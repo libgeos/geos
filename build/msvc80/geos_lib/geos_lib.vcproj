@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\source\headers"
+				AdditionalIncludeDirectories="..\..\..\capi;..\..\..\source\headers"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;WIN32_LEAN_AND_MEAN;NOMINMAX;NOGDI"
 				IgnoreStandardIncludePath="false"
 				MinimalRebuild="true"
@@ -215,11 +215,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\algorithm\RobustDeterminant.cpp"
+					RelativePath="..\..\..\source\algorithm\RayCrossingCounter.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\algorithm\SimplePointInAreaLocator.cpp"
+					RelativePath="..\..\..\source\algorithm\RobustDeterminant.cpp"
 					>
 				</File>
 				<File
@@ -230,6 +230,40 @@
 					RelativePath="..\..\..\source\algorithm\SIRtreePointInRing.cpp"
 					>
 				</File>
+				<Filter
+					Name="locate"
+					>
+					<File
+						RelativePath="..\..\..\source\algorithm\locate\IndexedPointInAreaLocator.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\algorithm\locate\PointOnGeometryLocator.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\algorithm\locate\SimplePointInAreaLocator.cpp"
+						>
+						<FileConfiguration
+							Name="Debug|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)\$(InputName)1.obj"
+								XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)\$(InputName)1.obj"
+								XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+							/>
+						</FileConfiguration>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="index"
@@ -484,6 +518,26 @@
 						>
 					</File>
 				</Filter>
+				<Filter
+					Name="intervalrtree"
+					>
+					<File
+						RelativePath="..\..\..\source\index\intervalrtree\IntervalRTreeBranchNode.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\index\intervalrtree\IntervalRTreeLeafNode.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\index\intervalrtree\IntervalRTreeNode.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\index\intervalrtree\SortedPackedIntervalRTree.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="geom"
@@ -588,6 +642,10 @@
 					Name="util"
 					>
 					<File
+						RelativePath="..\..\..\source\geom\util\ComponentCoordinateExtracter.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\source\geom\util\CoordinateOperation.cpp"
 						>
 					</File>
@@ -613,6 +671,66 @@
 					</File>
 					<File
 						RelativePath="..\..\..\source\geom\util\ShortCircuitedGeometryVisitor.cpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="prep"
+					>
+					<File
+						RelativePath="..\..\..\source\geom\prep\AbstractPreparedPolygonContains.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\geom\prep\BasicPreparedGeometry.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\geom\prep\PreparedGeometry.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\geom\prep\PreparedGeometryFactory.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\geom\prep\PreparedLineString.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\geom\prep\PreparedLineStringIntersects.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\geom\prep\PreparedPoint.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\geom\prep\PreparedPolygon.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\geom\prep\PreparedPolygonContains.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\geom\prep\PreparedPolygonContainsProperly.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\geom\prep\PreparedPolygonCovers.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\geom\prep\PreparedPolygonIntersects.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\geom\prep\PreparedPolygonLineIntersection.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\geom\prep\PreparedPolygonPredicate.cpp"
 						>
 					</File>
 				</Filter>
@@ -793,6 +911,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\source\noding\FastSegmentSetIntersectionFinder.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\noding\IntersectionAdder.cpp"
 					>
 				</File>
@@ -809,6 +931,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\source\noding\MCIndexSegmentSetMutualIntersector.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\noding\NodedSegmentString.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\noding\NodingValidator.cpp"
 					>
 				</File>
@@ -821,6 +951,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\source\noding\SegmentIntersectionDetector.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\noding\SegmentNode.cpp"
 					>
 				</File>
@@ -830,6 +964,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\noding\SegmentString.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\noding\SegmentStringUtil.cpp"
 					>
 				</File>
 				<File
@@ -1613,11 +1751,11 @@
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\RobustDeterminant.h"
+							RelativePath="..\..\..\source\headers\geos\algorithm\RayCrossingCounter.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\SimplePointInAreaLocator.h"
+							RelativePath="..\..\..\source\headers\geos\algorithm\RobustDeterminant.h"
 							>
 						</File>
 						<File
@@ -1628,6 +1766,22 @@
 							RelativePath="..\..\..\source\headers\geos\algorithm\SIRtreePointInRing.h"
 							>
 						</File>
+						<Filter
+							Name="locate"
+							>
+							<File
+								RelativePath="..\..\..\source\headers\geos\algorithm\locate\IndexedPointInAreaLocator.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\source\headers\geos\algorithm\locate\PointOnGeometryLocator.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\source\headers\geos\algorithm\locate\SimplePointInAreaLocator.h"
+								>
+							</File>
+						</Filter>
 					</Filter>
 					<Filter
 						Name="geom"
@@ -1788,6 +1942,10 @@
 							Name="util"
 							>
 							<File
+								RelativePath="..\..\..\source\headers\geos\geom\util\ComponentCoordinateExtracter.h"
+								>
+							</File>
+							<File
 								RelativePath="..\..\..\source\headers\geos\geom\util\CoordinateOperation.h"
 								>
 							</File>
@@ -1817,6 +1975,66 @@
 							</File>
 							<File
 								RelativePath="..\..\..\source\headers\geos\geom\util\ShortCircuitedGeometryVisitor.h"
+								>
+							</File>
+						</Filter>
+						<Filter
+							Name="prep"
+							>
+							<File
+								RelativePath="..\..\..\source\headers\geos\geom\prep\AbstractPreparedPolygonContains.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\source\headers\geos\geom\prep\BasicPreparedGeometry.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\source\headers\geos\geom\prep\PreparedGeometry.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\source\headers\geos\geom\prep\PreparedGeometryFactory.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\source\headers\geos\geom\prep\PreparedLineString.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\source\headers\geos\geom\prep\PreparedLineStringIntersects.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\source\headers\geos\geom\prep\PreparedPoint.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\source\headers\geos\geom\prep\PreparedPolygon.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\source\headers\geos\geom\prep\PreparedPolygonContains.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\source\headers\geos\geom\prep\PreparedPolygonContainsProperly.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\source\headers\geos\geom\prep\PreparedPolygonCovers.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\source\headers\geos\geom\prep\PreparedPolygonIntersects.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\source\headers\geos\geom\prep\PreparedPolygonLineIntersection.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\source\headers\geos\geom\prep\PreparedPolygonPredicate.h"
 								>
 							</File>
 						</Filter>
@@ -1969,6 +2187,10 @@
 						Name="noding"
 						>
 						<File
+							RelativePath="..\..\..\source\headers\geos\noding\FastSegmentSetIntersectionFinder.h"
+							>
+						</File>
+						<File
 							RelativePath="..\..\..\source\headers\geos\noding\IntersectionAdder.h"
 							>
 						</File>
@@ -1989,6 +2211,18 @@
 							>
 						</File>
 						<File
+							RelativePath="..\..\..\source\headers\geos\noding\MCIndexSegmentSetMutualIntersector.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\noding\NodableSegmentString.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\noding\NodedSegmentString.h"
+							>
+						</File>
+						<File
 							RelativePath="..\..\..\source\headers\geos\noding\Noder.h"
 							>
 						</File>
@@ -2005,6 +2239,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\..\..\source\headers\geos\noding\SegmentIntersectionDetector.h"
+							>
+						</File>
+						<File
 							RelativePath="..\..\..\source\headers\geos\noding\SegmentIntersector.h"
 							>
 						</File>
@@ -2017,11 +2255,19 @@
 							>
 						</File>
 						<File
+							RelativePath="..\..\..\source\headers\geos\noding\SegmentSetMutualIntersector.h"
+							>
+						</File>
+						<File
 							RelativePath="..\..\..\source\headers\geos\noding\SegmentString.h"
 							>
 						</File>
 						<File
 							RelativePath="..\..\..\source\headers\geos\noding\SegmentString.inl"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\noding\SegmentStringUtil.h"
 							>
 						</File>
 						<File
@@ -2565,6 +2811,26 @@
 							</File>
 							<File
 								RelativePath="..\..\..\source\headers\geos\index\sweepline\SweepLineOverlapAction.h"
+								>
+							</File>
+						</Filter>
+						<Filter
+							Name="intervalrtree"
+							>
+							<File
+								RelativePath="..\..\..\source\headers\geos\index\intervalrtree\IntervalRTreeBranchNode.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\source\headers\geos\index\intervalrtree\IntervalRTreeLeafNode.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\source\headers\geos\index\intervalrtree\IntervalRTreeNode.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\source\headers\geos\index\intervalrtree\SortedPackedIntervalRTree.h"
 								>
 							</File>
 						</Filter>
