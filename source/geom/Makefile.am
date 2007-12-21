@@ -1,8 +1,10 @@
 
 SUBDIRS=\
-	util
+	util \
+	prep
 
-noinst_LTLIBRARIES = libgeom.la
+noinst_LTLIBRARIES = \
+	libgeom.la
 
 INCLUDES = -I$(top_srcdir)/source/headers 
 
@@ -36,6 +38,7 @@ libgeom_la_SOURCES = \
 
 
 libgeom_la_LIBADD = \
-	util/libgeomutil.la 
+	util/libgeomutil.la \
+	prep/libgeomprep.la
 
 
