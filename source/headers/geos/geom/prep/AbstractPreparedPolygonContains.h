@@ -1,0 +1,115 @@
+/**********************************************************************
+ * $Id
+ *
+ * GEOS - Geometry Engine Open Source
+ * http://geos.refractions.net
+ *
+ * Copyright (C) 2006 Refractions Research Inc.
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation. 
+ * See the COPYING file for more information.
+ *
+ *
+ **********************************************************************/
+
+#ifndef GEOS_GEOM_PREP_ABSTRACTPREPAREDPOLYGONCONTAINS_H
+#define GEOS_GEOM_PREP_ABSTRACTPREPAREDPOLYGONCONTAINS_H
+
+#include <geos/geom/prep/PreparedPolygonPredicate.h> // inherited
+
+
+// forward declarations
+namespace geos {
+	namespace geom { 
+		class Geometry;
+
+		namespace prep { 
+			class PreparedPolygon;
+		}
+	}
+}
+
+
+namespace geos {
+namespace geom { // geos::geom
+namespace prep { // geos::geom::prep
+
+class AbstractPreparedPolygonContains : public PreparedPolygonPredicate 
+{
+private:
+	// information about geometric situation
+	bool hasSegmentIntersection;
+	bool hasProperIntersection;
+	bool hasNonProperIntersection;
+
+	bool isProperIntersectionImpliesNotContainedSituation( const geom::Geometry * testGeom);
+
+	/**
+	 * Tests whether a geometry consists of a single polygon with no holes.
+	 *  
+	 * @return true if the geometry is a single polygon with no holes
+	 */
+	bool isSingleShell( const geom::Geometry & geom);
+	
+	void findAndClassifyIntersections( const geom::Geometry * geom);
+
+protected:
+	/**
+	 * This flag controls a difference between contains and covers.
+	 * 
+	 * For contains the value is true.
+	 * For covers the value is false.
+	 */
+	bool requireSomePointInInterior;
+
+	/**
+	 * Evaluate the <tt>contains</tt> or <tt>covers</tt> relationship
+	 * for the given geometry.
+	 * 
+	 * @param geom the test geometry
+	 * @return true if the test geometry is contained
+	 */
+	bool eval( const geom::Geometry * geom);
+
+ 	/**
+ 	 * Computes the full topological predicate.
+	 * Used when short-circuit tests are not conclusive.
+	 * 
+	 * @param geom the test geometry
+	 * @return true if this prepared polygon has the relationship with the test geometry
+	 */
+	virtual bool fullTopologicalPredicate( const geom::Geometry * geom) =0;
+
+public:
+	AbstractPreparedPolygonContains( const PreparedPolygon * const prepPoly) 
+	:	PreparedPolygonPredicate( prepPoly),
+		hasSegmentIntersection( false),
+		hasProperIntersection( false),
+		hasNonProperIntersection( false),
+		requireSomePointInInterior(true)
+	{ }
+
+	AbstractPreparedPolygonContains( const PreparedPolygon * const prepPoly, bool requireSomePointInInterior) 
+	:	PreparedPolygonPredicate( prepPoly),
+		hasSegmentIntersection( false),
+		hasProperIntersection( false),
+		hasNonProperIntersection( false),
+		requireSomePointInInterior(requireSomePointInInterior)
+	{ }
+
+	virtual ~AbstractPreparedPolygonContains()
+	{ }
+
+};
+
+} // geos::geom::prep
+} // geos::geom
+} // geos
+
+#endif // GEOS_GEOM_PREP_ABSTRACTPREPAREDPOLYGONCONTAINS_H
+/**********************************************************************
+ * $Log$
+ **********************************************************************/
+
