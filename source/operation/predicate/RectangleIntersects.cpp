@@ -29,7 +29,7 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/IntersectionMatrix.h>
 
-#include <geos/algorithm/SimplePointInAreaLocator.h>
+#include <geos/algorithm/locate/SimplePointInAreaLocator.h>
 
 //using namespace geos::geom::util;
 
@@ -134,7 +134,7 @@ protected:
 
 	void visit(const geom::Geometry &geom)
 	{
-		using geos::algorithm::SimplePointInAreaLocator;
+		using geos::algorithm::locate::SimplePointInAreaLocator;
 
 		const geom::Polygon *poly;
 
