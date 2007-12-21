@@ -9,8 +9,12 @@ INCLUDES = -I$(top_srcdir)/source/headers
 # LinearComponentExtracter.cpp 
 
 libgeomutil_la_SOURCES = \
+	ComponentCoordinateExtracter.cpp \
+	CoordinateOperation.cpp \
 	GeometryEditor.cpp \
 	GeometryTransformer.cpp \
-	CoordinateOperation.cpp \
+	LinearComponentExtracter.cpp \
+	PointExtracter.cpp \
+	PolygonExtracter.cpp \
 	ShortCircuitedGeometryVisitor.cpp
 
