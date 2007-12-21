@@ -58,10 +58,13 @@ OBJ = 	algorithm\CGAlgorithms.obj \
 	algorithm\MinimumDiameter.obj \
 	algorithm\NotRepresentableException.obj \
 	algorithm\PointLocator.obj \
+	algorithm\RayCrossingCounter.obj \
 	algorithm\RobustDeterminant.obj \
-	algorithm\SimplePointInAreaLocator.obj \
 	algorithm\SimplePointInRing.obj \
 	algorithm\SIRtreePointInRing.obj \
+	algorithm\locate\IndexedPointInAreaLocator.obj \
+	algorithm\locate\PointOnGeometryLocator.obj \
+	algorithm\locate\SimplePointInAreaLocator.obj \
 	geom\Coordinate.obj \
 	geom\CoordinateArraySequence.obj \
 	geom\CoordinateArraySequenceFactory.obj \
@@ -131,6 +134,10 @@ OBJ = 	algorithm\CGAlgorithms.obj \
 	index\chain\MonotoneChainBuilder.obj \
 	index\chain\MonotoneChainOverlapAction.obj \
 	index\chain\MonotoneChainSelectAction.obj \
+	index\intervalrtree\IntervalRTreeBranchNode.obj \
+	index\intervalrtree\IntervalRTreeLeafNode.obj \
+	index\intervalrtree\IntervalRTreeNode.obj \
+	index\intervalrtree\SortedPackedIntervalRTree.obj \
 	index\quadtree\DoubleBits.obj \
 	index\quadtree\IntervalSize.obj \
 	index\quadtree\Key.obj \
