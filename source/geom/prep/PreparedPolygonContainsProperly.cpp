@@ -59,8 +59,8 @@ PreparedPolygonContainsProperly::containsProperly( const geom::Geometry * geom)
 	if (segsIntersect) 
 		return false;
 	
-	if (	geom->getGeometryTypeId() == GeometryTypeId::GEOS_MULTIPOLYGON  
-		||	geom->getGeometryTypeId() == GeometryTypeId::GEOS_POLYGON )
+	if (	geom->getGeometryTypeId() == geos::geom::GEOS_MULTIPOLYGON  
+		||	geom->getGeometryTypeId() == geos::geom::GEOS_POLYGON )
 	{
 		// TODO: generalize this to handle GeometryCollections
 		bool isTargetGeomInTestArea = isAnyTargetComponentInTestArea( geom, prepPoly->getRepresentativePoints());
