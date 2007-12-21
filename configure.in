@@ -18,7 +18,7 @@ dnl -- Release versions / C++ library SONAME will use these
 dnl -- encoding ABI break at every release
 dnl
 VERSION_MAJOR=3
-VERSION_MINOR=0
+VERSION_MINOR=1
 VERSION_PATCH=0
 VERSION="$VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH"
 
