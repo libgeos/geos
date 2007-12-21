@@ -26,5 +26,5 @@ libalgorithm_la_SOURCES = \
 	SIRtreePointInRing.cpp 
 
 libalgorithm_la_LIBADD =  \
-        location/liblocation.la           
+        locate/liblocation.la           
 
