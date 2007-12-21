@@ -1,4 +1,5 @@
-#SUBDIRS = predicate
+SUBDIRS = \
+	locate
 
 noinst_LTLIBRARIES = libalgorithm.la
 
@@ -27,5 +28,6 @@ libalgorithm_la_SOURCES = \
 	SimplePointInRing.cpp \
 	SIRtreePointInRing.cpp 
 
-libalgorithm_la_LIBADD = 
+libalgorithm_la_LIBADD =  \
+        location/liblocation.la           
 
