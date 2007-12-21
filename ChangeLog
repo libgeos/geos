@@ -1,5 +1,8 @@
 $Id$
 
+
+---------  GEOS-3.0.0 release [2007-12-21] --------------------------
+
 2007-12-19 Mateusz Loskot <mateusz@loskot.net>
 
 	* source/headers/geos/io.h, source/headers/geos/geom.h:
