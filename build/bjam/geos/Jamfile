@@ -43,10 +43,12 @@ lib libgeos
     [ set.difference
         [ glob algorithm/*.cpp ] : [ glob algorithm/*RobustLineIntersector.cpp ]
     ]
+    [ glob algorithm/locate/*.cpp ]
     [ glob geom/*.cpp ]
     [ glob geom/util/*.cpp ]
     [ glob index/*.cpp ]
     [ glob index/chain/*.cpp ]
+    [ glob index/intervalrtree/*.cpp ]
     [ glob index/strtree/*.cpp ]
     [ glob index/sweepline/*.cpp ]
     [ glob io/*.cpp ]
