@@ -45,8 +45,8 @@ MCIndexSegmentSetMutualIntersector::addToIndex( SegmentString * segStr)
 		index->insert(mc->getEnvelope(), mc);
 	}
 
-	for ( std::vector<MonotoneChain *>::iterator i = segChains->begin(), e = segChains->end(); i != e; i++ )
-		delete *i;
+//	for ( std::vector<MonotoneChain *>::iterator i = segChains->begin(), e = segChains->end(); i != e; i++ )
+//		delete *i;
 	delete segChains;
 }
 
