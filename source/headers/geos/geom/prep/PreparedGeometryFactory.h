@@ -27,7 +27,6 @@ namespace geos {
 	}
 }
 
-using namespace geos::geom;
 
 namespace geos {
 namespace geom { // geos::geom
