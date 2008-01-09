@@ -16,6 +16,8 @@
  ***********************************************************************/
 
 #include <geos/geom/Geometry.h> 
+#include <geos/geom/prep/PreparedGeometry.h> 
+#include <geos/geom/prep/PreparedGeometryFactory.h> 
 #include <geos/geom/GeometryCollection.h> 
 #include <geos/geom/Polygon.h> 
 #include <geos/geom/Point.h> 
@@ -53,6 +55,7 @@
 
 // Some extra magic to make type declarations in geos_c.h work - for cross-checking of types in header.
 #define GEOSGeometry geos::geom::Geometry
+#define GEOSPreparedGeometry geos::geom::prep::PreparedGeometry
 #define GEOSCoordSequence geos::geom::CoordinateSequence
 #define GEOSWKTReader_t geos::io::WKTReader
 #define GEOSWKTWriter_t geos::io::WKTWriter
@@ -2280,5 +2283,129 @@ GEOSWKBWriter_setIncludeSRID(GEOSWKBWriter* writer, const char newIncludeSRID)
 	}
 }
 
+
+//-----------------------------------------------------------------
+// Prepared Geometry 
+//-----------------------------------------------------------------
+
+const geos::geom::prep::PreparedGeometry*
+GEOSPrepare(const Geometry *g)
+{
+	try
+	{
+		const geos::geom::prep::PreparedGeometry* prep;
+		prep = geos::geom::prep::PreparedGeometryFactory::prepare( g);
+		return prep;
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+	}
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+	}
+}
+
+void
+GEOSPreparedGeom_destroy(geos::geom::prep::PreparedGeometry *a)
+{
+	try
+	{
+		delete a;
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+	}
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+	}
+}
+
+char
+GEOSPreparedContains(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
+{
+	try 
+	{
+		bool result;
+		result = pg1->contains(g2);
+		return result;
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+		return 2;
+	}
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return 2;
+	}
+}
+
+char
+GEOSPreparedContainsProperty(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
+{
+	try 
+	{
+		bool result;
+		result = pg1->containsProperly(g2);
+		return result;
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+		return 2;
+	}
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return 2;
+	}
+}
+
+char
+GEOSPreparedCovers(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
+{
+	try 
+	{
+		bool result;
+		result = pg1->covers(g2);
+		return result;
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+		return 2;
+	}
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return 2;
+	}
+}
+
+char
+GEOSPreparedIntersects(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
+{
+	try 
+	{
+		bool result;
+		result = pg1->intersects(g2);
+		return result;
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+		return 2;
+	}
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return 2;
+	}
+}
 
 } //extern "C"

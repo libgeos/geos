@@ -86,6 +86,7 @@ typedef void (*GEOSMessageHandler)(const char *fmt, ...);
  */
 #ifndef GEOSGeometry
 typedef struct GEOSGeom_t GEOSGeometry;
+typedef struct GEOSPrepGeom_t GEOSPreparedGeometry;
 typedef struct GEOSCoordSeq_t GEOSCoordSequence;
 #endif
 
@@ -308,6 +309,25 @@ extern char GEOS_DLL GEOSContains(const GEOSGeometry* g1, const GEOSGeometry* g2
 extern char GEOS_DLL GEOSOverlaps(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSEquals(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSEqualsExact(const GEOSGeometry* g1, const GEOSGeometry* g2, double tolerance);
+
+
+/************************************************************************
+ *
+ *  Prepared Geometry Binary predicates - return 2 on exception, 1 on true, 0 on false
+ *
+ ***********************************************************************/
+
+/* 
+ * Argument ownership is taken by prepared geometry
+ */
+extern const GEOSPreparedGeometry GEOS_DLL *GEOSPrepare(const GEOSGeometry* g);
+
+extern void GEOS_DLL GEOSPreparedGeom_destroy(GEOSPreparedGeometry* g);
+
+extern char GEOS_DLL GEOSPreparedContains(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
+extern char GEOS_DLL GEOSPreparedContainsProperly(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
+extern char GEOS_DLL GEOSPreparedCovers(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
+extern char GEOS_DLL GEOSPreparedIntersects(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
 
 
 /************************************************************************
