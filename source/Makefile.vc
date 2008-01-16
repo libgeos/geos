@@ -40,8 +40,8 @@ CFLAGS = -Iheaders /MD /GR /O2 /D "NDEBUG" /nologo \
 
 LIBNAME =	geos.lib
 DLLNAME = 	geos.dll
-CDLLNAME =  geos_c.dll
-CLIBNAME =  geos_c_i.lib
+CDLLNAME =  	geos_c.dll
+CLIBNAME =  	geos_c_i.lib
 SLIBNAME =	geos_i.lib
 
 OBJ = 	algorithm\CGAlgorithms.obj \
@@ -95,6 +95,20 @@ OBJ = 	algorithm\CGAlgorithms.obj \
 	geom\util\PointExtracter.obj \
 	geom\util\PolygonExtracter.obj \
 	geom\util\ShortCircuitedGeometryVisitor.obj \
+	geom\prep\AbstractPreparedPolygonContains.obj \
+	geom\prep\BasicPreparedGeometry.obj \
+	geom\prep\PreparedGeometry.obj \
+	geom\prep\PreparedGeometryFactory.obj \
+	geom\prep\PreparedLineString.obj \
+	geom\prep\PreparedLineStringIntersects.obj \
+	geom\prep\PreparedPoint.obj \
+	geom\prep\PreparedPolygonContains.obj \
+	geom\prep\PreparedPolygonContainsProperly.obj \
+	geom\prep\PreparedPolygonCovers.obj \
+	geom\prep\PreparedPolygon.obj \
+	geom\prep\PreparedPolygonIntersects.obj \
+	geom\prep\PreparedPolygonLineIntersection.obj \
+	geom\prep\PreparedPolygonPredicate.obj \
 	geomgraph\Depth.obj \
 	geomgraph\DirectedEdge.obj \
 	geomgraph\DirectedEdgeStar.obj \
@@ -164,19 +178,24 @@ OBJ = 	algorithm\CGAlgorithms.obj \
 	io\WKTReader.obj \
 	io\WKTWriter.obj \
 	io\Writer.obj \
-    noding\FastNodingValidator.obj \
+	noding\FastNodingValidator.obj \
+	noding\FastSegmentSetIntersectionFinder.obj \
 	noding\IntersectionAdder.obj \
 	noding\IntersectionFinderAdder.obj \
 	noding\IteratedNoder.obj \
 	noding\MCIndexNoder.obj \
+	noding\MCIndexSegmentSetMutualIntersector.obj \
+	noding\NodedSegmentString.obj \
 	noding\NodingValidator.obj \
 	noding\Octant.obj \
 	noding\ScaledNoder.obj \
+	noding\SegmentIntersectionDetector.obj \
 	noding\SegmentNode.obj \
 	noding\SegmentNodeList.obj \
 	noding\SegmentString.obj \
+	noding\SegmentStringUtil.obj \
 	noding\SimpleNoder.obj \
-    noding\SingleInteriorIntersectionFinder.obj \
+	noding\SingleInteriorIntersectionFinder.obj \
 	noding\snapround\HotPixel.obj \
 	noding\snapround\MCIndexPointSnapper.obj \
 	noding\snapround\MCIndexSnapRounder.obj \
