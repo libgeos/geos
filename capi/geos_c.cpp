@@ -2346,7 +2346,7 @@ GEOSPreparedContains(const geos::geom::prep::PreparedGeometry *pg1, const Geomet
 }
 
 char
-GEOSPreparedContainsProperty(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
+GEOSPreparedContainsProperly(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
 {
 	try 
 	{
