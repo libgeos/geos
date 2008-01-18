@@ -98,16 +98,27 @@ MonotoneChainBuilder::getChainStartIndices(const CoordinateSequence *pts,
 int
 MonotoneChainBuilder::findChainEnd(const CoordinateSequence *pts, int start)
 {
+    std::size_t npts = pts->getSize();
+
+	// skip any zero-length segments at start of sequence
+	while ( pts->getAt( start).equals2D( pts->getAt( start + 1) ) )
+		if ( ++start >= ( npts - 1 ) )
+			// bail if there are no non-zero-length segments
+			return npts - 1;
+			
 	// determine quadrant for chain
 	int chainQuad=Quadrant::quadrant(pts->getAt(start),pts->getAt(start + 1));
 	std::size_t last=start+1;
-    std::size_t npts=pts->getSize();
 	while (last < npts)
 	{
-		// compute quadrant for next possible segment in chain
-		int quad=Quadrant::quadrant(pts->getAt(last-1),pts->getAt(last));
-		if (quad!=chainQuad) break;
-		last++;
+		// skip a zero-length segnments
+		if (! pts->getAt( last - 1).equals2D( pts->getAt( last) ) )
+		{
+			// compute quadrant for next possible segment in chain
+			int quad=Quadrant::quadrant(pts->getAt(last-1),pts->getAt(last));
+			if (quad!=chainQuad) break;
+		}
+		last++;	
 	}
 #if GEOS_DEBUG
 	std::cerr<<"MonotoneChainBuilder::findChainEnd() returning"<<std::endl;
