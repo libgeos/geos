@@ -79,10 +79,9 @@ RectangleContains::isPointContainedInBoundary(const Coordinate& pt)
 {
 	// we already know that the point is contained in the
 	// rectangle envelope
-	if (! (pt.x == rectEnv.getMinX() || pt.x == rectEnv.getMaxX()) )
-		return false;
-	if (! (pt.y == rectEnv.getMinY() || pt.y == rectEnv.getMaxY()) )
-		return false;
+	return 	
+		pt.x == rectEnv.getMinX() || pt.x == rectEnv.getMaxX() ||
+	    pt.y == rectEnv.getMinY() || pt.y == rectEnv.getMaxY();
 
 	return true;
 }
