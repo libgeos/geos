@@ -18,6 +18,7 @@
 #define GEOS_GEOM_PREP_PREPAREDLINESTRING_H
 
 #include <geos/geom/prep/BasicPreparedGeometry.h> // for inheritance
+#include <geos/noding/SegmentString.h> 
 
 namespace geos {
 	namespace noding {
@@ -39,6 +40,7 @@ class PreparedLineString : public BasicPreparedGeometry
 {
 private:
 	noding::FastSegmentSetIntersectionFinder * segIntFinder;
+	mutable noding::SegmentString::ConstVect segStrings;
 
 protected:
 public:
@@ -62,4 +64,5 @@ public:
 /**********************************************************************
  * $Log$
  **********************************************************************/
+
 

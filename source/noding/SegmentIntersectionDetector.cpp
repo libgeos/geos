@@ -25,8 +25,11 @@
 namespace geos {
 namespace noding { // geos::noding
 
+
+
 void 
-SegmentIntersectionDetector::processIntersections(	
+SegmentIntersectionDetector::
+processIntersections(	
 	noding::SegmentString * e0, int segIndex0,
 	noding::SegmentString * e1, int segIndex1 )
 {  	
@@ -64,6 +67,8 @@ SegmentIntersectionDetector::processIntersections(
 		{
 			// record intersection location (approximate)
 			intPt = &li->getIntersection(0);
+
+			delete intSegments;
 
 			// record intersecting segments
 			intSegments = new geom::CoordinateArraySequence();

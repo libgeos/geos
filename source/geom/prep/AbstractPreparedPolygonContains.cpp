@@ -92,7 +92,10 @@ AbstractPreparedPolygonContains::findAndClassifyIntersections( const geom::Geome
 	delete intDetector;
 	delete li;
 	for ( size_t i = 0, ni = lineSegStr.size(); i < ni; i++ )
+	{
+		delete lineSegStr[ i ]->getCoordinates();
 		delete lineSegStr[ i ];
+	}
 }
 
 

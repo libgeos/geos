@@ -53,7 +53,10 @@ PreparedPolygon::
 	delete ptOnGeomLoc;
 
 	for ( size_t i = 0, ni = segStrings.size(); i < ni; i++ )
+	{
+		delete segStrings[ i ]->getCoordinates();
 		delete segStrings[ i ];
+	}
 }
 
 

@@ -45,9 +45,11 @@ MCIndexSegmentSetMutualIntersector::addToIndex( SegmentString * segStr)
 		index->insert(mc->getEnvelope(), mc);
 	}
 
+// BWJ - seems to cause some tests of prepared predicates to fail, but leaving this out probably causes a 
+// memory leak.  more research needed
 //	for ( std::vector<MonotoneChain *>::iterator i = segChains->begin(), e = segChains->end(); i != e; i++ )
 //		delete *i;
-	delete segChains;
+//	delete segChains;
 }
 
 void 

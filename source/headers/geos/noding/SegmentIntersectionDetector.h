@@ -57,6 +57,13 @@ public:
 		intSegments( NULL)
 	{ }
 
+	~SegmentIntersectionDetector()
+	{
+		//delete intPt;
+		delete intSegments;
+	}
+
+
 	void setFindProper( bool findProper)
 	{
 		this->findProper = findProper;
@@ -153,4 +160,5 @@ public:
 /**********************************************************************
  * $Log$
  **********************************************************************/
+
 
