@@ -21,5 +21,4 @@ libgeomprep_la_SOURCES = \
 	PreparedPolygonCovers.cpp \
 	PreparedPolygon.cpp \
 	PreparedPolygonIntersects.cpp \
-	PreparedPolygonLineIntersection.cpp \
 	PreparedPolygonPredicate.cpp

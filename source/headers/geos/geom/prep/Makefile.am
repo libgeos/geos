@@ -17,7 +17,6 @@ geos_HEADERS = \
 	PreparedPolygonCovers.h \
 	PreparedPolygon.h \
 	PreparedPolygonIntersects.h \
-	PreparedPolygonLineIntersection.h \
 	PreparedPolygonPredicate.h
 
 #noinst_HEADERS = 
