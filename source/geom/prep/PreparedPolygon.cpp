@@ -21,7 +21,6 @@
 #include <geos/geom/prep/PreparedPolygonContainsProperly.h>
 #include <geos/geom/prep/PreparedPolygonCovers.h>
 #include <geos/geom/prep/PreparedPolygonIntersects.h>
-#include <geos/geom/prep/PreparedPolygonLineIntersection.h>
 #include <geos/geom/prep/PreparedPolygonPredicate.h>
 
 #include <geos/noding/FastSegmentSetIntersectionFinder.h>
