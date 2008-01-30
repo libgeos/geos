@@ -33,6 +33,25 @@ namespace geos {
 namespace geom { // geos::geom
 namespace prep { // geos::geom::prep
 
+/**
+ * \brief
+ * Computes the <tt>containsProperly</tt> spatial relationship predicate
+ * for {@link PreparedPolygon}s relative to all other {@link Geometry} classes.
+ *
+ * Uses short-circuit tests and indexing to improve performance. 
+ * 
+ * A Geometry A <tt>containsProperly</tt> another Geometry B iff
+ * all points of B are contained in the Interior of A.
+ * Equivalently, B is contained in A AND B does not intersect 
+ * the Boundary of A.
+ * 
+ * The advantage to using this predicate is that it can be computed
+ * efficiently, with no need to compute topology at individual points.
+ * In a situation with many geometries intersecting the boundary 
+ * of the target geometry, this can make a performance difference.
+ * 
+ * @author Martin Davis
+ */
 class PreparedPolygonContainsProperly : public PreparedPolygonPredicate
 {
 private:

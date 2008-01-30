@@ -28,6 +28,19 @@ using namespace geos::algorithm;
 namespace geos {
 namespace noding { // geos::noding
 
+/** \brief
+ * Detects and records an intersection between two {@link SegmentString}s,
+ * if one exists.  
+ *
+ * This strategy can be configured to search for proper intersections.
+ * In this case, the presence of any intersection will still be recorded,
+ * but searching will continue until either a proper intersection has been found
+ * or no intersections are detected.
+ *
+ * Only a single intersection is recorded.
+ *
+ * @version 1.7
+ */
 class SegmentIntersectionDetector : public SegmentIntersector 
 {
 private:

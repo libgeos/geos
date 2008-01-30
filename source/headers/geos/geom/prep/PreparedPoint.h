@@ -24,7 +24,8 @@ namespace geom { // geos::geom
 namespace prep { // geos::geom::prep
 
 /**
- * A prepared version for {@link Puntal} geometries.
+ * \brief
+ * A prepared version of {@link Point} or {@link MultiPoint} geometries.
  * 
  * @author Martin Davis
  *

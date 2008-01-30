@@ -33,6 +33,16 @@ namespace geos {
 namespace geom { // geos::geom
 namespace prep { // geos::geom::prep
 
+/**
+ * \brief
+ * Computes the <tt>intersects</tt> spatial relationship predicate
+ * for {@link PreparedPolygon}s relative to all other {@link Geometry} classes.
+ * 
+ * Uses short-circuit tests and indexing to improve performance. 
+ * 
+ * @author Martin Davis
+ *
+ */
 class PreparedPolygonIntersects : public PreparedPolygonPredicate
 {
 private:

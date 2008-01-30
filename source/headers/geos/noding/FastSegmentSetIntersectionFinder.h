@@ -34,6 +34,15 @@ namespace geos {
 namespace geos {
 namespace noding { // geos::noding
 
+/** \brief
+ * Finds if two sets of {@link SegmentStrings}s intersect.
+ *
+ * Uses indexing for fast performance and to optimize repeated tests
+ * against a target set of lines.
+ * Short-circuited to return as soon an intersection is found.
+ *
+ * @version 1.7
+ */
 class FastSegmentSetIntersectionFinder
 {
 private:

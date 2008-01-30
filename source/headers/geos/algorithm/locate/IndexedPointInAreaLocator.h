@@ -40,6 +40,16 @@ namespace geos {
 namespace algorithm { // geos::algorithm
 namespace locate { // geos::algorithm::locate
 
+/** \brief
+ * Determines the location of {@link Coordinate}s relative to
+ * a {@link Polygon} or {@link MultiPolygon} geometry, using indexing for efficiency.
+ *
+ * This algorithm is suitable for use in cases where
+ * many points will be tested against a given area.
+ * 
+ * @author Martin Davis
+ *
+ */
 class IndexedPointInAreaLocator : public PointOnGeometryLocator 
 {
 private:

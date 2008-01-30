@@ -31,8 +31,10 @@ namespace geom { // geos::geom
 namespace prep { // geos::geom::prep
 
 /**
+ * \brief
  * Computes the <tt>intersects</tt> spatial relationship predicate
  * for a target {@link PreparedLineString} relative to other {@link Geometry} classes.
+ * 
  * Uses short-circuit tests and indexing to improve performance. 
  * 
  * @author Martin Davis

@@ -34,6 +34,20 @@ namespace geos {
 namespace geom { // geos::geom
 namespace prep { // geos::geom::prep
 
+/**
+ * \brief
+ * Computes the <tt>contains</tt> spatial relationship predicate
+ * for a {@link PreparedPolygon} relative to all other {@link Geometry} classes.
+ * 
+ * Uses short-circuit tests and indexing to improve performance. 
+ * 
+ * It is not possible to short-circuit in all cases, in particular
+ * in the case where the test geometry touches the polygon linework.
+ * In this case full topology must be computed.
+ * 
+ * @author Martin Davis
+ *
+ */
 class PreparedPolygonContains : public AbstractPreparedPolygonContains 
 {
 private:

@@ -18,11 +18,6 @@
 #define GEOS_NODING_MCINDEXSEGMENTSETMUTUALINTERSECTOR_H
 
 #include <geos/noding/SegmentSetMutualIntersector.h> // inherited
-//#include <geos/noding/SegmentString.h>
-//#include <geos/noding/SegmentIntersector.h>
-//#include <geos/index/SpatialIndex.h>
-//#include <geos/index/strtree/STRtree.h> // for constructor
-//#include <geos/index/chain/MonotoneChain.h>
 #include <geos/index/chain/MonotoneChainOverlapAction.h> // inherited
 
 namespace geos {
@@ -47,6 +42,12 @@ namespace geos {
 namespace geos {
 namespace noding { // geos::noding
 
+/** \brief
+ * Intersects two sets of {@link SegmentStrings} using a index based
+ * on {@link MonotoneChain}s and a {@link SpatialIndex}.
+ *
+ * @version 1.7
+ */
 class MCIndexSegmentSetMutualIntersector : public SegmentSetMutualIntersector 
 {
 private:

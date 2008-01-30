@@ -36,7 +36,8 @@ namespace geom { // geos::geom
 namespace prep { // geos::geom::prep
 
 /**
- * A prepared version for {@link Polygonal} geometries.
+ * \brief
+ * A prepared version of {@link Polygon} or {@link MultiPolygon} geometries.
  * 
  * @author mbdavis
  *

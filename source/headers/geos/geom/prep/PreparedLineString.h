@@ -31,7 +31,8 @@ namespace geom { // geos::geom
 namespace prep { // geos::geom::prep
 
 /**
- * A prepared version for {@link Lineal} geometries.
+ * \brief
+ * A prepared version of {@link LinearRing}, {@link LineString} or {@link MultiLineString} geometries.
  * 
  * @author mbdavis
  *

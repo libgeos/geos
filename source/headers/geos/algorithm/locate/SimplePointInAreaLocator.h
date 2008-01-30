@@ -32,6 +32,19 @@ namespace geos {
 namespace algorithm { // geos::algorithm
 namespace locate { // geos::algorithm::locate
 
+/** \brief
+ * Computes the location of points
+ * relative to an areal {@link Geometry},
+ * using a simple O(n) algorithm.
+ *
+ * This algorithm is suitable for use in cases where
+ * only one or a few points will be tested against a given area.
+ * 
+ * The algorithm used is only guaranteed to return correct results
+ * for points which are <b>not</b> on the boundary of the Geometry.
+ *
+ * @version 1.7
+ */
 class SimplePointInAreaLocator : public PointOnGeometryLocator
 {
 

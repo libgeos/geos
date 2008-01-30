@@ -34,9 +34,9 @@ namespace prep { // geos::geom::prep
  *
  * \brief
  * An interface for classes which prepare {@link Geometry}s 
- * in order to optimize the performance 
+ * in order to optimize the performance
  * of repeated calls to specific geometric operations.
- * <p>
+ * 
  * A given implementation may provide optimized implementations
  * for only some of the specified methods, 
  * and delegate the remaining methods to the original {@link Geometry} operations.
@@ -45,7 +45,6 @@ namespace prep { // geos::geom::prep
  * See the implementing classes for documentation about which methods and situations
  * they optimize.
  * 
- * Last port: index/SpatialIndex.java (JTS-1.9) *
  */
 class PreparedGeometry {
 public:

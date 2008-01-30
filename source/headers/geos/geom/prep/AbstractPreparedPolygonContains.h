@@ -36,6 +36,28 @@ namespace geos {
 namespace geom { // geos::geom
 namespace prep { // geos::geom::prep
 
+/**
+ * \brief
+ * A base class containing the logic for computes the <tt>contains</tt>
+ * and <tt>covers</tt> spatial relationship predicates
+ * for a {@link PreparedPolygon} relative to all other {@link Geometry} classes.
+ *
+ * Uses short-circuit tests and indexing to improve performance. 
+ * 
+ * Contains and covers are very similar, and differ only in how certain
+ * cases along the boundary are handled.  These cases require 
+ * full topological evaluation to handle, so all the code in 
+ * this class is common to both predicates.
+ * 
+ * It is not possible to short-circuit in all cases, in particular
+ * in the case where line segments of the test geometry touches the polygon linework.
+ * In this case full topology must be computed.
+ * (However, if the test geometry consists of only points, this 
+ * <i>can</i> be evaluated in an optimized fashion.
+ * 
+ * @author Martin Davis
+ *
+ */
 class AbstractPreparedPolygonContains : public PreparedPolygonPredicate 
 {
 private:

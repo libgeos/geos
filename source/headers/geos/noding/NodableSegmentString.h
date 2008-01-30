@@ -28,7 +28,7 @@ namespace geos {
 namespace geos {
 namespace noding { // geos::noding
 
-/**
+/** \brief
  * An interface for classes which support adding nodes to
  * a segment string.
  * 

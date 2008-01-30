@@ -25,6 +25,12 @@
 namespace geos {
 namespace noding { // geos::noding
 
+/** \brief
+ * Utility methods for processing {@link SegmentString}s.
+ * 
+ * @author Martin Davis
+ *
+ */
 class SegmentStringUtil
 {
 private:

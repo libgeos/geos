@@ -30,7 +30,7 @@ namespace geos {
 namespace geom { // geos::geom
 namespace util { // geos::geom::util
 
-/**
+/** \brief
  * Extracts a single representative {@link Coordinate} 
  * from each connected component of a {@link Geometry}.
  *

@@ -27,6 +27,12 @@ namespace geos {
 namespace algorithm { // geos::algorithm
 namespace locate { // geos::algorithm::locate
 
+/** \brief
+ * An interface for classes which determine the {@link Location} of
+ * points in {@link Polygon} or {@link MultiPolygon} geometries.
+ * 
+ * @author Martin Davis
+ */
 class PointOnGeometryLocator
 {
 private:

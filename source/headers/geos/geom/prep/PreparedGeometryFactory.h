@@ -34,13 +34,13 @@ namespace prep { // geos::geom::prep
 
 
 /**
+ * \brief
  * A factory for creating {@link PreparedGeometry}s.
+ * 
  * It chooses an appropriate implementation of PreparedGeometry
  * based on the geoemtric type of the input geometry.
- * <p>
  * In the future, the factory may accept hints that indicate
  * special optimizations which can be performed.
- * 
  * 
  * @author Martin Davis
  *

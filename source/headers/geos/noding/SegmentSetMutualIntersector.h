@@ -23,6 +23,18 @@
 namespace geos {
 namespace noding { // geos::noding
 
+/** \brief
+ * An intersector for the red-blue intersection problem.
+ *
+ * In this class of line arrangement problem,
+ * two disjoint sets of linestrings are provided.
+ * It is assumed that within
+ * each set, no two linestrings intersect except possibly at their endpoints.
+ * Implementations can take advantage of this fact to optimize processing.
+ *
+ * @author Martin Davis
+ * @version 1.10
+ */
 class SegmentSetMutualIntersector
 {
 private:

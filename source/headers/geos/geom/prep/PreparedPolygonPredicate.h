@@ -43,6 +43,13 @@ namespace geos {
 namespace geom { // geos::geom
 namespace prep { // geos::geom::prep
 
+/**
+ * \brief
+ * A base class for predicate operations on {@link PreparedPolygon}s.
+ * 
+ * @author mbdavis
+ *
+ */
 class PreparedPolygonPredicate 
 {
 private:

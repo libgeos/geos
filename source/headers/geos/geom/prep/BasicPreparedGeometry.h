@@ -38,8 +38,13 @@ namespace geos {
 namespace geom { // geos::geom
 namespace prep { // geos::geom::prep
 
+// * \class BasicPreparedGeometry
+
 /**
+ * 
+ * \brief
  * A base class for {@link PreparedGeometry} subclasses.
+ * 
  * Contains default implementations for methods, which simply delegate
  * to the equivalent {@link Geometry} methods.
  * This class may be used as a "no-op" class for Geometry types
@@ -55,6 +60,9 @@ private:
 	Coordinate::ConstVect representativePts;
 
 protected:
+	/**
+	 * Sets the original {@link Geometry} which will be prepared.
+	 */
 	void setGeometry( const geom::Geometry * geom );
 	
 	/**

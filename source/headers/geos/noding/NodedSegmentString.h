@@ -30,6 +30,19 @@
 namespace geos {
 namespace noding { // geos::noding
 
+/** \brief
+ * Represents a list of contiguous line segments,
+ * and supports noding the segments.
+ *
+ * The line segments are represented by an array of {@link Coordinate}s.
+ * Intended to optimize the noding of contiguous segments by
+ * reducing the number of allocated objects.
+ * SegmentStrings can carry a context object, which is useful
+ * for preserving topological or parentage information.
+ * All noded substrings are initialized with the same context object.
+ *
+ * @version 1.7
+ */
 class NodedSegmentString : public NodableSegmentString 
 {
 private:

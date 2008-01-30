@@ -91,6 +91,12 @@ namespace geos {
  * 
  */
 namespace algorithm { // geos::algorithm
+
+/** \brief
+ * Classes which determine the Location of points in geometries.
+ */
+namespace locate {
+} // namespace geos::algorithm::locate
 } // namespace geos::algorithm
 } // namespace geos
 
