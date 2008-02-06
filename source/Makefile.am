@@ -12,7 +12,7 @@ SUBDIRS = \
 	simplify \
 	util
 
-EXTRA_DIST = Makefile.vc
+EXTRA_DIST = Makefile.vc dirlist.mk
 
 INCLUDES = -I$(top_srcdir)/source/headers
 

@@ -1,6 +1,6 @@
 SUBDIRS = snapround
 
-#EXTRA_DIST = 
+EXTRA_DIST = MCIndexNoder.inl  SegmentString.inl
 
 # NOTES:
 #

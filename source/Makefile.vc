@@ -69,7 +69,6 @@ OBJ = 	algorithm\CGAlgorithms.obj \
 	geom\CoordinateArraySequence.obj \
 	geom\CoordinateArraySequenceFactory.obj \
 	geom\CoordinateSequence.obj \
-	geom\CoordinateSequenceFactory.obj \
 	geom\Dimension.obj \
 	geom\Envelope.obj \
 	geom\Geometry.obj \
@@ -91,9 +90,6 @@ OBJ = 	algorithm\CGAlgorithms.obj \
 	geom\util\CoordinateOperation.obj \
 	geom\util\GeometryEditor.obj \
 	geom\util\GeometryTransformer.obj \
-	geom\util\LinearComponentExtracter.obj \
-	geom\util\PointExtracter.obj \
-	geom\util\PolygonExtracter.obj \
 	geom\util\ShortCircuitedGeometryVisitor.obj \
 	geom\prep\AbstractPreparedPolygonContains.obj \
 	geom\prep\BasicPreparedGeometry.obj \
@@ -280,12 +276,9 @@ OBJ = 	algorithm\CGAlgorithms.obj \
 	simplify\TaggedLineStringSimplifier.obj \
 	simplify\TopologyPreservingSimplifier.obj \
 	util\Assert.obj \
-	util\AssertionFailedException.obj \
 	util\GeometricShapeFactory.obj \
-	util\IllegalArgumentException.obj \
 	util\math.obj \
 	util\Profiler.obj \
-	util\UnsupportedOperationException.obj \
 	..\capi\geos_c.obj \
 	inlines.obj
 
@@ -305,11 +298,6 @@ $(CDLLNAME): ..\capi\geos_c.obj $(DLLNAME)
   
 headers/geos/platform.h: headers/geos/platform.h.vc
 	copy headers\geos\platform.h.vc headers\geos\platform.h
-
-# version.h should already be in distribution, if is not you'll
-# have to run ./configure to recreate
-headers/geos/version.h: headers/geos/version.h.vc
-	copy headers\geos\version.h.vc headers\geos\version.h
 
 # geos_c.h should already be in distribution, if is not you'll
 # have to run ./configure to recreate
