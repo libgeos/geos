@@ -14,4 +14,4 @@ SUBDIRS = 	\
 	tests	\
 	tools
 
-EXTRA_DIST = acsite.m4
+EXTRA_DIST = acsite.m4 makefile.vc
