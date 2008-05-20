@@ -1,5 +1,11 @@
 $Id$
 
+2008-05-20 Mateusz Loskot <mateusz@loskot.net>
+
+	* bootstrap.bat: Added script generating headers for use with Visual C++
+	compiler. DO NOT include this script in GEOS source distribution.
+	* source/makefile.vc: Do not make copies of 3 dynamic headers but let
+	users to use bootstrap.bat instead.
 
 ---------  GEOS-3.0.0 release [2007-12-21] --------------------------
 

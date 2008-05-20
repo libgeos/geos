@@ -296,14 +296,6 @@ $(DLLNAME):	$(OBJ)
 $(CDLLNAME): ..\capi\geos_c.obj $(DLLNAME)
 	link /dll /debug ..\capi\geos_c.obj $(LIBNAME) /out:$(CDLLNAME) /implib:$(CLIBNAME)
   
-headers/geos/platform.h: headers/geos/platform.h.vc
-	copy headers\geos\platform.h.vc headers\geos\platform.h
-
-# geos_c.h should already be in distribution, if is not you'll
-# have to run ./configure to recreate
-../capi/geos_c.h: ../capi/geos_c.h.in.
-	copy ..\capi\geos_c.h.in ..\capi\geos_c.h
-   
 .cpp.obj:
 	$(CC) $(CFLAGS) /c $*.cpp /Fo$@
 
