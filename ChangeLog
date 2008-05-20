@@ -5,7 +5,8 @@ $Id$
 	* bootstrap.bat: Added script generating headers for use with Visual C++
 	compiler. DO NOT include this script in GEOS source distribution.
 	* source/makefile.vc: Do not make copies of 3 dynamic headers but let
-	users to use bootstrap.bat instead.
+	users to use bootstrap.bat instead. Fixed compilation error by removing
+	non-existing file entry: source\geom\prep\PreparedPolygonLineIntersection.cpp
 
 ---------  GEOS-3.0.0 release [2007-12-21] --------------------------
 

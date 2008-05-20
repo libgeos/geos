@@ -98,12 +98,11 @@ OBJ = 	algorithm\CGAlgorithms.obj \
 	geom\prep\PreparedLineString.obj \
 	geom\prep\PreparedLineStringIntersects.obj \
 	geom\prep\PreparedPoint.obj \
+	geom\prep\PreparedPolygon.obj \
 	geom\prep\PreparedPolygonContains.obj \
 	geom\prep\PreparedPolygonContainsProperly.obj \
 	geom\prep\PreparedPolygonCovers.obj \
-	geom\prep\PreparedPolygon.obj \
 	geom\prep\PreparedPolygonIntersects.obj \
-	geom\prep\PreparedPolygonLineIntersection.obj \
 	geom\prep\PreparedPolygonPredicate.obj \
 	geomgraph\Depth.obj \
 	geomgraph\DirectedEdge.obj \
