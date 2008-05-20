@@ -726,10 +726,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geom\prep\PreparedPolygonLineIntersection.cpp"
-						>
-					</File>
-					<File
 						RelativePath="..\..\..\source\geom\prep\PreparedPolygonPredicate.cpp"
 						>
 					</File>

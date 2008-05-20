@@ -7,6 +7,7 @@
 // GEOS
 #include <geos/geom/Dimension.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/util.h>
 
 namespace tut
 {
@@ -51,6 +52,7 @@ namespace tut
     {
 		// Just compile-time test
 		geos::geom::Dimension dim;
+        UNREFERENCED_PARAMETER(dim);
     }
 
     // Test of toDimensionSymbol()

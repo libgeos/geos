@@ -31,6 +31,7 @@
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/util.h>
 
 #include <typeinfo>
 #include <cassert>
@@ -114,6 +115,7 @@ GeometryTransformer::transformCoordinates(
 		const Geometry* parent)
 {
 
+    UNREFERENCED_PARAMETER(parent);
 #if GEOS_DEBUG
 	std::cerr << "GeometryTransformer::transformCoordinates(CoordinateSequence " << coords <<", Geometry " << parent << ");" << std::endl;
 #endif
@@ -126,6 +128,7 @@ GeometryTransformer::transformPoint(
 		const Point* geom,
 		const Geometry* parent)
 {
+    UNREFERENCED_PARAMETER(parent);
 
 #if GEOS_DEBUG
 	std::cerr << "GeometryTransformer::transformPoint(Point " << geom <<", Geometry " << parent << ");" << std::endl;
@@ -142,6 +145,7 @@ GeometryTransformer::transformMultiPoint(
 		const MultiPoint* geom,
 		const Geometry* parent)
 {
+    UNREFERENCED_PARAMETER(parent);
 
 #if GEOS_DEBUG
 	std::cerr << "GeometryTransformer::transformMultiPoint(MultiPoint " << geom <<", Geometry " << parent << ");" << std::endl;
@@ -172,6 +176,7 @@ GeometryTransformer::transformLinearRing(
 		const LinearRing* geom,
 		const Geometry* parent)
 {
+    UNREFERENCED_PARAMETER(parent);
 
 #if GEOS_DEBUG
 	std::cerr << "GeometryTransformer::transformLinearRing(LinearRing " << geom <<", Geometry " << parent << ");" << std::endl;
@@ -197,6 +202,7 @@ GeometryTransformer::transformLineString(
 		const LineString* geom,
 		const Geometry* parent)
 {
+    UNREFERENCED_PARAMETER(parent);
 
 #if GEOS_DEBUG
 	std::cerr << "GeometryTransformer::transformLineString(LineString " << geom <<", Geometry " << parent << ");" << std::endl;
@@ -212,6 +218,7 @@ GeometryTransformer::transformMultiLineString(
 		const MultiLineString* geom,
 		const Geometry* parent)
 {
+    UNREFERENCED_PARAMETER(parent);
 
 #if GEOS_DEBUG
 	std::cerr << "GeometryTransformer::transformMultiLineString(MultiLineString " << geom <<", Geometry " << parent << ");" << std::endl;
@@ -242,6 +249,7 @@ GeometryTransformer::transformPolygon(
 		const Polygon* geom,
 		const Geometry* parent)
 {
+    UNREFERENCED_PARAMETER(parent);
 
 #if GEOS_DEBUG
 	std::cerr << "GeometryTransformer::transformPolygon(Polygon " << geom <<", Geometry " << parent << ");" << std::endl;
@@ -314,6 +322,7 @@ GeometryTransformer::transformMultiPolygon(
 		const MultiPolygon* geom,
 		const Geometry* parent)
 {
+    UNREFERENCED_PARAMETER(parent);
 
 #if GEOS_DEBUG
 	std::cerr << "GeometryTransformer::transformMultiPolygon(MultiPolygon " << geom <<", Geometry " << parent << ");" << std::endl;
@@ -344,6 +353,7 @@ GeometryTransformer::transformGeometryCollection(
 		const GeometryCollection* geom,
 		const Geometry* parent)
 {
+    UNREFERENCED_PARAMETER(parent);
 
 #if GEOS_DEBUG
 	std::cerr << "GeometryTransformer::transformGeometryCollection(GeometryCollection " << geom <<", Geometry " << parent << ");" << std::endl;

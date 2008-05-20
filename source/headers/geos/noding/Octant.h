@@ -17,6 +17,7 @@
 #define GEOS_NODING_OCTANT_H
 
 #include <geos/inline.h>
+#include <geos/util.h>
 
 // Forward declarations
 namespace geos {
@@ -59,7 +60,10 @@ public:
 	 * Returns the octant of a directed line segment from p0 to p1.
 	 */
 	static int octant(const geom::Coordinate& p0, const geom::Coordinate& p1);
-	static int octant(const geom::Coordinate* p0, const geom::Coordinate* p1) {
+	
+    static int octant(const geom::Coordinate* p0, const geom::Coordinate* p1)
+    {
+        UNREFERENCED_PARAMETER(p0);
 		return octant(*p1, *p1);
 	}
 };

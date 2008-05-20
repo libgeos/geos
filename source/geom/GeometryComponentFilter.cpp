@@ -18,6 +18,7 @@
 
 #include <geos/geom/GeometryComponentFilter.h>
 #include <geos/geom/Geometry.h>
+#include <geos/util.h>
 
 namespace geos {
 namespace geom { // geos::geom
@@ -28,6 +29,7 @@ void GeometryComponentFilter::filter_rw(Geometry *geom) {
 
 void GeometryComponentFilter::filter_ro(const Geometry *geom)
 {
+    UNREFERENCED_PARAMETER(geom);
 	//assert(0);
 }
 

@@ -25,7 +25,8 @@
 #include <geos/geom/GeometryFactory.h> 
 #include <geos/geom/CoordinateSequenceFactory.h> 
 #include <geos/geom/util/GeometryTransformer.h> // for DPTransformer inheritance
-#include <geos/util/IllegalArgumentException.h> 
+#include <geos/util/IllegalArgumentException.h>
+#include <geos/util.h>
 
 #include <memory> // for auto_ptr
 #include <cassert>
@@ -102,6 +103,8 @@ DPTransformer::transformCoordinates(
 		const CoordinateSequence* coords,
 		const Geometry* parent)
 {
+    UNREFERENCED_PARAMETER(parent);
+
 	const Coordinate::Vect* inputPts = coords->toVector();
 	assert(inputPts);
 

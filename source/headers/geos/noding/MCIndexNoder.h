@@ -21,6 +21,7 @@
 #include <geos/index/chain/MonotoneChainOverlapAction.h> // for inheritance
 #include <geos/noding/SinglePassNoder.h> // for inheritance
 #include <geos/index/strtree/STRtree.h> // for composition
+#include <geos/util.h>
 
 #include <vector>
 #include <iostream>
@@ -96,7 +97,11 @@ public:
 		void overlap(index::chain::MonotoneChain* mc1, int start1,
 				index::chain::MonotoneChain* mc2, int start2);
 
-		void overlap(geom::LineSegment* s1, geom::LineSegment* s2) { assert(0); }
+		void overlap(geom::LineSegment* s1, geom::LineSegment* s2)
+        {
+            UNREFERENCED_PARAMETER(s1);
+            assert(0);
+        }
 	};
 	
 };

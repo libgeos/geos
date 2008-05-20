@@ -7,6 +7,19 @@ $Id$
 	* source/makefile.vc: Do not make copies of 3 dynamic headers but let
 	users to use bootstrap.bat instead. Fixed compilation error by removing
 	non-existing file entry: source\geom\prep\PreparedPolygonLineIntersection.cpp
+	* source\headers\geos\util.h: Add UNREFERENCED_PARAMETER macro.
+	* source\geom\PrecisionModel.cpp, source\geom\GeometryComponentFilter.cpp,
+	  source\geom\util\GeometryTransformer.cpp, source\precision\GeometrySnapper.cpp,
+	  source\precision\CommonBitsRemover.cpp,	source\simplify\DouglasPeuckerSimplifier.cpp,
+	  source\operation\overlay\OverlayOp.cpp,	source\operation\overlay\FuzzyPointLocator.cpp,
+	  source\index\quadtree\NodeBase.cpp,	source\headers\geos\geom\BinaryOp.h,
+	  source\headers\geos\operation\overlay\PointBuilder.h,
+	  source\headers\geos\noding\MCIndexNoder.h,
+	  source\headers\geos\noding\ScaledNoder.h, source\headers\geos\noding\Octant.h,
+	  source\noding\ScaledNoder.cpp, source\noding\snapround\MCIndexPointSnapper.cpp,
+	  source\noding\SegmentString.cpp, tests\unit\geom\DimensionTest.cpp:
+	  Use UNREFERENCED_PARAMETER macro to get rid of C4100 warning when building with Visual C++.
+	* build\msvc80\geos_lib\geos_lib.vcproj: Remove non-existing source files.
 
 ---------  GEOS-3.0.0 release [2007-12-21] --------------------------
 

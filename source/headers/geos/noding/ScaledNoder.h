@@ -24,9 +24,9 @@
 #include <vector>
 
 #include <geos/inline.h>
-
 #include <geos/noding/Noder.h> // for inheritance
 //#include <geos/geom/CoordinateFilter.h> // for inheritance
+#include <geos/util.h>
 
 // Forward declarations
 namespace geos {
@@ -102,7 +102,11 @@ public:
 
 	//void filter(Coordinate& c);
 
-	void filter_ro(const geom::Coordinate* c) { assert(0); }
+	void filter_ro(const geom::Coordinate* c)
+    {
+        UNREFERENCED_PARAMETER(c);
+        assert(0);
+    }
 
 	void filter_rw(geom::Coordinate* c) const;
 

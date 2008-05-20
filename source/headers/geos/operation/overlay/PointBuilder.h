@@ -18,6 +18,7 @@
 
 #include <geos/geom/GeometryFactory.h> // for inlines
 #include <geos/operation/overlay/OverlayOp.h> // for OpCode enum
+#include <geos/util.h>
 
 #include <vector>
 
@@ -81,7 +82,9 @@ public:
 		op(newOp),
 		geometryFactory(newGeometryFactory),
 		resultPointList(new std::vector<geom::Point *>())
-	{}
+	{
+        UNREFERENCED_PARAMETER(newPtLocator);
+    }
 
 	/**
 	 * @return a list of the Points in the result of the specified
