@@ -4,9 +4,11 @@
 #
 
 GEOS_DIRLIST =  algorithm \
+				algorithm\locate \
                 examples \
                 geom \
                 geom\util \
+                geom\prep \
                 geomgraph \
                 geomgraph\index \
                 headers \
@@ -14,6 +16,7 @@ GEOS_DIRLIST =  algorithm \
                 index \
                 index\bintree \
                 index\chain \
+                index\intervalrtree \
                 index\quadtree \
                 index\strtree \
                 index\sweepline \
@@ -32,6 +35,6 @@ GEOS_DIRLIST =  algorithm \
                 planargraph \
                 planargraph\algorithm \
                 precision \
-		simplify \
+				simplify \
                 util
 
