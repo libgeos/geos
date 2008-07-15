@@ -206,7 +206,7 @@ operator<< (std::ostream& os, const EdgeEnd& ee)
 	os << " - ";
 	os << ee.p1;
 	os << " ";
-	os << ee.quadrant << ":" << atan2(ee.dy, ee.dx);
+	os << ee.quadrant << ":" << std::atan2(ee.dy, ee.dx);
 	os << "  ";
 	os << *(ee.label);
 

@@ -69,10 +69,10 @@ BufferOp::precisionScaleFactor(const Geometry *g,
 	double expandByDistance=distance > 0.0 ? distance : 0.0;
 	double bufEnvSize=envSize + 2 * expandByDistance;
 	// the smallest power of 10 greater than the buffer envelope
-	int bufEnvLog10=(int) (log(bufEnvSize) / log(10.0) + 1.0);
+	int bufEnvLog10=(int) (std::log(bufEnvSize) / std::log(10.0) + 1.0);
 	int minUnitLog10=bufEnvLog10 - maxPrecisionDigits;
 	// scale factor is inverse of min Unit size, so flip sign of exponent
-	double scaleFactor=pow(10.0,-minUnitLog10);
+	double scaleFactor=std::pow(10.0,-minUnitLog10);
 	return scaleFactor;
 }
 

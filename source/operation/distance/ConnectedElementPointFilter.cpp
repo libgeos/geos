@@ -20,6 +20,7 @@
 #include <geos/geom/Polygon.h>
 
 #include <vector>
+#include <typeinfo>
 
 using namespace std;
 using namespace geos::geom;

@@ -184,7 +184,7 @@ int RobustDeterminant::signOfDet2x2(double x1,double y1,double x2,double y2) {
 	*/
 	while (true) {
 		count=count+1;
-		k=floor(x2/x1);
+		k=std::floor(x2/x1);
 		x2=x2-k*x1;
 		y2=y2-k*y1;
 
@@ -228,7 +228,7 @@ int RobustDeterminant::signOfDet2x2(double x1,double y1,double x2,double y2) {
 		/*
 		*  exchange 1 and 2 role.
 		*/
-		k=floor(x1/x2);
+		k=std::floor(x1/x2);
 		x1=x1-k*x2;
 		y1=y1-k*y2;
 		

@@ -28,6 +28,7 @@
 #include <geos/index/ItemVisitor.h> 
 
 #include <algorithm>
+#include <typeinfo>
 
 namespace geos {
 namespace algorithm { 

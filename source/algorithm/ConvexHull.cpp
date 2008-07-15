@@ -164,7 +164,7 @@ ConvexHull::computeOctRing(const Coordinate::ConstVect &inputPts,
 	// Remove consecutive equal Coordinates
 	// unique() returns an iterator to the end of the resulting
 	// sequence, we erase from there to the end.
-	dest.erase( unique(dest.begin(),dest.end()), dest.end() );
+	dest.erase( std::unique(dest.begin(),dest.end()), dest.end() );
 
 	// points must all lie in a line	
 	if ( dest.size() < 3 ) return false;
@@ -269,7 +269,7 @@ ConvexHull::preSort(Coordinate::ConstVect &pts)
 	}
 
 	// sort the points radially around the focal point.
-	sort(pts.begin(), pts.end(), RadiallyLessThen(pts[0]));
+    std::sort(pts.begin(), pts.end(), RadiallyLessThen(pts[0]));
 }
 
 /*private*/

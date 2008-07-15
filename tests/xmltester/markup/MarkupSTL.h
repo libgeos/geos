@@ -62,6 +62,7 @@
 #pragma warning(disable:4786)
 #endif
 
+#include <cstring>
 #include <string>
 #include <map>
 #include <vector>
@@ -193,9 +194,9 @@ protected:
 		#ifdef MARKUP_IGNORECASE
 			return ( (strnicmp( &szDoc[nL], szName, nLen ) == 0)
 		#else
-			return ( (strncmp( &szDoc[nL], szName, nLen ) == 0)
+			return ( (std::strncmp( &szDoc[nL], szName, nLen ) == 0)
 		#endif
-				&& ( szName[nLen] == '\0' || strchr(" =/[",szName[nLen]) ) );
+				&& ( szName[nLen] == '\0' || std::strchr(" =/[",szName[nLen]) ) );
 		};
 		int nL;
 		int nR;

@@ -90,7 +90,7 @@ Key::computeInterval(int level, Interval *itemInterval)
 
 	double size=DoubleBits::powerOf2(level);
 	//double size = pow2.power(level);
-	pt=floor(itemInterval->getMin()/size)*size;
+	pt=std::floor(itemInterval->getMin()/size)*size;
 	interval->init(pt,pt+size);
 }
 

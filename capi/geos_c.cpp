@@ -566,7 +566,7 @@ GEOSGeomToWKB_buf(const Geometry *g, size_t *size)
 
 		unsigned char *result;
 		result = (unsigned char*) std::malloc(len);
-		memcpy(result, wkbstring.c_str(), len);
+        std::memcpy(result, wkbstring.c_str(), len);
 		*size = len;
 		return result;
 	}
@@ -628,7 +628,7 @@ GEOSGeomToHEX_buf(const Geometry *g, size_t *size)
 
 		char *result;
 		result = (char*) std::malloc(len);
-		memcpy(result, hexstring.c_str(), len);
+        std::memcpy(result, hexstring.c_str(), len);
 		*size = len;
 		return (unsigned char*) result;
 	}
@@ -2149,7 +2149,7 @@ GEOSWKBWriter_write(WKBWriter *writer, const Geometry *geom, size_t *size)
 
 		unsigned char *result;
 		result = (unsigned char*) std::malloc(len);
-		memcpy(result, wkbstring.c_str(), len);
+        std::memcpy(result, wkbstring.c_str(), len);
 		*size = len;
 		return result;
 	}
@@ -2179,7 +2179,7 @@ GEOSWKBWriter_writeHEX(WKBWriter *writer, const Geometry *geom, size_t *size)
 
 		unsigned char *result;
 		result = (unsigned char*) std::malloc(len);
-		memcpy(result, wkbstring.c_str(), len);
+        std::memcpy(result, wkbstring.c_str(), len);
 		*size = len;
 		return result;
 	}

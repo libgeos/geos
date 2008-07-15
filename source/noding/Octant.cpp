@@ -41,8 +41,8 @@ Octant::octant(double dx, double dy)
       		throw util::IllegalArgumentException(s.str());
 	}
 
-    double adx = fabs(dx);
-    double ady = fabs(dy);
+    double adx = std::fabs(dx);
+    double ady = std::fabs(dy);
 
     if (dx >= 0) {
       if (dy >= 0) {

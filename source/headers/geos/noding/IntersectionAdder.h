@@ -157,7 +157,7 @@ public:
 
  
 	static bool isAdjacentSegments(int i1, int i2) {
-		return abs(i1 - i2) == 1;
+		return std::abs(i1 - i2) == 1;
 	}
 
 };

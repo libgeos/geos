@@ -119,7 +119,7 @@ Coordinate::distance(const Coordinate& p) const
 {
 	double dx = x - p.x;
 	double dy = y - p.y;
-	return sqrt(dx * dx + dy * dy);
+	return std::sqrt(dx * dx + dy * dy);
 }
 
 INLINE int

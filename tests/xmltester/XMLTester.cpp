@@ -277,9 +277,9 @@ XMLTester::parsePrecisionModel()
 		std::string offsetXStr=xml.GetChildAttrib("offsetx");
 		std::string offsetYStr=xml.GetChildAttrib("offsety");
 
-		double scale=strtod(scaleStr.c_str(),&stopstring);
-		double offsetX=strtod(offsetXStr.c_str(),&stopstring);
-		double offsetY=strtod(offsetYStr.c_str(),&stopstring);
+		double scale=std::strtod(scaleStr.c_str(),&stopstring);
+		double offsetX=std::strtod(offsetXStr.c_str(),&stopstring);
+		double offsetY=std::strtod(offsetYStr.c_str(),&stopstring);
 		pm.reset(new PrecisionModel(scale,offsetX,offsetY));
 	}
 
@@ -703,10 +703,10 @@ XMLTester::parseTest()
 			profile.start();
 
 			GeomAutoPtr gRealRes;
-			double dist = atof(opArg3.c_str());
+			double dist = std::atof(opArg3.c_str());
 
 			if ( opArg2 != "" ) {
-				gRealRes.reset(gT->buffer(dist, atoi(opArg2.c_str())));
+				gRealRes.reset(gT->buffer(dist, std::atoi(opArg2.c_str())));
 			} else {
 				gRealRes.reset(gT->buffer(dist));
 			}
@@ -806,7 +806,7 @@ XMLTester::parseTest()
 
 		else if (opName=="iswithindistance")
 		{
-			float dist=atof(opArg3.c_str());
+			float dist=std::atof(opArg3.c_str());
 			if (gA->isWithinDistance(gB, dist)) {
 				actual_result="true";
 			} else {
@@ -876,7 +876,7 @@ XMLTester::parseTest()
 		else if (opName=="areatest")
 		{
 			char* rest;
-			double toleratedDiff = strtod(opRes.c_str(), &rest);
+			double toleratedDiff = std::strtod(opRes.c_str(), &rest);
 			if ( rest == opRes.c_str() )
 			{
 				throw std::runtime_error("malformed testcase: missing tolerated area difference in 'areatest' op");
@@ -944,28 +944,28 @@ XMLTester::parseTest()
 			// ^ : intersection
 		
 			// A == ( A ^ B ) + ( A - B )
-			double diff = fabs ( areaA - areaI - areaDab );
+			double diff = std::fabs ( areaA - areaI - areaDab );
 			if ( diff > maxdiff ) {
 				maxdiffop = "A == ( A ^ B ) + ( A - B )";
 				maxdiff = diff;
 			}
 
 			// B == ( A ^ B ) + ( B - A )
-			diff = fabs ( areaB - areaI - areaDba );
+			diff = std::fabs ( areaB - areaI - areaDba );
 			if ( diff > maxdiff ) {
 				maxdiffop = "B == ( A ^ B ) + ( B - A )";
 				maxdiff = diff;
 			}
 
 			//  ( A @ B ) == ( A - B ) + ( B - A )
-			diff = fabs ( areaDab + areaDba - areaSD );
+			diff = std::fabs ( areaDab + areaDba - areaSD );
 			if ( diff > maxdiff ) {
 				maxdiffop = "( A @ B ) == ( A - B ) + ( B - A )";
 				maxdiff = diff;
 			}
 
 			//  ( A u B ) == ( A ^ B ) + ( A @ B )
-			diff = fabs ( areaI + areaSD - areaU );
+			diff = std::fabs ( areaI + areaSD - areaU );
 			if ( diff > maxdiff ) {
 				maxdiffop = "( A u B ) == ( A ^ B ) + ( A @ B )";
 				maxdiff = diff;
@@ -1052,7 +1052,7 @@ usage(char *me, int exitcode, std::ostream &os)
 	   << "--sql-output         Produce SQL output" << std::endl
 	   << "--wkb-output         Print Geometries as HEXWKB" << std::endl;
 
-	exit(exitcode);
+    std::exit(exitcode);
 }
 
 int
@@ -1074,30 +1074,30 @@ main(int argC, char* argV[])
 	for (int i=1; i<argC; ++i)
 	{
 		// increment verbosity level
-		if ( ! strcmp(argV[i], "-v" ) )
+		if ( ! std::strcmp(argV[i], "-v" ) )
 		{
 			++verbose;
 			tester.setVerbosityLevel(verbose);
 			continue;
 		}
-		if ( ! strcmp(argV[i], "--test-valid-output" ) )
+		if ( ! std::strcmp(argV[i], "--test-valid-output" ) )
 		{
 			tester.testOutputValidity(true);
 			continue;
 		}
-		if ( ! strcmp(argV[i], "--sql-output" ) )
+		if ( ! std::strcmp(argV[i], "--sql-output" ) )
 		{
 			sql_output = true;
 			tester.setSQLOutput(sql_output);
 			continue;
 		}
-		if ( ! strcmp(argV[i], "--wkb-output" ) )
+		if ( ! std::strcmp(argV[i], "--wkb-output" ) )
 		{
 			sql_output = true;
 			tester.setHEXWKBOutput(sql_output);
 			continue;
 		}
-		if ( ! strcmp(argV[i], "--test-valid-input" ) )
+		if ( ! std::strcmp(argV[i], "--test-valid-input" ) )
 		{
 			tester.testInputValidity(true);
 			continue;

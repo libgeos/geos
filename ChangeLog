@@ -1,5 +1,26 @@
 $Id$
 
+2008-07-15 Mateusz Loskot <mateusz@loskot.net>
+
+	* source\algorithm\RobustDeterminant.cpp,
+	  source\algorithm\locate\IndexedPointInAreaLocator.cpp,
+	  source\algorithm\ConvexHull.cpp,
+	  source\precision\SimpleGeometryPrecisionReducer.cpp,
+	  source\planargraph\DirectedEdge.cpp,
+	  source\operation\buffer\OffsetCurveSetBuilder.cpp,
+	  source\operation\buffer\BufferBuilder.cpp,
+	  source\operation\buffer\BufferOp.cpp,
+	  source\operation\distance\ConnectedElementPointFilter.cpp,
+	  source\io\ByteOrderValues.cpp, source\index\bintree\Key.cpp,
+	  source\index\quadtree\Key.cpp, source\geomgraph\GeometryGraph.cpp,
+	  source\geomgraph\EdgeEnd.cpp, source\headers\geos\geom\LineSegment.inl,
+	  source\headers\geos\geom\Coordinate.inl, source\headers\geos\io\WKBReader.h,
+	  source\headers\geos\noding\IntersectionAdder.h, source\util\math.cpp,
+	  source\noding\Octant.cpp, tests\xmltester\markup\MarkupSTL.h,
+	  tests\xmltester\XMLTester.cpp, capi\geos_c.cpp: Fixed compilation on
+	  with Sun Studio compiler on Solaris x86 and Sparc (Ticket #189). Thanks
+	  to Magne Mahre for the patch.
+
 2008-05-20 Mateusz Loskot <mateusz@loskot.net>
 
 	* bootstrap.bat: Added script generating headers for use with Visual C++

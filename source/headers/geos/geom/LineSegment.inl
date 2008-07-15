@@ -140,7 +140,7 @@ LineSegment::closestPoints(const LineSegment* line)
 INLINE double
 LineSegment::angle() const
 {
-	return atan2(p1.y-p0.y,p1.x-p0.x);
+	return std::atan2(p1.y-p0.y,p1.x-p0.x);
 }
 
 INLINE std::ostream&

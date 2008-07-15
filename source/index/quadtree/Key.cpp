@@ -105,8 +105,8 @@ Key::computeKey(int level,Envelope *itemEnv)
 {
 	double quadSize=DoubleBits::powerOf2(level);
 	//double quadSize=pow2.power(level);
-	pt->x=floor(itemEnv->getMinX()/quadSize)*quadSize;
-	pt->y=floor(itemEnv->getMinY()/quadSize)*quadSize;
+	pt->x=std::floor(itemEnv->getMinX()/quadSize)*quadSize;
+	pt->y=std::floor(itemEnv->getMinY()/quadSize)*quadSize;
 	env->init(pt->x,pt->x+quadSize,pt->y,pt->y+quadSize);
 }
 

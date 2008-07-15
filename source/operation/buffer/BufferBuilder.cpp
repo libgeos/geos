@@ -360,7 +360,7 @@ BufferBuilder::createSubgraphs(PlanarGraph *graph, std::vector<BufferSubgraph*>&
 	 * subgraphs for shells will have been built before the subgraphs for
 	 * any holes they contain
 	 */
-	sort(subgraphList.begin(), subgraphList.end(), BufferSubgraphGT);
+    std::sort(subgraphList.begin(), subgraphList.end(), BufferSubgraphGT);
 }
 
 /*private*/
