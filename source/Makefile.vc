@@ -19,32 +19,42 @@ RM = -del
 
 # Check compiler version given in command line
 # nmake -f makefile.vc MSVC_VER=xxxx
+# By default, Visual C++ 7.1 (1310) is configured.
 #
 !IFNDEF MSVC_VER
-#assume msvc 7.1
 MSVC_VER=1310
 !ENDIF
 
+# Collect compiler version specific flags
 !IF $(MSVC_VER) >= 1400
 MSVC_CPPFLAGS = /EHs /D "_CRT_SECURE_NO_DEPRECATE"
 !ELSE
 MSVC_CPPFLAGS = /GX
 !ENDIF
 
-#CFLAGS = -Iheaders /GX /MD /GR /Zi /nologo
-#CFLAGS = -Iheaders /GX /MD /GR /O1 /D "NDEBUG" /nologo
-CFLAGS = -Iheaders /MD /GR /O2 /D "NDEBUG" /nologo \
-     	 /D "NOMINMAX" /D "WIN32_LEAN_AND_MEAN" /D "NOGDI" \
-	 $(MSVC_CPPFLAGS)
+# Determine requested build configuration, by default use release and
+# build optimized binaries. For Debug, use
+# nmake -f makefile.vc DEBUG=1
+!IFNDEF DEBUG
+CFLAGS = -Iheaders /MD /GR /O2 /W3 /nologo /D "NDEBUG" \
+         /D "NOMINMAX" /D "WIN32_LEAN_AND_MEAN" /D "NOGDI" \
+         $(MSVC_CPPFLAGS)
+!ELSE
+CFLAGS = -Iheaders /MDd /GR /Od /W4 /Zi /nologo /D "_DEBUG" \
+         /D "NOMINMAX" /D "WIN32_LEAN_AND_MEAN" /D "NOGDI" \
+         $(MSVC_CPPFLAGS)
+!ENDIF
 
-
+# Names of binary files
 LIBNAME =	geos.lib
 DLLNAME = 	geos.dll
-CDLLNAME =  	geos_c.dll
-CLIBNAME =  	geos_c_i.lib
+CDLLNAME =  geos_c.dll
+CLIBNAME =  geos_c_i.lib
 SLIBNAME =	geos_i.lib
 
-OBJ = 	algorithm\CGAlgorithms.obj \
+# List of objects
+OBJ = \
+    algorithm\CGAlgorithms.obj \
 	algorithm\CentroidArea.obj \
 	algorithm\CentroidLine.obj \
 	algorithm\CentroidPoint.obj \
