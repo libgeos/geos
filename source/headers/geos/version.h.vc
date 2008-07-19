@@ -29,8 +29,8 @@
 
 #define GEOS_VERSION_MAJOR 3
 #define GEOS_VERSION_MINOR 0
-#define GEOS_VERSION_PATCH 0rc4
-#define GEOS_VERSION "3.0.0rc4"
+#define GEOS_VERSION_PATCH 99
+#define GEOS_VERSION "3.0svn"
 #define GEOS_JTS_PORT "1.7.1"
 
 #endif // GEOS_VERSION_H
