@@ -301,9 +301,11 @@ $(LIBNAME):	headers/geos/platform.h headers/geos/version.h ../capi/geos_c.h $(OB
 
 $(DLLNAME):	$(OBJ)
 	link /dll /debug $(OBJ) /out:$(DLLNAME) /implib:$(SLIBNAME)
+	if exist $(DLLNAME).manifest mt -manifest $(DLLNAME).manifest -outputresource:$(DLLNAME);2
 
 $(CDLLNAME): ..\capi\geos_c.obj $(DLLNAME)
 	link /dll /debug ..\capi\geos_c.obj $(LIBNAME) /out:$(CDLLNAME) /implib:$(CLIBNAME)
+	if exist $(CDLLNAME).manifest mt -manifest $(CDLLNAME).manifest -outputresource:$(CDLLNAME);2
   
 headers/geos/platform.h: headers/geos/platform.h.vc
 	copy headers\geos\platform.h.vc headers\geos\platform.h
