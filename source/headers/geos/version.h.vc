@@ -19,18 +19,31 @@
  * number changes.
  *
  **********************************************************************/
-
-#ifndef GEOS_VERSION_H
-#define GEOS_VERSION_H
+#ifndef GEOS_VERSION_H_INCLUDED
+#define GEOS_VERSION_H_INCLUDED
 
 #ifndef _MSC_VER
 #error "This version.h intended for use with MS Visual C++"
 #endif
 
+#ifndef GEOS_VERSION_MAJOR
 #define GEOS_VERSION_MAJOR 3
-#define GEOS_VERSION_MINOR 1
-#define GEOS_VERSION_PATCH 0
-#define GEOS_VERSION "3.1.0"
-#define GEOS_JTS_PORT "1.7.1"
+#endif
 
-#endif // GEOS_VERSION_H
+#ifndef GEOS_VERSION_MINOR
+#define GEOS_VERSION_MINOR 1
+#endif
+
+#ifndef GEOS_VERSION_PATCH
+#define GEOS_VERSION_PATCH 0
+#endif
+
+#ifndef GEOS_VERSION
+#define GEOS_VERSION "3.1.0"
+#endif
+
+#ifndef GEOS_JTS_PORT
+#define GEOS_JTS_PORT "1.7.1"
+#endif
+
+#endif // GEOS_VERSION_H_INCLUDED
