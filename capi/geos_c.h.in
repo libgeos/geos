@@ -27,8 +27,8 @@
  *
  ***********************************************************************/
 
-#ifndef GEOS_C_H
-#define GEOS_C_H
+#ifndef GEOS_C_H_INCLUDED
+#define GEOS_C_H_INCLUDED
 
 #ifndef __cplusplus
 # include <stddef.h> /* for size_t definition */
@@ -55,11 +55,21 @@ extern "C" {
 #define GEOS_CAPI_VERSION_PATCH 0
 #define GEOS_CAPI_VERSION "3.1.0-CAPI-1.5.0"
 #else
+#ifndef GEOS_VERSION_MAJOR
 #define GEOS_VERSION_MAJOR @VERSION_MAJOR@
+#endif
+#ifndef GEOS_VERSION_MINOR
 #define GEOS_VERSION_MINOR @VERSION_MINOR@
+#endif
+#ifndef GEOS_VERSION_PATCH
 #define GEOS_VERSION_PATCH @VERSION_PATCH@
+#endif
+#ifndef GEOS_VERSION
 #define GEOS_VERSION "@VERSION@"
+#endif
+#ifndef GEOS_JTS_PORT
 #define GEOS_JTS_PORT "@JTS_PORT@"
+#endif
 
 #define GEOS_CAPI_VERSION_MAJOR @CAPI_VERSION_MAJOR@
 #define GEOS_CAPI_VERSION_MINOR @CAPI_VERSION_MINOR@
@@ -486,4 +496,4 @@ extern void GEOS_DLL GEOSWKBWriter_setIncludeSRID(GEOSWKBWriter* writer, const c
 } // extern "C"
 #endif
 
-#endif /* #ifndef GEOS_C_H */
+#endif /* #ifndef GEOS_C_H_INCLUDED */
