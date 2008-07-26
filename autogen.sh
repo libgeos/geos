@@ -1,5 +1,9 @@
 #!/bin/sh
-
+#
+# $Id$
+#
+# GEOS Bootstrapping Script
+#
 giveup()
 {
         echo
@@ -12,7 +16,7 @@ OSTYPE=`uname -s`
 
 for libtoolize in glibtoolize libtoolize; do
     LIBTOOLIZE=`which $libtoolize 2>/dev/null`
-    if test "$LIBTOOLIZE"; then
+    if test -x "${LIBTOOLIZE}"; then
         break;
     fi
 done
