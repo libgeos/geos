@@ -45,7 +45,7 @@ AC_DEFUN([AC_PYTHON_DEVEL],[
         # Check for Python library path
         AC_MSG_CHECKING([for Python library path])
         for i in "$base_python_path/lib/python$PYTHON_VERSION/config/" "$base_python_path/lib/python$PYTHON_VERSION/" "$base_python_path/lib/python/config/" "$base_python_path/lib/python/" "$base_python_path/" "$base_python_path/libs/" ; do
-                python_path=`find $i -type f -name libpython$PYTHON_VERSION.* -print 2> /dev/null | sed "1q"`
+                python_path=`find $i -name libpython$PYTHON_VERSION.* -print 2> /dev/null | sed "1q"`
                 if test -n "$python_path" ; then
                         break
                 fi
