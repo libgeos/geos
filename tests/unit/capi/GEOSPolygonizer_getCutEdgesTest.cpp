@@ -61,10 +61,10 @@ namespace tut
         const int size = 2;
         GEOSGeometry* geoms[size] = { 0 };
 
-	    geoms[0] = GEOSGeomFromWKT("LINESTRING(1 3, 3 3, 3 1, 1 1, 1 3)");
-	    geoms[1] = GEOSGeomFromWKT("LINESTRING(1 3, 3 3, 3 1, 1 1, 1 3)");
+        geoms[0] = GEOSGeomFromWKT("LINESTRING(1 3, 3 3, 3 1, 1 1, 1 3)");
+        geoms[1] = GEOSGeomFromWKT("LINESTRING(1 3, 3 3, 3 1, 1 1, 1 3)");
 
-		GEOSGeometry* g = GEOSPolygonizer_getCutEdges(geoms, size);
+        GEOSGeometry* g = GEOSPolygonizer_getCutEdges(geoms, size);
 
         ensure(0 != g);
         ensure_equals(GEOSGetNumGeometries(g), size);
@@ -82,14 +82,14 @@ namespace tut
         GEOSGeometry* geoms[size] = { 0 };
 
         // Example from JTS Developer's Guide, Chapter 6 - Polygonization
-	    geoms[0] = GEOSGeomFromWKT("LINESTRING(0 0, 10 10)"); // isolated edge
-	    geoms[1] = GEOSGeomFromWKT("LINESTRING(185 221, 100 100)"); // dangling edge
-	    geoms[2] = GEOSGeomFromWKT("LINESTRING(185 221, 88 275, 180 316)");
-	    geoms[3] = GEOSGeomFromWKT("LINESTRING(185 221, 292 281, 180 316)");
-	    geoms[4] = GEOSGeomFromWKT("LINESTRING(189 98, 83 187, 185 221)");
-	    geoms[5] = GEOSGeomFromWKT("LINESTRING(189 98, 325 168, 185 221)");
+        geoms[0] = GEOSGeomFromWKT("LINESTRING(0 0, 10 10)"); // isolated edge
+        geoms[1] = GEOSGeomFromWKT("LINESTRING(185 221, 100 100)"); // dangling edge
+        geoms[2] = GEOSGeomFromWKT("LINESTRING(185 221, 88 275, 180 316)");
+        geoms[3] = GEOSGeomFromWKT("LINESTRING(185 221, 292 281, 180 316)");
+        geoms[4] = GEOSGeomFromWKT("LINESTRING(189 98, 83 187, 185 221)");
+        geoms[5] = GEOSGeomFromWKT("LINESTRING(189 98, 325 168, 185 221)");
 
-		GEOSGeometry* g = GEOSPolygonizer_getCutEdges(geoms, size);
+        GEOSGeometry* g = GEOSPolygonizer_getCutEdges(geoms, size);
 
         ensure(0 != g);
         ensure_equals(GEOSGetNumGeometries(g), 0);
