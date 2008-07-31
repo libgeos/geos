@@ -57,7 +57,8 @@ geos_unit_SOURCES = geos_unit.cpp \
 	simplify/TopologyPreservingSimplifierTest.cpp \
 	util/UniqueCoordinateArrayFilterTest.cpp \
 	capi/GEOSCoordSeqTest.cpp	\
-	capi/GEOSSimplifyTest.cpp
+	capi/GEOSSimplifyTest.cpp \
+	capi/GEOSPolygonizer_getCutEdgesTest.cpp
 
-noinst_HEADERS = 			\
+noinst_HEADERS = \
 	utility.h

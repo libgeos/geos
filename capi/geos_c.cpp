@@ -1352,6 +1352,54 @@ GEOSPolygonize(const Geometry * const * g, unsigned int ngeoms)
 }
 
 Geometry *
+GEOSPolygonizer_getCutEdges(const Geometry * const * g, unsigned int ngeoms)
+{
+	using geos::operation::polygonize::Polygonizer;
+	unsigned int i;
+	Geometry *out = NULL;
+
+	try{
+		// Polygonize
+		Polygonizer plgnzr;
+		for (i=0; i<ngeoms; i++) plgnzr.add(g[i]);
+#if GEOS_DEBUG
+	NOTICE_MESSAGE("geometry vector added to polygonizer");
+#endif
+
+		std::vector<const LineString *>*lines = plgnzr.getCutEdges();
+
+#if GEOS_DEBUG
+	NOTICE_MESSAGE("output polygons got");
+#endif
+
+		// We need a vector of Geometry pointers, not
+		// Polygon pointers.
+		// STL vector doesn't allow transparent upcast of this
+		// nature, so we explicitly convert.
+		// (it's just a waste of processor and memory, btw)
+    std::vector<Geometry*> *linevec =
+				new std::vector<Geometry *>(lines->size());
+		for (i=0; i<lines->size(); i++) (*linevec)[i] = (*lines)[i]->clone();
+
+		out = geomFactory->createGeometryCollection(linevec);
+		// the above method takes ownership of the passed
+		// vector, so we must *not* delete it
+	}
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+		return NULL;
+	}
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
+	}
+
+	return out;
+}
+
+Geometry *
 GEOSLineMerge(const Geometry *g)
 {
 		using geos::operation::linemerge::LineMerger;
