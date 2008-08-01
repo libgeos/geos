@@ -1,5 +1,35 @@
 $Id$
 
+2008-07-31 Mateusz Loskot <mateusz@loskot.net>
+
+	* capi/geos_c.cpp, capi/geos_c.h.in, tests/unit/Makefile.am,
+	  tests/unit/capi/GEOSPolygonizer_getCutEdgesTest.cpp: Patch completing
+	  C API interface with wrapper on Polygonizer::getCutEdges (Ticket #195).
+	  Unit test included in tests/unit/capi/GEOSPolygonizer_getCutEdgeTest.cpp.
+
+2008-07-26 Mateusz Loskot <mateusz@loskot.net>
+	* r2138 - r2143: Tickets #167, #191, #192
+
+2008-07-25 Mateusz Loskot <mateusz@loskot.net>
+
+	* trunk/build/README, trunk/build/msvc80/README trunk/macros/geos.m4,
+	  trunk/source/headers/geos/algorithm/CentralEndpointIntersector.h,
+	  trunk/source/headers/geos/geomPrep.h,
+	  trunk/source/headers/geos/indexIntervalRTree.h,
+	  trunk/source/headers/geos/noding/FastNodingValidator.h,
+	  trunk/source/headers/geos/noding/SingleInteriorIntersectionFinder.h,
+	  trunk/source/noding/FastNodingValidator.cpp,
+	  trunk/source/noding/SingleInteriorIntersectionFinder.cpp,
+	  trunk/source/operation/buffer/OffsetCurveVertexList.h,
+	  trunk/swig/python/tests/TESTING.txt:
+	  tests/unit/operation/IsSimpleOpTest.cpp,
+	  tests/unit/precision/SimpleGeometryPrecisionReducerTest.cpp:
+	  Updated svn:keywords property
+
+2008-07-19 Frank Warmerdam
+
+	* r2123 - r2135
+
 2008-07-15 Mateusz Loskot <mateusz@loskot.net>
 
 	* source\algorithm\RobustDeterminant.cpp,
