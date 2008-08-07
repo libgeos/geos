@@ -1,11 +1,18 @@
-/*
- * timeval.h    1.3 2003/01/14
+/**********************************************************************
+ * $Id$
  *
- * Defines gettimeofday, timeval, etc. for Win32
+ * GEOS - Geometry Engine Open Source
+ * http://geos.refractions.net
  *
- * By Wu Yongwei
+ * Copyright (C) 2006 Wu Yongwei
  *
- */
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation. 
+ * See the COPYING file for more information.
+ *
+ **********************************************************************/
+
 
 #ifndef _TIMEVAL_H
 #define _TIMEVAL_H
