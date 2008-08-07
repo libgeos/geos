@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (c) Olivier Devillers <Olivier.Devillers@sophia.inria.fr>
  * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -18,9 +19,8 @@
  * sign of a 2x2 determinant for double precision values robustly.
  * It is a direct translation of code developed by Olivier Devillers.
  * 
- * The original code carries the following copyright notice:
- *
  *************************************************************************
+ * The original code carries the following copyright notice:
  * Author : Olivier Devillers
  * Olivier.Devillers@sophia.inria.fr
  * http:/www.inria.fr:/prisme/personnel/devillers/anglais/determinant.html
