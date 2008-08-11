@@ -17,12 +17,12 @@
 #ifndef GEOS_GEOM_PREP_PREPAREDGEOMETRYFACTORY_H
 #define GEOS_GEOM_PREP_PREPAREDGEOMETRYFACTORY_H
 
+#include <geos/geom/prep/PreparedGeometry.h>
+
 namespace geos {
 	namespace geom {
-		class Geometry;
-
-		namespace prep {
-			class PreparedGeometry;
+        namespace prep {
+            class PreparedGeometry;
 		}
 	}
 }
