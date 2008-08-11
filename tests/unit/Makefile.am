@@ -39,6 +39,7 @@ geos_unit_SOURCES = geos_unit.cpp \
 	geom/TriangleTest.cpp \
 	geom/Geometry/isRectangleTest.cpp \
 	geom/Geometry/coversTest.cpp \
+	geom/prep/PreparedGeometryFactoryTest.cpp \
 	index/quadtree/DoubleBitsTest.cpp \
 	io/WKBReaderTest.cpp \
 	io/ByteOrderValuesTest.cpp \
