@@ -77,7 +77,9 @@ namespace tut
         prep::PreparedGeometry const* pg = prep::PreparedGeometryFactory::prepare(g);
 		ensure( 0 != pg );
 
-        // FIXME: pg leaks here, but we don't know how to destroy
+        // FREE MEMORY
+        prep::PreparedGeometryFactory::destroy(pg);
+        gf.destroyGeometry(g);
 	}
 	
     // Test create with empty POINT
@@ -92,7 +94,10 @@ namespace tut
 		prep::PreparedGeometryFactory pgf;
 		prep::PreparedGeometry const* pg = pgf.create(g);
 		ensure( 0 != pg );
-        // FIXME: pg leaks here, but we don't know how to destroy
+        
+        // FREE MEMORY
+        prep::PreparedGeometryFactory::destroy(pg);
+        gf.destroyGeometry(g);
 	}
 	
 
