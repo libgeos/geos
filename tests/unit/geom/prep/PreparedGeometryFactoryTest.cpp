@@ -43,6 +43,7 @@ namespace tut
     void object::test<1>()
     {
         prep::PreparedGeometryFactory pgf;
+        (void)pgf;
     }
 
     // Test passing null-pointer to prepare static method
@@ -60,6 +61,7 @@ namespace tut
     void object::test<3>()
     {
         prep::PreparedGeometryFactory pgf;
+        (void)pgf;
 
         // FIXME: null pointer throws segfault (Ticket #197)
         // ensure(0 == pgf.create(0));
