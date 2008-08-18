@@ -113,10 +113,16 @@ CoordinateSequence* GeometryTestFactory::createSineStar(double basex,double base
 			double len=armLen*(1-cos(ang)/2)+armBaseLen;
 			double x=len*cos(starAng+iArmPt*angInc/nArmPt)+basex;
 			double y=len*sin(starAng+iArmPt*angInc/nArmPt)+basey;
+
+            // FIXME - mloskot: Number of problems here:
+            // - new'd Coordinate definitely leaks
+            // - add() method makes a copy
+            // - why temporarily used Coordinate is allocated on the heap?!?
 			pts->add(*(new Coordinate(x,y)));
 		}
 		starAng+=angInc;
 	}
+    // FIXME - mloskot: The same problems as above
 	pts->add(*(new Coordinate(pts->getAt(0))));
 	return pts;
 }

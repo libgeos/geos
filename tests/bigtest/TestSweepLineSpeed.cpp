@@ -78,14 +78,16 @@ void run(int nPts, GeometryFactory *fact) {
 	int nArms=10;
 	Polygon *poly=GeometryTestFactory::createSineStar(fact,0.0,0.0,size,armLen,nArms,nPts);
 	Polygon *box=GeometryTestFactory::createSineStar(fact,0.0,size/2,size,armLen,nArms,nPts); 
-//	Polygon *box=GeometryTestFactory::createBox(fact,0,0,1,100.0);
+    //Polygon *box=GeometryTestFactory::createBox(fact,0,0,1,100.0);
 
 	startTime=clock();
     poly->intersects(box);
     endTime=clock();
 	double totalTime=(double)(endTime-startTime);
 	printf( "n Pts: %i  Executed in %6.0f ms.\n",nPts,totalTime);
-//	cout << "n Pts: " << nPts << "   Executed in " << totalTime << endl;
+    //cout << "n Pts: " << nPts << "   Executed in " << totalTime << endl;
+    
+    // FIXME - mloskot: Why generated test geometries are not destroyed?"
 }
 
 int main(int /* argc */, char** /* argv[] */) {
@@ -107,6 +109,8 @@ int main(int /* argc */, char** /* argv[] */) {
 //	_CrtDumpMemoryLeaks();
 
 	cout << "Done" << endl;
+
+    // FIXME - mloskot: Who's gonna to eat the 'fact'? Mr. Leak!
 
 	return 0;
 }
