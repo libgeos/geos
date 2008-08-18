@@ -37,7 +37,7 @@
 // 
 
 #ifndef UNREFERENCED_PARAMETER 
-#define UNREFERENCED_PARAMETER(p) (p)
+#define UNREFERENCED_PARAMETER(p) ((void)p)
 #endif 
 
 #endif // GEOS_UTIL_H
