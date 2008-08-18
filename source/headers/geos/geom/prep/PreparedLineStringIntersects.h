@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
@@ -77,6 +77,7 @@ protected:
 
 
 public:
+
 	/**
 	 * Computes the intersects predicate between a {@link PreparedLineString}
 	 * and a {@link Geometry}.
@@ -91,6 +92,9 @@ public:
 		return op->intersects( geom);
 	}
 
+    /**
+     * \todo FIXME - mloskot: Why not taking linestring through const reference?
+     */
 	PreparedLineStringIntersects(PreparedLineString & prep) 
 		: prepLine( prep)
 	{ }
