@@ -2,9 +2,7 @@
 // 
 // Test Suite for geos::geom::GeometryFactory class.
 
-// TUT
-#include <tut.h>
-// GEOS
+// geos
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/Coordinate.h>
@@ -22,9 +20,12 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/io/WKTReader.h>
 #include <geos/util/IllegalArgumentException.h>
-// STL
+// std
 #include <vector>
 #include <cstring> // std::size_t
+// tut
+#include <tut.h>
+#include <utility.h>
 
 /*!
  * \brief
@@ -47,36 +48,6 @@ namespace tut
 	// Common data used by tests
 	struct test_geometryfactory_data
 	{
-		// Typedefs used as short names by test cases
-
-		typedef geos::geom::Coordinate* CoordinatePtr;
-		typedef geos::geom::Coordinate const* CoordinateCPtr;
-
-		typedef geos::geom::CoordinateArraySequence* CoordArrayPtr;
-		typedef geos::geom::CoordinateArraySequence const* CoordArrayCPtr;
-		
-		typedef geos::geom::Geometry* GeometryPtr;
-		typedef geos::geom::Geometry const* GeometryCPtr;
-
-		typedef geos::geom::Point* PointPtr;
-		typedef geos::geom::Point const* PointCPtr;
-		typedef geos::geom::LinearRing* LinearRingPtr;
-		typedef geos::geom::LinearRing const* LinearRingCPtr;
-		typedef geos::geom::LineString* LineStringPtr;
-		typedef geos::geom::LineString const* LineStringCPtr;
-		typedef geos::geom::Polygon* PolygonPtr;
-		typedef geos::geom::Polygon const* PolygonCPtr;
-
-		typedef geos::geom::GeometryCollection* GeometryColPtr;
-		typedef geos::geom::GeometryCollection const* GeometryColCPtr;
-
-		typedef geos::geom::MultiPoint* MultiPointPtr;
-		typedef geos::geom::MultiPoint const* MultiPointCPtr;
-		typedef geos::geom::MultiLineString* MultiLineStringPtr;
-		typedef geos::geom::MultiLineString const* MultiLineStringCPtr;
-		typedef geos::geom::MultiPolygon* MultiPolygonPtr;
-		typedef geos::geom::MultiPolygon const* MultiPolygonCPtr;
-
 		// Test data
 		const int x_;
 		const int y_;

@@ -3,9 +3,6 @@
 // Test Suite for geos::algorithm::ConvexHull
 // Ported from JTS junit/algorithm/ConvexHullTest.java
 
-// tut
-#include <tut.h>
-#include <utility.h>
 // geos
 #include <geos/algorithm/ConvexHull.h>
 #include <geos/geom/LineString.h>
@@ -19,6 +16,9 @@
 // std
 #include <sstream>
 #include <memory>
+// tut
+#include <tut.h>
+#include <utility.h>
 
 namespace geos {
 	namespace geom {
@@ -65,7 +65,6 @@ namespace tut
     void object::test<1>()
     {   
         using geos::geom::LineString;
-        using utility::dynamic_cast_auto_ptr;
 
         GeometryAPtr lineGeom(reader_.read("LINESTRING (30 220, 240 220, 240 220)"));
         LineStringAPtr line(dynamic_cast_auto_ptr<LineString>(lineGeom));
@@ -84,7 +83,6 @@ namespace tut
     void object::test<2>()
     {   
         using geos::geom::LineString;
-        using utility::dynamic_cast_auto_ptr;
 
         GeometryAPtr geom(reader_.read("MULTIPOINT (130 240, 130 240, 130 240, 570 240, 570 240, 570 240, 650 240)"));
         ensure(0 != geom.get());
@@ -102,7 +100,6 @@ namespace tut
     void object::test<3>()
     {   
         using geos::geom::LineString;
-        using utility::dynamic_cast_auto_ptr;
 
         GeometryAPtr geom(reader_.read("MULTIPOINT (0 0, 0 0, 10 0)"));
         ensure(0 != geom.get());
@@ -120,7 +117,6 @@ namespace tut
     void object::test<4>()
     {   
         using geos::geom::LineString;
-        using utility::dynamic_cast_auto_ptr;
 
         GeometryAPtr geom(reader_.read("MULTIPOINT (0 0, 10 0, 10 0)"));
         ensure(0 != geom.get());
@@ -138,7 +134,6 @@ namespace tut
     void object::test<5>()
     {   
         using geos::geom::LineString;
-        using utility::dynamic_cast_auto_ptr;
 
         GeometryAPtr geom(reader_.read("MULTIPOINT (0 0, 5 0, 10 0)"));
         ensure(0 != geom.get());
@@ -156,7 +151,6 @@ namespace tut
     void object::test<6>()
     {   
         using geos::geom::LineString;
-        using utility::dynamic_cast_auto_ptr;
 
         GeometryAPtr geom(reader_.read("MULTIPOINT (0 0, 5 1, 10 0)"));
         ensure(0 != geom.get());
@@ -176,7 +170,6 @@ namespace tut
     void object::test<7>()
     {   
         using geos::geom::LineString;
-        using utility::dynamic_cast_auto_ptr;
 
         GeometryAPtr geom(reader_.read("MULTIPOINT (0 0, 0 0, 5 0, 5 0, 10 0, 10 0)"));
         ensure(0 != geom.get());
@@ -189,3 +182,4 @@ namespace tut
     }
 
 } // namespace tut
+

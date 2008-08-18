@@ -2,9 +2,7 @@
 // 
 // Test Suite for geos::geom::MultiPoint class.
 
-// TUT
-#include <tut.h>
-// GEOS
+// geos
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Geometry.h>
@@ -12,8 +10,11 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/io/ParseException.h>
 #include <geos/io/WKTReader.h>
-// STL
+// std
 #include <cmath>
+// tut
+#include <tut.h>
+#include <utility.h>
 
 namespace tut
 {
@@ -24,15 +25,7 @@ namespace tut
 	// Common data used by tests
 	struct test_multipoint_data
 	{
-		typedef geos::geom::Geometry* GeometryPtr;
-		typedef geos::geom::Geometry const* GeometryCPtr;
-
-		typedef geos::geom::Point* PointPtr;
-		typedef geos::geom::Point const* PointCPtr;
-
-		typedef geos::geom::MultiPoint* MultiPointPtr;
 		typedef std::auto_ptr<geos::geom::MultiPoint> MultiPointAutoPtr;
-		typedef geos::geom::MultiPoint const* MultiPointCPtr;
 
 		geos::geom::PrecisionModel pm_;
 		geos::geom::GeometryFactory factory_;
@@ -382,3 +375,4 @@ namespace tut
 	}
 
 } // namespace tut
+
