@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id:
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
@@ -91,7 +91,12 @@ contains( const geom::Geometry * g) const
   	
     // optimization for rectangles
     if ( isRectangle )
-		return operation::predicate::RectangleContains::contains( *((geom::Polygon *)&getGeometry()), *g);
+    {
+        geom::Geometry const& geom = getGeometry();
+        geom::Polygon const& poly = static_cast<geom::Polygon const&>(geom);
+        
+        return operation::predicate::RectangleContains::contains(poly, *g);
+    }
 
 	return PreparedPolygonContains::contains( this, g);
 }
@@ -132,7 +137,12 @@ intersects( const geom::Geometry* g) const
   	
     // optimization for rectangles
     if ( isRectangle )
-		return operation::predicate::RectangleIntersects::intersects( *((geom::Polygon *)&getGeometry()), *g);
+    {
+        geom::Geometry const& geom = getGeometry();
+        geom::Polygon const& poly = static_cast<geom::Polygon const&>(geom);
+        
+        return operation::predicate::RectangleIntersects::intersects(poly, *g);
+    }
     
 	return PreparedPolygonIntersects::intersects( this, g);
 }
@@ -145,3 +155,4 @@ intersects( const geom::Geometry* g) const
  * $Log$
  *
  **********************************************************************/
+

@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id:
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
@@ -46,9 +46,14 @@ PreparedLineString::getIntersectionFinder()
 bool 
 PreparedLineString::intersects(const geom::Geometry * g) const
 {
-	if (! envelopesIntersect(g)) return false;
-
-	return PreparedLineStringIntersects::intersects( *(const_cast<PreparedLineString*>(this)), g);
+	if (! envelopesIntersect(g))
+    {
+        return false;
+    }
+    
+    PreparedLineString& prep = *(const_cast<PreparedLineString*>(this));
+    
+    return PreparedLineStringIntersects::intersects(prep, g);
 }
 
 } // namespace geos.geom.prep
@@ -59,3 +64,4 @@ PreparedLineString::intersects(const geom::Geometry * g) const
  * $Log$
  *
  **********************************************************************/
+
