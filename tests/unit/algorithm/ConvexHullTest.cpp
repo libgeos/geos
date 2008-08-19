@@ -16,6 +16,7 @@
 // std
 #include <sstream>
 #include <memory>
+#include <cassert>
 // tut
 #include <tut.h>
 #include <utility.h>
@@ -41,13 +42,22 @@ namespace tut
         typedef std::auto_ptr<geos::geom::Geometry> GeometryAPtr;
         typedef std::auto_ptr<geos::geom::LineString> LineStringAPtr;
 
+        GeometryPtr geom_;
         geos::geom::PrecisionModel pm_;
         geos::geom::GeometryFactory factory_;
         geos::io::WKTReader reader_;
 
         test_convexhull_data()
-			: pm_(1), factory_(&pm_, 0), reader_(&factory_)
-        {}
+			: geom_(0), pm_(1), factory_(&pm_, 0), reader_(&factory_)
+        {
+            assert(0 == geom_);
+        }
+
+        ~test_convexhull_data()
+        {
+            factory_.destroyGeometry(geom_);
+            geom_ = 0;
+        }
     };
 
 	typedef test_group<test_convexhull_data> group;
@@ -74,7 +84,8 @@ namespace tut
         LineStringAPtr convexHull(dynamic_cast_auto_ptr<LineString>(hullGeom));
         ensure(0 != convexHull.get());
 
-        ensure( convexHull->equalsExact(line->convexHull()) );
+        geom_ = line->convexHull();
+        ensure( convexHull->equalsExact(geom_) );
     }
 
 	// 2 - Test convex hull of multipoint
@@ -91,7 +102,8 @@ namespace tut
         LineStringAPtr convexHull(dynamic_cast_auto_ptr<LineString>(hullGeom));
         ensure(0 != convexHull.get());
 
-        ensure( convexHull->equalsExact(geom->convexHull()) );
+        geom_ = geom->convexHull();
+        ensure( convexHull->equalsExact(geom_) );
     }
 
 	// 3 - Test convex hull of multipoint
@@ -108,7 +120,8 @@ namespace tut
         LineStringAPtr convexHull(dynamic_cast_auto_ptr<LineString>(hullGeom));
         ensure(0 != convexHull.get());
 
-        ensure( convexHull->equalsExact(geom->convexHull()) );
+        geom_ = geom->convexHull();
+        ensure( convexHull->equalsExact(geom_) );
     }
 		      
 	// 4 - Test convex hull of multipoint
@@ -125,7 +138,8 @@ namespace tut
         LineStringAPtr convexHull(dynamic_cast_auto_ptr<LineString>(hullGeom));
         ensure(0 != convexHull.get());
 
-        ensure( convexHull->equalsExact(geom->convexHull()) );
+        geom_ = geom->convexHull();
+        ensure( convexHull->equalsExact(geom_) );
     }
 
 	// 5 - Test convex hull of multipoint
@@ -142,7 +156,8 @@ namespace tut
         LineStringAPtr convexHull(dynamic_cast_auto_ptr<LineString>(hullGeom));
         ensure(0 != convexHull.get());
 
-        ensure( convexHull->equalsExact(geom->convexHull()) );
+        geom_ = geom->convexHull();
+        ensure( convexHull->equalsExact(geom_) );
     }
 
 	// 6 - Test convex hull of multipoint exported to string form
@@ -178,7 +193,8 @@ namespace tut
         LineStringAPtr convexHull(dynamic_cast_auto_ptr<LineString>(hullGeom));
         ensure(0 != convexHull.get());
 
-        ensure( convexHull->equalsExact(geom->convexHull()) );
+        geom_ = geom->convexHull();
+        ensure( convexHull->equalsExact(geom_) );
     }
 
 } // namespace tut
