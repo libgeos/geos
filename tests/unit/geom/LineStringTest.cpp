@@ -13,12 +13,13 @@
 #include <geos/io/WKTReader.h>
 #include <geos/util/GEOSException.h>
 #include <geos/util/IllegalArgumentException.h>
-// std 
-#include <cmath>
-#include <string>
 // tut
 #include <tut.h>
 #include <utility.h>
+// std 
+#include <string>
+#include <cmath>
+#include <cassert>
 
 namespace tut
 {
@@ -41,7 +42,15 @@ namespace tut
 		test_linestring_data()
 			: pm_(1000), factory_(&pm_, 0), reader_(&factory_),
 			empty_line_(factory_.createLineString(new geos::geom::CoordinateArraySequence()))
-		{}
+		{
+            assert(0 != empty_line_);
+        }
+		
+        ~test_linestring_data()
+        {
+            factory_.destroyGeometry(empty_line_);
+            empty_line_ = 0;
+        }
     };
 
     typedef test_group<test_linestring_data> group;
