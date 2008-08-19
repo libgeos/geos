@@ -90,8 +90,9 @@ GeometryEditor::edit(const Geometry *geometry, GeometryEditorOperation *operatio
 		return operation->edit(geometry, factory);
 	}
 
-	assert(0); // Unsupported Geometry classes should be caught in the GeometryEditorOperation.
-	return NULL;
+    // Unsupported Geometry classes should be caught in the GeometryEditorOperation.
+    assert(!"SHOULD NEVER GET HERE");
+    return NULL;
 }
 
 Polygon*
@@ -102,7 +103,10 @@ GeometryEditor::editPolygon(const Polygon *polygon,GeometryEditorOperation *oper
 		//RemoveSelectedPlugIn relies on this behaviour. [Jon Aquino]
 		return newPolygon;
 	}
-	LinearRing* shell = (LinearRing*) edit(newPolygon->getExteriorRing(),operation);
+
+	Geometry* editResult = edit(newPolygon->getExteriorRing(),operation);
+
+	LinearRing* shell = static_cast<LinearRing*>(editResult);
 	if (shell->isEmpty()) {
 		//RemoveSelectedPlugIn relies on this behaviour. [Jon Aquino]
 		delete shell;
