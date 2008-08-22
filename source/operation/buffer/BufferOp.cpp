@@ -19,6 +19,7 @@
  **********************************************************************/
 
 #include <algorithm>
+#include <cmath>
 
 #include <geos/profiler.h>
 #include <geos/operation/buffer/BufferOp.h>
