@@ -1,0 +1,7 @@
+$Id$
+
+*** STATUS OF BBv2 CONFIGURATION IS EXPERIMENTAL***
+
+build/bjam provides a set of Jamfiles for Boost Build v2 system and bjam builder tool.
+
+Author: Mateusz Loskot <mateusz@loskot.net>
