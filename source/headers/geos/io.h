@@ -55,6 +55,7 @@ namespace io { // geos.io
 #include <geos/io/WKBWriter.h>
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTWriter.h>
+#include <geos/io/CLocalizer.h>
 //#include <geos/io/Writer.h>
 
 #ifdef __GNUC__

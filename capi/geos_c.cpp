@@ -34,6 +34,7 @@
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/io/WKBWriter.h>
+#include <geos/io/CLocalizer.h>
 #include <geos/simplify/DouglasPeuckerSimplifier.h>
 #include <geos/simplify/TopologyPreservingSimplifier.h>
 #include <geos/operation/valid/IsValidOp.h>
@@ -86,6 +87,7 @@ using geos::io::WKTReader;
 using geos::io::WKTWriter;
 using geos::io::WKBReader;
 using geos::io::WKBWriter;
+using geos::io::CLocalizer;
 
 using geos::operation::overlay::OverlayOp;
 using geos::operation::overlay::overlayOp;
@@ -504,31 +506,12 @@ GEOSLength(const Geometry *g, double *length)
 Geometry *
 GEOSGeomFromWKT(const char *wkt)
 {
-	using geos::io::WKTReader;
+    CLocalizer clocale;
 	try
 	{
-        /* Delocalize the writer, saving the current locale */
-        char *current_locale = strdup(std::setlocale(LC_NUMERIC, NULL));
-        if (std::setlocale(LC_NUMERIC, "C") == NULL)
-        {
-            if (current_locale != NULL) 
-            {
-                free(current_locale);
-                current_locale = NULL;
-            }
-        }
-
 		WKTReader r(geomFactory);
 		const std::string wktstring = std::string(wkt);
 		Geometry *g = r.read(wktstring);
-
-        /* Restore saved locale */
-        if (current_locale != NULL)
-        {
-            std::setlocale(LC_NUMERIC, current_locale);
-            free(current_locale);
-        }
-
 		return g;
 	}
 	catch (const std::exception &e)
@@ -547,31 +530,13 @@ GEOSGeomFromWKT(const char *wkt)
 char *
 GEOSGeomToWKT(const Geometry *g1)
 {
+    CLocalizer clocale;
 	try
 	{
-        /* Delocalize the writer, saving the current locale */
-        char *current_locale = strdup(std::setlocale(LC_NUMERIC, NULL));
-        if (std::setlocale(LC_NUMERIC, "C") == NULL)
-        {
-            if (current_locale != NULL) 
-            {
-                free(current_locale);
-                current_locale = NULL;
-            }
-        }
-
 		std::string s = g1->toString();
 		char *result;
 		result = (char*) std::malloc( s.length() + 1);
 		std::strcpy(result, s.c_str() );
-
-        /* Restore saved locale */
-        if (current_locale != NULL)
-        {
-            std::setlocale(LC_NUMERIC, current_locale);
-            free(current_locale);
-        }
-        
         return result;
 	}
 	catch (const std::exception &e)
@@ -2002,29 +1967,11 @@ GEOSWKTReader_destroy(WKTReader *reader)
 Geometry*
 GEOSWKTReader_read(WKTReader *reader, const char *wkt)
 {
+    CLocalizer clocale;
 	try
 	{
-        /* Delocalize the writer, saving the current locale */
-        char *current_locale = strdup(std::setlocale(LC_NUMERIC, NULL));
-        if (std::setlocale(LC_NUMERIC, "C") == NULL)
-        {
-            if (current_locale != NULL) 
-            {
-                free(current_locale);
-                current_locale = NULL;
-            }
-        }
-
 		const std::string wktstring = std::string(wkt);
 		Geometry *g = reader->read(wktstring);
-
-        /* Restore saved locale */
-        if (current_locale != NULL)
-        {
-            std::setlocale(LC_NUMERIC, current_locale);
-            free(current_locale);
-        }
-
 		return g;
 	}
 	catch (const std::exception &e)
@@ -2084,32 +2031,13 @@ GEOSWKTWriter_destroy(WKTWriter *Writer)
 char*
 GEOSWKTWriter_write(WKTWriter *writer, const Geometry *geom)
 {
+    CLocalizer clocale;
 	try
 	{
-        /* Delocalize the writer, saving the current locale */
-        char *current_locale = strdup(std::setlocale(LC_NUMERIC, NULL));
-        if (std::setlocale(LC_NUMERIC, "C") == NULL)
-        {
-            if (current_locale != NULL) 
-            {
-                free(current_locale);
-                current_locale = NULL;
-            }
-        }
-        
 		std::string s = writer->write(geom);
-
 		char *result;
 		result = (char*) std::malloc( s.length() + 1);
 		std::strcpy(result, s.c_str() );
-        
-        /* Restore saved locale */
-        if (current_locale != NULL)
-        {
-            std::setlocale(LC_NUMERIC, current_locale);
-            free(current_locale);
-        }
-
 		return result;
 	}
 	catch (const std::exception &e)

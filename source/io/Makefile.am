@@ -14,7 +14,8 @@ libio_la_SOURCES = \
 	WKBReader.cpp \
 	WKBWriter.cpp \
 	Writer.cpp \
-	Unload.cpp 
+	Unload.cpp \
+	CLocalizer.cpp
 
 libio_la_LIBADD = 
 
