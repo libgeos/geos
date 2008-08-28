@@ -57,7 +57,8 @@ geos_unit_SOURCES = geos_unit.cpp \
 	simplify/DouglasPeuckerSimplifierTest.cpp \
 	simplify/TopologyPreservingSimplifierTest.cpp \
 	util/UniqueCoordinateArrayFilterTest.cpp \
-	capi/GEOSCoordSeqTest.cpp	\
+	capi/GEOSCoordSeqTest.cpp \
+	capi/GEOSGeomToWKTTest.cpp \
 	capi/GEOSSimplifyTest.cpp \
 	capi/GEOSPolygonizer_getCutEdgesTest.cpp
 
