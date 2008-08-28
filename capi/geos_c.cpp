@@ -507,9 +507,28 @@ GEOSGeomFromWKT(const char *wkt)
 	using geos::io::WKTReader;
 	try
 	{
+        /* Delocalize the writer, saving the current locale */
+        char *current_locale = strdup(std::setlocale(LC_NUMERIC, NULL));
+        if (std::setlocale(LC_NUMERIC, "C") == NULL)
+        {
+            if (current_locale != NULL) 
+            {
+                free(current_locale);
+                current_locale = NULL;
+            }
+        }
+
 		WKTReader r(geomFactory);
 		const std::string wktstring = std::string(wkt);
 		Geometry *g = r.read(wktstring);
+
+        /* Restore saved locale */
+        if (current_locale != NULL)
+        {
+            std::setlocale(LC_NUMERIC, current_locale);
+            free(current_locale);
+        }
+
 		return g;
 	}
 	catch (const std::exception &e)
@@ -530,12 +549,30 @@ GEOSGeomToWKT(const Geometry *g1)
 {
 	try
 	{
-		std::string s = g1->toString();
+        /* Delocalize the writer, saving the current locale */
+        char *current_locale = strdup(std::setlocale(LC_NUMERIC, NULL));
+        if (std::setlocale(LC_NUMERIC, "C") == NULL)
+        {
+            if (current_locale != NULL) 
+            {
+                free(current_locale);
+                current_locale = NULL;
+            }
+        }
 
+		std::string s = g1->toString();
 		char *result;
 		result = (char*) std::malloc( s.length() + 1);
 		std::strcpy(result, s.c_str() );
-		return result;
+
+        /* Restore saved locale */
+        if (current_locale != NULL)
+        {
+            std::setlocale(LC_NUMERIC, current_locale);
+            free(current_locale);
+        }
+        
+        return result;
 	}
 	catch (const std::exception &e)
 	{
@@ -1967,8 +2004,27 @@ GEOSWKTReader_read(WKTReader *reader, const char *wkt)
 {
 	try
 	{
+        /* Delocalize the writer, saving the current locale */
+        char *current_locale = strdup(std::setlocale(LC_NUMERIC, NULL));
+        if (std::setlocale(LC_NUMERIC, "C") == NULL)
+        {
+            if (current_locale != NULL) 
+            {
+                free(current_locale);
+                current_locale = NULL;
+            }
+        }
+
 		const std::string wktstring = std::string(wkt);
 		Geometry *g = reader->read(wktstring);
+
+        /* Restore saved locale */
+        if (current_locale != NULL)
+        {
+            std::setlocale(LC_NUMERIC, current_locale);
+            free(current_locale);
+        }
+
 		return g;
 	}
 	catch (const std::exception &e)
@@ -2030,11 +2086,30 @@ GEOSWKTWriter_write(WKTWriter *writer, const Geometry *geom)
 {
 	try
 	{
+        /* Delocalize the writer, saving the current locale */
+        char *current_locale = strdup(std::setlocale(LC_NUMERIC, NULL));
+        if (std::setlocale(LC_NUMERIC, "C") == NULL)
+        {
+            if (current_locale != NULL) 
+            {
+                free(current_locale);
+                current_locale = NULL;
+            }
+        }
+        
 		std::string s = writer->write(geom);
 
 		char *result;
 		result = (char*) std::malloc( s.length() + 1);
 		std::strcpy(result, s.c_str() );
+        
+        /* Restore saved locale */
+        if (current_locale != NULL)
+        {
+            std::setlocale(LC_NUMERIC, current_locale);
+            free(current_locale);
+        }
+
 		return result;
 	}
 	catch (const std::exception &e)
