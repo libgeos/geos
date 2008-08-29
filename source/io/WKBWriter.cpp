@@ -48,6 +48,10 @@ WKBWriter::WKBWriter(int dims, int bo, bool srid):
 		throw util::IllegalArgumentException("WKB output dimension must be 2 or 3");
 }
 
+WKBWriter::~WKBWriter()
+{
+}
+
 void
 WKBWriter::writeHEX(const Geometry &g, ostream &os) 
 {

@@ -67,8 +67,19 @@ namespace io {
 class WKBWriter {
 
 public:
-
+	/*
+	 * \brief
+	 * Initializes writer with target coordinate dimention, endianness flag
+     * and SRID value.
+	 * <code>WKBWriter</code>.
+     */
 	WKBWriter(int dims=2, int bo=getMachineByteOrder(), bool includeSRID=false);
+
+    /*
+     * \brief
+     * Destructor.
+     */
+    virtual ~WKBWriter();
 
 	/*
 	 * \brief
