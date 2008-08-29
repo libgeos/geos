@@ -2035,7 +2035,7 @@ GEOSWKTWriter_write(WKTWriter *writer, const Geometry *geom)
 	try
 	{
 		std::string s = writer->write(geom);
-		char *result;
+		char *result = NULL;
 		result = (char*) std::malloc( s.length() + 1);
 		std::strcpy(result, s.c_str() );
 		return result;
@@ -2043,14 +2043,13 @@ GEOSWKTWriter_write(WKTWriter *writer, const Geometry *geom)
 	catch (const std::exception &e)
 	{
 		ERROR_MESSAGE("%s", e.what());
-		return NULL;
 	}
-
 	catch (...)
 	{
 		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
 	}
+    
+    return NULL;
 }
 
 /* WKB Reader */
@@ -2065,14 +2064,13 @@ GEOSWKBReader_create()
 	catch (const std::exception &e)
 	{
 		ERROR_MESSAGE("%s", e.what());
-		return NULL;
 	}
-
 	catch (...)
 	{
 		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
 	}
+    
+    return NULL;
 }
 
 void
@@ -2110,14 +2108,13 @@ GEOSWKBReader_read(WKBReader *reader, const unsigned char *wkb, size_t size)
 	catch (const std::exception &e)
 	{
 		ERROR_MESSAGE("%s", e.what());
-		return NULL;
 	}
-
 	catch (...)
 	{
 		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
 	}
+    
+    return NULL;
 }
 
 Geometry*
@@ -2136,14 +2133,13 @@ GEOSWKBReader_readHEX(WKBReader *reader, const unsigned char *hex, size_t size)
 	catch (const std::exception &e)
 	{
 		ERROR_MESSAGE("%s", e.what());
-		return NULL;
 	}
-
 	catch (...)
 	{
 		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
 	}
+    
+    return NULL;
 }
 
 /* WKB Writer */
@@ -2158,14 +2154,13 @@ GEOSWKBWriter_create()
 	catch (const std::exception &e)
 	{
 		ERROR_MESSAGE("%s", e.what());
-		return NULL;
 	}
-
 	catch (...)
 	{
 		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
 	}
+    
+    return NULL;
 }
 
 void
@@ -2198,7 +2193,7 @@ GEOSWKBWriter_write(WKBWriter *writer, const Geometry *geom, size_t *size)
 		std::string wkbstring = s.str();
 		size_t len = wkbstring.length();
 
-		unsigned char *result;
+		unsigned char *result = NULL;
 		result = (unsigned char*) std::malloc(len);
         std::memcpy(result, wkbstring.c_str(), len);
 		*size = len;
@@ -2207,14 +2202,12 @@ GEOSWKBWriter_write(WKBWriter *writer, const Geometry *geom, size_t *size)
 	catch (const std::exception &e)
 	{
 		ERROR_MESSAGE("%s", e.what());
-		return NULL;
 	}
-
 	catch (...)
 	{
 		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
 	}
+    return NULL;
 }
 
 /* The owner owns the result */
@@ -2226,9 +2219,9 @@ GEOSWKBWriter_writeHEX(WKBWriter *writer, const Geometry *geom, size_t *size)
 		std::ostringstream s(std::ios_base::binary);
 		writer->writeHEX(*geom, s);
 		std::string wkbstring = s.str();
-		size_t len = wkbstring.length();
+		const size_t len = wkbstring.length();
 
-		unsigned char *result;
+		unsigned char *result = NULL;
 		result = (unsigned char*) std::malloc(len);
         std::memcpy(result, wkbstring.c_str(), len);
 		*size = len;
@@ -2237,14 +2230,13 @@ GEOSWKBWriter_writeHEX(WKBWriter *writer, const Geometry *geom, size_t *size)
 	catch (const std::exception &e)
 	{
 		ERROR_MESSAGE("%s", e.what());
-		return NULL;
 	}
 
 	catch (...)
 	{
 		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
 	}
+    return NULL;
 }
 
 int
@@ -2258,8 +2250,8 @@ GEOSWKBWriter_getOutputDimension(const GEOSWKBWriter* writer)
 	catch (...)
 	{
 		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
 	}
+    return 0;
 }
 
 void
@@ -2287,8 +2279,8 @@ GEOSWKBWriter_getByteOrder(const GEOSWKBWriter* writer)
 	catch (...)
 	{
 		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
 	}
+    return 0;
 }
 
 void
@@ -2342,11 +2334,11 @@ GEOSWKBWriter_setIncludeSRID(GEOSWKBWriter* writer, const char newIncludeSRID)
 const geos::geom::prep::PreparedGeometry*
 GEOSPrepare(const Geometry *g)
 {
-	try
+    const geos::geom::prep::PreparedGeometry* prep = NULL;
+	
+    try
 	{
-		const geos::geom::prep::PreparedGeometry* prep;
-		prep = geos::geom::prep::PreparedGeometryFactory::prepare( g);
-		return prep;
+		prep = geos::geom::prep::PreparedGeometryFactory::prepare(g);
 	}
 	catch (const std::exception &e)
 	{
@@ -2356,6 +2348,8 @@ GEOSPrepare(const Geometry *g)
 	{
 		ERROR_MESSAGE("Unknown exception thrown");
 	}
+	
+    return prep;
 }
 
 void
