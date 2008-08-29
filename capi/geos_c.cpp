@@ -323,31 +323,27 @@ GEOSRelate(const Geometry *g1, const Geometry *g2)
 	try {
 
 		IntersectionMatrix *im = g1->relate(g2);
-
-		std::string s;
-		char *result;
 		if (im == NULL)
 				return NULL;
-
-		s= im->toString();
+		
+        std::string s(im->toString());
+		char *result = NULL;
 		result = (char*) std::malloc( s.length() + 1);
 		std::strcpy(result, s.c_str() );
 		delete im;
 
 		return result;
 	}
-
 	catch (const std::exception &e)
 	{
 		ERROR_MESSAGE("%s", e.what());
-		return NULL;
 	}
-
 	catch (...)
 	{
 		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
 	}
+    
+    return NULL;
 }
 
 
