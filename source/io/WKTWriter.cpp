@@ -54,6 +54,7 @@ string
 WKTWriter::toLineString(const CoordinateSequence& seq)
 {
 	stringstream buf("LINESTRING ", ios_base::in|ios_base::out);
+    buf.imbue(std::locale("C"));
 	unsigned int npts = seq.getSize();
 	if ( npts == 0 )
 	{
@@ -81,6 +82,7 @@ string
 WKTWriter::toLineString(const Coordinate& p0, const Coordinate& p1)
 {
 	stringstream ret("LINESTRING (", ios_base::in|ios_base::out);
+    ret.imbue(std::locale("C"));
 	ret << p0.x << " " << p0.y;
 #if PRINT_Z
 	ret << " " << p0.z;
@@ -98,6 +100,7 @@ string
 WKTWriter::toPoint(const Coordinate& p0)
 {
 	stringstream ret("POINT (", ios_base::in|ios_base::out);
+    ret.imbue(std::locale("C"));
 #if PRINT_Z
 	ret << p0.x << " " << p0.y  << " " << p0.z << " )";
 #else

@@ -32,6 +32,7 @@
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/io/WKBWriter.h>
+#include <geos/io/CLocalizer.h>
 #include <geos/simplify/DouglasPeuckerSimplifier.h>
 #include <geos/simplify/TopologyPreservingSimplifier.h>
 #include <geos/operation/valid/IsValidOp.h>
@@ -83,6 +84,7 @@ using geos::io::WKTReader;
 using geos::io::WKTWriter;
 using geos::io::WKBReader;
 using geos::io::WKBWriter;
+using geos::io::CLocalizer;
 
 using geos::operation::overlay::OverlayOp;
 using geos::operation::overlay::overlayOp;
@@ -501,7 +503,7 @@ GEOSLength(const Geometry *g, double *length)
 Geometry *
 GEOSGeomFromWKT(const char *wkt)
 {
-	using geos::io::WKTReader;
+    CLocalizer clocale;
 	try
 	{
 		WKTReader r(geomFactory);
@@ -525,6 +527,7 @@ GEOSGeomFromWKT(const char *wkt)
 char *
 GEOSGeomToWKT(const Geometry *g1)
 {
+    CLocalizer clocale;
 	try
 	{
 		std::string s = g1->toString();
@@ -1914,6 +1917,7 @@ GEOSWKTReader_destroy(WKTReader *reader)
 Geometry*
 GEOSWKTReader_read(WKTReader *reader, const char *wkt)
 {
+    CLocalizer clocale;
 	try
 	{
 		const std::string wktstring = std::string(wkt);
@@ -1977,6 +1981,7 @@ GEOSWKTWriter_destroy(WKTWriter *Writer)
 char*
 GEOSWKTWriter_write(WKTWriter *writer, const Geometry *geom)
 {
+    CLocalizer clocale;
 	try
 	{
 		std::string s = writer->write(geom);
