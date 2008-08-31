@@ -10,6 +10,7 @@
 // STL
 #include <iostream>
 #include <iomanip>
+#include <cmath>
 // GEOS
 #include <geos/unload.h>
 
@@ -95,7 +96,7 @@ int main(int argc, const char* argv[])
             // TODO - mloskot - check if test group with given name exists
             // TODO - mloskot - check if test case with given number exists
 
-            tut::runner.get().run_test(argv[1], ::atoi(argv[2]));
+            tut::runner.get().run_test(argv[1], std::atoi(argv[2]));
         }
     }
     catch( const std::exception& ex )
