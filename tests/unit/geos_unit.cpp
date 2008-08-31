@@ -10,7 +10,7 @@
 // STL
 #include <iostream>
 #include <iomanip>
-#include <cmath>
+#include <cstdlib>
 // GEOS
 #include <geos/unload.h>
 
@@ -116,7 +116,7 @@ int main(int argc, const char* argv[])
     }
     else
     {
-       return EXIT_SUCCESS;
+       return 0;
     }
 	
 } // main
