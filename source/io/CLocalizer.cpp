@@ -9,26 +9,19 @@ namespace io {
 
 CLocalizer::CLocalizer()
 {
-    outer_locale = strdup(std::setlocale(LC_NUMERIC, NULL));
-    if (std::setlocale(LC_NUMERIC, "C") == NULL)
+    char* p = std::setlocale(LC_NUMERIC, NULL);
+    if (0 != p)
     {
-        if (outer_locale != NULL)
-        {
-            free(outer_locale);
-            outer_locale = NULL;
-        }
+        saved_locale = p;
     }
+    std::setlocale(LC_NUMERIC, "C");
 }
 
 CLocalizer::~CLocalizer()
 {
-    if (outer_locale != NULL)
-    {
-        std::setlocale(LC_NUMERIC, outer_locale);
-        free(outer_locale);
-        outer_locale = NULL;
-    }
+    std::setlocale(LC_NUMERIC, saved_locale.c_str());
 }
 
 } // namespace geos.io
 } // namespace geos
+
