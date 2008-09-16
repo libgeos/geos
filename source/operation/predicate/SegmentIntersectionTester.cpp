@@ -48,17 +48,17 @@ SegmentIntersectionTester::hasIntersection(
 	const CoordinateSequence &seq0, const CoordinateSequence &seq1)
 {
 
-	for (unsigned i=1, ni=seq0.getSize(); i<ni; ++i)
+    for (std::size_t i = 1, ni = seq0.getSize(); i < ni; ++i)
 	{
-		const Coordinate &pt00 = seq0.getAt(i - 1);
-		const Coordinate &pt01 = seq0.getAt(i);
-		for (unsigned j=1, nj=seq1.getSize(); j<nj; ++j)
+		const Coordinate& pt00 = seq0.getAt(i - 1);
+		const Coordinate& pt01 = seq0.getAt(i);
+		
+        for (std::size_t j = 1, nj = seq1.getSize(); j < nj; ++j)
 		{
-			const Coordinate &pt10 = seq1.getAt(j-1);
-			const Coordinate &pt11 = seq1.getAt(j); 
+			const Coordinate& pt10 = seq1.getAt(j-1);
+			const Coordinate& pt11 = seq1.getAt(j); 
 
-			li.LineIntersector::computeIntersection(pt00, pt01,
-				pt10, pt11);
+			li.algorithm::LineIntersector::computeIntersection(pt00, pt01, pt10, pt11);
 			if (li.hasIntersection())
 			{
 				hasIntersectionVar = true;
