@@ -2,10 +2,6 @@
 // 
 // Test Suite for CGAlgorithms::isPointInRing() function
 
-// TUT
-#include <tut.h>
-// STL
-#include <string>
 // GEOS
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/geom/Polygon.h>
@@ -13,6 +9,11 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/io/WKTReader.h>
+// TUT
+#include <tut.h>
+// STL
+#include <string>
+#include <cassert>
 
 using namespace geos::algorithm;
 
