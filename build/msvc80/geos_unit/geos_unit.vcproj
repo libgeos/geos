@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="windows-1250"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="geos_unit"
 	ProjectGUID="{30461863-CCA4-4A8F-8BEE-1AB57060D5C2}"
 	RootNamespace="geos_unit"
@@ -92,7 +92,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Running regression tests using $(ProjectName)d.exe..."
-				CommandLine="cd $(OutDir)&#x0D;&#x0A;$(ProjectName)d.exe"
+				CommandLine="cd $(OutDir)&#x0D;&#x0A;$(ProjectName)d.exe&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -277,6 +277,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\tests\unit\geom\Geometry\isRectangleTest.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="prep"
+				>
+				<File
+					RelativePath="..\..\..\tests\unit\geom\prep\PreparedGeometryFactoryTest.cpp"
 					>
 				</File>
 			</Filter>
