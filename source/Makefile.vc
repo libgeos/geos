@@ -175,6 +175,7 @@ OBJ = \
 	index\sweepline\SweepLineInterval.obj \
 	io\ByteOrderDataInStream.obj \
 	io\ByteOrderValues.obj \
+	io\CLocalizer.obj \
 	io\ParseException.obj \
 	io\StringTokenizer.obj \
 	io\Unload.obj \

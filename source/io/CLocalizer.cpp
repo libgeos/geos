@@ -1,6 +1,7 @@
 #include <geos/io/CLocalizer.h>
 
 #include <string>
+#include <clocale>
 
 using namespace std;
 
