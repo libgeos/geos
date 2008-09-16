@@ -75,8 +75,20 @@ namespace tut
     template<>
     void object::test<2>()
     {
-        // FIXME - mloskot: null pointer throws segfault (Ticket #197)
-        // ensure(0 == prep::PreparedGeometryFactory::prepare(0));
+        try
+        {
+            GeometryPtr nullgeom = 0; // intentionally nullptr
+            prep::PreparedGeometry const* pg = 0;
+
+            pg = prep::PreparedGeometryFactory::prepare(nullgeom);
+
+            fail("IllegalArgumentException expected");
+        }
+        catch (geos::util::IllegalArgumentException const& e)
+        {
+            const char* msg = e.what(); // ok
+            ensure( msg != 0 );
+        }
     }
 
     // Test passing null-pointer to create method
@@ -84,11 +96,22 @@ namespace tut
     template<>
     void object::test<3>()
     {
-        prep::PreparedGeometryFactory pgf;
-        UNREFERENCED_PARAMETER(pgf);
+        try
+        {
+            GeometryPtr nullgeom = 0; // intentionally nullptr
+            prep::PreparedGeometry const* pg = 0;
 
-        // FIXME - mloskot: null pointer throws segfault (Ticket #197)
-        // ensure(0 == pgf.create(0));
+            prep::PreparedGeometryFactory pgf;
+
+            pg = pgf.create(nullgeom);
+
+            fail("IllegalArgumentException expected");
+        }
+        catch (geos::util::IllegalArgumentException const& e)
+        {
+            const char* msg = e.what(); // ok
+            ensure( msg != 0 );
+        }
     }
 
     // Test prepare empty GEOMETRY

@@ -21,13 +21,13 @@
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/MultiPolygon.h>
-
 #include <geos/geom/prep/PreparedGeometryFactory.h>
 #include <geos/geom/prep/PreparedGeometry.h>
 #include <geos/geom/prep/BasicPreparedGeometry.h>
 #include <geos/geom/prep/PreparedPolygon.h>
 #include <geos/geom/prep/PreparedLineString.h>
 #include <geos/geom/prep/PreparedPoint.h>
+#include <geos/util/IllegalArgumentException.h>
 
 namespace geos {
 namespace geom { // geos.geom
@@ -37,6 +37,11 @@ const PreparedGeometry *
 PreparedGeometryFactory::create( const geom::Geometry * g) const
 {
     using geos::geom::GeometryTypeId;
+
+    if (0 == g)
+    {
+        throw util::IllegalArgumentException("PreparedGeometry constructd with null Geometry object");
+    }
 
 	PreparedGeometry* pg = 0;
 
