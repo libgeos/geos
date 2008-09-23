@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
@@ -50,8 +50,44 @@ namespace noding { // geos::noding
  */
 class MCIndexSegmentSetMutualIntersector : public SegmentSetMutualIntersector 
 {
+public:
+
+	MCIndexSegmentSetMutualIntersector();
+
+	~MCIndexSegmentSetMutualIntersector();
+
+	std::vector<index::chain::MonotoneChain *>* getMonotoneChains() 
+	{ 
+		return monoChains; 
+	}
+
+	index::SpatialIndex* getIndex() 
+	{ 
+		return index; 
+	}
+
+	void setBaseSegments(SegmentString::ConstVect* segStrings);
+  
+	void process(SegmentString::ConstVect* segStrings);
+
+	class SegmentOverlapAction : public index::chain::MonotoneChainOverlapAction
+	{
+	private:
+		SegmentIntersector & si;
+
+	public:
+
+		SegmentOverlapAction(SegmentIntersector & si)
+            : si(si)
+		{}
+
+		void overlap(index::chain::MonotoneChain* mc1, int start1, index::chain::MonotoneChain* mc2, int start2);
+	};
+
 private:
+
 	std::vector<index::chain::MonotoneChain *> * monoChains;
+
 	/*
 	 * The {@link SpatialIndex} used should be something that supports
 	 * envelope (range) queries efficiently (such as a {@link Quadtree}
@@ -68,39 +104,6 @@ private:
 	void intersectChains();
 
 	void addToMonoChains( SegmentString * segStr);
-
-protected:
-public:
-	MCIndexSegmentSetMutualIntersector();
-
-	~MCIndexSegmentSetMutualIntersector();
-
-	std::vector<index::chain::MonotoneChain *> * getMonotoneChains() 
-	{ 
-		return monoChains; 
-	}
-
-	index::SpatialIndex * getIndex() 
-	{ 
-		return index; 
-	}
-
-	void setBaseSegments( SegmentString::ConstVect * segStrings);
-  
-	void process( SegmentString::ConstVect * segStrings);
-
-
-	class SegmentOverlapAction : public index::chain::MonotoneChainOverlapAction
-	{
-	private:
-		SegmentIntersector & si;
-
-	public:
-		SegmentOverlapAction( SegmentIntersector & si) : si(si)
-		{ }
-
-		void overlap( index::chain::MonotoneChain * mc1, int start1, index::chain::MonotoneChain * mc2, int start2);
-	};
 
 };
 

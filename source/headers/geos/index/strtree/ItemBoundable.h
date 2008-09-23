@@ -12,7 +12,6 @@
  * See the COPYING file for more information.
  *
  **********************************************************************/
-
 #ifndef GEOS_INDEX_STRTREE_ITEMBOUNDABLE_H
 #define GEOS_INDEX_STRTREE_ITEMBOUNDABLE_H
 
@@ -26,18 +25,24 @@ namespace strtree { // geos::index::strtree
  * \brief
  * Boundable wrapper for a non-Boundable spatial object.
  * Used internally by AbstractSTRtree.
+ *
+ * \todo TODO: It's unclear who takes ownership of passed newBounds and newItem objects.
  */
-class ItemBoundable: public Boundable {
+class ItemBoundable: public Boundable
+{
+public:
+
+    ItemBoundable(const void* newBounds, void* newItem);
+	virtual ~ItemBoundable();
+	
+    const void* getBounds() const;
+	void* getItem() const;
+
 private:
+
 	const void* bounds;
 	void* item;
-public:
-	ItemBoundable(const void* newBounds, void* newItem);
-	virtual ~ItemBoundable();
-	const void* getBounds() const;
-	void* getItem() const;
 };
-
 
 } // namespace geos::index::strtree
 } // namespace geos::index

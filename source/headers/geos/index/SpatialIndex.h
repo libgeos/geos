@@ -32,8 +32,8 @@ namespace geos {
 namespace index {
 
 /** \brief
- * The basic insertion and query operations supported by classes
- * implementing spatial index algorithms.
+ * Abstract class defines basic insertion and query operations supported by
+ * classes implementing spatial index algorithms.
  * 
  * A spatial index typically provides a primary filter for range rectangle queries. A
  * secondary filter is required to test for exact intersection. Of course, this
@@ -45,13 +45,14 @@ namespace index {
  */
 class SpatialIndex {
 public:
-	virtual ~SpatialIndex() {};
+	
+    virtual ~SpatialIndex() {}
 
 	/** \brief
 	 * Adds a spatial item with an extent specified by the given Envelope
 	 * to the index
 	 */
-	virtual void insert(const geom::Envelope *itemEnv, void *item)=0;
+	virtual void insert(const geom::Envelope *itemEnv, void *item) = 0;
 
 	/** \brief
 	 * Queries the index for all items whose extents intersect the given search Envelope
@@ -63,7 +64,7 @@ public:
 	 * @return a list of the items found by the query in a newly allocated vector
 	 */
 	//virtual std::vector<void*>* query(const geom::Envelope *searchEnv)=0;
-	virtual void query(const geom::Envelope* searchEnv, std::vector<void*>&)=0;
+	virtual void query(const geom::Envelope* searchEnv, std::vector<void*>&) = 0;
 
 	/** \brief
 	 * Queries the index for all items whose extents intersect the given search Envelope
@@ -75,7 +76,7 @@ public:
 	 * @param searchEnv the envelope to query for
 	 * @param visitor a visitor object to apply to the items found
 	 */
-	virtual void query(const geom::Envelope *searchEnv, ItemVisitor& visitor)=0;
+	virtual void query(const geom::Envelope *searchEnv, ItemVisitor& visitor) = 0;
 
 	/** \brief
 	 * Removes a single item from the tree.
@@ -84,8 +85,7 @@ public:
 	 * @param item the item to remove
 	 * @return <code>true</code> if the item was found
 	 */
-	virtual bool remove(const geom::Envelope* itemEnv, void* item)=0;
-
+	virtual bool remove(const geom::Envelope* itemEnv, void* item) = 0;
 
 };
 

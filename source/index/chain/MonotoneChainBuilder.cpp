@@ -39,30 +39,27 @@ namespace chain { // geos.index.chain
 
 /* static public */
 vector<MonotoneChain*>*
-MonotoneChainBuilder::getChains(const CoordinateSequence* pts,
-		void* context)
+MonotoneChainBuilder::getChains(const CoordinateSequence* pts, void* context)
 {
-	vector<MonotoneChain*> *mcList=new vector<MonotoneChain*>();
+	vector<MonotoneChain*>* mcList = new vector<MonotoneChain*>();
 	getChains(pts, context, *mcList);
 	return mcList;
 }
 
 /* static public */
 void
-MonotoneChainBuilder::getChains(const CoordinateSequence* pts,
-		void* context,
-		vector<MonotoneChain*>& mcList)
+MonotoneChainBuilder::getChains(const CoordinateSequence* pts, void* context,
+                                vector<MonotoneChain*>& mcList)
 {
 	vector<int> startIndex;
 	getChainStartIndices(pts, startIndex);
-	size_t nindexes=startIndex.size();
-	if ( nindexes )
+	size_t nindexes = startIndex.size();
+	if (nindexes > 0)
 	{
-		size_t n=nindexes-1;
-		for(size_t i=0; i<n; i++)
+		size_t n = nindexes - 1;
+		for(size_t i = 0; i < n; i++)
 		{
-			MonotoneChain *mc=new MonotoneChain(pts,
-				startIndex[i], startIndex[i+1], context);
+			MonotoneChain* mc = new MonotoneChain(pts, startIndex[i], startIndex[i+1], context);
 			mcList.push_back(mc);
 		}
 	}
@@ -76,17 +73,18 @@ MonotoneChainBuilder::getChains(const CoordinateSequence* pts,
  */
 void
 MonotoneChainBuilder::getChainStartIndices(const CoordinateSequence *pts,
-		vector<int>& startIndexList)
+                                           vector<int>& startIndexList)
 {
 	// find the startpoint (and endpoints) of all monotone chains
 	// in this edge
-	int start=0;
+	int start = 0;
 	startIndexList.push_back(start);
-    const std::size_t n=pts->getSize() - 1;
-	do {
-		int last=findChainEnd(pts, start);
+    const std::size_t n = pts->getSize() - 1;
+	do
+    {
+		int last = findChainEnd(pts, start);
 		startIndexList.push_back(last);
-		start=last;
+		start = last;
 	} while (static_cast<std::size_t>(start) < n);
 
 }

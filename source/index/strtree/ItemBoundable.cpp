@@ -20,12 +20,13 @@ namespace geos {
 namespace index { // geos.index
 namespace strtree { // geos.index.strtree
 
-ItemBoundable::ItemBoundable(const void* newBounds,void* newItem){
-	bounds=newBounds;
-	item=newItem;
+ItemBoundable::ItemBoundable(const void* newBounds, void* newItem) :
+    bounds(newBounds), item(newItem)
+{
 }
 
-ItemBoundable::~ItemBoundable() {
+ItemBoundable::~ItemBoundable()
+{
 }
 
 const void*

@@ -21,9 +21,14 @@
 namespace geos {
 namespace geom { // geos.geom
 namespace prep { // geos.geom.prep
+
 //
-// private:
+// public:
 //
+PreparedPolygonContains::PreparedPolygonContains(const PreparedPolygon * const prepPoly)
+    : AbstractPreparedPolygonContains( prepPoly)
+{
+}
 
 //
 // protected:
@@ -36,7 +41,7 @@ PreparedPolygonContains::fullTopologicalPredicate( const geom::Geometry * geom)
 }
 
 //
-// public:
+// private:
 //
 } // namespace geos.geom.prep
 } // namespace geos.geom

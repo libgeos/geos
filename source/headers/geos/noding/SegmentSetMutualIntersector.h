@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
@@ -37,17 +37,13 @@ namespace noding { // geos::noding
  */
 class SegmentSetMutualIntersector
 {
-private:
-protected:
-	SegmentIntersector * segInt;
-
 public:
-	SegmentSetMutualIntersector() 
-	:	segInt( NULL)
-	{ }
+	
+    SegmentSetMutualIntersector()
+        : segInt(0)
+    {}
 
-	virtual ~SegmentSetMutualIntersector() 
-	{ }
+	virtual ~SegmentSetMutualIntersector() {}
 
 	/**
 	 * Sets the {@link SegmentIntersector} to use with this intersector.
@@ -56,7 +52,7 @@ public:
 	 *
 	 * @param segInt the segment intersector to use
 	 */
-	void setSegmentIntersector( SegmentIntersector * si)
+	void setSegmentIntersector(SegmentIntersector* si)
 	{
 		segInt = si;
 	}
@@ -65,14 +61,18 @@ public:
 	 * 
 	 * @param segStrings0 a collection of {@link SegmentString}s to node
 	 */
-	virtual void setBaseSegments( SegmentString::ConstVect * segStrings) =0; 
+	virtual void setBaseSegments(SegmentString::ConstVect* segStrings) = 0; 
 
 	/**
 	 * Computes the intersections for two collections of {@link SegmentString}s.
 	 *
 	 * @param segStrings1 a collection of {@link SegmentString}s to node
 	 */
-	virtual void process( SegmentString::ConstVect * segStrings) =0;
+	virtual void process(SegmentString::ConstVect* segStrings) = 0;
+
+protected:
+
+    SegmentIntersector* segInt;
 
 };
 

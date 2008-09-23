@@ -13,22 +13,21 @@
  *
  **********************************************************************/
 
-
 #include <geos/geom/Polygon.h>
-
 #include <geos/geom/prep/PreparedPolygon.h>
 #include <geos/geom/prep/PreparedPolygonContains.h>
 #include <geos/geom/prep/PreparedPolygonContainsProperly.h>
 #include <geos/geom/prep/PreparedPolygonCovers.h>
 #include <geos/geom/prep/PreparedPolygonIntersects.h>
 #include <geos/geom/prep/PreparedPolygonPredicate.h>
-
 #include <geos/noding/FastSegmentSetIntersectionFinder.h>
 #include <geos/noding/SegmentStringUtil.h>
 #include <geos/operation/predicate/RectangleContains.h>
 #include <geos/operation/predicate/RectangleIntersects.h>
 #include <geos/algorithm/locate/PointOnGeometryLocator.h>
 #include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
+// std
+#include <cstddef>
 
 namespace geos {
 namespace geom { // geos.geom
@@ -36,22 +35,18 @@ namespace prep { // geos.geom.prep
 //
 // public:
 //
-PreparedPolygon::
-PreparedPolygon( const geom::Geometry * geom) 
-:	BasicPreparedGeometry( geom),
-	segIntFinder( NULL),
-	ptOnGeomLoc( NULL)
+PreparedPolygon::PreparedPolygon(const geom::Geometry * geom) 
+    : BasicPreparedGeometry(geom), segIntFinder(0), ptOnGeomLoc(0)
 {
 	isRectangle = getGeometry().isRectangle();
 }
 
-PreparedPolygon::
-~PreparedPolygon( )
+PreparedPolygon::~PreparedPolygon()
 {
 	delete segIntFinder;
 	delete ptOnGeomLoc;
 
-	for ( size_t i = 0, ni = segStrings.size(); i < ni; i++ )
+	for ( std::size_t i = 0, ni = segStrings.size(); i < ni; i++ )
 	{
 		delete segStrings[ i ]->getCoordinates();
 		delete segStrings[ i ];

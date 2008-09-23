@@ -13,7 +13,6 @@
  *
  **********************************************************************/
 
-
 #include <geos/geom/prep/AbstractPreparedPolygonContains.h>
 #include <geos/geom/prep/PreparedPolygon.h>
 #include <geos/geom/Geometry.h>
@@ -24,6 +23,8 @@
 #include <geos/noding/SegmentIntersectionDetector.h>
 #include <geos/noding/FastSegmentSetIntersectionFinder.h>
 #include <geos/algorithm/LineIntersector.h>
+// std
+#include <cstddef>
 
 namespace geos {
 namespace geom { // geos::geom
@@ -56,34 +57,37 @@ AbstractPreparedPolygonContains::isProperIntersectionImpliesNotContainedSituatio
 
 
 bool 
-AbstractPreparedPolygonContains::isSingleShell( const geom::Geometry & geom)
+AbstractPreparedPolygonContains::isSingleShell(const geom::Geometry& geom)
 {
 	// handles single-element MultiPolygons, as well as Polygons
-	if ( geom.getNumGeometries() != 1) 
+	if (geom.getNumGeometries() != 1)
+    {
 		return false;
+    }
 	
-	const geom::Polygon * poly = (Polygon *)geom.getGeometryN( 0);
+    const geom::Geometry* g = geom.getGeometryN(0);
+	const geom::Polygon* poly = static_cast<const Polygon*>(g);
 
-	int numHoles = poly->getNumInteriorRing();
-	return (numHoles == 0);
+    std::size_t numHoles = poly->getNumInteriorRing();
+	return (0 == numHoles);
 }
 	
 
 void 
-AbstractPreparedPolygonContains::findAndClassifyIntersections( const geom::Geometry * geom)
+AbstractPreparedPolygonContains::findAndClassifyIntersections(const geom::Geometry* geom)
 {
 	noding::SegmentString::ConstVect lineSegStr; 
-	noding::SegmentStringUtil::extractSegmentStrings( geom, lineSegStr);
+	noding::SegmentStringUtil::extractSegmentStrings(geom, lineSegStr);
 
-	algorithm::LineIntersector * li;
+	algorithm::LineIntersector* li = 0;
 	li = new algorithm::LineIntersector();
 
-	noding::SegmentIntersectionDetector * intDetector;
-	intDetector = new noding::SegmentIntersectionDetector( li);
+	noding::SegmentIntersectionDetector* intDetector = 0;
+	intDetector = new noding::SegmentIntersectionDetector(li);
 
 	intDetector->setFindAllIntersectionTypes( true);
 
-	prepPoly->getIntersectionFinder()->intersects( &lineSegStr, intDetector);
+	prepPoly->getIntersectionFinder()->intersects(&lineSegStr, intDetector);
 		
 	hasSegmentIntersection = intDetector->hasIntersection();
 	hasProperIntersection = intDetector->hasProperIntersection();
@@ -91,10 +95,10 @@ AbstractPreparedPolygonContains::findAndClassifyIntersections( const geom::Geome
 
 	delete intDetector;
 	delete li;
-	for ( size_t i = 0, ni = lineSegStr.size(); i < ni; i++ )
+    for (std::size_t i = 0, ni = lineSegStr.size(); i < ni; i++ )
 	{
-		delete lineSegStr[ i ]->getCoordinates();
-		delete lineSegStr[ i ];
+		delete lineSegStr[i]->getCoordinates();
+		delete lineSegStr[i];
 	}
 }
 
