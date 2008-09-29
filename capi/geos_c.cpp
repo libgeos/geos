@@ -1775,8 +1775,7 @@ GEOSGeom_createLineString(CoordinateSequence *cs)
 }
 
 Geometry *
-GEOSGeom_createPolygon(Geometry *shell, Geometry **holes, 
-	unsigned int nholes)
+GEOSGeom_createPolygon(Geometry *shell, Geometry **holes, unsigned int nholes)
 {
         using geos::geom::LinearRing;
 	try
