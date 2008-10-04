@@ -39,25 +39,14 @@ MCIndexSegmentSetMutualIntersector::addToIndex(SegmentString* segStr)
     std::vector<MonotoneChain*>* segChains = 0;
     segChains = MonotoneChainBuilder::getChains(segStr->getCoordinates(), segStr);
 
+    chainStore.push_back(segChains);
+
     for (std::size_t i = 0, n = segChains->size(); i < n; i++)
     {
         MonotoneChain * mc = (*segChains)[i];
         mc->setId(indexCounter++);
         index->insert(mc->getEnvelope(), mc);
     }
-
-    // FIXME - BWJ: seems to cause some tests of prepared predicates to fail, but leaving
-    // this out probably causes a memory leak.  more research needed
-    //
-    // NOTE - mloskot: segChains can not be deleted because index composed above will later
-    // use (refer to) MonotoneChain objects, elements originally stored in segChains collection.
-    // However, then segChains allocated by MonotoneChainBuilder::getChains gets never deallocated,
-    // so memory leaks. This looks like a design bug and not-synchronized lifetime of related objects.
-    // This bug really seems not to be easy to fix.
-    //
-    //for (std::vector<MonotoneChain*>::iterator it = segChains->begin(), e = segChains->end(); it != e; ++it)
-    //	delete *it;
-    //delete segChains;
 }
 
 void 
@@ -90,14 +79,14 @@ MCIndexSegmentSetMutualIntersector::addToMonoChains(SegmentString* segStr)
     std::vector<MonotoneChain*>* segChains = 0; 
     segChains = MonotoneChainBuilder::getChains(segStr->getCoordinates(), segStr);
 
+    chainStore.push_back(segChains);
+
     for (std::size_t i = 0, ni = segChains->size(); i < ni; i++)
     {
         MonotoneChain* mc = (*segChains)[i];
         mc->setId( processCounter++ );
         monoChains->push_back(mc);
     }
-
-    delete segChains;
 }
 
 //
@@ -116,11 +105,19 @@ nOverlaps(0)
 MCIndexSegmentSetMutualIntersector::~MCIndexSegmentSetMutualIntersector() 
 {
     delete index;
-    for (std::size_t i = 0, ni = monoChains->size(); i < ni; i++ )
-    {
-        delete (*monoChains)[ i ];
-    }
     delete monoChains;
+
+    chainstore_mm_type::iterator end = chainStore.end();
+    for (chainstore_mm_type::iterator it = chainStore.begin(); it != end; ++it)
+    {
+        typedef std::vector<index::chain::MonotoneChain*> chainstore_type;
+        chainstore_type::iterator csend = (*it)->end();
+        for (chainstore_type::iterator csit = (*it)->begin(); csit != csend; ++csit)
+        {
+            delete *csit;
+        }
+        delete *it;
+    } 
 }
 
 void 

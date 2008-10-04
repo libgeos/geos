@@ -98,7 +98,11 @@ private:
 	int processCounter;
 	// statistics
 	int nOverlaps;
-
+	
+	// memory management helper
+      typedef std::vector<std::vector<index::chain::MonotoneChain*>*> chainstore_mm_type;
+      chainstore_mm_type chainStore;
+      
 	void addToIndex( SegmentString * segStr);
 
 	void intersectChains();
