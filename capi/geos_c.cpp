@@ -2348,7 +2348,7 @@ GEOSPrepare(const Geometry *g)
 }
 
 void
-GEOSPreparedGeom_destroy(geos::geom::prep::PreparedGeometry *a)
+GEOSPreparedGeom_destroy(const geos::geom::prep::PreparedGeometry *a)
 {
 	try
 	{

@@ -332,7 +332,7 @@ extern char GEOS_DLL GEOSEqualsExact(const GEOSGeometry* g1, const GEOSGeometry*
  */
 extern const GEOSPreparedGeometry GEOS_DLL *GEOSPrepare(const GEOSGeometry* g);
 
-extern void GEOS_DLL GEOSPreparedGeom_destroy(GEOSPreparedGeometry* g);
+extern void GEOS_DLL GEOSPreparedGeom_destroy(const GEOSPreparedGeometry* g);
 
 extern char GEOS_DLL GEOSPreparedContains(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSPreparedContainsProperly(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
