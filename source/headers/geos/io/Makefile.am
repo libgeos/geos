@@ -14,6 +14,7 @@ geos_HEADERS = \
 	ByteOrderDataInStream.h		\
 	ByteOrderDataInStream.inl	\
 	ByteOrderValues.h		\
+	CLocalizer.h			\
 	ParseException.h		\
 	WKBConstants.h			\
 	WKBReader.h			\
