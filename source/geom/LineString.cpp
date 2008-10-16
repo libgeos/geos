@@ -114,7 +114,6 @@ LineString::getCoordinates() const
 const CoordinateSequence*
 LineString::getCoordinatesRO() const
 {
-	assert(0 != points.get());
 	return points.get();
 }
 

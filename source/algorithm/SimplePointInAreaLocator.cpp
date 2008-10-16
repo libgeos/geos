@@ -15,7 +15,7 @@
  **********************************************************************/
 
 #include <geos/algorithm/CGAlgorithms.h>
-#include <geos/algorithm/locate/SimplePointInAreaLocator.h>
+#include <geos/algorithm/SimplePointInAreaLocator.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/GeometryCollection.h>
@@ -30,7 +30,6 @@ using namespace geos::geom;
 
 namespace geos {
 namespace algorithm { // geos.algorithm
-namespace locate { // geos.algorithm
 
 /**
  * locate is the main location function.  It handles both single-element
@@ -92,7 +91,6 @@ SimplePointInAreaLocator::containsPointInPolygon(const Coordinate& p, const Poly
 	return true;
 }
 
-} // namespace geos.algorithm.locate
 } // namespace geos.algorithm
 } // namespace geos
 

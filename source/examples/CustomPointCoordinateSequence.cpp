@@ -36,7 +36,7 @@
 
 #include "CustomCoordinateSequenceExample.h"
 #include <sstream>
-#include <iostream>
+//#include <stdio.h>
 
 using namespace geos;
 

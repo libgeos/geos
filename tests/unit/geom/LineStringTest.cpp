@@ -2,7 +2,9 @@
 // 
 // Test Suite for geos::geom::LineString class.
 
-// geos
+// TUT
+#include <tut.h>
+// GEOS
 #include <geos/geom/LineString.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateArraySequence.h>
@@ -13,13 +15,9 @@
 #include <geos/io/WKTReader.h>
 #include <geos/util/GEOSException.h>
 #include <geos/util/IllegalArgumentException.h>
-// tut
-#include <tut.h>
-#include <utility.h>
-// std 
-#include <string>
+// STL
 #include <cmath>
-#include <cassert>
+#include <string>
 
 namespace tut
 {
@@ -31,7 +29,18 @@ namespace tut
     struct test_linestring_data
     {
 		// Typedefs used as short names by test cases
+		typedef geos::geom::Geometry* GeometryPtr;
+		typedef geos::geom::Geometry const* GeometryCPtr;
+
+		typedef geos::geom::Coordinate* CoordinatePtr;
+		typedef geos::geom::Coordinate const* CoordinateCPtr;
+
+		typedef geos::geom::CoordinateArraySequence* CoordArrayPtr;
+		typedef geos::geom::CoordinateArraySequence const* CoordArrayCPtr;
+
+		typedef geos::geom::LineString* LineStringPtr;
 		typedef std::auto_ptr<geos::geom::LineString> LineStringAutoPtr;
+		typedef geos::geom::LineString const* LineStringCPtr;
 
 		geos::geom::PrecisionModel pm_;
 		geos::geom::GeometryFactory factory_;
@@ -42,15 +51,7 @@ namespace tut
 		test_linestring_data()
 			: pm_(1000), factory_(&pm_, 0), reader_(&factory_),
 			empty_line_(factory_.createLineString(new geos::geom::CoordinateArraySequence()))
-		{
-            assert(0 != empty_line_);
-        }
-		
-        ~test_linestring_data()
-        {
-            factory_.destroyGeometry(empty_line_);
-            empty_line_ = 0;
-        }
+		{}
     };
 
     typedef test_group<test_linestring_data> group;
@@ -505,4 +506,3 @@ namespace tut
 	}
 
 } // namespace tut
-

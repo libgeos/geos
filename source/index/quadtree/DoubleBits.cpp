@@ -22,7 +22,6 @@
 #include <geos/util/IllegalArgumentException.h>
 
 #include <string>
-#include <cstring>
 
 #if __STDC_IEC_559__
 #define ASSUME_IEEE_DOUBLE 1

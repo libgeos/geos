@@ -28,6 +28,9 @@
  *
  **********************************************************************/
 
+#include <vector>
+#include <sstream>
+#include <iomanip>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
@@ -48,10 +51,6 @@
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/opLinemerge.h>
 #include <geos/opPolygonize.h>
-#include <vector>
-#include <sstream>
-#include <iomanip>
-#include <cstdlib> // exit()
 
 #ifndef M_PI
 #define M_PI       3.14159265358979323846

@@ -45,7 +45,6 @@
 #include <vector>
 #include <memory> // auto_ptr
 #include <cassert>
-#include <typeinfo>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -169,7 +168,6 @@ GeometryGraph::add(const Geometry *g)
 	if (g->isEmpty()) return;
 	// check if this Geometry should obey the Boundary Determination Rule
 	// all collections except MultiPolygons obey the rule
-    // FIXME - mloskot: Make this condition readable and use paranthesis
 	if ((typeid(*g)==typeid(GeometryCollection)) ||
 			   (typeid(*g)==typeid(MultiPoint)) ||
 			   (typeid(*g)==typeid(MultiLineString)) &&

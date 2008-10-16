@@ -26,20 +26,20 @@ double
 sym_round(double val)
 {
         double n;
-        double f = std::fabs(std::modf(val, &n));
+        double f = fabs(modf(val, &n));
         if (val >= 0) {
                 if (f < 0.5) {
-                        return std::floor(val);
+                        return floor(val);
                 } else if (f > 0.5) {
-                        return std::ceil(val);
+                        return ceil(val);
                 } else {
                         return (n + 1.0);
                 }
         } else {
                 if (f < 0.5) {
-                        return std::ceil(val);
+                        return ceil(val);
                 } else if (f > 0.5) {
-                        return std::floor(val);
+                        return floor(val);
                 } else {
                         return (n - 1.0);
                 }
@@ -52,22 +52,22 @@ sym_round(double val)
 double java_math_round(double val)
 {
 	double n;
-	double f = std::fabs(std::modf(val, &n));
+	double f = fabs(modf(val, &n));
 	
 	if (val >= 0)
 	{
 		if (f < 0.5) {
-			return std::floor(val);
+			return floor(val);
 		} else if (f > 0.5) {
-			return std::ceil(val);
+			return ceil(val);
 		} else {
 			return (n + 1.0);
 		}
 	} else {
 		if (f < 0.5) {
-			return std::ceil(val);
+			return ceil(val);
 		} else if (f > 0.5) {
-			return std::floor(val);
+			return floor(val);
 		} else {
 			return n;
 		}
@@ -81,26 +81,27 @@ double
 rint_vc(double val)
 {
 	double n;
-	double f=std::fabs(std::modf(val,&n));
+	double f=fabs(modf(val,&n));
 	if (val>=0) {
 		if (f<0.5) {
-			return std::floor(val);
+			return floor(val);
 		} else if (f>0.5) {
-			return std::ceil(val);
+			return ceil(val);
 		} else {
-			return(std::floor(n/2)==n/2)?n:n+1.0;
+			return(floor(n/2)==n/2)?n:n+1.0;
 		}
 	} else {
 		if (f<0.5) {
-			return std::ceil(val);
+			return ceil(val);
 		} else if (f>0.5) {
-			return std::floor(val);
+			return floor(val);
 		} else {
-			return(std::floor(n/2)==n/2)?n:n-1.0;
+			return(floor(n/2)==n/2)?n:n-1.0;
 		}
 	}
 }
 
+
+
 } // namespace geos.util
 } // namespace geos
-

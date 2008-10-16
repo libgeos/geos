@@ -21,7 +21,6 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util/math.h>
-#include <geos/util.h>
 
 #include <sstream>
 #include <string>
@@ -110,9 +109,6 @@ PrecisionModel::PrecisionModel(double newScale, double newOffsetX, double newOff
 	:
 	modelType(FIXED)
 {
-    UNREFERENCED_PARAMETER(newOffsetX);
-    UNREFERENCED_PARAMETER(newOffsetY);
-
 #if GEOS_DEBUG
 	cerr<<"PrecisionModel["<<this<<"] ctor(scale,offsets)"<<endl;
 #endif

@@ -21,9 +21,6 @@ namespace tut
     // Common data used in test cases.
     struct test_capigeossimplify_data
 	{
-	    GEOSGeometry* geom1_;
-	    GEOSGeometry* geom2_;
-
 		static void notice(const char *fmt, ...)
 		{
 			std::fprintf( stdout, "NOTICE: ");
@@ -37,17 +34,12 @@ namespace tut
 		}
 
 		test_capigeossimplify_data()
-            : geom1_(0), geom2_(0)
 		{
 			initGEOS(notice, notice);
 		}		
 
 		~test_capigeossimplify_data()
 		{
-            GEOSGeom_destroy(geom1_);
-            GEOSGeom_destroy(geom2_);
-            geom1_ = 0;
-            geom2_ = 0;
 			finishGEOS();
 		}
 
@@ -67,13 +59,13 @@ namespace tut
     template<>
     void object::test<1>()
     {
-	    geom1_ = GEOSGeomFromWKT("POLYGON EMPTY");
+	    GEOSGeometry* geom1 = GEOSGeomFromWKT("POLYGON EMPTY");
 
-		ensure ( 0 != GEOSisEmpty(geom1_) );
+		ensure ( 0 != GEOSisEmpty(geom1) );
 
-		geom2_ = GEOSSimplify(geom1_, 43.2);
+		GEOSGeometry* geom2 = GEOSSimplify(geom1, 43.2);
 
-		ensure ( 0 != GEOSisEmpty(geom2_) );
+		ensure ( 0 != GEOSisEmpty(geom2) );
     }
     
 } // namespace tut

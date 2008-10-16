@@ -2,19 +2,19 @@
 // 
 // Test Suite for geos::simplify::TopologyPreservingSimplifier
 
-// geos
+// TUT
+#include <tut.h>
+#include "utility.h"
+// GEOS
 #include <geos/io/WKTReader.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/LineString.h>
 #include <geos/simplify/TopologyPreservingSimplifier.h>
-// std
+// C++ SL
 #include <string>
 #include <memory>
-// tut
-#include <tut.h>
-#include <utility.h>
 
 namespace tut
 {
@@ -34,7 +34,10 @@ namespace tut
 		typedef geos::geom::Geometry::AutoPtr GeomPtr;
 
 		test_tpsimp_data()
-            : pm(1.0), gf(&pm), wktreader(&gf)
+			:
+			pm(1.0),
+			gf(&pm),
+			wktreader(&gf)
 		{}
 	};
 
@@ -60,8 +63,8 @@ namespace tut
 		GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
 
 		ensure( "Simplified geometry is invalid!", simplified->isValid() );
-		ensure( "Simplified and original geometry inequal", simplified->equals(g.get()) );
-        ensure_equals_geometry( g.get(), simplified.get() );
+		ensure( simplified->equals(g.get()) );
+        ensure( utility::isSameStructure(g.get(), simplified.get()) );
 	}
 
     // PolygonNoReductionWithConflicts
@@ -77,7 +80,7 @@ namespace tut
 
 		ensure( "Simplified geometry is invalid!", simplified->isValid() );
 		ensure( "Topology has been changed by simplification!", simplified->equals(g.get()) );
-        ensure_equals_geometry( g.get(), simplified.get() );
+        ensure( utility::isSameStructure(g.get(), simplified.get()) );
     }
 
     // PolygonWithTouchingHole
@@ -95,7 +98,7 @@ namespace tut
 		GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
 
 		ensure( "Simplified geometry is invalid!", simplified->isValid() );
-        ensure_equals_geometry( g.get(), simplified.get() );
+        ensure( utility::isSameStructure(g.get(), simplified.get()) );
 
         GeomPtr g_expected(wktreader.read(wkt_expected));
 
@@ -114,7 +117,7 @@ namespace tut
 		GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
 
 		ensure( "Simplified geometry is invalid!", simplified->isValid() );
-        ensure_equals_geometry( g.get(), simplified.get() );
+        ensure( utility::isSameStructure(g.get(), simplified.get()) );
     }
 
     // PolygonWithFlattishHole
@@ -131,7 +134,7 @@ namespace tut
 		GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
 
 		ensure( "Simplified geometry is invalid!", simplified->isValid() );
-        ensure_equals_geometry( g.get(), simplified.get() );
+        ensure( utility::isSameStructure(g.get(), simplified.get()) );
         ensure( g_expected->equalsExact(simplified.get()) );
     }
 
@@ -146,7 +149,7 @@ namespace tut
 		GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
 
 		ensure( "Simplified geometry is invalid!", simplified->isValid() );
-        ensure_equals_geometry( g.get(), simplified.get() );
+        ensure( utility::isSameStructure(g.get(), simplified.get()) );
     }
 
     // TinyLineString
@@ -160,7 +163,7 @@ namespace tut
 		GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
 
 		ensure( "Simplified geometry is invalid!", simplified->isValid() );
-        ensure_equals_geometry(g.get(), simplified.get() );
+        ensure( utility::isSameStructure(g.get(), simplified.get()) );
     }
 
     // MultiPoint
@@ -175,7 +178,7 @@ namespace tut
 		GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
 
 		ensure( "Simplified geometry is invalid!", simplified->isValid() );
-        ensure_equals_geometry(g.get(), simplified.get() );
+        ensure( utility::isSameStructure(g.get(), simplified.get()) );
     }
 
     // MultiLineString
@@ -190,7 +193,7 @@ namespace tut
 		GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
 
 		ensure( "Simplified geometry is invalid!", simplified->isValid() );
-        ensure_equals_geometry(g.get(), simplified.get() );
+        ensure( utility::isSameStructure(g.get(), simplified.get()) );
     }
     
     // GeometryCollection
@@ -207,7 +210,7 @@ namespace tut
 		GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
 
 		ensure( "Simplified geometry is invalid!", simplified->isValid() );
-        ensure_equals_geometry(g.get(), simplified.get() );
+        ensure( utility::isSameStructure(g.get(), simplified.get()) );
     }
 } // namespace tut
 

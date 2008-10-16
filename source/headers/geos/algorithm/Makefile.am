@@ -1,5 +1,4 @@
-SUBDIRS = \
-	locate 
+SUBDIRS = 
 
 EXTRA_DIST = 
 
@@ -34,8 +33,8 @@ noinst_HEADERS = 			\
 	MinimumDiameter.h		\
 	NotRepresentableException.h	\
 	PointInRing.h			\
-	RayCrossingCounter.h		\
 	RobustDeterminant.h		\
 	SIRtreePointInRing.h		\
+	SimplePointInAreaLocator.h	\
 	SimplePointInRing.h	
 

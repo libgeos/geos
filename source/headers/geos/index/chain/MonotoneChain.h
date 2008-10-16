@@ -76,14 +76,46 @@ namespace chain { // geos::index::chain
  *
  * Last port: index/chain/MonotoneChain.java rev. 1.13 (JTS-1.7)
  */
-class MonotoneChain
-{
+class MonotoneChain {
+
+private:
+
+	void computeSelect(const geom::Envelope& searchEnv,
+			unsigned int start0,
+			unsigned int end0,
+			MonotoneChainSelectAction& mcs);
+
+	void computeOverlaps(int start0, int end0, MonotoneChain* mc,
+			int start1, int end1, MonotoneChainOverlapAction* mco);
+
+	const geom::CoordinateSequence* pts;
+
+	int start, end;
+
+	geom::Envelope* env;
+
+	/// user-defined information
+	void* context;
+
+	/// useful for optimizing chain comparisons
+	int id;
+
 public:
-
 	MonotoneChain(const geom::CoordinateSequence *newPts,
-                  int nstart, int nend, void* nContext);
+			int nstart, int nend,
+			void* nContext)
+		:
+		pts(newPts),
+		start(nstart),
+		end(nend),
+		env(NULL),
+		context(nContext)
+	{
+	}
 
-	~MonotoneChain();
+	~MonotoneChain() { 
+		delete env;
+	}
 
 	geom::Envelope* getEnvelope();
 
@@ -114,25 +146,6 @@ public:
 	inline int getId() { return id; }
 
 	void* getContext() { return context; }
-
-private:
-
-	void computeSelect(const geom::Envelope& searchEnv,
-			unsigned int start0,
-			unsigned int end0,
-			MonotoneChainSelectAction& mcs);
-
-	void computeOverlaps(int start0, int end0, MonotoneChain* mc,
-			int start1, int end1, MonotoneChainOverlapAction* mco);
-
-	const geom::CoordinateSequence* pts;
-    geom::Envelope* env;
-	/// user-defined information
-	void* context;
-    int start;
-    int end;
-    /// useful for optimizing chain comparisons
-	int id;
 
 };
 

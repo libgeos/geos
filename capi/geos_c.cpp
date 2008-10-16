@@ -16,8 +16,6 @@
  ***********************************************************************/
 
 #include <geos/geom/Geometry.h> 
-#include <geos/geom/prep/PreparedGeometry.h> 
-#include <geos/geom/prep/PreparedGeometryFactory.h> 
 #include <geos/geom/GeometryCollection.h> 
 #include <geos/geom/Polygon.h> 
 #include <geos/geom/Point.h> 
@@ -56,7 +54,6 @@
 
 // Some extra magic to make type declarations in geos_c.h work - for cross-checking of types in header.
 #define GEOSGeometry geos::geom::Geometry
-#define GEOSPreparedGeometry geos::geom::prep::PreparedGeometry
 #define GEOSCoordSequence geos::geom::CoordinateSequence
 #define GEOSWKTReader_t geos::io::WKTReader
 #define GEOSWKTWriter_t geos::io::WKTWriter
@@ -323,27 +320,31 @@ GEOSRelate(const Geometry *g1, const Geometry *g2)
 	try {
 
 		IntersectionMatrix *im = g1->relate(g2);
+
+		std::string s;
+		char *result;
 		if (im == NULL)
 				return NULL;
-		
-        std::string s(im->toString());
-		char *result = NULL;
+
+		s= im->toString();
 		result = (char*) std::malloc( s.length() + 1);
 		std::strcpy(result, s.c_str() );
 		delete im;
 
 		return result;
 	}
+
 	catch (const std::exception &e)
 	{
 		ERROR_MESSAGE("%s", e.what());
+		return NULL;
 	}
+
 	catch (...)
 	{
 		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
 	}
-    
-    return NULL;
 }
 
 
@@ -530,10 +531,11 @@ GEOSGeomToWKT(const Geometry *g1)
 	try
 	{
 		std::string s = g1->toString();
+
 		char *result;
 		result = (char*) std::malloc( s.length() + 1);
 		std::strcpy(result, s.c_str() );
-        return result;
+		return result;
 	}
 	catch (const std::exception &e)
 	{
@@ -564,7 +566,7 @@ GEOSGeomToWKB_buf(const Geometry *g, size_t *size)
 
 		unsigned char *result;
 		result = (unsigned char*) std::malloc(len);
-        std::memcpy(result, wkbstring.c_str(), len);
+		memcpy(result, wkbstring.c_str(), len);
 		*size = len;
 		return result;
 	}
@@ -626,7 +628,7 @@ GEOSGeomToHEX_buf(const Geometry *g, size_t *size)
 
 		char *result;
 		result = (char*) std::malloc(len);
-        std::memcpy(result, hexstring.c_str(), len);
+		memcpy(result, hexstring.c_str(), len);
 		*size = len;
 		return (unsigned char*) result;
 	}
@@ -1350,54 +1352,6 @@ GEOSPolygonize(const Geometry * const * g, unsigned int ngeoms)
 }
 
 Geometry *
-GEOSPolygonizer_getCutEdges(const Geometry * const * g, unsigned int ngeoms)
-{
-	using geos::operation::polygonize::Polygonizer;
-	unsigned int i;
-	Geometry *out = NULL;
-
-	try{
-		// Polygonize
-		Polygonizer plgnzr;
-		for (i=0; i<ngeoms; i++) plgnzr.add(g[i]);
-#if GEOS_DEBUG
-	NOTICE_MESSAGE("geometry vector added to polygonizer");
-#endif
-
-		std::vector<const LineString *>*lines = plgnzr.getCutEdges();
-
-#if GEOS_DEBUG
-	NOTICE_MESSAGE("output polygons got");
-#endif
-
-		// We need a vector of Geometry pointers, not
-		// Polygon pointers.
-		// STL vector doesn't allow transparent upcast of this
-		// nature, so we explicitly convert.
-		// (it's just a waste of processor and memory, btw)
-    std::vector<Geometry*> *linevec =
-				new std::vector<Geometry *>(lines->size());
-		for (i=0; i<lines->size(); i++) (*linevec)[i] = (*lines)[i]->clone();
-
-		out = geomFactory->createGeometryCollection(linevec);
-		// the above method takes ownership of the passed
-		// vector, so we must *not* delete it
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
-
-	return out;
-}
-
-Geometry *
 GEOSLineMerge(const Geometry *g)
 {
 		using geos::operation::linemerge::LineMerger;
@@ -1775,7 +1729,8 @@ GEOSGeom_createLineString(CoordinateSequence *cs)
 }
 
 Geometry *
-GEOSGeom_createPolygon(Geometry *shell, Geometry **holes, unsigned int nholes)
+GEOSGeom_createPolygon(Geometry *shell, Geometry **holes, 
+	unsigned int nholes)
 {
         using geos::geom::LinearRing;
 	try
@@ -2030,7 +1985,8 @@ GEOSWKTWriter_write(WKTWriter *writer, const Geometry *geom)
 	try
 	{
 		std::string s = writer->write(geom);
-		char *result = NULL;
+
+		char *result;
 		result = (char*) std::malloc( s.length() + 1);
 		std::strcpy(result, s.c_str() );
 		return result;
@@ -2038,13 +1994,14 @@ GEOSWKTWriter_write(WKTWriter *writer, const Geometry *geom)
 	catch (const std::exception &e)
 	{
 		ERROR_MESSAGE("%s", e.what());
+		return NULL;
 	}
+
 	catch (...)
 	{
 		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
 	}
-    
-    return NULL;
 }
 
 /* WKB Reader */
@@ -2059,13 +2016,14 @@ GEOSWKBReader_create()
 	catch (const std::exception &e)
 	{
 		ERROR_MESSAGE("%s", e.what());
+		return NULL;
 	}
+
 	catch (...)
 	{
 		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
 	}
-    
-    return NULL;
 }
 
 void
@@ -2103,13 +2061,14 @@ GEOSWKBReader_read(WKBReader *reader, const unsigned char *wkb, size_t size)
 	catch (const std::exception &e)
 	{
 		ERROR_MESSAGE("%s", e.what());
+		return NULL;
 	}
+
 	catch (...)
 	{
 		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
 	}
-    
-    return NULL;
 }
 
 Geometry*
@@ -2128,13 +2087,14 @@ GEOSWKBReader_readHEX(WKBReader *reader, const unsigned char *hex, size_t size)
 	catch (const std::exception &e)
 	{
 		ERROR_MESSAGE("%s", e.what());
+		return NULL;
 	}
+
 	catch (...)
 	{
 		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
 	}
-    
-    return NULL;
 }
 
 /* WKB Writer */
@@ -2149,13 +2109,14 @@ GEOSWKBWriter_create()
 	catch (const std::exception &e)
 	{
 		ERROR_MESSAGE("%s", e.what());
+		return NULL;
 	}
+
 	catch (...)
 	{
 		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
 	}
-    
-    return NULL;
 }
 
 void
@@ -2188,21 +2149,23 @@ GEOSWKBWriter_write(WKBWriter *writer, const Geometry *geom, size_t *size)
 		std::string wkbstring = s.str();
 		size_t len = wkbstring.length();
 
-		unsigned char *result = NULL;
+		unsigned char *result;
 		result = (unsigned char*) std::malloc(len);
-        std::memcpy(result, wkbstring.c_str(), len);
+		memcpy(result, wkbstring.c_str(), len);
 		*size = len;
 		return result;
 	}
 	catch (const std::exception &e)
 	{
 		ERROR_MESSAGE("%s", e.what());
+		return NULL;
 	}
+
 	catch (...)
 	{
 		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
 	}
-    return NULL;
 }
 
 /* The owner owns the result */
@@ -2214,24 +2177,25 @@ GEOSWKBWriter_writeHEX(WKBWriter *writer, const Geometry *geom, size_t *size)
 		std::ostringstream s(std::ios_base::binary);
 		writer->writeHEX(*geom, s);
 		std::string wkbstring = s.str();
-		const size_t len = wkbstring.length();
+		size_t len = wkbstring.length();
 
-		unsigned char *result = NULL;
+		unsigned char *result;
 		result = (unsigned char*) std::malloc(len);
-        std::memcpy(result, wkbstring.c_str(), len);
+		memcpy(result, wkbstring.c_str(), len);
 		*size = len;
 		return result;
 	}
 	catch (const std::exception &e)
 	{
 		ERROR_MESSAGE("%s", e.what());
+		return NULL;
 	}
 
 	catch (...)
 	{
 		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
 	}
-    return NULL;
 }
 
 int
@@ -2245,8 +2209,8 @@ GEOSWKBWriter_getOutputDimension(const GEOSWKBWriter* writer)
 	catch (...)
 	{
 		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
 	}
-    return 0;
 }
 
 void
@@ -2274,8 +2238,8 @@ GEOSWKBWriter_getByteOrder(const GEOSWKBWriter* writer)
 	catch (...)
 	{
 		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
 	}
-    return 0;
 }
 
 void
@@ -2321,131 +2285,5 @@ GEOSWKBWriter_setIncludeSRID(GEOSWKBWriter* writer, const char newIncludeSRID)
 	}
 }
 
-
-//-----------------------------------------------------------------
-// Prepared Geometry 
-//-----------------------------------------------------------------
-
-const geos::geom::prep::PreparedGeometry*
-GEOSPrepare(const Geometry *g)
-{
-    const geos::geom::prep::PreparedGeometry* prep = NULL;
-	
-    try
-	{
-		prep = geos::geom::prep::PreparedGeometryFactory::prepare(g);
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-	}
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-	}
-	
-    return prep;
-}
-
-void
-GEOSPreparedGeom_destroy(const geos::geom::prep::PreparedGeometry *a)
-{
-	try
-	{
-		delete a;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-	}
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-	}
-}
-
-char
-GEOSPreparedContains(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
-{
-	try 
-	{
-		bool result;
-		result = pg1->contains(g2);
-		return result;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 2;
-	}
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 2;
-	}
-}
-
-char
-GEOSPreparedContainsProperly(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
-{
-	try 
-	{
-		bool result;
-		result = pg1->containsProperly(g2);
-		return result;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 2;
-	}
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 2;
-	}
-}
-
-char
-GEOSPreparedCovers(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
-{
-	try 
-	{
-		bool result;
-		result = pg1->covers(g2);
-		return result;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 2;
-	}
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 2;
-	}
-}
-
-char
-GEOSPreparedIntersects(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
-{
-	try 
-	{
-		bool result;
-		result = pg1->intersects(g2);
-		return result;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 2;
-	}
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 2;
-	}
-}
 
 } //extern "C"

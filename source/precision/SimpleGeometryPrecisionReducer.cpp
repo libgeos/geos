@@ -30,7 +30,6 @@
 #include <geos/geom/LinearRing.h>
 
 #include <vector>
-#include <typeinfo>
 
 using namespace std;
 using namespace geos::geom;

@@ -38,10 +38,9 @@
 #include <geos/noding/SegmentString.h>
 
 #include <cmath>
-#include <cassert>
-#include <memory>
 #include <vector>
-#include <typeinfo>
+#include <memory>
+#include <cassert>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -316,7 +315,7 @@ OffsetCurveSetBuilder::isErodedCompletely(CoordinateSequence *ringCoord,
 
 	//delete md;
 	//System->out->println(md->getDiameter());
-	return minDiam < (2 * std::fabs(bufferDistance));
+	return minDiam < (2 * fabs(bufferDistance));
 }
 
 /*private*/
@@ -329,7 +328,7 @@ OffsetCurveSetBuilder::isTriangleErodedCompletely(
 	Coordinate inCentre;
 	tri.inCentre(inCentre);
 	double distToCentre=CGAlgorithms::distancePointLine(inCentre, tri.p0, tri.p1);
-	bool ret = distToCentre < std::fabs(bufferDistance);
+	bool ret = distToCentre < fabs(bufferDistance);
 	return ret;
 }
 

@@ -19,7 +19,6 @@
 #include <geos/index/ItemVisitor.h> 
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/util.h>
 
 #include <sstream>
 #include <vector>
@@ -193,8 +192,6 @@ NodeBase::visit(const Envelope* searchEnv, ItemVisitor& visitor)
 void
 NodeBase::visitItems(const Envelope* searchEnv, ItemVisitor& visitor)
 {
-    UNREFERENCED_PARAMETER(searchEnv);
-
 	// would be nice to filter items based on search envelope, but can't
 	// until they contain an envelope
 	for (vector<void*>::iterator i=items->begin(), e=items->end();

@@ -14,10 +14,9 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_LOCATE_SIMPLEPOINTINAREALOCATOR_H
-#define GEOS_ALGORITHM_LOCATE_SIMPLEPOINTINAREALOCATOR_H
+#ifndef GEOS_ALGORITHM_SIMPLEPOINTINAREALOCATOR_H
+#define GEOS_ALGORITHM_SIMPLEPOINTINAREALOCATOR_H
 
-#include <geos/algorithm/locate/PointOnGeometryLocator.h> // inherited
 
 // Forward declarations
 namespace geos {
@@ -30,23 +29,8 @@ namespace geos {
 
 namespace geos {
 namespace algorithm { // geos::algorithm
-namespace locate { // geos::algorithm::locate
 
-/** \brief
- * Computes the location of points
- * relative to an areal {@link Geometry},
- * using a simple O(n) algorithm.
- *
- * This algorithm is suitable for use in cases where
- * only one or a few points will be tested against a given area.
- * 
- * The algorithm used is only guaranteed to return correct results
- * for points which are <b>not</b> on the boundary of the Geometry.
- *
- * @version 1.7
- */
-class SimplePointInAreaLocator : public PointOnGeometryLocator
-{
+class SimplePointInAreaLocator {
 
 public:
 
@@ -56,30 +40,17 @@ public:
 	static bool containsPointInPolygon(const geom::Coordinate& p,
 			const geom::Polygon *poly);
 
-	SimplePointInAreaLocator( const geom::Geometry * g) 
-	:	g( g)
-	{ }
-
-	int locate( const geom::Coordinate * p) 
-	{
-		return locate( *p, g);
-	}
-
 private:
 
 	static bool containsPoint(const geom::Coordinate& p,
 			const geom::Geometry *geom);
-
-	const geom::Geometry * g;
-
 };
 
-} // geos::algorithm::locate
-} // geos::algorithm
-} // geos
+} // namespace geos::algorithm
+} // namespace geos
 
 
-#endif // GEOS_ALGORITHM_LOCATE_SIMPLEPOINTINAREALOCATOR_H
+#endif // GEOS_ALGORITHM_SIMPLEPOINTINAREALOCATOR_H
 
 /**********************************************************************
  * $Log$

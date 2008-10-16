@@ -32,12 +32,4 @@
 #include <geos/util/GeometricShapeFactory.h>
 //#include <geos/util/math.h>
 
-//
-// Private macros definition 
-// 
-
-#ifndef UNREFERENCED_PARAMETER 
-#define UNREFERENCED_PARAMETER(p) ((void)p)
-#endif 
-
 #endif // GEOS_UTIL_H

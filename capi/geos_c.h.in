@@ -27,8 +27,8 @@
  *
  ***********************************************************************/
 
-#ifndef GEOS_C_H_INCLUDED
-#define GEOS_C_H_INCLUDED
+#ifndef GEOS_C_H
+#define GEOS_C_H
 
 #ifndef __cplusplus
 # include <stddef.h> /* for size_t definition */
@@ -51,25 +51,15 @@ extern "C" {
 #if defined(_MSC_VER)
 #include <geos/version.h>
 #define GEOS_CAPI_VERSION_MAJOR 1
-#define GEOS_CAPI_VERSION_MINOR 5
-#define GEOS_CAPI_VERSION_PATCH 0
-#define GEOS_CAPI_VERSION "3.1.0-CAPI-1.5.0"
+#define GEOS_CAPI_VERSION_MINOR 3
+#define GEOS_CAPI_VERSION_PATCH 3
+#define GEOS_CAPI_VERSION "3.0.0rc4-CAPI-1.3.3"
 #else
-#ifndef GEOS_VERSION_MAJOR
 #define GEOS_VERSION_MAJOR @VERSION_MAJOR@
-#endif
-#ifndef GEOS_VERSION_MINOR
 #define GEOS_VERSION_MINOR @VERSION_MINOR@
-#endif
-#ifndef GEOS_VERSION_PATCH
 #define GEOS_VERSION_PATCH @VERSION_PATCH@
-#endif
-#ifndef GEOS_VERSION
 #define GEOS_VERSION "@VERSION@"
-#endif
-#ifndef GEOS_JTS_PORT
 #define GEOS_JTS_PORT "@JTS_PORT@"
-#endif
 
 #define GEOS_CAPI_VERSION_MAJOR @CAPI_VERSION_MAJOR@
 #define GEOS_CAPI_VERSION_MINOR @CAPI_VERSION_MINOR@
@@ -96,7 +86,6 @@ typedef void (*GEOSMessageHandler)(const char *fmt, ...);
  */
 #ifndef GEOSGeometry
 typedef struct GEOSGeom_t GEOSGeometry;
-typedef struct GEOSPrepGeom_t GEOSPreparedGeometry;
 typedef struct GEOSCoordSeq_t GEOSCoordSequence;
 #endif
 
@@ -294,8 +283,8 @@ extern char GEOS_DLL *GEOSRelate(const GEOSGeometry* g1, const GEOSGeometry* g2)
  * all arguments remain ownership of the caller
  * (both Geometries and pointers)
  */
-extern GEOSGeometry GEOS_DLL *GEOSPolygonize(const GEOSGeometry * const geoms[], unsigned int ngeoms);
-extern GEOSGeometry GEOS_DLL *GEOSPolygonizer_getCutEdges(const GEOSGeometry * const geoms[], unsigned int ngeoms);
+extern GEOSGeometry GEOS_DLL *GEOSPolygonize(const GEOSGeometry * const geoms[],
+	unsigned int ngeoms);
 
 extern GEOSGeometry GEOS_DLL *GEOSLineMerge(const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSSimplify(const GEOSGeometry* g1, double tolerance);
@@ -319,25 +308,6 @@ extern char GEOS_DLL GEOSContains(const GEOSGeometry* g1, const GEOSGeometry* g2
 extern char GEOS_DLL GEOSOverlaps(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSEquals(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSEqualsExact(const GEOSGeometry* g1, const GEOSGeometry* g2, double tolerance);
-
-
-/************************************************************************
- *
- *  Prepared Geometry Binary predicates - return 2 on exception, 1 on true, 0 on false
- *
- ***********************************************************************/
-
-/* 
- * Argument ownership is taken by prepared geometry
- */
-extern const GEOSPreparedGeometry GEOS_DLL *GEOSPrepare(const GEOSGeometry* g);
-
-extern void GEOS_DLL GEOSPreparedGeom_destroy(const GEOSPreparedGeometry* g);
-
-extern char GEOS_DLL GEOSPreparedContains(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
-extern char GEOS_DLL GEOSPreparedContainsProperly(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
-extern char GEOS_DLL GEOSPreparedCovers(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
-extern char GEOS_DLL GEOSPreparedIntersects(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
 
 
 /************************************************************************
@@ -496,4 +466,4 @@ extern void GEOS_DLL GEOSWKBWriter_setIncludeSRID(GEOSWKBWriter* writer, const c
 } // extern "C"
 #endif
 
-#endif /* #ifndef GEOS_C_H_INCLUDED */
+#endif /* #ifndef GEOS_C_H */

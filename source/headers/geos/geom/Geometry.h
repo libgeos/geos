@@ -288,9 +288,6 @@ public:
 	/// Returns whether or not the set of points in this Geometry is empty.
 	virtual bool isEmpty() const=0; //Abstract
 
-	/// Polygon overrides to check for actual rectangle
-	virtual bool isRectangle() const { return false; }
-
 	/// Returns the dimension of this Geometry (0=point, 1=line, 2=surface)
 	virtual Dimension::DimensionType getDimension() const=0; //Abstract
 
@@ -710,7 +707,7 @@ protected:
 	//Geometry* fromInternalGeometry(const Geometry *g) const;
 
 	/// Polygon overrides to check for actual rectangle
-	//virtual bool isRectangle() const { return false; } -- moved to public
+	virtual bool isRectangle() const { return false; }
 
 	Geometry(const Geometry &geom);
 

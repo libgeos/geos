@@ -70,12 +70,10 @@ public:
 		return false;
 	}
 
-	virtual ~SegmentIntersector() 
-	{ }
-
 protected:
 
 	SegmentIntersector() {}
+	virtual ~SegmentIntersector() {}
  
 };
 
@@ -100,5 +98,4 @@ typedef SegmentIntersector nodingSegmentIntersector;
  * geos::geom namespace definition, first pass at headers split
  *
  **********************************************************************/
-
 

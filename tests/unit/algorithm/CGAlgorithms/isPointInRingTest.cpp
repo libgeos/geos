@@ -2,18 +2,16 @@
 // 
 // Test Suite for CGAlgorithms::isPointInRing() function
 
-// GEOS
-#include <geos/algorithm/CGAlgorithms.h>
-#include <geos/geom/Polygon.h>
-#include <geos/geom/Geometry.h>
-#include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/Coordinate.h>
-#include <geos/io/WKTReader.h>
 // TUT
 #include <tut.h>
 // STL
 #include <string>
-#include <cassert>
+// GEOS
+#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/Geometry.h>
+#include <geos/io/WKTReader.h>
 
 using namespace geos::algorithm;
 
@@ -27,20 +25,9 @@ namespace tut
     {
 	    typedef std::auto_ptr<geos::geom::Geometry> GeomPtr;
 
-        geos::geom::CoordinateSequence* cs_;
         geos::io::WKTReader reader_;
-        
-        test_ispointinring_data()
-            : cs_(0)
-        {
-            assert(0 == cs_);
-        }
-        
-        ~test_ispointinring_data()
-        {
-            delete cs_;
-            cs_ = 0;
-        }
+
+        test_ispointinring_data() {}
     };
 
     typedef test_group<test_ispointinring_data> group;
@@ -62,8 +49,7 @@ namespace tut
 
         geos::geom::Coordinate pt(10, 10);
 
-        cs_ = geom->getCoordinates();
-        bool isInRing = CGAlgorithms::isPointInRing(pt, cs_);
+        bool isInRing = CGAlgorithms::isPointInRing(pt, geom->getCoordinates());
 
         ensure_equals( true, isInRing );
     }
@@ -80,11 +66,10 @@ namespace tut
 
         geos::geom::Coordinate pt(0, 0);
 
-        cs_ = geom->getCoordinates();
-        bool isInRing = CGAlgorithms::isPointInRing(pt, cs_);
+        bool isInRing = CGAlgorithms::isPointInRing(pt, geom->getCoordinates());
 
         ensure_equals( true, isInRing );
     }
 
-} // namespace tut
 
+} // namespace tut

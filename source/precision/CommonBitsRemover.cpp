@@ -20,7 +20,6 @@
 #include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Geometry.h>
-#include <geos/util.h>
 
 #include <cassert>
 
@@ -50,11 +49,7 @@ public:
 		trans(newTrans)
 	{}
 
-	void filter_ro(const geom::Coordinate *coord)  //Not used
-    {
-        UNREFERENCED_PARAMETER(coord);
-        assert(0);
-    };
+	void filter_ro(const geom::Coordinate *coord){ assert(0); }; //Not used
 
 	void filter_rw(geom::Coordinate *coord) const
 	{
@@ -72,8 +67,7 @@ public:
 
 	void filter_rw(geom::Coordinate *coord) const
 	{
-        // CommonCoordinateFilter is a read-only filter
-        UNREFERENCED_PARAMETER(coord);
+		// CommonCoordinateFilter is a read-only filter
 		assert(0);
 	}
 

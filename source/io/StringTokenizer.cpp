@@ -17,7 +17,6 @@
 #include <geos/io/StringTokenizer.h>
 
 #include <string>
-#include <cstdlib>
 
 using namespace std;
 

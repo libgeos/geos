@@ -18,7 +18,7 @@
 
 #include <vector>
 #include <iostream>
-#include <cstdlib> // for abs()
+#include <cmath> // for abs()
 
 #include <geos/inline.h>
 
@@ -157,7 +157,7 @@ public:
 
  
 	static bool isAdjacentSegments(int i1, int i2) {
-		return std::abs(i1 - i2) == 1;
+		return abs(i1 - i2) == 1;
 	}
 
 };

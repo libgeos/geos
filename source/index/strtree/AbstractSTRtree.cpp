@@ -18,11 +18,10 @@
 #include <geos/index/strtree/AbstractNode.h>
 #include <geos/index/strtree/ItemBoundable.h>
 #include <geos/index/ItemVisitor.h>
-// std
+
 #include <algorithm>
 #include <vector>
 #include <typeinfo>
-#include <cstddef>
 #include <cassert>
 
 using namespace std;
@@ -34,21 +33,20 @@ namespace strtree { // geos.index.strtree
 
 AbstractSTRtree::~AbstractSTRtree()
 {
-	assert(0 != itemBoundables);
-    BoundableList::iterator it = itemBoundables->begin();
-    BoundableList::iterator end = itemBoundables->end();
-	while (it != end)
+	assert(itemBoundables);
+
+	for (BoundableList::iterator i=itemBoundables->begin(),
+			e=itemBoundables->end();
+			i!=e;
+			++i)
 	{
-		delete *it; 
-        ++it;
+		delete *i; 
 	}
 	delete itemBoundables;
 
-	assert(0 != nodes);
-	for (std::size_t i = 0, nsize = nodes->size(); i < nsize; i++)
-    {
+	assert(nodes);
+	for (size_t i=0, nsize=nodes->size(); i<nsize; i++)
 		delete (*nodes)[i];
-    }
 	delete nodes;
 }
 
@@ -75,7 +73,7 @@ AbstractSTRtree::createParentBoundables(BoundableList* childBoundables,
 	for (BoundableList::iterator i=sortedChildBoundables->begin(),
 			e=sortedChildBoundables->end();
 			i!=e; i++)
-	//for(std::size_t i=0, scbsize=sortedChildBoundables->size(); i<scbsize; ++i)
+	//for(size_t i=0, scbsize=sortedChildBoundables->size(); i<scbsize; ++i)
 	{
 		Boundable *childBoundable=*i; // (*sortedChildBoundables)[i];
 
@@ -262,7 +260,7 @@ AbstractSTRtree::query(const void* searchBounds,
 
 
 	IntersectsOp *io=getIntersectsOp();
-	//std::size_t vbsize=vb.size();
+	//size_t vbsize=vb.size();
 	//cerr<<"AbstractSTRtree::query: childBoundables: "<<vbsize<<endl;
 	for(BoundableList::const_iterator i=vb.begin(), e=vb.end();
 			i!=e; ++i)
@@ -341,7 +339,7 @@ AbstractSTRtree::boundablesAtLevel(int level, AbstractNode* top,
 /**********************************************************************
  * $Log$
  * Revision 1.30  2006/06/12 10:49:43  strk
- * unsigned int => std::size_t
+ * unsigned int => size_t
  *
  * Revision 1.29  2006/03/21 10:47:34  strk
  * indexStrtree.h split

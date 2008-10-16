@@ -21,7 +21,6 @@
 #include <geos/platform.h>
 #include <geos/util.h>
 
-#include <cstring>
 #include <cassert>
 
 namespace geos {
@@ -137,7 +136,7 @@ ByteOrderValues::getDouble(const unsigned char *buf, int byteOrder)
 {
 	int64 longValue = getLong(buf, byteOrder);
 	double ret;
-    std::memcpy(&ret, &longValue, sizeof(double));
+	memcpy(&ret, &longValue, sizeof(double));
 	return ret;
 }
 
@@ -145,7 +144,7 @@ void
 ByteOrderValues::putDouble(double doubleValue, unsigned char *buf, int byteOrder)
 {
 	int64 longValue;
-    std::memcpy(&longValue, &doubleValue, sizeof(double));
+	memcpy(&longValue, &doubleValue, sizeof(double));
 #if DEBUG_BYTEORDER_VALUES
 	cout<<"ByteOrderValues::putDouble("<<doubleValue<<
 		", order:"<<byteOrder

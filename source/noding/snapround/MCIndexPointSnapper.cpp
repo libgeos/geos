@@ -25,7 +25,6 @@
 #include <geos/geom/Envelope.h>
 #include <geos/index/chain/MonotoneChainSelectAction.h> 
 #include <geos/index/chain/MonotoneChain.h> 
-#include <geos/util.h>
 
 #include <algorithm>
 
@@ -70,10 +69,7 @@ public:
 		isNodeAddedVar = SimpleSnapRounder::addSnappedNode(hotPixel, ss, startIndex);
 	}
 
-	void select(LineSegment* ls)
-    {
-        UNREFERENCED_PARAMETER(ls);
-    }
+	void select(LineSegment* ls) {}
 
 };
 

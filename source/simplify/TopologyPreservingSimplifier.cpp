@@ -300,7 +300,8 @@ TopologyPreservingSimplifier::getResultGeometry()
 #if GEOS_DEBUG
 	std::cerr << "LineStringMapBuilderFilter applied, "
 	          << " lineStringMap contains "
-	          << linestringMap.size() << " elements\n";
+	          << linestringMap.size() << " elements"
+	          << std::endl;
 #endif
 
 		LinesMapValueIterator begin(linestringMap.begin());
@@ -309,14 +310,16 @@ TopologyPreservingSimplifier::getResultGeometry()
 
 
 #if GEOS_DEBUG
-	std::cerr << "all TaggedLineString simplified\n";
+	std::cerr << "all TaggedLineString simplified"
+	          << std::endl;
 #endif
 
 		LineStringTransformer trans(linestringMap);
 		result = trans.transform(inputGeom);
 
 #if GEOS_DEBUG
-	std::cerr << "inputGeom transformed\n";
+	std::cerr << "inputGeom transformed"
+	          << std::endl;
 #endif
 
 	} catch (...) {
@@ -342,7 +345,8 @@ TopologyPreservingSimplifier::getResultGeometry()
 	}
 
 #if GEOS_DEBUG
-	std::cerr << "returning result\n";
+	std::cerr << "returning result"
+	          << std::endl;
 #endif
 
 	return result;

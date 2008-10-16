@@ -39,7 +39,6 @@ geos_unit_SOURCES = geos_unit.cpp \
 	geom/TriangleTest.cpp \
 	geom/Geometry/isRectangleTest.cpp \
 	geom/Geometry/coversTest.cpp \
-	geom/prep/PreparedGeometryFactoryTest.cpp \
 	index/quadtree/DoubleBitsTest.cpp \
 	io/WKBReaderTest.cpp \
 	io/ByteOrderValuesTest.cpp \
@@ -57,10 +56,8 @@ geos_unit_SOURCES = geos_unit.cpp \
 	simplify/DouglasPeuckerSimplifierTest.cpp \
 	simplify/TopologyPreservingSimplifierTest.cpp \
 	util/UniqueCoordinateArrayFilterTest.cpp \
-	capi/GEOSCoordSeqTest.cpp \
-	capi/GEOSGeomToWKTTest.cpp \
-	capi/GEOSSimplifyTest.cpp \
-	capi/GEOSPolygonizer_getCutEdgesTest.cpp
+	capi/GEOSCoordSeqTest.cpp	\
+	capi/GEOSSimplifyTest.cpp
 
-noinst_HEADERS = \
+noinst_HEADERS = 			\
 	utility.h

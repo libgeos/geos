@@ -27,10 +27,6 @@
 
 namespace geos {
 namespace geom { // geos.geom
-
-/** \brief
- * Provides classes that parse and modify Geometry objects.
- */
 namespace util { // geos.geom.util
 
 } // namespace geos.geom.util

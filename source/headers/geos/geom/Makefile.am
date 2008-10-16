@@ -1,6 +1,4 @@
-SUBDIRS = \
-	util \
-	prep
+SUBDIRS = util
 
 #EXTRA_DIST = 
 

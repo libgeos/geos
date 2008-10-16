@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: SinglePassNoder.h 1820 2006-09-06 16:54:23Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
@@ -23,9 +23,8 @@
 #include <geos/noding/SingleInteriorIntersectionFinder.h> // for composition
 #include <geos/algorithm/LineIntersector.h> // for composition
 
-#include <memory>
-#include <string>
 #include <cassert>
+#include <string>
 
 // Forward declarations
 namespace geos {

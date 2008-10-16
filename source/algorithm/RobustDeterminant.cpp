@@ -4,7 +4,6 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (c) Olivier Devillers <Olivier.Devillers@sophia.inria.fr>
  * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -19,8 +18,9 @@
  * sign of a 2x2 determinant for double precision values robustly.
  * It is a direct translation of code developed by Olivier Devillers.
  * 
- *************************************************************************
  * The original code carries the following copyright notice:
+ *
+ *************************************************************************
  * Author : Olivier Devillers
  * Olivier.Devillers@sophia.inria.fr
  * http:/www.inria.fr:/prisme/personnel/devillers/anglais/determinant.html
@@ -184,7 +184,7 @@ int RobustDeterminant::signOfDet2x2(double x1,double y1,double x2,double y2) {
 	*/
 	while (true) {
 		count=count+1;
-		k=std::floor(x2/x1);
+		k=floor(x2/x1);
 		x2=x2-k*x1;
 		y2=y2-k*y1;
 
@@ -228,7 +228,7 @@ int RobustDeterminant::signOfDet2x2(double x1,double y1,double x2,double y2) {
 		/*
 		*  exchange 1 and 2 role.
 		*/
-		k=std::floor(x1/x2);
+		k=floor(x1/x2);
 		x1=x1-k*x2;
 		y1=y1-k*y2;
 		

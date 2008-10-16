@@ -2,10 +2,10 @@
 // 
 // Test Suite for geos::geom::MultiLineString class.
 
-// geos
-#include <geos/geom/MultiLineString.h>
-// tut
+// TUT
 #include <tut.h>
+// GEOS
+#include <geos/geom/MultiLineString.h>
 
 namespace tut
 {
@@ -37,4 +37,3 @@ namespace tut
     }
 
 } // namespace tut
-

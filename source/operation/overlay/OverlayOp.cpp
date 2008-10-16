@@ -898,6 +898,7 @@ OverlayOp::checkObviouslyWrongResult(OverlayOp::OpCode opCode)
 
 	assert(resultGeom);
 
+
 #ifdef ENABLE_OTHER_OVERLAY_RESULT_VALIDATORS
 
 	if ( opCode == opINTERSECTION
@@ -946,9 +947,6 @@ OverlayOp::checkObviouslyWrongResult(OverlayOp::OpCode opCode)
 	}
 
 	// Add your tests here
-
-#else
-    UNREFERENCED_PARAMETER(opCode);
 #endif
 
 #ifdef ENABLE_OVERLAY_RESULT_VALIDATOR

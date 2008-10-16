@@ -2,7 +2,9 @@
 // 
 // Test Suite for geos::geom::Polygon class.
 
-// geos
+// TUT
+#include <tut.h>
+// GEOS
 #include <geos/geom/Polygon.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -15,12 +17,9 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/io/WKTReader.h>
 #include <geos/util/IllegalArgumentException.h>
-// std
+// STL
 #include <cmath>
 #include <string>
-// tut
-#include <tut.h>
-#include <utility.h>
 
 namespace tut
 {
@@ -32,7 +31,27 @@ namespace tut
     struct test_polygon_data
     {
 		// Typedefs used as short names by test cases
+		typedef geos::geom::Geometry* GeometryPtr;
+		typedef geos::geom::Geometry const* GeometryCPtr;
 		typedef std::auto_ptr<geos::geom::Geometry> GeometryAutoPtr;
+
+		typedef geos::geom::Coordinate* CoordinatePtr;
+		typedef geos::geom::Coordinate const* CoordinateCPtr;
+		typedef geos::geom::CoordinateSequence* CoordSeqPtr;
+		typedef geos::geom::CoordinateSequence const* CoordSeqCPtr;
+		typedef geos::geom::CoordinateArraySequence* CoordArrayPtr;
+		typedef geos::geom::CoordinateArraySequence const* CoordArrayCPtr;
+
+		typedef geos::geom::Envelope* EnvelopePtr;
+		typedef geos::geom::Envelope const* EnvelopeCPtr;
+		typedef geos::geom::Point* PointPtr;
+		typedef geos::geom::Point const* PointCPtr;
+		typedef geos::geom::LineString* LineStringPtr;
+		typedef geos::geom::LineString const* LineStringCPtr;
+		typedef geos::geom::LinearRing* LinearRingPtr;
+		typedef geos::geom::LinearRing const* LinearRingCPtr;
+		typedef geos::geom::Polygon* PolygonPtr;
+		typedef geos::geom::Polygon const* PolygonCPtr;
 		typedef std::auto_ptr<geos::geom::Polygon> PolygonAutoPtr;
 
 		geos::geom::PrecisionModel pm_;
@@ -45,7 +64,7 @@ namespace tut
 
 		test_polygon_data() 
 			: pm_(1), factory_(&pm_, 0), reader_(&factory_),
-                empty_poly_(factory_.createPolygon()), poly_size_(7)
+			empty_poly_(factory_.createPolygon()), poly_size_(7)
 		{
 			// Create non-empty LinearRing
 			GeometryPtr geo = 0;

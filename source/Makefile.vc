@@ -15,48 +15,36 @@
 # Commands
 #
 MAKE = nmake
-CC = cl.exe
-LINK = link.exe
 RM = -del
 
 # Check compiler version given in command line
 # nmake -f makefile.vc MSVC_VER=xxxx
-# By default, Visual C++ 7.1 (1310) is configured.
 #
 !IFNDEF MSVC_VER
+#assume msvc 7.1
 MSVC_VER=1310
 !ENDIF
 
-# Collect compiler version specific flags
 !IF $(MSVC_VER) >= 1400
 MSVC_CPPFLAGS = /EHs /D "_CRT_SECURE_NO_DEPRECATE"
 !ELSE
 MSVC_CPPFLAGS = /GX
 !ENDIF
 
-# Determine requested build configuration, by default use release and
-# build optimized binaries. For Debug, use
-# nmake -f makefile.vc DEBUG=1
-!IFNDEF DEBUG
-CFLAGS = -Iheaders /MD /GR /O2 /W3 /nologo /D "NDEBUG" \
-         /D "NOMINMAX" /D "WIN32_LEAN_AND_MEAN" /D "NOGDI" \
-         $(MSVC_CPPFLAGS)
-!ELSE
-CFLAGS = -Iheaders /MDd /GR /Od /W4 /Zi /nologo /D "_DEBUG" \
-         /D "NOMINMAX" /D "WIN32_LEAN_AND_MEAN" /D "NOGDI" \
-         $(MSVC_CPPFLAGS)
-!ENDIF
+#CFLAGS = -Iheaders /GX /MD /GR /Zi /nologo
+#CFLAGS = -Iheaders /GX /MD /GR /O1 /D "NDEBUG" /nologo
+CFLAGS = -Iheaders /MD /GR /O2 /D "NDEBUG" /nologo \
+     	 /D "NOMINMAX" /D "WIN32_LEAN_AND_MEAN" /D "NOGDI" \
+	 $(MSVC_CPPFLAGS)
 
-# Names of binary files
-LIBNAME = geos.lib
-DLLNAME = geos.dll
-CDLLNAME = geos_c.dll
-CLIBNAME = geos_c_i.lib
-SLIBNAME = geos_i.lib
 
-# List of objects
-OBJ = \
-    algorithm\CGAlgorithms.obj \
+LIBNAME =	geos.lib
+DLLNAME = 	geos.dll
+CDLLNAME =  geos_c.dll
+CLIBNAME =  geos_c_i.lib
+SLIBNAME =	geos_i.lib
+
+OBJ = 	algorithm\CGAlgorithms.obj \
 	algorithm\CentroidArea.obj \
 	algorithm\CentroidLine.obj \
 	algorithm\CentroidPoint.obj \
@@ -70,13 +58,10 @@ OBJ = \
 	algorithm\MinimumDiameter.obj \
 	algorithm\NotRepresentableException.obj \
 	algorithm\PointLocator.obj \
-	algorithm\RayCrossingCounter.obj \
 	algorithm\RobustDeterminant.obj \
+	algorithm\SimplePointInAreaLocator.obj \
 	algorithm\SimplePointInRing.obj \
 	algorithm\SIRtreePointInRing.obj \
-	algorithm\locate\IndexedPointInAreaLocator.obj \
-	algorithm\locate\PointOnGeometryLocator.obj \
-	algorithm\locate\SimplePointInAreaLocator.obj \
 	geom\Coordinate.obj \
 	geom\CoordinateArraySequence.obj \
 	geom\CoordinateArraySequenceFactory.obj \
@@ -103,19 +88,6 @@ OBJ = \
 	geom\util\GeometryEditor.obj \
 	geom\util\GeometryTransformer.obj \
 	geom\util\ShortCircuitedGeometryVisitor.obj \
-	geom\prep\AbstractPreparedPolygonContains.obj \
-	geom\prep\BasicPreparedGeometry.obj \
-	geom\prep\PreparedGeometry.obj \
-	geom\prep\PreparedGeometryFactory.obj \
-	geom\prep\PreparedLineString.obj \
-	geom\prep\PreparedLineStringIntersects.obj \
-	geom\prep\PreparedPoint.obj \
-	geom\prep\PreparedPolygon.obj \
-	geom\prep\PreparedPolygonContains.obj \
-	geom\prep\PreparedPolygonContainsProperly.obj \
-	geom\prep\PreparedPolygonCovers.obj \
-	geom\prep\PreparedPolygonIntersects.obj \
-	geom\prep\PreparedPolygonPredicate.obj \
 	geomgraph\Depth.obj \
 	geomgraph\DirectedEdge.obj \
 	geomgraph\DirectedEdgeStar.obj \
@@ -155,10 +127,6 @@ OBJ = \
 	index\chain\MonotoneChainBuilder.obj \
 	index\chain\MonotoneChainOverlapAction.obj \
 	index\chain\MonotoneChainSelectAction.obj \
-	index\intervalrtree\IntervalRTreeBranchNode.obj \
-	index\intervalrtree\IntervalRTreeLeafNode.obj \
-	index\intervalrtree\IntervalRTreeNode.obj \
-	index\intervalrtree\SortedPackedIntervalRTree.obj \
 	index\quadtree\DoubleBits.obj \
 	index\quadtree\IntervalSize.obj \
 	index\quadtree\Key.obj \
@@ -177,7 +145,6 @@ OBJ = \
 	index\sweepline\SweepLineInterval.obj \
 	io\ByteOrderDataInStream.obj \
 	io\ByteOrderValues.obj \
-	io\CLocalizer.obj \
 	io\ParseException.obj \
 	io\StringTokenizer.obj \
 	io\Unload.obj \
@@ -186,24 +153,19 @@ OBJ = \
 	io\WKTReader.obj \
 	io\WKTWriter.obj \
 	io\Writer.obj \
-	noding\FastNodingValidator.obj \
-	noding\FastSegmentSetIntersectionFinder.obj \
+    noding\FastNodingValidator.obj \
 	noding\IntersectionAdder.obj \
 	noding\IntersectionFinderAdder.obj \
 	noding\IteratedNoder.obj \
 	noding\MCIndexNoder.obj \
-	noding\MCIndexSegmentSetMutualIntersector.obj \
-	noding\NodedSegmentString.obj \
 	noding\NodingValidator.obj \
 	noding\Octant.obj \
 	noding\ScaledNoder.obj \
-	noding\SegmentIntersectionDetector.obj \
 	noding\SegmentNode.obj \
 	noding\SegmentNodeList.obj \
 	noding\SegmentString.obj \
-	noding\SegmentStringUtil.obj \
 	noding\SimpleNoder.obj \
-	noding\SingleInteriorIntersectionFinder.obj \
+    noding\SingleInteriorIntersectionFinder.obj \
 	noding\snapround\HotPixel.obj \
 	noding\snapround\MCIndexPointSnapper.obj \
 	noding\snapround\MCIndexSnapRounder.obj \
@@ -300,7 +262,7 @@ default:	$(LIBNAME) $(DLLNAME) $(CDLLNAME)
 
 $(LIBNAME):	headers/geos/platform.h headers/geos/version.h ../capi/geos_c.h $(OBJ)
 	if exist $(LIBNAME) del $(LIBNAME)
-	$(LINK) /lib /out:$(LIBNAME) $(OBJ)
+	lib /out:$(LIBNAME) $(OBJ)
 
 $(DLLNAME):	$(OBJ)
 	link /dll /debug $(OBJ) /out:$(DLLNAME) /implib:$(SLIBNAME)

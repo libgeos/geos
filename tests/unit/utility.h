@@ -1,92 +1,38 @@
 // $Id$
 // 
-// GEOS Unit Test utilities, extension of TUT Framework namespace
+// Utility for GEOS Test Suite
 //
-#ifndef GEOS_TUT_UTILITY_H_INCLUDED
-#define GEOS_TUT_UTILITY_H_INCLUDED 
+#ifndef UTILITY_H_INCLUDED
+#define UTILITY_H_INCLUDED
 
-// geos
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>
-#include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateArraySequence.h>
-#include <geos/geom/CoordinateArraySequenceFactory.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
-#include <geos/geom/Dimension.h>
-#include <geos/geom/Point.h>
 #include <geos/geom/Polygon.h>
-#include <geos/geom/LinearRing.h>
-#include <geos/geom/LineString.h>
-#include <geos/geom/MultiPoint.h>
-#include <geos/geom/MultiLineString.h>
-#include <geos/geom/MultiPolygon.h>
-#include <geos/geom/PrecisionModel.h>
-#include <geos/geom/GeometryFactory.h>
-#include <geos/geom/prep/PreparedGeometry.h>
-#include <geos/io/WKTReader.h>
-// std
+
+#include <iostream>
 #include <memory>
-#include <cstdlib>
 #include <cassert>
-// tut
-#include <tut.h>
 
-namespace tut
+//
+// GEOS Unit Test utilities
+//
+namespace utility
 {
-
-//
-// Helper typedefs
-//
-typedef geos::geom::Coordinate* CoordinatePtr;
-typedef geos::geom::Coordinate const* CoordinateCPtr;
-
-typedef geos::geom::CoordinateSequence* CoordSeqPtr;
-typedef geos::geom::CoordinateSequence const* CoordSeqCPtr;
-
-typedef geos::geom::CoordinateArraySequence* CoordArrayPtr;
-typedef geos::geom::CoordinateArraySequence const* CoordArrayCPtr;
-
-typedef geos::geom::Geometry* GeometryPtr;
-typedef geos::geom::Geometry const* GeometryCPtr;
-
-typedef geos::geom::Point* PointPtr;
-typedef geos::geom::Point const* PointCPtr;
-typedef geos::geom::LinearRing* LinearRingPtr;
-typedef geos::geom::LinearRing const* LinearRingCPtr;
-typedef geos::geom::LineString* LineStringPtr;
-typedef geos::geom::LineString const* LineStringCPtr;
-typedef geos::geom::Polygon* PolygonPtr;
-typedef geos::geom::Polygon const* PolygonCPtr;
-
-typedef geos::geom::GeometryCollection* GeometryColPtr;
-typedef geos::geom::GeometryCollection const* GeometryColCPtr;
-
-typedef geos::geom::MultiPoint* MultiPointPtr;
-typedef geos::geom::MultiPoint const* MultiPointCPtr;
-typedef geos::geom::MultiLineString* MultiLineStringPtr;
-typedef geos::geom::MultiLineString const* MultiLineStringCPtr;
-typedef geos::geom::MultiPolygon* MultiPolygonPtr;
-typedef geos::geom::MultiPolygon const* MultiPolygonCPtr;
-
-// prepared geometries always returend as const
-typedef geos::geom::prep::PreparedGeometry const* PreparedGeometryPtr;
 
 //
 // Type cast helper utilities
 //
 
-template<typename Type, typename InstanceType>
-inline bool isInstanceOf(InstanceType const* instance)
+template<class Type, class InstanceType>
+inline bool isInstanceOf(InstanceType* instance)
 {
-    assert(0 != instance);
-    return (0 != dynamic_cast<Type const*>(instance) );
+    return ( 0 != dynamic_cast<Type *>(instance) );
 }
 
-template<typename Type, typename InstanceType>
-inline Type const* instanceOf(InstanceType const* instance)
+template<class Type, class InstanceType>
+inline Type* instanceOf(InstanceType* instance)
 {
-    assert(0 != instance);
-    return dynamic_cast<Type const*>(instance);
+    return dynamic_cast<Type *>(instance);
 }
 
 template <typename Dst, typename Src>
@@ -110,112 +56,91 @@ std::auto_ptr<Dst> static_cast_auto_ptr(std::auto_ptr<Src>& ptr)
 // Geometries structure comparators
 //
 
-template <typename T1, typename T2>
-inline void ensure_equals_geometry(T1 const* lhs, T2 const* rhs)
+template <class T1, class T2>
+inline bool isSameStructure(T1 lhs, T2 rhs)
 {
-    assert(0 != lhs);
-    assert(0 != rhs);
-
-    assert(!"DIFFERENT TYPES ARE NOT OF THE SAME STRUCTURE");
+    // Different types can't have the smame structure
+    return false;
 }
 
-template <typename T>
-inline void ensure_equals_geometry(T const* lhs, T const* rhs)
+template <class T>
+inline bool isSameStructure(T* lhs, T* rhs)
 {
-    assert(0 != lhs);
-    assert(0 != rhs);
-
     using geos::geom::Polygon;
     using geos::geom::GeometryCollection;
     
-    ensure_equals("is-valid do not match",
-                  lhs->isValid(), rhs->isValid());
+    assert( 0 != lhs );
+    assert( 0 != rhs );
 
-    ensure_equals("is-empty do not match",
-                  lhs->isEmpty(), rhs->isEmpty());
+    // Both are empty
+    if (!(lhs->isEmpty() == rhs->isEmpty()))
+        return false;
 
-    if (!isInstanceOf<GeometryCollection>(lhs)
-         && !isInstanceOf<GeometryCollection>(rhs))
-    {
-        ensure_equals("is-simple do not match",
-                      lhs->isSimple(), rhs->isSimple());
-    }
+    // Both are non-empty
+    if (!(!lhs->isEmpty()) == (!rhs->isEmpty()))
+        return false;
 
-    ensure_equals("type do not match",
-                  lhs->getGeometryType(), rhs->getGeometryType());
-
-    ensure_equals("type id do not match",
-                  lhs->getGeometryTypeId(), rhs->getGeometryTypeId());
-
-    ensure_equals("dimension do not match",
-                  lhs->getDimension(), rhs->getDimension());
-
-    ensure_equals("boundary dimension do not match",
-                  lhs->getBoundaryDimension(), rhs->getBoundaryDimension());
-
-    // NOTE - mloskot: Intentionally disabled, so simplified geometry
-    // can be compared to its original
-    //ensure_equals("number of points do not match",
-    //              lhs->getNumPoints(), rhs->getNumPoints());
+    // Both are valid
+    if (!(lhs->isValid() == rhs->isValid()))
+        return false;
 
     // Dispatch to run more specific testes
     if (isInstanceOf<Polygon>(lhs)
         && isInstanceOf<Polygon>(rhs))
     {
-        ensure_equals_geometry(instanceOf<Polygon>(lhs),
-                        instanceOf<Polygon>(rhs));
+        return isSameStructure(instanceOf<Polygon>(lhs),
+                               instanceOf<Polygon>(rhs));
     }
     else if (isInstanceOf<GeometryCollection>(lhs)
-             && isInstanceOf<GeometryCollection>(rhs))
+            && isInstanceOf<GeometryCollection>(rhs))
     {
-        ensure_equals_geometry(instanceOf<GeometryCollection>(lhs),
-                        instanceOf<GeometryCollection>(rhs));
+        return isSameStructure(instanceOf<GeometryCollection>(lhs),
+                               instanceOf<GeometryCollection>(rhs));
     }
+
+    return true;
 }
 
 template <>
-inline void ensure_equals_geometry(geos::geom::Polygon const* lhs,
-                                   geos::geom::Polygon const* rhs)
+inline bool isSameStructure(geos::geom::Polygon* lhs,
+                            geos::geom::Polygon* rhs)
 {
-    assert(0 != lhs);
-    assert(0 != rhs);
+    assert( 0 != lhs );
+    assert( 0 != rhs );
 
-    ensure_equals("number of interior ring do not match",
-                  lhs->getNumInteriorRing(), rhs->getNumInteriorRing());
+    return (lhs->getNumInteriorRing() == rhs->getNumInteriorRing());
 }
 
 template <>
-inline void ensure_equals_geometry(geos::geom::GeometryCollection const* lhs,
-                                   geos::geom::GeometryCollection const* rhs)
+inline bool isSameStructure(geos::geom::GeometryCollection* lhs,
+                            geos::geom::GeometryCollection* rhs)
 {
-    assert(0 != lhs);
-    assert(0 != rhs);
-
     using geos::geom::Geometry;
 
-    ensure_equals("number of geometries do not match",
-                  lhs->getNumGeometries(), rhs->getNumGeometries());
+    assert( 0 != lhs );
+    assert( 0 != rhs );
+
+    if (lhs->getNumGeometries() != rhs->getNumGeometries())
+        return false;
 
     for (std::size_t i = 0, n = lhs->getNumGeometries(); i < n; ++i)
     {
-        Geometry const* g1 = lhs->getGeometryN(i);
-        Geometry const* g2 = rhs->getGeometryN(i);
-        ensure_equals_geometry(g1, g2); // breaks on failure 
+        // Dirty, but necessary!
+        // isSameStructure promises to not to try to change geometries
+        // @@ why doesn't you take const pointers ?
+        Geometry* g1 = const_cast<Geometry*>(lhs->getGeometryN(i));
+        Geometry* g2 = const_cast<Geometry*>(rhs->getGeometryN(i));
+        if (!isSameStructure(g1, g2))
+        {
+            return false;
+        }
     }
+
+    return true;
 }
 
-template <>
-inline void ensure_equals_geometry(geos::geom::Geometry const* lhs,
-                                   geos::geom::prep::PreparedGeometry const* rhs)
-{
-    assert(0 != lhs);
-    assert(0 != rhs);
-    
-    geos::geom::Geometry const& pg = rhs->getGeometry();
-    ensure_equals_geometry(lhs, &pg);
-}
+} // namespace unit
 
-} // namespace tut
+#endif // #ifndef UTILITY_H_INCLUDED
 
-#endif // #ifndef GEOS_TUT_UTILITY_H_INCLUDED
 

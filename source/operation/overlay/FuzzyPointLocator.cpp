@@ -23,7 +23,6 @@
 #include <geos/geom/Point.h> // for Point upcast
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Location.h> // for Location::Value enum
-#include <geos/util.h>
 
 #include <cassert>
 #include <functional>
@@ -61,8 +60,6 @@ FuzzyPointLocator::FuzzyPointLocator(const geom::Geometry& geom,
 std::auto_ptr<Geometry>
 FuzzyPointLocator::extractLineWork(const geom::Geometry& geom)
 {
-    UNREFERENCED_PARAMETER(geom);
-
 	vector<Geometry*>* lineGeoms = new vector<Geometry*>();
 	try { // geoms array will leak if an exception is thrown
 
@@ -82,6 +79,7 @@ FuzzyPointLocator::extractLineWork(const geom::Geometry& geom)
 	} catch (...) { // avoid leaks
 		for (size_t i=0, n=lineGeoms->size(); i<n; ++i)
 		{
+
 			delete (*lineGeoms)[i];
 		}
 		delete lineGeoms;
@@ -94,8 +92,6 @@ FuzzyPointLocator::extractLineWork(const geom::Geometry& geom)
 std::auto_ptr<Geometry>
 FuzzyPointLocator::getLineWork(const geom::Geometry& geom)
 {
-    UNREFERENCED_PARAMETER(geom);
-
 	vector<Geometry*>* lineGeoms = new vector<Geometry*>();
 	try { // geoms array will leak if an exception is thrown
 

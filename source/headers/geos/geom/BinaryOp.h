@@ -48,13 +48,12 @@
 
 #include <geos/geom/Geometry.h>
 #include <geos/geom/PrecisionModel.h>
+#include <geos/util/TopologyException.h>
 #include <geos/precision/CommonBitsRemover.h>
 #include <geos/precision/SimpleGeometryPrecisionReducer.h>
 #include <geos/precision/GeometrySnapper.h>
 #include <geos/simplify/TopologyPreservingSimplifier.h>
 #include <geos/operation/valid/IsValidOp.h>
-#include <geos/util/TopologyException.h>
-#include <geos/util.h>
 
 #include <memory> // for auto_ptr
 
@@ -257,7 +256,6 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 	}
 	catch (const util::TopologyException& ex)
 	{
-        UNREFERENCED_PARAMETER(ex);
 #if GEOS_DEBUG_BINARYOP
 		std::cerr << "CBR: " << ex.what() << std::endl;
 #endif
@@ -287,7 +285,6 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 	}
 	catch (const util::TopologyException& ex)
 	{
-        UNREFERENCED_PARAMETER(ex);
 #if GEOS_DEBUG_BINARYOP
 		std::cerr << "SNAP: " << ex.what() << std::endl;
 #endif

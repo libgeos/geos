@@ -54,8 +54,6 @@ void
 SegmentString::addIntersection(LineIntersector *li, unsigned int segmentIndex,
 		int geomIndex, int intIndex)
 {
-    UNREFERENCED_PARAMETER(geomIndex);
-
 	const Coordinate &intPt=li->getIntersection(intIndex);
 	addIntersection(intPt, segmentIndex);
 }

@@ -1,15 +1,14 @@
-SUBDIRS = \
-	locate
+#SUBDIRS = predicate
 
 noinst_LTLIBRARIES = libalgorithm.la
 
 INCLUDES = -I$(top_srcdir)/source/headers 
 
 libalgorithm_la_SOURCES = \
+	CGAlgorithms.cpp \
 	CentroidArea.cpp \
 	CentroidLine.cpp \
 	CentroidPoint.cpp \
-	CGAlgorithms.cpp \
 	ConvexHull.cpp \
 	HCoordinate.cpp \
 	InteriorPointArea.cpp \
@@ -20,16 +19,11 @@ libalgorithm_la_SOURCES = \
 	MinimumDiameter.cpp \
 	NotRepresentableException.cpp \
 	PointLocator.cpp \
-	RayCrossingCounter.cpp \
 	RobustDeterminant.cpp \
-	SimplePointInRing.cpp \
-	SIRtreePointInRing.cpp 
+	SIRtreePointInRing.cpp \
+	SimplePointInAreaLocator.cpp \
+	SimplePointInRing.cpp 
 
-# Deprecated files
-# (http://geos.refractions.net/pipermail/geos-devel/2006-March/001828.html):
-#NonRobustLineIntersector.cpp
-#RobustLineIntersector.cpp
+libalgorithm_la_LIBADD = 
 
-libalgorithm_la_LIBADD =  \
-        locate/liblocation.la           
 

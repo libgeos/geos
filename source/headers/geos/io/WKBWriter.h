@@ -67,19 +67,8 @@ namespace io {
 class WKBWriter {
 
 public:
-	/*
-	 * \brief
-	 * Initializes writer with target coordinate dimention, endianness flag
-     * and SRID value.
-	 * <code>WKBWriter</code>.
-     */
-	WKBWriter(int dims=2, int bo=getMachineByteOrder(), bool includeSRID=false);
 
-    /*
-     * \brief
-     * Destructor.
-     */
-    virtual ~WKBWriter();
+	WKBWriter(int dims=2, int bo=getMachineByteOrder(), bool includeSRID=false);
 
 	/*
 	 * \brief
@@ -118,7 +107,7 @@ public:
 	 * Sets whether SRID values should be output by the
 	 * <code>WKBWriter</code>.
 	 */
-    virtual void setIncludeSRID(int newIncludeSRID) { includeSRID = (0 == newIncludeSRID ? false : true); }
+	virtual void setIncludeSRID(int newIncludeSRID) { includeSRID=static_cast<bool>(newIncludeSRID); }
 
 	/**
 	 * \brief Write a Geometry to an ostream.

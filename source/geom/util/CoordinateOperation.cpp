@@ -37,7 +37,6 @@ CoordinateOperation::edit(const Geometry *geometry,
 		if (ring) {
 			const CoordinateSequence *coords = ring->getCoordinatesRO();
 			CoordinateSequence *newCoords = edit(coords,geometry);
-            // LinearRing instance takes over ownership of newCoords instance
 			return factory->createLinearRing(newCoords);
 		}
 		const LineString *line = dynamic_cast<const LineString *>(geometry);

@@ -23,7 +23,6 @@
 #include <geos/noding/ScaledNoder.h>
 #include <geos/noding/SegmentString.h>
 #include <geos/util/math.h>
-#include <geos/util.h>
 
 #include <functional>
 #include <vector>
@@ -105,12 +104,7 @@ public:
 #endif
 	}
 
-	void filter_ro(const geom::Coordinate* c)
-    {
-        UNREFERENCED_PARAMETER(c);
-        assert(0);
-    }
-
+	void filter_ro(const geom::Coordinate* c) { assert(0); }
 	void filter_rw(geom::Coordinate* c) const {
 		c->x = c->x / sn.scaleFactor + sn.offsetX;
 		c->y = c->y / sn.scaleFactor + sn.offsetY;

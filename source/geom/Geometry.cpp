@@ -422,10 +422,11 @@ Geometry::contains(const Geometry *g) const
 	if (isRectangle()) {
 		return predicate::RectangleContains::contains((Polygon&)*this, *g);
 	}
-	// Incorrect: contains is not commutative
-	//if (g->isRectangle()) {
-	//	return predicate::RectangleContains::contains((const Polygon&)*g, *this);
-	//}
+/* Removed per: http://www.nabble.com/ST_Contains-doesn't-work--to14946025.html
+	if (g->isRectangle()) {
+		return predicate::RectangleContains::contains((const Polygon&)*g, *this);
+	}
+*/
 
 	IntersectionMatrix *im=relate(g);
 	bool res=im->isContains();

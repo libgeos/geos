@@ -23,11 +23,10 @@
 #include <geos/geom/util/GeometryTransformer.h> // inherit. of SnapTransformer
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/util/UniqueCoordinateArrayFilter.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/PrecisionModel.h>
-#include <geos/util/UniqueCoordinateArrayFilter.h>
-#include <geos/util.h>
 
 #include <vector>
 #include <memory>
@@ -77,7 +76,6 @@ public:
 			const CoordinateSequence* coords,
 			const Geometry* parent)
 	{
-        UNREFERENCED_PARAMETER(parent);
 		return snapLine(coords);
 	}
 

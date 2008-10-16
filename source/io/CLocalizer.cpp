@@ -1,7 +1,6 @@
 #include <geos/io/CLocalizer.h>
 
 #include <string>
-#include <clocale>
 
 using namespace std;
 
@@ -10,19 +9,26 @@ namespace io {
 
 CLocalizer::CLocalizer()
 {
-    char* p = std::setlocale(LC_NUMERIC, NULL);
-    if (0 != p)
+    outer_locale = strdup(std::setlocale(LC_NUMERIC, NULL));
+    if (std::setlocale(LC_NUMERIC, "C") == NULL)
     {
-        saved_locale = p;
+        if (outer_locale != NULL)
+        {
+            free(outer_locale);
+            outer_locale = NULL;
+        }
     }
-    std::setlocale(LC_NUMERIC, "C");
 }
 
 CLocalizer::~CLocalizer()
 {
-    std::setlocale(LC_NUMERIC, saved_locale.c_str());
+    if (outer_locale != NULL)
+    {
+        std::setlocale(LC_NUMERIC, outer_locale);
+        free(outer_locale);
+        outer_locale = NULL;
+    }
 }
 
 } // namespace geos.io
 } // namespace geos
-
