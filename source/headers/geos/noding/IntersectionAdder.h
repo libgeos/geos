@@ -18,7 +18,7 @@
 
 #include <vector>
 #include <iostream>
-#include <cmath> // for abs()
+#include <cstdlib> // for abs()
 
 #include <geos/inline.h>
 

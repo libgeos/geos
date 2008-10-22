@@ -41,6 +41,7 @@
 #include <vector>
 #include <memory>
 #include <cassert>
+#include <typeinfo>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0

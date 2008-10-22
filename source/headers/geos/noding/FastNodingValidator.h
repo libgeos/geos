@@ -23,8 +23,9 @@
 #include <geos/noding/SingleInteriorIntersectionFinder.h> // for composition
 #include <geos/algorithm/LineIntersector.h> // for composition
 
-#include <cassert>
+#include <memory>
 #include <string>
+#include <cassert>
 
 // Forward declarations
 namespace geos {

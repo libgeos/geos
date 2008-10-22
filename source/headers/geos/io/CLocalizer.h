@@ -1,3 +1,4 @@
+#include <string>
 
 namespace geos {
 namespace io {
@@ -5,15 +6,16 @@ namespace io {
 /**
  * \class CLocalizer io.h geos.h
  */
-
 class CLocalizer
 {
-private:
-    char *outer_locale;
-
 public:
+
     CLocalizer();
     ~CLocalizer();
+
+private:
+
+    std::string saved_locale;
 };
 
 } // namespace io

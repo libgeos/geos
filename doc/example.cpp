@@ -31,6 +31,7 @@
 #include <vector>
 #include <sstream>
 #include <iomanip>
+#include <cstdlib>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
