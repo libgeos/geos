@@ -153,6 +153,7 @@ OBJ = 	algorithm\CGAlgorithms.obj \
 	io\WKTReader.obj \
 	io\WKTWriter.obj \
 	io\Writer.obj \
+	io\CLocalizer.obj \
     noding\FastNodingValidator.obj \
 	noding\IntersectionAdder.obj \
 	noding\IntersectionFinderAdder.obj \
