@@ -111,6 +111,8 @@ void
 IsValidOp::checkValid(const Geometry *g)
 {
 	if (isChecked) return;
+
+        assert( validErr == NULL );
 	validErr=NULL;
 
 	// empty geometries are always valid!
@@ -126,6 +128,7 @@ IsValidOp::checkValid(const Geometry *g)
 	else if ((gc=dynamic_cast<const GeometryCollection *>(g)))
 		checkValid(gc);
 	else throw util::UnsupportedOperationException();
+        isChecked=true;
 }
 
 /*
