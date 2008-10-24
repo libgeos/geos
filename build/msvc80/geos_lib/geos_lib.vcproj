@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\source\headers"
+				AdditionalIncludeDirectories="..\..\..\capi;..\..\..\source\headers"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;WIN32_LEAN_AND_MEAN;NOMINMAX;NOGDI"
 				IgnoreStandardIncludePath="false"
 				MinimalRebuild="true"
@@ -107,7 +107,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\..\source\headers"
+				AdditionalIncludeDirectories="..\..\..\capi;..\..\..\source\headers"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;WIN32_LEAN_AND_MEAN;NOMINMAX;NOGDI"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -750,6 +750,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\io\ByteOrderValues.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\io\CLocalizer.cpp"
 					>
 				</File>
 				<File
@@ -2386,6 +2390,10 @@
 						</File>
 						<File
 							RelativePath="..\..\..\source\headers\geos\io\ByteOrderValues.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\io\CLocalizer.h"
 							>
 						</File>
 						<File
