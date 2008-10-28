@@ -23,11 +23,11 @@
 // Otherwise we'll end up with duplicated symbols
 #ifdef GEOS_INLINE
 
-// If using MingW with GEOS_INLINE to build a DLL then MingW's gcc
+// If using MingW or Cygwin with GEOS_INLINE to build a DLL then Win32 gcc
 // has already generated the stubs for the contents of this file. 
 // Hence we need to supress it to avoid "multiple definition" errors
 // during the final link phase
-#if ! defined(__MINGW32__) || defined(__MINGW32__) && !defined(DLL_EXPORT)
+#if !(defined(__GNUC__) && defined(_WIN32)) || defined(__GNUC__) && defined(_WIN32) && !defined(DLL_EXPORT)
 
 
 // Undefine GEOS_INLINE so that .inl files
