@@ -22,6 +22,6 @@
 6: check everything is ok ;)
 
 7: Tag the release:
-   $ base=http://svn.refractions.net/geos/
+   $ base=http://svn.osgeo.org/geos/
    $ svn copy -m "Tagged release MAJOR.MINOR.PATCH" \
 		$base/trunk $base/tags/MAJOR.MINOR.PATCH
