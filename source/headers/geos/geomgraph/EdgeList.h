@@ -84,6 +84,8 @@ public:
 
 	std::string print();
 
+        void clearList();
+
 };
 
 std::ostream& operator<< (std::ostream& os, const EdgeList& el);

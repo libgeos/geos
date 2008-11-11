@@ -685,18 +685,25 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 		// Will throw TopologyException if noding is found to be invalid
 		EdgeNodingValidator nv(edgeList.getEdges());
 
-#ifdef GEOS_DEBUG_VALIDATION // {
 		try {
 			nv.checkValid();
 		} catch (const util::TopologyException& ex) {
+#ifdef GEOS_DEBUG_VALIDATION // {
 			cout << "EdgeNodingValidator found noding invalid: " << ex.what() << endl;
+#endif // }
+                        // In the error scenario, the edgeList is not properly
+                        // deleted. Cannot add to the destructor of EdgeList
+                        // (as it should) because 
+                        // "graph.addEdges(edgeList.getEdges());" below
+                        // takes over edgeList ownership in the success case.
+                        edgeList.clearList();
+
 			throw ex;
 		}
+#ifdef GEOS_DEBUG_VALIDATION // {
 		cout << "EdgeNodingValidator accepted the noding" << endl;
-
-#else // }{
-		nv.checkValid();
 #endif // }
+
 	}
 #ifdef GEOS_DEBUG_VALIDATION // {
 	else
