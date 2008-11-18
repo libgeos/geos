@@ -23,11 +23,16 @@
 // Otherwise we'll end up with duplicated symbols
 #ifdef GEOS_INLINE
 
-// If using MingW or Cygwin with GEOS_INLINE to build a DLL then Win32 gcc
+// If using MingW with GEOS_INLINE to build a DLL then MingW's gcc
 // has already generated the stubs for the contents of this file. 
 // Hence we need to supress it to avoid "multiple definition" errors
 // during the final link phase
-#if !(defined(__GNUC__) && defined(_WIN32)) || defined(__GNUC__) && defined(_WIN32) && !defined(DLL_EXPORT)
+#if ! defined(__MINGW32__) || defined(__MINGW32__) && !defined(DLL_EXPORT) 
+
+// If using cygwin then we suppress the "multiple definition" errors by
+// ignoring this section completely; the cygwin linker seems to handle
+// the stubs correctly at link time by itself
+#if ! defined(__CYGWIN__)
 
 
 // Undefine GEOS_INLINE so that .inl files
@@ -57,7 +62,7 @@
 #include <geos/noding/snapround/MCIndexSnapRounder.inl>
 #include <geos/noding/MCIndexNoder.inl>
 
-
+#endif // defined __CYGWIN__
 #endif // defined __MINGW32__ and !defined DLL_EXPORT
 
 #endif // defined GEOS_INLINE
