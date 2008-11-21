@@ -17,6 +17,7 @@
 
 #include <stdio.h>
 
+#include <cstring>
 #include <string>
 #include <iostream>
 #include <sstream>

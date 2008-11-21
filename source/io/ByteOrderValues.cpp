@@ -17,6 +17,8 @@
 #include <geos/io.h>
 #include <geos/util.h>
 
+#include <cstring>
+
 namespace geos {
 
 int ByteOrderValues::ENDIAN_BIG = 1;
