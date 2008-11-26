@@ -6,6 +6,7 @@
 #include <tut.h>
 // GEOS
 #include <geos/noding/SegmentString.h>
+#include <geos/noding/Octant.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateArraySequenceFactory.h>
@@ -235,6 +236,27 @@ namespace tut
 	ensure_equals(ss->getNodeList().size(), 2u);
 
     }
+
+	// test Octant class
+	template<>
+	template<>
+	void object::test<5>()
+	{
+		geos::geom::Coordinate p0(0, 0);
+		geos::geom::Coordinate p1(5,-5);
+		int octant_rc1 = 0;
+		int octant_rc2 = 0;
+		int testPassed = true;
+		try {
+			octant_rc1 = geos::noding::Octant::octant(p0,p1);
+			octant_rc2 = geos::noding::Octant::octant(&p0,&p1);
+			testPassed = (octant_rc1 == octant_rc2);
+		}
+		catch (...) {
+			testPassed = false;
+		}
+		ensure(testPassed);
+	}
 
 
 } // namespace tut
