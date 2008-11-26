@@ -372,6 +372,7 @@ GEOSisValid(const Geometry *g1)
 		}
 		return result;
 	}
+	
 
 	catch (const std::exception &e)
 	{
@@ -387,6 +388,46 @@ GEOSisValid(const Geometry *g1)
 
 }
 
+char *
+GEOSisValidReason(const Geometry *g1)
+{
+	using geos::operation::valid::IsValidOp;
+	using geos::operation::valid::TopologyValidationError;
+	IsValidOp ivo(g1);
+	try {
+		char *result = NULL;
+		bool isvalid = ivo.isValid();
+		if ( ! isvalid )
+		{
+			int msglen = 0;
+			int loclen = 0;
+			TopologyValidationError *err = ivo.getValidationError();
+			std::string errmsg = err->getMessage();
+			std::string errloc = err->getCoordinate().toString();
+			msglen = errmsg.length();
+			loclen = errloc.length();
+			result = (char*)std::malloc(msglen + loclen + 3);
+			sprintf(result, "%s [%s]", errmsg.c_str(), errloc.c_str());
+		}
+		else {
+			result = strdup( "Valid Geometry" );
+		}
+		return result;
+	}
+
+	catch (const std::exception &e)
+	{
+		ERROR_MESSAGE("%s", e.what());
+		return NULL;
+	}
+
+	catch (...)
+	{
+		ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
+	}
+
+}
 
 //-----------------------------------------------------------------
 // general purpose

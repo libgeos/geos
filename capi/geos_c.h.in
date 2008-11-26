@@ -348,6 +348,7 @@ extern char GEOS_DLL GEOSPreparedIntersects(const GEOSPreparedGeometry* pg1, con
 
 extern char GEOS_DLL GEOSisEmpty(const GEOSGeometry* g1);
 extern char GEOS_DLL GEOSisValid(const GEOSGeometry* g1);
+extern char GEOS_DLL *GEOSisValidReason(const GEOSGeometry *g1);
 extern char GEOS_DLL GEOSisSimple(const GEOSGeometry* g1);
 extern char GEOS_DLL GEOSisRing(const GEOSGeometry* g1);
 extern char GEOS_DLL GEOSHasZ(const GEOSGeometry* g1);
