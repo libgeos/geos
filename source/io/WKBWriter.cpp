@@ -252,7 +252,7 @@ WKBWriter::writeCoordinate(const CoordinateSequence &cs, int idx,
 	if ( is3d )
 	{
 		ByteOrderValues::putDouble(
-			cs.getOrdinate(idx, CoordinateSequence::X),
+			cs.getOrdinate(idx, CoordinateSequence::Z),
 			buf, byteOrder);
 		outStream->write(reinterpret_cast<char *>(buf), 8);
 	}
