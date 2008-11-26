@@ -254,7 +254,7 @@ WKBReader::readGeometry()
 	bool hasSRID = ((typeInt & 0x20000000) != 0);
 
 #if DEBUG_WKB_READER
-	cout<<"WKB hasSRID: "<<hasZ<<endl;
+	cout<<"WKB hasSRID: "<<hasSRID<<endl;
 #endif
 
 	int SRID = 0;
@@ -303,7 +303,11 @@ Point *
 WKBReader::readPoint()
 {
 	readCoordinate();
-	return factory.createPoint(Coordinate(ordValues[0], ordValues[1]));
+	if(inputDimension == 3){
+	  return factory.createPoint(Coordinate(ordValues[0], ordValues[1], ordValues[2]));
+	}else{
+	  return factory.createPoint(Coordinate(ordValues[0], ordValues[1]));
+	}
 }
 
 LineString *
