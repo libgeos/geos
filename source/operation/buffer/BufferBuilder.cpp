@@ -190,6 +190,8 @@ for (size_t i = 0, n=bufferSegStrList.size(); i<n; i++)
 		// just in case ...
 		if ( resultPolyList->empty() )
 		{
+			for (size_t i=0, n=subgraphList.size(); i<n; i++)
+				delete subgraphList[i];
 			return createEmptyResultGeometry();
 		}
 

@@ -148,6 +148,14 @@ public:
 		return ptList;
 	}
 
+	// Added getCoordinatesRO(), which returns the coordinates without
+	// passing ownership to the caller.
+	const geom::CoordinateSequence* getCoordinatesRO()
+	{
+		closeRing();
+		return ptList;
+	}
+
 };
 
 } // namespace geos.operation.buffer

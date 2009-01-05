@@ -207,7 +207,11 @@ vector<LineString*>*
 LineMerger::getMergedLineStrings()
 {
 	merge();
-	return mergedLineStrings;
+
+	// Explicitly give ownership to the caller.
+	vector<LineString*>* ret = mergedLineStrings;
+	mergedLineStrings = NULL;
+	return ret;
 }
 
 } // namespace geos.operation.linemerge
