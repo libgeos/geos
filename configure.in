@@ -9,7 +9,7 @@ dnl local vars to hold user's preferences --------------------------------
 AC_INIT(source/headers/geos.h)
 AC_CANONICAL_SYSTEM
 
-dnl AC_CONFIG_MACRO_DIR([macros])
+AC_CONFIG_MACRO_DIR([macros])
 
 dnl -- JTS_PORT: the version of JTS this release is bound to
 JTS_PORT=1.7.1
