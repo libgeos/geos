@@ -3679,13 +3679,13 @@ GEOSWKBWriter_getIncludeSRID_r(GEOSContextHandle_t extHandle,
 
     if( extHandle == NULL )
     {
-        return NULL;
+        return -1;
     }
 
     handle = (GEOSContextHandleInternal_t*)extHandle;
     if( handle->initialized == 0 )
     {
-        return NULL;
+        return -1;
     }
 
 	try
@@ -3696,7 +3696,7 @@ GEOSWKBWriter_getIncludeSRID_r(GEOSContextHandle_t extHandle,
 	catch (...)
 	{
 		handle->ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
+		return -1;
 	}
 }
 
