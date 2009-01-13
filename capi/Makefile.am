@@ -3,27 +3,17 @@ top_srcdir=@top_srcdir@
 GEOS_CAPI_VERSION="@VERSION@-CAPI-@CAPI_VERSION@"
 GEOS_JTS_PORT="@JTS_PORT@"
 
-TESTS = testrunner
-
-check_PROGRAMS = geostest 
-
-geostest_SOURCES = geostest.c
-# stdc++ dependency should be deduced by libgeos_c.la
-##geostest_LDFLAGS = -lstdc++
-geostest_LDADD = libgeos_c.la
-geostest_INCLUDES = -I.
-
 INCLUDES = -I$(top_srcdir)/source/headers
 
 capidir = $(includedir)
 
 nodist_capi_HEADERS = \
-	geos_c.h 
+	geos_c.h
 
 lib_LTLIBRARIES = libgeos_c.la
 
 DIR_SOURCES = \
-	geos_c.cpp 
+	geos_c.cpp geos_ts_c.cpp
 
 libgeos_c_la_SOURCES = $(DIR_SOURCES)
 libgeos_c_la_CPPFLAGS = -DGEOS_CAPI_VERSION='$(GEOS_CAPI_VERSION)' -DGEOS_JTS_PORT='$(GEOS_JTS_PORT)'
@@ -35,9 +25,4 @@ libgeos_c_la_LDFLAGS = \
 dist-local:
 	cp -p $(DIST_SOURCES) Makefile.am Makefile.in $(distdir)
 
-CLEANFILES = testrunner test.out
-
-EXTRA_DIST = testrunner.sh test.expected test.wkt geos_c.h
-
-testrunner: testrunner.sh
-	sh $(srcdir)/testrunner.sh $@ $(srcdir)
+EXTRA_DIST = geos_c.h

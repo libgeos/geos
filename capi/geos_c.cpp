@@ -15,44 +15,13 @@
  *
  ***********************************************************************/
 
-#include <geos/geom/Geometry.h> 
-#include <geos/geom/prep/PreparedGeometry.h> 
 #include <geos/geom/prep/PreparedGeometryFactory.h> 
-#include <geos/geom/GeometryCollection.h> 
-#include <geos/geom/Polygon.h> 
-#include <geos/geom/Point.h> 
-#include <geos/geom/MultiPoint.h> 
-#include <geos/geom/MultiLineString.h> 
-#include <geos/geom/MultiPolygon.h> 
-#include <geos/geom/LinearRing.h> 
-#include <geos/geom/LineString.h> 
-#include <geos/geom/PrecisionModel.h> 
-#include <geos/geom/GeometryFactory.h> 
-#include <geos/geom/CoordinateSequenceFactory.h> 
-#include <geos/geom/IntersectionMatrix.h> 
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/io/WKBWriter.h>
 #include <geos/io/CLocalizer.h>
-#include <geos/simplify/DouglasPeuckerSimplifier.h>
-#include <geos/simplify/TopologyPreservingSimplifier.h>
-#include <geos/operation/valid/IsValidOp.h>
-#include <geos/operation/polygonize/Polygonizer.h>
-#include <geos/operation/linemerge/LineMerger.h>
 #include <geos/operation/overlay/OverlayOp.h>
-#include <geos/geom/BinaryOp.h>
-#include <geos/version.h> 
-
-// This should go away
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <fstream>
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <memory>
 
 // Some extra magic to make type declarations in geos_c.h work - for cross-checking of types in header.
 #define GEOSGeometry geos::geom::Geometry
@@ -94,36 +63,23 @@ using geos::operation::overlay::overlayOp;
 
 typedef std::auto_ptr<Geometry> GeomAutoPtr;
 
-//## PROTOTYPES #############################################
-
-extern "C" const char GEOS_DLL *GEOSjtsport();
-extern "C" char GEOS_DLL *GEOSasText(Geometry *g1);
-
 //## GLOBALS ################################################
 
 // NOTE: SRID will have to be changed after geometry creation
-static const GeometryFactory *geomFactory = 
-	GeometryFactory::getDefaultInstance();
-
-static GEOSMessageHandler NOTICE_MESSAGE;
-static GEOSMessageHandler ERROR_MESSAGE;
-static int WKBOutputDims = 2;
-static int WKBByteOrder = getMachineByteOrder();
+GEOSContextHandle_t handle = NULL;
 
 extern "C" {
 
 void
 initGEOS (GEOSMessageHandler nf, GEOSMessageHandler ef)
 {
-	NOTICE_MESSAGE = nf;
-	ERROR_MESSAGE = ef;
+    handle = initGEOS_r( nf, ef );
 }
 
 void
 finishGEOS ()
 {
-	// Nothing to do
-	//delete geomFactory;
+    finishGEOS_r( handle );
 }
 
 //-----------------------------------------------------------
@@ -134,110 +90,31 @@ finishGEOS ()
 char
 GEOSDisjoint(const Geometry *g1, const Geometry *g2)
 {
-	try {
-		bool result;
-		result = g1->disjoint(g2);
-		return result;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 2;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 2;
-	}
+    return GEOSDisjoint_r( handle, g1, g2 );
 }
 
 char
 GEOSTouches(const Geometry *g1, const Geometry *g2)
 {
-	try {
-		bool result;
-		result =  g1->touches(g2);
-		return result;
-	}
-
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 2;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 2;
-	}
+    return GEOSTouches_r( handle, g1, g2 );
 }
 
 char
 GEOSIntersects(const Geometry *g1, const Geometry *g2)
 {
-	try {
-		bool result;
-		result = g1->intersects(g2);
-		return result;
-	}
-
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 2;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 2;
-	}
+    return GEOSIntersects_r( handle, g1, g2 );
 }
 
 char
 GEOSCrosses(const Geometry *g1, const Geometry *g2)
 {
-	try {
-		bool result;
-		result = g1->crosses(g2);
-		return result;
-	}
-
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 2;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 2;
-	}
+    return GEOSCrosses_r( handle, g1, g2 );
 }
 
 char
 GEOSWithin(const Geometry *g1, const Geometry *g2)
 {
-	try {
-		bool result;
-		result = g1->within(g2);
-		return result;
-	}
-
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 2;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 2;
-	}
+    return GEOSWithin_r( handle, g1, g2 );
 }
 
 // call g1->contains(g2)
@@ -247,45 +124,13 @@ GEOSWithin(const Geometry *g1, const Geometry *g2)
 char
 GEOSContains(const Geometry *g1, const Geometry *g2)
 {
-	try {
-		bool result;
-		result = g1->contains(g2);
-		return result;
-	}
-
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 2;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 2;
-	}
+    return GEOSContains_r( handle, g1, g2 );
 }
 
 char
 GEOSOverlaps(const Geometry *g1, const Geometry *g2)
 {
-	try {
-		bool result;
-		result = g1->overlaps(g2);
-		return result;
-	}
-
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 2;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 2;
-	}
+    return GEOSOverlaps_r( handle, g1, g2 );
 }
 
 
@@ -296,54 +141,13 @@ GEOSOverlaps(const Geometry *g1, const Geometry *g2)
 char
 GEOSRelatePattern(const Geometry *g1, const Geometry *g2, const char *pat)
 {
-	try {
-		bool result;
-		std::string s = pat;
-		result = g1->relate(g2,s);
-		return result;
-	}
-
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 2;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 2;
-	}
+    return GEOSRelatePattern_r( handle, g1, g2, pat );
 }
 
 char *
 GEOSRelate(const Geometry *g1, const Geometry *g2)
 {
-	using geos::geom::IntersectionMatrix;
-	try {
-
-		IntersectionMatrix *im = g1->relate(g2);
-		if (im == NULL)
-				return NULL;
-		
-        std::string s(im->toString());
-		char *result = NULL;
-		result = (char*) std::malloc( s.length() + 1);
-		std::strcpy(result, s.c_str() );
-		delete im;
-
-		return result;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-	}
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-	}
-    
-    return NULL;
+    return GEOSRelate_r( handle, g1, g2 );
 }
 
 
@@ -356,77 +160,13 @@ GEOSRelate(const Geometry *g1, const Geometry *g2)
 char
 GEOSisValid(const Geometry *g1)
 {
-	using geos::operation::valid::IsValidOp;
-	using geos::operation::valid::TopologyValidationError;
-	IsValidOp ivo(g1);
-	bool result;
-	try {
-		result = ivo.isValid();
-		if ( result == 0 )
-		{
-			TopologyValidationError *err = ivo.getValidationError();
-			if ( err ) {
-				std::string errmsg = err->toString();
-				NOTICE_MESSAGE("%s", errmsg.c_str());
-			}
-		}
-		return result;
-	}
-	
-
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 2;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 2;
-	}
-
+    return GEOSisValid_r( handle, g1 );
 }
 
 char *
 GEOSisValidReason(const Geometry *g1)
 {
-	using geos::operation::valid::IsValidOp;
-	using geos::operation::valid::TopologyValidationError;
-	IsValidOp ivo(g1);
-	try {
-		char *result = NULL;
-		bool isvalid = ivo.isValid();
-		if ( ! isvalid )
-		{
-			int msglen = 0;
-			int loclen = 0;
-			TopologyValidationError *err = ivo.getValidationError();
-			std::string errmsg = err->getMessage();
-			std::string errloc = err->getCoordinate().toString();
-			msglen = errmsg.length();
-			loclen = errloc.length();
-			result = (char*)std::malloc(msglen + loclen + 3);
-			sprintf(result, "%s [%s]", errmsg.c_str(), errloc.c_str());
-		}
-		else {
-			result = strdup( "Valid Geometry" );
-		}
-		return result;
-	}
-
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
-
+    return GEOSisValidReason_r( handle, g1 );
 }
 
 //-----------------------------------------------------------------
@@ -436,218 +176,56 @@ GEOSisValidReason(const Geometry *g1)
 char
 GEOSEquals(const Geometry *g1, const Geometry *g2)
 {
-	try {
-		bool result;
-		result = g1->equals(g2);
-		return result;
-	}
-
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 2;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 2;
-	}
+    return GEOSEquals_r( handle, g1, g2 );
 }
 
 char
 GEOSEqualsExact(const Geometry *g1, const Geometry *g2, double tolerance)
 {
-	try {
-		bool result;
-		result = g1->equalsExact(g2, tolerance);
-		return result;
-	}
-
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 2;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 2;
-	}
+    return GEOSEqualsExact_r( handle, g1, g2, tolerance );
 }
 
 int
 GEOSDistance(const Geometry *g1, const Geometry *g2, double *dist)
 {
-	try {
-		*dist = g1->distance(g2);
-		return 1;
-	}
-
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 0;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 0;
-	}
+    return GEOSDistance_r( handle, g1, g2, dist );
 }
 
 int
 GEOSArea(const Geometry *g, double *area)
 {
-	try {
-		*area = g->getArea();
-		return 1;
-	}
-
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 0;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 0;
-	}
+    return GEOSArea_r( handle, g, area );
 }
 
 int
 GEOSLength(const Geometry *g, double *length)
 {
-	try {
-		*length = g->getLength();
-		return 1;
-	}
-
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 0;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 0;
-	}
+    return GEOSLength_r( handle, g, length );
 }
 
 Geometry *
 GEOSGeomFromWKT(const char *wkt)
 {
-    CLocalizer clocale;
-	try
-	{
-		WKTReader r(geomFactory);
-		const std::string wktstring = std::string(wkt);
-		Geometry *g = r.read(wktstring);
-		return g;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSGeomFromWKT_r( handle, wkt );
 }
 
 char *
 GEOSGeomToWKT(const Geometry *g1)
 {
-    CLocalizer clocale;
-	try
-	{
-		std::string s = g1->toString();
-		char *result;
-		result = (char*) std::malloc( s.length() + 1);
-		std::strcpy(result, s.c_str() );
-        return result;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSGeomToWKT_r( handle, g1 );
 }
 
 // Remember to free the result!
 unsigned char *
 GEOSGeomToWKB_buf(const Geometry *g, size_t *size)
 {
-	using geos::io::WKBWriter;
-	try
-	{
-		int byteOrder = (int) WKBByteOrder;
-		WKBWriter w(WKBOutputDims, byteOrder);
-		std::ostringstream s(std::ios_base::binary);
-		w.write(*g, s);
-		std::string wkbstring = s.str();
-		size_t len = wkbstring.length();
-
-		unsigned char *result;
-		result = (unsigned char*) std::malloc(len);
-        std::memcpy(result, wkbstring.c_str(), len);
-		*size = len;
-		return result;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSGeomToWKB_buf_r( handle, g, size );
 }
 
 Geometry *
 GEOSGeomFromWKB_buf(const unsigned char *wkb, size_t size)
 {
-	using geos::io::WKBReader;
-	try
-	{
-		std::string wkbstring = std::string((const char*)wkb, size); // make it binary !
-		WKBReader r(*geomFactory);
-		std::istringstream s(std::ios_base::binary);
-		s.str(wkbstring);
-
-		s.seekg(0, std::ios::beg); // rewind reader pointer
-		Geometry *g = r.read(s);
-		return g;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSGeomFromWKB_buf_r( handle, wkb, size );
 }
 
 /* Read/write wkb hex values.  Returned geometries are
@@ -655,126 +233,31 @@ GEOSGeomFromWKB_buf(const unsigned char *wkb, size_t size)
 unsigned char *
 GEOSGeomToHEX_buf(const Geometry *g, size_t *size)
 {
-	using geos::io::WKBWriter;
-	try
-	{
-        int byteOrder = (int) WKBByteOrder;
-		WKBWriter w(WKBOutputDims, byteOrder);
-		std::ostringstream s(std::ios_base::binary);
-		w.writeHEX(*g, s);
-		std::string hexstring = s.str();
-		size_t len = hexstring.length();
-
-		char *result;
-		result = (char*) std::malloc(len);
-        std::memcpy(result, hexstring.c_str(), len);
-		*size = len;
-		return (unsigned char*) result;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSGeomToHEX_buf_r( handle, g, size );
 }
 
 Geometry *
 GEOSGeomFromHEX_buf(const unsigned char *hex, size_t size)
 {
-	using geos::io::WKBReader;
-	try
-	{
-		std::string hexstring = std::string((const char*)hex, size); 
-		WKBReader r(*geomFactory);
-		std::istringstream s(std::ios_base::binary);
-		s.str(hexstring);
-
-		s.seekg(0, std::ios::beg); // rewind reader pointer
-		Geometry *g = r.readHEX(s);
-		return g;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSGeomFromHEX_buf_r( handle, hex, size );
 }
 
 char
 GEOSisEmpty(const Geometry *g1)
 {
-	try
-	{
-		return g1->isEmpty();
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 2;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 2;
-	}
+    return GEOSisEmpty_r( handle, g1 );
 }
 
 char
 GEOSisSimple(const Geometry *g1)
 {
-	try
-	{
-		return g1->isSimple();
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 2;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 2;
-	}
+    return GEOSisSimple_r( handle, g1 );
 }
 
 char
 GEOSisRing(const Geometry *g)
 {
-	try
-	{
-		const LineString *ls = dynamic_cast<const LineString *>(g);
-		if ( ls ) {
-			return (ls->isRing());
-		} else {
-			return 0;
-		}
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 2;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 2;
-	}
+    return GEOSisRing_r( handle, g );
 }
 
 
@@ -783,47 +266,14 @@ GEOSisRing(const Geometry *g)
 char *
 GEOSGeomType(const Geometry *g1)
 {
-	try
-	{
-		std::string s = g1->getGeometryType();
-
-		char *result;
-		result = (char*) std::malloc( s.length() + 1);
-		std::strcpy(result, s.c_str() );
-		return result;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSGeomType_r( handle, g1 );
 }
 
 // Return postgis geometry type index
 int
 GEOSGeomTypeId(const Geometry *g1)
 {
-	try
-	{
-		return g1->getGeometryTypeId();
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return -1;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return -1;
-	}
+    return GEOSGeomTypeId_r( handle, g1 );
 }
 
 
@@ -836,207 +286,56 @@ GEOSGeomTypeId(const Geometry *g1)
 Geometry *
 GEOSEnvelope(const Geometry *g1)
 {
-	try
-	{
-		Geometry *g3 = g1->getEnvelope();
-		return g3;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSEnvelope_r( handle, g1 );
 }
 
 Geometry *
 GEOSIntersection(const Geometry *g1, const Geometry *g2)
 {
-	try
-	{
-		GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::opINTERSECTION));
-		return g3.release();
-		//Geometry *g3 = g1->intersection(g2);
-		//return g3;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSIntersection_r( handle, g1, g2 );
 }
 
 Geometry *
 GEOSBuffer(const Geometry *g1, double width, int quadrantsegments)
 {
-	try
-	{
-		Geometry *g3 = g1->buffer(width, quadrantsegments);
-		return g3;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSBuffer_r( handle, g1, width, quadrantsegments );
 }
 
 Geometry *
 GEOSConvexHull(const Geometry *g1)
 {
-	try
-	{
-		Geometry *g3 = g1->convexHull();
-		return g3;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSConvexHull_r( handle, g1 );
 }
 
 Geometry *
 GEOSDifference(const Geometry *g1, const Geometry *g2)
 {
-	try
-	{
-		GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::opDIFFERENCE));
-		return g3.release();
-		//Geometry *g3 = g1->difference(g2);
-		//return g3;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSDifference_r( handle, g1, g2 );
 }
 
 Geometry *
 GEOSBoundary(const Geometry *g1)
 {
-	try
-	{
-		Geometry *g3 = g1->getBoundary();
-		return g3;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSBoundary_r( handle, g1 );
 }
 
 Geometry *
 GEOSSymDifference(const Geometry *g1, const Geometry *g2)
 {
-	try
-	{
-		GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::opSYMDIFFERENCE));
-		return g3.release();
-		//Geometry *g3 = g1->symDifference(g2);
-		//return g3;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSSymDifference_r( handle, g1, g2 );
 }
 
 Geometry *
 GEOSUnion(const Geometry *g1, const Geometry *g2)
 {
-	try
-	{
-		GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::opUNION));
-		return g3.release();
-		//Geometry *g3 = g1->Union(g2);
-		//return g3;
-	}
-	catch (const std::exception &e)
-	{
-#if VERBOSE_EXCEPTIONS
-		std::ostringstream s; 
-		s << "Exception on GEOSUnion with following inputs:" << std::endl;
-		s << "A: "<<g1->toString() << std::endl;
-		s << "B: "<<g2->toString() << std::endl;
-		NOTICE_MESSAGE("%s", s.str().c_str());
-#endif // VERBOSE_EXCEPTIONS
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSUnion_r( handle, g1, g2 );
 }
 
 
 Geometry *
 GEOSPointOnSurface(const Geometry *g1)
 {
-	try
-	{
-		Geometry *ret = g1->getInteriorPoint();
-		if ( ! ret ) return geomFactory->createGeometryCollection();
-		return ret;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSPointOnSurface_r( handle, g1 );
 }
 
 
@@ -1051,63 +350,14 @@ GEOSPointOnSurface(const Geometry *g1)
 void
 GEOSGeom_destroy(Geometry *a)
 {
-	try{
-		delete a;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-	}
+    return GEOSGeom_destroy_r( handle, a );
 }
-
-void
-GEOSSetSRID(Geometry *g, int SRID)
-{
-	g->setSRID(SRID);
-}
-
-/*
-void
-GEOSdeleteChar(char *a)
-{
-	try{
-	   free(a);
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-	}
-}
-*/
 
 
 int
 GEOSGetNumCoordinates(const Geometry *g1)
 {
-	try{
-		return g1->getNumPoints();
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return -1;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return -1;
-	}
+    return GEOSGetNumCoordinates_r( handle, g1 );
 }
 
 /*
@@ -1117,46 +367,13 @@ GEOSGetNumCoordinates(const Geometry *g1)
 int
 GEOSNormalize(Geometry *g1)
 {
-	try{
-		g1->normalize();
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return -1;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return -1;
-	}
-    return 0;
+    return GEOSNormalize_r( handle, g1 );
 }
 
 int
 GEOSGetNumInteriorRings(const Geometry *g1)
 {
-	try{
-		const Polygon *p = dynamic_cast<const Polygon *>(g1);
-                if ( ! p )
-                {
-                        ERROR_MESSAGE("Argument is not a Polygon");
-                        return -1;
-                }
-		return p->getNumInteriorRing();
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return -1;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return -1;
-	}
+    return GEOSGetNumInteriorRings_r( handle, g1 );
 }
 
 
@@ -1164,20 +381,7 @@ GEOSGetNumInteriorRings(const Geometry *g1)
 int
 GEOSGetNumGeometries(const Geometry *g1)
 {
-	try{
-		return g1->getNumGeometries();
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return -1;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return -1;
-	}
+    return GEOSGetNumGeometries_r( handle, g1 );
 }
 
 
@@ -1188,27 +392,7 @@ GEOSGetNumGeometries(const Geometry *g1)
 const Geometry *
 GEOSGetGeometryN(const Geometry *g1, int n)
 {
-	using geos::geom::GeometryCollection;
-	try{
-		const GeometryCollection *gc = dynamic_cast<const GeometryCollection *>(g1);
-		if ( ! gc )
-		{
-			ERROR_MESSAGE("Argument is not a GeometryCollection");
-			return NULL;
-		}
-		return gc->getGeometryN(n);
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSGetGeometryN_r( handle, g1, n );
 }
 
 
@@ -1219,26 +403,7 @@ GEOSGetGeometryN(const Geometry *g1, int n)
 const Geometry *
 GEOSGetExteriorRing(const Geometry *g1)
 {
-	try{
-		const Polygon *p = dynamic_cast<const Polygon *>(g1);
-		if ( ! p ) 
-		{
-			ERROR_MESSAGE("Invalid argument (must be a Polygon)");
-			return NULL;
-		}
-		return p->getExteriorRing();
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSGetExteriorRing_r( handle, g1 );
 }
 
 /*
@@ -1248,352 +413,87 @@ GEOSGetExteriorRing(const Geometry *g1)
 const Geometry *
 GEOSGetInteriorRingN(const Geometry *g1, int n)
 {
-	try{
-		const Polygon *p = dynamic_cast<const Polygon *>(g1);
-		if ( ! p ) 
-		{
-			ERROR_MESSAGE("Invalid argument (must be a Polygon)");
-			return NULL;
-		}
-		return p->getInteriorRingN(n);
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSGetInteriorRingN_r( handle, g1, n );
 }
 
 Geometry *
 GEOSGetCentroid(const Geometry *g)
 {
-	try{
-		Geometry *ret = g->getCentroid();
-		if ( ! ret ) return geomFactory->createGeometryCollection();
-		return ret;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSGetCentroid_r( handle, g );
 }
 
 Geometry *
 GEOSGeom_createCollection(int type, Geometry **geoms, unsigned int ngeoms)
 {
-#ifdef GEOS_DEBUG
-	char buf[256];
-	sprintf(buf, "PostGIS2GEOS_collection: requested type %d, ngeoms: %d",
-			type, ngeoms);
-	NOTICE_MESSAGE("%s", buf);// TODO: Can NOTICE_MESSAGE format that directly? 
-#endif
-
-	try
-	{
-		Geometry *g;
-		std::vector<Geometry *> *vgeoms = new std::vector<Geometry *>(geoms, geoms+ngeoms);
-
-		switch (type)
-		{
-			case GEOS_GEOMETRYCOLLECTION:
-				g = geomFactory->createGeometryCollection(vgeoms);
-				break;
-			case GEOS_MULTIPOINT:
-				g = geomFactory->createMultiPoint(vgeoms);
-				break;
-			case GEOS_MULTILINESTRING:
-				g = geomFactory->createMultiLineString(vgeoms);
-				break;
-			case GEOS_MULTIPOLYGON:
-				g = geomFactory->createMultiPolygon(vgeoms);
-				break;
-			default:
-				ERROR_MESSAGE("Unsupported type request for PostGIS2GEOS_collection");
-				g = NULL;
-				
-		}
-		if (g==NULL) return NULL;
-		return g;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSGeom_createCollection_r( handle, type, geoms, ngeoms );
 }
 
 Geometry *
 GEOSPolygonize(const Geometry * const * g, unsigned int ngeoms)
 {
-	using geos::operation::polygonize::Polygonizer;
-	unsigned int i;
-	Geometry *out = NULL;
-
-	try{
-		// Polygonize
-		Polygonizer plgnzr;
-		for (i=0; i<ngeoms; i++) plgnzr.add(g[i]);
-#if GEOS_DEBUG
-	NOTICE_MESSAGE("geometry vector added to polygonizer");
-#endif
-
-		std::vector<Polygon *>*polys = plgnzr.getPolygons();
-
-#if GEOS_DEBUG
-	NOTICE_MESSAGE("output polygons got");
-#endif
-
-		// We need a vector of Geometry pointers, not
-		// Polygon pointers.
-		// STL vector doesn't allow transparent upcast of this
-		// nature, so we explicitly convert.
-		// (it's just a waste of processor and memory, btw)
-                std::vector<Geometry*> *polyvec =
-				new std::vector<Geometry *>(polys->size());
-		for (i=0; i<polys->size(); i++) (*polyvec)[i] = (*polys)[i];
-		delete polys;
-
-		out = geomFactory->createGeometryCollection(polyvec);
-		// the above method takes ownership of the passed
-		// vector, so we must *not* delete it
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
-
-	return out;
+    return GEOSPolygonize_r( handle, g, ngeoms );
 }
 
 Geometry *
 GEOSPolygonizer_getCutEdges(const Geometry * const * g, unsigned int ngeoms)
 {
-	using geos::operation::polygonize::Polygonizer;
-	unsigned int i;
-	Geometry *out = NULL;
-
-	try{
-		// Polygonize
-		Polygonizer plgnzr;
-		for (i=0; i<ngeoms; i++) plgnzr.add(g[i]);
-#if GEOS_DEBUG
-	NOTICE_MESSAGE("geometry vector added to polygonizer");
-#endif
-
-		std::vector<const LineString *>*lines = plgnzr.getCutEdges();
-
-#if GEOS_DEBUG
-	NOTICE_MESSAGE("output polygons got");
-#endif
-
-		// We need a vector of Geometry pointers, not
-		// Polygon pointers.
-		// STL vector doesn't allow transparent upcast of this
-		// nature, so we explicitly convert.
-		// (it's just a waste of processor and memory, btw)
-    std::vector<Geometry*> *linevec =
-				new std::vector<Geometry *>(lines->size());
-		for (i=0; i<lines->size(); i++) (*linevec)[i] = (*lines)[i]->clone();
-
-		out = geomFactory->createGeometryCollection(linevec);
-		// the above method takes ownership of the passed
-		// vector, so we must *not* delete it
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
-
-	return out;
+    return GEOSPolygonizer_getCutEdges_r( handle, g, ngeoms );
 }
 
 Geometry *
 GEOSLineMerge(const Geometry *g)
 {
-		using geos::operation::linemerge::LineMerger;
-        unsigned int i;
-        Geometry *out = NULL;
-
-        try{
-                // LineMerge
-                LineMerger lmrgr;
-
-                lmrgr.add(g);
-
-                std::vector<LineString *>*lines = lmrgr.getMergedLineStrings();
-
-#if GEOS_DEBUG
-        NOTICE_MESSAGE("output lines got");
-#endif
-
-                std::vector<Geometry *>*geoms = new std::vector<Geometry *>(lines->size());
-                for (i=0; i<lines->size(); i++) (*geoms)[i] = (*lines)[i];
-                delete lines;
-                out = geomFactory->buildGeometry(geoms);
-                //out = geomFactory->createGeometryCollection(geoms);
-        }
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
-
-        return out;
+    return GEOSLineMerge_r( handle, g );
 }
 
 int
 GEOSGetSRID(const Geometry *g1)
 {
-	try{
-		return g1->getSRID();
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 0;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 0;
-	}
+    return GEOSGetSRID_r( handle, g1 );
 }
-
-const char *
-GEOSversion()
-{
-	//static string version = GEOS_CAPI_VERSION;
-	return GEOS_CAPI_VERSION;
-}
-
-const char *
-GEOSjtsport()
-{
-	//string version = jtsport();
-	//char *res = strdup(version.c_str());
-	//return res;
-	return GEOS_JTS_PORT;
-}
-
 
 char 
 GEOSHasZ(const Geometry *g)
 {
-	if ( g->isEmpty() ) return false;
-	double az = g->getCoordinate()->z;
-	//ERROR_MESSAGE("ZCoord: %g", az);
-	return FINITE(az);
+    return GEOSHasZ_r( handle, g );
 }
 
 int
 GEOS_getWKBOutputDims()
 {
-    return WKBOutputDims;
+    return GEOS_getWKBOutputDims_r( handle );
 }
 
 int
 GEOS_setWKBOutputDims(int newdims)
 {
-	if ( newdims < 2 || newdims > 3 )
-		ERROR_MESSAGE("WKB output dimensions out of range 2..3");
-	int olddims = WKBOutputDims;
-	WKBOutputDims = newdims;
-	return olddims;
+    return GEOS_setWKBOutputDims_r( handle, newdims );
 }
 
 int
 GEOS_getWKBByteOrder()
 {
-	return WKBByteOrder;
+	return GEOS_getWKBByteOrder_r( handle );
 }
 
 int
 GEOS_setWKBByteOrder(int byteOrder)
 {
-	int oldByteOrder = WKBByteOrder;
-	WKBByteOrder = byteOrder;
-	return oldByteOrder;
+	return GEOS_setWKBByteOrder_r( handle, byteOrder );
 }
 
 
 CoordinateSequence *
 GEOSCoordSeq_create(unsigned int size, unsigned int dims)
 {
-	try {
-		return geomFactory->getCoordinateSequenceFactory()->create(size, dims);
-	}
-
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSCoordSeq_create_r( handle, size, dims );
 }
 
 int
 GEOSCoordSeq_setOrdinate(CoordinateSequence *s, unsigned int idx,
 	unsigned int dim, double val)
 {
-	try {
-		s->setOrdinate(static_cast<int>(idx),
-			static_cast<int>(dim), val);
-		return 1;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 0;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 0;
-	}
+    return GEOSCoordSeq_setOrdinate_r( handle, s, idx, dim, val );
 }
 
 int
@@ -1617,41 +517,14 @@ GEOSCoordSeq_setZ(CoordinateSequence *s, unsigned int idx, double val)
 CoordinateSequence *
 GEOSCoordSeq_clone(const CoordinateSequence *s)
 {
-	try { return s->clone(); }
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSCoordSeq_clone_r( handle, s );
 }
 
 int
 GEOSCoordSeq_getOrdinate(const CoordinateSequence *s, unsigned int idx,
 	unsigned int dim, double *val)
 {
-	try {
-		double d = s->getOrdinate(static_cast<int>(idx),
-			static_cast<int>(dim));
-		*val = d;
-		return 1;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 0;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 0;
-	}
+    return GEOSCoordSeq_getOrdinate_r( handle, s, idx, dim, val );
 }
 
 int
@@ -1675,287 +548,73 @@ GEOSCoordSeq_getZ(const CoordinateSequence *s, unsigned int idx, double *val)
 int
 GEOSCoordSeq_getSize(const CoordinateSequence *s, unsigned int *size)
 {
-	try {
-		int sz = s->getSize();
-		*size = static_cast<unsigned int>(sz);
-		return 1;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 0;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 0;
-	}
+    return GEOSCoordSeq_getSize_r( handle, s, size );
 }
 
 int
 GEOSCoordSeq_getDimensions(const CoordinateSequence *s, unsigned int *dims)
 {
-	try {
-		unsigned int dm = s->getDimension();
-		*dims = dm;
-		return 1;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 0;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 0;
-	}
+    return GEOSCoordSeq_getDimensions_r( handle, s, dims );
 }
 
 void
 GEOSCoordSeq_destroy(CoordinateSequence *s)
 {
-	try{
-		delete s;
-	}
-
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-	}
+    return GEOSCoordSeq_destroy_r( handle, s );
 }
 
 const CoordinateSequence *
 GEOSGeom_getCoordSeq(const Geometry *g)
 {
-        using geos::geom::Point;
-	try
-	{
-		const LineString *ls = dynamic_cast<const LineString *>(g);
-		if ( ls )
-		{
-			return ls->getCoordinatesRO();
-		}
-		const Point *p = dynamic_cast<const Point *>(g);
-		if ( p ) 
-		{
-			return p->getCoordinatesRO();
-		}
-		ERROR_MESSAGE("Geometry must be a Point or LineString");
-		return NULL;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSGeom_getCoordSeq_r( handle, g );
 }
 
 Geometry *
 GEOSGeom_createPoint(CoordinateSequence *cs)
 {
-	try { return geomFactory->createPoint(cs); }
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSGeom_createPoint_r( handle, cs );
 }
 
 Geometry *
 GEOSGeom_createLinearRing(CoordinateSequence *cs)
 {
-	try { return geomFactory->createLinearRing(cs); }
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSGeom_createLinearRing_r( handle, cs );
 }
 
 Geometry *
 GEOSGeom_createLineString(CoordinateSequence *cs)
 {
-	try { return geomFactory->createLineString(cs); }
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSGeom_createLineString_r( handle, cs );
 }
 
 Geometry *
 GEOSGeom_createPolygon(Geometry *shell, Geometry **holes, unsigned int nholes)
 {
-        using geos::geom::LinearRing;
-	try
-	{
-		std::vector<Geometry *> *vholes = new std::vector<Geometry *>(holes, holes+nholes);
-		LinearRing *nshell = dynamic_cast<LinearRing *>(shell);
-		if ( ! nshell )
-		{
-			ERROR_MESSAGE("Shell is not a LinearRing");
-			return NULL;
-		}
-		return geomFactory->createPolygon(nshell, vholes);
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSGeom_createPolygon_r( handle, shell, holes, nholes );
 }
 
 Geometry *
 GEOSGeom_clone(const Geometry *g)
 {
-	try { return g->clone(); }
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSGeom_clone_r( handle, g );
 }
 
 int
 GEOSGeom_getDimensions(const Geometry *g)
 {
-        using geos::geom::GeometryCollection;
-        using geos::geom::Point;
-	try {
-		const LineString *ls = dynamic_cast<const LineString *>(g);
-		if ( ls )
-		{
-			return ls->getCoordinatesRO()->getDimension();
-		}
-
-		const Point *p = dynamic_cast<const Point *>(g);
-		if ( p )
-		{
-			return p->getCoordinatesRO()->getDimension();
-		}
-
-		const Polygon *poly = dynamic_cast<const Polygon *>(g);
-		if ( poly )
-		{
-			return GEOSGeom_getDimensions(poly->getExteriorRing());
-		}
-
-
-		const GeometryCollection *coll =
-			dynamic_cast<const GeometryCollection *>(g);
-		if ( coll )
-		{
-			if ( coll->isEmpty() ) return 0;
-			return GEOSGeom_getDimensions(coll->getGeometryN(0));
-		}
-
-		ERROR_MESSAGE("Unknown geometry type");
-		return 0;
-	}
-
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 0;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 0;
-	}
+    return GEOSGeom_getDimensions_r( handle, g );
 }
 
 Geometry *
 GEOSSimplify(const Geometry *g1, double tolerance)
 {
-	using namespace geos::simplify;
-
-	try
-	{
-		Geometry::AutoPtr g(DouglasPeuckerSimplifier::simplify(
-				g1, tolerance));
-		return g.release();
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSSimplify_r( handle, g1, tolerance );
 }
 
 Geometry *
 GEOSTopologyPreserveSimplify(const Geometry *g1, double tolerance)
 {
-	using namespace geos::simplify;
-
-	try
-	{
-		Geometry::AutoPtr g(TopologyPreservingSimplifier::simplify(
-				g1, tolerance));
-		return g.release();
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSTopologyPreserveSimplify_r( handle, g1, tolerance );
 }
 
 
@@ -1963,258 +622,79 @@ GEOSTopologyPreserveSimplify(const Geometry *g1, double tolerance)
 WKTReader *
 GEOSWKTReader_create()
 {
-	using geos::io::WKTReader;
-	try
-	{
-		return new WKTReader(geomFactory);
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSWKTReader_create_r( handle );
 }
 
 void
 GEOSWKTReader_destroy(WKTReader *reader)
 {
-	try
-	{
-		delete reader;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-	}
+    GEOSWKTReader_destroy_r( handle, reader );
 }
 
 
 Geometry*
 GEOSWKTReader_read(WKTReader *reader, const char *wkt)
 {
-    CLocalizer clocale;
-	try
-	{
-		const std::string wktstring = std::string(wkt);
-		Geometry *g = reader->read(wktstring);
-		return g;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSWKTReader_read_r( handle, reader, wkt );
 }
 
 /* WKT Writer */
 WKTWriter *
 GEOSWKTWriter_create()
 {
-	using geos::io::WKTWriter;
-	try
-	{
-		return new WKTWriter();
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return NULL;
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSWKTWriter_create_r( handle );
 }
 
 void
 GEOSWKTWriter_destroy(WKTWriter *Writer)
 {
-	try
-	{
-		delete Writer;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-	}
+    GEOSWKTWriter_destroy_r( handle, Writer );
 }
 
 
 char*
 GEOSWKTWriter_write(WKTWriter *writer, const Geometry *geom)
 {
-    CLocalizer clocale;
-	try
-	{
-		std::string s = writer->write(geom);
-		char *result = NULL;
-		result = (char*) std::malloc( s.length() + 1);
-		std::strcpy(result, s.c_str() );
-		return result;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-	}
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-	}
-    
-    return NULL;
+    return GEOSWKTWriter_write_r( handle, writer, geom );
 }
 
 /* WKB Reader */
 WKBReader *
 GEOSWKBReader_create()
 {
-	using geos::io::WKBReader;
-	try
-	{
-		return new WKBReader(*geomFactory);
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-	}
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-	}
-    
-    return NULL;
+    return GEOSWKBReader_create_r( handle );
 }
 
 void
 GEOSWKBReader_destroy(WKBReader *reader)
 {
-	try
-	{
-		delete reader;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-	}
+    GEOSWKBReader_destroy_r( handle, reader );
 }
 
 
 Geometry*
 GEOSWKBReader_read(WKBReader *reader, const unsigned char *wkb, size_t size)
 {
-	try
-	{
-		std::string wkbstring = std::string((const char*)wkb, size); // make it binary !
-		std::istringstream s(std::ios_base::binary);
-		s.str(wkbstring);
-
-		s.seekg(0, std::ios::beg); // rewind reader pointer
-		Geometry *g = reader->read(s);
-		return g;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-	}
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-	}
-    
-    return NULL;
+    return GEOSWKBReader_read_r( handle, reader, wkb, size );
 }
 
 Geometry*
 GEOSWKBReader_readHEX(WKBReader *reader, const unsigned char *hex, size_t size)
 {
-	try
-	{
-		std::string hexstring = std::string((const char*)hex, size); 
-		std::istringstream s(std::ios_base::binary);
-		s.str(hexstring);
-
-		s.seekg(0, std::ios::beg); // rewind reader pointer
-		Geometry *g = reader->readHEX(s);
-		return g;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-	}
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-	}
-    
-    return NULL;
+    return GEOSWKBReader_readHEX_r( handle, reader, hex, size );
 }
 
 /* WKB Writer */
 WKBWriter *
 GEOSWKBWriter_create()
 {
-	using geos::io::WKBWriter;
-	try
-	{
-		return new WKBWriter();
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-	}
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-	}
-    
-    return NULL;
+    return GEOSWKBWriter_create_r( handle );
 }
 
 void
 GEOSWKBWriter_destroy(WKBWriter *Writer)
 {
-	try
-	{
-		delete Writer;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-	}
+    GEOSWKBWriter_destroy_r( handle, Writer );
 }
 
 
@@ -2222,144 +702,50 @@ GEOSWKBWriter_destroy(WKBWriter *Writer)
 unsigned char*
 GEOSWKBWriter_write(WKBWriter *writer, const Geometry *geom, size_t *size)
 {
-	try
-	{
-		std::ostringstream s(std::ios_base::binary);
-		writer->write(*geom, s);
-		std::string wkbstring = s.str();
-		size_t len = wkbstring.length();
-
-		unsigned char *result = NULL;
-		result = (unsigned char*) std::malloc(len);
-        std::memcpy(result, wkbstring.c_str(), len);
-		*size = len;
-		return result;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-	}
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-	}
-    return NULL;
+    return GEOSWKBWriter_write_r( handle, writer, geom, size );
 }
 
 /* The owner owns the result */
 unsigned char*
 GEOSWKBWriter_writeHEX(WKBWriter *writer, const Geometry *geom, size_t *size)
 {
-	try
-	{
-		std::ostringstream s(std::ios_base::binary);
-		writer->writeHEX(*geom, s);
-		std::string wkbstring = s.str();
-		const size_t len = wkbstring.length();
-
-		unsigned char *result = NULL;
-		result = (unsigned char*) std::malloc(len);
-        std::memcpy(result, wkbstring.c_str(), len);
-		*size = len;
-		return result;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-	}
-    return NULL;
+    return GEOSWKBWriter_writeHEX_r( handle, writer, geom, size );
 }
 
 int
 GEOSWKBWriter_getOutputDimension(const GEOSWKBWriter* writer)
 {
-	try
-	{
-		return writer->getOutputDimension();
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-	}
-    return 0;
+    return GEOSWKBWriter_getOutputDimension_r( handle, writer );
 }
 
 void
 GEOSWKBWriter_setOutputDimension(GEOSWKBWriter* writer, int newDimension)
 {
-	try
-	{
-		return writer->setOutputDimension(newDimension);
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-	}
+    GEOSWKBWriter_setOutputDimension_r( handle, writer, newDimension );
 }
 
 int
 GEOSWKBWriter_getByteOrder(const GEOSWKBWriter* writer)
 {
-	try
-	{
-		return writer->getByteOrder();
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-	}
-    return 0;
+    return GEOSWKBWriter_getByteOrder_r( handle, writer );
 }
 
 void
 GEOSWKBWriter_setByteOrder(GEOSWKBWriter* writer, int newByteOrder)
 {
-	try
-	{
-		return writer->setByteOrder(newByteOrder);
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-	}
+    GEOSWKBWriter_setByteOrder_r( handle, writer, newByteOrder );
 }
 
 char
 GEOSWKBWriter_getIncludeSRID(const GEOSWKBWriter* writer)
 {
-	try
-	{
-		return writer->getIncludeSRID();
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return NULL;
-	}
+    return GEOSWKBWriter_getIncludeSRID_r( handle, writer );
 }
 
 void
 GEOSWKBWriter_setIncludeSRID(GEOSWKBWriter* writer, const char newIncludeSRID)
 {
-	try
-	{
-		writer->setIncludeSRID(newIncludeSRID);
-	}
-
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-	}
+    GEOSWKBWriter_setIncludeSRID_r( handle, writer, newIncludeSRID );
 }
 
 
@@ -2370,123 +756,41 @@ GEOSWKBWriter_setIncludeSRID(GEOSWKBWriter* writer, const char newIncludeSRID)
 const geos::geom::prep::PreparedGeometry*
 GEOSPrepare(const Geometry *g)
 {
-    const geos::geom::prep::PreparedGeometry* prep = NULL;
-	
-    try
-	{
-		prep = geos::geom::prep::PreparedGeometryFactory::prepare(g);
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-	}
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-	}
-	
-    return prep;
+    return GEOSPrepare_r( handle, g );
 }
 
 void
 GEOSPreparedGeom_destroy(const geos::geom::prep::PreparedGeometry *a)
 {
-	try
-	{
-		delete a;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-	}
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-	}
+    GEOSPreparedGeom_destroy_r( handle, a );
 }
 
 char
-GEOSPreparedContains(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
+GEOSPreparedContains(const geos::geom::prep::PreparedGeometry *pg1,
+                     const Geometry *g2)
 {
-	try 
-	{
-		bool result;
-		result = pg1->contains(g2);
-		return result;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 2;
-	}
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 2;
-	}
+    return GEOSPreparedContains_r( handle, pg1, g2 );
 }
 
 char
-GEOSPreparedContainsProperly(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
+GEOSPreparedContainsProperly(const geos::geom::prep::PreparedGeometry *pg1,
+                             const Geometry *g2)
 {
-	try 
-	{
-		bool result;
-		result = pg1->containsProperly(g2);
-		return result;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 2;
-	}
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 2;
-	}
+    return GEOSPreparedContainsProperly_r( handle, pg1, g2 );
 }
 
 char
-GEOSPreparedCovers(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
+GEOSPreparedCovers(const geos::geom::prep::PreparedGeometry *pg1,
+                   const Geometry *g2)
 {
-	try 
-	{
-		bool result;
-		result = pg1->covers(g2);
-		return result;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 2;
-	}
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 2;
-	}
+    return GEOSPreparedCovers_r( handle, pg1, g2 );
 }
 
 char
-GEOSPreparedIntersects(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
+GEOSPreparedIntersects(const geos::geom::prep::PreparedGeometry *pg1, 
+                       const Geometry *g2)
 {
-	try 
-	{
-		bool result;
-		result = pg1->intersects(g2);
-		return result;
-	}
-	catch (const std::exception &e)
-	{
-		ERROR_MESSAGE("%s", e.what());
-		return 2;
-	}
-	catch (...)
-	{
-		ERROR_MESSAGE("Unknown exception thrown");
-		return 2;
-	}
+    return GEOSPreparedIntersects_r( handle, pg1, g2 );
 }
 
 } //extern "C"

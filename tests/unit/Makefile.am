@@ -3,8 +3,15 @@ INCLUDES = -I$(top_srcdir)/source/headers -I$(top_srcdir)/tests/tut -I$(top_buil
 
 TESTS = geos_unit
 
+EXTRA_DIST = \
+	capi/brokengrammar \
+	capi/test.expected \
+	capi/test.wkt \
+	capi/testrunner.sh
+
+
 #noinst_PROGRAMS = geos_unit
-check_PROGRAMS = geos_unit
+check_PROGRAMS = geos_unit geostest threadtest badthreadtest
 #bin_PROGRAMS = geos_tut
 
 geos_unit_LDADD = \
@@ -64,3 +71,13 @@ geos_unit_SOURCES = geos_unit.cpp \
 
 noinst_HEADERS = \
 	utility.h
+
+geostest_SOURCES = capi/geostest.c
+geostest_LDADD = $(top_builddir)/capi/libgeos_c.la
+
+threadtest_SOURCES = capi/threadtest.c
+threadtest_LDADD = $(top_builddir)/capi/libgeos_c.la -lpthread
+
+badthreadtest_SOURCES = capi/badthreadtest.c
+badthreadtest_LDADD = $(top_builddir)/capi/libgeos_c.la -lpthread
+
