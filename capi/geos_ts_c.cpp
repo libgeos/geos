@@ -570,6 +570,8 @@ GEOSisValidReason_r(GEOSContextHandle_t extHandle, const Geometry *g1)
     IsValidOp ivo(g1);
     try {
         char *result = NULL;
+		char *validstr = "Valid Geometry";
+		int validstrlen = std::strlen(validstr) + 1;
         bool isvalid = ivo.isValid();
         if ( ! isvalid )
         {
@@ -584,7 +586,8 @@ GEOSisValidReason_r(GEOSContextHandle_t extHandle, const Geometry *g1)
             sprintf(result, "%s [%s]", errmsg.c_str(), errloc.c_str());
         }
         else {
-            result = strdup( "Valid Geometry" );
+			result = (char*)std::malloc(validstrlen);
+			std::memcpy(result, validstr, validstrlen);
         }
         return result;
     }
