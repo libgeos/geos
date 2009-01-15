@@ -14,8 +14,8 @@ XMLTESTS=$(SAFE_XMLTESTS)
 
 EXTRA_DIST += $(XMLTESTS)
 
-noinst_PROGRAMS = SimpleWKTTester
-bin_PROGRAMS = XMLTester
+noinst_PROGRAMS = SimpleWKTTester XMLTester
+#bin_PROGRAMS = XMLTester
 # CTS
 
 LIBS = $(top_builddir)/source/libgeos.la
