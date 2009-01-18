@@ -14,12 +14,16 @@ giveup()
 
 OSTYPE=`uname -s`
 
-for aclocal in aclocal aclocal-1.10 aclocal-1.9; do
+for aclocal in aclocal alocal-1.10 alocal-1.9; do
     ACLOCAL=`which $aclocal 2>/dev/null`
     if test -x "${ACLOCAL}"; then
         break;
     fi
 done
+if [ ! $ACLOCAL ]; then
+    echo "Missingn aclocal!"
+    exit
+fi
 
 for automake in automake automake-1.10 automake-1.9; do
     AUTOMAKE=`which $automake 2>/dev/null`
@@ -27,6 +31,10 @@ for automake in automake automake-1.10 automake-1.9; do
         break;
     fi
 done
+if [ ! $AUTOMAKE ]; then
+    echo "Missingn automake!"
+    exit
+fi
 
 
 for libtoolize in glibtoolize libtoolize; do
@@ -35,6 +43,10 @@ for libtoolize in glibtoolize libtoolize; do
         break;
     fi
 done
+if [ ! $LIBTOOLIZE ]; then
+    echo "Missingn libtoolize!"
+    exit
+fi
 
 #AMFLAGS="--add-missing --copy --force-missing"
 AMFLAGS="--add-missing --copy"
