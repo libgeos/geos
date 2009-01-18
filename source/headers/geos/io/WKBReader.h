@@ -22,6 +22,7 @@
 
 #include <iosfwd> // ostream, istream
 #include <vector>
+#include <string>
 
 // Forward declarations
 namespace geos {
