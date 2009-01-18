@@ -14,6 +14,21 @@ giveup()
 
 OSTYPE=`uname -s`
 
+for aclocal in aclocal aclocal-1.10 aclocal-1.9; do
+    ACLOCAL=`which $aclocal 2>/dev/null`
+    if test -x "${ACLOCAL}"; then
+        break;
+    fi
+done
+
+for automake in automake automake-1.10 automake-1.9; do
+    AUTOMAKE=`which $automake 2>/dev/null`
+    if test -x "${AUTOMAKE}"; then
+        break;
+    fi
+done
+
+
 for libtoolize in glibtoolize libtoolize; do
     LIBTOOLIZE=`which $libtoolize 2>/dev/null`
     if test -x "${LIBTOOLIZE}"; then
@@ -28,13 +43,13 @@ if test "$OSTYPE" = "IRIX" -o "$OSTYPE" = "IRIX64"; then
 fi
 
 echo "Running aclocal -I macros"
-aclocal -I macros || giveup
+$ACLOCAL -I macros || giveup
 echo "Running autoheader"
 autoheader || giveup
 echo "Running libtoolize"
 $LIBTOOLIZE --force --copy || giveup
 echo "Running automake"
-automake $AMFLAGS # || giveup
+$AUTOMAKE $AMFLAGS # || giveup
 echo "Running autoconf"
 autoconf || giveup
 
