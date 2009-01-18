@@ -48,6 +48,8 @@ AC_PROG_LIBTOOL
 dnl check for programs ----------------------------------------------------
 AC_PROG_CXX
 AC_ISC_POSIX
+AC_PROG_INSTALL
+AC_PROG_MAKE_SET
 
 dnl function checks ------------------------------------------------------
 AC_FUNC_CLOSEDIR_VOID
