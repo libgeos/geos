@@ -56,10 +56,10 @@ SLIBNAME = geos_i.lib
 
 # List of objects
 OBJ = \
-    algorithm\CGAlgorithms.obj \
 	algorithm\CentroidArea.obj \
 	algorithm\CentroidLine.obj \
 	algorithm\CentroidPoint.obj \
+	algorithm\CGAlgorithms.obj \
 	algorithm\ConvexHull.obj \
 	algorithm\HCoordinate.obj \
 	algorithm\InteriorPointArea.obj \
@@ -72,6 +72,7 @@ OBJ = \
 	algorithm\PointLocator.obj \
 	algorithm\RayCrossingCounter.obj \
 	algorithm\RobustDeterminant.obj \
+	algorithm\RobustLineIntersector \
 	algorithm\SimplePointInRing.obj \
 	algorithm\SIRtreePointInRing.obj \
 	algorithm\locate\IndexedPointInAreaLocator.obj \

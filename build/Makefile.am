@@ -6,15 +6,7 @@
 # relies on the order items in SUBDIRS appear.
 #
 SUBDIRS = 	\
-	build	\
-	source	\
-	capi	\
-	doc	\
-	macros	\
-	swig	\
-	tests	\
-	tools
+	msvc80	
 
-EXTRA_DIST = acsite.m4 makefile.vc
+EXTRA_DIST = README
 
-ACLOCAL_AMFLAGS = -I macros

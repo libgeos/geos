@@ -5,16 +5,14 @@
 # is not able to detect required build order but blindly
 # relies on the order items in SUBDIRS appear.
 #
-SUBDIRS = 	\
-	build	\
-	source	\
-	capi	\
-	doc	\
-	macros	\
-	swig	\
-	tests	\
-	tools
+SUBDIRS = \
+	geos_c_dll \
+	geos_lib \
+	geos_python \
+	geos_ruby \
+	geos_unit
 
-EXTRA_DIST = acsite.m4 makefile.vc
-
-ACLOCAL_AMFLAGS = -I macros
+EXTRA_DIST = \
+	README \
+	geos.sln \
+	geos.vsprops

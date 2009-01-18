@@ -5,16 +5,5 @@
 # is not able to detect required build order but blindly
 # relies on the order items in SUBDIRS appear.
 #
-SUBDIRS = 	\
-	build	\
-	source	\
-	capi	\
-	doc	\
-	macros	\
-	swig	\
-	tests	\
-	tools
-
-EXTRA_DIST = acsite.m4 makefile.vc
-
-ACLOCAL_AMFLAGS = -I macros
+EXTRA_DIST = \
+	geos_unit.vcproj

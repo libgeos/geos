@@ -7,10 +7,12 @@
      [ THIS MUST BE CAREFULLY AVOIDED ]
 
 2: Increment release version:
-   - VERSION_PATCH for bugfixes/improvements (even breaking C++ API)
-   - VERSION_MINOR for NEW interfaces in the C lib
-   - VERSION_MAJOR for SUBSTANTIAL additions or C lib ABI break
-     [ THIS MUST BE CAREFULLY AVOIDED ]
+   - In configure.in
+   - In source/headers/geos/version.h.vc
+     - VERSION_PATCH for bugfixes/improvements (even breaking C++ API)
+     - VERSION_MINOR for NEW interfaces in the C lib
+     - VERSION_MAJOR for SUBSTANTIAL additions or C lib ABI break
+       [ THIS MUST BE CAREFULLY AVOIDED ]
    
 3: Release-mark the ChangeLog (search for '---' at start of a line to 
    see how a release mark looks like).
@@ -20,6 +22,7 @@
 5: make distcheck
 
 6: check everything is ok ;)
+   ./configure ; make ; make check
 
 7: Tag the release:
    $ base=http://svn.osgeo.org/geos/

@@ -244,6 +244,13 @@ dnl output stuff ----------------------------------------------------------
 
 AC_OUTPUT([
 	Makefile 
+	build/Makefile
+	build/msvc80/Makefile
+	build/msvc80/geos_c_dll/Makefile
+	build/msvc80/geos_lib/Makefile
+	build/msvc80/geos_python/Makefile
+	build/msvc80/geos_ruby/Makefile
+	build/msvc80/geos_unit/Makefile
 	capi/Makefile
 	capi/geos_c.h
 	doc/Doxyfile
