@@ -6,6 +6,7 @@ SUBDIRS = \
 	polygonize	\
 	predicate	\
 	relate		\
+        union           \
 	valid		
 
 noinst_LTLIBRARIES = liboperation.la
@@ -22,8 +23,9 @@ liboperation_la_LIBADD = \
 	linemerge/liboplinemerge.la	\
 	overlay/libopoverlay.la		\
 	polygonize/liboppolygonize.la	\
-	relate/liboprelate.la		\
 	predicate/liboppredicate.la	\
+	relate/liboprelate.la		\
+        union/libopunion.la             \
 	valid/libopvalid.la
 
 

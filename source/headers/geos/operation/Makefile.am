@@ -1,12 +1,13 @@
 SUBDIRS = \
 	buffer \
-	overlay \
-	valid \
-	relate \
-	predicate \
 	distance \
 	linemerge \
-	polygonize
+	overlay \
+	polygonize \
+	predicate \
+	relate \
+	union \
+	valid 
 
 #EXTRA_DIST = 
 

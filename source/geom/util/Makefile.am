@@ -13,7 +13,8 @@ libgeomutil_la_SOURCES = \
 	CoordinateOperation.cpp \
 	GeometryEditor.cpp \
 	GeometryTransformer.cpp \
-	ShortCircuitedGeometryVisitor.cpp
+	ShortCircuitedGeometryVisitor.cpp \
+        GeometryCombiner.cpp
 
 #	LinearComponentExtracter.cpp 
 #	PointExtracter.cpp 

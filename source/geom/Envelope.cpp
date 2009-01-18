@@ -425,7 +425,7 @@ Envelope::centre(Coordinate& centre) const
 
 /*public*/
 bool
-Envelope::intersection(const Envelope& env, Envelope& result)
+Envelope::intersection(const Envelope& env, Envelope& result) const
 {
 	if (isNull() || env.isNull() || ! intersects(env)) return false;
 

@@ -22,6 +22,7 @@
 #include <list>
 #include <memory> // for auto_ptr
 #include <cassert> // for inlines
+#include <algorithm>
 
 // Forward declarations
 namespace geos {
@@ -41,6 +42,79 @@ namespace strtree { // geos::index::strtree
 /// A list of boundables. TODO: use a list
 typedef std::vector<Boundable*> BoundableList;
 //typedef std::list<Boundable*> BoundableList;
+
+/// list contains boundables or lists of boundables. The lists are owned by 
+/// this class, the plain boundables are held by reference only.
+class ItemsList;
+
+class ItemsListItem
+{
+public:
+    enum type {
+        item_is_geometry,
+        item_is_list
+    };
+
+    ItemsListItem(void *item_)
+      : t(item_is_geometry)
+    {
+        item.g = item_;
+    }
+    ItemsListItem(ItemsList* item_)
+      : t(item_is_list)
+    {
+        item.l = item_;
+    }
+
+    type get_type() const { return t; }
+
+    void* get_geometry() const
+    {
+        assert(t == item_is_geometry);
+        return item.g;
+    }
+    ItemsList* get_itemslist() const
+    {
+        assert(t == item_is_list);
+        return item.l;
+    }
+
+    type t;
+    union {
+        void* g;
+        ItemsList* l;
+    } item;
+};
+
+class ItemsList : public std::vector<ItemsListItem>
+{
+private:
+    typedef std::vector<ItemsListItem> base_type;
+
+    static void delete_item(ItemsListItem& item)
+    {
+        if (ItemsListItem::item_is_list == item.t)
+            delete reinterpret_cast<ItemsList*>(item.item.l);
+    }
+
+public:
+    ~ItemsList()
+    {
+        std::for_each(begin(), end(), &ItemsList::delete_item);
+    }
+
+    // lists of items need to be deleted in the end
+    void push_back(void* item)
+    {
+        this->base_type::push_back(ItemsListItem(item));
+    }
+
+    // lists of items need to be deleted in the end
+    void push_back_owned(ItemsList* itemList)
+    {
+        this->base_type::push_back(ItemsListItem(itemList));
+    }
+};
 
 /** \brief
  * Base class for STRtree and SIRtree.
@@ -78,6 +152,8 @@ private:
 
 	bool remove(const void* searchBounds, AbstractNode& node, void* item);
 	bool removeItem(AbstractNode& node, void* item);
+
+    ItemsList* itemsTree(AbstractNode* node);
 
 protected:
 
@@ -207,6 +283,22 @@ public:
 	 */
 	virtual void boundablesAtLevel(int level, AbstractNode* top,
 			BoundableList* boundables);
+
+    /**
+     * Gets a tree structure (as a nested list) 
+     * corresponding to the structure of the items and nodes in this tree.
+     * <p>
+     * The returned {@link List}s contain either {@link Object} items, 
+     * or Lists which correspond to subtrees of the tree
+     * Subtrees which do not contain any items are not included.
+     * <p>
+     * Builds the tree if necessary.
+     * 
+     * @note The caller is responsible for releasing the list
+     *
+     * @return a List of items and/or Lists
+     */
+    ItemsList* itemsTree();
 };
 
 

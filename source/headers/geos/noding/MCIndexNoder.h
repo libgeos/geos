@@ -100,6 +100,7 @@ public:
 		void overlap(geom::LineSegment* s1, geom::LineSegment* s2)
         {
             UNREFERENCED_PARAMETER(s1);
+            UNREFERENCED_PARAMETER(s2);
             assert(0);
         }
 	};

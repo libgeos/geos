@@ -21,43 +21,44 @@ geos_unit_LDADD = \
 
 
 geos_unit_SOURCES = geos_unit.cpp \
-	algorithm/ConvexHullTest.cpp \
-	algorithm/PointLocatorTest.cpp \
 	algorithm/CGAlgorithms/isCCWTest.cpp \
 	algorithm/CGAlgorithms/isPointInRingTest.cpp \
 	algorithm/CGAlgorithms/computeOrientationTest.cpp \
+	algorithm/ConvexHullTest.cpp \
+	algorithm/PointLocatorTest.cpp \
 	geom/CoordinateArraySequenceFactoryTest.cpp \
 	geom/CoordinateArraySequenceTest.cpp \
 	geom/CoordinateListTest.cpp \
 	geom/CoordinateTest.cpp \
 	geom/DimensionTest.cpp \
 	geom/EnvelopeTest.cpp \
+	geom/Geometry/isRectangleTest.cpp \
+	geom/Geometry/coversTest.cpp \
 	geom/GeometryFactoryTest.cpp \
 	geom/IntersectionMatrixTest.cpp \
+	geom/LinearRingTest.cpp \
 	geom/LineSegmentTest.cpp \
 	geom/LineStringTest.cpp \
-	geom/LinearRingTest.cpp \
 	geom/LocationTest.cpp \
 	geom/MultiLineStringTest.cpp \
 	geom/MultiPointTest.cpp \
 	geom/MultiPolygonTest.cpp \
 	geom/PointTest.cpp \
 	geom/PolygonTest.cpp \
-	geom/TriangleTest.cpp \
-	geom/Geometry/isRectangleTest.cpp \
-	geom/Geometry/coversTest.cpp \
 	geom/prep/PreparedGeometryFactoryTest.cpp \
+	geom/TriangleTest.cpp \
 	index/quadtree/DoubleBitsTest.cpp \
-	io/WKBReaderTest.cpp \
 	io/ByteOrderValuesTest.cpp \
-	operation/IsSimpleOpTest.cpp \
-	operation/distance/DistanceOpTest.cpp \
-	operation/overlay/FuzzyPointLocatorTest.cpp \
-	operation/overlay/OffsetPointGeneratorTest.cpp \
-	operation/overlay/OverlayResultValidatorTest.cpp \
+	io/WKBReaderTest.cpp \
 	noding/SegmentNodeTest.cpp \
 	noding/SegmentPointComparatorTest.cpp \
 	noding/SegmentStringTest.cpp \
+	operation/distance/DistanceOpTest.cpp \
+	operation/IsSimpleOpTest.cpp \
+	operation/overlay/FuzzyPointLocatorTest.cpp \
+	operation/overlay/OffsetPointGeneratorTest.cpp \
+	operation/overlay/OverlayResultValidatorTest.cpp \
+	operation/union/CascadedPolygonUnionTest.cpp \
 	precision/GeometrySnapperTest.cpp \
 	precision/LineStringSnapperTest.cpp \
 	precision/SimpleGeometryPrecisionReducerTest.cpp \

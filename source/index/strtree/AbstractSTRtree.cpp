@@ -334,6 +334,49 @@ AbstractSTRtree::boundablesAtLevel(int level, AbstractNode* top,
 	return;
 }
 
+ItemsList* AbstractSTRtree::itemsTree(AbstractNode* node) 
+{
+    std::auto_ptr<ItemsList> valuesTreeForNode (new ItemsList());
+
+    BoundableList::iterator end = node->getChildBoundables()->end();
+    for (BoundableList::iterator i = node->getChildBoundables()->begin(); 
+         i != end; ++i) 
+    {
+        Boundable* childBoundable = *i;
+        if (dynamic_cast<AbstractNode*>(childBoundable)) {
+            ItemsList* valuesTreeForChild = 
+                itemsTree(static_cast<AbstractNode*>(childBoundable));
+            // only add if not null (which indicates an item somewhere in this tree
+            if (valuesTreeForChild != NULL)
+                valuesTreeForNode->push_back_owned(valuesTreeForChild);
+        }
+        else if (dynamic_cast<ItemBoundable*>(childBoundable)) {
+            valuesTreeForNode->push_back(
+                static_cast<ItemBoundable*>(childBoundable)->getItem());
+        }
+        else {
+            assert(!"should never be reached");
+        }
+    }
+    if (valuesTreeForNode->empty()) 
+        return NULL;
+
+    return valuesTreeForNode.release();
+}
+
+ItemsList* AbstractSTRtree::itemsTree()
+{
+    if (!built) { 
+        build(); 
+    }
+
+    ItemsList* valuesTree (itemsTree(root));
+    if (valuesTree == NULL)
+        return new ItemsList();
+
+    return valuesTree;
+}
+
 } // namespace geos.index.strtree
 } // namespace geos.index
 } // namespace geos

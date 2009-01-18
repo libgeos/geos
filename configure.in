@@ -282,6 +282,7 @@ AC_OUTPUT([
 	source/headers/geos/operation/polygonize/Makefile
 	source/headers/geos/operation/predicate/Makefile
 	source/headers/geos/operation/relate/Makefile
+	source/headers/geos/operation/union/Makefile
 	source/headers/geos/operation/valid/Makefile
 	source/headers/geos/planargraph/Makefile
 	source/headers/geos/planargraph/algorithm/Makefile
@@ -307,6 +308,7 @@ AC_OUTPUT([
 	source/operation/polygonize/Makefile
 	source/operation/predicate/Makefile
 	source/operation/relate/Makefile
+	source/operation/union/Makefile
 	source/operation/valid/Makefile
 	source/planargraph/Makefile
 	source/precision/Makefile

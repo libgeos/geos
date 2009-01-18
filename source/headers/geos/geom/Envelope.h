@@ -235,7 +235,7 @@ public:
 	 *               if either argument is null, or they do not intersect)
 	 * @return false if not intersection is found
 	 */
-	bool intersection(const Envelope& env, Envelope& result);
+	bool intersection(const Envelope& env, Envelope& result) const;
 
 	/** \brief
 	 * Translates this envelope by given amounts in the X and Y direction.
