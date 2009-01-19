@@ -72,7 +72,6 @@ OBJ = \
 	algorithm\PointLocator.obj \
 	algorithm\RayCrossingCounter.obj \
 	algorithm\RobustDeterminant.obj \
-	algorithm\RobustLineIntersector \
 	algorithm\SimplePointInRing.obj \
 	algorithm\SIRtreePointInRing.obj \
 	algorithm\locate\IndexedPointInAreaLocator.obj \
@@ -293,6 +292,7 @@ OBJ = \
 	util\math.obj \
 	util\Profiler.obj \
 	..\capi\geos_c.obj \
+	..\capi\geos_ts_c.obj \
 	inlines.obj
 
 TEST_EXE =	TestSweepLineSpeed.exe
@@ -307,8 +307,8 @@ $(DLLNAME):	$(OBJ)
 	link /dll /debug $(OBJ) /out:$(DLLNAME) /implib:$(SLIBNAME)
 	if exist $(DLLNAME).manifest mt -manifest $(DLLNAME).manifest -outputresource:$(DLLNAME);2
 
-$(CDLLNAME): ..\capi\geos_c.obj $(DLLNAME)
-	link /dll /debug ..\capi\geos_c.obj $(LIBNAME) /out:$(CDLLNAME) /implib:$(CLIBNAME)
+$(CDLLNAME): ..\capi\geos_c.obj ..\capi\geos_ts_c.obj $(DLLNAME)
+	link /dll /debug ..\capi\geos_c.obj ..\capi\geos_ts_c.obj $(LIBNAME) /out:$(CDLLNAME) /implib:$(CLIBNAME)
 	if exist $(CDLLNAME).manifest mt -manifest $(CDLLNAME).manifest -outputresource:$(CDLLNAME);2
   
 headers/geos/platform.h: headers/geos/platform.h.vc
