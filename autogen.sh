@@ -14,7 +14,7 @@ giveup()
 
 OSTYPE=`uname -s`
 
-for aclocal in aclocal alocal-1.10 alocal-1.9; do
+for aclocal in aclocal aclocal-1.10 aclocal-1.9; do
     ACLOCAL=`which $aclocal 2>/dev/null`
     if test -x "${ACLOCAL}"; then
         break;
