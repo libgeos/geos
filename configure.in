@@ -111,8 +111,13 @@ dnl --------------------------------------------------------------------
 # Set default CXXFLAGS and CFLAGS if not set by the user
 # -pedantic: ISO does not support long long
 # we add -Wno-long-long to avoid those messages
-CXXFLAGS="${CXXFLAGS} -Wall -ansi -pedantic -Wno-long-long"
-CFLAGS="${CFLAGS} -Wall -ansi -pedantic -Wno-long-long"
+WARNFLAGS=""
+AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -pedantic], [dummy], [-pedantic], [], [WARNFLAGS="$WARNFLAGS -pedantic"], [])
+AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -Wall], [dummy], [-Wall], [], [WARNFLAGS="$WARNFLAGS -Wall"], [])
+AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -ansi], [dummy], [-ansi], [], [WARNFLAGS="$WARNFLAGS -ansi"], [])
+AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -Wno-long-long], [dummy], [-Wno-long-long], [], [WARNFLAGS="$WARNFLAGS -Wno-long-long"], [])
+CXXFLAGS="${CXXFLAGS} ${WARNFLAGS}"
+CFLAGS="${CFLAGS} ${WARNFLAGS}"
 
 dnl --------------------------------------------------------------------
 dnl - Look for a 64bit integer (do after CFLAGS is set)
