@@ -17,6 +17,7 @@
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Polygon.h>
+#include <geos/geom/MultiPolygon.h>
 #include <geos/geom/util/GeometryCombiner.h>
 #include <geos/index/strtree/STRtree.h>
 
@@ -34,6 +35,19 @@ void GeometryListHolder::deleteItem(geom::Geometry* item)
 geom::Geometry* CascadedPolygonUnion::Union(std::vector<geom::Polygon*>* polys)
 {
     CascadedPolygonUnion op (polys);
+    return op.Union();
+}
+
+geom::Geometry* CascadedPolygonUnion::Union(geom::MultiPolygon* multipoly)
+{
+    std::vector<geom::Polygon*> polys;
+    
+    typedef geom::MultiPolygon::const_iterator iterator;
+    iterator end = multipoly->end();
+    for (iterator i = multipoly->begin(); i != end; ++i)
+        polys.push_back(static_cast<geom::Polygon*>(*i));
+
+    CascadedPolygonUnion op (&polys);
     return op.Union();
 }
 

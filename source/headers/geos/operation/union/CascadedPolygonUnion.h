@@ -24,6 +24,7 @@ namespace geos {
         class GeometryFactory;
         class Geometry;
         class Polygon;
+        class MultiPolygon;
         class Envelope;
     }
     namespace index {
@@ -119,6 +120,14 @@ public:
      * @param polys a collection of {@link Polygonal} {@link Geometry}s
      */
     static geom::Geometry* Union(std::vector<geom::Polygon*>* polys);
+
+    /**
+     * Computes the union of
+     * a collection of {@link Polygonal} {@link Geometry}s.
+     * 
+     * @param polys a collection of {@link Polygonal} {@link Geometry}s
+     */
+    static geom::Geometry* Union(geom::MultiPolygon* polys);
 
     /**
      * Creates a new instance to union
