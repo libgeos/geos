@@ -82,11 +82,11 @@ finishGEOS ()
     finishGEOS_r( handle );
 }
 
-//-----------------------------------------------------------
-// relate()-related functions
-//  return 0 = false, 1 = true, 2 = error occured
-//-----------------------------------------------------------
-
+/****************************************************************
+** relate()-related functions
+** return 0 = false, 1 = true, 2 = error occured
+**
+*/
 char
 GEOSDisjoint(const Geometry *g1, const Geometry *g2)
 {
@@ -490,8 +490,7 @@ GEOSCoordSeq_create(unsigned int size, unsigned int dims)
 }
 
 int
-GEOSCoordSeq_setOrdinate(CoordinateSequence *s, unsigned int idx,
-	unsigned int dim, double val)
+GEOSCoordSeq_setOrdinate(CoordinateSequence *s, unsigned int idx, unsigned int dim, double val)
 {
     return GEOSCoordSeq_setOrdinate_r( handle, s, idx, dim, val );
 }
@@ -521,8 +520,7 @@ GEOSCoordSeq_clone(const CoordinateSequence *s)
 }
 
 int
-GEOSCoordSeq_getOrdinate(const CoordinateSequence *s, unsigned int idx,
-	unsigned int dim, double *val)
+GEOSCoordSeq_getOrdinate(const CoordinateSequence *s, unsigned int idx, unsigned int dim, double *val)
 {
     return GEOSCoordSeq_getOrdinate_r( handle, s, idx, dim, val );
 }
@@ -766,31 +764,27 @@ GEOSPreparedGeom_destroy(const geos::geom::prep::PreparedGeometry *a)
 }
 
 char
-GEOSPreparedContains(const geos::geom::prep::PreparedGeometry *pg1,
-                     const Geometry *g2)
+GEOSPreparedContains(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
 {
     return GEOSPreparedContains_r( handle, pg1, g2 );
 }
 
 char
-GEOSPreparedContainsProperly(const geos::geom::prep::PreparedGeometry *pg1,
-                             const Geometry *g2)
+GEOSPreparedContainsProperly(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
 {
     return GEOSPreparedContainsProperly_r( handle, pg1, g2 );
 }
 
 char
-GEOSPreparedCovers(const geos::geom::prep::PreparedGeometry *pg1,
-                   const Geometry *g2)
+GEOSPreparedCovers(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
 {
     return GEOSPreparedCovers_r( handle, pg1, g2 );
 }
 
 char
-GEOSPreparedIntersects(const geos::geom::prep::PreparedGeometry *pg1, 
-                       const Geometry *g2)
+GEOSPreparedIntersects(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
 {
     return GEOSPreparedIntersects_r( handle, pg1, g2 );
 }
 
-} //extern "C"
+} /* extern "C" */

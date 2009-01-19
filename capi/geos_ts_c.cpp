@@ -155,8 +155,7 @@ finishGEOS_r(GEOSContextHandle_t extHandle)
 //-----------------------------------------------------------
 
 char
-GEOSDisjoint_r(GEOSContextHandle_t extHandle, const Geometry *g1,
-               const Geometry *g2)
+GEOSDisjoint_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g2)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -190,8 +189,7 @@ GEOSDisjoint_r(GEOSContextHandle_t extHandle, const Geometry *g1,
 }
 
 char
-GEOSTouches_r(GEOSContextHandle_t extHandle, const Geometry *g1,
-              const Geometry *g2)
+GEOSTouches_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g2)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -226,8 +224,7 @@ GEOSTouches_r(GEOSContextHandle_t extHandle, const Geometry *g1,
 }
 
 char
-GEOSIntersects_r(GEOSContextHandle_t extHandle, const Geometry *g1,
-                 const Geometry *g2)
+GEOSIntersects_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g2)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -262,8 +259,7 @@ GEOSIntersects_r(GEOSContextHandle_t extHandle, const Geometry *g1,
 }
 
 char
-GEOSCrosses_r(GEOSContextHandle_t extHandle, const Geometry *g1, 
-              const Geometry *g2)
+GEOSCrosses_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g2)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -298,8 +294,7 @@ GEOSCrosses_r(GEOSContextHandle_t extHandle, const Geometry *g1,
 }
 
 char
-GEOSWithin_r(GEOSContextHandle_t extHandle, const Geometry *g1, 
-             const Geometry *g2)
+GEOSWithin_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g2)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -338,8 +333,7 @@ GEOSWithin_r(GEOSContextHandle_t extHandle, const Geometry *g1,
 //         1 = true
 //         2 = error was trapped
 char
-GEOSContains_r(GEOSContextHandle_t extHandle, const Geometry *g1, 
-               const Geometry *g2)
+GEOSContains_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g2)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -374,8 +368,7 @@ GEOSContains_r(GEOSContextHandle_t extHandle, const Geometry *g1,
 }
 
 char
-GEOSOverlaps_r(GEOSContextHandle_t extHandle, const Geometry *g1,
-               const Geometry *g2)
+GEOSOverlaps_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g2)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -415,8 +408,7 @@ GEOSOverlaps_r(GEOSContextHandle_t extHandle, const Geometry *g1,
 //------------------------------------------------------------------
 
 char
-GEOSRelatePattern_r(GEOSContextHandle_t extHandle, const Geometry *g1, 
-                     const Geometry *g2, const char *pat)
+GEOSRelatePattern_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g2, const char *pat)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -452,8 +444,7 @@ GEOSRelatePattern_r(GEOSContextHandle_t extHandle, const Geometry *g1,
 }
 
 char *
-GEOSRelate_r(GEOSContextHandle_t extHandle, const Geometry *g1, 
-             const Geometry *g2)
+GEOSRelate_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g2)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -611,8 +602,7 @@ GEOSisValidReason_r(GEOSContextHandle_t extHandle, const Geometry *g1)
 //-----------------------------------------------------------------
 
 char
-GEOSEquals_r(GEOSContextHandle_t extHandle, const Geometry *g1, 
-             const Geometry *g2)
+GEOSEquals_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g2)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -647,8 +637,7 @@ GEOSEquals_r(GEOSContextHandle_t extHandle, const Geometry *g1,
 }
 
 char
-GEOSEqualsExact_r(GEOSContextHandle_t extHandle, const Geometry *g1, 
-                  const Geometry *g2, double tolerance)
+GEOSEqualsExact_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g2, double tolerance)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -683,8 +672,7 @@ GEOSEqualsExact_r(GEOSContextHandle_t extHandle, const Geometry *g1,
 }
 
 int
-GEOSDistance_r(GEOSContextHandle_t extHandle, const Geometry *g1, 
-               const Geometry *g2, double *dist)
+GEOSDistance_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g2, double *dist)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -862,8 +850,7 @@ GEOSGeomToWKT_r(GEOSContextHandle_t extHandle, const Geometry *g1)
 
 // Remember to free the result!
 unsigned char *
-GEOSGeomToWKB_buf_r(GEOSContextHandle_t extHandle, const Geometry *g,
-                    size_t *size)
+GEOSGeomToWKB_buf_r(GEOSContextHandle_t extHandle, const Geometry *g, size_t *size)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -908,8 +895,7 @@ GEOSGeomToWKB_buf_r(GEOSContextHandle_t extHandle, const Geometry *g,
 }
 
 Geometry *
-GEOSGeomFromWKB_buf_r(GEOSContextHandle_t extHandle, const unsigned char *wkb, 
-                       size_t size)
+GEOSGeomFromWKB_buf_r(GEOSContextHandle_t extHandle, const unsigned char *wkb, size_t size)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -952,8 +938,7 @@ GEOSGeomFromWKB_buf_r(GEOSContextHandle_t extHandle, const unsigned char *wkb,
 /* Read/write wkb hex values.  Returned geometries are
    owned by the caller.*/
 unsigned char *
-GEOSGeomToHEX_buf_r(GEOSContextHandle_t extHandle, const Geometry *g, 
-                    size_t *size)
+GEOSGeomToHEX_buf_r(GEOSContextHandle_t extHandle, const Geometry *g, size_t *size)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -998,8 +983,7 @@ GEOSGeomToHEX_buf_r(GEOSContextHandle_t extHandle, const Geometry *g,
 }
 
 Geometry *
-GEOSGeomFromHEX_buf_r(GEOSContextHandle_t extHandle, const unsigned char *hex, 
-                      size_t size)
+GEOSGeomFromHEX_buf_r(GEOSContextHandle_t extHandle, const unsigned char *hex, size_t size)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -1260,8 +1244,7 @@ GEOSEnvelope_r(GEOSContextHandle_t extHandle, const Geometry *g1)
 }
 
 Geometry *
-GEOSIntersection_r(GEOSContextHandle_t extHandle, const Geometry *g1, 
-                   const Geometry *g2)
+GEOSIntersection_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g2)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -1297,8 +1280,7 @@ GEOSIntersection_r(GEOSContextHandle_t extHandle, const Geometry *g1,
 }
 
 Geometry *
-GEOSBuffer_r(GEOSContextHandle_t extHandle, const Geometry *g1, double width, 
-              int quadrantsegments)
+GEOSBuffer_r(GEOSContextHandle_t extHandle, const Geometry *g1, double width, int quadrantsegments)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -1366,8 +1348,7 @@ GEOSConvexHull_r(GEOSContextHandle_t extHandle, const Geometry *g1)
 }
 
 Geometry *
-GEOSDifference_r(GEOSContextHandle_t extHandle, const Geometry *g1, 
-                 const Geometry *g2)
+GEOSDifference_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g2)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -1437,8 +1418,7 @@ GEOSBoundary_r(GEOSContextHandle_t extHandle, const Geometry *g1)
 }
 
 Geometry *
-GEOSSymDifference_r(GEOSContextHandle_t extHandle, const Geometry *g1, 
-                    const Geometry *g2)
+GEOSSymDifference_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g2)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -1474,8 +1454,7 @@ GEOSSymDifference_r(GEOSContextHandle_t extHandle, const Geometry *g1,
 }
 
 Geometry *
-GEOSUnion_r(GEOSContextHandle_t extHandle, const Geometry *g1,
-            const Geometry *g2)
+GEOSUnion_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g2)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -1614,25 +1593,6 @@ GEOSSetSRID(Geometry *g, int SRID)
 {
 	g->setSRID(SRID);
 }
-
-/*
-void
-GEOSdeleteChar(char *a)
-{
-	try{
-	   free(a);
-	}
-	catch (const std::exception &e)
-	{
-		handle->ERROR_MESSAGE("%s", e.what());
-	}
-
-	catch (...)
-	{
-		handle->ERROR_MESSAGE("Unknown exception thrown");
-	}
-}
-*/
 
 
 int
@@ -1905,6 +1865,8 @@ GEOSGetInteriorRingN_r(GEOSContextHandle_t extHandle, const Geometry *g1, int n)
 	}
 }
 
+
+
 Geometry *
 GEOSGetCentroid_r(GEOSContextHandle_t extHandle, const Geometry *g)
 {
@@ -1946,8 +1908,7 @@ GEOSGetCentroid_r(GEOSContextHandle_t extHandle, const Geometry *g)
 }
 
 Geometry *
-GEOSGeom_createCollection_r(GEOSContextHandle_t extHandle, int type,
-                            Geometry **geoms, unsigned int ngeoms)
+GEOSGeom_createCollection_r(GEOSContextHandle_t extHandle, int type, Geometry **geoms, unsigned int ngeoms)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -2012,8 +1973,7 @@ GEOSGeom_createCollection_r(GEOSContextHandle_t extHandle, int type,
 }
 
 Geometry *
-GEOSPolygonize_r(GEOSContextHandle_t extHandle, const Geometry * const * g,
-                 unsigned int ngeoms)
+GEOSPolygonize_r(GEOSContextHandle_t extHandle, const Geometry * const * g, unsigned int ngeoms)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -2078,8 +2038,7 @@ GEOSPolygonize_r(GEOSContextHandle_t extHandle, const Geometry * const * g,
 }
 
 Geometry *
-GEOSPolygonizer_getCutEdges_r(GEOSContextHandle_t extHandle, 
-                              const Geometry * const * g, unsigned int ngeoms)
+GEOSPolygonizer_getCutEdges_r(GEOSContextHandle_t extHandle, const Geometry * const * g, unsigned int ngeoms)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -2354,8 +2313,7 @@ GEOS_setWKBByteOrder_r(GEOSContextHandle_t extHandle, int byteOrder)
 
 
 CoordinateSequence *
-GEOSCoordSeq_create_r(GEOSContextHandle_t extHandle, unsigned int size, 
-                      unsigned int dims)
+GEOSCoordSeq_create_r(GEOSContextHandle_t extHandle, unsigned int size, unsigned int dims)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -2391,8 +2349,7 @@ GEOSCoordSeq_create_r(GEOSContextHandle_t extHandle, unsigned int size,
 }
 
 int
-GEOSCoordSeq_setOrdinate_r(GEOSContextHandle_t extHandle, CoordinateSequence *s,
-                           unsigned int idx, unsigned int dim, double val)
+GEOSCoordSeq_setOrdinate_r(GEOSContextHandle_t extHandle, CoordinateSequence *s, unsigned int idx, unsigned int dim, double val)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -2426,22 +2383,19 @@ GEOSCoordSeq_setOrdinate_r(GEOSContextHandle_t extHandle, CoordinateSequence *s,
 }
 
 int
-GEOSCoordSeq_setX_r(GEOSContextHandle_t extHandle, CoordinateSequence *s, 
-                    unsigned int idx, double val)
+GEOSCoordSeq_setX_r(GEOSContextHandle_t extHandle, CoordinateSequence *s, unsigned int idx, double val)
 {
 	return GEOSCoordSeq_setOrdinate_r(extHandle, s, idx, 0, val);
 }
 
 int
-GEOSCoordSeq_setY_r(GEOSContextHandle_t extHandle, CoordinateSequence *s, 
-                    unsigned int idx, double val)
+GEOSCoordSeq_setY_r(GEOSContextHandle_t extHandle, CoordinateSequence *s, unsigned int idx, double val)
 {
 	return GEOSCoordSeq_setOrdinate_r(extHandle, s, idx, 1, val);
 }
 
 int
-GEOSCoordSeq_setZ_r(GEOSContextHandle_t extHandle, CoordinateSequence *s, 
-                    unsigned int idx, double val)
+GEOSCoordSeq_setZ_r(GEOSContextHandle_t extHandle, CoordinateSequence *s, unsigned int idx, double val)
 {
 	return GEOSCoordSeq_setOrdinate_r(extHandle, s, idx, 2, val);
 }
@@ -2477,8 +2431,7 @@ GEOSCoordSeq_clone_r(GEOSContextHandle_t extHandle, const CoordinateSequence *s)
 }
 
 int
-GEOSCoordSeq_getOrdinate_r(GEOSContextHandle_t extHandle, const CoordinateSequence *s, 
-                            unsigned int idx, unsigned int dim, double *val)
+GEOSCoordSeq_getOrdinate_r(GEOSContextHandle_t extHandle, const CoordinateSequence *s, unsigned int idx, unsigned int dim, double *val)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -2513,29 +2466,25 @@ GEOSCoordSeq_getOrdinate_r(GEOSContextHandle_t extHandle, const CoordinateSequen
 }
 
 int
-GEOSCoordSeq_getX_r(GEOSContextHandle_t extHandle, const CoordinateSequence *s,
-                     unsigned int idx, double *val)
+GEOSCoordSeq_getX_r(GEOSContextHandle_t extHandle, const CoordinateSequence *s, unsigned int idx, double *val)
 {
 	return GEOSCoordSeq_getOrdinate_r(extHandle, s, idx, 0, val);
 }
 
 int
-GEOSCoordSeq_getY_r(GEOSContextHandle_t extHandle, const CoordinateSequence *s,
-                     unsigned int idx, double *val)
+GEOSCoordSeq_getY_r(GEOSContextHandle_t extHandle, const CoordinateSequence *s, unsigned int idx, double *val)
 {
 	return GEOSCoordSeq_getOrdinate_r(extHandle, s, idx, 1, val);
 }
 
 int
-GEOSCoordSeq_getZ_r(GEOSContextHandle_t extHandle, const CoordinateSequence *s,
-                     unsigned int idx, double *val)
+GEOSCoordSeq_getZ_r(GEOSContextHandle_t extHandle, const CoordinateSequence *s, unsigned int idx, double *val)
 {
 	return GEOSCoordSeq_getOrdinate_r(extHandle, s, idx, 2, val);
 }
 
 int
-GEOSCoordSeq_getSize_r(GEOSContextHandle_t extHandle,
-                       const CoordinateSequence *s, unsigned int *size)
+GEOSCoordSeq_getSize_r(GEOSContextHandle_t extHandle, const CoordinateSequence *s, unsigned int *size)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -2569,8 +2518,7 @@ GEOSCoordSeq_getSize_r(GEOSContextHandle_t extHandle,
 }
 
 int
-GEOSCoordSeq_getDimensions_r(GEOSContextHandle_t extHandle,
-                             const CoordinateSequence *s, unsigned int *dims)
+GEOSCoordSeq_getDimensions_r(GEOSContextHandle_t extHandle, const CoordinateSequence *s, unsigned int *dims)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -2725,8 +2673,7 @@ GEOSGeom_createPoint_r(GEOSContextHandle_t extHandle, CoordinateSequence *cs)
 }
 
 Geometry *
-GEOSGeom_createLinearRing_r(GEOSContextHandle_t extHandle,
-                            CoordinateSequence *cs)
+GEOSGeom_createLinearRing_r(GEOSContextHandle_t extHandle, CoordinateSequence *cs)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -2761,8 +2708,7 @@ GEOSGeom_createLinearRing_r(GEOSContextHandle_t extHandle,
 }
 
 Geometry *
-GEOSGeom_createLineString_r(GEOSContextHandle_t extHandle,
-                            CoordinateSequence *cs)
+GEOSGeom_createLineString_r(GEOSContextHandle_t extHandle, CoordinateSequence *cs)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -2797,8 +2743,7 @@ GEOSGeom_createLineString_r(GEOSContextHandle_t extHandle,
 }
 
 Geometry *
-GEOSGeom_createPolygon_r(GEOSContextHandle_t extHandle, Geometry *shell, 
-                         Geometry **holes, unsigned int nholes)
+GEOSGeom_createPolygon_r(GEOSContextHandle_t extHandle, Geometry *shell, Geometry **holes, unsigned int nholes)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -2936,8 +2881,7 @@ GEOSGeom_getDimensions_r(GEOSContextHandle_t extHandle, const Geometry *g)
 }
 
 Geometry *
-GEOSSimplify_r(GEOSContextHandle_t extHandle, const Geometry *g1, 
-               double tolerance)
+GEOSSimplify_r(GEOSContextHandle_t extHandle, const Geometry *g1, double tolerance)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -2974,8 +2918,7 @@ GEOSSimplify_r(GEOSContextHandle_t extHandle, const Geometry *g1,
 }
 
 Geometry *
-GEOSTopologyPreserveSimplify_r(GEOSContextHandle_t extHandle, 
-                               const Geometry *g1, double tolerance)
+GEOSTopologyPreserveSimplify_r(GEOSContextHandle_t extHandle, const Geometry *g1, double tolerance)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -3091,8 +3034,7 @@ GEOSWKTReader_destroy_r(GEOSContextHandle_t extHandle, WKTReader *reader)
 
 
 Geometry*
-GEOSWKTReader_read_r(GEOSContextHandle_t extHandle, WKTReader *reader, 
-                     const char *wkt)
+GEOSWKTReader_read_r(GEOSContextHandle_t extHandle, WKTReader *reader, const char *wkt)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -3206,8 +3148,7 @@ GEOSWKTWriter_destroy_r(GEOSContextHandle_t extHandle, WKTWriter *Writer)
 
 
 char*
-GEOSWKTWriter_write_r(GEOSContextHandle_t extHandle, WKTWriter *writer, 
-                      const Geometry *geom)
+GEOSWKTWriter_write_r(GEOSContextHandle_t extHandle, WKTWriter *writer, const Geometry *geom)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -3321,8 +3262,7 @@ GEOSWKBReader_destroy_r(GEOSContextHandle_t extHandle, WKBReader *reader)
 
 
 Geometry*
-GEOSWKBReader_read_r(GEOSContextHandle_t extHandle, WKBReader *reader, 
-                     const unsigned char *wkb, size_t size)
+GEOSWKBReader_read_r(GEOSContextHandle_t extHandle, WKBReader *reader, const unsigned char *wkb, size_t size)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -3360,8 +3300,7 @@ GEOSWKBReader_read_r(GEOSContextHandle_t extHandle, WKBReader *reader,
 }
 
 Geometry*
-GEOSWKBReader_readHEX_r(GEOSContextHandle_t extHandle, WKBReader *reader, 
-                        const unsigned char *hex, size_t size)
+GEOSWKBReader_readHEX_r(GEOSContextHandle_t extHandle, WKBReader *reader, const unsigned char *hex, size_t size)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -3477,8 +3416,7 @@ GEOSWKBWriter_destroy_r(GEOSContextHandle_t extHandle, WKBWriter *Writer)
 
 /* The owner owns the result */
 unsigned char*
-GEOSWKBWriter_write_r(GEOSContextHandle_t extHandle, WKBWriter *writer, 
-                      const Geometry *geom, size_t *size)
+GEOSWKBWriter_write_r(GEOSContextHandle_t extHandle, WKBWriter *writer, const Geometry *geom, size_t *size)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -3519,8 +3457,7 @@ GEOSWKBWriter_write_r(GEOSContextHandle_t extHandle, WKBWriter *writer,
 
 /* The owner owns the result */
 unsigned char*
-GEOSWKBWriter_writeHEX_r(GEOSContextHandle_t extHandle, WKBWriter *writer, 
-                         const Geometry *geom, size_t *size)
+GEOSWKBWriter_writeHEX_r(GEOSContextHandle_t extHandle, WKBWriter *writer, const Geometry *geom, size_t *size)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -3561,8 +3498,7 @@ GEOSWKBWriter_writeHEX_r(GEOSContextHandle_t extHandle, WKBWriter *writer,
 }
 
 int
-GEOSWKBWriter_getOutputDimension_r(GEOSContextHandle_t extHandle, 
-                                   const GEOSWKBWriter* writer)
+GEOSWKBWriter_getOutputDimension_r(GEOSContextHandle_t extHandle, const GEOSWKBWriter* writer)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -3590,8 +3526,7 @@ GEOSWKBWriter_getOutputDimension_r(GEOSContextHandle_t extHandle,
 }
 
 void
-GEOSWKBWriter_setOutputDimension_r(GEOSContextHandle_t extHandle, 
-                                   GEOSWKBWriter* writer, int newDimension)
+GEOSWKBWriter_setOutputDimension_r(GEOSContextHandle_t extHandle, GEOSWKBWriter* writer, int newDimension)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -3618,8 +3553,7 @@ GEOSWKBWriter_setOutputDimension_r(GEOSContextHandle_t extHandle,
 }
 
 int
-GEOSWKBWriter_getByteOrder_r(GEOSContextHandle_t extHandle, 
-                             const GEOSWKBWriter* writer)
+GEOSWKBWriter_getByteOrder_r(GEOSContextHandle_t extHandle, const GEOSWKBWriter* writer)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -3647,8 +3581,7 @@ GEOSWKBWriter_getByteOrder_r(GEOSContextHandle_t extHandle,
 }
 
 void
-GEOSWKBWriter_setByteOrder_r(GEOSContextHandle_t extHandle, 
-                             GEOSWKBWriter* writer, int newByteOrder)
+GEOSWKBWriter_setByteOrder_r(GEOSContextHandle_t extHandle, GEOSWKBWriter* writer, int newByteOrder)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -3675,8 +3608,7 @@ GEOSWKBWriter_setByteOrder_r(GEOSContextHandle_t extHandle,
 }
 
 char
-GEOSWKBWriter_getIncludeSRID_r(GEOSContextHandle_t extHandle, 
-                               const GEOSWKBWriter* writer)
+GEOSWKBWriter_getIncludeSRID_r(GEOSContextHandle_t extHandle, const GEOSWKBWriter* writer)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -3704,8 +3636,7 @@ GEOSWKBWriter_getIncludeSRID_r(GEOSContextHandle_t extHandle,
 }
 
 void
-GEOSWKBWriter_setIncludeSRID_r(GEOSContextHandle_t extHandle, 
-                               GEOSWKBWriter* writer, const char newIncludeSRID)
+GEOSWKBWriter_setIncludeSRID_r(GEOSContextHandle_t extHandle, GEOSWKBWriter* writer, const char newIncludeSRID)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -3771,8 +3702,7 @@ GEOSPrepare_r(GEOSContextHandle_t extHandle, const Geometry *g)
 }
 
 void
-GEOSPreparedGeom_destroy_r(GEOSContextHandle_t extHandle, 
-                           const geos::geom::prep::PreparedGeometry *a)
+GEOSPreparedGeom_destroy_r(GEOSContextHandle_t extHandle, const geos::geom::prep::PreparedGeometry *a)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -3813,9 +3743,7 @@ GEOSPreparedGeom_destroy_r(GEOSContextHandle_t extHandle,
 }
 
 char
-GEOSPreparedContains_r(GEOSContextHandle_t extHandle, 
-                       const geos::geom::prep::PreparedGeometry *pg1, 
-                       const Geometry *g2)
+GEOSPreparedContains_r(GEOSContextHandle_t extHandle, const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -3849,9 +3777,7 @@ GEOSPreparedContains_r(GEOSContextHandle_t extHandle,
 }
 
 char
-GEOSPreparedContainsProperly_r(GEOSContextHandle_t extHandle, 
-                               const geos::geom::prep::PreparedGeometry *pg1, 
-                               const Geometry *g2)
+GEOSPreparedContainsProperly_r(GEOSContextHandle_t extHandle, const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -3885,9 +3811,7 @@ GEOSPreparedContainsProperly_r(GEOSContextHandle_t extHandle,
 }
 
 char
-GEOSPreparedCovers_r(GEOSContextHandle_t extHandle, 
-                     const geos::geom::prep::PreparedGeometry *pg1, 
-                     const Geometry *g2)
+GEOSPreparedCovers_r(GEOSContextHandle_t extHandle, const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -3921,9 +3845,7 @@ GEOSPreparedCovers_r(GEOSContextHandle_t extHandle,
 }
 
 char
-GEOSPreparedIntersects_r(GEOSContextHandle_t extHandle, 
-                         const geos::geom::prep::PreparedGeometry *pg1, 
-                         const Geometry *g2)
+GEOSPreparedIntersects_r(GEOSContextHandle_t extHandle, const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
 {
     GEOSContextHandleInternal_t *handle;
 
@@ -3956,4 +3878,4 @@ GEOSPreparedIntersects_r(GEOSContextHandle_t extHandle,
 	}
 }
 
-} //extern "C"
+} /* extern "C" */
