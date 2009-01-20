@@ -22,6 +22,7 @@
 #include <geos/io/WKBWriter.h>
 #include <geos/io/CLocalizer.h>
 #include <geos/operation/overlay/OverlayOp.h>
+#include <geos/operation/union/CascadedPolygonUnion.h>
 
 // Some extra magic to make type declarations in geos_c.h work - for cross-checking of types in header.
 #define GEOSGeometry geos::geom::Geometry
@@ -60,6 +61,8 @@ using geos::io::CLocalizer;
 
 using geos::operation::overlay::OverlayOp;
 using geos::operation::overlay::overlayOp;
+using geos::operation::geounion::CascadedPolygonUnion;
+
 
 typedef std::auto_ptr<Geometry> GeomAutoPtr;
 
@@ -331,6 +334,11 @@ GEOSUnion(const Geometry *g1, const Geometry *g2)
     return GEOSUnion_r( handle, g1, g2 );
 }
 
+Geometry *
+GEOSUnionCascaded(const Geometry *g1)
+{
+	return GEOSUnionCascaded_r( handle, g1 );
+}
 
 Geometry *
 GEOSPointOnSurface(const Geometry *g1)

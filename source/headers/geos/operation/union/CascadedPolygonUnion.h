@@ -127,7 +127,7 @@ public:
      * 
      * @param polys a collection of {@link Polygonal} {@link Geometry}s
      */
-    static geom::Geometry* Union(geom::MultiPolygon* polys);
+    static geom::Geometry* Union(const geom::MultiPolygon* polys);
 
     /**
      * Creates a new instance to union

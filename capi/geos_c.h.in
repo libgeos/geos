@@ -390,6 +390,8 @@ extern GEOSGeometry GEOS_DLL *GEOSSymDifference(const GEOSGeometry* g1,
 	const GEOSGeometry* g2);
 extern GEOSGeometry GEOS_DLL *GEOSBoundary(const GEOSGeometry* g1);
 extern GEOSGeometry GEOS_DLL *GEOSUnion(const GEOSGeometry* g1, const GEOSGeometry* g2);
+extern GEOSGeometry GEOS_DLL *GEOSUnionCascaded(const GEOSGeometry* g1);
+
 extern GEOSGeometry GEOS_DLL *GEOSPointOnSurface(const GEOSGeometry* g1);
 extern GEOSGeometry GEOS_DLL *GEOSGetCentroid(const GEOSGeometry* g);
 extern char GEOS_DLL *GEOSRelate(const GEOSGeometry* g1, const GEOSGeometry* g2);
@@ -415,6 +417,7 @@ extern GEOSGeometry GEOS_DLL *GEOSBoundary_r(GEOSContextHandle_t handle,
 extern GEOSGeometry GEOS_DLL *GEOSUnion_r(GEOSContextHandle_t handle,
                                           const GEOSGeometry* g1,
                                           const GEOSGeometry* g2);
+extern GEOSGeometry GEOS_DLL *GEOSUnionCascaded_r(GEOSContextHandle_t handle, const GEOSGeometry* g1);
 extern GEOSGeometry GEOS_DLL *GEOSPointOnSurface_r(GEOSContextHandle_t handle,
                                                    const GEOSGeometry* g1);
 extern GEOSGeometry GEOS_DLL *GEOSGetCentroid_r(GEOSContextHandle_t handle,

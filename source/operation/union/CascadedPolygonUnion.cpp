@@ -38,7 +38,7 @@ geom::Geometry* CascadedPolygonUnion::Union(std::vector<geom::Polygon*>* polys)
     return op.Union();
 }
 
-geom::Geometry* CascadedPolygonUnion::Union(geom::MultiPolygon* multipoly)
+geom::Geometry* CascadedPolygonUnion::Union(const geom::MultiPolygon* multipoly)
 {
     std::vector<geom::Polygon*> polys;
     

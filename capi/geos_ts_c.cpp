@@ -42,6 +42,7 @@
 #include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/operation/overlay/OverlayOp.h>
+#include <geos/operation/union/CascadedPolygonUnion.h>
 #include <geos/geom/BinaryOp.h>
 #include <geos/version.h> 
 
@@ -94,6 +95,7 @@ using geos::io::CLocalizer;
 
 using geos::operation::overlay::OverlayOp;
 using geos::operation::overlay::overlayOp;
+using geos::operation::geounion::CascadedPolygonUnion;
 
 typedef std::auto_ptr<Geometry> GeomAutoPtr;
 
@@ -1496,6 +1498,43 @@ GEOSUnion_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g
 	}
 }
 
+Geometry *
+GEOSUnionCascaded_r(GEOSContextHandle_t extHandle, const Geometry *g1)
+{
+    GEOSContextHandleInternal_t *handle;
+
+    if( extHandle == NULL )
+    {
+        return NULL;
+    }
+
+    handle = (GEOSContextHandleInternal_t*)extHandle;
+    if( handle->initialized == 0 )
+    {
+        return NULL;
+    }
+
+	try{
+		const geos::geom::MultiPolygon *p = dynamic_cast<const geos::geom::MultiPolygon *>(g1);
+		if ( ! p ) 
+		{
+			handle->ERROR_MESSAGE("Invalid argument (must be a MultiPolygon)");
+			return NULL;
+		}
+        using geos::operation::geounion::CascadedPolygonUnion;
+		return CascadedPolygonUnion::Union(p);
+	}
+	catch (const std::exception &e)
+	{
+		handle->ERROR_MESSAGE("%s", e.what());
+		return NULL;
+	}
+	catch (...)
+	{
+		handle->ERROR_MESSAGE("Unknown exception thrown");
+		return NULL;
+	}
+}
 
 Geometry *
 GEOSPointOnSurface_r(GEOSContextHandle_t extHandle, const Geometry *g1)
@@ -1520,7 +1559,7 @@ GEOSPointOnSurface_r(GEOSContextHandle_t extHandle, const Geometry *g1)
                 {
                     const GeometryFactory *gf;
                     gf=handle->geomFactory;
-
+					// return an empty collection 
                     return gf->createGeometryCollection();
                 }
 		return ret;
