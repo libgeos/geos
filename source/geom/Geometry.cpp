@@ -474,8 +474,6 @@ IntersectionMatrix*
 Geometry::relate(const Geometry *other) const
 	//throw(IllegalArgumentException *)
 {
-	checkNotGeometryCollection(this);
-	checkNotGeometryCollection(other);
 	return RelateOp::relate(this, other);
 }
 
@@ -527,8 +525,6 @@ Geometry::convexHull() const
 Geometry*
 Geometry::intersection(const Geometry *other) const
 {
-	checkNotGeometryCollection(this);
-	checkNotGeometryCollection(other);
 	return OverlayOp::overlayOp(this, other, OverlayOp::opINTERSECTION);
 }
 
@@ -536,9 +532,6 @@ Geometry*
 Geometry::Union(const Geometry *other) const
 	//throw(TopologyException *, IllegalArgumentException *)
 {
-	checkNotGeometryCollection(this);
-	checkNotGeometryCollection(other);
-
 	Geometry *out = NULL;
 
 #ifdef SHORTCIRCUIT_PREDICATES
@@ -581,16 +574,12 @@ Geometry*
 Geometry::difference(const Geometry *other) const
 	//throw(IllegalArgumentException *)
 {
-	checkNotGeometryCollection(this);
-	checkNotGeometryCollection(other);
 	return OverlayOp::overlayOp(this, other, OverlayOp::opDIFFERENCE);
 }
 
 Geometry*
 Geometry::symDifference(const Geometry *other) const
 {
-	checkNotGeometryCollection(this);
-	checkNotGeometryCollection(other);
 	return OverlayOp::overlayOp(this, other, OverlayOp::opSYMDIFFERENCE);
 }
 
