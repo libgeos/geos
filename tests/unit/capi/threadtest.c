@@ -1,6 +1,6 @@
 /************************************************************************
  *
- * $Id: geostest.c 1892 2006-11-02 10:02:59Z strk $
+ * $Id$
  *
  * Multithreaded test for C-Wrapper of GEOS library
  *
