@@ -650,6 +650,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\..\source\geom\util\GeometryCombiner.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\source\geom\util\GeometryEditor.cpp"
 						>
 					</File>
@@ -1424,6 +1428,14 @@
 						>
 					</File>
 				</Filter>
+				<Filter
+					Name="union"
+					>
+					<File
+						RelativePath="..\..\..\source\operation\union\CascadedPolygonUnion.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="precision"
@@ -1947,6 +1959,10 @@
 							</File>
 							<File
 								RelativePath="..\..\..\source\headers\geos\geom\util\CoordinateOperation.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\source\headers\geos\geom\util\GeometryCombiner.h"
 								>
 							</File>
 							<File
@@ -2574,6 +2590,14 @@
 								>
 							</File>
 						</Filter>
+						<Filter
+							Name="union"
+							>
+							<File
+								RelativePath="..\..\..\source\headers\geos\operation\union\CascadedPolygonUnion.h"
+								>
+							</File>
+						</Filter>
 					</Filter>
 					<Filter
 						Name="util"
@@ -2999,6 +3023,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\capi\geos_c.h.in"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\capi\geos_ts_c.cpp"
 				>
 			</File>
 		</Filter>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="windows-1250"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="geos_c_dll"
 	ProjectGUID="{CDBC2FB8-2995-49DE-B80B-B7BE0E4C1115}"
 	RootNamespace="geos_c_dll"
@@ -209,6 +209,10 @@
 						Outputs="$(InputDir)$(InputName)"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\capi\geos_ts_c.cpp"
+				>
 			</File>
 		</Filter>
 	</Files>

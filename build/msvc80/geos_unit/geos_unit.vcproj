@@ -408,6 +408,14 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="union"
+				>
+				<File
+					RelativePath="..\..\..\tests\unit\operation\union\CascadedPolygonUnionTest.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="precision"
@@ -429,12 +437,48 @@
 			Name="capi"
 			>
 			<File
+				RelativePath="..\..\..\tests\unit\capi\badthreadtest.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\..\tests\unit\capi\GEOSCoordSeqTest.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\tests\unit\capi\GEOSSimplifyTest.cpp"
 				>
+			</File>
+			<File
+				RelativePath="..\..\..\tests\unit\capi\geostest.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\tests\unit\capi\threadtest.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<File
