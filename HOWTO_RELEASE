@@ -14,8 +14,7 @@
      - VERSION_MAJOR for SUBSTANTIAL additions or C lib ABI break
        [ THIS MUST BE CAREFULLY AVOIDED ]
    
-3: Release-mark the ChangeLog (search for '---' at start of a line to 
-   see how a release mark looks like).
+3: Update the ChangeLog by running svn2cl. Commit the new ChangeLog
 
 4: Update the NEWS file (extract most important things from the ChangeLog)
 
