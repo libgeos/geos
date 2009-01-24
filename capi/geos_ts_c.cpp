@@ -47,6 +47,7 @@
 #include <geos/version.h> 
 
 // This should go away
+#include <cstddef>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -564,17 +565,15 @@ GEOSisValidReason_r(GEOSContextHandle_t extHandle, const Geometry *g1)
     try {
         char *result = NULL;
 		char *validstr = "Valid Geometry";
-		int validstrlen = std::strlen(validstr) + 1;
+		const std::size_t validstrlen = std::strlen(validstr) + 1;
         bool isvalid = ivo.isValid();
         if ( ! isvalid )
         {
-            int msglen = 0;
-            int loclen = 0;
             TopologyValidationError *err = ivo.getValidationError();
             std::string errmsg = err->getMessage();
             std::string errloc = err->getCoordinate().toString();
-            msglen = errmsg.length();
-            loclen = errloc.length();
+            const std::size_t msglen = errmsg.length();
+            const std::size_t loclen = errloc.length();
             result = (char*)std::malloc(msglen + loclen + 3);
             sprintf(result, "%s [%s]", errmsg.c_str(), errloc.c_str());
         }
@@ -1651,7 +1650,7 @@ GEOSGetNumCoordinates_r(GEOSContextHandle_t extHandle, const Geometry *g1)
     }
 
 	try{
-		return g1->getNumPoints();
+		return static_cast<int>(g1->getNumPoints());
 	}
 	catch (const std::exception &e)
 	{
@@ -1726,7 +1725,7 @@ GEOSGetNumInteriorRings_r(GEOSContextHandle_t extHandle, const Geometry *g1)
                         handle->ERROR_MESSAGE("Argument is not a Polygon");
                         return -1;
                 }
-		return p->getNumInteriorRing();
+		return static_cast<int>(p->getNumInteriorRing());
 	}
 	catch (const std::exception &e)
 	{
@@ -1760,7 +1759,7 @@ GEOSGetNumGeometries_r(GEOSContextHandle_t extHandle, const Geometry *g1)
     }
 
 	try{
-		return g1->getNumGeometries();
+		return static_cast<int>(g1->getNumGeometries());
 	}
 	catch (const std::exception &e)
 	{
@@ -2265,7 +2264,7 @@ GEOSHasZ_r(GEOSContextHandle_t extHandle, const Geometry *g)
 	if ( g->isEmpty() ) return false;
 	double az = g->getCoordinate()->z;
 	//handle->ERROR_MESSAGE("ZCoord: %g", az);
-	return FINITE(az);
+	return static_cast<char>(FINITE(az));
 }
 
 int
@@ -2539,7 +2538,7 @@ GEOSCoordSeq_getSize_r(GEOSContextHandle_t extHandle, const CoordinateSequence *
     }
 
 	try {
-		int sz = s->getSize();
+        std::size_t sz = s->getSize();
 		*size = static_cast<unsigned int>(sz);
 		return 1;
 	}
@@ -2573,8 +2572,8 @@ GEOSCoordSeq_getDimensions_r(GEOSContextHandle_t extHandle, const CoordinateSequ
     }
 
 	try {
-		unsigned int dm = s->getDimension();
-		*dims = dm;
+        std::size_t dim = s->getDimension();
+		*dims = static_cast<unsigned int>(dim);
 		return 1;
 	}
 	catch (const std::exception &e)
@@ -2874,17 +2873,21 @@ GEOSGeom_getDimensions_r(GEOSContextHandle_t extHandle, const Geometry *g)
 
     using geos::geom::GeometryCollection;
     using geos::geom::Point;
+
+    std::size_t dim = 0;
 	try {
 		const LineString *ls = dynamic_cast<const LineString *>(g);
 		if ( ls )
 		{
-			return ls->getCoordinatesRO()->getDimension();
+            dim = ls->getCoordinatesRO()->getDimension();
+			return static_cast<int>(dim);
 		}
 
 		const Point *p = dynamic_cast<const Point *>(g);
 		if ( p )
 		{
-			return p->getCoordinatesRO()->getDimension();
+            dim = p->getCoordinatesRO()->getDimension();
+			return static_cast<int>(dim);
 		}
 
 		const Polygon *poly = dynamic_cast<const Polygon *>(g);
@@ -2892,7 +2895,6 @@ GEOSGeom_getDimensions_r(GEOSContextHandle_t extHandle, const Geometry *g)
 		{
 			return GEOSGeom_getDimensions_r(extHandle, poly->getExteriorRing());
 		}
-
 
 		const GeometryCollection *coll =
 			dynamic_cast<const GeometryCollection *>(g);
@@ -3664,7 +3666,8 @@ GEOSWKBWriter_getIncludeSRID_r(GEOSContextHandle_t extHandle, const GEOSWKBWrite
 
 	try
 	{
-		return writer->getIncludeSRID();
+		int srid = writer->getIncludeSRID();
+        return static_cast<char>(srid);
 	}
 
 	catch (...)
