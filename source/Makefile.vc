@@ -102,6 +102,7 @@ OBJ = \
 	geom\util\CoordinateOperation.obj \
 	geom\util\GeometryEditor.obj \
 	geom\util\GeometryTransformer.obj \
+	geom\util\GeometryCombiner.obj \
 	geom\util\ShortCircuitedGeometryVisitor.obj \
 	geom\prep\AbstractPreparedPolygonContains.obj \
 	geom\prep\BasicPreparedGeometry.obj \
@@ -256,6 +257,7 @@ OBJ = \
 	operation\relate\RelateNodeFactory.obj \
 	operation\relate\RelateNodeGraph.obj \
 	operation\relate\RelateOp.obj \
+	operation\union\CascadedPolygonUnion.obj \
 	operation\valid\ConnectedInteriorTester.obj \
 	operation\valid\ConsistentAreaTester.obj \
 	operation\valid\IsValidOp.obj \
