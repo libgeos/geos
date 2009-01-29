@@ -4,7 +4,7 @@ REM
 REM This script generates headers for use with Visual C++ only
 REM
 REM Usage:
-REM .\bootstrap.bat
+REM .\autogen.bat
 REM nmake -f makefile.vc
 REM
 REM NOTE: DO NOT include this script in GEOS sources distribution
