@@ -5,9 +5,5 @@
 # is not able to detect required build order but blindly
 # relies on the order items in SUBDIRS appear.
 #
-SUBDIRS = 	\
-	msvc80 \
-	msvc90
-
-EXTRA_DIST = README
-
+EXTRA_DIST = \
+	geos_ruby.vcproj

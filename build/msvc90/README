@@ -1,0 +1,36 @@
+$Id$
+-------------------------------------------------------------------------------
+Visual C++ 2008 project for GEOS
+Author: Mateusz Loskot (mateusz@loskot.net)
+-------------------------------------------------------------------------------
+
+This directory consists of solution and project files for
+Visual C++ 2008 (all editions).
+
+The solution includes following projects:
+geos.sln - main solution file
+geos_lib - builds GEOS C and C++ API as static library
+geos_c_dll - builds GEOS C API library as DLL, links to geos_lib project
+geos_unit - GEOS Unit Test Suite project, unit tests run as post-build event
+
+Usage:
+1. Open geos.sln in Visual C++ 2008 IDE
+2. Run Build -> Build solution
+3. After all, you should see output binaries in 'build\msvc90\debug' or
+   'build\msvc90\release', depending on selected build configuration
+
+Output binaries:
+1. Debug - file names are <filename>d.ext, where 'd' indicates debug compilation
+
+- geosd.lib - static library
+- geosd_c.dll - DLL
+- geosd_c_i.lib - import library for DLL
+- geos_unitd.exe - unit test runner
+
+2. Release
+
+- geos.lib - static library
+- geos_c.dll - DLL
+- geos_c_i.lib - import library for DLL
+- geos_unit.exe - unit test runner
+

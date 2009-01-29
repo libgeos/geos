@@ -5,9 +5,14 @@
 # is not able to detect required build order but blindly
 # relies on the order items in SUBDIRS appear.
 #
-SUBDIRS = 	\
-	msvc80 \
-	msvc90
+SUBDIRS = \
+	geos_c_dll \
+	geos_lib \
+	geos_python \
+	geos_ruby \
+	geos_unit
 
-EXTRA_DIST = README
-
+EXTRA_DIST = \
+	README \
+	geos.sln \
+	geos.vsprops
