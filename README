@@ -13,9 +13,11 @@ Win32
 -----
 
 If you use Microsoft Visual C++ (7.1 or later) compiler, you can build 
-GEOS using NMAKE program and provided makefile.vc files:
+GEOS using NMAKE program and provided makefile.vc files.
 
-  bootstrap.bat
+If you are building from SVN checkout, first run: autogen.bat
+Then:
+
   nmake /f makefile.vc MSVC_VER=1400
 
 where 1400 is version number of Visual C++ compiler, here Visual C++ 8.0 
