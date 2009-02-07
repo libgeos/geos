@@ -14,9 +14,9 @@ geos_HEADERS = 					\
 	CommonBitsOp.h				\
 	CommonBitsRemover.h			\
 	EnhancedPrecisionOp.h			\
+	GeometrySnapper.h			\
 	SimpleGeometryPrecisionReducer.h
 
 noinst_HEADERS = 				\
 	CommonBits.h				\
-	GeometrySnapper.h			\
 	LineStringSnapper.h
