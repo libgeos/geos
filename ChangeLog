@@ -1,3 +1,91 @@
+2009-02-07 23:29  pramsey
+
+	* source/headers/geos/precision/Makefile.am: Include
+	  GeometrySnapper.h in distribution package.
+
+2009-02-02 22:58  sgillies
+
+	* swig/python/README.txt: Note lack of Python support since 3.0
+
+2009-02-02 22:53  sgillies
+
+	* README: Notes on state of scripting language bindings
+
+2009-01-30 20:01  pramsey
+
+	* configure.in: Add new msvc targets to build
+
+2009-01-29 19:22  mloskot
+
+	* build/Makefile.am, build/msvc90, build/msvc90/Makefile.am,
+	  build/msvc90/README, build/msvc90/geos.sln,
+	  build/msvc90/geos.vsprops, build/msvc90/geos_c_dll,
+	  build/msvc90/geos_c_dll/Makefile.am,
+	  build/msvc90/geos_c_dll/geos_c_dll.vcproj, build/msvc90/geos_lib,
+	  build/msvc90/geos_lib/Makefile.am,
+	  build/msvc90/geos_lib/geos_lib.vcproj, build/msvc90/geos_python,
+	  build/msvc90/geos_python/Makefile.am,
+	  build/msvc90/geos_python/geos_python.vcproj,
+	  build/msvc90/geos_ruby, build/msvc90/geos_ruby/Makefile.am,
+	  build/msvc90/geos_ruby/geos_ruby.vcproj, build/msvc90/geos_unit,
+	  build/msvc90/geos_unit/Makefile.am,
+	  build/msvc90/geos_unit/geos_unit.vcproj: Added build/msvc90 with
+	  solution and project files for Microsoft Visual C++ 2009 (9.0).
+	  Successfully built and tested GEOS with Visual C++ 9.0.
+
+2009-01-29 19:02  pramsey
+
+	* README: update autogen.bat ref
+
+2009-01-29 18:56  mloskot
+
+	* source/headers/geos/algorithm/RayCrossingCounter.h,
+	  source/headers/geos/algorithm/locate/IndexedPointInAreaLocator.h,
+	  source/headers/geos/algorithm/locate/PointOnGeometryLocator.h,
+	  source/headers/geos/geom/util/ComponentCoordinateExtracter.h,
+	  source/headers/geos/index/intervalrtree/IntervalRTreeBranchNode.h,
+	  source/headers/geos/index/intervalrtree/IntervalRTreeLeafNode.h,
+	  source/headers/geos/index/intervalrtree/IntervalRTreeNode.h,
+	  source/headers/geos/index/intervalrtree/SortedPackedIntervalRTree.h,
+	  source/headers/geos/noding/FastSegmentSetIntersectionFinder.h,
+	  source/headers/geos/noding/NodableSegmentString.h,
+	  source/headers/geos/noding/NodedSegmentString.h,
+	  source/headers/geos/noding/SegmentIntersectionDetector.h,
+	  source/headers/geos/noding/SegmentStringUtil.h: Fixed broken
+	  svn:keyword Id
+
+2009-01-29 18:51  mloskot
+
+	* autogen.bat, bootstrap.bat: Renamed bootstrap.bat to autogen.bat
+	  for easier guass of the script purpose. Wiki updated.
+
+2009-01-28 01:06  pramsey
+
+	* README: Add to win32 instructions
+
+2009-01-27 18:10  pramsey
+
+	* source/headers/geos/geom/util/Makefile.am: Add GeometryCombiner.h
+	  to include dist
+
+2009-01-27 00:18  pramsey
+
+	* build/msvc80/geos_c_dll/geos_c_dll.vcproj: Revert some junk from
+	  an old commit, per issue #220
+
+2009-01-26 20:44  warmerdam
+
+	* source/Makefile.vc: added two new files related to cascaded
+	  polygon union (#226)
+
+2009-01-24 05:03  pramsey
+
+	* HOWTO_RELEASE: Update
+
+2009-01-24 05:02  pramsey
+
+	* ChangeLog: Update changelog
+
 2009-01-24 01:33  mloskot
 
 	* capi/geos_ts_c.cpp: Fixed mixed signed/unsigned integral types in
