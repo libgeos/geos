@@ -1,3 +1,17 @@
+Changes in 3.1.0
+
+- PreparedGeometry operations for very fast predicate testing.
+  - Intersects()
+  - Covers() 
+  - CoveredBy()
+  - ContainsProperly()
+- Easier builds under MSVC and OpenSolaris
+- Thread-safe CAPI option
+- IsValidReason added to CAPI
+- CascadedUnion operation for fast unions of geometry sets
+- Numerous bug fixes.
+  http://trac.osgeo.org/geos/query?status=closed&milestone=3.1.0&order=priority
+
 Changes in 3.0.0
 
    These are mostly ABI breaking changes.
