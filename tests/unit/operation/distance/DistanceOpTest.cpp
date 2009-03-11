@@ -7,11 +7,12 @@
 // GEOS
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/platform.h>
+#include <geos/geom/Coordinate.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
 #include <geos/algorithm/PointLocator.h>
 #include <geos/io/WKTReader.h>
-#include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <memory>
 #include <vector>
 
@@ -30,14 +31,9 @@ namespace tut
 		typedef geos::geom::Geometry::AutoPtr GeomPtr;
 
 		test_distanceop_data()
-			:
-			gf(),
-			wktreader(&gf)
-		{
-		}
-
+            : gf(), wktreader(&gf)
+		{}
 	};
-	
 
 	typedef test_group<test_distanceop_data> group;
 	typedef group::object object;
@@ -47,7 +43,6 @@ namespace tut
 	//
 	// Test Cases
 	//
-
 	template<>
 	template<>
 	void object::test<1>()
@@ -65,7 +60,8 @@ namespace tut
 
 		// TODO: test closestPoints() and
 		//       closestLocations()
-
+        geos::geom::CoordinateSequence* coords = dist.closestPoints();
+        ensure(0 != coords);
 	}
 
 	template<>
@@ -378,6 +374,28 @@ namespace tut
 		// TODO: test closestPoints() and
 		//       closestLocations()
 
+	}
+
+    // Test for crash reported in Ticket #236:
+    // http://trac.osgeo.org/geos/ticket/236
+	template<>
+	template<>
+	void object::test<17>()
+	{
+		using geos::operation::distance::DistanceOp;
+
+		std::string wkt0("POLYGON((0 0, 0 1, 1 1, 1 0, 0 0))");
+		std::string wkt1("POLYGON((1.25 0.25, 1.25 0.75, 1.75 0.75, 1.75 0.25, 1.25 0.25))");
+
+		GeomPtr g0(wktreader.read(wkt0));
+		GeomPtr g1(wktreader.read(wkt1));
+
+		DistanceOp dist(g0.get(), g1.get());
+		ensure_equals(dist.distance(), 0.25);
+
+        // FIXME: This operation crashes becasue of both GeometryLocation's are NULL
+        //        in DistanceOp::closestPoints()
+        //geos::geom::CoordinateSequence* cs dist.closestPoints();
 	}
 
 	// TODO: finish the tests by adding:

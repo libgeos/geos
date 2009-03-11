@@ -109,10 +109,27 @@ DistanceOp::distance()
 CoordinateSequence*
 DistanceOp::closestPoints()
 {
-	computeMinDistance();
-	CoordinateSequence* closestPts=new CoordinateArraySequence();
-	closestPts->add((*minDistanceLocation)[0]->getCoordinate());
-	closestPts->add((*minDistanceLocation)[1]->getCoordinate());
+    assert(0 != minDistanceLocation);
+    std::vector<GeometryLocation*>& locs = *minDistanceLocation;
+
+    computeMinDistance();
+
+    // FIXME: This code (refactored to make the bug visible) causes
+    //        crash reported in Ticket #236
+    // NOTE: In order to reproduce, uncomment test case test<17>
+    //       in tests/unit/operation/distance/DistanceOpTest.cpp        
+    GeometryLocation* loc0 = locs[0];
+    GeometryLocation* loc1 = locs[1];
+    // Assertion fails, so...
+    assert(0 != loc0 && 0 != loc1);
+    // ...accesss violation is thrown.
+    Coordinate& c0 = loc0->getCoordinate();
+    Coordinate& c1 = loc1->getCoordinate();
+
+    CoordinateSequence* closestPts = new CoordinateArraySequence();
+	closestPts->add(c0);
+	closestPts->add(c1);
+
 	return closestPts;
 }
 
