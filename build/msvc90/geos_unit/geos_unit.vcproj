@@ -452,6 +452,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\tests\unit\capi\GEOSGeomFromWKBTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\tests\unit\capi\GEOSGeomToWKTTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\tests\unit\capi\GEOSPolygonizer_getCutEdgesTest.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\tests\unit\capi\GEOSSimplifyTest.cpp"
 				>
 			</File>

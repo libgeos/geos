@@ -28,6 +28,8 @@
 #include <memory>
 #include <cstdlib>
 #include <cassert>
+#include <string>
+#include <vector>
 // tut
 #include <tut.h>
 
@@ -214,6 +216,30 @@ inline void ensure_equals_geometry(geos::geom::Geometry const* lhs,
     geos::geom::Geometry const& pg = rhs->getGeometry();
     ensure_equals_geometry(lhs, &pg);
 }
+
+//
+// Utility functions
+//
+
+// Decodes hex-encoded WKB/EWKB to raw binary.
+struct wkb_hex_decoder
+{
+    typedef std::vector<unsigned char> binary_type;
+
+    // bytes [out] - buffer for binary output
+    static void decode(std::string const& hexstr, binary_type& bytes)
+    {
+        bytes.clear();
+        for(std::string::size_type i = 0; i < hexstr.size() / 2; ++i)
+        {
+            std::istringstream iss(hexstr.substr(i * 2, 2));
+            unsigned int n;
+            iss >> std::hex >> n;
+            bytes.push_back(static_cast<unsigned char>(n));
+        }
+    }
+};
+
 
 } // namespace tut
 
