@@ -21,7 +21,7 @@ for aclocal in aclocal aclocal-1.10 aclocal-1.9; do
     fi
 done
 if [ ! $ACLOCAL ]; then
-    echo "Missingn aclocal!"
+    echo "Missing aclocal!"
     exit
 fi
 
@@ -32,7 +32,7 @@ for automake in automake automake-1.10 automake-1.9; do
     fi
 done
 if [ ! $AUTOMAKE ]; then
-    echo "Missingn automake!"
+    echo "Missing automake!"
     exit
 fi
 
@@ -44,7 +44,7 @@ for libtoolize in glibtoolize libtoolize; do
     fi
 done
 if [ ! $LIBTOOLIZE ]; then
-    echo "Missingn libtoolize!"
+    echo "Missing libtoolize!"
     exit
 fi
 
