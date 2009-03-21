@@ -528,43 +528,49 @@ GEOSisValidReason_r(GEOSContextHandle_t extHandle, const Geometry *g1)
         return NULL;
     }
 
-    using geos::operation::valid::IsValidOp;
-    using geos::operation::valid::TopologyValidationError;
-    IsValidOp ivo(g1);
-    try {
-        char *result = NULL;
-		char *validstr = "Valid Geometry";
+    try
+    {
+        using geos::operation::valid::IsValidOp;
+        using geos::operation::valid::TopologyValidationError;
+
+        char* result = 0;
+		char const* const validstr = "Valid Geometry";
 		const std::size_t validstrlen = std::strlen(validstr) + 1;
+
+        IsValidOp ivo(g1);
         bool isvalid = ivo.isValid();
         if ( ! isvalid )
         {
             TopologyValidationError *err = ivo.getValidationError();
             std::string errmsg = err->getMessage();
             std::string errloc = err->getCoordinate().toString();
-            const std::size_t msglen = errmsg.length();
-            const std::size_t loclen = errloc.length();
-            result = (char*)std::malloc(msglen + loclen + 3);
-            sprintf(result, "%s [%s]", errmsg.c_str(), errloc.c_str());
+
+            const std::size_t resultlen = errmsg.length() + errloc.length() + 3;
+            result = static_cast<char*>(std::malloc(resultlen));
+            if (0 != result)
+            {
+                std::memset(result, '\0', resultlen);
+                sprintf(result, "%s [%s]", errmsg.c_str(), errloc.c_str());
+            }
         }
-        else {
-			result = (char*)std::malloc(validstrlen);
+        else
+        {
+			result = static_cast<char*>(std::malloc(validstrlen));
 			std::memcpy(result, validstr, validstrlen);
         }
+
         return result;
     }
-
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return NULL;
     }
-
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return NULL;
     }
 
+    return 0;
 }
 
 //-----------------------------------------------------------------
