@@ -87,30 +87,30 @@ EdgeRing::findEdgeRingContaining(EdgeRing *testEr,
 /*public static*/
 const Coordinate&
 EdgeRing::ptNotInList(const CoordinateSequence *testPts,
-	const CoordinateSequence *pts)
+                      const CoordinateSequence *pts)
 {
-	unsigned int npts=testPts->getSize();
-	for (unsigned int i=0; i<npts; ++i)
-	{
-		const Coordinate& testPt=testPts->getAt(i);
-		if (isInList(testPt, pts))
-			return testPt;
-	}
-	return Coordinate::getNull();
+    const std::size_t npts = testPts->getSize();
+    for (std::size_t i = 0; i < npts; ++i)
+    {
+        const Coordinate& testPt = testPts->getAt(i);
+        if (isInList(testPt, pts))
+            return testPt;
+    }
+    return Coordinate::getNull();
 }
 
 /*public static*/
 bool
 EdgeRing::isInList(const Coordinate& pt,
-	const CoordinateSequence *pts)
+                   const CoordinateSequence *pts)
 {
-	unsigned int npts=pts->getSize();
-	for (unsigned int i=0; i<npts; ++i)
-	{
-		if (pt==pts->getAt(i))
-			return false;
-	}
-	return true;
+    const std::size_t npts = pts->getSize();
+    for (std::size_t i = 0; i < npts; ++i)
+    {
+        if (pt == pts->getAt(i))
+            return false;
+    }
+    return true;
 }
 
 /*public*/
@@ -236,19 +236,23 @@ EdgeRing::getRingOwnership()
 /*private*/
 void
 EdgeRing::addEdge(const CoordinateSequence *coords, bool isForward,
-	CoordinateSequence *coordList)
+                  CoordinateSequence *coordList)
 {
-	unsigned int npts=coords->getSize();
-	if (isForward) {
-		for (unsigned int i=0; i<npts; ++i)
-		{
-			coordList->add(coords->getAt(i), false);
-		}
-	} else {
-		for (unsigned int i=npts; i>0; --i) {
-			coordList->add(coords->getAt(i-1), false);
-		}
-	}
+    const std::size_t npts=coords->getSize();
+    if (isForward)
+    {
+        for (std::size_t i = 0; i < npts; ++i)
+        {
+            coordList->add(coords->getAt(i), false);
+        }
+    }
+    else
+    {
+        for (std::size_t i = npts; i > 0; --i)
+        {
+            coordList->add(coords->getAt(i-1), false);
+        }
+    }
 }
 
 } // namespace geos.operation.polygonize
