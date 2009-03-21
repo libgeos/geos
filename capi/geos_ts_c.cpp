@@ -117,6 +117,25 @@ extern "C" char GEOS_DLL *GEOSasText(Geometry *g1);
 
 extern "C" {
 
+char* gstrdup_s(const char* str, const std::size_t size)
+{
+    char* out = static_cast<char*>(std::malloc(size + 1));
+    if (0 != out)
+    {
+        // as no strlen call necessary, memcpy may be faster than strcpy
+        std::memcpy(out, str, size + 1);
+    }
+
+    assert(0 != out);
+    return out;
+}
+
+char* gstrdup(std::string const& str)
+{
+    return gstrdup_s(str.c_str(), str.size());
+}
+
+
 GEOSContextHandle_t
 initGEOS_r(GEOSMessageHandler nf, GEOSMessageHandler ef)
 {
@@ -174,13 +193,13 @@ GEOSDisjoint_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return 2;
     }
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return 2;
     }
+
+    return 2;
 }
 
 char
@@ -302,13 +321,13 @@ GEOSWithin_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return 2;
     }
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return 2;
     }
+    
+    return 2;
 }
 
 // call g1->contains(g2)
@@ -338,13 +357,13 @@ GEOSContains_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return 2;
     }
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return 2;
     }
+    
+    return 2;
 }
 
 char
@@ -370,13 +389,13 @@ GEOSOverlaps_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return 2;
     }
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return 2;
     }
+    
+    return 2;
 }
 
 
@@ -408,13 +427,13 @@ GEOSRelatePattern_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geo
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return 2;
     }
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return 2;
     }
+    
+    return 2;
 }
 
 char *
@@ -436,16 +455,15 @@ GEOSRelate_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *
     {
         using geos::geom::IntersectionMatrix;
 
-        IntersectionMatrix *im = g1->relate(g2);
-        if (im == NULL)
-                return NULL;
-        
-        std::string s(im->toString());
-        char *result = NULL;
-        result = (char*) std::malloc( s.length() + 1);
-        std::strcpy(result, s.c_str() );
-        delete im;
+        IntersectionMatrix* im = g1->relate(g2);
+        if (0 == im)
+        {
+            return 0;
+        }
+       
+        char *result = gstrdup(im->toString());
 
+        delete im;
         return result;
     }
     catch (const std::exception &e)
