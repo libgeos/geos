@@ -54,13 +54,13 @@ if test "$OSTYPE" = "IRIX" -o "$OSTYPE" = "IRIX64"; then
    AMFLAGS=$AMFLAGS" --include-deps";
 fi
 
-echo "Running aclocal -I macros"
+echo "Running $ACLOCAL -I macros"
 $ACLOCAL -I macros || giveup
 echo "Running autoheader"
 autoheader || giveup
-echo "Running libtoolize"
+echo "Running $LIBTOOLIZE --force --copy"
 $LIBTOOLIZE --force --copy || giveup
-echo "Running automake"
+echo "Running $AUTOMAKE $AMFLAGS"
 $AUTOMAKE $AMFLAGS # || giveup
 echo "Running autoconf"
 autoconf || giveup
