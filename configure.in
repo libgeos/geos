@@ -64,7 +64,7 @@ AC_CHECK_HEADERS([unistd.h])
 AC_CHECK_HEADERS([ieeefp.h])
 AC_CHECK_HEADERS([sys/file.h])
 AC_CHECK_HEADERS([sys/time.h])
-AC_CHECK_FUNCS([strchr memcpy gettimeofday[)
+AC_CHECK_FUNCS([strchr memcpy gettimeofday])
 AC_HEADER_STAT
 AC_STRUCT_TM
 AC_TYPE_SIZE_T
