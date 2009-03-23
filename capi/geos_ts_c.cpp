@@ -3535,7 +3535,7 @@ GEOSWKBWriter_setOutputDimension_r(GEOSContextHandle_t extHandle, GEOSWKBWriter*
     {
         try
         {
-            return writer->setOutputDimension(newDimension);
+            writer->setOutputDimension(newDimension);
         }
         catch (...)
         {
@@ -3590,7 +3590,7 @@ GEOSWKBWriter_setByteOrder_r(GEOSContextHandle_t extHandle, GEOSWKBWriter* write
     {
         try
         {
-            return writer->setByteOrder(newByteOrder);
+            writer->setByteOrder(newByteOrder);
         }
         catch (...)
         {
@@ -3664,17 +3664,18 @@ GEOSPrepare_r(GEOSContextHandle_t extHandle, const Geometry *g)
 {
     if ( 0 == extHandle )
     {
-        return NULL;
+        return 0;
     }
 
     GEOSContextHandleInternal_t *handle = 0;
     handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
     if ( 0 == handle->initialized )
     {
-        return NULL;
+        return 0;
     }
 
-    const geos::geom::prep::PreparedGeometry* prep = NULL;
+    const geos::geom::prep::PreparedGeometry* prep = 0;
+
     try
     {
         prep = geos::geom::prep::PreparedGeometryFactory::prepare(g);
@@ -3733,8 +3734,12 @@ GEOSPreparedGeom_destroy_r(GEOSContextHandle_t extHandle, const geos::geom::prep
 }
 
 char
-GEOSPreparedContains_r(GEOSContextHandle_t extHandle, const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
+GEOSPreparedContains_r(GEOSContextHandle_t extHandle,
+        const geos::geom::prep::PreparedGeometry *pg, const Geometry *g)
 {
+    assert(0 != pg);
+    assert(0 != g);
+
     if ( 0 == extHandle )
     {
         return 2;
@@ -3749,25 +3754,28 @@ GEOSPreparedContains_r(GEOSContextHandle_t extHandle, const geos::geom::prep::Pr
 
     try 
     {
-        bool result;
-        result = pg1->contains(g2);
+        bool result = pg->contains(g);
         return result;
     }
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return 2;
     }
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return 2;
     }
+    
+    return 2;
 }
 
 char
-GEOSPreparedContainsProperly_r(GEOSContextHandle_t extHandle, const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
+GEOSPreparedContainsProperly_r(GEOSContextHandle_t extHandle,
+        const geos::geom::prep::PreparedGeometry *pg, const Geometry *g)
 {
+    assert(0 != pg);
+    assert(0 != g);
+
     if ( 0 == extHandle )
     {
         return 2;
@@ -3782,25 +3790,28 @@ GEOSPreparedContainsProperly_r(GEOSContextHandle_t extHandle, const geos::geom::
 
     try 
     {
-        bool result;
-        result = pg1->containsProperly(g2);
+        bool result = pg->containsProperly(g);
         return result;
     }
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return 2;
     }
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return 2;
     }
+    
+    return 2;
 }
 
 char
-GEOSPreparedCovers_r(GEOSContextHandle_t extHandle, const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
+GEOSPreparedCovers_r(GEOSContextHandle_t extHandle,
+        const geos::geom::prep::PreparedGeometry *pg, const Geometry *g)
 {
+    assert(0 != pg);
+    assert(0 != g);
+
     if ( 0 == extHandle )
     {
         return 2;
@@ -3815,25 +3826,28 @@ GEOSPreparedCovers_r(GEOSContextHandle_t extHandle, const geos::geom::prep::Prep
 
     try 
     {
-        bool result;
-        result = pg1->covers(g2);
+        bool result = pg->covers(g);
         return result;
     }
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return 2;
     }
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return 2;
     }
+    
+    return 2;
 }
 
 char
-GEOSPreparedIntersects_r(GEOSContextHandle_t extHandle, const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
+GEOSPreparedIntersects_r(GEOSContextHandle_t extHandle,
+        const geos::geom::prep::PreparedGeometry *pg, const Geometry *g)
 {
+    assert(0 != pg);
+    assert(0 != g);
+
     if ( 0 == extHandle )
     {
         return 2;
@@ -3848,20 +3862,19 @@ GEOSPreparedIntersects_r(GEOSContextHandle_t extHandle, const geos::geom::prep::
 
     try 
     {
-        bool result;
-        result = pg1->intersects(g2);
+        bool result = pg->intersects(g);
         return result;
     }
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return 2;
     }
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return 2;
     }
+    
+    return 2;
 }
 
 } /* extern "C" */
