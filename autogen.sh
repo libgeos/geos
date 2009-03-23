@@ -14,12 +14,18 @@ giveup()
 
 OSTYPE=`uname -s`
 
-AUTOHEADER=`which autoheader 2>/dev/null`
-if [ ! ${AUTOHEADER} ]; then
+AUTOCONF=`which autoconf 2>/dev/null`
+if [ ! ${AUTOCONF} ]; then
     echo "Missing autoconf!"
     exit
 fi
-AUTOHEADER_VER=`${AUTOHEADER} --version | grep -E "^.*[0-9]$" | sed 's/^.* //'`
+AUTOCONF_VER=`${AUTOCONF} --version | grep -E "^.*[0-9]$" | sed 's/^.* //'`
+
+AUTOHEADER=`which autoheader 2>/dev/null`
+if [ ! ${AUTOHEADER} ]; then
+    echo "Missing autoheader!"
+    exit
+fi
 
 for aclocal in aclocal aclocal-1.10 aclocal-1.9; do
     ACLOCAL=`which $aclocal 2>/dev/null`
@@ -58,24 +64,34 @@ if [ ! ${LIBTOOLIZE} ]; then
 fi
 LIBTOOLIZE_VER=`${LIBTOOLIZE} --version | grep -E "^.*[0-9]\.[0-9]$" | sed 's/^.* //'`
 
-#AMFLAGS="--add-missing --copy --force-missing"
-AMFLAGS="--add-missing --copy"
+AMOPTS="--add-missing --copy"
 if test "$OSTYPE" = "IRIX" -o "$OSTYPE" = "IRIX64"; then
-   AMFLAGS=$AMFLAGS" --include-deps";
+   AMOPTS=$AMOPTS" --include-deps";
 fi
 
+LTOPTS="--force --copy"
 echo "* Running ${LIBTOOLIZE} (${LIBTOOLIZE_VER})"
-${LIBTOOLIZE} --force --copy || giveup
+echo "\tOPTIONS = ${LTOPTS}"
+${LIBTOOLIZE} ${LTOPTS} || giveup
+
 echo "* Running $ACLOCAL (${ACLOCAL_VER})"
 ${ACLOCAL} -I macros || giveup
-echo "* Running ${AUTOHEADER} (${AUTOHEADER_VER})"
-${AUTOHEADER} || giveup
-echo "* Running ${AUTOMAKE} (${AUTOMAKE_VER})"
-echo "\tAMFLAGS=${AMFLAGS}"
-${AUTOMAKE} ${AMFLAGS} # || giveup
-echo "* Running autoconf"
-autoconf || giveup
 
-echo "======================================"
-echo "Now you are ready to run './configure'"
-echo "======================================"
+echo "* Running ${AUTOHEADER} (${AUTOCONF_VER})"
+${AUTOHEADER} || giveup
+
+echo "* Running ${AUTOMAKE} (${AUTOMAKE_VER})"
+echo "\OPTIONS = ${AMOPTS}"
+${AUTOMAKE} ${AMOPTS} || giveup
+
+echo "* Running ${AUTOCONF} (${AUTOCONF_VER})"
+${AUTOCONF} || giveup
+
+if test -f "${PWD}/configure"; then
+    echo "======================================"
+    echo "Now you are ready to run './configure'"
+    echo "======================================"
+else
+    echo "  Failed to generate ./configure script!"
+    giveup
+fi
