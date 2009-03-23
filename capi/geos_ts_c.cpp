@@ -190,6 +190,10 @@ GEOSDisjoint_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry
         bool result = g1->disjoint(g2);
         return result;
     }
+
+    // TODO: mloskot is going to replace these double-catch block
+    // with a macro to remove redundant code in this and
+    // following functions.
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
@@ -1117,22 +1121,19 @@ GEOSGeomType_r(GEOSContextHandle_t extHandle, const Geometry *g1)
     {
         std::string s = g1->getGeometryType();
 
-        char *result;
-        result = (char*) std::malloc( s.length() + 1);
-        std::strcpy(result, s.c_str() );
+        char *result = gstrdup(s);
         return result;
     }
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return NULL;
     }
-
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return NULL;
     }
+    
+    return NULL;
 }
 
 // Return postgis geometry type index
@@ -1158,18 +1159,14 @@ GEOSGeomTypeId_r(GEOSContextHandle_t extHandle, const Geometry *g1)
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return -1;
     }
-
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return -1;
     }
+    
+    return -1;
 }
-
-
-
 
 //-------------------------------------------------------------------
 // GEOS functions that return geometries
@@ -1198,14 +1195,13 @@ GEOSEnvelope_r(GEOSContextHandle_t extHandle, const Geometry *g1)
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return NULL;
     }
-
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return NULL;
     }
+    
+    return NULL;
 }
 
 Geometry *
@@ -1225,22 +1221,23 @@ GEOSIntersection_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geom
 
     try
     {
-        GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::opINTERSECTION));
+        GeomAutoPtr g3(BinaryOp(g1, g2, overlayOp(OverlayOp::opINTERSECTION)));
         return g3.release();
+
+        // XXX: old version
         //Geometry *g3 = g1->intersection(g2);
         //return g3;
     }
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return NULL;
     }
-
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return NULL;
     }
+    
+    return NULL;
 }
 
 Geometry *
@@ -1266,14 +1263,13 @@ GEOSBuffer_r(GEOSContextHandle_t extHandle, const Geometry *g1, double width, in
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return NULL;
     }
-
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return NULL;
     }
+    
+    return NULL;
 }
 
 Geometry *
@@ -1299,14 +1295,13 @@ GEOSConvexHull_r(GEOSContextHandle_t extHandle, const Geometry *g1)
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return NULL;
     }
-
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return NULL;
     }
+    
+    return NULL;
 }
 
 Geometry *
@@ -1326,22 +1321,23 @@ GEOSDifference_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geomet
 
     try
     {
-        GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::opDIFFERENCE));
+        GeomAutoPtr g3(BinaryOp(g1, g2, overlayOp(OverlayOp::opDIFFERENCE)));
         return g3.release();
+
+        // XXX: old version
         //Geometry *g3 = g1->difference(g2);
         //return g3;
     }
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return NULL;
     }
-
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return NULL;
     }
+    
+    return NULL;
 }
 
 Geometry *
@@ -1367,14 +1363,13 @@ GEOSBoundary_r(GEOSContextHandle_t extHandle, const Geometry *g1)
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return NULL;
     }
-
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return NULL;
     }
+    
+    return NULL;
 }
 
 Geometry *
@@ -1431,6 +1426,8 @@ GEOSUnion_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g
     {
         GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::opUNION));
         return g3.release();
+
+        // XXX: old version
         //Geometry *g3 = g1->Union(g2);
         //return g3;
     }
@@ -1444,14 +1441,13 @@ GEOSUnion_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g
         handle->NOTICE_MESSAGE("%s", s.str().c_str());
 #endif // VERBOSE_EXCEPTIONS
         handle->ERROR_MESSAGE("%s", e.what());
-        return NULL;
     }
-
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return NULL;
     }
+    
+    return NULL;
 }
 
 Geometry *
@@ -1477,19 +1473,20 @@ GEOSUnionCascaded_r(GEOSContextHandle_t extHandle, const Geometry *g1)
             handle->ERROR_MESSAGE("Invalid argument (must be a MultiPolygon)");
             return NULL;
         }
+
         using geos::operation::geounion::CascadedPolygonUnion;
         return CascadedPolygonUnion::Union(p);
     }
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return NULL;
     }
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return NULL;
     }
+    
+    return NULL;
 }
 
 Geometry *
@@ -1511,25 +1508,23 @@ GEOSPointOnSurface_r(GEOSContextHandle_t extHandle, const Geometry *g1)
     {
         Geometry *ret = g1->getInteriorPoint();
         if ( ! ret )
-                {
-                    const GeometryFactory *gf;
-                    gf=handle->geomFactory;
-                    // return an empty collection 
-                    return gf->createGeometryCollection();
-                }
+        {
+            const GeometryFactory* gf = handle->geomFactory;
+            // return an empty collection 
+            return gf->createGeometryCollection();
+        }
         return ret;
     }
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return NULL;
     }
-
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return NULL;
     }
+    
+    return NULL;
 }
 
 //-------------------------------------------------------------------
@@ -1540,6 +1535,10 @@ void
 GEOSGeom_destroy_r(GEOSContextHandle_t extHandle, Geometry *a)
 {
     GEOSContextHandleInternal_t *handle = 0;
+
+    // FIXME: mloskot: Does this try-catch around delete means that 
+    // destructors in GEOS may throw? If it does, this is a serious
+    // violation of "never throw an exception from a destructor" principle
 
     try
     {
