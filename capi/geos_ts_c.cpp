@@ -1609,13 +1609,13 @@ GEOSGetNumCoordinates_r(GEOSContextHandle_t extHandle, const Geometry *g1)
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return -1;
     }
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return -1;
     }
+    
+    return -1;
 }
 
 /*
@@ -1637,21 +1637,21 @@ GEOSNormalize_r(GEOSContextHandle_t extHandle, Geometry *g1)
         return -1;
     }
 
-    try{
+    try
+    {
         g1->normalize();
+        return 0; // SUCCESS
     }
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return -1;
     }
-
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return -1;
     }
-    return 0;
+    
+    return -1;
 }
 
 int
@@ -1669,26 +1669,26 @@ GEOSGetNumInteriorRings_r(GEOSContextHandle_t extHandle, const Geometry *g1)
         return -1;
     }
 
-    try{
+    try
+    {
         const Polygon *p = dynamic_cast<const Polygon *>(g1);
-                if ( ! p )
-                {
-                        handle->ERROR_MESSAGE("Argument is not a Polygon");
-                        return -1;
-                }
+        if ( ! p )
+        {
+            handle->ERROR_MESSAGE("Argument is not a Polygon");
+            return -1;
+        }
         return static_cast<int>(p->getNumInteriorRing());
     }
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return -1;
     }
-
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return -1;
     }
+    
+    return -1;
 }
 
 
@@ -1715,13 +1715,13 @@ GEOSGetNumGeometries_r(GEOSContextHandle_t extHandle, const Geometry *g1)
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return -1;
     }
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return -1;
     }
+    
+    return -1;
 }
 
 
@@ -1744,9 +1744,9 @@ GEOSGetGeometryN_r(GEOSContextHandle_t extHandle, const Geometry *g1, int n)
         return NULL;
     }
 
-    using geos::geom::GeometryCollection;
     try
     {
+        using geos::geom::GeometryCollection;
         const GeometryCollection *gc = dynamic_cast<const GeometryCollection *>(g1);
         if ( ! gc )
         {
@@ -1758,13 +1758,13 @@ GEOSGetGeometryN_r(GEOSContextHandle_t extHandle, const Geometry *g1, int n)
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return NULL;
     }
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return NULL;
     }
+    
+    return NULL;
 }
 
 
@@ -1800,13 +1800,13 @@ GEOSGetExteriorRing_r(GEOSContextHandle_t extHandle, const Geometry *g1)
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return NULL;
     }
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return NULL;
     }
+    
+    return NULL;
 }
 
 /*
@@ -1841,16 +1841,14 @@ GEOSGetInteriorRingN_r(GEOSContextHandle_t extHandle, const Geometry *g1, int n)
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return NULL;
     }
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return NULL;
     }
+    
+    return NULL;
 }
-
-
 
 Geometry *
 GEOSGetCentroid_r(GEOSContextHandle_t extHandle, const Geometry *g)
@@ -1880,13 +1878,13 @@ GEOSGetCentroid_r(GEOSContextHandle_t extHandle, const Geometry *g)
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return NULL;
     }
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return NULL;
     }
+    
+    return NULL;
 }
 
 Geometry *
@@ -1913,11 +1911,10 @@ GEOSGeom_createCollection_r(GEOSContextHandle_t extHandle, int type, Geometry **
 
     try
     {
-        Geometry *g;
-        const GeometryFactory *gf;
-        gf=handle->geomFactory;
-        std::vector<Geometry *> *vgeoms = new std::vector<Geometry *>(geoms, geoms+ngeoms);
+        const GeometryFactory* gf = handle->geomFactory;
+        std::vector<Geometry*>* vgeoms = new std::vector<Geometry*>(geoms, geoms + ngeoms);
 
+        Geometry *g = 0;
         switch (type)
         {
             case GEOS_GEOMETRYCOLLECTION:
@@ -1934,23 +1931,22 @@ GEOSGeom_createCollection_r(GEOSContextHandle_t extHandle, int type, Geometry **
                 break;
             default:
                 handle->ERROR_MESSAGE("Unsupported type request for PostGIS2GEOS_collection");
-                g = NULL;
+                g = 0;
                 
         }
-        if (g==NULL) return NULL;
+        
         return g;
     }
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return NULL;
     }
-
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return NULL;
     }
+
+    return 0;
 }
 
 Geometry *
@@ -1958,60 +1954,69 @@ GEOSPolygonize_r(GEOSContextHandle_t extHandle, const Geometry * const * g, unsi
 {
     if ( 0 == extHandle )
     {
-        return NULL;
+        return 0;
     }
 
     GEOSContextHandleInternal_t *handle = 0;
     handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
     if ( 0 == handle->initialized )
     {
-        return NULL;
+        return 0;
     }
 
-    using geos::operation::polygonize::Polygonizer;
-    unsigned int i;
-    Geometry *out = NULL;
+    Geometry *out = 0;
 
-    try{
+    try
+    {
         // Polygonize
+        using geos::operation::polygonize::Polygonizer;
         Polygonizer plgnzr;
-        for (i=0; i<ngeoms; i++) plgnzr.add(g[i]);
-#if GEOS_DEBUG
-    handle->NOTICE_MESSAGE("geometry vector added to polygonizer");
-#endif
-
-        std::vector<Polygon *>*polys = plgnzr.getPolygons();
+        for (std::size_t i = 0; i < ngeoms; ++i)
+        {
+            plgnzr.add(g[i]);
+        }
 
 #if GEOS_DEBUG
-    handle->NOTICE_MESSAGE("output polygons got");
+        handle->NOTICE_MESSAGE("geometry vector added to polygonizer");
 #endif
 
-        // We need a vector of Geometry pointers, not
-        // Polygon pointers.
+        std::vector<Polygon*> *polys = plgnzr.getPolygons();
+        assert(0 != polys);
+
+#if GEOS_DEBUG
+        handle->NOTICE_MESSAGE("output polygons got");
+#endif
+
+        // We need a vector of Geometry pointers, not Polygon pointers.
         // STL vector doesn't allow transparent upcast of this
         // nature, so we explicitly convert.
         // (it's just a waste of processor and memory, btw)
-                std::vector<Geometry*> *polyvec =
-                new std::vector<Geometry *>(polys->size());
-        for (i=0; i<polys->size(); i++) (*polyvec)[i] = (*polys)[i];
+        //
+        // XXX mloskot: Why not to extent GeometryFactory to accept
+        // vector of polygons or extend Polygonizer to return list of Geometry*
+        // or add a wrapper which semantic is similar to:
+        // std::vector<as_polygon<Geometry*> >
+        std::vector<Geometry*> *polyvec = new std::vector<Geometry *>(polys->size());
+        
+        for (std::size_t i = 0; i < polys->size(); ++i)
+        {
+            (*polyvec)[i] = (*polys)[i];
+        }
         delete polys;
 
-        const GeometryFactory *gf;
-        gf=handle->geomFactory;
+        const GeometryFactory *gf = handle->geomFactory;
 
+        // The below takes ownership of the passed vector,
+        // so we must *not* delete it
         out = gf->createGeometryCollection(polyvec);
-        // the above method takes ownership of the passed
-        // vector, so we must *not* delete it
     }
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return NULL;
     }
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return NULL;
     }
 
     return out;
@@ -2032,49 +2037,55 @@ GEOSPolygonizer_getCutEdges_r(GEOSContextHandle_t extHandle, const Geometry * co
         return NULL;
     }
 
-    using geos::operation::polygonize::Polygonizer;
-    unsigned int i;
-    Geometry *out = NULL;
+    Geometry *out = 0;
 
-    try{
+    try
+    {
         // Polygonize
+        using geos::operation::polygonize::Polygonizer;
         Polygonizer plgnzr;
-        for (i=0; i<ngeoms; i++) plgnzr.add(g[i]);
-#if GEOS_DEBUG
-    handle->NOTICE_MESSAGE("geometry vector added to polygonizer");
-#endif
-
-        std::vector<const LineString *>*lines = plgnzr.getCutEdges();
+        for (std::size_t i = 0; i < ngeoms; ++i)
+        {
+            plgnzr.add(g[i]);
+        }
 
 #if GEOS_DEBUG
-    handle->NOTICE_MESSAGE("output polygons got");
+        handle->NOTICE_MESSAGE("geometry vector added to polygonizer");
 #endif
 
-        // We need a vector of Geometry pointers, not
-        // Polygon pointers.
+        std::vector<const LineString *>* lines = plgnzr.getCutEdges();
+        assert(0 != lines);
+
+#if GEOS_DEBUG
+        handle->NOTICE_MESSAGE("output polygons got");
+#endif
+
+        // We need a vector of Geometry pointers, not Polygon pointers.
         // STL vector doesn't allow transparent upcast of this
         // nature, so we explicitly convert.
         // (it's just a waste of processor and memory, btw)
-    std::vector<Geometry*> *linevec =
-                new std::vector<Geometry *>(lines->size());
-        for (i=0; i<lines->size(); i++) (*linevec)[i] = (*lines)[i]->clone();
+        // XXX mloskot: See comment for GEOSPolygonize_r
+        std::vector<Geometry*> *linevec = new std::vector<Geometry *>(lines->size());
 
-        const GeometryFactory *gf;
-        gf=handle->geomFactory;
+        for (std::size_t i = 0; i < lines->size(); ++i)
+        {
+            (*linevec)[i] = (*lines)[i]->clone();
+        }
+        // FIXME mloskot: Who deallocates vector pointed by lines* ?
 
+        const GeometryFactory *gf = handle->geomFactory;
+
+        // The below takes ownership of the passed vector,
+        // so we must *not* delete it
         out = gf->createGeometryCollection(linevec);
-        // the above method takes ownership of the passed
-        // vector, so we must *not* delete it
     }
     catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
-        return NULL;
     }
     catch (...)
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
-        return NULL;
     }
 
     return out;
