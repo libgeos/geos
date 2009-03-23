@@ -64,12 +64,12 @@ if test "$OSTYPE" = "IRIX" -o "$OSTYPE" = "IRIX64"; then
    AMFLAGS=$AMFLAGS" --include-deps";
 fi
 
+echo "* Running ${LIBTOOLIZE} (${LIBTOOLIZE_VER})"
+${LIBTOOLIZE} --force --copy || giveup
 echo "* Running $ACLOCAL (${ACLOCAL_VER})"
 ${ACLOCAL} -I macros || giveup
 echo "* Running ${AUTOHEADER} (${AUTOHEADER_VER})"
 ${AUTOHEADER} || giveup
-echo "* Running ${LIBTOOLIZE} (${LIBTOOLIZE_VER})"
-${LIBTOOLIZE} --force --copy || giveup
 echo "* Running ${AUTOMAKE} (${AUTOMAKE_VER})"
 echo "\tAMFLAGS=${AMFLAGS}"
 ${AUTOMAKE} ${AMFLAGS} # || giveup
