@@ -81,7 +81,7 @@ echo "* Running ${AUTOHEADER} (${AUTOCONF_VER})"
 ${AUTOHEADER} || giveup
 
 echo "* Running ${AUTOMAKE} (${AUTOMAKE_VER})"
-echo "\OPTIONS = ${AMOPTS}"
+echo "\tOPTIONS = ${AMOPTS}"
 ${AUTOMAKE} ${AMOPTS} || giveup
 
 echo "* Running ${AUTOCONF} (${AUTOCONF_VER})"
