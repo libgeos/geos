@@ -95,3 +95,4 @@ else
     echo "  Failed to generate ./configure script!"
     giveup
 fi
+
