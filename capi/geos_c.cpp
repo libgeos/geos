@@ -455,15 +455,9 @@ GEOSLineMerge(const Geometry *g)
 }
 
 int
-GEOSGetSRID(const Geometry *g)
+GEOSGetSRID(const Geometry *g1)
 {
-    return GEOSGetSRID_r( handle, g );
-}
-
-void
-GEOSSetSRID(Geometry *g, int srid)
-{
-    GEOSSetSRID_r( handle, g, srid );
+    return GEOSGetSRID_r( handle, g1 );
 }
 
 char 
