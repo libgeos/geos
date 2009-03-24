@@ -1579,19 +1579,21 @@ GEOSGeom_destroy_r(GEOSContextHandle_t extHandle, Geometry *a)
 }
 
 void
-GEOSSetSRID(Geometry *g, int SRID)
+GEOSSetSRID(Geometry *g, int srid)
 {
     assert(0 != g);
     if (0 != g)
     {
-        g->setSRID(SRID);
+        g->setSRID(srid);
     }
 }
 
 
 int
-GEOSGetNumCoordinates_r(GEOSContextHandle_t extHandle, const Geometry *g1)
+GEOSGetNumCoordinates_r(GEOSContextHandle_t extHandle, const Geometry *g)
 {
+    assert(0 != g);
+
     if ( 0 == extHandle )
     {
         return -1;
@@ -1606,7 +1608,7 @@ GEOSGetNumCoordinates_r(GEOSContextHandle_t extHandle, const Geometry *g1)
 
     try
     {
-        return static_cast<int>(g1->getNumPoints());
+        return static_cast<int>(g->getNumPoints());
     }
     catch (const std::exception &e)
     {
@@ -1625,8 +1627,10 @@ GEOSGetNumCoordinates_r(GEOSContextHandle_t extHandle, const Geometry *g1)
  * Converts Geometry to normal form (or canonical form).
  */
 int
-GEOSNormalize_r(GEOSContextHandle_t extHandle, Geometry *g1)
+GEOSNormalize_r(GEOSContextHandle_t extHandle, Geometry *g)
 {
+    assert(0 != g);
+
     if ( 0 == extHandle )
     {
         return -1;
@@ -1641,7 +1645,7 @@ GEOSNormalize_r(GEOSContextHandle_t extHandle, Geometry *g1)
 
     try
     {
-        g1->normalize();
+        g->normalize();
         return 0; // SUCCESS
     }
     catch (const std::exception &e)
@@ -2151,8 +2155,10 @@ GEOSLineMerge_r(GEOSContextHandle_t extHandle, const Geometry *g)
 }
 
 int
-GEOSGetSRID_r(GEOSContextHandle_t extHandle, const Geometry *g1)
+GEOSGetSRID_r(GEOSContextHandle_t extHandle, const Geometry *g)
 {
+    assert(0 != g);
+
     if ( 0 == extHandle )
     {
         return 0;
@@ -2167,7 +2173,7 @@ GEOSGetSRID_r(GEOSContextHandle_t extHandle, const Geometry *g1)
 
     try
     {
-        return g1->getSRID();
+        return g->getSRID();
     }
     catch (const std::exception &e)
     {

@@ -589,12 +589,12 @@ extern int GEOS_DLL GEOSGeomTypeId_r(GEOSContextHandle_t handle,
                                      const GEOSGeometry* g1);
 
 /* Return 0 on exception */
-extern int GEOS_DLL GEOSGetSRID(const GEOSGeometry* g1);
+extern int GEOS_DLL GEOSGetSRID(const GEOSGeometry* g);
 
 extern void GEOS_DLL GEOSSetSRID(GEOSGeometry* g, int SRID);
 
 extern int GEOS_DLL GEOSGetSRID_r(GEOSContextHandle_t handle,
-                                  const GEOSGeometry* g1);
+                                  const GEOSGeometry* g);
 
 extern void GEOS_DLL GEOSSetSRID(GEOSGeometry* g, int SRID);
 
@@ -604,10 +604,10 @@ extern void GEOS_DLL GEOSSetSRID(GEOSGeometry* g, int SRID);
  * when feeded simple geometries, so beware if you need compatibility with
  * old GEOS versions.
  */
-extern int GEOS_DLL GEOSGetNumGeometries(const GEOSGeometry* g1);
+extern int GEOS_DLL GEOSGetNumGeometries(const GEOSGeometry* g);
 
 extern int GEOS_DLL GEOSGetNumGeometries_r(GEOSContextHandle_t handle,
-                                           const GEOSGeometry* g1);
+                                           const GEOSGeometry* g);
 
 /*
  * Return NULL on exception, Geometry must be a Collection.
