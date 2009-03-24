@@ -1578,17 +1578,6 @@ GEOSGeom_destroy_r(GEOSContextHandle_t extHandle, Geometry *a)
     }
 }
 
-void
-GEOSSetSRID(Geometry *g, int SRID)
-{
-    assert(0 != g);
-    if (0 != g)
-    {
-        g->setSRID(SRID);
-    }
-}
-
-
 int
 GEOSGetNumCoordinates_r(GEOSContextHandle_t extHandle, const Geometry *g1)
 {
@@ -2125,7 +2114,7 @@ GEOSLineMerge_r(GEOSContextHandle_t extHandle, const Geometry *g)
 #endif
 
         std::vector<Geometry *>*geoms = new std::vector<Geometry *>(lines->size());
-        for (int i = 0; i < lines->size(); ++i)
+        for (std::size_t i = 0; i < lines->size(); ++i)
         {
             (*geoms)[i] = (*lines)[i];
         }
@@ -2151,8 +2140,10 @@ GEOSLineMerge_r(GEOSContextHandle_t extHandle, const Geometry *g)
 }
 
 int
-GEOSGetSRID_r(GEOSContextHandle_t extHandle, const Geometry *g1)
+GEOSGetSRID_r(GEOSContextHandle_t extHandle, const Geometry *g)
 {
+    assert(0 != g);
+
     if ( 0 == extHandle )
     {
         return 0;
@@ -2167,7 +2158,7 @@ GEOSGetSRID_r(GEOSContextHandle_t extHandle, const Geometry *g1)
 
     try
     {
-        return g1->getSRID();
+        return g->getSRID();
     }
     catch (const std::exception &e)
     {
@@ -2179,6 +2170,35 @@ GEOSGetSRID_r(GEOSContextHandle_t extHandle, const Geometry *g1)
     }
     
     return 0;
+}
+
+void
+GEOSSetSRID_r(GEOSContextHandle_t extHandle, Geometry *g, int srid)
+{
+    assert(0 != g);
+
+    if ( 0 == extHandle )
+    {
+        return;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 != handle->initialized && 0 != g)
+    {
+        try
+        {
+            g->setSRID(srid);
+        }
+        catch (const std::exception &e)
+        {
+            handle->ERROR_MESSAGE("%s", e.what());
+        }
+        catch (...)
+        {
+            handle->ERROR_MESSAGE("Unknown exception thrown");
+        }
+    }
 }
 
 const char* GEOSversion()
