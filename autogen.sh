@@ -52,7 +52,7 @@ fi
 AUTOMAKE_VER=`${AUTOMAKE} --version | grep -E "^.*[0-9]$" | sed 's/^.* //'`
 
 
-for libtoolize in glibtoolize libtoolize; do
+for libtoolize in libtoolize glibtoolize; do
     LIBTOOLIZE=`which $libtoolize 2>/dev/null`
     if test -x "${LIBTOOLIZE}"; then
         break;
@@ -62,7 +62,7 @@ if [ ! ${LIBTOOLIZE} ]; then
     echo "Missing libtoolize!"
     exit
 fi
-LIBTOOLIZE_VER=`${LIBTOOLIZE} --version | grep -E "^.*[0-9]\.[0-9]$" | sed 's/^.* //'`
+LIBTOOLIZE_VER=`${LIBTOOLIZE} --version | grep -E "^.*[0-9]\.[0-9]" | sed 's/^.* //'`
 
 AMOPTS="--add-missing --copy"
 if test "$OSTYPE" = "IRIX" -o "$OSTYPE" = "IRIX64"; then
