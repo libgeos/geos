@@ -1874,7 +1874,7 @@ GEOSGetCentroid_r(GEOSContextHandle_t extHandle, const Geometry *g)
     try
     {
         Geometry *ret = g->getCentroid();
-        if (0 != ret)
+        if (0 == ret)
         {
             const GeometryFactory *gf = handle->geomFactory;
             return gf->createGeometryCollection();
