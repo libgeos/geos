@@ -1,3 +1,4 @@
+GEOS TODO:
 
 - Feed PrecisionModel to OverlayResultValidator to set _TOLERANCE
 
@@ -23,4 +24,3 @@
   [not documented]
 
 - Add distinct binary predicates test support in XMLTester
-
