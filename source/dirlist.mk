@@ -31,6 +31,7 @@ GEOS_DIRLIST =  algorithm \
                 operation\polygonize \
                 operation\predicate \
                 operation\relate \
+                operation\union \
                 operation\valid \
                 planargraph \
                 planargraph\algorithm \
