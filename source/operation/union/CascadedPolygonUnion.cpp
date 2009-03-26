@@ -20,6 +20,11 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/util/GeometryCombiner.h>
 #include <geos/index/strtree/STRtree.h>
+// std
+#include <cassert>
+#include <cstddef>
+#include <memory>
+#include <vector>
 
 namespace geos {
 namespace operation { // geos.operation
