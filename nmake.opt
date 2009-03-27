@@ -1,0 +1,153 @@
+# $Id$
+#
+# nmake.opt - main configuration file for NMAKE makefiles
+#
+!MESSAGE **********************************************************************
+!MESSAGE *** GEOS Build Configuration ***
+!INCLUDE <ntwin32.mak>
+
+###############################################################################
+# For convenience, user may put custom settings to private mynmake.opt
+# and use EXT_NMAKE_OPT option while calling nmake.exe, as follows:
+#
+# nmake -f makefile.vc EXT_NMAKE_OPT=mynmake.opt
+
+!IFDEF EXT_NMAKE_OPT
+!MESSAGE *** Setting EXT_NMAKE_OPT $(EXT_NMAKE_OPT)
+!INCLUDE $(EXT_NMAKE_OPT)
+!ENDIF
+
+###############################################################################
+# Set BUILD_DEBUG to YES if you want to make debug build
+# and to prepare not optimized binaries.
+
+!IFNDEF BUILD_DEBUG 
+BUILD_DEBUG = NO
+!ENDIF
+
+!MESSAGE *** Setting BUILD_DEBUG $(BUILD_DEBUG)
+
+###############################################################################
+# Set BUILD_BATCH to YES if you want feed compiler with all
+# source .c and .cpp files in single batch.
+
+!IFNDEF BUILD_BATCH
+BUILD_BATCH = NO
+!ENDIF
+
+!MESSAGE *** Setting BUILD_DEBUG $(BUILD_DEBUG)
+
+###############################################################################
+# Derive version of Visual C++ being used from NMAKE if not specified
+#
+# WARNING:
+# If we should expect variety of NMAKE build versions, tests below may fail
+# and we will need to fall back to setting GEOS_MSVC as command line parameter.
+
+!IF "$(_NMAKE_VER)" == ""
+GEOS_MSVC = 4.0
+!ERROR *** Failed to determine version of Visual C++
+!ELSEIF "$(_NMAKE_VER)" == "162"
+GEOS_MSVC = 5.0
+!ERROR *** Detected Visual C++ 5.0 - NOT SUPPORTED
+!ELSEIF "$(_NMAKE_VER)" == "6.00.8168.0"
+GEOS_MSVC = 6.0
+GEOS_MSC = 1200
+!ERROR *** Detected Visual C++ 6.0 - NOT SUPPORTED
+!ELSEIF "$(_NMAKE_VER)" == "7.00.9466"
+GEOS_MSVC = 7.0
+GEOS_MSC = 1300
+!ELSEIF "$(_NMAKE_VER)" == "7.10.3077"
+GEOS_MSVC = 7.1
+GEOS_MSC = 1310
+!ELSEIF "$(_NMAKE_VER)" == "8.00.50727.42"
+GEOS_MSVC = 8.0
+GEOS_MSC = 1400
+!ELSEIF "$(_NMAKE_VER)" == "8.00.50727.762"
+GEOS_MSVC = 8.0
+GEOS_MSC = 1400
+!ELSEIF "$(_NMAKE_VER)" == "9.00.30729.01"
+GEOS_MSVC = 9.0
+GEOS_MSC = 1500
+!ELSE
+GEOS_MSVC = 0.0
+GEOS_MSC = 0
+!ENDIF
+
+!IF "$(GEOS_MSVC)" == "0.0" && "$(GEOS_MSC)" == "0"
+!MESSAGE *** Cannot determined Visual C++ version
+!ERROR *** Aborting make job
+!ELSE
+!MESSAGE *** Using Microsoft NMAKE version $(_NMAKE_VER)
+!MESSAGE *** Using Microsoft Visual C++ version $(GEOS_MSVC)
+!MESSAGE *** Using Microsoft C/C++ version $(GEOS_MSC)
+!ENDIF
+
+###############################################################################
+# Include directories
+
+GEOS_INCLUDE = -Iheaders
+
+!MESSAGE *** Setting GEOS_INCLUDE $(GEOS_INCLUDE)
+!MESSAGE *** Setting INCLUDE $(INCLUDE)
+
+###############################################################################
+# Compilation flags for Release and Debug modes
+
+GEOS_CPPFLAGS = /D "NOMINMAX" /D "WIN32_LEAN_AND_MEAN" /D "NOGDI"
+
+!IF "$(BUILD_DEBUG)" == "YES"
+BUILD_PREFIX=_d
+GEOS_CFLAGS = /nologo /MDd /GR /Od /W4 /Zi
+GEOS_CPPFLAGS = /D "NDEBUG" $(GEOS_CPPFLAGS)
+!ELSE
+GEOS_CFLAGS = /nologo /MD /GR /O2 /W3
+GEOS_CPPFLAGS = /D "NDEBUG" $(GEOS_CPPFLAGS)
+!ENDIF
+
+# Compiler version specific flags
+!IF $(GEOS_MSC) >= 1400
+GEOS_CFLAGS = $(GEOS_CFLAGS) /EHs
+GEOS_CPPFLAGS = $(GEOS_CPPFLAGS) /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "_SCL_SECURE_NO_DEPRECATE"
+!ELSE
+GEOS_CFLAGS = $(GEOS_CFLAGS) /GX
+!ENDIF
+
+# For Visual C++ 9.0+ use multiple process build
+!IF $(GEOS_MSC) > 1400
+MPFLAGS = /MP
+BUILD_BATCH = YES
+!MESSAGE *** Setting /MP flag to number of effective processors
+!ENDIF
+
+!MESSAGE *** Using CFLAGS $(GEOS_CFLAGS)
+!MESSAGE *** Using CPPFLAGS $(GEOS_CPPFLAGS)
+
+CFLAGS= $(MPFLAGS) $(GEOS_CFLAGS) $(GEOS_CPPFLAGS) $(GEOS_INCLUDE)
+
+###############################################################################
+# Output location
+
+LIBNAME = geos$(BUILD_PREFIX).lib
+DLLNAME = geos$(BUILD_PREFIX).dll
+SLIBNAME = geos_i$(BUILD_PREFIX).lib
+CDLLNAME = geos_c$(BUILD_PREFIX).dll
+CLIBNAME = geos_c_i$(BUILD_PREFIX).lib
+
+###############################################################################
+# Building toolset programs
+
+MAKE = nmake
+CC = cl
+RM = del
+CP = copy
+
+# Linker executable
+# - Dynamic-Linked Libraries
+# $(LINK) /dll
+# - Static Libraries (use of lib.exe wrapper is not portable, see VC++ Toolkit 2003)
+# $(LINK) /lib
+LINK = link.exe
+
+!MESSAGE **********************************************************************
+# EOF

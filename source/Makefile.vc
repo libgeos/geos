@@ -20,252 +20,257 @@ GEOS_ROOT=..
 !INCLUDE dirlist.mk
 
 ###############################################################################
+# Output location
+# TODO: not yet supported
+#OUT_DIR = $(GEOS_ROOT)\bin\$(BUILD_DIR)
+
+###############################################################################
 # List of objects
-# .obj
-INCEXT = obj
-INEXT = obj
+
+OBJ_EXT = obj
+EXT = $(OBJ_EXT)
 
 OBJ = \
-	algorithm\CentroidArea.$(INEXT) \
-	algorithm\CentroidLine.$(INEXT) \
-	algorithm\CentroidPoint.$(INEXT) \
-	algorithm\CGAlgorithms.$(INEXT) \
-	algorithm\ConvexHull.$(INEXT) \
-	algorithm\HCoordinate.$(INEXT) \
-	algorithm\InteriorPointArea.$(INEXT) \
-	algorithm\InteriorPointLine.$(INEXT) \
-	algorithm\InteriorPointPoint.$(INEXT) \
-	algorithm\LineIntersector.$(INEXT) \
-	algorithm\MCPointInRing.$(INEXT) \
-	algorithm\MinimumDiameter.$(INEXT) \
-	algorithm\NotRepresentableException.$(INEXT) \
-	algorithm\PointLocator.$(INEXT) \
-	algorithm\RayCrossingCounter.$(INEXT) \
-	algorithm\RobustDeterminant.$(INEXT) \
-	algorithm\SimplePointInRing.$(INEXT) \
-	algorithm\SIRtreePointInRing.$(INEXT) \
-	algorithm\locate\IndexedPointInAreaLocator.$(INEXT) \
-	algorithm\locate\PointOnGeometryLocator.$(INEXT) \
-	algorithm\locate\SimplePointInAreaLocator.$(INEXT) \
-	geom\Coordinate.$(INEXT) \
-	geom\CoordinateArraySequence.$(INEXT) \
-	geom\CoordinateArraySequenceFactory.$(INEXT) \
-	geom\CoordinateSequence.$(INEXT) \
-	geom\Dimension.$(INEXT) \
-	geom\Envelope.$(INEXT) \
-	geom\Geometry.$(INEXT) \
-	geom\GeometryCollection.$(INEXT) \
-	geom\GeometryComponentFilter.$(INEXT) \
-	geom\GeometryFactory.$(INEXT) \
-	geom\IntersectionMatrix.$(INEXT) \
-	geom\LinearRing.$(INEXT) \
-	geom\LineSegment.$(INEXT) \
-	geom\LineString.$(INEXT) \
-	geom\Location.$(INEXT) \
-	geom\MultiLineString.$(INEXT) \
-	geom\MultiPoint.$(INEXT) \
-	geom\MultiPolygon.$(INEXT) \
-	geom\Point.$(INEXT) \
-	geom\Polygon.$(INEXT) \
-	geom\PrecisionModel.$(INEXT) \
-	geom\Triangle.$(INEXT) \
-	geom\util\CoordinateOperation.$(INEXT) \
-	geom\util\GeometryEditor.$(INEXT) \
-	geom\util\GeometryTransformer.$(INEXT) \
-	geom\util\GeometryCombiner.$(INEXT) \
-	geom\util\ShortCircuitedGeometryVisitor.$(INEXT) \
-	geom\prep\AbstractPreparedPolygonContains.$(INEXT) \
-	geom\prep\BasicPreparedGeometry.$(INEXT) \
-	geom\prep\PreparedGeometry.$(INEXT) \
-	geom\prep\PreparedGeometryFactory.$(INEXT) \
-	geom\prep\PreparedLineString.$(INEXT) \
-	geom\prep\PreparedLineStringIntersects.$(INEXT) \
-	geom\prep\PreparedPoint.$(INEXT) \
-	geom\prep\PreparedPolygon.$(INEXT) \
-	geom\prep\PreparedPolygonContains.$(INEXT) \
-	geom\prep\PreparedPolygonContainsProperly.$(INEXT) \
-	geom\prep\PreparedPolygonCovers.$(INEXT) \
-	geom\prep\PreparedPolygonIntersects.$(INEXT) \
-	geom\prep\PreparedPolygonPredicate.$(INEXT) \
-	geomgraph\Depth.$(INEXT) \
-	geomgraph\DirectedEdge.$(INEXT) \
-	geomgraph\DirectedEdgeStar.$(INEXT) \
-	geomgraph\Edge.$(INEXT) \
-	geomgraph\EdgeEnd.$(INEXT) \
-	geomgraph\EdgeEndStar.$(INEXT) \
-	geomgraph\EdgeIntersection.$(INEXT) \
-	geomgraph\EdgeIntersectionList.$(INEXT) \
-	geomgraph\EdgeList.$(INEXT) \
-	geomgraph\EdgeNodingValidator.$(INEXT) \
-	geomgraph\EdgeRing.$(INEXT) \
-	geomgraph\GeometryGraph.$(INEXT) \
-	geomgraph\GraphComponent.$(INEXT) \
-	geomgraph\Label.$(INEXT) \
-	geomgraph\Node.$(INEXT) \
-	geomgraph\NodeFactory.$(INEXT) \
-	geomgraph\NodeMap.$(INEXT) \
-	geomgraph\PlanarGraph.$(INEXT) \
-	geomgraph\Position.$(INEXT) \
-	geomgraph\Quadrant.$(INEXT) \
-	geomgraph\TopologyLocation.$(INEXT) \
-	geomgraph\index\MonotoneChainEdge.$(INEXT) \
-	geomgraph\index\MonotoneChainIndexer.$(INEXT) \
-	geomgraph\index\SegmentIntersector.$(INEXT) \
-	geomgraph\index\SimpleEdgeSetIntersector.$(INEXT) \
-	geomgraph\index\SimpleMCSweepLineIntersector.$(INEXT) \
-	geomgraph\index\SimpleSweepLineIntersector.$(INEXT) \
-	geomgraph\index\SweepLineEvent.$(INEXT) \
-	geomgraph\index\SweepLineSegment.$(INEXT) \
-	index\bintree\Bintree.$(INEXT) \
-	index\bintree\Interval.$(INEXT) \
-	index\bintree\Key.$(INEXT) \
-	index\bintree\Node.$(INEXT) \
-	index\bintree\NodeBase.$(INEXT) \
-	index\bintree\Root.$(INEXT) \
-	index\chain\MonotoneChain.$(INEXT) \
-	index\chain\MonotoneChainBuilder.$(INEXT) \
-	index\chain\MonotoneChainOverlapAction.$(INEXT) \
-	index\chain\MonotoneChainSelectAction.$(INEXT) \
-	index\intervalrtree\IntervalRTreeBranchNode.$(INEXT) \
-	index\intervalrtree\IntervalRTreeLeafNode.$(INEXT) \
-	index\intervalrtree\IntervalRTreeNode.$(INEXT) \
-	index\intervalrtree\SortedPackedIntervalRTree.$(INEXT) \
-	index\quadtree\DoubleBits.$(INEXT) \
-	index\quadtree\IntervalSize.$(INEXT) \
-	index\quadtree\Key.$(INEXT) \
-	index\quadtree\Node.$(INEXT) \
-	index\quadtree\NodeBase.$(INEXT) \
-	index\quadtree\Root.$(INEXT) \
-	index\quadtree\Quadtree.$(INEXT) \
-	index\strtree\AbstractNode.$(INEXT) \
-	index\strtree\AbstractSTRtree.$(INEXT) \
-	index\strtree\Interval.$(INEXT) \
-	index\strtree\ItemBoundable.$(INEXT) \
-	index\strtree\SIRtree.$(INEXT) \
-	index\strtree\STRtree.$(INEXT) \
-	index\sweepline\SweepLineEvent.$(INEXT) \
-	index\sweepline\SweepLineIndex.$(INEXT) \
-	index\sweepline\SweepLineInterval.$(INEXT) \
-	io\ByteOrderDataInStream.$(INEXT) \
-	io\ByteOrderValues.$(INEXT) \
-	io\CLocalizer.$(INEXT) \
-	io\ParseException.$(INEXT) \
-	io\StringTokenizer.$(INEXT) \
-	io\Unload.$(INEXT) \
-	io\WKBReader.$(INEXT) \
-	io\WKBWriter.$(INEXT) \
-	io\WKTReader.$(INEXT) \
-	io\WKTWriter.$(INEXT) \
-	io\Writer.$(INEXT) \
-	noding\FastNodingValidator.$(INEXT) \
-	noding\FastSegmentSetIntersectionFinder.$(INEXT) \
-	noding\IntersectionAdder.$(INEXT) \
-	noding\IntersectionFinderAdder.$(INEXT) \
-	noding\IteratedNoder.$(INEXT) \
-	noding\MCIndexNoder.$(INEXT) \
-	noding\MCIndexSegmentSetMutualIntersector.$(INEXT) \
-	noding\NodedSegmentString.$(INEXT) \
-	noding\NodingValidator.$(INEXT) \
-	noding\Octant.$(INEXT) \
-	noding\ScaledNoder.$(INEXT) \
-	noding\SegmentIntersectionDetector.$(INEXT) \
-	noding\SegmentNode.$(INEXT) \
-	noding\SegmentNodeList.$(INEXT) \
-	noding\SegmentString.$(INEXT) \
-	noding\SegmentStringUtil.$(INEXT) \
-	noding\SimpleNoder.$(INEXT) \
-	noding\SingleInteriorIntersectionFinder.$(INEXT) \
-	noding\snapround\HotPixel.$(INEXT) \
-	noding\snapround\MCIndexPointSnapper.$(INEXT) \
-	noding\snapround\MCIndexSnapRounder.$(INEXT) \
-	noding\snapround\SimpleSnapRounder.$(INEXT) \
-	operation\GeometryGraphOperation.$(INEXT) \
-	operation\IsSimpleOp.$(INEXT) \
-	operation\buffer\BufferBuilder.$(INEXT) \
-	operation\buffer\BufferOp.$(INEXT) \
-	operation\buffer\BufferSubgraph.$(INEXT) \
-	operation\buffer\OffsetCurveBuilder.$(INEXT) \
-	operation\buffer\OffsetCurveSetBuilder.$(INEXT) \
-	operation\buffer\RightmostEdgeFinder.$(INEXT) \
-	operation\buffer\SubgraphDepthLocater.$(INEXT) \
-	operation\distance\ConnectedElementLocationFilter.$(INEXT) \
-	operation\distance\ConnectedElementPointFilter.$(INEXT) \
-	operation\distance\DistanceOp.$(INEXT) \
-	operation\distance\GeometryLocation.$(INEXT) \
-	operation\linemerge\EdgeString.$(INEXT) \
-	operation\linemerge\LineMergeDirectedEdge.$(INEXT) \
-	operation\linemerge\LineMergeEdge.$(INEXT) \
-	operation\linemerge\LineMergeGraph.$(INEXT) \
-	operation\linemerge\LineMerger.$(INEXT) \
-	operation\linemerge\LineSequencer.$(INEXT) \
-	operation\overlay\EdgeSetNoder.$(INEXT) \
-	operation\overlay\ElevationMatrix.$(INEXT) \
-	operation\overlay\ElevationMatrixCell.$(INEXT) \
-	operation\overlay\FuzzyPointLocator.$(INEXT) \
-	operation\overlay\LineBuilder.$(INEXT) \
-	operation\overlay\MaximalEdgeRing.$(INEXT) \
-	operation\overlay\MinimalEdgeRing.$(INEXT) \
-	operation\overlay\OffsetPointGenerator.$(INEXT) \
-	operation\overlay\OverlayNodeFactory.$(INEXT) \
-	operation\overlay\OverlayOp.$(INEXT) \
-	operation\overlay\OverlayResultValidator.$(INEXT) \
-	operation\overlay\PointBuilder.$(INEXT) \
-	operation\overlay\PolygonBuilder.$(INEXT) \
-	operation\polygonize\PolygonizeDirectedEdge.$(INEXT) \
-	operation\polygonize\PolygonizeEdge.$(INEXT) \
-	operation\polygonize\EdgeRing.$(INEXT) \
-	operation\polygonize\PolygonizeGraph.$(INEXT) \
-	operation\polygonize\Polygonizer.$(INEXT) \
-	operation\predicate\RectangleContains.$(INEXT) \
-	operation\predicate\RectangleIntersects.$(INEXT) \
-	operation\predicate\SegmentIntersectionTester.$(INEXT) \
-	operation\relate\EdgeEndBuilder.$(INEXT) \
-	operation\relate\EdgeEndBundle.$(INEXT) \
-	operation\relate\EdgeEndBundleStar.$(INEXT) \
-	operation\relate\RelateComputer.$(INEXT) \
-	operation\relate\RelateNode.$(INEXT) \
-	operation\relate\RelateNodeFactory.$(INEXT) \
-	operation\relate\RelateNodeGraph.$(INEXT) \
-	operation\relate\RelateOp.$(INEXT) \
-	operation\union\CascadedPolygonUnion.$(INEXT) \
-	operation\valid\ConnectedInteriorTester.$(INEXT) \
-	operation\valid\ConsistentAreaTester.$(INEXT) \
-	operation\valid\IsValidOp.$(INEXT) \
-	operation\valid\QuadtreeNestedRingTester.$(INEXT) \
-	operation\valid\RepeatedPointTester.$(INEXT) \
-	operation\valid\SimpleNestedRingTester.$(INEXT) \
-	operation\valid\SweeplineNestedRingTester.$(INEXT) \
-	operation\valid\TopologyValidationError.$(INEXT) \
-	planargraph\DirectedEdge.$(INEXT) \
-	planargraph\DirectedEdgeStar.$(INEXT) \
-	planargraph\Edge.$(INEXT) \
-	planargraph\Node.$(INEXT) \
-	planargraph\NodeMap.$(INEXT) \
-	planargraph\PlanarGraph.$(INEXT) \
-	planargraph\Subgraph.$(INEXT) \
-	planargraph\algorithm\ConnectedSubgraphFinder.$(INEXT) \
-	precision\CommonBits.$(INEXT) \
-	precision\CommonBitsOp.$(INEXT) \
-	precision\CommonBitsRemover.$(INEXT) \
-	precision\EnhancedPrecisionOp.$(INEXT) \
-	precision\GeometrySnapper.$(INEXT) \
-	precision\LineStringSnapper.$(INEXT) \
-	precision\SimpleGeometryPrecisionReducer.$(INEXT) \
-	simplify\DouglasPeuckerLineSimplifier.$(INEXT) \
-	simplify\DouglasPeuckerSimplifier.$(INEXT) \
-	simplify\LineSegmentIndex.$(INEXT) \
-	simplify\TaggedLineSegment.$(INEXT) \
-	simplify\TaggedLinesSimplifier.$(INEXT) \
-	simplify\TaggedLineString.$(INEXT) \
-	simplify\TaggedLineStringSimplifier.$(INEXT) \
-	simplify\TopologyPreservingSimplifier.$(INEXT) \
-	util\Assert.$(INEXT) \
-	util\GeometricShapeFactory.$(INEXT) \
-	util\math.$(INEXT) \
-	util\Profiler.$(INEXT) \
-	..\capi\geos_c.$(INEXT) \
-	..\capi\geos_ts_c.$(INEXT) \
-	inlines.$(INEXT)
+	algorithm\CentroidArea.$(EXT) \
+	algorithm\CentroidLine.$(EXT) \
+	algorithm\CentroidPoint.$(EXT) \
+	algorithm\CGAlgorithms.$(EXT) \
+	algorithm\ConvexHull.$(EXT) \
+	algorithm\HCoordinate.$(EXT) \
+	algorithm\InteriorPointArea.$(EXT) \
+	algorithm\InteriorPointLine.$(EXT) \
+	algorithm\InteriorPointPoint.$(EXT) \
+	algorithm\LineIntersector.$(EXT) \
+	algorithm\MCPointInRing.$(EXT) \
+	algorithm\MinimumDiameter.$(EXT) \
+	algorithm\NotRepresentableException.$(EXT) \
+	algorithm\PointLocator.$(EXT) \
+	algorithm\RayCrossingCounter.$(EXT) \
+	algorithm\RobustDeterminant.$(EXT) \
+	algorithm\SimplePointInRing.$(EXT) \
+	algorithm\SIRtreePointInRing.$(EXT) \
+	algorithm\locate\IndexedPointInAreaLocator.$(EXT) \
+	algorithm\locate\PointOnGeometryLocator.$(EXT) \
+	algorithm\locate\SimplePointInAreaLocator.$(EXT) \
+	geom\Coordinate.$(EXT) \
+	geom\CoordinateArraySequence.$(EXT) \
+	geom\CoordinateArraySequenceFactory.$(EXT) \
+	geom\CoordinateSequence.$(EXT) \
+	geom\Dimension.$(EXT) \
+	geom\Envelope.$(EXT) \
+	geom\Geometry.$(EXT) \
+	geom\GeometryCollection.$(EXT) \
+	geom\GeometryComponentFilter.$(EXT) \
+	geom\GeometryFactory.$(EXT) \
+	geom\IntersectionMatrix.$(EXT) \
+	geom\LinearRing.$(EXT) \
+	geom\LineSegment.$(EXT) \
+	geom\LineString.$(EXT) \
+	geom\Location.$(EXT) \
+	geom\MultiLineString.$(EXT) \
+	geom\MultiPoint.$(EXT) \
+	geom\MultiPolygon.$(EXT) \
+	geom\Point.$(EXT) \
+	geom\Polygon.$(EXT) \
+	geom\PrecisionModel.$(EXT) \
+	geom\Triangle.$(EXT) \
+	geom\util\CoordinateOperation.$(EXT) \
+	geom\util\GeometryEditor.$(EXT) \
+	geom\util\GeometryTransformer.$(EXT) \
+	geom\util\GeometryCombiner.$(EXT) \
+	geom\util\ShortCircuitedGeometryVisitor.$(EXT) \
+	geom\prep\AbstractPreparedPolygonContains.$(EXT) \
+	geom\prep\BasicPreparedGeometry.$(EXT) \
+	geom\prep\PreparedGeometry.$(EXT) \
+	geom\prep\PreparedGeometryFactory.$(EXT) \
+	geom\prep\PreparedLineString.$(EXT) \
+	geom\prep\PreparedLineStringIntersects.$(EXT) \
+	geom\prep\PreparedPoint.$(EXT) \
+	geom\prep\PreparedPolygon.$(EXT) \
+	geom\prep\PreparedPolygonContains.$(EXT) \
+	geom\prep\PreparedPolygonContainsProperly.$(EXT) \
+	geom\prep\PreparedPolygonCovers.$(EXT) \
+	geom\prep\PreparedPolygonIntersects.$(EXT) \
+	geom\prep\PreparedPolygonPredicate.$(EXT) \
+	geomgraph\Depth.$(EXT) \
+	geomgraph\DirectedEdge.$(EXT) \
+	geomgraph\DirectedEdgeStar.$(EXT) \
+	geomgraph\Edge.$(EXT) \
+	geomgraph\EdgeEnd.$(EXT) \
+	geomgraph\EdgeEndStar.$(EXT) \
+	geomgraph\EdgeIntersection.$(EXT) \
+	geomgraph\EdgeIntersectionList.$(EXT) \
+	geomgraph\EdgeList.$(EXT) \
+	geomgraph\EdgeNodingValidator.$(EXT) \
+	geomgraph\EdgeRing.$(EXT) \
+	geomgraph\GeometryGraph.$(EXT) \
+	geomgraph\GraphComponent.$(EXT) \
+	geomgraph\Label.$(EXT) \
+	geomgraph\Node.$(EXT) \
+	geomgraph\NodeFactory.$(EXT) \
+	geomgraph\NodeMap.$(EXT) \
+	geomgraph\PlanarGraph.$(EXT) \
+	geomgraph\Position.$(EXT) \
+	geomgraph\Quadrant.$(EXT) \
+	geomgraph\TopologyLocation.$(EXT) \
+	geomgraph\index\MonotoneChainEdge.$(EXT) \
+	geomgraph\index\MonotoneChainIndexer.$(EXT) \
+	geomgraph\index\SegmentIntersector.$(EXT) \
+	geomgraph\index\SimpleEdgeSetIntersector.$(EXT) \
+	geomgraph\index\SimpleMCSweepLineIntersector.$(EXT) \
+	geomgraph\index\SimpleSweepLineIntersector.$(EXT) \
+	geomgraph\index\SweepLineEvent.$(EXT) \
+	geomgraph\index\SweepLineSegment.$(EXT) \
+	index\bintree\Bintree.$(EXT) \
+	index\bintree\Interval.$(EXT) \
+	index\bintree\Key.$(EXT) \
+	index\bintree\Node.$(EXT) \
+	index\bintree\NodeBase.$(EXT) \
+	index\bintree\Root.$(EXT) \
+	index\chain\MonotoneChain.$(EXT) \
+	index\chain\MonotoneChainBuilder.$(EXT) \
+	index\chain\MonotoneChainOverlapAction.$(EXT) \
+	index\chain\MonotoneChainSelectAction.$(EXT) \
+	index\intervalrtree\IntervalRTreeBranchNode.$(EXT) \
+	index\intervalrtree\IntervalRTreeLeafNode.$(EXT) \
+	index\intervalrtree\IntervalRTreeNode.$(EXT) \
+	index\intervalrtree\SortedPackedIntervalRTree.$(EXT) \
+	index\quadtree\DoubleBits.$(EXT) \
+	index\quadtree\IntervalSize.$(EXT) \
+	index\quadtree\Key.$(EXT) \
+	index\quadtree\Node.$(EXT) \
+	index\quadtree\NodeBase.$(EXT) \
+	index\quadtree\Root.$(EXT) \
+	index\quadtree\Quadtree.$(EXT) \
+	index\strtree\AbstractNode.$(EXT) \
+	index\strtree\AbstractSTRtree.$(EXT) \
+	index\strtree\Interval.$(EXT) \
+	index\strtree\ItemBoundable.$(EXT) \
+	index\strtree\SIRtree.$(EXT) \
+	index\strtree\STRtree.$(EXT) \
+	index\sweepline\SweepLineEvent.$(EXT) \
+	index\sweepline\SweepLineIndex.$(EXT) \
+	index\sweepline\SweepLineInterval.$(EXT) \
+	io\ByteOrderDataInStream.$(EXT) \
+	io\ByteOrderValues.$(EXT) \
+	io\CLocalizer.$(EXT) \
+	io\ParseException.$(EXT) \
+	io\StringTokenizer.$(EXT) \
+	io\Unload.$(EXT) \
+	io\WKBReader.$(EXT) \
+	io\WKBWriter.$(EXT) \
+	io\WKTReader.$(EXT) \
+	io\WKTWriter.$(EXT) \
+	io\Writer.$(EXT) \
+	noding\FastNodingValidator.$(EXT) \
+	noding\FastSegmentSetIntersectionFinder.$(EXT) \
+	noding\IntersectionAdder.$(EXT) \
+	noding\IntersectionFinderAdder.$(EXT) \
+	noding\IteratedNoder.$(EXT) \
+	noding\MCIndexNoder.$(EXT) \
+	noding\MCIndexSegmentSetMutualIntersector.$(EXT) \
+	noding\NodedSegmentString.$(EXT) \
+	noding\NodingValidator.$(EXT) \
+	noding\Octant.$(EXT) \
+	noding\ScaledNoder.$(EXT) \
+	noding\SegmentIntersectionDetector.$(EXT) \
+	noding\SegmentNode.$(EXT) \
+	noding\SegmentNodeList.$(EXT) \
+	noding\SegmentString.$(EXT) \
+	noding\SegmentStringUtil.$(EXT) \
+	noding\SimpleNoder.$(EXT) \
+	noding\SingleInteriorIntersectionFinder.$(EXT) \
+	noding\snapround\HotPixel.$(EXT) \
+	noding\snapround\MCIndexPointSnapper.$(EXT) \
+	noding\snapround\MCIndexSnapRounder.$(EXT) \
+	noding\snapround\SimpleSnapRounder.$(EXT) \
+	operation\GeometryGraphOperation.$(EXT) \
+	operation\IsSimpleOp.$(EXT) \
+	operation\buffer\BufferBuilder.$(EXT) \
+	operation\buffer\BufferOp.$(EXT) \
+	operation\buffer\BufferSubgraph.$(EXT) \
+	operation\buffer\OffsetCurveBuilder.$(EXT) \
+	operation\buffer\OffsetCurveSetBuilder.$(EXT) \
+	operation\buffer\RightmostEdgeFinder.$(EXT) \
+	operation\buffer\SubgraphDepthLocater.$(EXT) \
+	operation\distance\ConnectedElementLocationFilter.$(EXT) \
+	operation\distance\ConnectedElementPointFilter.$(EXT) \
+	operation\distance\DistanceOp.$(EXT) \
+	operation\distance\GeometryLocation.$(EXT) \
+	operation\linemerge\EdgeString.$(EXT) \
+	operation\linemerge\LineMergeDirectedEdge.$(EXT) \
+	operation\linemerge\LineMergeEdge.$(EXT) \
+	operation\linemerge\LineMergeGraph.$(EXT) \
+	operation\linemerge\LineMerger.$(EXT) \
+	operation\linemerge\LineSequencer.$(EXT) \
+	operation\overlay\EdgeSetNoder.$(EXT) \
+	operation\overlay\ElevationMatrix.$(EXT) \
+	operation\overlay\ElevationMatrixCell.$(EXT) \
+	operation\overlay\FuzzyPointLocator.$(EXT) \
+	operation\overlay\LineBuilder.$(EXT) \
+	operation\overlay\MaximalEdgeRing.$(EXT) \
+	operation\overlay\MinimalEdgeRing.$(EXT) \
+	operation\overlay\OffsetPointGenerator.$(EXT) \
+	operation\overlay\OverlayNodeFactory.$(EXT) \
+	operation\overlay\OverlayOp.$(EXT) \
+	operation\overlay\OverlayResultValidator.$(EXT) \
+	operation\overlay\PointBuilder.$(EXT) \
+	operation\overlay\PolygonBuilder.$(EXT) \
+	operation\polygonize\PolygonizeDirectedEdge.$(EXT) \
+	operation\polygonize\PolygonizeEdge.$(EXT) \
+	operation\polygonize\EdgeRing.$(EXT) \
+	operation\polygonize\PolygonizeGraph.$(EXT) \
+	operation\polygonize\Polygonizer.$(EXT) \
+	operation\predicate\RectangleContains.$(EXT) \
+	operation\predicate\RectangleIntersects.$(EXT) \
+	operation\predicate\SegmentIntersectionTester.$(EXT) \
+	operation\relate\EdgeEndBuilder.$(EXT) \
+	operation\relate\EdgeEndBundle.$(EXT) \
+	operation\relate\EdgeEndBundleStar.$(EXT) \
+	operation\relate\RelateComputer.$(EXT) \
+	operation\relate\RelateNode.$(EXT) \
+	operation\relate\RelateNodeFactory.$(EXT) \
+	operation\relate\RelateNodeGraph.$(EXT) \
+	operation\relate\RelateOp.$(EXT) \
+	operation\union\CascadedPolygonUnion.$(EXT) \
+	operation\valid\ConnectedInteriorTester.$(EXT) \
+	operation\valid\ConsistentAreaTester.$(EXT) \
+	operation\valid\IsValidOp.$(EXT) \
+	operation\valid\QuadtreeNestedRingTester.$(EXT) \
+	operation\valid\RepeatedPointTester.$(EXT) \
+	operation\valid\SimpleNestedRingTester.$(EXT) \
+	operation\valid\SweeplineNestedRingTester.$(EXT) \
+	operation\valid\TopologyValidationError.$(EXT) \
+	planargraph\DirectedEdge.$(EXT) \
+	planargraph\DirectedEdgeStar.$(EXT) \
+	planargraph\Edge.$(EXT) \
+	planargraph\Node.$(EXT) \
+	planargraph\NodeMap.$(EXT) \
+	planargraph\PlanarGraph.$(EXT) \
+	planargraph\Subgraph.$(EXT) \
+	planargraph\algorithm\ConnectedSubgraphFinder.$(EXT) \
+	precision\CommonBits.$(EXT) \
+	precision\CommonBitsOp.$(EXT) \
+	precision\CommonBitsRemover.$(EXT) \
+	precision\EnhancedPrecisionOp.$(EXT) \
+	precision\GeometrySnapper.$(EXT) \
+	precision\LineStringSnapper.$(EXT) \
+	precision\SimpleGeometryPrecisionReducer.$(EXT) \
+	simplify\DouglasPeuckerLineSimplifier.$(EXT) \
+	simplify\DouglasPeuckerSimplifier.$(EXT) \
+	simplify\LineSegmentIndex.$(EXT) \
+	simplify\TaggedLineSegment.$(EXT) \
+	simplify\TaggedLinesSimplifier.$(EXT) \
+	simplify\TaggedLineString.$(EXT) \
+	simplify\TaggedLineStringSimplifier.$(EXT) \
+	simplify\TopologyPreservingSimplifier.$(EXT) \
+	util\Assert.$(EXT) \
+	util\GeometricShapeFactory.$(EXT) \
+	util\math.$(EXT) \
+	util\Profiler.$(EXT) \
+	..\capi\geos_c.$(EXT) \
+	..\capi\geos_ts_c.$(EXT) \
+	inlines.$(EXT)
 
 TEST_EXE =	TestSweepLineSpeed.exe
 
@@ -287,48 +292,48 @@ $(CDLLNAME): ..\capi\geos_c.obj ..\capi\geos_ts_c.obj $(DLLNAME)
 	if exist $(CDLLNAME).manifest mt -manifest $(CDLLNAME).manifest -outputresource:$(CDLLNAME);2
   
 headers/geos/platform.h: headers/geos/platform.h.vc
-	copy headers\geos\platform.h.vc headers\geos\platform.h
+	$(CP) headers\geos\platform.h.vc headers\geos\platform.h
 
 headers/geos/version.h: headers/geos/version.h.vc
-	if not exist headers\geos\version.h copy headers\geos\version.h.vc headers\geos\version.h
+	if not exist headers\geos\version.h $(CP) headers\geos\version.h.vc headers\geos\version.h
 
 # geos_c.h should already be in distribution, if is not you'll
 # have to run ./configure to recreate
 ../capi/geos_c.h: ../capi/geos_c.h.in.
-	copy ..\capi\geos_c.h.in ..\capi\geos_c.h
-   
+	$(CP) ..\capi\geos_c.h.in ..\capi\geos_c.h
+
 .cpp.obj:
-	$(CC) $(CFLAGS) /c $*.cpp /Fo$@
+    $(CC) $(CFLAGS) /c $*.cpp /Fo$@
 
 .c.obj:
 	$(CC) $(CFLAGS) /c $*.c /Fo$@
 
 clean:
-	$(RM) $(LIBNAME)
-	$(RM) $(SLIBNAME)
-	$(RM) $(DLLNAME)
-	$(RM) $(SLIBNAME)
-	$(RM) $(CLIBNAME)
-	$(RM) $(CDLLNAME)
-	$(RM) ..\capi\*.obj
-	$(RM) *.exe
-	$(RM) *.exp
-	$(RM) *.ilk
-	$(RM) *.manifest
-	$(RM) *.obj
-	$(RM) *.pdb
-	for %d in ( $(GEOS_DIRLIST) ) do \
-		del %d\*.obj
+    @ECHO "*** Cleaning GEOS source tree"
+	@IF EXIST $(LIBNAME)  $(RM) $(LIBNAME)
+	@IF EXIST $(SLIBNAME) $(RM) $(SLIBNAME)
+	@IF EXIST $(DLLNAME)  $(RM) $(DLLNAME)
+	@IF EXIST $(SLIBNAME) $(RM) $(SLIBNAME)
+	@IF EXIST $(CLIBNAME) $(RM) $(CLIBNAME)
+	@IF EXIST $(CDLLNAME) $(RM) $(CDLLNAME)
+	-@del ..\capi\*.obj
+	-@del $*.exe
+	-@del $*.exp
+	-@del $*.ilk
+	-@del $*.manifest
+	-@del $*.obj
+	-@del $*.pdb
+	-@FOR %d IN ( $(GEOS_DIRLIST) ) DO del %d\*.obj
 
 TestSweepLineSpeed.exe:	$(LIBNAME) \
 		bigtest\GeometryTestFactory.obj \
 		bigtest\TestSweepLineSpeed.obj
-	link /debug /out:TestSweepLineSpeed.exe \
+	$(LINK) /debug /out:TestSweepLineSpeed.exe \
 		bigtest\TestSweepLineSpeed.obj \
 		bigtest\GeometryTestFactory.obj \
 		$(LIBNAME)
 
 geostest.exe: $(DLLNAME) ..\capi\geostest.obj
-	link /debug ..\capi\geostest.obj $(SLIBNAME)
+	$(LINK) /debug ..\capi\geostest.obj $(SLIBNAME)
 
 # EOF
