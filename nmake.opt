@@ -35,7 +35,7 @@ BUILD_DEBUG = NO
 BUILD_BATCH = NO
 !ENDIF
 
-!MESSAGE *** Setting BUILD_DEBUG $(BUILD_DEBUG)
+!MESSAGE *** Setting BUILD_BATCH $(BUILD_BATCH)
 
 ###############################################################################
 # Derive version of Visual C++ being used from NMAKE if not specified
@@ -66,6 +66,9 @@ GEOS_MSC = 1400
 !ELSEIF "$(_NMAKE_VER)" == "8.00.50727.762"
 GEOS_MSVC = 8.0
 GEOS_MSC = 1400
+!ELSEIF "$(_NMAKE_VER)" == "9.00.21022.08"
+GEOS_MSVC = 9.0
+GEOS_MSC = 1500
 !ELSEIF "$(_NMAKE_VER)" == "9.00.30729.01"
 GEOS_MSVC = 9.0
 GEOS_MSC = 1500
@@ -114,10 +117,11 @@ GEOS_CFLAGS = $(GEOS_CFLAGS) /GX
 !ENDIF
 
 # For Visual C++ 9.0+ use multiple process build
+!IF "$(BUILD_BATCH)" == "YES"
 !IF $(GEOS_MSC) > 1400
 MPFLAGS = /MP
-BUILD_BATCH = YES
 !MESSAGE *** Setting /MP flag to number of effective processors
+!ENDIF
 !ENDIF
 
 !MESSAGE *** Using CFLAGS $(GEOS_CFLAGS)
