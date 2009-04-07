@@ -79,12 +79,12 @@ public:
 	 * @param segmentIndex the index of the segment containing the intersection
 	 * @return the intersection node for the point
 	 */
-	SegmentNode * addIntersectionNode( geom::Coordinate * intPt, int segmentIndex) 
+	SegmentNode * addIntersectionNode( geom::Coordinate * intPt, size_t segmentIndex) 
 	{
-		int normalizedSegmentIndex = segmentIndex;
+		size_t normalizedSegmentIndex = segmentIndex;
 
 		// normalize the intersection point location
-		int nextSegIndex = normalizedSegmentIndex + 1;
+		size_t nextSegIndex = normalizedSegmentIndex + 1;
 		if (nextSegIndex < size()) 
 		{
 			const geom::Coordinate &nextPt = getCoordinate( nextSegIndex);
