@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: noding/snapround/HotPixel.java rev. 1.3 (JTS-1.9)
+ *
  **********************************************************************/
 
 #ifndef GEOS_NODING_SNAPROUND_HOTPIXEL_INL

@@ -13,11 +13,12 @@
  *
  **********************************************************************
  *
- * Last port: noding/snapround/HotPixel.java rev. 1.2 (JTS-1.7)
+ * Last port: noding/snapround/HotPixel.java rev. 1.3 (JTS-1.9)
  *
  **********************************************************************/
 
 #include <geos/noding/snapround/HotPixel.h>
+#include <geos/noding/NodedSegmentString.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/geom/Coordinate.h>
 
@@ -25,6 +26,7 @@
 # include "geos/noding/snapround/HotPixel.inl"
 #endif
 
+#include <algorithm> // for std::min and std::max
 #include <cassert>
 #include <memory>
 
@@ -74,7 +76,12 @@ HotPixel::initCorners(const Coordinate& pt)
 	maxx = pt.x + tolerance;
 	miny = pt.y - tolerance;
 	maxy = pt.y + tolerance;
-	corner.assign(4, Coordinate(minx, maxy));
+
+	corner.resize(4);
+	corner[0] = Coordinate(maxx, maxy);
+	corner[1] = Coordinate(minx, maxy);
+	corner[2] = Coordinate(minx, miny);
+	corner[4] = Coordinate(maxx, maxy);
 }
 
 bool
@@ -82,9 +89,6 @@ HotPixel::intersects(const Coordinate& p0,
 		const Coordinate& p1) const
 {
 	if (scaleFactor == 1.0) return intersectsScaled(p0, p1);
-
-	Coordinate p0Scaled;
-	Coordinate p1Scaled;
 
 	copyScaled(p0, p0Scaled);
 	copyScaled(p1, p1Scaled);
@@ -97,12 +101,10 @@ HotPixel::intersectsScaled(const Coordinate& p0,
 		const Coordinate& p1) const
 {
 
-#define MIN(x,y) (x)<(y)?(x):(y)
-
-	double segMinx = MIN(p0.x, p1.x);
-	double segMaxx = MIN(p0.x, p1.x);
-	double segMiny = MIN(p0.y, p1.y);
-	double segMaxy = MIN(p0.y, p1.y);
+	double segMinx = std::min(p0.x, p1.x);
+	double segMaxx = std::max(p0.x, p1.x);
+	double segMiny = std::min(p0.y, p1.y);
+	double segMaxy = std::max(p0.y, p1.y);
 
 	bool isOutsidePixelEnv =  maxx < segMinx
                          || minx > segMaxx
@@ -164,6 +166,21 @@ HotPixel::intersectsPixelClosure(const Coordinate& p0,
     if (li.hasIntersection()) return true;
 
     return false;
+}
+
+bool
+HotPixel::addSnappedNode(NodedSegmentString& segStr, size_t segIndex)
+{
+	const Coordinate& p0 = segStr.getCoordinate(segIndex);
+	const Coordinate& p1 = segStr.getCoordinate(segIndex + 1);
+
+	if (intersects(p0, p1))
+	{
+		//cout << "snapped: " <<  snapPt << endl;
+		segStr.addIntersection(getCoordinate(), segIndex);
+		return true;
+	}
+	return false;
 }
 
 

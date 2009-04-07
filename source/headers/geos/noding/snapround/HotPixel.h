@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: noding/snapround/HotPixel.java rev. 1.2 (JTS-1.7)
+ * Last port: noding/snapround/HotPixel.java rev. 1.3 (JTS-1.9)
  *
  **********************************************************************/
 
@@ -32,6 +32,9 @@ namespace geos {
 	}
 	namespace algorithm {
 		class LineIntersector;
+	}
+	namespace noding {
+		class NodedSegmentString;
 	}
 }
 
@@ -59,6 +62,9 @@ private:
 	geom::Coordinate pt;
 	const geom::Coordinate& originalPt;
 	geom::Coordinate ptScaled;
+
+	mutable geom::Coordinate p0Scaled;
+	mutable geom::Coordinate p1Scaled;
 
 	double scaleFactor;
 
@@ -151,6 +157,15 @@ public:
 	bool intersects(const geom::Coordinate& p0,
 			const geom::Coordinate& p1) const;
  
+	/**
+	 * Adds a new node (equal to the snap pt) to the specified segment
+	 * if the segment passes through the hot pixel
+	 *
+	 * @param segStr
+	 * @param segIndex
+	 * @return true if a node was added to the segment
+	 */
+	bool addSnappedNode(NodedSegmentString& segStr, size_t segIndex);
 
 };
 
