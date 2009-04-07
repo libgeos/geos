@@ -12,6 +12,10 @@
  * See the COPYING file for more information.
  *
  *
+ **********************************************************************
+ *
+ * Last port: noding/SegmentStringUtil.java rev. 1.2 (JTS-1.9)
+ *
  **********************************************************************/
 
 #ifndef GEOS_NODING_SEGMENTSTRINGUTIL_H
@@ -33,29 +37,34 @@ namespace noding { // geos::noding
  */
 class SegmentStringUtil
 {
-private:
-protected:
 public:
-	/**
+	/** \brief
 	 * Extracts all linear components from a given {@link Geometry}
 	 * to {@link SegmentString}s.
+	 *
 	 * The SegmentString data item is set to be the source Geometry.
 	 * 
 	 * @param geom the geometry to extract from
-	 * @return a List of SegmentStrings
+	 * @param segStr a List of SegmentStrings (output parameter).
+	 *               Ownership of elements pushed to the vector
+	 *		 is transferred to caller.
 	 */
-	static void extractSegmentStrings( const geom::Geometry * g, SegmentString::ConstVect & segStr)
+	static void extractSegmentStrings(const geom::Geometry * g,
+					  SegmentString::ConstVect& segStr)
 	{
 		geom::LineString::ConstVect lines;
-		geom::util::LinearComponentExtracter::getLines( *g, lines);
+		geom::util::LinearComponentExtracter::getLines(*g, lines);
 
 		for (size_t i=0, n=lines.size(); i<n; i++)
 		{
-			geom::LineString * line = (geom::LineString *)(lines[i]);
+			geom::LineString* line = (geom::LineString*)(lines[i]);
 
-			geom::CoordinateSequence * pts = line->getCoordinates();
+			// we take ownership of the coordinates here
+			// TODO: check if this can be optimized by getting
+			//       the internal CS.
+			geom::CoordinateSequence* pts = line->getCoordinates();
 
-			segStr.push_back( new NodedSegmentString( pts, g));
+			segStr.push_back(new NodedSegmentString(pts, g));
 		}
 	}
 
