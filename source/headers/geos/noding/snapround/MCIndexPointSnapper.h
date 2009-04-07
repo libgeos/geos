@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: noding/snapround/MCIndexPointSnapper.java rev. 1.4 (JTS-1.9)
+ *
  **********************************************************************/
 
 #ifndef GEOS_NODING_SNAPROUND_MCINDEXPOINTSNAPPER_H
@@ -39,7 +43,6 @@ namespace snapround { // geos::noding::snapround
  * "Snaps" all {@link SegmentString}s in a {@link SpatialIndex} containing
  * {@link MonotoneChain}s to a given {@link HotPixel}.
  *
- * Last port: noding/snapround/MCIndexPointSnapper.java rev. 1.2 (JTS-1.7)
  */
 class MCIndexPointSnapper {
 
@@ -68,10 +71,10 @@ public:
 	 * @param vertexIndex the index of the vertex, if applicable, or -1
 	 * @return <code>true</code> if a node was added for this pixel
 	 */
-	bool snap(const HotPixel& hotPixel, SegmentString* parentEdge,
+	bool snap(HotPixel& hotPixel, SegmentString* parentEdge,
 			unsigned int vertexIndex);
 
-	bool snap(const HotPixel& hotPixel) {
+	bool snap(HotPixel& hotPixel) {
 		return snap(hotPixel, 0, 0);
 	}
 		

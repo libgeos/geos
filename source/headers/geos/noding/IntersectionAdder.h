@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: noding/IntersectionAdder.java rev. 1.6 (JTS-1.9)
+ *
  **********************************************************************/
 
 #ifndef GEOS_NODING_INTERSECTIONADDER_H
@@ -48,8 +52,6 @@ namespace noding { // geos.noding
  * The {@link addIntersections} method is called whenever the {@link Noder}
  * detects that two SegmentStrings <i>might</i> intersect.
  * This class is an example of the <i>Strategy</i> pattern.
- *
- * Last port: noding/IntersectionAdder.java rev. 1.4 (JTS-1.7)
  *
  */
 class IntersectionAdder: public SegmentIntersector {
@@ -160,6 +162,14 @@ public:
 		return std::abs(i1 - i2) == 1;
 	}
 
+	/**
+	 * Always process all intersections
+	 *
+	 * @return false always
+	 */
+	virtual bool isDone() const {
+		return false;
+	}
 };
  
 

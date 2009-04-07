@@ -13,13 +13,13 @@
  *
  **********************************************************************
  *
- * Last port: noding/MCIndexNoder.java rev. 1.4 (JTS-1.7)
+ * Last port: noding/MCIndexNoder.java rev. 1.6 (JTS-1.9)
  *
  **********************************************************************/
 
 #include <geos/noding/MCIndexNoder.h>
 #include <geos/noding/SegmentIntersector.h>
-#include <geos/noding/SegmentString.h>
+#include <geos/noding/NodedSegmentString.h>
 #include <geos/index/chain/MonotoneChain.h> 
 #include <geos/index/chain/MonotoneChainBuilder.h> 
 

@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: noding/SegmentNodeList.java rev. 1.7 (JTS-1.7)
+ * Last port: noding/SegmentNodeList.java rev. 1.8 (JTS-1.9)
  *
  **********************************************************************/
 
@@ -24,7 +24,7 @@
 #include <geos/profiler.h>
 #include <geos/util/GEOSException.h>
 #include <geos/noding/SegmentNodeList.h>
-#include <geos/noding/SegmentString.h>
+#include <geos/noding/NodedSegmentString.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateArraySequence.h> // FIXME: should we really be using this ?
@@ -283,7 +283,7 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 	}
 	if (useIntPt1) 	pts->setAt(ei1->coord, ipt++);
 
-	SegmentString *ret = new SegmentString(pts, edge.getData());
+	SegmentString *ret = new NodedSegmentString(pts, edge.getData());
 #if GEOS_DEBUG
 	std::cerr<<" SegmentString created"<<std::endl;
 #endif

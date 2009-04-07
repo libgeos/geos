@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: noding/IntersectionFinderAdder.java rev. 1.2 (JTS-1.7)
+ * Last port: noding/IntersectionFinderAdder.java rev. 1.5 (JTS-1.9)
  *
  **********************************************************************/
 
@@ -21,6 +21,7 @@
 
 #include <geos/noding/IntersectionFinderAdder.h>
 #include <geos/noding/SegmentString.h>
+#include <geos/noding/NodedSegmentString.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/geom/Coordinate.h>
 
@@ -53,8 +54,12 @@ IntersectionFinderAdder::processIntersections(
 			{
 				interiorIntersections.push_back(li.getIntersection(intIndex));
 			}
-        		e0->addIntersections(&li, segIndex0, 0);
-			e1->addIntersections(&li, segIndex1, 1);
+
+			NodedSegmentString* ee0 = dynamic_cast<NodedSegmentString*>(e0);
+			NodedSegmentString* ee1 = dynamic_cast<NodedSegmentString*>(e1);
+			assert(ee0 && ee1);
+        		ee0->addIntersections(&li, segIndex0, 0);
+			ee1->addIntersections(&li, segIndex1, 1);
 		}
 	}
 }

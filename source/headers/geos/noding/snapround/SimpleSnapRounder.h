@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: noding/snapround/SimpleSnapRounder.java rev. 1.4 (JTS-1.9)
+ *
  **********************************************************************/
 
 #ifndef GEOS_NODING_SNAPROUND_SIMPLESNAPROUNDER_H
@@ -35,6 +39,7 @@ namespace geos {
 	}
 	namespace noding {
 		class SegmentString;
+		class NodedSegmentString;
 		namespace snapround {
 			class HotPixel;
 		}
@@ -100,14 +105,14 @@ private:
 	void computeSnaps(const std::vector<SegmentString*>& segStrings,
 		std::vector<geom::Coordinate>& snapPts);
 
-	void computeSnaps(SegmentString* ss, std::vector<geom::Coordinate>& snapPts);
+	void computeSnaps(NodedSegmentString* ss, std::vector<geom::Coordinate>& snapPts);
 
 	/** \brief
 	 * Performs a brute-force comparison of every segment in each
 	 * {@link SegmentString}.
 	 * This has n^2 performance.
 	 */
-	void computeVertexSnaps(SegmentString* e0, SegmentString* e1);
+	void computeVertexSnaps(NodedSegmentString* e0, NodedSegmentString* e1);
 
 public:
 
@@ -129,14 +134,15 @@ public:
 	 * @return <code>true</code> if a node was added
 	 */
 	static bool addSnappedNode(const HotPixel& hotPix,
-			SegmentString& segStr,
+			NodedSegmentString& segStr,
 			unsigned int segIndex);
 
 	/**
 	 * Computes nodes introduced as a result of
 	 * snapping segments to vertices of other segments
 	 *
-	 * @param segStrings the list of segment strings to snap together
+	 * @param segStrings the list of segment strings to snap together.
+	 *        Must be NodedSegmentString or an assertion will fail.
 	 */
 	void computeVertexSnaps(const std::vector<SegmentString*>& edges);
 };

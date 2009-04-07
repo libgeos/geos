@@ -11,15 +11,19 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: noding/SegmentString.java rev. 1.6 (JTS-1.9)
+ *
  **********************************************************************/
 
 #include <geos/noding/SegmentString.h>
-#include <geos/noding/SegmentNodeList.h>
-#include <geos/algorithm/LineIntersector.h>
-#include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateSequence.h>
-#include <geos/util/IllegalArgumentException.h>
-#include <geos/noding/Octant.h>
+//#include <geos/noding/SegmentNodeList.h>
+//#include <geos/algorithm/LineIntersector.h>
+//#include <geos/geom/Coordinate.h>
+//#include <geos/geom/CoordinateSequence.h>
+//#include <geos/util/IllegalArgumentException.h>
+//#include <geos/noding/Octant.h>
 //#include <geos/profiler.h>
 
 #ifndef GEOS_DEBUG
@@ -39,121 +43,17 @@ using namespace geos::geom;
 namespace geos {
 namespace noding { // geos.noding
 
-/*public*/
-void
-SegmentString::addIntersections(LineIntersector *li, unsigned int segmentIndex,
-		int geomIndex)
-{
-	for (int i=0, n=li->getIntersectionNum(); i<n; ++i) {
-		addIntersection(li, segmentIndex, geomIndex, i);
-	}
-}
-
-/*public*/
-void
-SegmentString::addIntersection(LineIntersector *li, unsigned int segmentIndex,
-		int geomIndex, int intIndex)
-{
-    UNREFERENCED_PARAMETER(geomIndex);
-
-	const Coordinate &intPt=li->getIntersection(intIndex);
-	addIntersection(intPt, segmentIndex);
-}
-
-/*public*/
-void
-SegmentString::addIntersection(const Coordinate& intPt,
-	unsigned int segmentIndex)
-{
-	unsigned int normalizedSegmentIndex = segmentIndex;
-
-	if ( segmentIndex > size()-2 )
-	{
-		throw util::IllegalArgumentException("SegmentString::addIntersection: SegmentIndex out of range");
-	}
-
-	// normalize the intersection point location
-	unsigned int nextSegIndex = normalizedSegmentIndex + 1;
-	if (nextSegIndex < size())
-	{
-		const Coordinate& nextPt = pts->getAt(nextSegIndex);
-
-		// Normalize segment index if intPt falls on vertex
-		// The check for point equality is 2D only -
-		// Z values are ignored
-		if (intPt.equals2D(nextPt)) {
-			normalizedSegmentIndex = nextSegIndex;
-		}
-	}
-
-	/*
-	 * Add the intersection point to edge intersection list
-	 * (unless the node is already known)
-	 */
-	//SegmentNode *ei=
-	nodeList.add(intPt, normalizedSegmentIndex);
-
-
-	testInvariant();
-}
-
-/* public static */
-void
-SegmentString::getNodedSubstrings(const SegmentString::NonConstVect& segStrings,
-	SegmentString::NonConstVect *resultEdgeList)
-{
-	assert(resultEdgeList);
-	for ( SegmentString::NonConstVect::const_iterator
-		i=segStrings.begin(), iEnd=segStrings.end();
-		i != iEnd; ++i )
-	{
-		SegmentString* ss = *i;
-		assert(ss);
-		ss->getNodeList().addSplitEdges(resultEdgeList);
-	}
-}
-
-/* public static */
-SegmentString::NonConstVect*
-SegmentString::getNodedSubstrings(const SegmentString::NonConstVect& segStrings)
-{
-	SegmentString::NonConstVect* resultEdgelist = \
-		new SegmentString::NonConstVect();
-	getNodedSubstrings(segStrings, resultEdgelist);
-	return resultEdgelist;
-}
-
-/*public*/
-int
-SegmentString::getSegmentOctant(unsigned int index) const
-{
-	testInvariant();
-	if (index >= size() - 1) return -1;
-	return Octant::octant(getCoordinate(index), getCoordinate(index+1));
-}
-
-/* public */
-void
-SegmentString::notifyCoordinatesChange() const
-{
-	npts = pts->size();
-
-	// What about SegmentNodes ? should
-	// we invalidate them as well ?
-
-	testInvariant();
-}
-
-
 std::ostream& operator<< (std::ostream& os, const SegmentString& ss)
 {
-	os << "SegmentString: " << std::endl;
-	os << " LINESTRING" << *(ss.pts) << ";" << std::endl;
-	os << " Nodes: " << ss.nodeList.size() << std::endl;
-
-	return os;
+	return ss.print(os);
 }
 
+std::ostream&
+SegmentString::print(std::ostream& os) const
+{
+	os << "SegmentString" << std::endl;
+	return os;
+}
 
 } // namespace geos.noding
 } // namespace geos

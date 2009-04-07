@@ -50,9 +50,10 @@ geos_unit_SOURCES = geos_unit.cpp \
 	index/quadtree/DoubleBitsTest.cpp \
 	io/ByteOrderValuesTest.cpp \
 	io/WKBReaderTest.cpp \
+	noding/BasicSegmentStringTest.cpp \
+	noding/NodedSegmentStringTest.cpp \
 	noding/SegmentNodeTest.cpp \
 	noding/SegmentPointComparatorTest.cpp \
-	noding/SegmentStringTest.cpp \
 	operation/distance/DistanceOpTest.cpp \
 	operation/IsSimpleOpTest.cpp \
 	operation/overlay/FuzzyPointLocatorTest.cpp \

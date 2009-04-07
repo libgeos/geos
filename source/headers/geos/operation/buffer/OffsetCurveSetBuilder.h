@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/buffer/OffsetCurveSetBuilder.java rev. 1.11 (JTS-1.9)
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_BUFFER_OFFSETCURVESETBUILDER_H
@@ -53,8 +57,6 @@ namespace buffer { // geos.operation.buffer
  *
  * Raw curves need to be noded together and polygonized to form the
  * final buffer area.
- *
- * Last port: operation/buffer/OffsetCurveSetBuilder.java rev. 1.7 (JTS-1.7)
  *
  */
 class OffsetCurveSetBuilder {

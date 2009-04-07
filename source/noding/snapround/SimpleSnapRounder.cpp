@@ -13,13 +13,14 @@
  *
  **********************************************************************
  *
- * Last port: noding/snapround/SimpleSnapRounder.java rev. 1.2 (JTS-1.7)
+ * Last port: noding/snapround/SimpleSnapRounder.java rev. 1.4 (JTS-1.9)
  *
  **********************************************************************/
 
 #include <geos/noding/snapround/SimpleSnapRounder.h>
 #include <geos/noding/snapround/HotPixel.h>
 #include <geos/noding/SegmentString.h>
+#include <geos/noding/NodedSegmentString.h>
 #include <geos/noding/NodingValidator.h>
 #include <geos/noding/MCIndexNoder.h>
 #include <geos/noding/IntersectionFinderAdder.h>
@@ -77,7 +78,7 @@ SimpleSnapRounder::checkCorrectness(
 		SegmentString::NonConstVect& inputSegmentStrings)
 {
 	auto_ptr<SegmentString::NonConstVect> resultSegStrings(
-		SegmentString::getNodedSubstrings(inputSegmentStrings)
+		NodedSegmentString::getNodedSubstrings(inputSegmentStrings)
 	);
 
 	NodingValidator nv(*(resultSegStrings.get()));
@@ -99,9 +100,7 @@ SimpleSnapRounder::computeSnaps(const SegmentString::NonConstVect& segStrings,
 			i=segStrings.begin(), iEnd=segStrings.end();
 			i!=iEnd; ++i)
 	{
-		SegmentString* ss = *i;
-
-		ss->testInvariant();
+		NodedSegmentString* ss = dynamic_cast<NodedSegmentString*>(*i);
 
 		computeSnaps(ss, snapPts);
 	}
@@ -109,7 +108,7 @@ SimpleSnapRounder::computeSnaps(const SegmentString::NonConstVect& segStrings,
 
 /*private*/
 void
-SimpleSnapRounder::computeSnaps(SegmentString* ss, vector<Coordinate>& snapPts)
+SimpleSnapRounder::computeSnaps(NodedSegmentString* ss, vector<Coordinate>& snapPts)
 {
 	for (vector<Coordinate>::iterator
 		it=snapPts.begin(), itEnd=snapPts.end();
@@ -126,7 +125,7 @@ SimpleSnapRounder::computeSnaps(SegmentString* ss, vector<Coordinate>& snapPts)
 /* public static */
 bool
 SimpleSnapRounder::addSnappedNode(const HotPixel& hotPix,
-		SegmentString& segStr, unsigned int segIndex)
+		NodedSegmentString& segStr, unsigned int segIndex)
 {
 	const Coordinate& p0 = segStr.getCoordinate(segIndex);
 	const Coordinate& p1 = segStr.getCoordinate(segIndex + 1);
@@ -144,7 +143,7 @@ SimpleSnapRounder::addSnappedNode(const HotPixel& hotPix,
 
 /*private*/
 void
-SimpleSnapRounder::computeVertexSnaps(SegmentString* e0, SegmentString* e1)
+SimpleSnapRounder::computeVertexSnaps(NodedSegmentString* e0, NodedSegmentString* e1)
 {
 	const CoordinateSequence* pts0 = e0->getCoordinates();
 	const CoordinateSequence* pts1 = e1->getCoordinates();
@@ -179,12 +178,14 @@ SimpleSnapRounder::computeVertexSnaps(const SegmentString::NonConstVect& edges)
 			i0=edges.begin(), i0End=edges.end();
 			i0!=i0End; ++i0)
 	{
-		SegmentString* edge0 = *i0;
+		NodedSegmentString* edge0 = dynamic_cast<NodedSegmentString*>(*i0);
+		assert(edge0);
 		for (SegmentString::NonConstVect::const_iterator
 				i1=edges.begin(), i1End=edges.end();
 				i1!=i1End; ++i1)
 		{
-			SegmentString* edge1 = *i1;
+			NodedSegmentString* edge1 = dynamic_cast<NodedSegmentString*>(*i1);
+			assert(edge1);
 			computeVertexSnaps(edge0, edge1);
 		}
 	}

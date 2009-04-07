@@ -12,11 +12,16 @@
  * See the COPYING file for more information.
  *
  *
+ **********************************************************************
+ *
+ * Last port: noding/NodedSegmentString.java rev. 1.2 (JTS-1.9)
+ *
  **********************************************************************/
 
 #ifndef GEOS_NODING_NODEDSEGMENTSTRING_H
 #define GEOS_NODING_NODEDSEGMENTSTRING_H
 
+#include <geos/geom/CoordinateSequence.h> // for inlines
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/noding/NodableSegmentString.h>
 #include <geos/noding/SegmentNode.h>
@@ -41,14 +46,13 @@ namespace noding { // geos::noding
  * for preserving topological or parentage information.
  * All noded substrings are initialized with the same context object.
  *
- * @version 1.7
  */
 class NodedSegmentString : public NodableSegmentString 
 {
-private:
-protected:
 public:
-	static void getNodedSubstrings( SegmentString::ConstVect * segStrings, SegmentString::NonConstVect * resultEdgelist)
+
+	static void getNodedSubstrings(SegmentString::ConstVect* segStrings,
+			SegmentString::NonConstVect* resultEdgelist)
 	{
 		for (size_t i=0, n=segStrings->size(); i<n; i++)
 		{
@@ -57,14 +61,30 @@ public:
 		}
 	}
 
+	static void getNodedSubstrings(
+			const SegmentString::NonConstVect& segStrings,
+			SegmentString::NonConstVect* resultEdgeList);
+
+	/// Returns allocated object
+	static SegmentString::NonConstVect* getNodedSubstrings(
+			const SegmentString::NonConstVect& segStrings);
+
+
 	/**
 	 * Creates a new segment string from a list of vertices.
 	 *
-	 * @param pts the vertices of the segment string
-	 * @param data the user-defined data of this segment string (may be null)
+	 * @param newPts CoordinateSequence representing the string,
+	 *                externally owned
+	 *
+	 * @param data the user-defined data of this segment string
+	 *             (may be null)
 	 */
-	NodedSegmentString( geom::CoordinateSequence *newPts, const void* newContext)
-		: NodableSegmentString( newPts, newContext ) 
+	NodedSegmentString(geom::CoordinateSequence *newPts,
+			const void* newContext)
+		:
+		NodableSegmentString(newContext),
+		nodeList(this),
+		pts(newPts)
 	{ }
 
 	~NodedSegmentString()
@@ -101,6 +121,69 @@ public:
 		SegmentNode * ei = getNodeList().add( *intPt, normalizedSegmentIndex);
 		return ei;
 	}
+
+	SegmentNodeList& getNodeList();
+
+	const SegmentNodeList& getNodeList() const;
+
+	virtual unsigned int size() const
+	{
+		return pts->size();
+	}
+
+	virtual const geom::Coordinate& getCoordinate(unsigned int i) const;
+
+	virtual geom::CoordinateSequence* getCoordinates() const;
+
+	virtual bool isClosed() const;
+
+	virtual std::ostream& print(std::ostream& os) const;
+
+
+	/** \brief
+	 * Gets the octant of the segment starting at vertex index.
+	 *
+	 * @param index the index of the vertex starting the segment. 
+	 *        Must not be the last index in the vertex list
+	 * @return the octant of the segment at the vertex
+	 */
+	int getSegmentOctant(unsigned int index) const;
+
+	/** \brief
+	 * Add {SegmentNode}s for one or both
+	 * intersections found for a segment of an edge to the edge
+	 * intersection list.
+	 */
+	void addIntersections(algorithm::LineIntersector *li,
+			unsigned int segmentIndex, int geomIndex);
+
+	/** \brief
+	 * Add an SegmentNode for intersection intIndex.
+	 *
+	 * An intersection that falls exactly on a vertex
+	 * of the SegmentString is normalized
+	 * to use the higher of the two possible segmentIndexes
+	 */
+	void addIntersection(algorithm::LineIntersector *li,
+			unsigned int segmentIndex,
+			int geomIndex, int intIndex);
+
+	/** \brief
+	 * Add an SegmentNode for intersection intIndex.
+	 *
+	 * An intersection that falls exactly on a vertex of the
+	 * edge is normalized
+	 * to use the higher of the two possible segmentIndexes
+	 */
+	void addIntersection(const geom::Coordinate& intPt,
+			unsigned int segmentIndex);
+
+
+private:
+
+	SegmentNodeList nodeList;
+
+	geom::CoordinateSequence *pts;
 
 };
 

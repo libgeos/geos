@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: noding/SimpleNoder.java rev. 1.7 (JTS-1.9)
+ *
  **********************************************************************/
 
 #ifndef GEOS_NODING_SIMPLENODER_H
@@ -21,7 +25,7 @@
 #include <geos/inline.h>
 
 #include <geos/noding/SinglePassNoder.h>
-#include <geos/noding/SegmentString.h> // for inlined (FIXME)
+#include <geos/noding/NodedSegmentString.h> // for inlined (FIXME)
 
 // Forward declarations
 namespace geos {
@@ -57,7 +61,7 @@ public:
 	void computeNodes(std::vector<SegmentString*>* inputSegmentStrings);
 
 	std::vector<SegmentString*>* getNodedSubstrings() const {
-		return SegmentString::getNodedSubstrings(*nodedSegStrings);
+		return NodedSegmentString::getNodedSubstrings(*nodedSegStrings);
 	}
 };
 

@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: noding/IteratedNoder.java rev. 1.6 (JTS-1.9)
+ *
  **********************************************************************/
 
 #ifndef GEOS_NODING_ITERATEDNODER_H
@@ -45,7 +49,6 @@ namespace noding { // geos::noding
  * due to roundoff error.   This problem is detected and an exception is thrown.
  * Clients can choose to rerun the noding using a lower precision model.
  *
- * Last port: noding/IteratedNoder.java rev. 1.6 (JTS-1.7)
  */
 class IteratedNoder : public Noder { // implements Noder
 
@@ -89,7 +92,7 @@ public:
 	void setMaximumIterations(int n) { maxIter = n; }
 
 	std::vector<SegmentString*>* getNodedSubstrings() const {
-		return SegmentString::getNodedSubstrings(*nodedSegStrings);
+		return nodedSegStrings;
 	}
  
 

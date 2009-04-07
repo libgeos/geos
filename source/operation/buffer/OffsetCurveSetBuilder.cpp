@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/OffsetCurveSetBuilder.java rev. 1.7 (JTS-1.7)
+ * Last port: operation/buffer/OffsetCurveSetBuilder.java rev. 1.11 (JTS-1.9)
  *
  **********************************************************************/
 
@@ -35,7 +35,7 @@
 #include <geos/geom/Triangle.h>
 #include <geos/geomgraph/Position.h>
 #include <geos/geomgraph/Label.h>
-#include <geos/noding/SegmentString.h>
+#include <geos/noding/NodedSegmentString.h>
 
 #include <cmath>
 #include <cassert>
@@ -68,7 +68,6 @@ OffsetCurveSetBuilder::OffsetCurveSetBuilder(const Geometry& newInputGeom,
 
 OffsetCurveSetBuilder::~OffsetCurveSetBuilder()
 {
-	//delete cga;
 	for (size_t i=0, n=curveList.size(); i<n; ++i)
 	{
 		delete curveList[i]->getCoordinates();
@@ -117,7 +116,11 @@ OffsetCurveSetBuilder::addCurve(CoordinateSequence *coord,
 
 	// add the edge for a coordinate list which is a raw offset curve
 	Label *newlabel = new Label(0, Location::BOUNDARY, leftLoc, rightLoc);
-	SegmentString *e=new SegmentString(coord, newlabel); // SegmentString doesnt own the sequence, so we need to delete in the destructor
+
+	SegmentString *e=new NodedSegmentString(coord, newlabel);
+
+	// SegmentString doesnt own the sequence, so we need to delete in
+	// the destructor
 	newLabels.push_back(newlabel);
 	curveList.push_back(e);
 }
@@ -220,6 +223,14 @@ OffsetCurveSetBuilder::addPolygon(const Polygon *p)
 	{
 		delete shellCoord;
 		return;
+	}
+
+	// don't attemtp to buffer a polygon
+	// with too few distinct vertices
+	if (distance <= 0.0 && shellCoord->size() < 3)
+	{
+		delete shellCoord;
+        	return;
 	}
 
 	addPolygonRing(

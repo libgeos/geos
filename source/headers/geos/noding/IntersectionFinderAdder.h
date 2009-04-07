@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: noding/IntersectionFinderAdder.java rev. 1.5 (JTS-1.9)
+ *
  **********************************************************************/
 
 #ifndef GEOS_NODING_INTERSECTIONFINDERADDER_H
@@ -43,8 +47,6 @@ namespace noding { // geos.noding
 /** \brief
  * Finds proper and interior intersections in a set of SegmentStrings,
  * and adds them as nodes.
- *
- * Last port: noding/IntersectionFinderAdder.java rev. 1.2 (JTS-1.7)
  *
  */
 class IntersectionFinderAdder: public SegmentIntersector {
@@ -87,6 +89,14 @@ public:
 		return interiorIntersections;
 	}
 	
+	/**
+	 * Always process all intersections
+	 *
+	 * @return false always
+	 */
+	virtual bool isDone() const {
+		return false;
+	}
 };
 
 } // namespace geos.noding

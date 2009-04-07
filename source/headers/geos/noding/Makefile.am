@@ -6,6 +6,7 @@ EXTRA_DIST = MCIndexNoder.inl  SegmentString.inl
 #
 
 noinst_HEADERS = \
+	BasicSegmentString.h \
 	FastNodingValidator.h \
 	FastSegmentSetIntersectionFinder.h \
 	IntersectionAdder.h \

@@ -39,8 +39,9 @@ class NodableSegmentString : public SegmentString
 private:
 protected:
 public:
-	NodableSegmentString( geom::CoordinateSequence *newPts, const void* newContext)
-		: SegmentString( newPts, newContext ) 
+	NodableSegmentString(const void* newContext)
+		:
+		SegmentString( newContext ) 
 	{ }
 
 	/**

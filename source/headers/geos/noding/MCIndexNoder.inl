@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: noding/MCIndexNoder.java rev. 1.6 (JTS-1.9)
+ *
  **********************************************************************/
 
 #ifndef GEOS_NODINGMCINDEXNODER_INL
@@ -18,6 +22,7 @@
 
 #include <geos/noding/MCIndexNoder.h>
 #include <geos/noding/SegmentString.h>
+#include <geos/noding/NodedSegmentString.h>
 
 #include <cassert>
 
@@ -34,7 +39,7 @@ INLINE std::vector<SegmentString*>*
 MCIndexNoder::getNodedSubstrings() const
 {
 	assert(nodedSegStrings); // must have colled computeNodes before!
-	return SegmentString::getNodedSubstrings(*nodedSegStrings);
+	return NodedSegmentString::getNodedSubstrings(*nodedSegStrings);
 }
 
 } // namespace geos::noding

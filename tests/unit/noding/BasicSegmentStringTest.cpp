@@ -1,11 +1,11 @@
-// $Id$
+// $Id@
 // 
-// Test Suite for geos::noding::SegmentString class.
+// Test Suite for geos::noding::BasicSegmentString class.
 
 // TUT
 #include <tut.h>
 // GEOS
-#include <geos/noding/SegmentString.h>
+#include <geos/noding/BasicSegmentString.h>
 #include <geos/noding/Octant.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -19,13 +19,13 @@ namespace tut
     //
 
     // Common data used by tests
-    struct test_segmentstring_data
+    struct test_basicsegmentstring_data
     {
 
     	typedef std::auto_ptr<geos::geom::CoordinateSequence> \
 		CoordinateSequenceAutoPtr;
 
-    	typedef std::auto_ptr<geos::noding::SegmentString> \
+    	typedef std::auto_ptr<geos::noding::BasicSegmentString> \
 		SegmentStringAutoPtr;
 	
 	const geos::geom::CoordinateSequenceFactory* csFactory;
@@ -34,26 +34,26 @@ namespace tut
 	makeSegmentString(geos::geom::CoordinateSequence* cs, void *d = 0)
 	{
 		return SegmentStringAutoPtr(
-			new geos::noding::SegmentString(cs, d)
+			new geos::noding::BasicSegmentString(cs, d)
 			);
 	}
 
-	test_segmentstring_data()
+	test_basicsegmentstring_data()
 		:
 		csFactory(geos::geom::CoordinateArraySequenceFactory::instance())
 	{
 	}
 	
-	~test_segmentstring_data()
+	~test_basicsegmentstring_data()
 	{
 	}
 
     };
 
-    typedef test_group<test_segmentstring_data> group;
+    typedef test_group<test_basicsegmentstring_data> group;
     typedef group::object object;
 
-    group test_segmentstring_group("geos::noding::SegmentString");
+    group test_basicsegmentstring_group("geos::noding::BasicSegmentString");
 
     //
     // Test Cases
@@ -89,8 +89,6 @@ namespace tut
 
 	ensure_equals(ss->getCoordinate(1), c1);
 
-	ensure_equals(ss->isIsolated(), false);
-
 	ensure_equals(ss->isClosed(), true);
 
 	// this would throw an exception
@@ -102,9 +100,6 @@ namespace tut
 	}
 	ensure(octant_failed);
 
-	ensure_equals(ss->getNodeList().size(), 0u);
-
-	ss->testInvariant();
     }
 
     // test constructor with 2 different points
@@ -137,15 +132,10 @@ namespace tut
 
 	ensure_equals(ss->getCoordinate(1), c1);
 
-	ensure_equals(ss->isIsolated(), false);
-
 	ensure_equals(ss->isClosed(), false);
 
 	ensure_equals(ss->getSegmentOctant(0), 0);
 
-	ensure_equals(ss->getNodeList().size(), 0u);
-
-	ss->testInvariant();
     }
 
     // test constructor with 4 different points forming a ring
@@ -185,8 +175,6 @@ namespace tut
 
 	ensure_equals(ss->getCoordinate(3), c0);
 
-	ensure_equals(ss->isIsolated(), false);
-
 	ensure_equals(ss->isClosed(), true);
 
 	ensure_equals(ss->getSegmentOctant(2), 4);
@@ -195,52 +183,12 @@ namespace tut
 
 	ensure_equals(ss->getSegmentOctant(0), 0);
 
-	ensure_equals(ss->getNodeList().size(), 0u);
-
-	ss->testInvariant();
-    }
-
-    // test adding intersections 
-    template<>
-    template<>
-    void object::test<4>()
-    {
-	geos::geom::Coordinate p0(0, 0);
-	geos::geom::Coordinate p1(10, 0);
-
-
-    	CoordinateSequenceAutoPtr cs(csFactory->create(0, 2));
-	cs->add(p0);
-	cs->add(p1);
-
-	SegmentStringAutoPtr ss(makeSegmentString(cs.get()));
-
-	ensure_equals(ss->getNodeList().size(), 0u);
-
-	// the intersection is invalid, but SegmentString trusts us
-	ss->addIntersection(p0, 0);
-	ensure_equals(ss->getNodeList().size(), 1u);
-
-	// This node is already present, so shouldn't be
-	// accepted as a new one
-	ss->addIntersection(p0, 0);
-	ensure_equals(ss->getNodeList().size(), 1u);
-
-	ss->addIntersection(p1, 0);
-	ensure_equals(ss->getNodeList().size(), 2u);
-
-	ss->addIntersection(p1, 0);
-	ensure_equals(ss->getNodeList().size(), 2u);
-
-	ss->addIntersection(p0, 0);
-	ensure_equals(ss->getNodeList().size(), 2u);
-
     }
 
 	// test Octant class
 	template<>
 	template<>
-	void object::test<5>()
+	void object::test<4>()
 	{
 		geos::geom::Coordinate p0(0, 0);
 		geos::geom::Coordinate p1(5,-5);

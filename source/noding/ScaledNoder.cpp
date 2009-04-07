@@ -146,8 +146,6 @@ ScaledNoder::scale(SegmentString::NonConstVect& segStrings) const
 	{
 		SegmentString* ss=*i0;
 
-		ss->testInvariant();
-
 		CoordinateSequence* cs=ss->getCoordinates();
 
 #ifndef NDEBUG
@@ -162,8 +160,6 @@ ScaledNoder::scale(SegmentString::NonConstVect& segStrings) const
 		// the memory cost ?
 		cs->removeRepeatedPoints();
 
-		// Let SegmentString know that something might be changed
-		ss->notifyCoordinatesChange();
 	}
 }
 

@@ -5,6 +5,7 @@ noinst_LTLIBRARIES = libnoding.la
 INCLUDES = -I$(top_srcdir)/source/headers 
 
 libnoding_la_SOURCES = \
+	BasicSegmentString.cpp \
 	FastNodingValidator.cpp \
 	FastSegmentSetIntersectionFinder.cpp \
 	IntersectionAdder.cpp \

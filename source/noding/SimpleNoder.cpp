@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: noding/SimpleNoder.java rev. 1.7 (JTS-1.9)
+ *
  **********************************************************************/
 
 #include <geos/noding/SimpleNoder.h>

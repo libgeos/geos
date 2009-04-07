@@ -13,12 +13,13 @@
  *
  **********************************************************************
  *
- * Last port: noding/IntersectionAdder.java rev. 1.4 (JTS-1.7)
+ * Last port: noding/IntersectionAdder.java rev. 1.6 (JTS-1.9)
  *
  **********************************************************************/
 
 #include <geos/noding/IntersectionAdder.h>
 #include <geos/noding/SegmentString.h>
+#include <geos/noding/NodedSegmentString.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/geom/Coordinate.h>
 
@@ -90,8 +91,13 @@ IntersectionAdder::processIntersections(
 	if (! isTrivialIntersection(e0, segIndex0, e1, segIndex1))
 	{
 		hasIntersectionVar = true;
-		e0->addIntersections(&li, segIndex0, 0);
-		e1->addIntersections(&li, segIndex1, 1);
+
+		NodedSegmentString* ee0 = dynamic_cast<NodedSegmentString*>(e0);
+		NodedSegmentString* ee1 = dynamic_cast<NodedSegmentString*>(e1);
+		assert(ee0 && ee1);
+		ee0->addIntersections(&li, segIndex0, 0);
+		ee1->addIntersections(&li, segIndex1, 1);
+
 		if (li.isProper()) {
 			numProperIntersections++;
 			//Debug.println(li.toString()); 

@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: noding/snapround/MCIndexSnapRounder.java rev. 1.3 (JTS-1.9)
+ *
  **********************************************************************/
 
 #ifndef GEOS_NODING_SNAPROUND_MCINDEXSNAPROUNDER_INL
@@ -19,6 +23,7 @@
 #include <geos/noding/snapround/MCIndexSnapRounder.h>
 #include <geos/noding/snapround/MCIndexPointSnapper.h>
 #include <geos/noding/SegmentString.h>
+#include <geos/noding/NodedSegmentString.h>
 #include <geos/geom/PrecisionModel.h>
 
 #include <memory>
@@ -30,7 +35,7 @@ namespace snapround { // geos::noding::snapround
 INLINE std::vector<SegmentString*>*
 MCIndexSnapRounder::getNodedSubstrings() const
 {
-	return SegmentString::getNodedSubstrings(*nodedSegStrings);
+	return NodedSegmentString::getNodedSubstrings(*nodedSegStrings);
 }
 
 INLINE

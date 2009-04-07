@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: noding/MCIndexNoder.java rev. 1.6 (JTS-1.9)
+ *
  **********************************************************************/
 
 #ifndef GEOS_NODING_MCINDEXNODER_H

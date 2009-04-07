@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: noding/SegmentNodeList.java rev. 1.8 (JTS-1.9)
+ *
  **********************************************************************/
 
 #ifndef GEOS_NODING_SEGMENTNODELIST_H
@@ -23,7 +27,7 @@
 #include <vector>
 #include <set>
 
-#include <geos/noding/SegmentNode.h>
+#include <geos/noding/SegmentNode.h> // for composition
 
 // Forward declarations
 namespace geos {
@@ -31,7 +35,7 @@ namespace geos {
 		class CoordinateSequence;
 	}
 	namespace noding {
-		class SegmentString;
+		class NodedSegmentString;
 	}
 }
 
@@ -41,15 +45,13 @@ namespace noding { // geos::noding
 /** \brief
  * A list of the SegmentNode present along a
  * noded SegmentString.
- *
- * Last port: noding/SegmentNodeList.java rev. 1.7 (JTS-1.7)
  */
 class SegmentNodeList {
 private:
 	std::set<SegmentNode*,SegmentNodeLT> nodeMap;
 
 	// the parent edge
-	const SegmentString& edge; 
+	const NodedSegmentString& edge; 
 
 	// UNUSED
 	//std::vector<SegmentNode*> *sortedNodes;
@@ -113,11 +115,11 @@ public:
 	typedef container::iterator iterator;
 	typedef container::const_iterator const_iterator;
 
-	SegmentNodeList(const SegmentString* newEdge): edge(*newEdge) {}
+	SegmentNodeList(const NodedSegmentString* newEdge): edge(*newEdge) {}
 
-	SegmentNodeList(const SegmentString& newEdge): edge(newEdge) {}
+	SegmentNodeList(const NodedSegmentString& newEdge): edge(newEdge) {}
 
-	const SegmentString& getEdge() const { return edge; }
+	const NodedSegmentString& getEdge() const { return edge; }
 
 	// TODO: Is this a final class ?
 	// Should remove the virtual in that case

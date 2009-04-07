@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: noding/snapround/MCIndexSnapRounder.java rev. 1.3 (JTS-1.9)
+ *
  **********************************************************************/
 
 #ifndef GEOS_NODING_SNAPROUND_MCINDEXSNAPROUNDER_H
@@ -34,6 +38,7 @@ namespace geos {
 	}
 	namespace noding {
 		class SegmentString;
+		class NodedSegmentString;
 		class MCIndexNoder;
 		namespace snapround {
 			//class HotPixel;
@@ -66,9 +71,6 @@ namespace snapround { // geos::noding::snapround
  *
  * It will function with non-integer precision models, but the
  * results are not 100% guaranteed to be correctly noded.
- *
- * Last port: noding/snapround/MCIndexSnapRounder.java rev. 1.1 (JTS-1.7)
- *
  */
 class MCIndexSnapRounder: public Noder { // implments Noder
 
@@ -109,7 +111,7 @@ private:
 	 * Performs a brute-force comparison of every segment in each {@link SegmentString}.
 	 * This has n^2 performance.
 	 */
-	void computeEdgeVertexSnaps(SegmentString* e);
+	void computeVertexSnaps(NodedSegmentString* e);
 	
 	void checkCorrectness(std::vector<SegmentString*>& inputSegmentStrings);
 
@@ -126,6 +128,8 @@ public:
 	 * snapping segments to vertices of other segments
 	 *
 	 * @param segStrings the list of segment strings to snap together
+	 *        NOTE: they *must* be instances of NodedSegmentString, or
+	 * 	  an assertion will fail.
 	 */
 	void computeVertexSnaps(std::vector<SegmentString*>& edges);
 

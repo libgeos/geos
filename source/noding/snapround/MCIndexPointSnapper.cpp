@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: noding/snapround/MCIndexPointSnapper.java rev. 1.2 (JTS-1.7)
+ * Last port: noding/snapround/MCIndexPointSnapper.java rev. 1.4 (JTS-1.9)
  *
  **********************************************************************/
 
@@ -21,6 +21,7 @@
 #include <geos/noding/snapround/HotPixel.h>
 #include <geos/noding/snapround/SimpleSnapRounder.h>
 #include <geos/noding/SegmentString.h>
+#include <geos/noding/NodedSegmentString.h>
 #include <geos/spatialIndex.h>
 #include <geos/geom/Envelope.h>
 #include <geos/index/chain/MonotoneChainSelectAction.h> 
@@ -39,14 +40,14 @@ namespace snapround { // geos.noding.snapround
 class HotPixelSnapAction: public index::chain::MonotoneChainSelectAction {
 
 private:
-	const HotPixel& hotPixel;
+	HotPixel& hotPixel;
 	SegmentString* parentEdge;
 	unsigned int vertexIndex;
 	bool isNodeAddedVar;
 
 public:
 
-	HotPixelSnapAction(const HotPixel& nHotPixel,
+	HotPixelSnapAction(HotPixel& nHotPixel,
 			SegmentString* nParentEdge,
 			unsigned int nVertexIndex)
 		:
@@ -61,13 +62,16 @@ public:
 	void select(chain::MonotoneChain& mc, unsigned int startIndex)
 	{
 		// This is casting away 'constness'!
-		SegmentString& ss = *(static_cast<SegmentString*>(mc.getContext()));
+		NodedSegmentString& ss = *(static_cast<NodedSegmentString*>(mc.getContext()));
 
 		// don't snap a vertex to itself
 		if ( parentEdge ) {
 			if (&ss == parentEdge && startIndex == vertexIndex) return;
 		}
-		isNodeAddedVar = SimpleSnapRounder::addSnappedNode(hotPixel, ss, startIndex);
+
+		//isNodeAddedVar = SimpleSnapRounder::addSnappedNode(hotPixel, ss, startIndex);
+
+		isNodeAddedVar = hotPixel.addSnappedNode(ss, startIndex);
 	}
 
 	void select(LineSegment* ls)
@@ -100,7 +104,7 @@ public:
 
 /* public */
 bool
-MCIndexPointSnapper::snap(const HotPixel& hotPixel,
+MCIndexPointSnapper::snap(HotPixel& hotPixel,
 		SegmentString* parentEdge,
 		unsigned int vertexIndex)
 {

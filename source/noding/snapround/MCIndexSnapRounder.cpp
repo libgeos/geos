@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: noding/snapround/MCIndexSnapRounder.java rev. 1.1 (JTS-1.7)
+ * Last port: noding/snapround/MCIndexSnapRounder.java rev. 1.3 (JTS-1.9)
  *
  **********************************************************************/
 
@@ -46,7 +46,7 @@ namespace snapround { // geos.noding.snapround
 /*private*/
 void
 MCIndexSnapRounder::findInteriorIntersections(MCIndexNoder& noder,
-		SegmentString::NonConstVect* segStrings,
+		NodedSegmentString::NonConstVect* segStrings,
 		vector<Coordinate>& intersections)
 {
 	IntersectionFinderAdder intFinderAdder(li, intersections);
@@ -71,7 +71,7 @@ MCIndexSnapRounder::computeIntersectionSnaps(vector<Coordinate>& snapPts)
 
 /*private*/
 void
-MCIndexSnapRounder::computeEdgeVertexSnaps(SegmentString* e)
+MCIndexSnapRounder::computeVertexSnaps(NodedSegmentString* e)
 {
 	CoordinateSequence& pts0 = *(e->getCoordinates());
 	for (unsigned int i=0, n=pts0.size()-1; i<n; ++i)
@@ -89,7 +89,14 @@ MCIndexSnapRounder::computeEdgeVertexSnaps(SegmentString* e)
 void
 MCIndexSnapRounder::computeVertexSnaps(SegmentString::NonConstVect& edges)
 {
-	for_each(edges.begin(), edges.end(), bind1st(mem_fun(&MCIndexSnapRounder::computeEdgeVertexSnaps), this));
+	SegmentString::NonConstVect::iterator i=edges.begin(), e=edges.end();
+	for (; i!=e; ++i)
+	{
+		NodedSegmentString* edge0 =
+			dynamic_cast<NodedSegmentString*>(*i);
+		assert(edge0);
+		computeVertexSnaps(edge0);
+	}
 }
 
 /*private*/
@@ -125,7 +132,7 @@ MCIndexSnapRounder::checkCorrectness(
 	SegmentString::NonConstVect& inputSegmentStrings)
 {
 	auto_ptr<SegmentString::NonConstVect> resultSegStrings(
-		SegmentString::getNodedSubstrings(inputSegmentStrings)
+		NodedSegmentString::getNodedSubstrings(inputSegmentStrings)
 	);
 
 	NodingValidator nv(*(resultSegStrings.get()));

@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geomgraph/EdgeNodingValidator.java rev. 1.6 (JTS-1.9)
+ *
  **********************************************************************/
 
 

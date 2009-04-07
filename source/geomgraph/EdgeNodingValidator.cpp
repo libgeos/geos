@@ -14,13 +14,15 @@
  *
  **********************************************************************
  *
+ * Last port: geomgraph/EdgeNodingValidator.java rev. 1.6 (JTS-1.9)
+ *
  **********************************************************************/
 
 #include <vector>
 
 #include <geos/geomgraph/EdgeNodingValidator.h>
 #include <geos/geomgraph/Edge.h>
-#include <geos/noding/SegmentString.h>
+#include <geos/noding/BasicSegmentString.h>
 #include <geos/geom/CoordinateSequence.h>
 
 using namespace std;
@@ -38,7 +40,7 @@ EdgeNodingValidator::toSegmentStrings(vector<Edge*>& edges)
 		Edge *e=edges[i];
 		CoordinateSequence* cs=e->getCoordinates()->clone();
 		newCoordSeq.push_back(cs);
-		segStr.push_back(new SegmentString(cs, e));
+		segStr.push_back(new BasicSegmentString(cs, e));
 	}
 	return segStr;
 }
