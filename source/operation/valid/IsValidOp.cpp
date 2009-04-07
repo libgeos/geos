@@ -14,13 +14,15 @@
  *
  **********************************************************************
  *
- * Last port: operation/valid/IsValidOp.java rev. 1.39 (JTS-1.7)
+ * Last port: operation/valid/IsValidOp.java rev. 1.41 (JTS-1.9)
  *
  **********************************************************************/
 
+#include "IndexedNestedRingTester.h"
+
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/valid/ConsistentAreaTester.h>
-#include <geos/operation/valid/QuadtreeNestedRingTester.h>
+#include <geos/operation/valid/ConnectedInteriorTester.h>
 #include <geos/operation/valid/ConnectedInteriorTester.h>
 #include <geos/util/UnsupportedOperationException.h>
 #include <geos/geomgraph/index/SegmentIntersector.h> 
@@ -401,7 +403,8 @@ IsValidOp::checkHolesNotNested(const Polygon *p, GeometryGraph *graph)
 {
 	//SimpleNestedRingTester nestedTester(graph);
 	//SweeplineNestedRingTester nestedTester(graph);
-	QuadtreeNestedRingTester nestedTester(graph);
+	//QuadtreeNestedRingTester nestedTester(graph);
+	IndexedNestedRingTester nestedTester(graph);
 
 	int nholes=p->getNumInteriorRing();
 	for(int i=0; i<nholes; ++i)

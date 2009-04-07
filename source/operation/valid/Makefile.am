@@ -16,7 +16,9 @@ libopvalid_la_SOURCES = \
 	RepeatedPointTester.cpp \
 	SimpleNestedRingTester.cpp \
 	SweeplineNestedRingTester.cpp \
-	TopologyValidationError.cpp 
+	TopologyValidationError.cpp \
+	IndexedNestedRingTester.cpp \
+	IndexedNestedRingTester.h
 
 libopvalid_la_LIBADD =
 
