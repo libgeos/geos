@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/HCoordinate.java rev. 1.17 (JTS-1.7)
+ * Last port: algorithm/HCoordinate.java rev. 1.18 (JTS-1.9)
  *
  **********************************************************************/
 
@@ -42,6 +42,74 @@ using namespace geos::geom;
 namespace geos {
 namespace algorithm { // geos.algorithm
 
+///*public static*/
+//void
+//HCoordinate::OLDintersection(const Coordinate &p1, const Coordinate &p2,
+//	const Coordinate &q1, const Coordinate &q2, Coordinate &ret)
+//{
+//
+//#if GEOS_DEBUG
+//	cerr << __FUNCTION__ << ":" << endl
+//	     << setprecision(20)
+//	     << " p1: " << p1 << endl
+//	     << " p2: " << p2 << endl
+//	     << " q1: " << q1 << endl
+//	     << " q2: " << q2 << endl;
+//#endif
+//
+//        HCoordinate hc1p1(p1);
+//
+//#if GEOS_DEBUG
+//	cerr << "HCoordinate(p1): "
+//	     << hc1p1 << endl;
+//#endif
+//
+//        HCoordinate hc1p2(p2);
+//
+//#if GEOS_DEBUG
+//	cerr << "HCoordinate(p2): "
+//	     << hc1p2 << endl;
+//#endif
+//
+//        HCoordinate l1(hc1p1, hc1p2);
+//
+//#if GEOS_DEBUG
+//	cerr << "L1 - HCoordinate(HCp1, HCp2): "
+//	     << l1 << endl;
+//#endif
+//
+//        HCoordinate hc2q1(q1);
+//
+//#if GEOS_DEBUG
+//	cerr << "HCoordinate(q1): "
+//	     << hc2q1 << endl;
+//#endif
+//
+//        HCoordinate hc2q2(q2);
+//
+//#if GEOS_DEBUG
+//	cerr << "HCoordinate(q2): "
+//	     << hc2q2 << endl;
+//#endif
+//
+//        HCoordinate l2(hc2q1, hc2q2);
+//
+//#if GEOS_DEBUG
+//	cerr << "L2 - HCoordinate(HCq1, HCq2): "
+//	     << l2 << endl;
+//#endif
+//
+//        HCoordinate intHCoord(l1, l2);
+//
+//#if GEOS_DEBUG
+//	cerr << "HCoordinate(L1, L2): "
+//	     << intHCoord << endl;
+//#endif
+//
+//        intHCoord.getCoordinate(ret);
+//
+//}
+
 /*public static*/
 void
 HCoordinate::intersection(const Coordinate &p1, const Coordinate &p2,
@@ -57,57 +125,29 @@ HCoordinate::intersection(const Coordinate &p1, const Coordinate &p2,
 	     << " q2: " << q2 << endl;
 #endif
 
-        HCoordinate hc1p1(p1);
+	// unrolled computation
 
-#if GEOS_DEBUG
-	cerr << "HCoordinate(p1): "
-	     << hc1p1 << endl;
-#endif
+	double px = p1.y - p2.y;
+	double py = p2.x - p1.x;
+	double pw = p1.x * p2.y - p2.x * p1.y;
 
-        HCoordinate hc1p2(p2);
+	double qx = q1.y - q2.y;
+	double qy = q2.x - q1.x;
+	double qw = q1.x * q2.y - q2.x * q1.y;
 
-#if GEOS_DEBUG
-	cerr << "HCoordinate(p2): "
-	     << hc1p2 << endl;
-#endif
+	double x = py * qw - qy * pw;
+	double y = qx * pw - px * qw;
+	double w = px * qy - qx * py;
 
-        HCoordinate l1(hc1p1, hc1p2);
+	double xInt = x/w;
+	double yInt = y/w;
 
-#if GEOS_DEBUG
-	cerr << "L1 - HCoordinate(HCp1, HCp2): "
-	     << l1 << endl;
-#endif
+	if ( (!FINITE(xInt)) || (!FINITE(yInt)) )
+	{
+		throw new NotRepresentableException();
+	}
 
-        HCoordinate hc2q1(q1);
-
-#if GEOS_DEBUG
-	cerr << "HCoordinate(q1): "
-	     << hc2q1 << endl;
-#endif
-
-        HCoordinate hc2q2(q2);
-
-#if GEOS_DEBUG
-	cerr << "HCoordinate(q2): "
-	     << hc2q2 << endl;
-#endif
-
-        HCoordinate l2(hc2q1, hc2q2);
-
-#if GEOS_DEBUG
-	cerr << "L2 - HCoordinate(HCq1, HCq2): "
-	     << l2 << endl;
-#endif
-
-        HCoordinate intHCoord(l1, l2);
-
-#if GEOS_DEBUG
-	cerr << "HCoordinate(L1, L2): "
-	     << intHCoord << endl;
-#endif
-
-        intHCoord.getCoordinate(ret);
-
+	ret = Coordinate(xInt, yInt);
 }
 
 /*public*/
@@ -135,6 +175,34 @@ HCoordinate::HCoordinate(const Coordinate& p)
 	y(p.y),
 	w(1.0)
 {
+}
+
+/*public*/
+HCoordinate::HCoordinate(const Coordinate& p1, const Coordinate& p2)
+	:
+	// optimization when it is known that w = 1
+	x ( p1.y - p2.y ),
+	y ( p2.x - p1.x ),
+	w ( p1.x * p2.y - p2.x * p1.y )
+{
+}
+
+/*public*/
+HCoordinate::HCoordinate(const Coordinate& p1, const Coordinate& p2,
+			 const Coordinate& q1, const Coordinate& q2)
+{
+	// unrolled computation
+	double px = p1.y - p2.y;
+	double py = p2.x - p1.x;
+	double pw = p1.x * p2.y - p2.x * p1.y;
+
+	double qx = q1.y - q2.y;
+	double qy = q2.x - q1.x;
+	double qw = q1.x * q2.y - q2.x * q1.y;
+
+	x = py * qw - qy * pw;
+	y = qx * pw - px * qw;
+	w = px * qy - qx * py;
 }
 
 /*public*/
@@ -185,7 +253,8 @@ HCoordinate::getX() const
 {
 	long double a = x/w;
 
-    if (std::fabs(a) > std::numeric_limits<double>::max())
+	//if (std::fabs(a) > std::numeric_limits<double>::max())
+	if ( !FINITE(a) )
 	{
 		throw  NotRepresentableException();
 	}
@@ -198,7 +267,8 @@ HCoordinate::getY() const
 {
 	long double a = y/w;
 
-    if (std::fabs(a) > std::numeric_limits<double>::max())
+	//if (std::fabs(a) > std::numeric_limits<double>::max())
+	if ( !FINITE(a) )
 	{
 		throw  NotRepresentableException();
 	}

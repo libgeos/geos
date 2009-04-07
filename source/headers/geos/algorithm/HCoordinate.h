@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/HCoordinate.java rev. 1.17 (JTS-1.7)
+ * Last port: algorithm/HCoordinate.java rev. 1.18 (JTS-1.9)
  *
  **********************************************************************/
 
@@ -47,17 +47,20 @@ public:
 	friend std::ostream& operator<< (std::ostream& o, const HCoordinate& c);
 
 	/** \brief
-	 * Computes the (approximate) intersection point between two line segments
-	 * using homogeneous coordinates.
+	 * Computes the (approximate) intersection point between two line
+	 * segments using homogeneous coordinates.
 	 * 
 	 * Note that this algorithm is
 	 * not numerically stable; i.e. it can produce intersection points which
 	 * lie outside the envelope of the line segments themselves.  In order
-	 * to increase the precision of the calculation input points should be normalized
-	 * before passing them to this routine.
+	 * to increase the precision of the calculation input points should be
+	 * normalized before passing them to this routine.
 	 */
-	static void intersection(const geom::Coordinate &p1, const geom::Coordinate &p2,
-		const geom::Coordinate &q1, const geom::Coordinate &q2, geom::Coordinate &ret);
+	static void intersection(const geom::Coordinate &p1,
+				 const geom::Coordinate &p2,
+				 const geom::Coordinate &q1,
+				 const geom::Coordinate &q2,
+				 geom::Coordinate &ret);
 
 	long double x,y,w;
 
@@ -66,6 +69,19 @@ public:
 	HCoordinate(long double _x, long double _y, long double _w);
 
 	HCoordinate(const geom::Coordinate& p);
+
+	/** \brief
+	 * Constructs a homogeneous coordinate which is the intersection
+	 * of the lines define by the homogenous coordinates represented
+	 * by two {@link Coordinate}s.
+	 *
+	 * @param p1
+	 * @param p2
+	 */
+	HCoordinate(const geom::Coordinate& p1, const geom::Coordinate& p2);
+
+	HCoordinate(const geom::Coordinate& p1, const geom::Coordinate& p2,
+		    const geom::Coordinate& q1, const geom::Coordinate& q2);
 
 	HCoordinate(const HCoordinate &p1, const HCoordinate &p2);
 
