@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/valid/IsValidOp.java rev. 1.41 (JTS-1.9)
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_ISVALIDOP_H
@@ -49,16 +53,20 @@ namespace operation { // geos::operation
 namespace valid { // geos::operation::valid
 
 /** \brief
- * Implements the algorithsm required to compute the <code>isValid()</code> method
- * for {@link Geometry}s.
- *
+ * Implements the algorithsm required to compute the <code>isValid()</code>
+ * method for {@link Geometry}s.
  */
 class IsValidOp {
 friend class Unload;
 private:
-	const geom::Geometry *parentGeometry;  // the base Geometry to be validated
+	/// the base Geometry to be validated
+	const geom::Geometry *parentGeometry; 
+
 	bool isChecked;
-	TopologyValidationError* validErr; // CHECKME: should this really be a pointer ?
+
+	// CHECKME: should this really be a pointer ?
+	TopologyValidationError* validErr;
+
 	void checkValid(const geom::Geometry *g);
 	void checkValid(const geom::Point *g);
 	void checkValid(const geom::LinearRing *g);
@@ -187,7 +195,8 @@ public:
 	 */
 	static const geom::Coordinate *findPtNotNode(
 			const geom::CoordinateSequence *testCoords,
-			const geom::LinearRing *searchRing, geomgraph::GeometryGraph *graph);
+			const geom::LinearRing *searchRing,
+			geomgraph::GeometryGraph *graph);
 
 	/**
 	 * Checks whether a coordinate is valid for processing.
