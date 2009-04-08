@@ -141,6 +141,21 @@ CoordinateSequence::scroll(CoordinateSequence* cl,
 	cl->setPoints(v);
 }
 
+int
+CoordinateSequence::increasingDirection(const CoordinateSequence& pts)
+{
+	size_t ptsize = pts.size();
+	for (size_t i=0, n=ptsize/2; i<n; ++i)
+	{
+		size_t j = ptsize - 1 - i;
+		// skip equal points on both ends
+		int comp = pts[i].compareTo(pts[j]);
+		if (comp != 0) return comp;
+	}
+	// array must be a palindrome - defined to be in positive direction
+	return 1;
+}
+
 void
 CoordinateSequence::reverse(CoordinateSequence *cl)
 {
