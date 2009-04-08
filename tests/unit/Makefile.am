@@ -69,6 +69,7 @@ geos_unit_SOURCES = geos_unit.cpp \
 	capi/GEOSCoordSeqTest.cpp \
 	capi/GEOSGeomToWKTTest.cpp \
 	capi/GEOSSimplifyTest.cpp \
+	capi/GEOSPreparedGeometryTest.cpp \
 	capi/GEOSPolygonizer_getCutEdgesTest.cpp
 
 noinst_HEADERS = \
