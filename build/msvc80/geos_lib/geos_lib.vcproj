@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="windows-1250"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="geos_lib"
 	ProjectGUID="{108E75A3-0A92-489A-B1A9-8F071D40A108}"
 	RootNamespace="geos_lib"
@@ -153,6 +153,10 @@
 			>
 			<File
 				RelativePath="..\..\..\source\inlines.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\Makefile.vc"
 				>
 			</File>
 			<Filter
@@ -3030,6 +3034,10 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath="..\..\..\makefile.vc"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

@@ -1,360 +1,339 @@
 # $Id$
 #
 # Building on Win32 with Visual C++ 7.0, 7.1, 8.0 or 9.0
-# ------------------------------------------------------
+###############################################################################
 # 
 # Produces:
 #  geos.lib: static library for use of C or C++ API.
 #  geos.dll: DLL - only exports the C API
-#  geos_i.lib: Stub library to link against for use of geos.dll. 
+#  geos_i.lib: stub library to link against for use of geos.dll. 
+#
+#  geos_d.lib: debug static library for use of C or C++ API.
+#  geos_d.dll: debug DLL - only exports the C API
+#  geos_i_d.lib: debug stub library to link against for use of geos.dll. 
 #
 # This makefile mostly maintained by Frank Warmerdam <warmerdam@pobox.com>
-#
+# with support by Mateusz Loskot <mateusz@loskot.net>
+###############################################################################
+GEOS_ROOT=..
+!INCLUDE $(GEOS_ROOT)\nmake.opt
 !INCLUDE dirlist.mk
 
-# Commands
-#
-MAKE = nmake
-CC = cl.exe
-LINK = link.exe
-RM = -del
+###############################################################################
+# Output location
+# TODO: not yet supported
+#OUT_DIR = $(GEOS_ROOT)\bin\$(BUILD_DIR)
 
-# Check compiler version given in command line
-# nmake -f makefile.vc MSVC_VER=xxxx
-# By default, Visual C++ 7.1 (1310) is configured.
-#
-!IFNDEF MSVC_VER
-MSVC_VER=1310
-!ENDIF
-
-# Collect compiler version specific flags
-!IF $(MSVC_VER) >= 1400
-MSVC_CPPFLAGS = /EHs /D "_CRT_SECURE_NO_DEPRECATE"
-!ELSE
-MSVC_CPPFLAGS = /GX
-!ENDIF
-
-# Determine requested build configuration, by default use release and
-# build optimized binaries. For Debug, use
-# nmake -f makefile.vc DEBUG=1
-!IFNDEF DEBUG
-CFLAGS = -Iheaders /MD /GR /O2 /W3 /nologo /D "NDEBUG" \
-         /D "NOMINMAX" /D "WIN32_LEAN_AND_MEAN" /D "NOGDI" \
-         $(MSVC_CPPFLAGS)
-!ELSE
-CFLAGS = -Iheaders /MDd /GR /Od /W4 /Zi /nologo /D "_DEBUG" \
-         /D "NOMINMAX" /D "WIN32_LEAN_AND_MEAN" /D "NOGDI" \
-         $(MSVC_CPPFLAGS)
-!ENDIF
-
-# Names of binary files
-LIBNAME = geos.lib
-DLLNAME = geos.dll
-CDLLNAME = geos_c.dll
-CLIBNAME = geos_c_i.lib
-SLIBNAME = geos_i.lib
-
+###############################################################################
 # List of objects
+
+OBJ_EXT = obj
+EXT = $(OBJ_EXT)
+
 OBJ = \
-	algorithm\CentroidArea.obj \
-	algorithm\CentroidLine.obj \
-	algorithm\CentroidPoint.obj \
-	algorithm\CGAlgorithms.obj \
-	algorithm\ConvexHull.obj \
-	algorithm\HCoordinate.obj \
-	algorithm\InteriorPointArea.obj \
-	algorithm\InteriorPointLine.obj \
-	algorithm\InteriorPointPoint.obj \
-	algorithm\LineIntersector.obj \
-	algorithm\MCPointInRing.obj \
-	algorithm\MinimumDiameter.obj \
-	algorithm\NotRepresentableException.obj \
-	algorithm\PointLocator.obj \
-	algorithm\RayCrossingCounter.obj \
-	algorithm\RobustDeterminant.obj \
-	algorithm\SimplePointInRing.obj \
-	algorithm\SIRtreePointInRing.obj \
-	algorithm\locate\IndexedPointInAreaLocator.obj \
-	algorithm\locate\PointOnGeometryLocator.obj \
-	algorithm\locate\SimplePointInAreaLocator.obj \
-	geom\Coordinate.obj \
-	geom\CoordinateArraySequence.obj \
-	geom\CoordinateArraySequenceFactory.obj \
-	geom\CoordinateSequence.obj \
-	geom\Dimension.obj \
-	geom\Envelope.obj \
-	geom\Geometry.obj \
-	geom\GeometryCollection.obj \
-	geom\GeometryComponentFilter.obj \
-	geom\GeometryFactory.obj \
-	geom\IntersectionMatrix.obj \
-	geom\LinearRing.obj \
-	geom\LineSegment.obj \
-	geom\LineString.obj \
-	geom\Location.obj \
-	geom\MultiLineString.obj \
-	geom\MultiPoint.obj \
-	geom\MultiPolygon.obj \
-	geom\Point.obj \
-	geom\Polygon.obj \
-	geom\PrecisionModel.obj \
-	geom\Triangle.obj \
-	geom\util\CoordinateOperation.obj \
-	geom\util\GeometryEditor.obj \
-	geom\util\GeometryTransformer.obj \
-	geom\util\GeometryCombiner.obj \
-	geom\util\ShortCircuitedGeometryVisitor.obj \
-	geom\prep\AbstractPreparedPolygonContains.obj \
-	geom\prep\BasicPreparedGeometry.obj \
-	geom\prep\PreparedGeometry.obj \
-	geom\prep\PreparedGeometryFactory.obj \
-	geom\prep\PreparedLineString.obj \
-	geom\prep\PreparedLineStringIntersects.obj \
-	geom\prep\PreparedPoint.obj \
-	geom\prep\PreparedPolygon.obj \
-	geom\prep\PreparedPolygonContains.obj \
-	geom\prep\PreparedPolygonContainsProperly.obj \
-	geom\prep\PreparedPolygonCovers.obj \
-	geom\prep\PreparedPolygonIntersects.obj \
-	geom\prep\PreparedPolygonPredicate.obj \
-	geomgraph\Depth.obj \
-	geomgraph\DirectedEdge.obj \
-	geomgraph\DirectedEdgeStar.obj \
-	geomgraph\Edge.obj \
-	geomgraph\EdgeEnd.obj \
-	geomgraph\EdgeEndStar.obj \
-	geomgraph\EdgeIntersection.obj \
-	geomgraph\EdgeIntersectionList.obj \
-	geomgraph\EdgeList.obj \
-	geomgraph\EdgeNodingValidator.obj \
-	geomgraph\EdgeRing.obj \
-	geomgraph\GeometryGraph.obj \
-	geomgraph\GraphComponent.obj \
-	geomgraph\Label.obj \
-	geomgraph\Node.obj \
-	geomgraph\NodeFactory.obj \
-	geomgraph\NodeMap.obj \
-	geomgraph\PlanarGraph.obj \
-	geomgraph\Position.obj \
-	geomgraph\Quadrant.obj \
-	geomgraph\TopologyLocation.obj \
-	geomgraph\index\MonotoneChainEdge.obj \
-	geomgraph\index\MonotoneChainIndexer.obj \
-	geomgraph\index\SegmentIntersector.obj \
-	geomgraph\index\SimpleEdgeSetIntersector.obj \
-	geomgraph\index\SimpleMCSweepLineIntersector.obj \
-	geomgraph\index\SimpleSweepLineIntersector.obj \
-	geomgraph\index\SweepLineEvent.obj \
-	geomgraph\index\SweepLineSegment.obj \
-	index\bintree\Bintree.obj \
-	index\bintree\Interval.obj \
-	index\bintree\Key.obj \
-	index\bintree\Node.obj \
-	index\bintree\NodeBase.obj \
-	index\bintree\Root.obj \
-	index\chain\MonotoneChain.obj \
-	index\chain\MonotoneChainBuilder.obj \
-	index\chain\MonotoneChainOverlapAction.obj \
-	index\chain\MonotoneChainSelectAction.obj \
-	index\intervalrtree\IntervalRTreeBranchNode.obj \
-	index\intervalrtree\IntervalRTreeLeafNode.obj \
-	index\intervalrtree\IntervalRTreeNode.obj \
-	index\intervalrtree\SortedPackedIntervalRTree.obj \
-	index\quadtree\DoubleBits.obj \
-	index\quadtree\IntervalSize.obj \
-	index\quadtree\Key.obj \
-	index\quadtree\Node.obj \
-	index\quadtree\NodeBase.obj \
-	index\quadtree\Root.obj \
-	index\quadtree\Quadtree.obj \
-	index\strtree\AbstractNode.obj \
-	index\strtree\AbstractSTRtree.obj \
-	index\strtree\Interval.obj \
-	index\strtree\ItemBoundable.obj \
-	index\strtree\SIRtree.obj \
-	index\strtree\STRtree.obj \
-	index\sweepline\SweepLineEvent.obj \
-	index\sweepline\SweepLineIndex.obj \
-	index\sweepline\SweepLineInterval.obj \
-	io\ByteOrderDataInStream.obj \
-	io\ByteOrderValues.obj \
-	io\CLocalizer.obj \
-	io\ParseException.obj \
-	io\StringTokenizer.obj \
-	io\Unload.obj \
-	io\WKBReader.obj \
-	io\WKBWriter.obj \
-	io\WKTReader.obj \
-	io\WKTWriter.obj \
-	io\Writer.obj \
-	noding\FastNodingValidator.obj \
-	noding\FastSegmentSetIntersectionFinder.obj \
-	noding\IntersectionAdder.obj \
-	noding\IntersectionFinderAdder.obj \
-	noding\IteratedNoder.obj \
-	noding\MCIndexNoder.obj \
-	noding\MCIndexSegmentSetMutualIntersector.obj \
-	noding\NodedSegmentString.obj \
-	noding\NodingValidator.obj \
-	noding\Octant.obj \
-	noding\ScaledNoder.obj \
-	noding\SegmentIntersectionDetector.obj \
-	noding\SegmentNode.obj \
-	noding\SegmentNodeList.obj \
-	noding\SegmentString.obj \
-	noding\SegmentStringUtil.obj \
-	noding\SimpleNoder.obj \
-	noding\SingleInteriorIntersectionFinder.obj \
-	noding\snapround\HotPixel.obj \
-	noding\snapround\MCIndexPointSnapper.obj \
-	noding\snapround\MCIndexSnapRounder.obj \
-	noding\snapround\SimpleSnapRounder.obj \
-	operation\GeometryGraphOperation.obj \
-	operation\IsSimpleOp.obj \
-	operation\buffer\BufferBuilder.obj \
-	operation\buffer\BufferOp.obj \
-	operation\buffer\BufferSubgraph.obj \
-	operation\buffer\OffsetCurveBuilder.obj \
-	operation\buffer\OffsetCurveSetBuilder.obj \
-	operation\buffer\RightmostEdgeFinder.obj \
-	operation\buffer\SubgraphDepthLocater.obj \
-	operation\distance\ConnectedElementLocationFilter.obj \
-	operation\distance\ConnectedElementPointFilter.obj \
-	operation\distance\DistanceOp.obj \
-	operation\distance\GeometryLocation.obj \
-	operation\linemerge\EdgeString.obj \
-	operation\linemerge\LineMergeDirectedEdge.obj \
-	operation\linemerge\LineMergeEdge.obj \
-	operation\linemerge\LineMergeGraph.obj \
-	operation\linemerge\LineMerger.obj \
-	operation\linemerge\LineSequencer.obj \
-	operation\overlay\EdgeSetNoder.obj \
-	operation\overlay\ElevationMatrix.obj \
-	operation\overlay\ElevationMatrixCell.obj \
-	operation\overlay\FuzzyPointLocator.obj \
-	operation\overlay\LineBuilder.obj \
-	operation\overlay\MaximalEdgeRing.obj \
-	operation\overlay\MinimalEdgeRing.obj \
-	operation\overlay\OffsetPointGenerator.obj \
-	operation\overlay\OverlayNodeFactory.obj \
-	operation\overlay\OverlayOp.obj \
-	operation\overlay\OverlayResultValidator.obj \
-	operation\overlay\PointBuilder.obj \
-	operation\overlay\PolygonBuilder.obj \
-	operation\polygonize\PolygonizeDirectedEdge.obj \
-	operation\polygonize\PolygonizeEdge.obj \
-	operation\polygonize\EdgeRing.obj \
-	operation\polygonize\PolygonizeGraph.obj \
-	operation\polygonize\Polygonizer.obj \
-	operation\predicate\RectangleContains.obj \
-	operation\predicate\RectangleIntersects.obj \
-	operation\predicate\SegmentIntersectionTester.obj \
-	operation\relate\EdgeEndBuilder.obj \
-	operation\relate\EdgeEndBundle.obj \
-	operation\relate\EdgeEndBundleStar.obj \
-	operation\relate\RelateComputer.obj \
-	operation\relate\RelateNode.obj \
-	operation\relate\RelateNodeFactory.obj \
-	operation\relate\RelateNodeGraph.obj \
-	operation\relate\RelateOp.obj \
-	operation\union\CascadedPolygonUnion.obj \
-	operation\valid\ConnectedInteriorTester.obj \
-	operation\valid\ConsistentAreaTester.obj \
-	operation\valid\IsValidOp.obj \
-	operation\valid\QuadtreeNestedRingTester.obj \
-	operation\valid\RepeatedPointTester.obj \
-	operation\valid\SimpleNestedRingTester.obj \
-	operation\valid\SweeplineNestedRingTester.obj \
-	operation\valid\TopologyValidationError.obj \
-	planargraph\DirectedEdge.obj \
-	planargraph\DirectedEdgeStar.obj \
-	planargraph\Edge.obj \
-	planargraph\Node.obj \
-	planargraph\NodeMap.obj \
-	planargraph\PlanarGraph.obj \
-	planargraph\Subgraph.obj \
-	planargraph\algorithm\ConnectedSubgraphFinder.obj \
-	precision\CommonBits.obj \
-	precision\CommonBitsOp.obj \
-	precision\CommonBitsRemover.obj \
-	precision\EnhancedPrecisionOp.obj \
-	precision\GeometrySnapper.obj \
-	precision\LineStringSnapper.obj \
-	precision\SimpleGeometryPrecisionReducer.obj \
-	simplify\DouglasPeuckerLineSimplifier.obj \
-	simplify\DouglasPeuckerSimplifier.obj \
-	simplify\LineSegmentIndex.obj \
-	simplify\TaggedLineSegment.obj \
-	simplify\TaggedLinesSimplifier.obj \
-	simplify\TaggedLineString.obj \
-	simplify\TaggedLineStringSimplifier.obj \
-	simplify\TopologyPreservingSimplifier.obj \
-	util\Assert.obj \
-	util\GeometricShapeFactory.obj \
-	util\math.obj \
-	util\Profiler.obj \
-	..\capi\geos_c.obj \
-	..\capi\geos_ts_c.obj \
-	inlines.obj
+	algorithm\CentroidArea.$(EXT) \
+	algorithm\CentroidLine.$(EXT) \
+	algorithm\CentroidPoint.$(EXT) \
+	algorithm\CGAlgorithms.$(EXT) \
+	algorithm\ConvexHull.$(EXT) \
+	algorithm\HCoordinate.$(EXT) \
+	algorithm\InteriorPointArea.$(EXT) \
+	algorithm\InteriorPointLine.$(EXT) \
+	algorithm\InteriorPointPoint.$(EXT) \
+	algorithm\LineIntersector.$(EXT) \
+	algorithm\MCPointInRing.$(EXT) \
+	algorithm\MinimumDiameter.$(EXT) \
+	algorithm\NotRepresentableException.$(EXT) \
+	algorithm\PointLocator.$(EXT) \
+	algorithm\RayCrossingCounter.$(EXT) \
+	algorithm\RobustDeterminant.$(EXT) \
+	algorithm\SimplePointInRing.$(EXT) \
+	algorithm\SIRtreePointInRing.$(EXT) \
+	algorithm\locate\IndexedPointInAreaLocator.$(EXT) \
+	algorithm\locate\PointOnGeometryLocator.$(EXT) \
+	algorithm\locate\SimplePointInAreaLocator.$(EXT) \
+	geom\Coordinate.$(EXT) \
+	geom\CoordinateArraySequence.$(EXT) \
+	geom\CoordinateArraySequenceFactory.$(EXT) \
+	geom\CoordinateSequence.$(EXT) \
+	geom\Dimension.$(EXT) \
+	geom\Envelope.$(EXT) \
+	geom\Geometry.$(EXT) \
+	geom\GeometryCollection.$(EXT) \
+	geom\GeometryComponentFilter.$(EXT) \
+	geom\GeometryFactory.$(EXT) \
+	geom\IntersectionMatrix.$(EXT) \
+	geom\LinearRing.$(EXT) \
+	geom\LineSegment.$(EXT) \
+	geom\LineString.$(EXT) \
+	geom\Location.$(EXT) \
+	geom\MultiLineString.$(EXT) \
+	geom\MultiPoint.$(EXT) \
+	geom\MultiPolygon.$(EXT) \
+	geom\Point.$(EXT) \
+	geom\Polygon.$(EXT) \
+	geom\PrecisionModel.$(EXT) \
+	geom\Triangle.$(EXT) \
+	geom\util\CoordinateOperation.$(EXT) \
+	geom\util\GeometryEditor.$(EXT) \
+	geom\util\GeometryTransformer.$(EXT) \
+	geom\util\GeometryCombiner.$(EXT) \
+	geom\util\ShortCircuitedGeometryVisitor.$(EXT) \
+	geom\prep\AbstractPreparedPolygonContains.$(EXT) \
+	geom\prep\BasicPreparedGeometry.$(EXT) \
+	geom\prep\PreparedGeometry.$(EXT) \
+	geom\prep\PreparedGeometryFactory.$(EXT) \
+	geom\prep\PreparedLineString.$(EXT) \
+	geom\prep\PreparedLineStringIntersects.$(EXT) \
+	geom\prep\PreparedPoint.$(EXT) \
+	geom\prep\PreparedPolygon.$(EXT) \
+	geom\prep\PreparedPolygonContains.$(EXT) \
+	geom\prep\PreparedPolygonContainsProperly.$(EXT) \
+	geom\prep\PreparedPolygonCovers.$(EXT) \
+	geom\prep\PreparedPolygonIntersects.$(EXT) \
+	geom\prep\PreparedPolygonPredicate.$(EXT) \
+	geomgraph\Depth.$(EXT) \
+	geomgraph\DirectedEdge.$(EXT) \
+	geomgraph\DirectedEdgeStar.$(EXT) \
+	geomgraph\Edge.$(EXT) \
+	geomgraph\EdgeEnd.$(EXT) \
+	geomgraph\EdgeEndStar.$(EXT) \
+	geomgraph\EdgeIntersection.$(EXT) \
+	geomgraph\EdgeIntersectionList.$(EXT) \
+	geomgraph\EdgeList.$(EXT) \
+	geomgraph\EdgeNodingValidator.$(EXT) \
+	geomgraph\EdgeRing.$(EXT) \
+	geomgraph\GeometryGraph.$(EXT) \
+	geomgraph\GraphComponent.$(EXT) \
+	geomgraph\Label.$(EXT) \
+	geomgraph\Node.$(EXT) \
+	geomgraph\NodeFactory.$(EXT) \
+	geomgraph\NodeMap.$(EXT) \
+	geomgraph\PlanarGraph.$(EXT) \
+	geomgraph\Position.$(EXT) \
+	geomgraph\Quadrant.$(EXT) \
+	geomgraph\TopologyLocation.$(EXT) \
+	geomgraph\index\MonotoneChainEdge.$(EXT) \
+	geomgraph\index\MonotoneChainIndexer.$(EXT) \
+	geomgraph\index\SegmentIntersector.$(EXT) \
+	geomgraph\index\SimpleEdgeSetIntersector.$(EXT) \
+	geomgraph\index\SimpleMCSweepLineIntersector.$(EXT) \
+	geomgraph\index\SimpleSweepLineIntersector.$(EXT) \
+	geomgraph\index\SweepLineEvent.$(EXT) \
+	geomgraph\index\SweepLineSegment.$(EXT) \
+	index\bintree\Bintree.$(EXT) \
+	index\bintree\Interval.$(EXT) \
+	index\bintree\Key.$(EXT) \
+	index\bintree\Node.$(EXT) \
+	index\bintree\NodeBase.$(EXT) \
+	index\bintree\Root.$(EXT) \
+	index\chain\MonotoneChain.$(EXT) \
+	index\chain\MonotoneChainBuilder.$(EXT) \
+	index\chain\MonotoneChainOverlapAction.$(EXT) \
+	index\chain\MonotoneChainSelectAction.$(EXT) \
+	index\intervalrtree\IntervalRTreeBranchNode.$(EXT) \
+	index\intervalrtree\IntervalRTreeLeafNode.$(EXT) \
+	index\intervalrtree\IntervalRTreeNode.$(EXT) \
+	index\intervalrtree\SortedPackedIntervalRTree.$(EXT) \
+	index\quadtree\DoubleBits.$(EXT) \
+	index\quadtree\IntervalSize.$(EXT) \
+	index\quadtree\Key.$(EXT) \
+	index\quadtree\Node.$(EXT) \
+	index\quadtree\NodeBase.$(EXT) \
+	index\quadtree\Root.$(EXT) \
+	index\quadtree\Quadtree.$(EXT) \
+	index\strtree\AbstractNode.$(EXT) \
+	index\strtree\AbstractSTRtree.$(EXT) \
+	index\strtree\Interval.$(EXT) \
+	index\strtree\ItemBoundable.$(EXT) \
+	index\strtree\SIRtree.$(EXT) \
+	index\strtree\STRtree.$(EXT) \
+	index\sweepline\SweepLineEvent.$(EXT) \
+	index\sweepline\SweepLineIndex.$(EXT) \
+	index\sweepline\SweepLineInterval.$(EXT) \
+	io\ByteOrderDataInStream.$(EXT) \
+	io\ByteOrderValues.$(EXT) \
+	io\CLocalizer.$(EXT) \
+	io\ParseException.$(EXT) \
+	io\StringTokenizer.$(EXT) \
+	io\Unload.$(EXT) \
+	io\WKBReader.$(EXT) \
+	io\WKBWriter.$(EXT) \
+	io\WKTReader.$(EXT) \
+	io\WKTWriter.$(EXT) \
+	io\Writer.$(EXT) \
+	noding\FastNodingValidator.$(EXT) \
+	noding\FastSegmentSetIntersectionFinder.$(EXT) \
+	noding\IntersectionAdder.$(EXT) \
+	noding\IntersectionFinderAdder.$(EXT) \
+	noding\IteratedNoder.$(EXT) \
+	noding\MCIndexNoder.$(EXT) \
+	noding\MCIndexSegmentSetMutualIntersector.$(EXT) \
+	noding\NodedSegmentString.$(EXT) \
+	noding\NodingValidator.$(EXT) \
+	noding\Octant.$(EXT) \
+	noding\ScaledNoder.$(EXT) \
+	noding\SegmentIntersectionDetector.$(EXT) \
+	noding\SegmentNode.$(EXT) \
+	noding\SegmentNodeList.$(EXT) \
+	noding\SegmentString.$(EXT) \
+	noding\SegmentStringUtil.$(EXT) \
+	noding\SimpleNoder.$(EXT) \
+	noding\SingleInteriorIntersectionFinder.$(EXT) \
+	noding\snapround\HotPixel.$(EXT) \
+	noding\snapround\MCIndexPointSnapper.$(EXT) \
+	noding\snapround\MCIndexSnapRounder.$(EXT) \
+	noding\snapround\SimpleSnapRounder.$(EXT) \
+	operation\GeometryGraphOperation.$(EXT) \
+	operation\IsSimpleOp.$(EXT) \
+	operation\buffer\BufferBuilder.$(EXT) \
+	operation\buffer\BufferOp.$(EXT) \
+	operation\buffer\BufferSubgraph.$(EXT) \
+	operation\buffer\OffsetCurveBuilder.$(EXT) \
+	operation\buffer\OffsetCurveSetBuilder.$(EXT) \
+	operation\buffer\RightmostEdgeFinder.$(EXT) \
+	operation\buffer\SubgraphDepthLocater.$(EXT) \
+	operation\distance\ConnectedElementLocationFilter.$(EXT) \
+	operation\distance\ConnectedElementPointFilter.$(EXT) \
+	operation\distance\DistanceOp.$(EXT) \
+	operation\distance\GeometryLocation.$(EXT) \
+	operation\linemerge\EdgeString.$(EXT) \
+	operation\linemerge\LineMergeDirectedEdge.$(EXT) \
+	operation\linemerge\LineMergeEdge.$(EXT) \
+	operation\linemerge\LineMergeGraph.$(EXT) \
+	operation\linemerge\LineMerger.$(EXT) \
+	operation\linemerge\LineSequencer.$(EXT) \
+	operation\overlay\EdgeSetNoder.$(EXT) \
+	operation\overlay\ElevationMatrix.$(EXT) \
+	operation\overlay\ElevationMatrixCell.$(EXT) \
+	operation\overlay\FuzzyPointLocator.$(EXT) \
+	operation\overlay\LineBuilder.$(EXT) \
+	operation\overlay\MaximalEdgeRing.$(EXT) \
+	operation\overlay\MinimalEdgeRing.$(EXT) \
+	operation\overlay\OffsetPointGenerator.$(EXT) \
+	operation\overlay\OverlayNodeFactory.$(EXT) \
+	operation\overlay\OverlayOp.$(EXT) \
+	operation\overlay\OverlayResultValidator.$(EXT) \
+	operation\overlay\PointBuilder.$(EXT) \
+	operation\overlay\PolygonBuilder.$(EXT) \
+	operation\polygonize\PolygonizeDirectedEdge.$(EXT) \
+	operation\polygonize\PolygonizeEdge.$(EXT) \
+	operation\polygonize\EdgeRing.$(EXT) \
+	operation\polygonize\PolygonizeGraph.$(EXT) \
+	operation\polygonize\Polygonizer.$(EXT) \
+	operation\predicate\RectangleContains.$(EXT) \
+	operation\predicate\RectangleIntersects.$(EXT) \
+	operation\predicate\SegmentIntersectionTester.$(EXT) \
+	operation\relate\EdgeEndBuilder.$(EXT) \
+	operation\relate\EdgeEndBundle.$(EXT) \
+	operation\relate\EdgeEndBundleStar.$(EXT) \
+	operation\relate\RelateComputer.$(EXT) \
+	operation\relate\RelateNode.$(EXT) \
+	operation\relate\RelateNodeFactory.$(EXT) \
+	operation\relate\RelateNodeGraph.$(EXT) \
+	operation\relate\RelateOp.$(EXT) \
+	operation\union\CascadedPolygonUnion.$(EXT) \
+	operation\valid\ConnectedInteriorTester.$(EXT) \
+	operation\valid\ConsistentAreaTester.$(EXT) \
+	operation\valid\IsValidOp.$(EXT) \
+	operation\valid\QuadtreeNestedRingTester.$(EXT) \
+	operation\valid\RepeatedPointTester.$(EXT) \
+	operation\valid\SimpleNestedRingTester.$(EXT) \
+	operation\valid\SweeplineNestedRingTester.$(EXT) \
+	operation\valid\TopologyValidationError.$(EXT) \
+	planargraph\DirectedEdge.$(EXT) \
+	planargraph\DirectedEdgeStar.$(EXT) \
+	planargraph\Edge.$(EXT) \
+	planargraph\Node.$(EXT) \
+	planargraph\NodeMap.$(EXT) \
+	planargraph\PlanarGraph.$(EXT) \
+	planargraph\Subgraph.$(EXT) \
+	planargraph\algorithm\ConnectedSubgraphFinder.$(EXT) \
+	precision\CommonBits.$(EXT) \
+	precision\CommonBitsOp.$(EXT) \
+	precision\CommonBitsRemover.$(EXT) \
+	precision\EnhancedPrecisionOp.$(EXT) \
+	precision\GeometrySnapper.$(EXT) \
+	precision\LineStringSnapper.$(EXT) \
+	precision\SimpleGeometryPrecisionReducer.$(EXT) \
+	simplify\DouglasPeuckerLineSimplifier.$(EXT) \
+	simplify\DouglasPeuckerSimplifier.$(EXT) \
+	simplify\LineSegmentIndex.$(EXT) \
+	simplify\TaggedLineSegment.$(EXT) \
+	simplify\TaggedLinesSimplifier.$(EXT) \
+	simplify\TaggedLineString.$(EXT) \
+	simplify\TaggedLineStringSimplifier.$(EXT) \
+	simplify\TopologyPreservingSimplifier.$(EXT) \
+	util\Assert.$(EXT) \
+	util\GeometricShapeFactory.$(EXT) \
+	util\math.$(EXT) \
+	util\Profiler.$(EXT) \
+	..\capi\geos_c.$(EXT) \
+	..\capi\geos_ts_c.$(EXT) \
+	inlines.$(EXT)
 
 TEST_EXE =	TestSweepLineSpeed.exe
 
-default:	$(LIBNAME) $(DLLNAME) $(CDLLNAME)
+###############################################################################
+# Build targets
+
+default: $(LIBNAME) $(DLLNAME) $(CDLLNAME)
 
 $(LIBNAME):	headers/geos/platform.h headers/geos/version.h ../capi/geos_c.h $(OBJ)
 	if exist $(LIBNAME) del $(LIBNAME)
 	$(LINK) /lib /out:$(LIBNAME) $(OBJ)
 
 $(DLLNAME):	$(OBJ)
-	link /dll /debug $(OBJ) /out:$(DLLNAME) /implib:$(SLIBNAME)
+	$(LINK) /dll /debug $(OBJ) /out:$(DLLNAME) /implib:$(SLIBNAME)
 	if exist $(DLLNAME).manifest mt -manifest $(DLLNAME).manifest -outputresource:$(DLLNAME);2
 
 $(CDLLNAME): ..\capi\geos_c.obj ..\capi\geos_ts_c.obj $(DLLNAME)
-	link /dll /debug ..\capi\geos_c.obj ..\capi\geos_ts_c.obj $(LIBNAME) /out:$(CDLLNAME) /implib:$(CLIBNAME)
+	$(LINK) /dll /debug ..\capi\geos_c.obj ..\capi\geos_ts_c.obj $(LIBNAME) /out:$(CDLLNAME) /implib:$(CLIBNAME)
 	if exist $(CDLLNAME).manifest mt -manifest $(CDLLNAME).manifest -outputresource:$(CDLLNAME);2
   
 headers/geos/platform.h: headers/geos/platform.h.vc
-	copy headers\geos\platform.h.vc headers\geos\platform.h
+	$(CP) headers\geos\platform.h.vc headers\geos\platform.h
 
 headers/geos/version.h: headers/geos/version.h.vc
-	if not exist headers\geos\version.h copy headers\geos\version.h.vc headers\geos\version.h
+	if not exist headers\geos\version.h $(CP) headers\geos\version.h.vc headers\geos\version.h
 
 # geos_c.h should already be in distribution, if is not you'll
 # have to run ./configure to recreate
 ../capi/geos_c.h: ../capi/geos_c.h.in.
-	copy ..\capi\geos_c.h.in ..\capi\geos_c.h
-   
+	$(CP) ..\capi\geos_c.h.in ..\capi\geos_c.h
+
 .cpp.obj:
-	$(CC) $(CFLAGS) /c $*.cpp /Fo$@
+    $(CC) $(CFLAGS) /c $*.cpp /Fo$@
 
 .c.obj:
 	$(CC) $(CFLAGS) /c $*.c /Fo$@
 
 clean:
-	$(RM) $(LIBNAME)
-	$(RM) $(SLIBNAME)
-	$(RM) $(DLLNAME)
-	$(RM) $(SLIBNAME)
-	$(RM) $(CLIBNAME)
-	$(RM) $(CDLLNAME)
-	$(RM) ..\capi\*.obj
-	$(RM) *.exe
-	$(RM) *.exp
-	$(RM) *.ilk
-	$(RM) *.manifest
-	$(RM) *.obj
-	$(RM) *.pdb
-	for %d in ( $(GEOS_DIRLIST) ) do \
-		del %d\*.obj 
-	
+    @ECHO "*** Cleaning GEOS source tree"
+	@IF EXIST $(LIBNAME)  $(RM) $(LIBNAME)
+	@IF EXIST $(SLIBNAME) $(RM) $(SLIBNAME)
+	@IF EXIST $(DLLNAME)  $(RM) $(DLLNAME)
+	@IF EXIST $(SLIBNAME) $(RM) $(SLIBNAME)
+	@IF EXIST $(CLIBNAME) $(RM) $(CLIBNAME)
+	@IF EXIST $(CDLLNAME) $(RM) $(CDLLNAME)
+	-@del ..\capi\*.obj
+	-@del $*.exe
+	-@del $*.exp
+	-@del $*.ilk
+	-@del $*.manifest
+	-@del $*.obj
+	-@del $*.pdb
+	-@FOR %d IN ( $(GEOS_DIRLIST) ) DO del %d\*.obj
 
 TestSweepLineSpeed.exe:	$(LIBNAME) \
 		bigtest\GeometryTestFactory.obj \
 		bigtest\TestSweepLineSpeed.obj
-	link /debug /out:TestSweepLineSpeed.exe \
+	$(LINK) /debug /out:TestSweepLineSpeed.exe \
 		bigtest\TestSweepLineSpeed.obj \
 		bigtest\GeometryTestFactory.obj \
 		$(LIBNAME)
 
 geostest.exe: $(DLLNAME) ..\capi\geostest.obj
-	link /debug ..\capi\geostest.obj $(SLIBNAME)
+	$(LINK) /debug ..\capi\geostest.obj $(SLIBNAME)
+
+# EOF

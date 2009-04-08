@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="windows-1250"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="geos_unit"
 	ProjectGUID="{30461863-CCA4-4A8F-8BEE-1AB57060D5C2}"
 	RootNamespace="geos_unit"
@@ -437,48 +437,20 @@
 			Name="capi"
 			>
 			<File
-				RelativePath="..\..\..\tests\unit\capi\badthreadtest.c"
+				RelativePath="..\..\..\tests\unit\capi\GEOSCoordSeqTest.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\tests\unit\capi\GEOSCoordSeqTest.cpp"
+				RelativePath="..\..\..\tests\unit\capi\GEOSGeomToWKTTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\tests\unit\capi\GEOSPolygonizer_getCutEdgesTest.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\tests\unit\capi\GEOSSimplifyTest.cpp"
 				>
-			</File>
-			<File
-				RelativePath="..\..\..\tests\unit\capi\geostest.c"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\tests\unit\capi\threadtest.c"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
 			</File>
 		</Filter>
 		<File

@@ -1,7 +1,7 @@
 # $Id$
 #
 # NMAKE Makefile to build GEOS on Windows
-#
+###############################################################################
 # This makefile.vc delegates making targets to source\makefile.vc
 # so it's just a thin wrapper.
 #
@@ -15,11 +15,11 @@
 #  source\geos.dll: DLL - only exports the C API
 #  source\geos_i.lib: Stub library to link against for use of geos.dll. 
 #  source\geos.lib: static library for use of C or C++ API.
-#
-MAKE = nmake
-RM = -del
+###############################################################################
+GEOS_ROOT=.
+!INCLUDE $(GEOS_ROOT)\nmake.opt
 
-default:    source_dir
+default: source_dir
 
 source_dir:
 	cd source
@@ -30,4 +30,3 @@ clean:
 	cd source
 	$(MAKE) /f makefile.vc clean
 	cd ..
-
