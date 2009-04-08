@@ -54,8 +54,8 @@ PreparedPolygonContainsProperly::containsProperly( const geom::Geometry * geom)
 	bool segsIntersect = prepPoly->getIntersectionFinder()->intersects( &lineSegStr);
 
 	for ( size_t i = 0, ni = lineSegStr.size(); i < ni; i++ ) {
-		delete lineSegStr[ i ];
 		delete lineSegStr[ i ]->getCoordinates();
+		delete lineSegStr[ i ];
 	}
 
 	if (segsIntersect) 
