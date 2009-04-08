@@ -19,6 +19,7 @@ noinst_HEADERS = \
 	Noder.h \
 	NodingValidator.h \
 	Octant.h \
+	OrientedCoordinateArray.h \
 	ScaledNoder.h \
 	SegmentIntersectionDetector.h \
 	SegmentIntersector.h \

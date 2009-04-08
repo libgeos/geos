@@ -16,6 +16,7 @@ libnoding_la_SOURCES = \
 	NodedSegmentString.cpp \
 	NodingValidator.cpp \
 	Octant.cpp \
+	OrientedCoordinateArray.cpp \
 	ScaledNoder.cpp \
 	SegmentIntersectionDetector.cpp \
 	SegmentNode.cpp \
