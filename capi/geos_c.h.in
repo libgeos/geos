@@ -513,7 +513,7 @@ extern char GEOS_DLL GEOSEqualsExact_r(GEOSContextHandle_t handle,
  ***********************************************************************/
 
 /* 
- * Argument ownership is taken by prepared geometry
+ * GEOSGeometry ownership is retained by caller
  */
 extern const GEOSPreparedGeometry GEOS_DLL *GEOSPrepare(const GEOSGeometry* g);
 
@@ -524,6 +524,9 @@ extern char GEOS_DLL GEOSPreparedContainsProperly(const GEOSPreparedGeometry* pg
 extern char GEOS_DLL GEOSPreparedCovers(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSPreparedIntersects(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
 
+/* 
+ * GEOSGeometry ownership is retained by caller
+ */
 extern const GEOSPreparedGeometry GEOS_DLL *GEOSPrepare_r(
                                             GEOSContextHandle_t handle,
                                             const GEOSGeometry* g);
