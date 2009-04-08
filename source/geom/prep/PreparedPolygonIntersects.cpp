@@ -55,7 +55,7 @@ PreparedPolygonIntersects::intersects( const geom::Geometry * geom)
 
 	for ( size_t i = 0, ni = lineSegStr.size(); i < ni; i++ ) 
 	{
-	      delete lineSegStr[ i ]->getCoordinates();
+		delete lineSegStr[ i ]->getCoordinates();
 		delete lineSegStr[ i ];
 	}
 	
