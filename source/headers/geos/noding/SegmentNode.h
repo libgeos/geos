@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ *  Last port: noding/SegmentNode.java rev. 1.6 (JTS-1.9)
+ *
  **********************************************************************/
 
 #ifndef GEOS_NODING_SEGMENTNODE_H
@@ -26,22 +30,20 @@
 // Forward declarations
 namespace geos {
 	namespace noding {
-		class SegmentString;
+		class NodedSegmentString;
 	}
 }
 
 namespace geos {
 namespace noding { // geos.noding
 
-/// Represents an intersection point between two SegmentString.
+/// Represents an intersection point between two NodedSegmentString.
 //
 /// Final class.
 ///
-/// Last port: noding/SegmentNode.java rev. 1.5 (JTS-1.7)
-///
 class SegmentNode {
 private:
-	const SegmentString& segString;
+	const NodedSegmentString& segString;
 
 	int segmentOctant;
 
@@ -56,18 +58,20 @@ public:
 	/// the index of the containing line segment in the parent edge
 	unsigned int segmentIndex;  
 
-	/// Construct a node on the given SegmentString
+	/// Construct a node on the given NodedSegmentString
 	//
-	/// @param ss the parent SegmentString 
+	/// @param ss the parent NodedSegmentString 
 	///
 	/// @param coord the coordinate of the intersection, will be copied
 	///
-	/// @param nSegmentIndex the index of the segment on parent SegmentString
+	/// @param nSegmentIndex the index of the segment on parent
+	///                      NodedSegmentString
 	///        where the Node is located.
 	///
 	/// @param nSegmentOctant
 	///
-	SegmentNode(const SegmentString& ss, const geom::Coordinate& nCoord,
+	SegmentNode(const NodedSegmentString& ss,
+		    const geom::Coordinate& nCoord,
 			unsigned int nSegmentIndex, int nSegmentOctant);
 
 	~SegmentNode() {}

@@ -25,6 +25,7 @@
 #include <geos/util/GEOSException.h>
 #include <geos/noding/SegmentNodeList.h>
 #include <geos/noding/NodedSegmentString.h>
+#include <geos/noding/SegmentString.h> // for use
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateArraySequence.h> // FIXME: should we really be using this ?

@@ -6,7 +6,7 @@
 #include <tut.h>
 // GEOS
 #include <geos/noding/SegmentNode.h>
-#include <geos/noding/BasicSegmentString.h>
+#include <geos/noding/NodedSegmentString.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateArraySequenceFactory.h>
@@ -50,7 +50,7 @@ namespace tut
     void object::test<1>()
     {
         using geos::geom::Coordinate;
-        using geos::noding::BasicSegmentString;
+        using geos::noding::NodedSegmentString;
         using geos::noding::SegmentNode;
 
         // Create coordinates sequence
@@ -68,11 +68,11 @@ namespace tut
 
         // Create SegmentString instance
         
-        BasicSegmentString segment(cs.get(), 0);
+        NodedSegmentString segment(cs.get(), 0);
 
         ensure_equals( segment.size(), coords_size );
 
-        // Construct a node on the given SegmentString
+        // Construct a node on the given NodedSegmentString
         {
             const size_t segment_index = 0;
             Coordinate cint(3, 3);

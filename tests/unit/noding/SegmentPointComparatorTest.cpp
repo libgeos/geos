@@ -6,6 +6,7 @@
 #include <tut.h>
 // GEOS
 #include <geos/noding/SegmentNode.h>
+#include <geos/noding/SegmentString.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateArraySequenceFactory.h>

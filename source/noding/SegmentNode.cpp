@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: noding/SegmentNode.java rev. 1.5 (JTS-1.7)
+ * Last port: noding/SegmentNode.java rev. 1.6 (JTS-1.9)
  *
  **********************************************************************/
 
@@ -27,7 +27,7 @@
 #include <iomanip>
 
 #include <geos/noding/SegmentNode.h>
-#include <geos/noding/SegmentString.h>
+#include <geos/noding/NodedSegmentString.h>
 #include <geos/geom/Coordinate.h>
 
 using namespace std;
@@ -103,7 +103,7 @@ public:
 };
 
 /*public*/
-SegmentNode::SegmentNode(const SegmentString& ss, const Coordinate& nCoord,
+SegmentNode::SegmentNode(const NodedSegmentString& ss, const Coordinate& nCoord,
 		unsigned int nSegmentIndex, int nSegmentOctant)
 	:
 	segString(ss),
@@ -111,7 +111,7 @@ SegmentNode::SegmentNode(const SegmentString& ss, const Coordinate& nCoord,
 	coord(nCoord),
 	segmentIndex(nSegmentIndex)
 {
-	// Number of points in SegmentString is one-more number of segments
+	// Number of points in NodedSegmentString is one-more number of segments
 	assert(segmentIndex < segString.size() );
 
 	isInteriorVar = \

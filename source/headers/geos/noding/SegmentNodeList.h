@@ -35,6 +35,7 @@ namespace geos {
 		class CoordinateSequence;
 	}
 	namespace noding {
+		class SegmentString;
 		class NodedSegmentString;
 	}
 }
@@ -44,7 +45,7 @@ namespace noding { // geos::noding
 
 /** \brief
  * A list of the SegmentNode present along a
- * noded SegmentString.
+ * NodedSegmentString.
  */
 class SegmentNodeList {
 private:
@@ -52,9 +53,6 @@ private:
 
 	// the parent edge
 	const NodedSegmentString& edge; 
-
-	// UNUSED
-	//std::vector<SegmentNode*> *sortedNodes;
 
 	// This vector is here to keep track of created splitEdges
 	std::vector<SegmentString*> splitEdges;
