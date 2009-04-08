@@ -117,28 +117,9 @@ SimpleSnapRounder::computeSnaps(NodedSegmentString* ss, vector<Coordinate>& snap
 		const Coordinate& snapPt = *it;
 		HotPixel hotPixel(snapPt, scaleFactor, li);
 		for (int i=0, n=ss->size()-1; i<n; ++i) {
-			addSnappedNode(hotPixel, *ss, i);
+			hotPixel.addSnappedNode(*ss, i);
 		}
 	}
-}
-
-/* public static */
-bool
-SimpleSnapRounder::addSnappedNode(const HotPixel& hotPix,
-		NodedSegmentString& segStr, unsigned int segIndex)
-{
-	const Coordinate& p0 = segStr.getCoordinate(segIndex);
-	const Coordinate& p1 = segStr.getCoordinate(segIndex + 1);
-
-	if (hotPix.intersects(p0, p1)) {
-		//cerr<<"snapped: "<<snapPt<<endl;
-		//cerr<<"POINT ("<<snapPt.x<<" "<<snapPt.y<<")"<<endl;
-		segStr.addIntersection(hotPix.getCoordinate(), segIndex);
-
-		return true;
-	}
-
-	return false;
 }
 
 /*private*/
@@ -160,7 +141,7 @@ SimpleSnapRounder::computeVertexSnaps(NodedSegmentString* e0, NodedSegmentString
 				continue;
 			}
 //cerr<<"trying "<<p0<<" against "<<pts1->getAt(i1)<<" "<<pts1->getAt(i1 + 1)<<endl;
-			bool isNodeAdded = addSnappedNode(hotPixel, *e1, i1);
+			bool isNodeAdded = hotPixel.addSnappedNode(*e1, i1);
 			// if a node is created for a vertex, that vertex must be noded too
 			if (isNodeAdded) {
 				e0->addIntersection(p0, i0);

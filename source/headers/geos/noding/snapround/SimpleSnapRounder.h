@@ -125,19 +125,6 @@ public:
 	void add(const SegmentString* segStr);
 
 	/**
-	 * Adds a new node (equal to the snap pt) to the segment if the segment
-	 * passes through the hot pixel.
-	 *
-	 * @param hotPix
-	 * @param segStr
-	 * @param segIndex
-	 * @return <code>true</code> if a node was added
-	 */
-	static bool addSnappedNode(const HotPixel& hotPix,
-			NodedSegmentString& segStr,
-			unsigned int segIndex);
-
-	/**
 	 * Computes nodes introduced as a result of
 	 * snapping segments to vertices of other segments
 	 *
