@@ -460,6 +460,12 @@ GEOSGetSRID(const Geometry *g1)
     return GEOSGetSRID_r( handle, g1 );
 }
 
+void
+GEOSSetSRID(Geometry *g, int srid)
+{
+    GEOSSetSRID_r( handle, g, srid);
+}
+
 char 
 GEOSHasZ(const Geometry *g)
 {

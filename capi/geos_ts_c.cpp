@@ -1627,10 +1627,37 @@ GEOSGeom_destroy_r(GEOSContextHandle_t extHandle, Geometry *a)
 }
 
 void
-GEOSSetSRID(Geometry *g, int SRID)
+GEOSSetSRID_r(GEOSContextHandle_t extHandle, Geometry *g, int srid)
 {
-	g->setSRID(SRID);
+    GEOSContextHandleInternal_t *handle;
+
+    if( extHandle == NULL )
+    {
+        return;
+    }
+
+    handle = (GEOSContextHandleInternal_t*)extHandle;
+    if( handle->initialized == 0 )
+    {
+        return;
+    }
+
+	try{
+		g->setSRID(srid);
+	}
+	catch (const std::exception &e)
+	{
+		handle->ERROR_MESSAGE("%s", e.what());
+		return;
+	}
+
+	catch (...)
+	{
+		handle->ERROR_MESSAGE("Unknown exception thrown");
+		return;
+	}
 }
+
 
 
 int
