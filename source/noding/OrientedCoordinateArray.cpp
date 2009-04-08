@@ -40,7 +40,7 @@ OrientedCoordinateArray::orientation(const CoordinateSequence& pts)
 }
 
 int
-OrientedCoordinateArray::compareTo(const OrientedCoordinateArray& oca)
+OrientedCoordinateArray::compareTo(const OrientedCoordinateArray& oca) const
 {
 	int comp = compareOriented(pts, orientationVar,
                                oca.pts, oca.orientationVar);
