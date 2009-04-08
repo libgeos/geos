@@ -70,7 +70,7 @@ public:
 	 * In JTS, this is used automatically by ordered lists.
 	 * In C++, operator< would be used instead....
 	 */
-	int compareTo(const OrientedCoordinateArray& o1);
+	int compareTo(const OrientedCoordinateArray& o1) const;
 
 
 private:

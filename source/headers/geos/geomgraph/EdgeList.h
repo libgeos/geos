@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geomgraph/EdgeList.java rev. 1.4 (JTS-1.9)
+ *
  **********************************************************************/
 
 
@@ -19,10 +23,11 @@
 #define GEOS_GEOMGRAPH_EDGELIST_H
 
 #include <vector>
+#include <map>
 #include <string>
 #include <iostream>
 
-#include <geos/indexQuadtree.h> // for inlined ctor
+#include <geos/noding/OrientedCoordinateArray.h> // for map comparator
 
 #include <geos/inline.h>
 
@@ -39,22 +44,37 @@ namespace geos {
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
+/** 
+ * A EdgeList is a list of Edges. 
+ *
+ * It supports locating edges
+ * that are pointwise equals to a target edge.
+ */
 class EdgeList {
 
 private:
 
 	std::vector<Edge*> edges;
 
+	struct OcaCmp {
+		bool operator()(
+			const noding::OrientedCoordinateArray *oca1,
+			const noding::OrientedCoordinateArray *oca2) const
+		{
+			return oca1->compareTo(*oca2)<0;
+		}
+	};
+
 	/**
 	 * An index of the edges, for fast lookup.
-	 *
-	 * a Quadtree is used, because this index needs to be dynamic
-	 * (e.g. allow insertions after queries).
-	 * An alternative would be to use an ordered set based on the values
-	 * of the edge coordinates
-	 *
+	 * 
+	 * OrientedCoordinateArray objects are owned by us.
+	 * TODO: optimize by dropping the OrientedCoordinateArray
+	 *       construction as a whole, and use CoordinateSequence
+	 *       directly instead..
 	 */
-	geos::index::SpatialIndex* index;
+	typedef std::map<noding::OrientedCoordinateArray*, Edge*, OcaCmp> EdgeMap;
+	EdgeMap ocaMap;
 
 public:
 	friend std::ostream& operator<< (std::ostream& os, const EdgeList& el);
@@ -62,10 +82,10 @@ public:
 	EdgeList()
 		:
 		edges(),
-		index(new geos::index::quadtree::Quadtree())
+		ocaMap()
 	{}
 
-	virtual ~EdgeList() { delete index; }
+	virtual ~EdgeList();
 
 	/**
 	 * Insert an edge unless it is already in the list

@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geomgraph/EdgeList.java rev. 1.4 (JTS-1.9)
+ *
  **********************************************************************/
 
 #include <string>
@@ -19,6 +23,7 @@
 
 #include <geos/geomgraph/Edge.h>
 #include <geos/geomgraph/EdgeList.h>
+#include <geos/noding/OrientedCoordinateArray.h> 
 #include <geos/profiler.h>
 
 #ifndef GEOS_DEBUG
@@ -26,7 +31,7 @@
 #endif
 
 using namespace std;
-using namespace geos::index::quadtree;
+using namespace geos::noding;
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
@@ -40,7 +45,8 @@ void
 EdgeList::add(Edge *e)
 {
 	edges.push_back(e);
-	index->insert(e->getEnvelope(), e);
+	OrientedCoordinateArray* oca = new OrientedCoordinateArray(*(e->getCoordinates()));
+	ocaMap[oca] = e;
 }
 
 void
@@ -52,7 +58,6 @@ EdgeList::addAll(const vector<Edge*> &edgeColl)
 	}
 }
 
-// <FIX> fast lookup for edges
 /**
  * If there is an edge equal to e already in the list, return it.
  * Otherwise return null.
@@ -66,26 +71,17 @@ EdgeList::findEqualEdge(Edge *e)
 	static Profile *prof = profiler->get("EdgeList::findEqualEdge(Edge *e)");
 	prof->start();
 #endif
-	vector<void*> testEdges;
-	index->query(e->getEnvelope(), testEdges);
+
+	OrientedCoordinateArray oca(*(e->getCoordinates()));
+
+	EdgeMap::iterator it = ocaMap.find(&oca);
+
 #if PROFILE
 	prof->stop();
 #endif
 
-#if GEOS_DEBUG
-	cerr << "EdgeList::findEqualEdge found " << testEdges.size() <<
-			" overlapping edges" << endl;
-#endif
-
-	for (std::size_t i=0, s=testEdges.size(); i<s; ++i)
-	{
-		Edge* testEdge=static_cast<Edge*>(testEdges[i]);
-		if (testEdge->equals(e))
-		{
-			return testEdge;
-		}
-	}
-	return NULL;
+	if ( it != ocaMap.end() ) return it->second;
+	return 0;
 }
 
 Edge*
@@ -147,6 +143,14 @@ operator<< (std::ostream&os, const EdgeList& el)
 		os << "  " << *e << std::endl; 
 	}
 	return os;
+}
+
+EdgeList::~EdgeList()
+{
+	for (EdgeMap::iterator i=ocaMap.begin(), e=ocaMap.end(); i!=e; ++i)
+	{
+		delete i->first; // OrientedCoordinateArray
+	}
 }
 
 } // namespace geos.geomgraph
