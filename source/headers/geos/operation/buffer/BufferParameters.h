@@ -135,7 +135,7 @@ public:
 	//
 	/// @return the number of quadrant segments
 	///
-	int getQuandrantSegments() const { return quadrantSegments; }
+	int getQuadrantSegments() const { return quadrantSegments; }
 
 	/// \brief
 	/// Sets the number of line segments used to approximate
