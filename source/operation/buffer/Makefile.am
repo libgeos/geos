@@ -7,6 +7,7 @@ INCLUDES = -I$(top_srcdir)/source/headers
 libopbuffer_la_SOURCES = \
 	BufferBuilder.cpp \
 	BufferOp.cpp \
+	BufferParameters.cpp \
 	BufferSubgraph.cpp \
 	OffsetCurveBuilder.cpp \
 	OffsetCurveSetBuilder.cpp \

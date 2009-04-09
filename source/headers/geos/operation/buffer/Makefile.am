@@ -13,6 +13,7 @@ geos_HEADERS = \
 
 noinst_HEADERS = \
 	BufferBuilder.h	\
+	BufferParameters.h	\
 	BufferSubgraph.h	\
 	OffsetCurveSetBuilder.h	\
 	RightmostEdgeFinder.h \
