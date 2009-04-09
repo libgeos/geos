@@ -1,5 +1,6 @@
+SUBDIRS = tut
 
-INCLUDES = -I$(top_srcdir)/source/headers -I$(top_srcdir)/tests/tut -I$(top_builddir)/capi
+INCLUDES = -I$(top_srcdir)/source/headers -I$(top_srcdir)/tests/unit/tut -I$(top_builddir)/capi
 
 TESTS = geos_unit
 

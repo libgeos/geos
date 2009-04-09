@@ -1,4 +1,4 @@
-// $Id$
+// $Id: tut_restartable.h 1820 2006-09-06 16:54:23Z mloskot $
 // 
 // TUT: C++ Unit Test Framework
 // http://tut-framework.sourceforge.net/
