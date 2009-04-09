@@ -19,6 +19,7 @@ geos_HEADERS = 				\
 	PointLocator.h	
 
 noinst_HEADERS = 			\
+	Angle.h				\
 	CGAlgorithms.h			\
 	CentralEndpointIntersector.h	\
 	CentroidArea.h			\

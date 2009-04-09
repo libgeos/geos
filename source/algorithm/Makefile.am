@@ -6,6 +6,7 @@ noinst_LTLIBRARIES = libalgorithm.la
 INCLUDES = -I$(top_srcdir)/source/headers 
 
 libalgorithm_la_SOURCES = \
+	Angle.cpp \
 	CentroidArea.cpp \
 	CentroidLine.cpp \
 	CentroidPoint.cpp \
