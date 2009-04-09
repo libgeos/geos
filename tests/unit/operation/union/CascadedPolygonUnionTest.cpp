@@ -2,9 +2,9 @@
 // 
 // Test Suite for geos::operation::geounion::CascadedPolygonUnion class.
 
-// TUT
-#include <tut.h>
-// GEOS
+// tut
+#include <tut.hpp>
+// geos
 #include <geos/operation/union/CascadedPolygonUnion.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
@@ -12,6 +12,10 @@
 #include <geos/geom/Point.h>
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTWriter.h>
+// std
+#include <memory>
+#include <string>
+#include <vector>
 
 namespace tut
 {
@@ -47,11 +51,14 @@ namespace tut
 
         std::auto_ptr<geos::geom::Geometry> unionAll;
         iterator end = geoms->end();
-        for (iterator i = geoms->begin(); i != end; ++i) {
-            if (!unionAll.get()) {
+        for (iterator i = geoms->begin(); i != end; ++i)
+        {
+            if (!unionAll.get())
+            {
                 unionAll.reset((*i)->clone());
             }
-            else {
+            else
+            {
                 unionAll.reset(unionAll->Union(*i));
             }
         }

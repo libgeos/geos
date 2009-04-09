@@ -2,15 +2,14 @@
 // 
 // Test Suite for geos::simplify::DouglasPeuckerSimplifierTest
 
-// TUT
-#include <tut.h>
-// GEOS
+#include <tut.hpp>
+// geos
 #include <geos/io/WKTReader.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
 #include <geos/simplify/DouglasPeuckerSimplifier.h>
-
+// std
 #include <string>
 #include <memory>
 

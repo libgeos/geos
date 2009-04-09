@@ -2,15 +2,16 @@
 // 
 // Test Suite for Geometry's covers() and coveredBy() functions
 
-// TUT
-#include <tut.h>
-// STL
-#include <string>
-// GEOS
+// tut
+#include <tut.hpp>
+// geos
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Polygon.h>
 #include <geos/io/WKTReader.h>
+// std
+#include <memory>
+#include <string>
 
 namespace tut {
 

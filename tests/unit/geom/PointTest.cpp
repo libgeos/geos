@@ -2,9 +2,8 @@
 // 
 // Test Suite for geos::geom::Point class.
 
-// TUT
-#include <tut.h>
-// GEOS
+#include <tut.hpp>
+// geos
 #include <geos/geom/Point.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateArraySequence.h>
@@ -14,6 +13,10 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/io/WKTReader.h>
 #include <geos/util/IllegalArgumentException.h>
+// std
+#include <memory>
+#include <string>
+
 
 namespace tut
 {

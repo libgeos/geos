@@ -1,15 +1,15 @@
-// $Id@
+// $Id$
 // 
 // Test Suite for geos::noding::BasicSegmentString class.
 
-// TUT
-#include <tut.h>
-// GEOS
+#include <tut.hpp>
+// geos
 #include <geos/noding/BasicSegmentString.h>
 #include <geos/noding/Octant.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateArraySequenceFactory.h>
+// std
 #include <memory>
 
 namespace tut

@@ -2,9 +2,9 @@
 // 
 // Test Suite for geos::operation::distance::DistanceOp class.
 
-// TUT
-#include <tut.h>
-// GEOS
+// tut
+#include <tut.hpp>
+// geos
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/platform.h>
 #include <geos/geom/Coordinate.h>
@@ -13,7 +13,9 @@
 #include <geos/algorithm/PointLocator.h>
 #include <geos/io/WKTReader.h>
 #include <geos/geom/CoordinateSequence.h>
+// std
 #include <memory>
+#include <string>
 #include <vector>
 
 namespace tut

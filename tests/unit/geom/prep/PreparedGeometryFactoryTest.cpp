@@ -2,6 +2,9 @@
 // 
 // Test Suite for geos::geom::prep::PreparedGeometryFactory class.
 
+// tut
+#include <tut.hpp>
+#include <utility.h>
 // geos
 #include <geos/geom/prep/PreparedGeometryFactory.h>
 #include <geos/geom/prep/PreparedGeometry.h>
@@ -13,9 +16,6 @@
 // std
 #include <vector>
 #include <cstring> // std::size_t
-// tut
-#include <tut.h>
-#include <utility.h>
 
 using namespace geos::geom;
 

@@ -2,9 +2,8 @@
 // 
 // Test Suite for geos::index::quadtree::DoubleBits class.
 
-// TUT
-#include <tut.h>
-// GEOS
+#include <tut.hpp>
+// geos
 #include <geos/index/quadtree/DoubleBits.h>
 
 using namespace geos::index::quadtree;

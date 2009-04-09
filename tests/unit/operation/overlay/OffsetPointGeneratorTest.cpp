@@ -2,9 +2,9 @@
 // 
 // Test Suite for geos::operation::overlay::OffsetPointGenerator class.
 
-// TUT
-#include <tut.h>
-// GEOS
+// tut
+#include <tut.hpp>
+// geos
 #include <geos/operation/overlay/OffsetPointGenerator.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Point.h>
@@ -12,6 +12,7 @@
 #include <geos/algorithm/PointLocator.h>
 #include <geos/io/WKTReader.h>
 #include <geos/geom/Coordinate.h>
+// std
 #include <memory>
 #include <vector>
 

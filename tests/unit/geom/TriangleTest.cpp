@@ -2,9 +2,9 @@
 // 
 // Test Suite for geos::geom::Triangle class.
 
-// TUT
-#include <tut.h>
-// GEOS
+// tut
+#include <tut.hpp>
+// geos
 #include <geos/geom/Triangle.h>
 #include <geos/geom/Coordinate.h>
 
@@ -94,9 +94,9 @@ namespace tut
 		ensure_equals( copy.p0, a );
 		ensure_equals( copy.p1, b );
 		ensure_equals( copy.p2, c );
-		ensure_not_equals( copy.p0, d );
-		ensure_not_equals( copy.p1, e );
-		ensure_not_equals( copy.p2, f );
+		ensure( copy.p0 != d );
+		ensure( copy.p1 != e );
+		ensure( copy.p2 != f );
 	}
 
     // Test of inCenter()

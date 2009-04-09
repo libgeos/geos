@@ -5,6 +5,8 @@
 #ifndef GEOS_TUT_UTILITY_H_INCLUDED
 #define GEOS_TUT_UTILITY_H_INCLUDED 
 
+// tut
+#include <tut.hpp>
 // geos
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>
@@ -30,8 +32,6 @@
 #include <cassert>
 #include <string>
 #include <vector>
-// tut
-#include <tut.h>
 
 namespace tut
 {

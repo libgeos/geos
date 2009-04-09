@@ -2,13 +2,14 @@
 // 
 // Test Suite for geos::geom::CoordinateList class.
 
-// TUT
-#include <tut.h>
-// GEOS
+// tut
+#include <tut.hpp>
+// geos
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateList.h>
 #include <geos/geom/CoordinateArraySequence.h>
-// STL
+// std
+#include <memory>
 #include <string>
 #include <vector>
 

@@ -3,6 +3,8 @@
 // Test Suite for geos::algorithm::ConvexHull
 // Ported from JTS junit/algorithm/ConvexHullTest.java
 
+#include <tut.hpp>
+#include <utility.h>
 // geos
 #include <geos/algorithm/ConvexHull.h>
 #include <geos/geom/LineString.h>
@@ -17,9 +19,6 @@
 #include <sstream>
 #include <memory>
 #include <cassert>
-// tut
-#include <tut.h>
-#include <utility.h>
 
 namespace geos {
 	namespace geom {

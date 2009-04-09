@@ -2,14 +2,14 @@
 // 
 // Test Suite for geos::noding::SegmentNode class.
 
-// TUT
-#include <tut.h>
-// GEOS
+#include <tut.hpp>
+// geos
 #include <geos/noding/SegmentNode.h>
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateArraySequenceFactory.h>
+// std
 #include <memory>
 
 namespace tut

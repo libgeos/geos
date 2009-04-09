@@ -2,12 +2,11 @@
 // 
 // Test Suite for C-API GEOSGeomFromWKB
 
-// TUT
-#include <tut.h>
+#include <tut.hpp>
 #include <utility.h> // wkb_hex_decoder
-// GEOS CAPI
+// geos
 #include <geos_c.h>
-// C+
+// std
 #include <string>
 #include <cstdarg>
 #include <cstdio>

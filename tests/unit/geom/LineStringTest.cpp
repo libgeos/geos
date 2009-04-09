@@ -2,6 +2,9 @@
 // 
 // Test Suite for geos::geom::LineString class.
 
+// tut
+#include <tut.hpp>
+#include <utility.h>
 // geos
 #include <geos/geom/LineString.h>
 #include <geos/geom/Coordinate.h>
@@ -13,9 +16,6 @@
 #include <geos/io/WKTReader.h>
 #include <geos/util/GEOSException.h>
 #include <geos/util/IllegalArgumentException.h>
-// tut
-#include <tut.h>
-#include <utility.h>
 // std 
 #include <string>
 #include <cmath>
@@ -131,7 +131,7 @@ namespace tut
 		ensure_equals( ls->getBoundaryDimension(), geos::geom::Dimension::P );
 		ensure_equals( ls->getNumPoints(), size3 );
 		ensure_equals( ls->getArea(), 0.0 );
-		ensure_not_equals( ls->getLength(), 0.0 );
+		ensure( ls->getLength() != 0.0 );
 	}
 
 	// Test of incomplete LineString user's constructor throwing the IllegalArgumentException
@@ -218,7 +218,7 @@ namespace tut
 		ensure_equals( copy->getBoundaryDimension(), geos::geom::Dimension::P );
 		ensure_equals( copy->getNumPoints(), size );
 		ensure_equals( copy->getArea(), 0.0 );
-		ensure_not_equals( copy->getLength(), 0.0 );
+		ensure( copy->getLength() != 0.0 );
 	}
 
     // Test of isClosed() and isRing() for empty linestring
@@ -466,7 +466,7 @@ namespace tut
 		GeometryPtr geo = reader_.read("LINESTRING (0 0, 10 10, 20 0)");
 		ensure( geo != 0 );
 
-		ensure_not_equals( geo->getLength(), 0.0 );
+		ensure( geo->getLength() != 0.0 );
 
 		const double diff = std::fabs(geo->getLength() - expected);
 		ensure( diff <= tolerance );

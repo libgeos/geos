@@ -2,6 +2,8 @@
 // 
 // Test Suite for geos::geom::Polygon class.
 
+#include <tut.hpp>
+#include <utility.h>
 // geos
 #include <geos/geom/Polygon.h>
 #include <geos/geom/Coordinate.h>
@@ -17,10 +19,8 @@
 #include <geos/util/IllegalArgumentException.h>
 // std
 #include <cmath>
+#include <memory>
 #include <string>
-// tut
-#include <tut.h>
-#include <utility.h>
 
 namespace tut
 {
@@ -345,7 +345,7 @@ namespace tut
     void object::test<24>()
 	{
 		ensure( poly_ != 0 );
-		ensure_not_equals( poly_->getLength(), 0.0 );
+		ensure( poly_->getLength() != 0.0 );
 
 		const double tolerance = 0.0001;
 		const double expected = 38.284271247461902;
@@ -359,7 +359,7 @@ namespace tut
     void object::test<25>()
 	{
 		ensure( poly_ != 0 );
-		ensure_not_equals( poly_->getArea(), 0.0 );
+		ensure( poly_->getArea() != 0.0 );
 	}
 	
 	// Test of getCoordinates() for non-empty Polygon

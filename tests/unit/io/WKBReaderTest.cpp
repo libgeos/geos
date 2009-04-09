@@ -6,9 +6,9 @@
 // Currently only tests 2D geoms of all (7) types.
 // Tests NDR and XDR input and output .
 
-// TUT
-#include <tut.h>
-// GEOS
+// tut
+#include <tut.hpp>
+// geos
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKBConstants.h>
 #include <geos/io/WKBWriter.h>
@@ -16,7 +16,9 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
+// std
 #include <sstream>
+#include <string>
 #include <memory>
 
 namespace tut

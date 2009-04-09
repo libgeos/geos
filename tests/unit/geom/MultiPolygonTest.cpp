@@ -2,9 +2,8 @@
 // 
 // Test Suite for geos::geom::MultiPolygon class.
 
-// TUT
-#include <tut.h>
-// GEOS
+#include <tut.hpp>
+// geos
 #include <geos/geom/MultiPolygon.h>
 
 namespace tut

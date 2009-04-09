@@ -2,15 +2,15 @@
 // 
 // Test Suite for geos::precision::GeometrySnapper class.
 
-// TUT
-#include <tut.h>
-// GEOS
+// tut
+#include <tut.hpp>
+// geos
 #include <geos/precision/GeometrySnapper.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/io/WKTReader.h>
-
-// STL
+// std
+#include <memory>
 #include <string>
 #include <vector>
 

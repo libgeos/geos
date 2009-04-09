@@ -2,14 +2,13 @@
 // 
 // Test Suite for geos::geom::CoordinateArraySequence class.
 
-// TUT
-#include <tut.h>
-// GEOS
+#include <tut.hpp>
+// geos
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateArraySequenceFactory.h>
-// STL
+// std
 #include <exception>
 #include <vector>
 
@@ -121,7 +120,7 @@ namespace tut
 			ensure( 0 != sequence);
 			ensure( !sequence->isEmpty() );
 			ensure_equals( sequence->size(), size2 );
-			ensure_not_equals( sequence->getAt(0), sequence->getAt(1) );
+			ensure( sequence->getAt(0) != sequence->getAt(1) );
 
 			// FREE MEMORY
 			delete sequence;

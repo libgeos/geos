@@ -2,16 +2,16 @@
 // 
 // Test Suite for CGAlgorithms::isPointInRing() function
 
-// GEOS
+// tut
+#include <tut.hpp>
+// geos
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/io/WKTReader.h>
-// TUT
-#include <tut.h>
-// STL
+// std
 #include <string>
 #include <cassert>
 

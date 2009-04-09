@@ -3,9 +3,9 @@
 // Test Suite for geos::operation::overlay::FuzzyPointLocator class.
 
 
-// TUT
-#include <tut.h>
-// GEOS
+// tut
+#include <tut.hpp>
+// geos
 #include <geos/operation/overlay/FuzzyPointLocator.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
@@ -13,6 +13,7 @@
 #include <geos/io/WKBReader.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Location.h>
+// std
 #include <memory>
 #include <sstream>
 

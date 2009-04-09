@@ -2,16 +2,15 @@
 // 
 // Test Suite for geos::precision::SimpleGeometryPrecisionReducer class.
 
-// TUT
-#include <tut.h>
-// GEOS
+// tut
+#include <tut.hpp>
+// geos
 #include <geos/precision/SimpleGeometryPrecisionReducer.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/io/WKTReader.h>
-
-// STL
+// std
 #include <string>
 #include <vector>
 

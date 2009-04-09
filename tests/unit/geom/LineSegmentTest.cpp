@@ -2,12 +2,11 @@
 // 
 // Test Suite for geos::geom::LineSegment class.
 
-// TUT
-#include <tut.h>
-// GEOS
+#include <tut.hpp>
+// geos
 #include <geos/geom/LineSegment.h>
 #include <geos/geom/Coordinate.h>
-
+// std
 #include <iostream>
 
 namespace tut

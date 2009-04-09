@@ -2,9 +2,9 @@
 // 
 // Test Suite for geos::geom::LinearRing class.
 
-// TUT
-#include <tut.h>
-// GEOS
+// tut
+#include <tut.hpp>
+// geos
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateArraySequence.h>
@@ -13,8 +13,10 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/io/WKTReader.h>
 #include <geos/util/IllegalArgumentException.h>
-// STL
+// std
 #include <cmath>
+#include <memory>
+#include <string>
 
 namespace tut
 {
@@ -354,7 +356,7 @@ namespace tut
     void object::test<26>()
 	{
 		ensure(ring_ != 0);
-		ensure_not_equals( ring_->getLength(), 0.0 );
+		ensure( ring_->getLength() != 0.0 );
 
 		const double tolerance = 0.0001;
 		const double expected = 38.284271247461902;

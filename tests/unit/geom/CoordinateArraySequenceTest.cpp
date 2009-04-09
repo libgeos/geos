@@ -2,13 +2,12 @@
 // 
 // Test Suite for geos::geom::CoordinateArraySequence class.
 
-// TUT
-#include <tut.h>
-// GEOS
+#include <tut.hpp>
+// geos
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateArraySequenceFactory.h>
-// STL
+// std
 #include <string>
 #include <vector>
 
@@ -64,7 +63,7 @@ namespace tut
         ensure_equals( sequence.getSize(), size );
 		ensure_equals( sequence.size(), size );
 
-		ensure_not_equals( sequence.toString(), std::string("()") );
+		ensure( sequence.toString() != std::string("()") );
 
 		ensure("Every coodinate in the default sequence should be same.", sequence.hasRepeatedPoints() );
 
@@ -96,7 +95,7 @@ namespace tut
         ensure_equals( sequence.getSize(), size );
 		ensure_equals( sequence.size(), size );
 
-		ensure_not_equals( sequence.toString(), std::string("()") );
+		ensure( sequence.toString() != std::string("()") );
 
 		ensure("Coordinate sequence should contain unique coordinates.", !sequence.hasRepeatedPoints() );
 	}
@@ -142,7 +141,7 @@ namespace tut
 		// Compare non-empty original and copy using equality operators
 		ensure_equals( non_empty_original.getAt(0), non_empty_copy.getAt(0) );
 		ensure_equals( non_empty_original.getAt(1), non_empty_copy.getAt(1) );
-		ensure_not_equals( non_empty_original.getAt(0), non_empty_copy.getAt(1) );	
+		ensure( non_empty_original.getAt(0) != non_empty_copy.getAt(1) );	
 	}
 
     // Test of getX() and getY()
@@ -186,7 +185,7 @@ namespace tut
 		
 		ensure( !sequence.isEmpty() );
 		ensure_equals( sequence.size(), size );
-		ensure_not_equals( sequence.getAt(0), sequence.getAt(1) );
+		ensure( sequence.getAt(0) != sequence.getAt(1) );
 
 		// First version of getAt()
 		ensure_equals( sequence.getAt(0).x, 1 );
@@ -244,7 +243,7 @@ namespace tut
 		ensure( !sequence.hasRepeatedPoints() );
 
 		// Check elements of sequence
-		ensure_not_equals( sequence.getAt(0), sequence.getAt(1) );
+		ensure( sequence.getAt(0) != sequence.getAt(1) );
 		
 		ensure_equals( sequence.getAt(0).x, 1 );
 		ensure_equals( sequence.getAt(0).y, 2 );
@@ -332,9 +331,9 @@ namespace tut
 		ensure( !sequence.isEmpty() );
 		ensure_equals( sequence.size(), sizeTwo );
 		
-		ensure_not_equals( sequence.getAt(0), sequence.getAt(1) );
+		ensure( sequence.getAt(0) != sequence.getAt(1) );
 		ensure_equals( sequence.getAt(0), first );
-		ensure_not_equals( "deleteAt() did not remove coordinate.", sequence.getAt(1), second );
+		ensure( "deleteAt() did not remove coordinate.", sequence.getAt(1) != second );
 		ensure_equals( sequence.getAt(1), third );
 	}
 
@@ -440,8 +439,8 @@ namespace tut
 		// Add a new coordinate to sequence2
 		sequence2.add(c3);
 
-		ensure_not_equals( sequence1, sequence2 );
-		ensure_not_equals( sequence2, sequence1 );
+		ensure( sequence1 != sequence2 );
+		ensure( sequence2 != sequence1 );
 
 		// Add a new coordinate to sequence1
 		sequence1.add(c3);
@@ -453,8 +452,8 @@ namespace tut
 		sequence1.add(c3);
 		sequence2.add(c2);
 
-		ensure_not_equals( sequence1, sequence2 );
-		ensure_not_equals( sequence2, sequence1 );
+		ensure( sequence1 != sequence2 );
+		ensure( sequence2 != sequence1 );
 
 	}
 

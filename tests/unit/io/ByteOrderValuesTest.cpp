@@ -2,11 +2,12 @@
 // 
 // Test Suite for geos::io::ByteOrderValues 
 
-// TUT
-#include <tut.h>
-// GEOS
+// tut
+#include <tut.hpp>
+// geos
 #include <geos/io/ByteOrderValues.h>
 #include <geos/platform.h> // for int64
+// std
 #include <sstream>
 #include <memory>
 

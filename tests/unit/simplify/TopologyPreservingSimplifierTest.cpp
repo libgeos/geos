@@ -2,6 +2,8 @@
 // 
 // Test Suite for geos::simplify::TopologyPreservingSimplifier
 
+#include <tut.hpp>
+#include <utility.h>
 // geos
 #include <geos/io/WKTReader.h>
 #include <geos/geom/PrecisionModel.h>
@@ -12,9 +14,6 @@
 // std
 #include <string>
 #include <memory>
-// tut
-#include <tut.h>
-#include <utility.h>
 
 namespace tut
 {

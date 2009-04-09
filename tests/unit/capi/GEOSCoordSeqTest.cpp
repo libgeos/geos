@@ -2,11 +2,10 @@
 // 
 // Test Suite for C-API GEOSCoordSeq
 
-// TUT
-#include <tut.h>
-// GEOS CAPI
+#include <tut.hpp>
+// geos
 #include <geos_c.h>
-// C+
+// std
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>

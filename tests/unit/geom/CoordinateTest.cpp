@@ -2,9 +2,8 @@
 // 
 // Test Suite for geos::geom::Coordinate class.
 
-// TUT
-#include <tut.h>
-// GEOS
+#include <tut.hpp>
+// geos
 #include <geos/geom/Coordinate.h>
 
 namespace tut
@@ -96,7 +95,7 @@ namespace tut
         ensure_equals( original, copy );
 
         copy.x += 3.14; // permutation
-        ensure_not_equals( original, copy );
+        ensure( original != copy );
     }
 
     // Test of equals()
@@ -153,7 +152,7 @@ namespace tut
         second.x += 10.0;
         second.y += 10.0;
         second.z += 10.0;
-        ensure_not_equals( first.distance( second ), 0 );
+        ensure( first.distance( second ) != 0 );
         ensure_equals( first.distance( second ), second.distance( first ) );
         // TODO - mloskot - I'm not sure if this will work on every platform.
         // In case of any problems, just remove it.

@@ -2,17 +2,18 @@
 // 
 // Test Suite for geos::util::UniqueCoordinateArrayFilter class.
 
-// TUT
-#include <tut.h>
-// GEOS
+// tut
+#include <tut.hpp>
+// geos
 #include <geos/util/UniqueCoordinateArrayFilter.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/io/WKTReader.h>
-// STL
+// std
 #include <memory>
+#include <string>
 
 namespace tut
 {

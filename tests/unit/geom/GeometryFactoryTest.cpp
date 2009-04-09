@@ -2,6 +2,9 @@
 // 
 // Test Suite for geos::geom::GeometryFactory class.
 
+// tut
+#include <tut.hpp>
+#include <utility.h>
 // geos
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/GeometryCollection.h>
@@ -23,9 +26,6 @@
 // std
 #include <vector>
 #include <cstring> // std::size_t
-// tut
-#include <tut.h>
-#include <utility.h>
 
 /*!
  * \brief
@@ -701,7 +701,7 @@ namespace tut
 		ensure_equals( exterior->getBoundaryDimension(), geos::geom::Dimension::False );
 		ensure_equals( exterior->getNumPoints(), size );
 		ensure_equals( exterior->getArea(), 0.0 );
-		ensure_not_equals( exterior->getLength(), 0.0 );
+		ensure( exterior->getLength() != 0.0 );
 
 		// Create polygon
 		PolygonPtr poly = factory_.createPolygon(exterior, 0);
@@ -712,8 +712,8 @@ namespace tut
 		ensure_equals( poly->getDimension(), geos::geom::Dimension::A );
 		ensure_equals( poly->getBoundaryDimension(), geos::geom::Dimension::L );
 		ensure_equals( poly->getNumPoints(), size );
-		ensure_not_equals( poly->getArea(), 0.0 );
-		ensure_not_equals( poly->getLength(), 0.0 );
+		ensure( poly->getArea() != 0.0 );
+		ensure( poly->getLength() != 0.0 );
 
 		// FREE MEMORY
 		factory_.destroyGeometry(poly);	
@@ -750,7 +750,7 @@ namespace tut
 		ensure_equals( exterior->getBoundaryDimension(), geos::geom::Dimension::False );
 		ensure_equals( exterior->getNumPoints(), exteriorSize );
 		ensure_equals( exterior->getArea(), 0.0 );
-		ensure_not_equals( exterior->getLength(), 0.0 );
+		ensure( exterior->getLength() != 0.0 );
 
 		// Create collection of holes
 		GeometryPtr geo = reader_.read(("LINEARRING(7 7, 12 7, 12 12, 7 12, 7 7)"));
@@ -773,8 +773,8 @@ namespace tut
 		ensure_equals( poly->getDimension(), geos::geom::Dimension::A );
 		ensure_equals( poly->getBoundaryDimension(), geos::geom::Dimension::L );
 		ensure_equals( poly->getNumPoints(), exteriorSize + interiorSize );
-		ensure_not_equals( poly->getArea(), 0.0 );
-		ensure_not_equals( poly->getLength(), 0.0 );
+		ensure( poly->getArea() != 0.0 );
+		ensure( poly->getLength() != 0.0 );
 
 		ensure_equals( poly->getNumGeometries(), 1u );
 		ensure_equals( poly->getNumInteriorRing(), 1u );

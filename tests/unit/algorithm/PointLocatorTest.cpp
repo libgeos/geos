@@ -3,16 +3,17 @@
 // Test Suite for geos::algorithm::PointLocator 
 // Ported from JTS junit/algorithm/PointLocator.java
 
-// TUT
-#include <tut.h>
-// GEOS
+#include <tut.hpp>
+// geos
 #include <geos/io/WKTReader.h>
 #include <geos/algorithm/PointLocator.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h> // required for use in auto_ptr
 #include <geos/geom/Coordinate.h>
+// std
 #include <sstream>
+#include <string>
 #include <memory>
 
 namespace geos {

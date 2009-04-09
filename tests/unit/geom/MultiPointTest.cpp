@@ -2,6 +2,9 @@
 // 
 // Test Suite for geos::geom::MultiPoint class.
 
+// tut
+#include <tut.hpp>
+#include <utility.h>
 // geos
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/Dimension.h>
@@ -12,9 +15,6 @@
 #include <geos/io/WKTReader.h>
 // std
 #include <cmath>
-// tut
-#include <tut.h>
-#include <utility.h>
 
 namespace tut
 {

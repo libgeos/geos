@@ -2,15 +2,15 @@
 // 
 // Test Suite for Geometry::isRectangle() function
 
-// TUT
-#include <tut.h>
-// STL
-#include <string>
-// GEOS
+// tut
+#include <tut.hpp>
+// geos
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Polygon.h>
 #include <geos/io/WKTReader.h>
+// std
+#include <string>
 
 namespace tut
 {

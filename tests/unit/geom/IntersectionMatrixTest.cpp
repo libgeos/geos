@@ -2,12 +2,11 @@
 // 
 // Test Suite for geos::geom::IntersectionMatrix class.
 
-// TUT
-#include <tut.h>
-// GEOS
+#include <tut.hpp>
+// geos
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/geom/Dimension.h>
-// STL
+// std
 #include <memory> 
 #include <string>
 #include <sstream>
@@ -220,7 +219,7 @@ namespace tut
 		const std::string pattern_expected("FFF012FFF");
 		
 		im_.setAtLeast(pattern_new);
-		ensure_not_equals( im_.toString(), pattern_false_);
+		ensure( im_.toString() != pattern_false_);
 		ensure_equals( im_.toString(), pattern_expected);
 		
 		// 3. Set old pattern, no change expected
@@ -256,7 +255,7 @@ namespace tut
 
 		// 1. No change expected
 		im_.setAtLeast(0, 0, geos::geom::Dimension::A);
-		ensure_not_equals( im_.toString(), pattern_false_);
+		ensure( im_.toString() != pattern_false_);
 		ensure_equals( im_.get(0, 0), geos::geom::Dimension::A);
 	}
 	
@@ -502,13 +501,13 @@ namespace tut
     template<>
 	void object::test<27>()
 	{
-		ensure_not_equals( "0*01T12F2", im_.toString() );
+		ensure( im_.toString() != "0*01T12F2" );
 		ensure_equals( "FFFFFFFFF", im_.toString() );
 
 		std::stringstream ss;
 		ss << im_;
 
-		ensure_not_equals( "0*01T12F2", ss.str() );
+		ensure( ss.str() != "0*01T12F2" );
 		ensure_equals( "FFFFFFFFF", ss.str() );
 	}
 
