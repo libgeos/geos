@@ -4,19 +4,26 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2006 Refractions Research Inc.
+ * Copyright (C) 2009  Sandro Santilli <strk@keybit.net>
+ * Copyright (C) 2005-2007 Refractions Research Inc.
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/buffer/BufferOp.java rev. 1.43 (JTS-1.9)
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_BUFFER_BUFFEROP_H
 #define GEOS_OP_BUFFER_BUFFEROP_H
 
-#include <geos/operation/buffer/OffsetCurveBuilder.h> // for enum values 
+//#include <geos/operation/buffer/OffsetCurveBuilder.h> // for enum values 
+#include <geos/operation/buffer/BufferParameters.h> // for enum values 
 #include <geos/util/TopologyException.h> // for composition
 
 // Forward declarations
@@ -60,8 +67,6 @@ namespace buffer { // geos.operation.buffer
  * - CAP_SQUARE - end caps are squared off at the buffer distance
  *   beyond the line ends
  * 
- * Last port: operation/buffer/BufferOp.java rev. 1.31 (JTS-1.7)
- *
  */
 class BufferOp {
 
@@ -101,9 +106,9 @@ private:
 
 	double distance;
 
-	int quadrantSegments;
-
-	int endCapStyle;
+	//int quadrantSegments;
+	//int endCapStyle;
+	BufferParameters bufParams;
 
 	geom::Geometry* resultGeometry;
 
@@ -121,11 +126,16 @@ public:
 
 	enum {
 		/// Specifies a round line buffer end cap style.
-		CAP_ROUND,
+		/// @deprecated use BufferParameters
+		CAP_ROUND = BufferParameters::CAP_ROUND,
+
 		/// Specifies a butt (or flat) line buffer end cap style.
-		CAP_BUTT,
+		/// @deprecated use BufferParameters
+		CAP_BUTT = BufferParameters::CAP_FLAT,
+
 		/// Specifies a square line buffer end cap style.
-		CAP_SQUARE
+		/// @deprecated use BufferParameters
+		CAP_SQUARE = BufferParameters::CAP_FLAT
 	};
 
 	/**
@@ -142,8 +152,8 @@ public:
 	static geom::Geometry* bufferOp(const geom::Geometry *g,
 		double distance,
 		int quadrantSegments=
-			OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS,
-		int endCapStyle=BufferOp::CAP_ROUND);
+			BufferParameters::DEFAULT_QUADRANT_SEGMENTS,
+		int endCapStyle=BufferParameters::CAP_ROUND);
 
 	/**
 	 * Initializes a buffer computation for the given geometry
@@ -153,10 +163,27 @@ public:
 	BufferOp(const geom::Geometry *g)
 		:
 		argGeom(g),
-		quadrantSegments(OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS),
-		endCapStyle(BufferOp::CAP_ROUND),
+		bufParams(),
 		resultGeometry(NULL)
-	{}
+	{
+	}
+
+	/**
+	 * Initializes a buffer computation for the given geometry
+	 * with the given set of parameters
+	 *
+	 * @param g the geometry to buffer
+	 * @param params the buffer parameters to use. This class will
+	 *               copy it to private memory.
+	 */
+	BufferOp(const geom::Geometry* g, const BufferParameters& params)
+		:
+		argGeom(g),
+		bufParams(params),
+		resultGeometry(NULL)
+	{
+	}
+
 
 	/**
 	 * Specifies the end cap style of the generated buffer.
@@ -186,24 +213,20 @@ public:
 	 */
 	geom::Geometry* getResultGeometry(double nDistance);
 
-	/**
-	 * Comutes the buffer for a geometry for a given buffer distance
-	 * and accuracy of approximation.
-	 *
-	 * @param g the geometry to buffer
-	 * @param distance the buffer distance
-	 * @param quadrantSegments the number of segments used to
-	 * approximate a quarter circle
-	 * @return the buffer of the input geometry
-	 *
-	 * @deprecated use setQuadrantSegments instead
-	 */
-	geom::Geometry* getResultGeometry(double nDistance, int nQuadrantSegments);
 };
 
 // BufferOp inlines
-void BufferOp::setQuadrantSegments(int q) { quadrantSegments=q; }
-void BufferOp::setEndCapStyle(int s) { endCapStyle=s; }
+void
+BufferOp::setQuadrantSegments(int q)
+{
+	bufParams.setQuadrantSegments(q);
+}
+
+void
+BufferOp::setEndCapStyle(int s)
+{
+	bufParams.setEndCapStyle((BufferParameters::EndCapStyle)s);
+}
 
 
 } // namespace geos::operation::buffer

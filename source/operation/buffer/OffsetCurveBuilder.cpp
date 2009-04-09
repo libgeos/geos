@@ -25,6 +25,7 @@
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/operation/buffer/OffsetCurveBuilder.h>
 #include <geos/operation/buffer/BufferOp.h>
+#include <geos/operation/buffer/BufferParameters.h>
 #include <geos/geomgraph/Position.h>
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -53,14 +54,14 @@ const double OffsetCurveBuilder::MAX_CLOSING_SEG_LEN = 3.0;
 
 /*public*/
 OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,
-		int quadrantSegments)
+		const BufferParameters& nBufParams)
 		:
 		li(),
 		maxCurveSegmentError(0.0),
 		vertexList(new OffsetCurveVertexList()),
 		distance(0.0),
 		precisionModel(newPrecisionModel),
-		endCapStyle(BufferOp::CAP_ROUND),
+		bufParams(nBufParams),
 		s0(),
 		s1(),
 		s2(),
@@ -71,8 +72,7 @@ OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,
 		side(0),
 		vertexLists()
 {
-	int limitedQuadSegs=quadrantSegments<1 ? 1 : quadrantSegments;
-	filletAngleQuantum=PI / 2.0 / limitedQuadSegs;
+	filletAngleQuantum=PI / 2.0 / bufParams.getQuadrantSegments();
 }
 
 /*public*/
@@ -94,14 +94,17 @@ OffsetCurveBuilder::getLineCurve(const CoordinateSequence *inputPts,
 	init(distance);
 
 	if (inputPts->getSize() < 2) {
-		switch (endCapStyle) {
-			case BufferOp::CAP_ROUND:
+		switch (bufParams.getEndCapStyle()) {
+			case BufferParameters::CAP_ROUND:
 				addCircle(inputPts->getAt(0), distance);
 				break;
-			case BufferOp::CAP_SQUARE:
+			case BufferParameters::CAP_SQUARE:
 				addSquare(inputPts->getAt(0), distance);
 				break;
-			// default is for buffer to be empty (e.g. for a butt line cap);
+			default:
+				// default is for buffer to be empty
+				// (e.g. for a butt line cap);
+				break;
 		}
 	} else {
 		computeLineBufferCurve(*inputPts);
@@ -325,19 +328,19 @@ OffsetCurveBuilder::addLineEndCap(const Coordinate &p0,const Coordinate &p1)
 	double dx=p1.x-p0.x;
 	double dy=p1.y-p0.y;
 	double angle=atan2(dy, dx);
-	switch (endCapStyle) {
-		case BufferOp::CAP_ROUND:
+	switch (bufParams.getEndCapStyle()) {
+		case BufferParameters::CAP_ROUND:
 			// add offset seg points with a fillet between them
 			vertexList->addPt(offsetL.p1);
 			addFillet(p1, angle+PI/2.0, angle-PI/2.0, CGAlgorithms::CLOCKWISE, distance);
 			vertexList->addPt(offsetR.p1);
 			break;
-		case BufferOp::CAP_BUTT:
+		case BufferParameters::CAP_FLAT:
 			// only offset segment points are added
 			vertexList->addPt(offsetL.p1);
 			vertexList->addPt(offsetR.p1);
 			break;
-		case BufferOp::CAP_SQUARE:
+		case BufferParameters::CAP_SQUARE:
 			// add a square defined by extensions of the offset segment endpoints
 			Coordinate squareCapSideOffset;
 			squareCapSideOffset.x=fabs(distance)*cos(angle);

@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/BufferBuilder.java rev. 1.23 (JTS-1.7)
+ * Last port: operation/buffer/BufferBuilder.java rev. 1.30 (JTS-1.9)
  *
  **********************************************************************/
 
@@ -113,8 +113,7 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 	// factory must be the same as the one used by the input
 	geomFact=g->getFactory();
 
-	OffsetCurveBuilder curveBuilder(precisionModel, quadrantSegments);
-	curveBuilder.setEndCapStyle(endCapStyle);
+	OffsetCurveBuilder curveBuilder(precisionModel, bufParams);
 	OffsetCurveSetBuilder curveSetBuilder(*g, distance, curveBuilder);
 
 	std::vector<SegmentString*>& bufferSegStrList=curveSetBuilder.getCurves();
@@ -284,7 +283,7 @@ BufferBuilder::computeNodedEdges(SegmentString::NonConstVect& bufferSegStrList,
 		Edge* edge = new Edge(cs, new Label(*oldLabel));
 
 		// will take care of the Edge ownership
-		insertEdge(edge);
+		insertUniqueEdge(edge);
 	}
 
 	if ( nodedSegStrings != &bufferSegStrList )
@@ -297,7 +296,7 @@ BufferBuilder::computeNodedEdges(SegmentString::NonConstVect& bufferSegStrList,
 
 /*private*/
 void
-BufferBuilder::insertEdge(Edge *e)
+BufferBuilder::insertUniqueEdge(Edge *e)
 {
 	//<FIX> MD 8 Oct 03  speed up identical edge lookup
 	// fast lookup

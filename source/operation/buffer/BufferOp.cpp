@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2009  Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2007 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -14,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/BufferOp.java rev. 1.35 (JTS-1.7)
+ * Last port: operation/buffer/BufferOp.java rev. 1.43 (JTS-1.9)
  *
  **********************************************************************/
 
@@ -98,16 +99,6 @@ BufferOp::getResultGeometry(double nDistance)
 	return resultGeometry;
 }
 
-/*public*/
-Geometry*
-BufferOp::getResultGeometry(double nDistance, int nQuadrantSegments)
-{
-	distance=nDistance;
-	setQuadrantSegments(nQuadrantSegments);
-	computeGeometry();
-	return resultGeometry;
-}
-
 /*private*/
 void
 BufferOp::computeGeometry()
@@ -163,9 +154,7 @@ BufferOp::bufferReducedPrecision()
 void
 BufferOp::bufferOriginalPrecision()
 {
-	BufferBuilder bufBuilder;
-	bufBuilder.setQuadrantSegments(quadrantSegments);
-	bufBuilder.setEndCapStyle(endCapStyle);
+	BufferBuilder bufBuilder(bufParams);
 
 	//std::cerr<<"computing with original precision"<<std::endl;
 	try
@@ -221,13 +210,10 @@ BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
 
 	ScaledNoder noder(inoder, fixedPM.getScale());
 
-	BufferBuilder bufBuilder;
+	BufferBuilder bufBuilder(bufParams);
 	bufBuilder.setWorkingPrecisionModel(&fixedPM);
 
 	bufBuilder.setNoder(&noder);
-
-	bufBuilder.setQuadrantSegments(quadrantSegments);
-	bufBuilder.setEndCapStyle(endCapStyle);
 
 	// this may throw an exception, if robustness errors are encountered
 	resultGeometry=bufBuilder.buffer(argGeom, distance);

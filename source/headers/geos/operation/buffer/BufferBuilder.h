@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/buffer/BufferBuilder.java rev. 1.30 (JTS-1.9)
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_BUFFER_BUFFERBUILDER_H
@@ -84,9 +88,7 @@ private:
 	 */
 	static int depthDelta(geomgraph::Label *label);
 
-	int quadrantSegments;
-
-	int endCapStyle;
+	const BufferParameters& bufParams; 
 
 	const geom::PrecisionModel* workingPrecisionModel;
 
@@ -115,7 +117,7 @@ private:
 	 * The function takes responsability of releasing the Edge parameter
 	 * memory when appropriate.
 	 */
-	void insertEdge(geomgraph::Edge *e);
+	void insertUniqueEdge(geomgraph::Edge *e);
 
 	void createSubgraphs(geomgraph::PlanarGraph *graph,
 			std::vector<BufferSubgraph*>& list);
@@ -156,11 +158,16 @@ private:
 public:
 	/**
 	 * Creates a new BufferBuilder
+	 *
+	 * @param nBufParams buffer parameters, this object will
+	 *                   keep a reference to the passed parameters
+	 *                   so caller must make sure the object is
+	 *                   kept alive for the whole lifetime of
+	 *                   the buffer builder.
 	 */
-	BufferBuilder()
+	BufferBuilder(const BufferParameters& nBufParams)
 		:
-		quadrantSegments(OffsetCurveBuilder::DEFAULT_QUADRANT_SEGMENTS),
-		endCapStyle(BufferOp::CAP_ROUND),
+		bufParams(nBufParams),
 		workingPrecisionModel(NULL),
 		li(NULL),
 		intersectionAdder(NULL),
@@ -170,16 +177,6 @@ public:
 	{}
 
 	~BufferBuilder();
-
-	/**
-	 * Sets the number of segments used to approximate a angle fillet
-	 *
-	 * @param quadrantSegments the number of segments in a fillet for
-	 *  a quadrant
-	 */
-	void setQuadrantSegments(int nQuadrantSegments) {
-		quadrantSegments=nQuadrantSegments;
-	} 
 
 
 	/**
@@ -204,10 +201,6 @@ public:
 	 * @param noder the noder to use
 	 */
 	void setNoder(noding::Noder* newNoder) { workingNoder = newNoder; }
-
-	void setEndCapStyle(int nEndCapStyle) {
-		endCapStyle=nEndCapStyle;
-	}
 
 	geom::Geometry* buffer(const geom::Geometry *g, double distance);
 		// throw (GEOSException);

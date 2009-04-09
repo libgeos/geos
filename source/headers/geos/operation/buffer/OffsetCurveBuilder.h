@@ -25,6 +25,7 @@
 #include <geos/algorithm/LineIntersector.h> // for composition
 #include <geos/geom/Coordinate.h> // for composition
 #include <geos/geom/LineSegment.h> // for composition
+#include <geos/operation/buffer/BufferParameters.h> // for composition
 
 // Forward declarations
 namespace geos {
@@ -70,12 +71,17 @@ public:
 	 */
 	static const int DEFAULT_QUADRANT_SEGMENTS=8;
 
+	/*
+	 * @param nBufParams buffer parameters, this object will
+	 *                   keep a reference to the passed parameters
+	 *                   so caller must make sure the object is
+	 *                   kept alive for the whole lifetime of
+	 *                   the buffer builder.
+	 */
 	OffsetCurveBuilder(const geom::PrecisionModel *newPrecisionModel,
-			int quadrantSegments=DEFAULT_QUADRANT_SEGMENTS);
+			const BufferParameters& bufParams);
 
 	~OffsetCurveBuilder();
-
-	void setEndCapStyle(int newEndCapStyle);
 
 	/**
 	 * This method handles single points as well as lines.
@@ -135,9 +141,7 @@ private:
 
 	const geom::PrecisionModel* precisionModel;
 
-	int endCapStyle;
-
-	//int joinStyle;
+	const BufferParameters& bufParams; 
 
 	geom::Coordinate s0, s1, s2;
 
@@ -214,12 +218,6 @@ private:
 
 	std::vector<OffsetCurveVertexList*> vertexLists;
 };
-
-// INLINES
-inline void OffsetCurveBuilder::setEndCapStyle(int newEndCapStyle) {
-	endCapStyle=newEndCapStyle;
-}
-
 
 } // namespace geos::operation::buffer
 } // namespace geos::operation
