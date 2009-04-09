@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/OffsetCurveVertexList.java rev. 1.1
+ * Last port: operation/buffer/OffsetCurveVertexList.java rev. 1.2 (JTS-1.9)
  *
  **********************************************************************/
 
@@ -54,7 +54,6 @@ class OffsetCurveVertexList
 private:
 
 	geom::CoordinateSequence* ptList;
-	bool ptListConsumed;
 
 	const geom::PrecisionModel* precisionModel;
   
@@ -87,10 +86,11 @@ private:
 
 public:
 	
+	friend std::ostream& operator<< (std::ostream& os, const OffsetCurveVertexList& node);
+
 	OffsetCurveVertexList()
 		:
 		ptList(new geom::CoordinateArraySequence()),
-		ptListConsumed(false),
 		precisionModel(NULL),
 		minimumVertexDistance (0.0)
 	{
@@ -98,7 +98,6 @@ public:
 
 	~OffsetCurveVertexList()
 	{
-		if (!ptListConsumed)
 			delete ptList;
 	}
 	
@@ -127,10 +126,11 @@ public:
 		// (JTS uses a vector for ptList, not a CoordinateSequence,
 		// we should do the same)
 		ptList->add(bufPt, true);
-		//ptList.push_back(bufPt);
 	}
 	
-	// check that points are a ring - add the startpoint again if they are not
+	/// Check that points are a ring
+	//
+	/// add the startpoint again if they are not
 	void closeRing()
 	{
 		if (ptList->size() < 1) return;
@@ -141,22 +141,36 @@ public:
 		ptList->add(startPt, true);
 	}
 
+	/// Get coordinates by taking ownership of them
+	//
+	/// After this call, the coordinates reference in
+	/// this object are dropped. Calling twice will
+	/// segfault...
+	///
+	/// FIXME: refactor memory management of this
+	///
 	geom::CoordinateSequence* getCoordinates()
 	{
 		closeRing();
-		ptListConsumed = true;
-		return ptList;
-	}
-
-	// Added getCoordinatesRO(), which returns the coordinates without
-	// passing ownership to the caller.
-	const geom::CoordinateSequence* getCoordinatesRO()
-	{
-		closeRing();
-		return ptList;
+		geom::CoordinateSequence* ret = ptList;
+		ptList = 0;
+		return ret;
 	}
 
 };
+
+std::ostream& operator<< (std::ostream& os, const OffsetCurveVertexList& lst)
+{
+	if ( lst.ptList )
+	{
+		os << *(lst.ptList);
+	}
+	else
+	{
+		os << "empty (consumed?)";
+	}
+	return os;
+}
 
 } // namespace geos.operation.buffer
 } // namespace geos.operation

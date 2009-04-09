@@ -106,6 +106,7 @@ OffsetCurveBuilder::getLineCurve(const CoordinateSequence *inputPts,
 	} else {
 		computeLineBufferCurve(*inputPts);
 	}
+	// NOTE: we take ownership of lineCoord here
 	CoordinateSequence *lineCoord=vertexList->getCoordinates();
 	lineList.push_back(lineCoord);
 }
@@ -130,7 +131,10 @@ OffsetCurveBuilder::getRingCurve(const CoordinateSequence *inputPts,
 		return;
 	}
 	computeRingBufferCurve(*inputPts, side);
-	lineList.push_back(vertexList->getCoordinates()); // this will be vertexList
+
+	// this will be vertexList
+	// NOTE: getCoordinates() take ownership of the CoordinateSequence
+	lineList.push_back(vertexList->getCoordinates());
 }
 
 /*private*/
