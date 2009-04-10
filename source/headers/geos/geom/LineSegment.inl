@@ -4,12 +4,17 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2009  Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
+ *
+ **********************************************************************
+ *
+ * Last port: geom/LineSegment.java rev. 1.30 (JTS-1.9)
  *
  **********************************************************************/
 
@@ -42,6 +47,14 @@ LineSegment::LineSegment(const Coordinate& c0, const Coordinate& c1)
 }
 
 INLINE
+LineSegment::LineSegment(double x0, double y0, double x1, double y1)
+	:
+	p0(x0, y0),
+	p1(x1, y1)
+{
+}
+
+INLINE
 LineSegment::LineSegment()
 {
 }
@@ -55,6 +68,14 @@ INLINE double
 LineSegment::distancePerpendicular(const Coordinate& p) const
 {
 	return algorithm::CGAlgorithms::distancePointLinePerpendicular(p, p0, p1);
+}
+
+INLINE void
+LineSegment::pointAlong(double segmentLengthFraction, Coordinate& ret) const
+{
+    ret = Coordinate(
+	p0.x + segmentLengthFraction * (p1.x - p0.x),
+	p0.y + segmentLengthFraction * (p1.y - p0.y));
 }
 
 INLINE double
@@ -130,6 +151,12 @@ LineSegment::orientationIndex(const LineSegment* seg) const
 	return orientationIndex(*seg);
 }
 
+INLINE int
+LineSegment::orientationIndex(const Coordinate& p) const
+{
+	return algorithm::CGAlgorithms::orientationIndex(p0, p1, p);
+}
+
 INLINE CoordinateSequence*
 LineSegment::closestPoints(const LineSegment* line)
 {
@@ -141,6 +168,13 @@ INLINE double
 LineSegment::angle() const
 {
 	return std::atan2(p1.y-p0.y,p1.x-p0.x);
+}
+
+INLINE void
+LineSegment::midPoint(Coordinate& ret) const
+{
+	ret = Coordinate( (p0.x + p1.x) / 2,
+	                  (p0.y + p1.y) / 2 );
 }
 
 INLINE std::ostream&

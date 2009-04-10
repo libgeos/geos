@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2009  Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -12,14 +13,22 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/LineSegment.java rev. 1.30 (JTS-1.9)
+ *
  **********************************************************************/
 
 #include <geos/geom/LineSegment.h>
+#include <geos/geom/LineString.h> // for toGeometry
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/GeometryFactory.h> 
 #include <geos/geom/CoordinateArraySequence.h> // should we really be using this?
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/algorithm/LineIntersector.h>
+#include <geos/algorithm/HCoordinate.h>
+#include <geos/algorithm/NotRepresentableException.h>
 #include <geos/profiler.h>
 #include <geos/inline.h>
 
@@ -31,6 +40,10 @@
 #endif
 
 using namespace std;
+//using namespace geos::algorithm;
+using geos::algorithm::HCoordinate;
+using geos::algorithm::NotRepresentableException;
+using geos::algorithm::LineIntersector;
 
 namespace geos {
 namespace geom { // geos::geom
@@ -68,6 +81,18 @@ LineSegment::projectionFactor(const Coordinate& p) const
 	double len2=dx*dx+dy*dy;
 	double r=((p.x-p0.x)*dx+(p.y-p0.y)*dy)/len2;
 	return r;
+}
+
+/*public*/
+double
+LineSegment::segmentFraction(const Coordinate& inputPt) const
+{
+	double segFrac = projectionFactor(inputPt);
+	if (segFrac < 0.0)
+		segFrac = 0.0;
+	else if (segFrac > 1.0)
+		segFrac = 1.0;
+	return segFrac;
 }
 
 /*public*/
@@ -227,6 +252,57 @@ LineSegment::intersection(const LineSegment& line, Coordinate& ret) const
 	return false;
 }
 
+bool
+LineSegment::lineIntersection(const LineSegment& line, Coordinate& ret) const
+{
+	try {
+		HCoordinate::intersection(p0, p1, line.p0, line.p1, ret);
+		return true;
+	}
+	catch (const NotRepresentableException& /*ex*/) {
+		// eat this exception, and return null;
+	}
+	return false;
+}
+
+
+/* public */
+void
+LineSegment::pointAlongOffset(double segmentLengthFraction,
+	                      double offsetDistance,
+	                      Coordinate& ret) const
+{
+	// the point on the segment line
+	double segx = p0.x + segmentLengthFraction * (p1.x - p0.x);
+	double segy = p0.y + segmentLengthFraction * (p1.y - p0.y);
+
+	double dx = p1.x - p0.x;
+	double dy = p1.y - p0.y;
+	double len = sqrt(dx * dx + dy * dy);
+	// u is the vector that is the length of the offset,
+	// in the direction of the segment
+	double ux = offsetDistance * dx / len;
+	double uy = offsetDistance * dy / len;
+
+	// the offset point is the seg point plus the offset
+	// vector rotated 90 degrees CCW
+	double offsetx = segx - uy;
+	double offsety = segy + ux;
+
+	ret = Coordinate(offsetx, offsety);
+}
+
+/* public */
+std::auto_ptr<LineString>
+LineSegment::toGeometry(const GeometryFactory& gf) const
+{
+	CoordinateSequence *cl=new CoordinateArraySequence();
+	cl->add(p0);
+	cl->add(p1);
+	return std::auto_ptr<LineString>(
+		gf.createLineString(cl) // ownership transferred
+	);
+}
 
 } // namespace geos::geom
 } // namespace geos

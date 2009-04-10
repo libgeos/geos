@@ -4,12 +4,17 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2009  Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
+ *
+ **********************************************************************
+ *
+ * Last port: geom/LineSegment.java rev. 1.30 (JTS-1.9)
  *
  **********************************************************************/
 
@@ -21,11 +26,14 @@
 #include <geos/inline.h>
 
 #include <iostream> // for ostream
+#include <memory> // for auto_ptr
 
 // Forward declarations
 namespace geos {
 	namespace geom {
 		class CoordinateSequence;
+		class GeometryFactory;
+		class LineString;
 	}
 }
 
@@ -60,6 +68,8 @@ public:
 
 	/// Constructs a LineSegment with the given start and end Coordinates.
 	LineSegment(const Coordinate& c0, const Coordinate& c1);
+
+	LineSegment(double x0, double y0, double x1, double y1);
 
 	virtual ~LineSegment();
 
@@ -111,7 +121,26 @@ public:
 	 */
 	int orientationIndex(const LineSegment& seg) const;
 
+	// TODO: deprecate this
 	int orientationIndex(const LineSegment* seg) const;
+
+	/** \brief
+	 * Determines the orientation index of a Coordinate
+	 * relative to this segment.
+	 *
+	 * The orientation index is as defined in
+	 * CGAlgorithms::computeOrientation.
+	 *
+	 * @param seg the LineSegment to compare
+	 *
+	 * @return 1 if <code>p</code> is to the left of this segment
+	 * @return -1 if <code>p</code> is to the right of this segment
+	 * @return 0 if <code>p</code> is collinear with this segment
+	 *
+	 * @see CGAlgorithms::computeOrientation(Coordinate, Coordinate,
+	 *                                       Coordinate)
+	 */
+	int orientationIndex(const Coordinate& p) const;
 
 	/// Reverses the direction of the line segment.
 	void reverse();
@@ -126,6 +155,12 @@ public:
 	/// @return the angle this segment makes with the x-axis (in radians)
 	double angle() const;
 
+	/// Computes the midpoint of the segment
+	//
+	/// @param ret will be set to the midpoint of the segment
+	///
+	void midPoint(Coordinate& ret) const;
+
 	/// Computes the distance between this line segment and another one.
 	double distance(const LineSegment& ls) const;
 
@@ -138,13 +173,83 @@ public:
 	 */
 	double distancePerpendicular(const Coordinate& p) const;
 
-	/**
+	/** \brief
+	 * Computes the Coordinate that lies a given
+	 * fraction along the line defined by this segment.
+	 *
+	 * A fraction of <code>0.0</code> returns the start point of
+	 * the segment; a fraction of <code>1.0</code> returns the end
+	 * point of the segment.
+	 * If the fraction is < 0.0 or > 1.0 the point returned
+	 * will lie before the start or beyond the end of the segment.
+	 *
+	 * @param segmentLengthFraction the fraction of the segment length
+	 *        along the line
+	 * @param ret will be set to the point at that distance
+	 */
+	void pointAlong(double segmentLengthFraction, Coordinate& ret) const;
+
+	/** \brief
+	 * Computes the {@link Coordinate} that lies a given
+	 * fraction along the line defined by this segment and offset from
+	 * the segment by a given distance.
+	 *
+	 * A fraction of <code>0.0</code> offsets
+	 * from the start point of the segment;
+	 * a fraction of <code>1.0</code> offsets
+	 * from the end point of the segment.
+	 *
+	 * The computed point is offset to the left of the line
+	 * if the offset distance is positive, to the right if negative.
+	 *
+	 * @param segmentLengthFraction the fraction of the segment
+	 *                              length along the line
+	 *
+	 * @param offsetDistance the distance the point is offset
+	 *        from the segment
+	 *         (positive is to the left, negative is to the right)
+	 *
+	 * @param ret will be set to the point at that distance and offset
+	 */
+	void pointAlongOffset(double segmentLengthFraction,
+	                      double offsetDistance,
+	                      Coordinate& ret) const;
+
+	/** \brief
 	 * Compute the projection factor for the projection of the point p
-	 * onto this LineSegment.  The projection factor is the constant k
+	 * onto this LineSegment. 
+	 * 
+	 * The projection factor is the constant r
 	 * by which the vector for this segment must be multiplied to
-	 * equal the vector for the projection of p.
+	 * equal the vector for the projection of p on the line
+	 * defined by this segment.
+	 *
+	 * The projection factor returned will be in the range
+	 * (-inf, +inf)
+	 *
+	 * @param p the point to compute the factor for
+	 *
+	 * @return the projection factor for the point
+	 *
 	 */
 	double projectionFactor(const Coordinate& p) const;
+
+	/** \brief
+	 * Computes the fraction of distance (in <tt>[0.0, 1.0]</tt>)
+	 * that the projection of a point occurs along this line segment.
+	 *
+	 * If the point is beyond either ends of the line segment,
+	 * the closest fractional value (<tt>0.0</tt> or <tt>1.0</tt>)
+	 * is returned.
+	 * 
+	 * Essentially, this is the {@link #projectionFactor} clamped to
+	 * the range <tt>[0.0, 1.0]</tt>.
+	 *
+	 * @param inputPt the point
+	 * @return the fraction along the line segment the projection
+	 *         of the point occurs
+	 */
+	double segmentFraction(const Coordinate& inputPt) const;
 
 	/** \brief
 	 * Compute the projection of a point onto the line determined
@@ -230,6 +335,33 @@ public:
 	 * @return true if an intersection was found, false otherwise
 	 */
 	bool intersection(const LineSegment& line, Coordinate& coord) const;
+
+	/** \brief
+	 * Computes the intersection point of the lines defined
+	 * by two segments, if there is one.
+	 *
+	 * There may be 0, 1 or an infinite number of intersection points
+	 * between two lines.
+	 * If there is a unique intersection point, it is returned.
+	 * Otherwise, <tt>null</tt> is returned.
+	 * If more information is required about the details of the
+	 * intersection, the algorithms::LineIntersector class should
+	 * be used.
+	 *
+	 * @param line a line segment defining a straight line
+	 * @param ret will be set to the intersection point (if any)
+	 * @return true if an intersection was found, false otherwise
+	 *
+	 */
+	bool lineIntersection(const LineSegment& line, Coordinate& coord) const;
+
+	/**
+	 * Creates a LineString with the same coordinates as this segment
+	 *
+	 * @param gf the geometery factory to use
+	 * @return a LineString with the same geometry as this segment
+	 */
+	std::auto_ptr<LineString> toGeometry(const GeometryFactory& gf) const;
 
 };
 
