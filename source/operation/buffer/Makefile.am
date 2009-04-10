@@ -6,6 +6,8 @@ INCLUDES = -I$(top_srcdir)/source/headers
 
 libopbuffer_la_SOURCES = \
 	BufferBuilder.cpp \
+	BufferInputLineSimplifier.cpp \
+	BufferInputLineSimplifier.h \
 	BufferOp.cpp \
 	BufferParameters.cpp \
 	BufferSubgraph.cpp \
