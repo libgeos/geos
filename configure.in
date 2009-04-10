@@ -343,7 +343,6 @@ AC_OUTPUT([
 	tests/Makefile
 	tests/bigtest/Makefile
 	tests/unit/Makefile
-	tests/unit/tut/Makefile
 	tests/xmltester/Makefile
 	tools/Makefile
 	tools/geos-config
