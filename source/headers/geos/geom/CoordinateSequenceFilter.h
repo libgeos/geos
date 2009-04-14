@@ -68,7 +68,7 @@ public:
    *             is applied
    * @param i the index of the coordinate to apply the filter to
    */
-  virtual void filter_rw(CoordinateSequence& /*seq*/, size_t i) const
+  virtual void filter_rw(CoordinateSequence& /*seq*/, size_t i)
   { assert(0); }
 
   /**
@@ -78,7 +78,7 @@ public:
    *             is applied
    * @param i the index of the coordinate to apply the filter to
    */
-  virtual void filter_ro(const CoordinateSequence& /*seq*/, size_t i) const
+  virtual void filter_ro(const CoordinateSequence& /*seq*/, size_t i)
   { assert(0); }
 
   /**

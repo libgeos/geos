@@ -1,5 +1,6 @@
 SUBDIRS = \
-	locate 
+	locate \
+	distance
 
 EXTRA_DIST = 
 

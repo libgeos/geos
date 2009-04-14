@@ -1,5 +1,6 @@
 SUBDIRS = \
-	locate
+	locate \
+	distance
 
 noinst_LTLIBRARIES = libalgorithm.la
 
@@ -32,5 +33,6 @@ libalgorithm_la_SOURCES = \
 #RobustLineIntersector.cpp
 
 libalgorithm_la_LIBADD =  \
-        locate/liblocation.la           
+        locate/liblocation.la \
+        distance/libdistance.la
 
