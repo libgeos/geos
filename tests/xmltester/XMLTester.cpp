@@ -30,6 +30,8 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/BinaryOp.h>
 #include <geos/operation/overlay/OverlayOp.h>
+#include <geos/operation/buffer/BufferParameters.h>
+#include <geos/operation/buffer/BufferOp.h>
 #include <geos/util.h>
 //#include <geos/geomgraph.h>
 #include <geos/io/WKBReader.h>
@@ -694,6 +696,8 @@ XMLTester::parseTest()
 
 		else if (opName=="buffer")
 		{
+			using namespace operation::buffer;
+
 			geom::Geometry *gT=gA;
 			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
@@ -705,11 +709,112 @@ XMLTester::parseTest()
 			GeomAutoPtr gRealRes;
 			double dist = std::atof(opArg2.c_str());
 
+			BufferParameters params;
 			if ( opArg3 != "" ) {
-				gRealRes.reset(gT->buffer(dist, std::atoi(opArg3.c_str())));
-			} else {
-				gRealRes.reset(gT->buffer(dist));
+		params.setQuadrantSegments(std::atoi(opArg3.c_str()));
 			}
+
+			BufferOp op(gT, params);
+			gRealRes.reset(op.getResultGeometry(dist));
+
+			profile.stop();
+			gRealRes->normalize();
+
+			// Assume a success and check for obvious failures
+			success=1;
+			do
+			{
+				// TODO: Is a buffer always an area ?
+				// 	 we might check geometry type..
+
+				if ( gRes->getGeometryTypeId() != gRealRes->getGeometryTypeId() )
+				{
+					std::cerr << "Expected result is of type "
+					        << gRes->getGeometryType()
+						<< "; obtained result is of type "
+						<< gRealRes->getGeometryType()
+						<< std::endl;
+					success=0;
+					break;
+				}
+
+				if ( gRes->isEmpty() && gRealRes->isEmpty() )
+				{
+					// Success !
+					break;
+				}
+
+				if ( gRes->getDimension() != 2 )
+				{
+					std::cerr << "Don't know how to validate "
+						<< "result of buffer operation "
+						<< "when expected result is not an "
+						<< "areal type."
+						<< std::endl;
+				}
+				
+				double expectedArea = gRes->getArea();
+
+				/// Allow area difference being at most
+				/// 1/1000 of the area of the expected result.
+				double areatol = expectedArea / 1e3;
+
+				GeomAutoPtr gDiff = BinaryOp(gRes.get(), gRealRes.get(),
+					overlayOp(OverlayOp::opDIFFERENCE));
+
+				double areaDiff = gDiff->getArea();
+				if ( areaDiff > areatol )
+				{
+					std::cerr << "Area of difference between "
+						<< "obtained and expected: "
+						<< areaDiff << " - Tolerated diff: "
+						<< areatol << std::endl;
+					success=0;
+					break;
+				}
+				else
+				{
+					std::cerr << "Area of difference between "
+						<< "obtained and expected: "
+						<< areaDiff << " - Tolerated diff: "
+						<< areatol << " (SUCCESS!)"
+						<< std::endl;
+				}
+
+			}
+			while (0);
+
+			if ( testValidOutput ) testValid(gRes.get(), "result");
+
+			actual_result=printGeom(gRealRes.get());
+			expected_result=printGeom(gRes.get());
+		}
+
+		else if (opName=="buffermitredjoin")
+		{
+			using namespace operation::buffer;
+
+			geom::Geometry *gT=gA;
+			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
+
+			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
+			gRes->normalize();
+
+			profile.start();
+
+			GeomAutoPtr gRealRes;
+			double dist = std::atof(opArg2.c_str());
+
+			BufferParameters params;
+			params.setJoinStyle(BufferParameters::JOIN_MITRE);
+
+			if ( opArg3 != "" ) {
+		params.setQuadrantSegments(std::atoi(opArg3.c_str()));
+			}
+
+			BufferOp op(gT, params);
+			gRealRes.reset(op.getResultGeometry(dist));
+
 			profile.stop();
 			gRealRes->normalize();
 
