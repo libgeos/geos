@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/buffer/BufferSubgraph.java rev. 1.21 (JTS-1.9)
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_BUFFER_BUFFERSUBGRAPH_H
@@ -41,7 +45,8 @@ namespace operation { // geos.operation
 namespace buffer { // geos.operation.buffer
 
 /**
- * \brief A connected subset of the graph of DirectedEdges and geomgraph::Node.
+ * \brief
+ * A connected subset of the graph of DirectedEdge and geomgraph::Node.
  * 
  * Its edges will generate either
  * - a single polygon in the complete buffer, with zero or more holes, or
@@ -96,11 +101,7 @@ public:
 
 	friend std::ostream& operator<< (std::ostream& os, const BufferSubgraph& bs);
 
-	/** \brief
-	 * algorithm::CGAlgorithms arg kept for backward-compatibility.
-	 * It is unused.
-	 */
-	BufferSubgraph(algorithm::CGAlgorithms *cga=NULL);
+	BufferSubgraph(); 
 
 	~BufferSubgraph();
 

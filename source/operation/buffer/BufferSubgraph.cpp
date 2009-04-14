@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2005 Refractions Research Inc.
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/BufferSubgraph.java rev. 1.17
+ * Last port: operation/buffer/BufferSubgraph.java rev. 1.21 (JTS-1.9)
  *
  **********************************************************************/
 
@@ -49,7 +49,11 @@ namespace operation { // geos.operation
 namespace buffer { // geos.operation.buffer
 
 // Argument is unused
-BufferSubgraph::BufferSubgraph(CGAlgorithms* /*cga*/):
+BufferSubgraph::BufferSubgraph()
+	:
+	finder(),
+	dirEdgeList(),
+	nodes(),
 	rightMostCoord(NULL),
 	env(NULL)
 {
@@ -171,11 +175,12 @@ BufferSubgraph::computeNodeDepth(Node *n)
 	}
 	// MD - testing  Result: breaks algorithm
 	//if (startEdge==null) return;
-	//assert(startEdge!=NULL);
-	if (startEdge==NULL)
+
+	// only compute string append if assertion would fail
+	if (startEdge == NULL)
 	{
 		throw util::TopologyException(
-			"unable to find edge to compute depths",
+			"unable to find edge to compute depths at",
 			n->getCoordinate());
 	}
 
