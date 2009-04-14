@@ -42,74 +42,6 @@ using namespace geos::geom;
 namespace geos {
 namespace algorithm { // geos.algorithm
 
-///*public static*/
-//void
-//HCoordinate::OLDintersection(const Coordinate &p1, const Coordinate &p2,
-//	const Coordinate &q1, const Coordinate &q2, Coordinate &ret)
-//{
-//
-//#if GEOS_DEBUG
-//	cerr << __FUNCTION__ << ":" << endl
-//	     << setprecision(20)
-//	     << " p1: " << p1 << endl
-//	     << " p2: " << p2 << endl
-//	     << " q1: " << q1 << endl
-//	     << " q2: " << q2 << endl;
-//#endif
-//
-//        HCoordinate hc1p1(p1);
-//
-//#if GEOS_DEBUG
-//	cerr << "HCoordinate(p1): "
-//	     << hc1p1 << endl;
-//#endif
-//
-//        HCoordinate hc1p2(p2);
-//
-//#if GEOS_DEBUG
-//	cerr << "HCoordinate(p2): "
-//	     << hc1p2 << endl;
-//#endif
-//
-//        HCoordinate l1(hc1p1, hc1p2);
-//
-//#if GEOS_DEBUG
-//	cerr << "L1 - HCoordinate(HCp1, HCp2): "
-//	     << l1 << endl;
-//#endif
-//
-//        HCoordinate hc2q1(q1);
-//
-//#if GEOS_DEBUG
-//	cerr << "HCoordinate(q1): "
-//	     << hc2q1 << endl;
-//#endif
-//
-//        HCoordinate hc2q2(q2);
-//
-//#if GEOS_DEBUG
-//	cerr << "HCoordinate(q2): "
-//	     << hc2q2 << endl;
-//#endif
-//
-//        HCoordinate l2(hc2q1, hc2q2);
-//
-//#if GEOS_DEBUG
-//	cerr << "L2 - HCoordinate(HCq1, HCq2): "
-//	     << l2 << endl;
-//#endif
-//
-//        HCoordinate intHCoord(l1, l2);
-//
-//#if GEOS_DEBUG
-//	cerr << "HCoordinate(L1, L2): "
-//	     << intHCoord << endl;
-//#endif
-//
-//        intHCoord.getCoordinate(ret);
-//
-//}
-
 /*public static*/
 void
 HCoordinate::intersection(const Coordinate &p1, const Coordinate &p2,
@@ -125,6 +57,7 @@ HCoordinate::intersection(const Coordinate &p1, const Coordinate &p2,
 	     << " q2: " << q2 << endl;
 #endif
 
+#if 0 // TODO: fix this, results in a testcase failure!
 	// unrolled computation
 
 	double px = p1.y - p2.y;
@@ -148,6 +81,20 @@ HCoordinate::intersection(const Coordinate &p1, const Coordinate &p2,
 	}
 
 	ret = Coordinate(xInt, yInt);
+#else
+
+	HCoordinate hc1p1(p1);
+	HCoordinate hc1p2(p2);
+	HCoordinate l1(hc1p1, hc1p2);
+
+	HCoordinate hc2q1(q1);
+	HCoordinate hc2q2(q2);
+	HCoordinate l2(hc2q1, hc2q2);
+
+	HCoordinate intHCoord(l1, l2);
+	intHCoord.getCoordinate(ret);
+#endif
+
 }
 
 /*public*/
