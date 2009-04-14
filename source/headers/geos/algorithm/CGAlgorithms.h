@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/CGAlgorithms.java rev. 1.34 (JTS-1.7.1)
+ * Last port: algorithm/CGAlgorithms.java rev. 1.46 (JTS-1.9)
  *
  **********************************************************************/
 
@@ -62,18 +62,20 @@ public:
 	CGAlgorithms(){};
 
 	/** \brief
-	 * Test whether a point lies inside a ring.
+	 * Tests whether a point lies inside a ring.
 	 *
 	 * The ring may be oriented in either direction.
-	 * If the point lies on the ring boundary the result
-	 * of this method is unspecified.
+	 * A point lying exactly on the ring boundary is considered
+	 * to be inside the ring.
 	 * 
-	 * This algorithm does not attempt to first check the
+	 * This algorithm does not first check the
 	 * point against the envelope of the ring.
 	 *
 	 * @param p point to check for ring inclusion
-	 * @param ring assumed to have first point identical to last point
+	 * @param ring is assumed to have first point identical to last point
 	 * @return <code>true</code> if p is inside ring
+	 *
+	 * @see locatePointInRing
 	 */
 	static bool isPointInRing(const geom::Coordinate& p,
 			const geom::CoordinateSequence* ring);
@@ -83,7 +85,28 @@ public:
 			const std::vector<const geom::Coordinate*>& ring);
 
 	/** \brief
-	 * Test whether a point lies on a linestring.
+	 * Determines whether a point lies in the interior,
+	 * on the boundary, or in the exterior of a ring.
+	 *
+	 * The ring may be oriented in either direction.
+	 * 
+	 * This method does <i>not</i> first check the point against
+	 * the envelope of the ring.
+	 *
+	 * @param p point to check for ring inclusion
+	 * @param ring an array of coordinates representing the ring
+	 *        (which must have first point identical to last point)
+	 * @return the {@link Location} of p relative to the ring
+	 */
+	static int locatePointInRing(const geom::Coordinate& p,
+			const geom::CoordinateSequence& ring);
+
+	/// Same as above, but taking a vector of const Coordinates
+	static int locatePointInRing(const geom::Coordinate& p,
+			const std::vector<const geom::Coordinate*>& ring);
+
+	/** \brief
+	 * Test whether a point lies on the given line segment
 	 *
 	 * @return true true if
 	 * the point is a vertex of the line or lies in the interior of a line

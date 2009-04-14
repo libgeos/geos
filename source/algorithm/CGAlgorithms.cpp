@@ -14,15 +14,18 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/CGAlgorithms.java rev. 1.34 (JTS-1.7.1)
+ * Last port: algorithm/CGAlgorithms.java rev. 1.46 (JTS-1.9)
  *
  **********************************************************************/
 
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/algorithm/RobustDeterminant.h>
 #include <geos/algorithm/LineIntersector.h>
+#include <geos/algorithm/RayCrossingCounter.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/Location.h>
+#include <geos/util/IllegalArgumentException.h>
 
 #include <algorithm>
 //#include <cstdio>
@@ -53,48 +56,7 @@ CGAlgorithms::orientationIndex(const Coordinate& p1,const Coordinate& p2,const C
 bool
 CGAlgorithms::isPointInRing(const Coordinate& p, const CoordinateSequence* ring)
 {
-	double xInt;  // x intersection of segment with ray
-	int crossings = 0;  // number of segment/ray crossings
-	double x1;    // translated coordinates
-	double y1;
-	double x2;
-	double y2;
-
-	/*
-	 * For each segment l = (i-1, i), see if it crosses ray from
-	 * test point in positive x direction.
-	 */
-	size_t nPts=ring->getSize();
-	for(size_t i=1; i<nPts; i++)
-	{
-		const Coordinate &p1=ring->getAt(i);
-		const Coordinate &p2=ring->getAt(i-1);
-		x1 = p1.x - p.x;
-		y1 = p1.y - p.y;
-		x2 = p2.x - p.x;
-		y2 = p2.y - p.y;
-
-		if (((y1 > 0) && (y2 <= 0)) ||
-			((y2 > 0) && (y1 <= 0)))
-		{
-			/*
-			 *  segment straddles x axis, so compute intersection.
-			 */
-			xInt = RobustDeterminant::signOfDet2x2(x1, y1, x2, y2)
-				/ (y2 - y1);
-
-			/*
-			 *  crosses ray if strictly positive intersection.
-			 */
-			if (0.0 < xInt) crossings++;
-		}
-	}
-
-	/*
-	 *  p is inside if number of crossings is odd.
-	 */
-	if ((crossings % 2) == 1) return true;
-	return false;
+	return locatePointInRing(p, *ring) != Location::EXTERIOR;
 }
 
 /*public static*/
@@ -102,47 +64,23 @@ bool
 CGAlgorithms::isPointInRing(const Coordinate& p,
 		const Coordinate::ConstVect& ring)
 {
-	double xInt;  // x intersection of segment with ray
-	int crossings = 0;  // number of segment/ray crossings
-	double x1;    // translated coordinates
-	double y1;
-	double x2;
-	double y2;
+	return locatePointInRing(p, ring) != Location::EXTERIOR;
+}
 
-	/*
-	 * For each segment l = (i-1, i), see if it crosses ray from
-	 * test point in positive x direction.
-	 */
-	for(size_t i=1, nPts=ring.size(); i<nPts; ++i)
-	{
-		const Coordinate *p1=ring[i];
-		const Coordinate *p2=ring[i-1];
-		x1 = p1->x - p.x;
-		y1 = p1->y - p.y;
-		x2 = p2->x - p.x;
-		y2 = p2->y - p.y;
+/*public static*/
+int
+CGAlgorithms::locatePointInRing(const Coordinate& p,
+		const CoordinateSequence& ring)
+{
+	return RayCrossingCounter::locatePointInRing(p, ring);
+}
 
-		if (((y1 > 0) && (y2 <= 0)) ||
-			((y2 > 0) && (y1 <= 0)))
-		{
-			/*
-			 *  segment straddles x axis, so compute intersection.
-			 */
-			xInt = RobustDeterminant::signOfDet2x2(x1, y1, x2, y2)
-				/ (y2 - y1);
-
-			/*
-			 *  crosses ray if strictly positive intersection.
-			 */
-			if (0.0 < xInt) crossings++;
-		}
-	}
-
-	/*
-	 *  p is inside if number of crossings is odd.
-	 */
-	if ((crossings % 2) == 1) return true;
-	return false;
+/*public static*/
+int
+CGAlgorithms::locatePointInRing(const Coordinate& p,
+		const std::vector<const geom::Coordinate*>& ring)
+{
+	return RayCrossingCounter::locatePointInRing(p, ring);
 }
 
 /*public static*/
@@ -169,12 +107,18 @@ bool
 CGAlgorithms::isCCW(const CoordinateSequence* ring)
 {
 	// # of points without closing endpoint
-    const std::size_t nPts=ring->getSize()-1;
+	const std::size_t nPts=ring->getSize()-1;
+
+	// sanity check
+	if (nPts < 3)
+	{
+		throw util::IllegalArgumentException("Ring has fewer than 3 points, so orientation cannot be determined");
+	}
 
 	// find highest point
 	const Coordinate *hiPt=&ring->getAt(0);
 	int hiIndex=0;
-    for (std::size_t i=1; i<=nPts; ++i)
+	for (std::size_t i=1; i<=nPts; ++i)
 	{
 		const Coordinate *p=&ring->getAt(i);
 		if (p->y > hiPt->y) {
@@ -379,17 +323,32 @@ CGAlgorithms::signedArea(const CoordinateSequence* ring)
 double
 CGAlgorithms::length(const CoordinateSequence* pts)
 {
+	// optimized for processing CoordinateSequences
+
 	size_t npts=pts->getSize();
+	if (npts <= 1) return 0.0;
 
-	if (npts<1) return 0.0;
+	double len = 0.0;
 
-	double sum=0.0;
+	const Coordinate& p = pts->getAt(0);
+	double x0 = p.x;
+	double y0 = p.y;
 
-	for(size_t i=1; i<npts; ++i)
+	for(size_t i = 1; i < npts; ++i)
 	{
-		sum+=pts->getAt(i).distance(pts->getAt(i - 1));
+		const Coordinate& p = pts->getAt(i);
+		double x1 = p.x;
+		double y1 = p.y;
+		double dx = x1 - x0;
+		double dy = y1 - y0;
+
+		len += sqrt(dx * dx + dy * dy);
+
+		x0 = x1;
+		y0 = y1;
 	}
-	return sum;
+
+	return len;
 }
 
 
