@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/RobustLineIntersector.java rev. 1.35
+ * Last port: algorithm/RobustLineIntersector.java rev. 1.37 (JTS-1.9)
  *
  **********************************************************************/
 
@@ -231,6 +231,12 @@ public:
 	double getEdgeDistance(int geomIndex,int intIndex) const;
 
 private:
+
+	void intersectionWithNormalization(const geom::Coordinate& p1,
+		const geom::Coordinate& p2,
+		const geom::Coordinate& q1,
+		const geom::Coordinate& q2,
+		geom::Coordinate &ret) const;
 
 	/**
 	 * If makePrecise is true, computed intersection coordinates

@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/RobustLineIntersector.java rev. 1.35
+ * Last port: algorithm/RobustLineIntersector.java rev. 1.37 (JTS-1.9)
  *
  **********************************************************************/
 
@@ -692,35 +692,12 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 
 /*private*/
 void
-LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
-	const Coordinate& q1, const Coordinate& q2, Coordinate &intPt) const
+LineIntersector::intersection(const Coordinate& p1,
+	const Coordinate& p2, const Coordinate& q1, const Coordinate& q2,
+	Coordinate &intPt) const
 {
-	Coordinate n1=p1;
-	Coordinate n2=p2;
-	Coordinate n3=q1;
-	Coordinate n4=q2;
-	Coordinate normPt;
 
-	//normalize(&n1, &n2, &n3, &n4, &normPt);
-	normalizeToEnvCentre(n1, n2, n3, n4, normPt);
-
-#if GEOS_DEBUG
-	cerr<<"RobustIntersector::intersection(p1,p2,q1,q2,intPt) called:"<<endl;
-	cerr<<" p1:"<<p1.toString()<<endl;
-	cerr<<" p2:"<<p2.toString()<<endl;
-	cerr<<" q1:"<<q1.toString()<<endl;
-	cerr<<" q2:"<<q2.toString()<<endl;
-
-	cerr<<" n1:"<<n1.toString()<<endl;
-	cerr<<" n2:"<<n2.toString()<<endl;
-	cerr<<" n3:"<<n3.toString()<<endl;
-	cerr<<" n4:"<<n4.toString()<<endl;
-#endif
-
-	safeHCoordinateIntersection(n1,n2,n3,n4,intPt);
-
-	intPt.x+=normPt.x;
-	intPt.y+=normPt.y;
+	intersectionWithNormalization(p1, p2, q1, q2, intPt);
 
 	/*
 	 * Due to rounding it can happen that the computed intersection is
@@ -746,7 +723,9 @@ LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
 #endif
 	}
  
-	if (precisionModel!=NULL) precisionModel->makePrecise(intPt);
+	if (precisionModel!=NULL) {
+		precisionModel->makePrecise(intPt);
+	}
 
 
 #if COMPUTE_Z
@@ -759,6 +738,25 @@ LineIntersector::intersection(const Coordinate& p1, const Coordinate& p2,
 	if ( zvals ) intPt.z = ztot/zvals;
 #endif // COMPUTE_Z
 
+}
+
+/*private*/
+void
+LineIntersector::intersectionWithNormalization(const Coordinate& p1,
+	const Coordinate& p2, const Coordinate& q1, const Coordinate& q2,
+	Coordinate &intPt) const
+{
+	Coordinate n1=p1;
+	Coordinate n2=p2;
+	Coordinate n3=q1;
+	Coordinate n4=q2;
+	Coordinate normPt;
+	normalizeToEnvCentre(n1, n2, n3, n4, normPt);
+
+	safeHCoordinateIntersection(n1, n2, n3, n4, intPt);
+
+	intPt.x += normPt.x;
+	intPt.y += normPt.y;
 }
 
 
