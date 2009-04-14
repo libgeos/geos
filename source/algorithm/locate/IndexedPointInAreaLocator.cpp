@@ -113,7 +113,7 @@ IndexedPointInAreaLocator::~IndexedPointInAreaLocator()
 int 
 IndexedPointInAreaLocator::locate( const geom::Coordinate * /*const*/ p)
 {
-	algorithm::RayCrossingCounter rcc( p);
+	algorithm::RayCrossingCounter rcc(*p);
 
 	IndexedPointInAreaLocator::SegmentVisitor visitor( &rcc);
 
@@ -127,7 +127,7 @@ IndexedPointInAreaLocator::SegmentVisitor::visitItem( void * item)
 {
 	geom::LineSegment * seg = (geom::LineSegment *)item;
 
-	counter->countSegment( &(*seg)[ 0 ], &(*seg)[ 1 ]);
+	counter->countSegment( (*seg)[ 0 ], (*seg)[ 1 ]);
 }
 
 void 

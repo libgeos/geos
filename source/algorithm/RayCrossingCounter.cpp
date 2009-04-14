@@ -39,38 +39,58 @@ namespace algorithm {
 // public:
 //
 /*static*/ int 
-RayCrossingCounter::locatePointInRing( const geom::Coordinate * point, const geom::CoordinateSequence * ring) 
+RayCrossingCounter::locatePointInRing(const geom::Coordinate& point,
+                         const geom::CoordinateSequence& ring) 
 {
-	RayCrossingCounter * rcc = new RayCrossingCounter( point);
+	RayCrossingCounter rcc(point);
 
-	for (int i = 1, ni = ring->size(); i < ni; i++) 
+	for (int i = 1, ni = ring.size(); i < ni; i++) 
 	{
-		const geom::Coordinate & p1 = (*ring)[ i ];
-		const geom::Coordinate & p2 = (*ring)[ i - 1 ];
+		const geom::Coordinate & p1 = ring[ i ];
+		const geom::Coordinate & p2 = ring[ i - 1 ];
 
-		rcc->countSegment( &p1, &p2);
+		rcc.countSegment(p1, p2);
 
-		if ( rcc->isOnSegment() )
-			return rcc->getLocation();
+		if ( rcc.isOnSegment() )
+			return rcc.getLocation();
 	}
-	return rcc->getLocation();
+	return rcc.getLocation();
+}
+
+/*static*/ int 
+RayCrossingCounter::locatePointInRing(const geom::Coordinate& point,
+	         const std::vector<const geom::Coordinate*>& ring)
+{
+	RayCrossingCounter rcc(point);
+
+	for (int i = 1, ni = ring.size(); i < ni; i++) 
+	{
+		const geom::Coordinate & p1 = *ring[ i ];
+		const geom::Coordinate & p2 = *ring[ i - 1 ];
+
+		rcc.countSegment(p1, p2);
+
+		if ( rcc.isOnSegment() )
+			return rcc.getLocation();
+	}
+	return rcc.getLocation();
 }
 
 
 void 
-RayCrossingCounter::countSegment(const geom::Coordinate * p1,
-                                 const geom::Coordinate * p2) 
+RayCrossingCounter::countSegment(const geom::Coordinate& p1,
+                                 const geom::Coordinate& p2) 
 {
 	// For each segment, check if it crosses 
 	// a horizontal ray running from the test point in
 	// the positive x direction.
 	
 	// check if the segment is strictly to the left of the test point
-	if (p1->x < point->x && p2->x < point->x)
+	if (p1.x < point.x && p2.x < point.x)
 		return;
 	
 	// check if the point is equal to the current ring vertex
-	if (point->x == p2->x && point->y == p2->y) 
+	if (point.x == p2.x && point.y == p2.y) 
 	{
 		isPointOnSegment = true;
 		return;
@@ -78,18 +98,18 @@ RayCrossingCounter::countSegment(const geom::Coordinate * p1,
 
 	// For horizontal segments, check if the point is on the segment.
 	// Otherwise, horizontal segments are not counted.
-	if (p1->y == point->y && p2->y == point->y) 
+	if (p1.y == point.y && p2.y == point.y) 
 	{
-		double minx = p1->x;
-		double maxx = p2->x;
+		double minx = p1.x;
+		double maxx = p2.x;
 
 		if (minx > maxx) 
 		{
-			minx = p2->x;
-			maxx = p1->x;
+			minx = p2.x;
+			maxx = p1.x;
 		}
 		
-		if (point->x >= minx && point->x <= maxx) 
+		if (point.x >= minx && point.x <= maxx) 
 			isPointOnSegment = true;
 
 		return;
@@ -102,15 +122,15 @@ RayCrossingCounter::countSegment(const geom::Coordinate * p1,
 	//   final endpoint
 	// - a downward edge excludes its starting endpoint, and includes its
 	//   final endpoint
-	if (((p1->y > point->y) && (p2->y <= point->y)) ||
-		((p2->y > point->y) && (p1->y <= point->y)) ) 
+	if (((p1.y > point.y) && (p2.y <= point.y)) ||
+		((p2.y > point.y) && (p1.y <= point.y)) ) 
 	{
 		// translate the segment so that the test point lies
 		// on the origin
-		double x1 = p1->x - point->x;
-		double y1 = p1->y - point->y;
-		double x2 = p2->x - point->x;
-		double y2 = p2->y - point->y;
+		double x1 = p1.x - point.x;
+		double y1 = p1.y - point.y;
+		double x2 = p2.x - point.x;
+		double y2 = p2.y - point.y;
 
 		// The translated segment straddles the x-axis.
 		// Compute the sign of the ordinate of intersection
@@ -140,8 +160,8 @@ RayCrossingCounter::getLocation()
 	if (isPointOnSegment)
 		return geom::Location::BOUNDARY;
 
-	// The point is in the interior of the ring if the number of X-crossings is
-	// odd.
+	// The point is in the interior of the ring if the number
+	// of X-crossings is odd.
 	if ((crossingCount % 2) == 1)
 		return geom::Location::INTERIOR;
 	

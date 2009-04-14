@@ -21,6 +21,7 @@
 #ifndef GEOS_ALGORITHM_RAYCROSSINGCOUNTER_H
 #define GEOS_ALGORITHM_RAYCROSSINGCOUNTER_H
 
+#include <vector>
 
 // forward declarations
 namespace geos {
@@ -64,7 +65,7 @@ namespace algorithm {
 class RayCrossingCounter 
 {
 private:
-	const geom::Coordinate * point;
+	const geom::Coordinate& point;
 	
 	int crossingCount;
 	
@@ -81,10 +82,14 @@ public:
 	 * @param ring an array of Coordinates forming a ring 
 	 * @return the location of the point in the ring
 	 */
-	static int locatePointInRing(const geom::Coordinate * p,
-	                             const geom::CoordinateSequence * ring);
+	static int locatePointInRing(const geom::Coordinate& p,
+	                             const geom::CoordinateSequence& ring);
 
-	RayCrossingCounter( const geom::Coordinate * point)
+	/// Semantically equal to the above, just different args encoding
+	static int locatePointInRing(const geom::Coordinate& p,
+	         const std::vector<const geom::Coordinate*>& ring);
+
+	RayCrossingCounter(const geom::Coordinate& point)
 	:	point( point),
 		crossingCount( 0),
 		isPointOnSegment( false)
@@ -96,7 +101,8 @@ public:
 	 * @param p1 an endpoint of the segment
 	 * @param p2 another endpoint of the segment
 	 */
-	void countSegment( const geom::Coordinate * p1, const geom::Coordinate * p2);
+	void countSegment(const geom::Coordinate& p1,
+	                  const geom::Coordinate& p2);
 	
 	/**
 	 * Reports whether the point lies exactly on one of the supplied segments.
