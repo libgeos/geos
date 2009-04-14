@@ -22,6 +22,7 @@ geos_HEADERS = 					\
 	CoordinateList.h			\
 	CoordinateSequence.h			\
 	CoordinateSequenceFactory.h		\
+	CoordinateSequenceFilter.h		\
 	Dimension.h				\
 	Envelope.h				\
 	Envelope.inl				\

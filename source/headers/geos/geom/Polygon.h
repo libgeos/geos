@@ -37,6 +37,7 @@ namespace geos {
 	namespace geom { // geos::geom
 		class Coordinate;
 		class CoordinateArraySequence;
+		class CoordinateSequenceFilter;
 		class LinearRing;
 		class LineString;
 	}
@@ -117,6 +118,8 @@ public:
 	void apply_ro(CoordinateFilter *filter) const;
 	void apply_rw(GeometryFilter *filter);
 	void apply_ro(GeometryFilter *filter) const;
+	void apply_rw(CoordinateSequenceFilter& filter);
+	void apply_ro(CoordinateSequenceFilter& filter) const;
 
 	Geometry* convexHull() const;
 

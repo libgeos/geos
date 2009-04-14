@@ -19,6 +19,7 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateSequenceFilter.h>
 #include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/GeometryFilter.h>
 #include <geos/geom/GeometryComponentFilter.h>
@@ -185,6 +186,22 @@ void
 Point::apply_ro(GeometryComponentFilter *filter) const
 {
 	filter->filter_ro(this);
+}
+
+void
+Point::apply_rw(CoordinateSequenceFilter& filter)
+{
+	if (isEmpty()) return;
+	filter.filter_rw(*coordinates, 0);
+	if (filter.isGeometryChanged()) geometryChanged();
+}
+
+void
+Point::apply_ro(CoordinateSequenceFilter& filter) const
+{
+	if (isEmpty()) return;
+	filter.filter_ro(*coordinates, 0);
+	//if (filter.isGeometryChanged()) geometryChanged();
 }
 
 bool

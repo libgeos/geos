@@ -33,6 +33,7 @@ namespace geos {
 	namespace geom {
 		class Coordinate;
 		class CoordinateArraySequence;
+		class CoordinateSequenceFilter;
 	}
 }
 
@@ -124,6 +125,10 @@ public:
 	virtual void apply_rw(GeometryComponentFilter *filter);
 
 	virtual void apply_ro(GeometryComponentFilter *filter) const;
+
+	void apply_rw(CoordinateSequenceFilter& filter);
+
+	void apply_ro(CoordinateSequenceFilter& filter) const;
 
 	/** \brief
 	 * Normalizes a LineString. 

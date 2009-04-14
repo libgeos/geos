@@ -29,6 +29,7 @@
 #include <geos/geom/Envelope.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateSequenceFilter.h>
 #include <geos/geom/GeometryFilter.h>
 #include <geos/geom/GeometryComponentFilter.h>
 
@@ -407,6 +408,40 @@ Polygon::apply_rw(GeometryComponentFilter *filter)
 	{
         	(*holes)[i]->apply_rw(filter);
 	}
+}
+
+void
+Polygon::apply_rw(CoordinateSequenceFilter& filter)
+{
+	shell->apply_rw(filter);
+
+	if (! filter.isDone())
+	{
+		for (size_t i=0, n=holes->size(); i<n; ++i)
+		{
+			(*holes)[i]->apply_rw(filter);
+			if (filter.isDone())
+			break;
+        	}
+	}
+	if (filter.isGeometryChanged()) geometryChanged();
+}
+
+void
+Polygon::apply_ro(CoordinateSequenceFilter& filter) const
+{
+	shell->apply_ro(filter);
+
+	if (! filter.isDone())
+	{
+		for (size_t i=0, n=holes->size(); i<n; ++i)
+		{
+			(*holes)[i]->apply_ro(filter);
+			if (filter.isDone())
+			break;
+        	}
+	}
+	//if (filter.isGeometryChanged()) geometryChanged();
 }
 
 Polygon::~Polygon()

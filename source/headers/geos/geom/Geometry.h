@@ -25,6 +25,7 @@
 #include <geos/inline.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
+#include <geos/geom/GeometryComponentFilter.h> // for inheritance
 
 #include <string>
 #include <iostream>
@@ -37,6 +38,7 @@ namespace geos {
 		class Coordinate;
 		class CoordinateFilter;
 		class CoordinateSequence;
+		class CoordinateSequenceFilter;
 		class Envelope;
 		class GeometryComponentFilter;
 		class GeometryFactory;
@@ -579,6 +581,24 @@ public:
 	virtual void apply_rw(GeometryComponentFilter *filter);
 	virtual void apply_ro(GeometryComponentFilter *filter) const;
 
+	/**
+	 *  Performs an operation on the coordinates in this Geometry's
+	 *  CoordinateSequences.s
+	 *  If the filter reports that a coordinate value has been changed,
+	 *  {@link #geometryChanged} will be called automatically.
+	 *
+	 * @param  filter  the filter to apply
+	 */
+	virtual void apply_rw(CoordinateSequenceFilter& filter)=0;
+
+	/**
+	 *  Performs a read-only operation on the coordinates in this
+	 *  Geometry's CoordinateSequences.
+	 *
+	 * @param  filter  the filter to apply
+	 */
+	virtual void apply_ro(CoordinateSequenceFilter& filter) const=0;
+
 	/** \brief
 	 * Apply a fiter to each component of this geometry.
 	 * The filter is expected to provide a .filter(const Geometry*)
@@ -723,8 +743,21 @@ protected:
 	Geometry(const GeometryFactory *factory);
 
 private:
+
+
+
 	int getClassSortIndex() const;
-	static GeometryComponentFilter geometryChangedFilter;
+
+	class GeometryChangedFilter : public GeometryComponentFilter
+	{
+	public:
+		void filter_rw(Geometry* geom)
+		{
+			geom->geometryChangedAction();
+		}
+	};
+
+	static GeometryChangedFilter geometryChangedFilter;
 	const GeometryFactory *factory;
 	static const GeometryFactory* INTERNAL_GEOMETRY_FACTORY;
 	void* userData;

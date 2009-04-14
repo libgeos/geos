@@ -23,14 +23,16 @@
 namespace geos {
 namespace geom { // geos::geom
 
-void GeometryComponentFilter::filter_rw(Geometry *geom) {
-	geom->geometryChangedAction();
+void GeometryComponentFilter::filter_rw(Geometry *geom)
+{
+	UNREFERENCED_PARAMETER(geom);
+	assert(0);
 }
 
 void GeometryComponentFilter::filter_ro(const Geometry *geom)
 {
-    UNREFERENCED_PARAMETER(geom);
-	//assert(0);
+	UNREFERENCED_PARAMETER(geom);
+	assert(0);
 }
 
 

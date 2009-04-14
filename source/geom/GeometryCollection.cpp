@@ -18,6 +18,7 @@
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateSequenceFilter.h>
 #include <geos/geom/CoordinateArraySequenceFactory.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/GeometryFilter.h>
@@ -302,6 +303,32 @@ GeometryCollection::apply_ro(GeometryComponentFilter *filter) const
 	{
 		(*geometries)[i]->apply_ro(filter);
 	}
+}
+
+void
+GeometryCollection::apply_rw(CoordinateSequenceFilter& filter)
+{
+	size_t ngeoms = geometries->size();
+	if (ngeoms == 0 ) return;
+	for (size_t i = 0; i < ngeoms; ++i)
+	{
+		(*geometries)[i]->apply_rw(filter);
+		if (filter.isDone()) break;
+	}
+	if (filter.isGeometryChanged()) geometryChanged();
+}
+
+void
+GeometryCollection::apply_ro(CoordinateSequenceFilter& filter) const
+{
+	size_t ngeoms = geometries->size();
+	if (ngeoms == 0 ) return;
+	for (size_t i = 0; i < ngeoms; ++i)
+	{
+		(*geometries)[i]->apply_ro(filter);
+		if (filter.isDone()) break;
+	}
+	//if (filter.isGeometryChanged()) geometryChanged();
 }
 
 GeometryCollection::~GeometryCollection()

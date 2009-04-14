@@ -20,6 +20,7 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateSequenceFilter.h>
 #include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/GeometryFilter.h>
@@ -380,6 +381,32 @@ LineString::apply_ro(GeometryComponentFilter *filter) const
 {
 	assert(filter);
 	filter->filter_ro(this);
+}
+
+void
+LineString::apply_rw(CoordinateSequenceFilter& filter)
+{
+	size_t npts=points->size();
+	if (!npts) return;
+	for (size_t i = 0; i<npts; ++i)
+	{
+		filter.filter_rw(*points, i);
+		if (filter.isDone()) break;
+	}
+	if (filter.isGeometryChanged()) geometryChanged();
+}
+
+void
+LineString::apply_ro(CoordinateSequenceFilter& filter) const
+{
+	size_t npts=points->size();
+	if (!npts) return;
+	for (size_t i = 0; i<npts; ++i)
+	{
+		filter.filter_ro(*points, i);
+		if (filter.isDone()) break;
+	}
+	//if (filter.isGeometryChanged()) geometryChanged();
 }
 
 GeometryTypeId

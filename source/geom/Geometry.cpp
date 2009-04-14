@@ -96,7 +96,7 @@ jtsport()
 	return GEOS_JTS_PORT;
 }
 
-GeometryComponentFilter Geometry::geometryChangedFilter;
+Geometry::GeometryChangedFilter Geometry::geometryChangedFilter;
 
 // REMOVE THIS, use GeometryFactory::getDefaultInstance() directly
 const GeometryFactory* Geometry::INTERNAL_GEOMETRY_FACTORY=GeometryFactory::getDefaultInstance();

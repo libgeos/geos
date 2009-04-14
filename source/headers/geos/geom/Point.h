@@ -35,6 +35,7 @@ namespace geos {
 		class Coordinate;
 		class CoordinateArraySequence;
 		class CoordinateFilter;
+		class CoordinateSequenceFilter;
 		class GeometryComponentFilter;
 		class GeometryFilter;
 	}
@@ -89,6 +90,8 @@ public:
 	void apply_rw(GeometryFilter *filter);
 	void apply_rw(GeometryComponentFilter *filter);
 	void apply_ro(GeometryComponentFilter *filter) const;
+	void apply_rw(CoordinateSequenceFilter& filter);
+	void apply_ro(CoordinateSequenceFilter& filter) const;
 
 	bool equalsExact(const Geometry *other, double tolerance=0) const;
 	void normalize(void) { };
