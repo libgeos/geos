@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: algorithm/RayCrossingCounter.java rev. 1.2 (JTS-1.9)
+ *
  **********************************************************************/
 
 #include <geos/algorithm/RayCrossingCounter.h>
@@ -54,10 +58,12 @@ RayCrossingCounter::locatePointInRing( const geom::Coordinate * point, const geo
 
 
 void 
-RayCrossingCounter::countSegment( const geom::Coordinate * p1, const geom::Coordinate * p2) 
+RayCrossingCounter::countSegment(const geom::Coordinate * p1,
+                                 const geom::Coordinate * p2) 
 {
 	// For each segment, check if it crosses 
-	// a horizontal ray running from the test point in the positive x direction.
+	// a horizontal ray running from the test point in
+	// the positive x direction.
 	
 	// check if the segment is strictly to the left of the test point
 	if (p1->x < point->x && p2->x < point->x)
@@ -89,9 +95,9 @@ RayCrossingCounter::countSegment( const geom::Coordinate * p1, const geom::Coord
 		return;
 	}
 
-	// Evaluate all non-horizontal segments which cross a horizontal ray to the
-	// right of the test pt. To avoid double-counting shared vertices, we use the
-	// convention that
+	// Evaluate all non-horizontal segments which cross a horizontal ray
+	// to the right of the test pt.
+	// To avoid double-counting shared vertices, we use the convention that
 	// - an upward edge includes its starting endpoint, and excludes its
 	//   final endpoint
 	// - a downward edge excludes its starting endpoint, and includes its
@@ -99,17 +105,19 @@ RayCrossingCounter::countSegment( const geom::Coordinate * p1, const geom::Coord
 	if (((p1->y > point->y) && (p2->y <= point->y)) ||
 		((p2->y > point->y) && (p1->y <= point->y)) ) 
 	{
-		// translate the segment so that the test point lies on the origin
+		// translate the segment so that the test point lies
+		// on the origin
 		double x1 = p1->x - point->x;
 		double y1 = p1->y - point->y;
 		double x2 = p2->x - point->x;
 		double y2 = p2->y - point->y;
 
-		// The translated segment straddles the x-axis. Compute the sign of the
-		// ordinate of intersection with the x-axis. (y2 != y1, so denominator
+		// The translated segment straddles the x-axis.
+		// Compute the sign of the ordinate of intersection
+		// with the x-axis. (y2 != y1, so denominator
 		// will never be 0.0)
-		double xIntSign = RobustDeterminant::signOfDet2x2( x1, y1, x2, y2);
-
+                        // MD - faster & more robust computation?
+                double xIntSign = RobustDeterminant::signOfDet2x2(x1, y1, x2, y2);
 		if (xIntSign == 0.0) 
 		{
 			isPointOnSegment = true;

@@ -12,6 +12,10 @@
  * See the COPYING file for more information.
  *
  *
+ **********************************************************************
+ *
+ * Last port: algorithm/RayCrossingCounter.java rev. 1.2 (JTS-1.9)
+ *
  **********************************************************************/
 
 #ifndef GEOS_ALGORITHM_RAYCROSSINGCOUNTER_H
@@ -77,7 +81,8 @@ public:
 	 * @param ring an array of Coordinates forming a ring 
 	 * @return the location of the point in the ring
 	 */
-	static int locatePointInRing( const geom::Coordinate * p, const geom::CoordinateSequence * ring);
+	static int locatePointInRing(const geom::Coordinate * p,
+	                             const geom::CoordinateSequence * ring);
 
 	RayCrossingCounter( const geom::Coordinate * point)
 	:	point( point),
