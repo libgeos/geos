@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2009  Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006-2007 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -13,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/OffsetCurveBuilder.java rev 1.10
+ * Last port: operation/buffer/OffsetCurveBuilder.java rev. 1.30 (JTS-1.9)
  *
  **********************************************************************/
 
@@ -62,14 +63,6 @@ namespace buffer { // geos.operation.buffer
  */
 class OffsetCurveBuilder {
 public:
-	/** \brief
-	 * The default number of facets into which to divide a fillet
-	 * of 90 degrees.
-	 *
-	 * A value of 8 gives less than 2% max error in the buffer distance.
-	 * For a max error of < 1%, use QS = 12
-	 */
-	static const int DEFAULT_QUADRANT_SEGMENTS=8;
 
 	/*
 	 * @param nBufParams buffer parameters, this object will
@@ -91,8 +84,9 @@ public:
 	 * @param lineList the std::vector to which CoordinateSequences will
 	 *                 be pushed_back
 	 */
-	void getLineCurve(const geom::CoordinateSequence* inputPts, double distance,
-		std::vector<geom::CoordinateSequence*>& lineList);
+	void getLineCurve(const geom::CoordinateSequence* inputPts,
+	                  double distance,
+	                  std::vector<geom::CoordinateSequence*>& lineList);
 
 	/**
 	 * This method handles the degenerate cases of single points and lines,
@@ -102,16 +96,75 @@ public:
 	 *                 be pushed_back
 	 */
 	void getRingCurve(const geom::CoordinateSequence *inputPts, int side,
-		double distance, std::vector<geom::CoordinateSequence*>& lineList);
+	                  double distance,
+	                  std::vector<geom::CoordinateSequence*>& lineList);
 
 
 private:
 
-	static const double MIN_CURVE_VERTEX_FACTOR; //  1.0E-6;
+	/// The mitre will be beveled if it exceeds the mitre ratio limit.
+	//
+	/// @param offset0 the first offset segment
+	/// @param offset1 the second offset segment
+	/// @param distance the offset distance
+	///
+	void addMitreJoin(const geom::Coordinate& p,
+	                  const geom::LineSegment& offset0,
+	                  const geom::LineSegment& offset1,
+	                  double distance);
+
+	/// Adds a limited mitre join connecting the two reflex offset segments.
+	//
+	/// A limited mitre is a mitre which is beveled at the distance
+	/// determined by the mitre ratio limit.
+	///
+	/// @param offset0 the first offset segment
+	/// @param offset1 the second offset segment
+	/// @param distance the offset distance
+	/// @param mitreLimit the mitre limit ratio
+	///
+	void addLimitedMitreJoin(
+	                  const geom::LineSegment& offset0,
+	                  const geom::LineSegment& offset1,
+	                  double distance, double mitreLimit);
+
+	/// \brief
+	/// Adds a bevel join connecting the two offset segments
+	/// around a reflex corner.
+	// 
+	/// @param offset0 the first offset segment
+	/// @param offset1 the second offset segment
+	///
+	void addBevelJoin(const geom::LineSegment& offset0,
+	                  const geom::LineSegment& offset1);
+
+   
+	/**
+	 * Factor which controls how close curve vertices can be to be snapped
+	 */
+	static const double CURVE_VERTEX_SNAP_DISTANCE_FACTOR; //  1.0E-6;
 
 	static const double PI; //  3.14159265358979
 
 	static const double MAX_CLOSING_SEG_LEN; // 3.0
+
+	/**
+	 * Factor which controls how close offset segments can be to
+	 * skip adding a filler or mitre.
+	 */
+	static const double OFFSET_SEGMENT_SEPARATION_FACTOR; // 1.0E-3;
+
+	/**
+	 * Factor which controls how close curve vertices on inside turns
+	 * can be to be snapped
+	 */
+	static const double INSIDE_TURN_VERTEX_SNAP_DISTANCE_FACTOR; // 1.0E-3;
+
+	/** \brief
+	 * Factor which determines how short closing segs can be
+	 * for round buffers
+	 */
+	static const int MAX_CLOSING_SEG_FRACTION = 80;
 
 	algorithm::LineIntersector li;
 
@@ -143,6 +196,25 @@ private:
 
 	const BufferParameters& bufParams; 
 
+	/// The Closing Segment Factor controls how long "closing
+	/// segments" are.  Closing segments are added at the middle of
+	/// inside corners to ensure a smoother boundary for the buffer
+	/// offset curve.  In some cases (particularly for round joins
+	/// with default-or-better quantization) the closing segments
+	/// can be made quite short.  This substantially improves
+	/// performance (due to fewer intersections being created).
+	/// 
+	/// A closingSegFactor of 0 results in lines to the corner vertex.
+	/// A closingSegFactor of 1 results in lines halfway
+	/// to the corner vertex.
+	/// A closingSegFactor of 80 results in lines 1/81 of the way
+	/// to the corner vertex (this option is reasonable for the very
+	/// common default situation of round joins and quadrantSegs >= 8).
+	///
+	/// The default is 1.
+	///
+	int closingSegFactor; // 1;
+
 	geom::Coordinate s0, s1, s2;
 
 	geom::LineSegment seg0;
@@ -155,60 +227,103 @@ private:
 
 	int side;
 
-//	static geom::CoordinateSequence* copyCoordinates(geom::CoordinateSequence *pts);
-
 	void init(double newDistance);
 
-	//geom::CoordinateSequence* getCoordinates();
+	/**
+	 * Use a value which results in a potential distance error which is
+	 * significantly less than the error due to
+	 * the quadrant segment discretization.
+	 * For QS = 8 a value of 100 is reasonable.
+	 * This should produce a maximum of 1% distance error.
+	 */
+	static const double SIMPLIFY_FACTOR; // 100.0;
+
+	/** \brief
+	 * Computes the distance tolerance to use during input
+	 * line simplification.
+	 *
+	 * @param distance the buffer distance
+	 * @return the simplification tolerance
+	 */
+	double simplifyTolerance(double bufDistance);
 
 	void computeLineBufferCurve(const geom::CoordinateSequence& inputPts);
 
-	void computeRingBufferCurve(const geom::CoordinateSequence& inputPts, int side);
+	void computeRingBufferCurve(const geom::CoordinateSequence& inputPts,
+	                            int side);
 
-	//void addPt(const geom::Coordinate &pt);
-
-	//void closePts();
-
-	void initSideSegments(const geom::Coordinate &nS1, const geom::Coordinate &nS2, int nSide);
+	void initSideSegments(const geom::Coordinate &nS1,
+	                      const geom::Coordinate &nS2, int nSide);
 
 	void addNextSegment(const geom::Coordinate &p, bool addStartPoint);
+
+	void addCollinear(bool addStartPoint);
+
+	/// Adds the offset points for an outside (convex) turn
+	//
+	/// @param orientation 
+	/// @param addStartPoint  
+	///
+	void addOutsideTurn(int orientation, bool addStartPoint);
+
+	/// Adds the offset points for an inside (concave) turn
+	//
+	/// @param orientation 
+	/// @param addStartPoint  
+	///
+	void addInsideTurn(int orientation, bool addStartPoint);
 
 	/// Add last offset point
 	void addLastSegment();
 
-	/**
-	 * Compute an offset segment for an input segment on a given side and at a
-	 * given distance.
-	 * The offset points are computed in full double precision, for accuracy.
+	/** \brief
+	 * Compute an offset segment for an input segment on a given
+	 * side and at a given distance.
+	 *
+	 * The offset points are computed in full double precision,
+	 * for accuracy.
 	 *
 	 * @param seg the segment to offset
 	 * @param side the side of the segment the offset lies on
 	 * @param distance the offset distance
 	 * @param offset the points computed for the offset segment
 	 */
-	void computeOffsetSegment(const geom::LineSegment& seg, int side, double distance,
-			geom::LineSegment& offset);
+	void computeOffsetSegment(const geom::LineSegment& seg,
+	                          int side, double distance,
+	                          geom::LineSegment& offset);
 
-	/// Add an end cap around point p1, terminating a line segment coming from p0
-	void addLineEndCap(const geom::Coordinate &p0,const geom::Coordinate &p1);
+	/// \brief
+	/// Add an end cap around point p1, terminating a line segment
+	/// coming from p0
+	void addLineEndCap(const geom::Coordinate &p0,
+	                   const geom::Coordinate &p1);
 
 	/**
+	 * Adds points for a circular fillet around a reflex corner.
+	 * 
+	 * Adds the start and end points
+	 *
 	 * @param p base point of curve
 	 * @param p0 start point of fillet curve
 	 * @param p1 endpoint of fillet curve
+	 * @param direction the orientation of the fillet
+	 * @param radius the radius of the fillet
 	 */
 	void addFillet(const geom::Coordinate &p, const geom::Coordinate &p0,
-			const geom::Coordinate &p1, int direction, double distance);
+	               const geom::Coordinate &p1,
+	               int direction, double radius);
 
-	/** \brief
-	 * Adds points for a fillet. 
+	/** 
+	 * Adds points for a circular fillet arc between two specified angles.
+	 *
 	 * The start and end point for the fillet are not added -
 	 * the caller must add them if required.
 	 *
 	 * @param direction is -1 for a CW angle, 1 for a CCW angle
+	 * @param radius the radius of the fillet
 	 */
-	void addFillet(const geom::Coordinate &p, double startAngle, double endAngle,
-			int direction, double distance);
+	void addFillet(const geom::Coordinate &p, double startAngle,
+	               double endAngle, int direction, double radius);
 
 	/// Adds a CW circle around a point
 	void addCircle(const geom::Coordinate &p, double distance);
