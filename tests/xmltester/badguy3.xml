@@ -30,8 +30,8 @@ MULTIPOLYGON(((
 
 <test>
 
-  <!--op name="buffer" arg1="a" arg3="0.000000001"-->
-  <op name="buffer" arg1="a" arg3="0">
+  <!--op name="buffer" arg1="a" arg2="0.000000001"-->
+  <op name="buffer" arg1="a" arg2="0">
 MULTIPOLYGON(((
 3135840 10098400,
 3135702 10098200,

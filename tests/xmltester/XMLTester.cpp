@@ -703,10 +703,10 @@ XMLTester::parseTest()
 			profile.start();
 
 			GeomAutoPtr gRealRes;
-			double dist = std::atof(opArg3.c_str());
+			double dist = std::atof(opArg2.c_str());
 
-			if ( opArg2 != "" ) {
-				gRealRes.reset(gT->buffer(dist, std::atoi(opArg2.c_str())));
+			if ( opArg3 != "" ) {
+				gRealRes.reset(gT->buffer(dist, std::atoi(opArg3.c_str())));
 			} else {
 				gRealRes.reset(gT->buffer(dist));
 			}

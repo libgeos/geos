@@ -8,7 +8,7 @@ CLEANFILES = testrunner
 
 EXTRA_DIST = testrunner.sh
 
-SAFE_XMLTESTS=$(srcdir)/testLeaksBig.xml $(srcdir)/hexwkb.xml $(srcdir)/test.xml $(srcdir)/linemerge.xml $(srcdir)/TestInteriorPoint.xml $(srcdir)/TestCentroid.xml $(srcdir)/TestIsValid.xml $(srcdir)/TestValid.xml $(srcdir)/TestValid2.xml $(srcdir)/TestValid2-big.xml $(srcdir)/robustness.xml $(srcdir)/stmlf-cases-20061020.xml $(srcdir)/TestRobustOverlayFixed.xml $(srcdir)/fme.xml $(srcdir)/TestBufferExternal.xml $(srcdir)/heisenbugs.xml $(srcdir)/stmlf-cases-20070119.xml $(srcdir)/badguy3.xml $(srcdir)/hole_from_shell.xml $(srcdir)/hole_red.xml
+SAFE_XMLTESTS=$(srcdir)/testLeaksBig.xml $(srcdir)/hexwkb.xml $(srcdir)/test.xml $(srcdir)/linemerge.xml $(srcdir)/TestInteriorPoint.xml $(srcdir)/TestCentroid.xml $(srcdir)/TestIsValid.xml $(srcdir)/TestValid.xml $(srcdir)/TestValid2.xml $(srcdir)/TestValid2-big.xml $(srcdir)/robustness.xml $(srcdir)/stmlf-cases-20061020.xml $(srcdir)/TestRobustOverlayFixed.xml $(srcdir)/fme.xml $(srcdir)/TestBuffer.xml $(srcdir)/TestBufferExternal.xml $(srcdir)/TestBufferExternal2.xml $(srcdir)/heisenbugs.xml $(srcdir)/stmlf-cases-20070119.xml $(srcdir)/badguy3.xml $(srcdir)/hole_from_shell.xml $(srcdir)/hole_red.xml
 
 XMLTESTS=$(SAFE_XMLTESTS) 
 
@@ -39,7 +39,7 @@ static:
 test: XMLTester
 	./XMLTester $(XMLTESTS) 
 
-testrunner: testrunner.sh
+testrunner: testrunner.sh Makefile
 	sh $(srcdir)/testrunner.sh $@ $(SAFE_XMLTESTS)
 
 verbose-test: XMLTester
