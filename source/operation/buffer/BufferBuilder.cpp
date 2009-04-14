@@ -160,7 +160,7 @@ for (size_t i = 0, n=bufferSegStrList.size(); i<n; i++)
 #endif
 
 	Geometry* resultGeom=NULL;
-	std::vector<Geometry*> *resultPolyList=NULL;
+	std::auto_ptr< std::vector<Geometry*> > resultPolyList;
 	std::vector<BufferSubgraph*> subgraphList;
 
 	try {
@@ -177,7 +177,7 @@ for (size_t i = 0, n=bufferSegStrList.size(); i<n; i++)
 #endif
 		PolygonBuilder polyBuilder(geomFact);
 		buildSubgraphs(subgraphList, polyBuilder);
-		resultPolyList=polyBuilder.getPolygons();
+		resultPolyList.reset( polyBuilder.getPolygons() );
 #if GEOS_DEBUG
 	std::cerr << "PolygonBuilder got " << resultPolyList->size()
 	          << " polygons" << std::endl;
@@ -194,7 +194,8 @@ for (size_t i = 0, n=bufferSegStrList.size(); i<n; i++)
 			return createEmptyResultGeometry();
 		}
 
-		resultGeom=geomFact->buildGeometry(resultPolyList);
+		// resultPolyList ownership transferred here
+		resultGeom=geomFact->buildGeometry(resultPolyList.release());
 	} catch (const util::GEOSException& /* exc */) {
 		for (size_t i=0, n=subgraphList.size(); i<n; i++)
 			delete subgraphList[i];
