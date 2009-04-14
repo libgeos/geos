@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/buffer/SubgraphDepthLocater.java rev. 1.7 (JTS-1.9)
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_BUFFER_SUBGRAPHDEPTHLOCATER_H
@@ -50,7 +54,6 @@ namespace buffer { // geos.operation.buffer
  * The input subgraphs are assumed to have had depths
  * already calculated for their edges.
  *
- * Last port: operation/buffer/SubgraphDepthLocater.java rev. 1.5 (JTS-1.7)
  */
 class SubgraphDepthLocater {
 

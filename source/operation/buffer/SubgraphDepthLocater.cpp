@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/SubgraphDepthLocater.java rev. 1.5 (JTS-1.7)
+ * Last port: operation/buffer/SubgraphDepthLocater.java rev. 1.7 (JTS-1.9)
  *
  **********************************************************************/
 
