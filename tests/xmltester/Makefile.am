@@ -8,7 +8,7 @@ CLEANFILES = testrunner
 
 EXTRA_DIST = testrunner.sh
 
-SAFE_XMLTESTS=$(srcdir)/testLeaksBig.xml $(srcdir)/hexwkb.xml $(srcdir)/test.xml $(srcdir)/linemerge.xml $(srcdir)/TestInteriorPoint.xml $(srcdir)/TestCentroid.xml $(srcdir)/TestIsValid.xml $(srcdir)/TestValid.xml $(srcdir)/TestValid2.xml $(srcdir)/TestValid2-big.xml $(srcdir)/robustness.xml $(srcdir)/stmlf-cases-20061020.xml $(srcdir)/TestRobustOverlayFixed.xml $(srcdir)/fme.xml $(srcdir)/TestBuffer.xml $(srcdir)/TestBufferExternal.xml $(srcdir)/TestBufferExternal2.xml $(srcdir)/heisenbugs.xml $(srcdir)/stmlf-cases-20070119.xml $(srcdir)/badguy3.xml $(srcdir)/hole_from_shell.xml $(srcdir)/hole_red.xml
+SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml $(srcdir)/tests/hexwkb.xml $(srcdir)/tests/test.xml $(srcdir)/tests/linemerge.xml $(srcdir)/tests/TestInteriorPoint.xml $(srcdir)/tests/TestCentroid.xml $(srcdir)/tests/TestIsValid.xml $(srcdir)/tests/TestValid.xml $(srcdir)/tests/TestValid2.xml $(srcdir)/tests/TestValid2-big.xml $(srcdir)/tests/robustness.xml $(srcdir)/tests/stmlf-cases-20061020.xml $(srcdir)/tests/TestRobustOverlayFixed.xml $(srcdir)/tests/fme.xml $(srcdir)/tests/TestBuffer.xml $(srcdir)/tests/TestBufferExternal.xml $(srcdir)/tests/TestBufferExternal2.xml $(srcdir)/tests/heisenbugs.xml $(srcdir)/tests/stmlf-cases-20070119.xml $(srcdir)/tests/badguy3.xml $(srcdir)/tests/hole_from_shell.xml $(srcdir)/tests/hole_red.xml
 
 XMLTESTS=$(SAFE_XMLTESTS) 
 
@@ -27,7 +27,7 @@ LIBS = $(top_builddir)/source/libgeos.la
 SimpleWKTTester_SOURCES = SimpleWKTTester.cpp
 SimpleWKTTester_LDADD = $(LIBS)
 
-XMLTester_SOURCES = XMLTester.cpp markup/MarkupSTL.cpp markup/MarkupSTL.h test.xml XMLTester.h
+XMLTester_SOURCES = XMLTester.cpp markup/MarkupSTL.cpp markup/MarkupSTL.h XMLTester.h
 XMLTester_LDADD = $(LIBS)
 
 INCLUDES = -I$(top_srcdir)/source/headers
