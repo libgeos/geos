@@ -82,7 +82,7 @@ HCoordinate::intersection(const Coordinate &p1, const Coordinate &p2,
 
 	if ( (!FINITE(xInt)) || (!FINITE(yInt)) )
 	{
-		throw new NotRepresentableException();
+		throw NotRepresentableException();
 	}
 
 	ret = Coordinate(xInt, yInt);
@@ -208,7 +208,7 @@ HCoordinate::getX() const
 	//if (std::fabs(a) > std::numeric_limits<double>::max())
 	if ( !FINITE(a) )
 	{
-		throw  NotRepresentableException();
+		throw NotRepresentableException();
 	}
 	return a;
 }
