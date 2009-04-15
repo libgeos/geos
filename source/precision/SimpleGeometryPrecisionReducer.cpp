@@ -39,22 +39,33 @@ using namespace geos::geom::util;
 namespace geos {
 namespace precision { // geos.precision
 
-class PrecisionReducerCoordinateOperation: public geom::util::CoordinateOperation {
+class PrecisionReducerCoordinateOperation :
+		public geom::util::CoordinateOperation
+{
 using CoordinateOperation::edit;
 private:
+
 	SimpleGeometryPrecisionReducer *sgpr;
+
 public:
-	PrecisionReducerCoordinateOperation(SimpleGeometryPrecisionReducer *newSgpr);
-	CoordinateSequence* edit(const CoordinateSequence *coordinates, const Geometry *geom);
+
+	PrecisionReducerCoordinateOperation(
+		SimpleGeometryPrecisionReducer *newSgpr);
+
+	/// Ownership of returned CoordinateSequence to caller
+	CoordinateSequence* edit(const CoordinateSequence *coordinates,
+	                         const Geometry *geom);
 };
 
-PrecisionReducerCoordinateOperation::PrecisionReducerCoordinateOperation(SimpleGeometryPrecisionReducer *newSgpr)
+PrecisionReducerCoordinateOperation::PrecisionReducerCoordinateOperation(
+		SimpleGeometryPrecisionReducer *newSgpr)
 {
 	sgpr=newSgpr;
 }
 
 CoordinateSequence*
-PrecisionReducerCoordinateOperation::edit(const CoordinateSequence *cs, const Geometry *geom)
+PrecisionReducerCoordinateOperation::edit(const CoordinateSequence *cs,
+                                          const Geometry *geom)
 {
 	if (cs->getSize()==0) return NULL;
 
@@ -70,26 +81,35 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence *cs, const Ge
 		(*vc)[i] = coord;
 	}
 
-	CoordinateSequence *reducedCoords = geom->getFactory()->getCoordinateSequenceFactory()->create(vc);
+	// reducedCoords take ownership of 'vc'
+	CoordinateSequence *reducedCoords =
+		geom->getFactory()->getCoordinateSequenceFactory()->create(vc);
 
-	// remove repeated points, to simplify returned geometry as much as possible
+	// remove repeated points, to simplify returned geometry as
+	// much as possible.
+	// 
 	CoordinateSequence *noRepeatedCoords=CoordinateSequence::removeRepeatedPoints(reducedCoords);
 
 	/**
-	* Check to see if the removal of repeated points
-	* collapsed the coordinate List to an invalid length
-	* for the type of the parent geometry.
-	* It is not necessary to check for Point collapses, since the coordinate list can
-	* never collapse to less than one point.
-	* If the length is invalid, return the full-length coordinate array
-	* first computed, or null if collapses are being removed.
-	* (This may create an invalid geometry - the client must handle this.)
-	*/
+	 * Check to see if the removal of repeated points
+	 * collapsed the coordinate List to an invalid length
+	 * for the type of the parent geometry.
+	 * It is not necessary to check for Point collapses,
+	 * since the coordinate list can
+	 * never collapse to less than one point.
+	 * If the length is invalid, return the full-length coordinate array
+	 * first computed, or null if collapses are being removed.
+	 * (This may create an invalid geometry - the client must handle this.)
+	 */
 	unsigned int minLength = 0;
 	if (typeid(*geom)==typeid(LineString)) minLength = 2;
 	if (typeid(*geom)==typeid(LinearRing)) minLength = 4;
 	CoordinateSequence *collapsedCoords = reducedCoords;
-	if (sgpr->getRemoveCollapsed()) collapsedCoords=NULL;
+	if (sgpr->getRemoveCollapsed())
+	{
+		delete reducedCoords; reducedCoords=0;
+		collapsedCoords=0;
+	}
 	// return null or orginal length coordinate array
 	if (noRepeatedCoords->getSize()<minLength) {
 		delete noRepeatedCoords;

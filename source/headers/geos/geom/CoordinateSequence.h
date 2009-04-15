@@ -217,6 +217,8 @@ public:
 	///
 	/// Equality test is 2D based
 	///
+	/// Ownership of returned object goes to the caller.
+	///
 	static CoordinateSequence* removeRepeatedPoints(
 			const CoordinateSequence *cl);
 

@@ -43,7 +43,7 @@ class CoordinateOperation: public GeometryEditorOperation {
 public:
 
 	/**
-	 * Return a newly created geometry 
+	 * Return a newly created geometry, ownership to caller
 	 */
 	virtual Geometry* edit(const Geometry *geometry,
 			const GeometryFactory *factory);
