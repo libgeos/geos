@@ -44,13 +44,13 @@ IndexedNestedRingTester::isNonNested()
 	for (size_t i=0, n=rings.size(); i<n; ++i)
 	{
 		const geom::LinearRing* innerRing = rings[i];
-		const geom::CoordinateSequence *innerRingPts=innerRing->getCoordinates();
+		const geom::CoordinateSequence *innerRingPts=innerRing->getCoordinatesRO();
 		std::vector<void*> results;
 		index->query(innerRing->getEnvelopeInternal(), results);
 		for (size_t j=0, jn=results.size(); j<jn; ++j)
 		{
-			geom::LinearRing* searchRing = static_cast<geom::LinearRing*>(results[j]);
-			geom::CoordinateSequence *searchRingPts=searchRing->getCoordinates();
+			const geom::LinearRing* searchRing = static_cast<const geom::LinearRing*>(results[j]);
+			const geom::CoordinateSequence *searchRingPts=searchRing->getCoordinatesRO();
 
 			if (innerRing==searchRing)
 				continue;
