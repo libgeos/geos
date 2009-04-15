@@ -103,6 +103,8 @@ protected:
 	 *  --+--
 	 *  0 | 1
 	 * </pre>
+	 *
+	 * Nodes are owned by this class 
 	 */
 	Node* subnode[4];
 
