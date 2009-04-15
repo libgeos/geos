@@ -13,11 +13,11 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/distance/EuclideanDistanceToPoint.java 1.1 (JTS-1.9)
+ * Last port: algorithm/distance/DistanceToPoint.java 1.1 (JTS-1.9)
  *
  **********************************************************************/
 
-#include <geos/algorithm/distance/EuclideanDistanceToPoint.h>
+#include <geos/algorithm/distance/DistanceToPoint.h>
 #include <geos/algorithm/distance/PointPairDistance.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -36,12 +36,12 @@ namespace algorithm { // geos.algorithm
 namespace distance { // geos.algorithm.distance
 
 /* static */
-LineSegment EuclideanDistanceToPoint::tempSegment;
+LineSegment DistanceToPoint::tempSegment;
 
 
 /* public static */
 void
-EuclideanDistanceToPoint::computeDistance(const geom::Geometry& geom,
+DistanceToPoint::computeDistance(const geom::Geometry& geom,
                                           const geom::Coordinate& pt,
                                           PointPairDistance& ptDist)
 {
@@ -70,7 +70,7 @@ EuclideanDistanceToPoint::computeDistance(const geom::Geometry& geom,
 
 /* public static */
 void
-EuclideanDistanceToPoint::computeDistance(const geom::LineString& line,
+DistanceToPoint::computeDistance(const geom::LineString& line,
                                           const geom::Coordinate& pt,
                                           PointPairDistance& ptDist)
 {
@@ -90,7 +90,7 @@ EuclideanDistanceToPoint::computeDistance(const geom::LineString& line,
 
 /* public static */
 void
-EuclideanDistanceToPoint::computeDistance(const geom::LineSegment& segment,
+DistanceToPoint::computeDistance(const geom::LineSegment& segment,
                                           const geom::Coordinate& pt,
                                           PointPairDistance& ptDist)
 {
@@ -101,7 +101,7 @@ EuclideanDistanceToPoint::computeDistance(const geom::LineSegment& segment,
 
 /* public static */
 void
-EuclideanDistanceToPoint::computeDistance(const geom::Polygon& poly,
+DistanceToPoint::computeDistance(const geom::Polygon& poly,
                                           const geom::Coordinate& pt,
                                           PointPairDistance& ptDist)
 {

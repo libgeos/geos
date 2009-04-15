@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/distance/DiscreteHausdorffDistance.java 1.4 (JTS-1.9)
+ * Last port: algorithm/distance/DiscreteHausdorffDistance.java 1.5 (JTS-1.9)
  *
  **********************************************************************/
 
@@ -57,7 +57,7 @@ DiscreteHausdorffDistance::MaxDensifiedByFractionDistanceFilter::filter_ro(
       double y = p0.y + i*dely;
       Coordinate pt(x, y);
       minPtDist.initialize();
-      EuclideanDistanceToPoint::computeDistance(geom, pt, minPtDist);
+      DistanceToPoint::computeDistance(geom, pt, minPtDist);
       maxPtDist.setMaximum(minPtDist);
     }
 

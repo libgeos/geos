@@ -13,12 +13,12 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/distance/EuclideanDistanceToPoint.java 1.1 (JTS-1.9)
+ * Last port: algorithm/distance/DistanceToPoint.java 1.1 (JTS-1.9)
  *
  **********************************************************************/
 
-#ifndef GEOS_ALGORITHM_DISTANCE_EUCLIDEANDISTANCETOPOINT_H
-#define GEOS_ALGORITHM_DISTANCE_EUCLIDEANDISTANCETOPOINT_H
+#ifndef GEOS_ALGORITHM_DISTANCE_DISTANCETOPOINT_H
+#define GEOS_ALGORITHM_DISTANCE_DISTANCETOPOINT_H
 
 #include <geos/geom/LineSegment.h> // for composition
 
@@ -45,11 +45,11 @@ namespace distance { // geos::algorithm::distance
  *
  * Also computes two points which are separated by the distance.
  */
-class EuclideanDistanceToPoint
+class DistanceToPoint
 {
 public:
 
-	EuclideanDistanceToPoint() {}
+	DistanceToPoint() {}
 
 	static void computeDistance(const geom::Geometry& geom,
 			            const geom::Coordinate& pt,
@@ -78,7 +78,7 @@ private:
 } // geos::algorithm
 } // geos
 
-#endif // GEOS_ALGORITHM_DISTANCE_EUCLIDEANDISTANCETOPOINT_H
+#endif // GEOS_ALGORITHM_DISTANCE_DISTANCETOPOINT_H
 
 /**********************************************************************
  * $Log$

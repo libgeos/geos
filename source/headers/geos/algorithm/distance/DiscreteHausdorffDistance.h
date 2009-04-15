@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/distance/DiscreteHausdorffDistance.java 1.4 (JTS-1.9)
+ * Last port: algorithm/distance/DiscreteHausdorffDistance.java 1.5 (JTS-1.9)
  *
  **********************************************************************/
 
@@ -21,7 +21,7 @@
 #define GEOS_ALGORITHM_DISTANCE_DISCRETEHAUSDORFFDISTANCE_H
 
 #include <geos/algorithm/distance/PointPairDistance.h> // for composition
-#include <geos/algorithm/distance/EuclideanDistanceToPoint.h> // for composition
+#include <geos/algorithm/distance/DistanceToPoint.h> // for composition
 #include <geos/util/IllegalArgumentException.h> // for inlines
 #include <geos/geom/Geometry.h> // for inlines
 #include <geos/util/math.h> // for inlines
@@ -157,7 +157,7 @@ public:
 		void filter_ro(const geom::Coordinate* pt)
 		{
 			minPtDist.initialize();
-			EuclideanDistanceToPoint::computeDistance(geom, *pt,
+			DistanceToPoint::computeDistance(geom, *pt,
 			                                         minPtDist);
 			maxPtDist.setMaximum(minPtDist);
 		}
@@ -170,7 +170,7 @@ public:
 	private:
 		PointPairDistance maxPtDist;
 		PointPairDistance minPtDist;
-		EuclideanDistanceToPoint euclideanDist;
+		DistanceToPoint euclideanDist;
 		const geom::Geometry& geom;
 	};
 
