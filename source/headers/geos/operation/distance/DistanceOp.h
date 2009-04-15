@@ -73,7 +73,7 @@ public:
 	 *
 	 * @param g0 a {@link Geometry}
 	 * @param g1 another {@link Geometry}
-	 * @return the closest points in the geometries
+	 * @return the closest points in the geometries, ownership to caller
 	 */
 	static geom::CoordinateSequence* closestPoints(geom::Geometry *g0, geom::Geometry *g1);
 

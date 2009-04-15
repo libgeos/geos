@@ -62,8 +62,9 @@ namespace tut
 
 		// TODO: test closestPoints() and
 		//       closestLocations()
-        geos::geom::CoordinateSequence* coords = dist.closestPoints();
-        ensure(0 != coords);
+        	geos::geom::CoordinateSequence* coords = dist.closestPoints();
+        	ensure(0 != coords);
+		delete coords;
 	}
 
 	template<>
