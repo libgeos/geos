@@ -22,13 +22,6 @@
 #include <geos/geom/CoordinateArraySequence.h> // for constructing the return
 #include <geos/algorithm/CGAlgorithms.h> // for use
 
-//#include <geos/operation/buffer/RightmostEdgeFinder.h>
-//#include <geos/geomgraph/DirectedEdge.h>
-//#include <geos/geomgraph/DirectedEdgeStar.h>
-//#include <geos/geomgraph/Position.h>
-//#include <geos/geomgraph/Node.h>
-//#include <geos/geomgraph/Edge.h>
-
 #include <memory>
 #include <cmath>
 #include <vector>
@@ -64,7 +57,7 @@ std::auto_ptr<geom::CoordinateSequence>
 BufferInputLineSimplifier::simplify(double nDistanceTol)
 {
 	distanceTol = fabs(nDistanceTol);
-	if (distanceTol < 0)
+	if (nDistanceTol < 0)
 		angleOrientation = CGAlgorithms::CLOCKWISE;
 
 	// rely on fact that boolean array is filled with false value
