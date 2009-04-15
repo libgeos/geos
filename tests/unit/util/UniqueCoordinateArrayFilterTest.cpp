@@ -8,6 +8,7 @@
 #include <geos/util/UniqueCoordinateArrayFilter.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Geometry.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/io/WKTReader.h>
@@ -57,7 +58,9 @@ namespace tut
 		GeometryPtr geo(reader_.read(wkt));
 		
 		ensure_equals( geo->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT );
-		ensure_equals( geo->getCoordinates()->getSize(), size5 );
+		std::auto_ptr<geos::geom::CoordinateSequence> cs;
+		cs.reset(geo->getCoordinates());
+		ensure_equals(cs->getSize(), size5 );
 		
 		// Create collection buffer for filtered coordinates
 		const Coordinate::ConstVect::size_type size0 = 0;
@@ -72,7 +75,8 @@ namespace tut
 		const Coordinate::ConstVect::size_type size3 = 3;
 		geo->apply_ro(&filter);
 		
-		ensure_equals( geo->getCoordinates()->getSize(), size5 );
+		cs.reset(geo->getCoordinates());
+		ensure_equals( cs->getSize(), size5 );
 		ensure_equals( coords.size(), size3 );
 		ensure_equals( coords.at(0)->x, 10 );
 		ensure_equals( coords.at(0)->y, 10 );
