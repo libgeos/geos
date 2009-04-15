@@ -84,7 +84,8 @@ Coordinate* Key::getCentre() {
  */
 void Key::computeKey(Envelope *itemEnv) {
 	level=computeQuadLevel(itemEnv);
-	env=new Envelope();
+	delete env;
+	env=new Envelope(); 
 	computeKey(level,itemEnv);
 	// MD - would be nice to have a non-iterative form of this algorithm
 	while (!env->contains(itemEnv)) {

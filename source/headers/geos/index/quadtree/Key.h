@@ -37,20 +37,37 @@ namespace quadtree { // geos::index::quadtree
  */
 class Key {
 public:
+
+	// Doesn't touch the Envelope, might as well be const
 	static int computeQuadLevel(geom::Envelope *env);
+
 	Key(geom::Envelope *itemEnv);
 	virtual ~Key();
+
+	/// Returned object ownership retained by this class
 	geom::Coordinate* getPoint();
+
 	int getLevel();
+
+	/// Returned object ownership retained by this class
 	geom::Envelope* getEnvelope();
+
+	/// Returns newly allocated object (ownership transferred)
 	geom::Coordinate* getCentre();
+
 	void computeKey(geom::Envelope *itemEnv);
 private:	
 	// the fields which make up the key
+
+	// Owned by this class
 	geom::Coordinate *pt;
+
 	int level;
+
 	// auxiliary data which is derived from the key for use in computation
+	// Owned by this class
 	geom::Envelope *env;
+
 	void computeKey(int level,geom::Envelope *itemEnv);
 };
 

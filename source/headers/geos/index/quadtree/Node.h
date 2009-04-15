@@ -46,6 +46,7 @@ class Node: public NodeBase {
 
 private:
 
+	/// Owned by this class
 	geom::Envelope *env;
 
 	geom::Coordinate centre;
@@ -81,6 +82,8 @@ public:
 
 	virtual ~Node() { delete env; }
 
+	/// Return Envelope associated with this node
+	/// ownership retained by this object
 	geom::Envelope* getEnvelope() { return env; }
 
 	/** \brief
