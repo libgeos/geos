@@ -57,7 +57,12 @@ HCoordinate::intersection(const Coordinate &p1, const Coordinate &p2,
 	     << " q2: " << q2 << endl;
 #endif
 
-#if 0 // TODO: fix this, results in a testcase failure!
+#if 0 // NOTE: unrolled computation is intentionally turned off
+      //       as it makes the algorithm less stable numerically
+      //       In particular the first case in TestBufferMitredJoin.xml
+      //       would fail with unrolled computation on and no input
+      //       simplification in operation/buffer/OffsetCurveBuilder.cpp
+
 	// unrolled computation
 
 	double px = p1.y - p2.y;
