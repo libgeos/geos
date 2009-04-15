@@ -222,6 +222,7 @@ EdgeRing::getEdges()
 /*protected*/
 void
 EdgeRing::computePoints(DirectedEdge *newStart)
+	// throw(const TopologyException &)
 {
 	startDe=newStart;
 	DirectedEdge *de=newStart;

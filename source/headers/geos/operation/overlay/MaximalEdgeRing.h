@@ -62,9 +62,9 @@ class MaximalEdgeRing: public geomgraph::EdgeRing {
 
 public:
 
-	// CGAlgorithms arg is obsoleted
 	MaximalEdgeRing(geomgraph::DirectedEdge *start,
 		const geom::GeometryFactory *geometryFactory);
+			// throw(const TopologyException &)
 
 	virtual ~MaximalEdgeRing();
 

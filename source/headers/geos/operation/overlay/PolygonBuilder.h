@@ -61,7 +61,8 @@ public:
 	 * The graph is assumed to contain one or more polygons,
 	 * possibly with holes.
 	 */
-	void add(geomgraph::PlanarGraph *graph); // throw(TopologyException *);
+	void add(geomgraph::PlanarGraph *graph);
+	    // throw(const TopologyException &)
 
 	/**
 	 * Add a set of edges and nodes, which form a graph.
@@ -70,7 +71,7 @@ public:
 	 */
 	void add(const std::vector<geomgraph::DirectedEdge*> *dirEdges,
 			const std::vector<geomgraph::Node*> *nodes);
-			// throw(TopologyException *);
+			// throw(const TopologyException &)
 
   	std::vector<geom::Geometry*>* getPolygons();
 
@@ -87,10 +88,14 @@ private:
 	std::vector<geomgraph::EdgeRing*> shellList;
 
 	/**
-	 * for all DirectedEdges in result, form them into MaximalEdgeRings
+	 * For all DirectedEdges in result, form them into MaximalEdgeRings
+	 *
+	 * Ownership of the returned vector *and* it's elements is
+	 * transferred to caller.
 	 */
 	std::vector<MaximalEdgeRing*>* buildMaximalEdgeRings(
 		const std::vector<geomgraph::DirectedEdge*> *dirEdges);
+			// throw(const TopologyException &)
 
 	std::vector<MaximalEdgeRing*>* buildMinimalEdgeRings(
 		std::vector<MaximalEdgeRing*> *maxEdgeRings,
@@ -148,6 +153,7 @@ private:
 	 */
 	void placeFreeHoles(std::vector<geomgraph::EdgeRing*>& newShellList,
 		std::vector<geomgraph::EdgeRing*>& freeHoleList);
+		// throw(const TopologyException&)
 
 	/** \brief
 	 * Find the innermost enclosing shell geomgraph::EdgeRing containing the

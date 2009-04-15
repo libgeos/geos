@@ -144,6 +144,7 @@ protected:
 
 	const geom::GeometryFactory *geometryFactory;
 
+	/// throw(const TopologyException &)
 	void computePoints(DirectedEdge *newStart);
 
 	void mergeLabel(Label& deLabel);

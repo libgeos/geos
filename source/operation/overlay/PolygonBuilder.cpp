@@ -30,6 +30,7 @@
 #include <geos/geom/Polygon.h>
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/util/TopologyException.h>
+#include <geos/util/GEOSException.h>
 
 #include <vector>
 #include <cassert>
@@ -144,10 +145,11 @@ PolygonBuilder::add(const vector<DirectedEdge*> *dirEdges,
 #endif
 
 	vector<EdgeRing*> freeHoleList;
-	vector<MaximalEdgeRing*> *edgeRings=
-		buildMinimalEdgeRings(maxEdgeRings,&shellList,&freeHoleList);
+	vector<MaximalEdgeRing*> *edgeRings;
+	edgeRings= buildMinimalEdgeRings(maxEdgeRings,&shellList,&freeHoleList);
 
 	sortShellsAndHoles(edgeRings,&shellList,&freeHoleList);
+
 	placeFreeHoles(shellList, freeHoleList);
 	delete maxEdgeRings;
 	delete edgeRings;
@@ -166,6 +168,7 @@ PolygonBuilder::getPolygons()
 /*private*/
 vector<MaximalEdgeRing*> *
 PolygonBuilder::buildMaximalEdgeRings(const vector<DirectedEdge*> *dirEdges)
+	// throw(const TopologyException &)
 {
 #if GEOS_DEBUG
 	cerr<<"PolygonBuilder::buildMaximalEdgeRings got "<<dirEdges->size()<<" dirEdges"<<endl;
@@ -180,10 +183,24 @@ PolygonBuilder::buildMaximalEdgeRings(const vector<DirectedEdge*> *dirEdges)
 	     << " inResult:" << de->isInResult() << endl
 	     << " isArea:" << de->getLabel()->isArea() << endl;
 #endif
-		if (de->isInResult() && de->getLabel()->isArea()) {
+		if (de->isInResult() && de->getLabel()->isArea())
+		{
 			// if this edge has not yet been processed
-			if (de->getEdgeRing()==NULL) {
-				MaximalEdgeRing *er=new MaximalEdgeRing(de,geometryFactory);
+			if (de->getEdgeRing() == NULL)
+			{
+				MaximalEdgeRing *er;
+	try
+	{ // MaximalEdgeRing constructor may throw
+				er=new MaximalEdgeRing(de,geometryFactory);
+	}
+	catch (util::GEOSException& e)
+	{ // cleanup if that happens (see stmlf-cases-20061020.xml)
+		for(size_t i=0, n=maxEdgeRings->size(); i<n; i++)
+			delete (*maxEdgeRings)[i];
+		delete maxEdgeRings;
+		//cerr << "Exception! " << e.what() << endl;
+		throw;
+	}
 				maxEdgeRings->push_back(er);
 				er->setInResult();
 				//System.out.println("max node degree=" + er.getMaxDegree());
