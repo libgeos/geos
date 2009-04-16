@@ -34,6 +34,7 @@ geos_unit_SOURCES = geos_unit.cpp \
 	algorithm/CGAlgorithms/computeOrientationTest.cpp \
 	algorithm/ConvexHullTest.cpp \
 	algorithm/PointLocatorTest.cpp \
+	algorithm/RobustLineIntersectionTest.cpp \
 	geom/CoordinateArraySequenceFactoryTest.cpp \
 	geom/CoordinateArraySequenceTest.cpp \
 	geom/CoordinateListTest.cpp \
