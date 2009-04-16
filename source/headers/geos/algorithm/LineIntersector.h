@@ -125,9 +125,9 @@ public:
 	static bool hasIntersection(const geom::Coordinate& p,const geom::Coordinate& p1,const geom::Coordinate& p2);
 
 	enum {
-		DONT_INTERSECT,
-		DO_INTERSECT,
-		COLLINEAR
+		DONT_INTERSECT=0,
+		DO_INTERSECT=1,
+		COLLINEAR=2
 	};
 
 	/// Computes the intersection of the lines p1-p2 and p3-p4
