@@ -30,23 +30,8 @@ namespace tut
 	// Test Group
 	//
 
-	struct test_lineintersector_data {};
-
-	typedef test_group<test_lineintersector_data> group;
-	typedef group::object object;
-
-	group test_lineintersector_group(
-		"geos::algorithm::RobustLineIntersection");
-
-	// These are static to avoid namespace pollution
-	// The struct test_*_data above is probably there
-	// for the same reason...
-	//
-	static PrecisionModel pm;
-	static GeometryFactory gf(&pm);
-        static geos::io::WKTReader reader(&gf);
-
-	typedef std::auto_ptr<Geometry> GeomPtr;
+	struct test_robustlineintersection_data
+	{
 	typedef std::auto_ptr<Geometry> GeomPtr;
 
 	bool equals(const Coordinate& p0, const Coordinate& p1,
@@ -191,7 +176,25 @@ namespace tut
 		                    intPt, distanceTolerance);
         }
 
+	test_robustlineintersection_data()
+		:
+		pm(),
+		gf(&pm),
+		reader(&gf)
+	{
+	}
 
+	PrecisionModel pm;
+	GeometryFactory gf;
+        geos::io::WKTReader reader;
+
+	};
+
+	typedef test_group<test_robustlineintersection_data> group;
+	typedef group::object object;
+
+	group test_robustlineintersection_group(
+		"geos::algorithm::RobustLineIntersection");
 
 
 	//
