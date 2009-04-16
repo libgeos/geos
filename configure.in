@@ -116,8 +116,15 @@ AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -pedantic], [dummy], [-pedanti
 AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -Wall], [dummy], [-Wall], [], [WARNFLAGS="$WARNFLAGS -Wall"], [])
 AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -ansi], [dummy], [-ansi], [], [WARNFLAGS="$WARNFLAGS -ansi"], [])
 AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -Wno-long-long], [dummy], [-Wno-long-long], [], [WARNFLAGS="$WARNFLAGS -Wno-long-long"], [])
-CXXFLAGS="${CXXFLAGS} ${WARNFLAGS}"
-CFLAGS="${CFLAGS} ${WARNFLAGS}"
+
+# To make numerical computation more stable, we use --ffloat-store
+NUMERICFLAGS=""
+AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -ffloat-store], [dummy], [-ffloat-store], [], [NUMERICFLAGS="$NUMERICFLAGS -ffloat-store"], [])
+
+DEFAULTFLAGS="${WARNFLAGS} ${NUMERICFLAGS}"
+
+CXXFLAGS="${CXXFLAGS} ${DEFAULTFLAGS}"
+CFLAGS="${CFLAGS} ${DEFAULTFLAGS}"
 
 dnl --------------------------------------------------------------------
 dnl - Look for a 64bit integer (do after CFLAGS is set)
