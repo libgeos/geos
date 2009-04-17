@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/RobustLineIntersector.java rev. 1.37 (JTS-1.9)
+ * Last port: algorithm/RobustLineIntersector.java rev. 1.38 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -309,11 +309,11 @@ LineIntersector::computeIntersection(const Coordinate& p,const Coordinate& p1,co
 					intPt[0].z = (intPt[0].z+z)/2;
 			}
 #endif // COMPUTE_Z
-			result=DO_INTERSECT;
+			result=POINT_INTERSECTION;
 			return;
 		}
 	}
-	result = DONT_INTERSECT;
+	result = NO_INTERSECTION;
 }
 
 /* public static */
@@ -344,9 +344,9 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 	if (!Envelope::intersects(p1,p2,q1,q2))
 	{
 #if GEOS_DEBUG
-		cerr<<" DONT_INTERSECT"<<endl;
+		cerr<<" NO_INTERSECTION"<<endl;
 #endif
-		return DONT_INTERSECT;
+		return NO_INTERSECTION;
 	}
 
 	// for each endpoint, compute which side of the other segment it lies
@@ -358,9 +358,9 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 	if ((Pq1>0 && Pq2>0) || (Pq1<0 && Pq2<0)) 
 	{
 #if GEOS_DEBUG
-		cerr<<" DONT_INTERSECT"<<endl;
+		cerr<<" NO_INTERSECTION"<<endl;
 #endif
-		return DONT_INTERSECT;
+		return NO_INTERSECTION;
 	}
 
 	int Qp1=CGAlgorithms::orientationIndex(q1,q2,p1);
@@ -368,9 +368,9 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 
 	if ((Qp1>0 && Qp2>0)||(Qp1<0 && Qp2<0)) {
 #if GEOS_DEBUG
-		cerr<<" DONT_INTERSECT"<<endl;
+		cerr<<" NO_INTERSECTION"<<endl;
 #endif
-		return DONT_INTERSECT;
+		return NO_INTERSECTION;
 	}
 
 	bool collinear=Pq1==0 && Pq2==0 && Qp1==0 && Qp2==0;
@@ -495,9 +495,9 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 		intersection(p1, p2, q1, q2, intPt[0]);
 	}
 #if GEOS_DEBUG
-	cerr<<" DO_INTERSECT; intPt[0]:"<<intPt[0].toString()<<endl;
+	cerr<<" POINT_INTERSECTION; intPt[0]:"<<intPt[0].toString()<<endl;
 #endif // GEOS_DEBUG
-	return DO_INTERSECT;
+	return POINT_INTERSECTION;
 }
 
 /*private*/
@@ -549,7 +549,7 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		cerr<<" intPt[0]: "<<intPt[0].toString()<<endl;
 		cerr<<" intPt[1]: "<<intPt[1].toString()<<endl;
 #endif
-		return COLLINEAR;
+		return COLLINEAR_INTERSECTION;
 	}
 	if (q1p1q2 && q1p2q2) {
 #if GEOS_DEBUG
@@ -573,7 +573,7 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		if (!ISNAN(p2.z)) { ztot+=p2.z; hits++; }
 		if ( hits ) intPt[1].z = ztot/hits;
 #endif
-		return COLLINEAR;
+		return COLLINEAR_INTERSECTION;
 	}
 	if (p1q1p2 && q1p1q2) {
 #if GEOS_DEBUG
@@ -601,7 +601,7 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		cerr<<" intPt[0]: "<<intPt[0].toString()<<endl;
 		cerr<<" intPt[1]: "<<intPt[1].toString()<<endl;
 #endif
-		return (q1==p1) && !p1q2p2 && !q1p2q2 ? DO_INTERSECT : COLLINEAR;
+		return (q1==p1) && !p1q2p2 && !q1p2q2 ? POINT_INTERSECTION : COLLINEAR_INTERSECTION;
 	}
 	if (p1q1p2 && q1p2q2) {
 #if GEOS_DEBUG
@@ -629,7 +629,7 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		cerr<<" intPt[0]: "<<intPt[0].toString()<<endl;
 		cerr<<" intPt[1]: "<<intPt[1].toString()<<endl;
 #endif
-		return (q1==p2) && !p1q2p2 && !q1p1q2 ? DO_INTERSECT : COLLINEAR;
+		return (q1==p2) && !p1q2p2 && !q1p1q2 ? POINT_INTERSECTION : COLLINEAR_INTERSECTION;
 	}
 	if (p1q2p2 && q1p1q2) {
 #if GEOS_DEBUG
@@ -657,7 +657,7 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		cerr<<" intPt[0]: "<<intPt[0].toString()<<endl;
 		cerr<<" intPt[1]: "<<intPt[1].toString()<<endl;
 #endif
-		return (q2==p1) && !p1q1p2 && !q1p2q2 ? DO_INTERSECT : COLLINEAR;
+		return (q2==p1) && !p1q1p2 && !q1p2q2 ? POINT_INTERSECTION : COLLINEAR_INTERSECTION;
 	}
 	if (p1q2p2 && q1p2q2) {
 #if GEOS_DEBUG
@@ -685,9 +685,9 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		cerr<<" intPt[0]: "<<intPt[0].toString()<<endl;
 		cerr<<" intPt[1]: "<<intPt[1].toString()<<endl;
 #endif
-		return (q2==p2) && !p1q1p2 && !q1p1q2 ? DO_INTERSECT : COLLINEAR;
+		return (q2==p2) && !p1q1p2 && !q1p1q2 ? POINT_INTERSECTION : COLLINEAR_INTERSECTION;
 	}
-	return DONT_INTERSECT;
+	return NO_INTERSECTION;
 }
 
 /*private*/

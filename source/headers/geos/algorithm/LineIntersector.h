@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/RobustLineIntersector.java rev. 1.37 (JTS-1.9)
+ * Last port: algorithm/RobustLineIntersector.java rev. 1.38 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -124,10 +124,22 @@ public:
 	/// Same as above but doen's compute intersection point. Faster.
 	static bool hasIntersection(const geom::Coordinate& p,const geom::Coordinate& p1,const geom::Coordinate& p2);
 
+	// These are deprecated, due to ambiguous naming
 	enum {
 		DONT_INTERSECT=0,
 		DO_INTERSECT=1,
 		COLLINEAR=2
+	};
+
+	enum {
+		/// Indicates that line segments do not intersect
+		NO_INTERSECTION=0,
+
+		/// Indicates that line segments intersect in a single point
+		POINT_INTERSECTION=1,
+
+		/// Indicates that line segments intersect in a line segment
+		COLLINEAR_INTERSECTION=2
 	};
 
 	/// Computes the intersection of the lines p1-p2 and p3-p4
@@ -141,7 +153,7 @@ public:
 	 *
 	 * @return true if the input geometries intersect
 	 */
-	bool hasIntersection() const { return result!=DONT_INTERSECT; }
+	bool hasIntersection() const { return result!=NO_INTERSECTION; }
 
 	/// Returns the number of intersection points found.
 	//
@@ -264,7 +276,7 @@ private:
 	//Coordinate &pa;
 	//Coordinate &pb;
 
-	bool isCollinear() const { return result==COLLINEAR; }
+	bool isCollinear() const { return result==COLLINEAR_INTERSECTION; }
 
 	int computeIntersect(const geom::Coordinate& p1,const geom::Coordinate& p2,const geom::Coordinate& q1,const geom::Coordinate& q2);
 

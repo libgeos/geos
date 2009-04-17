@@ -66,7 +66,7 @@ namespace tut
     Coordinate x(15, 15);
     i.computeIntersection(p1, p2, q1, q2);
 
-    ensure_equals(i.getIntersectionNum(), (int)LineIntersector::DO_INTERSECT);
+    ensure_equals(i.getIntersectionNum(), (int)LineIntersector::POINT_INTERSECTION);
     ensure_equals(i.getIntersectionNum(), 1);
     ensure_equals(i.getIntersection(0), x);
     ensure("isProper", i.isProper());
@@ -85,7 +85,7 @@ namespace tut
     Coordinate q2(30, 10);
     i.computeIntersection(p1, p2, q1, q2);
 
-    ensure_equals(i.getIntersectionNum(), (int)LineIntersector::DONT_INTERSECT);
+    ensure_equals(i.getIntersectionNum(), (int)LineIntersector::NO_INTERSECTION);
     ensure_equals(i.getIntersectionNum(), 0);
     ensure("!isProper", !i.isProper());
     ensure("!hasIntersection", !i.hasIntersection());
@@ -103,7 +103,7 @@ namespace tut
     Coordinate q2(30, 10);
     i.computeIntersection(p1, p2, q1, q2);
 
-    ensure_equals(i.getIntersectionNum(), (int)LineIntersector::DO_INTERSECT);
+    ensure_equals(i.getIntersectionNum(), (int)LineIntersector::POINT_INTERSECTION);
     ensure_equals(i.getIntersectionNum(), 1);
     ensure("!isProper", !i.isProper());
     ensure("hasIntersection", i.hasIntersection());
@@ -121,7 +121,7 @@ namespace tut
     Coordinate q2(30, 10);
     i.computeIntersection(p1, p2, q1, q2);
 
-    ensure_equals(i.getIntersectionNum(), (int)LineIntersector::COLLINEAR);
+    ensure_equals(i.getIntersectionNum(), (int)LineIntersector::COLLINEAR_INTERSECTION);
     ensure_equals(i.getIntersectionNum(), 2);
     ensure("!isProper", !i.isProper());
     ensure("hasIntersection", i.hasIntersection());
@@ -139,7 +139,7 @@ namespace tut
     Coordinate q2(30, 10);
     i.computeIntersection(p1, p2, q1, q2);
 
-    ensure_equals(i.getIntersectionNum(), (int)LineIntersector::COLLINEAR);
+    ensure_equals(i.getIntersectionNum(), (int)LineIntersector::COLLINEAR_INTERSECTION);
     ensure_equals(i.getIntersectionNum(), 2);
     ensure("!isProper", !i.isProper());
     ensure("hasIntersection", i.hasIntersection());
