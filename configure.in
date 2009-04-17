@@ -108,6 +108,11 @@ dnl --------------------------------------------------------------------
 dnl - Append default C++ and C flags 
 dnl --------------------------------------------------------------------
 
+echo "NOTE ---- CXX=${CXX}"
+echo "NOTE ---- compiler=${compiler}"
+echo "NOTE ---- ac_compile=${ac_compiler}"
+echo "NOTE ---- lt_simple_compile_test_code=${lt_simple_compile_test_code}"
+
 # Set default CXXFLAGS and CFLAGS if not set by the user
 # -pedantic: ISO does not support long long
 # we add -Wno-long-long to avoid those messages
