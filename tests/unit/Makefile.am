@@ -33,6 +33,7 @@ geos_unit_SOURCES = geos_unit.cpp \
 	algorithm/CGAlgorithms/isPointInRingTest.cpp \
 	algorithm/CGAlgorithms/computeOrientationTest.cpp \
 	algorithm/ConvexHullTest.cpp \
+	algorithm/distance/DiscreteHausdorffDistanceTest.cpp \
 	algorithm/PointLocatorTest.cpp \
 	algorithm/RobustLineIntersectionTest.cpp \
 	algorithm/RobustLineIntersectorTest.cpp \
