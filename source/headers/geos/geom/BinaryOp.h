@@ -108,7 +108,7 @@
 namespace geos {
 namespace geom { // geos::geom
 
-bool
+inline bool
 check_valid(const Geometry& g, const std::string& label)
 {
 	operation::valid::IsValidOp ivo(&g);

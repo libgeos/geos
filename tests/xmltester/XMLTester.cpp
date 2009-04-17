@@ -760,7 +760,7 @@ XMLTester::parseTest()
 				double areatol = expectedArea / 1e3;
 
 				GeomAutoPtr gDiff = BinaryOp(gRes.get(), gRealRes.get(),
-					overlayOp(OverlayOp::opDIFFERENCE));
+					overlayOp(OverlayOp::opSYMDIFFERENCE));
 
 				double areaDiff = gDiff->getArea();
 				if ( areaDiff > areatol )
@@ -858,7 +858,7 @@ XMLTester::parseTest()
 				double areatol = expectedArea / 1e3;
 
 				GeomAutoPtr gDiff = BinaryOp(gRes.get(), gRealRes.get(),
-					overlayOp(OverlayOp::opDIFFERENCE));
+					overlayOp(OverlayOp::opSYMDIFFERENCE));
 
 				double areaDiff = gDiff->getArea();
 				if ( areaDiff > areatol )

@@ -27,7 +27,7 @@ LIBS = $(top_builddir)/source/libgeos.la
 SimpleWKTTester_SOURCES = SimpleWKTTester.cpp
 SimpleWKTTester_LDADD = $(LIBS)
 
-XMLTester_SOURCES = XMLTester.cpp markup/MarkupSTL.cpp markup/MarkupSTL.h XMLTester.h
+XMLTester_SOURCES = XMLTester.cpp markup/MarkupSTL.cpp markup/MarkupSTL.h XMLTester.h BufferResultMatcher.h BufferResultMatcher.cpp
 XMLTester_LDADD = $(LIBS)
 
 INCLUDES = -I$(top_srcdir)/source/headers
