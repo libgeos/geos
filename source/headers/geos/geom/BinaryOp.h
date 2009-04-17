@@ -46,6 +46,9 @@
  *
  **********************************************************************/
 
+#ifndef GEOS_GEOM_BINARYOP_H
+#define GEOS_GEOM_BINARYOP_H
+
 #include <geos/geom/Geometry.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/precision/CommonBitsRemover.h>
@@ -399,3 +402,5 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 
 } // namespace geos::geom
 } // namespace geos
+
+#endif // GEOS_GEOM_BINARYOP_H
