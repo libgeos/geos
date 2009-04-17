@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/distance/DiscreteHausdorffDistance.java 1.5 (JTS-1.9)
+ * Last port: algorithm/distance/DiscreteHausdorffDistance.java 1.5 (JTS-1.10)
  *
  **********************************************************************/
 

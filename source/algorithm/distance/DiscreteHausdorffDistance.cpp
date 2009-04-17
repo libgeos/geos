@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/distance/DiscreteHausdorffDistance.java 1.5 (JTS-1.9)
+ * Last port: algorithm/distance/DiscreteHausdorffDistance.java 1.5 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -63,6 +63,25 @@ DiscreteHausdorffDistance::MaxDensifiedByFractionDistanceFilter::filter_ro(
 
 }
 
+/* static public */
+double
+DiscreteHausdorffDistance::distance(const geom::Geometry& g0,
+	                       const geom::Geometry& g1)
+{
+	DiscreteHausdorffDistance dist(g0, g1);
+	return dist.distance();
+}
+
+/* static public */
+double
+DiscreteHausdorffDistance::distance(const geom::Geometry& g0,
+	                       const geom::Geometry& g1,
+                               double densifyFrac)
+{
+	DiscreteHausdorffDistance dist(g0, g1);
+	dist.setDensifyFraction(densifyFrac);
+	return dist.distance();
+}
 
 } // namespace geos.algorithm.distance
 } // namespace geos.algorithm
