@@ -112,14 +112,14 @@ dnl --------------------------------------------------------------------
 # -pedantic: ISO does not support long long
 # we add -Wno-long-long to avoid those messages
 WARNFLAGS=""
-AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -pedantic], [dummy], [-pedantic], [], [WARNFLAGS="$WARNFLAGS -pedantic"], [])
-AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -Wall], [dummy], [-Wall], [], [WARNFLAGS="$WARNFLAGS -Wall"], [])
-AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -ansi], [dummy], [-ansi], [], [WARNFLAGS="$WARNFLAGS -ansi"], [])
-AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -Wno-long-long], [dummy], [-Wno-long-long], [], [WARNFLAGS="$WARNFLAGS -Wno-long-long"], [])
+AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -pedantic], [dummy_pedantic], [-pedantic], [], [WARNFLAGS="$WARNFLAGS -pedantic"], [])
+AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -Wall], [dummy_wall], [-Wall], [], [WARNFLAGS="$WARNFLAGS -Wall"], [])
+AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -ansi], [dummy_ansi], [-ansi], [], [WARNFLAGS="$WARNFLAGS -ansi"], [])
+AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -Wno-long-long], [dummy_no_long_long], [-Wno-long-long], [], [WARNFLAGS="$WARNFLAGS -Wno-long-long"], [])
 
 # To make numerical computation more stable, we use --ffloat-store
 NUMERICFLAGS=""
-AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -ffloat-store], [dummy], [-ffloat-store], [], [NUMERICFLAGS="$NUMERICFLAGS -ffloat-store"], [])
+AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -ffloat-store], [dummy_ffloat_store], [-ffloat-store], [], [NUMERICFLAGS="$NUMERICFLAGS -ffloat-store"], [])
 
 DEFAULTFLAGS="${WARNFLAGS} ${NUMERICFLAGS}"
 
