@@ -46,6 +46,7 @@
 #include <geos/unload.h>
 #include <geos/opValid.h>
 #include "XMLTester.h"
+#include "BufferResultMatcher.h"
 
 #include <cassert>
 #include <cctype>
@@ -724,6 +725,17 @@ XMLTester::parseTest()
 			success=1;
 			do
 			{
+#if USE_BUFFER_RESULT_MATCHER
+				geos::xmltester::BufferResultMatcher matcher;
+				if ( ! matcher.isBufferResultMatch(*gRealRes,
+				                                   *gRes,
+					                           dist) )
+				{
+					success=0;
+					break;
+				}
+#endif
+
 				// TODO: Is a buffer always an area ?
 				// 	 we might check geometry type..
 
