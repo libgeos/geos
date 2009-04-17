@@ -83,6 +83,26 @@ DiscreteHausdorffDistance::distance(const geom::Geometry& g0,
 	return dist.distance();
 }
 
+/* private */
+void
+DiscreteHausdorffDistance::computeOrientedDistance(
+		const geom::Geometry& discreteGeom,
+		const geom::Geometry& geom,
+		PointPairDistance& ptDist)
+{
+	MaxPointDistanceFilter distFilter(geom);
+	discreteGeom.apply_ro(&distFilter);
+	ptDist.setMaximum(distFilter.getMaxPointDistance());
+
+	if (densifyFrac > 0)
+	{
+		MaxDensifiedByFractionDistanceFilter fracFilter(geom,
+							  densifyFrac);
+		discreteGeom.apply_ro(fracFilter);
+		ptDist.setMaximum(fracFilter.getMaxPointDistance());
+	}
+}
+
 } // namespace geos.algorithm.distance
 } // namespace geos.algorithm
 } // namespace geos
