@@ -54,7 +54,7 @@ namespace tut
 
 		double distance = DiscreteHausdorffDistance::distance(*g1, *g2);
 		double diff = fabs(distance-expectedDistance);
-		std::cerr << "expectedDistance:" << expectedDistance << " actual distance:" << distance << std::endl;
+		//std::cerr << "expectedDistance:" << expectedDistance << " actual distance:" << distance << std::endl;
 		ensure( diff <= TOLERANCE );
 	}
 
@@ -67,7 +67,7 @@ namespace tut
 		double distance = DiscreteHausdorffDistance::distance(*g1,
 			*g2, densifyFactor);
 		double diff = fabs(distance-expectedDistance);
-		std::cerr << "expectedDistance:" << expectedDistance << " actual distance:" << distance << std::endl;
+		//std::cerr << "expectedDistance:" << expectedDistance << " actual distance:" << distance << std::endl;
 		ensure( diff <= TOLERANCE );
 	}
 
