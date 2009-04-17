@@ -137,7 +137,7 @@ private:
 	{
 		pt[0] = p0;
 		pt[1] = p1;
-		distance = distance;
+		distance = dist;
 		isNull = false;
 	}
 
