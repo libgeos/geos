@@ -725,19 +725,6 @@ XMLTester::parseTest()
 			success=1;
 			do
 			{
-#if USE_BUFFER_RESULT_MATCHER
-				geos::xmltester::BufferResultMatcher matcher;
-				if ( ! matcher.isBufferResultMatch(*gRealRes,
-				                                   *gRes,
-					                           dist) )
-				{
-					success=0;
-					break;
-				}
-#endif
-
-				// TODO: Is a buffer always an area ?
-				// 	 we might check geometry type..
 
 				if ( gRes->getGeometryTypeId() != gRealRes->getGeometryTypeId() )
 				{
@@ -750,12 +737,7 @@ XMLTester::parseTest()
 					break;
 				}
 
-				if ( gRes->isEmpty() && gRealRes->isEmpty() )
-				{
-					// Success !
-					break;
-				}
-
+				// Is a buffer always an area ?
 				if ( gRes->getDimension() != 2 )
 				{
 					std::cerr << "Don't know how to validate "
@@ -765,32 +747,15 @@ XMLTester::parseTest()
 						<< std::endl;
 				}
 				
-				double expectedArea = gRes->getArea();
 
-				/// Allow area difference being at most
-				/// 1/1000 of the area of the expected result.
-				double areatol = expectedArea / 1e3;
-
-				GeomAutoPtr gDiff = BinaryOp(gRes.get(), gRealRes.get(),
-					overlayOp(OverlayOp::opSYMDIFFERENCE));
-
-				double areaDiff = gDiff->getArea();
-				if ( areaDiff > areatol )
+				geos::xmltester::BufferResultMatcher matcher;
+				if ( ! matcher.isBufferResultMatch(*gRealRes,
+				                                   *gRes,
+					                           dist) )
 				{
-					std::cerr << "Area of difference between "
-						<< "obtained and expected: "
-						<< areaDiff << " - Tolerated diff: "
-						<< areatol << std::endl;
+std::cerr << "BufferResultMatcher FAILED" << std::endl;
 					success=0;
 					break;
-				}
-				else
-				{
-					std::cerr << "Area of difference between "
-						<< "obtained and expected: "
-						<< areaDiff << " - Tolerated diff: "
-						<< areatol << " (SUCCESS!)"
-						<< std::endl;
 				}
 
 			}
@@ -834,8 +799,6 @@ XMLTester::parseTest()
 			success=1;
 			do
 			{
-				// TODO: Is a buffer always an area ?
-				// 	 we might check geometry type..
 
 				if ( gRes->getGeometryTypeId() != gRealRes->getGeometryTypeId() )
 				{
@@ -848,12 +811,7 @@ XMLTester::parseTest()
 					break;
 				}
 
-				if ( gRes->isEmpty() && gRealRes->isEmpty() )
-				{
-					// Success !
-					break;
-				}
-
+				// Is a buffer always an area ?
 				if ( gRes->getDimension() != 2 )
 				{
 					std::cerr << "Don't know how to validate "
@@ -863,32 +821,15 @@ XMLTester::parseTest()
 						<< std::endl;
 				}
 				
-				double expectedArea = gRes->getArea();
 
-				/// Allow area difference being at most
-				/// 1/1000 of the area of the expected result.
-				double areatol = expectedArea / 1e3;
-
-				GeomAutoPtr gDiff = BinaryOp(gRes.get(), gRealRes.get(),
-					overlayOp(OverlayOp::opSYMDIFFERENCE));
-
-				double areaDiff = gDiff->getArea();
-				if ( areaDiff > areatol )
+				geos::xmltester::BufferResultMatcher matcher;
+				if ( ! matcher.isBufferResultMatch(*gRealRes,
+				                                   *gRes,
+					                           dist) )
 				{
-					std::cerr << "Area of difference between "
-						<< "obtained and expected: "
-						<< areaDiff << " - Tolerated diff: "
-						<< areatol << std::endl;
+std::cerr << "BufferResultMatcher FAILED" << std::endl;
 					success=0;
 					break;
-				}
-				else
-				{
-					std::cerr << "Area of difference between "
-						<< "obtained and expected: "
-						<< areaDiff << " - Tolerated diff: "
-						<< areatol << " (SUCCESS!)"
-						<< std::endl;
 				}
 
 			}
