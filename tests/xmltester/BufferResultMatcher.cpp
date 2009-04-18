@@ -109,9 +109,20 @@ BufferResultMatcher::isBoundaryHausdorffDistanceInTolerance(
 	GeomPtr expectedBdy ( expectedBuffer.getBoundary() );
 
 	DiscreteHausdorffDistance haus(*actualBdy, *expectedBdy);
-	haus.setDensifyFraction(0.25);
+
+	// JTS PORT NOTE:
+	// For buffer(0) we won't densify coordinates, to
+	// avoid subtle drifts (tested as possibly reaching
+	// up to 4e-10 distance from original geometry)
+	//
+	if ( distance ) {
+		haus.setDensifyFraction(0.25);
+	}
+
+
 	double maxDistanceFound = haus.orientedDistance();
 	double expectedDistanceTol = fabs(distance) / MAX_HAUSDORFF_DISTANCE_FACTOR;
+
 	if (maxDistanceFound > expectedDistanceTol)
 	{
 std::cerr << "maxDistanceFound: " << maxDistanceFound << " tolerated " << expectedDistanceTol << std::endl;
