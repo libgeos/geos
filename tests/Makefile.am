@@ -1,5 +1,6 @@
 SUBDIRS = \
 	bigtest		\
 	xmltester	\
-	unit
+	unit		\
+	perf
 
