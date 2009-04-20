@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: jtstest/testrunner/BufferResultMatcher.java rev rev 1.5 (JTS-1.10)
+ * Last port: jtstest/testrunner/BufferResultMatcher.java rev rev 1.6 (JTS-1.11)
  *
  **********************************************************************/
 
@@ -30,6 +30,7 @@ namespace geos {
 namespace xmltester {
 
 double BufferResultMatcher::MAX_RELATIVE_AREA_DIFFERENCE = 1.0E-3;
+double BufferResultMatcher::MIN_DISTANCE_TOLERANCE = 1.0e-8;
 double BufferResultMatcher::MAX_HAUSDORFF_DISTANCE_FACTOR = 100;
 
 bool
@@ -109,19 +110,15 @@ BufferResultMatcher::isBoundaryHausdorffDistanceInTolerance(
 	GeomPtr expectedBdy ( expectedBuffer.getBoundary() );
 
 	DiscreteHausdorffDistance haus(*actualBdy, *expectedBdy);
-
-	// JTS PORT NOTE:
-	// For buffer(0) we won't densify coordinates, to
-	// avoid subtle drifts (tested as possibly reaching
-	// up to 4e-10 distance from original geometry)
-	//
-	if ( distance ) {
-		haus.setDensifyFraction(0.25);
-	}
-
+	haus.setDensifyFraction(0.25);
 
 	double maxDistanceFound = haus.orientedDistance();
+
 	double expectedDistanceTol = fabs(distance) / MAX_HAUSDORFF_DISTANCE_FACTOR;
+	if (expectedDistanceTol < MIN_DISTANCE_TOLERANCE)
+	{
+		expectedDistanceTol = MIN_DISTANCE_TOLERANCE;
+	}
 
 	if (maxDistanceFound > expectedDistanceTol)
 	{

@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: jtstest/testrunner/BufferResultMatcher.java rev rev 1.5 (JTS-1.10)
+ * Last port: jtstest/testrunner/BufferResultMatcher.java rev rev 1.6 (JTS-1.11)
  *
  **********************************************************************/
 
@@ -42,6 +42,13 @@ private:
 	static double MAX_RELATIVE_AREA_DIFFERENCE;
 
 	static double MAX_HAUSDORFF_DISTANCE_FACTOR;
+
+	/*
+	 * The minimum distance tolerance which will be used.
+	 * This is required because densified vertices do no lie
+	 * precisely on their parent segment.
+	 */
+	static double MIN_DISTANCE_TOLERANCE;
 
 	bool isSymDiffAreaInTolerance(const geom::Geometry& actualBuffer,
 	                              const geom::Geometry& expectedBuffer);
