@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geomgraph/Quadrant.java rev. 1.8 (JTS-1.10)
+ *
  **********************************************************************/
 
 #include <sstream>
@@ -26,11 +30,10 @@ using namespace geos::geom;
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-/**
-* Returns the quadrant of a directed line segment (specified as x and y
-* displacements, which cannot both be 0).
-*/
-int Quadrant::quadrant(double dx, double dy) {
+/* public static */
+int
+Quadrant::quadrant(double dx, double dy)
+{
 	if (dx == 0.0 && dy == 0.0) {
 		ostringstream s;
 		s<<"Cannot compute the quadrant for point ";
@@ -39,34 +42,44 @@ int Quadrant::quadrant(double dx, double dy) {
 	}
 	if (dx >= 0) {
 		if (dy >= 0)
-			return 0;
+			return NE;
 		else
-			return 3;
+			return SE;
 	} else {
 		if (dy >= 0)
-			return 1;
+			return NW;
 		else
-		return 2;
+			return SW;
 	}
 }
 
-/**
-* Returns the quadrant of a directed line segment from p0 to p1.
-*/
-int Quadrant::quadrant(const Coordinate& p0, const Coordinate& p1) {
-	double dx=p1.x-p0.x;
-	double dy=p1.y-p0.y;
-	if (dx==0.0 && dy==0.0)
+/* public static */
+int
+Quadrant::quadrant(const Coordinate& p0, const Coordinate& p1)
+{
+	if (p1.x == p0.x && p1.y == p0.y)
 	{
 		throw util::IllegalArgumentException("Cannot compute the quadrant for two identical points " + p0.toString());
 	}
-	return quadrant(dx, dy);
+
+	if (p1.x >= p0.x) {
+		if (p1.y >= p0.y)
+			return NE;
+		else
+			return SE;
+	}
+	else {
+		if (p1.y >= p0.y)
+			return NW;
+		else
+			return SW;
+	}
 }
 
-/**
-* Returns true if the quadrants are 1 and 3, or 2 and 4
-*/
-bool Quadrant::isOpposite(int quad1, int quad2){
+/* public static */
+bool
+Quadrant::isOpposite(int quad1, int quad2)
+{
 	if (quad1==quad2) return false;
 	int diff=(quad1-quad2+4)%4;
 	// if quadrants are not adjacent, they are opposite
@@ -74,12 +87,12 @@ bool Quadrant::isOpposite(int quad1, int quad2){
 	return false;
 }
 
-/** 
-* Returns the right-hand quadrant of the halfplane defined by the two quadrants,
-* or -1 if the quadrants are opposite, or the quadrant if they are identical.
-*/
-int Quadrant::commonHalfPlane(int quad1, int quad2){
-	// if quadrants are the same they do not determine a unique common halfplane.
+/* public static */
+int
+Quadrant::commonHalfPlane(int quad1, int quad2)
+{
+	// if quadrants are the same they do not determine a unique
+	// common halfplane.
 	// Simply return one of the two possibilities
 	if (quad1==quad2) return quad1;
 	int diff=(quad1-quad2+4)%4;
@@ -90,26 +103,26 @@ int Quadrant::commonHalfPlane(int quad1, int quad2){
 	int max=(quad1>quad2)? quad1:quad2;
 	// for this one case, the righthand plane is NOT the minimum index;
 	if (min==0 && max==3) return 3;
-	// in general, the halfplane index is the minimum of the two adjacent quadrants
+	// in general, the halfplane index is the minimum of the two
+	// adjacent quadrants
 	return min;
 }
 
-/**
-* Returns whether the given quadrant lies within the given halfplane (specified
-* by its right-hand quadrant).
-*/
-bool Quadrant::isInHalfPlane(int quad, int halfPlane){
-	if (halfPlane==3) {
-		return quad==3 || quad==0;
+/* public static */
+bool
+Quadrant::isInHalfPlane(int quad, int halfPlane)
+{
+	if (halfPlane==SE) {
+		return quad==SE || quad==SW;
 	}
 	return quad==halfPlane || quad==halfPlane+1;
 }
 
-/**
-* Returns true if the given quadrant is 0 or 1.
-*/
-bool Quadrant::isNorthern(int quad) {
-	return quad==0 || quad==1;
+/* public static */
+bool
+Quadrant::isNorthern(int quad)
+{
+	return quad==NE || quad==NW;
 }
 
 } // namespace geos.geomgraph
