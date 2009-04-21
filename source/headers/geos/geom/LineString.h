@@ -152,7 +152,7 @@ public:
 	 *
 	 * @return a LineString with coordinates in the reverse order
 	 */
-  	LineString* reverse() const;
+  	Geometry* reverse() const;
 
 protected:
 

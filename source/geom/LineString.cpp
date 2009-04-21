@@ -51,7 +51,7 @@ LineString::LineString(const LineString &ls)
 	//points=ls.points->clone();
 }
 
-LineString*
+Geometry*
 LineString::reverse() const
 {
 	assert(points.get());
