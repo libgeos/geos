@@ -111,10 +111,10 @@ dnl --------------------------------------------------------------------
 dnl In order for AC_LIBTOOL_COMPILER_OPTION to use
 dnl the C compiler we need the hack below.
 dnl It is likely a bug in the libtool macro file to
-dnl require AC_LIBTOOL_LANG_C_CONFIG in *addition*
-dnl to AC_LANG(C) or AC_LANG_PUSH(C)/AC_LANG_POP()
+dnl require AC_LIBTOOL_LANG_CXX_CONFIG in *addition*
+dnl to AC_LANG(CXX) or AC_LANG_PUSH(CXX)/AC_LANG_POP()
 dnl 
-AC_LIBTOOL_LANG_C_CONFIG
+AC_LIBTOOL_LANG_CXX_CONFIG
 
 echo "NOTE ---- CXX=${CXX}"
 echo "NOTE ---- compiler=${compiler}"
