@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/LinearRing.java rev. 1.32 (JTS-1.10)
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOS_LINEARRING_H
@@ -36,13 +40,19 @@ namespace geos {
 namespace geom { // geos::geom
 
 /**
+ * \brief 
+ * Models an OGC SFS <code>LinearRing</code>.
  *
- * \brief Basic implementation of <code>LinearRing</code>.
- *
- * The first and last point in the coordinate sequence must be equal.
+ * A LinearRing is a LineString which is both closed and simple.
+ * In other words,
+ * the first and last coordinate in the ring must be equal,
+ * and the interior of the ring must not self-intersect.
  * Either orientation of the ring is allowed.
- * A valid ring must not self-intersect.
- *
+ * 
+ * A ring must have either 0 or 4 or more points.
+ * The first and last points must be equal (in 2D).
+ * If these conditions are not met, the constructors throw
+ * an {@link IllegalArgumentException}
  */
 class LinearRing : public LineString {
 
@@ -70,13 +80,37 @@ public:
 			const GeometryFactory *newFactory);
 
 	virtual Geometry *clone() const { return new LinearRing(*this); }
+
 	virtual ~LinearRing();
+
+	/** \brief
+	 * Returns <code>Dimension.FALSE</code>, since by definition
+	 * LinearRings do not have a boundary.
+	 *
+	 * @return Dimension::False
+	 */
+	int getBoundaryDimension() const;
+
+	/** \brief
+	 * Returns <code>true</code>, since by definition LinearRings
+	 * are always simple.
+	 *
+	 * @return <code>true</code>
+	 *
+	 * @see Geometry::isSimple
+	 */
 	bool isSimple() const;
+
 	std::string getGeometryType() const;
+
 	virtual GeometryTypeId getGeometryTypeId() const;
-	bool isClosed() const;
+
 	void setPoints(CoordinateSequence* cl);
+
+  	Geometry* reverse() const;
+
 private:
+
 	void validateConstruction();
 };
 

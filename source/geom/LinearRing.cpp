@@ -12,13 +12,19 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/LinearRing.java rev. 1.32 (JTS-1.10)
+ *
  **********************************************************************/
 
 #include <geos/geom/LinearRing.h>
+#include <geos/geom/Dimension.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/util/IllegalArgumentException.h>
 
+#include <sstream>
 #include <string>
 #include <memory>
 
@@ -52,11 +58,22 @@ LinearRing::LinearRing(CoordinateSequence::AutoPtr newCoords,
 void
 LinearRing::validateConstruction()
 {
-	if (!LineString::isEmpty() && !LineString::isClosed()) {
-		throw util::IllegalArgumentException("points must form a closed linestring");
-    }
-	if (!points->isEmpty() && (points->getSize()>=1 && points->getSize()<=3)) {
-		throw util::IllegalArgumentException("Number of points must be 0 or >3");
+	// Empty ring is valid
+	if ( points->isEmpty() ) return;
+
+	if ( !LineString::isClosed() )
+	{
+		throw util::IllegalArgumentException(
+		  "Points of LinearRing do not form a closed linestring"
+		);
+	}
+
+	if ( points->getSize() <= 3 )
+	{
+		std::ostringstream os;
+		os << "Invalid number of points in LinearRing found "
+		   << points->getSize() << " - must be 0 or >= 4";
+		throw util::IllegalArgumentException(os.str());
 	}
 }
 
@@ -66,14 +83,20 @@ LinearRing::validateConstruction()
 LinearRing::~LinearRing(){
 }
 
-bool LinearRing::isSimple() const {
+int
+LinearRing::getBoundaryDimension() const
+{
+	return Dimension::False;
+}
+
+bool
+LinearRing::isSimple() const
+{
 	return true;
 }
+
 string LinearRing::getGeometryType() const {
 	return "LinearRing";
-}
-bool LinearRing::isClosed() const {
-	return true;
 }
 
 void LinearRing::setPoints(CoordinateSequence* cl){
@@ -85,6 +108,16 @@ void LinearRing::setPoints(CoordinateSequence* cl){
 GeometryTypeId
 LinearRing::getGeometryTypeId() const {
 	return GEOS_LINEARRING;
+}
+
+Geometry*
+LinearRing::reverse() const
+{
+	assert(points.get());
+	CoordinateSequence* seq = points->clone();
+	CoordinateSequence::reverse(seq);
+	assert(getFactory());
+	return getFactory()->createLinearRing(seq);
 }
 
 } // namespace geos::geom

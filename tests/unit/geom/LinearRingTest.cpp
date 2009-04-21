@@ -136,7 +136,7 @@ namespace tut
 	template<>
 	void object::test<4>()
 	{
-		ensure( empty_ring_.isClosed() );
+		ensure( ! empty_ring_.isClosed() );
 	}
 
 	// Test of isRing() for empty LinearRing
@@ -144,7 +144,7 @@ namespace tut
 	template<>
 	void object::test<5>()
 	{
-		ensure( empty_ring_.isRing() );
+		ensure( ! empty_ring_.isRing() );
 	}
 
 	// Test of isSimple() for empty LinearRing
