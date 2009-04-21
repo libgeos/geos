@@ -71,6 +71,7 @@ geos_unit_SOURCES = geos_unit.cpp \
 	operation/overlay/OffsetPointGeneratorTest.cpp \
 	operation/overlay/OverlayResultValidatorTest.cpp \
 	operation/union/CascadedPolygonUnionTest.cpp \
+	operation/valid/IsValidTest.cpp \
 	precision/GeometrySnapperTest.cpp \
 	precision/LineStringSnapperTest.cpp \
 	precision/SimpleGeometryPrecisionReducerTest.cpp \
