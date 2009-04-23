@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2009 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006-2007 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -77,8 +78,6 @@ namespace buffer { // geos.operation.buffer
  * Retrying the computation in a fixed precision
  * can produce more robust results.
  *
- * Last port: operation/buffer/BufferBuilder.java rev. 1.21 (JTS-1.7)
- *
  */
 class BufferBuilder {
 
@@ -104,7 +103,7 @@ private:
 
 	std::vector<geomgraph::Label *> newLabels;
 
-	void computeNodedEdges(std::vector<noding::SegmentString*>& bufferSegStrList,
+	void computeNodedEdges(std::vector<noding::SegmentString*>& bufSegStr,
 			const geom::PrecisionModel *precisionModel);
 			// throw(GEOSException);
 
@@ -203,6 +202,11 @@ public:
 	void setNoder(noding::Noder* newNoder) { workingNoder = newNoder; }
 
 	geom::Geometry* buffer(const geom::Geometry *g, double distance);
+		// throw (GEOSException);
+
+	/// Not in JTS: this is a GEOS extension
+	geom::Geometry* bufferLineSingleSided( const geom::Geometry* g,
+	                                double distance, bool leftSide ) ;
 		// throw (GEOSException);
 
 };
