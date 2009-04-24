@@ -142,7 +142,9 @@ bool
 Quadtree::remove(const Envelope* itemEnv, void* item)
 {
 	Envelope* posEnv = ensureExtent(itemEnv, minExtent);
-	return root->remove(posEnv, item);
+	bool ret = root->remove(posEnv, item);
+	if ( posEnv != itemEnv ) delete posEnv;
+	return ret;
 }
 
 /*private*/
