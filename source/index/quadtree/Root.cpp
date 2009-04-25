@@ -73,9 +73,11 @@ Root::insert(const Envelope *itemEnv, void* item)
 	 *  have to expand the tree upward to contain the item.
 	 */
 	if (node==NULL || !node->getEnvelope()->contains(itemEnv)) {
-		Node *largerNode=Node::createExpanded(node,itemEnv);
+		std::auto_ptr<Node> largerNode = Node::createExpanded(node,
+							              itemEnv);
 		//delete subnode[index];
-		subnode[index]=largerNode;
+		// TODO: should subnode[] be an array of auto_ptrs ?
+		subnode[index]=largerNode.release();
 	}
 
 	/*

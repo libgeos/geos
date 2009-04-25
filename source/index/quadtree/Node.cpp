@@ -37,26 +37,29 @@ namespace geos {
 namespace index { // geos.index
 namespace quadtree { // geos.index.quadtree
 
-Node*
-Node::createNode(Envelope *env)
+/* public static */
+std::auto_ptr<Node>
+Node::createNode(const Envelope& env)
 {
-	Key* key=new Key(env);
-	Node *node=new Node(new Envelope(*(key->getEnvelope())),key->getLevel());
-	delete key;
+	Key key(env);
+	std::auto_ptr<Node> node (
+		new Node(new Envelope(key.getEnvelope()),
+	                 key.getLevel())
+	);
 	return node;
 }
 
-Node*
+/* static public */
+std::auto_ptr<Node>
 Node::createExpanded(Node *node, const Envelope *addEnv)
 {
-	Envelope *expandEnv=new Envelope(*addEnv);
-	if (node!=NULL) expandEnv->expandToInclude(node->env);
+	Envelope expandEnv(*addEnv);
+	if (node!=NULL) expandEnv.expandToInclude(node->env);
 #if GEOS_DEBUG
-	cerr<<"Node::createExpanded computed "<<expandEnv->toString()<<endl;
+	cerr<<"Node::createExpanded computed "<<expandEnv.toString()<<endl;
 #endif
-	Node *largerNode=createNode(expandEnv);
+	std::auto_ptr<Node> largerNode = createNode(expandEnv);
 	if (node!=NULL) largerNode->insertNode(node);
-	delete expandEnv;
 	return largerNode;
 }
 

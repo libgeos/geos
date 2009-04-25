@@ -4,25 +4,29 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2009  Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: index/quadtree/Key.java rev 1.8 (JTS-1.10)
+ *
  **********************************************************************/
 
 #ifndef GEOS_IDX_QUADTREE_KEY_H
 #define GEOS_IDX_QUADTREE_KEY_H
 
+#include <geos/geom/Coordinate.h> // for composition
+#include <geos/geom/Envelope.h> // for composition
+
 // Forward declarations
-namespace geos {
-	namespace geom {
-		class Envelope;
-		class Coordinate;
-	}
-}
+// ...
 
 namespace geos {
 namespace index { // geos::index
@@ -39,36 +43,43 @@ class Key {
 public:
 
 	// Doesn't touch the Envelope, might as well be const
-	static int computeQuadLevel(geom::Envelope *env);
+	static int computeQuadLevel(const geom::Envelope& env);
 
-	Key(geom::Envelope *itemEnv);
-	virtual ~Key();
+	// Reference to argument won't be used after construction
+	Key(const geom::Envelope& itemEnv);
 
-	/// Returned object ownership retained by this class
-	geom::Coordinate* getPoint();
-
-	int getLevel();
+	// used to be virtual, but I don't see subclasses...
+	~Key();
 
 	/// Returned object ownership retained by this class
-	geom::Envelope* getEnvelope();
+	const geom::Coordinate& getPoint() const;
+
+	int getLevel() const;
+
+	/// Returned object ownership retained by this class
+	const geom::Envelope& getEnvelope() const;
 
 	/// Returns newly allocated object (ownership transferred)
-	geom::Coordinate* getCentre();
+	geom::Coordinate* getCentre() const;
 
-	void computeKey(geom::Envelope *itemEnv);
+	/**
+	 * return a square envelope containing the argument envelope,
+	 * whose extent is a power of two and which is based at a power of 2
+	 */
+	void computeKey(const geom::Envelope& itemEnv);
+
 private:	
 	// the fields which make up the key
 
 	// Owned by this class
-	geom::Coordinate *pt;
+	geom::Coordinate pt;
 
 	int level;
 
 	// auxiliary data which is derived from the key for use in computation
-	// Owned by this class
-	geom::Envelope *env;
+	geom::Envelope env;
 
-	void computeKey(int level,geom::Envelope *itemEnv);
+	void computeKey(int level, const geom::Envelope& itemEnv);
 };
 
 } // namespace geos::index::quadtree

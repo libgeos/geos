@@ -21,6 +21,7 @@
 #include <geos/geom/Envelope.h> // for inline
 
 #include <string>
+#include <memory>
 
 // Forward declarations
 namespace geos {
@@ -65,9 +66,9 @@ protected:
 
 public:
 
-	static Node* createNode(geom::Envelope *env);
+	static std::auto_ptr<Node> createNode(const geom::Envelope& env);
 
-	static Node* createExpanded(Node *node,
+	static std::auto_ptr<Node> createExpanded(Node *node,
 			const geom::Envelope *addEnv);
 
 	// Takes ownership of envelope

@@ -51,6 +51,8 @@ public:
 	/** \brief
 	 * Adds a spatial item with an extent specified by the given Envelope
 	 * to the index
+	 *
+	 * TODO: document ownership of 'itemEnv' and 'item'
 	 */
 	virtual void insert(const geom::Envelope *itemEnv, void *item) = 0;
 
