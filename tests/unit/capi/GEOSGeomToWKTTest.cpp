@@ -53,7 +53,9 @@ namespace tut
             geom1_ = GEOSGeomFromWKT(wkt.c_str());
             ensure ( 0 != geom1_ );
 
-            std::string out(GEOSGeomToWKT(geom1_));
+            char* wkt_c = GEOSGeomToWKT(geom1_);
+            std::string out(wkt_c); 
+	    free(wkt_c);
 
             ensure_equals(out, wkt);
         }
@@ -63,7 +65,9 @@ namespace tut
             geom1_ = GEOSGeomFromWKT(wkt.c_str());
             ensure ( 0 != geom1_ );
 
-            std::string out(GEOSGeomToWKT(geom1_));
+            char* wkt_c = GEOSGeomToWKT(geom1_);
+            std::string out(wkt_c); 
+	    free(wkt_c);
 
             ensure_equals(out.substr(0, n), wkt.substr(0, n));
         }
