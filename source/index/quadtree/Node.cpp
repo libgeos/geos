@@ -46,24 +46,34 @@ std::auto_ptr<Node>
 Node::createNode(const Envelope& env)
 {
 	Key key(env);
+
+	std::auto_ptr<Envelope> nenv ( new Envelope(key.getEnvelope()) );
 	std::auto_ptr<Node> node (
-		new Node(new Envelope(key.getEnvelope()),
-	                 key.getLevel())
+		new Node(nenv, key.getLevel())
 	);
 	return node;
 }
 
 /* static public */
 std::auto_ptr<Node>
-Node::createExpanded(Node *node, const Envelope *addEnv)
+Node::createExpanded(std::auto_ptr<Node> node, const Envelope& addEnv)
 {
-	Envelope expandEnv(*addEnv);
-	if (node!=NULL) expandEnv.expandToInclude(node->env);
+	Envelope expandEnv(addEnv);
+	if ( node.get() ) // should this be asserted ?
+	{
+		expandEnv.expandToInclude(node->getEnvelope());
+	}
+
 #if GEOS_DEBUG
 	cerr<<"Node::createExpanded computed "<<expandEnv.toString()<<endl;
 #endif
+
 	std::auto_ptr<Node> largerNode = createNode(expandEnv);
-	if (node!=NULL) largerNode->insertNode(node);
+	if ( node.get() ) // should this be asserted ?
+	{
+		largerNode->insertNode(node);
+	}
+
 	return largerNode;
 }
 
@@ -71,14 +81,17 @@ Node::createExpanded(Node *node, const Envelope *addEnv)
 Node*
 Node::getNode(const Envelope *searchEnv)
 {
-	int subnodeIndex=getSubnodeIndex(searchEnv, centre);
+	int subnodeIndex = getSubnodeIndex(searchEnv, centre);
 	// if subquadIndex is -1 searchEnv is not contained in a subquad
-	if (subnodeIndex!=-1) {
+	if (subnodeIndex != -1)
+	{
 		// create the quad if it does not exist
-		Node *node=getSubnode(subnodeIndex);
+		Node *node = getSubnode(subnodeIndex);
 		// recursively search the found/created quad
 		return node->getNode(searchEnv);
-	} else {
+	}
+	else
+	{
 		return this;
 	}
 }
@@ -99,36 +112,50 @@ Node::find(const Envelope *searchEnv)
 	return this;
 }
 
-void Node::insertNode(Node* node) {
-	assert(env==NULL || env->contains(node->env));
-	//System.out.println(env);
-	//System.out.println(quad.env);
-	int index=getSubnodeIndex(node->env, centre);
-	//System.out.println(index);
-	if (node->level==level-1) {
-		subnode[index]=node;
+void
+Node::insertNode(std::auto_ptr<Node> node)
+{
+	assert( env->contains(node->getEnvelope()) );
+
+	int index = getSubnodeIndex(node->getEnvelope(), centre);
+
+	if (node->level == level-1)
+	{
+		// We take ownership of node 
+		delete subnode[index];
+		subnode[index] = node.release();
+
 		//System.out.println("inserted");
-	} else {
-		// the quad is not a direct child, so make a new child quad to contain it
-		// and recursively insert the quad
-		Node *childNode=createSubnode(index);
+	}
+	else
+	{
+		// the quad is not a direct child, so make a new child
+		// quad to contain it and recursively insert the quad
+		std::auto_ptr<Node> childNode ( createSubnode(index) );
+
+		// childNode takes ownership of node
 		childNode->insertNode(node);
-		subnode[index]=childNode;
+
+		// We take ownership of childNode 
+		delete subnode[index];
+		subnode[index] = childNode.release();
 	}
 }
 
-/**
-* get the subquad for the index.
-* If it doesn't exist, create it
-*/
-Node* Node::getSubnode(int index){
-	if (subnode[index]==NULL) {
-		subnode[index]=createSubnode(index);
+Node*
+Node::getSubnode(int index)
+{
+	assert(index >=0 && index < 4);
+	if (subnode[index] == NULL)
+	{
+		subnode[index] = createSubnode(index).release();
 	}
 	return subnode[index];
 }
 
-Node* Node::createSubnode(int index) {
+std::auto_ptr<Node>
+Node::createSubnode(int index)
+{
 	// create a new subquad in the appropriate quadrant
 	double minx=0.0;
 	double maxx=0.0;
@@ -148,21 +175,21 @@ Node* Node::createSubnode(int index) {
 			miny=env->getMinY();
 			maxy=centre.y;
 			break;
-	case 2:
+		case 2:
 			minx=env->getMinX();
 			maxx=centre.x;
 			miny=centre.y;
 			maxy=env->getMaxY();
 			break;
-	case 3:
+		case 3:
 			minx=centre.x;
 			maxx=env->getMaxX();
 			miny=centre.y;
 			maxy=env->getMaxY();
 			break;
 	}
-	Envelope *sqEnv=new Envelope(minx,maxx,miny,maxy);
-	Node *node=new Node(sqEnv,level-1);
+	std::auto_ptr<Envelope> sqEnv ( new Envelope(minx,maxx,miny,maxy) );
+	std::auto_ptr<Node> node ( new Node(sqEnv, level-1) );
 	return node;
 }
 
@@ -174,6 +201,7 @@ Node::toString() const
 	os <<" "+NodeBase::toString();
 	return os.str();
 }
+
 
 } // namespace geos.index.quadtree
 } // namespace geos.index

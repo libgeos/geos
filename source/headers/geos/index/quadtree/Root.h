@@ -51,14 +51,15 @@ class Root: public NodeBase {
 
 private:
 
-	static geom::Coordinate origin;
+	static const geom::Coordinate origin;
 
 	/**
 	 * insert an item which is known to be contained in the tree rooted at
 	 * the given QuadNode root.  Lower levels of the tree will be created
 	 * if necessary to hold the item.
 	 */
-	void insertContained(Node *tree, const geom::Envelope *itemEnv, void* item);
+	void insertContained(Node *tree, const geom::Envelope *itemEnv,
+	                     void* item);
 
 public:
 

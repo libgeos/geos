@@ -42,7 +42,7 @@ namespace quadtree { // geos.index.quadtree
 
 // the singleton root quad is centred at the origin.
 //Coordinate* Root::origin=new Coordinate(0.0, 0.0);
-Coordinate Root::origin(0.0, 0.0);
+const Coordinate Root::origin(0.0, 0.0);
 
 /*public*/
 void
@@ -50,11 +50,12 @@ Root::insert(const Envelope *itemEnv, void* item)
 {
 
 #if GEOS_DEBUG
-	std::cerr<<"("<<this<<") insert("<<itemEnv->toString()<<", "<<item<<") called"<<std::endl;
+	std::cerr<< "Root("<<this<<")::insert("<<itemEnv->toString()<<", "<<item<<") called"<<std::endl;
 #endif
-	int index=getSubnodeIndex(itemEnv,origin);
+	int index = getSubnodeIndex(itemEnv, origin);
 	// if index is -1, itemEnv must cross the X or Y axis.
-	if (index==-1) {
+	if (index==-1)
+	{
 #if GEOS_DEBUG
 	std::cerr<<"  -1 subnode index"<<std::endl;
 #endif
@@ -66,7 +67,7 @@ Root::insert(const Envelope *itemEnv, void* item)
 	 * the item must be contained in one quadrant, so insert it into the
 	 * tree for that quadrant (which may not yet exist)
 	 */
-	Node *node=subnode[index];
+	Node *node = subnode[index];
 
 #if GEOS_DEBUG
 	std::cerr<<"("<<this<<") subnode["<<index<<"] @ "<<node<<std::endl;
@@ -76,19 +77,35 @@ Root::insert(const Envelope *itemEnv, void* item)
 	 *  If the subquad doesn't exist or this item is not contained in it,
 	 *  have to expand the tree upward to contain the item.
 	 */
-	if (node==NULL || !node->getEnvelope()->contains(itemEnv)) {
-		std::auto_ptr<Node> largerNode = Node::createExpanded(node,
-							              itemEnv);
-		//delete subnode[index];
-		// TODO: should subnode[] be an array of auto_ptrs ?
-		subnode[index]=largerNode.release();
+	if (node==NULL || !node->getEnvelope()->contains(itemEnv))
+	{
+		std::auto_ptr<Node> snode (node); // may be NULL
+		node = 0; subnode[index] = 0;
+
+		std::auto_ptr<Node> largerNode =
+			Node::createExpanded(snode, *itemEnv);
+
+#if GEOS_DEBUG
+		std::cerr<<"("<<this<<") created expanded node " << largerNode.get() << " containing previously reported subnode" << std::endl;
+#endif
+
+		// Previous subnode was passed as a child of the larger one
+		assert(!subnode[index]);
+		subnode[index] = largerNode.release();
 	}
 
+#if GEOS_DEBUG
+	std::cerr<<"("<<this<<") calling insertContained with subnode " << subnode[index] << std::endl;
+#endif
 	/*
 	 * At this point we have a subquad which exists and must contain
 	 * contains the env for the item.  Insert the item into the tree.
 	 */
-	insertContained(subnode[index],itemEnv,item);
+	insertContained(subnode[index], itemEnv, item);
+
+#if GEOS_DEBUG
+	std::cerr<<"("<<this<<") done calling insertContained with subnode " << subnode[index] << std::endl;
+#endif
 
 	//System.out.println("depth = " + root.depth() + " size = " + root.size());
 	//System.out.println(" size = " + size());
@@ -113,9 +130,13 @@ Root::insertContained(Node *tree, const Envelope *itemEnv, void *item)
 	NodeBase *node;
 
 	if (isZeroX || isZeroY)
-		node=tree->find(itemEnv);
+	{
+		node = tree->find(itemEnv);
+	}
 	else
-		node=tree->getNode(itemEnv);
+	{
+		node = tree->getNode(itemEnv);
+	}
 
 	node->add(item);
 }

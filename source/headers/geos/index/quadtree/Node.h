@@ -52,15 +52,21 @@ class Node: public NodeBase {
 private:
 
 	/// Owned by this class
-	geom::Envelope *env;
+	std::auto_ptr<geom::Envelope> env;
 
 	geom::Coordinate centre;
 
 	int level;
 
+	/**
+	 * Get the subquad for the index.
+	 * If it doesn't exist, create it.
+	 * 
+	 * Ownership of the returned object belongs to this class.
+	 */
 	Node* getSubnode(int index);
 
-	Node* createSubnode(int index);
+	std::auto_ptr<Node> createSubnode(int index);
 
 protected:
 
@@ -70,26 +76,31 @@ protected:
 
 public:
 
+	// Create a node computing level from given envelope
 	static std::auto_ptr<Node> createNode(const geom::Envelope& env);
 
-	static std::auto_ptr<Node> createExpanded(Node *node,
-			const geom::Envelope *addEnv);
+	/// Create a node containing the given node and envelope
+	//
+	/// @param node if not null, will be inserted to the returned node
+	/// @param addEnv minimum envelope to use for the node
+	///
+	static std::auto_ptr<Node> createExpanded(std::auto_ptr<Node> node,
+			const geom::Envelope& addEnv);
 
-	// Takes ownership of envelope
-	Node(geom::Envelope *nenv, int nlevel)
+	Node(std::auto_ptr<geom::Envelope> nenv, int nlevel)
 		:
 		env(nenv),
-		centre((nenv->getMinX()+nenv->getMaxX())/2,
-			(nenv->getMinY()+nenv->getMaxY())/2),
+		centre((env->getMinX()+env->getMaxX())/2,
+			(env->getMinY()+env->getMaxY())/2),
 		level(nlevel)
 	{
 	}
 
-	virtual ~Node() { delete env; }
+	virtual ~Node() {}
 
 	/// Return Envelope associated with this node
 	/// ownership retained by this object
-	geom::Envelope* getEnvelope() { return env; }
+	geom::Envelope* getEnvelope() { return env.get(); }
 
 	/** \brief
 	 * Returns the subquad containing the envelope.
@@ -104,7 +115,7 @@ public:
 	 */
 	NodeBase* find(const geom::Envelope *searchEnv);
 
-	void insertNode(Node *node);
+	void insertNode(std::auto_ptr<Node> node);
 
 	std::string toString() const;
 
