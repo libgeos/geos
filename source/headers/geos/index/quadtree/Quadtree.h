@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: index/quadtree/Quadtree.java rev. 1.14
+ * Last port: index/quadtree/Quadtree.java rev. 1.16 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -21,7 +21,7 @@
 #define GEOS_IDX_QUADTREE_QUADTREE_H
 
 #include <geos/index/SpatialIndex.h> // for inheritance
-#include <geos/index/quadtree/Root.h> // for inline
+#include <geos/index/quadtree/Root.h> // for composition
 
 #include <vector>
 #include <string>
@@ -70,9 +70,9 @@ private:
 
 	std::vector<geom::Envelope *> newEnvelopes;
 
-	void collectStats(const geom::Envelope *itemEnv);
+	void collectStats(const geom::Envelope& itemEnv);
 
-	Root *root;
+	Root root;
 
 	/**
 	 *  Statistics
@@ -104,7 +104,7 @@ public:
 	 */
 	Quadtree()
 		:
-		root(new Root()),
+		root(),
 		minExtent(1.0)
 	{}
 
@@ -118,22 +118,57 @@ public:
 	
 	void insert(const geom::Envelope *itemEnv, void *item);
 
+	/** \brief
+	 * Queries the tree and returns items which may lie
+	 * in the given search envelope.
+	 *
+	 * Precisely, the items that are returned are all items in the tree
+	 * whose envelope <b>may</b> intersect the search Envelope.
+	 * Note that some items with non-intersecting envelopes may be
+	 * returned as well;
+	 * the client is responsible for filtering these out.
+	 * In most situations there will be many items in the tree which do not
+	 * intersect the search envelope and which are not returned - thus
+	 * providing improved performance over a simple linear scan.
+	 *
+	 * @param searchEnv the envelope of the desired query area.
+	 * @param ret a vector where items which may intersect the
+	 * 	      search envelope are pushed
+	 */
 	void query(const geom::Envelope *searchEnv, std::vector<void*>& ret);
 
-	void query(const geom::Envelope *searchEnv, ItemVisitor& visitor) {
+
+	/** \brief
+	 * Queries the tree and visits items which may lie in
+	 * the given search envelope.
+	 *
+	 * Precisely, the items that are visited are all items in the tree
+	 * whose envelope <b>may</b> intersect the search Envelope.
+	 * Note that some items with non-intersecting envelopes may be
+	 * visited as well;
+	 * the client is responsible for filtering these out.
+	 * In most situations there will be many items in the tree which do not
+	 * intersect the search envelope and which are not visited - thus
+	 * providing improved performance over a simple linear scan.
+	 *
+	 * @param searchEnv the envelope of the desired query area.
+	 * @param visitor a visitor object which is passed the visited items
+	 */
+	void query(const geom::Envelope *searchEnv, ItemVisitor& visitor)
+	{
 		/*
 		 * the items that are matched are the items in quads which
 		 * overlap the search envelope
 		 */
-		root->visit(searchEnv, visitor);
+		root.visit(searchEnv, visitor);
 	}
 
 	/**
 	 * Removes a single item from the tree.
 	 *
-	 * @param itemEnv the Envelope of the item to remove
+	 * @param itemEnv the Envelope of the item to be removed
 	 * @param item the item to remove
-	 * @return <code>true</code> if the item was found
+	 * @return <code>true</code> if the item was found (and thus removed)
 	 */
 	bool remove(const geom::Envelope* itemEnv, void* item);
 

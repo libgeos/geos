@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: index/quadtree/Quadtree.java rev. 1.14
+ * Last port: index/quadtree/Quadtree.java rev. 1.16 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -71,41 +71,35 @@ Quadtree::~Quadtree()
 {
 	for (unsigned int i=0; i<newEnvelopes.size(); i++)
 		delete newEnvelopes[i];
-	delete root;
 }
 
 /*public*/
 int
 Quadtree::depth()
 {
-	//I don't think it's possible for root to be null. Perhaps we should
-	//remove the check. [Jon Aquino]
-    //Or make an assertion [Jon Aquino 10/29/2003] 
-	if (root!=NULL) return root->depth();
-	return 0;
+	return root.depth();
 }
 
 /*public*/
 int
 Quadtree::size()
 {
-	assert(root!=NULL);
-	return root->size();
+	return root.size();
 }
 
 /*public*/
 void
 Quadtree::insert(const Envelope *itemEnv, void* item)
 {
-	collectStats(itemEnv);
+	collectStats(*itemEnv);
 
 	Envelope *insertEnv=ensureExtent(itemEnv,minExtent);
 	if ( insertEnv != itemEnv ) newEnvelopes.push_back(insertEnv);
-	root->insert(insertEnv,item);
+	root.insert(insertEnv,item);
 #if GEOS_DEBUG
 	cerr<<"Quadtree::insert("<<itemEnv->toString()<<", "<<item<<")"<<endl;
 	cerr<<"       insertEnv:"<<insertEnv->toString()<<endl;
-	cerr<<"       tree:"<<endl<<root->toString()<<endl;
+	cerr<<"       tree:"<<endl<<root.toString()<<endl;
 #endif
 }
 
@@ -119,12 +113,12 @@ Quadtree::query(const Envelope *searchEnv,
 	 * the items that are matched are the items in quads which
 	 * overlap the search envelope
 	 */
-	root->addAllItemsFromOverlapping(*searchEnv, foundItems);
+	root.addAllItemsFromOverlapping(*searchEnv, foundItems);
 #if GEOS_DEBUG
 	cerr<<"Quadtree::query returning "<<foundItems.size()
 		<<" items over "<<size()
 		<<" items in index (of depth: "<<depth()<<")"<<endl;
-	cerr<<" Root:\n"<<root->toString()<<endl;
+	cerr<<" Root:\n"<<root.toString()<<endl;
 #endif
 }
 
@@ -133,7 +127,7 @@ vector<void*>*
 Quadtree::queryAll()
 {
 	vector<void*> *foundItems=new vector<void*>();
-	root->addAllItems(*foundItems);
+	root.addAllItems(*foundItems);
 	return foundItems;
 }
 
@@ -142,28 +136,29 @@ bool
 Quadtree::remove(const Envelope* itemEnv, void* item)
 {
 	Envelope* posEnv = ensureExtent(itemEnv, minExtent);
-	bool ret = root->remove(posEnv, item);
+	bool ret = root.remove(posEnv, item);
 	if ( posEnv != itemEnv ) delete posEnv;
 	return ret;
 }
 
 /*private*/
 void
-Quadtree::collectStats(const Envelope *itemEnv)
+Quadtree::collectStats(const Envelope& itemEnv)
 {
-	double delX=itemEnv->getWidth();
-	if (delX<minExtent && delX>0.0)
-		minExtent=delX;
-	double delY=itemEnv->getWidth();
-	if (delY<minExtent && delY>0.0)
-		minExtent=delY;
+	double delX = itemEnv.getWidth();
+	if (delX < minExtent && delX > 0.0)
+		minExtent = delX;
+
+	double delY = itemEnv.getHeight();
+	if (delY < minExtent && delY > 0.0)
+		minExtent = delY;
 }
 
 /*public*/
 string
 Quadtree::toString() const
 {
-	string ret = root->toString();
+	string ret = root.toString();
 	return ret;
 }
 
