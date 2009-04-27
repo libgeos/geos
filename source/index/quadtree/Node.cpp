@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: index/quadtree/Node.java rev 1.8 (JTS-1.10)
+ *
  **********************************************************************/
 
 #include <geos/index/quadtree/Node.h> 
