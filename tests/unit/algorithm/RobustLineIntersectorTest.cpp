@@ -243,10 +243,11 @@ namespace tut
     cs->add(p1);
     cs->add(p2);
 
-    LineString* l = factory.createLineString(cs);
-    Point* p = factory.createPoint(q);
-    ensure(!l->intersects(p));
-    ensure(!CGAlgorithms::isOnLine(q, l->getCoordinatesRO()));
+    GeomPtr l ( factory.createLineString(cs) );
+    GeomPtr p ( factory.createPoint(q) );
+    ensure(!l->intersects(p.get()));
+
+    ensure(!CGAlgorithms::isOnLine(q, cs));
     ensure_equals(CGAlgorithms::computeOrientation(p1, p2, q), -1);
 
 	}
