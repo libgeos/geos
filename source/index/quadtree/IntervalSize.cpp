@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: index/quadtree/IntervalSize.java rev 1.7 (JTS-1.10)
+ *
  **********************************************************************/
 
 #include <geos/index/quadtree/IntervalSize.h>
@@ -26,13 +30,17 @@ namespace geos {
 namespace index { // geos.index
 namespace quadtree { // geos.index.quadtree
 
-bool IntervalSize::isZeroWidth(double mn,double mx){
-	double width=mx-mn;
-	if (width==0.0) return true;
-	double maxAbs=max(fabs(mn),fabs(mx));
-	double scaledInterval=width/maxAbs;
-	int level=DoubleBits::exponent(scaledInterval);
-	return level<=MIN_BINARY_EXPONENT;
+/* public static */
+bool
+IntervalSize::isZeroWidth(double mn, double mx)
+{
+	double width = mx - mn;
+	if (width == 0.0) return true;
+
+	double maxAbs = max(fabs(mn), fabs(mx));
+	double scaledInterval = width / maxAbs;
+	int level = DoubleBits::exponent(scaledInterval);
+	return level <= MIN_BINARY_EXPONENT;
 }
 
 } // namespace geos.index.quadtree
