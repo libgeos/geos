@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: index/quadtree/Root.java rev 1.7 (JTS-1.10)
+ *
  **********************************************************************/
 
 #ifndef GEOS_IDX_QUADTREE_ROOT_H

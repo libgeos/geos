@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: index/quadtree/Root.java rev 1.7 (JTS-1.10)
+ *
  **********************************************************************/
 
 #include <geos/index/quadtree/Root.h>
@@ -101,8 +105,10 @@ Root::insertContained(Node *tree, const Envelope *itemEnv, void *item)
 	 * to infinite recursion. Instead, use a heuristic of simply returning
 	 * the smallest existing quad containing the query
 	 */
-	bool isZeroX=IntervalSize::isZeroWidth(itemEnv->getMinX(),itemEnv->getMaxX());
-	bool isZeroY=IntervalSize::isZeroWidth(itemEnv->getMinY(),itemEnv->getMaxY());
+	bool isZeroX = IntervalSize::isZeroWidth(itemEnv->getMinX(),
+	                                         itemEnv->getMaxX());
+	bool isZeroY = IntervalSize::isZeroWidth(itemEnv->getMinY(),
+	                                         itemEnv->getMaxY());
 
 	NodeBase *node;
 
