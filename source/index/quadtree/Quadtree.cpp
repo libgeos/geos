@@ -119,7 +119,7 @@ Quadtree::query(const Envelope *searchEnv,
 	 * the items that are matched are the items in quads which
 	 * overlap the search envelope
 	 */
-	root->addAllItemsFromOverlapping(searchEnv, &foundItems);
+	root->addAllItemsFromOverlapping(*searchEnv, foundItems);
 #if GEOS_DEBUG
 	cerr<<"Quadtree::query returning "<<foundItems.size()
 		<<" items over "<<size()
@@ -133,7 +133,7 @@ vector<void*>*
 Quadtree::queryAll()
 {
 	vector<void*> *foundItems=new vector<void*>();
-	root->addAllItems(foundItems);
+	root->addAllItems(*foundItems);
 	return foundItems;
 }
 

@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: index/quadtree/NodeBase.java rev 1.9 (JTS-1.10)
+ *
  **********************************************************************/
 
 #ifndef GEOS_IDX_QUADTREE_NODEBASE_H
@@ -58,20 +62,23 @@ public:
 
 	virtual ~NodeBase();
 
-	virtual std::vector<void*>* getItems();
+	std::vector<void*>& getItems();
 
-	virtual void add(void* item);
+	/// Add an item to this node.
+	/// Ownership of the item is left to caller.
+	void add(void* item);
 
-	virtual std::vector<void*>* addAllItems(std::vector<void*> *resultItems);
+	/// Push all node items to the given vector, return the argument
+	std::vector<void*>& addAllItems(std::vector<void*>& resultItems) const;
 
-	virtual void addAllItemsFromOverlapping(const geom::Envelope *searchEnv,
-			std::vector<void*> *resultItems);
+	virtual void addAllItemsFromOverlapping(const geom::Envelope& searchEnv,
+			std::vector<void*>& resultItems) const;
 
-	virtual int depth();
+	unsigned int depth() const;
 
-	virtual int size();
+	unsigned int size() const;
 
-	virtual int nodeCount();
+	unsigned int getNodeCount() const;
 
 	virtual std::string toString() const;
 
@@ -94,7 +101,8 @@ public:
 
 protected:
 
-	std::vector<void*> *items;
+	/// Actual items are NOT owned by this class
+	std::vector<void*> items;
 
 	/**
 	 * subquads are numbered as follows:
@@ -108,7 +116,7 @@ protected:
 	 */
 	Node* subnode[4];
 
-	virtual bool isSearchMatch(const geom::Envelope *searchEnv)=0;
+	virtual bool isSearchMatch(const geom::Envelope& searchEnv) const=0;
 };
 
 
@@ -131,7 +139,7 @@ NodeBase::isPrunable() const
 inline bool
 NodeBase::hasItems() const
 {
-	return ! items->empty();
+	return ! items.empty();
 }
 
 } // namespace geos::index::quadtree

@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: index/quadtree/NodeBase.java rev 1.9 (JTS-1.10)
+ *
  **********************************************************************/
 
 #include <geos/index/quadtree/NodeBase.h> 
@@ -58,15 +62,16 @@ NodeBase::getSubnodeIndex(const Envelope *env, const Coordinate& centre)
 	return subnodeIndex;
 }
 
-NodeBase::NodeBase() {
-	items=new vector<void*>();
-	subnode[0]=NULL;
-	subnode[1]=NULL;
-	subnode[2]=NULL;
-	subnode[3]=NULL;
+NodeBase::NodeBase()
+{
+	subnode[0]=0;
+	subnode[1]=0;
+	subnode[2]=0;
+	subnode[3]=0;
 }
 
-NodeBase::~NodeBase() {
+NodeBase::~NodeBase()
+{
 	delete subnode[0];
 	delete subnode[1];
 	delete subnode[2];
@@ -75,27 +80,33 @@ NodeBase::~NodeBase() {
 	subnode[1]=NULL;
 	subnode[2]=NULL;
 	subnode[3]=NULL;
-	delete items;
 }
 
-vector<void*>* NodeBase::getItems() {
+vector<void*>&
+NodeBase::getItems()
+{
 	return items;
 }
 
-void NodeBase::add(void* item) {
-	items->push_back(item);
+void
+NodeBase::add(void* item)
+{
+	items.push_back(item);
 	//GEOS_DEBUG itemCount++;
 	//GEOS_DEBUG System.out.print(itemCount);
 }
 
-vector<void*>*
-NodeBase::addAllItems(vector<void*> *resultItems)
+vector<void*>&
+NodeBase::addAllItems(vector<void*>& resultItems) const
 {
-	//<<TODO:ASSERT?>> Can we assert that this node cannot have both items
-	//and subnodes? [Jon Aquino]
-	resultItems->insert(resultItems->end(),items->begin(),items->end());
-	for(int i=0;i<4;i++) {
-		if (subnode[i]!=NULL) {
+	// this node may have items as well as subnodes (since items may not
+	// be wholely contained in any single subnode
+	resultItems.insert(resultItems.end(), items.begin(), items.end());
+
+	for(int i=0; i<4; ++i)
+	{
+		if ( subnode[i] )
+		{
 			subnode[i]->addAllItems(resultItems);
 		}
 	}
@@ -103,65 +114,78 @@ NodeBase::addAllItems(vector<void*> *resultItems)
 }
 
 void
-NodeBase::addAllItemsFromOverlapping(const Envelope *searchEnv, vector<void*> *resultItems)
+NodeBase::addAllItemsFromOverlapping(const Envelope& searchEnv,
+                                     vector<void*>& resultItems) const
 {
 	if (!isSearchMatch(searchEnv))
 		return;
 
-	//<<TODO:ASSERT?>> Can we assert that this node cannot have both items
-	//and subnodes? [Jon Aquino]
-	resultItems->insert(resultItems->end(),items->begin(),items->end());
-	for(int i=0;i<4;i++) {
-		if (subnode[i]!=NULL) {
-			subnode[i]->addAllItemsFromOverlapping(searchEnv,resultItems);
+	// this node may have items as well as subnodes (since items may not
+	// be wholely contained in any single subnode
+	resultItems.insert(resultItems.end(), items.begin(), items.end());
+
+	for(int i=0; i<4; ++i)
+	{
+		if ( subnode[i] )
+		{
+			subnode[i]->addAllItemsFromOverlapping(searchEnv,
+			                                       resultItems);
 		}
 	}
 }
 
 //<<TODO:RENAME?>> In Samet's terminology, I think what we're returning here is
 //actually level+1 rather than depth. (See p. 4 of his book) [Jon Aquino]
-int NodeBase::depth() {
-	int maxSubDepth=0;
-	for(int i=0;i<4;i++) {
-		if (subnode[i]!=NULL) {
-			int sqd=subnode[i]->depth();
-			if (sqd>maxSubDepth)
+unsigned int
+NodeBase::depth() const
+{
+	unsigned int maxSubDepth=0;
+	for (int i=0; i<4; ++i)
+	{
+		if (subnode[i] != NULL)
+		{
+			unsigned int sqd=subnode[i]->depth();
+			if ( sqd > maxSubDepth )
 				maxSubDepth=sqd;
 		}
 	}
-	return maxSubDepth+1;
+	return maxSubDepth + 1;
 }
 
-//<<TODO:RENAME?>> "size" is a bit generic. How about "itemCount"? [Jon Aquino]
-int NodeBase::size() {
-	int subSize=0;
-	for(int i=0;i<4;i++) {
-		if (subnode[i]!=NULL) {
-			subSize+=subnode[i]->size();
+unsigned int
+NodeBase::size() const
+{
+	unsigned int subSize=0;
+	for(int i=0; i<4; i++)
+	{
+		if (subnode[i] != NULL)
+		{
+			subSize += subnode[i]->size();
 		}
 	}
-	return subSize+(int)items->size();
+	return subSize + items.size();
 }
 
-//<<TODO:RENAME?>> The Java Language Specification recommends that "Methods to
-//get and set an attribute that might be thought of as a variable V should be
-//named getV and setV" (6.8.3). Perhaps this and other methods should be
-//renamed to "get..."? [Jon Aquino]
-int NodeBase::nodeCount() {
-	int subSize=0;
-	for(int i=0;i<4;i++) {
-		if (subnode[i]!=NULL) {
-			subSize+=subnode[i]->size();
+unsigned int
+NodeBase::getNodeCount() const
+{
+	unsigned int subSize=0;
+	for(int i=0; i<4; ++i)
+	{
+		if (subnode[i] != NULL)
+		{
+			subSize += subnode[i]->size();
 		}
 	}
-	return subSize+1;
+
+	return subSize + 1;
 }
 
 string
 NodeBase::toString() const
 {
 	ostringstream s;
-	s<<"ITEMS:"<<items->size()<<endl;
+	s<<"ITEMS:"<<items.size()<<endl;
 	for (int i=0; i<4; i++)
 	{
 		s<<"subnode["<<i<<"] ";
@@ -176,7 +200,7 @@ NodeBase::toString() const
 void
 NodeBase::visit(const Envelope* searchEnv, ItemVisitor& visitor)
 {
-	if (! isSearchMatch(searchEnv)) return;
+	if (! isSearchMatch(*searchEnv)) return;
 
 	// this node may have items as well as subnodes (since items may not
 	// be wholely contained in any single subnode
@@ -197,7 +221,7 @@ NodeBase::visitItems(const Envelope* searchEnv, ItemVisitor& visitor)
 
 	// would be nice to filter items based on search envelope, but can't
 	// until they contain an envelope
-	for (vector<void*>::iterator i=items->begin(), e=items->end();
+	for (vector<void*>::iterator i=items.begin(), e=items.end();
 			i!=e; i++)
 	{
 		visitor.visitItem(*i);
@@ -209,16 +233,22 @@ bool
 NodeBase::remove(const Envelope* itemEnv, void* item)
 {
 	// use envelope to restrict nodes scanned
-	if (! isSearchMatch(itemEnv)) return false;
+	if (! isSearchMatch(*itemEnv)) return false;
 
 	bool found = false;
-	for (int i = 0; i < 4; i++) {
-		if (subnode[i] != NULL) {
+	for (int i = 0; i < 4; ++i)
+	{
+		if ( subnode[i] )
+		{
 			found = subnode[i]->remove(itemEnv, item);
-			if (found) {
+			if (found)
+			{
 				// trim subtree if empty
 				if (subnode[i]->isPrunable())
-				subnode[i] = NULL;
+				{
+					// delete subnode[i]
+					subnode[i] = NULL;
+				}
 				break;
 			}
 		}
@@ -229,9 +259,9 @@ NodeBase::remove(const Envelope* itemEnv, void* item)
 	// otherwise, try and remove the item from the list of items
 	// in this node
 	vector<void*>::iterator foundIter = 
-		find(items->begin(), items->end(), item);
-	if ( foundIter != items->end() ) {
-		items->erase(foundIter);
+		find(items.begin(), items.end(), item);
+	if ( foundIter != items.end() ) {
+		items.erase(foundIter);
 		return true;
 	} else {
 		return false;

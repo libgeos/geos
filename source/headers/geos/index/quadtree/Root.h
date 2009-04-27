@@ -69,7 +69,9 @@ public:
 
 protected:
 
-	bool isSearchMatch(const geom::Envelope* /* searchEnv */) { return true; }
+	bool isSearchMatch(const geom::Envelope& /* searchEnv */) const {
+		return true;
+	}
 
 };
 

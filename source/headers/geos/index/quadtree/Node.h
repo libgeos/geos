@@ -60,7 +60,7 @@ private:
 
 protected:
 
-	bool isSearchMatch(const geom::Envelope *searchEnv) {
+	bool isSearchMatch(const geom::Envelope& searchEnv) const {
 		return env->intersects(searchEnv);
 	}
 
