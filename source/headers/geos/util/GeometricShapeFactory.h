@@ -12,6 +12,11 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: util/GeometricShapeFactory.java rev 1.14 (JTS-1.10+)
+ * (2009-03-19)
+ *
  **********************************************************************/
 
 #ifndef GEOS_UTIL_GEOMETRICSHAPEFACTORY_H
@@ -24,9 +29,11 @@
 // Forward declarations
 namespace geos {
 	namespace geom { 
+		class Coordinate;
 		class Envelope;
 		class Polygon;
 		class GeometryFactory;
+		class PrecisionModel;
 		class LineString;
 	}
 }
@@ -36,16 +43,23 @@ namespace util { // geos::util
 
 
 /**
- * \class GeometricShapeFactory util.h geos.h
- *
- * \brief
  * Computes various kinds of common geometric shapes.
+ *
  * Allows various ways of specifying the location and extent of the shapes,
  * as well as number of line segments used to form them.
  *
+ * Example:
+ * <pre>
+ *  GeometricShapeFactory gsf(factory);
+ *  gsf.setSize(100);
+ *  gsf.setNumPoints(100);
+ *  gsf.setBase(Coordinate(0, 0));
+ *  std::auto_ptr<Polygon> rect ( gsf.createRectangle() );
+ * </pre>
+ *
  */
 class GeometricShapeFactory {
-private:
+protected:
 	class Dimensions {
 	public:
 		Dimensions();
@@ -58,12 +72,19 @@ private:
 		void setSize(double size);
 		void setWidth(double nWidth);
 		void setHeight(double nHeight);
+
+		// Return newly-allocated object, ownership transferred
 		geom::Envelope* getEnvelope();
 	};
-	const geom::GeometryFactory* geomFact;
+	const geom::GeometryFactory* geomFact; // externally owned
+	const geom::PrecisionModel* precModel; // externally owned
 	Dimensions dim;
 	int nPts;
+
+	geom::Coordinate createCoord(double x, double y) const;
+
 public:
+
 	/**
 	 * \brief
 	 * Create a shape factory which will create shapes using the given
@@ -79,11 +100,28 @@ public:
 	~GeometricShapeFactory();
 
 	/**
-	 * \brief Creates a elliptical arc, as a LineString.
+	 * \brief Creates an elliptical arc, as a LineString.
 	 *
+	 * The arc is always created in a counter-clockwise direction.
+	 *
+	 * @param startAng start angle in radians
+	 * @param angExtent size of angle in radians
 	 * @return an elliptical arc
 	 */
-	geom::LineString* createArc(double startAng, double endAng);
+	geom::LineString* createArc(double startAng, double angExtent);
+
+	/**
+	 * \brief Creates an elliptical arc polygon.
+	 *
+	 * The polygon is formed from the specified arc of an ellipse
+	 * and the two radii connecting the endpoints to the centre of
+	 * the ellipse.
+	 *
+	 * @param startAng start angle in radians
+	 * @param angExtent size of angle in radians
+	 * @return an elliptical arc polygon
+	 */
+	geom::Polygon* createArcPolygon(double startAng, double angExt);
 
 	/**
 	 * \brief Creates a circular Polygon.
