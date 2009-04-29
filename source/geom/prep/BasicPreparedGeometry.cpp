@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/prep/BasicPreparedGeometry.java rev. 1.3 (2007-08-20)
+ * Last port: geom/prep/BasicPreparedGeometry.java rev. 1.5 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -86,6 +86,15 @@ BasicPreparedGeometry::contains(const geom::Geometry * g) const
 bool 
 BasicPreparedGeometry::containsProperly(const geom::Geometry * g)	const
 {
+	// since raw relate is used, provide some optimizations
+
+	// short-circuit test
+	if (! baseGeom->getEnvelopeInternal()->contains(g->getEnvelopeInternal()))
+	{
+		return false;
+	}
+
+	// otherwise, compute using relate mask
 	return baseGeom->relate(g, "T**FF*FF*");
 }
 

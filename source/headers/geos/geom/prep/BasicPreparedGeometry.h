@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/prep/BasicPreparedGeometry.java rev. 1.3 (2007-08-20)
+ * Last port: geom/prep/BasicPreparedGeometry.java rev. 1.5 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -146,6 +146,10 @@ public:
 	 */
 	bool crosses(const geom::Geometry * g) const;
 
+	/**
+	 * Standard implementation for all geometries.
+	 * Supports {@link GeometryCollection}s as input.
+	 */
 	bool disjoint(const geom::Geometry * g)	const;
 
 	/**
