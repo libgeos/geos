@@ -19,35 +19,35 @@ namespace tut
 
     // Common data used in test cases.
     struct test_capigeospolygonizegetcutedges_data
-	{
-		static void notice(const char *fmt, ...)
-		{
-			std::fprintf( stdout, "NOTICE: ");
+    {
+        static void notice(const char *fmt, ...)
+        {
+            std::fprintf( stdout, "NOTICE: ");
 
-			va_list ap;
-			va_start(ap, fmt);
-			std::vfprintf(stdout, fmt, ap);
-			va_end(ap);
-		
-			std::fprintf(stdout, "\n");
-		}
+            va_list ap;
+            va_start(ap, fmt);
+            std::vfprintf(stdout, fmt, ap);
+            va_end(ap);
+        
+            std::fprintf(stdout, "\n");
+        }
 
-		test_capigeospolygonizegetcutedges_data()
-		{
-			initGEOS(notice, notice);
-		}		
+        test_capigeospolygonizegetcutedges_data()
+        {
+            initGEOS(notice, notice);
+        }       
 
-		~test_capigeospolygonizegetcutedges_data()
-		{
-			finishGEOS();
-		}
+        ~test_capigeospolygonizegetcutedges_data()
+        {
+            finishGEOS();
+        }
 
-	};
+    };
 
-	typedef test_group<test_capigeospolygonizegetcutedges_data> group;
-	typedef group::object object;
+    typedef test_group<test_capigeospolygonizegetcutedges_data> group;
+    typedef group::object object;
 
-	group test_capigeospolygonizegetcutedges_group("capi::GEOSPolygonizeGetCutEdges");
+    group test_capigeospolygonizegetcutedges_group("capi::GEOSPolygonizeGetCutEdges");
 
     //
     // Test Cases

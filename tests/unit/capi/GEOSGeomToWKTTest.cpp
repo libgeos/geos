@@ -20,33 +20,33 @@ namespace tut
 
     // Common data used in test cases.
     struct test_capigeosgeomtowkt_data
-	{
-	    GEOSGeometry* geom1_;
+    {
+        GEOSGeometry* geom1_;
 
-		static void notice(const char *fmt, ...)
-		{
+        static void notice(const char *fmt, ...)
+        {
             std::fprintf( stdout, "NOTICE: ");
 
-			va_list ap;
-			va_start(ap, fmt);
-			std::vfprintf(stdout, fmt, ap);
-			va_end(ap);
-		
-			std::fprintf(stdout, "\n");
-		}
+            va_list ap;
+            va_start(ap, fmt);
+            std::vfprintf(stdout, fmt, ap);
+            va_end(ap);
+        
+            std::fprintf(stdout, "\n");
+        }
 
-		test_capigeosgeomtowkt_data()
+        test_capigeosgeomtowkt_data()
             : geom1_(0)
-		{
-			initGEOS(notice, notice);
-		}		
+        {
+            initGEOS(notice, notice);
+        }       
 
-		~test_capigeosgeomtowkt_data()
-		{
+        ~test_capigeosgeomtowkt_data()
+        {
             GEOSGeom_destroy(geom1_);
             geom1_ = 0;
-			finishGEOS();
-		}
+            finishGEOS();
+        }
 
         void test_wkt(std::string const& wkt)
         {
@@ -55,7 +55,7 @@ namespace tut
 
             char* wkt_c = GEOSGeomToWKT(geom1_);
             std::string out(wkt_c); 
-	    free(wkt_c);
+        free(wkt_c);
 
             ensure_equals(out, wkt);
         }
@@ -67,16 +67,16 @@ namespace tut
 
             char* wkt_c = GEOSGeomToWKT(geom1_);
             std::string out(wkt_c); 
-	    free(wkt_c);
+        free(wkt_c);
 
             ensure_equals(out.substr(0, n), wkt.substr(0, n));
         }
-	};
+    };
 
-	typedef test_group<test_capigeosgeomtowkt_data> group;
-	typedef group::object object;
+    typedef test_group<test_capigeosgeomtowkt_data> group;
+    typedef group::object object;
 
-	group test_capigeosgeomtowkt_group("capi::GEOSGeomToWKT");
+    group test_capigeosgeomtowkt_group("capi::GEOSGeomToWKT");
 
     //
     // Test Cases

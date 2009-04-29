@@ -21,32 +21,32 @@ namespace tut
 
     // Common data used in test cases.
     struct test_capigeosgeomfromwkb_data
-	{
-	    GEOSGeometry* geom1_;
+    {
+        GEOSGeometry* geom1_;
         GEOSGeometry* geom2_;
         GEOSWKTReader* reader_;
 
-		static void notice(const char *fmt, ...)
-		{
+        static void notice(const char *fmt, ...)
+        {
             std::fprintf( stdout, "NOTICE: ");
 
-			va_list ap;
-			va_start(ap, fmt);
-			std::vfprintf(stdout, fmt, ap);
-			va_end(ap);
-		
-			std::fprintf(stdout, "\n");
-		}
+            va_list ap;
+            va_start(ap, fmt);
+            std::vfprintf(stdout, fmt, ap);
+            va_end(ap);
+        
+            std::fprintf(stdout, "\n");
+        }
 
-		test_capigeosgeomfromwkb_data()
+        test_capigeosgeomfromwkb_data()
             : geom1_(0), geom2_(0), reader_(0)
-		{
-			initGEOS(notice, notice);
+        {
+            initGEOS(notice, notice);
             reader_ = GEOSWKTReader_create();
-		}		
+        }       
 
-		~test_capigeosgeomfromwkb_data()
-		{
+        ~test_capigeosgeomfromwkb_data()
+        {
             GEOSGeom_destroy(geom2_);
             geom2_ = 0;
             GEOSGeom_destroy(geom1_);
@@ -54,7 +54,7 @@ namespace tut
             GEOSWKTReader_destroy(reader_);
             reader_ = 0;
             finishGEOS();
-		}
+        }
 
         void test_wkb(std::string const& wkbhex, std::string const& wkt)
         {
@@ -71,12 +71,12 @@ namespace tut
             //char result = GEOSEquals(geom1_, geom2_);
             //ensure_equals(result, char(1));
         }
-	};
+    };
 
-	typedef test_group<test_capigeosgeomfromwkb_data> group;
-	typedef group::object object;
+    typedef test_group<test_capigeosgeomfromwkb_data> group;
+    typedef group::object object;
 
-	group test_capigeosgeomfromwkb_group("capi::GEOSGeomFromWKB");
+    group test_capigeosgeomfromwkb_group("capi::GEOSGeomFromWKB");
 
     //
     // Test Cases
