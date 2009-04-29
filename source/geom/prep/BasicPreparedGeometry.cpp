@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/prep/BasicPreparedGeometry.java rev. 1.3 (2007-08-20)
+ *
  **********************************************************************/
 
 

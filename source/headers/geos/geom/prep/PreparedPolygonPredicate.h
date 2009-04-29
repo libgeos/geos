@@ -12,6 +12,10 @@
  * See the COPYING file for more information.
  *
  *
+ **********************************************************************
+ *
+ * Last port: geom/prep/PreparedPolygonPredicate.java rev. 1.2 (2007-08-16)
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOM_PREP_PREPAREDPOLYGONPREDICATE_H

@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/prep/AbstractPreparedPolygonContains.java rev. 1.6 (2007-12-12)
+ *
  **********************************************************************/
 
 #include <geos/geom/prep/AbstractPreparedPolygonContains.h>
@@ -112,7 +116,8 @@ AbstractPreparedPolygonContains::eval( const geom::Geometry * geom)
 	// Do point-in-poly tests first, since they are cheaper and may result
 	// in a quick negative result.
 	// 
-	// If a point of any test components does not lie in target, result is false
+	// If a point of any test components does not lie in target,
+	// result is false
 	bool isAllInTargetArea = isAllTestComponentsInTargetArea( geom);
 	if ( !isAllInTargetArea ) 
 		return false;

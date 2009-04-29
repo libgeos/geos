@@ -12,6 +12,10 @@
  * See the COPYING file for more information.
  *
  *
+ **********************************************************************
+ *
+ * Last port: geom/prep/PreparedPolygonCovers.java rev 1.1 (2007-08-17)
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOM_PREP_PREPAREDPOLYGONCOVERS_H

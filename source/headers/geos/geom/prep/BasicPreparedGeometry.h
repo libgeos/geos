@@ -12,6 +12,10 @@
  * See the COPYING file for more information.
  *
  *
+ **********************************************************************
+ *
+ * Last port: geom/prep/BasicPreparedGeometry.java rev. 1.3 (2007-08-20)
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOM_PREP_BASICPREPAREDGEOMETRY_H

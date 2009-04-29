@@ -12,6 +12,10 @@
  * See the COPYING file for more information.
  *
  *
+ **********************************************************************
+ *
+ * Last port: geom/prep/PreparedGeometryFactory.java rev. 1.4 (JTS-1.10)
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOM_PREP_PREPAREDGEOMETRYFACTORY_H

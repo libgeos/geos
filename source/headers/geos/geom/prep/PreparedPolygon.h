@@ -12,6 +12,10 @@
  * See the COPYING file for more information.
  *
  *
+ **********************************************************************
+ *
+ * Last port: geom/prep/PreparedPolygon.java rev 1.7 (JTS-1.10)
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOM_PREP_PREPAREDPOLYGON_H

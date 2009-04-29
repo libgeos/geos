@@ -12,6 +12,10 @@
  * See the COPYING file for more information.
  *
  *
+ **********************************************************************
+ *
+ * Last port: geom/prep/PreparedPolygonContainsProperly.java rev 1.4 (2007-12-12)
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOM_PREP_PREPAREDPOLYGONCONTAINSPROPERLY_H

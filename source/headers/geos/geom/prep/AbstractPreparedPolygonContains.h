@@ -12,6 +12,10 @@
  * See the COPYING file for more information.
  *
  *
+ **********************************************************************
+ *
+ * Last port: geom/prep/AbstractPreparedPolygonContains.java rev. 1.6 (2007-12-12)
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOM_PREP_ABSTRACTPREPAREDPOLYGONCONTAINS_H
@@ -50,7 +54,8 @@ namespace prep { // geos::geom::prep
  * this class is common to both predicates.
  * 
  * It is not possible to short-circuit in all cases, in particular
- * in the case where line segments of the test geometry touches the polygon linework.
+ * in the case where line segments of the test geometry touches the polygon
+ * linework.
  * In this case full topology must be computed.
  * (However, if the test geometry consists of only points, this 
  * <i>can</i> be evaluated in an optimized fashion.

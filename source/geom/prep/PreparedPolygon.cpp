@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/prep/PreparedPolygon.java rev 1.7 (JTS-1.10)
+ *
  **********************************************************************/
 
 #include <geos/geom/Polygon.h>

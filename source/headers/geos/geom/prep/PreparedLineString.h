@@ -12,6 +12,10 @@
  * See the COPYING file for more information.
  *
  *
+ **********************************************************************
+ *
+ * Last port: geom/prep/PreparedLineString.java rev 1.3 (JTS-1.10)
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOM_PREP_PREPAREDLINESTRING_H

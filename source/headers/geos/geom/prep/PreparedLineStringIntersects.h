@@ -12,6 +12,10 @@
  * See the COPYING file for more information.
  *
  *
+ **********************************************************************
+ *
+ * Last port: geom/prep/PreparedLineStringIntersects.java rev 1.2 (JTS-1.10)
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOM_PREP_PREPAREDLINESTRINGINTERSECTS_H
@@ -33,7 +37,8 @@ namespace prep { // geos::geom::prep
 /**
  * \brief
  * Computes the <tt>intersects</tt> spatial relationship predicate
- * for a target {@link PreparedLineString} relative to other {@link Geometry} classes.
+ * for a target {@link PreparedLineString} relative to all other
+ * {@link Geometry} classes.
  * 
  * Uses short-circuit tests and indexing to improve performance. 
  * 

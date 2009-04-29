@@ -12,6 +12,10 @@
  * See the COPYING file for more information.
  *
  *
+ **********************************************************************
+ *
+ * Last port: geom/prep/PreparedPoint.java rev. 1.2 (JTS-1.10)
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOM_PREP_PREPAREDPOINT_H
@@ -41,9 +45,9 @@ public:
 
 	/**
 	 * Tests whether this point intersects a {@link Geometry}.
-	 * <p>
-	 * The optimization here is that computing topology for the test geometry
-	 * is avoided.  This can be significant for large geometries.
+	 * 
+	 * The optimization here is that computing topology for the test
+	 * geometry is avoided. This can be significant for large geometries.
 	 */
 	bool intersects(geom::Geometry* g);
 

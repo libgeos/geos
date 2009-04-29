@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/prep/PreparedPolygonContainsProperly.java rev 1.4 (2007-12-12)
+ *
  **********************************************************************/
 
 
@@ -43,7 +47,8 @@ PreparedPolygonContainsProperly::containsProperly( const geom::Geometry * geom)
 {
 	// Do point-in-poly tests first, since they are cheaper and may result
 	// in a quick negative result.
-	// If a point of any test components does not lie in target, result is false
+	// If a point of any test components does not lie in target,
+	// result is false
 	bool isAllInPrepGeomArea = isAllTestComponentsInTargetInterior( geom);
 	if ( !isAllInPrepGeomArea ) 
 		return false;
@@ -61,6 +66,11 @@ PreparedPolygonContainsProperly::containsProperly( const geom::Geometry * geom)
 	if (segsIntersect) 
 		return false;
 	
+	/**
+	 * Given that no segments intersect, if any vertex of the target
+	 * is contained in some test component.
+	 * the test is NOT properly contained.
+	 */
 	if (	geom->getGeometryTypeId() == geos::geom::GEOS_MULTIPOLYGON  
 		||	geom->getGeometryTypeId() == geos::geom::GEOS_POLYGON )
 	{
