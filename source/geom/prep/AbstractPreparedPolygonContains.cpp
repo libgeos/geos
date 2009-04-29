@@ -13,7 +13,8 @@
  *
  **********************************************************************
  *
- * Last port: geom/prep/AbstractPreparedPolygonContains.java rev. 1.6 (2007-12-12)
+ * Last port: geom/prep/AbstractPreparedPolygonContains.java rev 1.7 (JTS-1.10)
+ * (2007-12-12)
  *
  **********************************************************************/
 
@@ -118,7 +119,7 @@ AbstractPreparedPolygonContains::eval( const geom::Geometry * geom)
 	// 
 	// If a point of any test components does not lie in target,
 	// result is false
-	bool isAllInTargetArea = isAllTestComponentsInTargetArea( geom);
+	bool isAllInTargetArea = isAllTestComponentsInTarget( geom);
 	if ( !isAllInTargetArea ) 
 		return false;
 
@@ -181,7 +182,7 @@ AbstractPreparedPolygonContains::eval( const geom::Geometry * geom)
 		||	geom->getGeometryTypeId() == geos::geom::GEOS_POLYGON )
 	{
 		// TODO: generalize this to handle GeometryCollections
-		bool isTargetInTestArea = isAnyTargetComponentInTestArea( geom, prepPoly->getRepresentativePoints());
+		bool isTargetInTestArea = isAnyTargetComponentInAreaTest( geom, prepPoly->getRepresentativePoints());
 	
 		if ( isTargetInTestArea ) 
 			return false;

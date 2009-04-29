@@ -13,7 +13,8 @@
  *
  **********************************************************************
  *
- * Last port: geom/prep/PreparedPolygonContainsProperly.java rev 1.4 (2007-12-12)
+ * Last port: geom/prep/PreparedPolygonContainsProperly.java rev 1.5 (JTS-1.10)
+ * (2007-12-12)
  *
  **********************************************************************/
 
@@ -75,7 +76,7 @@ PreparedPolygonContainsProperly::containsProperly( const geom::Geometry * geom)
 		||	geom->getGeometryTypeId() == geos::geom::GEOS_POLYGON )
 	{
 		// TODO: generalize this to handle GeometryCollections
-		bool isTargetGeomInTestArea = isAnyTargetComponentInTestArea( geom, prepPoly->getRepresentativePoints());
+		bool isTargetGeomInTestArea = isAnyTargetComponentInAreaTest( geom, prepPoly->getRepresentativePoints());
 		if (isTargetGeomInTestArea) 
 			return false;
 	}

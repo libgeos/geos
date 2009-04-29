@@ -14,7 +14,8 @@
  *
  **********************************************************************
  *
- * Last port: geom/prep/PreparedPolygonIntersects.java rev 1.5 (2007-08-17)
+ * Last port: geom/prep/PreparedPolygonIntersects.java rev 1.6 (JTS-1.10)
+ * (2007-12-12)
  *
  **********************************************************************/
 

@@ -13,7 +13,8 @@
  *
  **********************************************************************
  *
- * Last port: geom/prep/PreparedPolygonCovers.java rev 1.1 (2007-08-17)
+ * Last port: geom/prep/PreparedPolygonCovers.java rev 1.2 (JTS-1.10)
+ * (2007-12-12)
  *
  **********************************************************************/
 

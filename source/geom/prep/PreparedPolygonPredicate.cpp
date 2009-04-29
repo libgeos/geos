@@ -13,7 +13,8 @@
  *
  **********************************************************************
  *
- * Last port: geom/prep/PreparedPolygonPredicate.java rev. 1.2 (2007-08-16)
+ * Last port: geom/prep/PreparedPolygonPredicate.java rev. 1.4 (JTS-1.10)
+ * (2007-12-12)
  *
  **********************************************************************/
 
@@ -38,7 +39,7 @@ namespace prep { // geos.geom.prep
 // protected:
 //
 bool 
-PreparedPolygonPredicate::isAllTestComponentsInTargetArea(const geom::Geometry* testGeom)
+PreparedPolygonPredicate::isAllTestComponentsInTarget(const geom::Geometry* testGeom) const
 {
     geom::Coordinate::ConstVect pts;
     geom::util::ComponentCoordinateExtracter::getCoordinates(*testGeom, pts);
@@ -56,7 +57,8 @@ PreparedPolygonPredicate::isAllTestComponentsInTargetArea(const geom::Geometry* 
 }
 
 bool 
-PreparedPolygonPredicate::isAllTestComponentsInTargetInterior(const geom::Geometry* testGeom)
+PreparedPolygonPredicate::isAllTestComponentsInTargetInterior(
+		const geom::Geometry* testGeom) const
 {
     geom::Coordinate::ConstVect pts;
     geom::util::ComponentCoordinateExtracter::getCoordinates(*testGeom, pts);
@@ -74,7 +76,8 @@ PreparedPolygonPredicate::isAllTestComponentsInTargetInterior(const geom::Geomet
 }
 
 bool 
-PreparedPolygonPredicate::isAnyTestComponentInTargetArea(const geom::Geometry* testGeom)
+PreparedPolygonPredicate::isAnyTestComponentInTarget(
+		const geom::Geometry* testGeom) const
 {
     geom::Coordinate::ConstVect pts;
     geom::util::ComponentCoordinateExtracter::getCoordinates(*testGeom, pts);
@@ -92,7 +95,8 @@ PreparedPolygonPredicate::isAnyTestComponentInTargetArea(const geom::Geometry* t
 }
 
 bool 
-PreparedPolygonPredicate::isAnyTestComponentInTargetInterior( const geom::Geometry * testGeom)
+PreparedPolygonPredicate::isAnyTestComponentInTargetInterior(
+	const geom::Geometry * testGeom) const
 {
     geom::Coordinate::ConstVect pts;
     geom::util::ComponentCoordinateExtracter::getCoordinates(*testGeom, pts);
@@ -110,25 +114,22 @@ PreparedPolygonPredicate::isAnyTestComponentInTargetInterior( const geom::Geomet
 }
 
 bool
-PreparedPolygonPredicate::isAnyTargetComponentInTestArea(const geom::Geometry* testGeom,
-                                                         const geom::Coordinate::ConstVect* targetRepPts)
+PreparedPolygonPredicate::isAnyTargetComponentInAreaTest(
+	const geom::Geometry* testGeom,
+	const geom::Coordinate::ConstVect* targetRepPts) const
 {
-    // TODO - mloskot: Replace manual delete with scoped_ptr
-    algorithm::locate::PointOnGeometryLocator* piaLoc = 0;
-    piaLoc = new algorithm::locate::SimplePointInAreaLocator(testGeom);
+    algorithm::locate::SimplePointInAreaLocator piaLoc(testGeom);
 
     for (std::size_t i = 0, ni = targetRepPts->size(); i < ni; i++)
     {
         const geom::Coordinate * pt = (*targetRepPts)[i];
-        const int loc = piaLoc->locate(pt);
+        const int loc = piaLoc.locate(pt);
         if (geom::Location::EXTERIOR != loc)
         {
-            delete piaLoc;
             return true;
         }
     }
 
-    delete piaLoc;
     return false;
 }
 

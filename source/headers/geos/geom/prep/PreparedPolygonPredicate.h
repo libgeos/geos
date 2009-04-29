@@ -14,7 +14,8 @@
  *
  **********************************************************************
  *
- * Last port: geom/prep/PreparedPolygonPredicate.java rev. 1.2 (2007-08-16)
+ * Last port: geom/prep/PreparedPolygonPredicate.java rev. 1.4 (JTS-1.10)
+ * (2007-12-12)
  *
  **********************************************************************/
 
@@ -60,55 +61,63 @@ private:
 protected:
 	const PreparedPolygon * const prepPoly;
 
-	/**
+	/** \brief
 	 * Tests whether all components of the test Geometry 
 	 * are contained in the target geometry.
+	 *
 	 * Handles both linear and point components.
 	 * 
 	 * @param geom a geometry to test
-	 * @return true if all componenta of the argument are contained in the target geometry
+	 * @return true if all components of the argument are contained
+	 *              in the target geometry
 	 */
-	bool isAllTestComponentsInTargetArea( const geom::Geometry * testGeom);
+	bool isAllTestComponentsInTarget(const geom::Geometry * testGeom) const;
 
-	/**
+	/** \brief
 	 * Tests whether all components of the test Geometry 
 	 * are contained in the interior of the target geometry.
+	 *
 	 * Handles both linear and point components.
 	 * 
 	 * @param geom a geometry to test
-	 * @return true if all componenta of the argument are contained in the target geometry interior
+	 * @return true if all componenta of the argument are contained in
+	 *              the target geometry interior
 	 */
-	bool isAllTestComponentsInTargetInterior( const geom::Geometry * testGeom);
+	bool isAllTestComponentsInTargetInterior( const geom::Geometry * testGeom) const;
 
-	/**
+	/** \brief
 	 * Tests whether any component of the test Geometry intersects
 	 * the area of the target geometry.
+	 *
 	 * Handles test geometries with both linear and point components.
 	 * 
 	 * @param geom a geometry to test
-	 * @return true if any component of the argument intersects the prepared geometry
+	 * @return true if any component of the argument intersects the
+	 *              prepared geometry
 	 */
-	bool isAnyTestComponentInTargetArea( const geom::Geometry * testGeom);
+	bool isAnyTestComponentInTarget( const geom::Geometry * testGeom) const;
 
-	/**
+	/** \brief
 	 * Tests whether any component of the test Geometry intersects
 	 * the interior of the target geometry.
+	 *
 	 * Handles test geometries with both linear and point components.
 	 * 
 	 * @param geom a geometry to test
-	 * @return true if any component of the argument intersects the prepared area geometry interior
+	 * @return true if any component of the argument intersects the
+	 *              prepared area geometry interior
 	 */
-	bool isAnyTestComponentInTargetInterior( const geom::Geometry * testGeom);
+	bool isAnyTestComponentInTargetInterior( const geom::Geometry * testGeom) const;
 
 	/**
 	 * Tests whether any component of the target geometry 
-	 * intersects the area of the test geometry 
+	 * intersects the test geometry (which must be an areal geometry)
 	 * 
 	 * @param geom the test geometry
 	 * @param repPts the representative points of the target geometry
 	 * @return true if any component intersects the areal test geometry
 	 */
-	bool isAnyTargetComponentInTestArea( const geom::Geometry * testGeom, const geom::Coordinate::ConstVect * targetRepPts);
+	bool isAnyTargetComponentInAreaTest( const geom::Geometry * testGeom, const geom::Coordinate::ConstVect * targetRepPts) const;
 
 public:
 	/**
@@ -120,7 +129,7 @@ public:
 	:	prepPoly( prepPoly)
 	{ }
 
-	~PreparedPolygonPredicate()
+	virtual ~PreparedPolygonPredicate()
 	{ }
 
 };

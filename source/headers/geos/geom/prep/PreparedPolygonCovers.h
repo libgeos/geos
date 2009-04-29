@@ -14,7 +14,8 @@
  *
  **********************************************************************
  *
- * Last port: geom/prep/PreparedPolygonCovers.java rev 1.1 (2007-08-17)
+ * Last port: geom/prep/PreparedPolygonCovers.java rev 1.2 (JTS-1.10)
+ * (2007-12-12)
  *
  **********************************************************************/
 
@@ -61,7 +62,7 @@ protected:
 	 * Used when short-circuit tests are not conclusive.
 	 * 
 	 * @param geom the test geometry
-	 * @return true if this prepared polygon contains the test geometry
+	 * @return true if this prepared polygon covers the test geometry
 	 */
 	bool fullTopologicalPredicate( const geom::Geometry * geom);
 
@@ -93,7 +94,7 @@ public:
 	 * Tests whether this PreparedPolygon <tt>covers</tt> a given geometry.
 	 * 
 	 * @param geom the test geometry
-	 * @return true if the test geometry is contained
+	 * @return true if the test geometry is covered
 	 */
 	bool covers( const Geometry * geom)
 	{

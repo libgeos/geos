@@ -13,7 +13,8 @@
  *
  **********************************************************************
  *
- * Last port: geom/prep/PreparedPolygonIntersects.java rev 1.5 (2007-08-17)
+ * Last port: geom/prep/PreparedPolygonIntersects.java rev 1.6 (JTS-1.10)
+ * (2007-12-12)
  *
  **********************************************************************/
 
@@ -48,7 +49,7 @@ PreparedPolygonIntersects::intersects( const geom::Geometry * geom)
 	// Do point-in-poly tests first, since they are cheaper and may result
 	// in a quick positive result.
 	// If a point of any test components lie in target, result is true
-	bool isInPrepGeomArea = isAnyTestComponentInTargetArea( geom);
+	bool isInPrepGeomArea = isAnyTestComponentInTarget( geom);
 	if ( isInPrepGeomArea ) 
 		return true;
 	
@@ -72,7 +73,7 @@ PreparedPolygonIntersects::intersects( const geom::Geometry * geom)
 	if ( geom->getDimension() == 2) 
 	{
 		// TODO: generalize this to handle GeometryCollections
-		bool isPrepGeomInArea = isAnyTargetComponentInTestArea( geom, prepPoly->getRepresentativePoints());
+		bool isPrepGeomInArea = isAnyTargetComponentInAreaTest( geom, prepPoly->getRepresentativePoints());
 		if ( isPrepGeomInArea ) 
 			return true;
 	}

@@ -14,7 +14,8 @@
  *
  **********************************************************************
  *
- * Last port: geom/prep/PreparedPolygonContainsProperly.java rev 1.4 (2007-12-12)
+ * Last port: geom/prep/PreparedPolygonContainsProperly.java rev 1.5 (JTS-1.10)
+ * (2007-12-12)
  *
  **********************************************************************/
 
