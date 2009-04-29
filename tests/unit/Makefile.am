@@ -82,6 +82,8 @@ geos_unit_SOURCES = geos_unit.cpp \
 	util/UniqueCoordinateArrayFilterTest.cpp \
 	capi/GEOSCoordSeqTest.cpp \
 	capi/GEOSGeomToWKTTest.cpp \
+	capi/GEOSContainsTest.cpp \
+	capi/GEOSWithinTest.cpp \
 	capi/GEOSSimplifyTest.cpp \
 	capi/GEOSPreparedGeometryTest.cpp \
 	capi/GEOSPolygonizer_getCutEdgesTest.cpp
