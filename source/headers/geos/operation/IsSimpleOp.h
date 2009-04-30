@@ -15,14 +15,17 @@
  *
  **********************************************************************
  *
- * Last port: operation/IsSimpleOp.java rev. 1.18
+ * Last port: operation/IsSimpleOp.java rev. 1.19
  *
  **********************************************************************/
 
 #ifndef GEOS_OPERATION_ISSIMPLEOP_H
 #define GEOS_OPERATION_ISSIMPLEOP_H
 
+#include <geos/geom/Coordinate.h> // for dtor visibility by auto_ptr (compos)
+
 #include <map>
+#include <memory> // for auto_ptr
 
 // Forward declarations
 namespace geos {
@@ -34,7 +37,6 @@ namespace geos {
 		class MultiLineString;
 		class MultiPoint;
 		class Geometry;
-		class Coordinate;
 		struct CoordinateLessThen;
 	}
 	namespace geomgraph {
@@ -90,20 +92,59 @@ public:
 	/** \brief
 	 * Creates a simplicity checker using the default
 	 * SFS Mod-2 Boundary Node Rule
+	 *
+	 * @deprecated use IsSimpleOp(Geometry)
 	 */
 	IsSimpleOp();
 
 	/** \brief
+	 * Creates a simplicity checker using the default
+	 * SFS Mod-2 Boundary Node Rule
+	 *
+	 * @param geom The geometry to test.
+	 *             Will store a reference: keep it alive.
+	 */
+	IsSimpleOp(const geom::Geometry& geom);
+
+	/** \brief
 	 * Creates a simplicity checker using a given
 	 * algorithm::BoundaryNodeRule
+	 *
+	 * @param geom the geometry to test
+	 * @param boundaryNodeRule the rule to use.
 	 */
-	IsSimpleOp(const algorithm::BoundaryNodeRule& boundaryNodeRule);
+	IsSimpleOp(const geom::Geometry& geom,
+		   const algorithm::BoundaryNodeRule& boundaryNodeRule);
+
+	/**
+	 * Tests whether the geometry is simple.
+	 *
+	 * @return true if the geometry is simple
+	 */
+	bool isSimple();
+
+	/**
+	 * Gets a coordinate for the location where the geometry
+	 * fails to be simple.
+	 * (i.e. where it has a non-boundary self-intersection).
+	 * {@link #isSimple} must be called before this method is called.
+	 *
+	 * @return a coordinate for the location of the non-boundary
+	 *           self-intersection. Ownership retained.
+	 * @return the null coordinate if the geometry is simple
+	 */
+	const geom::Coordinate* getNonSimpleLocation() const
+	{
+		return nonSimpleLocation.get();
+	}
 
 	/**
 	 * Reports whether a geom::LineString is simple.
 	 *
 	 * @param geom the lineal geometry to test
 	 * @return true if the geometry is simple
+	 *
+	 * @deprecated use isSimple()
 	 */
 	bool isSimple(const geom::LineString *geom);
 
@@ -112,11 +153,15 @@ public:
 	 *
 	 * @param geom the lineal geometry to test
 	 * @return true if the geometry is simple
+	 *
+	 * @deprecated use isSimple()
 	 */
 	bool isSimple(const geom::MultiLineString *geom);
 
 	/**
 	 * A MultiPoint is simple iff it has no repeated points
+	 *
+	 * @deprecated use isSimple()
 	 */
 	bool isSimple(const geom::MultiPoint *mp);
 
@@ -150,6 +195,12 @@ private:
 			const geom::Coordinate *p, bool isClosed);
 
 	bool isClosedEndpointsInInterior; 
+
+	bool isSimpleMultiPoint(const geom::MultiPoint& mp);
+
+	const geom::Geometry* geom;
+
+	std::auto_ptr<geom::Coordinate> nonSimpleLocation;
 };
 
 } // namespace geos.operation

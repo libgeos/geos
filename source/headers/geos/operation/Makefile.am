@@ -17,7 +17,6 @@ SUBDIRS = \
 geosdir = $(includedir)/geos/operation
 
 geos_HEADERS = \
-	EndpointInfo.h \
 	GeometryGraphOperation.h \
 	IsSimpleOp.h
 

@@ -15,12 +15,12 @@
  *
  **********************************************************************
  *
- * Last port: operation/IsSimpleOp.java rev. 1.18
+ * Last port: operation/IsSimpleOp.java rev. 1.19
  *
  **********************************************************************/
 
 #include <geos/operation/IsSimpleOp.h>
-#include <geos/operation/EndpointInfo.h>
+//#include <geos/operation/EndpointInfo.h>
 #include <geos/algorithm/BoundaryNodeRule.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/geomgraph/GeometryGraph.h>
@@ -45,17 +45,83 @@ using namespace geos::geom;
 namespace geos {
 namespace operation { // geos.operation
 
+// This is supposedly a private of IsSimpleOp...
+class EndpointInfo
+{
+public:
+
+	Coordinate pt;
+
+	bool isClosed;
+
+	int degree;
+
+    	EndpointInfo(const geom::Coordinate& newPt);
+
+	const Coordinate& getCoordinate() const { return pt; }
+
+	void addEndpoint(bool newIsClosed)
+	{
+		degree++;
+		isClosed |= newIsClosed;
+	}
+};
+
+EndpointInfo::EndpointInfo(const Coordinate& newPt)
+{
+	pt=newPt;
+	isClosed=false;
+	degree=0;
+}
+
+// -----------------------------------------------------
+
+
+
 /*public*/
 IsSimpleOp::IsSimpleOp()
 	:
-	isClosedEndpointsInInterior(true)
+	isClosedEndpointsInInterior(true),
+	geom(0),
+	nonSimpleLocation()
 {}
 
 /*public*/
-IsSimpleOp::IsSimpleOp(const algorithm::BoundaryNodeRule& boundaryNodeRule)
+IsSimpleOp::IsSimpleOp(const Geometry& g)
 	:
-	isClosedEndpointsInInterior( ! boundaryNodeRule.isInBoundary(2) )
+	isClosedEndpointsInInterior(true),
+	geom(&g),
+	nonSimpleLocation()
 {}
+
+/*public*/
+IsSimpleOp::IsSimpleOp(const Geometry& g,
+	               const BoundaryNodeRule& boundaryNodeRule)
+	:
+	isClosedEndpointsInInterior( ! boundaryNodeRule.isInBoundary(2) ),
+	geom(&g),
+	nonSimpleLocation()
+{}
+
+/*public*/
+bool
+IsSimpleOp::isSimple()
+{
+	nonSimpleLocation.reset();
+
+	if ( dynamic_cast<const LineString*>(geom) )
+		return isSimpleLinearGeometry(geom);
+
+	if ( dynamic_cast<const MultiLineString*>(geom) )
+		return isSimpleLinearGeometry(geom);
+
+	const MultiPoint* mp = dynamic_cast<const MultiPoint*>(geom);
+	if ( mp ) return isSimpleMultiPoint(*mp);
+
+	// all other geometry types are simple by definition
+	return true;
+}
+
 
 /*public*/
 bool
@@ -75,15 +141,24 @@ IsSimpleOp::isSimple(const MultiLineString *geom)
 bool
 IsSimpleOp::isSimple(const MultiPoint *mp)
 {
-	if (mp->isEmpty()) return true;
+	return isSimpleMultiPoint(*mp);
+}
+
+/*private*/
+bool
+IsSimpleOp::isSimpleMultiPoint(const MultiPoint& mp)
+{
+	if (mp.isEmpty()) return true;
 	set<const Coordinate*, CoordinateLessThen> points;
 
-    for (std::size_t i=0, n=mp->getNumGeometries(); i<n; i++)
+	for (std::size_t i=0, n=mp.getNumGeometries(); i<n; ++i)
 	{
-		assert(dynamic_cast<const Point*>(mp->getGeometryN(i)));
-		const Point *pt=static_cast<const Point*>(mp->getGeometryN(i));
+		assert(dynamic_cast<const Point*>(mp.getGeometryN(i)));
+		const Point *pt=static_cast<const Point*>(mp.getGeometryN(i));
 		const Coordinate *p=pt->getCoordinate();
-		if (points.find(p) != points.end()) {
+		if (points.find(p) != points.end())
+		{
+			nonSimpleLocation.reset(new Coordinate(*p));
 			return false;
 		}
 		points.insert(p);
@@ -102,7 +177,13 @@ IsSimpleOp::isSimpleLinearGeometry(const Geometry *geom)
 	// if no self-intersection, must be simple
 	if (!si->hasIntersection()) return true;
 	
-	if (si->hasProperIntersection()) return false;
+	if (si->hasProperIntersection())
+	{
+		nonSimpleLocation.reset(
+			new Coordinate(si->getProperIntersectionPoint())
+		);
+		return false;
+	}
 	
 	if (hasNonEndpointIntersection(graph)) return false;
 
@@ -127,7 +208,12 @@ IsSimpleOp::hasNonEndpointIntersection(GeometryGraph &graph)
 		{
 			EdgeIntersection *ei=*eiIt;
 			if (!ei->isEndPoint(maxSegmentIndex))
+			{
+				nonSimpleLocation.reset(
+					new Coordinate(ei->getCoordinate())
+				);
 				return true;
+			}
 		}
 	}
 	return false;
@@ -158,6 +244,9 @@ IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph &graph)
 				EndpointInfo *ep=it->second;
 				delete ep;
 			}
+			nonSimpleLocation.reset(
+				new Coordinate( eiInfo->getCoordinate() )
+			);
             		return true;
 		}
 	}
@@ -188,20 +277,6 @@ IsSimpleOp::addEndpoint(
 		endPoints[p]=eiInfo;
 	}
 	eiInfo->addEndpoint(isClosed);
-}
-
-EndpointInfo::EndpointInfo(const Coordinate& newPt)
-{
-	pt=newPt;
-	isClosed=false;
-	degree=0;
-}
-
-void
-EndpointInfo::addEndpoint(bool newIsClosed)
-{
-	degree++;
-	isClosed|=newIsClosed;
 }
 
 } // namespace geos::operation
