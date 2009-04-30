@@ -15,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/IsSimpleOp.java rev. 1.19
+ * Last port: operation/IsSimpleOp.java rev. 1.22 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -72,8 +72,9 @@ namespace operation { // geos.operation
  *    use {@link Geometry::isValid}).
  *
  *  - Linear geometries are simple iff they do not self-intersect at points
- *    other than boundary points. (This means that closed linestrings
- *    cannot be touched at their endpoints, since by the Mod-2 rule these are
+ *    other than boundary points. 
+ *    (Using the Mod-2 rule, this means that closed linestrings
+ *    cannot be touched at their endpoints, since these are
  *    interior points, not boundary points).
  *
  *  - Zero-dimensional geometries (points) are simple iff they have no
