@@ -29,7 +29,6 @@ namespace operation { // geos.operation
 } // namespace geos.operation
 } // namespace geos
 
-#include <geos/operation/EndpointInfo.h>
 #include <geos/operation/GeometryGraphOperation.h>
 #include <geos/operation/IsSimpleOp.h>
 
