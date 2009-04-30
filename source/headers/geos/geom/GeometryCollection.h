@@ -119,8 +119,6 @@ public:
 
 	virtual GeometryTypeId getGeometryTypeId() const;
 
-	virtual bool isSimple() const;
-
 	virtual bool equalsExact(const Geometry *other,
 			double tolerance=0) const;
 
