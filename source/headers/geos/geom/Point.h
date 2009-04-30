@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/Point.java rev. 1.37 (JTS-1.10)
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOS_POINT_H
@@ -48,7 +52,9 @@ namespace geom { // geos::geom
  * \class Point geom.h geos.h
  * \brief Basic implementation of Point.
  */
-class Point : public Geometry {
+class Point : public Geometry
+	// NOTE: in JTS Point implements Puntual
+{
 
 public:
 
@@ -59,6 +65,12 @@ public:
 
 	virtual ~Point();
 
+	/**
+	 * Creates and returns a full copy of this {@link Point} object.
+	 * (including all coordinates contained by it).
+	 *
+	 * @return a clone of this instance
+	 */
 	Geometry *clone() const { return new Point(*this); }
 
 	CoordinateSequence* getCoordinates(void) const;
@@ -76,7 +88,14 @@ public:
 	/// Returns Dimension::False (Point has no boundary)
 	int getBoundaryDimension() const;
 
-	/// Returns an EMPTY Geometry.
+	/**
+	 * Gets the boundary of this geometry.
+	 * Zero-dimensional geometries have no boundary by definition,
+	 * so an empty GeometryCollection is returned.
+	 *
+	 * @return an empty GeometryCollection
+	 * @see Geometry::getBoundary
+	 */
 	Geometry* getBoundary() const;
 
 	double getX() const;
@@ -94,7 +113,16 @@ public:
 	void apply_ro(CoordinateSequenceFilter& filter) const;
 
 	bool equalsExact(const Geometry *other, double tolerance=0) const;
-	void normalize(void) { };
+
+	void normalize(void)
+	{
+		// a Point is always in normalized form
+	}
+
+  	Geometry* reverse() const
+	{
+		return clone();
+	}
 
 protected:
 
@@ -135,28 +163,3 @@ private:
 
 #endif // ndef GEOS_GEOS_POINT_H
 
-/**********************************************************************
- * $Log$
- * Revision 1.6  2006/05/04 15:49:39  strk
- * updated all Geometry::getDimension() methods to return Dimension::DimensionType (closes bug#93)
- *
- * Revision 1.5  2006/04/28 10:55:39  strk
- * Geometry constructors made protected, to ensure all constructions use GeometryFactory,
- * which has been made friend of all Geometry derivates. getNumPoints() changed to return
- * size_t.
- *
- * Revision 1.4  2006/04/10 18:15:09  strk
- * Changed Geometry::envelope member to be of type auto_ptr<Envelope>.
- * Changed computeEnvelopeInternal() signater to return auto_ptr<Envelope>
- *
- * Revision 1.3  2006/04/10 17:35:44  strk
- * Changed LineString::points and Point::coordinates to be wrapped
- * in an auto_ptr<>. This should close bugs #86 and #89
- *
- * Revision 1.2  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/
