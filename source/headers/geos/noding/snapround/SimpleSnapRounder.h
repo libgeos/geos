@@ -67,8 +67,6 @@ namespace snapround { // geos::noding::snapround
  * It will function with non-integer precision models, but the
  * results are not 100% guaranteed to be correctly noded.
  *
- * Last port: noding/snapround/SimpleSnapRounder.java rev. 1.2 (JTS-1.7)
- *
  */
 class SimpleSnapRounder: public Noder { // implements NoderIface
 
