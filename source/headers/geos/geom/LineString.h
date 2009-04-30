@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/LineString.java rev. 1.46
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOS_LINESTRING_H
@@ -55,6 +59,12 @@ public:
 
 	virtual ~LineString();
 
+	/**
+	 * Creates and returns a full copy of this {@link LineString} object.
+	 * (including all coordinates contained by it).
+	 *
+	 * @return a clone of this instance
+	 */
 	virtual Geometry *clone() const;
 
 	virtual CoordinateSequence* getCoordinates() const;
@@ -106,8 +116,6 @@ public:
 	virtual std::string getGeometryType() const;
 
 	virtual GeometryTypeId getGeometryTypeId() const;
-
-	virtual bool isSimple() const;
 
 	virtual bool isCoordinate(Coordinate& pt) const;
 

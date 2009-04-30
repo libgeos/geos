@@ -12,11 +12,14 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/LineString.java rev. 1.46
+ *
  **********************************************************************/
 
 #include <geos/util/IllegalArgumentException.h> 
 #include <geos/algorithm/CGAlgorithms.h>
-#include <geos/operation/IsSimpleOp.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -204,19 +207,15 @@ LineString::getGeometryType() const
 	return "LineString";
 }
 
-bool
-LineString::isSimple() const
-{
-	operation::IsSimpleOp iso;
-	return iso.isSimple(this); 
-}
-
 Geometry*
 LineString::getBoundary() const
 {
 	if (isEmpty()) {
-		return getFactory()->createEmptyGeometry();
+		return getFactory()->createMultiPoint();
 	}
+
+	// using the default OGC_SFS MOD2 rule, the boundary of a
+	// closed LineString is empty
 	if (isClosed()) {
 		return getFactory()->createMultiPoint();
 	}
