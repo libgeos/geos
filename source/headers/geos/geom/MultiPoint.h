@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/MultiPoint.java rev. 1.30
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOS_MULTIPOINT_H
@@ -54,16 +58,20 @@ public:
 	/// Returns Dimension::False (Point has no boundary)
 	int getBoundaryDimension() const;
 
-	/// Returns an EMPTY Geometry
+	/** \brief
+	 * Gets the boundary of this geometry.
+	 *
+	 * Zero-dimensional geometries have no boundary by definition,
+	 * so an empty GeometryCollection is returned.
+	 *
+	 * @return an empty GeometryCollection
+	 * @see Geometry#getBoundary
+	 */
 	Geometry* getBoundary() const;
 
 	std::string getGeometryType() const;
 
 	virtual GeometryTypeId getGeometryTypeId() const;
-
-	//bool isValid() const;
-
-	bool isSimple() const;
 
 	bool equalsExact(const Geometry *other, double tolerance=0) const;
 

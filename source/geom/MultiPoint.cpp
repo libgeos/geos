@@ -12,11 +12,14 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/MultiPoint.java rev. 1.30
+ *
  **********************************************************************/
 
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/operation/IsSimpleOp.h>
 #include <geos/geom/Dimension.h>
 
 #include <vector>
@@ -52,20 +55,8 @@ string MultiPoint::getGeometryType() const {
 }
 
 Geometry* MultiPoint::getBoundary() const {
-	return getFactory()->createGeometryCollection(NULL);
+	return getFactory()->createGeometryCollection();
 }
-
-bool MultiPoint::isSimple() const {
-	operation::IsSimpleOp iso;
-	return iso.isSimple(this);
-	
-	//Geometry *in = toInternalGeometry(this);
-	//bool issimple = iso.isSimple((MultiPoint *)in);
-	//if ( (MultiPoint *)in != this ) delete(in);
-	//return issimple;
-}
-
-//bool MultiPoint::isValid() const { return true; }
 
 bool
 MultiPoint::equalsExact(const Geometry *other, double tolerance) const
