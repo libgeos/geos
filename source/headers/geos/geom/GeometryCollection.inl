@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/GeometryCollection.java rev. 1.41
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOMETRYCOLLECTION_INL

@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/GeometryCollection.java rev. 1.41
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOS_GEOMETRYCOLLECTION_H
@@ -62,6 +66,12 @@ public:
 
 	const_iterator end() const;
 
+	/**
+	 * Creates and returns a full copy of this GeometryCollection object.
+	 * (including all coordinates contained by it).
+	 *
+	 * @return a clone of this instance
+	 */
 	virtual Geometry *clone() const {
 		return new GeometryCollection(*this);
 	}

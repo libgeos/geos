@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/GeometryCollection.java rev. 1.41
+ *
  **********************************************************************/
 
 #include <geos/geom/GeometryCollection.h>
@@ -156,6 +160,9 @@ bool
 GeometryCollection::isSimple() const
 {
 	throw util::IllegalArgumentException("Operation not supported by GeometryCollection\n");
+	checkNotGeometryCollection(this);
+	abort(); // never reached...
+	return false;
 }
 
 Geometry*
@@ -328,6 +335,8 @@ GeometryCollection::apply_ro(CoordinateSequenceFilter& filter) const
 		(*geometries)[i]->apply_ro(filter);
 		if (filter.isDone()) break;
 	}
+
+	assert(!filter.isGeometryChanged()); // read-only filter...
 	//if (filter.isGeometryChanged()) geometryChanged();
 }
 
