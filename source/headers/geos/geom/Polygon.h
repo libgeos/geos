@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/Polygon.java rev. 1.47
+ * Last port: geom/Polygon.java rev. 1.50
  *
  **********************************************************************/
 
@@ -72,6 +72,12 @@ public:
 
 	virtual ~Polygon();
 
+	/**
+	 * Creates and returns a full copy of this {@link Polygon} object.
+	 * (including all coordinates contained by it).
+	 *
+	 * @return a clone of this instance
+	 */
 	virtual Geometry *clone() const { return new Polygon(*this); }
 
 	CoordinateSequence* getCoordinates() const;
@@ -84,11 +90,11 @@ public:
 	/// Returns 1 (Polygon boundary is a MultiLineString)
 	int getBoundaryDimension() const;
 
-	/**
-	 * \brief
-	 * Returns a MultiLineString.
-	 * One LineString for the shell and one for each hole.
-	 * Empty for an empty Polygon.
+	/** \brief
+	 * Computes the boundary of this geometry
+	 *
+	 * @return a lineal geometry (which may be empty)
+	 * @see Geometry#getBoundary
 	 */
 	Geometry* getBoundary() const;
 

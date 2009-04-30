@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/Polygon.java rev. 1.47
+ * Last port: geom/Polygon.java rev. 1.50
  *
  **********************************************************************/
 
@@ -209,7 +209,7 @@ Polygon::getBoundary() const
 	const GeometryFactory* gf = getFactory();
 
 	if (isEmpty()) {
-		return gf->createEmptyGeometry();
+		return gf->createMultiLineString();
 	}
 
 	if ( ! holes->size() )
