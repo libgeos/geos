@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2009      Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2005 Refractions Research Inc.
  *
@@ -14,12 +15,13 @@
  *
  **********************************************************************
  *
- * Last port: operation/IsSimpleOp.java rev. 1.17
+ * Last port: operation/IsSimpleOp.java rev. 1.18
  *
  **********************************************************************/
 
 #include <geos/operation/IsSimpleOp.h>
 #include <geos/operation/EndpointInfo.h>
+#include <geos/algorithm/BoundaryNodeRule.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/geomgraph/GeometryGraph.h>
 #include <geos/geomgraph/Edge.h>
@@ -45,6 +47,14 @@ namespace operation { // geos.operation
 
 /*public*/
 IsSimpleOp::IsSimpleOp()
+	:
+	isClosedEndpointsInInterior(true)
+{}
+
+/*public*/
+IsSimpleOp::IsSimpleOp(const algorithm::BoundaryNodeRule& boundaryNodeRule)
+	:
+	isClosedEndpointsInInterior( ! boundaryNodeRule.isInBoundary(2) )
 {}
 
 /*public*/
@@ -87,25 +97,19 @@ IsSimpleOp::isSimpleLinearGeometry(const Geometry *geom)
 	if (geom->isEmpty()) return true;
 	GeometryGraph graph(0,geom);
 	LineIntersector li;
-	SegmentIntersector *si=graph.computeSelfNodes(&li,true);
+	std::auto_ptr<SegmentIntersector> si (graph.computeSelfNodes(&li,true));
+
 	// if no self-intersection, must be simple
-	if (!si->hasIntersection()) {
-		delete si;
-		return true;
+	if (!si->hasIntersection()) return true;
+	
+	if (si->hasProperIntersection()) return false;
+	
+	if (hasNonEndpointIntersection(graph)) return false;
+
+	if ( isClosedEndpointsInInterior ) {
+		if (hasClosedEndpointIntersection(graph)) return false;
 	}
-	if (si->hasProperIntersection()) {
-		delete si;
-		return false;
-	}
-	if (hasNonEndpointIntersection(graph)) {
-		delete si;
-		return false;
-	}
-	if (hasClosedEndpointIntersection(graph)) {
-		delete si;
-		return false;
-	}
-	delete si;
+	
 	return true;
 }
 

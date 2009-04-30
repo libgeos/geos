@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2009      Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -14,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/IsSimpleOp.java rev. 1.17
+ * Last port: operation/IsSimpleOp.java rev. 1.18
  *
  **********************************************************************/
 
@@ -25,6 +26,9 @@
 
 // Forward declarations
 namespace geos {
+	namespace algorithm {
+		class BoundaryNodeRule;
+	}
 	namespace geom {
 		class LineString;
 		class MultiLineString;
@@ -50,28 +54,65 @@ namespace operation { // geos.operation
  *
  * In general, the SFS specification of simplicity follows the rule:
  *
- *  - A Geometry is simple iff the only self-intersections are at
- *    boundary points.
+ *  - A Geometry is simple if and only if the only self-intersections
+ *    are at boundary points.
+ * 
+ * This definition relies on the definition of boundary points.
+ * The SFS uses the Mod-2 rule to determine which points are on the boundary of
+ * lineal geometries, but this class supports
+ * using other {@link BoundaryNodeRule}s as well.
  *
  * Simplicity is defined for each {@link Geometry} subclass as follows:
  * 
  *  - Valid polygonal geometries are simple by definition, so
  *    <code>isSimple</code> trivially returns true.
+ *    (Hint: in order to check if a polygonal geometry has self-intersections,
+ *    use {@link Geometry::isValid}).
+ *
  *  - Linear geometries are simple iff they do not self-intersect at points
- *    other than boundary points.
+ *    other than boundary points. (This means that closed linestrings
+ *    cannot be touched at their endpoints, since by the Mod-2 rule these are
+ *    interior points, not boundary points).
+ *
  *  - Zero-dimensional geometries (points) are simple iff they have no
  *    repeated points.
+ *
  *  - Empty <code>Geometry</code>s are always simple
  *
+ * @see algorithm::BoundaryNodeRule
+ *
  */
-class IsSimpleOp {
+class IsSimpleOp
+{
 
 public:
 
+	/** \brief
+	 * Creates a simplicity checker using the default
+	 * SFS Mod-2 Boundary Node Rule
+	 */
 	IsSimpleOp();
 
+	/** \brief
+	 * Creates a simplicity checker using a given
+	 * algorithm::BoundaryNodeRule
+	 */
+	IsSimpleOp(const algorithm::BoundaryNodeRule& boundaryNodeRule);
+
+	/**
+	 * Reports whether a geom::LineString is simple.
+	 *
+	 * @param geom the lineal geometry to test
+	 * @return true if the geometry is simple
+	 */
 	bool isSimple(const geom::LineString *geom);
 
+	/**
+	 * Reports whether a geom::MultiLineString is simple.
+	 *
+	 * @param geom the lineal geometry to test
+	 * @return true if the geometry is simple
+	 */
 	bool isSimple(const geom::MultiLineString *geom);
 
 	/**
@@ -107,6 +148,8 @@ private:
 	void addEndpoint(std::map<const geom::Coordinate*, EndpointInfo*,
 			geom::CoordinateLessThen>&endPoints,
 			const geom::Coordinate *p, bool isClosed);
+
+	bool isClosedEndpointsInInterior; 
 };
 
 } // namespace geos.operation
