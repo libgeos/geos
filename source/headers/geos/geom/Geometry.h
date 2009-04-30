@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/Geometry.java rev. 1.100
+ * Last port: geom/Geometry.java rev. 1.104
  *
  **********************************************************************/
 
@@ -260,7 +260,7 @@ public:
 	virtual size_t getNumPoints() const=0; //Abstract
 
 	/// Returns false if the Geometry not simple.
-	virtual bool isSimple() const=0; //Abstract
+	virtual bool isSimple() const; 
 
 	/// Return a string representation of this Geometry type
 	virtual std::string getGeometryType() const=0; //Abstract
@@ -298,9 +298,19 @@ public:
 
 	/**
 	 * \brief
-	 * Returns the boundary as a newly allocated Geometry object.
+	 * Returns the boundary, or an empty geometry of appropriate
+	 * dimension if this <code>Geometry</code>  is empty.
 	 *
-	 * Returned geometry is empty if this Geometry is empty.
+	 * (In the case of zero-dimensional geometries, 
+	 * an empty GeometryCollection is returned.)
+	 * For a discussion of this function, see the OpenGIS Simple
+	 * Features Specification. As stated in SFS Section 2.1.13.1,
+	 * "the boundary of a Geometry is a set of Geometries of the
+	 * next lower dimension."
+	 *
+	 * @return  the closure of the combinatorial boundary
+	 *          of this <code>Geometry</code>.
+	 *          Ownershipof the returned object transferred to caller.
 	 */
 	virtual Geometry* getBoundary() const=0; //Abstract
 
@@ -530,7 +540,8 @@ public:
 	 * this Geometry and other.
 	 *
 	 * @throws util::TopologyException if a robustness error occurs
-	 * @throws util::IllegalArgumentException if either arg is a collection
+	 * @throws util::IllegalArgumentException if either input is a
+	 *         non-empty GeometryCollection
 	 *
 	 */
 	virtual Geometry* intersection(const Geometry *other) const;
@@ -540,7 +551,8 @@ public:
 	 * and other.
 	 *
 	 * @throws util::TopologyException if a robustness error occurs
-	 * @throws util::IllegalArgumentException if either arg is a collection
+	 * @throws util::IllegalArgumentException if either input is a
+	 *         non-empty GeometryCollection
 	 *
 	 */
 	virtual Geometry* Union(const Geometry *other) const;
@@ -552,7 +564,8 @@ public:
 	 * Geometry that do not make up other.
 	 *
 	 * @throws util::TopologyException if a robustness error occurs
-	 * @throws util::IllegalArgumentException if either arg is a collection
+	 * @throws util::IllegalArgumentException if either input is a
+	 *         non-empty GeometryCollection
 	 *
 	 */
 	virtual Geometry* difference(const Geometry *other) const;
@@ -562,7 +575,8 @@ public:
 	 * and the points in other not in this Geometry.
 	 *
 	 * @throws util::TopologyException if a robustness error occurs
-	 * @throws util::IllegalArgumentException if either arg is a collection
+	 * @throws util::IllegalArgumentException if either input is a
+	 *         non-empty GeometryCollection
 	 *
 	 */
 	virtual Geometry* symDifference(const Geometry *other) const;
@@ -682,6 +696,8 @@ public:
 	void geometryChangedAction();
 
 protected:
+
+	/// The bounding box of this Geometry
 	mutable std::auto_ptr<Envelope> envelope;
 	
 	/// Returns true if the array contains any non-empty Geometrys.
@@ -736,9 +752,12 @@ protected:
 
 	/** \brief
 	 * Construct a geometry with the given GeometryFactory.
+	 *
 	 * Will keep a reference to the factory, so don't
 	 * delete it until al Geometry objects referring to
 	 * it are deleted.
+	 *
+	 * @param factory
 	 */
 	Geometry(const GeometryFactory *factory);
 
@@ -758,8 +777,15 @@ private:
 	};
 
 	static GeometryChangedFilter geometryChangedFilter;
+
+	/// The GeometryFactory used to create this Geometry
+	//
+	/// Externally owned
+	///
 	const GeometryFactory *factory;
+
 	static const GeometryFactory* INTERNAL_GEOMETRY_FACTORY;
+
 	void* userData;
 };
 

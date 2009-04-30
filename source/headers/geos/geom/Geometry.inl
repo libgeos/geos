@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/Geometry.java rev. 1.104
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOM_GEOMETRY_INL

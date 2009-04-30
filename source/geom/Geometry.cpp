@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/Geometry.java rev. 1.100
+ * Last port: geom/Geometry.java rev. 1.104
  *
  **********************************************************************/
 
@@ -47,6 +47,7 @@
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/distance/DistanceOp.h>
+#include <geos/operation/IsSimpleOp.h>
 #include <geos/io/WKBWriter.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/version.h>
@@ -525,6 +526,16 @@ Geometry::convexHull() const
 Geometry*
 Geometry::intersection(const Geometry *other) const
 {
+	/**
+         * TODO: MD - add optimization for P-A case using Point-In-Polygon
+         */
+
+	// special case: if one input is empty ==> empty
+	if (isEmpty() || other->isEmpty() )
+	{
+		return getFactory()->createGeometryCollection();
+	}
+
 	return OverlayOp::overlayOp(this, other, OverlayOp::opINTERSECTION);
 }
 
@@ -532,6 +543,11 @@ Geometry*
 Geometry::Union(const Geometry *other) const
 	//throw(TopologyException *, IllegalArgumentException *)
 {
+
+	// special case: if one input is empty ==> other input
+	if ( isEmpty() ) return other->clone();
+	if ( other->isEmpty() ) return clone();
+
 	Geometry *out = NULL;
 
 #ifdef SHORTCIRCUIT_PREDICATES
@@ -574,12 +590,20 @@ Geometry*
 Geometry::difference(const Geometry *other) const
 	//throw(IllegalArgumentException *)
 {
+	// special case: if A.isEmpty ==> empty; if B.isEmpty ==> A
+	if (isEmpty()) return getFactory()->createGeometryCollection();
+	if (other->isEmpty()) return clone();
+
 	return OverlayOp::overlayOp(this, other, OverlayOp::opDIFFERENCE);
 }
 
 Geometry*
 Geometry::symDifference(const Geometry *other) const
 {
+	// special case: if either input is empty ==> other input
+	if ( isEmpty() ) return other->clone();
+	if ( other->isEmpty() ) return clone();
+
 	return OverlayOp::overlayOp(this, other, OverlayOp::opSYMDIFFERENCE);
 }
 
@@ -788,403 +812,15 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 	filter->filter_rw(this);
 }
 
+bool
+Geometry::isSimple() const
+{
+	checkNotGeometryCollection(this);
+	operation::IsSimpleOp op(*this);
+	return op.isSimple();
+}
+
 } // namespace geos::geom
 } // namespace geos
 
-/**********************************************************************
- * $Log$
- * Revision 1.119  2006/07/08 00:33:54  strk
- *         * configure.in: incremented CAPI minor version, to avoid                        falling behind any future version from the 2.2. branch.
- *         * source/geom/Geometry.cpp, source/geom/GeometryFactory.cpp,
- *         source/geomgraph/EdgeRing.cpp,
- *         source/headers/geos/geom/Geometry.h,
- *         source/headers/geos/geom/GeometryFactory.h,
- *         source/headers/geos/geom/GeometryFactory.inl,
- *         source/headers/geos/geomgraph/EdgeRing.h:
- *         updated doxygen comments (sync with JTS head).
- *         * source/headers/geos/platform.h.in: include <inttypes.h>
- *         rather then <stdint.h>
- *
- * Revision 1.118  2006/06/13 21:38:41  strk
- * Added self comparison check in Geometry::compareTo().
- *
- * Revision 1.117  2006/06/12 10:10:39  strk
- * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
- *
- * Revision 1.116  2006/06/05 15:36:34  strk
- * Given OverlayOp funx code enum a name and renamed values to have a lowercase prefix. Drop all of noding headers from installed header set.
- *
- * Revision 1.115  2006/05/18 08:56:50  strk
- *         * source/geom/Geometry.cpp,
- *         source/headers/geos/geom/Geometry.h: added
- *         covers() and isCoveredBy() predicates.
- *         * tests/unit/Makefile.am,
- *         tests/unit/geom/Geometry/coversTest.cpp:
- *         added test for covers() predicates.
- *
- * Revision 1.114  2006/04/11 09:29:42  strk
- * Fixed initialization list (removed compiler warning)
- *
- * Revision 1.113  2006/04/10 18:15:09  strk
- * Changed Geometry::envelope member to be of type auto_ptr<Envelope>.
- * Changed computeEnvelopeInternal() signater to return auto_ptr<Envelope>
- *
- * Revision 1.112  2006/04/10 15:05:15  strk
- * Fixed a bug introduced by previous commit in getCentroid()
- *
- * Revision 1.111  2006/04/10 14:18:51  strk
- * Fixed getCentroid(Coordinate&) to round using PrecisionModel
- * all unit tests succeed.
- *
- * Revision 1.110  2006/04/10 13:09:47  strk
- * Added GeometryFactory::defaultInstance()
- * Made Geometry::INTERNAL_GEOMETRY_FACTORY an alias for it
- * removed last deletion from Unload::Release class
- *
- * Revision 1.109  2006/04/07 09:54:30  strk
- * Geometry::getNumGeometries() changed to return 'unsigned int'
- * rather then 'int'
- *
- * Revision 1.108  2006/03/31 11:03:39  strk
- * Fixed NULL-GeometryFactory constructor to use INTERNAL_GEOMETRY_FACTORY
- * (should fix bug #81)
- *
- * Revision 1.107  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.106  2006/03/23 12:12:00  strk
- * Fixes to allow build with -DGEOS_INLINE
- *
- * Revision 1.105  2006/03/21 17:55:01  strk
- * opDistance.h header split
- *
- * Revision 1.104  2006/03/21 17:11:56  strk
- * opPredicate.h header split
- *
- * Revision 1.103  2006/03/21 13:11:28  strk
- * opRelate.h header split
- *
- * Revision 1.102  2006/03/20 16:57:43  strk
- * spatialindex.h and opValid.h headers split
- *
- * Revision 1.101  2006/03/20 12:03:25  strk
- * Added operator<< for Geometry, writing HEXWKB
- *
- * Revision 1.100  2006/03/17 13:24:58  strk
- * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
- *
- * Revision 1.99  2006/03/16 10:42:43  strk
- * Bug #64 - Not all control paths return a value in geos::geom::Geometry::getClassSortIndex
- *
- * Revision 1.98  2006/03/14 12:55:55  strk
- * Headers split: geomgraphindex.h, nodingSnapround.h
- *
- * Revision 1.97  2006/03/13 21:54:56  strk
- * Streamlined headers inclusion.
- *
- * Revision 1.96  2006/03/09 16:46:47  strk
- * geos::geom namespace definition, first pass at headers split
- *
- * Revision 1.95  2006/03/06 19:40:46  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.94  2006/03/06 15:23:14  strk
- * geos::io namespace
- *
- * Revision 1.93  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.92  2006/03/01 18:37:07  strk
- * Geometry::createPointFromInternalCoord dropped (it's a duplication of GeometryFactory::createPointFromInternalCoord).
- * Fixed bugs in InteriorPoint* and getCentroid() inserted by previous commits.
- *
- * Revision 1.91  2006/03/01 17:16:38  strk
- * LineSegment class made final and optionally (compile-time) inlined.
- * Reduced heap allocations in Centroid{Area,Line,Point} and InteriorPoint{Area,Line,Point}.
- *
- * Revision 1.90  2006/02/20 10:14:18  strk
- * - namespaces geos::index::*
- * - Doxygen documentation cleanup
- *
- * Revision 1.89  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.88  2006/02/18 21:08:09  strk
- * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
- * - SegmentString::getCoordinates() doesn't return a clone anymore.
- * - SegmentString::getCoordinatesRO() obsoleted.
- * - SegmentString constructor does not promises constness of passed
- *   CoordinateSequence anymore.
- * - NEW ScaledNoder class
- * - Stubs for MCIndexPointSnapper and  MCIndexSnapRounder
- * - Simplified internal interaces of OffsetCurveBuilder and OffsetCurveSetBuilder
- *
- * Revision 1.87  2006/02/09 15:52:47  strk
- * GEOSException derived from std::exception; always thrown and cought by const ref.
- *
- * Revision 1.86  2006/02/09 13:44:57  strk
- * Added support for SRID in input WKB, undeprecated Geometry::setSRID
- * and Geometry::getSRID
- *
- * Revision 1.85  2006/02/08 17:18:28  strk
- * - New WKTWriter::toLineString and ::toPoint convenience methods
- * - New IsValidOp::setSelfTouchingRingFormingHoleValid method
- * - New Envelope::centre()
- * - New Envelope::intersection(Envelope)
- * - New Envelope::expandBy(distance, [ydistance])
- * - New LineString::reverse()
- * - New MultiLineString::reverse()
- * - New Geometry::buffer(distance, quadSeg, endCapStyle)
- * - Obsoleted toInternalGeometry/fromInternalGeometry
- * - More const-correctness in Buffer "package"
- *
- * Revision 1.84  2006/02/01 22:21:29  strk
- * - Added rectangle-based optimizations of intersects() and contains() ops
- * - Inlined all planarGraphComponent class
- *
- * Revision 1.83  2006/01/31 19:07:33  strk
- * - Renamed DefaultCoordinateSequence to CoordinateArraySequence.
- * - Moved GetNumGeometries() and GetGeometryN() interfaces
- *   from GeometryCollection to Geometry class.
- * - Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence class.
- * - Reworked automake scripts to produce a static lib for each subdir and
- *   then link all subsystem's libs togheter
- * - Moved C-API in it's own top-level dir capi/
- * - Moved source/bigtest and source/test to tests/bigtest and test/xmltester
- * - Fixed PointLocator handling of LinearRings
- * - Changed CoordinateArrayFilter to reduce memory copies
- * - Changed UniqueCoordinateArrayFilter to reduce memory copies
- * - Added CGAlgorithms::isPointInRing() version working with
- *   Coordinate::ConstVect type (faster!)
- * - Ported JTS-1.7 version of ConvexHull with big attention to
- *   memory usage optimizations.
- * - Improved XMLTester output and user interface
- * - geos::geom::util namespace used for geom/util stuff
- * - Improved memory use in geos::geom::util::PolygonExtractor
- * - New ShortCircuitedGeometryVisitor class
- * - New operation/predicate package
- *
- * Revision 1.82  2005/11/24 23:09:15  strk
- * CoordinateSequence indexes switched from int to the more
- * the correct unsigned int. Optimizations here and there
- * to avoid calling getSize() in loops.
- * Update of all callers is not complete yet.
- *
- * Revision 1.81  2005/11/21 16:03:20  strk
- *
- * Coordinate interface change:
- *         Removed setCoordinate call, use assignment operator
- *         instead. Provided a compile-time switch to
- *         make copy ctor and assignment operators non-inline
- *         to allow for more accurate profiling.
- *
- * Coordinate copies removal:
- *         NodeFactory::createNode() takes now a Coordinate reference
- *         rather then real value. This brings coordinate copies
- *         in the testLeaksBig.xml test from 654818 to 645991
- *         (tested in 2.1 branch). In the head branch Coordinate
- *         copies are 222198.
- *         Removed useless coordinate copies in ConvexHull
- *         operations
- *
- * STL containers heap allocations reduction:
- *         Converted many containers element from
- *         pointers to real objects.
- *         Made some use of .reserve() or size
- *         initialization when final container size is known
- *         in advance.
- *
- * Stateless classes allocations reduction:
- *         Provided ::instance() function for
- *         NodeFactories, to avoid allocating
- *         more then one (they are all
- *         stateless).
- *
- * HCoordinate improvements:
- *         Changed HCoordinate constructor by HCoordinates
- *         take reference rather then real objects.
- *         Changed HCoordinate::intersection to avoid
- *         a new allocation but rather return into a provided
- *         storage. LineIntersector changed to reflect
- *         the above change.
- *
- * Revision 1.80  2005/11/08 10:03:28  strk
- * Set library version to 2.2.0.
- * Cleaned up Doxygen warnings.
- * Inlined more Envelope methods.
- * Dropped deprecated Envelope::overlaps methods.
- *
- * Revision 1.79  2005/08/22 13:31:16  strk
- * Fixed comparator functions used with STL sort() algorithm to
- * implement StrictWeakOrdering semantic.
- *
- * Revision 1.78  2005/07/11 10:50:19  strk
- * Added parens suggested by compiler
- *
- * Revision 1.77  2005/07/11 10:23:17  strk
- * removed useless assignment
- *
- * Revision 1.76  2005/06/22 00:46:57  strk
- * Shortcircuit tests for Union
- *
- * Revision 1.75  2005/05/13 17:14:54  strk
- * Added comment about 2D-only comparison of ::equal(Coordinate, Coordinate, double)
- *
- * Revision 1.74  2005/04/29 17:40:35  strk
- * Updated Doxygen documentation and some Copyright headers.
- *
- * Revision 1.73  2004/12/30 13:31:20  strk
- * Fixed a segfault on EMPTYGEOM->getCeontroid()
- *
- * Revision 1.72  2004/11/17 08:13:16  strk
- * Indentation changes.
- * Some Z_COMPUTATION activated by default.
- *
- * Revision 1.71  2004/09/16 09:48:40  strk
- * Finer short-circuit tests for equals, within, contains.
- *
- * Revision 1.70  2004/09/16 07:32:15  strk
- * Added short-circuit tests. Can be disabled at compile-time
- *
- * Revision 1.69  2004/07/27 16:35:46  strk
- * Geometry::getEnvelopeInternal() changed to return a const Envelope *.
- * This should reduce object copies as once computed the envelope of a
- * geometry remains the same.
- *
- * Revision 1.68  2004/07/22 16:58:01  strk
- * runtime version extractor functions split. geos::version() is now
- * geos::geosversion() and geos::jtsport()
- *
- * Revision 1.67  2004/07/21 09:55:24  strk
- * CoordinateSequence::atLeastNCoordinatesOrNothing definition fix.
- * Documentation fixes.
- *
- * Revision 1.66  2004/07/20 08:34:18  strk
- * Fixed a bug in opDistance.h.
- * Removed doxygen tags from obsoleted CoordinateList.cpp.
- * Got doxygen to run with no warnings.
- *
- * Revision 1.65  2004/07/19 13:19:30  strk
- * Documentation fixes
- *
- * Revision 1.64  2004/07/17 10:48:04  strk
- * fixed typo in documentation
- *
- * Revision 1.63  2004/07/17 09:18:54  strk
- * Added geos::version()
- *
- * Revision 1.62  2004/07/14 21:20:58  strk
- * Added GeometricShapeFactory note on doxygen mainpage
- *
- * Revision 1.61  2004/07/08 19:34:49  strk
- * Mirrored JTS interface of CoordinateSequence, factory and
- * default implementations.
- * Added CoordinateArraySequenceFactory::instance() function.
- *
- * Revision 1.60  2004/07/07 09:38:12  strk
- * Dropped WKTWriter::stringOfChars (implemented by std::string).
- * Dropped WKTWriter default constructor (internally created GeometryFactory).
- * Updated XMLTester to respect the changes.
- * Main documentation page made nicer.
- *
- * Revision 1.59  2004/07/06 17:58:21  strk
- * Removed deprecated Geometry constructors based on PrecisionModel and
- * SRID specification. Removed SimpleGeometryPrecisionReducer capability
- * of changing Geometry's factory. Reverted Geometry::factory member
- * to be a reference to external factory.
- *
- * Revision 1.58  2004/07/05 19:40:48  strk
- * Added GeometryFactory::destroyGeometry(Geometry *)
- *
- * Revision 1.57  2004/07/05 15:20:18  strk
- * Documentation again.
- *
- * Revision 1.56  2004/07/05 10:50:20  strk
- * deep-dopy construction taken out of Geometry and implemented only
- * in GeometryFactory.
- * Deep-copy geometry construction takes care of cleaning up copies
- * on exception.
- * Implemented clone() method for CoordinateSequence
- * Changed createMultiPoint(CoordinateSequence) signature to reflect
- * copy semantic (by-ref instead of by-pointer).
- * Cleaned up documentation.
- *
- * Revision 1.55  2004/07/03 12:51:37  strk
- * Documentation cleanups for DoxyGen.
- *
- * Revision 1.54  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.53  2004/07/01 17:34:07  strk
- * GeometryFactory argument in Geometry constructor reverted
- * to its copy-and-destroy semantic.
- *
- * Revision 1.52  2004/07/01 14:12:44  strk
- *
- * Geometry constructors come now in two flavors:
- * 	- deep-copy args (pass-by-reference)
- * 	- take-ownership of args (pass-by-pointer)
- * Same functionality is available through GeometryFactory,
- * including buildGeometry().
- *
- * Revision 1.51  2004/06/30 20:59:12  strk
- * Removed GeoemtryFactory copy from geometry constructors.
- * Enforced const-correctness on GeometryFactory arguments.
- *
- * Revision 1.50  2004/05/21 13:58:47  strk
- * ::intersection missed to invalidate geometryCollection inputs
- *
- * Revision 1.49  2004/05/17 07:23:05  strk
- * ::getCeontroid(): reduced dynamic allocations, added missing check for isEmpty
- *
- * Revision 1.48  2004/05/14 12:14:08  strk
- * const correctness
- *
- * Revision 1.47  2004/05/07 09:05:13  strk
- * Some const correctness added. Fixed bug in GeometryFactory::createMultiPoint
- * to handle NULL CoordinateSequence.
- *
- * Revision 1.46  2004/05/05 16:51:29  strk
- * avoided copy constructor in Geometry::geometryChangedFilter initializzazion
- *
- * Revision 1.45  2004/05/05 10:54:48  strk
- * Removed some private static heap explicit allocation, less cleanup done by
- * the unloader.
- *
- * Revision 1.44  2004/04/30 09:15:28  strk
- * Enlarged exception specifications to allow for AssertionFailedException.
- * Added missing initializers.
- *
- * Revision 1.43  2004/04/20 10:14:20  strk
- * Memory leaks removed.
- *
- * Revision 1.42  2004/04/14 13:56:26  strk
- * All geometries returned by {from,to}InternalGeometry calls are
- * now deleted after use (unless NOT new).
- * Some 'commented' throw specifications in geom.h
- *
- * Revision 1.41  2004/04/14 07:29:43  strk
- * Fixed GeometryFactory constructors to copy given PrecisionModel. Added GeometryFactory copy constructor. Fixed Geometry constructors to copy GeometryFactory.
- *
- * Revision 1.40  2004/04/01 10:44:33  ybychkov
- * All "geom" classes from JTS 1.3 upgraded to JTS 1.4
- *
- * Revision 1.39  2004/03/17 02:00:33  ybychkov
- * "Algorithm" upgraded to JTS 1.4
- *
- * Revision 1.38  2004/03/01 22:04:59  strk
- * applied const correctness changes by Manuel Prieto Villegas <ManuelPrietoVillegas@telefonica.net>
- *
- * Revision 1.37  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- * Revision 1.36  2003/10/20 15:41:34  strk
- * Geometry::checkNotGeometryCollection made static and non-distructive.
- *
- * Revision 1.35  2003/10/13 12:51:28  strk
- * removed sortedClasses strings array from all geometries.
- *
- **********************************************************************/
 
