@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/MultiPolygon.java rev 1.34
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOS_MULTIPOLYGON_H
@@ -39,7 +43,8 @@ namespace geos {
 namespace geom { // geos::geom
 
 /// Basic implementation of <code>MultiPolygon</code>.
-class MultiPolygon: public GeometryCollection {
+class MultiPolygon: public GeometryCollection
+{
 
 public:
 
@@ -53,10 +58,11 @@ public:
 	/// Returns 1 (MultiPolygon boundary is MultiLineString)
 	int getBoundaryDimension() const;
 
-	/**
-	 * \brief
-	 * Returns a MultiLineString composed of one LineString for
-	 * each of the composing Polygon's shells and holes.
+	/** \brief
+	 * Computes the boundary of this geometry
+	 *
+	 * @return a lineal geometry (which may be empty)
+	 * @see Geometry#getBoundary
 	 */
 	Geometry* getBoundary() const;
 

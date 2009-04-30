@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/MultiPolygon.java rev 1.34
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOM_MULTIPOLYGON_INL

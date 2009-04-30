@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/MultiPolygon.java rev 1.34
+ *
  **********************************************************************/
 
 #include <geos/geom/Geometry.h>
@@ -60,7 +64,7 @@ bool MultiPolygon::isSimple() const {
 
 Geometry* MultiPolygon::getBoundary() const {
 	if (isEmpty()) {
-		return getFactory()->createGeometryCollection(NULL);
+		return getFactory()->createMultiLineString();
 	}
 	vector<Geometry *>* allRings=new vector<Geometry *>();
 	for (size_t i = 0; i < geometries->size(); i++) {
