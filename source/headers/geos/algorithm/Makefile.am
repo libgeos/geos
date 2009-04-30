@@ -21,6 +21,7 @@ geos_HEADERS = 				\
 
 noinst_HEADERS = 			\
 	Angle.h				\
+	BoundaryNodeRule.h		\
 	CGAlgorithms.h			\
 	CentralEndpointIntersector.h	\
 	CentroidArea.h			\
