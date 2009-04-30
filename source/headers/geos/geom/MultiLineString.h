@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/MultiLineString.java rev. 1.40
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOS_MULTILINESTRING_H
@@ -64,8 +68,6 @@ public:
 	virtual GeometryTypeId getGeometryTypeId() const;
 
 	bool isClosed() const;
-
-	bool isSimple() const;
 
 	bool equalsExact(const Geometry *other, double tolerance=0) const;
 

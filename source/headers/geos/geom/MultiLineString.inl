@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/MultiLineString.java rev. 1.40
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOM_MULTILINESTRING_INL

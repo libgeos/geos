@@ -12,9 +12,12 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/MultiLineString.java rev. 1.40
+ *
  **********************************************************************/
 
-#include <geos/operation/IsSimpleOp.h>
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/geomgraph/GeometryGraph.h>
 #include <geos/geom/MultiLineString.h>
@@ -75,12 +78,9 @@ bool MultiLineString::isClosed() const {
 	return true;
 }
 
-bool MultiLineString::isSimple() const {
-	operation::IsSimpleOp iso;
-	return iso.isSimple(this);
-}
-
-Geometry* MultiLineString::getBoundary() const {
+Geometry*
+MultiLineString::getBoundary() const
+{
 	if (isEmpty()) {
 		return getFactory()->createGeometryCollection(NULL);
 	}
