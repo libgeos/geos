@@ -1,3 +1,13 @@
+Changes in 3.2.0 (?)
+
+- JTS-1.10 sync ...
+  - Drastically improved Buffer speed
+  - Improved EdgeList duplicate edge finding
+  - Added algorithm::distance package
+  - Added algorithm::Angle class
+  - Added algorithm::BoundaryNodeRule class
+  - IsSimpleOp can now return non-simple location coordinate
+
 Changes in 3.1.0
 
 - PreparedGeometry operations for very fast predicate testing.
