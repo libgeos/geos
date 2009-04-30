@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2009      Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -11,6 +12,10 @@
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
+ *
+ **********************************************************************
+ *
+ * Last port: geomgraph/EdgeIntersection.java rev. 1.5 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -28,17 +33,55 @@
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
+/**
+ * Represents a point on an
+ * edge which intersects with another edge.
+ * 
+ * The intersection may either be a single point, or a line segment
+ * (in which case this point is the start of the line segment)
+ * The intersection point must be precise.
+ *
+ */
 class EdgeIntersection {
 public:
+
+	// the point of intersection
 	geom::Coordinate coord;
+
+	// the index of the containing line segment in the parent edge
 	int segmentIndex;
+
+	// the edge distance of this point along the containing line segment
 	double dist;
-	EdgeIntersection(const geom::Coordinate& newCoord, int newSegmentIndex, double newDist);
+
+	EdgeIntersection(const geom::Coordinate& newCoord,
+	                 int newSegmentIndex, double newDist);
+
 	virtual ~EdgeIntersection();
+
+	/**
+	 * @return -1 this EdgeIntersection is located before the
+	 *                 argument location
+	 * @return 0 this EdgeIntersection is at the argument location
+	 * @return 1 this EdgeIntersection is located after the argument
+	 *                location
+	 */
 	int compare(int newSegmentIndex, double newDist) const;
+
 	bool isEndPoint(int maxSegmentIndex);
+
 	std::string print() const;
+
 	int compareTo(const EdgeIntersection *) const;
+
+	const geom::Coordinate& getCoordinate() const {
+		return coord;
+	}
+
+	int getSegmentIndex() const { return segmentIndex; }
+
+	double getDistance() { return dist; }
+
 };
 
 struct EdgeIntersectionLessThen {
@@ -62,13 +105,4 @@ struct EdgeIntersectionLessThen {
 
 #endif // ifndef GEOS_GEOMGRAPH_EDGEINTERSECTION_H
 
-/**********************************************************************
- * $Log$
- * Revision 1.2  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/
 
