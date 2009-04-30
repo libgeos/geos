@@ -7,6 +7,8 @@ Changes in 3.2.0 (?)
   - Added algorithm::Angle class
   - Added algorithm::BoundaryNodeRule class
   - IsSimpleOp can now return non-simple location coordinate
+  - MultiPolygon::getBoundary always return MultiLineString, also
+    when the result is the EMPTY geometry.
 
 Changes in 3.1.0
 
