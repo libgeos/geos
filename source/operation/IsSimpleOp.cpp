@@ -14,6 +14,8 @@
  *
  **********************************************************************
  *
+ * Last port: operation/IsSimpleOp.java rev. 1.17
+ *
  **********************************************************************/
 
 #include <geos/operation/IsSimpleOp.h>
@@ -41,24 +43,25 @@ using namespace geos::geom;
 namespace geos {
 namespace operation { // geos.operation
 
+/*public*/
 IsSimpleOp::IsSimpleOp()
 {}
 
+/*public*/
 bool
 IsSimpleOp::isSimple(const LineString *geom)
 {
 	return isSimpleLinearGeometry(geom);
 }
 
+/*public*/
 bool
 IsSimpleOp::isSimple(const MultiLineString *geom)
 {
 	return isSimpleLinearGeometry(geom);
 }
 
-/**
- * A MultiPoint is simple iff it has no repeated points
- */
+/*public*/
 bool
 IsSimpleOp::isSimple(const MultiPoint *mp)
 {
@@ -106,10 +109,7 @@ IsSimpleOp::isSimpleLinearGeometry(const Geometry *geom)
 	return true;
 }
 
-/**
- * For all edges, check if there are any intersections which are NOT at an endpoint.
- * The Geometry is not simple if there are intersections not at endpoints.
- */
+/*private*/
 bool
 IsSimpleOp::hasNonEndpointIntersection(GeometryGraph &graph)
 {
@@ -129,12 +129,7 @@ IsSimpleOp::hasNonEndpointIntersection(GeometryGraph &graph)
 	return false;
 }
 
-/**
- * Test that no edge intersection is the
- * endpoint of a closed line.  To check this we compute the
- * degree of each endpoint. The degree of endpoints of closed lines
- * must be exactly 2.
- */
+/*private*/
 bool
 IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph &graph)
 {
@@ -171,9 +166,7 @@ IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph &graph)
 	return false;
 }
 
-/**
-* Add an endpoint to the map, creating an entry for it if none exists
-*/
+/*private*/
 void
 IsSimpleOp::addEndpoint(
 	map<const Coordinate*,EndpointInfo*,CoordinateLessThen>&endPoints,
@@ -209,90 +202,4 @@ EndpointInfo::addEndpoint(bool newIsClosed)
 
 } // namespace geos::operation
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.23  2006/03/21 21:42:54  strk
- * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
- *
- * Revision 1.22  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- * Revision 1.21  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.20  2006/01/08 15:24:40  strk
- * Changed container-related typedef to class-scoped STL-like typedefs.
- * Fixed const correctness of EdgeIntersectionList::begin() and ::end() consts;
- * defined M_PI when undef as suggested by Charlie Savage.
- * Removed <stdio.h> include from GeometricShapeFactory.cpp.
- *
- * Revision 1.19  2005/11/21 16:03:20  strk
- *
- * Coordinate interface change:
- *         Removed setCoordinate call, use assignment operator
- *         instead. Provided a compile-time switch to
- *         make copy ctor and assignment operators non-inline
- *         to allow for more accurate profiling.
- *
- * Coordinate copies removal:
- *         NodeFactory::createNode() takes now a Coordinate reference
- *         rather then real value. This brings coordinate copies
- *         in the testLeaksBig.xml test from 654818 to 645991
- *         (tested in 2.1 branch). In the head branch Coordinate
- *         copies are 222198.
- *         Removed useless coordinate copies in ConvexHull
- *         operations
- *
- * STL containers heap allocations reduction:
- *         Converted many containers element from
- *         pointers to real objects.
- *         Made some use of .reserve() or size
- *         initialization when final container size is known
- *         in advance.
- *
- * Stateless classes allocations reduction:
- *         Provided ::instance() function for
- *         NodeFactories, to avoid allocating
- *         more then one (they are all
- *         stateless).
- *
- * HCoordinate improvements:
- *         Changed HCoordinate constructor by HCoordinates
- *         take reference rather then real objects.
- *         Changed HCoordinate::intersection to avoid
- *         a new allocation but rather return into a provided
- *         storage. LineIntersector changed to reflect
- *         the above change.
- *
- * Revision 1.18  2005/11/16 15:49:54  strk
- * Reduced gratuitous heap allocations.
- *
- * Revision 1.17  2005/11/07 12:31:24  strk
- * Changed EdgeIntersectionList to use a set<> rathern then a vector<>, and
- * to avoid dynamic allocation of initial header.
- * Inlined short SweepLineEvent methods.
- *
- * Revision 1.16  2005/06/24 11:09:43  strk
- * Dropped RobustLineIntersector, made LineIntersector a concrete class.
- * Added LineIntersector::hasIntersection(Coordinate&,Coordinate&,Coordinate&)
- * to avoid computing intersection point (Z) when it's not necessary.
- *
- * Revision 1.15  2005/02/05 05:44:47  strk
- * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
- * lots of other Coordinate copies.
- *
- * Revision 1.14  2004/12/08 13:54:43  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.13  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.12  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
- **********************************************************************/
 
