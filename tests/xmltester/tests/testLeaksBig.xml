@@ -3181,18 +3181,6 @@ GEOMETRYCOLLECTION(
   </op>
 </test>
 </case>
-<case>
-  <desc>PP - Point just off line. Causes non-robust algorithms to fail.</desc>
-  <a>
-    LINESTRING(-123456789 -40, 381039468754763 123456789)
-  </a>
-  <b>
-    POINT(0 0)
-  </b>
-<test>
-  <op name="intersects">false</op>
-</test>
-</case>
 
 <case>
 <desc>A/A-1-1: same polygons [dim(2){A.A.Int = B.A.Int}, dim(1){A.A.Bdy.SP-EP = B.A.Bdy.SP-EP}]</desc>
