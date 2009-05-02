@@ -614,7 +614,10 @@ XMLTester::parseTest()
 
 		else if (opName=="intersects")
 		{
-			if (gA->intersects(gB)) actual_result="true";
+			geom::Geometry *g1 = opArg1 == "B" ? gB : gA;
+			geom::Geometry *g2 = opArg2 == "B" ? gB : gA;
+
+			if (g1->intersects(g2)) actual_result="true";
 			else actual_result="false";
 			
 			if (actual_result==opRes) success=1;
@@ -622,7 +625,43 @@ XMLTester::parseTest()
 
 		else if (opName=="contains")
 		{
-			if (gA->contains(gB)) actual_result="true";
+			geom::Geometry *g1 = opArg1 == "B" ? gB : gA;
+			geom::Geometry *g2 = opArg2 == "B" ? gB : gA;
+
+			if (g1->contains(g2)) actual_result="true";
+			else actual_result="false";
+			
+			if (actual_result==opRes) success=1;
+		}
+
+		else if (opName=="within")
+		{
+			geom::Geometry *g1 = opArg1 == "B" ? gB : gA;
+			geom::Geometry *g2 = opArg2 == "B" ? gB : gA;
+
+			if (g1->within(g2)) actual_result="true";
+			else actual_result="false";
+			
+			if (actual_result==opRes) success=1;
+		}
+
+		else if (opName=="covers")
+		{
+			geom::Geometry *g1 = opArg1 == "B" ? gB : gA;
+			geom::Geometry *g2 = opArg2 == "B" ? gB : gA;
+
+			if (g1->covers(g2)) actual_result="true";
+			else actual_result="false";
+			
+			if (actual_result==opRes) success=1;
+		}
+
+		else if (opName=="coveredby")
+		{
+			geom::Geometry *g1 = opArg1 == "B" ? gB : gA;
+			geom::Geometry *g2 = opArg2 == "B" ? gB : gA;
+
+			if (g1->coveredBy(g2)) actual_result="true";
 			else actual_result="false";
 			
 			if (actual_result==opRes) success=1;
