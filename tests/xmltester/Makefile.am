@@ -21,7 +21,8 @@ SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
 	$(srcdir)/tests/TestValid2.xml \
 	$(srcdir)/tests/TestValid2-big.xml \
 	$(srcdir)/tests/robustness.xml \
-	$(srcdir)/tests/stmlf-cases-20061020.xml \
+	$(srcdir)/tests/stmlf/stmlf-cases-20061020.xml \
+	$(srcdir)/tests/stmlf/stmlf-cases-20070119.xml \
 	$(srcdir)/tests/robust/TestRobustOverlayFixed.xml \
 	$(srcdir)/tests/robust/TestRobustRelate.xml \
 	$(srcdir)/tests/fme.xml \
@@ -30,7 +31,6 @@ SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
 	$(srcdir)/tests/TestBufferExternal2.xml \
 	$(srcdir)/tests/TestBufferMitredJoin.xml \
 	$(srcdir)/tests/heisenbugs.xml \
-	$(srcdir)/tests/stmlf-cases-20070119.xml \
 	$(srcdir)/tests/badguy3.xml \
 	$(srcdir)/tests/hole_from_shell.xml \
 	$(srcdir)/tests/hole_red.xml
