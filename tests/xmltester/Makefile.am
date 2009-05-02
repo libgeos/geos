@@ -8,7 +8,32 @@ CLEANFILES = testrunner
 
 EXTRA_DIST = testrunner.sh
 
-SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml $(srcdir)/tests/TestSimple.xml $(srcdir)/tests/hexwkb.xml $(srcdir)/tests/test.xml $(srcdir)/tests/linemerge.xml $(srcdir)/tests/TestInteriorPoint.xml $(srcdir)/tests/TestCentroid.xml $(srcdir)/tests/TestIsValid.xml $(srcdir)/tests/TestValid.xml $(srcdir)/tests/TestValid2.xml $(srcdir)/tests/TestValid2-big.xml $(srcdir)/tests/robustness.xml $(srcdir)/tests/stmlf-cases-20061020.xml $(srcdir)/tests/TestRobustOverlayFixed.xml $(srcdir)/tests/fme.xml $(srcdir)/tests/TestBuffer.xml $(srcdir)/tests/TestBufferExternal.xml $(srcdir)/tests/TestBufferExternal2.xml $(srcdir)/tests/TestBufferMitredJoin.xml $(srcdir)/tests/heisenbugs.xml $(srcdir)/tests/stmlf-cases-20070119.xml $(srcdir)/tests/badguy3.xml $(srcdir)/tests/hole_from_shell.xml $(srcdir)/tests/hole_red.xml
+SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
+	$(srcdir)/split.xml \
+	$(srcdir)/tests/TestSimple.xml \
+	$(srcdir)/tests/hexwkb.xml \
+	$(srcdir)/tests/test.xml \
+	$(srcdir)/tests/linemerge.xml \
+	$(srcdir)/tests/TestInteriorPoint.xml \
+	$(srcdir)/tests/TestCentroid.xml \
+	$(srcdir)/tests/TestIsValid.xml \
+	$(srcdir)/tests/TestValid.xml \
+	$(srcdir)/tests/TestValid2.xml \
+	$(srcdir)/tests/TestValid2-big.xml \
+	$(srcdir)/tests/robustness.xml \
+	$(srcdir)/tests/stmlf-cases-20061020.xml \
+	$(srcdir)/tests/robust/TestRobustOverlayFixed.xml \
+	$(srcdir)/tests/robust/TestRobustRelate.xml \
+	$(srcdir)/tests/fme.xml \
+	$(srcdir)/tests/TestBuffer.xml \
+	$(srcdir)/tests/TestBufferExternal.xml \
+	$(srcdir)/tests/TestBufferExternal2.xml \
+	$(srcdir)/tests/TestBufferMitredJoin.xml \
+	$(srcdir)/tests/heisenbugs.xml \
+	$(srcdir)/tests/stmlf-cases-20070119.xml \
+	$(srcdir)/tests/badguy3.xml \
+	$(srcdir)/tests/hole_from_shell.xml \
+	$(srcdir)/tests/hole_red.xml
 
 XMLTESTS=$(SAFE_XMLTESTS) 
 

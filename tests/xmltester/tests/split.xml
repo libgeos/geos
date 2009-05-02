@@ -1,0 +1,52 @@
+<run>
+  <precisionModel scale="1.0" offsetx="0.0" offsety="0.0"/>
+<!--
+This test is to verify difference() can be used to split linestrings
+and multilinestring using a "cutter" linesting.
+-->
+
+<case>
+  <desc>Line/line difference/split</desc>
+  <a>LINESTRING(2 0,10 0,10 10,0 10,0 2)</a>
+  <b>LINESTRING(-5 5, 15 5)</b>
+<test>
+  <op name="difference" arg1="a" arg2="b">
+  MULTILINESTRING((2 0,10 0,10 5),(10 5,10 10,0 10,0 5),(0 5,0 2))
+  </op>
+</test>
+</case>
+
+<case>
+  <desc>Line/line difference/split with boundary intersection</desc>
+  <a>LINESTRING(2 0,10 0,10 10,0 10,0 2)</a>
+  <b>LINESTRING(0 5, 10 5)</b>
+<test>
+  <op name="difference" arg1="a" arg2="b">
+  MULTILINESTRING((2 0,10 0,10 5),(10 5,10 10,0 10,0 5),(0 5,0 2))
+  </op>
+</test>
+</case>
+
+<case>
+  <desc>Multiline/line difference/split</desc>
+  <a>MULTILINESTRING((0 0, 0 10), (5 0, 5 10), (10 0, 10 10))</a>
+  <b>LINESTRING(-5 5, 15 5)</b>
+<test>
+  <op name="difference" arg1="a" arg2="b">
+  MULTILINESTRING((0 0,0 5),(0 5,0 10),(5 0,5 5),(5 5,5 10),(10 0,10 5),(10 5,10 10))
+  </op>
+</test>
+</case>
+
+<case>
+  <desc>Multiline/line difference/split with boundary intersection</desc>
+  <a>MULTILINESTRING((0 0, 0 10), (5 0, 5 10), (10 0, 10 10))</a>
+  <b>LINESTRING(0 5, 10 5)</b>
+<test>
+  <op name="difference" arg1="a" arg2="b">
+  MULTILINESTRING((0 0,0 5),(0 5,0 10),(5 0,5 5),(5 5,5 10),(10 0,10 5),(10 5,10 10))
+  </op>
+</test>
+</case>
+
+</run>
