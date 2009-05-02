@@ -21,6 +21,16 @@ SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
 	$(srcdir)/tests/general/TestCentroid.xml \
 	$(srcdir)/tests/general/TestConvexHull.xml \
 	$(srcdir)/tests/general/TestConvexHull-big.xml \
+	$(srcdir)/tests/general/TestFunctionAAPrec.xml \
+	$(srcdir)/tests/general/TestFunctionAA.xml \
+	$(srcdir)/tests/general/TestFunctionLAPrec.xml \
+	$(srcdir)/tests/general/TestFunctionLA.xml \
+	$(srcdir)/tests/general/TestFunctionLLPrec.xml \
+	$(srcdir)/tests/general/TestFunctionLL.xml \
+	$(srcdir)/tests/general/TestFunctionPA.xml \
+	$(srcdir)/tests/general/TestFunctionPLPrec.xml \
+	$(srcdir)/tests/general/TestFunctionPL.xml \
+	$(srcdir)/tests/general/TestFunctionPP.xml \
 	$(srcdir)/tests/general/TestInteriorPoint.xml \
 	$(srcdir)/tests/general/TestSimple.xml \
 	$(srcdir)/tests/general/TestValid.xml \
