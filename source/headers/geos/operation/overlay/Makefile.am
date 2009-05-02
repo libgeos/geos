@@ -23,4 +23,5 @@ noinst_HEADERS =  \
 	OverlayNodeFactory.h	\
 	OverlayResultValidator.h \
 	PointBuilder.h		\
-	PolygonBuilder.h
+	PolygonBuilder.h	\
+	snap/LineStringSnapper.h

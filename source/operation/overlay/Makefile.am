@@ -17,7 +17,8 @@ libopoverlay_la_SOURCES = \
 	OverlayOp.cpp \
 	OverlayResultValidator.cpp \
 	PointBuilder.cpp \
-	PolygonBuilder.cpp 
+	PolygonBuilder.cpp \
+	snap/LineStringSnapper.cpp
 
 libopoverlay_la_LIBADD = 
 
