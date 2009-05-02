@@ -620,6 +620,14 @@ XMLTester::parseTest()
 			if (actual_result==opRes) success=1;
 		}
 
+		else if (opName=="contains")
+		{
+			if (gA->contains(gB)) actual_result="true";
+			else actual_result="false";
+			
+			if (actual_result==opRes) success=1;
+		}
+
 		else if (opName=="getboundary")
 		{
 			geom::Geometry *gT=gA;

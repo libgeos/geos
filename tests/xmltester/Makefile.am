@@ -23,6 +23,14 @@ SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
 	$(srcdir)/tests/general/TestValid.xml \
 	$(srcdir)/tests/general/TestValid2.xml \
 	$(srcdir)/tests/general/TestValid2-big.xml \
+	$(srcdir)/tests/general/TestRelateAA.xml \
+	$(srcdir)/tests/general/TestRelateLA.xml \
+	$(srcdir)/tests/general/TestRelateLL.xml \
+	$(srcdir)/tests/general/TestRelatePL.xml \
+	$(srcdir)/tests/general/TestRelateAC.xml \
+	$(srcdir)/tests/general/TestRelateLC.xml \
+	$(srcdir)/tests/general/TestRelatePA.xml \
+	$(srcdir)/tests/general/TestRelatePP.xml \
 	$(srcdir)/tests/stmlf/stmlf-cases-20061020.xml \
 	$(srcdir)/tests/stmlf/stmlf-cases-20070119.xml \
 	$(srcdir)/tests/robust/TestRobustOverlayFixed.xml \
