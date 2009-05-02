@@ -1,0 +1,17 @@
+Tests found in JTS/testxml/general and not ported as of rev 2455 (May 02 2009)
+----------------------------------------------------------------------------
+
+TestDensify.xml
+ - requires densify::Densifier still unported
+
+TestPreparedPointPredicate.xml
+ - requires using custom operation (PreparedGeometryOperation)
+
+TestPreparedPolygonPredicate.xml
+ - requires using custom operation (PreparedGeometryOperation)
+
+TestPreparedPredicatesWithGeometryCollection.xml
+ - requires using custom operation (PreparedGeometryOperation)
+
+TestUnaryUnion.xml 
+ -  requires geom::Geometry::Union() still unported 
