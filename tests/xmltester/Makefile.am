@@ -15,9 +15,10 @@ SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
 	$(srcdir)/tests/linemerge.xml \
 	$(srcdir)/tests/TestIsValid.xml \
 	$(srcdir)/tests/robustness.xml \
-	$(srcdir)/tests/general/TestCentroid.xml \
+	$(srcdir)/tests/general/TestBoundary.xml \
 	$(srcdir)/tests/general/TestBuffer.xml \
 	$(srcdir)/tests/general/TestBufferMitredJoin.xml \
+	$(srcdir)/tests/general/TestCentroid.xml \
 	$(srcdir)/tests/general/TestConvexHull.xml \
 	$(srcdir)/tests/general/TestConvexHull-big.xml \
 	$(srcdir)/tests/general/TestInteriorPoint.xml \
