@@ -69,6 +69,19 @@ public:
 
 	virtual void add(const Coordinate& c, bool allowRepeated);
 
+	/** \brief
+	 * Inserts the specified coordinate at the specified position in
+	 * this list.
+	 *
+	 * @param i the position at which to insert
+	 * @param coord the coordinate to insert
+	 * @param allowRepeated if set to false, repeated coordinates are
+	 *                      collapsed
+	 *
+	 * NOTE: this is a CoordinateList interface in JTS
+	 */
+	virtual void add(size_t i, const Coordinate& coord, bool allowRepeated);
+
 	void setAt(const Coordinate& c, size_t pos);
 
 	void deleteAt(size_t pos);

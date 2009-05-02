@@ -98,6 +98,29 @@ CoordinateArraySequence::add(const Coordinate& c, bool allowRepeated)
 	vect->push_back(c);
 }
 
+/*public*/
+void
+CoordinateArraySequence::add(size_t i, const Coordinate& coord,
+                                       bool allowRepeated)
+{
+    // don't add duplicate coordinates
+    if (! allowRepeated) {
+      size_t sz = size();
+      if (sz > 0) {
+        if (i > 0) {
+          const Coordinate& prev = getAt(i - 1);
+          if (prev.equals2D(coord)) return;
+        }
+        if (i < sz) {
+          const Coordinate& next = getAt(i);
+          if (next.equals2D(coord)) return;
+        }
+      }
+    }
+
+    vect->insert(vect->begin()+i, coord);
+}
+
 size_t
 CoordinateArraySequence::getSize() const
 {

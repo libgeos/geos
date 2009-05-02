@@ -180,6 +180,19 @@ public:
 	 */
 	virtual void add(const Coordinate& c, bool allowRepeated);
 
+	/** \brief
+	 * Inserts the specified coordinate at the specified position in
+	 * this list.
+	 *
+	 * @param i the position at which to insert
+	 * @param coord the coordinate to insert
+	 * @param allowRepeated if set to false, repeated coordinates are
+	 *                      collapsed
+	 *
+	 * NOTE: this is a CoordinateList interface in JTS
+	 */
+	virtual void add(size_t i, const Coordinate& coord, bool allowRepeated)=0;
+
 	/// Returns <code>true</code> it list contains no coordinates.
 	virtual	bool isEmpty() const=0;
 
