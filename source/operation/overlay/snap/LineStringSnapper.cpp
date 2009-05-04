@@ -48,6 +48,18 @@ LineStringSnapper::snapTo(const CoordinateSequence& snapPts)
 	return coordList;
 } 
 
+/*public*/
+auto_ptr<CoordinateSequence>
+LineStringSnapper::snapTo(const vector<const Coordinate*>& snapPts)
+{
+	auto_ptr<CoordinateSequence> coordList(srcPts.clone());
+
+	snapVertices(*coordList, snapPts);
+	snapSegments(*coordList, snapPts);
+
+	return coordList;
+} 
+
 /*private*/
 void
 LineStringSnapper::snapVertices(geom::CoordinateSequence& srcCoords,
@@ -55,7 +67,27 @@ LineStringSnapper::snapVertices(geom::CoordinateSequence& srcCoords,
 {
     // try snapping vertices
     // assume src list has a closing point (is a ring)
-    for (int i = 0; i < srcCoords.size() - 1; i++) {
+    for (size_t i = 0; i < srcCoords.size() - 1; i++) {
+      const Coordinate& srcPt = srcCoords.getAt(i);
+      const Coordinate* snapVert = findSnapForVertex(srcPt, snapPts);
+      if (snapVert != NULL) {
+        // update src with snap pt
+        srcCoords.setAt(*snapVert, i);
+        // keep final closing point in synch (rings only)
+        if (i == 0 && isClosed)
+          srcCoords.setAt(*snapVert, srcCoords.size() - 1);
+      }
+    }
+}
+
+/*private*/
+void
+LineStringSnapper::snapVertices(geom::CoordinateSequence& srcCoords,
+                                const vector<const Coordinate*>& snapPts)
+{
+    // try snapping vertices
+    // assume src list has a closing point (is a ring)
+    for (size_t i = 0; i < srcCoords.size() - 1; i++) {
       const Coordinate& srcPt = srcCoords.getAt(i);
       const Coordinate* snapVert = findSnapForVertex(srcPt, snapPts);
       if (snapVert != NULL) {
@@ -73,12 +105,27 @@ const geom::Coordinate*
 LineStringSnapper::findSnapForVertex(const geom::Coordinate& pt,
 	                  const geom::CoordinateSequence& snapPts)
 {
-    for (int i = 0; i < snapPts.size(); i++) {
+    for (size_t i = 0; i < snapPts.size(); i++) {
       // if point is already equal to a src pt, don't snap
       if (pt.equals2D(snapPts[i]))
         return 0;
       if (pt.distance(snapPts[i]) < snapTolerance)
         return &(snapPts[i]);
+    }
+    return 0;
+}
+
+/*private*/
+const geom::Coordinate*
+LineStringSnapper::findSnapForVertex(const geom::Coordinate& pt,
+			 const vector<const Coordinate*>& snapPts)
+{
+    for (size_t i = 0; i < snapPts.size(); i++) {
+      // if point is already equal to a src pt, don't snap
+      if (pt.equals2D(*snapPts[i]))
+        return 0;
+      if (pt.distance(*snapPts[i]) < snapTolerance)
+        return snapPts[i];
     }
     return 0;
 }
@@ -111,13 +158,40 @@ LineStringSnapper::snapSegments(geom::CoordinateSequence& srcCoords,
 }
 
 /*private*/
+void
+LineStringSnapper::snapSegments(geom::CoordinateSequence& srcCoords,
+                          const vector<const Coordinate*>& snapPts)
+{
+    int distinctPtCount = snapPts.size();
+
+    // check for duplicate snap pts.
+    // Need to do this better - need to check all points for dups (using a Set?)
+    if (snapPts[0]->equals2D(*snapPts[snapPts.size() - 1]))
+        distinctPtCount = snapPts.size() - 1;
+
+    for (int i = 0; i < distinctPtCount; i++) {
+      const Coordinate& snapPt = *(snapPts[i]);
+      int index = findSegmentIndexToSnap(snapPt, srcCoords);
+      /**
+       * If a segment to snap to was found, "crack" it at the snap pt.
+       * The new pt is inserted immediately into the src segment list,
+       * so that subsequent snapping will take place on the latest segments.
+       * Duplicate points are not added.
+       */
+      if (index >= 0) {
+        srcCoords.add(index + 1, snapPt, false);
+      }
+    }
+}
+
+/*private*/
 int
 LineStringSnapper::findSegmentIndexToSnap(const geom::Coordinate& snapPt,
 	                      const geom::CoordinateSequence& srcCoords)
 {
     double minDist = numeric_limits<double>::max();
     int snapIndex = -1;
-    for (int i = 0; i < srcCoords.size() - 1; i++) {
+    for (size_t i = 0; i < srcCoords.size() - 1; i++) {
       seg.p0 = srcCoords.getAt(i);
       seg.p1 = srcCoords.getAt(i + 1);
 

@@ -23,12 +23,13 @@
 #include <geos/geom/LineSegment.h> // for composition
 #include <geos/geom/LineString.h> // for inlined ctor
 
-//#include <vector>
+#include <vector>
 #include <memory> // for auto_ptr
 
 // Forward declarations
 namespace geos {
 	namespace geom {
+		class Coordinate;
 		class CoordinateSequence;
 	}
 }
@@ -93,6 +94,9 @@ public:
 	std::auto_ptr<geom::CoordinateSequence> snapTo(
 	                 const geom::CoordinateSequence& snapPts);
 
+	std::auto_ptr<geom::CoordinateSequence> snapTo(
+	                 const std::vector<const geom::Coordinate*>& snapPts);
+
 private:
 
 	/**
@@ -104,11 +108,18 @@ private:
 	void snapVertices(geom::CoordinateSequence& srcCoords,
 	                  const geom::CoordinateSequence& snapPts);
 
+	void snapVertices(geom::CoordinateSequence& srcCoords,
+	                 const std::vector<const geom::Coordinate*>& snapPts);
+
 
 	// return pointer into snapPts memory, or null
 	const geom::Coordinate*
 	findSnapForVertex(const geom::Coordinate& pt,
 	                  const geom::CoordinateSequence& snapPts);
+
+	const geom::Coordinate*
+	findSnapForVertex(const geom::Coordinate& pt,
+	                 const std::vector<const geom::Coordinate*>& snapPts);
 
 	/**
 	 * Snap segments of the source to nearby snap vertices.
@@ -124,6 +135,9 @@ private:
 	 */
 	void snapSegments(geom::CoordinateSequence& srcCoords,
 	                  const geom::CoordinateSequence& snapPts);
+
+	void snapSegments(geom::CoordinateSequence& srcCoords,
+	                 const std::vector<const geom::Coordinate*>& snapPts);
 
 	/** \brief
 	 * Finds a src segment which snaps to (is close to)
@@ -141,7 +155,6 @@ private:
 	 */
 	int findSegmentIndexToSnap(const geom::Coordinate& snapPt,
 	                      const geom::CoordinateSequence& srcCoords);
- 
  
 
 	double snapTolerance;
