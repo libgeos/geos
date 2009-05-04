@@ -15,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/Geometry.java rev. 1.106
+ * Last port: geom/Geometry.java rev. 1.112
  *
  **********************************************************************/
 
@@ -328,9 +328,20 @@ public:
 	virtual const Envelope* getEnvelopeInternal() const;
 
 	/**
-	 * \brief
-	 * Returns true if the DE-9IM intersection matrix for the
-	 * two Geometrys is FF*FF****.
+	 * Tests whether this geometry is disjoint from the specified geometry.
+	 * 
+	 * The <code>disjoint</code> predicate has the following equivalent
+	 * definitions:
+	 *  - The two geometries have no point in common
+	 *  - The DE-9IM Intersection Matrix for the two geometries matches
+	 *    <code>[FF*FF****]</code>
+	 *  - <code>! g.intersects(this)</code>
+	 *    (<code>disjoint</code> is the inverse of <code>intersects</code>)
+	 *
+	 * @param  g  the Geometry with which to compare this Geometry
+	 * @return true if the two <code>Geometry</code>s are disjoint
+	 *
+	 * @see Geometry::intersects
 	 */
 	virtual bool disjoint(const Geometry *other) const;
 
@@ -344,10 +355,26 @@ public:
 	virtual bool intersects(const Geometry *g) const;
 
 	/**
-	 * \brief
-	 * Returns true if the DE-9IM intersection matrix for the two
-	 * Geometrys is T*T****** (for a point and a curve, a point and
-	 * an area or a line and an area) 0******** (for two curves).
+	 * Tests whether this geometry crosses the specified geometry.
+	 * 
+	 * The <code>crosses</code> predicate has the following equivalent
+	 * definitions:
+	 *  - The geometries have some but not all interior points in common.
+	 *  - The DE-9IM Intersection Matrix for the two geometries matches
+	 *    - <code>[T*T******]</code> (for P/L, P/A, and L/A situations)
+	 *    - <code>[T*****T**]</code> (for L/P, A/P, and A/L situations)
+	 *    - <code>[0********]</code> (for L/L situations)
+	 * For any other combination of dimensions this predicate returns
+	 * <code>false</code>.
+	 * 
+	 * The SFS defined this predicate only for P/L, P/A, L/L, and L/A
+	 * situations.
+	 * JTS extends the definition to apply to L/P, A/P and A/L situations
+	 * as well, in order to make the relation symmetric.
+	 *
+	 * @param  g  the <code>Geometry</code> with which to compare this
+	 *            <code>Geometry</code>
+	 *@return  <code>true</code> if the two <code>Geometry</code>s cross.
 	 */
 	virtual bool crosses(const Geometry *g) const;
 
@@ -416,14 +443,15 @@ public:
 	 *    or <code>***T**FF*</code>
 	 *    or <code>****T*FF*</code>
 	 * - <code>g.coveredBy(this)</code>
-	 *   (<code>covers</code> is the inverse of <code>coverdBy</code>)
+	 *   (<code>covers</code> is the inverse of <code>coveredBy</code>)
 	 * 
-	 * Note the difference between <code>covers</code> and
-	 * <code>contains</code>
-	 * - <code>covers</code> is a more inclusive relation.
-	 * In particular, unlike <code>contains</code> it does not
-	 * distinguish between points in the boundary and in the interior
-	 * of geometries.
+	 * If either geometry is empty, the value of this predicate
+	 * is <tt>false</tt>.
+	 *
+	 * This predicate is similar to {@link #contains},
+	 * but is more inclusive (i.e. returns <tt>true</tt> for more cases).
+	 * In particular, unlike <code>contains</code> it does not distinguish
+	 * between points in the boundary and in the interior of geometries.
 	 * For most situations, <code>covers</code> should be used in
 	 * preference to <code>contains</code>.
 	 * As an added benefit, <code>covers</code> is more amenable to
@@ -434,7 +462,7 @@ public:
 	 *         <code>Geometry</code>
 	 * 
 	 * @return <code>true</code> if this <code>Geometry</code>
-	 * covers <code>g</code>
+	 *                           covers <code>g</code>
 	 *
 	 * @see Geometry::contains
 	 * @see Geometry::coveredBy
@@ -442,30 +470,34 @@ public:
 	bool covers(const Geometry* g) const;
 
 	/** \brief
-	 * Returns <code>true</code> if this geometry is covered by the
+	 * Tests whether this geometry is covered by the
 	 * specified geometry.
-	 * 
-	 * - Every point of this geometry is a point of the other geometry.
-	 * - The DE-9IM Intersection Matrix for the two geometries is
-	 *       <code>T*F**F***</code>
-	 *    or <code>*TF**F***</code>
-	 *    or <code>**FT*F***</code>
-	 *    or <code>**F*TF***</code>
-	 * - <code>g.covers(this)</code>
-	 *   (<code>coveredBy</code> is the inverse of <code>covers</code>)
-	 * 
-	 * Note the difference between <code>coveredBy</code> and
-	 * <code>within</code>
-	 * - <code>coveredBy</code> is a more inclusive relation.
 	 *
-	 * @param  g 
-	 *         the <code>Geometry</code> with which to compare this
-	 *         <code>Geometry</code>
-	 * @return <code>true</code> if this <code>Geometry</code> is
-	 *         covered by <code>g</code>
+	 * The <code>coveredBy</code> predicate has the following
+	 * equivalent definitions:
 	 *
-	 * @see Geometry::within
-	 * @see Geometry::covers
+	 *  - Every point of this geometry is a point of the other geometry.
+	 *  - The DE-9IM Intersection Matrix for the two geometries matches
+	 *       <code>[T*F**F***]</code>
+	 *    or <code>[*TF**F***]</code>
+	 *    or <code>[**FT*F***]</code>
+	 *    or <code>[**F*TF***]</code>
+	 *  - <code>g.covers(this)</code>
+	 *    (<code>coveredBy</code> is the converse of <code>covers</code>)
+	 * 
+	 * If either geometry is empty, the value of this predicate
+	 * is <tt>false</tt>.
+	 * 
+	 * This predicate is similar to {@link #within},
+	 * but is more inclusive (i.e. returns <tt>true</tt> for more cases).
+	 *
+	 * @param  g  the <code>Geometry</code> with which to compare
+	 *            this <code>Geometry</code>
+	 * @return  <code>true</code> if this <code>Geometry</code>
+	 *                            is covered by <code>g</code>
+	 *
+	 * @see Geometry#within
+	 * @see Geometry#covers
 	 */
 	bool coveredBy(const Geometry* g) const {
 	  return g->covers(this);

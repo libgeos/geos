@@ -15,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/Geometry.java rev. 1.106
+ * Last port: geom/Geometry.java rev. 1.112
  *
  **********************************************************************/
 
@@ -380,12 +380,15 @@ Geometry::covers(const Geometry* g) const
 {
 #ifdef SHORTCIRCUIT_PREDICATES
 	// short-circuit test
-	if (! getEnvelopeInternal()->contains(g->getEnvelopeInternal()))
+	if (! getEnvelopeInternal()->covers(g->getEnvelopeInternal()))
 		return false;
 #endif
+
 	// optimization for rectangle arguments
 	if (isRectangle()) {
-		return getEnvelopeInternal()->contains(g->getEnvelopeInternal());
+		// since we have already tested that the test envelope
+		// is covered
+		return true;
 	}
 
 	auto_ptr<IntersectionMatrix> im(relate(g));
