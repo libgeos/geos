@@ -13,15 +13,15 @@
  *
  ***********************************************************************
  *
- * Last port: operation/overlay/snap/SnapOverlayOp.java rev 1.4 (JTS-1.10)
+ * Last port: operation/overlay/snap/SnapIfNeededOverlayOp.java rev 1.1
+ * (JTS-1.10)
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_OVERLAY_SNAP_SNAPOVERLAYOP_H
-#define GEOS_OP_OVERLAY_SNAP_SNAPOVERLAYOP_H
+#ifndef GEOS_OP_OVERLAY_SNAP_SNAPIFNEEDEDOVERLAYOP_H
+#define GEOS_OP_OVERLAY_SNAP_SNAPIFNEEDEDOVERLAYOP_H
 
 #include <geos/operation/overlay/OverlayOp.h> // for enums 
-#include <geos/precision/CommonBitsRemover.h> // for dtor visibility by auto_ptr
 
 #include <memory> // for auto_ptr
 
@@ -41,14 +41,14 @@ namespace snap { // geos::operation::overlay::snap
  * Performs an overlay operation using snapping and enhanced precision
  * to improve the robustness of the result.
  *
- * This class <i>always</i> uses snapping.
- * This is less performant than the standard JTS overlay code,
- * and may even introduce errors which were not present in the original data.
- * For this reason, this class should only be used
- * if the standard overlay code fails to produce a correct result.
+ * This class only uses snapping
+ * if an error is detected when running the standard JTS overlay code.
+ * Errors detected include thrown exceptions
+ * (in particular, {@link TopologyException})
+ * and invalid overlay computations.
  *
  */
-class SnapOverlayOp
+class SnapIfNeededOverlayOp
 {
 
 public:
@@ -57,7 +57,7 @@ public:
 	overlayOp(const geom::Geometry& g0, const geom::Geometry& g1,
 	          OverlayOp::OpCode opCode)
 	{
-		SnapOverlayOp op(g0, g1);
+		SnapIfNeededOverlayOp op(g0, g1);
 		return op.getResultGeometry(opCode);
 	}
 
@@ -85,12 +85,11 @@ public:
 		return overlayOp(g0, g1, OverlayOp::opSYMDIFFERENCE);
 	}
 
-	SnapOverlayOp(const geom::Geometry& g1, const geom::Geometry& g2)
+	SnapIfNeededOverlayOp(const geom::Geometry& g1, const geom::Geometry& g2)
 		:
 		geom0(g1),
 		geom1(g2)
 	{
-		computeSnapTolerance();
 	}
 
 	
@@ -100,25 +99,9 @@ public:
 
 private:
 
-	void computeSnapTolerance();
-
-	typedef std::pair<GeomPtr, GeomPtr> GeomPtrPair;
-
-	void snap(GeomPtrPair& ret);
-
-	void removeCommonBits(const geom::Geometry& geom0,
-	                      const geom::Geometry& geom1, GeomPtrPair& ret);
-
-	// re-adds common bits to the given geom
-	void prepareResult(geom::Geometry& geom);
-
-
 	const geom::Geometry& geom0;
 	const geom::Geometry& geom1;
 
-	double snapTolerance;
-
-	std::auto_ptr<precision::CommonBitsRemover> cbr;
 };
  
 
@@ -127,7 +110,7 @@ private:
 } // namespace geos::operation
 } // namespace geos
 
-#endif // ndef GEOS_OP_OVERLAY_SNAP_SNAPOVERLAYOP_H
+#endif // ndef GEOS_OP_OVERLAY_SNAP_SNAPIFNEEDEDOVERLAYOP_H
 
 /**********************************************************************
  * $Log$

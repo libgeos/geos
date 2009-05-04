@@ -24,6 +24,7 @@ noinst_HEADERS =  \
 	snap/GeometrySnapper.h	\
 	snap/LineStringSnapper.h \
 	snap/SnapOverlayOp.h	\
+	snap/SnapIfNeededOverlayOp.h	\
 	validate/FuzzyPointLocator.h	\
 	validate/OffsetPointGenerator.h	\
 	validate/OverlayResultValidator.h 

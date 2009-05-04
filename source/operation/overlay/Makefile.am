@@ -18,6 +18,7 @@ libopoverlay_la_SOURCES = \
 	snap/GeometrySnapper.cpp \
 	snap/LineStringSnapper.cpp \
 	snap/SnapOverlayOp.cpp \
+	snap/SnapIfNeededOverlayOp.cpp \
 	validate/FuzzyPointLocator.cpp \
 	validate/OffsetPointGenerator.cpp \
 	validate/OverlayResultValidator.cpp 
