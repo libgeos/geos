@@ -19,7 +19,8 @@ libopoverlay_la_SOURCES = \
 	PointBuilder.cpp \
 	PolygonBuilder.cpp \
 	snap/GeometrySnapper.cpp \
-	snap/LineStringSnapper.cpp
+	snap/LineStringSnapper.cpp \
+	snap/SnapOverlayOp.cpp
 
 libopoverlay_la_LIBADD = 
 

@@ -131,13 +131,12 @@ GeometrySnapper::computeOverlaySnapTolerance(const geom::Geometry& g0,
 }
 
 /* public static */
-GeometrySnapper::GeomPtrPair
+void
 GeometrySnapper::snap(const geom::Geometry& g0,
                       const geom::Geometry& g1,
-                      double snapTolerance)
+                      double snapTolerance,
+                      GeometrySnapper::GeomPtrPair& snapGeom)
 {
-	GeometrySnapper::GeomPtrPair snapGeom;
-
 	GeometrySnapper snapper0(g0);
 	snapGeom.first = snapper0.snapTo(g1, snapTolerance);
 
@@ -153,7 +152,7 @@ GeometrySnapper::snap(const geom::Geometry& g0,
 //	cout << *snapGeom.first << endl;
 //	cout << *snapGeom.second << endl;
 
-	return snapGeom;
+	//return snapGeom;
 }
 
 /*public*/

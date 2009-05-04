@@ -76,11 +76,12 @@ public:
 	 * @param g0 a geometry to snap
 	 * @param g1 a geometry to snap
 	 * @param snapTolerance the tolerance to use
-	 * @return the snapped geometries as a pair of auto_ptrs
+	 * @param ret the snapped geometries as a pair of auto_ptrs
+	 *            (output parameter)
 	 */
-	static GeomPtrPair snap(const geom::Geometry& g0,
+	static void snap(const geom::Geometry& g0,
 	                        const geom::Geometry& g1,
-	                        double snapTolerance);
+	                        double snapTolerance, GeomPtrPair& ret);
 
 	/**
 	 * Creates a new snapper acting on the given geometry
