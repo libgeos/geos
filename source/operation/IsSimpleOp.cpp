@@ -239,14 +239,16 @@ IsSimpleOp::hasClosedEndpointIntersection(GeometryGraph &graph)
 	for (; it!=endPoints.end(); ++it) {
 		EndpointInfo *eiInfo=it->second;
 		if (eiInfo->isClosed && eiInfo->degree!=2) {
+
+			nonSimpleLocation.reset(
+				new Coordinate( eiInfo->getCoordinate() )
+			);
+
 			it=endPoints.begin();
 			for (; it!=endPoints.end(); ++it) {
 				EndpointInfo *ep=it->second;
 				delete ep;
 			}
-			nonSimpleLocation.reset(
-				new Coordinate( eiInfo->getCoordinate() )
-			);
             		return true;
 		}
 	}
