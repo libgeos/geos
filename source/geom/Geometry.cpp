@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2009  Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -14,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/Geometry.java rev. 1.105
+ * Last port: geom/Geometry.java rev. 1.106
  *
  **********************************************************************/
 
@@ -45,6 +46,7 @@
 #include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/overlay/OverlayOp.h>
+#include <geos/operation/overlay/snap/SnapIfNeededOverlayOp.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/IsSimpleOp.h>
@@ -71,6 +73,7 @@ using namespace geos::operation::valid;
 using namespace geos::operation::relate;
 using namespace geos::operation::buffer;
 using namespace geos::operation::overlay;
+using namespace geos::operation::overlay::snap;
 using namespace geos::operation::distance;
 using namespace geos::operation;
 
@@ -536,7 +539,7 @@ Geometry::intersection(const Geometry *other) const
 		return getFactory()->createGeometryCollection();
 	}
 
-	return OverlayOp::overlayOp(this, other, OverlayOp::opINTERSECTION);
+	return SnapIfNeededOverlayOp::overlayOp(*this, *other, OverlayOp::opINTERSECTION).release();
 }
 
 Geometry*
@@ -583,7 +586,7 @@ Geometry::Union(const Geometry *other) const
 	}
 #endif
 
-	return OverlayOp::overlayOp(this, other, OverlayOp::opUNION);
+	return SnapIfNeededOverlayOp::overlayOp(*this, *other, OverlayOp::opUNION).release();
 }
 
 Geometry*
@@ -594,7 +597,7 @@ Geometry::difference(const Geometry *other) const
 	if (isEmpty()) return getFactory()->createGeometryCollection();
 	if (other->isEmpty()) return clone();
 
-	return OverlayOp::overlayOp(this, other, OverlayOp::opDIFFERENCE);
+	return SnapIfNeededOverlayOp::overlayOp(*this, *other, OverlayOp::opDIFFERENCE).release();
 }
 
 Geometry*
@@ -604,7 +607,7 @@ Geometry::symDifference(const Geometry *other) const
 	if ( isEmpty() ) return other->clone();
 	if ( other->isEmpty() ) return clone();
 
-	return OverlayOp::overlayOp(this, other, OverlayOp::opSYMDIFFERENCE);
+	return SnapIfNeededOverlayOp::overlayOp(*this, *other, OverlayOp::opSYMDIFFERENCE).release();
 }
 
 int

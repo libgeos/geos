@@ -4,8 +4,9 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2009  Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005 2006 Refractions Research Inc.
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -14,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/Geometry.java rev. 1.105
+ * Last port: geom/Geometry.java rev. 1.106
  *
  **********************************************************************/
 
