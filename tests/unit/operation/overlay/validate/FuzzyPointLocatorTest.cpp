@@ -1,12 +1,12 @@
 // $Id$
 // 
-// Test Suite for geos::operation::overlay::FuzzyPointLocator class.
+// Test Suite for geos::operation::overlay::validate::FuzzyPointLocator class.
 
 
 // tut
 #include <tut.hpp>
 // geos
-#include <geos/operation/overlay/FuzzyPointLocator.h>
+#include <geos/operation/overlay/validate/FuzzyPointLocator.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
 #include <geos/io/WKTReader.h>
@@ -49,7 +49,7 @@ namespace tut
 	typedef test_group<test_fuzzypointlocator_data> group;
 	typedef group::object object;
 
-	group test_fuzzypointlocator_group("geos::operation::overlay::FuzzyPointLocator");
+	group test_fuzzypointlocator_group("geos::operation::overlay::validate::FuzzyPointLocator");
 
 	//
 	// Test Cases
@@ -59,7 +59,7 @@ namespace tut
 	template<>
 	void object::test<1>()
 	{
-		using geos::operation::overlay::FuzzyPointLocator;
+		using geos::operation::overlay::validate::FuzzyPointLocator;
 		using geos::geom::Location;
 		using geos::geom::Coordinate;
 
@@ -77,7 +77,7 @@ namespace tut
 	template<>
 	void object::test<2>()
 	{
-		using geos::operation::overlay::FuzzyPointLocator;
+		using geos::operation::overlay::validate::FuzzyPointLocator;
 		using geos::geom::Location;
 		using geos::geom::Coordinate;
 
@@ -102,7 +102,7 @@ namespace tut
 	template<>
 	void object::test<3>()
 	{
-		using geos::operation::overlay::FuzzyPointLocator;
+		using geos::operation::overlay::validate::FuzzyPointLocator;
 		using geos::geom::Location;
 		using geos::geom::Coordinate;
 
@@ -121,7 +121,7 @@ namespace tut
 	template<>
 	void object::test<4>()
 	{
-		using geos::operation::overlay::FuzzyPointLocator;
+		using geos::operation::overlay::validate::FuzzyPointLocator;
 		using geos::geom::Location;
 		using geos::geom::Coordinate;
 
@@ -141,7 +141,7 @@ namespace tut
 	template<>
 	void object::test<5>()
 	{
-		using geos::operation::overlay::FuzzyPointLocator;
+		using geos::operation::overlay::validate::FuzzyPointLocator;
 		using geos::geom::Location;
 		geos::geom::Coordinate pt(160.000000125, 119.500004998);
 
@@ -159,7 +159,7 @@ namespace tut
 	template<>
 	void object::test<6>()
 	{
-		using geos::operation::overlay::FuzzyPointLocator;
+		using geos::operation::overlay::validate::FuzzyPointLocator;
 		using geos::geom::Location;
 		// this would return the expected result
 		//geos::geom::Coordinate pt(160, 120);
@@ -179,7 +179,7 @@ namespace tut
 	template<>
 	void object::test<7>()
 	{
-		using geos::operation::overlay::FuzzyPointLocator;
+		using geos::operation::overlay::validate::FuzzyPointLocator;
 		using geos::geom::Location;
 		// this would return the expected result
 		//geos::geom::Coordinate pt(160, 120);

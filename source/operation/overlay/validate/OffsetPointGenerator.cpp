@@ -14,11 +14,10 @@
  ***********************************************************************
  *
  * Last port: operation/overlay/validate/OffsetPointGenerator.java rev. 1.1
- * (we should move in GEOS too, probably)
  *
  **********************************************************************/
 
-#include <geos/operation/overlay/OffsetPointGenerator.h>
+#include <geos/operation/overlay/validate/OffsetPointGenerator.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/LineString.h> 
 #include <geos/geom/MultiPoint.h> 
@@ -44,6 +43,7 @@ using namespace geos::algorithm;
 namespace geos {
 namespace operation { // geos.operation
 namespace overlay { // geos.operation.overlay
+namespace validate { // geos.operation.overlay.validate
 
 /*public*/
 OffsetPointGenerator::OffsetPointGenerator(const geom::Geometry& geom,
@@ -106,6 +106,7 @@ OffsetPointGenerator::computeOffsets(const Coordinate& p0,
 	offsetPts->push_back(offsetRight);
 }
 
+} // namespace geos.operation.overlay.validate
 } // namespace geos.operation.overlay
 } // namespace geos.operation
 } // namespace geos

@@ -14,13 +14,12 @@
  ***********************************************************************
  *
  * Last port: operation/overlay/validate/OverlayResultValidator.java rev. 1.1
- * (we should move in GEOS too, probably)
  *
  **********************************************************************/
 
-#include <geos/operation/overlay/OverlayResultValidator.h>
-#include <geos/operation/overlay/FuzzyPointLocator.h>
-#include <geos/operation/overlay/OffsetPointGenerator.h>
+#include <geos/operation/overlay/validate/OverlayResultValidator.h>
+#include <geos/operation/overlay/validate/FuzzyPointLocator.h>
+#include <geos/operation/overlay/validate/OffsetPointGenerator.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/GeometryFactory.h>
@@ -52,6 +51,7 @@ using namespace geos::algorithm;
 namespace geos {
 namespace operation { // geos.operation
 namespace overlay { // geos.operation.overlay
+namespace validate { // geos.operation.overlay.validate
 
 double OverlayResultValidator::_TOLERANCE = 0.000001;
 
@@ -231,7 +231,7 @@ OverlayResultValidator::isValidResult(OverlayOp::OpCode overlayOp,
 }
 
 
-
+} // namespace geos.operation.overlay.validate
 } // namespace geos.operation.overlay
 } // namespace geos.operation
 } // namespace geos

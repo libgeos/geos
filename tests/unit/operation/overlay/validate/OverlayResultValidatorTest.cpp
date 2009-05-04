@@ -1,12 +1,12 @@
 // $Id$
 // 
-// Test Suite for geos::operation::overlay::OverlayResultValidator class.
+// Test Suite for geos::operation::overlay::validate::OverlayResultValidator class.
 
 // tut
 #include <tut.hpp>
 // geos
 #include <geos/operation/overlay/OverlayOp.h>
-#include <geos/operation/overlay/OverlayResultValidator.h>
+#include <geos/operation/overlay/validate/OverlayResultValidator.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
 #include <geos/algorithm/PointLocator.h>
@@ -19,6 +19,7 @@
 namespace tut
 {
 	using namespace geos::operation::overlay;
+	using namespace geos::operation::overlay::validate;
 
 	//
 	// Test Group
@@ -48,7 +49,7 @@ namespace tut
 	typedef test_group<test_overlayresultvalidator_data> group;
 	typedef group::object object;
 
-	group test_overlayresultvalidator_group("geos::operation::overlay::OverlayResultValidator");
+	group test_overlayresultvalidator_group("geos::operation::overlay::validate::OverlayResultValidator");
 
 	//
 	// Test Cases

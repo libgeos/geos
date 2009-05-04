@@ -14,7 +14,6 @@
  ***********************************************************************
  *
  * Last port: operation/overlay/validate/OverlayResultValidator.java rev. 1.1
- * (we should move in GEOS too, probably)
  *
  **********************************************************************/
 
@@ -22,7 +21,7 @@
 #define GEOS_OP_OVERLAY_OVERLAYRESULTVALIDATOR_H
 
 #include <geos/operation/overlay/OverlayOp.h> // for OpCode enum
-#include <geos/operation/overlay/FuzzyPointLocator.h> 
+#include <geos/operation/overlay/validate/FuzzyPointLocator.h> // composition
 #include <geos/geom/Location.h> // for Location::Value type
 
 #include <vector>
@@ -38,6 +37,7 @@ namespace geos {
 namespace geos {
 namespace operation { // geos::operation
 namespace overlay { // geos::operation::overlay
+namespace validate { // geos::operation::overlay::validate
 
 /** \brief
  * Validates that the result of an overlay operation is
@@ -105,6 +105,7 @@ private:
 			std::vector<geom::Location::Value>& location);
 };
 
+} // namespace geos::operation::overlay::validate
 } // namespace geos::operation::overlay
 } // namespace geos::operation
 } // namespace geos

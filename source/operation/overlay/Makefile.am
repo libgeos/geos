@@ -8,19 +8,19 @@ libopoverlay_la_SOURCES = \
 	EdgeSetNoder.cpp \
 	ElevationMatrixCell.cpp \
 	ElevationMatrix.cpp \
-	FuzzyPointLocator.cpp \
 	LineBuilder.cpp \
 	MaximalEdgeRing.cpp \
 	MinimalEdgeRing.cpp \
-	OffsetPointGenerator.cpp \
 	OverlayNodeFactory.cpp \
 	OverlayOp.cpp \
-	OverlayResultValidator.cpp \
 	PointBuilder.cpp \
 	PolygonBuilder.cpp \
 	snap/GeometrySnapper.cpp \
 	snap/LineStringSnapper.cpp \
-	snap/SnapOverlayOp.cpp
+	snap/SnapOverlayOp.cpp \
+	validate/FuzzyPointLocator.cpp \
+	validate/OffsetPointGenerator.cpp \
+	validate/OverlayResultValidator.cpp 
 
 libopoverlay_la_LIBADD = 
 

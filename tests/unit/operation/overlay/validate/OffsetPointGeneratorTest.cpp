@@ -1,11 +1,11 @@
 // $Id$
 // 
-// Test Suite for geos::operation::overlay::OffsetPointGenerator class.
+// Test Suite for geos::operation::overlay::validate::OffsetPointGenerator class.
 
 // tut
 #include <tut.hpp>
 // geos
-#include <geos/operation/overlay/OffsetPointGenerator.h>
+#include <geos/operation/overlay/validate/OffsetPointGenerator.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/Geometry.h>
@@ -72,7 +72,7 @@ namespace tut
 	typedef test_group<test_offsetpointgenerator_data> group;
 	typedef group::object object;
 
-	group test_offsetpointgenerator_group("geos::operation::overlay::OffsetPointGenerator");
+	group test_offsetpointgenerator_group("geos::operation::overlay::validate::OffsetPointGenerator");
 
 	//
 	// Test Cases
@@ -82,7 +82,7 @@ namespace tut
 	template<>
 	void object::test<1>()
 	{
-		using geos::operation::overlay::OffsetPointGenerator;
+		using geos::operation::overlay::validate::OffsetPointGenerator;
 		using geos::geom::Coordinate;
 		using geos::algorithm::PointLocator;
 		using std::auto_ptr;
@@ -106,7 +106,7 @@ namespace tut
 	template<>
 	void object::test<2>()
 	{
-		using geos::operation::overlay::OffsetPointGenerator;
+		using geos::operation::overlay::validate::OffsetPointGenerator;
 		using geos::geom::Location;
 		using geos::geom::Coordinate;
 		using std::auto_ptr;
@@ -130,7 +130,7 @@ namespace tut
 	template<>
 	void object::test<3>()
 	{
-		using geos::operation::overlay::OffsetPointGenerator;
+		using geos::operation::overlay::validate::OffsetPointGenerator;
 		using geos::geom::Location;
 		using geos::geom::Coordinate;
 		using std::auto_ptr;
@@ -154,7 +154,7 @@ namespace tut
 	template<>
 	void object::test<4>()
 	{
-		using geos::operation::overlay::OffsetPointGenerator;
+		using geos::operation::overlay::validate::OffsetPointGenerator;
 		using geos::geom::Location;
 		using geos::geom::Coordinate;
 		using std::auto_ptr;
@@ -178,7 +178,7 @@ namespace tut
 	template<>
 	void object::test<5>()
 	{
-		using geos::operation::overlay::OffsetPointGenerator;
+		using geos::operation::overlay::validate::OffsetPointGenerator;
 		using geos::geom::Location;
 		using geos::geom::Coordinate;
 		using std::auto_ptr;

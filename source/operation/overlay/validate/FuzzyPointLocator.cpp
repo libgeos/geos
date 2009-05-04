@@ -14,11 +14,10 @@
  ***********************************************************************
  *
  * Last port: operation/overlay/validate/FuzzyPointLocator.java rev. 1.1
- * (we should move in GEOS too, probably)
  *
  **********************************************************************/
 
-#include <geos/operation/overlay/FuzzyPointLocator.h>
+#include <geos/operation/overlay/validate/FuzzyPointLocator.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Point.h> // for Point upcast
 #include <geos/geom/GeometryFactory.h>
@@ -46,6 +45,7 @@ using namespace geos::algorithm;
 namespace geos {
 namespace operation { // geos.operation
 namespace overlay { // geos.operation.overlay
+namespace validate { // geos.operation.overlay.validate
 
 FuzzyPointLocator::FuzzyPointLocator(const geom::Geometry& geom,
 		double nTolerance)
@@ -146,6 +146,7 @@ FuzzyPointLocator::getLocation(const Coordinate& pt)
 	return static_cast<Location::Value>(ptLocator.locate(pt, &g));
 }
 
+} // namespace geos.operation.overlay.validate
 } // namespace geos.operation.overlay
 } // namespace geos.operation
 } // namespace geos

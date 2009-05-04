@@ -39,6 +39,7 @@ namespace geos {
 namespace geos {
 namespace operation { // geos::operation
 namespace overlay { // geos::operation::overlay
+namespace validate { // geos::operation::overlay::validate
 
 /** \brief
  * Finds the most likely Location of a point relative to
@@ -80,6 +81,7 @@ private:
 
 };
 
+} // namespace geos::operation::overlay::validate
 } // namespace geos::operation::overlay
 } // namespace geos::operation
 } // namespace geos

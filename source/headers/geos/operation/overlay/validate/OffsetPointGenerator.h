@@ -14,7 +14,6 @@
  ***********************************************************************
  *
  * Last port: operation/overlay/validate/OffsetPointGenerator.java rev. 1.1
- * (we should move in GEOS too, probably)
  *
  **********************************************************************/
 
@@ -42,6 +41,7 @@ namespace geos {
 namespace geos {
 namespace operation { // geos::operation
 namespace overlay { // geos::operation::overlay
+namespace validate { // geos::operation::overlay::validate
 
 /// Generates points offset from both sides of all segments in a geometry
 //
@@ -68,6 +68,7 @@ private:
 			const geom::Coordinate& p1);
 };
 
+} // namespace geos::operation::overlay::validate
 } // namespace geos::operation::overlay
 } // namespace geos::operation
 } // namespace geos

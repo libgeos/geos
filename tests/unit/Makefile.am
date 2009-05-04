@@ -67,9 +67,9 @@ geos_unit_SOURCES = geos_unit.cpp \
 	noding/SegmentPointComparatorTest.cpp \
 	operation/distance/DistanceOpTest.cpp \
 	operation/IsSimpleOpTest.cpp \
-	operation/overlay/FuzzyPointLocatorTest.cpp \
-	operation/overlay/OffsetPointGeneratorTest.cpp \
-	operation/overlay/OverlayResultValidatorTest.cpp \
+	operation/overlay/validate/FuzzyPointLocatorTest.cpp \
+	operation/overlay/validate/OffsetPointGeneratorTest.cpp \
+	operation/overlay/validate/OverlayResultValidatorTest.cpp \
 	operation/union/CascadedPolygonUnionTest.cpp \
 	operation/valid/IsValidTest.cpp \
 	operation/valid/ValidClosedRingTest.cpp \

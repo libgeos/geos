@@ -14,16 +14,16 @@ noinst_HEADERS =  \
 	EdgeSetNoder.h		\
 	ElevationMatrixCell.h	\
 	ElevationMatrix.h	\
-	FuzzyPointLocator.h	\
 	LineBuilder.h		\
 	MaximalEdgeRing.h	\
 	MinimalEdgeRing.h	\
 	MinimalEdgeRing.inl	\
-	OffsetPointGenerator.h	\
 	OverlayNodeFactory.h	\
-	OverlayResultValidator.h \
 	PointBuilder.h		\
 	PolygonBuilder.h	\
 	snap/GeometrySnapper.h	\
 	snap/LineStringSnapper.h \
-	snap/SnapOverlayOp.h
+	snap/SnapOverlayOp.h	\
+	validate/FuzzyPointLocator.h	\
+	validate/OffsetPointGenerator.h	\
+	validate/OverlayResultValidator.h 
