@@ -321,6 +321,7 @@ AC_OUTPUT([
 	source/headers/geos/operation/distance/Makefile
 	source/headers/geos/operation/linemerge/Makefile
 	source/headers/geos/operation/overlay/Makefile
+	source/headers/geos/operation/overlay/snap/Makefile
 	source/headers/geos/operation/polygonize/Makefile
 	source/headers/geos/operation/predicate/Makefile
 	source/headers/geos/operation/relate/Makefile

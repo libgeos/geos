@@ -8,8 +8,6 @@ libprecision_la_SOURCES = \
 	CommonBits.cpp \
 	CommonBitsOp.cpp \
 	CommonBitsRemover.cpp \
-	GeometrySnapper.cpp \
-	LineStringSnapper.cpp \
 	EnhancedPrecisionOp.cpp \
 	SimpleGeometryPrecisionReducer.cpp 
 

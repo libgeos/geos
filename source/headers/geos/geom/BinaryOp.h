@@ -53,7 +53,9 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/precision/CommonBitsRemover.h>
 #include <geos/precision/SimpleGeometryPrecisionReducer.h>
-#include <geos/precision/GeometrySnapper.h>
+
+#include <geos/operation/overlay/snap/GeometrySnapper.h>
+
 #include <geos/simplify/TopologyPreservingSimplifier.h>
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/util/TopologyException.h>
@@ -134,7 +136,8 @@ SnapOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 
 #define CBR_BEFORE_SNAPPING 1
 
-	using geos::precision::GeometrySnapper;
+	//using geos::precision::GeometrySnapper;
+	using geos::operation::overlay::snap::GeometrySnapper;
 
 	// Snap tolerance must be computed on the original
 	// (not commonbits-removed) geoms

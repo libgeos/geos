@@ -1,8 +1,9 @@
-#SUBDIRS = 
+SUBDIRS = snap
 
 #EXTRA_DIST = 
 
 # Notes:
+# snap/GeometrySnapper.h is needed by geom/BinaryOp.h
 # 
 
 geosdir = $(includedir)/geos/operation/overlay
@@ -21,10 +22,6 @@ noinst_HEADERS =  \
 	OverlayNodeFactory.h	\
 	PointBuilder.h		\
 	PolygonBuilder.h	\
-	snap/GeometrySnapper.h	\
-	snap/LineStringSnapper.h \
-	snap/SnapOverlayOp.h	\
-	snap/SnapIfNeededOverlayOp.h	\
 	validate/FuzzyPointLocator.h	\
 	validate/OffsetPointGenerator.h	\
 	validate/OverlayResultValidator.h 

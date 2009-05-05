@@ -1,10 +1,11 @@
 /**********************************************************************
- * $Id$
+ * $Id: GeometrySnapper.h 1948 2006-12-18 18:44:20Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
  * Copyright (C) 2009  Sandro Santilli <strk@keybit.net>
+ * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -20,15 +21,16 @@
 #ifndef GEOS_OP_OVERLAY_SNAP_GEOMETRYSNAPPER_H
 #define GEOS_OP_OVERLAY_SNAP_GEOMETRYSNAPPER_H
 
-#include <geos/geom/LineSegment.h> // for composition
-#include <geos/geom/LineString.h> // for inlined ctor
+#include <geos/geom/Coordinate.h>
 
-//#include <vector>
-#include <memory> // for auto_ptr
+#include <memory>
+#include <vector>
 
 // Forward declarations
 namespace geos {
-	namespace geom {
+	namespace geom { 
+		//class PrecisionModel;
+		class Geometry;
 		class CoordinateSequence;
 	}
 }
@@ -39,33 +41,12 @@ namespace overlay { // geos::operation::overlay
 namespace snap { // geos::operation::overlay::snap
 
 /** \brief
- * Snaps the vertices and segments of a geom::Geometry to another
- * Geometry's vertices.
- * 
- * Improves robustness for overlay operations, by eliminating
- * nearly parallel edges (which cause problems during noding and
- * intersection calculation).
- *
+ * Snaps the vertices and segments of a geometry to another's vertices.
+ * Should improve robustness for overlay operations.
  */
-class GeometrySnapper
-{
+class GeometrySnapper {
 
 public:
-
-	/** \brief
-	 * Estimates the snap tolerance for a Geometry, taking into account
-	 * its precision model.
-	 *
-	 * @param g a Geometry
-	 * @return the estimated snap tolerance
-	 */
-	static double computeOverlaySnapTolerance(const geom::Geometry& g);
-
-	static double computeSizeBasedSnapTolerance(const geom::Geometry& g);
-
-	static double computeOverlaySnapTolerance(const geom::Geometry& g0,
-	                                          const geom::Geometry& g1);
-
 
 	typedef std::auto_ptr<geom::Geometry> GeomPtr;
 	typedef std::pair<GeomPtr, GeomPtr> GeomPtrPair;
@@ -86,45 +67,63 @@ public:
 	/**
 	 * Creates a new snapper acting on the given geometry
 	 *
-	 * @param nSrcGeom the geometry to snap
+	 * @param g the geometry to snap
 	 */
-	GeometrySnapper(const geom::Geometry& nSrcGeom)
+	GeometrySnapper(const geom::Geometry& g)
 		:
-		srcGeom(nSrcGeom)
-	{}
+		srcGeom(g)
+	{
+	}
 
-	/**
+	/** \brief
 	 * Snaps the vertices in the component {@link LineString}s
-	 * of the source geometry
-	 * to the vertices of the given snap geometry.
+	 * of the source geometry to the vertices of the given snap geometry
+	 * with a given snap tolerance
 	 *
-	 * @param snapGeom a geometry to snap the source to
+	 * @param g a geometry to snap the source to
 	 * @param snapTolerance
-	 *
 	 * @return a new snapped Geometry
 	 */
-	GeomPtr snapTo(const geom::Geometry& snapGeom, double snapTolerance);
+	std::auto_ptr<geom::Geometry> snapTo(const geom::Geometry& g,
+	                                     double snapTolerance);
 
-	// why is this public ??
-	void extractTargetCoordinates(const geom::Geometry& g,
-	                    std::vector<const geom::Coordinate*>& target);
- 
+	/** \brief
+	 * Estimates the snap tolerance for a Geometry, taking into account
+	 * its precision model.
+	 *
+	 * @param g a Geometry
+	 * @return the estimated snap tolerance
+	 */
+	static double computeOverlaySnapTolerance(const geom::Geometry& g);
+
+	static double computeSizeBasedSnapTolerance(const geom::Geometry& g);
+
+	/** \brief
+	 * Computes the snap tolerance based on input geometries;
+	 */
+	static double computeOverlaySnapTolerance(const geom::Geometry& g1,
+			const geom::Geometry& g2);
+
 
 private:
 
-	static const double SNAP_PRECISION_FACTOR; // = 10e-10;
+	// eventually this will be determined from the geometry topology
+	//static const double snapTol; //  = 0.000001;
+
+	static const double snapPrecisionFactor; //  = 10e-10
 
 	const geom::Geometry& srcGeom;
+
+	/// Extract target (unique) coordinates
+	std::auto_ptr<geom::Coordinate::ConstVect> extractTargetCoordinates(
+			const geom::Geometry& g);
 };
+
 
 } // namespace geos::operation::overlay::snap
 } // namespace geos::operation::overlay
 } // namespace geos::operation
 } // namespace geos
 
-#endif // ndef GEOS_OP_OVERLAY_SNAP_GEOMETRYSNAPPER_H
-
-/**********************************************************************
- * $Log$
- **********************************************************************/
+#endif // GEOS_OP_OVERLAY_SNAP_GEOMETRYSNAPPER_H
 

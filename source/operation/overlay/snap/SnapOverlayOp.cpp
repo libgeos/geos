@@ -20,7 +20,7 @@
 #include <geos/operation/overlay/snap/SnapOverlayOp.h>
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
 #include <geos/precision/CommonBitsRemover.h>
-//#include <geos/geom/CoordinateSequence.h> 
+#include <geos/geom/Geometry.h> 
 
 #include <cassert>
 #include <limits> // for numeric_limits

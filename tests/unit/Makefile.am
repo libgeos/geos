@@ -70,12 +70,12 @@ geos_unit_SOURCES = geos_unit.cpp \
 	operation/overlay/validate/FuzzyPointLocatorTest.cpp \
 	operation/overlay/validate/OffsetPointGeneratorTest.cpp \
 	operation/overlay/validate/OverlayResultValidatorTest.cpp \
+	operation/overlay/snap/GeometrySnapperTest.cpp \
+	operation/overlay/snap/LineStringSnapperTest.cpp \
 	operation/union/CascadedPolygonUnionTest.cpp \
 	operation/valid/IsValidTest.cpp \
 	operation/valid/ValidClosedRingTest.cpp \
 	operation/valid/ValidSelfTouchingRingFormingHoleTest.cpp \
-	precision/GeometrySnapperTest.cpp \
-	precision/LineStringSnapperTest.cpp \
 	precision/SimpleGeometryPrecisionReducerTest.cpp \
 	simplify/DouglasPeuckerSimplifierTest.cpp \
 	simplify/TopologyPreservingSimplifierTest.cpp \

@@ -1,11 +1,11 @@
 // $Id$
 // 
-// Test Suite for geos::precision::LineStringSnapper class.
+// Test Suite for geos::operation::overlay::snap::LineStringSnapper class.
 
 // tut
 #include <tut.hpp>
 // geos
-#include <geos/precision/LineStringSnapper.h>
+#include <geos/operation/overlay/snap/LineStringSnapper.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateList.h>
 #include <geos/geom/CoordinateArraySequence.h>
@@ -29,7 +29,7 @@ namespace tut
     typedef test_group<test_linestringsnapper_data> group;
     typedef group::object object;
 
-    group test_linestringsnapper_group("geos::precision::LineStringSnapper");
+    group test_linestringsnapper_group("geos::operation::overlay::snap::LineStringSnapper");
 
     //
     // Test Cases
@@ -41,7 +41,7 @@ namespace tut
     void object::test<1>()
     {
 		using geos::geom::Coordinate;
-		using geos::precision::LineStringSnapper;
+		using geos::operation::overlay::snap::LineStringSnapper;
 
 		typedef std::auto_ptr<Coordinate::Vect> CoordsVectAptr;
 
@@ -78,7 +78,7 @@ namespace tut
     void object::test<2>()
     {
 		using geos::geom::Coordinate;
-		using geos::precision::LineStringSnapper;
+		using geos::operation::overlay::snap::LineStringSnapper;
 
 		typedef std::auto_ptr<Coordinate::Vect> CoordsVectAptr;
 

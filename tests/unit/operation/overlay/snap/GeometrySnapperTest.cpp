@@ -1,11 +1,11 @@
 // $Id$
 // 
-// Test Suite for geos::precision::GeometrySnapper class.
+// Test Suite for geos::operation::overlay::snap::GeometrySnapper class.
 
 // tut
 #include <tut.hpp>
 // geos
-#include <geos/precision/GeometrySnapper.h>
+#include <geos/operation/overlay/snap/GeometrySnapper.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/io/WKTReader.h>
@@ -31,7 +31,7 @@ namespace tut
 
 	GeomAutoPtr src;
 
-	geos::precision::GeometrySnapper snapper;
+	geos::operation::overlay::snap::GeometrySnapper snapper;
 
         test_geometrysnapper_data()
 		:
@@ -49,7 +49,7 @@ namespace tut
     typedef test_group<test_geometrysnapper_data> group;
     typedef group::object object;
 
-    group test_geometrysnapper_group("geos::precision::GeometrySnapper");
+    group test_geometrysnapper_group("geos::operation::overlay::snap::GeometrySnapper");
 
     //
     // Test Cases
