@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/Envelope.java rev 1.46 (JTS-1.10)
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOM_ENVELOPE_INL
@@ -83,42 +87,10 @@ Envelope::intersects(double x, double y) const
 
 /*public*/
 INLINE bool 
-Envelope::covers(double x, double y) const
-{
-	if (isNull()) return false;
-	return x >= minx &&
-		x <= maxx &&
-		y >= miny &&
-		y <= maxy;
-}
-
-/*public*/
-INLINE bool 
-Envelope::covers( const Coordinate *p) const
+Envelope::covers(const Coordinate *p) const
 {
 	return covers(p->x, p->y);
 }
-
-/*public*/
-INLINE bool 
-Envelope::covers( const Envelope *other) const
-{
-	if (isNull() || other->isNull()) return false;
-
-	return 
-		other->getMinX() >= minx &&
-		other->getMaxX() <= maxx &&
-		other->getMinY() >= miny &&
-		other->getMaxY() <= maxy;
-}
-
-/*public*/
-INLINE bool 
-Envelope::covers( const Envelope &other) const 
-{ 
-	return covers( &other); 
-}
-
 
 } // namespace geos::geom
 } // namespace geos

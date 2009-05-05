@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/Envelope.java rev. 1.41 (JTS-1.7)
+ * Last port: geom/Envelope.java rev 1.46 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -295,32 +295,32 @@ Envelope::expandToInclude(const Envelope* other)
 }
 
 /*public*/
-bool
-Envelope::contains(const Coordinate& p) const
+bool 
+Envelope::covers(double x, double y) const
 {
-	return contains(p.x, p.y);
+	if (isNull()) return false;
+	return x >= minx &&
+		x <= maxx &&
+		y >= miny &&
+		y <= maxy;
 }
 
-/*public*/
-bool
-Envelope::contains(double x, double y) const
-{
-	return  x >= minx &&
-			x <= maxx &&
-			y >= miny &&
-			y <= maxy;
-}
 
 /*public*/
-bool
-Envelope::contains(const Envelope* other) const
+bool 
+Envelope::covers(const Envelope& other) const
 {
-	if (isNull() || other->isNull()) { return false; }
-	return  other->getMinX() >= minx &&
-			other->getMaxX() <= maxx &&
-			other->getMinY() >= miny &&
-			other->getMaxY() <= maxy;
+	if (isNull() || other.isNull()) return false;
+
+	return 
+		other.getMinX() >= minx &&
+		other.getMaxX() <= maxx &&
+		other.getMinY() >= miny &&
+		other.getMaxY() <= maxy;
 }
+
+
+
 
 /*public*/
 bool

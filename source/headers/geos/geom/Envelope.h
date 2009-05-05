@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/Envelope.java rev. 1.41 (JTS-1.7)
+ * Last port: geom/Envelope.java rev 1.46 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -21,6 +21,7 @@
 #define GEOS_GEOM_ENVELOPE_H
 
 #include <geos/inline.h>
+#include <geos/geom/Coordinate.h>
 
 #include <string>
 #include <vector>
@@ -193,6 +194,17 @@ public:
 	double getHeight(void) const;
 
 	/**
+	 * Gets the area of this envelope.
+	 *
+	 * @return the area of the envelope
+	 * @return 0.0 if the envelope is null
+	 */
+	double getArea() const
+	{
+		return getWidth() * getHeight();
+	}
+
+	/**
 	 *  Returns the Envelope maximum y-value. min y > max y
 	 *  indicates that this is a null Envelope.
 	 */
@@ -295,6 +307,27 @@ public:
 	void expandToInclude(const Envelope* other);
 
 	/** \brief
+	 * Tests if the <code>Envelope other</code> lies wholely
+	 * inside this <code>Envelope</code> (inclusive of the boundary).
+	 * 
+	 * Note that this is <b>not</b> the same definition as the SFS
+	 * <tt>contains</tt>, which would exclude the envelope boundary.
+	 *
+	 * @param  other the <code>Envelope</code> to check
+	 * @return true if <code>other</code> is contained in this
+	 *              <code>Envelope</code>
+	 *
+	 * @see covers(Envelope)
+	 */
+	bool contains(const Envelope& other) const {
+		return covers(other);
+	}
+
+	bool contains(const Envelope* other) const {
+		return contains(*other);
+	}
+
+	/** \brief
 	 * Returns <code>true</code> if the given point lies in
 	 * or on the envelope.
 	 *
@@ -303,7 +336,9 @@ public:
 	 * @return    <code>true</code> if the point lies in the interior or
 	 *      on the boundary of this <code>Envelope</code>.
 	 */
-	bool contains(const Coordinate& p) const;
+	bool contains(const Coordinate& p) const {
+		return covers(p.x, p.y);
+	}
 
 	/** \brief
 	 * Returns <code>true</code> if the given point lies in
@@ -320,23 +355,9 @@ public:
 	 *            the interior or on the boundary of this
 	 *            <code>Envelope</code>.
 	 */
-	bool contains(double x, double y) const;
-
-	/** \brief
-	 * Returns <code>true</code> if the <code>Envelope other</code>
-	 * lies wholely inside this <code>Envelope</code> (inclusive of
-	 * the boundary).
-	 *
-	 * @param  other  the <code>Envelope</code> which this
-	 *                    <code>Envelope</code> is being checked
-	 *                    for containing
-	 *
-	 * @return        <code>true</code> if <code>other</code>
-	 *                is contained in this <code>Envelope</code>
-	 */
-	bool contains(const Envelope* other) const;
-
-	bool contains(const Envelope& other) const { return contains(&other); }
+	bool contains(double x, double y) const {
+		return covers(x, y);
+	}
 
 	/**
 	 * Check if the point p
@@ -393,14 +414,18 @@ public:
 	bool covers(const Coordinate *p) const;
 
 	/**
-	* Tests if the <code>Envelope other</code>
-	* lies wholely inside this <code>Envelope</code> (inclusive of the boundary).
-	*
-	*@param  other the <code>Envelope</code> to check
-	*@return true if this <code>Envelope</code> covers the <code>other</code> 
-	*/
-	bool covers(const Envelope *other) const;
-	bool covers(const Envelope &other) const;
+	 * Tests if the <code>Envelope other</code> lies wholely inside
+	 * this <code>Envelope</code> (inclusive of the boundary).
+	 *
+	 * @param  other the <code>Envelope</code> to check
+	 * @return true if this <code>Envelope</code> covers the
+	 * <code>other</code> 
+	 */
+	bool covers(const Envelope& other) const;
+
+	bool covers(const Envelope* other) const {
+		return covers(*other);
+	}
 
 
 	/** \brief
