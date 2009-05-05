@@ -66,6 +66,12 @@
 #include "Stackwalker.h"
 #endif
 
+// Undefine this to use Geometry methods for overlay operations
+//
+// Using BinaryOp gives more successes though...
+//
+#define USE_BINARYOP 1
+
 using namespace geos;
 using namespace geos::operation::polygonize;
 using namespace geos::operation::linemerge;
@@ -544,8 +550,12 @@ XMLTester::parseTest()
 			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
 			gRes->normalize();
 
-			//GeomAutoPtr gRealRes(gA->intersection(gB));
+#ifndef USE_BINARYOP
+			GeomAutoPtr gRealRes(gA->intersection(gB));
+#else
 			GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opINTERSECTION));
+#endif
+
 			gRealRes->normalize();
 
 			if (gRes->compareTo(gRealRes.get())==0) success=1;
@@ -562,8 +572,12 @@ XMLTester::parseTest()
 			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
 			gRes->normalize();
 
-			//GeomAutoPtr gRealRes(gA->Union(gB));
+#ifndef USE_BINARYOP
+			GeomAutoPtr gRealRes(gA->Union(gB));
+#else
 			GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opUNION));
+#endif
+
 			gRealRes->normalize();
 
 			if (gRes->compareTo(gRealRes.get())==0) success=1;
@@ -580,8 +594,11 @@ XMLTester::parseTest()
 			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
 			gRes->normalize();
 
-			//GeomAutoPtr gRealRes(gA->difference(gB));
+#ifndef USE_BINARYOP
+			GeomAutoPtr gRealRes(gA->difference(gB));
+#else
 			GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opDIFFERENCE));
+#endif
 			
 			gRealRes->normalize();
 
@@ -599,8 +616,12 @@ XMLTester::parseTest()
 			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
 			gRes->normalize();
 
-			//GeomAutoPtr gRealRes(gA->symDifference(gB));
+#ifndef USE_BINARYOP
+			GeomAutoPtr gRealRes(gA->symDifference(gB));
+#else
 			GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opSYMDIFFERENCE));
+#endif
+
 			gRealRes->normalize();
 
 			if (gRes->compareTo(gRealRes.get())==0) success=1;
@@ -991,8 +1012,12 @@ std::cerr << "BufferResultMatcher FAILED" << std::endl;
 			{
 		std::cerr << "Running intersection for areatest" << std::endl;
 			}
+#ifndef USE_BINARYOP
+			GeomAutoPtr gI(gA->intersection(gB));
+#else
 			GeomAutoPtr gI = BinaryOp(gA, gB,
 					overlayOp(OverlayOp::opINTERSECTION));
+#endif
 
 			if ( testValidOutput )
 			{
@@ -1003,15 +1028,25 @@ std::cerr << "BufferResultMatcher FAILED" << std::endl;
 			{
 		std::cerr << "Running difference(A,B) for areatest" << std::endl;
 			}
+
+#ifndef USE_BINARYOP
+			GeomAutoPtr gDab(gA->difference(gB));
+#else
 			GeomAutoPtr gDab = BinaryOp(gA, gB,
 					overlayOp(OverlayOp::opDIFFERENCE));
+#endif
 
 			if ( verbose > 1 )
 			{
 		std::cerr << "Running difference(B,A) for areatest" << std::endl;
 			}
+
+#ifndef USE_BINARYOP
+			GeomAutoPtr gDba(gB->difference(gA));
+#else
 			GeomAutoPtr gDba = BinaryOp(gB, gA,
 					overlayOp(OverlayOp::opDIFFERENCE));
+#endif
 
 			if ( testValidOutput )
 			{
@@ -1022,15 +1057,25 @@ std::cerr << "BufferResultMatcher FAILED" << std::endl;
 			{
 		std::cerr << "Running symdifference for areatest" << std::endl;
 			}
+
+#ifndef USE_BINARYOP
+			GeomAutoPtr gSD(gA->symDifference(gB));
+#else
 			GeomAutoPtr gSD = BinaryOp(gA, gB,
 					overlayOp(OverlayOp::opSYMDIFFERENCE));
+#endif
 
 			if ( verbose > 1 )
 			{
 		std::cerr << "Running union for areatest" << std::endl;
 			}
+
+#ifndef USE_BINARYOP
+			GeomAutoPtr gU(gA->Union(gB));
+#else
 			GeomAutoPtr gU = BinaryOp(gA, gB,
 					overlayOp(OverlayOp::opUNION));
+#endif
 
 			double areaA = gA->getArea();
 			double areaB = gB->getArea();
