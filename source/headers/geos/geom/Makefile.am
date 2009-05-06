@@ -6,7 +6,9 @@ SUBDIRS = \
 
 # Notes:
 # GeometryComponentFilter.h needed by Polygonizer.h
-# LineSegment.h needed by buffer/OffsetCurveBuilder.h needed by BufferOp.h 
+# LineSegment.h needed by buffer/OffsetCurveBuilder.h needed by BufferOp.h,
+#   needed by index/chain/monotoneChainSelectAction.h by McPointInRing.h,
+#   needed by index/chain/monotoneChainOverlapAction.h by McIndexNoder.h
 # Location.h needed by PointLocator.h for inlines
 
 geosdir = $(includedir)/geos/geom

@@ -95,18 +95,13 @@ public:
 	public:
 		SegmentOverlapAction(SegmentIntersector& newSi)
 			:
+			index::chain::MonotoneChainOverlapAction(),
 			si(newSi)
 		{}
 
-		void overlap(index::chain::MonotoneChain* mc1, int start1,
-				index::chain::MonotoneChain* mc2, int start2);
+		void overlap(index::chain::MonotoneChain& mc1, size_t start1,
+		             index::chain::MonotoneChain& mc2, size_t start2);
 
-		void overlap(geom::LineSegment* s1, geom::LineSegment* s2)
-        {
-            UNREFERENCED_PARAMETER(s1);
-            UNREFERENCED_PARAMETER(s2);
-            assert(0);
-        }
 	};
 	
 };

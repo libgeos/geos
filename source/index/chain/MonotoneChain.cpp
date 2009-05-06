@@ -61,7 +61,7 @@ MonotoneChain::getEnvelope() const
 }
 
 void
-MonotoneChain::getLineSegment(unsigned int index, LineSegment& ls) const
+MonotoneChain::getLineSegment(size_t index, LineSegment& ls) const
 {
     ls.p0 = pts[index];
     ls.p1 = pts[index+1];
@@ -127,14 +127,14 @@ MonotoneChain::computeOverlaps(MonotoneChain *mc,
 void
 MonotoneChain::computeOverlaps(size_t start0, size_t end0,
                                MonotoneChain& mc,
-                               int    start1, int    end1,
+                               size_t start1, size_t end1,
                                MonotoneChainOverlapAction& mco)
 {
     //Debug.println("computeIntersectsForChain:"+p00+p01+p10+p11);
     // terminating condition for the recursion
     if (end0-start0==1 && end1-start1==1)
     {
-        mco.overlap(this, start0, &mc, start1);
+        mco.overlap(*this, start0, mc, start1);
         return;
     }
 
@@ -144,9 +144,9 @@ MonotoneChain::computeOverlaps(size_t start0, size_t end0,
     const Coordinate& p11 = mc.pts[end1];
 
     // nothing to do if the envelopes of these chains don't overlap
-    mco.tempEnv1->init(p00, p01);
-    mco.tempEnv2->init(p10, p11);
-    if (!mco.tempEnv1->intersects(mco.tempEnv2)) return;
+    mco.tempEnv1.init(p00, p01);
+    mco.tempEnv2.init(p10, p11);
+    if (!mco.tempEnv1.intersects(mco.tempEnv2)) return;
 
     // the chains overlap,so split each in half and iterate (binary search)
     size_t mid0=(start0+end0)/2;

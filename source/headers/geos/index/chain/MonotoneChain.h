@@ -112,7 +112,7 @@ public:
 	 *  Set given LineSegment with points of the segment starting
 	 *  at the given index.
 	 */
-	void getLineSegment(unsigned int index, geom::LineSegment& ls) const;
+	void getLineSegment(size_t index, geom::LineSegment& ls) const;
 
 	/**
 	 * Return the subsequence of coordinates forming this chain.
@@ -145,7 +145,8 @@ private:
 			MonotoneChainSelectAction& mcs);
 
 	void computeOverlaps(size_t start0, size_t end0, MonotoneChain& mc,
-			int start1, int end1, MonotoneChainOverlapAction& mco);
+			     size_t start1, size_t end1,
+	                     MonotoneChainOverlapAction& mco);
 
 	/// Externally owned 
 	const geom::CoordinateSequence& pts;

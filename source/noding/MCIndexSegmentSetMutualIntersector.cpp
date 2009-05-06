@@ -150,10 +150,11 @@ MCIndexSegmentSetMutualIntersector::process(SegmentString::ConstVect * segString
 
 
 void 
-MCIndexSegmentSetMutualIntersector::SegmentOverlapAction::overlap( MonotoneChain * mc1, int start1, MonotoneChain * mc2, int start2)
+MCIndexSegmentSetMutualIntersector::SegmentOverlapAction::overlap(
+	MonotoneChain& mc1, size_t start1, MonotoneChain& mc2, size_t start2)
 {
-    SegmentString * ss1 = (SegmentString *)(mc1->getContext());
-    SegmentString * ss2 = (SegmentString *)(mc2->getContext());
+    SegmentString * ss1 = (SegmentString *)(mc1.getContext());
+    SegmentString * ss2 = (SegmentString *)(mc2.getContext());
 
     si.processIntersections(ss1, start1, ss2, start2);
 }

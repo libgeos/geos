@@ -136,16 +136,16 @@ MCIndexNoder::~MCIndexNoder()
 }
 
 void
-MCIndexNoder::SegmentOverlapAction::overlap(MonotoneChain* mc1, int start1,
-		MonotoneChain* mc2, int start2)
+MCIndexNoder::SegmentOverlapAction::overlap(MonotoneChain& mc1, size_t start1,
+		MonotoneChain& mc2, size_t start2)
 {
 	SegmentString* ss1 = const_cast<SegmentString*>(
-		static_cast<const SegmentString *>(mc1->getContext())
+		static_cast<const SegmentString *>(mc1.getContext())
 		);
 	assert(ss1);
 
 	SegmentString* ss2 = const_cast<SegmentString*>(
-		static_cast<const SegmentString *>(mc2->getContext())
+		static_cast<const SegmentString *>(mc2.getContext())
 		);
 	assert(ss2);
 

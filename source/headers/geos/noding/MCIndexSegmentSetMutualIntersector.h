@@ -78,10 +78,13 @@ public:
 	public:
 
 		SegmentOverlapAction(SegmentIntersector & si)
-            : si(si)
+			:
+			index::chain::MonotoneChainOverlapAction(),
+			si(si)
 		{}
 
-		void overlap(index::chain::MonotoneChain* mc1, int start1, index::chain::MonotoneChain* mc2, int start2);
+		void overlap(index::chain::MonotoneChain& mc1, size_t start1,
+		             index::chain::MonotoneChain& mc2, size_t start2);
 	};
 
 private:

@@ -29,28 +29,12 @@ namespace geos {
 namespace index { // geos.index
 namespace chain { // geos.index.chain
 
-MonotoneChainOverlapAction::MonotoneChainOverlapAction() {
-	overlapSeg1=new geom::LineSegment();
-	overlapSeg2=new geom::LineSegment();
-	tempEnv1=new geom::Envelope();
-	tempEnv2=new geom::Envelope();
-
-}
-
-MonotoneChainOverlapAction::~MonotoneChainOverlapAction() {
-	delete overlapSeg1;
-	delete overlapSeg2;
-	delete tempEnv1;
-	delete tempEnv2;
-}
-
-
 void
-MonotoneChainOverlapAction::overlap(MonotoneChain *mc1, int start1,
-		MonotoneChain *mc2, int start2)
+MonotoneChainOverlapAction::overlap(MonotoneChain& mc1, size_t start1,
+		MonotoneChain& mc2, size_t start2)
 {
-	mc1->getLineSegment(start1, *overlapSeg1);
-	mc2->getLineSegment(start2, *overlapSeg2);
+	mc1.getLineSegment(start1, overlapSeg1);
+	mc2.getLineSegment(start2, overlapSeg2);
 	overlap(overlapSeg1, overlapSeg2);
 }
 

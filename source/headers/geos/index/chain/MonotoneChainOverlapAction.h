@@ -20,13 +20,12 @@
 #ifndef GEOS_IDX_CHAIN_MONOTONECHAINOVERLAPACTION_H
 #define GEOS_IDX_CHAIN_MONOTONECHAINOVERLAPACTION_H
 
+#include <geos/geom/LineSegment.h>
+#include <geos/geom/Envelope.h>
+
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Envelope;
-		class LineSegment;
-	}
 	namespace index { 
 		namespace chain { 
 			class MonotoneChain;
@@ -46,38 +45,40 @@ class MonotoneChainOverlapAction {
 
 protected:
 
-	geom::LineSegment *overlapSeg1;
+	geom::LineSegment overlapSeg1;
 
-	geom::LineSegment *overlapSeg2;
+	geom::LineSegment overlapSeg2;
 
 public:
 
-	MonotoneChainOverlapAction();
+	MonotoneChainOverlapAction() {};
 
-	virtual ~MonotoneChainOverlapAction();
+	virtual ~MonotoneChainOverlapAction() {};
 
 	/**
 	 * This function can be overridden if the original chains are needed
 	 *
-	 * @param start1 the index of the start of the overlapping segment from mc1
-	 * @param start2 the index of the start of the overlapping segment from mc2
+	 * @param start1 the index of the start of the overlapping segment
+	 *               from mc1
+	 * @param start2 the index of the start of the overlapping segment
+	 *               from mc2
 	 */
-	virtual void overlap(MonotoneChain *mc1, int start1,
-			MonotoneChain *mc2, int start2);
+	virtual void overlap(MonotoneChain& mc1, size_t start1,
+	                     MonotoneChain& mc2, size_t start2);
 
 	/**
-	 * This is a convenience function which can be overridden to obtain the actual
-	 * line segments which overlap
+	 * This is a convenience function which can be overridden to
+	 * obtain the actual line segments which overlap
 	 * @param seg1
 	 * @param seg2
 	 */
-	virtual void overlap(geom::LineSegment* /*newSeg1*/,
-			geom::LineSegment* /*newSeg2*/)
+	virtual void overlap(const geom::LineSegment& /*seg1*/,
+	                     const geom::LineSegment& /*seg2*/)
 	{}
 
 	// these envelopes are used during the MonotoneChain search process
-	geom::Envelope *tempEnv1;
-	geom::Envelope *tempEnv2;
+	geom::Envelope tempEnv1;
+	geom::Envelope tempEnv2;
 };
 
 } // namespace geos::index::chain
