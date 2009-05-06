@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: index/chain/MonotoneChain.java rev. 1.13 (JTS-1.7)
+ * Last port: index/chain/MonotoneChain.java rev. 1.15 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -32,7 +32,7 @@ namespace index { // geos.index
 namespace chain { // geos.index.chain
 
 MonotoneChain::MonotoneChain(const geom::CoordinateSequence *newPts,
-                             int nstart, int nend, void* nContext)
+                             size_t nstart, size_t nend, void* nContext)
 : pts(newPts), env(0), context(nContext), start(nstart), end(nend), id(-1)
 {
 }

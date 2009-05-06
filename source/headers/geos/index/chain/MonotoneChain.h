@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: index/chain/MonotoneChain.java rev. 1.15 (JTS-1.10)
+ *
  **********************************************************************/
 
 #ifndef GEOS_IDX_CHAIN_MONOTONECHAIN_H
@@ -38,21 +42,22 @@ namespace index { // geos::index
 namespace chain { // geos::index::chain
 
 /** \brief
- * MonotoneChains are a way of partitioning the segments of a linestring to
+ * Monotone Chains are a way of partitioning the segments of a linestring to
  * allow for fast searching of intersections.
  *
  * They have the following properties:
  * 
- * - the segments within a monotone chain will never intersect each other
- * - the envelope of any contiguous subset of the segments in a monotone chain
- *   is equal to the envelope of the endpoints of the subset.
+ * - the segments within a monotone chain never intersect each other
+ * - the envelope of any contiguous subset of the segments in a monotone
+ *   chain is equal to the envelope of the endpoints of the subset.
  * 
- * Property 1 means that there is no need to test pairs of segments from within
- * the same monotone chain for intersection.
- * Property 2 allows
- * binary search to be used to find the intersection points of two monotone chains.
- * For many types of real-world data, these properties eliminate a large number of
- * segment comparisons, producing substantial speed gains.
+ * Property 1 means that there is no need to test pairs of segments from
+ * within the same monotone chain for intersection.
+ * Property 2 allows an efficient binary search to be used to find the
+ * intersection points of two monotone chains.
+ *
+ * For many types of real-world data, these properties eliminate
+ * a large number of segment comparisons, producing substantial speed gains.
  *
  * One of the goals of this implementation of MonotoneChains is to be
  * as space and time efficient as possible. One design choice that aids this
@@ -74,28 +79,33 @@ namespace chain { // geos::index::chain
  * returned by the query.
  * However, it does mean that the queries are not thread-safe.
  *
- * Last port: index/chain/MonotoneChain.java rev. 1.13 (JTS-1.7)
  */
 class MonotoneChain
 {
 public:
 
-	MonotoneChain(const geom::CoordinateSequence *newPts,
-                  int nstart, int nend, void* nContext);
+	MonotoneChain(const geom::CoordinateSequence* pts,
+                  size_t start, size_t end, void* context);
 
 	~MonotoneChain();
 
+	/// Returned envelope is owned by this class
 	geom::Envelope* getEnvelope();
 
-	int getStartIndex() { return start; }
+	size_t getStartIndex() { return start; }
 
-	int getEndIndex() { return end; }
+	size_t getEndIndex() { return end; }
 
+	/// Set given LineSegment with points of the segment starting
+	/// at the given index.
 	void getLineSegment(unsigned int index, geom::LineSegment *ls);
 
 	/**
 	 * Return the subsequence of coordinates forming this chain.
 	 * Allocates a new CoordinateSequence to hold the Coordinates
+	 *
+	 * TODO: return by auto_ptr
+	 *
 	 */
 	geom::CoordinateSequence* getCoordinates();
 
@@ -125,13 +135,22 @@ private:
 	void computeOverlaps(int start0, int end0, MonotoneChain* mc,
 			int start1, int end1, MonotoneChainOverlapAction* mco);
 
+	/// Externally owned (could be a reference)
 	const geom::CoordinateSequence* pts;
-    geom::Envelope* env;
+
+	/// Owned by this class, lazely created
+	geom::Envelope* env;
+
 	/// user-defined information
 	void* context;
-    int start;
-    int end;
-    /// useful for optimizing chain comparisons
+
+	/// Index of chain start vertex into the CoordinateSequence, 0 based.
+	size_t start;
+
+	/// Index of chain end vertex into the CoordinateSequence, 0 based.
+	size_t end;
+
+	/// useful for optimizing chain comparisons
 	int id;
 
 };
