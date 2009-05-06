@@ -52,7 +52,13 @@ public:
 	 * Adds a spatial item with an extent specified by the given Envelope
 	 * to the index
 	 *
-	 * TODO: document ownership of 'itemEnv' and 'item'
+	 * @param itemEnv
+	 *    Envelope of the item, ownership left to caller.
+	 *    TODO: Reference hold by this class ?
+	 *
+	 * @param item
+	 *    Opaque item, ownership left to caller.
+	 *    Reference hold by this class.
 	 */
 	virtual void insert(const geom::Envelope *itemEnv, void *item) = 0;
 

@@ -52,7 +52,18 @@ class Bintree {
 
 public:
 
-	static Interval* ensureExtent(Interval *itemInterval, double minExtent);
+	/**
+	 * Ensure that the Interval for the inserted item has non-zero extents.
+	 * Use the current minExtent to pad it, if necessary
+	 *
+	 * NOTE: in GEOS this function always return a newly allocated object
+	 *       with ownership transferred to caller. TODO: change this ?
+	 *
+	 * @param itemInterval
+	 *      Source interval, ownership left to caller, no references hold.
+	 */
+	static Interval* ensureExtent(const Interval *itemInterval,
+	                                                 double minExtent);
 
 	Bintree();
 
@@ -64,7 +75,13 @@ public:
 
 	int nodeSize();
 
-	void insert(Interval *itemInterval,void* item);
+	/// @param itemInterval
+	///     Ownership left to caller, NO reference hold by this class.
+	///
+	/// @param item
+	///     Ownership left to caller, reference kept by this class.
+	///
+	void insert(Interval *itemInterval, void* item);
 
 	std::vector<void*>* iterator();
 

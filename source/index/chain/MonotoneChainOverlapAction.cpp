@@ -41,16 +41,13 @@ MonotoneChainOverlapAction::~MonotoneChainOverlapAction() {
 }
 
 
-/**
- * This function can be overridden if the original chains are needed
- */
 void
 MonotoneChainOverlapAction::overlap(MonotoneChain *mc1, int start1,
 		MonotoneChain *mc2, int start2)
 {
-	mc1->getLineSegment(start1,overlapSeg1);
-	mc2->getLineSegment(start2,overlapSeg2);
-	overlap(overlapSeg1,overlapSeg2);
+	mc1->getLineSegment(start1, *overlapSeg1);
+	mc2->getLineSegment(start2, *overlapSeg2);
+	overlap(overlapSeg1, overlapSeg2);
 }
 
 } // namespace geos.index.chain

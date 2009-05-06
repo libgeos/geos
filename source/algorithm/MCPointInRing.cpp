@@ -72,14 +72,29 @@ MCPointInRing::buildIndex()
 //	Envelope *env=ring->getEnvelopeInternal();
 	tree=new bintree::Bintree();
 	pts=CoordinateSequence::removeRepeatedPoints(ring->getCoordinatesRO());
-	vector<chain::MonotoneChain*> *mcList=chain::MonotoneChainBuilder::getChains(pts);
-	for(int i=0;i<(int)mcList->size();i++) {
+
+	// NOTE: we take ownership of mcList and it's elements
+	vector<chain::MonotoneChain*> *mcList =
+		chain::MonotoneChainBuilder::getChains(pts);
+
+	for(size_t i=0, n=mcList->size(); i<n; ++i)
+	{
 		chain::MonotoneChain *mc=(*mcList)[i];
-		Envelope *mcEnv=mc->getEnvelope();
-		interval.min=mcEnv->getMinY();
-		interval.max=mcEnv->getMaxY();
-		tree->insert(&interval,mc);
+		const Envelope& mcEnv = mc->getEnvelope();
+		interval.min = mcEnv.getMinY();
+		interval.max = mcEnv.getMaxY();
+
+		// TODO: is 'mc' ownership transferred here ? (see below)
+		//       by documentation SpatialIndex does NOT take
+		//       ownership of the items, so unless we query it
+		//       all later we've a leak problem here..
+		//       Need a focused testcase.
+		//
+		tree->insert(&interval, mc);
 	}
+
+	// TODO: mcList elements ownership went to tree or what ?
+
 	delete mcList;
 }
 

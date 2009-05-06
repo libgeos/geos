@@ -55,7 +55,13 @@ public:
 
 	~Root() {}
 
-	void insert(Interval *itemInterval,void* item);
+	/// @param itemInterval
+	///     Ownership left to caller, references kept in this class.
+	///
+	/// @param item
+	///     Ownership left to caller, references kept in this class.
+	///
+	void insert(Interval *itemInterval, void* item);
 
 protected:
 

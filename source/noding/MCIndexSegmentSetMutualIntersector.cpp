@@ -45,7 +45,7 @@ MCIndexSegmentSetMutualIntersector::addToIndex(SegmentString* segStr)
     {
         MonotoneChain * mc = (*segChains)[i];
         mc->setId(indexCounter++);
-        index->insert(mc->getEnvelope(), mc);
+        index->insert(&(mc->getEnvelope()), mc);
     }
 }
 
@@ -59,7 +59,7 @@ MCIndexSegmentSetMutualIntersector::intersectChains()
         MonotoneChain * queryChain = (MonotoneChain *)((*monoChains)[i]);
 
         std::vector<void*> overlapChains;
-        index->query( queryChain->getEnvelope(), overlapChains);
+        index->query( &(queryChain->getEnvelope()), overlapChains);
 
         for (std::size_t j = 0, nj = overlapChains.size(); j < nj; j++)
         {

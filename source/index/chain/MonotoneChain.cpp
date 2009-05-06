@@ -31,9 +31,15 @@ namespace geos {
 namespace index { // geos.index
 namespace chain { // geos.index.chain
 
-MonotoneChain::MonotoneChain(const geom::CoordinateSequence *newPts,
+MonotoneChain::MonotoneChain(const geom::CoordinateSequence& newPts,
                              size_t nstart, size_t nend, void* nContext)
-: pts(newPts), env(0), context(nContext), start(nstart), end(nend), id(-1)
+	:
+	pts(newPts),
+	env(0),
+	context(nContext),
+	start(nstart),
+	end(nend),
+	id(-1)
 {
 }
 
@@ -42,48 +48,44 @@ MonotoneChain::~MonotoneChain()
     delete env;
 }
 
-Envelope*
-MonotoneChain::getEnvelope()
+const Envelope&
+MonotoneChain::getEnvelope() const
 {
     if (0 == env)
     {
-        const Coordinate& p0 = pts->getAt(start);
-        const Coordinate& p1 = pts->getAt(end);
+        const Coordinate& p0 = pts[start];
+        const Coordinate& p1 = pts[end];
         env = new Envelope(p0, p1);
     }
-    return env;
+    return *env;
 }
 
 void
-MonotoneChain::getLineSegment(unsigned int index, LineSegment *ls)
+MonotoneChain::getLineSegment(unsigned int index, LineSegment& ls) const
 {
-    ls->p0=pts->getAt(index);
-    ls->p1=pts->getAt(index+1);
+    ls.p0 = pts[index];
+    ls.p1 = pts[index+1];
 }
 
-/**
-* Return the subsequence of coordinates forming this chain.
-* Allocates a new array to hold the Coordinates
-*/
-CoordinateSequence*
-MonotoneChain::getCoordinates()
+std::auto_ptr<CoordinateSequence>
+MonotoneChain::getCoordinates() const
 {
-    return pts->clone();
+    return std::auto_ptr<CoordinateSequence>(pts.clone());
 }
 
 void
 MonotoneChain::select(const Envelope& searchEnv, MonotoneChainSelectAction& mcs)
 {
-    computeSelect(searchEnv,start,end,mcs);
+    computeSelect(searchEnv, start, end, mcs);
 }
 
 void
 MonotoneChain::computeSelect(const Envelope& searchEnv,
-                             unsigned int start0, unsigned int end0,
+                             size_t start0, size_t end0,
                              MonotoneChainSelectAction& mcs )
 {
-    const Coordinate& p0=pts->getAt(start0);
-    const Coordinate& p1=pts->getAt(end0);
+    const Coordinate& p0=pts[start0];
+    const Coordinate& p1=pts[end0];
     mcs.tempEnv1->init(p0,p1);
 
     //Debug.println("trying:"+p0+p1+" [ "+start0+","+end0+" ]");
@@ -113,37 +115,42 @@ MonotoneChain::computeSelect(const Envelope& searchEnv,
     }
 }
 
+/* public */
 void
-MonotoneChain::computeOverlaps(MonotoneChain *mc, MonotoneChainOverlapAction *mco)
+MonotoneChain::computeOverlaps(MonotoneChain *mc,
+                               MonotoneChainOverlapAction *mco)
 {
-    computeOverlaps(start,end,mc,mc->start,mc->end,mco);
+    computeOverlaps(start, end, *mc, mc->start, mc->end, *mco);
 }
 
+/*private*/
 void
-MonotoneChain::computeOverlaps(int start0, int end0, MonotoneChain *mc,
-                               int start1, int end1, MonotoneChainOverlapAction *mco)
+MonotoneChain::computeOverlaps(size_t start0, size_t end0,
+                               MonotoneChain& mc,
+                               int    start1, int    end1,
+                               MonotoneChainOverlapAction& mco)
 {
     //Debug.println("computeIntersectsForChain:"+p00+p01+p10+p11);
     // terminating condition for the recursion
     if (end0-start0==1 && end1-start1==1)
     {
-        mco->overlap(this,start0,mc,start1);
+        mco.overlap(this, start0, &mc, start1);
         return;
     }
 
-    const Coordinate& p00=pts->getAt(start0);
-    const Coordinate& p01=pts->getAt(end0);
-    const Coordinate& p10=mc->pts->getAt(start1);
-    const Coordinate& p11=mc->pts->getAt(end1);
+    const Coordinate& p00 = pts[start0];
+    const Coordinate& p01 = pts[end0];
+    const Coordinate& p10 = mc.pts[start1];
+    const Coordinate& p11 = mc.pts[end1];
 
     // nothing to do if the envelopes of these chains don't overlap
-    mco->tempEnv1->init(p00,p01);
-    mco->tempEnv2->init(p10,p11);
-    if (!mco->tempEnv1->intersects(mco->tempEnv2)) return;
+    mco.tempEnv1->init(p00, p01);
+    mco.tempEnv2->init(p10, p11);
+    if (!mco.tempEnv1->intersects(mco.tempEnv2)) return;
 
     // the chains overlap,so split each in half and iterate (binary search)
-    int mid0=(start0+end0)/2;
-    int mid1=(start1+end1)/2;
+    size_t mid0=(start0+end0)/2;
+    size_t mid1=(start1+end1)/2;
 
     // Assert: mid != start or end (since we checked above for
     // end-start <= 1)
@@ -151,17 +158,17 @@ MonotoneChain::computeOverlaps(int start0, int end0, MonotoneChain *mc,
     if (start0<mid0)
     {
         if (start1<mid1)
-            computeOverlaps(start0,mid0,mc,start1,mid1,mco);
+            computeOverlaps(start0, mid0, mc, start1, mid1, mco);
         if (mid1<end1)
-            computeOverlaps(start0,mid0,mc,mid1,end1,mco);
+            computeOverlaps(start0, mid0, mc, mid1, end1, mco);
     }
     
     if (mid0<end0)
     {
         if (start1<mid1)
-            computeOverlaps(mid0,end0,mc,start1,mid1,mco);
+            computeOverlaps(mid0, end0, mc, start1, mid1, mco);
         if (mid1<end1)
-            computeOverlaps(mid0,end0,mc,mid1,end1,mco);
+            computeOverlaps(mid0, end0, mc, mid1, end1, mco);
     }
 }
 

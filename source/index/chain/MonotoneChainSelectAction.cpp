@@ -39,7 +39,7 @@ MonotoneChainSelectAction::~MonotoneChainSelectAction()
 void
 MonotoneChainSelectAction::select(MonotoneChain& mc, unsigned int start)
 {
-	mc.getLineSegment(start, selectedSegment);
+	mc.getLineSegment(start, *selectedSegment);
 	select(selectedSegment);
 }
 

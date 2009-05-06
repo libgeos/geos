@@ -63,7 +63,7 @@ MonotoneChainBuilder::getChains(const CoordinateSequence* pts, void* context,
 		size_t n = nindexes - 1;
 		for(size_t i = 0; i < n; i++)
 		{
-			MonotoneChain* mc = new MonotoneChain(pts, startIndex[i], startIndex[i+1], context);
+			MonotoneChain* mc = new MonotoneChain(*pts, startIndex[i], startIndex[i+1], context);
 			mcList.push_back(mc);
 		}
 	}

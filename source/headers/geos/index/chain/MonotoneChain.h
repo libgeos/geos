@@ -22,6 +22,8 @@
 
 #include <geos/geom/Envelope.h> // for inline
 
+#include <memory> // for auto_ptr
+
 // Forward declarations
 namespace geos {
 	namespace geom {
@@ -84,30 +86,40 @@ class MonotoneChain
 {
 public:
 
-	MonotoneChain(const geom::CoordinateSequence* pts,
+	/// @param pts
+	///   Ownership left to caller, this class holds a reference.
+	///
+	/// @param start
+	///
+	/// @param end
+	///
+	/// @param context
+	///   Ownership left to caller, this class holds a reference.
+	///
+	MonotoneChain(const geom::CoordinateSequence& pts,
                   size_t start, size_t end, void* context);
 
 	~MonotoneChain();
 
 	/// Returned envelope is owned by this class
-	geom::Envelope* getEnvelope();
+	const geom::Envelope& getEnvelope() const;
 
-	size_t getStartIndex() { return start; }
+	size_t getStartIndex() const { return start; }
 
-	size_t getEndIndex() { return end; }
+	size_t getEndIndex() const { return end; }
 
-	/// Set given LineSegment with points of the segment starting
-	/// at the given index.
-	void getLineSegment(unsigned int index, geom::LineSegment *ls);
+	/** \brief
+	 *  Set given LineSegment with points of the segment starting
+	 *  at the given index.
+	 */
+	void getLineSegment(unsigned int index, geom::LineSegment& ls) const;
 
 	/**
 	 * Return the subsequence of coordinates forming this chain.
 	 * Allocates a new CoordinateSequence to hold the Coordinates
 	 *
-	 * TODO: return by auto_ptr
-	 *
 	 */
-	geom::CoordinateSequence* getCoordinates();
+	std::auto_ptr<geom::CoordinateSequence> getCoordinates() const;
 
 	/**
 	 * Determine all the line segments in the chain whose envelopes overlap
@@ -121,25 +133,25 @@ public:
 
 	void setId(int nId) { id=nId; }
 
-	inline int getId() { return id; }
+	inline int getId() const { return id; }
 
 	void* getContext() { return context; }
 
 private:
 
 	void computeSelect(const geom::Envelope& searchEnv,
-			unsigned int start0,
-			unsigned int end0,
+			size_t start0,
+			size_t end0,
 			MonotoneChainSelectAction& mcs);
 
-	void computeOverlaps(int start0, int end0, MonotoneChain* mc,
-			int start1, int end1, MonotoneChainOverlapAction* mco);
+	void computeOverlaps(size_t start0, size_t end0, MonotoneChain& mc,
+			int start1, int end1, MonotoneChainOverlapAction& mco);
 
-	/// Externally owned (could be a reference)
-	const geom::CoordinateSequence* pts;
+	/// Externally owned 
+	const geom::CoordinateSequence& pts;
 
 	/// Owned by this class, lazely created
-	geom::Envelope* env;
+	mutable geom::Envelope* env;
 
 	/// user-defined information
 	void* context;

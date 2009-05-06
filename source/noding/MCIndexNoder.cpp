@@ -72,7 +72,7 @@ MCIndexNoder::intersectChains()
 		MonotoneChain* queryChain = *i;
 		assert(queryChain);
 		vector<void*> overlapChains;
-		index.query(queryChain->getEnvelope(), overlapChains);
+		index.query(&(queryChain->getEnvelope()), overlapChains);
 		for (vector<void*>::iterator
 			j=overlapChains.begin(), jEnd=overlapChains.end();
 			j != jEnd;
@@ -117,7 +117,7 @@ MCIndexNoder::add(SegmentString* segStr)
 		assert(mc);
 
 		mc->setId(idCounter++);
-		index.insert(mc->getEnvelope(), mc);
+		index.insert(&(mc->getEnvelope()), mc);
 
 		// MonotoneChain objects deletion delegated to destructor
 		monoChains.push_back(mc);

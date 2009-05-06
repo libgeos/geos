@@ -25,23 +25,26 @@ namespace bintree { // geos.index.bintree
 
 using namespace std;
 
-/**
-* Ensure that the Interval for the inserted item has non-zero extents.
-* Use the current minExtent to pad it, if necessary
-*/
 Interval*
-Bintree::ensureExtent(Interval *itemInterval, double minExtent)
+Bintree::ensureExtent(const Interval* itemInterval, double minExtent)
 {
-	double min=itemInterval->getMin();
-	double max=itemInterval->getMax();
+	double min = itemInterval->getMin();
+	double max = itemInterval->getMax();
 	// has a non-zero extent
-	if (min!=max) return new Interval(itemInterval);
-	// pad extent
-	if (min==max) {
-		min=min-minExtent/2.0;
-		max=min+minExtent/2.0;
+	if (min != max)
+	{
+		// GEOS forces a copy here to be predictable wrt
+		// memory management. May change in the future.
+		return new Interval(*itemInterval);
 	}
-//	delete itemInterval;
+
+	// pad extent
+	if (min==max)
+	{
+		min = min-minExtent/2.0;
+		max = min+minExtent/2.0;
+	}
+
 	return new Interval(min, max);
 }
 
