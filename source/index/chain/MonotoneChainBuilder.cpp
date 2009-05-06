@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: index/chain/MonotoneChainBuilder.java rev 1.8
+ * Last port: index/chain/MonotoneChainBuilder.java rev 1.9
  *
  **********************************************************************/
 
@@ -93,38 +93,47 @@ MonotoneChainBuilder::getChainStartIndices(const CoordinateSequence *pts,
 
 }
 
-/**
- * @return the index of the last point in the monotone chain starting
- * at <code>start</code>.
- */
+/* public static */
 int
 MonotoneChainBuilder::findChainEnd(const CoordinateSequence *pts, int start)
 {
-    std::size_t npts = pts->getSize();
+	std::size_t safeStart = start;
 
-	// skip any zero-length segments at start of sequence
-	while ( pts->getAt( start).equals2D( pts->getAt( start + 1) ) )
-		if ( ++start >= ( npts - 1 ) )
-			// bail if there are no non-zero-length segments
-			return npts - 1;
-			
-	// determine quadrant for chain
-	int chainQuad=Quadrant::quadrant(pts->getAt(start),pts->getAt(start + 1));
-	std::size_t last=start+1;
+	std::size_t npts = pts->getSize();
+
+        // skip any zero-length segments at the start of the sequence
+        // (since they cannot be used to establish a quadrant)
+	while ( safeStart < npts - 1
+		&& pts->getAt(safeStart).equals2D(pts->getAt(safeStart+1)) ) 
+	{
+		++safeStart;
+	}
+
+	// check if there are NO non-zero-length segments
+	if (safeStart >= npts - 1) {
+		return static_cast<int>(npts - 1);
+	}
+
+	// determine overall quadrant for chain
+	int chainQuad = Quadrant::quadrant(pts->getAt(safeStart),
+	                                   pts->getAt(safeStart + 1));
+	std::size_t last = start + 1;
 	while (last < npts)
 	{
 		// skip a zero-length segnments
-		if (! pts->getAt( last - 1).equals2D( pts->getAt( last) ) )
+		if (! pts->getAt(last - 1).equals2D( pts->getAt(last) ) )
 		{
 			// compute quadrant for next possible segment in chain
-			int quad=Quadrant::quadrant(pts->getAt(last-1),pts->getAt(last));
-			if (quad!=chainQuad) break;
+			int quad = Quadrant::quadrant(pts->getAt(last-1),
+			                              pts->getAt(last));
+			if (quad != chainQuad) break;
 		}
-		last++;	
+		++last;	
 	}
 #if GEOS_DEBUG
 	std::cerr<<"MonotoneChainBuilder::findChainEnd() returning"<<std::endl;
 #endif
+
 	return static_cast<int>(last - 1);
 }
 
