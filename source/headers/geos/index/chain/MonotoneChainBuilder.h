@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: index/chain/MonotoneChainBuilder.java rev 1.9
+ * Last port: index/chain/MonotoneChainBuilder.java rev 1.12 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -39,11 +39,10 @@ namespace index { // geos::index
 namespace chain { // geos::index::chain
 
 /** \brief
- * A MonotoneChainBuilder implements functions to determine the monotone chains
- * in a sequence of points.
+ * Constructs {@link MonotoneChain}s
+ * for sequences of {@link Coordinate}s.
  *
- * TODO: use vector<const Coordinate*> instead
- *
+ * TODO: use vector<const Coordinate*> instead ?
  */
 class MonotoneChainBuilder {
 
@@ -77,17 +76,28 @@ public:
 	/** \brief
 	 * Fill the given vector with start/end indexes of the monotone chains
 	 * for the given CoordinateSequence.
-	 * The last entry in the array points to the end point of the point array,
+	 * The last entry in the array points to the end point of the point
+	 * array,
 	 * for use as a sentinel.
 	 */
-	static void getChainStartIndices(const geom::CoordinateSequence *pts,
-			std::vector<int>& startIndexList);
+	static void getChainStartIndices(const geom::CoordinateSequence& pts,
+			std::vector<std::size_t>& startIndexList);
 
-	/** \brief
+private:
+
+	/**
+	 * Finds the index of the last point in a monotone chain
+	 * starting at a given point.
+	 * Any repeated points (0-length segments) will be included
+	 * in the monotone chain returned.
+	 *
 	 * @return the index of the last point in the monotone chain
-	 * starting at <code>start</code>.
+	 *         starting at <code>start</code>.
+	 *
+	 * NOTE: aborts if 'start' is >= pts.getSize()
 	 */
-	static int findChainEnd(const geom::CoordinateSequence *pts, int start);
+	static size_t findChainEnd(const geom::CoordinateSequence& pts,
+	                                                   size_t start);
 };
 
 } // namespace geos::index::chain
