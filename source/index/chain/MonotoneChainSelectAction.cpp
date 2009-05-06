@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: index/chain/MonotoneChainSelectAction.java rev. 1.6 (JTS-1.10)
+ *
  **********************************************************************/
 
 #include <geos/index/chain/MonotoneChainSelectAction.h>
@@ -24,22 +28,11 @@ namespace geos {
 namespace index { // geos.index
 namespace chain { // geos.index.chain
 
-MonotoneChainSelectAction::MonotoneChainSelectAction()
-{
-	selectedSegment=new geom::LineSegment();
-	tempEnv1=new geom::Envelope();
-}
-
-MonotoneChainSelectAction::~MonotoneChainSelectAction()
-{
-	delete selectedSegment;
-	delete tempEnv1;
-}
-
 void
 MonotoneChainSelectAction::select(MonotoneChain& mc, unsigned int start)
 {
-	mc.getLineSegment(start, *selectedSegment);
+	mc.getLineSegment(start, selectedSegment);
+
 	select(selectedSegment);
 }
 

@@ -52,7 +52,9 @@ public:
 	MCPointInRing(const geom::LinearRing *newRing);
 	~MCPointInRing();
 	bool isInside(const geom::Coordinate& pt);
-	void testLineSegment(geom::Coordinate& p, geom::LineSegment *seg);
+
+	void testLineSegment(const geom::Coordinate& p,
+	                        const geom::LineSegment& seg);
 
 	class MCSelecter: public index::chain::MonotoneChainSelectAction {
 	using MonotoneChainSelectAction::select;
@@ -61,7 +63,7 @@ public:
 		MCPointInRing *parent;
 	public:
 		MCSelecter(const geom::Coordinate& newP, MCPointInRing *prt);
-		void select(geom::LineSegment *ls);
+		void select(const geom::LineSegment& ls);
 	};
 
 private:

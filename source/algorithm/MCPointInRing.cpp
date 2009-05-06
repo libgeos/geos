@@ -36,15 +36,18 @@ namespace algorithm { // geos.algorithm
 
 MCPointInRing::MCSelecter::MCSelecter(const Coordinate& newP,
 		MCPointInRing *prt)
+	:
+	MonotoneChainSelectAction()
 {
 	p=newP;
 	parent=prt;
 }
 
+/* public overridden */
 void
-MCPointInRing::MCSelecter::select(LineSegment *ls)
+MCPointInRing::MCSelecter::select(const LineSegment& ls)
 {
-	parent->testLineSegment(p,ls);
+	parent->testLineSegment(p, ls);
 }
 
 MCPointInRing::MCPointInRing(const LinearRing *newRing)
@@ -138,7 +141,7 @@ MCPointInRing::testMonotoneChain(Envelope *rayEnv,
 }
 
 void
-MCPointInRing::testLineSegment(Coordinate& p,LineSegment *seg)
+MCPointInRing::testLineSegment(const Coordinate& p, const LineSegment& seg)
 {
 	double xInt;  // x intersection of segment with ray
 	double x1;    // translated coordinates
@@ -147,23 +150,26 @@ MCPointInRing::testLineSegment(Coordinate& p,LineSegment *seg)
 	double y2;
 
 	/*
-	*  Test if segment crosses ray from test point in positive x direction.
-	*/
-	Coordinate& p1=seg->p0;
-	Coordinate& p2=seg->p1;
-	x1=p1.x-p.x;
-	y1=p1.y-p.y;
-	x2=p2.x-p.x;
-	y2=p2.y-p.y;
-	if (((y1>0)&&(y2<=0)) || ((y2>0)&&(y1<=0))) {
+	 * Test if segment crosses ray from test point in positive x direction.
+	 */
+	const Coordinate& p1 = seg.p0;
+	const Coordinate& p2 = seg.p1;
+	x1 = p1.x - p.x;
+	y1 = p1.y - p.y;
+	x2 = p2.x - p.x;
+	y2 = p2.y - p.y;
+
+	if (((y1>0)&&(y2<=0)) || ((y2>0)&&(y1<=0)))
+	{
+
 		/*
-		*  segment straddles x axis, so compute intersection.
-		*/
+		 *  segment straddles x axis, so compute intersection.
+		 */
 		xInt=RobustDeterminant::signOfDet2x2(x1,y1,x2,y2)/(y2-y1);
-		//xsave=xInt;
+
 		/*
-		*  crosses ray if strictly positive intersection.
-		*/
+		 *  crosses ray if strictly positive intersection.
+		 */
 		if (0.0<xInt) {
 			crossings++;
 		}

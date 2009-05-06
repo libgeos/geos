@@ -51,6 +51,7 @@ public:
 			SegmentString* nParentEdge,
 			unsigned int nVertexIndex)
 		:
+		MonotoneChainSelectAction(),
 		hotPixel(nHotPixel),
 		parentEdge(nParentEdge),
 		vertexIndex(nVertexIndex),
@@ -74,10 +75,10 @@ public:
 		isNodeAddedVar = hotPixel.addSnappedNode(ss, startIndex);
 	}
 
-	void select(LineSegment* ls)
-    {
-        UNREFERENCED_PARAMETER(ls);
-    }
+	void select(const LineSegment& ls)
+	{
+		UNREFERENCED_PARAMETER(ls);
+	}
 
 };
 

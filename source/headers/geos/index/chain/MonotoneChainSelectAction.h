@@ -11,18 +11,21 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: index/chain/MonotoneChainSelectAction.java rev. 1.6 (JTS-1.10)
+ *
  **********************************************************************/
 
 #ifndef GEOS_IDX_CHAIN_MONOTONECHAINSELECTACTION_H
 #define GEOS_IDX_CHAIN_MONOTONECHAINSELECTACTION_H
 
+#include <geos/geom/LineSegment.h> // composition
+#include <geos/geom/Envelope.h> // composition
+
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Envelope;
-		class LineSegment;
-	}
 	namespace index { 
 		namespace chain { 
 			class MonotoneChain;
@@ -38,32 +41,33 @@ namespace chain { // geos::index::chain
  *  The action for the internal iterator for performing
  *  Envelope select queries on a MonotoneChain
  *
- * Last port: index/chain/MonotoneChainSelectAction.java rev. 1.6 (JTS-1.7)
  */
 class MonotoneChainSelectAction {
 
 protected:
 
-	geom::LineSegment* selectedSegment;
+	geom::LineSegment selectedSegment;
 
 public:
 
-	MonotoneChainSelectAction();
+	MonotoneChainSelectAction() {}
 
-	virtual ~MonotoneChainSelectAction();
+	virtual ~MonotoneChainSelectAction() {}
 
 	/// This function can be overridden if the original chain is needed
 	virtual void select(MonotoneChain& mc, unsigned int start);
 
 	/**
-	 * This is a convenience function which can be overridden to obtain the actual
-	 * line segment which is selected
+	 * This is a convenience function which can be overridden
+	 * to obtain the actual line segment which is selected
+	 *
 	 * @param seg
 	 */
-	virtual void select(geom::LineSegment* newSeg)=0;
+	virtual void select(const geom::LineSegment& seg) = 0;
 
 	// these envelopes are used during the MonotoneChain search process
-	geom::Envelope* tempEnv1;
+	// should only be visible by classes in this package
+	geom::Envelope tempEnv1;
 };
 
 

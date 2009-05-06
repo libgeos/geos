@@ -86,7 +86,7 @@ MonotoneChain::computeSelect(const Envelope& searchEnv,
 {
     const Coordinate& p0=pts[start0];
     const Coordinate& p1=pts[end0];
-    mcs.tempEnv1->init(p0,p1);
+    mcs.tempEnv1.init(p0,p1);
 
     //Debug.println("trying:"+p0+p1+" [ "+start0+","+end0+" ]");
     // terminating condition for the recursion
