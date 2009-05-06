@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: noding/SegmentNodeList.java rev. 1.8 (JTS-1.9)
+ * Last port: noding/SegmentNodeList.java rev. 1.8 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -120,10 +120,11 @@ void
 SegmentNodeList::findCollapsesFromExistingVertices(
 			std::vector<size_t>& collapsedVertexIndexes)
 {
+	if ( edge.size() < 2 ) return; // or we'll never exit the loop below
+
 	for (size_t i=0, n=edge.size()-2; i<n; ++i)
 	{
 		const Coordinate& p0 = edge.getCoordinate(i);
-		//const Coordinate& p1 = edge.getCoordinate(i + 1);
 		const Coordinate& p2 = edge.getCoordinate(i + 2);
 		if (p0.equals2D(p2)) {
 			// add base of collapse as node
