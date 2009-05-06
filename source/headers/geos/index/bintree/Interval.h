@@ -33,27 +33,28 @@ public:
 
 	Interval(double nmin, double nmax);
 
-	Interval(Interval *interval);
+	/// TODO: drop this, rely on copy ctor
+	Interval(const Interval *interval);
 
 	void init(double nmin, double nmax);
 
-	double getMin();
+	double getMin() const;
 
-	double getMax();
+	double getMax() const;
 
-	double getWidth();
+	double getWidth() const;
 
 	void expandToInclude(Interval *interval);
 
-	bool overlaps(Interval *interval);
+	bool overlaps(const Interval *interval) const;
 
-	bool overlaps(double nmin, double nmax);
+	bool overlaps(double nmin, double nmax) const;
 
-	bool contains(Interval *interval);
+	bool contains(const Interval *interval) const;
 
-	bool contains(double nmin, double nmax);
+	bool contains(double nmin, double nmax) const;
 
-	bool contains(double p);
+	bool contains(double p) const;
 };
 
 } // namespace geos::index::bintree

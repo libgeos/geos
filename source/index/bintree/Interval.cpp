@@ -35,7 +35,7 @@ Interval::~Interval()
 {
 }
 
-Interval::Interval(Interval* interval)
+Interval::Interval(const Interval* interval)
 {
 	init(interval->min, interval->max);
 }
@@ -52,19 +52,19 @@ Interval::init(double nmin, double nmax)
 }
  
 double
-Interval::getMin()
+Interval::getMin() const
 {
 	return min;
 }
 
 double
-Interval::getMax()
+Interval::getMax() const
 {
 	return max;
 }
 
 double
-Interval::getWidth()
+Interval::getWidth() const
 {
 	return max-min;
 }
@@ -77,32 +77,32 @@ Interval::expandToInclude(Interval *interval)
 }
  
 bool
-Interval::overlaps(Interval *interval)
+Interval::overlaps(const Interval *interval) const
 {
 	return overlaps(interval->min,interval->max);
 }
  
 bool
-Interval::overlaps(double nmin, double nmax)
+Interval::overlaps(double nmin, double nmax) const
 {
 	if (min>nmax || max<nmin) return false;
 	return true;
 }
  
 bool
-Interval::contains(Interval *interval)
+Interval::contains(const Interval *interval) const
 {
 	return contains(interval->min,interval->max);
 }
 
 bool
-Interval::contains(double nmin, double nmax)
+Interval::contains(double nmin, double nmax) const
 {
 	return (nmin>=min && nmax<=max);
 }
 
 bool
-Interval::contains(double p)
+Interval::contains(double p) const
 {
 	return (p>=min && p<=max);
 }
