@@ -420,7 +420,7 @@ void
 BufferBuilder::computeNodedEdges(SegmentString::NonConstVect& bufferSegStrList,
 		const PrecisionModel *precisionModel) // throw(GEOSException)
 {
-   Noder* noder = getNoder( precisionModel );
+	Noder* noder = getNoder( precisionModel );
 
 	noder->computeNodes(&bufferSegStrList);
 
