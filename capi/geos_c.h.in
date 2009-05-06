@@ -675,6 +675,7 @@ extern const GEOSCoordSequence GEOS_DLL *GEOSGeom_getCoordSeq_r(
 
 /*
  * Return 0 on exception (or empty geometry)
+ * See also GEOSCoordSeq_getDimensions 
  */
 extern int GEOS_DLL GEOSGeom_getDimensions(const GEOSGeometry* g);
 

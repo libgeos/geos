@@ -2129,7 +2129,7 @@ GEOSLineMerge_r(GEOSContextHandle_t extHandle, const Geometry *g)
 #endif
 
         std::vector<Geometry *>*geoms = new std::vector<Geometry *>(lines->size());
-        for (int i = 0; i < lines->size(); ++i)
+        for (std::vector<Geometry *>::size_type i = 0; i < lines->size(); ++i)
         {
             (*geoms)[i] = (*lines)[i];
         }
@@ -2841,6 +2841,11 @@ GEOSGeom_getDimensions_r(GEOSContextHandle_t extHandle, const Geometry *g)
         using geos::geom::Point;
         using geos::geom::GeometryCollection;
 
+	if ( g->isEmpty() )
+	{
+		return 0;
+	}
+
         std::size_t dim = 0;
         const LineString *ls = dynamic_cast<const LineString *>(g);
         if ( ls )
@@ -2865,10 +2870,6 @@ GEOSGeom_getDimensions_r(GEOSContextHandle_t extHandle, const Geometry *g)
         const GeometryCollection *coll = dynamic_cast<const GeometryCollection *>(g);
         if ( coll )
         {
-            if ( coll->isEmpty() )
-            {
-                return 0;
-            }
             return GEOSGeom_getDimensions_r(extHandle, coll->getGeometryN(0));
         }
 
