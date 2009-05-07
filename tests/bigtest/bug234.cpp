@@ -38,10 +38,10 @@ int main() {
  MultiPolygon *mpoly1 = factory.createMultiPolygon(polys1);
  MultiPolygon *mpoly2 = factory.createMultiPolygon(polys2);
 
- cout << mpoly1->toString() << endl;
- cout << mpoly2->toString() << endl;
+ cout << "      Mpoly1: " << mpoly1->toString() << endl;
+ cout << "      Mpoly2: " << mpoly2->toString() << endl;
  Geometry *intersection = mpoly1->intersection(mpoly2);
- cout << intersection->toString() << endl;
+ cout << "Intersection: " << intersection->toString() << endl;
 
  delete mpoly1;
  delete mpoly2;
