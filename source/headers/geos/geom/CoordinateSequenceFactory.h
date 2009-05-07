@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/CoordinateSequenceFactory.java rev 1.14 (JTS-1.10)
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOM_COORDINATESEQUENCEFACTORY_H
@@ -35,26 +39,34 @@ namespace geom { // geos::geom
 
 /**
  * \brief
- * An object that knows how to build a particular implementation of
- * CoordinateSequence from an array of Coordinates.
+ * A factory to create concrete instances of {@link CoordinateSequence}s.
+ *
+ * Used to configure {@link GeometryFactory}s
+ * to provide specific kinds of CoordinateSequences.
  */
 class CoordinateSequenceFactory {
 public:
 
 	/** \brief
 	 * Returns a CoordinateSequence based on the given array.
-	 * Whether or not the vector is copied is implementation-dependent,
-	 * for this reason caller does give up ownership of it.
+	 *
+	 * Whether the array is copied or simply referenced
+	 * is implementation-dependent.
+	 * For this reason caller does give up ownership of it.
 	 * Implementations that will not copy it will need take care
 	 * of deleting it.
-	 * Note that a NULL value is allowed as coordinates, and will
-	 * create an empty CoordinateSequence.
+	 *
+	 * This method must handle null arguments by creating
+	 * an empty sequence.
+	 *
+	 * @param coordinates the coordinates
 	 */
 	virtual CoordinateSequence *create(
 			std::vector<Coordinate> *coordinates) const=0;
 
 	/** \brief
 	 * Creates a CoordinateSequence of the specified size and dimension.
+	 *
 	 * For this to be useful, the CoordinateSequence implementation must
 	 * be mutable.
 	 *

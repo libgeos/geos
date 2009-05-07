@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/CoordinateSequenceFactory.java rev 1.14 (JTS-1.10)
+ *
  **********************************************************************/
 
 #include <geos/geom/CoordinateSequenceFactory.h>
