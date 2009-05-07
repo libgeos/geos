@@ -101,6 +101,52 @@ normalize_filename(const std::string& str)
 	return newstring;
 }
 
+/* Could be an XMLTester class private but oh well.. */
+static int
+checkBufferSuccess(geom::Geometry& gRes, geom::Geometry& gRealRes, double dist)
+{
+	int success = 1;
+	do
+	{
+
+		if ( gRes.getGeometryTypeId() != gRealRes.getGeometryTypeId() )
+		{
+			std::cerr << "Expected result is of type "
+				<< gRes.getGeometryType()
+				<< "; obtained result is of type "
+				<< gRealRes.getGeometryType()
+				<< std::endl;
+			success=0;
+			break;
+		}
+
+		// Is a buffer always an area ?
+		if ( gRes.getDimension() != 2 )
+		{
+			std::cerr << "Don't know how to validate "
+				<< "result of buffer operation "
+				<< "when expected result is not an "
+				<< "areal type."
+				<< std::endl;
+		}
+		
+
+		geos::xmltester::BufferResultMatcher matcher;
+		if ( ! matcher.isBufferResultMatch(gRealRes,
+						   gRes,
+						   dist) )
+		{
+std::cerr << "BufferResultMatcher FAILED" << std::endl;
+			success=0;
+			break;
+		}
+
+	}
+	while (0);
+
+	return success;
+}
+
 XMLTester::XMLTester()
 	:
 	gA(0),
@@ -789,45 +835,8 @@ XMLTester::parseTest()
 			profile.stop();
 			gRealRes->normalize();
 
-			// Assume a success and check for obvious failures
-			success=1;
-			do
-			{
-
-				if ( gRes->getGeometryTypeId() != gRealRes->getGeometryTypeId() )
-				{
-					std::cerr << "Expected result is of type "
-					        << gRes->getGeometryType()
-						<< "; obtained result is of type "
-						<< gRealRes->getGeometryType()
-						<< std::endl;
-					success=0;
-					break;
-				}
-
-				// Is a buffer always an area ?
-				if ( gRes->getDimension() != 2 )
-				{
-					std::cerr << "Don't know how to validate "
-						<< "result of buffer operation "
-						<< "when expected result is not an "
-						<< "areal type."
-						<< std::endl;
-				}
-				
-
-				geos::xmltester::BufferResultMatcher matcher;
-				if ( ! matcher.isBufferResultMatch(*gRealRes,
-				                                   *gRes,
-					                           dist) )
-				{
-std::cerr << "BufferResultMatcher FAILED" << std::endl;
-					success=0;
-					break;
-				}
-
-			}
-			while (0);
+			// Validate the buffer operation
+			success = checkBufferSuccess(*gRes, *gRealRes, dist);
 
 			if ( testValidOutput ) testValid(gRes.get(), "result");
 
@@ -863,51 +872,15 @@ std::cerr << "BufferResultMatcher FAILED" << std::endl;
 			profile.stop();
 			gRealRes->normalize();
 
-			// Assume a success and check for obvious failures
-			success=1;
-			do
-			{
-
-				if ( gRes->getGeometryTypeId() != gRealRes->getGeometryTypeId() )
-				{
-					std::cerr << "Expected result is of type "
-					        << gRes->getGeometryType()
-						<< "; obtained result is of type "
-						<< gRealRes->getGeometryType()
-						<< std::endl;
-					success=0;
-					break;
-				}
-
-				// Is a buffer always an area ?
-				if ( gRes->getDimension() != 2 )
-				{
-					std::cerr << "Don't know how to validate "
-						<< "result of buffer operation "
-						<< "when expected result is not an "
-						<< "areal type."
-						<< std::endl;
-				}
-				
-
-				geos::xmltester::BufferResultMatcher matcher;
-				if ( ! matcher.isBufferResultMatch(*gRealRes,
-				                                   *gRes,
-					                           dist) )
-				{
-std::cerr << "BufferResultMatcher FAILED" << std::endl;
-					success=0;
-					break;
-				}
-
-			}
-			while (0);
+			// Validate the buffer operation
+			success = checkBufferSuccess(*gRes, *gRealRes, dist);
 
 			if ( testValidOutput ) testValid(gRes.get(), "result");
 
 			actual_result=printGeom(gRealRes.get());
 			expected_result=printGeom(gRes.get());
 		}
+
 
 		else if (opName=="getinteriorpoint")
 		{
