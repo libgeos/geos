@@ -234,6 +234,29 @@ namespace tut
         ensure_equals( ycheck, y );
         ensure_equals( zcheck, z );
     }   
+
+    // Test getDimensions call (see bug #135)
+    template<>
+    template<>
+    void object::test<6>()
+    {
+        cs_ = GEOSCoordSeq_create(1, 2);
+        
+        unsigned int size;
+        unsigned int dims;
+
+        ensure ( 0 != GEOSCoordSeq_getSize(cs_, &size) );
+        ensure_equals( size, 1u );
+
+        ensure ( 0 != GEOSCoordSeq_getDimensions(cs_, &dims) );
+
+	// The dimension passed to GEOSCoordSeq_create()
+	// is a request for a minimum, not a strict mandate
+	// for changing actual size.
+	//
+        ensure ( dims >= 2u );
+
+    }   
     
 } // namespace tut
 
