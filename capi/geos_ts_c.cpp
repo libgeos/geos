@@ -1579,13 +1579,23 @@ GEOSGeom_destroy_r(GEOSContextHandle_t extHandle, Geometry *a)
 }
 
 void
-GEOSSetSRID(Geometry *g, int srid)
+GEOSSetSRID_r(GEOSContextHandle_t extHandle, Geometry *g, int srid)
 {
     assert(0 != g);
-    if (0 != g)
+
+    if ( 0 == extHandle )
     {
-        g->setSRID(srid);
+        return;
     }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return;
+    }
+
+    g->setSRID(srid);
 }
 
 
