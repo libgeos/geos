@@ -227,8 +227,11 @@ void
 GeometryGraph::addPolygonRing(const LinearRing *lr, int cwLeft, int cwRight)
 	// throw IllegalArgumentException (see below)
 {
-	const CoordinateSequence *lrcl;
-	lrcl = lr->getCoordinatesRO();
+	// skip empty component (see bug #234)
+	if ( lr->isEmpty() ) return;
+
+	const CoordinateSequence *lrcl = lr->getCoordinatesRO();
+
 	CoordinateSequence* coord=CoordinateSequence::removeRepeatedPoints(lrcl);
 	if (coord->getSize()<4) {
 		hasTooFewPointsVar=true;
