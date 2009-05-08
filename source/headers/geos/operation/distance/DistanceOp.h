@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/distance/DistanceOp.java rev 1.16
+ * Last port: operation/distance/DistanceOp.java rev 1.17
  *
  **********************************************************************/
 
@@ -46,30 +46,54 @@ namespace geos {
 namespace operation { // geos::operation
 namespace distance { // geos::operation::distance
 
-/** \brief
- * Computes the distance and
- * closest points between two {@link Geometry}s.
+/**
+ * \brief
+ * Find two points on two {@link Geometry}s which lie
+ * within a given distance, or else are the nearest points
+ * on the geometries (in which case this also
+ * provides the distance between the geometries).
  * 
- * The distance computation finds a pair of points in the input geometries
- * which have minimum distance between them.  These points may
- * not be vertices of the geometries, but may lie in the interior of
- * a line segment. In this case the coordinate computed is a close
+ * The distance computation also finds a pair of points in the
+ * input geometries which have the minimum distance between them.
+ * If a point lies in the interior of a line segment,
+ * the coordinate computed is a close
  * approximation to the exact point.
- *
+ * 
  * The algorithms used are straightforward O(n^2)
  * comparisons.  This worst-case performance could be improved on
- * by using Voronoi techniques.
+ * by using Voronoi techniques or spatial indexes.
  *
  */
 class DistanceOp {
 public:
 	/**
+	 * \brief
 	 * Compute the distance between the closest points of two geometries.
+	 *
 	 * @param g0 a {@link Geometry}
 	 * @param g1 another {@link Geometry}
 	 * @return the distance between the geometries
 	 */
-	static double distance(const geom::Geometry *g0, const geom::Geometry *g1);
+	static double distance(const geom::Geometry& g0,
+	                       const geom::Geometry& g1);
+
+	/// @deprecated, use the version taking references
+	static double distance(const geom::Geometry *g0,
+	                        const geom::Geometry *g1);
+
+	/**
+	 * \brief
+	 * Test whether two geometries lie within a given distance of
+	 * each other.
+	 *
+	 * @param g0 a {@link Geometry}
+	 * @param g1 another {@link Geometry}
+	 * @param distance the distance to test
+	 * @return true if g0.distance(g1) <= distance
+	 */
+	static bool isWithinDistance(const geom::Geometry& g0,
+	                             const geom::Geometry& g1,
+	                                            double distance);
 
 	/**
 	 * Compute the the closest points of two geometries.
@@ -81,11 +105,31 @@ public:
 	 */
 	static geom::CoordinateSequence* closestPoints(geom::Geometry *g0, geom::Geometry *g1);
 
-	/**
-	 * Constructs a DistanceOp that computes the distance and closest points between
-	 * the two specified geometries.
-	 */
+	/// @deprecated use the one taking references
 	DistanceOp(const geom::Geometry *g0, const geom::Geometry *g1);
+
+	/**
+	 * \brief
+	 * Constructs a DistanceOp that computes the distance and
+	 * closest points between the two specified geometries.
+	 *
+	 * @param g0 a Geometry
+	 * @param g1 a Geometry
+	 */
+	DistanceOp(const geom::Geometry& g0, const geom::Geometry& g1);
+
+	/**
+	 * \brief
+	 * Constructs a DistanceOp that computes the distance and nearest
+	 * points between the two specified geometries.
+	 *
+	 * @param g0 a Geometry
+	 * @param g1 a Geometry
+	 * @param terminateDistance the distance on which to terminate
+	 *                          the search
+	 */
+	DistanceOp(const geom::Geometry& g0, const geom::Geometry& g1,
+	                                      double terminateDistance);
 
 	~DistanceOp();
 
@@ -119,11 +163,19 @@ public:
 
 private:
 
-	algorithm::PointLocator ptLocator;
+	// input (TODO: use two references instead..)
 	std::vector<geom::Geometry const*> geom;
-	std::vector<geom::Coordinate *> newCoords;
+	double terminateDistance; 
+
+	// working (TODO: use two auto_ptr, or to concrete types)
+	algorithm::PointLocator ptLocator;
 	std::vector<GeometryLocation*> *minDistanceLocation;
 	double minDistance;
+
+	// memory management
+	std::vector<geom::Coordinate *> newCoords;
+
+
 	void updateMinDistance(double dist);
 	void updateMinDistance(std::vector<GeometryLocation*> *locGeom, bool flip);
 	void computeMinDistance();

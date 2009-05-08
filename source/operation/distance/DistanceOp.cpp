@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/distance/DistanceOp.java rev 1.16
+ * Last port: operation/distance/DistanceOp.java rev 1.17
  *
  **********************************************************************/
 
@@ -50,9 +50,17 @@ namespace distance { // geos.operation.distance
 using namespace geom;
 //using namespace geom::util;
 
-/*public static*/
+/*public static (deprecated)*/
 double
 DistanceOp::distance(const Geometry *g0, const Geometry *g1)
+{
+	DistanceOp distOp(g0,g1);
+	return distOp.distance();
+}
+
+/*public static*/
+double
+DistanceOp::distance(const Geometry& g0, const Geometry& g1)
 {
 	DistanceOp distOp(g0,g1);
 	return distOp.distance();
@@ -67,12 +75,34 @@ DistanceOp::closestPoints(Geometry *g0,Geometry *g1)
 }
 
 DistanceOp::DistanceOp(const Geometry *g0, const Geometry *g1):
-	geom(2)
+	geom(2),
+	terminateDistance(0.0),
+	minDistanceLocation(0),
+	minDistance(DoubleInfinity)
 {
-	geom[0]=g0;
-	geom[1]=g1;
-	minDistance=DoubleInfinity;
-	minDistanceLocation=NULL;
+	geom[0] = g0;
+	geom[1] = g1;
+}
+
+DistanceOp::DistanceOp(const Geometry& g0, const Geometry& g1):
+	geom(2),
+	terminateDistance(0.0),
+	minDistanceLocation(0),
+	minDistance(DoubleInfinity)
+{
+	geom[0] = &g0;
+	geom[1] = &g1;
+}
+
+DistanceOp::DistanceOp(const Geometry& g0, const Geometry& g1, double tdist)
+	:
+	geom(2),
+	terminateDistance(tdist),
+	minDistanceLocation(0),
+	minDistance(DoubleInfinity)
+{
+	geom[0] = &g0;
+	geom[1] = &g1;
 }
 
 DistanceOp::~DistanceOp()
@@ -169,7 +199,7 @@ void DistanceOp::computeMinDistance() {
     if (minDistanceLocation!=NULL) return;
     minDistanceLocation = new vector<GeometryLocation*>(2);
     computeContainmentDistance();
-    if (minDistance<=0.0) return;
+    if (minDistance <= terminateDistance) return;
     computeLineDistance();
 }
 
@@ -190,7 +220,7 @@ DistanceOp::computeContainmentDistance()
 	if (polys1.size()>0) {
 		vector<GeometryLocation*> *insideLocs0 = ConnectedElementLocationFilter::getLocations(geom[0]);
 		computeInside(insideLocs0, polys1, locPtPoly);
-		if (minDistance <= 0.0) {
+		if (minDistance <= terminateDistance) {
 			(*minDistanceLocation)[0] = (*locPtPoly)[0];
 			(*minDistanceLocation)[1] = (*locPtPoly)[1];
 			delete locPtPoly;
@@ -213,7 +243,7 @@ DistanceOp::computeContainmentDistance()
 	if (polys0.size()>0) {
 		vector<GeometryLocation*> *insideLocs1 = ConnectedElementLocationFilter::getLocations(geom[1]);
 		computeInside(insideLocs1, polys0, locPtPoly);
-		if (minDistance <= 0.0) {
+		if (minDistance <= terminateDistance) {
 // flip locations, since we are testing geom 1 VS geom 0
 			(*minDistanceLocation)[0] = (*locPtPoly)[1];
 			(*minDistanceLocation)[1] = (*locPtPoly)[0];
@@ -250,7 +280,7 @@ DistanceOp::computeInside(vector<GeometryLocation*> *locs,
 		for (size_t j=0, nj=polys.size(); j<nj; ++j)
 		{
 			computeInside(loc, polys[j], locPtPoly);
-			if (minDistance<=0.0) return;
+			if (minDistance<=terminateDistance) return;
 		}
 	}
 }
@@ -299,7 +329,7 @@ DistanceOp::computeLineDistance()
 	// bail whenever minDistance goes to zero, since it can't get any less
 	computeMinDistanceLines(lines0, lines1, locGeom);
 	updateMinDistance(&locGeom, false);
-	if (minDistance <= 0.0) {
+	if (minDistance <= terminateDistance) {
 		return;
 	};
 
@@ -307,7 +337,7 @@ DistanceOp::computeLineDistance()
 	locGeom[1]=NULL;
 	computeMinDistanceLinesPoints(lines0, pts1, locGeom);
 	updateMinDistance(&locGeom, false);
-	if (minDistance <= 0.0) {
+	if (minDistance <= terminateDistance) {
 		return;
 	};
 
@@ -315,7 +345,7 @@ DistanceOp::computeLineDistance()
 	locGeom[1]=NULL;
 	computeMinDistanceLinesPoints(lines1, pts0, locGeom);
 	updateMinDistance(&locGeom, true);
-	if (minDistance <= 0.0){
+	if (minDistance <= terminateDistance){
 		return;
 	};
 
@@ -338,7 +368,7 @@ DistanceOp::computeMinDistanceLines(
 		for (size_t j=0, nj=lines1.size(); j<nj; ++j) {
 			const LineString *line1=lines1[j];
 			computeMinDistance(line0, line1, locGeom);
-			if (minDistance<=0.0) return;
+			if (minDistance<=terminateDistance) return;
 		}
 	}
 }
@@ -363,7 +393,7 @@ DistanceOp::computeMinDistancePoints(
 				locGeom[0] = new GeometryLocation(pt0, 0, *(pt0->getCoordinate()));
 				locGeom[1] = new GeometryLocation(pt1, 0, *(pt1->getCoordinate()));
 			}
-			if (minDistance<=0.0) return;
+			if (minDistance<=terminateDistance) return;
 			if ( i<points0.size()-1 || j<points1.size()-1)
 			{
 				delete locGeom[0]; locGeom[0]=NULL;
@@ -385,7 +415,7 @@ DistanceOp::computeMinDistanceLinesPoints(
 		for (size_t j=0;j<points.size();j++) {
 			const Point *pt=points[j];
 			computeMinDistance(line,pt,locGeom);
-			if (minDistance<=0.0) return;
+			if (minDistance<=terminateDistance) return;
 			if ( i<lines.size()-1 || j<points.size()-1)
 			{
 				delete locGeom[0]; locGeom[0]=NULL;
@@ -435,7 +465,7 @@ DistanceOp::computeMinDistance(
 				locGeom[0] = new GeometryLocation(line0, i, *c1);
 				locGeom[1] = new GeometryLocation(line1, j, *c2);
 			}
-			if (minDistance<=0.0) return;
+			if (minDistance<=terminateDistance) return;
 			if ( i<npts0-1 || j<npts1-1)
 			{
 				delete locGeom[0]; locGeom[0]=NULL;
@@ -478,8 +508,18 @@ DistanceOp::computeMinDistance(const LineString *line,
 			delete locGeom[1];
 			locGeom[1] = new GeometryLocation(pt, 0, *coord);
         	}
-		if (minDistance<=0.0) return;
+		if (minDistance<=terminateDistance) return;
 	}
+}
+
+/* public static */
+bool
+DistanceOp::isWithinDistance(const geom::Geometry& g0,
+	                     const geom::Geometry& g1,
+	                     double distance)
+{
+	DistanceOp distOp(g0, g1, distance);
+	return distOp.distance() <= distance;
 }
 
 } // namespace geos.operation.distance
