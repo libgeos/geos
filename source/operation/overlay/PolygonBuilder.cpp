@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/overlay/PolygonBuilder.java rev. 1.18 (JTS-1.7)
+ * Last port: operation/overlay/PolygonBuilder.java rev. 1.20 (JTS-1.10)
  *
  **********************************************************************/
 

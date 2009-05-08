@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/overlay/PolygonBuilder.java rev. 1.20 (JTS-1.10)
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_OVERLAY_POLYGONBUILDER_H
@@ -51,7 +55,6 @@ namespace overlay { // geos::operation::overlay
 class PolygonBuilder {
 public:
 
-	// CGAlgorithms argument is unused
 	PolygonBuilder(const geom::GeometryFactory *newGeometryFactory);
 
 	~PolygonBuilder();
@@ -150,6 +153,8 @@ private:
 	 * properly contained (i.e. are connected to their
 	 * parent shell) would have formed part of a MaximalEdgeRing
 	 * and been handled in a previous step.
+	 *
+	 * @throws TopologyException if a hole cannot be assigned to a shell
 	 */
 	void placeFreeHoles(std::vector<geomgraph::EdgeRing*>& newShellList,
 		std::vector<geomgraph::EdgeRing*>& freeHoleList);
