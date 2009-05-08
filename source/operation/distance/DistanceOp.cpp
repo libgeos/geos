@@ -14,6 +14,8 @@
  *
  **********************************************************************
  *
+ * Last port: operation/distance/DistanceOp.java rev 1.16
+ *
  **********************************************************************/
 
 #include <geos/operation/distance/DistanceOp.h>

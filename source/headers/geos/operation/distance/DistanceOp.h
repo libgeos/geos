@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/distance/DistanceOp.java rev 1.16
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_DISTANCE_DISTANCEOP_H
