@@ -30,9 +30,7 @@
 #ifndef GEOS_C_H_INCLUDED
 #define GEOS_C_H_INCLUDED
 
-#ifndef __cplusplus
 # include <stddef.h> /* for size_t definition */
-#endif
 
 #ifdef __cplusplus
 extern "C" {
