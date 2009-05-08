@@ -97,13 +97,18 @@ public:
 
 	/**
 	 * Compute the the closest points of two geometries.
+	 *
 	 * The points are presented in the same order as the input Geometries.
 	 *
 	 * @param g0 a {@link Geometry}
 	 * @param g1 another {@link Geometry}
-	 * @return the closest points in the geometries, ownership to caller
+	 *
+	 * @return the closest points in the geometries, ownership to caller.
+	 *         A NULL return means one of the geometries is empty.
 	 */
-	static geom::CoordinateSequence* closestPoints(geom::Geometry *g0, geom::Geometry *g1);
+	static geom::CoordinateSequence* closestPoints(
+	                                        const geom::Geometry *g0,
+	                                        const geom::Geometry *g1);
 
 	/// @deprecated use the one taking references
 	DistanceOp(const geom::Geometry *g0, const geom::Geometry *g1);
