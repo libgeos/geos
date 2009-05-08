@@ -149,26 +149,29 @@ public:
 	 */
 	geom::CoordinateSequence* closestPoints();
 
+private:
+
 	/**
 	 * Report the locations of the closest points in the input geometries.
-	 * The locations are presented in the same order as the input Geometries.
+	 * The locations are presented in the same order as the input
+	 * Geometries.
 	 *
 	 * @return a pair of {@link GeometryLocation}s for the closest points.
 	 *         Ownership of returned object is left to this instance and 
-	 *         it's reference will be invalidated by next call
-	 *         to distance()
+	 *         it's reference will be alive for the whole lifetime of it.
+	 *
+	 * NOTE: this is public in JTS, but we aim at API reduction here...
 	 *
 	 */
 	std::vector<GeometryLocation*>* closestLocations();
-
-private:
 
 	// input (TODO: use two references instead..)
 	std::vector<geom::Geometry const*> geom;
 	double terminateDistance; 
 
-	// working (TODO: use two auto_ptr, or to concrete types)
+	// working 
 	algorithm::PointLocator ptLocator;
+	// TODO: use auto_ptr
 	std::vector<GeometryLocation*> *minDistanceLocation;
 	double minDistance;
 
@@ -176,9 +179,11 @@ private:
 	std::vector<geom::Coordinate *> newCoords;
 
 
-	void updateMinDistance(double dist);
-	void updateMinDistance(std::vector<GeometryLocation*> *locGeom, bool flip);
+	void updateMinDistance(std::vector<GeometryLocation*>& locGeom,
+	                       bool flip);
+
 	void computeMinDistance();
+
 	void computeContainmentDistance();
 
 	void computeInside(std::vector<GeometryLocation*> *locs,
@@ -189,7 +194,11 @@ private:
 			const geom::Polygon *poly,
 			std::vector<GeometryLocation*> *locPtPoly);
 
-	void computeLineDistance();
+	/**
+	 * Computes distance between facets (lines and points)
+	 * of input geometries.
+	 */
+	void computeFacetDistance();
 
 	void computeMinDistanceLines(
 			const std::vector<const geom::LineString*>& lines0,

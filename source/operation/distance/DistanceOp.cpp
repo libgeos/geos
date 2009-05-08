@@ -38,6 +38,11 @@
 #include <geos/geom/util/PointExtracter.h>
 
 #include <vector>
+#include <iostream>
+
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
 
 using namespace std;
 using namespace geos::geom;
@@ -132,33 +137,31 @@ DistanceOp::distance()
 }
 
 
-/**
-* Report the coordinates of the closest points in the input geometries.
-* The points are presented in the same order as the input Geometries.
-*
-* @return a pair of Coordinate s of the closest points
-*/
+/* public */
 CoordinateSequence*
 DistanceOp::closestPoints()
 {
-    assert(0 != minDistanceLocation);
-    std::vector<GeometryLocation*>& locs = *minDistanceLocation;
+	// lazily creates minDistanceLocation
+	computeMinDistance();
 
-    computeMinDistance();
+	assert(0 != minDistanceLocation);
+	std::vector<GeometryLocation*>& locs = *minDistanceLocation;
 
-    // FIXME: This code (refactored to make the bug visible) causes
-    //        crash reported in Ticket #236
-    // NOTE: In order to reproduce, uncomment test case test<17>
-    //       in tests/unit/operation/distance/DistanceOpTest.cpp        
-    GeometryLocation* loc0 = locs[0];
-    GeometryLocation* loc1 = locs[1];
-    // Assertion fails, so...
-    assert(0 != loc0 && 0 != loc1);
-    // ...accesss violation is thrown.
-    Coordinate& c0 = loc0->getCoordinate();
-    Coordinate& c1 = loc1->getCoordinate();
+	// Empty input geometries result in this behaviour
+	if ( locs[0] == 0 || locs[1] == 0 )
+	{
+		// either both or none are set..
+		assert(locs[0] == 0 && locs[1] == 0);
 
-    CoordinateSequence* closestPts = new CoordinateArraySequence();
+		return 0;
+	}
+
+	GeometryLocation* loc0 = locs[0];
+	GeometryLocation* loc1 = locs[1];
+	const Coordinate& c0 = loc0->getCoordinate();
+	const Coordinate& c1 = loc1->getCoordinate();
+
+	CoordinateSequence* closestPts = new CoordinateArraySequence();
 	closestPts->add(c0);
 	closestPts->add(c1);
 
@@ -176,33 +179,60 @@ vector<GeometryLocation*>* DistanceOp::closestLocations(){
 	return minDistanceLocation;
 }
 
-void DistanceOp::updateMinDistance(double dist) {
-	if (dist<minDistance)
-	minDistance=dist;
-}
+void
+DistanceOp::updateMinDistance(vector<GeometryLocation*>& locGeom, bool flip)
+{
+	assert(minDistanceLocation);
 
-void DistanceOp::updateMinDistance(vector<GeometryLocation*> *locGeom, bool flip){
 	// if not set then don't update
-	if ((*locGeom)[0]==NULL) return;
+	if (locGeom[0]==NULL)
+	{
+#if GEOS_DEBUG
+std::cerr << "updateMinDistance called with loc[0] == null and loc[1] == " << locGeom[1] << std::endl;
+#endif
+		assert(locGeom[1] == NULL);
+		return;
+	}
+
 	delete (*minDistanceLocation)[0];
 	delete (*minDistanceLocation)[1];
 	if (flip) {
-		(*minDistanceLocation)[0]=(*locGeom)[1];
-		(*minDistanceLocation)[1]=(*locGeom)[0];
+		(*minDistanceLocation)[0]=locGeom[1];
+		(*minDistanceLocation)[1]=locGeom[0];
 	} else {
-		(*minDistanceLocation)[0]=(*locGeom)[0];
-		(*minDistanceLocation)[1]=(*locGeom)[1];
+		(*minDistanceLocation)[0]=locGeom[0];
+		(*minDistanceLocation)[1]=locGeom[1];
 	}
 }
 
-void DistanceOp::computeMinDistance() {
-    if (minDistanceLocation!=NULL) return;
-    minDistanceLocation = new vector<GeometryLocation*>(2);
-    computeContainmentDistance();
-    if (minDistance <= terminateDistance) return;
-    computeLineDistance();
+/*private*/
+void
+DistanceOp::computeMinDistance()
+{
+	// only compute once!
+	if (minDistanceLocation) return;
+
+#if GEOS_DEBUG
+	std::cerr << "---Start: " << geom[0]->toString() << " - " << geom[1]->toString() << std::endl;
+#endif
+
+	minDistanceLocation = new vector<GeometryLocation*>(2);
+
+	computeContainmentDistance();
+
+	if (minDistance <= terminateDistance)
+	{
+		return;
+	}
+
+	computeFacetDistance();
+
+#if GEOS_DEBUG
+	std::cerr << "---End " << std::endl;
+#endif
 }
 
+/*private*/
 void
 DistanceOp::computeContainmentDistance()
 {
@@ -213,14 +243,25 @@ DistanceOp::computeContainmentDistance()
 
 	PolygonExtracter::getPolygons(*(geom[0]), polys0);
 	PolygonExtracter::getPolygons(*(geom[1]), polys1);
-	
+
+#if GEOS_DEBUG
+	std::cerr << "PolygonExtracter found " << polys0.size() << " polygons in geometry 1 and " << polys1.size() << " polygons in geometry 2 " << std::endl;
+#endif
+
+	// NOTE:
+	// Expected to fill minDistanceLocation items
+	// if minDistance <= terminateDistance
 
 	vector<GeometryLocation*> *locPtPoly = new vector<GeometryLocation*>(2);
 	// test if either geometry is wholely inside the other
-	if (polys1.size()>0) {
-		vector<GeometryLocation*> *insideLocs0 = ConnectedElementLocationFilter::getLocations(geom[0]);
+	if ( ! polys1.empty() )
+	{
+		vector<GeometryLocation*> *insideLocs0 =
+			ConnectedElementLocationFilter::getLocations(geom[0]);
 		computeInside(insideLocs0, polys1, locPtPoly);
 		if (minDistance <= terminateDistance) {
+			assert( (*locPtPoly)[0] );
+			assert( (*locPtPoly)[1] );
 			(*minDistanceLocation)[0] = (*locPtPoly)[0];
 			(*minDistanceLocation)[1] = (*locPtPoly)[1];
 			delete locPtPoly;
@@ -240,11 +281,15 @@ DistanceOp::computeContainmentDistance()
 			delete (*insideLocs0)[i];
 		delete insideLocs0;
 	}
-	if (polys0.size()>0) {
+
+	if ( ! polys0.empty() )
+	{
 		vector<GeometryLocation*> *insideLocs1 = ConnectedElementLocationFilter::getLocations(geom[1]);
 		computeInside(insideLocs1, polys0, locPtPoly);
 		if (minDistance <= terminateDistance) {
 // flip locations, since we are testing geom 1 VS geom 0
+			assert( (*locPtPoly)[0] );
+			assert( (*locPtPoly)[1] );
 			(*minDistanceLocation)[0] = (*locPtPoly)[1];
 			(*minDistanceLocation)[1] = (*locPtPoly)[0];
 			delete locPtPoly;
@@ -264,7 +309,13 @@ DistanceOp::computeContainmentDistance()
 			delete (*insideLocs1)[i];
 		delete insideLocs1;
 	}
+
 	delete locPtPoly;
+
+	// If minDistance <= terminateDistance we must have
+	// set minDistanceLocations to some non-null item
+	assert( minDistance > terminateDistance ||
+	        ( (*minDistanceLocation)[0] && (*minDistanceLocation)[1] ) );
 }
 
 
@@ -304,7 +355,7 @@ DistanceOp::computeInside(GeometryLocation *ptLoc,
 
 /*private*/
 void
-DistanceOp::computeLineDistance()
+DistanceOp::computeFacetDistance()
 {
 	using geom::util::LinearComponentExtracter;
 	using geom::util::PointExtracter;
@@ -321,38 +372,65 @@ DistanceOp::computeLineDistance()
 	LinearComponentExtracter::getLines(*(geom[0]), lines0);
 	LinearComponentExtracter::getLines(*(geom[1]), lines1);
 
+#if GEOS_DEBUG
+	std::cerr << "LinearComponentExtracter found "
+	          << lines0.size() << " lines in geometry 1 and "
+	          << lines1.size() << " lines in geometry 2 "
+	          << std::endl;
+#endif
+
 	Point::ConstVect pts0;
 	Point::ConstVect pts1;
 	PointExtracter::getPoints(*(geom[0]), pts0);
 	PointExtracter::getPoints(*(geom[1]), pts1);
 
+#if GEOS_DEBUG
+	std::cerr << "PointExtracter found "
+	          << pts0.size() << " points in geometry 1 and "
+	          << pts1.size() << " points in geometry 2 "
+	          << std::endl;
+#endif
+
 	// bail whenever minDistance goes to zero, since it can't get any less
 	computeMinDistanceLines(lines0, lines1, locGeom);
-	updateMinDistance(&locGeom, false);
+	updateMinDistance(locGeom, false);
 	if (minDistance <= terminateDistance) {
+#if GEOS_DEBUG
+		std::cerr << "Early termination after line-line distance" << std::endl;
+#endif
 		return;
 	};
 
 	locGeom[0]=NULL;
 	locGeom[1]=NULL;
 	computeMinDistanceLinesPoints(lines0, pts1, locGeom);
-	updateMinDistance(&locGeom, false);
+	updateMinDistance(locGeom, false);
 	if (minDistance <= terminateDistance) {
+#if GEOS_DEBUG
+		std::cerr << "Early termination after lines0-points1 distance" << std::endl;
+#endif
 		return;
 	};
 
 	locGeom[0]=NULL;
 	locGeom[1]=NULL;
 	computeMinDistanceLinesPoints(lines1, pts0, locGeom);
-	updateMinDistance(&locGeom, true);
+	updateMinDistance(locGeom, true);
 	if (minDistance <= terminateDistance){
+#if GEOS_DEBUG
+		std::cerr << "Early termination after lines1-points0 distance" << std::endl;
+#endif
 		return;
 	};
 
 	locGeom[0]=NULL;
 	locGeom[1]=NULL;
 	computeMinDistancePoints(pts0, pts1, locGeom);
-	updateMinDistance(&locGeom, false);
+	updateMinDistance(locGeom, false);
+
+#if GEOS_DEBUG
+	std::cerr << "termination after pts-pts distance" << std::endl;
+#endif
 }
 
 /*private*/
@@ -380,25 +458,33 @@ DistanceOp::computeMinDistancePoints(
 		const Point::ConstVect& points1,
 		vector<GeometryLocation*>& locGeom)
 {
-	for (size_t i=0, ni=points0.size(); i<ni; ++i) {
-		const Point *pt0=points0[i];
-		//Geometry *pt0=(*points0)[i];
-		for (size_t j=0, nj=points1.size(); j<nj; ++j) {
-			const Point *pt1=points1[j];
-			//Geometry *pt1=(*points1)[j];
-			double dist=pt0->getCoordinate()->distance(*(pt1->getCoordinate()));
-			if (dist < minDistance) {
+	for (size_t i=0, ni=points0.size(); i<ni; ++i)
+	{
+		const Point *pt0 = points0[i];
+		for (size_t j=0, nj=points1.size(); j<nj; ++j)
+		{
+			const Point *pt1 = points1[j];
+			double dist = pt0->getCoordinate()->distance(*(pt1->getCoordinate()));
+
+#if GEOS_DEBUG
+	std::cerr << "Distance "
+	          << pt0->toString() << " - "
+	          << pt1->toString() << ": "
+	          << dist << ", minDistance: " << minDistance
+	          << std::endl;
+#endif
+
+			if (dist < minDistance)
+			{
 				minDistance = dist;
 				// this is wrong - need to determine closest points on both segments!!!
+				delete locGeom[0];
 				locGeom[0] = new GeometryLocation(pt0, 0, *(pt0->getCoordinate()));
+				delete locGeom[1];
 				locGeom[1] = new GeometryLocation(pt1, 0, *(pt1->getCoordinate()));
 			}
+
 			if (minDistance<=terminateDistance) return;
-			if ( i<points0.size()-1 || j<points1.size()-1)
-			{
-				delete locGeom[0]; locGeom[0]=NULL;
-				delete locGeom[1]; locGeom[1]=NULL;
-			}
 		}
 	}
 }
@@ -410,17 +496,14 @@ DistanceOp::computeMinDistanceLinesPoints(
 		const Point::ConstVect& points,
 		vector<GeometryLocation*>& locGeom)
 {
-	for (size_t i=0;i<lines.size();i++) {
+	for (size_t i=0;i<lines.size();i++)
+	{
 		const LineString *line=lines[i];
-		for (size_t j=0;j<points.size();j++) {
+		for (size_t j=0;j<points.size();j++)
+		{
 			const Point *pt=points[j];
 			computeMinDistance(line,pt,locGeom);
 			if (minDistance<=terminateDistance) return;
-			if ( i<lines.size()-1 || j<points.size()-1)
-			{
-				delete locGeom[0]; locGeom[0]=NULL;
-				delete locGeom[1]; locGeom[1]=NULL;
-			}
 		}
 	}
 }
@@ -462,15 +545,13 @@ DistanceOp::computeMinDistance(
 				newCoords.push_back(c1);
 				newCoords.push_back(c2);
 				delete closestPt;
+
+				delete locGeom[0];
 				locGeom[0] = new GeometryLocation(line0, i, *c1);
+				delete locGeom[1];
 				locGeom[1] = new GeometryLocation(line1, j, *c2);
 			}
 			if (minDistance<=terminateDistance) return;
-			if ( i<npts0-1 || j<npts1-1)
-			{
-				delete locGeom[0]; locGeom[0]=NULL;
-				delete locGeom[1]; locGeom[1]=NULL;
-			}
 		}
 	}
 }
