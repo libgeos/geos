@@ -73,7 +73,7 @@ DistanceOp::distance(const Geometry& g0, const Geometry& g1)
 
 /*public static*/
 CoordinateSequence*
-DistanceOp::closestPoints(Geometry *g0,Geometry *g1)
+DistanceOp::closestPoints(const Geometry *g0, const Geometry *g1)
 {
 	DistanceOp distOp(g0,g1);
 	return distOp.closestPoints();
