@@ -1,5 +1,6 @@
 Changes in 3.2.0 (?)
 
+- Add Single-sided buffer operation
 - JTS-1.10 sync ...
   - Drastically improved Buffer speed
   - Improved EdgeList duplicate edge finding
