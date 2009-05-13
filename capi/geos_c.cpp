@@ -88,7 +88,7 @@ finishGEOS ()
 void 
 GEOSFree (void* buffer) 
 { 
-    free(buffer); 
+    GEOSFree_r( handle, buffer ); 
 } 
     
 /****************************************************************

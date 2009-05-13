@@ -168,7 +168,7 @@ finishGEOS_r(GEOSContextHandle_t extHandle)
 void 
 GEOSFree_r (GEOSContextHandle_t extHandle, void* buffer) 
 { 
-    free(buffer); 
+    std::free(buffer); 
 } 
 
 //-----------------------------------------------------------
