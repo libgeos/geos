@@ -21,9 +21,8 @@
  *	  functions, and call finishGEOS() when done.
  *
  *	- Currently you have to explicitly GEOSGeom_destroy() all
- *	  GEOSGeom objects to avoid memory leaks, and to free()
- *	  all returned char * (unless const). This might change
- *	  before first release to ensure greater API stability.
+ *	  GEOSGeom objects to avoid memory leaks, and to GEOSFree()
+ *	  all returned char * (unless const). 
  *
  ***********************************************************************/
 
