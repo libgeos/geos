@@ -826,6 +826,12 @@ extern void GEOS_DLL GEOSWKBWriter_setIncludeSRID_r(GEOSContextHandle_t handle,
                                    GEOSWKBWriter* writer, const char writeSRID);
 
 
+/*
+ * Free buffers returned by stuff like GEOSWKBWriter_write(), 
+ * GEOSWKBWriter_writeHEX() and GEOSWKTWriter_write(). 
+ */
+extern void GEOS_DLL GEOSFree( void *buffer );
+extern void GEOS_DLL GEOSFree_r( GEOSContextHandle_t handle, void *buffer );
 
 #ifdef __cplusplus
 } // extern "C"

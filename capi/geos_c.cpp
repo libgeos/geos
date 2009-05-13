@@ -85,6 +85,12 @@ finishGEOS ()
     finishGEOS_r( handle );
 }
 
+void 
+GEOSFree (void* buffer) 
+{ 
+    free(buffer); 
+} 
+    
 /****************************************************************
 ** relate()-related functions
 ** return 0 = false, 1 = true, 2 = error occured

@@ -1,3 +1,8 @@
+2009-05-13  Frank Warmerdam  <warmerdam@pobox.com>
+
+	* capi/geos_ts_c.cpp, capi/geos_c.cpp, capi/geos_c.h.in: Added
+	GEOSFree() and GEOSFree_r() functions (#249).
+
 2009-02-07 23:29  pramsey
 
 	* source/headers/geos/precision/Makefile.am: Include

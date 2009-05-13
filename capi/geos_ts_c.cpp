@@ -165,6 +165,12 @@ finishGEOS_r(GEOSContextHandle_t extHandle)
     extHandle = NULL;
 }
 
+void 
+GEOSFree_r (GEOSContextHandle_t extHandle, void* buffer) 
+{ 
+    free(buffer); 
+} 
+
 //-----------------------------------------------------------
 // relate()-related functions
 //  return 0 = false, 1 = true, 2 = error occured
