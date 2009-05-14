@@ -81,7 +81,7 @@ public:
 	int leftDepth;
 
 	/// @param seg will be copied to private space
-	DepthSegment(constgeom::LineSegment &seg, int depth)
+	DepthSegment(const geom::LineSegment &seg, int depth)
 		:
 		upwardSeg(seg),
 		leftDepth(depth)
