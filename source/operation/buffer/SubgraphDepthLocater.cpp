@@ -55,7 +55,7 @@ class DepthSegment {
 
 private:
 
-	geom::LineSegment& upwardSeg;
+	geom::LineSegment upwardSeg;
 
 	/*
 	 * Compare two collinear segments for left-most ordering.
@@ -80,7 +80,8 @@ public:
 
 	int leftDepth;
 
-	DepthSegment(geom::LineSegment &seg, int depth)
+	/// @param seg will be copied to private space
+	DepthSegment(constgeom::LineSegment &seg, int depth)
 		:
 		upwardSeg(seg),
 		leftDepth(depth)
