@@ -18,3 +18,6 @@ SUBDIRS = 	\
 EXTRA_DIST = acsite.m4 makefile.vc
 
 ACLOCAL_AMFLAGS = -I macros
+
+ChangeLog.svn:
+	svn2cl --authors=authors.svn -i -o ChangeLog.svn
