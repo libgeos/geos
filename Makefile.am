@@ -21,3 +21,5 @@ ACLOCAL_AMFLAGS = -I macros
 
 ChangeLog.svn:
 	svn2cl --authors=authors.svn -i -o ChangeLog.svn
+
+.PHONY: ChangeLog.svn

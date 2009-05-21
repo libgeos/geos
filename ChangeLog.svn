@@ -143,7 +143,7 @@
 	* [r2483] tests/xmltester/markup/MarkupSTL.cpp: Fix compilation
 	  warnings thrown by GCC 4.3.x. Patch by Mateus, closes bug #92.
 
-2009-05-06 20:12  mloskot
+2009-05-06 20:12  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2482] source/headers/geos/operation/overlay/snap: Updated
 	  svn:ignore property.
@@ -628,7 +628,7 @@
 	  source/operation/IsSimpleOp.cpp: Port info, and sync from 1.14 to
 	  1.17 (more to do, need more classes)
 
-2009-04-29 23:52  mloskot
+2009-04-29 23:52  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2424] tests/unit/capi/GEOSContainsTest.cpp,
 	  tests/unit/capi/GEOSCoordSeqTest.cpp,
@@ -640,13 +640,13 @@
 	  tests/unit/capi/GEOSWithinTest.cpp: test/unit/capi: re-tab all
 	  .cpp files to use spaces.
 
-2009-04-29 23:46  mloskot
+2009-04-29 23:46  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2423] tests/unit/capi/GEOSContainsTest.cpp,
 	  tests/unit/capi/GEOSWithinTest.cpp: Removed unused <memory>
 	  header from C API tests.
 
-2009-04-29 23:44  mloskot
+2009-04-29 23:44  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2422] tests/unit/Makefile.am,
 	  tests/unit/capi/GEOSContainsTest.cpp,
@@ -849,7 +849,7 @@
 	  tests/xmltester/BufferResultMatcher.h: Use JTS heuristic for
 	  distance-0 buffer checking
 
-2009-04-20 11:04  mloskot
+2009-04-20 11:04  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2396] tests/perf, tests/perf/operation,
 	  tests/perf/operation/buffer: Updated svn:ignore patterns.
@@ -869,7 +869,7 @@
 	  source/headers/geos/geomgraph/Quadrant.h: Add named constants,
 	  sync to JTS-1.10
 
-2009-04-20 09:24  mloskot
+2009-04-20 09:24  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2393] source/algorithm/distance,
 	  source/headers/geos/algorithm/distance: Updated svn:ignore
@@ -1235,7 +1235,7 @@
 	  source/operation/buffer/Makefile.am: Port
 	  BufferInputLineSimplifier from JTS 1.9
 
-2009-04-10 15:15  mloskot
+2009-04-10 15:15  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2346] configure.in: Do not generate Makefile for
 	  tests/unit/tut. Fixed bug reported as #247.
@@ -1247,7 +1247,7 @@
 	  source/headers/geos/geom/LineSegment.inl: Sync LineSegment with
 	  JTS-1.9
 
-2009-04-09 21:46  mloskot
+2009-04-09 21:46  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2344] tests/unit/Makefile.am,
 	  tests/unit/algorithm/CGAlgorithms/computeOrientationTest.cpp,
@@ -1311,7 +1311,7 @@
 	  tests/unit/utility.h: Updated tests/unit package with latest
 	  relase of C++ TUT Framework from 2008-11-30.
 
-2009-04-09 19:39  mloskot
+2009-04-09 19:39  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2343] configure.in, tests/Makefile.am, tests/tut,
 	  tests/unit/Makefile.am, tests/unit/tut,
@@ -1518,23 +1518,23 @@
 	  source/headers/geos/algorithm/HCoordinate.h: Sync HCoordinate
 	  class to JTS-1.9 (rev 1.18)
 
-2009-04-03 15:27  mloskot
+2009-04-03 15:27  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2311] nmake.opt: Added _NMAKE_VER 9.00.21022.08 to nmake.opt.
 	  Fixed bug with using BUILD_DEBUG instead of BUILD_BATCH in
 	  nmake.opt.
 
-2009-03-27 02:39  mloskot
+2009-03-27 02:39  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2310] build/msvc80/geos.sln,
 	  build/msvc80/geos_lib/geos_lib.vcproj: Updated build/msvc80.
 
-2009-03-27 02:38  mloskot
+2009-03-27 02:38  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2309] nmake.opt, source/Makefile.vc: Forgotten nmake.opt in
 	  last commit.
 
-2009-03-26 21:52  mloskot
+2009-03-26 21:52  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2308] build/msvc90/geos.sln,
 	  build/msvc90/geos_lib/geos_lib.vcproj, makefile.vc,
@@ -1545,157 +1545,157 @@
 	  version in cmd line, but just run: nmake -f makefile.vc in root
 	  dir of the tree.
 
-2009-03-26 21:07  mloskot
+2009-03-26 21:07  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2307] source/operation/union/CascadedPolygonUnion.cpp:
 	  CascadedPolygonUnion.cpp: added missing std headers.
 
-2009-03-26 01:53  mloskot
+2009-03-26 01:53  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2306] TODO: Dummy commit - testing buildbot resurection.
 
-2009-03-24 16:49  mloskot
+2009-03-24 16:49  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2304] capi/geos_ts_c.cpp: Fixed bug introduced in recent
 	  refactoring work (r2281). This is the reason of PostGIS
 	  regression test failing (Issue 143)
 
-2009-03-24 15:58  pramsey
+2009-03-24 15:58  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2303] autogen.sh: Allow version test to work in glibtoolize
 
-2009-03-24 00:48  mloskot
+2009-03-24 00:48  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2302] capi/geos_c.cpp, capi/geos_c.h.in, capi/geos_ts_c.cpp:
 	  capi/geos_ts_c.cpp: refactoring, assert() to test against nullptr
 	  where it is forbidden.
 
-2009-03-24 00:30  mloskot
+2009-03-24 00:30  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2301] capi/geos_c.cpp, capi/geos_c.h.in, capi/geos_ts_c.cpp:
 	  REVERTED r2299: Fixed GEOSSetSRID_r missing, GEOSSetSRID
 	  duplicated (Ticket #242). A little of refactoring.
 
-2009-03-24 00:19  mloskot
+2009-03-24 00:19  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2300] capi/geos_c.cpp, capi/geos_c.h.in, capi/geos_ts_c.cpp:
 	  Fixed GEOSSetSRID_r missing, GEOSSetSRID duplicated (Ticket
 	  #242). A little of refactoring.
 
-2009-03-23 23:50  mloskot
+2009-03-23 23:50  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2299] capi/geos_ts_c.cpp: capi/geos_ts_c.cpp: refactoring, use
 	  single return expression per function, added assert() to test
 	  against nullptr where it is forbidden.
 
-2009-03-23 23:29  mloskot
+2009-03-23 23:29  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2298] capi/geos_ts_c.cpp: capi/geos_ts_c.cpp: refactoring, use
 	  single return expression per function, added assert() to test
 	  against nullptr where it is forbidden, addd some comments.
 
-2009-03-23 22:19  mloskot
+2009-03-23 22:19  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2297] capi/geos_ts_c.cpp: capi/geos_ts_c.cpp: refactoring, use
 	  single return expression per function, added assert() to test
 	  against nullptr where it is forbidden, addd some comments.
 
-2009-03-23 21:07  mloskot
+2009-03-23 21:07  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2296] capi/geos_ts_c.cpp: capi/geos_ts_c.cpp: refactoring,
 	  replace manual strdup with gstrdup, use single return expression
 	  per function, added some comments.
 
-2009-03-23 20:31  mloskot
+2009-03-23 20:31  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2295] autogen.sh: dummy commit
 
-2009-03-23 20:03  mloskot
+2009-03-23 20:03  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2294] autogen.sh: autogen.sh: Fixed typo in tab character.
 
-2009-03-23 17:08  mloskot
+2009-03-23 17:08  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2293] autogen.sh: autogen.sh: be more verbose about versions,
 	  check for autoconf, check if ./configure is really generated.
 
-2009-03-23 16:28  mloskot
+2009-03-23 16:28  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2292] configure.in: configure.in: mloskot made a stupid
 	  mistake, mloskot has fixed it.
 
-2009-03-23 14:38  mloskot
+2009-03-23 14:38  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2291] configure.in: configure.in: wrap macro arguments with
 	  proper M4 quote characters.
 
-2009-03-23 14:08  mloskot
+2009-03-23 14:08  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2290] autogen.sh: autogen.sh: Call libtool *before* aclocal and
 	  automake (see Automake manual,8.3.9.1).
 
-2009-03-23 14:01  mloskot
+2009-03-23 14:01  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2289] autogen.sh: autogen.sh: verbose check if autotools
 	  versions.
 
-2009-03-22 20:29  pramsey
+2009-03-22 20:29  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2288] autogen.sh: Show what versions of things we're running
 
-2009-03-21 02:17  mloskot
+2009-03-21 02:17  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2287] capi/geos_ts_c.cpp: capi/geos_ts_c.cpp: refactoring -
 	  removed redundant return expressions, replaced bloated use of
 	  malloc + memcpy with single call to gstrdup, use of C++ cast
 	  operators, removed unnecessary allocation of std::string objects.
 
-2009-03-21 01:37  mloskot
+2009-03-21 01:37  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2286] capi/geos_ts_c.cpp: capi/geos_ts_c.cpp: added gstrdup and
 	  gstrdup_s helper functions to get rid of bloated code in future.
 	  Started eliminating redundant return expressions.
 
-2009-03-21 01:10  mloskot
+2009-03-21 01:10  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2285] macros: macros: Updated svn:ignore property.
 
-2009-03-21 01:08  mloskot
+2009-03-21 01:08  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2284] capi/geos_ts_c.cpp: capi/geos_ts_c.cpp: Use of spaces
 	  instead of tabs applied.
 
-2009-03-21 01:05  mloskot
+2009-03-21 01:05  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2283] source/operation/polygonize/EdgeRing.cpp:
 	  source/operation/polygonize/edgering.cpp: cleaned compiler
 	  warnings about mixed integral types.
 
-2009-03-21 01:01  mloskot
+2009-03-21 01:01  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2282] capi/geos_ts_c.cpp: Fixed deprecated conversion from
 	  string constant to char* in GEOSisValidReason_r. Small
 	  refactoring.
 
-2009-03-21 00:47  mloskot
+2009-03-21 00:47  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2281] capi/geos_ts_c.cpp: capi/geos_ts_c.cpp: refactoring, use
 	  c++ cast operators.
 
-2009-03-20 23:37  mloskot
+2009-03-20 23:37  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2280] source/operation/union: Updated svn:ignore property.
 
-2009-03-20 23:35  mloskot
+2009-03-20 23:35  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2279] build/msvc80/geos_unit/geos_unit.vcproj: Updated
 	  build/msvc80 project.
 
-2009-03-19 16:45  pramsey
+2009-03-19 16:45  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2278] autogen.sh: Fix spellingn mistake.
 
-2009-03-19 16:19  mloskot
+2009-03-19 16:19  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2277] build/msvc90/geos_unit/geos_unit.vcproj,
 	  tests/unit/capi/GEOSGeomFromWKBTest.cpp, tests/unit/utility.h: *
@@ -1707,7 +1707,7 @@
 	  * test/unit/utility.h: Added helper class wkb_hex_decoder.
 	  * Updated build/msvc90 projects.
 
-2009-03-11 12:51  mloskot
+2009-03-11 12:51  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2276] source/operation/distance/DistanceOp.cpp,
 	  tests/unit/operation/distance/DistanceOpTest.cpp: BUG in
@@ -1723,32 +1723,32 @@
 	  * A dirty fix: if loc0 or loc1 are nullptr, return nullptr
 	  CoordinatesSequence from closestPoints().
 
-2009-03-11 12:18  mloskot
+2009-03-11 12:18  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2275] source/geom/CoordinateArraySequence.cpp: Number of
 	  assertions in CoordinateArraySequence class.
 
-2009-03-10 17:29  pramsey
+2009-03-10 17:29  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2274] build/msvc90/geos_c_dll, build/msvc90/geos_lib,
 	  build/msvc90/geos_python, build/msvc90/geos_ruby,
 	  build/msvc90/geos_unit: svn:ignore
 
-2009-03-10 17:28  pramsey
+2009-03-10 17:28  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2273] build/msvc90, build/msvc90/geos_c_dll,
 	  build/msvc90/geos_lib, build/msvc90/geos_python,
 	  build/msvc90/geos_ruby, build/msvc90/geos_unit: svn:ignore
 
-2009-03-10 17:18  pramsey
+2009-03-10 17:18  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2272] NEWS: Update NEWS for 3.1.0
 
-2009-03-10 16:23  pramsey
+2009-03-10 16:23  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2271] ChangeLog: Update ChangeLog for 3.1.0 release
 
-2009-02-07 23:29  pramsey
+2009-02-07 23:29  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2269] source/headers/geos/precision/Makefile.am: Include
 	  GeometrySnapper.h in distribution package.
@@ -1762,11 +1762,11 @@
 
 	* [r2267] README: Notes on state of scripting language bindings
 
-2009-01-30 20:01  pramsey
+2009-01-30 20:01  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2266] configure.in: Add new msvc targets to build
 
-2009-01-29 19:22  mloskot
+2009-01-29 19:22  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2265] build/Makefile.am, build/msvc90,
 	  build/msvc90/Makefile.am, build/msvc90/README,
@@ -1784,11 +1784,11 @@
 	  solution and project files for Microsoft Visual C++ 2009 (9.0).
 	  Successfully built and tested GEOS with Visual C++ 9.0.
 
-2009-01-29 19:02  pramsey
+2009-01-29 19:02  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2264] README: update autogen.bat ref
 
-2009-01-29 18:56  mloskot
+2009-01-29 18:56  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2263] source/headers/geos/algorithm/RayCrossingCounter.h,
 	  source/headers/geos/algorithm/locate/IndexedPointInAreaLocator.h,
@@ -1805,21 +1805,21 @@
 	  source/headers/geos/noding/SegmentStringUtil.h: Fixed broken
 	  svn:keyword Id
 
-2009-01-29 18:51  mloskot
+2009-01-29 18:51  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2262] autogen.bat, bootstrap.bat: Renamed bootstrap.bat to
 	  autogen.bat for easier guass of the script purpose. Wiki updated.
 
-2009-01-28 01:06  pramsey
+2009-01-28 01:06  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2261] README: Add to win32 instructions
 
-2009-01-27 18:10  pramsey
+2009-01-27 18:10  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2260] source/headers/geos/geom/util/Makefile.am: Add
 	  GeometryCombiner.h to include dist
 
-2009-01-27 00:18  pramsey
+2009-01-27 00:18  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2259] build/msvc80/geos_c_dll/geos_c_dll.vcproj: Revert some
 	  junk from an old commit, per issue #220
@@ -1829,28 +1829,28 @@
 	* [r2258] source/Makefile.vc: added two new files related to
 	  cascaded polygon union (#226)
 
-2009-01-24 05:03  pramsey
+2009-01-24 05:03  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2257] HOWTO_RELEASE: Update
 
-2009-01-24 05:02  pramsey
+2009-01-24 05:02  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2256] ChangeLog: Update changelog
 
-2009-01-24 01:33  mloskot
+2009-01-24 01:33  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2255] capi/geos_ts_c.cpp: Fixed mixed signed/unsigned integral
 	  types in geos_ts_c.cpp, so no compilers should flood with
 	  warnings now.
 
-2009-01-24 01:30  mloskot
+2009-01-24 01:30  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2254] build/msvc80/geos_c_dll/geos_c_dll.vcproj,
 	  build/msvc80/geos_lib/geos_lib.vcproj,
 	  build/msvc80/geos_unit/geos_unit.vcproj: Updated projects for
 	  Visual Studio 2005 adding new .h/.cpp files.
 
-2009-01-23 23:58  mloskot
+2009-01-23 23:58  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2253] capi/geos_ts_c.cpp,
 	  source/geom/util/GeometryCombiner.cpp,
@@ -1864,12 +1864,12 @@
 	  tests/unit/operation/union/CascadedPolygonUnionTest.cpp: Updated
 	  svn:keywords property on C/C++ files.
 
-2009-01-21 22:18  pramsey
+2009-01-21 22:18  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2252] source/geom/Geometry.cpp: Remove geometryCollection
 	  protection from Union/Relate/Intersection/Difference.
 
-2009-01-20 01:01  pramsey
+2009-01-20 01:01  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2251] capi/geos_c.cpp, capi/geos_c.h.in, capi/geos_ts_c.cpp,
 	  source/headers/geos/operation/union/CascadedPolygonUnion.h,
@@ -1877,7 +1877,7 @@
 	  GEOSUnionCascaded(*GEOSGeometry) to CAPI in preparation for
 	  PostGIS hook-up.
 
-2009-01-19 23:55  pramsey
+2009-01-19 23:55  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2250] capi/geos_c.cpp, capi/geos_ts_c.cpp: Formatting changes
 	  to function decls.
@@ -1886,12 +1886,12 @@
 
 	* [r2249] source/Makefile.vc: fixes to allow building in msvc 2003
 
-2009-01-19 20:00  pramsey
+2009-01-19 20:00  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2248] configure.in: Make warning flags conditional behind a
 	  compiler test... fix to bug #192 ?
 
-2009-01-19 16:44  pramsey
+2009-01-19 16:44  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2247]
 	  source/headers/geos/operation/union/CascadedPolygonUnion.h,
@@ -1899,15 +1899,15 @@
 	  hkaiser to allow cascadedunion to be run directly on a
 	  multipolygon.
 
-2009-01-19 00:12  pramsey
+2009-01-19 00:12  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2246] autogen.sh: Fix error left behind from testing.
 
-2009-01-18 23:28  pramsey
+2009-01-18 23:28  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2245] autogen.sh: Add some more info on missing tools.
 
-2009-01-18 23:07  pramsey
+2009-01-18 23:07  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2244] HOWTO_RELEASE, Makefile.am, build, build/Makefile.am,
 	  build/msvc80, build/msvc80/Makefile.am, build/msvc80/geos_c_dll,
@@ -1921,16 +1921,16 @@
 	  updating
 	  version in .vc headers.
 
-2009-01-18 22:35  pramsey
+2009-01-18 22:35  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2243] configure.in: Add a couple extra program checks.
 
-2009-01-18 21:30  pramsey
+2009-01-18 21:30  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2241] autogen.sh: Add version test for aclocal and automake to
 	  allow OpenSolaris to work.
 
-2009-01-18 20:34  pramsey
+2009-01-18 20:34  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2240] configure.in, source/geom/Envelope.cpp,
 	  source/geom/util/GeometryCombiner.cpp,
@@ -1951,42 +1951,42 @@
 	  tests/unit/operation/union/CascadedPolygonUnionTest.cpp: Apply
 	  cascaded union patch, for issue #225
 
-2009-01-15 01:00  pramsey
+2009-01-15 01:00  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2239] tests/xmltester/Makefile.am: Remove XMLTester from list
 	  of installed programs.
 
-2009-01-14 20:25  pramsey
+2009-01-14 20:25  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2238] capi/geos_ts_c.cpp: Remove strdup use from code for
 	  compilation in mingw
 
-2009-01-13 20:59  pramsey
+2009-01-13 20:59  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2237] configure.in: Add [macros] include to configure.in
 	  directly. Seems to make more recent aclocals happy
 
-2009-01-13 20:43  pramsey
+2009-01-13 20:43  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2236] configure.in: Change AC_SUBST to one-per-line instead of
 	  one-line-for-all. Seems to make more recent autoconf's happier.
 
-2009-01-13 19:23  pramsey
+2009-01-13 19:23  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2235] capi/geos_ts_c.cpp: Change return values for
 	  GEOSWKBWriter_getIncludeSRID_r to match function signature.
 
-2009-01-13 17:04  pramsey
+2009-01-13 17:04  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2234] tests/unit/capi/badthreadtest.c,
 	  tests/unit/capi/brokengrammar, tests/unit/capi/threadtest.c: More
 	  files missing from commit.
 
-2009-01-13 15:47  pramsey
+2009-01-13 15:47  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2233] capi/geos_ts_c.cpp: Add missing file to SVN.
 
-2009-01-13 01:21  pramsey
+2009-01-13 01:21  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2232] capi/Makefile.am, capi/geos_c.cpp, capi/geos_c.h.in,
 	  capi/geostest.c, capi/test.expected, capi/test.wkt,
@@ -2004,44 +2004,44 @@
 	  BufferBuilder (#218); added read-only coordinates function in
 	  OffsetCurveVertexList; explicity pass ownership in LineMerger.
 
-2008-11-26 19:41  pramsey
+2008-11-26 19:41  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2229] source/headers/geos/noding/Octant.h,
 	  tests/unit/noding/SegmentStringTest.cpp: Octant.h error (#185)
 	  from Denise Macleod.
 
-2008-11-26 19:27  pramsey
+2008-11-26 19:27  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2228] source/io/WKBWriter.cpp: Allow proper writing out of z
 	  ordinates. From Justin Bronn (#216)
 
-2008-11-26 19:25  pramsey
+2008-11-26 19:25  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2227] source/io/WKBReader.cpp: Allow readpoint to look at input
 	  dimension and fill higher ordinates. (#217)
 
-2008-11-26 19:06  pramsey
+2008-11-26 19:06  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2226] capi/geos_c.cpp, capi/geos_c.h.in: Expose
 	  GEOSIsValidReason to CAPI
 
-2008-11-18 03:09  pramsey
+2008-11-18 03:09  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2221] source/inlines.cpp: Cygwin build fix from MCA
 
-2008-11-11 17:32  pramsey
+2008-11-11 17:32  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2220] source/geomgraph/EdgeList.cpp,
 	  source/headers/geos/geomgraph/EdgeList.h,
 	  source/operation/overlay/OverlayOp.cpp: Memory leak on invalid
 	  polygons in intersection(). (#170) from Denise MacLeod.
 
-2008-11-05 20:52  pramsey
+2008-11-05 20:52  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2218] source/geom/prep/PreparedLineStringIntersects.cpp:
 	  Another minor memory leak removed.
 
-2008-10-28 15:47  pramsey
+2008-10-28 15:47  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2217] source/inlines.cpp: Cygwin/Mingw patch from Mark
 	  Cave-Ayland
@@ -2051,42 +2051,42 @@
 	* [r2210] source/operation/valid/IsValidOp.cpp: set isChecked flag
 	  after checking to fix memory leak (#169)
 
-2008-10-16 00:40  pramsey
+2008-10-16 00:40  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2203] HOWTO_RELEASE: change info to point to osgeo.org
 
-2008-10-14 15:01  pramsey
+2008-10-14 15:01  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2200] capi/geos_c.cpp, capi/geos_c.h.in: Consistent const
 	  declarations in c-api ($#209)
 
-2008-10-13 22:40  pramsey
+2008-10-13 22:40  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2199] source/headers/geos/io/Makefile.am: Add CLocalizer.h to
 	  build so it gets packaged in make dist
 
-2008-10-10 17:46  pramsey
+2008-10-10 17:46  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2198] source/geom/prep/PreparedPolygonContainsProperly.cpp: One
 	  last memory leak fix.
 
-2008-10-09 16:39  pramsey
+2008-10-09 16:39  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2197] source/geom/prep/PreparedPolygonIntersects.cpp: Memory
 	  leak fix for for prepared intersects. (#207)
 
-2008-10-04 18:14  pramsey
+2008-10-04 18:14  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2196]
 	  source/headers/geos/noding/MCIndexSegmentSetMutualIntersector.h,
 	  source/noding/MCIndexSegmentSetMutualIntersector.cpp: Memory leak
 	  fix for prepared geometry, from Hartmut Kaiser. (#207)
 
-2008-09-29 19:24  pramsey
+2008-09-29 19:24  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2195] capi/geos_c.cpp: Put function sig on one line
 
-2008-09-23 23:01  mloskot
+2008-09-23 23:01  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2194] source/geom/prep/AbstractPreparedPolygonContains.cpp,
 	  source/geom/prep/PreparedPolygon.cpp,
@@ -2106,7 +2106,7 @@
 	  readability. TODO: We need to run a beast like AStyle on all GEOS
 	  code because many places are very hard to read.
 
-2008-09-23 22:55  mloskot
+2008-09-23 22:55  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2193] source/noding/MCIndexSegmentSetMutualIntersector.cpp:
 	  MCIndexSegmentSetMutualIntersector::addToIndex: Completed BWJ's
@@ -2114,89 +2114,89 @@
 	  relation & lifetime. The note is a diagnosis of roots of the
 	  problem. Improved source code readability.
 
-2008-09-22 21:48  mloskot
+2008-09-22 21:48  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2192] source/headers/geos/io/WKBWriter.h: Use conditional
 	  operators instead of cast bool to int.
 
-2008-09-22 20:16  mloskot
+2008-09-22 20:16  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2191] source/simplify/TopologyPreservingSimplifier.cpp: Removed
 	  unnecessary std::endl from debug messages in
 	  TopologyPreservingSimplifier.cpp.
 
-2008-09-21 21:32  mloskot
+2008-09-21 21:32  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2190] source/Makefile.vc: Patched NMAKE makefiles: replaced
 	  lib.exe with link.exe /lib command to enabled compilation using
 	  Microsoft Visual C++ Toolkit 2003
 
-2008-09-16 21:09  mloskot
+2008-09-16 21:09  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2189] source/operation/predicate/SegmentIntersectionTester.cpp,
 	  source/util/math.cpp: Patch fixing build problems on Solaris
 	  (Ticket #205).
 
-2008-09-16 21:01  mloskot
+2008-09-16 21:01  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2188] tests/unit/geom/prep/PreparedGeometryFactoryTest.cpp:
 	  Fixed EOL to LF.
 
-2008-09-16 20:58  mloskot
+2008-09-16 20:58  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2187] source/geom/prep/PreparedGeometryFactory.cpp,
 	  tests/unit/geom/prep/PreparedGeometryFactoryTest.cpp: Fixed crash
 	  of Prepared Geometry construction with nullptr to Geometry object
 	  (Ticket #197).
 
-2008-09-16 20:55  mloskot
+2008-09-16 20:55  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2186] build/msvc80/geos_unit/geos_unit.vcproj: Added
 	  PreparedGeometryFactoryTest to geos_unit.vcproj.
 
-2008-09-16 20:15  mloskot
+2008-09-16 20:15  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2185] build/msvc80/geos_lib/geos_lib.vcproj: Added CLocalizer
 	  to geos_lib.vcproj project for Visual C++ 2005/2008.
 
-2008-09-16 20:13  mloskot
+2008-09-16 20:13  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2184] tests/unit/algorithm/CGAlgorithms/isPointInRingTest.cpp:
 	  Include missing <cassert> in isPointInRingTest.cpp
 
-2008-09-16 20:05  mloskot
+2008-09-16 20:05  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2183] source/Makefile.vc, source/io/CLocalizer.cpp: Fixed
 	  undeclared std::locale in CLocalizer when building using Visual
 	  C++ (Ticket #201)
 
-2008-08-31 20:28  mloskot
+2008-08-31 20:28  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2182] tests/unit/geos_unit.cpp: Replaced incorrect <cmath> with
 	  <cstdlib> in geos_unit.cpp.
 
-2008-08-31 20:23  mloskot
+2008-08-31 20:23  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2181] tests/unit/geos_unit.cpp: Added missing include <cmath>
 	  in geos_unit.cpp.
 
-2008-08-31 19:54  mloskot
+2008-08-31 19:54  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2180] source/headers/geos/io/CLocalizer.h,
 	  source/io/CLocalizer.cpp: Removed use of strdup function to fix
 	  compilation with GCC 4.3.1 (Ticket #204).
 
-2008-08-29 18:17  mloskot
+2008-08-29 18:17  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2179] capi/geos_c.cpp: Removed redundant return expressions
 	  from geos_c.cpp. Testing changes notifications for buildbot.
 
-2008-08-29 00:30  mloskot
+2008-08-29 00:30  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2176] capi/geos_c.cpp: Fixed execution paths and removed
 	  redundant return expr in some C API calls.
 
-2008-08-29 00:29  mloskot
+2008-08-29 00:29  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2175] source/headers/geos/io/WKBWriter.h,
 	  source/io/WKBWriter.cpp: Added missing virtual destructor to
@@ -2210,7 +2210,7 @@
 	  locale and restores to the outer context's locale when deleted
 	  (#201)
 
-2008-08-28 21:35  mloskot
+2008-08-28 21:35  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2173] tests/unit/Makefile.am,
 	  tests/unit/capi/GEOSGeomToWKTTest.cpp: tests/unit: added
@@ -2227,51 +2227,51 @@
 	* [r2171] source/operation/buffer/BufferOp.cpp: include cmath for
 	  std::pow() and std:log() on MSVC7.1 (#199)
 
-2008-08-22 16:10  mloskot
+2008-08-22 16:10  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2170] build/bjam/README: Added build/bjam/README with status
 	  note.
 
-2008-08-19 17:02  mloskot
+2008-08-19 17:02  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2169] tests/unit/geom/LineStringTest.cpp: LineStringTest: fixed
 	  memory leak.
 
-2008-08-19 17:00  mloskot
+2008-08-19 17:00  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2168] source/geom/util/CoordinateOperation.cpp,
 	  source/geom/util/GeometryEditor.cpp: geos/geom/util: Prefer
 	  strict static_cast than C-style cast. Commented ownership
 	  transfer of coordinates object.
 
-2008-08-19 00:18  mloskot
+2008-08-19 00:18  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2167] tests/unit/algorithm/ConvexHullTest.cpp:
 	  tests/unit/algorithm/ConvexHullTest.cpp: Fixed memory leaks.
 
-2008-08-19 00:05  mloskot
+2008-08-19 00:05  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2166] tests/unit/algorithm/CGAlgorithms/isPointInRingTest.cpp:
 	  tests/unit/algorithm/CGAlgorithms: Fixed memory leaks.
 
-2008-08-18 23:45  mloskot
+2008-08-18 23:45  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2165] tests/unit/algorithm/CGAlgorithms/isCCWTest.cpp:
 	  tests/unit/algorithm/CGAlgorithms: Fixed number of memory leaks.
 
-2008-08-18 23:30  mloskot
+2008-08-18 23:30  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2164] tests/unit/capi/GEOSCoordSeqTest.cpp,
 	  tests/unit/capi/GEOSSimplifyTest.cpp: tests/unit/capi: Fixed
 	  number of memory leaks.
 
-2008-08-18 16:32  mloskot
+2008-08-18 16:32  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2163] tests/bigtest/GeometryTestFactory.cpp,
 	  tests/bigtest/TestSweepLineSpeed.cpp: tests/bigtest: Pointed out
 	  number of memory leaks but not fixing them, waiting for comments.
 
-2008-08-18 16:30  mloskot
+2008-08-18 16:30  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2162] tests/unit/algorithm/ConvexHullTest.cpp,
 	  tests/unit/geom/GeometryFactoryTest.cpp,
@@ -2285,7 +2285,7 @@
 	  PreparedGeometryFactoryTest, refactored casting utils and
 	  geometry comparators, small cleanup.
 
-2008-08-18 16:29  mloskot
+2008-08-18 16:29  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2161] source/algorithm/RayCrossingCounter.cpp,
 	  source/algorithm/locate/IndexedPointInAreaLocator.cpp,
@@ -2301,12 +2301,12 @@
 	  source/noding/SegmentIntersectionDetector.cpp,
 	  source/noding/SegmentStringUtil.cpp: Fixed svn:keywords.
 
-2008-08-18 16:27  mloskot
+2008-08-18 16:27  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2160] source/headers/geos/util.h: Fixed UNREFERENCED_PARAMETER
 	  macro.
 
-2008-08-18 16:27  mloskot
+2008-08-18 16:27  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2159]
 	  source/headers/geos/geom/prep/AbstractPreparedPolygonContains.h,
@@ -2323,7 +2323,7 @@
 	  source/headers/geos/geom/prep/PreparedPolygonPredicate.h: Fixed
 	  svn:keywords.
 
-2008-08-18 16:24  mloskot
+2008-08-18 16:24  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2158] source/geom/prep/AbstractPreparedPolygonContains.cpp,
 	  source/geom/prep/BasicPreparedGeometry.cpp,
@@ -2341,11 +2341,11 @@
 	  Refactored kamikaze casts to more readable form. Fixed
 	  svn:keywords.
 
-2008-08-12 00:25  mloskot
+2008-08-12 00:25  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2157] source/headers/geos/geomPrep.h: Fixed Id keywords.
 
-2008-08-12 00:23  mloskot
+2008-08-12 00:23  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2156]
 	  tests/unit/algorithm/CGAlgorithms/computeOrientationTest.cpp,
@@ -2355,42 +2355,42 @@
 	  tests/unit/operation/IsSimpleOpTest.cpp: Fixed EOL to LF in
 	  trunk/tests.
 
-2008-08-12 00:09  mloskot
+2008-08-12 00:09  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2155] source/headers/geos/geom/prep/PreparedGeometryFactory.h:
 	  Updated svn:keywords property.
 
-2008-08-12 00:03  mloskot
+2008-08-12 00:03  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2154] tests/unit/geom/prep/PreparedGeometryFactoryTest.cpp:
 	  Updated svn:keywords property.
 
-2008-08-11 23:54  mloskot
+2008-08-11 23:54  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2153] tests/unit/geom/prep/PreparedGeometryFactoryTest.cpp:
 	  Refactored tabs vs spaces in PreparedGeometryFactoryTest.
 
-2008-08-11 23:52  mloskot
+2008-08-11 23:52  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2152] source/headers/geos/geom/prep/PreparedGeometryFactory.h:
 	  PreparedGeometry must be a complete type where it is destroyed by
 	  the factory (Ticket #198).
 
-2008-08-11 23:42  mloskot
+2008-08-11 23:42  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2151] source/headers/geos/geom/prep/PreparedGeometryFactory.h,
 	  tests/unit/geom/prep/PreparedGeometryFactoryTest.cpp: Completed
 	  PreparedGeometryFactory class with missing named destructor for
 	  PreparedGeometry (Ticket #198)
 
-2008-08-11 23:35  mloskot
+2008-08-11 23:35  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2150]
 	  tests/unit/geom/prep/.PreparedGeometryFactoryTest.cpp.swp:
 	  Removed .PreparedGeometryFactoryTest.cpp.swp that must sneaked
 	  accidentally.
 
-2008-08-11 22:48  mloskot
+2008-08-11 22:48  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2149] tests/unit/Makefile.am, tests/unit/geom/prep,
 	  tests/unit/geom/prep/.PreparedGeometryFactoryTest.cpp.swp,
@@ -2400,27 +2400,27 @@
 	  destroy PreparedGeometry objects returned by the factory,
 	  discussing on the geos-devel list now.
 
-2008-08-07 16:59  pramsey
+2008-08-07 16:59  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2148] source/algorithm/RobustDeterminant.cpp: Added original
 	  author to main copyright block.
 
-2008-08-07 16:57  pramsey
+2008-08-07 16:57  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2147] source/headers/geos/timeval.h: Change to standard header,
 	  with (c) credit to author.
 
-2008-08-01 23:23  mloskot
+2008-08-01 23:23  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2146] ChangeLog: Updated ChangeLog with latest submissions.
 	  Hmm, should we stil maintain the ChangeLog file?
 
-2008-07-31 17:08  mloskot
+2008-07-31 17:08  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2145] tests/unit/capi/GEOSPolygonizer_getCutEdgesTest.cpp:
 	  Fixed tabs, hopefully. Updated svn:keywords property.
 
-2008-07-31 17:01  mloskot
+2008-07-31 17:01  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2144] capi/geos_c.cpp, capi/geos_c.h.in,
 	  tests/unit/Makefile.am,
@@ -2430,7 +2430,7 @@
 	  tests/unit/capi/GEOSPolygonizer_getCutEdgeTest.cpp. Thanks to
 	  Jurgen E. Fischer for this patch.
 
-2008-07-26 23:06  mloskot
+2008-07-26 23:06  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2143] doc/example.cpp, source/geomgraph/GeometryGraph.cpp,
 	  source/headers/geos/noding/FastNodingValidator.h,
@@ -2440,32 +2440,32 @@
 	  tests/bigtest/TestSweepLineSpeed.cpp: Number of fixes enabling
 	  GEOS compilation with GCC 4.3 (Ticket #167).
 
-2008-07-26 21:00  mloskot
+2008-07-26 21:00  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2142] capi/geos_c.h.in: Guarded version macros with #ifndef
 	  conditions to avoid redefinition errors (Ticket #167).
 
-2008-07-26 20:47  mloskot
+2008-07-26 20:47  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2141] source/headers/geos/version.h.in,
 	  source/headers/geos/version.h.vc: Guarded version macros with
 	  #ifndef conditions to avoid redefinition errors (Ticket #167).
 
-2008-07-26 20:24  mloskot
+2008-07-26 20:24  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2140] macros/ac_python_devel.m4: Fixed problems with finding
 	  libpython on Mac Darwin (Ticket #191).
 
-2008-07-26 19:57  mloskot
+2008-07-26 19:57  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2139] autogen.sh: Updated svn:keywords property.
 
-2008-07-26 19:56  mloskot
+2008-07-26 19:56  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2138] autogen.sh: Fixed autogen.sh for OpenSolaris (Ticket
 	  #192).
 
-2008-07-25 21:00  mloskot
+2008-07-25 21:00  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2137] build/README, build/msvc80/README, macros/geos.m4,
 	  source/headers/geos/algorithm/CentralEndpointIntersector.h,
@@ -2478,7 +2478,7 @@
 	  source/operation/buffer/OffsetCurveVertexList.h,
 	  swig/python/tests/TESTING.txt: Updated svn:keywords property
 
-2008-07-25 20:56  mloskot
+2008-07-25 20:56  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2136] tests/unit/operation/IsSimpleOpTest.cpp,
 	  tests/unit/precision/SimpleGeometryPrecisionReducerTest.cpp:
@@ -2494,7 +2494,7 @@
 	* [r2134] source/Makefile.vc: added rules to create platform.h,
 	  version.h and geos_c.h from templates on win32
 
-2008-07-15 22:04  mloskot
+2008-07-15 22:04  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2131] ChangeLog, capi/geos_c.cpp,
 	  source/algorithm/ConvexHull.cpp,
@@ -2518,23 +2518,23 @@
 	  Studio compiler on Solaris x86 and Sparc (Ticket #189). Thanks to
 	  Magne Mahre for the patch.
 
-2008-07-15 13:35  mloskot
+2008-07-15 13:35  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2130] source/Makefile.vc: For building with Visual C++, added
 	  new flag DEBUG=1 (see GEOS building instructions on GEOS Wiki).
 	  Added missing flags for Visual C++ compiler, in release and debug
 	  configuration.
 
-2008-05-20 21:34  mloskot
+2008-05-20 21:34  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2129] source/dirlist.mk: Added missing subdirs to
 	  source/dirlist.mk
 
-2008-05-20 21:31  mloskot
+2008-05-20 21:31  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2128] source/geom/prep: Updated svn:ignore patterns.
 
-2008-05-20 21:25  mloskot
+2008-05-20 21:25  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2127] ChangeLog, bootstrap.bat, build/msvc80/geos.sln,
 	  build/msvc80/geos_lib/geos_lib.vcproj,
@@ -2578,13 +2578,13 @@
 	  * build\msvc80\geos_lib\geos_lib.vcproj: Remove non-existing
 	  source files.
 
-2008-05-20 20:45  mloskot
+2008-05-20 20:45  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2126] ChangeLog, source/Makefile.vc: source/makefile.vc:
 	  Removed non-existing file entry:
 	  PreparedPolygonLineIntersects.obj.
 
-2008-05-20 20:33  mloskot
+2008-05-20 20:33  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2125] ChangeLog, bootstrap.bat, source/Makefile.vc: *
 	  bootstrap.bat: Added script generating headers for use with
@@ -2741,77 +2741,77 @@
 	* [r2102] swig/Makefile.am: Conditionally add swig/python,ruby to
 	  SUBDIRS
 
-2007-12-22 00:04  mloskot
+2007-12-22 00:04  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2101] build/bjam/geos/Jamfile, build/bjam/geos_c,
 	  build/bjam/geos_unit: Updated configuration of experimental
 	  builder based on Boost.Build. GEOS compiles with bjam
 	  successfully as static library.
 
-2007-12-21 23:50  mloskot
+2007-12-21 23:50  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2100] source/Makefile.vc, source/algorithm/locate,
 	  source/index/intervalrtree: Updated Visual C++ makefiles with new
 	  submissions from Ben. Now, new GEOS features compiles with NMAKE
 	  too.
 
-2007-12-21 23:31  mloskot
+2007-12-21 23:31  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2099] source/headers/geos/algorithm/Makefile.am: Removed
 	  SimplePointInAreaLocator.h from algorithm/Makefile.am (header
 	  migrated to algorithm/locate).
 
-2007-12-21 23:26  mloskot
+2007-12-21 23:26  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2098] source/algorithm/Makefile.am: Added comment about
 	  deprecated translation units in source/algorithm.
 
-2007-12-21 23:26  pramsey
+2007-12-21 23:26  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2097] source/geom/util/Makefile.am: remove trailing backslash
 
-2007-12-21 23:21  mloskot
+2007-12-21 23:21  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2096] ., source/headers/geos/algorithm,
 	  source/headers/geos/algorithm/locate, tests/unit: Updated
 	  svn:ignore property.
 
-2007-12-21 23:18  mloskot
+2007-12-21 23:18  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2095] source/geom/prep/PreparedPolygonContainsProperly.cpp:
 	  Fixed extra qualifications in
 	  /geom/prep/PreparedPolygonContainsProperly.
 
-2007-12-21 23:12  mloskot
+2007-12-21 23:12  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2094] source/geom/prep/AbstractPreparedPolygonContains.cpp,
 	  source/geom/prep/PreparedGeometryFactory.cpp,
 	  source/headers/geos/geom/prep/PreparedGeometryFactory.h: Fixed
 	  extra qualifications in PreparedGeometryFactory class.
 
-2007-12-21 22:57  mloskot
+2007-12-21 22:57  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2093]
 	  source/headers/geos/geom/util/ComponentCoordinateExtracter.h:
 	  Fixed GeometryTypeId misused in
 	  geos/geom/util/ComponentCoordinateExtracter.h.
 
-2007-12-21 22:49  pramsey
+2007-12-21 22:49  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2092] source/geom/util/Makefile.am: remove .cpp files that
 	  weren't there before
 
-2007-12-21 22:49  mloskot
+2007-12-21 22:49  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2091] source/geom/CoordinateArraySequence.cpp,
 	  source/geom/CoordinateSequence.cpp, source/geom/LineString.cpp:
 	  Reverted changes appled in r2089 to three files from source/geom.
 
-2007-12-21 22:47  pramsey
+2007-12-21 22:47  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2090] source/algorithm/Makefile.am: type subdir typo
 
-2007-12-21 22:43  mloskot
+2007-12-21 22:43  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2089] source/geom/CoordinateArraySequence.cpp,
 	  source/geom/CoordinateSequence.cpp, source/geom/LineString.cpp,
@@ -2819,12 +2819,12 @@
 	  source/headers/geos/index/intervalrtree,
 	  source/index/intervalrtree: Updated svn:ignore property.
 
-2007-12-21 22:41  mloskot
+2007-12-21 22:41  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2088] source/examples/CustomPointCoordinateSequence.cpp: Added
 	  missing <iostream> header to CustomPointCoordinateSequence.cpp.
 
-2007-12-21 22:40  mloskot
+2007-12-21 22:40  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2087] source/algorithm/Makefile.am,
 	  source/algorithm/SimplePointInAreaLocator.cpp,
@@ -2832,73 +2832,73 @@
 	  SimplePointInAreaLocator.cpp. This unit migrated to
 	  algorithm/locate module.
 
-2007-12-21 22:21  pramsey
+2007-12-21 22:21  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2086] configure.in: Updated configure.in with new locations.
 
-2007-12-21 22:14  mloskot
+2007-12-21 22:14  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2085] configure.in: Updated configure.in with new locations.
 
-2007-12-21 22:12  mloskot
+2007-12-21 22:12  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2084] configure.in: Updated configure.in with new locations.
 
-2007-12-21 22:09  mloskot
+2007-12-21 22:09  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2083] configure.in: Updated configure.in with new locations.
 
-2007-12-21 22:07  mloskot
+2007-12-21 22:07  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2082] configure.in: Updated configure.in with new locations.
 
-2007-12-21 22:02  pramsey
+2007-12-21 22:02  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2081] source/headers/geos/algorithm/Makefile.am,
 	  source/headers/geos/algorithm/locate/Makefile.am,
 	  source/headers/geos/noding/Makefile.am: Add
 	  headers/geos/algorithm/locate to automake
 
-2007-12-21 22:01  pramsey
+2007-12-21 22:01  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2080] source/noding/Makefile.am: Add files to automake
 
-2007-12-21 21:57  pramsey
+2007-12-21 21:57  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2079] source/headers/geos/index/Makefile.am,
 	  source/headers/geos/index/intervalrtree/Makefile.am: Added
 	  headers/index/intervalrtree to automake
 
-2007-12-21 21:55  pramsey
+2007-12-21 21:55  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2078] source/headers/geos/geom/Makefile.am,
 	  source/headers/geos/geom/prep/Makefile.am,
 	  source/headers/geos/geom/util/Makefile.am: Added
 	  headers/geom/prep headers/geom/util to automake
 
-2007-12-21 21:47  pramsey
+2007-12-21 21:47  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2077] source/index/Makefile.am,
 	  source/index/intervalrtree/Makefile.am: Added index/intervalrtree
 	  to automake
 
-2007-12-21 21:43  pramsey
+2007-12-21 21:43  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2076] source/geom/util/Makefile.am: added
 	  geom/util/ComponentCoordinateExtracter.h
 
-2007-12-21 21:40  pramsey
+2007-12-21 21:40  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2075] source/geom/Makefile.am, source/geom/prep/Makefile.am:
 	  Add geom/prep to automake
 
-2007-12-21 21:36  pramsey
+2007-12-21 21:36  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2074] source/algorithm/Makefile.am,
 	  source/algorithm/locate/Makefile.am: Add algorithm/location to
 	  automake
 
-2007-12-21 21:31  pramsey
+2007-12-21 21:31  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2073] source/algorithm/Makefile.am: Added new files
 
@@ -3065,40 +3065,40 @@
 	  Added a public constructor, and a method to bring in line with
 	  JTS 1.9. Changed namespace to geos::algorithm::locate
 
-2007-12-21 18:44  pramsey
+2007-12-21 18:44  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2050] configure.in: version numbering for next release (3.1.0)
 
-2007-12-21 18:41  pramsey
+2007-12-21 18:41  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2046] ChangeLog, configure.in: 3.0.0 release
 
-2007-12-19 20:18  mloskot
+2007-12-19 20:18  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2045] ChangeLog, source/headers/geos/geom.h,
 	  source/headers/geos/io.h: Improved warning message about using
 	  DEPRECATED headers
 
-2007-12-17 23:09  mloskot
+2007-12-17 23:09  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2044] tests/xmltester/XMLTester.cpp: Fixed std::tolower usage
 	  in XMLTester.cpp (Ticket #163).
 
-2007-12-17 23:05  mloskot
+2007-12-17 23:05  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2043] source/algorithm/HCoordinate.cpp: Replaced finite
 	  function with std::numeric_limits (Ticket #162).
 
-2007-12-17 21:52  mloskot
+2007-12-17 21:52  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2042] ChangeLog, source/Makefile.vc: source\Makefile.vc: Fixed
 	  MSVC_VER condition for Microsoft Visual C++ 2008 (9.0).
 
-2007-12-13 16:11  mloskot
+2007-12-13 16:11  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2041] ChangeLog: Added Id keyword at the top of ChangeLog file.
 
-2007-12-13 16:09  mloskot
+2007-12-13 16:09  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2040] ChangeLog, build/msvc80/geos_unit/geos_unit.vcproj,
 	  source/geom/Geometry.cpp, source/geom/GeometryCollection.cpp,
@@ -3112,23 +3112,23 @@
 	  instead of
 	  int where unsigned integral type required.
 
-2007-12-09 00:02  mloskot
+2007-12-09 00:02  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2038] ChangeLog, tests/unit/Makefile.am,
 	  tests/unit/precision/SimpleGeometryPrecisionReducerTest.cpp:
 	  Added test suite for class
 	  geos::precision::SimpleGeometryPrecisionReducer.
 
-2007-12-08 22:59  mloskot
+2007-12-08 22:59  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2037] .: Updated svn:keyword property.
 
-2007-11-26 16:26  mloskot
+2007-11-26 16:26  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2036] build/msvc80/geos.vsprops: Added geos.vsprops - property
 	  sheet for Visual C++ projects.
 
-2007-11-26 15:19  mloskot
+2007-11-26 15:19  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2035] ChangeLog, build/msvc80/geos_python/geos_python.vcproj,
 	  build/msvc80/geos_ruby/geos_ruby.vcproj,
@@ -3136,27 +3136,27 @@
 	  C++ projects where Python and Ruby macros/locations are defined.
 	  Fixed include of Python.h, see Ticket #164 for details.
 
-2007-11-26 06:21  mloskot
+2007-11-26 06:21  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2034] source/algorithm: Updated svn:ignore patterns.
 
-2007-11-26 06:16  mloskot
+2007-11-26 06:16  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2033] ChangeLog, source/Makefile.vc,
 	  source/headers/geos/version.h.vc: Enabled target copying
 	  version.h.vc and geos_c.h.vc to headers used by Visual C++. Added
 	  test if version.h.vc is used with Visual C++.
 
-2007-11-23 02:33  mloskot
+2007-11-23 02:33  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2032] ChangeLog, source/headers/geos/io/WKBWriter.h: A bit of
 	  purification with explicit casting int to bool type.
 
-2007-11-02 22:41  pramsey
+2007-11-02 22:41  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2031] web/index.html: urls updated to point to osgeo locations
 
-2007-11-02 22:17  pramsey
+2007-11-02 22:17  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2030] web, web/index.html, web/style.css: add the web site
 	  content to svn for collaborative management
@@ -3372,39 +3372,39 @@
 	* [r1999] swig/geos.i.in: Exposed Geometry::Clone method in SWIG
 	  bindings. Added check for NULL string in geomFromWKT wrapper.
 
-2007-08-23 20:35  pramsey
+2007-08-23 20:35  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r1998] source/operation/buffer/BufferBuilder.cpp,
 	  source/operation/buffer/OffsetCurveSetBuilder.cpp,
 	  source/operation/buffer/OffsetCurveVertexList.h: Memory leak
 	  patches from Robert Coup
 
-2007-08-22 23:45  mloskot
+2007-08-22 23:45  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1997] source/headers/geos/io/ByteOrderDataInStream.inl,
 	  source/operation/overlay/ElevationMatrix.cpp,
 	  source/operation/polygonize/Polygonizer.cpp: Cleaned compilation
 	  warnings from VC++.
 
-2007-06-11 07:43  mloskot
+2007-06-11 07:43  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1996] ChangeLog, source/operation/IsSimpleOp.cpp: Replaced
 	  post-increment operators with pre-increment operators where
 	  standard iterators are incremented in loops. NOTE: Prefer
 	  pre-incr. over post-inc. when working with standard iterators.
 
-2007-06-11 07:39  mloskot
+2007-06-11 07:39  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1995] tests/unit/Makefile.am,
 	  tests/unit/operation/IsSimpleOpTest.cpp: Added unit test for
 	  geos::operation::IsSimpleOp class.
 
-2007-06-10 13:03  mloskot
+2007-06-10 13:03  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1994] ., ChangeLog, tests/unit/Makefile.am: Updated
 	  tests/unit/Makefile.am with new files.
 
-2007-06-10 11:53  mloskot
+2007-06-10 11:53  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1993] ChangeLog, build/msvc80/geos.sln,
 	  build/msvc80/geos_unit/geos_unit.vcproj,
@@ -3413,7 +3413,7 @@
 	  tests/unit/algorithm/ConvexHullTest.cpp: Added unit test for
 	  geos::algorithm::CGAlgorithms::computeOrientation() function.
 
-2007-06-10 11:29  mloskot
+2007-06-10 11:29  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1992] ., capi, source, source/geom, source/geom/util,
 	  source/geomgraph, source/geomgraph/index, source/index/bintree,
@@ -3429,36 +3429,36 @@
 	  svn:ignore property for the whole tree adding VC++ and Windows
 	  specific patterns.
 
-2007-06-10 11:18  mloskot
+2007-06-10 11:18  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1991] ChangeLog, build/msvc80/geos_unit/geos_unit.vcproj,
 	  tests/unit/algorithm/CGAlgorithms/isCCWTest.cpp: Added unit test
 	  for CGAlgorithms::isCCW() function.
 
-2007-06-10 11:08  mloskot
+2007-06-10 11:08  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1990] tests/unit/algorithm/ConvexHullTest.cpp,
 	  tests/unit/geom/LineStringTest.cpp: Added unit test for
 	  geos::algorithm::ConvexHull.
 
-2007-06-10 11:03  mloskot
+2007-06-10 11:03  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1989] tests/unit/utility.h: Added custom operators for static
 	  and dynamic casts of pointers wrapped with std::auto_ptr<T> type.
 
-2007-06-08 17:13  mloskot
+2007-06-08 17:13  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1988] tests/unit/simplify/DouglasPeuckerSimplifierTest.cpp:
 	  Identified test case failing because of
 	  geos::index::strtree::yComparator() instability.
 
-2007-06-08 17:10  mloskot
+2007-06-08 17:10  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1987] ChangeLog, source/index/strtree/STRtree.cpp: Analysis of
 	  instability of the yComparator, there are some new important
 	  questions to answer.
 
-2007-06-08 15:27  mloskot
+2007-06-08 15:27  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1986] ChangeLog, build/msvc80/geos_lib/geos_lib.vcproj,
 	  source/algorithm/CGAlgorithms.cpp,
@@ -3488,17 +3488,17 @@
 	  signed/unsigned types mixtures, got rid from annoying compiler
 	  warnings.
 
-2007-06-08 14:50  mloskot
+2007-06-08 14:50  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1985] ChangeLog: Applied Konstantin Baumann's suggestion about
 	  including version.h in C API header for Visual C++.
 
-2007-06-08 14:50  mloskot
+2007-06-08 14:50  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1984] capi/geos_c.h.in: Applied Konstantin Baumann's suggestion
 	  about including version.h in C API header for Visual C++.
 
-2007-06-01 13:53  mloskot
+2007-06-01 13:53  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1983] ChangeLog, build/bjam, build/bjam/Jamroot,
 	  build/bjam/geos, build/bjam/geos/Jamfile, build/bjam/geos_c,
@@ -3507,7 +3507,7 @@
 	  GEOS (experimental). The idea is to enable users to build GEOS
 	  with bjam tool from Boost.Build package.
 
-2007-06-01 13:43  mloskot
+2007-06-01 13:43  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1982] source/headers/geos/platform.h.vc,
 	  source/headers/geos/version.h.vc,
@@ -3517,24 +3517,24 @@
 	  tests/unit/operation/overlay/OverlayResultValidatorTest.cpp: Set
 	  missing svn:keywords property.
 
-2007-06-01 13:06  mloskot
+2007-06-01 13:06  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1981] ChangeLog, build/msvc80/geos_lib/geos_lib.vcproj: Applied
 	  patch with pre-build events generating platform.h and version.h
 	  headers. Thanks to Konstantin Baumann for this patch.
 
-2007-05-06 02:42  mloskot
+2007-05-06 02:42  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1980] build/msvc80, build/msvc80/geos_c_dll,
 	  build/msvc80/geos_lib, build/msvc80/geos_unit: Updated svn:ignore
 	  property for build\msvc80.
 
-2007-05-06 02:40  mloskot
+2007-05-06 02:40  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1979] ChangeLog, source/headers/geos/version.h.vc: Added
 	  source/headers/geos/version.h.vc file for Visual C++ compiler.
 
-2007-04-22 04:44  mloskot
+2007-04-22 04:44  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1978] ., ChangeLog, capi,
 	  source/geom/CoordinateArraySequence.cpp, swig,
@@ -3543,7 +3543,7 @@
 	  GEOSCoordSeqTest with swapped and non-swapped calls of
 	  coordiantes assignment functions.
 
-2007-04-15 18:02  mloskot
+2007-04-15 18:02  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1977] ChangeLog, autogen.sh: Added detection of glibtoolize
 	  under Mac OS X.
@@ -3628,7 +3628,7 @@
 	  Fixed buffer operation to always return polygonal
 	  geometry
 
-2007-02-03 02:18  pramsey
+2007-02-03 02:18  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r1967] ChangeLog, configure.in: 3.0.0rc4 tagging
 
@@ -3808,11 +3808,11 @@
 
 	* [r1945] ChangeLog: release 3.0.0rc3 marked
 
-2006-12-14 19:12  pramsey
+2006-12-14 19:12  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r1943] configure.in: bumped version numbers for 3.0.0rc3
 
-2006-12-13 11:05  mloskot
+2006-12-13 11:05  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1942] ChangeLog, build/msvc80/geos_lib/geos_lib.vcproj,
 	  source/Makefile.vc: Updated makefile and project files for Visual
@@ -3876,30 +3876,30 @@
 	  * algorithm::LineIntersector: robustness improvements
 	  from JTS-1.8.
 
-2006-12-05 11:22  mloskot
+2006-12-05 11:22  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1937] tests/unit/capi/GEOSCoordSeqTest.cpp,
 	  tests/unit/capi/GEOSSimplifyTest.cpp: Fixed indentantion in
 	  tests/unit/capi.
 
-2006-12-05 11:10  mloskot
+2006-12-05 11:10  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1936] ChangeLog: Fixed typos in changelog.
 
-2006-12-05 11:05  mloskot
+2006-12-05 11:05  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1935] tests/unit/capi/GEOSCoordSeqTest.cpp,
 	  tests/unit/capi/GEOSSimplifyTest.cpp: Set svn:keyword property on
 	  CAPI tests.
 
-2006-12-05 11:02  mloskot
+2006-12-05 11:02  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1934] ChangeLog, tests/unit/capi/GEOSCoordSeqTest.cpp,
 	  tests/unit/capi/GEOSSimplifyTest.cpp,
 	  tests/unit/util/UniqueCoordinateArrayFilterTest.cpp: Purifying
 	  CAPI unit tests.
 
-2006-12-05 10:59  mloskot
+2006-12-05 10:59  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1933] build/msvc80/geos_unit/geos_unit.vcproj: Added CAPI tests
 	  to VC++ project.
@@ -3983,7 +3983,7 @@
 	  * capi/geos_c.cpp (GEOSCoordSeq_create): removed
 	  suspicious static cast.
 
-2006-11-28 19:13  mloskot
+2006-11-28 19:13  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1922] build, build/README, build/msvc80, build/msvc80/README,
 	  build/msvc80/geos.sln, build/msvc80/geos_c_dll,
@@ -4016,7 +4016,7 @@
 	  * autogen.sh: call 'autoheader' after 'aclocal'.
 	  Fixes bug #131
 
-2006-11-18 15:30  mloskot
+2006-11-18 15:30  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1917] source/Makefile.vc: Fixed path to geos_c.h in
 	  source/makefile.vc.
@@ -4045,7 +4045,7 @@
 	  (GEOSGeom_getDimensions): Fix a segfault on empty geometry input
 	  (fix bug #126).
 
-2006-11-11 05:32  pramsey
+2006-11-11 05:32  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r1913] capi/geos_c.h.vc.in: Retreived original .vc file and put
 	  in MACRO substitutions. Somehow GNU version replaced .vc version
@@ -4055,21 +4055,21 @@
 
 	* [r1912] ChangeLog: fixed timewarp
 
-2006-11-10 17:56  pramsey
+2006-11-10 17:56  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r1911] ChangeLog: noted .vc change
 
-2006-11-10 17:55  pramsey
+2006-11-10 17:55  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r1910] capi/Makefile.am: Made sure geos_c.h.vc is part of 'make
 	  dist' since VC users won't have .configure
 
-2006-11-10 17:38  pramsey
+2006-11-10 17:38  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r1909] capi/Makefile.am, capi/geos_c.h.vc, capi/geos_c.h.vc.in:
 	  Added substitution strings to .in files for .vc generation.
 
-2006-11-10 17:35  pramsey
+2006-11-10 17:35  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r1908] configure.in: Changes for capi .vc generation
 
@@ -4322,17 +4322,17 @@
 	* [r1871] ChangeLog, configure.in: * configure.in: use 'expr' for
 	  arithmetics (more portable)
 
-2006-10-18 19:21  mloskot
+2006-10-18 19:21  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1870] ChangeLog, makefile.vc, source/Makefile.vc: Refactored
 	  Visual C++ makefiles.
 
-2006-10-18 17:53  mloskot
+2006-10-18 17:53  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1869] source/Makefile.vc, source/dirlist.mk: Updated
 	  source\makefile.vc and source\dirlist.mk files.
 
-2006-10-18 17:53  mloskot
+2006-10-18 17:53  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1868] makefile.vc: Added top-level makefile.vc.
 
@@ -4389,7 +4389,7 @@
 	  source/operation/overlay/OverlayOp.cpp: enable all overlay result
 	  validators, make it disablable at compile time.
 
-2006-10-05 10:58  mloskot
+2006-10-05 10:58  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1858] ChangeLog, capi/geos_c.h.in, capi/geos_c.h.vc: Added
 	  inclusion guards to geos_c.h files.
@@ -4417,7 +4417,7 @@
 	* [r1853] source/operation/overlay/OffsetPointGenerator.cpp: Added
 	  <algorithm> include
 
-2006-09-08 23:13  pramsey
+2006-09-08 23:13  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r1851] AUTHORS: Added information about funders of the 3.0.0
 	  series: Safe Software, Autodesk,
@@ -4505,7 +4505,7 @@
 	* [r1840] tests/unit/operation/overlay/FuzzyPointLocatorTest.cpp:
 	  testing execute bit state
 
-2006-09-07 12:17  mloskot
+2006-09-07 12:17  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1839] tests/unit/operation/distance/DistanceOpTest.cpp: Set
 	  svn:keyword for $ expansion.
@@ -4596,7 +4596,7 @@
 	* [r1823] tests/unit/precision/GeometrySnapperTest.cpp: updated
 	  after GeometrySnapper interface change.
 
-2006-09-06 17:26  mloskot
+2006-09-06 17:26  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1822] ChangeLog,
 	  source/headers/geos/operation/overlay/OffsetPointGenerator.h,
@@ -4618,7 +4618,7 @@
 	  source/operation/overlay/OverlayResultValidator.cpp: Rest of
 	  Overlay validation classes.
 
-2006-09-06 16:54  mloskot
+2006-09-06 16:54  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1820] ChangeLog, capi/geos_c.cpp, capi/geos_c.h.in,
 	  capi/geos_c.h.vc, capi/geostest.c, configure.in, debian/watch,
@@ -5254,7 +5254,7 @@
 	  ruby/geos_wrap.cxx, python/geos_wrap.cxx and python/geos.py are
 	  removed by make maintainer-clean but not make clean.
 
-2006-08-03 16:28  mloskot
+2006-08-03 16:28  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1799] ChangeLog, tests/unit/geos_unit.cpp: Fixed Bug #90
 
@@ -5264,7 +5264,7 @@
 	  swig/ruby/geos_wrap.cxx: Added SWIG generated wrapper files for
 	  Ruby and Python
 
-2006-07-27 06:18  mloskot
+2006-07-27 06:18  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1797] .: Added svn:ignore property to ignore 'geos-3.0.0rc1'
 	  dir (testing commit access to SVN).
@@ -5385,7 +5385,7 @@
 	* [r1768] ChangeLog, tests/unit/geom/LineSegmentTest.cpp: Added
 	  another distance() test
 
-2006-07-21 16:45  mloskot
+2006-07-21 16:45  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1767] ChangeLog, source/headers/geos/geom.h,
 	  source/headers/geos/io.h: Wrapped FIXME message with #warning
@@ -5741,26 +5741,26 @@
 	  source/headers/geos/simplify/DouglasPeuckerLineSimplifier.h:
 	  changed vector<bool> to vector<short int> (see bug#101)
 
-2006-07-09 03:37  mloskot
+2006-07-09 03:37  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1701] tests/xmltester, tests/xmltester/.cvsignore: Added
 	  'testrunner' pattern to tests/xmltester/.cvsignore.
 
-2006-07-09 03:21  mloskot
+2006-07-09 03:21  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1700] ., .cvsignore: Added 'testrunner' to .cvsignore patterns.
 
-2006-07-09 03:21  mloskot
+2006-07-09 03:21  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1699] ChangeLog: Updated ChangeLog with details about new unit
 	  tests.
 
-2006-07-09 03:16  mloskot
+2006-07-09 03:16  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1698] tests/unit/Makefile.am: Added new tests to
 	  tests/unit/Makefile.am.
 
-2006-07-09 03:15  mloskot
+2006-07-09 03:15  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1697] tests/unit/noding/SegmentNodeTest.cpp,
 	  tests/unit/noding/SegmentPointComparatorTest.cpp,
@@ -5793,12 +5793,12 @@
 	  * source/headers/geos/platform.h.in: include <inttypes.h>
 	  rather then <stdint.h>
 
-2006-07-07 20:02  mloskot
+2006-07-07 20:02  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1691] ChangeLog: Updated ChangeLog with version comparison fix
 	  in GEOS_UNIT.
 
-2006-07-07 20:00  mloskot
+2006-07-07 20:00  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1690] macros/geos.m4: Fixed versions comparison in the
 	  GEOS_UNIT macro.
@@ -5811,17 +5811,17 @@
 	  * configure.in: make sure CFLAGS is set before compiling
 	  using the 64bit integer detection macro.
 
-2006-07-06 16:39  mloskot
+2006-07-06 16:39  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1688] ChangeLog, macros/geos.m4: Fixed version query regexp
 	  with escaped dots. Removed -lpq from GEOS_LIBS flags.
 
-2006-07-05 23:27  mloskot
+2006-07-05 23:27  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1687] ChangeLog, macros/geos.m4: Removed redundant -L and -I
 	  from GEOS_LIBS and GEOS_CFLAGS.
 
-2006-07-05 23:10  mloskot
+2006-07-05 23:10  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1686] ChangeLog, macros/geos.m4: Fixed GEOS_INIT to support
 	  full paths to geos-config passed to --with-geos. Fixed version
@@ -6200,7 +6200,7 @@
 
 	* [r1633] ChangeLog: Added missing log for mloskot change
 
-2006-06-08 18:50  mloskot
+2006-06-08 18:50  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1632] tests/unit/geom/DimensionTest.cpp: Fixed no-effect
 	  warning in test<1> from DimensionTest.cpp.
@@ -6292,19 +6292,19 @@
 
 	* [r1619] configure.in: Set release version to 3.0.0rc1
 
-2006-06-07 14:10  mloskot
+2006-06-07 14:10  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1618] ChangeLog, tests/unit/Makefile.am: Update ChangeLog with
 	  info about new test case isPointInRingTest.cpp.
 
-2006-06-07 14:06  mloskot
+2006-06-07 14:06  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1617] tests/unit/algorithm/CGAlgorithms/isPointInRing.cpp,
 	  tests/unit/algorithm/CGAlgorithms/isPointInRingTest.cpp: Renamed
 	  file isPointInRing.cpp to isPointInRingTest.cpp to follow GEOS
 	  Unit Test convention.
 
-2006-06-07 13:52  mloskot
+2006-06-07 13:52  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1616] tests/unit/Makefile.am,
 	  tests/unit/algorithm/CGAlgorithms,
@@ -6428,12 +6428,12 @@
 	  tests/unit/geom/TriangleTest.cpp: take floating-point rounding
 	  error into account.
 
-2006-05-25 16:11  mloskot
+2006-05-25 16:11  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1606] tests/tut/tut.h: Changed precision constant with
 	  epsilon() from std::numeric_limits.
 
-2006-05-25 15:54  mloskot
+2006-05-25 15:54  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1605] tests/tut/tut.h: Added specialization of ensure_equals
 	  for double type.
@@ -6489,7 +6489,7 @@
 
 	* [r1599] NEWS: Added a note about unit tests being introduced
 
-2006-05-24 11:44  mloskot
+2006-05-24 11:44  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1598] ChangeLog: Added missing entries to ChangeLog.
 
@@ -6512,7 +6512,7 @@
 	* [r1596] ChangeLog, capi/geos_c.h.in: * capi/geos_c.h.in: #include
 	  <stddef.h> to get size_t definition (only #ifndef __cplusplus)
 
-2006-05-24 05:53  mloskot
+2006-05-24 05:53  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1595] tests/unit/Makefile.am,
 	  tests/unit/simplify/TopologyPreservingSimplifierTest.cpp,
@@ -6685,12 +6685,12 @@
 	* [r1569] source/headers/geos/geom/BinaryOp.h: typo fixed to make
 	  description more clear
 
-2006-05-13 10:42  mloskot
+2006-05-13 10:42  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1563] tests/unit/algorithm/PointLocatorTest.cpp: Fixed
 	  line-ends in PointLocatorTest.cpp file.
 
-2006-05-13 08:26  mloskot
+2006-05-13 08:26  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1562] ., .cvsignore, tests/unit, tests/unit/.cvsignore,
 	  tests/unit/geom/Geometry/isRectangleTest.cpp: Fixed line-ends in
@@ -7154,7 +7154,7 @@
 	* [r1480] source/simplify/TopologyPreservingSimplifier.cpp: Public
 	  constructors change made permanent
 
-2006-04-23 11:58  mloskot
+2006-04-23 11:58  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1479] ., .cvsignore,
 	  tests/unit/simplify/DouglasPeuckerSimplifierTest.cpp: Small
@@ -7162,11 +7162,11 @@
 	  instead of operator= to create objects). Added new patterns to
 	  .cvsignore.
 
-2006-04-23 11:29  mloskot
+2006-04-23 11:29  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1478] ., .cvsignore: Added new patterns to .cvsignore file.
 
-2006-04-22 17:16  mloskot
+2006-04-22 17:16  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1477] source/simplify/TopologyPreservingSimplifier.cpp:
 	  Temporar fix of Bug #100. This report requires deeper analysis!.
@@ -7348,13 +7348,13 @@
 	  source/simplify/TopologyPreservingSimplifier.cpp: Initial
 	  implementation of TaggedLinesSimplifier class
 
-2006-04-13 09:28  mloskot
+2006-04-13 09:28  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1447] source/headers/geos/simplify/LineSegmentIndex.h,
 	  source/simplify/LineSegmentIndex.cpp: Removed definition of copy
 	  ctor and assignment operator for LineSegmentString class.
 
-2006-04-13 09:21  mloskot
+2006-04-13 09:21  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1446] source/headers/geos/simplify/TaggedLineString.h,
 	  source/simplify/TaggedLineString.cpp: Removed definition of copy
@@ -7580,7 +7580,7 @@
 	* [r1417] tests/unit/algorithm/PointLocatorTest.cpp: Uncommented
 	  required Geometry.h include (for use in auto_ptr)
 
-2006-04-10 09:21  mloskot
+2006-04-10 09:21  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1416] source/headers/geos/util/UniqueCoordinateArrayFilter.h,
 	  tests/unit/Makefile.am,
@@ -7594,45 +7594,45 @@
 	  test for UniqueCoordinateArrayFilter class. Small fixes related
 	  to signed/unsigned comparison.
 
-2006-04-09 11:07  mloskot
+2006-04-09 11:07  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1413] doc/example.cpp: Small fixes in doc/example.cpp.
 
-2006-04-09 04:56  mloskot
+2006-04-09 04:56  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1412] tests/xmltester/markup/MarkupSTL.cpp: Removed redundant
 	  semicolons from xmltester sources.
 
-2006-04-09 04:26  mloskot
+2006-04-09 04:26  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1411] tests/xmltester/markup/MarkupSTL.cpp: Removed redundant
 	  semicolon reported by g++ -pedantic.
 
-2006-04-09 04:09  mloskot
+2006-04-09 04:09  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1410] source/operation/valid/SweeplineNestedRingTester.cpp:
 	  Removed redundant semicolon reported by g++ -pedantic.
 
-2006-04-09 01:48  mloskot
+2006-04-09 01:48  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1409] tests/unit/Makefile.am,
 	  tests/unit/geom/IntersectionMatrixTest.cpp: Added Unit Test for
 	  IntersectionMatrix class.
 
-2006-04-09 01:46  mloskot
+2006-04-09 01:46  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1408] source/headers/geos/geom/IntersectionMatrix.h: [SORRY]
 	  Added comments for doxygen based on JTS docs. Added row/col
 	  dimension consts. Added asserts in functions to check if given
 	  row/col is in range.
 
-2006-04-09 01:41  mloskot
+2006-04-09 01:41  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1407] source/geom/IntersectionMatrix.cpp: Added comments for
 	  doxygen based on JTS docs. Added row/col dimension consts. Added
 	  asserts in functions to check if given row/col is in range.
 
-2006-04-08 15:57  mloskot
+2006-04-08 15:57  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1406] tests/tut/tut.h, tests/tut/tut_reporter.h,
 	  tests/tut/tut_restartable.h: Added copyright notice to TUT files.
@@ -7666,21 +7666,21 @@
 	  tests/xmltester/XMLTester.h: Use of auto_ptr<> to prevent
 	  confusing leaks in tester
 
-2006-04-07 13:14  mloskot
+2006-04-07 13:14  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1400] tests/tut/tut_reporter.h: Fixed annoying warnings from
 	  TUT.
 
-2006-04-07 13:01  mloskot
+2006-04-07 13:01  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1399] tests/unit/geos_unit.cpp: Fixed line-ends to LF.
 
-2006-04-07 12:55  mloskot
+2006-04-07 12:55  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1398] tests/unit/geom/PolygonTest.cpp: Uncommented test nr 38
 	  in PolygonTest.cpp.
 
-2006-04-07 12:37  mloskot
+2006-04-07 12:37  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1397] source/geom/PrecisionModel.cpp,
 	  source/headers/geos/util/math.h, source/util/math.cpp,
@@ -7691,7 +7691,7 @@
 	  tests/unit/geos_unit.cpp: Added java_math_round() function for
 	  Asymmetric Arithmetic Rounding. Small fixes in Unit Tests.
 
-2006-04-07 10:42  mloskot
+2006-04-07 10:42  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1396] tests/unit/geom/GeometryFactoryTest.cpp,
 	  tests/unit/geom/PointTest.cpp: Added test nr 29 to PointTest (JTS
@@ -7737,17 +7737,17 @@
 
 	* [r1390] source/precision/CommonBitsOp.cpp: debugging blocks
 
-2006-04-07 07:21  mloskot
+2006-04-07 07:21  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1389] tests/unit/Makefile.am,
 	  tests/unit/geom/CoordinateTest.cpp: Add new-line at the EOF some
 	  files.
 
-2006-04-07 05:55  mloskot
+2006-04-07 05:55  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1388] ., .cvsignore: Added new objects to .cvsignore.
 
-2006-04-07 05:44  mloskot
+2006-04-07 05:44  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1387] source/headers/geos/geom/Dimension.h,
 	  tests/unit/geom/CoordinateArraySequenceFactoryTest.cpp,
@@ -7768,13 +7768,13 @@
 	  in Dimension class (bug). Added missing new-line at the end of
 	  source files. Removed CR from line ends.
 
-2006-04-07 00:05  mloskot
+2006-04-07 00:05  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1386] tests/unit/geom/Geometry,
 	  tests/unit/geom/Geometry/isRectangleTest.cpp: Adding missing
 	  isRectangleTest.cpp
 
-2006-04-06 23:50  mloskot
+2006-04-06 23:50  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1385] tests/unit/Makefile.am, tests/unit/geom,
 	  tests/unit/geom/CoordinateArraySequenceFactoryTest.cpp,
@@ -7798,31 +7798,31 @@
 
 	* [r1384] AUTHORS: Added Mateusz Loskot
 
-2006-04-06 23:31  mloskot
+2006-04-06 23:31  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1383] tests/unit/algorithm,
 	  tests/unit/algorithm/PointLocatorTest.cpp: [UT Files Renaming]
 	  Add PointLocatorTest.cpp
 
-2006-04-06 23:28  mloskot
+2006-04-06 23:28  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1382] tests/unit/io: [UT Files Renaming] Remove 'io' tests.
 
-2006-04-06 23:26  mloskot
+2006-04-06 23:26  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1381] tests/unit/geom: [UT Files Renaming] Remove 'geom' tests.
 
-2006-04-06 23:25  mloskot
+2006-04-06 23:25  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1380] tests/unit/algorithm: [UT Files Renaming] Remove file
 	  PointLocator.cpp
 
-2006-04-06 23:20  mloskot
+2006-04-06 23:20  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1379] tests/unit/geos_unit.cpp: New version of Unit Test
 	  runner. Now, it's more GNU style compatible
 
-2006-04-06 22:30  mloskot
+2006-04-06 22:30  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r1378] tests/tut/tut.h, tests/tut/tut_reporter.h: Add inform()
 	  target in tut.h and new callbacks in tut_reporter.h
@@ -13309,7 +13309,7 @@
 	  Geometry destruction, Avoided CoordinateSequence copies
 	  when possible.
 
-2004-12-16 18:29  pramsey
+2004-12-16 18:29  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r644] configure.in: Bumped minor version number for 2.1.1
 	  release.
@@ -14065,11 +14065,11 @@
 	* [r539] source/geom/CoordinateSequence.cpp: Fixed a bug in
 	  ::reverse (thanks to Elliott Edwards)
 
-2004-09-23 21:28  pramsey
+2004-09-23 21:28  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r538] configure.in: Back minor version back to 2.0.1
 
-2004-09-23 04:30  pramsey
+2004-09-23 04:30  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r537] configure.in: Bumped minor version to 2.0.2 after 2.0.1
 	  release.
@@ -14155,7 +14155,7 @@
 	* [r521] source/geom/LineString.cpp: Ported fix in
 	  LineString::isCoordinate
 
-2004-09-12 03:51  pramsey
+2004-09-12 03:51  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r520] source/geom/LineString.cpp,
 	  source/geom/MultiLineString.cpp, source/geom/MultiPoint.cpp:
@@ -14166,12 +14166,12 @@
 	* [r519] source/headers/geos/geom.h: Fixed doxygen malformed
 	  comment for Coordinate class
 
-2004-08-20 03:20  pramsey
+2004-08-20 03:20  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r517] source/bigtest/Makefile.am: Added reference to bigtest.h
 	  so 'make dist' includes it properly.
 
-2004-08-20 01:55  pramsey
+2004-08-20 01:55  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r516] configure.in: Removed examples from build directories for
 	  release (they don't build now).
@@ -14305,7 +14305,7 @@
 	  Removed doxygen tags from obsoleted CoordinateList.cpp.
 	  Got doxygen to run with no warnings.
 
-2004-07-19 19:37  pramsey
+2004-07-19 19:37  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r500] doc/Makefile.am: Changed doxygen target to be more "make
 	  dist" friendly. (and allow autogeneration of CVS snapshot to work
@@ -15666,7 +15666,7 @@
 	  SIGABORT
 	  are no more raised.
 
-2004-04-26 22:00  pramsey
+2004-04-26 22:00  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r332] configure.in: Bump version number to 1.4 to indicate new
 	  changes.
@@ -16201,17 +16201,17 @@
 	  source/headers/geosAlgorithm.h: made CGAlgorithms::signedArea()
 	  and CGAlgorithms::length() arguments const-correct
 
-2004-02-20 05:44  pramsey
+2004-02-20 05:44  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r269] ltmain.sh: Changed to new version of ltmain, that matches
 	  the version of libtool
 	  on build box
 
-2004-01-20 05:51  pramsey
+2004-01-20 05:51  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r268] configure.in: Change platform.h back to AM_CONFIG_HEADER.
 
-2004-01-20 05:10  pramsey
+2004-01-20 05:10  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r267] configure.in: Change AM_CONFIG_HEADER to AC_CONFIG_HEADERS
 	  to allow autoheader to work
@@ -16288,7 +16288,7 @@
 	* [r253] source/operation/buffer/BufferOp.cpp: Memory leak fix in
 	  insertEdge()
 
-2003-11-07 17:49  pramsey
+2003-11-07 17:49  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r252] ChangeLog: Added current ChangeLog
 
@@ -16314,11 +16314,11 @@
 	* [r248] source/headers, source/headers/.cvsignore: added
 	  config.h.in
 
-2003-11-07 01:58  pramsey
+2003-11-07 01:58  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r247] AUTHORS: Added people!
 
-2003-11-07 01:23  pramsey
+2003-11-07 01:23  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r245] doc/example.cpp, source/algorithm/CGAlgorithms.cpp,
 	  source/algorithm/CentroidArea.cpp,
@@ -16529,7 +16529,7 @@
 	* [r233] doc/example.cpp: Added Buffer,Intersection,Difference and
 	  Symdifference. Exception cleanup
 
-2003-11-06 17:33  pramsey
+2003-11-06 17:33  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r232] INSTALL: Small addition of into about LD_LIBRARY_PATH
 
@@ -16603,16 +16603,16 @@
 	* [r220] doc/example.cpp: Uncommented point creation lines. Updated
 	  comments about segfaults.
 
-2003-10-21 05:35  pramsey
+2003-10-21 05:35  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r219] source/test/Makefile.am: Added test.xml so it gets picked
 	  up by 'make dist'
 
-2003-10-21 05:09  pramsey
+2003-10-21 05:09  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r218] INSTALL: Added simple installation directions.
 
-2003-10-21 04:55  pramsey
+2003-10-21 04:55  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r217] source/examples/Makefile.am, source/geom/Makefile.am,
 	  source/test/Makefile.am: Fix up references to header files to
@@ -17067,42 +17067,42 @@
 	  bugfixes. XMLTester expanded to accomodate getBoundary,
 	  getCentroid, isSimple.
 
-2003-08-18 23:40  pramsey
+2003-08-18 23:40  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r159] source/algorithm/ConvexHull.java: Removed java source file
 	  from archive.
 
-2003-08-18 22:34  pramsey
+2003-08-18 22:34  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r158] configure.in: Change it back :/
 
-2003-08-18 22:33  pramsey
+2003-08-18 22:33  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r157] configure.in: Change version number.
 
-2003-08-18 20:42  pramsey
+2003-08-18 20:42  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r156] ltmain.sh: Return ltmain to distro (oops)
 
-2003-08-18 20:36  pramsey
+2003-08-18 20:36  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r155] mkinstalldirs: Remove more autoconf files
 
-2003-08-18 20:34  pramsey
+2003-08-18 20:34  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r154] acinclude.m4, config.guess, config.sub, install-sh,
 	  ltmain.sh: Removed more autoconf files...
 
-2003-08-18 20:27  pramsey
+2003-08-18 20:27  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r153] missing: Removed 'missing' script.
 
-2003-08-18 16:38  pramsey
+2003-08-18 16:38  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r152] source/headers/Makefile.am: Fixed up to treat headers as
 	  headers.
 
-2003-08-17 18:40  pramsey
+2003-08-17 18:40  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r151] Makefile.am, source/Makefile.am,
 	  source/algorithm/CGAlgorithms.cpp,
@@ -17238,17 +17238,17 @@
 	  global removal of "no newline" + small changes
 	  to make Norman's patch work in the linux build environment.
 
-2003-08-17 18:01  pramsey
+2003-08-17 18:01  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r150] libtool: Removed more configuration files per Norman's
 	  request.
 
-2003-08-17 17:56  pramsey
+2003-08-17 17:56  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r149] aclocal.m4, configure: Removed more configure files per
 	  Norman's request.
 
-2003-08-17 17:55  pramsey
+2003-08-17 17:55  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r148] Makefile.in, macros/Makefile.in, source/Makefile.in,
 	  source/bigtest/Makefile.in, source/geom/Coordinate.cpp,
@@ -17334,7 +17334,7 @@
 	  source/test/XMLTester.cpp, source/util/CoordinateArrayFiter.cpp,
 	  source/util/UniqueCoordinateArrayFilter.cpp: Memory leak fixes.
 
-2003-06-21 22:17  pramsey
+2003-06-21 22:17  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r146] source/geom/Makefile.am: GNU compile fixes from nvine.
 
@@ -17492,21 +17492,21 @@
 	  source/operation/buffer/RightmostEdgeFinder.cpp: Buffer is almost
 	  fully debugged.
 
-2003-05-29 00:05  pramsey
+2003-05-29 00:05  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r143] source/bigtest/Makefile.am, source/geom/Makefile.am: Final
 	  GNU build adjustments.
 
-2003-05-28 23:55  pramsey
+2003-05-28 23:55  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r142] source/examples/Makefile.am: Added new exception class.
 
-2003-05-28 23:39  pramsey
+2003-05-28 23:39  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r141] source/headers/Makefile.am: Change reference to
 	  spatialIndex.h
 
-2003-05-28 23:22  pramsey
+2003-05-28 23:22  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r140] source/geom/Makefile.am: Removed obsolete build entries
 	  for removed classes.
@@ -17522,51 +17522,51 @@
 	  source/index/bintree/Node.cpp, source/test/XMLTester.cpp: no
 	  message
 
-2003-05-28 05:02  pramsey
+2003-05-28 05:02  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r137] source/index/strtree/Interval.cpp,
 	  source/index/strtree/SIRtree.cpp: Changed __max/__min to max/min
 
-2003-05-28 05:01  pramsey
+2003-05-28 05:01  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r136] source/index/quadtree/IntervalSize.cpp: Change __max to
 	  max
 
-2003-05-27 23:56  pramsey
+2003-05-27 23:56  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r135] source/geom/Makefile.am: Changed from mistaken cpp file
 	  names.
 
-2003-05-27 23:54  pramsey
+2003-05-27 23:54  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r134] source/algorithm/CentroidArea.cpp: Added include for
 	  <typeinfo>
 
-2003-05-27 23:45  pramsey
+2003-05-27 23:45  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r133] source/headers/indexStrtree.h: GNU build support
 
-2003-05-27 23:42  pramsey
+2003-05-27 23:42  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r132] source/headers/indexQuadtree.h: Fix reference to
 	  spatialIndex header
 
-2003-05-27 23:41  pramsey
+2003-05-27 23:41  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r131] source/headers/Makefile.in, source/headers/SpatialIndex.h,
 	  source/headers/geom.h, source/headers/indexStrtree.h,
 	  source/headers/spatialIndex.h: Build updates.
 
-2003-05-27 23:33  pramsey
+2003-05-27 23:33  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r130] source/geom/Makefile.am: Add new files into build support
 
-2003-05-27 23:17  pramsey
+2003-05-27 23:17  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r129] source/headers/Makefile.am: Add all new headers into the
 	  build process.
 
-2003-05-27 23:11  pramsey
+2003-05-27 23:11  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r128] source/geom/Makefile.am, source/headers/Makefile.am: Some
 	  updates to synch build with devel.
@@ -17851,36 +17851,36 @@
 	  source/test/XMLTester.cpp: Overlay passes all normal tests. Still
 	  fails on Precision tests.
 
-2003-04-09 21:52  pramsey
+2003-04-09 21:52  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r113] source/headers/geom.h: Changed destructors to virtual to
 	  quiet GNU warnings
 
-2003-04-04 23:49  pramsey
+2003-04-04 23:49  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r112] source/headers/Makefile.am: Install all headers at install
 	  time.
 
-2003-04-04 22:04  pramsey
+2003-04-04 22:04  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r111] source/examples/CustomCoordinateListExample.cpp,
 	  source/examples/CustomCoordinateListExample.h,
 	  source/examples/CustomPointCoordinateList.cpp: Newlines added to
 	  quiet gcc.
 
-2003-04-04 03:44  pramsey
+2003-04-04 03:44  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r110] source/geom/Makefile.am: Build support
 
-2003-04-04 03:43  pramsey
+2003-04-04 03:43  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r109] source/examples/Makefile.am: Build support.
 
-2003-04-04 03:28  pramsey
+2003-04-04 03:28  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r108] source/geom/Makefile.am: Build support updates.
 
-2003-04-04 03:11  pramsey
+2003-04-04 03:11  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r107] source/examples/Makefile.am: Build support for new example
 	  programs.
@@ -17913,13 +17913,13 @@
 	  source/operation/valid/IsValidOp.cpp: isValid is debugged (passes
 	  all 805 tests).
 
-2003-03-24 19:23  pramsey
+2003-03-24 19:23  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r103] source/headers/indexQuadtree.h,
 	  source/headers/indexSweepline.h: Added newlines to end to quiet
 	  gcc
 
-2003-03-24 19:21  pramsey
+2003-03-24 19:21  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r102] Makefile.in, aclocal.m4, configure, configure.in, libtool,
 	  macros/Makefile.in, source/Makefile.am, source/Makefile.in,
@@ -17940,11 +17940,11 @@
 	  extraneous build support from all
 	  non-geom library directories.
 
-2003-03-24 03:45  pramsey
+2003-03-24 03:45  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r101] source/geom/Makefile.am: More GNU build support
 
-2003-03-24 03:07  pramsey
+2003-03-24 03:07  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r100] Makefile.in, aclocal.m4, configure, configure.in, libtool,
 	  macros/Makefile.in, source/Makefile.in,
@@ -18010,7 +18010,7 @@
 	  source/operation/valid/IsValidOp.cpp: IsValid and supporting
 	  packages are ported (but NOT tested).
 
-2003-03-12 23:45  pramsey
+2003-03-12 23:45  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r95] source/geom/Makefile.am, source/operation/Makefile.am,
 	  source/operation/valid/Makefile.am: Build support for valid.
@@ -18044,7 +18044,7 @@
 	  source/test/XMLTester.cpp: IsValid and supporting index classes
 	  are almost done.
 
-2003-03-05 17:04  pramsey
+2003-03-05 17:04  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r92] configure.in, source/Makefile.am,
 	  source/examples/Makefile.am: Build support for new coordinateline
@@ -18057,11 +18057,11 @@
 	  source/geom/PointCoordinateList.cpp, source/headers/geom.h:
 	  CoordinateList interface example.
 
-2003-03-03 03:56  pramsey
+2003-03-03 03:56  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r90] source/geom/Makefile.am: Remove PointInRing
 
-2003-03-03 03:35  pramsey
+2003-03-03 03:35  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r89] source/algorithm/PointInRing.cpp: Removed unused file.
 
@@ -18130,12 +18130,12 @@
 	  source/operation/relate/RelateNodeGraph.cpp: First pass of code
 	  cleanup completed over all packages.
 
-2003-03-01 06:10  pramsey
+2003-03-01 06:10  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r84] source/headers/geosAlgorithm.h: Uncommented default
 	  constructor for PointInRing
 
-2003-03-01 06:08  pramsey
+2003-03-01 06:08  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r83] source/test/SimpleWKTTester.cpp: Fixed call to geometry
 	  factory.
@@ -18155,13 +18155,13 @@
 	  source/io/Writer.cpp, source/test/XMLTester.cpp: All packages
 	  except 'graph' has been refactored.
 
-2003-02-20 03:32  pramsey
+2003-02-20 03:32  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r81] source/test/SimpleWKTTester.cpp: Fixed small bug in call to
 	  GeometryFactory (instantiate PrecisionModel
 	  with new)
 
-2003-02-20 03:30  pramsey
+2003-02-20 03:30  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r80] source/geom/CoordinateListFactory.cpp,
 	  source/geom/GeometryFactory.cpp: GFactory: Move i outside of for
@@ -18214,23 +18214,23 @@
 	  source/graph/EdgeRing.cpp, source/headers/geom.h,
 	  source/io/WKTReader.cpp: GEOM package partially updated.
 
-2003-02-12 21:09  pramsey
+2003-02-12 21:09  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r75] INSTALL, missing: Added two files required by autoconf
 	  build process.
 
-2003-02-12 20:51  pramsey
+2003-02-12 20:51  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r74] configure, libtool, source/geom/Makefile.in,
 	  source/headers/Makefile.in, source/test/Makefile.in: Commit build
 	  support files.
 
-2003-02-12 19:11  pramsey
+2003-02-12 19:11  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r73] source/headers/Makefile.am: Change header installation path
 	  to $(prefix)/include/geos.
 
-2003-02-12 06:50  pramsey
+2003-02-12 06:50  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r72] source/algorithm/LineIntersector.cpp,
 	  source/algorithm/SimplePointInRing.cpp,
@@ -18238,7 +18238,7 @@
 	  source/operation/relate/EdgeEndBundle.cpp: Added newlines to
 	  quiet g++ warnings.
 
-2003-02-12 06:48  pramsey
+2003-02-12 06:48  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r71] source/graph/Depth.cpp, source/graph/DirectedEdge.cpp,
 	  source/graph/DirectedEdgeStar.cpp, source/graph/EdgeEnd.cpp,
@@ -18249,59 +18249,59 @@
 	  source/graph/index/SweepLineEvent.cpp: Added newlines to ends of
 	  files to quiet g++ warnings.
 
-2003-02-12 06:27  pramsey
+2003-02-12 06:27  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r70] source/test/XMLTester.cpp: Fix headers.
 
-2003-02-12 06:26  pramsey
+2003-02-12 06:26  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r69] source/test/SimpleWKTTester.cpp: Changed headers.
 
-2003-02-12 06:24  pramsey
+2003-02-12 06:24  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r68] source/bigtest/TestSweepLineSpeed.cpp: Added return value.
 
-2003-02-12 06:24  pramsey
+2003-02-12 06:24  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r67] source/bigtest/TestSweepLineSpeed.cpp, source/test/CTS.cpp,
 	  source/test/XMLTester.cpp: Changed headers.
 
-2003-02-12 06:19  pramsey
+2003-02-12 06:19  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r66] source/test/XMLTester.cpp: Make path to test file relative.
 
-2003-02-12 06:18  pramsey
+2003-02-12 06:18  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r65] source/bigtest/GeometryTestFactory.cpp: Change include
 	  reference syntax.
 
-2003-02-12 06:07  pramsey
+2003-02-12 06:07  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r64] source/graph/EdgeEndStar.cpp: Remove NULL test.
 
-2003-02-12 06:07  pramsey
+2003-02-12 06:07  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r63] source/io/WKTWriter.cpp: Pass double to log().
 
-2003-02-12 06:07  pramsey
+2003-02-12 06:07  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r62] source/bigtest/TestSweepLineSpeed.cpp: Fixed main() return
 	  type.
 
-2003-02-12 06:04  pramsey
+2003-02-12 06:04  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r61] source/test/Makefile.am: Remove old library references.
 
-2003-02-12 05:58  pramsey
+2003-02-12 05:58  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r60] source/bigtest/TestSweepLineSpeed.cpp: Added stdio
 	  reference and newline at end.
 
-2003-02-12 00:58  pramsey
+2003-02-12 00:58  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r59] source/test/test.xml: Added all JTS test cases to the file.
 
-2003-02-11 23:54  pramsey
+2003-02-11 23:54  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r58] source/geom/Makefile.am: Added support for new cpp files.
 
@@ -18402,7 +18402,7 @@
 	  source/headers/geom.h, source/headers/graphindex.h: Some
 	  performance improvements.
 
-2002-11-14 23:43  pramsey
+2002-11-14 23:43  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r48] configure.in, source/Makefile.am, source/Makefile.in,
 	  source/bigtest/Makefile.am, source/bigtest/Makefile.in,
@@ -18436,21 +18436,21 @@
 	  source/io/StringTokenizer.cpp, source/test/XMLTester.cpp: XML
 	  tester is less fragile now.
 
-2002-10-30 21:59  pramsey
+2002-10-30 21:59  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r44] config.guess, config.sub: Added configure support files for
 	  building w/o automake/autoconf
 
-2002-10-30 21:58  pramsey
+2002-10-30 21:58  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r43] configure.in: Small changes to make autoconf happy.
 
-2002-10-30 20:04  pramsey
+2002-10-30 20:04  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r42] source/test/test.xml: Edited test file to not crash
 	  XMLTester
 
-2002-10-30 19:54  pramsey
+2002-10-30 19:54  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r41] Makefile.in, aclocal.m4, configure, configure.in, libtool,
 	  macros/Makefile.in, source/Makefile.in,
@@ -18599,7 +18599,7 @@
 	  version is
 	  #define'd for code being compiled as GEOS_VERSION.
 
-2002-09-03 16:04  pramsey
+2002-09-03 16:04  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r32] source/test/Makefile.am: Changed reference to 'libgeom' to
 	  'libgeos'
@@ -18649,7 +18649,7 @@
 	  solution is not
 	  easy to work with in automake.
 
-2002-09-01 18:08  pramsey
+2002-09-01 18:08  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r30] source/algorithm/NotRepresentableException.cpp,
 	  source/algorithm/PointInRing.cpp,
@@ -18659,13 +18659,13 @@
 	  source/io/Writer.cpp, source/io/markup/MarkupSTL.cpp: Minor
 	  portability changes.
 
-2002-09-01 17:53  pramsey
+2002-09-01 17:53  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r29] configure.in, source/Makefile.am,
 	  source/algorithm/Makefile.am: Changes to support algorithm
 	  directory in build structure.
 
-2002-09-01 17:51  pramsey
+2002-09-01 17:51  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r28] source/geom/Coordinate.cpp, source/geom/CoordinateList.cpp,
 	  source/geom/Dimension.cpp, source/geom/Envelope.cpp,
@@ -18678,21 +18678,21 @@
 	  stdio.h where needed, small syntax adjustments, newlines at
 	  end of files.
 
-2002-08-30 18:33  pramsey
+2002-08-30 18:33  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r27] COPYING: Added LGPL licence text.
 
-2002-08-30 18:30  pramsey
+2002-08-30 18:30  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r26] AUTHORS, Authors: Changed name of authors file as requested
 	  by autoconf.
 
-2002-08-30 18:28  pramsey
+2002-08-30 18:28  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r25] autogen.sh: Removed --force-missing which did not work for
 	  my version of autoconf
 
-2002-08-30 18:16  pramsey
+2002-08-30 18:16  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r24] ., .cvsignore, source, source/.cvsignore, source/geom,
 	  source/geom/.cvsignore, source/graph, source/graph/.cvsignore,
@@ -18701,14 +18701,14 @@
 	  source/io/markup/.cvsignore, source/test, source/test/.cvsignore,
 	  source/util, source/util/.cvsignore: Added cvs ignore files.
 
-2002-08-30 18:15  pramsey
+2002-08-30 18:15  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r23] source/test/CTS.cpp, source/test/SimpleWKTTester.cpp,
 	  source/test/WKTIn, source/test/WKTOut, source/test/XMLTester.cpp,
 	  source/test/test.xml: Added the testing files back into their new
 	  subdirectory.
 
-2002-08-30 18:15  pramsey
+2002-08-30 18:15  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r22] Authors, ChangeLog, Makefile.am, NEWS, README, autogen.sh,
 	  configure.in, source/CTS.cpp, source/Makefile.am,
@@ -18891,7 +18891,7 @@
 	  LinearRing.cpp, Location.cpp, Point.cpp, PrecisionModel.cpp,
 	  geom.h, operation.h, platform.h: 'geom' package 70% done
 
-2002-06-07 17:47  pramsey
+2002-06-07 17:47  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r2] CTS.cpp, Coordinate.cpp, CoordinateList.cpp, Dimension.cpp,
 	  Envelope.cpp, LineSegment.cpp, Location.cpp, geom.h, platform.h:
