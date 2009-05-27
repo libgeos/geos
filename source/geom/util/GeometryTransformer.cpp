@@ -328,7 +328,7 @@ GeometryTransformer::transformMultiPolygon(
 	std::cerr << "GeometryTransformer::transformMultiPolygon(MultiPolygon " << geom <<", Geometry " << parent << ");" << std::endl;
 #endif
 
-	vector<Geometry*>* transGeomList = new vector<Geometry*>();
+	auto_ptr< vector<Geometry*> > transGeomList( new vector<Geometry*>() );
 
 	for (unsigned int i=0, n=geom->getNumGeometries(); i<n; i++)
 	{
@@ -344,7 +344,7 @@ GeometryTransformer::transformMultiPolygon(
 		transGeomList->push_back(transformGeom.release());
 	}
 
-	return Geometry::AutoPtr(factory->buildGeometry(transGeomList));
+	return Geometry::AutoPtr(factory->buildGeometry(transGeomList.release()));
 
 }
 
