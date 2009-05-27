@@ -9,7 +9,9 @@
 // This software is provided "as is", with no warranty.
 
 #include "MarkupSTL.h"
-#include <stdio.h>
+#include <cassert>
+#include <cstdio>
+#include <string>
 
 using namespace std;
 
@@ -873,24 +875,27 @@ bool CMarkupSTL::x_SetData( int iPos, const char* szData, int nCDATA )
 
 string CMarkupSTL::x_GetData( int iPos ) const
 {
+    std::string::size_type const pos(iPos);
+    assert(std::string::npos != pos);
+
 	// Return a string representing data between start and end tag
 	// Return empty string if there are any children elements
-	if ( ! m_aPos[iPos].iElemChild && ! m_aPos[iPos].IsEmptyElement() )
+	if ( ! m_aPos[pos].iElemChild && ! m_aPos[pos].IsEmptyElement() )
 	{
 		// See if it is a CDATA section
 		TokenPos token( m_strDoc.c_str() );
-		token.nNext = m_aPos[iPos].nStartR+1;
+		token.nNext = m_aPos[pos].nStartR+1;
 		if ( x_FindToken( token ) && m_strDoc[token.nL] == '<'
-				&& token.nL + 11 < m_aPos[iPos].nEndL
+				&& token.nL + 11 < m_aPos[pos].nEndL
 				&& strncmp( &token.szDoc[token.nL+1], "![CDATA[", 8 ) == 0 )
 		{
-			int nEndCDATA = m_strDoc.find( "]]>", token.nNext );
-			if ( (unsigned int)nEndCDATA != string::npos && nEndCDATA < m_aPos[iPos].nEndL )
+            std::string::size_type const nEndCDATA = m_strDoc.find( "]]>", token.nNext );
+			if ( nEndCDATA != string::npos && nEndCDATA < std::string::size_type(m_aPos[pos].nEndL) )
 			{
 				return m_strDoc.substr( token.nL+9, nEndCDATA-token.nL-9 );
 			}
 		}
-		return x_TextFromDoc( m_aPos[iPos].nStartR+1, m_aPos[iPos].nEndL-1 );
+		return x_TextFromDoc( m_aPos[pos].nStartR+1, m_aPos[pos].nEndL-1 );
 	}
 	return "";
 }
@@ -907,7 +912,7 @@ string CMarkupSTL::x_TextToDoc( const char* szText, bool bAttrib ) const
 	// &apos; apostrophe or single quote
 	// &quot; double quote
 	//
-	static char* szaReplace[] = { "&lt;","&amp;","&gt;","&apos;","&quot;" };
+	static char const* const szaReplace[] = { "&lt;","&amp;","&gt;","&apos;","&quot;" };
 	const char* pFind = bAttrib?"<&>\'\"":"<&>";
 	const char* pSource = szText;
 	string strResult;
@@ -936,9 +941,9 @@ string CMarkupSTL::x_TextFromDoc( int nLeft, int nRight ) const
 	//
 	// Conveniently the result is always the same or shorter in length
 	//
-	static char* szaCode[] = { "lt;","amp;","gt;","apos;","quot;" };
+	static char const* const szaCode[] = { "lt;","amp;","gt;","apos;","quot;" };
 	static int anCodeLen[] = { 3,4,3,5,5 };
-	static char* szSymbol = "<&>\'\"";
+	static char const* const szSymbol = "<&>\'\"";
 	string strResult;
 	strResult.reserve( nRight - nLeft + 1 );
 	const char* pSource = m_strDoc.c_str();
