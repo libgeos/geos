@@ -89,7 +89,12 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence *cs, const Ge
 	if (typeid(*geom)==typeid(LineString)) minLength = 2;
 	if (typeid(*geom)==typeid(LinearRing)) minLength = 4;
 	CoordinateSequence *collapsedCoords = reducedCoords;
-	if (sgpr->getRemoveCollapsed()) collapsedCoords=NULL;
+	if (sgpr->getRemoveCollapsed())
+	{
+		delete reducedCoords; 
+		reducedCoords=0;
+		collapsedCoords=0;
+	}
 	// return null or orginal length coordinate array
 	if (noRepeatedCoords->getSize()<minLength) {
 		delete noRepeatedCoords;
