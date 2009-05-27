@@ -24,6 +24,7 @@ Changes in 3.1.0
 - Thread-safe CAPI option
 - IsValidReason added to CAPI
 - CascadedUnion operation for fast unions of geometry sets
+- Single-sided buffering operation added
 - Numerous bug fixes.
   http://trac.osgeo.org/geos/query?status=closed&milestone=3.1.0&order=priority
 
