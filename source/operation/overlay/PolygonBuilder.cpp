@@ -30,6 +30,7 @@
 #include <geos/geom/Polygon.h>
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/util/TopologyException.h>
+#include <geos/util/GEOSException.h>
 
 #include <vector>
 #include <cassert>
@@ -183,7 +184,19 @@ PolygonBuilder::buildMaximalEdgeRings(const vector<DirectedEdge*> *dirEdges)
 		if (de->isInResult() && de->getLabel()->isArea()) {
 			// if this edge has not yet been processed
 			if (de->getEdgeRing()==NULL) {
-				MaximalEdgeRing *er=new MaximalEdgeRing(de,geometryFactory);
+				MaximalEdgeRing *er;
+				try
+				{
+					er=new MaximalEdgeRing(de,geometryFactory);
+				}
+				catch( util::GEOSException& e )
+				{
+					for( size_t i=0, n=maxEdgeRings->size(); i<n; i++)
+						delete (*maxEdgeRings)[i];
+					delete maxEdgeRings;
+					throw;
+				}
+
 				maxEdgeRings->push_back(er);
 				er->setInResult();
 				//System.out.println("max node degree=" + er.getMaxDegree());
