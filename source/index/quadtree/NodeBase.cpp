@@ -215,7 +215,10 @@ NodeBase::remove(const Envelope* itemEnv, void* item)
 			if (found) {
 				// trim subtree if empty
 				if (subnode[i]->isPrunable())
-				subnode[i] = NULL;
+				{
+					delete subnode[i];
+					subnode[i] = NULL;
+				}
 				break;
 			}
 		}
