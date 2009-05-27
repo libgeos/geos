@@ -229,7 +229,7 @@ GeometryGraph::addPolygonRing(const LinearRing *lr, int cwLeft, int cwRight)
 {
 	// skip empty component (see bug #234) 
 	if ( lr->isEmpty() ) return; 
-	CoordinateSequence *lrcl = lr->getCoordinatesRO(); 	
+	const CoordinateSequence *lrcl = lr->getCoordinatesRO(); 	
 	CoordinateSequence* coord=CoordinateSequence::removeRepeatedPoints(lrcl);
 	if (coord->getSize()<4) {
 		hasTooFewPointsVar=true;
