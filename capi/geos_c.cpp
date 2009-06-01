@@ -82,7 +82,11 @@ initGEOS (GEOSMessageHandler nf, GEOSMessageHandler ef)
 void
 finishGEOS ()
 {
-    finishGEOS_r( handle );
+    if (handle != NULL) 
+    { 
+        finishGEOS_r( handle ); 
+        handle = NULL; 
+    } 
 }
 
 void 
