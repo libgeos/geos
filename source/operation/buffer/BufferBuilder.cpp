@@ -39,6 +39,7 @@
 #include <geos/noding/IntersectionAdder.h>
 #include <geos/noding/SegmentString.h>
 #include <geos/noding/MCIndexNoder.h>
+#include <geos/noding/NodedSegmentString.h>
 #include <geos/geomgraph/Position.h>
 #include <geos/geomgraph/PlanarGraph.h>
 #include <geos/geomgraph/Label.h>
@@ -141,7 +142,8 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    SegmentString::NonConstVect curveList;
    for ( unsigned int i = 0; i < lineList.size(); ++i )
    {
-      curveList.push_back( new NodedSegmentString( lineList[i], NULL ) );
+      CoordinateSequence* seq = lineList[i];
+      curveList.push_back( new NodedSegmentString( seq, NULL ) );
    }
 
    // Node these SegmentStrings.
