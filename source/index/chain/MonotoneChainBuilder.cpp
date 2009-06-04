@@ -22,6 +22,7 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geomgraph/Quadrant.h>
 
+#include <cassert>
 #include <cstdio>
 #include <vector>
 

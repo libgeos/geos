@@ -65,7 +65,8 @@ namespace tut
 	bool valid = isValidOp.isValid();
 
 	TopologyValidationError* err = isValidOp.getValidationError();
-	const Coordinate& errCoord = err->getCoordinate();
+    ensure(0 != err);
+    const Coordinate& errCoord = err->getCoordinate();
 
 	ensure_equals( err->getErrorType(),
 	               TopologyValidationError::eInvalidCoordinate );

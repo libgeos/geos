@@ -213,6 +213,10 @@
 				RelativePath="..\..\..\capi\geos_ts_c.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\..\capi\Makefile.am"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath=".\Makefile.am"

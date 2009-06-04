@@ -168,6 +168,14 @@
 				Name="algorithm"
 				>
 				<File
+					RelativePath="..\..\..\source\algorithm\Angle.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\algorithm\BoundaryNodeRule.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\algorithm\CentroidArea.cpp"
 					>
 				</File>
@@ -271,6 +279,18 @@
 								XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
 							/>
 						</FileConfiguration>
+					</File>
+				</Filter>
+				<Filter
+					Name="distance"
+					>
+					<File
+						RelativePath="..\..\..\source\algorithm\distance\DiscreteHausdorffDistance.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\algorithm\distance\DistanceToPoint.cpp"
+						>
 					</File>
 				</Filter>
 			</Filter>
@@ -920,6 +940,10 @@
 				Name="noding"
 				>
 				<File
+					RelativePath="..\..\..\source\noding\BasicSegmentString.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\noding\FastNodingValidator.cpp"
 					>
 				</File>
@@ -957,6 +981,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\noding\Octant.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\noding\OrientedCoordinateArray.cpp"
 					>
 				</File>
 				<File
@@ -1179,7 +1207,19 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\..\source\operation\buffer\BufferInputLineSimplifier.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\operation\buffer\BufferInputLineSimplifier.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\source\operation\buffer\BufferOp.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\operation\buffer\BufferParameters.cpp"
 						>
 					</File>
 					<File
@@ -1192,6 +1232,10 @@
 					</File>
 					<File
 						RelativePath="..\..\..\source\operation\buffer\OffsetCurveSetBuilder.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\operation\buffer\OffsetCurveVertexList.h"
 						>
 					</File>
 					<File
@@ -1239,10 +1283,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\overlay\FuzzyPointLocator.cpp"
-						>
-					</File>
-					<File
 						RelativePath="..\..\..\source\operation\overlay\LineBuilder.cpp"
 						>
 					</File>
@@ -1255,19 +1295,11 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\overlay\OffsetPointGenerator.cpp"
-						>
-					</File>
-					<File
 						RelativePath="..\..\..\source\operation\overlay\OverlayNodeFactory.cpp"
 						>
 					</File>
 					<File
 						RelativePath="..\..\..\source\operation\overlay\OverlayOp.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\source\operation\overlay\OverlayResultValidator.cpp"
 						>
 					</File>
 					<File
@@ -1278,6 +1310,42 @@
 						RelativePath="..\..\..\source\operation\overlay\PolygonBuilder.cpp"
 						>
 					</File>
+					<Filter
+						Name="snap"
+						>
+						<File
+							RelativePath="..\..\..\source\operation\overlay\snap\GeometrySnapper.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\operation\overlay\snap\LineStringSnapper.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\operation\overlay\snap\SnapIfNeededOverlayOp.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\operation\overlay\snap\SnapOverlayOp.cpp"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="validate"
+						>
+						<File
+							RelativePath="..\..\..\source\operation\overlay\validate\FuzzyPointLocator.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\operation\overlay\validate\OffsetPointGenerator.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\operation\overlay\validate\OverlayResultValidator.cpp"
+							>
+						</File>
+					</Filter>
 				</Filter>
 				<Filter
 					Name="polygonize"
@@ -1366,6 +1434,14 @@
 					</File>
 					<File
 						RelativePath="..\..\..\source\operation\valid\ConsistentAreaTester.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\operation\valid\IndexedNestedRingTester.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\operation\valid\IndexedNestedRingTester.h"
 						>
 					</File>
 					<File

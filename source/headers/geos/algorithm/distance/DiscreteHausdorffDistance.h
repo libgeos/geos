@@ -28,6 +28,7 @@
 #include <geos/geom/CoordinateFilter.h> // for inheritance
 #include <geos/geom/CoordinateSequenceFilter.h> // for inheritance
 
+#include <cstddef>
 #include <vector>
 
 namespace geos {
@@ -183,12 +184,12 @@ public:
 				const geom::Geometry& geom, double fraction)
 			:
 			geom(geom),
-			numSubSegs( size_t(round(1.0/fraction)) )
+                numSubSegs( std::size_t(util::round(1.0/fraction)) )
 		{
 		}
 
 		void filter_ro(const geom::CoordinateSequence& seq,
-		               size_t index);
+		               std::size_t index);
 
 		bool isGeometryChanged() const { return false; }
 
@@ -202,7 +203,7 @@ public:
 		PointPairDistance maxPtDist;
 		PointPairDistance minPtDist;
 		const geom::Geometry& geom;
-		size_t numSubSegs; // = 0;
+		std::size_t numSubSegs; // = 0;
 		
 	};
 

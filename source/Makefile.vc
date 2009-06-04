@@ -31,6 +31,8 @@ OBJ_EXT = obj
 EXT = $(OBJ_EXT)
 
 OBJ = \
+    algorithm\Angle.$(EXT) \
+    algorithm\BoundaryNodeRule.$(EXT) \
 	algorithm\CentroidArea.$(EXT) \
 	algorithm\CentroidLine.$(EXT) \
 	algorithm\CentroidPoint.$(EXT) \
@@ -49,6 +51,8 @@ OBJ = \
 	algorithm\RobustDeterminant.$(EXT) \
 	algorithm\SimplePointInRing.$(EXT) \
 	algorithm\SIRtreePointInRing.$(EXT) \
+	algorithm\distance\DiscreteHausdorffDistance.$(EXT) \
+	algorithm\distance\DistanceToPoint.$(EXT) \
 	algorithm\locate\IndexedPointInAreaLocator.$(EXT) \
 	algorithm\locate\PointOnGeometryLocator.$(EXT) \
 	algorithm\locate\SimplePointInAreaLocator.$(EXT) \
@@ -74,6 +78,7 @@ OBJ = \
 	geom\Polygon.$(EXT) \
 	geom\PrecisionModel.$(EXT) \
 	geom\Triangle.$(EXT) \
+	geom\util\ComponentCoordinateExtracter.$(EXT) \
 	geom\util\CoordinateOperation.$(EXT) \
 	geom\util\GeometryEditor.$(EXT) \
 	geom\util\GeometryTransformer.$(EXT) \
@@ -162,6 +167,7 @@ OBJ = \
 	io\WKTReader.$(EXT) \
 	io\WKTWriter.$(EXT) \
 	io\Writer.$(EXT) \
+	noding\BasicSegmentString.$(EXT) \
 	noding\FastNodingValidator.$(EXT) \
 	noding\FastSegmentSetIntersectionFinder.$(EXT) \
 	noding\IntersectionAdder.$(EXT) \
@@ -172,6 +178,7 @@ OBJ = \
 	noding\NodedSegmentString.$(EXT) \
 	noding\NodingValidator.$(EXT) \
 	noding\Octant.$(EXT) \
+	noding\OrientedCoordinateArray.$(EXT) \
 	noding\ScaledNoder.$(EXT) \
 	noding\SegmentIntersectionDetector.$(EXT) \
 	noding\SegmentNode.$(EXT) \
@@ -187,7 +194,9 @@ OBJ = \
 	operation\GeometryGraphOperation.$(EXT) \
 	operation\IsSimpleOp.$(EXT) \
 	operation\buffer\BufferBuilder.$(EXT) \
-	operation\buffer\BufferOp.$(EXT) \
+	operation\buffer\BufferInputLineSimplifier.$(EXT) \
+ 	operation\buffer\BufferParameters.$(EXT) \
+	operation\buffer\BufferOp.$(EXT) 
 	operation\buffer\BufferSubgraph.$(EXT) \
 	operation\buffer\OffsetCurveBuilder.$(EXT) \
 	operation\buffer\OffsetCurveSetBuilder.$(EXT) \
@@ -206,16 +215,20 @@ OBJ = \
 	operation\overlay\EdgeSetNoder.$(EXT) \
 	operation\overlay\ElevationMatrix.$(EXT) \
 	operation\overlay\ElevationMatrixCell.$(EXT) \
-	operation\overlay\FuzzyPointLocator.$(EXT) \
 	operation\overlay\LineBuilder.$(EXT) \
 	operation\overlay\MaximalEdgeRing.$(EXT) \
 	operation\overlay\MinimalEdgeRing.$(EXT) \
-	operation\overlay\OffsetPointGenerator.$(EXT) \
 	operation\overlay\OverlayNodeFactory.$(EXT) \
 	operation\overlay\OverlayOp.$(EXT) \
-	operation\overlay\OverlayResultValidator.$(EXT) \
 	operation\overlay\PointBuilder.$(EXT) \
 	operation\overlay\PolygonBuilder.$(EXT) \
+    operation\overlay\snap\GeometrySnapper.$(EXT) \ 
+ 	operation\overlay\snap\LineStringSnapper.$(EXT) \ 
+ 	operation\overlay\snap\SnapOverlayOp.$(EXT) \ 
+ 	operation\overlay\snap\SnapIfNeededOverlayOp.$(EXT) \ 
+ 	operation\overlay\validate\FuzzyPointLocator.$(EXT) \ 
+ 	operation\overlay\validate\OffsetPointGenerator.$(EXT) \ 
+ 	operation\overlay\validate\OverlayResultValidator.$(EXT) \
 	operation\polygonize\PolygonizeDirectedEdge.$(EXT) \
 	operation\polygonize\PolygonizeEdge.$(EXT) \
 	operation\polygonize\EdgeRing.$(EXT) \
@@ -235,6 +248,7 @@ OBJ = \
 	operation\union\CascadedPolygonUnion.$(EXT) \
 	operation\valid\ConnectedInteriorTester.$(EXT) \
 	operation\valid\ConsistentAreaTester.$(EXT) \
+	operation\valid\IndexedNestedRingTester.$(EXT) \ 
 	operation\valid\IsValidOp.$(EXT) \
 	operation\valid\QuadtreeNestedRingTester.$(EXT) \
 	operation\valid\RepeatedPointTester.$(EXT) \
@@ -253,8 +267,6 @@ OBJ = \
 	precision\CommonBitsOp.$(EXT) \
 	precision\CommonBitsRemover.$(EXT) \
 	precision\EnhancedPrecisionOp.$(EXT) \
-	precision\GeometrySnapper.$(EXT) \
-	precision\LineStringSnapper.$(EXT) \
 	precision\SimpleGeometryPrecisionReducer.$(EXT) \
 	simplify\DouglasPeuckerLineSimplifier.$(EXT) \
 	simplify\DouglasPeuckerSimplifier.$(EXT) \

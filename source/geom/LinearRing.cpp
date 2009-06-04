@@ -24,6 +24,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/util/IllegalArgumentException.h>
 
+#include <cassert>
 #include <sstream>
 #include <string>
 #include <memory>
