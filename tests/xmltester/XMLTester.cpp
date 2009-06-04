@@ -30,6 +30,7 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/BinaryOp.h>
 #include <geos/operation/overlay/OverlayOp.h>
+#include <geos/operation/buffer/BufferBuilder.h>
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/util.h>
@@ -521,6 +522,7 @@ XMLTester::parseTest()
 	std::string opArg1;
 	std::string opArg2;
 	std::string opArg3;
+	std::string opArg4;
 	std::string opRes;
 	//string opSig;
 
@@ -532,6 +534,7 @@ XMLTester::parseTest()
 	opArg1=xml.GetChildAttrib("arg1");
 	opArg2=xml.GetChildAttrib("arg2");
 	opArg3=xml.GetChildAttrib("arg3");
+	opArg4=xml.GetChildAttrib("arg4");
 	//opSig=xml.GetChildAttrib("arg3");
 	opRes=xml.GetChildData();
 
@@ -550,6 +553,10 @@ XMLTester::parseTest()
 	if ( opArg3 != "" ) {
 		if ( opSig != "" ) opSig += ", ";
 		opSig += opArg3;
+	}
+	if ( opArg4 != "" ) {
+		if ( opSig != "" ) opSig += ", ";
+		opSig += opArg4;
 	}
 
 	opSignature = opName + "(" + opSig + ")";
@@ -828,6 +835,7 @@ XMLTester::parseTest()
 			if ( opArg3 != "" ) {
 		params.setQuadrantSegments(std::atoi(opArg3.c_str()));
 			}
+			
 
 			BufferOp op(gT, params);
 			gRealRes.reset(op.getResultGeometry(dist));
@@ -837,6 +845,73 @@ XMLTester::parseTest()
 
 			// Validate the buffer operation
 			success = checkBufferSuccess(*gRes, *gRealRes, dist);
+
+			if ( testValidOutput ) testValid(gRes.get(), "result");
+
+			actual_result=printGeom(gRealRes.get());
+			expected_result=printGeom(gRes.get());
+		}
+
+		else if (opName=="buffersinglesided")
+		{
+			using namespace operation::buffer;
+
+			geom::Geometry *gT=gA;
+			if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
+
+			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
+			gRes->normalize();
+
+			profile.start();
+
+			GeomAutoPtr gRealRes;
+			double dist = std::atof(opArg2.c_str());
+				
+			BufferParameters params ;
+			params.setJoinStyle( BufferParameters::JOIN_ROUND ) ;
+			if ( opArg3 != "" ) {
+		params.setQuadrantSegments( std::atoi(opArg3.c_str()));
+			}
+			
+			bool leftSide = true ;
+			if ( opArg4 == "right" )
+			{
+				leftSide = false ;
+			}
+
+			BufferBuilder bufBuilder( params ) ;
+			gRealRes.reset( bufBuilder.bufferLineSingleSided(
+			                             gT, dist, leftSide ) ) ;
+
+			profile.stop();
+			gRealRes->normalize();
+
+			// Assume a success and check for obvious failures
+			success=1;
+			do
+			{
+
+				if ( gRes->getGeometryTypeId() !=
+				     gRealRes->getGeometryTypeId() )
+				{
+					std::cerr << "Expected result is of type "
+					        << gRes->getGeometryType()
+						<< "; obtained result is of type "
+						<< gRealRes->getGeometryType()
+						<< std::endl;
+					success=0;
+					break;
+				}
+				
+				if ( ! gRes->equals( gRealRes.get() ) )
+				{
+std::cerr << "Matching single sided buffer results FAILED" << std::endl;
+					success=0;
+					break;
+				}
+
+			}
+			while (0);
 
 			if ( testValidOutput ) testValid(gRes.get(), "result");
 
