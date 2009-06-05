@@ -1,3 +1,61 @@
+2009-06-04 15:01  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2538] build/msvc90/geos_c_dll/geos_c_dll.vcproj,
+	  build/msvc90/geos_lib/geos_lib.vcproj,
+	  build/msvc90/geos_unit/geos_unit.vcproj, source/Makefile.vc,
+	  source/geom/LinearRing.cpp,
+	  source/headers/geos/algorithm/distance/DiscreteHausdorffDistance.h,
+	  source/index/chain/MonotoneChainBuilder.cpp,
+	  tests/unit/operation/valid/IsValidTest.cpp: * Applied patch for
+	  ticket #257.
+	  * Noticed that unit tests fail:
+	  1>geos::util::UniqueCoordinateArrayFilter: .
+	  1>---> group: geos::operation::valid::IsValidOp, test: test<1>
+	  1> problem: assertion failed
+
+2009-06-04 14:59  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2537] source/operation/buffer/BufferBuilder.cpp: Fixed bug of
+	  inaccessible constructor of incomplete type NodedSegmentString -
+	  header missing.
+
+2009-06-04 13:59  Sandro Santilli <strk@keybit.net>
+
+	* [r2536] tests/xmltester/XMLTester.cpp: Add support for testing
+	  single sided buffers
+
+2009-06-01 03:34  hobu
+
+	* [r2534] capi/geos_c.cpp: #256 finishGEOS called multiple times
+	  will segfault
+
+2009-05-28 14:38  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2533] configure.in, tests/bigtest: Fixed aclocal warnings for
+	  mixing cache-id's in configure.in.
+
+2009-05-27 16:57  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r2516] NEWS: remove error
+
+2009-05-27 16:57  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r2515] NEWS: Add single-sided item
+
+2009-05-21 10:08  Sandro Santilli <strk@keybit.net>
+
+	* [r2514] ChangeLog.svn, Makefile.am, authors.svn: Add Mat's and
+	  Paul's entries, make ChangeLog.svn rule phony
+
+2009-05-21 09:56  Sandro Santilli <strk@keybit.net>
+
+	* [r2513] ChangeLog.svn, Makefile.am, authors.svn: Add a rule to
+	  generate a ChangeLog using svn2cl. The authors.svn file will be
+	  used to map usernames and full names: please expand your own
+	  nick. The generated ChangeLog is added to repository to show you
+	  how it looks. If everybody agree we could rename this to
+	  ChangeLog and stop requiring manual edits (+1 from me:)
+
 2009-05-13 11:29  Frank Warmerdam <warmerdam@pobox.com>
 
 	* [r2508] capi/geos_c.h.in: refer to GEOSFree() instead of free()
