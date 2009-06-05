@@ -11,6 +11,12 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/relate/EdgeEndBundle.java rev. 1.15 (JTS-1.7)
+ *
+ * NON-EXPOSED GEOS HEADER
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_RELATE_EDGEENDBUNDLE_H

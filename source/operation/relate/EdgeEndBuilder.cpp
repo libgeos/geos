@@ -14,6 +14,8 @@
  *
  **********************************************************************
  *
+ * Last port: operation/relate/EdgeEndBuilder.java rev. 1.12 (JTS-1.10)
+ *
  **********************************************************************/
 
 #include <geos/operation/relate/EdgeEndBuilder.h>

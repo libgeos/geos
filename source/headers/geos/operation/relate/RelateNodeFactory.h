@@ -11,6 +11,12 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/relate/RelateNodeFactory.java rev. 1.11 (JTS-1.10)
+ *
+ * NON-EXPOSED GEOS HEADER
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_RELATE_RELATENODEFACTORY_H

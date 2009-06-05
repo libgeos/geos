@@ -11,6 +11,12 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/relate/EdgeEndBuilder.java rev. 1.12 (JTS-1.10)
+ *
+ * NON-EXPOSED GEOS HEADER
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_RELATE_EDGEENDBUILDER_H
@@ -37,7 +43,8 @@ namespace operation { // geos::operation
 namespace relate { // geos::operation::relate
 
 /** \brief
- * Computes the geomgraph::EdgeEnd objects which arise from a noded geomgraph::Edge.
+ * Computes the geomgraph::EdgeEnd objects which arise
+ * from a noded geomgraph::Edge.
  */
 class EdgeEndBuilder {
 public:

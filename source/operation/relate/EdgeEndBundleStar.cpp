@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/relate/EdgeEndBundleStar.java rev. 1.13 (JTS-1.10)
+ *
  **********************************************************************/
 
 #include <geos/operation/relate/EdgeEndBundleStar.h>
