@@ -26,7 +26,6 @@
 
 #include <vector>
 
-//#include <geos/noding/NodingValidator.h> // for composition
 #include <geos/noding/FastNodingValidator.h> // for composition
 
 #include <geos/inline.h>
@@ -47,11 +46,10 @@ namespace geos {
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-/**
+/** \brief
  * Validates that a collection of SegmentStrings is correctly noded.
- * Throws an appropriate exception if an noding error is found.
  *
- * @version 1.4
+ * Throws an appropriate exception if an noding error is found.
  */
 class EdgeNodingValidator {
 
@@ -71,9 +69,25 @@ private:
 	std::vector<geom::CoordinateSequence*> newCoordSeq;
 
 	noding::FastNodingValidator nv;
-	//noding::NodingValidator nv;
 
 public:
+
+        /** \brief
+	 * Checks whether the supplied {@link Edge}s
+	 * are correctly noded.
+	 *
+	 * Throws a  {@link TopologyException} if they are not.
+	 *
+	 * @param edges a collection of Edges.
+	 * @throws TopologyException if the SegmentStrings are not
+	 *         correctly noded
+	 *
+	 */
+        static void checkValid(std::vector<Edge*>& edges)
+        {
+                EdgeNodingValidator validator(edges);
+                validator.checkValid();
+        }
 
 	EdgeNodingValidator(std::vector<Edge*>& edges)
 		:
