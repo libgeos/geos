@@ -14,12 +14,13 @@
  *
  **********************************************************************
  *
- * Last port: operation/GeometryGraphOperation.java rev. 1.14 (JTS-1.7)
+ * Last port: operation/GeometryGraphOperation.java rev. 1.18 (JTS-1.10)
  *
  **********************************************************************/
 
 #include <geos/operation/GeometryGraphOperation.h>
 #include <geos/algorithm/LineIntersector.h>
+#include <geos/algorithm/BoundaryNodeRule.h>
 #include <geos/geomgraph/GeometryGraph.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/PrecisionModel.h>
@@ -52,8 +53,32 @@ GeometryGraphOperation::GeometryGraphOperation(const Geometry *g0,
 	else
 		setComputationPrecision(pm1);
 
-	arg[0]=new GeometryGraph(0, g0);
-	arg[1]=new GeometryGraph(1, g1);
+	arg[0]=new GeometryGraph(0, g0,
+		algorithm::BoundaryNodeRule::OGC_SFS_BOUNDARY_RULE);
+	arg[1]=new GeometryGraph(1, g1,
+		algorithm::BoundaryNodeRule::OGC_SFS_BOUNDARY_RULE);
+}
+
+GeometryGraphOperation::GeometryGraphOperation(const Geometry *g0,
+		const Geometry *g1,
+		const algorithm::BoundaryNodeRule& boundaryNodeRule)
+	:
+	arg(2)
+{
+	const PrecisionModel* pm0 = g0->getPrecisionModel();
+	assert(pm0);
+
+	const PrecisionModel* pm1 = g1->getPrecisionModel();
+	assert(pm1);
+
+	// use the most precise model for the result
+	if (pm0->compareTo(pm1) >= 0)
+		setComputationPrecision(pm0);
+	else
+		setComputationPrecision(pm1);
+
+	arg[0]=new GeometryGraph(0, g0, boundaryNodeRule);
+	arg[1]=new GeometryGraph(1, g1, boundaryNodeRule);
 }
 
 

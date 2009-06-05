@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/GeometryGraphOperation.java rev. 1.14 (JTS-1.7)
+ * Last port: operation/GeometryGraphOperation.java rev. 1.18 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -27,6 +27,9 @@
 
 // Forward declarations
 namespace geos {
+	namespace algorithm {
+		class BoundaryNodeRule;
+	}
 	namespace geom {
 		class Geometry;
 		class PrecisionModel;
@@ -47,6 +50,10 @@ public:
 
 	GeometryGraphOperation(const geom::Geometry *g0,
 			const geom::Geometry *g1);
+
+	GeometryGraphOperation(const geom::Geometry *g0,
+		const geom::Geometry *g1,
+		const algorithm::BoundaryNodeRule& boundaryNodeRule);
 
 	GeometryGraphOperation(const geom::Geometry *g0);
 

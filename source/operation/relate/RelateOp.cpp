@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/relate/RelateOp.java rev. 1.17 (JTS-1.7)
+ * Last port: operation/relate/RelateOp.java rev. 1.19 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -43,8 +43,24 @@ RelateOp::relate(const Geometry *a, const Geometry *b)
 	return relOp.getIntersectionMatrix();
 }
 
+IntersectionMatrix*
+RelateOp::relate(const Geometry *a, const Geometry *b,
+		const algorithm::BoundaryNodeRule& boundaryNodeRule)
+{
+	RelateOp relOp(a, b, boundaryNodeRule);
+	return relOp.getIntersectionMatrix();
+}
+
 RelateOp::RelateOp(const Geometry *g0, const Geometry *g1):
 	GeometryGraphOperation(g0, g1),
+	relateComp(&arg)
+{
+}
+
+RelateOp::RelateOp(const Geometry *g0, const Geometry *g1,
+		const algorithm::BoundaryNodeRule& boundaryNodeRule)
+	:
+	GeometryGraphOperation(g0, g1, boundaryNodeRule),
 	relateComp(&arg)
 {
 }
