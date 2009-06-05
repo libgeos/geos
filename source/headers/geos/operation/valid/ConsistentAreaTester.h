@@ -12,6 +12,12 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/valid/ConsistentAreaTester.java rev. 1.14 (JTS-1.10)
+ *
+ * NON-EXPOSED GEOS HEADER
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_CONSISTENTAREATESTER_H
@@ -43,7 +49,7 @@ namespace valid { // geos::operation::valid
 /** \brief
  * Checks that a {@link geomgraph::GeometryGraph} representing an area
  * (a {@link Polygon} or {@link MultiPolygon} )
- * is consistent with the SFS semantics for area geometries.
+ * is consistent with the OGC-SFS semantics for area geometries.
  *
  * Checks include:
  * 
@@ -53,6 +59,27 @@ namespace valid { // geos::operation::valid
  * 
  * If an inconsistency if found the location of the problem
  * is recorded.
+ */
+/** \brief
+ * Checks that a geomgraph::GeometryGraph representing an area
+ * (a geom::Polygon or geom::MultiPolygon)
+ * has consistent semantics for area geometries.
+ * This check is required for any reasonable polygonal model
+ * (including the OGC-SFS model, as well as models which allow ring
+ * self-intersection at single points)
+ * 
+ * Checks include:
+ * 
+ *  - test for rings which properly intersect
+ *    (but not for ring self-intersection, or intersections at vertices)
+ *  - test for consistent labelling at all node points
+ *    (this detects vertex intersections with invalid topology,
+ *    i.e. where the exterior side of an edge lies in the interior of the area)
+ *  - test for duplicate rings
+ * 
+ * If an inconsistency is found the location of the problem
+ * is recorded and is available to the caller.
+ *
  */
 class ConsistentAreaTester {
 private:
@@ -75,16 +102,29 @@ private:
 
 public:
 
-	/// Caller keeps responsibility for GeometryGraph deletion
+	/**
+	 * Creates a new tester for consistent areas.
+	 *
+	 * @param geomGraph the topology graph of the area geometry.
+	 *                  Caller keeps responsibility for its deletion
+	 */
 	ConsistentAreaTester(geomgraph::GeometryGraph *newGeomGraph);
 
 	~ConsistentAreaTester();
 
 	/**
-	 * @return the intersection point, or <code>null</code> if none was found
+	 * @return the intersection point, or <code>null</code>
+	 *         if none was found
 	 */
 	geom::Coordinate& getInvalidPoint();
 
+	/** \brief
+	 * Check all nodes to see if their labels are consistent with
+	 * area topology.
+	 *
+	 * @return <code>true</code> if this area has a consistent node
+	 *         labelling
+	 */
 	bool isNodeConsistentArea();
 
 	/**

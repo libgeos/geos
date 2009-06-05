@@ -14,9 +14,9 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/EdgeEnd.java rev. 1.5 (JTS-1.7)
+ * Last port: geomgraph/EdgeEnd.java rev. 1.6 (JTS-1.10)
  *
- * EXPOSED GEOS HEADER
+ * EXPOSED GEOS HEADER, but direct use NOT reccommended
  *
  **********************************************************************/
 
@@ -31,6 +31,9 @@
 
 // Forward declarations
 namespace geos {
+	namespace algorithm {
+		class BoundaryNodeRule;
+	}
 	namespace geomgraph {
 		class Label;
 		class Edge;
@@ -111,7 +114,7 @@ public:
 	 */
 	virtual int compareDirection(const EdgeEnd *e) const;
 
-	virtual void computeLabel();
+	virtual void computeLabel(const algorithm::BoundaryNodeRule& bnr);
 
 	virtual std::string print();
 

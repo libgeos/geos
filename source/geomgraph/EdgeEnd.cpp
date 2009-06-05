@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/EdgeEnd.java rev. 1.5 (JTS-1.7)
+ * Last port: geomgraph/EdgeEnd.java rev. 1.6 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -182,7 +182,7 @@ EdgeEnd::compareDirection(const EdgeEnd* e) const
 
 /*public*/
 void
-EdgeEnd::computeLabel()
+EdgeEnd::computeLabel(const algorithm::BoundaryNodeRule& boundaryNodeRule)
 {
 	// subclasses should override this if they are using labels
 }

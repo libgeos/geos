@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/EdgeEndStar.java rev. 1.4 (JTS-1.7)
+ * Last port: geomgraph/EdgeEndStar.java rev. 1.8 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -76,10 +76,10 @@ EdgeEndStar::getNextCW(EdgeEnd *ee)
 
 /*public*/
 void
-EdgeEndStar::computeLabelling(std::vector<GeometryGraph*> *geom)
+EdgeEndStar::computeLabelling(std::vector<GeometryGraph*> *geomGraph)
 	//throw(TopologyException *)
 {
-	computeEdgeEndLabels();
+	computeEdgeEndLabels((*geomGraph)[0]->getBoundaryNodeRule());
 
 	// Propagate side labels  around the edges in the star
 	// for each parent Geometry
@@ -156,7 +156,7 @@ EdgeEndStar::computeLabelling(std::vector<GeometryGraph*> *geom)
 					loc=Location::EXTERIOR;
 				}else {
 					Coordinate& p=e->getCoordinate();
-					loc=getLocation(geomi,p,geom);
+					loc = getLocation(geomi, p, geomGraph);
 				}
 				label->setAllLocationsIfNull(geomi,loc);
 			}
@@ -166,14 +166,15 @@ EdgeEndStar::computeLabelling(std::vector<GeometryGraph*> *geom)
 
 /*private*/
 void
-EdgeEndStar::computeEdgeEndLabels()
+EdgeEndStar::computeEdgeEndLabels(
+		const algorithm::BoundaryNodeRule& boundaryNodeRule)
 {
 	// Compute edge label for each EdgeEnd
 	for (EdgeEndStar::iterator it=begin(); it!=end(); ++it)
 	{
-		EdgeEnd *e=*it;
-		assert(e);
-		e->computeLabel();
+		EdgeEnd *ee=*it;
+		assert(ee);
+		ee->computeLabel(boundaryNodeRule);
 	}
 }
 
@@ -193,9 +194,9 @@ EdgeEndStar::getLocation(int geomIndex,
 
 /*public*/
 bool
-EdgeEndStar::isAreaLabelsConsistent()
+EdgeEndStar::isAreaLabelsConsistent(const GeometryGraph& geomGraph)
 {
-	computeEdgeEndLabels();
+	computeEdgeEndLabels(geomGraph.getBoundaryNodeRule());
 	return checkAreaLabelsConsistent(0);
 }
 

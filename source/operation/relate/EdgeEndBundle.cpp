@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/relate/EdgeEndBundle.java rev. 1.15 (JTS-1.7)
+ * Last port: operation/relate/EdgeEndBundle.java rev. 1.17 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -75,7 +75,9 @@ void EdgeEndBundle::insert(EdgeEnd *e){
 * edges in this EdgeStubBundle.  It essentially merges
 * the ON and side labels for each edge.  These labels must be compatible
 */
-void EdgeEndBundle::computeLabel() {
+void EdgeEndBundle::computeLabel(
+	const algorithm::BoundaryNodeRule& boundaryNodeRule)
+{
 	// create the label.  If any of the edges belong to areas,
 	// the label must be an area label
 	bool isArea=false;
@@ -95,34 +97,16 @@ void EdgeEndBundle::computeLabel() {
 	}
 	// compute the On label, and the side labels if present
 	for(int i=0;i<2;i++) {
-		computeLabelOn(i);
+		computeLabelOn(i, boundaryNodeRule);
 		if (isArea)
 			computeLabelSides(i);
 	}
 }
 
 
-/**
-* Compute the overall ON location for the list of EdgeStubs.
-* (This is essentially equivalent to computing the self-overlay of a single Geometry)
-* edgeStubs can be either on the boundary (eg Polygon edge)
-* OR in the interior (e.g. segment of a LineString)
-* of their parent Geometry.
-* In addition, GeometryCollections use the mod-2 rule to determine
-* whether a segment is on the boundary or not.
-* Finally, in GeometryCollections it can still occur that an edge is both
-* on the boundary and in the interior (e.g. a LineString segment lying on
-* top of a Polygon edge.) In this case as usual the Boundary is given precendence.
-* <br>
-* These observations result in the following rules for computing the ON location:
-* <ul>
-* <li> if there are an odd number of Bdy edges, the attribute is Bdy
-* <li> if there are an even number >= 2 of Bdy edges, the attribute is Int
-* <li> if there are any Int edges, the attribute is Int
-* <li> otherwise, the attribute is NULL.
-* </ul>
-*/
-void EdgeEndBundle::computeLabelOn(int geomIndex) {
+void
+EdgeEndBundle::computeLabelOn(int geomIndex, const algorithm::BoundaryNodeRule& boundaryNodeRule)
+{
 	// compute the ON location value
 	int boundaryCount=0;
 	bool foundInterior=false;
@@ -136,7 +120,8 @@ void EdgeEndBundle::computeLabelOn(int geomIndex) {
 	int loc=Location::UNDEF;
 	if (foundInterior) loc=Location::INTERIOR;
 	if (boundaryCount>0) {
-		loc=GeometryGraph::determineBoundary(boundaryCount);
+		loc = GeometryGraph::determineBoundary(boundaryNodeRule,
+		                                       boundaryCount);
 	}
 	label->setLocation(geomIndex,loc);
 }

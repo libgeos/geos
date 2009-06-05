@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/valid/ConsistentAreaTester.java rev. 1.14 (JTS-1.10)
+ *
  **********************************************************************/
 
 #include <geos/operation/valid/ConsistentAreaTester.h> 
@@ -79,11 +83,13 @@ ConsistentAreaTester::isNodeConsistentArea()
 bool
 ConsistentAreaTester::isNodeEdgeAreaLabelsConsistent()
 {
+	assert(geomGraph);
+
 	map<Coordinate*,Node*,CoordinateLessThen>& nMap=nodeGraph.getNodeMap();
 	map<Coordinate*,Node*,CoordinateLessThen>::iterator nodeIt;
 	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
 		relate::RelateNode *node=static_cast<relate::RelateNode*>(nodeIt->second);
-		if (!node->getEdges()->isAreaLabelsConsistent()) {
+		if (!node->getEdges()->isAreaLabelsConsistent(*geomGraph)) {
 			invalidPoint=node->getCoordinate();
 			return false;
 		}

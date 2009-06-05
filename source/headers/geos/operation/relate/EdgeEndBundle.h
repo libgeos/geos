@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/relate/EdgeEndBundle.java rev. 1.15 (JTS-1.7)
+ * Last port: operation/relate/EdgeEndBundle.java rev. 1.17 (JTS-1.10)
  *
  * NON-EXPOSED GEOS HEADER
  *
@@ -28,6 +28,9 @@
 
 // Forward declarations
 namespace geos {
+	namespace algorithm {
+		class BoundaryNodeRule;
+	}
 	namespace geom {
 		class IntersectionMatrix;
 	}
@@ -39,23 +42,57 @@ namespace operation { // geos::operation
 namespace relate { // geos::operation::relate
 
 /** \brief
- * Contains all geomgraph::EdgeEnd objectss which start at the same point
- * and are parallel.
+ * A collection of geomgraph::EdgeEnd objects which
+ * originate at the same point and have the same direction.
  */
-class EdgeEndBundle: public geomgraph::EdgeEnd {
+class EdgeEndBundle: public geomgraph::EdgeEnd
+{
 public:
 	EdgeEndBundle(geomgraph::EdgeEnd *e);
 	virtual ~EdgeEndBundle();
 	geomgraph::Label *getLabel();
-//Iterator iterator() //Not needed
 	std::vector<geomgraph::EdgeEnd*>* getEdgeEnds();
 	void insert(geomgraph::EdgeEnd *e);
-	void computeLabel() ; 
+
+	void computeLabel(const algorithm::BoundaryNodeRule& bnr); 
+
 	void updateIM(geom::IntersectionMatrix *im);
 	std::string print();
 protected:
 	std::vector<geomgraph::EdgeEnd*> *edgeEnds;
-	void computeLabelOn(int geomIndex);
+
+	/**
+	 * Compute the overall ON location for the list of EdgeStubs.
+	 *
+	 * (This is essentially equivalent to computing the self-overlay of
+	 * a single Geometry)
+	 *
+	 * edgeStubs can be either on the boundary (eg Polygon edge)
+	 * OR in the interior (e.g. segment of a LineString)
+	 * of their parent Geometry.
+	 *
+	 * In addition, GeometryCollections use a algorithm::BoundaryNodeRule
+	 * to determine whether a segment is on the boundary or not.
+	 *
+	 * Finally, in GeometryCollections it can occur that an edge
+	 * is both
+	 * on the boundary and in the interior (e.g. a LineString segment
+	 * lying on
+	 * top of a Polygon edge.) In this case the Boundary is
+	 * given precendence.
+	 * 
+	 * These observations result in the following rules for computing
+	 * the ON location:
+	 *  - if there are an odd number of Bdy edges, the attribute is Bdy
+	 *  - if there are an even number >= 2 of Bdy edges, the attribute
+	 *    is Int
+	 *  - if there are any Int edges, the attribute is Int
+	 *  - otherwise, the attribute is NULL.
+	 * 
+	 */
+	void computeLabelOn(int geomIndex,
+		const algorithm::BoundaryNodeRule& boundaryNodeRule);
+
 	void computeLabelSides(int geomIndex);
 	void computeLabelSide(int geomIndex,int side);
 };

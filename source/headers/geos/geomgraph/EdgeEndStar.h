@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/EdgeEndStar.java rev. 1.4 (JTS-1.7)
+ * Last port: geomgraph/EdgeEndStar.java rev. 1.8 (JTS-1.10)
  *
  * EXPOSED GEOS HEADER
  *
@@ -36,6 +36,9 @@
 
 // Forward declarations
 namespace geos {
+	namespace algorithm {
+		class BoundaryNodeRule;
+	}
 	namespace geomgraph {
 		class GeometryGraph;
 	}
@@ -94,14 +97,10 @@ public:
 
 	virtual EdgeEnd* getNextCW(EdgeEnd *ee);
 
-	virtual void computeLabelling(std::vector<GeometryGraph*> *geom);
+	virtual void computeLabelling(std::vector<GeometryGraph*> *geomGraph);
 		// throw(TopologyException *);
 
-	virtual int getLocation(int geomIndex,
-		const geom::Coordinate& p,
-		std::vector<GeometryGraph*> *geom); 
-
-	virtual bool isAreaLabelsConsistent();
+	virtual bool isAreaLabelsConsistent(const GeometryGraph& geomGraph);
 
 	virtual void propagateSideLabels(int geomIndex);
 		// throw(TopologyException *);
@@ -126,13 +125,17 @@ protected:
 
 private:
 
+	virtual int getLocation(int geomIndex,
+		const geom::Coordinate& p,
+		std::vector<GeometryGraph*> *geom); 
+
 	/** \brief
 	 * The location of the point for this star in
 	 * Geometry i Areas
 	 */
 	int ptInAreaLocation[2];
 
-	virtual void computeEdgeEndLabels();
+	virtual void computeEdgeEndLabels(const algorithm::BoundaryNodeRule&);
 
 	virtual bool checkAreaLabelsConsistent(int geomIndex);
 
