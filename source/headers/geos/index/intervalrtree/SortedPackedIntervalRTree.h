@@ -45,6 +45,7 @@ namespace intervalrtree {
  * can be optimized based on a fixed set of items.
  * 
  * @author Martin Davis
+ *
  */
 class SortedPackedIntervalRTree 
 {
@@ -68,7 +69,7 @@ public:
 	 * 
 	 * @param min the lower bound of the item interval
 	 * @param max the upper bound of the item interval
-	 * @param item the item to insert
+	 * @param item the item to insert, ownership left to caller
 	 * 
 	 * @throw IllegalStateException if the index has already been queried
 	 */

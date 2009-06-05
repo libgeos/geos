@@ -20,6 +20,8 @@
 #include <geos/algorithm/locate/PointOnGeometryLocator.h> // inherited
 #include <geos/index/ItemVisitor.h> // inherited
 
+#include <vector> // composition
+
 namespace geos {
 	namespace algorithm {
 		class RayCrossingCounter;
@@ -28,6 +30,7 @@ namespace geos {
 		class Geometry;
 		class Coordinate; 
 		class CoordinateSequence; 
+		class LineSegment;
 	}
 	namespace index {
 		namespace intervalrtree {
@@ -60,6 +63,9 @@ private:
 
 		void init( const geom::Geometry & g);
 		void addLine( geom::CoordinateSequence * pts);
+
+		// To keep track of allocated LineSegments
+		std::vector< geom::LineSegment* > allocatedSegments;
 
 	public:
 		IntervalIndexedGeometry( const geom::Geometry & g);
@@ -109,7 +115,7 @@ public:
 	 * @return the location of the point in the geometry  
 	 */
 	int locate( const geom::Coordinate * /*const*/ p);
-    
+
 };
 
 } // geos::algorithm::locate

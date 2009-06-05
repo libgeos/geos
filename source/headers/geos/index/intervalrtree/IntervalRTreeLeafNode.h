@@ -36,10 +36,13 @@ namespace intervalrtree {
 class IntervalRTreeLeafNode : public IntervalRTreeNode
 {
 private:
+	/// externally owned
 	void * item;
 
 protected:
 public:
+
+	/// @param item externally owned
 	IntervalRTreeLeafNode( double min, double max, void * item)
 	:	IntervalRTreeNode( min, max),
 		item( item)
@@ -47,7 +50,6 @@ public:
 
 	~IntervalRTreeLeafNode()
 	{
-		delete item;
 	}
 	
 	void query( double queryMin, double queryMax, index::ItemVisitor * visitor) const;
