@@ -12,6 +12,12 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geomgraph/GeometryGraph.java rev. 1.5 (JTS-1.7)
+ *
+ * EXPOSED GEOS HEADER
+ *
  **********************************************************************/
 
 

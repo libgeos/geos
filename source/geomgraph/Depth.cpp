@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geomgraph/Depth.java rev. 1.4 (JTS-1.10)
+ *
  **********************************************************************/
 
 #include <sstream>
@@ -22,7 +26,7 @@
 #include <geos/geomgraph/Position.h>
 #include <geos/geom/Location.h>
 
-#define DEPTHNULL -1
+#define NULL_VALUE -1
 
 using namespace std;
 using namespace geos::geom;
@@ -35,7 +39,7 @@ Depth::depthAtLocation(int location)
 {
 	if (location == Location::EXTERIOR) return 0;
 	if (location == Location::INTERIOR) return 1;
-	return DEPTHNULL;
+	return NULL_VALUE;
 }
 
 Depth::Depth()
@@ -43,7 +47,7 @@ Depth::Depth()
 	// initialize depth array to a sentinel value
 	for (int i=0; i<2; i++) {
 		for (int j=0; j<3;j++) {
-			depth[i][j]=DEPTHNULL;
+			depth[i][j]=NULL_VALUE;
 		}
 	}
 }
@@ -87,7 +91,7 @@ Depth::isNull() const
 {
 	for (int i=0; i<2; i++) {
 		for (int j=0; j<3; j++) {
-			if (depth[i][j] != DEPTHNULL)
+			if (depth[i][j] != NULL_VALUE)
 				return false;
 		}
 	}
@@ -97,13 +101,13 @@ Depth::isNull() const
 bool
 Depth::isNull(int geomIndex) const
 {
-	return depth[geomIndex][1] == DEPTHNULL;
+	return depth[geomIndex][1] == NULL_VALUE;
 }
 
 bool
 Depth::isNull(int geomIndex, int posIndex) const
 {
-	return depth[geomIndex][posIndex] == DEPTHNULL;
+	return depth[geomIndex][posIndex] == NULL_VALUE;
 }
 
 int

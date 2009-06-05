@@ -12,6 +12,12 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geomgraph/Depth.java rev. 1.4 (JTS-1.10)
+ *
+ * NON-EXPOSED GEOS HEADER
+ *
  **********************************************************************/
 
 
@@ -50,9 +56,8 @@ public:
 	std::string toString() const;
 private:
 	enum {
-		DEPTHNULL=-1 //Replaces NULL
+		NULL_VALUE=-1 //Replaces NULL
 	};
-//	static const int DEPTHNULL=-1; //Replaces NULL
 	int depth[2][3];
 };
 

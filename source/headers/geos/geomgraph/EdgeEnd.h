@@ -16,6 +16,8 @@
  *
  * Last port: geomgraph/EdgeEnd.java rev. 1.5 (JTS-1.7)
  *
+ * EXPOSED GEOS HEADER
+ *
  **********************************************************************/
 
 

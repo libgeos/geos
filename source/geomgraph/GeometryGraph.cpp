@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geomgraph/GeometryGraph.java rev. 1.5 (JTS-1.7)
+ *
  **********************************************************************/
 
 #include <geos/algorithm/CGAlgorithms.h>
@@ -167,30 +171,35 @@ GeometryGraph::add(const Geometry *g)
 	//throw (UnsupportedOperationException *)
 {
 	if (g->isEmpty()) return;
+
 	// check if this Geometry should obey the Boundary Determination Rule
 	// all collections except MultiPolygons obey the rule
-    // FIXME - mloskot: Make this condition readable and use paranthesis
-	if ((typeid(*g)==typeid(GeometryCollection)) ||
-			   (typeid(*g)==typeid(MultiPoint)) ||
-			   (typeid(*g)==typeid(MultiLineString)) &&
-			   !(typeid(*g)==typeid(MultiPolygon)))
-			useBoundaryDeterminationRule=true;
-	if (typeid(*g)==typeid(Polygon))
+	if ( dynamic_cast<const MultiPolygon*>(g) )
+		useBoundaryDeterminationRule = false;
+
+
+	if ( dynamic_cast<const Polygon*>(g) )
 		addPolygon((Polygon*) g);
-	else if (typeid(*g)==typeid(LineString))
+
+	// LineString also handles LinearRings
+	else if ( dynamic_cast<const LineString*>(g) )
 		addLineString((LineString*) g);
-	else if (typeid(*g)==typeid(LinearRing))
-		addLineString((LineString*) g);
-	else if (typeid(*g)==typeid(Point))
+
+	else if ( dynamic_cast<const Point*>(g) )
 		addPoint((Point*) g);
-	else if (typeid(*g)==typeid(MultiPoint))
+
+	else if ( dynamic_cast<const MultiPoint*>(g) )
 		addCollection((MultiPoint*) g);
-	else if (typeid(*g)==typeid(MultiLineString))
+
+	else if ( dynamic_cast<const MultiLineString*>(g) )
 		addCollection((MultiLineString*) g);
-	else if (typeid(*g)==typeid(MultiPolygon))
+
+	else if ( dynamic_cast<const MultiPolygon*>(g) )
 		addCollection((MultiPolygon*) g);
-	else if (typeid(*g)==typeid(GeometryCollection))
+
+	else if ( dynamic_cast<const GeometryCollection*>(g) )
 		addCollection((GeometryCollection*) g);
+
 	else {
 		string out=typeid(*g).name();
 		throw util::UnsupportedOperationException("GeometryGraph::add(Geometry *): unknown geometry type: "+out);

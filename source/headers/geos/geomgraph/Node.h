@@ -16,6 +16,8 @@
  *
  * Last port: geomgraph/Node.java rev. 1.6 (JTS-1.7)
  *
+ * EXPOSED GEOS HEADER
+ *
  **********************************************************************/
 
 

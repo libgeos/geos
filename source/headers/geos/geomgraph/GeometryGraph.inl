@@ -11,6 +11,12 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geomgraph/GeometryGraph.java rev. 1.5 (JTS-1.7)
+ *
+ * EXPOSED GEOS HEADER
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOMGRAPH_GEOMETRYGRAPH_INL
@@ -52,7 +58,7 @@ GeometryGraph::GeometryGraph(int newArgIndex,
 	:
 	PlanarGraph(),
 	parentGeom(newParentGeom),
-	useBoundaryDeterminationRule(false),
+	useBoundaryDeterminationRule(true),
 	argIndex(newArgIndex),
 	hasTooFewPointsVar(false)
 {
@@ -64,7 +70,7 @@ GeometryGraph::GeometryGraph()
 	:
 	PlanarGraph(),
 	parentGeom(NULL),
-	useBoundaryDeterminationRule(false),
+	useBoundaryDeterminationRule(true),
 	argIndex(-1),
 	hasTooFewPointsVar(false)
 {

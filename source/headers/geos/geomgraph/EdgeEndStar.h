@@ -16,6 +16,8 @@
  *
  * Last port: geomgraph/EdgeEndStar.java rev. 1.4 (JTS-1.7)
  *
+ * EXPOSED GEOS HEADER
+ *
  **********************************************************************/
 
 

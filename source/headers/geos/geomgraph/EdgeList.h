@@ -14,7 +14,9 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/EdgeList.java rev. 1.4 (JTS-1.9)
+ * Last port: geomgraph/EdgeList.java rev. 1.4 (JTS-1.10)
+ *
+ * EXPOSED GEOS HEADER
  *
  **********************************************************************/
 
