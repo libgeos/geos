@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/TopologyLocation.java rev. 1.6 (JTS-1.7)
+ * Last port: geomgraph/TopologyLocation.java rev. 1.6 (JTS-1.10)
  *
  **********************************************************************/
 

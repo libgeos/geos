@@ -14,7 +14,9 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/EdgeNodingValidator.java rev. 1.6 (JTS-1.9)
+ * Last port: geomgraph/EdgeNodingValidator.java rev. 1.6 (JTS-1.10)
+ *
+ * NON-EXPOSED GEOS HEADER
  *
  **********************************************************************/
 

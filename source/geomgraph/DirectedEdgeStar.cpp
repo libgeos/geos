@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/DirectedEdgeStar.java rev. 1.4 (JTS-1.7)
+ * Last port: geomgraph/DirectedEdgeStar.java rev. 1.4 (JTS-1.10)
  *
  **********************************************************************/
 

@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geomgraph/Edge.java rev. 1.4 (JTS-1.10)
+ *
  **********************************************************************/
 
 #ifdef _MSC_VER

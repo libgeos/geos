@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/Label.java rev. 1.6 (JTS-1.7)
+ * Last port: geomgraph/Label.java rev. 1.8 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -256,9 +256,9 @@ Label::toString() const
 std::ostream&
 operator<< (std::ostream& os, const Label& l)
 {
-	os << "a:"
+	os << "A:"
 	   << l.elt[0]
-	   << " b:"
+	   << " B:"
 	   << l.elt[1];
 	return os;
 }

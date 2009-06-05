@@ -12,6 +12,12 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geomgraph/DirectedEdgeStar.java rev. 1.4 (JTS-1.10)
+ *
+ * NON-EXPOSED GEOS HEADER
+ *
  **********************************************************************/
 
 
@@ -46,7 +52,6 @@ namespace geomgraph { // geos.geomgraph
  * It supports labelling the edges as well as linking the edges to form both
  * MaximalEdgeRings and MinimalEdgeRings.
  *
- * Last port: geomgraph/DirectedEdgeStar.java rev. 1.4 (JTS-1.7)
  */
 class DirectedEdgeStar: public EdgeEndStar {
 
