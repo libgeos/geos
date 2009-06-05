@@ -11,6 +11,12 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ ***********************************************************************
+ *
+ * Last port: operation/overlay/OverlayOp.java rev. 1.31 (JTS-1.10)
+ *
+ * EXPOSED GEOS HEADER
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_OVERLAY_OVERLAYOP_H

@@ -14,7 +14,9 @@
  *
  ***********************************************************************
  *
- * Last port: operation/overlay/OverlayOp.java rev. 1.23
+ * Last port: operation/overlay/OverlayOp.java rev. 1.31 (JTS-1.10)
+ *
+ * NOTE: Use of EdgeNodingValidator is not strictly the same
  *
  **********************************************************************/
 
@@ -680,14 +682,28 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 	//Debug.println(edgeList);
 
 #ifdef ENABLE_EDGE_NODING_VALIDATOR // {
-	if ( resultPrecisionModel->isFloating() )
+	/**
+	 * Check that the noding completed correctly.
+	 *
+	 * This test is slow, but necessary in order to catch
+	 * robustness failure situations.
+	 * If an exception is thrown because of a noding failure,
+	 * then snapping will be performed, which will hopefully avoid
+	 * the problem.
+	 * In the future hopefully a faster check can be developed.
+	 *
+	 */
+	if ( resultPrecisionModel->isFloating() ) // NOTE: this is not in JTS
 	{
-		// Will throw TopologyException if noding is found to be invalid
-		EdgeNodingValidator nv(edgeList.getEdges());
 
-		try {
-			nv.checkValid();
-		} catch (const util::TopologyException& ex) {
+		try
+		{
+			// Will throw TopologyException if noding is
+			// found to be invalid
+			EdgeNodingValidator::checkValid(edgeList.getEdges());
+		}
+		catch (const util::TopologyException& ex)
+		{
 #ifdef GEOS_DEBUG_VALIDATION // {
 			cout << "EdgeNodingValidator found noding invalid: " << ex.what() << endl;
 #endif // }
