@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/GeometryGraph.java rev. 1.5 (JTS-1.7)
+ * Last port: geomgraph/GeometryGraph.java rev. 1.9 (JTS-1.10)
  *
  * EXPOSED GEOS HEADER
  *
@@ -47,6 +47,7 @@ namespace geos {
 	}
 	namespace algorithm {
 		class LineIntersector;
+		class BoundaryNodeRule;
 	}
 	namespace geomgraph {
 		class Edge;
@@ -61,7 +62,9 @@ namespace geos {
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-class GeometryGraph: public PlanarGraph {
+class GeometryGraph: public PlanarGraph
+{
+
 using PlanarGraph::add;
 using PlanarGraph::findEdge;
 
@@ -85,6 +88,8 @@ private:
 	 * used when deciding whether nodes are in the boundary or not
 	 */
 	bool useBoundaryDeterminationRule;
+
+	const algorithm::BoundaryNodeRule& boundaryNodeRule;
 
 	/**
 	 * the index of this geometry as an argument to a spatial function
@@ -123,6 +128,13 @@ private:
 	void insertPoint(int argIndex, const geom::Coordinate& coord,
 			int onLocation);
 
+	/** \brief
+	 * Adds candidate boundary points using the current
+	 * algorithm::BoundaryNodeRule.
+	 *
+	 * This is used to add the boundary
+	 * points of dim-1 geometries (Curves/MultiCurves).
+	 */
 	void insertBoundaryPoint(int argIndex, const geom::Coordinate& coord);
 
 	void addSelfIntersectionNodes(int argIndex);
@@ -143,9 +155,16 @@ public:
 
 	static int determineBoundary(int boundaryCount);
 
+	static int determineBoundary(
+	             const algorithm::BoundaryNodeRule& boundaryNodeRule,
+	                                            int boundaryCount);
+
 	GeometryGraph();
 
 	GeometryGraph(int newArgIndex, const geom::Geometry *newParentGeom);
+
+	GeometryGraph(int newArgIndex, const geom::Geometry *newParentGeom,
+	              const algorithm::BoundaryNodeRule& boundaryNodeRule);
 
 	virtual ~GeometryGraph();
 
@@ -201,6 +220,9 @@ public:
 	bool hasTooFewPoints();
 
 	const geom::Coordinate& getInvalidPoint(); 
+
+	const algorithm::BoundaryNodeRule& getBoundaryNodeRule() const
+	{ return boundaryNodeRule; }
 
 };
 

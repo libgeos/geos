@@ -14,11 +14,12 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/GeometryGraph.java rev. 1.5 (JTS-1.7)
+ * Last port: geomgraph/GeometryGraph.java rev. 1.9 (JTS-1.10)
  *
  **********************************************************************/
 
 #include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/BoundaryNodeRule.h>
 
 #include <geos/util/UnsupportedOperationException.h>
 
@@ -435,7 +436,7 @@ GeometryGraph::insertBoundaryPoint(int argIndex,const Coordinate& coord)
 
 	// determine the boundary status of the point according to the
 	// Boundary Determination Rule
-	int newLoc=determineBoundary(boundaryCount);
+	int newLoc = determineBoundary(boundaryNodeRule, boundaryCount);
 	lbl->setLocation(argIndex,newLoc);
 }
 
@@ -492,6 +493,55 @@ const Coordinate&
 GeometryGraph::getInvalidPoint()
 {
 	return invalidPoint;
+}
+
+GeometryGraph::GeometryGraph(int newArgIndex,
+		const geom::Geometry *newParentGeom)
+	:
+	PlanarGraph(),
+	parentGeom(newParentGeom),
+	useBoundaryDeterminationRule(true),
+	boundaryNodeRule(algorithm::BoundaryNodeRule::OGC_SFS_BOUNDARY_RULE),
+	argIndex(newArgIndex),
+	hasTooFewPointsVar(false)
+{
+	if (parentGeom!=NULL) add(parentGeom);
+}
+
+GeometryGraph::GeometryGraph(int newArgIndex,
+		const geom::Geometry *newParentGeom,
+		const algorithm::BoundaryNodeRule& bnr)
+	:
+	PlanarGraph(),
+	parentGeom(newParentGeom),
+	useBoundaryDeterminationRule(true),
+	boundaryNodeRule(bnr),
+	argIndex(newArgIndex),
+	hasTooFewPointsVar(false)
+{
+	if (parentGeom!=NULL) add(parentGeom);
+}
+
+GeometryGraph::GeometryGraph()
+	:
+	PlanarGraph(),
+	parentGeom(NULL),
+	useBoundaryDeterminationRule(true),
+	boundaryNodeRule(algorithm::BoundaryNodeRule::OGC_SFS_BOUNDARY_RULE),
+	argIndex(-1),
+	hasTooFewPointsVar(false)
+{
+}
+
+
+/* public static */
+int
+GeometryGraph::determineBoundary(
+	             const algorithm::BoundaryNodeRule& boundaryNodeRule,
+	                                            int boundaryCount)
+{
+	return boundaryNodeRule.isInBoundary(boundaryCount)
+		? Location::BOUNDARY : Location::INTERIOR;
 }
 
 } // namespace geos.geomgraph

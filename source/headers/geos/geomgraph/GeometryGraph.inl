@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/GeometryGraph.java rev. 1.5 (JTS-1.7)
+ * Last port: geomgraph/GeometryGraph.java rev. 1.9 (JTS-1.10)
  *
  * EXPOSED GEOS HEADER
  *
@@ -49,30 +49,6 @@ GeometryGraph::getGeometry()
 
 INLINE 
 GeometryGraph::~GeometryGraph()
-{
-}
-
-INLINE
-GeometryGraph::GeometryGraph(int newArgIndex,
-		const geom::Geometry *newParentGeom)
-	:
-	PlanarGraph(),
-	parentGeom(newParentGeom),
-	useBoundaryDeterminationRule(true),
-	argIndex(newArgIndex),
-	hasTooFewPointsVar(false)
-{
-	if (parentGeom!=NULL) add(parentGeom);
-}
-
-INLINE
-GeometryGraph::GeometryGraph()
-	:
-	PlanarGraph(),
-	parentGeom(NULL),
-	useBoundaryDeterminationRule(true),
-	argIndex(-1),
-	hasTooFewPointsVar(false)
 {
 }
 
