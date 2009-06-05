@@ -55,7 +55,7 @@
  *
  * \section Overview
  *
- * Main class is geos::Geometry, from which all geometry types
+ * Main class is geos::geom::Geometry, from which all geometry types
  * derive.
  *
  * Construction and destruction of Geometries is done
