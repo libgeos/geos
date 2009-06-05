@@ -82,7 +82,7 @@
  * Internal exceptions are thrown as instances geos::util::GEOSException or
  * derived classes. GEOSException derives from std::exception.
  *
- * Note that prior to version 3.0.0, GEOSException were trown by
+ * Note that prior to version 3.0.0, GEOSException were thrown by
  * pointer, and did not derive from std::exception.
  *
  */ 
