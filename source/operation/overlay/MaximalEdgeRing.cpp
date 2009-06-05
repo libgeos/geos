@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/overlay/MaximalEdgeRing.java rev. 1.13
+ * Last port: operation/overlay/MaximalEdgeRing.java rev. 1.15 (JTS-1.10)
  *
  **********************************************************************/
 
