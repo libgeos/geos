@@ -20,8 +20,11 @@
 #include <iostream>
 #include <fstream>
 
-#include <geos/io.h>
-#include <geos/geom.h>
+#include <geos/io/WKTWriter.h>
+#include <geos/io/WKTReader.h>
+#include <geos/geom/PrecisionModel.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/Geometry.h>
 #include <geos/util/GEOSException.h>
 
 using namespace std;
