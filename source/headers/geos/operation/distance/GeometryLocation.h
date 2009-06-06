@@ -11,6 +11,12 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/distance/GeometryLocation.java rev. 1.4 (JTS-1.7)
+ *
+ * NON-EXPOSED GEOS HEADER
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_DISTANCE_GEOMETRYLOCATION_H
@@ -48,8 +54,8 @@ private:
 	geom::Coordinate pt;
 public:  
 	/**
-	 * Special value of segment-index for locations inside area geometries. These
-	 * locations do not have an associated segment index.
+	 * Special value of segment-index for locations inside area geometries.
+	 * These locations do not have an associated segment index.
 	 */
 	static const int INSIDE_AREA = -1;
 
