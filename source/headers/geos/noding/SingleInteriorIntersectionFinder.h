@@ -71,7 +71,7 @@ public:
 	 */
 	bool hasIntersection() const
 	{ 
-		return interiorIntersection != geom::Coordinate::getNull(); 
+		return !interiorIntersection.isNull(); 
 	}
   
 	/** \brief
@@ -110,8 +110,7 @@ public:
   
 	bool isDone() const
 	{ 
-		// TODO: add Coordinate::isNull()
-		return interiorIntersection != geom::Coordinate::getNull();
+		return !interiorIntersection.isNull();
 	}
 };
 

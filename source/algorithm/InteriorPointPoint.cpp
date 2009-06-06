@@ -14,6 +14,7 @@
  *
  **********************************************************************/
 
+#include <geos/platform.h>
 #include <geos/algorithm/InteriorPointPoint.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Geometry.h>
@@ -33,7 +34,7 @@ namespace algorithm { // geos.algorithm
 /*public*/
 InteriorPointPoint::InteriorPointPoint(const Geometry *g)
 {
-	minDistance=DoubleInfinity;
+	minDistance=DoubleMax;
 	if ( ! g->getCentroid(centroid) ) {
 		hasInterior=false;
 	} else {

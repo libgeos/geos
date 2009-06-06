@@ -194,7 +194,7 @@ LineSegment::closestPoints(const LineSegment& line)
 	CoordinateSequence *closestPt=new CoordinateArraySequence(2);
 	//vector<Coordinate> *cv = new vector<Coordinate>(2);
 
-	double minDistance=DoubleInfinity;
+	double minDistance=DoubleMax;
 	double dist;
 
 	Coordinate close00;

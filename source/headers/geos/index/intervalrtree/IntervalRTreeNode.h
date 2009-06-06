@@ -17,6 +17,7 @@
 #ifndef GEOS_INDEX_INTERVALRTREE_INTERVALRTREENODE_H
 #define GEOS_INDEX_INTERVALRTREE_INTERVALRTREENODE_H
 
+#include <geos/platform.h>
 #include <vector>
 #include <limits>
 
@@ -51,8 +52,8 @@ public:
 	typedef std::vector<const IntervalRTreeNode *> ConstVect;
 
 	IntervalRTreeNode()
-	:	min( std::numeric_limits<double>::min() ),
-		max( std::numeric_limits<double>::max() )
+	:	min( DoubleInfinity ),
+		max( DoubleNegInfinity )
 	{ }
 
 	IntervalRTreeNode( double min, double max)

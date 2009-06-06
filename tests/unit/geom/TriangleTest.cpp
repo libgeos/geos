@@ -113,6 +113,6 @@ namespace tut
 		ensure( fabs(center.x - 6.0) < 1e-15 );
 		ensure( center.y > 4.2 );
 		ensure( center.y < 4.3 );
-		ensure_equals( center.z, DoubleNotANumber );
+		ensure( ISNAN( center.z ) );
     }
 } // namespace tut

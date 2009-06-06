@@ -39,13 +39,15 @@
 #endif
 
 //Defines NaN for intel platforms
-#define DoubleNotANumber 1.7e-308
+#define DoubleNotANumber std::numeric_limits<double>::quiet_NaN()
 
 #define ISNAN(x)  _isnan(x)
 
 //Don't forget to define infinities
-#define DoubleInfinity 1.7e+308
-#define DoubleNegInfinity -1.7e+308
+#define DoubleInfinity std::numeric_limits<double>::infinity()
+#define DoubleNegInfinity -std::numeric_limits<double>::infinity()
+
+#define DoubleMax std::numeric_limits<double>::max()
 
 #define FINITE(x) _finite(x)
 #define finite(x) _finite(x)

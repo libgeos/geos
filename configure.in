@@ -140,6 +140,35 @@ CXXFLAGS="${CXXFLAGS} ${DEFAULTFLAGS}"
 CFLAGS="${CFLAGS} ${DEFAULTFLAGS}"
 
 dnl --------------------------------------------------------------------
+dnl - Look for finite and/or isfinite macros/functions
+dnl --------------------------------------------------------------------
+
+dnl These two tests need the math library or they won't link
+dnl on OpenBSD, even if the functions exist.
+save_LIBS=$LIBS
+LIBS="$LIBS -lm"
+AC_CACHE_CHECK([for finite], ac_cv_finite,
+ [AC_TRY_LINK([#include <math.h>],
+ [double x; int y; y = finite(x);],
+ ac_cv_finite=yes,
+ ac_cv_finite=no
+)])
+if test x"$ac_cv_finite" = x"yes"; then
+  AC_DEFINE(HAVE_FINITE, [1], [Has finite])
+fi
+
+AC_CACHE_CHECK([for isfinite], ac_cv_isfinite,
+ [AC_TRY_LINK([#include <math.h>],
+ [double x; int y; y = isfinite(x);],
+ ac_cv_isfinite=yes,
+ ac_cv_isfinite=no
+)])
+if test x"$ac_cv_isfinite" = x"yes"; then
+  AC_DEFINE(HAVE_ISFINITE, [1], [Has isfinite])
+fi
+LIBS=$save_LIBS
+
+dnl --------------------------------------------------------------------
 dnl - Look for a 64bit integer (do after CFLAGS is set)
 dnl --------------------------------------------------------------------
 

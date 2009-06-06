@@ -149,7 +149,7 @@ Geometry::hasNullElements(const CoordinateSequence* list)
 {
 	size_t npts=list->getSize();
 	for (size_t i=0; i<npts; ++i) {
-		if (list->getAt(i)==Coordinate::getNull()) {
+		if (list->getAt(i).isNull()) {
 			return true;
 		}
 	}

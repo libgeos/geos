@@ -23,6 +23,7 @@
 #include <stack>
 #include <vector> // for typedefs
 #include <string>
+#include <limits>
 
 namespace geos {
 namespace geom { // geos.geom
@@ -83,6 +84,8 @@ public:
 	void setNull();
 
 	static Coordinate& getNull();
+
+	bool isNull() const;
 
 	~Coordinate();
 

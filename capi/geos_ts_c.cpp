@@ -45,6 +45,7 @@
 #include <geos/operation/union/CascadedPolygonUnion.h>
 #include <geos/geom/BinaryOp.h>
 #include <geos/version.h> 
+#include <geos/platform.h>  // for FINITE
 
 // This should go away
 #include <cstddef>

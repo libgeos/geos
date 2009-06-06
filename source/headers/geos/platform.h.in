@@ -13,6 +13,12 @@
 /* Set to 1 if you have ieeefp.h */
 #undef HAVE_IEEEFP_H
 
+/* Has finite */
+#undef HAVE_FINITE
+
+/* Has isfinite */
+#undef HAVE_ISFINITE
+
 #ifdef HAVE_IEEEFP_H
 extern "C"
 {
@@ -36,15 +42,35 @@ extern "C"
 #include <float.h>
 #endif
 
+#include <cmath> // for finite()/isfinite() and isnan()
+#include <limits> // for std::numeric_limits
+
+
 
 //Defines NaN for intel platforms
-//Don't forget to define infinities
-#define DoubleNotANumber 1.7e-308
-#define DoubleInfinity 1.7e+308
-#define DoubleNegInfinity -1.7e+308
+#define DoubleNotANumber std::numeric_limits<double>::quiet_NaN()
 
-#define FINITE(x) ( (x) != DoubleNotANumber && (x) != DoubleInfinity && (x) != DoubleNegInfinity )
-#define ISNAN(x) ( (x) == DoubleNotANumber )
+//Don't forget to define infinities
+#define DoubleInfinity std::numeric_limits<double>::infinity()
+#define DoubleNegInfinity -std::numeric_limits<double>::infinity()
+
+#define DoubleMax std::numeric_limits<double>::max()
+
+inline bool
+isFinite(double d)
+{
+#if defined(HAVE_FINITE) && !defined(HAVE_ISFINITE)
+    return (finite(d));
+#else
+    // Put using namespace std; here if you have to
+    // put it anywhere.
+    using namespace std;
+    return (isfinite(d));
+#endif
+}
+#define FINITE(x) ( isFinite(x) ) 
+
+#define ISNAN(x) ( isnan(x) )
 
 #ifdef HAVE_INT64_T_64
   typedef int64_t int64;

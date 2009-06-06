@@ -232,7 +232,7 @@ GeometryFactory::createPoint() const
 Point*
 GeometryFactory::createPoint(const Coordinate& coordinate) const
 {
-	if (coordinate==Coordinate::getNull()) {
+	if (coordinate.isNull()) {
 		return createPoint();
 	} else {
 		CoordinateSequence *cl=coordinateListFactory->create(new vector<Coordinate>(1, coordinate));

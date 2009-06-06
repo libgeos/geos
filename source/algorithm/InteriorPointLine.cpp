@@ -38,7 +38,7 @@ namespace algorithm { // geos.algorithm
 
 InteriorPointLine::InteriorPointLine(const Geometry *g)
 {
-	minDistance=DoubleInfinity;
+	minDistance=DoubleMax;
 	hasInterior=false;
 	if ( g->getCentroid(centroid) )
 	{

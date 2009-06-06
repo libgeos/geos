@@ -218,7 +218,7 @@ namespace tut
 
 		DistanceOp dist(g0.get(), g1.get());
 
-		ensure_equals(dist.distance(), DoubleInfinity);
+		ensure_equals(dist.distance(), DoubleMax);
 
 		ensure_equals(dist.closestPoints(), (void*)0);
 	}
@@ -396,7 +396,7 @@ namespace tut
 
 		DistanceOp dist(g0.get(), g1.get());
 
-		ensure_equals(dist.distance(), DoubleInfinity);
+		ensure_equals(dist.distance(), DoubleMax);
 
         	ensure_equals(dist.closestPoints(), (void*)0);
 

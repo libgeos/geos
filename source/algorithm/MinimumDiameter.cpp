@@ -220,7 +220,7 @@ MinimumDiameter::computeWidthConvex(const Geometry *geom)
 void
 MinimumDiameter::computeConvexRingMinDiameter(const CoordinateSequence* pts)
 {
-	minWidth=DoubleInfinity;
+	minWidth=DoubleMax;
 	unsigned int currMaxIndex=1;
 	LineSegment seg;
 

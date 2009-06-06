@@ -83,7 +83,7 @@ DistanceOp::DistanceOp(const Geometry *g0, const Geometry *g1):
 	geom(2),
 	terminateDistance(0.0),
 	minDistanceLocation(0),
-	minDistance(DoubleInfinity)
+	minDistance(DoubleMax)
 {
 	geom[0] = g0;
 	geom[1] = g1;
@@ -93,7 +93,7 @@ DistanceOp::DistanceOp(const Geometry& g0, const Geometry& g1):
 	geom(2),
 	terminateDistance(0.0),
 	minDistanceLocation(0),
-	minDistance(DoubleInfinity)
+	minDistance(DoubleMax)
 {
 	geom[0] = &g0;
 	geom[1] = &g1;
@@ -104,7 +104,7 @@ DistanceOp::DistanceOp(const Geometry& g0, const Geometry& g1, double tdist)
 	geom(2),
 	terminateDistance(tdist),
 	minDistanceLocation(0),
-	minDistance(DoubleInfinity)
+	minDistance(DoubleMax)
 {
 	geom[0] = &g0;
 	geom[1] = &g1;

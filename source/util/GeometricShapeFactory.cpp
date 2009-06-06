@@ -257,10 +257,10 @@ void GeometricShapeFactory::Dimensions::setHeight(double nHeight)
 Envelope*
 GeometricShapeFactory::Dimensions::getEnvelope()
 {
-	if (base!=Coordinate::getNull()) {
+	if (!base.isNull()) {
 		return new Envelope(base.x, base.x + width, base.y, base.y + height);
 	}
-	if (centre!=Coordinate::getNull()) {
+	if (!centre.isNull()) {
 		return new Envelope(centre.x - width/2, centre.x + width/2,centre.y - height/2, centre.y + height/2);
 	}
 	return new Envelope(0, width, 0, height);

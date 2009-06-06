@@ -40,6 +40,12 @@ Coordinate::getNull()
 	return nullCoord;
 }
 
+INLINE bool
+Coordinate::isNull() const
+{
+	return (ISNAN(x) && ISNAN(y) && ISNAN(z));
+}
+
 INLINE
 Coordinate::~Coordinate()
 {

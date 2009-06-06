@@ -50,7 +50,7 @@ namespace tut
         geos::geom::Coordinate coord;
         ensure_equals( coord.x, 0.0 );
         ensure_equals( coord.y, 0.0 );
-        ensure_equals( coord.z, DoubleNotANumber );
+        ensure( ISNAN( coord.z ) );
     }
 
     // Test of copy constructor and assignment operator
@@ -172,16 +172,16 @@ namespace tut
 
         // Make it null and check
         not_null_coord.setNull();
-        ensure_equals( not_null_coord.x, DoubleNotANumber );
-        ensure_equals( not_null_coord.y, DoubleNotANumber );
-        ensure_equals( not_null_coord.z, DoubleNotANumber );
+        ensure( ISNAN( not_null_coord.x ) );
+        ensure( ISNAN( not_null_coord.y ) );
+        ensure( ISNAN( not_null_coord.z ) );
 
         // Build in static null instance
         geos::geom::Coordinate null_coord;
         null_coord = geos::geom::Coordinate::getNull();
-        ensure_equals( null_coord.x, DoubleNotANumber );
-        ensure_equals( null_coord.y, DoubleNotANumber );
-        ensure_equals( null_coord.z, DoubleNotANumber );
+        ensure( ISNAN( null_coord.x ) );
+        ensure( ISNAN( null_coord.y ) );
+        ensure( ISNAN( null_coord.z ) );
     }
 
 } // namespace tut

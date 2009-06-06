@@ -202,7 +202,7 @@ RightmostEdgeFinder::checkForRightmostCoordinate(DirectedEdge *de)
      // of a non-horizontal segment
      // <FIX> MD 19 Sep 03 - NO!  we can test all vertices,
      // since the rightmost must have a non-horiz segment adjacent to it
-		if (minCoord==Coordinate::getNull() ||
+		if (minCoord.isNull() || 
 			coord->getAt(i).x > minCoord.x )
 		{
 			minDe = de;
