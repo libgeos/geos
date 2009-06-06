@@ -17,6 +17,7 @@
 #ifndef GEOS_OP_SWEEPLINENESTEDRINGTESTER_H
 #define GEOS_OP_SWEEPLINENESTEDRINGTESTER_H
 
+#include <geos/export.h>
 #include <vector>
 
 #include <geos/geom/Envelope.h> // for inline
@@ -50,7 +51,7 @@ namespace valid { // geos::operation::valid
  * nested inside another ring in the set, using an
  * index::sweepline::SweepLineIndex to speed up the comparisons.
  */
-class SweeplineNestedRingTester {
+class GEOS_DLL SweeplineNestedRingTester {
 
 private:
 	geomgraph::GeometryGraph *graph;  // used to find non-node vertices

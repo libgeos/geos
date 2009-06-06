@@ -24,6 +24,7 @@
 #ifndef GEOS_GEOMGRAPH_DIRECTEDEDGE_H
 #define GEOS_GEOMGRAPH_DIRECTEDEDGE_H
 
+#include <geos/export.h>
 #include <string>
 
 #include <geos/geomgraph/EdgeEnd.h> // for inheritance
@@ -42,7 +43,7 @@ namespace geos {
 namespace geomgraph { // geos.geomgraph
 
 /// A directed EdgeEnd
-class DirectedEdge: public EdgeEnd {
+class GEOS_DLL DirectedEdge: public EdgeEnd {
 
 public:
 

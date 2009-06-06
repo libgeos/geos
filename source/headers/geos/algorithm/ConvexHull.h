@@ -17,6 +17,7 @@
 #ifndef GEOS_ALGORITHM_CONVEXHULL_H
 #define GEOS_ALGORITHM_CONVEXHULL_H
 
+#include <geos/export.h>
 #include <vector>
 
 // FIXME: avoid using Cordinate:: typedefs to avoid full include
@@ -45,7 +46,7 @@ namespace algorithm { // geos::algorithm
  * Last port: algorithm/ConvexHull.java rev. 1.26 (JTS-1.7)
  *
  */
-class ConvexHull {
+class GEOS_DLL ConvexHull {
 private:
 	const geom::GeometryFactory *geomFactory;
 	geom::Coordinate::ConstVect inputPts;

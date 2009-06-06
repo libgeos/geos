@@ -16,6 +16,7 @@
 #ifndef GEOS_OP_LINEMERGE_EDGESTRING_H
 #define GEOS_OP_LINEMERGE_EDGESTRING_H
 
+#include <geos/export.h>
 #include <vector>
 
 // Forward declarations 
@@ -42,7 +43,7 @@ namespace linemerge { // geos::operation::linemerge
  * A sequence of LineMergeDirectedEdge forming one of the lines that will
  * be output by the line-merging process.
  */
-class EdgeString {
+class GEOS_DLL EdgeString {
 private:
 	const geom::GeometryFactory *factory;
 	std::vector<LineMergeDirectedEdge*> *directedEdges;

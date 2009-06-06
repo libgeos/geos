@@ -40,11 +40,15 @@
 ///
 #undef VERBOSE_EXCEPTIONS
 
+#include <geos/export.h>
+
+/*
 #if defined(_MSC_VER)
 #  define GEOS_DLL     __declspec(dllexport)
 #else
 #  define GEOS_DLL
 #endif
+*/
 
 // import the most frequently used definitions globally
 using geos::geom::Geometry;

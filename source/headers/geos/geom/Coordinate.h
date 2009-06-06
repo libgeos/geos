@@ -16,9 +16,9 @@
 #ifndef GEOS_GEOM_COORDINATE_H
 #define GEOS_GEOM_COORDINATE_H
 
+#include <geos/export.h>
 #include <geos/platform.h> // for DoubleNotANumber
 #include <geos/inline.h>
-
 #include <set>
 #include <stack>
 #include <vector> // for typedefs
@@ -53,7 +53,7 @@ struct CoordinateLessThen;
 // Define the following to make assignments and copy constructions 
 // NON-inline (will let profilers report usages)
 //#define PROFILE_COORDINATE_COPIES 1
-class Coordinate {
+class GEOS_DLL Coordinate {
 
 private:
 
@@ -129,7 +129,7 @@ public:
 };
 
 /// Strict weak ordering Functor for Coordinate
-struct CoordinateLessThen {
+struct GEOS_DLL CoordinateLessThen {
 
 	bool operator()(const Coordinate* a, const Coordinate* b) const;
 	bool operator()(const Coordinate& a, const Coordinate& b) const;
@@ -137,13 +137,13 @@ struct CoordinateLessThen {
 };
 
 /// Output function
-std::ostream& operator<< (std::ostream& os, const Coordinate& c);
+GEOS_DLL std::ostream& operator<< (std::ostream& os, const Coordinate& c);
 
 /// Equality operator for Coordinate. 2D only.
-bool operator==(const Coordinate& a, const Coordinate& b);
+GEOS_DLL bool operator==(const Coordinate& a, const Coordinate& b);
 
 /// Inequality operator for Coordinate. 2D only.
-bool operator!=(const Coordinate& a, const Coordinate& b);
+GEOS_DLL bool operator!=(const Coordinate& a, const Coordinate& b);
 
 
 

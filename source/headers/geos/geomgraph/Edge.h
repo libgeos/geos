@@ -24,6 +24,7 @@
 #ifndef GEOS_GEOMGRAPH_EDGE_H
 #define GEOS_GEOMGRAPH_EDGE_H
 
+#include <geos/export.h>
 #include <string>
 #include <cassert>
 
@@ -58,7 +59,7 @@ namespace geos {
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-class Edge: public GraphComponent{
+class GEOS_DLL Edge: public GraphComponent{
 using GraphComponent::updateIM;
 
 private:

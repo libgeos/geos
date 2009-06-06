@@ -21,6 +21,7 @@
 #ifndef GEOS_GEOS_MULTIPOLYGON_H
 #define GEOS_GEOS_MULTIPOLYGON_H
 
+#include <geos/export.h>
 #include <string>
 #include <vector>
 #include <geos/platform.h>
@@ -43,7 +44,7 @@ namespace geos {
 namespace geom { // geos::geom
 
 /// Basic implementation of <code>MultiPolygon</code>.
-class MultiPolygon: public GeometryCollection
+class GEOS_DLL MultiPolygon: public GeometryCollection
 {
 
 public:

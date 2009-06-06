@@ -17,6 +17,7 @@
 #ifndef GEOS_UTIL_ILLEGALARGUMENTEXCEPTION_H
 #define GEOS_UTIL_ILLEGALARGUMENTEXCEPTION_H
 
+#include <geos/export.h>
 #include <string>
 
 #include <geos/util/GEOSException.h>
@@ -31,7 +32,7 @@ namespace util { // geos::util
  * trying to apply set-theoretic methods to a
  * GeometryCollection object.
  */
-class IllegalArgumentException: public GEOSException {
+class GEOS_DLL IllegalArgumentException: public GEOSException {
 public:
 	IllegalArgumentException()
 		:

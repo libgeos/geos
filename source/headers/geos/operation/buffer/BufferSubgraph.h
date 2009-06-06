@@ -20,6 +20,8 @@
 #ifndef GEOS_OP_BUFFER_BUFFERSUBGRAPH_H
 #define GEOS_OP_BUFFER_BUFFERSUBGRAPH_H
 
+#include <geos/export.h>
+
 #include <vector>
 #include <set>
 
@@ -52,7 +54,7 @@ namespace buffer { // geos.operation.buffer
  * - a single polygon in the complete buffer, with zero or more holes, or
  * -  ne or more connected holes
  */
-class BufferSubgraph {
+class GEOS_DLL BufferSubgraph {
 private:
 	RightmostEdgeFinder finder;
 

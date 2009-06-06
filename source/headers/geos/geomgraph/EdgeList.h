@@ -24,6 +24,7 @@
 #ifndef GEOS_GEOMGRAPH_EDGELIST_H
 #define GEOS_GEOMGRAPH_EDGELIST_H
 
+#include <geos/export.h>
 #include <vector>
 #include <map>
 #include <string>
@@ -52,7 +53,7 @@ namespace geomgraph { // geos.geomgraph
  * It supports locating edges
  * that are pointwise equals to a target edge.
  */
-class EdgeList {
+class GEOS_DLL EdgeList {
 
 private:
 

@@ -17,6 +17,8 @@
 #ifndef GEOS_PLANARGRAPH_NODE_H
 #define GEOS_PLANARGRAPH_NODE_H
 
+#include <geos/export.h>
+
 #include <geos/planargraph/GraphComponent.h> // for inheritance
 #include <geos/planargraph/DirectedEdgeStar.h> // for inlines
 #include <geos/geom/Coordinate.h> // for composition
@@ -41,7 +43,7 @@ namespace planargraph { // geos.planargraph
  * data and methods.
  *
  */
-class Node: public GraphComponent {
+class GEOS_DLL Node: public GraphComponent {
 protected:
 
 	/// The location of this Node 

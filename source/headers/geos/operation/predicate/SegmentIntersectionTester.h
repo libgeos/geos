@@ -16,6 +16,8 @@
 #ifndef GEOS_OP_PREDICATE_SEGMENTINTERSECTIONTESTER_H
 #define GEOS_OP_PREDICATE_SEGMENTINTERSECTIONTESTER_H
 
+#include <geos/export.h>
+
 #include <geos/algorithm/LineIntersector.h> // for composition
 
 // Forward declarations
@@ -40,7 +42,7 @@ namespace predicate { // geos::operation::predicate
  * (JTS-1.7)
  *
  */
-class SegmentIntersectionTester {
+class GEOS_DLL SegmentIntersectionTester {
 
 private:
 

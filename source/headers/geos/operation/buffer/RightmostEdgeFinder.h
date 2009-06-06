@@ -20,6 +20,8 @@
 #ifndef GEOS_OP_BUFFER_RIGHTMOSTEDGEFINDER_H
 #define GEOS_OP_BUFFER_RIGHTMOSTEDGEFINDER_H
 
+#include <geos/export.h>
+
 #include <geos/geom/Coordinate.h> // for composition
 
 #include <vector>
@@ -43,7 +45,7 @@ namespace buffer { // geos.operation.buffer
  * the highest coordinate, and which is oriented L to R at that point.
  * (I.e. the right side is on the RHS of the edge.)
  */
-class RightmostEdgeFinder {
+class GEOS_DLL RightmostEdgeFinder {
 
 private:
 

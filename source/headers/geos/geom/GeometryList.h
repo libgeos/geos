@@ -20,6 +20,7 @@
 #ifndef GEOS_GEOM_GEOMETRYLIST_H
 #define GEOS_GEOM_GEOMETRYLIST_H
 
+#include <geos/export.h>
 #include <geos/geom/Geometry.h> // for auto_ptr
 
 #include <memory> // for auto_ptr
@@ -32,7 +33,7 @@ namespace geom { // geos.geom
 /** \brief
  * Manager of Geometry pointers. Owns the Geometries.
  */
-class GeometryList {
+class GEOS_DLL GeometryList {
 
 public:
 

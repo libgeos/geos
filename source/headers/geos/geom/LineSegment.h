@@ -21,6 +21,7 @@
 #ifndef GEOS_GEOM_LINESEGMENT_H
 #define GEOS_GEOM_LINESEGMENT_H
 
+#include <geos/export.h>
 #include <geos/geom/Coordinate.h> // for composition
 
 #include <geos/inline.h>
@@ -53,7 +54,7 @@ namespace geom { // geos::geom
  *
  * TODO: have this class keep pointers rather then real Coordinates ?
  */
-class LineSegment {
+class GEOS_DLL LineSegment {
 public:
 
 	friend std::ostream& operator<< (std::ostream& o, const LineSegment& l);

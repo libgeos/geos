@@ -17,6 +17,7 @@
 #ifndef GEOS_OP_TOPOLOGYVALIDATIONERROR_H
 #define GEOS_OP_TOPOLOGYVALIDATIONERROR_H
 
+#include <geos/export.h>
 #include <string>
 
 #include <geos/geom/Coordinate.h> // for composition
@@ -33,7 +34,7 @@ namespace valid { // geos::operation::valid
  * validation error
  *
  */
-class TopologyValidationError {
+class GEOS_DLL TopologyValidationError {
 public:
 
 	enum errorEnum {

@@ -16,6 +16,7 @@
 #ifndef GEOS_IDX_BINTREE_ROOT_H
 #define GEOS_IDX_BINTREE_ROOT_H
 
+#include <geos/export.h>
 #include <geos/index/bintree/NodeBase.h> // for inheritance
 
 // Forward declarations
@@ -38,7 +39,7 @@ namespace bintree { // geos::index::bintree
  * It is centred at the origin,
  * and does not have a defined extent.
  */
-class Root: public NodeBase {
+class GEOS_DLL Root: public NodeBase {
 
 private:
 

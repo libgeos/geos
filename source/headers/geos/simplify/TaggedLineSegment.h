@@ -30,6 +30,7 @@
 #ifndef _GEOS_SIMPLIFY_TAGGEDLINESEGMENT_H_
 #define _GEOS_SIMPLIFY_TAGGEDLINESEGMENT_H_ 
 
+#include <geos/export.h>
 #include <geos/geom/LineSegment.h> // for inheritance
 
 
@@ -51,7 +52,7 @@ namespace simplify { // geos::simplify
  * Used to index the segments in a geometry and recover the segment locations
  * from the index.
  */
-class TaggedLineSegment: public geom::LineSegment
+class GEOS_DLL TaggedLineSegment: public geom::LineSegment
 {
 
 public:

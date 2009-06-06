@@ -17,6 +17,7 @@
 #ifndef GEOS_UTIL_TOPOLOGYEXCEPTION_H
 #define GEOS_UTIL_TOPOLOGYEXCEPTION_H
 
+#include <geos/export.h>
 #include <geos/util/GEOSException.h>
 #include <geos/geom/Coordinate.h> // to be removed when .inl is available
 
@@ -32,7 +33,7 @@ namespace util { // geos.util
  * Indicates an invalid or inconsistent topological situation encountered
  * during processing
  */
-class TopologyException: public GEOSException {
+class GEOS_DLL TopologyException: public GEOSException {
 public:
 	TopologyException()
 		:

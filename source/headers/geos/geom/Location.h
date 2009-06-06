@@ -16,6 +16,7 @@
 #ifndef GEOS_GEOM_LOCATION_H
 #define GEOS_GEOM_LOCATION_H
 
+#include <geos/export.h>
 #include <iostream> // for ostream
 
 #include <geos/inline.h>
@@ -32,7 +33,7 @@ namespace geom { // geos::geom
  *  HREF="http://www.opengis.org/techno/specs.htm">OpenGIS Simple Features
  *  Specification for SQL</A> .
  */
-class Location {
+class GEOS_DLL Location {
 public:
 	enum Value {
 

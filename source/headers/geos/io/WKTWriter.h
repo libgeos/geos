@@ -17,6 +17,8 @@
 #ifndef GEOS_IO_WKTWRITER_H
 #define GEOS_IO_WKTWRITER_H
 
+#include <geos/export.h>
+
 #include <string>
 
 // Forward declarations
@@ -65,7 +67,7 @@ namespace io {
  * See WKTReader for parsing.
  *
  */
-class WKTWriter {
+class GEOS_DLL WKTWriter {
 public:
 	WKTWriter();
 	~WKTWriter();

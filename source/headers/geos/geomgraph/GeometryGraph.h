@@ -24,6 +24,7 @@
 #ifndef GEOS_GEOMGRAPH_GEOMETRYGRAPH_H
 #define GEOS_GEOMGRAPH_GEOMETRYGRAPH_H
 
+#include <geos/export.h>
 #include <map>
 #include <vector>
 #include <memory>
@@ -62,9 +63,8 @@ namespace geos {
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-class GeometryGraph: public PlanarGraph
+class GEOS_DLL GeometryGraph: public PlanarGraph
 {
-
 using PlanarGraph::add;
 using PlanarGraph::findEdge;
 

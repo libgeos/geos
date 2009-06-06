@@ -18,6 +18,8 @@
 #ifndef GEOS_OP_POLYGONIZE_POLYGONIZEGRAPH_H
 #define GEOS_OP_POLYGONIZE_POLYGONIZEGRAPH_H
 
+#include <geos/export.h>
+
 #include <geos/planargraph/PlanarGraph.h> // for inheritance
 
 #include <vector>
@@ -57,7 +59,7 @@ namespace polygonize { // geos::operation::polygonize
  * has be logically deleted from the graph.
  *
  */
-class PolygonizeGraph: public planargraph::PlanarGraph {
+class GEOS_DLL PolygonizeGraph: public planargraph::PlanarGraph {
 
 public:
 

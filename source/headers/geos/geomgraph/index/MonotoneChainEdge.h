@@ -17,6 +17,8 @@
 #ifndef GEOS_GEOMGRAPH_INDEX_MONOTONECHAINEDGE_H
 #define GEOS_GEOMGRAPH_INDEX_MONOTONECHAINEDGE_H
 
+
+#include <geos/export.h>
 #include <geos/geom/Envelope.h> // for composition
 
 // Forward declarations
@@ -36,7 +38,7 @@ namespace geos {
 namespace geomgraph { // geos::geomgraph
 namespace index { // geos::geomgraph::index
 
-class MonotoneChainEdge {
+class GEOS_DLL MonotoneChainEdge {
 public:
 	//MonotoneChainEdge();
 	~MonotoneChainEdge();

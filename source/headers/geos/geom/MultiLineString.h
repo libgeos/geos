@@ -21,6 +21,7 @@
 #ifndef GEOS_GEOS_MULTILINESTRING_H
 #define GEOS_GEOS_MULTILINESTRING_H
 
+#include <geos/export.h>
 #include <geos/geom/GeometryCollection.h> // for inheritance
 //#include <geos/platform.h> 
 #include <geos/geom/Dimension.h>
@@ -42,7 +43,7 @@ namespace geos {
 namespace geom { // geos::geom
 
 /// Basic implementation of MultiLineString objects.
-class MultiLineString: public GeometryCollection {
+class GEOS_DLL MultiLineString: public GeometryCollection {
 
 public:
 

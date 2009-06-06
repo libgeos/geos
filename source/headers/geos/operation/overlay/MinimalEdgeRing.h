@@ -16,6 +16,8 @@
 #ifndef GEOS_OP_OVERLAY_MINIMALEDGERING_H
 #define GEOS_OP_OVERLAY_MINIMALEDGERING_H
 
+#include <geos/export.h>
+
 #include <geos/geomgraph/EdgeRing.h> // for inheritance
 #include <geos/geomgraph/DirectedEdge.h> // for inlines
 
@@ -48,7 +50,7 @@ namespace overlay { // geos::operation::overlay
  * @see operation::overlay::MaximalEdgeRing
  *
  */
-class MinimalEdgeRing: public geomgraph::EdgeRing {
+class GEOS_DLL MinimalEdgeRing: public geomgraph::EdgeRing {
 
 public:
 

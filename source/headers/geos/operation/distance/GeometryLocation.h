@@ -22,6 +22,8 @@
 #ifndef GEOS_OP_DISTANCE_GEOMETRYLOCATION_H
 #define GEOS_OP_DISTANCE_GEOMETRYLOCATION_H
 
+#include <geos/export.h>
+
 #include <geos/geom/Coordinate.h> // for composition
 
 // Forward declarations
@@ -47,7 +49,7 @@ namespace distance { // geos::operation::distance
  * so in this case the segment index will have the sentinel value of
  * INSIDE_AREA.
  */
-class GeometryLocation {
+class GEOS_DLL GeometryLocation {
 private:
 	const geom::Geometry *component;
 	int segIndex;

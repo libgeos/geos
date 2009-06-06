@@ -17,12 +17,14 @@
 #ifndef GEOS_IO_WRITER_H
 #define GEOS_IO_WRITER_H
 
+#include <geos/export.h>
+
 #include <string>
 
 namespace geos {
 namespace io {
 
-class Writer {
+class GEOS_DLL Writer {
 public:
 	Writer();
 	~Writer();

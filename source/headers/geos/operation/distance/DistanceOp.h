@@ -22,6 +22,8 @@
 #ifndef GEOS_OP_DISTANCE_DISTANCEOP_H
 #define GEOS_OP_DISTANCE_DISTANCEOP_H
 
+#include <geos/export.h>
+
 #include <geos/algorithm/PointLocator.h> // for composition
 
 #include <vector>
@@ -66,7 +68,7 @@ namespace distance { // geos::operation::distance
  * by using Voronoi techniques or spatial indexes.
  *
  */
-class DistanceOp {
+class GEOS_DLL DistanceOp {
 public:
 	/**
 	 * \brief

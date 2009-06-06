@@ -24,6 +24,7 @@
 #ifndef GEOS_GEOMGRAPH_POSITION_H
 #define GEOS_GEOMGRAPH_POSITION_H
 
+#include <geos/export.h>
 #include <map>
 #include <vector>
 #include <string>
@@ -34,7 +35,7 @@
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-class Position {
+class GEOS_DLL Position {
 public:
 	enum {
 		/*

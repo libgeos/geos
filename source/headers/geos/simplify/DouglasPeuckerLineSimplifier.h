@@ -20,6 +20,7 @@
 #ifndef _GEOS_SIMPLIFY_DOUBGLASPEUCKERLINESIMPLIFIER_H_
 #define _GEOS_SIMPLIFY_DOUBGLASPEUCKERLINESIMPLIFIER_H_ 
 
+#include <geos/export.h>
 #include <vector>
 #include <memory> // for auto_ptr
 
@@ -37,7 +38,7 @@ namespace simplify { // geos::simplify
  * Simplifies a linestring (sequence of points) using
  * the standard Douglas-Peucker algorithm.
  */
-class DouglasPeuckerLineSimplifier {
+class GEOS_DLL DouglasPeuckerLineSimplifier {
 
 public:
 

@@ -20,6 +20,7 @@
 #ifndef GEOS_IDX_CHAIN_MONOTONECHAINSELECTACTION_H
 #define GEOS_IDX_CHAIN_MONOTONECHAINSELECTACTION_H
 
+#include <geos/export.h>
 #include <geos/geom/LineSegment.h> // composition
 #include <geos/geom/Envelope.h> // composition
 
@@ -42,7 +43,7 @@ namespace chain { // geos::index::chain
  *  Envelope select queries on a MonotoneChain
  *
  */
-class MonotoneChainSelectAction {
+class GEOS_DLL MonotoneChainSelectAction {
 
 protected:
 

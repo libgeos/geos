@@ -16,6 +16,7 @@
 #ifndef GEOS_IDX_BINTREE_NODEBASE_H
 #define GEOS_IDX_BINTREE_NODEBASE_H
 
+#include <geos/export.h>
 #include <vector>
 
 // Forward declarations
@@ -33,7 +34,7 @@ namespace index { // geos::index
 namespace bintree { // geos::index::bintree
 
 /// The base class for nodes in a Bintree.
-class NodeBase {
+class GEOS_DLL NodeBase {
 
 public:
 

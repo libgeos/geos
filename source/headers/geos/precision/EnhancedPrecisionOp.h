@@ -20,6 +20,7 @@
 #ifndef GEOS_PRECISION_ENHANCEDPRECISIONOP_H
 #define GEOS_PRECISION_ENHANCEDPRECISIONOP_H
 
+#include <geos/export.h>
 #include <geos/platform.h> // for int64
 
 // Forward declarations
@@ -37,7 +38,7 @@ namespace precision { // geos.precision
  * enhanced precision techniques to reduce the likelihood of robustness
  * problems.
  */
-class EnhancedPrecisionOp {
+class GEOS_DLL EnhancedPrecisionOp {
 
 public:
 

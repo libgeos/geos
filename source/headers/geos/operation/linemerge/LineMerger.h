@@ -16,6 +16,8 @@
 #ifndef GEOS_OP_LINEMERGE_LINEMERGER_H
 #define GEOS_OP_LINEMERGE_LINEMERGER_H
 
+#include <geos/export.h>
+
 #include <geos/operation/linemerge/LineMergeGraph.h> // for composition
 
 #include <vector>
@@ -63,7 +65,7 @@ namespace linemerge { // geos::operation::linemerge
  * but will not form polygons from incorrected noded edges.
  *
  */
-class LineMerger {
+class GEOS_DLL LineMerger {
 
 private:
 

@@ -17,6 +17,8 @@
 #ifndef GEOS_GEOMGRAPH_INDEX_SEGMENTINTERSECTOR_H
 #define GEOS_GEOMGRAPH_INDEX_SEGMENTINTERSECTOR_H
 
+
+#include <geos/export.h>
 #include <vector>
 
 #include <geos/geom/Coordinate.h> // for composition
@@ -37,7 +39,7 @@ namespace geomgraph { // geos::geomgraph
 namespace index { // geos::geomgraph::index
 
 
-class SegmentIntersector{
+class GEOS_DLL SegmentIntersector{
 
 private:
 

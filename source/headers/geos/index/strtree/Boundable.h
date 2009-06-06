@@ -16,12 +16,14 @@
 #ifndef GEOS_INDEX_STRTREE_BOUNDABLE_H
 #define GEOS_INDEX_STRTREE_BOUNDABLE_H
 
+#include <geos/export.h>
+
 namespace geos {
 namespace index { // geos::index
 namespace strtree { // geos::index::strtree
 
 /// A spatial object in an AbstractSTRtree.
-class Boundable {
+class GEOS_DLL Boundable {
 public:
 	/**
 	 * Returns a representation of space that encloses this Boundable,

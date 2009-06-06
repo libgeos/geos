@@ -20,6 +20,8 @@
 #ifndef GEOS_NODING_ORIENTEDCOORDINATEARRAY_H
 #define GEOS_NODING_ORIENTEDCOORDINATEARRAY_H
 
+#include <geos/export.h>
+
 //#include <vector>
 //#include <iostream>
 
@@ -42,7 +44,7 @@ namespace noding { // geos.noding
  * Allows comparing {@link geom::CoordinateSequence}s
  * in an orientation-independent way.
  */
-class OrientedCoordinateArray
+class GEOS_DLL OrientedCoordinateArray
 {
 public:
 

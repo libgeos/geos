@@ -20,6 +20,8 @@
 #ifndef GEOS_NODING_MCINDEXNODER_H
 #define GEOS_NODING_MCINDEXNODER_H
 
+#include <geos/export.h>
+
 #include <geos/inline.h>
 
 #include <geos/index/chain/MonotoneChainOverlapAction.h> // for inheritance
@@ -54,7 +56,7 @@ namespace noding { // geos.noding
  *
  * Last port: noding/MCIndexNoder.java rev. 1.4 (JTS-1.7)
  */
-class MCIndexNoder : public SinglePassNoder {
+class GEOS_DLL MCIndexNoder : public SinglePassNoder {
 
 private:
 	std::vector<index::chain::MonotoneChain*> monoChains;

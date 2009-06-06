@@ -44,7 +44,7 @@ namespace snap { // geos::operation::overlay::snap
  * Snaps the vertices and segments of a geometry to another's vertices.
  * Should improve robustness for overlay operations.
  */
-class GeometrySnapper {
+class GEOS_DLL GeometrySnapper {
 
 public:
 

@@ -17,6 +17,8 @@
 #ifndef GEOS_OP_CONNECTEDINTERIORTESTER_H
 #define GEOS_OP_CONNECTEDINTERIORTESTER_H
 
+#include <geos/export.h>
+
 #include <geos/geom/Coordinate.h> // for composition
 
 #include <vector>
@@ -57,7 +59,7 @@ namespace valid { // geos::operation::valid
  * If an inconsistency if found the location of the problem
  * is recorded.
  */
-class ConnectedInteriorTester {
+class GEOS_DLL ConnectedInteriorTester {
 public:
 	ConnectedInteriorTester(geomgraph::GeometryGraph &newGeomGraph);
 	~ConnectedInteriorTester();

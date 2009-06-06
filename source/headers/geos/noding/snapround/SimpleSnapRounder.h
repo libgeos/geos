@@ -20,6 +20,8 @@
 #ifndef GEOS_NODING_SNAPROUND_SIMPLESNAPROUNDER_H
 #define GEOS_NODING_SNAPROUND_SIMPLESNAPROUNDER_H
 
+#include <geos/export.h>
+
 #include <vector>
 
 #include <geos/inline.h>
@@ -68,7 +70,7 @@ namespace snapround { // geos::noding::snapround
  * results are not 100% guaranteed to be correctly noded.
  *
  */
-class SimpleSnapRounder: public Noder { // implements NoderIface
+class GEOS_DLL SimpleSnapRounder: public Noder { // implements NoderIface
 
 private:
 	const geom::PrecisionModel& pm;

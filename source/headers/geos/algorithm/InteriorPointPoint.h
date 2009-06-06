@@ -17,6 +17,7 @@
 #ifndef GEOS_ALGORITHM_INTERIORPOINTPOINT_H
 #define GEOS_ALGORITHM_INTERIORPOINTPOINT_H
 
+#include <geos/export.h>
 #include <geos/geom/Coordinate.h>
 
 // Forward declarations
@@ -38,7 +39,7 @@ namespace algorithm { // geos::algorithm
  *
  * Find a point which is closest to the centroid of the geometry.
  */
-class InteriorPointPoint {
+class GEOS_DLL InteriorPointPoint {
 private:
 
 	bool hasInterior;

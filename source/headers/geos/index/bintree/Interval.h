@@ -16,12 +16,14 @@
 #ifndef GEOS_IDX_BINTREE_INTERVAL_H
 #define GEOS_IDX_BINTREE_INTERVAL_H
 
+#include <geos/export.h>
+
 namespace geos {
 namespace index { // geos::index
 namespace bintree { // geos::index::bintree
 
 /// Represents an (1-dimensional) closed interval on the Real number line.
-class Interval {
+class GEOS_DLL Interval {
 
 public:
 

@@ -20,6 +20,8 @@
 #ifndef GEOS_INDEX_STRTREE_STRTREE_H
 #define GEOS_INDEX_STRTREE_STRTREE_H
 
+#include <geos/export.h>
+
 #include <geos/index/strtree/AbstractSTRtree.h> // for inheritance
 #include <geos/index/SpatialIndex.h> // for inheritance
 #include <geos/geom/Envelope.h> // for inlines
@@ -55,7 +57,7 @@ namespace strtree { // geos::index::strtree
  * Databases With Application To GIS. Morgan Kaufmann, San Francisco, 2002. 
  *
  */
-class STRtree: public AbstractSTRtree, public SpatialIndex
+class GEOS_DLL STRtree: public AbstractSTRtree, public SpatialIndex
 {
 using AbstractSTRtree::insert;
 using AbstractSTRtree::query;

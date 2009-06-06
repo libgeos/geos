@@ -24,6 +24,7 @@
 #ifndef GEOS_GEOMGRAPH_EDGERING_H
 #define GEOS_GEOMGRAPH_EDGERING_H
 
+#include <geos/export.h>
 #include <geos/geomgraph/Label.h> // for composition
 
 #include <geos/inline.h>
@@ -52,7 +53,7 @@ namespace geos {
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-class EdgeRing {
+class GEOS_DLL EdgeRing {
 
 public:
 	friend std::ostream& operator<< (std::ostream& os, const EdgeRing& er);

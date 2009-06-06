@@ -22,6 +22,8 @@
 #ifndef GEOS_OP_RELATE_EDGEENDBUILDER_H
 #define GEOS_OP_RELATE_EDGEENDBUILDER_H
 
+#include <geos/export.h>
+
 #include <vector>
 
 // Forward declarations
@@ -46,7 +48,7 @@ namespace relate { // geos::operation::relate
  * Computes the geomgraph::EdgeEnd objects which arise
  * from a noded geomgraph::Edge.
  */
-class EdgeEndBuilder {
+class GEOS_DLL EdgeEndBuilder {
 public:
 	EdgeEndBuilder() {}
 

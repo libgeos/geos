@@ -16,6 +16,7 @@
 #ifndef GEOS_GEOM_COORDINATESEQUENCE_H
 #define GEOS_GEOM_COORDINATESEQUENCE_H
 
+#include <geos/export.h>
 #include <geos/platform.h>
 #include <geos/inline.h>
 
@@ -57,7 +58,7 @@ namespace geom { // geos::geom
  * will use your CoordinateSequence implementation.
  * 
  */
-class CoordinateSequence {
+class GEOS_DLL CoordinateSequence {
 
 protected:
 

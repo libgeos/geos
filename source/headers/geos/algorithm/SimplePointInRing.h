@@ -17,6 +17,7 @@
 #ifndef GEOS_ALGORITHM_SIMPLEPOINTINRING_H
 #define GEOS_ALGORITHM_SIMPLEPOINTINRING_H
 
+#include <geos/export.h>
 #include <geos/algorithm/PointInRing.h> // for inheritance
 
 // Forward declarations
@@ -31,7 +32,7 @@ namespace geos {
 namespace geos {
 namespace algorithm { // geos::algorithm
 
-class SimplePointInRing: public PointInRing {
+class GEOS_DLL SimplePointInRing: public PointInRing {
 public:
 	SimplePointInRing(geom::LinearRing *ring);
 	virtual ~SimplePointInRing();

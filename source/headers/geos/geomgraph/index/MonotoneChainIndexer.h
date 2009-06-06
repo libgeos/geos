@@ -17,6 +17,7 @@
 #ifndef GEOS_GEOMGRAPH_INDEX_MONOTONECHAININDEXER_H
 #define GEOS_GEOMGRAPH_INDEX_MONOTONECHAININDEXER_H
 
+#include <geos/export.h>
 #include <vector>
 
 // Forward declarations
@@ -31,7 +32,7 @@ namespace geomgraph { // geos::geomgraph
 namespace index { // geos::geomgraph::index
 
 
-class MonotoneChainIndexer{
+class GEOS_DLL MonotoneChainIndexer{
 
 public:
 

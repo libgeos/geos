@@ -48,7 +48,7 @@ namespace snap { // geos::operation::overlay::snap
  * if the standard overlay code fails to produce a correct result.
  *
  */
-class SnapOverlayOp
+class GEOS_DLL SnapOverlayOp
 {
 
 public:

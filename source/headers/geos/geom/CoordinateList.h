@@ -16,6 +16,7 @@
 #ifndef GEOS_GEOM_COORDINATELIST_H
 #define GEOS_GEOM_COORDINATELIST_H
 
+#include <geos/export.h>
 #include <geos/geom/Coordinate.h> 
 
 #include <list>
@@ -41,7 +42,7 @@ namespace geom { // geos::geom
  * The class keeps ownership of the Coordinates.
  *
  */
-class CoordinateList {
+class GEOS_DLL CoordinateList {
 
 public:
 

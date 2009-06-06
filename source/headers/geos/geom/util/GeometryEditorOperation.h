@@ -17,6 +17,8 @@
 #ifndef GEOS_GEOM_UTIL_GEOMETRYEDITOROPERATION_H
 #define GEOS_GEOM_UTIL_GEOMETRYEDITOROPERATION_H
 
+#include <geos/export.h>
+
 // Forward declarations
 namespace geos {
 	namespace geom {
@@ -34,7 +36,7 @@ namespace util { // geos.geom.util
 /**
  * A interface which specifies an edit operation for Geometries.
  */
-class GeometryEditorOperation {
+class GEOS_DLL GeometryEditorOperation {
 
 public:
 	/**

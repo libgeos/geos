@@ -17,6 +17,8 @@
 #ifndef GEOS_OP_REPEATEDPOINTTESTER_H
 #define GEOS_OP_REPEATEDPOINTTESTER_H
 
+#include <geos/export.h>
+
 #include <geos/geom/Coordinate.h> // for composition
 
 // Forward declarations
@@ -41,7 +43,7 @@ namespace valid { // geos::operation::valid
  * (consecutive identical coordinates) as defined in the
  * JTS spec.
  */
-class RepeatedPointTester {
+class GEOS_DLL RepeatedPointTester {
 public:
 	RepeatedPointTester() {};
 	geom::Coordinate& getCoordinate();

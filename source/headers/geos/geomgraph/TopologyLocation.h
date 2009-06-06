@@ -24,6 +24,7 @@
 #ifndef GEOS_GEOMGRAPH_TOPOLOGYLOCATION_H
 #define GEOS_GEOMGRAPH_TOPOLOGYLOCATION_H
 
+#include <geos/export.h>
 #include <geos/inline.h>
 
 #include <vector>
@@ -52,7 +53,7 @@ namespace geomgraph { // geos.geomgraph
  * The labelling is stored in an array location[j] where
  * where j has the values ON, LEFT, RIGHT
  */
-class TopologyLocation {
+class GEOS_DLL TopologyLocation {
 
 public:
 

@@ -17,6 +17,8 @@
 #ifndef GEOS_IO_PARSEEXCEPTION_H
 #define GEOS_IO_PARSEEXCEPTION_H
 
+#include <geos/export.h>
+
 #include <geos/util/GEOSException.h>
 
 namespace geos {
@@ -26,7 +28,7 @@ namespace io {
  * \class ParseException io.h geos.h
  * \brief Notifies a parsing error
  */
-class ParseException : public util::GEOSException
+class GEOS_DLL ParseException : public util::GEOSException
 {
 
 public:

@@ -22,6 +22,8 @@
 #ifndef GEOS_OP_OVERLAY_OVERLAYOP_H
 #define GEOS_OP_OVERLAY_OVERLAYOP_H
 
+#include <geos/export.h>
+
 #include <geos/operation/GeometryGraphOperation.h> // for inheritance
 #include <geos/geomgraph/EdgeList.h> // for composition
 #include <geos/algorithm/PointLocator.h> // for composition
@@ -60,7 +62,7 @@ namespace overlay { // geos::operation::overlay
 /// The overlay can be used to determine any
 /// boolean combination of the geometries.
 ///
-class OverlayOp: public GeometryGraphOperation {
+class GEOS_DLL OverlayOp: public GeometryGraphOperation {
 
 public:
 

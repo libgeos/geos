@@ -16,6 +16,8 @@
 #ifndef GEOS_OP_LINEMERGE_LINEMERGEEDGE_H
 #define GEOS_OP_LINEMERGE_LINEMERGEEDGE_H
 
+#include <geos/export.h>
+
 #include <geos/planargraph/Edge.h> // for inheritance
 
 // Forward declarations 
@@ -34,7 +36,7 @@ namespace linemerge { // geos::operation::linemerge
  * An edge of a LineMergeGraph. The <code>marked</code> field indicates
  * whether this Edge has been logically deleted from the graph.
  */
-class LineMergeEdge: public planargraph::Edge {
+class GEOS_DLL LineMergeEdge: public planargraph::Edge {
 private:
 	const geom::LineString *line;
 public:

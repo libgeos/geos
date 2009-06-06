@@ -20,6 +20,8 @@
 #ifndef GEOS_NODING_SEGMENTNODELIST_H
 #define GEOS_NODING_SEGMENTNODELIST_H
 
+#include <geos/export.h>
+
 #include <geos/inline.h>
 
 #include <cassert>
@@ -47,7 +49,7 @@ namespace noding { // geos::noding
  * A list of the SegmentNode present along a
  * NodedSegmentString.
  */
-class SegmentNodeList {
+class GEOS_DLL SegmentNodeList {
 private:
 	std::set<SegmentNode*,SegmentNodeLT> nodeMap;
 

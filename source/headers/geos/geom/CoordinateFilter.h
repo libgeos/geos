@@ -16,6 +16,7 @@
 #ifndef GEOS_GEOM_COORDINATEFILTER_H
 #define GEOS_GEOM_COORDINATEFILTER_H
 
+#include <geos/export.h>
 #include <geos/inline.h>
 
 #include <cassert>
@@ -40,7 +41,7 @@ class Coordinate;
  * of having the two versions of filter_rw and filter_ro
  *
  */
-class CoordinateFilter {
+class GEOS_DLL CoordinateFilter {
 public:
    virtual ~CoordinateFilter() {}
 

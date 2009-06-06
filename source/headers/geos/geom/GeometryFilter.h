@@ -18,7 +18,7 @@
 #define GEOS_GEOM_GEOMETRYFILTER_H
 
 //#include <geos/platform.h>
-
+#include <geos/export.h>
 #include <geos/inline.h>
 
 #include <string>
@@ -46,7 +46,7 @@ namespace geom { // geos::geom
  * Geometry filters implement the interface GeometryFilter.
  * (GeometryFilter is an example of the Gang-of-Four Visitor pattern).
  */
-class GeometryFilter {
+class GEOS_DLL GeometryFilter {
 public:
 	/*
 	 * Performs an operation with or on <code>geom</code>.

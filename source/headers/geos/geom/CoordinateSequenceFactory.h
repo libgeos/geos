@@ -21,6 +21,7 @@
 #define GEOS_GEOM_COORDINATESEQUENCEFACTORY_H
 
 
+#include <geos/export.h>
 #include <vector>
 
 //#include <geos/geom/Coordinate.h>
@@ -44,7 +45,7 @@ namespace geom { // geos::geom
  * Used to configure {@link GeometryFactory}s
  * to provide specific kinds of CoordinateSequences.
  */
-class CoordinateSequenceFactory {
+class GEOS_DLL CoordinateSequenceFactory {
 public:
 
 	/** \brief

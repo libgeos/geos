@@ -20,6 +20,7 @@
 #ifndef GEOS_IDX_QUADTREE_NODEBASE_H
 #define GEOS_IDX_QUADTREE_NODEBASE_H
 
+#include <geos/export.h>
 #include <vector>
 #include <string>
 
@@ -46,7 +47,7 @@ namespace quadtree { // geos::index::quadtree
  * The base class for nodes in a Quadtree.
  *
  */
-class NodeBase {
+class GEOS_DLL NodeBase {
 
 private:
 

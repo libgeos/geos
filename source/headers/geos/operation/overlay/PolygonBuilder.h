@@ -20,6 +20,8 @@
 #ifndef GEOS_OP_OVERLAY_POLYGONBUILDER_H
 #define GEOS_OP_OVERLAY_POLYGONBUILDER_H
 
+#include <geos/export.h>
+
 #include <vector>
 
 // Forward declarations
@@ -52,7 +54,7 @@ namespace overlay { // geos::operation::overlay
  *
  * The edges to use are marked as being in the result Area.
  */
-class PolygonBuilder {
+class GEOS_DLL PolygonBuilder {
 public:
 
 	PolygonBuilder(const geom::GeometryFactory *newGeometryFactory);

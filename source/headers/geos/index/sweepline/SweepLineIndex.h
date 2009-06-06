@@ -16,6 +16,8 @@
 #ifndef GEOS_INDEX_SWEEPLINE_SWEEPLINEINDEX_H
 #define GEOS_INDEX_SWEEPLINE_SWEEPLINEINDEX_H
 
+#include <geos/export.h>
+
 #include <vector>
 
 // Forward declarations
@@ -38,7 +40,7 @@ namespace sweepline { // geos:index:sweepline
  *
  * It is used to compute all overlaps between the interval in the index.
  */
-class SweepLineIndex {
+class GEOS_DLL SweepLineIndex {
 
 public:
 

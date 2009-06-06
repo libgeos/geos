@@ -17,6 +17,7 @@
 #ifndef GEOS_ALGORITHM_NOTREPRESENTABLEEXCEPTION_H
 #define GEOS_ALGORITHM_NOTREPRESENTABLEEXCEPTION_H
 
+#include <geos/export.h>
 #include <string>
 #include <geos/util/GEOSException.h>
 
@@ -32,7 +33,7 @@ namespace algorithm { // geos::algorithm
  * @version 1.4
  * @see HCoordinate
  */
-class NotRepresentableException: public util::GEOSException {
+class GEOS_DLL NotRepresentableException: public util::GEOSException {
 public:
 	NotRepresentableException();
 	NotRepresentableException(std::string msg);

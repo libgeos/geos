@@ -24,6 +24,7 @@
 #ifndef GEOS_GEOMGRAPH_EDGEENDSTAR_H
 #define GEOS_GEOMGRAPH_EDGEENDSTAR_H
 
+#include <geos/export.h>
 #include <geos/geomgraph/EdgeEnd.h>  // for EdgeEndLT
 #include <geos/geom/Coordinate.h>  // for p0,p1
 
@@ -56,7 +57,7 @@ namespace geomgraph { // geos.geomgraph
  *
  * @version 1.4
  */
-class EdgeEndStar {
+class GEOS_DLL EdgeEndStar {
 public:
 
 	typedef std::set<EdgeEnd *, EdgeEndLT> container;

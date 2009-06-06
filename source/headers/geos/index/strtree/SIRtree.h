@@ -16,6 +16,8 @@
 #ifndef GEOS_INDEX_STRTREE_SIRTREE_H
 #define GEOS_INDEX_STRTREE_SIRTREE_H
 
+#include <geos/export.h>
+
 #include <geos/index/strtree/AbstractSTRtree.h> // for inheritance
 #include <geos/index/strtree/Interval.h> // for inline
 
@@ -37,7 +39,7 @@ namespace strtree { // geos::index::strtree
  *
  * @see STRtree
  */
-class SIRtree: public AbstractSTRtree {
+class GEOS_DLL SIRtree: public AbstractSTRtree {
 using AbstractSTRtree::insert;
 using AbstractSTRtree::query;
 

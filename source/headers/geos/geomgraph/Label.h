@@ -24,6 +24,7 @@
 #ifndef GEOS_GEOMGRAPH_LABEL_H
 #define GEOS_GEOMGRAPH_LABEL_H
 
+#include <geos/export.h>
 #include <geos/geomgraph/TopologyLocation.h> 
 
 #include <geos/inline.h>
@@ -56,7 +57,7 @@ namespace geomgraph { // geos.geomgraph
  * with specific geometries.
  *
  */
-class Label {
+class GEOS_DLL Label {
 
 public:
 

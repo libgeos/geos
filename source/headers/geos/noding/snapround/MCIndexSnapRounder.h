@@ -20,6 +20,8 @@
 #ifndef GEOS_NODING_SNAPROUND_MCINDEXSNAPROUNDER_H
 #define GEOS_NODING_SNAPROUND_MCINDEXSNAPROUNDER_H
 
+#include <geos/export.h>
+
 #include <vector>
 
 #include <geos/inline.h>
@@ -72,7 +74,7 @@ namespace snapround { // geos::noding::snapround
  * It will function with non-integer precision models, but the
  * results are not 100% guaranteed to be correctly noded.
  */
-class MCIndexSnapRounder: public Noder { // implments Noder
+class GEOS_DLL MCIndexSnapRounder: public Noder { // implments Noder
 
 private:
 

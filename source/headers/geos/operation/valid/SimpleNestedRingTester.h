@@ -17,6 +17,8 @@
 #ifndef GEOS_OP_SIMPLENESTEDRINGTESTER_H
 #define GEOS_OP_SIMPLENESTEDRINGTESTER_H
 
+#include <geos/export.h>
+
 #include <vector>
 
 // Forward declarations
@@ -40,7 +42,7 @@ namespace valid { // geos::operation::valid
  * comparison.
  *
  */
-class SimpleNestedRingTester {
+class GEOS_DLL SimpleNestedRingTester {
 private:
 	geomgraph::GeometryGraph *graph;  // used to find non-node vertices
 	std::vector<geom::LinearRing*> rings;

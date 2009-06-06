@@ -22,6 +22,8 @@
 #ifndef GEOS_OP_RELATE_RELATEOP_H
 #define GEOS_OP_RELATE_RELATEOP_H
 
+#include <geos/export.h>
+
 #include <geos/operation/GeometryGraphOperation.h> // for inheritance
 #include <geos/operation/relate/RelateComputer.h> // for composition
 
@@ -55,7 +57,7 @@ namespace relate { // geos::operation::relate
  * a custom Boundary Node Rule.
  *
  */
-class RelateOp: public GeometryGraphOperation {
+class GEOS_DLL RelateOp: public GeometryGraphOperation {
 
 public:
 

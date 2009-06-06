@@ -20,6 +20,8 @@
 #ifndef GEOS_NODING_SCALEDNODER_H
 #define GEOS_NODING_SCALEDNODER_H
 
+#include <geos/export.h>
+
 #include <cassert>
 #include <vector>
 
@@ -52,7 +54,7 @@ namespace noding { // geos.noding
  * available precision.
  *
  */
-class ScaledNoder : public Noder { // , public geom::CoordinateFilter { // implements Noder
+class GEOS_DLL ScaledNoder : public Noder { // , public geom::CoordinateFilter { // implements Noder
 
 private:
 

@@ -20,6 +20,8 @@
 #ifndef GEOS_NODING_SEGMENTSTRING_H
 #define GEOS_NODING_SEGMENTSTRING_H
 
+#include <geos/export.h>
+
 #include <geos/noding/SegmentNodeList.h>
 
 #include <geos/inline.h>
@@ -43,7 +45,7 @@ namespace noding { // geos.noding
  * SegmentStrings can carry a context object, which is useful
  * for preserving topological or parentage information.
  */
-class SegmentString {
+class GEOS_DLL SegmentString {
 public:
 	typedef std::vector<const SegmentString*> ConstVect;
 	typedef std::vector<SegmentString *> NonConstVect;

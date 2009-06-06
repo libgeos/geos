@@ -24,6 +24,7 @@
 #ifndef GEOS_GEOMGRAPH_DIRECTEDEDGEENDSTAR_H
 #define GEOS_GEOMGRAPH_DIRECTEDEDGEENDSTAR_H
 
+#include <geos/export.h>
 #include <set>
 #include <string>
 #include <vector>
@@ -53,7 +54,7 @@ namespace geomgraph { // geos.geomgraph
  * MaximalEdgeRings and MinimalEdgeRings.
  *
  */
-class DirectedEdgeStar: public EdgeEndStar {
+class GEOS_DLL DirectedEdgeStar: public EdgeEndStar {
 
 public:
 

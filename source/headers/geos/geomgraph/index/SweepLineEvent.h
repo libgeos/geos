@@ -17,6 +17,8 @@
 #ifndef GEOS_GEOMGRAPH_INDEX_SWEEPLINEEVENT_H
 #define GEOS_GEOMGRAPH_INDEX_SWEEPLINEEVENT_H
 
+
+#include <geos/export.h>
 #include <string>
 
 // Forward declarations
@@ -34,7 +36,7 @@ namespace index { // geos::geomgraph::index
 
 //class SweepLineEventLessThen; // needed ??
 
-class SweepLineEvent{
+class GEOS_DLL SweepLineEvent{
 friend class SweepLineEventLessThen;
 
 public:
@@ -85,7 +87,7 @@ private:
 	int deleteEventIndex;
 };
 
-class SweepLineEventLessThen {
+class GEOS_DLL SweepLineEventLessThen {
 public:
 	bool operator()(const SweepLineEvent *f, const SweepLineEvent *s) const
 	{

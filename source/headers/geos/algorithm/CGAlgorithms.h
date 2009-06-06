@@ -21,6 +21,7 @@
 #ifndef GEOS_ALGORITHM_CGALGORITHM_H
 #define GEOS_ALGORITHM_CGALGORITHM_H
 
+#include <geos/export.h>
 #include <vector>
 
 // Forward declarations
@@ -43,7 +44,7 @@ namespace algorithm { // geos::algorithm
  * floating point.
  *
  */
-class CGAlgorithms {
+class GEOS_DLL CGAlgorithms {
 
 public:
 

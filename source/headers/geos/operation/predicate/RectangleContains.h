@@ -16,6 +16,8 @@
 #ifndef GEOS_OP_PREDICATE_RECTANGLECONTAINS_H
 #define GEOS_OP_PREDICATE_RECTANGLECONTAINS_H
 
+#include <geos/export.h>
+
 #include <geos/geom/Polygon.h> // for inlines
 
 // Forward declarations
@@ -44,7 +46,7 @@ namespace predicate { // geos::operation::predicate
  *
  * Last port: operation/predicate/RectangleContains.java rev 1.1 (JTS-1.7)
  */
-class RectangleContains {
+class GEOS_DLL RectangleContains {
 
 private:
 

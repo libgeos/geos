@@ -16,6 +16,8 @@
 #ifndef GEOS_INDEX_SWEEPLINE_SWEEPLINEOVERLAPACTION_H
 #define GEOS_INDEX_SWEEPLINE_SWEEPLINEOVERLAPACTION_H
 
+#include <geos/export.h>
+
 // Forward declarations
 namespace geos {
 	namespace index { 
@@ -29,7 +31,7 @@ namespace geos {
 namespace index { // geos.index
 namespace sweepline { // geos:index:sweepline
 
-class SweepLineOverlapAction {
+class GEOS_DLL SweepLineOverlapAction {
 public:
 	virtual void overlap(SweepLineInterval *s0,SweepLineInterval *s1)=0;
 

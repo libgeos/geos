@@ -17,6 +17,7 @@
 #ifndef GEOS_PLANARGRAPH_NODEMAP_H
 #define GEOS_PLANARGRAPH_NODEMAP_H
 
+#include <geos/export.h>
 #include <geos/geom/Coordinate.h> // for use in container
 
 #include <map>
@@ -40,7 +41,7 @@ namespace planargraph { // geos.planargraph
  * A map of Node, indexed by the coordinate of the node.
  *
  */
-class NodeMap {
+class GEOS_DLL NodeMap {
 public:
 	typedef std::map<geom::Coordinate, Node*, geom::CoordinateLessThen> container;
 private:

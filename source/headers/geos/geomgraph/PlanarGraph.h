@@ -24,6 +24,7 @@
 #ifndef GEOS_GEOMGRAPH_PLANARGRAPH_H
 #define GEOS_GEOMGRAPH_PLANARGRAPH_H
 
+#include <geos/export.h>
 #include <map>
 #include <vector>
 #include <memory>
@@ -73,7 +74,7 @@ namespace geomgraph { // geos.geomgraph
  *    different graphs
  * 
  */
-class PlanarGraph {
+class GEOS_DLL PlanarGraph {
 public:
 
 	/** \brief

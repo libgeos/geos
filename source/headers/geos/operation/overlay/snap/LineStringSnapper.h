@@ -49,7 +49,7 @@ namespace snap { // geos::operation::overlay::snap
  * A snapping distance tolerance is used to control where snapping is performed.
  *
  */
-class LineStringSnapper {
+class GEOS_DLL LineStringSnapper {
 
 public:
 

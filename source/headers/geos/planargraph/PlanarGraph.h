@@ -16,6 +16,7 @@
 #ifndef GEOS_PLANARGRAPH_PLANARGRAPH_H
 #define GEOS_PLANARGRAPH_PLANARGRAPH_H
 
+#include <geos/export.h>
 #include <geos/planargraph/NodeMap.h> // for composition
 
 #include <vector> // for typedefs
@@ -48,7 +49,7 @@ namespace planargraph { // geos.planargraph
  * framework will almost always provide subclasses for one or more graph
  * components, which hold application-specific data and graph algorithms.
  */
-class PlanarGraph {
+class GEOS_DLL PlanarGraph {
 
 protected:
 

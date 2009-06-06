@@ -17,6 +17,7 @@
 #ifndef GEOS_GEOM_UTIL_POLYGONEXTRACTER_H
 #define GEOS_GEOM_UTIL_POLYGONEXTRACTER_H
 
+#include <geos/export.h>
 #include <geos/geom/GeometryFilter.h>
 #include <geos/geom/Polygon.h>
 #include <geos/platform.h>
@@ -29,7 +30,7 @@ namespace util { // geos.geom.util
 /**
  * Extracts all the 2-dimensional (Polygon) components from a Geometry.
  */
-class PolygonExtracter: public GeometryFilter {
+class GEOS_DLL PolygonExtracter: public GeometryFilter {
 
 private:
 

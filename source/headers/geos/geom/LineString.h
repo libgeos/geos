@@ -21,6 +21,7 @@
 #ifndef GEOS_GEOS_LINESTRING_H
 #define GEOS_GEOS_LINESTRING_H
 
+#include <geos/export.h>
 #include <geos/platform.h> // do we need this ?
 #include <geos/geom/Geometry.h> // for inheritance
 #include <geos/geom/CoordinateSequence.h> // for proper use of auto_ptr<>
@@ -48,7 +49,7 @@ namespace geom { // geos::geom
  * \class LineString geom.h geos.h
  * \brief Basic implementation of LineString.
  */
-class LineString: public Geometry {
+class GEOS_DLL LineString: public Geometry {
 
 public:
 
@@ -185,7 +186,7 @@ private:
 
 };
 
-struct LineStringLT {
+struct GEOS_DLL  LineStringLT {
 	bool operator()(const LineString *ls1, const LineString *ls2) const {
 		return ls1->compareTo(ls2)<0;
 	}

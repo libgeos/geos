@@ -22,6 +22,8 @@
 #ifndef GEOS_OP_RELATE_RELATECOMPUTER_H
 #define GEOS_OP_RELATE_RELATECOMPUTER_H
 
+#include <geos/export.h>
+
 #include <geos/algorithm/PointLocator.h> // for RelateComputer composition
 #include <geos/algorithm/LineIntersector.h> // for RelateComputer composition
 #include <geos/geomgraph/NodeMap.h> // for RelateComputer composition
@@ -65,7 +67,7 @@ namespace relate { // geos::operation::relate
  * implicitly).
  *
  */
-class RelateComputer {
+class GEOS_DLL RelateComputer {
 public:
 	//RelateComputer();
 	virtual ~RelateComputer();

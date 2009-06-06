@@ -22,6 +22,8 @@
 #ifndef GEOS_OP_RELATE_RELATENODE_H
 #define GEOS_OP_RELATE_RELATENODE_H
 
+#include <geos/export.h>
+
 #include <geos/geomgraph/Node.h> // for inheritance
 
 // Forward declarations
@@ -44,7 +46,7 @@ namespace relate { // geos::operation::relate
  * Represents a node in the topological graph used to compute spatial
  * relationships.
  */
-class RelateNode: public geomgraph::Node {
+class GEOS_DLL RelateNode: public geomgraph::Node {
 
 public:
 

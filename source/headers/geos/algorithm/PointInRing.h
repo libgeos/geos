@@ -17,6 +17,7 @@
 #ifndef GEOS_ALGORITHM_POINTINRING_H
 #define GEOS_ALGORITHM_POINTINRING_H
 
+#include <geos/export.h>
 
 // Forward declarations
 namespace geos {
@@ -28,7 +29,7 @@ namespace geos {
 namespace geos {
 namespace algorithm { // geos::algorithm
 
-class PointInRing{
+class GEOS_DLL PointInRing{
 public:
 	virtual ~PointInRing(){};
 	virtual bool isInside(const geom::Coordinate& pt)=0;

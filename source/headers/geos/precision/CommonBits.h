@@ -16,6 +16,7 @@
 #ifndef GEOS_PRECISION_COMMONBITS_H
 #define GEOS_PRECISION_COMMONBITS_H
 
+#include <geos/export.h>
 #include <geos/platform.h> // for int64
 
 namespace geos {
@@ -30,7 +31,7 @@ namespace precision { // geos.precision
  * If there are no common bits, the number computed is 0.0.
  *
  */
-class CommonBits {
+class GEOS_DLL CommonBits {
 
 private:
 

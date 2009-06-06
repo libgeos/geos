@@ -22,6 +22,8 @@
 #ifndef GEOS_OP_RELATE_EDGEENDBUNDLE_H
 #define GEOS_OP_RELATE_EDGEENDBUNDLE_H
 
+#include <geos/export.h>
+
 #include <geos/geomgraph/EdgeEnd.h> // for EdgeEndBundle inheritance
 
 #include <string>
@@ -45,7 +47,7 @@ namespace relate { // geos::operation::relate
  * A collection of geomgraph::EdgeEnd objects which
  * originate at the same point and have the same direction.
  */
-class EdgeEndBundle: public geomgraph::EdgeEnd
+class GEOS_DLL EdgeEndBundle: public geomgraph::EdgeEnd 
 {
 public:
 	EdgeEndBundle(geomgraph::EdgeEnd *e);

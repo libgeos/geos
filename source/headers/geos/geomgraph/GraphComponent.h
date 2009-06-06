@@ -24,6 +24,7 @@
 #ifndef GEOS_GEOMGRAPH_GRAPHCOMPONENT_H
 #define GEOS_GEOMGRAPH_GRAPHCOMPONENT_H
 
+#include <geos/export.h>
 #include <geos/inline.h>
 
 // Forward declarations
@@ -40,7 +41,7 @@ namespace geos {
 namespace geomgraph { // geos.geomgraph
 
 
-class GraphComponent {
+class GEOS_DLL GraphComponent {
 public:
 	GraphComponent();
 

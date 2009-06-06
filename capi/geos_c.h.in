@@ -138,11 +138,7 @@ typedef struct GEOSContextHandle_HS *GEOSContextHandle_t;
  *
  ***********************************************************************/
 
-#if defined(_MSC_VER)
-#  define GEOS_DLL     __declspec(dllexport)
-#else
-#  define GEOS_DLL
-#endif
+#include <geos/export.h>
 
 extern void GEOS_DLL initGEOS(GEOSMessageHandler notice_function,
 	GEOSMessageHandler error_function);

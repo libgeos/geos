@@ -20,6 +20,7 @@
 #ifndef GEOS_IDX_CHAIN_MONOTONECHAIN_H
 #define GEOS_IDX_CHAIN_MONOTONECHAIN_H
 
+#include <geos/export.h>
 #include <geos/geom/Envelope.h> // for inline
 
 #include <memory> // for auto_ptr
@@ -82,7 +83,7 @@ namespace chain { // geos::index::chain
  * However, it does mean that the queries are not thread-safe.
  *
  */
-class MonotoneChain
+class GEOS_DLL MonotoneChain
 {
 public:
 

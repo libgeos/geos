@@ -17,6 +17,7 @@
 #ifndef GEOS_ALGORITHM_POINTLOCATOR_H
 #define GEOS_ALGORITHM_POINTLOCATOR_H
 
+#include <geos/export.h>
 #include <geos/geom/Location.h> // for inlines
 
 // Forward declarations
@@ -50,7 +51,7 @@ namespace algorithm { // geos::algorithm
  *
  * Last port: algorithm/PointLocator.java rev. 1.26 (JTS-1.7+)
  */
-class PointLocator {
+class GEOS_DLL PointLocator {
 public:
 	PointLocator() {}
 	~PointLocator() {}

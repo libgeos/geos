@@ -20,6 +20,8 @@
 #ifndef GEOS_NODING_INTERSECTIONFINDERADDER_H
 #define GEOS_NODING_INTERSECTIONFINDERADDER_H
 
+#include <geos/export.h>
+
 #include <vector>
 #include <iostream>
 
@@ -49,7 +51,7 @@ namespace noding { // geos.noding
  * and adds them as nodes.
  *
  */
-class IntersectionFinderAdder: public SegmentIntersector {
+class GEOS_DLL IntersectionFinderAdder: public SegmentIntersector {
 
 private:
 	algorithm::LineIntersector& li;

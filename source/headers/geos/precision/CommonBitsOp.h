@@ -16,6 +16,7 @@
 #ifndef GEOS_PRECISION_COMMONBITSOP_H
 #define GEOS_PRECISION_COMMONBITSOP_H
 
+#include <geos/export.h>
 #include <geos/precision/CommonBitsRemover.h> // for auto_ptr composition
 
 #include <vector>
@@ -42,7 +43,7 @@ namespace precision { // geos.precision
  * that the returned Geometry is invalid.
  * Client classes should check the validity of the returned result themselves.
  */
-class CommonBitsOp {
+class GEOS_DLL CommonBitsOp {
 
 private:
 

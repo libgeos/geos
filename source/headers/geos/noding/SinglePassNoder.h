@@ -16,6 +16,8 @@
 #ifndef GEOS_NODING_SINGLEPASSNODER_H
 #define GEOS_NODING_SINGLEPASSNODER_H
 
+#include <geos/export.h>
+
 #include <vector>
 
 #include <geos/inline.h>
@@ -46,7 +48,7 @@ namespace noding { // geos.noding
  * TODO: Noder inheritance (that's just an interface!)
  *
  */
-class SinglePassNoder : public Noder { // implements Noder
+class GEOS_DLL SinglePassNoder : public Noder { // implements Noder
 
 protected:
 

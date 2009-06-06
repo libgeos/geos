@@ -24,6 +24,7 @@
 #ifndef _GEOS_SIMPLIFY_LINESEGMENTINDEX_H_
 #define _GEOS_SIMPLIFY_LINESEGMENTINDEX_H_ 
 
+#include <geos/export.h>
 #include <vector>
 #include <memory> // for auto_ptr
 
@@ -46,7 +47,7 @@ namespace geos {
 namespace geos {
 namespace simplify { // geos::simplify
 
-class LineSegmentIndex {
+class GEOS_DLL LineSegmentIndex {
 
 public:
 

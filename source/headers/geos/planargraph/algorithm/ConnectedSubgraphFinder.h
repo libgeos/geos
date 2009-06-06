@@ -17,6 +17,7 @@
 #ifndef GEOS_PLANARGRAPH_ALGO_CONNECTEDSUBGRAPHFINDER_H
 #define GEOS_PLANARGRAPH_ALGO_CONNECTEDSUBGRAPHFINDER_H
 
+#include <geos/export.h>
 #include <geos/planargraph/PlanarGraph.h> // for inlines
 
 #include <stack>
@@ -40,7 +41,7 @@ namespace algorithm { // geos::planargraph::algorithm
  * 
  * <b>Note:</b> uses the <code>isVisited</code> flag on the nodes.
  */
-class ConnectedSubgraphFinder
+class GEOS_DLL ConnectedSubgraphFinder
 {
 private:
 	PlanarGraph& graph;

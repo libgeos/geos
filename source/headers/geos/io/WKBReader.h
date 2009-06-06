@@ -17,6 +17,8 @@
 #ifndef GEOS_IO_WKBREADER_H
 #define GEOS_IO_WKBREADER_H
 
+#include <geos/export.h>
+
 #include <geos/geom/GeometryFactory.h>
 #include <geos/io/ByteOrderDataInStream.h> // for composition
 
@@ -64,7 +66,7 @@ namespace io {
  * representing 3-dimensional coordinates.
  *
  */
-class WKBReader {
+class GEOS_DLL WKBReader {
 
 public:
 

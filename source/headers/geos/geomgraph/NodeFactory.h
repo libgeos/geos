@@ -24,6 +24,7 @@
 #ifndef GEOS_GEOMGRAPH_NODEFACTORY_H
 #define GEOS_GEOMGRAPH_NODEFACTORY_H
 
+#include <geos/export.h>
 #include <geos/inline.h>
 
 // Forward declarations
@@ -39,7 +40,7 @@ namespace geos {
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-class NodeFactory {
+class GEOS_DLL NodeFactory {
 public:
 	virtual Node* createNode(const geom::Coordinate &coord) const;
 	static const NodeFactory &instance();

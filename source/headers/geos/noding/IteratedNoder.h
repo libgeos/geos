@@ -20,6 +20,8 @@
 #ifndef GEOS_NODING_ITERATEDNODER_H
 #define GEOS_NODING_ITERATEDNODER_H
 
+#include <geos/export.h>
+
 #include <vector>
 #include <iostream>
 
@@ -50,7 +52,7 @@ namespace noding { // geos::noding
  * Clients can choose to rerun the noding using a lower precision model.
  *
  */
-class IteratedNoder : public Noder { // implements Noder
+class GEOS_DLL IteratedNoder : public Noder { // implements Noder
 
 private:
 	static const int MAX_ITER = 5;

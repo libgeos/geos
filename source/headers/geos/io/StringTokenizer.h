@@ -17,12 +17,14 @@
 #ifndef GEOS_IO_STRINGTOKENIZER_H
 #define GEOS_IO_STRINGTOKENIZER_H
 
+#include <geos/export.h>
+
 #include <string>
 
 namespace geos {
 namespace io {
 
-class StringTokenizer {
+class GEOS_DLL StringTokenizer {
 public:
 	enum {
 		TT_EOF,

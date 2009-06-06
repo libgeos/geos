@@ -16,6 +16,7 @@
 #ifndef GEOS_PRECISION_SIMPLEGEOMETRYPRECISIONREDUCER_H
 #define GEOS_PRECISION_SIMPLEGEOMETRYPRECISIONREDUCER_H
 
+#include <geos/export.h>
 
 // Forward declarations
 namespace geos {
@@ -41,7 +42,7 @@ namespace precision { // geos.precision
  * The buffer algorithm does not depend on the validity of the input geometry.
  *
  */
-class SimpleGeometryPrecisionReducer {
+class GEOS_DLL SimpleGeometryPrecisionReducer {
 
 private:
 

@@ -22,6 +22,7 @@
 #ifndef GEOS_IDX_QUADTREE_KEY_H
 #define GEOS_IDX_QUADTREE_KEY_H
 
+#include <geos/export.h>
 #include <geos/geom/Coordinate.h> // for composition
 #include <geos/geom/Envelope.h> // for composition
 
@@ -39,7 +40,7 @@ namespace quadtree { // geos::index::quadtree
  * It contains a lower-left point and a level number. The level number
  * is the power of two for the size of the node envelope
  */
-class Key {
+class GEOS_DLL Key {
 public:
 
 	// Doesn't touch the Envelope, might as well be const

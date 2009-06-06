@@ -17,6 +17,8 @@
 #ifndef GEOS_INDEX_ITEMVISITOR_H
 #define GEOS_INDEX_ITEMVISITOR_H
 
+#include <geos/export.h>
+
 namespace geos {
 namespace index {
 
@@ -25,7 +27,7 @@ namespace index {
  *
  * Last port: index/ItemVisitor.java rev. 1.2 (JTS-1.7)
  */
-class ItemVisitor {
+class GEOS_DLL ItemVisitor {
 public:
 	virtual void visitItem(void *)=0;
 

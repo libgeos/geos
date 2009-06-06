@@ -16,6 +16,8 @@
 #ifndef GEOS_OP_OVERLAY_ELEVATIONMATRIX_H
 #define GEOS_OP_OVERLAY_ELEVATIONMATRIX_H
 
+#include <geos/export.h>
+
 #include <vector>
 #include <string>
 
@@ -48,7 +50,7 @@ namespace overlay { // geos::operation::overlay
  * values to the matrix.
  * filter_rw is used to actually elevate Geometries.
  */
-class ElevationMatrixFilter: public geom::CoordinateFilter
+class GEOS_DLL ElevationMatrixFilter: public geom::CoordinateFilter
 {
 public:
 	ElevationMatrixFilter(ElevationMatrix &em);
@@ -63,7 +65,7 @@ private:
 
 /*
  */
-class ElevationMatrix {
+class GEOS_DLL ElevationMatrix {
 friend class ElevationMatrixFilter;
 public:
 	ElevationMatrix(const geom::Envelope &extent, unsigned int rows,

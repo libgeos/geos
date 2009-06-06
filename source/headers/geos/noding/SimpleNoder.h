@@ -20,6 +20,8 @@
 #ifndef GEOS_NODING_SIMPLENODER_H
 #define GEOS_NODING_SIMPLENODER_H
 
+#include <geos/export.h>
+
 #include <vector>
 
 #include <geos/inline.h>
@@ -47,7 +49,7 @@ namespace noding { // geos.noding
  *
  * @version 1.7
  */
-class SimpleNoder: public SinglePassNoder {
+class GEOS_DLL SimpleNoder: public SinglePassNoder {
 private:
 	std::vector<SegmentString*>* nodedSegStrings;
 	virtual void computeIntersects(SegmentString *e0, SegmentString *e1);

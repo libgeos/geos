@@ -20,6 +20,8 @@
 #ifndef GEOS_IDX_QUADTREE_INTERVALSIZE_H
 #define GEOS_IDX_QUADTREE_INTERVALSIZE_H
 
+#include <geos/export.h>
+
 namespace geos {
 namespace index { // geos::index
 namespace quadtree { // geos::index::quadtree
@@ -37,7 +39,7 @@ namespace quadtree { // geos::index::quadtree
  * computing a midpoint value which does not lie strictly between the
  * endpoints.
  */
-class IntervalSize {
+class GEOS_DLL IntervalSize {
 public:
 	/**
 	 * This value is chosen to be a few powers of 2 less than the

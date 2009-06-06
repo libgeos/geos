@@ -17,6 +17,7 @@
 #ifndef GEOS_ALGORITHM_MINIMUMDIAMETER_H
 #define GEOS_ALGORITHM_MINIMUMDIAMETER_H
 
+#include <geos/export.h>
 
 // Forward declarations
 namespace geos {
@@ -51,7 +52,7 @@ namespace algorithm { // geos::algorithm
  * @see ConvexHull
  *
  */
-class MinimumDiameter {
+class GEOS_DLL MinimumDiameter {
 private:
 	const geom::Geometry* inputGeom;
 	bool isConvex;

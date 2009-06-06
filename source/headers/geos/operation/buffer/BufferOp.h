@@ -22,8 +22,9 @@
 #ifndef GEOS_OP_BUFFER_BUFFEROP_H
 #define GEOS_OP_BUFFER_BUFFEROP_H
 
-//#include <geos/operation/buffer/OffsetCurveBuilder.h> // for enum values 
+#include <geos/export.h>//#include <geos/operation/buffer/OffsetCurveBuilder.h> // for enum values 
 #include <geos/operation/buffer/BufferParameters.h> // for enum values 
+
 #include <geos/util/TopologyException.h> // for composition
 
 // Forward declarations
@@ -68,7 +69,7 @@ namespace buffer { // geos.operation.buffer
  *   beyond the line ends
  * 
  */
-class BufferOp {
+class GEOS_DLL BufferOp {
 
 
 private:

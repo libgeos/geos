@@ -17,6 +17,7 @@
 #ifndef GEOS_GEOMGRAPH_INDEX_SWEEPLINEEVENTOBJ_H
 #define GEOS_GEOMGRAPH_INDEX_SWEEPLINEEVENTOBJ_H
 
+#include <geos/export.h>
 
 namespace geos {
 namespace geomgraph { // geos::geomgraph
@@ -26,7 +27,7 @@ namespace index { // geos::geomgraph::index
 // can use it as argument type. 
 // Both  SweepLineSegment and MonotoneChain will
 // inherit from it.
-class SweepLineEventOBJ {
+class GEOS_DLL SweepLineEventOBJ {
 public:
 	virtual ~SweepLineEventOBJ(){};
 };

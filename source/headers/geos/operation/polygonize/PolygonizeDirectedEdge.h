@@ -18,6 +18,8 @@
 #ifndef GEOS_OP_POLYGONIZE_POLYGONIZEDIRECTEDEDGE_H
 #define GEOS_OP_POLYGONIZE_POLYGONIZEDIRECTEDEDGE_H
 
+#include <geos/export.h>
+
 #include <geos/planargraph/DirectedEdge.h> // for inheritance
 
 // Forward declarations
@@ -46,7 +48,7 @@ namespace polygonize { // geos::operation::polygonize
  * May be logically deleted from the graph by setting the
  * <code>marked</code> flag.
  */
-class PolygonizeDirectedEdge: public planargraph::DirectedEdge {
+class GEOS_DLL PolygonizeDirectedEdge: public planargraph::DirectedEdge {
 
 private:
 

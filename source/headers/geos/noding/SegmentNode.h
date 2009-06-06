@@ -20,6 +20,8 @@
 #ifndef GEOS_NODING_SEGMENTNODE_H
 #define GEOS_NODING_SEGMENTNODE_H
 
+#include <geos/export.h>
+
 #include <vector>
 #include <iostream>
 
@@ -41,7 +43,7 @@ namespace noding { // geos.noding
 //
 /// Final class.
 ///
-class SegmentNode {
+class GEOS_DLL SegmentNode {
 private:
 	const NodedSegmentString& segString;
 
@@ -99,7 +101,7 @@ public:
 
 std::ostream& operator<< (std::ostream& os, const SegmentNode& n);
 
-struct SegmentNodeLT {
+struct GEOS_DLL  SegmentNodeLT {
 	bool operator()(SegmentNode *s1, SegmentNode *s2) const {
 		return s1->compareTo(*s2)<0;
 	}

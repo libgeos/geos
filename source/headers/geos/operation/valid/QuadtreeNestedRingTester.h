@@ -17,6 +17,8 @@
 #ifndef GEOS_OP_QUADTREENESTEDRINGTESTER_H
 #define GEOS_OP_QUADTREENESTEDRINGTESTER_H
 
+#include <geos/export.h>
+
 #include <geos/geom/Envelope.h> // for composition
 
 #include <vector>
@@ -47,7 +49,7 @@ namespace valid { // geos::operation::valid
  * index to speed up the comparisons.
  *
  */
-class QuadtreeNestedRingTester {
+class GEOS_DLL QuadtreeNestedRingTester {
 public:
 
 	/// Caller retains ownership of GeometryGraph

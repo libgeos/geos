@@ -21,6 +21,7 @@
 #ifndef GEOS_OPERATION_GEOMETRYGRAPHOPERATION_H
 #define GEOS_OPERATION_GEOMETRYGRAPHOPERATION_H
 
+#include <geos/export.h>
 #include <geos/algorithm/LineIntersector.h> // for composition
 
 #include <vector>
@@ -44,7 +45,7 @@ namespace geos {
 namespace operation { // geos.operation
 
 /// The base class for operations that require GeometryGraph
-class GeometryGraphOperation {
+class GEOS_DLL GeometryGraphOperation {
 
 public:
 

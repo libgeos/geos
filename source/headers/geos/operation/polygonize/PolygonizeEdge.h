@@ -18,6 +18,8 @@
 #ifndef GEOS_OP_POLYGONIZE_POLYGONIZEEDGE_H
 #define GEOS_OP_POLYGONIZE_POLYGONIZEEDGE_H
 
+#include <geos/export.h>
+
 #include <geos/planargraph/Edge.h> // for inheritance
 
 // Forward declarations
@@ -36,7 +38,7 @@ namespace polygonize { // geos::operation::polygonize
  *
  * @version 1.4
  */
-class PolygonizeEdge: public planargraph::Edge {
+class GEOS_DLL PolygonizeEdge: public planargraph::Edge {
 private:
 	const geom::LineString *line;
 public:

@@ -17,6 +17,8 @@
 #ifndef GEOS_GEOMGRAPH_INDEX_SWEEPLINESEGMENT_H
 #define GEOS_GEOMGRAPH_INDEX_SWEEPLINESEGMENT_H
 
+
+#include <geos/export.h>
 #include <geos/geomgraph/index/SweepLineEventObj.h> // for inheritance
 
 // Forward declarations
@@ -36,7 +38,7 @@ namespace geos {
 namespace geomgraph { // geos::geomgraph
 namespace index { // geos::geomgraph::index
 
-class SweepLineSegment: public SweepLineEventOBJ {
+class GEOS_DLL SweepLineSegment: public SweepLineEventOBJ {
 public:
 	SweepLineSegment(Edge *newEdge, int newPtIndex);
 	~SweepLineSegment();

@@ -21,6 +21,8 @@
 #ifndef GEOS_ALGORITHM_RAYCROSSINGCOUNTER_H
 #define GEOS_ALGORITHM_RAYCROSSINGCOUNTER_H
 
+#include <geos/export.h>
+
 #include <vector>
 
 // forward declarations
@@ -62,7 +64,7 @@ namespace algorithm {
  * @author Martin Davis
  *
  */
-class RayCrossingCounter 
+class GEOS_DLL RayCrossingCounter 
 {
 private:
 	const geom::Coordinate& point;

@@ -17,6 +17,8 @@
 #ifndef GEOS_PLANARGRAPH_EDGE_H
 #define GEOS_PLANARGRAPH_EDGE_H
 
+#include <geos/export.h>
+
 #include <geos/planargraph/GraphComponent.h> // for inheritance
 
 #include <vector> // for typedefs
@@ -45,7 +47,7 @@ namespace planargraph { // geos.planargraph
  * Usually a client using a PlanarGraph will subclass Edge
  * to add its own application-specific data and methods.
  */
-class Edge: public GraphComponent {
+class GEOS_DLL Edge: public GraphComponent {
 
 public:
 

@@ -17,6 +17,7 @@
 #ifndef GEOS_GEOM_UTIL_COORDINATEOPERATION_H
 #define GEOS_GEOM_UTIL_COORDINATEOPERATION_H
 
+#include <geos/export.h>
 #include <geos/geom/util/GeometryEditorOperation.h> // for inheritance
 
 // Forward declarations
@@ -38,7 +39,7 @@ namespace util { // geos.geom.util
  * Geometry.
  * Operates on Geometry subclasses which contains a single coordinate list.
  */
-class CoordinateOperation: public GeometryEditorOperation {
+class GEOS_DLL CoordinateOperation: public GeometryEditorOperation {
 
 public:
 

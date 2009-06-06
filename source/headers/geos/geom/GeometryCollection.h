@@ -21,6 +21,7 @@
 #ifndef GEOS_GEOS_GEOMETRYCOLLECTION_H
 #define GEOS_GEOS_GEOMETRYCOLLECTION_H
 
+#include <geos/export.h>
 #include <geos/geom/Geometry.h> // for inheritance
 //#include <geos/platform.h>
 #include <geos/geom/Envelope.h> // for proper use of auto_ptr<>
@@ -53,7 +54,7 @@ namespace geom { // geos::geom
  * represented by GeometryCollection subclasses MultiPoint,
  * MultiLineString, MultiPolygon.
  */
-class GeometryCollection : public Geometry {
+class GEOS_DLL GeometryCollection : public Geometry {
 
 public:
 	friend class GeometryFactory;

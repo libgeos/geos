@@ -24,6 +24,7 @@
 #ifndef GEOS_GEOMGRAPH_NODE_H
 #define GEOS_GEOMGRAPH_NODE_H
 
+#include <geos/export.h>
 #include <geos/geomgraph/GraphComponent.h> // for inheritance
 #include <geos/geom/Coordinate.h> // for member
 
@@ -54,7 +55,7 @@ namespace geos {
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-class Node: public GraphComponent {
+class GEOS_DLL Node: public GraphComponent {
 using GraphComponent::setLabel;
 
 public:

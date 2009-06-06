@@ -17,6 +17,7 @@
 #ifndef GEOS_UTIL_ASSERTIONFAILEDEXCEPTION_H
 #define GEOS_UTIL_ASSERTIONFAILEDEXCEPTION_H
 
+#include <geos/export.h>
 #include <string>
 
 #include <geos/util/GEOSException.h>
@@ -27,7 +28,7 @@ namespace util { // geos.util
 /** \class AssertionFailedException util.h geos.h
  * \brief Indicates a bug in GEOS code.
  */
-class AssertionFailedException: public GEOSException {
+class GEOS_DLL AssertionFailedException: public GEOSException {
 
 public:
 

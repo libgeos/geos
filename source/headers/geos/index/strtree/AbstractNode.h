@@ -16,6 +16,7 @@
 #ifndef GEOS_INDEX_STRTREE_ABSTRACTNODE_H
 #define GEOS_INDEX_STRTREE_ABSTRACTNODE_H
 
+#include <geos/export.h>
 #include <geos/index/strtree/Boundable.h> // for inheritance
 
 #include <vector>
@@ -34,7 +35,7 @@ namespace strtree { // geos::index::strtree
  * then we say that this node is a "leaf node".  
  *
  */
-class AbstractNode: public Boundable {
+class GEOS_DLL AbstractNode: public Boundable {
 private:
 	std::vector<Boundable*> *childBoundables;
 	int level;

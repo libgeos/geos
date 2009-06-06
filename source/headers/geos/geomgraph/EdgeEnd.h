@@ -24,6 +24,7 @@
 #ifndef GEOS_GEOMGRAPH_EDGEEND_H
 #define GEOS_GEOMGRAPH_EDGEEND_H
 
+#include <geos/export.h>
 #include <geos/geom/Coordinate.h>  // for p0,p1
 #include <geos/inline.h>
 
@@ -54,7 +55,7 @@ namespace geomgraph { // geos.geomgraph
  * "a has a greater angle with the x-axis than b".
  * This ordering is used to sort EdgeEnds around a node.
  */
-class EdgeEnd {
+class GEOS_DLL EdgeEnd {
 
 public:
 
@@ -145,7 +146,7 @@ private:
 
 std::ostream& operator<< (std::ostream&, const EdgeEnd&);
 
-struct EdgeEndLT {
+struct GEOS_DLL  EdgeEndLT {
 	bool operator()(const EdgeEnd *s1, const EdgeEnd *s2) const {
 		return s1->compareTo(s2)<0;
 	}

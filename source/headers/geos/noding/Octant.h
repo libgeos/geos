@@ -16,6 +16,8 @@
 #ifndef GEOS_NODING_OCTANT_H
 #define GEOS_NODING_OCTANT_H
 
+#include <geos/export.h>
+
 #include <geos/inline.h>
 #include <geos/util.h>
 
@@ -45,7 +47,7 @@ namespace noding { // geos.noding
  *
  * Last port: noding/Octant.java rev. 1.2 (JTS-1.7)
  */
-class Octant {
+class GEOS_DLL Octant {
 private:
 	Octant() {} // Can't instanciate it
 public:

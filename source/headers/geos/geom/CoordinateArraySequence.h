@@ -16,6 +16,7 @@
 #ifndef GEOS_GEOM_COORDINATEARRAYSEQUENCE_H
 #define GEOS_GEOM_COORDINATEARRAYSEQUENCE_H
 
+#include <geos/export.h>
 #include <vector>
 
 //#include <geos/platform.h>
@@ -35,7 +36,7 @@ namespace geos {
 namespace geom { // geos.geom
 
 /// The default implementation of CoordinateSequence
-class CoordinateArraySequence : public CoordinateSequence {
+class GEOS_DLL CoordinateArraySequence : public CoordinateSequence {
 public:
 
 	CoordinateArraySequence(const CoordinateArraySequence &cl);

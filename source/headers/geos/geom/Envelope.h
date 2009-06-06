@@ -20,6 +20,8 @@
 #ifndef GEOS_GEOM_ENVELOPE_H
 #define GEOS_GEOM_ENVELOPE_H
 
+
+#include <geos/export.h>
 #include <geos/inline.h>
 #include <geos/geom/Coordinate.h>
 
@@ -49,7 +51,7 @@ class Coordinate;
  * the supplies extent values are automatically sorted into the correct order.
  *
  */
-class Envelope {
+class GEOS_DLL Envelope {
 
 public:
 

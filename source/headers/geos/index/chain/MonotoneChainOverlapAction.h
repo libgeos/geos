@@ -20,6 +20,7 @@
 #ifndef GEOS_IDX_CHAIN_MONOTONECHAINOVERLAPACTION_H
 #define GEOS_IDX_CHAIN_MONOTONECHAINOVERLAPACTION_H
 
+#include <geos/export.h>
 #include <geos/geom/LineSegment.h>
 #include <geos/geom/Envelope.h>
 
@@ -41,7 +42,7 @@ namespace chain { // geos::index::chain
  * The action for the internal iterator for performing
  * overlap queries on a MonotoneChain
  */
-class MonotoneChainOverlapAction {
+class GEOS_DLL MonotoneChainOverlapAction {
 
 protected:
 

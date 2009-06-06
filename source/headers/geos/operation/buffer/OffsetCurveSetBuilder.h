@@ -20,6 +20,8 @@
 #ifndef GEOS_OP_BUFFER_OFFSETCURVESETBUILDER_H
 #define GEOS_OP_BUFFER_OFFSETCURVESETBUILDER_H
 
+#include <geos/export.h>
+
 #include <vector>
 
 // Forward declarations
@@ -59,7 +61,7 @@ namespace buffer { // geos.operation.buffer
  * final buffer area.
  *
  */
-class OffsetCurveSetBuilder {
+class GEOS_DLL OffsetCurveSetBuilder {
 
 private:
 

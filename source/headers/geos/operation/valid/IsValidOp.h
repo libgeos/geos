@@ -21,6 +21,8 @@
 #ifndef GEOS_OP_ISVALIDOP_H
 #define GEOS_OP_ISVALIDOP_H
 
+#include <geos/export.h>
+
 #include <geos/operation/valid/TopologyValidationError.h> // for inlined destructor
 
 // Forward declarations
@@ -56,7 +58,7 @@ namespace valid { // geos::operation::valid
  * Implements the algorithsm required to compute the <code>isValid()</code>
  * method for {@link Geometry}s.
  */
-class IsValidOp {
+class GEOS_DLL IsValidOp {
 friend class Unload;
 private:
 	/// the base Geometry to be validated

@@ -20,6 +20,8 @@
 #ifndef GEOS_NODING_SNAPROUND_HOTPIXEL_H
 #define GEOS_NODING_SNAPROUND_HOTPIXEL_H
 
+#include <geos/export.h>
+
 #include <geos/inline.h>
 
 #include <geos/geom/Coordinate.h> // for composition
@@ -53,7 +55,7 @@ namespace snapround { // geos::noding::snapround
  * to avoid rounding problems.
  *
  */
-class HotPixel {
+class GEOS_DLL HotPixel {
 
 private:
 

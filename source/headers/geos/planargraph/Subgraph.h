@@ -17,6 +17,7 @@
 #ifndef GEOS_PLANARGRAPH_SUBGRAPH_H
 #define GEOS_PLANARGRAPH_SUBGRAPH_H
 
+#include <geos/export.h>
 #include <geos/planargraph/NodeMap.h> // for composition
 
 #include <vector> 
@@ -45,7 +46,7 @@ namespace planargraph { // geos.planargraph
 /// @@ Actually we'll be copying Coordinates in NodeMap.
 /// I guess that'll need to be changed soon.
 ///
-class Subgraph
+class GEOS_DLL Subgraph
 {
 protected:
 	PlanarGraph &parentGraph;

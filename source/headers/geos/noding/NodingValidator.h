@@ -16,6 +16,8 @@
 #ifndef GEOS_NODING_NODINGVALIDATOR_H
 #define GEOS_NODING_NODINGVALIDATOR_H
 
+#include <geos/export.h>
+
 #include <vector>
 #include <iostream>
 
@@ -44,7 +46,7 @@ namespace noding { // geos.noding
  * Last port: noding/NodingValidator.java rev. 1.6 (JTS-1.7)
  *
  */
-class NodingValidator {
+class GEOS_DLL NodingValidator {
 private:
 	algorithm::LineIntersector li;
 	const std::vector<SegmentString*>& segStrings;

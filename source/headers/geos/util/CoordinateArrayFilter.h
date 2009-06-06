@@ -17,6 +17,7 @@
 #ifndef GEOS_UTIL_COORDINATEARRAYFILTER_H
 #define GEOS_UTIL_COORDINATEARRAYFILTER_H
 
+#include <geos/export.h>
 #include <cassert>
 
 #include <geos/geom/CoordinateFilter.h>
@@ -33,7 +34,7 @@ namespace util { // geos::util
  *
  * Last port: util/CoordinateArrayFilter.java rev. 1.15
  */
-class CoordinateArrayFilter: public geom::CoordinateFilter {
+class GEOS_DLL CoordinateArrayFilter: public geom::CoordinateFilter {
 private:
 	geom::Coordinate::ConstVect &pts; // target vector reference
 public:

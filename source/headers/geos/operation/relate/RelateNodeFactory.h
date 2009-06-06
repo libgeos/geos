@@ -22,6 +22,8 @@
 #ifndef GEOS_OP_RELATE_RELATENODEFACTORY_H
 #define GEOS_OP_RELATE_RELATENODEFACTORY_H
 
+#include <geos/export.h>
+
 #include <geos/geomgraph/NodeFactory.h> // for RelateNodeFactory inheritance
 
 // Forward declarations
@@ -42,7 +44,7 @@ namespace relate { // geos::operation::relate
 /** \brief
  * Used by the geomgraph::NodeMap in a RelateNodeGraph to create RelateNode objects.
  */
-class RelateNodeFactory: public geomgraph::NodeFactory {
+class GEOS_DLL RelateNodeFactory: public geomgraph::NodeFactory {
 public:
 	geomgraph::Node* createNode(const geom::Coordinate &coord) const;
 	static const geomgraph::NodeFactory &instance();

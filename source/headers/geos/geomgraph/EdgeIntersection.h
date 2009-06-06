@@ -25,6 +25,7 @@
 #ifndef GEOS_GEOMGRAPH_EDGEINTERSECTION_H
 #define GEOS_GEOMGRAPH_EDGEINTERSECTION_H
 
+#include <geos/export.h>
 #include <string>
 
 #include <geos/geom/Coordinate.h> // for CoordinateLessThen
@@ -44,7 +45,7 @@ namespace geomgraph { // geos.geomgraph
  * The intersection point must be precise.
  *
  */
-class EdgeIntersection {
+class GEOS_DLL EdgeIntersection {
 public:
 
 	// the point of intersection
@@ -86,7 +87,7 @@ public:
 
 };
 
-struct EdgeIntersectionLessThen {
+struct GEOS_DLL  EdgeIntersectionLessThen {
 	bool operator()(const EdgeIntersection *ei1,
 		const EdgeIntersection *ei2) const
 	{

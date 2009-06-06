@@ -24,6 +24,7 @@
 #ifndef GEOS_GEOMGRAPH_NODEMAP_H
 #define GEOS_GEOMGRAPH_NODEMAP_H
 
+#include <geos/export.h>
 #include <map>
 #include <vector>
 #include <string>
@@ -45,7 +46,7 @@ namespace geos {
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-class NodeMap{
+class GEOS_DLL NodeMap{
 public:
 
 	typedef std::map<geom::Coordinate*,Node*,geom::CoordinateLessThen> container;

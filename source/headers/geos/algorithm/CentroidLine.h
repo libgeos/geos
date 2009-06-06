@@ -18,6 +18,7 @@
 #define GEOS_ALGORITHM_CENTROIDLINE_H
 
 
+#include <geos/export.h>
 #include <geos/geom/Coordinate.h>
 
 // Forward declarations
@@ -31,7 +32,7 @@ namespace geos {
 namespace geos {
 namespace algorithm { // geos::algorithm
 
-class CentroidLine {
+class GEOS_DLL CentroidLine {
 private:
 
 	geom::Coordinate centSum;

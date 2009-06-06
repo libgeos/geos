@@ -17,6 +17,7 @@
 #ifndef GEOS_GEOMGRAPH_INDEX_SIMPLEEDGESETINTERSECTOR_H
 #define GEOS_GEOMGRAPH_INDEX_SIMPLEEDGESETINTERSECTOR_H
 
+#include <geos/export.h>
 #include <vector>
 
 #include <geos/geomgraph/index/EdgeSetIntersector.h> // for inheritance
@@ -35,7 +36,7 @@ namespace geos {
 namespace geomgraph { // geos::geomgraph
 namespace index { // geos::geomgraph::index
 
-class SimpleEdgeSetIntersector: public EdgeSetIntersector {
+class GEOS_DLL SimpleEdgeSetIntersector: public EdgeSetIntersector {
 
 public:
 

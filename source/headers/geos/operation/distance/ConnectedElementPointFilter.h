@@ -22,6 +22,8 @@
 #ifndef GEOS_OP_DISTANCE_CONNECTEDELEMENTPOINTFILTER_H
 #define GEOS_OP_DISTANCE_CONNECTEDELEMENTPOINTFILTER_H
 
+#include <geos/export.h>
+
 #include <geos/geom/GeometryFilter.h> // for inheritance
 
 #include <vector>
@@ -45,7 +47,7 @@ namespace distance { // geos::operation::distance
  * (e.g. a polygon, linestring or point)
  * and returns them in a list
  */
-class ConnectedElementPointFilter: public geom::GeometryFilter {
+class GEOS_DLL ConnectedElementPointFilter: public geom::GeometryFilter {
 
 private:
 	std::vector<const geom::Coordinate*> *pts;

@@ -16,6 +16,7 @@
 #ifndef GEOS_GEOM_DIMENSION_H
 #define GEOS_GEOM_DIMENSION_H
 
+#include <geos/export.h>
 #include <geos/inline.h>
 
 namespace geos {
@@ -26,7 +27,7 @@ namespace geom { // geos::geom
 /// Also, constants representing the dimensions of the empty geometry and
 /// non-empty geometries, and a wildcard dimension meaning "any dimension".
 ///
-class Dimension {
+class GEOS_DLL Dimension {
 public:
 	enum DimensionType {
 		/// Dimension value for any dimension (= {FALSE, TRUE}).

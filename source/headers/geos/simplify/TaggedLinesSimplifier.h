@@ -27,6 +27,7 @@
 #ifndef _GEOS_SIMPLIFY_TAGGEDLINESSIMPLIFIER_H_
 #define _GEOS_SIMPLIFY_TAGGEDLINESSIMPLIFIER_H_ 
 
+#include <geos/export.h>
 #include <vector>
 #include <memory>
 #include <cassert>
@@ -49,7 +50,7 @@ namespace simplify { // geos::simplify
  * Simplifies a collection of TaggedLineStrings, preserving topology
  * (in the sense that no new intersections are introduced).
  */
-class TaggedLinesSimplifier {
+class GEOS_DLL TaggedLinesSimplifier {
 
 public:
 

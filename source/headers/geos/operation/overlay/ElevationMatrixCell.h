@@ -16,6 +16,8 @@
 #ifndef GEOS_OP_OVERLAY_ELEVATIONMATRIXCELL_H
 #define GEOS_OP_OVERLAY_ELEVATIONMATRIXCELL_H
 
+#include <geos/export.h>
+
 #include <set>
 
 // Forward declarations
@@ -30,7 +32,7 @@ namespace operation { // geos::operation
 namespace overlay { // geos::operation::overlay
 
 
-class ElevationMatrixCell {
+class GEOS_DLL ElevationMatrixCell {
 public:
 	ElevationMatrixCell();
 	~ElevationMatrixCell();

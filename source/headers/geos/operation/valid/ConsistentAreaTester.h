@@ -23,6 +23,8 @@
 #ifndef GEOS_OP_CONSISTENTAREATESTER_H
 #define GEOS_OP_CONSISTENTAREATESTER_H
 
+#include <geos/export.h>
+
 #include <geos/geom/Coordinate.h> // for composition
 #include <geos/algorithm/LineIntersector.h> // for composition
 #include <geos/operation/relate/RelateNodeGraph.h> // for composition
@@ -81,7 +83,7 @@ namespace valid { // geos::operation::valid
  * is recorded and is available to the caller.
  *
  */
-class ConsistentAreaTester {
+class GEOS_DLL ConsistentAreaTester {
 private:
 
 	algorithm::LineIntersector li;

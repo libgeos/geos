@@ -17,6 +17,7 @@
 #ifndef GEOS_ALGORITHM_SIRTREEPOINTINRING_H
 #define GEOS_ALGORITHM_SIRTREEPOINTINRING_H
 
+#include <geos/export.h>
 #include <geos/algorithm/PointInRing.h> // for inheritance
 
 #include <vector>
@@ -39,7 +40,7 @@ namespace geos {
 namespace geos {
 namespace algorithm { // geos::algorithm
 
-class SIRtreePointInRing: public PointInRing {
+class GEOS_DLL SIRtreePointInRing: public PointInRing {
 private:
 	geom::LinearRing *ring;
 	index::strtree::SIRtree *sirTree;

@@ -16,11 +16,13 @@
 #ifndef GEOS_INDEX_SWEEPLINE_SWEEPLINEINTERVAL_H
 #define GEOS_INDEX_SWEEPLINE_SWEEPLINEINTERVAL_H
 
+#include <geos/export.h>
+
 namespace geos {
 namespace index { // geos.index
 namespace sweepline { // geos:index:sweepline
 
-class SweepLineInterval {
+class GEOS_DLL SweepLineInterval {
 public:
 	SweepLineInterval(double newMin, double newMax, void* newItem=0);
 	double getMin();

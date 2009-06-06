@@ -16,6 +16,8 @@
 #ifndef GEOS_OP_OVERLAY_POINTBUILDER_H
 #define GEOS_OP_OVERLAY_POINTBUILDER_H
 
+#include <geos/export.h>
+
 #include <geos/geom/GeometryFactory.h> // for inlines
 #include <geos/operation/overlay/OverlayOp.h> // for OpCode enum
 #include <geos/util.h>
@@ -48,7 +50,7 @@ namespace overlay { // geos::operation::overlay
 /** \brief
  * Constructs geom::Point s from the nodes of an overlay graph.
  */
-class PointBuilder {
+class GEOS_DLL PointBuilder {
 private:
 
 	OverlayOp *op;

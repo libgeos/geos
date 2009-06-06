@@ -20,6 +20,7 @@
 #ifndef _GEOS_SIMPLIFY_DOUBGLASPEUCKERSIMPLIFIER_H_
 #define _GEOS_SIMPLIFY_DOUBGLASPEUCKERSIMPLIFIER_H_ 
 
+#include <geos/export.h>
 #include <memory> // for auto_ptr
 
 // Forward declarations
@@ -47,7 +48,7 @@ namespace simplify { // geos::simplify
  * (However, using D-P is significantly faster).
  *
  */
-class DouglasPeuckerSimplifier {
+class GEOS_DLL DouglasPeuckerSimplifier {
 
 public:
 

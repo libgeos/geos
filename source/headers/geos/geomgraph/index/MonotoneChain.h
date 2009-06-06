@@ -17,6 +17,8 @@
 #ifndef GEOS_GEOMGRAPH_INDEX_MONOTONECHAIN_H
 #define GEOS_GEOMGRAPH_INDEX_MONOTONECHAIN_H
 
+
+#include <geos/export.h>
 #include <geos/geomgraph/index/SweepLineEventObj.h> // for inheritance
 #include <geos/geomgraph/index/MonotoneChainEdge.h> // for inline
 
@@ -38,7 +40,7 @@ namespace index { // geos::geomgraph::index
 /**
  * Last port: geomgraph/index/MonotoneChain.java rev. 1.3 (JTS-1.7)
  */
-class MonotoneChain: public SweepLineEventOBJ {
+class GEOS_DLL MonotoneChain: public SweepLineEventOBJ {
 private:
 	MonotoneChainEdge *mce;
 	int chainIndex;

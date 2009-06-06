@@ -22,6 +22,8 @@
 #ifndef GEOS_OP_POLYGONIZE_EDGERING_H
 #define GEOS_OP_POLYGONIZE_EDGERING_H
 
+#include <geos/export.h>
+
 #include <vector>
 
 // Forward declarations
@@ -48,7 +50,7 @@ namespace polygonize { // geos::operation::polygonize
  * Represents a ring of PolygonizeDirectedEdge which form
  * a ring of a polygon.  The ring may be either an outer shell or a hole.
  */
-class EdgeRing {
+class GEOS_DLL EdgeRing {
 private:
 	const geom::GeometryFactory *factory; 
 	std::vector<const planargraph::DirectedEdge*> *deList;

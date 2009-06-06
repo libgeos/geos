@@ -21,6 +21,7 @@
 #ifndef GEOS_ALGORITHM_LINEINTERSECTOR_H
 #define GEOS_ALGORITHM_LINEINTERSECTOR_H
 
+#include <geos/export.h>
 #include <string>
 
 #include <geos/geom/Coordinate.h>
@@ -46,7 +47,7 @@ namespace algorithm { // geos::algorithm
  * an integer grid.)
  *
  */
-class LineIntersector {
+class GEOS_DLL LineIntersector {
 public:	
 
 	/// \brief

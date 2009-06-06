@@ -16,6 +16,8 @@
 #ifndef GEOS_INDEX_STRTREE_ABSTRACTSTRTREE_H
 #define GEOS_INDEX_STRTREE_ABSTRACTSTRTREE_H
 
+#include <geos/export.h>
+
 #include <geos/index/strtree/AbstractNode.h> // for inlines
 
 #include <vector>
@@ -128,7 +130,7 @@ public:
  * data, both of which are treated here as Boundables.
  * 
  */
-class AbstractSTRtree {
+class GEOS_DLL AbstractSTRtree {
 
 private:
 	bool built;

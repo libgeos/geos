@@ -20,6 +20,7 @@
 #ifndef GEOS_IDX_QUADTREE_DOUBLEBITS_H
 #define GEOS_IDX_QUADTREE_DOUBLEBITS_H
 
+#include <geos/export.h>
 #include <geos/platform.h> // for int64
 
 #include <string>
@@ -41,7 +42,7 @@ namespace quadtree { // geos::index::quadtree
  * apply only to IEEE-754 double-precision floating point format.
  *
  */
-class DoubleBits {
+class GEOS_DLL DoubleBits {
 
 public:
 

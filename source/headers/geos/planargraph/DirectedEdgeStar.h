@@ -17,6 +17,8 @@
 #ifndef GEOS_PLANARGRAPH_DIRECTEDEDGESTAR_H
 #define GEOS_PLANARGRAPH_DIRECTEDEDGESTAR_H
 
+#include <geos/export.h>
+
 #include <vector>
 
 // Forward declarations
@@ -34,7 +36,7 @@ namespace geos {
 namespace planargraph { // geos.planargraph
 
 /// A sorted collection of DirectedEdge which leave a Node in a PlanarGraph.
-class DirectedEdgeStar {
+class GEOS_DLL DirectedEdgeStar {
 protected:
 
 private:

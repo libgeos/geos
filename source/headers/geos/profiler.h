@@ -16,6 +16,8 @@
 #ifndef GEOS_PROFILER_H
 #define GEOS_PROFILER_H
 
+#include <geos/export.h>
+
 /* For MingW builds with __STRICT_ANSI__ (-ansi) */
 #if defined(__MINGW32__)
 /* Allow us to check for presence of gettimeofday in MingW */ 
@@ -55,7 +57,7 @@ namespace util {
  *
  * \brief Profile statistics
  */
-class Profile {
+class GEOS_DLL Profile {
 public:
 	/** \brief Create a named profile */
 	Profile(std::string name);
@@ -133,7 +135,7 @@ private:
  * \brief Profiling class
  *
  */
-class Profiler {
+class GEOS_DLL Profiler {
 
 public:
 

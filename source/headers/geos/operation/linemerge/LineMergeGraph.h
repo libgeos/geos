@@ -16,6 +16,8 @@
 #ifndef GEOS_OP_LINEMERGE_LINEMERGEGRAPH_H
 #define GEOS_OP_LINEMERGE_LINEMERGEGRAPH_H
 
+#include <geos/export.h>
+
 #include <geos/planargraph/PlanarGraph.h> // for inheritance
 
 #include <vector>
@@ -45,7 +47,7 @@ namespace linemerge { // geos::operation::linemerge
  * and planargraph::Node indicates whether they have been
  * logically deleted from the graph.
  */
-class LineMergeGraph: public planargraph::PlanarGraph {
+class GEOS_DLL LineMergeGraph: public planargraph::PlanarGraph {
 
 private:
 

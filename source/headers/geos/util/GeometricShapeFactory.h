@@ -22,6 +22,7 @@
 #ifndef GEOS_UTIL_GEOMETRICSHAPEFACTORY_H
 #define GEOS_UTIL_GEOMETRICSHAPEFACTORY_H
 
+#include <geos/export.h>
 #include <cassert>
 
 #include <geos/geom/Coordinate.h>
@@ -58,7 +59,7 @@ namespace util { // geos::util
  * </pre>
  *
  */
-class GeometricShapeFactory {
+class GEOS_DLL GeometricShapeFactory {
 protected:
 	class Dimensions {
 	public:

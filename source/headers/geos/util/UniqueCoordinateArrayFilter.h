@@ -17,6 +17,7 @@
 #ifndef GEOS_UTIL_UNIQUECOORDINATEARRAYFILTER_H
 #define GEOS_UTIL_UNIQUECOORDINATEARRAYFILTER_H
 
+#include <geos/export.h>
 #include <cassert>
 #include <set>
 #include <vector>
@@ -34,7 +35,7 @@ namespace util { // geos::util
  *
  *  Last port: util/UniqueCoordinateArrayFilter.java rev. 1.17
  */
-class UniqueCoordinateArrayFilter: public geom::CoordinateFilter {
+class GEOS_DLL UniqueCoordinateArrayFilter: public geom::CoordinateFilter {
 
 private:
 	geom::Coordinate::ConstVect &pts;	// target set reference

@@ -20,6 +20,8 @@
 #ifndef GEOS_NODING_INTERSECTIONADDER_H
 #define GEOS_NODING_INTERSECTIONADDER_H
 
+#include <geos/export.h>
+
 #include <vector>
 #include <iostream>
 #include <cstdlib> // for abs()
@@ -54,7 +56,7 @@ namespace noding { // geos.noding
  * This class is an example of the <i>Strategy</i> pattern.
  *
  */
-class IntersectionAdder: public SegmentIntersector {
+class GEOS_DLL IntersectionAdder: public SegmentIntersector {
 
 private:
 

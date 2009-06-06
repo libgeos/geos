@@ -17,11 +17,12 @@
 #ifndef GEOS_ALGORITHM_ROBUSTDETERMINANT_H
 #define GEOS_ALGORITHM_ROBUSTDETERMINANT_H
 
+#include <geos/export.h>
 
 namespace geos {
 namespace algorithm { // geos::algorithm
 
-class RobustDeterminant {
+class GEOS_DLL RobustDeterminant {
 public:
 	static int signOfDet2x2(double x1,double y1,double x2,double y2);
 };

@@ -22,6 +22,7 @@
 #ifndef GEOS_GEOM_GEOMETRY_H
 #define GEOS_GEOM_GEOMETRY_H
 
+#include <geos/export.h>
 #include <geos/platform.h>
 #include <geos/inline.h>
 #include <geos/geom/Envelope.h>
@@ -159,7 +160,7 @@ enum GeometryTypeId {
  *  remain distinct. This behaviour is desired in many cases.
  *
  */
-class Geometry {
+class GEOS_DLL Geometry {
 
 public:
 
@@ -828,7 +829,7 @@ private:
 ///
 std::ostream& operator<< (std::ostream& os, const Geometry& geom);
 
-struct GeometryGreaterThen {
+struct GEOS_DLL GeometryGreaterThen {
 	bool operator()(const Geometry *first, const Geometry *second);
 };
 

@@ -16,6 +16,8 @@
 #ifndef GEOS_IDX_BINTREE_KEY_H
 #define GEOS_IDX_BINTREE_KEY_H
 
+#include <geos/export.h>
+
 // Forward declarations
 namespace geos {
 	namespace index { 
@@ -35,7 +37,7 @@ namespace bintree { // geos::index::bintree
  * It contains a lower-left point and a level number.
  * The level number is the power of two for the size of the node envelope
  */
-class Key {
+class GEOS_DLL Key {
 
 public:
 

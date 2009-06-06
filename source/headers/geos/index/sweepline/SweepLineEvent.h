@@ -16,6 +16,8 @@
 #ifndef GEOS_INDEX_SWEEPLINE_SWEEPLINEEVENT_H
 #define GEOS_INDEX_SWEEPLINE_SWEEPLINEEVENT_H
 
+#include <geos/export.h>
+
 // Forward declarations
 namespace geos {
 	namespace index { 
@@ -29,7 +31,7 @@ namespace geos {
 namespace index { // geos.index
 namespace sweepline { // geos:index:sweepline
 
-class SweepLineEvent {
+class GEOS_DLL SweepLineEvent {
 
 public:
 
@@ -81,7 +83,7 @@ private:
 // temp typedefs for backward compatibility
 //typedef SweepLineEvent indexSweepLineEvent;
 
-struct SweepLineEventLessThen {
+struct GEOS_DLL  SweepLineEventLessThen {
 	bool operator() (const SweepLineEvent* first, const SweepLineEvent* second) const;
 };
 

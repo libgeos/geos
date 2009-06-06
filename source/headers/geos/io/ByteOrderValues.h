@@ -17,6 +17,8 @@
 #ifndef GEOS_IO_BYTEORDERVALUES_H
 #define GEOS_IO_BYTEORDERVALUES_H
 
+#include <geos/export.h>
+
 #include <geos/platform.h>
 
 namespace geos {
@@ -30,7 +32,7 @@ namespace io {
  * 
  * Similar to the standard Java <code>ByteBuffer</code> class.
  */
-class ByteOrderValues {
+class GEOS_DLL ByteOrderValues {
 
 public:
 

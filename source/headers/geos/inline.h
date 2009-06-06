@@ -22,4 +22,5 @@
 # define INLINE
 #endif
 
+
 #endif // ndef GEOS_INLINE_H

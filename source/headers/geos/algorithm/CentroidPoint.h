@@ -17,6 +17,7 @@
 #ifndef GEOS_ALGORITHM_CENTROIDPOINT_H
 #define GEOS_ALGORITHM_CENTROIDPOINT_H
 
+#include <geos/export.h>
 #include <geos/geom/Coordinate.h>
 
 // Forward declarations
@@ -30,7 +31,7 @@ namespace geos {
 namespace geos {
 namespace algorithm { // geos::algorithm
 
-class CentroidPoint {
+class GEOS_DLL CentroidPoint {
 
 private:
 

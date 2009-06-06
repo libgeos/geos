@@ -17,6 +17,7 @@
 #ifndef GEOS_GEOMGRAPH_INDEX_EDGESETINTERSECTOR_H
 #define GEOS_GEOMGRAPH_INDEX_EDGESETINTERSECTOR_H
 
+#include <geos/export.h>
 #include <vector>
 
 // Forward declarations
@@ -36,7 +37,7 @@ namespace index { // geos::geomgraph::index
 /* 
  * This is derived from a Java interface.
  */
-class EdgeSetIntersector {
+class GEOS_DLL EdgeSetIntersector {
 public:
 	/**
 	 * Computes all self-intersections between edges in a set of edges,

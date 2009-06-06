@@ -17,6 +17,7 @@ EXTRA_DIST = platform.h.vc version.h version.h.vc
 geosdir = $(includedir)/geos
 
 geos_HEADERS = 			\
+	export.h 		\
 	geom.h 			\
 	geomUtil.h 		\
 	geomgraph.h 		\

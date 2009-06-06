@@ -20,6 +20,7 @@
 #ifndef GEOS_IDX_QUADTREE_QUADTREE_H
 #define GEOS_IDX_QUADTREE_QUADTREE_H
 
+#include <geos/export.h>
 #include <geos/index/SpatialIndex.h> // for inheritance
 #include <geos/index/quadtree/Root.h> // for composition
 
@@ -64,7 +65,7 @@ namespace quadtree { // geos::index::quadtree
  * This data structure is also known as an <i>MX-CIF quadtree</i>
  * following the usage of Samet and others.
  */
-class Quadtree: public SpatialIndex {
+class GEOS_DLL Quadtree: public SpatialIndex {
 
 private:
 

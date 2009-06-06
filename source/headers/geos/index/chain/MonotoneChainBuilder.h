@@ -20,6 +20,7 @@
 #ifndef GEOS_IDX_CHAIN_MONOTONECHAINBUILDER_H
 #define GEOS_IDX_CHAIN_MONOTONECHAINBUILDER_H
 
+#include <geos/export.h>
 #include <vector>
 
 // Forward declarations
@@ -44,7 +45,7 @@ namespace chain { // geos::index::chain
  *
  * TODO: use vector<const Coordinate*> instead ?
  */
-class MonotoneChainBuilder {
+class GEOS_DLL MonotoneChainBuilder {
 
 public:
 

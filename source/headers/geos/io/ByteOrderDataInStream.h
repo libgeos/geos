@@ -17,6 +17,8 @@
 #ifndef GEOS_IO_BYTEORDERDATAINSTREAM_H
 #define GEOS_IO_BYTEORDERDATAINSTREAM_H
 
+#include <geos/export.h>
+
 //#include <geos/platform.h>
 //#include <geos/io/ParseException.h>
 //#include <geos/io/ByteOrderValues.h>
@@ -34,7 +36,7 @@ namespace io {
  * istream, with the representation being in either common byte ordering.
  *
  */
-class ByteOrderDataInStream {
+class GEOS_DLL ByteOrderDataInStream {
 
 public:
 

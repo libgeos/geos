@@ -18,6 +18,7 @@
 #define GEOS_ALGORITHM_CENTROIDAREA_H
 
 
+#include <geos/export.h>
 #include <geos/geom/Coordinate.h>
 
 // Forward declarations
@@ -46,7 +47,7 @@ namespace algorithm { // geos::algorithm
  * See <code>http://www.faqs.org/faqs/graphics/algorithms-faq/</code>
  * for further details of the basic approach.
  */
-class CentroidArea {
+class GEOS_DLL CentroidArea {
 
 public:
 

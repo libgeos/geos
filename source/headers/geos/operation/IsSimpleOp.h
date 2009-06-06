@@ -22,6 +22,8 @@
 #ifndef GEOS_OPERATION_ISSIMPLEOP_H
 #define GEOS_OPERATION_ISSIMPLEOP_H
 
+
+#include <geos/export.h>
 #include <geos/geom/Coordinate.h> // for dtor visibility by auto_ptr (compos)
 
 #include <map>
@@ -85,7 +87,7 @@ namespace operation { // geos.operation
  * @see algorithm::BoundaryNodeRule
  *
  */
-class IsSimpleOp
+class GEOS_DLL IsSimpleOp
 {
 
 public:

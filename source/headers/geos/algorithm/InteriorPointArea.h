@@ -17,6 +17,7 @@
 #ifndef GEOS_ALGORITHM_INTERIORPOINTAREA_H
 #define GEOS_ALGORITHM_INTERIORPOINTAREA_H
 
+#include <geos/export.h>
 #include <geos/geom/Coordinate.h>
 
 // Forward declarations
@@ -50,7 +51,7 @@ namespace algorithm { // geos::algorithm
  * which does not lie in the interior.
  * </b>
  */
-class InteriorPointArea {
+class GEOS_DLL InteriorPointArea {
 
 private:
 

@@ -15,6 +15,8 @@
 #ifndef GEOS_INDEX_STRTREE_ITEMBOUNDABLE_H
 #define GEOS_INDEX_STRTREE_ITEMBOUNDABLE_H
 
+#include <geos/export.h>
+
 #include <geos/index/strtree/Boundable.h> // for inheritance
 
 namespace geos {
@@ -28,7 +30,7 @@ namespace strtree { // geos::index::strtree
  *
  * \todo TODO: It's unclear who takes ownership of passed newBounds and newItem objects.
  */
-class ItemBoundable: public Boundable
+class GEOS_DLL ItemBoundable: public Boundable
 {
 public:
 

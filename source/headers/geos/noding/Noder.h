@@ -16,6 +16,8 @@
 #ifndef GEOS_NODING_NODER_H
 #define GEOS_NODING_NODER_H
 
+#include <geos/export.h>
+
 #include <vector>
 #include <iostream>
 
@@ -45,7 +47,7 @@ namespace noding { // geos.noding
  * TODO: this was really an interface, we should avoid making it a Base class
  *
  */
-class Noder {
+class GEOS_DLL Noder {
 public:
 	/** \brief
 	 * Computes the noding for a collection of {@link SegmentString}s.

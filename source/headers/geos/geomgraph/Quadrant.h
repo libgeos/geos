@@ -24,6 +24,7 @@
 #ifndef GEOS_GEOMGRAPH_QUADRANT_H
 #define GEOS_GEOMGRAPH_QUADRANT_H
 
+#include <geos/export.h>
 #include <string>
 
 #include <geos/inline.h>
@@ -47,7 +48,7 @@ namespace geomgraph { // geos.geomgraph
  * <pre>
  *
  */
-class Quadrant {
+class GEOS_DLL Quadrant {
 
 public:
 

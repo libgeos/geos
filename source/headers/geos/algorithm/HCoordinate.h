@@ -21,6 +21,7 @@
 #ifndef GEOS_ALGORITHM_HCOORDINATE_H
 #define GEOS_ALGORITHM_HCOORDINATE_H
 
+#include <geos/export.h>
 #include <iosfwd>
 
 // Forward declarations
@@ -40,7 +41,7 @@ namespace algorithm { // geos::algorithm
  * HCoordinate are used as a clean way
  * of computing intersections between line segments.
  */
-class HCoordinate {
+class GEOS_DLL HCoordinate {
 
 public:
 

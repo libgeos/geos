@@ -24,6 +24,7 @@
 #ifndef _GEOS_SIMPLIFY_TOPOLOGYPRESERVINGSIMPLIFIER_H_
 #define _GEOS_SIMPLIFY_TOPOLOGYPRESERVINGSIMPLIFIER_H_ 
 
+#include <geos/export.h>
 #include <memory> // for auto_ptr
 #include <map> 
 
@@ -58,7 +59,7 @@ namespace simplify { // geos::simplify
  *     (although they may touch at fewer points)
  *
  */
-class TopologyPreservingSimplifier
+class GEOS_DLL TopologyPreservingSimplifier
 {
 
 public:

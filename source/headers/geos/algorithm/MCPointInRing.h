@@ -17,6 +17,7 @@
 #ifndef GEOS_ALGORITHM_MCPOINTINRING_H
 #define GEOS_ALGORITHM_MCPOINTINRING_H
 
+#include <geos/export.h>
 #include <geos/index/chain/MonotoneChainSelectAction.h> // for inheritance
 #include <geos/algorithm/PointInRing.h> // for inheritance
 #include <geos/geom/Coordinate.h> // for composition
@@ -47,7 +48,7 @@ namespace geos {
 namespace geos {
 namespace algorithm { // geos::algorithm
 
-class MCPointInRing: public PointInRing {
+class GEOS_DLL MCPointInRing: public PointInRing {
 public:
 	MCPointInRing(const geom::LinearRing *newRing);
 	~MCPointInRing();

@@ -24,6 +24,7 @@
 #ifndef GEOS_GEOMGRAPH_EDGEINTERSECTIONLIST_H
 #define GEOS_GEOMGRAPH_EDGEINTERSECTIONLIST_H
 
+#include <geos/export.h>
 #include <vector>
 #include <set>
 #include <string>
@@ -52,7 +53,7 @@ namespace geomgraph { // geos.geomgraph
  * Implements splitting an edge with intersections
  * into multiple resultant edges.
  */
-class EdgeIntersectionList{
+class GEOS_DLL EdgeIntersectionList{
 public:
 	typedef std::set<EdgeIntersection *, EdgeIntersectionLessThen> container;
 	typedef container::iterator iterator;

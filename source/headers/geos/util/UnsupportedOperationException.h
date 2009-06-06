@@ -17,6 +17,8 @@
 #ifndef GEOS_UTIL_UNSUPPORTEDOPERATIONEXCEPTION_H
 #define GEOS_UTIL_UNSUPPORTEDOPERATIONEXCEPTION_H
 
+#include <geos/export.h>
+
 #include <string>
 
 #include <geos/util/GEOSException.h>

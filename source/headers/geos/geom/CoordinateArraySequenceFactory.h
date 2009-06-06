@@ -16,6 +16,8 @@
 #ifndef GEOS_GEOM_COORDINATEARRAYSEQUENCEFACTORY_H
 #define GEOS_GEOM_COORDINATEARRAYSEQUENCEFACTORY_H
 
+
+#include <geos/export.h>
 #include <vector>
 
 #include <geos/geom/CoordinateSequenceFactory.h> // for inheritance
@@ -39,7 +41,7 @@ namespace geom { // geos::geom
  * Creates CoordinateSequences internally represented as an array of
  * Coordinates.
  */
-class CoordinateArraySequenceFactory: public CoordinateSequenceFactory {
+class GEOS_DLL CoordinateArraySequenceFactory: public CoordinateSequenceFactory {
 
 public:
 

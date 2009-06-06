@@ -21,6 +21,7 @@
 #ifndef GEOS_GEOS_LINEARRING_H
 #define GEOS_GEOS_LINEARRING_H
 
+#include <geos/export.h>
 #include <string>
 #include <vector>
 #include <geos/platform.h>
@@ -54,7 +55,7 @@ namespace geom { // geos::geom
  * If these conditions are not met, the constructors throw
  * an {@link IllegalArgumentException}
  */
-class LinearRing : public LineString {
+class GEOS_DLL LinearRing : public LineString {
 
 public:
 

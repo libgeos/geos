@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".\;..\..\..\tests\unit;..\..\..\tests\unit\tut;..\..\..\capi;..\..\..\source\headers"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;WIN32_LEAN_AND_MEAN;NOMINMAX;NOGDI"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;WIN32_LEAN_AND_MEAN;NOMINMAX;NOGDI;GEOS_DLL_LIBRARY"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -121,7 +121,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories=".\;..\..\..\tests\unit;..\..\..\tests\unit\tut;..\..\..\capi;..\..\..\source\headers"
-				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;WIN32_LEAN_AND_MEAN;NOMINMAX;NOGDI"
+				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;WIN32_LEAN_AND_MEAN;NOMINMAX;NOGDI;GEOS_DLL_LIBRARY"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"

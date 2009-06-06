@@ -17,6 +17,7 @@
 #ifndef GEOS_UTIL_GEOSEXCEPTION_H
 #define GEOS_UTIL_GEOSEXCEPTION_H
 
+#include <geos/export.h>
 #include <stdexcept>
 #include <string>
 
@@ -30,7 +31,7 @@ namespace util { // geos.util
  * Exceptions are thrown as pointers to this type.
  * Use toString() to get a readable message.
  */
-class GEOSException: public std::exception {
+class GEOS_DLL GEOSException: public std::exception {
 
 	std::string _msg;
 

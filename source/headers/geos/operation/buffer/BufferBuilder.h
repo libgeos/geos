@@ -21,6 +21,8 @@
 #ifndef GEOS_OP_BUFFER_BUFFERBUILDER_H
 #define GEOS_OP_BUFFER_BUFFERBUILDER_H
 
+#include <geos/export.h>
+
 #include <vector>
 
 #include <geos/operation/buffer/BufferOp.h> // for inlines (BufferOp enums)
@@ -79,7 +81,7 @@ namespace buffer { // geos.operation.buffer
  * can produce more robust results.
  *
  */
-class BufferBuilder {
+class GEOS_DLL BufferBuilder {
 
 private:
 	/**

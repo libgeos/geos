@@ -16,6 +16,8 @@
 #ifndef GEOS_OP_LINEMERGE_LINEMERGEDIRECTEDEDGE_H
 #define GEOS_OP_LINEMERGE_LINEMERGEDIRECTEDEDGE_H
 
+#include <geos/export.h>
+
 #include <geos/planargraph/DirectedEdge.h> // for inheritance
 
 // Forward declarations 
@@ -39,7 +41,7 @@ namespace linemerge { // geos::operation::linemerge
  * A planargraph::DirectedEdge of a LineMergeGraph. 
  *
  */
-class LineMergeDirectedEdge: public planargraph::DirectedEdge {
+class GEOS_DLL LineMergeDirectedEdge: public planargraph::DirectedEdge {
 public:
 	/**
 	 * Constructs a LineMergeDirectedEdge connecting the <code>from</code>

@@ -16,6 +16,8 @@
 #ifndef GEOS_OP_OVERLAY_EDGESETNODER_H
 #define GEOS_OP_OVERLAY_EDGESETNODER_H
 
+#include <geos/export.h>
+
 #include <vector>
 
 // Forward declarations
@@ -39,7 +41,7 @@ namespace overlay { // geos::operation::overlay
  * new set of edges consisting of all the split edges created by
  * noding the input edges together
  */
-class EdgeSetNoder {
+class GEOS_DLL EdgeSetNoder {
 private:
 	algorithm::LineIntersector *li;
 	std::vector<geomgraph::Edge*>* inputEdges;

@@ -17,6 +17,8 @@
 #ifndef GEOS_PLANARGRAPH_GRAPHCOMPONENT_H
 #define GEOS_PLANARGRAPH_GRAPHCOMPONENT_H
 
+#include <geos/export.h>
+
 namespace geos {
 namespace planargraph { // geos.planargraph
 
@@ -40,7 +42,7 @@ namespace planargraph { // geos.planargraph
  * Last port: planargraph/GraphComponent.java rev. 1.7 (JTS-1.7)
  *
  */
-class GraphComponent {
+class GEOS_DLL GraphComponent {
 
 protected:
 

@@ -17,6 +17,7 @@
 #ifndef GEOS_GEOM_UTIL_POINTEXTRACTER_H
 #define GEOS_GEOM_UTIL_POINTEXTRACTER_H
 
+#include <geos/export.h>
 #include <geos/geom/GeometryFilter.h>
 #include <geos/geom/Point.h>
 #include <geos/platform.h>
@@ -29,7 +30,7 @@ namespace util { // geos.geom.util
 /**
  * Extracts all the 0-dimensional (Point) components from a Geometry.
  */
-class PointExtracter: public GeometryFilter {
+class GEOS_DLL PointExtracter: public GeometryFilter {
 
 private:
 	Point::ConstVect& comps;

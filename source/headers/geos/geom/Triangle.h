@@ -16,6 +16,7 @@
 #ifndef GEOS_GEOM_TRIANGLE_H
 #define GEOS_GEOM_TRIANGLE_H
 
+#include <geos/export.h>
 #include <geos/geom/Coordinate.h> 
 
 #include <geos/inline.h>
@@ -28,7 +29,7 @@ namespace geom { // geos::geom
  * Represents a planar triangle, and provides methods for calculating various
  * properties of triangles.
  */
-class Triangle {
+class GEOS_DLL Triangle {
 public:
 	Coordinate p0, p1, p2;
 

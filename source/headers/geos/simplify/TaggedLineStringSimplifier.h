@@ -25,6 +25,7 @@
 #ifndef _GEOS_SIMPLIFY_TAGGEDLINESTRINGSIMPLIFIER_H_
 #define _GEOS_SIMPLIFY_TAGGEDLINESTRINGSIMPLIFIER_H_ 
 
+#include <geos/export.h>
 #include <vector>
 #include <memory>
 
@@ -54,7 +55,7 @@ namespace simplify { // geos::simplify
  * Uses the recursive Douglas-Peucker algorithm.
  *
  */
-class TaggedLineStringSimplifier {
+class GEOS_DLL TaggedLineStringSimplifier {
 
 public:
 

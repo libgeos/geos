@@ -17,6 +17,8 @@
 #ifndef GEOS_GEOM_UTIL_SHORTCIRCUITEDGEOMETRYVISITOR_H
 #define GEOS_GEOM_UTIL_SHORTCIRCUITEDGEOMETRYVISITOR_H
 
+#include <geos/export.h>
+
 // Forward declarations
 namespace geos {
 	namespace geom {
@@ -35,7 +37,7 @@ namespace util { // geos.geom.util
  *
  * Last port: geom/util/ShortCircuitedGeometryVisitor.java rev. 1.1 (JTS-1.7)
  */
-class ShortCircuitedGeometryVisitor
+class GEOS_DLL ShortCircuitedGeometryVisitor
 {
 
 private:

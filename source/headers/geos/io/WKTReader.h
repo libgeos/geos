@@ -17,6 +17,8 @@
 #ifndef GEOS_IO_WKTREADER_H
 #define GEOS_IO_WKTREADER_H
 
+#include <geos/export.h>
+
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <string>
@@ -50,7 +52,7 @@ namespace io {
  * \class WKTReader io.h geos.h
  * \brief WKT parser class; see also WKTWriter.
  */
-class WKTReader {
+class GEOS_DLL WKTReader {
 public:
 	//WKTReader();
 

@@ -99,8 +99,9 @@ SortedPackedIntervalRTree::buildLevel( IntervalRTreeNode::ConstVect * src, Inter
 // public:
 //
 SortedPackedIntervalRTree::SortedPackedIntervalRTree()
-:	root( NULL),
+	:
 	leaves( new IntervalRTreeNode::ConstVect()),
+	root( NULL),
 	level( 0)
 { }
 

@@ -20,6 +20,7 @@
 #ifndef GEOS_GEOM_INTERSECTIONMATRIX_H
 #define GEOS_GEOM_INTERSECTIONMATRIX_H
 
+#include <geos/export.h>
 #include <string>
 
 #include <geos/inline.h>
@@ -48,7 +49,7 @@ namespace geom { // geos::geom
  * 
  * \todo Suggestion: add equal and not-equal operator to this class.
  */
-class IntersectionMatrix {
+class GEOS_DLL IntersectionMatrix {
 
 public:
 

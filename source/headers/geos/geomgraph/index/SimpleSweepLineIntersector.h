@@ -17,6 +17,7 @@
 #ifndef GEOS_GEOMGRAPH_INDEX_SIMPLESWEEPLINEINTERSECTOR_H
 #define GEOS_GEOMGRAPH_INDEX_SIMPLESWEEPLINEINTERSECTOR_H
 
+#include <geos/export.h>
 #include <vector>
 
 #include <geos/geomgraph/index/EdgeSetIntersector.h> // for inheritance
@@ -43,7 +44,7 @@ namespace index { // geos::geomgraph::index
  * While still O(n^2) in the worst case, this algorithm
  * drastically improves the average-case time.
  */
-class SimpleSweepLineIntersector: public EdgeSetIntersector {
+class GEOS_DLL SimpleSweepLineIntersector: public EdgeSetIntersector {
 
 public:
 

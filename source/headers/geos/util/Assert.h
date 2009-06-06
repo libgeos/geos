@@ -17,6 +17,7 @@
 #ifndef GEOS_UTIL_ASSERT_H
 #define GEOS_UTIL_ASSERT_H
 
+#include <geos/export.h>
 #include <string>
 
 // Forward declarations
@@ -29,7 +30,7 @@ namespace geos {
 namespace geos {
 namespace util { // geos.util
 
-class Assert {
+class GEOS_DLL Assert {
 public:
 
 	static void isTrue(bool assertion, const std::string& message);

@@ -16,6 +16,8 @@
 #ifndef GEOS_OP_LINEMERGE_LINESEQUENCER_H
 #define GEOS_OP_LINEMERGE_LINESEQUENCER_H
 
+#include <geos/export.h>
+
 #include <geos/operation/linemerge/LineMergeGraph.h> // for composition
 #include <geos/geom/Geometry.h> // for inlines
 #include <geos/geom/LineString.h> // for inlines
@@ -79,7 +81,7 @@ namespace linemerge { // geos::operation::linemerge
  *
  * Last port: operation/linemerge/LineSequencer.java rev. 1.5 (JTS-1.7)
  */
-class LineSequencer {
+class GEOS_DLL LineSequencer {
 
 private:
 	typedef std::list<planargraph::DirectedEdge*> DirEdgeList;

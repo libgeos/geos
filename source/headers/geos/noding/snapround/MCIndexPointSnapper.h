@@ -20,6 +20,8 @@
 #ifndef GEOS_NODING_SNAPROUND_MCINDEXPOINTSNAPPER_H
 #define GEOS_NODING_SNAPROUND_MCINDEXPOINTSNAPPER_H
 
+#include <geos/export.h>
+
 #include <geos/inline.h>
 
 // Forward declarations
@@ -44,7 +46,7 @@ namespace snapround { // geos::noding::snapround
  * {@link MonotoneChain}s to a given {@link HotPixel}.
  *
  */
-class MCIndexPointSnapper {
+class GEOS_DLL MCIndexPointSnapper {
 
 private:
 

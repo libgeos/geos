@@ -20,6 +20,7 @@
 #ifndef GEOS_IDX_QUADTREE_NODE_H
 #define GEOS_IDX_QUADTREE_NODE_H
 
+#include <geos/export.h>
 #include <geos/index/quadtree/NodeBase.h> // for inheritance
 #include <geos/geom/Coordinate.h> // for composition
 #include <geos/geom/Envelope.h> // for inline
@@ -47,7 +48,7 @@ namespace quadtree { // geos::index::quadtree
  * the node's position in the quadtree.
  *
  */
-class Node: public NodeBase {
+class GEOS_DLL Node: public NodeBase {
 
 private:
 

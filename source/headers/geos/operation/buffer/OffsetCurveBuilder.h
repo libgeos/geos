@@ -21,6 +21,8 @@
 #ifndef GEOS_OP_BUFFER_OFFSETCURVEBUILDER_H
 #define GEOS_OP_BUFFER_OFFSETCURVEBUILDER_H
 
+#include <geos/export.h>
+
 #include <vector>
 
 #include <geos/algorithm/LineIntersector.h> // for composition
@@ -61,7 +63,7 @@ namespace buffer { // geos.operation.buffer
  * Last port: operation/buffer/OffsetCurveBuilder.java rev. 1.9
  *
  */
-class OffsetCurveBuilder {
+class GEOS_DLL OffsetCurveBuilder {
 public:
 
 	/*

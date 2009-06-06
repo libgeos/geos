@@ -22,6 +22,8 @@
 #ifndef GEOS_OP_OVERLAY_MAXIMALEDGERING_H
 #define GEOS_OP_OVERLAY_MAXIMALEDGERING_H
 
+#include <geos/export.h>
+
 #include <vector>
 
 #include <geos/geomgraph/EdgeRing.h> // for inheritance
@@ -64,7 +66,7 @@ namespace overlay { // geos::operation::overlay
  *
  * @see com.vividsolutions.jts.operation.overlay.MinimalEdgeRing
  */
-class MaximalEdgeRing: public geomgraph::EdgeRing {
+class GEOS_DLL MaximalEdgeRing: public geomgraph::EdgeRing {
 
 public:
 

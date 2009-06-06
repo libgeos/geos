@@ -16,6 +16,7 @@
 #ifndef GEOS_IDX_BINTREE_NODE_H
 #define GEOS_IDX_BINTREE_NODE_H
 
+#include <geos/export.h>
 #include <geos/index/bintree/NodeBase.h> // for inheritance
 
 // Forward declarations
@@ -32,7 +33,7 @@ namespace index { // geos::index
 namespace bintree { // geos::index::bintree
 
 /// A node of a Bintree.
-class Node: public NodeBase {
+class GEOS_DLL Node: public NodeBase {
 
 public:
 

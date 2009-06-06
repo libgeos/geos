@@ -16,6 +16,8 @@
 #ifndef GEOS_OP_OVERLAY_OVERLAYNODEFACTORY_H
 #define GEOS_OP_OVERLAY_OVERLAYNODEFACTORY_H
 
+#include <geos/export.h>
+
 #include <vector>
 
 #include <geos/geomgraph/NodeFactory.h> // for inheritance
@@ -38,7 +40,7 @@ namespace overlay { // geos::operation::overlay
  * Creates nodes for use in the geomgraph::PlanarGraph constructed during
  * overlay operations. NOTE: also used by operation::valid
  */
-class OverlayNodeFactory: public geomgraph::NodeFactory {
+class GEOS_DLL OverlayNodeFactory: public geomgraph::NodeFactory {
 public:
 	geomgraph::Node* createNode(const geom::Coordinate &coord) const;
 	static const geomgraph::NodeFactory &instance();

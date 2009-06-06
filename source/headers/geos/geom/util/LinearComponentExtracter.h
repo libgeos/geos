@@ -17,6 +17,8 @@
 #ifndef GEOS_GEOM_UTIL_LINEARCOMPONENTEXTRACTER_H
 #define GEOS_GEOM_UTIL_LINEARCOMPONENTEXTRACTER_H
 
+
+#include <geos/export.h>
 #include <vector>
 
 #include <geos/geom/GeometryComponentFilter.h>
@@ -31,7 +33,7 @@ namespace util { // geos.geom.util
 /**
  * Extracts all the 1-dimensional (LineString) components from a Geometry.
  */
-class LinearComponentExtracter: public GeometryComponentFilter {
+class GEOS_DLL LinearComponentExtracter: public GeometryComponentFilter {
 
 private:
 

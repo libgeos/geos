@@ -22,6 +22,8 @@
 #ifndef GEOS_OP_RELATE_RELATENODEGRAPH_H
 #define GEOS_OP_RELATE_RELATENODEGRAPH_H
 
+#include <geos/export.h>
+
 #include <map>
 #include <vector>
 
@@ -66,7 +68,7 @@ namespace relate { // geos::operation::relate
  * to represent them.
  *
  */
-class RelateNodeGraph {
+class GEOS_DLL RelateNodeGraph {
 
 public:
 

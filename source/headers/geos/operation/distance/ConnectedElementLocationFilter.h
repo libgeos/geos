@@ -22,6 +22,8 @@
 #ifndef GEOS_OP_DISTANCE_CONNECTEDELEMENTLOCATIONFILTER_H
 #define GEOS_OP_DISTANCE_CONNECTEDELEMENTLOCATIONFILTER_H
 
+#include <geos/export.h>
+
 #include <geos/geom/GeometryFilter.h> // for inheritance
 
 #include <vector>
@@ -50,7 +52,7 @@ namespace distance { // geos::operation::distance
  * and returns them in a list. The elements of the list are 
  * DistanceOp::GeometryLocation.
  */
-class ConnectedElementLocationFilter: public geom::GeometryFilter {
+class GEOS_DLL ConnectedElementLocationFilter: public geom::GeometryFilter {
 private:
 
 	std::vector<GeometryLocation*> *locations;

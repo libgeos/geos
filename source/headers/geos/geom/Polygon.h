@@ -21,6 +21,7 @@
 #ifndef GEOS_GEOM_POLYGON_H
 #define GEOS_GEOM_POLYGON_H
 
+#include <geos/export.h>
 #include <string>
 #include <vector>
 #include <geos/platform.h>
@@ -61,7 +62,7 @@ namespace geom { // geos::geom
  *  Specification for SQL</A> .
  *
  */
-class Polygon: public Geometry{
+class GEOS_DLL Polygon: public Geometry{
 
 public:
 

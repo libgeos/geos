@@ -21,6 +21,7 @@
 #ifndef GEOS_GEOS_MULTIPOINT_H
 #define GEOS_GEOS_MULTIPOINT_H
 
+#include <geos/export.h>
 #include <geos/platform.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
@@ -44,7 +45,7 @@ namespace geom { // geos::geom
  * \class MultiPoint geom.h geos.h
  * \brief  Models a collection of Point objects.
  */
-class MultiPoint: public GeometryCollection {
+class GEOS_DLL MultiPoint: public GeometryCollection {
 
 public:
 

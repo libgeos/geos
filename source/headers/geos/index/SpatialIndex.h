@@ -16,6 +16,8 @@
 #ifndef GEOS_INDEX_SPATIALINDEX_H
 #define GEOS_INDEX_SPATIALINDEX_H
 
+#include <geos/export.h>
+
 #include <vector>
 
 // Forward declarations
@@ -43,7 +45,7 @@ namespace index {
  * Last port: index/SpatialIndex.java rev. 1.11 (JTS-1.7)
  *
  */
-class SpatialIndex {
+class GEOS_DLL SpatialIndex {
 public:
 	
     virtual ~SpatialIndex() {}

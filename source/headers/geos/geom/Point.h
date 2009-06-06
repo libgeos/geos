@@ -21,6 +21,7 @@
 #ifndef GEOS_GEOS_POINT_H
 #define GEOS_GEOS_POINT_H
 
+#include <geos/export.h>
 #include <geos/platform.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/CoordinateSequence.h> // for proper use of auto_ptr<>
@@ -52,7 +53,8 @@ namespace geom { // geos::geom
  * \class Point geom.h geos.h
  * \brief Basic implementation of Point.
  */
-class Point : public Geometry
+class GEOS_DLL Point : public Geometry 
+
 	// NOTE: in JTS Point implements Puntual
 {
 

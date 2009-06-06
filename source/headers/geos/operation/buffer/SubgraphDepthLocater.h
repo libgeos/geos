@@ -20,6 +20,8 @@
 #ifndef GEOS_OP_BUFFER_SUBGRAPHDEPTHLOCATER_H
 #define GEOS_OP_BUFFER_SUBGRAPHDEPTHLOCATER_H
 
+#include <geos/export.h>
+
 #include <vector>
 
 #include <geos/geom/LineSegment.h> // for composition
@@ -55,7 +57,7 @@ namespace buffer { // geos.operation.buffer
  * already calculated for their edges.
  *
  */
-class SubgraphDepthLocater {
+class GEOS_DLL SubgraphDepthLocater {
 
 public:
 

@@ -17,6 +17,7 @@
 #ifndef GEOS_ALGORITHM_INTERIORPOINTLINE_H
 #define GEOS_ALGORITHM_INTERIORPOINTLINE_H
 
+#include <geos/export.h>
 #include <geos/geom/Coordinate.h>
 
 // Forward declarations
@@ -42,7 +43,7 @@ namespace algorithm { // geos::algorithm
  * closest to the centroid.
  * </ul>
  */
-class InteriorPointLine {
+class GEOS_DLL InteriorPointLine {
 public:
 
 	InteriorPointLine(const geom::Geometry *g);

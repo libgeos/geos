@@ -24,6 +24,7 @@
 #ifndef GEOS_GEOMGRAPH_EDGENODINGVALIDATOR_H
 #define GEOS_GEOMGRAPH_EDGENODINGVALIDATOR_H
 
+#include <geos/export.h>
 #include <vector>
 
 #include <geos/noding/FastNodingValidator.h> // for composition
@@ -51,7 +52,7 @@ namespace geomgraph { // geos.geomgraph
  *
  * Throws an appropriate exception if an noding error is found.
  */
-class EdgeNodingValidator {
+class GEOS_DLL EdgeNodingValidator {
 
 private:
 	std::vector<noding::SegmentString*>& toSegmentStrings(std::vector<Edge*>& edges);

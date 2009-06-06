@@ -17,6 +17,8 @@
 #ifndef GEOS_IO_WKBWRITER_H
 #define GEOS_IO_WKBWRITER_H
 
+#include <geos/export.h>
+
 #include <geos/platform.h> // for getMachineByteOrder
 #include <iosfwd>
 
@@ -64,7 +66,7 @@ namespace io {
  *
  * @see WKBReader
  */
-class WKBWriter {
+class GEOS_DLL WKBWriter {
 
 public:
 	/*

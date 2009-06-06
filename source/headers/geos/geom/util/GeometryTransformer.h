@@ -20,6 +20,8 @@
 #ifndef GEOS_GEOM_UTIL_GEOMETRYTRANSFORMER_H
 #define GEOS_GEOM_UTIL_GEOMETRYTRANSFORMER_H
 
+
+#include <geos/export.h>
 #include <geos/geom/Coordinate.h> // destructor visibility for vector
 #include <geos/geom/Geometry.h> // destructor visibility for auto_ptr
 #include <geos/geom/CoordinateSequence.h> // destructor visibility for auto_ptr
@@ -87,7 +89,7 @@ namespace util { // geos.geom.util
  * getParent() method to return immediate parent e.g. of LinearRings in Polygons
  *
  */
-class GeometryTransformer {
+class GEOS_DLL GeometryTransformer {
 
 public:
 

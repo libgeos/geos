@@ -20,6 +20,7 @@
 #ifndef GEOS_IDX_QUADTREE_ROOT_H
 #define GEOS_IDX_QUADTREE_ROOT_H
 
+#include <geos/export.h>
 #include <geos/index/quadtree/NodeBase.h> // for inheritance
 #include <geos/geom/Coordinate.h> // for composition
 
@@ -46,7 +47,7 @@ namespace quadtree { // geos::index::quadtree
  * QuadRoot is the root of a single Quadtree.  It is centred at the origin,
  * and does not have a defined extent.
  */
-class Root: public NodeBase {
+class GEOS_DLL Root: public NodeBase {
 //friend class Unload;
 
 private:

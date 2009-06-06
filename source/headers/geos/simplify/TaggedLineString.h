@@ -26,6 +26,7 @@
 #ifndef _GEOS_SIMPLIFY_TAGGEDLINESTRING_H_
 #define _GEOS_SIMPLIFY_TAGGEDLINESTRING_H_ 
 
+#include <geos/export.h>
 #include <vector>
 #include <memory>
 
@@ -52,7 +53,7 @@ namespace simplify { // geos::simplify
  * Contains and owns a list of TaggedLineSegments
  *
  */
-class TaggedLineString {
+class GEOS_DLL TaggedLineString {
 
 public:
 

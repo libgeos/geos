@@ -16,6 +16,7 @@
 #ifndef GEOS_IDX_BINTREE_BINTREE_H
 #define GEOS_IDX_BINTREE_BINTREE_H
 
+#include <geos/export.h>
 #include <vector>
 
 // Forward declarations
@@ -48,7 +49,7 @@ namespace bintree { // geos::index::bintree
  * This index is different to the Interval Tree of Edelsbrunner
  * or the Segment Tree of Bentley.
  */
-class Bintree {
+class GEOS_DLL Bintree {
 
 public:
 

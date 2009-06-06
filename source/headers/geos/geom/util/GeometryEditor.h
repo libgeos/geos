@@ -17,6 +17,8 @@
 #ifndef GEOS_GEOM_UTIL_GEOMETRYEDITOR_H
 #define GEOS_GEOM_UTIL_GEOMETRYEDITOR_H
 
+#include <geos/export.h>
+
 // Forward declarations
 namespace geos {
 	namespace geom {
@@ -69,7 +71,7 @@ namespace util { // geos.geom.util
  * @see Geometry::isValid
  *
  */
-class GeometryEditor {
+class GEOS_DLL GeometryEditor {
 private:
 	/**
 	 * The factory used to create the modified Geometry

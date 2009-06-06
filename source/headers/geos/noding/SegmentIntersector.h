@@ -16,6 +16,8 @@
 #ifndef GEOS_NODING_SEGMENTINTERSECTOR_H
 #define GEOS_NODING_SEGMENTINTERSECTOR_H
 
+#include <geos/export.h>
+
 #include <geos/inline.h>
 
 // Forward declarations
@@ -43,7 +45,7 @@ namespace noding { // geos.noding
  *
  * @version 1.7
  */
-class SegmentIntersector {
+class GEOS_DLL SegmentIntersector {
 
 public:
 

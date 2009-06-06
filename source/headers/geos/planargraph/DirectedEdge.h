@@ -17,6 +17,7 @@
 #ifndef GEOS_PLANARGRAPH_DIRECTEDEDGE_H
 #define GEOS_PLANARGRAPH_DIRECTEDEDGE_H
 
+#include <geos/export.h>
 #include <geos/planargraph/GraphComponent.h> // for inheritance
 #include <geos/geom/Coordinate.h> // for composition
 
@@ -43,7 +44,7 @@ namespace planargraph { // geos.planargraph
  * will subclass DirectedEdge to add its own application-specific
  * data and methods.
  */
-class DirectedEdge: public GraphComponent {
+class GEOS_DLL DirectedEdge: public GraphComponent {
 
 public:
 

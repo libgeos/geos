@@ -16,6 +16,8 @@
 #ifndef GEOS_OP_PREDICATE_RECTANGLEINTERSECTS_H
 #define GEOS_OP_PREDICATE_RECTANGLEINTERSECTS_H
 
+#include <geos/export.h>
+
 #include <geos/geom/Polygon.h> // for inlines
 
 // Forward declarations
@@ -40,7 +42,7 @@ namespace predicate { // geos::operation::predicate
  *
  * Last port: operation/predicate/RectangleIntersects.java rev. 1.3 (JTS-1.7)
  */
-class RectangleIntersects {
+class GEOS_DLL RectangleIntersects {
 
 private:
 

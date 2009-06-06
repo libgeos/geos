@@ -1,3 +1,5 @@
+#include <geos/export.h>
+
 #include <string>
 
 namespace geos {
@@ -6,7 +8,7 @@ namespace io {
 /**
  * \class CLocalizer io.h geos.h
  */
-class CLocalizer
+class GEOS_DLL CLocalizer
 {
 public:
 

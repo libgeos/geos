@@ -29,6 +29,7 @@
  *
  **********************************************************************/
 
+#include <geos/export.h>
 
 #ifndef GEOS_UNLOAD_H
 #define GEOS_UNLOAD_H
@@ -36,7 +37,7 @@
 namespace geos {
 namespace io {
 
-class Unload
+class GEOS_DLL Unload
 {
 private:
 	Unload(void) {}

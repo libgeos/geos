@@ -16,6 +16,7 @@
 #ifndef GEOS_GEOM_GEOMETRYCOMPONENTFILTER_H
 #define GEOS_GEOM_GEOMETRYCOMPONENTFILTER_H
 
+#include <geos/export.h>
 #include <geos/inline.h>
 
 namespace geos {
@@ -40,7 +41,7 @@ namespace geom { // geos::geom
  *  is an example of the Gang-of-Four Visitor pattern.
  *
  */
-class GeometryComponentFilter {
+class GEOS_DLL GeometryComponentFilter {
 public:
 
 	/**

@@ -17,6 +17,7 @@
 #ifndef GEOS_GEOMGRAPH_INDEX_SIMPLEMCSWEEPLINEINTERSECTOR_H
 #define GEOS_GEOMGRAPH_INDEX_SIMPLEMCSWEEPLINEINTERSECTOR_H
 
+#include <geos/export.h>
 #include <vector>
 
 #include <geos/geomgraph/index/EdgeSetIntersector.h> // for inheritance
@@ -45,7 +46,7 @@ namespace index { // geos::geomgraph::index
  * The use of MonotoneChains as the items in the index
  * seems to offer an improvement in performance over a sweep-line alone.
  */
-class SimpleMCSweepLineIntersector: public EdgeSetIntersector {
+class GEOS_DLL SimpleMCSweepLineIntersector: public EdgeSetIntersector {
 
 public:
 

@@ -24,6 +24,7 @@
 #ifndef GEOS_GEOMGRAPH_DEPTH_H
 #define GEOS_GEOMGRAPH_DEPTH_H
 
+#include <geos/export.h>
 #include <string>
 
 #include <geos/inline.h>
@@ -38,7 +39,7 @@ namespace geos {
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-class Depth {
+class GEOS_DLL Depth {
 public:
 	static int depthAtLocation(int location);
 	Depth();

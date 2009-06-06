@@ -16,6 +16,8 @@
 #ifndef GEOS_INDEX_STRTREE_INTERVAL_H
 #define GEOS_INDEX_STRTREE_INTERVAL_H
 
+#include <geos/export.h>
+
 namespace geos {
 namespace index { // geos::index
 namespace strtree { // geos::index::strtree
@@ -24,7 +26,7 @@ namespace strtree { // geos::index::strtree
 //
 /// @see SIRtree
 ///
-class Interval {
+class GEOS_DLL Interval {
 public:
 	Interval(Interval *other);
 	Interval(double newMin, double newMax);

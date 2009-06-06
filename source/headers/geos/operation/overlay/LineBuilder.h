@@ -16,6 +16,8 @@
 #ifndef GEOS_OP_OVERLAY_LINEBUILDER_H
 #define GEOS_OP_OVERLAY_LINEBUILDER_H
 
+#include <geos/export.h>
+
 #include <geos/operation/overlay/OverlayOp.h> // for OverlayOp::OpCode enum 
 
 #include <vector>
@@ -50,7 +52,7 @@ namespace overlay { // geos::operation::overlay
  * created by an OverlayOp.
  *
  */
-class LineBuilder {
+class GEOS_DLL LineBuilder {
 
 public:
 
