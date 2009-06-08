@@ -13,7 +13,7 @@
  *
  ***********************************************************************
  *
- * Last port: operation/overlay/validate/OverlayResultValidator.java rev. 1.1
+ * Last port: operation/overlay/validate/OverlayResultValidator.java rev. 1.4 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -41,15 +41,19 @@ namespace validate { // geos::operation::overlay::validate
 
 /** \brief
  * Validates that the result of an overlay operation is
- * geometrically correct within a given tolerance.
+ * geometrically correct within a determined tolerance.
  *
- * Uses fuzzy point location, which only works with polygonal
- * components of geometries.
+ * Uses fuzzy point location to find points which are
+ * definitely in either the interior or exterior of the result
+ * geometry, and compares these results with the expected ones.
  *
- * This is a heuristic test, and may return incorrect results.
+ * This algorithm is only useful where the inputs are polygonal.
+ *
+ * This is a heuristic test, and may return false positive results
+ * (I.e. it may fail to detect an invalid result.)
  * It should never return a false negative result, however
- * (I.e. reporting a valid result as invalid.)
- * 
+ * (I.e. it should never report a valid result as invalid.)
+ *
  * @see OverlayOp
  */
 class OverlayResultValidator {
@@ -75,6 +79,8 @@ public:
 
 private:
 
+	double boundaryDistanceTolerance;
+
 	const geom::Geometry& g0;
 
 	const geom::Geometry& g1;
@@ -89,8 +95,6 @@ private:
 
 	geom::Coordinate invalidLocation;
 
-	static double _TOLERANCE; // 0.000001
-	
 	std::vector<geom::Coordinate> testCoords;
 
 	void addTestPts(const geom::Geometry& g);
@@ -103,6 +107,10 @@ private:
 
 	bool isValidResult(OverlayOp::OpCode overlayOp,
 			std::vector<geom::Location::Value>& location);
+
+	static double computeBoundaryDistanceTolerance(
+		const geom::Geometry& g0, const geom::Geometry& g1);
+
 };
 
 } // namespace geos::operation::overlay::validate

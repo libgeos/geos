@@ -13,7 +13,7 @@
  *
  ***********************************************************************
  *
- * Last port: operation/overlay/validate/FuzzyPointLocator.java rev. 1.1
+ * Last port: operation/overlay/validate/FuzzyPointLocator.java rev. 1.1 (JTS-1.10)
  *
  **********************************************************************/
 

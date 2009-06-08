@@ -13,8 +13,7 @@
  *
  ***********************************************************************
  *
- * Last port: operation/overlay/validate/FuzzyPointLocator.java rev. 1.1
- * (we should move in GEOS too, probably)
+ * Last port: operation/overlay/validate/FuzzyPointLocator.java rev. 1.1 (JTS-1.10)
  *
  **********************************************************************/
 

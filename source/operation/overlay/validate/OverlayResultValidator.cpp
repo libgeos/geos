@@ -13,13 +13,14 @@
  *
  ***********************************************************************
  *
- * Last port: operation/overlay/validate/OverlayResultValidator.java rev. 1.1
+ * Last port: operation/overlay/validate/OverlayResultValidator.java rev. 1.4 (JTS-1.10)
  *
  **********************************************************************/
 
 #include <geos/operation/overlay/validate/OverlayResultValidator.h>
 #include <geos/operation/overlay/validate/FuzzyPointLocator.h>
 #include <geos/operation/overlay/validate/OffsetPointGenerator.h>
+#include <geos/operation/overlay/snap/GeometrySnapper.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/GeometryFactory.h>
@@ -29,7 +30,7 @@
 #include <functional>
 #include <vector>
 #include <memory> // for auto_ptr
-#include <algorithm>
+#include <algorithm> // for std::min etc.
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -52,8 +53,6 @@ namespace geos {
 namespace operation { // geos.operation
 namespace overlay { // geos.operation.overlay
 namespace validate { // geos.operation.overlay.validate
-
-double OverlayResultValidator::_TOLERANCE = 0.000001;
 
 namespace { // anonymous namespace
 
@@ -103,12 +102,15 @@ OverlayResultValidator::OverlayResultValidator(
 		const Geometry& geom1,
 		const Geometry& result)
 	:
+	boundaryDistanceTolerance(
+		computeBoundaryDistanceTolerance(geom0, geom1)
+	),
 	g0(geom0),
 	g1(geom1),
 	gres(result),
-	fpl0(g0, _TOLERANCE),
-	fpl1(g1, _TOLERANCE),
-	fplres(gres, _TOLERANCE),
+	fpl0(g0, boundaryDistanceTolerance),
+	fpl1(g1, boundaryDistanceTolerance),
+	fplres(gres, boundaryDistanceTolerance),
 	invalidLocation()
 {
 }
@@ -151,7 +153,7 @@ OverlayResultValidator::isValid(OverlayOp::OpCode overlayOp)
 void
 OverlayResultValidator::addTestPts(const Geometry& g)
 {
-	OffsetPointGenerator ptGen(g, 5 * _TOLERANCE);
+	OffsetPointGenerator ptGen(g, 5 * boundaryDistanceTolerance);
 	auto_ptr< vector<geom::Coordinate> > pts = ptGen.getPoints();
 	testCoords.insert(testCoords.end(), pts->begin(), pts->end());
 }
@@ -230,6 +232,16 @@ OverlayResultValidator::isValidResult(OverlayOp::OpCode overlayOp,
 	return isValid;
 }
 
+/*private static*/
+double
+OverlayResultValidator::computeBoundaryDistanceTolerance(
+		const geom::Geometry& g0, const geom::Geometry& g1)
+{
+	using geos::operation::overlay::snap::GeometrySnapper;
+
+	return std::min(GeometrySnapper::computeSizeBasedSnapTolerance(g0),
+                        GeometrySnapper::computeSizeBasedSnapTolerance(g1));
+}
 
 } // namespace geos.operation.overlay.validate
 } // namespace geos.operation.overlay
