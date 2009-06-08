@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/predicate/RectangleContains.java rev 1.1 (JTS-1.7)
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_PREDICATE_RECTANGLECONTAINS_H
@@ -44,7 +48,6 @@ namespace predicate { // geos::operation::predicate
  * this class can be used directly to test many geometries against a single
  * rectangle.
  *
- * Last port: operation/predicate/RectangleContains.java rev 1.1 (JTS-1.7)
  */
 class GEOS_DLL RectangleContains {
 

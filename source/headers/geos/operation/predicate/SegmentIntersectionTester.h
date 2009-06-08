@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/predicate/SegmentIntersectionTester.java rev. 1.6 (JTS-1.7)
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_PREDICATE_SEGMENTINTERSECTIONTESTER_H
@@ -37,9 +41,6 @@ namespace predicate { // geos::operation::predicate
  * Optimized for small geometry size.
  *
  * Short-circuited to return as soon an intersection is found.
- *
- * Last port: operation/predicate/SegmentIntersectionTester.java rev. 1.6
- * (JTS-1.7)
  *
  */
 class GEOS_DLL SegmentIntersectionTester {
