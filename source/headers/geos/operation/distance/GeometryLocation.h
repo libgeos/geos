@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/distance/GeometryLocation.java rev. 1.4 (JTS-1.7)
+ * Last port: operation/distance/GeometryLocation.java rev. 1.7 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -40,8 +40,9 @@ namespace distance { // geos::operation::distance
 /** \brief
  * Represents the location of a point on a Geometry.
  *
- * Maintains both the actual point location (which of course
- * may not be exact) as well as information about the component
+ * Maintains both the actual point location
+ * (which may not be exact, if the point is not a vertex)
+ * as well as information about the component
  * and segment index where the point occurs.
  * Locations inside area Geometrys will not have an associated segment index,
  * so in this case the segment index will have the sentinel value of
@@ -53,31 +54,46 @@ private:
 	int segIndex;
 	geom::Coordinate pt;
 public:  
-	/**
-	 * Special value of segment-index for locations inside area geometries.
-	 * These locations do not have an associated segment index.
+	/** \brief
+	 * A Special value of segmentIndex used for locations
+	 * inside area geometries.
+	 *
+	 * These locations are not located on a segment,
+	 * and thus do not have an associated segment index.
 	 */
 	static const int INSIDE_AREA = -1;
 
-	/**
-	 * Constructs a GeometryLocation specifying a point on a geometry, as well as the 
-	 * segment that the point is on (or INSIDE_AREA if the point is not on a segment).
+	/** \brief
+	 * Constructs a GeometryLocation specifying a point on a geometry,
+	 * as well as the segment that the point is on (or INSIDE_AREA if
+	 * the point is not on a segment).
+	 *
+	 * @param component the component of the geometry containing the point
+	 * @param segIndex the segment index of the location, or INSIDE_AREA
+	 * @param pt the coordinate of the location
 	 */
-	GeometryLocation(const geom::Geometry *newComponent,
-			int newSegIndex, const geom::Coordinate &newPt);
+	GeometryLocation(const geom::Geometry *component,
+			int segIndex, const geom::Coordinate &pt);
 
-	/**
-	 * Constructs a GeometryLocation specifying a point inside an area geometry.
+	/** \brief
+	 * Constructs a GeometryLocation specifying a point inside an
+	 * area geometry.
+	 *
+	 * @param component the component of the geometry containing the point
+	 * @param pt the coordinate of the location
 	 */  
-	GeometryLocation(const geom::Geometry *newComponent, const geom::Coordinate &newPt);
+	GeometryLocation(const geom::Geometry *component,
+	                      const geom::Coordinate &pt);
 
 	/**
-	 * Returns the geometry associated with this location.
+	 * Returns the geometry component on (or in) which this location occurs.
 	 */
 	const geom::Geometry* getGeometryComponent();
 
 	/**
-	 * Returns the segment index for this location. If the location is inside an
+	 * Returns the segment index for this location.
+	 * 
+	 * If the location is inside an
 	 * area, the index will have the value INSIDE_AREA;
 	 *
 	 * @return the segment index for the location, or INSIDE_AREA
@@ -85,12 +101,13 @@ public:
 	int getSegmentIndex();
 
 	/**
-	 * Returns the location.
+	 * Returns the geom::Coordinate of this location.
 	 */
 	geom::Coordinate& getCoordinate();
 
-	/**
-	 * Returns whether this GeometryLocation represents a point inside an area geometry.
+	/** \brief
+	 * Tests whether this location represents a point
+	 * inside an area geometry.
 	 */
 	bool isInsideArea();
 };

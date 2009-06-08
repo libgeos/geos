@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/distance/GeometryLocation.java rev. 1.4 (JTS-1.7)
+ * Last port: operation/distance/GeometryLocation.java rev. 1.7 (JTS-1.10)
  *
  **********************************************************************/
 
