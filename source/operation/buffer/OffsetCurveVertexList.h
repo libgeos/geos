@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/OffsetCurveVertexList.java rev. 1.2 (JTS-1.9)
+ * Last port: operation/buffer/OffsetCurveVertexList.java rev. 1.2 (JTS-1.10)
  *
  **********************************************************************/
 

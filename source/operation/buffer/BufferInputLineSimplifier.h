@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/BufferInputLineSimplifier.java rev 1.6 (JTS-1.9)
+ * Last port: operation/buffer/BufferInputLineSimplifier.java rev 1.6 (JTS-1.10)
  *
  **********************************************************************/
 

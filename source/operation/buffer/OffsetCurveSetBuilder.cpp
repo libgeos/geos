@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/OffsetCurveSetBuilder.java rev. 1.11 (JTS-1.9)
+ * Last port: operation/buffer/OffsetCurveSetBuilder.java rev. 1.11 (JTS-1.10)
  *
  **********************************************************************/
 

@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/BufferSubgraph.java rev. 1.21 (JTS-1.9)
+ * Last port: operation/buffer/BufferSubgraph.java rev. 1.21 (JTS-1.10)
  *
  **********************************************************************/
 

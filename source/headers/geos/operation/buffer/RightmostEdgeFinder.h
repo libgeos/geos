@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/RightmostEdgeFinder.java rev. 1.14 (JTS-1.9)
+ * Last port: operation/buffer/RightmostEdgeFinder.java rev. 1.14 (JTS-1.10)
  *
  **********************************************************************/
 
