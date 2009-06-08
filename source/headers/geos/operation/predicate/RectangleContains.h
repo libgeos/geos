@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/predicate/RectangleContains.java rev 1.1 (JTS-1.7)
+ * Last port: operation/predicate/RectangleContains.java rev 1.5 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -57,9 +57,35 @@ private:
 	const geom::Envelope& rectEnv;
 
 	bool isContainedInBoundary(const geom::Geometry& geom);
+
 	bool isPointContainedInBoundary(const geom::Point& geom);
-	bool isPointContainedInBoundary(const geom::Coordinate &coord);
+
+	/** \brief
+	 * Tests if a point is contained in the boundary of the target
+	 * rectangle.
+	 *
+	 * @param pt the point to test
+	 * @return true if the point is contained in the boundary
+	 */
+	bool isPointContainedInBoundary(const geom::Coordinate &pt);
+
+	/** \brief
+	 * Tests if a linestring is completely contained in the boundary
+	 * of the target rectangle.
+	 *
+	 * @param line the linestring to test
+	 * @return true if the linestring is contained in the boundary
+	 */
 	bool isLineStringContainedInBoundary(const geom::LineString &line);
+
+	/** \brief
+	 * Tests if a line segment is contained in the boundary of the
+	 * target rectangle.
+	 *
+	 * @param p0 an endpoint of the segment
+	 * @param p1 an endpoint of the segment
+	 * @return true if the line segment is contained in the boundary
+	 */
 	bool isLineSegmentContainedInBoundary(const geom::Coordinate& p0,
 			const geom::Coordinate& p1);
 

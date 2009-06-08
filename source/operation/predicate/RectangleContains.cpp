@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/predicate/RectangleContains.java rev 1.1 (JTS-1.7)
+ * Last port: operation/predicate/RectangleContains.java rev 1.5 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -77,13 +77,16 @@ RectangleContains::isPointContainedInBoundary(const Point& point)
 bool
 RectangleContains::isPointContainedInBoundary(const Coordinate& pt)
 {
-	// we already know that the point is contained in the
-	// rectangle envelope
-	return 	
-		pt.x == rectEnv.getMinX() || pt.x == rectEnv.getMaxX() ||
-	    pt.y == rectEnv.getMinY() || pt.y == rectEnv.getMaxY();
-
-	return true;
+	/**
+	 * contains = false iff the point is properly contained
+	 * in the rectangle.
+	 *
+	 * This code assumes that the point lies in the rectangle envelope
+	 */
+	return pt.x == rectEnv.getMinX()
+		|| pt.x == rectEnv.getMaxX()
+		|| pt.y == rectEnv.getMinY()
+		|| pt.y == rectEnv.getMaxY();
 }
 
 /*private*/
