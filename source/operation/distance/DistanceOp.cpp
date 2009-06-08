@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/distance/DistanceOp.java rev 1.17
+ * Last port: operation/distance/DistanceOp.java rev 1.21 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -71,12 +71,20 @@ DistanceOp::distance(const Geometry& g0, const Geometry& g1)
 	return distOp.distance();
 }
 
-/*public static*/
+/*public static deprecated*/
 CoordinateSequence*
 DistanceOp::closestPoints(const Geometry *g0, const Geometry *g1)
 {
 	DistanceOp distOp(g0,g1);
-	return distOp.closestPoints();
+	return distOp.nearestPoints();
+}
+
+/*public static*/
+CoordinateSequence*
+DistanceOp::nearestPoints(const Geometry *g0, const Geometry *g1)
+{
+	DistanceOp distOp(g0,g1);
+	return distOp.nearestPoints();
 }
 
 DistanceOp::DistanceOp(const Geometry *g0, const Geometry *g1):
@@ -136,10 +144,17 @@ DistanceOp::distance()
 	return minDistance;
 }
 
-
 /* public */
 CoordinateSequence*
 DistanceOp::closestPoints()
+{
+	return nearestPoints();
+}
+
+
+/* public */
+CoordinateSequence*
+DistanceOp::nearestPoints()
 {
 	// lazily creates minDistanceLocation
 	computeMinDistance();
@@ -161,20 +176,15 @@ DistanceOp::closestPoints()
 	const Coordinate& c0 = loc0->getCoordinate();
 	const Coordinate& c1 = loc1->getCoordinate();
 
-	CoordinateSequence* closestPts = new CoordinateArraySequence();
-	closestPts->add(c0);
-	closestPts->add(c1);
+	CoordinateSequence* nearestPts = new CoordinateArraySequence();
+	nearestPts->add(c0);
+	nearestPts->add(c1);
 
-	return closestPts;
+	return nearestPts;
 }
 
-/**
-* Report the locations of the closest points in the input geometries.
-* The locations are presented in the same order as the input Geometries.
-*
-* @return a pair of {@link GeometryLocation}s for the closest points
-*/
-vector<GeometryLocation*>* DistanceOp::closestLocations(){
+/*private, unused!*/
+vector<GeometryLocation*>* DistanceOp::nearestLocations(){
 	computeMinDistance();
 	return minDistanceLocation;
 }
@@ -238,14 +248,12 @@ DistanceOp::computeContainmentDistance()
 {
 	using geom::util::PolygonExtracter;
 
-	Polygon::ConstVect polys0;
 	Polygon::ConstVect polys1;
-
-	PolygonExtracter::getPolygons(*(geom[0]), polys0);
 	PolygonExtracter::getPolygons(*(geom[1]), polys1);
 
+
 #if GEOS_DEBUG
-	std::cerr << "PolygonExtracter found " << polys0.size() << " polygons in geometry 1 and " << polys1.size() << " polygons in geometry 2 " << std::endl;
+	std::cerr << "PolygonExtracter found " << polys1.size() << " polygons in geometry 2" << std::endl;
 #endif
 
 	// NOTE:
@@ -253,7 +261,7 @@ DistanceOp::computeContainmentDistance()
 	// if minDistance <= terminateDistance
 
 	vector<GeometryLocation*> *locPtPoly = new vector<GeometryLocation*>(2);
-	// test if either geometry is wholely inside the other
+	// test if either geometry has a vertex inside the other
 	if ( ! polys1.empty() )
 	{
 		vector<GeometryLocation*> *insideLocs0 =
@@ -281,6 +289,14 @@ DistanceOp::computeContainmentDistance()
 			delete (*insideLocs0)[i];
 		delete insideLocs0;
 	}
+
+	Polygon::ConstVect polys0;
+	PolygonExtracter::getPolygons(*(geom[0]), polys0);
+
+#if GEOS_DEBUG
+	std::cerr << "PolygonExtracter found " << polys0.size() << " polygons in geometry 1" << std::endl;
+#endif
+
 
 	if ( ! polys0.empty() )
 	{
@@ -343,6 +359,8 @@ DistanceOp::computeInside(GeometryLocation *ptLoc,
 		vector<GeometryLocation*> *locPtPoly)
 {
 	const Coordinate &pt=ptLoc->getCoordinate();
+
+	// if pt is not in exterior, distance to geom is 0
 	if (Location::EXTERIOR!=ptLocator.locate(pt, static_cast<const Geometry *>(poly)))
 	{
 		minDistance = 0.0;
@@ -391,7 +409,7 @@ DistanceOp::computeFacetDistance()
 	          << std::endl;
 #endif
 
-	// bail whenever minDistance goes to zero, since it can't get any less
+	// exit whenever minDistance goes LE than terminateDistance
 	computeMinDistanceLines(lines0, lines1, locGeom);
 	updateMinDistance(locGeom, false);
 	if (minDistance <= terminateDistance) {

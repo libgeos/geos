@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/distance/DistanceOp.java rev 1.17
+ * Last port: operation/distance/DistanceOp.java rev 1.21 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -70,7 +70,7 @@ class GEOS_DLL DistanceOp {
 public:
 	/**
 	 * \brief
-	 * Compute the distance between the closest points of two geometries.
+	 * Compute the distance between the nearest points of two geometries.
 	 *
 	 * @param g0 a {@link Geometry}
 	 * @param g1 another {@link Geometry}
@@ -98,6 +98,22 @@ public:
 	                                            double distance);
 
 	/**
+	 * Compute the the nearest points of two geometries.
+	 *
+	 * The points are presented in the same order as the input Geometries.
+	 *
+	 * @param g0 a {@link Geometry}
+	 * @param g1 another {@link Geometry}
+	 *
+	 * @return the nearest points in the geometries, ownership to caller.
+	 *         A NULL return means one of the geometries is empty.
+	 *
+	 */
+	static geom::CoordinateSequence* nearestPoints(
+	                                        const geom::Geometry *g0,
+	                                        const geom::Geometry *g1);
+
+	/**
 	 * Compute the the closest points of two geometries.
 	 *
 	 * The points are presented in the same order as the input Geometries.
@@ -107,6 +123,8 @@ public:
 	 *
 	 * @return the closest points in the geometries, ownership to caller.
 	 *         A NULL return means one of the geometries is empty.
+	 *
+	 * @deprecated renamed to nearestPoints
 	 */
 	static geom::CoordinateSequence* closestPoints(
 	                                        const geom::Geometry *g0,
@@ -118,7 +136,7 @@ public:
 	/**
 	 * \brief
 	 * Constructs a DistanceOp that computes the distance and
-	 * closest points between the two specified geometries.
+	 * nearest points between the two specified geometries.
 	 *
 	 * @param g0 a Geometry
 	 * @param g1 a Geometry
@@ -153,8 +171,20 @@ public:
 	 *
 	 * @return a pair of {@link Coordinate}s of the closest points
 	 *         as a newly allocated object (ownership to caller)
+	 *
+	 * @deprecated renamed to nearestPoints
 	 */
 	geom::CoordinateSequence* closestPoints();
+
+	/**
+	 * Report the coordinates of the nearest points in the input geometries.
+	 * The points are presented in the same order as the input Geometries.
+	 *
+	 * @return a pair of {@link Coordinate}s of the nearest points
+	 *         as a newly allocated object (ownership to caller)
+	 *
+	 */
+	geom::CoordinateSequence* nearestPoints();
 
 private:
 
@@ -170,7 +200,7 @@ private:
 	 * NOTE: this is public in JTS, but we aim at API reduction here...
 	 *
 	 */
-	std::vector<GeometryLocation*>* closestLocations();
+	std::vector<GeometryLocation*>* nearestLocations();
 
 	// input (TODO: use two references instead..)
 	std::vector<geom::Geometry const*> geom;
