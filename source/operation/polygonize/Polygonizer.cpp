@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/polygonize/Polygonizer.java rev. 1.6 (JTS-1.10)
+ *
  **********************************************************************/
 
 #include <geos/operation/polygonize/Polygonizer.h>
@@ -227,10 +231,8 @@ Polygonizer::polygonize()
 
 	polyList=new vector<Polygon*>();
 
-	if (graph==NULL) // No valid geometries added
-	{
-		return; 
-	}
+	// if no geometries were supplied it's possible graph could be null
+	if (graph==NULL) return; 
 
 	dangles=graph->deleteDangles();
 	cutEdges=graph->deleteCutEdges();

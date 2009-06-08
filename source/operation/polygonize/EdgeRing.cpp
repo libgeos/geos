@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/polygonize/EdgeRing.java rev. 1.6
+ * Last port: operation/polygonize/EdgeRing.java rev. 1.8 (JTS-1.10)
  *
  **********************************************************************/
 
