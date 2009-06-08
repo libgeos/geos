@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/linemerge/LineSequencer.java rev. 1.6 (JTS-1.10)
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_LINEMERGE_LINESEQUENCER_H
@@ -79,7 +83,6 @@ namespace linemerge { // geos::operation::linemerge
  * If it is not possible to find a sequence, the isSequenceable method
  * will return <code>false</code>.
  *
- * Last port: operation/linemerge/LineSequencer.java rev. 1.5 (JTS-1.7)
  */
 class GEOS_DLL LineSequencer {
 

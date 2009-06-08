@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/linemerge/LineMerger.java rev. 1.6 (JTS-1.7)
+ *
  **********************************************************************/
 
 #include <geos/operation/linemerge/LineMerger.h>
@@ -20,6 +24,7 @@
 #include <geos/planargraph/DirectedEdge.h>
 #include <geos/planargraph/Edge.h>
 #include <geos/planargraph/Node.h>
+//#include <geos/planargraph/GraphComponent.h>
 #include <geos/geom/GeometryComponentFilter.h>
 #include <geos/geom/LineString.h>
 
@@ -97,6 +102,16 @@ void
 LineMerger::merge()
 {
 	if (mergedLineStrings!=NULL) return;
+
+#if 0 // requires changes to GraphComponent to enhance porting to rev 1.7
+	// reset marks (this allows incremental processing)
+	GraphComponent::setMarked(graph.nodeIterator(), false);
+	GraphComponent::setMarked(graph.edgeIterator(), false);
+
+	for (size_t i=0, n=edgeStrings.size(); i<n; ++i) 
+		delete edgeStrings[i];
+	edgeStrings.clear();
+#endif
 
 	buildEdgeStringsForObviousStartNodes();
 	buildEdgeStringsForIsolatedLoops();

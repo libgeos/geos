@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/linemerge/LineMerger.java rev. 1.6 (JTS-1.7)
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_LINEMERGE_LINEMERGER_H
