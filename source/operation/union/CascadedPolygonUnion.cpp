@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/union/CascadedPolygonUnion.java rev 1.10 (JTS-1.10)
+ *
  **********************************************************************/
 
 #include <geos/operation/union/CascadedPolygonUnion.h>
