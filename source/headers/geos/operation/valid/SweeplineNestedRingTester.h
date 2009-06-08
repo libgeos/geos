@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/valid/SweeplineNestedRingTester.java rev. 1.12 (JTS-1.10)
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_SWEEPLINENESTEDRINGTESTER_H
@@ -56,7 +60,6 @@ class GEOS_DLL SweeplineNestedRingTester {
 private:
 	geomgraph::GeometryGraph *graph;  // used to find non-node vertices
 	std::vector<geom::LinearRing*> rings;
-	geom::Envelope *totalEnv;
 	index::sweepline::SweepLineIndex *sweepLine;
 	geom::Coordinate *nestedPt;
 	void buildIndex();
@@ -67,14 +70,12 @@ public:
 		:
 		graph(newGraph),
 		rings(),
-		totalEnv(new geom::Envelope()),
 		sweepLine(new index::sweepline::SweepLineIndex()),
 		nestedPt(NULL)
 	{}
 
 	~SweeplineNestedRingTester()
 	{
-		delete totalEnv;
 		delete sweepLine;
 	}
 

@@ -13,6 +13,8 @@
  *
  **********************************************************************
  *
+ * Last port: operation/valid/RepeatedPointTester.java rev. 1.8 (JTS-1.10)
+ *
  **********************************************************************/
 
 #include <geos/operation/valid/RepeatedPointTester.h>

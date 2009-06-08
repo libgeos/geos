@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/valid/ConnectedInteriorTester.java rev. 1.15 (JTS-1.10)
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_CONNECTEDINTERIORTESTER_H

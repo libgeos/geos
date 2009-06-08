@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/valid/TopologyValidationError.java rev. 1.14 (JTS-1.7)
+ * Last port: operation/valid/TopologyValidationError.java rev. 1.16 (JTS-1.10)
  *
  **********************************************************************/
 

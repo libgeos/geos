@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/valid/QuadtreeNestedRingTester.java rev. 1.11
+ * Last port: operation/valid/QuadtreeNestedRingTester.java rev. 1.12 (JTS-1.10)
  *
  **********************************************************************/
 

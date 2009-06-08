@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: operation/valid/SimpleNestedRingTester.java rev. 1.14 (JTS-1.10)
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_SIMPLENESTEDRINGTESTER_H

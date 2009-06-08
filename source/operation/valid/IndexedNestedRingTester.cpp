@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/valid/IndexedNestedRingTester.java rev. 1.1 (JTS-1.9)
+ * Last port: operation/valid/IndexedNestedRingTester.java rev. 1.1 (JTS-1.10)
  *
  **********************************************************************/
 

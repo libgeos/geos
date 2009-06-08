@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/valid/ConnectedInteriorTester.java rev. 1.14
+ * Last port: operation/valid/ConnectedInteriorTester.java rev. 1.15 (JTS-1.10)
  *
  **********************************************************************
  * 
