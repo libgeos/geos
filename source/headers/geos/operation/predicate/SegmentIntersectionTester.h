@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/predicate/SegmentIntersectionTester.java rev. 1.6 (JTS-1.7)
+ * Last port: operation/predicate/SegmentIntersectionTester.java rev. 1.3 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -38,7 +38,7 @@ namespace predicate { // geos::operation::predicate
 
 /** \brief
  * Tests if any line segments in two sets of CoordinateSequences intersect.
- * Optimized for small geometry size.
+ * Optimized for use when at least one input is of small size.
  *
  * Short-circuited to return as soon an intersection is found.
  *

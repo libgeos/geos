@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/predicate/SegmentIntersectionTester.java rev. 1.6 (JTS-1.7)
+ * Last port: operation/predicate/SegmentIntersectionTester.java rev. 1.3 (JTS-1.10)
  *
  **********************************************************************/
 

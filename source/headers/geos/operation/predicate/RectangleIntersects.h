@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/predicate/RectangleIntersects.java rev 1.3 (JTS-1.7)
+ * Last port: operation/predicate/RectangleIntersects.java rev 1.4 (JTS-1.10)
  *
  **********************************************************************/
 
