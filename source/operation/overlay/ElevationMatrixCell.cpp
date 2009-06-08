@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ ***********************************************************************
+ *
+ * Last port: original (by strk)
+ *
  **********************************************************************/
 
 #include <sstream>

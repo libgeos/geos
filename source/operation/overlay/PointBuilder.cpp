@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ ***********************************************************************
+ *
+ * Last port: operation/overlay/PointBuilder.java rev. 1.16 (JTS-1.10)
+ *
  **********************************************************************/
 
 #include <geos/operation/overlay/PointBuilder.h>

@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ ***********************************************************************
+ *
+ * Last port: operation/overlay/EdgeSetNoder.java rev. 1.12 (JTS-1.10)
+ *
  **********************************************************************/
 
 #ifndef GEOS_OP_OVERLAY_EDGESETNODER_H
