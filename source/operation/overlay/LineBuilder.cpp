@@ -14,7 +14,7 @@
  *
  ***********************************************************************
  *
- * Last port: operation/overlay/LineBuilder.java rev. 1.13 (JTS-1.4)
+ * Last port: operation/overlay/LineBuilder.java rev. 1.15 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -151,36 +151,39 @@ LineBuilder::collectLineEdge(DirectedEdge *de, OverlayOp::OpCode opCode,
 	}
 }
 
-/*
- * Collect edges from Area inputs which should be in the result but
- * which have not been included in a result area.
- * This happens ONLY:
- *  - during an intersection when the boundaries of two
- *    areas touch in a line segment
- *  - OR as a result of a dimensional collapse.
- */
+/*private*/
 void
 LineBuilder::collectBoundaryTouchEdge(DirectedEdge *de,
 		OverlayOp::OpCode opCode, vector<Edge*> *edges)
 {
-	Label *label=de->getLabel();
-	// this smells like a bit of a hack, but it seems to work...
-	if (!de->isLineEdge()
-		&& !de->isInteriorAreaEdge()  // added to handle dimensional collapses
-		&& !de->getEdge()->isInResult()
-		&& !de->isVisited()
-		&& OverlayOp::isResultOfOp(label, opCode)
-		&& opCode==OverlayOp::opINTERSECTION)
+	if (de->isLineEdge()) return;  // only interested in area edges
+	if (de->isVisited()) return;  // already processed
+
+	// added to handle dimensional collapses
+	if (de->isInteriorAreaEdge()) return;
+
+	// if the edge linework is already included, don't include it again
+	if (de->getEdge()->isInResult()) return; 
+
+	// sanity check for labelling of result edgerings
+	assert( ! ( de->isInResult() || de->getSym()->isInResult() )
+		||
+	        ! de->getEdge()->isInResult() );
+
+
+	// include the linework if it's in the result of the operation
+	Label *label = de->getLabel();
+	if ( OverlayOp::isResultOfOp(label, opCode) 
+		&& opCode == OverlayOp::opINTERSECTION )
 	{
-			edges->push_back(de->getEdge());
-			de->setVisitedEdge(true);
+		edges->push_back(de->getEdge());
+		de->setVisitedEdge(true);
 	}
 }
 
 void
 LineBuilder::buildLines(OverlayOp::OpCode /* opCode */)
 {
-	// need to simplify lines?
 	for(size_t i=0, s=lineEdgesList.size(); i<s; ++i)
 	{
 		Edge *e=lineEdgesList[i];

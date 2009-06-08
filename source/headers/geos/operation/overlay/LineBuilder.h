@@ -13,7 +13,7 @@
  *
  ***********************************************************************
  *
- * Last port: operation/overlay/LineBuilder.java rev. 1.13 (JTS-1.4)
+ * Last port: operation/overlay/LineBuilder.java rev. 1.15 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -72,15 +72,30 @@ public:
 	std::vector<geom::LineString*>* build(OverlayOp::OpCode opCode);
 
 	/**
-	 * Find and mark L edges which are "covered" by the result area (if any).
-	 * L edges at nodes which also have A edges can be checked by checking
-	 * their depth at that node.
-	 * L edges at nodes which do not have A edges can be checked by doing a
-	 * point-in-polygon test with the previously computed result areas.
+	 * Collect line edges which are in the result.
+	 *
+	 * Line edges are in the result if they are not part of
+	 * an area boundary, if they are in the result of the overlay operation,
+	 * and if they are not covered by a result area.
+	 *
+	 * @param de the directed edge to test. 
+	 * @param opCode the overlap operation
+	 * @param edges the list of included line edges. 
 	 */
 	void collectLineEdge(geomgraph::DirectedEdge *de,
 			OverlayOp::OpCode opCode,
 			std::vector<geomgraph::Edge*>* edges);
+
+private:
+	OverlayOp *op;
+	const geom::GeometryFactory *geometryFactory;
+	algorithm::PointLocator *ptLocator;
+	std::vector<geomgraph::Edge*> lineEdgesList;
+	std::vector<geom::LineString*>* resultLineList;
+	void findCoveredLineEdges();
+	void collectLines(OverlayOp::OpCode opCode);
+	void buildLines(OverlayOp::OpCode opCode);
+	void labelIsolatedLines(std::vector<geomgraph::Edge*> *edgesList);
 
 	/**
 	 * Collect edges from Area inputs which should be in the result but
@@ -95,17 +110,6 @@ public:
 	void collectBoundaryTouchEdge(geomgraph::DirectedEdge *de,
 			OverlayOp::OpCode opCode,
 			std::vector<geomgraph::Edge*>* edges);
-
-private:
-	OverlayOp *op;
-	const geom::GeometryFactory *geometryFactory;
-	algorithm::PointLocator *ptLocator;
-	std::vector<geomgraph::Edge*> lineEdgesList;
-	std::vector<geom::LineString*>* resultLineList;
-	void findCoveredLineEdges();
-	void collectLines(OverlayOp::OpCode opCode);
-	void buildLines(OverlayOp::OpCode opCode);
-	void labelIsolatedLines(std::vector<geomgraph::Edge*> *edgesList);
 
 	/**
 	 * Label an isolated node with its relationship to the target geometry.
