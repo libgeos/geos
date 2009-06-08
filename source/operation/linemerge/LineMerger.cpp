@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/linemerge/LineMerger.java rev. 1.6 (JTS-1.7)
+ * Last port: operation/linemerge/LineMerger.java rev. 1.7 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -103,15 +103,15 @@ LineMerger::merge()
 {
 	if (mergedLineStrings!=NULL) return;
 
-#if 0 // requires changes to GraphComponent to enhance porting to rev 1.7
 	// reset marks (this allows incremental processing)
-	GraphComponent::setMarked(graph.nodeIterator(), false);
-	GraphComponent::setMarked(graph.edgeIterator(), false);
+	GraphComponent::setMarkedMap(graph.nodeIterator(), graph.nodeEnd(),
+	                                                              false);
+	GraphComponent::setMarked(graph.edgeIterator(), graph.edgeEnd(),
+	                                                              false);
 
 	for (size_t i=0, n=edgeStrings.size(); i<n; ++i) 
 		delete edgeStrings[i];
 	edgeStrings.clear();
-#endif
 
 	buildEdgeStringsForObviousStartNodes();
 	buildEdgeStringsForIsolatedLoops();

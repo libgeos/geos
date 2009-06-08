@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: planargraph/GraphComponent.java rev. 1.7 (JTS-1.7)
+ *
  **********************************************************************/
 
 #ifndef GEOS_PLANARGRAPH_GRAPHCOMPONENT_H
@@ -38,8 +42,6 @@ namespace planargraph { // geos.planargraph
  *    that a node has already been traversed.
  *    The visited flag may be set and cleared many times during the
  *    lifetime of a graph.
- *
- * Last port: planargraph/GraphComponent.java rev. 1.7 (JTS-1.7)
  *
  */
 class GEOS_DLL GraphComponent {
@@ -87,7 +89,6 @@ public:
 	template <typename T>
 	static void setVisited(T start, T end, bool visited) {
 		for(T i=start; i!=end; ++i) {
-			//i->second->setVisited(visited);
 			(*i)->setVisited(visited);
 		}
 	}
@@ -104,6 +105,37 @@ public:
 	static void setVisitedMap(T start, T end, bool visited) {
 		for(T i=start; i!=end; ++i) {
 			i->second->setVisited(visited);
+		}
+	}
+
+	/** \brief
+	 * Sets the Marked state for the elements of a container,
+	 * from start to end iterator.
+	 *
+	 * @param start the start element
+	 * @param end one past the last element
+	 * @param marked the state to set the marked flag to
+	 */
+	template <typename T>
+	static void setMarked(T start, T end, bool marked) {
+		for(T i=start; i!=end; ++i) {
+			(*i)->setMarked(marked);
+		}
+	}
+
+
+	/** \brief
+	 * Sets the Marked state for the values of each map
+	 * container element, from start to end iterator.
+	 *
+	 * @param start the start element
+	 * @param end one past the last element
+	 * @param marked the state to set the visited flag to
+	 */
+	template <typename T>
+	static void setMarkedMap(T start, T end, bool marked) {
+		for(T i=start; i!=end; ++i) {
+			i->second->setMarked(marked);
 		}
 	}
 
