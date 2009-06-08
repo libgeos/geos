@@ -1,11 +1,10 @@
 SUBDIRS = snapround
 
-EXTRA_DIST = MCIndexNoder.inl  SegmentString.inl
+EXTRA_DIST =
 
-# NOTES:
-#
+geosdir = $(includedir)/geos/noding
 
-noinst_HEADERS = \
+geos_HEADERS = \
 	BasicSegmentString.h \
 	FastNodingValidator.h \
 	FastSegmentSetIntersectionFinder.h \
@@ -13,6 +12,7 @@ noinst_HEADERS = \
 	IntersectionFinderAdder.h \
 	IteratedNoder.h \
 	MCIndexNoder.h \
+	MCIndexNoder.inl \
 	MCIndexSegmentSetMutualIntersector.h \
 	NodableSegmentString.h \
 	NodedSegmentString.h \
@@ -27,11 +27,8 @@ noinst_HEADERS = \
 	SegmentNodeList.h \
 	SegmentSetMutualIntersector.h \
 	SegmentString.h \
+	SegmentString.inl \
 	SegmentStringUtil.h \
 	SimpleNoder.h \
 	SingleInteriorIntersectionFinder.h \
-	SinglePassNoder.h
-
-#geosdir = $(includedir)/geos/noding
-
-#geos_HEADERS = 
+	SinglePassNoder.h 

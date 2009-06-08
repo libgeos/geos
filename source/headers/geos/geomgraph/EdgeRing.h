@@ -16,8 +16,6 @@
  *
  * Last port: geomgraph/EdgeRing.java rev. 1.10 (JTS-1.10)
  *
- * NON-EXPOSED GEOS HEADER
- *
  **********************************************************************/
 
 

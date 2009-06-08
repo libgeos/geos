@@ -15,8 +15,6 @@
  *
  * Last port: operation/distance/DistanceOp.java rev 1.17
  *
- * EXPOSED GEOS HEADER
- *
  **********************************************************************/
 
 #ifndef GEOS_OP_DISTANCE_DISTANCEOP_H

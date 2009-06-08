@@ -2,19 +2,15 @@
 
 #EXTRA_DIST = 
 
-# NOTES:
-# OffsetCurveBuilder.h needed bu BufferOp.h for enum values
-
 geosdir = $(includedir)/geos/operation/buffer
 
 geos_HEADERS = \
-	BufferOp.h	\
-	OffsetCurveBuilder.h
-
-noinst_HEADERS = \
-	BufferBuilder.h	\
+	BufferBuilder.h		\
+	BufferOp.h		\
 	BufferParameters.h	\
 	BufferSubgraph.h	\
+	OffsetCurveBuilder.h	\
 	OffsetCurveSetBuilder.h	\
-	RightmostEdgeFinder.h \
-	SubgraphDepthLocater.h
+	RightmostEdgeFinder.h 	\
+	SubgraphDepthLocater.h	
+

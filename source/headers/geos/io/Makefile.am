@@ -2,12 +2,6 @@ SUBDIRS =
 
 EXTRA_DIST = 
 
-# NOTES:
-# ByteOrderDataInStream.{h,inl} needed by WKBReader.h for composition
-# ByteOrderValues.h needed by ByteOrderDataInStream.inl for inlines
-# ParseException.h needed by ByteOrderDataInStream.inl for inlines
-# WKBConstants.h is worth exposing
-
 geosdir = $(includedir)/geos/io
 
 geos_HEADERS = \
@@ -16,13 +10,12 @@ geos_HEADERS = \
 	ByteOrderValues.h		\
 	CLocalizer.h			\
 	ParseException.h		\
+	StringTokenizer.h		\
 	WKBConstants.h			\
 	WKBReader.h			\
 	WKBWriter.h			\
 	WKTReader.h			\
 	WKTReader.inl			\
-	WKTWriter.h			
+	WKTWriter.h			\
+	Writer.h			
 
-noinst_HEADERS = 		\
-	StringTokenizer.h	\
-	Writer.h

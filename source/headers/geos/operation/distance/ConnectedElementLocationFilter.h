@@ -15,8 +15,6 @@
  *
  * Last port: operation/distance/ConnectedElementLocationFilter.java rev. 1.4 (JTS-1.10)
  *
- * NON-EXPOSED GEOS HEADER
- *
  **********************************************************************/
 
 #ifndef GEOS_OP_DISTANCE_CONNECTEDELEMENTLOCATIONFILTER_H

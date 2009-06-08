@@ -4,44 +4,37 @@ SUBDIRS = \
 
 #EXTRA_DIST = 
 
-# Notes:
-# GeometryComponentFilter.h needed by Polygonizer.h
-# LineSegment.h needed by buffer/OffsetCurveBuilder.h needed by BufferOp.h,
-#   needed by index/chain/monotoneChainSelectAction.h by McPointInRing.h,
-#   needed by index/chain/monotoneChainOverlapAction.h by McIndexNoder.h
-# Location.h needed by PointLocator.h for inlines
-
 geosdir = $(includedir)/geos/geom
 
 geos_HEADERS = 					\
 	BinaryOp.h				\
-	Coordinate.h				\
-	Coordinate.inl				\
-	CoordinateArraySequence.h		\
 	CoordinateArraySequenceFactory.h	\
 	CoordinateArraySequenceFactory.inl	\
+	CoordinateArraySequence.h		\
 	CoordinateFilter.h			\
+	Coordinate.h				\
+	Coordinate.inl				\
 	CoordinateList.h			\
-	CoordinateSequence.h			\
 	CoordinateSequenceFactory.h		\
 	CoordinateSequenceFilter.h		\
+	CoordinateSequence.h			\
 	Dimension.h				\
 	Envelope.h				\
 	Envelope.inl				\
-	Geometry.h				\
-	Geometry.inl				\
-	GeometryList.h				\
 	GeometryCollection.h			\
 	GeometryCollection.inl			\
 	GeometryComponentFilter.h		\
 	GeometryFactory.h			\
 	GeometryFactory.inl			\
 	GeometryFilter.h			\
+	Geometry.h				\
+	Geometry.inl				\
+	GeometryList.h				\
 	IntersectionMatrix.h			\
+	LinearRing.h				\
 	LineSegment.h				\
 	LineSegment.inl				\
 	LineString.h				\
-	LinearRing.h				\
 	Location.h				\
 	MultiLineString.h			\
 	MultiLineString.inl			\
@@ -51,7 +44,5 @@ geos_HEADERS = 					\
 	Point.h					\
 	Polygon.h				\
 	PrecisionModel.h			\
-	PrecisionModel.inl	
-
-noinst_HEADERS = 		\
-	Triangle.h
+	PrecisionModel.inl			\
+	Triangle.h				

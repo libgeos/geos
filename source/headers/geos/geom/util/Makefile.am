@@ -16,4 +16,3 @@ geos_HEADERS = \
 	PolygonExtracter.h \
 	ShortCircuitedGeometryVisitor.h
 
-#noinst_HEADERS = 

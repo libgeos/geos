@@ -16,8 +16,6 @@
  *
  * Last port: geomgraph/GraphComponent.java rev. 1.3 (JTS-1.10)
  *
- * EXPOSED GEOS HEADER
- *
  **********************************************************************/
 
 

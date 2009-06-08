@@ -16,8 +16,6 @@
  *
  * Last port: geomgraph/EdgeIntersectionList.java rev. 1.5 (JTS-1.10)
  *
- * NON-EXPOSED GEOS HEADER
- *
  **********************************************************************/
 
 

@@ -16,8 +16,6 @@
  *
  * Last port: geomgraph/NodeFactory.java rev. 1.3 (JTS-1.10)
  *
- * NON-EXPOSED GEOS HEADER
- *
  **********************************************************************/
 
 

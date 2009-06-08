@@ -17,4 +17,3 @@ geos_HEADERS = \
 	SweepLineEventObj.h	\
 	SweepLineSegment.h
 
-#noinst_HEADERS = 

@@ -15,8 +15,6 @@
  *
  * Last port: geomgraph/GeometryGraph.java rev. 1.9 (JTS-1.10)
  *
- * EXPOSED GEOS HEADER
- *
  **********************************************************************/
 
 #ifndef GEOS_GEOMGRAPH_GEOMETRYGRAPH_INL

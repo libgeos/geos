@@ -16,8 +16,6 @@
  *
  * Last port: geomgraph/Label.java rev. 1.8 (JTS-1.10)
  *
- * NON-EXPOSED GEOS HEADER
- *
  **********************************************************************/
 
 

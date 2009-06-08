@@ -19,4 +19,3 @@ geos_HEADERS = \
 	PreparedPolygonIntersects.h \
 	PreparedPolygonPredicate.h
 
-#noinst_HEADERS = 

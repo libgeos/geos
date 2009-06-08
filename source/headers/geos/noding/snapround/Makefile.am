@@ -2,11 +2,9 @@
 
 #EXTRA_DIST = 
 
-#geosdir = $(includedir)/geos/noding/snapround
+geosdir = $(includedir)/geos/noding/snapround
 
-#geos_HEADERS = 
-
-noinst_HEADERS = \
+geos_HEADERS = \
 	HotPixel.h \
 	HotPixel.inl \
 	MCIndexPointSnapper.h \

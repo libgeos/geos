@@ -15,8 +15,6 @@
  *
  * Last port: operation/relate/RelateComputer.java rev. 1.24 (JTS-1.10)
  *
- * EXPOSED GEOS HEADER
- *
  **********************************************************************/
 
 #ifndef GEOS_OP_RELATE_RELATECOMPUTER_H

@@ -15,8 +15,6 @@
  *
  * Last port: operation/overlay/MaximalEdgeRing.java rev. 1.15 (JTS-1.10)
  *
- * NON-EXPOSED GEOS HEADER
- *
  **********************************************************************/
 
 #ifndef GEOS_OP_OVERLAY_MAXIMALEDGERING_H

@@ -15,8 +15,6 @@
  *
  * Last port: operation/relate/EdgeEndBuilder.java rev. 1.12 (JTS-1.10)
  *
- * NON-EXPOSED GEOS HEADER
- *
  **********************************************************************/
 
 #ifndef GEOS_OP_RELATE_EDGEENDBUILDER_H

@@ -18,10 +18,10 @@ geosdir = $(includedir)/geos
 
 geos_HEADERS = 			\
 	export.h 		\
-	geom.h 			\
-	geomUtil.h 		\
 	geomgraph.h 		\
 	geomgraphindex.h 	\
+	geom.h 			\
+	geomUtil.h 		\
 	geosAlgorithm.h 	\
 	indexBintree.h 		\
 	indexChain.h 		\
@@ -34,24 +34,21 @@ geos_HEADERS = 			\
 	nodingSnapround.h 	\
 	opBuffer.h 		\
 	opDistance.h 		\
+	operation.h 		\
+	operation.h 		\
 	opLinemerge.h 		\
 	opOverlay.h 		\
 	opPolygonize.h 		\
 	opPredicate.h 		\
 	opRelate.h 		\
 	opValid.h 		\
-	operation.h 		\
-	operation.h 		\
 	planargraph.h 		\
+	platform.h 		\
 	precision.h 		\
+	profiler.h 		\
 	spatialIndex.h 		\
 	timeval.h		\
 	unload.h 		\
-	util.h 		
+	util.h 			\
+	version.h		
 
-nodist_geos_HEADERS =		\
-	platform.h 		\
-	version.h
-
-noinst_HEADERS =		\
-	profiler.h 

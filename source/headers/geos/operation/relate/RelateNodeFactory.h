@@ -15,8 +15,6 @@
  *
  * Last port: operation/relate/RelateNodeFactory.java rev. 1.11 (JTS-1.10)
  *
- * NON-EXPOSED GEOS HEADER
- *
  **********************************************************************/
 
 #ifndef GEOS_OP_RELATE_RELATENODEFACTORY_H

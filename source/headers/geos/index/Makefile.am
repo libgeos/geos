@@ -14,4 +14,3 @@ geos_HEADERS = \
 	ItemVisitor.h \
 	SpatialIndex.h 
 
-noinst_HEADERS = 

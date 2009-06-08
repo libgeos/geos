@@ -16,8 +16,6 @@
  *
  * Last port: geomgraph/DirectedEdge.java rev. 1.5 (JTS-1.10)
  *
- * NON-EXPOSED GEOS HEADER
- *
  **********************************************************************/
 
 

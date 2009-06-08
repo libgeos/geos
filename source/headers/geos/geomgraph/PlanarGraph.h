@@ -16,8 +16,6 @@
  *
  * Last port: geomgraph/PlanarGraph.java rev. 1.6 (JTS-1.10)
  *
- * EXPOSED GEOS HEADER
- *
  **********************************************************************/
 
 

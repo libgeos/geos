@@ -15,8 +15,6 @@
  *
  * Last port: operation/distance/GeometryLocation.java rev. 1.4 (JTS-1.7)
  *
- * NON-EXPOSED GEOS HEADER
- *
  **********************************************************************/
 
 #ifndef GEOS_OP_DISTANCE_GEOMETRYLOCATION_H

@@ -8,14 +8,14 @@ EXTRA_DIST = \
 	capi/test.expected \
 	capi/test.wkt \
 	capi/testrunner.sh \
-    tut/tut_assert.hpp \
-    tut/tut_exception.hpp \
-    tut/tut.hpp \
-    tut/tut_posix.hpp \
-    tut/tut_reporter.hpp \
-    tut/tut_restartable.hpp \
-    tut/tut_result.hpp \
-    tut/tut_runner.hpp
+	tut/tut_assert.hpp \
+	tut/tut_exception.hpp \
+	tut/tut.hpp \
+	tut/tut_posix.hpp \
+	tut/tut_reporter.hpp \
+	tut/tut_restartable.hpp \
+	tut/tut_result.hpp \
+	tut/tut_runner.hpp
 
 
 #noinst_PROGRAMS = geos_unit

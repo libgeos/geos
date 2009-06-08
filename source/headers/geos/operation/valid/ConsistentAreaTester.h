@@ -16,8 +16,6 @@
  *
  * Last port: operation/valid/ConsistentAreaTester.java rev. 1.14 (JTS-1.10)
  *
- * NON-EXPOSED GEOS HEADER
- *
  **********************************************************************/
 
 #ifndef GEOS_OP_CONSISTENTAREATESTER_H

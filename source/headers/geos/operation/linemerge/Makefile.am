@@ -2,16 +2,13 @@
 
 #EXTRA_DIST = 
 
-# Notes: LineMergeGraph is required by LineMerger.h for composition
-
 geosdir = $(includedir)/geos/operation/linemerge
 
 geos_HEADERS = \
-	LineMerger.h	\
-	LineMergeGraph.h
-
-noinst_HEADERS = \
-	EdgeString.h	\
+	EdgeString.h		\
 	LineMergeDirectedEdge.h	\
-	LineMergeEdge.h	\
-	LineSequencer.h
+	LineMergeEdge.h		\
+	LineMergeGraph.h	\
+	LineMerger.h		\
+	LineSequencer.h	
+
