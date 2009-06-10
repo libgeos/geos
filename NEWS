@@ -1,3 +1,10 @@
+Changes in 3.0.4
+
+- Bug fixes.
+  - Calculations in Octant
+  - Packaging fixes
+  - Memory leaks
+  - Buffer build for multipolygons
 
 Changes in 3.0.3
 
