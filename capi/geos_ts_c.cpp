@@ -35,7 +35,6 @@
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/io/WKBWriter.h>
-#include <geos/io/CLocalizer.h>
 #include <geos/simplify/DouglasPeuckerSimplifier.h>
 #include <geos/simplify/TopologyPreservingSimplifier.h>
 #include <geos/operation/valid/IsValidOp.h>
@@ -90,7 +89,6 @@ using geos::io::WKTReader;
 using geos::io::WKTWriter;
 using geos::io::WKBReader;
 using geos::io::WKBWriter;
-using geos::io::CLocalizer;
 
 using geos::operation::overlay::OverlayOp;
 using geos::operation::overlay::overlayOp;
@@ -781,7 +779,6 @@ GEOSGeomFromWKT_r(GEOSContextHandle_t extHandle, const char *wkt)
 
     try
     {
-        CLocalizer clocale;
         const std::string wktstring(wkt);
         WKTReader r(static_cast<GeometryFactory const*>(handle->geomFactory));
 
@@ -817,7 +814,6 @@ GEOSGeomToWKT_r(GEOSContextHandle_t extHandle, const Geometry *g1)
 
     try
     {
-        CLocalizer clocale;
 
         char *result = gstrdup(g1->toString());
         return result;
@@ -3061,7 +3057,6 @@ GEOSWKTReader_read_r(GEOSContextHandle_t extHandle, WKTReader *reader, const cha
         return 0;
     }
 
-    CLocalizer clocale;
     try
     {
         const std::string wktstring(wkt);
@@ -3173,7 +3168,6 @@ GEOSWKTWriter_write_r(GEOSContextHandle_t extHandle, WKTWriter *writer, const Ge
         return NULL;
     }
 
-    CLocalizer clocale;
     try
     {
         std::string sgeom(writer->write(geom));
