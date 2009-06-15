@@ -16,6 +16,7 @@
 
 #include <geos/io/WKTWriter.h>
 #include <geos/io/Writer.h>
+#include <geos/io/CLocalizer.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/LinearRing.h>
@@ -142,6 +143,7 @@ void WKTWriter::write(const Geometry *geometry, Writer *writer) {
 }
 
 string WKTWriter::writeFormatted(const Geometry *geometry) {
+        CLocalizer clocale;
 	Writer sw;
 	writeFormatted(geometry, true, &sw);
 	return sw.toString();

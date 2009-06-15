@@ -17,6 +17,7 @@
 #include <geos/io/WKTReader.h>
 #include <geos/io/StringTokenizer.h>
 #include <geos/io/ParseException.h>
+#include <geos/io/CLocalizer.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Point.h>
@@ -57,6 +58,7 @@ Geometry *
 WKTReader::read(const string &wellKnownText)
 {
 	//auto_ptr<StringTokenizer> tokenizer(new StringTokenizer(wellKnownText));
+        CLocalizer clocale;
 	StringTokenizer tokenizer(wellKnownText);
 	Geometry *g=NULL;
 	g=readGeometryTaggedText(&tokenizer);
