@@ -143,7 +143,6 @@ void WKTWriter::write(const Geometry *geometry, Writer *writer) {
 }
 
 string WKTWriter::writeFormatted(const Geometry *geometry) {
-        CLocalizer clocale;
 	Writer sw;
 	writeFormatted(geometry, true, &sw);
 	return sw.toString();
@@ -153,7 +152,11 @@ void WKTWriter::writeFormatted(const Geometry *geometry, Writer *writer) {
 	writeFormatted(geometry, true, writer);
 }
 
-void WKTWriter::writeFormatted(const Geometry *geometry, bool isFormatted, Writer *writer) {
+void
+WKTWriter::writeFormatted(const Geometry *geometry, bool isFormatted,
+                          Writer *writer)
+{
+        CLocalizer clocale;
 	this->isFormatted=isFormatted;
 	formatter=createFormatter(geometry->getPrecisionModel());
 	appendGeometryTaggedText(geometry, 0, writer);
