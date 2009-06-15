@@ -35,7 +35,6 @@ geos_HEADERS = 			\
 	opBuffer.h 		\
 	opDistance.h 		\
 	operation.h 		\
-	operation.h 		\
 	opLinemerge.h 		\
 	opOverlay.h 		\
 	opPolygonize.h 		\
