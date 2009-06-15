@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: ORIGINAL WORK to be used like java.io.Writer
+ *
  **********************************************************************/
 
 #include <geos/io/Writer.h>

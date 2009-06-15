@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: io/WKBConstants.java rev. 1.1 (JTS-1.10)
+ *
  **********************************************************************/
 
 #ifndef GEOS_IO_WKBCONSTANTS_H

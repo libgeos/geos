@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: ORIGINAL WORK
+ *
  **********************************************************************/
 
 #ifndef GEOS_IO_STRINGTOKENIZER_H

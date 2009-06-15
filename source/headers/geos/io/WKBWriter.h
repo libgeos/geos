@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: io/WKBWriter.java rev. 1.1 (JTS-1.7)
+ *
  **********************************************************************/
 
 #ifndef GEOS_IO_WKBWRITER_H

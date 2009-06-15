@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: io/ByteOrderValues.java rev. 1.3 (JTS-1.10)
+ *
  **********************************************************************/
 
 #ifndef GEOS_IO_BYTEORDERVALUES_H

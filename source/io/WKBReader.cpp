@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: io/WKBReader.java rev. 1.1 (JTS-1.7)
+ *
  **********************************************************************/
 
 #include <geos/io/WKBReader.h>
