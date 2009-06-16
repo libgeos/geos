@@ -15,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/RobustDeterminant.java 1.14 (JTS-1.7)
+ * Last port: algorithm/RobustDeterminant.java 1.15 (JTS-1.10)
  *
  **********************************************************************/
 
