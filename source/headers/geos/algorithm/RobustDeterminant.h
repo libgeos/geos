@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: algorithm/RobustDeterminant.java 1.13 (JTS-1.7)
+ *
  **********************************************************************/
 
 #ifndef GEOS_ALGORITHM_ROBUSTDETERMINANT_H
@@ -22,6 +26,29 @@
 namespace geos {
 namespace algorithm { // geos::algorithm
 
+/** \brief
+ * Implements an algorithm to compute the
+ * sign of a 2x2 determinant for double precision values robustly.
+ *
+ * It is a direct translation of code developed by Olivier Devillers.
+ * 
+ * The original code carries the following copyright notice:
+ *
+ * <pre>
+ *************************************************************************
+ * The original code carries the following copyright notice:
+ * Author : Olivier Devillers
+ * Olivier.Devillers@sophia.inria.fr
+ * http:/www.inria.fr:/prisme/personnel/devillers/anglais/determinant.html
+ *
+ **************************************************************************
+ *              Copyright (c) 1995  by  INRIA Prisme Project
+ *                  BP 93 06902 Sophia Antipolis Cedex, France.
+ *                           All rights reserved
+ **********************************************************************
+ * </pre>
+ *
+ */
 class GEOS_DLL RobustDeterminant {
 public:
 	static int signOfDet2x2(double x1,double y1,double x2,double y2);

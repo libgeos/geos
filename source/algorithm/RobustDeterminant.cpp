@@ -15,23 +15,9 @@
  *
  **********************************************************************
  *
- * RobustDeterminant implements an algorithm to compute the
- * sign of a 2x2 determinant for double precision values robustly.
- * It is a direct translation of code developed by Olivier Devillers.
- * 
- *************************************************************************
- * The original code carries the following copyright notice:
- * Author : Olivier Devillers
- * Olivier.Devillers@sophia.inria.fr
- * http:/www.inria.fr:/prisme/personnel/devillers/anglais/determinant.html
- **************************************************************************
+ * Last port: algorithm/RobustDeterminant.java 1.13 (JTS-1.7)
  *
- **************************************************************************
- *              Copyright (c) 1995  by  INRIA Prisme Project
- *                  BP 93 06902 Sophia Antipolis Cedex, France.
- *                           All rights reserved
- **************************************************************************
- */
+ **********************************************************************/
 
 #include <geos/algorithm/RobustDeterminant.h>
 
