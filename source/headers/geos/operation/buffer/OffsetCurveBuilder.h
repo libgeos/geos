@@ -91,25 +91,6 @@ public:
 	                  std::vector<geom::CoordinateSequence*>& lineList);
 
 	/**
-	 * This method handles single points as well as lines.
-	 *
-	 * Lines are assumed to <b>not</b> be closed (the function will not
-	 * fail for closed lines, but will generate superfluous line caps).
-	 *
-	 * @param lineList the std::vector to which CoordinateSequences will
-	 *                 be pushed_back
-	 * @param leftSide indicates that the left side buffer will be
-	 *                 obtained/skipped
-	 * @param rightSide indicates that the right side buffer will
-	 *                  be obtained/skipped
-	 *
-	 * NOTE: this is a GEOS extension
-	 */
-	void getSingleSidedLineCurve(const geom::CoordinateSequence* inputPts, 
-	     double distance, std::vector<geom::CoordinateSequence*>& lineList,
-	     bool leftSide, bool rightSide ) ;
-
-	/**
 	 * This method handles the degenerate cases of single points and lines,
 	 * as well as rings.
 	 *
@@ -247,9 +228,6 @@ private:
 	geom::LineSegment offset1;
 
 	int side;
-
-	// Not in JTS, used for single-sided buffers
-	int endCapIndex;
 
 	void init(double newDistance);
 

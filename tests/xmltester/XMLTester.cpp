@@ -852,6 +852,9 @@ XMLTester::parseTest()
 			expected_result=printGeom(gRes.get());
 		}
 
+// disabled till we have an actual api exposed for that
+// (and probably a different name)
+#if 0
 		else if (opName=="buffersinglesided")
 		{
 			using namespace operation::buffer;
@@ -918,6 +921,7 @@ std::cerr << "Matching single sided buffer results FAILED" << std::endl;
 			actual_result=printGeom(gRealRes.get());
 			expected_result=printGeom(gRes.get());
 		}
+#endif
 
 		else if (opName=="buffermitredjoin")
 		{

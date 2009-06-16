@@ -26,15 +26,11 @@
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/GeometryCollection.h>
-#include <geos/geom/LineString.h>
-#include <geos/geom/MultiLineString.h>
 #include <geos/operation/buffer/BufferBuilder.h>
 #include <geos/operation/buffer/OffsetCurveBuilder.h>
 #include <geos/operation/buffer/OffsetCurveSetBuilder.h>
 #include <geos/operation/buffer/BufferSubgraph.h>
 #include <geos/operation/buffer/SubgraphDepthLocater.h>
-#include <geos/operation/overlay/OverlayOp.h>
-#include <geos/operation/linemerge/LineMerger.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/noding/IntersectionAdder.h>
 #include <geos/noding/SegmentString.h>
@@ -68,7 +64,6 @@ using namespace geos::geomgraph;
 using namespace geos::noding;
 using namespace geos::algorithm;
 using namespace geos::operation::overlay;
-using namespace geos::operation::linemerge;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -103,166 +98,6 @@ BufferBuilder::~BufferBuilder()
 	//delete edgeList;
 	for (size_t i=0; i<newLabels.size(); i++)
 		delete newLabels[i];
-}
-
-/*public*/
-Geometry*
-BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
-                                      bool leftSide )
-{
-   // Returns the line used to create a single-sided buffer.
-   // Input requirement: Must be a LineString.
-   const LineString* l = dynamic_cast< const LineString* >( g );
-   if ( !l ) return NULL;
-
-   // Get geometry factory and precision model.
-   const PrecisionModel* precisionModel = workingPrecisionModel;
-   if ( !precisionModel ) precisionModel = l->getPrecisionModel();
-
-   assert( precisionModel );
-   assert( l );
-
-   geomFact = l->getFactory();
-
-   // First, generate the two-sided buffer using a butt-cap.
-   BufferParameters modParams = bufParams;
-   modParams.setEndCapStyle(BufferParameters::CAP_FLAT); 
-   Geometry* buf = buffer( l, distance );
-
-   // Create MultiLineStrings from this polygon.
-   Geometry* bufLineString = buf->getBoundary();
-
-   // Then, get the raw (i.e. unnoded) single sided offset curve.
-   OffsetCurveBuilder curveBuilder( precisionModel, modParams );
-   std::vector< CoordinateSequence* > lineList;
-   curveBuilder.getSingleSidedLineCurve( g->getCoordinates(), distance,
-                                         lineList, leftSide, !leftSide );
-
-   // Create a SegmentString from these coordinates.
-   SegmentString::NonConstVect curveList;
-   for ( unsigned int i = 0; i < lineList.size(); ++i )
-   {
-      CoordinateSequence* seq = lineList[i];
-      curveList.push_back( new NodedSegmentString( seq, NULL ) );
-   }
-
-   // Node these SegmentStrings.
-   Noder* noder = getNoder( precisionModel );
-   noder->computeNodes( &curveList );
-   SegmentString::NonConstVect* nodedEdges = noder->getNodedSubstrings();
-
-   // Create a geometry out of the noded substrings.
-   std::vector< Geometry* >* singleSidedNodedEdges =
-      new std::vector< Geometry * >();
-   for ( unsigned int i = 0; i < nodedEdges->size(); ++i )
-   {
-      singleSidedNodedEdges->push_back( geomFact->createLineString(
-         ( *nodedEdges )[i]->getCoordinates() ) );
-   }
-   Geometry* singleSided = geomFact->createMultiLineString(
-      singleSidedNodedEdges );
-
-   // Use the boolean operation intersect to obtain the line segments lying
-   // on both the butt-cap buffer and this multi-line.
-   Geometry* intersectedLines = singleSided->intersection( bufLineString );
-
-   // Merge result lines together.
-   LineMerger lineMerge;
-   lineMerge.add( intersectedLines );
-   std::vector< LineString* >* mergedLines = lineMerge.getMergedLineStrings();
-
-   // Convert the result into a std::vector< Geometry* >.
-   std::vector< Geometry* >* mergedLinesGeom = new std::vector< Geometry* >();
-   const Coordinate& startPoint = l->getCoordinatesRO()->front();
-   const Coordinate& endPoint = l->getCoordinatesRO()->back();
-   while( !mergedLines->empty() )
-   {
-      // Remove end points if they are a part of the original line to be
-      // buffered.
-      CoordinateSequence::AutoPtr coords(mergedLines->back()->getCoordinates());
-      if ( NULL != coords.get() )
-      {
-         // Use 98% of the buffer width as the point-distance requirement - this
-         // is to ensure that the point that is "distance" +/- epsilon is not
-         // included.
-         const double ptDistAllowance = 0.98 * distance;
-         // Use 102% of the buffer width as the line-length requirement - this
-         // is to ensure that line segments that is length "distance" +/-
-         // epsilon is removed.
-         const double segLengthAllowance = 1.02 * distance;
-
-         // Clean up the front of the list.
-         // Loop until the line's end is not inside the buffer width from
-         // the startPoint.
-         while ( coords->size() > 1 && 
-                 coords->front().distance( startPoint ) < ptDistAllowance )
-         {
-            // Record the end segment length.
-            double segLength = coords->front().distance( ( *coords )[1] );
-            // Stop looping if there are no more points, or if the segment
-            // length is larger than the buffer width.
-            if ( coords->size() <= 1 || segLength > segLengthAllowance )
-            {
-               break;
-            }
-            // If the first point is less than buffer width away from the
-            // reference point, then delete the point.
-            coords->deleteAt( 0 );
-         }
-         while ( coords->size() > 1 && 
-                 coords->front().distance( endPoint ) < ptDistAllowance )
-         {
-            double segLength = coords->front().distance( ( *coords )[1] );
-            if ( coords->size() <= 1 || segLength > segLengthAllowance )
-            {
-               break;
-            }
-            coords->deleteAt( 0 );
-         }
-
-         // Clean up the back of the list.
-         while ( coords->size() > 1 &&
-                 coords->back().distance( startPoint ) < ptDistAllowance )
-         {
-            double segLength = coords->back().distance(
-               ( *coords )[coords->size()-2] );
-            if ( coords->size() <= 1 || segLength > segLengthAllowance )
-            {
-               break;
-            }
-            coords->deleteAt( coords->size()-1 );
-         }
-         while ( coords->size() > 1 &&
-                 coords->back().distance( endPoint ) < ptDistAllowance )
-         {
-            double segLength = coords->back().distance(
-               ( *coords )[coords->size()-2] );
-            if ( coords->size() <= 1 || segLength > segLengthAllowance )
-            {
-               break;
-            }
-            coords->deleteAt( coords->size()-1 );
-         }
-
-         // Add the coordinates to the resultant line string.
-         if ( coords->size() > 1 )
-         {
-            mergedLinesGeom->push_back( geomFact->createLineString( coords.release() ) );
-         }
-      }
-
-      geomFact->destroyGeometry( mergedLines->back() );
-      mergedLines->pop_back();
-   }
-
-   // Clean up.
-   if ( noder != workingNoder ) delete noder;
-   geomFact->destroyGeometry( buf );
-   geomFact->destroyGeometry( bufLineString );
-   geomFact->destroyGeometry( singleSided );
-   geomFact->destroyGeometry( intersectedLines );
-
-   return geomFact->createMultiLineString( mergedLinesGeom );
 }
 
 /*public*/

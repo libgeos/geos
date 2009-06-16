@@ -157,8 +157,6 @@ public:
 		return ret;
 	}
 
-	inline int size() const { return ptList ? ptList->size() : 0 ; }
-
 };
 
 std::ostream& operator<< (std::ostream& os, const OffsetCurveVertexList& lst)
