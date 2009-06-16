@@ -9,6 +9,7 @@
 2: Increment release version:
    - In configure.in
    - In source/headers/geos/version.h.vc
+   - In capi/geos_c.h.in
      - VERSION_PATCH for bugfixes/improvements (even breaking C++ API)
      - VERSION_MINOR for NEW interfaces in the C lib
      - VERSION_MAJOR for SUBSTANTIAL additions or C lib ABI break
