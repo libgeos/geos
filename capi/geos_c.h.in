@@ -316,6 +316,40 @@ extern int GEOS_DLL GEOSCoordSeq_getDimensions_r(GEOSContextHandle_t handle,
 
 /************************************************************************
  *
+ * Buffer related functions
+ *
+ ***********************************************************************/
+
+enum GEOSBufCapStyles {
+	GEOSBUF_CAP_ROUND=1,
+	GEOSBUF_CAP_FLAT=2,
+	GEOSBUF_CAP_SQUARE=3
+};
+
+enum GEOSBufJoinStyles {
+	GEOSBUF_JOIN_ROUND=1,
+	GEOSBUF_JOIN_MITRE=2,
+	GEOSBUF_JOIN_BEVEL=3
+};
+
+/* These functions return NULL on exception. */
+extern GEOSGeometry GEOS_DLL *GEOSBuffer(const GEOSGeometry* g1,
+	double width, int quadsegs);
+extern GEOSGeometry GEOS_DLL *GEOSBuffer_r(GEOSContextHandle_t handle,
+                                           const GEOSGeometry* g1,
+                                           double width, int quadsegs);
+
+/* These functions return NULL on exception. */
+extern GEOSGeometry GEOS_DLL *GEOSBufferWithStyle(const GEOSGeometry* g1,
+	double width, int quadsegs, int endCapStyle, int joinStyle,
+	double mitreLimit);
+extern GEOSGeometry GEOS_DLL *GEOSBufferWithStyle_r(GEOSContextHandle_t handle,
+	const GEOSGeometry* g1, double width, int quadsegs, int endCapStyle,
+	int joinStyle, double mitreLimit);
+
+
+/************************************************************************
+ *
  * Geometry Constructors.
  * GEOSCoordSequence* arguments will become ownership of the returned object.
  * All functions return NULL on exception.
@@ -380,8 +414,6 @@ extern void GEOS_DLL GEOSGeom_destroy_r(GEOSContextHandle_t handle,
 
 extern GEOSGeometry GEOS_DLL *GEOSEnvelope(const GEOSGeometry* g1);
 extern GEOSGeometry GEOS_DLL *GEOSIntersection(const GEOSGeometry* g1, const GEOSGeometry* g2);
-extern GEOSGeometry GEOS_DLL *GEOSBuffer(const GEOSGeometry* g1,
-	double width, int quadsegs);
 extern GEOSGeometry GEOS_DLL *GEOSConvexHull(const GEOSGeometry* g1);
 extern GEOSGeometry GEOS_DLL *GEOSDifference(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern GEOSGeometry GEOS_DLL *GEOSSymDifference(const GEOSGeometry* g1,
@@ -399,9 +431,6 @@ extern GEOSGeometry GEOS_DLL *GEOSEnvelope_r(GEOSContextHandle_t handle,
 extern GEOSGeometry GEOS_DLL *GEOSIntersection_r(GEOSContextHandle_t handle,
                                                  const GEOSGeometry* g1,
                                                  const GEOSGeometry* g2);
-extern GEOSGeometry GEOS_DLL *GEOSBuffer_r(GEOSContextHandle_t handle,
-                                           const GEOSGeometry* g1,
-                                           double width, int quadsegs);
 extern GEOSGeometry GEOS_DLL *GEOSConvexHull_r(GEOSContextHandle_t handle,
                                                const GEOSGeometry* g1);
 extern GEOSGeometry GEOS_DLL *GEOSDifference_r(GEOSContextHandle_t handle,

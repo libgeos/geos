@@ -318,6 +318,14 @@ GEOSBuffer(const Geometry *g1, double width, int quadrantsegments)
 }
 
 Geometry *
+GEOSBufferWithStyle(const Geometry *g1, double width, int quadsegs,
+	int endCapStyle, int joinStyle, double mitreLimit)
+{
+    return GEOSBufferWithStyle_r( handle, g1, width, quadsegs, endCapStyle,
+                               joinStyle, mitreLimit );
+}
+
+Geometry *
 GEOSConvexHull(const Geometry *g1)
 {
     return GEOSConvexHull_r( handle, g1 );

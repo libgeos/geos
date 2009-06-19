@@ -42,7 +42,10 @@
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/union/CascadedPolygonUnion.h>
+#include <geos/operation/buffer/BufferOp.h>
+#include <geos/operation/buffer/BufferParameters.h>
 #include <geos/geom/BinaryOp.h>
+#include <geos/util/IllegalArgumentException.h>
 #include <geos/version.h> 
 #include <geos/platform.h>  // for FINITE
 
@@ -1260,6 +1263,62 @@ GEOSBuffer_r(GEOSContextHandle_t extHandle, const Geometry *g1, double width, in
     try
     {
         Geometry *g3 = g1->buffer(width, quadrantsegments);
+        return g3;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+    
+    return NULL;
+}
+
+Geometry *
+GEOSBufferWithStyle_r(GEOSContextHandle_t extHandle, const Geometry *g1, double width, int quadsegs, int endCapStyle, int joinStyle, double mitreLimit)
+{
+    using geos::operation::buffer::BufferParameters;
+    using geos::operation::buffer::BufferOp;
+    using geos::util::IllegalArgumentException;
+
+    if ( 0 == extHandle )
+    {
+        return NULL;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return NULL;
+    }
+
+    try
+    {
+        BufferParameters bp;
+        bp.setQuadrantSegments(quadsegs);
+
+        if ( endCapStyle > BufferParameters::CAP_SQUARE )
+        {
+        	throw IllegalArgumentException("Invalid buffer endCap style");
+        }
+        bp.setEndCapStyle(
+        	static_cast<BufferParameters::EndCapStyle>(endCapStyle)
+        );
+
+        if ( joinStyle > BufferParameters::JOIN_BEVEL )
+        {
+        	throw IllegalArgumentException("Invalid buffer join style");
+        }
+        bp.setJoinStyle(
+        	static_cast<BufferParameters::JoinStyle>(joinStyle)
+        );
+        bp.setMitreLimit(mitreLimit);
+        BufferOp op(g1, bp);
+        Geometry *g3 = op.getResultGeometry(width);
         return g3;
     }
     catch (const std::exception &e)
