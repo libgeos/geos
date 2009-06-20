@@ -86,7 +86,8 @@ geos_unit_SOURCES = geos_unit.cpp \
 	capi/GEOSWithinTest.cpp \
 	capi/GEOSSimplifyTest.cpp \
 	capi/GEOSPreparedGeometryTest.cpp \
-	capi/GEOSPolygonizer_getCutEdgesTest.cpp
+	capi/GEOSPolygonizer_getCutEdgesTest.cpp \
+	capi/GEOSBufferTest.cpp
 
 noinst_HEADERS = \
 	utility.h
