@@ -12,19 +12,19 @@ AC_CANONICAL_SYSTEM
 AC_CONFIG_MACRO_DIR([macros])
 
 dnl -- JTS_PORT: the version of JTS this release is bound to
-JTS_PORT=1.7.1
+JTS_PORT=1.10.0
 
 dnl -- Version info for the CAPI
-CAPI_INTERFACE_CURRENT=6
+CAPI_INTERFACE_CURRENT=7
 CAPI_INTERFACE_REVISION=0
-CAPI_INTERFACE_AGE=5
+CAPI_INTERFACE_AGE=6
 
 dnl
 dnl -- Release versions / C++ library SONAME will use these
 dnl -- encoding ABI break at every release
 dnl
 VERSION_MAJOR=3
-VERSION_MINOR=1
+VERSION_MINOR=2
 VERSION_PATCH=0
 VERSION="$VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH"
 
