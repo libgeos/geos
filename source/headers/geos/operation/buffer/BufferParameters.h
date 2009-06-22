@@ -239,7 +239,7 @@ public:
 	///
 	void setMitreLimit(double limit)
 	{
-		mitreLimit = mitreLimit;
+		mitreLimit = limit;
 	}
 
 
