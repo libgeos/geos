@@ -375,6 +375,75 @@ namespace tut
         ));
     }
 
+    // Buffer with limited mitre  (1)
+    template<>
+    template<>
+    void object::test<14>()
+    {
+        geom1_ = GEOSGeomFromWKT("POLYGON((0 0, 10 0, 10 10, 0 0))");
+
+        ensure( 0 != geom1_ );
+
+        geom2_ = GEOSBufferWithStyle(geom1_, 2, 200, GEOSBUF_CAP_FLAT,
+                                     GEOSBUF_JOIN_MITRE, 1);
+
+        ensure( 0 != geom2_ );
+
+        wkt_ = GEOSGeomToWKT(geom2_);
+
+        ensure_equals(GEOSGetNumCoordinates(geom2_), 7);
+
+        ensure(GEOSArea(geom2_, &area_));
+        ensure_distance(area_, 127.452, 0.001);
+
+    }
+
+    // Buffer with limited mitre  (2)
+    template<>
+    template<>
+    void object::test<15>()
+    {
+        geom1_ = GEOSGeomFromWKT("POLYGON((0 0, 10 0, 10 10, 0 0))");
+
+        ensure( 0 != geom1_ );
+
+        geom2_ = GEOSBufferWithStyle(geom1_, 2, 200, GEOSBUF_CAP_FLAT,
+                                     GEOSBUF_JOIN_MITRE, 2);
+
+        ensure( 0 != geom2_ );
+
+        wkt_ = GEOSGeomToWKT(geom2_);
+
+        ensure_equals(GEOSGetNumCoordinates(geom2_), 6);
+
+        ensure(GEOSArea(geom2_, &area_));
+        ensure_distance(area_, 139.043, 0.001);
+
+    }
+
+    // Buffer with limited mitre  (3)
+    template<>
+    template<>
+    void object::test<16>()
+    {
+        geom1_ = GEOSGeomFromWKT("POLYGON((0 0, 10 0, 10 10, 0 0))");
+
+        ensure( 0 != geom1_ );
+
+        geom2_ = GEOSBufferWithStyle(geom1_, 2, 200, GEOSBUF_CAP_FLAT,
+                                     GEOSBUF_JOIN_MITRE, 3);
+
+        ensure( 0 != geom2_ );
+
+        wkt_ = GEOSGeomToWKT(geom2_);
+
+        ensure_equals(GEOSGetNumCoordinates(geom2_), 4);
+
+        ensure(GEOSArea(geom2_, &area_));
+        ensure_distance(area_, 141.598, 0.001);
+
+    }
+
 
 } // namespace tut
 
