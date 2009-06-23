@@ -196,7 +196,7 @@ OBJ = \
 	operation\buffer\BufferBuilder.$(EXT) \
 	operation\buffer\BufferInputLineSimplifier.$(EXT) \
  	operation\buffer\BufferParameters.$(EXT) \
-	operation\buffer\BufferOp.$(EXT) 
+	operation\buffer\BufferOp.$(EXT) \
 	operation\buffer\BufferSubgraph.$(EXT) \
 	operation\buffer\OffsetCurveBuilder.$(EXT) \
 	operation\buffer\OffsetCurveSetBuilder.$(EXT) \
@@ -222,12 +222,12 @@ OBJ = \
 	operation\overlay\OverlayOp.$(EXT) \
 	operation\overlay\PointBuilder.$(EXT) \
 	operation\overlay\PolygonBuilder.$(EXT) \
-    operation\overlay\snap\GeometrySnapper.$(EXT) \ 
- 	operation\overlay\snap\LineStringSnapper.$(EXT) \ 
- 	operation\overlay\snap\SnapOverlayOp.$(EXT) \ 
- 	operation\overlay\snap\SnapIfNeededOverlayOp.$(EXT) \ 
- 	operation\overlay\validate\FuzzyPointLocator.$(EXT) \ 
- 	operation\overlay\validate\OffsetPointGenerator.$(EXT) \ 
+    operation\overlay\snap\GeometrySnapper.$(EXT) \
+ 	operation\overlay\snap\LineStringSnapper.$(EXT) \
+ 	operation\overlay\snap\SnapOverlayOp.$(EXT) \
+ 	operation\overlay\snap\SnapIfNeededOverlayOp.$(EXT) \
+ 	operation\overlay\validate\FuzzyPointLocator.$(EXT) \
+ 	operation\overlay\validate\OffsetPointGenerator.$(EXT) \
  	operation\overlay\validate\OverlayResultValidator.$(EXT) \
 	operation\polygonize\PolygonizeDirectedEdge.$(EXT) \
 	operation\polygonize\PolygonizeEdge.$(EXT) \
@@ -248,7 +248,7 @@ OBJ = \
 	operation\union\CascadedPolygonUnion.$(EXT) \
 	operation\valid\ConnectedInteriorTester.$(EXT) \
 	operation\valid\ConsistentAreaTester.$(EXT) \
-	operation\valid\IndexedNestedRingTester.$(EXT) \ 
+	operation\valid\IndexedNestedRingTester.$(EXT) \
 	operation\valid\IsValidOp.$(EXT) \
 	operation\valid\QuadtreeNestedRingTester.$(EXT) \
 	operation\valid\RepeatedPointTester.$(EXT) \
