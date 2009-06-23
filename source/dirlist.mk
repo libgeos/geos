@@ -4,7 +4,7 @@
 #
 
 GEOS_DIRLIST =  algorithm \
-				algorithm\locate \
+                algorithm\locate \
                 examples \
                 geom \
                 geom\util \
@@ -31,10 +31,11 @@ GEOS_DIRLIST =  algorithm \
                 operation\polygonize \
                 operation\predicate \
                 operation\relate \
+                operation\union \
                 operation\valid \
                 planargraph \
                 planargraph\algorithm \
                 precision \
-				simplify \
+                simplify \
                 util
 
