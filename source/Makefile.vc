@@ -329,12 +329,12 @@ clean:
 	@IF EXIST $(CLIBNAME) $(RM) $(CLIBNAME)
 	@IF EXIST $(CDLLNAME) $(RM) $(CDLLNAME)
 	-@del ..\capi\*.obj
-	-@del $*.exe
-	-@del $*.exp
-	-@del $*.ilk
-	-@del $*.manifest
-	-@del $*.obj
-	-@del $*.pdb
+	-@del *.exe
+	-@del *.exp
+	-@del *.ilk
+	-@del *.manifest
+	-@del *.obj
+	-@del *.pdb
 	-@FOR %d IN ( $(GEOS_DIRLIST) ) DO del %d\*.obj
 
 TestSweepLineSpeed.exe:	$(LIBNAME) \

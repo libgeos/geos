@@ -4,7 +4,7 @@
 #
 
 GEOS_DIRLIST =  algorithm \
-				algorithm\locate \
+                algorithm\locate \
                 examples \
                 geom \
                 geom\util \
