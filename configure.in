@@ -166,6 +166,26 @@ AC_CACHE_CHECK([for isfinite], ac_cv_isfinite,
 if test x"$ac_cv_isfinite" = x"yes"; then
   AC_DEFINE(HAVE_ISFINITE, [1], [Has isfinite])
 fi
+
+dnl --------------------------------------------------------------------
+dnl Test for presence of isnan function when using C++ and <cmath>
+dnl This is for a particular bug in OS/X where <cmath> drops the definition
+dnl of isnan().
+
+AC_LANG_PUSH([C++])
+AC_CACHE_CHECK([for isnan], ac_cv_isnan,
+ [AC_TRY_LINK([#include <cmath>],
+ [double x; int y; y = isnan(x);],
+ ac_cv_isnan=yes,
+ ac_cv_isnan=no
+)])
+if test x"$ac_cv_isnan" = x"yes"; then
+  AC_DEFINE(HAVE_ISNAN, [1], [Has isnan])
+fi
+AC_LANG_POP([C++])
+
+dnl --------------------------------------------------------------------
+
 LIBS=$save_LIBS
 
 dnl --------------------------------------------------------------------

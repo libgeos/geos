@@ -70,7 +70,13 @@ isFinite(double d)
 }
 #define FINITE(x) ( isFinite(x) ) 
 
+#ifdef HAVE_ISNAN
 #define ISNAN(x) ( isnan(x) )
+#else
+// Hack for OS/X <cmath> incorrectly re-defining isnan() into
+// oblivion. It does leave a version in std.
+#define ISNAN(c) ( std::isnan(x) )
+#endif
 
 #ifdef HAVE_INT64_T_64
   typedef int64_t int64;
