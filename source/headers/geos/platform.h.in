@@ -75,7 +75,7 @@ isFinite(double d)
 #else
 // Hack for OS/X <cmath> incorrectly re-defining isnan() into
 // oblivion. It does leave a version in std.
-#define ISNAN(c) ( std::isnan(x) )
+#define ISNAN(x) ( std::isnan(x) )
 #endif
 
 #ifdef HAVE_INT64_T_64
