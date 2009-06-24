@@ -116,11 +116,6 @@ dnl to AC_LANG(CXX) or AC_LANG_PUSH(CXX)/AC_LANG_POP()
 dnl 
 AC_LIBTOOL_LANG_CXX_CONFIG
 
-echo "NOTE ---- CXX=${CXX}"
-echo "NOTE ---- compiler=${compiler}"
-echo "NOTE ---- ac_compile=${ac_compiler}"
-echo "NOTE ---- lt_simple_compile_test_code=${lt_simple_compile_test_code}"
-
 # Set default CXXFLAGS and CFLAGS if not set by the user
 # -pedantic: ISO does not support long long
 # we add -Wno-long-long to avoid those messages
