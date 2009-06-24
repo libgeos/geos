@@ -719,7 +719,10 @@ extern int GEOS_DLL GEOSArea(const GEOSGeometry* g1, double *area);
 extern int GEOS_DLL GEOSLength(const GEOSGeometry* g1, double *length);
 extern int GEOS_DLL GEOSDistance(const GEOSGeometry* g1, const GEOSGeometry* g2,
 	double *dist);
-
+extern int GEOS_DLL GEOSHausdorffDistance(const GEOSGeometry *g1,
+        const GEOSGeometry *g2, double *dist);
+extern int GEOS_DLL GEOSHausdorffDistanceDensify(const GEOSGeometry *g1,
+        const GEOSGeometry *g2, double densifyFrac, double *dist);
 extern int GEOS_DLL GEOSArea_r(GEOSContextHandle_t handle,
                                const GEOSGeometry* g1, double *area);
 extern int GEOS_DLL GEOSLength_r(GEOSContextHandle_t handle,
@@ -727,6 +730,14 @@ extern int GEOS_DLL GEOSLength_r(GEOSContextHandle_t handle,
 extern int GEOS_DLL GEOSDistance_r(GEOSContextHandle_t handle,
                                    const GEOSGeometry* g1,
                                    const GEOSGeometry* g2, double *dist);
+extern int GEOS_DLL GEOSHausdorffDistance_r(GEOSContextHandle_t handle,
+                                   const GEOSGeometry *g1,
+                                   const GEOSGeometry *g2,
+                                   double *dist);
+extern int GEOS_DLL GEOSHausdorffDistanceDensify_r(GEOSContextHandle_t handle,
+                                   const GEOSGeometry *g1,
+                                   const GEOSGeometry *g2,
+                                   double densifyFrac, double *dist);
 
 
 /************************************************************************

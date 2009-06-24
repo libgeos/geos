@@ -23,6 +23,7 @@
 #include <geos/io/CLocalizer.h>
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/union/CascadedPolygonUnion.h>
+#include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
 
 // Some extra magic to make type declarations in geos_c.h work - for cross-checking of types in header.
 #define GEOSGeometry geos::geom::Geometry
@@ -205,6 +206,18 @@ int
 GEOSDistance(const Geometry *g1, const Geometry *g2, double *dist)
 {
     return GEOSDistance_r( handle, g1, g2, dist );
+}
+
+int
+GEOSHausdorffDistance(const Geometry *g1, const Geometry *g2, double *dist)
+{
+    return GEOSHausdorffDistance_r( handle, g1, g2, dist );
+}
+
+int
+GEOSHausdorffDistanceDensify(const Geometry *g1, const Geometry *g2, double densifyFrac, double *dist)
+{
+    return GEOSHausdorffDistanceDensify_r( handle, g1, g2, densifyFrac, dist );
 }
 
 int
