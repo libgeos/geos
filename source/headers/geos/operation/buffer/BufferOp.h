@@ -136,7 +136,7 @@ public:
 
 		/// Specifies a square line buffer end cap style.
 		/// @deprecated use BufferParameters
-		CAP_SQUARE = BufferParameters::CAP_FLAT
+		CAP_SQUARE = BufferParameters::CAP_SQUARE
 	};
 
 	/**
