@@ -15,6 +15,6 @@ SUBDIRS = 	\
 	tests	\
 	tools
 
-EXTRA_DIST = acsite.m4 makefile.vc
+EXTRA_DIST = acsite.m4 makefile.vc nmake.opt
 
 ACLOCAL_AMFLAGS = -I macros
