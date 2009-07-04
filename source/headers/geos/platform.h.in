@@ -59,7 +59,7 @@ extern "C"
 inline bool
 isFinite(double d)
 {
-#if defined(HAVE_FINITE) && !defined(HAVE_ISFINITE)
+#if defined(HAVE_FINITE) && !defined(HAVE_ISFINITE) && !defined(__MINGW32__)
     return (finite(d));
 #else
     // Put using namespace std; here if you have to

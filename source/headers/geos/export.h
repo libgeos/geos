@@ -17,12 +17,12 @@
 #define GEOS_EXPORT_H
 
 #if defined(_MSC_VER) || defined(__CYGWIN__) || defined(__MINGW32__) || defined( __BCPLUSPLUS__)  || defined( __MWERKS__)
-    #  if defined( GEOS_DLL_LIBRARY_STATIC )
-    #    define GEOS_DLL
-    #  elif defined( GEOS_DLL_LIBRARY )
+    #  if defined( GEOS_DLL_EXPORT )
     #    define GEOS_DLL   __declspec(dllexport)
-    #  else
+    #  elif defined( GEOS_DLL_IMPORT )
     #    define GEOS_DLL   __declspec(dllimport)
+    #  else
+    #    define GEOS_DLL
     #  endif 
 #else
     #  define GEOS_DLL
