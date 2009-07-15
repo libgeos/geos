@@ -31,6 +31,9 @@
 #include <geos/geom/GeometryFactory.h> 
 #include <geos/geom/CoordinateSequenceFactory.h> 
 #include <geos/geom/IntersectionMatrix.h> 
+#include <geos/geom/Envelope.h> 
+#include <geos/index/strtree/STRtree.h> 
+#include <geos/index/ItemVisitor.h>
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKTWriter.h>
@@ -66,6 +69,7 @@
 #define GEOSGeometry geos::geom::Geometry
 #define GEOSPreparedGeometry geos::geom::prep::PreparedGeometry
 #define GEOSCoordSequence geos::geom::CoordinateSequence
+#define GEOSSTRtree geos::index::strtree::STRtree
 #define GEOSWKTReader_t geos::io::WKTReader
 #define GEOSWKTWriter_t geos::io::WKTWriter
 #define GEOSWKBReader_t geos::io::WKBReader
@@ -111,6 +115,19 @@ typedef struct GEOSContextHandleInternal
     int WKBByteOrder;
     int initialized;
 } GEOSContextHandleInternal_t;
+
+// CAPI_ItemVisitor is used internally by the CAPI STRtree
+// wrappers. It's defined here just to keep it out of the
+// extern "C" block.
+class CAPI_ItemVisitor : public geos::index::ItemVisitor {
+    GEOSQueryCallback callback;
+    void *userdata;
+  public:
+    CAPI_ItemVisitor (GEOSQueryCallback cb, void *ud)
+        : ItemVisitor(), callback(cb), userdata(ud) {};
+    void visitItem (void *item) { callback(item, userdata); };
+};
+
 
 //## PROTOTYPES #############################################
 
@@ -4020,6 +4037,266 @@ GEOSPreparedIntersects_r(GEOSContextHandle_t extHandle,
     }
     
     return 2;
+}
+
+//-----------------------------------------------------------------
+// STRtree
+//-----------------------------------------------------------------
+
+geos::index::strtree::STRtree *
+GEOSSTRtree_create_r(GEOSContextHandle_t extHandle,
+                                  size_t nodeCapacity)
+{
+    if ( 0 == extHandle )
+    {
+        return 0;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return 0;
+    }
+
+    geos::index::strtree::STRtree *tree = 0;
+
+    try
+    {
+        tree = new geos::index::strtree::STRtree(nodeCapacity);
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+    
+    return tree;
+}
+
+void
+GEOSSTRtree_insert_r(GEOSContextHandle_t extHandle,
+                     geos::index::strtree::STRtree *tree,
+                     const geos::geom::Geometry *g,
+                     void *item)
+{
+    GEOSContextHandleInternal_t *handle = 0;
+    assert(tree != 0);
+    assert(g != 0);
+
+    try
+    {
+        tree->insert(g->getEnvelopeInternal(), item);
+    }
+    catch (const std::exception &e)
+    {
+        if ( 0 == extHandle )
+        {
+            return;
+        }
+
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if ( 0 == handle->initialized )
+        {
+            return;
+        }
+
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        if ( 0 == extHandle )
+        {
+            return;
+        }
+
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if ( 0 == handle->initialized )
+        {
+            return;
+        }
+
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+}
+
+void 
+GEOSSTRtree_query_r(GEOSContextHandle_t extHandle,
+                    geos::index::strtree::STRtree *tree,
+                    const geos::geom::Geometry *g,
+                    GEOSQueryCallback callback,
+                    void *userdata)
+{
+    GEOSContextHandleInternal_t *handle = 0;
+    assert(tree != 0);
+    assert(g != 0);
+    assert(callback != 0);
+
+    try
+    {
+        CAPI_ItemVisitor visitor(callback, userdata);
+        tree->query(g->getEnvelopeInternal(), visitor);
+    }
+    catch (const std::exception &e)
+    {
+        if ( 0 == extHandle )
+        {
+            return;
+        }
+
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if ( 0 == handle->initialized )
+        {
+            return;
+        }
+
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        if ( 0 == extHandle )
+        {
+            return;
+        }
+
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if ( 0 == handle->initialized )
+        {
+            return;
+        }
+
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+}
+
+void 
+GEOSSTRtree_iterate_r(GEOSContextHandle_t extHandle,
+                    geos::index::strtree::STRtree *tree,
+                    GEOSQueryCallback callback,
+                    void *userdata)
+{
+    GEOSContextHandleInternal_t *handle = 0;
+    assert(tree != 0);
+    assert(callback != 0);
+
+    try
+    {
+        CAPI_ItemVisitor visitor(callback, userdata);
+        tree->iterate(visitor);
+    }
+    catch (const std::exception &e)
+    {
+        if ( 0 == extHandle )
+        {
+            return;
+        }
+
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if ( 0 == handle->initialized )
+        {
+            return;
+        }
+
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        if ( 0 == extHandle )
+        {
+            return;
+        }
+
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if ( 0 == handle->initialized )
+        {
+            return;
+        }
+
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+}
+
+char
+GEOSSTRtree_remove_r(GEOSContextHandle_t extHandle,
+                     geos::index::strtree::STRtree *tree,
+                     const geos::geom::Geometry *g,
+                     void *item)
+{
+    assert(0 != tree);
+    assert(0 != g);
+
+    if ( 0 == extHandle )
+    {
+        return 2;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return 2;
+    }
+
+    try 
+    {
+        bool result = tree->remove(g->getEnvelopeInternal(), item);
+        return result;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+    
+    return 2;
+}
+
+void
+GEOSSTRtree_destroy_r(GEOSContextHandle_t extHandle,
+                      geos::index::strtree::STRtree *tree)
+{
+    GEOSContextHandleInternal_t *handle = 0;
+
+    try
+    {
+        delete tree;
+    }
+    catch (const std::exception &e)
+    {
+        if ( 0 == extHandle )
+        {
+            return;
+        }
+
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if ( 0 == handle->initialized )
+        {
+            return;
+        }
+
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        if ( 0 == extHandle )
+        {
+            return;
+        }
+
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if ( 0 == handle->initialized )
+        {
+            return;
+        }
+
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
 }
 
 } /* extern "C" */

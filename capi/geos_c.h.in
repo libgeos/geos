@@ -100,6 +100,7 @@ typedef void (*GEOSMessageHandler)(const char *fmt, ...);
 typedef struct GEOSGeom_t GEOSGeometry;
 typedef struct GEOSPrepGeom_t GEOSPreparedGeometry;
 typedef struct GEOSCoordSeq_t GEOSCoordSequence;
+typedef struct GEOSSTRtree_t GEOSSTRtree;
 #endif
 
 /* Those are compatibility definitions for source compatibility
@@ -131,6 +132,8 @@ enum GEOSByteOrders {
 };
 
 typedef struct GEOSContextHandle_HS *GEOSContextHandle_t;
+
+typedef void (*GEOSQueryCallback)(void *item, void *userdata);
 
 /************************************************************************
  *
@@ -573,6 +576,57 @@ extern char GEOS_DLL GEOSPreparedCovers_r(GEOSContextHandle_t handle,
 extern char GEOS_DLL GEOSPreparedIntersects_r(GEOSContextHandle_t handle,
                                               const GEOSPreparedGeometry* pg1,
                                               const GEOSGeometry* g2);
+
+/************************************************************************
+ *
+ *  STRtree functions
+ *
+ ***********************************************************************/
+
+/* 
+ * GEOSGeometry ownership is retained by caller
+ */
+
+extern GEOSSTRtree GEOS_DLL *GEOSSTRtree_create(size_t nodeCapacity);
+extern void GEOS_DLL GEOSSTRtree_insert(GEOSSTRtree *tree,
+                                        const GEOSGeometry *g,
+                                        void *item);
+extern void GEOS_DLL GEOSSTRtree_query(GEOSSTRtree *tree,
+                                       const GEOSGeometry *g,
+                                       GEOSQueryCallback callback,
+                                       void *userdata);
+extern void GEOS_DLL GEOSSTRtree_iterate(GEOSSTRtree *tree,
+                                       GEOSQueryCallback callback,
+                                       void *userdata);
+extern char GEOS_DLL GEOSSTRtree_remove(GEOSSTRtree *tree,
+                                        const GEOSGeometry *g,
+                                        void *item);
+extern void GEOS_DLL GEOSSTRtree_destroy(GEOSSTRtree *tree);
+
+
+extern GEOSSTRtree GEOS_DLL *GEOSSTRtree_create_r(
+                                    GEOSContextHandle_t handle,
+                                    size_t nodeCapacity);
+extern void GEOS_DLL GEOSSTRtree_insert_r(GEOSContextHandle_t handle,
+                                          GEOSSTRtree *tree,
+                                          const GEOSGeometry *g,
+                                          void *item);
+extern void GEOS_DLL GEOSSTRtree_query_r(GEOSContextHandle_t handle,
+                                         GEOSSTRtree *tree,
+                                         const GEOSGeometry *g,
+                                         GEOSQueryCallback callback,
+                                         void *userdata);
+extern void GEOS_DLL GEOSSTRtree_iterate_r(GEOSContextHandle_t handle,
+                                       GEOSSTRtree *tree,
+                                       GEOSQueryCallback callback,
+                                       void *userdata);
+extern char GEOS_DLL GEOSSTRtree_remove_r(GEOSContextHandle_t handle,
+                                          GEOSSTRtree *tree,
+                                          const GEOSGeometry *g,
+                                          void *item);
+extern void GEOS_DLL GEOSSTRtree_destroy_r(GEOSContextHandle_t handle,
+                                           GEOSSTRtree *tree);
+
 
 /************************************************************************
  *

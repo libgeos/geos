@@ -16,6 +16,7 @@
  ***********************************************************************/
 
 #include <geos/geom/prep/PreparedGeometryFactory.h> 
+#include <geos/index/strtree/STRtree.h>
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKTWriter.h>
@@ -29,6 +30,7 @@
 #define GEOSGeometry geos::geom::Geometry
 #define GEOSPreparedGeometry geos::geom::prep::PreparedGeometry
 #define GEOSCoordSequence geos::geom::CoordinateSequence
+#define GEOSSTRtree geos::index::strtree::STRtree
 #define GEOSWKTReader_t geos::io::WKTReader
 #define GEOSWKTWriter_t geos::io::WKTWriter
 #define GEOSWKBReader_t geos::io::WKBReader
@@ -64,10 +66,11 @@ using geos::io::WKBReader;
 using geos::io::WKBWriter;
 using geos::io::CLocalizer;
 
+using geos::index::strtree::STRtree;
+
 using geos::operation::overlay::OverlayOp;
 using geos::operation::overlay::overlayOp;
 using geos::operation::geounion::CascadedPolygonUnion;
-
 
 typedef std::auto_ptr<Geometry> GeomAutoPtr;
 
@@ -833,6 +836,51 @@ char
 GEOSPreparedIntersects(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
 {
     return GEOSPreparedIntersects_r( handle, pg1, g2 );
+}
+
+STRtree *
+GEOSSTRtree_create (size_t nodeCapacity)
+{
+    return GEOSSTRtree_create_r( handle, nodeCapacity );
+}
+
+void
+GEOSSTRtree_insert (geos::index::strtree::STRtree *tree,
+                    const geos::geom::Geometry *g,
+                    void *item)
+{
+    GEOSSTRtree_insert_r( handle, tree, g, item );
+}
+
+void
+GEOSSTRtree_query (geos::index::strtree::STRtree *tree,
+                   const geos::geom::Geometry *g, 
+                   GEOSQueryCallback cb,
+                   void *userdata)
+{
+    GEOSSTRtree_query_r( handle, tree, g, cb, userdata );
+}
+
+void 
+GEOSSTRtree_iterate(geos::index::strtree::STRtree *tree,
+                    GEOSQueryCallback callback,
+                    void *userdata)
+{
+    GEOSSTRtree_iterate_r( handle, tree, callback, userdata );
+}
+
+char
+GEOSSTRtree_remove (geos::index::strtree::STRtree *tree,
+                    const geos::geom::Geometry *g,
+                    void *item)
+{
+    return GEOSSTRtree_remove_r( handle, tree, g, item );
+}
+
+void
+GEOSSTRtree_destroy (geos::index::strtree::STRtree *tree)
+{
+    GEOSSTRtree_destroy_r( handle, tree );
 }
 
 } /* extern "C" */
