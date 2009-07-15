@@ -950,6 +950,126 @@ extern GEOSGeom GEOS_DLL GEOSGeom_createCollection(int type,
 
 %clear GeosCoordinateSequence *s;
 
+// === Prepared Geometry ===
+
+%{
+typedef void GeosPreparedGeometry;
+%}
+
+%rename (Prepared) GeosPreparedGeometry;
+class GeosPreparedGeometry
+{
+public:
+%extend
+{
+    GeosPreparedGeometry(const GeosGeometry *source)
+    {
+        const GEOSPreparedGeometry *prep = GEOSPrepare((const GEOSGeometry *)source);
+        if(prep == NULL)
+            throw std::runtime_error(message);
+        return (GeosPreparedGeometry *) prep;
+    }
+
+    ~GeosPreparedGeometry()
+    {
+        GEOSPreparedGeometry *prep = (GEOSPreparedGeometry *) self;
+        return GEOSPreparedGeom_destroy(prep);
+    }
+
+    bool contains (const GeosGeometry* other)
+    {
+        GEOSPreparedGeometry *prep = (GEOSPreparedGeometry *) self;
+        GEOSGeom otherGeom = (GEOSGeom) other;
+        return checkBoolResult(GEOSPreparedContains(prep, otherGeom));
+    }
+
+    bool containsProperly(const GeosGeometry* other)
+    {
+        GEOSPreparedGeometry *prep = (GEOSPreparedGeometry *) self;
+        GEOSGeom otherGeom = (GEOSGeom) other;
+        return checkBoolResult(GEOSPreparedContainsProperly(prep, otherGeom));
+    }
+
+    bool covers (const GeosGeometry* other)
+    {
+        GEOSPreparedGeometry *prep = (GEOSPreparedGeometry *) self;
+        GEOSGeom otherGeom = (GEOSGeom) other;
+        return checkBoolResult(GEOSPreparedCovers(prep, otherGeom));
+    }
+
+    bool intersects (const GeosGeometry* other)
+    {
+        GEOSPreparedGeometry *prep = (GEOSPreparedGeometry *) self;
+        GEOSGeom otherGeom = (GEOSGeom) other;
+        return checkBoolResult(GEOSPreparedIntersects(prep, otherGeom));
+    }
+}
+};
+
+// === STRtree ===
+
+%{
+typedef void GeosSTRtree;
+/* GeosIndexItem typedef'd here so it can be %typemap(typecheck)'d
+   as a native object by each language specially */
+typedef void *GeosIndexItem;
+typedef GEOSQueryCallback GeosQueryCallback;
+%}
+
+%rename (STRtree) GeosSTRtree;
+class GeosSTRtree
+{
+public:
+%extend
+{
+    %typemap(default) int nodeCapacity {
+     $1 = 10;
+    };
+    GeosSTRtree(int nodeCapacity)
+    {
+        GEOSSTRtree *tree = GEOSSTRtree_create(nodeCapacity);
+        if(tree == NULL)
+            throw std::runtime_error(message);
+        return (GeosSTRtree *) tree;
+    }
+
+    ~GeosSTRtree()
+    {
+        GEOSSTRtree *tree = (GEOSSTRtree *) self;
+        return GEOSSTRtree_destroy(tree);
+    }
+
+    void insert (const GeosGeometry* g, GeosIndexItem item)
+    {
+        GEOSSTRtree *tree = (GEOSSTRtree *) self;
+        const GEOSGeometry *geom = (const GEOSGeometry *) g;
+        GEOSSTRtree_insert(tree, geom, item);
+    }
+
+    void remove (const GeosGeometry* g, GeosIndexItem item)
+    {
+        GEOSSTRtree *tree = (GEOSSTRtree *) self;
+        const GEOSGeometry *geom = (const GEOSGeometry *) g;
+        GEOSSTRtree_remove(tree, geom, item);
+    }
+
+    void query (const GeosGeometry* g, GeosQueryCallback callback,
+                GeosIndexItem accumulator)
+    {
+        GEOSSTRtree *tree = (GEOSSTRtree *) self;
+        const GEOSGeometry *geom = (const GEOSGeometry *) g;
+        GEOSSTRtree_query(tree, geom, callback, accumulator);
+    }
+
+    void iterate (GeosQueryCallback callback, GeosIndexItem accumulator)
+    {
+        GEOSSTRtree *tree = (GEOSSTRtree *) self;
+        GEOSSTRtree_iterate(tree, callback, accumulator);
+    }
+}
+};
+
+
 // === Input/Output ===
 
 /* This typemap allows the scripting language to pass in buffers

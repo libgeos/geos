@@ -104,3 +104,73 @@
     free((void*) $1);
   }
 }
+
+// GeosPreparedGeometry
+// Use predicates to make the ruby code nicer  - so disjoint?
+%rename("contains_properly?") GeosPreparedGeometry::containsProperly;
+%predicate GeosPreparedGeometry::contains;
+%predicate GeosPreparedGeometry::intersects;
+%predicate GeosPreparedGeometry::covers;
+
+// GeosSTRtree
+
+%rename("each") GeosSTRtree::iterate;
+
+%typemap(in) GeosIndexItem
+{
+    $1 = (GeosIndexItem) $input;
+}
+
+/* accumulator will be blissfully unused because
+ * Ruby supports closures, more or less */
+%typemap(in,numinputs=0) (GeosIndexItem accumulator)
+{
+    $1 = (GeosIndexItem) Qnil;
+}
+
+/* typecheck GeosIndexItem and make sure it's really a VALUE */
+%typemap(typecheck) GeosIndexItem
+{
+    $1 = (TYPE($input) & T_MASK) ? 1 : 0;
+}
+
+/* always call the provided block as the query callback */
+%typemap(in,numinputs=0) GeosQueryCallback
+{
+    $1 = GeosSTRtree_query_callback;
+}
+
+%typemap(typecheck) GeosQueryCallback
+{
+    /* SWIG throws a warning if we don't do this */
+    $1 = 1;
+}
+
+%{
+    /* this callback yields the data item to the block */
+    static void GeosSTRtree_query_callback (void *data, void *nothing) {
+        if (rb_block_given_p()) {
+            rb_yield((VALUE) data);
+        }
+    }
+%}
+
+/* assuming that GeosIndexItems are all VALUEs (since this gets tested
+ * on typemap(in)), mark them during the mark phase of GC to hang on to them */
+%{
+    static void GeosSTRtree_mark_item (void *data, void *nothing)
+    {
+        if ((VALUE) data != Qnil) {
+            rb_gc_mark((VALUE)data);
+        }
+    }
+
+    static void mark_GeosSTRtree(void *self)
+    {
+        GEOSSTRtree *tree = (GEOSSTRtree *) self;
+        GEOSSTRtree_iterate(tree, GeosSTRtree_mark_item, NULL);
+    }
+%}
+
+%markfunc GeosSTRtree "mark_GeosSTRtree";
+
