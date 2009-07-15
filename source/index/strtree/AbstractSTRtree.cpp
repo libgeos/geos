@@ -288,6 +288,20 @@ AbstractSTRtree::query(const void* searchBounds,
 	}
 }
 
+void
+AbstractSTRtree::iterate(ItemVisitor& visitor)
+{
+    for (BoundableList::const_iterator i=itemBoundables->begin(), e=itemBoundables->end();
+			i!=e; i++)
+	{
+		const Boundable* boundable = *i;
+		if (const ItemBoundable *ib=dynamic_cast<const ItemBoundable *>(boundable))
+		{
+			visitor.visitItem(ib->getItem());
+		}
+        }
+}
+
 /*protected*/
 std::auto_ptr<BoundableList>
 AbstractSTRtree::boundablesAtLevel(int level)

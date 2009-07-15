@@ -202,6 +202,7 @@ protected:
 	}
 
 	virtual AbstractNode* getRoot() {
+                assert(built);
 		return root;
 	}
 
@@ -219,8 +220,6 @@ protected:
 		return matches;
 	}
 #endif
-
-
 	///  Also builds the tree, if necessary.
 	void query(const void* searchBounds, ItemVisitor& visitor);
 
@@ -279,6 +278,13 @@ public:
 	virtual size_t getNodeCapacity() { return nodeCapacity; }
 
 	virtual void query(const void* searchBounds, const AbstractNode* node, std::vector<void*>* matches);
+
+	/**
+         * Iterate over all items added thus far.  Explicitly does not build
+         * the tree.
+         */
+	void iterate(ItemVisitor& visitor);
+
 
 	/**
 	 * @param level -1 to get items
