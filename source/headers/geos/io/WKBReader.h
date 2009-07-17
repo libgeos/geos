@@ -24,6 +24,9 @@
 #include <vector>
 #include <string>
 
+#define BAD_GEOM_TYPE_MSG "Bad geometry type encountered in"
+
+
 // Forward declarations
 namespace geos {
 	namespace geom {
@@ -104,8 +107,6 @@ public:
 	static std::ostream &printHEX(std::istream &is, std::ostream &os);
  
 private:
-
-	static std::string BAD_GEOM_TYPE_MSG;
 
 	const geom::GeometryFactory &factory;
 
