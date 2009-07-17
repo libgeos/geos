@@ -47,8 +47,6 @@ using namespace geos::geom;
 namespace geos {
 namespace io { // geos.io
 
-string WKBReader::BAD_GEOM_TYPE_MSG = "bad geometry type encountered in ";
-
 WKBReader::WKBReader()
 	:
 	factory(*(GeometryFactory::getDefaultInstance()))
