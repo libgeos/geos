@@ -120,30 +120,7 @@ PolygonBuilder::add(const vector<DirectedEdge*> *dirEdges,
 		des->linkResultDirectedEdges();
 	}
 
-#if GEOS_DEBUG > 1
-	cerr << "CREATE TABLE diredges (g geometry);" << endl;
-	for (size_t i=0, n=dirEdges->size(); i<n; i++)
-	{
-		DirectedEdge* de = (*dirEdges)[i];
-		Edge* e = de->getEdge();
-		const CoordinateSequence* pts = e->getCoordinates();
-		cerr << "INSERT INTO diredges VALUES ('LINESTRING"
-		     << pts->toString() << "');" << endl;
-	}
-#endif
 	vector<MaximalEdgeRing*>* maxEdgeRings=buildMaximalEdgeRings(dirEdges);
-#if GEOS_DEBUG > 1
-	cerr << "CREATE TABLE maxedgerings (g geometry);" << endl;
-	for (size_t i=0, n=maxEdgeRings->size(); i<n; i++)
-	{
-		EdgeRing* er = (*maxEdgeRings)[i];
-		Polygon* poly = er->toPolygon(geometryFactory);
-		cerr << "INSERT INTO maxedgerings VALUES ('"
-		     << poly->toString() << "');" << endl;
-		delete poly;
-	}
-#endif
-
 	vector<EdgeRing*> freeHoleList;
 	vector<MaximalEdgeRing*> *edgeRings;
 	edgeRings= buildMinimalEdgeRings(maxEdgeRings,&shellList,&freeHoleList);
