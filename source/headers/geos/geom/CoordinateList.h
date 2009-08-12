@@ -59,6 +59,12 @@ public:
 	{
 	}
 
+	CoordinateList()
+		:
+		coords()
+	{
+	}
+
 	size_type size() const
 	{
 		return coords.size();

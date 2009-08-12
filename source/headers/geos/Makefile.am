@@ -4,6 +4,7 @@ SUBDIRS = \
 	geomgraph \
 	index \
 	io \
+	linearref \
 	noding \
 	operation \
 	planargraph \

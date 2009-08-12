@@ -361,6 +361,7 @@ AC_OUTPUT([
 	source/headers/geos/index/strtree/Makefile
 	source/headers/geos/index/sweepline/Makefile
 	source/headers/geos/io/Makefile
+	source/headers/geos/linearref/Makefile
 	source/headers/geos/noding/Makefile
 	source/headers/geos/noding/snapround/Makefile
 	source/headers/geos/operation/Makefile
@@ -388,6 +389,7 @@ AC_OUTPUT([
 	source/index/strtree/Makefile
 	source/index/sweepline/Makefile
 	source/io/Makefile
+	source/linearref/Makefile
 	source/noding/Makefile
 	source/noding/snapround/Makefile
 	source/operation/Makefile

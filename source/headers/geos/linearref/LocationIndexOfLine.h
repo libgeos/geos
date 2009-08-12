@@ -1,0 +1,62 @@
+/**********************************************************************
+ * $Id: LinearGeometryBuilder.h 1938 2009-07-23 10:45:16Z novalis $
+ *
+ * GEOS - Geometry Engine Open Source
+ * http://geos.refractions.net
+ *
+ * Copyright (C) 2005-2006 Refractions Research Inc.
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation.
+ * See the COPYING file for more information.
+ *
+ **********************************************************************
+ *
+ * Last port: linearref/LinearGeometryBuilder.java rev. 1.10
+ *
+ **********************************************************************/
+
+#ifndef GEOS_LINEARREF_LINEARGEOMETRYBUILDER_H
+#define GEOS_LINEARREF_LINEARGEOMETRYBUILDER_H
+
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/Geometry.h>
+#include <geos/linearref/LinearLocation.h>
+
+namespace geos
+{
+namespace linearref   // geos::linearref
+{
+
+/**
+ * Determines the location of a subline along a linear {@link Geometry}.
+ * The location is reported as a pair of {@link LinearLocation}s.
+ * <p>
+ * <b>Note:</b> Currently this algorithm is not guaranteed to
+ * return the correct substring in some situations where
+ * an endpoint of the test line occurs more than once in the input line.
+ * (However, the common case of a ring is always handled correctly).
+ */
+class LocationIndexOfLine
+{
+	/**
+	* MD - this algorithm has been extracted into a class
+	* because it is intended to validate that the subline truly is a subline,
+	* and also to use the internal vertex information to unambiguously locate the subline.
+	*/
+private:
+	geom::Geometry* linearGeom;
+
+public:
+	static LinearLocation* indicesOf(geom::Geometry* linearGeom, geom::Geometry* subLine);
+
+	LocationIndexOfLine(geom::Geometry* linearGeom);
+
+	LinearLocation* indicesOf(geom::Geometry* subLine) const;
+};
+}
+}
+
+#endif

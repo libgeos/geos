@@ -4,6 +4,7 @@ SUBDIRS = \
 	headers \
 	index \
 	io \
+	linearref \
 	noding \
 	operation \
 	planargraph \
@@ -31,6 +32,7 @@ libgeos_la_LIBADD = \
 	geomgraph/libgeomgraph.la \
 	index/libindex.la \
 	io/libio.la \
+	linearref/liblinearref.la \
 	noding/libnoding.la \
 	operation/liboperation.la \
 	planargraph/libplanargraph.la \
