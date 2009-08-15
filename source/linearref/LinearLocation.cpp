@@ -32,7 +32,7 @@ namespace geos
 namespace linearref   // geos.linearref
 {
 
-LinearLocation LinearLocation::getEndLocation(Geometry* linear)
+LinearLocation LinearLocation::getEndLocation(const Geometry* linear)
 {
 	// assert: linear is LineString or MultiLineString
 	LinearLocation loc;
@@ -40,7 +40,7 @@ LinearLocation LinearLocation::getEndLocation(Geometry* linear)
 	return loc;
 }
 
-Coordinate LinearLocation::pointAlongSegmentByFraction(Coordinate& p0, Coordinate& p1, double frac)
+Coordinate LinearLocation::pointAlongSegmentByFraction(const Coordinate& p0, const Coordinate& p1, double frac)
 {
 	if (frac <= 0.0) return p0;
 	if (frac >= 1.0) return p1;
@@ -93,7 +93,7 @@ void LinearLocation::normalize()
 
 
 
-void LinearLocation::clamp(Geometry* linear)
+void LinearLocation::clamp(const Geometry* linear)
 {
 	if (componentIndex >= linear->getNumGeometries())
 	{
@@ -108,7 +108,7 @@ void LinearLocation::clamp(Geometry* linear)
 	}
 }
 
-void LinearLocation::snapToVertex(Geometry* linearGeom, double minDistance)
+void LinearLocation::snapToVertex(const Geometry* linearGeom, double minDistance)
 {
 	if (segmentFraction <= 0.0 || segmentFraction >= 1.0)
 		return;
@@ -125,7 +125,7 @@ void LinearLocation::snapToVertex(Geometry* linearGeom, double minDistance)
 	}
 }
 
-double LinearLocation::getSegmentLength(Geometry* linearGeom) const
+double LinearLocation::getSegmentLength(const Geometry* linearGeom) const
 {
 	const LineString* lineComp = dynamic_cast<const LineString*> (linearGeom->getGeometryN(componentIndex));
 
@@ -139,7 +139,7 @@ double LinearLocation::getSegmentLength(Geometry* linearGeom) const
 	return p0.distance(p1);
 }
 
-void LinearLocation::setToEnd(Geometry* linear)
+void LinearLocation::setToEnd(const Geometry* linear)
 {
 	componentIndex = linear->getNumGeometries() - 1;
 	const LineString* lastLine = dynamic_cast<const LineString*>(linear->getGeometryN(componentIndex));
@@ -167,7 +167,7 @@ bool LinearLocation::isVertex() const
 	return segmentFraction <= 0.0 || segmentFraction >= 1.0;
 }
 
-Coordinate LinearLocation::getCoordinate(Geometry* linearGeom) const
+Coordinate LinearLocation::getCoordinate(const Geometry* linearGeom) const
 {
 	const LineString* lineComp = dynamic_cast<const LineString *> (linearGeom->getGeometryN(componentIndex));
 	Coordinate p0 = lineComp->getCoordinateN(segmentIndex);
@@ -177,7 +177,7 @@ Coordinate LinearLocation::getCoordinate(Geometry* linearGeom) const
 	return pointAlongSegmentByFraction(p0, p1, segmentFraction);
 }
 
-LineSegment* LinearLocation::getSegment(Geometry* linearGeom) const
+LineSegment* LinearLocation::getSegment(const Geometry* linearGeom) const
 {
 	const LineString* lineComp = dynamic_cast<const LineString *> (linearGeom->getGeometryN(componentIndex));
 	Coordinate p0 = lineComp->getCoordinateN(segmentIndex);
@@ -192,7 +192,7 @@ LineSegment* LinearLocation::getSegment(Geometry* linearGeom) const
 }
 
 
-bool LinearLocation::isValid(Geometry* linearGeom) const
+bool LinearLocation::isValid(const Geometry* linearGeom) const
 {
 	if (componentIndex < 0 || componentIndex >= linearGeom->getNumGeometries())
 		return false;

@@ -62,7 +62,7 @@ public:
 	 * @param linear the linear geometry
 	 * @return a new <tt>LinearLocation</tt>
 	 */
-	static LinearLocation getEndLocation(geom::Geometry* linear);
+	static LinearLocation getEndLocation(const geom::Geometry* linear);
 
 	/**
 	 * Computes the {@link Coordinate} of a point a given fraction
@@ -79,7 +79,7 @@ public:
 	 * @param frac the length to the desired point
 	 * @return the <tt>Coordinate</tt> of the desired point
 	 */
-	static geom::Coordinate pointAlongSegmentByFraction(geom::Coordinate& p0, geom::Coordinate& p1, double frac);
+	static geom::Coordinate pointAlongSegmentByFraction(const geom::Coordinate& p0, const geom::Coordinate& p1, double frac);
 
 
 	/**
@@ -95,7 +95,7 @@ public:
 	 *
 	 * @param linear a linear geometry
 	 */
-	void clamp(geom::Geometry* linear);
+	void clamp(const geom::Geometry* linear);
 
 	/**
 	 * Snaps the value of this location to
@@ -105,7 +105,7 @@ public:
 	 * @param linearGeom a linear geometry
 	 * @param minDistance the minimum allowable distance to a vertex
 	 */
-	void snapToVertex(geom::Geometry* linearGeom, double minDistance);
+	void snapToVertex(const geom::Geometry* linearGeom, double minDistance);
 
 	/**
 	 * Gets the length of the segment in the given
@@ -114,14 +114,14 @@ public:
 	 * @param linearGeom a linear geometry
 	 * @return the length of the segment
 	 */
-	double getSegmentLength(geom::Geometry* linearGeom) const;
+	double getSegmentLength(const geom::Geometry* linearGeom) const;
 	/**
 	 * Sets the value of this location to
 	 * refer the end of a linear geometry
 	 *
 	 * @param linear the linear geometry to set
 	 */
-	void setToEnd(geom::Geometry* linear);
+	void setToEnd(const geom::Geometry* linear);
 
 	/**
 	 * Gets the component index for this location.
@@ -159,7 +159,7 @@ public:
 	 * @param linearGeom a linear geometry
 	 * @return the <tt>Coordinate</tt> at the location
 	 */
-	geom::Coordinate getCoordinate(geom::Geometry* linearGeom) const;
+	geom::Coordinate getCoordinate(const geom::Geometry* linearGeom) const;
 
 	/**
 	 * Gets a {@link LineSegment} representing the segment of the
@@ -168,7 +168,7 @@ public:
 	 * @param linearGeom a linear geometry
 	 * @return the <tt>LineSegment</tt> containing the location
 	 */
-	geom::LineSegment *getSegment(geom::Geometry* linearGeom) const;
+	geom::LineSegment *getSegment(const geom::Geometry* linearGeom) const;
 
 	/**
 	 * Tests whether this location refers to a valid
@@ -177,7 +177,7 @@ public:
 	 * @param linearGeom a linear geometry
 	 * @return true if this location is valid
 	 */
-	bool isValid(geom::Geometry* linearGeom) const;
+	bool isValid(const geom::Geometry* linearGeom) const;
 
 	/**
 	 *  Compares this object with the specified object for order.

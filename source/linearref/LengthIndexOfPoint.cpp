@@ -36,28 +36,28 @@ namespace geos
 namespace linearref   // geos.linearref
 {
 
-double LengthIndexOfPoint::indexOf(Geometry *linearGeom, Coordinate& inputPt)
+double LengthIndexOfPoint::indexOf(const Geometry *linearGeom, const Coordinate& inputPt)
 {
 	LengthIndexOfPoint locater(linearGeom);
 	return locater.indexOf(inputPt);
 }
 
-double LengthIndexOfPoint::indexOfAfter(Geometry *linearGeom, Coordinate& inputPt, double minIndex)
+double LengthIndexOfPoint::indexOfAfter(const Geometry *linearGeom, const Coordinate& inputPt, double minIndex)
 {
 	LengthIndexOfPoint locater(linearGeom);
 	return locater.indexOfAfter(inputPt, minIndex);
 }
 
-LengthIndexOfPoint::LengthIndexOfPoint(Geometry *linearGeom):
+LengthIndexOfPoint::LengthIndexOfPoint(const Geometry *linearGeom):
 		linearGeom(linearGeom) {}
 
-double LengthIndexOfPoint::indexOf(Coordinate& inputPt)
+double LengthIndexOfPoint::indexOf(const Coordinate& inputPt) const
 {
 	return indexOfFromStart(inputPt, -1.0);
 }
 
 
-double LengthIndexOfPoint::indexOfAfter(Coordinate& inputPt, double minIndex)
+double LengthIndexOfPoint::indexOfAfter(const Coordinate& inputPt, double minIndex) const
 {
 	if (minIndex < 0.0) return indexOf(inputPt);
 
@@ -78,7 +78,7 @@ double LengthIndexOfPoint::indexOfAfter(Coordinate& inputPt, double minIndex)
 	return closestAfter;
 }
 
-double LengthIndexOfPoint::indexOfFromStart(Coordinate& inputPt, double minIndex)
+double LengthIndexOfPoint::indexOfFromStart(const Coordinate& inputPt, double minIndex) const
 {
 	double minDistance = numeric_limits<double>::max();
 
@@ -107,8 +107,9 @@ double LengthIndexOfPoint::indexOfFromStart(Coordinate& inputPt, double minIndex
 	return ptMeasure;
 }
 
-double LengthIndexOfPoint::segmentNearestMeasure(LineSegment* seg, Coordinate& inputPt,
-		double segmentStartMeasure)
+double LengthIndexOfPoint::segmentNearestMeasure(const LineSegment* seg, 
+                                                 const Coordinate& inputPt,
+                                                 double segmentStartMeasure) const
 {
 	// found new minimum, so compute location distance of point
 	double projFactor = seg->projectionFactor(inputPt);

@@ -44,8 +44,8 @@ namespace linearref   // geos::linearref
 class LengthIndexedLine
 {
 private:
-	geom::Geometry *linearGeom;
-	LinearLocation locationOf(double index);
+	const geom::Geometry *linearGeom;
+	LinearLocation locationOf(double index) const;
 
 public:
 
@@ -56,7 +56,7 @@ public:
 	 * @param linearGeom the linear geometry to reference along
 	 */
 
-	LengthIndexedLine(geom::Geometry *linearGeom);
+	LengthIndexedLine(const geom::Geometry *linearGeom);
 
 	/** \brief
 	 * Computes the {@link Coordinate} for the point
@@ -69,7 +69,7 @@ public:
 	 * @param index the index of the desired point
 	 * @return the Coordinate at the given index
 	 */
-	geom::Coordinate extractPoint(double index);
+	geom::Coordinate extractPoint(double index) const;
 
 
 	/**
@@ -88,7 +88,7 @@ public:
 	 *    (positive is to the left, negative is to the right)
 	 * @return the Coordinate at the given index
 	 */
-	geom::Coordinate extractPoint(double index, double offsetDistance);
+	geom::Coordinate extractPoint(double index, double offsetDistance) const;
 
 	/**
 	 * Computes the {@link LineString} for the interval
@@ -100,7 +100,7 @@ public:
 	 * @param endIndex the index of the end of the interval
 	 * @return the linear interval between the indices
 	 */
-	geom::Geometry *extractLine(double startIndex, double endIndex);
+	geom::Geometry *extractLine(double startIndex, double endIndex) const;
 
 
 	/**
@@ -120,7 +120,7 @@ public:
 	 *
 	 * @see project
 	 */
-	double indexOf(geom::Coordinate& pt);
+	double indexOf(const geom::Coordinate& pt) const;
 
 	/**
 	 * Finds the index for a point on the line
@@ -144,7 +144,7 @@ public:
 	 *
 	 * @see project
 	 */
-	double indexOfAfter(geom::Coordinate& pt, double minIndex);
+	double indexOfAfter(const geom::Coordinate& pt, double minIndex) const;
 
 	/**
 	 * Computes the indices for a subline of the line.
@@ -155,7 +155,7 @@ public:
 	 * @param subLine a subLine of the line
 	 * @return a pair of indices for the start and end of the subline.
 	 */
-	double* indicesOf(geom::Geometry *subLine);
+	double* indicesOf(const geom::Geometry *subLine) const;
 
 
 	/**
@@ -167,19 +167,19 @@ public:
 	 * @param pt a point on the line
 	 * @return the index of the point
 	 */
-	double project(geom::Coordinate pt);
+	double project(const geom::Coordinate& pt) const;
 
 	/**
 	 * Returns the index of the start of the line
 	 * @return the start index
 	 */
-	double getStartIndex();
+	double getStartIndex() const;
 
 	/**
 	 * Returns the index of the end of the line
 	 * @return the end index
 	 */
-	double getEndIndex();
+	double getEndIndex() const;
 
 	/**
 	 * Tests whether an index is in the valid index range for the line.
@@ -187,7 +187,7 @@ public:
 	 * @param length the index to test
 	 * @return <code>true</code> if the index is in the valid range
 	 */
-	bool isValidIndex(double index);
+	bool isValidIndex(double index) const;
 
 
 	/**
@@ -196,7 +196,7 @@ public:
 	 *
 	 * @return a valid index value
 	 */
-	double clampIndex(double index);
+	double clampIndex(double index) const;
 };
 }
 }

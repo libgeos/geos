@@ -41,7 +41,7 @@ class LengthLocationMap
 
 
 private:
-	geom::Geometry *linearGeom;
+	const geom::Geometry *linearGeom;
 
 	LinearLocation getLocationForward(double length) const;
 
@@ -59,7 +59,7 @@ public:
 	 * @param length the length index of the location
 	 * @return the {@link LinearLocation} for the length
 	 */
-	static LinearLocation getLocation(geom::Geometry *linearGeom, double length);
+	static LinearLocation getLocation(const geom::Geometry *linearGeom, double length);
 
 	/**
 	 * Computes the length for a given {@link LinearLocation}
@@ -69,9 +69,9 @@ public:
 	 * @param loc the {@link LinearLocation} index of the location
 	 * @return the length for the {@link LinearLocation}
 	 */
-	static double getLength(geom::Geometry *linearGeom, const LinearLocation& loc);
+	static double getLength(const geom::Geometry *linearGeom, const LinearLocation& loc);
 
-	LengthLocationMap(geom::Geometry *linearGeom);
+	LengthLocationMap(const geom::Geometry *linearGeom);
 
 	/**
 	 * Compute the {@link LinearLocation} corresponding to a length.

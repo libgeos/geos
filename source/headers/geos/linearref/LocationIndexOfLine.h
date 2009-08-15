@@ -47,14 +47,14 @@ class LocationIndexOfLine
 	* and also to use the internal vertex information to unambiguously locate the subline.
 	*/
 private:
-	geom::Geometry* linearGeom;
+	const geom::Geometry* linearGeom;
 
 public:
-	static LinearLocation* indicesOf(geom::Geometry* linearGeom, geom::Geometry* subLine);
+	static LinearLocation* indicesOf(const geom::Geometry* linearGeom, const geom::Geometry* subLine);
 
-	LocationIndexOfLine(geom::Geometry* linearGeom);
+	LocationIndexOfLine(const geom::Geometry* linearGeom);
 
-	LinearLocation* indicesOf(geom::Geometry* subLine) const;
+	LinearLocation* indicesOf(const geom::Geometry* subLine) const;
 };
 }
 }

@@ -41,16 +41,16 @@ class LocationIndexOfPoint
 {
 
 private:
-	geom::Geometry *linearGeom;
+	const geom::Geometry *linearGeom;
 
 	LinearLocation indexOfFromStart(const geom::Coordinate& inputPt, LinearLocation* minIndex) const;
 
 public:
-	static LinearLocation indexOf(geom::Geometry *linearGeom, const geom::Coordinate& inputPt);
+	static LinearLocation indexOf(const geom::Geometry *linearGeom, const geom::Coordinate& inputPt);
 
-	static LinearLocation indexOfAfter(geom::Geometry *linearGeom, const geom::Coordinate& inputPt, LinearLocation* minIndex);
+	static LinearLocation indexOfAfter(const geom::Geometry *linearGeom, const geom::Coordinate& inputPt, LinearLocation* minIndex);
 
-	LocationIndexOfPoint(geom::Geometry *linearGeom);
+	LocationIndexOfPoint(const geom::Geometry *linearGeom);
 
 	/**
 	 * Find the nearest location along a linear {@link Geometry} to a given point.

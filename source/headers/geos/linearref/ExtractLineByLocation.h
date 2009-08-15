@@ -38,8 +38,8 @@ class ExtractLineByLocation
 {
 
 private:
-	geom::Geometry *line;
-	geom::Geometry *reverse(geom::Geometry *linear);
+	const geom::Geometry *line;
+	geom::Geometry *reverse(const geom::Geometry *linear);
 
 	/**
 	 * Assumes input is valid (e.g. start <= end)
@@ -71,9 +71,9 @@ public:
 	 * @param end the end location
 	 * @return the extracted subline
 	 */
-	static geom::Geometry *extract(geom::Geometry *line, const LinearLocation& start, const LinearLocation& end);
+	static geom::Geometry *extract(const geom::Geometry *line, const LinearLocation& start, const LinearLocation& end);
 
-	ExtractLineByLocation(geom::Geometry *line);
+	ExtractLineByLocation(const geom::Geometry *line);
 
 	/**
 	 * Extracts a subline of the input.

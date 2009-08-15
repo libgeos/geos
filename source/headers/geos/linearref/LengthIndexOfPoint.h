@@ -38,18 +38,19 @@ class LengthIndexOfPoint
 {
 
 private:
-	geom::Geometry *linearGeom;
+	const geom::Geometry *linearGeom;
 
-	double indexOfFromStart(geom::Coordinate& inputPt, double minIndex);
+	double indexOfFromStart(const geom::Coordinate& inputPt, const double minIndex) const;
 
-	double segmentNearestMeasure(geom::LineSegment *seg, geom::Coordinate& inputPt,
-				     double segmentStartMeasure);
+	double segmentNearestMeasure(const geom::LineSegment *seg, 
+                               const geom::Coordinate& inputPt,
+                               double segmentStartMeasure) const;
 public:
-	static double indexOf(geom::Geometry *linearGeom, geom::Coordinate& inputPt);
+	static double indexOf(const geom::Geometry *linearGeom, const geom::Coordinate& inputPt);
 
-	static double indexOfAfter(geom::Geometry *linearGeom, geom::Coordinate& inputPt, double minIndex);
+	static double indexOfAfter(const geom::Geometry *linearGeom, const geom::Coordinate& inputPt, double minIndex);
 
-	LengthIndexOfPoint(geom::Geometry *linearGeom);
+	LengthIndexOfPoint(const geom::Geometry *linearGeom);
 
 	/**
 	 * Find the nearest location along a linear {@link Geometry} to a given point.
@@ -57,7 +58,7 @@ public:
 	 * @param inputPt the coordinate to locate
 	 * @return the location of the nearest point
 	 */
-	double indexOf(geom::Coordinate& inputPt);
+	double indexOf(const geom::Coordinate& inputPt) const;
 
 	/**
 	 * Finds the nearest index along the linear {@link Geometry}
@@ -74,7 +75,7 @@ public:
 	 * @param minLocation the minimum location for the point location
 	 * @return the location of the nearest point
 	 */
-	double indexOfAfter(geom::Coordinate& inputPt, double minIndex);
+	double indexOfAfter(const geom::Coordinate& inputPt, double minIndex) const;
 
 };
 }

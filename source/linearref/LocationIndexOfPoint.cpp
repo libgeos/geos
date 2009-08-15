@@ -77,19 +77,19 @@ LinearLocation LocationIndexOfPoint::indexOfFromStart(const Coordinate& inputPt,
 }
 
 
-LinearLocation LocationIndexOfPoint::indexOf(Geometry *linearGeom, const Coordinate& inputPt)
+LinearLocation LocationIndexOfPoint::indexOf(const Geometry *linearGeom, const Coordinate& inputPt)
 {
 	LocationIndexOfPoint locater(linearGeom);
 	return locater.indexOf(inputPt);
 }
 
-LinearLocation LocationIndexOfPoint::indexOfAfter(Geometry *linearGeom, const Coordinate& inputPt, LinearLocation* minIndex)
+LinearLocation LocationIndexOfPoint::indexOfAfter(const Geometry *linearGeom, const Coordinate& inputPt, LinearLocation* minIndex)
 {
 	LocationIndexOfPoint locater(linearGeom);
 	return locater.indexOfAfter(inputPt, minIndex);
 }
 
-LocationIndexOfPoint::LocationIndexOfPoint(Geometry *linearGeom) :
+LocationIndexOfPoint::LocationIndexOfPoint(const Geometry *linearGeom) :
 		linearGeom(linearGeom)
 {}
 

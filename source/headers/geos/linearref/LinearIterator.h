@@ -58,7 +58,7 @@ private:
 	const geom::LineString *currentLine;
 	unsigned int vertexIndex;
 	unsigned int componentIndex;
-	geom::Geometry *linear;
+	const geom::Geometry *linear;
 	const unsigned int numLines;
 
 	/**
@@ -74,7 +74,7 @@ public:
 	 *
 	 * @param linear the linear geometry to iterate over
 	 */
-	LinearIterator(geom::Geometry *linear);
+	LinearIterator(const geom::Geometry *linear);
 
 	/**
 	 * Creates an iterator starting at
@@ -83,7 +83,7 @@ public:
 	 * @param linear the linear geometry to iterate over
 	 * @param start the location to start at
 	 */
-	LinearIterator(geom::Geometry *linear, const LinearLocation& start);
+	LinearIterator(const geom::Geometry *linear, const LinearLocation& start);
 
 	/**
 	 * Creates an iterator starting at
@@ -93,7 +93,7 @@ public:
 	 * @param componentIndex the component to start at
 	 * @param vertexIndex the vertex to start at
 	 */
-	LinearIterator(geom::Geometry *linear, unsigned int componentIndex, unsigned int vertexIndex);
+	LinearIterator(const geom::Geometry *linear, unsigned int componentIndex, unsigned int vertexIndex);
 
 	/**
 	 * Tests whether there are any vertices left to iterator over.

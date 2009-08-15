@@ -42,13 +42,13 @@ namespace linearref   // geos.linearref
 {
 
 
-Geometry *ExtractLineByLocation::extract(Geometry *line, const LinearLocation& start, const LinearLocation& end)
+Geometry *ExtractLineByLocation::extract(const Geometry *line, const LinearLocation& start, const LinearLocation& end)
 {
 	ExtractLineByLocation ls(line);
 	return ls.extract(start, end);
 }
 
-ExtractLineByLocation::ExtractLineByLocation(Geometry *line) :
+ExtractLineByLocation::ExtractLineByLocation(const Geometry *line) :
 		line(line) {}
 
 
@@ -64,16 +64,16 @@ Geometry *ExtractLineByLocation::extract(const LinearLocation& start, const Line
 	return computeLinear(start, end);
 }
 
-Geometry *ExtractLineByLocation::reverse(Geometry *linear)
+Geometry *ExtractLineByLocation::reverse(const Geometry *linear)
 {
-	LineString* ls = dynamic_cast<LineString *>(linear);
+	const LineString* ls = dynamic_cast<const LineString *>(linear);
 	if (ls)
 	{
 		return ls->reverse();
 	}
 	else
 	{
-		MultiLineString* mls = dynamic_cast<MultiLineString *>(linear);
+		const MultiLineString* mls = dynamic_cast<const MultiLineString *>(linear);
 		if (mls)
 		{
 			return mls->reverse();

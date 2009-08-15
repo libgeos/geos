@@ -34,20 +34,20 @@ namespace linearref   // geos.linearref
 {
 
 
-LinearLocation LengthLocationMap::getLocation(Geometry* linearGeom, double length)
+LinearLocation LengthLocationMap::getLocation(const Geometry* linearGeom, double length)
 {
 	LengthLocationMap locater(linearGeom);
 	return locater.getLocation(length);
 }
 
-double LengthLocationMap::getLength(Geometry* linearGeom, const LinearLocation& loc)
+double LengthLocationMap::getLength(const Geometry* linearGeom, const LinearLocation& loc)
 {
 	LengthLocationMap locater(linearGeom);
 	return locater.getLength(loc);
 }
 
 
-LengthLocationMap::LengthLocationMap(Geometry* linearGeom) :
+LengthLocationMap::LengthLocationMap(const Geometry* linearGeom) :
 		linearGeom(linearGeom) {}
 
 LinearLocation LengthLocationMap::getLocation(double length) const

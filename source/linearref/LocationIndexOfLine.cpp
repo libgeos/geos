@@ -43,16 +43,16 @@ namespace linearref   // geos.linearref
  * (However, the common case of a ring is always handled correctly).
  */
 
-LinearLocation* LocationIndexOfLine::indicesOf(Geometry* linearGeom, Geometry* subLine)
+LinearLocation* LocationIndexOfLine::indicesOf(const Geometry* linearGeom, const Geometry* subLine)
 {
 	LocationIndexOfLine locater(linearGeom);
 	return locater.indicesOf(subLine);
 }
 
-LocationIndexOfLine::LocationIndexOfLine(Geometry* linearGeom) :
+LocationIndexOfLine::LocationIndexOfLine(const Geometry* linearGeom) :
 		linearGeom(linearGeom) {}
 
-LinearLocation* LocationIndexOfLine::indicesOf(Geometry* subLine) const
+LinearLocation* LocationIndexOfLine::indicesOf(const Geometry* subLine) const
 {
 	Coordinate startPt = dynamic_cast<const LineString*> (subLine->getGeometryN(0))->getCoordinateN(0);
 	const LineString* lastLine = dynamic_cast<const LineString*> (subLine->getGeometryN(subLine->getNumGeometries() - 1));

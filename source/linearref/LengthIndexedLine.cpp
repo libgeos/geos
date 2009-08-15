@@ -34,17 +34,17 @@ namespace geos
 namespace linearref   // geos.linearref
 {
 
-LengthIndexedLine::LengthIndexedLine(Geometry* linearGeom) :
+LengthIndexedLine::LengthIndexedLine(const Geometry* linearGeom) :
 		linearGeom(linearGeom) {}
 
-Coordinate LengthIndexedLine::extractPoint(double index)
+Coordinate LengthIndexedLine::extractPoint(double index) const
 {
 	LinearLocation loc = LengthLocationMap::getLocation(linearGeom, index);
 	Coordinate coord = loc.getCoordinate(linearGeom);
 	return coord;
 }
 
-Coordinate LengthIndexedLine::extractPoint(double index, double offsetDistance)
+Coordinate LengthIndexedLine::extractPoint(double index, double offsetDistance) const
 {
 	LinearLocation loc = LengthLocationMap::getLocation(linearGeom, index);
 	Coordinate ret;
@@ -53,34 +53,34 @@ Coordinate LengthIndexedLine::extractPoint(double index, double offsetDistance)
 }
 
 
-Geometry *LengthIndexedLine::extractLine(double startIndex, double endIndex)
+Geometry *LengthIndexedLine::extractLine(double startIndex, double endIndex) const
 {
 
-	LinearLocation startLoc = locationOf(startIndex);
-	LinearLocation endLoc = locationOf(endIndex);
+	const LinearLocation startLoc = locationOf(startIndex);
+	const LinearLocation endLoc = locationOf(endIndex);
 	Geometry* g = ExtractLineByLocation::extract(linearGeom, startLoc, endLoc);
 	return g;
 }
 
-LinearLocation LengthIndexedLine::locationOf(double index)
+LinearLocation LengthIndexedLine::locationOf(double index) const
 {
 	return LengthLocationMap::getLocation(linearGeom, index);
 }
 
 
-double LengthIndexedLine::indexOf(Coordinate& pt)
+double LengthIndexedLine::indexOf(const Coordinate& pt) const
 {
 	return LengthIndexOfPoint::indexOf(linearGeom, pt);
 }
 
 
-double LengthIndexedLine::indexOfAfter(Coordinate& pt, double minIndex)
+double LengthIndexedLine::indexOfAfter(const Coordinate& pt, double minIndex) const
 {
 	return LengthIndexOfPoint::indexOfAfter(linearGeom, pt, minIndex);
 }
 
 
-double* LengthIndexedLine::indicesOf(Geometry* subLine)
+double* LengthIndexedLine::indicesOf(const Geometry* subLine) const
 {
 	LinearLocation* locIndex = LocationIndexOfLine::indicesOf(linearGeom, subLine);
 	double* index = new double[2];
@@ -91,28 +91,28 @@ double* LengthIndexedLine::indicesOf(Geometry* subLine)
 }
 
 
-double LengthIndexedLine::project(Coordinate pt)
+double LengthIndexedLine::project(const Coordinate& pt) const
 {
 	return LengthIndexOfPoint::indexOf(linearGeom, pt);
 }
 
-double LengthIndexedLine::getStartIndex()
+double LengthIndexedLine::getStartIndex() const
 {
 	return 0.0;
 }
 
-double LengthIndexedLine::getEndIndex()
+double LengthIndexedLine::getEndIndex() const
 {
 	return linearGeom->getLength();
 }
 
-bool LengthIndexedLine::isValidIndex(double index)
+bool LengthIndexedLine::isValidIndex(double index) const
 {
 	return (index >= getStartIndex()
 		&& index <= getEndIndex());
 }
 
-double LengthIndexedLine::clampIndex(double index)
+double LengthIndexedLine::clampIndex(double index) const
 {
 	double startIndex = getStartIndex();
 	if (index < startIndex) return startIndex;
