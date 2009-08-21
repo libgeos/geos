@@ -16,19 +16,19 @@
 #ifndef GEOS_EXPORT_H
 #define GEOS_EXPORT_H
 
-#if defined(_MSC_VER) || defined(__CYGWIN__) || defined(__MINGW32__) || defined( __BCPLUSPLUS__)  || defined( __MWERKS__)
-    #  if defined( GEOS_DLL_EXPORT )
-    #    define GEOS_DLL   __declspec(dllexport)
-    #  elif defined( GEOS_DLL_IMPORT )
-    #    define GEOS_DLL   __declspec(dllimport)
-    #  else
-    #    define GEOS_DLL
-    #  endif 
-#else
-    #  define GEOS_DLL
-#endif  
+#if defined(_MSC_VER) || defined(__CYGWIN__) || defined(__MINGW32__) || \
+    defined( __BCPLUSPLUS__)  || defined( __MWERKS__)
 
+    #if defined(GEOS_DLL_EXPORT)
+        #define GEOS_DLL   __declspec(dllexport)
+    #elif defined(GEOS_DLL_IMPORT)
+        #define GEOS_DLL   __declspec(dllimport)
+    #else
+        #define GEOS_DLL
+    #endif
+#else
+    #define GEOS_DLL
+#endif
 
 #endif // ndef GEOS_EXPORT_H
-
 

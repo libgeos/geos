@@ -564,46 +564,45 @@ namespace tut
     void object::test<16>()
     {
 		using geos::geom::Coordinate;
+		using geos::geom::CoordinateArraySequence;
 
 		// Create empty sequence to fill with coordinates
-		const size_t size = 0;
-		geos::geom::CoordinateArraySequence sequence;
+		CoordinateArraySequence sequence;
 		
 		sequence.add(Coordinate(0,0)); 
 		sequence.add(Coordinate(1,1)); 
 		sequence.add(Coordinate(2,2)); 
 		
-		ensure_equals( sequence.size(), 3 );
+		ensure_equals( sequence.size(), std::size_t(3));
 
 		sequence.add(0, Coordinate(4,4), false); // don't alow repeated
-		ensure_equals( sequence.size(), 4 );
-		ensure_equals( sequence.getAt(0).x, 4 );
+		ensure_equals( sequence.size(), std::size_t(4) );
+		ensure_equals( sequence.getAt(0).x, std::size_t(4) );
 
 		// do not allow repeated
 		sequence.add(0, Coordinate(4,4), false); 
-		ensure_equals( sequence.size(), 4 );
+		ensure_equals( sequence.size(), std::size_t(4) );
 
 		// allow repeated
 		sequence.add(0, Coordinate(4,4), true); 
-		ensure_equals( sequence.size(), 5 );
+		ensure_equals( sequence.size(), std::size_t(5) );
 
 		// Now looks like this: 4,4,0,1,2
 		// we'll add at position 4 a 2 (equals to the one after)
 		sequence.add(4, Coordinate(2,2), false); 
-		ensure_equals( sequence.size(), 5 );
+		ensure_equals( sequence.size(), std::size_t(5) );
 
 		// we'll add at position 4 a 1 (equals to the one before)
 		sequence.add(4, Coordinate(1,1), false); 
-		ensure_equals( sequence.size(), 5 );
+		ensure_equals( sequence.size(), std::size_t(5) );
 
 		// we'll add at position 4 a 1 (equals to the one before)
 		// but allowing duplicates
 		sequence.add(4, Coordinate(1,1), true); 
-		ensure_equals( sequence.size(), 6 );
+		ensure_equals( sequence.size(), std::size_t(6) );
 		ensure_equals( sequence.getAt(3).x, 1 );
 		ensure_equals( sequence.getAt(4).x, 1 );
 		ensure_equals( sequence.getAt(5).x, 2 );
-
 	}
 
 } // namespace tut

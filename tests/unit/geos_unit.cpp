@@ -95,8 +95,12 @@ int main(int argc, const char* argv[])
         {
             // TODO - mloskot - check if test group with given name exists
             // TODO - mloskot - check if test case with given number exists
+            std::string grpname(argv[1]);
+            if (grpname.empty())
+                throw std::runtime_error("missing test group name");
 
-            tut::runner.get().run_test(argv[1], std::atoi(argv[2]));
+            tut::test_result result;
+            tut::runner.get().run_test(grpname, std::atoi(argv[2]), result);
         }
     }
     catch( const std::exception& ex )

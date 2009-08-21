@@ -69,7 +69,7 @@ namespace tut
 
 		if ( intPt.empty() ) return;
 
-		ensure_equals(intPt.size(), intNum);
+		ensure_equals(intPt.size(), static_cast<std::vector<Coordinate>::size_type>(intNum));
 
 		// test that both points are represented here
 		//bool isIntPointsCorrect = true;
