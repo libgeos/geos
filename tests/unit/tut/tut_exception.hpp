@@ -37,38 +37,6 @@ private:
 };
 
 /**
- * Exception to be throwed when attempted to execute
- * missed test by number.
- */
-struct no_such_test : public tut_error
-{
-    no_such_test()
-        : tut_error("no such test")
-    {
-    }
-
-    ~no_such_test() throw()
-    {
-    }
-};
-
-/**
- * No such test and passed test number is higher than
- * any test number in current group. Used in one-by-one
- * test running when upper bound is not known.
- */
-struct beyond_last_test : public no_such_test
-{
-    beyond_last_test()
-    {
-    }
-
-    ~beyond_last_test() throw()
-    {
-    }
-};
-
-/**
  * Group not found exception.
  */
 struct no_such_group : public tut_error
@@ -79,21 +47,6 @@ struct no_such_group : public tut_error
     }
 
     ~no_such_group() throw()
-    {
-    }
-};
-
-/**
- * Internal exception to be throwed when
- * no more tests left in group or journal.
- */
-struct no_more_tests
-{
-    no_more_tests()
-    {
-    }
-
-    ~no_more_tests() throw()
     {
     }
 };

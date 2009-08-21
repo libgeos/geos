@@ -60,7 +60,8 @@ struct test_result : public test_result_posix
         warn,
         term,
         ex_ctor,
-        rethrown
+        rethrown,
+        dummy
     };
 
     result_type result;

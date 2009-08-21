@@ -7,11 +7,10 @@
 #include <stdexcept>
 
 /**
- * Template Unit Tests Framework for C++.
- * http://tut.dozen.ru
+ * Optional restartable wrapper for test_runner.
  *
- * Optional restartable wrapper for test_runner. Allows to restart test runs
- * finished due to abnormal test application termination (such as segmentation
+ * Allows to restart test runs finished due to abnormal
+ * test application termination (such as segmentation
  * fault or math error).
  *
  * @author Vladimir Dyuzhev, Vladimir.Dyuzhev@gmail.com
@@ -19,10 +18,10 @@
 
 namespace tut
 {
-    
+
 namespace util
 {
-    
+
 /**
  * Escapes non-alphabetical characters in string.
  */
@@ -124,12 +123,12 @@ void serialize(std::ostream& os, const tut::test_result& tr)
 /**
  * deserialization for test_result
  */
-void deserialize(std::istream& is, tut::test_result& tr)
+bool deserialize(std::istream& is, tut::test_result& tr)
 {
     std::getline(is,tr.group);
     if (is.eof())
     {
-        throw tut::no_more_tests();
+        return false;
     }
     tr.group = unescape(tr.group);
 
@@ -170,6 +169,7 @@ void deserialize(std::istream& is, tut::test_result& tr)
     {
         throw std::logic_error("malformed test result");
     }
+    return true;
 }
 };
 
@@ -179,7 +179,7 @@ void deserialize(std::istream& is, tut::test_result& tr)
 class restartable_wrapper
 {
     test_runner& runner_;
-    callback* callback_;
+    callbacks callbacks_;
 
     std::string dir_;
     std::string log_; // log file: last test being executed
@@ -191,8 +191,7 @@ public:
      * @param dir Directory where to search/put log and journal files
      */
     restartable_wrapper(const std::string& dir = ".")
-        : runner_(runner.get()), 
-          callback_(0), 
+        : runner_(runner.get()),
           dir_(dir)
     {
         // dozen: it works, but it would be better to use system path separator
@@ -213,15 +212,28 @@ public:
      */
     void set_callback(callback* cb)
     {
-        callback_ = cb;
+        callbacks_.clear();
+        callbacks_.insert(cb);
     }
 
-    /**
-     * Returns callback object.
-     */
-    callback& get_callback() const
+    void insert_callback(callback* cb)
     {
-        return runner_.get_callback();
+        callbacks_.insert(cb);
+    }
+
+    void erase_callback(callback* cb)
+    {
+        callbacks_.erase(cb);
+    }
+
+    void set_callbacks(const callbacks& cb)
+    {
+        callbacks_ = cb;
+    }
+
+    const callbacks& get_callbacks() const
+    {
+        return runner_.get_callbacks();
     }
 
     /**
@@ -270,16 +282,16 @@ public:
 
                 try
                 {
-                    tut::test_result tr = runner_.run_test(*gni,test);
+                    tut::test_result tr;
+                    if( !runner_.run_test(*gni,test, tr) )
+                    {
+                        break;
+                    }
                     register_test_(tr);
                 }
                 catch (const tut::beyond_last_test&)
                 {
                     break;
-                }
-                catch(const tut::no_such_test&)
-                {
-                    // it's ok
                 }
 
                 ++test;
@@ -301,27 +313,22 @@ private:
      */
     void invoke_callback_() const
     {
-        runner_.set_callback(callback_);
-        runner_.get_callback().run_started();
+        runner_.set_callbacks(callbacks_);
+        runner_.cb_run_started_();
 
         std::string current_group;
         std::ifstream ijournal(jrn_.c_str());
         while (ijournal.good())
         {
-            // read next test result
-            try
-            {
-                tut::test_result tr;
-                util::deserialize(ijournal,tr);
-                runner_.get_callback().test_completed(tr);
-            }
-            catch (const no_more_tests&)
+            tut::test_result tr;
+            if( !util::deserialize(ijournal,tr) )
             {
                 break;
             }
+            runner_.cb_test_completed_(tr);
         }
 
-        runner_.get_callback().run_completed();
+        runner_.cb_run_completed_();
     }
 
     /**

@@ -65,9 +65,17 @@ struct tut_posix
     pid_t fork()
     {
         test_object<T> *self = dynamic_cast< tut::test_object<T>* >(this);
-        ensure("trying to call 'fork' in ctor of test object", self != NULL);
+        ensure("trying to call 'tut_fork' in ctor of test object", self != NULL);
 
         return self->fork_();
+    }
+
+    pid_t waitpid(pid_t pid, int *status, int flags = 0)
+    {
+        test_object<T> *self = dynamic_cast< tut::test_object<T>* >(this);
+        ensure("trying to call 'tut_waitpid' in ctor of test object", self != NULL);
+
+        return self->waitpid_(pid, status, flags);
     }
 
     void ensure_child_exit(pid_t pid, int exit_status = 0)
@@ -188,7 +196,7 @@ private:
         else
         {
             // in child, shutdown reporter
-            tut::runner.get().set_callback(NULL);
+            tut::runner.get().clear_callbacks();
 
             // close reading side
             close(fds[0]);
@@ -248,13 +256,13 @@ private:
                     return;
                 }
                 else
-            {
-                std::stringstream ss;
+                {
+                    std::stringstream ss;
                     char e[1024];
                     ss << "child " << pid << " could not be killed with SIGKILL, " << strerror_r(errno, e, sizeof(e)) << std::endl;
-                fail(ss.str());
+                    fail(ss.str());
+                }
             }
-        }
 
             ensure_equals("wait after SIGKILL", waitpid_(pid, &status), pid);
             ensure_child_signal_(status, SIGKILL);
@@ -290,8 +298,20 @@ private:
         return tr;
     }
 
+    struct fdclose
+    {
+        fdclose(int fd): fd_(fd) { }
+        ~fdclose()
+        {
+            close(fd_);
+        }
+    private:
+        int fd_;
+    };
+
     pid_t waitpid_(pid_t pid, int *status, int flags = 0)
     {
+
         ensure("trying to wait for unknown pid", pids_.count(pid) > 0);
 
         pid_t p = ::waitpid(pid, status, flags);
@@ -309,6 +329,8 @@ private:
         FD_ZERO(&fdset);
 
         int pipe = pids_[pid];
+        fdclose guard(pipe);
+
         FD_SET(pipe, &fdset);
 
         int result = select(pipe+1, &fdset, NULL, NULL, &tv);
@@ -417,7 +439,7 @@ private:
 
         return pids;
     }
-    
+
     pid_map         pids_;
     int             pipe_;
 };

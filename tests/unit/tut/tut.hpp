@@ -11,6 +11,10 @@
 #include <algorithm>
 #include <typeinfo>
 
+#if defined(linux)
+#define TUT_USE_POSIX
+#endif
+
 #include "tut_exception.hpp"
 #include "tut_result.hpp"
 #include "tut_posix.hpp"
@@ -58,6 +62,16 @@ public:
         return current_test_name_;
     }
 
+    void set_test_id(int current_test_id)
+    {
+        current_test_id_ = current_test_id;
+    }
+
+    int get_test_id() const
+    {
+        return current_test_id_;
+    }
+
     /**
      * Default do-nothing test.
      */
@@ -77,6 +91,7 @@ public:
     bool called_method_was_a_dummy_test_;
 
 private:
+    int             current_test_id_;
     std::string     current_test_name_;
 };
 
@@ -123,6 +138,14 @@ class test_group : public group_base, public test_group_posix
 
     tests tests_;
     tests_iterator current_test_;
+
+	enum seh_result
+	{
+		SEH_OK,
+		SEH_CTOR,
+		SEH_TEST,
+		SEH_DUMMY
+	};
 
     /**
      * Exception-in-destructor-safe smart-pointer class.
@@ -287,84 +310,80 @@ public:
     /**
      * Runs next test.
      */
-    test_result run_next()
+    bool run_next(test_result &tr)
     {
         if (current_test_ == tests_.end())
         {
-            throw no_more_tests();
+            return false;
         }
 
         // find next user-specialized test
         safe_holder<object> obj;
         while (current_test_ != tests_.end())
         {
-            try
-            {
-                tests_iterator current_test = current_test_++;
+            tests_iterator current_test = current_test_++;
 
-                test_result tr = run_test_(current_test, obj);
-
-                return tr;
-            }
-            catch (const no_such_test&)
+            if(run_test_(current_test, obj, tr) && tr.result != test_result::dummy)
             {
-                continue;
+                return true;
             }
         }
 
-        throw no_more_tests();
+        return false;
     }
 
     /**
      * Runs one test by position.
      */
-    test_result run_test(int n)
+    bool run_test(int n, test_result &tr)
     {
-        // beyond tests is special case to discover upper limit
-        if (tests_.rbegin() == tests_.rend())
+        if (tests_.rbegin() == tests_.rend() ||
+            tests_.rbegin()->first < n)
         {
-            throw beyond_last_test();
-        }
-
-        if (tests_.rbegin()->first < n)
-        {
-            throw beyond_last_test();
+            return false;
         }
 
         // withing scope; check if given test exists
         tests_iterator ti = tests_.find(n);
         if (ti == tests_.end())
         {
-            throw no_such_test();
+            return false;
         }
 
         safe_holder<object> obj;
-        test_result tr = run_test_(ti, obj);
-
-        return tr;
+        return run_test_(ti, obj, tr);
     }
-
 
     /**
      * VC allows only one exception handling type per function,
      * so I have to split the method.
      */
-    test_result run_test_(const tests_iterator& ti, safe_holder<object>& obj)
+    bool run_test_(const tests_iterator& ti, safe_holder<object>& obj, test_result &tr)
     {
         std::string current_test_name;
 
-        test_result tr(name_, ti->first, current_test_name, test_result::ok);
+        tr = test_result(name_, ti->first, current_test_name, test_result::ok);
 
         try
         {
-            if (run_test_seh_(ti->second, obj, current_test_name) == false)
-            {
-                throw seh("seh");
+            switch (run_test_seh_(ti->second, obj, current_test_name, ti->first))
+			{
+				case SEH_CTOR:
+					throw bad_ctor("seh");
+					break;
+
+				case SEH_TEST:
+					throw seh("seh");
+					break;
+
+				case SEH_DUMMY:
+					tr.result = test_result::dummy;
+					break;
+
+				case SEH_OK:
+					// ok
+					break;
             }
-        }
-        catch (const no_such_test&)
-        {
-            throw;
         }
         catch (const rethrown& ex)
         {
@@ -401,14 +420,14 @@ public:
             tr.name = current_test_name;
         }
 
-        return tr;
+        return true;
     }
 
     /**
      * Runs one under SEH if platform supports it.
      */
-    bool run_test_seh_(testmethod tm, safe_holder<object>& obj,
-        std::string& current_test_name)
+    seh_result run_test_seh_(testmethod tm, safe_holder<object>& obj,
+                             std::string& current_test_name, int current_test_id)
     {
 #if defined(TUT_USE_SEH)
         __try
@@ -426,21 +445,21 @@ public:
             __try
             {
 #endif
+                obj.get()->set_test_id(current_test_id);
                 (obj.get()->*tm)();
 #if defined(TUT_USE_SEH)
             }
             __except(handle_seh_(::GetExceptionCode()))
             {
-                // throw seh("SEH");
                 current_test_name = obj->get_test_name();
-                return false;
+                return SEH_TEST;
             }
 #endif
 
         if (obj->called_method_was_a_dummy_test_)
         {
             // do not call obj.release(); reuse object
-            throw no_such_test();
+            return SEH_DUMMY;
         }
 
         current_test_name = obj->get_test_name();
@@ -450,10 +469,10 @@ public:
         }
         __except(handle_seh_(::GetExceptionCode()))
         {
-            return false;
+			return SEH_CTOR;
         }
 #endif
-        return true;
+        return SEH_OK;
     }
 
     void reset_holder_(safe_holder<object>& obj)
