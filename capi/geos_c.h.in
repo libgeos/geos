@@ -319,6 +319,43 @@ extern int GEOS_DLL GEOSCoordSeq_getDimensions_r(GEOSContextHandle_t handle,
 
 /************************************************************************
  *
+ *  Linearref functions -- there are more, but these two are probably
+ *  sufficient for most purposes
+ *
+ ***********************************************************************/
+
+/* 
+ * GEOSGeometry ownership is retained by caller
+ */
+
+
+extern double GEOS_DLL GEOSProject(const GEOSGeometry *g,
+                                   const GEOSGeometry* p);
+extern double GEOS_DLL GEOSProject_r(GEOSContextHandle_t handle,
+                                     const GEOSGeometry *g,
+                                     const GEOSGeometry *p);
+
+extern GEOSGeometry* GEOS_DLL GEOSInterpolate(const GEOSGeometry *g,
+                                              double d);
+extern GEOSGeometry* GEOS_DLL GEOSInterpolate_r(GEOSContextHandle_t handle,
+                                                const GEOSGeometry *g,
+                                                double d);
+
+extern double GEOS_DLL GEOSProjectNormalized(const GEOSGeometry *g,
+                                             const GEOSGeometry* p);
+extern double GEOS_DLL GEOSProjectNormalized_r(GEOSContextHandle_t handle,
+                                               const GEOSGeometry *g,
+                                               const GEOSGeometry *p);
+
+extern GEOSGeometry* GEOS_DLL GEOSInterpolateNormalized(const GEOSGeometry *g,
+                                                        double d);
+extern GEOSGeometry* GEOS_DLL GEOSInterpolateNormalized_r(
+                                                GEOSContextHandle_t handle,
+                                                const GEOSGeometry *g,
+                                                double d);
+
+/************************************************************************
+ *
  * Buffer related functions
  *
  ***********************************************************************/

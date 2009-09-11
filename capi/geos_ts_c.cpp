@@ -48,6 +48,7 @@
 #include <geos/operation/union/CascadedPolygonUnion.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/buffer/BufferParameters.h>
+#include <geos/linearref/LengthIndexedLine.h>
 #include <geos/geom/BinaryOp.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/version.h> 
@@ -4298,6 +4299,65 @@ GEOSSTRtree_destroy_r(GEOSContextHandle_t extHandle,
         handle->ERROR_MESSAGE("Unknown exception thrown");
     }
 }
+
+double
+GEOSProject_r(GEOSContextHandle_t extHandle,
+              const Geometry *g,
+              const Geometry *p)
+{
+
+    const geos::geom::Point* point = dynamic_cast<const geos::geom::Point*>(p);
+    if (!point) {
+        if ( 0 == extHandle )
+        {
+            return -1.0;
+        }
+        GEOSContextHandleInternal_t *handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if ( 0 == handle->initialized )
+        {
+            return -1.0;
+        }
+
+        handle->ERROR_MESSAGE("third argument of GEOSProject_r must be Point*");
+        return -1.0;
+    }
+    const geos::geom::Coordinate* inputPt = p->getCoordinate();
+    return geos::linearref::LengthIndexedLine(g).project(*inputPt);
+}
+
+
+Geometry*
+GEOSInterpolate_r(GEOSContextHandle_t extHandle, const Geometry *g, double d)
+{
+    geos::linearref::LengthIndexedLine lil(g);
+    geos::geom::Coordinate coord = lil.extractPoint(d);
+    GEOSContextHandleInternal_t *handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    const GeometryFactory *gf = handle->geomFactory;
+    Geometry* point = gf->createPoint(coord);
+    return point;
+}
+
+
+double
+GEOSProjectNormalized_r(GEOSContextHandle_t extHandle, const Geometry *g,
+                        const Geometry *p)
+{
+
+    double length;
+    GEOSLength_r(extHandle, g, &length);
+    return GEOSProject_r(extHandle, g, p) / length;
+}
+
+
+Geometry*
+GEOSInterpolateNormalized_r(GEOSContextHandle_t extHandle, const Geometry *g,
+                            double d)
+{
+    double length;
+    GEOSLength_r(extHandle, g, &length);
+    return GEOSInterpolate_r(extHandle, g, d * length);
+}
+
 
 } /* extern "C" */
 

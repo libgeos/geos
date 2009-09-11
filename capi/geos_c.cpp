@@ -883,4 +883,33 @@ GEOSSTRtree_destroy (geos::index::strtree::STRtree *tree)
     GEOSSTRtree_destroy_r( handle, tree );
 }
 
+double
+GEOSProject (const geos::geom::Geometry *g,
+             const geos::geom::Geometry *p)
+{
+    return GEOSProject_r (handle, g, p);
+}
+
+geos::geom::Geometry *
+GEOSInterpolate (const geos::geom::Geometry *g,
+                 double d)
+{
+    return GEOSInterpolate_r(handle, g, d);
+}
+
+double
+GEOSProjectNormalized (const geos::geom::Geometry *g,
+                       const geos::geom::Geometry *p)
+{
+    return GEOSProjectNormalized_r (handle, g, p);
+}
+
+geos::geom::Geometry *
+GEOSInterpolateNormalized (const geos::geom::Geometry *g,
+                           double d)
+{
+    return GEOSInterpolateNormalized_r(handle, g, d);
+}
+
+
 } /* extern "C" */
