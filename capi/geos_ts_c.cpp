@@ -580,7 +580,7 @@ GEOSisValidReason_r(GEOSContextHandle_t extHandle, const Geometry *g1)
             std::string errloc = err->getCoordinate().toString();
             const std::size_t msglen = errmsg.length();
             const std::size_t loclen = errloc.length();
-            result = (char*)std::malloc(msglen + loclen + 3);
+            result = (char*)std::malloc(msglen + loclen + 4);
             sprintf(result, "%s [%s]", errmsg.c_str(), errloc.c_str());
         }
         else {
