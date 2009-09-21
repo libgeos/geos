@@ -74,7 +74,7 @@ Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
 	}
 	else
 	{
-		if (newShell->isEmpty() && hasNonEmptyElements(newHoles)) {
+		if (newHoles != NULL && newShell->isEmpty() && hasNonEmptyElements(newHoles)) {
 			delete newShell;
 			delete newHoles;
 			throw util::IllegalArgumentException("shell is empty but holes are not");
