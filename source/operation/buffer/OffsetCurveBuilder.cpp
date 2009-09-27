@@ -82,6 +82,7 @@ OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,
 		offset0(),
 		offset1(),
 		side(0),
+		endCapIndex(0),
 		vertexLists()
 {
 	// compute intersections in full precision, to provide accuracy
@@ -140,6 +141,62 @@ OffsetCurveBuilder::getLineCurve(const CoordinateSequence *inputPts,
 
 	// ... and we give it away here
 	lineList.push_back(lineCoord);
+}
+
+/*public*/
+void
+OffsetCurveBuilder::getSingleSidedLineCurve(const CoordinateSequence* inputPts, 
+   double distance, vector<CoordinateSequence*>& lineList, bool leftSide,
+   bool rightSide)
+{
+   // A zero or negative width buffer of a line/point is empty.
+   if ( distance <= 0.0 ) return ;
+
+   init( distance ) ;
+
+   if ( inputPts->getSize() < 2 )
+   {
+      // No cap, so just return.
+      return ;
+   }
+   else
+   {
+      computeLineBufferCurve( *inputPts ) ;
+   }
+
+   // NOTE: we take ownership of lineCoord here ...
+   CoordinateSequence* lineCoord = vertexList->getCoordinates() ;
+
+   // [swong] April 24, 2008
+   // Left side:  index [n-2] to [endCapIndex]
+   // Right side: index [endCapIndex] to [n-2]
+   // Where n is the last index (size-1).
+   int n = lineCoord->size() - 1 ;
+
+   // Add the left side curve to the line list.
+   if ( leftSide )
+   {
+      CoordinateArraySequence* coordSeq = new CoordinateArraySequence() ;
+      coordSeq->add( ( *lineCoord )[n-2] ) ;
+      coordSeq->add( ( *lineCoord )[n-1] ) ;
+      for ( int i = 0 ; i <= endCapIndex ; ++i )
+      {
+         coordSeq->add( ( *lineCoord )[i] ) ;
+      }
+      lineList.push_back( coordSeq ) ;
+   }
+
+   // Add the right side curve to the line list.
+   if ( rightSide )
+   {
+      CoordinateArraySequence* coordSeq = new CoordinateArraySequence() ;
+      for ( int i = endCapIndex ; i <= n-2 ; ++i )
+      {
+         coordSeq->add( ( *lineCoord )[i] ) ;
+      }
+
+      lineList.push_back( coordSeq ) ;
+   }
 }
 
 /*public*/
@@ -225,6 +282,10 @@ OffsetCurveBuilder::computeLineBufferCurve(const CoordinateSequence& inputPts)
 	addLastSegment();
 	// add line cap for end of line
 	addLineEndCap(simp1[n1-1], simp1[n1]);
+
+	// Record the index of the end of line cap.
+	endCapIndex = vertexList->size() - 2 ;
+
 
 	//---------- compute points for right side of line
 #ifndef SKIP_INPUT_SIMPLIFICATION

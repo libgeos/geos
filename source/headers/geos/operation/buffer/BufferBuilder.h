@@ -206,6 +206,11 @@ public:
 	geom::Geometry* buffer(const geom::Geometry *g, double distance);
 		// throw (GEOSException);
 
+	/// Not in JTS: this is a GEOS extension
+	geom::Geometry* bufferLineSingleSided( const geom::Geometry* g,
+	                                double distance, bool leftSide ) ;
+		// throw (GEOSException);
+
 };
 
 } // namespace geos::operation::buffer
