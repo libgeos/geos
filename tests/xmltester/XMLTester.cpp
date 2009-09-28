@@ -48,6 +48,7 @@
 #include <geos/opValid.h>
 #include "XMLTester.h"
 #include "BufferResultMatcher.h"
+#include "SingleSidedBufferResultMatcher.h"
 
 #include <cassert>
 #include <cctype>
@@ -138,6 +139,41 @@ checkBufferSuccess(geom::Geometry& gRes, geom::Geometry& gRealRes, double dist)
 						   dist) )
 		{
 std::cerr << "BufferResultMatcher FAILED" << std::endl;
+			success=0;
+			break;
+		}
+
+	}
+	while (0);
+
+	return success;
+}
+
+static int
+checkSingleSidedBufferSuccess(geom::Geometry& gRes,
+		geom::Geometry& gRealRes, double dist)
+{
+	int success = 1;
+	do
+	{
+
+		if ( gRes.getGeometryTypeId() != gRealRes.getGeometryTypeId() )
+		{
+			std::cerr << "Expected result is of type "
+				<< gRes.getGeometryType()
+				<< "; obtained result is of type "
+				<< gRealRes.getGeometryType()
+				<< std::endl;
+			success=0;
+			break;
+		}
+
+		geos::xmltester::SingleSidedBufferResultMatcher matcher;
+		if ( ! matcher.isBufferResultMatch(gRealRes,
+						   gRes,
+						   dist) )
+		{
+std::cerr << "SingleSidedBufferResultMatcher FAILED" << std::endl;
 			success=0;
 			break;
 		}
@@ -886,32 +922,9 @@ XMLTester::parseTest()
 			profile.stop();
 			gRealRes->normalize();
 
-			// Assume a success and check for obvious failures
-			success=1;
-			do
-			{
-
-				if ( gRes->getGeometryTypeId() !=
-				     gRealRes->getGeometryTypeId() )
-				{
-					std::cerr << "Expected result is of type "
-					        << gRes->getGeometryType()
-						<< "; obtained result is of type "
-						<< gRealRes->getGeometryType()
-						<< std::endl;
-					success=0;
-					break;
-				}
-				
-				if ( ! gRes->equals( gRealRes.get() ) )
-				{
-std::cerr << "Matching single sided buffer results FAILED" << std::endl;
-					success=0;
-					break;
-				}
-
-			}
-			while (0);
+			// Validate the single sided buffer operation
+			success = checkSingleSidedBufferSuccess(*gRes,
+					*gRealRes, dist);
 
 			if ( testValidOutput ) testValid(gRes.get(), "result");
 

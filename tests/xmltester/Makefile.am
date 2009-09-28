@@ -15,6 +15,7 @@ SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
 	$(srcdir)/tests/linemerge.xml \
 	$(srcdir)/tests/TestIsValid.xml \
 	$(srcdir)/tests/robustness.xml \
+	$(srcdir)/tests/singlesidedbuffer.xml \
 	$(srcdir)/tests/bug176.xml \
 	$(srcdir)/tests/bug188.xml \
 	$(srcdir)/tests/bug244.xml \
@@ -79,7 +80,11 @@ LIBS = $(top_builddir)/source/libgeos.la
 SimpleWKTTester_SOURCES = SimpleWKTTester.cpp
 SimpleWKTTester_LDADD = $(LIBS)
 
-XMLTester_SOURCES = XMLTester.cpp markup/MarkupSTL.cpp markup/MarkupSTL.h XMLTester.h BufferResultMatcher.h BufferResultMatcher.cpp
+XMLTester_SOURCES = XMLTester.cpp XMLTester.h \
+	markup/MarkupSTL.cpp markup/MarkupSTL.h \
+	BufferResultMatcher.h BufferResultMatcher.cpp \
+	SingleSidedBufferResultMatcher.h SingleSidedBufferResultMatcher.cpp
+
 XMLTester_LDADD = $(LIBS)
 
 INCLUDES = -I$(top_srcdir)/source/headers
