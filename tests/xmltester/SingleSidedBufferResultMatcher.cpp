@@ -47,7 +47,7 @@ SingleSidedBufferResultMatcher::isBufferResultMatch(const geom::Geometry& actual
 	if (aEmpty || eEmpty)
 	{
 std::cerr << "isBufferResultMatch failed (one empty and one not)" << std::endl;
-		return true;
+		return false;
 	}
 
 	if (! isBoundaryHausdorffDistanceInTolerance(actualBuffer,
