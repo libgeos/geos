@@ -201,7 +201,10 @@ PrecisionModel::toString() const
   	} else if (modelType == FLOATING_SINGLE) {
   		s<<"Floating-Single";
   	} else if (modelType == FIXED) {
-		s<<"Fixed (Scale="<<getScale()<<")";
+		s <<"Fixed (Scale=" << getScale()
+		  << " OffsetX=" << getOffsetX()
+		  << " OffsetY=" << getOffsetY()
+		  << ")";
 	} else {
 		s<<"UNKNOWN";
 	}
