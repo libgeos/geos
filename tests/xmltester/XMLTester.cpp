@@ -43,7 +43,6 @@
 #include <geos/opPolygonize.h>
 #include <geos/opLinemerge.h>
 #include <geos/profiler.h>
-#include "markup/MarkupSTL.h"
 #include <geos/unload.h>
 #include <geos/opValid.h>
 #include "XMLTester.h"
@@ -57,11 +56,12 @@
 #include <functional>
 #include <iostream>
 #include <sstream>
-#include <string>
+#include <cstring>
 #include <memory>
 #include <functional>
 #include <stdexcept>
 #include <cmath>
+#include <stdexcept>
 
 #ifdef _MSC_VER
 #include <windows.h>
@@ -77,6 +77,71 @@
 using namespace geos;
 using namespace geos::operation::polygonize;
 using namespace geos::operation::linemerge;
+using std::runtime_error;
+
+namespace {
+
+// a utility function defining a very simple method to indent a line of text
+const char * getIndent( unsigned int numIndents )
+{
+    static const char * pINDENT = "                                      + ";
+    static const unsigned int LENGTH = strlen( pINDENT );
+
+    if ( numIndents > LENGTH ) numIndents = LENGTH;
+
+    return &pINDENT[ LENGTH-numIndents ];
+}
+
+
+
+void dump_to_stdout( const TiXmlNode * pParent, unsigned int indent = 0 )
+{
+    if ( !pParent ) return;
+
+    const TiXmlText *pText;
+    int t = pParent->Type();
+    printf( "%s", getIndent( indent));
+
+    switch ( t )
+    {
+    case TiXmlNode::DOCUMENT:
+        printf( "Document" );
+        break;
+
+    case TiXmlNode::ELEMENT:
+        printf( "Element \"%s\"", pParent->Value() );
+        break;
+
+    case TiXmlNode::COMMENT:
+        printf( "Comment: \"%s\"", pParent->Value());
+        break;
+
+    case TiXmlNode::UNKNOWN:
+        printf( "Unknown" );
+        break;
+
+    case TiXmlNode::TEXT:
+        pText = pParent->ToText();
+        printf( "Text: [%s]", pText->Value() );
+        break;
+
+    case TiXmlNode::DECLARATION:
+        printf( "Declaration" );
+        break;
+    default:
+        break;
+    }
+    printf( "\n" );
+
+    const TiXmlNode * pChild;
+
+    for ( pChild = pParent->FirstChild(); pChild != 0; pChild = pChild->NextSibling()) 
+    {
+        dump_to_stdout( pChild, indent+2 );
+    }
+}
+
+}
 
 void
 tolower(std::string& str)
@@ -311,22 +376,20 @@ XMLTester::run(const std::string &source)
 
 	caseCount=0;
 
-	if ( ! xml.Load(source.c_str()) )
+	if ( ! xml.LoadFile(source.c_str()) )
 	{
 		std::cerr << "Error loading " << source << std::endl;
 	}
 
-	xml.ResetPos();
-	xml.FindElem("run");
-	xml.FindChildElem("precisionModel");
-	parsePrecisionModel();
-	while (xml.FindChildElem("case")) {
-		try {
-			parseCase();
-		} catch (const std::exception& exc) {
-			std::cerr<<exc.what()<<std::endl;
-		}
-	}
+	//dump_to_stdout(&xml);
+
+	const TiXmlNode* node = xml.FirstChild("run");
+
+	if ( ! node )
+	  throw(runtime_error("Document has no childs"));
+
+	parseRun(node);
+
 }
 
 void 
@@ -344,17 +407,46 @@ XMLTester::resetCounters()
 	testFileCount=totalTestCount=failed=succeeded=0;
 }
 
+void
+XMLTester::parseRun(const TiXmlNode* node)
+{
+	assert(node);
+
+	//dump_to_stdout(node);
+
+	// Look for precisionModel element
+	const TiXmlElement* el = node->FirstChildElement("precisionModel");
+	if ( el ) parsePrecisionModel(el);
+
+	const TiXmlNode* casenode;
+	for ( casenode = node->FirstChild("case");
+	      casenode;
+	      casenode = casenode->NextSibling("case") )
+	{
+		try {
+			parseCase(casenode);
+		} catch (const std::exception& exc) {
+			std::cerr<<exc.what()<<std::endl;
+		}
+	}
+
+}
 
 void
-XMLTester::parsePrecisionModel()
+XMLTester::parsePrecisionModel(const TiXmlElement* el)
 {
 	using geos::geom::PrecisionModel;
 
-	/* This does not seem to work... */
-	std::string type=xml.GetChildAttrib("type");
-	std::string scaleStr=xml.GetChildAttrib("scale");
+	//dump_to_stdout(el);
 
-	if ( scaleStr == "" ) {
+	/* This does not seem to work... */
+	std::string type;
+	const char* typeStr = el->Attribute("type");
+	if ( typeStr ) type = typeStr;
+
+	const char* scaleStr = el->Attribute("scale");
+
+	if ( ! scaleStr ) {
 		if ( type == "FLOATING_SINGLE" )
 		{
 			pm.reset(new PrecisionModel(PrecisionModel::FLOATING_SINGLE));
@@ -364,15 +456,21 @@ XMLTester::parsePrecisionModel()
 			pm.reset(new PrecisionModel());
 		}
 	} else {
-		char* stopstring;
-		//string scaleStr=xml.GetChildAttrib("scale");
-		std::string offsetXStr=xml.GetChildAttrib("offsetx");
-		std::string offsetYStr=xml.GetChildAttrib("offsety");
 
-		double scale=std::strtod(scaleStr.c_str(),&stopstring);
-		double offsetX=std::strtod(offsetXStr.c_str(),&stopstring);
-		double offsetY=std::strtod(offsetYStr.c_str(),&stopstring);
-		pm.reset(new PrecisionModel(scale,offsetX,offsetY));
+		char* stopstring;
+
+		double scale = std::strtod(scaleStr, &stopstring);
+		double offsetX = 0;
+		double offsetY = 2;
+
+		if ( ! el->QueryDoubleAttribute("offsetx", &offsetX) )
+		{} // std::cerr << "No offsetx" << std::endl;
+
+		if ( ! el->QueryDoubleAttribute("offsety", &offsetY) )
+		{} // std::cerr << "No offsety" << std::endl;
+
+		// NOTE: PrecisionModel discards offsets anyway...
+		pm.reset(new PrecisionModel(scale, offsetX, offsetY));
 	}
 
 	if (verbose > 1)
@@ -468,8 +566,10 @@ XMLTester::trimBlanks(const std::string &in)
 }
 
 void
-XMLTester::parseCase()
+XMLTester::parseCase(const TiXmlNode* node)
 {
+	assert(node);
+
 	std::string geomAin;
 	std::string geomBin;
 	std::string thrownException;
@@ -477,21 +577,30 @@ XMLTester::parseCase()
 	gA=NULL;
 	gB=NULL;
 
-	xml.IntoElem();
-	xml.FindChildElem("desc");
-	curr_case_desc=trimBlanks(xml.GetChildData());
+
+	//dump_to_stdout(node);
+
+	curr_case_desc.clear();
+	const TiXmlNode* txt = node->FirstChild("desc");
+	if ( txt ) {
+		txt = txt->FirstChild();
+		if ( txt ) curr_case_desc = trimBlanks(txt->Value());
+	}
+
+	//std::cerr << "Desc: " << curr_case_desc << std::endl;
+
 
 	try {
-		xml.FindChildElem("a");
-		geomAin=xml.GetChildData();
-		geomAin=trimBlanks(geomAin);
-		gA=parseGeometry(geomAin, "Geometry A");
+		const TiXmlNode *el = node->FirstChild("a");
+		geomAin = el->FirstChild()->Value();
+		geomAin = trimBlanks(geomAin);
+		gA = parseGeometry(geomAin, "Geometry A");
 
-		if ( xml.FindChildElem("b") )
+		if ( (el = node->FirstChild("b")) )
 		{
-			geomBin=xml.GetChildData();
-			geomBin=trimBlanks(geomBin);
-			gB=parseGeometry(geomBin, "Geometry B");
+			geomBin = el->FirstChild()->Value();
+			geomBin = trimBlanks(geomBin);
+			gB = parseGeometry(geomBin, "Geometry B");
 		}
 	}
 	catch (const std::exception &e) {
@@ -501,23 +610,31 @@ XMLTester::parseCase()
 		thrownException = "Unknown exception";
 	}
 
+//std::cerr << "A: " << geomAin << std::endl;
+//std::cerr << "B: " << geomBin << std::endl;
+
+
 	if ( thrownException != "" )
 	{
 		std::cout << *curr_file <<":";
 		std::cout << " case" << caseCount << ":";
 		std::cout << " skipped ("<<thrownException<<")."<<std::endl;
-		xml.OutOfElem();
 		return;
 	}
 
 	++caseCount;
 	testCount=0;
-	while(xml.FindChildElem("test")) {
-		parseTest();
+
+	const TiXmlNode* testnode;
+	for ( testnode = node->FirstChild("test");
+	      testnode;
+	      testnode = testnode->NextSibling("test") )
+	{
+		parseTest(testnode);
 	}
+
 	totalTestCount+=testCount;
 		
-	xml.OutOfElem();
 	delete gA;
 	delete gB;
 }
@@ -547,7 +664,7 @@ XMLTester::printGeom(geom::Geometry *g)
 }
 
 void
-XMLTester::parseTest()
+XMLTester::parseTest(const TiXmlNode* node)
 {
 	using namespace operation::overlay;
 
@@ -560,19 +677,32 @@ XMLTester::parseTest()
 	std::string opArg3;
 	std::string opArg4;
 	std::string opRes;
-	//string opSig;
 
 	++testCount;
 
-	xml.IntoElem();
-	xml.FindChildElem("op");
-	opName=xml.GetChildAttrib("name");
-	opArg1=xml.GetChildAttrib("arg1");
-	opArg2=xml.GetChildAttrib("arg2");
-	opArg3=xml.GetChildAttrib("arg3");
-	opArg4=xml.GetChildAttrib("arg4");
-	//opSig=xml.GetChildAttrib("arg3");
-	opRes=xml.GetChildData();
+	const TiXmlNode* opnode = node->FirstChild("op");
+	if ( ! opnode ) throw(runtime_error("case has no op"));
+
+	//dump_to_stdout(opnode);
+
+	const TiXmlElement* opel = opnode->ToElement();
+
+	const char* tmp = opel->Attribute("name");
+	if ( tmp ) opName = tmp;
+
+	tmp = opel->Attribute("arg1");
+	if ( tmp ) opArg1 = tmp;
+
+	tmp = opel->Attribute("arg2");
+	if ( tmp ) opArg2 = tmp;
+
+	tmp = opel->Attribute("arg3");
+	if ( tmp ) opArg3 = tmp;
+
+	tmp = opel->Attribute("arg4");
+	if ( tmp ) opArg4 = tmp;
+
+	opRes = opnode->FirstChild()->Value();
 
 	// trim blanks
 	opRes=trimBlanks(opRes);
@@ -1230,7 +1360,6 @@ XMLTester::parseTest()
 		runPredicates(gA, gB);
 	}
 
-	xml.OutOfElem();
 }
 
 void
