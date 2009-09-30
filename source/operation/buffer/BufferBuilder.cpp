@@ -54,6 +54,9 @@
 #include <algorithm>
 #include <iostream>
 
+// Debug single sided buffer
+//#define GEOS_DEBUG_SSB 1
+
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
@@ -132,6 +135,11 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    // Create MultiLineStrings from this polygon.
    Geometry* bufLineString = buf->getBoundary();
 
+#ifdef GEOS_DEBUG_SSB
+   std::cerr << "input|" << *l << std::endl;
+   std::cerr << "fullBufferBoundary|" << *buf << std::endl;
+#endif
+
    // Then, get the raw (i.e. unnoded) single sided offset curve.
    OffsetCurveBuilder curveBuilder( precisionModel, modParams );
    std::vector< CoordinateSequence* > lineList;
@@ -156,8 +164,14 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
       new std::vector< Geometry * >();
    for ( unsigned int i = 0; i < nodedEdges->size(); ++i )
    {
-      singleSidedNodedEdges->push_back( geomFact->createLineString(
-         ( *nodedEdges )[i]->getCoordinates() ) );
+     Geometry* tmp = geomFact->createLineString(
+         ( *nodedEdges )[i]->getCoordinates() );
+
+#ifdef GEOS_DEBUG_SSB
+     std::cerr << "nodedEdge" << i << "|" << *tmp << std::endl;
+#endif
+
+      singleSidedNodedEdges->push_back( tmp );
    }
    Geometry* singleSided = geomFact->createMultiLineString(
       singleSidedNodedEdges );
@@ -165,6 +179,10 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    // Use the boolean operation intersect to obtain the line segments lying
    // on both the butt-cap buffer and this multi-line.
    Geometry* intersectedLines = singleSided->intersection( bufLineString );
+
+#ifdef GEOS_DEBUG_SSB
+     std::cerr << "intersection" << "|" << *intersectedLines << std::endl;
+#endif
 
    // Merge result lines together.
    LineMerger lineMerge;
