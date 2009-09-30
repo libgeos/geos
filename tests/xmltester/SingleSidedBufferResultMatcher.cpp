@@ -50,10 +50,20 @@ std::cerr << "isBufferResultMatch failed (one empty and one not)" << std::endl;
 		return false;
 	}
 
+
+   // NOTE: we need to test hausdorff distance in both directions
+
 	if (! isBoundaryHausdorffDistanceInTolerance(actualBuffer,
 	           expectedBuffer, distance))
 	{
-std::cerr << "isBoundaryHasudorffDistanceInTolerance failed" << std::endl;
+std::cerr << "isBoundaryHasudorffDistanceInTolerance failed (actual,expected)" << std::endl;
+		return false;
+	}
+
+	if (! isBoundaryHausdorffDistanceInTolerance(expectedBuffer,
+	           actualBuffer, distance))
+	{
+std::cerr << "isBoundaryHasudorffDistanceInTolerance failed (expected,actual)" << std::endl;
 		return false;
 	}
 
