@@ -2,7 +2,7 @@
   <!--precisionModel scale="1.0" offsetx="0.0" offsety="0.0"/-->
   <precisionModel type="FLOATING" />
 
-<case><desc>Single-sided buffer on vertical line</desc>
+<case><desc>Single-sided buffer on vertical line (down-up)</desc>
 <a>
 LINESTRING (0 10, 0 20)
 </a>
@@ -14,6 +14,22 @@ MULTILINESTRING ((2 10, 2 20))
 <test>
 <op name="buffersinglesided" arg1="a" arg2="2" arg3="4" arg4="left">
 MULTILINESTRING ((-2 10, -2 20))
+</op>
+</test>
+</case>
+
+<case><desc>Single-sided buffer on vertical line (up-down)</desc>
+<a>
+LINESTRING (0 20, 0 10)
+</a>
+<test>
+<op name="buffersinglesided" arg1="a" arg2="3" arg3="4" arg4="right">
+MULTILINESTRING ((-3 10, -3 20))
+</op>
+</test>
+<test>
+<op name="buffersinglesided" arg1="a" arg2="3" arg3="4" arg4="left">
+MULTILINESTRING ((3 10, 3 20))
 </op>
 </test>
 </case>
