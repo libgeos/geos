@@ -1,6 +1,23 @@
 <run>
   <!--precisionModel scale="1.0" offsetx="0.0" offsety="0.0"/-->
   <precisionModel type="FLOATING" />
+
+<case><desc>Single-sided buffer on vertical line</desc>
+<a>
+LINESTRING (0 10, 0 20)
+</a>
+<test>
+<op name="buffersinglesided" arg1="a" arg2="2" arg3="4" arg4="right">
+MULTILINESTRING ((2 10, 2 20))
+</op>
+</test>
+<test>
+<op name="buffersinglesided" arg1="a" arg2="2" arg3="4" arg4="left">
+MULTILINESTRING ((-2 10, -2 20))
+</op>
+</test>
+</case>
+
 <case><desc>Single-sided buffers</desc>
 <a>
 LINESTRING (5 5,1 1,1.5 3)
