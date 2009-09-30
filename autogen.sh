@@ -71,7 +71,7 @@ fi
 
 LTOPTS="--force --copy"
 echo "* Running ${LIBTOOLIZE} (${LIBTOOLIZE_VER})"
-echo "\tOPTIONS = ${LTOPTS}"
+echo "   OPTIONS = ${LTOPTS}"
 ${LIBTOOLIZE} ${LTOPTS} || giveup
 
 echo "* Running $ACLOCAL (${ACLOCAL_VER})"
@@ -81,7 +81,7 @@ echo "* Running ${AUTOHEADER} (${AUTOCONF_VER})"
 ${AUTOHEADER} || giveup
 
 echo "* Running ${AUTOMAKE} (${AUTOMAKE_VER})"
-echo "\tOPTIONS = ${AMOPTS}"
+echo "   OPTIONS = ${AMOPTS}"
 ${AUTOMAKE} ${AMOPTS} || giveup
 
 echo "* Running ${AUTOCONF} (${AUTOCONF_VER})"
