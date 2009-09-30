@@ -34,11 +34,44 @@ MULTILINESTRING ((3 10, 3 20))
 </test>
 </case>
 
-<case><desc>Single-sided buffers</desc>
+<case><desc>Single-sided buffer on horizontal line (left-right)</desc>
+<a>
+LINESTRING (0 0, 5 0)
+</a>
+<test>
+<op name="buffersinglesided" arg1="a" arg2="2" arg3="4" arg4="right">
+MULTILINESTRING ((0 -2, 5 -2))
+</op>
+</test>
+<test>
+<op name="buffersinglesided" arg1="a" arg2="2" arg3="4" arg4="left">
+MULTILINESTRING ((0 2, 5 2))
+</op>
+</test>
+</case>
+
+<case><desc>Single-sided buffer on horizontal line (right-left)</desc>
+<a>
+LINESTRING (5 0, 0 0)
+</a>
+<test>
+<op name="buffersinglesided" arg1="a" arg2="2" arg3="4" arg4="right">
+MULTILINESTRING ((0 2, 5 2))
+</op>
+</test>
+<test>
+<op name="buffersinglesided" arg1="a" arg2="2" arg3="4" arg4="left">
+MULTILINESTRING ((0 -2, 5 -2))
+</op>
+</test>
+</case>
+
+
+<case><desc>Single-sided buffers on sharpe edged line</desc>
 <a>
 LINESTRING (5 5,1 1,1.5 3)
 </a>
-<!--
+<!-- right-side returns with empty geometry !
 <test>
 <op name="buffersinglesided" arg1="a" arg2="1.6" arg3="4" arg4="right">
 MULTILINESTRING ((0.889806640162438 3.15254833995939,3.86862915010152 6.13137084989848))
