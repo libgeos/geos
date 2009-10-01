@@ -67,7 +67,8 @@ while read line <&7; do
 
 	elif test "${lbl}" = "Buffer Style"; then
 
-		if test "${val}" = "RIGHT_SIDE_ONLY"; then
+      # No quotes around ${val} is intentional, to trim blanks
+		if test ${val} = "RIGHT_SIDE_ONLY"; then
 			style=right
 		else
 			style=left
