@@ -131,7 +131,16 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    // First, generate the two-sided buffer using a butt-cap.
    BufferParameters modParams = bufParams;
    modParams.setEndCapStyle(BufferParameters::CAP_FLAT); 
-   Geometry* buf = buffer( l, distance );
+   Geometry* buf = 0;
+
+   // This is a (temp?) hack to workaround the fact that
+   // BufferBuilder BufferParamaters are immutable after
+   // construction, while we want to force the end cap
+   // style to FLAT for single-sided buffering
+   {
+      BufferBuilder tmp(modParams);
+      buf = tmp.buffer( l, distance );
+   }
 
    // Create MultiLineStrings from this polygon.
    Geometry* bufLineString = buf->getBoundary();
