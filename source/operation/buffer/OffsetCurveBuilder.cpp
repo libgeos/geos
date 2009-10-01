@@ -167,9 +167,9 @@ OffsetCurveBuilder::getSingleSidedLineCurve(const CoordinateSequence* inputPts,
    // NOTE: we take ownership of lineCoord here ...
    CoordinateSequence* lineCoord = vertexList->getCoordinates() ;
 
-   // [swong] April 24, 2008
-   // Left side:  index [n-2] to [endCapIndex]
-   // Right side: index [endCapIndex] to [n-2]
+   // [strk] Oct 1, 2009
+   // Left side:  index [n-1] to [endCapIndex]
+   // Right side: index [endCapIndex+1] to [n-2]
    // Where n is the last index (size-1).
    int n = lineCoord->size() - 1 ;
 
@@ -177,7 +177,7 @@ OffsetCurveBuilder::getSingleSidedLineCurve(const CoordinateSequence* inputPts,
    if ( leftSide )
    {
       CoordinateArraySequence* coordSeq = new CoordinateArraySequence() ;
-      coordSeq->add( ( *lineCoord )[n-2] ) ;
+      //coordSeq->add( ( *lineCoord )[n-2] ) ;
       coordSeq->add( ( *lineCoord )[n-1] ) ;
       for ( int i = 0 ; i <= endCapIndex ; ++i )
       {
@@ -190,7 +190,7 @@ OffsetCurveBuilder::getSingleSidedLineCurve(const CoordinateSequence* inputPts,
    if ( rightSide )
    {
       CoordinateArraySequence* coordSeq = new CoordinateArraySequence() ;
-      for ( int i = endCapIndex ; i <= n-2 ; ++i )
+      for ( int i = endCapIndex+1 ; i <= n-2 ; ++i )
       {
          coordSeq->add( ( *lineCoord )[i] ) ;
       }
