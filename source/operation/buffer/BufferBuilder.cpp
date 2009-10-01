@@ -47,6 +47,7 @@
 #include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/Edge.h>
 #include <geos/util/GEOSException.h>
+#include <geos/util/IllegalArgumentException.h>
 #include <geos/profiler.h>
 
 #include <cassert>
@@ -117,7 +118,7 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    // Returns the line used to create a single-sided buffer.
    // Input requirement: Must be a LineString.
    const LineString* l = dynamic_cast< const LineString* >( g );
-   if ( !l ) return NULL;
+   if ( !l ) throw util::IllegalArgumentException("BufferBuilder::bufferLineSingleSided only accept linestrings");
 
    // Get geometry factory and precision model.
    const PrecisionModel* precisionModel = workingPrecisionModel;
