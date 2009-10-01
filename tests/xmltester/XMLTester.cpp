@@ -513,6 +513,9 @@ XMLTester::testValid(const geom::Geometry* g, const std::string& label)
 geom::Geometry *
 XMLTester::parseGeometry(const std::string &in, const char* label)
 {
+	if ( ( ! wkbreader.get() ) || ( ! wktreader.get() ) )
+		throw(runtime_error("No precision model specified"));
+
 	std::stringstream is(in, std::ios_base::in);
 	char first_char;
 
