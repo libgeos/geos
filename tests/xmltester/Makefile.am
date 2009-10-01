@@ -61,7 +61,10 @@ SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
 	$(srcdir)/tests/heisenbugs.xml \
 	$(srcdir)/tests/badguy3.xml \
 	$(srcdir)/tests/hole_from_shell.xml \
-	$(srcdir)/tests/hole_red.xml
+	$(srcdir)/tests/hole_red.xml \
+	$(srcdir)/tests/safe/16595.xml \
+	$(srcdir)/tests/safe/16596.xml
+
 
 XMLTESTS=$(SAFE_XMLTESTS) 
 

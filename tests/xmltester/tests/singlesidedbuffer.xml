@@ -8,12 +8,12 @@ LINESTRING (0 10, 0 20)
 </a>
 <test>
 <op name="buffersinglesided" arg1="a" arg2="2" arg3="4" arg4="right">
-MULTILINESTRING ((2 10, 2 20))
+LINESTRING (2 10, 2 20)
 </op>
 </test>
 <test>
 <op name="buffersinglesided" arg1="a" arg2="2" arg3="4" arg4="left">
-MULTILINESTRING ((-2 10, -2 20))
+LINESTRING (-2 10, -2 20)
 </op>
 </test>
 </case>
@@ -24,12 +24,12 @@ LINESTRING (0 20, 0 10)
 </a>
 <test>
 <op name="buffersinglesided" arg1="a" arg2="3" arg3="4" arg4="right">
-MULTILINESTRING ((-3 10, -3 20))
+LINESTRING (-3 10, -3 20)
 </op>
 </test>
 <test>
 <op name="buffersinglesided" arg1="a" arg2="3" arg3="4" arg4="left">
-MULTILINESTRING ((3 10, 3 20))
+LINESTRING (3 10, 3 20)
 </op>
 </test>
 </case>
@@ -40,12 +40,12 @@ LINESTRING (0 0, 5 0)
 </a>
 <test>
 <op name="buffersinglesided" arg1="a" arg2="2" arg3="4" arg4="right">
-MULTILINESTRING ((0 -2, 5 -2))
+LINESTRING (0 -2, 5 -2)
 </op>
 </test>
 <test>
 <op name="buffersinglesided" arg1="a" arg2="2" arg3="4" arg4="left">
-MULTILINESTRING ((0 2, 5 2))
+LINESTRING (0 2, 5 2)
 </op>
 </test>
 </case>
@@ -56,12 +56,12 @@ LINESTRING (5 0, 0 0)
 </a>
 <test>
 <op name="buffersinglesided" arg1="a" arg2="2" arg3="4" arg4="right">
-MULTILINESTRING ((0 2, 5 2))
+LINESTRING (0 2, 5 2)
 </op>
 </test>
 <test>
 <op name="buffersinglesided" arg1="a" arg2="2" arg3="4" arg4="left">
-MULTILINESTRING ((0 -2, 5 -2))
+LINESTRING (0 -2, 5 -2)
 </op>
 </test>
 </case>
@@ -73,13 +73,14 @@ LINESTRING (5 5,1 1,1.5 3)
 </a>
 <test>
 <op name="buffersinglesided" arg1="a" arg2="1.6" arg3="4" arg4="right">
-MULTILINESTRING ((0.889806640162438 3.15254833995939,3.86862915010152 6.13137084989848))
+LINESTRING (0.889806640162438 3.15254833995939,3.86862915010152 6.13137084989848)
 </op>
 </test>
 <test>
 <op name="buffersinglesided" arg1="a" arg2="1.6" arg3="4" arg4="left">
-MULTILINESTRING ((6.13137084989848 3.86862915010152,2.13137084989848 -0.131370849898476,1.64334932914975 -0.464957897238882,1.06750928729122 -0.598575145599803,0.482454087349093 -0.513983562756987,-0.0319550194114402 -0.222730075655103,-0.405500120335007 0.235428609129087,-0.58719153245376 0.797952878498393,-0.552228000232531 1.38805700005813,-0.052228000232531 3.38805700005813))
+LINESTRING (6.13137084989848 3.86862915010152,2.13137084989848 -0.131370849898476,1.64334932914975 -0.464957897238882,1.06750928729122 -0.598575145599803,0.482454087349093 -0.513983562756987,-0.0319550194114402 -0.222730075655103,-0.405500120335007 0.235428609129087,-0.58719153245376 0.797952878498393,-0.552228000232531 1.38805700005813,-0.052228000232531 3.38805700005813)
 </op>
 </test>
 </case>
+
 </run>

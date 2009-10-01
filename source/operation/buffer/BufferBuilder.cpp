@@ -295,7 +295,14 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    geomFact->destroyGeometry( singleSided );
    geomFact->destroyGeometry( intersectedLines );
 
-   return geomFact->createMultiLineString( mergedLinesGeom );
+   if ( mergedLinesGeom->size() > 1 ) return geomFact->createMultiLineString( mergedLinesGeom );
+   else
+   {
+      // Must be a single line
+      Geometry* single = (*mergedLinesGeom)[0];
+      delete mergedLinesGeom;
+      return single;
+   }
 }
 
 /*public*/
