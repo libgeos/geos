@@ -19,8 +19,6 @@
  *
  **********************************************************************/
 
-#include <geos/operation/overlay/PolygonBuilder.h> 
-#include <geos/operation/overlay/OverlayNodeFactory.h> 
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Location.h>
 #include <geos/geom/Geometry.h>
@@ -34,6 +32,9 @@
 #include <geos/operation/buffer/BufferSubgraph.h>
 #include <geos/operation/buffer/SubgraphDepthLocater.h>
 #include <geos/operation/overlay/OverlayOp.h>
+#include <geos/operation/overlay/snap/SnapOverlayOp.h> 
+#include <geos/operation/overlay/PolygonBuilder.h> 
+#include <geos/operation/overlay/OverlayNodeFactory.h> 
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/noding/IntersectionAdder.h>
@@ -137,7 +138,7 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
 
 #ifdef GEOS_DEBUG_SSB
    std::cerr << "input|" << *l << std::endl;
-   std::cerr << "fullBufferBoundary|" << *buf << std::endl;
+   std::cerr << "buffer|" << *bufLineString << std::endl;
 #endif
 
    // Then, get the raw (i.e. unnoded) single sided offset curve.
@@ -167,18 +168,23 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
      Geometry* tmp = geomFact->createLineString(
          ( *nodedEdges )[i]->getCoordinates() );
 
-#ifdef GEOS_DEBUG_SSB
-     std::cerr << "nodedEdge" << i << "|" << *tmp << std::endl;
-#endif
-
       singleSidedNodedEdges->push_back( tmp );
    }
    Geometry* singleSided = geomFact->createMultiLineString(
       singleSidedNodedEdges );
 
+#ifdef GEOS_DEBUG_SSB
+     std::cerr << "edges|" << *singleSided << std::endl;
+#endif
+
    // Use the boolean operation intersect to obtain the line segments lying
    // on both the butt-cap buffer and this multi-line.
-   Geometry* intersectedLines = singleSided->intersection( bufLineString );
+   //Geometry* intersectedLines = singleSided->intersection( bufLineString );
+   // NOTE: we use Snapped overlay because the actual buffer boundary might
+   //       diverge from original offset curves due to the addition of
+   //       intersections with caps and joins curves
+   using geos::operation::overlay::snap::SnapOverlayOp;
+   Geometry* intersectedLines = SnapOverlayOp::overlayOp(*singleSided, *bufLineString, OverlayOp::opINTERSECTION).release();
 
 #ifdef GEOS_DEBUG_SSB
      std::cerr << "intersection" << "|" << *intersectedLines << std::endl;
