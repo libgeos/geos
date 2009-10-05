@@ -178,12 +178,15 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
       new std::vector< Geometry * >();
    for ( unsigned int i = 0, n = nodedEdges->size(); i < n; ++i )
    {
-     Geometry* tmp = geomFact->createLineString(
-         ( *nodedEdges )[i]->getCoordinates() );
+      SegmentString* ss = ( *nodedEdges )[i];
+
+      Geometry* tmp = geomFact->createLineString( ss->getCoordinates() );
+      delete ss;
 
       singleSidedNodedEdges->push_back( tmp );
    }
    nodedEdges.reset();
+
    Geometry* singleSided = geomFact->createMultiLineString(
       singleSidedNodedEdges );
 

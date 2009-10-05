@@ -165,7 +165,7 @@ OffsetCurveBuilder::getSingleSidedLineCurve(const CoordinateSequence* inputPts,
    }
 
    // NOTE: we take ownership of lineCoord here ...
-   CoordinateSequence* lineCoord = vertexList->getCoordinates() ;
+   std::auto_ptr<CoordinateSequence> lineCoord (vertexList->getCoordinates());
 
    // [strk] Oct 1, 2009
    // Left side:  index [n-1] to [endCapIndex]
