@@ -67,11 +67,6 @@ public:
 			            const geom::Coordinate& pt,
 	                            PointPairDistance& ptDist);
 
-private:
-
-	// used for point-line distance calculation
-	// NOT THREAD SAFE !!
-	static geom::LineSegment tempSegment;
 };
 
 } // geos::algorithm::distance

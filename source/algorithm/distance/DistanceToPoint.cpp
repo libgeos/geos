@@ -35,10 +35,6 @@ namespace geos {
 namespace algorithm { // geos.algorithm
 namespace distance { // geos.algorithm.distance
 
-/* static */
-LineSegment DistanceToPoint::tempSegment;
-
-
 /* public static */
 void
 DistanceToPoint::computeDistance(const geom::Geometry& geom,
@@ -76,12 +72,13 @@ DistanceToPoint::computeDistance(const geom::LineString& line,
 {
 	const CoordinateSequence* coordsRO = line.getCoordinatesRO();
 	const CoordinateSequence& coords = *coordsRO;
+
+	LineSegment tempSegment;
+	Coordinate closestPt;
 	for (size_t i=0, n=coords.size()-1; i<n; ++i)
 	{
-		// NOT THREAD SAFE
-		tempSegment.setCoordinates(coords[i], coords[i + 1]);
 		// this is somewhat inefficient - could do better
-		Coordinate closestPt;
+		tempSegment.setCoordinates(coords[i], coords[i + 1]);
 		tempSegment.closestPoint(pt, closestPt);
 		ptDist.setMinimum(closestPt, pt);
 	}
