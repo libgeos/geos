@@ -97,8 +97,9 @@ public:
 	 * Lines are assumed to <b>not</b> be closed (the function will not
 	 * fail for closed lines, but will generate superfluous line caps).
 	 *
-	 * @param lineList the std::vector to which CoordinateSequences will
-	 *                 be pushed_back
+	 * @param lineList the std::vector to which newly created
+	 *                 CoordinateSequences will be pushed_back.
+	 *                 Caller will be responsible to delete them.
 	 * @param leftSide indicates that the left side buffer will be
 	 *                 obtained/skipped
 	 * @param rightSide indicates that the right side buffer will
