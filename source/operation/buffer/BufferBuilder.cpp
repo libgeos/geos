@@ -182,19 +182,20 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    {
       SegmentString* ss = ( *nodedEdges )[i];
 
-      Geometry* tmp = geomFact->createLineString( ss->getCoordinates()->clone() );
+      Geometry* tmp = geomFact->createLineString(
+                        ss->getCoordinates()->clone()
+                      );
       singleSidedNodedEdges->push_back( tmp );
    }
 
-   if ( nodedEdges != &curveList )
-   {
-      delete nodedEdges;
-   }
+   if ( nodedEdges != &curveList ) delete nodedEdges;
 
-   for (size_t i=0; i<lineList.size(); ++i)
-   {
-      delete lineList[i];
-   }
+   for (size_t i=0, n=curveList.size(); i<n; ++i) delete curveList[i];
+   curveList.clear();
+
+   for (size_t i=0, n=lineList.size(); i<n; ++i) delete lineList[i];
+   lineList.clear();
+
 
    Geometry* singleSided = geomFact->createMultiLineString(
       singleSidedNodedEdges );
@@ -312,11 +313,6 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    geomFact->destroyGeometry( bufLineString );
    geomFact->destroyGeometry( singleSided );
    geomFact->destroyGeometry( intersectedLines );
-
-   for (size_t i=0; i<curveList.size(); ++i)
-   {
-      delete curveList[i];
-   }
 
    if ( mergedLinesGeom->size() > 1 ) return geomFact->createMultiLineString( mergedLinesGeom );
    else
