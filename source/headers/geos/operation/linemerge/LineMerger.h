@@ -122,6 +122,7 @@ public:
 	/**
 	 * \brief
 	 * Returns the LineStrings built by the merging process.
+	 * Ownership of vector _and_ its elements to caller.
 	 */
 	std::vector<geom::LineString*>* getMergedLineStrings();
 
