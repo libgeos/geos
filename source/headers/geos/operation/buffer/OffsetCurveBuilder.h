@@ -83,8 +83,9 @@ public:
 	 * Lines are assumed to <b>not</b> be closed (the function will not
 	 * fail for closed lines, but will generate superfluous line caps).
 	 *
-	 * @param lineList the std::vector to which CoordinateSequences will
-	 *                 be pushed_back
+	 * @param lineList the std::vector to which the newly created
+	 *                 CoordinateSequences will be pushed_back.
+	 *                 Caller is responsible to delete these new elements.
 	 */
 	void getLineCurve(const geom::CoordinateSequence* inputPts,
 	                  double distance,

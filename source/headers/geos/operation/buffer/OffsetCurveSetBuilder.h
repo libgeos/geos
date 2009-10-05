@@ -83,12 +83,14 @@ private:
 	/**
 	 * Creates a noding::SegmentString for a coordinate list which is a raw
 	 * offset curve, and adds it to the list of buffer curves.
-	 * The noding::SegmentString is tagged with a geomgraph::Label giving the topology
-	 * of the curve.
+	 * The noding::SegmentString is tagged with a geomgraph::Label
+	 * giving the topology of the curve.
 	 * The curve may be oriented in either direction.
 	 * If the curve is oriented CW, the locations will be:
 	 * - Left: Location.EXTERIOR
 	 * - Right: Location.INTERIOR
+	 *
+	 * @param coord is raw offset curve, ownership transferred here
 	 */
 	void addCurve(geom::CoordinateSequence *coord, int leftLoc,
 			int rightLoc);
@@ -182,6 +184,10 @@ public:
 	std::vector<noding::SegmentString*>& getCurves();
 
 	/// Add raw curves for a set of CoordinateSequences
+	//
+	/// @param lineList is a list of CoordinateSequence, ownership
+	///        of which is transferred here.
+	///
 	void addCurves(const std::vector<geom::CoordinateSequence*>& lineList,
 		int leftLoc, int rightLoc);
 

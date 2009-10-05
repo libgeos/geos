@@ -70,8 +70,9 @@ OffsetCurveSetBuilder::~OffsetCurveSetBuilder()
 {
 	for (size_t i=0, n=curveList.size(); i<n; ++i)
 	{
-		delete curveList[i]->getCoordinates();
-		delete curveList[i];
+		SegmentString* ss = curveList[i];
+		delete ss->getCoordinates();
+		delete ss;
 	}
 	for (size_t i=0, n=newLabels.size(); i<n; ++i)
 		delete newLabels[i];
@@ -92,7 +93,7 @@ OffsetCurveSetBuilder::addCurves(const std::vector<CoordinateSequence*>& lineLis
 {
 	for (size_t i=0, n=lineList.size(); i<n; ++i)
 	{
-		CoordinateSequence *coords=lineList[i];
+		CoordinateSequence *coords = lineList[i];
 		addCurve(coords, leftLoc, rightLoc);
 	}
 }
