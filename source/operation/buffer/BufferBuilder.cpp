@@ -154,8 +154,11 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    // Then, get the raw (i.e. unnoded) single sided offset curve.
    OffsetCurveBuilder curveBuilder( precisionModel, modParams );
    std::vector< CoordinateSequence* > lineList;
-   curveBuilder.getSingleSidedLineCurve( g->getCoordinates(), distance,
+
+   std::auto_ptr< CoordinateSequence > coords ( g->getCoordinates() );
+   curveBuilder.getSingleSidedLineCurve( coords.get(), distance,
                                          lineList, leftSide, !leftSide );
+   coords.reset();
 
    // Create a SegmentString from these coordinates.
    SegmentString::NonConstVect curveList;
@@ -168,18 +171,19 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    // Node these SegmentStrings.
    Noder* noder = getNoder( precisionModel );
    noder->computeNodes( &curveList );
-   SegmentString::NonConstVect* nodedEdges = noder->getNodedSubstrings();
+   std::auto_ptr< SegmentString::NonConstVect > nodedEdges ( noder->getNodedSubstrings() );
 
    // Create a geometry out of the noded substrings.
    std::vector< Geometry* >* singleSidedNodedEdges =
       new std::vector< Geometry * >();
-   for ( unsigned int i = 0; i < nodedEdges->size(); ++i )
+   for ( unsigned int i = 0, n = nodedEdges->size(); i < n; ++i )
    {
      Geometry* tmp = geomFact->createLineString(
          ( *nodedEdges )[i]->getCoordinates() );
 
       singleSidedNodedEdges->push_back( tmp );
    }
+   nodedEdges.reset();
    Geometry* singleSided = geomFact->createMultiLineString(
       singleSidedNodedEdges );
 
@@ -203,7 +207,8 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    // Merge result lines together.
    LineMerger lineMerge;
    lineMerge.add( intersectedLines );
-   std::vector< LineString* >* mergedLines = lineMerge.getMergedLineStrings();
+   std::auto_ptr< std::vector< LineString* > > mergedLines (
+	lineMerge.getMergedLineStrings() );
 
    // Convert the result into a std::vector< Geometry* >.
    std::vector< Geometry* >* mergedLinesGeom = new std::vector< Geometry* >();
