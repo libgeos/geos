@@ -165,13 +165,15 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    for ( unsigned int i = 0; i < lineList.size(); ++i )
    {
       CoordinateSequence* seq = lineList[i];
-      curveList.push_back( new NodedSegmentString( seq, NULL ) );
+
+      SegmentString* ss = new NodedSegmentString(seq, NULL);
+      curveList.push_back( ss );
    }
 
    // Node these SegmentStrings.
    Noder* noder = getNoder( precisionModel );
    noder->computeNodes( &curveList );
-   std::auto_ptr< SegmentString::NonConstVect > nodedEdges ( noder->getNodedSubstrings() );
+   SegmentString::NonConstVect* nodedEdges = noder->getNodedSubstrings();
 
    // Create a geometry out of the noded substrings.
    std::vector< Geometry* >* singleSidedNodedEdges =
@@ -180,12 +182,19 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    {
       SegmentString* ss = ( *nodedEdges )[i];
 
-      Geometry* tmp = geomFact->createLineString( ss->getCoordinates() );
-      delete ss;
-
+      Geometry* tmp = geomFact->createLineString( ss->getCoordinates()->clone() );
       singleSidedNodedEdges->push_back( tmp );
    }
-   nodedEdges.reset();
+
+   if ( nodedEdges != &curveList )
+   {
+      delete nodedEdges;
+   }
+
+   for (size_t i=0; i<lineList.size(); ++i)
+   {
+      delete lineList[i];
+   }
 
    Geometry* singleSided = geomFact->createMultiLineString(
       singleSidedNodedEdges );
@@ -303,6 +312,11 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    geomFact->destroyGeometry( bufLineString );
    geomFact->destroyGeometry( singleSided );
    geomFact->destroyGeometry( intersectedLines );
+
+   for (size_t i=0; i<curveList.size(); ++i)
+   {
+      delete curveList[i];
+   }
 
    if ( mergedLinesGeom->size() > 1 ) return geomFact->createMultiLineString( mergedLinesGeom );
    else
