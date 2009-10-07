@@ -387,6 +387,15 @@ extern GEOSGeometry GEOS_DLL *GEOSBufferWithStyle_r(GEOSContextHandle_t handle,
 	const GEOSGeometry* g1, double width, int quadsegs, int endCapStyle,
 	int joinStyle, double mitreLimit);
 
+/* These functions return NULL on exception. Only LINESTRINGs are accepted. */
+extern GEOSGeometry GEOS_DLL *GEOSSingleSidedBuffer(const GEOSGeometry* g1,
+	double width, int quadsegs, int joinStyle, double mitreLimit,
+	int leftSide);
+extern GEOSGeometry GEOS_DLL *GEOSSingleSidedBuffer_r(
+	GEOSContextHandle_t handle,
+	const GEOSGeometry* g1, double width, int quadsegs, 
+	int joinStyle, double mitreLimit, int leftSide);
+
 
 /************************************************************************
  *

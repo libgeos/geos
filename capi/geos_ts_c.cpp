@@ -48,6 +48,7 @@
 #include <geos/operation/union/CascadedPolygonUnion.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/buffer/BufferParameters.h>
+#include <geos/operation/buffer/BufferBuilder.h>
 #include <geos/linearref/LengthIndexedLine.h>
 #include <geos/geom/BinaryOp.h>
 #include <geos/util/IllegalArgumentException.h>
@@ -1408,6 +1409,58 @@ GEOSBufferWithStyle_r(GEOSContextHandle_t extHandle, const Geometry *g1, double 
         bp.setMitreLimit(mitreLimit);
         BufferOp op(g1, bp);
         Geometry *g3 = op.getResultGeometry(width);
+        return g3;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+    
+    return NULL;
+}
+
+Geometry *
+GEOSSingleSidedBuffer_r(GEOSContextHandle_t extHandle, const Geometry *g1, double width, int quadsegs, int joinStyle, double mitreLimit, int leftSide)
+{
+    using geos::operation::buffer::BufferParameters;
+    using geos::operation::buffer::BufferBuilder;
+    using geos::operation::buffer::BufferOp;
+    using geos::util::IllegalArgumentException;
+
+    if ( 0 == extHandle )
+    {
+        return NULL;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return NULL;
+    }
+
+    try
+    {
+        BufferParameters bp;
+	bp.setEndCapStyle( BufferParameters::CAP_FLAT );
+        bp.setQuadrantSegments(quadsegs);
+
+        if ( joinStyle > BufferParameters::JOIN_BEVEL )
+        {
+        	throw IllegalArgumentException("Invalid buffer join style");
+        }
+        bp.setJoinStyle(
+        	static_cast<BufferParameters::JoinStyle>(joinStyle)
+        );
+        bp.setMitreLimit(mitreLimit);
+
+	BufferBuilder bufBuilder (bp);
+        Geometry *g3 = bufBuilder.bufferLineSingleSided(g1, width, leftSide);
+	
         return g3;
     }
     catch (const std::exception &e)
