@@ -386,7 +386,7 @@
 	* [r2599] source/Makefile.vc, source/dirlist.mk: Fix clean target
 	  for VC build (#267)
 
-2009-06-23 18:22  hobu
+2009-06-23 18:22  Howard Butler <hobu.inc@gmail.com>
 
 	* [r2598] source/Makefile.vc: fix up syntax of the makefile related
 	  to the patch for #257
@@ -1194,7 +1194,7 @@
 	* [r2536] tests/xmltester/XMLTester.cpp: Add support for testing
 	  single sided buffers
 
-2009-06-01 03:34  hobu
+2009-06-01 03:34  Howard Butler <hobu.inc@gmail.com>
 
 	* [r2534] capi/geos_c.cpp: #256 finishGEOS called multiple times
 	  will segfault
@@ -3110,7 +3110,7 @@
 	* [r2250] capi/geos_c.cpp, capi/geos_ts_c.cpp: Formatting changes
 	  to function decls.
 
-2009-01-19 20:41  hobu
+2009-01-19 20:41  Howard Butler <hobu.inc@gmail.com>
 
 	* [r2249] source/Makefile.vc: fixes to allow building in msvc 2003
 
@@ -3224,7 +3224,7 @@
 	  patch for issue #210 (thread safe c-api) submitted by Chuck
 	  Thibert.
 
-2009-01-05 23:42  swongu
+2009-01-05 23:42  Stephen Wong <swongu@gmail.com>
 
 	* [r2231] source/operation/buffer/BufferBuilder.cpp,
 	  source/operation/buffer/OffsetCurveVertexList.h,
@@ -3831,7 +3831,7 @@
 	  include in distribution, and remove unused files from Makefile.vc
 	  (#175)
 
-2008-01-30 22:34  benjubb
+2008-01-30 22:34  Ben Jubb <benjubb@refractions.net>
 
 	* [r2120] source/headers/geos/algorithm/RayCrossingCounter.h,
 	  source/headers/geos/algorithm/locate/IndexedPointInAreaLocator.h,
@@ -3864,23 +3864,23 @@
 	  source/headers/geos/noding/SegmentStringUtil.h: Added
 	  documentation, for benefit of doxygen.
 
-2008-01-30 22:30  benjubb
+2008-01-30 22:30  Ben Jubb <benjubb@refractions.net>
 
 	* [r2119] source/geom/prep/PreparedPolygonIntersects.cpp: deleted
 	  out-commented line.
 
-2008-01-30 22:29  benjubb
+2008-01-30 22:29  Ben Jubb <benjubb@refractions.net>
 
 	* [r2118] source/geom/prep/PreparedPolygon.cpp: removed ref to
 	  PreparedPolygonLineIntersection
 
-2008-01-30 22:18  benjubb
+2008-01-30 22:18  Ben Jubb <benjubb@refractions.net>
 
 	* [r2117] source/geom/prep/Makefile.am,
 	  source/headers/geos/geom/prep/Makefile.am: Removed refs to
 	  PreparedPolygonLineIntersection.
 
-2008-01-30 22:17  benjubb
+2008-01-30 22:17  Ben Jubb <benjubb@refractions.net>
 
 	* [r2116] source/geom/prep/PreparedPolygonLineIntersection.cpp,
 	  source/headers/geos/geom/prep/PreparedPolygonLineIntersection.h:
@@ -3888,12 +3888,12 @@
 	  
 	  
 
-2008-01-30 19:09  benjubb
+2008-01-30 19:09  Ben Jubb <benjubb@refractions.net>
 
 	* [r2115] source/headers/geos/geomPrep.h: Added for benefit of
 	  doxygen.
 
-2008-01-29 17:55  benjubb
+2008-01-29 17:55  Ben Jubb <benjubb@refractions.net>
 
 	* [r2114] source/geom/prep/AbstractPreparedPolygonContains.cpp,
 	  source/geom/prep/PreparedLineString.cpp,
@@ -3906,7 +3906,7 @@
 	  to improve the memory management. These changes plug a few leaks,
 	  but not all.
 
-2008-01-29 17:49  benjubb
+2008-01-29 17:49  Ben Jubb <benjubb@refractions.net>
 
 	* [r2113] source/operation/predicate/RectangleContains.cpp: Fix a
 	  bug in the shortcut test for containment in a rectangle. This
@@ -3915,21 +3915,21 @@
 	  
 	  Was also a bug in JTS (now fixed).
 
-2008-01-29 17:37  benjubb
+2008-01-29 17:37  Ben Jubb <benjubb@refractions.net>
 
 	* [r2112] source/geom/Geometry.cpp: Patch to fix bug in ticket #171
 
-2008-01-22 19:34  benjubb
+2008-01-22 19:34  Ben Jubb <benjubb@refractions.net>
 
 	* [r2111] capi/geos_c.h.in, source/headers/geos/version.h.vc:
 	  Updated for VC to give correct version (3.1.0-CAPI-1.5.0).
 
-2008-01-18 00:37  benjubb
+2008-01-18 00:37  Ben Jubb <benjubb@refractions.net>
 
 	* [r2110] configure.in: Added to CAPI interface, cleared
 	  CAPI_INTERFACE_REV, bumped AGE & CURRENT
 
-2008-01-18 00:35  benjubb
+2008-01-18 00:35  Ben Jubb <benjubb@refractions.net>
 
 	* [r2109] source/index/chain/MonotoneChainBuilder.cpp: Fixed a bug
 	  in the handling of line strings with repeated points.
@@ -3938,7 +3938,7 @@
 	  
 	  M MonotoneChainBuilder.cpp
 
-2008-01-17 19:15  benjubb
+2008-01-17 19:15  Ben Jubb <benjubb@refractions.net>
 
 	* [r2108] capi/geos_c.cpp: Fixed a misspelling,
 	  GEOSPreparedContainsProperty => GEOSPreparedContainsProperly
@@ -3947,17 +3947,17 @@
 
 	* [r2107] source/Makefile.vc: updated to include post 3.0 classes
 
-2008-01-09 23:49  benjubb
+2008-01-09 23:49  Ben Jubb <benjubb@refractions.net>
 
 	* [r2106] capi/geos_c.cpp, capi/geos_c.h.in: Added support for
 	  prepared geometry
 
-2008-01-09 23:48  benjubb
+2008-01-09 23:48  Ben Jubb <benjubb@refractions.net>
 
 	* [r2105] source/headers/geos/geom/prep/PreparedGeometryFactory.h:
 	  removed extraneous 'using namespace'
 
-2008-01-03 21:11  benjubb
+2008-01-03 21:11  Ben Jubb <benjubb@refractions.net>
 
 	* [r2104] source/noding/MCIndexSegmentSetMutualIntersector.cpp:
 	  commented out some delete's in
@@ -4130,15 +4130,15 @@
 
 	* [r2073] source/algorithm/Makefile.am: Added new files
 
-2007-12-21 20:50  benjubb
+2007-12-21 20:50  Ben Jubb <benjubb@refractions.net>
 
 	* [r2072] source/algorithm/RayCrossingCounter.cpp:
 
-2007-12-21 20:48  benjubb
+2007-12-21 20:48  Ben Jubb <benjubb@refractions.net>
 
 	* [r2071] build/msvc80/geos_lib/geos_lib.vcproj:
 
-2007-12-21 20:47  benjubb
+2007-12-21 20:47  Ben Jubb <benjubb@refractions.net>
 
 	* [r2070] source/headers/geos/index/intervalrtree,
 	  source/headers/geos/index/intervalrtree/IntervalRTreeBranchNode.h,
@@ -4147,7 +4147,7 @@
 	  source/headers/geos/index/intervalrtree/SortedPackedIntervalRTree.h:
 	  Added from JTS 1.9 to support prepared geometry
 
-2007-12-21 20:47  benjubb
+2007-12-21 20:47  Ben Jubb <benjubb@refractions.net>
 
 	* [r2069] source/algorithm/locate,
 	  source/algorithm/locate/IndexedPointInAreaLocator.cpp,
@@ -4155,23 +4155,23 @@
 	  source/algorithm/locate/SimplePointInAreaLocator.cpp: Added from
 	  JTS 1.9 to support prepared geometry
 
-2007-12-21 20:44  benjubb
+2007-12-21 20:44  Ben Jubb <benjubb@refractions.net>
 
 	* [r2068] source/geom/util/ComponentCoordinateExtracter.cpp: Added
 	  from JTS 1.9 to support prepared geometry
 
-2007-12-21 20:44  benjubb
+2007-12-21 20:44  Ben Jubb <benjubb@refractions.net>
 
 	* [r2067]
 	  source/headers/geos/geom/util/ComponentCoordinateExtracter.h:
 	  Added from JTS 1.9 to support prepared geometry
 
-2007-12-21 20:42  benjubb
+2007-12-21 20:42  Ben Jubb <benjubb@refractions.net>
 
 	* [r2066] source/operation/predicate/RectangleIntersects.cpp:
 	  modified because SimplePointInAreaLocator.h moved
 
-2007-12-21 20:41  benjubb
+2007-12-21 20:41  Ben Jubb <benjubb@refractions.net>
 
 	* [r2065] source/noding/FastSegmentSetIntersectionFinder.cpp,
 	  source/noding/MCIndexSegmentSetMutualIntersector.cpp,
@@ -4180,7 +4180,7 @@
 	  source/noding/SegmentStringUtil.cpp: Added from JTS 1.9 to
 	  support prepared geometry
 
-2007-12-21 20:41  benjubb
+2007-12-21 20:41  Ben Jubb <benjubb@refractions.net>
 
 	* [r2064] source/index/intervalrtree,
 	  source/index/intervalrtree/IntervalRTreeBranchNode.cpp,
@@ -4189,7 +4189,7 @@
 	  source/index/intervalrtree/SortedPackedIntervalRTree.cpp: Added
 	  from JTS 1.9 to support prepared geometry
 
-2007-12-21 20:40  benjubb
+2007-12-21 20:40  Ben Jubb <benjubb@refractions.net>
 
 	* [r2063] source/geom/prep,
 	  source/geom/prep/AbstractPreparedPolygonContains.cpp,
@@ -4208,22 +4208,22 @@
 	  source/geom/prep/PreparedPolygonPredicate.cpp: Added from JTS 1.9
 	  to support prepared geometry
 
-2007-12-21 20:39  benjubb
+2007-12-21 20:39  Ben Jubb <benjubb@refractions.net>
 
 	* [r2062] source/geomgraph/EdgeEndStar.cpp: modified because
 	  SimplePointInAreaLocator.h moved
 
-2007-12-21 20:38  benjubb
+2007-12-21 20:38  Ben Jubb <benjubb@refractions.net>
 
 	* [r2061] source/headers/geos/algorithm/SimplePointInAreaLocator.h:
 	  Moved into geos::algorithm::locate
 
-2007-12-21 20:37  benjubb
+2007-12-21 20:37  Ben Jubb <benjubb@refractions.net>
 
 	* [r2060] source/headers/geos/algorithm/RayCrossingCounter.h: Added
 	  from JTS 1.9 to support prepared geometry
 
-2007-12-21 20:35  benjubb
+2007-12-21 20:35  Ben Jubb <benjubb@refractions.net>
 
 	* [r2059] source/headers/geos/geom/prep,
 	  source/headers/geos/geom/prep/AbstractPreparedPolygonContains.h,
@@ -4242,7 +4242,7 @@
 	  source/headers/geos/geom/prep/PreparedPolygonPredicate.h: Added
 	  from JTS 1.9 to support prepared geometry
 
-2007-12-21 20:34  benjubb
+2007-12-21 20:34  Ben Jubb <benjubb@refractions.net>
 
 	* [r2058]
 	  source/headers/geos/noding/FastSegmentSetIntersectionFinder.h,
@@ -4254,40 +4254,40 @@
 	  source/headers/geos/noding/SegmentStringUtil.h: Added from JTS
 	  1.9 to support prepared geometry
 
-2007-12-21 20:33  benjubb
+2007-12-21 20:33  Ben Jubb <benjubb@refractions.net>
 
 	* [r2057] source/headers/geos/noding/SegmentString.h: changed
 	  destructor to be virtual
 
-2007-12-21 20:31  benjubb
+2007-12-21 20:31  Ben Jubb <benjubb@refractions.net>
 
 	* [r2056] source/headers/geos/geom/Envelope.h: Added a covers()
 	  predicate, from JTS 1.9, to support prepared geometry
 
-2007-12-21 20:30  benjubb
+2007-12-21 20:30  Ben Jubb <benjubb@refractions.net>
 
 	* [r2055] source/headers/geos/geom/Geometry.h: changed IsRectangle
 	  to be public
 
-2007-12-21 20:03  benjubb
+2007-12-21 20:03  Ben Jubb <benjubb@refractions.net>
 
 	* [r2054] source/headers/geos/geom/Envelope.inl: Added a covers()
 	  predicate, from JTS 1.9, to support prepared geometry
 
-2007-12-21 20:00  benjubb
+2007-12-21 20:00  Ben Jubb <benjubb@refractions.net>
 
 	* [r2053]
 	  source/headers/geos/algorithm/locate/SimplePointInAreaLocator.h:
 	  Moved from geos::algorithm as in JTS 1.9
 
-2007-12-21 19:55  benjubb
+2007-12-21 19:55  Ben Jubb <benjubb@refractions.net>
 
 	* [r2052] source/headers/geos/algorithm/locate,
 	  source/headers/geos/algorithm/locate/IndexedPointInAreaLocator.h,
 	  source/headers/geos/algorithm/locate/PointOnGeometryLocator.h:
 	  New namaspace geos::algorithm::locate, as in JTS 1.9..
 
-2007-12-21 19:52  benjubb
+2007-12-21 19:52  Ben Jubb <benjubb@refractions.net>
 
 	* [r2051] source/headers/geos/algorithm/SimplePointInAreaLocator.h:
 	  Added a public constructor, and a method to bring in line with
@@ -4389,13 +4389,13 @@
 	* [r2030] web, web/index.html, web/style.css: add the web site
 	  content to svn for collaborative management
 
-2007-09-21 17:42  csavage
+2007-09-21 17:42  Charlie Savage <cfis@savagexi.com>
 
 	* [r2029] configure.in: Update the CAPI and GEOS version numbers
 	  based on Reader/Writer additions to the CAPI and EWKB support for
 	  the C++ api.
 
-2007-09-21 17:40  csavage
+2007-09-21 17:40  Charlie Savage <cfis@savagexi.com>
 
 	* [r2028] swig/geos.i.in, swig/ruby/geos_wrap.cxx,
 	  swig/ruby/ruby.i, swig/ruby/test/test_buffer.rb,
@@ -4404,7 +4404,7 @@
 	  swig/ruby/test/test_version.rb: Updated the SWIG bindings and
 	  tests to use the new Reader/Writer classes exposed in the CAPI.
 
-2007-09-21 17:40  csavage
+2007-09-21 17:40  Charlie Savage <cfis@savagexi.com>
 
 	* [r2027] capi/geos_c.cpp, capi/geos_c.h.in: Update the CAPI to
 	  expose WKTReader/WBTWriter and WKBReader/WBKWriter in the CAPI.
@@ -4415,7 +4415,7 @@
 	  ability to output the EWKB format (set SRID to true in the
 	  WKBWriter).
 
-2007-09-21 17:35  csavage
+2007-09-21 17:35  Charlie Savage <cfis@savagexi.com>
 
 	* [r2026] source/index/strtree/STRtree.cpp: Switched back to using
 	  < because the fuzzy comparison now in use trips assertion errors
@@ -4424,7 +4424,7 @@
 	  that the '<' comparison sometimes gives unstable results. But
 	  that seems better than an assertion failure.
 
-2007-09-21 17:32  csavage
+2007-09-21 17:32  Charlie Savage <cfis@savagexi.com>
 
 	* [r2025] source/headers/geos/io/WKBWriter.h,
 	  source/io/WKBWriter.cpp: Updated the WKBWriter so it can output
@@ -4434,33 +4434,33 @@
 	  These getters/setters make it easier to wrap the reader in the
 	  CAPI.
 
-2007-09-14 15:34  csavage
+2007-09-14 15:34  Charlie Savage <cfis@savagexi.com>
 
 	* [r2024] build/msvc80/geos_c_dll/geos_c_dll.vcproj,
 	  build/msvc80/geos_ruby, build/msvc80/geos_ruby/geos_ruby.vcproj:
 
-2007-09-14 15:34  csavage
+2007-09-14 15:34  Charlie Savage <cfis@savagexi.com>
 
 	* [r2023] build/msvc80/geos_python: Told SVN to ignore MSCV++
 	  Python swig build directories.
 
-2007-09-14 15:25  csavage
+2007-09-14 15:25  Charlie Savage <cfis@savagexi.com>
 
 	* [r2022] source/io/WKBReader.cpp: Set unknown SRID values to 0
 	  instead of -1 to be more consistent with the rest of GEOS (srid
 	  values are initialized to 0 by default).
 
-2007-09-11 02:02  csavage
+2007-09-11 02:02  Charlie Savage <cfis@savagexi.com>
 
 	* [r2021] source/headers/geos/profiler.h: Don't include config.h
 	  for MSVC++ builds.
 
-2007-09-07 17:32  csavage
+2007-09-07 17:32  Charlie Savage <cfis@savagexi.com>
 
 	* [r2020] configure.in: The test for SWIG was incorrect. Fixed by
 	  patch from Mark Cave-Ayland.
 
-2007-09-06 23:24  csavage
+2007-09-06 23:24  Charlie Savage <cfis@savagexi.com>
 
 	* [r2019] source/headers/geos/profiler.h: Applied patch from Mark
 	  Cave-Ayland's to make older versions of MingW that don't have
@@ -4468,20 +4468,20 @@
 	  more recent versions of MingW that don't correctly compile with
 	  the -ansi compiler switch.
 
-2007-09-06 23:22  csavage
+2007-09-06 23:22  Charlie Savage <cfis@savagexi.com>
 
 	* [r2018] configure.in, macros/ruby.m4: Applied patches from Mark
 	  Cave-Ayland's that reorganize/improve the SWIG support in the
 	  generated configure file.\
 
-2007-08-31 20:44  csavage
+2007-08-31 20:44  Charlie Savage <cfis@savagexi.com>
 
 	* [r2017] capi/geos_c.cpp, capi/geos_c.h.in: For MSVC++ builds the
 	  CAPI version was set in geos_c.cpp instead of geos_c.h and it was
 	  set incorrectly. This patch fixes the MSVC++ version number and
 	  centralizes the various versoin #defines in the geos_c.h.
 
-2007-08-31 20:18  csavage
+2007-08-31 20:18  Charlie Savage <cfis@savagexi.com>
 
 	* [r2016] swig/python/Makefile.am, swig/ruby/Makefile.am: Update
 	  swig makefiles to make the wrappers dependent on the SWIG
@@ -4490,45 +4490,45 @@
 	  but that the .cxx wrapper cannot be regenerated since SWIG is not
 	  available.
 
-2007-08-30 20:06  csavage
+2007-08-30 20:06  Charlie Savage <cfis@savagexi.com>
 
 	* [r2015] source/headers/geos/profiler.h,
 	  source/headers/geos/timeval.h: MingW now includes the
 	  gettimeofday function - so reworked includes to only use custom
 	  version when building with VC++.
 
-2007-08-30 17:00  csavage
+2007-08-30 17:00  Charlie Savage <cfis@savagexi.com>
 
 	* [r2014] macros/ruby.m4, swig/ruby/Makefile.am: Added RUBY_BIN_DIR
 	  to autoconf macros - simplified auto make input file for ruby
 	  bindings.
 
-2007-08-30 06:19  csavage
+2007-08-30 06:19  Charlie Savage <cfis@savagexi.com>
 
 	* [r2013] macros/ac_pkg_swig.m4: The last attempt to fix this file
 	  failed - instead keep the code that queries the swig libraries
 	  but use sed to merge multiple lines together. If this is not
 	  done, then the swig output causes ./configure to blow up on msys.
 
-2007-08-30 05:31  csavage
+2007-08-30 05:31  Charlie Savage <cfis@savagexi.com>
 
 	* [r2012] macros/ac_pkg_swig.m4: Fixes sed issue with swig on msys.
 	  For more info see:
 	  
 	  http://lists.refractions.net/pipermail/geos-devel/2007-August/002956.html
 
-2007-08-30 03:18  csavage
+2007-08-30 03:18  Charlie Savage <cfis@savagexi.com>
 
 	* [r2011] swig/geos.i.in: Changed from dos to unix line feeds.
 
-2007-08-29 01:41  csavage
+2007-08-29 01:41  Charlie Savage <cfis@savagexi.com>
 
 	* [r2010] build/msvc80/geos.sln, build/msvc80/geos_python,
 	  build/msvc80/geos_python/geos_python.vcproj,
 	  build/msvc80/geos_ruby/geos_ruby.vcproj: New VC++ project for the
 	  python SWIG bindings.
 
-2007-08-29 01:29  csavage
+2007-08-29 01:29  Charlie Savage <cfis@savagexi.com>
 
 	* [r2009] build/msvc80/geos_ruby/geos_ruby.vcproj, swig/geos.i.in,
 	  swig/python/python.i, swig/ruby/geos_wrap.cxx, swig/ruby/ruby.i:
@@ -4537,47 +4537,47 @@
 	  Updated out-of-date copyright notices for no particularly good
 	  reason.
 
-2007-08-28 21:29  csavage
+2007-08-28 21:29  Charlie Savage <cfis@savagexi.com>
 
 	* [r2008] build/msvc80: Added release as an ignored directory for
 	  VC++, similar to the debug directory.
 
-2007-08-28 21:28  csavage
+2007-08-28 21:28  Charlie Savage <cfis@savagexi.com>
 
 	* [r2007] build/msvc80/geos_ruby: Added new ruby VC++ project to
 	  solution file.
 
-2007-08-28 21:27  csavage
+2007-08-28 21:27  Charlie Savage <cfis@savagexi.com>
 
 	* [r2006] capi/geos_c.h.in: Fixed c api include for VC++ - it
 	  should be #include <geos/version.h> instead of #include
 	  <version.h>.
 
-2007-08-28 21:27  csavage
+2007-08-28 21:27  Charlie Savage <cfis@savagexi.com>
 
 	* [r2005] build/msvc80/geos.sln: Added new ruby VC++ project to
 	  solution file.
 
-2007-08-28 21:26  csavage
+2007-08-28 21:26  Charlie Savage <cfis@savagexi.com>
 
 	* [r2004] build/msvc80/geos_c_dll/geos_c_dll.vcproj: Follow lead of
 	  geos_lib project - copy geos/geos_c.h.in to geos/geos_c.h when
 	  building with VC++.
 
-2007-08-28 21:25  csavage
+2007-08-28 21:25  Charlie Savage <cfis@savagexi.com>
 
 	* [r2003] build/msvc80/geos_ruby,
 	  build/msvc80/geos_ruby/geos_ruby.vcproj: Added new vc++ project
 	  for building ruby bindings. Its not perfect since it hard-codes
 	  the path to Ruby, but its enough to get one started.
 
-2007-08-28 21:22  csavage
+2007-08-28 21:22  Charlie Savage <cfis@savagexi.com>
 
 	* [r2002] swig/python/geos.py, swig/python/geos_wrap.cxx,
 	  swig/ruby/geos_wrap.cxx: Updated SWIG wrappers based on changed
 	  interface file. Also generated with SWIG 1.3.31
 
-2007-08-28 20:42  csavage
+2007-08-28 20:42  Charlie Savage <cfis@savagexi.com>
 
 	* [r2001] swig/ruby/test/geos_tests.rb,
 	  swig/ruby/test/test_buffer.rb,
@@ -4589,13 +4589,13 @@
 	  swig/ruby/test/test_version.rb: SWIG bindings - updated Ruby
 	  tests based on name changes.
 
-2007-08-28 20:41  csavage
+2007-08-28 20:41  Charlie Savage <cfis@savagexi.com>
 
 	* [r2000] swig/ruby/ruby.i: Updated Ruby swig bindings to more
 	  closely match Ruby style names. So eql? instead of equals,
 	  dimensions instead of get_dimensions, etc.
 
-2007-08-28 20:40  csavage
+2007-08-28 20:40  Charlie Savage <cfis@savagexi.com>
 
 	* [r1999] swig/geos.i.in: Exposed Geometry::Clone method in SWIG
 	  bindings. Added check for NULL string in geomFromWKT wrapper.
@@ -5301,7 +5301,7 @@
 
 	* [r1908] configure.in: Changes for capi .vc generation
 
-2006-11-10 14:50  hobu
+2006-11-10 14:50  Howard Butler <hobu.inc@gmail.com>
 
 	* [r1907] capi/geos_c.h.vc: update
 
@@ -5337,17 +5337,17 @@
 	  distribute files needed for testing, proper cleanup (make
 	  distcheck works now)
 
-2006-11-05 00:24  csavage
+2006-11-05 00:24  Charlie Savage <cfis@savagexi.com>
 
 	* [r1899] swig/ruby/geos_wrap.cxx: Updated ruby swig wrapper for
 	  changes in header files.
 
-2006-11-05 00:24  csavage
+2006-11-05 00:24  Charlie Savage <cfis@savagexi.com>
 
 	* [r1898] swig/python/geos_wrap.cxx: Updated python swig wrapper
 	  for changes in header files.
 
-2006-11-05 00:23  csavage
+2006-11-05 00:23  Charlie Savage <cfis@savagexi.com>
 
 	* [r1897] swig/geos.i: Fixes for changes in header files.
 
@@ -5627,7 +5627,7 @@
 	* [r1857] ChangeLog, tests/xmltester/XMLTester.cpp: increment
 	  areatest verbosity (needs -v -v)
 
-2006-10-02 18:53  hobu
+2006-10-02 18:53  Howard Butler <hobu.inc@gmail.com>
 
 	* [r1856] ChangeLog, capi/geos_c.cpp: GEOSEnvelope wasn't in the
 	  PROTOTYPES section in geos_c.cpp
@@ -6423,26 +6423,26 @@
 	* [r1811] ChangeLog, configure.in: AC_CONFIG_HEADERS =>
 	  AM_CONFIG_HEADER (to support older automake versions)
 
-2006-08-04 20:30  hobu
+2006-08-04 20:30  Howard Butler <hobu.inc@gmail.com>
 
 	* [r1810] capi/geos_c.h.vc: version should be 3.0.0 instead of
 	  3.3.0
 
-2006-08-04 20:29  hobu
+2006-08-04 20:29  Howard Butler <hobu.inc@gmail.com>
 
 	* [r1809] source/headers/geos/version.h.vc: bump patch to rc1
 
-2006-08-04 20:23  hobu
+2006-08-04 20:23  Howard Butler <hobu.inc@gmail.com>
 
 	* [r1808] source/Makefile.vc: give makefile.vc some love
 
-2006-08-04 16:40  csavage
+2006-08-04 16:40  Charlie Savage <cfis@savagexi.com>
 
 	* [r1807] swig/geos.i, swig/python/geos.py,
 	  swig/python/geos_wrap.cxx, swig/ruby/geos_wrap.cxx: Updated SWIG
 	  bindings to expose the equalsExact and normalize methods.
 
-2006-08-03 23:43  csavage
+2006-08-03 23:43  Charlie Savage <cfis@savagexi.com>
 
 	* [r1806] source/headers/geos/platform.h.in,
 	  source/headers/geos/timeval.h: Two changes needed to include the
@@ -6453,29 +6453,29 @@
 
 	* [r1805] ChangeLog: try to keep text within 80 cols
 
-2006-08-03 22:24  csavage
+2006-08-03 22:24  Charlie Savage <cfis@savagexi.com>
 
 	* [r1804] configure.in: Changed configure.in to use *nix line
 	  feeds.
 
-2006-08-03 22:17  csavage
+2006-08-03 22:17  Charlie Savage <cfis@savagexi.com>
 
 	* [r1803] capi/geos_c.cpp, capi/geos_c.h.in, capi/geos_c.h.vc:
 	  Mistakenly used Geometry* in C api headers instead of GEOSGeom.
 
-2006-08-03 22:13  csavage
+2006-08-03 22:13  Charlie Savage <cfis@savagexi.com>
 
 	* [r1802] configure.in: Removed native line endings for
 	  configure.in since CR/LF does not work on Windows under msys.
 
-2006-08-03 22:02  csavage
+2006-08-03 22:02  Charlie Savage <cfis@savagexi.com>
 
 	* [r1801] ChangeLog, capi/geos_c.cpp, capi/geos_c.h.in,
 	  capi/geos_c.h.vc: Added equalsExact and normalize to the c api as
 	  discussed on the mailing list
 	  (http://geos.refractions.net/pipermail/geos-devel/2006-July/002452.html).
 
-2006-08-03 21:34  csavage
+2006-08-03 21:34  Charlie Savage <cfis@savagexi.com>
 
 	* [r1800] ChangeLog, swig/python/Makefile.am,
 	  swig/ruby/Makefile.am: Updated build scripts so that
@@ -6486,7 +6486,7 @@
 
 	* [r1799] ChangeLog, tests/unit/geos_unit.cpp: Fixed Bug #90
 
-2006-08-03 16:18  csavage
+2006-08-03 16:18  Charlie Savage <cfis@savagexi.com>
 
 	* [r1798] swig/python/geos.py, swig/python/geos_wrap.cxx,
 	  swig/ruby/geos_wrap.cxx: Added SWIG generated wrapper files for
@@ -6572,7 +6572,7 @@
 	* [r1775] ChangeLog, autogen.sh: Made autogen.sh errors more
 	  visible
 
-2006-07-21 19:37  csavage
+2006-07-21 19:37  Charlie Savage <cfis@savagexi.com>
 
 	* [r1773] NEWS: Added note about inclusion of version.in.vc. See
 	  http://geos.refractions.net/pipermail/geos-devel/2006-July/002463.html
@@ -6637,74 +6637,74 @@
 	* [r1764] swig/ruby/test/Makefile.am: Removed blank space after
 	  backslash (automake complained)
 
-2006-07-19 02:43  csavage
+2006-07-19 02:43  Charlie Savage <cfis@savagexi.com>
 
 	* [r1763] source/headers/geos/Makefile.am: Added veresion.h.vc as
 	  EXTRA_DIST to ensure it is packaged when doing make dist.
 
-2006-07-15 19:36  csavage
+2006-07-15 19:36  Charlie Savage <cfis@savagexi.com>
 
 	* [r1762] configure.in: Removed python test/cases directory (tests
 	  are now just in tests directory).
 
-2006-07-13 08:02  csavage
+2006-07-13 08:02  Charlie Savage <cfis@savagexi.com>
 
 	* [r1761] ChangeLog: Updated ChangeLog to note additional SWIG
 	  tests and integration with the GEOS build system.
 
-2006-07-13 07:49  csavage
+2006-07-13 07:49  Charlie Savage <cfis@savagexi.com>
 
 	* [r1760] capi/geos_c.h.vc: Updated version number to
 	  3.0.0rc1-CAPI-1.1.1 to match the autoconf generated files.
 
-2006-07-13 07:38  csavage
+2006-07-13 07:38  Charlie Savage <cfis@savagexi.com>
 
 	* [r1759] swig/ruby/test/Makefile.am: Fixed spelling mistake in
 	  test task.
 
-2006-07-13 07:36  csavage
+2006-07-13 07:36  Charlie Savage <cfis@savagexi.com>
 
 	* [r1758] swig/Makefile.am: Removed dependency on README.txt since
 	  it has been removed.
 
-2006-07-13 07:35  csavage
+2006-07-13 07:35  Charlie Savage <cfis@savagexi.com>
 
 	* [r1757] swig/ruby/test/test_buffer.rb: New tests for the buffer
 	  operation.
 
-2006-07-13 07:29  csavage
+2006-07-13 07:29  Charlie Savage <cfis@savagexi.com>
 
 	* [r1756] configure.in: Added SWIG Python and Ruby bindings back
 	  into the main GEOS build system.
 
-2006-07-13 07:27  csavage
+2006-07-13 07:27  Charlie Savage <cfis@savagexi.com>
 
 	* [r1755] swig/python/tests/Makefile.am,
 	  swig/ruby/test/Makefile.am: Updated extra_dist for test
 	  directories.
 
-2006-07-13 07:20  csavage
+2006-07-13 07:20  Charlie Savage <cfis@savagexi.com>
 
 	* [r1754] swig/python/tests/Makefile.am: Remove the dependency on
 	  the cases subdirectory which is no longer needed.
 
-2006-07-13 07:19  csavage
+2006-07-13 07:19  Charlie Savage <cfis@savagexi.com>
 
 	* [r1753] swig/python/tests/runtests.py: Updated test suite to use
 	  the correct tests.
 
-2006-07-13 07:16  csavage
+2006-07-13 07:16  Charlie Savage <cfis@savagexi.com>
 
 	* [r1752] swig/python/tests/cases: Removed old tests cases which
 	  are no longer valid (worked using the C++ api).
 
-2006-07-13 07:14  csavage
+2006-07-13 07:14  Charlie Savage <cfis@savagexi.com>
 
 	* [r1751] swig/python/tests/test_geometry.py: New Python test case
 	  to ensure creating coordinate sequences and geometries works
 	  correctly.
 
-2006-07-13 07:14  csavage
+2006-07-13 07:14  Charlie Savage <cfis@savagexi.com>
 
 	* [r1750] swig/README.txt, swig/python/Makefile.am,
 	  swig/python/README.txt, swig/ruby/Makefile.am,
@@ -6712,113 +6712,113 @@
 	  longer applicable now that the SWIG bindings have been
 	  intergrated into the GEOS build system.
 
-2006-07-13 07:13  csavage
+2006-07-13 07:13  Charlie Savage <cfis@savagexi.com>
 
 	* [r1749] swig/ruby/test/test_geometry.rb: Renamed test class.
 
-2006-07-13 07:09  csavage
+2006-07-13 07:09  Charlie Savage <cfis@savagexi.com>
 
 	* [r1748] swig/python/Makefile.am: Removed old, unused code.
 
-2006-07-13 07:09  csavage
+2006-07-13 07:09  Charlie Savage <cfis@savagexi.com>
 
 	* [r1747] swig/python/python.i: Added tyepmap to support creating
 	  polygons with holes.
 
-2006-07-13 07:08  csavage
+2006-07-13 07:08  Charlie Savage <cfis@savagexi.com>
 
 	* [r1746] swig/geos.i: Added default value for quadsegs parmeter in
 	  buffer operation.
 
-2006-07-13 04:47  csavage
+2006-07-13 04:47  Charlie Savage <cfis@savagexi.com>
 
 	* [r1745] swig/python/tests/example.py: Manually moved from parent
 	  directory.
 
-2006-07-13 04:46  csavage
+2006-07-13 04:46  Charlie Savage <cfis@savagexi.com>
 
 	* [r1744] swig/python/Makefile.am: Updated EXTRA_DIST to include
 	  python.i and geos.pth
 
-2006-07-13 04:46  csavage
+2006-07-13 04:46  Charlie Savage <cfis@savagexi.com>
 
 	* [r1743] swig/python/example.py: Moved file to tests subdirectory.
 
-2006-07-13 04:45  csavage
+2006-07-13 04:45  Charlie Savage <cfis@savagexi.com>
 
 	* [r1742] swig/python/setup.py: Installation is now done by
 	  autoconf macros instead of setup.py
 
-2006-07-13 04:39  csavage
+2006-07-13 04:39  Charlie Savage <cfis@savagexi.com>
 
 	* [r1741] swig/geos.i, swig/python/python.i, swig/ruby/ruby.i:
 	  Cleaned up ruby.i, added licenxe to python.i, commented back in
 	  python.i into geos.i.
 
-2006-07-13 04:09  csavage
+2006-07-13 04:09  Charlie Savage <cfis@savagexi.com>
 
 	* [r1740] swig/ruby/test/test_helper.rb: Added code to read xml
 	  test cases.
 
-2006-07-13 04:08  csavage
+2006-07-13 04:08  Charlie Savage <cfis@savagexi.com>
 
 	* [r1739] swig/geos.i: Added exception handling for results that
 	  return geometries. Added normalize and equalsExact, but for the
 	  moment they are commented out.
 
-2006-07-13 03:59  csavage
+2006-07-13 03:59  Charlie Savage <cfis@savagexi.com>
 
 	* [r1738] tests/xmltester/XMLTester.cpp: Changes to compile on VC++
 	  - fully qualified polygon name. Should also work on MingW, will
 	  test next.
 
-2006-07-12 23:17  csavage
+2006-07-12 23:17  Charlie Savage <cfis@savagexi.com>
 
 	* [r1737] swig/ruby/test/geos_tests.rb: Disabled
 	  test_combinations.rb for the moment since it fails.
 
-2006-07-12 23:16  csavage
+2006-07-12 23:16  Charlie Savage <cfis@savagexi.com>
 
 	* [r1736] swig/geos.i: Fixed serious bug in geom_to_hex and
 	  geom_to_wkb type maps. Was using temporary variable instead of
 	  passed in variable.
 
-2006-07-12 22:55  csavage
+2006-07-12 22:55  Charlie Savage <cfis@savagexi.com>
 
 	* [r1735] capi/geos_c.h.vc: Switched GeosBytesOrder to int in api
 	  signatures.
 
-2006-07-12 22:11  csavage
+2006-07-12 22:11  Charlie Savage <cfis@savagexi.com>
 
 	* [r1734] swig/geos.i: A number of changes to fix warning generated
 	  by gcc and to make sure the bindings compile for Python.
 
-2006-07-12 22:11  csavage
+2006-07-12 22:11  Charlie Savage <cfis@savagexi.com>
 
 	* [r1733] swig/python/Makefile.am: Updated Python SWIG makefile to
 	  build with the c api.
 
-2006-07-12 22:10  csavage
+2006-07-12 22:10  Charlie Savage <cfis@savagexi.com>
 
 	* [r1732] swig/ruby/ruby.i: Minor change to fix gcc warning.
 
-2006-07-12 22:10  csavage
+2006-07-12 22:10  Charlie Savage <cfis@savagexi.com>
 
 	* [r1731] swig/ruby/Makefile.am: Updated Ruby SWIG makefile to
 	  build with the c api.
 
-2006-07-12 21:03  csavage
+2006-07-12 21:03  Charlie Savage <cfis@savagexi.com>
 
 	* [r1730] capi/geos_c.cpp, capi/geos_c.h.in, capi/geos_c.h.vc:
 	  Fixed an error in the way GEOSByteOrder was declared. It is now
 	  an enum in geos_c.h
 
-2006-07-12 19:10  csavage
+2006-07-12 19:10  Charlie Savage <cfis@savagexi.com>
 
 	* [r1729] swig/geos.i: Added %rename directive so that GeomUnion is
 	  exposed as union is SWIG languages.
 
-2006-07-12 19:08  csavage
+2006-07-12 19:08  Charlie Savage <cfis@savagexi.com>
 
 	* [r1728] swig/ruby/test/geos_tests.rb,
 	  swig/ruby/test/test_combinations.rb,
@@ -6826,130 +6826,130 @@
 	  (union, intersection, etc.) and operaptions (buffer, centroid,
 	  etc.).
 
-2006-07-12 19:07  csavage
+2006-07-12 19:07  Charlie Savage <cfis@savagexi.com>
 
 	* [r1727] swig/ruby/test/test_simple.rb: These tests are no longer
 	  needed.
 
-2006-07-12 17:51  csavage
+2006-07-12 17:51  Charlie Savage <cfis@savagexi.com>
 
 	* [r1726] swig/ruby/test/geos_tests.rb,
 	  swig/ruby/test/test_helper.rb, swig/ruby/test/test_relations.rb:
 	  Ported old tests for relations, such as intersects, touches,
 	  etc., to new swig bindings.
 
-2006-07-12 08:30  csavage
+2006-07-12 08:30  Charlie Savage <cfis@savagexi.com>
 
 	* [r1725] swig/ruby/ruby.i: Added type map needed to create
 	  polygons with holes. Unfortunately, this is Ruby specific. It
 	  needs to be ported to Python next.
 
-2006-07-12 08:29  csavage
+2006-07-12 08:29  Charlie Savage <cfis@savagexi.com>
 
 	* [r1724] swig/geos.i: Removed wrapper classes and replace them
 	  with SWIG "fake" classes. This makes the interface cleaner, and
 	  makes memory management much easier. Also added area, dimension,
 	  length, getExteriorRing, getInteriorRingN methods.
 
-2006-07-12 08:27  csavage
+2006-07-12 08:27  Charlie Savage <cfis@savagexi.com>
 
 	* [r1723] swig/ruby/test/test_srid.rb: Added test to read from wkb
 	  geometry - currently fails, needs more investigation.
 
-2006-07-12 08:27  csavage
+2006-07-12 08:27  Charlie Savage <cfis@savagexi.com>
 
 	* [r1722] swig/ruby/test/test_io.rb: Added tests for invalid
 	  geometries.
 
-2006-07-12 08:27  csavage
+2006-07-12 08:27  Charlie Savage <cfis@savagexi.com>
 
 	* [r1721] swig/ruby/test/geos_tests.rb: Updated ruby test suite.
 
-2006-07-12 08:24  csavage
+2006-07-12 08:24  Charlie Savage <cfis@savagexi.com>
 
 	* [r1720] swig/ruby/test/test_geometry.rb: New tests for area,
 	  length, distance.
 
-2006-07-12 05:21  csavage
+2006-07-12 05:21  Charlie Savage <cfis@savagexi.com>
 
 	* [r1719] swig/ruby/test/test_coordinate_sequence.rb,
 	  swig/ruby/test/test_version.rb: Converted line feeds to Unix
 	  style.
 
-2006-07-12 05:21  csavage
+2006-07-12 05:21  Charlie Savage <cfis@savagexi.com>
 
 	* [r1718] swig/ruby/test/test_geometry.rb: New tests for creating
 	  geometries and calling various functions such as numGeometries,
 	  isValid, etc.
 
-2006-07-12 05:20  csavage
+2006-07-12 05:20  Charlie Savage <cfis@savagexi.com>
 
 	* [r1717] swig/ruby/test/test_srid.rb: Tests for srid handling.
 
-2006-07-12 05:20  csavage
+2006-07-12 05:20  Charlie Savage <cfis@savagexi.com>
 
 	* [r1716] swig/ruby/test/test_io.rb: Merged tests from
 	  test_wkb_reader.rb
 
-2006-07-12 05:18  csavage
+2006-07-12 05:18  Charlie Savage <cfis@savagexi.com>
 
 	* [r1715] swig/ruby/test/test_wkb_reader.rb: Merging into
 	  test_io.rb
 
-2006-07-12 04:46  csavage
+2006-07-12 04:46  Charlie Savage <cfis@savagexi.com>
 
 	* [r1714] swig/ruby/test/test_version.rb: Tests to verify returned
 	  version numbers from C api.
 
-2006-07-11 18:48  csavage
+2006-07-11 18:48  Charlie Savage <cfis@savagexi.com>
 
 	* [r1713] swig/geos.i: Fixes for coordinate sequences. Fixed bug in
 	  range checking, chaned clone to be a method instead of copy
 	  constructor, marked clone as creating a new object.
 
-2006-07-11 18:44  csavage
+2006-07-11 18:44  Charlie Savage <cfis@savagexi.com>
 
 	* [r1712] swig/ruby/test/test_coordinate_sequence.rb: Tests for
 	  SWIG coordinate sequence class.
 
-2006-07-11 09:07  csavage
+2006-07-11 09:07  Charlie Savage <cfis@savagexi.com>
 
 	* [r1711] capi/geos_c.h.in, capi/geos_c.h.vc: Added reference to
 	  new enum called GEOSByteOrders. The enum has two values,
 	  GEOS_WKB_NDR and GEOS_WKB_XDR which signify big endian and little
 	  endian byte orders.
 
-2006-07-11 09:05  csavage
+2006-07-11 09:05  Charlie Savage <cfis@savagexi.com>
 
 	* [r1710] capi/geos_c.h.in, capi/geos_c.h.vc: Added 5 methods to
 	  the C API as documented in the changelong. The new methods are
 	  read/write WKB Hex values, read/write WKB byte order and read wkb
 	  output dimensions.
 
-2006-07-11 08:55  csavage
+2006-07-11 08:55  Charlie Savage <cfis@savagexi.com>
 
 	* [r1709] swig/ruby/test/test_wkb_reader.rb: Test cases for reading
 	  and writing geometries to WKT, WKB and hex encoded WKB formats
 	  via the SWIG bindings.
 
-2006-07-11 08:54  csavage
+2006-07-11 08:54  Charlie Savage <cfis@savagexi.com>
 
 	* [r1708] capi/geos_c.h.vc: Updated visual studio header file to
 	  match geos_c.h.in
 
-2006-07-11 08:53  csavage
+2006-07-11 08:53  Charlie Savage <cfis@savagexi.com>
 
 	* [r1707] capi/geos_c.cpp: Added 5 methods to the C API as
 	  documented in the changelong. The new methods are read/write WKB
 	  Hex values, read/write WKB byte order and read wkb output
 	  dimensions.
 
-2006-07-11 08:52  csavage
+2006-07-11 08:52  Charlie Savage <cfis@savagexi.com>
 
 	* [r1706] ChangeLog: Noted additions to the C API and porting of
 	  SWIG to use the C api.
 
-2006-07-11 08:44  csavage
+2006-07-11 08:44  Charlie Savage <cfis@savagexi.com>
 
 	* [r1705] swig/geos.i, swig/ruby/ruby.i: Ported SWIG bindings to
 	  use c-api.
@@ -7606,11 +7606,11 @@
 	  name and renamed values to have a lowercase prefix. Drop all of
 	  noding headers from installed header set.
 
-2006-06-03 22:31  hobu
+2006-06-03 22:31  Howard Butler <hobu.inc@gmail.com>
 
 	* [r1611] source/Makefile.vc: update to track latest removals
 
-2006-06-03 22:29  hobu
+2006-06-03 22:29  Howard Butler <hobu.inc@gmail.com>
 
 	* [r1610] source/simplify/DouglasPeuckerLineSimplifier.cpp: Use a
 	  fully qualified namespace for LineSegment because we're inside of
@@ -8110,11 +8110,11 @@
 	* [r1533] ChangeLog, source/headers/geos/nodingSnapround.h: Doxygen
 	  brief
 
-2006-05-03 16:22  hobu
+2006-05-03 16:22  Howard Butler <hobu.inc@gmail.com>
 
 	* [r1532] source/Makefile.vc: tweak clean target
 
-2006-05-03 16:21  hobu
+2006-05-03 16:21  Howard Butler <hobu.inc@gmail.com>
 
 	* [r1531] source/Makefile.vc: Build the C API and shared lib
 	  separate from the normal lib
@@ -8125,12 +8125,12 @@
 	* [r1530] source/headers/geos/noding/SegmentString.h: fit in 80
 	  columns
 
-2006-05-03 16:09  hobu
+2006-05-03 16:09  Howard Butler <hobu.inc@gmail.com>
 
 	* [r1529] capi/geos_c.h.vc: Maintain a geos_c.h.vc until we come up
 	  with a better solution
 
-2006-05-03 15:50  hobu
+2006-05-03 15:50  Howard Butler <hobu.inc@gmail.com>
 
 	* [r1528] ChangeLog: *** empty log message ***
 
@@ -8140,7 +8140,7 @@
 	  fixed bug in SimpleSnapRounder::computeSnaps, trying to access
 	  out-of-bound vector element.
 
-2006-05-03 15:49  hobu
+2006-05-03 15:49  Howard Butler <hobu.inc@gmail.com>
 
 	* [r1526] source/Makefile.vc: add additional files and change names
 	  where necessary
@@ -8154,11 +8154,11 @@
 
 	* [r1524] ChangeLog: Tabs for indent
 
-2006-05-03 15:32  hobu
+2006-05-03 15:32  Howard Butler <hobu.inc@gmail.com>
 
 	* [r1523] ChangeLog: *** empty log message ***
 
-2006-05-03 15:30  hobu
+2006-05-03 15:30  Howard Butler <hobu.inc@gmail.com>
 
 	* [r1522] source/headers/geos/version.h.vc: Maintain a version.h.vc
 	  until we come up with a better solution
@@ -9250,17 +9250,17 @@
 	  Removed the GEOSException::toString redundant method (use
 	  ::what() instead)
 
-2006-04-04 01:54  hobu
+2006-04-04 01:54  Howard Butler <hobu.inc@gmail.com>
 
 	* [r1344] source/Makefile.vc: Add in changes/missing from previous
 	  rearranging.
 
-2006-04-04 01:29  hobu
+2006-04-04 01:29  Howard Butler <hobu.inc@gmail.com>
 
 	* [r1343] capi/geos_c.cpp: GEOS_JTS_PORT is in version.h not
 	  platform.h
 
-2006-04-04 01:28  hobu
+2006-04-04 01:28  Howard Butler <hobu.inc@gmail.com>
 
 	* [r1342] source/Makefile.vc: remove objects that no longer exist
 	  default to MSVC_VER=1310
