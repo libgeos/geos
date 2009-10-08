@@ -19,7 +19,7 @@ EXTRA_DIST = acsite.m4 makefile.vc nmake.opt
 
 ACLOCAL_AMFLAGS = -I macros
 
-ChangeLog.svn:
-	cd $(srcdir) && svn2cl --authors=authors.svn -i -o ChangeLog.svn
+ChangeLog:
+	cd $(srcdir) && svn2cl --authors=authors.svn -i -o ChangeLog
 
-.PHONY: ChangeLog.svn
+.PHONY: ChangeLog
