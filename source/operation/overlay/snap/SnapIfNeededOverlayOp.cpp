@@ -63,7 +63,9 @@ SnapIfNeededOverlayOp::getResultGeometry(OverlayOp::OpCode opCode)
 		// ignore this exception, since the operation will be rerun
 		//      System.out.println(ex.getMessage());
 		//      ex.printStackTrace();
+#if GEOS_DEBUG
 		std::cerr << "Overlay op threw " << ex.what() << ". Will try snapping now" << std::endl;
+#endif
 	}
 
 	if (! isSuccess) {
