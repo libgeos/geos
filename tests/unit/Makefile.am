@@ -12,6 +12,7 @@ EXTRA_DIST = \
 	tut/tut_exception.hpp \
 	tut/tut.hpp \
 	tut/tut_posix.hpp \
+	tut/tut_console_reporter.hpp \
 	tut/tut_reporter.hpp \
 	tut/tut_restartable.hpp \
 	tut/tut_result.hpp \
