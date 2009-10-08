@@ -4,6 +4,7 @@
 #
 
 GEOS_DIRLIST =  algorithm \
+                algorithm\distance \
                 algorithm\locate \
                 examples \
                 geom \
@@ -21,6 +22,7 @@ GEOS_DIRLIST =  algorithm \
                 index\strtree \
                 index\sweepline \
                 io \
+		linearref \
                 noding \
                 noding\snapround \
                 operation \
@@ -28,6 +30,8 @@ GEOS_DIRLIST =  algorithm \
                 operation\distance \
                 operation\linemerge \
                 operation\overlay \
+                operation\overlay\snap \
+                operation\overlay\validate \
                 operation\polygonize \
                 operation\predicate \
                 operation\relate \
@@ -36,6 +40,6 @@ GEOS_DIRLIST =  algorithm \
                 planargraph \
                 planargraph\algorithm \
                 precision \
-				simplify \
+		simplify \
                 util
 

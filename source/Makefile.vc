@@ -222,7 +222,7 @@ OBJ = \
 	operation\overlay\OverlayOp.$(EXT) \
 	operation\overlay\PointBuilder.$(EXT) \
 	operation\overlay\PolygonBuilder.$(EXT) \
-    operation\overlay\snap\GeometrySnapper.$(EXT) \
+	operation\overlay\snap\GeometrySnapper.$(EXT) \
  	operation\overlay\snap\LineStringSnapper.$(EXT) \
  	operation\overlay\snap\SnapOverlayOp.$(EXT) \
  	operation\overlay\snap\SnapIfNeededOverlayOp.$(EXT) \
@@ -280,6 +280,15 @@ OBJ = \
 	util\GeometricShapeFactory.$(EXT) \
 	util\math.$(EXT) \
 	util\Profiler.$(EXT) \
+	linearref\ExtractLineByLocation.$(EXT) \
+	linearref\LengthIndexOfPoint.$(EXT) \
+	linearref\LengthIndexedLine.$(EXT) \
+	linearref\LengthLocationMap.$(EXT) \
+	linearref\LinearGeometryBuilder.$(EXT) \
+	linearref\LinearIterator.$(EXT) \
+	linearref\LinearLocation.$(EXT) \
+	linearref\LocationIndexOfLine.$(EXT) \
+	linearref\LocationIndexOfPoint.$(EXT) \
 	..\capi\geos_c.$(EXT) \
 	..\capi\geos_ts_c.$(EXT) \
 	inlines.$(EXT)
