@@ -336,9 +336,9 @@ extern double GEOS_DLL GEOSProject_r(GEOSContextHandle_t handle,
                                      const GEOSGeometry *g,
                                      const GEOSGeometry *p);
 
-extern GEOSGeometry* GEOS_DLL GEOSInterpolate(const GEOSGeometry *g,
+extern GEOSGeometry GEOS_DLL *GEOSInterpolate(const GEOSGeometry *g,
                                               double d);
-extern GEOSGeometry* GEOS_DLL GEOSInterpolate_r(GEOSContextHandle_t handle,
+extern GEOSGeometry GEOS_DLL *GEOSInterpolate_r(GEOSContextHandle_t handle,
                                                 const GEOSGeometry *g,
                                                 double d);
 
@@ -348,9 +348,9 @@ extern double GEOS_DLL GEOSProjectNormalized_r(GEOSContextHandle_t handle,
                                                const GEOSGeometry *g,
                                                const GEOSGeometry *p);
 
-extern GEOSGeometry* GEOS_DLL GEOSInterpolateNormalized(const GEOSGeometry *g,
+extern GEOSGeometry GEOS_DLL *GEOSInterpolateNormalized(const GEOSGeometry *g,
                                                         double d);
-extern GEOSGeometry* GEOS_DLL GEOSInterpolateNormalized_r(
+extern GEOSGeometry GEOS_DLL *GEOSInterpolateNormalized_r(
                                                 GEOSContextHandle_t handle,
                                                 const GEOSGeometry *g,
                                                 double d);

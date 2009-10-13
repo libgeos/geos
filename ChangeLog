@@ -1,3 +1,9 @@
+2009-10-13  Frank Warmerdam  <warmerdam@pobox.com>
+
+	* r[2670] Fix nmake DLL export and test linking (#280)
+
+	* [r2669] Add new directory and source to nmakefiles (#288)
+
 2009-10-08 08:17  Sandro Santilli <strk@keybit.net>
 
 	* [r2663] tests/unit/Makefile.am: Distribute all of TUT

@@ -300,6 +300,12 @@ TEST_EXE =	TestSweepLineSpeed.exe
 
 default: $(LIBNAME) $(DLLNAME) $(CDLLNAME)
 
+all: $(LIBNAME) $(DLLNAME) $(CDLLNAME) TestSweepLineSpeed.exe geostest.exe
+
+check: all
+	TestSweepLineSpeed.exe
+	
+
 $(LIBNAME):	headers/geos/platform.h headers/geos/version.h ../capi/geos_c.h $(OBJ)
 	if exist $(LIBNAME) del $(LIBNAME)
 	$(LINK) /lib /out:$(LIBNAME) $(OBJ)
@@ -326,6 +332,9 @@ headers/geos/version.h: headers/geos/version.h.vc
 .cpp.obj:
     $(CC) $(CFLAGS) /c $*.cpp /Fo$@
 
+{..\capi}.cpp.obj:
+	$(CC) $(CFLAGS) /D "GEOS_DLL_EXPORT" /c $*.cpp /Fo$@
+
 .c.obj:
 	$(CC) $(CFLAGS) /c $*.c /Fo$@
 
@@ -347,14 +356,14 @@ clean:
 	-@FOR %d IN ( $(GEOS_DIRLIST) ) DO del %d\*.obj
 
 TestSweepLineSpeed.exe:	$(LIBNAME) \
-		bigtest\GeometryTestFactory.obj \
-		bigtest\TestSweepLineSpeed.obj
+		..\tests\bigtest\GeometryTestFactory.obj \
+		..\tests\bigtest\TestSweepLineSpeed.obj
 	$(LINK) /debug /out:TestSweepLineSpeed.exe \
-		bigtest\TestSweepLineSpeed.obj \
-		bigtest\GeometryTestFactory.obj \
+		..\tests\bigtest\TestSweepLineSpeed.obj \
+		..\tests\bigtest\GeometryTestFactory.obj \
 		$(LIBNAME)
 
-geostest.exe: $(DLLNAME) ..\capi\geostest.obj
-	$(LINK) /debug ..\capi\geostest.obj $(SLIBNAME)
+geostest.exe: $(CDLLNAME) ..\tests\unit\capi\geostest.obj
+	$(LINK) /debug ..\tests\unit\capi\geostest.obj $(CLIBNAME)
 
 # EOF
