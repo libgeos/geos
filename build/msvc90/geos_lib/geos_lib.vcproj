@@ -3056,6 +3056,46 @@
 							>
 						</File>
 					</Filter>
+					<Filter
+						Name="linearref"
+						>
+						<File
+							RelativePath="..\..\..\source\headers\geos\linearref\ExtractLineByLocation.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\linearref\LengthIndexedLine.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\linearref\LengthIndexOfPoint.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\linearref\LengthLocationMap.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\linearref\LinearGeometryBuilder.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\linearref\LinearIterator.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\linearref\LinearLocation.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\linearref\LocationIndexOfLine.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\linearref\LocationIndexOfPoint.h"
+							>
+						</File>
+					</Filter>
 				</Filter>
 			</Filter>
 			<Filter
@@ -3091,6 +3131,46 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\simplify\TopologyPreservingSimplifier.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="linearref"
+				>
+				<File
+					RelativePath="..\..\..\source\linearref\ExtractLineByLocation.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\linearref\LengthIndexedLine.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\linearref\LengthIndexOfPoint.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\linearref\LengthLocationMap.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\linearref\LinearGeometryBuilder.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\linearref\LinearIterator.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\linearref\LinearLocation.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\linearref\LocationIndexOfLine.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\linearref\LocationIndexOfPoint.cpp"
 					>
 				</File>
 			</Filter>
