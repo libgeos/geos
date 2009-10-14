@@ -91,8 +91,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="Running regression tests using $(ProjectName)d.exe..."
-				CommandLine="cd $(OutDir)&#x0D;&#x0A;$(ProjectName)d.exe&#x0D;&#x0A;"
+				Description="Running regression tests using $(TargetPath)"
+				CommandLine="$(TargetPath)"
 			/>
 		</Configuration>
 		<Configuration
@@ -168,8 +168,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="Running regression tests using $(ProjectName).exe..."
-				CommandLine="$(OutDir)\$(ProjectName).exe"
+				Description="Running regression tests using $(TargetPath)"
+				CommandLine="$(TargetPath)"
 			/>
 		</Configuration>
 	</Configurations>

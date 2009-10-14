@@ -14,10 +14,14 @@
  *
  **********************************************************************/
 
+#ifdef _MSC_VER
+# if defined(GEOS_DEBUG_MSVC_USE_VLD) && !defined(GEOS_TEST_USE_STACKWALKER)
+#  include <vld.h>
+# else
 //#define _CRTDBG_MAP_ALLOC
 //#include <stdlib.h>
-#ifdef _MSC_VER
-#include <crtdbg.h>
+#  include <crtdbg.h>
+# endif
 #endif
 
 #include <geos/geom/Point.h>

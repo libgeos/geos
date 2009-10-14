@@ -1,0 +1,77 @@
+GEOS_ROOT=../..
+
+!IFNDEF XMLTESTER
+XMLTESTER=xmltester.exe
+!ENDIF
+
+SAFE_XMLTESTS= \
+    $(GEOS_ROOT)/tests/xmltester/tests/testLeaksBig.xml \
+    $(GEOS_ROOT)/tests/xmltester/tests/split.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/hexwkb.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/test.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/linemerge.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/TestIsValid.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/robustness.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/singlesidedbuffer.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/bug176.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/bug188.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/bug244.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/bug275.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestBoundary.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestBuffer.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestBufferMitredJoin.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestCentroid.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestConvexHull.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestConvexHull-big.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestFunctionAAPrec.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestFunctionAA.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestFunctionLAPrec.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestFunctionLA.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestFunctionLLPrec.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestFunctionLL.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestFunctionPA.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestFunctionPLPrec.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestFunctionPL.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestFunctionPP.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestInteriorPoint.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestRectanglePredicate.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestRelateAA.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestRelateLA.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestRelateLL.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestRelatePL.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestRelateAC.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestRelateLC.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestRelatePA.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestRelatePP.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestSimple.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestValid.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestValid2.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestValid2-big.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/general/TestWithinDistance.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/stmlf/stmlf-cases-20061020.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/stmlf/stmlf-cases-20070119.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/robust/TestRobustOverlayFixed.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/robust/TestRobustRelate.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/fme.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/TestBufferExternal.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/TestBufferExternal2.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/heisenbugs.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/badguy3.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/hole_from_shell.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/hole_red.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/safe/16595.xml \
+	$(GEOS_ROOT)/tests/xmltester/tests/safe/16596.xml
+
+all:
+    @echo Usage:
+    @echo 1) Run XMLTester.exe program from current directory:
+    @echo "    nmake /f makefile.vc"
+    @echo 2) Run XMLTester.exe program from specified location:
+    @echo "    nmake /f makefile.vc XMLTESTER=C:\path\to\XMLTester.exe"
+    @echo
+
+test:   
+    @echo ====== Running GEOX XMLTester test cases ======
+    @echo ====== XMLTester program: $(XMLTESTER)
+    @for %t in ( $(SAFE_XMLTESTS) ) do \
+        $(XMLTESTER) %t
