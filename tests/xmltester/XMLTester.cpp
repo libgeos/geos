@@ -63,7 +63,7 @@
 #include <cmath>
 #include <stdexcept>
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && defined(GEOS_TEST_USE_STACKWALKER)
 #include <windows.h>
 #include "Stackwalker.h"
 #endif
@@ -1404,7 +1404,7 @@ main(int argC, char* argV[])
 	int verbose=0;
 	bool sql_output=false;
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && defined(GEOS_TEST_USE_STACKWALKER)
 	InitAllocCheck();
 	{
 #endif
@@ -1457,7 +1457,7 @@ main(int argC, char* argV[])
 
 	return tester.getFailuresCount();
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && defined(GEOS_TEST_USE_STACKWALKER)
 	}
 	DeInitAllocCheck();
 #endif
