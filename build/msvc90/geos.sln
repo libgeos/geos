@@ -37,6 +37,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "geos_python", "geos_python\
 		{CDBC2FB8-2995-49DE-B80B-B7BE0E4C1115} = {CDBC2FB8-2995-49DE-B80B-B7BE0E4C1115}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "geos_xmltester", "geos_xmltester\geos_xmltester.vcproj", "{304618A3-CCA4-4A2F-8BEE-1AB57060D5C2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{108E75A3-0A92-489A-B1A9-8F071D40A108} = {108E75A3-0A92-489A-B1A9-8F071D40A108}
+		{CDBC2FB8-2995-49DE-B80B-B7BE0E4C1115} = {CDBC2FB8-2995-49DE-B80B-B7BE0E4C1115}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -63,6 +69,10 @@ Global
 		{DCDE3502-BEA2-4F60-B45A-2B279CD47994}.Debug|Win32.Build.0 = Debug|Win32
 		{DCDE3502-BEA2-4F60-B45A-2B279CD47994}.Release|Win32.ActiveCfg = Release|Win32
 		{DCDE3502-BEA2-4F60-B45A-2B279CD47994}.Release|Win32.Build.0 = Release|Win32
+		{304618A3-CCA4-4A2F-8BEE-1AB57060D5C2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{304618A3-CCA4-4A2F-8BEE-1AB57060D5C2}.Debug|Win32.Build.0 = Debug|Win32
+		{304618A3-CCA4-4A2F-8BEE-1AB57060D5C2}.Release|Win32.ActiveCfg = Release|Win32
+		{304618A3-CCA4-4A2F-8BEE-1AB57060D5C2}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
