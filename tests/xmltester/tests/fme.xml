@@ -5,7 +5,7 @@
  -->
 
 <run>
-<precisionModel type=FLOATING/>
+<precisionModel type="FLOATING"/>
 <case>
   <desc>Big Bad Nasty buffer</desc>
   <a>
