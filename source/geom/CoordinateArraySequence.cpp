@@ -61,21 +61,18 @@ CoordinateArraySequence::clone() const
 void
 CoordinateArraySequence::setPoints(const vector<Coordinate> &v)
 {
-    assert(0 != vect);
 	vect->assign(v.begin(), v.end());
 }
 
 const vector<Coordinate>*
 CoordinateArraySequence::toVector() const
 {
-    assert(0 != vect);
 	return vect; //new vector<Coordinate>(vect->begin(),vect->end());
 }
 
 void
 CoordinateArraySequence::toVector(vector<Coordinate>& out) const
 {
-	assert(0 != vect);
 	// TODO: can this be optimized ?
 	out.insert(out.end(), vect->begin(), vect->end());
 }
@@ -83,21 +80,18 @@ CoordinateArraySequence::toVector(vector<Coordinate>& out) const
 bool
 CoordinateArraySequence::isEmpty() const
 {
-    assert(0 != vect);
 	return vect->empty();
 }
 
 void
 CoordinateArraySequence::add(const Coordinate& c)
 {
-    assert(0 != vect);
 	vect->push_back(c);
 }
 
 void
 CoordinateArraySequence::add(const Coordinate& c, bool allowRepeated)
 {
-    assert(0 != vect);
 	if (!allowRepeated && ! vect->empty() )
 	{
 		const Coordinate& last=vect->back();
@@ -138,32 +132,24 @@ CoordinateArraySequence::getSize() const
 const Coordinate &
 CoordinateArraySequence::getAt(size_t pos) const
 {
-    assert(0 != vect);
-	assert(pos < vect->size());
 	return (*vect)[pos];
 }
 
 void
 CoordinateArraySequence::getAt(size_t pos, Coordinate &c) const
 {
-    assert(0 != vect);
-	assert(pos<vect->size());
 	c=(*vect)[pos];
 }
 
 void
 CoordinateArraySequence::setAt(const Coordinate& c, size_t pos)
 {
-    assert(0 != vect);
-	assert(pos<vect->size());
 	(*vect)[pos]=c;
 }
 
 void
 CoordinateArraySequence::deleteAt(size_t pos)
 {
-    assert(0 != vect);
-	assert(pos<vect->size());
 	vect->erase(vect->begin()+pos);
 }
 
@@ -193,17 +179,13 @@ CoordinateArraySequence::~CoordinateArraySequence()
 void
 CoordinateArraySequence::expandEnvelope(Envelope &env) const
 {
-    assert(0 != vect);
-	size_t size = vect->size();
-	for (size_t i=0; i<size; i++) env.expandToInclude((*vect)[i]);
+	for (size_t i=0, n=vect->size(); i<n; ++i)
+		env.expandToInclude((*vect)[i]);
 }
 
 double
 CoordinateArraySequence::getOrdinate(size_t index, size_t ordinateIndex) const
 {
-    assert(0 != vect);
-	assert(index<vect->size());
-
 	switch (ordinateIndex)
 	{
 		case CoordinateSequence::X:
@@ -221,14 +203,6 @@ void
 CoordinateArraySequence::setOrdinate(size_t index, size_t ordinateIndex,
 	double value)
 {
-
-    assert(0 != vect);
-	assert(index<vect->size());
-
-    assert(ordinateIndex == CoordinateSequence::X
-           || ordinateIndex == CoordinateSequence::Y
-           || ordinateIndex == CoordinateSequence::Z);
-
 	switch (ordinateIndex)
 	{
 		case CoordinateSequence::X:
@@ -241,6 +215,7 @@ CoordinateArraySequence::setOrdinate(size_t index, size_t ordinateIndex,
 			(*vect)[index].z = value;
 			break;
 		default:
+			assert(0);
 			break;
 	}
 }
@@ -248,7 +223,6 @@ CoordinateArraySequence::setOrdinate(size_t index, size_t ordinateIndex,
 void
 CoordinateArraySequence::apply_rw(const CoordinateFilter *filter)
 {
-    assert(0 != vect);
 	for (vector<Coordinate>::iterator i=vect->begin(), e=vect->end(); i!=e; ++i)
 	{
 		filter->filter_rw(&(*i));
@@ -258,7 +232,6 @@ CoordinateArraySequence::apply_rw(const CoordinateFilter *filter)
 void
 CoordinateArraySequence::apply_ro(CoordinateFilter *filter) const
 {
-    assert(0 != vect);
 	for (vector<Coordinate>::const_iterator i=vect->begin(), e=vect->end(); i!=e; ++i)
 	{
 		filter->filter_ro(&(*i));
@@ -268,7 +241,6 @@ CoordinateArraySequence::apply_ro(CoordinateFilter *filter) const
 CoordinateSequence&
 CoordinateArraySequence::removeRepeatedPoints()
 {
-    assert(0 != vect);
 	// We use == operator, which is 2D only
 	vector<Coordinate>::iterator new_end = \
 		std::unique(vect->begin(), vect->end());
