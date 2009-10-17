@@ -51,7 +51,12 @@ public:
 
 	//int size() const;
 	size_t getSize() const;
+
+	// @deprecated
 	const std::vector<Coordinate>* toVector() const;
+
+	// See dox in CoordinateSequence.h
+	void toVector(std::vector<Coordinate>&) const;
 
 	/// Construct an empty sequence
 	CoordinateArraySequence();

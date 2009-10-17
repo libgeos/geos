@@ -72,6 +72,14 @@ CoordinateArraySequence::toVector() const
 	return vect; //new vector<Coordinate>(vect->begin(),vect->end());
 }
 
+void
+CoordinateArraySequence::toVector(vector<Coordinate>& out) const
+{
+	assert(0 != vect);
+	// TODO: can this be optimized ?
+	out.insert(out.end(), vect->begin(), vect->end());
+}
+
 bool
 CoordinateArraySequence::isEmpty() const
 {

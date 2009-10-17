@@ -107,38 +107,21 @@ Polygon::getCoordinates() const
 		return getFactory()->getCoordinateSequenceFactory()->create(NULL);
 	}
 
-	size_t i, j, npts;
-	size_t nholes=holes->size();
-
 	vector<Coordinate> *cl = new vector<Coordinate>;
+
+	// reserve space in the vector for all the polygon points
+	cl->reserve(getNumPoints());
 
 	// Add shell points
 	const CoordinateSequence* shellCoords=shell->getCoordinatesRO();
-	npts=shellCoords->getSize();
+	shellCoords->toVector(*cl);
 
-	/*
-	 * reserve space in the vector for all the polygon points
-	 */
-	cl->reserve(getNumPoints());
-
-	for (j=0; j<npts; ++j)
+	// Add holes points
+	size_t nholes=holes->size();
+	for (size_t i=0; i<nholes; ++i)
 	{
-		// This can be optimized by having CoordinateSequence
-		// expose a method to push all coords to a vector
-		cl->push_back(shellCoords->getAt(j));
-	}
-
-	for (i=0; i<nholes; ++i)
-	{
-		// Add hole points
 		const CoordinateSequence* childCoords=((LinearRing *)(*holes)[i])->getCoordinatesRO();
-		npts=childCoords->getSize();
-		for (j=0; j<npts; ++j)
-		{
-			// This can be optimized by having CoordinateSequence
-			// expose a method to push all coords to a vector
-			cl->push_back(childCoords->getAt(j));
-		}
+		childCoords->toVector(*cl);
 	}
 
 	return getFactory()->getCoordinateSequenceFactory()->create(cl);

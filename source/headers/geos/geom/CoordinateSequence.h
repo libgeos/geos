@@ -142,8 +142,16 @@ public:
 	 * We opted for the second, so the returned object is a const, to
 	 * also ensure that returning an internal pointer doesn't make
 	 * the object mutable.
+	 *
+	 * @deprecated use toVector(std::vector<Coordinate>&) instead
 	 */
 	virtual	const std::vector<Coordinate>* toVector() const=0;
+
+	/// Pushes all Coordinates of this sequence onto the provided vector.
+	//
+	/// This method is a port of the toCoordinateArray() method of JTS.
+	///
+	virtual	void toVector(std::vector<Coordinate>& coords) const=0;
 
 	/**
 	 * \brief Add an array of coordinates 
