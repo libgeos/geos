@@ -117,20 +117,28 @@ Polygon::getCoordinates() const
 	npts=shellCoords->getSize();
 
 	/*
-	 * reserve space in the vector as if all holes have the same
-	 * amount of points. Holes usually have less, so this should
-	 * be a good compromise
+	 * reserve space in the vector for all the polygon points
 	 */
-	cl->reserve((nholes+1)*npts);
+	cl->reserve(getNumPoints());
 
-	for (j=0; j<npts; ++j) cl->push_back(shellCoords->getAt(j));
+	for (j=0; j<npts; ++j)
+	{
+		// This can be optimized by having CoordinateSequence
+		// expose a method to push all coords to a vector
+		cl->push_back(shellCoords->getAt(j));
+	}
 
 	for (i=0; i<nholes; ++i)
 	{
 		// Add hole points
 		const CoordinateSequence* childCoords=((LinearRing *)(*holes)[i])->getCoordinatesRO();
 		npts=childCoords->getSize();
-		for (j=0; j<npts; ++j) cl->push_back(childCoords->getAt(j));
+		for (j=0; j<npts; ++j)
+		{
+			// This can be optimized by having CoordinateSequence
+			// expose a method to push all coords to a vector
+			cl->push_back(childCoords->getAt(j));
+		}
 	}
 
 	return getFactory()->getCoordinateSequenceFactory()->create(cl);
