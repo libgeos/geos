@@ -33,6 +33,7 @@ using namespace geos::geom;
 namespace geos {
 namespace noding { // geos.noding
 
+/* private static */
 bool
 OrientedCoordinateArray::orientation(const CoordinateSequence& pts)
 {
@@ -60,6 +61,7 @@ OrientedCoordinateArray::compareTo(const OrientedCoordinateArray& oca) const
 	return comp;
 }
 
+/* private static */
 int
 OrientedCoordinateArray::compareOriented(const geom::CoordinateSequence& pts1,
                                      bool orientation1,
