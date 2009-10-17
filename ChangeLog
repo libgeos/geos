@@ -1,3 +1,12 @@
+2009-10-16 15:27  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2676] tests/xmltester/tests/fme.xml: xmltester/tests: missing
+	  double quotes around XML attribute value in fme.xml.
+
+2009-10-14 20:42  Sandro Santilli <strk@keybit.net>
+
+	* [r2675] ChangeLog: regenerate ChangeLog
+
 2009-10-14 15:32  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2674] build/msvc90/geos_unit/geos_unit.vcproj,
