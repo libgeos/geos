@@ -1,8 +1,8 @@
-Changes in 3.2.0 (?)
+Changes in 3.2.0 
 
 - Add Single-sided buffer operation
 - JTS-1.10 sync ...
-  - Drastically improved Buffer speed
+  - Drastically improved Buffer speed (20x for a case in testsuite)
   - Improved EdgeList duplicate edge finding
   - Added algorithm::distance package
   - Added algorithm::Angle class
@@ -12,6 +12,7 @@ Changes in 3.2.0 (?)
     (earlier exit)
   - MultiPolygon::getBoundary always return MultiLineString, also
     when the result is the EMPTY geometry.
+- Various bug fixes and optimizations
 
 Changes in 3.1.0
 
