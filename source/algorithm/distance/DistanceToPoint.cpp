@@ -73,16 +73,22 @@ DistanceToPoint::computeDistance(const geom::LineString& line,
 	const CoordinateSequence* coordsRO = line.getCoordinatesRO();
 	const CoordinateSequence& coords = *coordsRO;
 
+	size_t npts = coords.size();
+	if ( ! npts ) return; // can this ever be ?
+
 	LineSegment tempSegment;
 	Coordinate closestPt;
-	for (size_t i=0, n=coords.size()-1; i<n; ++i)
+
+	Coordinate* segPts[2] = { &(tempSegment.p0), &(tempSegment.p1) };
+	tempSegment.p0 = coords.getAt(0);
+	for (size_t i=1; i<npts; ++i)
 	{
+		*(segPts[i%2]) = coords.getAt(i);
+
 		// this is somewhat inefficient - could do better
-		tempSegment.setCoordinates(coords[i], coords[i + 1]);
 		tempSegment.closestPoint(pt, closestPt);
 		ptDist.setMinimum(closestPt, pt);
 	}
-
 }
 
 /* public static */
