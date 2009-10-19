@@ -1,3 +1,8 @@
+2009-10-19 14:47  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2684] tests/xmltester/tests/buffer_snapround.xml: not well-formed XML,
+	  fixed missing attribute.
+
 2009-10-16 15:27  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2676] tests/xmltester/tests/fme.xml: xmltester/tests: missing

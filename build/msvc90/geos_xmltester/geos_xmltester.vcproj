@@ -91,7 +91,6 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description=""
 				CommandLine=""
 			/>
 		</Configuration>
@@ -168,7 +167,6 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description=""
 				CommandLine=""
 			/>
 		</Configuration>
@@ -490,10 +488,6 @@
 		</File>
 		<File
 			RelativePath="..\..\..\tests\xmltester\SingleSidedBufferResultMatcher.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\tests\xmltester\testrunner.bat"
 			>
 		</File>
 		<File

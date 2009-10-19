@@ -1,5 +1,5 @@
 <run>
-<precisionModel FLOATING />
+<precisionModel type="FLOATING" />
 <case><desc>Case #</desc>
 <a>
 MULTILINESTRING (  
