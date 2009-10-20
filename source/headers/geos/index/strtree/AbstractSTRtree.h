@@ -259,7 +259,11 @@ public:
 	}
 
 	static bool compareDoubles(double a, double b) {
-		return a<b;
+		// NOTE - strk:
+		// Ternary operation is a workaround for
+		// a probable MingW bug, see
+		// http://trac.osgeo.org/geos/ticket/293
+		return ( a < b ) ? true : false;
 	}
 
 	virtual ~AbstractSTRtree();

@@ -80,7 +80,12 @@ static bool yComparator(Boundable *a, Boundable *b)
 		const wchar_t *_Where, unsigned int _Line)*/
 
     //return std::fabs( STRtree::centreY(aEnv) - STRtree::centreY(bEnv) ) < 1e-30
-    return STRtree::centreY(aEnv) < STRtree::centreY(bEnv);
+
+    // NOTE - strk:
+    // See http://trac.osgeo.org/geos/ticket/293
+    // as for why simple comparison (<) isn't used here
+    return AbstractSTRtree::compareDoubles(STRtree::centreY(aEnv),
+                                           STRtree::centreY(bEnv));
 }
 
 /*public*/
