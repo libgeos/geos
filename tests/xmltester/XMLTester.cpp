@@ -709,7 +709,16 @@ XMLTester::parseTest(const TiXmlNode* node)
 	tmp = opel->Attribute("arg4");
 	if ( tmp ) opArg4 = tmp;
 
-	opRes = opnode->FirstChild()->Value();
+	const TiXmlNode* resnode = opnode->FirstChild();
+	if ( ! resnode )
+	{
+		std::stringstream tmp;
+		tmp << "op of test " << testCount
+		    << " of case " << caseCount
+		    << " has no expected result child";
+		throw(runtime_error(tmp.str()));
+	}
+	opRes = resnode->Value();
 
 	// trim blanks
 	opRes=trimBlanks(opRes);
