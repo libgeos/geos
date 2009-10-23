@@ -35,47 +35,41 @@ using namespace geos::geom;
 
 namespace geos
 {
+
 namespace linearref   // geos.linearref
 {
 
+/* public */
 LinearGeometryBuilder::LinearGeometryBuilder(const GeometryFactory* geomFact) :
 		geomFact(geomFact),
 		ignoreInvalidLines(false),
 		fixInvalidLines(false),
 		coordList(0) {}
 
-void LinearGeometryBuilder::setIgnoreInvalidLines(bool ignoreInvalidLines)
+/* public */
+void
+LinearGeometryBuilder::setIgnoreInvalidLines(bool ignoreInvalidLines)
 {
 	this->ignoreInvalidLines = ignoreInvalidLines;
 }
 
-/**
- * Allows invalid lines to be ignored rather than causing Exceptions.
- * An invalid line is one which has only one unique point.
- *
- * @param ignoreShortLines <code>true</code> if short lines are to be ignored
- */
-void LinearGeometryBuilder::setFixInvalidLines(bool fixInvalidLines)
+/* public */
+void
+LinearGeometryBuilder::setFixInvalidLines(bool fixInvalidLines)
 {
 	this->fixInvalidLines = fixInvalidLines;
 }
 
-/**
- * Adds a point to the current line.
- *
- * @param pt the Coordinate to add
- */
-void LinearGeometryBuilder::add(const Coordinate& pt)
+/* public */
+void
+LinearGeometryBuilder::add(const Coordinate& pt)
 {
 	add(pt, true);
 }
 
-/**
- * Adds a point to the current line.
- *
- * @param pt the Coordinate to add
- */
-void LinearGeometryBuilder::add(const Coordinate& pt, bool allowRepeatedPoints)
+/* public */
+void
+LinearGeometryBuilder::add(const Coordinate& pt, bool allowRepeatedPoints)
 {
 	if (!coordList)
 		coordList = new CoordinateArraySequence();
@@ -83,15 +77,16 @@ void LinearGeometryBuilder::add(const Coordinate& pt, bool allowRepeatedPoints)
 	lastPt = pt;
 }
 
-Coordinate LinearGeometryBuilder::getLastCoordinate() const
+/* public */
+Coordinate
+LinearGeometryBuilder::getLastCoordinate() const
 {
 	return lastPt;
 }
 
-/**
- * Terminate the current LineString.
- */
-void LinearGeometryBuilder::endLine()
+/* public */
+void
+LinearGeometryBuilder::endLine()
 {
 	if (!coordList)
 	{
@@ -131,11 +126,16 @@ void LinearGeometryBuilder::endLine()
 	coordList = 0;
 }
 
-Geometry* LinearGeometryBuilder::getGeometry()
+/* public */
+Geometry*
+LinearGeometryBuilder::getGeometry()
 {
 	// end last line in case it was not done by user
 	endLine();
+
+	// NOTE: lines elements are cloned
 	return geomFact->buildGeometry(lines);
 }
-}
-}
+
+} // namespace geos.linearref
+} // namespace geos

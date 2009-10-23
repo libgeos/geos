@@ -59,7 +59,8 @@ public:
 	 * Allows invalid lines to be ignored rather than causing Exceptions.
 	 * An invalid line is one which has only one unique point.
 	 *
-	 * @param ignoreShortLines <code>true</code> if short lines are to be ignored
+	 * @param ignoreShortLines <code>true</code> if short lines are
+	 *                         to be ignored
 	 */
 	void setIgnoreInvalidLines(bool ignoreInvalidLines);
 
@@ -67,9 +68,11 @@ public:
 	 * Allows invalid lines to be ignored rather than causing Exceptions.
 	 * An invalid line is one which has only one unique point.
 	 *
-	 * @param ignoreShortLines <code>true</code> if short lines are to be ignored
+	 * @param ignoreShortLines <code>true</code> if short lines are
+	 *                         to be ignored
 	 */
 	void setFixInvalidLines(bool fixInvalidLines);
+
 	/**
 	 * Adds a point to the current line.
 	 *
@@ -84,15 +87,16 @@ public:
 	 */
 	void add(const geom::Coordinate& pt, bool allowRepeatedPoints);
 
+	/// NOTE strk: why return by value ?
 	geom::Coordinate getLastCoordinate() const;
 
-	/**
-	 * Terminate the current LineString.
-	 */
+	/// Terminate the current LineString.
 	void endLine();
 
 	geom::Geometry *getGeometry();
 };
-}
-}
+
+} // namespace geos.linearref
+} // namespace geos
+
 #endif
