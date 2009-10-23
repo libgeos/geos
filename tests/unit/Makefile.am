@@ -94,12 +94,15 @@ geos_unit_SOURCES = geos_unit.cpp \
 noinst_HEADERS = \
 	utility.h
 
+# The -lstdc++ is needed for --disable-shared to work
 geostest_SOURCES = capi/geostest.c
-geostest_LDADD = $(top_builddir)/capi/libgeos_c.la
+geostest_LDADD = $(top_builddir)/capi/libgeos_c.la -lstdc++
 
+# The -lstdc++ is needed for --disable-shared to work
 threadtest_SOURCES = capi/threadtest.c
-threadtest_LDADD = $(top_builddir)/capi/libgeos_c.la -lpthread
+threadtest_LDADD = $(top_builddir)/capi/libgeos_c.la -lpthread -lstdc++
 
+# The -lstdc++ is needed for --disable-shared to work
 badthreadtest_SOURCES = capi/badthreadtest.c
-badthreadtest_LDADD = $(top_builddir)/capi/libgeos_c.la -lpthread
+badthreadtest_LDADD = $(top_builddir)/capi/libgeos_c.la -lpthread -lstdc++
 
