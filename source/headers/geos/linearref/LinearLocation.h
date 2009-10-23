@@ -27,14 +27,13 @@
 #include <geos/geom/Geometry.h>
 #include <geos/geom/LineSegment.h>
 
-namespace geos
-{
-namespace linearref   // geos::linearref
-{
+namespace geos {
+namespace linearref { // geos::linearref
 
 
-/**
+/** \brief
  * Represents a location along a {@link LineString} or {@link MultiLineString}.
+ *
  * The referenced geometry is not maintained within
  * this location, but must be provided for operations which require it.
  * Various methods are provided to manipulate the location value
@@ -71,8 +70,8 @@ public:
 	 * point of the segment is returned.
 	 * If the fraction is less than or equal to 0.0 the first point
 	 * of the segment is returned.
-	 * The Z ordinate is interpolated from the Z-ordinates of the given points,
-	 * if they are specified.
+	 * The Z ordinate is interpolated from the Z-ordinates of
+	 * the given points, if they are specified.
 	 *
 	 * @param p0 the first point of the line segment
 	 * @param p1 the last point of the line segment
@@ -85,7 +84,6 @@ public:
 	/**
 	 * Creates a location referring to the start of a linear geometry
 	 */
-
 	LinearLocation(unsigned int segmentIndex = 0, double segmentFraction = 0.0);
 
 	LinearLocation(unsigned int componentIndex, unsigned int segmentIndex, double segmentFraction);
@@ -115,6 +113,7 @@ public:
 	 * @return the length of the segment
 	 */
 	double getSegmentLength(const geom::Geometry* linearGeom) const;
+
 	/**
 	 * Sets the value of this location to
 	 * refer the end of a linear geometry
@@ -232,7 +231,7 @@ public:
 };
 
 
-}
-}
+} // namespace geos.linearref
+} // namespace geos
 
 #endif

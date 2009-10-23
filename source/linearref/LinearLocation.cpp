@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: linearref/LinearLocation.java rev. 1.35
+ * Last port: linearref/LinearLocation.java rev. 1.10
  *
  **********************************************************************/
 
@@ -27,12 +27,12 @@ using namespace std;
 
 using namespace geos::geom;
 
-namespace geos
-{
-namespace linearref   // geos.linearref
-{
+namespace geos {
+namespace linearref { // geos::linearref
 
-LinearLocation LinearLocation::getEndLocation(const Geometry* linear)
+/* public static */
+LinearLocation
+LinearLocation::getEndLocation(const Geometry* linear)
 {
 	// assert: linear is LineString or MultiLineString
 	LinearLocation loc;
@@ -40,7 +40,9 @@ LinearLocation LinearLocation::getEndLocation(const Geometry* linear)
 	return loc;
 }
 
-Coordinate LinearLocation::pointAlongSegmentByFraction(const Coordinate& p0, const Coordinate& p1, double frac)
+/* public static */
+Coordinate
+LinearLocation::pointAlongSegmentByFraction(const Coordinate& p0, const Coordinate& p1, double frac)
 {
 	if (frac <= 0.0) return p0;
 	if (frac >= 1.0) return p1;
@@ -52,17 +54,30 @@ Coordinate LinearLocation::pointAlongSegmentByFraction(const Coordinate& p0, con
 	return Coordinate(x, y, z);
 }
 
-LinearLocation::LinearLocation(unsigned int segmentIndex, double segmentFraction) :
-		componentIndex(0), segmentIndex(segmentIndex), segmentFraction(segmentFraction) {}
+/* public */
+LinearLocation::LinearLocation(unsigned int segmentIndex,
+		double segmentFraction)
+	:
+	componentIndex(0),
+	segmentIndex(segmentIndex),
+	segmentFraction(segmentFraction)
+{}
 
 
-LinearLocation::LinearLocation(unsigned int componentIndex, unsigned int segmentIndex, double segmentFraction):
-		componentIndex(componentIndex), segmentIndex(segmentIndex), segmentFraction(segmentFraction)
+/* public */
+LinearLocation::LinearLocation(unsigned int componentIndex,
+		unsigned int segmentIndex, double segmentFraction)
+	:
+	componentIndex(componentIndex),
+	segmentIndex(segmentIndex),
+	segmentFraction(segmentFraction)
 {
 	normalize();
 }
 
-void LinearLocation::normalize()
+/* private */
+void
+LinearLocation::normalize()
 {
 	if (segmentFraction < 0.0)
 	{
@@ -91,9 +106,9 @@ void LinearLocation::normalize()
 	}
 }
 
-
-
-void LinearLocation::clamp(const Geometry* linear)
+/* public */
+void
+LinearLocation::clamp(const Geometry* linear)
 {
 	if (componentIndex >= linear->getNumGeometries())
 	{
@@ -108,7 +123,9 @@ void LinearLocation::clamp(const Geometry* linear)
 	}
 }
 
-void LinearLocation::snapToVertex(const Geometry* linearGeom, double minDistance)
+/* public */
+void
+LinearLocation::snapToVertex(const Geometry* linearGeom, double minDistance)
 {
 	if (segmentFraction <= 0.0 || segmentFraction >= 1.0)
 		return;
@@ -125,7 +142,9 @@ void LinearLocation::snapToVertex(const Geometry* linearGeom, double minDistance
 	}
 }
 
-double LinearLocation::getSegmentLength(const Geometry* linearGeom) const
+/* public */
+double
+LinearLocation::getSegmentLength(const Geometry* linearGeom) const
 {
 	const LineString* lineComp = dynamic_cast<const LineString*> (linearGeom->getGeometryN(componentIndex));
 
@@ -139,7 +158,9 @@ double LinearLocation::getSegmentLength(const Geometry* linearGeom) const
 	return p0.distance(p1);
 }
 
-void LinearLocation::setToEnd(const Geometry* linear)
+/* public */
+void
+LinearLocation::setToEnd(const Geometry* linear)
 {
 	componentIndex = linear->getNumGeometries() - 1;
 	const LineString* lastLine = dynamic_cast<const LineString*>(linear->getGeometryN(componentIndex));
@@ -147,27 +168,37 @@ void LinearLocation::setToEnd(const Geometry* linear)
 	segmentFraction = 1.0;
 }
 
-unsigned int LinearLocation::getComponentIndex() const
+/* public */
+unsigned int
+LinearLocation::getComponentIndex() const
 {
 	return componentIndex;
 }
 
-unsigned int LinearLocation::getSegmentIndex() const
+/* public */
+unsigned int
+LinearLocation::getSegmentIndex() const
 {
 	return segmentIndex;
 }
 
-double LinearLocation::getSegmentFraction() const
+/* public */
+double
+LinearLocation::getSegmentFraction() const
 {
 	return segmentFraction;
 }
 
-bool LinearLocation::isVertex() const
+/* public */
+bool
+LinearLocation::isVertex() const
 {
 	return segmentFraction <= 0.0 || segmentFraction >= 1.0;
 }
 
-Coordinate LinearLocation::getCoordinate(const Geometry* linearGeom) const
+/* public */
+Coordinate
+LinearLocation::getCoordinate(const Geometry* linearGeom) const
 {
 	const LineString* lineComp = dynamic_cast<const LineString *> (linearGeom->getGeometryN(componentIndex));
 	Coordinate p0 = lineComp->getCoordinateN(segmentIndex);
@@ -177,7 +208,9 @@ Coordinate LinearLocation::getCoordinate(const Geometry* linearGeom) const
 	return pointAlongSegmentByFraction(p0, p1, segmentFraction);
 }
 
-LineSegment* LinearLocation::getSegment(const Geometry* linearGeom) const
+/* public */
+LineSegment*
+LinearLocation::getSegment(const Geometry* linearGeom) const
 {
 	const LineString* lineComp = dynamic_cast<const LineString *> (linearGeom->getGeometryN(componentIndex));
 	Coordinate p0 = lineComp->getCoordinateN(segmentIndex);
@@ -191,8 +224,9 @@ LineSegment* LinearLocation::getSegment(const Geometry* linearGeom) const
 	return new LineSegment(p0, p1);
 }
 
-
-bool LinearLocation::isValid(const Geometry* linearGeom) const
+/* public */
+bool
+LinearLocation::isValid(const Geometry* linearGeom) const
 {
 	if (componentIndex < 0 || componentIndex >= linearGeom->getNumGeometries())
 		return false;
@@ -208,8 +242,9 @@ bool LinearLocation::isValid(const Geometry* linearGeom) const
 	return true;
 }
 
-
-int LinearLocation::compareTo(const LinearLocation& other) const
+/* public */
+int
+LinearLocation::compareTo(const LinearLocation& other) const
 {
 	// compare component indices
 	if (componentIndex < other.componentIndex) return -1;
@@ -224,8 +259,10 @@ int LinearLocation::compareTo(const LinearLocation& other) const
 	return 0;
 }
 
-
-int LinearLocation::compareLocationValues(unsigned int componentIndex1, unsigned int segmentIndex1, double segmentFraction1) const
+/* public */
+int
+LinearLocation::compareLocationValues(unsigned int componentIndex1,
+		unsigned int segmentIndex1, double segmentFraction1) const
 {
 	// compare component indices
 	if (componentIndex < componentIndex1) return -1;
@@ -241,9 +278,13 @@ int LinearLocation::compareLocationValues(unsigned int componentIndex1, unsigned
 }
 
 
-int LinearLocation::compareLocationValues(
-	unsigned int componentIndex0, unsigned int segmentIndex0, double segmentFraction0,
-	unsigned int componentIndex1, unsigned int segmentIndex1, double segmentFraction1)
+/* public */
+int
+LinearLocation::compareLocationValues(
+	unsigned int componentIndex0, unsigned int segmentIndex0,
+	double segmentFraction0,
+	unsigned int componentIndex1, unsigned int segmentIndex1,
+	double segmentFraction1)
 {
 	// compare component indices
 	if (componentIndex0 < componentIndex1) return -1;
@@ -259,7 +300,9 @@ int LinearLocation::compareLocationValues(
 }
 
 
-bool LinearLocation::isOnSameSegment(const LinearLocation& loc) const
+/* public */
+bool
+LinearLocation::isOnSameSegment(const LinearLocation& loc) const
 {
 	if (componentIndex != loc.componentIndex) return false;
 	if (segmentIndex == loc.segmentIndex) return true;
@@ -279,6 +322,6 @@ ostream& operator<<(ostream &out, const LinearLocation &obj)
 	       obj.segmentIndex << ", " << obj.segmentFraction << ")";
 }
 
-}
-}
+} // namespace geos.linearref
+} // namespace geos
 
