@@ -148,7 +148,7 @@ namespace tut {
     LengthIndexedLine indexedLine(linearGeom);
     double* loc = indexedLine.indicesOf(subLine);
     Geometry* result = indexedLine.extractLine(loc[0], loc[1]);
-    delete loc;
+    delete [] loc;
     return result;
   }
 

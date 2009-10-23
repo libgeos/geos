@@ -86,7 +86,7 @@ double* LengthIndexedLine::indicesOf(const Geometry* subLine) const
 	double* index = new double[2];
 	index[0] = LengthLocationMap::getLength(linearGeom, locIndex[0]);
 	index[1] = LengthLocationMap::getLength(linearGeom, locIndex[1]);
-	delete locIndex;
+	delete [] locIndex;
 	return index;
 }
 

@@ -33,17 +33,10 @@ namespace geos
 namespace linearref   // geos.linearref
 {
 
-/**
- * Determines the location of a subline along a linear {@link Geometry}.
- * The location is reported as a pair of {@link LinearLocation}s.
- * <p>
- * <b>Note:</b> Currently this algorithm is not guaranteed to
- * return the correct substring in some situations where
- * an endpoint of the test line occurs more than once in the input line.
- * (However, the common case of a ring is always handled correctly).
- */
-
-LinearLocation* LocationIndexOfLine::indicesOf(const Geometry* linearGeom, const Geometry* subLine)
+/* public static */
+LinearLocation*
+LocationIndexOfLine::indicesOf(const Geometry* linearGeom,
+		const Geometry* subLine)
 {
 	LocationIndexOfLine locater(linearGeom);
 	return locater.indicesOf(subLine);
@@ -52,7 +45,9 @@ LinearLocation* LocationIndexOfLine::indicesOf(const Geometry* linearGeom, const
 LocationIndexOfLine::LocationIndexOfLine(const Geometry* linearGeom) :
 		linearGeom(linearGeom) {}
 
-LinearLocation* LocationIndexOfLine::indicesOf(const Geometry* subLine) const
+/* public */
+LinearLocation*
+LocationIndexOfLine::indicesOf(const Geometry* subLine) const
 {
 	Coordinate startPt = dynamic_cast<const LineString*> (subLine->getGeometryN(0))->getCoordinateN(0);
 	const LineString* lastLine = dynamic_cast<const LineString*> (subLine->getGeometryN(subLine->getNumGeometries() - 1));

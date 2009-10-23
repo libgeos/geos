@@ -50,10 +50,25 @@ private:
 	const geom::Geometry* linearGeom;
 
 public:
+
+	/** \brief
+	 * Determines the location of a subline along a linear {@link Geometry}.
+	 *
+	 * The location is reported as a pair of {@link LinearLocation}s.
+	 * 
+	 * <b>Note:</b> Currently this algorithm is not guaranteed to
+	 * return the correct substring in some situations where
+	 * an endpoint of the test line occurs more than once in the input line.
+	 * (However, the common case of a ring is always handled correctly).
+	 *
+	 * Caller must take of releasing with delete[]
+	 *
+	 */
 	static LinearLocation* indicesOf(const geom::Geometry* linearGeom, const geom::Geometry* subLine);
 
 	LocationIndexOfLine(const geom::Geometry* linearGeom);
 
+	/// Caller must take of releasing with delete[]
 	LinearLocation* indicesOf(const geom::Geometry* subLine) const;
 };
 }
