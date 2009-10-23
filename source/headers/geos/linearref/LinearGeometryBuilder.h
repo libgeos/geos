@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: linearref/LinearGeometryBuilder.java rev. 1.10
+ * Last port: linearref/LinearGeometryBuilder.java rev. 1.1
  *
  **********************************************************************/
 

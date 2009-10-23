@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: linearref/ExtractLineByLocation.java rev. 1.35
+ * Last port: linearref/LinearGeometryBuilder.java rev. 1.1
  *
  **********************************************************************/
 
