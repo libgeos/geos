@@ -16,6 +16,7 @@ SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
 	$(srcdir)/tests/TestIsValid.xml \
 	$(srcdir)/tests/robustness.xml \
 	$(srcdir)/tests/buffer.xml \
+	$(srcdir)/tests/test.xml \
 	$(srcdir)/tests/singlesidedbuffer.xml \
 	$(srcdir)/tests/bug176.xml \
 	$(srcdir)/tests/bug188.xml \
