@@ -29,6 +29,8 @@
 #include <geos/linearref/LinearGeometryBuilder.h>
 #include <geos/util/IllegalArgumentException.h>
 
+#include <cassert>
+
 using namespace std;
 
 using namespace geos::geom;
@@ -105,7 +107,17 @@ LinearGeometryBuilder::endLine()
 		}
 		else if (fixInvalidLines)
 		{
-			add((*coordList)[0]);
+			assert(!coordList->isEmpty()); // just to be sure
+
+			// NOTE: we copy the point cause reallocation of
+			//       vector memory will invalidate the reference
+			//       to one of its elements.
+			//
+			//       We wouldn't have such problems with a vector
+			//       of pointers (as used in JTS)...
+			//
+			Coordinate firstPoint = (*coordList)[0];
+			add(firstPoint);
 		}
 	}
 
