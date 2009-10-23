@@ -209,7 +209,7 @@ LinearLocation::getCoordinate(const Geometry* linearGeom) const
 }
 
 /* public */
-LineSegment*
+std::auto_ptr<LineSegment>
 LinearLocation::getSegment(const Geometry* linearGeom) const
 {
 	const LineString* lineComp = dynamic_cast<const LineString *> (linearGeom->getGeometryN(componentIndex));
@@ -218,10 +218,10 @@ LinearLocation::getSegment(const Geometry* linearGeom) const
 	if (segmentIndex >= lineComp->getNumPoints() - 1)
 	{
 		Coordinate prev = lineComp->getCoordinateN(lineComp->getNumPoints() - 2);
-		return new LineSegment(prev, p0);
+		return std::auto_ptr<LineSegment>(new LineSegment(prev, p0));
 	}
 	Coordinate p1 = lineComp->getCoordinateN(segmentIndex + 1);
-	return new LineSegment(p0, p1);
+	return std::auto_ptr<LineSegment>(new LineSegment(p0, p1));
 }
 
 /* public */
@@ -278,7 +278,7 @@ LinearLocation::compareLocationValues(unsigned int componentIndex1,
 }
 
 
-/* public */
+/* public static */
 int
 LinearLocation::compareLocationValues(
 	unsigned int componentIndex0, unsigned int segmentIndex0,
