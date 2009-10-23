@@ -50,6 +50,9 @@ class BoundaryNodeRule {
 
 public:
 
+	// virtual classes should always have a virtual destructor..
+	virtual ~BoundaryNodeRule() {}
+
         /**
          * Tests whether a point that lies in <tt>boundaryCount</tt>
          * geometry component boundaries is considered to form part of
