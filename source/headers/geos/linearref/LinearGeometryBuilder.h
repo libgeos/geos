@@ -44,7 +44,11 @@ class LinearGeometryBuilder
 {
 private:
 	const geom::GeometryFactory* geomFact;
-	std::vector<geom::Geometry *> lines;
+
+	typedef std::vector<geom::Geometry *> GeomPtrVect;
+
+	// Geometry elements owned by this class
+	GeomPtrVect lines;
 
 	bool ignoreInvalidLines;
 	bool fixInvalidLines;
@@ -54,6 +58,8 @@ private:
 
 public:
 	LinearGeometryBuilder(const geom::GeometryFactory* geomFact);
+
+	~LinearGeometryBuilder();
 
 	/**
 	 * Allows invalid lines to be ignored rather than causing Exceptions.

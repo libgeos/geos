@@ -149,5 +149,15 @@ LinearGeometryBuilder::getGeometry()
 	return geomFact->buildGeometry(lines);
 }
 
+/* public */
+LinearGeometryBuilder::~LinearGeometryBuilder()
+{
+	for (GeomPtrVect::const_iterator i=lines.begin(), e=lines.end();
+		i != e; ++i)
+	{
+		delete *i;
+	}
+}
+
 } // namespace geos.linearref
 } // namespace geos
