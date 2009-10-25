@@ -690,7 +690,7 @@ public:
 	 * Computes the centroid of this <code>Geometry</code>.
 	 *
 	 * The centroid is equal to the centroid of the set of component
-	 * Geometrys of highest dimension (since the lower-dimension geometries
+	 * Geometries of highest dimension (since the lower-dimension geometries
 	 * contribute zero "weight" to the centroid)
 	 *
 	 * @return a {@link Point} which is the centroid of this Geometry

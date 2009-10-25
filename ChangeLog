@@ -1,3 +1,7 @@
+2009-10-25 18:47  Mateusz Loskot <mateusz@loskot.net>
+	
+	* Fixed typo in getCentroid function comment in Geometry.h
+
 2009-10-19 14:47  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2684] tests/xmltester/tests/buffer_snapround.xml: not well-formed XML,
