@@ -1,3 +1,8 @@
+2009-10-28 12:10  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2702] tests/xmltester/XMLTester.cpp: declare checkBufferSuccess function
+	  to take geometries by refernece to const.
+
 2009-10-25 18:47  Mateusz Loskot <mateusz@loskot.net>
 	
 	* Fixed typo in getCentroid function comment in Geometry.h

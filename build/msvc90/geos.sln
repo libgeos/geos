@@ -4,7 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8584EE81-D4E9-4EC7-ABF2-389E5F9D0107}"
 	ProjectSection(SolutionItems) = preProject
 		..\..\AUTHORS = ..\..\AUTHORS
-		..\..\ChangeLog = ..\..\ChangeLog
 		..\..\COPYING = ..\..\COPYING
 		..\..\INSTALL = ..\..\INSTALL
 		Makefile.am = Makefile.am

@@ -174,7 +174,7 @@ normalize_filename(const std::string& str)
 
 /* Could be an XMLTester class private but oh well.. */
 static int
-checkBufferSuccess(geom::Geometry& gRes, geom::Geometry& gRealRes, double dist)
+checkBufferSuccess(geom::Geometry const& gRes, geom::Geometry const& gRealRes, double dist)
 {
 	int success = 1;
 	do
