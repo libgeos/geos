@@ -1,3 +1,9 @@
+2009-10-29 16:25  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2706] tests/unit/operation/buffer/BufferOpTest.cpp: Added more test
+	  cases for buffer calculation based on A (input) geometries from
+	  XMLTester's buffer.xml and TestBufferExternal2.xml tests.
+
 2009-10-29 15:15  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2705] tests/unit/operation/buffer/BufferOpTest.cpp: Added test case
