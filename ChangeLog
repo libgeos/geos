@@ -1,8 +1,13 @@
+2009-10-29 15:15  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2705] tests/unit/operation/buffer/BufferOpTest.cpp: Added test case
+	  for buffer of multipolygon from XMLTester's buffer.xml, case #25 but
+	  with custom quadrant segments
+
 2009-10-29 14:25  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2704] tests/unit/operation/buffer/BufferOpTest.cpp: Added test case
 	  for buffer of POINT(0 0) with distance 1.0 and 32 quadrant segments.
-
 2009-10-29 12:30  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2703] tests/unit/operation/buffer: added unit test case for BufferOp,
