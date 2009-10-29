@@ -1,3 +1,8 @@
+2009-10-29 20:45  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2707] tests/unit/operation/buffer/BufferOpTest.cpp: missing include
+    of BufferParameters.h header
+
 2009-10-29 16:25  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2706] tests/unit/operation/buffer/BufferOpTest.cpp: Added more test

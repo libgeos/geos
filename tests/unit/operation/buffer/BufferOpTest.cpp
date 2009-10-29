@@ -6,6 +6,7 @@
 #include <tut.hpp>
 // geos
 #include <geos/operation/buffer/BufferOp.h>
+#include <geos/operation/buffer/BufferParameters.h>
 #include <geos/platform.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/GeometryFactory.h>
