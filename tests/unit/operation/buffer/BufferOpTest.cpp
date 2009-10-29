@@ -51,7 +51,6 @@ namespace tut
     void object::test<1>()
     {
         using geos::operation::buffer::BufferOp;
-        using geos::operation::buffer::BufferParameters;
 
         std::string wkt0("POINT(0 0)");
         GeomPtr g0(wktreader.read(wkt0));
@@ -70,7 +69,6 @@ namespace tut
     void object::test<2>()
     {
         using geos::operation::buffer::BufferOp;
-        using geos::operation::buffer::BufferParameters;
 
         std::string wkt0("POINT(0 0)");
         GeomPtr g0(wktreader.read(wkt0));
@@ -82,7 +80,31 @@ namespace tut
 
         ensure_not(gBuffer->isEmpty());
         ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
-        ensure_equals(gBuffer->getNumPoints(), 33);
+        ensure(gBuffer->getNumPoints() > 32);
+    }
+
+    template<>
+    template<>
+    void object::test<3>()
+    {
+        using geos::operation::buffer::BufferOp;
+        using geos::operation::buffer::BufferParameters;
+
+        std::string wkt0("POINT(0 0)");
+        GeomPtr g0(wktreader.read(wkt0));
+
+        // Buffer point with custom parameters: 32 quadrant segments
+        int const segments = 32;
+        BufferParameters params(segments);
+        
+        BufferOp op(g0.get(), params);
+
+        double const distance = 1.0;
+        GeomPtr gBuffer(op.getResultGeometry(distance));
+
+        ensure_not(gBuffer->isEmpty());
+        ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
+        ensure(gBuffer->getNumPoints() > 129);
     }
 
 } // namespace tut
