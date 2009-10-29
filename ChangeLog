@@ -1,3 +1,9 @@
+2009-10-29 12:30  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2703] tests/unit/operation/buffer: added unit test case for BufferOp,
+	  tests/unit/Makefile.am: added new test case source to Makefile,
+	  build/msvc90/geos_unit/geos_unit.vcproj: updated Visual C++ project.
+
 2009-10-28 12:10  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2702] tests/xmltester/XMLTester.cpp: declare checkBufferSuccess function

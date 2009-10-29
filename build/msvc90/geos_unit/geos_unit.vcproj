@@ -487,6 +487,14 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="buffer"
+				>
+				<File
+					RelativePath="..\..\..\tests\unit\operation\buffer\BufferOpTest.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="precision"
@@ -598,6 +606,10 @@
 		</Filter>
 		<File
 			RelativePath="..\..\..\tests\unit\geos_unit.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\tests\unit\Makefile.am"
 			>
 		</File>
 		<File

@@ -67,6 +67,7 @@ geos_unit_SOURCES = geos_unit.cpp \
 	noding/NodedSegmentStringTest.cpp \
 	noding/SegmentNodeTest.cpp \
 	noding/SegmentPointComparatorTest.cpp \
+	operation/buffer/BufferOpTest.cpp \
 	operation/distance/DistanceOpTest.cpp \
 	operation/IsSimpleOpTest.cpp \
 	operation/overlay/validate/FuzzyPointLocatorTest.cpp \
