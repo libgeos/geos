@@ -1,43 +1,209 @@
-2009-10-29 20:45  Mateusz Loskot <mateusz@loskot.net>
+2009-10-29 21:06  Mateusz Loskot <mateusz@loskot.net>
 
-	* [r2707] tests/unit/operation/buffer/BufferOpTest.cpp: missing include
-    of BufferParameters.h header
+	* [r2710] tests/unit/operation/buffer/BufferOpTest.cpp: Testing
+	  linker problem with DEFAULT_QUADRANT_SEGMENT constant
 
-2009-10-29 16:25  Mateusz Loskot <mateusz@loskot.net>
+2009-10-29 20:58  Mateusz Loskot <mateusz@loskot.net>
 
-	* [r2706] tests/unit/operation/buffer/BufferOpTest.cpp: Added more test
-	  cases for buffer calculation based on A (input) geometries from
-	  XMLTester's buffer.xml and TestBufferExternal2.xml tests.
+	* [r2709] tests/unit/operation/buffer/BufferOpTest.cpp: Testing
+	  linker problem with DEFAULT_QUADRANT_SEGMENT constant
 
-2009-10-29 15:15  Mateusz Loskot <mateusz@loskot.net>
+2009-10-29 20:55  Mateusz Loskot <mateusz@loskot.net>
 
-	* [r2705] tests/unit/operation/buffer/BufferOpTest.cpp: Added test case
-	  for buffer of multipolygon from XMLTester's buffer.xml, case #25 but
-	  with custom quadrant segments
+	* [r2708] tests/unit/operation/buffer/BufferOpTest.cpp: Fixed CRLF
+	  to LF in BufferOpTest.cpp
 
-2009-10-29 14:25  Mateusz Loskot <mateusz@loskot.net>
+2009-10-29 20:47  Mateusz Loskot <mateusz@loskot.net>
 
-	* [r2704] tests/unit/operation/buffer/BufferOpTest.cpp: Added test case
-	  for buffer of POINT(0 0) with distance 1.0 and 32 quadrant segments.
-2009-10-29 12:30  Mateusz Loskot <mateusz@loskot.net>
+	* [r2707] ChangeLog, tests/unit/operation/buffer/BufferOpTest.cpp:
+	  Missing include of BufferParameters.h header in BufferOpTest.cpp
+	  unit suite
 
-	* [r2703] tests/unit/operation/buffer: added unit test case for BufferOp,
-	  tests/unit/Makefile.am: added new test case source to Makefile,
-	  build/msvc90/geos_unit/geos_unit.vcproj: updated Visual C++ project.
+2009-10-29 16:20  Mateusz Loskot <mateusz@loskot.net>
 
-2009-10-28 12:10  Mateusz Loskot <mateusz@loskot.net>
+	* [r2706] ChangeLog, tests/unit/operation/buffer/BufferOpTest.cpp:
+	  Added more test cases for buffer calculation based on A (input)
+	  geometries from XMLTester's buffer.xml and
+	  TestBufferExternal2.xml tests.
 
-	* [r2702] tests/xmltester/XMLTester.cpp: declare checkBufferSuccess function
-	  to take geometries by refernece to const.
+2009-10-29 15:11  Mateusz Loskot <mateusz@loskot.net>
 
-2009-10-25 18:47  Mateusz Loskot <mateusz@loskot.net>
-	
-	* Fixed typo in getCentroid function comment in Geometry.h
+	* [r2705] ChangeLog, tests/unit/operation/buffer/BufferOpTest.cpp:
+	  Added test case for buffer of multipolygon from XMLTester's
+	  buffer.xml, case #25 but with custom quadrant segments
 
-2009-10-19 14:47  Mateusz Loskot <mateusz@loskot.net>
+2009-10-29 14:24  Mateusz Loskot <mateusz@loskot.net>
 
-	* [r2684] tests/xmltester/tests/buffer_snapround.xml: not well-formed XML,
+	* [r2704] ChangeLog, tests/unit/operation/buffer/BufferOpTest.cpp:
+	  Added test case for buffer of POINT(0 0) with distance 1.0 and 32
+	  quadrant segments.
+
+2009-10-29 12:33  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2703] ChangeLog, build/msvc90/geos_unit/geos_unit.vcproj,
+	  tests/unit/Makefile.am, tests/unit/operation/buffer,
+	  tests/unit/operation/buffer/BufferOpTest.cpp: *
+	  tests/unit/operation/buffer: added unit test case for BufferOp,
+	  * tests/unit/Makefile.am: added new test case source to Makefile,
+	  * build/msvc90/geos_unit/geos_unit.vcproj: updated Visual C++
+	  project.
+
+2009-10-28 12:09  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2702] ChangeLog, build/msvc90/geos.sln,
+	  tests/xmltester/XMLTester.cpp: tests/xmltester/XMLTester.cpp:
+	  declare checkBufferSuccess function to take geometries by
+	  refernece to const
+
+2009-10-25 18:48  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2701] ChangeLog, source/headers/geos/geom/Geometry.h: Fixed
+	  typo in getCentroid function comment in Geometry.h.
+
+2009-10-23 13:04  Sandro Santilli <strk@keybit.net>
+
+	* [r2700] source/headers/geos/linearref/LinearLocation.h,
+	  source/linearref/LinearLocation.cpp: Have
+	  LinearLocation::getSegment return by auto_ptr to encode ownership
+	  transfer. Fixes leak reported in #296.
+
+2009-10-23 12:58  Sandro Santilli <strk@keybit.net>
+
+	* [r2699] source/headers/geos/linearref/LinearLocation.h,
+	  source/linearref/LinearLocation.cpp: Fix port info, add standard
+	  protection notes
+
+2009-10-23 10:21  Sandro Santilli <strk@keybit.net>
+
+	* [r2698] source/headers/geos/linearref/LinearGeometryBuilder.h,
+	  source/linearref/LinearGeometryBuilder.cpp: Add destructor to
+	  LinearGeometryBuilder fixing memory leaks there.
+
+2009-10-23 10:13  Sandro Santilli <strk@keybit.net>
+
+	* [r2697] source/linearref/LinearGeometryBuilder.cpp: Fix memory
+	  access error (#283)
+
+2009-10-23 10:03  Sandro Santilli <strk@keybit.net>
+
+	* [r2696] source/headers/geos/linearref/LinearGeometryBuilder.h,
+	  source/linearref/LinearGeometryBuilder.cpp: Fix port info for
+	  LinearGeometryBuilder
+
+2009-10-23 09:53  Sandro Santilli <strk@keybit.net>
+
+	* [r2695] source/headers/geos/linearref/LinearGeometryBuilder.h,
+	  source/linearref/LinearGeometryBuilder.cpp: Cleanup
+	  LinearGeometrybuilder defs and impl to match common code style,
+	  add note about suspicious things (not written but noted that the
+	  class seems to lack a destructor..)
+
+2009-10-23 09:43  Sandro Santilli <strk@keybit.net>
+
+	* [r2694] source/headers/geos/linearref/LocationIndexOfLine.h,
+	  source/linearref/LengthIndexedLine.cpp,
+	  source/linearref/LocationIndexOfLine.cpp,
+	  tests/unit/linearref/LengthIndexedLineTest.cpp: Document
+	  ownership of return from LocationIndexOfLine::indicesOf, fix
+	  mismatch delete/delete[] in core and unit test
+
+2009-10-23 09:34  Sandro Santilli <strk@keybit.net>
+
+	* [r2693] source/headers/geos/algorithm/BoundaryNodeRule.h: Add
+	  virtual dtor to virtual class
+
+2009-10-23 09:33  Sandro Santilli <strk@keybit.net>
+
+	* [r2692] tests/xmltester/tinyxml/tinyxmlparser.cpp: add some
+	  parens to hush gcc warning
+
+2009-10-23 09:00  Sandro Santilli <strk@keybit.net>
+
+	* [r2691] tests/unit/Makefile.am: Fix static building of C-api
+	  demo/tests
+
+2009-10-23 08:34  Sandro Santilli <strk@keybit.net>
+
+	* [r2690] tests/xmltester/Makefile.am: Run the last
+	  available-but-no-automatically-run test: test.xml
+
+2009-10-22 18:18  Sandro Santilli <strk@keybit.net>
+
+	* [r2689] tests/xmltester/tests/buffer.xml,
+	  tests/xmltester/tests/buffer_snapround.xml: Merge
+	  buffer_snapround.xml into buffer.xml
+
+2009-10-22 17:13  Sandro Santilli <strk@keybit.net>
+
+	* [r2688] tests/xmltester/Makefile.am: A quick check reveals that
+	  the tests in buffer.xml are not really duplicated elsewhere so we
+	  run that test too now as part of make check
+
+2009-10-22 17:07  Sandro Santilli <strk@keybit.net>
+
+	* [r2687] tests/xmltester/tests/buffer.xml: Give buffer.xml cases a
+	  somewhat more helpful description, fix 4 expected results after
+	  eye-checking. This is still not automatically run case it might
+	  contain duplicated tests from elsewhere (to be checked).
+
+2009-10-22 16:30  Sandro Santilli <strk@keybit.net>
+
+	* [r2686] tests/xmltester/XMLTester.cpp: Don't segfault on EOF
+	  inside <op> tag
+
+2009-10-20 16:59  Sandro Santilli <strk@keybit.net>
+
+	* [r2685] source/headers/geos/index/strtree/AbstractSTRtree.h,
+	  source/index/strtree/STRtree.cpp: Commit MingW bug workaround
+	  provided by sanak in ticket #293
+
+2009-10-19 13:38  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2684] ChangeLog,
+	  build/msvc90/geos_xmltester/geos_xmltester.vcproj,
+	  tests/xmltester/tests/buffer_snapround.xml:
+	  tests/xmltester/tests/buffer_snapround.xml: not well-formed XML,
 	  fixed missing attribute.
+
+2009-10-17 14:47  Sandro Santilli <strk@keybit.net>
+
+	* [r2683] ChangeLog: updated
+
+2009-10-17 14:43  Sandro Santilli <strk@keybit.net>
+
+	* [r2682] NEWS: updated
+
+2009-10-17 14:35  Sandro Santilli <strk@keybit.net>
+
+	* [r2681] source/algorithm/distance/DistanceToPoint.cpp: Half the
+	  calls to the virtual CoordinateSequence::getAt when computing
+	  line distances
+
+2009-10-17 13:40  Sandro Santilli <strk@keybit.net>
+
+	* [r2680] source/geom/CoordinateArraySequence.cpp: Drop pointless
+	  asserts. We'd abort anyway if vector is null. For the
+	  out-of-range case the GNU c++ lib helps debugging with an
+	  environment variable
+
+2009-10-17 13:04  Sandro Santilli <strk@keybit.net>
+
+	* [r2679] source/noding/OrientedCoordinateArray.cpp: Add note of
+	  private/static nature of implemented methods
+
+2009-10-17 12:28  Sandro Santilli <strk@keybit.net>
+
+	* [r2678] source/geom/CoordinateArraySequence.cpp,
+	  source/geom/Polygon.cpp,
+	  source/headers/geos/geom/CoordinateArraySequence.h,
+	  source/headers/geos/geom/CoordinateSequence.h: Expose a usable
+	  toVector method for CoordinateSequence (ie: no memory management
+	  issues). Use it from Polygon::getCoordinates.
+
+2009-10-17 12:02  Sandro Santilli <strk@keybit.net>
+
+	* [r2677] source/geom/Polygon.cpp: Don't allocate too much space
+	  for polygon points vector. Fixes bug #294.
 
 2009-10-16 15:27  Mateusz Loskot <mateusz@loskot.net>
 
