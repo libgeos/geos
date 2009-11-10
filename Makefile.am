@@ -22,4 +22,7 @@ ACLOCAL_AMFLAGS = -I macros
 ChangeLog:
 	cd $(srcdir) && svn2cl --authors=authors.svn -i -o ChangeLog
 
-.PHONY: ChangeLog
+# Should only be phony if in maintainer-mode or similar
+# to prevent 'distcheck' from failing due to read-only
+# source dir
+#.PHONY: ChangeLog
