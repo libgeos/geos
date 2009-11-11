@@ -15,9 +15,9 @@
      - VERSION_MAJOR for SUBSTANTIAL additions or C lib ABI break
        [ THIS MUST BE CAREFULLY AVOIDED ]
    
-3: Run make distcheck, fix any problem with it.
+3: Run 'make distcheck', fix any problem with it.
 
-4: Run make ChangeLog.
+4: Generate the ChangeLog by running 'make cl'
 
 5: Update the NEWS file (extract most important things from the ChangeLog)
 
