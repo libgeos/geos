@@ -1,12 +1,39 @@
+1: Verify that the versions currently set (see 10 and 11 below) make
+   sense for this release.
 
-1: Increment CAPI_INTERFACE_X in configure.in
+2: Run 'make distcheck', fix any problem with it.
+
+3: Generate the ChangeLog by running 'make cl'
+
+4: Update the NEWS file (extract most important things from the ChangeLog)
+
+5. Commit the new ChangeLog and NEWS files.
+
+6: Tag the release:
+   $ base=http://svn.osgeo.org/geos/
+   $ svn copy -m "Tagged release MAJOR.MINOR.PATCH" \
+		$base/trunk $base/tags/MAJOR.MINOR.PATCH
+
+7: Export the tag and 'make dist'. Un-gzip the tarball and bzip2 it
+   instead. 
+   $ svn export http://svn.osgeo.org/geos/tags/MAJOR.MINOR.PATCH 
+   $ cd MAJOR.MINOR.PATCH
+   $ ./autogen ; ./configure ; make dist
+   $ gzip -d geos-MAJOR.MINOR-PATCH.tar.gz
+   $ bzip2 geos-MAJOR.MINOR-PATCH.tar
+
+8: Copy the tarball to upload.osgeo.org:/download_data/download/geos
+
+9: Increment all the version numbers for the next release, as below.
+
+10: Increment CAPI_INTERFACE_X in configure.in
    - For a release with no interface changes just bump REVISION.
      [ Even if *nothing* changed in CAPI ]
    - Adding interfaces, bump CURRENT/AGE, set REVISION to 0.
    - Deleting interfaces / compatibility issues - bump CURRENT, others to zero
      [ THIS MUST BE CAREFULLY AVOIDED ]
 
-2: Increment release version:
+11: Increment release version:
    - In configure.in
    - In source/headers/geos/version.h.vc
    - In capi/geos_c.h.in
@@ -15,15 +42,3 @@
      - VERSION_MAJOR for SUBSTANTIAL additions or C lib ABI break
        [ THIS MUST BE CAREFULLY AVOIDED ]
    
-3: Run 'make distcheck', fix any problem with it.
-
-4: Generate the ChangeLog by running 'make cl'
-
-5: Update the NEWS file (extract most important things from the ChangeLog)
-
-6. Commit the new ChangeLog and NEWS files.
-
-7: Tag the release:
-   $ base=http://svn.osgeo.org/geos/
-   $ svn copy -m "Tagged release MAJOR.MINOR.PATCH" \
-		$base/trunk $base/tags/MAJOR.MINOR.PATCH
