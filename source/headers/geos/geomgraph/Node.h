@@ -53,7 +53,6 @@ namespace geos {
 namespace geomgraph { // geos.geomgraph
 
 class Node: public GraphComponent {
-using GraphComponent::setLabel;
 
 public:
 
@@ -134,6 +133,7 @@ protected:
 	 * Basic nodes do not compute IMs
 	 */
 	virtual void computeIM(geom::IntersectionMatrix* /*im*/) {};
+	virtual void setLabel_impl(Label* newLabel);
 
 private:
 

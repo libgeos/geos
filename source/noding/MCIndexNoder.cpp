@@ -139,14 +139,10 @@ void
 MCIndexNoder::SegmentOverlapAction::overlap(MonotoneChain* mc1, int start1,
 		MonotoneChain* mc2, int start2)
 {
-	SegmentString* ss1 = const_cast<SegmentString*>(
-		static_cast<const SegmentString *>(mc1->getContext())
-		);
+	SegmentString* ss1 = const_cast<SegmentString*>((const SegmentString *)(mc1->getContext()));
 	assert(ss1);
 
-	SegmentString* ss2 = const_cast<SegmentString*>(
-		static_cast<const SegmentString *>(mc2->getContext())
-		);
+	SegmentString* ss2 = const_cast<SegmentString*>((const SegmentString *)(mc2->getContext()));
 	assert(ss2);
 
 	si.processIntersections(ss1, start1, ss2, start2);

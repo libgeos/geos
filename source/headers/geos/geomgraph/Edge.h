@@ -53,7 +53,6 @@ namespace geos {
 namespace geomgraph { // geos.geomgraph
 
 class Edge: public GraphComponent{
-using GraphComponent::updateIM;
 
 private:
 
@@ -70,6 +69,9 @@ private:
 	Depth depth;
 
 	int depthDelta;   // the change in area depth from the R to L side of this edge
+
+ protected:
+	virtual void updateIM_impl(geom::IntersectionMatrix *im);
 
 public:
 

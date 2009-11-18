@@ -57,7 +57,7 @@ namespace tut
                     60 180, 20 180, 20 220))");
 
 		GeomPtr g(wktreader.read(wkt));
-		GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
+		GeomPtr simplified(TopologyPreservingSimplifier::simplify(g.get(), 10.0));
 
 		ensure( "Simplified geometry is invalid!", simplified->isValid() );
 		ensure( "Simplified and original geometry inequal", simplified->equals(g.get()) );
@@ -73,7 +73,7 @@ namespace tut
                         160 240, 40 140, 40 240))");
     
         GeomPtr g(wktreader.read(wkt));
-		GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
+	        GeomPtr simplified(TopologyPreservingSimplifier::simplify(g.get(), 10.0));
 
 		ensure( "Simplified geometry is invalid!", simplified->isValid() );
 		ensure( "Topology has been changed by simplification!", simplified->equals(g.get()) );
@@ -92,7 +92,7 @@ namespace tut
                     (120 120, 220 120, 180 199, 160 200, 140 199, 120 120))");
         
         GeomPtr g(wktreader.read(wkt));
-		GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
+	        GeomPtr simplified(TopologyPreservingSimplifier::simplify(g.get(), 10.0));
 
 		ensure( "Simplified geometry is invalid!", simplified->isValid() );
         ensure_equals_geometry( g.get(), simplified.get() );
@@ -111,7 +111,7 @@ namespace tut
                     70 1, 60 1, 50 1, 40 1, 0 0))");
 
         GeomPtr g(wktreader.read(wkt));
-		GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
+	        GeomPtr simplified(TopologyPreservingSimplifier::simplify(g.get(), 10.0));
 
 		ensure( "Simplified geometry is invalid!", simplified->isValid() );
         ensure_equals_geometry( g.get(), simplified.get() );
@@ -128,7 +128,7 @@ namespace tut
         GeomPtr g(wktreader.read(wkt));
         GeomPtr g_expected(wktreader.read(wkt));
 
-		GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
+	        GeomPtr simplified(TopologyPreservingSimplifier::simplify(g.get(), 10.0));
 
 		ensure( "Simplified geometry is invalid!", simplified->isValid() );
         ensure_equals_geometry( g.get(), simplified.get() );
@@ -143,7 +143,7 @@ namespace tut
         std::string wkt("POLYGON ((0 5, 5 5, 5 0, 0 0, 0 1, 0 5))");
 
         GeomPtr g(wktreader.read(wkt));
-		GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
+	        GeomPtr simplified(TopologyPreservingSimplifier::simplify(g.get(), 10.0));
 
 		ensure( "Simplified geometry is invalid!", simplified->isValid() );
         ensure_equals_geometry( g.get(), simplified.get() );
@@ -157,7 +157,7 @@ namespace tut
         std::string wkt("LINESTRING (0 5, 1 5, 2 5, 5 5)");
 
         GeomPtr g(wktreader.read(wkt));
-		GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
+	        GeomPtr simplified(TopologyPreservingSimplifier::simplify(g.get(), 10.0));
 
 		ensure( "Simplified geometry is invalid!", simplified->isValid() );
         ensure_equals_geometry(g.get(), simplified.get() );
@@ -172,7 +172,7 @@ namespace tut
                     80 60, 80 200, 140 199, 120 120)");
 
         GeomPtr g(wktreader.read(wkt));
-		GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
+	        GeomPtr simplified(TopologyPreservingSimplifier::simplify(g.get(), 10.0));
 
 		ensure( "Simplified geometry is invalid!", simplified->isValid() );
         ensure_equals_geometry(g.get(), simplified.get() );
@@ -187,7 +187,7 @@ namespace tut
                     (0 0, 50 1, 60 1, 100 0))");
 
         GeomPtr g(wktreader.read(wkt));
-		GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
+	        GeomPtr simplified(TopologyPreservingSimplifier::simplify(g.get(), 10.0));
 
 		ensure( "Simplified geometry is invalid!", simplified->isValid() );
         ensure_equals_geometry(g.get(), simplified.get() );
@@ -204,7 +204,7 @@ namespace tut
                     LINESTRING (80 200, 240 200, 240 60, 80 60, 80 200, 140 199, 120 120))");
 
         GeomPtr g(wktreader.read(wkt));
-		GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
+	        GeomPtr simplified(TopologyPreservingSimplifier::simplify(g.get(), 10.0));
 
 		ensure( "Simplified geometry is invalid!", simplified->isValid() );
         ensure_equals_geometry(g.get(), simplified.get() );

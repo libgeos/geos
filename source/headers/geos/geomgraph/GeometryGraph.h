@@ -56,8 +56,6 @@ namespace geos {
 namespace geomgraph { // geos.geomgraph
 
 class GeometryGraph: public PlanarGraph {
-using PlanarGraph::add;
-using PlanarGraph::findEdge;
 
 private:
 
@@ -130,6 +128,10 @@ private:
 	 */
 	void addSelfIntersectionNode(int argIndex,
 		const geom::Coordinate& coord, int loc);
+
+ protected:
+	virtual void add_impl(EdgeEnd *e);
+	virtual Edge* findEdge_impl(const geom::Coordinate& p0, const geom::Coordinate& p1);
 
 public:
 

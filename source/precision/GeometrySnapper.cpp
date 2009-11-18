@@ -57,7 +57,7 @@ private:
 		assert(srcPts);
 		assert(srcPts->toVector());
 		LineStringSnapper snapper(*(srcPts->toVector()), snapTol);
-		auto_ptr<Coordinate::Vect> newPts = snapper.snapTo(snapPts);
+		auto_ptr<Coordinate::Vect> newPts(snapper.snapTo(snapPts));
 
 		const CoordinateSequenceFactory* cfact = factory->getCoordinateSequenceFactory();
 		return auto_ptr<CoordinateSequence>(cfact->create(newPts.release()));
@@ -105,7 +105,7 @@ GeometrySnapper::snapTo(const geom::Geometry& g, double snapTolerance)
 	using geom::util::GeometryTransformer;
 	
 	// Get snap points
-	auto_ptr<Coordinate::ConstVect> snapPts=extractTargetCoordinates(g);
+	auto_ptr<Coordinate::ConstVect> snapPts(extractTargetCoordinates(g));
 
 	// Apply a SnapTransformer to source geometry
 	// (we need a pointer for dynamic polymorphism)

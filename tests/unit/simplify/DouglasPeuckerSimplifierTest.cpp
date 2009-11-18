@@ -58,8 +58,7 @@ namespace tut
 
 		GeomPtr g(wktreader.read(wkt));
 
-		GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
-			g.get(), 10.0);
+		GeomPtr simplified(DouglasPeuckerSimplifier::simplify(g.get(), 10.0));
 
 		ensure( simplified->isValid() );
 
@@ -83,9 +82,7 @@ namespace tut
 		GeomPtr expected(wktreader.read(wkt_ex));
 
         // TODO: This test blows because if instability of geos.index.strtree::yComparator() predicate
-
-		GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
-			g.get(), 10.0);
+		GeomPtr simplified(DouglasPeuckerSimplifier::simplify(g.get(), 10.0));
 
 		ensure( simplified->isValid() );
 		
@@ -107,8 +104,7 @@ namespace tut
 
 		GeomPtr expected(wktreader.read(wkt_ex));
 
-		GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
-			g.get(), 10.0);
+		GeomPtr simplified(DouglasPeuckerSimplifier::simplify(g.get(), 10.0));
 
 		ensure( simplified->isValid() );
 		
@@ -131,8 +127,7 @@ namespace tut
 
 		GeomPtr expected(wktreader.read(wkt_ex));
 
-		GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
-			g.get(), 10.0);
+		GeomPtr simplified(DouglasPeuckerSimplifier::simplify(g.get(), 10.0));
 
 		ensure( simplified->isValid() );
 
@@ -153,9 +148,7 @@ namespace tut
 		GeomPtr g(wktreader.read(wkt_in));
 
 		GeomPtr expected(wktreader.read(wkt_ex));
-
-		GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
-			g.get(), 10.0);
+		GeomPtr simplified(DouglasPeuckerSimplifier::simplify(g.get(), 10.0));
 
 		ensure( simplified->isValid() );
 
@@ -177,8 +170,7 @@ namespace tut
 
 		GeomPtr expected(wktreader.read(wkt_ex));
 
-		GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
-			g.get(), 10.0);
+		GeomPtr simplified(DouglasPeuckerSimplifier::simplify(g.get(), 10.0));
 
 		ensure( simplified->isValid() );
 
@@ -198,8 +190,7 @@ namespace tut
 
 		GeomPtr expected(wktreader.read(wkt_ex));
 
-		GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
-			g.get(), 10.0);
+		GeomPtr simplified(DouglasPeuckerSimplifier::simplify(g.get(), 10.0));
 
 		ensure( simplified->isValid() );
 
@@ -216,8 +207,7 @@ namespace tut
 
 		GeomPtr g(wktreader.read(wkt_in));
 
-		GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
-			g.get(), 10.0);
+		GeomPtr simplified(DouglasPeuckerSimplifier::simplify(g.get(), 10.0));
 
 		// MultiPoint is *not* simplified
 		ensure( simplified->equalsExact(g.get()) );
@@ -237,8 +227,7 @@ namespace tut
 
 		GeomPtr expected(wktreader.read(wkt_ex));
 
-		GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
-			g.get(), 10.0);
+		GeomPtr simplified(DouglasPeuckerSimplifier::simplify(g.get(), 10.0));
 
 		ensure( simplified->isValid() );
 
@@ -261,8 +250,7 @@ namespace tut
 
 		GeomPtr expected(wktreader.read(wkt_ex));
 
-		GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
-			g.get(), 10.0);
+		GeomPtr simplified(DouglasPeuckerSimplifier::simplify(g.get(), 10.0));
 
 		ensure( simplified->isValid() );
 

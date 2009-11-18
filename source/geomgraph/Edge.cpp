@@ -289,6 +289,13 @@ Edge::getEnvelope()
 	return env;
 }
 
+/*protected*/
+void
+Edge::updateIM_impl(geom::IntersectionMatrix *im)
+{
+  GraphComponent::updateIM_impl(im);
+}
+
 std::ostream&
 operator<< (std::ostream&os, const Edge& e)
 {

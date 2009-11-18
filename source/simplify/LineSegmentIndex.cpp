@@ -164,7 +164,7 @@ LineSegmentIndex::query(const LineSegment* querySeg) const
 	LineSegmentVisitor visitor(querySeg);
 	index->query(&env, visitor);
 
-	auto_ptr< vector<LineSegment*> > itemsFound = visitor.getItems();
+	auto_ptr< vector<LineSegment*> > itemsFound(visitor.getItems());
 
 	return itemsFound;
 }

@@ -14,10 +14,6 @@
 // GEOS
 #include <geos/unload.h>
 
-namespace tut
-{
-    test_runner_singleton runner;
-}
 
 void usage()
 {

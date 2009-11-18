@@ -113,7 +113,7 @@ namespace tut
 
         test_runner(*this, &g); 
 
-        for_each(g.begin(), g.end(), delete_geometry);
+        std::for_each(g.begin(), g.end(), delete_geometry);
     }
 
     void create_discs(geos::geom::GeometryFactory& gf, int num, double radius, 

@@ -159,7 +159,8 @@ GeometryTransformer::transformMultiPoint(
 		const Point* p = static_cast<const Point*>(
 				geom->getGeometryN(i));
 
-		Geometry::AutoPtr transformGeom = transformPoint(p, geom);
+		Geometry::AutoPtr transformGeom(transformPoint(p, geom));
+
 		if ( transformGeom.get() == NULL ) continue;
 		if ( transformGeom->isEmpty() ) continue;
 
@@ -209,8 +210,8 @@ GeometryTransformer::transformLineString(
 #endif
 
 	// should check for 1-point sequences and downgrade them to points
-	return factory->createLineString(
-		transformCoordinates(geom->getCoordinatesRO(), geom));
+	std::auto_ptr<CoordinateSequence> tempCoordSeq(transformCoordinates(geom->getCoordinatesRO(), geom));
+	return factory->createLineString(tempCoordSeq);
 }
 
 Geometry::AutoPtr
@@ -232,7 +233,8 @@ GeometryTransformer::transformMultiLineString(
 		const LineString* l = static_cast<const LineString*>(
 				geom->getGeometryN(i));
 
-		Geometry::AutoPtr transformGeom = transformLineString(l, geom);
+		Geometry::AutoPtr transformGeom(transformLineString(l, geom));
+
 		if ( transformGeom.get() == NULL ) continue;
 		if ( transformGeom->isEmpty() ) continue;
 
@@ -261,7 +263,8 @@ GeometryTransformer::transformPolygon(
 	const LinearRing* lr = static_cast<const LinearRing*>(
 			geom->getExteriorRing());
 
-	Geometry::AutoPtr shell = transformLinearRing(lr, geom);
+	Geometry::AutoPtr shell(transformLinearRing(lr, geom));
+
 	if ( shell.get() == NULL
 		|| ! dynamic_cast<LinearRing*>(shell.get()) 
 		|| shell->isEmpty() )
@@ -336,7 +339,7 @@ GeometryTransformer::transformMultiPolygon(
 		const Polygon* p = static_cast<const Polygon*>(
 				geom->getGeometryN(i));
 
-		Geometry::AutoPtr transformGeom = transformPolygon(p, geom);
+		Geometry::AutoPtr transformGeom(transformPolygon(p, geom));
 		if ( transformGeom.get() == NULL ) continue;
 		if ( transformGeom->isEmpty() ) continue;
 
@@ -363,8 +366,7 @@ GeometryTransformer::transformGeometryCollection(
 
 	for (unsigned int i=0, n=geom->getNumGeometries(); i<n; i++)
 	{
-		Geometry::AutoPtr transformGeom = transform(
-			geom->getGeometryN(i)); // no parent ?
+	  Geometry::AutoPtr transformGeom(transform(geom->getGeometryN(i))); // no parent ?
 		if ( transformGeom.get() == NULL ) continue;
 		if ( pruneEmptyGeometry && transformGeom->isEmpty() ) continue;
 

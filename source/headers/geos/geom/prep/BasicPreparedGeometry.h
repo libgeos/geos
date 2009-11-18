@@ -84,6 +84,11 @@ protected:
 	 */
 	bool envelopeCovers(const geom::Geometry* g) const;
 
+	/**
+	 * Default implementation.
+	 */
+	virtual bool intersects_impl(const geom::Geometry * g) const;
+
 public:
 	BasicPreparedGeometry( const Geometry * geom);
 
@@ -143,11 +148,6 @@ public:
 	bool crosses(const geom::Geometry * g) const;
 
 	bool disjoint(const geom::Geometry * g)	const;
-
-	/**
-	 * Default implementation.
-	 */
-	bool intersects(const geom::Geometry * g) const;
 
 	/**
 	 * Default implementation.

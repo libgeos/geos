@@ -173,7 +173,7 @@ GEOSDisjoint_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry
         return 2;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 2;
@@ -207,7 +207,7 @@ GEOSTouches_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry 
         return 2;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 2;
@@ -242,7 +242,7 @@ GEOSIntersects_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geomet
         return 2;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 2;
@@ -277,7 +277,7 @@ GEOSCrosses_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry 
         return 2;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 2;
@@ -312,7 +312,7 @@ GEOSWithin_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *
         return 2;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 2;
@@ -351,7 +351,7 @@ GEOSContains_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry
         return 2;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 2;
@@ -386,7 +386,7 @@ GEOSOverlaps_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry
         return 2;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 2;
@@ -426,7 +426,7 @@ GEOSRelatePattern_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geo
         return 2;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 2;
@@ -462,7 +462,7 @@ GEOSRelate_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -512,7 +512,7 @@ GEOSisValid_r(GEOSContextHandle_t extHandle, const Geometry *g1)
         return 2;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 2;
@@ -559,7 +559,7 @@ GEOSisValidReason_r(GEOSContextHandle_t extHandle, const Geometry *g1)
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -618,7 +618,7 @@ GEOSEquals_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *
         return 2;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 2;
@@ -653,7 +653,7 @@ GEOSEqualsExact_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geome
         return 2;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 2;
@@ -688,7 +688,7 @@ GEOSDistance_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry
         return 0;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 0;
@@ -722,7 +722,7 @@ GEOSArea_r(GEOSContextHandle_t extHandle, const Geometry *g, double *area)
         return 0;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 0;
@@ -756,7 +756,7 @@ GEOSLength_r(GEOSContextHandle_t extHandle, const Geometry *g, double *length)
         return 2;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 0;
@@ -790,7 +790,7 @@ GEOSGeomFromWKT_r(GEOSContextHandle_t extHandle, const char *wkt)
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -827,7 +827,7 @@ GEOSGeomToWKT_r(GEOSContextHandle_t extHandle, const Geometry *g1)
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -866,7 +866,7 @@ GEOSGeomToWKB_buf_r(GEOSContextHandle_t extHandle, const Geometry *g, size_t *si
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -911,7 +911,7 @@ GEOSGeomFromWKB_buf_r(GEOSContextHandle_t extHandle, const unsigned char *wkb, s
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -954,7 +954,7 @@ GEOSGeomToHEX_buf_r(GEOSContextHandle_t extHandle, const Geometry *g, size_t *si
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -999,7 +999,7 @@ GEOSGeomFromHEX_buf_r(GEOSContextHandle_t extHandle, const unsigned char *hex, s
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -1040,7 +1040,7 @@ GEOSisEmpty_r(GEOSContextHandle_t extHandle, const Geometry *g1)
         return 2;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 2;
@@ -1073,7 +1073,7 @@ GEOSisSimple_r(GEOSContextHandle_t extHandle, const Geometry *g1)
         return 2;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 2;
@@ -1106,7 +1106,7 @@ GEOSisRing_r(GEOSContextHandle_t extHandle, const Geometry *g)
         return 2;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 2;
@@ -1147,7 +1147,7 @@ GEOSGeomType_r(GEOSContextHandle_t extHandle, const Geometry *g1)
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -1186,7 +1186,7 @@ GEOSGeomTypeId_r(GEOSContextHandle_t extHandle, const Geometry *g1)
         return -1;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return -1;
@@ -1226,7 +1226,7 @@ GEOSEnvelope_r(GEOSContextHandle_t extHandle, const Geometry *g1)
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -1260,7 +1260,7 @@ GEOSIntersection_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geom
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -1268,7 +1268,7 @@ GEOSIntersection_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geom
 
 	try
 	{
-		GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::opINTERSECTION));
+	        GeomAutoPtr g3(BinaryOp(g1, g2, overlayOp(OverlayOp::opINTERSECTION)));
 		return g3.release();
 		//Geometry *g3 = g1->intersection(g2);
 		//return g3;
@@ -1296,7 +1296,7 @@ GEOSBuffer_r(GEOSContextHandle_t extHandle, const Geometry *g1, double width, in
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -1330,7 +1330,7 @@ GEOSConvexHull_r(GEOSContextHandle_t extHandle, const Geometry *g1)
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -1364,7 +1364,7 @@ GEOSDifference_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geomet
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -1372,7 +1372,7 @@ GEOSDifference_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geomet
 
 	try
 	{
-		GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::opDIFFERENCE));
+	        GeomAutoPtr g3(BinaryOp(g1, g2, overlayOp(OverlayOp::opDIFFERENCE)));
 		return g3.release();
 		//Geometry *g3 = g1->difference(g2);
 		//return g3;
@@ -1400,7 +1400,7 @@ GEOSBoundary_r(GEOSContextHandle_t extHandle, const Geometry *g1)
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -1434,7 +1434,7 @@ GEOSSymDifference_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geo
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -1442,7 +1442,7 @@ GEOSSymDifference_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geo
 
 	try
 	{
-		GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::opSYMDIFFERENCE));
+	        GeomAutoPtr g3(BinaryOp(g1, g2, overlayOp(OverlayOp::opSYMDIFFERENCE)));
 		return g3.release();
 		//Geometry *g3 = g1->symDifference(g2);
 		//return g3;
@@ -1470,7 +1470,7 @@ GEOSUnion_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -1478,7 +1478,7 @@ GEOSUnion_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g
 
 	try
 	{
-		GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::opUNION));
+	        GeomAutoPtr g3(BinaryOp(g1, g2, overlayOp(OverlayOp::opUNION)));
 		return g3.release();
 		//Geometry *g3 = g1->Union(g2);
 		//return g3;
@@ -1513,7 +1513,7 @@ GEOSUnionCascaded_r(GEOSContextHandle_t extHandle, const Geometry *g1)
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -1551,7 +1551,7 @@ GEOSPointOnSurface_r(GEOSContextHandle_t extHandle, const Geometry *g1)
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -1606,7 +1606,7 @@ GEOSGeom_destroy_r(GEOSContextHandle_t extHandle, Geometry *a)
             return;
         }
 
-        handle = (GEOSContextHandleInternal_t*)extHandle;
+        handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
         if( handle->initialized == 0 )
         {
             return;
@@ -1622,7 +1622,7 @@ GEOSGeom_destroy_r(GEOSContextHandle_t extHandle, Geometry *a)
             return;
         }
 
-        handle = (GEOSContextHandleInternal_t*)extHandle;
+        handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
         if( handle->initialized == 0 )
         {
             return;
@@ -1642,7 +1642,7 @@ GEOSSetSRID_r(GEOSContextHandle_t extHandle, Geometry *g, int srid)
         return;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return;
@@ -1676,7 +1676,7 @@ GEOSGetNumCoordinates_r(GEOSContextHandle_t extHandle, const Geometry *g1)
         return -1;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return -1;
@@ -1712,7 +1712,7 @@ GEOSNormalize_r(GEOSContextHandle_t extHandle, Geometry *g1)
         return -1;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return -1;
@@ -1745,7 +1745,7 @@ GEOSGetNumInteriorRings_r(GEOSContextHandle_t extHandle, const Geometry *g1)
         return -1;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return -1;
@@ -1785,7 +1785,7 @@ GEOSGetNumGeometries_r(GEOSContextHandle_t extHandle, const Geometry *g1)
         return -1;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return -1;
@@ -1822,7 +1822,7 @@ GEOSGetGeometryN_r(GEOSContextHandle_t extHandle, const Geometry *g1, int n)
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -1866,7 +1866,7 @@ GEOSGetExteriorRing_r(GEOSContextHandle_t extHandle, const Geometry *g1)
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -1908,7 +1908,7 @@ GEOSGetInteriorRingN_r(GEOSContextHandle_t extHandle, const Geometry *g1, int n)
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -1948,7 +1948,7 @@ GEOSGetCentroid_r(GEOSContextHandle_t extHandle, const Geometry *g)
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -1988,7 +1988,7 @@ GEOSGeom_createCollection_r(GEOSContextHandle_t extHandle, int type, Geometry **
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -2053,7 +2053,7 @@ GEOSPolygonize_r(GEOSContextHandle_t extHandle, const Geometry * const * g, unsi
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -2118,7 +2118,7 @@ GEOSPolygonizer_getCutEdges_r(GEOSContextHandle_t extHandle, const Geometry * co
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -2182,7 +2182,7 @@ GEOSLineMerge_r(GEOSContextHandle_t extHandle, const Geometry *g)
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -2239,7 +2239,7 @@ GEOSGetSRID_r(GEOSContextHandle_t extHandle, const Geometry *g1)
         return 0;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 0;
@@ -2288,7 +2288,7 @@ GEOSHasZ_r(GEOSContextHandle_t extHandle, const Geometry *g)
         return -1;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return -1;
@@ -2310,7 +2310,7 @@ GEOS_getWKBOutputDims_r(GEOSContextHandle_t extHandle)
         return -1;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return -1;
@@ -2329,7 +2329,7 @@ GEOS_setWKBOutputDims_r(GEOSContextHandle_t extHandle, int newdims)
         return -1;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return -1;
@@ -2352,7 +2352,7 @@ GEOS_getWKBByteOrder_r(GEOSContextHandle_t extHandle)
         return -1;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return -1;
@@ -2371,7 +2371,7 @@ GEOS_setWKBByteOrder_r(GEOSContextHandle_t extHandle, int byteOrder)
         return -1;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return -1;
@@ -2393,7 +2393,7 @@ GEOSCoordSeq_create_r(GEOSContextHandle_t extHandle, unsigned int size, unsigned
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -2429,7 +2429,7 @@ GEOSCoordSeq_setOrdinate_r(GEOSContextHandle_t extHandle, CoordinateSequence *s,
         return 0;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 0;
@@ -2481,7 +2481,7 @@ GEOSCoordSeq_clone_r(GEOSContextHandle_t extHandle, const CoordinateSequence *s)
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -2511,7 +2511,7 @@ GEOSCoordSeq_getOrdinate_r(GEOSContextHandle_t extHandle, const CoordinateSequen
         return 0;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 0;
@@ -2564,7 +2564,7 @@ GEOSCoordSeq_getSize_r(GEOSContextHandle_t extHandle, const CoordinateSequence *
         return 0;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 0;
@@ -2598,7 +2598,7 @@ GEOSCoordSeq_getDimensions_r(GEOSContextHandle_t extHandle, const CoordinateSequ
         return 0;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 0;
@@ -2638,7 +2638,7 @@ GEOSCoordSeq_destroy_r(GEOSContextHandle_t extHandle, CoordinateSequence *s)
             return;
         }
 
-        handle = (GEOSContextHandleInternal_t*)extHandle;
+        handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
         if( handle->initialized == 0 )
         {
             return;
@@ -2654,7 +2654,7 @@ GEOSCoordSeq_destroy_r(GEOSContextHandle_t extHandle, CoordinateSequence *s)
             return;
         }
 
-        handle = (GEOSContextHandleInternal_t*)extHandle;
+        handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
         if( handle->initialized == 0 )
         {
             return;
@@ -2674,7 +2674,7 @@ GEOSGeom_getCoordSeq_r(GEOSContextHandle_t extHandle, const Geometry *g)
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -2719,7 +2719,7 @@ GEOSGeom_createPoint_r(GEOSContextHandle_t extHandle, CoordinateSequence *cs)
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -2753,7 +2753,7 @@ GEOSGeom_createLinearRing_r(GEOSContextHandle_t extHandle, CoordinateSequence *c
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -2788,7 +2788,7 @@ GEOSGeom_createLineString_r(GEOSContextHandle_t extHandle, CoordinateSequence *c
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -2823,7 +2823,7 @@ GEOSGeom_createPolygon_r(GEOSContextHandle_t extHandle, Geometry *shell, Geometr
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -2868,7 +2868,7 @@ GEOSGeom_clone_r(GEOSContextHandle_t extHandle, const Geometry *g)
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -2898,7 +2898,7 @@ GEOSGeom_getDimensions_r(GEOSContextHandle_t extHandle, const Geometry *g)
         return 0;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 0;
@@ -2964,7 +2964,7 @@ GEOSSimplify_r(GEOSContextHandle_t extHandle, const Geometry *g1, double toleran
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -3001,7 +3001,7 @@ GEOSTopologyPreserveSimplify_r(GEOSContextHandle_t extHandle, const Geometry *g1
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -3040,7 +3040,7 @@ GEOSWKTReader_create_r(GEOSContextHandle_t extHandle)
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -3080,7 +3080,7 @@ GEOSWKTReader_destroy_r(GEOSContextHandle_t extHandle, WKTReader *reader)
             return;
         }
 
-        handle = (GEOSContextHandleInternal_t*)extHandle;
+        handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
         if( handle->initialized == 0 )
         {
             return;
@@ -3096,7 +3096,7 @@ GEOSWKTReader_destroy_r(GEOSContextHandle_t extHandle, WKTReader *reader)
             return;
         }
 
-        handle = (GEOSContextHandleInternal_t*)extHandle;
+        handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
         if( handle->initialized == 0 )
         {
             return;
@@ -3117,7 +3117,7 @@ GEOSWKTReader_read_r(GEOSContextHandle_t extHandle, WKTReader *reader, const cha
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -3154,7 +3154,7 @@ GEOSWKTWriter_create_r(GEOSContextHandle_t extHandle)
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -3194,7 +3194,7 @@ GEOSWKTWriter_destroy_r(GEOSContextHandle_t extHandle, WKTWriter *Writer)
             return;
         }
 
-        handle = (GEOSContextHandleInternal_t*)extHandle;
+        handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
         if( handle->initialized == 0 )
         {
             return;
@@ -3210,7 +3210,7 @@ GEOSWKTWriter_destroy_r(GEOSContextHandle_t extHandle, WKTWriter *Writer)
             return;
         }
 
-        handle = (GEOSContextHandleInternal_t*)extHandle;
+        handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
         if( handle->initialized == 0 )
         {
             return;
@@ -3231,7 +3231,7 @@ GEOSWKTWriter_write_r(GEOSContextHandle_t extHandle, WKTWriter *writer, const Ge
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -3269,7 +3269,7 @@ GEOSWKBReader_create_r(GEOSContextHandle_t extHandle)
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -3308,7 +3308,7 @@ GEOSWKBReader_destroy_r(GEOSContextHandle_t extHandle, WKBReader *reader)
             return;
         }
 
-        handle = (GEOSContextHandleInternal_t*)extHandle;
+        handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
         if( handle->initialized == 0 )
         {
             return;
@@ -3324,7 +3324,7 @@ GEOSWKBReader_destroy_r(GEOSContextHandle_t extHandle, WKBReader *reader)
             return;
         }
 
-        handle = (GEOSContextHandleInternal_t*)extHandle;
+        handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
         if( handle->initialized == 0 )
         {
             return;
@@ -3345,7 +3345,7 @@ GEOSWKBReader_read_r(GEOSContextHandle_t extHandle, WKBReader *reader, const uns
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -3383,7 +3383,7 @@ GEOSWKBReader_readHEX_r(GEOSContextHandle_t extHandle, WKBReader *reader, const 
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -3422,7 +3422,7 @@ GEOSWKBWriter_create_r(GEOSContextHandle_t extHandle)
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -3461,7 +3461,7 @@ GEOSWKBWriter_destroy_r(GEOSContextHandle_t extHandle, WKBWriter *Writer)
             return;
         }
 
-        handle = (GEOSContextHandleInternal_t*)extHandle;
+        handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
         if( handle->initialized == 0 )
         {
             return;
@@ -3477,7 +3477,7 @@ GEOSWKBWriter_destroy_r(GEOSContextHandle_t extHandle, WKBWriter *Writer)
             return;
         }
 
-        handle = (GEOSContextHandleInternal_t*)extHandle;
+        handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
         if( handle->initialized == 0 )
         {
             return;
@@ -3499,7 +3499,7 @@ GEOSWKBWriter_write_r(GEOSContextHandle_t extHandle, WKBWriter *writer, const Ge
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -3540,7 +3540,7 @@ GEOSWKBWriter_writeHEX_r(GEOSContextHandle_t extHandle, WKBWriter *writer, const
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -3581,7 +3581,7 @@ GEOSWKBWriter_getOutputDimension_r(GEOSContextHandle_t extHandle, const GEOSWKBW
         return 0;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 0;
@@ -3609,7 +3609,7 @@ GEOSWKBWriter_setOutputDimension_r(GEOSContextHandle_t extHandle, GEOSWKBWriter*
         return;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return;
@@ -3636,7 +3636,7 @@ GEOSWKBWriter_getByteOrder_r(GEOSContextHandle_t extHandle, const GEOSWKBWriter*
         return 0;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 0;
@@ -3664,7 +3664,7 @@ GEOSWKBWriter_setByteOrder_r(GEOSContextHandle_t extHandle, GEOSWKBWriter* write
         return;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return;
@@ -3691,7 +3691,7 @@ GEOSWKBWriter_getIncludeSRID_r(GEOSContextHandle_t extHandle, const GEOSWKBWrite
         return -1;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return -1;
@@ -3720,7 +3720,7 @@ GEOSWKBWriter_setIncludeSRID_r(GEOSContextHandle_t extHandle, GEOSWKBWriter* wri
         return;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return;
@@ -3754,7 +3754,7 @@ GEOSPrepare_r(GEOSContextHandle_t extHandle, const Geometry *g)
         return NULL;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return NULL;
@@ -3792,7 +3792,7 @@ GEOSPreparedGeom_destroy_r(GEOSContextHandle_t extHandle, const geos::geom::prep
             return;
         }
 
-        handle = (GEOSContextHandleInternal_t*)extHandle;
+        handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
         if( handle->initialized == 0 )
         {
             return;
@@ -3807,7 +3807,7 @@ GEOSPreparedGeom_destroy_r(GEOSContextHandle_t extHandle, const geos::geom::prep
             return;
         }
 
-        handle = (GEOSContextHandleInternal_t*)extHandle;
+        handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
         if( handle->initialized == 0 )
         {
             return;
@@ -3827,7 +3827,7 @@ GEOSPreparedContains_r(GEOSContextHandle_t extHandle, const geos::geom::prep::Pr
         return 2;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 2;
@@ -3861,7 +3861,7 @@ GEOSPreparedContainsProperly_r(GEOSContextHandle_t extHandle, const geos::geom::
         return 2;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 2;
@@ -3895,7 +3895,7 @@ GEOSPreparedCovers_r(GEOSContextHandle_t extHandle, const geos::geom::prep::Prep
         return 2;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 2;
@@ -3929,7 +3929,7 @@ GEOSPreparedIntersects_r(GEOSContextHandle_t extHandle, const geos::geom::prep::
         return 2;
     }
 
-    handle = (GEOSContextHandleInternal_t*)extHandle;
+    handle = (GEOSContextHandleInternal_t*)((void*)extHandle);
     if( handle->initialized == 0 )
     {
         return 2;

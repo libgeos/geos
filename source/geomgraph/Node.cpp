@@ -129,6 +129,12 @@ Node::isIncidentEdgeInResult() const
 	return false;
 }
 
+/*protected*/
+void Node::setLabel_impl(Label* newLabel)
+{
+  GraphComponent::setLabel_impl(newLabel);
+}
+
 void
 Node::add(EdgeEnd *e)
 {

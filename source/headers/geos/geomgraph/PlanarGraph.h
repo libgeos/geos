@@ -99,7 +99,7 @@ public:
 
 	virtual bool isBoundaryNode(int geomIndex, const geom::Coordinate& coord);
 
-	virtual void add(EdgeEnd *e);
+	void add(EdgeEnd *e);
 
 	virtual NodeMap::iterator getNodeIterator();
 
@@ -139,7 +139,7 @@ public:
 	 * @return the edge, if found
 	 *    <code>null</code> if the edge was not found
 	 */
-	virtual Edge* findEdge(const geom::Coordinate& p0,
+	Edge* findEdge(const geom::Coordinate& p0,
 			const geom::Coordinate& p1);
 
 	/** \brief
@@ -165,7 +165,9 @@ protected:
 	std::vector<EdgeEnd*> *edgeEndList;
 
 	virtual void insertEdge(Edge *e);
-
+	virtual void add_impl(EdgeEnd *e);
+	virtual Edge* findEdge_impl(const geom::Coordinate& p0,
+				    const geom::Coordinate& p1);
 private:
 
 	/** \brief

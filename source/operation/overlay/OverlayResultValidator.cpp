@@ -152,7 +152,8 @@ void
 OverlayResultValidator::addTestPts(const Geometry& g)
 {
 	OffsetPointGenerator ptGen(g, 5 * _TOLERANCE);
-	auto_ptr< vector<geom::Coordinate> > pts = ptGen.getPoints();
+	auto_ptr< vector<geom::Coordinate> > pts(ptGen.getPoints());
+
 	testCoords.insert(testCoords.end(), pts->begin(), pts->end());
 }
 

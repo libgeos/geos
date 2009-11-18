@@ -96,8 +96,9 @@ bool
 HotPixel::intersectsScaled(const Coordinate& p0,
 		const Coordinate& p1) const
 {
-
+#ifndef MIN
 #define MIN(x,y) (x)<(y)?(x):(y)
+#endif
 
 	double segMinx = MIN(p0.x, p1.x);
 	double segMaxx = MIN(p0.x, p1.x);

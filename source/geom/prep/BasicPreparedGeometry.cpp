@@ -110,7 +110,7 @@ BasicPreparedGeometry::disjoint(const geom::Geometry * g)	const
 }
 
 bool 
-BasicPreparedGeometry::intersects(const geom::Geometry * g) const
+BasicPreparedGeometry::intersects_impl(const geom::Geometry * g) const
 {
 	return baseGeom->intersects(g);
 }

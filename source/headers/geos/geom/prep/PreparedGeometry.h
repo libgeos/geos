@@ -133,7 +133,7 @@ public:
 	 * 
 	 * @see Geometry#intersects(Geometry)
 	 */
-	virtual bool intersects(const geom::Geometry *geom) const =0;
+	bool intersects(const geom::Geometry *geom) const {return intersects_impl(geom);};
 
 	/**
 	 * Tests whether the base {@link Geometry} overlaps a given geometry.
@@ -164,6 +164,9 @@ public:
 	 * @see Geometry#within(Geometry)
 	 */
 	virtual bool within(const geom::Geometry *geom) const =0;
+
+ protected:
+	virtual bool intersects_impl(const geom::Geometry *geom) const =0;
 };
 
 

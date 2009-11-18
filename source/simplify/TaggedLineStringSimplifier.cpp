@@ -155,7 +155,7 @@ TaggedLineStringSimplifier::simplifySection(size_t i,
 	if (isValidToSimplify)
 	{
 
-		auto_ptr<TaggedLineSegment> newSeg = flatten(i, j);
+	        auto_ptr<TaggedLineSegment> newSeg(flatten(i, j));
 
 #if GEOS_DEBUG
 		std::cerr << "isValidToSimplify, adding seg " 
@@ -209,8 +209,7 @@ bool
 TaggedLineStringSimplifier::hasBadOutputIntersection(
 		const LineSegment& candidateSeg)
 {
-	auto_ptr< vector<LineSegment*> > querySegs =
-		outputIndex->query(&candidateSeg);
+        auto_ptr< vector<LineSegment*> > querySegs(outputIndex->query(&candidateSeg));
 
 	for (vector<LineSegment*>::iterator
 			it = querySegs->begin(), iEnd = querySegs->end();
@@ -245,8 +244,7 @@ TaggedLineStringSimplifier::hasBadInputIntersection(
 		const vector<size_t>& sectionIndex,
 		const LineSegment& candidateSeg)
 {
-	auto_ptr< vector<LineSegment*> > querySegs =
-		inputIndex->query(&candidateSeg);
+        auto_ptr< vector<LineSegment*> > querySegs(inputIndex->query(&candidateSeg));
 
 	for (vector<LineSegment*>::iterator
 			it = querySegs->begin(), iEnd = querySegs->end();

@@ -131,7 +131,7 @@ TaggedLineString::getResultCoordinates() const
 	     << resultSegs.size() << endl;
 #endif
 
-	CoordVectPtr pts = extractCoordinates(resultSegs);
+	CoordVectPtr pts(extractCoordinates(resultSegs));
 
 #if GEOS_DEBUG
 	cerr << __FUNCTION__ << " extracted Coords.size: "
@@ -213,16 +213,16 @@ TaggedLineString::getSegments() const
 auto_ptr<Geometry>
 TaggedLineString::asLineString() const
 {
-	return parentLine->getFactory()->createLineString(
-			getResultCoordinates());
+  CoordSeqPtr tempSeqPtr(getResultCoordinates());
+	return parentLine->getFactory()->createLineString(tempSeqPtr);
 }
 
 /*public*/
 auto_ptr<Geometry>
 TaggedLineString::asLinearRing() const
 {
-	return parentLine->getFactory()->createLinearRing(
-			getResultCoordinates());
+  CoordSeqPtr tempSeqPtr(getResultCoordinates());
+	return parentLine->getFactory()->createLinearRing(tempSeqPtr);
 }
 
 /*public*/

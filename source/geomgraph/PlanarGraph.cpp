@@ -147,9 +147,9 @@ PlanarGraph::insertEdge(Edge *e)
 	edges->push_back(e);
 }
 
-/*public*/
+/*protected*/
 void
-PlanarGraph::add(EdgeEnd* e)
+PlanarGraph::add_impl(EdgeEnd* e)
 {
 
 	assert(e);
@@ -158,6 +158,31 @@ PlanarGraph::add(EdgeEnd* e)
 
 	assert(edgeEndList);
 	edgeEndList->push_back(e);
+}
+
+/*protected*/
+Edge*
+PlanarGraph::findEdge_impl(const Coordinate& p0, const Coordinate& p1)
+{
+	for (size_t i=0, n=edges->size(); i<n; ++i)
+	{
+		Edge *e=(*edges)[i];
+		assert(e);
+
+		const CoordinateSequence* eCoord=e->getCoordinates();
+		assert(eCoord);
+
+		if (p0==eCoord->getAt(0) && p1==eCoord->getAt(1))
+			return e;
+	}
+	return NULL;
+}
+
+/*public*/
+void
+PlanarGraph::add(EdgeEnd* e)
+{
+  add_impl(e);
 }
 
 /*public*/
@@ -313,18 +338,7 @@ PlanarGraph::findEdgeEnd(Edge *e)
 Edge*
 PlanarGraph::findEdge(const Coordinate& p0, const Coordinate& p1)
 {
-	for (size_t i=0, n=edges->size(); i<n; ++i)
-	{
-		Edge *e=(*edges)[i];
-		assert(e);
-
-		const CoordinateSequence* eCoord=e->getCoordinates();
-		assert(eCoord);
-
-		if (p0==eCoord->getAt(0) && p1==eCoord->getAt(1))
-			return e;
-	}
-	return NULL;
+  return findEdge_impl(p0, p1);
 }
 
 /*public*/

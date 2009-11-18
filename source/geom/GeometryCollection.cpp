@@ -155,12 +155,14 @@ bool
 GeometryCollection::isSimple() const
 {
 	throw util::IllegalArgumentException("Operation not supported by GeometryCollection\n");
+	return false; // here to prevent compiler warning
 }
 
 Geometry*
 GeometryCollection::getBoundary() const
 {
 	throw util::IllegalArgumentException("Operation not supported by GeometryCollection\n");
+	return NULL; // here to prevent compiler warning
 }
 
 bool

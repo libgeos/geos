@@ -26,6 +26,7 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph

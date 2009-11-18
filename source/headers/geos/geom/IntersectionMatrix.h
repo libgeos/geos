@@ -21,6 +21,7 @@
 #define GEOS_GEOM_INTERSECTIONMATRIX_H
 
 #include <string>
+#include <iostream>
 
 #include <geos/inline.h>
 

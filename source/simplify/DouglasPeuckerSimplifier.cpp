@@ -108,9 +108,7 @@ DPTransformer::transformCoordinates(
 	const Coordinate::Vect* inputPts = coords->toVector();
 	assert(inputPts);
 
-	std::auto_ptr<Coordinate::Vect> newPts =
-			DouglasPeuckerLineSimplifier::simplify(*inputPts,
-				distanceTolerance);
+	std::auto_ptr<Coordinate::Vect> newPts(DouglasPeuckerLineSimplifier::simplify(*inputPts, distanceTolerance));
 
 	return CoordinateSequence::AutoPtr(
 		factory->getCoordinateSequenceFactory()->create(

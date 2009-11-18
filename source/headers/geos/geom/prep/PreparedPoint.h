@@ -34,6 +34,7 @@ class PreparedPoint: public BasicPreparedGeometry
 {
 private:
 protected:
+  virtual bool intersects_impl(const geom::Geometry* g) const;
 public:
 	PreparedPoint(const Geometry * geom) 
 		: BasicPreparedGeometry( geom) 
@@ -45,7 +46,6 @@ public:
 	 * The optimization here is that computing topology for the test geometry
 	 * is avoided.  This can be significant for large geometries.
 	 */
-	bool intersects(geom::Geometry* g);
 
 };
 

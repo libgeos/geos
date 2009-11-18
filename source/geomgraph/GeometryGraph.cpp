@@ -465,6 +465,20 @@ GeometryGraph::addSelfIntersectionNode(int argIndex,
 	}
 }
 
+/*protected*/
+void
+GeometryGraph::add_impl(EdgeEnd *e)
+{
+  PlanarGraph::add_impl(e);
+}
+
+/*protected*/
+Edge*
+GeometryGraph::findEdge_impl(const geom::Coordinate& p0, const geom::Coordinate& p1)
+{
+  return PlanarGraph::findEdge_impl(p0, p1);
+}
+
 vector<Edge*> *
 GeometryGraph::getEdges()
 {

@@ -45,7 +45,7 @@ public:
 	GraphComponent(Label* newLabel); 
 	virtual ~GraphComponent();
 	Label* getLabel();
-	virtual void setLabel(Label* newLabel);
+	void setLabel(Label* newLabel);
 	virtual void setInResult(bool isInResult) { isInResultVar=isInResult; }
 	virtual bool isInResult() const { return isInResultVar; }
 	virtual void setCovered(bool isCovered);
@@ -54,10 +54,12 @@ public:
 	virtual bool isVisited() const { return isVisitedVar; }
 	virtual void setVisited(bool isVisited) { isVisitedVar = isVisited; }
 	virtual bool isIsolated() const=0;
-	virtual void updateIM(geom::IntersectionMatrix *im);
+	void updateIM(geom::IntersectionMatrix *im);
 protected:
 	Label* label;
 	virtual void computeIM(geom::IntersectionMatrix *im)=0;
+	virtual void setLabel_impl(Label* newLabel);
+	virtual void updateIM_impl(geom::IntersectionMatrix *im);
 private:
 	bool isInResultVar;
 	bool isCoveredVar;

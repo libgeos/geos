@@ -18,6 +18,7 @@
 
 #include <geos/platform.h> // for DoubleNotANumber
 #include <geos/inline.h>
+#include <iostream>
 
 #include <set>
 #include <stack>

@@ -56,8 +56,7 @@ GraphComponent::getLabel()
 void
 GraphComponent::setLabel(Label* newLabel)
 {
-	delete label;
-	label=newLabel;
+  setLabel_impl(newLabel);
 }
 
 void
@@ -69,6 +68,21 @@ GraphComponent::setCovered(bool isCovered)
 
 void
 GraphComponent::updateIM(IntersectionMatrix *im)
+{
+  updateIM_impl(im);
+}
+
+/*protected*/
+void
+GraphComponent::setLabel_impl(Label* newLabel)
+{
+	delete label;
+	label=newLabel;
+}
+
+/*protected*/
+void
+GraphComponent::updateIM_impl(IntersectionMatrix *im)
 {
 	assert(label->getGeometryCount() >= 2); // found partial label
 	computeIM(im);

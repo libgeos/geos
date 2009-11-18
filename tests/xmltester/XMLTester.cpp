@@ -70,7 +70,7 @@ using namespace geos::operation::linemerge;
 void
 tolower(std::string& str)
 {
-    std::transform(str.begin(), str.end(), str.begin(), (int(*)(int))std::tolower);
+    std::transform(str.begin(), str.end(), str.begin(), (int(*)(int))tolower);
 }
 
 std::string
@@ -542,7 +542,7 @@ XMLTester::parseTest()
 			gRes->normalize();
 
 			//GeomAutoPtr gRealRes(gA->intersection(gB));
-			GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opINTERSECTION));
+			GeomAutoPtr gRealRes(BinaryOp(gA, gB, overlayOp(OverlayOp::opINTERSECTION)));
 			gRealRes->normalize();
 
 			if (gRes->compareTo(gRealRes.get())==0) success=1;
@@ -560,7 +560,7 @@ XMLTester::parseTest()
 			gRes->normalize();
 
 			//GeomAutoPtr gRealRes(gA->Union(gB));
-			GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opUNION));
+			GeomAutoPtr gRealRes(BinaryOp(gA, gB, overlayOp(OverlayOp::opUNION)));
 			gRealRes->normalize();
 
 			if (gRes->compareTo(gRealRes.get())==0) success=1;
@@ -578,7 +578,7 @@ XMLTester::parseTest()
 			gRes->normalize();
 
 			//GeomAutoPtr gRealRes(gA->difference(gB));
-			GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opDIFFERENCE));
+			GeomAutoPtr gRealRes(BinaryOp(gA, gB, overlayOp(OverlayOp::opDIFFERENCE)));
 			
 			gRealRes->normalize();
 
@@ -597,7 +597,7 @@ XMLTester::parseTest()
 			gRes->normalize();
 
 			//GeomAutoPtr gRealRes(gA->symDifference(gB));
-			GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opSYMDIFFERENCE));
+			GeomAutoPtr gRealRes(BinaryOp(gA, gB, overlayOp(OverlayOp::opSYMDIFFERENCE)));
 			gRealRes->normalize();
 
 			if (gRes->compareTo(gRealRes.get())==0) success=1;
@@ -752,8 +752,7 @@ XMLTester::parseTest()
 				/// 1/1000 of the area of the expected result.
 				double areatol = expectedArea / 1e3;
 
-				GeomAutoPtr gDiff = BinaryOp(gRes.get(), gRealRes.get(),
-					overlayOp(OverlayOp::opDIFFERENCE));
+				GeomAutoPtr gDiff(BinaryOp(gRes.get(), gRealRes.get(), overlayOp(OverlayOp::opDIFFERENCE)));
 
 				double areaDiff = gDiff->getArea();
 				if ( areaDiff > areatol )
@@ -886,8 +885,7 @@ XMLTester::parseTest()
 			{
 		std::cerr << "Running intersection for areatest" << std::endl;
 			}
-			GeomAutoPtr gI = BinaryOp(gA, gB,
-					overlayOp(OverlayOp::opINTERSECTION));
+			GeomAutoPtr gI(BinaryOp(gA, gB, overlayOp(OverlayOp::opINTERSECTION)));
 
 			if ( testValidOutput )
 			{
@@ -898,15 +896,13 @@ XMLTester::parseTest()
 			{
 		std::cerr << "Running difference(A,B) for areatest" << std::endl;
 			}
-			GeomAutoPtr gDab = BinaryOp(gA, gB,
-					overlayOp(OverlayOp::opDIFFERENCE));
+			GeomAutoPtr gDab(BinaryOp(gA, gB, overlayOp(OverlayOp::opDIFFERENCE)));
 
 			if ( verbose > 1 )
 			{
 		std::cerr << "Running difference(B,A) for areatest" << std::endl;
 			}
-			GeomAutoPtr gDba = BinaryOp(gB, gA,
-					overlayOp(OverlayOp::opDIFFERENCE));
+			GeomAutoPtr gDba(BinaryOp(gB, gA, overlayOp(OverlayOp::opDIFFERENCE)));
 
 			if ( testValidOutput )
 			{
@@ -917,15 +913,13 @@ XMLTester::parseTest()
 			{
 		std::cerr << "Running symdifference for areatest" << std::endl;
 			}
-			GeomAutoPtr gSD = BinaryOp(gA, gB,
-					overlayOp(OverlayOp::opSYMDIFFERENCE));
+			GeomAutoPtr gSD(BinaryOp(gA, gB, overlayOp(OverlayOp::opSYMDIFFERENCE)));
 
 			if ( verbose > 1 )
 			{
 		std::cerr << "Running union for areatest" << std::endl;
 			}
-			GeomAutoPtr gU = BinaryOp(gA, gB,
-					overlayOp(OverlayOp::opUNION));
+			GeomAutoPtr gU(BinaryOp(gA, gB, overlayOp(OverlayOp::opUNION)));
 
 			double areaA = gA->getArea();
 			double areaB = gB->getArea();

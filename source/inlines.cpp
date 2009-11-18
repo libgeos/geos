@@ -59,7 +59,6 @@
 #include <geos/geom/CoordinateArraySequenceFactory.inl>
 #include <geos/noding/SegmentString.inl>
 #include <geos/noding/snapround/HotPixel.inl>
-#include <geos/noding/snapround/MCIndexSnapRounder.inl>
 #include <geos/noding/MCIndexNoder.inl>
 
 #endif // defined __CYGWIN__
