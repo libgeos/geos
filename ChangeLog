@@ -1,3 +1,8 @@
+2009-11-18 01:26  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2717] capi/geos_c.cpp, capi/geos_ts_c.cpp: Silent warning
+    thrown by Visual C++ about mixed class and struct keyword (#269)
+
 2009-10-29 21:06  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2710] tests/unit/operation/buffer/BufferOpTest.cpp: Testing
