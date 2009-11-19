@@ -16,6 +16,7 @@
 
 
 #include <vector>
+#include <stdlib.h>
 
 #include <geos/geomgraph/index/SegmentIntersector.h>
 #include <geos/geomgraph/Edge.h>
