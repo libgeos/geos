@@ -168,61 +168,49 @@ PolygonizeGraph::computeNextCWEdges()
 	delete pns;
 }
 
-/*
- * Convert the maximal edge rings found by the initial graph traversal
- * into the minimal edge rings required by JTS polygon topology rules.
- *
- * @param ringEdges the list of start edges for the edgeRings to convert.
- */
+/* private */
 void
-PolygonizeGraph::convertMaximalToMinimalEdgeRings(std::vector<PolygonizeDirectedEdge*> *ringEdges)
+PolygonizeGraph::convertMaximalToMinimalEdgeRings(
+		std::vector<PolygonizeDirectedEdge*> *ringEdges)
 {
-	for(int i=0;i<(int)ringEdges->size();i++)
+	typedef std::vector<Node*> IntersectionNodes;
+	typedef std::vector<PolygonizeDirectedEdge*> RingEdges;
+
+	IntersectionNodes intNodes;
+	for(RingEdges::size_type i=0, in=ringEdges->size();
+			i<in; ++i)
 	{
 		PolygonizeDirectedEdge *de=(*ringEdges)[i];
 		long label=de->getLabel();
-		std::vector<Node*> *intNodes=findIntersectionNodes(de, label);
-		if (intNodes==NULL) continue;
-
-		// flip the next pointers on the intersection nodes to
-		// create minimal edge rings
-		//std::vector<Node*> *pns=getNodes();
+		findIntersectionNodes(de, label, intNodes);
 
 		// set the next pointers for the edges around each node
-		for(int j=0;j<(int)intNodes->size();j++) {
-			Node *node=(*intNodes)[j];
+		for(IntersectionNodes::size_type j=0, jn=intNodes.size();
+				j<jn; ++j)
+		{
+			Node *node=intNodes[j];
 			computeNextCCWEdges(node, label);
 		}
 
-		delete intNodes;
+		intNodes.clear(); 
 	}
 }
 
-/*
- * Finds all nodes in a maximal edgering which are self-intersection nodes
- * @param startDE
- * @param label
- * @return the list of intersection nodes found,
- * or <code>NULL</code> if no intersection nodes were found.
- * Ownership of returned object goes to caller.
- */
-std::vector<Node*>*
-PolygonizeGraph::findIntersectionNodes(PolygonizeDirectedEdge *startDE, long label)
+/* private static */
+void
+PolygonizeGraph::findIntersectionNodes(PolygonizeDirectedEdge *startDE,
+		long label, std::vector<Node*>& intNodes)
 {
 	PolygonizeDirectedEdge *de=startDE;
-	std::vector<Node*> *intNodes=NULL;
 	do {
 		Node *node=de->getFromNode();
 		if (getDegree(node, label) > 1) {
-			if (intNodes==NULL)
-				intNodes=new std::vector<Node*>();
-			intNodes->push_back(node);
+			intNodes.push_back(node);
 		}
 		de=de->getNext();
 		assert(de!=NULL); // found NULL DE in ring
 		assert(de==startDE || !de->isInRing()); // found DE already in ring
 	} while (de!=startDE);
-	return intNodes;
 }
 
 /**

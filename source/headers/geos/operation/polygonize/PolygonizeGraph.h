@@ -141,24 +141,25 @@ private:
 	 *
 	 * @param ringEdges
 	 * 	the list of start edges for the edgeRings to convert.
+	 *
+	 * TODO: take ringEdges by ref
 	 */
 	void convertMaximalToMinimalEdgeRings(
 			std::vector<PolygonizeDirectedEdge*> *ringEdges);
 
 	/**
 	 * \brief
-	 * Finds all nodes in a maximal edgering which are self-intersection
-	 * nodes
+	 * Finds all nodes in a maximal edgering
+	 * which are self-intersection nodes
 	 *
 	 * @param startDE
 	 * @param label
-	 * @return the list of intersection nodes found,
-	 * or <code>null</code> if no intersection nodes were found.
-	 * Ownership of returned vector goes to caller.
+	 * @param intNodes : intersection nodes found will be pushed here
+	 *                   the vector won't be cleared before pushing.
 	 */
-	static std::vector<planargraph::Node*>* findIntersectionNodes(
-			PolygonizeDirectedEdge *startDE,
-			long label);
+	static void findIntersectionNodes( PolygonizeDirectedEdge *startDE,
+			long label, std::vector<planargraph::Node*>& intNodes
+);
 
 	/**
 	 * @param dirEdges a List of the DirectedEdges in the graph
@@ -195,11 +196,11 @@ private:
 	EdgeRing* findEdgeRing(PolygonizeDirectedEdge *startDE);
 
 	/* Tese are for memory management */
-	std::vector<planargraph::Edge *>newEdges;
-	std::vector<planargraph::DirectedEdge *>newDirEdges;
-	std::vector<planargraph::Node *>newNodes;
-	std::vector<EdgeRing *>newEdgeRings;
-	std::vector<geom::CoordinateSequence *>newCoords;
+	std::vector<planargraph::Edge *> newEdges;
+	std::vector<planargraph::DirectedEdge *> newDirEdges;
+	std::vector<planargraph::Node *> newNodes;
+	std::vector<EdgeRing *> newEdgeRings;
+	std::vector<geom::CoordinateSequence *> newCoords;
 };
 
 } // namespace geos::operation::polygonize
