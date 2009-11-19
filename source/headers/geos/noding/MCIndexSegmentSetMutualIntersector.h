@@ -56,7 +56,7 @@ public:
 
 	~MCIndexSegmentSetMutualIntersector();
 
-	std::vector<index::chain::MonotoneChain *>* getMonotoneChains() 
+	std::vector<index::chain::MonotoneChain *>& getMonotoneChains() 
 	{ 
 		return monoChains; 
 	}
@@ -89,7 +89,8 @@ public:
 
 private:
 
-	std::vector<index::chain::MonotoneChain *> * monoChains;
+	typedef std::vector<index::chain::MonotoneChain *> MonoChains;
+	MonoChains monoChains;
 
 	/*
 	 * The {@link SpatialIndex} used should be something that supports

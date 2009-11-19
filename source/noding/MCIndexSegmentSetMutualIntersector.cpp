@@ -54,9 +54,9 @@ MCIndexSegmentSetMutualIntersector::intersectChains()
 {
     MCIndexSegmentSetMutualIntersector::SegmentOverlapAction overlapAction( *segInt);
 
-    for (std::size_t i = 0, ni = monoChains->size(); i < ni; i++)
+    for (MonoChains::size_type i = 0, ni = monoChains.size(); i < ni; ++i)
     {
-        MonotoneChain * queryChain = (MonotoneChain *)((*monoChains)[i]);
+        MonotoneChain * queryChain = (MonotoneChain *)monoChains[i];
 
         std::vector<void*> overlapChains;
         index->query( &(queryChain->getEnvelope()), overlapChains);
@@ -76,16 +76,16 @@ MCIndexSegmentSetMutualIntersector::intersectChains()
 void 
 MCIndexSegmentSetMutualIntersector::addToMonoChains(SegmentString* segStr)
 {
-    std::vector<MonotoneChain*>* segChains = 0; 
-    segChains = MonotoneChainBuilder::getChains(segStr->getCoordinates(), segStr);
+    MonoChains* segChains = 
+    	MonotoneChainBuilder::getChains(segStr->getCoordinates(), segStr);
 
     chainStore.push_back(segChains);
 
-    for (std::size_t i = 0, ni = segChains->size(); i < ni; i++)
+    for (MonoChains::size_type i = 0, ni = segChains->size(); i < ni; i++)
     {
         MonotoneChain* mc = (*segChains)[i];
         mc->setId( processCounter++ );
-        monoChains->push_back(mc);
+        monoChains.push_back(mc);
     }
 }
 
@@ -94,7 +94,7 @@ MCIndexSegmentSetMutualIntersector::addToMonoChains(SegmentString* segStr)
 //
 
 MCIndexSegmentSetMutualIntersector::MCIndexSegmentSetMutualIntersector() 
-:	monoChains( new std::vector<index::chain::MonotoneChain *>()),
+:	monoChains(),
 index(new geos::index::strtree::STRtree()),
 indexCounter(0),
 processCounter(0),
@@ -105,7 +105,6 @@ nOverlaps(0)
 MCIndexSegmentSetMutualIntersector::~MCIndexSegmentSetMutualIntersector() 
 {
     delete index;
-    delete monoChains;
 
     chainstore_mm_type::iterator end = chainStore.end();
     for (chainstore_mm_type::iterator it = chainStore.begin(); it != end; ++it)
@@ -138,7 +137,7 @@ MCIndexSegmentSetMutualIntersector::process(SegmentString::ConstVect * segString
 {
     processCounter = indexCounter + 1;
     nOverlaps = 0;
-    monoChains->clear();
+    monoChains.clear();
 
     for (std::size_t i = 0, n = segStrings->size(); i < n; i++)
     {
