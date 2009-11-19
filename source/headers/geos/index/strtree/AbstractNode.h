@@ -37,17 +37,22 @@ namespace strtree { // geos::index::strtree
  */
 class GEOS_DLL AbstractNode: public Boundable {
 private:
-	std::vector<Boundable*> *childBoundables;
+	std::vector<Boundable*> childBoundables;
 	int level;
 public:
 	AbstractNode(int newLevel, int capacity=10);
 	virtual	~AbstractNode();
+
+	// TODO: change signature to return by ref,
+	// document ownership of the return
 	inline std::vector<Boundable*>* getChildBoundables() {
-		return childBoundables;
+		return &childBoundables;
 	}
 
+	// TODO: change signature to return by ref,
+	// document ownership of the return
 	inline const std::vector<Boundable*>* getChildBoundables() const {
-		return childBoundables;
+		return &childBoundables;
 	}
 
 	/**

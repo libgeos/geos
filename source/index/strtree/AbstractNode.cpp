@@ -31,23 +31,13 @@ namespace strtree { // geos.index.strtree
  * the root node will have the highest level
  */
 AbstractNode::AbstractNode(int newLevel, int capacity) {
-	childBoundables=new std::vector<Boundable*>();
-	childBoundables->reserve(capacity);
+	childBoundables.reserve(capacity);
 	bounds=NULL;
 	level=newLevel;
 }
 
 AbstractNode::~AbstractNode() {
-	delete childBoundables;
 }
-
-/**
-* Returns either child AbstractNodes, or if this is a leaf node, real data (wrapped
-* in ItemBoundables).
-*/
-//vector<Boundable*>* AbstractNode::getChildBoundables() {
-	//return childBoundables;
-//}
 
 const void *
 AbstractNode::getBounds() const
@@ -72,7 +62,7 @@ int AbstractNode::getLevel() {
  */
 void AbstractNode::addChildBoundable(Boundable *childBoundable) {
 	assert(bounds==NULL);
-	childBoundables->push_back(childBoundable);
+	childBoundables.push_back(childBoundable);
 }
 
 } // namespace geos.index.strtree
