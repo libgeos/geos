@@ -96,10 +96,11 @@ public:
 	 * \brief
 	 * Computes the EdgeRings formed by the edges in this graph.
 	 *
-	 * @return a list of the EdgeRing found by the
-	 * 	polygonization process.
+	 * @param edgeRingList : the EdgeRing found by the
+	 * 	polygonization process will be pushed here.
+	 *
 	 */
-	std::vector<EdgeRing*>* getEdgeRings();
+	void getEdgeRings(std::vector<EdgeRing*>& edgeRingList);
 
 	/**
 	 * \brief

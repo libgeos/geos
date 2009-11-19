@@ -213,12 +213,9 @@ PolygonizeGraph::findIntersectionNodes(PolygonizeDirectedEdge *startDE,
 	} while (de!=startDE);
 }
 
-/**
- * Computes the EdgeRings formed by the edges in this graph.
- * @return a list of the EdgeRing found by the polygonization process.
- */
-std::vector<EdgeRing*>*
-PolygonizeGraph::getEdgeRings()
+/* public */
+void
+PolygonizeGraph::getEdgeRings(std::vector<EdgeRing*>& edgeRingList)
 {
 	// maybe could optimize this, since most of these pointers should
 	// be set correctly already
@@ -232,16 +229,14 @@ PolygonizeGraph::getEdgeRings()
 	delete maximalRings;
 
 	// find all edgerings
-	std::vector<EdgeRing*> *edgeRingList=new std::vector<EdgeRing*>();
 	for(unsigned int i=0; i<dirEdges.size(); ++i)
 	{
 		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)dirEdges[i];
 		if (de->isMarked()) continue;
 		if (de->isInRing()) continue;
 		EdgeRing *er=findEdgeRing(de);
-		edgeRingList->push_back(er);
+		edgeRingList.push_back(er);
 	}
-	return edgeRingList;
 }
 
 /**

@@ -95,7 +95,8 @@ private:
 	 */
 	void polygonize();
 
-	void findValidRings(std::vector<EdgeRing*> *edgeRingList,
+	/// @todo : take all args by ref
+	void findValidRings(std::vector<EdgeRing*>& edgeRingList,
 			std::vector<EdgeRing*> *validEdgeRingList,
 			std::vector<geom::LineString*> *invalidRingList);
 

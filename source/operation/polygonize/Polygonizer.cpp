@@ -236,9 +236,10 @@ Polygonizer::polygonize()
 
 	dangles=graph->deleteDangles();
 	cutEdges=graph->deleteCutEdges();
-	vector<EdgeRing*> *edgeRingList=graph->getEdgeRings();
+	vector<EdgeRing*> edgeRingList;
+	graph->getEdgeRings(edgeRingList);
 #if GEOS_DEBUG
-	cerr<<"Polygonizer::polygonize(): "<<edgeRingList->size()<<" edgeRings in graph"<<endl;
+	cerr<<"Polygonizer::polygonize(): "<<edgeRingList.size()<<" edgeRings in graph"<<endl;
 #endif
 	vector<EdgeRing*> *validEdgeRingList=new vector<EdgeRing*>();
 	invalidRingLines=new vector<LineString*>();
@@ -247,7 +248,6 @@ Polygonizer::polygonize()
 	cerr<<"                           "<<validEdgeRingList->size()<<" valid"<<endl;
 	cerr<<"                           "<<invalidRingLines->size()<<" invalid"<<endl;
 #endif
-	delete edgeRingList;
 
 	findShellsAndHoles(validEdgeRingList);
 #if GEOS_DEBUG
@@ -265,12 +265,17 @@ Polygonizer::polygonize()
 	delete validEdgeRingList;
 }
 
+/* private */
 void
-Polygonizer::findValidRings(vector<EdgeRing*> *edgeRingList, vector<EdgeRing*> *validEdgeRingList, vector<LineString*> *invalidRingList)
+Polygonizer::findValidRings(vector<EdgeRing*>& edgeRingList,
+	vector<EdgeRing*> *validEdgeRingList,
+	vector<LineString*> *invalidRingList)
 {
-	for (unsigned int i=0, n=edgeRingList->size(); i<n; ++i)
+	typedef vector<EdgeRing*> EdgeRingList;
+	
+	for (EdgeRingList::size_type i=0, n=edgeRingList.size(); i<n; ++i)
 	{
-		EdgeRing *er=(*edgeRingList)[i];
+		EdgeRing *er = edgeRingList[i];
 		if (er->isValid())
 			validEdgeRingList->push_back(er);
 		else
