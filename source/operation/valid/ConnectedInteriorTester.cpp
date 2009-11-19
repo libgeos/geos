@@ -53,6 +53,8 @@
 #define GEOS_DEBUG 0
 #endif
 
+//#define GEOS_CAST_PARANOIA 1
+
 #if GEOS_DEBUG
 #include <iostream>
 #endif
@@ -114,12 +116,11 @@ ConnectedInteriorTester::isInteriorsConnected()
 	setInteriorEdgesInResult(graph);
 	graph.linkResultDirectedEdges();
 
-	// Someone has to delete the returned vector and its contents
-	std::vector<EdgeRing*>* edgeRings=buildEdgeRings(graph.getEdgeEnds());
-	assert(edgeRings);
+	std::vector<EdgeRing*> edgeRings;
+	buildEdgeRings(graph.getEdgeEnds(), edgeRings);
 
 #if GEOS_DEBUG
-	cerr << "buildEdgeRings constructed " << edgeRings->size() << " edgeRings." << endl;
+	cerr << "buildEdgeRings constructed " << edgeRings.size() << " edgeRings." << endl;
 #endif
 
 	/*
@@ -132,7 +133,7 @@ ConnectedInteriorTester::isInteriorsConnected()
 	visitShellInteriors(geomGraph.getGeometry(), graph);
 
 #if GEOS_DEBUG
-	cerr << "after visitShellInteriors edgeRings are " << edgeRings->size() << " edgeRings." << endl;
+	cerr << "after visitShellInteriors edgeRings are " << edgeRings.size() << " edgeRings." << endl;
 #endif
 
 	/*
@@ -142,16 +143,15 @@ ConnectedInteriorTester::isInteriorsConnected()
 	 * this means that one or more holes must have split the interior of the
 	 * polygon into at least two pieces.  The polygon is thus invalid.
 	 */
-	bool res=!hasUnvisitedShellEdge(edgeRings);
+	bool res=!hasUnvisitedShellEdge(&edgeRings);
 
-	assert(edgeRings);
 #if GEOS_DEBUG
-	cerr << "releasing " << edgeRings->size() << " edgeRings." << endl;
+	cerr << "releasing " << edgeRings.size() << " edgeRings." << endl;
 #endif
 	// Release memory allocated by buildEdgeRings
-	for(size_t i=0, n=edgeRings->size(); i<n; ++i)
+	for(size_t i=0, n=edgeRings.size(); i<n; ++i)
 	{
-		EdgeRing* er = (*edgeRings)[i];
+		EdgeRing* er = edgeRings[i];
 #if GEOS_DEBUG
 		cerr<<*er<<endl;
 #endif
@@ -161,7 +161,7 @@ ConnectedInteriorTester::isInteriorsConnected()
 	cerr << "releasing edgeRing at " << er << endl;
 #endif
 	}
-	delete edgeRings;
+	edgeRings.clear();
 
 	// Release memory allocated by MaximalEdgeRings
 	// There should be no more references to this object
@@ -193,16 +193,22 @@ ConnectedInteriorTester::setInteriorEdgesInResult(PlanarGraph &graph)
 }
 
 /*private*/
-std::vector<EdgeRing*>*
-ConnectedInteriorTester::buildEdgeRings(std::vector<EdgeEnd*> *dirEdges)
+void
+ConnectedInteriorTester::buildEdgeRings(std::vector<EdgeEnd*> *dirEdges,
+                                        std::vector<EdgeRing*>& minEdgeRings)
 {
 #if GEOS_DEBUG
 	cerr << __FUNCTION__ << " got " << dirEdges->size() << " EdgeEnd vector" << endl;
 #endif
-	std::vector<MinimalEdgeRing*> minEdgeRings;
-	for(size_t i=0, n=dirEdges->size(); i<n; ++i)
+
+	typedef std::vector<EdgeEnd*> EdgeEnds;
+
+	//std::vector<MinimalEdgeRing*> minEdgeRings;
+	for(EdgeEnds::size_type i=0, n=dirEdges->size(); i<n; ++i)
 	{
+#ifdef GEOS_CAST_PARANOIA 
 		assert(dynamic_cast<DirectedEdge*>((*dirEdges)[i]));
+#endif
 		DirectedEdge *de=static_cast<DirectedEdge*>((*dirEdges)[i]);
 
 #if GEOS_DEBUG
@@ -212,10 +218,8 @@ ConnectedInteriorTester::buildEdgeRings(std::vector<EdgeEnd*> *dirEdges)
 		// if this edge has not yet been processed
 		if(de->isInResult() && de->getEdgeRing()==NULL)
 		{
-			//EdgeRing *er=new MaximalEdgeRing(de,geometryFactory);
-			//edgeRings->push_back(er);
-
-			MaximalEdgeRing* er=new MaximalEdgeRing(de, geometryFactory);
+			MaximalEdgeRing* er = new MaximalEdgeRing(de,
+			                                   geometryFactory);
 			// We track MaximalEdgeRings allocations
 			// using the private maximalEdgeRings vector
 			maximalEdgeRings.push_back(er);
@@ -224,9 +228,11 @@ ConnectedInteriorTester::buildEdgeRings(std::vector<EdgeEnd*> *dirEdges)
 			er->buildMinimalRings(minEdgeRings);
 		}
 	}
+/*
 	std::vector<EdgeRing*> *edgeRings=new std::vector<EdgeRing*>();
 	edgeRings->assign(minEdgeRings.begin(), minEdgeRings.end());
 	return edgeRings;
+*/
 }
 
 /**

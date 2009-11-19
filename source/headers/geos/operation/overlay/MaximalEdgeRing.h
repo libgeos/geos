@@ -82,6 +82,8 @@ public:
 	/// This function returns a newly allocated vector of
 	/// pointers to newly allocated MinimalEdgeRing objects.
 	///
+	/// @deprecated pass the vector yourself instead
+	///
 	std::vector<MinimalEdgeRing*>* buildMinimalRings();
 
 	/// \brief
@@ -89,6 +91,7 @@ public:
 	/// objects to the provided vector.
 	///
 	void buildMinimalRings(std::vector<MinimalEdgeRing*>& minEdgeRings);
+	void buildMinimalRings(std::vector<EdgeRing*>& minEdgeRings);
 
 	/// \brief
 	/// For all nodes in this EdgeRing,

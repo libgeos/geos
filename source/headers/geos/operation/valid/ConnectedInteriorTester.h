@@ -91,15 +91,18 @@ private:
 
 	
 	/**
+	 * \brief
 	 * Form DirectedEdges in graph into Minimal EdgeRings.
-	 * (Minimal Edgerings must be used, because only they are guaranteed to provide
-	 * a correct isHole computation)
 	 *
-	 * The returned vector and its contents are allocated on the
-	 * heap; deletion responsibility is left to caller.
+	 * Minimal Edgerings must be used, because only they are
+	 * guaranteed to provide a correct isHole computation.
+	 *
+	 * @param minEdgeRings : newly allocated minimal edge rings will
+	 *                       be push_back'ed here.
+	 *                       deletion responsibility is left to caller.
 	 */
-	std::vector<geomgraph::EdgeRing*>* buildEdgeRings(
-			std::vector<geomgraph::EdgeEnd*> *dirEdges);
+	void buildEdgeRings(std::vector<geomgraph::EdgeEnd*> *dirEdges,
+	                    std::vector<geomgraph::EdgeRing*>& minEdgeRings);
 
 	/**
 	 * Mark all the edges for the edgeRings corresponding to the shells

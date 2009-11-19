@@ -124,6 +124,20 @@ MaximalEdgeRing::buildMinimalRings(vector<MinimalEdgeRing*>& minEdgeRings)
 	} while(de!=startDe);
 }
 
+/*public*/
+void
+MaximalEdgeRing::buildMinimalRings(vector<EdgeRing*>& minEdgeRings)
+{
+	DirectedEdge *de=startDe;
+	do {
+		if(de->getMinEdgeRing()==NULL) {
+			MinimalEdgeRing *minEr=new MinimalEdgeRing(de, geometryFactory);
+			minEdgeRings.push_back(minEr);
+		}
+		de=de->getNext();
+	} while(de!=startDe);
+}
+
 } // namespace geos.operation.overlay
 } // namespace geos.operation
 } // namespace geos
