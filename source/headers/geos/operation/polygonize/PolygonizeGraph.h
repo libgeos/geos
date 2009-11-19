@@ -143,10 +143,9 @@ private:
 	 * @param ringEdges
 	 * 	the list of start edges for the edgeRings to convert.
 	 *
-	 * TODO: take ringEdges by ref
 	 */
 	void convertMaximalToMinimalEdgeRings(
-			std::vector<PolygonizeDirectedEdge*> *ringEdges);
+			std::vector<PolygonizeDirectedEdge*> &ringEdges);
 
 	/**
 	 * \brief
@@ -163,11 +162,17 @@ private:
 );
 
 	/**
-	 * @param dirEdges a List of the DirectedEdges in the graph
-	 * @return a List of DirectedEdges, one for each edge ring found
+	 * Finds and labels all edgerings in the graph.
+	 *
+	 * The edge rings are labelling with unique integers.
+	 * The labelling allows detecting cut edges.
+	 *
+	 * @param dirEdgesIn  a list of the DirectedEdges in the graph
+	 * @param dirEdgesOut each ring found will be pushed here
 	 */
-	static std::vector<PolygonizeDirectedEdge*>* findLabeledEdgeRings(
-			std::vector<planargraph::DirectedEdge*> &dirEdges);
+	static void findLabeledEdgeRings(
+			std::vector<planargraph::DirectedEdge*> &dirEdgesIn,
+			std::vector<PolygonizeDirectedEdge*> &dirEdgesOut);
 
 	static void label(std::vector<planargraph::DirectedEdge*> &dirEdges, long label);
 

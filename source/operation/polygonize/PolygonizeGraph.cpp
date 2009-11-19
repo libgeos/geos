@@ -171,16 +171,16 @@ PolygonizeGraph::computeNextCWEdges()
 /* private */
 void
 PolygonizeGraph::convertMaximalToMinimalEdgeRings(
-		std::vector<PolygonizeDirectedEdge*> *ringEdges)
+		std::vector<PolygonizeDirectedEdge*> &ringEdges)
 {
 	typedef std::vector<Node*> IntersectionNodes;
 	typedef std::vector<PolygonizeDirectedEdge*> RingEdges;
 
 	IntersectionNodes intNodes;
-	for(RingEdges::size_type i=0, in=ringEdges->size();
+	for(RingEdges::size_type i=0, in=ringEdges.size();
 			i<in; ++i)
 	{
-		PolygonizeDirectedEdge *de=(*ringEdges)[i];
+		PolygonizeDirectedEdge *de = ringEdges[i];
 		long label=de->getLabel();
 		findIntersectionNodes(de, label, intNodes);
 
@@ -224,9 +224,10 @@ PolygonizeGraph::getEdgeRings(std::vector<EdgeRing*>& edgeRingList)
 
 	// clear labels of all edges in graph
 	label(dirEdges, -1);
-	std::vector<PolygonizeDirectedEdge*> *maximalRings=findLabeledEdgeRings(dirEdges);
+	std::vector<PolygonizeDirectedEdge*> maximalRings;
+	findLabeledEdgeRings(dirEdges, maximalRings);
 	convertMaximalToMinimalEdgeRings(maximalRings);
-	delete maximalRings;
+	maximalRings.clear(); // not needed anymore
 
 	// find all edgerings
 	for(unsigned int i=0; i<dirEdges.size(); ++i)
@@ -239,15 +240,11 @@ PolygonizeGraph::getEdgeRings(std::vector<EdgeRing*>& edgeRingList)
 	}
 }
 
-/**
-*
-* @param dirEdges a List of the DirectedEdges in the graph
-* @return a List of DirectedEdges, one for each edge ring found
-*/
-std::vector<PolygonizeDirectedEdge*>*
-PolygonizeGraph::findLabeledEdgeRings(std::vector<DirectedEdge*> &dirEdges)
+/* static private */
+void
+PolygonizeGraph::findLabeledEdgeRings(std::vector<DirectedEdge*> &dirEdges,
+		std::vector<PolygonizeDirectedEdge*> &edgeRingStarts)
 {
-	std::vector<PolygonizeDirectedEdge*> *edgeRingStarts=new std::vector<PolygonizeDirectedEdge*>();
 	// label the edge rings formed
 	long currLabel=1;
 	for(unsigned int i=0; i<dirEdges.size(); ++i)
@@ -255,13 +252,12 @@ PolygonizeGraph::findLabeledEdgeRings(std::vector<DirectedEdge*> &dirEdges)
 		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)dirEdges[i];
 		if (de->isMarked()) continue;
 		if (de->getLabel() >= 0) continue;
-		edgeRingStarts->push_back(de);
+		edgeRingStarts.push_back(de);
 		std::vector<DirectedEdge*> *edges=findDirEdgesInRing(de);
 		label(*edges, currLabel);
 		delete edges;
 		++currLabel;
 	}
-	return edgeRingStarts;
 }
 
 /*
@@ -274,7 +270,9 @@ PolygonizeGraph::deleteCutEdges()
 	computeNextCWEdges();
 
 	// label the current set of edgerings
-	delete findLabeledEdgeRings(dirEdges);
+	std::vector<PolygonizeDirectedEdge*> junk;
+	findLabeledEdgeRings(dirEdges, junk);
+	junk.clear(); // not needed anymore
 
 	/*
 	 * Cut Edges are edges where both dirEdges have the same label.
