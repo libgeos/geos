@@ -440,21 +440,11 @@ PolygonizeGraph::findEdgeRing(PolygonizeDirectedEdge *startDE)
 	return er;
 }
 
-/**
- * Marks all edges from the graph which are "dangles".
- * Dangles are which are incident on a node with degree 1.
- * This process is recursive, since removing a dangling edge
- * may result in another edge becoming a dangle.
- * In order to handle large recursion depths efficiently,
- * an explicit recursion stack is used
- *
- * @return a List containing the LineStrings that formed dangles
- */
-std::vector<const LineString*>*
-PolygonizeGraph::deleteDangles()
+/* public */
+void
+PolygonizeGraph::deleteDangles(std::vector<const LineString*>& dangleLines)
 {
 	std::vector<Node*> *nodesToRemove=findNodesOfDegree(1);
-	std::vector<const LineString*> *dangleLines=new std::vector<const LineString*>();
 	std::vector<Node*> nodeStack;
 	for(int i=0;i<(int)nodesToRemove->size();i++) {
 		nodeStack.push_back((*nodesToRemove)[i]);
@@ -475,14 +465,13 @@ PolygonizeGraph::deleteDangles()
 				sym->setMarked(true);
 			// save the line as a dangle
 			PolygonizeEdge *e=(PolygonizeEdge*) de->getEdge();
-			dangleLines->push_back(e->getLine());
+			dangleLines.push_back(e->getLine());
 			Node *toNode=de->getToNode();
 			// add the toNode to the list to be processed, if it is now a dangle
 			if (getDegreeNonDeleted(toNode)==1)
 				nodeStack.push_back(toNode);
 		}
 	}
-	return dangleLines;
 }
 
 } // namespace geos.operation.polygonize

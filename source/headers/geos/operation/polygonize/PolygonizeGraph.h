@@ -122,9 +122,10 @@ public:
 	 * In order to handle large recursion depths efficiently,
 	 * an explicit recursion stack is used
 	 *
-	 * @return a List containing the LineStrings that formed dangles
+	 * @param dangleLines : the LineStrings that formed dangles will
+	 *                      be push_back'ed here
 	 */
-	std::vector<const geom::LineString*>* deleteDangles();
+	void deleteDangles(std::vector<const geom::LineString*> &dangleLines);
 
 private:
 

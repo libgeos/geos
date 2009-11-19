@@ -234,7 +234,9 @@ Polygonizer::polygonize()
 	// if no geometries were supplied it's possible graph could be null
 	if (graph==NULL) return; 
 
-	dangles=graph->deleteDangles();
+	// TODO: drop this heap allocation
+	dangles = new std::vector<const LineString*>();
+	graph->deleteDangles(*dangles);
 
 	// TODO: drop this heap allocation
 	cutEdges = new std::vector<const LineString*>();
