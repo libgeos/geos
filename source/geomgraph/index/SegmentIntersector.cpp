@@ -15,6 +15,7 @@
  **********************************************************************/
 
 
+#include <stdlib.h>
 #include <vector>
 
 #include <geos/geomgraph/index/SegmentIntersector.h>

@@ -66,6 +66,7 @@
 #include <stdexcept>
 #include <cmath>
 #include <stdexcept>
+#include <algorithm>
 
 #if defined(_MSC_VER) && defined(GEOS_TEST_USE_STACKWALKER)
 #include <windows.h>
