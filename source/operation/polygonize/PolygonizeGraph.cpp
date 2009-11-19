@@ -35,6 +35,9 @@
 using namespace geos::planargraph;
 using namespace geos::geom;
 
+// Define the following to add assertions on downcasts
+//#define GEOS_CAST_PARANOIA 1
+
 namespace geos {
 namespace operation { // geos.operation
 namespace polygonize { // geos.operation.polygonize
@@ -260,17 +263,16 @@ PolygonizeGraph::findLabeledEdgeRings(std::vector<DirectedEdge*> &dirEdges,
 	}
 }
 
-/*
- * Finds and removes all cut edges from the graph.
- * @return a list of the LineString forming the removed cut edges
- */
-std::vector<const LineString*> *
-PolygonizeGraph::deleteCutEdges()
+/* public */
+void
+PolygonizeGraph::deleteCutEdges(std::vector<const LineString*> &cutLines)
 {
 	computeNextCWEdges();
 
+	typedef std::vector<PolygonizeDirectedEdge*> DirEdges;
+
 	// label the current set of edgerings
-	std::vector<PolygonizeDirectedEdge*> junk;
+	DirEdges junk;
 	findLabeledEdgeRings(dirEdges, junk);
 	junk.clear(); // not needed anymore
 
@@ -278,20 +280,39 @@ PolygonizeGraph::deleteCutEdges()
 	 * Cut Edges are edges where both dirEdges have the same label.
 	 * Delete them, and record them
 	 */
-	std::vector<const LineString*> *cutLines=new std::vector<const LineString*>();
-	for(unsigned int i=0; i<dirEdges.size(); ++i) {
-		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)dirEdges[i];
+	for (DirEdges::size_type i=0, in=dirEdges.size(); i<in; ++i)
+	{
+		DirectedEdge *de_ = dirEdges[i];
+#ifdef GEOS_CAST_PARANOIA
+		assert(dynamic_cast<PolygonizeDirectedEdge*>(de_));
+#endif
+		PolygonizeDirectedEdge *de =
+			static_cast<PolygonizeDirectedEdge*>(de_);
+
 		if (de->isMarked()) continue;
-		PolygonizeDirectedEdge *sym=(PolygonizeDirectedEdge*) de->getSym();
-		if (de->getLabel()==sym->getLabel()) {
+
+		DirectedEdge *sym_ = de->getSym();
+#ifdef GEOS_CAST_PARANOIA
+		assert(dynamic_cast<PolygonizeDirectedEdge*>(sym_));
+#endif
+		PolygonizeDirectedEdge *sym =
+			static_cast<PolygonizeDirectedEdge*>(sym_);
+
+		if (de->getLabel()==sym->getLabel())
+		{
 			de->setMarked(true);
 			sym->setMarked(true);
+
 			// save the line as a cut edge
-			PolygonizeEdge *e=(PolygonizeEdge*) de->getEdge();
-			cutLines->push_back(e->getLine());
+			Edge *e_ = de->getEdge();
+#ifdef GEOS_CAST_PARANOIA
+			assert(dynamic_cast<PolygonizeEdge*>(e_));
+#endif
+			PolygonizeEdge *e = static_cast<PolygonizeEdge*>(e_);
+
+			cutLines.push_back(e->getLine());
 		}
 	}
-	return cutLines;
 }
 
 void

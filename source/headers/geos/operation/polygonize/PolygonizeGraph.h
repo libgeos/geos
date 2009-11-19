@@ -106,9 +106,12 @@ public:
 	 * \brief
 	 * Finds and removes all cut edges from the graph.
 	 *
-	 * @return a list of the LineString forming the removed cut edges
+	 * @param cutLines : the list of the LineString forming the removed
+	 *                   cut edges will be pushed here.
+	 *
+	 * TODO: document ownership of the returned LineStrings
 	 */
-	std::vector<const geom::LineString*>* deleteCutEdges();
+	void deleteCutEdges(std::vector<const geom::LineString*> &cutLines);
 
 	/** \brief
 	 * Marks all edges from the graph which are "dangles".

@@ -235,7 +235,11 @@ Polygonizer::polygonize()
 	if (graph==NULL) return; 
 
 	dangles=graph->deleteDangles();
-	cutEdges=graph->deleteCutEdges();
+
+	// TODO: drop this heap allocation
+	cutEdges = new std::vector<const LineString*>();
+	graph->deleteCutEdges(*cutEdges);
+
 	vector<EdgeRing*> edgeRingList;
 	graph->getEdgeRings(edgeRingList);
 #if GEOS_DEBUG

@@ -191,7 +191,9 @@ public:
 	/** \brief
 	 * Get the list of cut edges found during polygonization.
 	 *
-	 * @return a collection of the input LineStrings which are cut edges
+	 * @return a (possibly empty) reference to collection of the input
+	 *         LineStrings which are cut edges. Ownership retained by
+	 *         this object.
 	 */
 	std::vector<const geom::LineString*>* getCutEdges();
 
