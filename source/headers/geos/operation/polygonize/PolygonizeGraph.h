@@ -197,10 +197,11 @@ private:
 	 * from the graph, so that there is always a next dirEdge.
 	 *
 	 * @param startDE the DirectedEdge to start traversing at
-	 * @return a List of DirectedEdges that form a ring
+	 * @param edgesInRing : the DirectedEdges that form a ring will
+	 *                      be pushed here.
 	 */
-	static std::vector<planargraph::DirectedEdge*>* findDirEdgesInRing(
-			PolygonizeDirectedEdge *startDE);
+	static void findDirEdgesInRing(PolygonizeDirectedEdge *startDE,
+		std::vector<planargraph::DirectedEdge*>& edgesInRing);
 
 	EdgeRing* findEdgeRing(PolygonizeDirectedEdge *startDE);
 

@@ -248,17 +248,28 @@ void
 PolygonizeGraph::findLabeledEdgeRings(std::vector<DirectedEdge*> &dirEdges,
 		std::vector<PolygonizeDirectedEdge*> &edgeRingStarts)
 {
+	typedef std::vector<DirectedEdge*> Edges;
+
+	Edges edges;
+
 	// label the edge rings formed
 	long currLabel=1;
-	for(unsigned int i=0; i<dirEdges.size(); ++i)
+	for(Edges::size_type i=0, n=dirEdges.size(); i<n; ++i)
 	{
-		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)dirEdges[i];
+#ifdef GEOS_CAST_PARANOIA
+		assert(dynamic_cast<PolygonizeDirectedEdge*>(dirEdges[i]));
+#endif
+		PolygonizeDirectedEdge *de =
+			static_cast<PolygonizeDirectedEdge*>(dirEdges[i]);
+
 		if (de->isMarked()) continue;
 		if (de->getLabel() >= 0) continue;
 		edgeRingStarts.push_back(de);
-		std::vector<DirectedEdge*> *edges=findDirEdgesInRing(de);
-		label(*edges, currLabel);
-		delete edges;
+
+		findDirEdgesInRing(de, edges);
+		label(edges, currLabel);
+		edges.clear(); 
+
 		++currLabel;
 	}
 }
@@ -398,26 +409,18 @@ PolygonizeGraph::computeNextCCWEdges(Node *node, long label)
 	}
 }
 
-/*
- * Traverse a ring of DirectedEdges, accumulating them into a list.
- * This assumes that all dangling directed edges have been removed
- * from the graph, so that there is always a next dirEdge.
- *
- * @param startDE the DirectedEdge to start traversing at
- * @return a List of DirectedEdges that form a ring
- */
-std::vector<DirectedEdge*>*
-PolygonizeGraph::findDirEdgesInRing(PolygonizeDirectedEdge *startDE)
+/* static private */
+void
+PolygonizeGraph::findDirEdgesInRing(PolygonizeDirectedEdge *startDE,
+		std::vector<DirectedEdge*>& edges)
 {
 	PolygonizeDirectedEdge *de=startDE;
-	std::vector<DirectedEdge*> *edges=new std::vector<DirectedEdge*>();
 	do {
-		edges->push_back(de);
+		edges.push_back(de);
 		de=de->getNext();
 		assert(de != NULL); // found NULL DE in ring
 		assert(de==startDE || !de->isInRing()); // found DE already in ring
 	} while (de != startDE);
-	return edges;
 }
 
 EdgeRing *
