@@ -143,9 +143,12 @@ LineMerger::buildEdgeStringsForUnprocessedNodes()
 #if GEOS_DEBUG
 	cerr<<__FUNCTION__<<endl;
 #endif
-	vector<Node*> *nodes=graph.getNodes();
-	for (size_t i=0; i<nodes->size(); ++i) {
-		Node *node=(*nodes)[i];
+	typedef std::vector<Node*> Nodes;
+
+	Nodes nodes;
+	graph.getNodes(nodes);
+	for (Nodes::size_type i=0, in=nodes.size(); i<in; ++i) {
+		Node *node=nodes[i];
 #if GEOS_DEBUG
 		cerr<<"Node "<<i<<": "<<*node<<endl;
 #endif
@@ -158,7 +161,6 @@ LineMerger::buildEdgeStringsForUnprocessedNodes()
 #endif
 		}
 	}
-	delete nodes;
 }
 
 void
@@ -167,10 +169,12 @@ LineMerger::buildEdgeStringsForNonDegree2Nodes()
 #if GEOS_DEBUG
 	cerr<<__FUNCTION__<<endl;
 #endif
-	vector<Node*> *nodes=graph.getNodes();
-	size_t size=nodes->size();
-	for (size_t i=0; i<size; i++) {
-		Node *node=(*nodes)[i];
+	typedef std::vector<Node*> Nodes;
+
+	Nodes nodes;
+	graph.getNodes(nodes);
+	for (Nodes::size_type i=0, in=nodes.size(); i<in; ++i) {
+		Node *node=nodes[i];
 #if GEOS_DEBUG
 		cerr<<"Node "<<i<<": "<<*node<<endl;
 #endif
@@ -182,7 +186,6 @@ LineMerger::buildEdgeStringsForNonDegree2Nodes()
 #endif
 		}
 	}
-	delete nodes;
 }
 
 void

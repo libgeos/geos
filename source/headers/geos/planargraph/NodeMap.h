@@ -106,8 +106,10 @@ public:
 	 * \brief
 	 * Returns the Nodes in this NodeMap, sorted in ascending order
 	 * by angle with the positive x-axis.
+	 *
+	 * @param nodes : the nodes are push_back'ed here
 	 */
-	std::vector<Node*>* getNodes();
+	void getNodes(std::vector<Node*>& nodes);
 };
 
 

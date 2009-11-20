@@ -142,8 +142,10 @@ public:
 	/**
 	 * \brief
 	 * Returns the Nodes in this PlanarGraph.
+	 *
+	 * @param nodes : the nodes are push_back'ed here
 	 */  
-	std::vector<Node*>* getNodes() { return nodeMap.getNodes(); }
+	void getNodes(std::vector<Node*>& nodes) { nodeMap.getNodes(nodes); }
 
 	/**
 	 * \brief

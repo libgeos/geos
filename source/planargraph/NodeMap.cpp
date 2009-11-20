@@ -64,16 +64,15 @@ NodeMap::remove(geom::Coordinate& pt)
 	return n;
 }
 
-vector<Node*>*
-NodeMap::getNodes()
+/* public */
+void
+NodeMap::getNodes(vector<Node*>& values)
 {
-	vector<Node*> *values=new vector<Node*>();
-	NodeMap::container::iterator it=nodeMap.begin();
-	while(it!=nodeMap.end()) {
-		values->push_back(it->second);
+	NodeMap::container::iterator it=nodeMap.begin(), itE=nodeMap.end();
+	while (it != itE) {
+		values.push_back(it->second);
 		++it;
 	}
-	return values;
 }
 
 /**

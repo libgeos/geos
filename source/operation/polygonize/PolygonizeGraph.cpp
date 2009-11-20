@@ -162,13 +162,13 @@ PolygonizeGraph::getNode(const Coordinate& pt)
 void
 PolygonizeGraph::computeNextCWEdges()
 {
-	std::vector<Node*> *pns=getNodes();
+	typedef std::vector<Node*> Nodes;
+	Nodes pns; getNodes(pns);
 	// set the next pointers for the edges around each node
-	for(int i=0;i<(int)pns->size();i++) {
-		Node *node=(*pns)[i];
+	for(Nodes::size_type i=0, in=pns.size(); i<in; ++i) {
+		Node *node=pns[i];
 		computeNextCWEdges(node);
 	}
-	delete pns;
 }
 
 /* private */
