@@ -21,9 +21,9 @@ namespace tut
 	// Common data used by tests
 	struct test_coordinatearraysequencefactory_data
 	{
-		typedef geos::geom::CoordinateSequence* CoordianteSequencePtr;
-		typedef geos::geom::CoordinateSequenceFactory const* CoordianteFactoryCPtr;
-		typedef geos::geom::CoordinateArraySequenceFactory const* CoordianteArrayFactoryCPtr;
+		typedef geos::geom::CoordinateSequence* CoordinateSequencePtr;
+		typedef geos::geom::CoordinateSequenceFactory const* CoordinateFactoryCPtr;
+		typedef geos::geom::CoordinateArraySequenceFactory const* CoordinateArrayFactoryCPtr;
 
 		test_coordinatearraysequencefactory_data() {}
 	};
@@ -44,16 +44,16 @@ namespace tut
 	{
 		try
 		{
-			CoordianteFactoryCPtr base = geos::geom::CoordinateArraySequenceFactory::instance();
+			CoordinateFactoryCPtr base = geos::geom::CoordinateArraySequenceFactory::instance();
 			ensure( 0 != base );
 
-			ensure(typeid(base).name(), typeid(base) == typeid(CoordianteFactoryCPtr) );
-			ensure(typeid(base).name(), typeid(base) != typeid(CoordianteArrayFactoryCPtr) );
+			ensure(typeid(base).name(), typeid(base) == typeid(CoordinateFactoryCPtr) );
+			ensure(typeid(base).name(), typeid(base) != typeid(CoordinateArrayFactoryCPtr) );
 
-			CoordianteArrayFactoryCPtr derived;
-			derived = dynamic_cast<CoordianteArrayFactoryCPtr>(base);
+			CoordinateArrayFactoryCPtr derived;
+			derived = dynamic_cast<CoordinateArrayFactoryCPtr>(base);
 			ensure( 0 != derived );
-			ensure(typeid(derived).name(), typeid(derived) == typeid(CoordianteArrayFactoryCPtr) );
+			ensure(typeid(derived).name(), typeid(derived) == typeid(CoordinateArrayFactoryCPtr) );
 		}
 		catch (std::exception& e)
 		{
@@ -71,7 +71,7 @@ namespace tut
 
 		try
 		{
-			CoordianteFactoryCPtr factory = geos::geom::CoordinateArraySequenceFactory::instance();
+			CoordinateFactoryCPtr factory = geos::geom::CoordinateArraySequenceFactory::instance();
 
 			ensure( 0 != factory );
 
@@ -80,7 +80,7 @@ namespace tut
 			ensure( 0 != col);
 
 			const size_t size0 = 0;
-			CoordianteSequencePtr sequence = factory->create(col);
+			CoordinateSequencePtr sequence = factory->create(col);
 
 			ensure( 0 != sequence);
 			ensure( sequence->isEmpty() );
@@ -104,7 +104,7 @@ namespace tut
 
 		try
 		{
-			CoordianteFactoryCPtr factory = geos::geom::CoordinateArraySequenceFactory::instance();
+			CoordinateFactoryCPtr factory = geos::geom::CoordinateArraySequenceFactory::instance();
 			ensure( 0 != factory );
 
 			std::vector<Coordinate>* col = new std::vector<Coordinate>();
@@ -115,7 +115,7 @@ namespace tut
 			col->push_back(Coordinate(5, 10, 15));
 
 			const size_t size2 = 2;
-			CoordianteSequencePtr sequence = factory->create(col);
+			CoordinateSequencePtr sequence = factory->create(col);
 
 			ensure( 0 != sequence);
 			ensure( !sequence->isEmpty() );
@@ -140,12 +140,12 @@ namespace tut
 
 		try
 		{
-			CoordianteFactoryCPtr factory = geos::geom::CoordinateArraySequenceFactory::instance();
+			CoordinateFactoryCPtr factory = geos::geom::CoordinateArraySequenceFactory::instance();
 
 			ensure( 0 != factory );
 
 			const size_t size1000 = 1000;
-			CoordianteSequencePtr sequence = factory->create(size1000, 3);
+			CoordinateSequencePtr sequence = factory->create(size1000, 3);
 
 			ensure( 0 != sequence);
 			ensure( !sequence->isEmpty() );
