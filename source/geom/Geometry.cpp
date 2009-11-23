@@ -563,13 +563,18 @@ Geometry::Union(const Geometry *other) const
 	{
 //cerr<<"SHORTCIRCUITED-UNION engaged"<<endl;
 		const GeometryCollection *coll;
-		size_t ngeoms, i;
+
+		size_t ngeomsThis = getNumGeometries();
+		size_t ngeomsOther = other->getNumGeometries();
+
+		// Allocated for ownership transfer
 		vector<Geometry *> *v = new vector<Geometry *>();
+		v->reserve(ngeomsThis+ngeomsOther);
+
 
 		if ( NULL != (coll = dynamic_cast<const GeometryCollection *>(this)) )
 		{
-			ngeoms = coll->getNumGeometries();
-			for (i=0; i<ngeoms; i++)
+			for (size_t i=0; i<ngeomsThis; ++i)
 				v->push_back(coll->getGeometryN(i)->clone());
 		} else {
 			v->push_back(this->clone());
@@ -577,8 +582,7 @@ Geometry::Union(const Geometry *other) const
 
 		if ( NULL != (coll = dynamic_cast<const GeometryCollection *>(other)) )
 		{
-			ngeoms = coll->getNumGeometries();
-			for (i=0; i<ngeoms; i++)
+			for (size_t i=0; i<ngeomsOther; ++i)
 				v->push_back(coll->getGeometryN(i)->clone());
 		} else {
 			v->push_back(other->clone());
