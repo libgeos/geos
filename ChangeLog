@@ -1,7 +1,126 @@
-2009-11-18 01:26  Mateusz Loskot <mateusz@loskot.net>
+2009-11-23 18:06  Sandro Santilli <strk@keybit.net>
 
-	* [r2717] capi/geos_c.cpp, capi/geos_ts_c.cpp: Silent warning
-    thrown by Visual C++ about mixed class and struct keyword (#269)
+	* [r2734] source/geom/Geometry.cpp: Avoid reallocations in Union
+	  short-circuit
+
+2009-11-20 19:58  Sandro Santilli <strk@keybit.net>
+
+	* [r2733] source/headers/geos/planargraph/NodeMap.h,
+	  source/headers/geos/planargraph/PlanarGraph.h,
+	  source/operation/linemerge/LineMerger.cpp,
+	  source/operation/polygonize/PolygonizeGraph.cpp,
+	  source/planargraph/NodeMap.cpp: Don't force heap allocation of
+	  vectors for getting nodes of a NodeMap
+
+2009-11-19 21:30  Sandro Santilli <strk@keybit.net>
+
+	* [r2732]
+	  source/headers/geos/noding/MCIndexSegmentSetMutualIntersector.h,
+	  source/noding/MCIndexSegmentSetMutualIntersector.cpp: Don't
+	  heap-allocate std::vector in MCIndexSegmentSetMutualIntersector
+
+2009-11-19 21:06  Sandro Santilli <strk@keybit.net>
+
+	* [r2731] source/headers/geos/operation/overlay/MaximalEdgeRing.h,
+	  source/headers/geos/operation/valid/ConnectedInteriorTester.h,
+	  source/operation/overlay/MaximalEdgeRing.cpp,
+	  source/operation/valid/ConnectedInteriorTester.cpp: Don't force
+	  heap allocation when building edge rings for isValidOp
+
+2009-11-19 20:29  Sandro Santilli <strk@keybit.net>
+
+	* [r2730]
+	  source/headers/geos/operation/polygonize/PolygonizeGraph.h,
+	  source/operation/polygonize/PolygonizeGraph.cpp,
+	  source/operation/polygonize/Polygonizer.cpp: Don't force heap
+	  allocation of std::vector in PolygonizeGraph when deleting
+	  dangles (moved allocation higher, in Polygonizer, so needs a
+	  second pass)
+
+2009-11-19 20:20  Sandro Santilli <strk@keybit.net>
+
+	* [r2729]
+	  source/headers/geos/operation/polygonize/PolygonizeGraph.h,
+	  source/operation/polygonize/PolygonizeGraph.cpp: don't
+	  heap-allocate vectors in findLabeledEdgeRings
+
+2009-11-19 19:57  Sandro Santilli <strk@keybit.net>
+
+	* [r2728]
+	  source/headers/geos/operation/polygonize/PolygonizeGraph.h,
+	  source/headers/geos/operation/polygonize/Polygonizer.h,
+	  source/operation/polygonize/PolygonizeGraph.cpp,
+	  source/operation/polygonize/Polygonizer.cpp: Move heap-allocation
+	  of vector used for 'cut-lines' containment out of PolygonizeGraph
+	  (but into Polygonizer)
+
+2009-11-19 19:31  Sandro Santilli <strk@keybit.net>
+
+	* [r2727]
+	  source/headers/geos/operation/polygonize/PolygonizeGraph.h,
+	  source/operation/polygonize/PolygonizeGraph.cpp: Don't force
+	  heap-allocation of vectors for finding/labeling edge rings
+
+2009-11-19 19:19  Sandro Santilli <strk@keybit.net>
+
+	* [r2726]
+	  source/headers/geos/operation/polygonize/PolygonizeGraph.h,
+	  source/headers/geos/operation/polygonize/Polygonizer.h,
+	  source/operation/polygonize/PolygonizeGraph.cpp,
+	  source/operation/polygonize/Polygonizer.cpp: Change
+	  PolygonizeGraph::getEdgeRings signature so not to force heap
+	  allocation of std::vector, update Polygonizer accordingly
+
+2009-11-19 19:06  Sandro Santilli <strk@keybit.net>
+
+	* [r2725]
+	  source/headers/geos/operation/polygonize/PolygonizeGraph.h,
+	  source/operation/polygonize/PolygonizeGraph.cpp: Do not
+	  heap-allocate vector of Node when finding intersections
+
+2009-11-19 18:52  Sandro Santilli <strk@keybit.net>
+
+	* [r2724] source/headers/geos/index/strtree/AbstractNode.h,
+	  source/index/strtree/AbstractNode.cpp: Don not allocate the
+	  container of STRtree node childs on the heap
+
+2009-11-19 16:40  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r2723] source/geomgraph/index/SegmentIntersector.cpp,
+	  tests/xmltester/XMLTester.cpp: Apply patch for --disable-cassert
+	  compilation (#291)
+
+2009-11-18 18:57  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r2720] HOWTO_RELEASE: Reverse the upgrade process a bit, bump up
+	  revision numbers *after* release so that the repo version is
+	  always one higher than the release version. (#287)
+
+2009-11-18 01:28  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2717] ChangeLog, capi/geos_c.cpp, capi/geos_ts_c.cpp: Silent
+	  warning thrown by Visual C++ about mixed class and struct keyword
+	  (#269)
+
+2009-11-17 20:29  Sandro Santilli <strk@keybit.net>
+
+	* [r2716] tests/unit/Makefile.am: Include capi::GEOSGeomFromWKB
+	  test in geos_unit build (should also distribute as side-effect)
+
+2009-11-11 23:05  Sandro Santilli <strk@keybit.net>
+
+	* [r2713] HOWTO_RELEASE, Makefile.am: Change ChangeLog generation
+	  rule so it doesn't mess with make dist. Reflect in HOW_TO_RELEASE
+
+2009-11-10 23:54  Sandro Santilli <strk@keybit.net>
+
+	* [r2712] HOWTO_RELEASE, Makefile.am: Make ChangeLog target
+	  non-phony to keep 'distcheck' happy. Reorganize HOW_TO_RELEASE
+	  steps.
+
+2009-11-10 22:58  Sandro Santilli <strk@keybit.net>
+
+	* [r2711] ChangeLog, HOWTO_RELEASE, NEWS: Package stuff for release
 
 2009-10-29 21:06  Mateusz Loskot <mateusz@loskot.net>
 
