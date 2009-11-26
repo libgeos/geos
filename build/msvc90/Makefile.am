@@ -10,7 +10,8 @@ SUBDIRS = \
 	geos_lib \
 	geos_python \
 	geos_ruby \
-	geos_unit
+	geos_unit \
+	geos_xmltester
 
 EXTRA_DIST = \
 	README \
