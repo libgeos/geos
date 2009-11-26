@@ -201,7 +201,6 @@ fi
 
 
 
-
 dnl --------------------------------------------------------------------
 dnl - check whether python is required for the build
 dnl --------------------------------------------------------------------
@@ -282,6 +281,38 @@ if test x"$use_ruby" = xtrue; then
 fi
 AM_CONDITIONAL(ENABLE_RUBY, [ test x"$use_ruby" = xtrue ])
 
+
+dnl --------------------------------------------------------------------
+dnl - do operating-system specific things
+dnl --------------------------------------------------------------------
+
+AC_MSG_CHECKING([OS-specific settings])
+
+case "${host_os}" in
+	*darwin*)
+		AC_MSG_RESULT([${host_os}])
+		AC_MSG_CHECKING([for OS/X version])
+		kernel=`uname -r`
+
+		# "Darwin 9.6.0" is Mac OSX 10.5.6
+		# "Darwin 10.x" would presumably be Mac OS X 10.6.x
+		case "${kernel}" in
+			8.*)
+				AC_MSG_RESULT([Mac OS X 10.4 Tiger])
+				;;
+			9.*)
+				AC_MSG_RESULT([Mac OS X 10.5 Leopard])
+				;;
+			10.*)
+				CXXFLAGS="$CXXFLAGS -Wnon-virtual-dtor -Woverloaded-virtual"
+				AC_MSG_RESULT([Mac OS X 10.6 Snow Leopard])
+				;;
+			*)
+				AC_MSG_RESULT([Mac OS X (Darwin ${kernel} kernel)])
+				;;
+		esac
+		;;
+esac
 
 dnl --------------------------------------------------------------------
 dnl - check for boost 
