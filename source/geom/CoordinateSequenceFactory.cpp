@@ -22,6 +22,9 @@
 namespace geos {
 namespace geom { // geos::geom
 
+CoordinateSequenceFactory::~CoordinateSequenceFactory()
+{}
+
 } // namespace geos::geom
 }
 
