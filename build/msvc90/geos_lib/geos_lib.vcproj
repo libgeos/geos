@@ -691,18 +691,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geom\util\LinearComponentExtracter.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\source\geom\util\PointExtracter.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\source\geom\util\PolygonExtracter.cpp"
-						>
-					</File>
-					<File
 						RelativePath="..\..\..\source\geom\util\ShortCircuitedGeometryVisitor.cpp"
 						>
 					</File>
@@ -1562,15 +1550,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\util\AssertionFailedException.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\source\util\GeometricShapeFactory.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\source\util\IllegalArgumentException.cpp"
 					>
 				</File>
 				<File
@@ -1579,10 +1559,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\util\Profiler.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\source\util\UnsupportedOperationException.cpp"
 					>
 				</File>
 			</Filter>
