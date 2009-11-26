@@ -19,6 +19,9 @@
 /* Has isfinite */
 #undef HAVE_ISFINITE
 
+/* Has isnan */
+#undef HAVE_ISNAN
+
 #ifdef HAVE_IEEEFP_H
 extern "C"
 {
