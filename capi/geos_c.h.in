@@ -908,7 +908,7 @@ extern GEOSWKBWriter GEOS_DLL *GEOSWKBWriter_create_r(
 extern void GEOS_DLL GEOSWKBWriter_destroy_r(GEOSContextHandle_t handle,
                                              GEOSWKBWriter* writer);
 
-/* The owner owns the results for these two methods! */
+/* The caller owns the results for these two methods! */
 extern unsigned char GEOS_DLL *GEOSWKBWriter_write(GEOSWKBWriter* writer, const GEOSGeometry* g, size_t *size);
 extern unsigned char GEOS_DLL *GEOSWKBWriter_writeHEX(GEOSWKBWriter* writer, const GEOSGeometry* g, size_t *size);
 

@@ -3621,7 +3621,7 @@ GEOSWKBWriter_destroy_r(GEOSContextHandle_t extHandle, WKBWriter *Writer)
 }
 
 
-/* The owner owns the result */
+/* The caller owns the result */
 unsigned char*
 GEOSWKBWriter_write_r(GEOSContextHandle_t extHandle, WKBWriter *writer, const Geometry *geom, size_t *size)
 {
@@ -3665,7 +3665,7 @@ GEOSWKBWriter_write_r(GEOSContextHandle_t extHandle, WKBWriter *writer, const Ge
     return NULL;
 }
 
-/* The owner owns the result */
+/* The caller owns the result */
 unsigned char*
 GEOSWKBWriter_writeHEX_r(GEOSContextHandle_t extHandle, WKBWriter *writer, const Geometry *geom, size_t *size)
 {

@@ -759,14 +759,14 @@ GEOSWKBWriter_destroy(WKBWriter *Writer)
 }
 
 
-/* The owner owns the result */
+/* The caller owns the result */
 unsigned char*
 GEOSWKBWriter_write(WKBWriter *writer, const Geometry *geom, size_t *size)
 {
     return GEOSWKBWriter_write_r( handle, writer, geom, size );
 }
 
-/* The owner owns the result */
+/* The caller owns the result */
 unsigned char*
 GEOSWKBWriter_writeHEX(WKBWriter *writer, const Geometry *geom, size_t *size)
 {
