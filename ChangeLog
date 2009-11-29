@@ -1,3 +1,63 @@
+2009-11-26 21:42  Sandro Santilli <strk@keybit.net>
+
+	* [r2748] source/headers/geos/platform.h.in: Add ISNAN support in
+	  platform.h.in
+
+2009-11-26 21:34  Sandro Santilli <strk@keybit.net>
+
+	* [r2747] source/geom/util/LinearComponentExtracter.cpp,
+	  source/geom/util/Makefile.am,
+	  source/geom/util/PointExtracter.cpp,
+	  source/geom/util/PolygonExtracter.cpp,
+	  source/util/AssertionFailedException.cpp,
+	  source/util/IllegalArgumentException.cpp,
+	  source/util/Makefile.am,
+	  source/util/UnsupportedOperationException.cpp: Remove
+	  unreferenced files from the repository
+
+2009-11-26 21:28  Sandro Santilli <strk@keybit.net>
+
+	* [r2746] build/msvc90/geos_lib/geos_lib.vcproj: Remove reference
+	  to files not needing to go in the dll
+
+2009-11-26 21:21  Sandro Santilli <strk@keybit.net>
+
+	* [r2745] source/geom/CoordinateSequenceFactory.cpp,
+	  source/geom/Makefile.am,
+	  source/headers/geos/geom/CoordinateSequenceFactory.h: Put
+	  destructor of the CoordinateSequenceFactory in an implementation
+	  file, hopefully reducing linker confusion about RTTI (see ticket
+	  #299)
+
+2009-11-26 19:49  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r2744] configure.in: Add magic flags for OS/X Snow Leopard only.
+	  (#299)
+
+2009-11-26 19:46  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r2743] configure.in: Add vc90 xmltester target to Makefile build
+
+2009-11-26 18:29  Frank Warmerdam <warmerdam@pobox.com>
+
+	* [r2742] capi/geos_c.cpp, capi/geos_c.h.in, capi/geos_ts_c.cpp:
+	  clarify ownership of returned buffer from wkbwriter
+
+2009-11-26 16:32  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r2741] Makefile.am, build/msvc90/Makefile.am,
+	  build/msvc90/geos_xmltester/Makefile.am: Fix missing components
+	  in tarball (#300)
+
+2009-11-24 18:05  Sandro Santilli <strk@keybit.net>
+
+	* [r2736] ChangeLog: updated
+
+2009-11-23 18:17  Sandro Santilli <strk@keybit.net>
+
+	* [r2735] tests/unit/geom/CoordinateArraySequenceFactoryTest.cpp:
+	  Coordiante->Coordinate
+
 2009-11-23 18:06  Sandro Santilli <strk@keybit.net>
 
 	* [r2734] source/geom/Geometry.cpp: Avoid reallocations in Union
@@ -9987,8 +10047,9 @@
 
 2006-03-27 09:05  Sandro Santilli <strk@keybit.net>
 
-	* [r1289] capi/geos_c.h.in: Added note about responsibility of
-	  return from GEOSGeomType()
+	* [r1289] branches/branch-2-2/source/capi/geos_c.h.in,
+	  capi/geos_c.h.in: Added note about responsibility of return from
+	  GEOSGeomType()
 
 2006-03-27 09:00  Sandro Santilli <strk@keybit.net>
 
@@ -20529,5 +20590,5 @@
 
 2002-06-07 17:47  cvs
 
-	* [r1] .: New repository initialized by cvs2svn.
+	* [r1] branches, tags, .: New repository initialized by cvs2svn.
 
