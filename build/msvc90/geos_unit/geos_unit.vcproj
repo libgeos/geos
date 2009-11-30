@@ -604,12 +604,16 @@
 				</FileConfiguration>
 			</File>
 		</Filter>
+		<Filter
+			Name="linearref"
+			>
+			<File
+				RelativePath="..\..\..\tests\unit\linearref\LengthIndexedLineTest.cpp"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\..\..\tests\unit\geos_unit.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\tests\unit\Makefile.am"
 			>
 		</File>
 		<File

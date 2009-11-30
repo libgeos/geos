@@ -13,6 +13,9 @@
 #include <geos/geom/LineString.h> 
 #include <geos/geom/Coordinate.h>
 #include <geos/linearref/LengthIndexedLine.h>
+#ifndef ISNAN
+#include <geos/platform.h>
+#endif
 
 // std
 #include <sstream>
@@ -408,7 +411,7 @@ namespace tut {
     LengthIndexedLine indexedLine(linearGeom.get());
     double projIndex = indexedLine.project(Coordinate(5, 5));
     Coordinate projPt = indexedLine.extractPoint(projIndex);
-    ensure(isnan(projPt.z));
+    ensure(ISNAN(projPt.z));
   }
 
 }
