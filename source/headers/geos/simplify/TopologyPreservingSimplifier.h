@@ -25,18 +25,10 @@
 #define _GEOS_SIMPLIFY_TOPOLOGYPRESERVINGSIMPLIFIER_H_ 
 
 #include <geos/export.h>
+#include <geos/geom/Geometry.h>
+#include <geos/simplify/TaggedLinesSimplifier.h>
 #include <memory> // for auto_ptr
 #include <map> 
-
-// Forward declarations
-namespace geos {
-	namespace simplify {
-		class TaggedLinesSimplifier;
-	}
-	namespace geom {
-		class Geometry;
-	}
-}
 
 namespace geos {
 namespace simplify { // geos::simplify

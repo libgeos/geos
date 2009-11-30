@@ -332,7 +332,6 @@ WKTReader::readMultiPointText(StringTokenizer *tokenizer)
 		}
 		err << endl;
 		throw ParseException(err.str());
-		return NULL;
 	}
 }
 

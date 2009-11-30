@@ -81,6 +81,7 @@ Geometry *ExtractLineByLocation::reverse(const Geometry *linear)
 		else
 		{
 			assert(!"non-linear geometry encountered");
+            return 0;
 		}
 	}
 }
