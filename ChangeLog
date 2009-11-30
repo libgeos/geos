@@ -1,3 +1,10 @@
+2009-11-18 01:28  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2752] build/msvc90/geos_unit/geos_unit.vcproj: Added missing
+	  tests to Visual Studio 2008 project
+	* [r2752] tests/unit/linearref/LengthIndexedLineTest.cpp: Replaced
+      call to isnan() missing in Visual C++ with ISNAN macro
+
 2009-11-26 21:42  Sandro Santilli <strk@keybit.net>
 
 	* [r2748] source/headers/geos/platform.h.in: Add ISNAN support in
