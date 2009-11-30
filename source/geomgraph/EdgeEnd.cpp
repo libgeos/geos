@@ -182,7 +182,7 @@ EdgeEnd::compareDirection(const EdgeEnd* e) const
 
 /*public*/
 void
-EdgeEnd::computeLabel(const algorithm::BoundaryNodeRule& boundaryNodeRule)
+EdgeEnd::computeLabel(const algorithm::BoundaryNodeRule& /*boundaryNodeRule*/)
 {
 	// subclasses should override this if they are using labels
 }

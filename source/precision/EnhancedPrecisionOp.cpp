@@ -82,6 +82,8 @@ EnhancedPrecisionOp::intersection(
 #if GEOS_DEBUG
 		std::cerr << "Reduced operation exception: "
 		          << ex2.what() << std::endl;
+#else
+        (void)ex2;
 #endif
 		throw originalEx;
 	}

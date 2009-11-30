@@ -193,6 +193,8 @@ finishGEOS_r(GEOSContextHandle_t extHandle)
 void 
 GEOSFree_r (GEOSContextHandle_t extHandle, void* buffer) 
 { 
+    assert(0 != extHandle);
+
     std::free(buffer); 
 } 
 
@@ -3846,7 +3848,7 @@ GEOSWKBWriter_getIncludeSRID_r(GEOSContextHandle_t extHandle, const GEOSWKBWrite
         }
     }
     
-    return ret;
+    return static_cast<char>(ret);
 }
 
 void
