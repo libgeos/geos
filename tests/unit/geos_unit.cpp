@@ -114,4 +114,3 @@ int main(int argc, const char* argv[])
     return (visi.all_ok() ? EXIT_SUCCESS : EXIT_FAILURE);
     
 }
-

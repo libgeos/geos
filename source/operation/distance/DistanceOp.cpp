@@ -21,8 +21,6 @@
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/distance/GeometryLocation.h>
 #include <geos/operation/distance/ConnectedElementLocationFilter.h>
-//#include <geos/geomUtil.h>
-//#include <geos/geosAlgorithm.h>
 #include <geos/algorithm/PointLocator.h> 
 #include <geos/algorithm/CGAlgorithms.h> 
 #include <geos/geom/Coordinate.h>

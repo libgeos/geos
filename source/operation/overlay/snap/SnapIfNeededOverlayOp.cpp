@@ -22,7 +22,7 @@
 #include <geos/operation/overlay/snap/SnapOverlayOp.h>
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/geom/Geometry.h> // for use in auto_ptr
-#include <geos/Util.h>
+#include <geos/util.h>
 
 #include <cassert>
 #include <limits> // for numeric_limits

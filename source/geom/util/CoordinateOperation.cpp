@@ -15,8 +15,6 @@
 
 #include <typeinfo>
 
-//#include <geos/geomUtil.h>
-//#include <geos/util.h> // to be removed when util.h is finished
 #include <geos/geom/util/CoordinateOperation.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LinearRing.h>

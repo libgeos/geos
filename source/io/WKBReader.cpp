@@ -123,21 +123,27 @@ WKBReader::readHEX(istream &is)
 				result_high = 9;
 				break;
 			case 'A' :
+            case 'a' :
 				result_high = 10;
 				break;
 			case 'B' :
+            case 'b' :
 				result_high = 11;
 				break;
 			case 'C' :
+			case 'c' :
 				result_high = 12;
 				break;
 			case 'D' :
+			case 'd' :
 				result_high = 13;
 				break;
 			case 'E' :
+			case 'e' :
 				result_high = 14;
 				break;
 			case 'F' :
+			case 'f' :
 				result_high = 15;
 				break;
 			default:
@@ -177,21 +183,27 @@ WKBReader::readHEX(istream &is)
 				result_low = 9;
 				break;
 			case 'A' :
+            case 'a' :
 				result_low = 10;
 				break;
 			case 'B' :
+            case 'b' :
 				result_low = 11;
 				break;
 			case 'C' :
+			case 'c' :
 				result_low = 12;
 				break;
 			case 'D' :
+			case 'd' :
 				result_low = 13;
 				break;
 			case 'E' :
+			case 'e' :
 				result_low = 14;
 				break;
 			case 'F' :
+			case 'f' :
 				result_low = 15;
 				break;
 			default:
