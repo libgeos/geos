@@ -25,13 +25,13 @@ namespace geom { // geos::geom
 
 void GeometryComponentFilter::filter_rw(Geometry *geom)
 {
-	UNREFERENCED_PARAMETER(geom);
+	::geos::ignore_unused_variable_warning(geom);
 	assert(0);
 }
 
 void GeometryComponentFilter::filter_ro(const Geometry *geom)
 {
-	UNREFERENCED_PARAMETER(geom);
+	::geos::ignore_unused_variable_warning(geom);
 	assert(0);
 }
 

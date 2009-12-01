@@ -217,7 +217,7 @@ NodeBase::visit(const Envelope* searchEnv, ItemVisitor& visitor)
 void
 NodeBase::visitItems(const Envelope* searchEnv, ItemVisitor& visitor)
 {
-    UNREFERENCED_PARAMETER(searchEnv);
+    ::geos::ignore_unused_variable_warning(searchEnv);
 
 	// would be nice to filter items based on search envelope, but can't
 	// until they contain an envelope

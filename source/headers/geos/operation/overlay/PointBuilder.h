@@ -89,7 +89,7 @@ public:
 		geometryFactory(newGeometryFactory),
 		resultPointList(new std::vector<geom::Point *>())
 	{
-        UNREFERENCED_PARAMETER(newPtLocator);
+        ::geos::ignore_unused_variable_warning(newPtLocator);
     }
 
 	/**

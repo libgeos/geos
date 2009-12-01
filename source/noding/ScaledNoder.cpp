@@ -107,7 +107,7 @@ public:
 
 	void filter_ro(const geom::Coordinate* c)
     {
-        UNREFERENCED_PARAMETER(c);
+        ::geos::ignore_unused_variable_warning(c);
         assert(0);
     }
 

@@ -1452,21 +1452,22 @@ GEOSSingleSidedBuffer_r(GEOSContextHandle_t extHandle, const Geometry *g1, doubl
     try
     {
         BufferParameters bp;
-	bp.setEndCapStyle( BufferParameters::CAP_FLAT );
+        bp.setEndCapStyle( BufferParameters::CAP_FLAT );
         bp.setQuadrantSegments(quadsegs);
 
         if ( joinStyle > BufferParameters::JOIN_BEVEL )
         {
-        	throw IllegalArgumentException("Invalid buffer join style");
+            throw IllegalArgumentException("Invalid buffer join style");
         }
         bp.setJoinStyle(
-        	static_cast<BufferParameters::JoinStyle>(joinStyle)
-        );
+            static_cast<BufferParameters::JoinStyle>(joinStyle)
+            );
         bp.setMitreLimit(mitreLimit);
 
-	BufferBuilder bufBuilder (bp);
-        Geometry *g3 = bufBuilder.bufferLineSingleSided(g1, width, leftSide);
-	
+        bool isLeftSide = leftSide == 0 ? false : true;
+        BufferBuilder bufBuilder (bp);
+        Geometry *g3 = bufBuilder.bufferLineSingleSided(g1, width, isLeftSide);
+
         return g3;
     }
     catch (const std::exception &e)

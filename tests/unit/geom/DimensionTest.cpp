@@ -52,7 +52,7 @@ namespace tut
     {
 		// Just compile-time test
 		geos::geom::Dimension dim;
-        UNREFERENCED_PARAMETER(dim);
+        ::geos::ignore_unused_variable_warning(dim);
     }
 
     // Test of toDimensionSymbol()

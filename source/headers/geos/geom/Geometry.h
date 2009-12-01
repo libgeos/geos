@@ -41,7 +41,6 @@ namespace geos {
 		class CoordinateFilter;
 		class CoordinateSequence;
 		class CoordinateSequenceFilter;
-		class Envelope;
 		class GeometryComponentFilter;
 		class GeometryFactory;
 		class GeometryFilter;

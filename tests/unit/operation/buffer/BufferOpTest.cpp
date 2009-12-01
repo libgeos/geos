@@ -40,6 +40,10 @@ namespace tut
         {
             ensure_equals(default_quadrant_segments, int(8));
         }
+    private:
+        // noncopyable
+        test_bufferop_data(test_bufferop_data const& other);
+        test_bufferop_data& operator=(test_bufferop_data const& rhs);
     };
 
     typedef test_group<test_bufferop_data> group;
@@ -66,7 +70,7 @@ namespace tut
         ensure(gBuffer->isEmpty());
         ensure(gBuffer->isValid());
         ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
-        ensure_equals(gBuffer->getNumPoints(), 0);
+        ensure_equals(gBuffer->getNumPoints(), std::size_t(0));
     }
 
     template<>
@@ -86,7 +90,7 @@ namespace tut
         ensure_not(gBuffer->isEmpty());
         ensure(gBuffer->isValid());
         ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
-        ensure(gBuffer->getNumPoints() > 32);
+        ensure(gBuffer->getNumPoints() > std::size_t(32));
     }
 
     template<>
@@ -111,7 +115,7 @@ namespace tut
         ensure_not(gBuffer->isEmpty());
         ensure(gBuffer->isValid());
         ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
-        ensure(gBuffer->getNumPoints() > 129);
+        ensure(gBuffer->getNumPoints() > std::size_t(129));
     }
 
     template<>
@@ -135,7 +139,7 @@ namespace tut
             ensure_not(gBuffer->isEmpty());
             ensure(gBuffer->isValid());
             ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
-            ensure(gBuffer->getNumPoints() >= 245);
+            ensure(gBuffer->getNumPoints() >= std::size_t(245));
         }
 
         // Buffer point with custom parameters: 32 quadrant segments
@@ -148,7 +152,7 @@ namespace tut
             ensure_not(gBuffer->isEmpty());
             ensure(gBuffer->isValid());
             ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
-            ensure(gBuffer->getNumPoints() >= 318);
+            ensure(gBuffer->getNumPoints() >= std::size_t(318));
         }
     }
 
@@ -171,7 +175,7 @@ namespace tut
         ensure_not(gBuffer->isEmpty());
         ensure(gBuffer->isValid());
         ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
-        ensure(gBuffer->getNumPoints() >= 8);
+        ensure(gBuffer->getNumPoints() >= std::size_t(8));
     }
 
     template<>
@@ -194,7 +198,7 @@ namespace tut
         ensure_not(gBuffer->isEmpty());
         ensure(gBuffer->isValid());
         ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
-        ensure(gBuffer->getNumPoints() >= 51);
+        ensure(gBuffer->getNumPoints() >= std::size_t(51));
     }
 
     template<>
@@ -217,7 +221,7 @@ namespace tut
         ensure_not(gBuffer->isEmpty());
         ensure(gBuffer->isValid());
         ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
-        ensure(gBuffer->getNumPoints() >= 24);
+        ensure(gBuffer->getNumPoints() >= std::size_t(24));
     }
 
     template<>
@@ -240,7 +244,7 @@ namespace tut
         ensure_not(gBuffer->isEmpty());
         ensure(gBuffer->isValid());
         ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
-        ensure(gBuffer->getNumPoints() >= 7);
+        ensure(gBuffer->getNumPoints() >= std::size_t(7));
     }
 
     template<>
@@ -263,7 +267,7 @@ namespace tut
         ensure_not(gBuffer->isEmpty());
         ensure(gBuffer->isValid());
         ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
-        ensure(gBuffer->getNumPoints() >= 5);
+        ensure(gBuffer->getNumPoints() >= std::size_t(5));
     }
 
 } // namespace tut

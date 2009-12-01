@@ -263,7 +263,7 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 	}
 	catch (const util::TopologyException& ex)
 	{
-        UNREFERENCED_PARAMETER(ex);
+        ::geos::ignore_unused_variable_warning(ex);
 #if GEOS_DEBUG_BINARYOP
 		std::cerr << "CBR: " << ex.what() << std::endl;
 #endif
@@ -293,7 +293,7 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 	}
 	catch (const util::TopologyException& ex)
 	{
-        UNREFERENCED_PARAMETER(ex);
+        ::geos::ignore_unused_variable_warning(ex);
 #if GEOS_DEBUG_BINARYOP
 		std::cerr << "SNAP: " << ex.what() << std::endl;
 #endif

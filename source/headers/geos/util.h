@@ -36,8 +36,11 @@
 // Private macros definition 
 // 
 
-#ifndef UNREFERENCED_PARAMETER 
-#define UNREFERENCED_PARAMETER(p) ((void)p)
-#endif 
+namespace geos
+{
+    template<class T>
+    void ignore_unused_variable_warning(T const& ) {}
+}
+
 
 #endif // GEOS_UTIL_H

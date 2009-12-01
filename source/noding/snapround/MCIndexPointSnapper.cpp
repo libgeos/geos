@@ -77,7 +77,7 @@ public:
 
 	void select(const LineSegment& ls)
 	{
-		UNREFERENCED_PARAMETER(ls);
+		::geos::ignore_unused_variable_warning(ls);
 	}
 
 };

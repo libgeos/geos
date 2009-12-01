@@ -103,7 +103,7 @@ DPTransformer::transformCoordinates(
 		const CoordinateSequence* coords,
 		const Geometry* parent)
 {
-    UNREFERENCED_PARAMETER(parent);
+    ::geos::ignore_unused_variable_warning(parent);
 
 	const Coordinate::Vect* inputPts = coords->toVector();
 	assert(inputPts);

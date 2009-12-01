@@ -971,7 +971,7 @@ OverlayOp::checkObviouslyWrongResult(OverlayOp::OpCode opCode)
 	// Add your tests here
 
 #else
-    UNREFERENCED_PARAMETER(opCode);
+    ::geos::ignore_unused_variable_warning(opCode);
 #endif
 
 #ifdef ENABLE_OVERLAY_RESULT_VALIDATOR

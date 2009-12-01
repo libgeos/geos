@@ -65,7 +65,7 @@ public:
 	
     static int octant(const geom::Coordinate* p0, const geom::Coordinate* p1)
     {
-        UNREFERENCED_PARAMETER(p0);
+        ::geos::ignore_unused_variable_warning(p0);
 		return octant(*p0, *p1);
 	}
 };

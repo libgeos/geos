@@ -84,7 +84,7 @@ namespace tut
 	{
 		const size_t size0 = 0;
 		MultiPointAutoPtr copy(dynamic_cast<geos::geom::MultiPoint*>(empty_mp_->clone()));
-		ensure( copy.get() );
+		ensure( 0 != copy.get() );
 		
 		ensure( copy->isEmpty() );
 		ensure( copy->isSimple() );

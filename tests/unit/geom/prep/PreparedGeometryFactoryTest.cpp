@@ -67,7 +67,7 @@ namespace tut
     void object::test<1>()
     {
         prep::PreparedGeometryFactory pgf;
-        UNREFERENCED_PARAMETER(pgf);
+        ::geos::ignore_unused_variable_warning(pgf);
     }
 
     // Test passing null-pointer to prepare static method

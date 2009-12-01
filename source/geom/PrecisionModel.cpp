@@ -110,8 +110,8 @@ PrecisionModel::PrecisionModel(double newScale, double newOffsetX, double newOff
 	:
 	modelType(FIXED)
 {
-    UNREFERENCED_PARAMETER(newOffsetX);
-    UNREFERENCED_PARAMETER(newOffsetY);
+    ::geos::ignore_unused_variable_warning(newOffsetX);
+    ::geos::ignore_unused_variable_warning(newOffsetY);
 
 #if GEOS_DEBUG
 	cerr<<"PrecisionModel["<<this<<"] ctor(scale,offsets)"<<endl;

@@ -22,6 +22,7 @@
 #include <geos/operation/overlay/snap/SnapOverlayOp.h>
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/geom/Geometry.h> // for use in auto_ptr
+#include <geos/Util.h>
 
 #include <cassert>
 #include <limits> // for numeric_limits
@@ -60,9 +61,7 @@ SnapIfNeededOverlayOp::getResultGeometry(OverlayOp::OpCode opCode)
 
 	}
 	catch (std::exception& ex) {
-		// ignore this exception, since the operation will be rerun
-		//      System.out.println(ex.getMessage());
-		//      ex.printStackTrace();
+        ::geos::ignore_unused_variable_warning(ex);
 #if GEOS_DEBUG
 		std::cerr << "Overlay op threw " << ex.what() << ". Will try snapping now" << std::endl;
 #endif

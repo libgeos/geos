@@ -65,7 +65,7 @@ NodedSegmentString::addIntersection(LineIntersector *li,
 		unsigned int segmentIndex,
 		int geomIndex, int intIndex)
 {
-    UNREFERENCED_PARAMETER(geomIndex);
+    ::geos::ignore_unused_variable_warning(geomIndex);
 
 	const Coordinate &intPt=li->getIntersection(intIndex);
 	addIntersection(intPt, segmentIndex);

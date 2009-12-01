@@ -79,7 +79,7 @@ public:
 			const CoordinateSequence* coords,
 			const Geometry* parent)
 	{
-        UNREFERENCED_PARAMETER(parent);
+        ::geos::ignore_unused_variable_warning(parent);
 		return snapLine(coords);
 	}
 

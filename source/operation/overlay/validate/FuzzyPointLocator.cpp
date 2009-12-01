@@ -61,7 +61,7 @@ FuzzyPointLocator::FuzzyPointLocator(const geom::Geometry& geom,
 std::auto_ptr<Geometry>
 FuzzyPointLocator::extractLineWork(const geom::Geometry& geom)
 {
-    UNREFERENCED_PARAMETER(geom);
+    ::geos::ignore_unused_variable_warning(geom);
 
 	vector<Geometry*>* lineGeoms = new vector<Geometry*>();
 	try { // geoms array will leak if an exception is thrown
@@ -94,7 +94,7 @@ FuzzyPointLocator::extractLineWork(const geom::Geometry& geom)
 std::auto_ptr<Geometry>
 FuzzyPointLocator::getLineWork(const geom::Geometry& geom)
 {
-    UNREFERENCED_PARAMETER(geom);
+    ::geos::ignore_unused_variable_warning(geom);
 
 	vector<Geometry*>* lineGeoms = new vector<Geometry*>();
 	try { // geoms array will leak if an exception is thrown

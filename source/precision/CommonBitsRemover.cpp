@@ -52,7 +52,7 @@ public:
 
 	void filter_ro(const geom::Coordinate *coord)  //Not used
     {
-        UNREFERENCED_PARAMETER(coord);
+        ::geos::ignore_unused_variable_warning(coord);
         assert(0);
     };
 
@@ -73,7 +73,7 @@ public:
 	void filter_rw(geom::Coordinate *coord) const
 	{
         // CommonCoordinateFilter is a read-only filter
-        UNREFERENCED_PARAMETER(coord);
+        ::geos::ignore_unused_variable_warning(coord);
 		assert(0);
 	}
 

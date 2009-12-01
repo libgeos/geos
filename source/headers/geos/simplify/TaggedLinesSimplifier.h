@@ -33,13 +33,12 @@
 #include <cassert>
 
 #include <geos/simplify/LineSegmentIndex.h> // for templated function body
+#include <geos/simplify/TaggedLineStringSimplifier.h>
 
 // Forward declarations
 namespace geos {
 	namespace simplify {
-		//class LineSegmentIndex;
 		class TaggedLineString;
-		class TaggedLineStringSimplifier;
 	}
 }
 
