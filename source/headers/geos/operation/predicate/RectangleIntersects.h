@@ -53,6 +53,10 @@ private:
 
  	const geom::Envelope &rectEnv;
 
+    // Declare type as noncopyable
+    RectangleIntersects(const RectangleIntersects& other);
+    RectangleIntersects& operator=(const RectangleIntersects& rhs);
+
 public:
 
 	/** \brief
