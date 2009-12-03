@@ -49,8 +49,8 @@
 
 #define DoubleMax std::numeric_limits<double>::max()
 
-#define FINITE(x) _finite(x)
-#define finite(x) _finite(x)
+#define FINITE(x) _finite(static_cast<double>(x))
+#define finite(x) _finite(static_cast<double>(x))
 
 typedef __int64 int64;
 

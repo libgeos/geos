@@ -13,9 +13,8 @@
  *
  **********************************************************************/
 
-
-#ifndef _TIMEVAL_H
-#define _TIMEVAL_H
+#ifndef GEOS_TIMEVAL_H
+#define GEOS_TIMEVAL_H
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -120,4 +119,4 @@ __inline int gettimeofday(struct timeval *tv, struct timezone *tz)
 
 #endif /* _WIN32_WCE */
 
-#endif /* _TIMEVAL_H */
+#endif /* GEOS_TIMEVAL_H */
