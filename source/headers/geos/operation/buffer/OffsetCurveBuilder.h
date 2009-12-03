@@ -357,7 +357,11 @@ private:
 	/// Adds a CW square around a point
 	void addSquare(const geom::Coordinate &p, double distance);
 
-	std::vector<OffsetCurveVertexList*> vertexLists;
+    std::vector<OffsetCurveVertexList*> vertexLists;
+
+    // Declare type as noncopyable
+    OffsetCurveBuilder(const OffsetCurveBuilder& other);
+    OffsetCurveBuilder& operator=(const OffsetCurveBuilder& rhs);
 };
 
 } // namespace geos::operation::buffer

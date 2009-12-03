@@ -83,6 +83,61 @@ namespace buffer { // geos.operation.buffer
  */
 class GEOS_DLL BufferBuilder {
 
+public:
+	/**
+	 * Creates a new BufferBuilder
+	 *
+	 * @param nBufParams buffer parameters, this object will
+	 *                   keep a reference to the passed parameters
+	 *                   so caller must make sure the object is
+	 *                   kept alive for the whole lifetime of
+	 *                   the buffer builder.
+	 */
+	BufferBuilder(const BufferParameters& nBufParams)
+		:
+		bufParams(nBufParams),
+		workingPrecisionModel(NULL),
+		li(NULL),
+		intersectionAdder(NULL),
+		workingNoder(NULL),
+		geomFact(NULL),
+		edgeList()
+	{}
+
+	~BufferBuilder();
+
+
+	/**
+	 * Sets the precision model to use during the curve computation
+	 * and noding,
+	 * if it is different to the precision model of the Geometry.
+	 * If the precision model is less than the precision of the
+	 * Geometry precision model,
+	 * the Geometry must have previously been rounded to that precision.
+	 *
+	 * @param pm the precision model to use
+	 */
+	void setWorkingPrecisionModel(const geom::PrecisionModel *pm) {
+		workingPrecisionModel=pm;
+	}
+
+	/**
+	 * Sets the {@link noding::Noder} to use during noding.
+	 * This allows choosing fast but non-robust noding, or slower
+	 * but robust noding.
+	 *
+	 * @param noder the noder to use
+	 */
+	void setNoder(noding::Noder* newNoder) { workingNoder = newNoder; }
+
+	geom::Geometry* buffer(const geom::Geometry *g, double distance);
+		// throw (GEOSException);
+
+	/// Not in JTS: this is a GEOS extension
+	geom::Geometry* bufferLineSingleSided( const geom::Geometry* g,
+	                                double distance, bool leftSide ) ;
+		// throw (GEOSException);
+
 private:
 	/**
 	 * Compute the change in depth as an edge is crossed from R to L
@@ -155,62 +210,10 @@ private:
 	 * @return the empty result geometry, transferring ownership to caller.
 	 */
 	geom::Geometry* createEmptyResultGeometry() const;
-
-public:
-	/**
-	 * Creates a new BufferBuilder
-	 *
-	 * @param nBufParams buffer parameters, this object will
-	 *                   keep a reference to the passed parameters
-	 *                   so caller must make sure the object is
-	 *                   kept alive for the whole lifetime of
-	 *                   the buffer builder.
-	 */
-	BufferBuilder(const BufferParameters& nBufParams)
-		:
-		bufParams(nBufParams),
-		workingPrecisionModel(NULL),
-		li(NULL),
-		intersectionAdder(NULL),
-		workingNoder(NULL),
-		geomFact(NULL),
-		edgeList()
-	{}
-
-	~BufferBuilder();
-
-
-	/**
-	 * Sets the precision model to use during the curve computation
-	 * and noding,
-	 * if it is different to the precision model of the Geometry.
-	 * If the precision model is less than the precision of the
-	 * Geometry precision model,
-	 * the Geometry must have previously been rounded to that precision.
-	 *
-	 * @param pm the precision model to use
-	 */
-	void setWorkingPrecisionModel(const geom::PrecisionModel *pm) {
-		workingPrecisionModel=pm;
-	}
-
-	/**
-	 * Sets the {@link noding::Noder} to use during noding.
-	 * This allows choosing fast but non-robust noding, or slower
-	 * but robust noding.
-	 *
-	 * @param noder the noder to use
-	 */
-	void setNoder(noding::Noder* newNoder) { workingNoder = newNoder; }
-
-	geom::Geometry* buffer(const geom::Geometry *g, double distance);
-		// throw (GEOSException);
-
-	/// Not in JTS: this is a GEOS extension
-	geom::Geometry* bufferLineSingleSided( const geom::Geometry* g,
-	                                double distance, bool leftSide ) ;
-		// throw (GEOSException);
-
+    
+    // Declare type as noncopyable
+    BufferBuilder(const BufferBuilder& other);
+    BufferBuilder& operator=(const BufferBuilder& rhs);
 };
 
 } // namespace geos::operation::buffer

@@ -163,6 +163,10 @@ private:
 	bool isTriangleErodedCompletely(geom::CoordinateSequence *triangleCoord,
 			double bufferDistance);
 
+    // Declare type as noncopyable
+    OffsetCurveSetBuilder(const OffsetCurveSetBuilder& other);
+    OffsetCurveSetBuilder& operator=(const OffsetCurveSetBuilder& rhs);
+
 public:
 
 	/// Constructor
