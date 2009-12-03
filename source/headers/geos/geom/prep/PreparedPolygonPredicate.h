@@ -58,6 +58,10 @@ namespace prep { // geos::geom::prep
 class PreparedPolygonPredicate 
 {
 private:
+    // Declare type as noncopyable
+    PreparedPolygonPredicate(const PreparedPolygonPredicate& other);
+    PreparedPolygonPredicate& operator=(const PreparedPolygonPredicate& rhs);
+
 protected:
 	const PreparedPolygon * const prepPoly;
 

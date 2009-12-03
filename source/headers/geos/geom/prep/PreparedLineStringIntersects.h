@@ -47,7 +47,37 @@ namespace prep { // geos::geom::prep
  */
 class PreparedLineStringIntersects
 {
-private:
+public:
+
+	/**
+	 * Computes the intersects predicate between a {@link PreparedLineString}
+	 * and a {@link Geometry}.
+	 * 
+	 * @param prep the prepared linestring
+	 * @param geom a test geometry
+	 * @return true if the linestring intersects the geometry
+	 */
+	static bool intersects(  PreparedLineString & prep, const geom::Geometry * geom ) 
+	{
+		PreparedLineStringIntersects * op = new PreparedLineStringIntersects( prep);
+		return op->intersects( geom);
+	}
+
+    /**
+     * \todo FIXME - mloskot: Why not taking linestring through const reference?
+     */
+	PreparedLineStringIntersects(PreparedLineString & prep) 
+		: prepLine( prep)
+	{ }
+
+	/**
+	 * Tests whether this geometry intersects a given geometry.
+	 * 
+	 * @param geom the test geometry
+	 * @return true if the test geometry intersects
+	 */
+	bool intersects(const geom::Geometry * g) const;
+
 protected:
 	PreparedLineString & prepLine;
 	//PreparedLineString * prepLine;
@@ -80,41 +110,10 @@ protected:
 	//	return false;
 	//}
 
-
-public:
-
-	/**
-	 * Computes the intersects predicate between a {@link PreparedLineString}
-	 * and a {@link Geometry}.
-	 * 
-	 * @param prep the prepared linestring
-	 * @param geom a test geometry
-	 * @return true if the linestring intersects the geometry
-	 */
-	static bool intersects(  PreparedLineString & prep, const geom::Geometry * geom ) 
-	{
-		PreparedLineStringIntersects * op = new PreparedLineStringIntersects( prep);
-		return op->intersects( geom);
-	}
-
-    /**
-     * \todo FIXME - mloskot: Why not taking linestring through const reference?
-     */
-	PreparedLineStringIntersects(PreparedLineString & prep) 
-		: prepLine( prep)
-	{ }
-
-	/**
-	 * Tests whether this geometry intersects a given geometry.
-	 * 
-	 * @param geom the test geometry
-	 * @return true if the test geometry intersects
-	 */
-	bool intersects(const geom::Geometry * g) const;
-
+    // Declare type as noncopyable
+    PreparedLineStringIntersects(const PreparedLineStringIntersects& other);
+    PreparedLineStringIntersects& operator=(const PreparedLineStringIntersects& rhs);
 };
-
-
 
 } // namespace geos::geom::prep
 } // namespace geos::geom
