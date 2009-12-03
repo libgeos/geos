@@ -76,6 +76,24 @@ namespace snapround { // geos::noding::snapround
  */
 class GEOS_DLL MCIndexSnapRounder: public Noder { // implments Noder
 
+public:
+
+	MCIndexSnapRounder(geom::PrecisionModel& nPm);
+
+	std::vector<SegmentString*>* getNodedSubstrings() const;
+
+	void computeNodes(std::vector<SegmentString*>* segStrings);
+ 
+	/**
+	 * Computes nodes introduced as a result of
+	 * snapping segments to vertices of other segments
+	 *
+	 * @param segStrings the list of segment strings to snap together
+	 *        NOTE: they *must* be instances of NodedSegmentString, or
+	 * 	  an assertion will fail.
+	 */
+	void computeVertexSnaps(std::vector<SegmentString*>& edges);
+
 private:
 
 	/// externally owned
@@ -117,24 +135,9 @@ private:
 	
 	void checkCorrectness(std::vector<SegmentString*>& inputSegmentStrings);
 
-public:
-
-	MCIndexSnapRounder(geom::PrecisionModel& nPm);
-
-	std::vector<SegmentString*>* getNodedSubstrings() const;
-
-	void computeNodes(std::vector<SegmentString*>* segStrings);
- 
-	/**
-	 * Computes nodes introduced as a result of
-	 * snapping segments to vertices of other segments
-	 *
-	 * @param segStrings the list of segment strings to snap together
-	 *        NOTE: they *must* be instances of NodedSegmentString, or
-	 * 	  an assertion will fail.
-	 */
-	void computeVertexSnaps(std::vector<SegmentString*>& edges);
-
+    // Declare type as noncopyable
+    MCIndexSnapRounder(const MCIndexSnapRounder& other);
+    MCIndexSnapRounder& operator=(const MCIndexSnapRounder& rhs);
 };
 
 

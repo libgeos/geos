@@ -72,7 +72,27 @@ namespace snapround { // geos::noding::snapround
  */
 class GEOS_DLL SimpleSnapRounder: public Noder { // implements NoderIface
 
+public:
+
+	SimpleSnapRounder(const geom::PrecisionModel& newPm);
+
+	std::vector<SegmentString*>* getNodedSubstrings() const;
+
+	void computeNodes(std::vector<SegmentString*>* inputSegmentStrings);
+
+	void add(const SegmentString* segStr);
+
+	/**
+	 * Computes nodes introduced as a result of
+	 * snapping segments to vertices of other segments
+	 *
+	 * @param segStrings the list of segment strings to snap together.
+	 *        Must be NodedSegmentString or an assertion will fail.
+	 */
+	void computeVertexSnaps(const std::vector<SegmentString*>& edges);
+
 private:
+
 	const geom::PrecisionModel& pm;
 	algorithm::LineIntersector li;
 	double scaleFactor;
@@ -114,24 +134,9 @@ private:
 	 */
 	void computeVertexSnaps(NodedSegmentString* e0, NodedSegmentString* e1);
 
-public:
-
-	SimpleSnapRounder(const geom::PrecisionModel& newPm);
-
-	std::vector<SegmentString*>* getNodedSubstrings() const;
-
-	void computeNodes(std::vector<SegmentString*>* inputSegmentStrings);
-
-	void add(const SegmentString* segStr);
-
-	/**
-	 * Computes nodes introduced as a result of
-	 * snapping segments to vertices of other segments
-	 *
-	 * @param segStrings the list of segment strings to snap together.
-	 *        Must be NodedSegmentString or an assertion will fail.
-	 */
-	void computeVertexSnaps(const std::vector<SegmentString*>& edges);
+    // Declare type as noncopyable
+    SimpleSnapRounder(const SimpleSnapRounder& other);
+    SimpleSnapRounder& operator=(const SimpleSnapRounder& rhs);
 };
 
 } // namespace geos::noding::snapround

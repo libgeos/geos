@@ -48,10 +48,6 @@ namespace snapround { // geos::noding::snapround
  */
 class GEOS_DLL MCIndexPointSnapper {
 
-private:
-
-	index::SpatialIndex& index;
-
 public:
  
 
@@ -59,7 +55,6 @@ public:
 		:
 		index(nIndex)
 	{}
-
 
 	/**
 	 * Snaps (nodes) all interacting segments to this hot pixel.
@@ -79,7 +74,15 @@ public:
 	bool snap(HotPixel& hotPixel) {
 		return snap(hotPixel, 0, 0);
 	}
-		
+
+
+private:
+
+	index::SpatialIndex& index;
+
+    // Declare type as noncopyable
+    MCIndexPointSnapper(const MCIndexPointSnapper& other);
+    MCIndexPointSnapper& operator=(const MCIndexPointSnapper& rhs);
 };
 
 

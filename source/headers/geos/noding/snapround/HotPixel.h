@@ -136,6 +136,10 @@ private:
 	bool intersectsPixelClosure(const geom::Coordinate& p0,
 			const geom::Coordinate& p1);
  
+    // Declare type as noncopyable
+    HotPixel(const HotPixel& other);
+    HotPixel& operator=(const HotPixel& rhs);
+
 public:
 
 	HotPixel(const geom::Coordinate& pt,
