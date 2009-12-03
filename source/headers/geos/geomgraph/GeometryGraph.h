@@ -147,6 +147,10 @@ private:
 	void addSelfIntersectionNode(int argIndex,
 		const geom::Coordinate& coord, int loc);
 
+    // Declare type as noncopyable
+    GeometryGraph(const GeometryGraph& other);
+    GeometryGraph& operator=(const GeometryGraph& rhs);
+
 public:
 
 	static bool isInBoundary(int boundaryCount);

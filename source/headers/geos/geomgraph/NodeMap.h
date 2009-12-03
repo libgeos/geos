@@ -102,6 +102,12 @@ public:
 		}
 #endif
 	}
+
+private:
+
+    // Declare type as noncopyable
+    NodeMap(const NodeMap& other);
+    NodeMap& operator=(const NodeMap& rhs);
 };
 
 } // namespace geos.geomgraph
