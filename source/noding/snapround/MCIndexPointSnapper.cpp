@@ -39,12 +39,6 @@ namespace snapround { // geos.noding.snapround
 
 class HotPixelSnapAction: public index::chain::MonotoneChainSelectAction {
 
-private:
-	HotPixel& hotPixel;
-	SegmentString* parentEdge;
-	unsigned int vertexIndex;
-	bool isNodeAddedVar;
-
 public:
 
 	HotPixelSnapAction(HotPixel& nHotPixel,
@@ -80,12 +74,18 @@ public:
 		::geos::ignore_unused_variable_warning(ls);
 	}
 
+private:
+	HotPixel& hotPixel;
+	SegmentString* parentEdge;
+	unsigned int vertexIndex;
+	bool isNodeAddedVar;
+
+    // Declare type as noncopyable
+    HotPixelSnapAction(const HotPixelSnapAction& other);
+    HotPixelSnapAction& operator=(const HotPixelSnapAction& rhs);
 };
 
 class MCIndexPointSnapperVisitor: public ItemVisitor {
-private:
-	const Envelope& pixelEnv;
-	chain::MonotoneChainSelectAction& action;
 
 public:
 	MCIndexPointSnapperVisitor(const Envelope& nPixelEnv, HotPixelSnapAction& nAction)
@@ -101,6 +101,14 @@ public:
 			*(static_cast<chain::MonotoneChain*>(item));
 		testChain.select(pixelEnv, action);
 	}
+
+private:
+	const Envelope& pixelEnv;
+	chain::MonotoneChainSelectAction& action;
+
+    // Declare type as noncopyable
+    MCIndexPointSnapperVisitor(const MCIndexPointSnapperVisitor& other);
+    MCIndexPointSnapperVisitor& operator=(const MCIndexPointSnapperVisitor& rhs);
 };
 
 /* public */
