@@ -48,12 +48,6 @@ namespace planargraph { // geos.planargraph
 ///
 class GEOS_DLL Subgraph
 {
-protected:
-	PlanarGraph &parentGraph;
-	std::set<Edge*> edges;
-	std::vector<const DirectedEdge*> dirEdges;
-	NodeMap nodeMap;
-
 public:
 	/**
 	 * Creates a new subgraph of the given PlanarGraph
@@ -136,7 +130,16 @@ public:
 	 */
 	bool contains(Edge *e) { return (edges.find(e) != edges.end()); }
 
-	
+protected:
+
+	PlanarGraph &parentGraph;
+	std::set<Edge*> edges;
+	std::vector<const DirectedEdge*> dirEdges;
+	NodeMap nodeMap;
+    
+    // Declare type as noncopyable
+    Subgraph(const Subgraph& other);
+    Subgraph& operator=(const Subgraph& rhs);
 };
 
 
