@@ -73,7 +73,7 @@ sqlPrint(const std::string& table, std::vector<SegmentString*>& ssv)
 
 } // anonym namespace 
 
-class ScaledNoder::Scaler: public geom::CoordinateFilter {
+class ScaledNoder::Scaler : public geom::CoordinateFilter {
 public:
 	const ScaledNoder& sn;
 	Scaler(const ScaledNoder&n): sn(n)
@@ -91,6 +91,11 @@ public:
 		c->x = util::round( ( c->x - sn.offsetX ) * sn.scaleFactor );
 		c->y = util::round( ( c->y - sn.offsetY ) * sn.scaleFactor );
 	}
+
+private:
+    // Declare type as noncopyable
+    ScaledNoder::Scaler(const ScaledNoder::Scaler& other);
+    ScaledNoder::Scaler& operator=(const ScaledNoder::Scaler& rhs);
 };
 
 class ScaledNoder::ReScaler: public geom::CoordinateFilter {
@@ -115,6 +120,11 @@ public:
 		c->x = c->x / sn.scaleFactor + sn.offsetX;
 		c->y = c->y / sn.scaleFactor + sn.offsetY;
 	}
+
+private:
+    // Declare type as noncopyable
+    ScaledNoder::ReScaler(const ScaledNoder::ReScaler& other);
+    ScaledNoder::ReScaler& operator=(const ScaledNoder::ReScaler& rhs);
 };
 
 /*private*/

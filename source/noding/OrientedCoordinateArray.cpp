@@ -30,6 +30,10 @@
 //using namespace std;
 using namespace geos::geom;
 
+#ifdef _MSC_VER
+#pragma warning(disable : 4127)
+#endif
+
 namespace geos {
 namespace noding { // geos.noding
 
