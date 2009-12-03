@@ -73,6 +73,10 @@ public:
 			const geom::CoordinateSequence *coord,
 			const geom::Coordinate& pt);
 
+protected:
+
+	void visitLinkedDirectedEdges(geomgraph::DirectedEdge *start);
+
 private:
 
 	geom::GeometryFactory *geometryFactory;
@@ -124,9 +128,9 @@ private:
 	 */
 	bool hasUnvisitedShellEdge(std::vector<geomgraph::EdgeRing*> *edgeRings);
 
-protected:
-
-	void visitLinkedDirectedEdges(geomgraph::DirectedEdge *start);
+    // Declare type as noncopyable
+    ConnectedInteriorTester(const ConnectedInteriorTester& other);
+    ConnectedInteriorTester& operator=(const ConnectedInteriorTester& rhs);
 };
 
 
