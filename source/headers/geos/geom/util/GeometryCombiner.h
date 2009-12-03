@@ -101,6 +101,10 @@ public:
 
 private:
     void extractElements(Geometry* geom, std::vector<Geometry*>& elems);
+
+    // Declare type as noncopyable
+    GeometryCombiner(const GeometryCombiner& other);
+    GeometryCombiner& operator=(const GeometryCombiner& rhs);
 };
 
 } // namespace geos.geom.util

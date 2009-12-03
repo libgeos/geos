@@ -32,11 +32,6 @@ namespace util { // geos.geom.util
  */
 class GEOS_DLL PolygonExtracter: public GeometryFilter {
 
-private:
-
-	/// Reference to provided vector
-	std::vector<const Polygon*>& comps;
-
 public:
 
 	/**
@@ -76,6 +71,14 @@ public:
 		}
 	}
 
+private:
+
+    /// Reference to provided vector
+    std::vector<const Polygon*>& comps;
+
+    // Declare type as noncopyable
+    PolygonExtracter(const PolygonExtracter& other);
+    PolygonExtracter& operator=(const PolygonExtracter& rhs);
 };
 
 } // namespace geos.geom.util

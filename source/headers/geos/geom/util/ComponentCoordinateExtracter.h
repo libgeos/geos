@@ -38,10 +38,6 @@ namespace util { // geos::geom::util
  */
 class ComponentCoordinateExtracter : public GeometryComponentFilter 
 {
-private:
-
-	Coordinate::ConstVect &comps;
-
 public:
 	/**
 	 * Push the linear components from a single geometry into
@@ -89,6 +85,13 @@ public:
 		//	comps.push_back(ls);
 	}
 
+private:
+
+	Coordinate::ConstVect &comps;
+
+    // Declare type as noncopyable
+    ComponentCoordinateExtracter(const ComponentCoordinateExtracter& other);
+    ComponentCoordinateExtracter& operator=(const ComponentCoordinateExtracter& rhs);
 };
 
 } // namespace geos.geom.util

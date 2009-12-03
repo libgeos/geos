@@ -39,6 +39,10 @@ private:
 
 	LineString::ConstVect &comps;
 
+    // Declare type as noncopyable
+    LinearComponentExtracter(const LinearComponentExtracter& other);
+    LinearComponentExtracter& operator=(const LinearComponentExtracter& rhs);
+
 public:
 	/**
 	 * Push the linear components from a single geometry into

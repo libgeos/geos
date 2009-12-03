@@ -32,9 +32,6 @@ namespace util { // geos.geom.util
  */
 class GEOS_DLL PointExtracter: public GeometryFilter {
 
-private:
-	Point::ConstVect& comps;
-
 public:
 	/**
 	 * Returns the Point components from a single geometry.
@@ -69,6 +66,13 @@ if ( const Point *p=dynamic_cast<const Point *>(geom) )
 		comps.push_back(p);
 	}
 
+private:
+
+	Point::ConstVect& comps;
+
+    // Declare type as noncopyable
+    PointExtracter(const PointExtracter& other);
+    PointExtracter& operator=(const PointExtracter& rhs);
 };
 
 } // namespace geos.geom.util

@@ -178,7 +178,9 @@ private:
 	 */
 	bool preserveType;
 
-
+    // Declare type as noncopyable
+    GeometryTransformer(const GeometryTransformer& other);
+    GeometryTransformer& operator=(const GeometryTransformer& rhs);
 };
 
 
