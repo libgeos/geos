@@ -107,6 +107,11 @@ private:
 
 	bool findCollapseIndex(SegmentNode& ei0, SegmentNode& ei1,
 		size_t& collapsedVertexIndex);
+
+    // Declare type as noncopyable
+    SegmentNodeList(const SegmentNodeList& other);
+    SegmentNodeList& operator=(const SegmentNodeList& rhs);
+
 public:
 
 	friend std::ostream& operator<< (std::ostream& os, const SegmentNodeList& l);

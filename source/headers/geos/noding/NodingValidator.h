@@ -91,6 +91,10 @@ private:
 	bool hasInteriorIntersection(const algorithm::LineIntersector& aLi,
 			const geom::Coordinate& p0, const geom::Coordinate& p1) const;
 
+    // Declare type as noncopyable
+    NodingValidator(const NodingValidator& other);
+    NodingValidator& operator=(const NodingValidator& rhs);
+
 public:
 
 	NodingValidator(const std::vector<SegmentString*>& newSegStrings):

@@ -70,22 +70,23 @@ public:
   
 	void process(SegmentString::ConstVect* segStrings);
 
-	class SegmentOverlapAction : public index::chain::MonotoneChainOverlapAction
-	{
-	private:
-		SegmentIntersector & si;
+    class SegmentOverlapAction : public index::chain::MonotoneChainOverlapAction
+    {
+    private:
+        SegmentIntersector & si;
 
-	public:
+        // Declare type as noncopyable
+        SegmentOverlapAction(const SegmentOverlapAction& other);
+        SegmentOverlapAction& operator=(const SegmentOverlapAction& rhs);
 
-		SegmentOverlapAction(SegmentIntersector & si)
-			:
-			index::chain::MonotoneChainOverlapAction(),
-			si(si)
-		{}
+    public:
+        SegmentOverlapAction(SegmentIntersector & si) :
+          index::chain::MonotoneChainOverlapAction(), si(si)
+          {}
 
-		void overlap(index::chain::MonotoneChain& mc1, size_t start1,
-		             index::chain::MonotoneChain& mc2, size_t start2);
-	};
+          void overlap(index::chain::MonotoneChain& mc1, size_t start1,
+              index::chain::MonotoneChain& mc2, size_t start2);
+    };
 
 private:
 

@@ -103,6 +103,9 @@ private:
 
 	const void* context;
 
+    // Declare type as noncopyable
+    SegmentString(const SegmentString& other);
+    SegmentString& operator=(const SegmentString& rhs);
 };
 
 std::ostream& operator<< (std::ostream& os, const SegmentString& ss);

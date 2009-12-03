@@ -56,32 +56,6 @@ namespace noding { // geos.noding
  */
 class GEOS_DLL ScaledNoder : public Noder { // , public geom::CoordinateFilter { // implements Noder
 
-private:
-
-	Noder& noder;
-
-	double scaleFactor;
-
-	double offsetX;
-
-	double offsetY;
-
-	bool isScaled;
-
-	void rescale(std::vector<SegmentString*>& segStrings) const;
-
-	void scale(std::vector<SegmentString*>& segStrings) const;
-
-	class Scaler;
-
-	class ReScaler;
-
-	friend class ScaledNoder::Scaler;
-
-	friend class ScaledNoder::ReScaler;
-
-	mutable std::vector<geom::CoordinateSequence*> newCoordSeq;
-
 public:
 
 	bool isIntegerPrecision() { return (scaleFactor == 1.0); }
@@ -112,6 +86,35 @@ public:
 
 	void filter_rw(geom::Coordinate* c) const;
 
+private:
+
+	Noder& noder;
+
+	double scaleFactor;
+
+	double offsetX;
+
+	double offsetY;
+
+	bool isScaled;
+
+	void rescale(std::vector<SegmentString*>& segStrings) const;
+
+	void scale(std::vector<SegmentString*>& segStrings) const;
+
+	class Scaler;
+
+	class ReScaler;
+
+	friend class ScaledNoder::Scaler;
+
+	friend class ScaledNoder::ReScaler;
+
+    mutable std::vector<geom::CoordinateSequence*> newCoordSeq;
+
+    // Declare type as noncopyable
+    ScaledNoder(const ScaledNoder& other);
+    ScaledNoder& operator=(const ScaledNoder& rhs);
 };
 
 } // namespace geos.noding

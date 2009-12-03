@@ -44,11 +44,6 @@ namespace noding { // geos.noding
 class SingleInteriorIntersectionFinder: public SegmentIntersector
 {
 
-private:
-	algorithm::LineIntersector& li;
-	geom::Coordinate interiorIntersection;
-	std::vector<geom::Coordinate> intSegments;
-
 public:
 
 	/** \brief
@@ -112,6 +107,15 @@ public:
 	{ 
 		return !interiorIntersection.isNull();
 	}
+
+private:
+	algorithm::LineIntersector& li;
+	geom::Coordinate interiorIntersection;
+	std::vector<geom::Coordinate> intSegments;
+
+    // Declare type as noncopyable
+    SingleInteriorIntersectionFinder(const SingleInteriorIntersectionFinder& other);
+    SingleInteriorIntersectionFinder& operator=(const SingleInteriorIntersectionFinder& rhs);
 };
 
 } // namespace geos.noding

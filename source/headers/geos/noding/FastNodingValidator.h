@@ -111,7 +111,9 @@ private:
 
 	void checkInteriorIntersections();
   
-
+    // Declare type as noncopyable
+    FastNodingValidator(const FastNodingValidator& other);
+    FastNodingValidator& operator=(const FastNodingValidator& rhs);
 };
 
 } // namespace geos.noding

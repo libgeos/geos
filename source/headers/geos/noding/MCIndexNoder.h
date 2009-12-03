@@ -92,8 +92,6 @@ public:
 	void computeNodes(std::vector<SegmentString*>* inputSegmentStrings);
 
 	class SegmentOverlapAction : public index::chain::MonotoneChainOverlapAction {
-	private:
-		SegmentIntersector& si;
 	public:
 		SegmentOverlapAction(SegmentIntersector& newSi)
 			:
@@ -102,8 +100,13 @@ public:
 		{}
 
 		void overlap(index::chain::MonotoneChain& mc1, size_t start1,
-		             index::chain::MonotoneChain& mc2, size_t start2);
+            index::chain::MonotoneChain& mc2, size_t start2);
+    private:
+        SegmentIntersector& si;
 
+        // Declare type as noncopyable
+        SegmentOverlapAction(const SegmentOverlapAction& other);
+        SegmentOverlapAction& operator=(const SegmentOverlapAction& rhs);
 	};
 	
 };

@@ -53,10 +53,6 @@ namespace noding { // geos.noding
  */
 class GEOS_DLL IntersectionFinderAdder: public SegmentIntersector {
 
-private:
-	algorithm::LineIntersector& li;
-	std::vector<geom::Coordinate>& interiorIntersections;
-
 public:
 
 	/**
@@ -99,6 +95,14 @@ public:
 	virtual bool isDone() const {
 		return false;
 	}
+
+private:
+	algorithm::LineIntersector& li;
+	std::vector<geom::Coordinate>& interiorIntersections;
+     
+    // Declare type as noncopyable
+    IntersectionFinderAdder(const IntersectionFinderAdder& other);
+    IntersectionFinderAdder& operator=(const IntersectionFinderAdder& rhs);
 };
 
 } // namespace geos.noding

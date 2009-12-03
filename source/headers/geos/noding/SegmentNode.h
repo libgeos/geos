@@ -51,6 +51,10 @@ private:
 
 	bool isInteriorVar;
 
+    // Declare type as noncopyable
+    SegmentNode(const SegmentNode& other);
+    SegmentNode& operator=(const SegmentNode& rhs);
+
 public:
 	friend std::ostream& operator<< (std::ostream& os, const SegmentNode& n);
 

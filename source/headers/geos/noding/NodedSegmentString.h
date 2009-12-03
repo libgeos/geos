@@ -30,7 +30,10 @@
 //#include <geos/noding/Octant.h>
 #include <geos/geom/Coordinate.h>
 
-//using namespace 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4355) // warning C4355: 'this' : used in base member initializer list
+#endif
 
 namespace geos {
 namespace noding { // geos::noding
@@ -189,6 +192,10 @@ private:
 
 } // namespace geos::noding
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // GEOS_NODING_NODEDSEGMENTSTRING_H
 /**********************************************************************
