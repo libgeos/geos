@@ -35,12 +35,8 @@ namespace util { // geos::util
  *
  *  Last port: util/UniqueCoordinateArrayFilter.java rev. 1.17
  */
-class GEOS_DLL UniqueCoordinateArrayFilter: public geom::CoordinateFilter {
-
-private:
-	geom::Coordinate::ConstVect &pts;	// target set reference
-	geom::Coordinate::ConstSet uniqPts; 	// unique points set
-
+class GEOS_DLL UniqueCoordinateArrayFilter: public geom::CoordinateFilter
+{
 public:
 	/**
 	 * Constructs a CoordinateArrayFilter.
@@ -70,8 +66,15 @@ public:
 		{
 			pts.push_back(coord);
 		}
-	}
+    }
 
+private:
+	geom::Coordinate::ConstVect &pts;	// target set reference
+	geom::Coordinate::ConstSet uniqPts; 	// unique points set
+
+    // Declare type as noncopyable
+    UniqueCoordinateArrayFilter(const UniqueCoordinateArrayFilter& other);
+    UniqueCoordinateArrayFilter& operator=(const UniqueCoordinateArrayFilter& rhs);
 };
 
 } // namespace geos::util
