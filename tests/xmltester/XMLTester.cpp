@@ -22,6 +22,7 @@
 //#include <stdlib.h>
 #  include <crtdbg.h>
 # endif
+#pragma warning(disable : 4127)
 #endif
 
 #include <geos/geom/Point.h>
@@ -604,7 +605,7 @@ XMLTester::parseCase(const TiXmlNode* node)
 		geomAin = trimBlanks(geomAin);
 		gA = parseGeometry(geomAin, "Geometry A");
 
-		if ( (el = node->FirstChild("b")) )
+		if ( 0 != (el = node->FirstChild("b")) )
 		{
 			geomBin = el->FirstChild()->Value();
 			geomBin = trimBlanks(geomBin);
@@ -1140,7 +1141,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 
 		else if (opName=="iswithindistance")
 		{
-			float dist=std::atof(opArg3.c_str());
+			double dist=std::atof(opArg3.c_str());
 			if (gA->isWithinDistance(gB, dist)) {
 				actual_result="true";
 			} else {
@@ -1370,7 +1371,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 
 	if ((!success && verbose) || verbose > 1)
 	{
-		printTest(success, expected_result, actual_result);
+		printTest(!!success, expected_result, actual_result);
 	}
 
 	if (test_predicates && gB && gA) {

@@ -71,7 +71,7 @@ namespace tut
 	ensure_equals( err->getErrorType(),
 	               TopologyValidationError::eInvalidCoordinate );
 
-	ensure(ISNAN(errCoord.y));
+	ensure(0 != ISNAN(errCoord.y));
 	ensure_equals(valid, false);
     }
 

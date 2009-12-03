@@ -95,7 +95,7 @@ namespace tut
     {
 	GeomPtr geom = fromWKT("LINEARRING (0 0, 0 10, 10 10, 10 0, 0 0)");
 	LinearRing* ring_chk = dynamic_cast<LinearRing*>(geom.get());
-	ensure(ring_chk);
+	ensure(0 != ring_chk);
 	LinearRing& ring = *ring_chk;
 	//cout << ring.toString() << endl;
 	updateNonClosedRing(ring);
@@ -119,11 +119,11 @@ namespace tut
     {
 	GeomPtr geom = fromWKT("POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0), (1 1, 2 1, 2 2, 1 2, 1 1) ))");
 	Polygon* poly = dynamic_cast<Polygon*>(geom.get());
-	ensure(poly);
+	ensure(0 != poly);
 	const LineString* ring = poly->getExteriorRing();
 
 	const LinearRing* lr = dynamic_cast<const LinearRing*>(ring);
-	ensure(lr);
+	ensure(0 != lr);
 
 	LinearRing* nclr = const_cast<LinearRing*>(lr);
 
@@ -138,11 +138,11 @@ namespace tut
     {
 	GeomPtr geom = fromWKT("POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0), (1 1, 2 1, 2 2, 1 2, 1 1) ))");
 	Polygon* poly = dynamic_cast<Polygon*>(geom.get());
-	ensure(poly);
+	ensure(0 != poly);
 	const LineString* ring = poly->getInteriorRingN(0);
 
 	const LinearRing* lr = dynamic_cast<const LinearRing*>(ring);
-	ensure(lr);
+	ensure(0 != lr);
 
 	LinearRing* nclr = const_cast<LinearRing*>(lr);
 
