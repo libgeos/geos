@@ -911,6 +911,11 @@ struct PointCoveredByAny: public geom::CoordinateFilter
 			"A point on first geom boundary isn't covered "
 			"by either result or second geom");
 	}
+
+private:
+    // Declare type as noncopyable
+    PointCoveredByAny(const PointCoveredByAny& other);
+    PointCoveredByAny& operator=(const PointCoveredByAny& rhs);
 };
 
 void

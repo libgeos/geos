@@ -31,6 +31,7 @@
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/util/TopologyException.h>
 #include <geos/util/GEOSException.h>
+#include <geos/util.h>
 
 #include <vector>
 #include <cassert>
@@ -176,6 +177,7 @@ PolygonBuilder::buildMaximalEdgeRings(const vector<DirectedEdge*> *dirEdges)
 			delete (*maxEdgeRings)[i];
 		delete maxEdgeRings;
 		//cerr << "Exception! " << e.what() << endl;
+        ::geos::ignore_unused_variable_warning(e);
 		throw;
 	}
 				maxEdgeRings->push_back(er);

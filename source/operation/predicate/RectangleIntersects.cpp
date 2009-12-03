@@ -51,6 +51,10 @@ private:
 	const geom::Envelope &rectEnv;
 	bool intersectsVar;
 
+    // Declare type as noncopyable
+    EnvelopeIntersectsVisitor(const EnvelopeIntersectsVisitor& other);
+    EnvelopeIntersectsVisitor& operator=(const EnvelopeIntersectsVisitor& rhs);
+
 protected:
 
 	/**
@@ -130,6 +134,10 @@ private:
 	bool containsPointVar;
 	const geom::CoordinateSequence &rectSeq;
 
+    // Declare type as noncopyable
+    ContainsPointVisitor(const ContainsPointVisitor& other);
+    ContainsPointVisitor& operator=(const ContainsPointVisitor& rhs);
+
 protected:
 
 	void visit(const geom::Geometry &geom)
@@ -138,7 +146,7 @@ protected:
 
 		const geom::Polygon *poly;
 
-		if ( !(poly=dynamic_cast<const geom::Polygon *>(&geom)) ) {
+		if ( 0 == (poly=dynamic_cast<const geom::Polygon *>(&geom)) ) {
 			return;
 		}
 
@@ -211,6 +219,10 @@ private:
 			return;
 		}
 	}
+
+    // Declare type as noncopyable
+    LineIntersectsVisitor(const LineIntersectsVisitor& other);
+    LineIntersectsVisitor& operator=(const LineIntersectsVisitor& rhs);
 
 protected:
 

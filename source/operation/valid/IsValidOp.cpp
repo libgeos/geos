@@ -127,7 +127,7 @@ IsValidOp::checkValid(const Geometry *g)
 	else if (typeid(*g)==typeid(LineString)) checkValid((LineString*)g);
 	else if (typeid(*g)==typeid(Polygon)) checkValid((Polygon*)g);
 	else if (typeid(*g)==typeid(MultiPolygon)) checkValid((MultiPolygon*)g);
-	else if ((gc=dynamic_cast<const GeometryCollection *>(g)))
+	else if (0 != (gc=dynamic_cast<const GeometryCollection *>(g)))
 		checkValid(gc);
 	else throw util::UnsupportedOperationException();
         isChecked=true;

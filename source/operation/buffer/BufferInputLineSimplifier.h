@@ -20,7 +20,7 @@
 #ifndef GEOS_OP_BUFFER_BUFFERINPUTLINESIMPLIFIER_H
 #define GEOS_OP_BUFFER_BUFFERINPUTLINESIMPLIFIER_H
 
-
+#include <geos/geom/CoordinateSequence.h> // complete type required
 #include <geos/algorithm/CGAlgorithms.h> // for enum
 
 #include <memory>
@@ -169,6 +169,10 @@ private:
 	std::vector<int> isDeleted;
 
 	int angleOrientation;
+
+    // Declare type as noncopyable
+    BufferInputLineSimplifier(const BufferInputLineSimplifier& other);
+    BufferInputLineSimplifier& operator=(const BufferInputLineSimplifier& rhs);
 };
 
 

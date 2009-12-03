@@ -40,6 +40,10 @@ using namespace std;
 using namespace geos::geom;
 //using namespace geos::planargraph::algorithm;
 
+#ifdef _MSC_VER
+#pragma warning(disable : 4127)
+#endif
+
 namespace geos {
 namespace operation { // geos.operation
 namespace linemerge { // geos.operation.linemerge
@@ -50,7 +54,7 @@ LineSequencer::isSequenced(const Geometry* geom)
 {
 	const MultiLineString *mls;
 
-	if ( ! (mls=dynamic_cast<const MultiLineString *>(geom)) )
+	if ( 0 == (mls=dynamic_cast<const MultiLineString *>(geom)) )
 	{
 		return true;
 	}

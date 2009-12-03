@@ -35,6 +35,7 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/algorithm/NotRepresentableException.h>
 #include <geos/algorithm/HCoordinate.h>
+#include <geos/util.h>
 
 #include "OffsetCurveVertexList.h"
 #include "BufferInputLineSimplifier.h"
@@ -626,6 +627,9 @@ OffsetCurveBuilder::addOutsideTurn(int orientation, bool addStartPoint)
 void
 OffsetCurveBuilder::addInsideTurn(int orientation, bool addStartPoint)
 {
+    ::geos::ignore_unused_variable_warning(orientation);
+    ::geos::ignore_unused_variable_warning(addStartPoint);
+
 	// add intersection point of offset segments (if any)
 	li.computeIntersection(offset0.p0, offset0.p1, offset1.p0, offset1.p1);
 	if (li.hasIntersection())
@@ -718,34 +722,36 @@ OffsetCurveBuilder::addMitreJoin(const geom::Coordinate& p,
 	 * by the check for whether the offset segment endpoints are
 	 * almost coincident
          */
-	try
-	{
-		HCoordinate::intersection(offset0.p0, offset0.p1,
-		                          offset1.p0, offset1.p1,
-		                          intPt);
+    try
+    {
+        HCoordinate::intersection(offset0.p0, offset0.p1,
+            offset1.p0, offset1.p1,
+            intPt);
 
-		double mitreRatio = distance <= 0.0 ? 1.0
-			: intPt.distance(p) / fabs(distance);
+        double mitreRatio = distance <= 0.0 ? 1.0
+            : intPt.distance(p) / fabs(distance);
 
-		if (mitreRatio > bufParams.getMitreLimit())
-			isMitreWithinLimit = false;
-	}
-	catch (const NotRepresentableException& e)
-	{
-                intPt = Coordinate(0,0);
-                isMitreWithinLimit = false;
-        }
+        if (mitreRatio > bufParams.getMitreLimit())
+            isMitreWithinLimit = false;
+    }
+    catch (const NotRepresentableException& e)
+    {
+        ::geos::ignore_unused_variable_warning(e);
 
-	if (isMitreWithinLimit)
-	{
-                vertexList->addPt(intPt);
-        }
-        else
-	{
-		addLimitedMitreJoin(offset0, offset1, distance,
-		                    bufParams.getMitreLimit());
-		//addBevelJoin(offset0, offset1);
-	}
+        intPt = Coordinate(0,0);
+        isMitreWithinLimit = false;
+    }
+
+    if (isMitreWithinLimit)
+    {
+        vertexList->addPt(intPt);
+    }
+    else
+    {
+        addLimitedMitreJoin(offset0, offset1, distance,
+            bufParams.getMitreLimit());
+        //addBevelJoin(offset0, offset1);
+    }
 }
 
 /* private */
@@ -755,6 +761,9 @@ OffsetCurveBuilder::addLimitedMitreJoin(
 	                  const geom::LineSegment& offset1,
 	                  double distance, double mitreLimit)
 {
+    ::geos::ignore_unused_variable_warning(offset0);
+    ::geos::ignore_unused_variable_warning(offset1);
+
 	const Coordinate& basePt = seg0.p1;
 
 	double ang0 = Angle::angle(basePt, seg0.p0);
