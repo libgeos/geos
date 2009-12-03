@@ -23,6 +23,10 @@
 
 #include <cmath>
 
+#ifdef _MSC_VER
+#pragma warning(disable : 4127)
+#endif
+
 namespace geos {
 namespace algorithm { // geos.algorithm
 
