@@ -117,6 +117,10 @@ private:
 	/// Extract target (unique) coordinates
 	std::auto_ptr<geom::Coordinate::ConstVect> extractTargetCoordinates(
 			const geom::Geometry& g);
+
+    // Declare type as noncopyable
+    GeometrySnapper(const GeometrySnapper& other);
+    GeometrySnapper& operator=(const GeometrySnapper& rhs);
 };
 
 

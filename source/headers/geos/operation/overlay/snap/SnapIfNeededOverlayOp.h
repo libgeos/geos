@@ -102,6 +102,9 @@ private:
 	const geom::Geometry& geom0;
 	const geom::Geometry& geom1;
 
+    // Declare type as noncopyable
+    SnapIfNeededOverlayOp(const SnapIfNeededOverlayOp& other);
+    SnapIfNeededOverlayOp& operator=(const SnapIfNeededOverlayOp& rhs);
 };
  
 

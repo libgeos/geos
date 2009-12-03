@@ -111,6 +111,9 @@ private:
 	static double computeBoundaryDistanceTolerance(
 		const geom::Geometry& g0, const geom::Geometry& g1);
 
+    // Declare type as noncopyable
+    OverlayResultValidator(const OverlayResultValidator& other);
+    OverlayResultValidator& operator=(const OverlayResultValidator& rhs);
 };
 
 } // namespace geos::operation::overlay::validate

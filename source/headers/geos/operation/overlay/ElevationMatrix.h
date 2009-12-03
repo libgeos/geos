@@ -64,6 +64,10 @@ public:
 private:
 	ElevationMatrix &em;
 	double avgElevation;
+
+    // Declare type as noncopyable
+    ElevationMatrixFilter(const ElevationMatrixFilter& other);
+    ElevationMatrixFilter& operator=(const ElevationMatrixFilter& rhs);
 };
 
 

@@ -119,6 +119,10 @@ private:
 	double snapTolerance;
 
 	std::auto_ptr<precision::CommonBitsRemover> cbr;
+
+    // Declare type as noncopyable
+    SnapOverlayOp(const SnapOverlayOp& other);
+    SnapOverlayOp& operator=(const SnapOverlayOp& rhs);
 };
  
 

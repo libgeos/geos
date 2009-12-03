@@ -77,7 +77,9 @@ private:
 	/// @return a lineal geometry containing the extracted linework
 	std::auto_ptr<geom::Geometry> extractLineWork(const geom::Geometry& geom);
 
-
+    // Declare type as noncopyable
+    FuzzyPointLocator(const FuzzyPointLocator& other);
+    FuzzyPointLocator& operator=(const FuzzyPointLocator& rhs);
 };
 
 } // namespace geos::operation::overlay::validate

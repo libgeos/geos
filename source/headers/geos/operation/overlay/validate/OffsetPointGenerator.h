@@ -66,6 +66,10 @@ private:
 
 	void computeOffsets(const geom::Coordinate& p0,
 			const geom::Coordinate& p1);
+
+    // Declare type as noncopyable
+    OffsetPointGenerator(const OffsetPointGenerator& other);
+    OffsetPointGenerator& operator=(const OffsetPointGenerator& rhs);
 };
 
 } // namespace geos::operation::overlay::validate
