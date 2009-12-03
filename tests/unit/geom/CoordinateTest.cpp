@@ -22,6 +22,10 @@ namespace tut
         test_coordinate_data()
             : x(1.234), y(2.345), z(3.456)
         {}
+    private:
+        // Declare type as noncopyable
+        test_coordinate_data(test_coordinate_data const& other);
+        test_coordinate_data& operator=(test_coordinate_data const& rhs);
     };
 
     typedef test_group<test_coordinate_data> group;
@@ -50,7 +54,7 @@ namespace tut
         geos::geom::Coordinate coord;
         ensure_equals( coord.x, 0.0 );
         ensure_equals( coord.y, 0.0 );
-        ensure( ISNAN( coord.z ) );
+        ensure(0 != ISNAN( coord.z ) );
     }
 
     // Test of copy constructor and assignment operator
@@ -172,16 +176,16 @@ namespace tut
 
         // Make it null and check
         not_null_coord.setNull();
-        ensure( ISNAN( not_null_coord.x ) );
-        ensure( ISNAN( not_null_coord.y ) );
-        ensure( ISNAN( not_null_coord.z ) );
+        ensure( 0 != ISNAN( not_null_coord.x ) );
+        ensure( 0 != ISNAN( not_null_coord.y ) );
+        ensure( 0 != ISNAN( not_null_coord.z ) );
 
         // Build in static null instance
         geos::geom::Coordinate null_coord;
         null_coord = geos::geom::Coordinate::getNull();
-        ensure( ISNAN( null_coord.x ) );
-        ensure( ISNAN( null_coord.y ) );
-        ensure( ISNAN( null_coord.z ) );
+        ensure( 0 != ISNAN( null_coord.x ) );
+        ensure( 0 != ISNAN( null_coord.y ) );
+        ensure( 0 != ISNAN( null_coord.z ) );
     }
 
 } // namespace tut

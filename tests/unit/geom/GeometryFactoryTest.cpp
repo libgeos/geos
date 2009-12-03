@@ -46,22 +46,26 @@ namespace tut
 	//
 
 	// Common data used by tests
-	struct test_geometryfactory_data
-	{
-		// Test data
-		const int x_;
-		const int y_;
-		const int z_;
+    struct test_geometryfactory_data
+    {
+        // Test data
+        const int x_;
+        const int y_;
+        const int z_;
 
-		const int srid_;
-		geos::geom::PrecisionModel pm_;
-		geos::geom::GeometryFactory factory_;
-		geos::io::WKTReader reader_;
+        const int srid_;
+        geos::geom::PrecisionModel pm_;
+        geos::geom::GeometryFactory factory_;
+        geos::io::WKTReader reader_;
 
-		test_geometryfactory_data()
-			: x_(5), y_(10), z_(15), srid_(666), pm_(1.0), factory_(&pm_, srid_), reader_(&factory_)
-		{}
-	};
+        test_geometryfactory_data()
+            : x_(5), y_(10), z_(15), srid_(666), pm_(1.0), factory_(&pm_, srid_), reader_(&factory_)
+        {}
+    private:
+        // Declare type as noncopyable
+        test_geometryfactory_data(const test_geometryfactory_data& other);
+        test_geometryfactory_data& operator=(const test_geometryfactory_data& rhs);
+    };
 
 	typedef test_group<test_geometryfactory_data> group;
 	typedef group::object object;

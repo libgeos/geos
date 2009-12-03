@@ -146,7 +146,7 @@ namespace tut
 
         ensure_equals(GEOSGetNumCoordinates(geom2_), 7);
 
-        ensure(GEOSArea(geom2_, &area_));
+        ensure(0 != GEOSArea(geom2_, &area_));
         ensure_distance(area_, 161.803, 0.001);
 
     }
@@ -168,7 +168,7 @@ namespace tut
 
         ensure_equals(GEOSGetNumCoordinates(geom2_), 11);
 
-        ensure(GEOSArea(geom2_, &area_));
+        ensure(0 != GEOSArea(geom2_, &area_));
         ensure_distance(area_, 182.514, 0.001);
     }
 
@@ -190,7 +190,7 @@ namespace tut
 
         ensure_equals(GEOSGetNumCoordinates(geom2_), 7);
 
-        ensure(GEOSArea(geom2_, &area_));
+        ensure(0 != GEOSArea(geom2_, &area_));
         ensure_distance(area_, 211.803, 0.001);
 
     }
@@ -213,7 +213,7 @@ namespace tut
 
         ensure_equals(GEOSGetNumCoordinates(geom2_), 5);
 
-        ensure(GEOSArea(geom2_, &area_));
+        ensure(0 != GEOSArea(geom2_, &area_));
         ensure_distance(area_, 111.803, 0.001);
     }
 
@@ -235,7 +235,7 @@ namespace tut
 
         ensure_equals(GEOSGetNumCoordinates(geom2_), 5);
 
-        ensure(GEOSArea(geom2_, &area_));
+        ensure(0 != GEOSArea(geom2_, &area_));
         ensure_distance(area_, 50.0, 0.001);
 
         ensure_equals(std::string(wkt_), std::string(
@@ -261,7 +261,7 @@ namespace tut
 
         ensure_equals(GEOSGetNumCoordinates(geom2_), 7);
 
-        ensure(GEOSArea(geom2_, &area_));
+        ensure(0 != GEOSArea(geom2_, &area_));
         ensure_distance(area_, 150.0, 0.001);
 
         ensure_equals(std::string(wkt_), std::string(
@@ -288,7 +288,7 @@ namespace tut
 
         ensure_equals(GEOSGetNumCoordinates(geom2_), 29);
 
-        ensure(GEOSArea(geom2_, &area_));
+        ensure(0 != GEOSArea(geom2_, &area_));
         ensure_distance(area_, 244.615, 0.001);
 
     }
@@ -312,7 +312,7 @@ namespace tut
 
         ensure_equals(GEOSGetNumCoordinates(geom2_), 9);
 
-        ensure(GEOSArea(geom2_, &area_));
+        ensure(0 != GEOSArea(geom2_, &area_));
         ensure_distance(area_, 250.0, 0.001);
 
         ensure_equals(std::string(wkt_), std::string(
@@ -339,7 +339,7 @@ namespace tut
 
         ensure_equals(GEOSGetNumCoordinates(geom2_), 10);
 
-        ensure(GEOSArea(geom2_, &area_));
+        ensure(0 != GEOSArea(geom2_, &area_));
         ensure_distance(area_, 237.5, 0.001);
 
         ensure_equals(std::string(wkt_), std::string(
@@ -367,7 +367,7 @@ namespace tut
 
         ensure_equals(GEOSGetNumCoordinates(geom2_), 10);
 
-        ensure(GEOSArea(geom2_, &area_));
+        ensure(0 != GEOSArea(geom2_, &area_));
         ensure_distance(area_, 237.5, 0.001);
 
         ensure_equals(std::string(wkt_), std::string(
@@ -393,7 +393,7 @@ namespace tut
 
         ensure_equals(GEOSGetNumCoordinates(geom2_), 7);
 
-        ensure(GEOSArea(geom2_, &area_));
+        ensure(0 != GEOSArea(geom2_, &area_));
         ensure_distance(area_, 127.452, 0.001);
 
     }
@@ -416,7 +416,7 @@ namespace tut
 
         ensure_equals(GEOSGetNumCoordinates(geom2_), 6);
 
-        ensure(GEOSArea(geom2_, &area_));
+        ensure(0 != GEOSArea(geom2_, &area_));
         ensure_distance(area_, 139.043, 0.001);
 
     }
@@ -439,7 +439,7 @@ namespace tut
 
         ensure_equals(GEOSGetNumCoordinates(geom2_), 4);
 
-        ensure(GEOSArea(geom2_, &area_));
+        ensure(0 != GEOSArea(geom2_, &area_));
         ensure_distance(area_, 141.598, 0.001);
 
     }

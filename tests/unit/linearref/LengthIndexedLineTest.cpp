@@ -411,7 +411,7 @@ namespace tut {
     LengthIndexedLine indexedLine(linearGeom.get());
     double projIndex = indexedLine.project(Coordinate(5, 5));
     Coordinate projPt = indexedLine.extractPoint(projIndex);
-    ensure(ISNAN(projPt.z));
+    ensure(0 != ISNAN(projPt.z));
   }
 
 }

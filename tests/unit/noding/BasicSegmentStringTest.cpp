@@ -66,7 +66,7 @@ namespace tut
     {
     	CoordinateSequenceAutoPtr cs(csFactory->create(0, 2));
 
-	ensure(cs.get());
+	ensure(0 != cs.get());
 
 	geos::geom::Coordinate c0(0, 0);
 	geos::geom::Coordinate c1(0, 0);
@@ -77,7 +77,7 @@ namespace tut
 	ensure_equals(cs->size(), 2u);
 
 	SegmentStringAutoPtr ss(makeSegmentString(cs.get()));
-	ensure(ss.get());
+	ensure(0 != ss.get());
 
 	ensure_equals(ss->size(), 2u);
 
@@ -109,7 +109,7 @@ namespace tut
     {
     	CoordinateSequenceAutoPtr cs(csFactory->create(0, 2));
 
-	ensure(cs.get());
+	ensure(0 != cs.get());
 
 	geos::geom::Coordinate c0(0, 0);
 	geos::geom::Coordinate c1(1, 0);
@@ -120,7 +120,7 @@ namespace tut
 	ensure_equals(cs->size(), 2u);
 
 	SegmentStringAutoPtr ss(makeSegmentString(cs.get()));
-	ensure(ss.get());
+	ensure(0 != ss.get());
 
 	ensure_equals(ss->size(), 2u);
 
@@ -145,7 +145,7 @@ namespace tut
     {
     	CoordinateSequenceAutoPtr cs(csFactory->create(0, 2));
 
-	ensure(cs.get());
+	ensure(0 != cs.get());
 
 	geos::geom::Coordinate c0(0, 0);
 	geos::geom::Coordinate c1(1, 0);
@@ -159,7 +159,7 @@ namespace tut
 	ensure_equals(cs->size(), 4u);
 
 	SegmentStringAutoPtr ss(makeSegmentString(cs.get()));
-	ensure(ss.get());
+	ensure(0 != ss.get());
 
 	ensure_equals(ss->size(), 4u);
 
@@ -203,7 +203,7 @@ namespace tut
 		catch (...) {
 			testPassed = false;
 		}
-		ensure(testPassed);
+		ensure( 0 != testPassed);
 	}
 
 

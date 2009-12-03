@@ -82,7 +82,7 @@ namespace tut
         // docs say so
         //geom1_ = 0;
 
-        ensure(prepGeom1_);
+        ensure(0 != prepGeom1_);
 
     }
 
@@ -102,7 +102,7 @@ namespace tut
     // docs say so
     //geom1_ = 0;
 
-    ensure(prepGeom1_);
+    ensure(0 != prepGeom1_);
 
     int ret = GEOSPreparedContainsProperly(prepGeom1_, geom2_);
     ensure_equals(ret, 1);
@@ -125,7 +125,7 @@ namespace tut
     // docs say so
     //geom1_ = 0;
 
-    ensure(prepGeom1_);
+    ensure(0 != prepGeom1_);
 
     int ret = GEOSPreparedContainsProperly(prepGeom1_, geom2_);
     ensure_equals(ret, 0);

@@ -62,7 +62,12 @@ namespace tut
 		~test_linearring_data()
 		{
 			factory_.destroyGeometry(ring_);
-		}
+        }
+
+    private:
+        // Declare type as noncopyable
+        test_linearring_data(const test_linearring_data& other);
+        test_linearring_data& operator=(const test_linearring_data& rhs);
 	};
 
 	typedef test_group<test_linearring_data> group;

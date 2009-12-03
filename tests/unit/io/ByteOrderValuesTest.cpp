@@ -128,8 +128,7 @@ namespace tut
 		ensure("putLong big endian[6]", buf[6] == 0);
 		ensure("putLong big endian[7]", buf[7] == 2);
 
-		out = ByteOrderValues::getLong(buf,
-				ByteOrderValues::ENDIAN_BIG);
+		out = static_cast<long>(ByteOrderValues::getLong(buf, ByteOrderValues::ENDIAN_BIG));
 		ensure_equals("getLong big endian", out, in);
 
 		ByteOrderValues::putLong(in, buf,
@@ -143,8 +142,7 @@ namespace tut
 		ensure("putLong little endian[6]", buf[6] == 0);
 		ensure("putLong little endian[7]", buf[7] == 0);
 
-		out = ByteOrderValues::getLong(buf,
-				ByteOrderValues::ENDIAN_LITTLE);
+		out = static_cast<long>(ByteOrderValues::getLong(buf, ByteOrderValues::ENDIAN_LITTLE));
 		ensure_equals("getLong little endian", out, in);
 	}
 

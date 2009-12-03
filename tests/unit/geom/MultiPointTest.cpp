@@ -50,6 +50,11 @@ namespace tut
 		{
 			factory_.destroyGeometry(mp_);
 		}
+
+    private:
+        // Declare type as noncopyable
+        test_multipoint_data(const test_multipoint_data& other);
+        test_multipoint_data& operator=(const test_multipoint_data& rhs);
 	};
 
 	typedef test_group<test_multipoint_data> group;

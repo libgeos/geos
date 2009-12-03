@@ -123,8 +123,8 @@ namespace tut
 		LineString* l1ptr = dynamic_cast<LineString*>(g1.get());
 		LineString* l2ptr = dynamic_cast<LineString*>(g2.get());
 
-		ensure(l1ptr);
-		ensure(l2ptr);
+		ensure(0 != l1ptr);
+		ensure(0 != l2ptr);
 
 		LineString& l1 = *l1ptr;
 		LineString& l2 = *l2ptr;
@@ -160,8 +160,8 @@ namespace tut
 		LineString* l1ptr = dynamic_cast<LineString*>(g1.get());
 		LineString* l2ptr = dynamic_cast<LineString*>(g2.get());
 
-		ensure(l1ptr);
-		ensure(l2ptr);
+		ensure(0 != l1ptr);
+		ensure(0 != l2ptr);
 
 		LineString& l1 = *l1ptr;
 		LineString& l2 = *l2ptr;

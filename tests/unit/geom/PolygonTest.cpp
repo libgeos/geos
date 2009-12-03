@@ -53,11 +53,16 @@ namespace tut
 			poly_ = static_cast<PolygonPtr>(geo);
 		}
 
-		~test_polygon_data() 
-		{
-			// FREE MEMORY
-			factory_.destroyGeometry(poly_);
-		}
+        ~test_polygon_data() 
+        {
+            // FREE MEMORY
+            factory_.destroyGeometry(poly_);
+        }
+
+    private:
+        // Declare type as noncopyable
+        test_polygon_data(const test_polygon_data& other);
+        test_polygon_data& operator=(const test_polygon_data& rhs);
     };
 
     typedef test_group<test_polygon_data> group;

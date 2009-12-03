@@ -65,6 +65,7 @@ namespace tut
             ensure("GEOSGeomFromWKB_buf failed to create geometry", 0 != geom1_ );
 
             // TODO: Update test to compare with WKT-based geometry
+            (void)wkt;
             //       ATM, some XYZ and XYZM geometries fail
             //geom2_ = GEOSWKTReader_read(reader_, wkt.c_str());
             //ensure ( 0 != geom2_ );

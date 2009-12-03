@@ -19,17 +19,21 @@ namespace tut
 
     // Common data used by test cases
     struct test_intersectionmatrix_data
-	{
-		typedef geos::geom::IntersectionMatrix* MatrixPtr;
-		typedef geos::geom::IntersectionMatrix const* MatrixCPtr;
+    {
+        typedef geos::geom::IntersectionMatrix* MatrixPtr;
+        typedef geos::geom::IntersectionMatrix const* MatrixCPtr;
 
-		const std::string pattern_false_;
-		geos::geom::IntersectionMatrix im_;
+        const std::string pattern_false_;
+        geos::geom::IntersectionMatrix im_;
 
-		test_intersectionmatrix_data()
-			: pattern_false_("FFFFFFFFF"),im_(pattern_false_)
-		{}
-	};
+        test_intersectionmatrix_data()
+            : pattern_false_("FFFFFFFFF"),im_(pattern_false_)
+        {}
+    private:
+        // Declare type as noncopyable
+        test_intersectionmatrix_data(const test_intersectionmatrix_data& other);
+        test_intersectionmatrix_data& operator=(const test_intersectionmatrix_data& rhs);
+    };
 
     typedef test_group<test_intersectionmatrix_data> group;
     typedef group::object object;
