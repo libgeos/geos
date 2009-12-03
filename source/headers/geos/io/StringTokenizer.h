@@ -48,6 +48,10 @@ private:
 	std::string stok;
 	double ntok;
 	std::string::const_iterator iter;
+
+    // Declare type as noncopyable
+    StringTokenizer(const StringTokenizer& other);
+    StringTokenizer& operator=(const StringTokenizer& rhs);
 };
 
 } // namespace io
