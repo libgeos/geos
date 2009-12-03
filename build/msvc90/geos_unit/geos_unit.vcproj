@@ -188,6 +188,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\tests\unit\tut\tut_console_reporter.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\tests\unit\tut\tut_exception.hpp"
 				>
 			</File>
