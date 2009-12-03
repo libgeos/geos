@@ -22,8 +22,8 @@
  *
  **********************************************************************/
 
-#ifndef _GEOS_SIMPLIFY_TAGGEDLINESTRINGSIMPLIFIER_H_
-#define _GEOS_SIMPLIFY_TAGGEDLINESTRINGSIMPLIFIER_H_ 
+#ifndef GEOS_SIMPLIFY_TAGGEDLINESTRINGSIMPLIFIER_H
+#define GEOS_SIMPLIFY_TAGGEDLINESTRINGSIMPLIFIER_H
 
 #include <geos/export.h>
 #include <vector>
@@ -152,7 +152,7 @@ TaggedLineStringSimplifier::setDistanceTolerance(double d)
 } // namespace geos::simplify
 } // namespace geos
 
-#endif // _GEOS_SIMPLIFY_TAGGEDLINESTRINGSIMPLIFIER_H_ 
+#endif // GEOS_SIMPLIFY_TAGGEDLINESTRINGSIMPLIFIER_H
 
 /**********************************************************************
  * $Log$

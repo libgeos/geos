@@ -17,8 +17,8 @@
  *
  **********************************************************************/
 
-#ifndef _GEOS_SIMPLIFY_DOUBGLASPEUCKERLINESIMPLIFIER_H_
-#define _GEOS_SIMPLIFY_DOUBGLASPEUCKERLINESIMPLIFIER_H_ 
+#ifndef GEOS_SIMPLIFY_DOUBGLASPEUCKERLINESIMPLIFIER_H
+#define GEOS_SIMPLIFY_DOUBGLASPEUCKERLINESIMPLIFIER_H
 
 #include <geos/export.h>
 #include <vector>
@@ -82,12 +82,16 @@ private:
 	double distanceTolerance;
 
 	void simplifySection(size_t i, size_t j);
+
+    // Declare type as noncopyable
+    DouglasPeuckerLineSimplifier(const DouglasPeuckerLineSimplifier& other);
+    DouglasPeuckerLineSimplifier& operator=(const DouglasPeuckerLineSimplifier& rhs);
 };
 
 } // namespace geos::simplify
 } // namespace geos
 
-#endif // _GEOS_SIMPLIFY_DOUBGLASPEUCKERLINESIMPLIFIER_H_ 
+#endif // GEOS_SIMPLIFY_DOUBGLASPEUCKERLINESIMPLIFIER_H
 
 /**********************************************************************
  * $Log$

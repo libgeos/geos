@@ -21,8 +21,8 @@
  *
  **********************************************************************/
 
-#ifndef _GEOS_SIMPLIFY_TOPOLOGYPRESERVINGSIMPLIFIER_H_
-#define _GEOS_SIMPLIFY_TOPOLOGYPRESERVINGSIMPLIFIER_H_ 
+#ifndef GEOS_SIMPLIFY_TOPOLOGYPRESERVINGSIMPLIFIER_H
+#define GEOS_SIMPLIFY_TOPOLOGYPRESERVINGSIMPLIFIER_H
 
 #include <geos/export.h>
 #include <geos/geom/Geometry.h>
@@ -84,12 +84,10 @@ private:
 
 };
 
-
-
 } // namespace geos::simplify
 } // namespace geos
 
-#endif // _GEOS_SIMPLIFY_TOPOLOGYPRESERVINGSIMPLIFIER_H_ 
+#endif // GEOS_SIMPLIFY_TOPOLOGYPRESERVINGSIMPLIFIER_H
 
 /**********************************************************************
  * $Log$

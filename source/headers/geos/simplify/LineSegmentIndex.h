@@ -21,8 +21,8 @@
  *
  **********************************************************************/
 
-#ifndef _GEOS_SIMPLIFY_LINESEGMENTINDEX_H_
-#define _GEOS_SIMPLIFY_LINESEGMENTINDEX_H_ 
+#ifndef GEOS_SIMPLIFY_LINESEGMENTINDEX_H
+#define GEOS_SIMPLIFY_LINESEGMENTINDEX_H
 
 #include <geos/export.h>
 #include <vector>
@@ -78,7 +78,7 @@ private:
 } // namespace geos::simplify
 } // namespace geos
 
-#endif // _GEOS_SIMPLIFY_LINESEGMENTINDEX_H_ 
+#endif // GEOS_SIMPLIFY_LINESEGMENTINDEX_H
 
 /**********************************************************************
  * $Log$
