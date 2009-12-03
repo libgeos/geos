@@ -35,6 +35,7 @@
 #include <geos/algorithm/CGAlgorithms.h>
 
 #include <vector>
+#include <sstream>
 #include <string>
 #include <cassert>
 
@@ -378,17 +379,15 @@ PlanarGraph::matchInSameDirection(const Coordinate& p0, const Coordinate& p1,
 string
 PlanarGraph::printEdges()
 {
-	string out="Edges: ";
+	
+    std::ostringstream oss;
+    oss << "Edges: ";
 	for(size_t i=0, n=edges->size(); i<n; ++i)
 	{
-		out+="edge ";
-		out+=i;
-		out+=":\n";
-		Edge *e=(*edges)[i];
-		out+=e->print();
-		out+=e->eiList.print();
+        Edge *e=(*edges)[i];
+		oss << "edge " << i << ":\n" << e->print() << e->eiList.print();
 	}
-	return out;
+    return oss.str();
 }
 
 NodeMap*
