@@ -43,7 +43,25 @@ namespace algorithm { // geos::planargraph::algorithm
  */
 class GEOS_DLL ConnectedSubgraphFinder
 {
+public:
+
+	ConnectedSubgraphFinder(PlanarGraph& newGraph)
+		:
+		graph(newGraph)
+		{}
+
+	/// \brief
+	/// Store newly allocated connected Subgraphs into the
+	/// given std::vector
+	///
+	/// Caller take responsibility in releasing memory associated
+	/// with the subgraphs themself.
+	///
+	///
+	void getConnectedSubgraphs(std::vector<Subgraph *>& dest);
+
 private:
+
 	PlanarGraph& graph;
 
 	/// Returns a newly allocated Subgraph
@@ -66,23 +84,9 @@ private:
 	void addEdges(Node* node, std::stack<Node *>& nodeStack,
 			Subgraph* subgraph);
 
-public:
-
-	ConnectedSubgraphFinder(PlanarGraph& newGraph)
-		:
-		graph(newGraph)
-		{}
-
-	/// \brief
-	/// Store newly allocated connected Subgraphs into the
-	/// given std::vector
-	///
-	/// Caller take responsibility in releasing memory associated
-	/// with the subgraphs themself.
-	///
-	///
-	void getConnectedSubgraphs(std::vector<Subgraph *>& dest);
-
+    // Declare type as noncopyable
+    ConnectedSubgraphFinder(const ConnectedSubgraphFinder& other);
+    ConnectedSubgraphFinder& operator=(const ConnectedSubgraphFinder& rhs);
 };
 
 } // namespace geos::planargraph::algorithm
