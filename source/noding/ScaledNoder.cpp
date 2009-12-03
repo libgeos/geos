@@ -94,8 +94,8 @@ public:
 
 private:
     // Declare type as noncopyable
-    ScaledNoder::Scaler(const ScaledNoder::Scaler& other);
-    ScaledNoder::Scaler& operator=(const ScaledNoder::Scaler& rhs);
+    Scaler(const Scaler& other);
+    Scaler& operator=(const Scaler& rhs);
 };
 
 class ScaledNoder::ReScaler: public geom::CoordinateFilter {
@@ -123,8 +123,8 @@ public:
 
 private:
     // Declare type as noncopyable
-    ScaledNoder::ReScaler(const ScaledNoder::ReScaler& other);
-    ScaledNoder::ReScaler& operator=(const ScaledNoder::ReScaler& rhs);
+    ReScaler(const ReScaler& other);
+    ReScaler& operator=(const ReScaler& rhs);
 };
 
 /*private*/
