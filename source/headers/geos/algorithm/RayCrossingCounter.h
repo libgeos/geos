@@ -72,9 +72,12 @@ private:
 	int crossingCount;
 	
 	// true if the test point lies on an input segment
-	bool isPointOnSegment;
+    bool isPointOnSegment;
 
-protected:
+    // Declare type as noncopyable
+    RayCrossingCounter(const RayCrossingCounter& other);
+    RayCrossingCounter& operator=(const RayCrossingCounter& rhs);
+
 public:
 	/**
 	 * Determines the {@link Location} of a point in a ring.

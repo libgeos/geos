@@ -97,8 +97,10 @@ private:
 
 	void buildIndex( const geom::Geometry & g);
 
+    // Declare type as noncopyable
+    IndexedPointInAreaLocator(const IndexedPointInAreaLocator& other);
+    IndexedPointInAreaLocator& operator=(const IndexedPointInAreaLocator& rhs);
 
-protected:
 public:
 	/**
 	 * Creates a new locator for a given {@link Geometry}

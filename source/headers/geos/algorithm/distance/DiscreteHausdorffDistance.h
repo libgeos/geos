@@ -173,6 +173,10 @@ public:
 		PointPairDistance minPtDist;
 		DistanceToPoint euclideanDist;
 		const geom::Geometry& geom;
+
+        // Declare type as noncopyable
+        MaxPointDistanceFilter(const MaxPointDistanceFilter& other);
+        MaxPointDistanceFilter& operator=(const MaxPointDistanceFilter& rhs);
 	};
 
 	class MaxDensifiedByFractionDistanceFilter
@@ -204,7 +208,10 @@ public:
 		PointPairDistance minPtDist;
 		const geom::Geometry& geom;
 		std::size_t numSubSegs; // = 0;
-		
+
+        // Declare type as noncopyable
+        MaxDensifiedByFractionDistanceFilter(const MaxDensifiedByFractionDistanceFilter& other);
+        MaxDensifiedByFractionDistanceFilter& operator=(const MaxDensifiedByFractionDistanceFilter& rhs);
 	};
 
 private:
@@ -227,8 +234,11 @@ private:
 	PointPairDistance ptDist;
 
 	/// Value of 0.0 indicates that no densification should take place
-	double densifyFrac; // = 0.0;
-	
+    double densifyFrac; // = 0.0;
+
+    // Declare type as noncopyable
+    DiscreteHausdorffDistance(const DiscreteHausdorffDistance& other);
+    DiscreteHausdorffDistance& operator=(const DiscreteHausdorffDistance& rhs);
 };
 
 
