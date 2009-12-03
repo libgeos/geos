@@ -30,5 +30,4 @@
     #define GEOS_DLL
 #endif
 
-#endif // ndef GEOS_EXPORT_H
-
+#endif // GEOS_EXPORT_H
