@@ -28,9 +28,7 @@
 #include <geos/geom/LineSegment.h>
 #include <geos/linearref/LinearLocation.h>
 
-namespace geos
-{
-namespace linearref   // geos::linearref
+namespace geos { namespace linearref
 {
 
 /**
@@ -52,22 +50,6 @@ namespace linearref   // geos::linearref
  */
 class LinearIterator
 {
-private:
-	static unsigned int segmentEndVertexIndex(const LinearLocation& loc);
-
-	const geom::LineString *currentLine;
-	unsigned int vertexIndex;
-	unsigned int componentIndex;
-	const geom::Geometry *linear;
-	const unsigned int numLines;
-
-	/**
-	 * Invariant: currentLine <> null if the iterator is pointing at a valid coordinate
-	 */
-
-	void loadCurrentLine();
-
-
 public:
 	/**
 	 * Creates an iterator initialized to the start of a linear {@link Geometry}
@@ -148,7 +130,27 @@ public:
 	 * @return a {@link Coordinate} or <code>null</code>
 	 */
 	geom::Coordinate getSegmentEnd() const;
+
+private:
+
+	static unsigned int segmentEndVertexIndex(const LinearLocation& loc);
+
+	const geom::LineString *currentLine;
+	unsigned int vertexIndex;
+	unsigned int componentIndex;
+	const geom::Geometry *linear;
+	const unsigned int numLines;
+
+	/**
+	 * Invariant: currentLine <> null if the iterator is pointing at a valid coordinate
+	 */
+	void loadCurrentLine();
+
+    // Declare type as noncopyable
+    LinearIterator(const LinearIterator& other);
+    LinearIterator& operator=(const LinearIterator& rhs);
 };
-}
-}
-#endif
+
+}} // namespace geos::linearref
+
+#endif // GEOS_LINEARREF_LINEARITERATOR_H
