@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
+#include <cassert>
 
 /**
  * Optional restartable wrapper for test_runner.
@@ -114,6 +115,14 @@ void serialize(std::ostream& os, const tut::test_result& tr)
     case test_result::term:
         os << 4;
         break;
+    case test_result::rethrown:
+        os << 5;
+        break;
+    case test_result::ex_ctor:
+        os << 6;
+        break;
+    case test_result::dummy:
+        assert(!"Should never be called");
     default:
         throw std::logic_error("operator << : bad result_type");
     }
@@ -157,6 +166,12 @@ bool deserialize(std::istream& is, tut::test_result& tr)
         break;
     case 4:
         tr.result = test_result::term;
+        break;
+    case 5:
+        tr.result = test_result::rethrown;
+        break;
+    case 6:
+        tr.result = test_result::ex_ctor;
         break;
     default:
         throw std::logic_error("operator >> : bad result_type");
@@ -280,19 +295,12 @@ public:
                 // last executed test pos
                 register_execution_(*gni,test);
 
-                try
-                {
-                    tut::test_result tr;
-                    if( !runner_.run_test(*gni,test, tr) )
-                    {
-                        break;
-                    }
-                    register_test_(tr);
-                }
-                catch (const tut::beyond_last_test&)
+                tut::test_result tr;
+                if( !runner_.run_test(*gni,test, tr) || tr.result == test_result::dummy )
                 {
                     break;
                 }
+                register_test_(tr);
 
                 ++test;
             }

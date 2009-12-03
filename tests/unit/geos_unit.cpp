@@ -111,6 +111,5 @@ int main(int argc, const char* argv[])
     // XXX - mloskot - this should be removed in future!
     geos::io::Unload::Release();
 
-    return (visi.all_ok() ? EXIT_SUCCESS : EXIT_FAILURE);
-    
+    return (visi.all_ok() ? EXIT_SUCCESS : EXIT_FAILURE);   
 }

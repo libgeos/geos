@@ -13,8 +13,8 @@
  *
  **********************************************************************/
 
-#ifndef __XMLTESTER_H__
-#define __XMLTESTER_H__
+#ifndef GEOS_XMLTESTER_H
+#define GEOS_XMLTESTER_H
 
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/PrecisionModel.h>
@@ -106,5 +106,4 @@ public:
 
 };
 
-
-#endif 
+#endif // GEOS_XMLTESTER_H
