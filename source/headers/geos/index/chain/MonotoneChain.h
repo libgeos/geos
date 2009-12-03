@@ -167,6 +167,9 @@ private:
 	/// useful for optimizing chain comparisons
 	int id;
 
+    // Declare type as noncopyable
+    MonotoneChain(const MonotoneChain& other);
+    MonotoneChain& operator=(const MonotoneChain& rhs);
 };
 
 } // namespace geos::index::chain
