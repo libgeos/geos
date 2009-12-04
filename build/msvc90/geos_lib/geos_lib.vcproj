@@ -1531,14 +1531,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\precision\GeometrySnapper.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\source\precision\LineStringSnapper.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\source\precision\SimpleGeometryPrecisionReducer.cpp"
 					>
 				</File>
@@ -2985,14 +2977,6 @@
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\precision\GeometrySnapper.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\source\headers\geos\precision\LineStringSnapper.h"
-							>
-						</File>
-						<File
 							RelativePath="..\..\..\source\headers\geos\precision\SimpleGeometryPrecisionReducer.h"
 							>
 						</File>
@@ -3166,9 +3150,33 @@
 			<File
 				RelativePath="..\..\..\capi\geos_c.h.in"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="copy $(InputDir)$(InputFileName) $(InputDir)$(InputName)"
+						CommandLine="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;"
+						Outputs="$(InputDir)$(InputName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="copy $(InputDir)$(InputFileName) $(InputDir)$(InputName)"
+						CommandLine="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;"
+						Outputs="$(InputDir)$(InputName)"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\capi\geos_ts_c.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\capi\Makefile.am"
 				>
 			</File>
 		</Filter>
