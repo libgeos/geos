@@ -361,6 +361,11 @@ AC_OUTPUT([
 	build/msvc90/geos_ruby/Makefile
 	build/msvc90/geos_unit/Makefile
 	build/msvc90/geos_xmltester/Makefile
+	build/msvc10/Makefile
+	build/msvc10/geos_c_dll/Makefile
+	build/msvc10/geos_lib/Makefile
+	build/msvc10/geos_unit/Makefile
+	build/msvc10/geos_xmltester/Makefile
 	capi/Makefile
 	capi/geos_c.h
 	doc/Doxyfile
