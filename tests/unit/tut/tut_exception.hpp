@@ -32,7 +32,7 @@ struct tut_error : public std::exception
     }
 
 private:
-
+    tut_error& operator=(const tut_error&);
     std::string err_msg;
 };
 
