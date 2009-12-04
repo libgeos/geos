@@ -25,6 +25,7 @@
 #include <algorithm>
 #include <vector>
 #include <cassert>
+#include <iterator>
 
 using namespace std;
 
