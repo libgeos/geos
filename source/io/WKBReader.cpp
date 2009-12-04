@@ -57,7 +57,7 @@ WKBReader::printHEX(istream &is, ostream &os)
 {
 	static const char hex[] = "0123456789ABCDEF";
 
-	long pos = is.tellg(); // take note of input stream get pointer
+    std::streampos pos = is.tellg(); // take note of input stream get pointer
 	is.seekg(0, ios::beg); // rewind input stream
 
 	char each=0;
