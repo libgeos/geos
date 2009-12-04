@@ -1,0 +1,2039 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="capi">
+      <UniqueIdentifier>{892cd9ec-c633-433c-b096-56a40efd8933}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{271a6312-9ec5-4459-a9de-9e2d9b18c2e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\algorithm">
+      <UniqueIdentifier>{026e8310-ce23-45c5-9ab0-06a18c4c5668}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\algorithm\distance">
+      <UniqueIdentifier>{b12e5a12-10e9-4f49-b777-fba598a5a792}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\algorithm\locate">
+      <UniqueIdentifier>{d4e37a89-edc8-4d7c-8420-1e183503be5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\geom">
+      <UniqueIdentifier>{06f7884e-dd61-454f-bf90-3846f5622d52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\geomgraph">
+      <UniqueIdentifier>{9627ea1e-e4df-433a-af2e-a86dce2dfc64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\geomgraph\index">
+      <UniqueIdentifier>{d6d1868a-66aa-4015-bcd7-58f790a17f4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\geom\prep">
+      <UniqueIdentifier>{bf24dd8e-ac6a-4b2b-b15d-55f92b64ea50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\geom\util">
+      <UniqueIdentifier>{75285089-bcd4-450c-9f3d-2f884e938734}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers">
+      <UniqueIdentifier>{a1d4aff3-38ce-4ce6-b908-399a05c81dbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos">
+      <UniqueIdentifier>{8e9703b9-8a09-44b3-9c18-5597e7ddfaa1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\algorithm">
+      <UniqueIdentifier>{0230b650-4e07-4b4e-9417-a0cb09c9dbb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\algorithm\locate">
+      <UniqueIdentifier>{a94ec6cf-1d97-4160-a5cc-9fc357ff7c3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\geom">
+      <UniqueIdentifier>{0382eba9-961e-4bfc-8b5b-519c6fb6839a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\geomgraph">
+      <UniqueIdentifier>{53dd1098-c07b-4845-82a4-3613c46b6237}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\geomgraph\index">
+      <UniqueIdentifier>{a3fcf7f4-922e-4848-a9e9-61d59841fbea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\geom\prep">
+      <UniqueIdentifier>{badc0a25-8a9e-4b76-927e-48669cac1b1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\geom\util">
+      <UniqueIdentifier>{c8611179-2b6d-4f08-ab7b-e80a69c5a66b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\index">
+      <UniqueIdentifier>{e3a7a832-1ac1-46aa-a754-644856794677}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\index\bintree">
+      <UniqueIdentifier>{02e13b2d-b829-4f3a-99d7-be08230c9b38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\index\chain">
+      <UniqueIdentifier>{951e664d-eca1-4531-99a6-9f7f5a73adc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\index\intervalrtree">
+      <UniqueIdentifier>{2c25f2ef-f54f-4974-9a55-b41a791b7aa3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\index\quadtree">
+      <UniqueIdentifier>{7754a98a-155e-4ab5-bf84-8b45561fb719}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\index\strtree">
+      <UniqueIdentifier>{c6144a7b-de47-43a3-b180-8afadc6c33c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\index\sweepline">
+      <UniqueIdentifier>{18f116d4-d929-4333-b4b3-a1d2050e348f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\io">
+      <UniqueIdentifier>{90741ced-c629-4a4b-8ef7-cb085b5b1802}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\linearref">
+      <UniqueIdentifier>{5db0eec1-2999-40a4-b221-ce25cd5a0351}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\noding">
+      <UniqueIdentifier>{09d6877b-a063-4591-b6eb-1fbf3d17015f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\noding\snapround">
+      <UniqueIdentifier>{3f8d0fcc-ee0f-43a6-96e7-3660f1b79594}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\operation">
+      <UniqueIdentifier>{02879ff3-78e0-4575-8a08-add91eceb06b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\operation\buffer">
+      <UniqueIdentifier>{a012a7f2-b43f-49e0-96ea-6f8af8d3042b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\operation\distance">
+      <UniqueIdentifier>{5e3e1096-4a09-4bb2-aed3-bf82cc907456}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\operation\linemerge">
+      <UniqueIdentifier>{67db5963-ff82-4190-8359-a29a75e1c33e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\operation\overlay">
+      <UniqueIdentifier>{44a3116c-e6b1-441b-b9fb-810b8c3ca808}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\operation\polygonize">
+      <UniqueIdentifier>{c270e676-8fd2-479e-aa1d-b61491a427ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\operation\predicate">
+      <UniqueIdentifier>{36c82615-d71f-499a-99cf-2cc2e0193985}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\operation\relate">
+      <UniqueIdentifier>{57586459-6d98-49f3-b785-1ca0e89a6484}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\operation\union">
+      <UniqueIdentifier>{d64e2a2d-d16c-4660-ab7d-8d4fdcb2a286}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\operation\valid">
+      <UniqueIdentifier>{ff247c36-f0a9-4f4e-84bc-94132acc63f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\planargraph">
+      <UniqueIdentifier>{3fa365ea-4c7a-4abc-ad7f-c4369e47b47d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\planargraph\algorithm">
+      <UniqueIdentifier>{88a29336-b2f9-438e-a9fd-38abb5509ff9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\precision">
+      <UniqueIdentifier>{04ae10c0-4f55-4668-8e38-9e58c0df459f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\simplify">
+      <UniqueIdentifier>{8a10b212-c06e-446b-bf5a-dcda17219449}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\headers\geos\util">
+      <UniqueIdentifier>{81a3f9bf-acbe-4dd7-b838-8e1e243ae1ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\index">
+      <UniqueIdentifier>{9722d6df-68c2-4dd8-8d5d-40f1a3c363e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\index\bintree">
+      <UniqueIdentifier>{04ffd530-da41-438f-b09f-6afc1447106b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\index\chain">
+      <UniqueIdentifier>{e33152c0-51ba-43ef-994f-80f8f1bcd244}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\index\intervalrtree">
+      <UniqueIdentifier>{5fca6e05-495f-4418-bc8f-8eefb8f1354b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\index\quadtree">
+      <UniqueIdentifier>{a1346a94-38d2-4985-a318-c4bc70b852d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\index\strtree">
+      <UniqueIdentifier>{000d08cc-3c99-4784-b0e2-7b95b8a76614}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\index\sweepline">
+      <UniqueIdentifier>{fbc928ca-45d1-4a7a-beba-da367ef75e7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\io">
+      <UniqueIdentifier>{e831dd8b-b452-41ae-902b-5a77dd39e50e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\linearref">
+      <UniqueIdentifier>{698cce4a-4b5e-4bca-a8d6-cb8954e95614}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\noding">
+      <UniqueIdentifier>{3c3fad49-f4e3-4880-8287-1c054da9a1db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\noding\snapround">
+      <UniqueIdentifier>{e56308f3-b1b8-4975-a7b0-5c583f59fe36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\operation">
+      <UniqueIdentifier>{230d7c48-e321-4a31-882b-17b26c543637}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\operation\buffer">
+      <UniqueIdentifier>{ee9f6559-13bc-4306-baab-efda66909a5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\operation\distance">
+      <UniqueIdentifier>{5253d7f9-b557-4262-9427-680de4c86bc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\operation\linemerge">
+      <UniqueIdentifier>{ae7292d3-08db-45cd-ac7a-84993bdfe92a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\operation\overlay">
+      <UniqueIdentifier>{e8e268f0-ba94-49d6-ac43-37ef5584c9b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\operation\overlay\snap">
+      <UniqueIdentifier>{4e00f29f-569a-4753-b5c5-d13c4e181357}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\operation\overlay\validate">
+      <UniqueIdentifier>{3ad28caa-20cd-44ed-96f7-a762940afd38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\operation\polygonize">
+      <UniqueIdentifier>{84af89f8-66b0-418b-bd74-b313eb4944c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\operation\predicate">
+      <UniqueIdentifier>{7f3ac688-0b4e-416f-8e60-02fe8b854266}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\operation\relate">
+      <UniqueIdentifier>{2998752f-ef9c-481f-b9a4-3a6725a59a4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\operation\union">
+      <UniqueIdentifier>{44cfe5ed-df30-4c29-bd08-219f5652ddb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\operation\valid">
+      <UniqueIdentifier>{92dcc3bb-0ba7-4367-aa49-ce22531670fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\planargraph">
+      <UniqueIdentifier>{b1d7dfda-6571-4e64-8aba-22f6dbb00df4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\planargraph\algorithm">
+      <UniqueIdentifier>{8a779838-f821-4292-a4ee-55b74bf77892}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\precision">
+      <UniqueIdentifier>{d61975a4-683b-421b-9a8c-715e4c0abcd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\simplify">
+      <UniqueIdentifier>{45ca024c-109f-444d-8767-cc9cb94ba523}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\util">
+      <UniqueIdentifier>{5672af04-548b-4660-9525-0a8207fa1c02}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\capi\Makefile.am">
+      <Filter>capi</Filter>
+    </None>
+    <None Include="..\..\..\source\dirlist.mk">
+      <Filter>src</Filter>
+    </None>
+    <None Include="..\..\..\source\headers\geos\algorithm\ConvexHull.inl">
+      <Filter>src\headers\geos\algorithm</Filter>
+    </None>
+    <None Include="..\..\..\source\headers\geos\geomgraph\DirectedEdge.inl">
+      <Filter>src\headers\geos\geomgraph</Filter>
+    </None>
+    <None Include="..\..\..\source\headers\geos\geomgraph\GeometryGraph.inl">
+      <Filter>src\headers\geos\geomgraph</Filter>
+    </None>
+    <None Include="..\..\..\source\headers\geos\geom\Coordinate.inl">
+      <Filter>src\headers\geos\geom</Filter>
+    </None>
+    <None Include="..\..\..\source\headers\geos\geom\CoordinateArraySequenceFactory.inl">
+      <Filter>src\headers\geos\geom</Filter>
+    </None>
+    <None Include="..\..\..\source\headers\geos\geom\Envelope.inl">
+      <Filter>src\headers\geos\geom</Filter>
+    </None>
+    <None Include="..\..\..\source\headers\geos\geom\Geometry.inl">
+      <Filter>src\headers\geos\geom</Filter>
+    </None>
+    <None Include="..\..\..\source\headers\geos\geom\GeometryCollection.inl">
+      <Filter>src\headers\geos\geom</Filter>
+    </None>
+    <None Include="..\..\..\source\headers\geos\geom\GeometryFactory.inl">
+      <Filter>src\headers\geos\geom</Filter>
+    </None>
+    <None Include="..\..\..\source\headers\geos\geom\LineSegment.inl">
+      <Filter>src\headers\geos\geom</Filter>
+    </None>
+    <None Include="..\..\..\source\headers\geos\geom\MultiLineString.inl">
+      <Filter>src\headers\geos\geom</Filter>
+    </None>
+    <None Include="..\..\..\source\headers\geos\geom\MultiPolygon.inl">
+      <Filter>src\headers\geos\geom</Filter>
+    </None>
+    <None Include="..\..\..\source\headers\geos\geom\PrecisionModel.inl">
+      <Filter>src\headers\geos\geom</Filter>
+    </None>
+    <None Include="..\..\..\source\headers\geos\io\ByteOrderDataInStream.inl">
+      <Filter>src\headers\geos\io</Filter>
+    </None>
+    <None Include="..\..\..\source\headers\geos\io\WKTReader.inl">
+      <Filter>src\headers\geos\io</Filter>
+    </None>
+    <None Include="..\..\..\source\headers\geos\noding\MCIndexNoder.inl">
+      <Filter>src\headers\geos\noding</Filter>
+    </None>
+    <None Include="..\..\..\source\headers\geos\noding\SegmentString.inl">
+      <Filter>src\headers\geos\noding</Filter>
+    </None>
+    <None Include="..\..\..\source\headers\geos\noding\snapround\HotPixel.inl">
+      <Filter>src\headers\geos\noding\snapround</Filter>
+    </None>
+    <None Include="..\..\..\source\headers\geos\noding\snapround\MCIndexSnapRounder.inl">
+      <Filter>src\headers\geos\noding\snapround</Filter>
+    </None>
+    <None Include="..\..\..\source\headers\geos\operation\overlay\MinimalEdgeRing.inl">
+      <Filter>src\headers\geos\operation\overlay</Filter>
+    </None>
+    <None Include="..\..\..\source\Makefile.vc">
+      <Filter>src</Filter>
+    </None>
+    <None Include="Makefile.am" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\capi\geos_c.cpp">
+      <Filter>capi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\capi\geos_ts_c.cpp">
+      <Filter>capi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\Angle.cpp">
+      <Filter>src\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\BoundaryNodeRule.cpp">
+      <Filter>src\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\CentroidArea.cpp">
+      <Filter>src\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\CentroidLine.cpp">
+      <Filter>src\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\CentroidPoint.cpp">
+      <Filter>src\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\CGAlgorithms.cpp">
+      <Filter>src\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\ConvexHull.cpp">
+      <Filter>src\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\distance\DiscreteHausdorffDistance.cpp">
+      <Filter>src\algorithm\distance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\distance\DistanceToPoint.cpp">
+      <Filter>src\algorithm\distance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\HCoordinate.cpp">
+      <Filter>src\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\InteriorPointArea.cpp">
+      <Filter>src\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\InteriorPointLine.cpp">
+      <Filter>src\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\InteriorPointPoint.cpp">
+      <Filter>src\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\LineIntersector.cpp">
+      <Filter>src\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\locate\IndexedPointInAreaLocator.cpp">
+      <Filter>src\algorithm\locate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\locate\PointOnGeometryLocator.cpp">
+      <Filter>src\algorithm\locate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\locate\SimplePointInAreaLocator.cpp">
+      <Filter>src\algorithm\locate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\MCPointInRing.cpp">
+      <Filter>src\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\MinimumDiameter.cpp">
+      <Filter>src\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\NotRepresentableException.cpp">
+      <Filter>src\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\PointLocator.cpp">
+      <Filter>src\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\RayCrossingCounter.cpp">
+      <Filter>src\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\RobustDeterminant.cpp">
+      <Filter>src\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\SimplePointInRing.cpp">
+      <Filter>src\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\algorithm\SIRtreePointInRing.cpp">
+      <Filter>src\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\Depth.cpp">
+      <Filter>src\geomgraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\DirectedEdge.cpp">
+      <Filter>src\geomgraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\DirectedEdgeStar.cpp">
+      <Filter>src\geomgraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\Edge.cpp">
+      <Filter>src\geomgraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\EdgeEnd.cpp">
+      <Filter>src\geomgraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\EdgeEndStar.cpp">
+      <Filter>src\geomgraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\EdgeIntersection.cpp">
+      <Filter>src\geomgraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\EdgeIntersectionList.cpp">
+      <Filter>src\geomgraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\EdgeList.cpp">
+      <Filter>src\geomgraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\EdgeNodingValidator.cpp">
+      <Filter>src\geomgraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\EdgeRing.cpp">
+      <Filter>src\geomgraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\GeometryGraph.cpp">
+      <Filter>src\geomgraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\GraphComponent.cpp">
+      <Filter>src\geomgraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\index\MonotoneChainEdge.cpp">
+      <Filter>src\geomgraph\index</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\index\MonotoneChainIndexer.cpp">
+      <Filter>src\geomgraph\index</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\index\SegmentIntersector.cpp">
+      <Filter>src\geomgraph\index</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\index\SimpleEdgeSetIntersector.cpp">
+      <Filter>src\geomgraph\index</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\index\SimpleMCSweepLineIntersector.cpp">
+      <Filter>src\geomgraph\index</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\index\SimpleSweepLineIntersector.cpp">
+      <Filter>src\geomgraph\index</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\index\SweepLineEvent.cpp">
+      <Filter>src\geomgraph\index</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\index\SweepLineSegment.cpp">
+      <Filter>src\geomgraph\index</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\Label.cpp">
+      <Filter>src\geomgraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\Node.cpp">
+      <Filter>src\geomgraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\NodeFactory.cpp">
+      <Filter>src\geomgraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\NodeMap.cpp">
+      <Filter>src\geomgraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\PlanarGraph.cpp">
+      <Filter>src\geomgraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\Position.cpp">
+      <Filter>src\geomgraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\Quadrant.cpp">
+      <Filter>src\geomgraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geomgraph\TopologyLocation.cpp">
+      <Filter>src\geomgraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\Coordinate.cpp">
+      <Filter>src\geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\CoordinateArraySequence.cpp">
+      <Filter>src\geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\CoordinateArraySequenceFactory.cpp">
+      <Filter>src\geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\CoordinateSequence.cpp">
+      <Filter>src\geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\CoordinateSequenceFactory.cpp">
+      <Filter>src\geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\Dimension.cpp">
+      <Filter>src\geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\Envelope.cpp">
+      <Filter>src\geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\Geometry.cpp">
+      <Filter>src\geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\GeometryCollection.cpp">
+      <Filter>src\geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\GeometryComponentFilter.cpp">
+      <Filter>src\geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\GeometryFactory.cpp">
+      <Filter>src\geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\GeometryList.cpp">
+      <Filter>src\geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\IntersectionMatrix.cpp">
+      <Filter>src\geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\LinearRing.cpp">
+      <Filter>src\geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\LineSegment.cpp">
+      <Filter>src\geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\LineString.cpp">
+      <Filter>src\geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\Location.cpp">
+      <Filter>src\geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\MultiLineString.cpp">
+      <Filter>src\geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\MultiPoint.cpp">
+      <Filter>src\geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\MultiPolygon.cpp">
+      <Filter>src\geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\Point.cpp">
+      <Filter>src\geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\Polygon.cpp">
+      <Filter>src\geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\PrecisionModel.cpp">
+      <Filter>src\geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\prep\AbstractPreparedPolygonContains.cpp">
+      <Filter>src\geom\prep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\prep\BasicPreparedGeometry.cpp">
+      <Filter>src\geom\prep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\prep\PreparedGeometry.cpp">
+      <Filter>src\geom\prep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\prep\PreparedGeometryFactory.cpp">
+      <Filter>src\geom\prep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\prep\PreparedLineString.cpp">
+      <Filter>src\geom\prep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\prep\PreparedLineStringIntersects.cpp">
+      <Filter>src\geom\prep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\prep\PreparedPoint.cpp">
+      <Filter>src\geom\prep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\prep\PreparedPolygon.cpp">
+      <Filter>src\geom\prep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\prep\PreparedPolygonContains.cpp">
+      <Filter>src\geom\prep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\prep\PreparedPolygonContainsProperly.cpp">
+      <Filter>src\geom\prep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\prep\PreparedPolygonCovers.cpp">
+      <Filter>src\geom\prep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\prep\PreparedPolygonIntersects.cpp">
+      <Filter>src\geom\prep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\prep\PreparedPolygonPredicate.cpp">
+      <Filter>src\geom\prep</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\Triangle.cpp">
+      <Filter>src\geom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\util\ComponentCoordinateExtracter.cpp">
+      <Filter>src\geom\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\util\CoordinateOperation.cpp">
+      <Filter>src\geom\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\util\GeometryCombiner.cpp">
+      <Filter>src\geom\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\util\GeometryEditor.cpp">
+      <Filter>src\geom\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\util\GeometryTransformer.cpp">
+      <Filter>src\geom\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\geom\util\ShortCircuitedGeometryVisitor.cpp">
+      <Filter>src\geom\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\bintree\Bintree.cpp">
+      <Filter>src\index\bintree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\bintree\Interval.cpp">
+      <Filter>src\index\bintree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\bintree\Key.cpp">
+      <Filter>src\index\bintree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\bintree\Node.cpp">
+      <Filter>src\index\bintree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\bintree\NodeBase.cpp">
+      <Filter>src\index\bintree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\bintree\Root.cpp">
+      <Filter>src\index\bintree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\chain\MonotoneChain.cpp">
+      <Filter>src\index\chain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\chain\MonotoneChainBuilder.cpp">
+      <Filter>src\index\chain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\chain\MonotoneChainOverlapAction.cpp">
+      <Filter>src\index\chain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\chain\MonotoneChainSelectAction.cpp">
+      <Filter>src\index\chain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\intervalrtree\IntervalRTreeBranchNode.cpp">
+      <Filter>src\index\intervalrtree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\intervalrtree\IntervalRTreeLeafNode.cpp">
+      <Filter>src\index\intervalrtree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\intervalrtree\IntervalRTreeNode.cpp">
+      <Filter>src\index\intervalrtree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\intervalrtree\SortedPackedIntervalRTree.cpp">
+      <Filter>src\index\intervalrtree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\quadtree\DoubleBits.cpp">
+      <Filter>src\index\quadtree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\quadtree\IntervalSize.cpp">
+      <Filter>src\index\quadtree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\quadtree\Key.cpp">
+      <Filter>src\index\quadtree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\quadtree\Node.cpp">
+      <Filter>src\index\quadtree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\quadtree\NodeBase.cpp">
+      <Filter>src\index\quadtree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\quadtree\Quadtree.cpp">
+      <Filter>src\index\quadtree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\quadtree\Root.cpp">
+      <Filter>src\index\quadtree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\strtree\AbstractNode.cpp">
+      <Filter>src\index\strtree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\strtree\AbstractSTRtree.cpp">
+      <Filter>src\index\strtree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\strtree\Interval.cpp">
+      <Filter>src\index\strtree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\strtree\ItemBoundable.cpp">
+      <Filter>src\index\strtree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\strtree\SIRtree.cpp">
+      <Filter>src\index\strtree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\strtree\STRtree.cpp">
+      <Filter>src\index\strtree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\sweepline\SweepLineEvent.cpp">
+      <Filter>src\index\sweepline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\sweepline\SweepLineIndex.cpp">
+      <Filter>src\index\sweepline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\index\sweepline\SweepLineInterval.cpp">
+      <Filter>src\index\sweepline</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\inlines.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\io\ByteOrderDataInStream.cpp">
+      <Filter>src\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\io\ByteOrderValues.cpp">
+      <Filter>src\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\io\CLocalizer.cpp">
+      <Filter>src\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\io\ParseException.cpp">
+      <Filter>src\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\io\StringTokenizer.cpp">
+      <Filter>src\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\io\Unload.cpp">
+      <Filter>src\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\io\WKBReader.cpp">
+      <Filter>src\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\io\WKBWriter.cpp">
+      <Filter>src\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\io\WKTReader.cpp">
+      <Filter>src\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\io\WKTWriter.cpp">
+      <Filter>src\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\io\Writer.cpp">
+      <Filter>src\io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\linearref\ExtractLineByLocation.cpp">
+      <Filter>src\linearref</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\linearref\LengthIndexedLine.cpp">
+      <Filter>src\linearref</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\linearref\LengthIndexOfPoint.cpp">
+      <Filter>src\linearref</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\linearref\LengthLocationMap.cpp">
+      <Filter>src\linearref</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\linearref\LinearGeometryBuilder.cpp">
+      <Filter>src\linearref</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\linearref\LinearIterator.cpp">
+      <Filter>src\linearref</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\linearref\LinearLocation.cpp">
+      <Filter>src\linearref</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\linearref\LocationIndexOfLine.cpp">
+      <Filter>src\linearref</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\linearref\LocationIndexOfPoint.cpp">
+      <Filter>src\linearref</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\noding\BasicSegmentString.cpp">
+      <Filter>src\noding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\noding\FastNodingValidator.cpp">
+      <Filter>src\noding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\noding\FastSegmentSetIntersectionFinder.cpp">
+      <Filter>src\noding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\noding\IntersectionAdder.cpp">
+      <Filter>src\noding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\noding\IntersectionFinderAdder.cpp">
+      <Filter>src\noding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\noding\IteratedNoder.cpp">
+      <Filter>src\noding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\noding\MCIndexNoder.cpp">
+      <Filter>src\noding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\noding\MCIndexSegmentSetMutualIntersector.cpp">
+      <Filter>src\noding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\noding\NodedSegmentString.cpp">
+      <Filter>src\noding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\noding\NodingValidator.cpp">
+      <Filter>src\noding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\noding\Octant.cpp">
+      <Filter>src\noding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\noding\OrientedCoordinateArray.cpp">
+      <Filter>src\noding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\noding\ScaledNoder.cpp">
+      <Filter>src\noding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\noding\SegmentIntersectionDetector.cpp">
+      <Filter>src\noding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\noding\SegmentNode.cpp">
+      <Filter>src\noding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\noding\SegmentNodeList.cpp">
+      <Filter>src\noding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\noding\SegmentString.cpp">
+      <Filter>src\noding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\noding\SegmentStringUtil.cpp">
+      <Filter>src\noding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\noding\SimpleNoder.cpp">
+      <Filter>src\noding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\noding\SingleInteriorIntersectionFinder.cpp">
+      <Filter>src\noding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\noding\snapround\HotPixel.cpp">
+      <Filter>src\noding\snapround</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\noding\snapround\MCIndexPointSnapper.cpp">
+      <Filter>src\noding\snapround</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\noding\snapround\MCIndexSnapRounder.cpp">
+      <Filter>src\noding\snapround</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\noding\snapround\SimpleSnapRounder.cpp">
+      <Filter>src\noding\snapround</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\buffer\BufferBuilder.cpp">
+      <Filter>src\operation\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\buffer\BufferInputLineSimplifier.cpp">
+      <Filter>src\operation\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\buffer\BufferOp.cpp">
+      <Filter>src\operation\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\buffer\BufferParameters.cpp">
+      <Filter>src\operation\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\buffer\BufferSubgraph.cpp">
+      <Filter>src\operation\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\buffer\OffsetCurveBuilder.cpp">
+      <Filter>src\operation\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\buffer\OffsetCurveSetBuilder.cpp">
+      <Filter>src\operation\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\buffer\RightmostEdgeFinder.cpp">
+      <Filter>src\operation\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\buffer\SubgraphDepthLocater.cpp">
+      <Filter>src\operation\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\distance\ConnectedElementLocationFilter.cpp">
+      <Filter>src\operation\distance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\distance\ConnectedElementPointFilter.cpp">
+      <Filter>src\operation\distance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\distance\DistanceOp.cpp">
+      <Filter>src\operation\distance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\distance\GeometryLocation.cpp">
+      <Filter>src\operation\distance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\GeometryGraphOperation.cpp">
+      <Filter>src\operation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\IsSimpleOp.cpp">
+      <Filter>src\operation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\linemerge\EdgeString.cpp">
+      <Filter>src\operation\linemerge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\linemerge\LineMergeDirectedEdge.cpp">
+      <Filter>src\operation\linemerge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\linemerge\LineMergeEdge.cpp">
+      <Filter>src\operation\linemerge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\linemerge\LineMergeGraph.cpp">
+      <Filter>src\operation\linemerge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\linemerge\LineMerger.cpp">
+      <Filter>src\operation\linemerge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\linemerge\LineSequencer.cpp">
+      <Filter>src\operation\linemerge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\overlay\EdgeSetNoder.cpp">
+      <Filter>src\operation\overlay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\overlay\ElevationMatrix.cpp">
+      <Filter>src\operation\overlay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\overlay\ElevationMatrixCell.cpp">
+      <Filter>src\operation\overlay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\overlay\LineBuilder.cpp">
+      <Filter>src\operation\overlay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\overlay\MaximalEdgeRing.cpp">
+      <Filter>src\operation\overlay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\overlay\MinimalEdgeRing.cpp">
+      <Filter>src\operation\overlay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\overlay\OverlayNodeFactory.cpp">
+      <Filter>src\operation\overlay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\overlay\OverlayOp.cpp">
+      <Filter>src\operation\overlay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\overlay\PointBuilder.cpp">
+      <Filter>src\operation\overlay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\overlay\PolygonBuilder.cpp">
+      <Filter>src\operation\overlay</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\overlay\snap\GeometrySnapper.cpp">
+      <Filter>src\operation\overlay\snap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\overlay\snap\LineStringSnapper.cpp">
+      <Filter>src\operation\overlay\snap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\overlay\snap\SnapIfNeededOverlayOp.cpp">
+      <Filter>src\operation\overlay\snap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\overlay\snap\SnapOverlayOp.cpp">
+      <Filter>src\operation\overlay\snap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\overlay\validate\FuzzyPointLocator.cpp">
+      <Filter>src\operation\overlay\validate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\overlay\validate\OffsetPointGenerator.cpp">
+      <Filter>src\operation\overlay\validate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\overlay\validate\OverlayResultValidator.cpp">
+      <Filter>src\operation\overlay\validate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\polygonize\EdgeRing.cpp">
+      <Filter>src\operation\polygonize</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\polygonize\PolygonizeDirectedEdge.cpp">
+      <Filter>src\operation\polygonize</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\polygonize\PolygonizeEdge.cpp">
+      <Filter>src\operation\polygonize</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\polygonize\PolygonizeGraph.cpp">
+      <Filter>src\operation\polygonize</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\polygonize\Polygonizer.cpp">
+      <Filter>src\operation\polygonize</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\predicate\RectangleContains.cpp">
+      <Filter>src\operation\predicate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\predicate\RectangleIntersects.cpp">
+      <Filter>src\operation\predicate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\predicate\SegmentIntersectionTester.cpp">
+      <Filter>src\operation\predicate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\relate\EdgeEndBuilder.cpp">
+      <Filter>src\operation\relate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\relate\EdgeEndBundle.cpp">
+      <Filter>src\operation\relate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\relate\EdgeEndBundleStar.cpp">
+      <Filter>src\operation\relate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\relate\RelateComputer.cpp">
+      <Filter>src\operation\relate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\relate\RelateNode.cpp">
+      <Filter>src\operation\relate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\relate\RelateNodeFactory.cpp">
+      <Filter>src\operation\relate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\relate\RelateNodeGraph.cpp">
+      <Filter>src\operation\relate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\relate\RelateOp.cpp">
+      <Filter>src\operation\relate</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\union\CascadedPolygonUnion.cpp">
+      <Filter>src\operation\union</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\valid\ConnectedInteriorTester.cpp">
+      <Filter>src\operation\valid</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\valid\ConsistentAreaTester.cpp">
+      <Filter>src\operation\valid</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\valid\IndexedNestedRingTester.cpp">
+      <Filter>src\operation\valid</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\valid\IsValidOp.cpp">
+      <Filter>src\operation\valid</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\valid\QuadtreeNestedRingTester.cpp">
+      <Filter>src\operation\valid</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\valid\RepeatedPointTester.cpp">
+      <Filter>src\operation\valid</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\valid\SimpleNestedRingTester.cpp">
+      <Filter>src\operation\valid</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\valid\SweeplineNestedRingTester.cpp">
+      <Filter>src\operation\valid</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\operation\valid\TopologyValidationError.cpp">
+      <Filter>src\operation\valid</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\planargraph\algorithm\ConnectedSubgraphFinder.cpp">
+      <Filter>src\planargraph\algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\planargraph\DirectedEdge.cpp">
+      <Filter>src\planargraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\planargraph\DirectedEdgeStar.cpp">
+      <Filter>src\planargraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\planargraph\Edge.cpp">
+      <Filter>src\planargraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\planargraph\Node.cpp">
+      <Filter>src\planargraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\planargraph\NodeMap.cpp">
+      <Filter>src\planargraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\planargraph\PlanarGraph.cpp">
+      <Filter>src\planargraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\planargraph\Subgraph.cpp">
+      <Filter>src\planargraph</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\precision\CommonBits.cpp">
+      <Filter>src\precision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\precision\CommonBitsOp.cpp">
+      <Filter>src\precision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\precision\CommonBitsRemover.cpp">
+      <Filter>src\precision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\precision\EnhancedPrecisionOp.cpp">
+      <Filter>src\precision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\precision\SimpleGeometryPrecisionReducer.cpp">
+      <Filter>src\precision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\simplify\DouglasPeuckerLineSimplifier.cpp">
+      <Filter>src\simplify</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\simplify\DouglasPeuckerSimplifier.cpp">
+      <Filter>src\simplify</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\simplify\LineSegmentIndex.cpp">
+      <Filter>src\simplify</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\simplify\TaggedLineSegment.cpp">
+      <Filter>src\simplify</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\simplify\TaggedLinesSimplifier.cpp">
+      <Filter>src\simplify</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\simplify\TaggedLineString.cpp">
+      <Filter>src\simplify</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\simplify\TaggedLineStringSimplifier.cpp">
+      <Filter>src\simplify</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\simplify\TopologyPreservingSimplifier.cpp">
+      <Filter>src\simplify</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\util\Assert.cpp">
+      <Filter>src\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\util\GeometricShapeFactory.cpp">
+      <Filter>src\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\util\math.cpp">
+      <Filter>src\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\util\Profiler.cpp">
+      <Filter>src\util</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\capi\geos_c.h">
+      <Filter>capi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\acconfig.h">
+      <Filter>src\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos.h">
+      <Filter>src\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\algorithm\CentroidArea.h">
+      <Filter>src\headers\geos\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\algorithm\CentroidLine.h">
+      <Filter>src\headers\geos\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\algorithm\CentroidPoint.h">
+      <Filter>src\headers\geos\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\algorithm\CGAlgorithms.h">
+      <Filter>src\headers\geos\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\algorithm\ConvexHull.h">
+      <Filter>src\headers\geos\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\algorithm\HCoordinate.h">
+      <Filter>src\headers\geos\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\algorithm\InteriorPointArea.h">
+      <Filter>src\headers\geos\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\algorithm\InteriorPointLine.h">
+      <Filter>src\headers\geos\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\algorithm\InteriorPointPoint.h">
+      <Filter>src\headers\geos\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\algorithm\LineIntersector.h">
+      <Filter>src\headers\geos\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\algorithm\locate\IndexedPointInAreaLocator.h">
+      <Filter>src\headers\geos\algorithm\locate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\algorithm\locate\PointOnGeometryLocator.h">
+      <Filter>src\headers\geos\algorithm\locate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\algorithm\locate\SimplePointInAreaLocator.h">
+      <Filter>src\headers\geos\algorithm\locate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\algorithm\MCPointInRing.h">
+      <Filter>src\headers\geos\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\algorithm\MinimumDiameter.h">
+      <Filter>src\headers\geos\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\algorithm\NotRepresentableException.h">
+      <Filter>src\headers\geos\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\algorithm\PointInRing.h">
+      <Filter>src\headers\geos\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\algorithm\PointLocator.h">
+      <Filter>src\headers\geos\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\algorithm\RayCrossingCounter.h">
+      <Filter>src\headers\geos\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\algorithm\RobustDeterminant.h">
+      <Filter>src\headers\geos\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\algorithm\SimplePointInRing.h">
+      <Filter>src\headers\geos\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\algorithm\SIRtreePointInRing.h">
+      <Filter>src\headers\geos\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\export.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraphindex.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\Depth.h">
+      <Filter>src\headers\geos\geomgraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\DirectedEdge.h">
+      <Filter>src\headers\geos\geomgraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\DirectedEdgeStar.h">
+      <Filter>src\headers\geos\geomgraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\Edge.h">
+      <Filter>src\headers\geos\geomgraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\EdgeEnd.h">
+      <Filter>src\headers\geos\geomgraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\EdgeEndStar.h">
+      <Filter>src\headers\geos\geomgraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\EdgeIntersection.h">
+      <Filter>src\headers\geos\geomgraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\EdgeIntersectionList.h">
+      <Filter>src\headers\geos\geomgraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\EdgeList.h">
+      <Filter>src\headers\geos\geomgraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\EdgeNodingValidator.h">
+      <Filter>src\headers\geos\geomgraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\EdgeRing.h">
+      <Filter>src\headers\geos\geomgraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\GeometryGraph.h">
+      <Filter>src\headers\geos\geomgraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\GraphComponent.h">
+      <Filter>src\headers\geos\geomgraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\index\EdgeSetIntersector.h">
+      <Filter>src\headers\geos\geomgraph\index</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\index\MonotoneChain.h">
+      <Filter>src\headers\geos\geomgraph\index</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\index\MonotoneChainEdge.h">
+      <Filter>src\headers\geos\geomgraph\index</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\index\MonotoneChainIndexer.h">
+      <Filter>src\headers\geos\geomgraph\index</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\index\SegmentIntersector.h">
+      <Filter>src\headers\geos\geomgraph\index</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\index\SimpleEdgeSetIntersector.h">
+      <Filter>src\headers\geos\geomgraph\index</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\index\SimpleMCSweepLineIntersector.h">
+      <Filter>src\headers\geos\geomgraph\index</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\index\SimpleSweepLineIntersector.h">
+      <Filter>src\headers\geos\geomgraph\index</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\index\SweepLineEvent.h">
+      <Filter>src\headers\geos\geomgraph\index</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\index\SweepLineEventObj.h">
+      <Filter>src\headers\geos\geomgraph\index</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\index\SweepLineSegment.h">
+      <Filter>src\headers\geos\geomgraph\index</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\Label.h">
+      <Filter>src\headers\geos\geomgraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\Node.h">
+      <Filter>src\headers\geos\geomgraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\NodeFactory.h">
+      <Filter>src\headers\geos\geomgraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\NodeMap.h">
+      <Filter>src\headers\geos\geomgraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\PlanarGraph.h">
+      <Filter>src\headers\geos\geomgraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\Position.h">
+      <Filter>src\headers\geos\geomgraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\Quadrant.h">
+      <Filter>src\headers\geos\geomgraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomgraph\TopologyLocation.h">
+      <Filter>src\headers\geos\geomgraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geomUtil.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\BinaryOp.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\Coordinate.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\CoordinateArraySequence.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\CoordinateArraySequenceFactory.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\CoordinateFilter.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\CoordinateList.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\CoordinateSequence.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\CoordinateSequenceFactory.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\Dimension.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\Envelope.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\Geometry.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\GeometryCollection.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\GeometryComponentFilter.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\GeometryFactory.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\GeometryFilter.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\GeometryList.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\IntersectionMatrix.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\LinearRing.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\LineSegment.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\LineString.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\Location.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\MultiLineString.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\MultiPoint.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\MultiPolygon.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\Point.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\Polygon.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\PrecisionModel.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\prep\AbstractPreparedPolygonContains.h">
+      <Filter>src\headers\geos\geom\prep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\prep\BasicPreparedGeometry.h">
+      <Filter>src\headers\geos\geom\prep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\prep\PreparedGeometry.h">
+      <Filter>src\headers\geos\geom\prep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\prep\PreparedGeometryFactory.h">
+      <Filter>src\headers\geos\geom\prep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\prep\PreparedLineString.h">
+      <Filter>src\headers\geos\geom\prep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\prep\PreparedLineStringIntersects.h">
+      <Filter>src\headers\geos\geom\prep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\prep\PreparedPoint.h">
+      <Filter>src\headers\geos\geom\prep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\prep\PreparedPolygon.h">
+      <Filter>src\headers\geos\geom\prep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\prep\PreparedPolygonContains.h">
+      <Filter>src\headers\geos\geom\prep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\prep\PreparedPolygonContainsProperly.h">
+      <Filter>src\headers\geos\geom\prep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\prep\PreparedPolygonCovers.h">
+      <Filter>src\headers\geos\geom\prep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\prep\PreparedPolygonIntersects.h">
+      <Filter>src\headers\geos\geom\prep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\prep\PreparedPolygonLineIntersection.h">
+      <Filter>src\headers\geos\geom\prep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\prep\PreparedPolygonPredicate.h">
+      <Filter>src\headers\geos\geom\prep</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\Triangle.h">
+      <Filter>src\headers\geos\geom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\util\ComponentCoordinateExtracter.h">
+      <Filter>src\headers\geos\geom\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\util\CoordinateOperation.h">
+      <Filter>src\headers\geos\geom\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\util\GeometryCombiner.h">
+      <Filter>src\headers\geos\geom\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\util\GeometryEditor.h">
+      <Filter>src\headers\geos\geom\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\util\GeometryEditorOperation.h">
+      <Filter>src\headers\geos\geom\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\util\GeometryTransformer.h">
+      <Filter>src\headers\geos\geom\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\util\LinearComponentExtracter.h">
+      <Filter>src\headers\geos\geom\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\util\PointExtracter.h">
+      <Filter>src\headers\geos\geom\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\util\PolygonExtracter.h">
+      <Filter>src\headers\geos\geom\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geom\util\ShortCircuitedGeometryVisitor.h">
+      <Filter>src\headers\geos\geom\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\geosAlgorithm.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\indexBintree.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\indexChain.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\indexQuadtree.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\indexStrtree.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\indexSweepline.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\bintree\Bintree.h">
+      <Filter>src\headers\geos\index\bintree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\bintree\Interval.h">
+      <Filter>src\headers\geos\index\bintree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\bintree\Key.h">
+      <Filter>src\headers\geos\index\bintree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\bintree\Node.h">
+      <Filter>src\headers\geos\index\bintree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\bintree\NodeBase.h">
+      <Filter>src\headers\geos\index\bintree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\bintree\Root.h">
+      <Filter>src\headers\geos\index\bintree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\chain\MonotoneChain.h">
+      <Filter>src\headers\geos\index\chain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\chain\MonotoneChainBuilder.h">
+      <Filter>src\headers\geos\index\chain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\chain\MonotoneChainOverlapAction.h">
+      <Filter>src\headers\geos\index\chain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\chain\MonotoneChainSelectAction.h">
+      <Filter>src\headers\geos\index\chain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\intervalrtree\IntervalRTreeBranchNode.h">
+      <Filter>src\headers\geos\index\intervalrtree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\intervalrtree\IntervalRTreeLeafNode.h">
+      <Filter>src\headers\geos\index\intervalrtree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\intervalrtree\IntervalRTreeNode.h">
+      <Filter>src\headers\geos\index\intervalrtree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\intervalrtree\SortedPackedIntervalRTree.h">
+      <Filter>src\headers\geos\index\intervalrtree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\ItemVisitor.h">
+      <Filter>src\headers\geos\index</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\quadtree\DoubleBits.h">
+      <Filter>src\headers\geos\index\quadtree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\quadtree\IntervalSize.h">
+      <Filter>src\headers\geos\index\quadtree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\quadtree\Key.h">
+      <Filter>src\headers\geos\index\quadtree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\quadtree\Node.h">
+      <Filter>src\headers\geos\index\quadtree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\quadtree\NodeBase.h">
+      <Filter>src\headers\geos\index\quadtree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\quadtree\Quadtree.h">
+      <Filter>src\headers\geos\index\quadtree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\quadtree\Root.h">
+      <Filter>src\headers\geos\index\quadtree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\SpatialIndex.h">
+      <Filter>src\headers\geos\index</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\strtree\AbstractNode.h">
+      <Filter>src\headers\geos\index\strtree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\strtree\AbstractSTRtree.h">
+      <Filter>src\headers\geos\index\strtree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\strtree\Boundable.h">
+      <Filter>src\headers\geos\index\strtree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\strtree\Interval.h">
+      <Filter>src\headers\geos\index\strtree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\strtree\ItemBoundable.h">
+      <Filter>src\headers\geos\index\strtree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\strtree\SIRtree.h">
+      <Filter>src\headers\geos\index\strtree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\strtree\STRtree.h">
+      <Filter>src\headers\geos\index\strtree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\sweepline\SweepLineEvent.h">
+      <Filter>src\headers\geos\index\sweepline</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\sweepline\SweepLineIndex.h">
+      <Filter>src\headers\geos\index\sweepline</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\sweepline\SweepLineInterval.h">
+      <Filter>src\headers\geos\index\sweepline</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\index\sweepline\SweepLineOverlapAction.h">
+      <Filter>src\headers\geos\index\sweepline</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\inline.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\io.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\io\ByteOrderDataInStream.h">
+      <Filter>src\headers\geos\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\io\ByteOrderValues.h">
+      <Filter>src\headers\geos\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\io\ParseException.h">
+      <Filter>src\headers\geos\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\io\StringTokenizer.h">
+      <Filter>src\headers\geos\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\io\WKBConstants.h">
+      <Filter>src\headers\geos\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\io\WKBReader.h">
+      <Filter>src\headers\geos\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\io\WKBWriter.h">
+      <Filter>src\headers\geos\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\io\WKTReader.h">
+      <Filter>src\headers\geos\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\io\WKTWriter.h">
+      <Filter>src\headers\geos\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\io\Writer.h">
+      <Filter>src\headers\geos\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\linearref\ExtractLineByLocation.h">
+      <Filter>src\headers\geos\linearref</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\linearref\LengthIndexedLine.h">
+      <Filter>src\headers\geos\linearref</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\linearref\LengthIndexOfPoint.h">
+      <Filter>src\headers\geos\linearref</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\linearref\LengthLocationMap.h">
+      <Filter>src\headers\geos\linearref</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\linearref\LinearGeometryBuilder.h">
+      <Filter>src\headers\geos\linearref</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\linearref\LinearIterator.h">
+      <Filter>src\headers\geos\linearref</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\linearref\LinearLocation.h">
+      <Filter>src\headers\geos\linearref</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\linearref\LocationIndexOfLine.h">
+      <Filter>src\headers\geos\linearref</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\linearref\LocationIndexOfPoint.h">
+      <Filter>src\headers\geos\linearref</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\nodingSnapround.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\FastSegmentSetIntersectionFinder.h">
+      <Filter>src\headers\geos\noding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\IntersectionAdder.h">
+      <Filter>src\headers\geos\noding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\IntersectionFinderAdder.h">
+      <Filter>src\headers\geos\noding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\IteratedNoder.h">
+      <Filter>src\headers\geos\noding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\MCIndexNoder.h">
+      <Filter>src\headers\geos\noding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\MCIndexSegmentSetMutualIntersector.h">
+      <Filter>src\headers\geos\noding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\NodableSegmentString.h">
+      <Filter>src\headers\geos\noding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\NodedSegmentString.h">
+      <Filter>src\headers\geos\noding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\Noder.h">
+      <Filter>src\headers\geos\noding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\NodingValidator.h">
+      <Filter>src\headers\geos\noding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\Octant.h">
+      <Filter>src\headers\geos\noding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\ScaledNoder.h">
+      <Filter>src\headers\geos\noding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\SegmentIntersectionDetector.h">
+      <Filter>src\headers\geos\noding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\SegmentIntersector.h">
+      <Filter>src\headers\geos\noding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\SegmentNode.h">
+      <Filter>src\headers\geos\noding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\SegmentNodeList.h">
+      <Filter>src\headers\geos\noding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\SegmentSetMutualIntersector.h">
+      <Filter>src\headers\geos\noding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\SegmentString.h">
+      <Filter>src\headers\geos\noding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\SegmentStringUtil.h">
+      <Filter>src\headers\geos\noding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\SimpleNoder.h">
+      <Filter>src\headers\geos\noding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\SinglePassNoder.h">
+      <Filter>src\headers\geos\noding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\snapround\HotPixel.h">
+      <Filter>src\headers\geos\noding\snapround</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\snapround\MCIndexPointSnapper.h">
+      <Filter>src\headers\geos\noding\snapround</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\snapround\MCIndexSnapRounder.h">
+      <Filter>src\headers\geos\noding\snapround</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\noding\snapround\SimpleSnapRounder.h">
+      <Filter>src\headers\geos\noding\snapround</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\opBuffer.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\opDistance.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\buffer\BufferBuilder.h">
+      <Filter>src\headers\geos\operation\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\buffer\BufferOp.h">
+      <Filter>src\headers\geos\operation\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\buffer\BufferSubgraph.h">
+      <Filter>src\headers\geos\operation\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\buffer\OffsetCurveBuilder.h">
+      <Filter>src\headers\geos\operation\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\buffer\OffsetCurveSetBuilder.h">
+      <Filter>src\headers\geos\operation\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\buffer\RightmostEdgeFinder.h">
+      <Filter>src\headers\geos\operation\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\buffer\SubgraphDepthLocater.h">
+      <Filter>src\headers\geos\operation\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\distance\ConnectedElementLocationFilter.h">
+      <Filter>src\headers\geos\operation\distance</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\distance\ConnectedElementPointFilter.h">
+      <Filter>src\headers\geos\operation\distance</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\distance\DistanceOp.h">
+      <Filter>src\headers\geos\operation\distance</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\distance\GeometryLocation.h">
+      <Filter>src\headers\geos\operation\distance</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\EndpointInfo.h">
+      <Filter>src\headers\geos\operation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\GeometryGraphOperation.h">
+      <Filter>src\headers\geos\operation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\IsSimpleOp.h">
+      <Filter>src\headers\geos\operation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\linemerge\EdgeString.h">
+      <Filter>src\headers\geos\operation\linemerge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\linemerge\LineMergeDirectedEdge.h">
+      <Filter>src\headers\geos\operation\linemerge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\linemerge\LineMergeEdge.h">
+      <Filter>src\headers\geos\operation\linemerge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\linemerge\LineMergeGraph.h">
+      <Filter>src\headers\geos\operation\linemerge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\linemerge\LineMerger.h">
+      <Filter>src\headers\geos\operation\linemerge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\linemerge\LineSequencer.h">
+      <Filter>src\headers\geos\operation\linemerge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\overlay\EdgeSetNoder.h">
+      <Filter>src\headers\geos\operation\overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\overlay\ElevationMatrix.h">
+      <Filter>src\headers\geos\operation\overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\overlay\ElevationMatrixCell.h">
+      <Filter>src\headers\geos\operation\overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\overlay\FuzzyPointLocator.h">
+      <Filter>src\headers\geos\operation\overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\overlay\LineBuilder.h">
+      <Filter>src\headers\geos\operation\overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\overlay\MaximalEdgeRing.h">
+      <Filter>src\headers\geos\operation\overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\overlay\MinimalEdgeRing.h">
+      <Filter>src\headers\geos\operation\overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\overlay\OffsetPointGenerator.h">
+      <Filter>src\headers\geos\operation\overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\overlay\OverlayNodeFactory.h">
+      <Filter>src\headers\geos\operation\overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\overlay\OverlayOp.h">
+      <Filter>src\headers\geos\operation\overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\overlay\OverlayResultValidator.h">
+      <Filter>src\headers\geos\operation\overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\overlay\PointBuilder.h">
+      <Filter>src\headers\geos\operation\overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\overlay\PolygonBuilder.h">
+      <Filter>src\headers\geos\operation\overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\polygonize\EdgeRing.h">
+      <Filter>src\headers\geos\operation\polygonize</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\polygonize\PolygonizeDirectedEdge.h">
+      <Filter>src\headers\geos\operation\polygonize</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\polygonize\PolygonizeEdge.h">
+      <Filter>src\headers\geos\operation\polygonize</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\polygonize\PolygonizeGraph.h">
+      <Filter>src\headers\geos\operation\polygonize</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\polygonize\Polygonizer.h">
+      <Filter>src\headers\geos\operation\polygonize</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\predicate\RectangleContains.h">
+      <Filter>src\headers\geos\operation\predicate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\predicate\RectangleIntersects.h">
+      <Filter>src\headers\geos\operation\predicate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\predicate\SegmentIntersectionTester.h">
+      <Filter>src\headers\geos\operation\predicate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\relate\EdgeEndBuilder.h">
+      <Filter>src\headers\geos\operation\relate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\relate\EdgeEndBundle.h">
+      <Filter>src\headers\geos\operation\relate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\relate\EdgeEndBundleStar.h">
+      <Filter>src\headers\geos\operation\relate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\relate\RelateComputer.h">
+      <Filter>src\headers\geos\operation\relate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\relate\RelateNode.h">
+      <Filter>src\headers\geos\operation\relate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\relate\RelateNodeFactory.h">
+      <Filter>src\headers\geos\operation\relate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\relate\RelateNodeGraph.h">
+      <Filter>src\headers\geos\operation\relate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\relate\RelateOp.h">
+      <Filter>src\headers\geos\operation\relate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\union\CascadedPolygonUnion.h">
+      <Filter>src\headers\geos\operation\union</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\valid\ConnectedInteriorTester.h">
+      <Filter>src\headers\geos\operation\valid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\valid\ConsistentAreaTester.h">
+      <Filter>src\headers\geos\operation\valid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\valid\IsValidOp.h">
+      <Filter>src\headers\geos\operation\valid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\valid\QuadtreeNestedRingTester.h">
+      <Filter>src\headers\geos\operation\valid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\valid\RepeatedPointTester.h">
+      <Filter>src\headers\geos\operation\valid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\valid\SimpleNestedRingTester.h">
+      <Filter>src\headers\geos\operation\valid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\valid\SweeplineNestedRingTester.h">
+      <Filter>src\headers\geos\operation\valid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\operation\valid\TopologyValidationError.h">
+      <Filter>src\headers\geos\operation\valid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\opLinemerge.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\opOverlay.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\opPolygonize.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\opPredicate.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\opRelate.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\opValid.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\planargraph.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\planargraph\algorithm\ConnectedSubgraphFinder.h">
+      <Filter>src\headers\geos\planargraph\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\planargraph\DirectedEdge.h">
+      <Filter>src\headers\geos\planargraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\planargraph\DirectedEdgeStar.h">
+      <Filter>src\headers\geos\planargraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\planargraph\Edge.h">
+      <Filter>src\headers\geos\planargraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\planargraph\GraphComponent.h">
+      <Filter>src\headers\geos\planargraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\planargraph\Node.h">
+      <Filter>src\headers\geos\planargraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\planargraph\NodeMap.h">
+      <Filter>src\headers\geos\planargraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\planargraph\PlanarGraph.h">
+      <Filter>src\headers\geos\planargraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\planargraph\Subgraph.h">
+      <Filter>src\headers\geos\planargraph</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\platform.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\precision.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\precision\CommonBits.h">
+      <Filter>src\headers\geos\precision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\precision\CommonBitsOp.h">
+      <Filter>src\headers\geos\precision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\precision\CommonBitsRemover.h">
+      <Filter>src\headers\geos\precision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\precision\EnhancedPrecisionOp.h">
+      <Filter>src\headers\geos\precision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\precision\SimpleGeometryPrecisionReducer.h">
+      <Filter>src\headers\geos\precision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\profiler.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\simplify\DouglasPeuckerLineSimplifier.h">
+      <Filter>src\headers\geos\simplify</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\simplify\DouglasPeuckerSimplifier.h">
+      <Filter>src\headers\geos\simplify</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\simplify\LineSegmentIndex.h">
+      <Filter>src\headers\geos\simplify</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\simplify\TaggedLineSegment.h">
+      <Filter>src\headers\geos\simplify</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\simplify\TaggedLinesSimplifier.h">
+      <Filter>src\headers\geos\simplify</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\simplify\TaggedLineString.h">
+      <Filter>src\headers\geos\simplify</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\simplify\TaggedLineStringSimplifier.h">
+      <Filter>src\headers\geos\simplify</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\simplify\TopologyPreservingSimplifier.h">
+      <Filter>src\headers\geos\simplify</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\spatialIndex.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\timeval.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\unload.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\util.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\util\Assert.h">
+      <Filter>src\headers\geos\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\util\AssertionFailedException.h">
+      <Filter>src\headers\geos\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\util\CoordinateArrayFilter.h">
+      <Filter>src\headers\geos\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\util\GeometricShapeFactory.h">
+      <Filter>src\headers\geos\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\util\GEOSException.h">
+      <Filter>src\headers\geos\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\util\IllegalArgumentException.h">
+      <Filter>src\headers\geos\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\util\math.h">
+      <Filter>src\headers\geos\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\util\TopologyException.h">
+      <Filter>src\headers\geos\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\util\UniqueCoordinateArrayFilter.h">
+      <Filter>src\headers\geos\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\util\UnsupportedOperationException.h">
+      <Filter>src\headers\geos\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\headers\geos\version.h">
+      <Filter>src\headers\geos</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\operation\buffer\BufferInputLineSimplifier.h">
+      <Filter>src\operation\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\operation\buffer\OffsetCurveVertexList.h">
+      <Filter>src\operation\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\operation\valid\IndexedNestedRingTester.h">
+      <Filter>src\operation\valid</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\..\capi\geos_c.h.in">
+      <Filter>capi</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\source\headers\geos\platform.h.vc">
+      <Filter>src\headers\geos</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\source\headers\geos\version.h.vc">
+      <Filter>src\headers\geos</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

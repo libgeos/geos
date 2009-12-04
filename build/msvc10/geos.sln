@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8584EE81-D4E9-4EC7-ABF2-389E5F9D0107}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\AUTHORS = ..\..\AUTHORS
+		..\..\COPYING = ..\..\COPYING
+		..\..\INSTALL = ..\..\INSTALL
+		Makefile.am = Makefile.am
+		..\..\makefile.vc = ..\..\makefile.vc
+		..\..\NEWS = ..\..\NEWS
+		..\..\nmake.opt = ..\..\nmake.opt
+		..\..\README = ..\..\README
+		..\..\TODO = ..\..\TODO
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "geos_lib", "geos_lib\geos_lib.vcxproj", "{108E75A3-0A92-489A-B1A9-8F071D40A108}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "geos_unit", "geos_unit\geos_unit.vcxproj", "{30461863-CCA4-4A8F-8BEE-1AB57060D5C2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "geos_c_dll", "geos_c_dll\geos_c_dll.vcxproj", "{CDBC2FB8-2995-49DE-B80B-B7BE0E4C1115}"
+	ProjectSection(ProjectDependencies) = postProject
+		{108E75A3-0A92-489A-B1A9-8F071D40A108} = {108E75A3-0A92-489A-B1A9-8F071D40A108}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "geos_xmltester", "geos_xmltester\geos_xmltester.vcxproj", "{304618A3-CCA4-4A2F-8BEE-1AB57060D5C2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{108E75A3-0A92-489A-B1A9-8F071D40A108}.Debug|Win32.ActiveCfg = Debug|Win32
+		{108E75A3-0A92-489A-B1A9-8F071D40A108}.Debug|Win32.Build.0 = Debug|Win32
+		{108E75A3-0A92-489A-B1A9-8F071D40A108}.Release|Win32.ActiveCfg = Release|Win32
+		{108E75A3-0A92-489A-B1A9-8F071D40A108}.Release|Win32.Build.0 = Release|Win32
+		{30461863-CCA4-4A8F-8BEE-1AB57060D5C2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{30461863-CCA4-4A8F-8BEE-1AB57060D5C2}.Debug|Win32.Build.0 = Debug|Win32
+		{30461863-CCA4-4A8F-8BEE-1AB57060D5C2}.Release|Win32.ActiveCfg = Release|Win32
+		{30461863-CCA4-4A8F-8BEE-1AB57060D5C2}.Release|Win32.Build.0 = Release|Win32
+		{CDBC2FB8-2995-49DE-B80B-B7BE0E4C1115}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CDBC2FB8-2995-49DE-B80B-B7BE0E4C1115}.Debug|Win32.Build.0 = Debug|Win32
+		{CDBC2FB8-2995-49DE-B80B-B7BE0E4C1115}.Release|Win32.ActiveCfg = Release|Win32
+		{CDBC2FB8-2995-49DE-B80B-B7BE0E4C1115}.Release|Win32.Build.0 = Release|Win32
+		{304618A3-CCA4-4A2F-8BEE-1AB57060D5C2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{304618A3-CCA4-4A2F-8BEE-1AB57060D5C2}.Debug|Win32.Build.0 = Debug|Win32
+		{304618A3-CCA4-4A2F-8BEE-1AB57060D5C2}.Release|Win32.ActiveCfg = Release|Win32
+		{304618A3-CCA4-4A2F-8BEE-1AB57060D5C2}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

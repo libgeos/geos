@@ -5,10 +5,13 @@
 # is not able to detect required build order but blindly
 # relies on the order items in SUBDIRS appear.
 #
-SUBDIRS = 	\
-	msvc80 \
-	msvc90 \
-	msvc10
+SUBDIRS = \
+	geos_c_dll \
+	geos_lib \
+	geos_unit \
+	geos_xmltester
 
-EXTRA_DIST = README
-
+EXTRA_DIST = \
+	README \
+	geos.sln \
+	geos.vsprops

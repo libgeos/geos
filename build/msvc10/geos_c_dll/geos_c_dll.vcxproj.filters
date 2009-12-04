@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="capi">
+      <UniqueIdentifier>{47d503a4-fab9-4542-8636-05dd97a4f79a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\capi\geos_c.cpp">
+      <Filter>capi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\capi\geos_ts_c.cpp">
+      <Filter>capi</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\capi\geos_c.h">
+      <Filter>capi</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\capi\Makefile.am">
+      <Filter>capi</Filter>
+    </None>
+    <None Include="Makefile.am" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\..\capi\geos_c.h.in">
+      <Filter>capi</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>
