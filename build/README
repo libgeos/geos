@@ -2,3 +2,11 @@ $Id$
 
 This directory is dedicated for custom, contributed and non-official
 building systems for GEOS.
+
+Visual Studio solutions:
+
+* msvc80 - 80 suffix denotes Visual C++ 8.0 from Visual Studio 2005
+* msvc90 - 90 suffix denotes Visual C++ 9.0 from Visual Studio 2008
+* msvc10 - 10 suffix denotes Visual C++ 10.0 from Visual Studio 2010
+
+Created and maintained by Mateusz Loskot <mateusz@loskot.net>
