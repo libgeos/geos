@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\;..\..\..\tests\unit;..\..\..\tests\tut;..\..\..\capi;..\..\..\source\headers"
+				AdditionalIncludeDirectories=".\;..\..\..\tests\unit;..\..\..\tests\unit\tut;..\..\..\capi;..\..\..\source\headers"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;WIN32_LEAN_AND_MEAN;NOMINMAX;NOGDI"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -120,7 +120,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\;..\..\..\tests\unit;..\..\..\tests\tut;..\..\..\capi;..\..\..\source\headers"
+				AdditionalIncludeDirectories=".\;..\..\..\tests\unit;..\..\..\tests\unit\tut;..\..\..\capi;..\..\..\source\headers"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;WIN32_LEAN_AND_MEAN;NOMINMAX;NOGDI"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -181,7 +181,23 @@
 			Name="tut"
 			>
 			<File
-				RelativePath="..\..\..\tests\tut\tut.h"
+				RelativePath="..\..\..\tests\unit\tut\tut.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\tests\unit\tut\tut_assert.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\tests\unit\tut\tut_console_reporter.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\tests\unit\tut\tut_exception.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\tests\unit\tut\tut_posix.hpp"
 				>
 			</File>
 			<File
@@ -189,7 +205,23 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\tests\unit\tut\tut_reporter.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\tests\tut\tut_restartable.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\tests\unit\tut\tut_restartable.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\tests\unit\tut\tut_result.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\tests\unit\tut\tut_runner.hpp"
 				>
 			</File>
 		</Filter>
@@ -293,15 +325,19 @@
 			Name="noding"
 			>
 			<File
+				RelativePath="..\..\..\tests\unit\noding\BasicSegmentStringTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\tests\unit\noding\NodedSegmentStringTest.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\tests\unit\noding\SegmentNodeTest.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\tests\unit\noding\SegmentPointComparatorTest.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\tests\unit\noding\SegmentStringTest.cpp"
 				>
 			</File>
 		</Filter>
@@ -340,6 +376,14 @@
 				RelativePath="..\..\..\tests\unit\algorithm\PointLocatorTest.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\..\tests\unit\algorithm\RobustLineIntersectionTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\tests\unit\algorithm\RobustLineIntersectorTest.cpp"
+				>
+			</File>
 			<Filter
 				Name="CGAlgorithms"
 				>
@@ -353,6 +397,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\tests\unit\algorithm\CGAlgorithms\isPointInRingTest.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="distance"
+				>
+				<File
+					RelativePath="..\..\..\tests\unit\algorithm\distance\DiscreteHausdorffDistanceTest.cpp"
 					>
 				</File>
 			</Filter>
@@ -395,18 +447,34 @@
 			<Filter
 				Name="overlay"
 				>
-				<File
-					RelativePath="..\..\..\tests\unit\operation\overlay\FuzzyPointLocatorTest.cpp"
+				<Filter
+					Name="snap"
 					>
-				</File>
-				<File
-					RelativePath="..\..\..\tests\unit\operation\overlay\OffsetPointGeneratorTest.cpp"
+					<File
+						RelativePath="..\..\..\tests\unit\operation\overlay\snap\GeometrySnapperTest.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\tests\unit\operation\overlay\snap\LineStringSnapperTest.cpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="validate"
 					>
-				</File>
-				<File
-					RelativePath="..\..\..\tests\unit\operation\overlay\OverlayResultValidatorTest.cpp"
-					>
-				</File>
+					<File
+						RelativePath="..\..\..\tests\unit\operation\overlay\validate\FuzzyPointLocatorTest.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\tests\unit\operation\overlay\validate\OffsetPointGeneratorTest.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\tests\unit\operation\overlay\validate\OverlayResultValidatorTest.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="union"
@@ -416,18 +484,34 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="buffer"
+				>
+				<File
+					RelativePath="..\..\..\tests\unit\operation\buffer\BufferOpTest.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="valid"
+				>
+				<File
+					RelativePath="..\..\..\tests\unit\operation\valid\IsValidTest.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\tests\unit\operation\valid\ValidClosedRingTest.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\tests\unit\operation\valid\ValidSelfTouchingRingFormingHoleTest.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="precision"
 			>
-			<File
-				RelativePath="..\..\..\tests\unit\precision\GeometrySnapperTest.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\tests\unit\precision\LineStringSnapperTest.cpp"
-				>
-			</File>
 			<File
 				RelativePath="..\..\..\tests\unit\precision\SimpleGeometryPrecisionReducerTest.cpp"
 				>
@@ -437,7 +521,19 @@
 			Name="capi"
 			>
 			<File
+				RelativePath="..\..\..\tests\unit\capi\GEOSBufferTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\tests\unit\capi\GEOSContainsTest.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\tests\unit\capi\GEOSCoordSeqTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\tests\unit\capi\GEOSGeomFromWKBTest.cpp"
 				>
 			</File>
 			<File
@@ -449,7 +545,23 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\tests\unit\capi\GEOSPreparedGeometryTest.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\tests\unit\capi\GEOSSimplifyTest.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\tests\unit\capi\GEOSWithinTest.cpp"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="linearref"
+			>
+			<File
+				RelativePath="..\..\..\tests\unit\linearref\LengthIndexedLineTest.cpp"
 				>
 			</File>
 		</Filter>

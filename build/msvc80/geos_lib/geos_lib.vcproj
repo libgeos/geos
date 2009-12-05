@@ -152,7 +152,15 @@
 			Name="src"
 			>
 			<File
+				RelativePath="..\..\..\source\dirlist.mk"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\inlines.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\Makefile.am"
 				>
 			</File>
 			<File
@@ -162,6 +170,14 @@
 			<Filter
 				Name="algorithm"
 				>
+				<File
+					RelativePath="..\..\..\source\algorithm\Angle.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\algorithm\BoundaryNodeRule.cpp"
+					>
+				</File>
 				<File
 					RelativePath="..\..\..\source\algorithm\CentroidArea.cpp"
 					>
@@ -248,24 +264,18 @@
 					<File
 						RelativePath="..\..\..\source\algorithm\locate\SimplePointInAreaLocator.cpp"
 						>
-						<FileConfiguration
-							Name="Debug|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)\$(InputName)1.obj"
-								XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)\$(InputName)1.obj"
-								XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-							/>
-						</FileConfiguration>
+					</File>
+				</Filter>
+				<Filter
+					Name="distance"
+					>
+					<File
+						RelativePath="..\..\..\source\algorithm\distance\DiscreteHausdorffDistance.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\algorithm\distance\DistanceToPoint.cpp"
+						>
 					</File>
 				</Filter>
 			</Filter>
@@ -666,18 +676,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geom\util\LinearComponentExtracter.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\source\geom\util\PointExtracter.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\source\geom\util\PolygonExtracter.cpp"
-						>
-					</File>
-					<File
 						RelativePath="..\..\..\source\geom\util\ShortCircuitedGeometryVisitor.cpp"
 						>
 					</File>
@@ -915,6 +913,10 @@
 				Name="noding"
 				>
 				<File
+					RelativePath="..\..\..\source\noding\BasicSegmentString.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\noding\FastNodingValidator.cpp"
 					>
 				</File>
@@ -952,6 +954,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\noding\Octant.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\noding\OrientedCoordinateArray.cpp"
 					>
 				</File>
 				<File
@@ -1174,7 +1180,19 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\..\source\operation\buffer\BufferInputLineSimplifier.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\operation\buffer\BufferInputLineSimplifier.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\source\operation\buffer\BufferOp.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\operation\buffer\BufferParameters.cpp"
 						>
 					</File>
 					<File
@@ -1187,6 +1205,10 @@
 					</File>
 					<File
 						RelativePath="..\..\..\source\operation\buffer\OffsetCurveSetBuilder.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\operation\buffer\OffsetCurveVertexList.h"
 						>
 					</File>
 					<File
@@ -1234,10 +1256,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\overlay\FuzzyPointLocator.cpp"
-						>
-					</File>
-					<File
 						RelativePath="..\..\..\source\operation\overlay\LineBuilder.cpp"
 						>
 					</File>
@@ -1250,19 +1268,11 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\overlay\OffsetPointGenerator.cpp"
-						>
-					</File>
-					<File
 						RelativePath="..\..\..\source\operation\overlay\OverlayNodeFactory.cpp"
 						>
 					</File>
 					<File
 						RelativePath="..\..\..\source\operation\overlay\OverlayOp.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\source\operation\overlay\OverlayResultValidator.cpp"
 						>
 					</File>
 					<File
@@ -1273,6 +1283,42 @@
 						RelativePath="..\..\..\source\operation\overlay\PolygonBuilder.cpp"
 						>
 					</File>
+					<Filter
+						Name="snap"
+						>
+						<File
+							RelativePath="..\..\..\source\operation\overlay\snap\GeometrySnapper.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\operation\overlay\snap\LineStringSnapper.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\operation\overlay\snap\SnapIfNeededOverlayOp.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\operation\overlay\snap\SnapOverlayOp.cpp"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="validate"
+						>
+						<File
+							RelativePath="..\..\..\source\operation\overlay\validate\FuzzyPointLocator.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\operation\overlay\validate\OffsetPointGenerator.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\operation\overlay\validate\OverlayResultValidator.cpp"
+							>
+						</File>
+					</Filter>
 				</Filter>
 				<Filter
 					Name="polygonize"
@@ -1361,6 +1407,14 @@
 					</File>
 					<File
 						RelativePath="..\..\..\source\operation\valid\ConsistentAreaTester.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\operation\valid\IndexedNestedRingTester.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\operation\valid\IndexedNestedRingTester.h"
 						>
 					</File>
 					<File
@@ -1461,14 +1515,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\precision\GeometrySnapper.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\source\precision\LineStringSnapper.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\source\precision\SimpleGeometryPrecisionReducer.cpp"
 					>
 				</File>
@@ -1481,15 +1527,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\util\AssertionFailedException.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\source\util\GeometricShapeFactory.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\source\util\IllegalArgumentException.cpp"
 					>
 				</File>
 				<File
@@ -1498,10 +1536,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\util\Profiler.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\source\util\UnsupportedOperationException.cpp"
 					>
 				</File>
 			</Filter>
@@ -1524,6 +1558,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\..\source\headers\geos\export.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\source\headers\geos\geom.h"
 						>
 					</File>
@@ -1533,6 +1571,10 @@
 					</File>
 					<File
 						RelativePath="..\..\..\source\headers\geos\geomgraphindex.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\headers\geos\geomPrep.h"
 						>
 					</File>
 					<File
@@ -1549,6 +1591,10 @@
 					</File>
 					<File
 						RelativePath="..\..\..\source\headers\geos\indexChain.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\headers\geos\indexIntervalRTree.h"
 						>
 					</File>
 					<File
@@ -1703,6 +1749,18 @@
 						Name="algorithm"
 						>
 						<File
+							RelativePath="..\..\..\source\headers\geos\algorithm\Angle.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\algorithm\BoundaryNodeRule.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\algorithm\CentralEndpointIntersector.h"
+							>
+						</File>
+						<File
 							RelativePath="..\..\..\source\headers\geos\algorithm\CentroidArea.h"
 							>
 						</File>
@@ -1798,6 +1856,22 @@
 								>
 							</File>
 						</Filter>
+						<Filter
+							Name="distance"
+							>
+							<File
+								RelativePath="..\..\..\source\headers\geos\algorithm\distance\DiscreteHausdorffDistance.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\source\headers\geos\algorithm\distance\DistanceToPoint.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\source\headers\geos\algorithm\distance\PointPairDistance.h"
+								>
+							</File>
+						</Filter>
 					</Filter>
 					<Filter
 						Name="geom"
@@ -1840,6 +1914,10 @@
 						</File>
 						<File
 							RelativePath="..\..\..\source\headers\geos\geom\CoordinateSequenceFactory.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\geom\CoordinateSequenceFilter.h"
 							>
 						</File>
 						<File
@@ -2207,6 +2285,14 @@
 						Name="noding"
 						>
 						<File
+							RelativePath="..\..\..\source\headers\geos\noding\BasicSegmentString.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\noding\FastNodingValidator.h"
+							>
+						</File>
+						<File
 							RelativePath="..\..\..\source\headers\geos\noding\FastSegmentSetIntersectionFinder.h"
 							>
 						</File>
@@ -2255,6 +2341,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\..\..\source\headers\geos\noding\OrientedCoordinateArray.h"
+							>
+						</File>
+						<File
 							RelativePath="..\..\..\source\headers\geos\noding\ScaledNoder.h"
 							>
 						</File>
@@ -2295,6 +2385,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\..\..\source\headers\geos\noding\SingleInteriorIntersectionFinder.h"
+							>
+						</File>
+						<File
 							RelativePath="..\..\..\source\headers\geos\noding\SinglePassNoder.h"
 							>
 						</File>
@@ -2330,10 +2424,6 @@
 					<Filter
 						Name="operation"
 						>
-						<File
-							RelativePath="..\..\..\source\headers\geos\operation\EndpointInfo.h"
-							>
-						</File>
 						<File
 							RelativePath="..\..\..\source\headers\geos\operation\GeometryGraphOperation.h"
 							>
@@ -2660,6 +2750,10 @@
 						</File>
 						<File
 							RelativePath="..\..\..\source\headers\geos\io\ByteOrderValues.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\io\CLocalizer.h"
 							>
 						</File>
 						<File
@@ -3013,6 +3107,46 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="linearref"
+				>
+				<File
+					RelativePath="..\..\..\source\linearref\ExtractLineByLocation.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\linearref\LengthIndexedLine.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\linearref\LengthIndexOfPoint.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\linearref\LengthLocationMap.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\linearref\LinearGeometryBuilder.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\linearref\LinearIterator.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\linearref\LinearLocation.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\linearref\LocationIndexOfLine.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\linearref\LocationIndexOfPoint.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="capi"
@@ -3028,6 +3162,26 @@
 			<File
 				RelativePath="..\..\..\capi\geos_c.h.in"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;"
+						CommandLine="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;&#x0D;&#x0A;"
+						Outputs="$(InputDir)$(InputName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;"
+						CommandLine="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;&#x0D;&#x0A;"
+						Outputs="$(InputDir)$(InputName)"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\capi\geos_ts_c.cpp"
