@@ -354,6 +354,7 @@ AC_OUTPUT([
 	build/msvc80/geos_python/Makefile
 	build/msvc80/geos_ruby/Makefile
 	build/msvc80/geos_unit/Makefile
+	build/msvc80/geos_xmltester/Makefile
 	build/msvc90/Makefile
 	build/msvc90/geos_c_dll/Makefile
 	build/msvc90/geos_lib/Makefile
