@@ -91,29 +91,46 @@ LineString* ExtractLineByLocation::computeLine(const LinearLocation& start, cons
 	CoordinateSequence* coordinates = line->getCoordinates();
 	CoordinateArraySequence newCoordinateArray;
 
+    const unsigned int indexStep = 1;
 	unsigned int startSegmentIndex = start.getSegmentIndex();
+    
 	if (start.getSegmentFraction() > 0.0)
-		startSegmentIndex += 1;
-	unsigned int lastSegmentIndex = end.getSegmentIndex();
+    {
+		startSegmentIndex += indexStep;
+    }
+	
+    unsigned int lastSegmentIndex = end.getSegmentIndex();
 	if (end.getSegmentFraction() == 1.0)
-		lastSegmentIndex += 1;
+    {
+		lastSegmentIndex += indexStep;
+    }
+
 	if (lastSegmentIndex >= coordinates->size())
-		lastSegmentIndex = coordinates->size() - 1;
-	// not needed - LinearLocation values should always be correct
-	//Assert.isTrue(end.getSegmentFraction() <= 1.0, "invalid segment fraction value");
+    {
+        assert(coordinates->size() > 0);
+        lastSegmentIndex = coordinates->size() - indexStep;
+    }
 
 	if (! start.isVertex())
+    {
 		newCoordinateArray.add(start.getCoordinate(line));
+    }
+
 	for (unsigned int i = startSegmentIndex; i <= lastSegmentIndex; i++)
 	{
 		newCoordinateArray.add((*coordinates)[i]);
 	}
+
 	if (! end.isVertex())
+    {
 		newCoordinateArray.add(end.getCoordinate(line));
+    }
 
 	// ensure there is at least one coordinate in the result
 	if (newCoordinateArray.size() == 0)
+    {
 		newCoordinateArray.add(start.getCoordinate(line));
+    }
 
 	/**
 	 * Ensure there is enough coordinates to build a valid line.
