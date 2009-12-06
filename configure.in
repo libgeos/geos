@@ -457,11 +457,11 @@ AC_OUTPUT([
 	tests/perf/operation/Makefile
 	tests/perf/operation/buffer/Makefile
 	tests/xmltester/Makefile
+	tests/geostest/Makefile
+	tests/thread/Makefile
 	tools/Makefile
 	tools/geos-config
 	])
-
-
 
 dnl -- echo "---------------------------------------"
 dnl -- echo "Boost UTF: $use_boost_utf"
@@ -469,4 +469,3 @@ echo "Swig: $use_swig"
 echo "Python: $use_python"
 echo "Ruby: $use_ruby"
 dnl -- echo "---------------------------------------"
-
