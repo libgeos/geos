@@ -1,13 +1,12 @@
-
+# $Id$
+#
+# tests/unit builds geos_unit - unit tests runner program
+#
 INCLUDES = -I$(top_srcdir)/source/headers -I$(top_srcdir)/tests/unit/tut -I$(top_builddir)/capi
 
 TESTS = geos_unit
 
 EXTRA_DIST = \
-	capi/brokengrammar \
-	capi/test.expected \
-	capi/test.wkt \
-	capi/testrunner.sh \
 	tut/tut_assert.hpp \
 	tut/tut_exception.hpp \
 	tut/tut.hpp \
@@ -20,7 +19,7 @@ EXTRA_DIST = \
 
 
 #noinst_PROGRAMS = geos_unit
-check_PROGRAMS = geos_unit geostest threadtest badthreadtest
+check_PROGRAMS = geos_unit
 #bin_PROGRAMS = geos_tut
 
 geos_unit_LDADD = \
@@ -95,16 +94,3 @@ geos_unit_SOURCES = geos_unit.cpp \
 
 noinst_HEADERS = \
 	utility.h
-
-# The -lstdc++ is needed for --disable-shared to work
-geostest_SOURCES = capi/geostest.c
-geostest_LDADD = $(top_builddir)/capi/libgeos_c.la -lstdc++
-
-# The -lstdc++ is needed for --disable-shared to work
-threadtest_SOURCES = capi/threadtest.c
-threadtest_LDADD = $(top_builddir)/capi/libgeos_c.la -lpthread -lstdc++
-
-# The -lstdc++ is needed for --disable-shared to work
-badthreadtest_SOURCES = capi/badthreadtest.c
-badthreadtest_LDADD = $(top_builddir)/capi/libgeos_c.la -lpthread -lstdc++
-

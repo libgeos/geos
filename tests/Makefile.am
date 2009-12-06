@@ -2,5 +2,6 @@ SUBDIRS = \
 	bigtest		\
 	xmltester	\
 	unit		\
-	perf
-
+	perf        \
+    geostest    \
+    thread
