@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id: export.h 2045 2008-03-17 20:18:24Z Ragi Burhum $
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

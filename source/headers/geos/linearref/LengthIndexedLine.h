@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id: LengthIndexedLine.h 1938 2009-07-23 10:45:16Z novalis $
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
