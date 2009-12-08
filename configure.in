@@ -304,7 +304,7 @@ case "${host_os}" in
 				AC_MSG_RESULT([Mac OS X 10.5 Leopard])
 				;;
 			10.*)
-				CXXFLAGS="$CXXFLAGS -Wnon-virtual-dtor -Woverloaded-virtual"
+dnl				CXXFLAGS="$CXXFLAGS -Wnon-virtual-dtor -Woverloaded-virtual"
 				AC_MSG_RESULT([Mac OS X 10.6 Snow Leopard])
 				;;
 			*)

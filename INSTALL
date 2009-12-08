@@ -1,11 +1,13 @@
 Compatibility notes
 ===================
 
-GCC 2.95.2 seems to lack the 'sstream' header file required
-to build GEOS. GCC 2.96 is known to work.
+OS/X 10.6, compile with gcc-4.0 rather than the default gcc that 
+comes with XCode.
+
+  CC=gcc-4.0 CXX=g++-4.0 ./configure
 
 Quickstart
-==================
+==========
 
 As root:
 
