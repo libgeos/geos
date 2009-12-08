@@ -13,5 +13,4 @@ SUBDIRS = \
 
 EXTRA_DIST = \
 	README \
-	geos.sln \
-	geos.vsprops
+	geos.sln
