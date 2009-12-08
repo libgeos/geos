@@ -59,8 +59,8 @@ public:
 	 */
 	static bool intersects(  PreparedLineString & prep, const geom::Geometry * geom ) 
 	{
-		PreparedLineStringIntersects * op = new PreparedLineStringIntersects( prep);
-		return op->intersects( geom);
+		PreparedLineStringIntersects op( prep);
+		return op.intersects( geom);
 	}
 
     /**
