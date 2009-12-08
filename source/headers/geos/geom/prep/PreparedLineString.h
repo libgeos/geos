@@ -55,6 +55,8 @@ public:
 		segIntFinder( NULL)
 	{ }
 
+	~PreparedLineString();
+
 	noding::FastSegmentSetIntersectionFinder * getIntersectionFinder();
 
 	bool intersects(const geom::Geometry * g) const;
