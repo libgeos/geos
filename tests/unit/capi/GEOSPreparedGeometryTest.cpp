@@ -78,10 +78,6 @@ namespace tut
             geom1_ = GEOSGeomFromWKT("POLYGON EMPTY");
         prepGeom1_ = GEOSPrepare(geom1_);
 
-        // ownership NOT transferred to prepGeom1, despite
-        // docs say so
-        //geom1_ = 0;
-
         ensure(0 != prepGeom1_);
 
     }
@@ -97,10 +93,6 @@ namespace tut
     geom1_ = GEOSGeomFromWKT("POLYGON((0 0, 0 10, 10 10, 10 0, 0 0))");
     geom2_ = GEOSGeomFromWKT("POLYGON((2 2, 2 3, 3 3, 3 2, 2 2))");
     prepGeom1_ = GEOSPrepare(geom1_);
-
-    // ownership NOT transferred to prepGeom1, despite
-    // docs say so
-    //geom1_ = 0;
 
     ensure(0 != prepGeom1_);
 
@@ -121,14 +113,29 @@ namespace tut
     geom2_ = GEOSGeomFromWKT("POLYGON((0 0, 0 10, 10 10, 10 0, 0 0))");
     prepGeom1_ = GEOSPrepare(geom1_);
 
-    // ownership NOT transferred to prepGeom1, despite
-    // docs say so
-    //geom1_ = 0;
-
     ensure(0 != prepGeom1_);
 
     int ret = GEOSPreparedContainsProperly(prepGeom1_, geom2_);
     ensure_equals(ret, 0);
+
+    }
+
+    // Test PreparedIntersects
+    // Also used as a linestring leakage reported
+    // by http://trac.osgeo.org/geos/ticket/305
+    // 
+    template<>
+    template<>
+    void object::test<4>()
+    {
+    geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 10)");
+    geom2_ = GEOSGeomFromWKT("LINESTRING(0 10, 10 0)");
+    prepGeom1_ = GEOSPrepare(geom1_);
+
+    ensure(0 != prepGeom1_);
+
+    int ret = GEOSPreparedIntersects(prepGeom1_, geom2_);
+    ensure_equals(ret, 1);
 
     }
 
