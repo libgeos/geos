@@ -65,6 +65,12 @@
     <Lib>
       <OutputFile>$(OutDir)geosd.lib</OutputFile>
     </Lib>
+    <PreBuildEvent>
+      <Command>copy ..\..\..\source\headers\geos\platform.h.vc ..\..\..\source\headers\geos\platform.h</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Copying ..\..\..\source\headers\geos\platform.h.vc to ..\..\..\source\headers\geos\platform.h</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -80,6 +86,10 @@
     <Lib>
       <OutputFile>$(OutDir)geos.lib</OutputFile>
     </Lib>
+    <PreBuildEvent>
+      <Message>Copying ..\..\..\source\headers\geos\platform.h.vc to ..\..\..\source\headers\geos\platform.h</Message>
+      <Command>copy ..\..\..\source\headers\geos\platform.h.vc ..\..\..\source\headers\geos\platform.h</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="..\..\..\source\dirlist.mk" />
