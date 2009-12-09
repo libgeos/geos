@@ -25,6 +25,8 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				Description="Copying ..\..\..\source\headers\geos\platform.h.vc to ..\..\..\source\headers\geos\platform.h"
+				CommandLine="copy ..\..\..\source\headers\geos\platform.h.vc ..\..\..\source\headers\geos\platform.h"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -94,6 +96,8 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				Description="Copying ..\..\..\source\headers\geos\platform.h.vc to ..\..\..\source\headers\geos\platform.h"
+				CommandLine="copy ..\..\..\source\headers\geos\platform.h.vc ..\..\..\source\headers\geos\platform.h"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -159,6 +163,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\inlines.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\Makefile.am"
 				>
 			</File>
 			<File
@@ -1570,6 +1578,10 @@
 					Name="geos"
 					>
 					<File
+						RelativePath="..\..\..\source\headers\geos\config.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\source\headers\geos\export.h"
 						>
 					</File>
@@ -1586,6 +1598,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\..\source\headers\geos\geomPrep.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\source\headers\geos\geomUtil.h"
 						>
 					</File>
@@ -1599,6 +1615,10 @@
 					</File>
 					<File
 						RelativePath="..\..\..\source\headers\geos\indexChain.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\headers\geos\indexIntervalRTree.h"
 						>
 					</File>
 					<File
@@ -1753,6 +1773,18 @@
 						Name="algorithm"
 						>
 						<File
+							RelativePath="..\..\..\source\headers\geos\algorithm\Angle.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\algorithm\BoundaryNodeRule.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\algorithm\CentralEndpointIntersector.h"
+							>
+						</File>
+						<File
 							RelativePath="..\..\..\source\headers\geos\algorithm\CentroidArea.h"
 							>
 						</File>
@@ -1848,6 +1880,22 @@
 								>
 							</File>
 						</Filter>
+						<Filter
+							Name="distance"
+							>
+							<File
+								RelativePath="..\..\..\source\headers\geos\algorithm\distance\DiscreteHausdorffDistance.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\source\headers\geos\algorithm\distance\DistanceToPoint.h"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\source\headers\geos\algorithm\distance\PointPairDistance.h"
+								>
+							</File>
+						</Filter>
 					</Filter>
 					<Filter
 						Name="geom"
@@ -1890,6 +1938,10 @@
 						</File>
 						<File
 							RelativePath="..\..\..\source\headers\geos\geom\CoordinateSequenceFactory.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\geom\CoordinateSequenceFilter.h"
 							>
 						</File>
 						<File
@@ -2257,6 +2309,14 @@
 						Name="noding"
 						>
 						<File
+							RelativePath="..\..\..\source\headers\geos\noding\BasicSegmentString.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\noding\FastNodingValidator.h"
+							>
+						</File>
+						<File
 							RelativePath="..\..\..\source\headers\geos\noding\FastSegmentSetIntersectionFinder.h"
 							>
 						</File>
@@ -2305,6 +2365,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\..\..\source\headers\geos\noding\OrientedCoordinateArray.h"
+							>
+						</File>
+						<File
 							RelativePath="..\..\..\source\headers\geos\noding\ScaledNoder.h"
 							>
 						</File>
@@ -2345,6 +2409,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\..\..\source\headers\geos\noding\SingleInteriorIntersectionFinder.h"
+							>
+						</File>
+						<File
 							RelativePath="..\..\..\source\headers\geos\noding\SinglePassNoder.h"
 							>
 						</File>
@@ -2380,10 +2448,6 @@
 					<Filter
 						Name="operation"
 						>
-						<File
-							RelativePath="..\..\..\source\headers\geos\operation\EndpointInfo.h"
-							>
-						</File>
 						<File
 							RelativePath="..\..\..\source\headers\geos\operation\GeometryGraphOperation.h"
 							>
@@ -2713,6 +2777,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\..\..\source\headers\geos\io\CLocalizer.h"
+							>
+						</File>
+						<File
 							RelativePath="..\..\..\source\headers\geos\io\ParseException.h"
 							>
 						</File>
@@ -2977,6 +3045,14 @@
 							>
 						</File>
 						<File
+							RelativePath="..\..\..\source\headers\geos\precision\GeometrySnapper.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\precision\LineStringSnapper.h"
+							>
+						</File>
+						<File
 							RelativePath="..\..\..\source\headers\geos\precision\SimpleGeometryPrecisionReducer.h"
 							>
 						</File>
@@ -3155,8 +3231,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="copy $(InputDir)$(InputFileName) $(InputDir)$(InputName)"
-						CommandLine="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;"
+						Description="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;"
+						CommandLine="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;&#x0D;&#x0A;"
 						Outputs="$(InputDir)$(InputName)"
 					/>
 				</FileConfiguration>
@@ -3165,8 +3241,8 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="copy $(InputDir)$(InputFileName) $(InputDir)$(InputName)"
-						CommandLine="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;"
+						Description="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;"
+						CommandLine="copy &quot;$(InputDir)$(InputFileName)&quot; &quot;$(InputDir)$(InputName)&quot;&#x0D;&#x0A;"
 						Outputs="$(InputDir)$(InputName)"
 					/>
 				</FileConfiguration>
@@ -3181,7 +3257,7 @@
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\Makefile.am"
+			RelativePath="..\..\..\makefile.vc"
 			>
 		</File>
 	</Files>

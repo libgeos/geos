@@ -24,6 +24,8 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				Description="Copying ..\..\..\source\headers\geos\platform.h.vc to ..\..\..\source\headers\geos\platform.h"
+				CommandLine="copy ..\..\..\source\headers\geos\platform.h.vc ..\..\..\source\headers\geos\platform.h"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -50,8 +52,9 @@
 				UsePrecompiledHeader="0"
 				BrowseInformation="0"
 				WarningLevel="4"
-				Detect64BitPortabilityProblems="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
+				ShowIncludes="false"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -92,6 +95,8 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				Description="Copying ..\..\..\source\headers\geos\platform.h.vc to ..\..\..\source\headers\geos\platform.h"
+				CommandLine="copy ..\..\..\source\headers\geos\platform.h.vc ..\..\..\source\headers\geos\platform.h"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -111,8 +116,8 @@
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;WIN32_LEAN_AND_MEAN;NOMINMAX;NOGDI"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
+				WarningLevel="4"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="0"
 			/>
 			<Tool
@@ -3069,6 +3074,46 @@
 							>
 						</File>
 					</Filter>
+					<Filter
+						Name="linearref"
+						>
+						<File
+							RelativePath="..\..\..\source\headers\geos\linearref\ExtractLineByLocation.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\linearref\LengthIndexedLine.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\linearref\LengthIndexOfPoint.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\linearref\LengthLocationMap.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\linearref\LinearGeometryBuilder.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\linearref\LinearIterator.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\linearref\LinearLocation.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\linearref\LocationIndexOfLine.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\headers\geos\linearref\LocationIndexOfPoint.h"
+							>
+						</File>
+					</Filter>
 				</Filter>
 			</Filter>
 			<Filter
@@ -3185,6 +3230,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\capi\geos_ts_c.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\capi\Makefile.am"
 				>
 			</File>
 		</Filter>
