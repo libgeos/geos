@@ -66,12 +66,12 @@ BasicPreparedGeometry::~BasicPreparedGeometry( )
 bool 
 BasicPreparedGeometry::isAnyTargetComponentInTest( const geom::Geometry * testGeom) const
 {
-	algorithm::PointLocator *locator = new algorithm::PointLocator();
+	algorithm::PointLocator locator;
 
 	for (size_t i=0, n=representativePts.size(); i<n; i++)
 	{
-		geom::Coordinate c = *(representativePts[i]);
-		if ( locator->intersects( c, testGeom) )
+		const geom::Coordinate& c = *(representativePts[i]);
+		if ( locator.intersects( c, testGeom) )
 		return true;
 	}
 	return false;
