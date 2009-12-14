@@ -32,7 +32,8 @@
  * API and the ABI of the library during performance improvements
  * that will likely change classes definitions.
  *
- * If you prefer troubles you can use the \ref cpp_iface.
+ * If you don't care about adapting/rebuilding your client code
+ * you can still use the \ref cpp_iface.
  */
 
 /** \page c_iface C wrapper interface
