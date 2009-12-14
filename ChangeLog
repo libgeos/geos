@@ -1,3 +1,14 @@
+2009-12-14 15:23  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2824] source/headers/geos/util/TopologyException.h,
+	  source/io/WKTWriter.cpp: * Fixed bug in WKTWriter that was
+	  dropping geometry tag in string representation of geometry
+	  * Improved message carried by TopologyException
+
+2009-12-11 13:17  Sandro Santilli <strk@keybit.net>
+
+	* [r2823] ChangeLog: Updated
+
 2009-12-11 13:10  Sandro Santilli <strk@keybit.net>
 
 	* [r2822] source/geom/prep/BasicPreparedGeometry.cpp: Fix memory
