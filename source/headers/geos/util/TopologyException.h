@@ -47,7 +47,7 @@ public:
 
 	TopologyException(const std::string& msg, const geom::Coordinate& newPt)
 		:
-		GEOSException("TopologyException", msg+" "+newPt.toString()),
+		GEOSException("TopologyException", msg + " at " + newPt.toString()),
 		pt(newPt)
 	{}
 
