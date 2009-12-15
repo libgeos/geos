@@ -60,6 +60,7 @@ OBJ = \
 	geom\CoordinateArraySequence.$(EXT) \
 	geom\CoordinateArraySequenceFactory.$(EXT) \
 	geom\CoordinateSequence.$(EXT) \
+	geom\CoordinateSequenceFactory.$(EXT) \
 	geom\Dimension.$(EXT) \
 	geom\Envelope.$(EXT) \
 	geom\Geometry.$(EXT) \
