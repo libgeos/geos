@@ -120,8 +120,8 @@ WKTWriter::createFormatter(const PrecisionModel* precisionModel)
 	// the default number of decimal places is 16, which is sufficient
 	// to accomodate the maximum precision of a double.
 	int decimalPlaces = precisionModel->getMaximumSignificantDigits();
-	string fmt="%.";
-	char buffer[255];
+    std::string fmt("%.");
+    char buffer[255] = { 0 };
 	sprintf(buffer,"%i",decimalPlaces);
 	fmt.append(buffer);
 	fmt.append("f");
@@ -281,10 +281,9 @@ WKTWriter::appendCoordinate(const Coordinate* coordinate,
 }
 
 string WKTWriter::writeNumber(double d) {
-	string out="";
-	char buffer[255];
+    char buffer[255] = { 0 };
 	sprintf(buffer,formatter.c_str(),d);
-	out.append(buffer);
+	std::string out(buffer);
 	out.append("");
 	return out;
 }
