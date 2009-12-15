@@ -48,20 +48,20 @@ double
 PrecisionModel::makePrecise(double val) const
 {
 #if GEOS_DEBUG
-	cerr<<"PrecisionModel["<<this<<"]::makePrecise called"<<endl;
+    cerr<<"PrecisionModel["<<this<<"]::makePrecise called"<<endl;
 #endif
 
-	if (modelType==FLOATING_SINGLE) {
-		float floatSingleVal = (float) val;
-		return (double) floatSingleVal;
-	}
-	if (modelType == FIXED) {
-		// Use whatever happens to be the default rounding method
-		double ret = util::round(val*scale)/scale;
-		return ret;
-	}
-	// modelType == FLOATING - no rounding necessary
-	return val;
+    if (modelType==FLOATING_SINGLE) {
+        float floatSingleVal = static_cast<float>(val);
+        return static_cast<double>(floatSingleVal);
+    }
+    if (modelType == FIXED) {
+        // Use whatever happens to be the default rounding method
+        const double ret = util::round(val*scale)/scale;
+        return ret;
+    }
+    // modelType == FLOATING - no rounding necessary
+    return val;
 }
 
 /*public*/
@@ -161,7 +161,8 @@ PrecisionModel::getMaximumSignificantDigits() const
 	} else if (modelType == FLOATING_SINGLE) {
 		maxSigDigits = 6;
 	} else if (modelType == FIXED) {
-		maxSigDigits = 1 + (int)ceil((double)log(getScale())/(double)log(10.0));
+        const int dgts = static_cast<int>(std::ceil(std::log(getScale()) / std::log(double(10.0))));
+        maxSigDigits = 1 + dgts;
 	}
 	return maxSigDigits;
 }
@@ -172,9 +173,9 @@ void
 PrecisionModel::setScale(double newScale)
 		// throw IllegalArgumentException
 {
-	if ( newScale == 0 )
+	if ( newScale <= 0 )
 		throw util::IllegalArgumentException("PrecisionModel scale cannot be 0"); 
-	scale=fabs(newScale);
+    scale = std::fabs(newScale);
 }
 
 /*public*/

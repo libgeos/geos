@@ -52,7 +52,8 @@ PrecisionModel::getType() const
 INLINE double
 PrecisionModel::getScale() const
 {
-	return scale;
+    assert(!(scale < 0));
+    return scale;
 }
 
 

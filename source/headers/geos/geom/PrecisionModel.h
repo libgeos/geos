@@ -70,8 +70,8 @@ namespace geom { // geos::geom
  *   The scale factor specifies the grid which numbers are rounded to.
  *   Input coordinates are mapped to fixed coordinates according to the
  *   following equations:
- *   - jtsPt.x = round( (inputPt.x * scale ) / scale
- *   - jtsPt.y = round( (inputPt.y * scale ) / scale
+ *   - jtsPt.x = round( inputPt.x * scale ) / scale
+ *   - jtsPt.y = round( inputPt.y * scale ) / scale
  *
  * Coordinates are represented internally as Java double-precision values.
  * Since Java uses the IEEE-394 floating point standard, this
