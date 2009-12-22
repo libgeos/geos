@@ -12,7 +12,6 @@
  * See the COPYING file for more information.
  *
  **********************************************************************/
-
 #ifndef GEOS_EXPORT_H
 #define GEOS_EXPORT_H
 
@@ -30,5 +29,4 @@
 #  define GEOS_DLL
 #endif
 
-#endif // GEOS_EXPORT_H
-
+#endif
