@@ -1,12 +1,14 @@
-
+# $Id$
+#
+# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+#
 noinst_LTLIBRARIES = libindexsweepline.la
 
-INCLUDES = -I$(top_srcdir)/source/headers 
+INCLUDES = -I$(top_srcdir)/include 
 
 libindexsweepline_la_SOURCES = \
-	SweepLineEvent.cpp \
-	SweepLineIndex.cpp \
-	SweepLineInterval.cpp 
+    SweepLineEvent.cpp \
+    SweepLineIndex.cpp \
+    SweepLineInterval.cpp 
 
 libindexsweepline_la_LIBADD = 
-

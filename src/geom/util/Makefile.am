@@ -1,12 +1,15 @@
-
+# $Id$
+#
+# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+#
 noinst_LTLIBRARIES = libgeomutil.la
 
-INCLUDES = -I$(top_srcdir)/source/headers 
+INCLUDES = -I$(top_srcdir)/include 
 
 libgeomutil_la_SOURCES = \
-	ComponentCoordinateExtracter.cpp \
-	CoordinateOperation.cpp \
-	GeometryEditor.cpp \
-	GeometryTransformer.cpp \
-	ShortCircuitedGeometryVisitor.cpp \
-        GeometryCombiner.cpp
+    ComponentCoordinateExtracter.cpp \
+    CoordinateOperation.cpp \
+    GeometryEditor.cpp \
+    GeometryTransformer.cpp \
+    ShortCircuitedGeometryVisitor.cpp \
+    GeometryCombiner.cpp

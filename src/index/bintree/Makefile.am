@@ -1,15 +1,17 @@
-
+# $Id$
+#
+# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+#
 noinst_LTLIBRARIES = libindexbintree.la
 
-INCLUDES = -I$(top_srcdir)/source/headers 
+INCLUDES = -I$(top_srcdir)/include 
 
 libindexbintree_la_SOURCES = \
-	Bintree.cpp \
-	Interval.cpp \
-	Node.cpp \
-	Key.cpp \
-	NodeBase.cpp \
-	Root.cpp 
+    Bintree.cpp \
+    Interval.cpp \
+    Node.cpp \
+    Key.cpp \
+    NodeBase.cpp \
+    Root.cpp 
 
 libindexbintree_la_LIBADD = 
-

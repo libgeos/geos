@@ -1,8 +1,12 @@
+# $Id$
+#
+# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+#
 SUBDIRS = 
 
 noinst_LTLIBRARIES = libutil.la
 
-INCLUDES = -I$(top_srcdir)/source/headers 
+INCLUDES = -I$(top_srcdir)/include 
 
 libutil_la_SOURCES = \
 	Assert.cpp \
@@ -11,5 +15,3 @@ libutil_la_SOURCES = \
 	Profiler.cpp 
 
 libutil_la_LIBADD = 
-
-

@@ -1,8 +1,12 @@
+# $Id$
+#
+# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+#
 SUBDIRS = snapround
 
 noinst_LTLIBRARIES = libnoding.la
 
-INCLUDES = -I$(top_srcdir)/source/headers 
+INCLUDES = -I$(top_srcdir)/include 
 
 libnoding_la_SOURCES = \
 	BasicSegmentString.cpp \
@@ -27,4 +31,3 @@ libnoding_la_SOURCES = \
 	SingleInteriorIntersectionFinder.cpp
 
 libnoding_la_LIBADD = snapround/libsnapround.la
-

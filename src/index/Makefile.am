@@ -1,3 +1,7 @@
+# $Id$
+#
+# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+#
 SUBDIRS = \
 	bintree \
 	chain \
@@ -17,4 +21,3 @@ libindex_la_LIBADD = \
 	quadtree/libindexquadtree.la \
 	strtree/libindexstrtree.la \
 	sweepline/libindexsweepline.la
-

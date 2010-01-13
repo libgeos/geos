@@ -1,8 +1,12 @@
+# $Id$
+#
+# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+#
 SUBDIRS = index
 
 noinst_LTLIBRARIES = libgeomgraph.la
 
-INCLUDES = -I$(top_srcdir)/source/headers 
+INCLUDES = -I$(top_srcdir)/include 
 
 libgeomgraph_la_SOURCES = \
 	Depth.cpp \

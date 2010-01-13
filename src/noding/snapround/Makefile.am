@@ -1,16 +1,17 @@
+# $Id$
+#
+# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+#
 SUBDIRS = 
 
 noinst_LTLIBRARIES = libsnapround.la
 
-INCLUDES = -I$(top_srcdir)/source/headers 
+INCLUDES = -I$(top_srcdir)/include 
 
 libsnapround_la_SOURCES = \
-	HotPixel.cpp \
-	MCIndexPointSnapper.cpp \
-	MCIndexSnapRounder.cpp \
-	SimpleSnapRounder.cpp
+    HotPixel.cpp \
+    MCIndexPointSnapper.cpp \
+    MCIndexSnapRounder.cpp \
+    SimpleSnapRounder.cpp
 
 libsnapround_la_LIBADD = 
-
-
-

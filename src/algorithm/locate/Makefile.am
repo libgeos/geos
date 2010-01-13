@@ -1,8 +1,12 @@
+# $Id$
+#
+# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+#
 SUBDIRS = 
 
 noinst_LTLIBRARIES = liblocation.la
 
-INCLUDES = -I$(top_srcdir)/source/headers 
+INCLUDES = -I$(top_srcdir)/include 
 
 liblocation_la_SOURCES = \
 	IndexedPointInAreaLocator.cpp \
@@ -10,5 +14,3 @@ liblocation_la_SOURCES = \
 	SimplePointInAreaLocator.cpp
 
 liblocation_la_LIBADD = 
-
-
