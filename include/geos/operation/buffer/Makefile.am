@@ -1,3 +1,7 @@
+# $Id$
+#
+# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+#
 #SUBDIRS = 
 
 #EXTRA_DIST = 
@@ -5,12 +9,11 @@
 geosdir = $(includedir)/geos/operation/buffer
 
 geos_HEADERS = \
-	BufferBuilder.h		\
-	BufferOp.h		\
-	BufferParameters.h	\
-	BufferSubgraph.h	\
-	OffsetCurveBuilder.h	\
-	OffsetCurveSetBuilder.h	\
-	RightmostEdgeFinder.h 	\
+	BufferBuilder.h \
+	BufferOp.h \
+	BufferParameters.h \
+	BufferSubgraph.h \
+	OffsetCurveBuilder.h \
+	OffsetCurveSetBuilder.h \
+	RightmostEdgeFinder.h \
 	SubgraphDepthLocater.h	
-
