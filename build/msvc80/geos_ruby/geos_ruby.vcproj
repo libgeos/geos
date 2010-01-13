@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\source\headers;..\..\..\capi;&quot;$(RUBY_INCLUDE_DIR)&quot;"
+				AdditionalIncludeDirectories="..\..\..\include;..\..\..\capi;&quot;$(RUBY_INCLUDE_DIR)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;GEOS_RUBY_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -121,7 +121,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\..\source\headers;..\..\..\capi;&quot;$(RUBY_INCLUDE_DIR)&quot;"
+				AdditionalIncludeDirectories="..\..\..\include;..\..\..\capi;&quot;$(RUBY_INCLUDE_DIR)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;GEOS_RUBY_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"

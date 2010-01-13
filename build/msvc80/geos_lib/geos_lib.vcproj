@@ -24,8 +24,8 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				Description="Copying ..\..\..\source\headers\geos\platform.h.vc to ..\..\..\source\headers\geos\platform.h"
-				CommandLine="copy ..\..\..\source\headers\geos\platform.h.vc ..\..\..\source\headers\geos\platform.h"
+				Description="Copying ..\..\..\include\geos\platform.h.vc to ..\..\..\include\geos\platform.h"
+				CommandLine="copy ..\..\..\include\geos\platform.h.vc ..\..\..\include\geos\platform.h"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\capi;..\..\..\source\headers"
+				AdditionalIncludeDirectories="..\..\..\capi;..\..\..\include"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;WIN32_LEAN_AND_MEAN;NOMINMAX;NOGDI"
 				IgnoreStandardIncludePath="false"
 				MinimalRebuild="true"
@@ -95,8 +95,8 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				Description="Copying ..\..\..\source\headers\geos\platform.h.vc to ..\..\..\source\headers\geos\platform.h"
-				CommandLine="copy ..\..\..\source\headers\geos\platform.h.vc ..\..\..\source\headers\geos\platform.h"
+				Description="Copying ..\..\..\include\geos\platform.h.vc to ..\..\..\include\geos\platform.h"
+				CommandLine="copy ..\..\..\include\geos\platform.h.vc ..\..\..\include\geos\platform.h"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -112,7 +112,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\..\source\headers"
+				AdditionalIncludeDirectories="..\..\..\include"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;WIN32_LEAN_AND_MEAN;NOMINMAX;NOGDI"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -157,117 +157,117 @@
 			Name="src"
 			>
 			<File
-				RelativePath="..\..\..\source\dirlist.mk"
+				RelativePath="..\..\..\src\dirlist.mk"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\source\inlines.cpp"
+				RelativePath="..\..\..\src\inlines.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\source\Makefile.am"
+				RelativePath="..\..\..\src\Makefile.am"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\source\Makefile.vc"
+				RelativePath="..\..\..\src\Makefile.vc"
 				>
 			</File>
 			<Filter
 				Name="algorithm"
 				>
 				<File
-					RelativePath="..\..\..\source\algorithm\Angle.cpp"
+					RelativePath="..\..\..\src\algorithm\Angle.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\algorithm\BoundaryNodeRule.cpp"
+					RelativePath="..\..\..\src\algorithm\BoundaryNodeRule.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\algorithm\CentroidArea.cpp"
+					RelativePath="..\..\..\src\algorithm\CentroidArea.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\algorithm\CentroidLine.cpp"
+					RelativePath="..\..\..\src\algorithm\CentroidLine.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\algorithm\CentroidPoint.cpp"
+					RelativePath="..\..\..\src\algorithm\CentroidPoint.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\algorithm\CGAlgorithms.cpp"
+					RelativePath="..\..\..\src\algorithm\CGAlgorithms.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\algorithm\ConvexHull.cpp"
+					RelativePath="..\..\..\src\algorithm\ConvexHull.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\algorithm\HCoordinate.cpp"
+					RelativePath="..\..\..\src\algorithm\HCoordinate.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\algorithm\InteriorPointArea.cpp"
+					RelativePath="..\..\..\src\algorithm\InteriorPointArea.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\algorithm\InteriorPointLine.cpp"
+					RelativePath="..\..\..\src\algorithm\InteriorPointLine.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\algorithm\InteriorPointPoint.cpp"
+					RelativePath="..\..\..\src\algorithm\InteriorPointPoint.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\algorithm\LineIntersector.cpp"
+					RelativePath="..\..\..\src\algorithm\LineIntersector.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\algorithm\MCPointInRing.cpp"
+					RelativePath="..\..\..\src\algorithm\MCPointInRing.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\algorithm\MinimumDiameter.cpp"
+					RelativePath="..\..\..\src\algorithm\MinimumDiameter.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\algorithm\NotRepresentableException.cpp"
+					RelativePath="..\..\..\src\algorithm\NotRepresentableException.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\algorithm\PointLocator.cpp"
+					RelativePath="..\..\..\src\algorithm\PointLocator.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\algorithm\RayCrossingCounter.cpp"
+					RelativePath="..\..\..\src\algorithm\RayCrossingCounter.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\algorithm\RobustDeterminant.cpp"
+					RelativePath="..\..\..\src\algorithm\RobustDeterminant.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\algorithm\SimplePointInRing.cpp"
+					RelativePath="..\..\..\src\algorithm\SimplePointInRing.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\algorithm\SIRtreePointInRing.cpp"
+					RelativePath="..\..\..\src\algorithm\SIRtreePointInRing.cpp"
 					>
 				</File>
 				<Filter
 					Name="locate"
 					>
 					<File
-						RelativePath="..\..\..\source\algorithm\locate\IndexedPointInAreaLocator.cpp"
+						RelativePath="..\..\..\src\algorithm\locate\IndexedPointInAreaLocator.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\algorithm\locate\PointOnGeometryLocator.cpp"
+						RelativePath="..\..\..\src\algorithm\locate\PointOnGeometryLocator.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\algorithm\locate\SimplePointInAreaLocator.cpp"
+						RelativePath="..\..\..\src\algorithm\locate\SimplePointInAreaLocator.cpp"
 						>
 					</File>
 				</Filter>
@@ -275,11 +275,11 @@
 					Name="distance"
 					>
 					<File
-						RelativePath="..\..\..\source\algorithm\distance\DiscreteHausdorffDistance.cpp"
+						RelativePath="..\..\..\src\algorithm\distance\DiscreteHausdorffDistance.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\algorithm\distance\DistanceToPoint.cpp"
+						RelativePath="..\..\..\src\algorithm\distance\DistanceToPoint.cpp"
 						>
 					</File>
 				</Filter>
@@ -291,19 +291,19 @@
 					Name="bintree"
 					>
 					<File
-						RelativePath="..\..\..\source\index\bintree\Bintree.cpp"
+						RelativePath="..\..\..\src\index\bintree\Bintree.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\index\bintree\Interval.cpp"
+						RelativePath="..\..\..\src\index\bintree\Interval.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\index\bintree\Key.cpp"
+						RelativePath="..\..\..\src\index\bintree\Key.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\index\bintree\Node.cpp"
+						RelativePath="..\..\..\src\index\bintree\Node.cpp"
 						>
 						<FileConfiguration
 							Name="Debug|Win32"
@@ -325,11 +325,11 @@
 						</FileConfiguration>
 					</File>
 					<File
-						RelativePath="..\..\..\source\index\bintree\NodeBase.cpp"
+						RelativePath="..\..\..\src\index\bintree\NodeBase.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\index\bintree\Root.cpp"
+						RelativePath="..\..\..\src\index\bintree\Root.cpp"
 						>
 					</File>
 				</Filter>
@@ -337,19 +337,19 @@
 					Name="chain"
 					>
 					<File
-						RelativePath="..\..\..\source\index\chain\MonotoneChain.cpp"
+						RelativePath="..\..\..\src\index\chain\MonotoneChain.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\index\chain\MonotoneChainBuilder.cpp"
+						RelativePath="..\..\..\src\index\chain\MonotoneChainBuilder.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\index\chain\MonotoneChainOverlapAction.cpp"
+						RelativePath="..\..\..\src\index\chain\MonotoneChainOverlapAction.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\index\chain\MonotoneChainSelectAction.cpp"
+						RelativePath="..\..\..\src\index\chain\MonotoneChainSelectAction.cpp"
 						>
 					</File>
 				</Filter>
@@ -357,15 +357,15 @@
 					Name="quadtree"
 					>
 					<File
-						RelativePath="..\..\..\source\index\quadtree\DoubleBits.cpp"
+						RelativePath="..\..\..\src\index\quadtree\DoubleBits.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\index\quadtree\IntervalSize.cpp"
+						RelativePath="..\..\..\src\index\quadtree\IntervalSize.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\index\quadtree\Key.cpp"
+						RelativePath="..\..\..\src\index\quadtree\Key.cpp"
 						>
 						<FileConfiguration
 							Name="Debug|Win32"
@@ -387,7 +387,7 @@
 						</FileConfiguration>
 					</File>
 					<File
-						RelativePath="..\..\..\source\index\quadtree\Node.cpp"
+						RelativePath="..\..\..\src\index\quadtree\Node.cpp"
 						>
 						<FileConfiguration
 							Name="Debug|Win32"
@@ -409,7 +409,7 @@
 						</FileConfiguration>
 					</File>
 					<File
-						RelativePath="..\..\..\source\index\quadtree\NodeBase.cpp"
+						RelativePath="..\..\..\src\index\quadtree\NodeBase.cpp"
 						>
 						<FileConfiguration
 							Name="Debug|Win32"
@@ -431,11 +431,11 @@
 						</FileConfiguration>
 					</File>
 					<File
-						RelativePath="..\..\..\source\index\quadtree\Quadtree.cpp"
+						RelativePath="..\..\..\src\index\quadtree\Quadtree.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\index\quadtree\Root.cpp"
+						RelativePath="..\..\..\src\index\quadtree\Root.cpp"
 						>
 						<FileConfiguration
 							Name="Debug|Win32"
@@ -461,15 +461,15 @@
 					Name="strtree"
 					>
 					<File
-						RelativePath="..\..\..\source\index\strtree\AbstractNode.cpp"
+						RelativePath="..\..\..\src\index\strtree\AbstractNode.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\index\strtree\AbstractSTRtree.cpp"
+						RelativePath="..\..\..\src\index\strtree\AbstractSTRtree.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\index\strtree\Interval.cpp"
+						RelativePath="..\..\..\src\index\strtree\Interval.cpp"
 						>
 						<FileConfiguration
 							Name="Debug|Win32"
@@ -491,15 +491,15 @@
 						</FileConfiguration>
 					</File>
 					<File
-						RelativePath="..\..\..\source\index\strtree\ItemBoundable.cpp"
+						RelativePath="..\..\..\src\index\strtree\ItemBoundable.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\index\strtree\SIRtree.cpp"
+						RelativePath="..\..\..\src\index\strtree\SIRtree.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\index\strtree\STRtree.cpp"
+						RelativePath="..\..\..\src\index\strtree\STRtree.cpp"
 						>
 					</File>
 				</Filter>
@@ -507,7 +507,7 @@
 					Name="sweepline"
 					>
 					<File
-						RelativePath="..\..\..\source\index\sweepline\SweepLineEvent.cpp"
+						RelativePath="..\..\..\src\index\sweepline\SweepLineEvent.cpp"
 						>
 						<FileConfiguration
 							Name="Debug|Win32"
@@ -529,11 +529,11 @@
 						</FileConfiguration>
 					</File>
 					<File
-						RelativePath="..\..\..\source\index\sweepline\SweepLineIndex.cpp"
+						RelativePath="..\..\..\src\index\sweepline\SweepLineIndex.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\index\sweepline\SweepLineInterval.cpp"
+						RelativePath="..\..\..\src\index\sweepline\SweepLineInterval.cpp"
 						>
 					</File>
 				</Filter>
@@ -541,19 +541,19 @@
 					Name="intervalrtree"
 					>
 					<File
-						RelativePath="..\..\..\source\index\intervalrtree\IntervalRTreeBranchNode.cpp"
+						RelativePath="..\..\..\src\index\intervalrtree\IntervalRTreeBranchNode.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\index\intervalrtree\IntervalRTreeLeafNode.cpp"
+						RelativePath="..\..\..\src\index\intervalrtree\IntervalRTreeLeafNode.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\index\intervalrtree\IntervalRTreeNode.cpp"
+						RelativePath="..\..\..\src\index\intervalrtree\IntervalRTreeNode.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\index\intervalrtree\SortedPackedIntervalRTree.cpp"
+						RelativePath="..\..\..\src\index\intervalrtree\SortedPackedIntervalRTree.cpp"
 						>
 					</File>
 				</Filter>
@@ -562,126 +562,126 @@
 				Name="geom"
 				>
 				<File
-					RelativePath="..\..\..\source\geom\Coordinate.cpp"
+					RelativePath="..\..\..\src\geom\Coordinate.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geom\CoordinateArraySequence.cpp"
+					RelativePath="..\..\..\src\geom\CoordinateArraySequence.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geom\CoordinateArraySequenceFactory.cpp"
+					RelativePath="..\..\..\src\geom\CoordinateArraySequenceFactory.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geom\CoordinateSequence.cpp"
+					RelativePath="..\..\..\src\geom\CoordinateSequence.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geom\CoordinateSequenceFactory.cpp"
+					RelativePath="..\..\..\src\geom\CoordinateSequenceFactory.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geom\Dimension.cpp"
+					RelativePath="..\..\..\src\geom\Dimension.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geom\Envelope.cpp"
+					RelativePath="..\..\..\src\geom\Envelope.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geom\Geometry.cpp"
+					RelativePath="..\..\..\src\geom\Geometry.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geom\GeometryCollection.cpp"
+					RelativePath="..\..\..\src\geom\GeometryCollection.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geom\GeometryComponentFilter.cpp"
+					RelativePath="..\..\..\src\geom\GeometryComponentFilter.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geom\GeometryFactory.cpp"
+					RelativePath="..\..\..\src\geom\GeometryFactory.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geom\GeometryList.cpp"
+					RelativePath="..\..\..\src\geom\GeometryList.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geom\IntersectionMatrix.cpp"
+					RelativePath="..\..\..\src\geom\IntersectionMatrix.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geom\LinearRing.cpp"
+					RelativePath="..\..\..\src\geom\LinearRing.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geom\LineSegment.cpp"
+					RelativePath="..\..\..\src\geom\LineSegment.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geom\LineString.cpp"
+					RelativePath="..\..\..\src\geom\LineString.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geom\Location.cpp"
+					RelativePath="..\..\..\src\geom\Location.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geom\MultiLineString.cpp"
+					RelativePath="..\..\..\src\geom\MultiLineString.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geom\MultiPoint.cpp"
+					RelativePath="..\..\..\src\geom\MultiPoint.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geom\MultiPolygon.cpp"
+					RelativePath="..\..\..\src\geom\MultiPolygon.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geom\Point.cpp"
+					RelativePath="..\..\..\src\geom\Point.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geom\Polygon.cpp"
+					RelativePath="..\..\..\src\geom\Polygon.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geom\PrecisionModel.cpp"
+					RelativePath="..\..\..\src\geom\PrecisionModel.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geom\Triangle.cpp"
+					RelativePath="..\..\..\src\geom\Triangle.cpp"
 					>
 				</File>
 				<Filter
 					Name="util"
 					>
 					<File
-						RelativePath="..\..\..\source\geom\util\ComponentCoordinateExtracter.cpp"
+						RelativePath="..\..\..\src\geom\util\ComponentCoordinateExtracter.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geom\util\CoordinateOperation.cpp"
+						RelativePath="..\..\..\src\geom\util\CoordinateOperation.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geom\util\GeometryCombiner.cpp"
+						RelativePath="..\..\..\src\geom\util\GeometryCombiner.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geom\util\GeometryEditor.cpp"
+						RelativePath="..\..\..\src\geom\util\GeometryEditor.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geom\util\GeometryTransformer.cpp"
+						RelativePath="..\..\..\src\geom\util\GeometryTransformer.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geom\util\ShortCircuitedGeometryVisitor.cpp"
+						RelativePath="..\..\..\src\geom\util\ShortCircuitedGeometryVisitor.cpp"
 						>
 					</File>
 				</Filter>
@@ -689,55 +689,55 @@
 					Name="prep"
 					>
 					<File
-						RelativePath="..\..\..\source\geom\prep\AbstractPreparedPolygonContains.cpp"
+						RelativePath="..\..\..\src\geom\prep\AbstractPreparedPolygonContains.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geom\prep\BasicPreparedGeometry.cpp"
+						RelativePath="..\..\..\src\geom\prep\BasicPreparedGeometry.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geom\prep\PreparedGeometry.cpp"
+						RelativePath="..\..\..\src\geom\prep\PreparedGeometry.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geom\prep\PreparedGeometryFactory.cpp"
+						RelativePath="..\..\..\src\geom\prep\PreparedGeometryFactory.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geom\prep\PreparedLineString.cpp"
+						RelativePath="..\..\..\src\geom\prep\PreparedLineString.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geom\prep\PreparedLineStringIntersects.cpp"
+						RelativePath="..\..\..\src\geom\prep\PreparedLineStringIntersects.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geom\prep\PreparedPoint.cpp"
+						RelativePath="..\..\..\src\geom\prep\PreparedPoint.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geom\prep\PreparedPolygon.cpp"
+						RelativePath="..\..\..\src\geom\prep\PreparedPolygon.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geom\prep\PreparedPolygonContains.cpp"
+						RelativePath="..\..\..\src\geom\prep\PreparedPolygonContains.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geom\prep\PreparedPolygonContainsProperly.cpp"
+						RelativePath="..\..\..\src\geom\prep\PreparedPolygonContainsProperly.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geom\prep\PreparedPolygonCovers.cpp"
+						RelativePath="..\..\..\src\geom\prep\PreparedPolygonCovers.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geom\prep\PreparedPolygonIntersects.cpp"
+						RelativePath="..\..\..\src\geom\prep\PreparedPolygonIntersects.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geom\prep\PreparedPolygonPredicate.cpp"
+						RelativePath="..\..\..\src\geom\prep\PreparedPolygonPredicate.cpp"
 						>
 					</File>
 				</Filter>
@@ -746,122 +746,122 @@
 				Name="geomgraph"
 				>
 				<File
-					RelativePath="..\..\..\source\geomgraph\Depth.cpp"
+					RelativePath="..\..\..\src\geomgraph\Depth.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geomgraph\DirectedEdge.cpp"
+					RelativePath="..\..\..\src\geomgraph\DirectedEdge.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geomgraph\DirectedEdgeStar.cpp"
+					RelativePath="..\..\..\src\geomgraph\DirectedEdgeStar.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geomgraph\Edge.cpp"
+					RelativePath="..\..\..\src\geomgraph\Edge.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geomgraph\EdgeEnd.cpp"
+					RelativePath="..\..\..\src\geomgraph\EdgeEnd.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geomgraph\EdgeEndStar.cpp"
+					RelativePath="..\..\..\src\geomgraph\EdgeEndStar.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geomgraph\EdgeIntersection.cpp"
+					RelativePath="..\..\..\src\geomgraph\EdgeIntersection.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geomgraph\EdgeIntersectionList.cpp"
+					RelativePath="..\..\..\src\geomgraph\EdgeIntersectionList.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geomgraph\EdgeList.cpp"
+					RelativePath="..\..\..\src\geomgraph\EdgeList.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geomgraph\EdgeNodingValidator.cpp"
+					RelativePath="..\..\..\src\geomgraph\EdgeNodingValidator.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geomgraph\EdgeRing.cpp"
+					RelativePath="..\..\..\src\geomgraph\EdgeRing.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geomgraph\GeometryGraph.cpp"
+					RelativePath="..\..\..\src\geomgraph\GeometryGraph.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geomgraph\GraphComponent.cpp"
+					RelativePath="..\..\..\src\geomgraph\GraphComponent.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geomgraph\Label.cpp"
+					RelativePath="..\..\..\src\geomgraph\Label.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geomgraph\Node.cpp"
+					RelativePath="..\..\..\src\geomgraph\Node.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geomgraph\NodeFactory.cpp"
+					RelativePath="..\..\..\src\geomgraph\NodeFactory.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geomgraph\NodeMap.cpp"
+					RelativePath="..\..\..\src\geomgraph\NodeMap.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geomgraph\PlanarGraph.cpp"
+					RelativePath="..\..\..\src\geomgraph\PlanarGraph.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geomgraph\Position.cpp"
+					RelativePath="..\..\..\src\geomgraph\Position.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geomgraph\Quadrant.cpp"
+					RelativePath="..\..\..\src\geomgraph\Quadrant.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\geomgraph\TopologyLocation.cpp"
+					RelativePath="..\..\..\src\geomgraph\TopologyLocation.cpp"
 					>
 				</File>
 				<Filter
 					Name="index"
 					>
 					<File
-						RelativePath="..\..\..\source\geomgraph\index\MonotoneChainEdge.cpp"
+						RelativePath="..\..\..\src\geomgraph\index\MonotoneChainEdge.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geomgraph\index\MonotoneChainIndexer.cpp"
+						RelativePath="..\..\..\src\geomgraph\index\MonotoneChainIndexer.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geomgraph\index\SegmentIntersector.cpp"
+						RelativePath="..\..\..\src\geomgraph\index\SegmentIntersector.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geomgraph\index\SimpleEdgeSetIntersector.cpp"
+						RelativePath="..\..\..\src\geomgraph\index\SimpleEdgeSetIntersector.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geomgraph\index\SimpleMCSweepLineIntersector.cpp"
+						RelativePath="..\..\..\src\geomgraph\index\SimpleMCSweepLineIntersector.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geomgraph\index\SimpleSweepLineIntersector.cpp"
+						RelativePath="..\..\..\src\geomgraph\index\SimpleSweepLineIntersector.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geomgraph\index\SweepLineEvent.cpp"
+						RelativePath="..\..\..\src\geomgraph\index\SweepLineEvent.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\geomgraph\index\SweepLineSegment.cpp"
+						RelativePath="..\..\..\src\geomgraph\index\SweepLineSegment.cpp"
 						>
 					</File>
 				</Filter>
@@ -870,47 +870,47 @@
 				Name="io"
 				>
 				<File
-					RelativePath="..\..\..\source\io\ByteOrderDataInStream.cpp"
+					RelativePath="..\..\..\src\io\ByteOrderDataInStream.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\io\ByteOrderValues.cpp"
+					RelativePath="..\..\..\src\io\ByteOrderValues.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\io\CLocalizer.cpp"
+					RelativePath="..\..\..\src\io\CLocalizer.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\io\ParseException.cpp"
+					RelativePath="..\..\..\src\io\ParseException.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\io\StringTokenizer.cpp"
+					RelativePath="..\..\..\src\io\StringTokenizer.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\io\Unload.cpp"
+					RelativePath="..\..\..\src\io\Unload.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\io\WKBReader.cpp"
+					RelativePath="..\..\..\src\io\WKBReader.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\io\WKBWriter.cpp"
+					RelativePath="..\..\..\src\io\WKBWriter.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\io\WKTReader.cpp"
+					RelativePath="..\..\..\src\io\WKTReader.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\io\WKTWriter.cpp"
+					RelativePath="..\..\..\src\io\WKTWriter.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\io\Writer.cpp"
+					RelativePath="..\..\..\src\io\Writer.cpp"
 					>
 				</File>
 			</Filter>
@@ -918,102 +918,102 @@
 				Name="noding"
 				>
 				<File
-					RelativePath="..\..\..\source\noding\BasicSegmentString.cpp"
+					RelativePath="..\..\..\src\noding\BasicSegmentString.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\noding\FastNodingValidator.cpp"
+					RelativePath="..\..\..\src\noding\FastNodingValidator.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\noding\FastSegmentSetIntersectionFinder.cpp"
+					RelativePath="..\..\..\src\noding\FastSegmentSetIntersectionFinder.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\noding\IntersectionAdder.cpp"
+					RelativePath="..\..\..\src\noding\IntersectionAdder.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\noding\IntersectionFinderAdder.cpp"
+					RelativePath="..\..\..\src\noding\IntersectionFinderAdder.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\noding\IteratedNoder.cpp"
+					RelativePath="..\..\..\src\noding\IteratedNoder.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\noding\MCIndexNoder.cpp"
+					RelativePath="..\..\..\src\noding\MCIndexNoder.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\noding\MCIndexSegmentSetMutualIntersector.cpp"
+					RelativePath="..\..\..\src\noding\MCIndexSegmentSetMutualIntersector.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\noding\NodedSegmentString.cpp"
+					RelativePath="..\..\..\src\noding\NodedSegmentString.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\noding\NodingValidator.cpp"
+					RelativePath="..\..\..\src\noding\NodingValidator.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\noding\Octant.cpp"
+					RelativePath="..\..\..\src\noding\Octant.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\noding\OrientedCoordinateArray.cpp"
+					RelativePath="..\..\..\src\noding\OrientedCoordinateArray.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\noding\ScaledNoder.cpp"
+					RelativePath="..\..\..\src\noding\ScaledNoder.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\noding\SegmentIntersectionDetector.cpp"
+					RelativePath="..\..\..\src\noding\SegmentIntersectionDetector.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\noding\SegmentNode.cpp"
+					RelativePath="..\..\..\src\noding\SegmentNode.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\noding\SegmentNodeList.cpp"
+					RelativePath="..\..\..\src\noding\SegmentNodeList.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\noding\SegmentString.cpp"
+					RelativePath="..\..\..\src\noding\SegmentString.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\noding\SegmentStringUtil.cpp"
+					RelativePath="..\..\..\src\noding\SegmentStringUtil.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\noding\SimpleNoder.cpp"
+					RelativePath="..\..\..\src\noding\SimpleNoder.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\noding\SingleInteriorIntersectionFinder.cpp"
+					RelativePath="..\..\..\src\noding\SingleInteriorIntersectionFinder.cpp"
 					>
 				</File>
 				<Filter
 					Name="snapround"
 					>
 					<File
-						RelativePath="..\..\..\source\noding\snapround\HotPixel.cpp"
+						RelativePath="..\..\..\src\noding\snapround\HotPixel.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\noding\snapround\MCIndexPointSnapper.cpp"
+						RelativePath="..\..\..\src\noding\snapround\MCIndexPointSnapper.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\noding\snapround\MCIndexSnapRounder.cpp"
+						RelativePath="..\..\..\src\noding\snapround\MCIndexSnapRounder.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\noding\snapround\SimpleSnapRounder.cpp"
+						RelativePath="..\..\..\src\noding\snapround\SimpleSnapRounder.cpp"
 						>
 					</File>
 				</Filter>
@@ -1022,7 +1022,7 @@
 				Name="planargraph"
 				>
 				<File
-					RelativePath="..\..\..\source\planargraph\DirectedEdge.cpp"
+					RelativePath="..\..\..\src\planargraph\DirectedEdge.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -1044,7 +1044,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\source\planargraph\DirectedEdgeStar.cpp"
+					RelativePath="..\..\..\src\planargraph\DirectedEdgeStar.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -1066,7 +1066,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\source\planargraph\Edge.cpp"
+					RelativePath="..\..\..\src\planargraph\Edge.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -1088,7 +1088,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\source\planargraph\Node.cpp"
+					RelativePath="..\..\..\src\planargraph\Node.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -1110,7 +1110,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\source\planargraph\NodeMap.cpp"
+					RelativePath="..\..\..\src\planargraph\NodeMap.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -1132,7 +1132,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\source\planargraph\PlanarGraph.cpp"
+					RelativePath="..\..\..\src\planargraph\PlanarGraph.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -1154,14 +1154,14 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\source\planargraph\Subgraph.cpp"
+					RelativePath="..\..\..\src\planargraph\Subgraph.cpp"
 					>
 				</File>
 				<Filter
 					Name="algorithm"
 					>
 					<File
-						RelativePath="..\..\..\source\planargraph\algorithm\ConnectedSubgraphFinder.cpp"
+						RelativePath="..\..\..\src\planargraph\algorithm\ConnectedSubgraphFinder.cpp"
 						>
 					</File>
 				</Filter>
@@ -1170,58 +1170,58 @@
 				Name="operation"
 				>
 				<File
-					RelativePath="..\..\..\source\operation\GeometryGraphOperation.cpp"
+					RelativePath="..\..\..\src\operation\GeometryGraphOperation.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\operation\IsSimpleOp.cpp"
+					RelativePath="..\..\..\src\operation\IsSimpleOp.cpp"
 					>
 				</File>
 				<Filter
 					Name="buffer"
 					>
 					<File
-						RelativePath="..\..\..\source\operation\buffer\BufferBuilder.cpp"
+						RelativePath="..\..\..\src\operation\buffer\BufferBuilder.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\buffer\BufferInputLineSimplifier.cpp"
+						RelativePath="..\..\..\src\operation\buffer\BufferInputLineSimplifier.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\buffer\BufferInputLineSimplifier.h"
+						RelativePath="..\..\..\src\operation\buffer\BufferInputLineSimplifier.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\buffer\BufferOp.cpp"
+						RelativePath="..\..\..\src\operation\buffer\BufferOp.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\buffer\BufferParameters.cpp"
+						RelativePath="..\..\..\src\operation\buffer\BufferParameters.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\buffer\BufferSubgraph.cpp"
+						RelativePath="..\..\..\src\operation\buffer\BufferSubgraph.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\buffer\OffsetCurveBuilder.cpp"
+						RelativePath="..\..\..\src\operation\buffer\OffsetCurveBuilder.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\buffer\OffsetCurveSetBuilder.cpp"
+						RelativePath="..\..\..\src\operation\buffer\OffsetCurveSetBuilder.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\buffer\OffsetCurveVertexList.h"
+						RelativePath="..\..\..\src\operation\buffer\OffsetCurveVertexList.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\buffer\RightmostEdgeFinder.cpp"
+						RelativePath="..\..\..\src\operation\buffer\RightmostEdgeFinder.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\buffer\SubgraphDepthLocater.cpp"
+						RelativePath="..\..\..\src\operation\buffer\SubgraphDepthLocater.cpp"
 						>
 					</File>
 				</Filter>
@@ -1229,19 +1229,19 @@
 					Name="distance"
 					>
 					<File
-						RelativePath="..\..\..\source\operation\distance\ConnectedElementLocationFilter.cpp"
+						RelativePath="..\..\..\src\operation\distance\ConnectedElementLocationFilter.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\distance\ConnectedElementPointFilter.cpp"
+						RelativePath="..\..\..\src\operation\distance\ConnectedElementPointFilter.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\distance\DistanceOp.cpp"
+						RelativePath="..\..\..\src\operation\distance\DistanceOp.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\distance\GeometryLocation.cpp"
+						RelativePath="..\..\..\src\operation\distance\GeometryLocation.cpp"
 						>
 					</File>
 				</Filter>
@@ -1249,62 +1249,62 @@
 					Name="overlay"
 					>
 					<File
-						RelativePath="..\..\..\source\operation\overlay\EdgeSetNoder.cpp"
+						RelativePath="..\..\..\src\operation\overlay\EdgeSetNoder.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\overlay\ElevationMatrix.cpp"
+						RelativePath="..\..\..\src\operation\overlay\ElevationMatrix.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\overlay\ElevationMatrixCell.cpp"
+						RelativePath="..\..\..\src\operation\overlay\ElevationMatrixCell.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\overlay\LineBuilder.cpp"
+						RelativePath="..\..\..\src\operation\overlay\LineBuilder.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\overlay\MaximalEdgeRing.cpp"
+						RelativePath="..\..\..\src\operation\overlay\MaximalEdgeRing.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\overlay\MinimalEdgeRing.cpp"
+						RelativePath="..\..\..\src\operation\overlay\MinimalEdgeRing.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\overlay\OverlayNodeFactory.cpp"
+						RelativePath="..\..\..\src\operation\overlay\OverlayNodeFactory.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\overlay\OverlayOp.cpp"
+						RelativePath="..\..\..\src\operation\overlay\OverlayOp.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\overlay\PointBuilder.cpp"
+						RelativePath="..\..\..\src\operation\overlay\PointBuilder.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\overlay\PolygonBuilder.cpp"
+						RelativePath="..\..\..\src\operation\overlay\PolygonBuilder.cpp"
 						>
 					</File>
 					<Filter
 						Name="snap"
 						>
 						<File
-							RelativePath="..\..\..\source\operation\overlay\snap\GeometrySnapper.cpp"
+							RelativePath="..\..\..\src\operation\overlay\snap\GeometrySnapper.cpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\operation\overlay\snap\LineStringSnapper.cpp"
+							RelativePath="..\..\..\src\operation\overlay\snap\LineStringSnapper.cpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\operation\overlay\snap\SnapIfNeededOverlayOp.cpp"
+							RelativePath="..\..\..\src\operation\overlay\snap\SnapIfNeededOverlayOp.cpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\operation\overlay\snap\SnapOverlayOp.cpp"
+							RelativePath="..\..\..\src\operation\overlay\snap\SnapOverlayOp.cpp"
 							>
 						</File>
 					</Filter>
@@ -1312,15 +1312,15 @@
 						Name="validate"
 						>
 						<File
-							RelativePath="..\..\..\source\operation\overlay\validate\FuzzyPointLocator.cpp"
+							RelativePath="..\..\..\src\operation\overlay\validate\FuzzyPointLocator.cpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\operation\overlay\validate\OffsetPointGenerator.cpp"
+							RelativePath="..\..\..\src\operation\overlay\validate\OffsetPointGenerator.cpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\operation\overlay\validate\OverlayResultValidator.cpp"
+							RelativePath="..\..\..\src\operation\overlay\validate\OverlayResultValidator.cpp"
 							>
 						</File>
 					</Filter>
@@ -1329,7 +1329,7 @@
 					Name="polygonize"
 					>
 					<File
-						RelativePath="..\..\..\source\operation\polygonize\EdgeRing.cpp"
+						RelativePath="..\..\..\src\operation\polygonize\EdgeRing.cpp"
 						>
 						<FileConfiguration
 							Name="Debug|Win32"
@@ -1351,19 +1351,19 @@
 						</FileConfiguration>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\polygonize\PolygonizeDirectedEdge.cpp"
+						RelativePath="..\..\..\src\operation\polygonize\PolygonizeDirectedEdge.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\polygonize\PolygonizeEdge.cpp"
+						RelativePath="..\..\..\src\operation\polygonize\PolygonizeEdge.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\polygonize\PolygonizeGraph.cpp"
+						RelativePath="..\..\..\src\operation\polygonize\PolygonizeGraph.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\polygonize\Polygonizer.cpp"
+						RelativePath="..\..\..\src\operation\polygonize\Polygonizer.cpp"
 						>
 					</File>
 				</Filter>
@@ -1371,35 +1371,35 @@
 					Name="relate"
 					>
 					<File
-						RelativePath="..\..\..\source\operation\relate\EdgeEndBuilder.cpp"
+						RelativePath="..\..\..\src\operation\relate\EdgeEndBuilder.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\relate\EdgeEndBundle.cpp"
+						RelativePath="..\..\..\src\operation\relate\EdgeEndBundle.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\relate\EdgeEndBundleStar.cpp"
+						RelativePath="..\..\..\src\operation\relate\EdgeEndBundleStar.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\relate\RelateComputer.cpp"
+						RelativePath="..\..\..\src\operation\relate\RelateComputer.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\relate\RelateNode.cpp"
+						RelativePath="..\..\..\src\operation\relate\RelateNode.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\relate\RelateNodeFactory.cpp"
+						RelativePath="..\..\..\src\operation\relate\RelateNodeFactory.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\relate\RelateNodeGraph.cpp"
+						RelativePath="..\..\..\src\operation\relate\RelateNodeGraph.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\relate\RelateOp.cpp"
+						RelativePath="..\..\..\src\operation\relate\RelateOp.cpp"
 						>
 					</File>
 				</Filter>
@@ -1407,43 +1407,43 @@
 					Name="valid"
 					>
 					<File
-						RelativePath="..\..\..\source\operation\valid\ConnectedInteriorTester.cpp"
+						RelativePath="..\..\..\src\operation\valid\ConnectedInteriorTester.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\valid\ConsistentAreaTester.cpp"
+						RelativePath="..\..\..\src\operation\valid\ConsistentAreaTester.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\valid\IndexedNestedRingTester.cpp"
+						RelativePath="..\..\..\src\operation\valid\IndexedNestedRingTester.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\valid\IndexedNestedRingTester.h"
+						RelativePath="..\..\..\src\operation\valid\IndexedNestedRingTester.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\valid\IsValidOp.cpp"
+						RelativePath="..\..\..\src\operation\valid\IsValidOp.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\valid\QuadtreeNestedRingTester.cpp"
+						RelativePath="..\..\..\src\operation\valid\QuadtreeNestedRingTester.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\valid\RepeatedPointTester.cpp"
+						RelativePath="..\..\..\src\operation\valid\RepeatedPointTester.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\valid\SimpleNestedRingTester.cpp"
+						RelativePath="..\..\..\src\operation\valid\SimpleNestedRingTester.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\valid\SweeplineNestedRingTester.cpp"
+						RelativePath="..\..\..\src\operation\valid\SweeplineNestedRingTester.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\valid\TopologyValidationError.cpp"
+						RelativePath="..\..\..\src\operation\valid\TopologyValidationError.cpp"
 						>
 					</File>
 				</Filter>
@@ -1451,27 +1451,27 @@
 					Name="linemerge"
 					>
 					<File
-						RelativePath="..\..\..\source\operation\linemerge\EdgeString.cpp"
+						RelativePath="..\..\..\src\operation\linemerge\EdgeString.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\linemerge\LineMergeDirectedEdge.cpp"
+						RelativePath="..\..\..\src\operation\linemerge\LineMergeDirectedEdge.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\linemerge\LineMergeEdge.cpp"
+						RelativePath="..\..\..\src\operation\linemerge\LineMergeEdge.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\linemerge\LineMergeGraph.cpp"
+						RelativePath="..\..\..\src\operation\linemerge\LineMergeGraph.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\linemerge\LineMerger.cpp"
+						RelativePath="..\..\..\src\operation\linemerge\LineMerger.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\linemerge\LineSequencer.cpp"
+						RelativePath="..\..\..\src\operation\linemerge\LineSequencer.cpp"
 						>
 					</File>
 				</Filter>
@@ -1479,15 +1479,15 @@
 					Name="predicate"
 					>
 					<File
-						RelativePath="..\..\..\source\operation\predicate\RectangleContains.cpp"
+						RelativePath="..\..\..\src\operation\predicate\RectangleContains.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\predicate\RectangleIntersects.cpp"
+						RelativePath="..\..\..\src\operation\predicate\RectangleIntersects.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\operation\predicate\SegmentIntersectionTester.cpp"
+						RelativePath="..\..\..\src\operation\predicate\SegmentIntersectionTester.cpp"
 						>
 					</File>
 				</Filter>
@@ -1495,7 +1495,7 @@
 					Name="union"
 					>
 					<File
-						RelativePath="..\..\..\source\operation\union\CascadedPolygonUnion.cpp"
+						RelativePath="..\..\..\src\operation\union\CascadedPolygonUnion.cpp"
 						>
 					</File>
 				</Filter>
@@ -1504,23 +1504,23 @@
 				Name="precision"
 				>
 				<File
-					RelativePath="..\..\..\source\precision\CommonBits.cpp"
+					RelativePath="..\..\..\src\precision\CommonBits.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\precision\CommonBitsOp.cpp"
+					RelativePath="..\..\..\src\precision\CommonBitsOp.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\precision\CommonBitsRemover.cpp"
+					RelativePath="..\..\..\src\precision\CommonBitsRemover.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\precision\EnhancedPrecisionOp.cpp"
+					RelativePath="..\..\..\src\precision\EnhancedPrecisionOp.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\precision\SimpleGeometryPrecisionReducer.cpp"
+					RelativePath="..\..\..\src\precision\SimpleGeometryPrecisionReducer.cpp"
 					>
 				</File>
 			</Filter>
@@ -1528,19 +1528,19 @@
 				Name="util"
 				>
 				<File
-					RelativePath="..\..\..\source\util\Assert.cpp"
+					RelativePath="..\..\..\src\util\Assert.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\util\GeometricShapeFactory.cpp"
+					RelativePath="..\..\..\src\util\GeometricShapeFactory.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\util\math.cpp"
+					RelativePath="..\..\..\src\util\math.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\util\Profiler.cpp"
+					RelativePath="..\..\..\src\util\Profiler.cpp"
 					>
 				</File>
 			</Filter>
@@ -1548,134 +1548,134 @@
 				Name="headers"
 				>
 				<File
-					RelativePath="..\..\..\source\headers\acconfig.h"
+					RelativePath="..\..\..\include\acconfig.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\headers\geos.h"
+					RelativePath="..\..\..\include\geos.h"
 					>
 				</File>
 				<Filter
 					Name="geos"
 					>
 					<File
-						RelativePath="..\..\..\source\headers\geos\config.h"
+						RelativePath="..\..\..\include\geos\config.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\export.h"
+						RelativePath="..\..\..\include\geos\export.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\geom.h"
+						RelativePath="..\..\..\include\geos\geom.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\geomgraph.h"
+						RelativePath="..\..\..\include\geos\geomgraph.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\geomgraphindex.h"
+						RelativePath="..\..\..\include\geos\geomgraphindex.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\geomPrep.h"
+						RelativePath="..\..\..\include\geos\geomPrep.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\geomUtil.h"
+						RelativePath="..\..\..\include\geos\geomUtil.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\geosAlgorithm.h"
+						RelativePath="..\..\..\include\geos\geosAlgorithm.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\indexBintree.h"
+						RelativePath="..\..\..\include\geos\indexBintree.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\indexChain.h"
+						RelativePath="..\..\..\include\geos\indexChain.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\indexIntervalRTree.h"
+						RelativePath="..\..\..\include\geos\indexIntervalRTree.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\indexQuadtree.h"
+						RelativePath="..\..\..\include\geos\indexQuadtree.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\indexStrtree.h"
+						RelativePath="..\..\..\include\geos\indexStrtree.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\indexSweepline.h"
+						RelativePath="..\..\..\include\geos\indexSweepline.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\inline.h"
+						RelativePath="..\..\..\include\geos\inline.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\io.h"
+						RelativePath="..\..\..\include\geos\io.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\noding.h"
+						RelativePath="..\..\..\include\geos\noding.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\nodingSnapround.h"
+						RelativePath="..\..\..\include\geos\nodingSnapround.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\opBuffer.h"
+						RelativePath="..\..\..\include\geos\opBuffer.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\opDistance.h"
+						RelativePath="..\..\..\include\geos\opDistance.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\operation.h"
+						RelativePath="..\..\..\include\geos\operation.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\opLinemerge.h"
+						RelativePath="..\..\..\include\geos\opLinemerge.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\opOverlay.h"
+						RelativePath="..\..\..\include\geos\opOverlay.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\opPolygonize.h"
+						RelativePath="..\..\..\include\geos\opPolygonize.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\opPredicate.h"
+						RelativePath="..\..\..\include\geos\opPredicate.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\opRelate.h"
+						RelativePath="..\..\..\include\geos\opRelate.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\opValid.h"
+						RelativePath="..\..\..\include\geos\opValid.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\planargraph.h"
+						RelativePath="..\..\..\include\geos\planargraph.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\platform.h"
+						RelativePath="..\..\..\include\geos\platform.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\platform.h.vc"
+						RelativePath="..\..\..\include\geos\platform.h.vc"
 						>
 						<FileConfiguration
 							Name="Debug|Win32"
@@ -1699,35 +1699,35 @@
 						</FileConfiguration>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\precision.h"
+						RelativePath="..\..\..\include\geos\precision.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\profiler.h"
+						RelativePath="..\..\..\include\geos\profiler.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\spatialIndex.h"
+						RelativePath="..\..\..\include\geos\spatialIndex.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\timeval.h"
+						RelativePath="..\..\..\include\geos\timeval.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\unload.h"
+						RelativePath="..\..\..\include\geos\unload.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\util.h"
+						RelativePath="..\..\..\include\geos\util.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\version.h"
+						RelativePath="..\..\..\include\geos\version.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\headers\geos\version.h.vc"
+						RelativePath="..\..\..\include\geos\version.h.vc"
 						>
 						<FileConfiguration
 							Name="Debug|Win32"
@@ -1754,110 +1754,110 @@
 						Name="algorithm"
 						>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\Angle.h"
+							RelativePath="..\..\..\include\geos\algorithm\Angle.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\BoundaryNodeRule.h"
+							RelativePath="..\..\..\include\geos\algorithm\BoundaryNodeRule.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\CentralEndpointIntersector.h"
+							RelativePath="..\..\..\include\geos\algorithm\CentralEndpointIntersector.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\CentroidArea.h"
+							RelativePath="..\..\..\include\geos\algorithm\CentroidArea.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\CentroidLine.h"
+							RelativePath="..\..\..\include\geos\algorithm\CentroidLine.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\CentroidPoint.h"
+							RelativePath="..\..\..\include\geos\algorithm\CentroidPoint.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\CGAlgorithms.h"
+							RelativePath="..\..\..\include\geos\algorithm\CGAlgorithms.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\ConvexHull.h"
+							RelativePath="..\..\..\include\geos\algorithm\ConvexHull.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\ConvexHull.inl"
+							RelativePath="..\..\..\include\geos\algorithm\ConvexHull.inl"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\HCoordinate.h"
+							RelativePath="..\..\..\include\geos\algorithm\HCoordinate.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\InteriorPointArea.h"
+							RelativePath="..\..\..\include\geos\algorithm\InteriorPointArea.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\InteriorPointLine.h"
+							RelativePath="..\..\..\include\geos\algorithm\InteriorPointLine.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\InteriorPointPoint.h"
+							RelativePath="..\..\..\include\geos\algorithm\InteriorPointPoint.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\LineIntersector.h"
+							RelativePath="..\..\..\include\geos\algorithm\LineIntersector.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\MCPointInRing.h"
+							RelativePath="..\..\..\include\geos\algorithm\MCPointInRing.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\MinimumDiameter.h"
+							RelativePath="..\..\..\include\geos\algorithm\MinimumDiameter.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\NotRepresentableException.h"
+							RelativePath="..\..\..\include\geos\algorithm\NotRepresentableException.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\PointInRing.h"
+							RelativePath="..\..\..\include\geos\algorithm\PointInRing.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\PointLocator.h"
+							RelativePath="..\..\..\include\geos\algorithm\PointLocator.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\RayCrossingCounter.h"
+							RelativePath="..\..\..\include\geos\algorithm\RayCrossingCounter.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\RobustDeterminant.h"
+							RelativePath="..\..\..\include\geos\algorithm\RobustDeterminant.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\SimplePointInRing.h"
+							RelativePath="..\..\..\include\geos\algorithm\SimplePointInRing.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\algorithm\SIRtreePointInRing.h"
+							RelativePath="..\..\..\include\geos\algorithm\SIRtreePointInRing.h"
 							>
 						</File>
 						<Filter
 							Name="locate"
 							>
 							<File
-								RelativePath="..\..\..\source\headers\geos\algorithm\locate\IndexedPointInAreaLocator.h"
+								RelativePath="..\..\..\include\geos\algorithm\locate\IndexedPointInAreaLocator.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\algorithm\locate\PointOnGeometryLocator.h"
+								RelativePath="..\..\..\include\geos\algorithm\locate\PointOnGeometryLocator.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\algorithm\locate\SimplePointInAreaLocator.h"
+								RelativePath="..\..\..\include\geos\algorithm\locate\SimplePointInAreaLocator.h"
 								>
 							</File>
 						</Filter>
@@ -1865,15 +1865,15 @@
 							Name="distance"
 							>
 							<File
-								RelativePath="..\..\..\source\headers\geos\algorithm\distance\DiscreteHausdorffDistance.h"
+								RelativePath="..\..\..\include\geos\algorithm\distance\DiscreteHausdorffDistance.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\algorithm\distance\DistanceToPoint.h"
+								RelativePath="..\..\..\include\geos\algorithm\distance\DistanceToPoint.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\algorithm\distance\PointPairDistance.h"
+								RelativePath="..\..\..\include\geos\algorithm\distance\PointPairDistance.h"
 								>
 							</File>
 						</Filter>
@@ -1882,202 +1882,202 @@
 						Name="geom"
 						>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\BinaryOp.h"
+							RelativePath="..\..\..\include\geos\geom\BinaryOp.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\Coordinate.h"
+							RelativePath="..\..\..\include\geos\geom\Coordinate.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\Coordinate.inl"
+							RelativePath="..\..\..\include\geos\geom\Coordinate.inl"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\CoordinateArraySequence.h"
+							RelativePath="..\..\..\include\geos\geom\CoordinateArraySequence.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\CoordinateArraySequenceFactory.h"
+							RelativePath="..\..\..\include\geos\geom\CoordinateArraySequenceFactory.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\CoordinateArraySequenceFactory.inl"
+							RelativePath="..\..\..\include\geos\geom\CoordinateArraySequenceFactory.inl"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\CoordinateFilter.h"
+							RelativePath="..\..\..\include\geos\geom\CoordinateFilter.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\CoordinateList.h"
+							RelativePath="..\..\..\include\geos\geom\CoordinateList.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\CoordinateSequence.h"
+							RelativePath="..\..\..\include\geos\geom\CoordinateSequence.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\CoordinateSequenceFactory.h"
+							RelativePath="..\..\..\include\geos\geom\CoordinateSequenceFactory.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\CoordinateSequenceFilter.h"
+							RelativePath="..\..\..\include\geos\geom\CoordinateSequenceFilter.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\Dimension.h"
+							RelativePath="..\..\..\include\geos\geom\Dimension.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\Envelope.h"
+							RelativePath="..\..\..\include\geos\geom\Envelope.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\Envelope.inl"
+							RelativePath="..\..\..\include\geos\geom\Envelope.inl"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\Geometry.h"
+							RelativePath="..\..\..\include\geos\geom\Geometry.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\Geometry.inl"
+							RelativePath="..\..\..\include\geos\geom\Geometry.inl"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\GeometryCollection.h"
+							RelativePath="..\..\..\include\geos\geom\GeometryCollection.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\GeometryCollection.inl"
+							RelativePath="..\..\..\include\geos\geom\GeometryCollection.inl"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\GeometryComponentFilter.h"
+							RelativePath="..\..\..\include\geos\geom\GeometryComponentFilter.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\GeometryFactory.h"
+							RelativePath="..\..\..\include\geos\geom\GeometryFactory.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\GeometryFactory.inl"
+							RelativePath="..\..\..\include\geos\geom\GeometryFactory.inl"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\GeometryFilter.h"
+							RelativePath="..\..\..\include\geos\geom\GeometryFilter.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\GeometryList.h"
+							RelativePath="..\..\..\include\geos\geom\GeometryList.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\IntersectionMatrix.h"
+							RelativePath="..\..\..\include\geos\geom\IntersectionMatrix.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\LinearRing.h"
+							RelativePath="..\..\..\include\geos\geom\LinearRing.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\LineSegment.h"
+							RelativePath="..\..\..\include\geos\geom\LineSegment.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\LineSegment.inl"
+							RelativePath="..\..\..\include\geos\geom\LineSegment.inl"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\LineString.h"
+							RelativePath="..\..\..\include\geos\geom\LineString.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\Location.h"
+							RelativePath="..\..\..\include\geos\geom\Location.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\MultiLineString.h"
+							RelativePath="..\..\..\include\geos\geom\MultiLineString.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\MultiLineString.inl"
+							RelativePath="..\..\..\include\geos\geom\MultiLineString.inl"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\MultiPoint.h"
+							RelativePath="..\..\..\include\geos\geom\MultiPoint.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\MultiPolygon.h"
+							RelativePath="..\..\..\include\geos\geom\MultiPolygon.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\MultiPolygon.inl"
+							RelativePath="..\..\..\include\geos\geom\MultiPolygon.inl"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\Point.h"
+							RelativePath="..\..\..\include\geos\geom\Point.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\Polygon.h"
+							RelativePath="..\..\..\include\geos\geom\Polygon.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\PrecisionModel.h"
+							RelativePath="..\..\..\include\geos\geom\PrecisionModel.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\PrecisionModel.inl"
+							RelativePath="..\..\..\include\geos\geom\PrecisionModel.inl"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geom\Triangle.h"
+							RelativePath="..\..\..\include\geos\geom\Triangle.h"
 							>
 						</File>
 						<Filter
 							Name="util"
 							>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geom\util\ComponentCoordinateExtracter.h"
+								RelativePath="..\..\..\include\geos\geom\util\ComponentCoordinateExtracter.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geom\util\CoordinateOperation.h"
+								RelativePath="..\..\..\include\geos\geom\util\CoordinateOperation.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geom\util\GeometryCombiner.h"
+								RelativePath="..\..\..\include\geos\geom\util\GeometryCombiner.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geom\util\GeometryEditor.h"
+								RelativePath="..\..\..\include\geos\geom\util\GeometryEditor.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geom\util\GeometryEditorOperation.h"
+								RelativePath="..\..\..\include\geos\geom\util\GeometryEditorOperation.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geom\util\GeometryTransformer.h"
+								RelativePath="..\..\..\include\geos\geom\util\GeometryTransformer.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geom\util\LinearComponentExtracter.h"
+								RelativePath="..\..\..\include\geos\geom\util\LinearComponentExtracter.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geom\util\PointExtracter.h"
+								RelativePath="..\..\..\include\geos\geom\util\PointExtracter.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geom\util\PolygonExtracter.h"
+								RelativePath="..\..\..\include\geos\geom\util\PolygonExtracter.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geom\util\ShortCircuitedGeometryVisitor.h"
+								RelativePath="..\..\..\include\geos\geom\util\ShortCircuitedGeometryVisitor.h"
 								>
 							</File>
 						</Filter>
@@ -2085,59 +2085,59 @@
 							Name="prep"
 							>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geom\prep\AbstractPreparedPolygonContains.h"
+								RelativePath="..\..\..\include\geos\geom\prep\AbstractPreparedPolygonContains.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geom\prep\BasicPreparedGeometry.h"
+								RelativePath="..\..\..\include\geos\geom\prep\BasicPreparedGeometry.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geom\prep\PreparedGeometry.h"
+								RelativePath="..\..\..\include\geos\geom\prep\PreparedGeometry.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geom\prep\PreparedGeometryFactory.h"
+								RelativePath="..\..\..\include\geos\geom\prep\PreparedGeometryFactory.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geom\prep\PreparedLineString.h"
+								RelativePath="..\..\..\include\geos\geom\prep\PreparedLineString.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geom\prep\PreparedLineStringIntersects.h"
+								RelativePath="..\..\..\include\geos\geom\prep\PreparedLineStringIntersects.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geom\prep\PreparedPoint.h"
+								RelativePath="..\..\..\include\geos\geom\prep\PreparedPoint.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geom\prep\PreparedPolygon.h"
+								RelativePath="..\..\..\include\geos\geom\prep\PreparedPolygon.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geom\prep\PreparedPolygonContains.h"
+								RelativePath="..\..\..\include\geos\geom\prep\PreparedPolygonContains.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geom\prep\PreparedPolygonContainsProperly.h"
+								RelativePath="..\..\..\include\geos\geom\prep\PreparedPolygonContainsProperly.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geom\prep\PreparedPolygonCovers.h"
+								RelativePath="..\..\..\include\geos\geom\prep\PreparedPolygonCovers.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geom\prep\PreparedPolygonIntersects.h"
+								RelativePath="..\..\..\include\geos\geom\prep\PreparedPolygonIntersects.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geom\prep\PreparedPolygonLineIntersection.h"
+								RelativePath="..\..\..\include\geos\geom\prep\PreparedPolygonLineIntersection.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geom\prep\PreparedPolygonPredicate.h"
+								RelativePath="..\..\..\include\geos\geom\prep\PreparedPolygonPredicate.h"
 								>
 							</File>
 						</Filter>
@@ -2146,142 +2146,142 @@
 						Name="geomgraph"
 						>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geomgraph\Depth.h"
+							RelativePath="..\..\..\include\geos\geomgraph\Depth.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geomgraph\DirectedEdge.h"
+							RelativePath="..\..\..\include\geos\geomgraph\DirectedEdge.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geomgraph\DirectedEdge.inl"
+							RelativePath="..\..\..\include\geos\geomgraph\DirectedEdge.inl"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geomgraph\DirectedEdgeStar.h"
+							RelativePath="..\..\..\include\geos\geomgraph\DirectedEdgeStar.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geomgraph\Edge.h"
+							RelativePath="..\..\..\include\geos\geomgraph\Edge.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geomgraph\EdgeEnd.h"
+							RelativePath="..\..\..\include\geos\geomgraph\EdgeEnd.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geomgraph\EdgeEndStar.h"
+							RelativePath="..\..\..\include\geos\geomgraph\EdgeEndStar.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geomgraph\EdgeIntersection.h"
+							RelativePath="..\..\..\include\geos\geomgraph\EdgeIntersection.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geomgraph\EdgeIntersectionList.h"
+							RelativePath="..\..\..\include\geos\geomgraph\EdgeIntersectionList.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geomgraph\EdgeList.h"
+							RelativePath="..\..\..\include\geos\geomgraph\EdgeList.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geomgraph\EdgeNodingValidator.h"
+							RelativePath="..\..\..\include\geos\geomgraph\EdgeNodingValidator.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geomgraph\EdgeRing.h"
+							RelativePath="..\..\..\include\geos\geomgraph\EdgeRing.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geomgraph\GeometryGraph.h"
+							RelativePath="..\..\..\include\geos\geomgraph\GeometryGraph.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geomgraph\GeometryGraph.inl"
+							RelativePath="..\..\..\include\geos\geomgraph\GeometryGraph.inl"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geomgraph\GraphComponent.h"
+							RelativePath="..\..\..\include\geos\geomgraph\GraphComponent.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geomgraph\Label.h"
+							RelativePath="..\..\..\include\geos\geomgraph\Label.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geomgraph\Node.h"
+							RelativePath="..\..\..\include\geos\geomgraph\Node.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geomgraph\NodeFactory.h"
+							RelativePath="..\..\..\include\geos\geomgraph\NodeFactory.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geomgraph\NodeMap.h"
+							RelativePath="..\..\..\include\geos\geomgraph\NodeMap.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geomgraph\PlanarGraph.h"
+							RelativePath="..\..\..\include\geos\geomgraph\PlanarGraph.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geomgraph\Position.h"
+							RelativePath="..\..\..\include\geos\geomgraph\Position.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geomgraph\Quadrant.h"
+							RelativePath="..\..\..\include\geos\geomgraph\Quadrant.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\geomgraph\TopologyLocation.h"
+							RelativePath="..\..\..\include\geos\geomgraph\TopologyLocation.h"
 							>
 						</File>
 						<Filter
 							Name="index"
 							>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geomgraph\index\EdgeSetIntersector.h"
+								RelativePath="..\..\..\include\geos\geomgraph\index\EdgeSetIntersector.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geomgraph\index\MonotoneChain.h"
+								RelativePath="..\..\..\include\geos\geomgraph\index\MonotoneChain.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geomgraph\index\MonotoneChainEdge.h"
+								RelativePath="..\..\..\include\geos\geomgraph\index\MonotoneChainEdge.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geomgraph\index\MonotoneChainIndexer.h"
+								RelativePath="..\..\..\include\geos\geomgraph\index\MonotoneChainIndexer.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geomgraph\index\SegmentIntersector.h"
+								RelativePath="..\..\..\include\geos\geomgraph\index\SegmentIntersector.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geomgraph\index\SimpleEdgeSetIntersector.h"
+								RelativePath="..\..\..\include\geos\geomgraph\index\SimpleEdgeSetIntersector.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geomgraph\index\SimpleMCSweepLineIntersector.h"
+								RelativePath="..\..\..\include\geos\geomgraph\index\SimpleMCSweepLineIntersector.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geomgraph\index\SimpleSweepLineIntersector.h"
+								RelativePath="..\..\..\include\geos\geomgraph\index\SimpleSweepLineIntersector.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geomgraph\index\SweepLineEvent.h"
+								RelativePath="..\..\..\include\geos\geomgraph\index\SweepLineEvent.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geomgraph\index\SweepLineEventObj.h"
+								RelativePath="..\..\..\include\geos\geomgraph\index\SweepLineEventObj.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\geomgraph\index\SweepLineSegment.h"
+								RelativePath="..\..\..\include\geos\geomgraph\index\SweepLineSegment.h"
 								>
 							</File>
 						</Filter>
@@ -2290,138 +2290,138 @@
 						Name="noding"
 						>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\BasicSegmentString.h"
+							RelativePath="..\..\..\include\geos\noding\BasicSegmentString.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\FastNodingValidator.h"
+							RelativePath="..\..\..\include\geos\noding\FastNodingValidator.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\FastSegmentSetIntersectionFinder.h"
+							RelativePath="..\..\..\include\geos\noding\FastSegmentSetIntersectionFinder.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\IntersectionAdder.h"
+							RelativePath="..\..\..\include\geos\noding\IntersectionAdder.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\IntersectionFinderAdder.h"
+							RelativePath="..\..\..\include\geos\noding\IntersectionFinderAdder.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\IteratedNoder.h"
+							RelativePath="..\..\..\include\geos\noding\IteratedNoder.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\MCIndexNoder.h"
+							RelativePath="..\..\..\include\geos\noding\MCIndexNoder.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\MCIndexNoder.inl"
+							RelativePath="..\..\..\include\geos\noding\MCIndexNoder.inl"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\MCIndexSegmentSetMutualIntersector.h"
+							RelativePath="..\..\..\include\geos\noding\MCIndexSegmentSetMutualIntersector.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\NodableSegmentString.h"
+							RelativePath="..\..\..\include\geos\noding\NodableSegmentString.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\NodedSegmentString.h"
+							RelativePath="..\..\..\include\geos\noding\NodedSegmentString.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\Noder.h"
+							RelativePath="..\..\..\include\geos\noding\Noder.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\NodingValidator.h"
+							RelativePath="..\..\..\include\geos\noding\NodingValidator.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\Octant.h"
+							RelativePath="..\..\..\include\geos\noding\Octant.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\OrientedCoordinateArray.h"
+							RelativePath="..\..\..\include\geos\noding\OrientedCoordinateArray.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\ScaledNoder.h"
+							RelativePath="..\..\..\include\geos\noding\ScaledNoder.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\SegmentIntersectionDetector.h"
+							RelativePath="..\..\..\include\geos\noding\SegmentIntersectionDetector.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\SegmentIntersector.h"
+							RelativePath="..\..\..\include\geos\noding\SegmentIntersector.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\SegmentNode.h"
+							RelativePath="..\..\..\include\geos\noding\SegmentNode.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\SegmentNodeList.h"
+							RelativePath="..\..\..\include\geos\noding\SegmentNodeList.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\SegmentSetMutualIntersector.h"
+							RelativePath="..\..\..\include\geos\noding\SegmentSetMutualIntersector.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\SegmentString.h"
+							RelativePath="..\..\..\include\geos\noding\SegmentString.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\SegmentString.inl"
+							RelativePath="..\..\..\include\geos\noding\SegmentString.inl"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\SegmentStringUtil.h"
+							RelativePath="..\..\..\include\geos\noding\SegmentStringUtil.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\SimpleNoder.h"
+							RelativePath="..\..\..\include\geos\noding\SimpleNoder.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\SingleInteriorIntersectionFinder.h"
+							RelativePath="..\..\..\include\geos\noding\SingleInteriorIntersectionFinder.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\noding\SinglePassNoder.h"
+							RelativePath="..\..\..\include\geos\noding\SinglePassNoder.h"
 							>
 						</File>
 						<Filter
 							Name="snapround"
 							>
 							<File
-								RelativePath="..\..\..\source\headers\geos\noding\snapround\HotPixel.h"
+								RelativePath="..\..\..\include\geos\noding\snapround\HotPixel.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\noding\snapround\HotPixel.inl"
+								RelativePath="..\..\..\include\geos\noding\snapround\HotPixel.inl"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\noding\snapround\MCIndexPointSnapper.h"
+								RelativePath="..\..\..\include\geos\noding\snapround\MCIndexPointSnapper.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\noding\snapround\MCIndexSnapRounder.h"
+								RelativePath="..\..\..\include\geos\noding\snapround\MCIndexSnapRounder.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\noding\snapround\MCIndexSnapRounder.inl"
+								RelativePath="..\..\..\include\geos\noding\snapround\MCIndexSnapRounder.inl"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\noding\snapround\SimpleSnapRounder.h"
+								RelativePath="..\..\..\include\geos\noding\snapround\SimpleSnapRounder.h"
 								>
 							</File>
 						</Filter>
@@ -2430,42 +2430,42 @@
 						Name="operation"
 						>
 						<File
-							RelativePath="..\..\..\source\headers\geos\operation\GeometryGraphOperation.h"
+							RelativePath="..\..\..\include\geos\operation\GeometryGraphOperation.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\operation\IsSimpleOp.h"
+							RelativePath="..\..\..\include\geos\operation\IsSimpleOp.h"
 							>
 						</File>
 						<Filter
 							Name="buffer"
 							>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\buffer\BufferBuilder.h"
+								RelativePath="..\..\..\include\geos\operation\buffer\BufferBuilder.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\buffer\BufferOp.h"
+								RelativePath="..\..\..\include\geos\operation\buffer\BufferOp.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\buffer\BufferSubgraph.h"
+								RelativePath="..\..\..\include\geos\operation\buffer\BufferSubgraph.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\buffer\OffsetCurveBuilder.h"
+								RelativePath="..\..\..\include\geos\operation\buffer\OffsetCurveBuilder.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\buffer\OffsetCurveSetBuilder.h"
+								RelativePath="..\..\..\include\geos\operation\buffer\OffsetCurveSetBuilder.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\buffer\RightmostEdgeFinder.h"
+								RelativePath="..\..\..\include\geos\operation\buffer\RightmostEdgeFinder.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\buffer\SubgraphDepthLocater.h"
+								RelativePath="..\..\..\include\geos\operation\buffer\SubgraphDepthLocater.h"
 								>
 							</File>
 						</Filter>
@@ -2473,59 +2473,59 @@
 							Name="overlay"
 							>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\overlay\EdgeSetNoder.h"
+								RelativePath="..\..\..\include\geos\operation\overlay\EdgeSetNoder.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\overlay\ElevationMatrix.h"
+								RelativePath="..\..\..\include\geos\operation\overlay\ElevationMatrix.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\overlay\ElevationMatrixCell.h"
+								RelativePath="..\..\..\include\geos\operation\overlay\ElevationMatrixCell.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\overlay\FuzzyPointLocator.h"
+								RelativePath="..\..\..\include\geos\operation\overlay\FuzzyPointLocator.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\overlay\LineBuilder.h"
+								RelativePath="..\..\..\include\geos\operation\overlay\LineBuilder.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\overlay\MaximalEdgeRing.h"
+								RelativePath="..\..\..\include\geos\operation\overlay\MaximalEdgeRing.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\overlay\MinimalEdgeRing.h"
+								RelativePath="..\..\..\include\geos\operation\overlay\MinimalEdgeRing.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\overlay\MinimalEdgeRing.inl"
+								RelativePath="..\..\..\include\geos\operation\overlay\MinimalEdgeRing.inl"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\overlay\OffsetPointGenerator.h"
+								RelativePath="..\..\..\include\geos\operation\overlay\OffsetPointGenerator.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\overlay\OverlayNodeFactory.h"
+								RelativePath="..\..\..\include\geos\operation\overlay\OverlayNodeFactory.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\overlay\OverlayOp.h"
+								RelativePath="..\..\..\include\geos\operation\overlay\OverlayOp.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\overlay\OverlayResultValidator.h"
+								RelativePath="..\..\..\include\geos\operation\overlay\OverlayResultValidator.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\overlay\PointBuilder.h"
+								RelativePath="..\..\..\include\geos\operation\overlay\PointBuilder.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\overlay\PolygonBuilder.h"
+								RelativePath="..\..\..\include\geos\operation\overlay\PolygonBuilder.h"
 								>
 							</File>
 						</Filter>
@@ -2533,19 +2533,19 @@
 							Name="distance"
 							>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\distance\ConnectedElementLocationFilter.h"
+								RelativePath="..\..\..\include\geos\operation\distance\ConnectedElementLocationFilter.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\distance\ConnectedElementPointFilter.h"
+								RelativePath="..\..\..\include\geos\operation\distance\ConnectedElementPointFilter.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\distance\DistanceOp.h"
+								RelativePath="..\..\..\include\geos\operation\distance\DistanceOp.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\distance\GeometryLocation.h"
+								RelativePath="..\..\..\include\geos\operation\distance\GeometryLocation.h"
 								>
 							</File>
 						</Filter>
@@ -2553,27 +2553,27 @@
 							Name="linemerge"
 							>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\linemerge\EdgeString.h"
+								RelativePath="..\..\..\include\geos\operation\linemerge\EdgeString.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\linemerge\LineMergeDirectedEdge.h"
+								RelativePath="..\..\..\include\geos\operation\linemerge\LineMergeDirectedEdge.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\linemerge\LineMergeEdge.h"
+								RelativePath="..\..\..\include\geos\operation\linemerge\LineMergeEdge.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\linemerge\LineMergeGraph.h"
+								RelativePath="..\..\..\include\geos\operation\linemerge\LineMergeGraph.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\linemerge\LineMerger.h"
+								RelativePath="..\..\..\include\geos\operation\linemerge\LineMerger.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\linemerge\LineSequencer.h"
+								RelativePath="..\..\..\include\geos\operation\linemerge\LineSequencer.h"
 								>
 							</File>
 						</Filter>
@@ -2581,23 +2581,23 @@
 							Name="polygonize"
 							>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\polygonize\EdgeRing.h"
+								RelativePath="..\..\..\include\geos\operation\polygonize\EdgeRing.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\polygonize\PolygonizeDirectedEdge.h"
+								RelativePath="..\..\..\include\geos\operation\polygonize\PolygonizeDirectedEdge.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\polygonize\PolygonizeEdge.h"
+								RelativePath="..\..\..\include\geos\operation\polygonize\PolygonizeEdge.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\polygonize\PolygonizeGraph.h"
+								RelativePath="..\..\..\include\geos\operation\polygonize\PolygonizeGraph.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\polygonize\Polygonizer.h"
+								RelativePath="..\..\..\include\geos\operation\polygonize\Polygonizer.h"
 								>
 							</File>
 						</Filter>
@@ -2605,15 +2605,15 @@
 							Name="predicate"
 							>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\predicate\RectangleContains.h"
+								RelativePath="..\..\..\include\geos\operation\predicate\RectangleContains.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\predicate\RectangleIntersects.h"
+								RelativePath="..\..\..\include\geos\operation\predicate\RectangleIntersects.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\predicate\SegmentIntersectionTester.h"
+								RelativePath="..\..\..\include\geos\operation\predicate\SegmentIntersectionTester.h"
 								>
 							</File>
 						</Filter>
@@ -2621,35 +2621,35 @@
 							Name="relate"
 							>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\relate\EdgeEndBuilder.h"
+								RelativePath="..\..\..\include\geos\operation\relate\EdgeEndBuilder.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\relate\EdgeEndBundle.h"
+								RelativePath="..\..\..\include\geos\operation\relate\EdgeEndBundle.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\relate\EdgeEndBundleStar.h"
+								RelativePath="..\..\..\include\geos\operation\relate\EdgeEndBundleStar.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\relate\RelateComputer.h"
+								RelativePath="..\..\..\include\geos\operation\relate\RelateComputer.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\relate\RelateNode.h"
+								RelativePath="..\..\..\include\geos\operation\relate\RelateNode.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\relate\RelateNodeFactory.h"
+								RelativePath="..\..\..\include\geos\operation\relate\RelateNodeFactory.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\relate\RelateNodeGraph.h"
+								RelativePath="..\..\..\include\geos\operation\relate\RelateNodeGraph.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\relate\RelateOp.h"
+								RelativePath="..\..\..\include\geos\operation\relate\RelateOp.h"
 								>
 							</File>
 						</Filter>
@@ -2657,35 +2657,35 @@
 							Name="valid"
 							>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\valid\ConnectedInteriorTester.h"
+								RelativePath="..\..\..\include\geos\operation\valid\ConnectedInteriorTester.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\valid\ConsistentAreaTester.h"
+								RelativePath="..\..\..\include\geos\operation\valid\ConsistentAreaTester.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\valid\IsValidOp.h"
+								RelativePath="..\..\..\include\geos\operation\valid\IsValidOp.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\valid\QuadtreeNestedRingTester.h"
+								RelativePath="..\..\..\include\geos\operation\valid\QuadtreeNestedRingTester.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\valid\RepeatedPointTester.h"
+								RelativePath="..\..\..\include\geos\operation\valid\RepeatedPointTester.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\valid\SimpleNestedRingTester.h"
+								RelativePath="..\..\..\include\geos\operation\valid\SimpleNestedRingTester.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\valid\SweeplineNestedRingTester.h"
+								RelativePath="..\..\..\include\geos\operation\valid\SweeplineNestedRingTester.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\valid\TopologyValidationError.h"
+								RelativePath="..\..\..\include\geos\operation\valid\TopologyValidationError.h"
 								>
 							</File>
 						</Filter>
@@ -2693,7 +2693,7 @@
 							Name="union"
 							>
 							<File
-								RelativePath="..\..\..\source\headers\geos\operation\union\CascadedPolygonUnion.h"
+								RelativePath="..\..\..\include\geos\operation\union\CascadedPolygonUnion.h"
 								>
 							</File>
 						</Filter>
@@ -2702,43 +2702,43 @@
 						Name="util"
 						>
 						<File
-							RelativePath="..\..\..\source\headers\geos\util\Assert.h"
+							RelativePath="..\..\..\include\geos\util\Assert.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\util\AssertionFailedException.h"
+							RelativePath="..\..\..\include\geos\util\AssertionFailedException.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\util\CoordinateArrayFilter.h"
+							RelativePath="..\..\..\include\geos\util\CoordinateArrayFilter.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\util\GeometricShapeFactory.h"
+							RelativePath="..\..\..\include\geos\util\GeometricShapeFactory.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\util\GEOSException.h"
+							RelativePath="..\..\..\include\geos\util\GEOSException.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\util\IllegalArgumentException.h"
+							RelativePath="..\..\..\include\geos\util\IllegalArgumentException.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\util\math.h"
+							RelativePath="..\..\..\include\geos\util\math.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\util\TopologyException.h"
+							RelativePath="..\..\..\include\geos\util\TopologyException.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\util\UniqueCoordinateArrayFilter.h"
+							RelativePath="..\..\..\include\geos\util\UniqueCoordinateArrayFilter.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\util\UnsupportedOperationException.h"
+							RelativePath="..\..\..\include\geos\util\UnsupportedOperationException.h"
 							>
 						</File>
 					</Filter>
@@ -2746,55 +2746,55 @@
 						Name="io"
 						>
 						<File
-							RelativePath="..\..\..\source\headers\geos\io\ByteOrderDataInStream.h"
+							RelativePath="..\..\..\include\geos\io\ByteOrderDataInStream.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\io\ByteOrderDataInStream.inl"
+							RelativePath="..\..\..\include\geos\io\ByteOrderDataInStream.inl"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\io\ByteOrderValues.h"
+							RelativePath="..\..\..\include\geos\io\ByteOrderValues.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\io\CLocalizer.h"
+							RelativePath="..\..\..\include\geos\io\CLocalizer.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\io\ParseException.h"
+							RelativePath="..\..\..\include\geos\io\ParseException.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\io\StringTokenizer.h"
+							RelativePath="..\..\..\include\geos\io\StringTokenizer.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\io\WKBConstants.h"
+							RelativePath="..\..\..\include\geos\io\WKBConstants.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\io\WKBReader.h"
+							RelativePath="..\..\..\include\geos\io\WKBReader.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\io\WKBWriter.h"
+							RelativePath="..\..\..\include\geos\io\WKBWriter.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\io\WKTReader.h"
+							RelativePath="..\..\..\include\geos\io\WKTReader.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\io\WKTReader.inl"
+							RelativePath="..\..\..\include\geos\io\WKTReader.inl"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\io\WKTWriter.h"
+							RelativePath="..\..\..\include\geos\io\WKTWriter.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\io\Writer.h"
+							RelativePath="..\..\..\include\geos\io\Writer.h"
 							>
 						</File>
 					</Filter>
@@ -2802,38 +2802,38 @@
 						Name="index"
 						>
 						<File
-							RelativePath="..\..\..\source\headers\geos\index\ItemVisitor.h"
+							RelativePath="..\..\..\include\geos\index\ItemVisitor.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\index\SpatialIndex.h"
+							RelativePath="..\..\..\include\geos\index\SpatialIndex.h"
 							>
 						</File>
 						<Filter
 							Name="bintree"
 							>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\bintree\Bintree.h"
+								RelativePath="..\..\..\include\geos\index\bintree\Bintree.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\bintree\Interval.h"
+								RelativePath="..\..\..\include\geos\index\bintree\Interval.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\bintree\Key.h"
+								RelativePath="..\..\..\include\geos\index\bintree\Key.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\bintree\Node.h"
+								RelativePath="..\..\..\include\geos\index\bintree\Node.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\bintree\NodeBase.h"
+								RelativePath="..\..\..\include\geos\index\bintree\NodeBase.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\bintree\Root.h"
+								RelativePath="..\..\..\include\geos\index\bintree\Root.h"
 								>
 							</File>
 						</Filter>
@@ -2841,19 +2841,19 @@
 							Name="chain"
 							>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\chain\MonotoneChain.h"
+								RelativePath="..\..\..\include\geos\index\chain\MonotoneChain.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\chain\MonotoneChainBuilder.h"
+								RelativePath="..\..\..\include\geos\index\chain\MonotoneChainBuilder.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\chain\MonotoneChainOverlapAction.h"
+								RelativePath="..\..\..\include\geos\index\chain\MonotoneChainOverlapAction.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\chain\MonotoneChainSelectAction.h"
+								RelativePath="..\..\..\include\geos\index\chain\MonotoneChainSelectAction.h"
 								>
 							</File>
 						</Filter>
@@ -2861,31 +2861,31 @@
 							Name="quadtree"
 							>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\quadtree\DoubleBits.h"
+								RelativePath="..\..\..\include\geos\index\quadtree\DoubleBits.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\quadtree\IntervalSize.h"
+								RelativePath="..\..\..\include\geos\index\quadtree\IntervalSize.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\quadtree\Key.h"
+								RelativePath="..\..\..\include\geos\index\quadtree\Key.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\quadtree\Node.h"
+								RelativePath="..\..\..\include\geos\index\quadtree\Node.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\quadtree\NodeBase.h"
+								RelativePath="..\..\..\include\geos\index\quadtree\NodeBase.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\quadtree\Quadtree.h"
+								RelativePath="..\..\..\include\geos\index\quadtree\Quadtree.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\quadtree\Root.h"
+								RelativePath="..\..\..\include\geos\index\quadtree\Root.h"
 								>
 							</File>
 						</Filter>
@@ -2893,31 +2893,31 @@
 							Name="strtree"
 							>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\strtree\AbstractNode.h"
+								RelativePath="..\..\..\include\geos\index\strtree\AbstractNode.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\strtree\AbstractSTRtree.h"
+								RelativePath="..\..\..\include\geos\index\strtree\AbstractSTRtree.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\strtree\Boundable.h"
+								RelativePath="..\..\..\include\geos\index\strtree\Boundable.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\strtree\Interval.h"
+								RelativePath="..\..\..\include\geos\index\strtree\Interval.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\strtree\ItemBoundable.h"
+								RelativePath="..\..\..\include\geos\index\strtree\ItemBoundable.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\strtree\SIRtree.h"
+								RelativePath="..\..\..\include\geos\index\strtree\SIRtree.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\strtree\STRtree.h"
+								RelativePath="..\..\..\include\geos\index\strtree\STRtree.h"
 								>
 							</File>
 						</Filter>
@@ -2925,19 +2925,19 @@
 							Name="sweepline"
 							>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\sweepline\SweepLineEvent.h"
+								RelativePath="..\..\..\include\geos\index\sweepline\SweepLineEvent.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\sweepline\SweepLineIndex.h"
+								RelativePath="..\..\..\include\geos\index\sweepline\SweepLineIndex.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\sweepline\SweepLineInterval.h"
+								RelativePath="..\..\..\include\geos\index\sweepline\SweepLineInterval.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\sweepline\SweepLineOverlapAction.h"
+								RelativePath="..\..\..\include\geos\index\sweepline\SweepLineOverlapAction.h"
 								>
 							</File>
 						</Filter>
@@ -2945,19 +2945,19 @@
 							Name="intervalrtree"
 							>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\intervalrtree\IntervalRTreeBranchNode.h"
+								RelativePath="..\..\..\include\geos\index\intervalrtree\IntervalRTreeBranchNode.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\intervalrtree\IntervalRTreeLeafNode.h"
+								RelativePath="..\..\..\include\geos\index\intervalrtree\IntervalRTreeLeafNode.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\intervalrtree\IntervalRTreeNode.h"
+								RelativePath="..\..\..\include\geos\index\intervalrtree\IntervalRTreeNode.h"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\source\headers\geos\index\intervalrtree\SortedPackedIntervalRTree.h"
+								RelativePath="..\..\..\include\geos\index\intervalrtree\SortedPackedIntervalRTree.h"
 								>
 							</File>
 						</Filter>
@@ -2966,42 +2966,42 @@
 						Name="planargraph"
 						>
 						<File
-							RelativePath="..\..\..\source\headers\geos\planargraph\DirectedEdge.h"
+							RelativePath="..\..\..\include\geos\planargraph\DirectedEdge.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\planargraph\DirectedEdgeStar.h"
+							RelativePath="..\..\..\include\geos\planargraph\DirectedEdgeStar.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\planargraph\Edge.h"
+							RelativePath="..\..\..\include\geos\planargraph\Edge.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\planargraph\GraphComponent.h"
+							RelativePath="..\..\..\include\geos\planargraph\GraphComponent.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\planargraph\Node.h"
+							RelativePath="..\..\..\include\geos\planargraph\Node.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\planargraph\NodeMap.h"
+							RelativePath="..\..\..\include\geos\planargraph\NodeMap.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\planargraph\PlanarGraph.h"
+							RelativePath="..\..\..\include\geos\planargraph\PlanarGraph.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\planargraph\Subgraph.h"
+							RelativePath="..\..\..\include\geos\planargraph\Subgraph.h"
 							>
 						</File>
 						<Filter
 							Name="algorithm"
 							>
 							<File
-								RelativePath="..\..\..\source\headers\geos\planargraph\algorithm\ConnectedSubgraphFinder.h"
+								RelativePath="..\..\..\include\geos\planargraph\algorithm\ConnectedSubgraphFinder.h"
 								>
 							</File>
 						</Filter>
@@ -3010,31 +3010,31 @@
 						Name="precision"
 						>
 						<File
-							RelativePath="..\..\..\source\headers\geos\precision\CommonBits.h"
+							RelativePath="..\..\..\include\geos\precision\CommonBits.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\precision\CommonBitsOp.h"
+							RelativePath="..\..\..\include\geos\precision\CommonBitsOp.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\precision\CommonBitsRemover.h"
+							RelativePath="..\..\..\include\geos\precision\CommonBitsRemover.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\precision\EnhancedPrecisionOp.h"
+							RelativePath="..\..\..\include\geos\precision\EnhancedPrecisionOp.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\precision\GeometrySnapper.h"
+							RelativePath="..\..\..\include\geos\precision\GeometrySnapper.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\precision\LineStringSnapper.h"
+							RelativePath="..\..\..\include\geos\precision\LineStringSnapper.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\precision\SimpleGeometryPrecisionReducer.h"
+							RelativePath="..\..\..\include\geos\precision\SimpleGeometryPrecisionReducer.h"
 							>
 						</File>
 					</Filter>
@@ -3042,35 +3042,35 @@
 						Name="simplify"
 						>
 						<File
-							RelativePath="..\..\..\source\headers\geos\simplify\DouglasPeuckerLineSimplifier.h"
+							RelativePath="..\..\..\include\geos\simplify\DouglasPeuckerLineSimplifier.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\simplify\DouglasPeuckerSimplifier.h"
+							RelativePath="..\..\..\include\geos\simplify\DouglasPeuckerSimplifier.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\simplify\LineSegmentIndex.h"
+							RelativePath="..\..\..\include\geos\simplify\LineSegmentIndex.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\simplify\TaggedLineSegment.h"
+							RelativePath="..\..\..\include\geos\simplify\TaggedLineSegment.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\simplify\TaggedLinesSimplifier.h"
+							RelativePath="..\..\..\include\geos\simplify\TaggedLinesSimplifier.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\simplify\TaggedLineString.h"
+							RelativePath="..\..\..\include\geos\simplify\TaggedLineString.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\simplify\TaggedLineStringSimplifier.h"
+							RelativePath="..\..\..\include\geos\simplify\TaggedLineStringSimplifier.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\simplify\TopologyPreservingSimplifier.h"
+							RelativePath="..\..\..\include\geos\simplify\TopologyPreservingSimplifier.h"
 							>
 						</File>
 					</Filter>
@@ -3078,39 +3078,39 @@
 						Name="linearref"
 						>
 						<File
-							RelativePath="..\..\..\source\headers\geos\linearref\ExtractLineByLocation.h"
+							RelativePath="..\..\..\include\geos\linearref\ExtractLineByLocation.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\linearref\LengthIndexedLine.h"
+							RelativePath="..\..\..\include\geos\linearref\LengthIndexedLine.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\linearref\LengthIndexOfPoint.h"
+							RelativePath="..\..\..\include\geos\linearref\LengthIndexOfPoint.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\linearref\LengthLocationMap.h"
+							RelativePath="..\..\..\include\geos\linearref\LengthLocationMap.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\linearref\LinearGeometryBuilder.h"
+							RelativePath="..\..\..\include\geos\linearref\LinearGeometryBuilder.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\linearref\LinearIterator.h"
+							RelativePath="..\..\..\include\geos\linearref\LinearIterator.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\linearref\LinearLocation.h"
+							RelativePath="..\..\..\include\geos\linearref\LinearLocation.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\linearref\LocationIndexOfLine.h"
+							RelativePath="..\..\..\include\geos\linearref\LocationIndexOfLine.h"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\source\headers\geos\linearref\LocationIndexOfPoint.h"
+							RelativePath="..\..\..\include\geos\linearref\LocationIndexOfPoint.h"
 							>
 						</File>
 					</Filter>
@@ -3120,35 +3120,35 @@
 				Name="simplify"
 				>
 				<File
-					RelativePath="..\..\..\source\simplify\DouglasPeuckerLineSimplifier.cpp"
+					RelativePath="..\..\..\src\simplify\DouglasPeuckerLineSimplifier.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\simplify\DouglasPeuckerSimplifier.cpp"
+					RelativePath="..\..\..\src\simplify\DouglasPeuckerSimplifier.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\simplify\LineSegmentIndex.cpp"
+					RelativePath="..\..\..\src\simplify\LineSegmentIndex.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\simplify\TaggedLineSegment.cpp"
+					RelativePath="..\..\..\src\simplify\TaggedLineSegment.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\simplify\TaggedLinesSimplifier.cpp"
+					RelativePath="..\..\..\src\simplify\TaggedLinesSimplifier.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\simplify\TaggedLineString.cpp"
+					RelativePath="..\..\..\src\simplify\TaggedLineString.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\simplify\TaggedLineStringSimplifier.cpp"
+					RelativePath="..\..\..\src\simplify\TaggedLineStringSimplifier.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\simplify\TopologyPreservingSimplifier.cpp"
+					RelativePath="..\..\..\src\simplify\TopologyPreservingSimplifier.cpp"
 					>
 				</File>
 			</Filter>
@@ -3156,39 +3156,39 @@
 				Name="linearref"
 				>
 				<File
-					RelativePath="..\..\..\source\linearref\ExtractLineByLocation.cpp"
+					RelativePath="..\..\..\src\linearref\ExtractLineByLocation.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\linearref\LengthIndexedLine.cpp"
+					RelativePath="..\..\..\src\linearref\LengthIndexedLine.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\linearref\LengthIndexOfPoint.cpp"
+					RelativePath="..\..\..\src\linearref\LengthIndexOfPoint.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\linearref\LengthLocationMap.cpp"
+					RelativePath="..\..\..\src\linearref\LengthLocationMap.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\linearref\LinearGeometryBuilder.cpp"
+					RelativePath="..\..\..\src\linearref\LinearGeometryBuilder.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\linearref\LinearIterator.cpp"
+					RelativePath="..\..\..\src\linearref\LinearIterator.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\linearref\LinearLocation.cpp"
+					RelativePath="..\..\..\src\linearref\LinearLocation.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\linearref\LocationIndexOfLine.cpp"
+					RelativePath="..\..\..\src\linearref\LocationIndexOfLine.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\linearref\LocationIndexOfPoint.cpp"
+					RelativePath="..\..\..\src\linearref\LocationIndexOfPoint.cpp"
 					>
 				</File>
 			</Filter>

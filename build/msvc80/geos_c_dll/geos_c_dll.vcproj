@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\capi;..\..\..\source\headers"
+				AdditionalIncludeDirectories="..\..\..\capi;..\..\..\include"
 				PreprocessorDefinitions="GEOS_DLL_EXPORT;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;WIN32_LEAN_AND_MEAN;NOMINMAX;NOGDI"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -118,7 +118,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\..\capi;..\..\..\source\headers"
+				AdditionalIncludeDirectories="..\..\..\capi;..\..\..\include"
 				PreprocessorDefinitions="GEOS_DLL_EXPORT;_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;WIN32_LEAN_AND_MEAN;NOMINMAX;NOGDI"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
