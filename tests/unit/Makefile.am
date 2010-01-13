@@ -1,8 +1,8 @@
 # $Id$
 #
-# tests/unit builds geos_unit - unit tests runner program
+# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
 #
-INCLUDES = -I$(top_srcdir)/source/headers -I$(top_srcdir)/tests/unit/tut -I$(top_builddir)/capi
+INCLUDES = -I$(top_srcdir)/include -I$(top_srcdir)/tests/unit/tut -I$(top_builddir)/capi
 
 TESTS = geos_unit
 
@@ -23,12 +23,13 @@ check_PROGRAMS = geos_unit
 #bin_PROGRAMS = geos_tut
 
 geos_unit_LDADD = \
-	$(top_builddir)/source/libgeos.la  \
+	$(top_builddir)/src/libgeos.la  \
 	$(top_builddir)/capi/libgeos_c.la  \
 	$(NULL)
 
 
-geos_unit_SOURCES = geos_unit.cpp \
+geos_unit_SOURCES = \
+	geos_unit.cpp \
 	algorithm/CGAlgorithms/isCCWTest.cpp \
 	algorithm/CGAlgorithms/isPointInRingTest.cpp \
 	algorithm/CGAlgorithms/computeOrientationTest.cpp \

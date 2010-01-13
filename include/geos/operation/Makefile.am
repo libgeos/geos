@@ -18,5 +18,5 @@ SUBDIRS = \
 geosdir = $(includedir)/geos/operation
 
 geos_HEADERS = \
-    GeometryGraphOperation.h \ 
+    GeometryGraphOperation.h \
     IsSimpleOp.h

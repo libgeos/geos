@@ -24,4 +24,4 @@ EXTRA_DIST = acsite.m4 makefile.vc nmake.opt autogen.bat
 ACLOCAL_AMFLAGS = -I macros
 
 cl:
-    cd $(srcdir) && svn2cl --authors=authors.svn -i -o ChangeLog
+	cd $(srcdir) && svn2cl --authors=authors.svn -i -o ChangeLog

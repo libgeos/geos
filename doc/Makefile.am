@@ -1,15 +1,19 @@
+# $Id$
+#
+# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+#
 prefix=@prefix@
 top_srcdir=@top_srcdir@
 top_builddir=@top_builddir@
 
 noinst_PROGRAMS = example 
 
-LIBS = $(top_builddir)/source/libgeos.la
+LIBS = $(top_builddir)/src/libgeos.la
 
 example_SOURCES = example.cpp 
 example_LDADD = $(LIBS)
 
-INCLUDES = -I$(top_srcdir)/source/headers
+INCLUDES = -I$(top_srcdir)/include
 
 DOXYGEN = doxygen
 
@@ -20,4 +24,3 @@ clean-generic:
 	rm -Rf doxygen_docs
 
 EXTRA_DIST = Doxyfile
-

@@ -12,4 +12,4 @@ geos_HEADERS =              \
     SweepLineEvent.h        \
     SweepLineIndex.h        \
     SweepLineInterval.h     \
-    eweepLineOverlapAction.h    
+    SweepLineOverlapAction.h    

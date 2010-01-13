@@ -1,3 +1,7 @@
+# $Id$
+#
+# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+#
 SUBDIRS = \
 	tests
 
@@ -22,7 +26,6 @@ _geos_la_CPPFLAGS = $(SWIG_PYTHON_CPPFLAGS) -I$(top_builddir)/capi
 # Specify -module and -avoid-version so we can create a file called geos.dll/so which is what Python wants
 _geos_la_LDFLAGS = -no-undefined -module -avoid-version
 _geos_la_LIBADD = $(top_builddir)/capi/libgeos_c.la $(PYTHON_LDFLAGS)
-
 
 if ENABLE_SWIG
 

@@ -1,3 +1,7 @@
+# $Id$
+#
+# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+#
 #prefix=@prefix@
 #top_srcdir=@top_srcdir@
 #top_builddir=@top_builddir@
@@ -76,7 +80,7 @@ noinst_PROGRAMS = SimpleWKTTester XMLTester
 #bin_PROGRAMS = XMLTester
 # CTS
 
-LIBS = $(top_builddir)/source/libgeos.la
+LIBS = $(top_builddir)/src/libgeos.la
 # -lmpatrol -lbfd -lintl -liberty -limagehlp
 
 # CTS_SOURCES = CTS.cpp
@@ -85,20 +89,27 @@ LIBS = $(top_builddir)/source/libgeos.la
 SimpleWKTTester_SOURCES = SimpleWKTTester.cpp
 SimpleWKTTester_LDADD = $(LIBS)
 
-XMLTester_SOURCES = XMLTester.cpp XMLTester.h \
-	tinyxml/tinyxml.h tinyxml/tinyxml.cpp \
-	tinyxml/tinystr.h tinyxml/tinystr.cpp \
-	tinyxml/tinyxmlerror.cpp tinyxml/tinyxmlparser.cpp \
-	BufferResultMatcher.h BufferResultMatcher.cpp \
-	SingleSidedBufferResultMatcher.h SingleSidedBufferResultMatcher.cpp
+XMLTester_SOURCES = \
+	XMLTester.cpp \
+	XMLTester.h \
+	tinyxml/tinyxml.h \
+	tinyxml/tinyxml.cpp \
+	tinyxml/tinystr.h \
+	tinyxml/tinystr.cpp \
+	tinyxml/tinyxmlerror.cpp \
+	tinyxml/tinyxmlparser.cpp \
+	BufferResultMatcher.h \
+	BufferResultMatcher.cpp \
+	SingleSidedBufferResultMatcher.h \
+	SingleSidedBufferResultMatcher.cpp
 
 XMLTester_LDADD = $(LIBS)
 
-INCLUDES = -I$(top_srcdir)/source/headers
-INCLUDES += -I$(top_srcdir)/source/io/tinyxml -DTIXML_USE_STL
+INCLUDES = -I$(top_srcdir)/include
+INCLUDES += -I$(top_srcdir)/src/io/tinyxml -DTIXML_USE_STL
 
 static:
-	$(CXX) $(CXXFLAGS) -I../headers -o staticXMLTester XMLTester.cpp MarkupSTL.o ../../source/geom/.libs/libgeos.a
+	$(CXX) $(CXXFLAGS) -I../include -o staticXMLTester XMLTester.cpp MarkupSTL.o ../../src/geom/.libs/libgeos.a
 
 test: XMLTester
 	./XMLTester $(XMLTESTS) 

@@ -29,6 +29,6 @@ libgeos_c_la_LDFLAGS = \
     -no-undefined
 
 dist-local:
-    cp -p $(DIST_SOURCES) Makefile.am Makefile.in $(distdir)
+	cp -p $(DIST_SOURCES) Makefile.am Makefile.in $(distdir)
 
 EXTRA_DIST = geos_c.h

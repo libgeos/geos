@@ -18,8 +18,8 @@ noinst_LTLIBRARIES = liboperation.la
 INCLUDES = -I$(top_srcdir)/include 
 
 liboperation_la_SOURCES = \
-    GeometryGraphOperation.cpp \
-    IsSimpleOp.cpp 
+	GeometryGraphOperation.cpp \
+	IsSimpleOp.cpp 
 
 liboperation_la_LIBADD = \
     buffer/libopbuffer.la \
