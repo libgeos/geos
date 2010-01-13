@@ -307,7 +307,7 @@ check: all
 	TestSweepLineSpeed.exe
 	
 
-$(LIBNAME):	headers/geos/platform.h headers/geos/version.h ../capi/geos_c.h $(OBJ)
+$(LIBNAME):	$(GEOS_ROOT)\include\geos\platform.h $(GEOS_ROOT)\include\geos\version.h ..\capi\geos_c.h $(OBJ)
 	if exist $(LIBNAME) del $(LIBNAME)
 	$(LINK) /lib /out:$(LIBNAME) $(OBJ)
 
@@ -319,11 +319,11 @@ $(CDLLNAME): ..\capi\geos_c.obj ..\capi\geos_ts_c.obj $(DLLNAME)
 	$(LINK) /dll /debug ..\capi\geos_c.obj ..\capi\geos_ts_c.obj $(LIBNAME) /out:$(CDLLNAME) /implib:$(CLIBNAME)
 	if exist $(CDLLNAME).manifest mt -manifest $(CDLLNAME).manifest -outputresource:$(CDLLNAME);2
   
-headers/geos/platform.h: headers/geos/platform.h.vc
-	$(CP) headers\geos\platform.h.vc headers\geos\platform.h
+$(GEOS_ROOT)\include\geos\platform.h: $(GEOS_ROOT)\include\geos\platform.h.vc
+	$(CP) $(GEOS_ROOT)\include\geos\platform.h.vc $(GEOS_ROOT)\include\geos\platform.h
 
-headers/geos/version.h: headers/geos/version.h.vc
-	if not exist headers\geos\version.h $(CP) headers\geos\version.h.vc headers\geos\version.h
+$(GEOS_ROOT)\include\geos\version.h: $(GEOS_ROOT)\include\geos\version.h.vc
+	if not exist $(GEOS_ROOT)\include\geos\version.h $(CP) $(GEOS_ROOT)\include\geos\version.h.vc $(GEOS_ROOT)\include\geos\version.h
 
 # geos_c.h should already be in distribution, if is not you'll
 # have to run ./configure to recreate

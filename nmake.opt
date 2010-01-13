@@ -89,7 +89,7 @@ GEOS_MSC = 0
 ###############################################################################
 # Include directories
 
-GEOS_INCLUDE = -Iheaders -I..\capi
+GEOS_INCLUDE = -I..\include -I..\capi
 
 !MESSAGE *** Setting GEOS_INCLUDE $(GEOS_INCLUDE)
 !MESSAGE *** Setting INCLUDE $(INCLUDE)
