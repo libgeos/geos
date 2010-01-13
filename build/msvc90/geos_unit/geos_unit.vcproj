@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\;..\..\..\tests\unit;..\..\..\tests\unit\tut;..\..\..\capi;..\..\..\source\headers"
+				AdditionalIncludeDirectories=".\;..\..\..\tests\unit;..\..\..\tests\unit\tut;..\..\..\capi;..\..\..\include"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;WIN32_LEAN_AND_MEAN;NOMINMAX;NOGDI"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -120,7 +120,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".\;..\..\..\tests\unit;..\..\..\tests\unit\tut;..\..\..\capi;..\..\..\source\headers"
+				AdditionalIncludeDirectories=".\;..\..\..\tests\unit;..\..\..\tests\unit\tut;..\..\..\capi;..\..\..\include"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_SCL_SECURE_NO_DEPRECATE;WIN32_LEAN_AND_MEAN;NOMINMAX;NOGDI"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
