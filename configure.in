@@ -372,15 +372,15 @@ AC_OUTPUT([
 	doc/Doxyfile
 	doc/Makefile
 	macros/Makefile
-	source/Makefile 
-	source/algorithm/Makefile
-	source/algorithm/locate/Makefile
-	source/algorithm/distance/Makefile
-	source/geom/Makefile
-	source/geom/prep/Makefile
-	source/geom/util/Makefile
-	source/geomgraph/Makefile
-	source/geomgraph/index/Makefile
+	src/Makefile 
+	src/algorithm/Makefile
+	src/algorithm/locate/Makefile
+	src/algorithm/distance/Makefile
+	src/geom/Makefile
+	src/geom/prep/Makefile
+	src/geom/util/Makefile
+	src/geomgraph/Makefile
+	src/geomgraph/index/Makefile
 	include/Makefile
 	include/geos/Makefile
 	include/geos/algorithm/Makefile
@@ -419,31 +419,31 @@ AC_OUTPUT([
 	include/geos/simplify/Makefile
 	include/geos/util/Makefile
 	include/geos/version.h
-	source/index/Makefile
-	source/index/bintree/Makefile
-	source/index/chain/Makefile
-	source/index/intervalrtree/Makefile
-	source/index/quadtree/Makefile
-	source/index/strtree/Makefile
-	source/index/sweepline/Makefile
-	source/io/Makefile
-	source/linearref/Makefile
-	source/noding/Makefile
-	source/noding/snapround/Makefile
-	source/operation/Makefile
-	source/operation/buffer/Makefile
-	source/operation/distance/Makefile
-	source/operation/linemerge/Makefile
-	source/operation/overlay/Makefile
-	source/operation/polygonize/Makefile
-	source/operation/predicate/Makefile
-	source/operation/relate/Makefile
-	source/operation/union/Makefile
-	source/operation/valid/Makefile
-	source/planargraph/Makefile
-	source/precision/Makefile
-	source/simplify/Makefile
-	source/util/Makefile
+	src/index/Makefile
+	src/index/bintree/Makefile
+	src/index/chain/Makefile
+	src/index/intervalrtree/Makefile
+	src/index/quadtree/Makefile
+	src/index/strtree/Makefile
+	src/index/sweepline/Makefile
+	src/io/Makefile
+	src/linearref/Makefile
+	src/noding/Makefile
+	src/noding/snapround/Makefile
+	src/operation/Makefile
+	src/operation/buffer/Makefile
+	src/operation/distance/Makefile
+	src/operation/linemerge/Makefile
+	src/operation/overlay/Makefile
+	src/operation/polygonize/Makefile
+	src/operation/predicate/Makefile
+	src/operation/relate/Makefile
+	src/operation/union/Makefile
+	src/operation/valid/Makefile
+	src/planargraph/Makefile
+	src/precision/Makefile
+	src/simplify/Makefile
+	src/util/Makefile
 	swig/geos.i
 	swig/Makefile
 	swig/python/Makefile

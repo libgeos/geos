@@ -10,6 +10,7 @@
 #
 SUBDIRS =   \
     build   \
+    include \
     src     \
     capi    \
     doc     \
