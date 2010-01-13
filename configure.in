@@ -6,7 +6,7 @@ dnl version 2.52 is required for Cygwin libtool support
 AC_PREREQ([2.52])
 
 dnl local vars to hold user's preferences --------------------------------
-AC_INIT([source/headers/geos.h])
+AC_INIT([include/geos.h])
 AC_CANONICAL_SYSTEM
 
 AC_CONFIG_MACRO_DIR([macros])
@@ -36,8 +36,8 @@ CAPI_VERSION_PATCH=$CAPI_INTERFACE_REVISION
 CAPI_VERSION="$CAPI_VERSION_MAJOR.$CAPI_VERSION_MINOR.$CAPI_VERSION_PATCH"
 
 AM_INIT_AUTOMAKE([geos], [$VERSION], [no-define])
-AM_CONFIG_HEADER([source/headers/config.h])
-AM_CONFIG_HEADER([source/headers/geos/platform.h])
+AM_CONFIG_HEADER([include/config.h])
+AM_CONFIG_HEADER([include/geos/platform.h])
 AC_PROG_CC
 
 dnl use libtool ----------------------------------------------------------
@@ -381,44 +381,44 @@ AC_OUTPUT([
 	source/geom/util/Makefile
 	source/geomgraph/Makefile
 	source/geomgraph/index/Makefile
-	source/headers/Makefile
-	source/headers/geos/Makefile
-	source/headers/geos/algorithm/Makefile
-	source/headers/geos/algorithm/locate/Makefile
-	source/headers/geos/algorithm/distance/Makefile
-	source/headers/geos/geom/Makefile
-	source/headers/geos/geom/prep/Makefile
-	source/headers/geos/geom/util/Makefile
-	source/headers/geos/geomgraph/Makefile
-	source/headers/geos/geomgraph/index/Makefile
-	source/headers/geos/index/Makefile
-	source/headers/geos/index/bintree/Makefile
-	source/headers/geos/index/chain/Makefile
-	source/headers/geos/index/intervalrtree/Makefile
-	source/headers/geos/index/quadtree/Makefile
-	source/headers/geos/index/strtree/Makefile
-	source/headers/geos/index/sweepline/Makefile
-	source/headers/geos/io/Makefile
-	source/headers/geos/linearref/Makefile
-	source/headers/geos/noding/Makefile
-	source/headers/geos/noding/snapround/Makefile
-	source/headers/geos/operation/Makefile
-	source/headers/geos/operation/buffer/Makefile
-	source/headers/geos/operation/distance/Makefile
-	source/headers/geos/operation/linemerge/Makefile
-	source/headers/geos/operation/overlay/Makefile
-	source/headers/geos/operation/overlay/snap/Makefile
-	source/headers/geos/operation/polygonize/Makefile
-	source/headers/geos/operation/predicate/Makefile
-	source/headers/geos/operation/relate/Makefile
-	source/headers/geos/operation/union/Makefile
-	source/headers/geos/operation/valid/Makefile
-	source/headers/geos/planargraph/Makefile
-	source/headers/geos/planargraph/algorithm/Makefile
-	source/headers/geos/precision/Makefile
-	source/headers/geos/simplify/Makefile
-	source/headers/geos/util/Makefile
-	source/headers/geos/version.h
+	include/Makefile
+	include/geos/Makefile
+	include/geos/algorithm/Makefile
+	include/geos/algorithm/locate/Makefile
+	include/geos/algorithm/distance/Makefile
+	include/geos/geom/Makefile
+	include/geos/geom/prep/Makefile
+	include/geos/geom/util/Makefile
+	include/geos/geomgraph/Makefile
+	include/geos/geomgraph/index/Makefile
+	include/geos/index/Makefile
+	include/geos/index/bintree/Makefile
+	include/geos/index/chain/Makefile
+	include/geos/index/intervalrtree/Makefile
+	include/geos/index/quadtree/Makefile
+	include/geos/index/strtree/Makefile
+	include/geos/index/sweepline/Makefile
+	include/geos/io/Makefile
+	include/geos/linearref/Makefile
+	include/geos/noding/Makefile
+	include/geos/noding/snapround/Makefile
+	include/geos/operation/Makefile
+	include/geos/operation/buffer/Makefile
+	include/geos/operation/distance/Makefile
+	include/geos/operation/linemerge/Makefile
+	include/geos/operation/overlay/Makefile
+	include/geos/operation/overlay/snap/Makefile
+	include/geos/operation/polygonize/Makefile
+	include/geos/operation/predicate/Makefile
+	include/geos/operation/relate/Makefile
+	include/geos/operation/union/Makefile
+	include/geos/operation/valid/Makefile
+	include/geos/planargraph/Makefile
+	include/geos/planargraph/algorithm/Makefile
+	include/geos/precision/Makefile
+	include/geos/simplify/Makefile
+	include/geos/util/Makefile
+	include/geos/version.h
 	source/index/Makefile
 	source/index/bintree/Makefile
 	source/index/chain/Makefile
