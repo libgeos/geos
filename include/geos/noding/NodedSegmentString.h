@@ -30,6 +30,8 @@
 //#include <geos/noding/Octant.h>
 #include <geos/geom/Coordinate.h>
 
+#include <cstddef>
+
 #ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable: 4355) // warning C4355: 'this' : used in base member initializer list
@@ -54,18 +56,19 @@ class NodedSegmentString : public NodableSegmentString
 {
 public:
 
-	static void getNodedSubstrings(SegmentString::ConstVect* segStrings,
-			SegmentString::NonConstVect* resultEdgelist)
-	{
-		for (size_t i=0, n=segStrings->size(); i<n; i++)
-		{
-			NodedSegmentString * nss = (NodedSegmentString *)((*segStrings)[i]);
-			nss->getNodeList().addSplitEdges( resultEdgelist);
-		}
-	}
+    static void getNodedSubstrings(SegmentString::ConstVect* segStrings,
+        SegmentString::NonConstVect* resultEdgelist)
+    {
+        for (ConstVect::size_type i=0, n=segStrings->size(); i<n; i++)
+        {
+            NodedSegmentString const* nss = 
+                static_cast<NodedSegmentString const*>((*segStrings)[i]);
 
-	static void getNodedSubstrings(
-			const SegmentString::NonConstVect& segStrings,
+            const_cast<NodedSegmentString*>(nss)->getNodeList().addSplitEdges( resultEdgelist);
+        }
+    }
+
+	static void getNodedSubstrings(const SegmentString::NonConstVect& segStrings,
 			SegmentString::NonConstVect* resultEdgeList);
 
 	/// Returns allocated object
@@ -82,16 +85,14 @@ public:
 	 * @param data the user-defined data of this segment string
 	 *             (may be null)
 	 */
-	NodedSegmentString(geom::CoordinateSequence *newPts,
-			const void* newContext)
-		:
-		NodableSegmentString(newContext),
-		nodeList(this),
-		pts(newPts)
-	{ }
+    NodedSegmentString(geom::CoordinateSequence *newPts, const void* newContext)
+        : NodableSegmentString(newContext)
+        , nodeList(this)
+        , pts(newPts)
+    {}
 
 	~NodedSegmentString()
-	{ }
+	{}
 
 	/**
 	 * Adds an intersection node for a given point and segment to this segment string.
@@ -102,15 +103,16 @@ public:
 	 * @param segmentIndex the index of the segment containing the intersection
 	 * @return the intersection node for the point
 	 */
-	SegmentNode * addIntersectionNode( geom::Coordinate * intPt, size_t segmentIndex) 
+	SegmentNode* addIntersectionNode( geom::Coordinate * intPt, std::size_t segmentIndex) 
 	{
-		size_t normalizedSegmentIndex = segmentIndex;
+		std::size_t normalizedSegmentIndex = segmentIndex;
 
 		// normalize the intersection point location
-		size_t nextSegIndex = normalizedSegmentIndex + 1;
+		std::size_t nextSegIndex = normalizedSegmentIndex + 1;
 		if (nextSegIndex < size()) 
 		{
-			const geom::Coordinate &nextPt = getCoordinate( nextSegIndex);
+			geom::Coordinate const& nextPt = 
+                getCoordinate(static_cast<unsigned int>(nextSegIndex));
 
 			// Normalize segment index if intPt falls on vertex
 			// The check for point equality is 2D only - Z values are ignored
@@ -131,7 +133,7 @@ public:
 
 	virtual unsigned int size() const
 	{
-		return pts->size();
+		return static_cast<unsigned int>(pts->size());
 	}
 
 	virtual const geom::Coordinate& getCoordinate(unsigned int i) const;
