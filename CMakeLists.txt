@@ -17,7 +17,7 @@ cmake_minimum_required(VERSION 2.6)
 #set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 #################################################################################
-# Configure GEOS version
+# Setup GEOS version
 #################################################################################
 
 # GEOS release version
@@ -42,18 +42,31 @@ set(CAPI_VERSION_PATCH ${CAPI_INTERFACE_REVISION})
 set(CAPI_VERSION "${CAPI_VERSION_MAJOR}.${CAPI_VERSION_MINOR}.${CAPI_VERSION_PATCH}")
 message(STATUS "Setting GEOS C API version ${CAPI_VERSION}")
 
-# TODO: consider setting in ${CMAKE_CURRENT_BINARY_DIR}/include/geos/version.h )
-configure_file(${CMAKE_SOURCE_DIR}/include/geos/version.h.cmake 
-  ${CMAKE_SOURCE_DIR}/include/geos/version.h )
-
 #################################################################################
-# Configure C/C++ compiler options
+# Setup C/C++ compiler options
 #################################################################################
 
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic -Wall -Wno-long-long -ansi")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 endif()
+
+#################################################################################
+# Setup include directories
+#################################################################################
+
+# for including build-specific version.h and platform.h
+include_directories(${CMAKE_BINARY_DIR}/include)
+
+#################################################################################
+# Setup checks and generate config headers
+#################################################################################
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/geos/version.h.cmake 
+  ${CMAKE_CURRENT_BINARY_DIR}/include/geos/version.h)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h.cmake 
+  ${CMAKE_CURRENT_BINARY_DIR}/include/geos/platform.h)
 
 #################################################################################
 # Configure subdirectories
