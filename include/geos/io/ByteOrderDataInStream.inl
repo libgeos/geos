@@ -24,7 +24,7 @@
 #include <geos/io/ParseException.h>
 #include <geos/io/ByteOrderDataInStream.h>
 #include <geos/io/ByteOrderValues.h>
-#include <geos/platform.h> // for getMachineByteOrder
+#include <geos/util/Machine.h> // for getMachineByteOrder
 
 #include <iostream> // ostream, istream 
 

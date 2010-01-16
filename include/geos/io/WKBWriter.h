@@ -23,7 +23,7 @@
 
 #include <geos/export.h>
 
-#include <geos/platform.h> // for getMachineByteOrder
+#include <geos/util/Machine.h> // for getMachineByteOrder
 #include <iosfwd>
 
 // Forward declarations

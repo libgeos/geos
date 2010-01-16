@@ -56,9 +56,4 @@ typedef __int64 int64;
 
 #define INT64_CONST_IS_I64 1
 
-inline int getMachineByteOrder() {
-        static int endian_check = 1; // don't modify !!
-        return *((char *)&endian_check); // 0 == big_endian | xdr,
-                                         // 1 == little_endian | ndr
-}
 #endif

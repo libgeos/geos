@@ -52,6 +52,7 @@
 #include <geos/linearref/LengthIndexedLine.h>
 #include <geos/geom/BinaryOp.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/util/Machine.h>
 #include <geos/version.h> 
 #include <geos/platform.h>  // for FINITE
 
