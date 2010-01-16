@@ -26,6 +26,12 @@
 /* Set to 1 if `long long int' is 64 bits */
 #cmakedefine HAVE_LONG_LONG_INT_64 1
 
+/* Set to 1 if you have stdint.h */
+#cmakedefine HAVE_STDINT_H 1
+
+/* Set to 1 if you have inttypes.h */
+#cmakedefine HAVE_INTTYPES_H 1
+
 /* Set to 1 if you have ieeefp.h */
 #cmakedefine HAVE_IEEEFP_H 1
 
@@ -46,11 +52,14 @@ extern "C"
 }
 #endif
 
-#ifdef HAVE_INT64_T_64
+#ifdef HAVE_INTTYPES_H
 extern "C"
 {
 #include <inttypes.h>
 }
+# ifndef HAVE_INT64_T_64
+#  error Warning: inttypes.h included but HAVE_INT64_T_64 not defined
+# endif
 #endif
 
 /* We need M_PI, but on MSVC you need to define _USE_MATH_DEFINES before
@@ -131,13 +140,11 @@ extern "C"
 #error "Could not find isnan function or macro!"
 #endif
 
-
 #define DoubleNegInfinity -std::numeric_limits<double>::infinity()
 #define DoubleMax std::numeric_limits<double>::max()
 // Defines NaN for Intel platforms
 #define DoubleNotANumber std::numeric_limits<double>::quiet_NaN()
 // Don't forget to define infinities
 #define DoubleInfinity std::numeric_limits<double>::infinity()
-
 
 #endif

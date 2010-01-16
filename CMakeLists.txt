@@ -52,6 +52,30 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 #################################################################################
+# Setup C/C++ library features
+#################################################################################
+
+# check header files
+include(CheckIncludeFiles)
+check_include_files(stdint.h HAVE_STDINT_H)
+check_include_files(inttypes.h HAVE_INTTYPES_H)
+check_include_files(ieeefp.h HAVE_IEEEFP_H)
+
+# check types and sizes
+include(CheckTypeSize)
+
+
+if(MSVC)
+  check_type_size("__int64" HAVE_INT64_T_64)
+else()
+  if(HAVE_STDINT_H OR HAVE_INTTYPES_H)
+    check_type_size("int64_t" HAVE_INT64_T_64)
+  else()
+    check_type_size("long long int" HAVE_LONG_LONG_INT_64)
+  endif()
+endif()
+
+################################################################################
 # Setup include directories
 #################################################################################
 
