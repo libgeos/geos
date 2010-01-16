@@ -6,7 +6,7 @@ noinst_PROGRAMS = \
     CoordinateSequencesExample \
     CustomCoordinateSequenceExample 
 
-LIBS = ../geom/libgeos.la
+LIBS = $(top_srcdir)/src/geom/libgeos.la
 # -lmpatrol -lbfd -lintl -liberty -limagehlp
 
 CustomCoordinateSequenceExample_SOURCES = \
