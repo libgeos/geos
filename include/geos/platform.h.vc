@@ -54,6 +54,4 @@
 
 typedef __int64 int64;
 
-#define INT64_CONST_IS_I64 1
-
 #endif
