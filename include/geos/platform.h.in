@@ -45,7 +45,6 @@ extern "C"
 #include <float.h>
 #endif
 
-#include <cmath> // for finite()/isfinite() and isnan()
 #include <limits> // for std::numeric_limits
 
 
@@ -59,28 +58,6 @@ extern "C"
 
 #define DoubleMax std::numeric_limits<double>::max()
 
-inline bool
-isFinite(double d)
-{
-#if defined(HAVE_FINITE) && !defined(HAVE_ISFINITE) && !defined(__MINGW32__)
-    return (finite(d));
-#else
-    // Put using namespace std; here if you have to
-    // put it anywhere.
-    using namespace std;
-    return (isfinite(d));
-#endif
-}
-#define FINITE(x) ( isFinite(x) ) 
-
-#ifdef HAVE_ISNAN
-#define ISNAN(x) ( isnan(x) )
-#else
-// Hack for OS/X <cmath> incorrectly re-defining isnan() into
-// oblivion. It does leave a version in std.
-#define ISNAN(x) ( std::isnan(x) )
-#endif
-
 #ifdef HAVE_INT64_T_64
   typedef int64_t int64;
 #else
@@ -93,6 +70,37 @@ isFinite(double d)
 #   warning "Could not find 64bit integer definition!"
 #  endif
 # endif
+#endif
+
+
+#if defined(HAVE_FINITE) && !defined(HAVE_ISFINITE)
+# define FINITE(x) (finite(x))
+#else
+# if defined(_MSC_VER)
+#  define FINITE(x) _finite(static_cast<double>(x))    
+# else
+#  define FINITE(x) (isfinite(x))
+# endif
+#endif
+
+#if defined(HAVE_ISNAN)
+# define ISNAN(x) (isnan(x))
+#else
+# if defined(_MSC_VER)
+#  define ISNAN(x) _isnan(x)
+# elif defined(__OSX__)
+   // Hack for OS/X <cmath> incorrectly re-defining isnan() into oblivion.
+   // It does leave a version in std.
+#  define ISNAN(x) (std::isnan(x))
+# endif
+#endif
+
+#ifndef FINITE
+#error "Can not compile without finite or isfinite function or macro"
+#endif
+
+#ifndef ISNAN
+#error "Can not compile without isnan function or macro"
 #endif
 
 #endif

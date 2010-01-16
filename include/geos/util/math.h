@@ -17,8 +17,7 @@
 #ifndef GEOS_UTIL_MATH_H
 #define GEOS_UTIL_MATH_H
 
-namespace geos {
-namespace util { // geos::util
+namespace geos { namespace util {
 
 /// Symmetric Rounding Algorithm
 double sym_round(double val);
@@ -30,17 +29,15 @@ double java_math_round(double val);
 double rint_vc(double val);
 
 /// Default rounding method for GEOS
-//
-/// Always use this rounding method, to easy
-/// easy switching between different rounding
-/// method for the whole codebase
-inline double round(double val) {
+///
+/// @note Always use this rounding method, to easy easy switching
+/// between different rounding method for the whole codebase.
+inline double round(double val)
+{
 	return java_math_round(val);
 }
 
-} // namespace geos.util
-} // namespace geos
-
+}} // namespace geos::util
 
 #endif // GEOS_UTIL_MATH_H
 
