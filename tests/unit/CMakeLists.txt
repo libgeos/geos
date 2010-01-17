@@ -1,7 +1,7 @@
 #################################################################################
 # $Id$
 #
-# GEOS C++ library build configuration for CMake build system
+# GEOS unit tests build configuration for CMake build system
 #
 # Copyright (C) 2009 Mateusz Loskot <mateusz@loskot.net>
 #
@@ -12,6 +12,12 @@
 #
 #################################################################################
 
-file(GLOB_RECURSE geos_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+include_directories(${CMAKE_SOURCE_DIR}/capi)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/tut)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_library(geos STATIC ${geos_SOURCES})
+file(GLOB_RECURSE geos_unit_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+
+add_executable(geos_unit ${geos_unit_SOURCES})
+
+target_link_libraries(geos_unit geos geos_c)

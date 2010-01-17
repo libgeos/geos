@@ -11,7 +11,6 @@
 # See the COPYING file for more information.
 #
 #################################################################################
-include_directories(${CMAKE_SOURCE_DIR}/include)
 
 set(geos_c_SOURCES
   geos_c.cpp

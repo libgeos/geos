@@ -106,21 +106,31 @@ endif()
 # Setup include directories
 #################################################################################
 
-# for including build-specific version.h and platform.h
+# for including GEOS C++ API headers
+include_directories(${CMAKE_SOURCE_DIR}/include)
+
+# for including build-specific version.h, platform.h and geos_c.h
 include_directories(${CMAKE_BINARY_DIR}/include)
 
 #################################################################################
-# Setup checks and generate config headers
+# Setup checks and generate config headers and geos-config tool
 #################################################################################
 
+# TODO: output to CMAKE_CURRENT_BINARY_DIR instead of CMAKE_SOURCE_DIR
+
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h.cmake 
-  ${CMAKE_SOURCE_DIR}/include/geos/platform.h)
+  ${CMAKE_CURRENT_BINARY_DIR}/include/geos/platform.h)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/geos/version.h.in
-  ${CMAKE_SOURCE_DIR}/include/geos/version.h @ONLY)
+  ${CMAKE_CURRENT_BINARY_DIR}/include/geos/version.h @ONLY)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/capi/geos_c.h.in
-  ${CMAKE_SOURCE_DIR}/capi/geos_c.h @ONLY)
+  ${CMAKE_CURRENT_BINARY_DIR}/capi/geos_c.h @ONLY)
+
+if(UNIX)
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tools/geos-config.in
+    ${CMAKE_CURRENT_BINARY_DIR}/tools/geos-config @ONLY)
+endif()
 
 #################################################################################
 # Configure subdirectories
@@ -128,3 +138,5 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/capi/geos_c.h.in
 
 add_subdirectory(src)
 add_subdirectory(capi)
+add_subdirectory(tests)
+

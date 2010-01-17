@@ -1,7 +1,7 @@
 #ifndef TUT_REPORTER
 #define TUT_REPORTER
 
-#include <tut/tut_console_reporter.hpp>
+#include <tut_console_reporter.hpp>
 
 namespace tut
 {
