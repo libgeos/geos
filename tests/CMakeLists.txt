@@ -13,3 +13,6 @@
 #################################################################################
 
 add_subdirectory(unit)
+add_subdirectory(xmltester)
+
+# TODO: add other test programs
