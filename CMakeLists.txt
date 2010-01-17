@@ -130,11 +130,6 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/geos/version.h.in
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/capi/geos_c.h.in
   ${CMAKE_CURRENT_BINARY_DIR}/capi/geos_c.h @ONLY)
 
-if(UNIX)
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/tools/geos-config.in
-    ${CMAKE_CURRENT_BINARY_DIR}/tools/geos-config @ONLY)
-endif()
-
 #################################################################################
 # Configure subdirectories
 #################################################################################
@@ -143,6 +138,7 @@ add_subdirectory(include)
 add_subdirectory(src)
 add_subdirectory(capi)
 add_subdirectory(tests)
+add_subdirectory(tools)
 
 #################################################################################
 # Setup installation of common files not specific to any targets
