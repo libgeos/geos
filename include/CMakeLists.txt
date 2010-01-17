@@ -12,11 +12,11 @@
 #
 #################################################################################
 
-file(GLOB_RECURSE geos_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+install(FILES geos.h DESTINATION include/geos)
 
-add_library(geos STATIC ${geos_SOURCES})
-
-install(TARGETS geos
-  RUNTIME DESTINATION bin
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib)
+install(DIRECTORY geos/
+  DESTINATION include/geos
+  FILES_MATCHING
+  PATTERN "*.h"
+  PATTERN "*.inl"
+  PATTERN ".svn" EXCLUDE)

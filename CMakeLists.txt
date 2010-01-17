@@ -136,7 +136,7 @@ endif()
 # Configure subdirectories
 #################################################################################
 
+add_subdirectory(include)
 add_subdirectory(src)
 add_subdirectory(capi)
 add_subdirectory(tests)
-
