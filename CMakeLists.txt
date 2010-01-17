@@ -113,11 +113,14 @@ include_directories(${CMAKE_BINARY_DIR}/include)
 # Setup checks and generate config headers
 #################################################################################
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/geos/version.h.cmake 
-  ${CMAKE_CURRENT_BINARY_DIR}/include/geos/version.h)
-
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h.cmake 
-  ${CMAKE_CURRENT_BINARY_DIR}/include/geos/platform.h)
+  ${CMAKE_SOURCE_DIR}/include/geos/platform.h)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/geos/version.h.in
+  ${CMAKE_SOURCE_DIR}/include/geos/version.h @ONLY)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/capi/geos_c.h.in
+  ${CMAKE_SOURCE_DIR}/capi/geos_c.h @ONLY)
 
 #################################################################################
 # Configure subdirectories
