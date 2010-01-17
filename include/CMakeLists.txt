@@ -12,7 +12,14 @@
 #
 #################################################################################
 
-install(FILES geos.h DESTINATION include/geos)
+install(FILES geos.h
+  DESTINATION include/geos)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/geos/platform.h
+  DESTINATION include/geos)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/geos/version.h
+  DESTINATION include/geos)
 
 install(DIRECTORY geos/
   DESTINATION include/geos

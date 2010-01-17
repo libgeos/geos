@@ -109,6 +109,9 @@ endif()
 # for including GEOS C++ API headers
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
+# for including build-specific GEOS C API headers
+include_directories(${CMAKE_BINARY_DIR}/capi)
+
 # for including build-specific version.h, platform.h and geos_c.h
 include_directories(${CMAKE_BINARY_DIR}/include)
 
@@ -140,3 +143,7 @@ add_subdirectory(include)
 add_subdirectory(src)
 add_subdirectory(capi)
 add_subdirectory(tests)
+
+#################################################################################
+# Setup installation of common files not specific to any targets
+#################################################################################

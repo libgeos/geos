@@ -19,3 +19,11 @@ set(geos_c_SOURCES
 add_library(geos_c SHARED ${geos_c_SOURCES})
 
 target_link_libraries(geos_c geos)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/geos_c.h
+  DESTINATION include/geos)
+
+install(TARGETS geos_c
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib)
