@@ -17,14 +17,8 @@
  *
  *********************************************************************/
 
-/* Set to 1 if you have `int64_t' type */
-#cmakedefine HAVE_INT64_T_64 1
-
-/* Set to 1 if `long int' is 64 bits */
-#cmakedefine HAVE_LONG_INT_64 1
-
-/* Set to 1 if `long long int' is 64 bits */
-#cmakedefine HAVE_LONG_LONG_INT_64 1
+#ifndef GEOS_PLATFORM_H_INCLUDED
+#define GEOS_PLATFORM_H_INCLUDED
 
 /* Set to 1 if you have stdint.h */
 #cmakedefine HAVE_STDINT_H 1
@@ -35,14 +29,35 @@
 /* Set to 1 if you have ieeefp.h */
 #cmakedefine HAVE_IEEEFP_H 1
 
-/* Has finite */
-#cmakedefine HAVE_FINITE 1
+/* Set to 1 if you have `int64_t' type */
+#cmakedefine HAVE_INT64_T_64 1
 
-/* Has isfinite */
+/* Set to 1 if `long int' is 64 bits */
+#cmakedefine HAVE_LONG_INT_64 1
+
+/* Set to 1 if `long long int' is 64 bits */
+#cmakedefine HAVE_LONG_LONG_INT_64 1
+
+/* Set to 1 if C++/C99 std::isnan is defined */
+#cmakedefine HAVE_STD_ISNAN 1
+
+/* Set to 1 if C99 isnan is defined */
+#cmakedefine HAVE_ISNAN 1
+
+/* Set to 1 if XCode __isnand is defined */
+#cmakedefine HAVE_ISNAND_XCODE 1
+
+/* Set to 1 if XCode __inline_isnand is defined */
+#cmakedefine HAVE_INLINE_ISNAND_XCODE 1
+
+/* Set to 1 if C++/C99 std::isfinite is defined */
+#cmakedefine HAVE_STD_ISFINITE 1
+
+/* Set to 1 if C99 isfinite is defined */
 #cmakedefine HAVE_ISFINITE 1
 
-/* Has isnan */
-#cmakedefine HAVE_ISNAN 1
+/* Set to 1 if Visual C++ finite is defined */
+#cmakedefine HAVE_FINITE 1
 
 
 #ifdef HAVE_IEEEFP_H
@@ -84,14 +99,6 @@ extern "C"
 #include <float.h>
 #endif
 
-/* For Visual C++, required to find _isnan and _finite */
-#ifdef _MSC_VER
-#include <float.h>
-#endif
-
-#include <cmath> // trying C++0x finite, isfinite, isnan
-#include <limits>
-
 #ifdef HAVE_INT64_T_64
 # ifdef _MSC_VER
    typedef __int64 int64;
@@ -110,36 +117,42 @@ extern "C"
 # endif
 #endif
 
-#if defined(HAVE_FINITE) && !defined(HAVE_ISFINITE)
-# define FINITE(x) (finite(x))
-#else
+#if defined(HAVE_STD_ISNAN)
+# include <cmath>
+# define ISNAN(x) (std::isnan)(x)
+#elif defined(HAVE_INLINE_ISNAND_XCODE)
+# include <math.h>
+# define ISNAN(x) __inline_isnand(static_cast<double>(x))
+#elif defined(HAVE_ISNAND_XCODE)
+# include <math.h>
+# define ISNAN(x) __isnand(static_cast<double>(x))
+#elif defined(HAVE_ISNAN)
 # if defined(_MSC_VER)
-#  define FINITE(x) _finite(static_cast<double>(x))    
+#  include <float.h>
+#  define ISNAN(x) _isnan(static_cast<double>(x))
 # else
-#  define FINITE(x) (isfinite(x))
+#  include <math.h>
+#  define ISNAN(x) isnan(x)
 # endif
-#endif
-
-#if defined(HAVE_ISNAN)
-# define ISNAN(x) (isnan(x))
 #else
-# if defined(_MSC_VER)
-#  define ISNAN(x) _isnan(x)
-# elif defined(__OSX__)
-   // Hack for OS/X <cmath> incorrectly re-defining isnan() into oblivion.
-   // It does leave a version in std.
-#  define ISNAN(x) (std::isnan(x))
-# endif
+# error "Could not find isnan function or macro!"
 #endif
 
-#ifndef FINITE
-#error "Could not find finite or isfinite function or macro!"
+#if defined(HAVE_STD_ISFINITE)
+# include <cmath>
+# define FINITE(x) (std::isfinite)(x)
+#elif defined(HAVE_ISFINITE)
+# include <math.h>
+# define FINITE(x) isfinite(x)
+#elif defined(HAVE_FINITE)
+# include <float.h>
+# define FINITE(x) _finite(static_cast<double>(x))
+#else
+# error "Could not find finite or isfinite function or macro!"
 #endif
 
-#ifndef ISNAN
-#error "Could not find isnan function or macro!"
-#endif
 
+#include <limits>
 #define DoubleNegInfinity -std::numeric_limits<double>::infinity()
 #define DoubleMax std::numeric_limits<double>::max()
 // Defines NaN for Intel platforms
@@ -147,4 +160,4 @@ extern "C"
 // Don't forget to define infinities
 #define DoubleInfinity std::numeric_limits<double>::infinity()
 
-#endif
+#endif // GEOS_PLATFORM_H_INCLUDED

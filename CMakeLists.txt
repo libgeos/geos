@@ -57,13 +57,13 @@ endif()
 
 # check header files
 include(CheckIncludeFiles)
+
 check_include_files(stdint.h HAVE_STDINT_H)
 check_include_files(inttypes.h HAVE_INTTYPES_H)
 check_include_files(ieeefp.h HAVE_IEEEFP_H)
 
 # check types and sizes
 include(CheckTypeSize)
-
 
 if(MSVC)
   check_type_size("__int64" HAVE_INT64_T_64)
@@ -72,6 +72,33 @@ else()
     check_type_size("int64_t" HAVE_INT64_T_64)
   else()
     check_type_size("long long int" HAVE_LONG_LONG_INT_64)
+  endif()
+endif()
+
+# check functions and macros
+include(CheckSymbolExists)
+include(CheckFunctionExists)
+
+check_symbol_exists(std::isnan cmath HAVE_STD_ISNAN)
+if(NOT HAVE_STD_ISNAN)
+  if(MSVC)
+    check_symbol_exists(_isnan float.h HAVE_ISNAN)
+  elseif(APPLE)
+    check_symbol_exists(__isnand math.h HAVE_ISNAND_XCODE)
+    if(NOT HAVE_ISNAND_XCODE)
+      check_symbol_exists(__inline_isnand math.h HAVE_INLINE_ISNAND_XCODE)
+    endif()
+  else()
+    check_symbol_exists(isnan math.h HAVE_ISNAN)
+  endif()
+endif()
+
+check_symbol_exists(std::isfinite cmath HAVE_STD_ISFINITE)
+if(NOT HAVE_STD_ISFINITE)
+  if(MSVC)
+    check_symbol_exists(_finite float.h HAVE_FINITE)
+  else()
+    check_symbol_exists(isfinite math.h HAVE_ISFINITE)
   endif()
 endif()
 
