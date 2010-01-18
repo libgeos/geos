@@ -12,6 +12,10 @@
 #
 #################################################################################
 
+if(WIN32)
+    add_definitions("-DGEOS_DLL_EXPORT=1")
+endif()
+
 set(geos_c_SOURCES
   geos_c.cpp
   geos_ts_c.cpp)
