@@ -85,6 +85,10 @@
 
 #include "geos_c.h"
 
+// Intentional, to allow non-standard C elements like C99 functions to be
+// imported through C++ headers of C library, like <cmath>.
+using namespace std;
+
 /// Define this if you want operations triggering Exceptions to
 /// be printed.
 /// (will use the NOTIFY channel - only implemented for GEOSUnion so far)
