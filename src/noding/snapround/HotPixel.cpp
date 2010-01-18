@@ -101,10 +101,10 @@ HotPixel::intersectsScaled(const Coordinate& p0,
 		const Coordinate& p1) const
 {
 
-	double segMinx = std::min(p0.x, p1.x);
-	double segMaxx = std::max(p0.x, p1.x);
-	double segMiny = std::min(p0.y, p1.y);
-	double segMaxy = std::max(p0.y, p1.y);
+	double const segMinx = (std::min)(p0.x, p1.x);
+	double const segMaxx = (std::max)(p0.x, p1.x);
+	double const segMiny = (std::min)(p0.y, p1.y);
+	double const segMaxy = (std::max)(p0.y, p1.y);
 
 	bool isOutsidePixelEnv =  maxx < segMinx
                          || minx > segMaxx

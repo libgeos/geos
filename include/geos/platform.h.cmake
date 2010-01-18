@@ -151,13 +151,12 @@ extern "C"
 # error "Could not find finite or isfinite function or macro!"
 #endif
 
-
 #include <limits>
-#define DoubleNegInfinity -std::numeric_limits<double>::infinity()
-#define DoubleMax std::numeric_limits<double>::max()
+#define DoubleNegInfinity (-(std::numeric_limits<double>::infinity)())
+#define DoubleMax (std::numeric_limits<double>::max)()
 // Defines NaN for Intel platforms
 #define DoubleNotANumber std::numeric_limits<double>::quiet_NaN()
 // Don't forget to define infinities
-#define DoubleInfinity std::numeric_limits<double>::infinity()
+#define DoubleInfinity (std::numeric_limits<double>::infinity)()
 
 #endif // GEOS_PLATFORM_H_INCLUDED

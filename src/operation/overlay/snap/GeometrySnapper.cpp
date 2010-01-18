@@ -120,7 +120,7 @@ double
 GeometrySnapper::computeSizeBasedSnapTolerance(const geom::Geometry& g)
 {
 	const Envelope* env = g.getEnvelopeInternal();
-	double minDimension = std::min(env->getHeight(), env->getWidth());
+	double minDimension = (std::min)(env->getHeight(), env->getWidth());
 	double snapTol = minDimension * snapPrecisionFactor;
 	return snapTol;
 }
@@ -156,7 +156,7 @@ double
 GeometrySnapper::computeOverlaySnapTolerance(const geom::Geometry& g1,
 		const geom::Geometry& g2)
 {
-        return std::min(computeOverlaySnapTolerance(g1), computeOverlaySnapTolerance(g2));
+        return (std::min)(computeOverlaySnapTolerance(g1), computeOverlaySnapTolerance(g2));
 }
 
 /* public static */

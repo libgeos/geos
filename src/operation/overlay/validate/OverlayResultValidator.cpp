@@ -235,12 +235,12 @@ OverlayResultValidator::isValidResult(OverlayOp::OpCode overlayOp,
 /*private static*/
 double
 OverlayResultValidator::computeBoundaryDistanceTolerance(
-		const geom::Geometry& g0, const geom::Geometry& g1)
+    const geom::Geometry& g0, const geom::Geometry& g1)
 {
-	using geos::operation::overlay::snap::GeometrySnapper;
+    using geos::operation::overlay::snap::GeometrySnapper;
 
-	return std::min(GeometrySnapper::computeSizeBasedSnapTolerance(g0),
-                        GeometrySnapper::computeSizeBasedSnapTolerance(g1));
+    return (std::min)(GeometrySnapper::computeSizeBasedSnapTolerance(g0),
+                      GeometrySnapper::computeSizeBasedSnapTolerance(g1));
 }
 
 } // namespace geos.operation.overlay.validate

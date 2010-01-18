@@ -284,17 +284,17 @@ limiting conditions:
 	double s_top=(A.y-C.y)*(B.x-A.x)-(A.x-C.x)*(B.y-A.y);
 	double s_bot=(B.x-A.x)*(D.y-C.y)-(B.y-A.y)*(D.x-C.x);
 	if ((r_bot==0)||(s_bot==0)) {
-		return std::min(distancePointLine(A,C,D),
-						std::min(distancePointLine(B,C,D),
-						std::min(distancePointLine(C,A,B), distancePointLine(D,A,B))));
+		return (std::min)(distancePointLine(A,C,D),
+						(std::min)(distancePointLine(B,C,D),
+						(std::min)(distancePointLine(C,A,B), distancePointLine(D,A,B))));
 	}
 	double s=s_top/s_bot;
 	double r=r_top/r_bot;
 	if ((r<0)||( r>1)||(s<0)||(s>1)) {
 		//no intersection
-		return std::min(distancePointLine(A,C,D),
-						std::min(distancePointLine(B,C,D),
-						std::min(distancePointLine(C,A,B), distancePointLine(D,A,B))));
+		return (std::min)(distancePointLine(A,C,D),
+						(std::min)(distancePointLine(B,C,D),
+						(std::min)(distancePointLine(C,A,B), distancePointLine(D,A,B))));
 	}
 	return 0.0; //intersection exists
 }

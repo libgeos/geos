@@ -75,8 +75,8 @@ IndexedPointInAreaLocator::IntervalIndexedGeometry::addLine( geom::CoordinateSeq
 	for ( size_t i = 1, ni = pts->size(); i < ni; i++ ) 
 	{
 		geom::LineSegment * seg = new geom::LineSegment( (*pts)[ i - 1 ], (*pts)[ i ]);
-		double min = std::min( seg->p0.y, seg->p1.y);
-		double max = std::max( seg->p0.y, seg->p1.y);
+		double const min = (std::min)( seg->p0.y, seg->p1.y);
+		double const max = (std::max)( seg->p0.y, seg->p1.y);
 		
 		// NOTE: seg ownership still ours
 		allocatedSegments.push_back(seg);
