@@ -83,8 +83,12 @@ extern "C"
  */
 #ifdef _MSC_VER
 #define _USE_MATH_DEFINES
-#include <math.h>
+#include <cmath>
+#include <float.h>
+#else
+#include <cmath>
 #endif
+#include <limits>
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -118,20 +122,15 @@ extern "C"
 #endif
 
 #if defined(HAVE_STD_ISNAN)
-# include <cmath>
 # define ISNAN(x) (std::isnan)(x)
 #elif defined(HAVE_INLINE_ISNAND_XCODE)
-# include <math.h>
 # define ISNAN(x) __inline_isnand(static_cast<double>(x))
 #elif defined(HAVE_ISNAND_XCODE)
-# include <math.h>
 # define ISNAN(x) __isnand(static_cast<double>(x))
 #elif defined(HAVE_ISNAN)
 # if defined(_MSC_VER)
-#  include <float.h>
 #  define ISNAN(x) _isnan(static_cast<double>(x))
 # else
-#  include <math.h>
 #  define ISNAN(x) isnan(x)
 # endif
 #else
@@ -139,19 +138,15 @@ extern "C"
 #endif
 
 #if defined(HAVE_STD_ISFINITE)
-# include <cmath>
 # define FINITE(x) (std::isfinite)(x)
 #elif defined(HAVE_ISFINITE)
-# include <math.h>
 # define FINITE(x) isfinite(x)
 #elif defined(HAVE_FINITE)
-# include <float.h>
 # define FINITE(x) _finite(static_cast<double>(x))
 #else
 # error "Could not find finite or isfinite function or macro!"
 #endif
 
-#include <limits>
 #define DoubleNegInfinity (-(std::numeric_limits<double>::infinity)())
 #define DoubleMax (std::numeric_limits<double>::max)()
 // Defines NaN for Intel platforms
