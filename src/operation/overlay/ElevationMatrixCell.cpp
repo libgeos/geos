@@ -17,13 +17,14 @@
  *
  **********************************************************************/
 
+#include <geos/platform.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/operation/overlay/ElevationMatrixCell.h>
+
 #include <sstream>
 #include <string>
 #include <vector>
-
-#include <geos/operation/overlay/ElevationMatrixCell.h>
-#include <geos/platform.h> // ISNAN
-#include <geos/geom/Coordinate.h>
+#include <cmath>
 
 using namespace std;
 using namespace geos::geom;

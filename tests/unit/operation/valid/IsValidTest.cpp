@@ -5,6 +5,7 @@
 
 #include <tut.hpp>
 // geos
+#include <geos/platform.h>
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateArraySequence.h>
@@ -16,6 +17,7 @@
 #include <geos/operation/valid/TopologyValidationError.h>
 #include <geos/platform.h> // for ISNAN
 // std
+#include <cmath>
 #include <string>
 #include <memory>
 

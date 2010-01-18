@@ -18,21 +18,20 @@
  *
  **********************************************************************/
 
-#include <map>
-#include <vector>
-#include <cassert>
-
+#include <geos/platform.h>
 #include <geos/operation/overlay/LineBuilder.h>
 #include <geos/operation/overlay/OverlayOp.h>
-
 #include <geos/algorithm/PointLocator.h>
-
 #include <geos/geom/GeometryFactory.h>
-
 #include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/Edge.h>
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geomgraph/DirectedEdgeStar.h>
+
+#include <map>
+#include <vector>
+#include <cassert>
+#include <cmath>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0

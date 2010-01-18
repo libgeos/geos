@@ -6,6 +6,7 @@
 #include <tut.hpp>
 #include <utility.h>
 // geos
+#include <geos/platform.h>
 #include <geos/io/WKTReader.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
@@ -13,11 +14,9 @@
 #include <geos/geom/LineString.h> 
 #include <geos/geom/Coordinate.h>
 #include <geos/linearref/LengthIndexedLine.h>
-#ifndef ISNAN
-#include <geos/platform.h>
-#endif
 
 // std
+#include <cmath>
 #include <sstream>
 #include <string>
 #include <memory>

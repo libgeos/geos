@@ -18,8 +18,9 @@
  *
  **********************************************************************/
 
-#include "IndexedNestedRingTester.h"
+#include "IndexedNestedRingTester.h" // TODO: private header>? --mloskot
 
+#include <geos/platform.h>
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/valid/ConsistentAreaTester.h>
 #include <geos/operation/valid/ConnectedInteriorTester.h>
@@ -39,9 +40,10 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/GeometryCollection.h>
 
+#include <cassert>
+#include <cmath>
 #include <typeinfo>
 #include <set>
-#include <cassert>
 
 using namespace std;
 using namespace geos::algorithm;

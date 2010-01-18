@@ -17,17 +17,18 @@
  *
  **********************************************************************/
 
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <cassert>
-
+#include <geos/platform.h>
 #include <geos/operation/overlay/ElevationMatrix.h>
-
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
+
+#include <cassert>
+#include <cmath>
+#include <iostream>
+#include <sstream>
+#include <string>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0

@@ -20,6 +20,7 @@
  *
  **********************************************************************/
 
+#include <geos/platform.h>
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/overlay/validate/OverlayResultValidator.h>
 #include <geos/operation/overlay/ElevationMatrix.h>
@@ -48,6 +49,7 @@
 #include <geos/geomgraph/EdgeNodingValidator.h>
 
 #include <cassert>
+#include <cmath>
 #include <functional>
 #include <vector>
 #include <sstream>

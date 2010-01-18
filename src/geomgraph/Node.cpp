@@ -18,6 +18,7 @@
  *
  **********************************************************************/
 
+#include <geos/platform.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/Edge.h>
@@ -26,6 +27,7 @@
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geom/Location.h>
 
+#include <cmath>
 #include <string>
 #include <sstream>
 #include <vector>

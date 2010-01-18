@@ -4,7 +4,10 @@
 
 #include <tut.hpp>
 // geos
+#include <geos/platform.h>
 #include <geos/geom/Coordinate.h>
+// std
+#include <cmath>
 
 namespace tut
 {

@@ -5,8 +5,11 @@
 // tut
 #include <tut.hpp>
 // geos
+#include <geos/platform.h>
 #include <geos/geom/Triangle.h>
 #include <geos/geom/Coordinate.h>
+// std
+#include <cmath>
 
 namespace tut
 {
@@ -110,7 +113,7 @@ namespace tut
 		// Expected: ~4.2426406871192857
 		abc.inCentre(center);
 		// 1e-16 fails sometimes
-		ensure( fabs(center.x - 6.0) < 1e-15 );
+		ensure( std::fabs(center.x - 6.0) < 1e-15 );
 		ensure( center.y > 4.2 );
 		ensure( center.y < 4.3 );
 		ensure( 0 != ISNAN( center.z ) );

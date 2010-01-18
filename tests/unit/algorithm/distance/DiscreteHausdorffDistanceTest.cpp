@@ -6,6 +6,7 @@
 
 #include <tut.hpp>
 // geos
+#include <geos/platform.h>
 #include <geos/io/WKTReader.h>
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
 #include <geos/geom/PrecisionModel.h>
@@ -13,6 +14,7 @@
 #include <geos/geom/Geometry.h> // required for use in auto_ptr
 #include <geos/geom/Coordinate.h>
 // std
+#include <cmath>
 #include <sstream>
 #include <string>
 #include <memory>
@@ -53,7 +55,7 @@ namespace tut
 		GeomPtr g2 ( reader.read(wkt2) );
 
 		double distance = DiscreteHausdorffDistance::distance(*g1, *g2);
-		double diff = fabs(distance-expectedDistance);
+		double diff = std::fabs(distance-expectedDistance);
 		//std::cerr << "expectedDistance:" << expectedDistance << " actual distance:" << distance << std::endl;
 		ensure( diff <= TOLERANCE );
 	}
@@ -66,7 +68,7 @@ namespace tut
 
 		double distance = DiscreteHausdorffDistance::distance(*g1,
 			*g2, densifyFactor);
-		double diff = fabs(distance-expectedDistance);
+		double diff = std::fabs(distance-expectedDistance);
 		//std::cerr << "expectedDistance:" << expectedDistance << " actual distance:" << distance << std::endl;
 		ensure( diff <= TOLERANCE );
 	}
