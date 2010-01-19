@@ -47,9 +47,36 @@ message(STATUS "Setting GEOS C API version ${CAPI_VERSION}")
 #################################################################################
 
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic -Wall -Wno-long-long -ansi")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+
+  list(APPEND CMAKE_CXX_FLAGS "-pedantic -ansi")
+  list(APPEND CMAKE_CXX_FLAGS "-Wall -Wno-long-long")
+  list(APPEND CMAKE_CXX_FLAGS "-fPIC")
+
+elseif(MSVC)
+    
+  # Set pedantic mode by default
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+
+  if(MSVC80 OR MSVC90 OR MSVC10)
+
+    # Option is to enable the /MP switch for Visual Studio 2005 or later
+    option(ENABLE_MSVC_MP
+      "Set to ON to build GEOS with the /MP option (Visual Studio 2005 and above)." OFF)
+    mark_as_advanced(ENABLE_MSVC_MP)
+    if(ENABLE_MSVC_MP)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
+    endif()
+    message(STATUS "Setting Visual Studio 2005+ option /MP to ${ENABLE_MSVC_MP}")
+    
+    # Disable C4996: 'function': was declared deprecated
+    add_definitions(-D_SCL_SECURE_NO_WARNINGS)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+  endif()
+
 endif()
+
+# DEBUG
+#message(STATUS "XXX: CMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}")
 
 #################################################################################
 # Setup C/C++ library features
