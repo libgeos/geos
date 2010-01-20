@@ -87,6 +87,11 @@ endif()
 # Setup C/C++ library features
 #################################################################################
 
+include(TestForANSIForScope)
+if (CMAKE_NO_ANSI_FOR_SCOPE)
+  message(FATAL_ERROR "Detected compiler does not support std namespace on STL classes")
+endif()
+
 # check header files
 include(CheckIncludeFiles)
 
