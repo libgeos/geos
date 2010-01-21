@@ -43,8 +43,28 @@ set(CAPI_VERSION "${CAPI_VERSION_MAJOR}.${CAPI_VERSION_MINOR}.${CAPI_VERSION_PAT
 message(STATUS "Setting GEOS C API version ${CAPI_VERSION}")
 
 #################################################################################
+# Check custom global options
+#################################################################################
+
+option(GEOS_ENABLE_INLINE
+  "Set to ON to enable GEOS compilation with small functions inlining" ON)
+
+option(GEOS_ENABLE_ASSERT
+  "Set to ON to build GEOS with assert() macro enabled" OFF) 
+
+#################################################################################
 # Setup C/C++ compiler options
 #################################################################################
+
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Debug CACHE STRING
+      "Choose the type of build, options are: None Debug Release" FORCE)
+endif()
+message(STATUS "Setting GEOS build type - ${CMAKE_BUILD_TYPE}")
+
+if(CMAKE_BUILD_TYPE STREQUAL Debug)
+  add_definitions(-D_DEBUG)
+endif()
 
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 
@@ -65,10 +85,10 @@ elseif(MSVC)
   if(MSVC80 OR MSVC90 OR MSVC10)
 
     # Option is to enable the /MP switch for Visual Studio 2005 or later
-    option(ENABLE_MSVC_MP
+    option(GEOS_MSVC_ENABLE_MP
       "Set to ON to build GEOS with the /MP option (Visual Studio 2005 and above)." OFF)
-    mark_as_advanced(ENABLE_MSVC_MP)
-    if(ENABLE_MSVC_MP)
+    mark_as_advanced(GEOS_MSVC_ENABLE_MP)
+    if(GEOS_MSVC_ENABLE_MP)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
     endif()
     message(STATUS "Setting Visual Studio 2005+ option /MP to ${ENABLE_MSVC_MP}")
@@ -80,8 +100,18 @@ elseif(MSVC)
 
 endif()
 
-# DEBUG
-#message(STATUS "XXX: CMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}")
+if(GEOS_ENABLE_INLINE)
+  add_definitions(-DGEOS_INLINE)
+endif()
+message(STATUS
+  "Setting GEOS compilation with small functions inlining - ${GEOS_ENABLE_INLINE}")
+
+if(GEOS_ENABLE_ASSERT AND CMAKE_BUILD_TYPE MATCHES "Rel")
+  string(REPLACE "-DNDEBUG" "-UNDEBUG"
+    CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+endif()
+message(STATUS
+  "Setting GEOS compilation with assert() macro enabled - ${GEOS_ENABLE_ASSERT}")
 
 #################################################################################
 # Setup C/C++ library features
@@ -116,6 +146,7 @@ endif()
 include(CheckSymbolExists)
 include(CheckFunctionExists)
 
+# TODO: This needs to be improved --mloskot
 check_symbol_exists(std::isnan cmath HAVE_STD_ISNAN)
 if(NOT HAVE_STD_ISNAN)
   if(MSVC)
@@ -178,5 +209,11 @@ add_subdirectory(tests)
 add_subdirectory(tools)
 
 #################################################################################
-# Setup installation of common files not specific to any targets
+# Setup installation of common files not specific to any target
+
+
 #################################################################################
+# DEBUG settings - TODO: make a summary
+message(STATUS "XXX: CMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}")
+message(STATUS "XXX: CMAKE_CXX_FLAGS_DEBUG=${CMAKE_CXX_FLAGS_DEBUG}")
+message(STATUS "XXX: CMAKE_CXX_FLAGS_RELEASE=${CMAKE_CXX_FLAGS_RELEASE}")
