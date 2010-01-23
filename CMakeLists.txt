@@ -14,7 +14,8 @@
 project(geos)
 cmake_minimum_required(VERSION 2.6)
 
-#set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+# Location of custom CMake modules with macros used by GEOS
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 #################################################################################
 # Setup GEOS version
@@ -143,28 +144,27 @@ else()
 endif()
 
 # check functions and macros
+include(CheckPrototypeExists)
 include(CheckSymbolExists)
-include(CheckFunctionExists)
 
-# TODO: This needs to be improved --mloskot
-check_symbol_exists(std::isnan cmath HAVE_STD_ISNAN)
+check_prototype_exists(isnan cmath HAVE_STD_ISNAN)
 if(NOT HAVE_STD_ISNAN)
   if(MSVC)
-    check_symbol_exists(_isnan float.h HAVE_ISNAN)
+    check_prototype_exists(_isnan float.h HAVE_ISNAN)
   elseif(APPLE)
-    check_symbol_exists(__isnand math.h HAVE_ISNAND_XCODE)
+    check_prototype_exists(__isnand math.h HAVE_ISNAND_XCODE)
     if(NOT HAVE_ISNAND_XCODE)
-      check_symbol_exists(__inline_isnand math.h HAVE_INLINE_ISNAND_XCODE)
+      check_prototype_exists(__inline_isnand math.h HAVE_INLINE_ISNAND_XCODE)
     endif()
   else()
     check_symbol_exists(isnan math.h HAVE_ISNAN)
   endif()
 endif()
 
-check_symbol_exists(std::isfinite cmath HAVE_STD_ISFINITE)
+check_prototype_exists(isfinite cmath HAVE_STD_ISFINITE)
 if(NOT HAVE_STD_ISFINITE)
   if(MSVC)
-    check_symbol_exists(_finite float.h HAVE_FINITE)
+    check_prototype_exists(_finite float.h HAVE_FINITE)
   else()
     check_symbol_exists(isfinite math.h HAVE_ISFINITE)
   endif()
