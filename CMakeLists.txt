@@ -108,9 +108,11 @@ endif()
 message(STATUS
   "Setting GEOS compilation with small functions inlining - ${GEOS_ENABLE_INLINE}")
 
-if(NOT MSVC AND GEOS_ENABLE_ASSERT)
-  string(REGEX REPLACE "[-/]D.*NDEBUG" "-U NDEBUG"
-    CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+if(NOT MSVC)
+  if(GEOS_ENABLE_ASSERT)
+    string(REGEX REPLACE "[-/]D.*NDEBUG" "-U NDEBUG"
+      CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+  endif()
   message(STATUS
     "Setting GEOS compilation with assert() macro enabled - ${GEOS_ENABLE_ASSERT}")
 endif()
