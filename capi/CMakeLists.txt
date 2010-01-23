@@ -24,6 +24,9 @@ add_library(geos_c SHARED ${geos_c_SOURCES})
 
 target_link_libraries(geos_c geos)
 
+# TODO: Enable SOVERSION property
+set_target_properties(geos_c PROPERTIES VERSION ${CAPI_VERSION})
+
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/geos_c.h
   DESTINATION include/geos)
 
