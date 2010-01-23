@@ -50,9 +50,10 @@ message(STATUS "Setting GEOS C API version ${CAPI_VERSION}")
 option(GEOS_ENABLE_INLINE
   "Set to ON to enable GEOS compilation with small functions inlining" ON)
 
-option(GEOS_ENABLE_ASSERT
-  "Set to ON to build GEOS with assert() macro enabled" OFF) 
-
+if(NOT MSVC)
+  option(GEOS_ENABLE_ASSERT
+    "Set to ON to build GEOS with assert() macro enabled" OFF) 
+endif()
 #################################################################################
 # Setup C/C++ compiler options
 #################################################################################
@@ -107,12 +108,12 @@ endif()
 message(STATUS
   "Setting GEOS compilation with small functions inlining - ${GEOS_ENABLE_INLINE}")
 
-if(GEOS_ENABLE_ASSERT AND CMAKE_BUILD_TYPE MATCHES "Rel")
-  string(REPLACE "-DNDEBUG" "-UNDEBUG"
+if(NOT MSVC AND GEOS_ENABLE_ASSERT)
+  string(REGEX REPLACE "[-/]D.*NDEBUG" "-U NDEBUG"
     CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+  message(STATUS
+    "Setting GEOS compilation with assert() macro enabled - ${GEOS_ENABLE_ASSERT}")
 endif()
-message(STATUS
-  "Setting GEOS compilation with assert() macro enabled - ${GEOS_ENABLE_ASSERT}")
 
 #################################################################################
 # Setup C/C++ library features
