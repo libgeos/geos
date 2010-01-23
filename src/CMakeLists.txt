@@ -24,7 +24,7 @@ set_target_properties(geos-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 # TODO: Enable SOVERSION property
 set_target_properties(geos PROPERTIES VERSION ${VERSION})
 
-install(TARGETS geos
+install(TARGETS geos geos-static
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib)
