@@ -72,6 +72,9 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 
   # General options
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic -ansi")
+  
+  #add_definitions(_ISOC99_SOURCE)
+  set(CMAKE_REQUIRED_DEFINITIONS "${CMAKE_REQUIRED_DEFINITIONS} -D_ISOC99_SOURCE=1")
 
   # Warnings specification
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-long-long")
@@ -165,10 +168,12 @@ if(NOT HAVE_STD_ISNAN)
 endif()
 
 check_prototype_exists(isfinite cmath HAVE_STD_ISFINITE)
+
 if(NOT HAVE_STD_ISFINITE)
   if(MSVC)
     check_prototype_exists(_finite float.h HAVE_FINITE)
   else()
+    #CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
     check_symbol_exists(isfinite math.h HAVE_ISFINITE)
   endif()
 endif()
