@@ -13,7 +13,7 @@
  *
  **********************************************************************/
 
-
+#include <geos/platform.h>
 #include <geos/planargraph/algorithm/ConnectedSubgraphFinder.h>
 #include <geos/planargraph/Subgraph.h>
 #include <geos/planargraph/Edge.h>
@@ -21,6 +21,7 @@
 #include <geos/planargraph/DirectedEdge.h>
 #include <geos/planargraph/DirectedEdgeStar.h>
 
+#include <cmath>
 #include <vector>
 #include <stack>
 
