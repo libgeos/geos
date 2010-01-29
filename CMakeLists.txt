@@ -54,6 +54,7 @@ if(NOT MSVC)
   option(GEOS_ENABLE_ASSERT
     "Set to ON to build GEOS with assert() macro enabled" OFF) 
 endif()
+
 #################################################################################
 # Setup C/C++ compiler options
 #################################################################################
@@ -209,6 +210,10 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/capi/geos_c.h.in
 #################################################################################
 # Configure subdirectories
 #################################################################################
+
+if(GEOS_ENABLE_TESTS)
+  enable_testing()
+endif()
 
 add_subdirectory(include)
 add_subdirectory(src)

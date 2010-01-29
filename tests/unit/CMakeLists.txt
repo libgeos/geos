@@ -12,12 +12,23 @@
 #
 #################################################################################
 
-include_directories(${CMAKE_SOURCE_DIR}/capi)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/tut)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+set(STATUS_MESSAGE "Enable GEOS tests build and run")
+set(STATUS_RESULT "OFF")
 
-file(GLOB_RECURSE geos_unit_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+if(GEOS_ENABLE_TESTS)
+  include_directories(${CMAKE_SOURCE_DIR}/capi)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/tut)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+  
+  file(GLOB_RECURSE geos_unit_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+  
+  add_executable(geos_unit ${geos_unit_SOURCES})
+  target_link_libraries(geos_unit geos geos_c)
 
-add_executable(geos_unit ${geos_unit_SOURCES})
+  add_test(geos_unit ${CMAKE_CURRENT_BINARY_DIR}/geos_unit)
 
-target_link_libraries(geos_unit geos geos_c)
+  set(STATUS_RESULT "ON")
+endif()
+
+message(STATUS "${STATUS_MESSAGE} - ${STATUS_RESULT}")
+
