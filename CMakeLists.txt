@@ -86,18 +86,20 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 elseif(MSVC)
     
   # Set pedantic mode by default
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+  #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+  string(REGEX REPLACE "/W[0-9]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+  message(STATUS "Z: ${CMAKE_CXX_FLAGS}")
 
   if(MSVC80 OR MSVC90 OR MSVC10)
 
     # Option is to enable the /MP switch for Visual Studio 2005 or later
     option(GEOS_MSVC_ENABLE_MP
-      "Set to ON to build GEOS with the /MP option (Visual Studio 2005 and above)." OFF)
+      "Set to ON to build GEOS with the /MP option (Visual Studio 2005 and above)." ON)
     mark_as_advanced(GEOS_MSVC_ENABLE_MP)
     if(GEOS_MSVC_ENABLE_MP)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
     endif()
-    message(STATUS "Setting Visual Studio 2005+ option /MP to ${ENABLE_MSVC_MP}")
+    message(STATUS "Setting Visual Studio 2005+ option /MP to ${GEOS_MSVC_ENABLE_MP}")
     
     # Disable C4996: 'function': was declared deprecated
     add_definitions(-D_SCL_SECURE_NO_WARNINGS)
@@ -197,6 +199,12 @@ include_directories(${CMAKE_BINARY_DIR}/include)
 #################################################################################
 
 # TODO: output to CMAKE_CURRENT_BINARY_DIR instead of CMAKE_SOURCE_DIR
+
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h)
+  file(RENAME
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h.disabled)
+endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h.cmake 
   ${CMAKE_CURRENT_BINARY_DIR}/include/geos/platform.h)
