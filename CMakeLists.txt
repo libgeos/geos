@@ -47,12 +47,15 @@ message(STATUS "Setting GEOS C API version ${CAPI_VERSION}")
 # Check custom global options
 #################################################################################
 
+option(GEOS_ENABLE_TESTS
+  "Set to OFF|ON (default) to control build of GEOS tests package" ON)
+
 option(GEOS_ENABLE_INLINE
-  "Set to ON to enable GEOS compilation with small functions inlining" ON)
+  "Set to OFF|ON (default) to control GEOS compilation with small functions inlining" ON)
 
 if(NOT MSVC)
   option(GEOS_ENABLE_ASSERT
-    "Set to ON to build GEOS with assert() macro enabled" OFF) 
+    "Set to ON|OFF (default) to build GEOS with assert() macro enabled" OFF) 
 endif()
 
 #################################################################################
