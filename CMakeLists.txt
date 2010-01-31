@@ -58,6 +58,11 @@ if(NOT MSVC)
     "Set to ON|OFF (default) to build GEOS with assert() macro enabled" OFF) 
 endif()
 
+if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
+  option(GEOS_ENABLE_FLOATSTORE
+    "Set to OFF|ON (default) to control IEEE754 conformance and remove extra precision" ON)
+endif()
+
 #################################################################################
 # Setup C/C++ compiler options
 #################################################################################
@@ -76,15 +81,23 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 
   # General options
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic -ansi")
-  
-  #add_definitions(_ISOC99_SOURCE)
-  set(CMAKE_REQUIRED_DEFINITIONS "${CMAKE_REQUIRED_DEFINITIONS} -D_ISOC99_SOURCE=1")
+
+  # Numerical stability
+  if(GEOS_ENABLE_FLOATSTORE)
+    # Remove extra precision by forcing conformance to IEEE 754 rather than IEEE 854
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffloat-store")
+  endif()
+  message(STATUS
+    "Forcing IEEE 754 using flag -ffloat-store - ${GEOS_ENABLE_FLOATSTORE}")
 
   # Warnings specification
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-long-long")
 
   # Turn on Position Independent Code generation for GEOS C shared library
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+
+  # Enable glibc ISO C99 features (macros isfinite, isnan)
+  set(CMAKE_REQUIRED_DEFINITIONS "${CMAKE_REQUIRED_DEFINITIONS} -D_ISOC99_SOURCE=1")
 
 elseif(MSVC)
     
