@@ -219,6 +219,21 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/capi/geos_c.h.in
   ${CMAKE_CURRENT_BINARY_DIR}/capi/geos_c.h @ONLY)
 
 #################################################################################
+# Configure tests
+#################################################################################
+
+if(GEOS_ENABLE_TESTS)
+
+ # Include CTest support
+ include(CTest)
+ enable_testing()
+
+  # Define "make check" as alias for "make test"
+  add_custom_target(check COMMAND ctest)
+
+endif()
+
+#################################################################################
 # Configure subdirectories
 #################################################################################
 
@@ -227,20 +242,6 @@ add_subdirectory(src)
 add_subdirectory(capi)
 add_subdirectory(tests)
 add_subdirectory(tools)
-
-#################################################################################
-# Configure tests
-#################################################################################
-
-if(GEOS_ENABLE_TESTS)
-
- # Include CTest support
-  enable_testing()
-
-  # Define "make check" as alias for "make test"
-  add_custom_target(check COMMAND ctest)
-
-endif()
 
 #################################################################################
 # Setup installation of common files not specific to any target
