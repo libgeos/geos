@@ -12,7 +12,7 @@
 #
 #################################################################################
 
-set(STATUS_MESSAGE "Enable GEOS tests build and run")
+set(STATUS_MESSAGE "Enable GEOS Unit Tests build")
 set(STATUS_RESULT "OFF")
 
 if(GEOS_ENABLE_TESTS)
@@ -31,4 +31,3 @@ if(GEOS_ENABLE_TESTS)
 endif()
 
 message(STATUS "${STATUS_MESSAGE} - ${STATUS_RESULT}")
-

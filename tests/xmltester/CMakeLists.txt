@@ -12,22 +12,36 @@
 #
 #################################################################################
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/tinyxml)
+set(STATUS_MESSAGE "Enable GEOS XML Tester build")
+set(STATUS_RESULT "OFF")
 
-set(simplewkttester_SOURCES SimpleWKTTester.cpp)
+if(GEOS_ENABLE_TESTS)
 
-set(xmltester_SOURCES
-  XMLTester.cpp
-  tinyxml/tinyxml.cpp
-  tinyxml/tinystr.cpp
-  tinyxml/tinyxmlerror.cpp
-  tinyxml/tinyxmlparser.cpp
-  BufferResultMatcher.cpp
-  SingleSidedBufferResultMatcher.cpp)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/tinyxml)
 
-add_executable(simplewkttester ${simplewkttester_SOURCES})
-target_link_libraries(simplewkttester geos)
+  set(simplewkttester_SOURCES SimpleWKTTester.cpp)
 
-add_executable(xmltester ${xmltester_SOURCES})
-target_link_libraries(xmltester geos)
+  set(xmltester_SOURCES
+    XMLTester.cpp
+    tinyxml/tinyxml.cpp
+    tinyxml/tinystr.cpp
+    tinyxml/tinyxmlerror.cpp
+    tinyxml/tinyxmlparser.cpp
+    BufferResultMatcher.cpp
+    SingleSidedBufferResultMatcher.cpp)
+
+  add_executable(simplewkttester ${simplewkttester_SOURCES})
+  target_link_libraries(simplewkttester geos)
+
+  add_executable(xmltester ${xmltester_SOURCES})
+  target_link_libraries(xmltester geos)
+
+  add_test(xmltester 
+    ${CMAKE_CURRENT_BINARY_DIR}/xmltester
+    ${CMAKE_CURRENT_SOURCE_DIR}/tests/TestBigNastyBuffer.xml)
+
+  set(STATUS_RESULT "ON")
+endif()
+
+message(STATUS "${STATUS_MESSAGE} - ${STATUS_RESULT}")
