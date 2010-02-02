@@ -217,9 +217,13 @@ include_directories(${CMAKE_BINARY_DIR}/include)
 # TODO: output to CMAKE_CURRENT_BINARY_DIR instead of CMAKE_SOURCE_DIR
 
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h)
-  file(RENAME
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h.disabled)
+  if (${CMAKE_VERSION} VERSION_LESS "2.8.0")
+    file(REMOVE ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h)
+  else()
+    file(RENAME
+      ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h.disabled)
+  endif()
 endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h.cmake 
