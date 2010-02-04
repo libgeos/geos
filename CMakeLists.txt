@@ -211,7 +211,7 @@ include_directories(${CMAKE_BINARY_DIR}/capi)
 include_directories(${CMAKE_BINARY_DIR}/include)
 
 #################################################################################
-# Setup checks and generate config headers and geos-config tool
+# Setup checks and generate config headers
 #################################################################################
 
 # TODO: output to CMAKE_CURRENT_BINARY_DIR instead of CMAKE_SOURCE_DIR

@@ -17,12 +17,14 @@ if(UNIX)
   # Autoconf compatibility variables to use the same script source.
   set(prefix ${CMAKE_INSTALL_PREFIX})
   set(exec_prefix ${CMAKE_INSTALL_PREFIX}/bin)
+  set(libdir ${CMAKE_INSTALL_PREFIX}/lib)
 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/geos-config.in
     ${CMAKE_CURRENT_BINARY_DIR}/geos-config @ONLY)
 
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/geos-config
     DESTINATION bin/
-    PERMISSIONS OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+    PERMISSIONS
+    OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 endif()
