@@ -14,6 +14,10 @@
 project(geos)
 cmake_minimum_required(VERSION 2.6)
 
+if(NOT CMAKE_VERSION)
+    set(CMAKE_VERSION "${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}")
+endif()
+
 # Location of custom CMake modules with macros used by GEOS
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
@@ -217,13 +221,19 @@ include_directories(${CMAKE_BINARY_DIR}/include)
 # TODO: output to CMAKE_CURRENT_BINARY_DIR instead of CMAKE_SOURCE_DIR
 
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h)
-  if (${CMAKE_VERSION} VERSION_LESS "2.8.0")
+  message(STATUS "Disabling existing ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h")
+
+  if(${CMAKE_MAJOR_VERSION} EQUAL 2 AND ${CMAKE_MINOR_VERSION} EQUAL 6)
     file(REMOVE ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h)
+    set(PH_RESULT "removed")
   else()
     file(RENAME
       ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h
       ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h.disabled)
+      set(PH_RESULT "renamed")
   endif()
+
+  message(STATUS "Disabling existing ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h - ${PH_RESULT}")
 endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h.cmake 
@@ -266,6 +276,9 @@ add_subdirectory(tools)
 
 #################################################################################
 # DEBUG settings - TODO: make a summary
+
+message(STATUS "CMake ${CMAKE_VERSION} successfully configured ${PROJECT_NAME} using ${CMAKE_GENERATOR} generator")
+
 #message(STATUS "XXX: CMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}")
 #message(STATUS "XXX: CMAKE_CXX_FLAGS_DEBUG=${CMAKE_CXX_FLAGS_DEBUG}")
 #message(STATUS "XXX: CMAKE_CXX_FLAGS_RELEASE=${CMAKE_CXX_FLAGS_RELEASE}")
