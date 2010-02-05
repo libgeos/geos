@@ -1,3 +1,8 @@
+Changes in 3.3.0 
+
+- New things:
+  - CAPI: GEOSisValidDetail: tell state, reason & location apart
+
 Changes in 3.2.0 
 
 - Add Single-sided buffer operation

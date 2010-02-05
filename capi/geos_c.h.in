@@ -684,6 +684,8 @@ extern void GEOS_DLL GEOSSTRtree_destroy_r(GEOSContextHandle_t handle,
 extern char GEOS_DLL GEOSisEmpty(const GEOSGeometry* g1);
 extern char GEOS_DLL GEOSisValid(const GEOSGeometry* g1);
 extern char GEOS_DLL *GEOSisValidReason(const GEOSGeometry *g1);
+extern char GEOS_DLL GEOSisValidDetail(const GEOSGeometry* g, char** reason,
+                                         const GEOSGeometry** location);
 extern char GEOS_DLL GEOSisSimple(const GEOSGeometry* g1);
 extern char GEOS_DLL GEOSisRing(const GEOSGeometry* g1);
 extern char GEOS_DLL GEOSHasZ(const GEOSGeometry* g1);
@@ -694,6 +696,9 @@ extern char GEOS_DLL GEOSisValid_r(GEOSContextHandle_t handle,
                                    const GEOSGeometry* g1);
 extern char GEOS_DLL *GEOSisValidReason_r(GEOSContextHandle_t handle,
                                          const GEOSGeometry* g1);
+extern char GEOS_DLL GEOSisValidDetail_r(GEOSContextHandle_t handle,
+                                         const GEOSGeometry* g, char** reason,
+                                         const GEOSGeometry** location);
 extern char GEOS_DLL GEOSisSimple_r(GEOSContextHandle_t handle,
                                     const GEOSGeometry* g1);
 extern char GEOS_DLL GEOSisRing_r(GEOSContextHandle_t handle,

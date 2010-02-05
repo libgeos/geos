@@ -193,6 +193,13 @@ GEOSisValidReason(const Geometry *g1)
     return GEOSisValidReason_r( handle, g1 );
 }
 
+char
+GEOSisValidDetail(const Geometry *g,
+	char** reason, const Geometry ** location)
+{
+    return GEOSisValidDetail_r( handle, g, reason, location );
+}
+
 //-----------------------------------------------------------------
 // general purpose
 //-----------------------------------------------------------------

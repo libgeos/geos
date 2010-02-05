@@ -629,6 +629,61 @@ GEOSisValidReason_r(GEOSContextHandle_t extHandle, const Geometry *g1)
     return 0;
 }
 
+char
+GEOSisValidDetail_r(GEOSContextHandle_t extHandle, const Geometry *g,
+	char** reason, const Geometry ** location)
+{
+    if ( 0 == extHandle )
+    {
+        return 0;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return 0;
+    }
+
+    try
+    {
+        using geos::operation::valid::IsValidOp;
+        using geos::operation::valid::TopologyValidationError;
+
+        IsValidOp ivo(g);
+        bool isvalid = ivo.isValid();
+        if ( ! isvalid )
+        {
+            TopologyValidationError *err = ivo.getValidationError();
+            if (0 != err)
+            {
+                *location = handle->geomFactory->createPoint(err->getCoordinate());
+                std::string errmsg(err->getMessage());
+                *reason = gstrdup(errmsg);
+            }
+            else {
+                /* is it ever possible for getValidationError to be 0 ? */
+            }
+            return 0; /* invalid */
+        }
+
+        *location = 0;
+        *reason = 0;
+        return 1; /* valid */
+
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return 2; /* exception */
+}
+
 //-----------------------------------------------------------------
 // general purpose
 //-----------------------------------------------------------------
