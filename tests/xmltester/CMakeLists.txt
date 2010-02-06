@@ -37,9 +37,68 @@ if(GEOS_ENABLE_TESTS)
   add_executable(xmltester ${xmltester_SOURCES})
   target_link_libraries(xmltester geos)
 
-  add_test(xmltester 
-    ${CMAKE_CURRENT_BINARY_DIR}/xmltester
-    ${CMAKE_CURRENT_SOURCE_DIR}/tests/TestBigNastyBuffer.xml)
+  set(XMLTESTS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tests)
+  set(SAVE_XMLTESTS
+    ${XMLTESTS_DIR}/testLeaksBig.xml
+    ${XMLTESTS_DIR}/split.xml
+    ${XMLTESTS_DIR}/hexwkb.xml
+    ${XMLTESTS_DIR}/test.xml
+    ${XMLTESTS_DIR}/linemerge.xml
+    ${XMLTESTS_DIR}/TestIsValid.xml
+    ${XMLTESTS_DIR}/robustness.xml
+    ${XMLTESTS_DIR}/buffer.xml
+    ${XMLTESTS_DIR}/test.xml
+    ${XMLTESTS_DIR}/singlesidedbuffer.xml
+    ${XMLTESTS_DIR}/bug176.xml
+    ${XMLTESTS_DIR}/bug188.xml
+    ${XMLTESTS_DIR}/bug244.xml
+    ${XMLTESTS_DIR}/bug275.xml
+    ${XMLTESTS_DIR}/general/TestBoundary.xml
+    ${XMLTESTS_DIR}/general/TestBuffer.xml
+    ${XMLTESTS_DIR}/general/TestBufferMitredJoin.xml
+    ${XMLTESTS_DIR}/general/TestCentroid.xml
+    ${XMLTESTS_DIR}/general/TestConvexHull.xml
+    ${XMLTESTS_DIR}/general/TestConvexHull-big.xml
+    ${XMLTESTS_DIR}/general/TestFunctionAAPrec.xml
+    ${XMLTESTS_DIR}/general/TestFunctionAA.xml
+    ${XMLTESTS_DIR}/general/TestFunctionLAPrec.xml
+    ${XMLTESTS_DIR}/general/TestFunctionLA.xml
+    ${XMLTESTS_DIR}/general/TestFunctionLLPrec.xml
+    ${XMLTESTS_DIR}/general/TestFunctionLL.xml
+    ${XMLTESTS_DIR}/general/TestFunctionPA.xml
+    ${XMLTESTS_DIR}/general/TestFunctionPLPrec.xml
+    ${XMLTESTS_DIR}/general/TestFunctionPL.xml
+    ${XMLTESTS_DIR}/general/TestFunctionPP.xml
+    ${XMLTESTS_DIR}/general/TestInteriorPoint.xml
+    ${XMLTESTS_DIR}/general/TestRectanglePredicate.xml
+    ${XMLTESTS_DIR}/general/TestRelateAA.xml
+    ${XMLTESTS_DIR}/general/TestRelateLA.xml
+    ${XMLTESTS_DIR}/general/TestRelateLL.xml
+    ${XMLTESTS_DIR}/general/TestRelatePL.xml
+    ${XMLTESTS_DIR}/general/TestRelateAC.xml
+    ${XMLTESTS_DIR}/general/TestRelateLC.xml
+    ${XMLTESTS_DIR}/general/TestRelatePA.xml
+    ${XMLTESTS_DIR}/general/TestRelatePP.xml
+    ${XMLTESTS_DIR}/general/TestSimple.xml
+    ${XMLTESTS_DIR}/general/TestValid.xml
+    ${XMLTESTS_DIR}/general/TestValid2.xml
+    ${XMLTESTS_DIR}/general/TestValid2-big.xml
+    ${XMLTESTS_DIR}/general/TestWithinDistance.xml
+    ${XMLTESTS_DIR}/stmlf/stmlf-cases-20061020.xml
+    ${XMLTESTS_DIR}/stmlf/stmlf-cases-20070119.xml
+    ${XMLTESTS_DIR}/robust/TestRobustOverlayFixed.xml
+    ${XMLTESTS_DIR}/robust/TestRobustRelate.xml
+    ${XMLTESTS_DIR}/fme.xml
+    ${XMLTESTS_DIR}/TestBufferExternal.xml
+    ${XMLTESTS_DIR}/TestBufferExternal2.xml
+    ${XMLTESTS_DIR}/heisenbugs.xml
+    ${XMLTESTS_DIR}/badguy3.xml
+    ${XMLTESTS_DIR}/hole_from_shell.xml
+    ${XMLTESTS_DIR}/hole_red.xml
+    ${XMLTESTS_DIR}/safe/16595.xml
+    ${XMLTESTS_DIR}/safe/16596.xml)
+
+  add_test(xmltester ${CMAKE_CURRENT_BINARY_DIR}/xmltester ${SAVE_XMLTESTS})
 
   set(STATUS_RESULT "ON")
 endif()
