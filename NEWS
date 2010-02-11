@@ -2,6 +2,8 @@ Changes in 3.3.0
 
 - New things:
   - CAPI: GEOSisValidDetail: tell state, reason & location apart
+  - CAPI: GEOSContext_setNoticeHandler, GEOSContext_setErrorHandler
+  - CAPI: GEOSGeom_createEmptyPolygon_r
 
 Changes in 3.2.0 
 

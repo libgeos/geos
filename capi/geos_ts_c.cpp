@@ -188,6 +188,40 @@ initGEOS_r(GEOSMessageHandler nf, GEOSMessageHandler ef)
     return static_cast<GEOSContextHandle_t>(extHandle);
 }
 
+GEOSMessageHandler
+GEOSContext_setNoticeHandler(GEOSContextHandle_t extHandle, GEOSMessageHandler nf)
+{
+    GEOSMessageHandler f;
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return NULL;
+    }
+
+    f = handle->NOTICE_MESSAGE;
+    handle->NOTICE_MESSAGE = nf;
+
+    return f;
+}
+
+GEOSMessageHandler
+GEOSContext_setErrorHandler(GEOSContextHandle_t extHandle, GEOSMessageHandler nf)
+{
+    GEOSMessageHandler f;
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return NULL;
+    }
+
+    f = handle->ERROR_MESSAGE;
+    handle->ERROR_MESSAGE = nf;
+
+    return f;
+}
+
 void
 finishGEOS_r(GEOSContextHandle_t extHandle)
 {
@@ -3008,6 +3042,38 @@ GEOSGeom_createLineString_r(GEOSContextHandle_t extHandle, CoordinateSequence *c
         const GeometryFactory *gf = handle->geomFactory;
 
         return gf->createLineString(cs);
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+    
+    return NULL;
+}
+
+Geometry *
+GEOSGeom_createEmptyPolygon_r(GEOSContextHandle_t extHandle)
+{
+    if ( 0 == extHandle )
+    {
+        return NULL;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return NULL;
+    }
+
+    try
+    {
+        const GeometryFactory *gf = handle->geomFactory;
+        return gf->createPolygon();
     }
     catch (const std::exception &e)
     {

@@ -153,6 +153,11 @@ extern GEOSContextHandle_t GEOS_DLL initGEOS_r(
                                     GEOSMessageHandler error_function);
 extern void GEOS_DLL finishGEOS_r(GEOSContextHandle_t handle);
 
+extern GEOSMessageHandler GEOS_DLL GEOSContext_setNoticeHandler(GEOSContextHandle_t extHandle,
+                                                                GEOSMessageHandler nf);
+extern GEOSMessageHandler GEOS_DLL GEOSContext_setErrorHandler(GEOSContextHandle_t extHandle,
+                                                               GEOSMessageHandler nf);
+
 extern const char GEOS_DLL *GEOSversion();
 
 
@@ -430,6 +435,8 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createPolygon(GEOSGeometry* shell,
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createCollection(int type,
 	GEOSGeometry* *geoms, unsigned int ngeoms);
 
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyPolygon_r(
+                                       GEOSContextHandle_t handle);
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createPolygon_r(
                                        GEOSContextHandle_t handle,
                                        GEOSGeometry* shell,
