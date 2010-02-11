@@ -4,6 +4,7 @@
  *
  * C-Wrapper for GEOS library
  *
+ * Copyright (C) 2010 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -418,12 +419,16 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createLineString(GEOSCoordSequence* s);
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createPoint_r(
                                        GEOSContextHandle_t handle,
                                        GEOSCoordSequence* s);
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyPoint_r(
+                                       GEOSContextHandle_t handle);
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createLinearRing_r(
                                        GEOSContextHandle_t handle,
                                        GEOSCoordSequence* s);
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createLineString_r(
                                        GEOSContextHandle_t handle,
                                        GEOSCoordSequence* s);
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyLineString_r(
+                                       GEOSContextHandle_t handle);
 
 /*
  * Second argument is an array of GEOSGeometry* objects.
@@ -446,6 +451,8 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createCollection_r(
                                        GEOSContextHandle_t handle, int type,
                                        GEOSGeometry* *geoms,
                                        unsigned int ngeoms);
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCollection_r(
+                                       GEOSContextHandle_t handle, int type);
 
 extern GEOSGeometry GEOS_DLL *GEOSGeom_clone(const GEOSGeometry* g);
 

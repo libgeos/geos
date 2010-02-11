@@ -4,6 +4,7 @@
  *
  * C-Wrapper for GEOS library
  *
+ * Copyright (C) 2010 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -2207,6 +2208,67 @@ GEOSGetCentroid_r(GEOSContextHandle_t extHandle, const Geometry *g)
 }
 
 Geometry *
+GEOSGeom_createEmptyCollection_r(GEOSContextHandle_t extHandle, int type)
+{
+    if ( 0 == extHandle )
+    {
+        return NULL;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return NULL;
+    }
+
+#ifdef GEOS_DEBUG
+    char buf[256];
+    sprintf(buf, "createCollection: requested type %d, ngeoms: %d",
+            type, ngeoms);
+    handle->NOTICE_MESSAGE("%s", buf);// TODO: Can handle->NOTICE_MESSAGE format that directly? 
+#endif
+
+    try
+    {
+        const GeometryFactory* gf = handle->geomFactory;
+
+        Geometry *g = 0;
+        switch (type)
+        {
+            case GEOS_GEOMETRYCOLLECTION:
+                g = gf->createGeometryCollection();
+                break;
+            case GEOS_MULTIPOINT:
+                g = gf->createMultiPoint();
+                break;
+            case GEOS_MULTILINESTRING:
+                g = gf->createMultiLineString();
+                break;
+            case GEOS_MULTIPOLYGON:
+                g = gf->createMultiPolygon();
+                break;
+            default:
+                handle->ERROR_MESSAGE("Unsupported type request for GEOSGeom_createEmptyCollection_r");
+                g = 0;
+                
+        }
+        
+        return g;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return 0;
+}
+
+Geometry *
 GEOSGeom_createCollection_r(GEOSContextHandle_t extHandle, int type, Geometry **geoms, unsigned int ngeoms)
 {
     if ( 0 == extHandle )
@@ -2958,6 +3020,38 @@ GEOSGeom_getCoordSeq_r(GEOSContextHandle_t extHandle, const Geometry *g)
 }
 
 Geometry *
+GEOSGeom_createEmptyPoint_r(GEOSContextHandle_t extHandle)
+{
+    if ( 0 == extHandle )
+    {
+        return NULL;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return NULL;
+    }
+
+    try
+    {
+        const GeometryFactory *gf = handle->geomFactory;
+        return gf->createPoint();
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+    
+    return NULL;
+}
+
+Geometry *
 GEOSGeom_createPoint_r(GEOSContextHandle_t extHandle, CoordinateSequence *cs)
 {
     if ( 0 == extHandle )
@@ -3009,6 +3103,39 @@ GEOSGeom_createLinearRing_r(GEOSContextHandle_t extHandle, CoordinateSequence *c
         const GeometryFactory *gf = handle->geomFactory;
 
         return gf->createLinearRing(cs);
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+    
+    return NULL;
+}
+
+Geometry *
+GEOSGeom_createEmptyLineString_r(GEOSContextHandle_t extHandle)
+{
+    if ( 0 == extHandle )
+    {
+        return NULL;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return NULL;
+    }
+
+    try
+    { 
+        const GeometryFactory *gf = handle->geomFactory;
+
+        return gf->createLineString();
     }
     catch (const std::exception &e)
     {
