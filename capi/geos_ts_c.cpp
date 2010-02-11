@@ -189,7 +189,7 @@ initGEOS_r(GEOSMessageHandler nf, GEOSMessageHandler ef)
 }
 
 GEOSMessageHandler
-GEOSContext_setNoticeHandler(GEOSContextHandle_t extHandle, GEOSMessageHandler nf)
+GEOSContext_setNoticeHandler_r(GEOSContextHandle_t extHandle, GEOSMessageHandler nf)
 {
     GEOSMessageHandler f;
     GEOSContextHandleInternal_t *handle = 0;
@@ -206,7 +206,7 @@ GEOSContext_setNoticeHandler(GEOSContextHandle_t extHandle, GEOSMessageHandler n
 }
 
 GEOSMessageHandler
-GEOSContext_setErrorHandler(GEOSContextHandle_t extHandle, GEOSMessageHandler nf)
+GEOSContext_setErrorHandler_r(GEOSContextHandle_t extHandle, GEOSMessageHandler nf)
 {
     GEOSMessageHandler f;
     GEOSContextHandleInternal_t *handle = 0;
