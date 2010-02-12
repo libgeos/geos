@@ -28,7 +28,7 @@ target_link_libraries(geos_c geos)
 set_target_properties(geos_c PROPERTIES VERSION ${CAPI_VERSION})
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/geos_c.h
-  DESTINATION include/geos)
+  DESTINATION include)
 
 install(TARGETS geos_c
   RUNTIME DESTINATION bin
