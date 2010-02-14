@@ -33,6 +33,7 @@ Changes in 3.1.0
 - Easier builds under MSVC and OpenSolaris
 - Thread-safe CAPI option
 - IsValidReason added to CAPI
+- GEOSPolygonizer_getCutEdges added to CAPI
 - CascadedUnion operation for fast unions of geometry sets
 - Numerous bug fixes.
   http://trac.osgeo.org/geos/query?status=closed&milestone=3.1.0&order=priority
