@@ -18,7 +18,9 @@
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateFilter.h>
+#include <geos/util/IllegalArgumentException.h>
 
+#include <sstream>
 #include <cassert>
 #include <algorithm>
 #include <vector>
@@ -215,8 +217,12 @@ CoordinateArraySequence::setOrdinate(size_t index, size_t ordinateIndex,
 			(*vect)[index].z = value;
 			break;
 		default:
-			assert(0);
+		{
+			std::stringstream ss;
+			ss << "Unknown ordinate index " << index;
+			throw util::IllegalArgumentException(ss.str());
 			break;
+		}
 	}
 }
 
