@@ -19,7 +19,7 @@ if(NOT CMAKE_VERSION)
 endif()
 
 # Location of custom CMake modules with macros used by GEOS
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
+set(CMAKE_MODULE_PATH "${geos_SOURCE_DIR}/cmake/modules")
 
 #################################################################################
 # Setup GEOS version
