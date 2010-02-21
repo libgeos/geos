@@ -206,13 +206,13 @@ endif()
 #################################################################################
 
 # for including GEOS C++ API headers
-include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(${geos_SOURCE_DIR}/include)
 
 # for including build-specific GEOS C API headers
-include_directories(${CMAKE_BINARY_DIR}/capi)
+include_directories(${geos_BINARY_DIR}/capi)
 
 # for including build-specific version.h, platform.h and geos_c.h
-include_directories(${CMAKE_BINARY_DIR}/include)
+include_directories(${geos_BINARY_DIR}/include)
 
 #################################################################################
 # Setup checks and generate config headers
