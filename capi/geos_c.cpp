@@ -930,5 +930,11 @@ GEOSInterpolateNormalized (const geos::geom::Geometry *g,
     return GEOSInterpolateNormalized_r(handle, g, d);
 }
 
+geos::geom::Geometry *
+GEOSGeom_extractUniquePoints (const geos::geom::Geometry *g)
+{
+    return GEOSGeom_extractUniquePoints_r(handle, g);
+}
+
 
 } /* extern "C" */
