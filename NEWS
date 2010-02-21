@@ -5,6 +5,7 @@ Changes in 3.3.0
   - CAPI: GEOSContext_setNoticeHandler_r, GEOSContext_setErrorHandler_r
   - CAPI: GEOSGeom_createEmptyPoint_r, GEOSGeom_createEmptyLineString_r
           GEOSGeom_createEmptyPolygon_r, GEOSGeom_createEmptyCollection_r
+  - CAPI: GEOSGeom_extractUniquePoints_r
 
 Changes in 3.2.0 
 

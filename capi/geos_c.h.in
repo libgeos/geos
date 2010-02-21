@@ -546,6 +546,11 @@ extern GEOSGeometry GEOS_DLL *GEOSTopologyPreserveSimplify_r(
                               GEOSContextHandle_t handle,
                               const GEOSGeometry* g1, double tolerance);
 
+/* Return all distinct vertices of input geometry as a MULTIPOINT */
+extern GEOSGeometry GEOS_DLL *GEOSGeom_extractUniquePoints_r(
+                              GEOSContextHandle_t handle,
+                              const GEOSGeometry* g);
+
 /************************************************************************
  *
  *  Binary predicates - return 2 on exception, 1 on true, 0 on false

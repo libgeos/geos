@@ -54,6 +54,7 @@
 #include <geos/linearref/LengthIndexedLine.h>
 #include <geos/geom/BinaryOp.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/util/UniqueCoordinateArrayFilter.h>
 #include <geos/util/Machine.h>
 #include <geos/version.h> 
 
@@ -4670,6 +4671,55 @@ GEOSInterpolateNormalized_r(GEOSContextHandle_t extHandle, const Geometry *g,
     double length;
     GEOSLength_r(extHandle, g, &length);
     return GEOSInterpolate_r(extHandle, g, d * length);
+}
+
+GEOSGeometry*
+GEOSGeom_extractUniquePoints_r(GEOSContextHandle_t extHandle,
+                              const GEOSGeometry* g)
+{
+    if ( 0 == extHandle ) return 0;
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( handle->initialized == 0 ) return 0;
+
+    using namespace geos::geom;
+    using namespace geos::util;
+    using namespace std;
+
+    try
+    {
+
+    /* 1: extract points */
+    vector<const Coordinate*> coords;
+    UniqueCoordinateArrayFilter filter(coords);
+    g->apply_ro(&filter);
+
+    /* 2: for each point, create a geometry and put into a vector */
+    vector<Geometry*>* points = new vector<Geometry*>();
+    points->reserve(coords.size());
+    const GeometryFactory* factory = g->getFactory();
+    for (vector<const Coordinate*>::iterator it=coords.begin(),
+                                             itE=coords.end();
+                                             it != itE; ++it)
+    {
+        Geometry* point = factory->createPoint(*(*it));
+        points->push_back(point);
+    }
+
+    /* 3: create a multipoint */
+    return factory->createMultiPoint(points);
+
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+        return 0;
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+        return 0;
+    }
 }
 
 
