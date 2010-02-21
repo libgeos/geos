@@ -6,6 +6,7 @@ Changes in 3.3.0
   - CAPI: GEOSGeom_createEmptyPoint_r, GEOSGeom_createEmptyLineString_r
           GEOSGeom_createEmptyPolygon_r, GEOSGeom_createEmptyCollection_r
   - CAPI: GEOSGeom_extractUniquePoints_r
+  - CAPI: GEOSGetGeometryN support for single geometries
 
 Changes in 3.2.0 
 

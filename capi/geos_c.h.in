@@ -770,9 +770,12 @@ extern int GEOS_DLL GEOSGetNumGeometries_r(GEOSContextHandle_t handle,
                                            const GEOSGeometry* g);
 
 /*
- * Return NULL on exception, Geometry must be a Collection.
+ * Return NULL on exception.
  * Returned object is a pointer to internal storage:
  * it must NOT be destroyed directly.
+ * Up to GEOS 3.2.0 the input geometry must be a Collection, in
+ * later version it doesn't matter (getGeometryN(0) for a single will
+ * return the input).
  */
 extern const GEOSGeometry GEOS_DLL *GEOSGetGeometryN(const GEOSGeometry* g, int n);
 

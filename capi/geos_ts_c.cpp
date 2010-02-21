@@ -2067,14 +2067,7 @@ GEOSGetGeometryN_r(GEOSContextHandle_t extHandle, const Geometry *g1, int n)
 
     try
     {
-        using geos::geom::GeometryCollection;
-        const GeometryCollection *gc = dynamic_cast<const GeometryCollection *>(g1);
-        if ( ! gc )
-        {
-            handle->ERROR_MESSAGE("Argument is not a GeometryCollection");
-            return NULL;
-        }
-        return gc->getGeometryN(n);
+        return g1->getGeometryN(n);
     }
     catch (const std::exception &e)
     {
