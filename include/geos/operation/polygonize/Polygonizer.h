@@ -113,7 +113,7 @@ protected:
 	PolygonizeGraph *graph;
 
 	// initialize with empty collections, in case nothing is computed
-	std::vector<const geom::LineString*> *dangles;
+	std::vector<const geom::LineString*> dangles;
 	std::vector<const geom::LineString*> cutEdges;
 	std::vector<geom::LineString*> *invalidRingLines;
 
@@ -183,24 +183,19 @@ public:
 	/** \brief
 	 * Get the list of dangling lines found during polygonization.
 	 *
-	 * @return a collection of the input LineStrings which are dangles.
-	 *         ownership of vector is retained by this object while
-	 *	   elements will be pointers to inside the input.
+	 * @return a (possibly empty) collection of pointers to
+	 *         the input LineStrings which are dangles.
 	 *
-	 * TODO: return by const vector reference instead !
 	 */
-	std::vector<const geom::LineString*>* getDangles();
+	const std::vector<const geom::LineString*>& getDangles();
 
 
 	/** \brief
 	 * Get the list of cut edges found during polygonization.
 	 *
-	 * @return a (possibly empty) reference to collection of the input
-	 *         LineStrings which are cut edges. Ownership of vector
-	 *	   retained by this object while elements will be pointers
-	 *         to inside the input.
+	 * @return a (possibly empty) collection of pointers to
+	 *         the input LineStrings which are cut edges.
 	 *
-	 * TODO: return by const vector reference instead !
 	 */
 	const std::vector<const geom::LineString*>& getCutEdges();
 

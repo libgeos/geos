@@ -62,7 +62,7 @@ Polygonizer::LineStringAdder::filter_ro(const Geometry *g)
 Polygonizer::Polygonizer():
 	lineStringAdder(new Polygonizer::LineStringAdder(this)),
 	graph(NULL),
-	dangles(NULL),
+	dangles(),
 	cutEdges(),
 	invalidRingLines(NULL),
 	holeList(NULL),
@@ -74,7 +74,6 @@ Polygonizer::Polygonizer():
 Polygonizer::~Polygonizer()
 {
 	delete lineStringAdder;
-	delete dangles;
 	delete graph;
 
 	delete holeList;
@@ -184,21 +183,15 @@ Polygonizer::getPolygons()
 	return ret;
 }
 
-/*
- * Get the list of dangling lines found during polygonization.
- * @return a collection of dangles LineStrings from input.
- */
-vector<const LineString*>*
+/* public */
+const vector<const LineString*>&
 Polygonizer::getDangles()
 {
 	polygonize();
 	return dangles;
 }
 
-/*
- * Get the list of cut edges found during polygonization.
- * @return a collection of the input {@LineStrings} which are cut edges
- */
+/* public */
 const vector<const LineString*>&
 Polygonizer::getCutEdges()
 {
@@ -219,9 +212,7 @@ Polygonizer::getInvalidRingLines()
 	return ret;
 }
 
-/*
- * Perform the polygonization, if it has not already been carried out.
- */
+/* public */
 void
 Polygonizer::polygonize()
 {
@@ -233,9 +224,7 @@ Polygonizer::polygonize()
 	// if no geometries were supplied it's possible graph could be null
 	if (graph==NULL) return; 
 
-	// TODO: drop this heap allocation
-	dangles = new std::vector<const LineString*>();
-	graph->deleteDangles(*dangles);
+	graph->deleteDangles(dangles);
 
 	graph->deleteCutEdges(cutEdges);
 
