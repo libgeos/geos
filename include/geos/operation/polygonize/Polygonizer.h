@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2010 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -81,7 +82,7 @@ private:
 	};
 
 	// default factory
-	LineStringAdder *lineStringAdder;
+	LineStringAdder lineStringAdder;
 
 	/**
 	 * Add a linestring to the graph of polygon edges.

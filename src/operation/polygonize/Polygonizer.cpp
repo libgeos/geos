@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2010 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -60,7 +61,7 @@ Polygonizer::LineStringAdder::filter_ro(const Geometry *g)
  * as the input Geometry
  */
 Polygonizer::Polygonizer():
-	lineStringAdder(new Polygonizer::LineStringAdder(this)),
+	lineStringAdder(this), 
 	graph(NULL),
 	dangles(),
 	cutEdges(),
@@ -73,7 +74,6 @@ Polygonizer::Polygonizer():
 
 Polygonizer::~Polygonizer()
 {
-	delete lineStringAdder;
 	delete graph;
 
 	for (unsigned int i=0, n=invalidRingLines.size(); i<n; ++i)
@@ -134,7 +134,7 @@ Polygonizer::add(vector<const Geometry*> *geomList)
 void
 Polygonizer::add(Geometry *g)
 {
-	g->apply_ro(lineStringAdder);
+	g->apply_ro(&lineStringAdder);
 }
 
 /*
@@ -148,7 +148,7 @@ Polygonizer::add(Geometry *g)
 void
 Polygonizer::add(const Geometry *g)
 {
-	g->apply_ro(lineStringAdder);
+	g->apply_ro(&lineStringAdder);
 }
 
 /*
