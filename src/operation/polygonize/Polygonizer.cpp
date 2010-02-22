@@ -63,7 +63,7 @@ Polygonizer::Polygonizer():
 	lineStringAdder(new Polygonizer::LineStringAdder(this)),
 	graph(NULL),
 	dangles(NULL),
-	cutEdges(NULL),
+	cutEdges(),
 	invalidRingLines(NULL),
 	holeList(NULL),
 	shellList(NULL),
@@ -75,7 +75,6 @@ Polygonizer::~Polygonizer()
 {
 	delete lineStringAdder;
 	delete dangles;
-	delete cutEdges;
 	delete graph;
 
 	delete holeList;
@@ -200,7 +199,7 @@ Polygonizer::getDangles()
  * Get the list of cut edges found during polygonization.
  * @return a collection of the input {@LineStrings} which are cut edges
  */
-vector<const LineString*>*
+const vector<const LineString*>&
 Polygonizer::getCutEdges()
 {
 	polygonize();
@@ -238,9 +237,7 @@ Polygonizer::polygonize()
 	dangles = new std::vector<const LineString*>();
 	graph->deleteDangles(*dangles);
 
-	// TODO: drop this heap allocation
-	cutEdges = new std::vector<const LineString*>();
-	graph->deleteCutEdges(*cutEdges);
+	graph->deleteCutEdges(cutEdges);
 
 	vector<EdgeRing*> edgeRingList;
 	graph->getEdgeRings(edgeRingList);

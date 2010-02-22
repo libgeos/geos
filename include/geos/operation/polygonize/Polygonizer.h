@@ -114,7 +114,7 @@ protected:
 
 	// initialize with empty collections, in case nothing is computed
 	std::vector<const geom::LineString*> *dangles;
-	std::vector<const geom::LineString*> *cutEdges;
+	std::vector<const geom::LineString*> cutEdges;
 	std::vector<geom::LineString*> *invalidRingLines;
 
 	std::vector<EdgeRing*> *holeList;
@@ -202,7 +202,7 @@ public:
 	 *
 	 * TODO: return by const vector reference instead !
 	 */
-	std::vector<const geom::LineString*>* getCutEdges();
+	const std::vector<const geom::LineString*>& getCutEdges();
 
 	/** \brief
 	 * Get the list of lines forming invalid rings found during

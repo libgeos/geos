@@ -2429,8 +2429,7 @@ GEOSPolygonizer_getCutEdges_r(GEOSContextHandle_t extHandle, const Geometry * co
         handle->NOTICE_MESSAGE("geometry vector added to polygonizer");
 #endif
 
-        std::vector<const LineString *>* lines = plgnzr.getCutEdges();
-        assert(0 != lines);
+        const std::vector<const LineString *>& lines = plgnzr.getCutEdges();
 
 #if GEOS_DEBUG
         handle->NOTICE_MESSAGE("output polygons got");
@@ -2441,13 +2440,12 @@ GEOSPolygonizer_getCutEdges_r(GEOSContextHandle_t extHandle, const Geometry * co
         // nature, so we explicitly convert.
         // (it's just a waste of processor and memory, btw)
         // XXX mloskot: See comment for GEOSPolygonize_r
-        std::vector<Geometry*> *linevec = new std::vector<Geometry *>(lines->size());
+        std::vector<Geometry*> *linevec = new std::vector<Geometry *>(lines.size());
 
-        for (std::size_t i = 0; i < lines->size(); ++i)
+        for (std::size_t i = 0, n=lines.size(); i < n; ++i)
         {
-            (*linevec)[i] = (*lines)[i]->clone();
+            (*linevec)[i] = lines[i]->clone();
         }
-        // FIXME mloskot: Who deallocates vector pointed by lines* ?
 
         const GeometryFactory *gf = handle->geomFactory;
 
