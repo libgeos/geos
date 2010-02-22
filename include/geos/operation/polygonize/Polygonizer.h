@@ -183,7 +183,11 @@ public:
 	/** \brief
 	 * Get the list of dangling lines found during polygonization.
 	 *
-	 * @return a collection of the input LineStrings which are dangles
+	 * @return a collection of the input LineStrings which are dangles.
+	 *         ownership of vector is retained by this object while
+	 *	   elements will be pointers to inside the input.
+	 *
+	 * TODO: return by const vector reference instead !
 	 */
 	std::vector<const geom::LineString*>* getDangles();
 
@@ -192,8 +196,11 @@ public:
 	 * Get the list of cut edges found during polygonization.
 	 *
 	 * @return a (possibly empty) reference to collection of the input
-	 *         LineStrings which are cut edges. Ownership retained by
-	 *         this object.
+	 *         LineStrings which are cut edges. Ownership of vector
+	 *	   retained by this object while elements will be pointers
+	 *         to inside the input.
+	 *
+	 * TODO: return by const vector reference instead !
 	 */
 	std::vector<const geom::LineString*>* getCutEdges();
 
@@ -201,10 +208,13 @@ public:
 	 * Get the list of lines forming invalid rings found during
 	 * polygonization.
 	 *
-	 * Ownership is tranferred to caller, second call will return
-	 * NULL (unless polygonize is called again).
-	 * @return a collection of LineStrings which form
-	 * invalid rings
+	 * @return a collection of LineStrings which form invalid rings
+	 * Ownership of vector is tranferred to caller.
+	 * On second call will return NULL (unless polygonize is called again).
+	 * Elements of vector will need be released by caller (or will be
+	 * released by this class if nobody ever called this method).
+	 *
+	 * TODO: always retain ownership of vector and elements, return by const ref !
 	 */
 	std::vector<geom::LineString*>* getInvalidRingLines();
 
