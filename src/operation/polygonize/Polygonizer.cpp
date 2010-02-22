@@ -65,8 +65,8 @@ Polygonizer::Polygonizer():
 	dangles(),
 	cutEdges(),
 	invalidRingLines(NULL),
-	holeList(NULL),
-	shellList(NULL),
+	holeList(),
+	shellList(),
 	polyList(NULL)
 {
 }
@@ -76,8 +76,6 @@ Polygonizer::~Polygonizer()
 	delete lineStringAdder;
 	delete graph;
 
-	delete holeList;
-	delete shellList;
 	if ( invalidRingLines )
 	{
 		for (unsigned int i=0, n=invalidRingLines->size(); i<n; ++i)
@@ -233,28 +231,27 @@ Polygonizer::polygonize()
 #if GEOS_DEBUG
 	cerr<<"Polygonizer::polygonize(): "<<edgeRingList.size()<<" edgeRings in graph"<<endl;
 #endif
-	vector<EdgeRing*> *validEdgeRingList=new vector<EdgeRing*>();
+	vector<EdgeRing*> validEdgeRingList;
 	invalidRingLines=new vector<LineString*>();
-	findValidRings(edgeRingList, validEdgeRingList, invalidRingLines);
+	findValidRings(edgeRingList, &validEdgeRingList, invalidRingLines);
 #if GEOS_DEBUG
-	cerr<<"                           "<<validEdgeRingList->size()<<" valid"<<endl;
-	cerr<<"                           "<<invalidRingLines->size()<<" invalid"<<endl;
+	cerr<<"                           "<<validEdgeRingList.size()<<" valid"<<endl;
+	cerr<<"                           "<<invalidRingLines.size()<<" invalid"<<endl;
 #endif
 
 	findShellsAndHoles(validEdgeRingList);
 #if GEOS_DEBUG
-	cerr<<"                           "<<holeList->size()<<" holes"<<endl;
-	cerr<<"                           "<<shellList->size()<<" shells"<<endl;
+	cerr<<"                           "<<holeList.size()<<" holes"<<endl;
+	cerr<<"                           "<<shellList.size()<<" shells"<<endl;
 #endif
 
 	assignHolesToShells(holeList, shellList);
 
-	for (unsigned int i=0, n=shellList->size(); i<n; ++i)
+	for (unsigned int i=0, n=shellList.size(); i<n; ++i)
 	{
-		EdgeRing *er=(*shellList)[i];
+		EdgeRing *er=shellList[i];
 		polyList->push_back(er->getPolygon());
 	}
-	delete validEdgeRingList;
 }
 
 /* private */
@@ -277,36 +274,39 @@ Polygonizer::findValidRings(vector<EdgeRing*>& edgeRingList,
 	}
 }
 
+/* private */
 void
-Polygonizer::findShellsAndHoles(vector<EdgeRing*> *edgeRingList)
+Polygonizer::findShellsAndHoles(const vector<EdgeRing*>& edgeRingList)
 {
-	holeList=new vector<EdgeRing*>();
-	shellList=new vector<EdgeRing*>();
-	for (unsigned int i=0, n=edgeRingList->size(); i<n; ++i)
+	holeList.clear(); 
+	shellList.clear();
+	for (unsigned int i=0, n=edgeRingList.size(); i<n; ++i)
 	{
-		EdgeRing *er=(*edgeRingList)[i];
+		EdgeRing *er=edgeRingList[i];
 		if (er->isHole())
-			holeList->push_back(er);
+			holeList.push_back(er);
 		else
-			shellList->push_back(er);
+			shellList.push_back(er);
 	}
 }
 
+/* private */
 void
-Polygonizer::assignHolesToShells(vector<EdgeRing*> *holeList,vector<EdgeRing*> *shellList)
+Polygonizer::assignHolesToShells(const vector<EdgeRing*>& holeList, vector<EdgeRing*>& shellList)
 {
-	for (unsigned int i=0, n=holeList->size(); i<n; ++i)
+	for (unsigned int i=0, n=holeList.size(); i<n; ++i)
 	{
-		EdgeRing *holeER=(*holeList)[i];
-		assignHoleToShell(holeER,shellList);
+		EdgeRing *holeER=holeList[i];
+		assignHoleToShell(holeER, shellList);
 	}
 }
 
+/* private */
 void
 Polygonizer::assignHoleToShell(EdgeRing *holeER,
-		vector<EdgeRing*> *shellList)
+		vector<EdgeRing*>& shellList)
 {
-	EdgeRing *shell=EdgeRing::findEdgeRingContaining(holeER, shellList);
+	EdgeRing *shell = EdgeRing::findEdgeRingContaining(holeER, &shellList);
 
 	if (shell!=NULL)
 		shell->addHole(holeER->getRingOwnership());

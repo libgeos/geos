@@ -100,13 +100,13 @@ private:
 			std::vector<EdgeRing*> *validEdgeRingList,
 			std::vector<geom::LineString*> *invalidRingList);
 
-	void findShellsAndHoles(std::vector<EdgeRing*> *edgeRingList);
+	void findShellsAndHoles(const std::vector<EdgeRing*>& edgeRingList);
 
-	static void assignHolesToShells(std::vector<EdgeRing*> *holeList,
-			std::vector<EdgeRing*> *shellList);
+	static void assignHolesToShells(const std::vector<EdgeRing*>& holeList,
+			std::vector<EdgeRing*>& shellList);
 
 	static void assignHoleToShell(EdgeRing *holeER,
-			std::vector<EdgeRing*> *shellList);
+			std::vector<EdgeRing*>& shellList);
 
 protected:
 
@@ -117,8 +117,8 @@ protected:
 	std::vector<const geom::LineString*> cutEdges;
 	std::vector<geom::LineString*> *invalidRingLines;
 
-	std::vector<EdgeRing*> *holeList;
-	std::vector<EdgeRing*> *shellList;
+	std::vector<EdgeRing*> holeList;
+	std::vector<EdgeRing*> shellList;
 	std::vector<geom::Polygon*> *polyList;
 
 public:
