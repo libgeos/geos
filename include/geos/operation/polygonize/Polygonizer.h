@@ -95,10 +95,9 @@ private:
 	 */
 	void polygonize();
 
-	/// @todo : take all args by ref
-	void findValidRings(std::vector<EdgeRing*>& edgeRingList,
-			std::vector<EdgeRing*> *validEdgeRingList,
-			std::vector<geom::LineString*> *invalidRingList);
+	void findValidRings(const std::vector<EdgeRing*>& edgeRingList,
+			std::vector<EdgeRing*>& validEdgeRingList,
+			std::vector<geom::LineString*>& invalidRingList);
 
 	void findShellsAndHoles(const std::vector<EdgeRing*>& edgeRingList);
 
@@ -115,7 +114,7 @@ protected:
 	// initialize with empty collections, in case nothing is computed
 	std::vector<const geom::LineString*> dangles;
 	std::vector<const geom::LineString*> cutEdges;
-	std::vector<geom::LineString*> *invalidRingLines;
+	std::vector<geom::LineString*> invalidRingLines;
 
 	std::vector<EdgeRing*> holeList;
 	std::vector<EdgeRing*> shellList;
@@ -203,15 +202,11 @@ public:
 	 * Get the list of lines forming invalid rings found during
 	 * polygonization.
 	 *
-	 * @return a collection of LineStrings which form invalid rings
-	 * Ownership of vector is tranferred to caller.
-	 * On second call will return NULL (unless polygonize is called again).
-	 * Elements of vector will need be released by caller (or will be
-	 * released by this class if nobody ever called this method).
+	 * @return a (possibly empty) collection of pointers to
+	 *         the input LineStrings which form invalid rings
 	 *
-	 * TODO: always retain ownership of vector and elements, return by const ref !
 	 */
-	std::vector<geom::LineString*>* getInvalidRingLines();
+	const std::vector<geom::LineString*>& getInvalidRingLines();
 
 // This seems to be needed by    GCC 2.95.4
 friend class Polygonizer::LineStringAdder;

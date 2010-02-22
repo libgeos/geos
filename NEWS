@@ -8,8 +8,10 @@ Changes in 3.3.0
   - CAPI: GEOSGeom_extractUniquePoints_r
   - CAPI: GEOSGetGeometryN support for single geometries
 - C++ API changes:
-  - Polygonizer::getCutEdges returns a const reference 
-  - Polygonizer::getDangles returns a const reference 
+  - Polygonizer::getCutEdges returns by const ref
+  - Polygonizer::getDangles returns by const ref
+  - Polygonizer::getInvalidRingLines returns by const ref and retains
+    ownership of vector elements
 
 Changes in 3.2.0 
 

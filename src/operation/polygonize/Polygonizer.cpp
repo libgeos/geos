@@ -64,7 +64,7 @@ Polygonizer::Polygonizer():
 	graph(NULL),
 	dangles(),
 	cutEdges(),
-	invalidRingLines(NULL),
+	invalidRingLines(),
 	holeList(),
 	shellList(),
 	polyList(NULL)
@@ -76,12 +76,9 @@ Polygonizer::~Polygonizer()
 	delete lineStringAdder;
 	delete graph;
 
-	if ( invalidRingLines )
-	{
-		for (unsigned int i=0, n=invalidRingLines->size(); i<n; ++i)
-			delete (*invalidRingLines)[i];
-		delete invalidRingLines;
-	}
+	for (unsigned int i=0, n=invalidRingLines.size(); i<n; ++i)
+		delete invalidRingLines[i];
+
 	if ( polyList )
 	{
 		for (unsigned int i=0, n=polyList->size(); i<n; ++i)
@@ -197,17 +194,12 @@ Polygonizer::getCutEdges()
 	return cutEdges;
 }
 
-/*
- * Get the list of lines forming invalid rings found during polygonization.
- * @return a collection of the input {@LineStrings} which form invalid rings
- */
-vector<LineString*>*
+/* public */
+const vector<LineString*>&
 Polygonizer::getInvalidRingLines()
 {
 	polygonize();
-	vector<LineString*> *ret = invalidRingLines;
-	invalidRingLines = NULL;
-	return ret;
+	return invalidRingLines;
 }
 
 /* public */
@@ -232,8 +224,8 @@ Polygonizer::polygonize()
 	cerr<<"Polygonizer::polygonize(): "<<edgeRingList.size()<<" edgeRings in graph"<<endl;
 #endif
 	vector<EdgeRing*> validEdgeRingList;
-	invalidRingLines=new vector<LineString*>();
-	findValidRings(edgeRingList, &validEdgeRingList, invalidRingLines);
+	invalidRingLines.clear(); /* what if it was populated already ? we should clean ! */
+	findValidRings(edgeRingList, validEdgeRingList, invalidRingLines);
 #if GEOS_DEBUG
 	cerr<<"                           "<<validEdgeRingList.size()<<" valid"<<endl;
 	cerr<<"                           "<<invalidRingLines.size()<<" invalid"<<endl;
@@ -256,9 +248,9 @@ Polygonizer::polygonize()
 
 /* private */
 void
-Polygonizer::findValidRings(vector<EdgeRing*>& edgeRingList,
-	vector<EdgeRing*> *validEdgeRingList,
-	vector<LineString*> *invalidRingList)
+Polygonizer::findValidRings(const vector<EdgeRing*>& edgeRingList,
+	vector<EdgeRing*>& validEdgeRingList,
+	vector<LineString*>& invalidRingList)
 {
 	typedef vector<EdgeRing*> EdgeRingList;
 	
@@ -266,10 +258,14 @@ Polygonizer::findValidRings(vector<EdgeRing*>& edgeRingList,
 	{
 		EdgeRing *er = edgeRingList[i];
 		if (er->isValid())
-			validEdgeRingList->push_back(er);
+		{
+			validEdgeRingList.push_back(er);
+		}
 		else
 		{
-			invalidRingList->push_back(er->getLineString());
+			// NOTE: polygonize::EdgeRing::getLineString
+			// returned LineString ownership is transferred.
+			invalidRingList.push_back(er->getLineString());
 		}
 	}
 }
