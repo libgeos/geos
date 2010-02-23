@@ -504,6 +504,13 @@ GEOSPolygonizer_getCutEdges(const Geometry * const * g, unsigned int ngeoms)
     return GEOSPolygonizer_getCutEdges_r( handle, g, ngeoms );
 }
 
+GEOSGeometry *
+GEOSPolygonize_full(const GEOSGeometry* input,
+	GEOSGeometry** cuts, GEOSGeometry** dangles, GEOSGeometry** invalid)
+{
+    return GEOSPolygonize_full_r(handle, input, cuts, dangles, invalid );
+}
+
 Geometry *
 GEOSLineMerge(const Geometry *g)
 {

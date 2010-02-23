@@ -523,6 +523,13 @@ extern char GEOS_DLL *GEOSRelate_r(GEOSContextHandle_t handle,
  */
 extern GEOSGeometry GEOS_DLL *GEOSPolygonize(const GEOSGeometry * const geoms[], unsigned int ngeoms);
 extern GEOSGeometry GEOS_DLL *GEOSPolygonizer_getCutEdges(const GEOSGeometry * const geoms[], unsigned int ngeoms);
+/*
+ * Return rings constructed from fully-noded input linestrings.
+ * Optionally (if output parameter pointers are not null) return cut edges, dangles
+ * and invalid rings lines.
+ */
+extern GEOSGeometry GEOS_DLL *GEOSPolygonize_full(const GEOSGeometry* input,
+	GEOSGeometry** cuts, GEOSGeometry** dangles, GEOSGeometry** invalid);
 
 extern GEOSGeometry GEOS_DLL *GEOSLineMerge(const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSSimplify(const GEOSGeometry* g1, double tolerance);
@@ -536,6 +543,9 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonizer_getCutEdges_r(
                               GEOSContextHandle_t handle,
                               const GEOSGeometry * const geoms[],
                               unsigned int ngeoms);
+extern GEOSGeometry GEOS_DLL *GEOSPolygonize_full_r(GEOSContextHandle_t handle,
+                              const GEOSGeometry* input, GEOSGeometry** cuts,
+                              GEOSGeometry** dangles, GEOSGeometry** invalidRings);
 
 extern GEOSGeometry GEOS_DLL *GEOSLineMerge_r(GEOSContextHandle_t handle,
                                               const GEOSGeometry* g);

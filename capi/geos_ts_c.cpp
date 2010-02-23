@@ -2466,6 +2466,102 @@ GEOSPolygonizer_getCutEdges_r(GEOSContextHandle_t extHandle, const Geometry * co
 }
 
 Geometry *
+GEOSPolygonize_full_r(GEOSContextHandle_t extHandle, const Geometry* g,
+	Geometry** cuts, Geometry** dangles, Geometry** invalid)
+{
+    if ( 0 == extHandle )
+    {
+        return 0;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return 0;
+    }
+
+    try
+    {
+        // Polygonize
+        using geos::operation::polygonize::Polygonizer;
+        Polygonizer plgnzr;
+        for (std::size_t i = 0; i <g->getNumGeometries(); ++i)
+        {
+            plgnzr.add(g->getGeometryN(i));
+        }
+
+#if GEOS_DEBUG
+        handle->NOTICE_MESSAGE("geometry vector added to polygonizer");
+#endif
+        const GeometryFactory *gf = handle->geomFactory;
+
+	if ( cuts ) {
+
+        	const std::vector<const LineString *>& lines = plgnzr.getCutEdges();
+        	std::vector<Geometry*> *linevec = new std::vector<Geometry *>(lines.size());
+		for (std::size_t i = 0, n=lines.size(); i < n; ++i)
+		{
+		    (*linevec)[i] = lines[i]->clone();
+		}
+
+		// The below takes ownership of the passed vector,
+		// so we must *not* delete it
+		*cuts = gf->createGeometryCollection(linevec);
+	}
+
+	if ( dangles ) {
+
+        	const std::vector<const LineString *>& lines = plgnzr.getDangles();
+        	std::vector<Geometry*> *linevec = new std::vector<Geometry *>(lines.size());
+		for (std::size_t i = 0, n=lines.size(); i < n; ++i)
+		{
+		    (*linevec)[i] = lines[i]->clone();
+		}
+
+		// The below takes ownership of the passed vector,
+		// so we must *not* delete it
+		*dangles = gf->createGeometryCollection(linevec);
+	}
+
+	if ( invalid ) {
+
+        	const std::vector<LineString *>& lines = plgnzr.getInvalidRingLines();
+        	std::vector<Geometry*> *linevec = new std::vector<Geometry *>(lines.size());
+		for (std::size_t i = 0, n=lines.size(); i < n; ++i)
+		{
+		    (*linevec)[i] = lines[i]->clone();
+		}
+
+		// The below takes ownership of the passed vector,
+		// so we must *not* delete it
+		*invalid = gf->createGeometryCollection(linevec);
+	}
+
+        std::vector<Polygon*> *polys = plgnzr.getPolygons();
+        std::vector<Geometry*> *polyvec = new std::vector<Geometry *>(polys->size());
+        for (std::size_t i = 0; i < polys->size(); ++i)
+	{
+            (*polyvec)[i] = (*polys)[i];
+	}
+        delete polys;
+
+        return gf->createGeometryCollection(polyvec);
+
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+	return 0;
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+	return 0;
+    }
+}
+
+Geometry *
 GEOSLineMerge_r(GEOSContextHandle_t extHandle, const Geometry *g)
 {
     if ( 0 == extHandle )
