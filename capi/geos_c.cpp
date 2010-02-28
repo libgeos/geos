@@ -943,5 +943,28 @@ GEOSGeom_extractUniquePoints (const geos::geom::Geometry *g)
     return GEOSGeom_extractUniquePoints_r(handle, g);
 }
 
+geos::geom::Geometry *
+GEOSGeom_createEmptyCollection(int type)
+{
+    return GEOSGeom_createEmptyCollection_r(handle, type);
+}
+
+geos::geom::Geometry *
+GEOSGeom_createEmptyPoint()
+{
+    return GEOSGeom_createEmptyPoint_r(handle);
+}
+
+geos::geom::Geometry *
+GEOSGeom_createEmptyLineString()
+{
+    return GEOSGeom_createEmptyLineString_r(handle);
+}
+
+geos::geom::Geometry *
+GEOSGeom_createEmptyPolygon()
+{
+    return GEOSGeom_createEmptyPolygon_r(handle);
+}
 
 } /* extern "C" */

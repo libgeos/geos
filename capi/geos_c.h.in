@@ -413,8 +413,10 @@ extern GEOSGeometry GEOS_DLL *GEOSSingleSidedBuffer_r(
  ***********************************************************************/
 
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createPoint(GEOSCoordSequence* s);
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyPoint();
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createLinearRing(GEOSCoordSequence* s);
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createLineString(GEOSCoordSequence* s);
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyLineString();
 
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createPoint_r(
                                        GEOSContextHandle_t handle,
@@ -435,10 +437,12 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyLineString_r(
  * The caller remains owner of the array, but pointed-to
  * objects become ownership of the returned GEOSGeometry.
  */
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyPolygon();
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createPolygon(GEOSGeometry* shell,
 	GEOSGeometry** holes, unsigned int nholes);
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createCollection(int type,
 	GEOSGeometry* *geoms, unsigned int ngeoms);
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCollection(int type);
 
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyPolygon_r(
                                        GEOSContextHandle_t handle);

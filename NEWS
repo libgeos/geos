@@ -3,8 +3,8 @@ Changes in 3.3.0
 - New things:
   - CAPI: GEOSisValidDetail: tell state, reason & location apart
   - CAPI: GEOSContext_setNoticeHandler_r, GEOSContext_setErrorHandler_r
-  - CAPI: GEOSGeom_createEmptyPoint_r, GEOSGeom_createEmptyLineString_r
-          GEOSGeom_createEmptyPolygon_r, GEOSGeom_createEmptyCollection_r
+  - CAPI: GEOSGeom_createEmptyPoint, GEOSGeom_createEmptyLineString
+          GEOSGeom_createEmptyPolygon, GEOSGeom_createEmptyCollection
   - CAPI: GEOSGeom_extractUniquePoints
   - CAPI: GEOSGetGeometryN support for single geometries
   - CAPI: GEOSPolygonize_full to return all informations computed by
