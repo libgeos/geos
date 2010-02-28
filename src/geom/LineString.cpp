@@ -148,7 +148,7 @@ bool
 LineString::isEmpty() const
 {
 	assert(points.get());
-	return points->getSize()==0;
+	return points->isEmpty();
 }
 
 size_t
