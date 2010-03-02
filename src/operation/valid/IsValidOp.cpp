@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2010 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2005 Refractions Research Inc.
  *
@@ -116,7 +117,7 @@ IsValidOp::checkValid(const Geometry *g)
 {
 	if (isChecked) return;
 
-        assert( validErr == NULL );
+        //assert( validErr == NULL );
 	validErr=NULL;
 
 	// empty geometries are always valid!
@@ -132,7 +133,7 @@ IsValidOp::checkValid(const Geometry *g)
 	else if (0 != (gc=dynamic_cast<const GeometryCollection *>(g)))
 		checkValid(gc);
 	else throw util::UnsupportedOperationException();
-        isChecked=true;
+        //isChecked=true;
 }
 
 /*

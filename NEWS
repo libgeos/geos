@@ -14,6 +14,8 @@ Changes in 3.3.0
   - Polygonizer::getDangles returns by const ref
   - Polygonizer::getInvalidRingLines returns by const ref and retains
     ownership of vector elements
+- Bug fixes:
+  - Invalid compound geometries reported as valid (#333)
 
 Changes in 3.2.0 
 
