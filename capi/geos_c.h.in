@@ -528,9 +528,31 @@ extern char GEOS_DLL *GEOSRelate_r(GEOSContextHandle_t handle,
 extern GEOSGeometry GEOS_DLL *GEOSPolygonize(const GEOSGeometry * const geoms[], unsigned int ngeoms);
 extern GEOSGeometry GEOS_DLL *GEOSPolygonizer_getCutEdges(const GEOSGeometry * const geoms[], unsigned int ngeoms);
 /*
- * Return rings constructed from fully-noded input linestrings.
- * Optionally (if output parameter pointers are not null) return cut edges, dangles
- * and invalid rings lines.
+ * Polygonizes a set of Geometrys which contain linework that
+ * represents the edges of a planar graph.
+ *
+ * Any dimension of Geometry is handled - the constituent linework
+ * is extracted to form the edges.
+ *
+ * The edges must be correctly noded; that is, they must only meet
+ * at their endpoints. 
+ * The Polygonizer will still run on incorrectly noded input
+ * but will not form polygons from incorrected noded edges.
+ *
+ * The Polygonizer reports the follow kinds of errors:
+ *
+ * - Dangles - edges which have one or both ends which are
+ *   not incident on another edge endpoint
+ * - Cut Edges - edges which are connected at both ends but
+ *   which do not form part of polygon
+ * - Invalid Ring Lines - edges which form rings which are invalid
+ *   (e.g. the component lines contain a self-intersection)
+ *
+ * Errors are reported to output parameters "cuts", "dangles" and
+ * "invalid" (if not-null). Formed polygons are returned as a
+ * collection. NULL is returned on exception. All returned 
+ * geometries must be destroyed by caller.
+ *
  */
 extern GEOSGeometry GEOS_DLL *GEOSPolygonize_full(const GEOSGeometry* input,
 	GEOSGeometry** cuts, GEOSGeometry** dangles, GEOSGeometry** invalid);
