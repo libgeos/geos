@@ -15,7 +15,8 @@ project(geos)
 cmake_minimum_required(VERSION 2.6)
 
 if(NOT CMAKE_VERSION)
-    set(CMAKE_VERSION "${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}")
+    set(CMAKE_VERSION
+      "${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}")
 endif()
 
 # Location of custom CMake modules with macros used by GEOS
@@ -271,8 +272,15 @@ add_subdirectory(tests)
 add_subdirectory(tools)
 
 #################################################################################
-# Setup installation of common files not specific to any target
+# Install/Uninstall
+#################################################################################
 
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/cmake/cmake_uninstall.cmake"
+  IMMEDIATE @ONLY)
+
+add_custom_target(uninstall
+  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake/cmake_uninstall.cmake") 
 
 #################################################################################
 # DEBUG settings - TODO: make a summary
