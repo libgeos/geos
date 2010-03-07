@@ -2,12 +2,19 @@ BUILDING, TESTING, INSTALLING
 =============================
 
 Unix
------
+----
 
-	# ./configure
-	# make
-	# make check
-	# make install
+Using Autotools:
+  ./autogen.sh  # in ${srcdir}, if obtained from SVN
+  ${srcdir}/configure # in build dir
+
+Using CMake:
+  cmake ${srcdir} # in build dir
+
+Now, all versions:
+  make
+  make check
+  make install
 
 Win32
 -----
@@ -38,47 +45,46 @@ Using the C interface (recommended)
 
 To compile programs against the C lib (recommended):
 
-	CFLAGS += `geos-config --cflags`
-	LDFLAGS += `geos-config --ldflags` -lgeos_c
-	#include <geos_c.h>
+  CFLAGS += `geos-config --cflags`
+  LDFLAGS += `geos-config --ldflags` -lgeos_c
+  #include <geos_c.h>
 
 Example usage:
 
-	capi/geostest.c contains basic usage
-	examples.
+  capi/geostest.c contains basic usage examples.
 
 Using the C++ interface (discouraged)
 -------------------------------------
 
 To compile programs against the C++ lib:
 
-	CFLAGS += `geos-config --cflags`
-	LDFLAGS += `geos-config --ldflags` -lgeos
-	#include <geos.h>
+  CFLAGS += `geos-config --cflags`
+  LDFLAGS += `geos-config --ldflags` -lgeos
+  #include <geos.h>
 
 Example usage:
 
-	doc/example.cpp contains basic usage
-	examples.
+  doc/example.cpp contains basic usage examples.
 
 Scripting language bindings
 ---------------------------
 
-Ruby bindings are fully supported. To build, use the --enable-ruby option when 
-configuring:
+Ruby bindings are fully supported. To build, use the --enable-ruby option
+when configuring:
 
-    # ./configure ... --enable-ruby
+  ./configure ... --enable-ruby
     
 Since version 3.0, the Python bindings are unsupported. Recommended options:
 
  1. Become or recruit a new maintainer.
- 2. Use Shapely (http://pypi.python.org/pypi/Shapely) with Python versions 2.4 or greater.
+ 2. Use Shapely (http://pypi.python.org/pypi/Shapely) with Python
+    versions 2.4 or greater.
  3. Simply call functions from libgeos_c via Python ctypes.
 
 DOCUMENTATION
 =============
 
-	# cd doc; make doxygen-html
+  cd doc; make doxygen-html
 
-	http://trac.osgeo.org/geos
+  http://trac.osgeo.org/geos
 
