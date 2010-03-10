@@ -15,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/valid/IsValidOp.java rev. 1.41 (JTS-1.10)
+ * Last port: operation/valid/IsValidOp.java rev. 38 (JTS-1.11+)
  *
  **********************************************************************/
 
@@ -115,8 +115,6 @@ IsValidOp::getValidationError()
 void
 IsValidOp::checkValid(const Geometry *g)
 {
-	if (isChecked) return;
-
         //assert( validErr == NULL );
 	validErr=NULL;
 
@@ -133,7 +131,6 @@ IsValidOp::checkValid(const Geometry *g)
 	else if (0 != (gc=dynamic_cast<const GeometryCollection *>(g)))
 		checkValid(gc);
 	else throw util::UnsupportedOperationException();
-        //isChecked=true;
 }
 
 /*

@@ -15,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/valid/IsValidOp.java rev. 1.41 (JTS-1.10)
+ * Last port: operation/valid/IsValidOp.java rev. 38 (JTS-1.11+)
  *
  **********************************************************************/
 
@@ -64,8 +64,6 @@ friend class Unload;
 private:
 	/// the base Geometry to be validated
 	const geom::Geometry *parentGeometry; 
-
-	bool isChecked;
 
 	// CHECKME: should this really be a pointer ?
 	TopologyValidationError* validErr;
@@ -214,7 +212,6 @@ public:
 	IsValidOp(const geom::Geometry *geom)
 		:
 		parentGeometry(geom),
-		isChecked(false),
 		validErr(NULL),
 		isSelfTouchingRingFormingHoleValid(false)
 	{}

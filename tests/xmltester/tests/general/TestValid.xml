@@ -78,7 +78,7 @@ LINESTRING (40 180, 120 120, 140 200, 140 200, 200 140, 240 200)
    </case>
 
    <case>
-      <desc>L - linestring with two identical points </desc>
+      <desc>mL - MultiLinestring with two identical points in second component</desc>
       <a>MULTILINESTRING((1 1, 0 0), (0 0, 0 0))</a>
       <test>
          <op name="isValid" arg1="A">      false      </op>
