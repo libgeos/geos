@@ -9,6 +9,7 @@ Changes in 3.3.0
   - CAPI: GEOSGetGeometryN support for single geometries
   - CAPI: GEOSPolygonize_full to return all informations computed by
           the polygonizer
+  - CAPI: GEOSOrientationIndex
 - C++ API changes:
   - Polygonizer::getCutEdges returns by const ref
   - Polygonizer::getDangles returns by const ref

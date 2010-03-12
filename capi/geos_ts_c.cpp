@@ -32,6 +32,7 @@
 #include <geos/geom/PrecisionModel.h> 
 #include <geos/geom/GeometryFactory.h> 
 #include <geos/geom/CoordinateSequenceFactory.h> 
+#include <geos/geom/Coordinate.h> 
 #include <geos/geom/IntersectionMatrix.h> 
 #include <geos/geom/Envelope.h> 
 #include <geos/index/strtree/STRtree.h> 
@@ -41,6 +42,7 @@
 #include <geos/io/WKTWriter.h>
 #include <geos/io/WKBWriter.h>
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
+#include <geos/algorithm/CGAlgorithms.h>
 #include <geos/simplify/DouglasPeuckerSimplifier.h>
 #include <geos/simplify/TopologyPreservingSimplifier.h>
 #include <geos/operation/valid/IsValidOp.h>
@@ -4806,6 +4808,37 @@ GEOSGeom_extractUniquePoints_r(GEOSContextHandle_t extHandle,
     {
         handle->ERROR_MESSAGE("Unknown exception thrown");
         return 0;
+    }
+}
+
+int GEOSOrientationIndex_r(GEOSContextHandle_t /*handle*/,
+	double Ax, double Ay, double Bx, double By, double Px, double Py)
+{
+    using geos::geom::Coordinate;
+    using geos::algorithm::CGAlgorithms;
+
+    if ( 0 == extHandle )
+    {
+        return 2;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return 2;
+    }
+
+    try
+    {
+        Coordinate A(Ax, Ay);
+        Coordinate B(Bx, By);
+        Coordinate P(Px, Py);
+        return CGAlgorithms::orientationIndex(A, B, P);
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+        return 2;
     }
 }
 

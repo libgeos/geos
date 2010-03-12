@@ -967,4 +967,11 @@ GEOSGeom_createEmptyPolygon()
     return GEOSGeom_createEmptyPolygon_r(handle);
 }
 
+int
+GEOSOrientationIndex(double Ax, double Ay, double Bx, double By,
+	double Px, double Py)
+{
+    return GEOSOrientationIndex_r(handle, Ax, Ay, Bx, By, Px, Py);
+}
+
 } /* extern "C" */

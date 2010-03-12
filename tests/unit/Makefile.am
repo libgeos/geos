@@ -93,7 +93,8 @@ geos_unit_SOURCES = \
 	capi/GEOSPolygonizer_getCutEdgesTest.cpp \
 	capi/GEOSBufferTest.cpp \
 	capi/GEOSGeom_create.cpp \
-	capi/GEOSGeom_extractUniquePointsTest.cpp
+	capi/GEOSGeom_extractUniquePointsTest.cpp \
+	capi/GEOSOrientationIndex.cpp
 
 noinst_HEADERS = \
 	utility.h

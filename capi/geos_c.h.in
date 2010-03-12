@@ -909,6 +909,25 @@ extern int GEOS_DLL GEOSHausdorffDistanceDensify_r(GEOSContextHandle_t handle,
                                    const GEOSGeometry *g2,
                                    double densifyFrac, double *dist);
 
+/************************************************************************
+ *
+ * Algorithms
+ *
+ ***********************************************************************/
+
+/* Walking from A to B:
+ *  return -1 if reaching P takes a counter-clockwise (left) turn
+ *  return  1 if reaching P takes a clockwise (right) turn
+ *  return  0 if P is collinear with A-B
+ *
+ * On exceptions, return 2.
+ *
+ */
+extern int GEOSOrientationIndex(double Ax, double Ay, double Bx, double By,
+	double Px, double Py);
+extern int GEOSOrientationIndex_r(GEOSContextHandle_t handle,
+	double Ax, double Ay, double Bx, double By, double Px, double Py);
+
 
 /************************************************************************
  *
