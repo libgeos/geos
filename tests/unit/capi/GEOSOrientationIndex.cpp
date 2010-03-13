@@ -61,7 +61,7 @@ namespace tut
     template<>
     void object::test<1>()
     {
-	int ret = GEOSOrientationIndex(0, 0, 10, 0, 5, 0);
+	int ret = GEOSOrientationIndex_r(handle_, 0, 0, 10, 0, 5, 0);
 	ensure_equals(ret, 0);
     }
 
@@ -70,7 +70,7 @@ namespace tut
     template<>
     void object::test<2>()
     {
-	int ret = GEOSOrientationIndex(0, 0, 10, 0, 10, 0);
+	int ret = GEOSOrientationIndex_r(handle_, 0, 0, 10, 0, 10, 0);
 	ensure_equals(ret, 0);
     }
 
@@ -79,7 +79,7 @@ namespace tut
     template<>
     void object::test<3>()
     {
-	int ret = GEOSOrientationIndex(0, 0, 10, 0, 0, 0);
+	int ret = GEOSOrientationIndex_r(handle_, 0, 0, 10, 0, 0, 0);
 	ensure_equals(ret, 0);
     }
 
@@ -88,7 +88,7 @@ namespace tut
     template<>
     void object::test<4>()
     {
-	int ret = GEOSOrientationIndex(0, 0, 10, 0, -5, 0);
+	int ret = GEOSOrientationIndex_r(handle_, 0, 0, 10, 0, -5, 0);
 	ensure_equals(ret, 0);
     }
 
@@ -97,7 +97,7 @@ namespace tut
     template<>
     void object::test<5>()
     {
-	int ret = GEOSOrientationIndex(0, 0, 10, 0, 20, 0);
+	int ret = GEOSOrientationIndex_r(handle_, 0, 0, 10, 0, 20, 0);
 	ensure_equals(ret, 0);
     }
 
@@ -106,7 +106,7 @@ namespace tut
     template<>
     void object::test<6>()
     {
-	int ret = GEOSOrientationIndex(0, 0, 10, 10, 5, 6);
+	int ret = GEOSOrientationIndex_r(handle_, 0, 0, 10, 10, 5, 6);
 	ensure_equals(ret, 1);
     }
 
@@ -115,7 +115,7 @@ namespace tut
     template<>
     void object::test<7>()
     {
-	int ret = GEOSOrientationIndex(0, 0, 10, 10, 5, 20);
+	int ret = GEOSOrientationIndex_r(handle_, 0, 0, 10, 10, 5, 20);
 	ensure_equals(ret, 1);
     }
 
@@ -124,7 +124,7 @@ namespace tut
     template<>
     void object::test<8>()
     {
-	int ret = GEOSOrientationIndex(0, 0, 10, 10, 5, 3);
+	int ret = GEOSOrientationIndex_r(handle_, 0, 0, 10, 10, 5, 3);
 	ensure_equals(ret, -1);
     }
 
@@ -133,7 +133,7 @@ namespace tut
     template<>
     void object::test<9>()
     {
-	int ret = GEOSOrientationIndex(0, 0, 10, 10, 5, -2);
+	int ret = GEOSOrientationIndex_r(handle_, 0, 0, 10, 10, 5, -2);
 	ensure_equals(ret, -1);
     }
 
@@ -142,7 +142,7 @@ namespace tut
     template<>
     void object::test<10>()
     {
-	int ret = GEOSOrientationIndex(0, 0, 10, 10, 1000000, 1000001);
+	int ret = GEOSOrientationIndex_r(handle_, 0, 0, 10, 10, 1000000, 1000001);
 	ensure_equals(ret, 1);
     }
 
@@ -151,7 +151,7 @@ namespace tut
     template<>
     void object::test<11>()
     {
-	int ret = GEOSOrientationIndex(0, 0, 10, 10, 1000000,  999999);
+	int ret = GEOSOrientationIndex_r(handle_, 0, 0, 10, 10, 1000000,  999999);
 	ensure_equals(ret, -1);
     }
 

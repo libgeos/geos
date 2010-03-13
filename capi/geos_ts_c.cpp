@@ -4811,9 +4811,11 @@ GEOSGeom_extractUniquePoints_r(GEOSContextHandle_t extHandle,
     }
 }
 
-int GEOSOrientationIndex_r(GEOSContextHandle_t /*handle*/,
+int GEOSOrientationIndex_r(GEOSContextHandle_t extHandle,
 	double Ax, double Ay, double Bx, double By, double Px, double Py)
 {
+    GEOSContextHandleInternal_t *handle = 0;
+
     using geos::geom::Coordinate;
     using geos::algorithm::CGAlgorithms;
 
@@ -4822,7 +4824,6 @@ int GEOSOrientationIndex_r(GEOSContextHandle_t /*handle*/,
         return 2;
     }
 
-    GEOSContextHandleInternal_t *handle = 0;
     handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
     if ( 0 == handle->initialized )
     {
@@ -4835,9 +4836,15 @@ int GEOSOrientationIndex_r(GEOSContextHandle_t /*handle*/,
         Coordinate B(Bx, By);
         Coordinate P(Px, Py);
         return CGAlgorithms::orientationIndex(A, B, P);
-    catch (...)
+    }
+    catch (const std::exception &e)
     {
         handle->ERROR_MESSAGE("%s", e.what());
+        return 2;
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
         return 2;
     }
 }
