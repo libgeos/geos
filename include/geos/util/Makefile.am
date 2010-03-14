@@ -16,6 +16,7 @@ geos_HEADERS = \
     GEOSException.h \
     IllegalArgumentException.h \
     math.h \
+    Machine.h \
     TopologyException.h \
     UniqueCoordinateArrayFilter.h \
     UnsupportedOperationException.h
