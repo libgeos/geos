@@ -589,16 +589,16 @@ GEOSisValid_r(GEOSContextHandle_t extHandle, const Geometry *g1)
         using geos::operation::valid::TopologyValidationError;
 
         IsValidOp ivo(g1);
-        bool valid = ivo.isValid();
-        if (!valid)
+        TopologyValidationError *err = ivo.getValidationError();
+        if ( err )
         {
-            TopologyValidationError *err = ivo.getValidationError();
-            if ( err )
-            {
-                handle->NOTICE_MESSAGE("%s", err->toString().c_str());
-            }
+           handle->NOTICE_MESSAGE("%s", err->toString().c_str());
+           return 0;
         }
-        return valid;
+        else
+        {
+           return 1;
+        }
     }
     catch (const std::exception &e)
     {
@@ -636,17 +636,13 @@ GEOSisValidReason_r(GEOSContextHandle_t extHandle, const Geometry *g1)
         char const* const validstr = "Valid Geometry";
 
         IsValidOp ivo(g1);
-        bool isvalid = ivo.isValid();
-        if ( ! isvalid )
+        TopologyValidationError *err = ivo.getValidationError();
+        if (0 != err)
         {
-            TopologyValidationError *err = ivo.getValidationError();
-            if (0 != err)
-            {
-                const std::string errloc = err->getCoordinate().toString();
-                std::string errmsg(err->getMessage());
-                errmsg += "[" + errloc + "]";
-                result = gstrdup(errmsg);
-            }
+            const std::string errloc = err->getCoordinate().toString();
+            std::string errmsg(err->getMessage());
+            errmsg += "[" + errloc + "]";
+            result = gstrdup(errmsg);
         }
         else
         {
@@ -689,19 +685,15 @@ GEOSisValidDetail_r(GEOSContextHandle_t extHandle, const Geometry *g,
         using geos::operation::valid::TopologyValidationError;
 
         IsValidOp ivo(g);
-        bool isvalid = ivo.isValid();
-        if ( ! isvalid )
+        TopologyValidationError *err = ivo.getValidationError();
+        if (0 != err)
         {
-            TopologyValidationError *err = ivo.getValidationError();
-            if (0 != err)
-            {
-                *location = handle->geomFactory->createPoint(err->getCoordinate());
-                std::string errmsg(err->getMessage());
-                *reason = gstrdup(errmsg);
-            }
-            else {
-                /* is it ever possible for getValidationError to be 0 ? */
-            }
+           *location = handle->geomFactory->createPoint(err->getCoordinate());
+           std::string errmsg(err->getMessage());
+           *reason = gstrdup(errmsg);
+        }
+        else
+        {
             return 0; /* invalid */
         }
 
