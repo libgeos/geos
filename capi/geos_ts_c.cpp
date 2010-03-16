@@ -691,10 +691,7 @@ GEOSisValidDetail_r(GEOSContextHandle_t extHandle, const Geometry *g,
            *location = handle->geomFactory->createPoint(err->getCoordinate());
            std::string errmsg(err->getMessage());
            *reason = gstrdup(errmsg);
-        }
-        else
-        {
-            return 0; /* invalid */
+           return 0;
         }
 
         *location = 0;
