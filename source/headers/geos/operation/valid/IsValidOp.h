@@ -69,6 +69,7 @@ private:
 	// CHECKME: should this really be a pointer ?
 	TopologyValidationError* validErr;
 
+	void checkValid();
 	void checkValid(const geom::Geometry *g);
 	void checkValid(const geom::Point *g);
 	void checkValid(const geom::LinearRing *g);
