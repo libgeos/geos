@@ -1,3 +1,8 @@
+Changes in 3.2.1 
+
+- Bug fixes:
+ - False positive return from IsValidOp (#333)
+
 Changes in 3.2.0 
 
 - Add Single-sided buffer operation
