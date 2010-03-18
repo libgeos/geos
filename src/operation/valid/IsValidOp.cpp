@@ -85,7 +85,7 @@ IsValidOp::findPtNotNode(const CoordinateSequence *testCoords,
 bool
 IsValidOp::isValid()
 {
-	checkValid(parentGeometry);
+	checkValid();
 	return validErr==NULL;
 }
 
@@ -108,15 +108,22 @@ IsValidOp::isValid(const Coordinate &coord)
 TopologyValidationError *
 IsValidOp::getValidationError()
 {
-	checkValid(parentGeometry);
+	checkValid();
 	return validErr;
+}
+
+void
+IsValidOp::checkValid()
+{
+	if (isChecked) return;
+	checkValid(parentGeometry);
+        isChecked=true;
 }
 
 void
 IsValidOp::checkValid(const Geometry *g)
 {
-        //assert( validErr == NULL );
-	validErr=NULL;
+        assert( validErr == NULL );
 
 	// empty geometries are always valid!
 	if (g->isEmpty()) return;

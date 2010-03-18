@@ -65,8 +65,13 @@ private:
 	/// the base Geometry to be validated
 	const geom::Geometry *parentGeometry; 
 
+	bool isChecked;
+
 	// CHECKME: should this really be a pointer ?
 	TopologyValidationError* validErr;
+
+	// This is the version using 'isChecked' flag
+	void checkValid();
 
 	void checkValid(const geom::Geometry *g);
 	void checkValid(const geom::Point *g);
@@ -212,6 +217,7 @@ public:
 	IsValidOp(const geom::Geometry *geom)
 		:
 		parentGeometry(geom),
+		isChecked(false),
 		validErr(NULL),
 		isSelfTouchingRingFormingHoleValid(false)
 	{}
