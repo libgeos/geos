@@ -17,6 +17,7 @@ Changes in 3.3.0
     ownership of vector elements
 - Bug fixes:
   - Invalid compound geometries reported as valid (#333)
+  - Return up to 15 digits of precision from GEOSisValidReason_t (#329)
 
 Changes in 3.2.0 
 

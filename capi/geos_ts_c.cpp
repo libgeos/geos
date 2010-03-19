@@ -639,7 +639,10 @@ GEOSisValidReason_r(GEOSContextHandle_t extHandle, const Geometry *g1)
         TopologyValidationError *err = ivo.getValidationError();
         if (0 != err)
         {
-            const std::string errloc = err->getCoordinate().toString();
+            std::ostringstream ss;
+            ss.precision(15);
+            ss << err->getCoordinate();
+            const std::string errloc = ss.str();
             std::string errmsg(err->getMessage());
             errmsg += "[" + errloc + "]";
             result = gstrdup(errmsg);
