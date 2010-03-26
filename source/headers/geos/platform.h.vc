@@ -26,6 +26,10 @@
 #define WIN32
 #endif
 
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+
 #include <float.h>
 
 // We need M_PI, but on MSVC you need to define _USE_MATH_DEFINES before
@@ -47,7 +51,7 @@
 #define DoubleInfinity std::numeric_limits<double>::infinity()
 #define DoubleNegInfinity -std::numeric_limits<double>::infinity()
 
-#define DoubleMax std::numeric_limits<double>::max()
+#define DoubleMax (std::numeric_limits<double>::max)()
 
 #define FINITE(x) _finite(static_cast<double>(x))
 #define finite(x) _finite(static_cast<double>(x))
