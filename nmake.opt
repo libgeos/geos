@@ -98,6 +98,7 @@ GEOS_INCLUDE = -I..\include -I..\capi
 # Compilation flags for Release and Debug modes
 
 GEOS_CPPFLAGS = /D "NOMINMAX" /D "WIN32_LEAN_AND_MEAN" /D "NOGDI"
+GEOS_CPPFLAGS = $(GEOS_CPPFLAGS) /D "GEOS_DLL_EXPORT"
 
 !IF "$(BUILD_DEBUG)" == "YES"
 BUILD_PREFIX=_d
