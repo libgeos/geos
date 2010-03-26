@@ -56,6 +56,13 @@ GeometryList::add(Geometry::AutoPtr geom)
 }
 
 /*public*/
+GeometryList::size_type
+GeometryList::size() const
+{
+	return geoms.size();
+}
+
+/*public*/
 Geometry *
 GeometryList::operator[] (GeometryList::size_type i)
 {
