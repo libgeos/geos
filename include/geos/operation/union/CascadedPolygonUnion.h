@@ -19,6 +19,7 @@
 
 #ifndef GEOS_OP_UNION_CASCADEDPOLYGONUNION_H
 #define GEOS_OP_UNION_CASCADEDPOLYGONUNION_H
+#include <geos/export.h>
 
 #include <vector>
 #include <algorithm>
@@ -100,7 +101,7 @@ private:
  * where there is <i>no</i> overlap between the input geometries. 
  * However, this case is likely rare in practice.
  */
-class CascadedPolygonUnion 
+class GEOS_DLL CascadedPolygonUnion 
 {
 private:
     std::vector<geom::Polygon*>* inputPolys;
