@@ -4765,21 +4765,20 @@ GEOSGeom_extractUniquePoints_r(GEOSContextHandle_t extHandle,
 
     using namespace geos::geom;
     using namespace geos::util;
-    using namespace std;
 
     try
     {
 
     /* 1: extract points */
-    vector<const Coordinate*> coords;
+    std::vector<const Coordinate*> coords;
     UniqueCoordinateArrayFilter filter(coords);
     g->apply_ro(&filter);
 
     /* 2: for each point, create a geometry and put into a vector */
-    vector<Geometry*>* points = new vector<Geometry*>();
+    std::vector<Geometry*>* points = new std::vector<Geometry*>();
     points->reserve(coords.size());
     const GeometryFactory* factory = g->getFactory();
-    for (vector<const Coordinate*>::iterator it=coords.begin(),
+    for (std::vector<const Coordinate*>::iterator it=coords.begin(),
                                              itE=coords.end();
                                              it != itE; ++it)
     {
