@@ -230,7 +230,7 @@ public:
 	 * Returns all Nodes with the given number of Edges around it.
  	 * The return value is a newly allocated vector of existing nodes
 	 */
-	std::vector<Node*>* findNodesOfDegree(size_t degree);
+	std::vector<Node*>* findNodesOfDegree(std::size_t degree);
 };
 
 } // namespace geos::planargraph

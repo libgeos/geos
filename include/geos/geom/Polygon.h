@@ -116,7 +116,7 @@ public:
 	size_t getNumInteriorRing() const;
 
 	/// Get nth interior ring (hole)
-	const LineString* getInteriorRingN(size_t n) const;
+	const LineString* getInteriorRingN(std::size_t n) const;
 
 	std::string getGeometryType() const;
 	virtual GeometryTypeId getGeometryTypeId() const;

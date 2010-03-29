@@ -37,7 +37,7 @@ CoordinateArraySequenceFactory::create(std::vector<Coordinate> *coords,
 }
 
 INLINE CoordinateSequence *
-CoordinateArraySequenceFactory::create(size_t size, size_t /* dimension */)
+CoordinateArraySequenceFactory::create(std::size_t size, std::size_t /* dimension */)
 		const
 {
 	/* CoordinateArraySequence only accepts 3d Coordinates */

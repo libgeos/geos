@@ -54,7 +54,7 @@ public:
 	 * Constructs an SIRtree with the given maximum number of child nodes
 	 * that a node may have
 	 */
-	SIRtree(size_t nodeCapacity);
+	SIRtree(std::size_t nodeCapacity);
 
 	virtual ~SIRtree();
 

@@ -97,8 +97,8 @@ private:
 	 *
 	 * NOTE: aborts if 'start' is >= pts.getSize()
 	 */
-	static size_t findChainEnd(const geom::CoordinateSequence& pts,
-	                                                   size_t start);
+	static std::size_t findChainEnd(const geom::CoordinateSequence& pts,
+	                                                   std::size_t start);
 };
 
 } // namespace geos::index::chain

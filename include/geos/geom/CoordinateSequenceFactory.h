@@ -75,7 +75,7 @@ public:
 	 * @param dimension the dimension of the coordinates in the sequence
 	 * 	(if user-specifiable, otherwise ignored)
 	 */
-	virtual CoordinateSequence *create(size_t size,
+	virtual CoordinateSequence *create(std::size_t size,
 			size_t dimension) const=0;
 
 	virtual ~CoordinateSequenceFactory();

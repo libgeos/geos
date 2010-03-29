@@ -81,7 +81,7 @@ private:
 	BoolVectAutoPtr usePt;
 	double distanceTolerance;
 
-	void simplifySection(size_t i, size_t j);
+	void simplifySection(std::size_t i, std::size_t j);
 
     // Declare type as noncopyable
     DouglasPeuckerLineSimplifier(const DouglasPeuckerLineSimplifier& other);

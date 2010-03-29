@@ -114,7 +114,7 @@ public:
 	 */
 	virtual int getBoundaryDimension() const;
 
-	virtual size_t getNumPoints() const;
+	virtual std::size_t getNumPoints() const;
 
 	virtual std::string getGeometryType() const;
 
@@ -150,10 +150,10 @@ public:
 	virtual double getLength() const;
 
 	/// Returns the number of geometries in this collection
-	virtual size_t getNumGeometries() const;
+	virtual std::size_t getNumGeometries() const;
 
 	/// Returns a pointer to the nth Geometry int this collection
-	virtual const Geometry* getGeometryN(size_t n) const;
+	virtual const Geometry* getGeometryN(std::size_t n) const;
 
 protected:
 

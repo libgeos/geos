@@ -86,7 +86,7 @@ public:
 	 */
 	virtual geom::Coordinate& getCoordinate();
 
-	virtual size_t getDegree();
+	virtual std::size_t getDegree();
 
 	virtual iterator begin();
 
@@ -145,7 +145,7 @@ private:
 
 };
 
-inline size_t
+inline std::size_t
 EdgeEndStar::getDegree()
 {
 	return edgeMap.size();

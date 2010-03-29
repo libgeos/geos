@@ -44,10 +44,10 @@ public:
 	CoordinateSequence *clone() const;
 
 	//const Coordinate& getCoordinate(int pos) const;
-	const Coordinate& getAt(size_t pos) const;
+	const Coordinate& getAt(std::size_t pos) const;
 
 	/// Copy Coordinate at position i to Coordinate c
-	virtual void getAt(size_t i, Coordinate& c) const;
+	virtual void getAt(std::size_t i, Coordinate& c) const;
 
 	//int size() const;
 	size_t getSize() const;
@@ -65,7 +65,7 @@ public:
 	CoordinateArraySequence(std::vector<Coordinate> *coords);
 
 	/// Construct sequence allocating space for n coordinates
-	CoordinateArraySequence(size_t n);
+	CoordinateArraySequence(std::size_t n);
 
 	~CoordinateArraySequence();
 
@@ -86,20 +86,20 @@ public:
 	 *
 	 * NOTE: this is a CoordinateList interface in JTS
 	 */
-	virtual void add(size_t i, const Coordinate& coord, bool allowRepeated);
+	virtual void add(std::size_t i, const Coordinate& coord, bool allowRepeated);
 
-	void setAt(const Coordinate& c, size_t pos);
+	void setAt(const Coordinate& c, std::size_t pos);
 
-	void deleteAt(size_t pos);
+	void deleteAt(std::size_t pos);
 
 	std::string toString() const;
 
 	void setPoints(const std::vector<Coordinate> &v);
 
-	double getOrdinate(size_t index,
+	double getOrdinate(std::size_t index,
 			size_t ordinateIndex) const;
 
-	void setOrdinate(size_t index, size_t ordinateIndex,
+	void setOrdinate(std::size_t index, std::size_t ordinateIndex,
 			double value);
 
 	void expandEnvelope(Envelope &env) const;

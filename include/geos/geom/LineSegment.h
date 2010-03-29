@@ -77,10 +77,10 @@ public:
 	void setCoordinates(const Coordinate& c0, const Coordinate& c1);
 
 	// obsoleted, use operator[] instead
-	//const Coordinate& getCoordinate(size_t i) const;
+	//const Coordinate& getCoordinate(std::size_t i) const;
 
-	const Coordinate& operator[](size_t i) const;
-	Coordinate& operator[](size_t i);
+	const Coordinate& operator[](std::size_t i) const;
+	Coordinate& operator[](std::size_t i);
 
 	void setCoordinates(const LineSegment& ls);
 

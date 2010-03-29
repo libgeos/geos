@@ -118,7 +118,7 @@ public:
 	 * Constructs an STRtree with the given maximum number of child nodes that
 	 * a node may have
 	 */
-	STRtree(size_t nodeCapacity=10);
+	STRtree(std::size_t nodeCapacity=10);
 
 	void insert(const geom::Envelope *itemEnv,void* item);
 

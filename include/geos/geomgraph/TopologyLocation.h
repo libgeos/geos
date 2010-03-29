@@ -80,7 +80,7 @@ public:
 
 	TopologyLocation(const TopologyLocation &gl);
 
-	int get(size_t posIndex) const;
+	int get(std::size_t posIndex) const;
 
 	/**
 	 * @return true if all locations are Location::UNDEF
@@ -104,7 +104,7 @@ public:
 
 	void setAllLocationsIfNull(int locValue);
 
-	void setLocation(size_t locIndex, int locValue);
+	void setLocation(std::size_t locIndex, int locValue);
 
 	void setLocation(int locValue);
 

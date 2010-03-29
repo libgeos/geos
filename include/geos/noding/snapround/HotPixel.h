@@ -171,7 +171,7 @@ public:
 	 * @param segIndex
 	 * @return true if a node was added to the segment
 	 */
-	bool addSnappedNode(NodedSegmentString& segStr, size_t segIndex);
+	bool addSnappedNode(NodedSegmentString& segStr, std::size_t segIndex);
 
 };
 

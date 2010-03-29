@@ -99,9 +99,9 @@ public:
 
 	virtual bool isEmpty() const;
 
-	virtual size_t getNumPoints() const;
+	virtual std::size_t getNumPoints() const;
 
-	virtual Point* getPointN(size_t n) const;
+	virtual Point* getPointN(std::size_t n) const;
 
 	/// \brief
 	/// Return the start point of the LineString

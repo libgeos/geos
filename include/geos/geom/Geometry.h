@@ -264,7 +264,7 @@ public:
 	virtual CoordinateSequence* getCoordinates() const=0; //Abstract
 
 	/// Returns the count of this Geometrys vertices.
-	virtual size_t getNumPoints() const=0; //Abstract
+	virtual std::size_t getNumPoints() const=0; //Abstract
 
 	/// Returns false if the Geometry not simple.
 	virtual bool isSimple() const; 
@@ -277,11 +277,11 @@ public:
 
 	/// Returns the number of geometries in this collection
 	/// (or 1 if this is not a collection)
-	virtual size_t getNumGeometries() const { return 1; }
+	virtual std::size_t getNumGeometries() const { return 1; }
 
 	/// Returns a pointer to the nth Geometry int this collection
 	/// (or self if this is not a collection)
-	virtual const Geometry* getGeometryN(size_t /*n*/) const { return this; }
+	virtual const Geometry* getGeometryN(std::size_t /*n*/) const { return this; }
 
 	/**
 	 * \brief Tests the validity of this <code>Geometry</code>.
@@ -664,7 +664,7 @@ public:
 	template <class T>
 	void applyComponentFilter(T& f) const
 	{
-		for(size_t i=0, n=getNumGeometries(); i<n; ++i)
+		for(std::size_t i=0, n=getNumGeometries(); i<n; ++i)
 			f.filter(getGeometryN(i));
 	}
 

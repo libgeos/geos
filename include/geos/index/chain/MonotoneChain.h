@@ -98,7 +98,7 @@ public:
 	///   Ownership left to caller, this class holds a reference.
 	///
 	MonotoneChain(const geom::CoordinateSequence& pts,
-                  size_t start, size_t end, void* context);
+                  std::size_t start, std::size_t end, void* context);
 
 	~MonotoneChain();
 
@@ -113,7 +113,7 @@ public:
 	 *  Set given LineSegment with points of the segment starting
 	 *  at the given index.
 	 */
-	void getLineSegment(size_t index, geom::LineSegment& ls) const;
+	void getLineSegment(std::size_t index, geom::LineSegment& ls) const;
 
 	/**
 	 * Return the subsequence of coordinates forming this chain.
@@ -145,8 +145,8 @@ private:
 			size_t end0,
 			MonotoneChainSelectAction& mcs);
 
-	void computeOverlaps(size_t start0, size_t end0, MonotoneChain& mc,
-			     size_t start1, size_t end1,
+	void computeOverlaps(std::size_t start0, std::size_t end0, MonotoneChain& mc,
+			     std::size_t start1, std::size_t end1,
 	                     MonotoneChainOverlapAction& mco);
 
 	/// Externally owned 

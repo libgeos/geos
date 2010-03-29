@@ -231,7 +231,7 @@ protected:
 	std::auto_ptr<BoundableList> boundablesAtLevel(int level);
 
 	// @@ should be size_t, probably
-	size_t nodeCapacity;
+	std::size_t nodeCapacity;
 
 	/**
 	 * @return a test for intersection between two bounds,
@@ -248,7 +248,7 @@ public:
 	 * Constructs an AbstractSTRtree with the specified maximum number of child
 	 * nodes that a node may have
 	 */
-	AbstractSTRtree(size_t newNodeCapacity)
+	AbstractSTRtree(std::size_t newNodeCapacity)
 		:
 		built(false),
 		itemBoundables(new BoundableList()),
@@ -279,7 +279,7 @@ public:
 	/**
 	 * Returns the maximum number of child nodes that a node may have
 	 */
-	virtual size_t getNodeCapacity() { return nodeCapacity; }
+	virtual std::size_t getNodeCapacity() { return nodeCapacity; }
 
 	virtual void query(const void* searchBounds, const AbstractNode* node, std::vector<void*>* matches);
 

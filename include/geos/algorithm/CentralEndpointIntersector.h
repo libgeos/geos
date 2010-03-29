@@ -106,7 +106,7 @@ private:
 		geom::Coordinate avg(0, 0);
 		size_t n = pts.size();
 		if ( ! n ) return avg;
-		for (size_t i=0; i<n; ++i)
+		for (std::size_t i=0; i<n; ++i)
 		{
 			avg.x += pts[i].x;
 			avg.y += pts[i].y;
@@ -131,7 +131,7 @@ private:
 	{
 		double minDist = std::numeric_limits<double>::max();
 		geom::Coordinate result = geom::Coordinate::getNull();
-		for (size_t i = 0, n=pts.size(); i < n; ++i) {
+		for (std::size_t i = 0, n=pts.size(); i < n; ++i) {
 			double dist = p.distance(pts[i]);
 			if (dist < minDist) {
 				minDist = dist;

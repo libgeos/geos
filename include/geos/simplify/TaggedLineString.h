@@ -80,9 +80,9 @@ public:
 
 	size_t getResultSize() const;
 
-	TaggedLineSegment* getSegment(size_t);
+	TaggedLineSegment* getSegment(std::size_t);
 
-	const TaggedLineSegment* getSegment(size_t) const;
+	const TaggedLineSegment* getSegment(std::size_t) const;
 
 	std::vector<TaggedLineSegment*>& getSegments();
 

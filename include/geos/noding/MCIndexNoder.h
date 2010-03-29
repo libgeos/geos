@@ -99,8 +99,8 @@ public:
 			si(newSi)
 		{}
 
-		void overlap(index::chain::MonotoneChain& mc1, size_t start1,
-            index::chain::MonotoneChain& mc2, size_t start2);
+		void overlap(index::chain::MonotoneChain& mc1, std::size_t start1,
+            index::chain::MonotoneChain& mc2, std::size_t start2);
     private:
         SegmentIntersector& si;
 

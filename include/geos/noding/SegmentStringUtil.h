@@ -62,7 +62,7 @@ public:
 		geom::LineString::ConstVect lines;
 		geom::util::LinearComponentExtracter::getLines(*g, lines);
 
-		for (size_t i=0, n=lines.size(); i<n; i++)
+		for (std::size_t i=0, n=lines.size(); i<n; i++)
 		{
 			geom::LineString* line = (geom::LineString*)(lines[i]);
 

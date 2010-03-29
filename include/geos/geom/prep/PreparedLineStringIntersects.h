@@ -101,7 +101,7 @@ protected:
 	//	geom::Coordinate::ConstVect coords;
 	//	ComponentCoordinateExtracter::getCoordinates( *testGeom, coords);
 
-	//	for (size_t i=0, n=coords.size(); i<n; i++)
+	//	for (std::size_t i=0, n=coords.size(); i<n; i++)
 	//	{
 	//		geom::Coordinate c = *(coords[i]);
 	//		if ( locator->intersects( c, &(prepLine->getGeometry()) ))

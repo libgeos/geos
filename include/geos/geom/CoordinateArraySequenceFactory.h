@@ -51,10 +51,10 @@ public:
 	 */
 	CoordinateSequence *create(std::vector<Coordinate> *coords) const;
 
-	CoordinateSequence *create(std::vector<Coordinate> *coords, size_t dims) const;
+	CoordinateSequence *create(std::vector<Coordinate> *coords, std::size_t dims) const;
 
-   	/** @see CoordinateSequenceFactory::create(size_t, int) */
-	CoordinateSequence *create(size_t size, size_t dimension=3) const;
+   	/** @see CoordinateSequenceFactory::create(std::size_t, int) */
+	CoordinateSequence *create(std::size_t size, std::size_t dimension=3) const;
 
 	/** \brief
 	 * Returns the singleton instance of CoordinateArraySequenceFactory

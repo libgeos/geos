@@ -93,7 +93,7 @@ private:
 	 * which are pre-existing in the vertex list.
 	 */
 	void findCollapsesFromExistingVertices(
-			std::vector<size_t>& collapsedVertexIndexes);
+			std::vector<std::size_t>& collapsedVertexIndexes);
 
 	/**
 	 * Adds nodes for any collapsed edge pairs caused by inserted nodes
@@ -103,7 +103,7 @@ private:
 	 * the vertex must be added as a node as well.
 	 */
 	void findCollapsesFromInsertedNodes(
-		std::vector<size_t>& collapsedVertexIndexes);
+		std::vector<std::size_t>& collapsedVertexIndexes);
 
 	bool findCollapseIndex(SegmentNode& ei0, SegmentNode& ei1,
 		size_t& collapsedVertexIndex);
@@ -140,9 +140,9 @@ public:
 	 * @param intPt the intersection Coordinate, will be copied
 	 * @param segmentIndex 
 	 */
-	SegmentNode* add(const geom::Coordinate& intPt, size_t segmentIndex);
+	SegmentNode* add(const geom::Coordinate& intPt, std::size_t segmentIndex);
 
-	SegmentNode* add(const geom::Coordinate *intPt, size_t segmentIndex) {
+	SegmentNode* add(const geom::Coordinate *intPt, std::size_t segmentIndex) {
 		return add(*intPt, segmentIndex);
 	}
 

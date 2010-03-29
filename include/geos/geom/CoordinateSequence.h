@@ -95,7 +95,7 @@ public:
 	 * Coordinate or merely a copy depends on the implementation.
 	 */
 	//virtual const Coordinate& getCoordinate(int i) const=0;
-	virtual const Coordinate& getAt(size_t i) const=0;
+	virtual const Coordinate& getAt(std::size_t i) const=0;
 
 	/// Return last Coordinate in the sequence
 	const Coordinate& back() const {
@@ -107,21 +107,21 @@ public:
 		return getAt(0);
 	}
 
-	const Coordinate& operator[] (size_t i) const {
+	const Coordinate& operator[] (std::size_t i) const {
 		return getAt(i);
 	}
 
 	/** \brief
 	 * Write Coordinate at position i to given Coordinate.
 	 */
-	virtual void getAt(size_t i, Coordinate& c) const=0;
+	virtual void getAt(std::size_t i, Coordinate& c) const=0;
 
 	/** \brief
 	 * Returns the number of Coordinates (actual or otherwise, as
 	 * this implementation may not store its data in Coordinate objects).
 	 */
 	//virtual int size() const=0;
-	virtual size_t getSize() const=0;
+	virtual std::size_t getSize() const=0;
 
 	size_t size() const { return getSize(); }
 
@@ -200,7 +200,7 @@ public:
 	 *
 	 * NOTE: this is a CoordinateList interface in JTS
 	 */
-	virtual void add(size_t i, const Coordinate& coord, bool allowRepeated)=0;
+	virtual void add(std::size_t i, const Coordinate& coord, bool allowRepeated)=0;
 
 	/// Returns <code>true</code> it list contains no coordinates.
 	virtual	bool isEmpty() const=0;
@@ -212,13 +212,13 @@ public:
 	//virtual int getSize() const=0;
 
 	/// Get a reference to Coordinate at position pos
-	//virtual	const Coordinate& getAt(size_t pos) const=0;
+	//virtual	const Coordinate& getAt(std::size_t pos) const=0;
 
 	/// Copy Coordinate c to position pos
-	virtual	void setAt(const Coordinate& c, size_t pos)=0;
+	virtual	void setAt(const Coordinate& c, std::size_t pos)=0;
 
 	/// Delete Coordinate at position pos (list will shrink).
-	virtual	void deleteAt(size_t pos)=0;
+	virtual	void deleteAt(std::size_t pos)=0;
 
 	/// Get a string rapresentation of CoordinateSequence
 	virtual	std::string toString() const=0;
@@ -260,7 +260,7 @@ public:
 	 *  Returns either the given CoordinateSequence if its length
 	 *  is greater than the given amount, or an empty CoordinateSequence.
 	 */
-	static CoordinateSequence* atLeastNCoordinatesOrNothing(size_t n,
+	static CoordinateSequence* atLeastNCoordinatesOrNothing(std::size_t n,
 			CoordinateSequence *c);
 
 	/** \brief
@@ -272,7 +272,7 @@ public:
 
 	/// Return position of a Coordinate, or -1 if not found
 	//
-	/// FIXME: return size_t, using numeric_limits<size_t>::max
+	/// FIXME: return std::size_t, using numeric_limits<std::size_t>::max
 	/// as 'not found' value.
 	///
 	static int indexOf(const Coordinate *coordinate,
@@ -320,7 +320,7 @@ public:
 	 *
 	 * @return the dimension of the sequence.
 	 */
-	virtual size_t getDimension() const=0;
+	virtual std::size_t getDimension() const=0;
 
 	/**
 	 * Returns the ordinate of a coordinate in this sequence.
@@ -332,7 +332,7 @@ public:
 	 * @param ordinateIndex the ordinate index in the coordinate
 	 * 	   (in range [0, dimension-1])
 	 */
-	virtual double getOrdinate(size_t index, size_t ordinateIndex) const=0;
+	virtual double getOrdinate(std::size_t index, std::size_t ordinateIndex) const=0;
 
 	/**
 	 * Returns ordinate X (0) of the specified coordinate.
@@ -340,7 +340,7 @@ public:
 	 * @param index
 	 * @return the value of the X ordinate in the index'th coordinate
 	 */
-	virtual double getX(size_t index) const { return getOrdinate(index, X); }
+	virtual double getX(std::size_t index) const { return getOrdinate(index, X); }
 
 	/**
 	 * Returns ordinate Y (1) of the specified coordinate.
@@ -348,7 +348,7 @@ public:
 	 * @param index
 	 * @return the value of the Y ordinate in the index'th coordinate
 	 */
-	virtual double getY(size_t index) const { return getOrdinate(index, Y); }
+	virtual double getY(std::size_t index) const { return getOrdinate(index, Y); }
 
 
 	/**
@@ -359,7 +359,7 @@ public:
 	 * 		(in range [0, dimension-1])
 	 * @param value  the new ordinate value
 	 */
-	virtual void setOrdinate(size_t index, size_t ordinateIndex, double value)=0;
+	virtual void setOrdinate(std::size_t index, std::size_t ordinateIndex, double value)=0;
 
 	/**
 	 * Expands the given Envelope to include the coordinates in the
@@ -385,7 +385,7 @@ public:
 	void applyCoordinateFilter(T& f) 
 	{
 		Coordinate c;
-		for(size_t i=0, n=size(); i<n; ++i)
+		for(std::size_t i=0, n=size(); i<n; ++i)
 		{
 			getAt(i, c);
 			f.filter(c);

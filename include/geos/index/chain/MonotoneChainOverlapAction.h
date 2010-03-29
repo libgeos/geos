@@ -64,8 +64,8 @@ public:
 	 * @param start2 the index of the start of the overlapping segment
 	 *               from mc2
 	 */
-	virtual void overlap(MonotoneChain& mc1, size_t start1,
-	                     MonotoneChain& mc2, size_t start2);
+	virtual void overlap(MonotoneChain& mc1, std::size_t start1,
+	                     MonotoneChain& mc2, std::size_t start2);
 
 	/**
 	 * This is a convenience function which can be overridden to

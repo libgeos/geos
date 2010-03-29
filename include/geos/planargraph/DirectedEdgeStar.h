@@ -86,7 +86,7 @@ public:
 	 * \brief Returns the number of edges around the Node associated
 	 * with this DirectedEdgeStar.
 	 */
-	size_t getDegree() const { return outEdges.size(); }
+	 std::size_t getDegree() const { return outEdges.size(); }
 
 	/**
 	 * \brief Returns the coordinate for the node at wich this
