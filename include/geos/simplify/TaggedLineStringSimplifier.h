@@ -26,8 +26,14 @@
 #define GEOS_SIMPLIFY_TAGGEDLINESTRINGSIMPLIFIER_H
 
 #include <geos/export.h>
+#include <cstddef>
 #include <vector>
 #include <memory>
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
 
 // Forward declarations
 namespace geos {
@@ -92,20 +98,20 @@ private:
 
 	double distanceTolerance;
 
-	void simplifySection(size_t i, size_t j,
-			size_t depth);
+	void simplifySection(std::size_t i, std::size_t j,
+			std::size_t depth);
 
-	static size_t findFurthestPoint(
+	static std::size_t findFurthestPoint(
 			const geom::CoordinateSequence* pts,
-			size_t i, size_t j,
+			std::size_t i, std::size_t j,
 			double& maxDistance);
 
 	bool hasBadIntersection(const TaggedLineString* parentLine,
-                       const std::vector<size_t>& sectionIndex,
+                       const std::vector<std::size_t>& sectionIndex,
                        const geom::LineSegment& candidateSeg);
 
 	bool hasBadInputIntersection(const TaggedLineString* parentLine,
-                       const std::vector<size_t>& sectionIndex,
+                       const std::vector<std::size_t>& sectionIndex,
                        const geom::LineSegment& candidateSeg);
 
 	bool hasBadOutputIntersection(const geom::LineSegment& candidateSeg);
@@ -114,7 +120,7 @@ private:
 			const geom::LineSegment& seg1) const;
 
 	std::auto_ptr<TaggedLineSegment> flatten(
-			size_t start, size_t end);
+			std::size_t start, std::size_t end);
 
 	/** \brief
 	 * Tests whether a segment is in a section of a TaggedLineString
@@ -126,7 +132,7 @@ private:
 	 */
 	static bool isInLineSection(
 		const TaggedLineString* parentLine,
-		const std::vector<size_t>& sectionIndex,
+		const std::vector<std::size_t>& sectionIndex,
 		const TaggedLineSegment* seg);
 
 	/** \brief
@@ -138,8 +144,8 @@ private:
 	 * @param sectionEndIndex
 	 */
 	void remove(const TaggedLineString* line,
-			size_t start,
-			size_t end);
+			std::size_t start,
+			std::size_t end);
  
 };
 
@@ -151,6 +157,10 @@ TaggedLineStringSimplifier::setDistanceTolerance(double d)
 
 } // namespace geos::simplify
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // GEOS_SIMPLIFY_TAGGEDLINESTRINGSIMPLIFIER_H
 

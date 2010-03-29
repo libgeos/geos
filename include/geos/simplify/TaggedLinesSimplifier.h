@@ -35,6 +35,11 @@
 #include <geos/simplify/LineSegmentIndex.h> // for templated function body
 #include <geos/simplify/TaggedLineStringSimplifier.h>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
+
 // Forward declarations
 namespace geos {
 	namespace simplify {
@@ -106,12 +111,14 @@ private:
 	std::auto_ptr<LineSegmentIndex> outputIndex;
 
 	std::auto_ptr<TaggedLineStringSimplifier> taggedlineSimplifier;
-
 };
-
 
 } // namespace geos::simplify
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // GEOS_SIMPLIFY_TAGGEDLINESSIMPLIFIER_H
 

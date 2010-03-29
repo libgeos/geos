@@ -21,6 +21,11 @@
 
 #include <string>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
+
 namespace geos {
 namespace io {
 
@@ -38,6 +43,10 @@ private:
 
     std::string saved_locale;
 };
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 } // namespace io
 } // namespace geos

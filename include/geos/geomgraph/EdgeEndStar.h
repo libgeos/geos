@@ -33,6 +33,11 @@
 #include <vector>
 #include <algorithm> // for inlines (find)
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
+
 // Forward declarations
 namespace geos {
 	namespace algorithm {
@@ -189,6 +194,10 @@ EdgeEndStar::find(EdgeEnd *eSearch)
 //#ifdef GEOS_INLINE
 //# include "geos/geomgraph/EdgeEndStar.inl"
 //#endif
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // ifndef GEOS_GEOMGRAPH_EDGEENDSTAR_H
 

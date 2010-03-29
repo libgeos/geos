@@ -34,6 +34,11 @@
 #include <vector>
 #include <memory> // for auto_ptr
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
+
 // Forward declarations
 namespace geos {
 	namespace geom { // geos::geom
@@ -162,6 +167,10 @@ private:
 //#ifdef GEOS_INLINE
 //# include "geos/geom/Point.inl"
 //#endif
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // ndef GEOS_GEOS_POINT_H
 

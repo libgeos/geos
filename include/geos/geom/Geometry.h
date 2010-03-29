@@ -34,6 +34,12 @@
 #include <vector>
 #include <memory>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#pragma warning(disable: 4355) // warning C4355: 'this' : used in base member initializer list
+#endif
+
 // Forward declarations
 namespace geos {
 	namespace geom {
@@ -796,8 +802,6 @@ protected:
 
 private:
 
-
-
 	int getClassSortIndex() const;
 
 	class GeometryChangedFilter : public GeometryComponentFilter
@@ -846,6 +850,10 @@ std::string jtsport();
 
 } // namespace geos::geom
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #ifdef GEOS_INLINE
 # include <geos/geom/Geometry.inl>

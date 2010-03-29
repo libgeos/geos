@@ -21,10 +21,14 @@
 #define GEOS_OP_LINEMERGE_LINEMERGER_H
 
 #include <geos/export.h>
-
 #include <geos/operation/linemerge/LineMergeGraph.h> // for composition
 
 #include <vector>
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
 
 // Forward declarations 
 namespace geos {
@@ -133,6 +137,10 @@ public:
 } // namespace geos::operation::linemerge
 } // namespace geos::operation
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // GEOS_OP_LINEMERGE_LINEMERGER_H
 

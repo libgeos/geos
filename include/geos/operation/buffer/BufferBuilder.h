@@ -29,6 +29,11 @@
 #include <geos/operation/buffer/OffsetCurveBuilder.h> // for inline (OffsetCurveBuilder enums)
 #include <geos/geomgraph/EdgeList.h> // for composition
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
+
 // Forward declarations
 namespace geos {
 	namespace geom {
@@ -219,6 +224,10 @@ private:
 } // namespace geos::operation::buffer
 } // namespace geos::operation
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // ndef GEOS_OP_BUFFER_BUFFERBUILDER_H
 

@@ -32,6 +32,10 @@
 
 #define BAD_GEOM_TYPE_MSG "Bad geometry type encountered in"
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
 
 // Forward declarations
 namespace geos {
@@ -162,6 +166,9 @@ private:
 } // namespace io
 } // namespace geos
 
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // #ifndef GEOS_IO_WKBREADER_H
 

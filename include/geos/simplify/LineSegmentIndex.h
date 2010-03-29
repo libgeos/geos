@@ -28,6 +28,11 @@
 #include <vector>
 #include <memory> // for auto_ptr
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
+
 // Forward declarations
 namespace geos {
 	namespace geom {
@@ -77,6 +82,10 @@ private:
 
 } // namespace geos::simplify
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // GEOS_SIMPLIFY_LINESEGMENTINDEX_H
 

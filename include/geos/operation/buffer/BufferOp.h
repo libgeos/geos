@@ -22,10 +22,15 @@
 #ifndef GEOS_OP_BUFFER_BUFFEROP_H
 #define GEOS_OP_BUFFER_BUFFEROP_H
 
-#include <geos/export.h>//#include <geos/operation/buffer/OffsetCurveBuilder.h> // for enum values 
+#include <geos/export.h>
 #include <geos/operation/buffer/BufferParameters.h> // for enum values 
 
 #include <geos/util/TopologyException.h> // for composition
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
 
 // Forward declarations
 namespace geos {
@@ -229,10 +234,13 @@ BufferOp::setEndCapStyle(int s)
 	bufParams.setEndCapStyle((BufferParameters::EndCapStyle)s);
 }
 
-
 } // namespace geos::operation::buffer
 } // namespace geos::operation
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // ndef GEOS_OP_BUFFER_BUFFEROP_H
 

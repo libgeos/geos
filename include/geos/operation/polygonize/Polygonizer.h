@@ -19,15 +19,18 @@
  *
  **********************************************************************/
 
-
 #ifndef GEOS_OP_POLYGONIZE_POLYGONIZER_H
 #define GEOS_OP_POLYGONIZE_POLYGONIZER_H
 
 #include <geos/export.h>
-
 #include <geos/geom/GeometryComponentFilter.h> // for LineStringAdder inheritance
 
 #include <vector>
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
 
 // Forward declarations
 namespace geos {
@@ -216,6 +219,10 @@ friend class Polygonizer::LineStringAdder;
 } // namespace geos::operation::polygonize
 } // namespace geos::operation
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // GEOS_OP_POLYGONIZE_POLYGONIZER_H
 
