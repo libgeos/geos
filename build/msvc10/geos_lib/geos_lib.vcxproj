@@ -66,11 +66,16 @@
       <OutputFile>$(OutDir)geosd.lib</OutputFile>
     </Lib>
     <PreBuildEvent>
-      <Command>copy ..\..\..\include\geos\platform.h.vc ..\..\..\include\geos\platform.h</Command>
+      <Command>copy ..\..\..\include\geos\platform.h.vc ..\..\..\include\geos\platform.h
+copy ..\..\..\include\geos\version.h.vc ..\..\..\include\geos\version.h</Command>
     </PreBuildEvent>
     <PreBuildEvent>
-      <Message>Copying ..\..\..\include\geos\platform.h.vc to ..\..\..\include\geos\platform.h</Message>
+      <Message>Generating include\geos\platform.h and include\geos\version.h</Message>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -87,8 +92,9 @@
       <OutputFile>$(OutDir)geos.lib</OutputFile>
     </Lib>
     <PreBuildEvent>
-      <Message>Copying ..\..\..\include\geos\platform.h.vc to ..\..\..\include\geos\platform.h</Message>
-      <Command>copy ..\..\..\include\geos\platform.h.vc ..\..\..\include\geos\platform.h</Command>
+      <Message>Generating include\geos\platform.h and include\geos\version.h</Message>
+      <Command>copy ..\..\..\include\geos\platform.h.vc ..\..\..\include\geos\platform.h
+copy ..\..\..\include\geos\version.h.vc    ..\..\..\include\geos\version.h</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
