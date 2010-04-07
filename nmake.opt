@@ -28,6 +28,16 @@ BUILD_DEBUG = NO
 !MESSAGE *** Setting BUILD_DEBUG $(BUILD_DEBUG)
 
 ###############################################################################
+# Set ENABLE_INLINE to YES if you want to make debug build
+# and to prepare not optimized binaries.
+
+!IFNDEF ENABLE_INLINE
+ENABLE_INLINE = NO
+!ENDIF
+
+!MESSAGE *** Setting ENABLE_INLINE $(ENABLE_INLINE)
+
+###############################################################################
 # Set BUILD_BATCH to YES if you want feed compiler with all
 # source .c and .cpp files in single batch.
 
@@ -106,7 +116,7 @@ GEOS_CPPFLAGS = $(GEOS_CPPFLAGS) /D "GEOS_DLL_EXPORT"
 !IF "$(BUILD_DEBUG)" == "YES"
 BUILD_PREFIX=_d
 GEOS_CFLAGS = /nologo /MDd /GR /Od /W4 /Zi
-GEOS_CPPFLAGS = /D "NDEBUG" $(GEOS_CPPFLAGS)
+GEOS_CPPFLAGS = /D "DEBUG" /D "_DEBUG" $(GEOS_CPPFLAGS)
 !ELSE
 GEOS_CFLAGS = /nologo /MD /GR /O2 /W3
 GEOS_CPPFLAGS = /D "NDEBUG" $(GEOS_CPPFLAGS)
@@ -126,6 +136,10 @@ GEOS_CFLAGS = $(GEOS_CFLAGS) /GX
 MPFLAGS = /MP
 !MESSAGE *** Setting /MP flag to number of effective processors
 !ENDIF
+!ENDIF
+
+!IF "$(ENABLE_INLINE)" == "YES"
+GEOS_CFLAGS = /D "GEOS_INLINE"
 !ENDIF
 
 !MESSAGE *** Using CFLAGS $(GEOS_CFLAGS)
