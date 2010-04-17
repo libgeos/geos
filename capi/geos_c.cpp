@@ -85,10 +85,23 @@ GEOSContextHandle_t handle = NULL;
 
 extern "C" {
 
+GEOSMessageHandler
+GEOSContext_setNoticeHandler_r(GEOSContextHandle_t extHandle, GEOSMessageHandler nf);
+GEOSMessageHandler
+GEOSContext_setErrorHandler_r(GEOSContextHandle_t extHandle, GEOSMessageHandler nf);
+
 void
 initGEOS (GEOSMessageHandler nf, GEOSMessageHandler ef)
 {
-    handle = initGEOS_r( nf, ef );
+    if ( ! handle )
+    {
+        handle = initGEOS_r( nf, ef );
+    }
+    else
+    {
+        GEOSContext_setNoticeHandler_r(handle, nf);
+        GEOSContext_setErrorHandler_r(handle, ef);
+    }
 }
 
 void

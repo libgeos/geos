@@ -90,6 +90,7 @@ geos_unit_SOURCES = geos_unit.cpp \
 	capi/GEOSSimplifyTest.cpp \
 	capi/GEOSPreparedGeometryTest.cpp \
 	capi/GEOSPolygonizer_getCutEdgesTest.cpp \
+	capi/GEOSGetCentroidTest.cpp \
 	capi/GEOSBufferTest.cpp
 
 noinst_HEADERS = \

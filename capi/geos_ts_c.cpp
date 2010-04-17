@@ -4,6 +4,7 @@
  *
  * C-Wrapper for GEOS library
  *
+ * Copyright (C) 2010 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -180,6 +181,40 @@ initGEOS_r(GEOSMessageHandler nf, GEOSMessageHandler ef)
     }
 
     return static_cast<GEOSContextHandle_t>(extHandle);
+}
+
+GEOSMessageHandler
+GEOSContext_setNoticeHandler_r(GEOSContextHandle_t extHandle, GEOSMessageHandler nf)
+{
+    GEOSMessageHandler f;
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return NULL;
+    }
+
+    f = handle->NOTICE_MESSAGE;
+    handle->NOTICE_MESSAGE = nf;
+
+    return f;
+}
+
+GEOSMessageHandler
+GEOSContext_setErrorHandler_r(GEOSContextHandle_t extHandle, GEOSMessageHandler nf)
+{
+    GEOSMessageHandler f;
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return NULL;
+    }
+
+    f = handle->ERROR_MESSAGE;
+    handle->ERROR_MESSAGE = nf;
+
+    return f;
 }
 
 void
