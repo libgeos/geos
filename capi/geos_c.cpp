@@ -88,7 +88,15 @@ extern "C" {
 void
 initGEOS (GEOSMessageHandler nf, GEOSMessageHandler ef)
 {
-    handle = initGEOS_r( nf, ef );
+    if ( ! handle )
+    {
+        handle = initGEOS_r( nf, ef );
+    }
+    else
+    {
+        GEOSContext_setNoticeHandler_r(handle, nf);
+        GEOSContext_setErrorHandler_r(handle, ef);
+    }
 }
 
 void
