@@ -1,3 +1,34 @@
+2010-04-18 09:34  Sandro Santilli <strk@keybit.net>
+
+	* [r2978] tests/unit/capi/GEOSGetCentroidTest.cpp: Forgot to add
+	  this, since I added the Makefile.am line..
+
+2010-04-17 21:55  Sandro Santilli <strk@keybit.net>
+
+	* [r2975] NEWS, capi/geos_c.cpp, capi/geos_c.h.in,
+	  capi/geos_ts_c.cpp, configure.in,
+	  source/headers/geos/version.h.vc, tests/unit/Makefile.am:
+	  Back-port fix of GEOS-context leakage
+
+2010-04-07 14:01  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2973] source/dirlist.mk: Ported r2967 update to branches/3.2
+
+2010-04-07 13:35  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2969] nmake.opt: Removed NDEBUG from CPPFLAGS of debug build
+	  configuration (Ticket #338)
+
+2010-03-29 17:50  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2966] ., autogen.bat, nmake.opt,
+	  source/algorithm/distance/DistanceToPoint.cpp: Added NMake 10.x
+	  version to be recognized by nmake.opt (ported from trunk)
+
+2010-03-29 16:21  Sandro Santilli <strk@keybit.net>
+
+	* [r2963] ChangeLog: Update ChangeLog
+
 2010-03-26 12:35  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2956] source/headers/geos/platform.h.vc: platform.h.vc: disable

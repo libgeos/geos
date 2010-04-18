@@ -1,4 +1,4 @@
-Changes in 3.2.2-svn
+Changes in 3.2.2
  
 - Bug fixes:
   - CAPI: do not leak contexts when using the non-reentrant interface
