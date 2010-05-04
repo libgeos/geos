@@ -14,7 +14,8 @@ Using CMake:
 Now, all versions:
   make
   make check
-  make install
+  make install # as root
+  ldconfig # as root
 
 Win32
 -----
