@@ -53,7 +53,7 @@ class OffsetCurveVertexList
 
 private:
 
-	geom::CoordinateSequence* ptList;
+	geom::CoordinateArraySequence* ptList;
 
 	const geom::PrecisionModel* precisionModel;
   
@@ -98,7 +98,16 @@ public:
 
 	~OffsetCurveVertexList()
 	{
-			delete ptList;
+		delete ptList;
+	}
+
+	void reset()
+	{
+		if ( ptList ) ptList->clear(); 
+		else ptList = new geom::CoordinateArraySequence();
+
+		precisionModel = NULL;
+		minimumVertexDistance = 0.0;
 	}
 	
 	void setPrecisionModel(const geom::PrecisionModel* nPrecisionModel)
@@ -161,7 +170,7 @@ public:
 
 };
 
-std::ostream& operator<< (std::ostream& os, const OffsetCurveVertexList& lst)
+inline std::ostream& operator<< (std::ostream& os, const OffsetCurveVertexList& lst)
 {
 	if ( lst.ptList )
 	{

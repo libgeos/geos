@@ -26,6 +26,7 @@
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/algorithm/Angle.h>
 #include <geos/operation/buffer/OffsetCurveBuilder.h>
+#include <geos/operation/buffer/OffsetCurveVertexList.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/geomgraph/Position.h>
@@ -37,7 +38,6 @@
 #include <geos/algorithm/HCoordinate.h>
 #include <geos/util.h>
 
-#include "OffsetCurveVertexList.h"
 #include "BufferInputLineSimplifier.h"
 
 #ifndef GEOS_DEBUG
@@ -70,7 +70,7 @@ OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,
 		:
 		li(),
 		maxCurveSegmentError(0.0),
-		vertexList(new OffsetCurveVertexList()),
+		vertexList(),
 		distance(0.0),
 		precisionModel(newPrecisionModel),
 		bufParams(nBufParams),
@@ -83,8 +83,7 @@ OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,
 		offset0(),
 		offset1(),
 		side(0),
-		endCapIndex(0),
-		vertexLists()
+		endCapIndex(0)
 {
 	// compute intersections in full precision, to provide accuracy
 	// the points are rounded as they are inserted into the curve line
@@ -105,8 +104,6 @@ OffsetCurveBuilder::OffsetCurveBuilder(const PrecisionModel *newPrecisionModel,
 /*public*/
 OffsetCurveBuilder::~OffsetCurveBuilder()
 {
-	delete vertexList;
-	for (unsigned int i=0; i<vertexLists.size(); i++) delete vertexLists[i];
 }
 
 
@@ -138,7 +135,7 @@ OffsetCurveBuilder::getLineCurve(const CoordinateSequence *inputPts,
 	}
 
 	// NOTE: we take ownership of lineCoord here ...
-	CoordinateSequence *lineCoord=vertexList->getCoordinates();
+	CoordinateSequence *lineCoord=vertexList.getCoordinates();
 
 	// ... and we give it away here
 	lineList.push_back(lineCoord);
@@ -166,7 +163,7 @@ OffsetCurveBuilder::getSingleSidedLineCurve(const CoordinateSequence* inputPts,
    }
 
    // NOTE: we take ownership of lineCoord here ...
-   std::auto_ptr<CoordinateSequence> lineCoord (vertexList->getCoordinates());
+   std::auto_ptr<CoordinateSequence> lineCoord (vertexList.getCoordinates());
 
    // [strk] Oct 1, 2009
    // Left side:  index [n-1] to [endCapIndex]
@@ -215,8 +212,7 @@ OffsetCurveBuilder::getRingCurve(const CoordinateSequence *inputPts,
 
 	// optimize creating ring for zero distance
 	if (distance == 0.0) {
-		vertexLists.push_back(vertexList);
-		vertexList = new OffsetCurveVertexList(); // is this needed ?
+		vertexList.reset(); // is this needed ?
 		lineList.push_back(inputPts->clone());
 		return;
 	}
@@ -225,7 +221,7 @@ OffsetCurveBuilder::getRingCurve(const CoordinateSequence *inputPts,
 
 	// this will be vertexList
 	// NOTE: getCoordinates() take ownership of the CoordinateSequence
-	lineList.push_back(vertexList->getCoordinates());
+	lineList.push_back(vertexList.getCoordinates());
 }
 
 /*private*/
@@ -238,15 +234,14 @@ OffsetCurveBuilder::init(double newDistance)
 	// Point list needs to be reset
 	// but if a previous point list exists
 	// we'd better back it up for final deletion
-	vertexLists.push_back(vertexList);
-	vertexList=new OffsetCurveVertexList();
-	vertexList->setPrecisionModel(precisionModel);
+	vertexList.reset();
+	vertexList.setPrecisionModel(precisionModel);
 
 	/**
 	 * Choose the min vertex separation as a small fraction of
 	 * the offset distance.
 	 */
-	vertexList->setMinimumVertexDistance(
+	vertexList.setMinimumVertexDistance(
 		distance * CURVE_VERTEX_SNAP_DISTANCE_FACTOR);
 }
 
@@ -285,7 +280,7 @@ OffsetCurveBuilder::computeLineBufferCurve(const CoordinateSequence& inputPts)
 	addLineEndCap(simp1[n1-1], simp1[n1]);
 
 	// Record the index of the end of line cap.
-	endCapIndex = vertexList->size() - 2 ;
+	endCapIndex = vertexList.size() - 2 ;
 
 
 	//---------- compute points for right side of line
@@ -308,7 +303,7 @@ OffsetCurveBuilder::computeLineBufferCurve(const CoordinateSequence& inputPts)
 	// add line cap for start of line
 	addLineEndCap(simp2[1], simp2[0]);
 
-	vertexList->closeRing();
+	vertexList.closeRing();
 }
 
 /*private*/
@@ -335,7 +330,7 @@ OffsetCurveBuilder::computeRingBufferCurve(const CoordinateSequence& inputPts,
 		bool addStartPoint = i != 1;
 		addNextSegment(simp[i], addStartPoint);
 	}
-	vertexList->closeRing();
+	vertexList.closeRing();
 }
 
 /*private*/
@@ -395,7 +390,7 @@ OffsetCurveBuilder::addNextSegment(const Coordinate &p, bool addStartPoint)
 void
 OffsetCurveBuilder::addLastSegment()
 {
-	vertexList->addPt(offset1.p1);
+	vertexList.addPt(offset1.p1);
 }
 
 /*private*/
@@ -435,15 +430,15 @@ OffsetCurveBuilder::addLineEndCap(const Coordinate &p0, const Coordinate &p1)
 	switch (bufParams.getEndCapStyle()) {
 		case BufferParameters::CAP_ROUND:
 			// add offset seg points with a fillet between them
-			vertexList->addPt(offsetL.p1);
+			vertexList.addPt(offsetL.p1);
 			addFillet(p1, angle+PI/2.0, angle-PI/2.0,
 			          CGAlgorithms::CLOCKWISE, distance);
-			vertexList->addPt(offsetR.p1);
+			vertexList.addPt(offsetR.p1);
 			break;
 		case BufferParameters::CAP_FLAT:
 			// only offset segment points are added
-			vertexList->addPt(offsetL.p1);
-			vertexList->addPt(offsetR.p1);
+			vertexList.addPt(offsetL.p1);
+			vertexList.addPt(offsetR.p1);
 			break;
 		case BufferParameters::CAP_SQUARE:
 			// add a square defined by extensions of the offset
@@ -458,8 +453,8 @@ OffsetCurveBuilder::addLineEndCap(const Coordinate &p0, const Coordinate &p1)
 			Coordinate squareCapROffset(
 				offsetR.p1.x+squareCapSideOffset.x,
 				offsetR.p1.y+squareCapSideOffset.y);
-			vertexList->addPt(squareCapLOffset);
-			vertexList->addPt(squareCapROffset);
+			vertexList.addPt(squareCapLOffset);
+			vertexList.addPt(squareCapROffset);
 			break;
 	}
 }
@@ -483,9 +478,9 @@ OffsetCurveBuilder::addFillet(const Coordinate &p, const Coordinate &p0,
 		if (startAngle >= endAngle) startAngle -= 2.0 * PI;
 	}
 
-	vertexList->addPt(p0);
+	vertexList.addPt(p0);
 	addFillet(p, startAngle, endAngle, direction, radius);
-	vertexList->addPt(p1);
+	vertexList.addPt(p1);
 }
 
 /*private*/
@@ -513,7 +508,7 @@ OffsetCurveBuilder::addFillet(const Coordinate &p, double startAngle,
 		double angle = startAngle + directionFactor * currAngle;
 		pt.x = p.x + radius * cos(angle);
 		pt.y = p.y + radius * sin(angle);
-		vertexList->addPt(pt);
+		vertexList.addPt(pt);
 		currAngle += currAngleInc;
 	}
 }
@@ -525,7 +520,7 @@ OffsetCurveBuilder::addCircle(const Coordinate &p, double distance)
 {
 	// add start point
 	Coordinate pt(p.x + distance, p.y);
-	vertexList->addPt(pt);
+	vertexList.addPt(pt);
 	addFillet(p, 0.0, 2.0*PI, -1, distance);
 }
 
@@ -534,11 +529,11 @@ void
 OffsetCurveBuilder::addSquare(const Coordinate &p, double distance)
 {
 	// add start point
-	vertexList->addPt(Coordinate(p.x+distance, p.y+distance));
-	vertexList->addPt(Coordinate(p.x+distance, p.y-distance));
-	vertexList->addPt(Coordinate(p.x-distance, p.y-distance));
-	vertexList->addPt(Coordinate(p.x-distance, p.y+distance));
-	vertexList->addPt(Coordinate(p.x+distance, p.y+distance));
+	vertexList.addPt(Coordinate(p.x+distance, p.y+distance));
+	vertexList.addPt(Coordinate(p.x+distance, p.y-distance));
+	vertexList.addPt(Coordinate(p.x-distance, p.y-distance));
+	vertexList.addPt(Coordinate(p.x-distance, p.y+distance));
+	vertexList.addPt(Coordinate(p.x+distance, p.y+distance));
 }
 
 /* private */
@@ -573,8 +568,8 @@ OffsetCurveBuilder::addCollinear(bool addStartPoint)
 		if (  bufParams.getJoinStyle() == BufferParameters::JOIN_BEVEL
 		   || bufParams.getJoinStyle() == BufferParameters::JOIN_MITRE)
 		{
-			if (addStartPoint) vertexList->addPt(offset0.p1);
-			vertexList->addPt(offset1.p0);
+			if (addStartPoint) vertexList.addPt(offset0.p1);
+			vertexList.addPt(offset1.p0);
 		}
 		else
 		{
@@ -599,7 +594,7 @@ OffsetCurveBuilder::addOutsideTurn(int orientation, bool addStartPoint)
 	if (offset0.p1.distance(offset1.p0) <
 		distance*OFFSET_SEGMENT_SEPARATION_FACTOR)
 	{
-		vertexList->addPt(offset0.p1);
+		vertexList.addPt(offset0.p1);
 		return;
 	}
 
@@ -615,11 +610,11 @@ OffsetCurveBuilder::addOutsideTurn(int orientation, bool addStartPoint)
 	{
 		// add a circular fillet connecting the endpoints 
 		// of the offset segments
-		if (addStartPoint) vertexList->addPt(offset0.p1);
+		if (addStartPoint) vertexList.addPt(offset0.p1);
 
 		// TESTING - comment out to produce beveled joins
 		addFillet(s1, offset0.p1, offset1.p0, orientation, distance);
-		vertexList->addPt(offset1.p0);
+		vertexList.addPt(offset1.p0);
 	}
 }
 
@@ -634,7 +629,7 @@ OffsetCurveBuilder::addInsideTurn(int orientation, bool addStartPoint)
 	li.computeIntersection(offset0.p0, offset0.p1, offset1.p0, offset1.p1);
 	if (li.hasIntersection())
 	{
-		vertexList->addPt(li.getIntersection(0));
+		vertexList.addPt(li.getIntersection(0));
 		return;
 	}
 
@@ -668,12 +663,12 @@ OffsetCurveBuilder::addInsideTurn(int orientation, bool addStartPoint)
 	if (offset0.p1.distance(offset1.p0) <
 		distance * INSIDE_TURN_VERTEX_SNAP_DISTANCE_FACTOR)
 	{
-		vertexList->addPt(offset0.p1);
+		vertexList.addPt(offset0.p1);
 	}
 	else
 	{
 		// add endpoint of this segment offset
-		vertexList->addPt(offset0.p1);
+		vertexList.addPt(offset0.p1);
 
 		// Add "closing segment" of required length.
 		if ( closingSegFactor > 0 )
@@ -682,13 +677,13 @@ OffsetCurveBuilder::addInsideTurn(int orientation, bool addStartPoint)
  (closingSegFactor*offset0.p1.x + s1.x)/(closingSegFactor + 1),
  (closingSegFactor*offset0.p1.y + s1.y)/(closingSegFactor + 1)
 			);
-			vertexList->addPt(mid0);
+			vertexList.addPt(mid0);
 
 			Coordinate mid1(
  (closingSegFactor*offset1.p0.x + s1.x)/(closingSegFactor + 1),
  (closingSegFactor*offset1.p0.y + s1.y)/(closingSegFactor + 1)
 			);
-			vertexList->addPt(mid1);
+			vertexList.addPt(mid1);
 		}
 		else
 		{
@@ -697,11 +692,11 @@ OffsetCurveBuilder::addInsideTurn(int orientation, bool addStartPoint)
 			// It is equivalent to the JTS 1.9 logic for
 			// closing segments (which results in very poor
 			// performance for large buffer distances)
-			vertexList->addPt(s1);
+			vertexList.addPt(s1);
 		}
 
 		// add start point of next segment offset
-		vertexList->addPt(offset1.p0);
+		vertexList.addPt(offset1.p0);
 	}
 }
 
@@ -744,7 +739,7 @@ OffsetCurveBuilder::addMitreJoin(const geom::Coordinate& p,
 
     if (isMitreWithinLimit)
     {
-        vertexList->addPt(intPt);
+        vertexList.addPt(intPt);
     }
     else
     {
@@ -803,12 +798,12 @@ OffsetCurveBuilder::addLimitedMitreJoin(
 	mitreMidLine.pointAlongOffset(1.0, -bevelHalfLen, bevelEndRight);
 
 	if (side == Position::LEFT) {
-		vertexList->addPt(bevelEndLeft);
-		vertexList->addPt(bevelEndRight);
+		vertexList.addPt(bevelEndLeft);
+		vertexList.addPt(bevelEndRight);
 	}
 	else {
-		vertexList->addPt(bevelEndRight);
-		vertexList->addPt(bevelEndLeft);
+		vertexList.addPt(bevelEndRight);
+		vertexList.addPt(bevelEndLeft);
 	}
 
 }
@@ -818,8 +813,8 @@ void
 OffsetCurveBuilder::addBevelJoin( const geom::LineSegment& offset0,
 	                  const geom::LineSegment& offset1)
 {
-	vertexList->addPt(offset0.p1);
-	vertexList->addPt(offset1.p0);
+	vertexList.addPt(offset0.p1);
+	vertexList.addPt(offset1.p0);
 }
 
 } // namespace geos.operation.buffer

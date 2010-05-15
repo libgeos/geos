@@ -29,6 +29,7 @@
 #include <geos/geom/Coordinate.h> // for composition
 #include <geos/geom/LineSegment.h> // for composition
 #include <geos/operation/buffer/BufferParameters.h> // for composition
+#include <geos/operation/buffer/OffsetCurveVertexList.h> // for composition
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -40,11 +41,6 @@ namespace geos {
 	namespace geom {
 		class CoordinateSequence;
 		class PrecisionModel;
-	}
-	namespace operation {
-		namespace buffer {
-			class OffsetCurveVertexList;
-		}
 	}
 }
 
@@ -216,7 +212,7 @@ private:
 	/// created CoordinateSequences are properly 
 	/// destroyed.
 	///
-	OffsetCurveVertexList* vertexList;
+	OffsetCurveVertexList vertexList;
 
 	double distance;
 
@@ -361,8 +357,6 @@ private:
 
 	/// Adds a CW square around a point
 	void addSquare(const geom::Coordinate &p, double distance);
-
-    std::vector<OffsetCurveVertexList*> vertexLists;
 
     // Declare type as noncopyable
     OffsetCurveBuilder(const OffsetCurveBuilder& other);

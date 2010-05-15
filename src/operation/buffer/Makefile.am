@@ -19,7 +19,6 @@ libopbuffer_la_SOURCES = \
 	OffsetCurveSetBuilder.cpp \
 	RightmostEdgeFinder.cpp \
 	SubgraphDepthLocater.cpp \
-	OffsetCurveVertexList.h \
 	$(NULL)
 
 libopbuffer_la_LIBADD = 

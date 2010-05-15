@@ -15,5 +15,6 @@ geos_HEADERS = \
 	BufferSubgraph.h \
 	OffsetCurveBuilder.h \
 	OffsetCurveSetBuilder.h \
+	OffsetCurveVertexList.h \
 	RightmostEdgeFinder.h \
 	SubgraphDepthLocater.h	
