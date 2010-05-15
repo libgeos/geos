@@ -19,7 +19,6 @@
 #include <geos/export.h>
 #include <vector>
 
-//#include <geos/platform.h>
 #include <geos/geom/CoordinateSequence.h>
 
 #include <geos/inline.h>
@@ -69,7 +68,12 @@ public:
 
 	~CoordinateArraySequence();
 
-	bool isEmpty() const;
+	bool isEmpty() const { return empty(); }
+
+	bool empty() const { return vect->empty(); }
+
+	/// Reset this CoordinateArraySequence to the empty state
+	void clear() { vect->clear(); }
 
 	void add(const Coordinate& c);
 

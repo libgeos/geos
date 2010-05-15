@@ -79,12 +79,6 @@ CoordinateArraySequence::toVector(vector<Coordinate>& out) const
 	out.insert(out.end(), vect->begin(), vect->end());
 }
 
-bool
-CoordinateArraySequence::isEmpty() const
-{
-	return vect->empty();
-}
-
 void
 CoordinateArraySequence::add(const Coordinate& c)
 {
