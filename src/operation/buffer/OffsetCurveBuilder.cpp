@@ -203,6 +203,12 @@ OffsetCurveBuilder::getRingCurve(const CoordinateSequence *inputPts,
 		int side, double distance,
 		vector<CoordinateSequence*>& lineList)
 {
+	// optimize creating ring for zero distance
+	if (distance == 0.0) {
+		lineList.push_back(inputPts->clone());
+		return;
+	}
+
 	init(distance);
 	if (inputPts->getSize() <= 2)
 	{
@@ -210,17 +216,10 @@ OffsetCurveBuilder::getRingCurve(const CoordinateSequence *inputPts,
 		return;
 	}
 
-	// optimize creating ring for zero distance
-	if (distance == 0.0) {
-		vertexList.reset(); // is this needed ?
-		lineList.push_back(inputPts->clone());
-		return;
-	}
-
 	computeRingBufferCurve(*inputPts, side);
 
-	// this will be vertexList
-	// NOTE: getCoordinates() take ownership of the CoordinateSequence
+	// NOTE: ownership of coordinates is transferred from vertexList
+	//       to lineList
 	lineList.push_back(vertexList.getCoordinates());
 }
 
@@ -232,8 +231,6 @@ OffsetCurveBuilder::init(double newDistance)
 	maxCurveSegmentError = distance * (1 - cos(filletAngleQuantum/2.0));
 
 	// Point list needs to be reset
-	// but if a previous point list exists
-	// we'd better back it up for final deletion
 	vertexList.reset();
 	vertexList.setPrecisionModel(precisionModel);
 
