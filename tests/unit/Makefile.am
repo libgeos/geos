@@ -94,7 +94,8 @@ geos_unit_SOURCES = \
 	capi/GEOSBufferTest.cpp \
 	capi/GEOSGeom_create.cpp \
 	capi/GEOSGeom_extractUniquePointsTest.cpp \
-	capi/GEOSOrientationIndex.cpp
+	capi/GEOSOrientationIndex.cpp \
+	capi/GEOSLineString_PointTest.cpp
 
 noinst_HEADERS = \
 	utility.h

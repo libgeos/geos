@@ -467,6 +467,83 @@ GEOSGetGeometryN(const Geometry *g1, int n)
     return GEOSGetGeometryN_r( handle, g1, n );
 }
 
+/*
+ * Call only on LINESTRING
+ * Returns NULL on exception
+ */
+Geometry *
+GEOSGeomGetPointN(const Geometry *g1, int n)
+{
+	return GEOSGeomGetPointN_r(handle, g1, n);
+}
+
+/*
+ * Call only on LINESTRING
+ */
+Geometry *
+GEOSGeomGetStartPoint(const Geometry *g1)
+{
+	return GEOSGeomGetStartPoint_r(handle, g1);
+}
+
+/*
+ * Call only on LINESTRING
+ */
+Geometry *
+GEOSGeomGetEndPoint(const Geometry *g1)
+{
+	return GEOSGeomGetEndPoint_r(handle, g1);
+}
+
+/*
+ * Call only on LINESTRING
+ * return 2 on exception, 1 on true, 0 on false
+ */
+char
+GEOSisClosed(const Geometry *g1)
+{
+	return GEOSisClosed_r(handle, g1);
+}
+
+/*
+ * Call only on LINESTRING
+ * returns 0 on exception, otherwise 1
+ */
+int
+GEOSGeomGetLength(const Geometry *g1, double *length)
+{
+	return GEOSGeomGetLength_r(handle, g1, length);
+}
+
+/*
+ * Call only on LINESTRING
+ * returns -1 on exception
+ */
+int
+GEOSGeomGetNumPoints(const Geometry *g1)
+{
+	return GEOSGeomGetNumPoints_r(handle, g1);
+}
+
+/*
+ * For POINT
+ * returns 0 on exception, otherwise 1
+ */
+int
+GEOSGeomGetX(const Geometry *g1, double *x)
+{
+	return GEOSGeomGetX_r(handle, g1, x);
+}
+
+/*
+ * For POINT
+ * returns 0 on exception, otherwise 1
+ */
+int
+GEOSGeomGetY(const Geometry *g1, double *y)
+{
+	return GEOSGeomGetY_r(handle, g1, y);
+}
 
 /*
  * Call only on polygon

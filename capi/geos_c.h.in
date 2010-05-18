@@ -752,6 +752,7 @@ extern char GEOS_DLL GEOSisValidDetail(const GEOSGeometry* g, char** reason,
 extern char GEOS_DLL GEOSisSimple(const GEOSGeometry* g1);
 extern char GEOS_DLL GEOSisRing(const GEOSGeometry* g1);
 extern char GEOS_DLL GEOSHasZ(const GEOSGeometry* g1);
+extern char GEOS_DLL GEOSisClosed(const GEOSGeometry *g1);
 
 extern char GEOS_DLL GEOSisEmpty_r(GEOSContextHandle_t handle,
                                    const GEOSGeometry* g1);
@@ -770,6 +771,8 @@ extern char GEOS_DLL GEOSisRing_r(GEOSContextHandle_t handle,
                                   const GEOSGeometry* g1);
 extern char GEOS_DLL GEOSHasZ_r(GEOSContextHandle_t handle,
                                 const GEOSGeometry* g1);
+extern char GEOS_DLL GEOSisClosed_r(GEOSContextHandle_t handle,
+                                const GEOSGeometry *g1);
 
 /************************************************************************
  *
@@ -835,6 +838,19 @@ extern int GEOS_DLL GEOSGetNumInteriorRings(const GEOSGeometry* g1);
 extern int GEOS_DLL GEOSGetNumInteriorRings_r(GEOSContextHandle_t handle,
                                               const GEOSGeometry* g1);
 
+/* Return -1 on exception, Geometry must be a LineString. */
+extern int GEOS_DLL GEOSGeomGetNumPoints(const GEOSGeometry* g1);
+
+extern int GEOS_DLL GEOSGeomGetNumPoints_r(GEOSContextHandle_t handle,
+                                       const GEOSGeometry* g1);
+
+/* Return -1 on exception, Geometry must be a Point. */
+extern int GEOS_DLL GEOSGeomGetX(const GEOSGeometry *g1, double *x);
+extern int GEOS_DLL GEOSGeomGetY(const GEOSGeometry *g1, double *y);
+
+extern int GEOS_DLL GEOSGeomGetX_r(GEOSContextHandle_t handle, const GEOSGeometry *g1, double *x);
+extern int GEOS_DLL GEOSGeomGetY_r(GEOSContextHandle_t handle, const GEOSGeometry *g1, double *y);
+
 /*
  * Return NULL on exception, Geometry must be a Polygon.
  * Returned object is a pointer to internal storage:
@@ -882,6 +898,18 @@ extern int GEOS_DLL GEOSGeom_getDimensions(const GEOSGeometry* g);
 extern int GEOS_DLL GEOSGeom_getDimensions_r(GEOSContextHandle_t handle,
                                              const GEOSGeometry* g);
 
+/*
+ * Return NULL on exception.
+ * Must be LineString and must be freed by called.
+ */
+extern GEOSGeometry GEOS_DLL *GEOSGeomGetPointN(const GEOSGeometry *g1, int n);
+extern GEOSGeometry GEOS_DLL *GEOSGeomGetStartPoint(const GEOSGeometry *g1);
+extern GEOSGeometry GEOS_DLL *GEOSGeomGetEndPoint(const GEOSGeometry *g1);
+
+extern GEOSGeometry GEOS_DLL *GEOSGeomGetPointN_r(GEOSContextHandle_t handle, const GEOSGeometry *g1, int n);
+extern GEOSGeometry GEOS_DLL *GEOSGeomGetStartPoint_r(GEOSContextHandle_t handle, const GEOSGeometry *g1);
+extern GEOSGeometry GEOS_DLL *GEOSGeomGetEndPoint_r(GEOSContextHandle_t handle, const GEOSGeometry *g1);
+
 /************************************************************************
  *
  *  Misc functions 
@@ -897,6 +925,7 @@ extern int GEOS_DLL GEOSHausdorffDistance(const GEOSGeometry *g1,
         const GEOSGeometry *g2, double *dist);
 extern int GEOS_DLL GEOSHausdorffDistanceDensify(const GEOSGeometry *g1,
         const GEOSGeometry *g2, double densifyFrac, double *dist);
+extern int GEOS_DLL GEOSGeomGetLength(const GEOSGeometry *g1, double *length);       
 extern int GEOS_DLL GEOSArea_r(GEOSContextHandle_t handle,
                                const GEOSGeometry* g1, double *area);
 extern int GEOS_DLL GEOSLength_r(GEOSContextHandle_t handle,
@@ -912,6 +941,8 @@ extern int GEOS_DLL GEOSHausdorffDistanceDensify_r(GEOSContextHandle_t handle,
                                    const GEOSGeometry *g1,
                                    const GEOSGeometry *g2,
                                    double densifyFrac, double *dist);
+extern int GEOS_DLL GEOSGeomGetLength_r(GEOSContextHandle_t handle,
+                                   const GEOSGeometry *g1, double *length);
 
 /************************************************************************
  *
