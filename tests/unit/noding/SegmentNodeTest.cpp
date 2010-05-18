@@ -55,7 +55,7 @@ namespace tut
 
         // Create coordinates sequence
         const size_t coords_size = 2;
-        CoordSeqPtr cs( factory_->create(0, coords_size) );
+        CoordSeqPtr cs( factory_->create((size_t)0, coords_size) );
 
         ensure( 0 != cs.get() );
 
@@ -103,7 +103,7 @@ namespace tut
 
         // Create coordinates sequence
         const size_t coords_size = 2;
-        CoordSeqPtr cs( factory_->create(0, coords_size) );
+        CoordSeqPtr cs( factory_->create((size_t)0, coords_size) );
 
         ensure( 0 != cs.get() );
 
@@ -145,7 +145,7 @@ namespace tut
 
         // Create coordinates sequence
         const size_t coords_size = 2;
-        CoordSeqPtr cs( factory_->create(0, coords_size) );
+        CoordSeqPtr cs( factory_->create((size_t)0, coords_size) );
 
         ensure( 0 != cs.get() );
 
@@ -187,7 +187,7 @@ namespace tut
 
         // Create coordinates sequence
         const size_t coords_size = 2;
-        CoordSeqPtr cs( factory_->create(0, coords_size) );
+        CoordSeqPtr cs( factory_->create((size_t)0, coords_size) );
 
         ensure( 0 != cs.get() );
 
