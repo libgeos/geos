@@ -72,20 +72,23 @@ WKTReader::read(const string &wellKnownText)
 CoordinateSequence*
 WKTReader::getCoordinates(StringTokenizer *tokenizer)
 {
+	size_t dim;
 	string nextToken=getNextEmptyOrOpener(tokenizer);
 	if (nextToken=="EMPTY") {
 		return geometryFactory->getCoordinateSequenceFactory()->create(NULL);
 		//new CoordinateArraySequence(); 
 	}
-	CoordinateSequence *coordinates = \
-		geometryFactory->getCoordinateSequenceFactory()->create(NULL);
+
 	Coordinate coord;
-	getPreciseCoordinate(tokenizer, coord);
+	getPreciseCoordinate(tokenizer, coord, dim);
+
+	CoordinateSequence *coordinates = \
+            geometryFactory->getCoordinateSequenceFactory()->create((size_t)0,dim);
 	coordinates->add(coord);
 	try {
 		nextToken=getNextCloserOrComma(tokenizer);
 		while (nextToken==",") {
-			getPreciseCoordinate(tokenizer, coord);
+			getPreciseCoordinate(tokenizer, coord, dim );
 			coordinates->add(coord);
 			nextToken=getNextCloserOrComma(tokenizer);
 		}
@@ -93,18 +96,23 @@ WKTReader::getCoordinates(StringTokenizer *tokenizer)
 		delete coordinates;
 		throw;
 	}
+
 	return coordinates;
 }
 
 void
-WKTReader::getPreciseCoordinate(StringTokenizer *tokenizer, Coordinate& coord)
+WKTReader::getPreciseCoordinate(StringTokenizer *tokenizer, 
+                                Coordinate& coord,
+                                size_t &dim )
 {
 	coord.x=getNextNumber(tokenizer);
 	coord.y=getNextNumber(tokenizer);
 	if (isNumberNext(tokenizer)) {
 		coord.z=getNextNumber(tokenizer);
+		dim = 3;
 	} else {
 		coord.z=DoubleNotANumber;
+		dim = 2;
 	}
 	precisionModel->makePrecise(coord);
 }
@@ -221,13 +229,14 @@ WKTReader::readGeometryTaggedText(StringTokenizer *tokenizer)
 Point*
 WKTReader::readPointText(StringTokenizer *tokenizer)
 {
+	size_t dim;
 	string nextToken=getNextEmptyOrOpener(tokenizer);
 	if (nextToken=="EMPTY") {
 		return geometryFactory->createPoint(Coordinate::getNull());
 	}
 
 	Coordinate coord;
-	getPreciseCoordinate(tokenizer, coord);
+	getPreciseCoordinate(tokenizer, coord, dim);
 	getNextCloser(tokenizer);
 
 	return geometryFactory->createPoint(coord);
@@ -258,6 +267,8 @@ WKTReader::readMultiPointText(StringTokenizer *tokenizer)
 
 	if ( tok == StringTokenizer::TT_NUMBER )
 	{
+		size_t dim;
+
 		// Try to parse deprecated form "MULTIPOINT(0 0, 1 1)"
 		const CoordinateSequenceFactory* csf = \
 			geometryFactory->getCoordinateSequenceFactory();
@@ -265,7 +276,7 @@ WKTReader::readMultiPointText(StringTokenizer *tokenizer)
 		try {
 			do {
 				Coordinate coord;
-				getPreciseCoordinate(tokenizer, coord);
+				getPreciseCoordinate(tokenizer, coord, dim);
 				coords->add(coord);
 				nextToken=getNextCloserOrComma(tokenizer);
 			} while(nextToken == ",");

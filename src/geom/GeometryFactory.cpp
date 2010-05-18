@@ -235,7 +235,8 @@ GeometryFactory::createPoint(const Coordinate& coordinate) const
 	if (coordinate.isNull()) {
 		return createPoint();
 	} else {
-		CoordinateSequence *cl=coordinateListFactory->create(new vector<Coordinate>(1, coordinate));
+		std::size_t dim = ISNAN(coordinate.z) ? 2 : 3;
+		CoordinateSequence *cl = coordinateListFactory->create(new vector<Coordinate>(1, coordinate), dim);
 		//cl->setAt(coordinate, 0);
 		Point *ret = createPoint(cl);
 		return ret;

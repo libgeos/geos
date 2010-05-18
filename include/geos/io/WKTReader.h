@@ -103,7 +103,7 @@ private:
 	const geom::GeometryFactory *geometryFactory;
 	const geom::PrecisionModel *precisionModel;
 
-	void getPreciseCoordinate(io::StringTokenizer *tokenizer, geom::Coordinate&);
+	void getPreciseCoordinate(io::StringTokenizer *tokenizer, geom::Coordinate&, std::size_t &dim );
 
 	bool isNumberNext(io::StringTokenizer *tokenizer);
 };

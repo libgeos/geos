@@ -31,26 +31,31 @@ namespace geos {
 namespace geom { // geos::geom
 
 CoordinateArraySequence::CoordinateArraySequence():
-	vect(new vector<Coordinate>())
+	vect(new vector<Coordinate>()),
+        dimension(3)
 {
 }
 
-CoordinateArraySequence::CoordinateArraySequence(size_t n):
-	vect(new vector<Coordinate>(n))
+CoordinateArraySequence::CoordinateArraySequence(size_t n, 
+                                                 size_t dimension_in ):
+	vect(new vector<Coordinate>(n)),
+        dimension(dimension_in)
 {
 }
 
 CoordinateArraySequence::CoordinateArraySequence(
-	vector<Coordinate> *coords): vect(coords)
+    vector<Coordinate> *coords, size_t dimension_in )
+        : vect(coords), dimension(dimension_in)
 {
 	if ( ! vect ) vect = new vector<Coordinate>();
 }
 
 CoordinateArraySequence::CoordinateArraySequence(
-	const CoordinateArraySequence &c)
+    const CoordinateArraySequence &c )
 	:
 	CoordinateSequence(c),
-	vect(new vector<Coordinate>(*(c.vect)))
+	vect(new vector<Coordinate>(*(c.vect))),
+        dimension(c.getDimension())
 {
 }
 

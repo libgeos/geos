@@ -26,22 +26,21 @@ namespace geom { // geos::geom
 INLINE CoordinateSequence*
 CoordinateArraySequenceFactory::create(std::vector<Coordinate> *coords) const
 {
-	return new CoordinateArraySequence(coords);
+	return new CoordinateArraySequence(coords,3);
 }
 
 INLINE CoordinateSequence *
 CoordinateArraySequenceFactory::create(std::vector<Coordinate> *coords,
-		size_t /* dimension */) const
+		size_t dimension ) const
 {
-	return new CoordinateArraySequence(coords);
+	return new CoordinateArraySequence(coords,dimension);
 }
 
 INLINE CoordinateSequence *
-CoordinateArraySequenceFactory::create(std::size_t size, std::size_t /* dimension */)
+CoordinateArraySequenceFactory::create(std::size_t size, std::size_t dimension)
 		const
 {
-	/* CoordinateArraySequence only accepts 3d Coordinates */
-	return new CoordinateArraySequence(size);
+	return new CoordinateArraySequence(size,dimension);
 }
 
 

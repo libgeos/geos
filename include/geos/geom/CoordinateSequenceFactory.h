@@ -63,7 +63,8 @@ public:
 	 * @param coordinates the coordinates
 	 */
 	virtual CoordinateSequence *create(
-			std::vector<Coordinate> *coordinates) const=0;
+            std::vector<Coordinate> *coordinates,
+            std::size_t dimension=3 ) const=0;
 
 	/** \brief
 	 * Creates a CoordinateSequence of the specified size and dimension.
@@ -76,7 +77,7 @@ public:
 	 * 	(if user-specifiable, otherwise ignored)
 	 */
 	virtual CoordinateSequence *create(std::size_t size,
-			size_t dimension) const=0;
+                                           std::size_t dimension) const=0;
 
 	virtual ~CoordinateSequenceFactory();
 };

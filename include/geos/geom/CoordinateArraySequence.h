@@ -38,7 +38,7 @@ namespace geom { // geos.geom
 class GEOS_DLL CoordinateArraySequence : public CoordinateSequence {
 public:
 
-	CoordinateArraySequence(const CoordinateArraySequence &cl);
+        CoordinateArraySequence(const CoordinateArraySequence &cl);
 
 	CoordinateSequence *clone() const;
 
@@ -61,10 +61,11 @@ public:
 	CoordinateArraySequence();
 
 	/// Construct sequence taking ownership of given Coordinate vector
-	CoordinateArraySequence(std::vector<Coordinate> *coords);
-
+	CoordinateArraySequence(std::vector<Coordinate> *coords,
+                                std::size_t dimension = 3);
+        
 	/// Construct sequence allocating space for n coordinates
-	CoordinateArraySequence(std::size_t n);
+	CoordinateArraySequence(std::size_t n, std::size_t dimension = 3);
 
 	~CoordinateArraySequence();
 
@@ -108,7 +109,7 @@ public:
 
 	void expandEnvelope(Envelope &env) const;
 
-	size_t getDimension() const { return 3; }
+        std::size_t getDimension() const { return dimension; }
 
 	void apply_rw(const CoordinateFilter *filter); 
 
@@ -118,6 +119,7 @@ public:
 
 private:
 	std::vector<Coordinate> *vect;
+        std::size_t dimension;
 };
 
 /// This is for backward API compatibility

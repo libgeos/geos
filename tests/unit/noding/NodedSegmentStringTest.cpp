@@ -64,7 +64,7 @@ namespace tut
     template<>
     void object::test<1>()
     {
-        CoordinateSequenceAutoPtr cs(csFactory->create(0, 2));
+        CoordinateSequenceAutoPtr cs(csFactory->create((size_t)0, 2));
 
         ensure(0 != cs.get());
 
@@ -111,7 +111,7 @@ namespace tut
     template<>
     void object::test<2>()
     {
-        CoordinateSequenceAutoPtr cs(csFactory->create(0, 2));
+        CoordinateSequenceAutoPtr cs(csFactory->create((size_t)0, 2));
 
     ensure(0 != cs.get());
 
@@ -148,7 +148,7 @@ namespace tut
     template<>
     void object::test<3>()
     {
-        CoordinateSequenceAutoPtr cs(csFactory->create(0, 2));
+        CoordinateSequenceAutoPtr cs(csFactory->create((size_t)0, 2));
 
     ensure(0 != cs.get());
 
@@ -221,7 +221,7 @@ namespace tut
         geos::geom::Coordinate p1(10, 0);
 
 
-        CoordinateSequenceAutoPtr cs(csFactory->create(0, 2));
+        CoordinateSequenceAutoPtr cs(csFactory->create((size_t)0, 2));
         cs->add(p0);
         cs->add(p1);
 
