@@ -122,6 +122,22 @@ public:
 	 */
 	static std::string toPoint(const geom::Coordinate& p0);
  
+	/**
+	 * Sets the rounding precision when writing the WKT
+	 * a precision of -1 disables it
+	 *
+	 * @param p0 the new precision to use
+	 *
+	 */
+	void setRoundingPrecision(int p0);
+
+	/**
+	 * Enables/disables trimming of unnecessary decimals
+	 *
+	 * @param p0 the trim boolean
+	 *
+	 */
+	void setTrim(bool p0);
 
 protected:
 
@@ -202,9 +218,14 @@ private:
 //	static const int INDENT = 2;
 
 	static std::string createFormatter(
-			const geom::PrecisionModel* precisionModel);
+			const geom::PrecisionModel* precisionModel,
+			int overwritePrecision);
 
 	bool isFormatted;
+
+	int roundingPrecision;
+
+	bool trim;
 
 	int level;
 

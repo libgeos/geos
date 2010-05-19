@@ -48,6 +48,8 @@ namespace io { // geos.io
 
 WKTWriter::WKTWriter() {
 	isFormatted=false;
+	roundingPrecision=-1;
+	trim = false;
 	level=0;
 	formatter="%f";
 }
@@ -114,12 +116,31 @@ WKTWriter::toPoint(const Coordinate& p0)
 	return ret.str();
 }
 
+void
+WKTWriter::setRoundingPrecision(int p0)
+{
+	if(p0 < -1) {
+		p0 = -1;
+	}
+	roundingPrecision = p0;
+}
+
+void
+WKTWriter::setTrim(bool p0)
+{
+	trim = p0;
+}
+
 string
-WKTWriter::createFormatter(const PrecisionModel* precisionModel)
+WKTWriter::createFormatter(const PrecisionModel* precisionModel, int overwritePrecision)
 {
 	// the default number of decimal places is 16, which is sufficient
 	// to accomodate the maximum precision of a double.
+	// if roundingPrecision is specified (not -1) it will be used instead
 	int decimalPlaces = precisionModel->getMaximumSignificantDigits();
+	if(overwritePrecision != -1) {
+		decimalPlaces = overwritePrecision;
+	}
     std::string fmt("%.");
     char buffer[255] = { 0 };
 	sprintf(buffer,"%i",decimalPlaces);
@@ -165,7 +186,7 @@ WKTWriter::writeFormatted(const Geometry *geometry, bool isFormatted,
 {
         CLocalizer clocale;
 	this->isFormatted=isFormatted;
-	formatter=createFormatter(geometry->getPrecisionModel());
+	formatter=createFormatter(geometry->getPrecisionModel(), roundingPrecision);
 	appendGeometryTaggedText(geometry, 0, writer);
 }
 
@@ -283,6 +304,69 @@ WKTWriter::appendCoordinate(const Coordinate* coordinate,
 string WKTWriter::writeNumber(double d) {
     char buffer[255] = { 0 };
 	sprintf(buffer,formatter.c_str(),d);
+	//If we've set trim to true, do it here
+	if(trim)	{
+		bool roundNines = false;
+		int i = 0, j;
+
+		//count the length of the string
+		while(buffer[i] != '\0') {
+			i++;
+		}
+		//arrays go to length-1 of course
+		i--;
+
+		/*
+		 * Is there a rounding error at the end?
+		 */
+		if(i > 6 &&
+			buffer[i] != '0' &&
+			buffer[i-1] == '0' &&
+			buffer[i-2] == '0' &&
+			buffer[i-3] == '0' &&
+			buffer[i-4] == '0' &&
+			buffer[i-5] == '0') {
+			buffer[i--] = '\0';
+		}
+		/*
+		 * Do we need to round 9's?
+		 */
+		if(i > 6 &&
+			buffer[i] == '9' &&
+			buffer[i-1] == '9' &&
+			buffer[i-2] == '9' &&
+			buffer[i-3] == '9' &&
+			buffer[i-4] == '9' &&
+			buffer[i-5] == '9') {
+			roundNines = true;
+		}
+
+		/*
+		 * Now let's format the string
+		 */
+		for(j = i; j >= 0; j--) {
+			if(roundNines) {
+				if(buffer[j] == '9') {
+					buffer[j] = '\0';
+				}
+				else {
+					buffer[j]++;
+					roundNines = false;
+				}
+			}
+			else if(buffer[j] == '0') {
+				buffer[j] = '\0';
+			}
+			else {
+				//remove period if no decimals
+				if(buffer[j] == '.' && buffer[j+1] == '\0') {
+					buffer[j] = '\0';
+				}
+				//and we're done
+				break;
+			}
+		}
+	}
 	std::string out(buffer);
 	out.append("");
 	return out;

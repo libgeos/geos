@@ -811,11 +811,22 @@ GEOSWKTWriter_destroy(WKTWriter *Writer)
     GEOSWKTWriter_destroy_r( handle, Writer );
 }
 
-
 char*
 GEOSWKTWriter_write(WKTWriter *writer, const Geometry *geom)
 {
     return GEOSWKTWriter_write_r( handle, writer, geom );
+}
+
+void
+GEOSWKTWriter_setTrim(WKTWriter *writer, char trim)
+{
+	GEOSWKTWriter_setTrim_r(handle, writer, trim);
+}
+
+void
+GEOSWKTWriter_setRoundingPrecision(WKTWriter *writer, int precision)
+{
+	return GEOSWKTWriter_setRoundingPrecision_r(handle, writer, precision);
 }
 
 /* WKB Reader */

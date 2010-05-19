@@ -62,6 +62,8 @@ geos_unit_SOURCES = \
 	index/quadtree/DoubleBitsTest.cpp \
 	io/ByteOrderValuesTest.cpp \
 	io/WKBReaderTest.cpp \
+	io/WKTReaderTest.cpp \
+	io/WKTWriterTest.cpp \
 	linearref/LengthIndexedLineTest.cpp \
 	noding/BasicSegmentStringTest.cpp \
 	noding/NodedSegmentStringTest.cpp \

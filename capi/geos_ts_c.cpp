@@ -4065,6 +4065,46 @@ GEOSWKTWriter_write_r(GEOSContextHandle_t extHandle, WKTWriter *writer, const Ge
     return NULL;
 }
 
+void
+GEOSWKTWriter_setTrim_r(GEOSContextHandle_t extHandle, WKTWriter *writer, char trim)
+{
+    assert(0 != writer);
+
+    if ( 0 == extHandle )
+    {
+        return;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return;
+    }
+
+    writer->setTrim(trim);
+}
+
+void
+GEOSWKTWriter_setRoundingPrecision_r(GEOSContextHandle_t extHandle, WKTWriter *writer, int precision)
+{
+    assert(0 != writer);
+
+    if ( 0 == extHandle )
+    {
+        return;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return;
+    }
+
+    writer->setRoundingPrecision(precision);
+}
+
 /* WKB Reader */
 WKBReader *
 GEOSWKBReader_create_r(GEOSContextHandle_t extHandle)
