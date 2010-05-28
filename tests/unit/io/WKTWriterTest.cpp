@@ -30,11 +30,11 @@ namespace tut
 		geos::io::WKTWriter wktwriter;
 
 		test_wktwriter_data()
-			:
-			pm(1000.0),
-			gf(&pm),
-			wktreader(&gf)
-		{}
+                :
+                pm(1000.0),
+                gf(&pm),
+                wktreader(&gf)
+            {}
 
 	};
 
@@ -53,42 +53,85 @@ namespace tut
 	template<>
 	void object::test<1>()
 	{         
-            geos::geom::Geometry *geom = wktreader.read("POINT(-117 33)");
-            std::string  result;
+        geos::geom::Geometry *geom = wktreader.read("POINT(-117 33)");
+        std::string  result;
 
-            wktwriter.setTrim(false);
-            result = wktwriter.write( geom );
+        wktwriter.setTrim(false);
+        result = wktwriter.write( geom );
 
-            ensure( result == "POINT (-117.0000 33.0000)" );
+        ensure( result == "POINT (-117.0000 33.0000)" );
 
-            wktwriter.setTrim(true);
-            result = wktwriter.write( geom );
+        wktwriter.setTrim(true);
+        result = wktwriter.write( geom );
 
-            ensure( result == "POINT (-117 33)" );
+        ensure( result == "POINT (-117 33)" );
 
-            delete geom;
-        }
+        delete geom;
+    }
 
 	// 2 - Test the output precision capability
 	template<>
 	template<>
 	void object::test<2>()
 	{         
-            geos::geom::Geometry *geom = wktreader.read("POINT(-117.1234567 33.1234567)");
-            std::string  result;
+        geos::geom::Geometry *geom = wktreader.read("POINT(-117.1234567 33.1234567)");
+        std::string  result;
 
-            wktwriter.setTrim(false);
-            result = wktwriter.write( geom );
+        wktwriter.setTrim(false);
+        result = wktwriter.write( geom );
 
-            ensure( result == "POINT (-117.1230 33.1230)" );
+        ensure( result == "POINT (-117.1230 33.1230)" );
 
-            wktwriter.setRoundingPrecision(2);
-            result = wktwriter.write( geom );
+        wktwriter.setRoundingPrecision(2);
+        result = wktwriter.write( geom );
 
-            ensure( result == "POINT (-117.12 33.12)" );
+        ensure( result == "POINT (-117.12 33.12)" );
 
-            delete geom;
-        }
+        delete geom;
+    }
+    
+	// 3 - Test 3D generation from a 3D geometry.
+	template<>
+	template<>
+	void object::test<3>()
+	{         
+        geos::geom::Geometry *geom = wktreader.read("POINT Z (-117 33 120)");
+        std::string  result;
 
+        wktwriter.setOutputDimension(3);
+        wktwriter.setTrim( true );
+        wktwriter.setOld3D( false );
+
+        result = wktwriter.write( geom );
+
+        ensure_equals( result, std::string("POINT Z (-117 33 120)") );
+
+        wktwriter.setOld3D( true );
+        result = wktwriter.write( geom );
+
+        ensure_equals( result, std::string("POINT (-117 33 120)") );
+
+        delete geom;
+    }
+    
+	// 4 - Test 2D generation from a 3D geometry.
+	template<>
+	template<>
+	void object::test<4>()
+	{         
+        geos::geom::Geometry *geom = wktreader.read("POINT(-117 33 120)");
+        std::string  result;
+
+        wktwriter.setOutputDimension(2);
+        wktwriter.setTrim( true );
+        wktwriter.setOld3D( false );
+
+        result = wktwriter.write( geom );
+
+        ensure_equals( result, std::string("POINT (-117 33)") );
+
+        delete geom;
+    }
+    
 } // namespace tut
 

@@ -88,6 +88,9 @@ public:
 	/// Returns surface dimension (2)
 	Dimension::DimensionType getDimension() const;
 
+	/// Returns coordinate dimension.
+	virtual int getCoordinateDimension() const;
+
 	/// Returns 1 (Polygon boundary is a MultiLineString)
 	int getBoundaryDimension() const;
 

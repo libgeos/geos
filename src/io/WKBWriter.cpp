@@ -46,10 +46,11 @@ namespace geos {
 	namespace io { // geos.io
 
 WKBWriter::WKBWriter(int dims, int bo, bool srid):
-		outputDimension(dims), byteOrder(bo), includeSRID(srid), outStream(NULL)
+		defaultOutputDimension(dims), byteOrder(bo), includeSRID(srid), outStream(NULL)
 {
 	if ( dims < 2 || dims > 3 )
 		throw util::IllegalArgumentException("WKB output dimension must be 2 or 3");
+    outputDimension = defaultOutputDimension;
 }
 
 WKBWriter::~WKBWriter()
@@ -72,6 +73,10 @@ WKBWriter::writeHEX(const Geometry &g, ostream &os)
 void
 WKBWriter::write(const Geometry &g, ostream &os) 
 {
+    outputDimension = defaultOutputDimension;
+    if( outputDimension > g.getCoordinateDimension() )
+        outputDimension = g.getCoordinateDimension();
+
 	outStream = &os;
 
 	switch (g.getGeometryTypeId()) {
@@ -204,20 +209,19 @@ void
 WKBWriter::writeGeometryType(int typeId, int SRID) 
 {
 	int flag3D = (outputDimension == 3) ? 0x80000000 : 0;
-        int typeInt = typeId | flag3D;
+    int typeInt = typeId | flag3D;
         
-        if (includeSRID && SRID != 0)
-          typeInt = typeInt | 0x20000000;
+    if (includeSRID && SRID != 0)
+        typeInt = typeInt | 0x20000000;
         
-	//writeInt(typeId);
 	writeInt(typeInt);
 }
 
 void
 WKBWriter::writeSRID(int SRID) 
 {
-        if (includeSRID && SRID != 0)
-          writeInt(SRID);
+    if (includeSRID && SRID != 0)
+        writeInt(SRID);
 }
 
 void
@@ -234,7 +238,7 @@ WKBWriter::writeCoordinateSequence(const CoordinateSequence &cs,
 {
 	int size = cs.getSize();
 	bool is3d=false;
-	if ( cs.getDimension() > 2 && outputDimension > 2) is3d = true;
+	if ( outputDimension > 2) is3d = true;
 
 	if (sized) writeInt(size);
 	for (int i=0; i<size; i++) writeCoordinate(cs, i, is3d);

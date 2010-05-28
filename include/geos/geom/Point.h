@@ -92,6 +92,9 @@ public:
 	/// Returns point dimension (0)
 	Dimension::DimensionType getDimension() const;
 
+	/// Returns coordinate dimension.
+	virtual int getCoordinateDimension() const;
+
 	/// Returns Dimension::False (Point has no boundary)
 	int getBoundaryDimension() const;
 

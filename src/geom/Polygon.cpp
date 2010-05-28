@@ -145,6 +145,23 @@ Polygon::getDimension() const
 }
 
 int
+Polygon::getCoordinateDimension() const
+{
+	int dimension=2;
+
+    if( shell != NULL )
+        dimension = max(dimension,shell->getCoordinateDimension());
+
+	size_t nholes=holes->size();
+	for (size_t i=0; i<nholes; ++i)
+	{
+        dimension = max(dimension,(*holes)[i]->getCoordinateDimension());
+	}
+
+	return dimension;
+}
+
+int
 Polygon::getBoundaryDimension() const
 {
 	return 1;

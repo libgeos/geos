@@ -38,8 +38,6 @@
 #include <sstream>
 #include <cassert>
 
-#define PRINT_Z 0
-
 using namespace std;
 using namespace geos::geom;
 
@@ -52,6 +50,8 @@ WKTWriter::WKTWriter() {
 	trim = false;
 	level=0;
 	formatter="%f";
+    defaultOutputDimension = 2;
+    old3D = false;
 }
 
 WKTWriter::~WKTWriter() {}
@@ -194,6 +194,8 @@ void
 WKTWriter::appendGeometryTaggedText(const Geometry *geometry, int level,
 		Writer *writer)
 {
+    outputDimension = min(defaultOutputDimension,geometry->getCoordinateDimension());
+
 	indent(level, writer);
 	if (typeid(*geometry)==typeid(Point)) {
 		Point* point=(Point*)geometry;
@@ -225,6 +227,9 @@ WKTWriter::appendPointTaggedText(const Coordinate* coordinate, int level,
 		Writer *writer)
 {
 	writer->write("POINT ");
+    if( outputDimension == 3 && !old3D )
+        writer->write( "Z " );
+
 	appendPointText(coordinate, level, writer);
 }
 
@@ -233,6 +238,9 @@ WKTWriter::appendLineStringTaggedText(const LineString *lineString, int level,
 		Writer *writer)
 {
 	writer->write("LINESTRING ");
+    if( outputDimension == 3 && !old3D )
+        writer->write( "Z " );
+
 	appendLineStringText(lineString, level, false, writer);
 }
 
@@ -245,31 +253,43 @@ WKTWriter::appendLineStringTaggedText(const LineString *lineString, int level,
  */
 void WKTWriter::appendLinearRingTaggedText(const LinearRing* linearRing, int level, Writer *writer) {
 	writer->write("LINEARRING ");
+    if( outputDimension == 3 && !old3D )
+        writer->write( "Z " );
 	appendLineStringText((LineString*)linearRing, level, false, writer);
 }
 
 void WKTWriter::appendPolygonTaggedText(const Polygon *polygon, int level, Writer *writer) {
 	writer->write("POLYGON ");
+    if( outputDimension == 3 && !old3D )
+        writer->write( "Z " );
 	appendPolygonText(polygon, level, false, writer);
 }
 
 void WKTWriter::appendMultiPointTaggedText(const MultiPoint *multipoint, int level, Writer *writer) {
 	writer->write("MULTIPOINT ");
+    if( outputDimension == 3 && !old3D )
+        writer->write( "Z " );
 	appendMultiPointText(multipoint, level, writer);
 }
 
 void WKTWriter::appendMultiLineStringTaggedText(const MultiLineString *multiLineString, int level,Writer *writer) {
 	writer->write("MULTILINESTRING ");
+    if( outputDimension == 3 && !old3D )
+        writer->write( "Z " );
 	appendMultiLineStringText(multiLineString, level, false, writer);
 }
 
 void WKTWriter::appendMultiPolygonTaggedText(const MultiPolygon *multiPolygon, int level, Writer *writer) {
 	writer->write("MULTIPOLYGON ");
+    if( outputDimension == 3 && !old3D )
+        writer->write( "Z " );
 	appendMultiPolygonText(multiPolygon, level, writer);
 }
 
 void WKTWriter::appendGeometryCollectionTaggedText(const GeometryCollection *geometryCollection, int level,Writer *writer) {
 	writer->write("GEOMETRYCOLLECTION ");
+    if( outputDimension == 3 && !old3D ) // ? do we really do this?
+        writer->write( "Z " );
 	appendGeometryCollectionText(geometryCollection, level, writer);
 }
 
@@ -294,10 +314,11 @@ WKTWriter::appendCoordinate(const Coordinate* coordinate,
 	out+=writeNumber(coordinate->x);
 	out+=" ";
 	out+=writeNumber(coordinate->y);
-#if PRINT_Z
-	out+=" ";
-	out+=writeNumber(coordinate->z);
-#endif
+    if( outputDimension == 3 )
+    {
+        out+=" ";
+        out+=writeNumber(coordinate->z);
+    }
 	writer->write(out);
 }
 

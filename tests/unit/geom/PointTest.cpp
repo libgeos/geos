@@ -91,6 +91,10 @@ namespace tut
 
 		PointAutoPtr point(factory_.createPoint(coords));
 		ensure( !point->isEmpty() );
+        
+        // currently the empty CoordinateArraySequence constructor 
+        // produces a dimension 3 sequence.
+        ensure( point->getCoordinateDimension() == 3 );
     }
 
     // Test of user's constructor throwing IllegalArgumentException
@@ -509,6 +513,20 @@ namespace tut
 		factory_.destroyGeometry(p2);
 		factory_.destroyGeometry(p3);
 	}
+
+	// Test of getCoordinateDimension() for 2d/3d.
+	template<>
+	template<>
+	void object::test<40>()
+	{
+		GeometryPtr p = reader_.read("POINT(-1.233 5.678 1.0)");
+
+        ensure( p->getCoordinateDimension() == 3 );
+
+		p = reader_.read("POINT(-1.233 5.678)");
+
+        ensure( p->getCoordinateDimension() == 2 );
+    }
 
 } // namespace tut
 

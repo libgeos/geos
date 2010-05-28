@@ -139,6 +139,32 @@ public:
 	 */
 	void setTrim(bool p0);
 
+	/**
+	 * Enable old style 3D/4D WKT generation.
+     *
+     * By default the WKBWriter produces new style 3D/4D WKT (ie. "POINT Z (10 20 30)")
+     * but if this method is used to turn on old style WKT production then the WKT will
+     * be formatted in the style "POINT (10 20 30)".
+	 *
+	 * @param useOld3D true or false
+	 */
+	void setOld3D(bool useOld3D ) { old3D = useOld3D; }
+
+	/*
+	 * \brief
+	 * Returns the output dimension used by the
+	 * <code>WKBWriter</code>.
+	 */
+	virtual int getOutputDimension() const { return defaultOutputDimension; }
+
+	/*
+	 * Sets the output dimension used by the <code>WKBWriter</code>.  
+     *
+     * @param newOutputDimension Supported values are 2 or 3.  Note that 3 indicates
+     * up to 3 dimensions will be written but 2D WKB is still produced for 2D geometries.
+	 */
+	virtual void setOutputDimension(int newOutputDimension) { defaultOutputDimension=newOutputDimension; }
+	
 protected:
 
 	std::string formatter;
@@ -228,6 +254,10 @@ private:
 	bool trim;
 
 	int level;
+
+	int defaultOutputDimension;
+    int outputDimension;
+    bool old3D;
 
 	void writeFormatted(
 			const geom::Geometry *geometry,

@@ -303,6 +303,9 @@ public:
 	/// Returns the dimension of this Geometry (0=point, 1=line, 2=surface)
 	virtual Dimension::DimensionType getDimension() const=0; //Abstract
 
+	/// Returns the coordinate dimension of this Geometry (2=XY, 3=XYZ, 4=XYZM in future).
+	virtual int getCoordinateDimension() const=0; //Abstract
+
 	/**
 	 * \brief
 	 * Returns the boundary, or an empty geometry of appropriate

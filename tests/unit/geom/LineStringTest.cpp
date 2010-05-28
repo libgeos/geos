@@ -129,6 +129,7 @@ namespace tut
 		ensure_equals( ls->getGeometryTypeId(), geos::geom::GEOS_LINESTRING );
 		ensure_equals( ls->getDimension(), geos::geom::Dimension::L );
 		ensure_equals( ls->getBoundaryDimension(), geos::geom::Dimension::P );
+        ensure_equals( ls->getCoordinateDimension(), 3 );
 		ensure_equals( ls->getNumPoints(), size3 );
 		ensure_equals( ls->getArea(), 0.0 );
 		ensure( ls->getLength() != 0.0 );
@@ -328,6 +329,7 @@ namespace tut
 		ensure( !line->isEmpty() );
 		ensure( !line->isClosed() );
 		ensure( !line->isRing() );
+        ensure( line->getCoordinateDimension() == 2 );
 		
 		// FREE TESTED LINESTRING
 		factory_.destroyGeometry(line);

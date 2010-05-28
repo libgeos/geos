@@ -105,6 +105,9 @@ public:
 	 */
 	virtual Dimension::DimensionType getDimension() const;
 
+	/// Returns coordinate dimension.
+	virtual int getCoordinateDimension() const;
+
 	virtual Geometry* getBoundary() const;
 
 	/**

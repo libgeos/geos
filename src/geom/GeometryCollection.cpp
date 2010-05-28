@@ -127,6 +127,18 @@ GeometryCollection::getBoundaryDimension() const
 	return dimension;
 }
 
+int 
+GeometryCollection::getCoordinateDimension() const
+{
+	int dimension=2;
+
+	for (size_t i=0, n=geometries->size(); i<n; ++i)
+	{
+		dimension=max(dimension,(*geometries)[i]->getCoordinateDimension());
+	}
+	return dimension;
+}
+
 size_t
 GeometryCollection::getNumGeometries() const
 {

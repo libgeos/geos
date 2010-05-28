@@ -90,6 +90,9 @@ public:
 	 */
 	virtual int getBoundaryDimension() const;
 
+	/// Returns coordinate dimension.
+	virtual int getCoordinateDimension() const;
+
 	/**
 	 * \brief
 	 * Returns a MultiPoint.

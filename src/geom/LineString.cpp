@@ -136,6 +136,12 @@ LineString::getDimension() const
 }
 
 int
+LineString::getCoordinateDimension() const
+{
+    return (int) points->getDimension();
+}
+
+int
 LineString::getBoundaryDimension() const
 {
 	if (isClosed()) {

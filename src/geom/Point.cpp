@@ -99,6 +99,12 @@ Point::getDimension() const
 }
 
 int
+Point::getCoordinateDimension() const
+{
+    return (int) coordinates->getDimension();
+}
+
+int
 Point::getBoundaryDimension() const
 {
 	return Dimension::False;
