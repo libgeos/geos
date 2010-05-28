@@ -6,6 +6,7 @@
 #include <tut.hpp>
 // geos
 #include <geos/io/WKTReader.h>
+#include <geos/io/WKTWriter.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
@@ -27,6 +28,7 @@ namespace tut
 		geos::geom::PrecisionModel pm;
 		geos::geom::GeometryFactory gf;
 		geos::io::WKTReader wktreader;
+		geos::io::WKTWriter wktwriter;
 
 		typedef std::auto_ptr<geos::geom::Geometry> GeomPtr;
 
@@ -35,7 +37,9 @@ namespace tut
 			pm(1.0),
 			gf(&pm),
 			wktreader(&gf)
-		{}
+		{
+            wktwriter.setOutputDimension( 3 );
+        }
 
 	};
 
@@ -61,7 +65,7 @@ namespace tut
             ensure( coords->getX(0) == -117 );
             ensure( coords->getY(0) == 33 );
             delete coords;
-        }
+    }
 
 	// 2 - Read a point, confirm 3D.
 	template<>
@@ -74,7 +78,7 @@ namespace tut
             ensure( coords->getDimension() == 3 );
             ensure( coords->getOrdinate(0,geos::geom::CoordinateSequence::Z) == 10.0 );
             delete coords;
-        }
+    }
 
 	// 3 - Linestring dimension preserved.
 	template<>
@@ -87,7 +91,24 @@ namespace tut
             ensure( coords->getDimension() == 2 );
 
             delete coords;
-        }
+    }
+
+	// 4 - Ensure we can read ZM geometries, just discarding the M.
+	template<>
+	template<>
+	void object::test<4>()
+	{         
+            GeomPtr geom(wktreader.read("LINESTRING ZM (-117 33 2 3, -116 34 4 5)"));
+            geos::geom::CoordinateSequence *coords = geom->getCoordinates();
+
+            ensure( coords->getDimension() == 3 );
+
+            ensure_equals( wktwriter.write(geom.get()), 
+                           std::string("LINESTRING Z (-117.0 33.0 2.0, -116.0 34.0 4.0)") );
+
+            delete coords;
+    }
 
 } // namespace tut
+
 

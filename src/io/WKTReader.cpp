@@ -110,6 +110,11 @@ WKTReader::getPreciseCoordinate(StringTokenizer *tokenizer,
 	if (isNumberNext(tokenizer)) {
 		coord.z=getNextNumber(tokenizer);
 		dim = 3;
+        
+        // If there is a fourth value (M) read and discard it.
+        if (isNumberNext(tokenizer)) 
+            getNextNumber(tokenizer);
+
 	} else {
 		coord.z=DoubleNotANumber;
 		dim = 2;
@@ -151,10 +156,15 @@ string
 WKTReader::getNextEmptyOrOpener(StringTokenizer *tokenizer)
 {
 	string nextWord=getNextWord(tokenizer);
+
+    // Skip the Z, M or ZM of an SF1.2 3/4 dim coordinate. 
+    if (nextWord == "Z" || nextWord == "M" || nextWord == "ZM" )
+        nextWord = getNextWord(tokenizer);
+
 	if (nextWord=="EMPTY" || nextWord=="(") {
 		return nextWord;
 	}
-	throw  ParseException("Expected 'EMPTY' or '(' but encountered ",nextWord);
+	throw  ParseException("Expected 'Z', 'M', 'ZM', 'EMPTY' or '(' but encountered ",nextWord);
 }
 
 string
