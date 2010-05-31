@@ -193,7 +193,8 @@ GeometryFactory::toGeometry(const Envelope* envelope) const
 		coord.y = envelope->getMinY();
 		return createPoint(coord);
 	}
-	CoordinateSequence *cl=CoordinateArraySequenceFactory::instance()->create(NULL);
+	CoordinateSequence *cl=CoordinateArraySequenceFactory::instance()->
+        create((size_t) 0, 2);
 	coord.x = envelope->getMinX();
 	coord.y = envelope->getMinY();
 	cl->add(coord);

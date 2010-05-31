@@ -61,10 +61,11 @@ public:
 	 * an empty sequence.
 	 *
 	 * @param coordinates the coordinates
+     * @param dimension 0, 2 or 3 with 0 indicating unknown at this time.
 	 */
 	virtual CoordinateSequence *create(
             std::vector<Coordinate> *coordinates,
-            std::size_t dimension=3 ) const=0;
+            std::size_t dimension=0 ) const=0;
 
 	/** \brief
 	 * Creates a CoordinateSequence of the specified size and dimension.
@@ -74,7 +75,7 @@ public:
 	 *
 	 * @param size the number of coordinates in the sequence
 	 * @param dimension the dimension of the coordinates in the sequence
-	 * 	(if user-specifiable, otherwise ignored)
+	 * 	(0=unknown, 2, or 3 - ignored if not user specifiable)
 	 */
 	virtual CoordinateSequence *create(std::size_t size,
                                            std::size_t dimension) const=0;

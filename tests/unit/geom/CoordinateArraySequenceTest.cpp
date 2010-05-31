@@ -68,7 +68,7 @@ namespace tut
 
 		ensure("Every coodinate in the default sequence should be same.", sequence.hasRepeatedPoints() );
 
-		const size_t dim = 3;
+		const size_t dim = 2; // default/empty coordinates now 2D.
 		ensure_equals( sequence.getDimension(), dim );
     }
 

@@ -77,6 +77,23 @@ CoordinateArraySequence::toVector() const
 	return vect; //new vector<Coordinate>(vect->begin(),vect->end());
 }
 
+std::size_t 
+CoordinateArraySequence::getDimension() const
+{
+    if( dimension != 0 )
+        return dimension;
+
+    if( vect->size() == 0 )
+        return 3;
+
+    if( ISNAN((*vect)[0].z) )
+        dimension = 2;
+    else
+        dimension = 3;
+
+    return dimension;
+}
+
 void
 CoordinateArraySequence::toVector(vector<Coordinate>& out) const
 {
