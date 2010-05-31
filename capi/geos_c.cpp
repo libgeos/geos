@@ -765,6 +765,12 @@ GEOSGeom_getDimensions(const Geometry *g)
     return GEOSGeom_getDimensions_r( handle, g );
 }
 
+int
+GEOSGeom_getCoordinateDimension(const Geometry *g)
+{
+    return GEOSGeom_getCoordinateDimension_r( handle, g );
+}
+
 Geometry *
 GEOSSimplify(const Geometry *g1, double tolerance)
 {
@@ -827,6 +833,18 @@ void
 GEOSWKTWriter_setRoundingPrecision(WKTWriter *writer, int precision)
 {
 	return GEOSWKTWriter_setRoundingPrecision_r(handle, writer, precision);
+}
+
+void
+GEOSWKTWriter_setOutputDimension(WKTWriter *writer, int dim)
+{
+	GEOSWKTWriter_setOutputDimension_r(handle, writer, dim);
+}
+
+void
+GEOSWKTWriter_setOld3D(WKTWriter *writer, int useOld3D)
+{
+	GEOSWKTWriter_setOld3D_r(handle, writer, useOld3D);
 }
 
 /* WKB Reader */

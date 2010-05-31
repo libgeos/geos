@@ -891,12 +891,19 @@ extern const GEOSCoordSequence GEOS_DLL *GEOSGeom_getCoordSeq_r(
 
 /*
  * Return 0 on exception (or empty geometry)
- * See also GEOSCoordSeq_getDimensions 
  */
 extern int GEOS_DLL GEOSGeom_getDimensions(const GEOSGeometry* g);
 
 extern int GEOS_DLL GEOSGeom_getDimensions_r(GEOSContextHandle_t handle,
                                              const GEOSGeometry* g);
+
+/*
+ * Return 2 or 3.
+ */
+extern int GEOS_DLL GEOSGeom_getCoordinateDimension(const GEOSGeometry* g);
+
+extern int GEOS_DLL GEOSGeom_getCoordinateDimension_r(GEOSContextHandle_t handle,
+                                                      const GEOSGeometry* g);
 
 /*
  * Return NULL on exception.
@@ -995,6 +1002,8 @@ extern void GEOS_DLL GEOSWKTWriter_destroy(GEOSWKTWriter* writer);
 extern char GEOS_DLL *GEOSWKTWriter_write(GEOSWKTWriter* reader, const GEOSGeometry* g);
 extern void GEOS_DLL GEOSWKTWriter_setTrim(GEOSWKTWriter *writer, char trim);
 extern void GEOS_DLL GEOSWKTWriter_setRoundingPrecision(GEOSWKTWriter *writer, int precision);
+extern void GEOS_DLL GEOSWKTWriter_setOutputDimension(GEOSWKTWriter *writer, int dim);
+extern void GEOS_DLL GEOSWKTWriter_setOld3D(GEOSWKTWriter *writer, int useOld3D);
 
 extern GEOSWKTWriter GEOS_DLL *GEOSWKTWriter_create_r(
                                              GEOSContextHandle_t handle);
@@ -1009,6 +1018,12 @@ extern void GEOS_DLL GEOSWKTWriter_setTrim_r(GEOSContextHandle_t handle,
 extern void GEOS_DLL GEOSWKTWriter_setRoundingPrecision_r(GEOSContextHandle_t handle,
                                             GEOSWKTWriter *writer,
                                             int precision);
+extern void GEOS_DLL GEOSWKTWriter_setOutputDimension_r(GEOSContextHandle_t handle,
+                                                        GEOSWKTWriter *writer,
+                                                        int dim);
+extern void GEOS_DLL GEOSWKTWriter_setOld3D_r(GEOSContextHandle_t handle,
+                                              GEOSWKTWriter *writer,
+                                              int useOld3D);
 
 /* WKB Reader */
 extern GEOSWKBReader GEOS_DLL *GEOSWKBReader_create();

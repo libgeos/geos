@@ -3727,43 +3727,38 @@ GEOSGeom_getDimensions_r(GEOSContextHandle_t extHandle, const Geometry *g)
 
     try
     {
-        using geos::geom::Point;
-        using geos::geom::GeometryCollection;
+        return (int) g->getDimension();
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+    
+    return 0;
+}
 
-	if ( g->isEmpty() )
-	{
-		return 0;
-	}
-
-        std::size_t dim = 0;
-        const LineString *ls = dynamic_cast<const LineString *>(g);
-        if ( ls )
-        {
-            dim = ls->getCoordinatesRO()->getDimension();
-            return static_cast<int>(dim);
-        }
-
-        const Point *p = dynamic_cast<const Point *>(g);
-        if ( p )
-        {
-            dim = p->getCoordinatesRO()->getDimension();
-            return static_cast<int>(dim);
-        }
-
-        const Polygon *poly = dynamic_cast<const Polygon *>(g);
-        if ( poly )
-        {
-            return GEOSGeom_getDimensions_r(extHandle, poly->getExteriorRing());
-        }
-
-        const GeometryCollection *coll = dynamic_cast<const GeometryCollection *>(g);
-        if ( coll )
-        {
-            return GEOSGeom_getDimensions_r(extHandle, coll->getGeometryN(0));
-        }
-
-        handle->ERROR_MESSAGE("Unknown geometry type");
+int
+GEOSGeom_getCoordinateDimension_r(GEOSContextHandle_t extHandle, const Geometry *g)
+{
+    if ( 0 == extHandle )
+    {
         return 0;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return 0;
+    }
+
+    try
+    {
+        return g->getCoordinateDimension();
     }
     catch (const std::exception &e)
     {
@@ -4103,6 +4098,46 @@ GEOSWKTWriter_setRoundingPrecision_r(GEOSContextHandle_t extHandle, WKTWriter *w
     }
 
     writer->setRoundingPrecision(precision);
+}
+
+void
+GEOSWKTWriter_setOutputDimension_r(GEOSContextHandle_t extHandle, WKTWriter *writer, int dim)
+{
+    assert(0 != writer);
+
+    if ( 0 == extHandle )
+    {
+        return;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return;
+    }
+
+    writer->setOutputDimension(dim);
+}
+
+void
+GEOSWKTWriter_setOld3D_r(GEOSContextHandle_t extHandle, WKTWriter *writer, int useOld3D)
+{
+    assert(0 != writer);
+
+    if ( 0 == extHandle )
+    {
+        return;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return;
+    }
+
+    writer->setOld3D(useOld3D);
 }
 
 /* WKB Reader */
