@@ -109,6 +109,16 @@ namespace tut
             delete coords;
     }
 
+	// 5 - Check support for mixed case keywords (and old style 3D)
+	template<>
+	template<>
+	void object::test<5>()
+	{         
+            GeomPtr geom(wktreader.read("LineString (-117 33 2, -116 34 4)"));
+            ensure_equals( wktwriter.write(geom.get()), 
+                           std::string("LINESTRING Z (-117.0 33.0 2.0, -116.0 34.0 4.0)") );
+    }
+
 } // namespace tut
 
 

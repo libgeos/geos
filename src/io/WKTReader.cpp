@@ -199,7 +199,16 @@ WKTReader::getNextWord(StringTokenizer *tokenizer)
 		case StringTokenizer::TT_NUMBER:
 			throw  ParseException("Expected word but encountered number", tokenizer->getNVal());
 		case StringTokenizer::TT_WORD:
-			return tokenizer->getSVal();
+        {
+            string word = tokenizer->getSVal();
+            int i = word.size();
+
+            while( --i >= 0 )
+            {
+                word[i] = toupper(word[i]);
+            }
+			return word;
+        }
 		case '(':
 			return "(";
 		case ')':
