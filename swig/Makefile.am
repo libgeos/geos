@@ -7,11 +7,11 @@ DIST_SUBDIRS = python ruby
 SUBDIRS =
 
 if ENABLE_PYTHON
-	SUBDIRS += python
+ SUBDIRS += python
 endif
 
 if ENABLE_RUBY
-	SUBDIRS += ruby
+ SUBDIRS += ruby
 endif
 
 EXTRA_DIST = \
