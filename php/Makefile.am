@@ -30,14 +30,29 @@ SUBDIRS = test
 EXTRA_DIST = README 
 
 pkglib_LTLIBRARIES = geos.la
+
 geos_la_SOURCES = geos.c php_geos.h
+
 geos_la_LIBADD =  $(top_builddir)/capi/libgeos_c.la 
+
 # TODO: check if -no-undefined should be added
 geos_la_LDFLAGS = -module -avoid-version
+
+# -std is an attempt to fix interpretation
+# of Zend headers, failing with -ansi.
+#
+# As of gcc (Ubuntu 4.3.2-1ubuntu12) 4.3.2
+# you need -std=gnu99
+# while on OpenSuse's plain gcc 4.3.2 -std=c99 is fine
+# (argh)
+#
+geos_la_CFLAGS = $(AM_CFLAGS) -std=gnu99
+
 # TODO: drop conditionals from geos.c and let it bound to current code
-geos_la_CFLAGS = $(AM_CFLAGS) `$(PHP_CONFIG) --includes` \
+geos_la_CPPFLAGS = $(AM_CPPFLAGS) \
+	`$(PHP_CONFIG) --includes` \
 	-DCOMPILE_DL_GEOS \
-	-std=c99
+	-I../capi
 
 install: all
 	$(INSTALL) -d "$(DESTDIR)"/`$(PHP_CONFIG) --extension-dir`
