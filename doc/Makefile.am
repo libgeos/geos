@@ -17,7 +17,7 @@ INCLUDES = -I$(top_srcdir)/include
 
 DOXYGEN = doxygen
 
-doxygen-html: Doxyfile
+doxygen-html apidoc doxygen: Doxyfile
 	$(DOXYGEN) $<
 
 clean-local:

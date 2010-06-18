@@ -26,3 +26,6 @@ ACLOCAL_AMFLAGS = -I macros
 
 cl:
 	cd $(srcdir) && svn2cl --authors=authors.svn -i -o ChangeLog
+
+apidoc doxygen:
+	cd doc && make $@
