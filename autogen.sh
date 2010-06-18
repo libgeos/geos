@@ -64,7 +64,7 @@ if [ ! ${LIBTOOLIZE} ]; then
 fi
 LIBTOOLIZE_VER=`${LIBTOOLIZE} --version | grep -E "^.*[0-9]\.[0-9]" | sed 's/^.* //'`
 
-AMOPTS="--add-missing --copy"
+AMOPTS="--add-missing --copy -Woverride"
 if test "$OSTYPE" = "IRIX" -o "$OSTYPE" = "IRIX64"; then
    AMOPTS=$AMOPTS" --include-deps";
 fi
