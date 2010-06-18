@@ -20,7 +20,7 @@ DOXYGEN = doxygen
 doxygen-html: Doxyfile
 	$(DOXYGEN) $<
 
-clean-generic:
+clean-local:
 	rm -Rf doxygen_docs
 
 EXTRA_DIST = Doxyfile
