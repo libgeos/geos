@@ -97,11 +97,11 @@ INLINE_FLAGS=
 AC_SUBST(INLINE_FLAGS)
 if test x"$enable_inline" = xtrue; then
 	INLINE_FLAGS="-DGEOS_INLINE"
-	CXXFLAGS="$CXXFLAGS $INLINE_FLAGS"
+	AM_CXXFLAGS="$AM_CXXFLAGS $INLINE_FLAGS"
 fi
 
 if test x"$enable_cassert" = xfalse; then
-	CXXFLAGS="$CXXFLAGS -DNDEBUG"
+	AM_CXXFLAGS="$AM_CXXFLAGS -DNDEBUG"
 fi
 
 dnl --------------------------------------------------------------------
@@ -116,7 +116,7 @@ dnl to AC_LANG(CXX) or AC_LANG_PUSH(CXX)/AC_LANG_POP()
 dnl 
 AC_LIBTOOL_LANG_CXX_CONFIG
 
-# Set default CXXFLAGS and CFLAGS if not set by the user
+# Set default AM_CXXFLAGS and AM_CFLAGS 
 # -pedantic: ISO does not support long long
 # we add -Wno-long-long to avoid those messages
 WARNFLAGS=""
@@ -131,8 +131,10 @@ AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -ffloat-store], [dummy_cv_fflo
 
 DEFAULTFLAGS="${WARNFLAGS} ${NUMERICFLAGS}"
 
-CXXFLAGS="${CXXFLAGS} ${DEFAULTFLAGS}"
-CFLAGS="${CFLAGS} ${DEFAULTFLAGS}"
+AM_CXXFLAGS="${AM_CXXFLAGS} ${DEFAULTFLAGS}"
+AM_CFLAGS="${AM_CFLAGS} ${DEFAULTFLAGS}"
+AC_SUBST(AM_CXXFLAGS)
+AC_SUBST(AM_CFLAGS)
 
 dnl --------------------------------------------------------------------
 dnl - Look for finite and/or isfinite macros/functions
@@ -304,7 +306,7 @@ case "${host_os}" in
 				AC_MSG_RESULT([Mac OS X 10.5 Leopard])
 				;;
 			10.*)
-dnl				CXXFLAGS="$CXXFLAGS -Wnon-virtual-dtor -Woverloaded-virtual"
+dnl				AM_CXXFLAGS="$AM_CXXFLAGS -Wnon-virtual-dtor -Woverloaded-virtual"
 				AC_MSG_RESULT([Mac OS X 10.6 Snow Leopard])
 				;;
 			*)
