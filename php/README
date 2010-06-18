@@ -1,0 +1,43 @@
+PHP module for GEOS
+===================
+
+  Date: Fri Jun 18 15:52:57 CEST 2010
+  Author: Sandro Santilli <strk@keybit.net>
+
+The code in this directory provides a PHP module to
+make use of functionalities of the GEOS library.
+The bindings are linked to the C-API, for betters stability.
+
+REQUIREMENTS
+------------
+
+You need php5 development tools, often found in
+packages named something like 'php5-dev'. 
+
+BUILD
+-----
+
+Just add --enable-php to your GEOS configure line
+and run 'make'.
+
+TESTING
+-------
+
+Automated testing should be executed on 'make check'
+togheter with the rest of the GEOS testsuite.
+You can still run 'make check' from this dir for
+localized (php-only) testing.
+
+INSTALL
+-------
+
+As root (or owner with write access to the directory
+returned by php-config --extension-dir),
+run 'make install'
+
+USAGE
+-----
+
+ ... TODO ...
+ (reference some automatically built doc?)
+

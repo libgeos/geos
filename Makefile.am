@@ -16,6 +16,7 @@ SUBDIRS =   \
     doc     \
     macros  \
     swig    \
+    php     \
     tests   \
     tools
 

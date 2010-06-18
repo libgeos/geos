@@ -1,0 +1,7 @@
+In order of priority
+
+- Complete all interfaces for WKTReader/WKTWriter/Geometry
+- Doxygen based documentation
+- Proper automated testing
+
+- Add interfaces for WKBReader/WKBWriter ?
