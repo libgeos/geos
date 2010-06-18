@@ -28,7 +28,7 @@
 #include "Zend/zend_exceptions.h" /* for zend_throw_exception_object */
 
 /* GEOS stuff */
-#include <geos_c.h>
+#include "geos_c.h"
 
 /* Own stuff */
 #include "php_geos.h"
@@ -278,10 +278,12 @@ PHP_METHOD(WKTReader, read)
 
 PHP_METHOD(WKTWriter, __construct);
 PHP_METHOD(WKTWriter, write);
+PHP_METHOD(WKTWriter, setTrim);
 
 static function_entry WKTWriter_methods[] = {
     PHP_ME(WKTWriter, __construct, NULL, 0)
     PHP_ME(WKTWriter, write, NULL, 0)
+    PHP_ME(WKTWriter, setTrim, NULL, 0)
     {NULL, NULL, NULL}
 };
 
@@ -306,7 +308,6 @@ WKTWriter_create_obj (zend_class_entry *type TSRMLS_DC)
 {
     return Gen_create_obj(type, WKTWriter_dtor, &WKTWriter_object_handlers);
 }
-
 
 PHP_METHOD(WKTWriter, __construct)
 {
@@ -353,6 +354,24 @@ PHP_METHOD(WKTWriter, write)
     object_init_ex(return_value, Geometry_ce_ptr);
     setRelay(return_value, geom);
 
+}
+
+PHP_METHOD(WKTWriter, setTrim)
+{
+    GEOSWKTWriter *writer;
+    zend_bool trimval;
+    char trim;
+
+    writer = (GEOSWKTWriter*)getRelay(getThis(), WKTWriter_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "b", &trimval)
+        == FAILURE)
+    {
+        RETURN_NULL();
+    }
+
+    trim = trimval;
+    GEOSWKTWriter_setTrim(writer, trim);
 }
 
 /* ------ Initialization / Deinitialization / Meta ------------------ */
