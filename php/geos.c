@@ -38,7 +38,6 @@ PHP_RINIT_FUNCTION(geos);
 PHP_RSHUTDOWN_FUNCTION(geos);
 PHP_MINFO_FUNCTION(geos);
 PHP_FUNCTION(GEOSVersion);
-/*PHP_METHOD(WKTReader, write);*/
 
 static function_entry geos_functions[] = {
     PHP_FE(GEOSVersion, NULL)
@@ -150,10 +149,13 @@ PHP_FUNCTION(GEOSVersion)
 /* -- class GEOSGeometry -------------------- */
 
 PHP_METHOD(Geometry, __construct);
+PHP_METHOD(Geometry, project);
+
 PHP_METHOD(Geometry, numGeometries);
 
 static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, __construct, NULL, 0)
+    PHP_ME(Geometry, project, NULL, 0)
     PHP_ME(Geometry, numGeometries, NULL, 0)
     {NULL, NULL, NULL}
 };
@@ -199,6 +201,27 @@ PHP_METHOD(Geometry, numGeometries)
     if ( ret == -1 ) RETURN_NULL(); /* should get an exception first */
 
     RETURN_LONG(ret);
+}
+
+PHP_METHOD(Geometry, project)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *other;
+    zval *zobj;
+    double ret;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zobj)
+        == FAILURE) {
+        RETURN_NULL();
+    }
+    other = getRelay(zobj, Geometry_ce_ptr);
+
+    ret = GEOSProject(this, other);
+    if ( ret < 0 ) RETURN_NULL(); /* should get an exception first */
+
+    RETURN_DOUBLE(ret);
 }
 
 /* -- class GEOSWKTReader -------------------- */
@@ -279,11 +302,17 @@ PHP_METHOD(WKTReader, read)
 PHP_METHOD(WKTWriter, __construct);
 PHP_METHOD(WKTWriter, write);
 PHP_METHOD(WKTWriter, setTrim);
+PHP_METHOD(WKTWriter, setRoundingPrecision);
+PHP_METHOD(WKTWriter, setOutputDimension);
+PHP_METHOD(WKTWriter, setOld3D);
 
 static function_entry WKTWriter_methods[] = {
     PHP_ME(WKTWriter, __construct, NULL, 0)
     PHP_ME(WKTWriter, write, NULL, 0)
     PHP_ME(WKTWriter, setTrim, NULL, 0)
+    PHP_ME(WKTWriter, setRoundingPrecision, NULL, 0)
+    PHP_ME(WKTWriter, setOutputDimension, NULL, 0)
+    PHP_ME(WKTWriter, setOld3D, NULL, 0)
     {NULL, NULL, NULL}
 };
 
@@ -372,6 +401,56 @@ PHP_METHOD(WKTWriter, setTrim)
 
     trim = trimval;
     GEOSWKTWriter_setTrim(writer, trim);
+}
+
+PHP_METHOD(WKTWriter, setRoundingPrecision)
+{
+    GEOSWKTWriter *writer;
+    long int prec;
+
+    writer = (GEOSWKTWriter*)getRelay(getThis(), WKTWriter_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &prec)
+        == FAILURE)
+    {
+        RETURN_NULL();
+    }
+
+    GEOSWKTWriter_setRoundingPrecision(writer, prec);
+}
+
+PHP_METHOD(WKTWriter, setOutputDimension)
+{
+    GEOSWKTWriter *writer;
+    long int dim;
+
+    writer = (GEOSWKTWriter*)getRelay(getThis(), WKTWriter_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &dim)
+        == FAILURE)
+    {
+        RETURN_NULL();
+    }
+
+    GEOSWKTWriter_setOutputDimension(writer, dim);
+}
+
+PHP_METHOD(WKTWriter, setOld3D)
+{
+    GEOSWKTWriter *writer;
+    zend_bool bval;
+    int val;
+
+    writer = (GEOSWKTWriter*)getRelay(getThis(), WKTWriter_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "b", &bval)
+        == FAILURE)
+    {
+        RETURN_NULL();
+    }
+
+    val = bval;
+    GEOSWKTWriter_setOld3D(writer, val);
 }
 
 /* ------ Initialization / Deinitialization / Meta ------------------ */

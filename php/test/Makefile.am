@@ -24,12 +24,15 @@
 
 EXTRA_DIST = test.php crashme.php
 
-if ENABLE_PHP
+if ENABLE_PHP_TESTS
+
+PHPOPTS = -n -d enable_dl=On -d extension_dir=../.libs
 
 check:
-	php -n -d enable_dl=On -d extension_dir=../.libs test.php
+	$(PHP) $(PHPOPTS) $(PHPUNIT) test.php
 
 crashtest:
-	php -n -d enable_dl=On -d extension_dir=../.libs crashme.php
+	$(PHP) $(PHPOPTS) crashme.php
+
 
 endif

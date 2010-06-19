@@ -1,7 +1,5 @@
 In order of priority
 
-- Complete all interfaces for WKTReader/WKTWriter/Geometry
-- Doxygen based documentation
-- Proper automated testing (phpunit2?)
-
+- Complete interfaces of Geometry
 - Add interfaces for WKBReader/WKBWriter ?
+- Doxygen based documentation ?
