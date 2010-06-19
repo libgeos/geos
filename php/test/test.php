@@ -866,7 +866,7 @@ class test extends PHPUnit_Framework_TestCase
         $this->assertEquals('0FFFFFFF2', $ret);
         $ret = $g->relate($g2, '0FFFFFFF2');
         $this->assertEquals(TRUE, $ret);
-        $ret = $g->relate($g2, '0*******2');
+        $ret = $g->relate($g2, '0*******T');
         $this->assertEquals(TRUE, $ret);
         $ret = $g->relate($g2, '0*******1');
         $this->assertEquals(FALSE, $ret);
@@ -888,7 +888,7 @@ class test extends PHPUnit_Framework_TestCase
         $this->assertEquals('FF20F1FF2', $ret);
         $ret = $g->relate($g2, 'FF20F1FF2');
         $this->assertEquals(TRUE, $ret);
-        $ret = $g->relate($g2, 'F*******2');
+        $ret = $g->relate($g2, 'F****T**T');
         $this->assertEquals(TRUE, $ret);
         $ret = $g->relate($g2, 'T*******2');
         $this->assertEquals(FALSE, $ret);
