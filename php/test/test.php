@@ -433,4 +433,374 @@ class test extends PHPUnit_Framework_TestCase
 
 
     }
+
+    public function testGeometry_envelope()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        $g = $reader->read('POINT(0 0)');
+        $b = $g->envelope();
+        $this->assertEquals(
+'POINT (0 0)'
+            , $writer->write($b));
+
+        $g = $reader->read('LINESTRING(0 0, 10 10)');
+        $b = $g->envelope();
+        $this->assertEquals(
+'POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))'
+            , $writer->write($b));
+
+    }
+
+    public function testGeometry_intersection()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        /* POINT - POINT */
+        $g = $reader->read('POINT(0 0)');
+        $g2 = $reader->read('POINT(0 0)');
+        $gi = $g->intersection($g2);
+        $this->assertEquals( 'POINT (0 0)'
+            , $writer->write($gi));
+        $g2 = $reader->read('POINT(1 0)');
+        $gi = $g->intersection($g2);
+        $this->assertEquals( 'GEOMETRYCOLLECTION EMPTY'
+            , $writer->write($gi));
+
+        /* POINT - LINE */
+        $g = $reader->read('LINESTRING(0 0, 10 0)');
+        $g2 = $reader->read('POINT(5 0)');
+        $gi = $g->intersection($g2);
+        $this->assertEquals( 'POINT (5 0)'
+            , $writer->write($gi));
+        $g2 = $reader->read('POINT(12 0)');
+        $gi = $g->intersection($g2);
+        $this->assertEquals( 'GEOMETRYCOLLECTION EMPTY'
+            , $writer->write($gi));
+
+        /* LINE - LINE */
+        $g = $reader->read('LINESTRING(0 0, 10 0)');
+        $g2 = $reader->read('LINESTRING(5 -10, 5 10)');
+        $gi = $g->intersection($g2);
+        $this->assertEquals( 'POINT (5 0)'
+            , $writer->write($gi));
+        $g2 = $reader->read('LINESTRING(5 0, 20 0)');
+        $gi = $g->intersection($g2);
+        $this->assertEquals( 'LINESTRING (5 0, 10 0)'
+            , $writer->write($gi));
+
+        /* LINE - POLY */
+        $g = $reader->read('POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))');
+        $g2 = $reader->read('LINESTRING(5 -10, 5 10)');
+        $gi = $g->intersection($g2);
+        $this->assertEquals( 'LINESTRING (5 0, 5 10)'
+            , $writer->write($gi));
+        $g2 = $reader->read('LINESTRING(10 0, 20 0)');
+        $gi = $g->intersection($g2);
+        $this->assertEquals( 'POINT (10 0)'
+            , $writer->write($gi));
+
+        /* POLY - POLY */
+        $g = $reader->read('POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))');
+        $g2 = $reader->read('POLYGON((5 -5, 5 5, 15 5, 15 -5, 5 -5))');
+        $gi = $g->intersection($g2);
+        $this->assertEquals(
+'POLYGON ((10 5, 10 0, 5 0, 5 5, 10 5))'
+            , $writer->write($gi));
+        $g2 = $reader->read('POLYGON((10 0, 20 0, 20 -5, 10 -5, 10 0))');
+        $gi = $g->intersection($g2);
+        $this->assertEquals( 'POINT (10 0)'
+            , $writer->write($gi));
+        $g2 = $reader->read('POLYGON((8 0, 20 0, 20 -5, 10 -5, 8 0))');
+        $gi = $g->intersection($g2);
+        $this->assertEquals( 'LINESTRING (8 0, 10 0)'
+            , $writer->write($gi));
+    }
+
+    public function testGeometry_convexHull()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        $g = $reader->read('POINT(0 0)');
+        $b = $g->convexHull();
+        $this->assertEquals(
+'POINT (0 0)'
+            , $writer->write($b));
+
+        $g = $reader->read('LINESTRING(0 0, 10 10)');
+        $b = $g->convexHull();
+        $this->assertEquals(
+'LINESTRING (0 0, 10 10)'
+            , $writer->write($b));
+
+        $g = $reader->read('POLYGON((0 0, 0 10, 5 5, 10 10, 10 0, 0 0))');
+        $b = $g->convexHull();
+        $this->assertEquals(
+'POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0))'
+            , $writer->write($b));
+
+    }
+
+    public function testGeometry_difference()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        /* POINT - POINT */
+        $g = $reader->read('POINT(0 0)');
+        $g2 = $reader->read('POINT(0 0)');
+        $gi = $g->difference($g2);
+        $this->assertEquals( 'GEOMETRYCOLLECTION EMPTY'
+            , $writer->write($gi));
+        $g2 = $reader->read('POINT(1 0)');
+        $gi = $g->difference($g2);
+        $this->assertEquals( 'POINT (0 0)'
+            , $writer->write($gi));
+
+        /* LINE - POINT */
+        $g = $reader->read('LINESTRING(0 0, 10 0)');
+        $g2 = $reader->read('POINT(5 0)');
+        $gi = $g->difference($g2);
+        $this->assertEquals('LINESTRING (0 0, 10 0)'
+            , $writer->write($gi));
+
+        /* POINT - LINE */
+        $g = $reader->read('POINT(5 0)');
+        $g2 = $reader->read('LINESTRING(0 0, 10 0)');
+        $gi = $g->difference($g2);
+        $this->assertEquals('GEOMETRYCOLLECTION EMPTY'
+            , $writer->write($gi));
+        $g2 = $reader->read('LINESTRING(0 1, 10 1)');
+        $gi = $g->difference($g2);
+        $this->assertEquals( 'POINT (5 0)'
+            , $writer->write($gi));
+
+        /* LINE - LINE */
+        $g = $reader->read('LINESTRING(0 0, 10 0)');
+        $g2 = $reader->read('LINESTRING(5 -10, 5 10)');
+        $gi = $g->difference($g2);
+        $this->assertEquals( 'MULTILINESTRING ((0 0, 5 0), (5 0, 10 0))'
+            , $writer->write($gi));
+        $g2 = $reader->read('LINESTRING(5 0, 20 0)');
+        $gi = $g->difference($g2);
+        $this->assertEquals( 'LINESTRING (0 0, 5 0)'
+            , $writer->write($gi));
+
+        /* POLY - LINE */
+        $g = $reader->read('POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))');
+        $g2 = $reader->read('LINESTRING(5 -10, 5 10)');
+        $gi = $g->difference($g2);
+        $this->assertEquals(
+'POLYGON ((5 0, 0 0, 0 10, 5 10, 10 10, 10 0, 5 0))'
+            , $writer->write($gi));
+        $g2 = $reader->read('LINESTRING(10 0, 20 0)');
+        $gi = $g->difference($g2);
+        $this->assertEquals(
+'POLYGON ((10 0, 0 0, 0 10, 10 10, 10 0))'
+            , $writer->write($gi));
+
+        /* POLY - POLY */
+        $g = $reader->read('POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))');
+        $g2 = $reader->read('POLYGON((5 -5, 5 5, 15 5, 15 -5, 5 -5))');
+        $gi = $g->difference($g2);
+        $this->assertEquals(
+'POLYGON ((5 0, 0 0, 0 10, 10 10, 10 5, 5 5, 5 0))'
+            , $writer->write($gi));
+    }
+
+    public function testGeometry_symdifference()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        /* POINT - POINT */
+        $g = $reader->read('POINT(0 0)');
+        $g2 = $reader->read('POINT(0 0)');
+        $gi = $g->symDifference($g2);
+        $this->assertEquals( 'GEOMETRYCOLLECTION EMPTY'
+            , $writer->write($gi));
+        $g2 = $reader->read('POINT(1 0)');
+        $gi = $g->symDifference($g2);
+        $this->assertEquals( 'MULTIPOINT (0 0, 1 0)'
+            , $writer->write($gi));
+
+        /* LINE - POINT */
+        $g = $reader->read('LINESTRING(0 0, 10 0)');
+        $g2 = $reader->read('POINT(5 0)');
+        $gi = $g->symDifference($g2);
+        $this->assertEquals('LINESTRING (0 0, 10 0)'
+            , $writer->write($gi));
+
+        /* POINT - LINE */
+        $g = $reader->read('POINT(5 0)');
+        $g2 = $reader->read('LINESTRING(0 0, 10 0)');
+        $gi = $g->symDifference($g2);
+        $this->assertEquals( 'LINESTRING (0 0, 10 0)'
+            , $writer->write($gi));
+        $g2 = $reader->read('LINESTRING(0 1, 10 1)');
+        $gi = $g->symDifference($g2);
+        $this->assertEquals(
+'GEOMETRYCOLLECTION (POINT (5 0), LINESTRING (0 1, 10 1))'
+            , $writer->write($gi));
+
+        /* LINE - LINE */
+        $g = $reader->read('LINESTRING(0 0, 10 0)');
+        $g2 = $reader->read('LINESTRING(5 -10, 5 10)');
+        $gi = $g->symDifference($g2);
+        $this->assertEquals(
+'MULTILINESTRING ((0 0, 5 0), (5 0, 10 0), (5 -10, 5 0), (5 0, 5 10))'
+            , $writer->write($gi));
+        $g2 = $reader->read('LINESTRING(5 0, 20 0)');
+        $gi = $g->symDifference($g2);
+        $this->assertEquals(
+'MULTILINESTRING ((0 0, 5 0), (10 0, 20 0))'
+            , $writer->write($gi));
+
+        /* POLY - LINE */
+        $g = $reader->read('POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))');
+        $g2 = $reader->read('LINESTRING(5 -10, 5 10)');
+        $gi = $g->symDifference($g2);
+        $this->assertEquals(
+'GEOMETRYCOLLECTION (LINESTRING (5 -10, 5 0), POLYGON ((5 0, 0 0, 0 10, 5 10, 10 10, 10 0, 5 0)))'
+            , $writer->write($gi));
+        $g2 = $reader->read('LINESTRING(10 0, 20 0)');
+        $gi = $g->symDifference($g2);
+        $this->assertEquals(
+'GEOMETRYCOLLECTION (LINESTRING (10 0, 20 0), POLYGON ((10 0, 0 0, 0 10, 10 10, 10 0)))'
+            , $writer->write($gi));
+
+        /* POLY - POLY */
+        $g = $reader->read('POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))');
+        $g2 = $reader->read('POLYGON((5 -5, 5 5, 15 5, 15 -5, 5 -5))');
+        $gi = $g->symDifference($g2);
+        $this->assertEquals(
+'MULTIPOLYGON (((5 0, 0 0, 0 10, 10 10, 10 5, 5 5, 5 0)), ((5 0, 10 0, 10 5, 15 5, 15 -5, 5 -5, 5 0)))'
+            , $writer->write($gi));
+    }
+
+    public function testGeometry_boundary()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        $g = $reader->read('POINT(0 0)');
+        $b = $g->boundary();
+        $this->assertEquals(
+'GEOMETRYCOLLECTION EMPTY'
+            , $writer->write($b));
+
+        $g = $reader->read('LINESTRING(0 0, 10 10)');
+        $b = $g->boundary();
+        $this->assertEquals(
+'MULTIPOINT (0 0, 10 10)'
+            , $writer->write($b));
+
+        $g = $reader->read(
+'POLYGON((0 0, 10 0, 10 10, 0 10, 0 0),( 5 5, 5 6, 6 6, 6 5, 5 5))');
+        $b = $g->boundary();
+        $this->assertEquals(
+'MULTILINESTRING ((0 0, 10 0, 10 10, 0 10, 0 0), (5 5, 5 6, 6 6, 6 5, 5 5))'
+            , $writer->write($b));
+
+    }
+
+    public function testGeometry_union()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        /* POINT - POINT */
+        $g = $reader->read('POINT(0 0)');
+        $g2 = $reader->read('POINT(0 0)');
+        $gi = $g->union($g2);
+        $this->assertEquals( 'POINT (0 0)'
+            , $writer->write($gi));
+        $g2 = $reader->read('POINT(1 0)');
+        $gi = $g->union($g2);
+        $this->assertEquals( 'MULTIPOINT (0 0, 1 0)'
+            , $writer->write($gi));
+
+        /* LINE - POINT */
+        $g = $reader->read('LINESTRING(0 0, 10 0)');
+        $g2 = $reader->read('POINT(5 0)');
+        $gi = $g->union($g2);
+        $this->assertEquals('LINESTRING (0 0, 10 0)'
+            , $writer->write($gi));
+
+        /* POINT - LINE */
+        $g = $reader->read('POINT(5 0)');
+        $g2 = $reader->read('LINESTRING(0 0, 10 0)');
+        $gi = $g->union($g2);
+        $this->assertEquals( 'LINESTRING (0 0, 10 0)'
+            , $writer->write($gi));
+        $g2 = $reader->read('LINESTRING(0 1, 10 1)');
+        $gi = $g->union($g2);
+        $this->assertEquals(
+'GEOMETRYCOLLECTION (POINT (5 0), LINESTRING (0 1, 10 1))'
+            , $writer->write($gi));
+
+        /* LINE - LINE */
+        $g = $reader->read('LINESTRING(0 0, 10 0)');
+        $g2 = $reader->read('LINESTRING(5 -10, 5 10)');
+        $gi = $g->union($g2);
+        $this->assertEquals(
+'MULTILINESTRING ((0 0, 5 0), (5 0, 10 0), (5 -10, 5 0), (5 0, 5 10))'
+            , $writer->write($gi));
+        $g2 = $reader->read('LINESTRING(5 0, 20 0)');
+        $gi = $g->union($g2);
+        $this->assertEquals(
+'MULTILINESTRING ((0 0, 5 0), (5 0, 10 0), (10 0, 20 0))'
+            , $writer->write($gi));
+
+        /* POLY - LINE */
+        $g = $reader->read('POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))');
+        $g2 = $reader->read('LINESTRING(5 -10, 5 10)');
+        $gi = $g->union($g2);
+        $this->assertEquals(
+'GEOMETRYCOLLECTION (LINESTRING (5 -10, 5 0), POLYGON ((5 0, 0 0, 0 10, 5 10, 10 10, 10 0, 5 0)))'
+            , $writer->write($gi));
+        $g2 = $reader->read('LINESTRING(10 0, 20 0)');
+        $gi = $g->union($g2);
+        $this->assertEquals(
+'GEOMETRYCOLLECTION (LINESTRING (10 0, 20 0), POLYGON ((10 0, 0 0, 0 10, 10 10, 10 0)))'
+            , $writer->write($gi));
+
+        /* POLY - POLY */
+        $g = $reader->read('POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))');
+        $g2 = $reader->read('POLYGON((5 -5, 5 5, 15 5, 15 -5, 5 -5))');
+        $gi = $g->union($g2);
+        $this->assertEquals(
+'POLYGON ((5 0, 0 0, 0 10, 10 10, 10 5, 15 5, 15 -5, 5 -5, 5 0))'
+            , $writer->write($gi));
+    }
+
+    public function testGeometry_unionCascaded()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        $g = $reader->read('MULTIPOLYGON(
+                 ((0 0, 1 0, 1 1, 0 1, 0 0)),
+                 ((10 10, 10 14, 14 14, 14 10, 10 10),
+                  (11 11, 11 12, 12 12, 12 11, 11 11)),
+                 ((0 0, 11 0, 11 11, 0 11, 0 0))
+                ))');
+
+        $gu = $g->union();
+        $this->assertEquals(
+'POLYGON ((1 0, 0 0, 0 1, 0 11, 10 11, 10 14, 14 14, 14 10, 11 10, 11 0, 1 0), (11 11, 12 11, 12 12, 11 12, 11 11))'
+            , $writer->write($gu));
+
+    }
 }

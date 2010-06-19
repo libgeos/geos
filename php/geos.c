@@ -178,6 +178,13 @@ PHP_METHOD(Geometry, __construct);
 PHP_METHOD(Geometry, project);
 PHP_METHOD(Geometry, interpolate);
 PHP_METHOD(Geometry, buffer);
+PHP_METHOD(Geometry, envelope);
+PHP_METHOD(Geometry, intersection);
+PHP_METHOD(Geometry, convexHull);
+PHP_METHOD(Geometry, difference);
+PHP_METHOD(Geometry, symDifference);
+PHP_METHOD(Geometry, boundary);
+PHP_METHOD(Geometry, union); /* also does union cascaded */
 
 PHP_METHOD(Geometry, numGeometries);
 
@@ -186,6 +193,13 @@ static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, project, NULL, 0)
     PHP_ME(Geometry, interpolate, NULL, 0)
     PHP_ME(Geometry, buffer, NULL, 0)
+    PHP_ME(Geometry, envelope, NULL, 0)
+    PHP_ME(Geometry, intersection, NULL, 0)
+    PHP_ME(Geometry, convexHull, NULL, 0)
+    PHP_ME(Geometry, difference, NULL, 0)
+    PHP_ME(Geometry, symDifference, NULL, 0)
+    PHP_ME(Geometry, boundary, NULL, 0)
+    PHP_ME(Geometry, union, NULL, 0)
     PHP_ME(Geometry, numGeometries, NULL, 0)
     {NULL, NULL, NULL}
 };
@@ -285,7 +299,7 @@ PHP_METHOD(Geometry, interpolate)
     setRelay(return_value, ret);
 }
 
-/*
+/**
  * GEOSGeometry::buffer(dist, [<styleArray>])
  *
  * styleArray keys supported:
@@ -363,6 +377,152 @@ PHP_METHOD(Geometry, buffer)
 
     ret = GEOSBufferWithStyle(this, dist,
         quadSegs, endCapStyle, joinStyle, mitreLimit);
+    if ( ! ret ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, ret);
+}
+
+PHP_METHOD(Geometry, envelope)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *ret;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    ret = GEOSEnvelope(this);
+    if ( ! ret ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, ret);
+}
+
+PHP_METHOD(Geometry, intersection)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *other;
+    GEOSGeometry *ret;
+    zval *zobj;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zobj)
+            == FAILURE) {
+        RETURN_NULL();
+    }
+    other = getRelay(zobj, Geometry_ce_ptr);
+
+    ret = GEOSIntersection(this, other);
+    if ( ! ret ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, ret);
+}
+
+PHP_METHOD(Geometry, convexHull)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *ret;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    ret = GEOSConvexHull(this);
+    if ( ret == NULL ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, ret);
+}
+
+PHP_METHOD(Geometry, difference)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *other;
+    GEOSGeometry *ret;
+    zval *zobj;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zobj)
+            == FAILURE) {
+        RETURN_NULL();
+    }
+    other = getRelay(zobj, Geometry_ce_ptr);
+
+    ret = GEOSDifference(this, other);
+    if ( ! ret ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, ret);
+}
+
+PHP_METHOD(Geometry, symDifference)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *other;
+    GEOSGeometry *ret;
+    zval *zobj;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zobj)
+            == FAILURE) {
+        RETURN_NULL();
+    }
+    other = getRelay(zobj, Geometry_ce_ptr);
+
+    ret = GEOSSymDifference(this, other);
+    if ( ! ret ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, ret);
+}
+
+PHP_METHOD(Geometry, boundary)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *ret;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    ret = GEOSBoundary(this);
+    if ( ret == NULL ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, ret);
+}
+
+/**
+ * GEOSGeometry::union(otherGeom)
+ * GEOSGeometry::union()
+ */
+PHP_METHOD(Geometry, union)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *other;
+    GEOSGeometry *ret;
+    zval *zobj = NULL;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|o", &zobj)
+            == FAILURE) {
+        RETURN_NULL();
+    }
+
+    if ( zobj ) {
+        other = getRelay(zobj, Geometry_ce_ptr);
+        ret = GEOSUnion(this, other);
+    } else {
+        ret = GEOSUnionCascaded(this);
+    }
+
     if ( ! ret ) RETURN_NULL(); /* should get an exception first */
 
     /* return_value is a zval */
