@@ -150,12 +150,14 @@ PHP_FUNCTION(GEOSVersion)
 
 PHP_METHOD(Geometry, __construct);
 PHP_METHOD(Geometry, project);
+PHP_METHOD(Geometry, interpolate);
 
 PHP_METHOD(Geometry, numGeometries);
 
 static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, __construct, NULL, 0)
     PHP_ME(Geometry, project, NULL, 0)
+    PHP_ME(Geometry, interpolate, NULL, 0)
     PHP_ME(Geometry, numGeometries, NULL, 0)
     {NULL, NULL, NULL}
 };
@@ -222,6 +224,28 @@ PHP_METHOD(Geometry, project)
     if ( ret < 0 ) RETURN_NULL(); /* should get an exception first */
 
     RETURN_DOUBLE(ret);
+}
+
+PHP_METHOD(Geometry, interpolate)
+{
+    GEOSGeometry *this;
+    double dist;
+    zval *zobj;
+    GEOSGeometry *ret;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &dist)
+        == FAILURE) {
+        RETURN_NULL();
+    }
+
+    ret = GEOSInterpolate(this, dist);
+    if ( ! ret ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, ret);
 }
 
 /* -- class GEOSWKTReader -------------------- */

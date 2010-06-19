@@ -242,4 +242,36 @@ class test extends PHPUnit_Framework_TestCase
 
 
     }
+
+    public function testGeometry_interpolate()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setTrim(TRUE);
+
+        /* The method only accept LineString geometries */
+        $g = $reader->read('POINT(1 2)');
+        try {
+            $prj = $g->interpolate(0);
+            $this->assertTrue(FALSE); # this is just to fail if we get here
+        } catch (Exception $e) {
+            $this->assertContains('LineString', $e->getMessage());
+        }
+
+        $g = $reader->read('LINESTRING(0 0, 10 0)');
+
+        $prj = $g->interpolate(0);
+        $this->assertNotNull($prj);
+        $this->assertEquals('POINT (0 0)', $writer->write($prj));
+
+        $prj = $g->interpolate(5);
+        $this->assertNotNull($prj);
+        $this->assertEquals('POINT (5 0)', $writer->write($prj));
+
+        /* return closest on longer distance */
+        $prj = $g->interpolate(20);
+        $this->assertNotNull($prj);
+        $this->assertEquals('POINT (10 0)', $writer->write($prj));
+    
+    }
 }
