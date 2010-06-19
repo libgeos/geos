@@ -76,7 +76,7 @@ void LinearIterator::loadCurrentLine()
 	}
 	currentLine = dynamic_cast<const LineString *> (linear->getGeometryN(componentIndex));
 	if ( ! currentLine ) {
-		throw util::IllegalArgumentException("computed index is before specified minimum index");
+		throw util::IllegalArgumentException("LinearIterator only supports lineal geometry components");
 	}
 }
 
