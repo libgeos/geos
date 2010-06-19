@@ -5111,11 +5111,7 @@ GEOSProject_r(GEOSContextHandle_t extHandle,
               const Geometry *g,
               const Geometry *p)
 {
-    if ( 0 == extHandle )
-    {
-        return -1.0;
-    }
-
+    if ( 0 == extHandle ) return -1.0;
     GEOSContextHandleInternal_t *handle = 
         reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
     if ( handle->initialized == 0 ) return -1.0;
@@ -5143,12 +5139,24 @@ GEOSProject_r(GEOSContextHandle_t extHandle,
 Geometry*
 GEOSInterpolate_r(GEOSContextHandle_t extHandle, const Geometry *g, double d)
 {
-    geos::linearref::LengthIndexedLine lil(g);
-    geos::geom::Coordinate coord = lil.extractPoint(d);
-    GEOSContextHandleInternal_t *handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
-    const GeometryFactory *gf = handle->geomFactory;
-    Geometry* point = gf->createPoint(coord);
-    return point;
+    if ( 0 == extHandle ) return 0;
+    GEOSContextHandleInternal_t *handle = 
+        reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( handle->initialized == 0 ) return 0;
+
+    try {
+    	geos::linearref::LengthIndexedLine lil(g);
+    	geos::geom::Coordinate coord = lil.extractPoint(d);
+    	const GeometryFactory *gf = handle->geomFactory;
+    	Geometry* point = gf->createPoint(coord);
+    	return point;
+    } catch (const std::exception &e) {
+        handle->ERROR_MESSAGE("%s", e.what());
+        return 0;
+    } catch (...) {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+        return 0;
+    }
 }
 
 
