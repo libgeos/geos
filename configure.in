@@ -304,16 +304,30 @@ dnl --------------------------------------------------------------------
 if test x"$use_php" = xtrue; then
 	dnl Check for PHP 
 	AC_PATH_PROG(PHP_CONFIG, php-config)
-	dnl TODO: AC_SUBST ?
 
 	if test x"$PHP_CONFIG" = x; then
+		AC_MSG_WARN([php-config not found, php support disabled])
 		use_php=false
+	else
+
+		dnl TODO: check for version, we want PHP5 dev files
+
+		AC_PATH_PROG(PHP, php) dnl for unit testing
+		AC_PATH_PROG(PHPUNIT, phpunit) dnl for unit testing
+
+		if test x"$PHP" != x -a x"$PHPUNIT" != x; then
+			can_test_php=true
+		else
+			AC_MSG_WARN([php or phpunit not found, php binding tests disabled])
+			can_test_php=false
+		fi
+
 	fi
 
-	dnl TODO: check for version, we want PHP5 dev files
 
 fi
 AM_CONDITIONAL(ENABLE_PHP, [ test x"$use_php" = xtrue ])
+AM_CONDITIONAL(ENABLE_PHP_TESTS, [ test x"$can_test_php" = xtrue ])
 
 
 dnl --------------------------------------------------------------------
