@@ -221,24 +221,34 @@ class test extends PHPUnit_Framework_TestCase
         $g2 = $reader->read('POINT(0 0)');
         $prj = $g->project($g2);
         $this->assertEquals(0, $prj);
+        $prj = $g->project($g2, TRUE);
+        $this->assertEquals(0, $prj);
 
         $g2 = $reader->read('POINT(10 0)');
         $prj = $g->project($g2);
         $this->assertEquals(10, $prj);
+        $prj = $g->project($g2, TRUE);
+        $this->assertEquals(1, $prj);
 
         $g2 = $reader->read('POINT(5 0)');
         $prj = $g->project($g2);
         $this->assertEquals(5, $prj);
+        $prj = $g->project($g2, TRUE);
+        $this->assertEquals(0.5, $prj);
 
-        $g = $reader->read('MULTILINESTRING((0 0, 10 0),(20 10, 20 30))');
+        $g = $reader->read('MULTILINESTRING((0 0, 10 0),(20 10, 20 20))');
 
         $g2 = $reader->read('POINT(20 0)');
         $prj = $g->project($g2);
         $this->assertEquals(10, $prj);
+        $prj = $g->project($g2, TRUE);
+        $this->assertEquals(0.5, $prj);
 
         $g2 = $reader->read('POINT(20 5)');
         $prj = $g->project($g2);
         $this->assertEquals(10, $prj);
+        $prj = $g->project($g2, TRUE);
+        $this->assertEquals(0.5, $prj);
 
 
     }
@@ -263,13 +273,22 @@ class test extends PHPUnit_Framework_TestCase
         $prj = $g->interpolate(0);
         $this->assertNotNull($prj);
         $this->assertEquals('POINT (0 0)', $writer->write($prj));
+        $prj = $g->interpolate(0, TRUE);
+        $this->assertNotNull($prj);
+        $this->assertEquals('POINT (0 0)', $writer->write($prj));
 
         $prj = $g->interpolate(5);
+        $this->assertNotNull($prj);
+        $this->assertEquals('POINT (5 0)', $writer->write($prj));
+        $prj = $g->interpolate(0.5, TRUE);
         $this->assertNotNull($prj);
         $this->assertEquals('POINT (5 0)', $writer->write($prj));
 
         /* return closest on longer distance */
         $prj = $g->interpolate(20);
+        $this->assertNotNull($prj);
+        $this->assertEquals('POINT (10 0)', $writer->write($prj));
+        $prj = $g->interpolate(2, TRUE);
         $this->assertNotNull($prj);
         $this->assertEquals('POINT (10 0)', $writer->write($prj));
     

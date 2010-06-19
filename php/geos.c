@@ -210,17 +210,22 @@ PHP_METHOD(Geometry, project)
     GEOSGeometry *this;
     GEOSGeometry *other;
     zval *zobj;
+    zend_bool normalized = 0;
     double ret;
 
     this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zobj)
-        == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o|b", &zobj,
+            &normalized) == FAILURE) {
         RETURN_NULL();
     }
     other = getRelay(zobj, Geometry_ce_ptr);
 
-    ret = GEOSProject(this, other);
+    if ( normalized ) {
+        ret = GEOSProjectNormalized(this, other);
+    } else {
+        ret = GEOSProject(this, other);
+    }
     if ( ret < 0 ) RETURN_NULL(); /* should get an exception first */
 
     RETURN_DOUBLE(ret);
@@ -230,17 +235,21 @@ PHP_METHOD(Geometry, interpolate)
 {
     GEOSGeometry *this;
     double dist;
-    zval *zobj;
     GEOSGeometry *ret;
+    zend_bool normalized = 0;
 
     this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d", &dist)
-        == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d|b",
+            &dist, &normalized) == FAILURE) {
         RETURN_NULL();
     }
 
-    ret = GEOSInterpolate(this, dist);
+    if ( normalized ) {
+        ret = GEOSInterpolateNormalized(this, dist);
+    } else {
+        ret = GEOSInterpolate(this, dist);
+    }
     if ( ! ret ) RETURN_NULL(); /* should get an exception first */
 
     /* return_value is a zval */
