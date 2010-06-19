@@ -23,6 +23,7 @@
 #include <geos/linearref/LinearIterator.h>
 #include <geos/linearref/LinearLocation.h>
 #include <geos/linearref/LengthLocationMap.h>
+#include <geos/util/IllegalArgumentException.h>
 
 using namespace geos::geom;
 
@@ -74,6 +75,9 @@ void LinearIterator::loadCurrentLine()
 		return;
 	}
 	currentLine = dynamic_cast<const LineString *> (linear->getGeometryN(componentIndex));
+	if ( ! currentLine ) {
+		throw util::IllegalArgumentException("computed index is before specified minimum index");
+	}
 }
 
 bool LinearIterator::hasNext() const
