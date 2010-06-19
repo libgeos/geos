@@ -336,6 +336,8 @@ extern int GEOS_DLL GEOSCoordSeq_getDimensions_r(GEOSContextHandle_t handle,
  */
 
 
+/* Return distance of point 'p' projected on 'g' from origin
+ * of 'g'. Geometry 'g' must be a lineal geometry */
 extern double GEOS_DLL GEOSProject(const GEOSGeometry *g,
                                    const GEOSGeometry* p);
 extern double GEOS_DLL GEOSProject_r(GEOSContextHandle_t handle,
