@@ -344,6 +344,8 @@ extern double GEOS_DLL GEOSProject_r(GEOSContextHandle_t handle,
                                      const GEOSGeometry *g,
                                      const GEOSGeometry *p);
 
+/* Return closest point to given distance within geometry
+ * Geometry must be a LineString */
 extern GEOSGeometry GEOS_DLL *GEOSInterpolate(const GEOSGeometry *g,
                                               double d);
 extern GEOSGeometry GEOS_DLL *GEOSInterpolate_r(GEOSContextHandle_t handle,
