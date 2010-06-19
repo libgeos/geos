@@ -24,15 +24,25 @@
 
 EXTRA_DIST = test.php crashme.php
 
+abs_topbuilddir=`cd $(top_builddir); pwd`
+abs_srcdir=`cd $(srcdir); pwd`
+
 if ENABLE_PHP_TESTS
 
-PHPOPTS = -n -d enable_dl=On -d extension_dir=../.libs
+TESTS = phpunit
 
-check:
-	$(PHP) $(PHPOPTS) $(PHPUNIT) test.php
+PHPOPTS = -n -d enable_dl=On -d extension_dir=$(abs_topbuilddir)/php/.libs
+
+phpunit: test.php 
+	echo "#!/bin/sh" > $@ 
+	echo "$(PHP) $(PHPOPTS) $(PHPUNIT) test $(abs_srcdir)/test.php $$@" >> $@
+	chmod +x $@
 
 crashtest:
 	$(PHP) $(PHPOPTS) crashme.php
+
+clean-local:
+	rm -f phpunit
 
 
 endif
