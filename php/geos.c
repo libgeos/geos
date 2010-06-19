@@ -185,6 +185,8 @@ PHP_METHOD(Geometry, difference);
 PHP_METHOD(Geometry, symDifference);
 PHP_METHOD(Geometry, boundary);
 PHP_METHOD(Geometry, union); /* also does union cascaded */
+PHP_METHOD(Geometry, pointOnSurface); 
+PHP_METHOD(Geometry, centroid); 
 
 PHP_METHOD(Geometry, numGeometries);
 
@@ -200,6 +202,9 @@ static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, symDifference, NULL, 0)
     PHP_ME(Geometry, boundary, NULL, 0)
     PHP_ME(Geometry, union, NULL, 0)
+    PHP_ME(Geometry, pointOnSurface, NULL, 0)
+    PHP_ME(Geometry, centroid, NULL, 0)
+
     PHP_ME(Geometry, numGeometries, NULL, 0)
     {NULL, NULL, NULL}
 };
@@ -524,6 +529,42 @@ PHP_METHOD(Geometry, union)
     }
 
     if ( ! ret ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, ret);
+}
+
+/**
+ * GEOSGeometry::pointOnSurface()
+ */
+PHP_METHOD(Geometry, pointOnSurface)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *ret;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    ret = GEOSPointOnSurface(this);
+    if ( ret == NULL ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, ret);
+}
+
+/**
+ * GEOSGeometry::centroid()
+ */
+PHP_METHOD(Geometry, centroid)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *ret;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    ret = GEOSGetCentroid(this);
+    if ( ret == NULL ) RETURN_NULL(); /* should get an exception first */
 
     /* return_value is a zval */
     object_init_ex(return_value, Geometry_ce_ptr);

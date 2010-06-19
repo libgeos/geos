@@ -803,4 +803,54 @@ class test extends PHPUnit_Framework_TestCase
             , $writer->write($gu));
 
     }
+
+    public function testGeometry_pointOnSurface()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        $g = $reader->read('POINT(0 0)');
+        $b = $g->pointOnSurface();
+        $this->assertEquals(
+'POINT (0 0)'
+            , $writer->write($b));
+
+        $g = $reader->read('LINESTRING(0 0, 5 5, 10 10)');
+        $b = $g->pointOnSurface();
+        $this->assertEquals(
+'POINT (5 5)'
+            , $writer->write($b));
+
+        $g = $reader->read('POLYGON((0 0, 0 10, 5 5, 10 10, 10 0, 0 0))');
+        $b = $g->pointOnSurface();
+        $this->assertEquals(
+'POINT (2 5)'
+            , $writer->write($b));
+    }
+
+    public function testGeometry_centroid()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        $g = $reader->read('POINT(0 0)');
+        $b = $g->centroid();
+        $this->assertEquals(
+'POINT (0 0)'
+            , $writer->write($b));
+
+        $g = $reader->read('LINESTRING(0 0, 10 10)');
+        $b = $g->centroid();
+        $this->assertEquals(
+'POINT (5 5)'
+            , $writer->write($b));
+
+        $g = $reader->read('POLYGON((0 0, 0 10, 5 5, 10 10, 10 0, 0 0))');
+        $b = $g->centroid();
+        $this->assertEquals(
+'POINT (5 4)'
+            , $writer->write($b));
+    }
 }
