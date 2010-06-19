@@ -15,6 +15,16 @@ class test extends PHPUnit_Framework_TestCase
         $this->assertContains('-CAPI-', GEOSVersion());
     }
 
+    public function testConstants()
+    {
+        $this->assertEquals(1, GEOSBUF_CAP_ROUND);
+        $this->assertEquals(2, GEOSBUF_CAP_FLAT);
+        $this->assertEquals(3, GEOSBUF_CAP_SQUARE);
+        $this->assertEquals(1, GEOSBUF_JOIN_ROUND);
+        $this->assertEquals(2, GEOSBUF_JOIN_MITRE);
+        $this->assertEquals(3, GEOSBUF_JOIN_BEVEL);
+    }
+
     public function testWKTReader__construct()
     {
         $reader = new GEOSWKTReader();
@@ -311,5 +321,116 @@ class test extends PHPUnit_Framework_TestCase
         $this->assertNotNull($prj);
         $this->assertEquals('POINT (10 0)', $writer->write($prj));
     
+    }
+
+    public function testGeometry_buffer()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        $g = $reader->read('POINT(0 0)');
+        $b = $g->buffer(0);
+        $this->assertEquals('POLYGON EMPTY', $writer->write($b));
+
+        $b = $g->buffer(10);
+        $this->assertEquals(
+'POLYGON ((10 0, 10 -2, 9 -4, 8 -6, 7 -7, 6 -8, 4 -9, 2 -10, 0 -10, -2 -10, -4 -9, -6 -8, -7 -7, -8 -6, -9 -4, -10 -2, -10 -0, -10 2, -9 4, -8 6, -7 7, -6 8, -4 9, -2 10, -0 10, 2 10, 4 9, 6 8, 7 7, 8 6, 9 4, 10 2, 10 0))'
+            , $writer->write($b));
+
+        # One segment per quadrant
+        $b = $g->buffer(10, array('quad_segs' => 1));
+        $this->assertEquals(
+'POLYGON ((10 0, 0 -10, -10 -0, -0 10, 10 0))'
+            , $writer->write($b));
+
+        /* End cap styles */
+
+        $g = $reader->read('LINESTRING(0 0, 100 0)');
+
+        $b = $g->buffer(10, array(
+            'quad_segs' => 1,
+            'endcap' => GEOSBUF_CAP_ROUND
+        ));
+        $this->assertEquals(
+'POLYGON ((100 10, 110 0, 100 -10, 0 -10, -10 0, 0 10, 100 10))'
+            , $writer->write($b));
+
+        $b = $g->buffer(10, array(
+            'quad_segs' => 1,
+            'endcap' => GEOSBUF_CAP_FLAT
+        ));
+        $this->assertEquals(
+'POLYGON ((100 10, 100 -10, 0 -10, 0 10, 100 10))'
+            , $writer->write($b));
+
+        $b = $g->buffer(10, array(
+            'quad_segs' => 1,
+            'endcap' => GEOSBUF_CAP_SQUARE
+        ));
+        $this->assertEquals(
+'POLYGON ((100 10, 110 10, 110 -10, 0 -10, -10 -10, -10 10, 100 10))'
+            , $writer->write($b));
+
+        /* Join styles */
+
+        $g = $reader->read('LINESTRING(0 0, 100 0, 100 100)');
+
+        $b = $g->buffer(10, array(
+            'quad_segs' => 2,
+            'join' => GEOSBUF_JOIN_ROUND
+        ));
+        $this->assertEquals(
+'POLYGON ((90 10, 90 100, 93 107, 100 110, 107 107, 110 100, 110 0, 107 -7, 100 -10, 0 -10, -7 -7, -10 0, -7 7, 0 10, 90 10))'
+            , $writer->write($b));
+
+        $b = $g->buffer(10, array(
+            'quad_segs' => 2,
+            'join' => GEOSBUF_JOIN_BEVEL
+        ));
+        $this->assertEquals(
+'POLYGON ((90 10, 90 100, 93 107, 100 110, 107 107, 110 100, 110 0, 100 -10, 0 -10, -7 -7, -10 0, -7 7, 0 10, 90 10))'
+            , $writer->write($b));
+
+        $b = $g->buffer(10, array(
+            'quad_segs' => 2,
+            'join' => GEOSBUF_JOIN_MITRE
+        ));
+        $this->assertEquals(
+'POLYGON ((90 10, 90 100, 93 107, 100 110, 107 107, 110 100, 110 -10, 0 -10, -7 -7, -10 0, -7 7, 0 10, 90 10))'
+            , $writer->write($b));
+
+        $b = $g->buffer(10, array(
+            'quad_segs' => 2,
+            'join' => GEOSBUF_JOIN_MITRE,
+            'mitre_limit' => 1.0
+        ));
+        $this->assertEquals(
+'POLYGON ((90 10, 90 100, 93 107, 100 110, 107 107, 110 100, 109 -5, 105 -9, 0 -10, -7 -7, -10 0, -7 7, 0 10, 90 10))'
+            , $writer->write($b));
+
+        /* Check that elements of the passed style array are not
+         * type-converted (buffer op will need to type-convert
+         * internally)
+         */
+        $ary = array('a' => 1);
+
+        $myStyle = array(
+            'quad_segs' => "a string",
+            'join' => "1",
+            'endcap' => $ary,
+            'mitre_limit' => 2 /* an int.. */
+        );
+        $this->assertEquals('string', gettype($myStyle['quad_segs']));
+        $this->assertEquals('string', gettype($myStyle['join']));
+        $this->assertEquals('array', gettype($myStyle['endcap']));
+        $this->assertEquals('integer', gettype($myStyle['mitre_limit']));
+        $b = $g->buffer(10, $myStyle);
+        $this->assertEquals('string', gettype($myStyle['quad_segs']));
+        $this->assertEquals('string', gettype($myStyle['join']));
+        $this->assertEquals('array', gettype($myStyle['endcap']));
+        $this->assertEquals('integer', gettype($myStyle['mitre_limit']));
+
+
     }
 }

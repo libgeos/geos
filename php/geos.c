@@ -113,6 +113,32 @@ getRelay(zval* val, zend_class_entry* ce) {
     return proxy->relay;
 }
 
+static long getZvalAsLong(zval* val)
+{
+    long ret;
+    zval tmp;
+
+    tmp = *val;
+    zval_copy_ctor(&tmp);
+    convert_to_long(&tmp);
+    ret = Z_LVAL(tmp);
+    zval_dtor(&tmp);
+    return ret;
+}
+
+static long getZvalAsDouble(zval* val)
+{
+    double ret;
+    zval tmp;
+
+    tmp = *val;
+    zval_copy_ctor(&tmp);
+    convert_to_double(&tmp);
+    ret = Z_DVAL(tmp);
+    zval_dtor(&tmp);
+    return ret;
+}
+
 static zend_object_value
 Gen_create_obj (zend_class_entry *type TSRMLS_DC,
     zend_objects_free_object_storage_t st, zend_object_handlers* handlers)
@@ -151,6 +177,7 @@ PHP_FUNCTION(GEOSVersion)
 PHP_METHOD(Geometry, __construct);
 PHP_METHOD(Geometry, project);
 PHP_METHOD(Geometry, interpolate);
+PHP_METHOD(Geometry, buffer);
 
 PHP_METHOD(Geometry, numGeometries);
 
@@ -158,6 +185,7 @@ static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, __construct, NULL, 0)
     PHP_ME(Geometry, project, NULL, 0)
     PHP_ME(Geometry, interpolate, NULL, 0)
+    PHP_ME(Geometry, buffer, NULL, 0)
     PHP_ME(Geometry, numGeometries, NULL, 0)
     {NULL, NULL, NULL}
 };
@@ -250,6 +278,91 @@ PHP_METHOD(Geometry, interpolate)
     } else {
         ret = GEOSInterpolate(this, dist);
     }
+    if ( ! ret ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, ret);
+}
+
+/*
+ * GEOSGeometry::buffer(dist, [<styleArray>])
+ *
+ * styleArray keys supported:
+ *  'quad_segs'
+ *       Type: int 
+ *       Number of segments used to approximate
+ *       a quarter circle (defaults to 8).
+ *  'endcap'
+ *       Type: long
+ *       Endcap style (defaults to GEOSBUF_CAP_ROUND)
+ *  'join'
+ *       Type: long
+ *       Join style (defaults to GEOSBUF_JOIN_ROUND)
+ *  'mitre_limit'
+ *       Type: double
+ *       mitre ratio limit (only affects joins with GEOSBUF_JOIN_MITRE style)
+ *       'miter_limit' is also accepted as a synonym for 'mitre_limit'.
+ */
+PHP_METHOD(Geometry, buffer)
+{
+    GEOSGeometry *this;
+    double dist;
+    GEOSGeometry *ret;
+    static const double default_mitreLimit = 5.0;
+    static const int default_endCapStyle = GEOSBUF_CAP_ROUND;
+    static const int default_joinStyle = GEOSBUF_JOIN_ROUND;
+    static const int default_quadSegs = 8;
+    long int quadSegs = default_quadSegs;
+    long int endCapStyle = default_endCapStyle;
+    long int joinStyle = default_joinStyle;
+    double mitreLimit = default_mitreLimit;
+    zval *style_val = NULL;
+    zval **data;
+    HashTable *style;
+    char *key;
+    ulong index;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d|a",
+            &dist, &style_val) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    if ( style_val )
+    {
+        style = HASH_OF(style_val);
+        while(zend_hash_get_current_key(style, &key, &index, 0)
+              == HASH_KEY_IS_STRING)
+        {
+            if(!strcmp(key, "quad_segs"))
+            {
+                zend_hash_get_current_data(style, (void**)&data);
+                quadSegs = getZvalAsLong(*data);
+            }
+            else if(!strcmp(key, "endcap"))
+            {
+                zend_hash_get_current_data(style, (void**)&data);
+                endCapStyle = getZvalAsLong(*data);
+            }
+            else if(!strcmp(key, "join"))
+            {
+                zend_hash_get_current_data(style, (void**)&data);
+                joinStyle = getZvalAsLong(*data);
+            }
+            else if(!strcmp(key, "mitre_limit"))
+            {
+                zend_hash_get_current_data(style, (void**)&data);
+                mitreLimit = getZvalAsDouble(*data);
+            }
+
+            zend_hash_move_forward(style);
+        }
+    }
+
+    ret = GEOSBufferWithStyle(this, dist,
+        quadSegs, endCapStyle, joinStyle, mitreLimit);
     if ( ! ret ) RETURN_NULL(); /* should get an exception first */
 
     /* return_value is a zval */
@@ -516,6 +629,20 @@ PHP_MINIT_FUNCTION(geos)
     memcpy(&Geometry_object_handlers,
         zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     Geometry_object_handlers.clone_obj = NULL;
+
+    /* Constants */
+    REGISTER_LONG_CONSTANT("GEOSBUF_CAP_ROUND",  GEOSBUF_CAP_ROUND,
+        CONST_CS|CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("GEOSBUF_CAP_FLAT",   GEOSBUF_CAP_FLAT,
+        CONST_CS|CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("GEOSBUF_CAP_SQUARE", GEOSBUF_CAP_SQUARE,
+        CONST_CS|CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("GEOSBUF_JOIN_ROUND", GEOSBUF_JOIN_ROUND,
+        CONST_CS|CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("GEOSBUF_JOIN_MITRE", GEOSBUF_JOIN_MITRE,
+        CONST_CS|CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("GEOSBUF_JOIN_BEVEL", GEOSBUF_JOIN_BEVEL,
+        CONST_CS|CONST_PERSISTENT);
 
     return SUCCESS;
 }
