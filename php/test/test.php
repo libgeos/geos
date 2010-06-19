@@ -28,22 +28,32 @@ class test extends PHPUnit_Framework_TestCase
         /* Good WKT */
         $geom = $reader->read('POINT(0 0)');
         $this->assertNotNull($geom);
+        $geom = $reader->read('POINT EMPTY');
+        $this->assertNotNull($geom);
         $geom = $reader->read('MULTIPOINT(0 0 1, 2 3 4)');
         $this->assertNotNull($geom);
         $geom = $reader->read('MULTIPOINT((0 0), (2 3))');
         $this->assertNotNull($geom);
+        $geom = $reader->read('MULTIPOINT EMPTY');
+        $this->assertNotNull($geom);
         $geom = $reader->read('LINESTRING(0 0 1, 2 3 4)');
+        $this->assertNotNull($geom);
+        $geom = $reader->read('LINESTRING EMPTY');
         $this->assertNotNull($geom);
         $geom = $reader->read('MULTILINESTRING((0 0 1, 2 3 4),
                                                (10 10 2, 3 4 5))');
         $this->assertNotNull($geom);
         $geom = $reader->read('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))');
         $this->assertNotNull($geom);
+        $geom = $reader->read('POLYGON EMPTY');
+        $this->assertNotNull($geom);
         $geom = $reader->read('MULTIPOLYGON(
                                 ((0 0, 1 0, 1 1, 0 1, 0 0)),
                                 ((10 10, 10 14, 14 14, 14 10, 10 10),
                                     (11 11, 11 12, 12 12, 12 11, 11 11))
                                )');
+        $this->assertNotNull($geom);
+        $geom = $reader->read('MULTIPOLYGON EMPTY');
         $this->assertNotNull($geom);
         $geom = $reader->read('GEOMETRYCOLLECTION(
                 MULTIPOLYGON(
@@ -57,6 +67,8 @@ class test extends PHPUnit_Framework_TestCase
                 MULTIPOINT(0 0, 2 3),
                 POINT(9 0)
         )');
+        $this->assertNotNull($geom);
+        $geom = $reader->read('GEOMETRYCOLLECTION EMPTY');
         $this->assertNotNull($geom);
 
         /* BOGUS WKT */
@@ -117,12 +129,19 @@ class test extends PHPUnit_Framework_TestCase
         $w->setTrim(TRUE);
 
         $in[] = 'POINT (0 0)';
+        $in[] = 'POINT EMPTY';
         $in[] = 'MULTIPOINT (0 1, 2 3)';
+        $in[] = 'MULTIPOINT EMPTY';
         $in[] = 'LINESTRING (0 0, 2 3)';
+        $in[] = 'LINESTRING EMPTY';
         $in[] = 'MULTILINESTRING ((0 1, 2 3), (10 10, 3 4))';
+        $in[] = 'MULTILINESTRING EMPTY';
         $in[] = 'POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))';
+        $in[] = 'POLYGON EMPTY';
         $in[] = 'MULTIPOLYGON (((0 0, 1 0, 1 1, 0 1, 0 0)), ((10 10, 10 14, 14 14, 14 10, 10 10), (11 11, 11 12, 12 12, 12 11, 11 11)))';
+        $in[] = 'MULTIPOLYGON EMPTY';
         $in[] = 'GEOMETRYCOLLECTION (MULTIPOLYGON (((0 0, 1 0, 1 1, 0 1, 0 0)), ((10 10, 10 14, 14 14, 14 10, 10 10), (11 11, 11 12, 12 12, 12 11, 11 11))), POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0)), MULTILINESTRING ((0 0, 2 3), (10 10, 3 4)), LINESTRING (0 0, 2 3), MULTIPOINT (0 0, 2 3), POINT (9 0))';
+        $in[] = 'GEOMETRYCOLLECTION EMPTY';
 
         foreach ($in as $i) {
             $this->assertEquals($i, $w->write($r->read($i)));
