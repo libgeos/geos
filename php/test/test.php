@@ -853,4 +853,45 @@ class test extends PHPUnit_Framework_TestCase
 'POINT (5 4)'
             , $writer->write($b));
     }
+
+    public function testGeometry_relate()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        $g = $reader->read('POINT(0 0)');
+        $g2 = $reader->read('POINT(0 0)');
+        $ret = $g->relate($g2);
+        $this->assertEquals('0FFFFFFF2', $ret);
+        $ret = $g->relate($g2, '0FFFFFFF2');
+        $this->assertEquals(TRUE, $ret);
+        $ret = $g->relate($g2, '0*******2');
+        $this->assertEquals(TRUE, $ret);
+        $ret = $g->relate($g2, '0*******1');
+        $this->assertEquals(FALSE, $ret);
+
+        $g = $reader->read('POINT(0 0)');
+        $g2 = $reader->read('POINT(1 0)');
+        $ret = $g->relate($g2);
+        $this->assertEquals('FF0FFF0F2', $ret);
+        $ret = $g->relate($g2, 'FF0FFF0F2');
+        $this->assertEquals(TRUE, $ret);
+        $ret = $g->relate($g2, 'F*******2');
+        $this->assertEquals(TRUE, $ret);
+        $ret = $g->relate($g2, 'T*******2');
+        $this->assertEquals(FALSE, $ret);
+
+        $g = $reader->read('POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))');
+        $g2 = $reader->read('POINT(1 0)');
+        $ret = $g->relate($g2);
+        $this->assertEquals('FF20F1FF2', $ret);
+        $ret = $g->relate($g2, 'FF20F1FF2');
+        $this->assertEquals(TRUE, $ret);
+        $ret = $g->relate($g2, 'F*******2');
+        $this->assertEquals(TRUE, $ret);
+        $ret = $g->relate($g2, 'T*******2');
+        $this->assertEquals(FALSE, $ret);
+
+    }
 }

@@ -187,6 +187,7 @@ PHP_METHOD(Geometry, boundary);
 PHP_METHOD(Geometry, union); /* also does union cascaded */
 PHP_METHOD(Geometry, pointOnSurface); 
 PHP_METHOD(Geometry, centroid); 
+PHP_METHOD(Geometry, relate); 
 
 PHP_METHOD(Geometry, numGeometries);
 
@@ -204,6 +205,7 @@ static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, union, NULL, 0)
     PHP_ME(Geometry, pointOnSurface, NULL, 0)
     PHP_ME(Geometry, centroid, NULL, 0)
+    PHP_ME(Geometry, relate, NULL, 0)
 
     PHP_ME(Geometry, numGeometries, NULL, 0)
     {NULL, NULL, NULL}
@@ -569,6 +571,47 @@ PHP_METHOD(Geometry, centroid)
     /* return_value is a zval */
     object_init_ex(return_value, Geometry_ce_ptr);
     setRelay(return_value, ret);
+}
+
+/**
+ * GEOSGeometry::relate(otherGeom)
+ * GEOSGeometry::relate(otherGeom, pattern)
+ */
+PHP_METHOD(Geometry, relate)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *other;
+    zval *zobj;
+    char* pat = NULL;
+    int patlen;
+    int retInt;
+    zend_bool retBool;
+    char* retStr;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o|s",
+        &zobj, &pat, &patlen) == FAILURE)
+    {
+        RETURN_NULL();
+    }
+
+    other = getRelay(zobj, Geometry_ce_ptr);
+
+    if ( ! pat ) {
+        /* we'll compute it */
+        pat = GEOSRelate(this, other);
+        if ( ! pat ) RETURN_NULL(); /* should get an exception first */
+        retStr = estrdup(pat);
+        GEOSFree(pat);
+        RETURN_STRING(retStr, 0);
+    } else {
+        retInt = GEOSRelatePattern(this, other, pat);
+        if ( retInt == 2 ) RETURN_NULL(); /* should get an exception first */
+        retBool = retInt;
+        RETURN_BOOL(retBool);
+    }
+
 }
 
 /* -- class GEOSWKTReader -------------------- */
