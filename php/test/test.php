@@ -1024,4 +1024,116 @@ class test extends PHPUnit_Framework_TestCase
 'MULTIPOINT (0 0, 1 0, 1 1, 0 1, 10 10, 10 14, 14 14, 14 10, 11 11, 11 12, 12 12, 12 11, 2 3, 3 4, 9 0)'
             , $writer->write($gs));
     }
+
+    public function testGeometry_relationalOps()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        $g1 = $reader->read('POINT(0 0)');
+        $g2 = $reader->read('POINT(0 0)');
+
+        $this->assertFalse( $g1->disjoint($g2) );
+        $this->assertFalse( $g1->touches($g2) ); /* no bounds, can't touch */
+        $this->assertTrue( $g1->intersects($g2) );
+        $this->assertFalse( $g1->crosses($g2) );
+        $this->assertTrue( $g1->within($g2) );
+        $this->assertTrue( $g1->contains($g2) );
+        $this->assertFalse( $g1->overlaps($g2) );
+        $this->assertTrue( $g1->equals($g2) );
+        $this->assertTrue( $g1->equalsExact($g2) );
+
+        $g1 = $reader->read('POINT(0 0)');
+        $g2 = $reader->read('LINESTRING(0 0, 10 0)');
+
+        $this->assertFalse( $g1->disjoint($g2) );
+        $this->assertTrue( $g1->touches($g2) ); 
+        $this->assertTrue( $g1->intersects($g2) );
+        $this->assertFalse( $g1->crosses($g2) );
+        $this->assertFalse( $g1->within($g2) );
+        $this->assertFalse( $g1->contains($g2) );
+        $this->assertFalse( $g1->overlaps($g2) );
+        $this->assertFalse( $g1->equals($g2) );
+        $this->assertFalse( $g1->equalsExact($g2, 10) );
+
+        $g1 = $reader->read('POINT(5 0)');
+        $g2 = $reader->read('LINESTRING(0 0, 10 0)');
+
+        $this->assertFalse( $g1->disjoint($g2) );
+        $this->assertFalse( $g1->touches($g2) ); 
+        $this->assertTrue( $g1->intersects($g2) );
+        $this->assertFalse( $g1->crosses($g2) );
+        $this->assertTrue( $g1->within($g2) );
+        $this->assertFalse( $g1->contains($g2) );
+        $this->assertFalse( $g1->overlaps($g2) );
+        $this->assertFalse( $g1->equals($g2) );
+        $this->assertFalse( $g1->equalsExact($g2, 10) );
+
+        $g1 = $reader->read('LINESTRING(5 -5, 5 5)');
+        $g2 = $reader->read('LINESTRING(0 0, 10 0)');
+
+        $this->assertFalse( $g1->disjoint($g2) );
+        $this->assertFalse( $g1->touches($g2) ); 
+        $this->assertTrue( $g1->intersects($g2) );
+        $this->assertTrue( $g1->crosses($g2) );
+        $this->assertFalse( $g1->within($g2) );
+        $this->assertFalse( $g1->contains($g2) );
+        $this->assertFalse( $g1->overlaps($g2) );
+        $this->assertFalse( $g1->equals($g2) );
+        $this->assertFalse( $g1->equalsExact($g2, 1) );
+
+        $g1 = $reader->read('LINESTRING(5 0, 15 0)');
+        $g2 = $reader->read('LINESTRING(0 0, 10 0)');
+
+        $this->assertFalse( $g1->disjoint($g2) );
+        $this->assertFalse( $g1->touches($g2) ); 
+        $this->assertTrue( $g1->intersects($g2) );
+        $this->assertFalse( $g1->crosses($g2) );
+        $this->assertFalse( $g1->within($g2) );
+        $this->assertFalse( $g1->contains($g2) );
+        $this->assertTrue( $g1->overlaps($g2) );
+        $this->assertFalse( $g1->equals($g2) );
+        $this->assertFalse( $g1->equalsExact($g2, 1) );
+
+        $g1 = $reader->read('LINESTRING(0 0, 5 0, 10 0)');
+        $g2 = $reader->read('LINESTRING(0 0, 10 0)');
+
+        $this->assertFalse( $g1->disjoint($g2) );
+        $this->assertFalse( $g1->touches($g2) ); 
+        $this->assertTrue( $g1->intersects($g2) );
+        $this->assertFalse( $g1->crosses($g2) );
+        $this->assertTrue( $g1->within($g2) );
+        $this->assertTrue( $g1->contains($g2) );
+        $this->assertFalse( $g1->overlaps($g2) );
+        $this->assertTrue( $g1->equals($g2) );
+        $this->assertFalse( $g1->equalsExact($g2, 1) );
+
+        $g1 = $reader->read('POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))');
+        $g2 = $reader->read('POLYGON((5 -5, 5 5, 15 5, 15 -5, 5 -5))');
+
+        $this->assertFalse( $g1->disjoint($g2) );
+        $this->assertFalse( $g1->touches($g2) ); 
+        $this->assertTrue( $g1->intersects($g2) );
+        $this->assertFalse( $g1->crosses($g2) );
+        $this->assertFalse( $g1->within($g2) );
+        $this->assertFalse( $g1->contains($g2) );
+        $this->assertTrue( $g1->overlaps($g2) );
+        $this->assertFalse( $g1->equals($g2) );
+        $this->assertFalse( $g1->equalsExact($g2, 1) );
+
+        $g1 = $reader->read('POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))');
+        $g2 = $reader->read('POINT(15 15)');
+
+        $this->assertTrue( $g1->disjoint($g2) );
+        $this->assertFalse( $g1->touches($g2) ); 
+        $this->assertFalse( $g1->intersects($g2) );
+        $this->assertFalse( $g1->crosses($g2) );
+        $this->assertFalse( $g1->within($g2) );
+        $this->assertFalse( $g1->contains($g2) );
+        $this->assertFalse( $g1->overlaps($g2) );
+        $this->assertFalse( $g1->equals($g2) );
+        $this->assertFalse( $g1->equalsExact($g2, 1) );
+
+    }
 }

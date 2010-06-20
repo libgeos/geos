@@ -185,6 +185,15 @@ PHP_METHOD(Geometry, centroid);
 PHP_METHOD(Geometry, relate); 
 PHP_METHOD(Geometry, simplify); /* also does topology-preserving */
 PHP_METHOD(Geometry, extractUniquePoints); 
+PHP_METHOD(Geometry, disjoint);
+PHP_METHOD(Geometry, touches);
+PHP_METHOD(Geometry, intersects);
+PHP_METHOD(Geometry, crosses);
+PHP_METHOD(Geometry, within);
+PHP_METHOD(Geometry, contains);
+PHP_METHOD(Geometry, overlaps);
+PHP_METHOD(Geometry, equals);
+PHP_METHOD(Geometry, equalsExact);
 
 PHP_METHOD(Geometry, numGeometries);
 
@@ -206,6 +215,15 @@ static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, relate, NULL, 0)
     PHP_ME(Geometry, simplify, NULL, 0)
     PHP_ME(Geometry, extractUniquePoints, NULL, 0)
+    PHP_ME(Geometry, disjoint, NULL, 0)
+    PHP_ME(Geometry, touches, NULL, 0)
+    PHP_ME(Geometry, intersects, NULL, 0)
+    PHP_ME(Geometry, crosses, NULL, 0)
+    PHP_ME(Geometry, within, NULL, 0)
+    PHP_ME(Geometry, contains, NULL, 0)
+    PHP_ME(Geometry, overlaps, NULL, 0)
+    PHP_ME(Geometry, equals, NULL, 0)
+    PHP_ME(Geometry, equalsExact, NULL, 0)
 
     PHP_ME(Geometry, numGeometries, NULL, 0)
     {NULL, NULL, NULL}
@@ -1068,6 +1086,250 @@ PHP_METHOD(Geometry, extractUniquePoints)
     setRelay(return_value, ret);
 }
 
+/**
+ * bool GEOSGeometry::disjoint(GEOSGeometry)
+ */
+PHP_METHOD(Geometry, disjoint)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *other;
+    int ret;
+    zend_bool retBool;
+    zval *zobj;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zobj)
+            == FAILURE) {
+        RETURN_NULL();
+    }
+    other = getRelay(zobj, Geometry_ce_ptr);
+
+    ret = GEOSDisjoint(this, other);
+    if ( ret == 2 ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    retBool = ret;
+    RETURN_BOOL(retBool);
+}
+
+/**
+ * bool GEOSGeometry::touches(GEOSGeometry)
+ */
+PHP_METHOD(Geometry, touches)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *other;
+    int ret;
+    zend_bool retBool;
+    zval *zobj;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zobj)
+            == FAILURE) {
+        RETURN_NULL();
+    }
+    other = getRelay(zobj, Geometry_ce_ptr);
+
+    ret = GEOSTouches(this, other);
+    if ( ret == 2 ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    retBool = ret;
+    RETURN_BOOL(retBool);
+}
+
+/**
+ * bool GEOSGeometry::intersects(GEOSGeometry)
+ */
+PHP_METHOD(Geometry, intersects)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *other;
+    int ret;
+    zend_bool retBool;
+    zval *zobj;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zobj)
+            == FAILURE) {
+        RETURN_NULL();
+    }
+    other = getRelay(zobj, Geometry_ce_ptr);
+
+    ret = GEOSIntersects(this, other);
+    if ( ret == 2 ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    retBool = ret;
+    RETURN_BOOL(retBool);
+}
+
+/**
+ * bool GEOSGeometry::crosses(GEOSGeometry)
+ */
+PHP_METHOD(Geometry, crosses)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *other;
+    int ret;
+    zend_bool retBool;
+    zval *zobj;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zobj)
+            == FAILURE) {
+        RETURN_NULL();
+    }
+    other = getRelay(zobj, Geometry_ce_ptr);
+
+    ret = GEOSCrosses(this, other);
+    if ( ret == 2 ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    retBool = ret;
+    RETURN_BOOL(retBool);
+}
+
+/**
+ * bool GEOSGeometry::within(GEOSGeometry)
+ */
+PHP_METHOD(Geometry, within)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *other;
+    int ret;
+    zend_bool retBool;
+    zval *zobj;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zobj)
+            == FAILURE) {
+        RETURN_NULL();
+    }
+    other = getRelay(zobj, Geometry_ce_ptr);
+
+    ret = GEOSWithin(this, other);
+    if ( ret == 2 ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    retBool = ret;
+    RETURN_BOOL(retBool);
+}
+
+/**
+ * bool GEOSGeometry::contains(GEOSGeometry)
+ */
+PHP_METHOD(Geometry, contains)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *other;
+    int ret;
+    zend_bool retBool;
+    zval *zobj;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zobj)
+            == FAILURE) {
+        RETURN_NULL();
+    }
+    other = getRelay(zobj, Geometry_ce_ptr);
+
+    ret = GEOSContains(this, other);
+    if ( ret == 2 ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    retBool = ret;
+    RETURN_BOOL(retBool);
+}
+
+/**
+ * bool GEOSGeometry::overlaps(GEOSGeometry)
+ */
+PHP_METHOD(Geometry, overlaps)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *other;
+    int ret;
+    zend_bool retBool;
+    zval *zobj;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zobj)
+            == FAILURE) {
+        RETURN_NULL();
+    }
+    other = getRelay(zobj, Geometry_ce_ptr);
+
+    ret = GEOSOverlaps(this, other);
+    if ( ret == 2 ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    retBool = ret;
+    RETURN_BOOL(retBool);
+}
+
+/**
+ * bool GEOSGeometry::equals(GEOSGeometry)
+ */
+PHP_METHOD(Geometry, equals)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *other;
+    int ret;
+    zend_bool retBool;
+    zval *zobj;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o",
+        &zobj) == FAILURE) {
+        RETURN_NULL();
+    }
+    other = getRelay(zobj, Geometry_ce_ptr);
+
+    ret = GEOSEquals(this, other);
+    if ( ret == 2 ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    retBool = ret;
+    RETURN_BOOL(retBool);
+}
+
+/**
+ * bool GEOSGeometry::equalsExact(GEOSGeometry)
+ * bool GEOSGeometry::equalsExact(GEOSGeometry, double tolerance)
+ */
+PHP_METHOD(Geometry, equalsExact)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *other;
+    int ret;
+    double tolerance = 0;
+    zend_bool retBool;
+    zval *zobj;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o|d",
+        &zobj, &tolerance) == FAILURE) {
+        RETURN_NULL();
+    }
+    other = getRelay(zobj, Geometry_ce_ptr);
+
+    ret = GEOSEqualsExact(this, other, tolerance);
+    if ( ret == 2 ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    retBool = ret;
+    RETURN_BOOL(retBool);
+}
 
 
 /* ------ Initialization / Deinitialization / Meta ------------------ */
