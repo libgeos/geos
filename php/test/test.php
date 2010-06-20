@@ -955,4 +955,30 @@ class test extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, count($ret['invalid_rings']));
 
     }
+
+    public function testGeometry_lineMerge()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        $g = $reader->read('MULTILINESTRING(
+            (0 0, 10 10),
+            (10 10, 10 0),
+            (5 0, 10 0),
+            (5 -5, 5 0)
+            )');
+
+        $ret = GEOSLineMerge($g);
+/*
+
+        $this->assertEquals('array', gettype($ret));
+        $this->assertEquals('1', count($ret));
+
+        $this->assertEquals(
+'LINESTRING (0 0, 10 10, 10 0, 5 0, 5 -5)'
+            , $writer->write($ret[0]));
+*/
+
+    }
 }

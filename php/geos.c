@@ -39,10 +39,12 @@ PHP_RSHUTDOWN_FUNCTION(geos);
 PHP_MINFO_FUNCTION(geos);
 PHP_FUNCTION(GEOSVersion);
 PHP_FUNCTION(GEOSPolygonize);
+PHP_FUNCTION(GEOSLineMerge);
 
 static function_entry geos_functions[] = {
     PHP_FE(GEOSVersion, NULL)
     PHP_FE(GEOSPolygonize, NULL)
+    PHP_FE(GEOSLineMerge, NULL)
     {NULL, NULL, NULL}
 };
 
@@ -210,18 +212,20 @@ static zend_class_entry *Geometry_ce_ptr;
 static zend_object_handlers Geometry_object_handlers;
 
 /*
- * Return a newly created array zval containing
- * a clone of all components of given geometry
+ * Push components of the given geometry
+ * to the given array zval.
+ * Components geometries are cloned.
  * NOTE: collection components are not descended into
  */
-static zval*
-dumpGeometry(GEOSGeometry* g)
+static void
+dumpGeometry(GEOSGeometry* g, zval* array)
 {
-    zval *array;
     int ngeoms, i;
 
+    /*
     MAKE_STD_ZVAL(array);
     array_init(array);
+    */
 
     ngeoms = GEOSGetNumGeometries(g);
     for (i=0; i<ngeoms; ++i)
@@ -240,7 +244,7 @@ dumpGeometry(GEOSGeometry* g)
         add_next_index_zval(array, tmp); 
     }
 
-    return array;
+    //return array;
 }
 
 
@@ -944,10 +948,7 @@ PHP_FUNCTION(GEOSPolygonize)
     GEOSGeometry *cut_edges;
     GEOSGeometry *dangles;
     GEOSGeometry *invalid_rings;
-    zval *rings_array;
-    zval *cut_edges_array;
-    zval *dangles_array;
-    zval *invalid_rings_array;
+    zval *array_elem;
     zval *zobj;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zobj)
@@ -963,20 +964,55 @@ PHP_FUNCTION(GEOSPolygonize)
     /* return value should be an array */
     array_init(return_value);
 
-    rings_array = dumpGeometry(rings);
+    MAKE_STD_ZVAL(array_elem);
+    array_init(array_elem);
+    dumpGeometry(rings, array_elem);
     GEOSGeom_destroy(rings);
-    cut_edges_array = dumpGeometry(cut_edges);
+    add_assoc_zval(return_value, "rings", array_elem); 
+
+    MAKE_STD_ZVAL(array_elem);
+    array_init(array_elem);
+    dumpGeometry(cut_edges, array_elem);
     GEOSGeom_destroy(cut_edges);
-    dangles_array = dumpGeometry(dangles);
+    add_assoc_zval(return_value, "cut_edges", array_elem);
+
+    MAKE_STD_ZVAL(array_elem);
+    array_init(array_elem);
+    dumpGeometry(dangles, array_elem);
     GEOSGeom_destroy(dangles);
-    invalid_rings_array = dumpGeometry(invalid_rings);
+    add_assoc_zval(return_value, "dangles", array_elem);
+
+    MAKE_STD_ZVAL(array_elem);
+    array_init(array_elem);
+    dumpGeometry(invalid_rings, array_elem);
     GEOSGeom_destroy(invalid_rings);
+    add_assoc_zval(return_value, "invalid_rings", array_elem);
 
-    add_assoc_zval(return_value, "rings", rings_array); 
-    add_assoc_zval(return_value, "cut_edges", cut_edges_array);
-    add_assoc_zval(return_value, "dangles", dangles_array);
-    add_assoc_zval(return_value, "invalid_rings", invalid_rings_array);
+}
 
+/**
+ * array GEOSLineMerge(GEOSGeometry $geom)
+ */
+PHP_FUNCTION(GEOSLineMerge)
+{
+    GEOSGeometry *geom_in;
+    GEOSGeometry *geom_out;
+    zval *zobj;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zobj)
+        == FAILURE)
+    {
+        RETURN_NULL();
+    }
+    geom_in = getRelay(zobj, Geometry_ce_ptr);
+
+    geom_out = GEOSLineMerge(geom_in);
+    if ( ! geom_out ) RETURN_NULL(); /* should get an exception first */
+
+    /* return value should be an array */
+    array_init(return_value);
+    dumpGeometry(geom_out, return_value);
+    GEOSGeom_destroy(geom_out);
 }
 
 

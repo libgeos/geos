@@ -39,7 +39,7 @@ phpunit: test.php
 	chmod +x $@
 
 crashtest:
-	$(PHP) $(PHPOPTS) crashme.php
+	$(PHP) $(PHPOPTS) $(abs_srcdir)/crashme.php
 
 clean-local:
 	rm -f phpunit
