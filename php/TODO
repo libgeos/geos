@@ -1,5 +1,7 @@
 In order of priority
 
+- Equip GEOSGeometry with standard string output
+  (and make sure it comes out on var_dump)
 - Complete interfaces of Geometry
 - Add interfaces for WKBReader/WKBWriter ?
 - Doxygen based documentation ?
