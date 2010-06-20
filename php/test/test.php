@@ -1136,4 +1136,35 @@ class test extends PHPUnit_Framework_TestCase
         $this->assertFalse( $g1->equalsExact($g2, 1) );
 
     }
+
+    public function testGeometry_isEmpty()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        $g1 = $reader->read('POINT(0 0)');
+        $this->assertFalse( $g1->isEmpty() );
+
+        $g1 = $reader->read('POINT EMPTY');
+        $this->assertTrue( $g1->isEmpty() );
+
+        $g1 = $reader->read('LINESTRING(0 0, 10 0)');
+        $this->assertFalse( $g1->isEmpty() );
+
+        $g1 = $reader->read('LINESTRING EMPTY');
+        $this->assertTrue( $g1->isEmpty() );
+
+        $g1 = $reader->read('POLYGON((0 0, 10 0, 10 10, 0 0))');
+        $this->assertFalse( $g1->isEmpty() );
+
+        $g1 = $reader->read('POLYGON EMPTY');
+        $this->assertTrue( $g1->isEmpty() );
+
+        $g1 = $reader->read('GEOMETRYCOLLECTION(POINT(0 0))');
+        $this->assertFalse( $g1->isEmpty() );
+
+        $g1 = $reader->read('GEOMETRYCOLLECTION EMPTY');
+        $this->assertTrue( $g1->isEmpty() );
+    }
 }

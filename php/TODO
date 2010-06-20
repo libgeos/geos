@@ -3,5 +3,7 @@ In order of priority
 - Complete interfaces of Geometry
 - Find a way to have GEOSGeometry contents shown on var_dump
 - Implement serialization/deserialization for Geometry
+- Documentation !! (doxygen-based?)
 - Add interfaces for WKBReader/WKBWriter ?
-- Doxygen based documentation ?
+- Add interfaces for prepared geometries ?
+- Add interfaces for STRTree ?

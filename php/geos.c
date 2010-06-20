@@ -194,6 +194,7 @@ PHP_METHOD(Geometry, contains);
 PHP_METHOD(Geometry, overlaps);
 PHP_METHOD(Geometry, equals);
 PHP_METHOD(Geometry, equalsExact);
+PHP_METHOD(Geometry, isEmpty);
 
 PHP_METHOD(Geometry, numGeometries);
 
@@ -224,6 +225,7 @@ static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, overlaps, NULL, 0)
     PHP_ME(Geometry, equals, NULL, 0)
     PHP_ME(Geometry, equalsExact, NULL, 0)
+    PHP_ME(Geometry, isEmpty, NULL, 0)
 
     PHP_ME(Geometry, numGeometries, NULL, 0)
     {NULL, NULL, NULL}
@@ -1324,6 +1326,25 @@ PHP_METHOD(Geometry, equalsExact)
     other = getRelay(zobj, Geometry_ce_ptr);
 
     ret = GEOSEqualsExact(this, other, tolerance);
+    if ( ret == 2 ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    retBool = ret;
+    RETURN_BOOL(retBool);
+}
+
+/**
+ * bool GEOSGeometry::isEmpty()
+ */
+PHP_METHOD(Geometry, isEmpty)
+{
+    GEOSGeometry *this;
+    int ret;
+    zend_bool retBool;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    ret = GEOSisEmpty(this);
     if ( ret == 2 ) RETURN_NULL(); /* should get an exception first */
 
     /* return_value is a zval */
