@@ -20,9 +20,19 @@ class test extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, GEOSBUF_CAP_ROUND);
         $this->assertEquals(2, GEOSBUF_CAP_FLAT);
         $this->assertEquals(3, GEOSBUF_CAP_SQUARE);
+
         $this->assertEquals(1, GEOSBUF_JOIN_ROUND);
         $this->assertEquals(2, GEOSBUF_JOIN_MITRE);
         $this->assertEquals(3, GEOSBUF_JOIN_BEVEL);
+
+        $this->assertEquals(0, GEOS_POINT);
+        $this->assertEquals(1, GEOS_LINESTRING);
+        $this->assertEquals(2, GEOS_LINEARRING);
+        $this->assertEquals(3, GEOS_POLYGON);
+        $this->assertEquals(4, GEOS_MULTIPOINT);
+        $this->assertEquals(5, GEOS_MULTILINESTRING);
+        $this->assertEquals(6, GEOS_MULTIPOLYGON);
+        $this->assertEquals(7, GEOS_GEOMETRYCOLLECTION);
     }
 
     public function testWKTReader__construct()
