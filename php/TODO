@@ -1,7 +1,7 @@
 In order of priority
 
-- Find a way to have GEOSGeometry contents shown 
-  on var_dump
 - Complete interfaces of Geometry
+- Find a way to have GEOSGeometry contents shown on var_dump
+- Implement serialization/deserialization for Geometry
 - Add interfaces for WKBReader/WKBWriter ?
 - Doxygen based documentation ?
