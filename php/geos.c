@@ -175,6 +175,7 @@ PHP_FUNCTION(GEOSVersion)
 /* -- class GEOSGeometry -------------------- */
 
 PHP_METHOD(Geometry, __construct);
+PHP_METHOD(Geometry, __toString);
 PHP_METHOD(Geometry, project);
 PHP_METHOD(Geometry, interpolate);
 PHP_METHOD(Geometry, buffer);
@@ -194,6 +195,7 @@ PHP_METHOD(Geometry, numGeometries);
 
 static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, __construct, NULL, 0)
+    PHP_ME(Geometry, __toString, NULL, 0)
     PHP_ME(Geometry, project, NULL, 0)
     PHP_ME(Geometry, interpolate, NULL, 0)
     PHP_ME(Geometry, buffer, NULL, 0)
@@ -276,6 +278,35 @@ PHP_METHOD(Geometry, __construct)
     php_error_docref(NULL TSRMLS_CC, E_ERROR,
             "GEOSGeometry can't be constructed using new, check WKTReader");
 
+}
+
+PHP_METHOD(Geometry, __toString)
+{
+    GEOSGeometry *geom;
+    GEOSWKTWriter *writer;
+    char *wkt;
+    char *ret;
+
+    geom = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+    writer = GEOSWKTWriter_create();
+    /* NOTE: if we get an exception before reaching
+     *       GEOSWKTWriter_destory below we'll be leaking memory.
+     *       One fix could be storing the object in a refcounted
+     *       zval.
+     */
+    GEOSWKTWriter_setTrim(writer, 1);
+
+    wkt = GEOSWKTWriter_write(writer, geom);
+    /* we'll probably get an exception if wkt is null */
+    if ( ! wkt ) RETURN_NULL();
+
+    GEOSWKTWriter_destroy(writer);
+    
+
+    ret = estrdup(wkt);
+    GEOSFree(wkt);
+
+    RETURN_STRING(ret, 0);
 }
 
 PHP_METHOD(Geometry, numGeometries)
