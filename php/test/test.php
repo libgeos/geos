@@ -970,7 +970,6 @@ class test extends PHPUnit_Framework_TestCase
             )');
 
         $ret = GEOSLineMerge($g);
-/*
 
         $this->assertEquals('array', gettype($ret));
         $this->assertEquals('1', count($ret));
@@ -978,7 +977,51 @@ class test extends PHPUnit_Framework_TestCase
         $this->assertEquals(
 'LINESTRING (0 0, 10 10, 10 0, 5 0, 5 -5)'
             , $writer->write($ret[0]));
-*/
 
+    }
+
+    public function testGeometry_simplify()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        $g = $reader->read('LINESTRING(0 0, 3 4, 5 10, 10 0, 10 9, 5 11, 0 9)');
+        $gs = $g->simplify(2);
+        $this->assertEquals( 'LINESTRING (0 0, 5 10, 10 0, 10 9, 0 9)'
+            , $writer->write($gs));
+        $gs = $g->simplify(2, TRUE);
+        $this->assertEquals( 'LINESTRING (0 0, 5 10, 10 0, 10 9, 5 11, 0 9)'
+            , $writer->write($gs));
+    }
+
+    public function testGeometry_extractUniquePoints()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        $g = $reader->read(
+    'GEOMETRYCOLLECTION (
+        MULTIPOLYGON (
+            ((0 0, 1 0, 1 1, 0 1, 0 0)),
+            ((10 10, 10 14, 14 14, 14 10, 10 10),
+                (11 11, 11 12, 12 12, 12 11, 11 11))
+        ),
+        POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0)),
+        MULTILINESTRING ((0 0, 2 3), (10 10, 3 4)),
+        LINESTRING (0 0, 2 3),
+        MULTIPOINT (0 0, 2 3),
+        POINT (9 0),
+        POINT(1 0)),
+        LINESTRING EMPTY
+');
+
+        $gs = $g->extractUniquePoints();
+        if ( ! $gs ) RETURN_NULL(); /* should get an exception before */
+
+        $this->assertEquals( 
+'MULTIPOINT (0 0, 1 0, 1 1, 0 1, 10 10, 10 14, 14 14, 14 10, 11 11, 11 12, 12 12, 12 11, 2 3, 3 4, 9 0)'
+            , $writer->write($gs));
     }
 }

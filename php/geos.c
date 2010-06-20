@@ -183,6 +183,8 @@ PHP_METHOD(Geometry, union); /* also does union cascaded */
 PHP_METHOD(Geometry, pointOnSurface); 
 PHP_METHOD(Geometry, centroid); 
 PHP_METHOD(Geometry, relate); 
+PHP_METHOD(Geometry, simplify); /* also does topology-preserving */
+PHP_METHOD(Geometry, extractUniquePoints); 
 
 PHP_METHOD(Geometry, numGeometries);
 
@@ -202,6 +204,8 @@ static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, pointOnSurface, NULL, 0)
     PHP_ME(Geometry, centroid, NULL, 0)
     PHP_ME(Geometry, relate, NULL, 0)
+    PHP_ME(Geometry, simplify, NULL, 0)
+    PHP_ME(Geometry, extractUniquePoints, NULL, 0)
 
     PHP_ME(Geometry, numGeometries, NULL, 0)
     {NULL, NULL, NULL}
@@ -1013,6 +1017,55 @@ PHP_FUNCTION(GEOSLineMerge)
     array_init(return_value);
     dumpGeometry(geom_out, return_value);
     GEOSGeom_destroy(geom_out);
+}
+
+/**
+ * GEOSGeometry GEOSGeometry::simplify(tolerance)
+ * GEOSGeometry GEOSGeometry::simplify(tolerance, preserveTopology)
+ */
+PHP_METHOD(Geometry, simplify)
+{
+    GEOSGeometry *this;
+    double tolerance;
+    zend_bool preserveTopology = 0;
+    GEOSGeometry *ret;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d|b",
+            &tolerance, &preserveTopology) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    if ( preserveTopology ) {
+        ret = GEOSTopologyPreserveSimplify(this, tolerance);
+    } else {
+        ret = GEOSSimplify(this, tolerance);
+    }
+
+    if ( ! ret ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, ret);
+}
+
+/**
+ * GEOSGeometry GEOSGeometry::extractUniquePoints()
+ */
+PHP_METHOD(Geometry, extractUniquePoints)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *ret;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    ret = GEOSGeom_extractUniquePoints(this);
+    if ( ret == NULL ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, ret);
 }
 
 
