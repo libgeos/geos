@@ -38,9 +38,11 @@ PHP_RINIT_FUNCTION(geos);
 PHP_RSHUTDOWN_FUNCTION(geos);
 PHP_MINFO_FUNCTION(geos);
 PHP_FUNCTION(GEOSVersion);
+PHP_FUNCTION(GEOSPolygonize);
 
 static function_entry geos_functions[] = {
     PHP_FE(GEOSVersion, NULL)
+    PHP_FE(GEOSPolygonize, NULL)
     {NULL, NULL, NULL}
 };
 
@@ -162,16 +164,6 @@ Gen_create_obj (zend_class_entry *type TSRMLS_DC,
 }
 
 
-/* -- Free functions ------------------------- */
-
-PHP_FUNCTION(GEOSVersion)
-{
-    char *str;
-
-    str = estrdup(GEOSversion());
-    RETURN_STRING(str, 0);
-}
-
 /* -- class GEOSGeometry -------------------- */
 
 PHP_METHOD(Geometry, __construct);
@@ -189,7 +181,6 @@ PHP_METHOD(Geometry, union); /* also does union cascaded */
 PHP_METHOD(Geometry, pointOnSurface); 
 PHP_METHOD(Geometry, centroid); 
 PHP_METHOD(Geometry, relate); 
-PHP_METHOD(Geometry, polygonize); 
 
 PHP_METHOD(Geometry, numGeometries);
 
@@ -209,7 +200,6 @@ static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, pointOnSurface, NULL, 0)
     PHP_ME(Geometry, centroid, NULL, 0)
     PHP_ME(Geometry, relate, NULL, 0)
-    PHP_ME(Geometry, polygonize, NULL, 0)
 
     PHP_ME(Geometry, numGeometries, NULL, 0)
     {NULL, NULL, NULL}
@@ -682,65 +672,6 @@ PHP_METHOD(Geometry, relate)
 
 }
 
-/**
- * array GEOSGeometry::polygonize()
- *
- * The returned array contains the following elements:
- *
- *  - 'rings'
- *      Type: array of GEOSGeometry 
- *      Rings that can be formed by the costituent
- *      linework of geometry.
- *  - 'cut_edges' (optional)
- *      Type: array of GEOSGeometry 
- *      Edges which are connected at both ends but
- *      which do not form part of polygon.
- *  - 'dangles'
- *      Type: array of GEOSGeometry 
- *      Edges which have one or both ends which are
- *      not incident on another edge endpoint
- *  - 'invalid_rings' 
- *      Type: array of GEOSGeometry
- *      Edges which form rings which are invalid
- *      (e.g. the component lines contain a self-intersection)
- *
- */
-PHP_METHOD(Geometry, polygonize)
-{
-    GEOSGeometry *this;
-    GEOSGeometry *rings;
-    GEOSGeometry *cut_edges;
-    GEOSGeometry *dangles;
-    GEOSGeometry *invalid_rings;
-    zval *rings_array;
-    zval *cut_edges_array;
-    zval *dangles_array;
-    zval *invalid_rings_array;
-
-    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
-
-    rings = GEOSPolygonize_full(this, &cut_edges, &dangles, &invalid_rings);
-    if ( ! rings ) RETURN_NULL(); /* should get an exception first */
-
-    /* return value should be an array */
-    array_init(return_value);
-
-    rings_array = dumpGeometry(rings);
-    GEOSGeom_destroy(rings);
-    cut_edges_array = dumpGeometry(cut_edges);
-    GEOSGeom_destroy(cut_edges);
-    dangles_array = dumpGeometry(dangles);
-    GEOSGeom_destroy(dangles);
-    invalid_rings_array = dumpGeometry(invalid_rings);
-    GEOSGeom_destroy(invalid_rings);
-
-    add_assoc_zval(return_value, "rings", rings_array); 
-    add_assoc_zval(return_value, "cut_edges", cut_edges_array);
-    add_assoc_zval(return_value, "dangles", dangles_array);
-    add_assoc_zval(return_value, "invalid_rings", invalid_rings_array);
-
-}
-
 /* -- class GEOSWKTReader -------------------- */
 
 PHP_METHOD(WKTReader, __construct);
@@ -969,6 +900,86 @@ PHP_METHOD(WKTWriter, setOld3D)
     val = bval;
     GEOSWKTWriter_setOld3D(writer, val);
 }
+
+/* -- Free functions ------------------------- */
+
+/**
+ * string GEOSVersion()
+ */
+PHP_FUNCTION(GEOSVersion)
+{
+    char *str;
+
+    str = estrdup(GEOSversion());
+    RETURN_STRING(str, 0);
+}
+
+/**
+ * array GEOSPolygonize(GEOSGeometry $geom)
+ *
+ * The returned array contains the following elements:
+ *
+ *  - 'rings'
+ *      Type: array of GEOSGeometry 
+ *      Rings that can be formed by the costituent
+ *      linework of geometry.
+ *  - 'cut_edges' (optional)
+ *      Type: array of GEOSGeometry 
+ *      Edges which are connected at both ends but
+ *      which do not form part of polygon.
+ *  - 'dangles'
+ *      Type: array of GEOSGeometry 
+ *      Edges which have one or both ends which are
+ *      not incident on another edge endpoint
+ *  - 'invalid_rings' 
+ *      Type: array of GEOSGeometry
+ *      Edges which form rings which are invalid
+ *      (e.g. the component lines contain a self-intersection)
+ *
+ */
+PHP_FUNCTION(GEOSPolygonize)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *rings;
+    GEOSGeometry *cut_edges;
+    GEOSGeometry *dangles;
+    GEOSGeometry *invalid_rings;
+    zval *rings_array;
+    zval *cut_edges_array;
+    zval *dangles_array;
+    zval *invalid_rings_array;
+    zval *zobj;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zobj)
+        == FAILURE)
+    {
+        RETURN_NULL();
+    }
+    this = getRelay(zobj, Geometry_ce_ptr);
+
+    rings = GEOSPolygonize_full(this, &cut_edges, &dangles, &invalid_rings);
+    if ( ! rings ) RETURN_NULL(); /* should get an exception first */
+
+    /* return value should be an array */
+    array_init(return_value);
+
+    rings_array = dumpGeometry(rings);
+    GEOSGeom_destroy(rings);
+    cut_edges_array = dumpGeometry(cut_edges);
+    GEOSGeom_destroy(cut_edges);
+    dangles_array = dumpGeometry(dangles);
+    GEOSGeom_destroy(dangles);
+    invalid_rings_array = dumpGeometry(invalid_rings);
+    GEOSGeom_destroy(invalid_rings);
+
+    add_assoc_zval(return_value, "rings", rings_array); 
+    add_assoc_zval(return_value, "cut_edges", cut_edges_array);
+    add_assoc_zval(return_value, "dangles", dangles_array);
+    add_assoc_zval(return_value, "invalid_rings", invalid_rings_array);
+
+}
+
+
 
 /* ------ Initialization / Deinitialization / Meta ------------------ */
 

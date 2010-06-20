@@ -913,7 +913,7 @@ class test extends PHPUnit_Framework_TestCase
         $g2 = $reader->read('POINT(0 0)');
         $g = $g->union($g2); /* Make sure linestrings are noded */
 
-        $ret = $g->polygonize();
+        $ret = GEOSPolygonize($g);
 
         /*
          * NOTE: the following expected results are suspicious
