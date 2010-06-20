@@ -200,6 +200,8 @@ PHP_METHOD(Geometry, isSimple);
 PHP_METHOD(Geometry, isRing);
 PHP_METHOD(Geometry, hasZ);
 PHP_METHOD(Geometry, isClosed);
+PHP_METHOD(Geometry, typeName);
+PHP_METHOD(Geometry, typeId);
 
 PHP_METHOD(Geometry, numGeometries);
 
@@ -236,6 +238,8 @@ static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, isRing, NULL, 0)
     PHP_ME(Geometry, hasZ, NULL, 0)
     PHP_ME(Geometry, isClosed, NULL, 0)
+    PHP_ME(Geometry, typeName, NULL, 0)
+    PHP_ME(Geometry, typeId, NULL, 0)
 
     PHP_ME(Geometry, numGeometries, NULL, 0)
     {NULL, NULL, NULL}
@@ -1473,6 +1477,46 @@ PHP_METHOD(Geometry, isClosed)
     /* return_value is a zval */
     retBool = ret;
     RETURN_BOOL(retBool);
+}
+
+/**
+ * string GEOSGeometry::typeName()
+ */
+PHP_METHOD(Geometry, typeName)
+{
+    GEOSGeometry *this;
+    char *typ;
+    char *typVal;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    /* TODO: define constant strings instead... */
+
+    typ = GEOSGeomType(this);
+    if ( ! typ ) RETURN_NULL(); /* should get an exception first */
+
+    typVal = estrdup(typ);
+    GEOSFree(typ);
+
+    RETURN_STRING(typVal, 0);
+}
+
+/**
+ * long GEOSGeometry::typeId()
+ */
+PHP_METHOD(Geometry, typeId)
+{
+    GEOSGeometry *this;
+    long typ;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    /* TODO: define constant strings instead... */
+
+    typ = GEOSGeomTypeId(this);
+    if ( typ == -1 ) RETURN_NULL(); /* should get an exception first */
+
+    RETURN_LONG(typ);
 }
 
 
