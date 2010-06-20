@@ -1167,4 +1167,26 @@ class test extends PHPUnit_Framework_TestCase
         $g1 = $reader->read('GEOMETRYCOLLECTION EMPTY');
         $this->assertTrue( $g1->isEmpty() );
     }
+
+    public function testGeometry_checkValidity()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        $g = $reader->read('POINT(0 0)');
+        $val = $g->checkValidity();
+        $this->assertType( 'array', $val );
+        $this->assertTrue( $val['valid'] );
+        $this->assertNull( $val['reason'] );
+        $this->assertNull( $val['location'] );
+
+        $g = $reader->read('POINT(0 NaN)');
+        $val = $g->checkValidity();
+        $this->assertType( 'array', $val );
+        $this->assertFalse( $val['valid'] );
+        $this->assertEquals( 'Invalid Coordinate', $val['reason'] );
+        $this->assertEquals( 'POINT (0 nan)',
+            $writer->write($val['location']) );
+    }
 }

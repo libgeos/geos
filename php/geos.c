@@ -195,6 +195,7 @@ PHP_METHOD(Geometry, overlaps);
 PHP_METHOD(Geometry, equals);
 PHP_METHOD(Geometry, equalsExact);
 PHP_METHOD(Geometry, isEmpty);
+PHP_METHOD(Geometry, checkValidity);
 
 PHP_METHOD(Geometry, numGeometries);
 
@@ -226,6 +227,7 @@ static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, equals, NULL, 0)
     PHP_ME(Geometry, equalsExact, NULL, 0)
     PHP_ME(Geometry, isEmpty, NULL, 0)
+    PHP_ME(Geometry, checkValidity, NULL, 0)
 
     PHP_ME(Geometry, numGeometries, NULL, 0)
     {NULL, NULL, NULL}
@@ -267,8 +269,6 @@ dumpGeometry(GEOSGeometry* g, zval* array)
         setRelay(tmp, cc);
         add_next_index_zval(array, tmp); 
     }
-
-    //return array;
 }
 
 
@@ -1350,6 +1350,45 @@ PHP_METHOD(Geometry, isEmpty)
     /* return_value is a zval */
     retBool = ret;
     RETURN_BOOL(retBool);
+}
+
+/**
+ * array GEOSGeometry::checkValidity()
+ */
+PHP_METHOD(Geometry, checkValidity)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *location = NULL;
+    int ret;
+    char *reason = NULL;
+    zend_bool retBool;
+    char *reasonVal = NULL;
+    zval *locationVal = NULL;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    ret = GEOSisValidDetail(this, &reason, (const GEOSGeometry**)&location);
+    if ( ret == 2 ) RETURN_NULL(); /* should get an exception first */
+
+    if ( reason ) {
+        reasonVal = estrdup(reason);
+        GEOSFree(reason);
+    }
+
+    if ( location ) {
+        MAKE_STD_ZVAL(locationVal);
+        object_init_ex(locationVal, Geometry_ce_ptr);
+        setRelay(locationVal, location);
+    }
+
+    retBool = ret;
+
+    /* return value is an array */
+    array_init(return_value);
+    add_assoc_bool(return_value, "valid", retBool); 
+    if ( reasonVal ) add_assoc_string(return_value, "reason", reasonVal, 0); 
+    if ( locationVal ) add_assoc_zval(return_value, "location", locationVal); 
+
 }
 
 
