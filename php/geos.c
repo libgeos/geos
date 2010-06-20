@@ -196,6 +196,10 @@ PHP_METHOD(Geometry, equals);
 PHP_METHOD(Geometry, equalsExact);
 PHP_METHOD(Geometry, isEmpty);
 PHP_METHOD(Geometry, checkValidity);
+PHP_METHOD(Geometry, isSimple);
+PHP_METHOD(Geometry, isRing);
+PHP_METHOD(Geometry, hasZ);
+PHP_METHOD(Geometry, isClosed);
 
 PHP_METHOD(Geometry, numGeometries);
 
@@ -228,6 +232,10 @@ static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, equalsExact, NULL, 0)
     PHP_ME(Geometry, isEmpty, NULL, 0)
     PHP_ME(Geometry, checkValidity, NULL, 0)
+    PHP_ME(Geometry, isSimple, NULL, 0)
+    PHP_ME(Geometry, isRing, NULL, 0)
+    PHP_ME(Geometry, hasZ, NULL, 0)
+    PHP_ME(Geometry, isClosed, NULL, 0)
 
     PHP_ME(Geometry, numGeometries, NULL, 0)
     {NULL, NULL, NULL}
@@ -1389,6 +1397,82 @@ PHP_METHOD(Geometry, checkValidity)
     if ( reasonVal ) add_assoc_string(return_value, "reason", reasonVal, 0); 
     if ( locationVal ) add_assoc_zval(return_value, "location", locationVal); 
 
+}
+
+/**
+ * bool GEOSGeometry::isSimple()
+ */
+PHP_METHOD(Geometry, isSimple)
+{
+    GEOSGeometry *this;
+    int ret;
+    zend_bool retBool;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    ret = GEOSisSimple(this);
+    if ( ret == 2 ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    retBool = ret;
+    RETURN_BOOL(retBool);
+}
+
+/**
+ * bool GEOSGeometry::isRing()
+ */
+PHP_METHOD(Geometry, isRing)
+{
+    GEOSGeometry *this;
+    int ret;
+    zend_bool retBool;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    ret = GEOSisRing(this);
+    if ( ret == 2 ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    retBool = ret;
+    RETURN_BOOL(retBool);
+}
+
+/**
+ * bool GEOSGeometry::hasZ()
+ */
+PHP_METHOD(Geometry, hasZ)
+{
+    GEOSGeometry *this;
+    int ret;
+    zend_bool retBool;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    ret = GEOSHasZ(this);
+    if ( ret == 2 ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    retBool = ret;
+    RETURN_BOOL(retBool);
+}
+
+/**
+ * bool GEOSGeometry::isClosed()
+ */
+PHP_METHOD(Geometry, isClosed)
+{
+    GEOSGeometry *this;
+    int ret;
+    zend_bool retBool;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    ret = GEOSisClosed(this);
+    if ( ret == 2 ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    retBool = ret;
+    RETURN_BOOL(retBool);
 }
 
 

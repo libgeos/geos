@@ -1189,4 +1189,63 @@ class test extends PHPUnit_Framework_TestCase
         $this->assertEquals( 'POINT (0 nan)',
             $writer->write($val['location']) );
     }
+
+    public function testGeometry_isSimple()
+    {
+        $reader = new GEOSWKTReader();
+
+        $g = $reader->read('POINT(0 0)');
+        $this->assertTrue( $g->isSimple() );
+
+        $g = $reader->read('LINESTRING(0 0, 10 0)');
+        $this->assertTrue( $g->isSimple() );
+
+        $g = $reader->read('LINESTRING(0 0, 10 0, 5 5, 5 -5)');
+        $this->assertFalse( $g->isSimple() );
+    }
+
+    public function testGeometry_isRing()
+    {
+        $reader = new GEOSWKTReader();
+
+        $g = $reader->read('POINT(0 0)');
+        $this->assertFalse( $g->isRing() );
+
+        $g = $reader->read('LINESTRING(0 0, 10 0, 5 5, 5 -5)');
+        $this->assertFalse( $g->isRing() );
+
+        $g = $reader->read('LINESTRING(0 0, 10 0, 5 5, 0 0)');
+        $this->assertTrue( $g->isRing() );
+    }
+
+    public function testGeometry_hasZ()
+    {
+        $reader = new GEOSWKTReader();
+
+        $g = $reader->read('POINT(0 0)');
+        $this->assertFalse( $g->hasZ() );
+
+        $g = $reader->read('POINT(0 0 0)');
+        $this->assertTrue( $g->hasZ() );
+
+    }
+
+    public function testGeometry_isClosed()
+    {
+        $reader = new GEOSWKTReader();
+
+        $g = $reader->read('POINT(0 0)');
+        try  {
+            $this->assertFalse( $g->isClosed() );
+            $this->assertTrue(FALSE);
+        } catch (Exception $e) {
+            $this->assertContains('LineString', $e->getMessage());
+        }
+
+        $g = $reader->read('LINESTRING(0 0, 10 0, 5 5, 5 -5)');
+        $this->assertFalse( $g->isClosed() );
+
+        $g = $reader->read('LINESTRING(0 0, 10 0, 5 5, 0 0)');
+        $this->assertTrue( $g->isClosed() );
+    }
 }
