@@ -194,6 +194,7 @@ Polygon::getNumInteriorRing() const
 const LineString*
 Polygon::getInteriorRingN(size_t n) const
 {
+	if ( n >= holes->size() ) return 0;
 	return (LineString *) (*holes)[n];
 }
 
