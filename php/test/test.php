@@ -1378,7 +1378,86 @@ class test extends PHPUnit_Framework_TestCase
 
         $g = $reader->read('POINT (0 0)');
         try {
-            $this->assertEquals(2, $g->numInteriorRings());
+            $g->numInteriorRings();
+            $this->assertTrue( FALSE );
+        } catch (Exception $e) {
+            $this->assertContains( 'Polygon', $e->getMessage() );
+        }
+
+    }
+
+    public function testGeometry_numPoints()
+    {
+        $reader = new GEOSWKTReader();
+
+        $g = $reader->read('LINESTRING (0 0, 1 0, 1 1, 0 1)');
+        $this->assertEquals(4, $g->numPoints());
+
+        $g = $reader->read('POINT (0 0)');
+        try {
+            $g->numPoints();
+            $this->assertTrue( FALSE );
+        } catch (Exception $e) {
+            $this->assertContains( 'LineString', $e->getMessage() );
+        }
+
+    }
+
+    public function testGeometry_getXY()
+    {
+        $reader = new GEOSWKTReader();
+
+        $g = $reader->read('POINT (1 2)');
+        $this->assertEquals(1, $g->getX());
+        $this->assertEquals(2, $g->getY());
+
+        $g = $reader->read('LINESTRING (0 0, 1 1)');
+        try {
+            $g->getX();
+            $this->assertTrue( FALSE );
+        } catch (Exception $e) {
+            $this->assertContains( 'Point', $e->getMessage() );
+        }
+
+        try {
+            $g->getY();
+            $this->assertTrue( FALSE );
+        } catch (Exception $e) {
+            $this->assertContains( 'Point', $e->getMessage() );
+        }
+
+    }
+
+    public function testGeometry_interiorRingN()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        $g = $reader->read('POLYGON (
+            (10 10, 10 14, 14 14, 14 10, 10 10),
+                (11 11, 11 12, 12 12, 12 11, 11 11))');
+        $r = $g->interiorRingN(0);
+        $this->assertEquals('LINEARRING (11 11, 11 12, 12 12, 12 11, 11 11)',
+            $writer->write($r) );
+
+        $g = $reader->read('POLYGON (
+            (10 10, 10 14, 14 14, 14 10, 10 10),
+                (11 11, 11 12, 12 12, 12 11, 11 11),
+                (13 11, 13 12, 13.5 12, 13.5 11, 13 11))');
+        $r = $g->interiorRingN(0);
+        $this->assertEquals('LINEARRING (11 11, 11 12, 12 12, 12 11, 11 11)',
+            $writer->write($r) );
+        $r = $g->interiorRingN(1);
+        $this->assertEquals('LINEARRING (13 11, 13 12, 14 12, 14 11, 13 11)',
+            $writer->write($r) );
+
+        $g = $reader->read('POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))');
+        $this->assertNull($g->interiorRingN(0));
+
+        $g = $reader->read('POINT (0 0)');
+        try {
+            $g->interiorRingN(0);
             $this->assertTrue( FALSE );
         } catch (Exception $e) {
             $this->assertContains( 'Polygon', $e->getMessage() );

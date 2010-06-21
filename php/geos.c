@@ -207,6 +207,10 @@ PHP_METHOD(Geometry, setSRID);
 PHP_METHOD(Geometry, numGeometries);
 PHP_METHOD(Geometry, getGeometryN);
 PHP_METHOD(Geometry, numInteriorRings);
+PHP_METHOD(Geometry, numPoints);
+PHP_METHOD(Geometry, getX);
+PHP_METHOD(Geometry, getY);
+PHP_METHOD(Geometry, interiorRingN);
 
 static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, __construct, NULL, 0)
@@ -248,6 +252,10 @@ static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, numGeometries, NULL, 0)
     PHP_ME(Geometry, getGeometryN, NULL, 0)
     PHP_ME(Geometry, numInteriorRings, NULL, 0)
+    PHP_ME(Geometry, numPoints, NULL, 0)
+    PHP_ME(Geometry, getX, NULL, 0)
+    PHP_ME(Geometry, getY, NULL, 0)
+    PHP_ME(Geometry, interiorRingN, NULL, 0)
     {NULL, NULL, NULL}
 };
 
@@ -1601,6 +1609,82 @@ PHP_METHOD(Geometry, numInteriorRings)
     if ( ret == -1 ) RETURN_NULL(); /* should get an exception first */
 
     RETURN_LONG(ret);
+}
+
+/**
+ * long GEOSGeometry::numPoints()
+ */
+PHP_METHOD(Geometry, numPoints)
+{
+    GEOSGeometry *geom;
+    long int ret;
+
+    geom = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    ret = GEOSGeomGetNumPoints(geom);
+    if ( ret == -1 ) RETURN_NULL(); /* should get an exception first */
+
+    RETURN_LONG(ret);
+}
+
+/**
+ * double GEOSGeometry::getX()
+ */
+PHP_METHOD(Geometry, getX)
+{
+    GEOSGeometry *geom;
+    int ret;
+    double x;
+
+    geom = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    ret = GEOSGeomGetX(geom, &x);
+    if ( ret == -1 ) RETURN_NULL(); /* should get an exception first */
+
+    RETURN_DOUBLE(x);
+}
+
+/**
+ * double GEOSGeometry::getY()
+ */
+PHP_METHOD(Geometry, getY)
+{
+    GEOSGeometry *geom;
+    int ret;
+    double y;
+
+    geom = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    ret = GEOSGeomGetY(geom, &y);
+    if ( ret == -1 ) RETURN_NULL(); /* should get an exception first */
+
+    RETURN_DOUBLE(y);
+}
+
+/**
+ * GEOSGeometry GEOSGeometry::interiorRingN()
+ */
+PHP_METHOD(Geometry, interiorRingN)
+{
+    GEOSGeometry *geom;
+    const GEOSGeometry *c;
+    GEOSGeometry *cc;
+    long int num;
+
+    geom = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l",
+        &num) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    c = GEOSGetInteriorRingN(geom, num);
+    if ( ! c ) RETURN_NULL(); /* should get an exception first */
+    cc = GEOSGeom_clone(c);
+    if ( ! cc ) RETURN_NULL(); /* should get an exception first */
+
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, cc);
 }
 
 
