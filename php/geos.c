@@ -202,7 +202,8 @@ PHP_METHOD(Geometry, hasZ);
 PHP_METHOD(Geometry, isClosed);
 PHP_METHOD(Geometry, typeName);
 PHP_METHOD(Geometry, typeId);
-
+PHP_METHOD(Geometry, getSRID);
+PHP_METHOD(Geometry, setSRID);
 PHP_METHOD(Geometry, numGeometries);
 
 static function_entry Geometry_methods[] = {
@@ -240,7 +241,8 @@ static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, isClosed, NULL, 0)
     PHP_ME(Geometry, typeName, NULL, 0)
     PHP_ME(Geometry, typeId, NULL, 0)
-
+    PHP_ME(Geometry, getSRID, NULL, 0)
+    PHP_ME(Geometry, setSRID, NULL, 0)
     PHP_ME(Geometry, numGeometries, NULL, 0)
     {NULL, NULL, NULL}
 };
@@ -337,19 +339,6 @@ PHP_METHOD(Geometry, __toString)
     GEOSFree(wkt);
 
     RETURN_STRING(ret, 0);
-}
-
-PHP_METHOD(Geometry, numGeometries)
-{
-    GEOSGeometry *geom;
-    long int ret;
-
-    geom = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
-
-    ret = GEOSGetNumGeometries(geom);
-    if ( ret == -1 ) RETURN_NULL(); /* should get an exception first */
-
-    RETURN_LONG(ret);
 }
 
 PHP_METHOD(Geometry, project)
@@ -1518,6 +1507,56 @@ PHP_METHOD(Geometry, typeId)
 
     RETURN_LONG(typ);
 }
+
+/**
+ * long GEOSGeometry::getSRID()
+ */
+PHP_METHOD(Geometry, getSRID)
+{
+    GEOSGeometry *geom;
+    long int ret;
+
+    geom = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    ret = GEOSGetSRID(geom);
+
+    RETURN_LONG(ret);
+}
+
+/**
+ * void GEOSGeometry::setSRID(long)
+ */
+PHP_METHOD(Geometry, setSRID)
+{
+    GEOSGeometry *geom;
+    long int srid;
+
+    geom = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l",
+        &srid) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    GEOSSetSRID(geom, srid);
+}
+
+/**
+ * long GEOSGeometry::numGeometries()
+ */
+PHP_METHOD(Geometry, numGeometries)
+{
+    GEOSGeometry *geom;
+    long int ret;
+
+    geom = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    ret = GEOSGetNumGeometries(geom);
+    if ( ret == -1 ) RETURN_NULL(); /* should get an exception first */
+
+    RETURN_LONG(ret);
+}
+
 
 
 /* ------ Initialization / Deinitialization / Meta ------------------ */

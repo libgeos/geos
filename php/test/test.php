@@ -1292,4 +1292,14 @@ class test extends PHPUnit_Framework_TestCase
         $this->assertEquals(GEOS_GEOMETRYCOLLECTION, $g->typeId());
     }
 
+    public function testGeometry_srid()
+    {
+        $reader = new GEOSWKTReader();
+
+        $g = $reader->read('POINT(0 0)');
+        $this->assertEquals(0, $g->getSRID());
+        $g->setSRID(2);
+        $this->assertEquals(2, $g->getSRID());
+    }
+
 }
