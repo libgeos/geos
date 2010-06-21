@@ -1353,6 +1353,9 @@ class test extends PHPUnit_Framework_TestCase
         $this->assertEquals($reader->read('POINT(0 1)'), $g->getGeometryN(0));
         $this->assertEquals($reader->read('POINT(2 3)'), $g->getGeometryN(1));
 
+        $c = $g->getGeometryN(2);
+        $this->assertNull( $c );
+
     }
 
 }
