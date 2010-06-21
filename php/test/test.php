@@ -1465,4 +1465,27 @@ class test extends PHPUnit_Framework_TestCase
 
     }
 
+    public function testGeometry_exteriorRing()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        $g = $reader->read('POLYGON (
+            (10 10, 10 14, 14 14, 14 10, 10 10),
+                (11 11, 11 12, 12 12, 12 11, 11 11))');
+        $r = $g->exteriorRing();
+        $this->assertEquals('LINEARRING (10 10, 10 14, 14 14, 14 10, 10 10)',
+            $writer->write($r) );
+
+        $g = $reader->read('POINT (0 0)');
+        try {
+            $g->exteriorRing(0);
+            $this->assertTrue( FALSE );
+        } catch (Exception $e) {
+            $this->assertContains( 'Polygon', $e->getMessage() );
+        }
+
+    }
+
 }
