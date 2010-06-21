@@ -2,6 +2,8 @@ In order of priority
 
 - Complete interfaces of Geometry
  - Normalize ? (is the only modifier function)
+ - CoordSeq accessors ?
+ - Constructors ?
 - Find a way to have GEOSGeometry contents shown on var_dump
 - Implement serialization/deserialization for Geometry
 - Documentation !! (doxygen-based?)
