@@ -1566,4 +1566,16 @@ class test extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $g->dimension());
     }
 
+    public function testGeometry_coordinateDimension()
+    {
+        $reader = new GEOSWKTReader();
+
+        $g = $reader->read('POINT(0 0)');
+        $this->assertEquals(2, $g->coordinateDimension());
+
+        $g = $reader->read('POINT(0 0 0)');
+        $this->assertEquals(3, $g->coordinateDimension());
+
+    }
+
 }

@@ -214,6 +214,7 @@ PHP_METHOD(Geometry, interiorRingN);
 PHP_METHOD(Geometry, exteriorRing);
 PHP_METHOD(Geometry, numCoordinates);
 PHP_METHOD(Geometry, dimension);
+PHP_METHOD(Geometry, coordinateDimension);
 
 static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, __construct, NULL, 0)
@@ -262,6 +263,7 @@ static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, exteriorRing, NULL, 0)
     PHP_ME(Geometry, numCoordinates, NULL, 0)
     PHP_ME(Geometry, dimension, NULL, 0)
+    PHP_ME(Geometry, coordinateDimension, NULL, 0)
     {NULL, NULL, NULL}
 };
 
@@ -1741,6 +1743,22 @@ PHP_METHOD(Geometry, dimension)
     geom = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
 
     ret = GEOSGeom_getDimensions(geom);
+    if ( ret == -1 ) RETURN_NULL(); /* should get an exception first */
+
+    RETURN_LONG(ret);
+}
+
+/**
+ * long GEOSGeometry::coordinateDimension()
+ */
+PHP_METHOD(Geometry, coordinateDimension)
+{
+    GEOSGeometry *geom;
+    long int ret;
+
+    geom = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    ret = GEOSGeom_getCoordinateDimension(geom);
     if ( ret == -1 ) RETURN_NULL(); /* should get an exception first */
 
     RETURN_LONG(ret);
