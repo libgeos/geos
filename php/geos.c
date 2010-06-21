@@ -216,6 +216,8 @@ PHP_METHOD(Geometry, numCoordinates);
 PHP_METHOD(Geometry, dimension);
 PHP_METHOD(Geometry, coordinateDimension);
 PHP_METHOD(Geometry, pointN);
+PHP_METHOD(Geometry, startPoint);
+PHP_METHOD(Geometry, endPoint);
 
 static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, __construct, NULL, 0)
@@ -266,6 +268,8 @@ static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, dimension, NULL, 0)
     PHP_ME(Geometry, coordinateDimension, NULL, 0)
     PHP_ME(Geometry, pointN, NULL, 0)
+    PHP_ME(Geometry, startPoint, NULL, 0)
+    PHP_ME(Geometry, endPoint, NULL, 0)
     {NULL, NULL, NULL}
 };
 
@@ -1792,6 +1796,45 @@ PHP_METHOD(Geometry, pointN)
     setRelay(return_value, cc);
 }
 
+/**
+ * GEOSGeometry GEOSGeometry::startPoint()
+ */
+PHP_METHOD(Geometry, startPoint)
+{
+    GEOSGeometry *geom;
+    const GEOSGeometry *c;
+    GEOSGeometry *cc;
+
+    geom = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    c = GEOSGeomGetStartPoint(geom);
+    if ( ! c ) RETURN_NULL(); /* should get an exception first */
+    cc = GEOSGeom_clone(c);
+    if ( ! cc ) RETURN_NULL(); /* should get an exception first */
+
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, cc);
+}
+
+/**
+ * GEOSGeometry GEOSGeometry::endPoint()
+ */
+PHP_METHOD(Geometry, endPoint)
+{
+    GEOSGeometry *geom;
+    const GEOSGeometry *c;
+    GEOSGeometry *cc;
+
+    geom = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    c = GEOSGeomGetEndPoint(geom);
+    if ( ! c ) RETURN_NULL(); /* should get an exception first */
+    cc = GEOSGeom_clone(c);
+    if ( ! cc ) RETURN_NULL(); /* should get an exception first */
+
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, cc);
+}
 
 /* ------ Initialization / Deinitialization / Meta ------------------ */
 
