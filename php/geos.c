@@ -218,6 +218,10 @@ PHP_METHOD(Geometry, coordinateDimension);
 PHP_METHOD(Geometry, pointN);
 PHP_METHOD(Geometry, startPoint);
 PHP_METHOD(Geometry, endPoint);
+PHP_METHOD(Geometry, area);
+PHP_METHOD(Geometry, length);
+PHP_METHOD(Geometry, distance);
+PHP_METHOD(Geometry, hausdorffDistance);
 
 static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, __construct, NULL, 0)
@@ -270,6 +274,10 @@ static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, pointN, NULL, 0)
     PHP_ME(Geometry, startPoint, NULL, 0)
     PHP_ME(Geometry, endPoint, NULL, 0)
+    PHP_ME(Geometry, area, NULL, 0)
+    PHP_ME(Geometry, length, NULL, 0)
+    PHP_ME(Geometry, distance, NULL, 0)
+    PHP_ME(Geometry, hausdorffDistance, NULL, 0)
     {NULL, NULL, NULL}
 };
 
@@ -725,345 +733,6 @@ PHP_METHOD(Geometry, relate)
         RETURN_BOOL(retBool);
     }
 
-}
-
-/* -- class GEOSWKTReader -------------------- */
-
-PHP_METHOD(WKTReader, __construct);
-PHP_METHOD(WKTReader, read);
-
-static function_entry WKTReader_methods[] = {
-    PHP_ME(WKTReader, __construct, NULL, 0)
-    PHP_ME(WKTReader, read, NULL, 0)
-    {NULL, NULL, NULL}
-};
-
-static zend_class_entry *WKTReader_ce_ptr;
-
-static zend_object_handlers WKTReader_object_handlers;
-
-static void
-WKTReader_dtor (void *object TSRMLS_DC)
-{
-    Proxy *obj = (Proxy *)object;
-    GEOSWKTReader_destroy((GEOSWKTReader*)obj->relay);
-
-    zend_hash_destroy(obj->std.properties);
-    FREE_HASHTABLE(obj->std.properties);
-
-    efree(obj);
-}
-
-static zend_object_value
-WKTReader_create_obj (zend_class_entry *type TSRMLS_DC)
-{
-    return Gen_create_obj(type, WKTReader_dtor, &WKTReader_object_handlers);
-}
-
-
-PHP_METHOD(WKTReader, __construct)
-{
-	GEOSWKTReader* obj;
-    zval *object = getThis();
-
-	obj = GEOSWKTReader_create();
-    if ( ! obj ) {
-        php_error_docref(NULL TSRMLS_CC, E_ERROR,
-                "GEOSWKTReader_create() failed (didn't initGEOS?)");
-    }
-
-    setRelay(object, obj);
-}
-
-PHP_METHOD(WKTReader, read)
-{
-    GEOSWKTReader *reader;
-    GEOSGeometry *geom;
-    char* wkt;
-    int wktlen;
-
-    reader = (GEOSWKTReader*)getRelay(getThis(), WKTReader_ce_ptr);
-
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s",
-        &wkt, &wktlen) == FAILURE)
-    {
-        RETURN_NULL();
-    }
-
-    geom = GEOSWKTReader_read(reader, wkt);
-    /* we'll probably get an exception if geom is null */
-    if ( ! geom ) RETURN_NULL();
- 
-    /* return_value is a zval */
-    object_init_ex(return_value, Geometry_ce_ptr);
-    setRelay(return_value, geom);
-
-}
-
-/* -- class GEOSWKTWriter -------------------- */
-
-PHP_METHOD(WKTWriter, __construct);
-PHP_METHOD(WKTWriter, write);
-PHP_METHOD(WKTWriter, setTrim);
-PHP_METHOD(WKTWriter, setRoundingPrecision);
-PHP_METHOD(WKTWriter, setOutputDimension);
-PHP_METHOD(WKTWriter, setOld3D);
-
-static function_entry WKTWriter_methods[] = {
-    PHP_ME(WKTWriter, __construct, NULL, 0)
-    PHP_ME(WKTWriter, write, NULL, 0)
-    PHP_ME(WKTWriter, setTrim, NULL, 0)
-    PHP_ME(WKTWriter, setRoundingPrecision, NULL, 0)
-    PHP_ME(WKTWriter, setOutputDimension, NULL, 0)
-    PHP_ME(WKTWriter, setOld3D, NULL, 0)
-    {NULL, NULL, NULL}
-};
-
-static zend_class_entry *WKTWriter_ce_ptr;
-
-static zend_object_handlers WKTWriter_object_handlers;
-
-static void
-WKTWriter_dtor (void *object TSRMLS_DC)
-{
-    Proxy *obj = (Proxy *)object;
-    GEOSWKTWriter_destroy((GEOSWKTWriter*)obj->relay);
-
-    zend_hash_destroy(obj->std.properties);
-    FREE_HASHTABLE(obj->std.properties);
-
-    efree(obj);
-}
-
-static zend_object_value
-WKTWriter_create_obj (zend_class_entry *type TSRMLS_DC)
-{
-    return Gen_create_obj(type, WKTWriter_dtor, &WKTWriter_object_handlers);
-}
-
-PHP_METHOD(WKTWriter, __construct)
-{
-	GEOSWKTWriter* obj;
-    zval *object = getThis();
-
-	obj = GEOSWKTWriter_create();
-    if ( ! obj ) {
-        php_error_docref(NULL TSRMLS_CC, E_ERROR,
-                "GEOSWKTWriter_create() failed (didn't initGEOS?)");
-    }
-
-    setRelay(object, obj);
-}
-
-PHP_METHOD(WKTWriter, write)
-{
-    GEOSWKTWriter *writer;
-    zval *zobj;
-    GEOSGeometry *geom;
-    char* wkt;
-    char* retstr;
-
-    writer = (GEOSWKTWriter*)getRelay(getThis(), WKTWriter_ce_ptr);
-
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zobj)
-        == FAILURE)
-    {
-        RETURN_NULL();
-    }
-
-    geom = getRelay(zobj, Geometry_ce_ptr);
-
-    wkt = GEOSWKTWriter_write(writer, geom);
-    /* we'll probably get an exception if wkt is null */
-    if ( ! wkt ) RETURN_NULL();
-
-    retstr = estrdup(wkt);
-    GEOSFree(wkt);
-
-    RETURN_STRING(retstr, 0);
- 
-    /* return_value is a zval */
-    object_init_ex(return_value, Geometry_ce_ptr);
-    setRelay(return_value, geom);
-
-}
-
-PHP_METHOD(WKTWriter, setTrim)
-{
-    GEOSWKTWriter *writer;
-    zend_bool trimval;
-    char trim;
-
-    writer = (GEOSWKTWriter*)getRelay(getThis(), WKTWriter_ce_ptr);
-
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "b", &trimval)
-        == FAILURE)
-    {
-        RETURN_NULL();
-    }
-
-    trim = trimval;
-    GEOSWKTWriter_setTrim(writer, trim);
-}
-
-PHP_METHOD(WKTWriter, setRoundingPrecision)
-{
-    GEOSWKTWriter *writer;
-    long int prec;
-
-    writer = (GEOSWKTWriter*)getRelay(getThis(), WKTWriter_ce_ptr);
-
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &prec)
-        == FAILURE)
-    {
-        RETURN_NULL();
-    }
-
-    GEOSWKTWriter_setRoundingPrecision(writer, prec);
-}
-
-PHP_METHOD(WKTWriter, setOutputDimension)
-{
-    GEOSWKTWriter *writer;
-    long int dim;
-
-    writer = (GEOSWKTWriter*)getRelay(getThis(), WKTWriter_ce_ptr);
-
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &dim)
-        == FAILURE)
-    {
-        RETURN_NULL();
-    }
-
-    GEOSWKTWriter_setOutputDimension(writer, dim);
-}
-
-PHP_METHOD(WKTWriter, setOld3D)
-{
-    GEOSWKTWriter *writer;
-    zend_bool bval;
-    int val;
-
-    writer = (GEOSWKTWriter*)getRelay(getThis(), WKTWriter_ce_ptr);
-
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "b", &bval)
-        == FAILURE)
-    {
-        RETURN_NULL();
-    }
-
-    val = bval;
-    GEOSWKTWriter_setOld3D(writer, val);
-}
-
-/* -- Free functions ------------------------- */
-
-/**
- * string GEOSVersion()
- */
-PHP_FUNCTION(GEOSVersion)
-{
-    char *str;
-
-    str = estrdup(GEOSversion());
-    RETURN_STRING(str, 0);
-}
-
-/**
- * array GEOSPolygonize(GEOSGeometry $geom)
- *
- * The returned array contains the following elements:
- *
- *  - 'rings'
- *      Type: array of GEOSGeometry 
- *      Rings that can be formed by the costituent
- *      linework of geometry.
- *  - 'cut_edges' (optional)
- *      Type: array of GEOSGeometry 
- *      Edges which are connected at both ends but
- *      which do not form part of polygon.
- *  - 'dangles'
- *      Type: array of GEOSGeometry 
- *      Edges which have one or both ends which are
- *      not incident on another edge endpoint
- *  - 'invalid_rings' 
- *      Type: array of GEOSGeometry
- *      Edges which form rings which are invalid
- *      (e.g. the component lines contain a self-intersection)
- *
- */
-PHP_FUNCTION(GEOSPolygonize)
-{
-    GEOSGeometry *this;
-    GEOSGeometry *rings;
-    GEOSGeometry *cut_edges;
-    GEOSGeometry *dangles;
-    GEOSGeometry *invalid_rings;
-    zval *array_elem;
-    zval *zobj;
-
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zobj)
-        == FAILURE)
-    {
-        RETURN_NULL();
-    }
-    this = getRelay(zobj, Geometry_ce_ptr);
-
-    rings = GEOSPolygonize_full(this, &cut_edges, &dangles, &invalid_rings);
-    if ( ! rings ) RETURN_NULL(); /* should get an exception first */
-
-    /* return value should be an array */
-    array_init(return_value);
-
-    MAKE_STD_ZVAL(array_elem);
-    array_init(array_elem);
-    dumpGeometry(rings, array_elem);
-    GEOSGeom_destroy(rings);
-    add_assoc_zval(return_value, "rings", array_elem); 
-
-    MAKE_STD_ZVAL(array_elem);
-    array_init(array_elem);
-    dumpGeometry(cut_edges, array_elem);
-    GEOSGeom_destroy(cut_edges);
-    add_assoc_zval(return_value, "cut_edges", array_elem);
-
-    MAKE_STD_ZVAL(array_elem);
-    array_init(array_elem);
-    dumpGeometry(dangles, array_elem);
-    GEOSGeom_destroy(dangles);
-    add_assoc_zval(return_value, "dangles", array_elem);
-
-    MAKE_STD_ZVAL(array_elem);
-    array_init(array_elem);
-    dumpGeometry(invalid_rings, array_elem);
-    GEOSGeom_destroy(invalid_rings);
-    add_assoc_zval(return_value, "invalid_rings", array_elem);
-
-}
-
-/**
- * array GEOSLineMerge(GEOSGeometry $geom)
- */
-PHP_FUNCTION(GEOSLineMerge)
-{
-    GEOSGeometry *geom_in;
-    GEOSGeometry *geom_out;
-    zval *zobj;
-
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zobj)
-        == FAILURE)
-    {
-        RETURN_NULL();
-    }
-    geom_in = getRelay(zobj, Geometry_ce_ptr);
-
-    geom_out = GEOSLineMerge(geom_in);
-    if ( ! geom_out ) RETURN_NULL(); /* should get an exception first */
-
-    /* return value should be an array */
-    array_init(return_value);
-    dumpGeometry(geom_out, return_value);
-    GEOSGeom_destroy(geom_out);
 }
 
 /**
@@ -1776,8 +1445,7 @@ PHP_METHOD(Geometry, coordinateDimension)
 PHP_METHOD(Geometry, pointN)
 {
     GEOSGeometry *geom;
-    const GEOSGeometry *c;
-    GEOSGeometry *cc;
+    GEOSGeometry *c;
     long int num;
 
     geom = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
@@ -1789,11 +1457,9 @@ PHP_METHOD(Geometry, pointN)
 
     c = GEOSGeomGetPointN(geom, num);
     if ( ! c ) RETURN_NULL(); /* should get an exception first */
-    cc = GEOSGeom_clone(c);
-    if ( ! cc ) RETURN_NULL(); /* should get an exception first */
 
     object_init_ex(return_value, Geometry_ce_ptr);
-    setRelay(return_value, cc);
+    setRelay(return_value, c);
 }
 
 /**
@@ -1802,18 +1468,15 @@ PHP_METHOD(Geometry, pointN)
 PHP_METHOD(Geometry, startPoint)
 {
     GEOSGeometry *geom;
-    const GEOSGeometry *c;
-    GEOSGeometry *cc;
+    GEOSGeometry *c;
 
     geom = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
 
     c = GEOSGeomGetStartPoint(geom);
     if ( ! c ) RETURN_NULL(); /* should get an exception first */
-    cc = GEOSGeom_clone(c);
-    if ( ! cc ) RETURN_NULL(); /* should get an exception first */
 
     object_init_ex(return_value, Geometry_ce_ptr);
-    setRelay(return_value, cc);
+    setRelay(return_value, c);
 }
 
 /**
@@ -1822,18 +1485,443 @@ PHP_METHOD(Geometry, startPoint)
 PHP_METHOD(Geometry, endPoint)
 {
     GEOSGeometry *geom;
-    const GEOSGeometry *c;
-    GEOSGeometry *cc;
+    GEOSGeometry *c;
 
     geom = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
 
     c = GEOSGeomGetEndPoint(geom);
     if ( ! c ) RETURN_NULL(); /* should get an exception first */
-    cc = GEOSGeom_clone(c);
-    if ( ! cc ) RETURN_NULL(); /* should get an exception first */
 
     object_init_ex(return_value, Geometry_ce_ptr);
-    setRelay(return_value, cc);
+    setRelay(return_value, c);
+}
+
+/**
+ * double GEOSGeometry::area()
+ */
+PHP_METHOD(Geometry, area)
+{
+    GEOSGeometry *geom;
+    double area;
+    int ret;
+
+    geom = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    ret = GEOSArea(geom, &area);
+    if ( ! ret ) RETURN_NULL(); /* should get an exception first */
+
+    RETURN_DOUBLE(area);
+}
+
+/**
+ * double GEOSGeometry::length()
+ */
+PHP_METHOD(Geometry, length)
+{
+    GEOSGeometry *geom;
+    double length;
+    int ret;
+
+    geom = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    ret = GEOSLength(geom, &length);
+    if ( ! ret ) RETURN_NULL(); /* should get an exception first */
+
+    RETURN_DOUBLE(length);
+}
+
+/**
+ * double GEOSGeometry::distance(GEOSGeometry)
+ */
+PHP_METHOD(Geometry, distance)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *other;
+    zval *zobj;
+    double dist;
+    int ret;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o",
+        &zobj) == FAILURE)
+    {
+        RETURN_NULL();
+    }
+
+    other = getRelay(zobj, Geometry_ce_ptr);
+
+    ret = GEOSDistance(this, other, &dist);
+    if ( ! ret ) RETURN_NULL(); /* should get an exception first */
+
+    RETURN_DOUBLE(dist);
+}
+
+/**
+ * double GEOSGeometry::hausdorffDistance(GEOSGeometry)
+ */
+PHP_METHOD(Geometry, hausdorffDistance)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *other;
+    zval *zobj;
+    double dist;
+    int ret;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o",
+        &zobj) == FAILURE)
+    {
+        RETURN_NULL();
+    }
+
+    other = getRelay(zobj, Geometry_ce_ptr);
+
+    ret = GEOSHausdorffDistance(this, other, &dist);
+    if ( ! ret ) RETURN_NULL(); /* should get an exception first */
+
+    RETURN_DOUBLE(dist);
+}
+
+
+/* -- class GEOSWKTReader -------------------- */
+
+PHP_METHOD(WKTReader, __construct);
+PHP_METHOD(WKTReader, read);
+
+static function_entry WKTReader_methods[] = {
+    PHP_ME(WKTReader, __construct, NULL, 0)
+    PHP_ME(WKTReader, read, NULL, 0)
+    {NULL, NULL, NULL}
+};
+
+static zend_class_entry *WKTReader_ce_ptr;
+
+static zend_object_handlers WKTReader_object_handlers;
+
+static void
+WKTReader_dtor (void *object TSRMLS_DC)
+{
+    Proxy *obj = (Proxy *)object;
+    GEOSWKTReader_destroy((GEOSWKTReader*)obj->relay);
+
+    zend_hash_destroy(obj->std.properties);
+    FREE_HASHTABLE(obj->std.properties);
+
+    efree(obj);
+}
+
+static zend_object_value
+WKTReader_create_obj (zend_class_entry *type TSRMLS_DC)
+{
+    return Gen_create_obj(type, WKTReader_dtor, &WKTReader_object_handlers);
+}
+
+
+PHP_METHOD(WKTReader, __construct)
+{
+	GEOSWKTReader* obj;
+    zval *object = getThis();
+
+	obj = GEOSWKTReader_create();
+    if ( ! obj ) {
+        php_error_docref(NULL TSRMLS_CC, E_ERROR,
+                "GEOSWKTReader_create() failed (didn't initGEOS?)");
+    }
+
+    setRelay(object, obj);
+}
+
+PHP_METHOD(WKTReader, read)
+{
+    GEOSWKTReader *reader;
+    GEOSGeometry *geom;
+    char* wkt;
+    int wktlen;
+
+    reader = (GEOSWKTReader*)getRelay(getThis(), WKTReader_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s",
+        &wkt, &wktlen) == FAILURE)
+    {
+        RETURN_NULL();
+    }
+
+    geom = GEOSWKTReader_read(reader, wkt);
+    /* we'll probably get an exception if geom is null */
+    if ( ! geom ) RETURN_NULL();
+ 
+    /* return_value is a zval */
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, geom);
+
+}
+
+/* -- class GEOSWKTWriter -------------------- */
+
+PHP_METHOD(WKTWriter, __construct);
+PHP_METHOD(WKTWriter, write);
+PHP_METHOD(WKTWriter, setTrim);
+PHP_METHOD(WKTWriter, setRoundingPrecision);
+PHP_METHOD(WKTWriter, setOutputDimension);
+PHP_METHOD(WKTWriter, setOld3D);
+
+static function_entry WKTWriter_methods[] = {
+    PHP_ME(WKTWriter, __construct, NULL, 0)
+    PHP_ME(WKTWriter, write, NULL, 0)
+    PHP_ME(WKTWriter, setTrim, NULL, 0)
+    PHP_ME(WKTWriter, setRoundingPrecision, NULL, 0)
+    PHP_ME(WKTWriter, setOutputDimension, NULL, 0)
+    PHP_ME(WKTWriter, setOld3D, NULL, 0)
+    {NULL, NULL, NULL}
+};
+
+static zend_class_entry *WKTWriter_ce_ptr;
+
+static zend_object_handlers WKTWriter_object_handlers;
+
+static void
+WKTWriter_dtor (void *object TSRMLS_DC)
+{
+    Proxy *obj = (Proxy *)object;
+    GEOSWKTWriter_destroy((GEOSWKTWriter*)obj->relay);
+
+    zend_hash_destroy(obj->std.properties);
+    FREE_HASHTABLE(obj->std.properties);
+
+    efree(obj);
+}
+
+static zend_object_value
+WKTWriter_create_obj (zend_class_entry *type TSRMLS_DC)
+{
+    return Gen_create_obj(type, WKTWriter_dtor, &WKTWriter_object_handlers);
+}
+
+PHP_METHOD(WKTWriter, __construct)
+{
+	GEOSWKTWriter* obj;
+    zval *object = getThis();
+
+	obj = GEOSWKTWriter_create();
+    if ( ! obj ) {
+        php_error_docref(NULL TSRMLS_CC, E_ERROR,
+                "GEOSWKTWriter_create() failed (didn't initGEOS?)");
+    }
+
+    setRelay(object, obj);
+}
+
+PHP_METHOD(WKTWriter, write)
+{
+    GEOSWKTWriter *writer;
+    zval *zobj;
+    GEOSGeometry *geom;
+    char* wkt;
+    char* retstr;
+
+    writer = (GEOSWKTWriter*)getRelay(getThis(), WKTWriter_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zobj)
+        == FAILURE)
+    {
+        RETURN_NULL();
+    }
+
+    geom = getRelay(zobj, Geometry_ce_ptr);
+
+    wkt = GEOSWKTWriter_write(writer, geom);
+    /* we'll probably get an exception if wkt is null */
+    if ( ! wkt ) RETURN_NULL();
+
+    retstr = estrdup(wkt);
+    GEOSFree(wkt);
+
+    RETURN_STRING(retstr, 0);
+ 
+    /* return_value is a zval */
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, geom);
+
+}
+
+PHP_METHOD(WKTWriter, setTrim)
+{
+    GEOSWKTWriter *writer;
+    zend_bool trimval;
+    char trim;
+
+    writer = (GEOSWKTWriter*)getRelay(getThis(), WKTWriter_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "b", &trimval)
+        == FAILURE)
+    {
+        RETURN_NULL();
+    }
+
+    trim = trimval;
+    GEOSWKTWriter_setTrim(writer, trim);
+}
+
+PHP_METHOD(WKTWriter, setRoundingPrecision)
+{
+    GEOSWKTWriter *writer;
+    long int prec;
+
+    writer = (GEOSWKTWriter*)getRelay(getThis(), WKTWriter_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &prec)
+        == FAILURE)
+    {
+        RETURN_NULL();
+    }
+
+    GEOSWKTWriter_setRoundingPrecision(writer, prec);
+}
+
+PHP_METHOD(WKTWriter, setOutputDimension)
+{
+    GEOSWKTWriter *writer;
+    long int dim;
+
+    writer = (GEOSWKTWriter*)getRelay(getThis(), WKTWriter_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &dim)
+        == FAILURE)
+    {
+        RETURN_NULL();
+    }
+
+    GEOSWKTWriter_setOutputDimension(writer, dim);
+}
+
+PHP_METHOD(WKTWriter, setOld3D)
+{
+    GEOSWKTWriter *writer;
+    zend_bool bval;
+    int val;
+
+    writer = (GEOSWKTWriter*)getRelay(getThis(), WKTWriter_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "b", &bval)
+        == FAILURE)
+    {
+        RETURN_NULL();
+    }
+
+    val = bval;
+    GEOSWKTWriter_setOld3D(writer, val);
+}
+
+/* -- Free functions ------------------------- */
+
+/**
+ * string GEOSVersion()
+ */
+PHP_FUNCTION(GEOSVersion)
+{
+    char *str;
+
+    str = estrdup(GEOSversion());
+    RETURN_STRING(str, 0);
+}
+
+/**
+ * array GEOSPolygonize(GEOSGeometry $geom)
+ *
+ * The returned array contains the following elements:
+ *
+ *  - 'rings'
+ *      Type: array of GEOSGeometry 
+ *      Rings that can be formed by the costituent
+ *      linework of geometry.
+ *  - 'cut_edges' (optional)
+ *      Type: array of GEOSGeometry 
+ *      Edges which are connected at both ends but
+ *      which do not form part of polygon.
+ *  - 'dangles'
+ *      Type: array of GEOSGeometry 
+ *      Edges which have one or both ends which are
+ *      not incident on another edge endpoint
+ *  - 'invalid_rings' 
+ *      Type: array of GEOSGeometry
+ *      Edges which form rings which are invalid
+ *      (e.g. the component lines contain a self-intersection)
+ *
+ */
+PHP_FUNCTION(GEOSPolygonize)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *rings;
+    GEOSGeometry *cut_edges;
+    GEOSGeometry *dangles;
+    GEOSGeometry *invalid_rings;
+    zval *array_elem;
+    zval *zobj;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zobj)
+        == FAILURE)
+    {
+        RETURN_NULL();
+    }
+    this = getRelay(zobj, Geometry_ce_ptr);
+
+    rings = GEOSPolygonize_full(this, &cut_edges, &dangles, &invalid_rings);
+    if ( ! rings ) RETURN_NULL(); /* should get an exception first */
+
+    /* return value should be an array */
+    array_init(return_value);
+
+    MAKE_STD_ZVAL(array_elem);
+    array_init(array_elem);
+    dumpGeometry(rings, array_elem);
+    GEOSGeom_destroy(rings);
+    add_assoc_zval(return_value, "rings", array_elem); 
+
+    MAKE_STD_ZVAL(array_elem);
+    array_init(array_elem);
+    dumpGeometry(cut_edges, array_elem);
+    GEOSGeom_destroy(cut_edges);
+    add_assoc_zval(return_value, "cut_edges", array_elem);
+
+    MAKE_STD_ZVAL(array_elem);
+    array_init(array_elem);
+    dumpGeometry(dangles, array_elem);
+    GEOSGeom_destroy(dangles);
+    add_assoc_zval(return_value, "dangles", array_elem);
+
+    MAKE_STD_ZVAL(array_elem);
+    array_init(array_elem);
+    dumpGeometry(invalid_rings, array_elem);
+    GEOSGeom_destroy(invalid_rings);
+    add_assoc_zval(return_value, "invalid_rings", array_elem);
+
+}
+
+/**
+ * array GEOSLineMerge(GEOSGeometry $geom)
+ */
+PHP_FUNCTION(GEOSLineMerge)
+{
+    GEOSGeometry *geom_in;
+    GEOSGeometry *geom_out;
+    zval *zobj;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zobj)
+        == FAILURE)
+    {
+        RETURN_NULL();
+    }
+    geom_in = getRelay(zobj, Geometry_ce_ptr);
+
+    geom_out = GEOSLineMerge(geom_in);
+    if ( ! geom_out ) RETURN_NULL(); /* should get an exception first */
+
+    /* return value should be an array */
+    array_init(return_value);
+    dumpGeometry(geom_out, return_value);
+    GEOSGeom_destroy(geom_out);
 }
 
 /* ------ Initialization / Deinitialization / Meta ------------------ */

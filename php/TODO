@@ -8,5 +8,6 @@ In order of priority
 - Implement serialization/deserialization for Geometry
 - Documentation !! (doxygen-based?)
 - Add interfaces for WKBReader/WKBWriter ?
+- Add interface for algorithms (Orientation Index) ?
 - Add interfaces for prepared geometries ?
 - Add interfaces for STRTree ?

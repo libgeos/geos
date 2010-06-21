@@ -1631,4 +1631,70 @@ class test extends PHPUnit_Framework_TestCase
         }
 
     }
+
+    public function testGeometry_area()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        $g = $reader->read('POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))');
+        $this->assertEquals( 1.0, $g->area() );
+
+        $g = $reader->read('POINT (0 0)');
+        $this->assertEquals( 0.0, $g->area() );
+
+        $g = $reader->read('LINESTRING (0 0 , 10 0)');
+        $this->assertEquals( 0.0, $g->area() );
+
+    }
+
+    public function testGeometry_length()
+    {
+        $reader = new GEOSWKTReader();
+
+        $g = $reader->read('POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))');
+        $this->assertEquals( 4.0, $g->length() );
+
+        $g = $reader->read('POINT (0 0)');
+        $this->assertEquals( 0.0, $g->length() );
+
+        $g = $reader->read('LINESTRING (0 0 , 10 0)');
+        $this->assertEquals( 10.0, $g->length() );
+
+    }
+
+    public function testGeometry_distance()
+    {
+        $reader = new GEOSWKTReader();
+
+        $g = $reader->read('POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))');
+
+        $g2 = $reader->read('POINT(0.5 0.5)');
+        $this->assertEquals( 0.0, $g->distance($g2) );
+
+        $g2 = $reader->read('POINT (-1 0)');
+        $this->assertEquals( 1.0, $g->distance($g2) );
+
+        $g2 = $reader->read('LINESTRING (3 0 , 10 0)');
+        $this->assertEquals( 2.0, $g->distance($g2) );
+
+    }
+
+    public function testGeometry_hausdorffDistance()
+    {
+        $reader = new GEOSWKTReader();
+
+        $g = $reader->read('POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))');
+
+        $g2 = $reader->read('POINT(0 10)');
+        $this->assertEquals( 10.0, round($g->hausdorffDistance($g2)) );
+
+        $g2 = $reader->read('POINT (-1 0)');
+        $this->assertEquals( 2.0, round($g->hausdorffDistance($g2)) );
+
+        $g2 = $reader->read('LINESTRING (3 0 , 10 0)');
+        $this->assertEquals( 9.0, round($g->hausdorffDistance($g2)) );
+
+    }
 }
