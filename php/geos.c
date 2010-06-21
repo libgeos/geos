@@ -206,6 +206,7 @@ PHP_METHOD(Geometry, getSRID);
 PHP_METHOD(Geometry, setSRID);
 PHP_METHOD(Geometry, numGeometries);
 PHP_METHOD(Geometry, getGeometryN);
+PHP_METHOD(Geometry, numInteriorRings);
 
 static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, __construct, NULL, 0)
@@ -246,6 +247,7 @@ static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, setSRID, NULL, 0)
     PHP_ME(Geometry, numGeometries, NULL, 0)
     PHP_ME(Geometry, getGeometryN, NULL, 0)
+    PHP_ME(Geometry, numInteriorRings, NULL, 0)
     {NULL, NULL, NULL}
 };
 
@@ -1583,6 +1585,22 @@ PHP_METHOD(Geometry, getGeometryN)
 
     object_init_ex(return_value, Geometry_ce_ptr);
     setRelay(return_value, cc);
+}
+
+/**
+ * long GEOSGeometry::numInteriorRings()
+ */
+PHP_METHOD(Geometry, numInteriorRings)
+{
+    GEOSGeometry *geom;
+    long int ret;
+
+    geom = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    ret = GEOSGetNumInteriorRings(geom);
+    if ( ret == -1 ) RETURN_NULL(); /* should get an exception first */
+
+    RETURN_LONG(ret);
 }
 
 

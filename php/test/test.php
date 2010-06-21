@@ -1358,4 +1358,32 @@ class test extends PHPUnit_Framework_TestCase
 
     }
 
+    public function testGeometry_numInteriorRings()
+    {
+        $reader = new GEOSWKTReader();
+
+        $g = $reader->read('POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))');
+        $this->assertEquals(0, $g->numInteriorRings());
+
+        $g = $reader->read('POLYGON (
+            (10 10, 10 14, 14 14, 14 10, 10 10),
+                (11 11, 11 12, 12 12, 12 11, 11 11))');
+        $this->assertEquals(1, $g->numInteriorRings());
+
+        $g = $reader->read('POLYGON (
+            (10 10, 10 14, 14 14, 14 10, 10 10),
+                (11 11, 11 12, 12 12, 12 11, 11 11),
+                (13 11, 13 12, 13.5 12, 13.5 11, 13 11))');
+        $this->assertEquals(2, $g->numInteriorRings());
+
+        $g = $reader->read('POINT (0 0)');
+        try {
+            $this->assertEquals(2, $g->numInteriorRings());
+            $this->assertTrue( FALSE );
+        } catch (Exception $e) {
+            $this->assertContains( 'Polygon', $e->getMessage() );
+        }
+
+    }
+
 }
