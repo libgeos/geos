@@ -1488,4 +1488,43 @@ class test extends PHPUnit_Framework_TestCase
 
     }
 
+    public function testGeometry_numCoordinates()
+    {
+        $reader = new GEOSWKTReader();
+
+        $g = $reader->read('POINT(0 0)');
+        $this->assertEquals(1, $g->numCoordinates());
+
+        $g = $reader->read('MULTIPOINT (0 1, 2 3)');
+        $this->assertEquals(2, $g->numCoordinates());
+
+        $g = $reader->read('LINESTRING (0 0, 2 3)');
+        $this->assertEquals(2, $g->numCoordinates());
+
+        $g = $reader->read('MULTILINESTRING ((0 1, 2 3), (10 10, 3 4))');
+        $this->assertEquals(4, $g->numCoordinates());
+
+        $g = $reader->read('POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))');
+        $this->assertEquals(5, $g->numCoordinates());
+
+        $g = $reader->read('MULTIPOLYGON (
+            ((0 0, 1 0, 1 1, 0 1, 0 0)),
+            ((10 10, 10 14, 14 14, 14 10, 10 10),
+                (11 11, 11 12, 12 12, 12 11, 11 11)))');
+        $this->assertEquals(15, $g->numCoordinates());
+
+        $g = $reader->read('GEOMETRYCOLLECTION (
+            MULTIPOLYGON (
+                ((0 0, 1 0, 1 1, 0 1, 0 0)),
+                ((10 10, 10 14, 14 14, 14 10, 10 10),
+                    (11 11, 11 12, 12 12, 12 11, 11 11))
+            ),
+            POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0)),
+            MULTILINESTRING ((0 0, 2 3), (10 10, 3 4)),
+            LINESTRING (0 0, 2 3),
+            MULTIPOINT (0 0, 2 3),
+            POINT (9 0))');
+        $this->assertEquals(29, $g->numCoordinates());
+    }
+
 }
