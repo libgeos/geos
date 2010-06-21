@@ -1578,4 +1578,32 @@ class test extends PHPUnit_Framework_TestCase
 
     }
 
+    public function testGeometry_pointN()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        $g = $reader->read('LINESTRING (10 10, 10 14, 14 14, 14 10)');
+        $this->assertEquals('POINT (10 10)', $writer->write($g->pointN(0)) );
+        $this->assertEquals('POINT (10 14)', $writer->write($g->pointN(1)) );
+        $this->assertEquals('POINT (14 14)', $writer->write($g->pointN(2)) );
+        $this->assertEquals('POINT (14 10)', $writer->write($g->pointN(3)) );
+        $this->assertNull( $g->pointN(4) );
+
+        $g = $reader->read('LINEARRING (11 11, 11 12, 12 11, 11 11)');
+        $this->assertEquals('POINT (11 11)', $writer->write($g->pointN(0)) );
+        $this->assertEquals('POINT (11 12)', $writer->write($g->pointN(1)) );
+        $this->assertEquals('POINT (12 11)', $writer->write($g->pointN(2)) );
+        $this->assertEquals('POINT (11 11)', $writer->write($g->pointN(3)) );
+
+        $g = $reader->read('POINT (0 0)');
+        try {
+            $g->pointN(0);
+            $this->assertTrue( FALSE );
+        } catch (Exception $e) {
+            $this->assertContains( 'LineString', $e->getMessage() );
+        }
+
+    }
 }

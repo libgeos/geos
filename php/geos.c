@@ -215,6 +215,7 @@ PHP_METHOD(Geometry, exteriorRing);
 PHP_METHOD(Geometry, numCoordinates);
 PHP_METHOD(Geometry, dimension);
 PHP_METHOD(Geometry, coordinateDimension);
+PHP_METHOD(Geometry, pointN);
 
 static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, __construct, NULL, 0)
@@ -264,6 +265,7 @@ static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, numCoordinates, NULL, 0)
     PHP_ME(Geometry, dimension, NULL, 0)
     PHP_ME(Geometry, coordinateDimension, NULL, 0)
+    PHP_ME(Geometry, pointN, NULL, 0)
     {NULL, NULL, NULL}
 };
 
@@ -1762,6 +1764,32 @@ PHP_METHOD(Geometry, coordinateDimension)
     if ( ret == -1 ) RETURN_NULL(); /* should get an exception first */
 
     RETURN_LONG(ret);
+}
+
+/**
+ * GEOSGeometry GEOSGeometry::pointN()
+ */
+PHP_METHOD(Geometry, pointN)
+{
+    GEOSGeometry *geom;
+    const GEOSGeometry *c;
+    GEOSGeometry *cc;
+    long int num;
+
+    geom = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l",
+        &num) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    c = GEOSGeomGetPointN(geom, num);
+    if ( ! c ) RETURN_NULL(); /* should get an exception first */
+    cc = GEOSGeom_clone(c);
+    if ( ! cc ) RETURN_NULL(); /* should get an exception first */
+
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, cc);
 }
 
 
