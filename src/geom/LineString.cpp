@@ -169,6 +169,7 @@ LineString::getPointN(size_t n) const
 {
 	assert(getFactory());
 	assert(points.get());
+	if ( n >= points->size() ) return 0;
 	return getFactory()->createPoint(points->getAt(n));
 }
 
