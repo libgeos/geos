@@ -205,7 +205,7 @@ PHP_METHOD(Geometry, typeId);
 PHP_METHOD(Geometry, getSRID);
 PHP_METHOD(Geometry, setSRID);
 PHP_METHOD(Geometry, numGeometries);
-PHP_METHOD(Geometry, getGeometryN);
+PHP_METHOD(Geometry, geometryN);
 PHP_METHOD(Geometry, numInteriorRings);
 PHP_METHOD(Geometry, numPoints);
 PHP_METHOD(Geometry, getX);
@@ -261,7 +261,7 @@ static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, getSRID, NULL, 0)
     PHP_ME(Geometry, setSRID, NULL, 0)
     PHP_ME(Geometry, numGeometries, NULL, 0)
-    PHP_ME(Geometry, getGeometryN, NULL, 0)
+    PHP_ME(Geometry, geometryN, NULL, 0)
     PHP_ME(Geometry, numInteriorRings, NULL, 0)
     PHP_ME(Geometry, numPoints, NULL, 0)
     PHP_ME(Geometry, getX, NULL, 0)
@@ -1253,9 +1253,9 @@ PHP_METHOD(Geometry, numGeometries)
 }
 
 /**
- * GEOSGeometry GEOSGeometry::getGeometryN()
+ * GEOSGeometry GEOSGeometry::geometryN()
  */
-PHP_METHOD(Geometry, getGeometryN)
+PHP_METHOD(Geometry, geometryN)
 {
     GEOSGeometry *geom;
     const GEOSGeometry *c;

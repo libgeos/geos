@@ -1341,19 +1341,19 @@ class test extends PHPUnit_Framework_TestCase
         $this->assertEquals(6, $g->numGeometries());
     }
 
-    public function testGeometry_getGeometryN()
+    public function testGeometry_geometryN()
     {
         $reader = new GEOSWKTReader();
 
         $g = $reader->read('POINT(0 0)');
-        $c = $g->getGeometryN(0);
+        $c = $g->geometryN(0);
         $this->assertTrue( $g->equalsExact($c) );
 
         $g = $reader->read('MULTIPOINT (0 1, 2 3)');
-        $this->assertEquals($reader->read('POINT(0 1)'), $g->getGeometryN(0));
-        $this->assertEquals($reader->read('POINT(2 3)'), $g->getGeometryN(1));
+        $this->assertEquals($reader->read('POINT(0 1)'), $g->geometryN(0));
+        $this->assertEquals($reader->read('POINT(2 3)'), $g->geometryN(1));
 
-        $c = $g->getGeometryN(2);
+        $c = $g->geometryN(2);
         $this->assertNull( $c );
 
     }

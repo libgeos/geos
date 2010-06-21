@@ -1,13 +1,13 @@
 In order of priority
 
-- Complete interfaces of Geometry
- - Normalize ? (is the only modifier function)
- - CoordSeq accessors ?
- - Constructors ?
-- Find a way to have GEOSGeometry contents shown on var_dump
+- Add GEOSGeometry::Normalize (make non-mutating !)
 - Implement serialization/deserialization for Geometry
 - Documentation !! (doxygen-based?)
+- Find a way to have GEOSGeometry contents shown on var_dump
+- Use the re-entrant interface
 - Add interfaces for WKBReader/WKBWriter ?
 - Add interface for algorithms (Orientation Index) ?
 - Add interfaces for prepared geometries ?
 - Add interfaces for STRTree ?
+- Add interfaces for GEOSCoordSeq ?
+- Add Geometry Constructors ?
