@@ -1269,6 +1269,7 @@ PHP_METHOD(Geometry, geometryN)
         RETURN_NULL();
     }
 
+    if ( num >= GEOSGetNumGeometries(geom) ) RETURN_NULL(); 
     c = GEOSGetGeometryN(geom, num);
     if ( ! c ) RETURN_NULL(); /* should get an exception first */
     cc = GEOSGeom_clone(c);
@@ -1361,6 +1362,7 @@ PHP_METHOD(Geometry, interiorRingN)
         RETURN_NULL();
     }
 
+    if ( num >= GEOSGetNumInteriorRings(geom) ) RETURN_NULL(); 
     c = GEOSGetInteriorRingN(geom, num);
     if ( ! c ) RETURN_NULL(); /* should get an exception first */
     cc = GEOSGeom_clone(c);
@@ -1455,6 +1457,7 @@ PHP_METHOD(Geometry, pointN)
         RETURN_NULL();
     }
 
+    if ( num >= GEOSGeomGetNumPoints(geom) ) RETURN_NULL(); 
     c = GEOSGeomGetPointN(geom, num);
     if ( ! c ) RETURN_NULL(); /* should get an exception first */
 

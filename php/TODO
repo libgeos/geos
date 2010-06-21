@@ -1,6 +1,5 @@
 In order of priority
 
-- Add GEOSGeometry::Normalize (make non-mutating !)
 - Implement serialization/deserialization for Geometry
 - Documentation !! (doxygen-based?)
 - Find a way to have GEOSGeometry contents shown on var_dump

@@ -148,7 +148,6 @@ GeometryCollection::getNumGeometries() const
 const Geometry*
 GeometryCollection::getGeometryN(size_t n) const
 {
-	if ( n >= geometries->size() ) return 0;
 	return (*geometries)[n];
 }
 
