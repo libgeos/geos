@@ -11,6 +11,7 @@ Changes in 3.3.0
           the polygonizer
   - CAPI: GEOSOrientationIndex
 - C++ API changes:
+  - Geometry::isWithinDistance method is now const
   - Polygonizer::getCutEdges returns by const ref
   - Polygonizer::getDangles returns by const ref
   - Polygonizer::getInvalidRingLines returns by const ref and retains
