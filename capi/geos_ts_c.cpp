@@ -668,7 +668,7 @@ GEOSisValidReason_r(GEOSContextHandle_t extHandle, const Geometry *g1)
 
 char
 GEOSisValidDetail_r(GEOSContextHandle_t extHandle, const Geometry *g,
-	char** reason, const Geometry ** location)
+	char** reason, Geometry ** location)
 {
     if ( 0 == extHandle )
     {

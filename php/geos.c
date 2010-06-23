@@ -1063,7 +1063,7 @@ PHP_METHOD(Geometry, checkValidity)
 
     this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
 
-    ret = GEOSisValidDetail(this, &reason, (const GEOSGeometry**)&location);
+    ret = GEOSisValidDetail(this, &reason, &location);
     if ( ret == 2 ) RETURN_NULL(); /* should get an exception first */
 
     if ( reason ) {

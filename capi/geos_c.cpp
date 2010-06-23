@@ -203,7 +203,7 @@ GEOSisValidReason(const Geometry *g1)
 
 char
 GEOSisValidDetail(const Geometry *g,
-	char** reason, const Geometry ** location)
+	char** reason, Geometry ** location)
 {
     return GEOSisValidDetail_r( handle, g, reason, location );
 }
