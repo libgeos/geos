@@ -168,17 +168,9 @@ Geometry::hasNullElements(const vector<Geometry *>* lrs)
 	return false;
 }
 	
-/**
- * Tests whether the distance from this <code>Geometry</code>
- * to another is less than or equal to a specified value.
- *
- * @param geom the Geometry to check the distance to
- * @param cDistance the distance value to compare
- * @return <code>true</code> if the geometries are less than
- *  <code>distance</code> apart.
- */
+/* public */
 bool
-Geometry::isWithinDistance(const Geometry *geom,double cDistance)
+Geometry::isWithinDistance(const Geometry *geom,double cDistance) const
 {
 	const Envelope *env0=getEnvelopeInternal();
 	const Envelope *env1=geom->getEnvelopeInternal();

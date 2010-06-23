@@ -691,8 +691,16 @@ public:
 	/** \brief
 	 * Tests whether the distance from this Geometry  to another
 	 * is less than or equal to a specified value.
+	 *
+	 * @param geom the Geometry to check the distance to
+	 * @param cDistance the distance value to compare
+	 * @return <code>true</code> if the geometries are less than
+	 *  <code>distance</code> apart.
+	 *
+	 * @todo doesn't seem to need being virtual, make it concrete
 	 */
-	virtual bool isWithinDistance(const Geometry *geom,double cDistance);
+	virtual bool isWithinDistance(const Geometry *geom,
+			double cDistance) const;
 
 	/** \brief
 	 * Computes the centroid of this <code>Geometry</code>.
