@@ -37,6 +37,7 @@
 #include <string>
 #include <sstream>
 #include <cassert>
+#include <cmath>
 
 using namespace std;
 using namespace geos::geom;

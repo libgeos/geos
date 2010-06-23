@@ -27,6 +27,7 @@
 
 #include <vector>
 #include <memory>
+#include <cassert>
 
 // Forward declarations
 namespace geos {
