@@ -1817,12 +1817,16 @@ PHP_METHOD(WKTWriter, setOld3D)
 PHP_METHOD(WKBWriter, __construct);
 PHP_METHOD(WKBWriter, getOutputDimension);
 PHP_METHOD(WKBWriter, setOutputDimension);
+PHP_METHOD(WKBWriter, getByteOrder);
+PHP_METHOD(WKBWriter, setByteOrder);
 PHP_METHOD(WKBWriter, writeHEX);
 
 static function_entry WKBWriter_methods[] = {
     PHP_ME(WKBWriter, __construct, NULL, 0)
     PHP_ME(WKBWriter, getOutputDimension, NULL, 0)
     PHP_ME(WKBWriter, setOutputDimension, NULL, 0)
+    PHP_ME(WKBWriter, getByteOrder, NULL, 0)
+    PHP_ME(WKBWriter, setByteOrder, NULL, 0)
     PHP_ME(WKBWriter, writeHEX, NULL, 0)
     {NULL, NULL, NULL}
 };
@@ -1931,6 +1935,41 @@ PHP_METHOD(WKBWriter, writeHEX)
     GEOSFree(ret);
 
     RETURN_STRING(retstr, 0);
+}
+
+/**
+ * long GEOSWKBWriter::getByteOrder();
+ */
+PHP_METHOD(WKBWriter, getByteOrder)
+{
+    GEOSWKBWriter *writer;
+    long int ret;
+
+    writer = (GEOSWKBWriter*)getRelay(getThis(), WKBWriter_ce_ptr);
+
+    ret = GEOSWKBWriter_getByteOrder(writer);
+
+    RETURN_LONG(ret);
+}
+
+/**
+ * void GEOSWKBWriter::setByteOrder(dims);
+ */
+PHP_METHOD(WKBWriter, setByteOrder)
+{
+    GEOSWKBWriter *writer;
+    long int dim;
+
+    writer = (GEOSWKBWriter*)getRelay(getThis(), WKBWriter_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &dim)
+        == FAILURE)
+    {
+        RETURN_NULL();
+    }
+
+    GEOSWKBWriter_setByteOrder(writer, dim);
+
 }
 
 

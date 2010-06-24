@@ -1734,7 +1734,7 @@ class test extends PHPUnit_Framework_TestCase
         $writer->setOutputDimension(2);
         $this->assertEquals(2, $writer->getOutputDimension());
 
-	# 1 is invalid
+        # 1 is invalid
         try {
             $writer->setOutputDimension(1);
             $this->assertTrue(FALSE);
@@ -1742,13 +1742,35 @@ class test extends PHPUnit_Framework_TestCase
             $this->assertContains('must be 2 or 3', $e->getMessage());
         }
 
-	# 4 is invalid
+        # 4 is invalid
         try {
             $writer->setOutputDimension(4);
             $this->assertTrue(FALSE);
         } catch (Exception $e) {
             $this->assertContains('must be 2 or 3', $e->getMessage());
         }
+    }
+
+    public function testWKBWriter_getsetByteOrder()
+    {
+        $writer = new GEOSWKBWriter();
+
+        /* Machine-dependent */
+        $bo = $writer->getByteOrder();
+
+        $obo = $bo ? 0 : 1;
+        $writer->setByteOrder($obo);
+        $this->assertEquals($obo, $writer->getByteOrder());
+
+        # Anything different from 0 (BIG_ENDIAN) or 1 (LITTLE_ENDIAN)
+        # is invalid
+        try {
+            $writer->setByteOrder(5);
+            $this->assertTrue(FALSE);
+        } catch (Exception $e) {
+            $this->assertContains('LITTLE (1) or BIG (0)', $e->getMessage());
+        }
+
     }
 
     public function testWKBWriter_writeHEX()
@@ -1765,11 +1787,44 @@ class test extends PHPUnit_Framework_TestCase
 
         $g = $reader->read('POINT(6 7)');
 
+        $writer->setOutputDimension(2); // 2D
+
+        $writer->setByteOrder(1); // LITTLE endian
         $this->assertEquals('010100000000000000000018400000000000001C40',
+            $writer->writeHEX($g));
+        $writer->setByteOrder(0); // BIG endian
+        $this->assertEquals('00000000014018000000000000401C000000000000',
+            $writer->writeHEX($g));
+
+        $writer->setOutputDimension(3); // 3D
+
+        $writer->setByteOrder(1); // LITTLE endian
+        $this->assertEquals('010100000000000000000018400000000000001C40',
+            $writer->writeHEX($g));
+        $writer->setByteOrder(0); // BIG endian
+        $this->assertEquals('00000000014018000000000000401C000000000000',
             $writer->writeHEX($g));
 
         $g = $reader->read('POINT(6 7 8)');
+
+        $writer->setOutputDimension(2); // 2D
+
+        $writer->setByteOrder(1); // LITTLE endian
         $this->assertEquals('010100000000000000000018400000000000001C40',
+            $writer->writeHEX($g));
+        $writer->setByteOrder(0); // BIG endian
+        $this->assertEquals('00000000014018000000000000401C000000000000',
+            $writer->writeHEX($g));
+
+        $writer->setOutputDimension(3); // 3D
+
+        $writer->setByteOrder(1); // LITTLE endian, 2d
+        $this->assertEquals(
+            '010100008000000000000018400000000000001C400000000000002040',
+            $writer->writeHEX($g));
+        $writer->setByteOrder(0); // BIG endian, 3d
+        $this->assertEquals(
+            '00800000014018000000000000401C0000000000004020000000000000',
             $writer->writeHEX($g));
     }
 }
