@@ -198,6 +198,7 @@ namespace tut
                 GEOSWKTWriter_getOutputDimension(writer) == 3 );
 
         test_writer_wkt(writer, "POINT Z (10 13 3)");
+        GEOSWKTWriter_destroy( writer );
     }
 
 } // namespace tut

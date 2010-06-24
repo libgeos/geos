@@ -21,6 +21,7 @@ namespace tut
     {
         GEOSGeometry* geom1_;
         GEOSGeometry* geom2_;
+        GEOSGeometry* geom3_;
         GEOSContextHandle_t handle_;
 
         static void notice(const char *fmt, ...)
@@ -36,7 +37,7 @@ namespace tut
         }
 
         test_capigeosextractuniquepoints_data()
-            : geom1_(0), geom2_(0)
+                : geom1_(0), geom2_(0), geom3_(0)
         {
             handle_ = initGEOS_r(notice, notice);
         }       
@@ -45,8 +46,12 @@ namespace tut
         {
             GEOSGeom_destroy_r(handle_, geom1_);
             GEOSGeom_destroy_r(handle_, geom2_);
+            if( geom3_ )
+                GEOSGeom_destroy_r(handle_, geom3_);
+
             geom1_ = 0;
             geom2_ = 0;
+            geom3_ = 0;
             finishGEOS_r(handle_);
         }
 
@@ -67,8 +72,8 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT_r(handle_, "POLYGON EMPTY");
         /* ensure_equals(GEOSGetNumGeometries_r(handle_, geom2_), 0); */
-        ensure(GEOSisEmpty_r(handle_,
-		GEOSGeom_extractUniquePoints_r(handle_, geom1_)));
+        geom3_ = GEOSGeom_extractUniquePoints_r(handle_, geom1_);
+        ensure(GEOSisEmpty_r(handle_, geom3_));
     }
 
     template<>
@@ -78,9 +83,8 @@ namespace tut
         geom1_ = GEOSGeomFromWKT_r(handle_, "MULTIPOINT(0 0, 0 0, 1 1)");
         geom2_ = GEOSGeomFromWKT_r(handle_, "MULTIPOINT(0 0, 1 1)");
         /* ensure_equals(GEOSGetNumGeometries_r(handle_, geom2_), 0); */
-        ensure(GEOSEquals_r(handle_,
-		GEOSGeom_extractUniquePoints_r(handle_, geom1_),
-		geom2_));
+        geom3_ = GEOSGeom_extractUniquePoints_r(handle_, geom1_);
+        ensure(GEOSEquals_r(handle_, geom3_, geom2_));
     }
 
     template<>
@@ -89,10 +93,9 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT_r(handle_, "GEOMETRYCOLLECTION(MULTIPOINT(0 0, 0 0, 1 1),LINESTRING(1 1, 2 2, 2 2, 0 0),POLYGON((5 5, 0 0, 0 2, 2 2, 5 5)))");
         geom2_ = GEOSGeomFromWKT_r(handle_, "MULTIPOINT(0 0, 1 1, 2 2, 5 5, 0 2)");
+        geom3_ = GEOSGeom_extractUniquePoints_r(handle_, geom1_);
         /* ensure_equals(GEOSGetNumGeometries_r(handle_, geom2_), 0); */
-        ensure(GEOSEquals_r(handle_,
-		GEOSGeom_extractUniquePoints_r(handle_, geom1_),
-		geom2_));
+        ensure(GEOSEquals_r(handle_, geom3_, geom2_));
     }
 
  

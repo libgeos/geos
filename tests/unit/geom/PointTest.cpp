@@ -523,9 +523,13 @@ namespace tut
 
         ensure( p->getCoordinateDimension() == 3 );
 
+        delete p;
+
 		p = reader_.read("POINT(-1.233 5.678)");
 
         ensure( p->getCoordinateDimension() == 2 );
+
+        delete p;
     }
 
 } // namespace tut
