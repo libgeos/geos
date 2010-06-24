@@ -1668,6 +1668,7 @@ PHP_METHOD(WKTWriter, write);
 PHP_METHOD(WKTWriter, setTrim);
 PHP_METHOD(WKTWriter, setRoundingPrecision);
 PHP_METHOD(WKTWriter, setOutputDimension);
+PHP_METHOD(WKTWriter, getOutputDimension);
 PHP_METHOD(WKTWriter, setOld3D);
 
 static function_entry WKTWriter_methods[] = {
@@ -1676,6 +1677,7 @@ static function_entry WKTWriter_methods[] = {
     PHP_ME(WKTWriter, setTrim, NULL, 0)
     PHP_ME(WKTWriter, setRoundingPrecision, NULL, 0)
     PHP_ME(WKTWriter, setOutputDimension, NULL, 0)
+    PHP_ME(WKTWriter, getOutputDimension, NULL, 0)
     PHP_ME(WKTWriter, setOld3D, NULL, 0)
     {NULL, NULL, NULL}
 };
@@ -1778,6 +1780,9 @@ PHP_METHOD(WKTWriter, setRoundingPrecision)
     GEOSWKTWriter_setRoundingPrecision(writer, prec);
 }
 
+/**
+ * void GEOSWKTWriter::setOutputDimension()
+ */
 PHP_METHOD(WKTWriter, setOutputDimension)
 {
     GEOSWKTWriter *writer;
@@ -1792,6 +1797,21 @@ PHP_METHOD(WKTWriter, setOutputDimension)
     }
 
     GEOSWKTWriter_setOutputDimension(writer, dim);
+}
+
+/**
+ * long GEOSWKTWriter::getOutputDimension()
+ */
+PHP_METHOD(WKTWriter, getOutputDimension)
+{
+    GEOSWKTWriter *writer;
+    long int ret;
+
+    writer = (GEOSWKTWriter*)getRelay(getThis(), WKTWriter_ce_ptr);
+
+    ret = GEOSWKTWriter_getOutputDimension(writer);
+
+    RETURN_LONG(ret);
 }
 
 PHP_METHOD(WKTWriter, setOld3D)

@@ -202,6 +202,12 @@ class test extends PHPUnit_Framework_TestCase
 
     }
 
+    public function testWKTWriter_getOutputDimension()
+    {
+        $writer = new GEOSWKTWriter();
+        $this->assertEquals(2, $writer->getOutputDimension());
+    }
+
     public function testWKTWriter_setOutputDimension()
     {
         $reader = new GEOSWKTReader();
@@ -219,7 +225,7 @@ class test extends PHPUnit_Framework_TestCase
         $this->assertEquals('POINT Z (1 2 3)', $writer->write($g3d));
         $this->assertEquals('POINT (3 2)', $writer->write($g2d));
 
-	# 1 is invalid
+        # 1 is invalid
         try {
             $writer->setOutputDimension(1);
             $this->assertTrue(FALSE);
@@ -227,7 +233,7 @@ class test extends PHPUnit_Framework_TestCase
             $this->assertContains('must be 2 or 3', $e->getMessage());
         }
 
-	# 4 is invalid
+        # 4 is invalid
         try {
             $writer->setOutputDimension(4);
             $this->assertTrue(FALSE);
