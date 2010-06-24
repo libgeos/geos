@@ -2014,6 +2014,79 @@ PHP_METHOD(WKBWriter, setIncludeSRID)
     GEOSWKBWriter_setIncludeSRID(writer, inc);
 }
 
+/* -- class GEOSWKBReader -------------------- */
+
+PHP_METHOD(WKBReader, __construct);
+PHP_METHOD(WKBReader, readHEX);
+
+static function_entry WKBReader_methods[] = {
+    PHP_ME(WKBReader, __construct, NULL, 0)
+    PHP_ME(WKBReader, readHEX, NULL, 0)
+    {NULL, NULL, NULL}
+};
+
+static zend_class_entry *WKBReader_ce_ptr;
+
+static zend_object_handlers WKBReader_object_handlers;
+
+static void
+WKBReader_dtor (void *object TSRMLS_DC)
+{
+    Proxy *obj = (Proxy *)object;
+    GEOSWKBReader_destroy((GEOSWKBReader*)obj->relay);
+
+    zend_hash_destroy(obj->std.properties);
+    FREE_HASHTABLE(obj->std.properties);
+
+    efree(obj);
+}
+
+static zend_object_value
+WKBReader_create_obj (zend_class_entry *type TSRMLS_DC)
+{
+    return Gen_create_obj(type, WKBReader_dtor, &WKBReader_object_handlers);
+}
+
+
+PHP_METHOD(WKBReader, __construct)
+{
+    GEOSWKBReader* obj;
+    zval *object = getThis();
+
+    obj = GEOSWKBReader_create();
+    if ( ! obj ) {
+        php_error_docref(NULL TSRMLS_CC, E_ERROR,
+                "GEOSWKBReader_create() failed (didn't initGEOS?)");
+    }
+
+    setRelay(object, obj);
+}
+
+PHP_METHOD(WKBReader, readHEX)
+{
+    GEOSWKBReader *reader;
+    GEOSGeometry *geom;
+    unsigned char* wkb;
+    int wkblen;
+
+    reader = (GEOSWKBReader*)getRelay(getThis(), WKBReader_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s",
+        &wkb, &wkblen) == FAILURE)
+    {
+        RETURN_NULL();
+    }
+
+    geom = GEOSWKBReader_readHEX(reader, wkb, wkblen);
+    /* we'll probably get an exception if geom is null */
+    if ( ! geom ) RETURN_NULL();
+ 
+    /* return_value is a zval */
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, geom);
+
+}
+
 
 /* -- Free functions ------------------------- */
 
@@ -2163,6 +2236,14 @@ PHP_MINIT_FUNCTION(geos)
     memcpy(&WKBWriter_object_handlers,
         zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     WKBWriter_object_handlers.clone_obj = NULL;
+
+    /* WKBReader */
+    INIT_CLASS_ENTRY(ce, "GEOSWKBReader", WKBReader_methods);
+    WKBReader_ce_ptr = zend_register_internal_class(&ce TSRMLS_CC);
+    WKBReader_ce_ptr->create_object = WKBReader_create_obj;
+    memcpy(&WKBReader_object_handlers,
+        zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+    WKBReader_object_handlers.clone_obj = NULL;
 
 
     /* Constants */

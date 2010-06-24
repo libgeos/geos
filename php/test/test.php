@@ -48,9 +48,15 @@ class test extends PHPUnit_Framework_TestCase
         /* Good WKT */
         $geom = $reader->read('POINT(0 0)');
         $this->assertNotNull($geom);
+        $geom = $reader->read('POINT(0 0 0)');
+        $this->assertNotNull($geom);
+        $geom = $reader->read('POINT Z (0 0 0)');
+        $this->assertNotNull($geom);
         $geom = $reader->read('POINT EMPTY');
         $this->assertNotNull($geom);
         $geom = $reader->read('MULTIPOINT(0 0 1, 2 3 4)');
+        $this->assertNotNull($geom);
+        $geom = $reader->read('MULTIPOINT Z (0 0 1, 2 3 4)');
         $this->assertNotNull($geom);
         $geom = $reader->read('MULTIPOINT((0 0), (2 3))');
         $this->assertNotNull($geom);
@@ -61,6 +67,9 @@ class test extends PHPUnit_Framework_TestCase
         $geom = $reader->read('LINESTRING EMPTY');
         $this->assertNotNull($geom);
         $geom = $reader->read('MULTILINESTRING((0 0 1, 2 3 4),
+                                               (10 10 2, 3 4 5))');
+        $this->assertNotNull($geom);
+        $geom = $reader->read('MULTILINESTRING Z ((0 0 1, 2 3 4),
                                                (10 10 2, 3 4 5))');
         $this->assertNotNull($geom);
         $geom = $reader->read('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))');
@@ -1895,5 +1904,71 @@ class test extends PHPUnit_Framework_TestCase
           '00A0000001000000354018000000000000401C0000000000004020000000000000',
           $writer->writeHEX($g));
         $writer->setIncludeSRID(FALSE);
+    }
+
+    public function testWKBReader__construct()
+    {
+        $reader = new GEOSWKBReader();
+        $this->assertNotNull($reader);
+    }
+
+    public function testWKBReader_readHEX()
+    {
+        $reader = new GEOSWKBReader();
+
+        $writer = new GEOSWKTWriter();
+        $writer->setTrim(TRUE);
+        $writer->setOutputDimension(3);
+
+        
+        // 2D LITTLE endian
+        $g = $reader->readHEX(
+            '010100000000000000000018400000000000001C40'
+        );
+        $this->assertEquals('POINT (6 7)', $writer->write($g));
+        $this->assertEquals(0, $g->getSRID());
+
+        // 2D BIG endian
+        $g = $reader->readHEX(
+            '00000000014018000000000000401C000000000000'
+        );
+        $this->assertEquals('POINT (6 7)', $writer->write($g));
+        $this->assertEquals(0, $g->getSRID());
+
+        // 2D LITTLE endian + SRID 
+        $g = $reader->readHEX(
+            '01010000202B00000000000000000018400000000000001C40'
+        );
+        $this->assertEquals('POINT (6 7)', $writer->write($g));
+        $this->assertEquals(43, $g->getSRID());
+
+        // 2D BIG endian + SRID
+        $g = $reader->readHEX(
+            '00200000010000002B4018000000000000401C000000000000'
+        );
+        $this->assertEquals('POINT (6 7)', $writer->write($g));
+        $this->assertEquals(43, $g->getSRID());
+
+        // 3D LITTLE endian 
+        $g = $reader->readHEX(
+            '010100008000000000000018400000000000001C400000000000002040'
+        );
+        $this->assertEquals('POINT Z (6 7 8)', $writer->write($g));
+        $this->assertEquals(0, $g->getSRID());
+
+        // 3D BIG endian 
+        $g = $reader->readHEX(
+            '00800000014018000000000000401C0000000000004020000000000000'
+        );
+        $this->assertEquals('POINT Z (6 7 8)', $writer->write($g));
+        $this->assertEquals(0, $g->getSRID());
+
+        // 3D BIG endian + SRID
+        $g = $reader->readHEX(
+          '00A0000001000000354018000000000000401C0000000000004020000000000000'
+        );
+        $this->assertEquals('POINT Z (6 7 8)', $writer->write($g));
+        $this->assertEquals(53, $g->getSRID());
+
     }
 }
