@@ -4117,7 +4117,18 @@ GEOSWKTWriter_setOutputDimension_r(GEOSContextHandle_t extHandle, WKTWriter *wri
         return;
     }
 
-    writer->setOutputDimension(dim);
+    try
+    {
+        writer->setOutputDimension(dim);
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
 }
 
 void
@@ -4505,6 +4516,10 @@ GEOSWKBWriter_setOutputDimension_r(GEOSContextHandle_t extHandle, GEOSWKBWriter*
         try
         {
             writer->setOutputDimension(newDimension);
+        }
+        catch (const std::exception &e)
+        {
+            handle->ERROR_MESSAGE("%s", e.what());
         }
         catch (...)
         {
