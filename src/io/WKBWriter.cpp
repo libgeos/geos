@@ -53,6 +53,16 @@ WKBWriter::WKBWriter(int dims, int bo, bool srid):
     outputDimension = defaultOutputDimension;
 }
 
+/* public */
+void
+WKBWriter::setOutputDimension(int dims)
+{
+	if ( dims < 2 || dims > 3 )
+		throw util::IllegalArgumentException("WKB output dimension must be 2 or 3");
+
+    defaultOutputDimension = dims;
+}
+
 WKBWriter::~WKBWriter()
 {
 }

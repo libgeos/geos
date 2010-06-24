@@ -31,6 +31,7 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/PrecisionModel.h>
+#include <geos/util/IllegalArgumentException.h>
 
 #include <typeinfo>
 #include <cstdio> // should avoid this
@@ -45,14 +46,24 @@ using namespace geos::geom;
 namespace geos {
 namespace io { // geos.io
 
-WKTWriter::WKTWriter() {
-	isFormatted=false;
-	roundingPrecision=-1;
-	trim = false;
-	level=0;
-	formatter="%f";
-    defaultOutputDimension = 2;
-    old3D = false;
+WKTWriter::WKTWriter():
+	formatter("%f"),
+	isFormatted(false),
+	roundingPrecision(-1),
+	trim(false),
+	level(0),
+	defaultOutputDimension(2),
+	old3D(false)
+{
+}
+
+/* public */
+void
+WKTWriter::setOutputDimension(int dims)
+{
+	if ( dims < 2 || dims > 3 )
+		throw util::IllegalArgumentException("WKT output dimension must be 2 or 3");
+	defaultOutputDimension = dims;
 }
 
 WKTWriter::~WKTWriter() {}

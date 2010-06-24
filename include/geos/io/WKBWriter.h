@@ -106,7 +106,7 @@ public:
      * @param newOutputDimension Supported values are 2 or 3.  Note that 3 indicates
      * up to 3 dimensions will be written but 2D WKB is still produced for 2D geometries.
 	 */
-	virtual void setOutputDimension(int newOutputDimension) { defaultOutputDimension=newOutputDimension; }
+	virtual void setOutputDimension(int newOutputDimension);
 	
 	/*
 	 * \brief
