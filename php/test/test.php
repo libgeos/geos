@@ -210,6 +210,22 @@ class test extends PHPUnit_Framework_TestCase
         $this->assertEquals('POINT Z (1 2 3)', $writer->write($g3d));
         $this->assertEquals('POINT (3 2)', $writer->write($g2d));
 
+	# 1 is invalid
+        try {
+            $writer->setOutputDimension(1);
+            $this->assertTrue(FALSE);
+        } catch (Exception $e) {
+            $this->assertContains('must be 2 or 3', $e->getMessage());
+        }
+
+	# 4 is invalid
+        try {
+            $writer->setOutputDimension(4);
+            $this->assertTrue(FALSE);
+        } catch (Exception $e) {
+            $this->assertContains('must be 2 or 3', $e->getMessage());
+        }
+
     }
 
     public function testWKTWriter_setOld3D()
@@ -1696,5 +1712,64 @@ class test extends PHPUnit_Framework_TestCase
         $g2 = $reader->read('LINESTRING (3 0 , 10 0)');
         $this->assertEquals( 9.0, round($g->hausdorffDistance($g2)) );
 
+    }
+
+    public function testWKBWriter__construct()
+    {
+        $writer = new GEOSWKBWriter();
+        $this->assertNotNull($writer);
+    }
+
+    public function testWKBWriter_getOutputDimension()
+    {
+        $writer = new GEOSWKBWriter();
+        $this->assertEquals(2, $writer->getOutputDimension());
+    }
+
+    public function testWKBWriter_setOutputDimension()
+    {
+        $writer = new GEOSWKBWriter();
+        $writer->setOutputDimension(3);
+        $this->assertEquals(3, $writer->getOutputDimension());
+        $writer->setOutputDimension(2);
+        $this->assertEquals(2, $writer->getOutputDimension());
+
+	# 1 is invalid
+        try {
+            $writer->setOutputDimension(1);
+            $this->assertTrue(FALSE);
+        } catch (Exception $e) {
+            $this->assertContains('must be 2 or 3', $e->getMessage());
+        }
+
+	# 4 is invalid
+        try {
+            $writer->setOutputDimension(4);
+            $this->assertTrue(FALSE);
+        } catch (Exception $e) {
+            $this->assertContains('must be 2 or 3', $e->getMessage());
+        }
+    }
+
+    public function testWKBWriter_writeHEX()
+    {
+        $writer = new GEOSWKBWriter();
+        $reader = new GEOSWKTReader();
+
+        try {
+            $writer->writeHEX(1);
+            $this->assertTrue(FALSE); # this is just to fail if we get here
+        } catch (Exception $e) {
+            $this->assertContains('expects parameter 1', $e->getMessage());
+        }
+
+        $g = $reader->read('POINT(6 7)');
+
+        $this->assertEquals('010100000000000000000018400000000000001C40',
+            $writer->writeHEX($g));
+
+        $g = $reader->read('POINT(6 7 8)');
+        $this->assertEquals('010100000000000000000018400000000000001C40',
+            $writer->writeHEX($g));
     }
 }

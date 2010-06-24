@@ -1624,10 +1624,10 @@ WKTReader_create_obj (zend_class_entry *type TSRMLS_DC)
 
 PHP_METHOD(WKTReader, __construct)
 {
-	GEOSWKTReader* obj;
+    GEOSWKTReader* obj;
     zval *object = getThis();
 
-	obj = GEOSWKTReader_create();
+    obj = GEOSWKTReader_create();
     if ( ! obj ) {
         php_error_docref(NULL TSRMLS_CC, E_ERROR,
                 "GEOSWKTReader_create() failed (didn't initGEOS?)");
@@ -1704,10 +1704,10 @@ WKTWriter_create_obj (zend_class_entry *type TSRMLS_DC)
 
 PHP_METHOD(WKTWriter, __construct)
 {
-	GEOSWKTWriter* obj;
+    GEOSWKTWriter* obj;
     zval *object = getThis();
 
-	obj = GEOSWKTWriter_create();
+    obj = GEOSWKTWriter_create();
     if ( ! obj ) {
         php_error_docref(NULL TSRMLS_CC, E_ERROR,
                 "GEOSWKTWriter_create() failed (didn't initGEOS?)");
@@ -1742,11 +1742,6 @@ PHP_METHOD(WKTWriter, write)
     GEOSFree(wkt);
 
     RETURN_STRING(retstr, 0);
- 
-    /* return_value is a zval */
-    object_init_ex(return_value, Geometry_ce_ptr);
-    setRelay(return_value, geom);
-
 }
 
 PHP_METHOD(WKTWriter, setTrim)
@@ -1816,6 +1811,129 @@ PHP_METHOD(WKTWriter, setOld3D)
     val = bval;
     GEOSWKTWriter_setOld3D(writer, val);
 }
+
+/* -- class GEOSWKBWriter -------------------- */
+
+PHP_METHOD(WKBWriter, __construct);
+PHP_METHOD(WKBWriter, getOutputDimension);
+PHP_METHOD(WKBWriter, setOutputDimension);
+PHP_METHOD(WKBWriter, writeHEX);
+
+static function_entry WKBWriter_methods[] = {
+    PHP_ME(WKBWriter, __construct, NULL, 0)
+    PHP_ME(WKBWriter, getOutputDimension, NULL, 0)
+    PHP_ME(WKBWriter, setOutputDimension, NULL, 0)
+    PHP_ME(WKBWriter, writeHEX, NULL, 0)
+    {NULL, NULL, NULL}
+};
+
+static zend_class_entry *WKBWriter_ce_ptr;
+
+static zend_object_handlers WKBWriter_object_handlers;
+
+static void
+WKBWriter_dtor (void *object TSRMLS_DC)
+{
+    Proxy *obj = (Proxy *)object;
+    GEOSWKBWriter_destroy((GEOSWKBWriter*)obj->relay);
+
+    zend_hash_destroy(obj->std.properties);
+    FREE_HASHTABLE(obj->std.properties);
+
+    efree(obj);
+}
+
+static zend_object_value
+WKBWriter_create_obj (zend_class_entry *type TSRMLS_DC)
+{
+    return Gen_create_obj(type, WKBWriter_dtor, &WKBWriter_object_handlers);
+}
+
+/**
+ * GEOSWKBWriter w = new GEOSWKBWriter()
+ */
+PHP_METHOD(WKBWriter, __construct)
+{
+    GEOSWKBWriter* obj;
+    zval *object = getThis();
+
+    obj = GEOSWKBWriter_create();
+    if ( ! obj ) {
+        php_error_docref(NULL TSRMLS_CC, E_ERROR,
+                "GEOSWKBWriter_create() failed (didn't initGEOS?)");
+    }
+
+    setRelay(object, obj);
+}
+
+/**
+ * long GEOSWKBWriter::getOutputDimension();
+ */
+PHP_METHOD(WKBWriter, getOutputDimension)
+{
+    GEOSWKBWriter *writer;
+    long int ret;
+
+    writer = (GEOSWKBWriter*)getRelay(getThis(), WKBWriter_ce_ptr);
+
+    ret = GEOSWKBWriter_getOutputDimension(writer);
+
+    RETURN_LONG(ret);
+}
+
+/**
+ * void GEOSWKBWriter::setOutputDimension(dims);
+ */
+PHP_METHOD(WKBWriter, setOutputDimension)
+{
+    GEOSWKBWriter *writer;
+    long int dim;
+
+    writer = (GEOSWKBWriter*)getRelay(getThis(), WKBWriter_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "l", &dim)
+        == FAILURE)
+    {
+        RETURN_NULL();
+    }
+
+    GEOSWKBWriter_setOutputDimension(writer, dim);
+
+}
+
+/**
+ * string GEOSWKBWriter::writeHEX(GEOSGeometry)
+ */
+PHP_METHOD(WKBWriter, writeHEX)
+{
+    GEOSWKBWriter *writer;
+    zval *zobj;
+    GEOSGeometry *geom;
+    char *ret;
+    size_t retsize; /* useless... */
+    char* retstr;
+
+    writer = (GEOSWKBWriter*)getRelay(getThis(), WKBWriter_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zobj)
+        == FAILURE)
+    {
+        RETURN_NULL();
+    }
+
+    geom = getRelay(zobj, Geometry_ce_ptr);
+
+    ret = (char*)GEOSWKBWriter_writeHEX(writer, geom, &retsize);
+    /* we'll probably get an exception if ret is null */
+    if ( ! ret ) RETURN_NULL();
+
+    retstr = estrndup(ret, retsize);
+    GEOSFree(ret);
+
+    RETURN_STRING(retstr, 0);
+}
+
+
 
 /* -- Free functions ------------------------- */
 
@@ -1957,6 +2075,15 @@ PHP_MINIT_FUNCTION(geos)
     memcpy(&Geometry_object_handlers,
         zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     Geometry_object_handlers.clone_obj = NULL;
+
+    /* WKBWriter */
+    INIT_CLASS_ENTRY(ce, "GEOSWKBWriter", WKBWriter_methods);
+    WKBWriter_ce_ptr = zend_register_internal_class(&ce TSRMLS_CC);
+    WKBWriter_ce_ptr->create_object = WKBWriter_create_obj;
+    memcpy(&WKBWriter_object_handlers,
+        zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+    WKBWriter_object_handlers.clone_obj = NULL;
+
 
     /* Constants */
     REGISTER_LONG_CONSTANT("GEOSBUF_CAP_ROUND",  GEOSBUF_CAP_ROUND,
