@@ -841,6 +841,12 @@ GEOSWKTWriter_setOutputDimension(WKTWriter *writer, int dim)
 	GEOSWKTWriter_setOutputDimension_r(handle, writer, dim);
 }
 
+int
+GEOSWKTWriter_getOutputDimension(WKTWriter *writer)
+{
+	return GEOSWKTWriter_getOutputDimension_r(handle, writer);
+}
+
 void
 GEOSWKTWriter_setOld3D(WKTWriter *writer, int useOld3D)
 {

@@ -4131,6 +4131,41 @@ GEOSWKTWriter_setOutputDimension_r(GEOSContextHandle_t extHandle, WKTWriter *wri
     }
 }
 
+int
+GEOSWKTWriter_getOutputDimension_r(GEOSContextHandle_t extHandle, WKTWriter *writer)
+{
+    assert(0 != writer);
+
+    if ( 0 == extHandle )
+    {
+        return -1;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return -1;
+    }
+
+    int  dim = -1;
+
+    try
+    {
+        dim = writer->getOutputDimension();
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return dim;
+}
+
 void
 GEOSWKTWriter_setOld3D_r(GEOSContextHandle_t extHandle, WKTWriter *writer, int useOld3D)
 {

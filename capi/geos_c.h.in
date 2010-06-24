@@ -1007,6 +1007,7 @@ extern char GEOS_DLL *GEOSWKTWriter_write(GEOSWKTWriter* reader, const GEOSGeome
 extern void GEOS_DLL GEOSWKTWriter_setTrim(GEOSWKTWriter *writer, char trim);
 extern void GEOS_DLL GEOSWKTWriter_setRoundingPrecision(GEOSWKTWriter *writer, int precision);
 extern void GEOS_DLL GEOSWKTWriter_setOutputDimension(GEOSWKTWriter *writer, int dim);
+extern int  GEOS_DLL GEOSWKTWriter_getOutputDimension(GEOSWKTWriter *writer);
 extern void GEOS_DLL GEOSWKTWriter_setOld3D(GEOSWKTWriter *writer, int useOld3D);
 
 extern GEOSWKTWriter GEOS_DLL *GEOSWKTWriter_create_r(
@@ -1025,6 +1026,8 @@ extern void GEOS_DLL GEOSWKTWriter_setRoundingPrecision_r(GEOSContextHandle_t ha
 extern void GEOS_DLL GEOSWKTWriter_setOutputDimension_r(GEOSContextHandle_t handle,
                                                         GEOSWKTWriter *writer,
                                                         int dim);
+extern int  GEOS_DLL GEOSWKTWriter_getOutputDimension_r(GEOSContextHandle_t handle,
+                                                        GEOSWKTWriter *writer);
 extern void GEOS_DLL GEOSWKTWriter_setOld3D_r(GEOSContextHandle_t handle,
                                               GEOSWKTWriter *writer,
                                               int useOld3D);
