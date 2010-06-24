@@ -102,9 +102,10 @@ public:
 
 	/*
 	 * Sets the output dimension used by the <code>WKBWriter</code>.  
-     *
-     * @param newOutputDimension Supported values are 2 or 3.  Note that 3 indicates
-     * up to 3 dimensions will be written but 2D WKB is still produced for 2D geometries.
+	 *
+	 * @param newOutputDimension Supported values are 2 or 3. 
+	 * Note that 3 indicates up to 3 dimensions will be written but
+	 * 2D WKB is still produced for 2D geometries.
 	 */
 	virtual void setOutputDimension(int newOutputDimension);
 	
@@ -119,7 +120,7 @@ public:
 	 * Sets the byte order used by the
 	 * <code>WKBWriter</code>.
 	 */
-	virtual void setByteOrder(int newByteOrder) { byteOrder=newByteOrder; }
+	virtual void setByteOrder(int newByteOrder);
 
 	/*
 	 * \brief

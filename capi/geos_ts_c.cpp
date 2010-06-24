@@ -4576,6 +4576,10 @@ GEOSWKBWriter_setByteOrder_r(GEOSContextHandle_t extHandle, GEOSWKBWriter* write
         {
             writer->setByteOrder(newByteOrder);
         }
+        catch (const std::exception &e)
+        {
+            handle->ERROR_MESSAGE("%s", e.what());
+        }
         catch (...)
         {
             handle->ERROR_MESSAGE("Unknown exception thrown");

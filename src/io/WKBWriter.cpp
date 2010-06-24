@@ -206,13 +206,30 @@ WKBWriter::writeByteOrder()
 	{
 		buf[0] = WKBConstants::wkbNDR;
 	}
-	else
+	else 
 	{
 		buf[0] = WKBConstants::wkbXDR;
 	}
 
 	assert(outStream);
 	outStream->write(reinterpret_cast<char*>(buf), 1);
+}
+
+/* public */
+void
+WKBWriter::setByteOrder(int bo)
+{
+	if (bo != ByteOrderValues::ENDIAN_LITTLE &&
+	    bo != ByteOrderValues::ENDIAN_BIG )
+	{
+	    std::ostringstream os;
+		os << "WKB output dimension must be LITTLE ("
+		   << ByteOrderValues::ENDIAN_LITTLE
+		   << ") or BIG (" << ByteOrderValues::ENDIAN_BIG << ")";
+		throw util::IllegalArgumentException(os.str());
+	}
+
+	byteOrder = bo;
 }
 
 void
