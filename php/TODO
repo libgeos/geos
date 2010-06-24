@@ -2,9 +2,9 @@ In order of priority
 
 - Implement serialization/deserialization for Geometry
 - Documentation !! (doxygen-based?)
+- Add WKBReader::read and WKBWriter::write (binary strings required)
 - Find a way to have GEOSGeometry contents shown on var_dump
 - Use the re-entrant interface
-- Add interfaces for WKBReader/WKBWriter ?
 - Add interface for algorithms (Orientation Index) ?
 - Add interfaces for prepared geometries ?
 - Add interfaces for STRTree ?
