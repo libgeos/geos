@@ -1819,6 +1819,8 @@ PHP_METHOD(WKBWriter, getOutputDimension);
 PHP_METHOD(WKBWriter, setOutputDimension);
 PHP_METHOD(WKBWriter, getByteOrder);
 PHP_METHOD(WKBWriter, setByteOrder);
+PHP_METHOD(WKBWriter, setIncludeSRID);
+PHP_METHOD(WKBWriter, getIncludeSRID);
 PHP_METHOD(WKBWriter, writeHEX);
 
 static function_entry WKBWriter_methods[] = {
@@ -1827,6 +1829,8 @@ static function_entry WKBWriter_methods[] = {
     PHP_ME(WKBWriter, setOutputDimension, NULL, 0)
     PHP_ME(WKBWriter, getByteOrder, NULL, 0)
     PHP_ME(WKBWriter, setByteOrder, NULL, 0)
+    PHP_ME(WKBWriter, getIncludeSRID, NULL, 0)
+    PHP_ME(WKBWriter, setIncludeSRID, NULL, 0)
     PHP_ME(WKBWriter, writeHEX, NULL, 0)
     {NULL, NULL, NULL}
 };
@@ -1972,6 +1976,43 @@ PHP_METHOD(WKBWriter, setByteOrder)
 
 }
 
+/**
+ * bool GEOSWKBWriter::getIncludeSRID();
+ */
+PHP_METHOD(WKBWriter, getIncludeSRID)
+{
+    GEOSWKBWriter *writer;
+    int ret;
+    zend_bool retBool;
+
+    writer = (GEOSWKBWriter*)getRelay(getThis(), WKBWriter_ce_ptr);
+
+    ret = GEOSWKBWriter_getIncludeSRID(writer);
+    retBool = ret;
+
+    RETURN_BOOL(retBool);
+}
+
+/**
+ * void GEOSWKBWriter::setIncludeSRID(bool);
+ */
+PHP_METHOD(WKBWriter, setIncludeSRID)
+{
+    GEOSWKBWriter *writer;
+    int inc;
+    zend_bool incVal;
+
+    writer = (GEOSWKBWriter*)getRelay(getThis(), WKBWriter_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "b", &incVal)
+        == FAILURE)
+    {
+        RETURN_NULL();
+    }
+
+    inc = incVal;
+    GEOSWKBWriter_setIncludeSRID(writer, inc);
+}
 
 
 /* -- Free functions ------------------------- */
