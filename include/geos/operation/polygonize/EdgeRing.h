@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/polygonize/EdgeRing.java rev. 1.8 (JTS-1.10)
+ * Last port: operation/polygonize/EdgeRing.java rev. 109 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -78,8 +78,10 @@ private:
 
 public:
 	/**
+	 * \brief
 	 * Find the innermost enclosing shell EdgeRing
 	 * containing the argument EdgeRing, if any.
+	 *
 	 * The innermost enclosing ring is the <i>smallest</i> enclosing ring.
 	 * The algorithm used depends on the fact that:
 	 * 

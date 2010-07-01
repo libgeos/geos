@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/polygonize/EdgeRing.java rev. 1.8 (JTS-1.10)
+ * Last port: operation/polygonize/EdgeRing.java rev. 109 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -33,6 +33,7 @@
 #include <cassert>
 
 //#define DEBUG_ALLOC 1
+//#define GEOS_PARANOIA_LEVEL 2
 
 using namespace std;
 using namespace geos::planargraph;
@@ -48,13 +49,15 @@ EdgeRing *
 EdgeRing::findEdgeRingContaining(EdgeRing *testEr,
 	vector<EdgeRing*> *shellList)
 {
-	LinearRing *testRing=testEr->getRingInternal();
+	const LinearRing *testRing=testEr->getRingInternal();
 	if ( ! testRing ) return NULL;
 	const Envelope *testEnv=testRing->getEnvelopeInternal();
 	Coordinate testPt=testRing->getCoordinateN(0);
 	EdgeRing *minShell=NULL;
 	const Envelope *minEnv=NULL;
-	for(int i=0;i<(int)shellList->size();i++) {
+
+	typedef std::vector<EdgeRing*> ERList;
+	for(ERList::size_type i=0, e=shellList->size(); i<e; ++i) {
 		EdgeRing *tryShell=(*shellList)[i];
 		LinearRing *tryRing=tryShell->getRingInternal();
 		const Envelope *tryEnv=tryRing->getEnvelopeInternal();
@@ -74,7 +77,8 @@ EdgeRing::findEdgeRingContaining(EdgeRing *testEr,
 		if (tryEnv->contains(testEnv)
 			&& CGAlgorithms::isPointInRing(testPt, tryCoords))
 				isContained=true;
-		// check if this new containing ring is smaller than the current minimum ring
+		// check if this new containing ring is smaller
+		// than the current minimum ring
 		if (isContained) {
 			if (minShell==NULL || minEnv->contains(tryEnv)) {
 				minShell=tryShell;
@@ -115,16 +119,15 @@ EdgeRing::isInList(const Coordinate& pt,
 
 /*public*/
 EdgeRing::EdgeRing(const GeometryFactory *newFactory)
+	:
+	factory(newFactory),
+	ring(0),
+	ringPts(0),
+	holes(0)
 {
 #ifdef DEBUG_ALLOC
 	cerr<<"["<<this<<"] EdgeRing(factory)"<<endl;
 #endif // DEBUG_ALLOC
-
-	// cache the following data for efficiency
-	ring=NULL;
-	ringPts=NULL;
-	holes=NULL;
-	factory=newFactory;
 }
 
 EdgeRing::~EdgeRing()
@@ -217,8 +220,11 @@ EdgeRing::getRingInternal()
 	getCoordinates();
 	try {
 		ring=factory->createLinearRing(*ringPts);
-	} catch (...) {
-		return NULL;
+	} catch (const std::exception& e) {
+		// FIXME: print also ringPts
+		std::cerr << "EdgeRing::getRingInternal: "
+		          << e.what()
+		          << endl;
 	}
 	return ring;
 }
