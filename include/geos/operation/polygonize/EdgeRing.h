@@ -53,12 +53,16 @@ namespace polygonize { // geos::operation::polygonize
 class GEOS_DLL EdgeRing {
 private:
 	const geom::GeometryFactory *factory; 
-	std::vector<const planargraph::DirectedEdge*> *deList;
+
+	typedef std::vector<const planargraph::DirectedEdge*> DeList;
+	DeList deList;
 
 	// cache the following data for efficiency
 	geom::LinearRing *ring;
 	geom::CoordinateSequence *ringPts;
-	std::vector<geom::Geometry*> *holes;
+
+	typedef std::vector<geom::Geometry*> GeomVect;
+	GeomVect *holes;
 
 	/** \brief
 	 * Computes the list of coordinates which are contained in this ring.

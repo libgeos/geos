@@ -120,7 +120,6 @@ EdgeRing::EdgeRing(const GeometryFactory *newFactory)
 	cerr<<"["<<this<<"] EdgeRing(factory)"<<endl;
 #endif // DEBUG_ALLOC
 
-	deList=new vector<const DirectedEdge*>();
 	// cache the following data for efficiency
 	ring=NULL;
 	ringPts=NULL;
@@ -133,10 +132,10 @@ EdgeRing::~EdgeRing()
 #ifdef DEBUG_ALLOC
 	cerr<<"["<<this<<"] ~EdgeRing()"<<endl;
 #endif // DEBUG_ALLOC
-	delete deList;
 	if ( holes )
 	{
-		for (int i=0; i<(int)holes->size(); i++) delete (*holes)[i];
+		for (GeomVect::size_type i=0, e=holes->size(); i<e; ++i)
+			delete (*holes)[i];
 		delete holes;
 	}
 	delete ring;
@@ -146,7 +145,7 @@ EdgeRing::~EdgeRing()
 /*public*/
 void
 EdgeRing::add(const DirectedEdge *de){
-	deList->push_back(de);
+	deList.push_back(de);
 }
 
 /*public*/
@@ -162,7 +161,7 @@ EdgeRing::addHole(LinearRing *hole)
 {
 	if (holes==NULL)
 		holes=new vector<Geometry*>();
-	holes->push_back((Geometry *)hole);
+	holes->push_back(hole);
 }
 
 /*public*/
@@ -190,8 +189,8 @@ EdgeRing::getCoordinates()
 	if (ringPts==NULL)
 	{
 		ringPts=factory->getCoordinateSequenceFactory()->create(NULL);
-		for (int i=0;i<(int)deList->size();i++) {
-			const DirectedEdge *de=(*deList)[i];
+		for (DeList::size_type i=0, e=deList.size(); i<e; ++i) {
+			const DirectedEdge *de=deList[i];
 			assert(dynamic_cast<PolygonizeEdge*>(de->getEdge()));
 			PolygonizeEdge *edge=static_cast<PolygonizeEdge*>(de->getEdge());
 			addEdge(edge->getLine()->getCoordinatesRO(),
