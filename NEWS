@@ -20,6 +20,7 @@ Changes in 3.3.0
   - Invalid compound geometries reported as valid (#333)
   - Return up to 15 digits of precision from GEOSisValidReason_t (#329)
   - CAPI: do not leak contexts when using the non-reentrant interface
+  - Fix duplicated dangles returned by Polygonizer
 
 Changes in 3.2.0 
 
