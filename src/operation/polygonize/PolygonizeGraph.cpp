@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/polygonize/PolygonizeGraph.java rev. 1.6 (JTS-1.10)
+ * Last port: operation/polygonize/PolygonizeGraph.java rev. 6/138 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -30,6 +30,7 @@
 
 #include <cassert>
 #include <vector>
+#include <set>
 
 //using namespace std;
 using namespace geos::planargraph;
@@ -444,14 +445,13 @@ PolygonizeGraph::findEdgeRing(PolygonizeDirectedEdge *startDE)
 void
 PolygonizeGraph::deleteDangles(std::vector<const LineString*>& dangleLines)
 {
-	std::vector<Node*> *nodesToRemove=findNodesOfDegree(1);
 	std::vector<Node*> nodeStack;
-	for(int i=0;i<(int)nodesToRemove->size();i++) {
-		nodeStack.push_back((*nodesToRemove)[i]);
-	}
-	delete nodesToRemove;
+	findNodesOfDegree(1, nodeStack);
+
+	std::set<const LineString*> uniqueDangles;
+
 	while (!nodeStack.empty()) {
-		Node *node=nodeStack[nodeStack.size()-1];
+		Node *node=nodeStack.back(); 
 		nodeStack.pop_back();
 		deleteAllEdges(node);
 		std::vector<DirectedEdge*> &nodeOutEdges=node->getOutEdges()->getEdges();
@@ -465,13 +465,17 @@ PolygonizeGraph::deleteDangles(std::vector<const LineString*>& dangleLines)
 				sym->setMarked(true);
 			// save the line as a dangle
 			PolygonizeEdge *e=(PolygonizeEdge*) de->getEdge();
-			dangleLines.push_back(e->getLine());
+			const LineString* ls = e->getLine();
+			if ( uniqueDangles.insert(ls).second )
+				dangleLines.push_back(ls);
 			Node *toNode=de->getToNode();
-			// add the toNode to the list to be processed, if it is now a dangle
+			// add the toNode to the list to be processed,
+			// if it is now a dangle
 			if (getDegreeNonDeleted(toNode)==1)
 				nodeStack.push_back(toNode);
 		}
 	}
+
 }
 
 } // namespace geos.operation.polygonize

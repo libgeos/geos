@@ -952,16 +952,8 @@ class test extends PHPUnit_Framework_TestCase
             )');
 
         $g2 = $reader->read('POINT(0 0)');
-        $g = $g->union($g2); /* Make sure linestrings are noded */
 
         $ret = GEOSPolygonize($g);
-
-        /*
-         * NOTE: the following expected results are suspicious
-         *       due to the duplicated dangle and lack of a cut edge
-         */
-
-        //var_dump($ret);
 
         $this->assertEquals('array', gettype($ret));
         $this->assertEquals('array', gettype($ret['rings']));
@@ -969,31 +961,54 @@ class test extends PHPUnit_Framework_TestCase
         $this->assertEquals('array', gettype($ret['dangles']));
         $this->assertEquals('array', gettype($ret['invalid_rings']));
 
-        $this->assertEquals(3, count($ret['rings']));
+        $this->assertEquals(2, count($ret['rings']));
         $this->assertEquals(
-'POLYGON ((185 221, 132 146, 83 187, 185 221))'
+'POLYGON ((185 221, 88 275, 180 316, 292 281, 185 221))' # JTS-confirmed!
             , $writer->write($ret['rings'][0]));
         $this->assertEquals(
-'POLYGON ((132 146, 185 221, 325 168, 189 98, 132 146))'
+'POLYGON ((189 98, 83 187, 185 221, 325 168, 189 98))' # JTS-confirmed !
             , $writer->write($ret['rings'][1]));
-        $this->assertEquals(
-'POLYGON ((185 221, 88 275, 180 316, 292 281, 185 221))'
-            , $writer->write($ret['rings'][2]));
 
         $this->assertEquals(0, count($ret['cut_edges']));
 
-        $this->assertEquals(3, count($ret['dangles']));
+        $this->assertEquals(0, count($ret['invalid_rings']));
+
+        /*
+         * FIXME: the duplicated dangle (0 0, 10 10) is unexpected
+         */
+
+        $this->assertEquals(2, count($ret['dangles']));
+        $this->assertEquals(
+'LINESTRING (185 221, 100 100)' # JTS-confirmed !
+            , $writer->write($ret['dangles'][0]));
+        $this->assertEquals(
+'LINESTRING (0 0, 10 10)' # JTS-confirmed !
+            , $writer->write($ret['dangles'][1]));
+
+
+        ###########################################################
+
+        $g = $g->union($g2); /* Now make sure linestrings are noded */
+
+        $ret = GEOSPolygonize($g);
+
+        $this->assertEquals('array', gettype($ret));
+        $this->assertEquals('array', gettype($ret['rings']));
+        $this->assertEquals('array', gettype($ret['cut_edges']));
+        $this->assertEquals('array', gettype($ret['dangles']));
+        $this->assertEquals('array', gettype($ret['invalid_rings']));
+
+        $this->assertEquals(2, count($ret['dangles']));
         $this->assertEquals(
 'LINESTRING (132 146, 100 100)'
             , $writer->write($ret['dangles'][0]));
         $this->assertEquals(
 'LINESTRING (0 0, 10 10)'
             , $writer->write($ret['dangles'][1]));
-        $this->assertEquals(
-'LINESTRING (0 0, 10 10)'
-            , $writer->write($ret['dangles'][2]));
 
         $this->assertEquals(0, count($ret['invalid_rings']));
+
+	// TODO: test a polygonize run with cut lines and invalid_rings
 
     }
 

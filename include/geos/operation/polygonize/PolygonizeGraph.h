@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/polygonize/PolygonizeGraph.java rev. 1.6 (JTS-1.10)
+ * Last port: operation/polygonize/PolygonizeGraph.java rev. 6/138 (JTS-1.10)
  *
  **********************************************************************/
 

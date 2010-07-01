@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: planargraph/PlanarGraph.java rev. 107/138 (JTS-1.10)
+ *
  **********************************************************************/
 
 #include <geos/planargraph/PlanarGraph.h>
@@ -126,16 +130,21 @@ vector<Node*>*
 PlanarGraph::findNodesOfDegree(size_t degree)
 {
 	vector<Node*> *nodesFound=new vector<Node*>();
+	findNodesOfDegree(degree, *nodesFound);
+	return nodesFound;
+}
+
+/*public*/
+void
+PlanarGraph::findNodesOfDegree(size_t degree, vector<Node*>& nodesFound)
+{
 	NodeMap::container &nm=nodeMap.getNodeMap();
-//	NodeMap::container::iterator it=nm.begin();
-//	for ( ; it!=nm.end(); ++it) 
 	for (NodeMap::container::iterator it=nm.begin(), itEnd=nm.end();
 			it!=itEnd; ++it)
 	{
 		Node *node=it->second;
-		if (node->getDegree()==degree) nodesFound->push_back(node);
+		if (node->getDegree()==degree) nodesFound.push_back(node);
 	}
-	return nodesFound;
 }
 
 } // namespace planargraph

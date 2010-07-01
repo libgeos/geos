@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: planargraph/PlanarGraph.java rev. 107/138 (JTS-1.10)
+ *
  **********************************************************************/
 
 #ifndef GEOS_PLANARGRAPH_PLANARGRAPH_H
@@ -231,6 +235,14 @@ public:
  	 * The return value is a newly allocated vector of existing nodes
 	 */
 	std::vector<Node*>* findNodesOfDegree(std::size_t degree);
+
+	/**
+	 * \brief
+	 * Get all Nodes with the given number of Edges around it.
+	 *
+ 	 * Found nodes are pushed to the given vector
+	 */
+	void findNodesOfDegree(std::size_t degree, std::vector<Node*>& to);
 };
 
 } // namespace geos::planargraph
