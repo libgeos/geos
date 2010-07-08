@@ -11,6 +11,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/util/IllegalArgumentException.h>
 // std
 #include <sstream>
 #include <string>
@@ -119,6 +120,22 @@ namespace tut
                            std::string("LINESTRING Z (-117.0 33.0 2.0, -116.0 34.0 4.0)") );
     }
 
+    // 6 - invalid WKT (see http://trac.osgeo.org/geos/ticket/361)
+    template<>
+    template<>
+    void object::test<6>()
+    {         
+        GeomPtr geom;
+
+        try {
+            geom.reset(wktreader.read("POLYGON( EMPTY, (1 1,2 2,1 2,1 1))"));
+            ensure( !"Didn't get expected exception" );
+        } catch (const geos::util::IllegalArgumentException& ex) {
+            ensure( "Did get expected exception" );
+        } catch (...) {
+            ensure( !"Got unexpected exception" );
+	}
+    }
 } // namespace tut
 
 
