@@ -314,20 +314,13 @@ if test x"$use_php" = xtrue; then
 
 		AC_PATH_PROG(PHP, php) dnl for unit testing
 		AC_PATH_PROG(PHPUNIT, phpunit) dnl for unit testing
-
-		if test x"$PHP" != x -a x"$PHPUNIT" != x; then
-			can_test_php=true
-		else
-			AC_MSG_WARN([php or phpunit not found, php binding tests disabled])
-			can_test_php=false
-		fi
-
 	fi
 
 
 fi
 AM_CONDITIONAL(ENABLE_PHP, [ test x"$use_php" = xtrue ])
-AM_CONDITIONAL(ENABLE_PHP_TESTS, [ test x"$can_test_php" = xtrue ])
+AM_CONDITIONAL(HAVE_PHP, [ test x"$PHP" != x ])
+AM_CONDITIONAL(HAVE_PHP_UNIT, [ test x"$PHPUNIT" != x ])
 
 
 dnl --------------------------------------------------------------------
@@ -516,7 +509,16 @@ AC_OUTPUT([
 dnl -- echo "---------------------------------------"
 dnl -- echo "Boost UTF: $use_boost_utf"
 echo "Swig: $use_swig"
-echo "Python: $use_python"
-echo "Ruby: $use_ruby"
-echo "PHP: $use_php"
+echo "Python bindings: $use_python"
+echo "Ruby bindings: $use_ruby"
+
+echo "PHP bindings: $use_php"
+if test x"$use_php" = xtrue; then
+ echo " PHP: $PHP"
+ echo " PHPUNIT: $PHPUNIT"
+ if test x"$PHP" != x -o x"$PHPUNIT" != x; then
+   AC_MSG_WARN([PHP Unit testing disabled (missing PHP or PHPUNIT)])
+ fi
+fi
+
 dnl -- echo "---------------------------------------"
