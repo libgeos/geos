@@ -34,6 +34,7 @@
 #include "php_geos.h"
 
 PHP_MINIT_FUNCTION(geos);
+PHP_MSHUTDOWN_FUNCTION(geos);
 PHP_RINIT_FUNCTION(geos);
 PHP_RSHUTDOWN_FUNCTION(geos);
 PHP_MINFO_FUNCTION(geos);
@@ -53,7 +54,7 @@ zend_module_entry geos_module_entry = {
     PHP_GEOS_EXTNAME,
     geos_functions,
     PHP_MINIT(geos),              /* module init function */
-    NULL,                         /* module shutdown function */
+    PHP_MSHUTDOWN(geos),          /* module shutdown function */
     PHP_RINIT(geos),              /* request init function */
     PHP_RSHUTDOWN(geos),          /* request shutdown function */
     PHP_MINFO(geos),              /* module info function */
@@ -284,6 +285,100 @@ static function_entry Geometry_methods[] = {
 static zend_class_entry *Geometry_ce_ptr;
 
 static zend_object_handlers Geometry_object_handlers;
+
+/* Geometry serializer */
+
+static GEOSWKBWriter* Geometry_serializer = 0;
+
+static GEOSWKBWriter* getGeometrySerializer()
+{
+    if ( ! Geometry_serializer ) {
+        Geometry_serializer = GEOSWKBWriter_create();
+        GEOSWKBWriter_setIncludeSRID(Geometry_serializer, 1);
+        GEOSWKBWriter_setOutputDimension(Geometry_serializer, 3);
+    }
+    return Geometry_serializer;
+}
+
+static void delGeometrySerializer()
+{
+    if ( Geometry_serializer ) {
+        GEOSWKBWriter_destroy(Geometry_serializer);
+    }
+}
+
+/* Geometry deserializer */
+
+static GEOSWKBReader* Geometry_deserializer = 0;
+
+static GEOSWKBReader* getGeometryDeserializer()
+{
+    if ( ! Geometry_deserializer ) {
+        Geometry_deserializer = GEOSWKBReader_create();
+    }
+    return Geometry_deserializer;
+}
+
+static void delGeometryDeserializer()
+{
+    if ( Geometry_deserializer ) {
+        GEOSWKBReader_destroy(Geometry_deserializer);
+    }
+}
+
+/* Serializer function for GEOSGeometry */
+
+static int
+Geometry_serialize(zval *object, unsigned char **buffer, zend_uint *buf_len,
+        zend_serialize_data *data TSRMLS_DC)
+{
+    GEOSWKBWriter *serializer;
+    GEOSGeometry *geom;
+    char* ret;
+    size_t retsize;
+
+
+    printf("Geometry_serialize called\n");
+
+    serializer = getGeometrySerializer();
+    geom = (GEOSGeometry*)getRelay(object, Geometry_ce_ptr);
+
+    /* NOTE: we might be fine using binary here */
+    ret = (char*)GEOSWKBWriter_writeHEX(serializer, geom, &retsize);
+    /* we'll probably get an exception if ret is null */
+    if ( ! ret ) return FAILURE;
+
+    *buffer = (unsigned char*)estrndup(ret, retsize);
+    GEOSFree(ret);
+
+    *buf_len = retsize;
+
+    return SUCCESS; 
+}
+
+static int
+Geometry_deserialize(zval **object, zend_class_entry *ce, const unsigned char *buf,
+        zend_uint buf_len, zend_unserialize_data *data TSRMLS_DC)
+{
+    GEOSWKBReader* deserializer;
+    GEOSGeometry* geom;
+
+    printf("Geometry_deserialize called\n");
+
+    deserializer = getGeometryDeserializer();
+    geom = GEOSWKBReader_readHEX(deserializer, buf, buf_len);
+
+    /* TODO: check zend_class_entry being what we expect! */
+    if ( ce != Geometry_ce_ptr ) {
+        php_error_docref(NULL TSRMLS_CC, E_ERROR,
+                "Geometry_deserialize called with unexpected zend_class_entry");
+        return FAILURE;
+    }
+    object_init_ex(*object, ce);
+    setRelay(*object, geom);
+
+    return SUCCESS;
+}
 
 /*
  * Push components of the given geometry
@@ -2248,6 +2343,9 @@ PHP_MINIT_FUNCTION(geos)
     memcpy(&Geometry_object_handlers,
         zend_get_std_object_handlers(), sizeof(zend_object_handlers));
     Geometry_object_handlers.clone_obj = NULL;
+    /* Geometry serialization */
+    Geometry_ce_ptr->serialize = Geometry_serialize;
+    Geometry_ce_ptr->unserialize = Geometry_deserialize;
 
     /* WKBWriter */
     INIT_CLASS_ENTRY(ce, "GEOSWKBWriter", WKBWriter_methods);
@@ -2297,6 +2395,14 @@ PHP_MINIT_FUNCTION(geos)
     REGISTER_LONG_CONSTANT("GEOS_GEOMETRYCOLLECTION", GEOS_GEOMETRYCOLLECTION,
         CONST_CS|CONST_PERSISTENT);
 
+    return SUCCESS;
+}
+
+/* per-module shutdown */
+PHP_MSHUTDOWN_FUNCTION(geos)
+{
+    delGeometrySerializer();
+    delGeometryDeserializer();
     return SUCCESS;
 }
 
