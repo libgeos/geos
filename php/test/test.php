@@ -271,6 +271,25 @@ class test extends PHPUnit_Framework_TestCase
 
     }
 
+    public function testGeometry_serialization()
+    {
+        $reader = new GEOSWKTReader();
+
+        $writer = new GEOSWKTWriter();
+        $writer->setTrim(TRUE);
+        $writer->setOutputDimension(3);
+
+        $g = $reader->read('POINT(6 7 8)');
+        $g->setSRID(54);
+
+        $a = array('geom' => $g, 'name' => 'test geometry');
+        $srl = serialize($a);
+        $a2 = unserialize($srl);
+
+        $this->assertEquals('POINT Z (6 7 8)', $writer->write($a['geom']));
+
+    }
+
     public function testGeometry_project()
     {
         $reader = new GEOSWKTReader();

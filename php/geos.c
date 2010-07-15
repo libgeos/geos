@@ -338,8 +338,6 @@ Geometry_serialize(zval *object, unsigned char **buffer, zend_uint *buf_len,
     size_t retsize;
 
 
-    printf("Geometry_serialize called\n");
-
     serializer = getGeometrySerializer();
     geom = (GEOSGeometry*)getRelay(object, Geometry_ce_ptr);
 
@@ -362,8 +360,6 @@ Geometry_deserialize(zval **object, zend_class_entry *ce, const unsigned char *b
 {
     GEOSWKBReader* deserializer;
     GEOSGeometry* geom;
-
-    printf("Geometry_deserialize called\n");
 
     deserializer = getGeometryDeserializer();
     geom = GEOSWKBReader_readHEX(deserializer, buf, buf_len);
