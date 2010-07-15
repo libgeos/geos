@@ -10,6 +10,7 @@ Changes in 3.3.0
   - CAPI: GEOSPolygonize_full to return all informations computed by
           the polygonizer
   - CAPI: GEOSOrientationIndex
+  - PHP: new PHP5 bindings
 - C++ API changes:
   - Geometry::isWithinDistance method is now const
   - Polygonizer::getCutEdges returns by const ref
