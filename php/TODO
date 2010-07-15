@@ -1,10 +1,9 @@
 In order of priority
 
-- Add phpunit test for serialization/deserialization 
 - Find a way to have GEOSGeometry contents shown on var_dump
 - Documentation !! (doxygen-based?)
 - Add WKBReader::read and WKBWriter::write (binary strings required)
-- Use the re-entrant interface
+- Use the re-entrant C-API interface
 - Add interface for algorithms (Orientation Index) ?
 - Add interfaces for prepared geometries ?
 - Add interfaces for STRTree ?
