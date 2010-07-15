@@ -516,7 +516,7 @@ echo "PHP bindings: $use_php"
 if test x"$use_php" = xtrue; then
  echo " PHP: $PHP"
  echo " PHPUNIT: $PHPUNIT"
- if test x"$PHP" != x -o x"$PHPUNIT" != x; then
+ if test x"$PHP" = x -o x"$PHPUNIT" = x; then
    AC_MSG_WARN([PHP Unit testing disabled (missing PHP or PHPUNIT)])
  fi
 fi
