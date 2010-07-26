@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2010 Safe Software Inc.
  * Copyright (C) 2010 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2005 Refractions Research Inc.
@@ -370,12 +371,34 @@ IsValidOp::checkHolesInShell(const Polygon *p, GeometryGraph *graph)
 
 	const LinearRing *shell=static_cast<const LinearRing*>(
 			p->getExteriorRing());
+         
+	int nholes = p->getNumInteriorRing();
+
+	if(shell->isEmpty())
+	{
+		for(int i=0; i<nholes; ++i)
+		{
+			assert(dynamic_cast<const LinearRing*>(
+				p->getInteriorRingN(i)));
+
+			const LinearRing *hole=static_cast<const LinearRing*>(
+				p->getInteriorRingN(i));
+
+			if(!hole->isEmpty())
+			{
+				validErr=new TopologyValidationError(
+					TopologyValidationError::eHoleOutsideShell);
+				return;
+			}
+		}
+		// all interiors also empty or none exist
+		return;
+	}
 
 	//SimplePointInRing pir(shell);
 	//SIRtreePointInRing pir(shell);
 	MCPointInRing pir(shell);
 
-	int nholes = p->getNumInteriorRing();
 	for(int i=0; i<nholes; ++i)
 	{
 		assert(dynamic_cast<const LinearRing*>(
@@ -421,6 +444,9 @@ IsValidOp::checkHolesNotNested(const Polygon *p, GeometryGraph *graph)
 
 		const LinearRing *innerHole=static_cast<const LinearRing*>(
 				p->getInteriorRingN(i));
+   
+		//empty holes always pass
+		if(innerHole->isEmpty()) continue;
 
 		nestedTester.add(innerHole);
 	}
@@ -456,6 +482,8 @@ IsValidOp::checkShellsNotNested(const MultiPolygon *mp, GeometryGraph *graph)
 					mp->getGeometryN(j)));
 			const Polygon *p2=static_cast<const Polygon *>(
 					mp->getGeometryN(j));
+
+			if (shell->isEmpty() || p2->isEmpty()) continue;
 
 			checkShellNotNested(shell, p2, graph);
 
@@ -619,7 +647,7 @@ IsValidOp::checkClosedRings(const Polygon *poly)
 void
 IsValidOp::checkClosedRing(const LinearRing *ring)
 {
-	if ( ! ring->isClosed() )
+	if ( ! ring->isClosed() && ! ring->isEmpty() )
 	{
 		validErr = new TopologyValidationError(
 			TopologyValidationError::eRingNotClosed,

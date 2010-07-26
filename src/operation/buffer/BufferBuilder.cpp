@@ -7,6 +7,7 @@
  * Copyright (C) 2009 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2007 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2008-2010 Safe Software Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -314,13 +315,21 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    geomFact->destroyGeometry( singleSided );
    geomFact->destroyGeometry( intersectedLines );
 
-   if ( mergedLinesGeom->size() > 1 ) return geomFact->createMultiLineString( mergedLinesGeom );
-   else
+   if ( mergedLinesGeom->size() > 1 )
+   {      
+      return geomFact->createMultiLineString( mergedLinesGeom );
+   }
+   else if ( mergedLinesGeom->size() == 1 )
    {
-      // Must be a single line
+
       Geometry* single = (*mergedLinesGeom)[0];
       delete mergedLinesGeom;
       return single;
+   }
+   else
+   {
+      delete mergedLinesGeom;
+      return NULL;
    }
 }
 

@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2007-2010 Safe Software Inc.
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -259,6 +260,9 @@ ConnectedInteriorTester::visitShellInteriors(const Geometry *g, PlanarGraph &gra
 void
 ConnectedInteriorTester::visitInteriorRing(const LineString *ring, PlanarGraph &graph)
 {
+	// can't visit an empty ring
+	if(ring->isEmpty()) return;
+   
 	const CoordinateSequence *pts=ring->getCoordinatesRO();
 	const Coordinate& pt0=pts->getAt(0);
 
