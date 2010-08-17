@@ -4,6 +4,7 @@
  *
  * C-Wrapper for GEOS library
  *
+ * Copyright (C) 2010 Sean Gillies <sean.gillies@gmail.com>
  * Copyright (C) 2010 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  *
@@ -120,6 +121,8 @@ using geos::operation::geounion::CascadedPolygonUnion;
 
 using geos::algorithm::distance::DiscreteHausdorffDistance;
 
+using std::runtime_error;
+
 typedef std::auto_ptr<Geometry> GeomAutoPtr;
 
 typedef struct GEOSContextHandleInternal
@@ -162,6 +165,11 @@ char* gstrdup_s(const char* str, const std::size_t size)
     }
 
     assert(0 != out);
+    
+    // we haven't been checking allocation before ticket #371
+    if (0 == out)
+	      throw(runtime_error("Failed to allocate memory for duplicate string"));
+    
     return out;
 }
 
