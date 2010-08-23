@@ -4,10 +4,10 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2008-2010 Safe Software Inc.
  * Copyright (C) 2009 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2007 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2008-2010 Safe Software Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -238,7 +238,14 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
          // Use 98% of the buffer width as the point-distance requirement - this
          // is to ensure that the point that is "distance" +/- epsilon is not
          // included.
-         const double ptDistAllowance = 0.98 * distance;
+         //
+         // Let's try and estimate a more accurate bound instead of just assuming
+         // 98%. With 98%, the episilon grows as the buffer distance grows, 
+         // so that at large distance, artifacts may skip through this filter
+         // Let the length of the line play a factor in the distance, which is still 
+         // going to be bounded by 98%. Take 10% of the length of the line  from the buffer distance
+         // to try and minimize any artifacts.
+         const double ptDistAllowance = std::max(distance - l->getLength()*0.1, distance * 0.98);
          // Use 102% of the buffer width as the line-length requirement - this
          // is to ensure that line segments that is length "distance" +/-
          // epsilon is removed.
