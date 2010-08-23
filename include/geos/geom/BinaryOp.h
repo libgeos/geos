@@ -116,7 +116,7 @@ check_valid(const Geometry& g, const std::string& label)
 	operation::valid::IsValidOp ivo(&g);
 	if ( ! ivo.isValid() )
 	{
-		std::cerr << label << ": is invalid!"
+		std::cerr << label << " is INVALID: "
 			<< ivo.getValidationError()->toString() << std::endl;
 		return false;
 	} 
@@ -184,7 +184,7 @@ SnapOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 	GeomPtr result( _Op(snapG0.get(), snapG1.get()) );
 
 #if GEOS_DEBUG_BINARYOP
-	check_valid(*result, "Op result (before common-bits addition");
+	check_valid(*result, "SNAP: result (before common-bits addition");
 #endif
 
 #if CBR_BEFORE_SNAPPING
@@ -193,7 +193,7 @@ SnapOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 #endif
 
 #if GEOS_DEBUG_BINARYOP
-	check_valid(*result, "Op result (after common-bits addition");
+	check_valid(*result, "SNAP: result (after common-bits addition");
 #endif
 
 	return result;
@@ -237,7 +237,7 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 		precision::CommonBitsRemover cbr;
 
 #if GEOS_DEBUG_BINARYOP
-		std::cerr << "Trying with Common bits remover." << std::endl;
+		std::cerr << "Trying with Common Bits Remover (CBR)" << std::endl;
 #endif
 
 		cbr.add(g0);
@@ -247,20 +247,21 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 		rG1.reset( cbr.removeCommonBits(g1->clone()) );
 
 #if GEOS_DEBUG_BINARYOP
-		if ( ! rG0->isValid() )
-		{
-			std::cerr << " CBR: geom 0 is invalid!" << std::endl;
-		}
-
-		if ( ! rG1->isValid() )
-		{
-			std::cerr << " CBR: geom 1 is invalid!" << std::endl;
-		}
+		check_valid(*rG0, "CBR: geom 0 (after common-bits removal)");
+		check_valid(*rG1, "CBR: geom 1 (after common-bits removal)");
 #endif
 
 		ret.reset( _Op(rG0.get(), rG1.get()) );
 
+#if GEOS_DEBUG_BINARYOP
+		check_valid(*ret, "CBR: result (before common-bits addition)");
+#endif
+
 		cbr.addCommonBits( ret.get() );
+
+#if GEOS_DEBUG_BINARYOP
+		check_valid(*ret, "CBR: result (after common-bits addition)");
+#endif
 
 		return ret;
 	}
