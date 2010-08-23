@@ -146,9 +146,12 @@ SnapOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 	std::cerr<<"Computed snap tolerance: "<<snapTolerance<<std::endl;
 #endif
 
-	geos::precision::CommonBitsRemover cbr;
 
 #if CBR_BEFORE_SNAPPING
+	// Compute common bits
+	geos::precision::CommonBitsRemover cbr;
+	cbr.add(g0); cbr.add(g1);
+
 	// Now remove common bits
 	GeomPtr rG0( cbr.removeCommonBits(g0->clone()) );
 	GeomPtr rG1( cbr.removeCommonBits(g1->clone()) );
