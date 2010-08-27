@@ -58,12 +58,18 @@
 
 #include <geos/simplify/TopologyPreservingSimplifier.h>
 #include <geos/operation/valid/IsValidOp.h>
+#include <geos/operation/valid/TopologyValidationError.h>
 #include <geos/util/TopologyException.h>
 #include <geos/util.h>
 
 #include <memory> // for auto_ptr
 
 //#define GEOS_DEBUG_BINARYOP 1
+
+#ifdef GEOS_DEBUG_BINARYOP
+# include <iostream>
+# include <iomanip>
+#endif
 
 
 /*
@@ -101,6 +107,19 @@
 #endif
 
 /*
+ * Check validity of operation performed
+ * by common bits removal policy.
+ *
+ * This matches what EnhancedPrecisionOp does in JTS
+ * and fixes 5 tests of invalid outputs in our testsuite
+ * (stmlf-cases-20061020-invalid-output.xml)
+ * and breaks 1 test (robustness-invalid-output.xml) so much
+ * to prevent a result.
+ *
+ */
+//#define GEOS_CHECK_COMMONBITS_VALIDITY 1
+
+/*
  * Use snapping policy
  */
 #ifndef USE_SNAPPING_POLICY
@@ -116,8 +135,15 @@ check_valid(const Geometry& g, const std::string& label)
 	operation::valid::IsValidOp ivo(&g);
 	if ( ! ivo.isValid() )
 	{
+#ifdef GEOS_DEBUG_BINARYOP
+		using operation::valid::TopologyValidationError;
+		TopologyValidationError* err = ivo.getValidationError();
 		std::cerr << label << " is INVALID: "
-			<< ivo.getValidationError()->toString() << std::endl;
+			<< err->toString()
+			<< " (" << std::setprecision(20)
+			<< err->getCoordinate() << ")"
+			<< std::endl;
+#endif
 		return false;
 	} 
 	return true;
@@ -143,7 +169,7 @@ SnapOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 	// (not commonbits-removed) geoms
 	double snapTolerance = GeometrySnapper::computeOverlaySnapTolerance(*g0, *g1);
 #if GEOS_DEBUG_BINARYOP
-	std::cerr<<"Computed snap tolerance: "<<snapTolerance<<std::endl;
+	std::cerr<< std::setprecision(20) << "Computed snap tolerance: "<<snapTolerance<<std::endl;
 #endif
 
 
@@ -151,6 +177,9 @@ SnapOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 	// Compute common bits
 	geos::precision::CommonBitsRemover cbr;
 	cbr.add(g0); cbr.add(g1);
+#if GEOS_DEBUG_BINARYOP
+	std::cerr<<"Computed common bits: "<<cbr.getCommonCoordinate()<<std::endl;
+#endif
 
 	// Now remove common bits
 	GeomPtr rG0( cbr.removeCommonBits(g0->clone()) );
@@ -167,6 +196,7 @@ SnapOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 	const Geometry& operand0 = *g0
 	const Geometry& operand1 = *g1
 #endif
+
 
 	GeometrySnapper snapper0( operand0 );
 	GeomPtr snapG0( snapper0.snapTo(operand1, snapTolerance) );
@@ -230,6 +260,12 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 
 #ifdef USE_COMMONBITS_POLICY
 	// Try removing common bits (possibly obsoleted by snapping below)
+	//
+	// NOTE: this policy was _later_ implemented 
+	//       in JTS as EnhancedPrecisionOp
+	// TODO: consider using the now-ported EnhancedPrecisionOp
+	//       here too
+	// 
 	try
 	{
 		GeomPtr rG0;
@@ -257,11 +293,29 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 		check_valid(*ret, "CBR: result (before common-bits addition)");
 #endif
 
-		cbr.addCommonBits( ret.get() );
+		cbr.addCommonBits( ret.get() ); 
 
 #if GEOS_DEBUG_BINARYOP
-		check_valid(*ret, "CBR: result (after common-bits addition)");
+		check_valid(*ret, "CBR: result (before common-bits addition)");
 #endif
+
+#if GEOS_CHECK_COMMONBITS_VALIDITY
+		// check that result is a valid geometry after the
+		// reshift to orginal precision (see EnhancedPrecisionOp)
+		using operation::valid::IsValidOp;
+		using operation::valid::TopologyValidationError;
+		using util::TopologyException;
+		IsValidOp ivo(ret.get());
+		if ( ! ivo.isValid() )
+		{
+			TopologyValidationError* e = ivo.getValidationError();
+			throw TopologyException(
+				"Result of overlay became invalid "
+				"after re-addin common bits of operand "
+				"coordinates: " + e->toString(),
+			        e->getCoordinate());
+		}
+#endif // GEOS_CHECK_COMMONBITS_VALIDITY
 
 		return ret;
 	}
