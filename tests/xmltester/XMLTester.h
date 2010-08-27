@@ -42,8 +42,8 @@ private:
 	void runPredicates(const geom::Geometry *a, const geom::Geometry *b);
 	geom::Geometry *parseGeometry(const std::string &in, const char* label="parsed");
 	static std::string trimBlanks(const std::string &in);
-	void printGeom(std::ostream& os, geom::Geometry *g);
-	std::string printGeom(geom::Geometry *g);
+	void printGeom(std::ostream& os, const geom::Geometry *g);
+	std::string printGeom(const geom::Geometry *g);
 	void printTest(bool success, const std::string& expected_result, const std::string& actual_result);
 
 	geom::Geometry *gA;

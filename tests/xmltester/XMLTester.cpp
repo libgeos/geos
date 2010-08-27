@@ -650,13 +650,13 @@ XMLTester::parseCase(const TiXmlNode* node)
 
 /*private*/
 void
-XMLTester::printGeom(std::ostream& os, geom::Geometry *g)
+XMLTester::printGeom(std::ostream& os, const geom::Geometry *g)
 {
 	os << printGeom(g);
 }
 
 std::string
-XMLTester::printGeom(geom::Geometry *g)
+XMLTester::printGeom(const geom::Geometry *g)
 {
 	if ( HEXWKB_output )
 	{
