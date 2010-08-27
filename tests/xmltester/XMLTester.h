@@ -78,7 +78,7 @@ private:
 	bool sqlOutput;
 	bool HEXWKB_output;
 
-	void testValid(const geom::Geometry* g, const std::string& label);
+	bool testValid(const geom::Geometry* g, const std::string& label);
 
 public:
 	XMLTester();
