@@ -6,9 +6,9 @@
 #top_srcdir=@top_srcdir@
 #top_builddir=@top_builddir@
 
-TESTS = testrunner
+TESTS = testrunner invalid-testrunner
 
-CLEANFILES = testrunner
+CLEANFILES = testrunner invalid-testrunner
 
 EXTRA_DIST = testrunner.sh
 
@@ -20,7 +20,6 @@ SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
 	$(srcdir)/tests/TestIsValid.xml \
 	$(srcdir)/tests/robustness.xml \
 	$(srcdir)/tests/buffer.xml \
-	$(srcdir)/tests/test.xml \
 	$(srcdir)/tests/singlesidedbuffer.xml \
 	$(srcdir)/tests/bug176.xml \
 	$(srcdir)/tests/bug188.xml \
@@ -71,8 +70,15 @@ SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
 	$(srcdir)/tests/safe/16595.xml \
 	$(srcdir)/tests/safe/16596.xml
 
+INVALID_OUTPUT_XMLTESTS = \
+	$(srcdir)/tests/stmlf/stmlf-cases-20061020-invalid-output.xml \
+	$(srcdir)/tests/robustness-invalid-output.xml 
 
-XMLTESTS=$(SAFE_XMLTESTS) 
+# TODO:
+# tests/bug375.xml (detail of robustness-invalid-output.xml)
+# tests/bug358.xml
+
+XMLTESTS=$(SAFE_XMLTESTS) $(INVALID_OUTPUT_XMLTESTS)
 
 EXTRA_DIST += $(XMLTESTS)
 
@@ -111,11 +117,9 @@ INCLUDES += -I$(top_srcdir)/src/io/tinyxml -DTIXML_USE_STL
 static:
 	$(CXX) $(CXXFLAGS) -I../include -o staticXMLTester XMLTester.cpp MarkupSTL.o ../../src/geom/.libs/libgeos.a
 
-test: XMLTester
-	./XMLTester $(XMLTESTS) 
-
 testrunner: testrunner.sh Makefile
-	sh $(srcdir)/testrunner.sh $@ $(SAFE_XMLTESTS)
+	@sh $(srcdir)/testrunner.sh $@ --test-valid-output $(SAFE_XMLTESTS)
 
-verbose-test: XMLTester
-	./XMLTester -v $(XMLTESTS) 
+invalid-testrunner: testrunner.sh Makefile
+	@sh $(srcdir)/testrunner.sh $@ $(INVALID_OUTPUT_XMLTESTS)
+
