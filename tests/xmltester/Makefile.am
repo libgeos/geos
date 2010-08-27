@@ -71,14 +71,15 @@ SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
 	$(srcdir)/tests/safe/16596.xml
 
 INVALID_OUTPUT_XMLTESTS = \
-	$(srcdir)/tests/stmlf/stmlf-cases-20061020-invalid-output.xml \
-	$(srcdir)/tests/robustness-invalid-output.xml 
+	$(srcdir)/tests/stmlf/stmlf-cases-20061020-invalid-output.xml
+
+FAILING_XMLTESTS = \
+	$(srcdir)/tests/failure/TestOverlay.xml
 
 # TODO:
-# tests/bug375.xml (detail of robustness-invalid-output.xml)
 # tests/bug358.xml
 
-XMLTESTS=$(SAFE_XMLTESTS) $(INVALID_OUTPUT_XMLTESTS)
+XMLTESTS=$(SAFE_XMLTESTS) $(INVALID_OUTPUT_XMLTESTS) $(FAILING_XMLTESTS)
 
 EXTRA_DIST += $(XMLTESTS)
 

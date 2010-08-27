@@ -1,16 +1,9 @@
 <run>
-  <!-- first occurrence is used -->
   <precisionModel type="FLOATING" />
-  <precisionModel type="FLOATING_SINGLE" />
-  <precisionModel scale="1.0" offsetx="0.0" offsety="0.0"/>
-
- <case>
-<desc>
-postgis-users/2006-November/013743.html
-
-Filed as http://trac.osgeo.org/geos/ticket/375 in 2010 when
-discovering that the 'intersection' part of expected output was invalid.
-</desc>
+<case>
+  <desc>
+    http://postgis.refractions.net/pipermail/postgis-users/2006-November/013743.html
+  </desc>
 <a>
 POLYGON((5417148.108 5658342.603,5417139.016
 5658338.009,5417126.791 5658331.833,5417116.292 5658327.518,5417112.871
@@ -110,25 +103,10 @@ POLYGON((5417148.36 5658440.81,5417149.233
 5658458.01,5417144.32092232 5658453.13043826,5417144.321
 5658453.127,5417146.41 5658446.6,5417148.36 5658440.81))
 </b>
-
 <test>
-<op name="isValid" arg1="A">
-true
-</op>
+	<op name="difference" arg1="A" arg2="B">
+POLYGON EMPTY
+	</op>
 </test>
-
-<test>
-<op name="isValid" arg1="B">
-true
-</op>
-</test>
-
-<test>
-<op name="areatest">
-1
-</op>
-</test>
-
 </case>
-
 </run>
