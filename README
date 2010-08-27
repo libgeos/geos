@@ -74,6 +74,11 @@ Ruby bindings are fully supported. To build, use the --enable-ruby option
 when configuring:
 
   ./configure ... --enable-ruby
+
+PHP bindings are fully supported. To build, use the --enable-php option
+when configuring:
+
+  ./configure ... --enable-php
     
 Since version 3.0, the Python bindings are unsupported. Recommended options:
 
