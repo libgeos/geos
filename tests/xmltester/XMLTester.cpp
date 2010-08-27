@@ -797,7 +797,8 @@ XMLTester::parseTest(const TiXmlNode* node)
 
 			if (gRes->compareTo(gRealRes.get())==0) success=1;
 
-			if ( testValidOutput ) testValid(gRes.get(), "result");
+			if ( testValidOutput )
+				testValid(gRealRes.get(), "result");
 
 			actual_result=printGeom(gRealRes.get());
 			expected_result=printGeom(gRes.get());
@@ -819,7 +820,8 @@ XMLTester::parseTest(const TiXmlNode* node)
 
 			if (gRes->compareTo(gRealRes.get())==0) success=1;
 
-			if ( testValidOutput ) testValid(gRes.get(), "result");
+			if ( testValidOutput )
+				testValid(gRealRes.get(), "result");
 
 			actual_result=printGeom(gRealRes.get());
 			expected_result=printGeom(gRes.get());
@@ -841,7 +843,8 @@ XMLTester::parseTest(const TiXmlNode* node)
 
 			if (gRes->compareTo(gRealRes.get())==0) success=1;
 
-			if ( testValidOutput ) testValid(gRes.get(), "result");
+			if ( testValidOutput )
+				testValid(gRealRes.get(), "result");
 
 			actual_result=printGeom(gRealRes.get());
 			expected_result=printGeom(gRes.get());
@@ -863,7 +866,8 @@ XMLTester::parseTest(const TiXmlNode* node)
 
 			if (gRes->compareTo(gRealRes.get())==0) success=1;
 
-			if ( testValidOutput ) testValid(gRes.get(), "result");
+			if ( testValidOutput )
+				testValid(gRealRes.get(), "result");
 
 			actual_result=printGeom(gRealRes.get());
 			expected_result=printGeom(gRes.get());
@@ -938,7 +942,8 @@ XMLTester::parseTest(const TiXmlNode* node)
 
 			if (gRes->compareTo(gRealRes.get())==0) success=1;
 
-			if ( testValidOutput ) testValid(gRes.get(), "result");
+			if ( testValidOutput )
+				testValid(gRealRes.get(), "result");
 
 			actual_result=printGeom(gRealRes.get());
 			expected_result=printGeom(gRes.get());
@@ -961,7 +966,8 @@ XMLTester::parseTest(const TiXmlNode* node)
 
 			if (gRes->compareTo(gRealRes.get())==0) success=1;
 
-			if ( testValidOutput ) testValid(gRes.get(), "result");
+			if ( testValidOutput )
+				testValid(gRealRes.get(), "result");
 
 			actual_result=printGeom(gRealRes.get());
 			expected_result=printGeom(gRes.get());
@@ -993,7 +999,8 @@ XMLTester::parseTest(const TiXmlNode* node)
 
 			if (gRes->compareTo(gRealRes.get())==0) success=1;
 
-			if ( testValidOutput ) testValid(gRes.get(), "result");
+			if ( testValidOutput )
+				testValid(gRealRes.get(), "result");
 
 			actual_result=printGeom(gRealRes.get());
 			expected_result=printGeom(gRes.get());
@@ -1030,7 +1037,8 @@ XMLTester::parseTest(const TiXmlNode* node)
 			// Validate the buffer operation
 			success = checkBufferSuccess(*gRes, *gRealRes, dist);
 
-			if ( testValidOutput ) testValid(gRes.get(), "result");
+			if ( testValidOutput )
+				testValid(gRealRes.get(), "result");
 
 			actual_result=printGeom(gRealRes.get());
 			expected_result=printGeom(gRes.get());
@@ -1074,7 +1082,8 @@ XMLTester::parseTest(const TiXmlNode* node)
 			success = checkSingleSidedBufferSuccess(*gRes,
 					*gRealRes, dist);
 
-			if ( testValidOutput ) testValid(gRes.get(), "result");
+			if ( testValidOutput )
+				testValid(gRealRes.get(), "result");
 
 			actual_result=printGeom(gRealRes.get());
 			expected_result=printGeom(gRes.get());
@@ -1111,7 +1120,8 @@ XMLTester::parseTest(const TiXmlNode* node)
 			// Validate the buffer operation
 			success = checkBufferSuccess(*gRes, *gRealRes, dist);
 
-			if ( testValidOutput ) testValid(gRes.get(), "result");
+			if ( testValidOutput )
+				testValid(gRealRes.get(), "result");
 
 			actual_result=printGeom(gRealRes.get());
 			expected_result=printGeom(gRes.get());
@@ -1132,7 +1142,8 @@ XMLTester::parseTest(const TiXmlNode* node)
 
 			if (gRes->compareTo(gRealRes.get())==0) success=1;
 
-			if ( testValidOutput ) testValid(gRes.get(), "result");
+			if ( testValidOutput )
+				testValid(gRealRes.get(), "result");
 
 			actual_result=printGeom(gRealRes.get());
 			expected_result=printGeom(gRes.get());
@@ -1174,7 +1185,8 @@ XMLTester::parseTest(const TiXmlNode* node)
 
 			if (gRes->compareTo(gRealRes.get())==0) success=1;
 
-			if ( testValidOutput ) testValid(gRes.get(), "result");
+			if ( testValidOutput )
+				testValid(gRealRes.get(), "result");
 
 			actual_result=printGeom(gRealRes.get());
 			expected_result=printGeom(gRes.get());
@@ -1201,7 +1213,8 @@ XMLTester::parseTest(const TiXmlNode* node)
 
 			if (gRes->compareTo(gRealRes.get())==0) success=1;
 
-			if ( testValidOutput ) testValid(gRes.get(), "result");
+			if ( testValidOutput )
+				testValid(gRealRes.get(), "result");
 
 			actual_result=printGeom(gRealRes.get());
 			expected_result=printGeom(gRes.get());
@@ -1362,7 +1375,9 @@ XMLTester::parseTest(const TiXmlNode* node)
 	}
 	catch (...)
 	{
-		std::cerr<<"EXEPTION"<<std::endl;
+		std::cerr << "Unknown EXEPTION on case "
+		          << caseCount
+		          << std::endl;
 		actual_result = "Unknown exception thrown";
 	}
 
