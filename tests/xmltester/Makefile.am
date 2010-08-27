@@ -6,9 +6,9 @@
 #top_srcdir=@top_srcdir@
 #top_builddir=@top_builddir@
 
-TESTS = testrunner invalid-testrunner
+TESTS = testrunner
 
-CLEANFILES = testrunner invalid-testrunner
+CLEANFILES = testrunner 
 
 EXTRA_DIST = testrunner.sh
 
@@ -57,6 +57,7 @@ SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
 	$(srcdir)/tests/general/TestValid2-big.xml \
 	$(srcdir)/tests/general/TestWithinDistance.xml \
 	$(srcdir)/tests/stmlf/stmlf-cases-20061020.xml \
+	$(srcdir)/tests/stmlf/stmlf-cases-20061020-invalid-output.xml \
 	$(srcdir)/tests/stmlf/stmlf-cases-20070119.xml \
 	$(srcdir)/tests/robust/TestRobustOverlayFixed.xml \
 	$(srcdir)/tests/robust/TestRobustRelate.xml \
@@ -70,8 +71,7 @@ SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
 	$(srcdir)/tests/safe/16595.xml \
 	$(srcdir)/tests/safe/16596.xml
 
-INVALID_OUTPUT_XMLTESTS = \
-	$(srcdir)/tests/stmlf/stmlf-cases-20061020-invalid-output.xml
+INVALID_OUTPUT_XMLTESTS = 
 
 FAILING_XMLTESTS = \
 	$(srcdir)/tests/failure/TestOverlay.xml
@@ -120,7 +120,4 @@ static:
 
 testrunner: testrunner.sh Makefile
 	@sh $(srcdir)/testrunner.sh $@ --test-valid-output $(SAFE_XMLTESTS)
-
-invalid-testrunner: testrunner.sh Makefile
-	@sh $(srcdir)/testrunner.sh $@ $(INVALID_OUTPUT_XMLTESTS)
 

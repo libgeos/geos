@@ -117,7 +117,7 @@
  * to prevent a result.
  *
  */
-//#define GEOS_CHECK_COMMONBITS_VALIDITY 1
+#define GEOS_CHECK_COMMONBITS_VALIDITY 1
 
 /*
  * Use snapping policy
