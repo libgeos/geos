@@ -10,7 +10,7 @@ REM
 REM NOTE: DO NOT include this script in GEOS sources distribution
 REM
 
-set GEOS_HEADERS=source\headers\geos
+set GEOS_HEADERS=include\geos
 
 COPY %GEOS_HEADERS%\version.h.vc %GEOS_HEADERS%\version.h 
 COPY %GEOS_HEADERS%\platform.h.vc %GEOS_HEADERS%\platform.h
