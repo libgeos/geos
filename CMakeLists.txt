@@ -123,9 +123,9 @@ elseif(MSVC)
     endif()
     message(STATUS "Setting Visual Studio 2005+ option /MP to ${GEOS_MSVC_ENABLE_MP}")
     
-    # Disable C4996: 'function': was declared deprecated
     add_definitions(-D_SCL_SECURE_NO_WARNINGS)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+    add_definitions(-DNOMINMAX)
   endif()
 
 endif()
