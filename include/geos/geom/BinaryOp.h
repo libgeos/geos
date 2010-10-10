@@ -143,6 +143,8 @@ check_valid(const Geometry& g, const std::string& label)
 			<< " (" << std::setprecision(20)
 			<< err->getCoordinate() << ")"
 			<< std::endl;
+#else
+        (void)label;
 #endif
 		return false;
 	} 
