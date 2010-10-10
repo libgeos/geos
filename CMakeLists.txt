@@ -72,11 +72,13 @@ endif()
 # Setup C/C++ compiler options
 #################################################################################
 
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Debug CACHE STRING
+if(NOT MSVC_IDE)
+  if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug CACHE STRING
       "Choose the type of build, options are: None Debug Release" FORCE)
+  endif()
+  message(STATUS "Setting GEOS build type - ${CMAKE_BUILD_TYPE}")
 endif()
-message(STATUS "Setting GEOS build type - ${CMAKE_BUILD_TYPE}")
 
 if(CMAKE_BUILD_TYPE STREQUAL Debug)
   add_definitions(-D_DEBUG)
@@ -109,7 +111,6 @@ elseif(MSVC)
   # Set pedantic mode by default
   #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
   string(REGEX REPLACE "/W[0-9]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-  message(STATUS "Z: ${CMAKE_CXX_FLAGS}")
 
   if(MSVC80 OR MSVC90 OR MSVC10)
 
