@@ -4084,7 +4084,7 @@ GEOSWKTWriter_setTrim_r(GEOSContextHandle_t extHandle, WKTWriter *writer, char t
         return;
     }
 
-    writer->setTrim(trim);
+    writer->setTrim(0 != trim);
 }
 
 void
@@ -4190,7 +4190,7 @@ GEOSWKTWriter_setOld3D_r(GEOSContextHandle_t extHandle, WKTWriter *writer, int u
         return;
     }
 
-    writer->setOld3D(useOld3D);
+    writer->setOld3D(0 != useOld3D);
 }
 
 /* WKB Reader */
