@@ -245,7 +245,7 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
          // Let the length of the line play a factor in the distance, which is still 
          // going to be bounded by 98%. Take 10% of the length of the line  from the buffer distance
          // to try and minimize any artifacts.
-         const double ptDistAllowance = std::max(distance - l->getLength()*0.1, distance * 0.98);
+         const double ptDistAllowance = (std::max)(distance - l->getLength()*0.1, distance * 0.98);
          // Use 102% of the buffer width as the line-length requirement - this
          // is to ensure that line segments that is length "distance" +/-
          // epsilon is removed.
