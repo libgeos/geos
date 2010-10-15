@@ -73,7 +73,7 @@ namespace tut
         geom1_ = GEOSGeomFromWKT_r(handle_, "POLYGON EMPTY");
         /* ensure_equals(GEOSGetNumGeometries_r(handle_, geom2_), 0); */
         geom3_ = GEOSGeom_extractUniquePoints_r(handle_, geom1_);
-        ensure(GEOSisEmpty_r(handle_, geom3_));
+        ensure(0 != GEOSisEmpty_r(handle_, geom3_));
     }
 
     template<>
@@ -84,7 +84,7 @@ namespace tut
         geom2_ = GEOSGeomFromWKT_r(handle_, "MULTIPOINT(0 0, 1 1)");
         /* ensure_equals(GEOSGetNumGeometries_r(handle_, geom2_), 0); */
         geom3_ = GEOSGeom_extractUniquePoints_r(handle_, geom1_);
-        ensure(GEOSEquals_r(handle_, geom3_, geom2_));
+        ensure(0 != GEOSEquals_r(handle_, geom3_, geom2_));
     }
 
     template<>
@@ -95,7 +95,7 @@ namespace tut
         geom2_ = GEOSGeomFromWKT_r(handle_, "MULTIPOINT(0 0, 1 1, 2 2, 5 5, 0 2)");
         geom3_ = GEOSGeom_extractUniquePoints_r(handle_, geom1_);
         /* ensure_equals(GEOSGetNumGeometries_r(handle_, geom2_), 0); */
-        ensure(GEOSEquals_r(handle_, geom3_, geom2_));
+        ensure(0 != GEOSEquals_r(handle_, geom3_, geom2_));
     }
 
  

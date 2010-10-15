@@ -132,6 +132,7 @@ namespace tut
             ensure( !"Didn't get expected exception" );
         } catch (const geos::util::IllegalArgumentException& ex) {
             ensure( "Did get expected exception" );
+            ex.what();
         } catch (...) {
             ensure( !"Got unexpected exception" );
 	}

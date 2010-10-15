@@ -64,9 +64,9 @@ namespace tut
     void object::test<1>()
     {
         geom1_ = GEOSGeom_createEmptyPoint_r(handle_);
-        ensure(GEOSisEmpty_r(handle_, geom1_));
-	ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_POINT);
-	GEOSGeom_destroy(geom1_); geom1_=0;
+        ensure(0 != GEOSisEmpty_r(handle_, geom1_));
+        ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_POINT);
+        GEOSGeom_destroy(geom1_); geom1_=0;
     }
 
     // EMPTY linestring
@@ -75,9 +75,9 @@ namespace tut
     void object::test<2>()
     {
         geom1_ = GEOSGeom_createEmptyLineString_r(handle_);
-        ensure(GEOSisEmpty_r(handle_, geom1_));
-	ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_LINESTRING);
-	GEOSGeom_destroy(geom1_); geom1_=0;
+        ensure(0 != GEOSisEmpty_r(handle_, geom1_));
+        ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_LINESTRING);
+        GEOSGeom_destroy(geom1_); geom1_=0;
     }
     
 
@@ -87,9 +87,9 @@ namespace tut
     void object::test<3>()
     {
         geom1_ = GEOSGeom_createEmptyPolygon_r(handle_);
-        ensure(GEOSisEmpty_r(handle_, geom1_));
-	ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_POLYGON);
-	GEOSGeom_destroy(geom1_); geom1_=0;
+        ensure(0 != GEOSisEmpty_r(handle_, geom1_));
+        ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_POLYGON);
+        GEOSGeom_destroy(geom1_); geom1_=0;
     }
 
     // EMPTY multipoint
@@ -98,9 +98,9 @@ namespace tut
     void object::test<4>()
     {
         geom1_ = GEOSGeom_createEmptyCollection_r(handle_, GEOS_MULTIPOINT);
-        ensure(GEOSisEmpty_r(handle_, geom1_));
-	ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_MULTIPOINT);
-	GEOSGeom_destroy(geom1_); geom1_=0;
+        ensure(0 != GEOSisEmpty_r(handle_, geom1_));
+        ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_MULTIPOINT);
+        GEOSGeom_destroy(geom1_); geom1_=0;
     }
 
     // EMPTY multilinestring
@@ -109,9 +109,9 @@ namespace tut
     void object::test<5>()
     {
         geom1_ = GEOSGeom_createEmptyCollection_r(handle_, GEOS_MULTILINESTRING);
-        ensure(GEOSisEmpty_r(handle_, geom1_));
-	ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_MULTILINESTRING);
-	GEOSGeom_destroy(geom1_); geom1_=0;
+        ensure(0 != GEOSisEmpty_r(handle_, geom1_));
+        ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_MULTILINESTRING);
+        GEOSGeom_destroy(geom1_); geom1_=0;
     }
 
     // EMPTY multipolygon
@@ -120,9 +120,9 @@ namespace tut
     void object::test<6>()
     {
         geom1_ = GEOSGeom_createEmptyCollection_r(handle_, GEOS_MULTIPOLYGON);
-        ensure(GEOSisEmpty_r(handle_, geom1_));
-	ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_MULTIPOLYGON);
-	GEOSGeom_destroy(geom1_); geom1_=0;
+        ensure(0 != GEOSisEmpty_r(handle_, geom1_));
+        ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_MULTIPOLYGON);
+        GEOSGeom_destroy(geom1_); geom1_=0;
     }
 
     // EMPTY collection
@@ -131,9 +131,9 @@ namespace tut
     void object::test<7>()
     {
         geom1_ = GEOSGeom_createEmptyCollection_r(handle_, GEOS_GEOMETRYCOLLECTION);
-        ensure(GEOSisEmpty_r(handle_, geom1_));
-	ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_GEOMETRYCOLLECTION);
-	GEOSGeom_destroy(geom1_); geom1_=0;
+        ensure(0 != GEOSisEmpty_r(handle_, geom1_));
+        ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_GEOMETRYCOLLECTION);
+        GEOSGeom_destroy(geom1_); geom1_=0;
     }
 
 
