@@ -969,9 +969,9 @@ extern int GEOS_DLL GEOSGeomGetLength_r(GEOSContextHandle_t handle,
  * On exceptions, return 2.
  *
  */
-extern int GEOSOrientationIndex(double Ax, double Ay, double Bx, double By,
+extern int GEOS_DLL GEOSOrientationIndex(double Ax, double Ay, double Bx, double By,
 	double Px, double Py);
-extern int GEOSOrientationIndex_r(GEOSContextHandle_t handle,
+extern int GEOS_DLL GEOSOrientationIndex_r(GEOSContextHandle_t handle,
 	double Ax, double Ay, double Bx, double By, double Px, double Py);
 
 
