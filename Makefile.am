@@ -9,7 +9,6 @@
 # relies on the order items in SUBDIRS appear.
 #
 SUBDIRS =   \
-    build   \
     include \
     src     \
     capi    \
