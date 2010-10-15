@@ -205,7 +205,7 @@ WKTReader::getNextWord(StringTokenizer *tokenizer)
 
             while( --i >= 0 )
             {
-                word[i] = toupper(word[i]);
+                word[i] = static_cast<char>(toupper(word[i]));
             }
 			return word;
         }
