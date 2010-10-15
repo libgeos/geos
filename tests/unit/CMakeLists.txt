@@ -25,7 +25,7 @@ if(GEOS_ENABLE_TESTS)
   add_executable(geos_unit ${geos_unit_SOURCES})
   target_link_libraries(geos_unit geos geos_c)
 
-  add_test(geos_unit ${CMAKE_CURRENT_BINARY_DIR}/geos_unit)
+  add_test(geos_unit ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/geos_unit)
 
   set(STATUS_RESULT "ON")
 endif()
