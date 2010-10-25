@@ -388,26 +388,6 @@ dnl output stuff ----------------------------------------------------------
 
 AC_OUTPUT([
 	Makefile 
-	build/Makefile
-	build/msvc80/Makefile
-	build/msvc80/geos_c_dll/Makefile
-	build/msvc80/geos_lib/Makefile
-	build/msvc80/geos_python/Makefile
-	build/msvc80/geos_ruby/Makefile
-	build/msvc80/geos_unit/Makefile
-	build/msvc80/geos_xmltester/Makefile
-	build/msvc90/Makefile
-	build/msvc90/geos_c_dll/Makefile
-	build/msvc90/geos_lib/Makefile
-	build/msvc90/geos_python/Makefile
-	build/msvc90/geos_ruby/Makefile
-	build/msvc90/geos_unit/Makefile
-	build/msvc90/geos_xmltester/Makefile
-	build/msvc10/Makefile
-	build/msvc10/geos_c_dll/Makefile
-	build/msvc10/geos_lib/Makefile
-	build/msvc10/geos_unit/Makefile
-	build/msvc10/geos_xmltester/Makefile
 	capi/Makefile
 	capi/geos_c.h
 	doc/Doxyfile
