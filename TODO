@@ -14,7 +14,7 @@ GEOS TODO:
 - Implement Safe's idea of a compile-time enabled 2d-only
   inlineable CoordinateSequence
 
-- WKB extension with LINEARRIN ?
+- WKB extension with LINEARRING ?
 
 - Check how to disable GEOS_VERSION define on command line
   (or make GEOS_VERSION define in version.h optional)
