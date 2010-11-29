@@ -105,11 +105,16 @@ SharedPathsOp::findLinearIntersections(PathList& to)
   std::auto_ptr<Geometry> full ( OverlayOp::overlayOp(
     &_g1, &_g2, OverlayOp::opINTERSECTION) );
 
+  // NOTE: intersection of equal lines yelds splitted lines, 
+  //       should we sew them back ?
+
   for (size_t i=0, n=full->getNumGeometries(); i<n; ++i)
   {
     const Geometry* sub = full->getGeometryN(i);
     const LineString* path = dynamic_cast<const LineString*>(sub);
     if ( path ) { 
+      // NOTE: we're making a copy here, wouldn't be needed
+      //       for a simple predicate
       to.push_back(_gf.createLineString(*path).release());
     }
   }

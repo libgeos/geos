@@ -288,5 +288,39 @@ namespace tut
     ensure(forwDir.empty());
   }
 
+  // line-line (equals, forward)
+  template<> template<>
+  void object::test<16>()
+  {
+    GeomPtr g0(wktreader.read("LINESTRING(0 0, 5 10, 10 10)"));
+    GeomPtr g1(wktreader.read("LINESTRING(0 0, 5 10, 10 10)"));
+
+    forwDir.clear(); backDir.clear();
+    SharedPathsOp::sharedPathsOp(*g0, *g1, forwDir, backDir);
+    ensure_equals(forwDir.size(), 2u);
+    ensure_equals(wktwriter.write(forwDir[0]), "LINESTRING (0 0, 5 10)"); 
+    ensure_equals(wktwriter.write(forwDir[1]), "LINESTRING (5 10, 10 10)");
+    SharedPathsOp::clearEdges(forwDir);
+
+    ensure(backDir.empty());
+  }
+
+  // line-line (equals, backward)
+  template<> template<>
+  void object::test<17>()
+  {
+    GeomPtr g0(wktreader.read("LINESTRING( 0  0, 5 10, 10 10)"));
+    GeomPtr g1(wktreader.read("LINESTRING(10 10, 5 10,  0  0)"));
+
+    forwDir.clear(); backDir.clear();
+    SharedPathsOp::sharedPathsOp(*g0, *g1, forwDir, backDir);
+    ensure_equals(backDir.size(), 2u);
+    ensure_equals(wktwriter.write(backDir[0]), "LINESTRING (0 0, 5 10)"); 
+    ensure_equals(wktwriter.write(backDir[1]), "LINESTRING (5 10, 10 10)");
+    SharedPathsOp::clearEdges(backDir);
+
+    ensure(forwDir.empty());
+  }
+
 } // namespace tut
 
