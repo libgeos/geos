@@ -20,11 +20,12 @@
 #include <geos/operation/sharedpaths/SharedPathsOp.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/LineString.h>
+#include <geos/geom/MultiLineString.h>
 #include <geos/linearref/LinearLocation.h>
 #include <geos/linearref/LocationIndexOfPoint.h>
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/util/IllegalArgumentException.h>
-#include <geos/geom/util/LinearComponentExtracter.h>
+//#include <geos/geom/util/LinearComponentExtracter.h>
 
 using namespace geos::geom;
 
@@ -50,6 +51,19 @@ SharedPathsOp::SharedPathsOp(
   _g2(g2),
   _gf(*g1.getFactory())
 {
+  checkLinealInput(_g1);
+  checkLinealInput(_g2);
+}
+
+/* private */
+void
+SharedPathsOp::checkLinealInput(const geom::Geometry& g)
+{
+  if ( ! dynamic_cast<const LineString*>(&g) &&
+       ! dynamic_cast<const MultiLineString*>(&g) )
+  {
+    throw util::IllegalArgumentException("Geometry is not lineal");
+  }
 }
 
 /* public */

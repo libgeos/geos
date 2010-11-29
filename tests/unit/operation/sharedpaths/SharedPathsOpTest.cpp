@@ -11,6 +11,7 @@
 #include <geos/geom/LineString.h>
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTWriter.h>
+#include <geos/util/IllegalArgumentException.h>
 // std
 #include <memory>
 #include <string>
@@ -57,28 +58,34 @@ namespace tut
   // Test Cases
   //
 
-  // Point-Point (disjoint)
+  // Point (illegal arg)
   template<> template<>
   void object::test<1>()
   {
     GeomPtr g0(wktreader.read("POINT(0 0)"));
     GeomPtr g1(wktreader.read("POINT(1 1)"));
-    forwDir.clear(); backDir.clear();
-    SharedPathsOp::sharedPathsOp(*g0, *g1, forwDir, backDir);
-    ensure(forwDir.empty());
-    ensure(backDir.empty());
+    bool threw = false;
+    try {
+      SharedPathsOp::sharedPathsOp(*g0, *g1, forwDir, backDir);
+    } catch (const geos::util::IllegalArgumentException& ex) {
+      threw = true;
+    }
+    ensure(threw);
   }
 
-  // Point-Point (same)
+  // Poly (illegal arg)
   template<> template<>
   void object::test<2>()
   {
-    GeomPtr g0(wktreader.read("POINT(0 0)"));
-    GeomPtr g1(wktreader.read("POINT(0 0)"));
-    forwDir.clear(); backDir.clear();
-    SharedPathsOp::sharedPathsOp(*g0, *g1, forwDir, backDir);
-    ensure(forwDir.empty());
-    ensure(backDir.empty());
+    GeomPtr g0(wktreader.read("POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))"));
+    GeomPtr g1(wktreader.read("LINESTRING(0 0, 10 0)"));
+    bool threw = false;
+    try {
+      SharedPathsOp::sharedPathsOp(*g0, *g1, forwDir, backDir);
+    } catch (const geos::util::IllegalArgumentException& ex) {
+      threw = true;
+    }
+    ensure(threw);
   }
 
   // Line-Line (disjoint)

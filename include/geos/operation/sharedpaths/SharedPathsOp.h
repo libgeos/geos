@@ -122,11 +122,14 @@ private:
   bool isForward(const geom::LineString& edge,
                  const geom::Geometry& geom);
 
-  // Check if the given edge goes in the same direction over
-  // the two geometries.
+  /// Check if the given edge goes in the same direction over
+  /// the two geometries.
   bool isSameDirection(const geom::LineString& edge) {
     return (isForward(edge, _g1) == isForward(edge, _g2));
   }
+
+  /// Throw an IllegalArgumentException if the geom is not linear
+  void checkLinealInput(const geom::Geometry& g);
 
   const geom::Geometry& _g1;
   const geom::Geometry& _g2;
