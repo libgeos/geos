@@ -25,7 +25,6 @@
 #include <geos/linearref/LocationIndexOfPoint.h>
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/util/IllegalArgumentException.h>
-//#include <geos/geom/util/LinearComponentExtracter.h>
 
 using namespace geos::geom;
 
