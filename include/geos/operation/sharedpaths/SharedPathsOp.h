@@ -44,6 +44,9 @@ namespace sharedpaths { // geos.operation.sharedpaths
  * For each shared path report if it direction is the same
  * or opposite.
  *
+ * Paths reported as shared are given in the direction they
+ * appear in the first geometry.
+ *
  */
 class GEOS_DLL SharedPathsOp
 {
