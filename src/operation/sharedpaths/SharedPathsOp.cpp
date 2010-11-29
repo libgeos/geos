@@ -18,22 +18,116 @@
  **********************************************************************/
 
 #include <geos/operation/sharedpaths/SharedPathsOp.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/LineString.h>
+#include <geos/linearref/LinearLocation.h>
+#include <geos/linearref/LocationIndexOfPoint.h>
+#include <geos/operation/overlay/OverlayOp.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/geom/util/LinearComponentExtracter.h>
+
+using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
 namespace sharedpaths { // geos.operation.sharedpaths
 
-using namespace geos::geom;
-
 /* public static */
 void
-SharedPathsOp::getSharedPaths(const Geometry& g1, const Geometry& g2,
-		double tol,
-		std::vector<Geometry*>& sameDirection,
-		std::vector<Geometry*>& oppositeDirection)
+SharedPathsOp::sharedPathsOp(const Geometry& g1, const Geometry& g2,
+    double tol,
+    std::vector<Geometry*>& sameDirection,
+    std::vector<Geometry*>& oppositeDirection)
 {
-	throw geos::util::IllegalArgumentException("Not implemented yet");
+  SharedPathsOp sp(g1, g2);
+  sp.getSharedPaths(tol, sameDirection, oppositeDirection);
+}
+
+/* public */
+SharedPathsOp::SharedPathsOp(
+    const geom::Geometry& g1, const geom::Geometry& g2)
+  :
+  _g1(g1),
+  _g2(g2),
+  _gf(*g1.getFactory())
+{
+}
+
+/* public */
+void
+SharedPathsOp::getSharedPaths(double tol,
+    std::vector<Geometry*>& sameDirection,
+    std::vector<Geometry*>& oppositeDirection)
+{
+  EdgeList paths;
+  findLinearIntersections(paths);
+  for (size_t i=0, n=paths.size(); i<n; ++i)
+  {
+    LineString* path = paths[i];
+    if ( isSameDirection(*path) ) sameDirection.push_back(path);
+    else oppositeDirection.push_back(path);
+  }
+}
+
+/* static private */
+void
+SharedPathsOp::clearEdges(EdgeList& edges)
+{
+  for (EdgeList::const_iterator
+        i=edges.begin(), e=edges.end();
+        i!=e; ++i)
+  {
+    delete *i;
+  }
+  edges.clear();
+}
+
+/* private */
+void
+SharedPathsOp::findLinearIntersections(EdgeList& to)
+{
+  using geos::operation::overlay::OverlayOp;
+
+  // TODO: optionally use the tolerance,
+  //       snapping _g2 over _g1 ?
+
+  std::auto_ptr<Geometry> full ( OverlayOp::overlayOp(
+    &_g1, &_g2, OverlayOp::opINTERSECTION) );
+
+  for (size_t i=0, n=full->getNumGeometries(); i<n; ++i)
+  {
+    const Geometry* sub = full->getGeometryN(i);
+    const LineString* path = dynamic_cast<const LineString*>(sub);
+    if ( path ) { 
+      to.push_back(_gf.createLineString(*path).release());
+    }
+  }
+}
+
+/* private */
+bool
+SharedPathsOp::isForward(const geom::LineString& edge,
+                       const geom::Geometry& geom)
+{
+  using namespace geos::linearref;
+
+  /*
+     ALGO:
+      1. find first point of edge on geom (linearref)
+      2. find second point of edge on geom (linearref)
+      3. if first < second, we're forward
+
+     PRECONDITIONS:
+      1. edge has at least 2 points
+      2. edge first two points are not equal
+      3. geom is simple
+   */
+
+  const Coordinate& pt1 = edge.getCoordinateN(0);
+  const Coordinate& pt2 = edge.getCoordinateN(1);
+  LinearLocation l1 = LocationIndexOfPoint::indexOf(&geom, pt1);
+  LinearLocation l2 = LocationIndexOfPoint::indexOf(&geom, pt2);
+  return l1.compareTo(l2) < 0;
 }
 
 } // namespace geos.operation.sharedpaths
