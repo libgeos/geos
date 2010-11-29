@@ -36,6 +36,7 @@ CAPI_VERSION_PATCH=$CAPI_INTERFACE_REVISION
 CAPI_VERSION="$CAPI_VERSION_MAJOR.$CAPI_VERSION_MINOR.$CAPI_VERSION_PATCH"
 
 AM_INIT_AUTOMAKE([geos], [$VERSION], [no-define])
+AM_MAINTAINER_MODE
 AM_CONFIG_HEADER([include/config.h])
 AM_CONFIG_HEADER([include/geos/platform.h])
 AC_PROG_CC
@@ -459,6 +460,7 @@ AC_OUTPUT([
 	src/operation/polygonize/Makefile
 	src/operation/predicate/Makefile
 	src/operation/relate/Makefile
+	src/operation/sharedpaths/Makefile
 	src/operation/union/Makefile
 	src/operation/valid/Makefile
 	src/planargraph/Makefile
