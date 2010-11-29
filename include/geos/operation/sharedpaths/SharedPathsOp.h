@@ -15,6 +15,10 @@
  *
  * Last port: original work
  *
+ * Work done for Faunalia (http://www.faunalia.it) with fundings
+ * from Regione Toscana - Sistema Informativo per il Governo
+ * del Territorio e dell'Ambiente (RT-SIGTA).
+ *
  **********************************************************************/
 
 #ifndef GEOS_OPERATION_SHAREDPATHSOP_H
