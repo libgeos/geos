@@ -597,6 +597,22 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_extractUniquePoints_r(
                               GEOSContextHandle_t handle,
                               const GEOSGeometry* g);
 
+/*
+ * Find paths shared between the two given lineal geometries.
+ *
+ * Returns a GEOMETRYCOLLECTION having two elements:
+ * - first element is a MULTILINESTRING containing shared paths
+ *   having the _same_ direction on both inputs
+ * - second element is a MULTILINESTRING containing shared paths
+ *   having the _opposite_ direction on the two inputs
+ * 
+ * Returns NULL on exception
+ */
+extern GEOSGeometry GEOS_DLL *GEOSSharedPaths(const GEOSGeometry* g1,
+  const GEOSGeometry* g2);
+extern GEOSGeometry GEOS_DLL *GEOSSharedPaths_r(GEOSContextHandle_t handle,
+  const GEOSGeometry* g1, const GEOSGeometry* g2);
+
 /************************************************************************
  *
  *  Binary predicates - return 2 on exception, 1 on true, 0 on false

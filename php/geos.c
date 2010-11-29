@@ -41,11 +41,13 @@ PHP_MINFO_FUNCTION(geos);
 PHP_FUNCTION(GEOSVersion);
 PHP_FUNCTION(GEOSPolygonize);
 PHP_FUNCTION(GEOSLineMerge);
+PHP_FUNCTION(GEOSSharedPaths);
 
 static function_entry geos_functions[] = {
     PHP_FE(GEOSVersion, NULL)
     PHP_FE(GEOSPolygonize, NULL)
     PHP_FE(GEOSLineMerge, NULL)
+    PHP_FE(GEOSSharedPaths, NULL)
     {NULL, NULL, NULL}
 };
 
@@ -2307,6 +2309,32 @@ PHP_FUNCTION(GEOSLineMerge)
     array_init(return_value);
     dumpGeometry(geom_out, return_value);
     GEOSGeom_destroy(geom_out);
+}
+
+/**
+ * GEOSGeometry GEOSSharedPaths(GEOSGeometry $geom1, GEOSGeometry *geom2)
+ */
+PHP_FUNCTION(GEOSSharedPaths)
+{
+    GEOSGeometry *geom_in_1;
+    GEOSGeometry *geom_in_2;
+    GEOSGeometry *geom_out;
+    zval *zobj1, *zobj2;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "oo", &zobj1, &zobj2)
+        == FAILURE)
+    {
+        RETURN_NULL();
+    }
+    geom_in_1 = getRelay(zobj1, Geometry_ce_ptr);
+    geom_in_2 = getRelay(zobj2, Geometry_ce_ptr);
+
+    geom_out = GEOSSharedPaths(geom_in_1, geom_in_2);
+    if ( ! geom_out ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, geom_out);
 }
 
 /* ------ Initialization / Deinitialization / Meta ------------------ */

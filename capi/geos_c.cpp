@@ -1094,4 +1094,13 @@ GEOSOrientationIndex(double Ax, double Ay, double Bx, double By,
     return GEOSOrientationIndex_r(handle, Ax, Ay, Bx, By, Px, Py);
 }
 
+GEOSGeometry *
+GEOSSharedPaths(const GEOSGeometry* g1, const GEOSGeometry* g2)
+{
+    return GEOSSharedPaths_r(handle, g1, g2);
+}
+
+extern GEOSGeometry GEOS_DLL *GEOSSharedPaths_r(GEOSContextHandle_t handle,
+  const GEOSGeometry* g1, const GEOSGeometry* g2);
+
 } /* extern "C" */

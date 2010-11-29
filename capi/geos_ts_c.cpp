@@ -53,6 +53,7 @@
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/operation/buffer/BufferBuilder.h>
+#include <geos/operation/sharedpaths/SharedPathsOp.h>
 #include <geos/linearref/LengthIndexedLine.h>
 #include <geos/geom/BinaryOp.h>
 #include <geos/util/IllegalArgumentException.h>
@@ -5327,6 +5328,79 @@ int GEOSOrientationIndex_r(GEOSContextHandle_t extHandle,
     }
 }
 
+GEOSGeometry *
+GEOSSharedPaths_r(GEOSContextHandle_t extHandle, const GEOSGeometry* g1, const GEOSGeometry* g2)
+{
+    using namespace geos::operation::sharedpaths;
+
+    if ( 0 == extHandle ) return 0;
+    GEOSContextHandleInternal_t *handle =
+      reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( handle->initialized == 0 ) return 0;
+
+    SharedPathsOp::PathList forw, back;
+    try {
+      SharedPathsOp::sharedPathsOp(*g1, *g2, forw, back);
+    } 
+    catch (const std::exception &e)
+    {
+        SharedPathsOp::clearEdges(forw);
+        SharedPathsOp::clearEdges(back);
+        handle->ERROR_MESSAGE("%s", e.what());
+        return 0;
+    }
+    catch (...)
+    {
+        SharedPathsOp::clearEdges(forw);
+        SharedPathsOp::clearEdges(back);
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+        return 0;
+    }
+
+    // Now forw and back have the geoms we want to use to construct
+    // our output GeometryCollections...
+
+    const GeometryFactory* factory = g1->getFactory();
+    size_t count;
+
+    std::auto_ptr< std::vector<Geometry*> > out1(
+      new std::vector<Geometry*>()
+    );
+    count = forw.size();
+    out1->reserve(count);
+    for (size_t i=0; i<count; ++i) {
+        out1->push_back(forw[i]);
+    }
+    std::auto_ptr<Geometry> out1g (
+      factory->createMultiLineString(out1.release())
+    );
+
+    std::auto_ptr< std::vector<Geometry*> > out2(
+      new std::vector<Geometry*>()
+    );
+    count = back.size();
+    out2->reserve(count);
+    for (size_t i=0; i<count; ++i) {
+        out2->push_back(back[i]);
+    }
+    std::auto_ptr<Geometry> out2g (
+      factory->createMultiLineString(out2.release())
+    );
+
+    std::auto_ptr< std::vector<Geometry*> > out(
+      new std::vector<Geometry*>()
+    );
+    out->reserve(2);
+    out->push_back(out1g.release());
+    out->push_back(out2g.release());
+
+    std::auto_ptr<Geometry> outg (
+      factory->createGeometryCollection(out.release())
+    );
+
+    return outg.release();
+
+}
 
 } /* extern "C" */
 

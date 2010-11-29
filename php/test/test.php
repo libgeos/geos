@@ -1055,6 +1055,21 @@ class test extends PHPUnit_Framework_TestCase
 
     }
 
+    public function testGeometry_sharedPaths()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        /* LINE - LINE */
+        $g1 = $reader->read('LINESTRING(0 0, 50 0)');
+        $g2 = $reader->read('MULTILINESTRING((5 0, 15 0),(40 0, 30 0))');
+        $gs = GEOSSharedPaths($g1, $g2);
+        $this->assertEquals(
+'GEOMETRYCOLLECTION (MULTILINESTRING ((5 0, 15 0)), MULTILINESTRING ((30 0, 40 0)))'
+            , $writer->write($gs));
+    }
+
     public function testGeometry_simplify()
     {
         $reader = new GEOSWKTReader();
@@ -2011,4 +2026,5 @@ class test extends PHPUnit_Framework_TestCase
         $this->assertEquals(53, $g->getSRID());
 
     }
+
 }
