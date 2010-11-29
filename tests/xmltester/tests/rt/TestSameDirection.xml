@@ -1,0 +1,123 @@
+<run>
+  <precisionModel type="FLOATING" />
+
+   <case>
+      <desc>equal lines</desc>
+      <a>
+LINESTRING(0 0, 10 0)
+      </a>
+      <b>
+LINESTRING(0 0, 10 0)
+      </b>
+      <test>
+         <op name="sameDirection" arg1="A" arg2="B">true</op>
+      </test>
+   </case>
+
+   <case>
+      <desc>disjoint lines</desc>
+      <a>
+LINESTRING(0 0, 10 0)
+      </a>
+      <b>
+LINESTRING(0 1, 10 1)
+      </b>
+      <test>
+         <op name="sameDirection" arg1="A" arg2="B">false</op>
+      </test>
+   </case>
+
+   <case>
+      <desc>overlapping lines, sharing vertices</desc>
+      <a>
+LINESTRING(0 0, 5 0, 10 0)
+      </a>
+      <b>
+LINESTRING(5 0, 10 0, 15 0)
+      </b>
+      <test>
+         <op name="sameDirection" arg1="A" arg2="B">true</op>
+      </test>
+   </case>
+
+   <case>
+      <desc>overlapping lines, no shared vertices</desc>
+      <a>
+LINESTRING(0 0, 10 0)
+      </a>
+      <b>
+LINESTRING(5 0, 15 0)
+      </b>
+      <test>
+         <op name="sameDirection" arg1="A" arg2="B">true</op>
+      </test>
+   </case>
+
+   <case>
+      <desc>equal lines, opposite direction</desc>
+      <a>
+LINESTRING(0 0, 10 0)
+      </a>
+      <b>
+LINESTRING(10 0, 0 0)
+      </b>
+      <test>
+         <op name="sameDirection" arg1="A" arg2="B">false</op>
+      </test>
+   </case>
+
+   <case>
+      <desc>overlapping lines, sharing vertices, opposite direction</desc>
+      <a>
+LINESTRING(0 0, 5 0, 10 0)
+      </a>
+      <b>
+LINESTRING(15 0, 10 0, 5 0)
+      </b>
+      <test>
+         <op name="sameDirection" arg1="A" arg2="B">false</op>
+      </test>
+   </case>
+
+   <case>
+      <desc>overlapping lines, no shared vertices opposite direction</desc>
+      <a>
+LINESTRING(0 0, 10 0)
+      </a>
+      <b>
+LINESTRING(15 0, 5 0)
+      </b>
+      <test>
+         <op name="sameDirection" arg1="A" arg2="B">false</op>
+      </test>
+   </case>
+
+   <case>
+      <desc>multiple overlaps all same direction</desc>
+      <a>
+LINESTRING(0 0, 30 0)
+      </a>
+      <b>
+LINESTRING(0 0, 10 0, 10 10, 20 10, 20 0, 30 0)
+      </b>
+      <test>
+         <op name="sameDirection" arg1="A" arg2="B">true</op>
+      </test>
+   </case>
+
+   <case>
+      <desc>multiple overlaps mixed direction</desc>
+      <a>
+LINESTRING(0 0, 30 0)
+      </a>
+      <b>
+LINESTRING(0 0, 10 0, 10 10, 30 10, 30 0, 20 0)
+      </b>
+      <test>
+         <op name="sameDirection" arg1="A" arg2="B">false</op>
+      </test>
+   </case>
+
+ <!-- TODO: multipart geoms -->
+
+</run>
