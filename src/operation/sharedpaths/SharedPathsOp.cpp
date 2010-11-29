@@ -35,12 +35,11 @@ namespace sharedpaths { // geos.operation.sharedpaths
 /* public static */
 void
 SharedPathsOp::sharedPathsOp(const Geometry& g1, const Geometry& g2,
-    double tol,
-    std::vector<Geometry*>& sameDirection,
-    std::vector<Geometry*>& oppositeDirection)
+    PathList& sameDirection,
+    PathList& oppositeDirection)
 {
   SharedPathsOp sp(g1, g2);
-  sp.getSharedPaths(tol, sameDirection, oppositeDirection);
+  sp.getSharedPaths(sameDirection, oppositeDirection);
 }
 
 /* public */
@@ -55,25 +54,23 @@ SharedPathsOp::SharedPathsOp(
 
 /* public */
 void
-SharedPathsOp::getSharedPaths(double tol,
-    std::vector<Geometry*>& sameDirection,
-    std::vector<Geometry*>& oppositeDirection)
+SharedPathsOp::getSharedPaths(PathList& forwDir, PathList& backDir)
 {
-  EdgeList paths;
+  PathList paths;
   findLinearIntersections(paths);
   for (size_t i=0, n=paths.size(); i<n; ++i)
   {
     LineString* path = paths[i];
-    if ( isSameDirection(*path) ) sameDirection.push_back(path);
-    else oppositeDirection.push_back(path);
+    if ( isSameDirection(*path) ) forwDir.push_back(path);
+    else backDir.push_back(path);
   }
 }
 
 /* static private */
 void
-SharedPathsOp::clearEdges(EdgeList& edges)
+SharedPathsOp::clearEdges(PathList& edges)
 {
-  for (EdgeList::const_iterator
+  for (PathList::const_iterator
         i=edges.begin(), e=edges.end();
         i!=e; ++i)
   {
@@ -84,7 +81,7 @@ SharedPathsOp::clearEdges(EdgeList& edges)
 
 /* private */
 void
-SharedPathsOp::findLinearIntersections(EdgeList& to)
+SharedPathsOp::findLinearIntersections(PathList& to)
 {
   using geos::operation::overlay::OverlayOp;
 

@@ -49,6 +49,9 @@ class GEOS_DLL SharedPathsOp
 {
 public:
 
+  /// LineString vector (list of edges)
+  typedef std::vector<geom::LineString*> PathList;
+
   /// Find paths shared between two linear geometries
   //
   /// @param g1
@@ -56,10 +59,6 @@ public:
   ///
   /// @param g2
   ///   Second geometry. Must be linear.
-  ///
-  /// @param tol
-  ///   Tolerance by which very close paths are considered shared.
-  ///   TODO: specify more about the semantic, check SnapOp 
   ///
   /// @param sameDir
   ///   Shared edges having the same direction are pushed
@@ -73,9 +72,8 @@ public:
   ///
   static void sharedPathsOp(const geom::Geometry& g1,
                             const geom::Geometry& g2,
-                            double tol,
-                            std::vector<geom::Geometry*>& sameDirection,
-                            std::vector<geom::Geometry*>& oppositeDirection);
+                            PathList& sameDirection,
+                            PathList& oppositeDirection);
 
   /// Constructor
   //
@@ -87,12 +85,8 @@ public:
   ///
   SharedPathsOp(const geom::Geometry& g1, const geom::Geometry& g2);
 
-  /// Get shared paths gith a given tolerance 
+  /// Get shared paths 
   //
-  /// @param tol
-  ///   Tolerance by which very close paths are considered shared.
-  ///   TODO: specify more about the semantic, check SnapOp 
-  ///
   /// @param sameDir
   ///   Shared edges having the same direction are pushed
   ///   onto this vector. They'll be of type geom::LineString.
@@ -103,17 +97,12 @@ public:
   ///   onto this vector. They'll be of type geom::LineString.
   ///   Ownership of the edges is tranferred.
   ///
-  void getSharedPaths(double tolerance,
-                      std::vector<geom::Geometry*>& sameDirection,
-                      std::vector<geom::Geometry*>& oppositeDirection);
-
-private:
-
-  /// LineString vector (list of edges)
-  typedef std::vector<geom::LineString*> EdgeList;
+  void getSharedPaths(PathList& sameDirection, PathList& oppositeDirection);
 
   /// Delete all edges in the list
-  static void clearEdges(EdgeList& from);
+  static void clearEdges(PathList& from);
+
+private:
 
   /// Get all the linear intersections
   //
@@ -121,7 +110,7 @@ private:
   /// is transferred to caller. See clearEdges for a deep
   /// release if you need one.
   ///
-  void findLinearIntersections(EdgeList& to);
+  void findLinearIntersections(PathList& to);
 
   /// Check if the given edge goes forward or backward on the given line.
   //
