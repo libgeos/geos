@@ -211,5 +211,75 @@ namespace tut
     SharedPathsOp::clearEdges(backDir);
   }
 
+  // MultiLine-Line (back and forth)
+  template<> template<>
+  void object::test<12>()
+  {
+    GeomPtr g0(wktreader.read("MULTILINESTRING((-10 0, -5 0),(10 0, 5 0))"));
+    GeomPtr g1(wktreader.read("LINESTRING(-15 0, 15 0)"));
+    forwDir.clear(); backDir.clear();
+    SharedPathsOp::sharedPathsOp(*g0, *g1, forwDir, backDir);
+
+    ensure_equals(forwDir.size(), 1u);
+    ensure_equals(wktwriter.write(forwDir[0]), "LINESTRING (-10 0, -5 0)");
+    SharedPathsOp::clearEdges(forwDir);
+
+    ensure_equals(backDir.size(), 1u);
+    ensure_equals(wktwriter.write(backDir[0]), "LINESTRING (10 0, 5 0)");
+    SharedPathsOp::clearEdges(backDir);
+  }
+
+  // MultiLine-MultiLine (back and forth)
+  template<> template<>
+  void object::test<13>()
+  {
+    GeomPtr g0(wktreader.read("MULTILINESTRING((-10 0, -5 0),(10 0, 5 0))"));
+    GeomPtr g1(wktreader.read("MULTILINESTRING((-8 0, -2 0),(6 0, 12 0))"));
+    forwDir.clear(); backDir.clear();
+    SharedPathsOp::sharedPathsOp(*g0, *g1, forwDir, backDir);
+
+    ensure_equals(forwDir.size(), 1u);
+    ensure_equals(wktwriter.write(forwDir[0]), "LINESTRING (-8 0, -5 0)");
+    SharedPathsOp::clearEdges(forwDir);
+
+    ensure_equals(backDir.size(), 1u);
+    ensure_equals(wktwriter.write(backDir[0]), "LINESTRING (10 0, 6 0)");
+    SharedPathsOp::clearEdges(backDir);
+  }
+
+  // MultiLine-MultiLine (forth and forth)
+  template<> template<>
+  void object::test<14>()
+  {
+    GeomPtr g0(wktreader.read("MULTILINESTRING((-10 0, -5 0),(10 0, 5 0))"));
+    GeomPtr g1(wktreader.read("MULTILINESTRING((-8 0, -2 0),(12 0, 6 0))"));
+    forwDir.clear(); backDir.clear();
+    SharedPathsOp::sharedPathsOp(*g0, *g1, forwDir, backDir);
+
+    ensure_equals(forwDir.size(), 2u);
+    ensure_equals(wktwriter.write(forwDir[0]), "LINESTRING (-8 0, -5 0)");
+    ensure_equals(wktwriter.write(forwDir[1]), "LINESTRING (10 0, 6 0)");
+    SharedPathsOp::clearEdges(forwDir);
+
+    ensure(backDir.empty());
+  }
+
+  // MultiLine-MultiLine (back and back)
+  template<> template<>
+  void object::test<15>()
+  {
+    GeomPtr g0(wktreader.read("MULTILINESTRING((-10 0, -5 0),(10 0, 5 0))"));
+    GeomPtr g1(wktreader.read("MULTILINESTRING((6 0, 12 0),(-2 0, -8 0))"));
+    forwDir.clear(); backDir.clear();
+    SharedPathsOp::sharedPathsOp(*g0, *g1, forwDir, backDir);
+
+    ensure_equals(backDir.size(), 2u);
+    ensure_equals(wktwriter.write(backDir[0]), "LINESTRING (-8 0, -5 0)");
+    ensure_equals(wktwriter.write(backDir[1]), "LINESTRING (10 0, 6 0)");
+    SharedPathsOp::clearEdges(backDir);
+
+    ensure(forwDir.empty());
+  }
+
 } // namespace tut
 
