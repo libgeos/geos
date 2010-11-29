@@ -11,6 +11,7 @@ SUBDIRS = \
     predicate \
     relate \
     union \
+    sharedpaths \
     valid 
 
 #EXTRA_DIST = 

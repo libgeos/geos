@@ -11,6 +11,7 @@ SUBDIRS = \
     predicate \
     relate \
     union \
+    sharedpaths \
     valid       
 
 noinst_LTLIBRARIES = liboperation.la
@@ -30,4 +31,5 @@ liboperation_la_LIBADD = \
     predicate/liboppredicate.la \
     relate/liboprelate.la \
     union/libopunion.la \
-    valid/libopvalid.la
+    valid/libopvalid.la \
+    sharedpaths/libopsharedpaths.la

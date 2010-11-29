@@ -17,16 +17,18 @@
  *
  **********************************************************************/
 
-#include <geos/operation/sharedpahts/SharedPathsOp.h>
+#include <geos/operation/sharedpaths/SharedPathsOp.h>
 #include <geos/util/IllegalArgumentException.h>
 
 namespace geos {
 namespace operation { // geos.operation
 namespace sharedpaths { // geos.operation.sharedpaths
 
+using namespace geos::geom;
+
 /* public static */
 void
-SharedPathsOp::SharedPathsOp(const Geometry& g1, const Geometry& g2,
+SharedPathsOp::getSharedPaths(const Geometry& g1, const Geometry& g2,
 		double tol,
 		std::vector<Geometry*>& sameDirection,
 		std::vector<Geometry*>& oppositeDirection)

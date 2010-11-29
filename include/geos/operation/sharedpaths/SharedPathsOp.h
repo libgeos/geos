@@ -20,6 +20,7 @@
 #ifndef GEOS_OPERATION_SHAREDPATHSOP_H
 #define GEOS_OPERATION_SHAREDPATHSOP_H
 
+#include <geos/export.h> // for GEOS_DLL
 
 #include <vector> 
 
@@ -69,10 +70,12 @@ public:
 	///     onto this vector. They'll be of type LineString.
 	///	Ownership of the edges is tranferred.
 	///
-	static void SharedPathsOp(const Geometry& g1, const Geometry& g2,
+	static void getSharedPaths(
+		const geom::Geometry& g1,
+		const geom::Geometry& g2,
 		double tol,
-		std::vector<Geometry*>& sameDirection,
-		std::vector<Geometry*>& oppositeDirection);
+		std::vector<geom::Geometry*>& sameDirection,
+		std::vector<geom::Geometry*>& oppositeDirection);
 
 };
 

@@ -433,6 +433,7 @@ AC_OUTPUT([
 	include/geos/operation/polygonize/Makefile
 	include/geos/operation/predicate/Makefile
 	include/geos/operation/relate/Makefile
+	include/geos/operation/sharedpaths/Makefile
 	include/geos/operation/union/Makefile
 	include/geos/operation/valid/Makefile
 	include/geos/planargraph/Makefile
