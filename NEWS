@@ -10,8 +10,8 @@ Changes in 3.3.0
   - CAPI: GEOSPolygonize_full to return all informations computed by
           the polygonizer
   - CAPI: GEOSOrientationIndex
-  - PHP: new PHP5 bindings 
-  - SharedPathsOp: find shared paths and their direction
+  - CAPI: GEOSSharedPaths to find shared paths and their orientation
+  -  PHP: new PHP5 bindings based on CAPI
 - C++ API changes:
   - Geometry::isWithinDistance method is now const
   - Polygonizer::getCutEdges returns by const ref
