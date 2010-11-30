@@ -15,12 +15,12 @@
  *
  * Last port: original work
  *
- * Developed by Sandro Santilli (strk@keybit.net) for Faunalia
- * (http://www.faunalia.it) with funding from Regione Toscana - Sistema
- * Informativo per la Gestione del Territorio e dell' Ambiente
- * [RT-SIGTA]". For the project: "Sviluppo strumenti software per il
- * trattamento di dati geografici basati su QuantumGIS e Postgis (CIG
- * 0494241492)"
+ * Developed by Sandro Santilli (strk@keybit.net)
+ * for Faunalia (http://www.faunalia.it)
+ * with funding from Regione Toscana - Settore SISTEMA INFORMATIVO
+ * TERRITORIALE ED AMBIENTALE - for the project: "Sviluppo strumenti
+ * software per il trattamento di dati geografici basati su QuantumGIS
+ * e Postgis (CIG 0494241492)"
  *
  **********************************************************************/
 
@@ -54,12 +54,12 @@ namespace sharedpaths { // geos.operation.sharedpaths
  * Paths reported as shared are given in the direction they
  * appear in the first geometry.
  *
- * Developed by Sandro Santilli (strk@keybit.net) for Faunalia
- * (http://www.faunalia.it) with funding from Regione Toscana - Sistema
- * Informativo per la Gestione del Territorio e dell' Ambiente
- * [RT-SIGTA]". For the project: "Sviluppo strumenti software per il
- * trattamento di dati geografici basati su QuantumGIS e Postgis (CIG
- * 0494241492)"
+ * Developed by Sandro Santilli (strk@keybit.net)
+ * for Faunalia (http://www.faunalia.it)
+ * with funding from Regione Toscana - Settore SISTEMA INFORMATIVO
+ * TERRITORIALE ED AMBIENTALE - for the project: "Sviluppo strumenti
+ * software per il trattamento di dati geografici basati su QuantumGIS
+ * e Postgis (CIG 0494241492)"
  *
  */
 class GEOS_DLL SharedPathsOp
