@@ -11,6 +11,7 @@ Changes in 3.3.0
           the polygonizer
   - CAPI: GEOSOrientationIndex
   - CAPI: GEOSSharedPaths to find shared paths and their orientation
+  - CAPI: GEOSSnap 
   -  PHP: new PHP5 bindings based on CAPI
 - C++ API changes:
   - Geometry::isWithinDistance method is now const
