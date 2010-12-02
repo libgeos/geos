@@ -14,7 +14,7 @@
  *
  ***********************************************************************
  *
- * Last port: operation/overlay/snap/GeometrySnapper.java rev 1.8 (JTS-1.10)
+ * Last port: operation/overlay/snap/GeometrySnapper.java r309 (JTS-1.11+)
  *
  **********************************************************************/
 
@@ -22,6 +22,8 @@
 #include <geos/operation/overlay/snap/LineStringSnapper.h>
 #include <geos/geom/util/GeometryTransformer.h> // inherit. of SnapTransformer
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/MultiPolygon.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
@@ -41,7 +43,7 @@ namespace operation { // geos.operation
 namespace overlay { // geos.operation.overlay
 namespace snap { // geos.operation.overlay.snap
 
-const double GeometrySnapper::snapPrecisionFactor = 10e-10; 
+const double GeometrySnapper::snapPrecisionFactor = 1e-9; 
 
 class SnapTransformer: public geos::geom::util::GeometryTransformer {
 
@@ -115,6 +117,33 @@ GeometrySnapper::snapTo(const geom::Geometry& g, double snapTolerance)
 	return snapTrans->transform(&srcGeom);
 }
 
+/*public*/
+std::auto_ptr<geom::Geometry>
+GeometrySnapper::snapToSelf(double snapTolerance, bool cleanResult)
+{
+
+	using std::auto_ptr;
+	using geom::util::GeometryTransformer;
+	
+	// Get snap points
+	auto_ptr<Coordinate::ConstVect> snapPts=extractTargetCoordinates(srcGeom);
+
+	// Apply a SnapTransformer to source geometry
+	// (we need a pointer for dynamic polymorphism)
+	auto_ptr<GeometryTransformer> snapTrans(new SnapTransformer(snapTolerance, *snapPts));
+
+	GeomPtr result = snapTrans->transform(&srcGeom);
+	
+	if (cleanResult && ( dynamic_cast<const Polygon*>(result.get()) ||
+	                     dynamic_cast<const MultiPolygon*>(result.get()) ) )
+	{
+		// TODO: use better cleaning approach
+		result.reset(result->buffer(0));
+	}
+
+	return result;
+}
+
 /*public static*/
 double
 GeometrySnapper::computeSizeBasedSnapTolerance(const geom::Geometry& g)
@@ -169,13 +198,12 @@ GeometrySnapper::snap(const geom::Geometry& g0,
 	GeometrySnapper snapper0(g0);
 	snapGeom.first = snapper0.snapTo(g1, snapTolerance);
 
-	GeometrySnapper snapper1(g1);
-
 	/**
 	 * Snap the second geometry to the snapped first geometry
 	 * (this strategy minimizes the number of possible different
 	 * points in the result)
 	 */
+	GeometrySnapper snapper1(g1);
 	snapGeom.second = snapper1.snapTo(*snapGeom.first, snapTolerance);
 
 //	cout << *snapGeom.first << endl;
@@ -183,6 +211,15 @@ GeometrySnapper::snap(const geom::Geometry& g0,
 
 }
 
+/* public static */
+GeometrySnapper::GeomPtr
+GeometrySnapper::snapToSelf(const geom::Geometry& g,
+                      double snapTolerance,
+                      bool cleanResult)
+{
+	GeometrySnapper snapper0(g);
+	return snapper0.snapToSelf(snapTolerance, cleanResult);
+}
 
 } // namespace geos.operation.snap
 } // namespace geos.operation.overlay

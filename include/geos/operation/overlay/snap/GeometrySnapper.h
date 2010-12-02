@@ -14,7 +14,7 @@
  *
  ***********************************************************************
  *
- * Last port: operation/overlay/snap/GeometrySnapper.java rev 1.8 (JTS-1.10)
+ * Last port: operation/overlay/snap/GeometrySnapper.java r309 (JTS-1.11+)
  *
  **********************************************************************/
 
@@ -41,8 +41,19 @@ namespace overlay { // geos::operation::overlay
 namespace snap { // geos::operation::overlay::snap
 
 /** \brief
- * Snaps the vertices and segments of a geometry to another's vertices.
- * Should improve robustness for overlay operations.
+ * Snaps the vertices and segments of a {@link Geometry}
+ * to another Geometry's vertices.
+ *
+ * A snap distance tolerance is used to control where snapping is performed.
+ * Snapping one geometry to another can improve
+ * robustness for overlay operations by eliminating
+ * nearly-coincident edges
+ * (which cause problems during noding and intersection calculation).
+ * Too much snapping can result in invalid topology
+ * beging created, so the number and location of snapped vertices
+ * is decided using heuristics to determine when it
+ * is safe to snap.
+ * This can result in some potential snaps being omitted, however.
  */
 class GEOS_DLL GeometrySnapper {
 
@@ -63,6 +74,9 @@ public:
 	static void snap(const geom::Geometry& g0,
 	                        const geom::Geometry& g1,
 	                        double snapTolerance, GeomPtrPair& ret);
+
+	static GeomPtr snapToSelf(const geom::Geometry& g0,
+	                        double snapTolerance, bool cleanResult);
 
 	/**
 	 * Creates a new snapper acting on the given geometry
@@ -86,6 +100,18 @@ public:
 	 */
 	std::auto_ptr<geom::Geometry> snapTo(const geom::Geometry& g,
 	                                     double snapTolerance);
+
+	/** \brief
+	 * Snaps the vertices in the component {@link LineString}s
+	 * of the source geometry to the vertices of itself
+	 * with a given snap tolerance and optionally cleaning the result.
+	 *
+	 * @param snapTolerance
+	 * @param cleanResult clean the result
+	 * @return a new snapped Geometry
+	 */
+	std::auto_ptr<geom::Geometry> snapToSelf(double snapTolerance,
+	                                         bool cleanResult);
 
 	/** \brief
 	 * Estimates the snap tolerance for a Geometry, taking into account
