@@ -29,19 +29,12 @@ namespace tut
 
         geos::io::WKTReader reader;
 
-        GeomAutoPtr src;
-
-        geos::operation::overlay::snap::GeometrySnapper snapper;
+        typedef geos::operation::overlay::snap::GeometrySnapper GeometrySnapper;
 
         test_geometrysnapper_data()
                 :
                 factory(), // initialize before use!
-                reader(&factory),
-                src(reader.read(
-                        "POLYGON ((0 0, 0 100, 100 100, 100 0, 0 0))"
-                )),
-                snapper( *(src.get()) )
-
+                reader(&factory)
         {
         }
     };
@@ -60,6 +53,12 @@ namespace tut
     template<>
     void object::test<1>()
     {
+        GeomAutoPtr src(reader.read(
+                "POLYGON ((0 0, 0 100, 100 100, 100 0, 0 0))"
+        ));
+
+        GeometrySnapper snapper( *(src.get()) );
+
         GeomAutoPtr snap(reader.read(
                 "MULTIPOINT ((0 0), (0 100.0000001), (100 100), (100 0))"
         ));
@@ -79,6 +78,12 @@ namespace tut
     template<>
     void object::test<2>()
     {
+        GeomAutoPtr src(reader.read(
+                "POLYGON ((0 0, 0 100, 100 100, 100 0, 0 0))"
+        ));
+
+        GeometrySnapper snapper( *(src.get()) );
+
         GeomAutoPtr snap(reader.read(
                 "MULTIPOINT ((0.0000001 50))"
         ));
