@@ -1100,7 +1100,10 @@ GEOSSharedPaths(const GEOSGeometry* g1, const GEOSGeometry* g2)
     return GEOSSharedPaths_r(handle, g1, g2);
 }
 
-extern GEOSGeometry GEOS_DLL *GEOSSharedPaths_r(GEOSContextHandle_t handle,
-  const GEOSGeometry* g1, const GEOSGeometry* g2);
+GEOSGeometry *
+GEOSSnap(const GEOSGeometry* g1, const GEOSGeometry* g2, double tolerance)
+{
+  return GEOSSnap(handle, g1, g2);
+}
 
 } /* extern "C" */

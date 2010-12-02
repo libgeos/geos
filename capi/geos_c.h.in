@@ -613,6 +613,15 @@ extern GEOSGeometry GEOS_DLL *GEOSSharedPaths(const GEOSGeometry* g1,
 extern GEOSGeometry GEOS_DLL *GEOSSharedPaths_r(GEOSContextHandle_t handle,
   const GEOSGeometry* g1, const GEOSGeometry* g2);
 
+/*
+ * Snap first geometry on to second with given tolerance
+ * Returns a newly allocated geometry, or NULL on exception
+ */
+extern GEOSGeometry GEOS_DLL *GEOSSnap(const GEOSGeometry* g1,
+  const GEOSGeometry* g2, double tolerance);
+extern GEOSGeometry GEOS_DLL *GEOSSnap_r(GEOSContextHandle_t handle,
+  const GEOSGeometry* g1, const GEOSGeometry* g2, double tolerance);
+
 /************************************************************************
  *
  *  Binary predicates - return 2 on exception, 1 on true, 0 on false
