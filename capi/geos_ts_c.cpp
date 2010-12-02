@@ -5403,7 +5403,7 @@ GEOSSharedPaths_r(GEOSContextHandle_t extHandle, const GEOSGeometry* g1, const G
 }
 
 GEOSGeometry *
-GEOSSnap_r(GEOSContextHandle_t handle, const GEOSGeometry* g1,
+GEOSSnap_r(GEOSContextHandle_t extHandle, const GEOSGeometry* g1,
            const GEOSGeometry* g2, double tolerance)
 {
     using namespace geos::operation::overlay::snap;
@@ -5414,8 +5414,8 @@ GEOSSnap_r(GEOSContextHandle_t handle, const GEOSGeometry* g1,
     if ( handle->initialized == 0 ) return 0;
 
     try{
-      GeometrySnapper snapper( g1 );
-      std::auto_ptr<Geometry*> ret = snapper.snapTo(*g2, tolerance);
+      GeometrySnapper snapper( *g1 );
+      std::auto_ptr<Geometry> ret = snapper.snapTo(*g2, tolerance);
       return ret.release();
     }
     catch (const std::exception &e)

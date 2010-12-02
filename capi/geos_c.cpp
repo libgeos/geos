@@ -1103,7 +1103,7 @@ GEOSSharedPaths(const GEOSGeometry* g1, const GEOSGeometry* g2)
 GEOSGeometry *
 GEOSSnap(const GEOSGeometry* g1, const GEOSGeometry* g2, double tolerance)
 {
-  return GEOSSnap(handle, g1, g2);
+  return GEOSSnap_r(handle, g1, g2, tolerance);
 }
 
 } /* extern "C" */
