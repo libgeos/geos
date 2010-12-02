@@ -4,7 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2009  Sandro Santilli <strk@keybit.net>
+ * Copyright (C) 2009-2010  Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -14,7 +14,7 @@
  *
  ***********************************************************************
  *
- * Last port: operation/overlay/snap/lineStringSnapper.java rev 1.5 (JTS-1.10)
+ * Last port: operation/overlay/snap/LineStringSnapper.java r309 (JTS-1.11+)
  *
  **********************************************************************/
 
@@ -68,10 +68,11 @@ LineStringSnapper::snapVertices(geom::CoordinateList& srcCoords,
 	geom::Coordinate::ConstVect::const_iterator not_found = snapPts.end();
 
 	// try snapping vertices
-	// assume src list has a closing point (is a ring)
+	// if src is a ring then don't snap final vertex
 	CoordinateList::iterator it = srcCoords.begin();
 	CoordinateList::iterator end = srcCoords.end(); 
 	CoordinateList::iterator last = end; --last;
+  if ( isClosed ) --end;
 	for ( ; it != end; ++it )
 	{
 		Coordinate& srcPt = *it;

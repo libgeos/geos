@@ -4,7 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2009  Sandro Santilli <strk@keybit.net>
+ * Copyright (C) 2009-2010  Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -14,7 +14,7 @@
  *
  ***********************************************************************
  *
- * Last port: operation/overlay/snap/lineStringSnapper.java rev 1.5 (JTS-1.10)
+ * Last port: operation/overlay/snap/LineStringSnapper.java r309 (JTS-1.11+)
  *
  **********************************************************************/
 
@@ -67,7 +67,7 @@ public:
 		snapTolerance(nSnapTol)
 	{
 		size_t s = srcPts.size();
-		isClosed = ( s < 2 || srcPts[0].equals2D(srcPts[s-1]) );
+		isClosed = s < 2 ? false : srcPts[0].equals2D(srcPts[s-1]);
 	}
 
 	// Snap points are assumed to be all distinct points (a set would be better, uh ?)

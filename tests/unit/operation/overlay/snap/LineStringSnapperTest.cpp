@@ -67,6 +67,7 @@ namespace tut
 		CoordsVectAptr ret(snapper.snapTo(snpCoords));
 
 		// both points should have been snapped
+		ensure_equals(ret->size(), 2u);
 		ensure_equals(ret->operator[](0), snp_a);
 		ensure_equals(ret->operator[](1), snp_b);
 
@@ -108,6 +109,112 @@ namespace tut
 		ensure_equals(ret->operator[](0), src_a);
 		ensure_equals(ret->operator[](1), snp_a);
 		ensure_equals(ret->operator[](2), src_b);
+
+	}
+
+  // Test vertices snapping in a closed ring
+  template<>
+  template<>
+  void object::test<3>()
+  {
+		using geos::geom::Coordinate;
+		using geos::operation::overlay::snap::LineStringSnapper;
+
+		typedef std::auto_ptr<Coordinate::Vect> CoordsVectAptr;
+
+
+		// source coordinates
+
+		Coordinate src_a(0, 0);
+		Coordinate src_b(10, 10);
+		Coordinate src_c(0, 10);
+
+		Coordinate::Vect srcCoords;
+		srcCoords.push_back( src_a );
+		srcCoords.push_back( src_b );
+		srcCoords.push_back( src_c );
+		srcCoords.push_back( src_a );
+
+		// snap coordinates
+
+		Coordinate snp_a(0.1, 0);
+		Coordinate snp_b(10, 10.1);
+
+		Coordinate::ConstVect snpCoords;
+		snpCoords.push_back( &snp_a );
+		snpCoords.push_back( &snp_b );
+
+		LineStringSnapper snapper(srcCoords, 0.4);
+
+		CoordsVectAptr ret(snapper.snapTo(snpCoords));
+
+		// Points A and B should be snapped
+		ensure_equals(ret->size(), 4u);
+		ensure_equals(ret->operator[](0), snp_a);
+		ensure_equals(ret->operator[](1), snp_b);
+		ensure_equals(ret->operator[](2), src_c);
+		ensure_equals(ret->operator[](3), snp_a);
+
+	}
+
+  // Test vertices snapping in a short sequence
+  template<>
+  template<>
+  void object::test<4>()
+  {
+		using geos::geom::Coordinate;
+		using geos::operation::overlay::snap::LineStringSnapper;
+
+		typedef std::auto_ptr<Coordinate::Vect> CoordsVectAptr;
+
+
+		// source coordinates
+
+		Coordinate src_a(0, 0);
+		Coordinate::Vect srcCoords;
+		srcCoords.push_back( src_a );
+
+		// snap coordinates
+
+		Coordinate snp_a(0.1, 0);
+		Coordinate::ConstVect snpCoords;
+		snpCoords.push_back( &snp_a );
+
+		LineStringSnapper snapper(srcCoords, 0.4);
+
+		CoordsVectAptr ret(snapper.snapTo(snpCoords));
+
+		ensure_equals(ret->size(), 1u);
+		ensure_equals(ret->operator[](0), snp_a);
+
+	}
+
+  // Test vertices snapping in an empty sequence
+  template<>
+  template<>
+  void object::test<5>()
+  {
+		using geos::geom::Coordinate;
+		using geos::operation::overlay::snap::LineStringSnapper;
+
+		typedef std::auto_ptr<Coordinate::Vect> CoordsVectAptr;
+
+
+		// source coordinates
+
+		Coordinate src_a(0, 0);
+		Coordinate::Vect srcCoords;
+
+		// snap coordinates
+
+		Coordinate snp_a(0.1, 0);
+		Coordinate::ConstVect snpCoords;
+
+		LineStringSnapper snapper(srcCoords, 0.4);
+
+		CoordsVectAptr ret(snapper.snapTo(snpCoords));
+
+		ensure_equals(ret->size(), 0u);
 
 	}
 
