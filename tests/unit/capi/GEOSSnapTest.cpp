@@ -50,6 +50,7 @@ namespace tut
             GEOSGeom_destroy(geom1_);
             GEOSGeom_destroy(geom2_);
             GEOSGeom_destroy(geom3_);
+            GEOSWKTWriter_destroy(w_);
             geom1_ = 0;
             geom2_ = 0;
             geom3_ = 0;
@@ -116,6 +117,22 @@ namespace tut
           "LINESTRING (-20 -20, -10 -9, 50 50, 80 79, 100 100)"
         );
     }
-    
+
+    /// Another single segment
+    template<>
+    template<>
+    void object::test<4>()
+    {
+        geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0)");
+        geom2_ = GEOSGeomFromWKT("LINESTRING(0 0, 9 0)");
+        geom3_ = GEOSSnap(geom1_, geom2_, 2);
+
+        char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
+        std::string out(wkt_c); 
+        free(wkt_c);
+
+        ensure_equals(out, "LINESTRING (0 0, 9 0)");
+    }
+
 } // namespace tut
 
