@@ -1778,6 +1778,25 @@ class test extends PHPUnit_Framework_TestCase
 
     }
 
+    public function testGeometry_snapTo()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setTrim(true);
+
+        $g = $reader->read('POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))');
+
+        $g2 = $reader->read('POINT(0.1 0)');
+
+        $snapped = $g->snapTo($g2, 0);
+        $this->assertEquals('POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))'
+            , $writer->write($snapped) );
+
+        $snapped = $g->snapTo($g2, 0.5);
+        $this->assertEquals('POLYGON ((0.1 0, 1 0, 1 1, 0 1, 0.1 0))'
+            , $writer->write($snapped) );
+    }
+
     public function testWKBWriter__construct()
     {
         $writer = new GEOSWKBWriter();
