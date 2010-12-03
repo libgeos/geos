@@ -103,5 +103,33 @@ namespace tut
 
 	}
 
+  // Test insert with and without duplicates
+  template<>
+  template<>
+  void object::test<2>()
+  {
+    using geos::geom::Coordinate;
+
+    geos::geom::CoordinateList clist;
+    ensure_equals( clist.size(), 0u );
+
+    clist.insert(clist.end(), Coordinate(0, 0));
+    ensure_equals( clist.size(), 1u );
+
+    clist.insert(clist.end(), Coordinate(0, 0), false);
+    ensure_equals( clist.size(), 1u );
+
+    clist.insert(clist.end(), Coordinate(0, 0), true);
+    ensure_equals( clist.size(), 2u );
+
+    clist.insert(clist.end(), Coordinate(1, 1), true);
+    ensure_equals( clist.size(), 3u );
+
+    geos::geom::CoordinateList::iterator it = clist.end(); 
+    --it;
+    clist.insert(it, Coordinate(0, 0), false);
+    ensure_equals( clist.size(), 3u );
+  }
+
 
 } // namespace tut
