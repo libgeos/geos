@@ -202,13 +202,40 @@ namespace tut
 
 		// source coordinates
 
-		Coordinate src_a(0, 0);
+		Coordinate::Vect srcCoords;
+
+		// snap coordinates
+
+		Coordinate::ConstVect snpCoords;
+
+		LineStringSnapper snapper(srcCoords, 0.4);
+
+		CoordsVectAptr ret(snapper.snapTo(snpCoords));
+
+		ensure_equals(ret->size(), 0u);
+
+	}
+
+  // Test snapping an empty sequence
+  template<>
+  template<>
+  void object::test<6>()
+  {
+		using geos::geom::Coordinate;
+		using geos::operation::overlay::snap::LineStringSnapper;
+
+		typedef std::auto_ptr<Coordinate::Vect> CoordsVectAptr;
+
+
+		// source coordinates
+
 		Coordinate::Vect srcCoords;
 
 		// snap coordinates
 
 		Coordinate snp_a(0.1, 0);
 		Coordinate::ConstVect snpCoords;
+		snpCoords.push_back( &snp_a );
 
 		LineStringSnapper snapper(srcCoords, 0.4);
 
