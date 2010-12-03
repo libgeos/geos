@@ -64,7 +64,8 @@ public:
 	                                          double nSnapTol)
 		:
 		srcPts(nSrcPts),
-		snapTolerance(nSnapTol)
+		snapTolerance(nSnapTol),
+		allowSnappingToSourceVertices(false)
 	{
 		size_t s = srcPts.size();
 		isClosed = s < 2 ? false : srcPts[0].equals2D(srcPts[s-1]);
@@ -73,12 +74,17 @@ public:
 	// Snap points are assumed to be all distinct points (a set would be better, uh ?)
 	std::auto_ptr<geom::Coordinate::Vect> snapTo(const geom::Coordinate::ConstVect& snapPts);
 
+	void setAllowSnappingToSourceVertices(bool allow) {
+		allowSnappingToSourceVertices = allow;
+	}
+
 private:
 
 	const geom::Coordinate::Vect& srcPts;
 
 	double snapTolerance;
 
+	bool allowSnappingToSourceVertices;
 	bool isClosed;
 
 
@@ -91,20 +97,39 @@ private:
 	geom::Coordinate::ConstVect::const_iterator findSnapForVertex(const geom::Coordinate& pt,
 			const geom::Coordinate::ConstVect& snapPts);
 
-	// Modifies first arg
-	void snapSegments(geom::CoordinateList& srcCoords,
-			const geom::Coordinate::ConstVect& snapPts);
+  /** \brief
+   * Snap segments of the source to nearby snap vertices.
+   *
+   * Source segments are "cracked" at a snap vertex.
+   * A single input segment may be snapped several times
+   * to different snap vertices.
+   * 
+   * For each distinct snap vertex, at most one source segment
+   * is snapped to.  This prevents "cracking" multiple segments
+   * at the same point, which would likely cause
+   * topology collapse when being used on polygonal linework.
+   *
+   * @param srcCoords the coordinates of the source linestring to be snapped
+   *                  the object will be modified (coords snapped)
+   * @param snapPts the target snap vertices                                       */
+  void snapSegments(geom::CoordinateList& srcCoords,
+                    const geom::Coordinate::ConstVect& snapPts);
 
 	/// \brief
 	/// Finds a src segment which snaps to (is close to) the given snap
 	/// point.
 	//
-	/// Only one segment is determined - this is to prevent
-	/// snapping to multiple segments, which would almost certainly cause
-	/// invalid geometry to be created.
-	/// (The heuristic approach of snapping is really only appropriate
-	///  when snap pts snap to a unique spot on the src geometry.)
+	/// Only a single segment is selected for snapping.
+	/// This prevents multiple segments snapping to the same snap vertex,
+	/// which would almost certainly cause invalid geometry
+	/// to be created.
+	/// (The heuristic approach to snapping used here
+	/// is really only appropriate when
+	/// snap pts snap to a unique spot on the src geometry.)
 	///
+	/// Also, if the snap vertex occurs as a vertex in the src
+	/// coordinate list, no snapping is performed (may be changed
+	/// using setAllowSnappingToSourceVertices).
 	///
 	/// @param from
 	///        an iterator to first point of first segment to be checked
@@ -112,9 +137,10 @@ private:
 	/// @param too_far
 	///        an iterator to last point of last segment to be checked
 	///
-	/// @returns too_far if no segment needs snapping
+	/// @returns an iterator to the snapped segment or
+	///          too_far if no segment needs snapping
 	///          (either none within snapTol distance,
-	///	      or one fond on the snapPt)
+	///           or one found on the snapPt)
 	///
 	geom::CoordinateList::iterator findSegmentToSnap(
 			const geom::Coordinate& snapPt,

@@ -209,6 +209,7 @@ cerr << " After segment snapping, srcCoors are: " << srcCoords << endl;
 }
 
 /*private*/
+/* NOTE: this is called findSegmentIndexToSnap in JTS */
 CoordinateList::iterator
 LineStringSnapper::findSegmentToSnap(
 			const Coordinate& snapPt,
@@ -238,9 +239,11 @@ cerr << " Checking segment " << seg << " for snapping against point " << snapPt 
 #if GEOS_DEBUG
 cerr << " One of segment endpoints equal snap point, returning too_far" << endl;
 #endif
-			// If the snap pt is already in the src list,
-			// don't snap
-			return too_far;
+			if (allowSnappingToSourceVertices) {
+				continue;
+			} else {
+				return too_far;
+			}
 		}
 
 		double dist = seg.distance(snapPt);
