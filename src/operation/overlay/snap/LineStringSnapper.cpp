@@ -233,6 +233,13 @@ LineStringSnapper::findSegmentToSnap(
 cerr << " Checking segment " << seg << " for snapping against point " << snapPt << endl;
 #endif
 
+		/**                                                                              * Check if the snap pt is equal to one of
+		 * the segment endpoints.
+		 *
+		 * If the snap pt is already in the src list,
+		 * don't snap at all (unless allowSnappingToSourceVertices
+		 * is set to true)
+		 */
 		if ( seg.p0.equals2D(snapPt) || seg.p1.equals2D(snapPt) )
 		{
 
