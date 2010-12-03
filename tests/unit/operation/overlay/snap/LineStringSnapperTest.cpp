@@ -245,5 +245,91 @@ namespace tut
 
 	}
 
+  // Test allow snapping to source vertices
+  template<>
+  template<>
+  void object::test<7>()
+  {
+    using geos::geom::Coordinate;
+    using geos::operation::overlay::snap::LineStringSnapper;
+
+    typedef std::auto_ptr<Coordinate::Vect> CoordsVectAptr;
+
+
+    // Source: (0 0, 10 0, 0 1)
+    Coordinate src_a(0, 0);
+    Coordinate src_b(10, 0);
+    Coordinate src_c(0, 1);
+    Coordinate::Vect srcCoords;
+    srcCoords.push_back(src_a);
+    srcCoords.push_back(src_b);
+    srcCoords.push_back(src_c);
+
+    // Snap: (0 0)
+    Coordinate snp_a(0, 0);
+    Coordinate::ConstVect snpCoords;
+    snpCoords.push_back( &snp_a );
+
+    // Snap with tolerance of 1
+    // (both first and second point could be snapped)
+    LineStringSnapper snapper(srcCoords, 1);
+
+    // Allow source-snapping, expect: (0 0, 5 0, 0 0, 10 0)
+    snapper.setAllowSnappingToSourceVertices(true);
+    CoordsVectAptr ret(snapper.snapTo(snpCoords));
+
+    ensure_equals(ret->size(), 4u);
+    ensure_equals(ret->operator[](0), src_a);
+    ensure_equals(ret->operator[](1), src_b);
+    ensure_equals(ret->operator[](2), snp_a);
+    ensure_equals(ret->operator[](3), src_c);
+
+    // Do not allow source-snapping, expect: (0 0, 5 0, 10 0)
+    snapper.setAllowSnappingToSourceVertices(false);
+    ret = snapper.snapTo(snpCoords);
+    ensure_equals(ret->size(), 3u);
+    ensure_equals(ret->operator[](0), src_a);
+    ensure_equals(ret->operator[](1), src_b);
+    ensure_equals(ret->operator[](2), src_c);
+  }
+
+  // Test two candidate vertices snaps
+/* The following one fails, I bet in JTS too.. but haven't tested
+  template<>
+  template<>
+  void object::test<8>()
+  {
+    using geos::geom::Coordinate;
+    using geos::operation::overlay::snap::LineStringSnapper;
+
+    typedef std::auto_ptr<Coordinate::Vect> CoordsVectAptr;
+
+
+    // Source: (0 0, 1 0, 1 1)
+    Coordinate src_a(0, 0);
+    Coordinate src_b(1, 0);
+    Coordinate src_c(1, 1);
+    Coordinate::Vect srcCoords;
+    srcCoords.push_back(src_a);
+    srcCoords.push_back(src_b);
+    srcCoords.push_back(src_c);
+
+    // Snap: (0.5, 0)
+    Coordinate snp_a(0.5, 0);
+    Coordinate::ConstVect snpCoords;
+    snpCoords.push_back( &snp_a );
+
+    // Snap with tolerance of 1
+    // (both first and second point could be snapped)
+    LineStringSnapper snapper(srcCoords, 1);
+
+    // Expect: (0.5 0, 1 0, 1 1)
+    CoordsVectAptr ret(snapper.snapTo(snpCoords));
+    ensure_equals(ret->size(), 3u);
+    ensure_equals(ret->operator[](0), snp_a);
+    ensure_equals(ret->operator[](1), src_b);
+    ensure_equals(ret->operator[](2), src_c);
+  }
+*/
 
 } // namespace tut
