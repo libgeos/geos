@@ -50,7 +50,7 @@ namespace snap { // geos::operation::overlay::snap
  * nearly-coincident edges
  * (which cause problems during noding and intersection calculation).
  * Too much snapping can result in invalid topology
- * beging created, so the number and location of snapped vertices
+ * being created, so the number and location of snapped vertices
  * is decided using heuristics to determine when it
  * is safe to snap.
  * This can result in some potential snaps being omitted, however.
