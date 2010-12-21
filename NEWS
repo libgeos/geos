@@ -12,6 +12,7 @@ Changes in 3.3.0
   - CAPI: GEOSOrientationIndex
   - CAPI: GEOSSharedPaths to find shared paths and their orientation
   - CAPI: GEOSSnap 
+  - CAPI: GEOSRelatePatternMatch 
   -  PHP: new PHP5 bindings based on CAPI
 - C++ API changes:
   - Geometry::isWithinDistance method is now const

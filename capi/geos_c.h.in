@@ -628,8 +628,8 @@ extern GEOSGeometry GEOS_DLL *GEOSSnap_r(GEOSContextHandle_t handle,
  *
  ***********************************************************************/
 
-extern char GEOS_DLL GEOSRelatePattern(const GEOSGeometry* g1, const GEOSGeometry* g2,
-	const char *pat);
+extern char GEOS_DLL GEOSRelatePattern(const GEOSGeometry* g1, const GEOSGeometry* g2, const char *pat);
+extern char GEOS_DLL GEOSRelatePatternMatch(const char* mat, const char *pat);
 extern char GEOS_DLL GEOSDisjoint(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSTouches(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSIntersects(const GEOSGeometry* g1, const GEOSGeometry* g2);
@@ -643,6 +643,9 @@ extern char GEOS_DLL GEOSEqualsExact(const GEOSGeometry* g1, const GEOSGeometry*
 extern char GEOS_DLL GEOSRelatePattern_r(GEOSContextHandle_t handle,
                                          const GEOSGeometry* g1,
                                          const GEOSGeometry* g2,
+                                         const char *pat);
+extern char GEOS_DLL GEOSRelatePatternMatch_r(GEOSContextHandle_t handle,
+                                         const char* mat,
                                          const char *pat);
 extern char GEOS_DLL GEOSDisjoint_r(GEOSContextHandle_t handle,
                                     const GEOSGeometry* g1,

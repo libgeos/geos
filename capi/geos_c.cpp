@@ -176,6 +176,12 @@ GEOSRelatePattern(const Geometry *g1, const Geometry *g2, const char *pat)
     return GEOSRelatePattern_r( handle, g1, g2, pat );
 }
 
+char
+GEOSRelatePatternMatch(const char *mat, const char *pat)
+{
+    return GEOSRelatePatternMatch_r( handle, mat, pat );
+}
+
 char *
 GEOSRelate(const Geometry *g1, const Geometry *g2)
 {
