@@ -42,12 +42,14 @@ PHP_FUNCTION(GEOSVersion);
 PHP_FUNCTION(GEOSPolygonize);
 PHP_FUNCTION(GEOSLineMerge);
 PHP_FUNCTION(GEOSSharedPaths);
+PHP_FUNCTION(GEOSRelateMatch);
 
 static function_entry geos_functions[] = {
     PHP_FE(GEOSVersion, NULL)
     PHP_FE(GEOSPolygonize, NULL)
     PHP_FE(GEOSLineMerge, NULL)
     PHP_FE(GEOSSharedPaths, NULL)
+    PHP_FE(GEOSRelateMatch, NULL)
     {NULL, NULL, NULL}
 };
 
@@ -2362,6 +2364,32 @@ PHP_FUNCTION(GEOSSharedPaths)
     /* return_value is a zval */
     object_init_ex(return_value, Geometry_ce_ptr);
     setRelay(return_value, geom_out);
+}
+
+/**
+ * bool GEOSRelateMatch(string matrix, string pattern)
+ */
+PHP_FUNCTION(GEOSRelateMatch)
+{
+    char* mat = NULL;
+    int matlen;
+    char* pat = NULL;
+    int patlen;
+    int ret;
+    zend_bool retBool;
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ss",
+        &mat, &matlen, &pat, &patlen) == FAILURE)
+    {
+        RETURN_NULL();
+    }
+
+    ret = GEOSRelatePatternMatch(mat, pat);
+    if ( ret == 2 ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    retBool = ret;
+    RETURN_BOOL(retBool);
 }
 
 /* ------ Initialization / Deinitialization / Meta ------------------ */

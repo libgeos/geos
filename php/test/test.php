@@ -2046,4 +2046,13 @@ class test extends PHPUnit_Framework_TestCase
 
     }
 
+    public function testGEOSRelateMatch()
+    {
+        $this->assertTrue(GEOSRelateMatch('0FFFFFFF2', '0FFFFFFF2'));
+        $this->assertTrue(GEOSRelateMatch('0FFFFFFF2', '0FFFFFFF*'));
+        $this->assertTrue(GEOSRelateMatch('0FFFFFFF2', 'TFFFFFFF2'));
+        $this->assertFalse(GEOSRelateMatch('0FFFFFFF2', '0FFFFFFFF'));
+    }
+
+
 }
