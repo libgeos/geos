@@ -147,8 +147,21 @@ SharedPathsOp::isForward(const geom::LineString& edge,
 
   const Coordinate& pt1 = edge.getCoordinateN(0);
   const Coordinate& pt2 = edge.getCoordinateN(1);
-  LinearLocation l1 = LocationIndexOfPoint::indexOf(&geom, pt1);
-  LinearLocation l2 = LocationIndexOfPoint::indexOf(&geom, pt2);
+
+  /*
+   * We move the coordinate somewhat closer, to avoid
+   * vertices of the geometry being checked (geom). 
+   *
+   * This is mostly only needed when one of the two points
+   * of the edge is an endpoint of a _closed_ geom.
+   * We have an unit test for this...
+   */
+  Coordinate pt1i = LinearLocation::pointAlongSegmentByFraction(pt1, pt2, 0.1);
+  Coordinate pt2i = LinearLocation::pointAlongSegmentByFraction(pt1, pt2, 0.9);
+
+  LinearLocation l1 = LocationIndexOfPoint::indexOf(&geom, pt1i);
+  LinearLocation l2 = LocationIndexOfPoint::indexOf(&geom, pt2i);
+
   return l1.compareTo(l2) < 0;
 }
 

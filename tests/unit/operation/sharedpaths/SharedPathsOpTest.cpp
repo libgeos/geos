@@ -322,5 +322,69 @@ namespace tut
     ensure(forwDir.empty());
   }
 
+  // line - line_closed_no_rhr
+  template<> template<>
+  void object::test<18>()
+  {
+    GeomPtr g0(wktreader.read("LINESTRING( 0  0, 10 0)"));
+    GeomPtr g1(wktreader.read("LINESTRING( 0  0, 10 0, 10 10, 0 10, 0 0 )"));
+
+    forwDir.clear(); backDir.clear();
+    SharedPathsOp::sharedPathsOp(*g0, *g1, forwDir, backDir);
+    ensure_equals(forwDir.size(), 1u);
+    ensure_equals(wktwriter.write(forwDir[0]), "LINESTRING (0 0, 10 0)"); 
+    SharedPathsOp::clearEdges(forwDir);
+
+    ensure(backDir.empty());
+  }
+
+  // line_closed_no_rhr - line
+  template<> template<>
+  void object::test<19>()
+  {
+    GeomPtr g0(wktreader.read("LINESTRING( 0  0, 10 0, 10 10, 0 10, 0 0 )"));
+    GeomPtr g1(wktreader.read("LINESTRING( 0  0, 10 0)"));
+
+    forwDir.clear(); backDir.clear();
+    SharedPathsOp::sharedPathsOp(*g0, *g1, forwDir, backDir);
+    ensure_equals(forwDir.size(), 1u);
+    ensure_equals(wktwriter.write(forwDir[0]), "LINESTRING (0 0, 10 0)"); 
+    SharedPathsOp::clearEdges(forwDir);
+
+    ensure(backDir.empty());
+  }
+
+  // line - line_closed_rhr (see ticket #391)
+  template<> template<>
+  void object::test<20>()
+  {
+    GeomPtr g0(wktreader.read("LINESTRING( 0  0, 10 0)"));
+    GeomPtr g1(wktreader.read("LINESTRING( 0  0, 0 10, 10 10, 10 0, 0 0 )"));
+
+    forwDir.clear(); backDir.clear();
+    SharedPathsOp::sharedPathsOp(*g0, *g1, forwDir, backDir);
+    ensure_equals(backDir.size(), 1u);
+    ensure_equals(wktwriter.write(backDir[0]), "LINESTRING (0 0, 10 0)"); 
+    SharedPathsOp::clearEdges(backDir);
+
+    ensure(forwDir.empty());
+  }
+
+  // line_closed_rhr - line 
+  template<> template<>
+  void object::test<21>()
+  {
+    GeomPtr g0(wktreader.read("LINESTRING( 0  0, 0 10, 10 10, 10 0, 0 0 )"));
+    GeomPtr g1(wktreader.read("LINESTRING( 0  0, 10 0)"));
+
+    forwDir.clear(); backDir.clear();
+    SharedPathsOp::sharedPathsOp(*g0, *g1, forwDir, backDir);
+    ensure_equals(backDir.size(), 1u);
+    ensure_equals(wktwriter.write(backDir[0]), "LINESTRING (10 0, 0 0)"); 
+    SharedPathsOp::clearEdges(backDir);
+
+    ensure(forwDir.empty());
+  }
+
 } // namespace tut
 
