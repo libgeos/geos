@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: algorithm/InteriorPointLine.java r317 (JTS-1.12)
+ *
  **********************************************************************/
 
 #ifndef GEOS_ALGORITHM_INTERIORPOINTLINE_H
@@ -36,12 +40,11 @@ namespace algorithm { // geos::algorithm
  * Computes a point in the interior of an linear geometry.
  *
  * <h2>Algorithm</h2>
- * <ul>
- * <li>Find an interior vertex which is closest to
- * the centroid of the linestring.
- * <li>If there is no interior vertex, find the endpoint which is
- * closest to the centroid.
- * </ul>
+ * 
+ * - Find an interior vertex which is closest to
+ *   the centroid of the linestring.
+ * - If there is no interior vertex, find the endpoint which is
+ *   closest to the centroid.
  */
 class GEOS_DLL InteriorPointLine {
 public:

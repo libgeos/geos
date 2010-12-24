@@ -14,6 +14,8 @@
  *
  **********************************************************************
  *
+ * Last port: algorithm/InteriorPointLine.java r317 (JTS-1.12)
+ *
  **********************************************************************/
 
 #include <geos/algorithm/InteriorPointLine.h>
