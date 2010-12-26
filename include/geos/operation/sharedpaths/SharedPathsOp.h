@@ -149,6 +149,10 @@ private:
   const geom::Geometry& _g2;
   const geom::GeometryFactory& _gf;
 
+  // Declare type as noncopyable
+  SharedPathsOp(const SharedPathsOp& other);
+  SharedPathsOp& operator=(const SharedPathsOp& rhs);
+
 };
 
 } // namespace geos.operation.sharedpaths
