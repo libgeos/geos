@@ -67,7 +67,7 @@ namespace tut
     bool threw = false;
     try {
       SharedPathsOp::sharedPathsOp(*g0, *g1, forwDir, backDir);
-    } catch (const geos::util::IllegalArgumentException& ex) {
+    } catch (const geos::util::IllegalArgumentException& /*ex*/) {
       threw = true;
     }
     ensure(threw);
@@ -82,7 +82,7 @@ namespace tut
     bool threw = false;
     try {
       SharedPathsOp::sharedPathsOp(*g0, *g1, forwDir, backDir);
-    } catch (const geos::util::IllegalArgumentException& ex) {
+    } catch (const geos::util::IllegalArgumentException& /*ex*/) {
       threw = true;
     }
     ensure(threw);
