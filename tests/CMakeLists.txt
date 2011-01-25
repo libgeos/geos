@@ -1,4 +1,4 @@
-#################################################################################
+ #################################################################################
 # $Id$
 #
 # GEOS tests build configuration for CMake build system
@@ -14,5 +14,6 @@
 
 add_subdirectory(unit)
 add_subdirectory(xmltester)
+add_subdirectory(bigtest)
 
 # TODO: add other test programs
