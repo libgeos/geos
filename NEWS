@@ -1,4 +1,5 @@
 Changes in 3.3.0 
+????-??-??
 
 - New things:
   - CAPI: GEOSisValidDetail: tell state, reason & location apart
@@ -27,6 +28,7 @@ Changes in 3.3.0
   - Fix duplicated dangles returned by Polygonizer
 
 Changes in 3.2.0 
+2009-12-14
 
 - Add Single-sided buffer operation
 - JTS-1.10 sync ...
