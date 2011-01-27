@@ -1268,8 +1268,8 @@ class test extends PHPUnit_Framework_TestCase
         $val = $g->checkValidity();
         $this->assertType( 'array', $val );
         $this->assertTrue( $val['valid'] );
-        $this->assertNull( $val['reason'] );
-        $this->assertNull( $val['location'] );
+        $this->assertFalse( isset($val['reason']) );
+        $this->assertFalse( isset($val['location']) );
 
         $g = $reader->read('POINT(0 NaN)');
         $val = $g->checkValidity();
