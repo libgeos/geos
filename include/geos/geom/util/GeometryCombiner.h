@@ -4,14 +4,19 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2006 Refractions Research Inc.
+ * Copyright (C) 2006-2011 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geom/util/GeometryCombiner.java r320 (JTS-1.12)
+ *
  **********************************************************************/
+
 #ifndef GEOS_GEOM_UTIL_GEOMETRYCOMBINER_H
 #define GEOS_GEOM_UTIL_GEOMETRYCOMBINER_H
 
@@ -35,8 +40,8 @@ namespace util { // geos.geom.util
  * Input geometries which are already collections
  * will have their elements extracted first.
  * No validation of the result geometry is performed.
- * (The only case where invalidity is possible is where {@link Polygonal} geometries
- * are combined and result in a self-intersection).
+ * (The only case where invalidity is possible is where {@link Polygonal}
+ * geometries are combined and result in a self-intersection).
  * 
  * @see GeometryFactory#buildGeometry
  */

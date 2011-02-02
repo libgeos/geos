@@ -4,12 +4,16 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2006 Refractions Research Inc.
+ * Copyright (C) 2006-2011 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
+ *
+ **********************************************************************
+ *
+ * Last port: geom/util/GeometryCombiner.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
