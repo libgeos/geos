@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -13,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/GeometryFactory.java rev. 1.48
+ * Last port: geom/GeometryFactory.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -223,6 +224,12 @@ public:
 	/// for each Coordinate in the given list.
 	MultiPoint* createMultiPoint(
 			const CoordinateSequence &fromCoords) const;
+
+	/// \brief
+	/// Construct a MultiPoint containing a Point geometry
+	/// for each Coordinate in the given vector.
+	MultiPoint* createMultiPoint(
+			const std::vector<Coordinate> &fromCoords) const;
 
 	/// Construct an EMPTY Polygon 
 	Polygon* createPolygon() const;

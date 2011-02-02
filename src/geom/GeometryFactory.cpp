@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2005 Refractions Research Inc.
  *
@@ -14,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/GeometryFactory.java rev. 1.48
+ * Last port: geom/GeometryFactory.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -458,6 +459,28 @@ GeometryFactory::createMultiPoint() const
 /*public*/
 MultiPoint*
 GeometryFactory::createMultiPoint(const CoordinateSequence &fromCoords) const
+{
+	size_t npts=fromCoords.getSize();
+	vector<Geometry *> *pts=new vector<Geometry *>;
+	pts->reserve(npts);
+	for (size_t i=0; i<npts; ++i) {
+		Point *pt=createPoint(fromCoords.getAt(i));
+		pts->push_back(pt);
+	}
+	MultiPoint *mp = NULL;
+	try {
+		mp = createMultiPoint(pts);
+	} catch (...) {
+		for (size_t i=0; i<npts; ++i) delete (*pts)[i];
+		delete pts;
+		throw;
+	}
+	return mp;
+}
+
+/*public*/
+MultiPoint*
+GeometryFactory::createMultiPoint(const std::vector<Coordinate> &fromCoords) const
 {
 	size_t npts=fromCoords.getSize();
 	vector<Geometry *> *pts=new vector<Geometry *>;
