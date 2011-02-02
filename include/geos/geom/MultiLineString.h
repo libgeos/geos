@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2005 2006 Refractions Research Inc.
  *
@@ -14,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/MultiLineString.java rev. 1.40
+ * Last port: geom/MultiLineString.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -23,7 +24,7 @@
 
 #include <geos/export.h>
 #include <geos/geom/GeometryCollection.h> // for inheritance
-//#include <geos/platform.h> 
+#include <geos/geom/Lineal.h> // for inheritance
 #include <geos/geom/Dimension.h>
 
 #include <string>
@@ -42,8 +43,8 @@ namespace geos {
 namespace geos {
 namespace geom { // geos::geom
 
-/// Basic implementation of MultiLineString objects.
-class GEOS_DLL MultiLineString: public GeometryCollection {
+/// Models a collection of (@link LineString}s.
+class GEOS_DLL MultiLineString: public GeometryCollection, public Lineal {
 
 public:
 

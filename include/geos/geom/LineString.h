@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2005 2006 Refractions Research Inc.
  *
@@ -14,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/LineString.java rev. 1.46
+ * Last port: geom/LineString.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -24,6 +25,7 @@
 #include <geos/export.h>
 #include <geos/platform.h> // do we need this ?
 #include <geos/geom/Geometry.h> // for inheritance
+#include <geos/geom/Lineal.h> // for inheritance
 #include <geos/geom/CoordinateSequence.h> // for proper use of auto_ptr<>
 #include <geos/geom/Envelope.h> // for proper use of auto_ptr<>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
@@ -51,10 +53,22 @@ namespace geos {
 namespace geom { // geos::geom
 
 /**
- * \class LineString geom.h geos.h
- * \brief Basic implementation of LineString.
+ *  Models an OGC-style <code>LineString</code>.
+ *
+ *  A LineString consists of a sequence of two or more vertices,
+ *  along with all points along the linearly-interpolated curves
+ *  (line segments) between each
+ *  pair of consecutive vertices.
+ *  Consecutive vertices may be equal.
+ *  The line segments in the line may intersect each other (in other words,
+ *  the linestring may "curl back" in itself and self-intersect.
+ *  Linestrings with exactly two identical points are invalid.
+ *  
+ *  A linestring must have either 0 or 2 or more points.
+ *  If these conditions are not met, the constructors throw
+ *  an {@link IllegalArgumentException}
  */
-class GEOS_DLL LineString: public Geometry {
+class GEOS_DLL LineString: public Geometry, public Lineal {
 
 public:
 

@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -14,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/Polygon.java rev. 1.50
+ * Last port: geom/Polygon.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -25,7 +26,8 @@
 #include <string>
 #include <vector>
 #include <geos/platform.h>
-#include <geos/geom/Geometry.h>
+#include <geos/geom/Geometry.h> // for inheritance
+#include <geos/geom/Polygonal.h> // for inheritance
 #include <geos/geom/Envelope.h> // for proper use of auto_ptr<>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
 
@@ -62,7 +64,8 @@ namespace geom { // geos::geom
  *  Specification for SQL</A> .
  *
  */
-class GEOS_DLL Polygon: public Geometry{
+class GEOS_DLL Polygon: public Geometry, public Polygonal
+{
 
 public:
 
@@ -189,10 +192,6 @@ private:
 
 } // namespace geos::geom
 } // namespace geos
-
-//#ifdef GEOS_INLINE
-//# include "geos/geom/Polygon.inl"
-//#endif
 
 #endif // ndef GEOS_GEOM_POLYGON_H
 

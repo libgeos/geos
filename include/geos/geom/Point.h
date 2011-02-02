@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2005 2006 Refractions Research Inc.
  *
@@ -14,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/Point.java rev. 1.37 (JTS-1.10)
+ * Last port: geom/Point.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -23,7 +24,8 @@
 
 #include <geos/export.h>
 #include <geos/platform.h>
-#include <geos/geom/Geometry.h>
+#include <geos/geom/Geometry.h> // for inheritance
+#include <geos/geom/Puntal.h> // for inheritance
 #include <geos/geom/CoordinateSequence.h> // for proper use of auto_ptr<>
 #include <geos/geom/Envelope.h> // for proper use of auto_ptr<>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
@@ -55,12 +57,15 @@ namespace geos {
 namespace geom { // geos::geom
 
 /**
- * \class Point geom.h geos.h
- * \brief Basic implementation of Point.
+ * Implementation of Point.
+ *
+ * A Point is valid iff:
+ * 
+ * - the coordinate which defines it is a valid coordinate
+ *   (i.e does not have an NaN X or Y ordinate)
+ *
  */
-class GEOS_DLL Point : public Geometry 
-
-	// NOTE: in JTS Point implements Puntual
+class GEOS_DLL Point : public Geometry, public Puntal 
 {
 
 public:
@@ -87,7 +92,6 @@ public:
 	size_t getNumPoints() const;
 	bool isEmpty() const;
 	bool isSimple() const;
-	//bool isValid() const;
 
 	/// Returns point dimension (0)
 	Dimension::DimensionType getDimension() const;

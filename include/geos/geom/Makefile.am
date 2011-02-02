@@ -49,4 +49,7 @@ geos_HEADERS = \
     Polygon.h \
     PrecisionModel.h \
     PrecisionModel.inl \
-    Triangle.h
+    Triangle.h \
+    Puntal.h \
+    Lineal.h \
+    Polygonal.h

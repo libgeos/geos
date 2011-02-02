@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -13,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/MultiPolygon.java rev 1.34
+ * Last port: geom/MultiPolygon.java r320 (JTS-1.12)
  *
  **********************************************************************/
 

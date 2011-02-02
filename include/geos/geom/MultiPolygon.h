@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2005 2006 Refractions Research Inc.
  *
@@ -14,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/MultiPolygon.java rev 1.34
+ * Last port: geom/MultiPolygon.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -25,7 +26,8 @@
 #include <string>
 #include <vector>
 #include <geos/platform.h>
-#include <geos/geom/GeometryCollection.h>
+#include <geos/geom/GeometryCollection.h> // for inheritance
+#include <geos/geom/Polygonal.h> // for inheritance
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
 
 #include <geos/inline.h>
@@ -43,8 +45,15 @@ namespace geos {
 namespace geos {
 namespace geom { // geos::geom
 
-/// Basic implementation of <code>MultiPolygon</code>.
-class GEOS_DLL MultiPolygon: public GeometryCollection
+/// Models a collection of {@link Polygon}s.
+//
+/// As per the OGC SFS specification,
+/// the Polygons in a MultiPolygon may not overlap,
+/// and may only touch at single points.
+/// This allows the topological point-set semantics
+/// to be well-defined.
+///
+class GEOS_DLL MultiPolygon: public GeometryCollection, public Polygonal
 {
 
 public:

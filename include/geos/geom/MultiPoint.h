@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2005 2006 Refractions Research Inc.
  *
@@ -14,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/MultiPoint.java rev. 1.30
+ * Last port: geom/MultiPoint.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -23,7 +24,8 @@
 
 #include <geos/export.h>
 #include <geos/platform.h>
-#include <geos/geom/GeometryCollection.h>
+#include <geos/geom/GeometryCollection.h> // for inheritance
+#include <geos/geom/Puntal.h> // for inheritance
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
 
 #include <geos/inline.h>
@@ -42,10 +44,12 @@ namespace geos {
 namespace geom { // geos::geom
 
 /**
- * \class MultiPoint geom.h geos.h
- * \brief  Models a collection of Point objects.
+ * Models a collection of Point objects.
+ *
+ * Any collection of Points is a valid MultiPoint.
  */
-class GEOS_DLL MultiPoint: public GeometryCollection {
+class GEOS_DLL MultiPoint: public GeometryCollection, public Puntal
+{
 
 public:
 

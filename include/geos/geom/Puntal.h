@@ -4,8 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
- * Copyright (C) 2005-2006 Refractions Research Inc.
+ * Copyright (C) 2011  Sandro Santilli <strk@keybit.net>
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -14,37 +13,23 @@
  *
  **********************************************************************
  *
- * Last port: geom/MultiLineString.java r320 (JTS-1.12)
+ * Last port: geom/Puntal.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
-#ifndef GEOS_GEOM_MULTILINESTRING_INL
-#define GEOS_GEOM_MULTILINESTRING_INL
-
-#include <geos/geom/MultiLineString.h>
-#include <geos/geom/MultiPoint.h>
-
-//#include <cassert>
+#ifndef GEOS_GEOM_PUNTAL_H
+#define GEOS_GEOM_PUNTAL_H
 
 namespace geos {
 namespace geom { // geos::geom
 
-INLINE 
-MultiLineString::MultiLineString(const MultiLineString &mp)
-	:
-	GeometryCollection(mp)
-{
-}
-
-INLINE Geometry*
-MultiLineString::clone() const
-{
-	return new MultiLineString(*this);
-}
+/**
+ * Identifies {@link Geometry} subclasses which
+ * are 0-dimensional and with components which are {@link Point}s.
+ */
+class Puntal {};
 
 } // namespace geos::geom
 } // namespace geos
 
-#endif // GEOS_GEOM_MULTILINESTRING_INL
-
-
+#endif // ndef GEOS_GEOM_PUNTAL_H

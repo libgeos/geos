@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2005 2006 Refractions Research Inc.
  *
@@ -14,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/Point.java rev. 1.37 (JTS-1.10)
+ * Last port: geom/Point.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -89,8 +90,6 @@ Point::isSimple() const
 {
 	return true;
 }
-
-//bool Point::isValid() const {return true;}
 
 Dimension::DimensionType
 Point::getDimension() const
