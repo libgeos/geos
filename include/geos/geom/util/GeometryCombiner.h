@@ -63,7 +63,7 @@ public:
      * @param g1 a geometry to combine (ownership left to caller)
      * @return the combined geometry
      */
-    static Geometry* combine(Geometry* g0, Geometry* g1);
+    static Geometry* combine(const Geometry* g0, const Geometry* g1);
 
     /**
      * Combines three geometries.
@@ -73,7 +73,7 @@ public:
      * @param g2 a geometry to combine (ownership left to caller)
      * @return the combined geometry
      */
-    static Geometry* combine(Geometry* g0, Geometry* g1, Geometry* g2);
+    static Geometry* combine(const Geometry* g0, const Geometry* g1, const Geometry* g2);
 
 private:
     GeometryFactory const* geomFactory;

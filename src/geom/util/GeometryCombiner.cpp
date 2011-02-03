@@ -32,22 +32,23 @@ Geometry* GeometryCombiner::combine(std::vector<Geometry*> const& geoms)
     return combiner.combine();
 }
 
-Geometry* GeometryCombiner::combine(Geometry* g0, Geometry* g1)
+Geometry* GeometryCombiner::combine(const Geometry* g0, const Geometry* g1)
 {
     std::vector<Geometry*> geoms;
-    geoms.push_back(g0);
-    geoms.push_back(g1);
+    geoms.push_back(const_cast<Geometry*>(g0));
+    geoms.push_back(const_cast<Geometry*>(g1));
 
     GeometryCombiner combiner(geoms);
     return combiner.combine();
 }
 
-Geometry* GeometryCombiner::combine(Geometry* g0, Geometry* g1, Geometry* g2)
+Geometry* GeometryCombiner::combine(const Geometry* g0, const Geometry* g1,
+                                    const Geometry* g2)
 {
     std::vector<Geometry*> geoms;
-    geoms.push_back(g0);
-    geoms.push_back(g1);
-    geoms.push_back(g2);
+    geoms.push_back(const_cast<Geometry*>(g0));
+    geoms.push_back(const_cast<Geometry*>(g1));
+    geoms.push_back(const_cast<Geometry*>(g2));
 
     GeometryCombiner combiner(geoms);
     return combiner.combine();
