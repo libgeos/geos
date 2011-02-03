@@ -50,7 +50,7 @@ namespace tut
 	    // Create non-empty Point
 	    GeometryPtr geo = 0;
 	    geo = reader_.read("POINT(1.234 5.678)");
-	    point_ = static_cast<PointPtr>(geo);
+	    point_ = dynamic_cast<PointPtr>(geo);
 	}
 	
 	~test_point_data()

@@ -43,7 +43,7 @@ namespace tut
 			// Create non-empty MultiPoint
 			GeometryPtr geo = 0;
 			geo = reader_.read("MULTIPOINT(0 0, 5 5, 10 10, 15 15, 20 20)");
-			mp_ = static_cast<MultiPointPtr>(geo);
+			mp_ = dynamic_cast<MultiPointPtr>(geo);
 		}
 
 		~test_multipoint_data()
@@ -106,7 +106,7 @@ namespace tut
 	{
 		const size_t size0 = 0;
 		GeometryPtr geo = reader_.read("MULTIPOINT EMPTY");
-		MultiPointPtr mp = static_cast<MultiPointPtr>(geo);
+		MultiPointPtr mp = dynamic_cast<MultiPointPtr>(geo);
 
 		ensure( mp->isEmpty() );
 		ensure( mp->isSimple() );
