@@ -482,11 +482,11 @@ GeometryFactory::createMultiPoint(const CoordinateSequence &fromCoords) const
 MultiPoint*
 GeometryFactory::createMultiPoint(const std::vector<Coordinate> &fromCoords) const
 {
-	size_t npts=fromCoords.getSize();
+	size_t npts=fromCoords.size();
 	vector<Geometry *> *pts=new vector<Geometry *>;
 	pts->reserve(npts);
 	for (size_t i=0; i<npts; ++i) {
-		Point *pt=createPoint(fromCoords.getAt(i));
+		Point *pt=createPoint(fromCoords[i]);
 		pts->push_back(pt);
 	}
 	MultiPoint *mp = NULL;
