@@ -153,8 +153,8 @@ IsSimpleOp::isSimpleMultiPoint(const MultiPoint& mp)
 
 	for (std::size_t i=0, n=mp.getNumGeometries(); i<n; ++i)
 	{
-		assert(dynamic_cast<const Point*>(mp.getGeometryN(i)));
-		const Point *pt=static_cast<const Point*>(mp.getGeometryN(i));
+		const Point *pt = dynamic_cast<const Point*>(mp.getGeometryN(i));
+		assert(pt);
 		const Coordinate *p=pt->getCoordinate();
 		if (points.find(p) != points.end())
 		{

@@ -253,9 +253,10 @@ GeometryCollection::computeEnvelopeInternal() const
 }
 
 int
-GeometryCollection::compareToSameClass(const Geometry *gc) const
+GeometryCollection::compareToSameClass(const Geometry *g) const
 {
-	return compare(*geometries, *(((GeometryCollection*)gc)->geometries));
+  const GeometryCollection* gc = dynamic_cast<const GeometryCollection*>(g);
+	return compare(*geometries, *(gc->geometries));
 }
 
 const Coordinate*

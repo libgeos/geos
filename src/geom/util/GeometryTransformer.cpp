@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -13,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/util/GeometryTransformer.java rev. 1.6 (JTS-1.7.1+)
+ * Last port: geom/util/GeometryTransformer.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -155,9 +156,8 @@ GeometryTransformer::transformMultiPoint(
 
 	for (unsigned int i=0, n=geom->getNumGeometries(); i<n; i++)
 	{
-		assert(dynamic_cast<const Point*>(geom->getGeometryN(i)));
-		const Point* p = static_cast<const Point*>(
-				geom->getGeometryN(i));
+		const Point* p = dynamic_cast<const Point*>(geom->getGeometryN(i));
+		assert(p);
 
 		Geometry::AutoPtr transformGeom = transformPoint(p, geom);
 		if ( transformGeom.get() == NULL ) continue;

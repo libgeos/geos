@@ -4,12 +4,18 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
+ * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
+ *
+ **********************************************************************
+ *
+ * Last port: geom/util/GeometryEditor.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -71,24 +77,27 @@ GeometryEditor::edit(const Geometry *geometry, GeometryEditorOperation *operatio
 	// if client did not supply a GeometryFactory, use the one from the input Geometry
 	if (factory == NULL)
 		factory=geometry->getFactory();
-	if ((typeid(*geometry)==typeid(GeometryCollection)) ||
-				(typeid(*geometry)==typeid(MultiPoint)) ||
-				(typeid(*geometry)==typeid(MultiPolygon)) ||
-				(typeid(*geometry)==typeid(MultiLineString))) {
-		return editGeometryCollection((const GeometryCollection*) geometry, operation);
-	}
 
-	if (typeid(*geometry)==typeid(Polygon)) {
-		return editPolygon((Polygon*) geometry, operation);
-	}
+  if ( const GeometryCollection *gc =
+            dynamic_cast<const GeometryCollection*>(geometry) )
+  {
+		return editGeometryCollection(gc, operation);
+  }
 
-	if (typeid(*geometry)==typeid(Point)) {
+  if ( const Polygon *p = dynamic_cast<const Polygon*>(geometry) )
+  {
+		return editPolygon(p, operation);
+  }
+
+  if ( dynamic_cast<const Point*>(geometry) )
+  {
 		return operation->edit(geometry, factory);
-	}
+  }
 
-	if (typeid(*geometry)==typeid(LineString) || typeid(*geometry)==typeid(LinearRing)) {
+  if ( dynamic_cast<const LineString*>(geometry) )
+  {
 		return operation->edit(geometry, factory);
-	}
+  }
 
     // Unsupported Geometry classes should be caught in the GeometryEditorOperation.
     assert(!"SHOULD NEVER GET HERE");
@@ -137,7 +146,7 @@ GeometryEditor::editPolygon(const Polygon *polygon,GeometryEditorOperation *oper
 GeometryCollection*
 GeometryEditor::editGeometryCollection(const GeometryCollection *collection, GeometryEditorOperation *operation)
 {
-	GeometryCollection *newCollection = (GeometryCollection*) operation->edit(collection,factory);
+	GeometryCollection *newCollection = dynamic_cast<GeometryCollection*>( operation->edit(collection,factory) );
 	vector<Geometry*> *geometries = new vector<Geometry*>();
 	for (unsigned int i=0, n=newCollection->getNumGeometries(); i<n; i++)
 	{

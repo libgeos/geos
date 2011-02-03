@@ -72,14 +72,13 @@ Geometry* MultiPolygon::getBoundary() const {
 		Polygon *pg=dynamic_cast<Polygon *>((*geometries)[i]);
 		assert(pg);
 		Geometry *g=pg->getBoundary();
-		LineString *ls=dynamic_cast<LineString *>(g);
-		if ( ls )
+		if ( LineString *ls=dynamic_cast<LineString *>(g) )
 		{
 			allRings->push_back(ls);
 		}
 		else
 		{
-			GeometryCollection* rings=(GeometryCollection*)g;
+			GeometryCollection* rings=dynamic_cast<GeometryCollection*>(g);
 			for (size_t j=0, jn=rings->getNumGeometries();
 					j<jn; ++j)
 			{

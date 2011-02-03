@@ -206,31 +206,53 @@ void
 WKTWriter::appendGeometryTaggedText(const Geometry *geometry, int level,
 		Writer *writer)
 {
-    outputDimension = min(defaultOutputDimension,geometry->getCoordinateDimension());
+  outputDimension = min( defaultOutputDimension,
+                         geometry->getCoordinateDimension() );
 
-	indent(level, writer);
-	if (typeid(*geometry)==typeid(Point)) {
-		Point* point=(Point*)geometry;
-		appendPointTaggedText(point->getCoordinate(),level,writer);
-	} else if (typeid(*geometry)==typeid(LinearRing)) {
-		appendLinearRingTaggedText((LinearRing*) geometry, level, writer);
-	} else if (typeid(*geometry)==typeid(LineString)) {
-		appendLineStringTaggedText((LineString*)geometry, level, writer);
-	} else if (typeid(*geometry)==typeid(LinearRing)) {
-		appendLinearRingTaggedText((LinearRing*)geometry, level, writer);
-	} else if (typeid(*geometry)==typeid(Polygon)) {
-		appendPolygonTaggedText((Polygon*)geometry, level, writer);
-	} else if (typeid(*geometry)==typeid(MultiPoint)) {
-		appendMultiPointTaggedText((MultiPoint*)geometry, level, writer);
-	} else if (typeid(*geometry)==typeid(MultiLineString)) {
-		appendMultiLineStringTaggedText((MultiLineString*)geometry, level, writer);
-	} else if (typeid(*geometry)==typeid(MultiPolygon)) {
-		appendMultiPolygonTaggedText((MultiPolygon*)geometry, level, writer);
-	} else if (typeid(*geometry)==typeid(GeometryCollection)) {
-		appendGeometryCollectionTaggedText((GeometryCollection*)geometry, level, writer);
-	} else {
-		assert(0); // Unsupported Geometry implementation
-	}
+  indent(level, writer);
+  if ( const Point* point = dynamic_cast<const Point*>(geometry) )
+  {
+    appendPointTaggedText(point->getCoordinate(),level,writer);
+  }
+  else if ( const LinearRing* lr =
+    dynamic_cast<const LinearRing*>(geometry) )
+  {
+    appendLinearRingTaggedText(lr, level, writer);
+  }
+  else if ( const LineString* ls =
+    dynamic_cast<const LineString*>(geometry) )
+  {
+    appendLineStringTaggedText(ls, level, writer);
+  }
+  else if ( const Polygon* x =
+    dynamic_cast<const Polygon*>(geometry) )
+  {
+    appendPolygonTaggedText(x, level, writer);
+  }
+  else if ( const MultiPoint* x =
+    dynamic_cast<const MultiPoint*>(geometry) )
+  {
+    appendMultiPointTaggedText(x, level, writer);
+  }
+  else if ( const MultiLineString* x =
+    dynamic_cast<const MultiLineString*>(geometry) )
+  {
+    appendMultiLineStringTaggedText(x, level, writer);
+  }
+  else if ( const MultiPolygon* x =
+    dynamic_cast<const MultiPolygon*>(geometry) )
+  {
+    appendMultiPolygonTaggedText(x, level, writer);
+  }
+  else if ( const GeometryCollection* x =
+    dynamic_cast<const GeometryCollection*>(geometry) )
+  {
+    appendGeometryCollectionTaggedText(x, level, writer);
+  }
+  else
+  {
+    assert(0); // Unsupported Geometry implementation
+  }
 }
 
 /*protected*/
@@ -465,7 +487,7 @@ WKTWriter::appendMultiPointText(const MultiPoint *multiPoint,
 				writer->write(", ");
 			}
 			appendCoordinate(
-				((Point* )multiPoint->getGeometryN(i))->getCoordinate(),
+				dynamic_cast<const Point*>(multiPoint->getGeometryN(i))->getCoordinate(),
 				writer);
 		}
 		writer->write(")");

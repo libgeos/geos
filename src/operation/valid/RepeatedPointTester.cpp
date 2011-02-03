@@ -48,16 +48,37 @@ bool
 RepeatedPointTester::hasRepeatedPoint(const Geometry *g)
 {
 	if (g->isEmpty()) return false;
-	if (typeid(*g)==typeid(Point)) return false;
-	else if (typeid(*g)==typeid(MultiPoint)) return false;
+
+	if ( dynamic_cast<const Point*>(g) ) return false;
+	if ( dynamic_cast<const MultiPoint*>(g) ) return false;
+
 	// LineString also handles LinearRings
-	else if (typeid(*g)==typeid(LineString)) return hasRepeatedPoint(((LineString*)g)->getCoordinatesRO());
-	else if (typeid(*g)==typeid(LinearRing)) return hasRepeatedPoint(((LineString*)g)->getCoordinatesRO());
-	else if (typeid(*g)==typeid(Polygon)) return hasRepeatedPoint((Polygon*)g);
-	else if (typeid(*g)==typeid(MultiPolygon)) return hasRepeatedPoint((MultiPolygon*)g);
-	else if (typeid(*g)==typeid(MultiLineString)) return hasRepeatedPoint((MultiLineString*)g);
-	else if (typeid(*g)==typeid(GeometryCollection)) return hasRepeatedPoint((GeometryCollection*)g);
-	else  throw util::UnsupportedOperationException(typeid(*g).name());
+	if ( const LineString* x = dynamic_cast<const LineString*>(g) ) 
+  {
+    return hasRepeatedPoint(x->getCoordinatesRO());
+  }
+
+	if ( const Polygon* x = dynamic_cast<const Polygon*>(g) ) 
+  {
+    return hasRepeatedPoint(x);
+  }
+
+	if ( const MultiPolygon* x = dynamic_cast<const MultiPolygon*>(g) ) 
+  {
+    return hasRepeatedPoint(x);
+  }
+
+	if ( const MultiLineString* x = dynamic_cast<const MultiLineString*>(g) ) 
+  {
+    return hasRepeatedPoint(x);
+  }
+
+	if ( const GeometryCollection* x = dynamic_cast<const GeometryCollection*>(g) ) 
+  {
+    return hasRepeatedPoint(x);
+  }
+
+	throw util::UnsupportedOperationException(typeid(*g).name());
 }
 
 bool

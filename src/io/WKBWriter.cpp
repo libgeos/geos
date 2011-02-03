@@ -89,33 +89,43 @@ WKBWriter::write(const Geometry &g, ostream &os)
 
 	outStream = &os;
 
-	switch (g.getGeometryTypeId()) {
-		case GEOS_POINT:
-			return writePoint((Point &)g);
-		case GEOS_LINESTRING:
-		case GEOS_LINEARRING:
-			return writeLineString((LineString &)g);
-		case GEOS_POLYGON:
-			return writePolygon((Polygon &)g);
-		case GEOS_MULTIPOINT:
-			return writeGeometryCollection(
-				(GeometryCollection &)g,
-				WKBConstants::wkbMultiPoint);
-		case GEOS_MULTILINESTRING:
-			return writeGeometryCollection(
-				(GeometryCollection &)g,
-				WKBConstants::wkbMultiLineString);
-		case GEOS_MULTIPOLYGON:
-			return writeGeometryCollection(
-				(GeometryCollection &)g,
-				WKBConstants::wkbMultiPolygon);
-		case GEOS_GEOMETRYCOLLECTION:
-			return writeGeometryCollection(
-				(GeometryCollection &)g,
-				WKBConstants::wkbGeometryCollection);
-		default:
-			assert(0); // Unknown Geometry type
-	}
+  if ( const Point* x = dynamic_cast<const Point*>(&g) )
+  {
+    return writePoint(*x);
+  }
+
+  if ( const LineString* x = dynamic_cast<const LineString*>(&g) )
+  {
+    return writeLineString(*x);
+  }
+
+  if ( const Polygon* x = dynamic_cast<const Polygon*>(&g) )
+  {
+    return writePolygon(*x);
+  }
+
+  if ( const MultiPoint* x = dynamic_cast<const MultiPoint*>(&g) )
+  {
+    return writeGeometryCollection(*x, WKBConstants::wkbMultiPoint);
+  }
+
+  if ( const MultiLineString* x = dynamic_cast<const MultiLineString*>(&g) )
+  { 
+    return writeGeometryCollection(*x, WKBConstants::wkbMultiLineString);
+  }
+
+  if ( const MultiPolygon* x = dynamic_cast<const MultiPolygon*>(&g) )
+  {
+    return writeGeometryCollection(*x, WKBConstants::wkbMultiPolygon);
+  }
+
+  if ( const GeometryCollection* x = 
+       dynamic_cast<const GeometryCollection*>(&g) )
+  {
+    return writeGeometryCollection(*x, WKBConstants::wkbGeometryCollection);
+  }
+
+  assert(0); // Unknown Geometry type
 }
 
 void

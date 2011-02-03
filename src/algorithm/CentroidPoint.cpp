@@ -31,16 +31,17 @@ namespace algorithm { // geos.algorithm
 void
 CentroidPoint::add(const Geometry *geom)
 {
-	if (typeid(*geom)==typeid(Point)) {
-		add(geom->getCoordinate());
-	} else if ((typeid(*geom)==typeid(GeometryCollection)) ||
-				(typeid(*geom)==typeid(MultiPoint))) {
-		GeometryCollection *gc=(GeometryCollection*) geom;
-		for(std::size_t i=0, n=gc->getNumGeometries(); i<n; ++i)
-		{
-			add(gc->getGeometryN(i));
-		}
-	}
+  if ( const Point *p = dynamic_cast<const Point*>(geom) )
+  {
+		add(p->getCoordinate());
+  }
+  else if ( const GeometryCollection *gc =
+            dynamic_cast<const GeometryCollection*>(geom) )
+  {
+    for(std::size_t i=0, n=gc->getNumGeometries(); i<n; ++i) {
+      add(gc->getGeometryN(i));
+    }
+  }
 }
 
 void

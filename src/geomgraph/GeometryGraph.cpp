@@ -179,27 +179,21 @@ GeometryGraph::add(const Geometry *g)
 		useBoundaryDeterminationRule = false;
 
 
-	if ( dynamic_cast<const Polygon*>(g) )
-		addPolygon((Polygon*) g);
+	if ( const Polygon* x = dynamic_cast<const Polygon*>(g) )
+		addPolygon(x);
 
 	// LineString also handles LinearRings
-	else if ( dynamic_cast<const LineString*>(g) )
-		addLineString((LineString*) g);
+	else if ( const LineString* x = dynamic_cast<const LineString*>(g) )
+		addLineString(x);
 
-	else if ( dynamic_cast<const Point*>(g) )
-		addPoint((Point*) g);
+	else if ( const Point* x = dynamic_cast<const Point*>(g) )
+		addPoint(x);
 
-	else if ( dynamic_cast<const MultiPoint*>(g) )
-		addCollection((MultiPoint*) g);
-
-	else if ( dynamic_cast<const MultiLineString*>(g) )
-		addCollection((MultiLineString*) g);
-
-	else if ( dynamic_cast<const MultiPolygon*>(g) )
-		addCollection((MultiPolygon*) g);
-
-	else if ( dynamic_cast<const GeometryCollection*>(g) )
-		addCollection((GeometryCollection*) g);
+	else if ( const GeometryCollection* x =
+            dynamic_cast<const GeometryCollection*>(g) )
+  {
+		addCollection(x);
+  }
 
 	else {
 		string out=typeid(*g).name();
