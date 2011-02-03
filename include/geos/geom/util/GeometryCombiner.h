@@ -51,7 +51,7 @@ public:
     /**
      * Combines a collection of geometries.
      * 
-     * @param geoms the geometries to combine
+     * @param geoms the geometries to combine (ownership left to caller)
      * @return the combined geometry
      */
     static Geometry* combine(std::vector<Geometry*> const& geoms);
@@ -59,8 +59,8 @@ public:
     /**
      * Combines two geometries.
      * 
-     * @param g0 a geometry to combine
-     * @param g1 a geometry to combine
+     * @param g0 a geometry to combine (ownership left to caller)
+     * @param g1 a geometry to combine (ownership left to caller)
      * @return the combined geometry
      */
     static Geometry* combine(Geometry* g0, Geometry* g1);
@@ -68,9 +68,9 @@ public:
     /**
      * Combines three geometries.
      * 
-     * @param g0 a geometry to combine
-     * @param g1 a geometry to combine
-     * @param g2 a geometry to combine
+     * @param g0 a geometry to combine (ownership left to caller)
+     * @param g1 a geometry to combine (ownership left to caller)
+     * @param g2 a geometry to combine (ownership left to caller)
      * @return the combined geometry
      */
     static Geometry* combine(Geometry* g0, Geometry* g1, Geometry* g2);
