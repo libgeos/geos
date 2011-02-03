@@ -136,6 +136,11 @@ struct GEOS_DLL CoordinateLessThen {
 
 };
 
+/// Strict weak ordering operator for Coordinate
+inline bool operator<(const Coordinate& a, const Coordinate& b) {
+  return CoordinateLessThen()(a,b);
+}
+
 /// Output function
 GEOS_DLL std::ostream& operator<< (std::ostream& os, const Coordinate& c);
 
