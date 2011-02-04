@@ -78,7 +78,8 @@ geom::Geometry* CascadedPolygonUnion::Union()
     typedef std::vector<geom::Polygon*>::iterator iterator_type;
     iterator_type end = inputPolys->end();
     for (iterator_type i = inputPolys->begin(); i != end; ++i) {
-        index.insert((*i)->getEnvelopeInternal(), *i);
+        geom::Geometry* g = dynamic_cast<geom::Geometry*>(*i);
+        index.insert(g->getEnvelopeInternal(), g);
     }
 
     std::auto_ptr<index::strtree::ItemsList> itemTree (index.itemsTree());
