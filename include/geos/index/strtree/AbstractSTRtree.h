@@ -96,7 +96,7 @@ private:
     static void delete_item(ItemsListItem& item)
     {
         if (ItemsListItem::item_is_list == item.t)
-            delete reinterpret_cast<ItemsList*>(item.item.l);
+            delete item.item.l;
     }
 
 public:
