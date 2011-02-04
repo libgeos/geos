@@ -347,8 +347,8 @@ LineString::normalize()
 int
 LineString::compareToSameClass(const Geometry *ls) const
 {
-	assert(dynamic_cast<const LineString*>(ls));
-	const LineString *line=static_cast<const LineString*>(ls);
+	const LineString *line=dynamic_cast<const LineString*>(ls);
+	assert(line);
 	// MD - optimized implementation
 	int mynpts=points->getSize();
 	int othnpts=line->points->getSize();

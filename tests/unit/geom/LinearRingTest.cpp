@@ -56,7 +56,7 @@ namespace tut
 			// Create non-empty LinearRing
 			GeometryPtr geo = 0;
 			geo = reader_.read("LINEARRING(0 10, 5 5, 10 5, 15 10, 10 15, 5 15, 0 10)");
-			ring_ = static_cast<LinearRingPtr>(geo);
+			ring_ = dynamic_cast<LinearRingPtr>(geo);
 		}
 
 		~test_linearring_data()
@@ -411,7 +411,7 @@ namespace tut
 			GeometryPtr geo = reader_.read("LINEARRING(0 0, 5 5, 10 10, 15 5, 5 5, 0 10)");
 			ensure(geo != 0);
 
-			LinearRingPtr ring = static_cast<LinearRingPtr>(geo);
+			LinearRingPtr ring = dynamic_cast<LinearRingPtr>(geo);
 			ensure(ring != 0);
 
 			ensure( !ring->isValid() );

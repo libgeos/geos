@@ -343,7 +343,7 @@ namespace tut
 		GeometryPtr geo = reader_.read("LINESTRING (0 0, 5 5, 10 5, 10 10)");
 		ensure( geo != 0 );
 
-		LineStringPtr line = static_cast<LineStringPtr>(geo);
+		LineStringPtr line = dynamic_cast<LineStringPtr>(geo);
 		ensure(line != 0);
 		
 		GeometryPtr envelope = line->getEnvelope();	
@@ -365,7 +365,7 @@ namespace tut
 		GeometryPtr geo = reader_.read("LINESTRING (0 0, 5 5, 10 5, 10 10)");
 		ensure( geo != 0 );
 
-		LineStringPtr line = static_cast<LineStringPtr>(geo);
+		LineStringPtr line = dynamic_cast<LineStringPtr>(geo);
 		ensure(line != 0);
 		
 		GeometryPtr boundary = line->getBoundary();	
@@ -387,7 +387,7 @@ namespace tut
 		GeometryPtr geo = reader_.read("LINESTRING (0 0, 5 5, 10 5, 10 10)");
 		ensure( geo != 0 );
 
-		LineStringPtr line = static_cast<LineStringPtr>(geo);
+		LineStringPtr line = dynamic_cast<LineStringPtr>(geo);
 		ensure(line != 0);
 		
 		GeometryPtr hull = line->convexHull();	

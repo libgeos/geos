@@ -67,10 +67,11 @@ LineSequencer::isSequenced(const Geometry* geom)
 
 	for (unsigned int i=0, n=mls->getNumGeometries(); i<n; ++i)
 	{
-		assert(dynamic_cast<const LineString*>(mls->getGeometryN(i)));
+		const LineString* lineptr = \
+			dynamic_cast<const LineString*>(mls->getGeometryN(i));
+		assert(lineptr);
+		const LineString& line = *lineptr;
 
-		const LineString& line = \
-			static_cast<const LineString&>(*(mls->getGeometryN(i)));
 
 		const Coordinate* startNode = &(line.getCoordinateN(0));
 		const Coordinate* endNode = &(line.getCoordinateN(line.getNumPoints() - 1));
@@ -208,8 +209,8 @@ LineSequencer::buildSequencedGeometry(const Sequences& sequences)
 				lineToAdd = reverse(line);
 			} else {
 				Geometry* lineClone = line->clone();
-				assert(dynamic_cast<LineString *>(lineClone));
-				lineToAdd = static_cast<LineString *>(lineClone); 
+				lineToAdd = dynamic_cast<LineString *>(lineClone); 
+				assert(lineToAdd);
 			}
 
 			lines->push_back(lineToAdd);

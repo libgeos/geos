@@ -510,7 +510,10 @@ void WKTWriter::appendMultiLineStringText(const MultiLineString *multiLineString
 				level2=level+1;
 				doIndent=true;
 			}
-			appendLineStringText((LineString *) multiLineString->getGeometryN(i), level2, doIndent, writer);
+			const LineString* ls = dynamic_cast<const LineString *>(
+			  multiLineString->getGeometryN(i)
+			);
+			appendLineStringText(ls, level2, doIndent, writer);
 		}
 		writer->write(")");
 	}

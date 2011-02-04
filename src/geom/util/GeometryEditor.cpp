@@ -115,7 +115,7 @@ GeometryEditor::editPolygon(const Polygon *polygon,GeometryEditorOperation *oper
 
 	Geometry* editResult = edit(newPolygon->getExteriorRing(),operation);
 
-	LinearRing* shell = static_cast<LinearRing*>(editResult);
+	LinearRing* shell = dynamic_cast<LinearRing*>(editResult);
 	if (shell->isEmpty()) {
 		//RemoveSelectedPlugIn relies on this behaviour. [Jon Aquino]
 		delete shell;
@@ -130,8 +130,8 @@ GeometryEditor::editPolygon(const Polygon *polygon,GeometryEditorOperation *oper
 		Geometry *hole_geom = edit(newPolygon->getInteriorRingN(i),
 			operation);
 
-		assert(dynamic_cast<LinearRing*>(hole_geom));
-		LinearRing *hole = static_cast<LinearRing*>(hole_geom);
+		LinearRing *hole = dynamic_cast<LinearRing*>(hole_geom);
+		assert(hole);
 
 		if (hole->isEmpty())
 		{

@@ -760,7 +760,8 @@ namespace tut
 		GeometryPtr geo = reader_.read(("LINEARRING(7 7, 12 7, 12 12, 7 12, 7 7)"));
 		ensure( geo != 0 );
 
-		LinearRingPtr hole = static_cast<LinearRingPtr>(geo);
+		LinearRingPtr hole = dynamic_cast<LinearRingPtr>(geo);
+		ensure( hole );
 		ensure( hole->isRing() );
 		ensure_equals( hole->getNumPoints(), interiorSize );
 

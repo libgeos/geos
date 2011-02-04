@@ -520,7 +520,7 @@ Polygon*
 GeometryFactory::createPolygon(const LinearRing &shell, const vector<Geometry *> &holes)
 	const
 {
-	LinearRing *newRing = (LinearRing *)shell.clone();
+	LinearRing *newRing = dynamic_cast<LinearRing *>(shell.clone());
 	vector<Geometry *>*newHoles = new vector<Geometry *>(holes.size());
 	for (size_t i=0; i<holes.size(); i++)
 	{

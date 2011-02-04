@@ -107,7 +107,7 @@ namespace tut
 
 			// Exterior (clone is required here because Polygon takes ownership)
 			GeometryPtr geo = ring.clone();
-			LinearRingPtr exterior = static_cast<LinearRingPtr>(geo);
+			LinearRingPtr exterior = dynamic_cast<LinearRingPtr>(geo);
 			
 			// Create non-empty Polygon
 			//geos::geom::Polygon poly(exterior, 0, &factory_);

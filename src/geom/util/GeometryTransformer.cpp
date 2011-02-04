@@ -228,9 +228,9 @@ GeometryTransformer::transformMultiLineString(
 
 	for (unsigned int i=0, n=geom->getNumGeometries(); i<n; i++)
 	{
-		assert(dynamic_cast<const LineString*>(geom->getGeometryN(i)));
-		const LineString* l = static_cast<const LineString*>(
+		const LineString* l = dynamic_cast<const LineString*>(
 				geom->getGeometryN(i));
+		assert(l);
 
 		Geometry::AutoPtr transformGeom = transformLineString(l, geom);
 		if ( transformGeom.get() == NULL ) continue;
@@ -257,9 +257,9 @@ GeometryTransformer::transformPolygon(
 
 	bool isAllValidLinearRings = true;
 
-	assert(dynamic_cast<const LinearRing*>(geom->getExteriorRing()));
-	const LinearRing* lr = static_cast<const LinearRing*>(
+	const LinearRing* lr = dynamic_cast<const LinearRing*>(
 			geom->getExteriorRing());
+	assert(lr);
 
 	Geometry::AutoPtr shell = transformLinearRing(lr, geom);
 	if ( shell.get() == NULL
@@ -272,10 +272,9 @@ GeometryTransformer::transformPolygon(
 	vector<Geometry*>* holes = new vector<Geometry*>();
 	for (unsigned int i=0, n=geom->getNumInteriorRing(); i<n; i++)
 	{
-		assert(dynamic_cast<const LinearRing*>(
-			geom->getInteriorRingN(i)));
-		const LinearRing* lr = static_cast<const LinearRing*>(
+		const LinearRing* lr = dynamic_cast<const LinearRing*>(
 			geom->getInteriorRingN(i));
+		assert(lr);
 
 		Geometry::AutoPtr hole(transformLinearRing(lr, geom));
 
@@ -294,10 +293,9 @@ GeometryTransformer::transformPolygon(
 	if ( isAllValidLinearRings)
 	{
 		Geometry* sh = shell.release();
-		assert(dynamic_cast<LinearRing*>(sh));
-		return Geometry::AutoPtr(factory->createPolygon(
-			static_cast<LinearRing*>(sh),
-			holes));
+		LinearRing* lr = dynamic_cast<LinearRing*>(sh);
+    assert(lr);
+		return Geometry::AutoPtr(factory->createPolygon(lr, holes));
 	}
 	else
 	{
@@ -332,9 +330,9 @@ GeometryTransformer::transformMultiPolygon(
 
 	for (unsigned int i=0, n=geom->getNumGeometries(); i<n; i++)
 	{
-		assert(dynamic_cast<const Polygon*>(geom->getGeometryN(i)));
-		const Polygon* p = static_cast<const Polygon*>(
+		const Polygon* p = dynamic_cast<const Polygon*>(
 				geom->getGeometryN(i));
+		assert(p);
 
 		Geometry::AutoPtr transformGeom = transformPolygon(p, geom);
 		if ( transformGeom.get() == NULL ) continue;
