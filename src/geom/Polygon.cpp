@@ -331,9 +331,10 @@ Polygon::normalize()
 }
 
 int
-Polygon::compareToSameClass(const Geometry *p) const
+Polygon::compareToSameClass(const Geometry *g) const
 {
-	return shell->compareToSameClass(((Polygon*)p)->shell);
+	const Polygon* p = dynamic_cast<const Polygon*>(g);
+	return shell->compareToSameClass(p->shell);
 }
 
 /*

@@ -534,7 +534,10 @@ void WKTWriter::appendMultiPolygonText(const MultiPolygon *multiPolygon, int lev
 				level2=level+1;
 				doIndent=true;
 			}
-			appendPolygonText((Polygon *) multiPolygon->getGeometryN(i), level2, doIndent, writer);
+			const Polygon *p = dynamic_cast<const Polygon *>(
+			  multiPolygon->getGeometryN(i)
+			);
+			appendPolygonText(p, level2, doIndent, writer);
 		}
 		writer->write(")");
 	}

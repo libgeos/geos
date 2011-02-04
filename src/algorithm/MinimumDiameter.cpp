@@ -179,9 +179,14 @@ MinimumDiameter::computeWidthConvex(const Geometry *geom)
 	//System.out.println("Input = " + geom);
 	CoordinateSequence* pts=NULL;
 	if (typeid(*geom)==typeid(Polygon))
-		pts=((Polygon*)geom)->getExteriorRing()->getCoordinates();
+	{
+		const Polygon* p = dynamic_cast<const Polygon*>(geom);
+		pts=p->getExteriorRing()->getCoordinates();
+	}
 	else
+	{
 		pts=geom->getCoordinates();
+	}
 
 	// special cases for lines or points or degenerate rings
 	switch(pts->getSize())

@@ -107,7 +107,9 @@ GeometryEditor::edit(const Geometry *geometry, GeometryEditorOperation *operatio
 Polygon*
 GeometryEditor::editPolygon(const Polygon *polygon,GeometryEditorOperation *operation)
 {
-	Polygon* newPolygon=(Polygon*) operation->edit(polygon, factory);
+	Polygon* newPolygon= dynamic_cast<Polygon*>(
+    operation->edit(polygon, factory)
+  );
 	if (newPolygon->isEmpty()) {
 		//RemoveSelectedPlugIn relies on this behaviour. [Jon Aquino]
 		return newPolygon;

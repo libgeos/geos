@@ -114,7 +114,7 @@ namespace tut
         {
             std::string wkt(*p);
             geos::geom::Polygon* geom = 
-                static_cast<geos::geom::Polygon*>(wktreader.read(wkt));
+                dynamic_cast<geos::geom::Polygon*>(wktreader.read(wkt));
             g.push_back(geom);
         }
 
@@ -130,7 +130,7 @@ namespace tut
             for (int j = 0; j < num; ++j) {
                 std::auto_ptr<geos::geom::Point> pt(
                     gf.createPoint(geos::geom::Coordinate(i, j)));
-                g->push_back(static_cast<geos::geom::Polygon*>(pt->buffer(radius)));
+                g->push_back(dynamic_cast<geos::geom::Polygon*>(pt->buffer(radius)));
             }
         }
     }

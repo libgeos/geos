@@ -354,10 +354,12 @@ Geometry::intersects(const Geometry *g) const
 
 	// optimization for rectangle arguments
 	if (isRectangle()) {
-		return predicate::RectangleIntersects::intersects((Polygon&)*this, *g);
+		const Polygon* p = dynamic_cast<const Polygon*>(this);
+		return predicate::RectangleIntersects::intersects(*p, *g);
 	}
 	if (g->isRectangle()) {
-		return predicate::RectangleIntersects::intersects((const Polygon&)*g, *this);
+		const Polygon* p = dynamic_cast<const Polygon*>(g);
+		return predicate::RectangleIntersects::intersects(*p, *this);
 	}
 
 	IntersectionMatrix *im=relate(g);
@@ -419,7 +421,8 @@ Geometry::contains(const Geometry *g) const
 
 	// optimization for rectangle arguments
 	if (isRectangle()) {
-		return predicate::RectangleContains::contains((Polygon&)*this, *g);
+		const Polygon* p = dynamic_cast<const Polygon*>(this);
+		return predicate::RectangleContains::contains(*p, *g);
 	}
 	// Incorrect: contains is not commutative
 	//if (g->isRectangle()) {

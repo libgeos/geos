@@ -70,11 +70,12 @@ AbstractPreparedPolygonContains::isSingleShell(const geom::Geometry& geom)
 		return false;
     }
 	
-    const geom::Geometry* g = geom.getGeometryN(0);
-	const geom::Polygon* poly = static_cast<const Polygon*>(g);
+  const geom::Geometry* g = geom.getGeometryN(0);
+  const geom::Polygon* poly = dynamic_cast<const Polygon*>(g);
+  assert(poly);
 
-    std::size_t numHoles = poly->getNumInteriorRing();
-	return (0 == numHoles);
+  std::size_t numHoles = poly->getNumInteriorRing();
+  return (0 == numHoles);
 }
 	
 

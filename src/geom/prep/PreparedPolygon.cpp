@@ -92,7 +92,7 @@ contains( const geom::Geometry * g) const
     if ( isRectangle )
     {
         geom::Geometry const& geom = getGeometry();
-        geom::Polygon const& poly = static_cast<geom::Polygon const&>(geom);
+        geom::Polygon const& poly = dynamic_cast<geom::Polygon const&>(geom);
         
         return operation::predicate::RectangleContains::contains(poly, *g);
     }
@@ -138,7 +138,7 @@ intersects( const geom::Geometry* g) const
     if ( isRectangle )
     {
         geom::Geometry const& geom = getGeometry();
-        geom::Polygon const& poly = static_cast<geom::Polygon const&>(geom);
+        geom::Polygon const& poly = dynamic_cast<geom::Polygon const&>(geom);
         
         return operation::predicate::RectangleIntersects::intersects(poly, *g);
     }

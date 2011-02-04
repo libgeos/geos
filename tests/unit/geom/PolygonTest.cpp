@@ -50,7 +50,7 @@ namespace tut
 			// Create non-empty LinearRing
 			GeometryPtr geo = 0;
 			geo = reader_.read("POLYGON((0 10, 5 5, 10 5, 15 10, 10 15, 5 15, 0 10))");
-			poly_ = static_cast<PolygonPtr>(geo);
+			poly_ = dynamic_cast<PolygonPtr>(geo);
 		}
 
         ~test_polygon_data() 
@@ -432,7 +432,7 @@ namespace tut
 		ensure( geo != 0 );
 		ensure_equals( geo->getGeometryTypeId(), geos::geom::GEOS_POLYGON );
 		
-		PolygonPtr poly = static_cast<PolygonPtr>(geo);
+		PolygonPtr poly = dynamic_cast<PolygonPtr>(geo);
 		ensure( poly != 0 );
 		ensure_equals( poly->getNumInteriorRing(), holesNum );
 

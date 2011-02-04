@@ -459,7 +459,8 @@ OverlayOp::getAverageZ(int targetIndex)
 	// OverlayOp::getAverageZ(int) called with a ! polygon
 	assert(targetGeom->getGeometryTypeId() == GEOS_POLYGON);
 
-	avgz[targetIndex] = getAverageZ((const Polygon *)targetGeom);
+	const Polygon* p = dynamic_cast<const Polygon*>(targetGeom);
+	avgz[targetIndex] = getAverageZ(p);
 	avgzcomputed[targetIndex] = true;
 	return avgz[targetIndex];
 }
@@ -761,7 +762,8 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 	size_t gvsize=gv->size();
 	resultPolyList=new vector<Polygon*>(gvsize);
 	for(size_t i=0; i<gvsize; ++i) {
-		(*resultPolyList)[i]=(Polygon*)(*gv)[i];
+		Polygon* p = dynamic_cast<Polygon*>((*gv)[i]);
+		(*resultPolyList)[i]=p;
 	}
 	delete gv;
 

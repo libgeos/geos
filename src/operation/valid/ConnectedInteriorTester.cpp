@@ -251,7 +251,7 @@ ConnectedInteriorTester::visitShellInteriors(const Geometry *g, PlanarGraph &gra
 	if (const MultiPolygon* mp=dynamic_cast<const MultiPolygon*>(g))
 	{
 		for (size_t i=0, n=mp->getNumGeometries(); i<n; i++) {
-			const Polygon *p=static_cast<const Polygon*>(mp->getGeometryN(i));
+			const Polygon *p=dynamic_cast<const Polygon*>(mp->getGeometryN(i));
 			visitInteriorRing(p->getExteriorRing(), graph);
 		}
 	}
