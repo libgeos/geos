@@ -18,6 +18,7 @@
  **********************************************************************/
 
 #include <memory> // for auto_ptr
+#include <cassert> // for assert
 #include <algorithm> // for copy
 #include <geos/operation/union/PointGeometryUnion.h> 
 #include <geos/geom/Coordinate.h> 
@@ -47,9 +48,9 @@ PointGeometryUnion::Union() const
   std::set<Coordinate> exteriorCoords;
 
   for (std::size_t i=0, n=pointGeom.getNumGeometries(); i<n; ++i) {
-      assert(dynamic_cast<const Point*>(pointGeom.getGeometryN(i)));
-      const Point& point = *(static_cast<const Point*>(pointGeom.getGeometryN(i)));
-      const Coordinate* coord = point.getCoordinate();
+      const Point* point = dynamic_cast<const Point*>(pointGeom.getGeometryN(i));
+      assert(point);
+      const Coordinate* coord = point->getCoordinate();
       int loc = locater.locate(*coord, &otherGeom);
       if (loc == Location::EXTERIOR)
               exteriorCoords.insert(*coord);
