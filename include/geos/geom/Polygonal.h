@@ -27,7 +27,11 @@ namespace geom { // geos::geom
  * Identifies {@link Geometry} subclasses which
  * are 2-dimensional and with components which are {@link Polygon}s.
  */
-class Polygonal {};
+class Polygonal : public virtual Geometry
+{
+protected:
+  Polygonal(): Geometry(0) {}
+};
 
 } // namespace geos::geom
 } // namespace geos

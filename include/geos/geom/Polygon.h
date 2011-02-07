@@ -64,7 +64,7 @@ namespace geom { // geos::geom
  *  Specification for SQL</A> .
  *
  */
-class GEOS_DLL Polygon: public Geometry, public Polygonal
+class GEOS_DLL Polygon: public virtual Geometry, public Polygonal
 {
 
 public:

@@ -68,7 +68,7 @@ namespace geom { // geos::geom
  *  If these conditions are not met, the constructors throw
  *  an {@link IllegalArgumentException}
  */
-class GEOS_DLL LineString: public Geometry, public Lineal {
+class GEOS_DLL LineString: public virtual Geometry, public Lineal {
 
 public:
 
@@ -222,10 +222,6 @@ LineString::clone() const {
 
 } // namespace geos::geom
 } // namespace geos
-
-//#ifdef GEOS_INLINE
-//# include "geos/geom/LineString.inl"
-//#endif
 
 #ifdef _MSC_VER
 #pragma warning(pop)

@@ -45,6 +45,7 @@ namespace geom { // geos::geom
 MultiLineString::MultiLineString(vector<Geometry *> *newLines,
 		const GeometryFactory *factory)
 	:
+	Geometry(factory),
 	GeometryCollection(newLines,factory)
 {
 }
@@ -71,8 +72,9 @@ bool MultiLineString::isClosed() const {
 	if (isEmpty()) {
 		return false;
 	}
-	for (size_t i = 0; i < geometries->size(); i++) {
-		if (!((LineString *)(*geometries)[i])->isClosed()) {
+	for (size_t i = 0, n = geometries->size(); i < n; ++i) {
+		LineString *ls = dynamic_cast<LineString*>((*geometries)[i]);
+		if ( ! ls->isClosed() ) {
 			return false;
 		}
 	}
@@ -112,8 +114,8 @@ MultiLineString::reverse() const
 	Geometry::NonConstVect *revLines = new Geometry::NonConstVect(nLines);
 	for (size_t i=0; i<nLines; ++i)
 	{
-		assert(dynamic_cast<LineString*>((*geometries)[i]));
-		LineString *iLS = static_cast<LineString*>((*geometries)[i]);
+		LineString *iLS = dynamic_cast<LineString*>((*geometries)[i]);
+		assert(iLS);
 		(*revLines)[nLines-1-i] = iLS->reverse();
 	}
 	return getFactory()->createMultiLineString(revLines);

@@ -27,7 +27,11 @@ namespace geom { // geos::geom
  * Identifies {@link Geometry} subclasses which
  * are 0-dimensional and with components which are {@link Point}s.
  */
-class Puntal {};
+class Puntal : public virtual Geometry
+{
+protected:
+  Puntal(): Geometry(0) {}
+};
 
 } // namespace geos::geom
 } // namespace geos

@@ -65,7 +65,7 @@ namespace geom { // geos::geom
  *   (i.e does not have an NaN X or Y ordinate)
  *
  */
-class GEOS_DLL Point : public Geometry, public Puntal 
+class GEOS_DLL Point : public virtual Geometry, public Puntal 
 {
 
 public:

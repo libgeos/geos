@@ -27,7 +27,11 @@ namespace geom { // geos::geom
  * Identifies {@link Geometry} subclasses which
  * are 1-dimensional and with components which are {@link LineString}s.
  */
-class Lineal {};
+class Lineal : public virtual Geometry
+{
+protected:
+  Lineal(): Geometry(0) {}
+};
 
 } // namespace geos::geom
 } // namespace geos

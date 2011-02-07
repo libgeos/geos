@@ -35,12 +35,13 @@ namespace geos {
 namespace geom { // geos::geom
 
 /*public*/
-LinearRing::LinearRing(const LinearRing &lr): LineString(lr) {}
+LinearRing::LinearRing(const LinearRing &lr): Geometry(lr), LineString(lr) {}
 
 /*public*/
 LinearRing::LinearRing(CoordinateSequence* newCoords,
 		const GeometryFactory *newFactory)
 	:
+	Geometry(newFactory),
 	LineString(newCoords, newFactory)
 {
 	validateConstruction();	
@@ -50,6 +51,7 @@ LinearRing::LinearRing(CoordinateSequence* newCoords,
 LinearRing::LinearRing(CoordinateSequence::AutoPtr newCoords,
 		const GeometryFactory *newFactory)
 	:
+	Geometry(newFactory),
 	LineString(newCoords, newFactory)
 {
 	validateConstruction();	
