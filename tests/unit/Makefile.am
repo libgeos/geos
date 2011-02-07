@@ -59,6 +59,7 @@ geos_unit_SOURCES = \
 	geom/PolygonTest.cpp \
 	geom/prep/PreparedGeometryFactoryTest.cpp \
 	geom/TriangleTest.cpp \
+	geom/util/GeometryExtracterTest.cpp \
 	index/quadtree/DoubleBitsTest.cpp \
 	io/ByteOrderValuesTest.cpp \
 	io/WKBReaderTest.cpp \

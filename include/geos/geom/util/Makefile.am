@@ -14,6 +14,7 @@ geos_HEADERS = \
     GeometryCombiner.h \
     GeometryEditor.h \
     GeometryEditorOperation.h \
+    GeometryExtracter.h \
     GeometryTransformer.h \
     LinearComponentExtracter.h \
     PointExtracter.h \
