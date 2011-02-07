@@ -9,6 +9,7 @@ noinst_LTLIBRARIES = libopunion.la
 INCLUDES = -I$(top_srcdir)/include 
 
 libopunion_la_SOURCES = \
-    CascadedPolygonUnion.cpp 
+    CascadedPolygonUnion.cpp \
+    PointGeometryUnion.cpp 
 
 libopunion_la_LIBADD = 

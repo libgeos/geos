@@ -9,4 +9,5 @@
 geosdir = $(includedir)/geos/operation/union
 
 geos_HEADERS = \
-    CascadedPolygonUnion.h
+    CascadedPolygonUnion.h \
+    PointGeometryUnion.h
