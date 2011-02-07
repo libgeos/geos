@@ -20,6 +20,8 @@
 #ifndef GEOS_GEOM_LINEAL_H
 #define GEOS_GEOM_LINEAL_H
 
+#include <geos/geom/Geometry.h> // for inheritance
+
 namespace geos {
 namespace geom { // geos::geom
 
