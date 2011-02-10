@@ -151,5 +151,21 @@ namespace tut
 
     }
 
+    template<>
+    template<>
+    void object::test<5>()
+    {
+        static char const* const geoms[] = 
+        {
+            "LINESTRING (40 60, 120 110)",
+            "POINT (120 110)",
+            "POINT (40 60)",
+            "POINT (100 70)",
+            "POINT (80 50)",
+            NULL
+        };
+        doTest(geoms, "GEOMETRYCOLLECTION (POINT (80 50), POINT (100 70), LINESTRING (40 60, 120 110))");
+    }
+
 } // namespace tut
 
