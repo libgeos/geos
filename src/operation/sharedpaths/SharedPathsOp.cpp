@@ -25,6 +25,7 @@
  **********************************************************************/
 
 #include <geos/operation/sharedpaths/SharedPathsOp.h>
+#include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/MultiLineString.h>
