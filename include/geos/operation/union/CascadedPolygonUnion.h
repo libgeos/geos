@@ -141,7 +141,7 @@ public:
     {
       std::vector<geom::Polygon*> polys;
       for (T i=start; i!=end; ++i) {
-        const geom::Polygon* p = dynamic_cast<geom::Polygon*>(*i);
+        const geom::Polygon* p = dynamic_cast<const geom::Polygon*>(*i);
         polys.push_back(const_cast<geom::Polygon*>(p));
       }
       return Union(&polys);
