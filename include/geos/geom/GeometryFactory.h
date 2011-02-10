@@ -22,12 +22,13 @@
 #define GEOS_GEOM_GEOMETRYFACTORY_H
 
 //#include <geos/geom/CoordinateSequence.h>
-//#include <geos/geom/Geometry.h>
+#include <geos/geom/Geometry.h>
 #include <geos/export.h>
 #include <geos/inline.h>
 
 #include <vector>
 #include <memory>
+#include <cassert>
 
 namespace geos {
 	namespace geom { 
@@ -290,6 +291,72 @@ public:
 	 * 	given vector AND its elements 
 	 */
 	Geometry* buildGeometry(std::vector<Geometry *> *geoms) const;
+
+  /// See buildGeometry(std::vector<Geometry *>&) for semantics
+  //
+  /// Will clone the geometries accessible trough the iterator.
+  ///
+  /// @tparam T an iterator yelding something which casts to const Geometry*
+  /// @param from start iterator
+  /// @param toofar end iterator
+  ///
+  template <class T>
+	std::auto_ptr<Geometry> buildGeometry(T from, T toofar) const
+  {
+    bool isHeterogeneous = false;
+    size_t count = 0;
+    int geomClass = -1;
+    for (T i=from; i != toofar; ++i)
+    {
+      ++count;
+      const Geometry* g = *i;
+      if ( geomClass < 0 ) {
+        geomClass = g->getClassSortIndex();
+      }
+      else if ( geomClass != g->getClassSortIndex() ) {
+        isHeterogeneous = true;
+      }
+    }
+
+    // for the empty geometry, return an empty GeometryCollection
+    if ( count == 0 ) {
+      return std::auto_ptr<Geometry>( createGeometryCollection() );
+    }
+
+    // for the single geometry, return a clone
+    if ( count == 1 ) {
+      return std::auto_ptr<Geometry>( (*from)->clone() );
+    }
+
+    // Now we know it is a collection
+
+    // FIXME:
+    // Until we tweak all the createMulti* interfaces
+    // to support taking iterators we'll have to build
+    // a custom vector here.
+    std::vector<Geometry*> fromGeoms;
+    for (T i=from; i != toofar; ++i) {
+      const Geometry* g = *i;
+      fromGeoms.push_back(const_cast<Geometry*>(g));
+    }
+    
+
+    // for an heterogeneous ...
+    if ( isHeterogeneous ) {
+      return std::auto_ptr<Geometry>( createGeometryCollection(fromGeoms) );
+    }
+
+    // At this point we know the collection is not hetereogenous.
+    if ( dynamic_cast<const Polygon*>(*from) ) {
+      return std::auto_ptr<Geometry>( createMultiPolygon(fromGeoms) );
+    } else if ( dynamic_cast<const LineString*>(*from) ) {
+      return std::auto_ptr<Geometry>( createMultiLineString(fromGeoms) );
+    } else if ( dynamic_cast<const Point*>(*from) ) {
+      return std::auto_ptr<Geometry>( createMultiPoint(fromGeoms) );
+    }
+    assert(0); // buildGeomtry encountered an unkwnon geometry type
+ 
+  }
 
 	/** \brief
 	 * This function does the same thing of the omonimouse function

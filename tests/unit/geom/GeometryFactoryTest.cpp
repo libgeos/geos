@@ -1237,4 +1237,48 @@ namespace tut
 		//inform("Test not implemented!");
 	}
 
+	// Test of
+  // buildGeometry(from, to, takeOwnership) const
+	template<>
+	template<>
+	void object::test<36>()
+	{
+    typedef std::auto_ptr<geos::geom::Geometry> GeometryAutoPtr;
+		typedef std::vector<PointPtr> PointVect;
+
+		const std::size_t size = 3;
+		geos::geom::Coordinate coord(x_, y_, z_);
+
+		PointVect vec;
+
+		PointPtr geo = 0;
+		geo = factory_.createPoint(coord);
+		vec.push_back(geo);
+
+		coord.x *= 2;
+		coord.y *= 2;
+		coord.z *= 2;
+		geo = factory_.createPoint(coord);
+		vec.push_back(geo);
+
+		coord.x *= 3;
+		coord.y *= 3;
+		coord.z *= 3;
+		geo = factory_.createPoint(coord);
+		vec.push_back(geo);
+
+		// Factory creates copy of the vec collection
+		GeometryAutoPtr go = factory_.buildGeometry(vec.begin(), vec.end());
+		ensure( go.get() );
+		ensure_equals( go->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT );
+		ensure_equals( go->getNumGeometries(), size );
+
+		// FREE MEMORY
+		PointVect::const_iterator it;
+		for (it = vec.begin(); it != vec.end(); ++it)
+		{
+			delete (*it);
+		}
+	}
+
 } // namespace tut

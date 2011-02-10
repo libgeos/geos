@@ -51,7 +51,6 @@
 #include <geos/geom/GeometryCollection.inl>
 #include <geos/geom/LineSegment.inl>
 #include <geos/geom/PrecisionModel.inl>
-#include <geos/geom/Geometry.inl>
 #include <geos/geom/Envelope.inl>
 #include <geos/geom/Coordinate.inl>
 #include <geos/geom/GeometryFactory.inl>

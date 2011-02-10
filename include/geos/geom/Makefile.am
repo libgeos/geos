@@ -32,7 +32,6 @@ geos_HEADERS = \
     GeometryFactory.inl \
     GeometryFilter.h \
     Geometry.h \
-    Geometry.inl \
     GeometryList.h \
     IntersectionMatrix.h \
     LinearRing.h \

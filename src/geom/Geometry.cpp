@@ -63,10 +63,6 @@
 
 #define SHORTCIRCUIT_PREDICATES 1
 
-#ifndef GEOS_INLINE
-# include <geos/geom/Geometry.inl>
-#endif
-
 using namespace std;
 using namespace geos::algorithm;
 using namespace geos::operation::valid;
@@ -823,6 +819,13 @@ Geometry::isSimple() const
 	checkNotGeometryCollection(this);
 	operation::IsSimpleOp op(*this);
 	return op.isSimple();
+}
+
+/* public */
+const PrecisionModel*
+Geometry::getPrecisionModel() const
+{
+	return factory->getPrecisionModel();
 }
 
 } // namespace geos::geom

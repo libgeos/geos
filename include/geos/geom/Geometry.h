@@ -866,10 +866,6 @@ std::string jtsport();
 #pragma warning(pop)
 #endif
 
-#ifdef GEOS_INLINE
-# include <geos/geom/Geometry.inl>
-#endif
-
 #endif // ndef GEOS_GEOM_GEOMETRY_H
 
 /**********************************************************************
