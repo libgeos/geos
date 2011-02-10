@@ -4,7 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2009  Sandro Santilli <strk@keybit.net>
+ * Copyright (C) 2009 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -46,6 +46,7 @@
 #include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/overlay/OverlayOp.h>
+#include <geos/operation/union/UnaryUnionOp.h>
 #include <geos/operation/overlay/snap/SnapIfNeededOverlayOp.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/distance/DistanceOp.h>
@@ -587,6 +588,14 @@ Geometry::Union(const Geometry *other) const
 	return SnapIfNeededOverlayOp::overlayOp(*this, *other, OverlayOp::opUNION).release();
 }
 
+/* public */
+Geometry::AutoPtr
+Geometry::Union() const
+{
+  using geos::operation::geounion::UnaryUnionOp;
+  return UnaryUnionOp::Union(*this);
+}
+
 Geometry*
 Geometry::difference(const Geometry *other) const
 	//throw(IllegalArgumentException *)
@@ -643,7 +652,7 @@ Geometry::checkNotGeometryCollection(const Geometry *g)
 	//throw(IllegalArgumentException *)
 {
 	if ((typeid(*g)==typeid(GeometryCollection))) {
-		throw  util::IllegalArgumentException("This method does not support GeometryCollection arguments\n");
+		throw  geos::util::IllegalArgumentException("This method does not support GeometryCollection arguments\n");
 	}
 }
 

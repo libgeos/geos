@@ -4,7 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2009  Sandro Santilli <strk@keybit.net>
+ * Copyright (C) 2009 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -597,7 +597,27 @@ public:
 	 *         non-empty GeometryCollection
 	 *
 	 */
-	virtual Geometry* Union(const Geometry *other) const;
+	Geometry* Union(const Geometry *other) const;
+		// throw(IllegalArgumentException *, TopologyException *);
+
+  /**
+   * Computes the union of all the elements of this geometry. Heterogeneous
+   * {@link GeometryCollection}s are fully supported.
+   * 
+   * The result obeys the following contract:
+   * 
+   * - Unioning a set of {@link LineString}s has the effect of fully noding
+   *   and dissolving the linework.
+   * - Unioning a set of {@link Polygon}s will always
+   *   return a {@link Polygonal} geometry (unlike {link #union(Geometry)},
+   *   which may return geometrys of lower dimension if a topology collapse
+   *   occurred.
+   *
+   * @return the union geometry
+   *
+   * @see UnaryUnionOp
+   */
+  AutoPtr Union() const;
 		// throw(IllegalArgumentException *, TopologyException *);
 
 	/**
