@@ -24,7 +24,7 @@ namespace tut
     //
 
     // Common data used by tests
-    struct test_unaryuniontest_data
+    struct test_cascadedpolygonuniontest_data
     {
         geos::geom::GeometryFactory gf;
         geos::io::WKTReader wktreader;
@@ -32,16 +32,16 @@ namespace tut
 
         typedef geos::geom::Geometry::AutoPtr GeomPtr;
 
-        test_unaryuniontest_data()
+        test_cascadedpolygonuniontest_data()
           : gf(),
             wktreader(&gf)
         {}
     };
 
-    typedef test_group<test_unaryuniontest_data> group;
+    typedef test_group<test_cascadedpolygonuniontest_data> group;
     typedef group::object object;
 
-    group test_unaryuniontest_group("geos::operation::geounion::CascadedPolygonUnion");
+    group test_cascadedpolygonuniontest_group("geos::operation::geounion::CascadedPolygonUnion");
 
     // test runner
     geos::geom::Geometry* unionIterated(
@@ -72,7 +72,7 @@ namespace tut
         return CascadedPolygonUnion::Union(geoms);
     }
 
-    void test_runner(test_unaryuniontest_data& t,
+    void test_runner(test_cascadedpolygonuniontest_data& t,
         std::vector<geos::geom::Polygon*>* geoms) 
     {
         std::auto_ptr<geos::geom::Geometry> union1(unionIterated(geoms));

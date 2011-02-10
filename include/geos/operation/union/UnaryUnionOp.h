@@ -106,7 +106,7 @@ public:
       :
       geomFact(&geomFactIn)
   {
-    extractAll(geoms);
+    extractGeoms(geoms);
   }
 
   template <class T>
@@ -114,7 +114,7 @@ public:
       :
       geomFact(0)
   {
-    extractAll(geoms);
+    extractGeoms(geoms);
   }
 
   UnaryUnionOp(const geom::Geometry& geom)

@@ -81,6 +81,7 @@ geos_unit_SOURCES = \
 	operation/overlay/snap/LineStringSnapperTest.cpp \
 	operation/sharedpaths/SharedPathsOpTest.cpp \
 	operation/union/CascadedPolygonUnionTest.cpp \
+	operation/union/UnaryUnionOpTest.cpp \
 	operation/valid/IsValidTest.cpp \
 	operation/valid/ValidClosedRingTest.cpp \
 	operation/valid/ValidSelfTouchingRingFormingHoleTest.cpp \
