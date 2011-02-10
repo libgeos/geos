@@ -69,7 +69,7 @@ namespace tut
         std::vector<geos::geom::Polygon*>* geoms)
     {
         using geos::operation::geounion::CascadedPolygonUnion;
-        return CascadedPolygonUnion::Union(geoms);
+        return CascadedPolygonUnion::Union(geoms.begin(), geoms.end());
     }
 
     void test_runner(test_unaryuniontest_data& t,

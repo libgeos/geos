@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -13,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/union/CascadedPolygonUnion.java rev 1.10 (JTS-1.10)
+ * Last port: operation/union/CascadedPolygonUnion.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -89,7 +90,7 @@ private:
  * This algorithm is faster and likely more robust than
  * the simple iterated approach of 
  * repeatedly unioning each polygon to a result geometry.
- * <p>
+ * 
  * The <tt>buffer(0)</tt> trick is sometimes faster, but can be less robust and 
  * can sometimes take an exceptionally long time to complete.
  * This is particularly the case where there is a high degree of overlap
@@ -123,15 +124,35 @@ public:
      * Computes the union of
      * a collection of {@link Polygonal} {@link Geometry}s.
      * 
-     * @param polys a collection of {@link Polygonal} {@link Geometry}s
+     * @param polys a collection of {@link Polygonal} {@link Geometry}s.
+     *        ownership of elements _and_ vector are left to caller.
      */
     static geom::Geometry* Union(std::vector<geom::Polygon*>* polys);
+
+    /**
+     * Computes the union of a set of {@link Polygonal} {@link Geometry}s.
+     * 
+     * @tparam T an iterator yelding something castable to const Polygon *
+     * @param start start iterator
+     * @param end end iterator
+     */
+    template <class T>
+    static geom::Geometry* Union(T start, T end)
+    {
+      std::vector<geom::Polygon*> polys;
+      for (T i=start; i!=end; ++i) {
+        const geom::Polygon* p = dynamic_cast<geom::Polygon*>(*i);
+        polys.push_back(const_cast<geom::Polygon*>(p));
+      }
+      return Union(&polys);
+    }
 
     /**
      * Computes the union of
      * a collection of {@link Polygonal} {@link Geometry}s.
      * 
      * @param polys a collection of {@link Polygonal} {@link Geometry}s
+     *        ownership of elements _and_ vector are left to caller.
      */
     static geom::Geometry* Union(const geom::MultiPolygon* polys);
 
@@ -140,6 +161,7 @@ public:
      * the given collection of {@link Geometry}s.
      * 
      * @param geoms a collection of {@link Polygonal} {@link Geometry}s
+     *        ownership of elements _and_ vector are left to caller.
      */
     CascadedPolygonUnion(std::vector<geom::Polygon*>* polys)
       : inputPolys(polys),
@@ -201,11 +223,13 @@ private:
     /**
      * Unions two polygonal geometries.
      * The case of MultiPolygons is optimized to union only 
-     * the polygons which lie in the intersection of the two geometry's envelopes.
-     * Polygons outside this region can simply be combined with the union result,
-     * which is potentially much faster.
+     * the polygons which lie in the intersection of the two geometry's
+     * envelopes.
+     * Polygons outside this region can simply be combined with the union
+     * result, which is potentially much faster.
      * This case is likely to occur often during cascaded union, and may also
-     * occur in real world data (such as unioning data for parcels on different street blocks).
+     * occur in real world data (such as unioning data for parcels on
+     * different street blocks).
      * 
      * @param g0 a polygonal geometry
      * @param g1 a polygonal geometry

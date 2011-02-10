@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -13,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/union/CascadedPolygonUnion.java rev 1.10 (JTS-1.10)
+ * Last port: operation/union/CascadedPolygonUnion.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
