@@ -806,11 +806,16 @@ XMLTester::parseTest(const TiXmlNode* node)
 			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
 			gRes->normalize();
 
+			GeomAutoPtr gRealRes;
+			if ( gB ) {
 #ifndef USE_BINARYOP
-			GeomAutoPtr gRealRes(gA->Union(gB));
+				gRealRes.reset(gA->Union(gB));
 #else
-			GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opUNION));
+				gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opUNION));
 #endif
+			} else {
+				gRealRes = gA->Union();
+			}
 
 			gRealRes->normalize();
 

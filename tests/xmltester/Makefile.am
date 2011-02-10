@@ -53,6 +53,7 @@ SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
 	$(srcdir)/tests/general/TestRelatePA.xml \
 	$(srcdir)/tests/general/TestRelatePP.xml \
 	$(srcdir)/tests/general/TestSimple.xml \
+	$(srcdir)/tests/general/TestUnaryUnion.xml \
 	$(srcdir)/tests/general/TestValid.xml \
 	$(srcdir)/tests/general/TestValid2.xml \
 	$(srcdir)/tests/general/TestValid2-big.xml \
