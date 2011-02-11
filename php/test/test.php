@@ -844,7 +844,7 @@ class test extends PHPUnit_Framework_TestCase
             , $writer->write($gi));
     }
 
-    public function testGeometry_unionCascaded()
+    public function testGeometry_unaryunion()
     {
         $reader = new GEOSWKTReader();
         $writer = new GEOSWKTWriter();
@@ -861,6 +861,56 @@ class test extends PHPUnit_Framework_TestCase
         $this->assertEquals(
 'POLYGON ((1 0, 0 0, 0 1, 0 11, 10 11, 10 14, 14 14, 14 10, 11 10, 11 0, 1 0), (11 11, 12 11, 12 12, 11 12, 11 11))'
             , $writer->write($gu));
+
+        $g = $reader->read('MULTILINESTRING(
+                 (0 0, 1 0, 1 1, 0 1, 0 0),
+                 (10 10, 10 14, 14 14, 14 10, 10 10),
+                  (11 11, 11 12, 12 12, 12 11, 11 11),
+                 (0 0, 11 0, 11 11, 0 11, 0 0)
+                )');
+
+        $gu = $g->union();
+        $this->assertEquals(
+'MULTILINESTRING ((0 0, 1 0), (1 0, 1 1, 0 1), (0 1, 0 0), (10 10, 10 11), (10 11, 10 14, 14 14, 14 10, 11 10), (11 10, 10 10), (11 11, 11 12, 12 12, 12 11, 11 11), (1 0, 11 0, 11 10), (11 10, 11 11), (11 11, 10 11), (10 11, 0 11, 0 1))'
+            , $writer->write($gu));
+
+        $g = $reader->read('MULTIPOINT(
+                 0 0, 1 0, 1 1, 0 1, 0 0,
+                 10 10, 10 14, 14 14, 14 10, 10 10,
+                  11 11, 11 12, 12 12, 12 11, 11 11,
+                 0 0, 11 0, 11 11, 0 11, 0 0
+                )');
+
+        $gu = $g->union();
+        $this->assertEquals(
+'MULTIPOINT (0 0, 0 1, 0 11, 1 0, 1 1, 10 10, 10 14, 11 0, 11 11, 11 12, 12 11, 12 12, 14 10, 14 14)'
+            , $writer->write($gu));
+
+        $g = $reader->read('GEOMETRYCOLLECTION(
+MULTIPOLYGON(
+                 ((0 0, 1 0, 1 1, 0 1, 0 0)),
+                 ((10 10, 10 14, 14 14, 14 10, 10 10),
+                  (11 11, 11 12, 12 12, 12 11, 11 11)),
+                 ((0 0, 11 0, 11 11, 0 11, 0 0))
+                ),
+MULTILINESTRING(
+                 (0 0, 1 0, 1 1, 0 1, 0 0),
+                 (10 10, 10 14, 14 14, 14 10, 10 10),
+                  (11 11, 11 12, 12 12, 12 11, 11 11),
+                 (0 0, 11 0, 11 11, 0 11, 0 0),(-8 8, -8 6)
+                ),
+MULTIPOINT(
+                 0 0, 1 0, 1 1, 0 1, 0 0,
+                 10 10, 10 14, 14 14, 14 10, 10 10,
+                  11 11, 11 12, 12 12, 12 11, 11 11,
+                 0 0, 11 0, 11 11, 0 11, 0 0, -10 -10
+                ))');
+
+        $gu = $g->union();
+        $this->assertEquals(
+'GEOMETRYCOLLECTION (POINT (-10 -10), LINESTRING (-8 8, -8 6), POLYGON ((1 0, 0 0, 0 1, 0 11, 10 11, 10 14, 14 14, 14 10, 11 10, 11 0, 1 0), (11 12, 11 11, 12 11, 12 12, 11 12)))'
+            , $writer->write($gu));
+
 
     }
 

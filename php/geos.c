@@ -745,7 +745,7 @@ PHP_METHOD(Geometry, union)
         other = getRelay(zobj, Geometry_ce_ptr);
         ret = GEOSUnion(this, other);
     } else {
-        ret = GEOSUnionCascaded(this);
+        ret = GEOSUnaryUnion(this);
     }
 
     if ( ! ret ) RETURN_NULL(); /* should get an exception first */
