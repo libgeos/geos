@@ -68,9 +68,8 @@ PointGeometryUnion::Union() const
   }
   else
   {
-    std::vector<Coordinate> coords;
-    std::copy(exteriorCoords.begin(), exteriorCoords.end(),
-      back_inserter(coords));
+    std::vector<Coordinate> coords(exteriorCoords.size());
+    std::copy(exteriorCoords.begin(), exteriorCoords.end(), coords.begin());
     ptComp.reset( geomFact->createMultiPoint(coords) );
   }
 
