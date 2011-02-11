@@ -4,7 +4,7 @@
  *
  * C-Wrapper for GEOS library
  *
- * Copyright (C) 2010 Sandro Santilli <strk@keybit.net>
+ * Copyright (C) 2010 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -1784,6 +1784,45 @@ GEOSUnion_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g
 #if VERBOSE_EXCEPTIONS
         std::ostringstream s; 
         s << "Exception on GEOSUnion with following inputs:" << std::endl;
+        s << "A: "<<g1->toString() << std::endl;
+        s << "B: "<<g2->toString() << std::endl;
+        handle->NOTICE_MESSAGE("%s", s.str().c_str());
+#endif // VERBOSE_EXCEPTIONS
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+    
+    return NULL;
+}
+
+Geometry *
+GEOSUnaryUnion_r(GEOSContextHandle_t extHandle, const Geometry *g)
+{
+    if ( 0 == extHandle )
+    {
+        return NULL;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return NULL;
+    }
+
+    try
+    {
+        GeomAutoPtr g3 ( g->Union() );
+        return g3.release();
+    }
+    catch (const std::exception &e)
+    {
+#if VERBOSE_EXCEPTIONS
+        std::ostringstream s; 
+        s << "Exception on GEOSUnaryUnion with following inputs:" << std::endl;
         s << "A: "<<g1->toString() << std::endl;
         s << "B: "<<g2->toString() << std::endl;
         handle->NOTICE_MESSAGE("%s", s.str().c_str());

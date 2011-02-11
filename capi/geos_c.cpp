@@ -4,6 +4,7 @@
  *
  * C-Wrapper for GEOS library
  *
+ * Copyright (C) 2010 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -402,6 +403,12 @@ Geometry *
 GEOSUnion(const Geometry *g1, const Geometry *g2)
 {
     return GEOSUnion_r( handle, g1, g2 );
+}
+
+Geometry *
+GEOSUnaryUnion(const Geometry *g1)
+{
+    return GEOSUnaryUnion_r( handle, g1);
 }
 
 Geometry *

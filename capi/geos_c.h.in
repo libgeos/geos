@@ -4,7 +4,7 @@
  *
  * C-Wrapper for GEOS library
  *
- * Copyright (C) 2010 Sandro Santilli <strk@keybit.net>
+ * Copyright (C) 2010 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -492,6 +492,7 @@ extern GEOSGeometry GEOS_DLL *GEOSSymDifference(const GEOSGeometry* g1,
 	const GEOSGeometry* g2);
 extern GEOSGeometry GEOS_DLL *GEOSBoundary(const GEOSGeometry* g1);
 extern GEOSGeometry GEOS_DLL *GEOSUnion(const GEOSGeometry* g1, const GEOSGeometry* g2);
+extern GEOSGeometry GEOS_DLL *GEOSUnaryUnion(const GEOSGeometry* g1);
 extern GEOSGeometry GEOS_DLL *GEOSUnionCascaded(const GEOSGeometry* g1);
 
 extern GEOSGeometry GEOS_DLL *GEOSPointOnSurface(const GEOSGeometry* g1);
@@ -516,6 +517,8 @@ extern GEOSGeometry GEOS_DLL *GEOSBoundary_r(GEOSContextHandle_t handle,
 extern GEOSGeometry GEOS_DLL *GEOSUnion_r(GEOSContextHandle_t handle,
                                           const GEOSGeometry* g1,
                                           const GEOSGeometry* g2);
+extern GEOSGeometry GEOS_DLL *GEOSUnaryUnion_r(GEOSContextHandle_t handle,
+                                          const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSUnionCascaded_r(GEOSContextHandle_t handle, const GEOSGeometry* g1);
 extern GEOSGeometry GEOS_DLL *GEOSPointOnSurface_r(GEOSContextHandle_t handle,
                                                    const GEOSGeometry* g1);
