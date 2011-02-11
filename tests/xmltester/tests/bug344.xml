@@ -1,6 +1,7 @@
 <run>
   <desc>
     http://trac.osgeo.org/geos/ticket/344
+    Buffer operation uses a huge amount of memory
   </desc>
   <precisionModel type="FLOATING" />
 
