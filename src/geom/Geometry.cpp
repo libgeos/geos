@@ -19,6 +19,7 @@
  *
  **********************************************************************/
 
+#include <geos/geom/BinaryOp.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/PrecisionModel.h>
@@ -585,7 +586,7 @@ Geometry::Union(const Geometry *other) const
 	}
 #endif
 
-	return SnapIfNeededOverlayOp::overlayOp(*this, *other, OverlayOp::opUNION).release();
+	return BinaryOp(this, other, overlayOp(OverlayOp::opUNION)).release();
 }
 
 /* public */
