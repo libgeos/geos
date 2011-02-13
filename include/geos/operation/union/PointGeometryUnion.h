@@ -63,6 +63,10 @@ private:
   const geom::Geometry& pointGeom;
   const geom::Geometry& otherGeom;
   const geom::GeometryFactory* geomFact;
+
+  // Declared as non-copyable
+  PointGeometryUnion(const PointGeometryUnion& other);
+  PointGeometryUnion& operator=(const PointGeometryUnion& rhs);
 };
 
 } // namespace geos::operation::union
