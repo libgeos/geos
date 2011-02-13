@@ -10,8 +10,10 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
+#include <geos/geom/PrecisionModel.h>
 #include <geos/algorithm/PointLocator.h>
 #include <geos/io/WKTReader.h>
+#include <geos/io/WKBReader.h>
 #include <geos/geom/CoordinateSequence.h>
 // std
 #include <memory>
@@ -454,6 +456,26 @@ namespace tut
 
 		// TODO: test closestPoints
 	}
+
+    // Test case submitted to Ticket #367
+    // http://trac.osgeo.org/geos/ticket/367/
+	template<>
+	template<>
+	void object::test<19>()
+	{
+        const char* wkb_geom1 = "01060000000100000001030000000100000000000000";
+        const char* wkb_geom2 = "010100000000000000000000000000000000000000";
+
+        geos::geom::PrecisionModel precision(geos::geom::PrecisionModel::FLOATING);
+        geos::geom::GeometryFactory f(&precision);
+        std::istringstream istr1(wkb_geom1);
+        std::istringstream istr2(wkb_geom2);
+        geos::io::WKBReader wkb(f);
+        GeomPtr g1(wkb.readHEX(istr1));
+        GeomPtr g2(wkb.readHEX(istr2));
+        ensure(g1->isValid());
+        ensure(g2->isValid());
+    }
 
 	// TODO: finish the tests by adding:
 	// 	LINESTRING - *all*
