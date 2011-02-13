@@ -63,6 +63,8 @@ void
 LineStringSnapper::snapVertices(geom::CoordinateList& srcCoords,
 			const geom::Coordinate::ConstVect& snapPts)
 {
+  if ( srcCoords.empty() ) return;
+
 	using geom::CoordinateList;
 
 	geom::Coordinate::ConstVect::const_iterator not_found = snapPts.end();
@@ -169,6 +171,9 @@ LineStringSnapper::snapSegments(geom::CoordinateList& srcCoords,
 #if GEOS_DEBUG
 cerr << " Snapping segment from: " << srcCoords << endl;
 #endif
+
+  // nothing to do if there are no source coords..
+  if ( srcCoords.empty() ) return;
 
 	for ( Coordinate::ConstVect::const_iterator
 			it=snapPts.begin(), end=snapPts.end();
