@@ -46,24 +46,24 @@ public:
    * @param geom the geometry from which to extract
    * @param list the list to add the extracted elements to
    */
-  template <class to, class container>
-  static void extract(const Geometry& geom, container& lst)
+  template <class ComponentType, class TargetContainer>
+  static void extract(const Geometry& geom, TargetContainer& lst)
   {
-    if ( const to* c = dynamic_cast<const to*>(&geom) )
+    if ( const ComponentType* c = dynamic_cast<const ComponentType*>(&geom) )
     {
       lst.push_back(c);
     }
     else if ( const GeometryCollection* c =
                    dynamic_cast<const GeometryCollection*>(&geom) )
     {
-      GeometryExtracter::Extracter<to, container> extracter(lst);
+      GeometryExtracter::Extracter<ComponentType, TargetContainer> extracter(lst);
       c->apply_ro(&extracter);
     }
   }
 
 private:
 
-  template <class TO, class CO>
+  template <class ComponentType, class TargetContainer>
   struct Extracter: public GeometryFilter {
 
     /**
@@ -71,17 +71,20 @@ private:
      *
      * @param comps the container to extract into (will push_back to it)
      */
-    Extracter(CO& comps) : _comps(comps) {}
+    Extracter(TargetContainer& comps) : comps_(comps) {}
 
-    CO& _comps;
+    TargetContainer& comps_;
 
     void filter_ro(const Geometry* geom)
     {
-      if ( const TO* c = dynamic_cast<const TO*>(geom) ) {
-        _comps.push_back(c);
+      if ( const ComponentType* c = dynamic_cast<const ComponentType*>(geom) ) {
+        comps_.push_back(c);
       }
     }
 
+    // Declare type as noncopyable
+    Extracter(const Extracter& other);
+    Extracter& operator=(const Extracter& rhs);
   };
 
   // Declare type as noncopyable
