@@ -238,7 +238,7 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 	typedef std::auto_ptr<Geometry> GeomPtr;
 
 	GeomPtr ret;
-	util::TopologyException origException;
+	geos::util::TopologyException origException;
 
 #ifdef USE_ORIGINAL_INPUT
 	// Try with original input
@@ -250,7 +250,7 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 		ret.reset(_Op(g0, g1));
 		return ret;
 	}
-	catch (const util::TopologyException& ex)
+	catch (const geos::util::TopologyException& ex)
 	{
 		origException=ex;
 #if GEOS_DEBUG_BINARYOP
@@ -306,12 +306,11 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 		// reshift to orginal precision (see EnhancedPrecisionOp)
 		using operation::valid::IsValidOp;
 		using operation::valid::TopologyValidationError;
-		using util::TopologyException;
 		IsValidOp ivo(ret.get());
 		if ( ! ivo.isValid() )
 		{
 			TopologyValidationError* e = ivo.getValidationError();
-			throw TopologyException(
+			throw geos::util::TopologyException(
 				"Result of overlay became invalid "
 				"after re-addin common bits of operand "
 				"coordinates: " + e->toString(),
@@ -321,7 +320,7 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 
 		return ret;
 	}
-	catch (const util::TopologyException& ex)
+	catch (const geos::util::TopologyException& ex)
 	{
         ::geos::ignore_unused_variable_warning(ex);
 #if GEOS_DEBUG_BINARYOP
@@ -351,7 +350,7 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 		return ret;
 		
 	}
-	catch (const util::TopologyException& ex)
+	catch (const geos::util::TopologyException& ex)
 	{
         ::geos::ignore_unused_variable_warning(ex);
 #if GEOS_DEBUG_BINARYOP
@@ -388,7 +387,7 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 				ret.reset( _Op(rG0.get(), rG1.get()) );
 				return ret;
 			}
-			catch (const util::TopologyException& ex)
+			catch (const geos::util::TopologyException& ex)
 			{
 				if ( precision == 1 ) throw ex;
 #if GEOS_DEBUG_BINARYOP
@@ -400,7 +399,7 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 		}
 
 	}
-	catch (const util::TopologyException& ex)
+	catch (const geos::util::TopologyException& ex)
 	{
 #if GEOS_DEBUG_BINARYOP
 		std::cerr << "Reduced: " << ex.what() << std::endl;
@@ -435,7 +434,7 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 				ret.reset( _Op(rG0.get(), rG1.get()) );
 				return ret;
 			}
-			catch (const util::TopologyException& ex)
+			catch (const geos::util::TopologyException& ex)
 			{
 				if ( tol >= maxTolerance ) throw ex;
 #if GEOS_DEBUG_BINARYOP
@@ -449,7 +448,7 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 		return ret;
 
 	}
-	catch (const util::TopologyException& ex)
+	catch (const geos::util::TopologyException& ex)
 	{
 #if GEOS_DEBUG_BINARYOP
 		std::cerr << "Simplified: " << ex.what() << std::endl;
