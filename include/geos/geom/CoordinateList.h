@@ -85,6 +85,11 @@ public:
 		return coords.size();
 	}
 
+	bool empty() const
+	{
+		return coords.empty();
+	}
+
 	iterator begin()
 	{
 		return coords.begin();
