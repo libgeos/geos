@@ -535,7 +535,7 @@ Geometry::intersection(const Geometry *other) const
 		return getFactory()->createGeometryCollection();
 	}
 
-	return SnapIfNeededOverlayOp::overlayOp(*this, *other, OverlayOp::opINTERSECTION).release();
+	return BinaryOp(this, other, overlayOp(OverlayOp::opINTERSECTION)).release();
 }
 
 Geometry*
@@ -605,7 +605,7 @@ Geometry::difference(const Geometry *other) const
 	if (isEmpty()) return getFactory()->createGeometryCollection();
 	if (other->isEmpty()) return clone();
 
-	return SnapIfNeededOverlayOp::overlayOp(*this, *other, OverlayOp::opDIFFERENCE).release();
+	return BinaryOp(this, other, overlayOp(OverlayOp::opDIFFERENCE)).release();
 }
 
 Geometry*
@@ -615,7 +615,7 @@ Geometry::symDifference(const Geometry *other) const
 	if ( isEmpty() ) return other->clone();
 	if ( other->isEmpty() ) return clone();
 
-	return SnapIfNeededOverlayOp::overlayOp(*this, *other, OverlayOp::opSYMDIFFERENCE).release();
+	return BinaryOp(this, other, overlayOp(OverlayOp::opSYMDIFFERENCE)).release();
 }
 
 int
