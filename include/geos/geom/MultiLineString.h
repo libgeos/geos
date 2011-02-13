@@ -43,6 +43,11 @@ namespace geos {
 namespace geos {
 namespace geom { // geos::geom
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable:4250) // T1 inherits T2 via dominance
+#endif
+
 /// Models a collection of (@link LineString}s.
 class GEOS_DLL MultiLineString: public GeometryCollection, public Lineal {
 
@@ -112,6 +117,10 @@ protected:
 
 	MultiLineString(const MultiLineString &mp);
 };
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 } // namespace geos::geom
 } // namespace geos

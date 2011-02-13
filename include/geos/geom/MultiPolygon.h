@@ -45,6 +45,11 @@ namespace geos {
 namespace geos {
 namespace geom { // geos::geom
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable:4250) // T1 inherits T2 via dominance
+#endif
+
 /// Models a collection of {@link Polygon}s.
 //
 /// As per the OGC SFS specification,
@@ -55,7 +60,6 @@ namespace geom { // geos::geom
 ///
 class GEOS_DLL MultiPolygon: public GeometryCollection, public Polygonal
 {
-
 public:
 
 	friend class GeometryFactory;
@@ -112,10 +116,11 @@ protected:
 	MultiPolygon(std::vector<Geometry *> *newPolys, const GeometryFactory *newFactory);
 
 	MultiPolygon(const MultiPolygon &mp);
-
-
 };
 
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 } // namespace geos::geom
 } // namespace geos
