@@ -354,8 +354,9 @@ public:
     } else if ( dynamic_cast<const Point*>(*from) ) {
       return std::auto_ptr<Geometry>( createMultiPoint(fromGeoms) );
     }
+    // FIXME: Why not to throw an exception? --mloskot
     assert(0); // buildGeomtry encountered an unkwnon geometry type
- 
+    return std::auto_ptr<Geometry>(); // nullptr
   }
 
 	/** \brief
