@@ -1157,10 +1157,16 @@ PHP_METHOD(Geometry, checkValidity)
     zend_bool retBool;
     char *reasonVal = NULL;
     zval *locationVal = NULL;
+    long int flags = 0;
 
     this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
 
-    ret = GEOSisValidDetail(this, &reason, &location);
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|l",
+        &flags) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    ret = GEOSisValidDetail(this, flags, &reason, &location);
     if ( ret == 2 ) RETURN_NULL(); /* should get an exception first */
 
     if ( reason ) {
@@ -2472,6 +2478,10 @@ PHP_MINIT_FUNCTION(geos)
     REGISTER_LONG_CONSTANT("GEOS_MULTIPOLYGON", GEOS_MULTIPOLYGON,
         CONST_CS|CONST_PERSISTENT);
     REGISTER_LONG_CONSTANT("GEOS_GEOMETRYCOLLECTION", GEOS_GEOMETRYCOLLECTION,
+        CONST_CS|CONST_PERSISTENT);
+
+    REGISTER_LONG_CONSTANT("GEOSVALID_ALLOW_SELFTOUCHING_RING_FORMING_HOLE",
+        GEOSVALID_ALLOW_SELFTOUCHING_RING_FORMING_HOLE,
         CONST_CS|CONST_PERSISTENT);
 
     return SUCCESS;

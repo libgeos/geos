@@ -33,6 +33,8 @@ class test extends PHPUnit_Framework_TestCase
         $this->assertEquals(5, GEOS_MULTILINESTRING);
         $this->assertEquals(6, GEOS_MULTIPOLYGON);
         $this->assertEquals(7, GEOS_GEOMETRYCOLLECTION);
+
+        $this->assertEquals(1, GEOSVALID_ALLOW_SELFTOUCHING_RING_FORMING_HOLE);
     }
 
     public function testWKTReader__construct()
@@ -1328,6 +1330,26 @@ MULTIPOINT(
         $this->assertEquals( 'Invalid Coordinate', $val['reason'] );
         $this->assertEquals( 'POINT (0 nan)',
             $writer->write($val['location']) );
+
+        $g = $reader->read(
+           'POLYGON((0 0, -10 10, 10 10, 0 0, 4 5, -4 5, 0 0)))'
+        );
+        $val = $g->checkValidity();
+        $this->assertType( 'array', $val );
+        $this->assertFalse( $val['valid'] );
+        $this->assertEquals( 'Ring Self-intersection', $val['reason'] );
+        $this->assertEquals( 'POINT (0 0)',
+            $writer->write($val['location']) );
+
+        $g = $reader->read(
+           'POLYGON((0 0, -10 10, 10 10, 0 0, 4 5, -4 5, 0 0)))'
+        );
+        $flags = GEOSVALID_ALLOW_SELFTOUCHING_RING_FORMING_HOLE;
+        $val = $g->checkValidity($flags);
+        $this->assertType( 'array', $val );
+        $this->assertTrue( $val['valid'] );
+        $this->assertFalse( isset($val['reason']) );
+        $this->assertFalse( isset($val['location']) );
     }
 
     public function testGeometry_isSimple()
