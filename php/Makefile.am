@@ -25,7 +25,7 @@
 
 if ENABLE_PHP
 
-SUBDIRS = test
+SUBDIRS = . test
 
 EXTRA_DIST = README 
 
