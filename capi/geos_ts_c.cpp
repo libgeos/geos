@@ -715,7 +715,7 @@ GEOSisValidReason_r(GEOSContextHandle_t extHandle, const Geometry *g1)
 
 char
 GEOSisValidDetail_r(GEOSContextHandle_t extHandle, const Geometry *g,
-	char** reason, Geometry ** location)
+	int flags, char** reason, Geometry ** location)
 {
     if ( 0 == extHandle )
     {
@@ -735,6 +735,9 @@ GEOSisValidDetail_r(GEOSContextHandle_t extHandle, const Geometry *g,
         using geos::operation::valid::TopologyValidationError;
 
         IsValidOp ivo(g);
+        if ( flags && GEOSVALID_ALLOW_SELFTOUCHING_RING_FORMING_HOLE ) {
+        	ivo.setSelfTouchingRingFormingHoleValid(true);
+        }
         TopologyValidationError *err = ivo.getValidationError();
         if (0 != err)
         {

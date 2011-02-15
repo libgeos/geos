@@ -105,7 +105,8 @@ geos_unit_SOURCES = \
 	capi/GEOSSnapTest.cpp \
 	capi/GEOSSharedPathsTest.cpp \
 	capi/GEOSRelatePatternMatchTest.cpp \
-	capi/GEOSUnaryUnionTest.cpp
+	capi/GEOSUnaryUnionTest.cpp \
+	capi/GEOSisValidDetailTest.cpp
 
 noinst_HEADERS = \
 	utility.h

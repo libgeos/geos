@@ -778,12 +778,6 @@ extern void GEOS_DLL GEOSSTRtree_destroy_r(GEOSContextHandle_t handle,
  ***********************************************************************/
 
 extern char GEOS_DLL GEOSisEmpty(const GEOSGeometry* g1);
-extern char GEOS_DLL GEOSisValid(const GEOSGeometry* g1);
-extern char GEOS_DLL *GEOSisValidReason(const GEOSGeometry *g1);
-/* caller has the responsibility to destroy 'reason' (GEOSFree)
- * and 'location' (GEOSGeom_destroy) Sparams */
-extern char GEOS_DLL GEOSisValidDetail(const GEOSGeometry* g, char** reason,
-                                         GEOSGeometry** location);
 extern char GEOS_DLL GEOSisSimple(const GEOSGeometry* g1);
 extern char GEOS_DLL GEOSisRing(const GEOSGeometry* g1);
 extern char GEOS_DLL GEOSHasZ(const GEOSGeometry* g1);
@@ -791,15 +785,6 @@ extern char GEOS_DLL GEOSisClosed(const GEOSGeometry *g1);
 
 extern char GEOS_DLL GEOSisEmpty_r(GEOSContextHandle_t handle,
                                    const GEOSGeometry* g1);
-extern char GEOS_DLL GEOSisValid_r(GEOSContextHandle_t handle,
-                                   const GEOSGeometry* g1);
-extern char GEOS_DLL *GEOSisValidReason_r(GEOSContextHandle_t handle,
-                                         const GEOSGeometry* g1);
-/* caller has the responsibility to destroy 'reason' (GEOSFree_r)
- * and 'location' (GEOSGeom_destroy_r) Sparams */
-extern char GEOS_DLL GEOSisValidDetail_r(GEOSContextHandle_t handle,
-                                         const GEOSGeometry* g, char** reason,
-                                         GEOSGeometry** location);
 extern char GEOS_DLL GEOSisSimple_r(GEOSContextHandle_t handle,
                                     const GEOSGeometry* g1);
 extern char GEOS_DLL GEOSisRing_r(GEOSContextHandle_t handle,
@@ -808,6 +793,41 @@ extern char GEOS_DLL GEOSHasZ_r(GEOSContextHandle_t handle,
                                 const GEOSGeometry* g1);
 extern char GEOS_DLL GEOSisClosed_r(GEOSContextHandle_t handle,
                                 const GEOSGeometry *g1);
+
+/************************************************************************
+ *
+ *  Validity checking
+ *
+ ***********************************************************************/
+
+/* These are for use with GEOSisValidDetail (flags param) */
+enum GEOSValidFlags {
+	GEOSVALID_ALLOW_SELFTOUCHING_RING_FORMING_HOLE=1
+};
+
+/* return 2 on exception, 1 on true, 0 on false */
+extern char GEOS_DLL GEOSisValid(const GEOSGeometry* g1);
+extern char GEOS_DLL GEOSisValid_r(GEOSContextHandle_t handle,
+                                   const GEOSGeometry* g1);
+
+/* return NULL on exception, a string to GEOSFree otherwise */
+extern char GEOS_DLL *GEOSisValidReason(const GEOSGeometry *g1);
+extern char GEOS_DLL *GEOSisValidReason_r(GEOSContextHandle_t handle,
+                                         const GEOSGeometry* g1);
+
+/*
+ * Caller has the responsibility to destroy 'reason' (GEOSFree)
+ * and 'location' (GEOSGeom_destroy) params
+ * return 2 on exception, 1 when valid, 0 when invalid
+ */
+extern char GEOS_DLL GEOSisValidDetail(const GEOSGeometry* g,
+                                       int flags,
+                                       char** reason, GEOSGeometry** location);
+extern char GEOS_DLL GEOSisValidDetail_r(GEOSContextHandle_t handle,
+                                         const GEOSGeometry* g,
+                                         int flags,
+                                         char** reason,
+                                         GEOSGeometry** location);
 
 /************************************************************************
  *

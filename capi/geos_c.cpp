@@ -209,10 +209,10 @@ GEOSisValidReason(const Geometry *g1)
 }
 
 char
-GEOSisValidDetail(const Geometry *g,
+GEOSisValidDetail(const Geometry *g, int flags,
 	char** reason, Geometry ** location)
 {
-    return GEOSisValidDetail_r( handle, g, reason, location );
+    return GEOSisValidDetail_r( handle, g, flags, reason, location );
 }
 
 //-----------------------------------------------------------------
