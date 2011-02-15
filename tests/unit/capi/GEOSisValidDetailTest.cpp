@@ -104,7 +104,7 @@ namespace tut
     {
       geom_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0, NaN -5)");
       int r = GEOSisValidDetail(geom_, 0, &reason_, &loc_);
-      ensure_equals(r, 0); // valid
+      ensure_equals(r, 0); // invalid
       ensure_equals(std::string(reason_), std::string("Invalid Coordinate"));
       ensure_equals(toWKT(loc_), "POINT (nan -5)");
     }
@@ -116,7 +116,7 @@ namespace tut
     {
       geom_ = GEOSGeomFromWKT("POLYGON((0 1, -10 10, 10 10, 0 1, 4 6, -4 6, 0 1))");
       int r = GEOSisValidDetail(geom_, 0, &reason_, &loc_);
-      ensure_equals(r, 0); // valid
+      ensure_equals(r, 0); // invalid
       ensure_equals(std::string(reason_), std::string("Ring Self-intersection"));
       ensure_equals(toWKT(loc_), "POINT (0 1)");
     }
@@ -133,6 +133,16 @@ namespace tut
       ensure_equals(r, 1); // valid
       ensure_equals(reason_, (void*)0);
       ensure_equals(loc_, (void*)0);
+    }
+
+    // Check it is possible to not request details
+    template<>
+    template<>
+    void object::test<6>()
+    {
+      geom_ = GEOSGeomFromWKT("POLYGON((0 1, -10 10, 10 10, 0 1, 4 6, -4 6, 0 1))");
+      int r = GEOSisValidDetail(geom_, 0, 0, 0);
+      ensure_equals(r, 0); // invalid
     }
 
 } // namespace tut

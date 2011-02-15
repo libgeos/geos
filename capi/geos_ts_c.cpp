@@ -13,7 +13,7 @@
  * See the COPYING file for more information.
  *
  * Author: Sandro Santilli <strk@refractions.net>
- *    Thread Safety modifications: Chuck Thibert <charles.thibert@ingres.com>
+ * Thread Safety modifications: Chuck Thibert <charles.thibert@ingres.com>
  *
  ***********************************************************************/
 
@@ -741,14 +741,18 @@ GEOSisValidDetail_r(GEOSContextHandle_t extHandle, const Geometry *g,
         TopologyValidationError *err = ivo.getValidationError();
         if (0 != err)
         {
-           *location = handle->geomFactory->createPoint(err->getCoordinate());
-           std::string errmsg(err->getMessage());
-           *reason = gstrdup(errmsg);
-           return 0;
+          if ( location ) {
+            *location = handle->geomFactory->createPoint(err->getCoordinate());
+          }
+          if ( reason ) {
+            std::string errmsg(err->getMessage());
+            *reason = gstrdup(errmsg);
+          }
+          return 0;
         }
 
-        *location = 0;
-        *reason = 0;
+        if ( location ) *location = 0;
+        if ( reason ) *reason = 0;
         return 1; /* valid */
 
     }
