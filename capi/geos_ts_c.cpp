@@ -151,7 +151,7 @@ class CAPI_ItemVisitor : public geos::index::ItemVisitor {
 extern "C" const char GEOS_DLL *GEOSjtsport();
 extern "C" char GEOS_DLL *GEOSasText(Geometry *g1);
 
-extern "C" {
+namespace { // anonymous
 
 char* gstrdup_s(const char* str, const std::size_t size)
 {
@@ -178,6 +178,9 @@ char* gstrdup(std::string const& str)
     return gstrdup_s(str.c_str(), str.size());
 }
 
+} // namespace anonymous
+
+extern "C" {
 
 GEOSContextHandle_t
 initGEOS_r(GEOSMessageHandler nf, GEOSMessageHandler ef)
