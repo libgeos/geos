@@ -4,7 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2009  Sandro Santilli <strk@keybit.net>
+ * Copyright (C) 2009 2011 Sandro Santilli <strk@keybit.net>
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -13,8 +13,7 @@
  *
  ***********************************************************************
  *
- * Last port: operation/overlay/snap/SnapIfNeededOverlayOp.java rev 1.1
- * (JTS-1.10)
+ * Last port: operation/overlay/snap/SnapIfNeededOverlayOp.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -44,35 +43,36 @@ namespace snap { // geos.operation.overlay.snap
 auto_ptr<Geometry>
 SnapIfNeededOverlayOp::getResultGeometry(OverlayOp::OpCode opCode)
 {
+	using geos::util::TopologyException;
+
 	auto_ptr<Geometry> result;
 
-	bool isSuccess = false;
+	TopologyException origEx;
 
+	// Try with original input
 	try {
 		result.reset( OverlayOp::overlayOp(&geom0, &geom1, opCode) );
-		bool isValid = true;
-
-		// not needed if noding validation is used
-		// bool isValid = OverlayResultValidator::isValid(
-		//                     geom0, geom1, OverlayOp::INTERSECTION,
-		//                     result);
-
-		if (isValid) isSuccess = true;
-
+		return result;
 	}
-	catch (std::exception& ex) {
-        ::geos::ignore_unused_variable_warning(ex);
+	catch (const TopologyException& ex) {
+		origEx = ex; // save original exception
 #if GEOS_DEBUG
 		std::cerr << "Overlay op threw " << ex.what() << ". Will try snapping now" << std::endl;
 #endif
 	}
 
-	if (! isSuccess) {
-		// this may still throw an exception - just let it go if it does
+	// Try snapping
+	try {
 		result = SnapOverlayOp::overlayOp(geom0, geom1, opCode);
+		return result;
 	}
-
-	return result;
+	catch (const TopologyException& ex) {
+		::geos::ignore_unused_variable_warning(ex);
+#if GEOS_DEBUG
+		std::cerr << "Overlay op on snapped geoms threw " << ex.what() << ". Will try snapping now" << std::endl;
+#endif
+	 	throw origEx;
+	}
 }
 
 

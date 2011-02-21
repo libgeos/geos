@@ -4,7 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2009  Sandro Santilli <strk@keybit.net>
+ * Copyright (C) 2009 2011  Sandro Santilli <strk@keybit.net>
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -13,8 +13,7 @@
  *
  ***********************************************************************
  *
- * Last port: operation/overlay/snap/SnapIfNeededOverlayOp.java rev 1.1
- * (JTS-1.10)
+ * Last port: operation/overlay/snap/SnapIfNeededOverlayOp.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
