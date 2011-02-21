@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -123,6 +124,14 @@ LineSequencer::hasSequence(planargraph::Subgraph& graph)
 	return oddDegreeCount <= 2;
 }
 
+void
+LineSequencer::delAll( LineSequencer::Sequences& s)
+{
+  for ( Sequences::iterator i=s.begin(), e=s.end(); i!=e; ++i )
+  {
+    delete *i;
+  }
+}
 
 /*private*/
 LineSequencer::Sequences*
@@ -130,7 +139,7 @@ LineSequencer::findSequences()
 {
 	Sequences *sequences = new Sequences();
 	planargraph::algorithm::ConnectedSubgraphFinder csFinder(graph);
-	vector<planargraph::Subgraph*>subgraphs;
+	vector<planargraph::Subgraph*> subgraphs;
 	csFinder.getConnectedSubgraphs(subgraphs);
 	for (vector<planargraph::Subgraph*>::const_iterator
 		it=subgraphs.begin(), endIt=subgraphs.end();
@@ -144,8 +153,12 @@ LineSequencer::findSequences()
 		}
 		else {
 			// if any subgraph cannot be sequenced, abort
+			delete subgraph;
+			delAll(*sequences);
+			delete sequences;
 			return NULL;
 		}
+		delete subgraph;
 	}
 	return sequences;
 }
@@ -168,11 +181,14 @@ LineSequencer::computeSequence()
 	if (isRun) return;
 	isRun = true;
 
-	Sequences* sequences(findSequences());
+	Sequences* sequences = findSequences();
 	if (sequences == NULL) return;
 
 	sequencedGeometry = auto_ptr<Geometry>(buildSequencedGeometry(*sequences));
 	isSequenceableVar = true;
+
+	delAll(*sequences);
+	delete sequences;
 
 	// Lines were missing from result
 	assert(lineCount == sequencedGeometry->getNumGeometries());

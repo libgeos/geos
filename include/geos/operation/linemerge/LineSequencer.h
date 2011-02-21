@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -102,6 +103,8 @@ private:
 	Sequences* findSequences();
 	DirEdgeList* findSequence(planargraph::Subgraph& graph);
 
+	void delAll( Sequences& );
+
 	/// return a newly allocated LineString
 	static geom::LineString* reverse(const geom::LineString *line);
 
@@ -109,8 +112,11 @@ private:
 	 * Builds a geometry ({@link LineString} or {@link MultiLineString} )
 	 * representing the sequence.
 	 *
-	 * @param sequences a vector of vectors of const planarDirectedEdges
-	 *                  with LineMergeEdges as their parent edges.
+	 * @param sequences
+	 *    a vector of vectors of const planarDirectedEdges
+	 *    with LineMergeEdges as their parent edges.
+	 *    Ownership of container _and_ contents retained by caller.
+	 *
 	 * @return the sequenced geometry, possibly NULL
 	 *         if no sequence exists
 	 */
