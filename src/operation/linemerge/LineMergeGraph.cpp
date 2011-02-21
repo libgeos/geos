@@ -4,7 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2005 R-2006efractions Research Inc.
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -14,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/linemerge/LineMergeGraph.java rev. 1.5 (JTS-1.10)
+ * Last port: operation/linemerge/LineMergeGraph.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -25,6 +26,7 @@
 #include <geos/planargraph/Node.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineString.h>
+#include <memory>
 
 #include <vector>
 
@@ -53,11 +55,17 @@ LineMergeGraph::addEdge(const LineString *lineString)
 	cerr<<"Adding LineString "<<lineString->toString()<<endl;
 #endif
 
-	CoordinateSequence *coordinates = 
-		CoordinateSequence::removeRepeatedPoints(lineString->getCoordinatesRO());
+	std::auto_ptr<CoordinateSequence> coordinates (
+		CoordinateSequence::removeRepeatedPoints(lineString->getCoordinatesRO())
+	);
 
-	const Coordinate& startCoordinate=coordinates->getAt(0);
-	const Coordinate& endCoordinate=coordinates->getAt(coordinates->getSize()-1);
+	std::size_t nCoords = coordinates->size(); // virtual call..
+
+	// don't add lines with all coordinates equal
+	if ( nCoords <= 1 ) return;
+
+	const Coordinate& startCoordinate = coordinates->getAt(0);
+	const Coordinate& endCoordinate = coordinates->getAt(nCoords-1);
 
 	planargraph::Node* startNode=getNode(startCoordinate);
 	planargraph::Node* endNode=getNode(endCoordinate);
@@ -72,7 +80,7 @@ LineMergeGraph::addEdge(const LineString *lineString)
 	newDirEdges.push_back(directedEdge0);
 
 	planargraph::DirectedEdge *directedEdge1=new LineMergeDirectedEdge(endNode,
-			startNode,coordinates->getAt(coordinates->getSize()-2),
+			startNode,coordinates->getAt(nCoords - 2),
 			false);
 	newDirEdges.push_back(directedEdge1);
 
@@ -92,7 +100,6 @@ LineMergeGraph::addEdge(const LineString *lineString)
 	cerr<<"  endNode: "<<*endNode<<endl;
 #endif
 
-	delete coordinates;
 }
 
 planargraph::Node *

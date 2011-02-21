@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/linemerge/LineMerger.java rev. 1.7 (JTS-1.10)
+ * Last port: operation/linemerge/LineMerger.java r320 (JTS-1.11)
  *
  **********************************************************************/
 

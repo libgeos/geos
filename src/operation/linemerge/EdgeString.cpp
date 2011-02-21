@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -14,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/linemerge/EdgeString.java rev. 1.5 (JTS-1.10)
+ * Last port: operation/linemerge/EdgeString.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -42,13 +43,12 @@ namespace linemerge { // geos.operation.linemerge
  */
 EdgeString::EdgeString(const GeometryFactory *newFactory):
 	factory(newFactory),
-	directedEdges(new vector<LineMergeDirectedEdge*>()),
+	directedEdges(),
 	coordinates(NULL)
 {
 }
 
 EdgeString::~EdgeString() {
-	delete directedEdges;
 }
 
 /**
@@ -57,7 +57,7 @@ EdgeString::~EdgeString() {
 void
 EdgeString::add(LineMergeDirectedEdge *directedEdge)
 {
-	directedEdges->push_back(directedEdge);
+	directedEdges.push_back(directedEdge);
 }
 
 CoordinateSequence *
@@ -67,8 +67,8 @@ EdgeString::getCoordinates()
 		int forwardDirectedEdges = 0;
 		int reverseDirectedEdges = 0;
 		coordinates=factory->getCoordinateSequenceFactory()->create(NULL);
-		for (int i=0;i<(int)directedEdges->size();i++) {
-			LineMergeDirectedEdge* directedEdge=(*directedEdges)[i];
+		for (std::size_t i=0, e=directedEdges.size(); i<e; ++i) {
+			LineMergeDirectedEdge* directedEdge = directedEdges[i];
 			if (directedEdge->getEdgeDirection()) {
 				forwardDirectedEdges++;
 			} else {
@@ -76,8 +76,7 @@ EdgeString::getCoordinates()
 			}
 
 			assert(dynamic_cast<LineMergeEdge*>(directedEdge->getEdge()));
-			LineMergeEdge* lme=static_cast<LineMergeEdge*>(
-				directedEdge->getEdge());
+			LineMergeEdge* lme=static_cast<LineMergeEdge*>( directedEdge->getEdge());
 
 			coordinates->add(lme->getLine()->getCoordinatesRO(),
 					false,

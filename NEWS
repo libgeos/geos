@@ -31,6 +31,7 @@ Changes in 3.3.0
   - CAPI: do not leak contexts when using the non-reentrant interface
   - Fix duplicated dangles returned by Polygonizer
   - Fix SnapIfNeededOverlayOp to throw the originating exception
+  - Fixed LineMerger to skip lines with only a single unique coordinate
 
 Changes in 3.2.0 
 2009-12-14

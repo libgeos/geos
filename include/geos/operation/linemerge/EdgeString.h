@@ -4,7 +4,9 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -13,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/linemerge/EdgeString.java rev. 1.5 (JTS-1.10)
+ * Last port: operation/linemerge/EdgeString.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -50,7 +52,7 @@ namespace linemerge { // geos::operation::linemerge
 class GEOS_DLL EdgeString {
 private:
 	const geom::GeometryFactory *factory;
-	std::vector<LineMergeDirectedEdge*> *directedEdges;
+	std::vector<LineMergeDirectedEdge*> directedEdges;
 	geom::CoordinateSequence *coordinates;
 	geom::CoordinateSequence* getCoordinates();
 public:

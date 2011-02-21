@@ -74,6 +74,7 @@ geos_unit_SOURCES = \
 	operation/buffer/BufferOpTest.cpp \
 	operation/distance/DistanceOpTest.cpp \
 	operation/IsSimpleOpTest.cpp \
+	operation/linemerge/LineMergerTest.cpp \
 	operation/overlay/validate/FuzzyPointLocatorTest.cpp \
 	operation/overlay/validate/OffsetPointGeneratorTest.cpp \
 	operation/overlay/validate/OverlayResultValidatorTest.cpp \

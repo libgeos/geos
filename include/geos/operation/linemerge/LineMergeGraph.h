@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -13,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/linemerge/LineMergeGraph.java rev. 1.5 (JTS-1.10)
+ * Last port: operation/linemerge/LineMergeGraph.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -69,9 +70,11 @@ private:
 
 public:
 
-	/**
+	/** \brief
 	 * Adds an Edge, DirectedEdges, and Nodes for the given
 	 * LineString representation of an edge. 
+	 * 
+	 * Empty lines or lines with all coordinates equal are not added.
 	 */
 	void addEdge(const geom::LineString *lineString);
 
