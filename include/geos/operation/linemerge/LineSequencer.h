@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/linemerge/LineSequencer.java rev. 1.6 (JTS-1.10)
+ * Last port: operation/linemerge/LineSequencer.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -60,7 +60,7 @@ namespace linemerge { // geos::operation::linemerge
  * The input linestrings may form one or more connected sets.
  * The input linestrings should be correctly noded, or the results may
  * not be what is expected.
- * The output of this method is a single MultiLineString containing the ordered
+ * The computed output is a single MultiLineString containing the ordered
  * linestrings in the sequence.
  * 
  * The sequencing employs the classic <b>Eulerian path</b> graph algorithm.
@@ -175,6 +175,13 @@ private:
 	bool hasSequence(planargraph::Subgraph& graph);
 
 public:
+
+	static geom::Geometry* sequence(const geom::Geometry& geom)
+	{
+		LineSequencer sequencer;
+		sequencer.add(geom);
+		return sequencer.getSequencedLineStrings();
+	}
 
 	LineSequencer()
 		:
