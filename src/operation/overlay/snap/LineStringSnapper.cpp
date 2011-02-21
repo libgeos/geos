@@ -14,7 +14,7 @@
  *
  ***********************************************************************
  *
- * Last port: operation/overlay/snap/LineStringSnapper.java r309 (JTS-1.11+)
+ * Last port: operation/overlay/snap/LineStringSnapper.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
