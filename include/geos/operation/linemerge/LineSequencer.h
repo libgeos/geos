@@ -227,6 +227,17 @@ public:
 		geometry.applyComponentFilter(*this);
 	}
 
+  template <class TargetContainer>
+  void add(TargetContainer& geoms)
+  {
+    for (typename TargetContainer::const_iterator i = geoms.begin(),
+         e = geoms.end(); i != e; ++i)
+    {
+      const geom::Geometry* g = *i;
+      add(*g);
+    }
+  }
+
 	/**
 	 * Act as a GeometryComponentFilter so to extract
 	 * the linearworks
