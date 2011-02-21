@@ -30,6 +30,7 @@ Changes in 3.3.0
   - Return up to 15 digits of precision from GEOSisValidReason_t (#329)
   - CAPI: do not leak contexts when using the non-reentrant interface
   - Fix duplicated dangles returned by Polygonizer
+  - Fix SnapIfNeededOverlayOp to throw the originating exception
 
 Changes in 3.2.0 
 2009-12-14
