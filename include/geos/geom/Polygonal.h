@@ -20,6 +20,7 @@
 #ifndef GEOS_GEOM_POLYGONAL_H
 #define GEOS_GEOM_POLYGONAL_H
 
+#include <geos/export.h>
 #include <geos/geom/Geometry.h> // for inheritance
 
 namespace geos {
@@ -29,7 +30,7 @@ namespace geom { // geos::geom
  * Identifies {@link Geometry} subclasses which
  * are 2-dimensional and with components which are {@link Polygon}s.
  */
-class Polygonal : public virtual Geometry
+class GEOS_DLL Polygonal : public virtual Geometry
 {
 protected:
   Polygonal(): Geometry(0) {}

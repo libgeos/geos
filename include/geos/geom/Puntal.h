@@ -20,6 +20,7 @@
 #ifndef GEOS_GEOM_PUNTAL_H
 #define GEOS_GEOM_PUNTAL_H
 
+#include <geos/export.h>
 #include <geos/geom/Geometry.h> // for inheritance
 
 namespace geos {
@@ -29,7 +30,7 @@ namespace geom { // geos::geom
  * Identifies {@link Geometry} subclasses which
  * are 0-dimensional and with components which are {@link Point}s.
  */
-class Puntal : public virtual Geometry
+class GEOS_DLL Puntal : public virtual Geometry
 {
 protected:
   Puntal(): Geometry(0) {}

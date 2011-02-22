@@ -20,6 +20,7 @@
 #ifndef GEOS_GEOM_LINEAL_H
 #define GEOS_GEOM_LINEAL_H
 
+#include <geos/export.h>
 #include <geos/geom/Geometry.h> // for inheritance
 
 namespace geos {
@@ -29,7 +30,7 @@ namespace geom { // geos::geom
  * Identifies {@link Geometry} subclasses which
  * are 1-dimensional and with components which are {@link LineString}s.
  */
-class Lineal : public virtual Geometry
+class GEOS_DLL Lineal : public virtual Geometry
 {
 protected:
   Lineal(): Geometry(0) {}
