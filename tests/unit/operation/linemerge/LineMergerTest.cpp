@@ -198,15 +198,11 @@ namespace tut
   template<> template<>
   void object::test<4>()
   {
-    // I don't see how the following test could succeed (even in JTS)
-    // so it is disabled
-    return; 
-
     const char* inpWKT[] = {
+      "LINESTRING EMPTY",
       "LINESTRING EMPTY",
       NULL };
     const char* expWKT[] = {
-      "LINESTRING EMPTY",
       NULL };
 
     doTest(inpWKT, expWKT);
