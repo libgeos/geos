@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: noding/snapround/MCIndexSnapRounder.java rev. 1.3 (JTS-1.9)
+ * Last port: noding/snapround/MCIndexSnapRounder.java r320 (JTS-1.12)
  *
  **********************************************************************/
 

@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: noding/snapround/MCIndexSnapRounder.java rev. 1.3 (JTS-1.9)
+ * Last port: noding/snapround/MCIndexSnapRounder.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -88,9 +88,9 @@ public:
 	 * Computes nodes introduced as a result of
 	 * snapping segments to vertices of other segments
 	 *
-	 * @param segStrings the list of segment strings to snap together
+	 * @param edges the list of segment strings to snap together
 	 *        NOTE: they *must* be instances of NodedSegmentString, or
-	 * 	  an assertion will fail.
+	 * 	            an assertion will fail.
 	 */
 	void computeVertexSnaps(std::vector<SegmentString*>& edges);
 
