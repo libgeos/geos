@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: noding/snapround/SimpleSnapRounder.java rev. 1.4 (JTS-1.9)
+ * Last port: noding/snapround/SimpleSnapRounder.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -63,6 +63,7 @@ namespace snapround { // geos::noding::snapround
  * and all the input vertices must be rounded to that precision).
  *
  * This implementation uses simple iteration over the line segments.
+ * * This is not the most efficient approach for large sets of segments.
  *
  * This implementation appears to be fully robust using an integer
  * precision model.
@@ -86,7 +87,7 @@ public:
 	 * Computes nodes introduced as a result of
 	 * snapping segments to vertices of other segments
 	 *
-	 * @param segStrings the list of segment strings to snap together.
+	 * @param edges the list of segment strings to snap together.
 	 *        Must be NodedSegmentString or an assertion will fail.
 	 */
 	void computeVertexSnaps(const std::vector<SegmentString*>& edges);

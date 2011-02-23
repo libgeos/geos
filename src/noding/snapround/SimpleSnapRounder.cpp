@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: noding/snapround/SimpleSnapRounder.java rev. 1.4 (JTS-1.9)
+ * Last port: noding/snapround/SimpleSnapRounder.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
