@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/BufferParameters.java rev 1.5 (JTS-1.10)
+ * Last port: operation/buffer/BufferParameters.java r262 (JTS-1.11+)
  *
  **********************************************************************/
 

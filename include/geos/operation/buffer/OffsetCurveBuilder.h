@@ -61,8 +61,6 @@ namespace buffer { // geos.operation.buffer
  * of all the noded raw curves and tracing outside contours.
  * The points in the raw curve are rounded to the required precision model.
  *
- * Last port: operation/buffer/OffsetCurveBuilder.java rev. 1.9
- *
  */
 class GEOS_DLL OffsetCurveBuilder {
 public:

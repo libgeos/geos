@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/BufferBuilder.java rev. 1.30 (JTS-1.10)
+ * Last port: operation/buffer/BufferBuilder.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
