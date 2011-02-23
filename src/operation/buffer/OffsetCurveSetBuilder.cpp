@@ -289,7 +289,9 @@ OffsetCurveSetBuilder::addPolygonRing(const CoordinateSequence *coord,
 #if GEOS_DEBUG
 	std::cerr<<"OffsetCurveSetBuilder::addPolygonRing: CCW: "<<CGAlgorithms::isCCW(coord)<<std::endl;
 #endif
-	if (CGAlgorithms::isCCW(coord)) {
+	if (coord->size() >= LinearRing::MINIMUM_VALID_SIZE
+			&& CGAlgorithms::isCCW(coord))
+	{
 		leftLoc=cwRightLoc;
 		rightLoc=cwLeftLoc;
 #if GEOS_DEBUG

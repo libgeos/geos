@@ -35,6 +35,7 @@ Changes in 3.3.0
   - Fixed LineMerger to skip lines with only a single unique coordinate
   - Fix NodedSegmentString to handle zero-length line segments correctly
     (via safeOctant)
+  - Fixed buffer OffsetCurveSetBuilder to handle "flat" rings correctly
 
 Changes in 3.2.0 
 2009-12-14
