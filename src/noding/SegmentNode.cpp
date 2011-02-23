@@ -27,6 +27,7 @@
 #include <iomanip>
 
 #include <geos/noding/SegmentNode.h>
+#include <geos/noding/SegmentPointComparator.h>
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/geom/Coordinate.h>
 
@@ -36,71 +37,6 @@ using namespace geos::geom;
 namespace geos {
 namespace noding { // geos.noding
 
-
-/**
- * Implements a robust method of comparing the relative position of two
- * points along the same segment.
- * The coordinates are assumed to lie "near" the segment.
- * This means that this algorithm will only return correct results
- * if the input coordinates
- * have the same precision and correspond to rounded values
- * of exact coordinates lying on the segment.
- *
- * Last port: noding/SegmentPointComparator.java rev. 1.2 (JTS-1.7)
- */
-class SegmentPointComparator {
-
-public:
-
-	/**
-	 * Compares two Coordinates for their relative position along a 
-	 * segment lying in the specified Octant.
-	 *
-	 * @return -1 node0 occurs first
-	 * @return 0 the two nodes are equal
-	 * @return 1 node1 occurs first
-	 */
-	static int compare(int octant, const Coordinate& p0,
-			const Coordinate& p1)
-	{
-		// nodes can only be equal if their coordinates are equal
-		if (p0.equals2D(p1)) return 0;
-
-		int xSign = relativeSign(p0.x, p1.x);
-		int ySign = relativeSign(p0.y, p1.y);
-
-		switch (octant) {
-			case 0: return compareValue(xSign, ySign);
-			case 1: return compareValue(ySign, xSign);
-			case 2: return compareValue(ySign, -xSign);
-			case 3: return compareValue(-xSign, ySign);
-			case 4: return compareValue(-xSign, -ySign);
-			case 5: return compareValue(-ySign, -xSign);
-			case 6: return compareValue(-ySign, xSign);
-			case 7: return compareValue(xSign, -ySign);
-		}
-		assert(0); // invalid octant value
-		return 0;
-	 
-	}
-
-	static int relativeSign(double x0, double x1)
-	{
-		if (x0 < x1) return -1;
-		if (x0 > x1) return 1;
-		return 0;
-	}
-
-	static int compareValue(int compareSign0, int compareSign1)
-	{
-		if (compareSign0 < 0) return -1;
-		if (compareSign0 > 0) return 1;
-		if (compareSign1 < 0) return -1;
-		if (compareSign1 > 0) return 1;
-		return 0;
-	}
- 
-};
 
 /*public*/
 SegmentNode::SegmentNode(const NodedSegmentString& ss, const Coordinate& nCoord,
