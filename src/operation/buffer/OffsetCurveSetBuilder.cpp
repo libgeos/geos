@@ -4,8 +4,9 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005 Refractions Research Inc.
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -14,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/OffsetCurveSetBuilder.java rev. 1.11 (JTS-1.10)
+ * Last port: operation/buffer/OffsetCurveSetBuilder.java r262 (JTS-1.11)
  *
  **********************************************************************/
 
@@ -277,6 +278,12 @@ void
 OffsetCurveSetBuilder::addPolygonRing(const CoordinateSequence *coord,
 	double offsetDistance, int side, int cwLeftLoc, int cwRightLoc)
 {
+
+	// don't bother adding ring if it is "flat" and
+	// will disappear in the output
+	if (offsetDistance == 0.0 && coord->size() < LinearRing::MINIMUM_VALID_SIZE)
+		return;
+
 	int leftLoc=cwLeftLoc;
 	int rightLoc=cwRightLoc;
 #if GEOS_DEBUG

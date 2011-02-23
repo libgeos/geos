@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -13,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/OffsetCurveSetBuilder.java rev. 1.11 (JTS-1.10)
+ * Last port: operation/buffer/OffsetCurveSetBuilder.java r262 (JTS-1.11)
  *
  **********************************************************************/
 
@@ -109,7 +110,7 @@ private:
 	void addPolygon(const geom::Polygon *p);
 
 	/**
-	 * Add an offset curve for a ring.
+	 * Add an offset curve for a polygon ring.
 	 * The side and left and right topological location arguments
 	 * assume that the ring is oriented CW.
 	 * If the ring is in the opposite orientation,
