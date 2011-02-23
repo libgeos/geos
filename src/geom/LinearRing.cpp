@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/LinearRing.java rev. 1.32 (JTS-1.10)
+ * Last port: geom/LinearRing.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -71,7 +71,7 @@ LinearRing::validateConstruction()
 		);
 	}
 
-	if ( points->getSize() <= 3 )
+	if ( points->getSize() < MINIMUM_VALID_SIZE )
 	{
 		std::ostringstream os;
 		os << "Invalid number of points in LinearRing found "
@@ -96,6 +96,16 @@ bool
 LinearRing::isSimple() const
 {
 	return true;
+}
+
+bool
+LinearRing::isClosed() const
+{
+	if ( points->isEmpty() ) {
+		// empty LinearRings are closed by definition
+		return true;
+	}
+	return LineString::isClosed();
 }
 
 string LinearRing::getGeometryType() const {

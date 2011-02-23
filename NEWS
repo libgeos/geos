@@ -25,6 +25,7 @@ Changes in 3.3.0
   - Polygonizer::getDangles returns by const ref
   - Polygonizer::getInvalidRingLines returns by const ref and retains
     ownership of vector elements
+  - Empty LinearRings are closed by definition
 - Bug fixes:
   - Invalid compound geometries reported as valid (#333)
   - Return up to 15 digits of precision from GEOSisValidReason_t (#329)

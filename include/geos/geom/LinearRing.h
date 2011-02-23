@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/LinearRing.java rev. 1.32 (JTS-1.10)
+ * Last port: geom/LinearRing.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -59,6 +59,12 @@ class GEOS_DLL LinearRing : public LineString {
 
 public:
 
+	/**
+	 * The minimum number of vertices allowed in a valid non-empty ring (= 4).
+	 * Empty rings with 0 vertices are also valid.
+	 */
+	static const unsigned int MINIMUM_VALID_SIZE = 4;
+
 	LinearRing(const LinearRing &lr);
 
 	/**
@@ -101,6 +107,8 @@ public:
 	 * @see Geometry::isSimple
 	 */
 	bool isSimple() const;
+
+	bool isClosed() const;
 
 	std::string getGeometryType() const;
 
