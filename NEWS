@@ -32,6 +32,8 @@ Changes in 3.3.0
   - Fix duplicated dangles returned by Polygonizer
   - Fix SnapIfNeededOverlayOp to throw the originating exception
   - Fixed LineMerger to skip lines with only a single unique coordinate
+  - Fix NodedSegmentString to handle zero-length line segments correctly
+    (via safeOctant)
 
 Changes in 3.2.0 
 2009-12-14

@@ -4,6 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
+ * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -13,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: noding/NodedSegmentString.java rev. 1.2 (JTS-1.9)
+ * Last port: noding/NodedSegmentString.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -40,13 +42,22 @@ NodedSegmentString::getNodeList()
 	return nodeList;
 }
 
+/*static private*/
+int
+NodedSegmentString::safeOctant(const Coordinate& p0, const Coordinate& p1) 
+{
+  if ( p0.equals2D(p1) ) return 0;
+	return Octant::octant(p0, p1);
+}
+
 
 /*public*/
 int
 NodedSegmentString::getSegmentOctant(unsigned int index) const
 {
 	if (index >= size() - 1) return -1;
-	return Octant::octant(getCoordinate(index), getCoordinate(index+1));
+	return safeOctant(getCoordinate(index), getCoordinate(index+1));
+	//return Octant::octant(getCoordinate(index), getCoordinate(index+1));
 }
 
 /*public*/

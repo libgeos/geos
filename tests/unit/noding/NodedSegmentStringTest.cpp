@@ -93,17 +93,7 @@ namespace tut
 
         ensure_equals(ss->getNodeList().size(), 0u);
 
-        // this would throw an exception
-        bool octant_failed=false;
-        try
-        {
-            ss->getSegmentOctant(0);
-        }
-        catch (...)
-        {
-            octant_failed=true;
-        }
-        ensure(octant_failed);
+        ensure_equals(ss->getSegmentOctant(0), 0);
     }
 
     // test constructor with 2 different points
