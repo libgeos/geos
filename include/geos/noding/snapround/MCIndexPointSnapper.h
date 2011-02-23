@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: noding/snapround/MCIndexPointSnapper.java rev. 1.4 (JTS-1.9)
+ * Last port: noding/snapround/MCIndexPointSnapper.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
