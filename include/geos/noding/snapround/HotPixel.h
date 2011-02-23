@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: noding/snapround/HotPixel.java rev. 1.3 (JTS-1.9)
+ * Last port: noding/snapround/HotPixel.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -135,6 +135,9 @@ private:
 	 */
 	bool intersectsPixelClosure(const geom::Coordinate& p0,
 			const geom::Coordinate& p1);
+
+	bool intersectsScaled(const geom::Coordinate& p0,
+			const geom::Coordinate& p1) const;
  
     // Declare type as noncopyable
     HotPixel(const HotPixel& other);
@@ -142,6 +145,14 @@ private:
 
 public:
 
+	/**
+	 * Creates a new hot pixel.
+	 *
+	 * @param pt the coordinate at the centre of the pixel
+	 * @param scaleFact the scaleFactor determining the pixel size
+	 * @param li the intersector to use for testing intersection with
+	 *        line segments
+	 */
 	HotPixel(const geom::Coordinate& pt,
 			double scaleFact,
 			algorithm::LineIntersector& li);
@@ -154,12 +165,19 @@ public:
 	/** \brief
 	 * Returns a "safe" envelope that is guaranteed to contain
 	 * the hot pixel. Keeps ownership of it.
+	 *
+	 * The envelope returned will be larger than the exact envelope of the
+	 * pixel.
 	 */
 	const geom::Envelope& getSafeEnvelope() const;
 
-	bool intersectsScaled(const geom::Coordinate& p0,
-			const geom::Coordinate& p1) const;
-
+	/**
+	 * Tests whether the line segment (p0-p1) intersects this hot pixel.
+	 *
+	 * @param p0 the first coordinate of the line segment to test
+	 * @param p1 the second coordinate of the line segment to test
+	 * @return true if the line segment intersects this hot pixel
+	 */
 	bool intersects(const geom::Coordinate& p0,
 			const geom::Coordinate& p1) const;
  

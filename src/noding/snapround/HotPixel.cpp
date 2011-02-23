@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: noding/snapround/HotPixel.java rev. 1.3 (JTS-1.9)
+ * Last port: noding/snapround/HotPixel.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -56,8 +56,10 @@ HotPixel::HotPixel(const Coordinate& newPt, double newScaleFactor,
 const Envelope&
 HotPixel::getSafeEnvelope() const
 {
+	static const double SAFE_ENV_EXPANSION_FACTOR = 0.75;
+
 	if (safeEnv.get() == NULL) {
-		double safeTolerance = .75 / scaleFactor;
+		double safeTolerance = SAFE_ENV_EXPANSION_FACTOR / scaleFactor;
 		safeEnv = auto_ptr<Envelope>(new Envelope(originalPt.x - safeTolerance,
 			originalPt.x + safeTolerance,
 			originalPt.y - safeTolerance,
@@ -96,6 +98,7 @@ HotPixel::intersects(const Coordinate& p0,
 	return intersectsScaled(p0Scaled, p1Scaled);
 }
 
+/* private */
 bool
 HotPixel::intersectsScaled(const Coordinate& p0,
 		const Coordinate& p1) const
