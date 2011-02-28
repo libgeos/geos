@@ -48,6 +48,7 @@
 #include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/Edge.h>
 #include <geos/util/GEOSException.h>
+#include <geos/io/WKTWriter.h> // for debugging
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/profiler.h>
 
@@ -75,6 +76,25 @@ using namespace geos::noding;
 using namespace geos::algorithm;
 using namespace geos::operation::overlay;
 using namespace geos::operation::linemerge;
+
+namespace {
+
+// Debug routine
+template <class Iterator>
+std::auto_ptr<Geometry>
+convertSegStrings(const GeometryFactory* fact, Iterator it, Iterator et)
+{
+  std::vector<Geometry*> lines;
+  while(it != et) {
+    const SegmentString* ss = *it;
+    LineString* line = fact->createLineString(ss->getCoordinates());
+    lines.push_back(line);
+    ++it;
+  }
+  return std::auto_ptr<Geometry>(fact->buildGeometry(lines));
+}
+
+}
 
 namespace geos {
 namespace operation { // geos.operation
@@ -373,29 +393,8 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 	std::cerr<<"BufferBuilder::buffer computing NodedEdges"<<std::endl;
 #endif
 
-#if JTS_DEBUG
-std::cerr << "before noding: SegStr # " << bufferSegStrList.size() << std::endl;
-for (size_t i = 0, n=bufferSegStrList.size(); i<n; i++)
-{
- 	SegmentString* segStr = bufferSegStrList[i];
-	std::cerr << "SegStr " << i << ": pts # " << segStr->size()
-		<< " nodes # " << segStr->getNodeList().size()
-		<< std::endl;
-}
-#endif
-
 	computeNodedEdges(bufferSegStrList, precisionModel);
-
-#if JTS_DEBUG
-std::cerr << "after noding: SegStr # " << bufferSegStrList.size() << std::endl;
-for (size_t i = 0, n=bufferSegStrList.size(); i<n; i++)
-{
- 	SegmentString* segStr = bufferSegStrList[i];
-	std::cerr << "SegStr " << i << ": pts # " << segStr->size()
-		<< " nodes # " << segStr->getNodeList().size()
-		<< std::endl;
-}
-#endif
+  // NOTE: bufferSegStrList should not be needed anymore from now on
 
 #if GEOS_DEBUG > 1
 	std::cerr << std::endl << edgeList << std::endl;
@@ -499,10 +498,27 @@ BufferBuilder::computeNodedEdges(SegmentString::NonConstVect& bufferSegStrList,
 {
 	Noder* noder = getNoder( precisionModel );
 
+#if JTS_DEBUG
+geos::io::WKTWriter wktWriter; wktWriter.setTrim(true);
+std::cerr << "before noding: "
+  << wktWriter.write(
+        convertSegStrings(geomFact, bufferSegStrList.begin(),
+                                    bufferSegStrList.end()).get()
+     ) << std::endl;
+#endif
+
 	noder->computeNodes(&bufferSegStrList);
 
 	SegmentString::NonConstVect* nodedSegStrings = \
 			noder->getNodedSubstrings();
+
+#if JTS_DEBUG
+std::cerr << "after noding: "
+  << wktWriter.write(
+        convertSegStrings(geomFact, bufferSegStrList.begin(),
+                                    bufferSegStrList.end()).get()
+     ) << std::endl;
+#endif
 
 
 	for (SegmentString::NonConstVect::iterator
