@@ -16,6 +16,7 @@ Changes in 3.3.0
   - CAPI: GEOSSharedPaths to find shared paths and their orientation
   - CAPI: GEOSSnap 
   - CAPI: GEOSRelatePatternMatch 
+  - CAPI: GEOSCovers, GEOSCoveredBy (#396) 
   -  PHP: new PHP5 bindings based on CAPI
 - C++ API changes:
   - Geometry inheritance chain changed to introduce Puntal, Lineal

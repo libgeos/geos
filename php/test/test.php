@@ -1185,6 +1185,8 @@ MULTIPOINT(
         $this->assertFalse( $g1->overlaps($g2) );
         $this->assertTrue( $g1->equals($g2) );
         $this->assertTrue( $g1->equalsExact($g2) );
+        $this->assertTrue( $g1->covers($g2) );
+        $this->assertTrue( $g1->coveredBy($g2) );
 
         $g1 = $reader->read('POINT(0 0)');
         $g2 = $reader->read('LINESTRING(0 0, 10 0)');
@@ -1198,6 +1200,8 @@ MULTIPOINT(
         $this->assertFalse( $g1->overlaps($g2) );
         $this->assertFalse( $g1->equals($g2) );
         $this->assertFalse( $g1->equalsExact($g2, 10) );
+        $this->assertFalse( $g1->covers($g2) );
+        $this->assertTrue( $g1->coveredBy($g2) );
 
         $g1 = $reader->read('POINT(5 0)');
         $g2 = $reader->read('LINESTRING(0 0, 10 0)');
@@ -1211,6 +1215,8 @@ MULTIPOINT(
         $this->assertFalse( $g1->overlaps($g2) );
         $this->assertFalse( $g1->equals($g2) );
         $this->assertFalse( $g1->equalsExact($g2, 10) );
+        $this->assertFalse( $g1->covers($g2) );
+        $this->assertTrue( $g1->coveredBy($g2) );
 
         $g1 = $reader->read('LINESTRING(5 -5, 5 5)');
         $g2 = $reader->read('LINESTRING(0 0, 10 0)');
@@ -1224,6 +1230,8 @@ MULTIPOINT(
         $this->assertFalse( $g1->overlaps($g2) );
         $this->assertFalse( $g1->equals($g2) );
         $this->assertFalse( $g1->equalsExact($g2, 1) );
+        $this->assertFalse( $g1->covers($g2) );
+        $this->assertFalse( $g1->coveredBy($g2) );
 
         $g1 = $reader->read('LINESTRING(5 0, 15 0)');
         $g2 = $reader->read('LINESTRING(0 0, 10 0)');
@@ -1237,6 +1245,8 @@ MULTIPOINT(
         $this->assertTrue( $g1->overlaps($g2) );
         $this->assertFalse( $g1->equals($g2) );
         $this->assertFalse( $g1->equalsExact($g2, 1) );
+        $this->assertFalse( $g1->covers($g2) );
+        $this->assertFalse( $g1->coveredBy($g2) );
 
         $g1 = $reader->read('LINESTRING(0 0, 5 0, 10 0)');
         $g2 = $reader->read('LINESTRING(0 0, 10 0)');
@@ -1250,6 +1260,8 @@ MULTIPOINT(
         $this->assertFalse( $g1->overlaps($g2) );
         $this->assertTrue( $g1->equals($g2) );
         $this->assertFalse( $g1->equalsExact($g2, 1) );
+        $this->assertTrue( $g1->covers($g2) );
+        $this->assertTrue( $g1->coveredBy($g2) );
 
         $g1 = $reader->read('POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))');
         $g2 = $reader->read('POLYGON((5 -5, 5 5, 15 5, 15 -5, 5 -5))');
@@ -1263,6 +1275,8 @@ MULTIPOINT(
         $this->assertTrue( $g1->overlaps($g2) );
         $this->assertFalse( $g1->equals($g2) );
         $this->assertFalse( $g1->equalsExact($g2, 1) );
+        $this->assertFalse( $g1->covers($g2) );
+        $this->assertFalse( $g1->coveredBy($g2) );
 
         $g1 = $reader->read('POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))');
         $g2 = $reader->read('POINT(15 15)');
@@ -1276,6 +1290,23 @@ MULTIPOINT(
         $this->assertFalse( $g1->overlaps($g2) );
         $this->assertFalse( $g1->equals($g2) );
         $this->assertFalse( $g1->equalsExact($g2, 1) );
+        $this->assertFalse( $g1->covers($g2) );
+        $this->assertFalse( $g1->coveredBy($g2) );
+
+        $g1 = $reader->read('POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))');
+        $g2 = $reader->read('POINT(5 0)');
+
+        $this->assertFalse( $g1->disjoint($g2) );
+        $this->assertTrue( $g1->touches($g2) ); 
+        $this->assertTrue( $g1->intersects($g2) );
+        $this->assertFalse( $g1->crosses($g2) );
+        $this->assertFalse( $g1->within($g2) );
+        $this->assertFalse( $g1->contains($g2) );
+        $this->assertFalse( $g1->overlaps($g2) );
+        $this->assertFalse( $g1->equals($g2) );
+        $this->assertFalse( $g1->equalsExact($g2, 1) );
+        $this->assertTrue( $g1->covers($g2) );
+        $this->assertFalse( $g1->coveredBy($g2) );
 
     }
 
