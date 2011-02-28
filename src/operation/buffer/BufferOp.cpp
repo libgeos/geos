@@ -193,20 +193,7 @@ BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
 
 
 	PrecisionModel pm(1.0); // fixed as well
-
-//
-// FIXME: both MCIndexSnapRounder and SimpleSnapRounder
-// makes buffer_snapround.xml test fail.
-//
-#if 0 
-	snapround::MCIndexSnapRounder inoder(pm); // fail
-	snapround::SimpleSnapRounder inoder(pm); // fail
-#else
-
-	algorithm::LineIntersector li(&fixedPM);
-	IntersectionAdder ia(li);
-	MCIndexNoder inoder(&ia); // This works fine (but does not snapround)
-#endif
+	snapround::MCIndexSnapRounder inoder(pm); 
 
 	ScaledNoder noder(inoder, fixedPM.getScale());
 
