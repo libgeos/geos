@@ -166,6 +166,18 @@ GEOSOverlaps(const Geometry *g1, const Geometry *g2)
     return GEOSOverlaps_r( handle, g1, g2 );
 }
 
+char
+GEOSCovers(const Geometry *g1, const Geometry *g2)
+{
+    return GEOSCovers_r( handle, g1, g2 );
+}
+
+char
+GEOSCoveredBy(const Geometry *g1, const Geometry *g2)
+{
+    return GEOSCoveredBy_r( handle, g1, g2 );
+}
+
 
 //-------------------------------------------------------------------
 // low-level relate functions

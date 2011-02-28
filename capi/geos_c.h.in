@@ -642,6 +642,8 @@ extern char GEOS_DLL GEOSContains(const GEOSGeometry* g1, const GEOSGeometry* g2
 extern char GEOS_DLL GEOSOverlaps(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSEquals(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSEqualsExact(const GEOSGeometry* g1, const GEOSGeometry* g2, double tolerance);
+extern char GEOS_DLL GEOSCovers(const GEOSGeometry* g1, const GEOSGeometry* g2);
+extern char GEOS_DLL GEOSCoveredBy(const GEOSGeometry* g1, const GEOSGeometry* g2);
 
 extern char GEOS_DLL GEOSRelatePattern_r(GEOSContextHandle_t handle,
                                          const GEOSGeometry* g1,
@@ -678,6 +680,12 @@ extern char GEOS_DLL GEOSEqualsExact_r(GEOSContextHandle_t handle,
                                        const GEOSGeometry* g1,
                                        const GEOSGeometry* g2,
                                        double tolerance);
+extern char GEOS_DLL GEOSCovers_r(GEOSContextHandle_t handle,
+                                  const GEOSGeometry* g1,
+                                  const GEOSGeometry* g2);
+extern char GEOS_DLL GEOSCoveredBy_r(GEOSContextHandle_t handle,
+                                  const GEOSGeometry* g1,
+                                  const GEOSGeometry* g2);
 
 /************************************************************************
  *

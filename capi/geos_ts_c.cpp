@@ -490,6 +490,70 @@ GEOSOverlaps_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry
     return 2;
 }
 
+char
+GEOSCovers_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g2)
+{
+    if ( 0 == extHandle )
+    {
+        return 2;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return 2;
+    }
+
+    try
+    {
+        bool result = g1->covers(g2);
+        return result;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+    
+    return 2;
+}
+
+char
+GEOSCoveredBy_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g2)
+{
+    if ( 0 == extHandle )
+    {
+        return 2;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return 2;
+    }
+
+    try
+    {
+        bool result = g1->coveredBy(g2);
+        return result;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+    
+    return 2;
+}
+
 
 //-------------------------------------------------------------------
 // low-level relate functions
