@@ -20,10 +20,16 @@
 #ifndef GEOS_ALGORITHM_CENTRALENDPOINTINTERSECTOR_H
 #define GEOS_ALGORITHM_CENTRALENDPOINTINTERSECTOR_H
 
+#include <geos/export.h>
 #include <geos/geom/Coordinate.h>
 
 #include <string>
 #include <limits>
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
 
 // Forward declarations
 namespace geos {
@@ -54,7 +60,7 @@ namespace algorithm { // geos::algorithm
  * @author Martin Davis
  * @version 1.8
  */
-class CentralEndpointIntersector {
+class GEOS_DLL CentralEndpointIntersector {
 
 public:	
 
@@ -140,14 +146,14 @@ private:
 		}
 		return result;
 	}
-  
-
-
 };
 
 } // namespace geos::algorithm
 } // namespace geos
 
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // GEOS_ALGORITHM_CENTRALENDPOINTINTERSECTOR_H
 

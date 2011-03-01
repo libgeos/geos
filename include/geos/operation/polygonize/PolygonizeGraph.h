@@ -18,7 +18,6 @@
  *
  **********************************************************************/
 
-
 #ifndef GEOS_OP_POLYGONIZE_POLYGONIZEGRAPH_H
 #define GEOS_OP_POLYGONIZE_POLYGONIZEGRAPH_H
 
@@ -27,6 +26,11 @@
 #include <geos/planargraph/PlanarGraph.h> // for inheritance
 
 #include <vector>
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
 
 // Forward declarations
 namespace geos {
@@ -217,6 +221,10 @@ private:
 } // namespace geos::operation::polygonize
 } // namespace geos::operation
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // GEOS_OP_POLYGONIZE_POLYGONIZEGRAPH_H
 

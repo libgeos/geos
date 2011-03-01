@@ -25,6 +25,11 @@
 
 #include <string>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
+
 namespace geos {
 namespace io {
 
@@ -56,6 +61,10 @@ private:
 
 } // namespace io
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // #ifndef GEOS_IO_STRINGTOKENIZER_H
 

@@ -21,6 +21,7 @@
 #ifndef GEOS_LINEARREF_LENGTHINDEXEDLINE_H
 #define GEOS_LINEARREF_LENGTHINDEXEDLINE_H
 
+#include <geos/export.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Geometry.h>
 #include <geos/linearref/LinearLocation.h>
@@ -41,7 +42,7 @@ namespace linearref   // geos::linearref
  * themselves) are supported.
  */
 
-class LengthIndexedLine
+class GEOS_DLL LengthIndexedLine
 {
 private:
 	const geom::Geometry *linearGeom;

@@ -22,6 +22,11 @@
 
 #include <geos/geomgraph/index/EdgeSetIntersector.h> // for inheritance
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
+
 // Forward declarations
 namespace geos {
 	namespace geomgraph {
@@ -81,12 +86,13 @@ private:
 			SegmentIntersector *si);
 };
 
-
-
-
 } // namespace geos.geomgraph.index
 } // namespace geos.geomgraph
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // GEOS_GEOMGRAPH_INDEX_SIMPLESWEEPLINEINTERSECTOR_H
 

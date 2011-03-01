@@ -20,11 +20,18 @@
 #ifndef GEOS_OP_BUFFER_BUFFERPARAMETERS_H
 #define GEOS_OP_BUFFER_BUFFERPARAMETERS_H
 
+#include <geos/export.h>
+
 //#include <vector>
 
 //#include <geos/algorithm/LineIntersector.h> // for composition
 //#include <geos/geom/Coordinate.h> // for composition
 //#include <geos/geom/LineSegment.h> // for composition
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
 
 // Forward declarations
 namespace geos {
@@ -48,7 +55,7 @@ namespace buffer { // geos.operation.buffer
  * describe how a buffer should be constructed.
  *
  */
-class BufferParameters
+class GEOS_DLL BufferParameters
 {
 
 public:
@@ -96,13 +103,7 @@ public:
 	static const double DEFAULT_MITRE_LIMIT; // 5.0 (in .cpp file)
 
 	/// Creates a default set of parameters
-	BufferParameters()
-		:
-		quadrantSegments(DEFAULT_QUADRANT_SEGMENTS),
-		endCapStyle(CAP_ROUND),
-		joinStyle(JOIN_ROUND),
-		mitreLimit(DEFAULT_MITRE_LIMIT)
-	{}
+	BufferParameters();
 
 	/// Creates a set of parameters with the given quadrantSegments value.
 	//
@@ -258,11 +259,13 @@ private:
 	double mitreLimit;
 };
 
-
-
 } // namespace geos::operation::buffer
 } // namespace geos::operation
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // ndef GEOS_OP_BUFFER_BUFFERPARAMETERS_H
 

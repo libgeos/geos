@@ -25,6 +25,11 @@
 #include <set> // for typedefs
 #include <iosfwd> // ostream
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
+
 // Forward declarations
 namespace geos {
 	namespace planargraph { 
@@ -132,13 +137,15 @@ public:
 /// Print a Edge
 std::ostream& operator<<(std::ostream& os, const Edge& n); 
 
-
-
 /// For backward compatibility
 //typedef Edge planarEdge;
 
 } // namespace geos::planargraph
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // GEOS_PLANARGRAPH_EDGE_H
 

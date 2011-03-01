@@ -34,12 +34,6 @@ Coordinate::setNull()
 	z=DoubleNotANumber;
 }
 
-INLINE Coordinate&
-Coordinate::getNull()
-{
-	return nullCoord;
-}
-
 INLINE bool
 Coordinate::isNull() const
 {

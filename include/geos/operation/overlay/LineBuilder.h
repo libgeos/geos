@@ -26,6 +26,11 @@
 
 #include <vector>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
+
 // Forward declarations
 namespace geos {
 	namespace geom {
@@ -125,10 +130,13 @@ private:
 	void propagateZ(geom::CoordinateSequence *cs);
 };
 
-
 } // namespace geos::operation::overlay
 } // namespace geos::operation
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // ndef GEOS_OP_OVERLAY_LINEBUILDER_H
 

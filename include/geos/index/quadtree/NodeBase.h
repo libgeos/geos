@@ -24,6 +24,11 @@
 #include <vector>
 #include <string>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
+
 // Forward declarations
 namespace geos {
 	namespace geom {
@@ -146,6 +151,10 @@ NodeBase::hasItems() const
 } // namespace geos::index::quadtree
 } // namespace geos::index
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // GEOS_IDX_QUADTREE_NODEBASE_H
 

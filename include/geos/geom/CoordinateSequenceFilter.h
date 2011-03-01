@@ -20,6 +20,7 @@
 #ifndef GEOS_GEOM_COORDINATESEQUENCEFILTER_H
 #define GEOS_GEOM_COORDINATESEQUENCEFILTER_H
 
+#include <geos/export.h>
 #include <geos/inline.h>
 
 #include <cassert>
@@ -55,7 +56,7 @@ namespace geom { // geos::geom
  * @author Martin Davis
  *
  */
-class CoordinateSequenceFilter {
+class GEOS_DLL CoordinateSequenceFilter {
 
 public:
 

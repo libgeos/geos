@@ -21,7 +21,6 @@
 #define GEOS_INDEX_STRTREE_STRTREE_H
 
 #include <geos/export.h>
-
 #include <geos/index/strtree/AbstractSTRtree.h> // for inheritance
 #include <geos/index/SpatialIndex.h> // for inheritance
 #include <geos/geom/Envelope.h> // for inlines
@@ -41,7 +40,6 @@ namespace geos {
 		}
 	}
 }
-
 
 namespace geos {
 namespace index { // geos::index
@@ -68,7 +66,7 @@ using AbstractSTRtree::insert;
 using AbstractSTRtree::query;
 
 private:
-	class STRIntersectsOp: public AbstractSTRtree::IntersectsOp {
+	class GEOS_DLL STRIntersectsOp: public AbstractSTRtree::IntersectsOp {
 		public:
 			bool intersects(const void* aBounds, const void* bBounds);
 	};

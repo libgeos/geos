@@ -17,6 +17,7 @@
 #ifndef GEOS_NODING_NODABLESEGMENTSTRING_H
 #define GEOS_NODING_NODABLESEGMENTSTRING_H
 
+#include <geos/export.h>
 #include <geos/noding/SegmentString.h> // for inheritance
 
 namespace geos {
@@ -34,7 +35,7 @@ namespace noding { // geos::noding
  * 
  * @author Martin Davis
  */
-class NodableSegmentString : public SegmentString 
+class GEOS_DLL NodableSegmentString : public SegmentString 
 {
 private:
 protected:

@@ -22,12 +22,17 @@
 
 #include <geos/export.h>
 
-#include <vector>
-#include <string>
-
 #include <geos/geom/CoordinateFilter.h> // for inheritance 
 #include <geos/geom/Envelope.h> // for composition
 #include <geos/operation/overlay/ElevationMatrixCell.h> // for composition
+
+#include <vector>
+#include <string>
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
 
 // Forward declarations
 namespace geos {
@@ -99,10 +104,13 @@ private:
 	std::vector<ElevationMatrixCell>cells;
 };
 
-
 } // namespace geos::operation::overlay
 } // namespace geos::operation
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // ndef GEOS_OP_OVERLAY_ELEVATIONMATRIX_H
 

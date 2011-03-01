@@ -31,6 +31,11 @@
 #include <list>
 #include <memory> // for auto_ptr
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
+
 // Forward declarations 
 namespace geos {
 	namespace geom { 
@@ -271,13 +276,15 @@ public:
 		if (release) return sequencedGeometry.release();
 		else return sequencedGeometry.get();
 	}
-
-
 };
 
 } // namespace geos::operation::linemerge
 } // namespace geos::operation
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // GEOS_OP_LINEMERGE_LINESEQUENCER_H
 

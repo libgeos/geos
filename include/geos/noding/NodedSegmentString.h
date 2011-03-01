@@ -23,6 +23,7 @@
 #ifndef GEOS_NODING_NODEDSEGMENTSTRING_H
 #define GEOS_NODING_NODEDSEGMENTSTRING_H
 
+#include <geos/export.h>
 #include <geos/noding/NodableSegmentString.h> // for inheritance
 #include <geos/geom/CoordinateSequence.h> // for inlines
 #include <geos/algorithm/LineIntersector.h>
@@ -54,7 +55,7 @@ namespace noding { // geos::noding
  * All noded substrings are initialized with the same context object.
  *
  */
-class NodedSegmentString : public NodableSegmentString 
+class GEOS_DLL NodedSegmentString : public NodableSegmentString 
 {
 public:
 

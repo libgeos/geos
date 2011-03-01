@@ -761,7 +761,7 @@ namespace tut
 		ensure( geo != 0 );
 
 		LinearRingPtr hole = dynamic_cast<LinearRingPtr>(geo);
-		ensure( hole );
+		ensure( hole != 0 );
 		ensure( hole->isRing() );
 		ensure_equals( hole->getNumPoints(), interiorSize );
 
@@ -1268,10 +1268,10 @@ namespace tut
 		vec.push_back(geo);
 
 		// Factory creates copy of the vec collection
-		GeometryAutoPtr go = factory_.buildGeometry(vec.begin(), vec.end());
-		ensure( go.get() );
-		ensure_equals( go->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT );
-		ensure_equals( go->getNumGeometries(), size );
+		GeometryAutoPtr g = factory_.buildGeometry(vec.begin(), vec.end());
+		ensure( g.get() != 0 );
+		ensure_equals( g->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT );
+		ensure_equals( g->getNumGeometries(), size );
 
 		// FREE MEMORY
 		PointVect::const_iterator it;

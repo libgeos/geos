@@ -35,6 +35,15 @@ namespace buffer { // geos.operation.buffer
 const double BufferParameters::DEFAULT_MITRE_LIMIT = 5.0;
 
 // public
+BufferParameters::BufferParameters()
+    :
+    quadrantSegments(DEFAULT_QUADRANT_SEGMENTS),
+    endCapStyle(CAP_ROUND),
+    joinStyle(JOIN_ROUND),
+    mitreLimit(DEFAULT_MITRE_LIMIT)
+{}
+
+// public
 BufferParameters::BufferParameters(int quadrantSegments)
 	:
 	quadrantSegments(DEFAULT_QUADRANT_SEGMENTS),

@@ -373,7 +373,7 @@ private:
 	
 }; // class IntersectionMatrix
 
-std::ostream& operator<< (std::ostream&os, const IntersectionMatrix& im);
+GEOS_DLL std::ostream& operator<< (std::ostream&os, const IntersectionMatrix& im);
 
 
 } // namespace geos::geom

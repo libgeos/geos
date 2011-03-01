@@ -20,12 +20,18 @@
 #ifndef GEOS_OP_OVERLAY_FUZZYPOINTLOCATOR_H
 #define GEOS_OP_OVERLAY_FUZZYPOINTLOCATOR_H
 
+#include <geos/export.h>
 #include <geos/algorithm/PointLocator.h> // for composition
 #include <geos/geom/Geometry.h> // for auto_ptr visibility of dtor
 #include <geos/geom/Location.h> // for Location::Value enum
 
 #include <vector>
 #include <memory> // for auto_ptr
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
 
 // Forward declarations
 namespace geos {
@@ -50,7 +56,7 @@ namespace validate { // geos::operation::overlay::validate
  * it is considered to be on the Boundary; otherwise,
  * whether it is Interior or Exterior is determined directly.
  */
-class FuzzyPointLocator {
+class GEOS_DLL FuzzyPointLocator {
 
 public:
 
@@ -86,6 +92,10 @@ private:
 } // namespace geos::operation::overlay
 } // namespace geos::operation
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // ndef GEOS_OP_OVERLAY_FUZZYPOINTLOCATOR_H
 

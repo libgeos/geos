@@ -20,6 +20,7 @@
 #ifndef GEOS_NODING_BASICSEGMENTSTRING_H
 #define GEOS_NODING_BASICSEGMENTSTRING_H
 
+#include <geos/export.h>
 #include <geos/noding/SegmentString.h> // for inheritance
 #include <geos/geom/CoordinateSequence.h> // for inlines (size())
 
@@ -47,7 +48,7 @@ namespace noding { // geos.noding
  * for preserving topological or parentage information.
  * All noded substrings are initialized with the same context object.
  */
-class BasicSegmentString : public SegmentString {
+class GEOS_DLL BasicSegmentString : public SegmentString {
 
 public:
 

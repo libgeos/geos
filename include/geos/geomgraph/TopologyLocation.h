@@ -28,6 +28,11 @@
 #include <vector>
 #include <string>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
+
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
@@ -136,6 +141,10 @@ std::ostream& operator<< (std::ostream&, const TopologyLocation&);
 //#ifdef GEOS_INLINE
 //# include "geos/geomgraph/TopologyLocation.inl"
 //#endif
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // ifndef GEOS_GEOMGRAPH_TOPOLOGYLOCATION_H
 

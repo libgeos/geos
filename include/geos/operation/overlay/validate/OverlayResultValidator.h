@@ -20,11 +20,17 @@
 #ifndef GEOS_OP_OVERLAY_OVERLAYRESULTVALIDATOR_H
 #define GEOS_OP_OVERLAY_OVERLAYRESULTVALIDATOR_H
 
+#include <geos/export.h>
 #include <geos/operation/overlay/OverlayOp.h> // for OpCode enum
 #include <geos/operation/overlay/validate/FuzzyPointLocator.h> // composition
 #include <geos/geom/Location.h> // for Location::Value type
 
 #include <vector>
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
 
 // Forward declarations
 namespace geos {
@@ -56,7 +62,7 @@ namespace validate { // geos::operation::overlay::validate
  *
  * @see OverlayOp
  */
-class OverlayResultValidator {
+class GEOS_DLL OverlayResultValidator {
 
 public:
 
@@ -120,6 +126,10 @@ private:
 } // namespace geos::operation::overlay
 } // namespace geos::operation
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // ndef GEOS_OP_OVERLAY_OVERLAYRESULTVALIDATOR_H
 

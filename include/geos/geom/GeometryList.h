@@ -26,6 +26,11 @@
 #include <memory> // for auto_ptr
 #include <vector> 
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
+
 namespace geos {
 namespace geom { // geos.geom
 
@@ -66,13 +71,15 @@ private:
 	std::vector<Geometry*> geoms;
 
 	GeometryList();
-
 	~GeometryList();
-
 };
 
 } // namespace geos.geom
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // GEOS_GEOM_GEOMETRYLIST_H
 

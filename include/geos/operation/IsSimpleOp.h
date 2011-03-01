@@ -22,12 +22,16 @@
 #ifndef GEOS_OPERATION_ISSIMPLEOP_H
 #define GEOS_OPERATION_ISSIMPLEOP_H
 
-
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h> // for dtor visibility by auto_ptr (compos)
 
 #include <map>
 #include <memory> // for auto_ptr
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
 
 // Forward declarations
 namespace geos {
@@ -208,6 +212,10 @@ private:
 
 } // namespace geos.operation
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif
 

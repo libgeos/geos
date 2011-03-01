@@ -17,9 +17,13 @@
 #ifndef GEOS_GEOMGRAPH_INDEX_MONOTONECHAINEDGE_H
 #define GEOS_GEOMGRAPH_INDEX_MONOTONECHAINEDGE_H
 
-
 #include <geos/export.h>
 #include <geos/geom/Envelope.h> // for composition
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
 
 // Forward declarations
 namespace geos {
@@ -71,11 +75,13 @@ private:
 		SegmentIntersector &ei);
 };
 
-
-
 } // namespace geos.geomgraph.index
 } // namespace geos.geomgraph
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif
 

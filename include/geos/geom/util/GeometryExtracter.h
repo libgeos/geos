@@ -35,7 +35,7 @@ namespace util { // geos.geom.util
 /**
  * Extracts the components of a given type from a {@link Geometry}.
  */
-class GeometryExtracter {
+class GEOS_DLL GeometryExtracter {
 
 public:
 

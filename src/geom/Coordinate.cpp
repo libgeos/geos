@@ -30,6 +30,12 @@ namespace geom { // geos::geom
 
 Coordinate Coordinate::nullCoord=Coordinate(DoubleNotANumber,DoubleNotANumber,DoubleNotANumber);
 
+Coordinate&
+Coordinate::getNull()
+{
+	return nullCoord;
+}
+
 string
 Coordinate::toString() const
 {

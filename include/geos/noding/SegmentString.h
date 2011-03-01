@@ -21,9 +21,7 @@
 #define GEOS_NODING_SEGMENTSTRING_H
 
 #include <geos/export.h>
-
 #include <geos/noding/SegmentNodeList.h>
-
 #include <geos/inline.h>
 
 #include <vector>

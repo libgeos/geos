@@ -20,6 +20,7 @@
 #ifndef GEOS_ALGORITHM_DISTANCE_DISCRETEHAUSDORFFDISTANCE_H
 #define GEOS_ALGORITHM_DISTANCE_DISCRETEHAUSDORFFDISTANCE_H
 
+#include <geos/export.h>
 #include <geos/algorithm/distance/PointPairDistance.h> // for composition
 #include <geos/algorithm/distance/DistanceToPoint.h> // for composition
 #include <geos/util/IllegalArgumentException.h> // for inlines
@@ -30,6 +31,11 @@
 
 #include <cstddef>
 #include <vector>
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
 
 namespace geos {
 	namespace algorithm {
@@ -92,7 +98,7 @@ namespace distance { // geos::algorithm::distance
  *   HD(A, B) ~= 47.8
  * </pre>
  */
-class DiscreteHausdorffDistance
+class GEOS_DLL DiscreteHausdorffDistance
 {
 public:
 
@@ -241,11 +247,13 @@ private:
     DiscreteHausdorffDistance& operator=(const DiscreteHausdorffDistance& rhs);
 };
 
-
-
 } // geos::algorithm::distance
 } // geos::algorithm
 } // geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // GEOS_ALGORITHM_DISTANCE_DISCRETEHAUSDORFFDISTANCE_H
 

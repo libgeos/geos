@@ -21,6 +21,7 @@
 #ifndef GEOS_GEOM_PREP_PREPAREDGEOMETRYFACTORY_H
 #define GEOS_GEOM_PREP_PREPAREDGEOMETRYFACTORY_H
 
+#include <geos/export.h>
 #include <geos/geom/prep/PreparedGeometry.h>
 
 namespace geos {
@@ -49,7 +50,7 @@ namespace prep { // geos::geom::prep
  * @author Martin Davis
  *
  */
-class PreparedGeometryFactory
+class GEOS_DLL PreparedGeometryFactory
 {
 public:
 

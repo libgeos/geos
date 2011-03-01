@@ -164,7 +164,7 @@ protected:
 	 * subclasses of AbstractSTRtree have different implementations of
 	 * bounds. 
 	 */
-	class IntersectsOp {
+	class GEOS_DLL IntersectsOp {
 		public:
 			/**
 			 * For STRtrees, the bounds will be Envelopes; for

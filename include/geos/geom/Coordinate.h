@@ -25,6 +25,11 @@
 #include <string>
 #include <limits>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
+
 namespace geos {
 namespace geom { // geos.geom
 
@@ -154,6 +159,10 @@ GEOS_DLL bool operator!=(const Coordinate& a, const Coordinate& b);
 
 } // namespace geos.geom
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #ifdef GEOS_INLINE
 # include "geos/geom/Coordinate.inl"

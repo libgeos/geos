@@ -22,13 +22,17 @@
 
 #include <geos/export.h>
 
-#include <vector>
-
-#include <geos/inline.h>
-
 #include <geos/noding/Noder.h> // for inheritance
 #include <geos/algorithm/LineIntersector.h> // for composition
 #include <geos/geom/Coordinate.h> // for use in vector
+#include <geos/inline.h>
+
+#include <vector>
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
 
 // Forward declarations
 namespace geos {
@@ -140,10 +144,13 @@ private:
     MCIndexSnapRounder& operator=(const MCIndexSnapRounder& rhs);
 };
 
-
 } // namespace geos::noding::snapround
 } // namespace geos::noding
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #ifdef GEOS_INLINE
 # include <geos/noding/snapround/MCIndexSnapRounder.inl>

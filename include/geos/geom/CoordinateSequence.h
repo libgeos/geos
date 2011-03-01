@@ -35,7 +35,6 @@ namespace geos {
 	}
 }
 
-
 namespace geos {
 namespace geom { // geos::geom
 
@@ -69,17 +68,6 @@ protected:
 public:
 
 	typedef std::auto_ptr<CoordinateSequence> AutoPtr;
-
-	friend std::ostream& operator<< (std::ostream& os,
-		const CoordinateSequence& cs);
-
-	friend bool operator== (
-		const CoordinateSequence& seq1,
-		const CoordinateSequence& seq2);
-
-	friend bool operator!= (
-		const CoordinateSequence& seq1,
-		const CoordinateSequence& seq2);
 
 	virtual ~CoordinateSequence() {}
 
@@ -395,11 +383,11 @@ public:
 
 };
 
-std::ostream& operator<< (std::ostream& os, const CoordinateSequence& cs);
+GEOS_DLL std::ostream& operator<< (std::ostream& os, const CoordinateSequence& cs);
 
-bool operator== (const CoordinateSequence& s1, const CoordinateSequence& s2);
+GEOS_DLL bool operator== (const CoordinateSequence& s1, const CoordinateSequence& s2);
 
-bool operator!= (const CoordinateSequence& s1, const CoordinateSequence& s2);
+GEOS_DLL bool operator!= (const CoordinateSequence& s1, const CoordinateSequence& s2);
 
 } // namespace geos::geom
 } // namespace geos

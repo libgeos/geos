@@ -19,6 +19,7 @@
 #ifndef GEOS_NODING_SEGMENTPOINTCOMPARATOR_H
 #define GEOS_NODING_SEGMENTPOINTCOMPARATOR_H
 
+#include <geos/export.h>
 #include <geos/geom/Coordinate.h>
 
 namespace geos {
@@ -34,7 +35,7 @@ namespace noding { // geos.noding
  * of exact coordinates lying on the segment.
  *
  */
-class SegmentPointComparator {
+class GEOS_DLL SegmentPointComparator {
 
 public:
 

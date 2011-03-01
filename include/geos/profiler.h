@@ -48,6 +48,11 @@ extern "C" {
 #define PROFILE 0
 #endif
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
+
 namespace geos {
 namespace util {
 
@@ -178,6 +183,10 @@ std::ostream& operator<< (std::ostream& os, const Profiler&);
 
 } // namespace geos::util
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // ndef GEOS_PROFILER_H
 

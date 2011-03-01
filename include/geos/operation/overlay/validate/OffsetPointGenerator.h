@@ -20,6 +20,7 @@
 #ifndef GEOS_OP_OVERLAY_OFFSETPOINTGENERATOR_H
 #define GEOS_OP_OVERLAY_OFFSETPOINTGENERATOR_H
 
+#include <geos/export.h>
 #include <geos/algorithm/PointLocator.h> // for composition
 #include <geos/geom/Geometry.h> // for auto_ptr visibility of dtor
 #include <geos/geom/MultiPoint.h> // for auto_ptr visibility of dtor
@@ -27,6 +28,11 @@
 
 #include <vector>
 #include <memory> // for auto_ptr
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
 
 // Forward declarations
 namespace geos {
@@ -45,7 +51,7 @@ namespace validate { // geos::operation::overlay::validate
 
 /// Generates points offset from both sides of all segments in a geometry
 //
-class OffsetPointGenerator {
+class GEOS_DLL OffsetPointGenerator {
 
 public:
 
@@ -76,6 +82,10 @@ private:
 } // namespace geos::operation::overlay
 } // namespace geos::operation
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // ndef GEOS_OP_OVERLAY_OFFSETPOINTGENERATOR_H
 

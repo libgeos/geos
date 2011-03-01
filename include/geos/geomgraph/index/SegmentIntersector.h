@@ -17,11 +17,15 @@
 #ifndef GEOS_GEOMGRAPH_INDEX_SEGMENTINTERSECTOR_H
 #define GEOS_GEOMGRAPH_INDEX_SEGMENTINTERSECTOR_H
 
-
 #include <geos/export.h>
 #include <vector>
 
 #include <geos/geom/Coordinate.h> // for composition
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
 
 // Forward declarations
 namespace geos {
@@ -122,10 +126,13 @@ public:
 
 };
 
-
 } // namespace geos.geomgraph.index
 } // namespace geos.geomgraph
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif
 

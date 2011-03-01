@@ -489,7 +489,7 @@ private:
 };
 
 /// Checks if two Envelopes are equal (2D only check)
-bool operator==(const Envelope& a, const Envelope& b);
+GEOS_DLL bool operator==(const Envelope& a, const Envelope& b);
 
 } // namespace geos::geom
 } // namespace geos

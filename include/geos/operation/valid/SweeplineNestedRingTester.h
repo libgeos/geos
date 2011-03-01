@@ -22,12 +22,17 @@
 #define GEOS_OP_SWEEPLINENESTEDRINGTESTER_H
 
 #include <geos/export.h>
-#include <vector>
-
 #include <geos/geom/Envelope.h> // for inline
 //#include <geos/indexSweepline.h> // for inline and inheritance 
 #include <geos/index/sweepline/SweepLineOverlapAction.h> // for inheritance
 #include <geos/index/sweepline/SweepLineIndex.h> // for inlines
+
+#include <vector>
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
 
 // Forward declarations
 namespace geos {
@@ -104,10 +109,13 @@ public:
 	};
 };
 
-
 } // namespace geos::operation::valid
 } // namespace geos::operation
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // GEOS_OP_SWEEPLINENESTEDRINGTESTER_H
 

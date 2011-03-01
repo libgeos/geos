@@ -171,8 +171,6 @@ public:
 
 	friend class GeometryFactory;
 
-	friend std::ostream& operator<< (std::ostream& os, const Geometry& geom);
-
 	/// A vector of const Geometry pointers
 	typedef std::vector<const Geometry *> ConstVect;
 
@@ -861,7 +859,7 @@ private:
 /// Write the Well-known Binary representation of this Geometry
 /// as an HEX string to the given output stream
 ///
-std::ostream& operator<< (std::ostream& os, const Geometry& geom);
+GEOS_DLL std::ostream& operator<< (std::ostream& os, const Geometry& geom);
 
 struct GEOS_DLL GeometryGreaterThen {
 	bool operator()(const Geometry *first, const Geometry *second);

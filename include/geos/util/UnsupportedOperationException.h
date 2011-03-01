@@ -34,7 +34,7 @@ namespace util { // geos::util
  * This exception is thrown - for example - when requesting the
  * X or Y member of an empty Point
  */
-class UnsupportedOperationException: public GEOSException {
+class GEOS_DLL UnsupportedOperationException: public GEOSException {
 public:
 	UnsupportedOperationException()
 		:

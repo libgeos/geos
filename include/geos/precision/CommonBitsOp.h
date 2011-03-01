@@ -22,6 +22,11 @@
 #include <vector>
 #include <memory>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
+
 namespace geos {
 	namespace geom {
 		class Geometry;
@@ -160,9 +165,12 @@ public:
 			geom::Geometry *result);
 };
 
-
 } // namespace geos.precision
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // GEOS_PRECISION_COMMONBITSOP_H
 

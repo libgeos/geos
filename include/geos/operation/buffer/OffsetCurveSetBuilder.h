@@ -25,6 +25,11 @@
 
 #include <vector>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
+
 // Forward declarations
 namespace geos {
 	namespace geom {
@@ -198,11 +203,13 @@ public:
 
 };
 
-
-
 } // namespace geos::operation::buffer
 } // namespace geos::operation
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // ndef GEOS_OP_BUFFER_OFFSETCURVESETBUILDER_H
 

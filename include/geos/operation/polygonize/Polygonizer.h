@@ -76,7 +76,7 @@ private:
 	/**
 	 * Add every linear element in a geometry into the polygonizer graph.
 	 */
-	class LineStringAdder: public geom::GeometryComponentFilter {
+	class GEOS_DLL LineStringAdder: public geom::GeometryComponentFilter {
 	public:
 		Polygonizer *pol;
 		LineStringAdder(Polygonizer *p);

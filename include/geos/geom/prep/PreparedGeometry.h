@@ -20,6 +20,7 @@
 #ifndef GEOS_GEOM_PREP_PREPAREDGEOMETRY_H
 #define GEOS_GEOM_PREP_PREPAREDGEOMETRY_H
 
+#include <geos/export.h>
 
 // Forward declarations
 namespace geos {
@@ -50,7 +51,7 @@ namespace prep { // geos::geom::prep
  * they optimize.
  * 
  */
-class PreparedGeometry {
+class GEOS_DLL PreparedGeometry {
 public:
 	virtual ~PreparedGeometry() {};
 	

@@ -50,10 +50,10 @@ namespace tut
 		ensure("putInt big endian[3]", buf[3] == 1);
 
 		out = ByteOrderValues::getInt(buf,
-				ByteOrderValues::ENDIAN_BIG);
+				geos::io::ByteOrderValues::ENDIAN_BIG);
 		ensure_equals("getInt big endian", out, in);
 
-		ByteOrderValues::putInt(1, buf, ByteOrderValues::ENDIAN_LITTLE);
+		ByteOrderValues::putInt(1, buf, geos::io::ByteOrderValues::ENDIAN_LITTLE);
 		ensure("putInt little endian[0]", buf[0] == 1);
 		ensure("putInt little endian[1]", buf[1] == 0);
 		ensure("putInt little endian[2]", buf[2] == 0);
