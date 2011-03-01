@@ -27,9 +27,6 @@
 namespace geos {
 namespace io { // geos.io
 
-int ByteOrderValues::ENDIAN_BIG = 0;
-int ByteOrderValues::ENDIAN_LITTLE = 1;
-
 int
 ByteOrderValues::getInt(const unsigned char *buf, int byteOrder)
 {

@@ -22,7 +22,6 @@
 #define GEOS_IO_BYTEORDERVALUES_H
 
 #include <geos/export.h>
-
 #include <geos/platform.h>
 
 namespace geos {
@@ -40,8 +39,11 @@ class GEOS_DLL ByteOrderValues {
 
 public:
 
-	static int ENDIAN_BIG;
-	static int ENDIAN_LITTLE;
+    enum EndianType
+    {
+        ENDIAN_BIG = 0,
+        ENDIAN_LITTLE = 1
+    };
 
 	static int getInt(const unsigned char *buf, int byteOrder);
 	static void putInt(int intValue, unsigned char *buf, int byteOrder);
