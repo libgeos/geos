@@ -124,7 +124,10 @@ IsValidOp::checkValid()
 void
 IsValidOp::checkValid(const Geometry *g)
 {
-        assert( validErr == NULL );
+    assert( validErr == NULL );
+
+    if (0 == g)
+        return;
 
 	// empty geometries are always valid!
 	if (g->isEmpty()) return;
