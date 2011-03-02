@@ -1359,6 +1359,24 @@ XMLTester::parseTest(const TiXmlNode* node)
 			expected_result=opRes;
 
 		}
+		else if (opName=="distance")
+		{
+			char* rest;
+			double distE = std::strtod(opRes.c_str(), &rest);
+			if ( rest == opRes.c_str() )
+			{
+				throw std::runtime_error("malformed testcase: missing expected result in 'distance' op");
+			}
+
+			geom::Geometry *g1 = opArg1 == "B" ? gB : gA;
+			geom::Geometry *g2 = opArg2 == "B" ? gB : gA;
+			double distO = g1->distance(g2);
+			std::stringstream ss; ss << distO; 
+			actual_result = ss.str();
+
+			// TODO: Use a tolerance ?
+			success = ( distO == distE ) ? 1 : 0;
+		}
 
 		else
 		{
