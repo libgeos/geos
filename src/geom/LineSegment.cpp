@@ -4,7 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2009  Sandro Santilli <strk@keybit.net>
+ * Copyright (C) 2009 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -15,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/LineSegment.java rev. 1.30 (JTS-1.9)
+ * Last port: geom/LineSegment.java r18 (JTS-1.11)
  *
  **********************************************************************/
 
@@ -29,6 +29,7 @@
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/HCoordinate.h>
 #include <geos/algorithm/NotRepresentableException.h>
+#include <geos/util/IllegalStateException.h>
 #include <geos/profiler.h>
 #include <geos/inline.h>
 
@@ -279,10 +280,19 @@ LineSegment::pointAlongOffset(double segmentLengthFraction,
 	double dx = p1.x - p0.x;
 	double dy = p1.y - p0.y;
 	double len = sqrt(dx * dx + dy * dy);
-	// u is the vector that is the length of the offset,
-	// in the direction of the segment
-	double ux = offsetDistance * dx / len;
-	double uy = offsetDistance * dy / len;
+
+	double ux = 0.0;
+	double uy = 0.0;
+	if (offsetDistance != 0.0) {
+		if (len <= 0.0) {
+			throw util::IllegalStateException("Cannot compute offset from zero-length line segment");
+		}
+
+		// u is the vector that is the length of the offset,
+		// in the direction of the segment
+		ux = offsetDistance * dx / len;
+		uy = offsetDistance * dy / len;
+	}
 
 	// the offset point is the seg point plus the offset
 	// vector rotated 90 degrees CCW

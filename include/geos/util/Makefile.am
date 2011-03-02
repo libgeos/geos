@@ -15,6 +15,7 @@ geos_HEADERS = \
     GeometricShapeFactory.h \
     GEOSException.h \
     IllegalArgumentException.h \
+    IllegalStateException.h \
     math.h \
     Machine.h \
     TopologyException.h \

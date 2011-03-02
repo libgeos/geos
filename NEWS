@@ -37,6 +37,7 @@ Changes in 3.3.0
   - Fix NodedSegmentString to handle zero-length line segments correctly
     (via safeOctant)
   - Fixed buffer OffsetCurveSetBuilder to handle "flat" rings correctly
+  - Added illegal state check in LineSegment::pointAlongOffset() 
 
 Changes in 3.2.0 
 2009-12-14
