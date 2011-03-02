@@ -15,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/valid/IsValidOp.java rev. 38 (JTS-1.11+)
+ * Last port: operation/valid/IsValidOp.java r335 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -213,6 +213,14 @@ public:
 	 * @return <code>true</code> if the coordinate is valid
 	 */
 	static bool isValid(const geom::Coordinate &coord);
+
+	/**
+	 * Tests whether a {@link Geometry} is valid.
+	 * 
+	 * @param geom the Geometry to test
+	 * @return true if the geometry is valid
+	 */
+	static bool isValid(const geom::Geometry &geom);
 
 	IsValidOp(const geom::Geometry *geom)
 		:

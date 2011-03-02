@@ -22,17 +22,37 @@
       <a>
     POINT(10 10)
   </a>
-      <test>
-         <op name="isValid" arg1="A">
-    true
-  </op>
-      </test>
+      <test>         <op name="isValid" arg1="A">    true  </op>      </test>
+   </case>
+
+   <case>
+      <desc>P - empty point</desc>
+      <a>
+    POINT EMPTY
+  </a>
+      <test>         <op name="isValid" arg1="A">    true  </op>      </test>
+   </case>
+
+   <case>
+      <desc>P - point with invalid X ordinate</desc>
+      <a>
+    POINT(NaN 10)
+  </a>
+      <test>         <op name="isValid" arg1="A">    false  </op>      </test>
+   </case>
+
+   <case>
+      <desc>P - point with invalid Y ordinate</desc>
+      <a>
+    POINT(10 NaN)
+  </a>
+      <test>         <op name="isValid" arg1="A">    false  </op>      </test>
    </case>
 
    <case>
       <desc>mP - no repeated points</desc>
       <a>
-    MULTIPOINT(10 10, 20 20, 30 30)
+    MULTIPOINT((10 10), (20 20), (30 30))
   </a>
       <test>
          <op name="isValid" arg1="A">    true  </op>
@@ -42,7 +62,7 @@
    <case>
       <desc>P - repeated points</desc>
       <a>
-    MULTIPOINT(10 10, 20 20, 30 30, 10 10)
+    MULTIPOINT((10 10), (20 20), (30 30), (10 10))
   </a>
       <test>
          <op name="isValid" arg1="A">    true  </op>
@@ -60,6 +80,16 @@ LINESTRING (40 180, 120 120, 140 200, 200 140, 240 200)
    </case>
 
    <case>
+      <desc>L - invalid ordinate</desc>
+      <a>
+LINESTRING (40 180, 120 120, 140 200, 200 140, NaN 200)
+  </a>
+      <test>
+         <op name="isValid" arg1="A">    false  </op>
+      </test>
+   </case>
+
+   <case>
       <desc>L - repeated points</desc>
       <a>
 LINESTRING (40 180, 120 120, 140 200, 140 200, 200 140, 240 200)
@@ -72,6 +102,14 @@ LINESTRING (40 180, 120 120, 140 200, 140 200, 200 140, 240 200)
    <case>
       <desc>L - linestring with two identical points </desc>
       <a>LINESTRING(0 0, 0 0)</a>
+      <test>
+         <op name="isValid" arg1="A">      false      </op>
+      </test>
+   </case>
+   
+   <case>
+      <desc>mL - MultiLinestring with two identical points in first component</desc>
+      <a>MULTILINESTRING((1 1, 0 0), (0 0, 0 0))</a>
       <test>
          <op name="isValid" arg1="A">      false      </op>
       </test>
@@ -96,6 +134,14 @@ LINESTRING (40 180, 120 120, 140 200, 140 200, 200 140, 240 200)
    <case>
       <desc>A - polygon with too few points </desc>
       <a>POLYGON ((0 0, 10 0, 20 0, 0 0, 0 0))</a>
+      <test>
+         <op name="isValid" arg1="A"> false </op>
+      </test>
+   </case>
+
+   <case>
+      <desc>A - polygon with invalid point </desc>
+      <a>POLYGON ((0 0, 10 NaN, 20 0, 0 10, 0 0))</a>
       <test>
          <op name="isValid" arg1="A"> false </op>
       </test>

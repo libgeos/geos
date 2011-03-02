@@ -16,7 +16,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/valid/IsValidOp.java rev. 38 (JTS-1.11+)
+ * Last port: operation/valid/IsValidOp.java r335 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -90,20 +90,21 @@ IsValidOp::isValid()
 	return validErr==NULL;
 }
 
-/*
- * Checks whether a coordinate is valid for processing.
- * Coordinates are valid iff their x and y coordinates are in the
- * range of the floating point representation.
- *
- * @param coord the coordinate to validate
- * @return <code>true</code> if the coordinate is valid
- */
+/* static public */
 bool
 IsValidOp::isValid(const Coordinate &coord)
 {
 	if (! FINITE(coord.x) ) return false;
 	if (! FINITE(coord.y) ) return false;
 	return true;
+}
+
+/* static public */
+bool
+IsValidOp::isValid(const Geometry &g)
+{
+  IsValidOp op(&g);
+	return op.isValid();
 }
 
 TopologyValidationError *
