@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -14,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/distance/DistanceOp.java rev 1.21 (JTS-1.10)
+ * Last port: operation/distance/DistanceOp.java r335 (JTS-1.12-)
  *
  **********************************************************************/
 
@@ -34,6 +35,7 @@
 #include <geos/geom/util/PolygonExtracter.h>
 #include <geos/geom/util/LinearComponentExtracter.h>
 #include <geos/geom/util/PointExtracter.h>
+#include <geos/util/IllegalArgumentException.h>
 
 #include <vector>
 #include <iostream>
@@ -138,6 +140,11 @@ DistanceOp::~DistanceOp()
 double
 DistanceOp::distance()
 {
+	using geos::util::IllegalArgumentException;
+
+	if ( geom[0] == 0 || geom[1] == 0 )
+		throw IllegalArgumentException("null geometries are not supported");
+	if ( geom[0]->isEmpty() || geom[1]->isEmpty() ) return 0.0;
 	computeMinDistance();
 	return minDistance;
 }

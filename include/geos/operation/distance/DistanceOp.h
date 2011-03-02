@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -13,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/distance/DistanceOp.java rev 1.21 (JTS-1.10)
+ * Last port: operation/distance/DistanceOp.java r335 (JTS-1.12-)
  *
  **********************************************************************/
 
@@ -80,6 +81,8 @@ public:
 	 * @param g0 a {@link Geometry}
 	 * @param g1 another {@link Geometry}
 	 * @return the distance between the geometries
+	 * @return 0 if either input geometry is empty
+	 * @throws IllegalArgumentException if either input geometry is null
 	 */
 	static double distance(const geom::Geometry& g0,
 	                       const geom::Geometry& g1);
