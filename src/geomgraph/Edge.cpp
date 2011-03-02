@@ -158,7 +158,7 @@ Edge::addIntersection(LineIntersector *li,
 	int segmentIndex, int geomIndex, int intIndex)
 {
 #if GEOS_DEBUG
-	cerr<<"["<<this<<"] Edge::addIntersection("<<li->toString()<<", "<<segmentIndex<<", "<<geomIndex<<", "<<intIndex<<") called"<<endl;
+	std::cerr << "["<<this<<"] Edge::addIntersection("<<li->toString()<<", "<<segmentIndex<<", "<<geomIndex<<", "<<intIndex<<") called"<< std::endl;
 #endif
 	const Coordinate& intPt=li->getIntersection(intIndex);
 	unsigned int normalizedSegmentIndex=segmentIndex;
