@@ -201,6 +201,11 @@ GEOSRelate(const Geometry *g1, const Geometry *g2)
     return GEOSRelate_r( handle, g1, g2 );
 }
 
+char *
+GEOSRelateBoundaryNodeRule(const Geometry *g1, const Geometry *g2, int bnr)
+{
+    return GEOSRelateBoundaryNodeRule_r( handle, g1, g2, bnr );
+}
 
 
 //-----------------------------------------------------------------

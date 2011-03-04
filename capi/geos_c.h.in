@@ -497,7 +497,6 @@ extern GEOSGeometry GEOS_DLL *GEOSUnionCascaded(const GEOSGeometry* g1);
 
 extern GEOSGeometry GEOS_DLL *GEOSPointOnSurface(const GEOSGeometry* g1);
 extern GEOSGeometry GEOS_DLL *GEOSGetCentroid(const GEOSGeometry* g);
-extern char GEOS_DLL *GEOSRelate(const GEOSGeometry* g1, const GEOSGeometry* g2);
 
 extern GEOSGeometry GEOS_DLL *GEOSEnvelope_r(GEOSContextHandle_t handle,
                                              const GEOSGeometry* g1);
@@ -524,9 +523,6 @@ extern GEOSGeometry GEOS_DLL *GEOSPointOnSurface_r(GEOSContextHandle_t handle,
                                                    const GEOSGeometry* g1);
 extern GEOSGeometry GEOS_DLL *GEOSGetCentroid_r(GEOSContextHandle_t handle,
                                                 const GEOSGeometry* g);
-extern char GEOS_DLL *GEOSRelate_r(GEOSContextHandle_t handle,
-                                   const GEOSGeometry* g1,
-                                   const GEOSGeometry* g2);
 
 /*
  * all arguments remain ownership of the caller
@@ -631,8 +627,6 @@ extern GEOSGeometry GEOS_DLL *GEOSSnap_r(GEOSContextHandle_t handle,
  *
  ***********************************************************************/
 
-extern char GEOS_DLL GEOSRelatePattern(const GEOSGeometry* g1, const GEOSGeometry* g2, const char *pat);
-extern char GEOS_DLL GEOSRelatePatternMatch(const char* mat, const char *pat);
 extern char GEOS_DLL GEOSDisjoint(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSTouches(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSIntersects(const GEOSGeometry* g1, const GEOSGeometry* g2);
@@ -645,13 +639,6 @@ extern char GEOS_DLL GEOSEqualsExact(const GEOSGeometry* g1, const GEOSGeometry*
 extern char GEOS_DLL GEOSCovers(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSCoveredBy(const GEOSGeometry* g1, const GEOSGeometry* g2);
 
-extern char GEOS_DLL GEOSRelatePattern_r(GEOSContextHandle_t handle,
-                                         const GEOSGeometry* g1,
-                                         const GEOSGeometry* g2,
-                                         const char *pat);
-extern char GEOS_DLL GEOSRelatePatternMatch_r(GEOSContextHandle_t handle,
-                                         const char* mat,
-                                         const char *pat);
 extern char GEOS_DLL GEOSDisjoint_r(GEOSContextHandle_t handle,
                                     const GEOSGeometry* g1,
                                     const GEOSGeometry* g2);
@@ -801,6 +788,52 @@ extern char GEOS_DLL GEOSHasZ_r(GEOSContextHandle_t handle,
                                 const GEOSGeometry* g1);
 extern char GEOS_DLL GEOSisClosed_r(GEOSContextHandle_t handle,
                                 const GEOSGeometry *g1);
+
+/************************************************************************
+ *
+ *  Dimensionally Extended 9 Intersection Model related
+ *
+ ***********************************************************************/
+
+/* These are for use with GEOSRelateBoundaryNodeRule (flags param) */
+enum GEOSRelateBoundaryNodeRules {
+	/* MOD2 and OGC are the same rule, and is the default
+	 * used by GEOSRelatePattern
+	 */
+	GEOSRELATE_BNR_MOD2=1,
+	GEOSRELATE_BNR_OGC=1,
+	GEOSRELATE_BNR_ENDPOINT=2,
+	GEOSRELATE_BNR_MULTIVALENT_ENDPOINT=3,
+	GEOSRELATE_BNR_MONOVALENT_ENDPOINT=4
+};
+
+/* return 2 on exception, 1 on true, 0 on false */
+extern char GEOS_DLL GEOSRelatePattern(const GEOSGeometry* g1, const GEOSGeometry* g2, const char *pat);
+extern char GEOS_DLL GEOSRelatePattern_r(GEOSContextHandle_t handle,
+                                         const GEOSGeometry* g1,
+                                         const GEOSGeometry* g2,
+                                         const char *pat);
+
+/* return NULL on exception, a string to GEOSFree otherwise */
+extern char GEOS_DLL *GEOSRelate(const GEOSGeometry* g1, const GEOSGeometry* g2);
+extern char GEOS_DLL *GEOSRelate_r(GEOSContextHandle_t handle,
+                                   const GEOSGeometry* g1,
+                                   const GEOSGeometry* g2);
+
+/* return 2 on exception, 1 on true, 0 on false */
+extern char GEOS_DLL GEOSRelatePatternMatch(const char* mat, const char *pat);
+extern char GEOS_DLL GEOSRelatePatternMatch_r(GEOSContextHandle_t handle,
+                                         const char* mat,
+                                         const char *pat);
+
+/* return NULL on exception, a string to GEOSFree otherwise */
+extern char GEOS_DLL *GEOSRelateBoundaryNodeRule(const GEOSGeometry* g1,
+                                                 const GEOSGeometry* g2,
+                                                 int bnr);
+extern char GEOS_DLL *GEOSRelateBoundaryNodeRule_r(GEOSContextHandle_t handle,
+                                                   const GEOSGeometry* g1,
+                                                   const GEOSGeometry* g2,
+                                                   int bnr);
 
 /************************************************************************
  *
