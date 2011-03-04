@@ -188,6 +188,7 @@ PHP_METHOD(Geometry, union); /* also does union cascaded */
 PHP_METHOD(Geometry, pointOnSurface); 
 PHP_METHOD(Geometry, centroid); 
 PHP_METHOD(Geometry, relate); 
+PHP_METHOD(Geometry, relateBoundaryNodeRule); 
 PHP_METHOD(Geometry, simplify); /* also does topology-preserving */
 PHP_METHOD(Geometry, extractUniquePoints); 
 PHP_METHOD(Geometry, disjoint);
@@ -247,6 +248,7 @@ static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, pointOnSurface, NULL, 0)
     PHP_ME(Geometry, centroid, NULL, 0)
     PHP_ME(Geometry, relate, NULL, 0)
+    PHP_ME(Geometry, relateBoundaryNodeRule, NULL, 0)
     PHP_ME(Geometry, simplify, NULL, 0)
     PHP_ME(Geometry, extractUniquePoints, NULL, 0)
     PHP_ME(Geometry, disjoint, NULL, 0)
@@ -834,6 +836,36 @@ PHP_METHOD(Geometry, relate)
         RETURN_BOOL(retBool);
     }
 
+}
+
+/**
+ * GEOSGeometry::relateBoundaryNodeRule(otherGeom, rule)
+ */
+PHP_METHOD(Geometry, relateBoundaryNodeRule)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *other;
+    zval *zobj;
+    char* pat;
+    long int bnr = GEOSRELATE_BNR_OGC;
+    char* retStr;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ol",
+        &zobj, &bnr) == FAILURE)
+    {
+        RETURN_NULL();
+    }
+
+    other = getRelay(zobj, Geometry_ce_ptr);
+
+    /* we'll compute it */
+    pat = GEOSRelateBoundaryNodeRule(this, other, bnr);
+    if ( ! pat ) RETURN_NULL(); /* should get an exception first */
+    retStr = estrdup(pat);
+    GEOSFree(pat);
+    RETURN_STRING(retStr, 0);
 }
 
 /**
@@ -2540,6 +2572,19 @@ PHP_MINIT_FUNCTION(geos)
 
     REGISTER_LONG_CONSTANT("GEOSVALID_ALLOW_SELFTOUCHING_RING_FORMING_HOLE",
         GEOSVALID_ALLOW_SELFTOUCHING_RING_FORMING_HOLE,
+        CONST_CS|CONST_PERSISTENT);
+
+    REGISTER_LONG_CONSTANT("GEOSRELATE_BNR_MOD2", GEOSRELATE_BNR_MOD2,
+        CONST_CS|CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("GEOSRELATE_BNR_OGC", GEOSRELATE_BNR_OGC,
+        CONST_CS|CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("GEOSRELATE_BNR_ENDPOINT", GEOSRELATE_BNR_ENDPOINT,
+        CONST_CS|CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("GEOSRELATE_BNR_MULTIVALENT_ENDPOINT",
+        GEOSRELATE_BNR_MULTIVALENT_ENDPOINT,
+        CONST_CS|CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("GEOSRELATE_BNR_MONOVALENT_ENDPOINT",
+        GEOSRELATE_BNR_MONOVALENT_ENDPOINT,
         CONST_CS|CONST_PERSISTENT);
 
     return SUCCESS;

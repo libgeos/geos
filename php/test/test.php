@@ -35,6 +35,12 @@ class test extends PHPUnit_Framework_TestCase
         $this->assertEquals(7, GEOS_GEOMETRYCOLLECTION);
 
         $this->assertEquals(1, GEOSVALID_ALLOW_SELFTOUCHING_RING_FORMING_HOLE);
+
+        $this->assertEquals(1, GEOSRELATE_BNR_MOD2);
+        $this->assertEquals(1, GEOSRELATE_BNR_OGC);
+        $this->assertEquals(2, GEOSRELATE_BNR_ENDPOINT);
+        $this->assertEquals(3, GEOSRELATE_BNR_MULTIVALENT_ENDPOINT);
+        $this->assertEquals(4, GEOSRELATE_BNR_MONOVALENT_ENDPOINT);
     }
 
     public function testWKTReader__construct()
@@ -1004,6 +1010,23 @@ MULTIPOINT(
         $this->assertEquals(TRUE, $ret);
         $ret = $g->relate($g2, 'T*******2');
         $this->assertEquals(FALSE, $ret);
+
+    }
+
+    public function testGeometry_relateBoundaryNodeRule()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        $g = $reader->read('LINESTRING(0 0, 2 4, 5 5, 0 0)');
+        $g2 = $reader->read('POINT(0 0)');
+
+        $ret = $g->relateBoundaryNodeRule($g2, GEOSRELATE_BNR_OGC);
+        $this->assertEquals('0F1FFFFF2', $ret);
+
+        $ret = $g->relateBoundaryNodeRule($g2, GEOSRELATE_BNR_ENDPOINT);
+        $this->assertEquals('FF10FFFF2', $ret);
 
     }
 
@@ -2156,6 +2179,5 @@ MULTIPOINT(
         $this->assertTrue(GEOSRelateMatch('0FFFFFFF2', 'TFFFFFFF2'));
         $this->assertFalse(GEOSRelateMatch('0FFFFFFF2', '0FFFFFFFF'));
     }
-
 
 }
