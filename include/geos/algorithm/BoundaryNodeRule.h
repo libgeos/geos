@@ -55,16 +55,16 @@ public:
 	// virtual classes should always have a virtual destructor..
 	virtual ~BoundaryNodeRule() {}
 
-        /**
-         * Tests whether a point that lies in <tt>boundaryCount</tt>
-         * geometry component boundaries is considered to form part of
+	/**
+	 * Tests whether a point that lies in <tt>boundaryCount</tt>
+	 * geometry component boundaries is considered to form part of
 	 * the boundary of the parent geometry.
-         *
-         * @param boundaryCount the number of component boundaries that
+	 *
+ 	 * @param boundaryCount the number of component boundaries that
 	 *                      this point occurs in
-         * @return true if points in this number of boundaries lie in
+	 * @return true if points in this number of boundaries lie in
 	 *              the parent boundary
-         */
+	 */
 	virtual bool isInBoundary(int boundaryCount) const=0;
 
 	/** \brief
