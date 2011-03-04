@@ -17,6 +17,7 @@ Changes in 3.3.0
   - CAPI: GEOSSnap 
   - CAPI: GEOSRelatePatternMatch 
   - CAPI: GEOSCovers, GEOSCoveredBy (#396) 
+  - CAPI: GEOSRelateBoundaryNodeRule (#399) 
   -  PHP: new PHP5 bindings based on CAPI
 - C++ API changes:
   - Geometry inheritance chain changed to introduce Puntal, Lineal
