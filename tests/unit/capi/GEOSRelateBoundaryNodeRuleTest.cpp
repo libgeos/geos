@@ -143,6 +143,17 @@ namespace tut
 	ensure_equals(std::string(pat_), std::string("F01FF0102"));
     }
 
+    // Invalid/unknown rule
+    template<>
+    template<>
+    void object::test<8>()
+    {
+        geom1_ = GEOSGeomFromWKT("MULTILINESTRING((0 0, 10 0),(10 0, 10 10))");
+        geom2_ = GEOSGeomFromWKT("LINESTRING(10 0, 10 -10)");
+        pat_ = GEOSRelateBoundaryNodeRule(geom1_, geom2_, 5);
+	ensure(0 == pat_);
+    }
+
 
 
 } // namespace tut
