@@ -384,7 +384,9 @@ XMLTester::run(const std::string &source)
 
 	if ( ! xml.LoadFile(source.c_str()) )
 	{
-		std::cerr << "Error loading " << source << std::endl;
+		std::stringstream err;
+		err << "Could not load " << source << ": " << xml.ErrorDesc();
+		throw runtime_error(err.str());
 	}
 
 	//dump_to_stdout(&xml);
@@ -1500,7 +1502,12 @@ main(int argC, char* argV[])
 		}
 
 		std::string source = argV[i];
-		tester.run(source);
+
+		try {
+			tester.run(source);
+		} catch (const std::exception& exc) {
+			std::cerr<<exc.what()<<std::endl;
+		}
 	}
 
 	if ( ! sql_output ) tester.resultSummary(std::cout);
