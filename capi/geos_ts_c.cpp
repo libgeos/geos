@@ -870,7 +870,7 @@ GEOSisValidDetail_r(GEOSContextHandle_t extHandle, const Geometry *g,
         using geos::operation::valid::TopologyValidationError;
 
         IsValidOp ivo(g);
-        if ( flags && GEOSVALID_ALLOW_SELFTOUCHING_RING_FORMING_HOLE ) {
+        if ( flags & GEOSVALID_ALLOW_SELFTOUCHING_RING_FORMING_HOLE ) {
         	ivo.setSelfTouchingRingFormingHoleValid(true);
         }
         TopologyValidationError *err = ivo.getValidationError();
