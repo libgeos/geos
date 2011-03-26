@@ -23,6 +23,7 @@
 
 #include <geos/export.h>
 
+#include <cstddef>
 #include <vector>
 
 #ifdef _MSC_VER

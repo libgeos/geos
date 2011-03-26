@@ -14,6 +14,7 @@
  *
  **********************************************************************/
 
+#include <cstddef>
 #include <cassert>
 
 #include <geos/index/bintree/Node.h>

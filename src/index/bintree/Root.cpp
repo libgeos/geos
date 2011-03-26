@@ -19,6 +19,7 @@
 #include <geos/index/bintree/Interval.h>
 #include <geos/index/quadtree/IntervalSize.h>
 
+#include <cstddef>
 #include <cassert>
 
 namespace geos {

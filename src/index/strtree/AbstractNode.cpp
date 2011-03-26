@@ -17,6 +17,7 @@
 #include <geos/index/strtree/AbstractNode.h>
 
 #include <vector>
+#include <cstddef>
 #include <cassert>
 
 using namespace std;

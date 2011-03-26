@@ -14,6 +14,7 @@
  *
  **********************************************************************/
 
+#include <cstddef>
 #include <geos/index/bintree/Bintree.h>
 #include <geos/index/bintree/Root.h>
 #include <geos/index/bintree/Interval.h>
