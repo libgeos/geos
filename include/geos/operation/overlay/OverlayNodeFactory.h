@@ -46,6 +46,7 @@ namespace overlay { // geos::operation::overlay
  */
 class GEOS_DLL OverlayNodeFactory: public geomgraph::NodeFactory {
 public:
+	OverlayNodeFactory():geomgraph::NodeFactory() {}
 	geomgraph::Node* createNode(const geom::Coordinate &coord) const;
 	static const geomgraph::NodeFactory &instance();
 };
