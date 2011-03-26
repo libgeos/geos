@@ -56,13 +56,13 @@ void
 MonotoneChainBuilder::getChains(const CoordinateSequence* pts, void* context,
                                 vector<MonotoneChain*>& mcList)
 {
-	vector<size_t> startIndex;
+	vector<std::size_t> startIndex;
 	getChainStartIndices(*pts, startIndex);
-	size_t nindexes = startIndex.size();
+	std::size_t nindexes = startIndex.size();
 	if (nindexes > 0)
 	{
-		size_t n = nindexes - 1;
-		for(size_t i = 0; i < n; i++)
+		std::size_t n = nindexes - 1;
+		for(std::size_t i = 0; i < n; i++)
 		{
 			MonotoneChain* mc = new MonotoneChain(*pts, startIndex[i], startIndex[i+1], context);
 			mcList.push_back(mc);
@@ -73,16 +73,16 @@ MonotoneChainBuilder::getChains(const CoordinateSequence* pts, void* context,
 /* static public */
 void
 MonotoneChainBuilder::getChainStartIndices(const CoordinateSequence& pts,
-                                           vector<size_t>& startIndexList)
+                                           vector<std::size_t>& startIndexList)
 {
 	// find the startpoint (and endpoints) of all monotone chains
 	// in this edge
-	size_t start = 0;
+	std::size_t start = 0;
 	startIndexList.push_back(start);
-	const size_t n = pts.getSize() - 1;
+	const std::size_t n = pts.getSize() - 1;
 	do
 	{
-		size_t last = findChainEnd(pts, start);
+		std::size_t last = findChainEnd(pts, start);
 		startIndexList.push_back(last);
 		start = last;
 	} while (start < n);
@@ -90,17 +90,17 @@ MonotoneChainBuilder::getChainStartIndices(const CoordinateSequence& pts,
 }
 
 /* private static */
-size_t
-MonotoneChainBuilder::findChainEnd(const CoordinateSequence& pts, size_t start)
+std::size_t
+MonotoneChainBuilder::findChainEnd(const CoordinateSequence& pts, std::size_t start)
 {
 
-	const size_t npts = pts.getSize(); // cache
+	const std::size_t npts = pts.getSize(); // cache
 
 	assert(start < npts);
 	assert(npts); // should be implied by the assertion above,
 	              // 'start' being unsigned
 
-	size_t safeStart = start;
+	std::size_t safeStart = start;
 
         // skip any zero-length segments at the start of the sequence
         // (since they cannot be used to establish a quadrant)
@@ -119,7 +119,7 @@ MonotoneChainBuilder::findChainEnd(const CoordinateSequence& pts, size_t start)
 	// (which is the starting quadrant)
 	int chainQuad = Quadrant::quadrant(pts[safeStart],
 	                                   pts[safeStart + 1]);
-	size_t last = start + 1;
+	std::size_t last = start + 1;
 	while (last < npts)
 	{
 		// skip zero-length segments, but include them in the chain

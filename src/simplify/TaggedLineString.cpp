@@ -44,7 +44,7 @@ namespace simplify { // geos::simplify
 
 /*public*/
 TaggedLineString::TaggedLineString(const geom::LineString* nParentLine,
-			size_t nMinimumSize)
+			std::size_t nMinimumSize)
 	:
 	parentLine(nParentLine),
 	minimumSize(nMinimumSize)
@@ -60,10 +60,10 @@ TaggedLineString::~TaggedLineString()
 	     << endl;
 #endif
 
-	for (size_t i=0, n=segs.size(); i<n; i++)
+	for (std::size_t i=0, n=segs.size(); i<n; i++)
 		delete segs[i];
 
-	for (size_t i=0, n=resultSegs.size(); i<n; i++)
+	for (std::size_t i=0, n=resultSegs.size(); i<n; i++)
 		delete resultSegs[i];
 }
 
@@ -81,7 +81,7 @@ TaggedLineString::init()
 
 	segs.reserve(pts->size()-1);
 
-	for (size_t i=0, n=pts->size()-1; i<n; i++)
+	for (std::size_t i=0, n=pts->size()-1; i<n; i++)
 	{
 		TaggedLineSegment* seg = new TaggedLineSegment(
 				pts->getAt(i),
@@ -100,7 +100,7 @@ TaggedLineString::init()
 }
 
 /*public*/
-size_t
+std::size_t
 TaggedLineString::getMinimumSize() const
 {
 	return minimumSize;
@@ -155,7 +155,7 @@ TaggedLineString::extractCoordinates(
 	cerr << __FUNCTION__ << " segs.size: " << segs.size() << endl;
 #endif
 
-	size_t i=0, size=segs.size();
+	std::size_t i=0, size=segs.size();
 
 	assert(size);
 
@@ -173,7 +173,7 @@ TaggedLineString::extractCoordinates(
 }
 
 /*public*/
-size_t
+std::size_t
 TaggedLineString::getResultSize() const
 {
 	unsigned resultSegsSize = resultSegs.size();
@@ -182,14 +182,14 @@ TaggedLineString::getResultSize() const
 
 /*public*/
 TaggedLineSegment*
-TaggedLineString::getSegment(size_t i) 
+TaggedLineString::getSegment(std::size_t i) 
 {
 	return segs[i];
 }
 
 /*public*/
 const TaggedLineSegment*
-TaggedLineString::getSegment(size_t i) const
+TaggedLineString::getSegment(std::size_t i) const
 {
 	return segs[i];
 }

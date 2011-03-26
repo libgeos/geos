@@ -71,11 +71,11 @@ public:
 	typedef std::auto_ptr<geom::CoordinateSequence> CoordSeqPtr;
 
 	TaggedLineString(const geom::LineString* nParentLine,
-			size_t minimumSize=2);
+			std::size_t minimumSize=2);
 
 	~TaggedLineString();
 
-	size_t getMinimumSize() const;
+	std::size_t getMinimumSize() const;
 
 	const geom::LineString* getParent() const;
 
@@ -83,11 +83,11 @@ public:
 
 	CoordSeqPtr getResultCoordinates() const;
 
-	size_t getResultSize() const;
+	std::size_t getResultSize() const;
 
-	TaggedLineSegment* getSegment(std::size_t);
+	TaggedLineSegment* getSegment(std::size_t i);
 
-	const TaggedLineSegment* getSegment(std::size_t) const;
+	const TaggedLineSegment* getSegment(std::size_t i) const;
 
 	std::vector<TaggedLineSegment*>& getSegments();
 
@@ -109,7 +109,7 @@ private:
 	// TaggedLineSegments owned by this object
 	std::vector<TaggedLineSegment*> resultSegs;
 
-	size_t minimumSize;
+	std::size_t minimumSize;
 
 	void init();
 

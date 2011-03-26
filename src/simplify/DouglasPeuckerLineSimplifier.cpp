@@ -68,7 +68,7 @@ DouglasPeuckerLineSimplifier::simplify()
 	usePt = BoolVectAutoPtr(new BoolVect(pts.size(), true));
 	simplifySection(0, pts.size() - 1);
 
-	for (size_t i=0, n=pts.size(); i<n; ++i)
+	for (std::size_t i=0, n=pts.size(); i<n; ++i)
 	{
 		if ( usePt->operator[](i) )
 		{
@@ -84,17 +84,17 @@ DouglasPeuckerLineSimplifier::simplify()
 /*private*/
 void
 DouglasPeuckerLineSimplifier::simplifySection(
-		size_t i,
-		size_t j)
+		std::size_t i,
+		std::size_t j)
 {
 	if ( (i+1) == j ) return;
 
 	geos::geom::LineSegment seg(pts[i], pts[j]);
 	double maxDistance = -1.0;
 
-	size_t maxIndex = i;
+	std::size_t maxIndex = i;
 
-	for (size_t k=i+1; k<j; k++)
+	for (std::size_t k=i+1; k<j; k++)
 	{
 		double distance = seg.distance(pts[k]);
 		if (distance > maxDistance) {
@@ -103,7 +103,7 @@ DouglasPeuckerLineSimplifier::simplifySection(
 		}
 	}
 	if (maxDistance <= distanceTolerance) {
-		for(size_t k =i+1; k<j; k++)
+		for(std::size_t k =i+1; k<j; k++)
 		{
 			usePt->operator[](k) = false;
 		}

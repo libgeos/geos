@@ -83,8 +83,8 @@ TaggedLineStringSimplifier::simplify(TaggedLineString* nLine)
 
 /*private*/
 void
-TaggedLineStringSimplifier::simplifySection(size_t i,
-		size_t j, size_t depth)
+TaggedLineStringSimplifier::simplifySection(std::size_t i,
+		std::size_t j, std::size_t depth)
 {
 	depth += 1;
 
@@ -94,7 +94,7 @@ TaggedLineStringSimplifier::simplifySection(size_t i,
 	          << std::endl;
 #endif
 
-	vector<size_t> sectionIndex(2);
+	vector<std::size_t> sectionIndex(2);
 
 	if((i+1) == j)
 	{
@@ -124,7 +124,7 @@ TaggedLineStringSimplifier::simplifySection(size_t i,
 	 */
 	if (line->getResultSize() < line->getMinimumSize())
 	{
-		size_t worstCaseSize = depth + 1;
+		std::size_t worstCaseSize = depth + 1;
 		if (worstCaseSize < line->getMinimumSize())
 			isValidToSimplify = false;
 	}
@@ -132,7 +132,7 @@ TaggedLineStringSimplifier::simplifySection(size_t i,
 	double distance;
 
 	// pass distance by ref
-	size_t furthestPtIndex = findFurthestPoint(linePts, i, j, distance);
+	std::size_t furthestPtIndex = findFurthestPoint(linePts, i, j, distance);
 
 #if GEOS_DEBUG
 	std::cerr << "furthest point " << furthestPtIndex 
@@ -176,7 +176,7 @@ TaggedLineStringSimplifier::simplifySection(size_t i,
 
 /*private*/
 auto_ptr<TaggedLineSegment>
-TaggedLineStringSimplifier::flatten(size_t start, size_t end)
+TaggedLineStringSimplifier::flatten(std::size_t start, std::size_t end)
 {
 	// make a new segment for the simplified geometry
 	const Coordinate& p0 = linePts->getAt(start);
@@ -192,7 +192,7 @@ TaggedLineStringSimplifier::flatten(size_t start, size_t end)
 bool
 TaggedLineStringSimplifier::hasBadIntersection(
 		const TaggedLineString* parentLine,
-		const vector<size_t>& sectionIndex,
+		const vector<std::size_t>& sectionIndex,
 		const LineSegment& candidateSeg)
 {
 	if (hasBadOutputIntersection(candidateSeg))
@@ -242,7 +242,7 @@ TaggedLineStringSimplifier::hasInteriorIntersection(
 bool
 TaggedLineStringSimplifier::hasBadInputIntersection(
 		const TaggedLineString* parentLine,
-		const vector<size_t>& sectionIndex,
+		const vector<std::size_t>& sectionIndex,
 		const LineSegment& candidateSeg)
 {
 	auto_ptr< vector<LineSegment*> > querySegs =
@@ -278,14 +278,14 @@ TaggedLineStringSimplifier::hasBadInputIntersection(
 bool
 TaggedLineStringSimplifier::isInLineSection(
 		const TaggedLineString* line,
-		const vector<size_t>& sectionIndex,
+		const vector<std::size_t>& sectionIndex,
 		const TaggedLineSegment* seg)
 {
 	// not in this line
 	if (seg->getParent() != line->getParent())
 		return false;
 
-	size_t segIndex = seg->getIndex();
+	std::size_t segIndex = seg->getIndex();
 	if (segIndex >= sectionIndex[0] && segIndex < sectionIndex[1])
 		return true;
 
@@ -295,13 +295,13 @@ TaggedLineStringSimplifier::isInLineSection(
 /*private*/
 void
 TaggedLineStringSimplifier::remove(const TaggedLineString* line,
-		size_t start,
-		size_t end)
+		std::size_t start,
+		std::size_t end)
 {
 	assert(end <= line->getSegments().size() );
 	assert(start < end); // I'm not sure this should always be true
 
-	for (size_t i = start; i < end; i++)
+	for (std::size_t i = start; i < end; i++)
 	{
 		const TaggedLineSegment* seg = line->getSegment(i);
 		inputIndex->remove(seg);
@@ -309,10 +309,10 @@ TaggedLineStringSimplifier::remove(const TaggedLineString* line,
 }
 
 /*private static*/
-size_t
+std::size_t
 TaggedLineStringSimplifier::findFurthestPoint(
 		const geom::CoordinateSequence* pts,
-		size_t i, size_t j,
+		std::size_t i, std::size_t j,
 		double& maxDistance)
 {
 	LineSegment seg(pts->getAt(i), pts->getAt(j));
@@ -321,8 +321,8 @@ TaggedLineStringSimplifier::findFurthestPoint(
 	          << std::endl;
 #endif
 	double maxDist = -1.0;
-	size_t maxIndex = i;
-	for (size_t k = i + 1; k < j; k++)
+	std::size_t maxIndex = i;
+	for (std::size_t k = i + 1; k < j; k++)
 	{
 		const Coordinate& midPt = pts->getAt(k);
 		double distance = seg.distance(midPt);
