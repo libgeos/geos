@@ -28,3 +28,9 @@ cl:
 
 apidoc doxygen:
 	cd doc && make $@
+
+authors.git: authors.svn
+	cd $(srcdir) && sed -e 's/:/ = /' authors.svn > authors.git
+
+svnrebase: authors.git
+	cd $(srcdir) && git svn rebase --authors-file authors.git

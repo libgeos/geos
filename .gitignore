@@ -45,3 +45,4 @@ doc/example
 include/config.h
 include/config.h.in
 php/test/phpunit
+authors.git
