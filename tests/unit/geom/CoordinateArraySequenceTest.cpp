@@ -5,6 +5,7 @@
 #include <tut.hpp>
 // geos
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateArraySequenceFactory.h>
 // std
@@ -21,8 +22,19 @@ namespace tut
     // Common data used by tests
     struct test_coordinatearraysequence_data
     {
-
         test_coordinatearraysequence_data() {}
+
+        struct Filter : public geos::geom::CoordinateFilter
+        {
+          bool is3d;
+          Filter() : is3d(false) {}
+          void filter_rw(geos::geom::Coordinate* c) const {
+            if ( is3d ) {
+              if ( ISNAN(c->z) ) c->z = 0.0;
+            }
+            else c->z = DoubleNotANumber;
+          }
+        };
     };
 
     typedef test_group<test_coordinatearraysequence_data> group;
@@ -603,6 +615,23 @@ namespace tut
 		ensure_equals( sequence.getAt(3).x, 1 );
 		ensure_equals( sequence.getAt(4).x, 1 );
 		ensure_equals( sequence.getAt(5).x, 2 );
+	}
+
+	// Test getDimension and filtering (http://trac.osgeo.org/geos/ticket/435)
+	template<>
+	template<>
+	void object::test<17>()
+	{
+    geos::geom::CoordinateArraySequence seq(1);
+    ensure_equals(seq.getDimension(), 2u);
+
+    Filter f;
+
+    f.is3d = true; seq.apply_rw(&f);
+    ensure_equals(seq.getDimension(), 3u);
+
+    f.is3d = false; seq.apply_rw(&f);
+    ensure_equals(seq.getDimension(), 2u);
 	}
 
 } // namespace tut
