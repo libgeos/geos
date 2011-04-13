@@ -52,7 +52,8 @@ geos_la_CFLAGS = $(AM_CFLAGS) -std=gnu99
 geos_la_CPPFLAGS = $(AM_CPPFLAGS) \
 	`$(PHP_CONFIG) --includes` \
 	-DCOMPILE_DL_GEOS \
-	-I../capi
+	-I$(top_builddir)/capi \
+	-I$(top_srcdir)/include
 
 install: all
 	$(INSTALL) -d "$(DESTDIR)"/`$(PHP_CONFIG) --extension-dir`
