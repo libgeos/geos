@@ -250,6 +250,7 @@ CoordinateArraySequence::apply_rw(const CoordinateFilter *filter)
 	{
 		filter->filter_rw(&(*i));
 	}
+	dimension = 0; // re-check (see http://trac.osgeo.org/geos/ticket/435)
 }
 
 void
