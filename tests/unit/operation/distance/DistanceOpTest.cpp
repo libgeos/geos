@@ -475,6 +475,8 @@ namespace tut
         GeomPtr g2(wkb.readHEX(istr2));
         ensure(g1->isValid());
         ensure(g2->isValid());
+
+        ensure_equals(g1->distance(g2.get()), 0);
     }
 
 	// TODO: finish the tests by adding:
