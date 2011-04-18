@@ -195,23 +195,23 @@ PolygonBuilder::buildMinimalEdgeRings(
 		if (er->getMaxNodeDegree()>2)
 		{
 			er->linkDirectedEdgesForMinimalEdgeRings();
-			vector<MinimalEdgeRing*> *minEdgeRings=er->buildMinimalRings();
+			vector<MinimalEdgeRing*> minEdgeRings;
+			er->buildMinimalRings(minEdgeRings);
 			// at this point we can go ahead and attempt to place
 			// holes, if this EdgeRing is a polygon
-			EdgeRing *shell=findShell(minEdgeRings);
+			EdgeRing *shell=findShell(&minEdgeRings);
 			if(shell != NULL)
 			{
-				placePolygonHoles(shell, minEdgeRings);
+				placePolygonHoles(shell, &minEdgeRings);
 				newShellList.push_back(shell);
 			}
 			else
 			{
 				freeHoleList.insert(freeHoleList.end(),
-						minEdgeRings->begin(),
-						minEdgeRings->end() );
+						minEdgeRings.begin(),
+						minEdgeRings.end() );
 			}
 			delete er;
-			delete minEdgeRings;
 		}
 		else
 		{
