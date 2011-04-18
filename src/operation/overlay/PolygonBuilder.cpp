@@ -244,7 +244,9 @@ PolygonBuilder::findShell(vector<MinimalEdgeRing*> *minEdgeRings)
 #endif
 		}
 	}
-	assert(shellCount <= 1); // found two shells in MinimalEdgeRing list
+	if ( shellCount > 1 ) {
+		throw util::TopologyException("found two shells in MinimalEdgeRing list");
+	}
 	return shell;
 }
 
