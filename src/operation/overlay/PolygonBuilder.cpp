@@ -108,16 +108,16 @@ PolygonBuilder::add(const vector<DirectedEdge*> *dirEdges,
 {
 	PlanarGraph::linkResultDirectedEdges(nodes->begin(), nodes->end());
 
-	vector<MaximalEdgeRing*>* maxEdgeRings=buildMaximalEdgeRings(dirEdges);
-	vector<EdgeRing*> freeHoleList;
-	vector<MaximalEdgeRing*> *edgeRings;
-	edgeRings= buildMinimalEdgeRings(maxEdgeRings,&shellList,&freeHoleList);
+	vector<MaximalEdgeRing*> maxEdgeRings;
+	buildMaximalEdgeRings(dirEdges, maxEdgeRings);
 
-	sortShellsAndHoles(edgeRings,&shellList,&freeHoleList);
+	vector<EdgeRing*> freeHoleList;
+	vector<MaximalEdgeRing*> edgeRings;
+	buildMinimalEdgeRings(maxEdgeRings, shellList, freeHoleList, edgeRings);
+
+	sortShellsAndHoles(edgeRings, shellList, freeHoleList);
 
 	placeFreeHoles(shellList, freeHoleList);
-	delete maxEdgeRings;
-	delete edgeRings;
 	//Assert: every hole on freeHoleList has a shell assigned to it
 }
 
@@ -131,14 +131,17 @@ PolygonBuilder::getPolygons()
 
 
 /*private*/
-vector<MaximalEdgeRing*> *
-PolygonBuilder::buildMaximalEdgeRings(const vector<DirectedEdge*> *dirEdges)
+void
+PolygonBuilder::buildMaximalEdgeRings(const vector<DirectedEdge*> *dirEdges,
+  vector<MaximalEdgeRing*> &maxEdgeRings)
 	// throw(const TopologyException &)
 {
 #if GEOS_DEBUG
 	cerr<<"PolygonBuilder::buildMaximalEdgeRings got "<<dirEdges->size()<<" dirEdges"<<endl;
 #endif
-	vector<MaximalEdgeRing*> *maxEdgeRings=new vector<MaximalEdgeRing*>();
+
+	vector<MaximalEdgeRing*>::size_type oldSize = maxEdgeRings.size();
+
 	for(size_t i=0, n=dirEdges->size(); i<n; i++)
 	{
 		DirectedEdge *de=(*dirEdges)[i];
@@ -158,36 +161,34 @@ PolygonBuilder::buildMaximalEdgeRings(const vector<DirectedEdge*> *dirEdges)
 	{ // MaximalEdgeRing constructor may throw
 				er=new MaximalEdgeRing(de,geometryFactory);
 	}
-	catch (util::GEOSException& e)
+	catch (util::GEOSException&)
 	{ // cleanup if that happens (see stmlf-cases-20061020.xml)
-		for(size_t i=0, n=maxEdgeRings->size(); i<n; i++)
-			delete (*maxEdgeRings)[i];
-		delete maxEdgeRings;
+		for(size_t i=oldSize, n=maxEdgeRings.size(); i<n; i++)
+			delete maxEdgeRings[i];
 		//cerr << "Exception! " << e.what() << endl;
-        ::geos::ignore_unused_variable_warning(e);
 		throw;
 	}
-				maxEdgeRings->push_back(er);
+				maxEdgeRings.push_back(er);
 				er->setInResult();
 				//System.out.println("max node degree=" + er.getMaxDegree());
 			}
 		}
 	}
 #if GEOS_DEBUG
-	cerr<<"  returning "<<maxEdgeRings->size()<<" maxEdgeRings"<<endl;
+	cerr<<"  pushed "<<maxEdgeRings.size()-oldSize<<" maxEdgeRings"<<endl;
 #endif
-	return maxEdgeRings;
 }
 
 /*private*/
-vector<MaximalEdgeRing*> *
-PolygonBuilder::buildMinimalEdgeRings(vector<MaximalEdgeRing*> *maxEdgeRings,
-	vector<EdgeRing*> *newShellList, vector<EdgeRing*> *freeHoleList)
+void
+PolygonBuilder::buildMinimalEdgeRings(
+  vector<MaximalEdgeRing*> &maxEdgeRings,
+	vector<EdgeRing*> &newShellList, vector<EdgeRing*> &freeHoleList,
+	vector<MaximalEdgeRing*> &edgeRings)
 {
-	vector<MaximalEdgeRing*> *edgeRings=new vector<MaximalEdgeRing*>();
-	for(size_t i=0, n=maxEdgeRings->size(); i<n; ++i)
+	for(size_t i=0, n=maxEdgeRings.size(); i<n; ++i)
 	{
-		MaximalEdgeRing *er=(*maxEdgeRings)[i];
+		MaximalEdgeRing *er = maxEdgeRings[i];
 #if GEOS_DEBUG
 	cerr<<"buildMinimalEdgeRings: maxEdgeRing "<<i<<" has "<<er->getMaxNodeDegree()<<" maxNodeDegree"<<endl;
 #endif
@@ -201,12 +202,11 @@ PolygonBuilder::buildMinimalEdgeRings(vector<MaximalEdgeRing*> *maxEdgeRings,
 			if(shell != NULL)
 			{
 				placePolygonHoles(shell, minEdgeRings);
-				newShellList->push_back(shell);
+				newShellList.push_back(shell);
 			}
 			else
 			{
-				freeHoleList->insert(
-						freeHoleList->end(),
+				freeHoleList.insert(freeHoleList.end(),
 						minEdgeRings->begin(),
 						minEdgeRings->end() );
 			}
@@ -215,10 +215,9 @@ PolygonBuilder::buildMinimalEdgeRings(vector<MaximalEdgeRing*> *maxEdgeRings,
 		}
 		else
 		{
-			edgeRings->push_back(er);
+			edgeRings.push_back(er);
 		}
 	}
-	return edgeRings;
 }
 
 /*private*/
@@ -266,20 +265,18 @@ PolygonBuilder::placePolygonHoles(EdgeRing *shell,
 
 /*private*/
 void
-PolygonBuilder::sortShellsAndHoles(vector<MaximalEdgeRing*> *edgeRings,
-	vector<EdgeRing*> *newShellList, vector<EdgeRing*> *freeHoleList)
+PolygonBuilder::sortShellsAndHoles(vector<MaximalEdgeRing*> &edgeRings,
+	vector<EdgeRing*> &newShellList, vector<EdgeRing*> &freeHoleList)
 {
-	for(size_t i=0, n=edgeRings->size(); i<n; i++)
+	for(size_t i=0, n=edgeRings.size(); i<n; i++)
 	{
-		EdgeRing *er=(*edgeRings)[i];
+		EdgeRing *er = edgeRings[i];
 		//er->setInResult();
-		if (er->isHole() )
-		{
-			freeHoleList->push_back(er);
+		if (er->isHole() ) {
+			freeHoleList.push_back(er);
 		}
-		else
-		{
-			newShellList->push_back(er);
+		else {
+			newShellList.push_back(er);
 		}
 	}
 }

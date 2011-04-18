@@ -100,17 +100,21 @@ private:
 	/**
 	 * For all DirectedEdges in result, form them into MaximalEdgeRings
 	 *
-	 * Ownership of the returned vector *and* it's elements is
-	 * transferred to caller.
+	 * @param maxEdgeRings
+	 *   Formed MaximalEdgeRings will be pushed to this vector.
+	 *   Ownership of the elements is transferred to caller.
 	 */
-	std::vector<MaximalEdgeRing*>* buildMaximalEdgeRings(
-		const std::vector<geomgraph::DirectedEdge*> *dirEdges);
+	void buildMaximalEdgeRings(
+		const std::vector<geomgraph::DirectedEdge*> *dirEdges,
+		std::vector<MaximalEdgeRing*> &maxEdgeRings);
 			// throw(const TopologyException &)
 
-	std::vector<MaximalEdgeRing*>* buildMinimalEdgeRings(
-		std::vector<MaximalEdgeRing*> *maxEdgeRings,
-		std::vector<geomgraph::EdgeRing*> *newShellList,
-		std::vector<geomgraph::EdgeRing*> *freeHoleList);
+	void buildMinimalEdgeRings(
+		std::vector<MaximalEdgeRing*> &maxEdgeRings,
+		std::vector<geomgraph::EdgeRing*> &newShellList,
+		std::vector<geomgraph::EdgeRing*> &freeHoleList,
+		std::vector<MaximalEdgeRing*> &edgeRings);
+
 	/**
 	 * This method takes a list of MinimalEdgeRings derived from a
 	 * MaximalEdgeRing, and tests whether they form a Polygon. 
@@ -145,9 +149,9 @@ private:
 	 * Due to the way the DirectedEdges were linked,
 	 * a ring is a shell if it is oriented CW, a hole otherwise.
 	 */
-	void sortShellsAndHoles(std::vector<MaximalEdgeRing*> *edgeRings,
-		std::vector<geomgraph::EdgeRing*> *newShellList,
-		std::vector<geomgraph::EdgeRing*> *freeHoleList);
+	void sortShellsAndHoles(std::vector<MaximalEdgeRing*> &edgeRings,
+		std::vector<geomgraph::EdgeRing*> &newShellList,
+		std::vector<geomgraph::EdgeRing*> &freeHoleList);
 
 	/** \brief
 	 * This method determines finds a containing shell for all holes
