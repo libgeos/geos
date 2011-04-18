@@ -51,28 +51,6 @@ using namespace geos::geom;
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-/*public static*/
-void
-PlanarGraph::linkResultDirectedEdges(
-			std::vector<Node*>::iterator start,
-			std::vector<Node*>::iterator end)
-	//throw(TopologyException *)
-{
-	for ( vector<Node*>::iterator nodeit=start; nodeit!=end; ++nodeit )
-	{
-		Node *node=*nodeit;
-		assert(node);
-
-		EdgeEndStar* ees=node->getEdges();
-		assert(ees);
-		assert(dynamic_cast<DirectedEdgeStar*>(ees));
-		DirectedEdgeStar* des = static_cast<DirectedEdgeStar*>(ees);
-
-		// this might throw an exception
-		des->linkResultDirectedEdges();
-	}
-}
-
 /*public*/
 PlanarGraph::PlanarGraph(const NodeFactory &nodeFact)
 	:

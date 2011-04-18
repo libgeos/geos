@@ -30,6 +30,7 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geomgraph/PlanarGraph.h>
 #include <geos/geomgraph/NodeMap.h> // for typedefs
+#include <geos/geomgraph/DirectedEdgeStar.h> // for inlines
 
 #include <geos/inline.h>
 
@@ -76,17 +77,31 @@ class GEOS_DLL PlanarGraph {
 public:
 
 	/** \brief
-	 * For nodes in the vector, link the DirectedEdges at the node
-	 * that are in the result.
+	 * For nodes in the collection (first..last),
+	 * link the DirectedEdges at the node that are in the result.
 	 *
 	 * This allows clients to link only a subset of nodes in the graph,
 	 * for efficiency (because they know that only a subset is of
 	 * interest).
 	 */
-	static void linkResultDirectedEdges(
-			std::vector<Node*>::iterator start,
-			std::vector<Node*>::iterator end);
-			// throw(TopologyException);
+  template <typename It>
+  static void linkResultDirectedEdges(It first, It last)
+    // throw(TopologyException);
+  {
+    for ( ; first!=last; ++first )
+    {
+      Node *node=*first;
+      assert(node);
+
+      EdgeEndStar* ees = node->getEdges();
+      assert(ees);
+      DirectedEdgeStar* des = dynamic_cast<DirectedEdgeStar*>(ees);
+      assert(des);
+
+      // this might throw an exception
+      des->linkResultDirectedEdges();
+    }
+  }
 
 	PlanarGraph(const NodeFactory &nodeFact);
 
