@@ -106,20 +106,7 @@ PolygonBuilder::add(const vector<DirectedEdge*> *dirEdges,
 		const vector<Node*> *nodes)
 		//throw(TopologyException *)
 {
-	//	PlanarGraph::linkResultDirectedEdgesS(nodes);
-
-	typedef vector<Node*>::const_iterator NodeIt;
-	
-	for ( NodeIt nodeit = nodes->begin(), nodeEnd = nodes->end();
-			nodeit != nodeEnd; ++nodeit)
-	{
-		Node *node=*nodeit;
-		DirectedEdgeStar* des = dynamic_cast<DirectedEdgeStar*>(node->getEdges());
-		assert(des);
-
-		// This might throw a TopologyException
-		des->linkResultDirectedEdges();
-	}
+	PlanarGraph::linkResultDirectedEdges(nodes->begin(), nodes->end());
 
 	vector<MaximalEdgeRing*>* maxEdgeRings=buildMaximalEdgeRings(dirEdges);
 	vector<EdgeRing*> freeHoleList;
