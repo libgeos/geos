@@ -12,10 +12,12 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/io/WKTReader.h>
+#include <geos/io/WKBReader.h>
 // std
 #include <string>
 #include <memory>
 #include <cassert>
+#include <sstream>
 
 using namespace geos::algorithm;
 
@@ -31,6 +33,7 @@ namespace tut
 
         geos::geom::CoordinateSequence* cs_;
         geos::io::WKTReader reader_;
+        geos::io::WKBReader breader_;
 
         test_isccw_data()
             : cs_(0)
@@ -94,6 +97,34 @@ namespace tut
         bool isCCW = CGAlgorithms::isCCW(cs_);
 
         ensure_equals( true, isCCW );
+    }
+
+    // 4 - Test orientation the narrow (almost collapsed) ring
+    //     resulting in GEOS during execution of the union described
+    //     in http://trac.osgeo.org/geos/ticket/398
+    template<>
+    template<>
+    void object::test<4>()
+    {
+        std::istringstream wkt("0102000000040000000000000000000000841D588465963540F56BFB214F0341408F26B714B2971B40F66BFB214F0341408C26B714B2971B400000000000000000841D588465963540");
+        GeometryPtr geom(breader_.readHEX(wkt));
+        cs_ = geom->getCoordinates();
+        bool isCCW = CGAlgorithms::isCCW(cs_);
+        ensure_equals( isCCW, false );
+    }
+
+    // 5 - Test orientation the narrow (almost collapsed) ring
+    //     resulting in JTS during execution of the union described
+    //     in http://trac.osgeo.org/geos/ticket/398
+    template<>
+    template<>
+    void object::test<5>()
+    {
+        std::istringstream wkt("0102000000040000000000000000000000841D588465963540F56BFB214F0341408F26B714B2971B40F66BFB214F0341408E26B714B2971B400000000000000000841D588465963540");
+        GeometryPtr geom(breader_.readHEX(wkt));
+        cs_ = geom->getCoordinates();
+        bool isCCW = CGAlgorithms::isCCW(cs_);
+        ensure_equals( isCCW, true );
     }
 
 } // namespace tut
