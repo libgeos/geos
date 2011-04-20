@@ -21,15 +21,15 @@ SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
 	$(srcdir)/tests/robustness.xml \
 	$(srcdir)/tests/buffer.xml \
 	$(srcdir)/tests/singlesidedbuffer.xml \
-	$(srcdir)/tests/bug176.xml \
-	$(srcdir)/tests/bug188.xml \
-	$(srcdir)/tests/bug244.xml \
-	$(srcdir)/tests/bug275.xml \
-	$(srcdir)/tests/bug356.xml \
-	$(srcdir)/tests/bug358.xml \
-	$(srcdir)/tests/bug360.xml \
-	$(srcdir)/tests/bug366.xml \
-	$(srcdir)/tests/bug398.xml \
+	$(srcdir)/tests/ticket/bug176.xml \
+	$(srcdir)/tests/ticket/bug188.xml \
+	$(srcdir)/tests/ticket/bug244.xml \
+	$(srcdir)/tests/ticket/bug275.xml \
+	$(srcdir)/tests/ticket/bug356.xml \
+	$(srcdir)/tests/ticket/bug358.xml \
+	$(srcdir)/tests/ticket/bug360.xml \
+	$(srcdir)/tests/ticket/bug366.xml \
+	$(srcdir)/tests/ticket/bug398.xml \
 	$(srcdir)/tests/general/TestBoundary.xml \
 	$(srcdir)/tests/general/TestBuffer.xml \
 	$(srcdir)/tests/general/TestBufferMitredJoin.xml \
