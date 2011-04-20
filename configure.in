@@ -12,7 +12,7 @@ AC_CANONICAL_SYSTEM
 AC_CONFIG_MACRO_DIR([macros])
 
 dnl -- JTS_PORT: the version of JTS this release is bound to
-JTS_PORT=1.10.0
+JTS_PORT=1.12.0
 
 dnl -- Version info for the CAPI
 CAPI_INTERFACE_CURRENT=8
