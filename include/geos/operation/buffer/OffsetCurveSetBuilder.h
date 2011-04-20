@@ -38,6 +38,7 @@ namespace geos {
 		class GeometryCollection;
 		class Point;
 		class LineString;
+		class LinearRing;
 		class Polygon;
 	}
 	namespace geomgraph {
@@ -141,12 +142,12 @@ private:
 	 * It may be degenerate (i.e. contain only 1, 2, or 3 points).
 	 * In this case it has no area, and hence has a minimum diameter of 0.
 	 *
-	 * @param ringCoord
+	 * @param ring
 	 * @param offsetDistance
 	 * @return
 	 */
-	bool isErodedCompletely(geom::CoordinateSequence *ringCoord,
-			double bufferDistance);
+	bool isErodedCompletely(const geom::LinearRing* ringCoord,
+      double bufferDistance);
 
 	/**
 	 * Tests whether a triangular ring would be eroded completely by
@@ -162,11 +163,11 @@ private:
 	 * In this case the triangle buffer curve "inverts" with incorrect
 	 * topology, producing an incorrect hole in the buffer.
 	 *
-	 * @param triangleCoord
+	 * @param triCoord
 	 * @param bufferDistance
 	 * @return
 	 */
-	bool isTriangleErodedCompletely(geom::CoordinateSequence *triangleCoord,
+	bool isTriangleErodedCompletely(const geom::CoordinateSequence *triCoords,
 			double bufferDistance);
 
     // Declare type as noncopyable

@@ -132,7 +132,12 @@ OffsetCurveSetBuilder::addCurve(CoordinateSequence *coord,
 void
 OffsetCurveSetBuilder::add(const Geometry& g)
 {
-	if (g.isEmpty()) return;
+  if (g.isEmpty()) {
+#if GEOS_DEBUG
+    std::cerr<<__FUNCTION__<<": skip empty geometry"<<std::endl;
+#endif
+    return;
+  }
 
 	const Polygon *poly = dynamic_cast<const Polygon *>(&g);
 	if ( poly ) {
@@ -217,22 +222,25 @@ OffsetCurveSetBuilder::addPolygon(const Polygon *p)
 
 	// FIXME: avoid the C-style cast
 	const LinearRing *shell=(const LinearRing *)p->getExteriorRing();
-	CoordinateSequence *shellCoord = CoordinateSequence::removeRepeatedPoints(shell->getCoordinatesRO());
 
 	// optimization - don't bother computing buffer
 	// if the polygon would be completely eroded
-	if (distance < 0.0 && isErodedCompletely(shellCoord, distance))
+	if (distance < 0.0 && isErodedCompletely(shell, distance))
 	{
-		delete shellCoord;
+#if GEOS_DEBUG
+		std::cerr<<__FUNCTION__<<": polygon is eroded completely "<<std::endl;
+#endif
 		return;
 	}
 
-	// don't attemtp to buffer a polygon
+	// don't attempt to buffer a polygon
 	// with too few distinct vertices
+	CoordinateSequence *shellCoord =
+		CoordinateSequence::removeRepeatedPoints(shell->getCoordinatesRO());
 	if (distance <= 0.0 && shellCoord->size() < 3)
 	{
 		delete shellCoord;
-        	return;
+		return;
 	}
 
 	addPolygonRing(
@@ -249,15 +257,16 @@ OffsetCurveSetBuilder::addPolygon(const Polygon *p)
 		const LineString *hls=p->getInteriorRingN(i);
 		assert(dynamic_cast<const LinearRing *>(hls));
 		const LinearRing *hole=static_cast<const LinearRing *>(hls);
-		CoordinateSequence *holeCoord=CoordinateSequence::removeRepeatedPoints(hole->getCoordinatesRO());
 
 		// optimization - don't bother computing buffer for this hole
 		// if the hole would be completely covered
-		if (distance > 0.0 && isErodedCompletely(holeCoord, -distance))
+		if (distance > 0.0 && isErodedCompletely(hole, -distance))
 		{
-			delete holeCoord;
 			continue;
 		}
+
+		CoordinateSequence *holeCoord =
+			CoordinateSequence::removeRepeatedPoints(hole->getCoordinatesRO());
 
 		// Holes are topologically labelled opposite to the shell,
 		// since the interior of the polygon lies on their opposite
@@ -306,17 +315,24 @@ OffsetCurveSetBuilder::addPolygonRing(const CoordinateSequence *coord,
 
 /*private*/
 bool
-OffsetCurveSetBuilder::isErodedCompletely(CoordinateSequence *ringCoord,
+OffsetCurveSetBuilder::isErodedCompletely(const LinearRing *ring,
 	double bufferDistance)
 {
-	double minDiam=0.0;
+	const CoordinateSequence *ringCoord = ring->getCoordinatesRO();
+
 	// degenerate ring has no area
 	if (ringCoord->getSize() < 4)
 		return bufferDistance < 0;
+
 	// important test to eliminate inverted triangle bug
 	// also optimizes erosion test for triangles
 	if (ringCoord->getSize() == 4)
 		return isTriangleErodedCompletely(ringCoord, bufferDistance);
+
+  const Envelope* env = ring->getEnvelopeInternal();
+  double envMinDimension = std::min(env->getHeight(), env->getWidth());
+  if (bufferDistance < 0.0 && 2 * std::abs(bufferDistance) > envMinDimension)
+      return true;
 
 	/**
 	 * The following is a heuristic test to determine whether an
@@ -330,20 +346,22 @@ OffsetCurveSetBuilder::isErodedCompletely(CoordinateSequence *ringCoord,
 	 * a full topological computation->
 	 *
 	 */
-	LinearRing *ring=inputGeom.getFactory()->createLinearRing(*ringCoord);
-	MinimumDiameter md(ring); //=new MinimumDiameter(ring);
-	minDiam=md.getLength();
-	delete ring;
 
-	//delete md;
-	//System->out->println(md->getDiameter());
+/* MD  7 Feb 2005 - there's an unknown bug in the MD code,
+ so disable this for now */
+#if 0
+	MinimumDiameter md(ring); //=new MinimumDiameter(ring);
+	double minDiam = md.getLength();
 	return minDiam < (2 * std::fabs(bufferDistance));
+#endif
+
+  return false;
 }
 
 /*private*/
 bool
 OffsetCurveSetBuilder::isTriangleErodedCompletely(
-	CoordinateSequence *triangleCoord, double bufferDistance)
+	const CoordinateSequence *triangleCoord, double bufferDistance)
 {
 	Triangle tri(triangleCoord->getAt(0), triangleCoord->getAt(1), triangleCoord->getAt(2));
 
