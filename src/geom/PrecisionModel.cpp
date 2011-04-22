@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -13,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/PrecisionModel.java rev. 1.51 (JTS-1.7)
+ * Last port: geom/PrecisionModel.java r378 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -80,7 +81,7 @@ PrecisionModel::makePrecise(Coordinate& coord) const
 PrecisionModel::PrecisionModel()
 	:
 	modelType(FLOATING),
-	scale(1.0)
+	scale(0.0)
 {
 #if GEOS_DEBUG
 	cerr<<"PrecisionModel["<<this<<"] ctor()"<<endl;
@@ -161,8 +162,13 @@ PrecisionModel::getMaximumSignificantDigits() const
 	} else if (modelType == FLOATING_SINGLE) {
 		maxSigDigits = 6;
 	} else if (modelType == FIXED) {
-        const int dgts = static_cast<int>(std::ceil(std::log(getScale()) / std::log(double(10.0))));
-        maxSigDigits = 1 + dgts;
+
+		double dgtsd = std::log(getScale()) / std::log(double(10.0));
+		const int dgts = static_cast<int>(
+			dgtsd > 0 ? std::ceil(dgtsd)
+			          : std::floor(dgtsd)
+		);
+		maxSigDigits = dgts;
 	}
 	return maxSigDigits;
 }

@@ -57,6 +57,7 @@ geos_unit_SOURCES = \
 	geom/MultiPolygonTest.cpp \
 	geom/PointTest.cpp \
 	geom/PolygonTest.cpp \
+  geom/PrecisionModelTest.cpp \
 	geom/prep/PreparedGeometryFactoryTest.cpp \
 	geom/TriangleTest.cpp \
 	geom/util/GeometryExtracterTest.cpp \

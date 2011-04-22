@@ -1,6 +1,6 @@
 // $Id: WKBReaderTest.cpp 2344 2009-04-09 21:46:30Z mloskot $
 // 
-// Test Suite for geos::io::WKTReader 
+// Test Suite for geos::io::WKTWriter 
 
 // tut
 #include <tut.hpp>
@@ -59,12 +59,12 @@ namespace tut
         wktwriter.setTrim(false);
         result = wktwriter.write( geom );
 
-        ensure( result == "POINT (-117.0000 33.0000)" );
+        ensure_equals( result , "POINT (-117.000 33.000)" );
 
         wktwriter.setTrim(true);
         result = wktwriter.write( geom );
 
-        ensure( result == "POINT (-117 33)" );
+        ensure_equals( result , "POINT (-117 33)" );
 
         delete geom;
     }
@@ -80,12 +80,12 @@ namespace tut
         wktwriter.setTrim(false);
         result = wktwriter.write( geom );
 
-        ensure( result == "POINT (-117.1230 33.1230)" );
+        ensure_equals( result , "POINT (-117.123 33.123)" );
 
         wktwriter.setRoundingPrecision(2);
         result = wktwriter.write( geom );
 
-        ensure( result == "POINT (-117.12 33.12)" );
+        ensure_equals( result , "POINT (-117.12 33.12)" );
 
         delete geom;
     }
@@ -132,6 +132,29 @@ namespace tut
 
         delete geom;
     }
+
+  // 5 - Test fixed precision model geometries
+  template<>
+  template<>
+  void object::test<5>()
+  {         
+
+/*
+ * For example, to specify 3 decimal places of precision, use a scale factor
+ * of 1000. To specify -3 decimal places of precision (i.e. rounding to
+ * the nearest 1000), use a scale factor of 0.001.
+ */
+
+    geos::geom::PrecisionModel pm3(1000, 0, 0);
+    geos::geom::GeometryFactory gf3(&pm3);
+    geos::io::WKTReader wktreader3(&gf3);
+    geos::geom::Geometry *geom = wktreader3.read("POINT(0.123456 1.98765)");
+
+    std::string  result = wktwriter.write( geom );
+    ensure_equals( result, std::string("POINT (0.123 1.988)") );
+
+    delete geom;
+  }
     
 } // namespace tut
 

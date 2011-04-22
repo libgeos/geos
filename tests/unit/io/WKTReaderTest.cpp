@@ -105,7 +105,7 @@ namespace tut
             ensure( coords->getDimension() == 3 );
 
             ensure_equals( wktwriter.write(geom.get()), 
-                           std::string("LINESTRING Z (-117.0 33.0 2.0, -116.0 34.0 4.0)") );
+                           std::string("LINESTRING Z (-117 33 2, -116 34 4)") );
 
             delete coords;
     }
@@ -117,7 +117,7 @@ namespace tut
 	{         
             GeomPtr geom(wktreader.read("LineString (-117 33 2, -116 34 4)"));
             ensure_equals( wktwriter.write(geom.get()), 
-                           std::string("LINESTRING Z (-117.0 33.0 2.0, -116.0 34.0 4.0)") );
+                           std::string("LINESTRING Z (-117 33 2, -116 34 4)") );
     }
 
     // 6 - invalid WKT (see http://trac.osgeo.org/geos/ticket/361)

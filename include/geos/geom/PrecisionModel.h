@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -13,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/PrecisionModel.java rev. 1.51 (JTS-1.7)
+ * Last port: geom/PrecisionModel.java r378 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -72,6 +73,10 @@ namespace geom { // geos::geom
  *   following equations:
  *   - jtsPt.x = round( inputPt.x * scale ) / scale
  *   - jtsPt.y = round( inputPt.y * scale ) / scale
+ *
+ * For example, to specify 3 decimal places of precision, use a scale factor
+ * of 1000. To specify -3 decimal places of precision (i.e. rounding to
+ * the nearest 1000), use a scale factor of 0.001.
  *
  * Coordinates are represented internally as Java double-precision values.
  * Since Java uses the IEEE-394 floating point standard, this
