@@ -806,7 +806,6 @@ XMLTester::parseTest(const TiXmlNode* node)
 		else if (opName=="union")
 		{
 			GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
-			gRes->normalize();
 
 			GeomAutoPtr gRealRes;
 			if ( gB ) {
@@ -819,9 +818,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 				gRealRes = gA->Union();
 			}
 
-			gRealRes->normalize();
-
-			if (gRes->compareTo(gRealRes.get())==0) success=1;
+			if (gRes->equals(gRealRes.get())) success=1;
 
 			actual_result=printGeom(gRealRes.get());
 			expected_result=printGeom(gRes.get());
