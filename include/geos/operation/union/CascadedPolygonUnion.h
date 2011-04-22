@@ -20,10 +20,13 @@
 
 #ifndef GEOS_OP_UNION_CASCADEDPOLYGONUNION_H
 #define GEOS_OP_UNION_CASCADEDPOLYGONUNION_H
+
 #include <geos/export.h>
 
 #include <vector>
 #include <algorithm>
+
+#include "GeometryListHolder.h"
 
 // Forward declarations
 namespace geos {
@@ -44,44 +47,6 @@ namespace geos {
 namespace geos {
 namespace operation { // geos::operation
 namespace geounion {  // geos::operation::geounion
-
-/**
- * \brief Helper class holding Geometries, part of which are held by reference
- *        others are held exclusively.
- */
-class GeometryListHolder : public std::vector<geom::Geometry*>
-{
-private:
-    typedef std::vector<geom::Geometry*> base_type;
-
-public:
-    GeometryListHolder() {}
-    ~GeometryListHolder()
-    {
-        std::for_each(ownedItems.begin(), ownedItems.end(), 
-            &GeometryListHolder::deleteItem);
-    }
-
-    // items need to be deleted in the end
-    void push_back_owned(geom::Geometry* item)
-    {
-        this->base_type::push_back(item);
-        ownedItems.push_back(item);
-    }
-
-    geom::Geometry* getGeometry(std::size_t index)
-    {
-      if (index >= this->base_type::size()) 
-          return NULL;
-      return (*this)[index];
-    }
-
-private:
-    static void deleteItem(geom::Geometry* item);
-
-private:
-    std::vector<geom::Geometry*> ownedItems;
-};
 
 /**
  * \brief 
