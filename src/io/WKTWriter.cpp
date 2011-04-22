@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -39,6 +40,7 @@
 #include <sstream>
 #include <cassert>
 #include <cmath>
+#include <iomanip>
 
 using namespace std;
 using namespace geos::geom;
@@ -47,7 +49,7 @@ namespace geos {
 namespace io { // geos.io
 
 WKTWriter::WKTWriter():
-	formatter("%f"),
+  decimalPlaces(6),
 	isFormatted(false),
 	roundingPrecision(-1),
 	trim(false),
@@ -143,37 +145,9 @@ WKTWriter::setTrim(bool p0)
 	trim = p0;
 }
 
-string
-WKTWriter::createFormatter(const PrecisionModel* precisionModel, int overwritePrecision)
-{
-	// the default number of decimal places is 16, which is sufficient
-	// to accomodate the maximum precision of a double.
-	// if roundingPrecision is specified (not -1) it will be used instead
-	int decimalPlaces = precisionModel->getMaximumSignificantDigits();
-	if(overwritePrecision != -1) {
-		decimalPlaces = overwritePrecision;
-	}
-    std::string fmt("%.");
-    char buffer[255] = { 0 };
-	sprintf(buffer,"%i",decimalPlaces);
-	fmt.append(buffer);
-	fmt.append("f");
-	return fmt;
-}
-
-//string WKTWriter::stringOfChar(char ch, int count) {
-	//string str="";
-	//for (int i=0;i<count;i++) str+=ch;
-	//return string(count, ch);
-//}
-
 string WKTWriter::write(const Geometry *geometry) {
 	Writer sw;
-//	try {
-		writeFormatted(geometry,false,&sw);
-//	} catch (const IOException ex) {
-//		Assert::shouldNeverReachHere();
-//	}
+  writeFormatted(geometry,false,&sw);
 	string res=sw.toString();
 	return res;
 }
@@ -198,7 +172,7 @@ WKTWriter::writeFormatted(const Geometry *geometry, bool isFormatted,
 {
         CLocalizer clocale;
 	this->isFormatted=isFormatted;
-	formatter=createFormatter(geometry->getPrecisionModel(), roundingPrecision);
+  decimalPlaces = roundingPrecision == -1 ? geometry->getPrecisionModel()->getMaximumSignificantDigits() : roundingPrecision;
 	appendGeometryTaggedText(geometry, 0, writer);
 }
 
@@ -340,6 +314,7 @@ WKTWriter::appendPointText(const Coordinate* coordinate, int /*level*/,
 	}
 }
 
+/* pritected */
 void
 WKTWriter::appendCoordinate(const Coordinate* coordinate,
 		Writer *writer)
@@ -359,75 +334,16 @@ WKTWriter::appendCoordinate(const Coordinate* coordinate,
 	writer->write(out);
 }
 
-string WKTWriter::writeNumber(double d) {
-    char buffer[255] = { 0 };
-	sprintf(buffer,formatter.c_str(),d);
-	//If we've set trim to true, do it here
-	if(trim)	{
-		bool roundNines = false;
-		int i = 0, j;
+/* protected */
+string
+WKTWriter::writeNumber(double d) {
 
-		//count the length of the string
-		while(buffer[i] != '\0') {
-			i++;
-		}
-		//arrays go to length-1 of course
-		i--;
+  std::stringstream ss;
 
-		/*
-		 * Is there a rounding error at the end?
-		 */
-		if(i > 6 &&
-			buffer[i] != '0' &&
-			buffer[i-1] == '0' &&
-			buffer[i-2] == '0' &&
-			buffer[i-3] == '0' &&
-			buffer[i-4] == '0' &&
-			buffer[i-5] == '0') {
-			buffer[i--] = '\0';
-		}
-		/*
-		 * Do we need to round 9's?
-		 */
-		if(i > 6 &&
-			buffer[i] == '9' &&
-			buffer[i-1] == '9' &&
-			buffer[i-2] == '9' &&
-			buffer[i-3] == '9' &&
-			buffer[i-4] == '9' &&
-			buffer[i-5] == '9') {
-			roundNines = true;
-		}
+  if ( ! trim ) ss << std::fixed;
+  ss << std::setprecision(decimalPlaces >= 0 ? decimalPlaces : 0) << d;
 
-		/*
-		 * Now let's format the string
-		 */
-		for(j = i; j >= 0; j--) {
-			if(roundNines) {
-				if(buffer[j] == '9') {
-					buffer[j] = '\0';
-				}
-				else {
-					buffer[j]++;
-					roundNines = false;
-				}
-			}
-			else if(buffer[j] == '0') {
-				buffer[j] = '\0';
-			}
-			else {
-				//remove period if no decimals
-				if(buffer[j] == '.' && buffer[j+1] == '\0') {
-					buffer[j] = '\0';
-				}
-				//and we're done
-				break;
-			}
-		}
-	}
-	std::string out(buffer);
-	out.append("");
-	return out;
+	return ss.str();
 }
 
 void
@@ -570,101 +486,9 @@ WKTWriter::appendGeometryCollectionText(
 void WKTWriter::indent(int level, Writer *writer) {
 	if (!isFormatted || level<=0) return;
 	writer->write("\n");
-	//writer->write(stringOfChar(' ', INDENT * level));
 	writer->write(string(INDENT * level, ' '));
 }
 
 } // namespace geos.io
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.35  2006/06/12 16:55:53  strk
- * fixed compiler warnings, fixed some methods to omit unused parameters.
- *
- * Revision 1.34  2006/06/08 17:58:57  strk
- * Polygon::getNumInteriorRing() return size_t, Polygon::interiorRingN() takes size_t.
- *
- * Revision 1.33  2006/06/01 11:49:36  strk
- * Reduced installed headers form geomgraph namespace
- *
- * Revision 1.32  2006/04/28 11:12:31  strk
- * removed warnings related to change in getNumPoints() return type.
- *
- * Revision 1.31  2006/04/07 09:54:30  strk
- * Geometry::getNumGeometries() changed to return 'unsigned int'
- * rather then 'int'
- *
- * Revision 1.30  2006/03/22 16:58:35  strk
- * Removed (almost) all inclusions of geom.h.
- * Removed obsoleted .cpp files.
- * Fixed a bug in WKTReader not using the provided CoordinateSequence
- * implementation, optimized out some memory allocations.
- *
- * Revision 1.29  2006/03/20 18:18:15  strk
- * io.h header split
- *
- * Revision 1.28  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- * Revision 1.27  2006/03/06 19:40:47  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.26  2006/03/06 15:23:14  strk
- * geos::io namespace
- *
- * Revision 1.25  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.24  2006/02/09 15:52:47  strk
- * GEOSException derived from std::exception; always thrown and cought by const ref.
- *
- * Revision 1.23  2006/02/08 17:18:28  strk
- * - New WKTWriter::toLineString and ::toPoint convenience methods
- * - New IsValidOp::setSelfTouchingRingFormingHoleValid method
- * - New Envelope::centre()
- * - New Envelope::intersection(Envelope)
- * - New Envelope::expandBy(distance, [ydistance])
- * - New LineString::reverse()
- * - New MultiLineString::reverse()
- * - New Geometry::buffer(distance, quadSeg, endCapStyle)
- * - Obsoleted toInternalGeometry/fromInternalGeometry
- * - More const-correctness in Buffer "package"
- *
- * Revision 1.22  2006/01/18 17:46:57  strk
- * Fixed leak in ::writeFormatted(Geometry *)
- *
- * Revision 1.21  2004/12/08 13:54:43  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.20  2004/10/21 22:29:54  strk
- * Indentation changes and some more COMPUTE_Z rules
- *
- * Revision 1.19  2004/10/20 17:32:14  strk
- * Initial approach to 2.5d intersection()
- *
- * Revision 1.18  2004/07/19 13:19:31  strk
- * Documentation fixes
- *
- * Revision 1.17  2004/07/07 09:38:12  strk
- * Dropped WKTWriter::stringOfChars (implemented by std::string).
- * Dropped WKTWriter default constructor (internally created GeometryFactory).
- * Updated XMLTester to respect the changes.
- * Main documentation page made nicer.
- *
- * Revision 1.16  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.15  2004/03/18 10:42:44  ybychkov
- * "IO" and "Util" upgraded to JTS 1.4
- * "Geometry" partially upgraded.
- *
- * Revision 1.14  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
- **********************************************************************/
-
 

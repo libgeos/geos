@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -169,7 +170,7 @@ public:
 	
 protected:
 
-	std::string formatter;
+  int decimalPlaces;
 
 	void appendGeometryTaggedText(const geom::Geometry *geometry, int level, Writer *writer);
 
@@ -244,10 +245,6 @@ private:
 	};
 
 //	static const int INDENT = 2;
-
-	static std::string createFormatter(
-			const geom::PrecisionModel* precisionModel,
-			int overwritePrecision);
 
 	bool isFormatted;
 
