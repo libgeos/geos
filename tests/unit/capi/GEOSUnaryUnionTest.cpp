@@ -142,7 +142,7 @@ namespace tut
         geom2_ = GEOSUnaryUnion(geom1_);
         ensure( 0 != geom2_ );
 
-        ensure_equals(toWKT(geom2_), std::string("GEOMETRYCOLLECTION (POINT (6 7), LINESTRING (0 5, 4 5), LINESTRING (4 5, 10 5), LINESTRING (4 -10, 4 5), LINESTRING (4 5, 4 10))"));
+        ensure_equals(toWKT(geom2_), std::string("GEOMETRYCOLLECTION (POINT (6 7), LINESTRING (4 -10, 4 5), LINESTRING (4 5, 4 10), LINESTRING (0 5, 4 5), LINESTRING (4 5, 10 5))"));
     }
 
     // Self-union a collection of puntal and polygonal geometries

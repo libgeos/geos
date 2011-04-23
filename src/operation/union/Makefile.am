@@ -10,6 +10,7 @@ INCLUDES = -I$(top_srcdir)/include
 
 libopunion_la_SOURCES = \
     CascadedPolygonUnion.cpp \
+    CascadedUnion.cpp \
     PointGeometryUnion.cpp \
     UnaryUnionOp.cpp 
 

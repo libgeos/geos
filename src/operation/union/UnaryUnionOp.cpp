@@ -22,6 +22,7 @@
 #include <algorithm> // for copy
 
 #include <geos/operation/union/UnaryUnionOp.h> 
+#include <geos/operation/union/CascadedUnion.h> 
 #include <geos/operation/union/CascadedPolygonUnion.h> 
 #include <geos/operation/union/PointGeometryUnion.h> 
 #include <geos/geom/Coordinate.h> 
@@ -82,9 +83,13 @@ UnaryUnionOp::Union()
 
   GeomAutoPtr unionLines;
   if (!lines.empty()) {
+#if 0
       GeomAutoPtr lineGeom = geomFact->buildGeometry( lines.begin(),
                                                       lines.end()    );
       unionLines = unionNoOpt(*lineGeom);
+#endif
+      unionLines.reset( CascadedUnion::Union( lines.begin(),
+                                              lines.end()   ) );
   }
 
   GeomAutoPtr unionPolygons;
