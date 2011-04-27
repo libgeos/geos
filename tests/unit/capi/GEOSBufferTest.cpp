@@ -23,6 +23,8 @@ namespace tut
         GEOSGeometry* geom1_;
         GEOSGeometry* geom2_;
         char* wkt_;
+        GEOSBufferParams* bp_;
+        GEOSWKTWriter* wktw_;
         double area_;
 
         static void notice(const char *fmt, ...)
@@ -38,15 +40,19 @@ namespace tut
         }
 
         test_capigeosbuffer_data()
-            : geom1_(0), geom2_(0), wkt_(0)
+            : geom1_(0), geom2_(0), wkt_(0), bp_(0)
         {
             initGEOS(notice, notice);
+            wktw_ = GEOSWKTWriter_create();
+            GEOSWKTWriter_setTrim(wktw_, 1);
         }       
 
         ~test_capigeosbuffer_data()
         {
             GEOSGeom_destroy(geom1_);
             GEOSGeom_destroy(geom2_);
+            GEOSWKTWriter_destroy(wktw_);
+            GEOSBufferParams_destroy(bp_);
             GEOSFree(wkt_);
             geom1_ = 0;
             geom2_ = 0;
@@ -442,6 +448,82 @@ namespace tut
         ensure(0 != GEOSArea(geom2_, &area_));
         ensure_distance(area_, 141.598, 0.001);
 
+    }
+
+    // Buffer with params:
+    // flat end cap on a straight line
+    template<>
+    template<>
+    void object::test<17>()
+    {
+        geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 10)");
+
+        ensure( 0 != geom1_ );
+
+        bp_ = GEOSBufferParams_create();
+
+        GEOSBufferParams_setEndCapStyle(bp_, GEOSBUF_CAP_SQUARE);
+        geom2_ = GEOSBufferWithParams(geom1_, bp_, 2);
+
+        ensure( 0 != geom2_ );
+
+        wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+
+        ensure_equals(std::string(wkt_), std::string(
+"POLYGON ((10 12, 12 12, 12 8, 5 8, 3 8, 3 12, 10 12))"
+));
+    }
+
+    // Buffer with params:
+    // flat end cap on a straight line
+    // Single sided (left)
+    template<>
+    template<>
+    void object::test<18>()
+    {
+        geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 10)");
+
+        ensure( 0 != geom1_ );
+
+        bp_ = GEOSBufferParams_create();
+
+        GEOSBufferParams_setEndCapStyle(bp_, GEOSBUF_CAP_SQUARE);
+        GEOSBufferParams_setSingleSided(bp_, 1);
+        geom2_ = GEOSBufferWithParams(geom1_, bp_, 2);
+
+        ensure( 0 != geom2_ );
+
+        wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+
+        ensure_equals(std::string(wkt_), std::string(
+"POLYGON ((10 10, 5 10, 5 12, 10 12, 10 10))"
+));
+    }
+
+    // Buffer with params:
+    // flat end cap on a straight line
+    // Single sided (right)
+    template<>
+    template<>
+    void object::test<19>()
+    {
+        geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 10)");
+
+        ensure( 0 != geom1_ );
+
+        bp_ = GEOSBufferParams_create();
+
+        GEOSBufferParams_setEndCapStyle(bp_, GEOSBUF_CAP_SQUARE);
+        GEOSBufferParams_setSingleSided(bp_, 1);
+        geom2_ = GEOSBufferWithParams(geom1_, bp_, -2);
+
+        ensure( 0 != geom2_ );
+
+        wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+
+        ensure_equals(std::string(wkt_), std::string(
+"POLYGON ((5 10, 10 10, 10 8, 5 8, 5 10))"
+));
     }
 
 } // namespace tut

@@ -15,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/OffsetCurveSetBuilder.java r262 (JTS-1.11+)
+ * Last port: operation/buffer/OffsetCurveSetBuilder.java r378 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -194,7 +194,11 @@ OffsetCurveSetBuilder::addPoint(const Point *p)
 void
 OffsetCurveSetBuilder::addLineString(const LineString *line)
 {
-	if (distance <= 0.0) return;
+	if (distance <= 0.0 && ! curveBuilder.getBufferParameters().isSingleSided())
+	{
+		return;
+	}
+
 #if GEOS_DEBUG
 	std::cerr<<__FUNCTION__<<": "<<line->toString()<<std::endl;
 #endif
