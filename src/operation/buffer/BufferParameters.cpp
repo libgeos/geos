@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/BufferParameters.java r262 (JTS-1.11+)
+ * Last port: operation/buffer/BufferParameters.java r278 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -40,7 +40,8 @@ BufferParameters::BufferParameters()
     quadrantSegments(DEFAULT_QUADRANT_SEGMENTS),
     endCapStyle(CAP_ROUND),
     joinStyle(JOIN_ROUND),
-    mitreLimit(DEFAULT_MITRE_LIMIT)
+    mitreLimit(DEFAULT_MITRE_LIMIT),
+    _isSingleSided(false)
 {}
 
 // public
@@ -49,7 +50,8 @@ BufferParameters::BufferParameters(int quadrantSegments)
 	quadrantSegments(DEFAULT_QUADRANT_SEGMENTS),
 	endCapStyle(CAP_ROUND),
 	joinStyle(JOIN_ROUND),
-	mitreLimit(DEFAULT_MITRE_LIMIT)
+	mitreLimit(DEFAULT_MITRE_LIMIT),
+	_isSingleSided(false)
 {
 	setQuadrantSegments(quadrantSegments);
 }
@@ -61,7 +63,8 @@ BufferParameters::BufferParameters(int quadrantSegments,
 	quadrantSegments(DEFAULT_QUADRANT_SEGMENTS),
 	endCapStyle(CAP_ROUND),
 	joinStyle(JOIN_ROUND),
-	mitreLimit(DEFAULT_MITRE_LIMIT)
+	mitreLimit(DEFAULT_MITRE_LIMIT),
+	_isSingleSided(false)
 {
 	setQuadrantSegments(quadrantSegments);
 	setEndCapStyle(endCapStyle);
@@ -76,7 +79,8 @@ BufferParameters::BufferParameters(int quadrantSegments,
 	quadrantSegments(DEFAULT_QUADRANT_SEGMENTS),
 	endCapStyle(CAP_ROUND),
 	joinStyle(JOIN_ROUND),
-	mitreLimit(DEFAULT_MITRE_LIMIT)
+	mitreLimit(DEFAULT_MITRE_LIMIT),
+	_isSingleSided(false)
 {
 	setQuadrantSegments(quadrantSegments);
 	setEndCapStyle(endCapStyle);

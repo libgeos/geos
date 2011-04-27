@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/BufferParameters.java r262 (JTS-1.11+)
+ * Last port: operation/buffer/BufferParameters.java r378 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -243,6 +243,37 @@ public:
 		mitreLimit = limit;
 	}
 
+	/**
+	 * Sets whether the computed buffer should be single-sided.
+	 * A single-sided buffer is constructed on only one side of each input line.
+	 * 
+	 * The side used is determined by the sign of the buffer distance:
+	 * - a positive distance indicates the left-hand side
+	 * - a negative distance indicates the right-hand side
+	 * 
+	 * The single-sided buffer of point geometries is
+	 * the same as the regular buffer.
+	 *
+	 * The End Cap Style for single-sided buffers is
+	 * always ignored,
+	 * and forced to the equivalent of <tt>CAP_FLAT</tt>.
+	 *
+	 * @param isSingleSided true if a single-sided buffer should be constructed
+	 */
+	void setSingleSided(bool isSingleSided)
+	{
+	  _isSingleSided = isSingleSided;
+	}
+
+	/**
+	 * Tests whether the buffer is to be generated on a single side only.
+	 *
+	 * @return true if the generated buffer is to be single-sided
+	 */
+	bool isSingleSided() const {
+	  return _isSingleSided;
+	}
+
 
 private:
 
@@ -252,11 +283,13 @@ private:
 	/// Defaults to CAP_ROUND;
 	EndCapStyle endCapStyle;
 
-	// Defaults to JOIN_ROUND;
+	/// Defaults to JOIN_ROUND;
 	JoinStyle joinStyle;
 
-	// Defaults to DEFAULT_MITRE_LIMIT;
+	/// Defaults to DEFAULT_MITRE_LIMIT;
 	double mitreLimit;
+
+	bool _isSingleSided;
 };
 
 } // namespace geos::operation::buffer
