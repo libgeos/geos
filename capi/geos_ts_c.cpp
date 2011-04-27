@@ -1710,7 +1710,7 @@ GEOSBufferWithStyle_r(GEOSContextHandle_t extHandle, const Geometry *g1, double 
 }
 
 Geometry *
-GEOSSingleSidedBuffer_r(GEOSContextHandle_t extHandle, const Geometry *g1, double width, int quadsegs, int joinStyle, double mitreLimit, int leftSide)
+GEOSOffsetCurve_r(GEOSContextHandle_t extHandle, const Geometry *g1, double width, int quadsegs, int joinStyle, double mitreLimit, int leftSide)
 {
     using geos::operation::buffer::BufferParameters;
     using geos::operation::buffer::BufferBuilder;
@@ -1760,6 +1760,13 @@ GEOSSingleSidedBuffer_r(GEOSContextHandle_t extHandle, const Geometry *g1, doubl
     }
     
     return NULL;
+}
+
+Geometry *
+GEOSSingleSidedBuffer_r(GEOSContextHandle_t extHandle, const Geometry *g1, double width, int quadsegs, int joinStyle, double mitreLimit, int leftSide)
+{
+    return GEOSOffsetCurve_r(extHandle, g1, width, quadsegs,
+                             joinStyle, mitreLimit, leftSide);
 }
 
 Geometry *

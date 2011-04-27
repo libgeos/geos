@@ -2,6 +2,7 @@ Changes in 3.3.0
 ????-??-??
 
 - New things:
+  - CAPI: GEOSOffsetCurve deprecates GEOSSingleSidedBuffer
   - CAPI: GEOSUnaryUnion deprecates GEOSCascadedUnion
   - CAPI: GEOSisValidDetail: tell state, reason & location apart. allows
           passing flags.

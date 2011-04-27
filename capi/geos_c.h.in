@@ -399,10 +399,20 @@ extern GEOSGeometry GEOS_DLL *GEOSBufferWithStyle_r(GEOSContextHandle_t handle,
 	int joinStyle, double mitreLimit);
 
 /* These functions return NULL on exception. Only LINESTRINGs are accepted. */
+/* @deprecated: use GEOSOffsetCurve instead */
 extern GEOSGeometry GEOS_DLL *GEOSSingleSidedBuffer(const GEOSGeometry* g1,
 	double width, int quadsegs, int joinStyle, double mitreLimit,
 	int leftSide);
 extern GEOSGeometry GEOS_DLL *GEOSSingleSidedBuffer_r(
+	GEOSContextHandle_t handle,
+	const GEOSGeometry* g1, double width, int quadsegs, 
+	int joinStyle, double mitreLimit, int leftSide);
+
+/* These functions return NULL on exception. Only LINESTRINGs are accepted. */
+extern GEOSGeometry GEOS_DLL *GEOSOffsetCurve(const GEOSGeometry* g1,
+	double width, int quadsegs, int joinStyle, double mitreLimit,
+	int leftSide);
+extern GEOSGeometry GEOS_DLL *GEOSOffsetCurve_r(
 	GEOSContextHandle_t handle,
 	const GEOSGeometry* g1, double width, int quadsegs, 
 	int joinStyle, double mitreLimit, int leftSide);

@@ -393,6 +393,14 @@ GEOSSingleSidedBuffer(const Geometry *g1, double width, int quadsegs,
 }
 
 Geometry *
+GEOSOffsetCurve(const Geometry *g1, double width, int quadsegs,
+	int joinStyle, double mitreLimit, int leftSide)
+{
+    return GEOSOffsetCurve_r( handle, g1, width, quadsegs, 
+                               joinStyle, mitreLimit, leftSide );
+}
+
+Geometry *
 GEOSConvexHull(const Geometry *g1)
 {
     return GEOSConvexHull_r( handle, g1 );
