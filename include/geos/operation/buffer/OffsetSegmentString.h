@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2007 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -13,12 +14,12 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/OffsetCurveVertexList.java r262 (JTS-1.11+)
+ * Last port: operation/buffer/OffsetSegmentString.java r378 (JTS-1.12)
  *
  **********************************************************************/
 
-#ifndef GEOS_OP_BUFFER_OFFSETCURVEVERTEXLIST_H
-#define GEOS_OP_BUFFER_OFFSETCURVEVERTEXLIST_H
+#ifndef GEOS_OP_BUFFER_OFFSETSEGMENTSTRING_H
+#define GEOS_OP_BUFFER_OFFSETSEGMENTSTRING_H
 
 #include <geos/geom/Coordinate.h> // for inlines
 #include <geos/geom/CoordinateSequence.h> // for inlines
@@ -29,27 +30,18 @@
 #include <memory>
 #include <cassert>
 
-// Forward declarations
-namespace geos {
-	namespace geom {
-		//class CoordinateSequence;
-		//class PrecisionModel;
-	}
-}
-
 namespace geos {
 namespace operation { // geos.operation
 namespace buffer { // geos.operation.buffer
 
-// ---------------------------------------------
-// OffsetCurveVertexList
-// ---------------------------------------------
-
-/// A list of the vertices in a constructed offset curve.
+/// A dynamic list of the vertices in a constructed offset curve.
 //
-/// Automatically removes close adjacent vertices.
+/// Automatically removes close vertices
+/// which are closer than a given tolerance.
 ///
-class OffsetCurveVertexList 
+/// @author Martin Davis
+///
+class OffsetSegmentString 
 {
 
 private:
@@ -67,13 +59,13 @@ private:
 	double minimumVertexDistance;
 
 	/** \brief
-	 * Tests whether the given point duplicates the previous
+	 * Tests whether the given point is redundant relative to the previous
 	 * point in the list (up to tolerance)
 	 * 
 	 * @param pt
-	 * @return true if the point duplicates the previous point
+	 * @return true if the point is redundant
 	 */
-	bool isDuplicate(const geom::Coordinate& pt)
+	bool isRedundant(const geom::Coordinate& pt) const
 	{
 		if (ptList->size() < 1)
 			return false;
@@ -87,9 +79,9 @@ private:
 
 public:
 	
-	friend std::ostream& operator<< (std::ostream& os, const OffsetCurveVertexList& node);
+	friend std::ostream& operator<< (std::ostream& os, const OffsetSegmentString& node);
 
-	OffsetCurveVertexList()
+	OffsetSegmentString()
 		:
 		ptList(new geom::CoordinateArraySequence()),
 		precisionModel(NULL),
@@ -97,7 +89,7 @@ public:
 	{
 	}
 
-	~OffsetCurveVertexList()
+	~OffsetSegmentString()
 	{
 		delete ptList;
 	}
@@ -128,7 +120,7 @@ public:
 		geom::Coordinate bufPt = pt;
 		precisionModel->makePrecise(bufPt);
 		// don't add duplicate (or near-duplicate) points
-		if (isDuplicate(bufPt))
+		if (isRedundant(bufPt))
 		{
 			return;
 		}
@@ -137,6 +129,19 @@ public:
 		// we should do the same)
 		ptList->add(bufPt, true);
 	}
+
+	void addPts(const geom::CoordinateSequence& pts, bool isForward)
+  {
+    if ( isForward ) {
+      for (size_t i=0, n=pts.size(); i<n; ++i) {
+        addPt(pts[i]);
+      }
+    } else {
+      for (size_t i=pts.size(); i>0; --i) {
+        addPt(pts[i-1]);
+      }
+    }
+  }
 	
 	/// Check that points are a ring
 	//
@@ -171,7 +176,8 @@ public:
 
 };
 
-inline std::ostream& operator<< (std::ostream& os, const OffsetCurveVertexList& lst)
+inline std::ostream& operator<< (std::ostream& os,
+                                 const OffsetSegmentString& lst)
 {
 	if ( lst.ptList )
 	{
@@ -189,9 +195,5 @@ inline std::ostream& operator<< (std::ostream& os, const OffsetCurveVertexList& 
 } // namespace geos
 
 
-#endif // ndef GEOS_OP_BUFFER_OFFSETCURVEVERTEXLIST_H
-
-/**********************************************************************
- * $Log$
- **********************************************************************/
+#endif // ndef GEOS_OP_BUFFER_OFFSETSEGMENTSTRING_H
 

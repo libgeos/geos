@@ -4,8 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2009-2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2008-2010 Safe Software Inc.
- * Copyright (C) 2009 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2007 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -16,7 +16,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/BufferBuilder.java r320 (JTS-1.12)
+ * Last port: operation/buffer/BufferBuilder.java r378 (JTS-1.12)
  *
  **********************************************************************/
 

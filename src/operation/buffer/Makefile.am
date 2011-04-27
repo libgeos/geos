@@ -17,6 +17,7 @@ libopbuffer_la_SOURCES = \
 	BufferSubgraph.cpp \
 	OffsetCurveBuilder.cpp \
 	OffsetCurveSetBuilder.cpp \
+	OffsetSegmentGenerator.cpp \
 	RightmostEdgeFinder.cpp \
 	SubgraphDepthLocater.cpp \
 	$(NULL)
