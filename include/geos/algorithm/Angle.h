@@ -4,7 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2009  Sandro Santilli <strk@keybit.net>
+ * Copyright (C) 2009-2011  Sandro Santilli <strk@keybit.net>
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/Angle.java rev. 1.6 (JTS-1.9)
+ * Last port: algorithm/Angle.java r378 (JTS-1.12)
  *
  **********************************************************************/
 
