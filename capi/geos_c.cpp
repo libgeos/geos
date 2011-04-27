@@ -40,6 +40,7 @@
 #define GEOSWKTWriter_t geos::io::WKTWriter
 #define GEOSWKBReader_t geos::io::WKBReader
 #define GEOSWKBWriter_t geos::io::WKBWriter
+typedef struct GEOSBufParams_t GEOSBufferParams;
 
 #include "geos_c.h"
 
@@ -1142,6 +1143,54 @@ GEOSGeometry *
 GEOSSnap(const GEOSGeometry* g1, const GEOSGeometry* g2, double tolerance)
 {
   return GEOSSnap_r(handle, g1, g2, tolerance);
+}
+
+GEOSBufferParams*
+GEOSBufferParams_create()
+{
+  return GEOSBufferParams_create_r(handle);
+}
+
+void
+GEOSBufferParams_destroy(GEOSBufferParams* p)
+{
+  return GEOSBufferParams_destroy_r(handle, p);
+}
+
+int
+GEOSBufferParams_setEndCapStyle(GEOSBufferParams* p, int style)
+{
+  return GEOSBufferParams_setEndCapStyle_r(handle, p, style);
+}
+
+int
+GEOSBufferParams_setJoinStyle(GEOSBufferParams* p, int joinStyle)
+{
+  return GEOSBufferParams_setJoinStyle_r(handle, p, joinStyle);
+}
+
+int
+GEOSBufferParams_setMitreLimit(GEOSBufferParams* p, double l)
+{
+  return GEOSBufferParams_setMitreLimit_r(handle, p, l);
+}
+
+int
+GEOSBufferParams_setQuadrantSegments(GEOSBufferParams* p, int joinStyle)
+{
+  return GEOSBufferParams_setQuadrantSegments_r(handle, p, joinStyle);
+}
+
+int
+GEOSBufferParams_setSingleSided(GEOSBufferParams* p, int singleSided)
+{
+  return GEOSBufferParams_setSingleSided_r(handle, p, singleSided);
+}
+
+Geometry*
+GEOSBufferWithParams(const Geometry* g, const GEOSBufferParams* p, double w)
+{
+  return GEOSBufferWithParams_r(handle, g, p, w);
 }
 
 } /* extern "C" */

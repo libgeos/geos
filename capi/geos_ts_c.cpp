@@ -84,6 +84,7 @@
 #define GEOSGeometry geos::geom::Geometry
 #define GEOSPreparedGeometry geos::geom::prep::PreparedGeometry
 #define GEOSCoordSequence geos::geom::CoordinateSequence
+#define GEOSBufferParams geos::operation::buffer::BufferParameters
 #define GEOSSTRtree geos::index::strtree::STRtree
 #define GEOSWKTReader_t geos::io::WKTReader
 #define GEOSWKTWriter_t geos::io::WKTWriter
@@ -120,7 +121,8 @@ using geos::io::WKBWriter;
 using geos::operation::overlay::OverlayOp;
 using geos::operation::overlay::overlayOp;
 using geos::operation::geounion::CascadedPolygonUnion;
-
+using geos::operation::buffer::BufferParameters;
+using geos::util::IllegalArgumentException;
 using geos::algorithm::distance::DiscreteHausdorffDistance;
 
 typedef std::auto_ptr<Geometry> GeomAutoPtr;
@@ -5655,6 +5657,209 @@ GEOSSnap_r(GEOSContextHandle_t extHandle, const GEOSGeometry* g1,
         handle->ERROR_MESSAGE("Unknown exception thrown");
         return 0;
     }
+}
+
+BufferParameters *
+GEOSBufferParams_create_r(GEOSContextHandle_t extHandle)
+{
+    if ( 0 == extHandle ) return NULL;
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized ) return NULL;
+
+    try
+    {
+        BufferParameters *p = new BufferParameters();
+        return p;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return 0;
+}
+
+void
+GEOSBufferParams_destroy_r(GEOSContextHandle_t extHandle, BufferParameters* p)
+{
+  delete p;     
+}
+
+int
+GEOSBufferParams_setEndCapStyle_r(GEOSContextHandle_t extHandle,
+  GEOSBufferParams* p, int style)
+{
+    if ( 0 == extHandle ) return 0;
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized ) return 0;
+
+    try
+    {
+        if ( style > BufferParameters::CAP_SQUARE )
+        {
+        	throw IllegalArgumentException("Invalid buffer endCap style");
+        }
+        p->setEndCapStyle(static_cast<BufferParameters::EndCapStyle>(style));
+        return 1;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return 0;
+}
+
+int
+GEOSBufferParams_setJoinStyle_r(GEOSContextHandle_t extHandle,
+  GEOSBufferParams* p, int style)
+{
+    if ( 0 == extHandle ) return 0;
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized ) return 0;
+
+    try
+    {
+        if ( style > BufferParameters::JOIN_BEVEL ) {
+        	throw IllegalArgumentException("Invalid buffer join style");
+        }
+        p->setJoinStyle(static_cast<BufferParameters::JoinStyle>(style));
+        return 1;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return 0;
+}
+
+int
+GEOSBufferParams_setMitreLimit_r(GEOSContextHandle_t extHandle,
+  GEOSBufferParams* p, double limit)
+{
+    if ( 0 == extHandle ) return 0;
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized ) return 0;
+
+    try
+    {
+        p->setMitreLimit(limit);
+        return 1;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return 0;
+}
+
+int
+GEOSBufferParams_setQuadrantSegments_r(GEOSContextHandle_t extHandle,
+  GEOSBufferParams* p, int segs)
+{
+    if ( 0 == extHandle ) return 0;
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized ) return 0;
+
+    try
+    {
+        p->setQuadrantSegments(segs);
+        return 1;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return 0;
+}
+
+int
+GEOSBufferParams_setSingleSided_r(GEOSContextHandle_t extHandle,
+  GEOSBufferParams* p, int ss)
+{
+    if ( 0 == extHandle ) return 0;
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized ) return 0;
+
+    try
+    {
+        p->setSingleSided( (ss != 0) );
+        return 1;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return 0;
+}
+
+Geometry *
+GEOSBufferWithParams_r(GEOSContextHandle_t extHandle, const Geometry *g1, const BufferParameters* bp, double width)
+{
+    using geos::operation::buffer::BufferOp;
+
+    if ( 0 == extHandle ) return NULL;
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized ) return NULL;
+
+    try
+    {
+        BufferOp op(g1, *bp);
+        Geometry *g3 = op.getResultGeometry(width);
+        return g3;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+    
+    return NULL;
 }
 
 } /* extern "C" */

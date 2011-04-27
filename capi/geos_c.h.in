@@ -103,6 +103,7 @@ typedef struct GEOSGeom_t GEOSGeometry;
 typedef struct GEOSPrepGeom_t GEOSPreparedGeometry;
 typedef struct GEOSCoordSeq_t GEOSCoordSequence;
 typedef struct GEOSSTRtree_t GEOSSTRtree;
+typedef struct GEOSBufParams_t GEOSBufferParams;
 #endif
 
 /* Those are compatibility definitions for source compatibility
@@ -382,6 +383,72 @@ enum GEOSBufJoinStyles {
 	GEOSBUF_JOIN_MITRE=2,
 	GEOSBUF_JOIN_BEVEL=3
 };
+
+/* @return 0 on exception */
+extern GEOSBufferParams GEOS_DLL *GEOSBufferParams_create();
+extern GEOSBufferParams GEOS_DLL *GEOSBufferParams_create_r(
+                                              GEOSContextHandle_t handle);
+extern void GEOS_DLL GEOSBufferParams_destroy(GEOSBufferParams* parms);
+extern void GEOS_DLL GEOSBufferParams_destroy_r(
+                                              GEOSContextHandle_t handle,
+                                              GEOSBufferParams* parms);
+
+/* @return 0 on exception */
+extern int GEOS_DLL GEOSBufferParams_setEndCapStyle(
+                                              GEOSBufferParams* p,
+                                              int style);
+extern int GEOS_DLL GEOSBufferParams_setEndCapStyle_r(
+                                              GEOSContextHandle_t handle,
+                                              GEOSBufferParams* p,
+                                              int style);
+
+/* @return 0 on exception */
+extern int GEOS_DLL GEOSBufferParams_setJoinStyle(
+                                              GEOSBufferParams* p,
+                                              int joinStyle);
+extern int GEOS_DLL GEOSBufferParams_setJoinStyle_r(
+                                              GEOSContextHandle_t handle,
+                                              GEOSBufferParams* p,
+                                              int joinStyle);
+
+/* @return 0 on exception */
+extern int GEOS_DLL GEOSBufferParams_setMitreLimit(
+                                              GEOSBufferParams* p,
+                                              double mitreLimit);
+extern int GEOS_DLL GEOSBufferParams_setMitreLimit_r(
+                                              GEOSContextHandle_t handle,
+                                              GEOSBufferParams* p,
+                                              double mitreLimit);
+
+/* @return 0 on exception */
+extern int GEOS_DLL GEOSBufferParams_setQuadrantSegments(
+                                              GEOSBufferParams* p,
+                                              int quadSegs);
+extern int GEOS_DLL GEOSBufferParams_setQuadrantSegments_r(
+                                              GEOSContextHandle_t handle,
+                                              GEOSBufferParams* p,
+                                              int quadSegs);
+
+/* @param singleSided: 1 for single sided, 0 otherwise */
+/* @return 0 on exception */
+extern int GEOS_DLL GEOSBufferParams_setSingleSided(
+                                              GEOSBufferParams* p,
+                                              int singleSided);
+extern int GEOS_DLL GEOSBufferParams_setSingleSided_r(
+                                              GEOSContextHandle_t handle,
+                                              GEOSBufferParams* p,
+                                              int singleSided);
+
+/* @return NULL on exception. */
+extern GEOSGeometry GEOS_DLL *GEOSBufferWithParams(
+                                              const GEOSGeometry* g1,
+                                              const GEOSBufferParams* p,
+                                              double width);
+extern GEOSGeometry GEOS_DLL *GEOSBufferWithParams_r(
+                                              GEOSContextHandle_t handle,
+                                              const GEOSGeometry* g1,
+                                              const GEOSBufferParams* p,
+                                              double width);
 
 /* These functions return NULL on exception. */
 extern GEOSGeometry GEOS_DLL *GEOSBuffer(const GEOSGeometry* g1,
