@@ -34,6 +34,7 @@ geos_unit_SOURCES = \
 	algorithm/CGAlgorithms/isCCWTest.cpp \
 	algorithm/CGAlgorithms/isPointInRingTest.cpp \
 	algorithm/CGAlgorithms/computeOrientationTest.cpp \
+	algorithm/CGAlgorithms/signedAreaTest.cpp \
 	algorithm/ConvexHullTest.cpp \
 	algorithm/distance/DiscreteHausdorffDistanceTest.cpp \
 	algorithm/PointLocatorTest.cpp \

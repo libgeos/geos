@@ -1,11 +1,11 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005 2006 Refractions Research Inc.
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/CGAlgorithms.java rev. 1.46 (JTS-1.9)
+ * Last port: algorithm/CGAlgorithms.java r378 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -308,13 +308,17 @@ CGAlgorithms::signedArea(const CoordinateSequence* ring)
 	if (npts<3) return 0.0;
 
 	double sum=0.0;
-	for (size_t i=0; i<npts-1; ++i)
+	Coordinate p = ring->getAt(0);
+	double bx = p.x;
+	double by = p.y;
+	for (size_t i=1; i<npts; ++i)
 	{
-		double bx=ring->getAt(i).x;
-		double by=ring->getAt(i).y;
-		double cx=ring->getAt(i+1).x;
-		double cy=ring->getAt(i+1).y;
-		sum+=(bx+cx)*(cy-by);
+		ring->getAt(i, p);
+		double cx = p.x;
+		double cy = p.y;
+		sum += (bx+cx) * (cy-by);
+		bx = cx;
+		by = cy;
 	}
 	return -sum/2.0;
 }
@@ -354,19 +358,3 @@ CGAlgorithms::length(const CoordinateSequence* pts)
 
 } // namespace geos.algorithm
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.33  2006/06/12 10:10:39  strk
- * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
- *
- * Revision 1.32  2006/05/02 14:51:53  strk
- * Added port info and fixed doxygen comments for CGAlgorithms class
- *
- * Revision 1.31  2006/03/21 11:12:23  strk
- * Cleanups: headers inclusion and Log section
- *
- * Revision 1.30  2006/03/09 16:46:45  strk
- * geos::geom namespace definition, first pass at headers split
- **********************************************************************/
-

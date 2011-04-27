@@ -1,9 +1,9 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/CGAlgorithms.java rev. 1.46 (JTS-1.9)
+ * Last port: algorithm/CGAlgorithms.java r378 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -228,14 +228,3 @@ public:
 } // namespace geos
 
 #endif // GEOS_ALGORITHM_CGALGORITHM_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.2  2006/05/02 14:51:53  strk
- * Added port info and fixed doxygen comments for CGAlgorithms class
- *
- * Revision 1.1  2006/03/09 16:46:48  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/
-
