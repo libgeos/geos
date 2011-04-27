@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/linemerge/LineSequencer.java r320 (JTS-1.12)
+ * Last port: operation/linemerge/LineSequencer.java r378 (JTS-1.12)
  *
  **********************************************************************/
 

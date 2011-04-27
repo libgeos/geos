@@ -6,6 +6,7 @@
  *
  * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -14,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/linemerge/LineMergeGraph.java r320 (JTS-1.12)
+ * Last port: operation/linemerge/LineMergeGraph.java r378 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -75,6 +76,8 @@ public:
 	 * LineString representation of an edge. 
 	 * 
 	 * Empty lines or lines with all coordinates equal are not added.
+	 * 
+	 * @param lineString the linestring to add to the graph
 	 */
 	void addEdge(const geom::LineString *lineString);
 

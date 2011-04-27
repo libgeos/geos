@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/linemerge/LineSequencer.java r320 (JTS-1.12)
+ * Last port: operation/linemerge/LineSequencer.java r378 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -63,6 +63,12 @@ namespace linemerge { // geos::operation::linemerge
  * components of the input.  Each linestring is oriented
  * so that identical endpoints are adjacent in the list.
  *
+ * A typical use case is to convert a set of
+ * unoriented geometric links
+ * from a linear network
+ * (e.g. such as block faces on a bus route)
+ * into a continuous oriented path through the network.
+ *
  * The input linestrings may form one or more connected sets.
  * The input linestrings should be correctly noded, or the results may
  * not be what is expected.
@@ -82,10 +88,11 @@ namespace linemerge { // geos::operation::linemerge
  *   node of an linestring, use that node as the end of the sequence
  * - If the sequence has no degree-1 nodes, use any node as the start
  *
- * Not all arrangements of lines can be sequenced.
+ * Note that not all arrangements of lines can be sequenced.
  * For a connected set of edges in a graph,
- * Euler's Theorem states that there is a sequence containing each edge once
- * if and only if there are no more than 2 nodes of odd degree.
+ * <i>Euler's Theorem</i> states that there is a sequence
+ * containing each edge once
+ * <b>if and only if</b> there are no more than 2 nodes of odd degree.
  * If it is not possible to find a sequence, the isSequenceable method
  * will return <code>false</code>.
  *

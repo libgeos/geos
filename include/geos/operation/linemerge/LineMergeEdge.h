@@ -4,7 +4,8 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2006 Refractions Research Inc.
+ * Copyright (C) 2005-2006 Refractions Research Inc.
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -13,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/linemerge/LineMergeEdge.java r320 (JTS-1.12)
+ * Last port: operation/linemerge/LineMergeEdge.java r378 (JTS-1.12)
  *
  **********************************************************************/
 

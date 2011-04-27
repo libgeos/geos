@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/linemerge/LineMergeDirectedEdge.java rev. 1.5 (JTS-1.10)
+ * Last port: operation/linemerge/LineMergeDirectedEdge.java r378 (JTS-1.12)
  *
  **********************************************************************/
 
