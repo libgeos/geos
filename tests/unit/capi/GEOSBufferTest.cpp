@@ -444,48 +444,5 @@ namespace tut
 
     }
 
-    // Single-sided buffer  (1)
-    template<>
-    template<>
-    void object::test<17>()
-    {
-        geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0)");
-
-        ensure( 0 != geom1_ );
-
-        geom2_ = GEOSSingleSidedBuffer(geom1_, 2, 2, GEOSBUF_JOIN_ROUND, 2, 1);
-
-        ensure( 0 != geom2_ );
-
-        wkt_ = GEOSGeomToWKT(geom2_);
-
-        ensure_equals(std::string(wkt_), std::string(
-"LINESTRING (0.0000000000000000 2.0000000000000000, 10.0000000000000000 2.0000000000000000)"
-        ));
-
-    }
-
-    // Single-sided buffer  (2)
-    template<>
-    template<>
-    void object::test<18>()
-    {
-        geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0)");
-
-        ensure( 0 != geom1_ );
-
-        geom2_ = GEOSSingleSidedBuffer(geom1_, 2, 2, GEOSBUF_JOIN_ROUND, 2, 0);
-
-        ensure( 0 != geom2_ );
-
-        wkt_ = GEOSGeomToWKT(geom2_);
-
-        ensure_equals(std::string(wkt_), std::string(
-"LINESTRING (10.0000000000000000 -2.0000000000000000, 0.0000000000000000 -2.0000000000000000)"
-        ));
-
-    }
-
-
 } // namespace tut
 
