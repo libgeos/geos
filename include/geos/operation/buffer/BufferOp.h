@@ -4,7 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2009  Sandro Santilli <strk@keybit.net>
+ * Copyright (C) 2009-2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2007 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -15,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/buffer/BufferOp.java r262 (JTS-1.12)
+ * Last port: operation/buffer/BufferOp.java r378 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -51,15 +51,17 @@ namespace buffer { // geos.operation.buffer
  * Computes the buffer of a geometry, for both positive and negative
  * buffer distances.
  *
- * In GIS, the buffer of a geometry is defined as
- * the Minkowski sum or difference of the geometry
+ * In GIS, the positive (or negative) buffer of a geometry is defined as
+ * the Minkowski sum (or difference) of the geometry
  * with a circle with radius equal to the absolute value of the buffer
  * distance.
  * In the CAD/CAM world buffers are known as </i>offset curves</i>.
- * In morphological analysis they are known as <i>erosion</i> and <i>dilation</i>.
+ * In morphological analysis the operation of positive and negative buffering
+ * is referred to as <i>erosion</i> and <i>dilation</i>.
  *
  * The buffer operation always returns a polygonal result.
- * The negative or zero-distance buffer of lines and points is always an empty Polygon.
+ * The negative or zero-distance buffer of lines and points is always
+ * an empty Polygon.
  * 
  * Since true buffer curves may contain circular arcs,
  * computed buffer polygons can only be approximations to the true geometry.
@@ -189,7 +191,6 @@ public:
 		resultGeometry(NULL)
 	{
 	}
-
 
 	/**
 	 * Specifies the end cap style of the generated buffer.
