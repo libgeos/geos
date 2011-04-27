@@ -395,10 +395,10 @@ GEOSSingleSidedBuffer(const Geometry *g1, double width, int quadsegs,
 
 Geometry *
 GEOSOffsetCurve(const Geometry *g1, double width, int quadsegs,
-	int joinStyle, double mitreLimit, int leftSide)
+	int joinStyle, double mitreLimit)
 {
     return GEOSOffsetCurve_r( handle, g1, width, quadsegs, 
-                               joinStyle, mitreLimit, leftSide );
+                               joinStyle, mitreLimit );
 }
 
 Geometry *

@@ -122,6 +122,7 @@ using geos::operation::overlay::OverlayOp;
 using geos::operation::overlay::overlayOp;
 using geos::operation::geounion::CascadedPolygonUnion;
 using geos::operation::buffer::BufferParameters;
+using geos::operation::buffer::BufferBuilder;
 using geos::util::IllegalArgumentException;
 using geos::algorithm::distance::DiscreteHausdorffDistance;
 
@@ -1712,24 +1713,60 @@ GEOSBufferWithStyle_r(GEOSContextHandle_t extHandle, const Geometry *g1, double 
 }
 
 Geometry *
-GEOSOffsetCurve_r(GEOSContextHandle_t extHandle, const Geometry *g1, double width, int quadsegs, int joinStyle, double mitreLimit, int leftSide)
+GEOSOffsetCurve_r(GEOSContextHandle_t extHandle, const Geometry *g1, double width, int quadsegs, int joinStyle, double mitreLimit)
 {
-    using geos::operation::buffer::BufferParameters;
-    using geos::operation::buffer::BufferBuilder;
-    using geos::operation::buffer::BufferOp;
-    using geos::util::IllegalArgumentException;
-
-    if ( 0 == extHandle )
-    {
-        return NULL;
-    }
+    if ( 0 == extHandle ) return NULL;
 
     GEOSContextHandleInternal_t *handle = 0;
     handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
-    if ( 0 == handle->initialized )
+    if ( 0 == handle->initialized ) return NULL;
+
+    try
     {
-        return NULL;
+        BufferParameters bp;
+        bp.setEndCapStyle( BufferParameters::CAP_FLAT );
+        bp.setQuadrantSegments(quadsegs);
+
+        if ( joinStyle > BufferParameters::JOIN_BEVEL )
+        {
+            throw IllegalArgumentException("Invalid buffer join style");
+        }
+        bp.setJoinStyle(
+            static_cast<BufferParameters::JoinStyle>(joinStyle)
+            );
+        bp.setMitreLimit(mitreLimit);
+
+        bool isLeftSide = true;
+        if ( width < 0 ) {
+          isLeftSide = false;
+          width = -width;
+        }
+        BufferBuilder bufBuilder (bp);
+        Geometry *g3 = bufBuilder.bufferLineSingleSided(g1, width, isLeftSide);
+
+        return g3;
     }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+    
+    return NULL;
+}
+
+/* @deprecated in 3.3.0 */
+Geometry *
+GEOSSingleSidedBuffer_r(GEOSContextHandle_t extHandle, const Geometry *g1, double width, int quadsegs, int joinStyle, double mitreLimit, int leftSide)
+{
+    if ( 0 == extHandle ) return NULL;
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized ) return NULL;
 
     try
     {
@@ -1762,13 +1799,6 @@ GEOSOffsetCurve_r(GEOSContextHandle_t extHandle, const Geometry *g1, double widt
     }
     
     return NULL;
-}
-
-Geometry *
-GEOSSingleSidedBuffer_r(GEOSContextHandle_t extHandle, const Geometry *g1, double width, int quadsegs, int joinStyle, double mitreLimit, int leftSide)
-{
-    return GEOSOffsetCurve_r(extHandle, g1, width, quadsegs,
-                             joinStyle, mitreLimit, leftSide);
 }
 
 Geometry *

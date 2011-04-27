@@ -78,7 +78,7 @@ namespace tut
 
         ensure( 0 != geom1_ );
 
-        geom2_ = GEOSOffsetCurve(geom1_, 2, 2, GEOSBUF_JOIN_ROUND, 2, 1);
+        geom2_ = GEOSOffsetCurve(geom1_, 2, 0, GEOSBUF_JOIN_ROUND, 2);
 
         ensure( 0 != geom2_ );
 
@@ -97,7 +97,7 @@ namespace tut
 
         ensure( 0 != geom1_ );
 
-        geom2_ = GEOSOffsetCurve(geom1_, 2, 2, GEOSBUF_JOIN_ROUND, 2, 0);
+        geom2_ = GEOSOffsetCurve(geom1_, -2, 0, GEOSBUF_JOIN_ROUND, 2);
 
         ensure( 0 != geom2_ );
 
@@ -117,7 +117,7 @@ namespace tut
 
         ensure( 0 != geom1_ );
 
-        geom2_ = GEOSOffsetCurve(geom1_, 2, 1, GEOSBUF_JOIN_ROUND, 2, 0);
+        geom2_ = GEOSOffsetCurve(geom1_, -2, 1, GEOSBUF_JOIN_ROUND, 2);
 
         ensure( 0 != geom2_ );
 
@@ -137,7 +137,7 @@ namespace tut
 
         ensure( 0 != geom1_ );
 
-        geom2_ = GEOSOffsetCurve(geom1_, 2, 1, GEOSBUF_JOIN_ROUND, 2, 1);
+        geom2_ = GEOSOffsetCurve(geom1_, 2, 1, GEOSBUF_JOIN_ROUND, 2);
 
         ensure( 0 != geom2_ );
 

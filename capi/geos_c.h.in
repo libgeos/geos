@@ -466,7 +466,7 @@ extern GEOSGeometry GEOS_DLL *GEOSBufferWithStyle_r(GEOSContextHandle_t handle,
 	int joinStyle, double mitreLimit);
 
 /* These functions return NULL on exception. Only LINESTRINGs are accepted. */
-/* @deprecated: use GEOSOffsetCurve instead */
+/* @deprecated in 3.3.0: use GEOSOffsetCurve instead */
 extern GEOSGeometry GEOS_DLL *GEOSSingleSidedBuffer(const GEOSGeometry* g1,
 	double width, int quadsegs, int joinStyle, double mitreLimit,
 	int leftSide);
@@ -475,14 +475,18 @@ extern GEOSGeometry GEOS_DLL *GEOSSingleSidedBuffer_r(
 	const GEOSGeometry* g1, double width, int quadsegs, 
 	int joinStyle, double mitreLimit, int leftSide);
 
-/* These functions return NULL on exception. Only LINESTRINGs are accepted. */
+/* 
+ * Only LINESTRINGs are accepted.
+ * @param width : offset distance.
+ *                negative for right side offset.
+ *                positive for left side offset.
+ * @return NULL on exception
+ */
 extern GEOSGeometry GEOS_DLL *GEOSOffsetCurve(const GEOSGeometry* g1,
-	double width, int quadsegs, int joinStyle, double mitreLimit,
-	int leftSide);
-extern GEOSGeometry GEOS_DLL *GEOSOffsetCurve_r(
-	GEOSContextHandle_t handle,
+	double width, int quadsegs, int joinStyle, double mitreLimit);
+extern GEOSGeometry GEOS_DLL *GEOSOffsetCurve_r(GEOSContextHandle_t handle,
 	const GEOSGeometry* g1, double width, int quadsegs, 
-	int joinStyle, double mitreLimit, int leftSide);
+	int joinStyle, double mitreLimit);
 
 
 /************************************************************************
@@ -570,8 +574,10 @@ extern GEOSGeometry GEOS_DLL *GEOSSymDifference(const GEOSGeometry* g1,
 extern GEOSGeometry GEOS_DLL *GEOSBoundary(const GEOSGeometry* g1);
 extern GEOSGeometry GEOS_DLL *GEOSUnion(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern GEOSGeometry GEOS_DLL *GEOSUnaryUnion(const GEOSGeometry* g1);
-/* @deprecated: use GEOSUnaryUnion instead */
+
+/* @deprecated in 3.3.0: use GEOSUnaryUnion instead */
 extern GEOSGeometry GEOS_DLL *GEOSUnionCascaded(const GEOSGeometry* g1);
+extern GEOSGeometry GEOS_DLL *GEOSUnionCascaded_r(GEOSContextHandle_t handle, const GEOSGeometry* g1);
 
 extern GEOSGeometry GEOS_DLL *GEOSPointOnSurface(const GEOSGeometry* g1);
 extern GEOSGeometry GEOS_DLL *GEOSGetCentroid(const GEOSGeometry* g);
@@ -596,7 +602,6 @@ extern GEOSGeometry GEOS_DLL *GEOSUnion_r(GEOSContextHandle_t handle,
                                           const GEOSGeometry* g2);
 extern GEOSGeometry GEOS_DLL *GEOSUnaryUnion_r(GEOSContextHandle_t handle,
                                           const GEOSGeometry* g);
-extern GEOSGeometry GEOS_DLL *GEOSUnionCascaded_r(GEOSContextHandle_t handle, const GEOSGeometry* g1);
 extern GEOSGeometry GEOS_DLL *GEOSPointOnSurface_r(GEOSContextHandle_t handle,
                                                    const GEOSGeometry* g1);
 extern GEOSGeometry GEOS_DLL *GEOSGetCentroid_r(GEOSContextHandle_t handle,
