@@ -508,6 +508,7 @@ AC_OUTPUT([
 	tests/perf/Makefile
 	tests/perf/operation/Makefile
 	tests/perf/operation/buffer/Makefile
+	tests/perf/operation/predicate/Makefile
 	tests/xmltester/Makefile
 	tests/geostest/Makefile
 	tests/thread/Makefile
