@@ -1,10 +1,11 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -28,6 +29,7 @@
 #include <geos/geom/Coordinate.h> // for RelateComputer composition
 
 #include <vector>
+#include <memory>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -72,8 +74,6 @@ namespace relate { // geos::operation::relate
  */
 class GEOS_DLL RelateComputer {
 public:
-	//RelateComputer();
-	virtual ~RelateComputer();
 	RelateComputer(std::vector<geomgraph::GeometryGraph*> *newArg);
 	geom::IntersectionMatrix* computeIM();
 private:
@@ -88,7 +88,7 @@ private:
 	geomgraph::NodeMap nodes;
 
 	/// this intersection matrix will hold the results compute for the relate
-	geom::IntersectionMatrix *im;
+	std::auto_ptr<geom::IntersectionMatrix> im;
 
 	std::vector<geomgraph::Edge*> isolatedEdges;
 
@@ -97,18 +97,61 @@ private:
 
 	void insertEdgeEnds(std::vector<geomgraph::EdgeEnd*> *ee);
 
-	void computeProperIntersectionIM(geomgraph::index::SegmentIntersector *intersector,
-			geom::IntersectionMatrix *imX);
+	void computeProperIntersectionIM(
+	    geomgraph::index::SegmentIntersector *intersector,
+	    geom::IntersectionMatrix *imX);
 
 	void copyNodesAndLabels(int argIndex);
 	void computeIntersectionNodes(int argIndex);
 	void labelIntersectionNodes(int argIndex);
+
+	/**
+	 * If the Geometries are disjoint, we need to enter their dimension and
+	 * boundary dimension in the Ext rows in the IM
+	 */
 	void computeDisjointIM(geom::IntersectionMatrix *imX);
+
 	void labelNodeEdges();
+
+	/**
+	 * update the IM with the sum of the IMs for each component
+	 */
 	void updateIM(geom::IntersectionMatrix *imX);
+
+	/**
+	 * Processes isolated edges by computing their labelling and adding them
+	 * to the isolated edges list.
+	 * Isolated edges are guaranteed not to touch the boundary of the target
+	 * (since if they
+	 * did, they would have caused an intersection to be computed and hence would
+	 * not be isolated)
+	 */
 	void labelIsolatedEdges(int thisIndex,int targetIndex);
-	void labelIsolatedEdge(geomgraph::Edge *e,int targetIndex, const geom::Geometry *target);
+
+	/**
+	 * Label an isolated edge of a graph with its relationship to the target
+	 * geometry.
+	 * If the target has dim 2 or 1, the edge can either be in the interior
+	 * or the exterior.
+	 * If the target has dim 0, the edge must be in the exterior
+	 */
+	void labelIsolatedEdge(geomgraph::Edge *e,int targetIndex,
+	                       const geom::Geometry *target);
+
+	/**
+	 * Isolated nodes are nodes whose labels are incomplete
+	 * (e.g. the location for one Geometry is null).
+	 * This is the case because nodes in one graph which don't intersect
+	 * nodes in the other are not completely labelled by the initial process
+	 * of adding nodes to the nodeList.
+	 * To complete the labelling we need to check for nodes that lie in the
+	 * interior of edges, and in the interior of areas.
+	 */
 	void labelIsolatedNodes();
+
+	/**
+	 * Label an isolated node with its relationship to the target geometry.
+	 */
 	void labelIsolatedNode(geomgraph::Node *n,int targetIndex);
 };
 

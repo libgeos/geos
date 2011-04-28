@@ -1,11 +1,11 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005 Refractions Research Inc.
+ * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -55,10 +55,6 @@ RelateComputer::RelateComputer(std::vector<GeometryGraph*> *newArg):
 {
 }
 
-RelateComputer::~RelateComputer()
-{
-}
-
 IntersectionMatrix*
 RelateComputer::computeIM()
 {
@@ -68,17 +64,21 @@ RelateComputer::computeIM()
 	const Envelope *e1=(*arg)[0]->getGeometry()->getEnvelopeInternal();
 	const Envelope *e2=(*arg)[1]->getGeometry()->getEnvelopeInternal();
 	if (!e1->intersects(e2)) {
-		computeDisjointIM(im);
-		//delete e1;
-		//delete e2;
-		return im;
+		computeDisjointIM(im.get());
+		return im.release();
 	}
 
-	SegmentIntersector *si1=(*arg)[0]->computeSelfNodes(&li,false);
-	SegmentIntersector *si2=(*arg)[1]->computeSelfNodes(&li,false);
+	std::auto_ptr<SegmentIntersector> si1 (
+		(*arg)[0]->computeSelfNodes(&li,false)
+	);
+	std::auto_ptr<SegmentIntersector> si2 (
+		(*arg)[1]->computeSelfNodes(&li,false)
+	);
 
 	// compute intersections between edges of the two input geometries
-	SegmentIntersector *intersector=(*arg)[0]->computeEdgeIntersections((*arg)[1], &li,false);
+	std::auto_ptr< SegmentIntersector> intersector (
+    (*arg)[0]->computeEdgeIntersections((*arg)[1], &li,false)
+  );
 	computeIntersectionNodes(0);
 	computeIntersectionNodes(1);
 
@@ -103,7 +103,7 @@ RelateComputer::computeIM()
 	 * If a proper intersection was found, we can set a lower bound
 	 * on the IM.
 	 */
-	computeProperIntersectionIM(intersector, im);
+	computeProperIntersectionIM(intersector.get(), im.get());
 
 	/*
 	 * Now process improper intersections
@@ -114,10 +114,14 @@ RelateComputer::computeIM()
 	 */
 	// build EdgeEnds for all intersections
 	EdgeEndBuilder eeBuilder;
-	std::vector<EdgeEnd*> *ee0=eeBuilder.computeEdgeEnds((*arg)[0]->getEdges());
-	insertEdgeEnds(ee0);
-	std::vector<EdgeEnd*> *ee1=eeBuilder.computeEdgeEnds((*arg)[1]->getEdges());
-	insertEdgeEnds(ee1);
+	std::auto_ptr< std::vector<EdgeEnd*> > ee0 (
+		eeBuilder.computeEdgeEnds((*arg)[0]->getEdges())
+  );
+	insertEdgeEnds(ee0.get());
+	std::auto_ptr< std::vector<EdgeEnd*> > ee1 (
+		eeBuilder.computeEdgeEnds((*arg)[1]->getEdges())
+  );
+	insertEdgeEnds(ee1.get());
 	//Debug.println("==== NodeList ===");
 	//Debug.print(nodes);
 	labelNodeEdges();
@@ -138,13 +142,8 @@ RelateComputer::computeIM()
 	//debugPrintln("Graph B isolated edges - ");
 	labelIsolatedEdges(1,0);
 	// update the IM from all components
-	updateIM(im);
-	delete si1;
-	delete si2;
-	delete intersector;
-	delete ee0;
-	delete ee1;
-	return im;
+	updateIM(im.get());
+	return im.release();
 }
 
 void
@@ -295,10 +294,7 @@ RelateComputer::labelIntersectionNodes(int argIndex)
 	}
 }
 
-/**
- * If the Geometries are disjoint, we need to enter their dimension and
- * boundary dimension in the Ext rows in the IM
- */
+/* private */
 void
 RelateComputer::computeDisjointIM(IntersectionMatrix *imX)
 {
@@ -330,9 +326,7 @@ RelateComputer::labelNodeEdges()
 	}
 }
 
-/**
- * update the IM with the sum of the IMs for each component
- */
+/*private*/
 void
 RelateComputer::updateIM(IntersectionMatrix *imX)
 {
@@ -356,14 +350,10 @@ RelateComputer::updateIM(IntersectionMatrix *imX)
 	}
 }
 
-/**
-* Processes isolated edges by computing their labelling and adding them
-* to the isolated edges list.
-* Isolated edges are guaranteed not to touch the boundary of the target (since if they
-* did, they would have caused an intersection to be computed and hence would
-* not be isolated)
-*/
-void RelateComputer::labelIsolatedEdges(int thisIndex,int targetIndex) {
+/*private*/
+void
+RelateComputer::labelIsolatedEdges(int thisIndex,int targetIndex)
+{
 	std::vector<Edge*> *edges=(*arg)[thisIndex]->getEdges();
 	for(std::vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
@@ -374,11 +364,7 @@ void RelateComputer::labelIsolatedEdges(int thisIndex,int targetIndex) {
 	}
 }
 
-/**
- * Label an isolated edge of a graph with its relationship to the target geometry.
- * If the target has dim 2 or 1, the edge can either be in the interior or the exterior.
- * If the target has dim 0, the edge must be in the exterior
- */
+/* private */
 void
 RelateComputer::labelIsolatedEdge(Edge *e, int targetIndex, const Geometry *target)
 {
@@ -395,15 +381,7 @@ RelateComputer::labelIsolatedEdge(Edge *e, int targetIndex, const Geometry *targ
 	//System.out.println(e.getLabel());
 }
 
-/**
- * Isolated nodes are nodes whose labels are incomplete
- * (e.g. the location for one Geometry is null).
- * This is the case because nodes in one graph which don't intersect
- * nodes in the other are not completely labelled by the initial process
- * of adding nodes to the nodeList.
- * To complete the labelling we need to check for nodes that lie in the
- * interior of edges, and in the interior of areas.
- */
+/*private*/
 void
 RelateComputer::labelIsolatedNodes()
 {
@@ -423,9 +401,7 @@ RelateComputer::labelIsolatedNodes()
 	}
 }
 
-/**
- * Label an isolated node with its relationship to the target geometry.
- */
+/* private */
 void
 RelateComputer::labelIsolatedNode(Node *n,int targetIndex)
 {
@@ -438,25 +414,4 @@ RelateComputer::labelIsolatedNode(Node *n,int targetIndex)
 } // namespace geos.operation.relate
 } // namespace geos.operation
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.32  2006/03/21 13:11:29  strk
- * opRelate.h header split
- *
- * Revision 1.31  2006/03/20 16:57:44  strk
- * spatialindex.h and opValid.h headers split
- *
- * Revision 1.30  2006/03/17 16:48:55  strk
- * LineIntersector and PointLocator made complete components of RelateComputer
- * (were statics const pointers before). Reduced inclusions from opRelate.h
- * and opValid.h, updated .cpp files to allow build.
- *
- * Revision 1.29  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- * Revision 1.28  2006/03/06 19:40:47  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- **********************************************************************/
 
