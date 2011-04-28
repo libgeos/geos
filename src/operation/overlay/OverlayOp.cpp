@@ -45,7 +45,6 @@
 #include <geos/geomgraph/Position.h>
 #include <geos/geomgraph/index/SegmentIntersector.h>
 #include <geos/util/TopologyException.h>
-#include <geos/precision/SimpleGeometryPrecisionReducer.h>
 #include <geos/geomgraph/EdgeNodingValidator.h>
 
 #include <cassert>
