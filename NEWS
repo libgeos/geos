@@ -31,7 +31,7 @@ Changes in 3.3.0
     ownership of vector elements
   - Empty LinearRings are closed by definition
   - Fixed Geometry.distance() and DistanceOp to return 0.0 for empty inputs
-- Bug fixes:
+- Bug fixes / improvements
   - Invalid compound geometries reported as valid (#333)
   - Return up to 15 digits of precision from GEOSisValidReason_t (#329)
   - CAPI: do not leak contexts when using the non-reentrant interface
@@ -42,6 +42,8 @@ Changes in 3.3.0
     (via safeOctant)
   - Fixed buffer OffsetCurveSetBuilder to handle "flat" rings correctly
   - Added illegal state check in LineSegment::pointAlongOffset() 
+  - Improved performance of RectangleIntersects by always using
+    segment-scanning and refining SegmentIntersectionTester
 
 Changes in 3.2.0 
 2009-12-14

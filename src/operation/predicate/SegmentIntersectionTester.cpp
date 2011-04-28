@@ -1,9 +1,9 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/predicate/SegmentIntersectionTester.java rev. 1.3 (JTS-1.10)
+ * Last port: operation/predicate/SegmentIntersectionTester.java r378 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -30,13 +30,14 @@ namespace predicate {
 
 bool
 SegmentIntersectionTester::hasIntersectionWithLineStrings(
-	const CoordinateSequence &seq,
+	const LineString &line,
 	const LineString::ConstVect& lines)
 {
+  hasIntersectionVar = false;
 	for (size_t i=0, n=lines.size(); i<n; ++i )
 	{
-		const LineString *line = lines[i];
-		hasIntersection(seq, *(line->getCoordinatesRO()));
+		const LineString *testLine = lines[i];
+		hasIntersection(line, *testLine);
 		if (hasIntersectionVar) break;
 	}
 	return hasIntersectionVar;
@@ -44,29 +45,67 @@ SegmentIntersectionTester::hasIntersectionWithLineStrings(
 
 bool
 SegmentIntersectionTester::hasIntersection(
-	const CoordinateSequence &seq0, const CoordinateSequence &seq1)
+	const LineString &line, const LineString &testLine)
 {
+  typedef std::size_t size_type;
 
-    for (std::size_t i = 1, ni = seq0.getSize(); i < ni; ++i)
+	const CoordinateSequence &seq0 = *(line.getCoordinatesRO());
+  size_type seq0size = seq0.getSize();
+
+  const CoordinateSequence &seq1 = *(testLine.getCoordinatesRO());
+  size_type seq1size = seq1.getSize();
+
+  for (size_type i = 1; i<seq0size && !hasIntersectionVar; ++i)
 	{
-		const Coordinate& pt00 = seq0.getAt(i - 1);
-		const Coordinate& pt01 = seq0.getAt(i);
-		
-        for (std::size_t j = 1, nj = seq1.getSize(); j < nj; ++j)
-		{
-			const Coordinate& pt10 = seq1.getAt(j-1);
-			const Coordinate& pt11 = seq1.getAt(j); 
+    seq0.getAt(i - 1, pt00);
+    seq0.getAt(i, pt01);
 
-			li.algorithm::LineIntersector::computeIntersection(pt00, pt01, pt10, pt11);
-			if (li.hasIntersection())
-			{
-				hasIntersectionVar = true;
-				goto out_of_loop;
-			}
+    for (size_type j = 1; j < seq1size && !hasIntersectionVar; ++j)
+		{
+      seq1.getAt(j-1, pt10);
+      seq1.getAt(j, pt11); 
+		
+			li.computeIntersection(pt00, pt01, pt10, pt11);
+			if (li.hasIntersection()) hasIntersectionVar = true;
 		}
 	}
 
-	out_of_loop:
+	return hasIntersectionVar;
+}
+
+bool
+SegmentIntersectionTester::hasIntersectionWithEnvelopeFilter(
+	const LineString &line, const LineString &testLine)
+{
+  typedef std::size_t size_type;
+
+	const CoordinateSequence &seq0 = *(line.getCoordinatesRO());
+  size_type seq0size = seq0.getSize();
+
+  const CoordinateSequence &seq1 = *(testLine.getCoordinatesRO());
+  size_type seq1size = seq1.getSize();
+
+  const Envelope* lineEnv = line.getEnvelopeInternal();
+
+  typedef std::size_t size_type;
+
+  for (size_type i = 1; i<seq1size && !hasIntersectionVar; ++i)
+	{
+    seq1.getAt(i-1, pt10);
+    seq1.getAt(i, pt11); 
+
+    // skip test if segment does not intersect query envelope
+    if (! lineEnv->intersects(Envelope(pt10, pt11))) continue;
+
+    for (size_type j = 1; j < seq0size && !hasIntersectionVar; ++j)
+		{
+      seq0.getAt(j - 1, pt00);
+      seq0.getAt(j, pt01);
+		
+			li.computeIntersection(pt00, pt01, pt10, pt11);
+			if (li.hasIntersection()) hasIntersectionVar = true;
+		}
+	}
 
 	return hasIntersectionVar;
 }

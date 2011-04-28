@@ -22,6 +22,7 @@ tests/bigtest/TestSweepLineSpeed
 tests/bigtest/bug234
 tests/geostest/geostest
 tests/perf/operation/buffer/IteratedBufferStressTest
+tests/perf/operation/predicate/RectangleIntersectsPerfTest
 include/geos/platform.h
 include/geos/stamp-h2
 include/geos/version.h

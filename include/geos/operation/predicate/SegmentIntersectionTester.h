@@ -1,9 +1,9 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/predicate/SegmentIntersectionTester.java rev. 1.3 (JTS-1.10)
+ * Last port: operation/predicate/SegmentIntersectionTester.java r378 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -23,6 +23,7 @@
 #include <geos/export.h>
 
 #include <geos/algorithm/LineIntersector.h> // for composition
+#include <geos/geom/Coordinate.h> // for composition
 
 // Forward declarations
 namespace geos {
@@ -38,9 +39,10 @@ namespace predicate { // geos::operation::predicate
 
 /** \brief
  * Tests if any line segments in two sets of CoordinateSequences intersect.
- * Optimized for use when at least one input is of small size.
  *
- * Short-circuited to return as soon an intersection is found.
+ * The algorithm is optimized for use when the first input has smaller extent
+ * than the set of test lines.
+ * The code is short-circuited to return as soon an intersection is found.
  *
  */
 class GEOS_DLL SegmentIntersectionTester {
@@ -55,15 +57,38 @@ private:
 
 	bool hasIntersectionVar;
 
+  geom::Coordinate pt10;
+  geom::Coordinate pt11;
+  geom::Coordinate pt00;
+  geom::Coordinate pt01;
+
+
 public:
 
 	SegmentIntersectionTester(): hasIntersectionVar(false) {}
 
-	bool hasIntersectionWithLineStrings(const geom::CoordinateSequence &seq,
+	bool hasIntersectionWithLineStrings(const geom::LineString &line,
 		const std::vector<const geom::LineString *>& lines);
 
-	bool hasIntersection(const geom::CoordinateSequence &seq0,
-		const geom::CoordinateSequence &seq1);
+	bool hasIntersection(const geom::LineString &line,
+		const geom::LineString &testLine);
+
+	/**
+	 * Tests the segments of a LineString against the segs in
+	 * another LineString for intersection.
+	 * Uses the envelope of the query LineString
+	 * to filter before testing segments directly.
+	 * This is optimized for the case when the query
+	 * LineString is a rectangle.
+	 *
+	 * Testing shows this is somewhat faster than not checking the envelope.
+	 *
+	 * @param line
+	 * @param testLine
+	 * @return
+	 */
+	bool hasIntersectionWithEnvelopeFilter(const geom::LineString &line,
+		const geom::LineString &testLine);
 
 
 };

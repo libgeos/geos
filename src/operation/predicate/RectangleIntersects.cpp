@@ -1,9 +1,9 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/predicate/RectangleIntersects.java rev 1.4 (JTS-1.10)
+ * Last port: operation/predicate/RectangleIntersects.java r378 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -38,9 +38,6 @@
 namespace geos {
 namespace operation { // geos.operation
 namespace predicate { // geos.operation.predicate
-
-const size_t RectangleIntersects::MAXIMUM_SCAN_SEGMENT_COUNT = 200;
-
 
 //----------------------------------------------------------------
 // EnvelopeIntersectsVisitor
@@ -70,10 +67,8 @@ protected:
 	{
 		const geom::Envelope &elementEnv = *(element.getEnvelopeInternal());
 
-		// disjoint
-		if ( ! rectEnv.intersects(elementEnv) ) {
-			return;
-		}
+		// skip if envelopes do not intersect
+		if ( ! rectEnv.intersects(elementEnv) ) return;
 
 		// fully contained - must intersect
 		if ( rectEnv.contains(elementEnv) ) {
@@ -148,6 +143,7 @@ protected:
 
 		const geom::Polygon *poly;
 
+		// if test geometry is not polygonal this check is not needed
 		if ( 0 == (poly=dynamic_cast<const geom::Polygon *>(&geom)) ) {
 			return;
 		}
@@ -201,10 +197,11 @@ class LineIntersectsVisitor: public geom::util::ShortCircuitedGeometryVisitor
 {
 private:
 
-	const geom::Polygon& rectangle;
+	//const geom::Polygon& rectangle;
 	const geom::Envelope& rectEnv;
+	const geom::LineString& rectLine;
 	bool intersectsVar;
-	const geom::CoordinateSequence &rectSeq;
+	//const geom::CoordinateSequence &rectSeq;
 
 	void computeSegmentIntersection(const geom::Geometry &geom)
 	{
@@ -215,7 +212,7 @@ private:
 		geom::LineString::ConstVect lines;
 		LinearComponentExtracter::getLines(geom, lines);
 		SegmentIntersectionTester si;
-		if ( si.hasIntersectionWithLineStrings(rectSeq, lines) )
+		if ( si.hasIntersectionWithLineStrings(rectLine, lines) )
 		{
 			intersectsVar = true;
 			return;
@@ -231,20 +228,10 @@ protected:
 	void visit(const geom::Geometry &geom)
 	{
 		const geom::Envelope &elementEnv = *(geom.getEnvelopeInternal());
-		if (! rectEnv.intersects(elementEnv) ) {
-			return;
-		}
 
-		// check if general relate algorithm should be used,
-		// since it's faster for large inputs
-		if (geom.getNumPoints() > RectangleIntersects::MAXIMUM_SCAN_SEGMENT_COUNT)
-		{
-      std::auto_ptr<geom::IntersectionMatrix> im ( rectangle.relate(geom) );
-			intersectsVar = im->isIntersects();
-			return;
-		}
+		// check for envelope intersection
+		if (! rectEnv.intersects(elementEnv) ) return;
 
-		// if small enough, test for segment intersection directly
 		computeSegmentIntersection(geom);
 	}
 
@@ -254,10 +241,11 @@ public:
 
 	LineIntersectsVisitor(const geom::Polygon &rect)
 		:
-		rectangle(rect),
+		//rectangle(rect),
 		rectEnv(*(rect.getEnvelopeInternal())),
-		intersectsVar(false),
-		rectSeq(*(rect.getExteriorRing()->getCoordinatesRO()))
+		rectLine(*(rect.getExteriorRing())),
+		intersectsVar(false)
+		//rectSeq(*(rect.getExteriorRing()->getCoordinatesRO()))
 		{}
 
 	/**
@@ -266,7 +254,7 @@ public:
 	 * @return <code>true</code> if a segment intersection exists
 	 * <code>false</code> if no segment intersection exists
 	 */
-	bool intersects() { return intersectsVar; }
+	bool intersects() const { return intersectsVar; }
 
 };
 
