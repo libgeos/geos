@@ -93,9 +93,7 @@ private:
   {
     typedef vector<const Geometry*>::size_type size_type;
 
-    stringstream ss; ss << g.getNumPoints() << " pts";
-
-    geos::util::Profile sw(ss.str());
+    geos::util::Profile sw("");
 		sw.start();
 
     for (int i = 0; i < MAX_ITER; i++) {
@@ -105,7 +103,7 @@ private:
     }
 
 		sw.stop();
-		cout << sw << endl; 
+		cout << g.getNumPoints() << " points: " << sw.getTot() << " usecs" << endl; 
 
   }
 
