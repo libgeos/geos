@@ -305,9 +305,8 @@ Geometry::disjoint(const Geometry *g) const
 	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
 		return true;
 #endif
-	IntersectionMatrix *im=relate(g);
+	auto_ptr<IntersectionMatrix> im ( relate(g) );
 	bool res=im->isDisjoint();
-	delete im;
 	return res;
 }
 
@@ -319,9 +318,8 @@ Geometry::touches(const Geometry *g) const
 	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
 		return false;
 #endif
-	IntersectionMatrix *im=relate(g);
+	auto_ptr<IntersectionMatrix> im ( relate(g) );
 	bool res=im->isTouches(getDimension(), g->getDimension());
-	delete im;
 	return res;
 }
 
@@ -360,9 +358,8 @@ Geometry::intersects(const Geometry *g) const
 		return predicate::RectangleIntersects::intersects(*p, *this);
 	}
 
-	IntersectionMatrix *im=relate(g);
+	auto_ptr<IntersectionMatrix> im ( relate(g) );
 	bool res=im->isIntersects();
-	delete im;
 	return res;
 }
 
@@ -396,9 +393,8 @@ Geometry::crosses(const Geometry *g) const
 	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
 		return false;
 #endif
-	IntersectionMatrix *im=relate(g);
+	auto_ptr<IntersectionMatrix> im ( relate(g) );
 	bool res=im->isCrosses(getDimension(), g->getDimension());
-	delete im;
 	return res;
 }
 
@@ -427,9 +423,8 @@ Geometry::contains(const Geometry *g) const
 	//	return predicate::RectangleContains::contains((const Polygon&)*g, *this);
 	//}
 
-	IntersectionMatrix *im=relate(g);
+	auto_ptr<IntersectionMatrix> im ( relate(g) );
 	bool res=im->isContains();
-	delete im;
 	return res;
 }
 
@@ -441,18 +436,16 @@ Geometry::overlaps(const Geometry *g) const
 	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
 		return false;
 #endif
-	IntersectionMatrix *im=relate(g);
+	auto_ptr<IntersectionMatrix> im ( relate(g) );
 	bool res=im->isOverlaps(getDimension(), g->getDimension());
-	delete im;
 	return res;
 }
 
 bool
 Geometry::relate(const Geometry *g, const string &intersectionPattern) const
 {
-	IntersectionMatrix *im=relate(g);
+	auto_ptr<IntersectionMatrix> im ( relate(g) );
 	bool res=im->matches(intersectionPattern);
-	delete im;
 	return res;
 }
 
@@ -464,9 +457,8 @@ Geometry::equals(const Geometry *g) const
 	if (! getEnvelopeInternal()->equals(g->getEnvelopeInternal()))
 		return false;
 #endif
-	IntersectionMatrix *im=relate(g);
+	auto_ptr<IntersectionMatrix> im ( relate(g) );
 	bool res=im->isEquals(getDimension(), g->getDimension());
-	delete im;
 	return res;
 }
 
