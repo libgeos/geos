@@ -112,8 +112,10 @@ BufferOp::computeGeometry()
 
 	if (resultGeometry!=NULL) return;
 
+#if GEOS_DEBUG
 	std::cerr << "bufferOriginalPrecision failed (" << saveException.what() << "), trying with reduced precision"
 	          << std::endl;
+#endif
 
 	const PrecisionModel& argPM = *(argGeom->getFactory()->getPrecisionModel());
 	if ( argPM.getType() == PrecisionModel::FIXED )
@@ -177,9 +179,11 @@ BufferOp::bufferReducedPrecision(int precisionDigits)
 {
 	double sizeBasedScaleFactor=precisionScaleFactor(argGeom, distance, precisionDigits);
 
+#if GEOS_DEBUG
 	std::cerr << "recomputing with precision scale factor = "
 		<< sizeBasedScaleFactor
 		<< std::endl;
+#endif
 
 	assert(sizeBasedScaleFactor>0);
 	PrecisionModel fixedPM(sizeBasedScaleFactor);

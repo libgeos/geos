@@ -78,7 +78,7 @@ public:
 	const ScaledNoder& sn;
 	Scaler(const ScaledNoder&n): sn(n)
 	{
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
 		std::cerr << "Scaler: offsetX,Y: " << sn.offsetX << ","
 			<< sn.offsetY << " scaleFactor: " << sn.scaleFactor
 			<< std::endl;
@@ -103,7 +103,7 @@ public:
 	const ScaledNoder& sn;
 	ReScaler(const ScaledNoder&n): sn(n)
 	{
-#ifdef GEOS_DEBUG
+#if GEOS_DEBUG
 		std::cerr << "ReScaler: offsetX,Y: " << sn.offsetX << ","
 			<< sn.offsetY << " scaleFactor: " << sn.scaleFactor
 			<< std::endl;
