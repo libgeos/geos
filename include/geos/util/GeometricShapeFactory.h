@@ -80,14 +80,14 @@ protected:
 		void setHeight(double nHeight);
 
 		// Return newly-allocated object, ownership transferred
-		geom::Envelope* getEnvelope();
+		geom::Envelope* getEnvelope() const;
 	};
 	const geom::GeometryFactory* geomFact; // externally owned
 	const geom::PrecisionModel* precModel; // externally owned
 	Dimensions dim;
 	int nPts;
 
-	geom::Coordinate createCoord(double x, double y) const;
+	geom::Coordinate coord(double x, double y) const;
 
 public:
 
@@ -103,7 +103,7 @@ public:
 	 */
 	GeometricShapeFactory(const geom::GeometryFactory *factory);
 
-	~GeometricShapeFactory();
+	virtual ~GeometricShapeFactory() {}
 
 	/**
 	 * \brief Creates an elliptical arc, as a LineString.

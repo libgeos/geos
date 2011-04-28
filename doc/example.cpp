@@ -44,6 +44,7 @@
 #include <geos/io/WKBWriter.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/util/GeometricShapeFactory.h>
+#include <geos/geom/util/SineStarFactory.h>
 #include <geos/util/GEOSException.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/opLinemerge.h>
@@ -71,6 +72,8 @@ using namespace geos;
 using namespace geos::geom;
 using namespace geos::operation::polygonize;
 using namespace geos::operation::linemerge;
+using geos::util::GEOSException;
+using geos::util::IllegalArgumentException;
 
 
 // Prototypes
@@ -333,7 +336,7 @@ create_simple_collection(vector<Geometry *> *geoms)
 Polygon *
 create_circle(double centerX, double centerY, double radius)
 {
-	util::GeometricShapeFactory shapefactory(global_factory);
+	geos::util::GeometricShapeFactory shapefactory(global_factory);
 	shapefactory.setCentre(Coordinate(centerX, centerY));
 	shapefactory.setSize(radius);
 	// same as:
@@ -349,7 +352,7 @@ create_circle(double centerX, double centerY, double radius)
 Polygon *
 create_ellipse(double centerX, double centerY, double width, double height)
 {
-	util::GeometricShapeFactory shapefactory(global_factory);
+	geos::util::GeometricShapeFactory shapefactory(global_factory);
 	shapefactory.setCentre(Coordinate(centerX, centerY));
 	shapefactory.setHeight(height);
 	shapefactory.setWidth(width);
@@ -364,7 +367,7 @@ create_ellipse(double centerX, double centerY, double width, double height)
 Polygon *
 create_rectangle(double llX, double llY, double width, double height)
 {
-	util::GeometricShapeFactory shapefactory(global_factory);
+	geos::util::GeometricShapeFactory shapefactory(global_factory);
 	shapefactory.setBase(Coordinate(llX, llY));
 	shapefactory.setHeight(height);
 	shapefactory.setWidth(width);
@@ -381,13 +384,25 @@ create_rectangle(double llX, double llY, double width, double height)
 LineString *
 create_arc(double llX, double llY, double width, double height, double startang, double endang)
 {
-	util::GeometricShapeFactory shapefactory(global_factory);
+	geos::util::GeometricShapeFactory shapefactory(global_factory);
 	shapefactory.setBase(Coordinate(llX, llY));
 	shapefactory.setHeight(height);
 	shapefactory.setWidth(width);
 	// shapefactory.setNumPoints(100); // the default (100 pts)
 	// can use setSize for a square
 	return shapefactory.createArc(startang, endang);
+}
+
+auto_ptr<Polygon>
+create_sinestar(double cx, double cy, double size, int nArms, double armLenRat)
+{
+	geos::geom::util::SineStarFactory fact(global_factory);
+	fact.setCentre(Coordinate(cx, cy));
+	fact.setSize(size);
+	fact.setNumPoints(nArms*5);
+  fact.setArmLengthRatio(armLenRat);
+	fact.setNumArms(nArms);
+	return fact.createSineStar();
 }
 
 // Start reading here
@@ -429,6 +444,7 @@ void do_all()
 	geoms->push_back(create_rectangle(-5, -5, 10, 20)); // a rectangle
 	// The upper-right quarter of a vertical ellipse
 	geoms->push_back(create_arc(0, 0, 10, 20, 0, M_PI/2));
+	geoms->push_back(create_sinestar(10, 10, 100, 5, 2).release()); // a sine star
 #endif
 
 	// Print all geoms.
@@ -474,7 +490,7 @@ void do_all()
 			Geometry *g2 = g->buffer(10);
 			newgeoms->push_back(g2);
 		}
-		catch (const util::GEOSException& exc) {
+		catch (const GEOSException& exc) {
 			cerr <<"GEOS Exception: geometry "<<i<<"->buffer(10): "<<exc.what()<<"\n";
 		}
 	}
@@ -540,7 +556,7 @@ cout<<"-------------------------------------------------------------------------
 				else cout<<" 0\t";
 			}
 			// Geometry Collection is not a valid argument
-			catch (const util::IllegalArgumentException& exc) {
+			catch (const IllegalArgumentException& exc) {
 				cout<<" X\t";
 			}
 			catch (const std::exception& exc) {
@@ -570,7 +586,7 @@ cout<<"-------------------------------------------------------------------------
 				else cout<<" 0\t";
 			}
 			// Geometry Collection is not a valid argument
-			catch (const util::IllegalArgumentException& exc) {
+			catch (const IllegalArgumentException& exc) {
 				cout<<" X\t";
 			}
 			catch (const std::exception& exc) {
@@ -600,7 +616,7 @@ cout<<"-------------------------------------------------------------------------
 				else cout<<" 0\t";
 			}
 			// Geometry Collection is not a valid argument
-			catch (const util::IllegalArgumentException& exc) {
+			catch (const IllegalArgumentException& exc) {
 				cout<<" X\t";
 			}
 			catch (const std::exception& exc) {
@@ -630,7 +646,7 @@ cout<<"-------------------------------------------------------------------------
 				else cout<<" 0\t";
 			}
 			// Geometry Collection is not a valid argument
-			catch (const util::IllegalArgumentException& exc) {
+			catch (const IllegalArgumentException& exc) {
 				cout<<" X\t";
 			}
 			catch (const std::exception& exc) {
@@ -660,7 +676,7 @@ cout<<"-------------------------------------------------------------------------
 				else cout<<" 0\t";
 			}
 			// Geometry Collection is not a valid argument
-			catch (const util::IllegalArgumentException& exc) {
+			catch (const IllegalArgumentException& exc) {
 				cout<<" X\t";
 			}
 			catch (const std::exception& exc) {
@@ -690,7 +706,7 @@ cout<<"-------------------------------------------------------------------------
 				else cout<<" 0\t";
 			}
 			// Geometry Collection is not a valid argument
-			catch (const util::IllegalArgumentException& exc) {
+			catch (const IllegalArgumentException& exc) {
 				cout<<" X\t";
 			}
 			catch (const std::exception& exc) {
@@ -720,7 +736,7 @@ cout<<"-------------------------------------------------------------------------
 				else cout<<" 0\t";
 			}
 			// Geometry Collection is not a valid argument
-			catch (const util::IllegalArgumentException& exc) {
+			catch (const IllegalArgumentException& exc) {
 				cout<<" X\t";
 			}
 			catch (const std::exception& exc) {
@@ -757,7 +773,7 @@ cout<<"-------------------------------------------------------------------------
 				delete im; // delete afterwards
 			}
 			// Geometry Collection is not a valid argument
-			catch (const util::IllegalArgumentException& exc) {
+			catch (const IllegalArgumentException& exc) {
 				cout<<" X\t";
 			}
 			catch (const std::exception& exc) {
@@ -787,7 +803,7 @@ cout<<"-------------------------------------------------------------------------
 				else cout<<" 0\t";
 			}
 			// Geometry Collection is not a valid argument
-			catch (const util::IllegalArgumentException& exc) {
+			catch (const IllegalArgumentException& exc) {
 				cout<<" X\t";
 			}
 			catch (const std::exception& exc) {
@@ -818,7 +834,7 @@ cout<<"-------------------------------------------------------------------------
 				else cout<<" 0\t";
 			}
 			// Geometry Collection is not a valid argument
-			catch (const util::IllegalArgumentException& exc) {
+			catch (const IllegalArgumentException& exc) {
 				cout<<" X\t";
 			}
 			catch (const std::exception& exc) {
@@ -849,7 +865,7 @@ cout<<"-------------------------------------------------------------------------
 				else cout<<" 0\t";
 			}
 			// Geometry Collection is not a valid argument
-			catch (const util::IllegalArgumentException& exc) {
+			catch (const IllegalArgumentException& exc) {
 				cout<<" X\t";
 			}
 			catch (const std::exception& exc) {
@@ -887,7 +903,7 @@ cout<<"-------------------------------------------------------------------------
 				newgeoms->push_back(g3);
 			}
 			// It's illegal to union a collection ...
-			catch (const util::IllegalArgumentException& ill) {
+			catch (const IllegalArgumentException& ill) {
 				//cerr <<ill.toString()<<"\n";
 			}
 			catch (const std::exception& exc) {
@@ -922,7 +938,7 @@ cout<<"-------------------------------------------------------------------------
 				newgeoms->push_back(g3);
 			}
 			// Collection are illegal as intersection argument
-			catch (const util::IllegalArgumentException& ill) {
+			catch (const IllegalArgumentException& ill) {
 				//cerr <<ill.toString()<<"\n";
 			}
 			catch (const std::exception& exc) {
@@ -955,7 +971,7 @@ cout<<"-------------------------------------------------------------------------
 				newgeoms->push_back(g3);
 			}
 			// Collection are illegal as difference argument
-			catch (const util::IllegalArgumentException& ill) {
+			catch (const IllegalArgumentException& ill) {
 				//cerr <<ill.toString()<<"\n";
 			}
 			catch (const std::exception& exc) {
@@ -988,7 +1004,7 @@ cout<<"-------------------------------------------------------------------------
 				newgeoms->push_back(g3);
 			}
 			// Collection are illegal as symdifference argument
-			catch (const util::IllegalArgumentException& ill) {
+			catch (const IllegalArgumentException& ill) {
 				//cerr <<ill.toString()<<"\n";
 			}
 			catch (const std::exception& exc) {
@@ -1079,7 +1095,7 @@ main()
 	}
 	// All exception thrown by GEOS are subclasses of this
 	// one, so this is a catch-all 
-	catch (const util::GEOSException& exc)
+	catch (const GEOSException& exc)
 	{
 		cerr <<"GEOS Exception: "<<exc.what()<<"\n";
 		exit(1);

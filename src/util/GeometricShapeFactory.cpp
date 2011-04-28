@@ -47,11 +47,6 @@ GeometricShapeFactory::GeometricShapeFactory(const GeometryFactory* factory)
 {
 }
 
-GeometricShapeFactory::~GeometricShapeFactory()
-{
-	//delete dim;
-}
-
 void
 GeometricShapeFactory::setBase(const Coordinate& base) 
 {
@@ -105,22 +100,22 @@ GeometricShapeFactory::createRectangle()
 	for (i = 0; i < nSide; i++) {
 		double x = env->getMinX() + i * XsegLen;
 		double y = env->getMinY();
-		(*vc)[ipt++] = createCoord(x, y); 
+		(*vc)[ipt++] = coord(x, y); 
 	}
 	for (i = 0; i < nSide; i++) {
 		double x = env->getMaxX();
 		double y = env->getMinY() + i * YsegLen;
-		(*vc)[ipt++] = createCoord(x, y); 
+		(*vc)[ipt++] = coord(x, y); 
 	}
 	for (i = 0; i < nSide; i++) {
 		double x = env->getMaxX() - i * XsegLen;
 		double y = env->getMaxY();
-		(*vc)[ipt++] = createCoord(x, y); 
+		(*vc)[ipt++] = coord(x, y); 
 	}
 	for (i = 0; i < nSide; i++) {
 		double x = env->getMinX();
 		double y = env->getMaxY() - i * YsegLen;
-		(*vc)[ipt++] = createCoord(x, y); 
+		(*vc)[ipt++] = coord(x, y); 
 	}
 	(*vc)[ipt++] = (*vc)[0];
 	CoordinateSequence *cs = geomFact->getCoordinateSequenceFactory()->create(vc);
@@ -146,7 +141,7 @@ GeometricShapeFactory::createCircle()
 		double ang = i * (2 * 3.14159265358979 / nPts);
 		double x = xRadius * cos(ang) + centreX;
 		double y = yRadius * sin(ang) + centreY;
-		(*pts)[iPt++] = createCoord(x, y);
+		(*pts)[iPt++] = coord(x, y);
 	}
 	(*pts)[iPt++] = (*pts)[0];
 	CoordinateSequence *cs=geomFact->getCoordinateSequenceFactory()->create(pts);
@@ -177,7 +172,7 @@ GeometricShapeFactory::createArc(double startAng, double angExtent)
 		double ang = startAng + i * angInc;
 		double x = xRadius * cos(ang) + centreX;
 		double y = yRadius * sin(ang) + centreY;
-		(*pts)[iPt++] = createCoord(x, y);
+		(*pts)[iPt++] = coord(x, y);
 	}
 	CoordinateSequence *cs = geomFact->getCoordinateSequenceFactory()->create(pts);
 	LineString* line = geomFact->createLineString(cs);
@@ -202,14 +197,14 @@ GeometricShapeFactory::createArcPolygon(double startAng, double angExtent)
 
 	vector<Coordinate> *pts = new vector<Coordinate>(nPts + 2);
 	int iPt = 0;
-	(*pts)[iPt++] = createCoord(centreX, centreY);
+	(*pts)[iPt++] = coord(centreX, centreY);
 	for (int i = 0; i < nPts; i++) {
 		double ang = startAng + i * angInc;
 		double x = xRadius * cos(ang) + centreX;
 		double y = yRadius * sin(ang) + centreY;
-		(*pts)[iPt++] = createCoord(x, y);
+		(*pts)[iPt++] = coord(x, y);
 	}
-	(*pts)[iPt++] = createCoord(centreX, centreY);
+	(*pts)[iPt++] = coord(centreX, centreY);
 
 	CoordinateSequence *cs = geomFact->getCoordinateSequenceFactory()->create(pts);
 	LinearRing* ring = geomFact->createLinearRing(cs);
@@ -255,7 +250,7 @@ void GeometricShapeFactory::Dimensions::setHeight(double nHeight)
 }
 
 Envelope*
-GeometricShapeFactory::Dimensions::getEnvelope()
+GeometricShapeFactory::Dimensions::getEnvelope() const
 {
 	if (!base.isNull()) {
 		return new Envelope(base.x, base.x + width, base.y, base.y + height);
@@ -268,7 +263,7 @@ GeometricShapeFactory::Dimensions::getEnvelope()
 
 /*protected*/
 Coordinate
-GeometricShapeFactory::createCoord(double x, double y) const
+GeometricShapeFactory::coord(double x, double y) const
 {
 	Coordinate ret(x, y);
 	precModel->makePrecise(&ret);
@@ -277,14 +272,4 @@ GeometricShapeFactory::createCoord(double x, double y) const
 
 } // namespace geos.util
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.15  2006/03/22 16:58:35  strk
- * Removed (almost) all inclusions of geom.h.
- * Removed obsoleted .cpp files.
- * Fixed a bug in WKTReader not using the provided CoordinateSequence
- * implementation, optimized out some memory allocations.
- *
- **********************************************************************/
 

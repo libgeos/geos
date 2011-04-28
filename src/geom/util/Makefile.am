@@ -12,4 +12,5 @@ libgeomutil_la_SOURCES = \
     GeometryEditor.cpp \
     GeometryTransformer.cpp \
     ShortCircuitedGeometryVisitor.cpp \
+    SineStarFactory.cpp \
     GeometryCombiner.cpp

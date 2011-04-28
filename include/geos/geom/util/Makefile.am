@@ -19,4 +19,5 @@ geos_HEADERS = \
     LinearComponentExtracter.h \
     PointExtracter.h \
     PolygonExtracter.h \
-    ShortCircuitedGeometryVisitor.h
+    ShortCircuitedGeometryVisitor.h \
+    SineStarFactory.h
