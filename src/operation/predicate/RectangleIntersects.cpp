@@ -31,6 +31,8 @@
 
 #include <geos/algorithm/locate/SimplePointInAreaLocator.h>
 
+#include <memory>
+
 //using namespace geos::geom::util;
 
 namespace geos {
@@ -237,7 +239,8 @@ protected:
 		// since it's faster for large inputs
 		if (geom.getNumPoints() > RectangleIntersects::MAXIMUM_SCAN_SEGMENT_COUNT)
 		{
-			intersectsVar = rectangle.relate(geom)->isIntersects();
+      std::auto_ptr<geom::IntersectionMatrix> im ( rectangle.relate(geom) );
+			intersectsVar = im->isIntersects();
 			return;
 		}
 
