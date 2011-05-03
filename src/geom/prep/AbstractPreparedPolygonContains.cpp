@@ -148,8 +148,8 @@ AbstractPreparedPolygonContains::eval( const geom::Geometry * geom)
 	// the target, which means that the test is not contained.
 	bool properIntersectionImpliesNotContained = isProperIntersectionImpliesNotContainedSituation( geom);
 
-	// find all intersection types which exist
-  findAndClassifyIntersections( geom);
+    // find all intersection types which exist
+    findAndClassifyIntersections( geom);
 
 	if ( properIntersectionImpliesNotContained && hasProperIntersection )
 		return false;

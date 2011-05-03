@@ -97,7 +97,7 @@ contains( const geom::Geometry * g) const
         return operation::predicate::RectangleContains::contains(poly, *g);
     }
 
-	  return PreparedPolygonContains::contains(this, g);
+	return PreparedPolygonContains::contains(this, g);
 }
 
 bool 
