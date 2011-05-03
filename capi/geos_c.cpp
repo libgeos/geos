@@ -1012,15 +1012,51 @@ GEOSPreparedContainsProperly(const geos::geom::prep::PreparedGeometry *pg1, cons
 }
 
 char
+GEOSPreparedCoveredBy(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
+{
+    return GEOSPreparedCoveredBy_r( handle, pg1, g2 );
+}
+
+char
 GEOSPreparedCovers(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
 {
     return GEOSPreparedCovers_r( handle, pg1, g2 );
 }
 
 char
+GEOSPreparedCrosses(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
+{
+    return GEOSPreparedCrosses_r( handle, pg1, g2 );
+}
+
+char
+GEOSPreparedDisjoint(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
+{
+    return GEOSPreparedDisjoint_r( handle, pg1, g2 );
+}
+
+char
 GEOSPreparedIntersects(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
 {
     return GEOSPreparedIntersects_r( handle, pg1, g2 );
+}
+
+char
+GEOSPreparedOverlaps(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
+{
+    return GEOSPreparedOverlaps_r( handle, pg1, g2 );
+}
+
+char
+GEOSPreparedTouches(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
+{
+    return GEOSPreparedTouches_r( handle, pg1, g2 );
+}
+
+char
+GEOSPreparedWithin(const geos::geom::prep::PreparedGeometry *pg1, const Geometry *g2)
+{
+    return GEOSPreparedWithin_r( handle, pg1, g2 );
 }
 
 STRtree *

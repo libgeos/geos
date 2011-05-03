@@ -93,11 +93,11 @@ contains( const geom::Geometry * g) const
     {
         geom::Geometry const& geom = getGeometry();
         geom::Polygon const& poly = dynamic_cast<geom::Polygon const&>(geom);
-        
+       
         return operation::predicate::RectangleContains::contains(poly, *g);
     }
 
-	return PreparedPolygonContains::contains( this, g);
+	  return PreparedPolygonContains::contains(this, g);
 }
 
 bool 

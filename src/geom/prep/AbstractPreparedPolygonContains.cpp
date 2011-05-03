@@ -92,12 +92,12 @@ AbstractPreparedPolygonContains::findAndClassifyIntersections(const geom::Geomet
 	intDetector = new noding::SegmentIntersectionDetector(li);
 
 	intDetector->setFindAllIntersectionTypes( true);
-
 	prepPoly->getIntersectionFinder()->intersects(&lineSegStr, intDetector);
-		
+  /*
 	hasSegmentIntersection = intDetector->hasIntersection();
 	hasProperIntersection = intDetector->hasProperIntersection();
 	hasNonProperIntersection = intDetector->hasNonProperIntersection();
+  */
 
 	delete intDetector;
 	delete li;
@@ -149,7 +149,7 @@ AbstractPreparedPolygonContains::eval( const geom::Geometry * geom)
 	bool properIntersectionImpliesNotContained = isProperIntersectionImpliesNotContainedSituation( geom);
 
 	// find all intersection types which exist
-	findAndClassifyIntersections( geom);
+  findAndClassifyIntersections( geom);
 
 	if ( properIntersectionImpliesNotContained && hasProperIntersection )
 		return false;

@@ -772,8 +772,14 @@ extern void GEOS_DLL GEOSPreparedGeom_destroy(const GEOSPreparedGeometry* g);
 
 extern char GEOS_DLL GEOSPreparedContains(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSPreparedContainsProperly(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
+extern char GEOS_DLL GEOSPreparedCoveredBy(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSPreparedCovers(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
+extern char GEOS_DLL GEOSPreparedCrosses(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
+extern char GEOS_DLL GEOSPreparedDisjoint(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSPreparedIntersects(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
+extern char GEOS_DLL GEOSPreparedOverlaps(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
+extern char GEOS_DLL GEOSPreparedTouches(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
+extern char GEOS_DLL GEOSPreparedWithin(const GEOSPreparedGeometry* pg1, const GEOSGeometry* g2);
 
 /* 
  * GEOSGeometry ownership is retained by caller
@@ -791,12 +797,30 @@ extern char GEOS_DLL GEOSPreparedContains_r(GEOSContextHandle_t handle,
 extern char GEOS_DLL GEOSPreparedContainsProperly_r(GEOSContextHandle_t handle,
                                          const GEOSPreparedGeometry* pg1,
                                          const GEOSGeometry* g2);
+extern char GEOS_DLL GEOSPreparedCoveredBy_r(GEOSContextHandle_t handle,
+                                          const GEOSPreparedGeometry* pg1,
+                                          const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSPreparedCovers_r(GEOSContextHandle_t handle,
+                                          const GEOSPreparedGeometry* pg1,
+                                          const GEOSGeometry* g2);
+extern char GEOS_DLL GEOSPreparedCrosses_r(GEOSContextHandle_t handle,
+                                          const GEOSPreparedGeometry* pg1,
+                                          const GEOSGeometry* g2);
+extern char GEOS_DLL GEOSPreparedDisjoint_r(GEOSContextHandle_t handle,
                                           const GEOSPreparedGeometry* pg1,
                                           const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSPreparedIntersects_r(GEOSContextHandle_t handle,
                                               const GEOSPreparedGeometry* pg1,
                                               const GEOSGeometry* g2);
+extern char GEOS_DLL GEOSPreparedOverlaps_r(GEOSContextHandle_t handle,
+                                          const GEOSPreparedGeometry* pg1,
+                                          const GEOSGeometry* g2);
+extern char GEOS_DLL GEOSPreparedTouches_r(GEOSContextHandle_t handle,
+                                          const GEOSPreparedGeometry* pg1,
+                                          const GEOSGeometry* g2);
+extern char GEOS_DLL GEOSPreparedWithin_r(GEOSContextHandle_t handle,
+                                          const GEOSPreparedGeometry* pg1,
+                                          const GEOSGeometry* g2);
 
 /************************************************************************
  *
