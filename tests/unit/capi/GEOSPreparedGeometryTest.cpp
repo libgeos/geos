@@ -139,6 +139,38 @@ namespace tut
 
     }
 
+    // Test PreparedCovers
+    template<>
+    template<>
+    void object::test<5>()
+    {
+    geom1_ = GEOSGeomFromWKT("POLYGON((0 0, 0 10, 10 11, 10 0, 0 0))");
+    geom2_ = GEOSGeomFromWKT("POLYGON((0 0, 2 0, 2 2, 0 2, 0 0))");
+    prepGeom1_ = GEOSPrepare(geom1_);
+
+    ensure(0 != prepGeom1_);
+
+    int ret = GEOSPreparedCovers(prepGeom1_, geom2_);
+    ensure_equals(ret, 1);
+
+    }
+
+    // Test PreparedContains
+    template<>
+    template<>
+    void object::test<6>()
+    {
+    geom1_ = GEOSGeomFromWKT("POLYGON((0 0, 0 10, 10 11, 10 0, 0 0))");
+    geom2_ = GEOSGeomFromWKT("POLYGON((0 0, 2 0, 2 2, 0 2, 0 0))");
+    prepGeom1_ = GEOSPrepare(geom1_);
+
+    ensure(0 != prepGeom1_);
+
+    int ret = GEOSPreparedContains(prepGeom1_, geom2_);
+    ensure_equals(ret, 1);
+
+    }
+
     // TODO: add lots of more tests
     
 } // namespace tut

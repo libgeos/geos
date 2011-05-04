@@ -93,11 +93,10 @@ AbstractPreparedPolygonContains::findAndClassifyIntersections(const geom::Geomet
 
 	intDetector->setFindAllIntersectionTypes( true);
 	prepPoly->getIntersectionFinder()->intersects(&lineSegStr, intDetector);
-  /*
+
 	hasSegmentIntersection = intDetector->hasIntersection();
 	hasProperIntersection = intDetector->hasProperIntersection();
 	hasNonProperIntersection = intDetector->hasNonProperIntersection();
-  */
 
 	delete intDetector;
 	delete li;
