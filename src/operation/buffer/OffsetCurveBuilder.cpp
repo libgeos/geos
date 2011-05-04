@@ -26,7 +26,6 @@
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/algorithm/Angle.h>
 #include <geos/operation/buffer/OffsetCurveBuilder.h>
-#include <geos/operation/buffer/OffsetCurveVertexList.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/geomgraph/Position.h>
