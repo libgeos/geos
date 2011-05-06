@@ -96,6 +96,7 @@ struct GEOS_DLL  EdgeIntersectionLessThen {
 	}
 };
 
+std::ostream& operator<< (std::ostream&, const EdgeIntersection&);
 
 } // namespace geos.geomgraph
 } // namespace geos

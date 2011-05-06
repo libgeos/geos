@@ -107,6 +107,8 @@ public:
 
 };
 
+std::ostream& operator<< (std::ostream&, const EdgeIntersectionList&);
+
 } // namespace geos.geomgraph
 } // namespace geos
 

@@ -26,6 +26,7 @@
 #include <geos/geom/CoordinateArraySequence.h> // shouldn't be using this
 #include <geos/geom/Coordinate.h>
 
+#include <sstream>
 #include <string>
 #include <vector>
 #include <set>
@@ -179,13 +180,21 @@ EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0,
 string
 EdgeIntersectionList::print() const
 {
-	string out="Intersections: ";
-	EdgeIntersectionList::const_iterator it=begin(), endIt=end();
-	for (; it!=endIt; ++it) {
-		EdgeIntersection *ei=*it;
-		out+=ei->print();
-	}
-	return out;
+	std::stringstream ss;
+  ss << *this;
+  return ss.str();
+}
+
+std::ostream&
+operator<< (std::ostream&os, const EdgeIntersectionList& e)
+{
+  os << "Intersections: ";
+  EdgeIntersectionList::const_iterator it=e.begin(), endIt=e.end();
+  for (; it!=endIt; ++it) {
+    EdgeIntersection *ei=*it;
+    os << *ei << endl;
+  }
+  return os;
 }
 
 } // namespace geos.geomgraph

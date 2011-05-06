@@ -65,9 +65,16 @@ string
 EdgeIntersection::print() const
 {
 	ostringstream s;
-	s<<coord.toString()<<" seg#="<<segmentIndex<<" dist="<<dist;
+	s << *this;
 	return s.str();
 
+}
+
+std::ostream&
+operator<< (std::ostream&os, const EdgeIntersection& e)
+{
+	os << e.coord << " seg#=" << e.segmentIndex << " dist=" << e.dist;
+	return os;
 }
 
 int
