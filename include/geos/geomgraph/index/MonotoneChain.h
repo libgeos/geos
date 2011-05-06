@@ -12,6 +12,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: geomgraph/index/MonotoneChain.java rev. 1.3 (JTS-1.7)
+ *
  **********************************************************************/
 
 #ifndef GEOS_GEOMGRAPH_INDEX_MONOTONECHAIN_H
@@ -25,10 +29,8 @@
 // Forward declarations
 namespace geos {
 	namespace geomgraph {
-		class Edge;
 		namespace index {
 			class SegmentIntersector;
-			//class MonotoneChainEdge; 
 		}
 	}
 }
@@ -38,7 +40,7 @@ namespace geomgraph { // geos::geomgraph
 namespace index { // geos::geomgraph::index
 
 /**
- * Last port: geomgraph/index/MonotoneChain.java rev. 1.3 (JTS-1.7)
+ * A chain in a MonotoneChainEdge
  */
 class GEOS_DLL MonotoneChain: public SweepLineEventOBJ {
 private:
