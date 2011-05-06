@@ -349,12 +349,12 @@ GeometryGraph::computeSelfNodes(LineIntersector *li, bool computeRingSelfNodes)
 {
 	SegmentIntersector *si=new SegmentIntersector(li,true,false);
     	auto_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
+
 	// optimized test for Polygons and Rings
-	if (parentGeom==NULL)
-	{
-		esi->computeIntersections(edges,si,true);
-	}
-	else if (!computeRingSelfNodes & (typeid(*parentGeom)==typeid(LinearRing)||typeid(*parentGeom)==typeid(Polygon)||typeid(*parentGeom)==typeid(MultiPolygon)))
+	if (! computeRingSelfNodes
+	    && ( dynamic_cast<const LinearRing*>(parentGeom)
+	    || dynamic_cast<const Polygon*>(parentGeom)
+	    || dynamic_cast<const MultiPolygon*>(parentGeom) ))
 	{
 		esi->computeIntersections(edges, si, false);
 	}
