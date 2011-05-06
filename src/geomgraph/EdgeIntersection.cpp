@@ -73,7 +73,7 @@ EdgeIntersection::print() const
 std::ostream&
 operator<< (std::ostream&os, const EdgeIntersection& e)
 {
-	os << e.coord << " seg#=" << e.segmentIndex << " dist=" << e.dist;
+	os << e.coord << " seg # = " << e.segmentIndex << " dist = " << e.dist;
 	return os;
 }
 

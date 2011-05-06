@@ -188,7 +188,7 @@ EdgeIntersectionList::print() const
 std::ostream&
 operator<< (std::ostream&os, const EdgeIntersectionList& e)
 {
-  os << "Intersections: ";
+  os << "Intersections:" << std::endl;
   EdgeIntersectionList::const_iterator it=e.begin(), endIt=e.end();
   for (; it!=endIt; ++it) {
     EdgeIntersection *ei=*it;

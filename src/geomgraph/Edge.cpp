@@ -296,15 +296,15 @@ Edge::getEnvelope()
 std::ostream&
 operator<< (std::ostream&os, const Edge& e)
 {
-	os << "EDGE";
-	if ( e.name != "" ) os << " name:" << e.name;
+	os << "edge";
+	if ( e.name != "" ) os << " " << e.name;
 
-	os << " label:" << e.label->toString()
-	   << " depthDelta:" << e.depthDelta
-	   << ":" << std::endl
+	os
 	   << "  LINESTRING"
-	   //<< *(e.pts); 
-	   << e.pts->toString();
+	   << *(e.pts)
+	   << "  " << e.label->toString()
+	   << "  " << e.depthDelta
+	   ;
 
 	return os;
 }
