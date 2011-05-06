@@ -15,7 +15,6 @@ libgeomgraph_la_SOURCES = \
 	Edge.cpp \
 	EdgeEnd.cpp \
 	EdgeEndStar.cpp \
-	EdgeIntersection.cpp \
 	EdgeIntersectionList.cpp \
 	EdgeNodingValidator.cpp \
 	EdgeList.cpp \

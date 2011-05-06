@@ -1,10 +1,9 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2009      Sandro Santilli <strk@keybit.net>
+ * Copyright (C) 2009-2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -24,19 +23,19 @@
 #define GEOS_GEOMGRAPH_EDGEINTERSECTION_H
 
 #include <geos/export.h>
-#include <string>
 
-#include <geos/geom/Coordinate.h> // for CoordinateLessThen
+#include <geos/geom/Coordinate.h> // for composition and inlines
 
 #include <geos/inline.h>
+
+#include <ostream>
 
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
 /**
- * Represents a point on an
- * edge which intersects with another edge.
+ * Represents a point on an edge which intersects with another edge.
  * 
  * The intersection may either be a single point, or a line segment
  * (in which case this point is the start of the line segment)
@@ -49,31 +48,25 @@ public:
 	// the point of intersection
 	geom::Coordinate coord;
 
-	// the index of the containing line segment in the parent edge
-	int segmentIndex;
-
 	// the edge distance of this point along the containing line segment
 	double dist;
 
+	// the index of the containing line segment in the parent edge
+	int segmentIndex;
+
 	EdgeIntersection(const geom::Coordinate& newCoord,
-	                 int newSegmentIndex, double newDist);
+	                 int newSegmentIndex, double newDist)
+	  :
+	  coord(newCoord),
+	  dist(newDist),
+	  segmentIndex(newSegmentIndex)
+	{}
 
-	virtual ~EdgeIntersection();
-
-	/**
-	 * @return -1 this EdgeIntersection is located before the
-	 *                 argument location
-	 * @return 0 this EdgeIntersection is at the argument location
-	 * @return 1 this EdgeIntersection is located after the argument
-	 *                location
-	 */
-	int compare(int newSegmentIndex, double newDist) const;
-
-	bool isEndPoint(int maxSegmentIndex);
-
-	std::string print() const;
-
-	int compareTo(const EdgeIntersection *) const;
+	bool isEndPoint(int maxSegmentIndex) const {
+	  if (segmentIndex==0 && dist==0.0) return true;
+	  if (segmentIndex==maxSegmentIndex) return true;
+	  return false;
+	}
 
 	const geom::Coordinate& getCoordinate() const {
 		return coord;
@@ -81,29 +74,45 @@ public:
 
 	int getSegmentIndex() const { return segmentIndex; }
 
-	double getDistance() { return dist; }
+	double getDistance() const { return dist; }
 
 };
 
+/// Strict weak ordering operator for EdgeIntersection
+//
+/// This is the C++ equivalent of JTS's compareTo
+inline bool operator< (const EdgeIntersection& ei1, const EdgeIntersection& ei2)
+{
+		if ( ei1.segmentIndex < ei2.segmentIndex ) return true;
+		if ( ei1.segmentIndex == ei2.segmentIndex )
+    {
+      if ( ei1.dist < ei2.dist ) return true;
+
+      // TODO: check if the Coordinate matches, or this will
+      //       be a robustness issue in computin distance
+      //       See http://trac.osgeo.org/geos/ticket/350
+    }
+		return false;
+}
+
+// @deprecated, use strict weak ordering operator
 struct GEOS_DLL  EdgeIntersectionLessThen {
 	bool operator()(const EdgeIntersection *ei1,
 		const EdgeIntersection *ei2) const
 	{
-		if ( ei1->segmentIndex<ei2->segmentIndex ||
-			( ei1->segmentIndex==ei2->segmentIndex &&
-		     	ei1->dist<ei2->dist ) ) return true;
-		return false;
+    return *ei1 < *ei2;
 	}
 };
 
-std::ostream& operator<< (std::ostream&, const EdgeIntersection&);
+/// Output operator
+inline std::ostream& operator<< (std::ostream& os, const EdgeIntersection& e)
+{
+  os << e.coord << " seg # = " << e.segmentIndex << " dist = " << e.dist;
+	return os;
+}
 
 } // namespace geos.geomgraph
 } // namespace geos
-
-//#ifdef GEOS_INLINE
-//# include "geos/geomgraph/EdgeIntersection.inl"
-//#endif
 
 #endif // ifndef GEOS_GEOMGRAPH_EDGEINTERSECTION_H
 
