@@ -109,8 +109,6 @@ private:
 
 	geom::Coordinate invalidPoint; 
 
-	std::vector<index::SegmentIntersector*> newSegmentIntersectors;
-
 	/// Allocates a new EdgeSetIntersector. Remember to delete it!
 	index::EdgeSetIntersector* createEdgeSetIntersector();
 

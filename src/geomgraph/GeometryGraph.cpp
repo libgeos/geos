@@ -379,7 +379,6 @@ GeometryGraph::computeEdgeIntersections(GeometryGraph *g,
 	cerr<<"GeometryGraph::computeEdgeIntersections call"<<endl;
 #endif
 	SegmentIntersector *si=new SegmentIntersector(li, includeProper, true);
-	newSegmentIntersectors.push_back(si);
 
 	si->setBoundaryNodes(getBoundaryNodes(), g->getBoundaryNodes());
 	auto_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
