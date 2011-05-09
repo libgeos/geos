@@ -63,7 +63,7 @@ EdgeIntersectionList::~EdgeIntersectionList()
 
 EdgeIntersection*
 EdgeIntersectionList::add(const Coordinate& coord,
-	int segmentIndex, double dist)
+	int segmentIndex, long double dist)
 {
 	EdgeIntersection *eiNew=new EdgeIntersection(coord, segmentIndex, dist);
 

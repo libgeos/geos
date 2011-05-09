@@ -74,7 +74,7 @@ public:
 	/// result of <b>rounding</b> points which lie on the line,
 	/// but not safe to use for <b>truncated</b> points.
 	///
-	static double computeEdgeDistance(const geom::Coordinate& p, const geom::Coordinate& p0, const geom::Coordinate& p1);
+	static long double computeEdgeDistance(const geom::Coordinate& p, const geom::Coordinate& p0, const geom::Coordinate& p1);
 
 	static double nonRobustComputeEdgeDistance(const geom::Coordinate& p,const geom::Coordinate& p1,const geom::Coordinate& p2);
 
@@ -241,7 +241,7 @@ public:
 	 *
 	 * @return the edge distance of the intersection point
 	 */
-	double getEdgeDistance(int geomIndex,int intIndex) const;
+	long double getEdgeDistance(int geomIndex,int intIndex) const;
 
 private:
 

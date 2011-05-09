@@ -77,7 +77,7 @@ public:
 	 * @return the EdgeIntersection found or added
 	 */
 	EdgeIntersection* add(const geom::Coordinate& coord,
-		int segmentIndex, double dist);
+		int segmentIndex, long double dist);
 
 	iterator begin() { return nodeMap.begin(); }
 	iterator end() { return nodeMap.end(); }

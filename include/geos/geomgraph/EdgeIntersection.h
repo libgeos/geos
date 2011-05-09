@@ -49,13 +49,13 @@ public:
 	geom::Coordinate coord;
 
 	// the edge distance of this point along the containing line segment
-	double dist;
+	long double dist;
 
 	// the index of the containing line segment in the parent edge
 	int segmentIndex;
 
 	EdgeIntersection(const geom::Coordinate& newCoord,
-	                 int newSegmentIndex, double newDist)
+	                 int newSegmentIndex, long double newDist)
 	  :
 	  coord(newCoord),
 	  dist(newDist),
@@ -74,7 +74,7 @@ public:
 
 	int getSegmentIndex() const { return segmentIndex; }
 
-	double getDistance() const { return dist; }
+	long double getDistance() const { return dist; }
 
 };
 
