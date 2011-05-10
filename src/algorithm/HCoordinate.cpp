@@ -34,9 +34,6 @@
 #define GEOS_DEBUG 0
 #endif
 
-// Define to make -ffloat-store be effective for this class
-#define STORE_INTERMEDIATE_COMPUTATION_VALUES 1
-
 using namespace std;
 using namespace geos::geom;
 
@@ -57,12 +54,6 @@ HCoordinate::intersection(const Coordinate &p1, const Coordinate &p2,
 	     << " q1: " << q1 << endl
 	     << " q2: " << q2 << endl;
 #endif
-
-#if 0 // NOTE: unrolled computation is intentionally turned off
-      //       as it makes the algorithm less stable numerically
-      //       In particular the first case in TestBufferMitredJoin.xml
-      //       would fail with unrolled computation on and no input
-      //       simplification in operation/buffer/OffsetCurveBuilder.cpp
 
 	// unrolled computation
 
@@ -87,20 +78,6 @@ HCoordinate::intersection(const Coordinate &p1, const Coordinate &p2,
 	}
 
 	ret = Coordinate(xInt, yInt);
-#else
-
-	HCoordinate hc1p1(p1);
-	HCoordinate hc1p2(p2);
-	HCoordinate l1(hc1p1, hc1p2);
-
-	HCoordinate hc2q1(q1);
-	HCoordinate hc2q2(q2);
-	HCoordinate l2(hc2q1, hc2q2);
-
-	HCoordinate intHCoord(l1, l2);
-	intHCoord.getCoordinate(ret);
-#endif
-
 }
 
 /*public*/
@@ -159,8 +136,6 @@ HCoordinate::HCoordinate(const Coordinate& p1, const Coordinate& p2,
 }
 
 /*public*/
-#ifndef STORE_INTERMEDIATE_COMPUTATION_VALUES
-
 HCoordinate::HCoordinate(const HCoordinate &p1, const HCoordinate &p2)
 	:
 	x( p1.y*p2.w - p2.y*p1.w ),
@@ -169,46 +144,12 @@ HCoordinate::HCoordinate(const HCoordinate &p1, const HCoordinate &p2)
 {
 }
 
-#else // def STORE_INTERMEDIATE_COMPUTATION_VALUES
-
-HCoordinate::HCoordinate(const HCoordinate &p1, const HCoordinate &p2)
-{
-        double xf1 = p1.y*p2.w;
-        double xf2 = p2.y*p1.w;
-        x = xf1 - xf2;
-
-        double yf1 = p2.x*p1.w;
-        double yf2 = p1.x*p2.w;
-        y = yf1 - yf2;
-
-        double wf1 = p1.x*p2.y;
-        double wf2 = p2.x*p1.y;
-        w = wf1 - wf2;
-
-#if GEOS_DEBUG
-        cerr
-             << " xf1: " << xf1 << endl
-             << " xf2: " << xf2 << endl
-             << " yf1: " << yf1 << endl
-             << " yf2: " << yf2 << endl
-             << " wf1: " << wf1 << endl
-             << " wf2: " << wf2 << endl
-             << "   x: " << x << endl
-             << "   y: " << y << endl
-             << "   w: " << w << endl;
-#endif // def GEOS_DEBUG
-}
-#endif // def STORE_INTERMEDIATE_COMPUTATION_VALUES
-
 /*public*/
 double
 HCoordinate::getX() const
 {
 	double a = x/w;
-
-	//if (std::fabs(a) > std::numeric_limits<double>::max())
-	if ( !FINITE(a) )
-	{
+	if ( !FINITE(a) ) {
 		throw NotRepresentableException();
 	}
 	return a;
@@ -219,10 +160,7 @@ double
 HCoordinate::getY() const
 {
 	double a = y/w;
-
-	//if (std::fabs(a) > std::numeric_limits<double>::max())
-	if ( !FINITE(a) )
-	{
+	if ( !FINITE(a) ) {
 		throw  NotRepresentableException();
 	}
 	return a;
