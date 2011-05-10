@@ -63,11 +63,11 @@ public:
 				 const geom::Coordinate &q2,
 				 geom::Coordinate &ret);
 
-	long double x,y,w;
+	double x,y,w;
 
 	HCoordinate();
 
-	HCoordinate(long double _x, long double _y, long double _w);
+	HCoordinate(double _x, double _y, double _w);
 
 	HCoordinate(const geom::Coordinate& p);
 
@@ -86,9 +86,9 @@ public:
 
 	HCoordinate(const HCoordinate &p1, const HCoordinate &p2);
 
-	long double getX() const;
+	double getX() const;
 
-	long double getY() const;
+	double getY() const;
 
 	void getCoordinate(geom::Coordinate &ret) const;
 
@@ -100,20 +100,4 @@ std::ostream& operator<< (std::ostream& o, const HCoordinate& c);
 } // namespace geos
 
 #endif // GEOS_ALGORITHM_HCOORDINATE_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.4  2006/04/20 14:27:40  strk
- * HCoordinate class changed to use long double types internally, in order to improve computation precision
- *
- * Revision 1.3  2006/04/14 09:02:16  strk
- * Hadded output operator and debugging prints for HCoordinate.
- *
- * Revision 1.2  2006/04/04 11:37:01  strk
- * Port information + initialization lists in ctors
- *
- * Revision 1.1  2006/03/09 16:46:48  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/
 

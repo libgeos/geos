@@ -34,7 +34,7 @@
 #endif
 
 // Define to make -ffloat-store be effective for this class
-//#define STORE_INTERMEDIATE_COMPUTATION_VALUES 1
+#define STORE_INTERMEDIATE_COMPUTATION_VALUES 1
 
 using namespace std;
 using namespace geos::geom;
@@ -112,7 +112,7 @@ HCoordinate::HCoordinate()
 }
 
 /*public*/
-HCoordinate::HCoordinate(long double _x, long double _y, long double _w)
+HCoordinate::HCoordinate(double _x, double _y, double _w)
 	:
 	x(_x),
 	y(_y),
@@ -172,16 +172,16 @@ HCoordinate::HCoordinate(const HCoordinate &p1, const HCoordinate &p2)
 
 HCoordinate::HCoordinate(const HCoordinate &p1, const HCoordinate &p2)
 {
-        long double xf1 = p1.y*p2.w;
-        long double xf2 = p2.y*p1.w;
+        double xf1 = p1.y*p2.w;
+        double xf2 = p2.y*p1.w;
         x = xf1 - xf2;
 
-        long double yf1 = p2.x*p1.w;
-        long double yf2 = p1.x*p2.w;
+        double yf1 = p2.x*p1.w;
+        double yf2 = p1.x*p2.w;
         y = yf1 - yf2;
 
-        long double wf1 = p1.x*p2.y;
-        long double wf2 = p2.x*p1.y;
+        double wf1 = p1.x*p2.y;
+        double wf2 = p2.x*p1.y;
         w = wf1 - wf2;
 
 #if GEOS_DEBUG
@@ -200,10 +200,10 @@ HCoordinate::HCoordinate(const HCoordinate &p1, const HCoordinate &p2)
 #endif // def STORE_INTERMEDIATE_COMPUTATION_VALUES
 
 /*public*/
-long double
+double
 HCoordinate::getX() const
 {
-	long double a = x/w;
+	double a = x/w;
 
 	//if (std::fabs(a) > std::numeric_limits<double>::max())
 	if ( !FINITE(a) )
@@ -214,10 +214,10 @@ HCoordinate::getX() const
 }
 
 /*public*/
-long double
+double
 HCoordinate::getY() const
 {
-	long double a = y/w;
+	double a = y/w;
 
 	//if (std::fabs(a) > std::numeric_limits<double>::max())
 	if ( !FINITE(a) )
@@ -242,33 +242,4 @@ std::ostream& operator<< (std::ostream& o, const HCoordinate& c)
 
 } // namespace geos.algorithm
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.24  2006/06/27 15:59:36  strk
- * * source/algorithm/HCoordinate.cpp: added support for MingW -ansi builds.
- *
- * Revision 1.23  2006/04/20 14:27:40  strk
- * HCoordinate class changed to use long double types internally, in order to improve computation precision
- *
- * Revision 1.22  2006/04/20 11:11:57  strk
- * source/algorithm/HCoordinate.cpp: added compile time define to force storage of intermediate computation values to variables (in order to make the -ffloat-store gcc switch effective). Disabled by default.
- *
- * Revision 1.21  2006/04/14 09:02:16  strk
- * Hadded output operator and debugging prints for HCoordinate.
- *
- * Revision 1.20  2006/04/04 11:37:00  strk
- * Port information + initialization lists in ctors
- *
- * Revision 1.19  2006/04/04 11:28:12  strk
- * NotRepresentable condition detected using finite() from <cmath>
- * rather then using FINITE() macro. Made ::intersection() body
- * more readable.
- *
- * Revision 1.18  2006/03/21 11:12:23  strk
- * Cleanups: headers inclusion and Log section
- *
- * Revision 1.17  2006/03/09 16:46:45  strk
- * geos::geom namespace definition, first pass at headers split
- **********************************************************************/
 
