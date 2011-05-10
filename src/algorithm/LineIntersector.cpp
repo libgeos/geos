@@ -55,12 +55,12 @@ namespace geos {
 namespace algorithm { // geos.algorithm
 
 /*public static*/
-long double
+double
 LineIntersector::computeEdgeDistance(const Coordinate& p,const Coordinate& p0,const Coordinate& p1)
 {
 	double dx=fabs(p1.x-p0.x);
 	double dy=fabs(p1.y-p0.y);
-	long double dist=-1.0;	// sentinel value
+	double dist=-1.0;	// sentinel value
 	if (p==p0) {
 		dist=0.0;
 	} else if (p==p1) {
@@ -69,8 +69,8 @@ LineIntersector::computeEdgeDistance(const Coordinate& p,const Coordinate& p0,co
 		else
 			dist=dy;
 	} else {
-		long double pdx=fabsl((long double)p.x - p0.x);
-		long double pdy=fabsl((long double)p.y - p0.y);
+		double pdx=fabs(p.x - p0.x);
+		double pdy=fabs(p.y - p0.y);
 		if (dx > dy)
 			dist = pdx;
 		else
@@ -179,10 +179,10 @@ LineIntersector::computeIntLineIndex(int segmentIndex)
 }
 
 /*public*/
-long double
+double
 LineIntersector::getEdgeDistance(int segmentIndex,int intIndex) const
 {
-	long double dist=computeEdgeDistance(intPt[intIndex],
+	double dist=computeEdgeDistance(intPt[intIndex],
 		*inputLines[segmentIndex][0],
 		*inputLines[segmentIndex][1]);
 	return dist;

@@ -162,7 +162,7 @@ Edge::addIntersection(LineIntersector *li,
 #endif
 	const Coordinate& intPt=li->getIntersection(intIndex);
 	unsigned int normalizedSegmentIndex=segmentIndex;
-	long double dist = li->getEdgeDistance(geomIndex, intIndex);
+	double dist=li->getEdgeDistance(geomIndex,intIndex);
 
 	// normalize the intersection point location
 	unsigned int nextSegIndex=normalizedSegmentIndex+1;
