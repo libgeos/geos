@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011      Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2005 Refractions Research Inc.
  *
@@ -14,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/HCoordinate.java rev. 1.18 (JTS-1.9)
+ * Last port: algorithm/HCoordinate.java r386 (JTS-1.12+)
  *
  **********************************************************************/
 
