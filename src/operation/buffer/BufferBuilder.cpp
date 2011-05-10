@@ -356,7 +356,7 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    else
    {
       delete mergedLinesGeom;
-      return NULL;
+      return geomFact->createLineString();
    }
 }
 
