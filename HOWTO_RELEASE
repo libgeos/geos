@@ -14,13 +14,10 @@
    $ svn copy -m "Tagged release MAJOR.MINOR.PATCH" \
 		$base/trunk $base/tags/MAJOR.MINOR.PATCH
 
-7: Export the tag and 'make dist'. Un-gzip the tarball and bzip2 it
-   instead. 
+7: Export the tag and 'make dist-bzip2'. 
    $ svn export http://svn.osgeo.org/geos/tags/MAJOR.MINOR.PATCH 
    $ cd MAJOR.MINOR.PATCH
-   $ ./autogen ; ./configure ; make dist
-   $ gzip -d geos-MAJOR.MINOR-PATCH.tar.gz
-   $ bzip2 geos-MAJOR.MINOR-PATCH.tar
+   $ ./autogen.sh && ./configure && make dist-bzip2
 
 8: Copy the tarball to upload.osgeo.org:/download_data/download/geos
 
