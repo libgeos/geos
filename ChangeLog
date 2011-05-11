@@ -1,3 +1,3237 @@
+2011-05-11 09:48  Sandro Santilli <strk@keybit.net>
+
+	* [r3345] php/geos.c, php/test/test.php: Add Geometry.offsetCurve
+	  to PHP binding
+
+2011-05-11 09:47  Sandro Santilli <strk@keybit.net>
+
+	* [r3344] php/geos.c, php/test/test.php: Add single-sided buffering
+	  support in PHP binding
+
+2011-05-11 09:15  Sandro Santilli <strk@keybit.net>
+
+	* [r3343] configure.in: Set version to 3.0.0rc1
+
+2011-05-10 18:10  Sandro Santilli <strk@keybit.net>
+
+	* [r3342] src/operation/buffer/BufferBuilder.cpp,
+	  tests/unit/capi/GEOSOffsetCurveTest.cpp: Have GEOSOffsetCurve
+	  return LINESTRING EMPTY for collapsing lines (right offset on
+	  right-turning curve can do that). Regress test one such case,
+	  taken from http://trac.osgeo.org/postgis/ticket/413.
+
+2011-05-10 11:11  Sandro Santilli <strk@keybit.net>
+
+	* [r3341] tests/unit/Makefile.am,
+	  tests/unit/capi/GEOSIntersectsTest.cpp: Add test for 357 (doesn't
+	  succeed at failing)
+
+2011-05-10 09:51  Sandro Santilli <strk@keybit.net>
+
+	* [r3340] include/geos/algorithm/LineIntersector.h,
+	  include/geos/geomgraph/EdgeIntersection.h,
+	  include/geos/geomgraph/EdgeIntersectionList.h,
+	  src/algorithm/LineIntersector.cpp, src/geomgraph/Edge.cpp,
+	  src/geomgraph/EdgeIntersectionList.cpp: Revert "Use long double
+	  to compute edge distance." (r3334). Simple double in HCoordinate
+	  made #350 pass anyway.
+
+2011-05-10 09:51  Sandro Santilli <strk@keybit.net>
+
+	* [r3339] src/algorithm/HCoordinate.cpp: Drop
+	  STORE_INTERMEDIATE_COMPUTATION_VALUES macro and protected
+	  non-unrolled computation, that is all paranoia aimed at making
+	  floats stored to match java IEEE. Since we get no failures in
+	  testsuite (our and postgis') I think it makes sense to have the
+	  code as close as possible to the JTS one.
+
+2011-05-10 09:50  Sandro Santilli <strk@keybit.net>
+
+	* [r3338] include/geos/algorithm/HCoordinate.h,
+	  src/algorithm/HCoordinate.cpp: Update port info
+
+2011-05-10 09:50  Sandro Santilli <strk@keybit.net>
+
+	* [r3337] tests/xmltester/tests/ticket/bug350.xml,
+	  tests/xmltester/tests/ticket/bug398.xml: Expect the same results
+	  given by JTS
+
+2011-05-10 09:50  Sandro Santilli <strk@keybit.net>
+
+	* [r3336] include/geos/algorithm/HCoordinate.h,
+	  src/algorithm/HCoordinate.cpp: Bring hcoordinate back to double
+	  precision (from long double)
+
+2011-05-09 11:57  Sandro Santilli <strk@keybit.net>
+
+	* [r3335] tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/ticket/bug350.xml: Automate test for
+	  bug350, change the expected result to match the one obtained by
+	  GEOS. It is not _exactly_ the same output obtained with JTS but
+	  close enough. Unfortunately both GEOS and JTS use an exact match
+	  for comparison so we won't be able to share this test.
+
+2011-05-09 11:57  Sandro Santilli <strk@keybit.net>
+
+	* [r3334] include/geos/algorithm/LineIntersector.h,
+	  include/geos/geomgraph/EdgeIntersection.h,
+	  include/geos/geomgraph/EdgeIntersectionList.h,
+	  src/algorithm/LineIntersector.cpp, src/geomgraph/Edge.cpp,
+	  src/geomgraph/EdgeIntersectionList.cpp: Use long double to
+	  compute edge distance. Makes noding more robust, fixes bug #350.
+
+2011-05-06 18:51  Sandro Santilli <strk@keybit.net>
+
+	* [r3333] include/geos/geomgraph/EdgeIntersection.h,
+	  src/geomgraph/EdgeIntersection.cpp, src/geomgraph/Makefile.am:
+	  Turn EdgeIntersection into a concrete, fully-inlined, C++ class.
+
+2011-05-06 18:51  Sandro Santilli <strk@keybit.net>
+
+	* [r3332] include/geos/geomgraph/index/MonotoneChain.h: Describe
+	  MonotoneChain
+
+2011-05-06 18:51  Sandro Santilli <strk@keybit.net>
+
+	* [r3331] src/geomgraph/Edge.cpp,
+	  src/geomgraph/EdgeIntersection.cpp,
+	  src/geomgraph/EdgeIntersectionList.cpp: Make output operators for
+	  Edge, EdgeIntersection and EdgeIntersectionList closer to JTS,
+	  for easier comparison
+
+2011-05-06 18:51  Sandro Santilli <strk@keybit.net>
+
+	* [r3330] include/geos/geomgraph/EdgeIntersection.h,
+	  include/geos/geomgraph/EdgeIntersectionList.h,
+	  src/geomgraph/EdgeIntersection.cpp,
+	  src/geomgraph/EdgeIntersectionList.cpp: Output operator for
+	  EdgeIntersection and EdgeIntersectionList
+
+2011-05-06 18:51  Sandro Santilli <strk@keybit.net>
+
+	* [r3329] include/geos/geomgraph/GeometryGraph.h,
+	  src/geomgraph/GeometryGraph.cpp: Drop book keeping of segment
+	  intersectors, as we're transferring their ownership to caller
+	  anyway
+
+2011-05-06 08:57  Sandro Santilli <strk@keybit.net>
+
+	* [r3328] tests/xmltester/tests/ticket/bug350.xml: Re-add also the
+	  original data in test for bug350, so nothing gets lost.
+
+2011-05-06 08:57  Sandro Santilli <strk@keybit.net>
+
+	* [r3327] src/geomgraph/GeometryGraph.cpp: Use logical (not
+	  bitwise) AND, use dynamic_cast to map JTS's instanceof operator
+
+2011-05-06 08:57  Sandro Santilli <strk@keybit.net>
+
+	* [r3326] tests/xmltester/tests/ticket/bug350.xml: Modify test for
+	  bug350 so to use pre-snapped geometries. Shows that the problem
+	  is not in snapping code, but after that (ie: JTS succeeds at fist
+	  shot on this new input)
+
+2011-05-04 17:45  Sandro Santilli <strk@keybit.net>
+
+	* [r3325] src/geom/prep/AbstractPreparedPolygonContains.cpp,
+	  tests/unit/capi/GEOSPreparedGeometryTest.cpp: Fix regression
+	  accidentally introduced by commit r3322 (Sean's). Add automated
+	  test for it (was found trough PostGIS regression test)
+
+2011-05-04 16:30  Sandro Santilli <strk@keybit.net>
+
+	* [r3324] src/operation/buffer/OffsetCurveBuilder.cpp: Drop useless
+	  and unavailable include
+
+2011-05-03 02:30  Sean Gillies <sgillies@frii.com>
+
+	* [r3323] src/geom/prep/AbstractPreparedPolygonContains.cpp,
+	  src/geom/prep/PreparedPolygon.cpp: Damn these tabs
+
+2011-05-03 02:27  Sean Gillies <sgillies@frii.com>
+
+	* [r3322] capi/geos_c.cpp, capi/geos_c.h.in, capi/geos_ts_c.cpp,
+	  src/geom/prep/AbstractPreparedPolygonContains.cpp,
+	  src/geom/prep/PreparedPolygon.cpp: Add missing prepared geometry
+	  predicates to C API (#436)
+
+2011-04-28 16:39  Sandro Santilli <strk@keybit.net>
+
+	* [r3321] .gitignore, NEWS,
+	  include/geos/operation/predicate/RectangleIntersects.h,
+	  include/geos/operation/predicate/SegmentIntersectionTester.h,
+	  src/operation/predicate/RectangleIntersects.cpp,
+	  src/operation/predicate/SegmentIntersectionTester.cpp: Improve
+	  performance of RectangleIntersects (of one order of magnitude).
+
+2011-04-28 16:38  Sandro Santilli <strk@keybit.net>
+
+	* [r3320]
+	  tests/perf/operation/predicate/RectangleIntersectsPerfTest.cpp:
+	  More concise output from performance tester
+
+2011-04-28 15:09  Sandro Santilli <strk@keybit.net>
+
+	* [r3319] src/noding/ScaledNoder.cpp,
+	  src/operation/buffer/BufferOp.cpp: Hush uncontrolled debugging
+	  prints
+
+2011-04-28 15:08  Sandro Santilli <strk@keybit.net>
+
+	* [r3318] include/geos/operation/relate/RelateComputer.h,
+	  src/operation/relate/RelateComputer.cpp: Plug leak on exception
+	  in RelateComputer (exposed by running doc/example)
+
+2011-04-28 15:08  Sandro Santilli <strk@keybit.net>
+
+	* [r3317] src/geom/Geometry.cpp: Do not leak on exception during
+	  relational geometry predicates
+
+2011-04-28 14:16  Sandro Santilli <strk@keybit.net>
+
+	* [r3316] configure.in, tests/perf/operation/Makefile.am,
+	  tests/perf/operation/predicate,
+	  tests/perf/operation/predicate/Makefile.am,
+	  tests/perf/operation/predicate/RectangleIntersectsPerfTest.cpp:
+	  Port RectangleIntersects performance test from JTS-1.12
+
+2011-04-28 14:16  Sandro Santilli <strk@keybit.net>
+
+	* [r3315] src/operation/predicate/RectangleIntersects.cpp: Do not
+	  leak memory during rectangle intersects predicate
+
+2011-04-28 14:16  Sandro Santilli <strk@keybit.net>
+
+	* [r3314] src/operation/overlay/OverlayOp.cpp: Drop unneeded
+	  include
+
+2011-04-28 10:04  Sandro Santilli <strk@keybit.net>
+
+	* [r3313] doc/example.cpp, include/geos/geom/util/Makefile.am,
+	  include/geos/geom/util/SineStarFactory.h,
+	  include/geos/util/GeometricShapeFactory.h,
+	  src/geom/util/Makefile.am, src/geom/util/SineStarFactory.cpp,
+	  src/util/GeometricShapeFactory.cpp: Port
+	  geos::geom::util::SineStarFactory from JTS-1.12, useful for
+	  profile-test RectangleIntersects.
+
+2011-04-28 10:04  Sandro Santilli <strk@keybit.net>
+
+	* [r3312] src/geomgraph/EdgeIntersectionList.cpp,
+	  src/geomgraph/NodeMap.cpp, src/operation/valid/IsValidOp.cpp:
+	  Trim old embedded history log (from CVS times)
+
+2011-04-27 16:42  Sandro Santilli <strk@keybit.net>
+
+	* [r3311] include/geos/algorithm/CGAlgorithms.h,
+	  src/algorithm/CGAlgorithms.cpp, tests/unit/Makefile.am,
+	  tests/unit/algorithm/CGAlgorithms/signedAreaTest.cpp: Improve
+	  speed of Geometry.getArea, unit-test it.
+
+2011-04-27 15:52  Sandro Santilli <strk@keybit.net>
+
+	* [r3310] tools/findclassfiles: Match full class names, not
+	  partial. Allow specifying a package name.
+
+2011-04-27 15:47  Sandro Santilli <strk@keybit.net>
+
+	* [r3309] include/geos/operation/linemerge/EdgeString.h,
+	  include/geos/operation/linemerge/LineMergeDirectedEdge.h,
+	  include/geos/operation/linemerge/LineMergeEdge.h,
+	  include/geos/operation/linemerge/LineMergeGraph.h,
+	  include/geos/operation/linemerge/LineMerger.h,
+	  include/geos/operation/linemerge/LineSequencer.h,
+	  src/operation/linemerge/EdgeString.cpp,
+	  src/operation/linemerge/LineMergeDirectedEdge.cpp,
+	  src/operation/linemerge/LineMergeEdge.cpp,
+	  src/operation/linemerge/LineMergeGraph.cpp,
+	  src/operation/linemerge/LineMerger.cpp,
+	  src/operation/linemerge/LineSequencer.cpp: Sync linemerge package
+	  to JTS-1.12 (nothing changed)
+
+2011-04-27 15:33  Sandro Santilli <strk@keybit.net>
+
+	* [r3308] tools/findclassfiles: Utility script to help with editing
+	  all files of a class
+
+2011-04-27 15:18  Sandro Santilli <strk@keybit.net>
+
+	* [r3307] include/geos/algorithm/Angle.h, src/algorithm/Angle.cpp,
+	  tests/unit/Makefile.am, tests/unit/algorithm/AngleTest.cpp: Sync
+	  Angle class to JTS-1.12, port unit testing for it.
+
+2011-04-27 14:13  Sandro Santilli <strk@keybit.net>
+
+	* [r3306] include/geos/operation/buffer/OffsetCurveSetBuilder.h,
+	  src/operation/buffer/OffsetCurveSetBuilder.cpp,
+	  tests/unit/capi/GEOSBufferTest.cpp: Add test for singlesided
+	  buffer (areal). Fix premature exit from OffsetCurveSetBuilder.
+
+2011-04-27 13:38  Sandro Santilli <strk@keybit.net>
+
+	* [r3305] capi/geos_c.cpp, capi/geos_c.h.in, capi/geos_ts_c.cpp,
+	  tests/unit/capi/GEOSOffsetCurveTest.cpp: Drop one argument from
+	  GEOSOffsetCurve. Tell right/left from width/distance sign (<0 for
+	  right side)
+
+2011-04-27 13:06  Sandro Santilli <strk@keybit.net>
+
+	* [r3304] tests/unit/Makefile.am,
+	  tests/unit/capi/GEOSBufferTest.cpp,
+	  tests/unit/capi/GEOSOffsetCurveTest.cpp: Put OffsetCurveTest in
+	  its own file (old singleside test + a couple more tests)
+
+2011-04-27 13:06  Sandro Santilli <strk@keybit.net>
+
+	* [r3303] NEWS, capi/geos_c.cpp, capi/geos_c.h.in,
+	  capi/geos_ts_c.cpp: Add GEOSBufferParams type and
+	  GEOSBufferWithParams function to have an extensible buffer
+	  operation. Allows areal single sided buffer.
+
+2011-04-27 11:13  Sandro Santilli <strk@keybit.net>
+
+	* [r3302] NEWS, capi/geos_c.cpp, capi/geos_c.h.in,
+	  capi/geos_ts_c.cpp: Add GEOSOffsetCurve C-API interface
+	  deprecating GEOSSingleSidedBuffer
+
+2011-04-27 09:42  Sandro Santilli <strk@keybit.net>
+
+	* [r3301] include/geos/operation/buffer/BufferBuilder.h,
+	  include/geos/operation/buffer/BufferSubgraph.h,
+	  include/geos/operation/buffer/Makefile.am,
+	  include/geos/operation/buffer/OffsetCurveBuilder.h,
+	  include/geos/operation/buffer/OffsetCurveVertexList.h,
+	  include/geos/operation/buffer/OffsetSegmentGenerator.h,
+	  include/geos/operation/buffer/OffsetSegmentString.h,
+	  src/operation/buffer/BufferBuilder.cpp,
+	  src/operation/buffer/BufferSubgraph.cpp,
+	  src/operation/buffer/Makefile.am,
+	  src/operation/buffer/OffsetCurveBuilder.cpp,
+	  src/operation/buffer/OffsetSegmentGenerator.cpp: Refactored
+	  offset curve generation (from JTS-1.12)
+
+2011-04-27 09:42  Sandro Santilli <strk@keybit.net>
+
+	* [r3300] include/geos/operation/buffer/BufferParameters.h,
+	  src/operation/buffer/BufferParameters.cpp: Sync BufferParameters
+	  class to JTS r378 (isSingleSided property)
+
+2011-04-27 09:42  Sandro Santilli <strk@keybit.net>
+
+	* [r3299] include/geos/operation/buffer/BufferOp.h,
+	  src/operation/buffer/BufferOp.cpp: Sync BufferOp class to JTS
+	  r378. Do not port the unused isSingleSided property.
+
+2011-04-23 10:30  Sandro Santilli <strk@keybit.net>
+
+	* [r3298] NEWS: Add note about GEOSCascadedUnion deprecation
+
+2011-04-23 10:28  Sandro Santilli <strk@keybit.net>
+
+	* [r3297] capi/geos_c.h.in: Mark GEOSUnionCascaded as deprecated,
+	  GEOSUnaryUnion does the same thing w/out refusin to deal with
+	  lines, points, collections
+
+2011-04-23 10:03  Sandro Santilli <strk@keybit.net>
+
+	* [r3296] include/geos/operation/union/CascadedUnion.h,
+	  include/geos/operation/union/Makefile.am, php/test/test.php,
+	  src/operation/union/CascadedUnion.cpp,
+	  src/operation/union/Makefile.am,
+	  src/operation/union/UnaryUnionOp.cpp,
+	  tests/unit/capi/GEOSUnaryUnionTest.cpp,
+	  tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/ticket/bug392.xml: Generalize
+	  CascadedPolygonUnion into a CascadedUnion. Use the generalized
+	  class for unary union of lines, fixing bug #392. Automate testing
+	  of it, tweak expected results from other tests (output components
+	  reordered).
+
+2011-04-22 22:26  Sandro Santilli <strk@keybit.net>
+
+	* [r3295] tests/xmltester/XMLTester.cpp: Use equals() to compare
+	  expected/obtained results of "Union" operation. This matches JTS
+	  and prevents being too strict about equality.
+
+2011-04-22 18:46  Sandro Santilli <strk@keybit.net>
+
+	* [r3294] include/geos/operation/union/CascadedPolygonUnion.h,
+	  include/geos/operation/union/GeometryListHolder.h,
+	  include/geos/operation/union/Makefile.am: Put GeometryListHolder
+	  in its own header file.
+
+2011-04-22 13:51  Sandro Santilli <strk@keybit.net>
+
+	* [r3293] include/geos/io/WKTWriter.h, src/io/WKTWriter.cpp,
+	  tests/unit/io/WKTWriterTest.cpp: Use stringstream to format
+	  strings rather than printf-like statements. Simplifies things a
+	  lot.
+
+2011-04-22 13:04  Sandro Santilli <strk@keybit.net>
+
+	* [r3292] include/geos/geom/PrecisionModel.h,
+	  include/geos/geom/PrecisionModel.inl,
+	  src/geom/PrecisionModel.cpp, tests/unit/Makefile.am,
+	  tests/unit/geom/PrecisionModelTest.cpp,
+	  tests/unit/io/WKTReaderTest.cpp, tests/unit/io/WKTWriterTest.cpp:
+	  Sync PrecisionModel to JTS-1.12, add unit testing, fix
+	  getMaximumPrecisionDigit to behave as documented (JTS doesn't).
+
+2011-04-20 17:13  Sandro Santilli <strk@keybit.net>
+
+	* [r3291] include/geos/operation/buffer/OffsetCurveSetBuilder.h,
+	  src/operation/buffer/OffsetCurveSetBuilder.cpp,
+	  tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/ticket/bug434.xml: Sync
+	  OffsetCurveSetBuilder::isErodedCompletely implementation to JTS,
+	  fixing bug #434
+
+2011-04-20 15:55  Sandro Santilli <strk@keybit.net>
+
+	* [r3290] tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/bug176.xml,
+	  tests/xmltester/tests/bug188.xml,
+	  tests/xmltester/tests/bug244.xml,
+	  tests/xmltester/tests/bug275.xml,
+	  tests/xmltester/tests/bug344.xml,
+	  tests/xmltester/tests/bug350.xml,
+	  tests/xmltester/tests/bug356.xml,
+	  tests/xmltester/tests/bug358.xml,
+	  tests/xmltester/tests/bug360.xml,
+	  tests/xmltester/tests/bug366.xml,
+	  tests/xmltester/tests/bug398.xml, tests/xmltester/tests/ticket,
+	  tests/xmltester/tests/ticket/bug176.xml,
+	  tests/xmltester/tests/ticket/bug188.xml,
+	  tests/xmltester/tests/ticket/bug244.xml,
+	  tests/xmltester/tests/ticket/bug275.xml,
+	  tests/xmltester/tests/ticket/bug344.xml,
+	  tests/xmltester/tests/ticket/bug350.xml,
+	  tests/xmltester/tests/ticket/bug356.xml,
+	  tests/xmltester/tests/ticket/bug358.xml,
+	  tests/xmltester/tests/ticket/bug360.xml,
+	  tests/xmltester/tests/ticket/bug366.xml,
+	  tests/xmltester/tests/ticket/bug398.xml: Move per-ticket
+	  testcases under their own directory
+
+2011-04-20 15:42  Sandro Santilli <strk@keybit.net>
+
+	* [r3289] configure.in: Set JTS port version to 1.12
+
+2011-04-19 07:57  Sandro Santilli <strk@keybit.net>
+
+	* [r3288] tests/unit/algorithm/CGAlgorithms/isCCWTest.cpp: Add test
+	  for IsCCW against the two almost-collapsed rings resulting by
+	  GEOS or JTS during execution of the union described in ticket
+	  #398. This is done after confirmation of same results in JTS (1
+	  bit makes the difference between CCW and CW orientation).
+
+2011-04-18 21:45  Sandro Santilli <strk@keybit.net>
+
+	* [r3287] tests/unit/operation/distance/DistanceOpTest.cpp: Add the
+	  actual ->distance() call to the test for bug #367
+
+2011-04-18 21:28  Sandro Santilli <strk@keybit.net>
+
+	* [r3286] src/operation/overlay/PolygonBuilder.cpp,
+	  tests/xmltester/Makefile.am: Throw a TopologyException, rather
+	  than aborting, when finding more than a shell in MinimalEdgeRing
+	  list. Fixes bug #398. Enables automated test for it. Note that
+	  JTS fails the test now, triggering the failed assertion.
+
+2011-04-18 21:28  Sandro Santilli <strk@keybit.net>
+
+	* [r3285] tests/xmltester/tests/bug398.xml: Expect a result
+	  with/out the collapsed ring in the test for bug 398. Funny
+	  enough, this makes JTS react by failing the assertion I was
+	  tracking...
+
+2011-04-18 21:01  Sandro Santilli <strk@keybit.net>
+
+	* [r3284] src/operation/overlay/PolygonBuilder.cpp: Avoid more heap
+	  allocations in PolygonBuilder
+
+2011-04-18 15:08  Sandro Santilli <strk@keybit.net>
+
+	* [r3283] include/geos/operation/overlay/PolygonBuilder.h,
+	  src/operation/overlay/PolygonBuilder.cpp: Reduce heap allocations
+	  in PolygonBuilder, rewrite some private interfaces to deal with
+	  refs rather than pointers
+
+2011-04-18 15:08  Sandro Santilli <strk@keybit.net>
+
+	* [r3282] src/operation/overlay/PolygonBuilder.cpp: Use
+	  PlanarGraph::linkResultDirectedEdges rather than rewriting it
+	  inline
+
+2011-04-18 15:08  Sandro Santilli <strk@keybit.net>
+
+	* [r3281] include/geos/geomgraph/PlanarGraph.h,
+	  src/geomgraph/PlanarGraph.cpp: Turn
+	  PlanarGraph::linkResultDirectedEdges into a templated method
+
+2011-04-13 11:52  Sandro Santilli <strk@keybit.net>
+
+	* [r3280] tests/unit/geom/CoordinateArraySequenceTest.cpp: Add test
+	  for bug #435
+
+2011-04-13 11:32  Sandro Santilli <strk@keybit.net>
+
+	* [r3279] php/Makefile.am: Fix path to CAPI includes for PHP
+	  binding
+
+2011-04-13 10:44  Sandro Santilli <strk@keybit.net>
+
+	* [r3278] src/geom/CoordinateArraySequence.cpp: Drop coordinate
+	  dimension cache after read-write filtering. Fixes ticket #435.
+
+2011-04-13 08:26  Sandro Santilli <strk@keybit.net>
+
+	* [r3277] .gitignore, Makefile.am, author.sh: Drop author.sh, add a
+	  rule to create authors.git instead
+
+2011-04-13 07:37  Sandro Santilli <strk@keybit.net>
+
+	* [r3276] author.sh: Add script to be used with git-svn
+	  --authors-prog
+
+2011-03-26 14:02  Sandro Santilli <strk@keybit.net>
+
+	* [r3275] include/geos/simplify/TaggedLineString.h,
+	  src/index/chain/MonotoneChainBuilder.cpp,
+	  src/simplify/DouglasPeuckerLineSimplifier.cpp,
+	  src/simplify/TaggedLineString.cpp,
+	  src/simplify/TaggedLineStringSimplifier.cpp: fix missing size_t
+	  with gcc 4.6
+
+2011-03-26 14:02  Sandro Santilli <strk@keybit.net>
+
+	* [r3274] include/geos/index/chain/MonotoneChainBuilder.h,
+	  include/geos/operation/valid/SimpleNestedRingTester.h,
+	  src/index/bintree/Bintree.cpp, src/index/bintree/Node.cpp,
+	  src/index/bintree/Root.cpp, src/index/strtree/AbstractNode.cpp:
+	  fixed missing NULL with gcc 4.6
+
+2011-03-26 14:02  Sandro Santilli <strk@keybit.net>
+
+	* [r3273] include/geos/operation/overlay/OverlayNodeFactory.h: fix
+	  uninitialized const caused by missing constructor
+
+2011-03-24 17:54  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3272] capi/CMakeLists.txt, include/CMakeLists.txt,
+	  src/CMakeLists.txt: Added source_group properties to support
+	  source browsers in various IDEs
+
+2011-03-16 22:29  Sandro Santilli <strk@keybit.net>
+
+	* [r3271] capi/geos_ts_c.cpp: Use GEOSVALID flag correctly, thanks
+	  Mat for spotting this.
+
+2011-03-11 14:40  Sandro Santilli <strk@keybit.net>
+
+	* [r3270] tests/xmltester/tests/bug350.xml: Add XML test for bug
+	  #350
+
+2011-03-11 14:24  Sandro Santilli <strk@keybit.net>
+
+	* [r3269] tests/xmltester/tests/bug398.xml: Add XML test for bug398
+	  (not automatically run, as it fails)
+
+2011-03-11 14:24  Sandro Santilli <strk@keybit.net>
+
+	* [r3268] tests/xmltester/XMLTester.cpp: Tell more about XML
+	  loading failures
+
+2011-03-08 09:04  Sandro Santilli <strk@keybit.net>
+
+	* [r3267] tests/unit/capi/GEOSRelateBoundaryNodeRuleTest.cpp: Add
+	  test for invalid boundary node rule value
+
+2011-03-04 17:05  Sandro Santilli <strk@keybit.net>
+
+	* [r3266] php/geos.c, php/test/test.php: PHP: add
+	  relateBoundaryNodeRule method to GEOSGeometry object
+
+2011-03-04 16:38  Sandro Santilli <strk@keybit.net>
+
+	* [r3265] NEWS: Add note aboute GEOSRelateBoundaryNodeRule
+
+2011-03-04 16:31  Sandro Santilli <strk@keybit.net>
+
+	* [r3264] tests/unit/Makefile.am,
+	  tests/unit/capi/GEOSRelateBoundaryNodeRuleTest.cpp:
+	  GEOSRelateBoundaryNodeRule test, ticket #399 [RT-SIGTA]
+
+2011-03-04 16:30  Sandro Santilli <strk@keybit.net>
+
+	* [r3263] capi/geos_c.cpp, capi/geos_c.h.in, capi/geos_ts_c.cpp:
+	  GEOSRelateBoundaryNodeRule, ticket #399 [RT-SIGTA]
+
+2011-03-04 16:30  Sandro Santilli <strk@keybit.net>
+
+	* [r3262] include/geos/algorithm/BoundaryNodeRule.h: Indenting..
+
+2011-03-02 13:45  Sandro Santilli <strk@keybit.net>
+
+	* [r3261] NEWS, tests/unit/operation/distance/DistanceOpTest.cpp:
+	  Tweak unit test to expect distance 0 between an empty an anything
+	  else. Report the change in NEWS file.
+
+2011-03-02 13:45  Sandro Santilli <strk@keybit.net>
+
+	* [r3260] tests/xmltester/Makefile.am,
+	  tests/xmltester/XMLTester.cpp,
+	  tests/xmltester/tests/general/TestDistance.xml: Add support for
+	  "distance" op in XMLTester, and import JTS TestDistance.xml
+
+2011-03-02 13:45  Sandro Santilli <strk@keybit.net>
+
+	* [r3259] include/geos/operation/distance/DistanceOp.h,
+	  src/operation/distance/DistanceOp.cpp: Fixed Geometry.distance()
+	  and DistanceOp to return 0.0 for empty inputs (JTS-1.11)
+
+2011-03-02 13:13  Sandro Santilli <strk@keybit.net>
+
+	* [r3258] include/geos/operation/valid/IsValidOp.h,
+	  src/operation/valid/IsValidOp.cpp,
+	  tests/xmltester/tests/general/TestValid.xml: Sync IsValidOp and
+	  related XML testcase to JTS-1.12
+
+2011-03-02 12:46  Sandro Santilli <strk@keybit.net>
+
+	* [r3257] NEWS, include/geos/geom/LineSegment.h,
+	  include/geos/geom/LineSegment.inl,
+	  include/geos/util/IllegalStateException.h,
+	  include/geos/util/Makefile.am, src/geom/LineSegment.cpp: Added
+	  check for illegal state in offsetPoint method
+
+2011-03-02 09:24  Sandro Santilli <strk@keybit.net>
+
+	* [r3256] src/geomgraph/Edge.cpp: Fix debug build
+
+2011-03-01 17:56  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3255] include/geos/algorithm/BoundaryNodeRule.h,
+	  include/geos/algorithm/CentralEndpointIntersector.h,
+	  include/geos/algorithm/ConvexHull.h,
+	  include/geos/algorithm/distance/DiscreteHausdorffDistance.h,
+	  include/geos/geom/Coordinate.h, include/geos/geom/Coordinate.inl,
+	  include/geos/geom/CoordinateArraySequence.h,
+	  include/geos/geom/CoordinateList.h,
+	  include/geos/geom/CoordinateSequence.h,
+	  include/geos/geom/CoordinateSequenceFilter.h,
+	  include/geos/geom/Envelope.h, include/geos/geom/Geometry.h,
+	  include/geos/geom/GeometryList.h,
+	  include/geos/geom/IntersectionMatrix.h,
+	  include/geos/geom/prep/PreparedGeometry.h,
+	  include/geos/geom/prep/PreparedGeometryFactory.h,
+	  include/geos/geom/util/GeometryExtracter.h,
+	  include/geos/geomgraph/Edge.h,
+	  include/geos/geomgraph/EdgeIntersectionList.h,
+	  include/geos/geomgraph/EdgeNodingValidator.h,
+	  include/geos/geomgraph/EdgeRing.h,
+	  include/geos/geomgraph/GeometryGraph.h,
+	  include/geos/geomgraph/TopologyLocation.h,
+	  include/geos/geomgraph/index/MonotoneChainEdge.h,
+	  include/geos/geomgraph/index/SegmentIntersector.h,
+	  include/geos/geomgraph/index/SimpleMCSweepLineIntersector.h,
+	  include/geos/geomgraph/index/SimpleSweepLineIntersector.h,
+	  include/geos/index/bintree/Bintree.h,
+	  include/geos/index/quadtree/Node.h,
+	  include/geos/index/quadtree/NodeBase.h,
+	  include/geos/index/quadtree/Quadtree.h,
+	  include/geos/index/strtree/AbstractSTRtree.h,
+	  include/geos/index/strtree/STRtree.h,
+	  include/geos/index/sweepline/SweepLineIndex.h,
+	  include/geos/io/StringTokenizer.h, include/geos/io/Writer.h,
+	  include/geos/linearref/LengthIndexedLine.h,
+	  include/geos/noding/BasicSegmentString.h,
+	  include/geos/noding/MCIndexNoder.h,
+	  include/geos/noding/NodableSegmentString.h,
+	  include/geos/noding/NodedSegmentString.h,
+	  include/geos/noding/ScaledNoder.h,
+	  include/geos/noding/SegmentNodeList.h,
+	  include/geos/noding/SegmentPointComparator.h,
+	  include/geos/noding/SegmentString.h,
+	  include/geos/noding/snapround/HotPixel.h,
+	  include/geos/noding/snapround/MCIndexSnapRounder.h,
+	  include/geos/operation/IsSimpleOp.h,
+	  include/geos/operation/buffer/BufferParameters.h,
+	  include/geos/operation/buffer/BufferSubgraph.h,
+	  include/geos/operation/buffer/OffsetCurveSetBuilder.h,
+	  include/geos/operation/distance/DistanceOp.h,
+	  include/geos/operation/linemerge/EdgeString.h,
+	  include/geos/operation/linemerge/LineSequencer.h,
+	  include/geos/operation/overlay/ElevationMatrix.h,
+	  include/geos/operation/overlay/ElevationMatrixCell.h,
+	  include/geos/operation/overlay/LineBuilder.h,
+	  include/geos/operation/overlay/PolygonBuilder.h,
+	  include/geos/operation/overlay/snap/SnapOverlayOp.h,
+	  include/geos/operation/overlay/validate/FuzzyPointLocator.h,
+	  include/geos/operation/overlay/validate/OffsetPointGenerator.h,
+	  include/geos/operation/overlay/validate/OverlayResultValidator.h,
+	  include/geos/operation/polygonize/EdgeRing.h,
+	  include/geos/operation/polygonize/PolygonizeGraph.h,
+	  include/geos/operation/polygonize/Polygonizer.h,
+	  include/geos/operation/relate/RelateComputer.h,
+	  include/geos/operation/union/UnaryUnionOp.h,
+	  include/geos/operation/valid/ConnectedInteriorTester.h,
+	  include/geos/operation/valid/QuadtreeNestedRingTester.h,
+	  include/geos/operation/valid/SimpleNestedRingTester.h,
+	  include/geos/operation/valid/SweeplineNestedRingTester.h,
+	  include/geos/planargraph/DirectedEdgeStar.h,
+	  include/geos/planargraph/Edge.h,
+	  include/geos/planargraph/Subgraph.h,
+	  include/geos/precision/CommonBitsOp.h, include/geos/profiler.h,
+	  include/geos/simplify/DouglasPeuckerLineSimplifier.h,
+	  include/geos/simplify/TaggedLineString.h,
+	  include/geos/util/UnsupportedOperationException.h,
+	  src/geom/Coordinate.cpp,
+	  src/operation/buffer/BufferParameters.cpp,
+	  tests/unit/capi/GEOSSharedPathsTest.cpp,
+	  tests/unit/capi/GEOSisValidDetailTest.cpp,
+	  tests/unit/geom/GeometryFactoryTest.cpp,
+	  tests/unit/io/ByteOrderValuesTest.cpp,
+	  tests/unit/io/WKBWriterTest.cpp: Fix DLL build using Visual C++:
+	  *) added missing exports; *) do not use static data members in
+	  inline methods - linker fails to find definition ; *) Clean up
+	  C4251 warning.
+
+2011-03-01 17:53  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3254] src/operation/valid/IsValidOp.cpp: Check geometry against
+	  nullptr
+
+2011-03-01 17:50  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3253] include/geos/io/ByteOrderValues.h,
+	  src/io/ByteOrderValues.cpp: Redefined ENDIAN_BIG and
+	  ENDIAN_LITTLE as enumerators instead of static non-const members
+	  - Visual C++ linker has mysterious problems with exporting them
+	  from DLL.
+
+2011-02-28 14:36  Sandro Santilli <strk@keybit.net>
+
+	* [r3252] src/operation/buffer/BufferOp.cpp,
+	  tests/xmltester/Makefile.am: Fix BufferOp::bufferFixedPrecision
+	  to use snap-rounding noder. Fixes bug #356.
+
+2011-02-28 12:19  Sandro Santilli <strk@keybit.net>
+
+	* [r3251] src/operation/buffer/BufferBuilder.cpp: Cleanup debugging
+	  output. Previous version didn't really print the _noded_ output
+	  at all.
+
+2011-02-28 11:43  Sandro Santilli <strk@keybit.net>
+
+	* [r3250] NEWS, php/geos.c, php/test/test.php: Expose and test
+	  covers/coveredBy to PHP binding
+
+2011-02-28 11:32  Sandro Santilli <strk@keybit.net>
+
+	* [r3249] capi/geos_c.cpp, capi/geos_c.h.in, capi/geos_ts_c.cpp:
+	  GEOSCovers and GEOSCoveredBy (ticket #396) by Alessandro Furieri
+
+2011-02-25 16:05  Sandro Santilli <strk@keybit.net>
+
+	* [r3248] tests/xmltester/tests/bug356.xml: be explicit about
+	  quadrant segments
+
+2011-02-25 10:22  Sandro Santilli <strk@keybit.net>
+
+	* [r3247] tests/xmltester/tests/bug356.xml: Add test for ticket
+	  #356 (not run, as it fails)
+
+2011-02-23 17:13  Sandro Santilli <strk@keybit.net>
+
+	* [r3246] src/operation/buffer/BufferInputLineSimplifier.cpp,
+	  src/operation/buffer/BufferInputLineSimplifier.h: JTS-1.12 sync
+
+2011-02-23 16:46  Sandro Santilli <strk@keybit.net>
+
+	* [r3245] include/geos/operation/buffer/BufferBuilder.h,
+	  include/geos/operation/buffer/BufferOp.h,
+	  include/geos/operation/buffer/BufferParameters.h,
+	  include/geos/operation/buffer/BufferSubgraph.h,
+	  include/geos/operation/buffer/OffsetCurveBuilder.h,
+	  include/geos/operation/buffer/OffsetCurveVertexList.h,
+	  include/geos/operation/buffer/RightmostEdgeFinder.h,
+	  include/geos/operation/buffer/SubgraphDepthLocater.h,
+	  src/operation/buffer/BufferBuilder.cpp,
+	  src/operation/buffer/BufferOp.cpp,
+	  src/operation/buffer/BufferParameters.cpp,
+	  src/operation/buffer/BufferSubgraph.cpp,
+	  src/operation/buffer/RightmostEdgeFinder.cpp,
+	  src/operation/buffer/SubgraphDepthLocater.cpp: Update port info
+
+2011-02-23 16:21  Sandro Santilli <strk@keybit.net>
+
+	* [r3244] include/geos/operation/buffer/OffsetCurveBuilder.h,
+	  include/geos/operation/buffer/OffsetCurveSetBuilder.h,
+	  src/operation/buffer/OffsetCurveBuilder.cpp,
+	  src/operation/buffer/OffsetCurveSetBuilder.cpp: Update port info
+
+2011-02-23 16:21  Sandro Santilli <strk@keybit.net>
+
+	* [r3243] NEWS, src/operation/buffer/OffsetCurveSetBuilder.cpp,
+	  tests/xmltester/tests/general/TestBuffer.xml: Fixed buffer
+	  OffsetCurveSetBuilder to handle "flat" rings correctly
+
+2011-02-23 15:45  Sandro Santilli <strk@keybit.net>
+
+	* [r3242] include/geos/operation/buffer/OffsetCurveSetBuilder.h,
+	  src/operation/buffer/OffsetCurveSetBuilder.cpp: Don't bother
+	  adding ring if it is "flat" and will disappear in the output
+	  (from TS r261)
+
+2011-02-23 15:45  Sandro Santilli <strk@keybit.net>
+
+	* [r3241] NEWS, include/geos/geom/LinearRing.h,
+	  src/geom/LinearRing.cpp, tests/unit/geom/LinearRingTest.cpp: Sync
+	  LinearRing to JTS-1.12: empty LinearRing are closed by definition
+	  now
+
+2011-02-23 14:37  Sandro Santilli <strk@keybit.net>
+
+	* [r3240] include/geos/noding/snapround/MCIndexPointSnapper.h,
+	  src/noding/snapround/MCIndexPointSnapper.cpp: Update port info
+	  for MCIndexPointSnapper
+
+2011-02-23 14:37  Sandro Santilli <strk@keybit.net>
+
+	* [r3239] include/geos/noding/snapround/SimpleSnapRounder.h,
+	  src/noding/snapround/SimpleSnapRounder.cpp: Update port info for
+	  SimpleSnapRounder
+
+2011-02-23 14:37  Sandro Santilli <strk@keybit.net>
+
+	* [r3238] include/geos/noding/snapround/MCIndexSnapRounder.h,
+	  include/geos/noding/snapround/MCIndexSnapRounder.inl,
+	  src/noding/snapround/MCIndexSnapRounder.cpp: Update port info for
+	  MCIndexSnapRounder (and remove testing-only check)
+
+2011-02-23 14:37  Sandro Santilli <strk@keybit.net>
+
+	* [r3237] include/geos/noding/snapround/HotPixel.h,
+	  include/geos/noding/snapround/HotPixel.inl,
+	  src/noding/snapround/HotPixel.cpp: Sync HotPixel to JTS-1.12
+	  (doxygen + privatization of a method..)
+
+2011-02-23 11:05  Sandro Santilli <strk@keybit.net>
+
+	* [r3236] tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/bug366.xml: Run test for bug366 (succeeds)
+
+2011-02-23 10:25  Sandro Santilli <strk@keybit.net>
+
+	* [r3235] tests/unit/noding/SegmentPointComparatorTest.cpp: Port
+	  JTS unit tests for SegmentPointComparator
+
+2011-02-23 10:25  Sandro Santilli <strk@keybit.net>
+
+	* [r3234] include/geos/noding/Makefile.am,
+	  include/geos/noding/SegmentPointComparator.h,
+	  src/noding/SegmentNode.cpp: Take SegmentPointComparator out of
+	  implelmentation file, to allow for unit-testing.
+
+2011-02-23 09:37  Sandro Santilli <strk@keybit.net>
+
+	* [r3233] NEWS, include/geos/noding/NodedSegmentString.h,
+	  src/noding/NodedSegmentString.cpp,
+	  tests/unit/noding/NodedSegmentStringTest.cpp: Fix
+	  NodedSegmentString to handle zero-length line segments correctly
+	  (via safeOctant)
+
+2011-02-22 21:22  Sandro Santilli <strk@keybit.net>
+
+	* [r3232] include/geos/geom/Lineal.h,
+	  include/geos/geom/Polygonal.h, include/geos/geom/Puntal.h: Export
+	  Puntal, Lineal and Polygonal symbols
+
+2011-02-22 17:53  Sandro Santilli <strk@keybit.net>
+
+	* [r3231] tests/unit/operation/linemerge/LineMergerTest.cpp: Fix
+	  linemerge test (wrong initial copy)
+
+2011-02-21 17:30  Sandro Santilli <strk@keybit.net>
+
+	* [r3230] include/geos/operation/linemerge/LineSequencer.h,
+	  src/operation/linemerge/LineSequencer.cpp,
+	  tests/unit/Makefile.am,
+	  tests/unit/operation/linemerge/LineSequencerTest.cpp: Add
+	  LineSequencer unit test, fix memory leaks in the class.
+
+2011-02-21 17:30  Sandro Santilli <strk@keybit.net>
+
+	* [r3229] include/geos/operation/linemerge/LineSequencer.h: Add
+	  templated geometry adder to LineSequencer class
+
+2011-02-21 16:14  Sandro Santilli <strk@keybit.net>
+
+	* [r3228] NEWS, include/geos/operation/linemerge/EdgeString.h,
+	  include/geos/operation/linemerge/LineMergeEdge.h,
+	  include/geos/operation/linemerge/LineMergeGraph.h,
+	  include/geos/operation/linemerge/LineMerger.h,
+	  src/operation/linemerge/EdgeString.cpp,
+	  src/operation/linemerge/LineMergeEdge.cpp,
+	  src/operation/linemerge/LineMergeGraph.cpp,
+	  src/operation/linemerge/LineMerger.cpp, tests/unit/Makefile.am,
+	  tests/unit/operation/linemerge,
+	  tests/unit/operation/linemerge/LineMergerTest.cpp: Sync linemerge
+	  namespace to JTS-1.12 fixing LineMerger to skip lines with only a
+	  single unique coordinate; reduce some heap allocations; add unit
+	  testing for Linemerger
+
+2011-02-21 16:14  Sandro Santilli <strk@keybit.net>
+
+	* [r3227] include/geos/operation/linemerge/LineSequencer.h,
+	  src/operation/linemerge/LineSequencer.cpp: Sync
+	  linemerge::LineSequencer to JTS-1.12
+
+2011-02-21 14:02  Sandro Santilli <strk@keybit.net>
+
+	* [r3226] NEWS: Add note about SnapIfNeededOverlayOp change
+
+2011-02-21 14:02  Sandro Santilli <strk@keybit.net>
+
+	* [r3225] include/geos/operation/overlay/snap/GeometrySnapper.h,
+	  include/geos/operation/overlay/snap/LineStringSnapper.h,
+	  include/geos/operation/overlay/snap/SnapOverlayOp.h,
+	  src/operation/overlay/snap/GeometrySnapper.cpp,
+	  src/operation/overlay/snap/LineStringSnapper.cpp,
+	  src/operation/overlay/snap/SnapOverlayOp.cpp: Update port info
+
+2011-02-21 12:03  Sandro Santilli <strk@keybit.net>
+
+	* [r3224]
+	  include/geos/operation/overlay/snap/SnapIfNeededOverlayOp.h,
+	  src/operation/overlay/snap/SnapIfNeededOverlayOp.cpp: Fix
+	  SnapIfNeededOverlayOp to throw the originating exception, which
+	  contains meaningful coordinates, and update port info.
+
+2011-02-18 18:25  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3223] capi/CMakeLists.txt, src/CMakeLists.txt: Updated CMake
+	  configuration to use libgeos.lib for static library and geos.lib
+	  for import library. Define GEOS_DLL_EXPORT for GEOS DLL target.
+
+2011-02-15 17:35  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3222] capi/geos_ts_c.cpp: gstrdup may throw since r3088 thus
+	  should no longer be declared as C function
+
+2011-02-15 15:24  Sandro Santilli <strk@keybit.net>
+
+	* [r3221] capi/geos_ts_c.cpp,
+	  tests/unit/capi/GEOSisValidDetailTest.cpp: Allow passing NULL for
+	  "reason" and "location" arguments of GEOSisValidDetail [RT-SIGTA]
+
+2011-02-15 15:15  Sandro Santilli <strk@keybit.net>
+
+	* [r3220] php/geos.c, php/test/test.php: Adapt PHP binding to the
+	  new GEOSisValidDetail interface
+
+2011-02-15 15:15  Sandro Santilli <strk@keybit.net>
+
+	* [r3219] NEWS, capi/geos_c.cpp, capi/geos_c.h.in,
+	  capi/geos_ts_c.cpp, tests/unit/Makefile.am,
+	  tests/unit/capi/GEOSisValidDetailTest.cpp: Add a 'flags'
+	  parameter to GEOSisValidDetail.
+
+2011-02-15 15:14  Sandro Santilli <strk@keybit.net>
+
+	* [r3218] php/Makefile.am: Make sure php binding are built _before_
+	  the corresponding test is run
+
+2011-02-13 22:31  Sandro Santilli <strk@keybit.net>
+
+	* [r3217] src/operation/overlay/snap/LineStringSnapper.cpp: Guard
+	  againts empty vectors before decrementing .end()
+
+2011-02-13 22:30  Sandro Santilli <strk@keybit.net>
+
+	* [r3216] include/geos/geom/CoordinateList.h: Add an .empty()
+	  interface to CoordinateList
+
+2011-02-13 21:29  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3215] configure.in: Added new ./configure option:
+	  --enable-glibcxx-debug which to enable libstdc++ debug mode (see
+	  Ticket #395). Added AC_MSG_CHECKING and AC_MSG_RESULT to existing
+	  options.
+
+2011-02-13 20:14  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3214] tests/unit/operation/distance/DistanceOpTest.cpp: CRLF to
+	  LF
+
+2011-02-13 20:14  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3213] tests/unit/operation/distance/DistanceOpTest.cpp: Added
+	  test case submitted with Ticket #367. No segmentation fault in
+	  distance() method observed under Visual C++ 10.0
+
+2011-02-13 20:03  Sandro Santilli <strk@keybit.net>
+
+	* [r3212] src/geom/Geometry.cpp: Always use BinaryOp for overlay
+	  operations accessible from Geometry
+
+2011-02-13 19:54  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3211] include/geos/geom/MultiLineString.h,
+	  include/geos/geom/MultiPoint.h, include/geos/geom/MultiPolygon.h:
+	  Explicitly disabled Visual C++ warning C4250 ('class1' : inherits
+	  'class2::member' via dominance) - it is still unclear if caused
+	  by Visual C++ bug
+	  https://connect.microsoft.com/VisualStudio/feedback/details/101259/
+	  - safe to disable anyway.
+
+2011-02-13 19:51  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3210] include/geos/geom/GeometryFactory.h: Return unset
+	  std::auto_otr from GeometryFactory, otherwise error condition
+	  causes no return
+
+2011-02-13 19:50  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3209] include/geos/operation/union/PointGeometryUnion.h:
+	  Declare PointGeometryUnion type as non-copyable
+
+2011-02-13 19:25  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3208] include/geos/geom/util/GeometryExtracter.h: Renamed
+	  template parameters to more readable CamelCase and
+	  self-descriptive form. Declare Extracter type as non-copyable. Do
+	  not use names starting with underscore - they are reserved for
+	  C++ implementations.
+
+2011-02-13 19:22  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3207] include/geos/geom/BinaryOp.h: Fixed missing or ambiguous
+	  declarations of TopologyException (Ticket #394)
+
+2011-02-12 08:54  Sandro Santilli <strk@keybit.net>
+
+	* [r3206] src/geom/Geometry.cpp, tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/bug360.xml: Have Geometry::Union use
+	  BinaryOp rather than SnapIfNeededOverlayOp. Improves robustness
+	  (fixes bug #360, test for which is enabled with this commit)
+
+2011-02-11 15:59  Sandro Santilli <strk@keybit.net>
+
+	* [r3205] tests/xmltester/tests/bug344.xml: Add description
+
+2011-02-11 10:51  Sandro Santilli <strk@keybit.net>
+
+	* [r3204] tests/xmltester/tests/bug360.xml: XML version of test for
+	  bug #360
+
+2011-02-11 10:28  Sandro Santilli <strk@keybit.net>
+
+	* [r3203] src/operation/union/PointGeometryUnion.cpp: Optimize
+	  container->container copy, on Mat's suggestion
+
+2011-02-11 09:58  Sandro Santilli <strk@keybit.net>
+
+	* [r3202] php/geos.c, php/test/test.php: PHP support or UnaryUnion
+
+2011-02-11 09:58  Sandro Santilli <strk@keybit.net>
+
+	* [r3201] NEWS, capi/geos_c.cpp, capi/geos_c.h.in,
+	  capi/geos_ts_c.cpp, tests/unit/Makefile.am,
+	  tests/unit/capi/GEOSUnaryUnionTest.cpp: GEOSUnaryUnion C-API
+	  interface (and test)
+
+2011-02-10 21:05  Sandro Santilli <strk@keybit.net>
+
+	* [r3200] tests/xmltester/Makefile.am,
+	  tests/xmltester/XMLTester.cpp,
+	  tests/xmltester/tests/general/TestUnaryUnion.xml: Add support for
+	  UnaryUnion testing in XML format, import the JTS xml test for it
+
+2011-02-10 21:05  Sandro Santilli <strk@keybit.net>
+
+	* [r3199] tests/unit/operation/union/UnaryUnionOpTest.cpp: Add test
+	  exposing the std::copy bug of two commits ago
+
+2011-02-10 21:05  Sandro Santilli <strk@keybit.net>
+
+	* [r3198] include/geos/geom/Geometry.h, src/geom/Geometry.cpp:
+	  Expose unary union trought Geometry.Union()
+
+2011-02-10 21:05  Sandro Santilli <strk@keybit.net>
+
+	* [r3197] src/operation/union/PointGeometryUnion.cpp: Can't just
+	  std::copy over an empty container. Need a back_inserter !
+
+2011-02-10 15:51  Sandro Santilli <strk@keybit.net>
+
+	* [r3196] include/geos/operation/union/UnaryUnionOp.h,
+	  tests/unit/Makefile.am,
+	  tests/unit/operation/union/CascadedPolygonUnionTest.cpp,
+	  tests/unit/operation/union/UnaryUnionOpTest.cpp: Add unit test
+	  for UnaryUnionOp (and fix interface bug)
+
+2011-02-10 14:14  Sandro Santilli <strk@keybit.net>
+
+	* [r3195] include/geos/operation/union/Makefile.am,
+	  include/geos/operation/union/UnaryUnionOp.h,
+	  src/operation/union/Makefile.am,
+	  src/operation/union/UnaryUnionOp.cpp: UnaryUnionOp port from
+	  JTS-1.12
+
+2011-02-10 14:10  Sandro Santilli <strk@keybit.net>
+
+	* [r3194] tests/unit/operation/union/CascadedPolygonUnionTest.cpp:
+	  Oops, didn't want to commit this one.
+
+2011-02-10 14:05  Sandro Santilli <strk@keybit.net>
+
+	* [r3193] include/geos/operation/union/CascadedPolygonUnion.h: Fix
+	  dynamic cast
+
+2011-02-10 13:48  Sandro Santilli <strk@keybit.net>
+
+	* [r3192] include/geos/operation/union/CascadedPolygonUnion.h,
+	  src/operation/union/CascadedPolygonUnion.cpp,
+	  tests/unit/operation/union/CascadedPolygonUnionTest.cpp: Add a
+	  template interface to CascadedPolygonUnion to relax requirements
+	  on used container
+
+2011-02-10 11:09  Sandro Santilli <strk@keybit.net>
+
+	* [r3191] include/geos/geom/Geometry.h,
+	  include/geos/geom/Geometry.inl,
+	  include/geos/geom/GeometryFactory.h,
+	  include/geos/geom/Makefile.am, src/geom/Geometry.cpp,
+	  src/inlines.cpp, tests/unit/geom/GeometryFactoryTest.cpp:
+	  Introduce a templated version of GeometryFactory::buildGeometry,
+	  and test it.
+
+2011-02-10 11:09  Sandro Santilli <strk@keybit.net>
+
+	* [r3190] src/operation/sharedpaths/SharedPathsOp.cpp: Include
+	  required GeometryFactory header (it's used)
+
+2011-02-07 17:52  Sandro Santilli <strk@keybit.net>
+
+	* [r3189] include/geos/geom/util/GeometryExtracter.h,
+	  include/geos/geom/util/Makefile.am, tests/unit/Makefile.am,
+	  tests/unit/geom/util,
+	  tests/unit/geom/util/GeometryExtracterTest.cpp: Port
+	  GeometryExtracter from JTS-1.12
+
+2011-02-07 17:00  Sandro Santilli <strk@keybit.net>
+
+	* [r3188] src/operation/union/PointGeometryUnion.cpp: Fix casts
+
+2011-02-07 15:41  Sandro Santilli <strk@keybit.net>
+
+	* [r3187] include/geos/operation/union/Makefile.am,
+	  include/geos/operation/union/PointGeometryUnion.h,
+	  src/operation/union/Makefile.am,
+	  src/operation/union/PointGeometryUnion.cpp: PointGeometryUnion
+	  port
+
+2011-02-07 15:39  Sandro Santilli <strk@keybit.net>
+
+	* [r3186] include/geos/geom/Lineal.h,
+	  include/geos/geom/Polygonal.h, include/geos/geom/Puntal.h:
+	  Include definition of base class
+
+2011-02-07 15:39  Sandro Santilli <strk@keybit.net>
+
+	* [r3185] NEWS, include/geos/geom/GeometryCollection.h,
+	  include/geos/geom/LineString.h, include/geos/geom/Lineal.h,
+	  include/geos/geom/MultiLineString.inl,
+	  include/geos/geom/MultiPoint.h,
+	  include/geos/geom/MultiPolygon.inl, include/geos/geom/Point.h,
+	  include/geos/geom/Polygon.h, include/geos/geom/Polygonal.h,
+	  include/geos/geom/Puntal.h, src/geom/LinearRing.cpp,
+	  src/geom/MultiLineString.cpp, src/geom/MultiPoint.cpp,
+	  src/geom/MultiPolygon.cpp: Turn Puntal, Lineal and Polygonal into
+	  Geometry derivates. This commit introduces virtual inheritance
+	  and 3 diamonds.
+
+2011-02-04 12:27  Sandro Santilli <strk@keybit.net>
+
+	* [r3184] src/operation/union/CascadedPolygonUnion.cpp:
+	  dynamic_cast Polygon to Geometry before converting to void
+	  pointer. This is safer, altought the whole void pointer use
+	  should be dropped for real safety.
+
+2011-02-04 12:26  Sandro Santilli <strk@keybit.net>
+
+	* [r3183] include/geos/index/strtree/AbstractSTRtree.h: Avoid
+	  useless reinterpret_cast
+
+2011-02-04 10:12  Sandro Santilli <strk@keybit.net>
+
+	* [r3182] src/algorithm/MinimumDiameter.cpp, src/geom/Geometry.cpp,
+	  src/geom/Polygon.cpp,
+	  src/geom/prep/AbstractPreparedPolygonContains.cpp,
+	  src/geom/prep/PreparedPolygon.cpp,
+	  src/geom/util/GeometryEditor.cpp, src/io/WKTWriter.cpp,
+	  src/operation/overlay/OverlayOp.cpp,
+	  src/operation/union/CascadedPolygonUnion.cpp,
+	  src/operation/valid/ConnectedInteriorTester.cpp,
+	  src/operation/valid/IsValidOp.cpp,
+	  tests/unit/geom/PolygonTest.cpp,
+	  tests/unit/operation/union/CascadedPolygonUnionTest.cpp: Even
+	  more static casts drops
+
+2011-02-04 08:50  Sandro Santilli <strk@keybit.net>
+
+	* [r3181] src/geom/GeometryFactory.cpp, src/geom/LineString.cpp,
+	  src/geom/Polygon.cpp, src/geom/util/GeometryEditor.cpp,
+	  src/geom/util/GeometryTransformer.cpp, src/io/WKTWriter.cpp,
+	  src/operation/linemerge/LineSequencer.cpp,
+	  tests/unit/geom/GeometryFactoryTest.cpp,
+	  tests/unit/geom/LineStringTest.cpp,
+	  tests/unit/geom/LinearRingTest.cpp,
+	  tests/unit/geom/PolygonTest.cpp: Drop more static casts
+
+2011-02-03 21:50  Sandro Santilli <strk@keybit.net>
+
+	* [r3180] tests/unit/geom/MultiPointTest.cpp,
+	  tests/unit/geom/PointTest.cpp: Don't downcast with static_cast
+
+2011-02-03 19:59  Sandro Santilli <strk@keybit.net>
+
+	* [r3179] include/geos/geom/util/GeometryEditor.h,
+	  include/geos/geom/util/GeometryTransformer.h,
+	  src/algorithm/CentroidPoint.cpp, src/geom/GeometryCollection.cpp,
+	  src/geom/MultiPolygon.cpp, src/geom/Point.cpp,
+	  src/geom/util/GeometryEditor.cpp,
+	  src/geom/util/GeometryTransformer.cpp,
+	  src/geomgraph/GeometryGraph.cpp, src/io/WKBWriter.cpp,
+	  src/io/WKTWriter.cpp, src/operation/IsSimpleOp.cpp,
+	  src/operation/valid/IsValidOp.cpp,
+	  src/operation/valid/RepeatedPointTester.cpp: reduce static casts
+
+2011-02-03 19:58  Sandro Santilli <strk@keybit.net>
+
+	* [r3178] include/geos/geom/Coordinate.h: provide standard strict
+	  weak ordering operator for Coordinate
+
+2011-02-03 19:58  Sandro Santilli <strk@keybit.net>
+
+	* [r3177] include/geos/geom/util/GeometryCombiner.h,
+	  src/geom/util/GeometryCombiner.cpp: A step toward better
+	  const-correctness in GeometryCombiner interface
+
+2011-02-03 19:58  Sandro Santilli <strk@keybit.net>
+
+	* [r3176] include/geos/geom/util/GeometryCombiner.h: Document
+	  ownerhips of GeometryCombiner inputs
+
+2011-02-03 08:15  Sandro Santilli <strk@keybit.net>
+
+	* [r3175] src/geom/GeometryFactory.cpp: Oops.. fix the newly added
+	  interface to create MultiPoint from a vector of coordinates
+
+2011-02-02 19:24  Sandro Santilli <strk@keybit.net>
+
+	* [r3174] include/geos/algorithm/PointLocator.h,
+	  src/algorithm/PointLocator.cpp: Check PointLocator sync with
+	  JTS-1.12
+
+2011-02-02 19:23  Sandro Santilli <strk@keybit.net>
+
+	* [r3173] include/geos/geom/GeometryFactory.h,
+	  src/geom/GeometryFactory.cpp: Add interface to create MultiPoint
+	  from Coordinate vector
+
+2011-02-02 17:57  Sandro Santilli <strk@keybit.net>
+
+	* [r3172] include/geos/geom/util/GeometryCombiner.h,
+	  src/geom/util/GeometryCombiner.cpp: Check GeometryCombiner
+	  against JTS-1.12
+
+2011-02-02 17:41  Sandro Santilli <strk@keybit.net>
+
+	* [r3171] include/geos/geom/LineString.h,
+	  include/geos/geom/Lineal.h, include/geos/geom/Makefile.am,
+	  include/geos/geom/MultiLineString.h,
+	  include/geos/geom/MultiLineString.inl,
+	  include/geos/geom/MultiPoint.h, include/geos/geom/MultiPolygon.h,
+	  include/geos/geom/Point.h, include/geos/geom/Polygon.h,
+	  include/geos/geom/Polygonal.h, include/geos/geom/Puntal.h,
+	  src/geom/LineString.cpp, src/geom/MultiLineString.cpp,
+	  src/geom/MultiPoint.cpp, src/geom/MultiPolygon.cpp,
+	  src/geom/Point.cpp, src/geom/Polygon.cpp: Add Puntal, Lineal and
+	  Polygonal "interfaces"
+
+2011-01-27 18:01  Sandro Santilli <strk@keybit.net>
+
+	* [r3170] NEWS: Add release date of 3.2.0 (more than an year ago..)
+
+2011-01-27 10:16  Sandro Santilli <strk@keybit.net>
+
+	* [r3169] php/test/test.php: Don't use is_null on unexistant array
+	  elements [#393]
+
+2011-01-25 23:20  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3168] tests/CMakeLists.txt, tests/bigtest/CMakeLists.txt: Added
+	  tests/bigtest programs to CMake configuration
+
+2011-01-25 23:08  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3167] tests/xmltester/CMakeLists.txt: Updated CMake
+	  configuration to call xmltester from runtime output directory.
+
+2010-12-26 21:20  Sandro Santilli <strk@keybit.net>
+
+	* [r3166] tests/unit/operation/sharedpaths/SharedPathsOpTest.cpp:
+	  remove warning in testcase
+
+2010-12-26 20:32  Sandro Santilli <strk@keybit.net>
+
+	* [r3165] include/geos/operation/sharedpaths/SharedPathsOp.h:
+	  Declare SharedPathsOp class as noncopyable. Hopefully fixes
+	  VC2008 warning. [RT-SIGTA]
+
+2010-12-24 14:27  Sandro Santilli <strk@keybit.net>
+
+	* [r3164] include/geos/algorithm/InteriorPointLine.h,
+	  src/algorithm/InteriorPointLine.cpp: Record port info for
+	  InteriorPointLine
+
+2010-12-22 16:28  Sandro Santilli <strk@keybit.net>
+
+	* [r3163] src/operation/sharedpaths/SharedPathsOp.cpp,
+	  tests/unit/operation/sharedpaths/SharedPathsOpTest.cpp: Fix
+	  computation of shared path direction when path starts or ends on
+	  the first-last point of a closed line. Fixes ticket #391.
+	  Includes automated testing.
+
+2010-12-22 09:42  Sandro Santilli <strk@keybit.net>
+
+	* [r3162] .gitignore, php/geos.c, php/test/test.php: Expose
+	  GEOSRelateMatch to PHP api.
+
+2010-12-21 08:55  Sandro Santilli <strk@keybit.net>
+
+	* [r3161] NEWS, capi/geos_c.cpp, capi/geos_c.h.in,
+	  capi/geos_ts_c.cpp, tests/unit/Makefile.am,
+	  tests/unit/capi/GEOSRelatePatternMatchTest.cpp: Add
+	  GEOSRelatePatternMatch C-API interface [RT-SIGTA]
+
+2010-12-20 11:34  Sandro Santilli <strk@keybit.net>
+
+	* [r3160] include/geos/platform.h.in: MinGW32 fixes by Sandro
+	  Furieri
+
+2010-12-20 11:16  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3159] include/geos/operation/sharedpaths, php, php/test,
+	  src/operation/sharedpaths: Updated svn:ignore properties.
+
+2010-12-06 15:00  Sandro Santilli <strk@keybit.net>
+
+	* [r3158] include/geos/operation/overlay/snap/GeometrySnapper.h:
+	  typo
+
+2010-12-03 17:26  Sandro Santilli <strk@keybit.net>
+
+	* [r3157]
+	  tests/unit/operation/overlay/snap/LineStringSnapperTest.cpp: Add
+	  test for src-vertex snapping allowance
+
+2010-12-03 14:02  Sandro Santilli <strk@keybit.net>
+
+	* [r3156] include/geos/geom/CoordinateList.h: Update copyright
+
+2010-12-03 13:57  Sandro Santilli <strk@keybit.net>
+
+	* [r3155] include/geos/geom/CoordinateList.h,
+	  tests/unit/geom/CoordinateListTest.cpp: Add method to insert
+	  coordinats into a CoordinateList w/out allowing duplicates (fixes
+	  issue #387)
+
+2010-12-03 10:58  Sandro Santilli <strk@keybit.net>
+
+	* [r3154]
+	  tests/unit/operation/overlay/snap/LineStringSnapperTest.cpp:
+	  Another test for snapping (empty sequence vs. non-empty snaps)
+
+2010-12-03 10:52  Sandro Santilli <strk@keybit.net>
+
+	* [r3153] src/operation/overlay/snap/LineStringSnapper.cpp: update
+	  dox
+
+2010-12-03 10:49  Sandro Santilli <strk@keybit.net>
+
+	* [r3152] include/geos/operation/overlay/snap/LineStringSnapper.h,
+	  src/operation/overlay/snap/LineStringSnapper.cpp: Take the
+	  allowSnappingToSourceVertices support in
+
+2010-12-03 08:36  Sandro Santilli <strk@keybit.net>
+
+	* [r3151] tests/unit/Makefile.am,
+	  tests/unit/capi/GEOSSharedPathsTest.cpp: Add test for
+	  GEOSSharedPaths C-API interface
+
+2010-12-02 18:06  Sandro Santilli <strk@keybit.net>
+
+	* [r3150] tests/unit/capi/GEOSSnapTest.cpp: Another test, and a
+	  leak plug (in the test)
+
+2010-12-02 16:49  Sandro Santilli <strk@keybit.net>
+
+	* [r3149] NEWS: Add GEOSSnap item
+
+2010-12-02 16:48  Sandro Santilli <strk@keybit.net>
+
+	* [r3148] php/geos.c, php/test/test.php: Expose GEOSSnap to PHP
+	  interface
+
+2010-12-02 16:44  Sandro Santilli <strk@keybit.net>
+
+	* [r3147] tests/unit/Makefile.am, tests/unit/capi/GEOSSnapTest.cpp:
+	  Add test for C-API GEOSSnap interface
+
+2010-12-02 15:07  Sandro Santilli <strk@keybit.net>
+
+	* [r3146] capi/geos_c.cpp, capi/geos_ts_c.cpp: OOps.. this one
+	  build
+
+2010-12-02 14:52  Sandro Santilli <strk@keybit.net>
+
+	* [r3145] capi/geos_c.cpp, capi/geos_c.h.in, capi/geos_ts_c.cpp:
+	  Expose snapping to the C-API
+
+2010-12-02 14:29  Sandro Santilli <strk@keybit.net>
+
+	* [r3144]
+	  tests/unit/operation/overlay/snap/GeometrySnapperTest.cpp: Allow
+	  testing snapping something different from a single polygon..
+
+2010-12-02 14:16  Sandro Santilli <strk@keybit.net>
+
+	* [r3143]
+	  tests/unit/operation/overlay/snap/GeometrySnapperTest.cpp: tab to
+	  8 spaces
+
+2010-12-02 10:32  Sandro Santilli <strk@keybit.net>
+
+	* [r3142] include/geos/operation/overlay/snap/LineStringSnapper.h,
+	  src/operation/overlay/snap/LineStringSnapper.cpp,
+	  tests/unit/operation/overlay/snap/LineStringSnapperTest.cpp:
+	  Bring LineStringSnapper forward to r309 (JTS-1.11+): avoid
+	  snapping final point of closed rings.
+
+2010-12-02 09:38  Sandro Santilli <strk@keybit.net>
+
+	* [r3141] include/geos/operation/overlay/snap/GeometrySnapper.h,
+	  src/operation/overlay/snap/GeometrySnapper.cpp: update copyright
+	  date
+
+2010-12-02 09:36  Sandro Santilli <strk@keybit.net>
+
+	* [r3140] include/geos/operation/overlay/snap/GeometrySnapper.h,
+	  src/operation/overlay/snap/GeometrySnapper.cpp: Take
+	  GeometrySnapper forward to r309 (JTS-1.11+): add self-snapping
+
+2010-11-30 08:31  Sandro Santilli <strk@keybit.net>
+
+	* [r3139] include/geos/operation/sharedpaths/SharedPathsOp.h,
+	  src/operation/sharedpaths/SharedPathsOp.cpp: Hope this is the
+	  last one... (RT credit tweaks)
+
+2010-11-29 13:45  Sandro Santilli <strk@keybit.net>
+
+	* [r3138] include/geos/operation/sharedpaths/SharedPathsOp.h,
+	  src/operation/sharedpaths/SharedPathsOp.cpp: Full credit line
+	  [RT-SIGTA]
+
+2010-11-29 11:08  Sandro Santilli <strk@keybit.net>
+
+	* [r3137] NEWS: SharedPaths in NEWS [RT-SIGTA]
+
+2010-11-29 10:51  Sandro Santilli <strk@keybit.net>
+
+	* [r3136] capi/geos_c.cpp, capi/geos_c.h.in, capi/geos_ts_c.cpp,
+	  php/geos.c, php/test/test.php: Merge branch 'rt'
+
+2010-11-29 09:43  Sandro Santilli <strk@keybit.net>
+
+	* [r3135] NEWS, include/geos/operation/sharedpaths/SharedPathsOp.h,
+	  src/operation/sharedpaths/SharedPathsOp.cpp: Write RT credit and
+	  NEWS itam
+
+2010-11-29 09:34  Sandro Santilli <strk@keybit.net>
+
+	* [r3134] src/operation/sharedpaths/SharedPathsOp.cpp: drop unused
+	  include
+
+2010-11-29 09:34  Sandro Santilli <strk@keybit.net>
+
+	* [r3133] src/operation/sharedpaths/SharedPathsOp.cpp,
+	  tests/unit/operation/sharedpaths/SharedPathsOpTest.cpp: Test
+	  equal lines
+
+2010-11-29 09:34  Sandro Santilli <strk@keybit.net>
+
+	* [r3132] include/geos/operation/sharedpaths/SharedPathsOp.h,
+	  src/operation/sharedpaths/SharedPathsOp.cpp,
+	  tests/unit/operation/sharedpaths/SharedPathsOpTest.cpp: Have
+	  SharedPathsOp throw an exception on illegal (non-lineal) arg
+
+2010-11-29 09:34  Sandro Santilli <strk@keybit.net>
+
+	* [r3131] tests/unit/operation/sharedpaths/SharedPathsOpTest.cpp:
+	  Add tests for multiline-multiline both single dir and mixed dirs
+
+2010-11-29 09:34  Sandro Santilli <strk@keybit.net>
+
+	* [r3130] tests/unit/operation/sharedpaths/SharedPathsOpTest.cpp:
+	  Add two tests of mixed direction shared paths
+
+2010-11-29 09:34  Sandro Santilli <strk@keybit.net>
+
+	* [r3129] include/geos/operation/sharedpaths/SharedPathsOp.h:
+	  Document that the direction of the returned paths is the one
+	  these paths have on the first geometry given
+
+2010-11-29 09:33  Sandro Santilli <strk@keybit.net>
+
+	* [r3128] tests/unit/Makefile.am, tests/unit/operation/sharedpaths,
+	  tests/unit/operation/sharedpaths/SharedPathsOpTest.cpp: Initial
+	  tests for SharedPathsOp
+
+2010-11-29 09:33  Sandro Santilli <strk@keybit.net>
+
+	* [r3127] include/geos/operation/sharedpaths/SharedPathsOp.h,
+	  src/operation/sharedpaths/SharedPathsOp.cpp: Paths are always
+	  LINESTRING types
+
+2010-11-29 09:33  Sandro Santilli <strk@keybit.net>
+
+	* [r3126] .gitignore: forgot aclocal.m4
+
+2010-11-29 09:33  Sandro Santilli <strk@keybit.net>
+
+	* [r3125] .vimrc,
+	  include/geos/operation/sharedpaths/SharedPathsOp.h,
+	  src/operation/sharedpaths/SharedPathsOp.cpp: Complete
+	  implementation of SharedPathsOp
+
+2010-11-29 09:33  Sandro Santilli <strk@keybit.net>
+
+	* [r3124] .gitignore: more ignores
+
+2010-11-29 09:33  Sandro Santilli <strk@keybit.net>
+
+	* [r3123] configure.in, include/geos/operation/Makefile.am,
+	  include/geos/operation/sharedpaths/Makefile.am,
+	  include/geos/operation/sharedpaths/SharedPathsOp.h,
+	  src/operation/Makefile.am, src/operation/sharedpaths/Makefile.am,
+	  src/operation/sharedpaths/SharedPathsOp.cpp: Build sharedpaths
+	  lib/namespace
+
+2010-11-29 09:32  Sandro Santilli <strk@keybit.net>
+
+	* [r3122] configure.in: Add support for 'maintainer mode'
+
+2010-11-29 09:32  Sandro Santilli <strk@keybit.net>
+
+	* [r3121] .gitignore: ignores
+
+2010-11-29 09:32  Sandro Santilli <strk@keybit.net>
+
+	* [r3120] include/geos/operation/sharedpaths,
+	  include/geos/operation/sharedpaths/SharedPathsOp.h,
+	  src/operation/sharedpaths,
+	  src/operation/sharedpaths/SharedPathsOp.cpp: Stub SharedPathsOp
+
+2010-11-29 09:32  Sandro Santilli <strk@keybit.net>
+
+	* [r3119] tests/xmltester/tests/rt,
+	  tests/xmltester/tests/rt/TestSameDirection.xml: stub tet for
+	  SameDirection predicate
+
+2010-11-24 09:00  Sandro Santilli <strk@keybit.net>
+
+	* [r3118] TODO: typo
+
+2010-10-25 15:12  Sandro Santilli <strk@keybit.net>
+
+	* [r3117] configure.in: Don't try to configure missing files (fixes
+	  bug #382)
+
+2010-10-15 15:54  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3116] CMakeLists.txt, tests/unit/CMakeLists.txt: Unified
+	  CMAKE_*_OUTPUT_DIRECTOR locations to simplify tests running and
+	  finding all binaries.
+
+2010-10-15 15:20  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3115] tests/unit/capi/GEOSGeom_create.cpp,
+	  tests/unit/capi/GEOSGeom_extractUniquePointsTest.cpp,
+	  tests/unit/io/WKTReaderTest.cpp: Visual C++ warnings cleanup
+
+2010-10-15 15:19  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3114] capi/geos_c.h.in: Missing DLL storage-class attributes
+	  for GEOSOrientationIndex
+
+2010-10-15 14:55  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3113] src/io/WKTReader.cpp: Cast toupper() result to char
+
+2010-10-15 13:42  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3112] Makefile.am, build: Deprecate Visual Studio projects in
+	  trunk/build (#381). Long live the CMake.
+
+2010-10-10 21:36  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3111] include/geos/geom/BinaryOp.h: Cleaned compiler warnings
+
+2010-10-10 21:36  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3110] capi/geos_ts_c.cpp: Cleaned compiler warnings
+
+2010-10-10 21:28  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3109] src/inlines.cpp: Disable inline.obj if GEOS_INLINE
+	  defined while building with Visual C++
+
+2010-10-10 21:15  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3108] src/operation/buffer/BufferBuilder.cpp: Disable argument
+	  dependant lookup (Koenig) for min/max functions to make sure GEOS
+	  compiles in the presence of the min and max macros.
+
+2010-10-10 21:07  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3107] CMakeLists.txt: Added NOMINMAX define for Visual C++
+
+2010-10-10 20:50  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3106] CMakeLists.txt: Do not set CMAKE_BUILD_TYPE for Visual
+	  Studio IDE generators - CMAKE_BUILD_TYPE is dedicated to
+	  single-configuration generators like Make or NMAKE.
+
+2010-10-10 11:32  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3105] autogen.bat: Updated GEOS_HEADERS location. Thanks to
+	  Andrea Peri for reporting.
+
+2010-08-27 18:23  Sandro Santilli <strk@keybit.net>
+
+	* [r3104] tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/bug358.xml: Add test for 358 in the loop
+	  (now fixed).
+
+2010-08-27 15:58  Sandro Santilli <strk@keybit.net>
+
+	* [r3103] tests/xmltester/tests/bug375.xml: Drop duplicated
+	  testcase
+
+2010-08-27 15:55  Sandro Santilli <strk@keybit.net>
+
+	* [r3102] include/geos/geom/BinaryOp.h,
+	  tests/xmltester/Makefile.am: Check validity of CommonBitsOp
+	  return, as JTS does. Check output validity for all tests, do not
+	  run the now-throwing tests also known to be bogus in JTS.
+
+2010-08-27 15:43  Sandro Santilli <strk@keybit.net>
+
+	* [r3101] tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/bug358.xml, tests/xmltester/tests/failure,
+	  tests/xmltester/tests/failure/TestOverlay.xml,
+	  tests/xmltester/tests/robustness-invalid-output.xml: Found
+	  bug375.xml (==robustness-invalid-output.xml) to be the same of
+	  JTS's failure/TestOverlay.xml, so dropped the previous 2 and
+	  copied over the latter. Won't run that test for now, so to get in
+	  sync with JTS as next step.
+
+2010-08-27 15:27  Sandro Santilli <strk@keybit.net>
+
+	* [r3100] tests/xmltester/tests/bug375.xml: Add proper arg1 and
+	  arg2 attributes (for JTS support)
+
+2010-08-27 14:13  Sandro Santilli <strk@keybit.net>
+
+	* [r3099] include/geos/geom/BinaryOp.h: Add code to check validity
+	  of CommonBits removal policy op (known as EnhancedPreicionOp in
+	  JTS). The check can be turned on at compile time. Currently
+	  defaults to off to avoid breaking a previously-almost-working
+	  test (robustness-invalid-output.xml). It'll need some discussion
+	  before going on with this as to whether we can accept to return
+	  invalid geometries or not..
+
+2010-08-27 13:53  Sandro Santilli <strk@keybit.net>
+
+	* [r3098] tests/xmltester/Makefile.am,
+	  tests/xmltester/testrunner.sh, tests/xmltester/tests/bug358.xml,
+	  tests/xmltester/tests/bug375.xml,
+	  tests/xmltester/tests/robustness-invalid-output.xml,
+	  tests/xmltester/tests/robustness.xml,
+	  tests/xmltester/tests/stmlf/stmlf-cases-20061020-invalid-output.xml,
+	  tests/xmltester/tests/stmlf/stmlf-cases-20061020.xml: Split tests
+	  that trigger invalid outputs from the rest.
+	  Test the sane ones with --test-invalid-output and the other ones
+	  with
+	  less strictness. Add (but dont run) tests for bugs 375 and 358
+	  (to
+	  review for correct expected otuput)
+
+2010-08-27 13:00  Sandro Santilli <strk@keybit.net>
+
+	* [r3097] tests/xmltester/XMLTester.cpp,
+	  tests/xmltester/XMLTester.h: Have --test-valid-output influence
+	  test results
+
+2010-08-27 10:22  Sandro Santilli <strk@keybit.net>
+
+	* [r3096] README: Add note about configuring for php support
+
+2010-08-27 09:04  Sandro Santilli <strk@keybit.net>
+
+	* [r3095] tests/xmltester/XMLTester.cpp,
+	  tests/xmltester/XMLTester.h: const-correctness
+
+2010-08-27 06:17  Sandro Santilli <strk@keybit.net>
+
+	* [r3094] tests/xmltester/XMLTester.cpp: Have --test-valid-output
+	  test actual result, not the expected one (more useful)
+
+2010-08-26 23:11  Sandro Santilli <strk@keybit.net>
+
+	* [r3093] tests/xmltester/tests/bug334.xml,
+	  tests/xmltester/tests/bug344.xml: Fix name of the test to match
+	  ticket number
+
+2010-08-23 16:37  Stephen Wong <swongu@gmail.com>
+
+	* [r3092] src/operation/buffer/BufferBuilder.cpp: Fixed a filtering
+	  distance problem in bufferLineSingleSided. (#372)
+
+2010-08-23 15:10  Sandro Santilli <strk@keybit.net>
+
+	* [r3091] include/geos/geom/BinaryOp.h: Add more debugging calls
+	  (for bug #358)
+
+2010-08-23 13:38  Sandro Santilli <strk@keybit.net>
+
+	* [r3090] include/geos/geom/BinaryOp.h: Snapping heuristic was
+	  never really dropping common bits. Now it does.
+	  This is just to have code match documentation, and still passes
+	  'make
+	  check' for GEOS. Wasn't tried against postgis, would be useful to
+	  do.
+
+2010-08-17 18:57  Sean Gillies <sgillies@frii.com>
+
+	* [r3089] capi/geos_ts_c.cpp: Use fully qualified
+	  std::runtime_error (#371) and fix indentation
+
+2010-08-17 18:33  Sean Gillies <sgillies@frii.com>
+
+	* [r3088] capi/geos_ts_c.cpp: Throw runtime_error if allocation
+	  fails in gstrdup_s
+
+2010-07-26 22:21  Stephen Wong <swongu@gmail.com>
+
+	* [r3087] src/operation/buffer/BufferBuilder.cpp,
+	  src/operation/valid/ConnectedInteriorTester.cpp,
+	  src/operation/valid/IsValidOp.cpp,
+	  tests/xmltester/tests/general/TestValid2.xml: Fixed a
+	  bufferLineSingleSided crash and fixed OGC validation on rare
+	  cases. (#364)
+
+2010-07-15 15:54  Sandro Santilli <strk@keybit.net>
+
+	* [r3086] php/TODO: Updated
+
+2010-07-15 09:15  Sandro Santilli <strk@keybit.net>
+
+	* [r3085] NEWS: Add item about the new PHP5 binding
+
+2010-07-15 09:13  Sandro Santilli <strk@keybit.net>
+
+	* [r3084] php/geos.c, php/test/test.php: PHP: Drop debug lines from
+	  serialization code, add test for
+	  serialization
+
+2010-07-15 09:07  Sandro Santilli <strk@keybit.net>
+
+	* [r3083] configure.in: Fix logic bug in phpunit check
+
+2010-07-14 08:38  Sandro Santilli <strk@keybit.net>
+
+	* [r3082] php/TODO, php/geos.c: Serialization/deserialization
+	  support for GEOSGeometry type
+
+2010-07-13 11:03  Sandro Santilli <strk@keybit.net>
+
+	* [r3081] configure.in, php/test/Makefile.am: Cleanup PHP-specific
+	  dependency handling and reporting
+
+2010-07-08 20:54  Sandro Santilli <strk@keybit.net>
+
+	* [r3080] src/geom/Polygon.cpp, tests/unit/io/WKTReaderTest.cpp:
+	  Object passed for ownership transfer in the constructor shouldn't
+	  be deleted when construction fails. Fixes bug #361
+
+2010-07-01 21:49  Sandro Santilli <strk@keybit.net>
+
+	* [r3079] NEWS: Note the bugfix in news file
+
+2010-07-01 21:44  Sandro Santilli <strk@keybit.net>
+
+	* [r3078] include/geos/operation/polygonize/EdgeRing.h,
+	  include/geos/operation/polygonize/PolygonizeGraph.h,
+	  include/geos/planargraph/PlanarGraph.h, php/test/test.php,
+	  src/operation/polygonize/EdgeRing.cpp,
+	  src/operation/polygonize/PolygonizeGraph.cpp,
+	  src/planargraph/PlanarGraph.cpp: Fix
+	  PolygonizeGraph::deleteDangles so it doesn't return duplicated
+	  LineStrings, as per JTS design. Fixes the Polygonizer Bug
+	  reported in list. This commit also takes the chance to reduce
+	  some heap allocations.
+
+2010-07-01 20:49  Sandro Santilli <strk@keybit.net>
+
+	* [r3077] include/geos/operation/polygonize/EdgeRing.h,
+	  src/operation/polygonize/EdgeRing.cpp: Minor optimizations /
+	  strictnesses
+
+2010-07-01 20:03  Sandro Santilli <strk@keybit.net>
+
+	* [r3076] include/geos/operation/polygonize/EdgeRing.h,
+	  src/operation/polygonize/EdgeRing.cpp: Drop useless
+	  heap-allocation in Polygonize op
+
+2010-06-24 14:40  Frank Warmerdam <warmerdam@pobox.com>
+
+	* [r3075] tests/unit/capi/GEOSGeomToWKTTest.cpp,
+	  tests/unit/capi/GEOSGeom_extractUniquePointsTest.cpp,
+	  tests/unit/geom/PointTest.cpp: fix memory leaks
+
+2010-06-24 14:10  Sandro Santilli <strk@keybit.net>
+
+	* [r3074] php/geos.c, php/test/test.php: PHP:
+	  GEOSWKTWriter::getOutputDimension and test
+
+2010-06-24 13:58  Frank Warmerdam <warmerdam@pobox.com>
+
+	* [r3073] capi/geos_c.cpp, capi/geos_c.h.in, capi/geos_ts_c.cpp,
+	  tests/unit/capi/GEOSGeomToWKTTest.cpp: added
+	  GEOSWKTWriter_getOutputDimension and test (#354)
+
+2010-06-24 09:42  Sandro Santilli <strk@keybit.net>
+
+	* [r3072] php/TODO: Update
+
+2010-06-24 09:41  Sandro Santilli <strk@keybit.net>
+
+	* [r3071] php/geos.c, php/test/test.php: WKBReader: construct and
+	  readHEX; improve WKTReader test to include 'Z' label
+
+2010-06-24 09:20  Sandro Santilli <strk@keybit.net>
+
+	* [r3070] php/geos.c, php/test/test.php:
+	  WKBWriter::{set,get}IncludeSRID (and test)
+
+2010-06-24 09:07  Sandro Santilli <strk@keybit.net>
+
+	* [r3069] php/geos.c, php/test/test.php:
+	  WKBWriter::{get,set}ByteOrder, improve tests for writeHEX
+
+2010-06-24 09:01  Sandro Santilli <strk@keybit.net>
+
+	* [r3068] capi/geos_ts_c.cpp, include/geos/io/WKBWriter.h,
+	  src/io/WKBWriter.cpp: Make WKBWriter::setByteOrder check for
+	  argument and throw IllegalArgumentException when appropriate.
+	  Make sure C-API wrapper catches those.
+
+2010-06-24 08:28  Sandro Santilli <strk@keybit.net>
+
+	* [r3067] php/geos.c, php/test/test.php: PHP: WKBWriter: ctor,
+	  getOutputDimension, setOutputDimension, writeHEX and tests
+
+2010-06-24 08:27  Sandro Santilli <strk@keybit.net>
+
+	* [r3066] capi/geos_ts_c.cpp: Properly catch exceptions from
+	  WKTWriter::setOutputDimension and WKBWriter::setOutputDimension
+
+2010-06-24 08:27  Sandro Santilli <strk@keybit.net>
+
+	* [r3065] include/geos/io/WKBWriter.h, include/geos/io/WKTWriter.h,
+	  src/io/WKBWriter.cpp, src/io/WKTWriter.cpp: Make
+	  WKTWriter::setOutputDimensions check parameter validity (must be
+	  2 or 3) to be consistent with WKBWriter already doing so in
+	  constructor; make WKBWriter::setOutputDimensions perform the
+	  check as well (like the constructor); Drop virtual methods from
+	  WKTWriter class, which wasn't meant to be a virtual class (no
+	  virtual dtor anyway)
+
+2010-06-23 09:48  Sandro Santilli <strk@keybit.net>
+
+	* [r3064] NEWS: Log ABI change
+
+2010-06-23 09:47  Sandro Santilli <strk@keybit.net>
+
+	* [r3063] include/geos/geom/Geometry.h, src/geom/Geometry.cpp:
+	  Const-correct Geometry::isWithinDistance. Thanks to Yabo, see
+	  ticket #349
+
+2010-06-23 09:31  Sandro Santilli <strk@keybit.net>
+
+	* [r3062] capi/geos_c.cpp, capi/geos_c.h.in, capi/geos_ts_c.cpp,
+	  php/geos.c: There's no point for GEOSisValidDetail to take output
+	  parameter as const pointer
+
+2010-06-23 09:23  Sandro Santilli <strk@keybit.net>
+
+	* [r3061] include/geos/operation/buffer/OffsetCurveVertexList.h,
+	  src/geom/CoordinateArraySequence.cpp,
+	  src/geom/GeometryFactory.cpp, src/io/WKTWriter.cpp: Fix for 4.4.3
+	  builds, patch by Yabo (see ticket #351)
+
+2010-06-21 14:31  Sandro Santilli <strk@keybit.net>
+
+	* [r3060] php/TODO, php/geos.c, src/geom/GeometryCollection.cpp,
+	  src/geom/LineString.cpp, src/geom/Polygon.cpp: Switch back to
+	  unchecked getGeometryN, getPointN and getInteriorRingN, check
+	  them at the PHP level, for performance sake in C-land.
+
+2010-06-21 10:30  Sandro Santilli <strk@keybit.net>
+
+	* [r3059] php/TODO, php/geos.c, php/test/test.php: Rename
+	  getGeometryN to geometryN, for interface consistency
+
+2010-06-21 10:21  Sandro Santilli <strk@keybit.net>
+
+	* [r3058] php/TODO, php/geos.c, php/test/test.php: area, length,
+	  distance, hausdorffDistance; fix leaks in pointN, startPoint and
+	  endPoint
+
+2010-06-21 02:02  Sandro Santilli <strk@keybit.net>
+
+	* [r3057] php/geos.c, php/test/test.php: startPoint, endPoint
+
+2010-06-21 01:58  Sandro Santilli <strk@keybit.net>
+
+	* [r3056] php/geos.c, php/test/test.php: pointN
+
+2010-06-21 01:57  Sandro Santilli <strk@keybit.net>
+
+	* [r3055] src/geom/LineString.cpp: LineString::getPointN is part of
+	  the API, check before segfaulting..
+
+2010-06-21 01:49  Sandro Santilli <strk@keybit.net>
+
+	* [r3054] php/geos.c, php/test/test.php: coordinateDimension()
+
+2010-06-21 01:46  Sandro Santilli <strk@keybit.net>
+
+	* [r3053] php/TODO, php/geos.c, php/test/test.php: dimension() [
+	  spatial ]
+
+2010-06-21 01:43  Sandro Santilli <strk@keybit.net>
+
+	* [r3052] php/geos.c, php/test/test.php: numCoordinates
+
+2010-06-21 01:39  Sandro Santilli <strk@keybit.net>
+
+	* [r3051] php/geos.c, php/test/test.php: exteriorRing
+
+2010-06-21 01:36  Sandro Santilli <strk@keybit.net>
+
+	* [r3050] php/TODO, php/geos.c, php/test/test.php: numPoints, getX,
+	  getY, interiorRingN
+
+2010-06-21 01:34  Sandro Santilli <strk@keybit.net>
+
+	* [r3049] src/geom/Polygon.cpp: Make getInteriorRingN checked (API)
+
+2010-06-21 01:05  Sandro Santilli <strk@keybit.net>
+
+	* [r3048] php/geos.c, php/test/test.php: numInteriorRings
+
+2010-06-21 00:56  Sandro Santilli <strk@keybit.net>
+
+	* [r3047] php/test/test.php: Test null-return from unexistent
+	  offset
+
+2010-06-21 00:53  Sandro Santilli <strk@keybit.net>
+
+	* [r3046] src/geom/GeometryCollection.cpp: Geometry::getGeometryN
+	  is an API function, so make it safe/checked
+
+2010-06-21 00:44  Sandro Santilli <strk@keybit.net>
+
+	* [r3045] php/geos.c, php/test/test.php: getGeometryN
+
+2010-06-21 00:06  Sandro Santilli <strk@keybit.net>
+
+	* [r3044] php/test/test.php: Test numGeometries
+
+2010-06-21 00:01  Sandro Santilli <strk@keybit.net>
+
+	* [r3043] php/geos.c, php/test/test.php: getSRID, setSRID
+
+2010-06-20 23:53  Sandro Santilli <strk@keybit.net>
+
+	* [r3042] php/geos.c, php/test/test.php: typeName, typeId
+
+2010-06-20 23:40  Sandro Santilli <strk@keybit.net>
+
+	* [r3041] php/geos.c, php/test/test.php: Geometry type constants
+
+2010-06-20 23:35  Sandro Santilli <strk@keybit.net>
+
+	* [r3040] php/geos.c, php/test/test.php: isSimple, isRing, hasZ,
+	  isClosed
+
+2010-06-20 22:59  Sandro Santilli <strk@keybit.net>
+
+	* [r3039] php/geos.c, php/test/test.php: checkValidity (isValid in
+	  disguise)
+
+2010-06-20 21:10  Sandro Santilli <strk@keybit.net>
+
+	* [r3038] php/TODO, php/geos.c, php/test/test.php: isEmpty
+
+2010-06-20 21:00  Sandro Santilli <strk@keybit.net>
+
+	* [r3037] php/geos.c, php/test/test.php: Relational operators +
+	  equalsExact
+
+2010-06-20 19:05  Sandro Santilli <strk@keybit.net>
+
+	* [r3036] php/geos.c, php/test/test.php: Simplify (also
+	  topology-preserving), ExtractUniquePoints
+
+2010-06-20 17:00  Sandro Santilli <strk@keybit.net>
+
+	* [r3035] php/geos.c, php/test/Makefile.am, php/test/test.php:
+	  GEOSLineMerge
+
+2010-06-20 09:13  Sandro Santilli <strk@keybit.net>
+
+	* [r3034] php/geos.c, php/test/test.php: Make GEOSPolygonize a free
+	  function rather than a method on GEOSGeometry. This is to allow
+	  extending it to accept differnet kind of args, like arrays of
+	  GEOSGeometry for example..
+
+2010-06-20 09:02  Sandro Santilli <strk@keybit.net>
+
+	* [r3033] php/TODO: Add serialize/unserialize TODO item
+
+2010-06-20 08:50  Sandro Santilli <strk@keybit.net>
+
+	* [r3032] php/TODO, php/geos.c: Geometry.__toString for easier
+	  debuggin
+
+2010-06-20 08:32  Sandro Santilli <strk@keybit.net>
+
+	* [r3031] php/TODO, php/geos.c, php/test/test.php: Polygonize
+	  (testing need further review for a possible bug in core lib)
+
+2010-06-19 21:38  Sandro Santilli <strk@keybit.net>
+
+	* [r3030] php/test/test.php: Use the "T" char for IM9 pattern
+	  sometime (for fun and proof)
+
+2010-06-19 21:36  Sandro Santilli <strk@keybit.net>
+
+	* [r3029] php/geos.c, php/test/test.php: relate, relatePattern
+
+2010-06-19 18:27  Sandro Santilli <strk@keybit.net>
+
+	* [r3028] php/geos.c, php/test/test.php:
+	  Geometry->{pointOnSurface,centroid}
+
+2010-06-19 18:13  Sandro Santilli <strk@keybit.net>
+
+	* [r3027] php/geos.c, php/test/test.php: More Geometry methods:
+	  envelope, intersection, convexHull, difference, symDifference,
+	  boundary, union (including cascaded)
+
+2010-06-19 17:14  Sandro Santilli <strk@keybit.net>
+
+	* [r3026] php/geos.c, php/test/test.php: Export buffer costants and
+	  method
+
+2010-06-19 13:27  Sandro Santilli <strk@keybit.net>
+
+	* [r3025] php/test/test.php: Test typed empty geoms too for IO
+
+2010-06-19 13:17  Sandro Santilli <strk@keybit.net>
+
+	* [r3024] php/geos.c, php/test/test.php: Add second optional
+	  argument to Geometry->project and Geometry->interpolate to
+	  request normalization
+
+2010-06-19 13:08  Sandro Santilli <strk@keybit.net>
+
+	* [r3023] capi/geos_c.h.in: Document GEOSInterpolate
+
+2010-06-19 13:06  Sandro Santilli <strk@keybit.net>
+
+	* [r3022] php/geos.c, php/test/test.php: Add
+	  GEOSGeometry->interpolate()
+
+2010-06-19 12:42  Sandro Santilli <strk@keybit.net>
+
+	* [r3021] capi/geos_ts_c.cpp: Handle exceptions in GEOSInterpolate
+
+2010-06-19 12:30  Sandro Santilli <strk@keybit.net>
+
+	* [r3020] php/test/Makefile.am: Better automake integration of unit
+	  test
+
+2010-06-19 12:28  Sandro Santilli <strk@keybit.net>
+
+	* [r3019] src/linearref/LinearLocation.cpp: Handle illegal argument
+	  to LinearLocation::getCoordinate
+
+2010-06-19 12:20  Sandro Santilli <strk@keybit.net>
+
+	* [r3018] capi/geos_c.h.in: document GEOSProject
+
+2010-06-19 11:34  Sandro Santilli <strk@keybit.net>
+
+	* [r3017] php/TODO, php/geos.c, php/test/Makefile.am,
+	  php/test/test.php: Complete implementation of WKTWriter
+	  interfaces, add phpunit-based testing, add .project interface to
+	  Geometry
+
+2010-06-19 11:32  Sandro Santilli <strk@keybit.net>
+
+	* [r3016] configure.in: Check for PHP and PHPUNIT (for testing php
+	  bindings)
+
+2010-06-19 11:25  Sandro Santilli <strk@keybit.net>
+
+	* [r3015] capi/geos_ts_c.cpp: Handle exceptions from
+	  LenghtIndexedLine::project
+
+2010-06-19 11:23  Sandro Santilli <strk@keybit.net>
+
+	* [r3014] src/linearref/LinearIterator.cpp: The thrown error shall
+	  make sense...
+
+2010-06-19 11:16  Sandro Santilli <strk@keybit.net>
+
+	* [r3013] src/linearref/LinearIterator.cpp: Throw an exception on
+	  first non-linestring component, rather than segfaulting la
+	  ter... (might be better to refuse non-lineal even earlier, but
+	  this way we *migh
+	  * be supporting collections with only linestrings)
+
+2010-06-19 11:14  Sandro Santilli <strk@keybit.net>
+
+	* [r3012] include/geos/linearref/LengthIndexOfPoint.h,
+	  include/geos/linearref/LinearIterator.h: Dox cleanup
+
+2010-06-18 16:15  Sandro Santilli <strk@keybit.net>
+
+	* [r3011] php/geos.c, php/test/test.php: WKTWriter::setTrim
+
+2010-06-18 16:12  Sandro Santilli <strk@keybit.net>
+
+	* [r3010] php/Makefile.am: Ubuntu 8.10 version of gcc needs
+	  -std=gnu99 to digest Zend headers :(
+
+2010-06-18 15:09  Sandro Santilli <strk@keybit.net>
+
+	* [r3009] Makefile.am, doc/Makefile.am: Add 'doxygen' rule (and
+	  'apidoc' alias) to top-level Makefile.am
+
+2010-06-18 14:43  Sandro Santilli <strk@keybit.net>
+
+	* [r3008] php/TODO: tip for test
+
+2010-06-18 14:20  Sandro Santilli <strk@keybit.net>
+
+	* [r3007] Makefile.am, configure.in, php, php/Makefile.am,
+	  php/README, php/TODO, php/geos.c, php/php_geos.h, php/test,
+	  php/test/Makefile.am, php/test/crashme.php, php/test/test.php:
+	  Initial go at PHP5 bindings. Can only read and write WKT so far.
+
+2010-06-18 10:29  Sandro Santilli <strk@keybit.net>
+
+	* [r3006] configure.in: Do not set user FLAGS, se project flags
+	  instead.
+	  For the whole story, see:
+	  http://www.gnu.org/software/hello/manual/automake/Flag-Variables-Ordering.html
+
+2010-06-18 09:57  Sandro Santilli <strk@keybit.net>
+
+	* [r3005] doc/Makefile.am: Fix automake override
+
+2010-06-18 09:52  Sandro Santilli <strk@keybit.net>
+
+	* [r3004] autogen.sh: Add -Woverride option to automake invocation,
+	  to catch Makefile.am errors (there's one)
+
+2010-06-16 10:39  Sandro Santilli <strk@keybit.net>
+
+	* [r3003] swig/geos.i.in: Drop carriage returns
+
+2010-06-16 09:45  Sandro Santilli <strk@keybit.net>
+
+	* [r3002] swig/Makefile.am: OOps, tabs instead of spaces confuse
+	  automake
+
+2010-06-16 09:31  Sandro Santilli <strk@keybit.net>
+
+	* [r3001] swig/Makefile.am: Always distribute swig bindings, closes
+	  bug #352
+
+2010-06-16 09:25  Sandro Santilli <strk@keybit.net>
+
+	* [r3000] macros/ac_pkg_swig.m4: Fix swig macro so it doesn't think
+	  version 2.0.0 is < 1.3.37
+
+2010-06-01 15:15  Frank Warmerdam <warmerdam@pobox.com>
+
+	* [r2999] src/io/WKTReader.cpp, tests/unit/io/WKTReaderTest.cpp:
+	  make WKTReader keywords case insensitive
+
+2010-05-31 16:25  Frank Warmerdam <warmerdam@pobox.com>
+
+	* [r2998] include/geos/geom/CoordinateArraySequence.h,
+	  include/geos/geom/CoordinateArraySequenceFactory.h,
+	  include/geos/geom/CoordinateSequenceFactory.h,
+	  src/geom/CoordinateArraySequence.cpp,
+	  src/geom/GeometryFactory.cpp, src/io/WKTWriter.cpp,
+	  tests/unit/geom/CoordinateArraySequenceTest.cpp: Attempt to make
+	  geometry dimension perform more smoothly.
+	  Modified CoordinateArraySequence to default to unknown dimension
+	  (0), which
+	  is determined at the point getDimension() is called by
+	  examination of the
+	  first coordinate Z (ISNAN test). The WKTWriter has also been
+	  altered to
+	  write 0.0 instead of nan, and to avoid writing "Z" for EMPTY
+	  geometries.(#348)
+
+2010-05-31 02:57  Frank Warmerdam <warmerdam@pobox.com>
+
+	* [r2997] capi/geos_c.cpp, capi/geos_c.h.in, capi/geos_ts_c.cpp:
+	  Addition of getCoordinateDimension() on GEOSGeom (#311)
+	  Addition of setOutputDimension, setOld3D on WKTWriter (#292)
+
+2010-05-28 20:44  Frank Warmerdam <warmerdam@pobox.com>
+
+	* [r2996] tests/unit/io/WKBWriterTest.cpp: added missing test that
+	  should have been in r2995
+
+2010-05-28 20:38  Frank Warmerdam <warmerdam@pobox.com>
+
+	* [r2995] include/geos/geom/Geometry.h,
+	  include/geos/geom/GeometryCollection.h,
+	  include/geos/geom/LineString.h, include/geos/geom/Point.h,
+	  include/geos/geom/Polygon.h, include/geos/io/WKBWriter.h,
+	  include/geos/io/WKTWriter.h, src/geom/GeometryCollection.cpp,
+	  src/geom/LineString.cpp, src/geom/Point.cpp,
+	  src/geom/Polygon.cpp, src/io/WKBWriter.cpp, src/io/WKTWriter.cpp,
+	  tests/unit/Makefile.am, tests/unit/geom/LineStringTest.cpp,
+	  tests/unit/geom/PointTest.cpp, tests/unit/io/WKTWriterTest.cpp:
+	  Implement getCoordinateDimension() for geometries (#331)
+	  WKTWriter now has setOutputDimension() method, and writes 3D
+	  geometries (#292)
+	  WKBWriter has fixes for writing 2D geometries from 3D geometry
+	  (#346)
+	  Minimal unit tests for the above.
+
+2010-05-28 20:32  Frank Warmerdam <warmerdam@pobox.com>
+
+	* [r2994] src/io/WKTReader.cpp, tests/unit/io/WKTReaderTest.cpp:
+	  add support for reading SF1.2 Z/M/ZM geometries (#347)
+
+2010-05-19 05:22  Frank Warmerdam <warmerdam@pobox.com>
+
+	* [r2993] capi/geos_c.cpp, capi/geos_c.h.in, capi/geos_ts_c.cpp,
+	  include/geos/io/WKTWriter.h, src/io/WKTWriter.cpp,
+	  tests/unit/Makefile.am, tests/unit/io/WKTReaderTest.cpp,
+	  tests/unit/io/WKTWriterTest.cpp: added setPrecision, setTrim
+	  support on WKTWriter and provided tests (#341)
+
+2010-05-18 20:28  Frank Warmerdam <warmerdam@pobox.com>
+
+	* [r2992] capi/geos_c.cpp, capi/geos_c.h.in, capi/geos_ts_c.cpp,
+	  tests/unit/Makefile.am,
+	  tests/unit/capi/GEOSLineString_PointTest.cpp: expose several new
+	  accessor functions on geometries (#345)
+
+2010-05-18 20:07  Frank Warmerdam <warmerdam@pobox.com>
+
+	* [r2991] tests/unit/noding/SegmentNodeTest.cpp: disamiguate create
+	  args (#345)
+
+2010-05-18 19:18  Frank Warmerdam <warmerdam@pobox.com>
+
+	* [r2990] include/geos/geom/CoordinateArraySequence.h,
+	  include/geos/geom/CoordinateArraySequenceFactory.inl,
+	  include/geos/geom/CoordinateSequenceFactory.h,
+	  include/geos/io/WKTReader.h,
+	  src/geom/CoordinateArraySequence.cpp,
+	  src/geom/GeometryFactory.cpp, src/io/WKTReader.cpp,
+	  tests/unit/noding/BasicSegmentStringTest.cpp,
+	  tests/unit/noding/NodedSegmentStringTest.cpp: preserve dimension
+	  as part of CoordinateArraySequence and while reading WKT (#345)
+
+2010-05-15 12:47  Sandro Santilli <strk@keybit.net>
+
+	* [r2989] src/operation/buffer/OffsetCurveBuilder.cpp: Minor tweaks
+
+2010-05-15 12:31  Sandro Santilli <strk@keybit.net>
+
+	* [r2988] include/geos/operation/buffer/Makefile.am,
+	  include/geos/operation/buffer/OffsetCurveBuilder.h,
+	  include/geos/operation/buffer/OffsetCurveVertexList.h,
+	  src/operation/buffer/Makefile.am,
+	  src/operation/buffer/OffsetCurveBuilder.cpp,
+	  src/operation/buffer/OffsetCurveVertexList.h,
+	  tests/xmltester/tests/bug334.xml: Move OffsetCurveVertexList.h to
+	  headers dir, add a .reset() method to reduce memory allocations,
+	  use the new interface.
+
+2010-05-15 12:30  Sandro Santilli <strk@keybit.net>
+
+	* [r2987] include/geos/geom/CoordinateArraySequence.h,
+	  src/geom/CoordinateArraySequence.cpp: Add clear() method to
+	  CoordinateArraySequence, inline empty()
+
+2010-05-04 21:29  Sandro Santilli <strk@keybit.net>
+
+	* [r2986] README: Add 'ldconfig' step, seems to be a recurring
+	  issue with builders...
+
+2010-05-02 09:35  Sandro Santilli <strk@keybit.net>
+
+	* [r2985] capi/geos_c.h.in: Add a note about 2d nature of
+	  extractUniquePoints
+
+2010-04-21 16:17  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2982] nmake.opt: * Updated nmake.opt with NMake version from
+	  Visual Studio 2010 release.
+
+2010-04-17 22:16  Sandro Santilli <strk@keybit.net>
+
+	* [r2977] HOWTO_RELEASE, capi/geos_c.h.in: Also set version for the
+	  systems not using autoconf, and update paths in HOWTO_RELEASE
+	  file
+
+2010-04-17 22:14  Sandro Santilli <strk@keybit.net>
+
+	* [r2976] configure.in: As we're still maintaining 3.2 branch, and
+	  since new CAPI interface were added, bump CAPI lib interface
+	  version up. We'll be 1.7.0 there from now on.
+
+2010-04-17 15:34  Sandro Santilli <strk@keybit.net>
+
+	* [r2974] NEWS, capi/geos_c.cpp: Have initGEOS(..) return a
+	  singleton, as used to be up to 3.0.0
+
+2010-04-07 13:24  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2968] nmake.opt: Added ENABLE_INLINE=YES|NO option to nmake.opt
+	  for Visual C++ builds using NMake. The ENABLE_INLINE=YES does not
+	  link for me - to be fixed
+
+2010-04-07 13:22  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2967] src/dirlist.mk: Updated src/dirlist.mk (Ticket 337)
+
+2010-03-29 17:44  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2965] nmake.opt: Added NMake 10.x version to be recognized by
+	  nmake.opt
+
+2010-03-29 12:17  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2961] include/geos/algorithm/CentralEndpointIntersector.h,
+	  include/geos/geom/CoordinateArraySequence.h,
+	  include/geos/geom/CoordinateArraySequenceFactory.h,
+	  include/geos/geom/CoordinateArraySequenceFactory.inl,
+	  include/geos/geom/CoordinateSequence.h,
+	  include/geos/geom/CoordinateSequenceFactory.h,
+	  include/geos/geom/CoordinateSequenceFilter.h,
+	  include/geos/geom/Geometry.h,
+	  include/geos/geom/GeometryCollection.h,
+	  include/geos/geom/LineSegment.h,
+	  include/geos/geom/LineSegment.inl,
+	  include/geos/geom/LineString.h, include/geos/geom/Polygon.h,
+	  include/geos/geom/prep/PreparedLineStringIntersects.h,
+	  include/geos/geomgraph/EdgeEndStar.h,
+	  include/geos/geomgraph/TopologyLocation.h,
+	  include/geos/index/chain/MonotoneChain.h,
+	  include/geos/index/chain/MonotoneChainBuilder.h,
+	  include/geos/index/chain/MonotoneChainOverlapAction.h,
+	  include/geos/index/strtree/AbstractSTRtree.h,
+	  include/geos/index/strtree/SIRtree.h,
+	  include/geos/index/strtree/STRtree.h,
+	  include/geos/noding/MCIndexNoder.h,
+	  include/geos/noding/MCIndexSegmentSetMutualIntersector.h,
+	  include/geos/noding/SegmentNodeList.h,
+	  include/geos/noding/SegmentStringUtil.h,
+	  include/geos/noding/snapround/HotPixel.h,
+	  include/geos/operation/predicate/RectangleIntersects.h,
+	  include/geos/planargraph/DirectedEdgeStar.h,
+	  include/geos/planargraph/PlanarGraph.h,
+	  include/geos/simplify/DouglasPeuckerLineSimplifier.h,
+	  include/geos/simplify/TaggedLineString.h: Qualify size_t with std
+	  namespace in headers.
+
+2010-03-29 12:13  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2960] build/msvc10, build/msvc10/geos_c_dll,
+	  build/msvc10/geos_lib, build/msvc10/geos_unit,
+	  build/msvc10/geos_xmltester: Updated svn:ignore property
+
+2010-03-29 11:30  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2959] build/msvc10/geos_lib/geos_lib.vcxproj,
+	  build/msvc10/geos_lib/geos_lib.vcxproj.filters,
+	  build/msvc90/geos_c_dll/geos_c_dll.vcproj,
+	  build/msvc90/geos_unit/geos_unit.vcproj,
+	  build/msvc90/geos_xmltester/geos_xmltester.vcproj: Updated
+	  projects for Visual Studio 2008 and 2010
+
+2010-03-29 11:29  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2958] include/geos/geom/Geometry.h,
+	  include/geos/geom/LineString.h, include/geos/geom/Point.h,
+	  include/geos/geomgraph/EdgeEndStar.h,
+	  include/geos/geomgraph/EdgeList.h, include/geos/geomgraph/Node.h,
+	  include/geos/geomgraph/NodeMap.h,
+	  include/geos/index/strtree/AbstractNode.h,
+	  include/geos/index/strtree/STRtree.h,
+	  include/geos/io/CLocalizer.h, include/geos/io/WKBReader.h,
+	  include/geos/io/WKTWriter.h,
+	  include/geos/noding/NodedSegmentString.h,
+	  include/geos/operation/GeometryGraphOperation.h,
+	  include/geos/operation/buffer/BufferBuilder.h,
+	  include/geos/operation/buffer/BufferOp.h,
+	  include/geos/operation/buffer/OffsetCurveBuilder.h,
+	  include/geos/operation/linemerge/LineMergeGraph.h,
+	  include/geos/operation/linemerge/LineMerger.h,
+	  include/geos/operation/overlay/OverlayOp.h,
+	  include/geos/operation/polygonize/Polygonizer.h,
+	  include/geos/planargraph/NodeMap.h,
+	  include/geos/planargraph/PlanarGraph.h,
+	  include/geos/simplify/LineSegmentIndex.h,
+	  include/geos/simplify/TaggedLineStringSimplifier.h,
+	  include/geos/simplify/TaggedLinesSimplifier.h,
+	  include/geos/simplify/TopologyPreservingSimplifier.h,
+	  include/geos/util/GEOSException.h,
+	  include/geos/util/GeometricShapeFactory.h,
+	  include/geos/util/UniqueCoordinateArrayFilter.h: Added pragma to
+	  disable Visual C++ warning C4251 - safe to ignore
+	  (http://support.microsoft.com/kb/813810/)
+	  
+
+2010-03-29 11:21  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2957] capi/geos_ts_c.cpp: No need to load the whole std
+	  namespace to use std::vector only.
+
+2010-03-26 12:35  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2955] include/geos/platform.h.vc: platform.h.vc: disable
+	  min/max macros substitution
+
+2010-03-26 12:06  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2954] include/geos/operation/union/CascadedPolygonUnion.h:
+	  Added GEOS_DLL with Microsoft-specific __declspec attribute
+	  missing from CascadedPolygonUnion class (ported from
+	  branches/3.2)
+
+2010-03-26 12:01  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2952] src/geom/GeometryList.cpp: geom\GeoemtryList.cpp: missing
+	  implementation of GeometryList::size() function (ported from
+	  branches/3.2)
+
+2010-03-26 11:58  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2950] src/Makefile.vc: src\Makefile.vc: added missing
+	  geom\GeometryList.cpp (ported from branches/3.2)
+
+2010-03-26 11:55  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2948] nmake.opt: nmake.opt: Added missing GEOS_DLL_EXPORT to
+	  CPPFLAGS (ported from branches/3.2)
+
+2010-03-19 15:13  Sandro Santilli <strk@keybit.net>
+
+	* [r2946] NEWS, capi/geos_ts_c.cpp: Improve formatting for
+	  GEOSisValidReason_r (#329)
+
+2010-03-18 18:39  Sandro Santilli <strk@keybit.net>
+
+	* [r2944] include/geos/operation/valid/IsValidOp.h,
+	  src/operation/valid/IsValidOp.cpp: Forw-port a better fix for
+	  #333 (false positive valid geoms)
+
+2010-03-16 13:13  Sandro Santilli <strk@keybit.net>
+
+	* [r2941] capi/geos_ts_c.cpp: Fix ST_IsValidDetail (broke by last
+	  commit)
+
+2010-03-16 12:32  Sandro Santilli <strk@keybit.net>
+
+	* [r2940] capi/geos_ts_c.cpp: Now that IsValidOp doesn't cache the
+	  'checked' status it is better to trigger a single check rather
+	  than two (also fix leaks)
+
+2010-03-14 10:13  Sandro Santilli <strk@keybit.net>
+
+	* [r2939] include/geos/util/Makefile.am: Install Machine.h
+
+2010-03-13 22:07  Sandro Santilli <strk@keybit.net>
+
+	* [r2938] capi/geos_ts_c.cpp,
+	  tests/unit/capi/GEOSOrientationIndex.cpp: Fix
+	  GEOSOrientationIndex implementation and testcase. Closes ticket
+	  #335.
+
+2010-03-12 07:54  Sandro Santilli <strk@keybit.net>
+
+	* [r2937] NEWS, capi/geos_c.cpp, capi/geos_c.h.in,
+	  capi/geos_ts_c.cpp, tests/unit/Makefile.am,
+	  tests/unit/capi/GEOSOrientationIndex.cpp: Expose
+	  GEOSOrientationIndex to C-API
+
+2010-03-10 09:34  Sandro Santilli <strk@keybit.net>
+
+	* [r2936] include/geos/operation/valid/IsValidOp.h,
+	  src/operation/valid/IsValidOp.cpp,
+	  tests/xmltester/tests/general/TestValid.xml: Sync TestValid xml
+	  from JTS, review IsValidOp to be in sync with current JTS trunk.
+
+2010-03-07 11:39  Sandro Santilli <strk@keybit.net>
+
+	* [r2935] README: Apply slightly modified patch by mwtoews (#344)
+
+2010-03-06 01:49  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2934] CMakeLists.txt, cmake/cmake_uninstall.cmake.in: Added
+	  cmake/cmake_uninstall.cmake.in script and configured make
+	  uninstall target for CMake configuration (#317)
+
+2010-03-03 07:21  Sandro Santilli <strk@keybit.net>
+
+	* [r2933] capi/geos_c.h.in: Improve documentation for
+	  GEOSPOlygonize_full
+
+2010-03-02 21:04  Sandro Santilli <strk@keybit.net>
+
+	* [r2932] NEWS, include/geos/operation/valid/IsValidOp.h,
+	  src/operation/valid/IsValidOp.cpp,
+	  tests/xmltester/tests/general/TestValid.xml: Fix false positive
+	  return from IsValidOp (#333)
+
+2010-02-28 19:01  Sandro Santilli <strk@keybit.net>
+
+	* [r2931] src/geom/LineString.cpp: Minor tweak
+
+2010-02-28 18:55  Sandro Santilli <strk@keybit.net>
+
+	* [r2930] NEWS, capi/geos_c.cpp, capi/geos_c.h.in: Provide
+	  non-rehentrant version of empty geometries constructors
+
+2010-02-28 17:02  Sandro Santilli <strk@keybit.net>
+
+	* [r2929] NEWS: extractUniquePoints comes in non-reentrant version
+	  too
+
+2010-02-25 07:50  Sandro Santilli <strk@keybit.net>
+
+	* [r2928] NEWS: Update with GEOSPolygonize_full item
+
+2010-02-23 20:00  Sandro Santilli <strk@keybit.net>
+
+	* [r2927] capi/geos_c.cpp, capi/geos_c.h.in, capi/geos_ts_c.cpp:
+	  GEOSPolygonize_full [RT-SIGTA]
+
+2010-02-22 22:21  Sandro Santilli <strk@keybit.net>
+
+	* [r2926] include/geos/operation/polygonize/Polygonizer.h,
+	  src/operation/polygonize/Polygonizer.cpp: LineStringAdder
+	  heap-allocation removal
+
+2010-02-22 22:17  Sandro Santilli <strk@keybit.net>
+
+	* [r2925] NEWS, include/geos/operation/polygonize/Polygonizer.h,
+	  src/operation/polygonize/Polygonizer.cpp: Drop heap allocation of
+	  invalidRingLines vector
+
+2010-02-22 22:06  Sandro Santilli <strk@keybit.net>
+
+	* [r2924] include/geos/operation/polygonize/Polygonizer.h,
+	  src/operation/polygonize/Polygonizer.cpp: More heap allocations
+	  bite the dust...
+
+2010-02-22 21:51  Sandro Santilli <strk@keybit.net>
+
+	* [r2923] NEWS, include/geos/operation/polygonize/Polygonizer.h,
+	  src/operation/polygonize/Polygonizer.cpp: Drop HEAP allocation
+	  for dangles vector too, and document all these API changes
+
+2010-02-22 21:41  Sandro Santilli <strk@keybit.net>
+
+	* [r2922] capi/geos_ts_c.cpp,
+	  include/geos/operation/polygonize/PolygonizeEdge.h,
+	  include/geos/operation/polygonize/Polygonizer.h,
+	  src/operation/polygonize/Polygonizer.cpp: Avoid heap allocation
+	  of a vector for cut edges, bits of additional documentation
+
+2010-02-22 21:29  Sandro Santilli <strk@keybit.net>
+
+	* [r2921] include/geos/operation/polygonize/Polygonizer.h: Try to
+	  document current behaviour (very bad behaviour indeed...)
+
+2010-02-21 17:11  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2920] CMakeLists.txt: Another patch from Gavin Heavyside to
+	  enable GEOS as a dependency of a project with CMake
+
+2010-02-21 17:05  Sandro Santilli <strk@keybit.net>
+
+	* [r2919] NEWS, capi/geos_c.h.in, capi/geos_ts_c.cpp: Allow
+	  GEOSGetGeometryN calls against single geometries
+
+2010-02-21 16:27  Sandro Santilli <strk@keybit.net>
+
+	* [r2918] capi/geos_c.cpp, capi/geos_c.h.in: Expose the
+	  non-reentrant version too (I know, I was against, but it's too
+	  much work on the postgis side for that right now)
+
+2010-02-21 15:03  Sandro Santilli <strk@keybit.net>
+
+	* [r2917] NEWS, capi/geos_c.h.in, capi/geos_ts_c.cpp,
+	  tests/unit/Makefile.am,
+	  tests/unit/capi/GEOSGeom_extractUniquePointsTest.cpp:
+	  GEOSGeom_extractUniquePoints [RT-SIGTA]
+
+2010-02-21 14:50  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2916] CMakeLists.txt: Patch from Gavin Heavyside that enables
+	  CMake to build GEOS as a dependency of user-defined project
+
+2010-02-17 14:04  Sandro Santilli <strk@keybit.net>
+
+	* [r2915] src/geom/CoordinateArraySequence.cpp: Throw an
+	  IllegalArgumentException when setOrdinate is called with unknown
+	  ordinate index
+
+2010-02-14 14:01  Sandro Santilli <strk@keybit.net>
+
+	* [r2913] NEWS: Add GEOSPolygonizer_getCutEdges NEWS item where it
+	  belongs
+
+2010-02-12 17:35  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2912] capi/CMakeLists.txt: Fixed but in CMake configuration
+	  which installed geos_c.h in incorrect location (#330)
+
+2010-02-11 18:15  Sandro Santilli <strk@keybit.net>
+
+	* [r2911] NEWS: Update
+
+2010-02-11 08:33  Sandro Santilli <strk@keybit.net>
+
+	* [r2910] capi/geos_c.h.in, capi/geos_ts_c.cpp,
+	  tests/unit/capi/GEOSGeom_create.cpp: Complete set of typed-empty
+	  constructors and tests for them [RT-SIGTA]
+
+2010-02-11 08:18  Sandro Santilli <strk@keybit.net>
+
+	* [r2909] capi/geos_c.h.in, capi/geos_ts_c.cpp: Go for consistency
+	  with reentrant interfaces [RT-SIGTA]
+
+2010-02-11 00:10  Sandro Santilli <strk@keybit.net>
+
+	* [r2908] NEWS, capi/geos_c.h.in, capi/geos_ts_c.cpp,
+	  tests/unit/Makefile.am, tests/unit/capi/GEOSGeom_create.cpp:
+	  GEOSContext_setNoticeHandler, GEOSContext_setErrorHandler,
+	  GEOSGeom_createEmptyPolygon_r (and test)
+
+2010-02-09 17:52  Sandro Santilli <strk@keybit.net>
+
+	* [r2907] doc/Doxyfile.in: Fix to match new layout
+
+2010-02-06 04:07  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2906] tests/xmltester/CMakeLists.txt: Ported list of
+	  SAVE_XMLTESTS to CMake configuration of XMLTester (#317) All
+	  tests pass on Ubuntu 9.10
+
+2010-02-05 21:24  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2905] CMakeLists.txt: Fixed CMake version comparison to disable
+	  platform.h (#317)
+
+2010-02-05 14:54  Sandro Santilli <strk@keybit.net>
+
+	* [r2904] capi/geos_c.h.in: Document ownership of created types
+
+2010-02-05 14:39  Sandro Santilli <strk@keybit.net>
+
+	* [r2903] NEWS, capi/geos_c.cpp, capi/geos_c.h.in,
+	  capi/geos_ts_c.cpp: New CAPI interface: GEOSisValidDetail ( tell
+	  state, reason & location apart )
+
+2010-02-04 23:35  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2902] CMakeLists.txt, tools/CMakeLists.txt: Fixed missing
+	  substitution of @libdir@ in geos-config generated by CMake #(317)
+
+2010-02-02 18:14  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2901] CMakeLists.txt: Fixed problem with use of new command
+	  with file() macro for older CMake versions (#327)
+
+2010-01-31 03:06  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2900] tests/unit/CMakeLists.txt,
+	  tests/xmltester/CMakeLists.txt: Added XMLTester to CTest
+	  configuration - work in progress (#317)
+
+2010-01-31 03:05  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2899] CMakeLists.txt: Added GEOS_ENABLE_FLOATSTORE option to
+	  CMake to control GCC flag -ffloat-store (#317)
+
+2010-01-31 01:26  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2898] include/geos: Added platform.h.disabled to svn:ignore
+	  property
+
+2010-01-31 01:22  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2897] CMakeLists.txt: A minor fix to order of enable_testing()
+	  and add_subdirectories(tests) - it is important to include the
+	  former macro first so the tests are caught in
+
+2010-01-30 23:45  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2896] CMakeLists.txt: Updated configuration of
+	  GEOS_ENABLE_TESTS option for CMake (#317)
+
+2010-01-30 22:48  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2895] CMakeLists.txt: Configured 'make check' target for CMake
+	  as alias to 'make test' to mimic GNU Autotools manner of running
+	  tests (#317)
+
+2010-01-29 20:30  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r2894] include/geos/platform.h.in: Extend support of Apple ISNAN
+	  case to newer? compilers
+
+2010-01-29 17:42  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2893] CMakeLists.txt, include/geos/platform.h.cmake: Solved
+	  problem with repeated definition of getMachineByteOrder (#317).
+	  Added check if alternative platform.h is already present in the
+	  include/geos directory and deactivate it renaming to
+	  platform.h.disable, before generating CMake-specific platform.h.
+	  Tested on Windows with Visual C++ but with
+	  -DGEOS_ENABLE_INLINE=OFF otherwise DLL linking fails with many
+	  redefined symbols - to be checked.
+
+2010-01-29 01:43  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2892] CMakeLists.txt, tests/unit/CMakeLists.txt: Configured
+	  'make test' target for CMake build (#317). Now only geos_unit is
+	  executed
+
+2010-01-28 18:42  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2891] src/planargraph/algorithm/ConnectedSubgraphFinder.cpp:
+	  Missing includes of platform.h and <cmath>
+
+2010-01-27 22:25  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2890] tests/unit/linearref/LengthIndexedLineTest.cpp: Tidy up
+	  messy code in tests/unit/linearref
+
+2010-01-27 22:09  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2889] CMakeLists.txt,
+	  tests/unit/linearref/LengthIndexedLineTest.cpp: Fixed CMake
+	  configuration for the problem about unavailable C99 features if
+	  -std=c99 is not specified for GCC 4.3.3 on Ubuntu 9.04. This is
+	  inconsistent behaviour with GCC 4.4.1
+	  (https://bugs.launchpad.net/ubuntu/+source/gcc-4.3/+bug/512741).
+
+2010-01-23 02:43  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2888] src/CMakeLists.txt: GEOS C++ static library was missing
+	  from installation targets (#317)
+
+2010-01-23 02:36  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2887] CMakeLists.txt, capi/CMakeLists.txt, src/CMakeLists.txt:
+	  CMake configuration update (#317): * Configured shared library
+	  target for C++ API. * Added library version information and TODO
+	  comment about SOVERSION.
+
+2010-01-23 01:38  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2886] CMakeLists.txt: Small fix to latest commit (#317)
+
+2010-01-23 01:32  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2885] CMakeLists.txt: Disabled GEOS_ENABLE_ASSERT option for
+	  Visual Studio builds - not supported, no sense (#317)
+
+2010-01-23 00:10  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2884] CMakeLists.txt: Tweaked detection isfinite and isnan
+	  declared as functions in C++ (#317)
+
+2010-01-22 23:52  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2883] cmake/modules/CheckPrototypeExists.cmake: Added
+	  CheckPrototypeExists.cmake module - imported from KDE/kdelibs
+	  tree
+
+2010-01-22 23:51  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2882] cmake, cmake/modules,
+	  cmake/modules/COPYING-CMAKE-SCRIPTS: Added trunk/cmake directory
+	  for custom CMake modules
+
+2010-01-21 01:23  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2881] CMakeLists.txt: CMake configuration update (#317): * Set
+	  default CMAKE_BUILD_TYPE to Debug * Added GEOS_ENABLE_ASSERT and
+	  GEOS_ENABLE_INLINE options. * Renamed option ENABLE_MSVC_MP to
+	  GEOS_MSVC_ENABLE_MP.
+
+2010-01-20 23:42  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2880] CMakeLists.txt: Fix for addd extra test for STL classes
+	  in std namespace to CMake configuration (#317)
+
+2010-01-20 23:37  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2879] CMakeLists.txt: Addd extra test for STL classes in std
+	  namespace to CMake configuration (#317)
+
+2010-01-20 23:21  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2878] CMakeLists.txt, capi/CMakeLists.txt,
+	  include/CMakeLists.txt, include/geos/platform.h.cmake,
+	  src/CMakeLists.txt, tests/CMakeLists.txt,
+	  tests/unit/CMakeLists.txt, tests/xmltester/CMakeLists.txt,
+	  tools/CMakeLists.txt: Updated svn:keyword with Id for CMake files
+
+2010-01-20 22:17  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2877] tools/CMakeLists.txt: Fixed bug with not setting proper
+	  permissions to geos-config while installing with CMake build
+	  configuration (#318).
+
+2010-01-19 00:19  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2876] CMakeLists.txt: #317: compiler flags can not be handled
+	  using CMake list type, reverted last change that sneaked in with
+	  Visual Studio related commit.
+
+2010-01-19 00:03  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2875] CMakeLists.txt: #317: Added CXX flags specific to Visual
+	  C++ compiler. Added ENABLE_MSVC_MP option to allow setting Visual
+	  C++ /MP flag that enables multi-process compilation.
+
+2010-01-18 21:15  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2874] capi/geos_ts_c.cpp: Load elements of std namespace to
+	  scope of geos_ts_c.cpp file, so C99 functions are loaded even if
+	  hidden in std (non-standard extension in GCC).
+
+2010-01-18 18:15  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2873] capi/geos_ts_c.cpp, src/geomgraph/Node.cpp,
+	  src/operation/overlay/ElevationMatrix.cpp,
+	  src/operation/overlay/ElevationMatrixCell.cpp,
+	  src/operation/overlay/LineBuilder.cpp,
+	  src/operation/overlay/OverlayOp.cpp,
+	  src/operation/valid/IsValidOp.cpp,
+	  tests/unit/algorithm/distance/DiscreteHausdorffDistanceTest.cpp,
+	  tests/unit/geom/CoordinateTest.cpp,
+	  tests/unit/geom/TriangleTest.cpp,
+	  tests/unit/linearref/LengthIndexedLineTest.cpp,
+	  tests/unit/operation/valid/IsValidTest.cpp: Added missing headers
+	  platform.h and <cmath> where ISNAN or FINITE macros are expanded
+
+2010-01-18 18:14  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2872] tests/geostest: Updated svn:ignore patterns
+
+2010-01-18 18:13  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2871] include/geos/platform.h.cmake: Cleaned redundant include
+	  for cmath and math.h from platform.h.cmake (#317)
+
+2010-01-18 18:12  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2870] tests/geostest, tests/thread: Updated svn:ignore patterns
+
+2010-01-18 01:25  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2869] capi/CMakeLists.txt: Updated Windows elements of build
+	  configuration for CMake system (#317):
+	  * Added missing symbol GEOS_DLL_EXPORT to request generation of
+	  import library for GEOS C API DLL
+	  * All targets configured for CMake build system have been
+	  successfully built and tested using CMake.
+	  * CMake-based install target successfully tested on Windows 7
+	  ** Default prefix for 32-bit build is "c:\Program Files
+	  (x86)\geos\" where bin, lib and include directories are created.
+
+2010-01-18 00:59  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2868] include/geos/platform.h.cmake,
+	  src/algorithm/CGAlgorithms.cpp,
+	  src/algorithm/locate/IndexedPointInAreaLocator.cpp,
+	  src/noding/snapround/HotPixel.cpp,
+	  src/operation/buffer/BufferOp.cpp,
+	  src/operation/overlay/snap/GeometrySnapper.cpp,
+	  src/operation/overlay/validate/OverlayResultValidator.cpp: *
+	  Successfully tested CMake configuration with Visual Studio 2010
+	  (#317).
+	  * Disable argument dependant lookup (Koenig) for min/max
+	  functions to make sure GEOS compiles in the presence of the
+	  min/max macros.
+	  * Some platform headers define min() and max() macros which cause
+	  some common C++ constructs to fail to compile.
+
+2010-01-17 23:54  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2867] CMakeLists.txt, tools/CMakeLists.txt: Configured 'make
+	  install' for tools to install geos-config program on Unix
+	  platforms (#317). Fixed missing prefix nad exec_prefix variables
+	  substitution during geos-config generation.
+
+2010-01-17 23:40  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2866] CMakeLists.txt, capi/CMakeLists.txt,
+	  include/CMakeLists.txt: Configured 'make install' target for GEOS
+	  C shared library and headers (#317). Install platform.h and
+	  version.h from build directory where they are installed, not from
+	  source tree. Added GEOS C API header location to include
+	  directories.
+
+2010-01-17 23:06  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2865] CMakeLists.txt, include/CMakeLists.txt,
+	  src/CMakeLists.txt: Configured 'make install' target for GEOS C++
+	  static library archive and headers (#317)
+
+2010-01-17 03:21  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2864] build/bjam: Removed build/bjam directory with old and no
+	  longer maintained build configuration based on Boost.Build
+
+2010-01-17 03:12  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2863] tests/CMakeLists.txt, tests/xmltester/CMakeLists.txt:
+	  Added simplewkttester and xmltester tests to CMake configuration
+	  (#317)
+
+2010-01-17 03:00  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2862] CMakeLists.txt, capi/CMakeLists.txt, src/CMakeLists.txt,
+	  tests/CMakeLists.txt, tests/unit/CMakeLists.txt,
+	  tests/unit/tut/tut_console_reporter.hpp,
+	  tests/unit/tut/tut_reporter.hpp: Updated CMake configuration
+	  (#317): CMake generates config headers in build tree. Added
+	  generation of geos-config script. Refined include directories
+	  settings. Added unit tests package to the configuration. Status:
+	  GEOS core + GEOS C library + unit tests build and run
+	  successfully.
+
+2010-01-17 02:07  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2861] CMakeLists.txt, include/geos/version.h.cmake: Now CMake
+	  can generates geos_c.h (#317). Removed
+	  include/geos/version.h.cmake as no longer needed - CMake can
+	  subsitute variables of Autoconf-style @VAR@ very well.
+
+2010-01-17 00:46  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2860] CMakeLists.txt, include/geos/platform.h.cmake: Refined
+	  detection of isnan and isfinite features (#317)
+
+2010-01-16 22:20  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2859] CMakeLists.txt, include/geos/platform.h.cmake: Added
+	  checks of C/C++ headers and library features like 64-bit integer
+	  type (#317)
+
+2010-01-16 21:45  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2858] CMakeLists.txt: Added generation of build-specific
+	  platform.h file from platform.h.cmake (#317)
+
+2010-01-16 21:25  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2857] CMakeLists.txt, include/geos/version.h.cmake: Set version
+	  numbers and generate version.h for CMake build (#317)
+
+2010-01-16 20:41  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2856] include/geos/platform.h.cmake: Added platform.h.cmake
+	  file used by build configuration for CMake build system (#317)
+
+2010-01-16 20:40  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2855] include/geos/platform.h.vc: Removed definition of
+	  INT64_CONST_IS_I64 - it is not checked or used anywhere
+
+2010-01-16 20:12  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2854] include/geos/platform.h.in, include/geos/util/math.h:
+	  Unified detection of math features to define FINITE and ISNAN
+	  macros
+
+2010-01-16 18:14  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2853] capi/geos_ts_c.cpp,
+	  include/geos/io/ByteOrderDataInStream.inl,
+	  include/geos/io/WKBWriter.h, include/geos/platform.h.in,
+	  include/geos/platform.h.vc, include/geos/util/Machine.h: Moved
+	  getMachineByteOrder from include/geos/platform.h to
+	  include/geos/util/Machine.h. This function is universal for
+	  non-Windows and Windows platforms
+
+2010-01-16 17:03  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2852] CMakeLists.txt, capi/CMakeLists.txt, src/CMakeLists.txt:
+	  Added first straps of configuration for CMake build system (#317)
+
+2010-01-16 02:40  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2851] tests/geostest/.deps: Removed tests/geostest/.deps
+	  directory
+
+2010-01-16 02:14  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2850] examples, examples/Makefile.am, src/examples: Moved
+	  src/examples out of src directory (#315)
+
+2010-01-14 00:01  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2849] build/msvc10/geos_c_dll/geos_c_dll.vcxproj,
+	  build/msvc10/geos_c_dll/geos_c_dll.vcxproj.filters,
+	  build/msvc10/geos_lib/geos_lib.vcxproj,
+	  build/msvc10/geos_lib/geos_lib.vcxproj.filters,
+	  build/msvc10/geos_unit/geos_unit.vcxproj,
+	  build/msvc10/geos_xmltester/geos_xmltester.vcxproj: Updated
+	  Visual Studio 2010 projects in build/msvc10 with new location of
+	  include and src (#315)
+
+2010-01-13 21:35  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2848] include/geos/noding/NodedSegmentString.h: * Successfully
+	  compiled with Visual C++ 8.0 after restructuring source tree.
+	  ** NodedSegmentString class;
+	  ** Use explicit self-describing two-step casts to indicate what's
+	  really happening - C-cast is evil and hides serious interface
+	  issues.
+	  ** Added missing <cstddef> and qualify size_t with std namespace.
+
+2010-01-13 21:25  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2847] build/msvc80/geos_c_dll/geos_c_dll.vcproj,
+	  build/msvc80/geos_lib/geos_lib.vcproj,
+	  build/msvc80/geos_python/geos_python.vcproj,
+	  build/msvc80/geos_ruby/geos_ruby.vcproj,
+	  build/msvc80/geos_unit/geos_unit.vcproj,
+	  build/msvc80/geos_xmltester/geos_xmltester.vcproj: Updated Visual
+	  Studio 2005 projects in build/msvc80 with new location of include
+	  and src (#315)
+
+2010-01-13 18:07  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2846] build/msvc90/geos_c_dll/geos_c_dll.vcproj,
+	  build/msvc90/geos_lib/geos_lib.vcproj,
+	  build/msvc90/geos_python/geos_python.vcproj,
+	  build/msvc90/geos_ruby/geos_ruby.vcproj,
+	  build/msvc90/geos_unit/geos_unit.vcproj,
+	  build/msvc90/geos_xmltester/geos_xmltester.vcproj: Updated Visual
+	  Studio 2008 projects in build/msvc90 with new location of include
+	  and src (#315)
+
+2010-01-13 17:54  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2845] makefile.vc, nmake.opt, src/Makefile.vc: Updated
+	  makefile.vc, nmake.opt, src/makefile.vc files with new location
+	  of include and src (#315)
+
+2010-01-13 03:03  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2844] Makefile.am, capi/Makefile.am, doc/Makefile.am,
+	  include/geos/index/sweepline/Makefile.am,
+	  include/geos/operation/Makefile.am, macros/Makefile.am,
+	  src/operation/Makefile.am, swig/Makefile.am,
+	  swig/python/Makefile.am, swig/python/tests/Makefile.am,
+	  swig/ruby/Makefile.am, swig/ruby/test/Makefile.am,
+	  tests/Makefile.am, tests/bigtest/Makefile.am,
+	  tests/geostest/Makefile.am, tests/perf/Makefile.am,
+	  tests/perf/operation/Makefile.am,
+	  tests/perf/operation/buffer/Makefile.am,
+	  tests/thread/Makefile.am, tests/unit/Makefile.am,
+	  tests/xmltester/Makefile.am, tools/Makefile.am: Updated remaining
+	  directories doc, macros, tools, tests, swig, capi with new src
+	  and include location (#315). Fixed previous updates. Successfull
+	  build on Linux.
+
+2010-01-13 02:08  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2843] capi/Makefile.am: Updated Makefile.am files in capi
+	  subtree after moved to new location (#315)
+
+2010-01-13 02:01  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2842] src/Makefile.am, src/algorithm/Makefile.am,
+	  src/algorithm/distance/Makefile.am,
+	  src/algorithm/locate/Makefile.am, src/examples/Makefile.am,
+	  src/geom/Makefile.am, src/geom/prep/Makefile.am,
+	  src/geom/util/Makefile.am, src/geomgraph/Makefile.am,
+	  src/geomgraph/index/Makefile.am, src/index/Makefile.am,
+	  src/index/bintree/Makefile.am, src/index/chain/Makefile.am,
+	  src/index/intervalrtree/Makefile.am,
+	  src/index/quadtree/Makefile.am, src/index/strtree/Makefile.am,
+	  src/index/sweepline/Makefile.am, src/io/Makefile.am,
+	  src/linearref/Makefile.am, src/noding/Makefile.am,
+	  src/noding/snapround/Makefile.am, src/operation/Makefile.am,
+	  src/operation/buffer/Makefile.am,
+	  src/operation/distance/Makefile.am,
+	  src/operation/linemerge/Makefile.am,
+	  src/operation/overlay/Makefile.am,
+	  src/operation/polygonize/Makefile.am,
+	  src/operation/predicate/Makefile.am,
+	  src/operation/relate/Makefile.am,
+	  src/operation/union/Makefile.am, src/operation/valid/Makefile.am,
+	  src/planargraph/Makefile.am, src/precision/Makefile.am,
+	  src/simplify/Makefile.am, src/util/Makefile.am: Updated
+	  Makefile.am files in src subtree after moved to new location
+	  (#315)
+
+2010-01-13 00:48  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2841] Makefile.am, configure.in: Updated new source structure
+	  in configure.in and root Makefile.am - part 2 (#315)
+
+2010-01-13 00:45  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2840] Makefile.am, configure.in: Updated new source structure
+	  in configure.in and root Makefile.am (#315)
+
+2010-01-13 00:43  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2839] include/Makefile.am, include/geos/Makefile.am,
+	  include/geos/algorithm/Makefile.am,
+	  include/geos/algorithm/distance/Makefile.am,
+	  include/geos/algorithm/locate/Makefile.am,
+	  include/geos/geom/Makefile.am,
+	  include/geos/geom/prep/Makefile.am,
+	  include/geos/geom/util/Makefile.am,
+	  include/geos/geomgraph/Makefile.am,
+	  include/geos/geomgraph/index/Makefile.am,
+	  include/geos/index/Makefile.am,
+	  include/geos/index/bintree/Makefile.am,
+	  include/geos/index/chain/Makefile.am,
+	  include/geos/index/intervalrtree/Makefile.am,
+	  include/geos/index/quadtree/Makefile.am,
+	  include/geos/index/strtree/Makefile.am,
+	  include/geos/index/sweepline/Makefile.am,
+	  include/geos/io/Makefile.am, include/geos/linearref/Makefile.am,
+	  include/geos/noding/Makefile.am,
+	  include/geos/noding/snapround/Makefile.am,
+	  include/geos/operation/Makefile.am,
+	  include/geos/operation/buffer/Makefile.am,
+	  include/geos/operation/distance/Makefile.am,
+	  include/geos/operation/linemerge/Makefile.am,
+	  include/geos/operation/overlay/Makefile.am,
+	  include/geos/operation/overlay/snap/Makefile.am,
+	  include/geos/operation/polygonize/Makefile.am,
+	  include/geos/operation/predicate/Makefile.am,
+	  include/geos/operation/relate/Makefile.am,
+	  include/geos/operation/union/Makefile.am,
+	  include/geos/operation/valid/Makefile.am,
+	  include/geos/planargraph/Makefile.am,
+	  include/geos/planargraph/algorithm/Makefile.am,
+	  include/geos/precision/Makefile.am,
+	  include/geos/simplify/Makefile.am, include/geos/util/Makefile.am:
+	  Updated Makefile.am files in headers subtree after moved to new
+	  location in include (#315)
+
+2010-01-12 23:58  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2838] source, src: Moved source directory to src (#315)
+
+2010-01-12 23:55  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2837] include, source/headers: Moved source/headers directory
+	  to include (#315)
+
+2009-12-23 12:37  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2835] tests/xmltester/tinyxml/tinyxml.cpp: Removed GNU specific
+	  printf formatter
+
+2009-12-22 11:38  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2834] source/headers/geos/export.h: Fixed compiler warning
+	  about extra tokens at end of #endif directive in export.h
+
+2009-12-15 17:29  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2833] source/Makefile.vc: Fixed missing
+	  CoordinateSequenceFactory.cpp from makefile.vc (Ticket #313)
+
+2009-12-15 14:44  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2832] source/geom/PrecisionModel.cpp,
+	  source/headers/geos/geom/PrecisionModel.h,
+	  source/headers/geos/geom/PrecisionModel.inl: * Assert precision
+	  model scale must never be negative
+	  * Replaced use of operator== against float-point number with
+	  operator<=
+	  * Typos
+
+2009-12-15 14:38  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2831] source/io/WKTWriter.cpp: In WKTWriter, initialise
+	  formatting buffer and avoid unnecessary calls to string
+	  constructor.
+
+2009-12-14 19:18  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r2828] capi/geos_c.h.in, configure.in,
+	  source/headers/geos/version.h.vc: Update version numbers on trunk
+	  to 3.3 series
+
+2009-12-14 19:06  Sandro Santilli <strk@keybit.net>
+
+	* [r2826] ChangeLog: Updated
+
+2009-12-14 18:58  Sandro Santilli <strk@keybit.net>
+
+	* [r2825] source/headers/geos/geom.h: Don't mention 'troubles' in
+	  documentation (some like it not)
+
 2009-12-14 15:23  Mateusz Loskot <mateusz@loskot.net>
 
 	* [r2824] source/headers/geos/util/TopologyException.h,
