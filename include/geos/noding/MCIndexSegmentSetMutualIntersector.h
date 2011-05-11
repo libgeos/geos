@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
@@ -11,6 +10,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ *
+ **********************************************************************
+ *
+ * Last port: noding/MCIndexSegmentSetMutualIntersector.java r388 (JTS-1.12)
  *
  **********************************************************************/
 
