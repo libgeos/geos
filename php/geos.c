@@ -548,12 +548,18 @@ PHP_METHOD(Geometry, interpolate)
  *       Type: double
  *       mitre ratio limit (only affects joins with GEOSBUF_JOIN_MITRE style)
  *       'miter_limit' is also accepted as a synonym for 'mitre_limit'.
+ *  'single_sided'
+ *       Type: bool
+ *       If true buffer lines only on one side, so that the input line
+ *       will be a portion of the boundary of the returned polygon.
+ *       Only applies to lineal input. Defaults to false.
  */
 PHP_METHOD(Geometry, buffer)
 {
     GEOSGeometry *this;
     double dist;
     GEOSGeometry *ret;
+    GEOSBufferParams *params;
     static const double default_mitreLimit = 5.0;
     static const int default_endCapStyle = GEOSBUF_CAP_ROUND;
     static const int default_joinStyle = GEOSBUF_JOIN_ROUND;
@@ -562,6 +568,7 @@ PHP_METHOD(Geometry, buffer)
     long int endCapStyle = default_endCapStyle;
     long int joinStyle = default_joinStyle;
     double mitreLimit = default_mitreLimit;
+    long singleSided = 0;
     zval *style_val = NULL;
     zval **data;
     HashTable *style;
@@ -575,6 +582,8 @@ PHP_METHOD(Geometry, buffer)
         RETURN_NULL();
     }
 
+    params = GEOSBufferParams_create();
+
     if ( style_val )
     {
         style = HASH_OF(style_val);
@@ -585,29 +594,39 @@ PHP_METHOD(Geometry, buffer)
             {
                 zend_hash_get_current_data(style, (void**)&data);
                 quadSegs = getZvalAsLong(*data);
+                GEOSBufferParams_setQuadrantSegments(params, quadSegs);
             }
             else if(!strcmp(key, "endcap"))
             {
                 zend_hash_get_current_data(style, (void**)&data);
                 endCapStyle = getZvalAsLong(*data);
+                GEOSBufferParams_setEndCapStyle(params, endCapStyle);
             }
             else if(!strcmp(key, "join"))
             {
                 zend_hash_get_current_data(style, (void**)&data);
                 joinStyle = getZvalAsLong(*data);
+                GEOSBufferParams_setJoinStyle(params, joinStyle);
             }
             else if(!strcmp(key, "mitre_limit"))
             {
                 zend_hash_get_current_data(style, (void**)&data);
                 mitreLimit = getZvalAsDouble(*data);
+                GEOSBufferParams_setMitreLimit(params, mitreLimit);
+            }
+            else if(!strcmp(key, "single_sided"))
+            {
+                zend_hash_get_current_data(style, (void**)&data);
+                singleSided = getZvalAsLong(*data);
+                GEOSBufferParams_setSingleSided(params, singleSided);
             }
 
             zend_hash_move_forward(style);
         }
     }
 
-    ret = GEOSBufferWithStyle(this, dist,
-        quadSegs, endCapStyle, joinStyle, mitreLimit);
+    ret = GEOSBufferWithParams(this, params, dist);
+    GEOSBufferParams_destroy(params);
     if ( ! ret ) RETURN_NULL(); /* should get an exception first */
 
     /* return_value is a zval */

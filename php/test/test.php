@@ -499,6 +499,23 @@ class test extends PHPUnit_Framework_TestCase
         $this->assertEquals('array', gettype($myStyle['endcap']));
         $this->assertEquals('integer', gettype($myStyle['mitre_limit']));
 
+        /* Single-sided buffering */
+
+        $g = $reader->read('LINESTRING(0 0, 100 0)');
+
+        $b = $g->buffer(10, array(
+            'single_sided' => true
+        ));
+        $this->assertEquals(
+'POLYGON ((100 0, 0 0, 0 10, 100 10, 100 0))'
+            , $writer->write($b));
+
+        $b = $g->buffer(-10, array(
+            'single_sided' => true
+        ));
+        $this->assertEquals(
+'POLYGON ((0 0, 100 0, 100 -10, 0 -10, 0 0))'
+            , $writer->write($b));
 
     }
 
