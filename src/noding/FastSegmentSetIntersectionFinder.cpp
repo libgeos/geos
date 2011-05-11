@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
@@ -10,6 +9,10 @@
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
+ *
+ **********************************************************************
+ *
+ * Last port: noding/FastSegmentSetIntersectionFinder.java r388 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -73,7 +76,3 @@ intersects( noding::SegmentString::ConstVect * segStrings,
 } // geos::noding
 } // geos
 
-/**********************************************************************
- * $Log$
- *
- **********************************************************************/
