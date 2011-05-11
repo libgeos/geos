@@ -178,6 +178,7 @@ PHP_METHOD(Geometry, __toString);
 PHP_METHOD(Geometry, project);
 PHP_METHOD(Geometry, interpolate);
 PHP_METHOD(Geometry, buffer);
+PHP_METHOD(Geometry, offsetCurve);
 PHP_METHOD(Geometry, envelope);
 PHP_METHOD(Geometry, intersection);
 PHP_METHOD(Geometry, convexHull);
@@ -238,6 +239,7 @@ static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, project, NULL, 0)
     PHP_ME(Geometry, interpolate, NULL, 0)
     PHP_ME(Geometry, buffer, NULL, 0)
+    PHP_ME(Geometry, offsetCurve, NULL, 0)
     PHP_ME(Geometry, envelope, NULL, 0)
     PHP_ME(Geometry, intersection, NULL, 0)
     PHP_ME(Geometry, convexHull, NULL, 0)
@@ -627,6 +629,80 @@ PHP_METHOD(Geometry, buffer)
 
     ret = GEOSBufferWithParams(this, params, dist);
     GEOSBufferParams_destroy(params);
+    if ( ! ret ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, ret);
+}
+
+/**
+ * GEOSGeometry::offsetCurve(dist, [<styleArray>])
+ *
+ * styleArray keys supported:
+ *  'quad_segs'
+ *       Type: int 
+ *       Number of segments used to approximate
+ *       a quarter circle (defaults to 8).
+ *  'join'
+ *       Type: long
+ *       Join style (defaults to GEOSBUF_JOIN_ROUND)
+ *  'mitre_limit'
+ *       Type: double
+ *       mitre ratio limit (only affects joins with GEOSBUF_JOIN_MITRE style)
+ *       'miter_limit' is also accepted as a synonym for 'mitre_limit'.
+ */
+PHP_METHOD(Geometry, offsetCurve)
+{
+    GEOSGeometry *this;
+    double dist;
+    GEOSGeometry *ret;
+    static const double default_mitreLimit = 5.0;
+    static const int default_joinStyle = GEOSBUF_JOIN_ROUND;
+    static const int default_quadSegs = 8;
+    long int quadSegs = default_quadSegs;
+    long int joinStyle = default_joinStyle;
+    double mitreLimit = default_mitreLimit;
+    zval *style_val = NULL;
+    zval **data;
+    HashTable *style;
+    char *key;
+    ulong index;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d|a",
+            &dist, &style_val) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    if ( style_val )
+    {
+        style = HASH_OF(style_val);
+        while(zend_hash_get_current_key(style, &key, &index, 0)
+              == HASH_KEY_IS_STRING)
+        {
+            if(!strcmp(key, "quad_segs"))
+            {
+                zend_hash_get_current_data(style, (void**)&data);
+                quadSegs = getZvalAsLong(*data);
+            }
+            else if(!strcmp(key, "join"))
+            {
+                zend_hash_get_current_data(style, (void**)&data);
+                joinStyle = getZvalAsLong(*data);
+            }
+            else if(!strcmp(key, "mitre_limit"))
+            {
+                zend_hash_get_current_data(style, (void**)&data);
+                mitreLimit = getZvalAsDouble(*data);
+            }
+
+            zend_hash_move_forward(style);
+        }
+    }
+
+    ret = GEOSOffsetCurve(this, dist, quadSegs, joinStyle, mitreLimit);
     if ( ! ret ) RETURN_NULL(); /* should get an exception first */
 
     /* return_value is a zval */

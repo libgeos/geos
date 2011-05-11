@@ -519,6 +519,83 @@ class test extends PHPUnit_Framework_TestCase
 
     }
 
+    public function testGeometry_offsetCurve()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+
+        /* Join styles */
+
+        $g = $reader->read('LINESTRING(0 0, 100 0, 100 100)');
+
+	/* left, round join */
+        $b = $g->offsetCurve(10, array(
+            'quad_segs' => 2,
+            'join' => GEOSBUF_JOIN_ROUND
+        ));
+        $this->assertEquals(
+'LINESTRING (0 10, 90 10, 90 100)'
+            , $writer->write($b));
+
+	/* right, round join */
+        $b = $g->offsetCurve(-10, array(
+            'quad_segs' => 2,
+            'join' => GEOSBUF_JOIN_ROUND
+        ));
+        $this->assertEquals(
+'LINESTRING (110 100, 110 0, 107 -7, 100 -10, 0 -10)'
+            , $writer->write($b));
+
+	/* left, bevel join */
+        $b = $g->offsetCurve(10, array(
+            'quad_segs' => 2,
+            'join' => GEOSBUF_JOIN_BEVEL
+        ));
+        $this->assertEquals(
+'LINESTRING (0 10, 90 10, 90 100)'
+            , $writer->write($b));
+
+	/* right, bevel join */
+        $b = $g->offsetCurve(-10, array(
+            'quad_segs' => 2,
+            'join' => GEOSBUF_JOIN_BEVEL
+        ));
+        $this->assertEquals(
+'LINESTRING (110 100, 110 0, 100 -10, 0 -10)'
+            , $writer->write($b));
+
+	/* left, mitre join */
+        $b = $g->offsetCurve(10, array(
+            'quad_segs' => 2,
+            'join' => GEOSBUF_JOIN_MITRE
+        ));
+        $this->assertEquals(
+'LINESTRING (0 10, 90 10, 90 100)'
+            , $writer->write($b));
+
+	/* right, mitre join */
+        $b = $g->offsetCurve(-10, array(
+            'quad_segs' => 2,
+            'join' => GEOSBUF_JOIN_MITRE
+        ));
+        $this->assertEquals(
+'LINESTRING (110 100, 110 -10, 0 -10)'
+            , $writer->write($b));
+
+	/* right, mitre join limited */
+        $b = $g->offsetCurve(-10, array(
+            'quad_segs' => 2,
+            'join' => GEOSBUF_JOIN_MITRE,
+            'mitre_limit' => 1.0
+        ));
+        $this->assertEquals(
+'LINESTRING (110 100, 109 -5, 105 -9, 0 -10)'
+            , $writer->write($b));
+
+    }
+
     public function testGeometry_envelope()
     {
         $reader = new GEOSWKTReader();
