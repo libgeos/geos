@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
@@ -13,8 +12,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/prep/AbstractPreparedPolygonContains.java rev 1.7 (JTS-1.10)
- * (2007-12-12)
+ * Last port: geom/prep/AbstractPreparedPolygonContains.java r388 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -85,22 +83,18 @@ AbstractPreparedPolygonContains::findAndClassifyIntersections(const geom::Geomet
 	noding::SegmentString::ConstVect lineSegStr; 
 	noding::SegmentStringUtil::extractSegmentStrings(geom, lineSegStr);
 
-	algorithm::LineIntersector* li = 0;
-	li = new algorithm::LineIntersector();
+	algorithm::LineIntersector li;
 
-	noding::SegmentIntersectionDetector* intDetector = 0;
-	intDetector = new noding::SegmentIntersectionDetector(li);
+	noding::SegmentIntersectionDetector intDetector(&li);
 
-	intDetector->setFindAllIntersectionTypes( true);
-	prepPoly->getIntersectionFinder()->intersects(&lineSegStr, intDetector);
+	intDetector.setFindAllIntersectionTypes(true);
+	prepPoly->getIntersectionFinder()->intersects(&lineSegStr, &intDetector);
 
-	hasSegmentIntersection = intDetector->hasIntersection();
-	hasProperIntersection = intDetector->hasProperIntersection();
-	hasNonProperIntersection = intDetector->hasNonProperIntersection();
+	hasSegmentIntersection = intDetector.hasIntersection();
+	hasProperIntersection = intDetector.hasProperIntersection();
+	hasNonProperIntersection = intDetector.hasNonProperIntersection();
 
-	delete intDetector;
-	delete li;
-    for (std::size_t i = 0, ni = lineSegStr.size(); i < ni; i++ )
+	for (std::size_t i = 0, ni = lineSegStr.size(); i < ni; i++ )
 	{
 		delete lineSegStr[i]->getCoordinates();
 		delete lineSegStr[i];
