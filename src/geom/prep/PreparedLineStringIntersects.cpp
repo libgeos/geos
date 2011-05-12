@@ -38,7 +38,7 @@ namespace prep { // geos.geom.prep
 		 * This could be optimized by using the segment index on the lineal target.
 		 * However, it seems like the L/P case would be pretty rare in practice.
 		 */
-		PointLocator * locator = new PointLocator();
+		PointLocator  locator;
 
 		geom::Coordinate::ConstVect coords;
 		ComponentCoordinateExtracter::getCoordinates( *testGeom, coords);
@@ -46,17 +46,11 @@ namespace prep { // geos.geom.prep
 		for (size_t i=0, n=coords.size(); i<n; i++)
 		{
 			geom::Coordinate c = *(coords[i]);
-			if ( locator->intersects( c, &(prepLine.getGeometry()) ))
+			if ( locator.intersects( c, &(prepLine.getGeometry()) ))
 				return true;
 		}
 		return false;
 	}
-
-	//bool PreparedLineStringIntersects::intersects( const PreparedLineString * const prep, const geom::Geometry * geom ) 
-	//{
-	//	PreparedLineStringIntersects op = new PreparedLineStringIntersects( prep);
-	//	return op.intersects_( geom);
-	//}
 
 	bool PreparedLineStringIntersects::intersects(const geom::Geometry * g) const
 	{
