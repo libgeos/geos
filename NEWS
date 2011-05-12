@@ -43,6 +43,7 @@ Changes in 3.3.0
   - Added illegal state check in LineSegment::pointAlongOffset() 
   - Improved performance of RectangleIntersects by always using
     segment-scanning and refining SegmentIntersectionTester
+  - Reduce memory use in PreparedGeometry predicates (#342)
 
 Changes in 3.2.0 
 2009-12-14
