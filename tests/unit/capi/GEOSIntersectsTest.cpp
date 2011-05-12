@@ -9,6 +9,7 @@
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 
 namespace tut
 {
@@ -117,7 +118,7 @@ namespace tut
         ensure_equals(int(r2), 1);
     }
 
-    // This is a tef for bug #357
+    // This is a test for bug #357 (GEOSIntersects with nan coords)
     template<>
     template<>
     void object::test<4>()
@@ -132,13 +133,29 @@ namespace tut
         }
         GEOSCoordSeq_setX(cs, 4, 1); GEOSCoordSeq_setY(cs, 4, 1);
 
-	geom1_ = GEOSGeom_createPolygon(
-		GEOSGeom_createLinearRing(cs),
-		NULL, 0);
+        geom1_ = GEOSGeom_createPolygon(GEOSGeom_createLinearRing(cs),
+                                        NULL, 0);
 
         char const r1 = GEOSIntersects(geom1_, geom1_);
 
-        ensure_equals(int(r1), 1);
+        ensure_equals(int(r1), 2);
+        
+    }
+
+    // This is a test for bug #357 (GEOSIntersects with inf coords)
+    template<>
+    template<>
+    void object::test<5>()
+    {
+        const char *hex = "0103000020E61000000100000005000000737979F3DDCC2CC0F92154F9E7534540000000000000F07F000000000000F07F8F806E993F7E55C0304B29FFEA8554400634E8D1DD424540B5FEE6A37FCD4540737979F3DDCC2CC0F92154F9E7534540";
+
+        geom1_ = GEOSGeomFromHEX_buf((unsigned char*)hex, std::strlen(hex));
+        
+        ensure( 0 != geom1_ );
+
+        char const r1 = GEOSIntersects(geom1_, geom1_);
+
+        ensure_equals(int(r1), 2);
         
     }
  
