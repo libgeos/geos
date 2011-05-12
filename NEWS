@@ -44,6 +44,7 @@ Changes in 3.3.0
   - Improved performance of RectangleIntersects by always using
     segment-scanning and refining SegmentIntersectionTester
   - Reduce memory use in PreparedGeometry predicates (#342)
+  - Fix infinite loop in RobustDeterminant with nan/inf input (#357)
 
 Changes in 3.2.0 
 2009-12-14
