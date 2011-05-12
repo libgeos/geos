@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
@@ -13,7 +12,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/prep/PreparedLineStringIntersects.java rev 1.2 (JTS-1.10)
+ * Last port: geom/prep/PreparedLineStringIntersects.java r338 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -25,6 +24,9 @@
 #include <geos/geom/Coordinate.h> 
 #include <geos/noding/SegmentStringUtil.h>
 #include <geos/noding/FastSegmentSetIntersectionFinder.h>
+
+using namespace geos::algorithm;
+using namespace geos::geom::util;
 
 namespace geos {
 namespace geom { // geos.geom
@@ -91,7 +93,3 @@ namespace prep { // geos.geom.prep
 } // namespace geos.geom
 } // namespace geos
 
-/**********************************************************************
- * $Log$
- *
- **********************************************************************/

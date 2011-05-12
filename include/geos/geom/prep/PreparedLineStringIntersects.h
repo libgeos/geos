@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
@@ -14,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/prep/PreparedLineStringIntersects.java rev 1.2 (JTS-1.10)
+ * Last port: geom/prep/PreparedLineStringIntersects.java r338 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -26,9 +25,6 @@
 #include <geos/geom/util/ComponentCoordinateExtracter.h> 
 #include <geos/geom/Coordinate.h> 
 #include <geos/noding/SegmentStringUtil.h>
-
-using namespace geos::algorithm;
-using namespace geos::geom::util;
 
 namespace geos {
 namespace geom { // geos::geom
@@ -80,7 +76,6 @@ public:
 
 protected:
 	PreparedLineString & prepLine;
-	//PreparedLineString * prepLine;
 
 	/**
 	 * Tests whether any representative point of the test Geometry intersects
@@ -91,24 +86,6 @@ protected:
 	 * @return true if any point of the argument intersects the prepared geometry
 	 */
 	bool isAnyTestPointInTarget(const geom::Geometry * testGeom) const;
-	//{
-	//	/**
-	//	 * This could be optimized by using the segment index on the lineal target.
-	//	 * However, it seems like the L/P case would be pretty rare in practice.
-	//	 */
-	//	PointLocator * locator = new PointLocator();
-
-	//	geom::Coordinate::ConstVect coords;
-	//	ComponentCoordinateExtracter::getCoordinates( *testGeom, coords);
-
-	//	for (std::size_t i=0, n=coords.size(); i<n; i++)
-	//	{
-	//		geom::Coordinate c = *(coords[i]);
-	//		if ( locator->intersects( c, &(prepLine->getGeometry()) ))
-	//			return true;
-	//	}
-	//	return false;
-	//}
 
     // Declare type as noncopyable
     PreparedLineStringIntersects(const PreparedLineStringIntersects& other);
@@ -120,7 +97,4 @@ protected:
 } // namespace geos
 
 #endif // GEOS_GEOM_PREP_PREPAREDLINESTRINGINTERSECTS_H
-/**********************************************************************
- * $Log$
- **********************************************************************/
 
