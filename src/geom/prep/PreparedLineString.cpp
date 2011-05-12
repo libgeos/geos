@@ -47,12 +47,8 @@ PreparedLineString::getIntersectionFinder()
 {
 	if (! segIntFinder)
 	{
-		//noding::SegmentString::ConstVect ss;
 		noding::SegmentStringUtil::extractSegmentStrings( &getGeometry(), segStrings );
 		segIntFinder = new noding::FastSegmentSetIntersectionFinder( &segStrings );
-
-		//for ( size_t i = 0, ni = ss.size(); i < ni; i++ )
-		//	delete ss[ i ];
 	}
 
 	return segIntFinder;
