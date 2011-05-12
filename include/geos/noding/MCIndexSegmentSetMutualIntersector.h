@@ -59,6 +59,10 @@ public:
 
 	~MCIndexSegmentSetMutualIntersector();
 
+	/* Returns a reference to a vector of MonotoneChain objects owned
+	 * by this class and destroyed on next call to ::process.
+	 * Copy them if you need them alive for longer.
+	 */
 	std::vector<index::chain::MonotoneChain *>& getMonotoneChains() 
 	{ 
 		return monoChains; 
@@ -71,6 +75,7 @@ public:
 
 	void setBaseSegments(SegmentString::ConstVect* segStrings);
   
+	// NOTE: re-populates the MonotoneChain vector with newly created chains
 	void process(SegmentString::ConstVect* segStrings);
 
     class SegmentOverlapAction : public index::chain::MonotoneChainOverlapAction
@@ -107,9 +112,10 @@ private:
 	// statistics
 	int nOverlaps;
 	
-	// memory management helper
-      typedef std::vector<std::vector<index::chain::MonotoneChain*>*> chainstore_mm_type;
-      chainstore_mm_type chainStore;
+	/* memory management helper, holds MonotoneChain objects used
+	 * in the SpatialIndex. It's cleared when the SpatialIndex is
+	 */
+	MonoChains chainStore;
       
 	void addToIndex( SegmentString * segStr);
 

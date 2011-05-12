@@ -39,16 +39,16 @@ namespace noding { // geos::noding
 void 
 MCIndexSegmentSetMutualIntersector::addToIndex(SegmentString* segStr)
 {
-    std::vector<MonotoneChain*>* segChains = 0;
-    segChains = MonotoneChainBuilder::getChains(segStr->getCoordinates(), segStr);
+    std::vector<MonotoneChain*> segChains;
+    MonotoneChainBuilder::getChains(segStr->getCoordinates(),
+      segStr, segChains);
 
-    chainStore.push_back(segChains);
-
-    for (std::size_t i = 0, n = segChains->size(); i < n; i++)
+    for (std::size_t i = 0, n = segChains.size(); i < n; i++)
     {
-        MonotoneChain * mc = (*segChains)[i];
+        MonotoneChain * mc = segChains[i];
         mc->setId(indexCounter++);
         index->insert(&(mc->getEnvelope()), mc);
+        chainStore.push_back(mc);
     }
 }
 
@@ -76,17 +76,17 @@ MCIndexSegmentSetMutualIntersector::intersectChains()
     }
 }
 
+/*private*/
 void 
 MCIndexSegmentSetMutualIntersector::addToMonoChains(SegmentString* segStr)
 {
-    MonoChains* segChains = 
-    	MonotoneChainBuilder::getChains(segStr->getCoordinates(), segStr);
+    MonoChains segChains;
+    MonotoneChainBuilder::getChains(segStr->getCoordinates(),
+                                    segStr, segChains);
 
-    chainStore.push_back(segChains);
-
-    for (MonoChains::size_type i = 0, ni = segChains->size(); i < ni; i++)
+    for (MonoChains::size_type i = 0, ni = segChains.size(); i < ni; i++)
     {
-        MonotoneChain* mc = (*segChains)[i];
+        MonotoneChain* mc = segChains[i];
         mc->setId( processCounter++ );
         monoChains.push_back(mc);
     }
@@ -109,17 +109,17 @@ MCIndexSegmentSetMutualIntersector::~MCIndexSegmentSetMutualIntersector()
 {
     delete index;
 
-    chainstore_mm_type::iterator end = chainStore.end();
-    for (chainstore_mm_type::iterator it = chainStore.begin(); it != end; ++it)
+    for (MonoChains::iterator it = chainStore.begin(), end = chainStore.end();
+           it != end; ++it)
     {
-        typedef std::vector<index::chain::MonotoneChain*> chainstore_type;
-        chainstore_type::iterator csend = (*it)->end();
-        for (chainstore_type::iterator csit = (*it)->begin(); csit != csend; ++csit)
-        {
-            delete *csit;
-        }
         delete *it;
     } 
+
+    for (MonoChains::iterator i = monoChains.begin(), e = monoChains.end();
+         i != e; i++)
+    {
+      delete *i;
+    }
 }
 
 void 
@@ -135,11 +135,18 @@ MCIndexSegmentSetMutualIntersector::setBaseSegments(SegmentString::ConstVect* se
     }
 }
 
+/*public*/
 void 
 MCIndexSegmentSetMutualIntersector::process(SegmentString::ConstVect * segStrings)
 {
     processCounter = indexCounter + 1;
     nOverlaps = 0;
+
+    for (MonoChains::iterator i = monoChains.begin(), e = monoChains.end();
+         i != e; i++)
+    {
+      delete *i;
+    }
     monoChains.clear();
 
     for (std::size_t i = 0, n = segStrings->size(); i < n; i++)
