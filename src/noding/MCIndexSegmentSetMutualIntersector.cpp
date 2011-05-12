@@ -32,18 +32,18 @@ using namespace geos::index::chain;
 
 namespace geos {
 namespace noding { // geos::noding
-//
-// private:
-//
 
+/*private*/
 void 
 MCIndexSegmentSetMutualIntersector::addToIndex(SegmentString* segStr)
 {
-    std::vector<MonotoneChain*> segChains;
+    MonoChains segChains;
     MonotoneChainBuilder::getChains(segStr->getCoordinates(),
       segStr, segChains);
 
-    for (std::size_t i = 0, n = segChains.size(); i < n; i++)
+    MonoChains::size_type n = segChains.size();
+    chainStore.reserve(chainStore.size() + n);
+    for (MonoChains::size_type i = 0; i < n; i++)
     {
         MonotoneChain * mc = segChains[i];
         mc->setId(indexCounter++);
@@ -52,6 +52,7 @@ MCIndexSegmentSetMutualIntersector::addToIndex(SegmentString* segStr)
     }
 }
 
+/*private*/
 void 
 MCIndexSegmentSetMutualIntersector::intersectChains()
 {
@@ -84,7 +85,9 @@ MCIndexSegmentSetMutualIntersector::addToMonoChains(SegmentString* segStr)
     MonotoneChainBuilder::getChains(segStr->getCoordinates(),
                                     segStr, segChains);
 
-    for (MonoChains::size_type i = 0, ni = segChains.size(); i < ni; i++)
+    MonoChains::size_type n = segChains.size(); 
+    monoChains.reserve(monoChains.size() + n);
+    for (MonoChains::size_type i = 0; i < n; i++)
     {
         MonotoneChain* mc = segChains[i];
         mc->setId( processCounter++ );
@@ -92,10 +95,7 @@ MCIndexSegmentSetMutualIntersector::addToMonoChains(SegmentString* segStr)
     }
 }
 
-//
-// public:
-//
-
+/* public */
 MCIndexSegmentSetMutualIntersector::MCIndexSegmentSetMutualIntersector() 
 :	monoChains(),
 index(new geos::index::strtree::STRtree()),
@@ -105,23 +105,23 @@ nOverlaps(0)
 {
 }
 
+/* public */
 MCIndexSegmentSetMutualIntersector::~MCIndexSegmentSetMutualIntersector() 
 {
     delete index;
 
-    for (MonoChains::iterator it = chainStore.begin(), end = chainStore.end();
-           it != end; ++it)
-    {
-        delete *it;
+    MonoChains::iterator i, e;
+
+    for (i = chainStore.begin(), e = chainStore.end(); i != e; ++i) {
+        delete *i;
     } 
 
-    for (MonoChains::iterator i = monoChains.begin(), e = monoChains.end();
-         i != e; i++)
-    {
+    for (i = monoChains.begin(), e = monoChains.end(); i != e; i++) {
       delete *i;
     }
 }
 
+/* public */
 void 
 MCIndexSegmentSetMutualIntersector::setBaseSegments(SegmentString::ConstVect* segStrings)
 {
@@ -149,7 +149,7 @@ MCIndexSegmentSetMutualIntersector::process(SegmentString::ConstVect * segString
     }
     monoChains.clear();
 
-    for (std::size_t i = 0, n = segStrings->size(); i < n; i++)
+    for (SegmentString::ConstVect::size_type i = 0, n = segStrings->size(); i < n; i++)
     {
         SegmentString * seg = (SegmentString *)((*segStrings)[i]);
         addToMonoChains( seg);
@@ -158,6 +158,7 @@ MCIndexSegmentSetMutualIntersector::process(SegmentString::ConstVect * segString
 }
 
 
+/* public */
 void 
 MCIndexSegmentSetMutualIntersector::SegmentOverlapAction::overlap(
 	MonotoneChain& mc1, size_t start1, MonotoneChain& mc2, size_t start2)
@@ -171,7 +172,3 @@ MCIndexSegmentSetMutualIntersector::SegmentOverlapAction::overlap(
 } // geos::noding
 } // geos
 
-/**********************************************************************
- * $Log$
- *
- **********************************************************************/
