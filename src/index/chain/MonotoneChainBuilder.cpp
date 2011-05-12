@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
@@ -13,7 +12,7 @@
  *
  **********************************************************************
  *
- * Last port: index/chain/MonotoneChainBuilder.java rev 1.12 (JTS-1.10)
+ * Last port: index/chain/MonotoneChainBuilder.java r388 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -142,17 +141,4 @@ MonotoneChainBuilder::findChainEnd(const CoordinateSequence& pts, std::size_t st
 } // namespace geos.index.chain
 } // namespace geos.index
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.25  2006/06/12 11:29:23  strk
- * unsigned int => size_t
- *
- * Revision 1.24  2006/03/23 13:31:58  strk
- * Fixed to allow build with GEOS_DEBUG
- *
- * Revision 1.23  2006/03/22 18:12:32  strk
- * indexChain.h header split.
- *
- **********************************************************************/
 

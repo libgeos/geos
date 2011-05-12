@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
@@ -13,7 +12,7 @@
  *
  **********************************************************************
  *
- * Last port: index/chain/MonotoneChainBuilder.java rev 1.12 (JTS-1.10)
+ * Last port: index/chain/MonotoneChainBuilder.java r388 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -107,11 +106,4 @@ private:
 } // namespace geos
 
 #endif // GEOS_IDX_CHAIN_MONOTONECHAINBUILDER_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.1  2006/03/22 18:12:31  strk
- * indexChain.h header split.
- *
- **********************************************************************/
 
