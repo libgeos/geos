@@ -125,7 +125,7 @@ namespace tut
     {
         GEOSCoordSequence* cs = GEOSCoordSeq_create(5, 2);
 
-        double nan = -0.0/0;
+        double nan = std::numeric_limits<double>::quiet_NaN();        
         GEOSCoordSeq_setX(cs, 0, 1); GEOSCoordSeq_setY(cs, 0, 1);
         for (unsigned int i=1; i<4; ++i) {
             GEOSCoordSeq_setX(cs, i, nan);

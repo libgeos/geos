@@ -24,7 +24,7 @@ file(GLOB geos_capi_HEADERS ${CMAKE_BINARY_DIR}/capi/*.h) # fix source_group iss
 
 add_library(geos_c SHARED ${geos_c_SOURCES} ${geos_capi_HEADERS})
 
-target_link_libraries(geos_c geos)
+target_link_libraries(geos_c geos-static)
 
 # TODO: Enable SOVERSION property
 set_target_properties(geos_c
