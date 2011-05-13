@@ -20,6 +20,7 @@
 #ifndef GEOS_ALGORITHM_ANGLE_H
 #define GEOS_ALGORITHM_ANGLE_H
 
+#include <geos/export.h>
 #include <geos/algorithm/CGAlgorithms.h> // for constants
 
 // Forward declarations
@@ -36,7 +37,7 @@ namespace algorithm { // geos::algorithm
 //
 /// Unless otherwise noted, methods in this class express angles in radians.
 ///
-class Angle
+class GEOS_DLL Angle
 {
 public:
 
