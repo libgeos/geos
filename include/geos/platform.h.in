@@ -74,12 +74,12 @@ extern "C"
 
 
 #if defined(HAVE_FINITE) && !defined(HAVE_ISFINITE)
-# define FINITE(x) (finite(x))
+# define FINITE(x) (std::finite(x))
 #else
 # if defined(_MSC_VER)
 #  define FINITE(x) _finite(static_cast<double>(x))    
 # else
-#  define FINITE(x) (isfinite(x))
+#  define FINITE(x) (std::isfinite(x))
 # endif
 #endif
 
