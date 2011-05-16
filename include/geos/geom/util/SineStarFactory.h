@@ -86,7 +86,7 @@ public:
    */
   void setNumArms(int nArms)
   {
-    numArms = numArms;
+    numArms = nArms;
   }
 
   /**
