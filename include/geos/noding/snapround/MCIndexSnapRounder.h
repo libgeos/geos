@@ -23,9 +23,11 @@
 #include <geos/export.h>
 
 #include <geos/noding/Noder.h> // for inheritance
+#include <geos/noding/NodedSegmentString.h> // for inlines
+#include <geos/noding/snapround/MCIndexPointSnapper.h> // for inines
 #include <geos/algorithm/LineIntersector.h> // for composition
 #include <geos/geom/Coordinate.h> // for use in vector
-#include <geos/inline.h>
+#include <geos/geom/PrecisionModel.h> // for inlines
 
 #include <vector>
 
@@ -36,20 +38,12 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class PrecisionModel;
-	}
 	namespace algorithm {
 		class LineIntersector;
 	}
 	namespace noding {
 		class SegmentString;
-		class NodedSegmentString;
 		class MCIndexNoder;
-		namespace snapround {
-			//class HotPixel;
-			class MCIndexPointSnapper;
-		}
 	}
 }
 
@@ -82,9 +76,16 @@ class GEOS_DLL MCIndexSnapRounder: public Noder { // implments Noder
 
 public:
 
-	MCIndexSnapRounder(geom::PrecisionModel& nPm);
+	MCIndexSnapRounder(geom::PrecisionModel& nPm)
+    :
+		pm(nPm),
+		scaleFactor(nPm.getScale()),
+		pointSnapper(0)
+  {}
 
-	std::vector<SegmentString*>* getNodedSubstrings() const;
+	std::vector<SegmentString*>* getNodedSubstrings() const {
+	  return NodedSegmentString::getNodedSubstrings(*nodedSegStrings);
+  }
 
 	void computeNodes(std::vector<SegmentString*>* segStrings);
  
@@ -150,10 +151,6 @@ private:
 
 #ifdef _MSC_VER
 #pragma warning(pop)
-#endif
-
-#ifdef GEOS_INLINE
-# include <geos/noding/snapround/MCIndexSnapRounder.inl>
 #endif
 
 #endif // GEOS_NODING_SNAPROUND_MCINDEXSNAPROUNDER_H
