@@ -21,5 +21,5 @@ bug234_LDADD = $(LIBS)
 INCLUDES = -I$(top_srcdir)/include
 INCLUDES += -I$(top_srcdir)/src/io/markup
 
-#EXTRA_DIST = GeometryTestFactory.cpp
+EXTRA_DIST = CMakeLists.txt
 

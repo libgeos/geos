@@ -16,7 +16,7 @@ SUBDIRS = \
     simplify \
     util
 
-EXTRA_DIST = platform.h.vc version.h version.h.vc
+EXTRA_DIST = version.h version.h.vc platform.h.vc platform.h.cmake
 
 geosdir = $(includedir)/geos
 

@@ -9,3 +9,5 @@ SUBDIRS = \
 	perf        \
     geostest    \
     thread
+
+EXTRA_DIST = CMakeLists.txt

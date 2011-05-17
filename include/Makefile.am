@@ -7,3 +7,5 @@ SUBDIRS = \
 
 include_HEADERS = \
     geos.h
+
+EXTRA_DIST = CMakeLists.txt

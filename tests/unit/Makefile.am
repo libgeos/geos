@@ -15,7 +15,8 @@ EXTRA_DIST = \
 	tut/tut_reporter.hpp \
 	tut/tut_restartable.hpp \
 	tut/tut_result.hpp \
-	tut/tut_runner.hpp
+	tut/tut_runner.hpp \
+	CMakeLists.txt
 
 
 #noinst_PROGRAMS = geos_unit

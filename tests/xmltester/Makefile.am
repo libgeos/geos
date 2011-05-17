@@ -10,7 +10,7 @@ TESTS = testrunner
 
 CLEANFILES = testrunner 
 
-EXTRA_DIST = testrunner.sh
+EXTRA_DIST = testrunner.sh CMakeLists.txt
 
 SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
 	$(srcdir)/tests/split.xml \

@@ -16,7 +16,7 @@ SUBDIRS = \
     simplify \
     util
 
-EXTRA_DIST = Makefile.vc dirlist.mk
+EXTRA_DIST = Makefile.vc dirlist.mk CMakeLists.txt
 
 INCLUDES = -I$(top_srcdir)/include
 
