@@ -17,7 +17,6 @@
 #define GEOS_GEOM_COORDINATE_INL
 
 #include <geos/geom/Coordinate.h>
-//#include <geos/geom/PrecisionModel.h> // we need it for makePrecise, possibly to be obsoleted
 #include <geos/platform.h> // for DoubleNotANumber
 
 #include <cassert>
@@ -53,27 +52,6 @@ Coordinate::Coordinate(double xNew, double yNew, double zNew)
 	z(zNew)
 {}
 
-#if 0
-INLINE
-Coordinate::Coordinate(const Coordinate& c)
-	:
-	x(c.x),
-	y(c.y),
-	z(c.z)
-{
-}
-
-INLINE Coordinate&
-Coordinate::operator=(const Coordinate &c)
-{
-	if ( this == &c ) return *this;
-	x=c.x;
-	y=c.y;
-	z=c.z;
-	return *this;
-}
-#endif
-
 INLINE bool
 Coordinate::equals2D(const Coordinate& other) const
 {
@@ -104,15 +82,6 @@ Coordinate::equals3D(const Coordinate& other) const
 	return (x == other.x) && ( y == other.y) && 
 		((z == other.z)||(ISNAN(z) && ISNAN(other.z)));
 }
-
-#if 0
-INLINE void
-Coordinate::makePrecise(const PrecisionModel *pm)
-{
-	x = pm->makePrecise(x);
-	y = pm->makePrecise(y);
-}
-#endif
 
 INLINE double
 Coordinate::distance(const Coordinate& p) const

@@ -96,13 +96,6 @@ public:
 
 	Coordinate(double xNew=0.0, double yNew=0.0, double zNew=DoubleNotANumber);
 
-// Letting the compiler synthetize these gives us more numerical stability
-#if 0
-	Coordinate(const Coordinate& c);
-
-	Coordinate &operator=(const Coordinate &c);
-#endif
-
 	bool equals2D(const Coordinate& other) const;
 
 	/// 2D only
@@ -170,24 +163,3 @@ GEOS_DLL bool operator!=(const Coordinate& a, const Coordinate& b);
 
 #endif // ndef GEOS_GEOM_COORDINATE_H
 
-/**********************************************************************
- * $Log$
- * Revision 1.6  2006/06/14 19:27:02  strk
- * Let the compiler synthetize copy ctor and assignment op for Coordinate class to obtain better numerical stability.
- *
- * Revision 1.5  2006/05/23 15:06:07  strk
- * * source/headers/geos/geom/Coordinate.h: added missing <string> include.
- *
- * Revision 1.4  2006/03/27 15:57:39  strk
- * Commented need for platform.h include
- *
- * Revision 1.3  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.2  2006/03/20 10:12:45  strk
- * Bug #70 - Small fix in fwd decl. of CoordinateLessThen
- *
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/
