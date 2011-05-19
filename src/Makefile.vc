@@ -86,6 +86,7 @@ OBJ = \
 	geom\util\GeometryTransformer.$(EXT) \
 	geom\util\GeometryCombiner.$(EXT) \
 	geom\util\ShortCircuitedGeometryVisitor.$(EXT) \
+	geom\util\SineStarFactory.$(EXT) \
 	geom\prep\AbstractPreparedPolygonContains.$(EXT) \
 	geom\prep\BasicPreparedGeometry.$(EXT) \
 	geom\prep\PreparedGeometry.$(EXT) \
@@ -105,7 +106,6 @@ OBJ = \
 	geomgraph\Edge.$(EXT) \
 	geomgraph\EdgeEnd.$(EXT) \
 	geomgraph\EdgeEndStar.$(EXT) \
-	geomgraph\EdgeIntersection.$(EXT) \
 	geomgraph\EdgeIntersectionList.$(EXT) \
 	geomgraph\EdgeList.$(EXT) \
 	geomgraph\EdgeNodingValidator.$(EXT) \
@@ -202,6 +202,7 @@ OBJ = \
 	operation\buffer\BufferSubgraph.$(EXT) \
 	operation\buffer\OffsetCurveBuilder.$(EXT) \
 	operation\buffer\OffsetCurveSetBuilder.$(EXT) \
+	operation\buffer\OffsetSegmentGenerator.$(EXT) \
 	operation\buffer\RightmostEdgeFinder.$(EXT) \
 	operation\buffer\SubgraphDepthLocater.$(EXT) \
 	operation\distance\ConnectedElementLocationFilter.$(EXT) \
@@ -247,7 +248,11 @@ OBJ = \
 	operation\relate\RelateNodeFactory.$(EXT) \
 	operation\relate\RelateNodeGraph.$(EXT) \
 	operation\relate\RelateOp.$(EXT) \
+	operation\sharedpaths\SharedPathsOp.$(EXT) \
 	operation\union\CascadedPolygonUnion.$(EXT) \
+	operation\union\CascadedUnion.$(EXT) \
+	operation\union\PointGeometryUnion.$(EXT) \
+	operation\union\UnaryUnionOp.$(EXT) \
 	operation\valid\ConnectedInteriorTester.$(EXT) \
 	operation\valid\ConsistentAreaTester.$(EXT) \
 	operation\valid\IndexedNestedRingTester.$(EXT) \

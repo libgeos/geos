@@ -21,6 +21,7 @@
 
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h>
+#include <cassert>
 
 namespace geos {
 namespace noding { // geos.noding

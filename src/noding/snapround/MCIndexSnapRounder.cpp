@@ -32,10 +32,6 @@
 #include <vector>
 
 
-#ifndef GEOS_INLINE
-# include <geos/noding/snapround/MCIndexSnapRounder.inl>
-#endif
-
 using namespace std;
 using namespace geos::geom;
 

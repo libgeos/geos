@@ -244,9 +244,13 @@ PolygonBuilder::findShell(vector<MinimalEdgeRing*> *minEdgeRings)
 #endif
 		}
 	}
+
+#ifndef NDEBUG
 	if ( shellCount > 1 ) {
 		throw util::TopologyException("found two shells in MinimalEdgeRing list");
 	}
+#endif
+
 	return shell;
 }
 
