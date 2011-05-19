@@ -224,9 +224,7 @@ PolygonBuilder::buildMinimalEdgeRings(
 EdgeRing*
 PolygonBuilder::findShell(vector<MinimalEdgeRing*> *minEdgeRings)
 {
-#ifndef NDEBUG
 	int shellCount=0;
-#endif
 	EdgeRing *shell=NULL;
 
 #if GEOS_DEBUG
@@ -239,17 +237,13 @@ PolygonBuilder::findShell(vector<MinimalEdgeRing*> *minEdgeRings)
 		if ( ! er->isHole() )
 		{
 			shell=er;
-#ifndef NDEBUG
 			++shellCount;
-#endif
 		}
 	}
 
-#ifndef NDEBUG
 	if ( shellCount > 1 ) {
 		throw util::TopologyException("found two shells in MinimalEdgeRing list");
 	}
-#endif
 
 	return shell;
 }
