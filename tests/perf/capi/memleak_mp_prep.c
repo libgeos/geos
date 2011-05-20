@@ -37,4 +37,6 @@ int main(void) {
   }
 
   printf("%lu iterations (END)\n", i);
+
+  return 0;
 }
