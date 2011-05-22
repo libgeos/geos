@@ -68,6 +68,13 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
     "Set to OFF|ON (default) to control IEEE754 conformance and remove extra precision" ON)
 endif()
 
+if(APPLE)
+  option(GEOS_ENABLE_MACOSX_FRAMEWORK
+    "Set to OFF|ON (default) to build GEOS as a Mac OS X framework" ON)
+  option(GEOS_ENABLE_MACOSX_FRAMEWORK_UNIXCOMPAT
+    "Set to ON|OFF (default) to add Unix compatibility to the Mac OS X framework" OFF)
+endif()
+
 #################################################################################
 # Setup C/C++ compiler options
 #################################################################################

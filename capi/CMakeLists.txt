@@ -22,27 +22,38 @@ set(geos_c_SOURCES
 
 file(GLOB geos_capi_HEADERS ${CMAKE_BINARY_DIR}/capi/*.h) # fix source_group issue
 
-add_library(geos_c SHARED ${geos_c_SOURCES} ${geos_capi_HEADERS})
+if(NOT APPLE AND NOT GEOS_ENABLE_MACOSX_FRAMEWORK) 
+  # if building OS X framework, CAPI built into C++ library 
+  add_library(geos_c SHARED ${geos_c_SOURCES}) 
 
-target_link_libraries(geos_c geos-static)
+  target_link_libraries(geos_c geos-static)
 
-# TODO: Enable SOVERSION property
-set_target_properties(geos_c
-  PROPERTIES
-  VERSION ${CAPI_VERSION}
-  CLEAN_DIRECT_OUTPUT 1)
+  # TODO: Enable SOVERSION property
+  set_target_properties(geos_c
+    PROPERTIES
+    VERSION ${CAPI_VERSION}
+    CLEAN_DIRECT_OUTPUT 1)
+endif()
 
 #################################################################################
 # Installation
 #################################################################################
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/geos_c.h
-  DESTINATION include)
+if(APPLE AND GEOS_ENABLE_MACOSX_FRAMEWORK)
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/geos_c.h
+    DESTINATION GEOS.framework/Versions/${VERSION_MAJOR}/Headers)
+  install(CODE "execute_process(COMMAND sed -E -i \"\" \"s,# *include[[:space:]]+<geos/,#include <GEOS/,g\" \"$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/GEOS.framework/Versions/${VERSION_MAJOR}/Headers/geos_c.h\")")
+else()
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/geos_c.h
+    DESTINATION include)
+endif()
 
-install(TARGETS geos_c
-  RUNTIME DESTINATION bin
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib)
+if(NOT APPLE AND NOT GEOS_ENABLE_MACOSX_FRAMEWORK) 
+  install(TARGETS geos_c
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib)
+endif()
 
 #################################################################################
 # Group source files for IDE source explorers (e.g. Visual Studio)
