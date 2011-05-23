@@ -1,3 +1,189 @@
+2011-05-23 09:58  Sandro Santilli <strk@keybit.net>
+
+	* [r3377] configure.in: Set version to 3.3.0rc2
+
+2011-05-23 08:52  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3376] src/info.plist.in: Added src/info.plist.in file for OS X
+	  framework build option in CMake configuration (Ticket #385)
+
+2011-05-22 23:34  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3375] CMakeLists.txt, capi/CMakeLists.txt,
+	  include/CMakeLists.txt, src/CMakeLists.txt, tools/CMakeLists.txt:
+	  Added OS X framework build option to CMake configuration (Ticket
+	  #385)
+
+2011-05-20 08:02  Sandro Santilli <strk@keybit.net>
+
+	* [r3374] tests/perf/capi/memleak_mp_prep.c: add missing return
+	  from main
+
+2011-05-19 20:39  Frank Warmerdam <warmerdam@pobox.com>
+
+	* [r3373] src/operation/overlay/PolygonBuilder.cpp: shellCount
+	  checking should not be DEBUG only now that we throw an exception
+	  (#398)
+
+2011-05-19 19:32  Frank Warmerdam <warmerdam@pobox.com>
+
+	* [r3372] include/geos/noding/SegmentPointComparator.h,
+	  src/Makefile.vc, src/noding/snapround/MCIndexSnapRounder.cpp,
+	  src/operation/overlay/PolygonBuilder.cpp: Updates for Makefile.vc
+	  builds and issues when building NDEBUG and no inlining
+
+2011-05-19 14:58  Sandro Santilli <strk@keybit.net>
+
+	* [r3371] tests/perf/capi/Makefile.am: Fix build of prepared geoms
+	  memleak tester on system w/out geos installed
+
+2011-05-18 19:59  Sandro Santilli <strk@keybit.net>
+
+	* [r3370] include/geos/platform.h.in,
+	  src/algorithm/RobustDeterminant.cpp: Do not assume isfinite is in
+	  std:: namespace to fix #444; Have RobustDeterminant use a broad
+	  'using namespace std' to fix #442 in another way.
+
+2011-05-17 20:44  Sandro Santilli <strk@keybit.net>
+
+	* [r3369] Makefile.am, capi/Makefile.am, include/Makefile.am,
+	  include/geos/Makefile.am, src/Makefile.am, tests/Makefile.am,
+	  tests/bigtest/Makefile.am, tests/unit/Makefile.am,
+	  tests/xmltester/Makefile.am, tools/Makefile.am: Distribute cmake
+	  build scripts. Fixes bug #441.
+
+2011-05-17 17:04  Sandro Santilli <strk@keybit.net>
+
+	* [r3368] include/geos/noding/snapround/MCIndexSnapRounder.h,
+	  include/geos/noding/snapround/MCIndexSnapRounder.inl,
+	  include/geos/noding/snapround/Makefile.am, src/inlines.cpp:
+	  Remove inlines machinery from MCIndexSnapRounder. Possibly fixes
+	  ticket #222.
+
+2011-05-17 16:50  Sandro Santilli <strk@keybit.net>
+
+	* [r3367] include/geos/geom/Coordinate.h,
+	  include/geos/geom/Coordinate.inl, src/geom/Coordinate.cpp: Remove
+	  disabled code and old logs. No functional change.
+
+2011-05-16 14:17  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3366] include/geos/geom/util/SineStarFactory.h: Fixed buggy
+	  self-assignment in SineStarFactory::setNumArms
+
+2011-05-16 11:46  Sandro Santilli <strk@keybit.net>
+
+	* [r3365] include/geos/platform.h.in: Quality ::finite and
+	  ::isfinite symbols, when available, into the std:: namespace.
+	  Fixes bug #442.
+
+2011-05-13 16:22  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3364] capi/CMakeLists.txt,
+	  tests/unit/capi/GEOSIntersectsTest.cpp: GEOS DLL exports are
+	  pretty much messed up. The same DLL declspec is used by both C++
+	  and C DLLs. So, GEOS C DLL cannot import and link properly
+	  against GEOS C++ interface as the declspec(dllexport) is
+	  specified for the GEOS C++ DLL where declspec(dllimport) is
+	  expected. This commit fixes the issue (temporarily) by linking
+	  GEOS C DLL against GEOS C++ static library.
+
+2011-05-13 16:17  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3363] include/geos/algorithm/Angle.h: Added missing DLL decspec
+	  for Angle class
+
+2011-05-13 15:53  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3362] src/algorithm/RobustDeterminant.cpp: Removed
+	  std::isfinite as possibly non-existing on some platforms - rather
+	  fix platform.h if needed.
+
+2011-05-12 10:11  Sandro Santilli <strk@keybit.net>
+
+	* [r3361] NEWS: Add note about #357 fix
+
+2011-05-12 09:56  Sandro Santilli <strk@keybit.net>
+
+	* [r3360] src/algorithm/RobustDeterminant.cpp,
+	  tests/unit/capi/GEOSIntersectsTest.cpp: Have RobustDeterminant
+	  throw an IllegalArgument if passed any infinite or nan value.
+	  Fixes bug #357. Includes regress test.
+
+2011-05-12 07:39  Sandro Santilli <strk@keybit.net>
+
+	* [r3359] NEWS: Add note about the memory usage reduction in
+	  prepared geoms (#342)
+
+2011-05-12 07:21  Sandro Santilli <strk@keybit.net>
+
+	* [r3358] src/noding/MCIndexSegmentSetMutualIntersector.cpp:
+	  Reserve vector space, use ::size_type for vector indices.
+
+2011-05-12 07:18  Sandro Santilli <strk@keybit.net>
+
+	* [r3357] include/geos/noding/MCIndexSegmentSetMutualIntersector.h,
+	  src/noding/MCIndexSegmentSetMutualIntersector.cpp: Don't let
+	  MCIndexSegmentSetMutualIntersector grow in memory on every new
+	  ::process call. Fixes bug #342.
+
+2011-05-12 07:14  Sandro Santilli <strk@keybit.net>
+
+	* [r3356] include/geos/index/chain/MonotoneChainBuilder.h,
+	  src/index/chain/MonotoneChainBuilder.cpp: Port info for
+	  MonotoneChainBuilder
+
+2011-05-12 06:20  Sandro Santilli <strk@keybit.net>
+
+	* [r3355] src/geom/prep/PreparedLineStringIntersects.cpp: Fix a
+	  memory leak in PreparedLineStringIntersects::isAnyPointInRing
+
+2011-05-12 06:16  Sandro Santilli <strk@keybit.net>
+
+	* [r3354] src/geom/prep/PreparedLineString.cpp: Drop commented out
+	  code
+
+2011-05-12 06:13  Sandro Santilli <strk@keybit.net>
+
+	* [r3353] include/geos/geom/prep/PreparedLineStringIntersects.h,
+	  src/geom/prep/PreparedLineStringIntersects.cpp: Port info for
+	  PreparedLineStringIntersects, and avoid polluting the global
+	  namespace
+
+2011-05-12 06:10  Sandro Santilli <strk@keybit.net>
+
+	* [r3352] include/geos/geom/prep/AbstractPreparedPolygonContains.h,
+	  src/geom/prep/AbstractPreparedPolygonContains.cpp: Reduce heap
+	  allocations in AbstractPreparedPolygonContains
+
+2011-05-11 17:59  Sandro Santilli <strk@keybit.net>
+
+	* [r3351] include/geos/noding/FastSegmentSetIntersectionFinder.h,
+	  src/noding/FastSegmentSetIntersectionFinder.cpp: Port info for
+	  FastSegmentSetIntersectionFinder
+
+2011-05-11 17:59  Sandro Santilli <strk@keybit.net>
+
+	* [r3350] include/geos/noding/MCIndexSegmentSetMutualIntersector.h,
+	  src/noding/MCIndexSegmentSetMutualIntersector.cpp: Port info for
+	  MCIndexSegmentSetMutualIntersector
+
+2011-05-11 17:25  Sandro Santilli <strk@keybit.net>
+
+	* [r3349] configure.in, tests/perf/Makefile.am, tests/perf/capi,
+	  tests/perf/capi/Makefile.am, tests/perf/capi/memleak_mp_prep.c,
+	  tests/perf/capi/memleak_mp_prep.sh: Import test for bug #342. It
+	  is not automated as it's not general (requires bash)
+
+2011-05-11 10:00  Sandro Santilli <strk@keybit.net>
+
+	* [r3348] HOWTO_RELEASE: Producing a bzip2 tarball is easier than
+	  described
+
+2011-05-11 09:54  Sandro Santilli <strk@keybit.net>
+
+	* [r3346] ChangeLog, NEWS: Updated for 3.0.0rc1 release
+
 2011-05-11 09:48  Sandro Santilli <strk@keybit.net>
 
 	* [r3345] php/geos.c, php/test/test.php: Add Geometry.offsetCurve
