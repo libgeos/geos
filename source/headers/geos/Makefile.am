@@ -40,7 +40,6 @@ geos_HEADERS = 			\
 	opRelate.h 		\
 	opValid.h 		\
 	operation.h 		\
-	operation.h 		\
 	planargraph.h 		\
 	precision.h 		\
 	spatialIndex.h 		\
