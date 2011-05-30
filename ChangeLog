@@ -1,3 +1,39 @@
+2011-05-30 12:48  Sandro Santilli <strk@keybit.net>
+
+	* [r3386] NEWS, configure.in: Set version to 3.3.0 (final) - Set
+	  release date to 2011-05-30
+
+2011-05-30 10:49  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3385] capi/CMakeLists.txt: Applied William\'s patch
+	  capi_CMakeLists.txt.patch for OSX framework (Ticket #385)
+
+2011-05-30 10:45  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3384] src/CMakeLists.txt: Applied William\'s patch *
+	  src_CMakeLists.txt.patch Download added OSX framework (Ticket
+	  #385)
+
+2011-05-30 10:30  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3383] src/CMakeLists.txt: Applied William\'s patch with missing
+	  library versions for OSX framework (Ticket #385)
+
+2011-05-30 09:41  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3382] tests/bigtest/CMakeLists.txt, tests/unit/CMakeLists.txt,
+	  tests/xmltester/CMakeLists.txt: Applied supplementary tests.patch
+	  for 85 from William
+
+2011-05-27 14:04  Sandro Santilli <strk@keybit.net>
+
+	* [r3381] src/Makefile.am: The mac framework info.plist.in from
+	  r3376 didn't make it into the rc2 tarball.
+
+2011-05-23 10:04  Sandro Santilli <strk@keybit.net>
+
+	* [r3378] ChangeLog: updated for 3.3.0rc2 release
+
 2011-05-23 09:58  Sandro Santilli <strk@keybit.net>
 
 	* [r3377] configure.in: Set version to 3.3.0rc2
