@@ -35,6 +35,8 @@ if(APPLE AND GEOS_ENABLE_MACOSX_FRAMEWORK)
     VERSION "${CVERSION}.${VERSION_MINOR}.${VERSION_PATCH}" 
  	  SOVERSION ${CVERSION} 
     FRAMEWORK_VERSION ${VERSION_MAJOR}
+    BUILD_WITH_INSTALL_RPATH TRUE
+    INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}"
     MACOSX_FRAMEWORK_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in"
     MACOSX_FRAMEWORK_BUNDLE_VERSION "GEOS ${VERSION}"
     MACOSX_FRAMEWORK_SHORT_VERSION_STRING ${VERSION}
@@ -60,22 +62,29 @@ if(APPLE AND GEOS_ENABLE_MACOSX_FRAMEWORK)
 
 else()
 
-add_library(geos SHARED ${geos_SOURCES} ${geos_ALL_HEADERS})
-add_library(geos-static STATIC ${geos_SOURCES} ${geos_ALL_HEADERS})
+  add_library(geos SHARED ${geos_SOURCES} ${geos_ALL_HEADERS})
+  add_library(geos-static STATIC ${geos_SOURCES} ${geos_ALL_HEADERS})
 
 # TODO: Enable SOVERSION property
-set_target_properties(geos
-  PROPERTIES
-  DEFINE_SYMBOL GEOS_DLL_EXPORT
-  VERSION ${VERSION}
-  CLEAN_DIRECT_OUTPUT 1)
+  set_target_properties(geos
+    PROPERTIES
+    DEFINE_SYMBOL GEOS_DLL_EXPORT
+    VERSION ${VERSION}
+    CLEAN_DIRECT_OUTPUT 1)
 
-set_target_properties(geos-static
-  PROPERTIES
-  OUTPUT_NAME "geos"
-  PREFIX "lib"
-  CLEAN_DIRECT_OUTPUT 1)
+  set_target_properties(geos-static
+    PROPERTIES
+    OUTPUT_NAME "geos"
+    PREFIX "lib"
+    CLEAN_DIRECT_OUTPUT 1)
 
+endif()
+
+if(APPLE)
+  set_target_properties(geos
+    PROPERTIES
+    BUILD_WITH_INSTALL_RPATH TRUE
+    INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}")
 endif()
 
 #################################################################################
@@ -185,5 +194,4 @@ source_group("Header Files\\geos\\simplify" FILES ${geos_simplify_HEADERS})
 ### geso/util
 file(GLOB geos_util_HEADERS ${CMAKE_SOURCE_DIR}/include/geos/util/*.h)
 source_group("Header Files\\geos\\util" FILES ${geos_util_HEADERS})
-
 
