@@ -23,7 +23,11 @@ if(GEOS_ENABLE_TESTS)
   file(GLOB_RECURSE geos_unit_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
   
   add_executable(geos_unit ${geos_unit_SOURCES})
-  target_link_libraries(geos_unit geos geos_c)
+  if(APPLE AND GEOS_ENABLE_MACOSX_FRAMEWORK)
+    target_link_libraries(geos_unit GEOS)
+ 	else()
+    target_link_libraries(geos_unit geos geos_c)
+ 	endif()
 
   add_test(geos_unit ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/geos_unit)
 
