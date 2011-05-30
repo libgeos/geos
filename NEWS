@@ -1,5 +1,5 @@
 Changes in 3.3.0
-2011-05-??
+2011-05-30
 
 - New things:
   - CAPI: GEOSBufferWithParams (allows single sided buffers)
