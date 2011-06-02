@@ -115,6 +115,14 @@ class test extends PHPUnit_Framework_TestCase
         } catch (Exception $e) {
             $this->assertContains('ParseException', $e->getMessage());
         }
+
+        /* BOGUS call (#448) */
+	try {
+        	$reader->read();
+	} catch (Exception $e) {
+            $this->assertContains('expects exactly 1 parameter',
+                                  $e->getMessage());
+	}
     }
 
     public function testWKTWriter__construct()
