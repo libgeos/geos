@@ -117,12 +117,13 @@ class test extends PHPUnit_Framework_TestCase
         }
 
         /* BOGUS call (#448) */
-	try {
-        	$reader->read();
-	} catch (Exception $e) {
+        try {
+        	  $reader->read();
+            $this->assertTrue(FALSE); # this is just to fail if we get here
+        } catch (Exception $e) {
             $this->assertContains('expects exactly 1 parameter',
                                   $e->getMessage());
-	}
+        }
     }
 
     public function testWKTWriter__construct()
