@@ -67,8 +67,9 @@ IndexedNestedRingTester::isNonNested()
 							 graph);
 
                         // Unable to find a ring point not a node of
-			// the search ring
-			assert(innerRingPt!=NULL);
+			// the search ring.
+			// See http://trac.osgeo.org/geos/ticket/449
+			if ( ! innerRingPt ) continue;
 
 			bool isInside = algorithm::CGAlgorithms::isPointInRing(	
 					*innerRingPt, searchRingPts);
