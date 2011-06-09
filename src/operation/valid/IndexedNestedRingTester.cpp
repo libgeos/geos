@@ -50,7 +50,6 @@ IndexedNestedRingTester::isNonNested()
 		for (size_t j=0, jn=results.size(); j<jn; ++j)
 		{
 			const geom::LinearRing* searchRing = static_cast<const geom::LinearRing*>(results[j]);
-			const geom::CoordinateSequence *searchRingPts=searchRing->getCoordinatesRO();
 
 			if (innerRing==searchRing)
 				continue;
@@ -61,15 +60,20 @@ IndexedNestedRingTester::isNonNested()
 				continue;
 			}
 
-                        const geom::Coordinate *innerRingPt =
+			const geom::Coordinate *innerRingPt =
 				IsValidOp::findPtNotNode(innerRingPts,
 							 searchRing,
 							 graph);
 
-                        // Unable to find a ring point not a node of
-			// the search ring
-			assert(innerRingPt!=NULL);
+			// Unable to find a ring point not a node of
+			// the search ring. Can happen, see
+			// http://trac.osgeo.org/geos/ticket/449
+			// for examples.
+			if ( ! innerRingPt ) {
+			  continue;
+			}
 
+			const geom::CoordinateSequence *searchRingPts=searchRing->getCoordinatesRO();
 			bool isInside = algorithm::CGAlgorithms::isPointInRing(	
 					*innerRingPt, searchRingPts);
 
