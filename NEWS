@@ -1,3 +1,9 @@
+Changes in 3.3.1
+2011-??-??
+
+- Bug fixes / improvements
+  - ValidOp abort in presence of 2 touching holes forming an island (#449)
+
 Changes in 3.3.0
 2011-05-30
 
