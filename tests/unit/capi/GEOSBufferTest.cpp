@@ -526,5 +526,27 @@ namespace tut
 ));
     }
 
+    // Single-sided buffer  (3)
+    // http://trac.osgeo.org/geos/ticket/455
+    template<>
+    template<>
+    void object::test<20>()
+    {
+        geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0, 10 10)', -10)");
+
+        ensure( 0 != geom1_ );
+
+        geom2_ = GEOSSingleSidedBuffer(geom1_, 10, 8, GEOSBUF_JOIN_BEVEL, 0, 0);
+
+        ensure( 0 != geom2_ );
+
+        wkt_ = GEOSGeomToWKT(geom2_);
+
+        ensure_equals(std::string(wkt_), std::string(
+"LINESTRING (20.0000000000000000 10.0000000000000000, 20.0000000000000000 0.0000000000000000, 10.0000000000000000 -10.0000000000000000, 0.0000000000000000 -10.0000000000000000)"
+        ));
+
+    }
+
 } // namespace tut
 
