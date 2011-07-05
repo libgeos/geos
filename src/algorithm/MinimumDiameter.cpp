@@ -64,6 +64,7 @@ MinimumDiameter::MinimumDiameter(const Geometry* newInputGeom)
 {
 	minBaseSeg=new LineSegment();
 	minWidthPt=NULL;
+	minPtIndex=0;
 	minWidth=0.0;
 	inputGeom=newInputGeom;
 	isConvex=false;
