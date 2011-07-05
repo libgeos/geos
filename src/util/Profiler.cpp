@@ -115,8 +115,10 @@ void
 Profiler::stop(string name)
 {
 	map<string, Profile *>::iterator iter = profs.find(name);
-	if ( iter == profs.end() )
+	if ( iter == profs.end() ) {
 		cerr<<name<<": no such Profile started";
+		return;
+	}
 	iter->second->stop();
 }
 
