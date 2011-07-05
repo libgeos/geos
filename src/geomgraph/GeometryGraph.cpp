@@ -422,9 +422,11 @@ GeometryGraph::insertBoundaryPoint(int argIndex,const Coordinate& coord)
 
 	// the new point to insert is on a boundary
 	int boundaryCount=1;
+
 	// determine the current location for the point (if any)
-	int loc=Location::UNDEF;
-	if (lbl!=NULL) loc=lbl->getLocation(argIndex,Position::ON);
+  if ( NULL == lbl ) return;
+
+	int loc = lbl->getLocation(argIndex,Position::ON);
 	if (loc==Location::BOUNDARY) boundaryCount++;
 
 	// determine the boundary status of the point according to the
