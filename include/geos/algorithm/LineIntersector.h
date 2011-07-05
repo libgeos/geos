@@ -81,7 +81,8 @@ public:
 	LineIntersector(const geom::PrecisionModel* initialPrecisionModel=NULL)
 		:
 		precisionModel(initialPrecisionModel),
-		result(0)
+		result(0),
+		isProperVar(false)
 	{}
 
 	~LineIntersector() {}
