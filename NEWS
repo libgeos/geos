@@ -1,3 +1,10 @@
+Changes in 3.3.1
+????-??-??
+
+- Bug fixes / improvements
+  - Enable prepared intersects operation for points
+  - Fortify suspicious code found by static analisys tools
+
 Changes in 3.3.0
 2011-05-30
 
