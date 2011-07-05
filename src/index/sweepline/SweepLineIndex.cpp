@@ -29,7 +29,8 @@ namespace sweepline { // geos.index.sweepline
 
 SweepLineIndex::SweepLineIndex()
 	:
-	nOverlaps(0)
+	nOverlaps(0),
+	indexBuilt(false)
 {
 	//events=new vector<SweepLineEvent*>();
 	//nOverlaps=0;
