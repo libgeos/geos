@@ -118,6 +118,7 @@ Node::insertNode(std::auto_ptr<Node> node)
 	assert( env->contains(node->getEnvelope()) );
 
 	int index = getSubnodeIndex(node->getEnvelope(), centre);
+	assert(index >= 0);
 
 	if (node->level == level-1)
 	{
