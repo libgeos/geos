@@ -66,6 +66,18 @@ IndexedNestedRingTester::isNonNested()
 							 searchRing,
 							 graph);
 
+        /**
+         * If no non-node pts can be found, this means
+         * that the searchRing touches ALL of the innerRing vertices.
+         * This indicates an invalid polygon, since either
+         * the two holes create a disconnected interior,
+         * or they touch in an infinite number of points
+         * (i.e. along a line segment).
+         * Both of these cases are caught by other tests,
+         * so it is safe to simply skip this situation here.
+         */
+        if ( ! innerRingPt ) continue;
+
                         // Unable to find a ring point not a node of
 			// the search ring
 			assert(innerRingPt!=NULL);
