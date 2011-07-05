@@ -192,9 +192,10 @@ Node::setLabel(int argIndex, int onLocation)
 void
 Node::setLabelBoundary(int argIndex)
 {
-	int loc=Location::UNDEF;
-	if (label!=NULL)
-		loc=label->getLocation(argIndex);
+	// See https://sourceforge.net/tracker/?func=detail&aid=3353871&group_id=128875&atid=713120
+	if (label == NULL) return;
+
+	int loc = label->getLocation(argIndex);
 	// flip the loc
 	int newLoc;
 	switch (loc){
