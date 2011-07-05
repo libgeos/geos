@@ -114,6 +114,7 @@ Node::insert(Node *node)
 {
 	assert(interval==NULL || interval->contains(node->interval));
 	int index=getSubnodeIndex(node->interval,centre);
+	assert(index >= 0);
 	if (node->level==level-1) {
 		subnode[index]=node;
 	} else {
