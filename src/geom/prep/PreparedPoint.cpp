@@ -25,7 +25,7 @@ namespace geom { // geos.geom
 namespace prep { // geos.geom.prep
 
 bool 
-PreparedPoint::intersects( geom::Geometry* g)
+PreparedPoint::intersects(const geom::Geometry* g)
 {
 	if (! envelopesIntersect( g)) return false;
 
