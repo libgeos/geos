@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/GeometryGraph.java rev. 1.9 (JTS-1.10)
+ * Last port: geomgraph/GeometryGraph.java r411 (JTS-1.12+)
  *
  **********************************************************************/
 
@@ -415,17 +415,17 @@ GeometryGraph::insertPoint(int argIndex, const Coordinate& coord,
  * iff if it is in the boundaries of an odd number of Geometries
  */
 void
-GeometryGraph::insertBoundaryPoint(int argIndex,const Coordinate& coord)
+GeometryGraph::insertBoundaryPoint(int argIndex, const Coordinate& coord)
 {
 	Node *n=nodes->addNode(coord);
+	// nodes always have labels
 	Label *lbl=n->getLabel();
+	assert(lbl);
 
 	// the new point to insert is on a boundary
 	int boundaryCount=1;
 
 	// determine the current location for the point (if any)
-  if ( NULL == lbl ) return;
-
 	int loc = lbl->getLocation(argIndex,Position::ON);
 	if (loc==Location::BOUNDARY) boundaryCount++;
 
