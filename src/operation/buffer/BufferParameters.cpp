@@ -20,6 +20,7 @@
 #include <cstdlib> // for std::abs()
 #include <cmath> // for cos
 
+#include <geos/platform.h>
 #include <geos/operation/buffer/BufferParameters.h>
 
 
