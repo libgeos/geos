@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: algorithm/ConvexHull.java r407 (JTS-1.12+)
+ *
  **********************************************************************/
 
 #ifndef GEOS_ALGORITHM_CONVEXHULL_INL

@@ -4,8 +4,9 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -14,7 +15,7 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/ConvexHull.java rev. 1.26 (JTS-1.7)
+ * Last port: algorithm/ConvexHull.java r407 (JTS-1.12+)
  *
  **********************************************************************/
 
@@ -208,7 +209,17 @@ ConvexHull::reduce(Coordinate::ConstVect &pts)
 	}
 
 	inputPts.assign(reducedSet.begin(), reducedSet.end());
- 
+
+	if ( inputPts.size() < 3 ) padArray3(inputPts);
+}
+
+/* private */
+void
+ConvexHull::padArray3(geom::Coordinate::ConstVect &pts)
+{
+  for (size_t i = pts.size(); i < 3; ++i) {
+    pts.push_back(pts[0]);
+  }
 }
 
 Geometry*
@@ -284,8 +295,9 @@ ConvexHull::grahamScan(const Coordinate::ConstVect &c,
 	for(size_t i=3, n=c.size(); i<n; ++i)
 	{
 		const Coordinate *p = ps.back(); ps.pop_back();
-		while (CGAlgorithms::computeOrientation(*(ps.back()),
-				*p, *(c[i])) > 0)
+		while (!ps.empty() && 
+			CGAlgorithms::computeOrientation(
+		    *(ps.back()), *p, *(c[i])) > 0)
 		{
 			p = ps.back(); ps.pop_back();
 		}

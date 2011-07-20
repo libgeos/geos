@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -11,6 +12,10 @@
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
+ *
+ **********************************************************************
+ *
+ * Last port: algorithm/ConvexHull.java r407 (JTS-1.12+)
  *
  **********************************************************************/
 
@@ -85,15 +90,19 @@ private:
 	 * vertices is not 100% robust, this does not affect the
 	 * robustness of the convex hull.
 	 *
-	 * @param pts The vector of const Coordinate pointers
-	 *            to be reduced
+	 * To satisfy the requirements of the Graham Scan algorithm,
+	 * the resulting array has at least 3 entries.
 	 *
+	 * @param pts The vector of const Coordinate pointers
+	 *            to be reduced (to at least 3 elements)
 	 *
 	 * WARNING: the parameter will be modified
 	 *
 	 */
 	void reduce(geom::Coordinate::ConstVect &pts);
 
+	/// parameter will be modified
+	void padArray3(geom::Coordinate::ConstVect &pts);
 
 	/// parameter will be modified
 	void preSort(geom::Coordinate::ConstVect &pts);
