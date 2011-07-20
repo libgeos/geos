@@ -1,6 +1,9 @@
 Changes in 3.4.0
 ????-??-??
 
+- C++ API changes:
+  - Added BufferOp::setSingleSided 
+
 Changes in 3.3.0
 2011-05-30
 
