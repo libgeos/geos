@@ -86,6 +86,7 @@ geos_unit_SOURCES = geos_unit.cpp \
 	capi/GEOSGeomFromWKBTest.cpp \
 	capi/GEOSGeomToWKTTest.cpp \
 	capi/GEOSContainsTest.cpp \
+	capi/GEOSIntersectsTest.cpp \
 	capi/GEOSWithinTest.cpp \
 	capi/GEOSSimplifyTest.cpp \
 	capi/GEOSPreparedGeometryTest.cpp \

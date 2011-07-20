@@ -20,8 +20,11 @@
  **********************************************************************/
 
 #include <geos/algorithm/RobustDeterminant.h>
+#include <geos/util/IllegalArgumentException.h> 
 
 #include <cmath>
+
+#include <geos/platform.h> // for ISNAN, FINITE
 
 #ifdef _MSC_VER
 #pragma warning(disable : 4127)
@@ -32,6 +35,16 @@ namespace algorithm { // geos.algorithm
 
 
 int RobustDeterminant::signOfDet2x2(double x1,double y1,double x2,double y2) {
+
+	using namespace std;
+
+  // Protect against non-finite numbers
+  if ( ISNAN(x1)   || ISNAN(y1)   || ISNAN(x2)   || ISNAN(y2) ||
+       !FINITE(x1) || !FINITE(y1) || !FINITE(x2) || !FINITE(y2) )
+  {
+    throw util::IllegalArgumentException("RobustDeterminant encountered non-finite numbers ");
+  }
+
 	// returns -1 if the determinant is negative,
 	// returns  1 if the determinant is positive,
 	// retunrs  0 if the determinant is null.
