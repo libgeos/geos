@@ -455,6 +455,25 @@ namespace tut
 		// TODO: test closestPoints
 	}
 
+	// Test for bug #367
+	template<>
+	template<>
+	void object::test<19>()
+	{
+		using geos::operation::distance::DistanceOp;
+		using geos::geom::Coordinate;
+
+/// Or: MULTIPOLYGON((()))
+		std::string wkt0("MULTIPOLYGON((EMPTY))");
+		std::string wkt1("POINT(0 0)");
+
+		GeomPtr g0(wktreader.read(wkt0));
+		GeomPtr g1(wktreader.read(wkt1));
+
+		ensure_equals(DistanceOp::distance(*g0, *g1), DoubleMax);
+
+	}
+
 	// TODO: finish the tests by adding:
 	// 	LINESTRING - *all*
 	// 	MULTILINESTRING - *all*

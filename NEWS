@@ -3,6 +3,7 @@ Changes in 3.2.3
 
 - Bug fixes / improvements
   - ValidOp abort in presence of 2 touching holes forming an island (#449)
+  - DistanceOp segfaults on MULTIPOLYGON with EMPTY elements (#367)
 
 Changes in 3.2.2
  

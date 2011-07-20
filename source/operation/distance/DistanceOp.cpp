@@ -34,6 +34,7 @@
 #include <geos/geom/util/PolygonExtracter.h>
 #include <geos/geom/util/LinearComponentExtracter.h>
 #include <geos/geom/util/PointExtracter.h>
+#include <geos/util/IllegalArgumentException.h>
 
 #include <vector>
 #include <iostream>
@@ -138,6 +139,10 @@ DistanceOp::~DistanceOp()
 double
 DistanceOp::distance()
 {
+	if ( geom[0] == 0 || geom[1] == 0 )
+		throw geos::util::IllegalArgumentException("null geometries are not supported");
+	if ( geom[0]->isEmpty() || geom[1]->isEmpty() ) return minDistance;
+
 	computeMinDistance();
 	return minDistance;
 }
