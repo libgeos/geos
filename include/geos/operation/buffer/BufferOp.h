@@ -211,6 +211,28 @@ public:
 	inline void setQuadrantSegments(int nQuadrantSegments);
 
 	/**
+	 * Sets whether the computed buffer should be single-sided.
+	 * 
+	 * A single-sided buffer is constructed on only one side
+	 * of each input line.
+	 * 
+	 * The side used is determined by the sign of the buffer distance:
+	 * - a positive distance indicates the left-hand side
+	 * - a negative distance indicates the right-hand side
+	 * 
+	 * The single-sided buffer of point geometries is
+	 * the same as the regular buffer.
+	 *
+	 * The End Cap Style for single-sided buffers is
+	 * always ignored,
+	 * and forced to the equivalent of <tt>CAP_FLAT</tt>.
+	 *
+	 * @param isSingleSided true if a single-sided buffer
+	 *                      should be constructed
+	 */
+	inline void setSingleSided(bool isSingleSided);
+
+	/**
 	 * Returns the buffer computed for a geometry for a given buffer
 	 * distance.
 	 *
@@ -233,6 +255,12 @@ void
 BufferOp::setEndCapStyle(int s)
 {
 	bufParams.setEndCapStyle((BufferParameters::EndCapStyle)s);
+}
+
+void
+BufferOp::setSingleSided(bool isSingleSided)
+{
+   bufParams.setSingleSided(isSingleSided);
 }
 
 } // namespace geos::operation::buffer
