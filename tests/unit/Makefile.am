@@ -85,6 +85,7 @@ geos_unit_SOURCES = \
 	operation/overlay/validate/OverlayResultValidatorTest.cpp \
 	operation/overlay/snap/GeometrySnapperTest.cpp \
 	operation/overlay/snap/LineStringSnapperTest.cpp \
+	operation/polygonize/PolygonizeTest.cpp \
 	operation/sharedpaths/SharedPathsOpTest.cpp \
 	operation/union/CascadedPolygonUnionTest.cpp \
 	operation/union/UnaryUnionOpTest.cpp \
