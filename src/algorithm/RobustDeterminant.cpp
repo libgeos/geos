@@ -43,7 +43,6 @@ int RobustDeterminant::signOfDet2x2(double x1,double y1,double x2,double y2) {
 	int sign=1;
 	double swap;
 	double k;
-	long count=0;
 
   // Protect against non-finite numbers
   if ( ISNAN(x1)   || ISNAN(y1)   || ISNAN(x2)   || ISNAN(y2) ||
@@ -185,7 +184,6 @@ int RobustDeterminant::signOfDet2x2(double x1,double y1,double x2,double y2) {
 	*  all entries strictly positive   x1 <= x2 and y1 <= y2
 	*/
 	while (true) {
-		count=count+1;
 		k=std::floor(x2/x1);
 		x2=x2-k*x1;
 		y2=y2-k*y1;
@@ -274,17 +272,4 @@ int RobustDeterminant::signOfDet2x2(double x1,double y1,double x2,double y2) {
 }
 } // namespace geos.algorithm
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.10  2006/03/21 11:12:23  strk
- * Cleanups: headers inclusion and Log section
- *
- * Revision 1.9  2006/03/21 10:46:03  strk
- * streamlined header inclusion, put original copyright on top
- *
- * Revision 1.8  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- **********************************************************************/
 
