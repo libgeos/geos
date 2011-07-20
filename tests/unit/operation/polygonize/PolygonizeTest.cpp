@@ -149,6 +149,7 @@ namespace tut
 
     group test_polygonizetest_group("geos::operation::polygonize::Polygonizer");
 
+    // test1() in JTS
     template<>
     template<>
     void object::test<1>()
@@ -166,6 +167,7 @@ namespace tut
         doTest(inp, exp);
     }
 
+    // test2() in JTS
     template<>
     template<>
     void object::test<2>()
@@ -184,7 +186,6 @@ namespace tut
 
         doTest(inp, exp);
     }
-
 
 } // namespace tut
 
