@@ -168,11 +168,16 @@ string
 DirectedEdge::print() const
 {
 	ostringstream s;
-	s<<typeid(*this).name()<<": "<<p0.toString()<<" - "<<p1.toString();
-	s<<" "<<quadrant<<":"<<angle;
+  s << *this;
 	return s.str();
 }
 
+std::ostream&
+operator << (std::ostream& s, const DirectedEdge& de)
+{
+	s << typeid(de).name() << ": " << de.p0 << " - " << de.p1;
+	s << " " << de.quadrant << ":" << de.angle;
+}
 
 } // namespace planargraph
 } // namespace geos

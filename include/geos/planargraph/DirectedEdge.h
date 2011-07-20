@@ -48,6 +48,8 @@ class GEOS_DLL DirectedEdge: public GraphComponent {
 
 public:
 
+  friend std::ostream& operator << (std::ostream&, const DirectedEdge&);
+
 	typedef std::list<DirectedEdge *> NonConstList;
 	typedef std::list<const DirectedEdge *> ConstList;
 	typedef std::vector<DirectedEdge *> NonConstVect;
@@ -226,6 +228,8 @@ public:
 /// Strict Weak comparator function for containers
 bool pdeLessThan(DirectedEdge *first, DirectedEdge * second);
 
+/// Output operator 
+std::ostream& operator << (std::ostream&, const DirectedEdge&);
 
 
 } // namespace geos::planargraph
