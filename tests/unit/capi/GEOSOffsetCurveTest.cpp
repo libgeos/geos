@@ -168,6 +168,26 @@ namespace tut
         ));
     }
 
+    // 0 distance
+    // See http://trac.osgeo.org/postgis/ticket/454
+    template<>
+    template<>
+    void object::test<6>()
+    {
+        geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0)");
+
+        ensure( 0 != geom1_ );
+
+        geom2_ = GEOSOffsetCurve(geom1_, 0, 0, GEOSBUF_JOIN_ROUND, 2);
+
+        ensure( 0 != geom2_ );
+
+        wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+
+        ensure_equals(std::string(wkt_), std::string(
+          "LINESTRING (0 0, 10 0)"
+        ));
+    }
 
 } // namespace tut
 

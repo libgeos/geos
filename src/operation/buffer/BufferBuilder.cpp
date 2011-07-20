@@ -141,6 +141,9 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    const LineString* l = dynamic_cast< const LineString* >( g );
    if ( !l ) throw util::IllegalArgumentException("BufferBuilder::bufferLineSingleSided only accept linestrings");
 
+   // Nothing to do for a distance of zero
+   if ( distance == 0 ) return g->clone();
+
    // Get geometry factory and precision model.
    const PrecisionModel* precisionModel = workingPrecisionModel;
    if ( !precisionModel ) precisionModel = l->getPrecisionModel();
