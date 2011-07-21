@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
@@ -14,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/Label.java rev. 1.8 (JTS-1.10)
+ * Last port: geomgraph/Label.java r428 (JTS-1.12+)
  *
  **********************************************************************/
 
@@ -84,8 +83,12 @@ Label::Label(const Label &l)
 }
 
 /*public*/
-Label::~Label()
+Label&
+Label::operator=(const Label &l)
 {
+	elt[0] = TopologyLocation(l.elt[0]);
+	elt[1] = TopologyLocation(l.elt[1]);
+	return *this;
 }
 
 /*public*/

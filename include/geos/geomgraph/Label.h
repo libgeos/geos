@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
@@ -14,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/Label.java rev. 1.8 (JTS-1.10)
+ * Last port: geomgraph/Label.java r428 (JTS-1.12+)
  *
  **********************************************************************/
 
@@ -94,13 +93,12 @@ public:
 	/// Copy ctor
 	Label(const Label &l);
 
+	Label& operator= (const Label& l);
+
 	/** \brief
 	 * Initialize the locations to Location::UNDEF
 	 */
 	Label();
-
-	/// I'd drop the 'virtual' modifier here --strk 2006-04-06
-	virtual ~Label();
 
 	/** \brief
 	 * Construct a Label with On, Left and Right locations for the
@@ -157,7 +155,7 @@ public:
 
 	std::string toString() const;
 
-protected:
+private:
 
 	TopologyLocation elt[2];
 };
@@ -173,17 +171,4 @@ std::ostream& operator<< (std::ostream&, const Label&);
 //#endif
 
 #endif // ifndef GEOS_GEOMGRAPH_LABEL_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.3  2006/04/06 09:01:37  strk
- * Doxygen comments, port info, operator<<, assertion checking
- *
- * Revision 1.2  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/
 
