@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
@@ -14,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/TopologyLocation.java rev. 1.6 (JTS-1.10)
+ * Last port: geomgraph/TopologyLocation.java r428 (JTS-1.12+)
  *
  **********************************************************************/
 
@@ -66,10 +65,18 @@ TopologyLocation::TopologyLocation(int on):
 }
 
 /*public*/
-TopologyLocation::TopologyLocation(const TopologyLocation &gl):
+TopologyLocation::TopologyLocation(const TopologyLocation &gl)
+  :
 	location(gl.location)
 {
-	//location=new vector<int>(gl->location->begin(),gl->location->end());
+}
+
+/*public*/
+TopologyLocation&
+TopologyLocation::operator= (const TopologyLocation &gl)
+{
+	location = gl.location;
+  return *this;
 }
 
 /*public*/
@@ -228,45 +235,4 @@ std::ostream& operator<< (std::ostream& os, const TopologyLocation& tl)
 } // namespace geos.geomgraph
 } // namespace geos
 
-/**********************************************************************
- * $Log$
- * Revision 1.10  2006/06/12 11:29:23  strk
- * unsigned int => size_t
- *
- * Revision 1.9  2006/04/06 09:01:10  strk
- * Doxygen comments, port info, operator<<, assertion checking
- *
- * Revision 1.8  2006/03/15 17:16:29  strk
- * streamlined headers inclusion
- *
- * Revision 1.7  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.6  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.5  2005/11/29 15:45:39  strk
- * Fixed signedness of TopologyLocation methods, cleanups.
- *
- * Revision 1.4  2005/11/15 18:30:59  strk
- * Removed dead code
- *
- * Revision 1.3  2005/11/14 18:14:04  strk
- * Reduced heap allocations made by TopologyLocation and Label objects.
- * Enforced const-correctness on GraphComponent.
- * Cleanups.
- *
- * Revision 1.2  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.8  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
- **********************************************************************/
 
