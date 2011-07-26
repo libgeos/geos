@@ -32,7 +32,6 @@ geos_HEADERS = \
     SegmentPointComparator.h \
     SegmentSetMutualIntersector.h \
     SegmentString.h \
-    SegmentString.inl \
     SegmentStringUtil.h \
     SimpleNoder.h \
     SingleInteriorIntersectionFinder.h \
