@@ -54,7 +54,11 @@ public:
 	
 	virtual ~EdgeEndBundleStar();
 	void insert(geomgraph::EdgeEnd *e);
-	void updateIM(geom::IntersectionMatrix *im);
+
+	/**
+	 * Update the IM with the contribution for the EdgeStubs around the node.
+	 */
+	void updateIM(geom::IntersectionMatrix& im);
 };
 
 

@@ -35,12 +35,12 @@ namespace geos {
 namespace geomgraph { // geos.geomgraph
 
 /*public static*/
-Label*
+Label
 Label::toLineLabel(const Label &label)
 {
-	Label *lineLabel=new Label(Location::UNDEF);
+	Label lineLabel(Location::UNDEF);
 	for (int i=0; i<2; i++) {
-		lineLabel->setLocation(i, label.getLocation(i));
+		lineLabel.setLocation(i, label.getLocation(i));
 	}
 	return lineLabel;
 }
@@ -188,6 +188,13 @@ Label::isNull(int geomIndex) const
 {
 	assert(geomIndex>=0 && geomIndex<2);
 	return elt[geomIndex].isNull();
+}
+
+/*public*/
+bool
+Label::isNull() const
+{
+	return elt[0].isNull() && elt[1].isNull();
 }
 
 /*public*/

@@ -186,7 +186,7 @@ ConnectedInteriorTester::setInteriorEdgesInResult(PlanarGraph &graph)
 		// Unexpected non DirectedEdge in graphEdgeEnds
 		assert(dynamic_cast<DirectedEdge*>((*ee)[i]));
 		DirectedEdge *de=static_cast<DirectedEdge*>((*ee)[i]);
-		if ( de->getLabel()->getLocation(0, Position::RIGHT) == Location::INTERIOR)
+		if ( de->getLabel().getLocation(0, Position::RIGHT) == Location::INTERIOR)
 		{
 			de->setInResult(true);
 		}
@@ -274,9 +274,9 @@ ConnectedInteriorTester::visitInteriorRing(const LineString *ring, PlanarGraph &
 	Edge *e=graph.findEdgeInSameDirection(pt0, pt1);
 	DirectedEdge *de=static_cast<DirectedEdge*>(graph.findEdgeEnd(e));
 	DirectedEdge *intDe=NULL;
-	if (de->getLabel()->getLocation(0,Position::RIGHT)==Location::INTERIOR) {
+	if (de->getLabel().getLocation(0,Position::RIGHT)==Location::INTERIOR) {
 		intDe=de;
-	} else if (de->getSym()->getLabel()->getLocation(0,Position::RIGHT)==Location::INTERIOR) {
+	} else if (de->getSym()->getLabel().getLocation(0,Position::RIGHT)==Location::INTERIOR) {
 		intDe=de->getSym();
 	}
 	assert(intDe!=NULL); // unable to find dirEdge with Interior on RHS
@@ -326,8 +326,7 @@ ConnectedInteriorTester::hasUnvisitedShellEdge(std::vector<EdgeRing*> *edgeRings
 
 		// don't check CW rings which are holes
 		// (MD - this check may now be irrelevant - 2006-03-09)
-		assert(de->getLabel());
-		if (de->getLabel()->getLocation(0, Position::RIGHT) != Location::INTERIOR) continue;
+		if (de->getLabel().getLocation(0, Position::RIGHT) != Location::INTERIOR) continue;
 
 		/*
 		 * the edgeRing is CW ring which surrounds the INT

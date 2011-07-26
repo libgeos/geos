@@ -116,7 +116,7 @@ private:
 	/**
 	 * update the IM with the sum of the IMs for each component
 	 */
-	void updateIM(geom::IntersectionMatrix *imX);
+	void updateIM(geom::IntersectionMatrix& imX);
 
 	/**
 	 * Processes isolated edges by computing their labelling and adding them

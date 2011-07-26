@@ -145,10 +145,11 @@ public:
 		// throw (GEOSException);
 
 private:
+
 	/**
 	 * Compute the change in depth as an edge is crossed from R to L
 	 */
-	static int depthDelta(geomgraph::Label *label);
+	static int depthDelta(const geomgraph::Label& label);
 
 	const BufferParameters& bufParams; 
 

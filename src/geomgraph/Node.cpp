@@ -1,9 +1,9 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -49,7 +49,7 @@ namespace geomgraph { // geos.geomgraph
 /*public*/
 Node::Node(const Coordinate& newCoord, EdgeEndStar* newEdges)
 	:
-	GraphComponent(new Label(0,Location::UNDEF)),
+	GraphComponent(Label(0,Location::UNDEF)),
 	coord(newCoord),
 	edges(newEdges)
 
@@ -108,7 +108,7 @@ Node::isIsolated() const
 {
 	testInvariant();
 
-	return (label->getGeometryCount()==1);
+	return (label.getGeometryCount()==1);
 }
 
 /*public*/
@@ -159,8 +159,8 @@ Node::add(EdgeEnd *e)
 void
 Node::mergeLabel(const Node& n)
 {
-	assert(n.label);
-	mergeLabel(*(n.label));
+	assert(!n.label.isNull());
+	mergeLabel(n.label);
 	testInvariant();
 }
 
@@ -169,9 +169,9 @@ void
 Node::mergeLabel(const Label& label2)
 {
 	for (int i=0; i<2; i++) {
-		int loc=computeMergedLocation(&label2, i);
-		int thisLoc=label->getLocation(i);
-		if (thisLoc==Location::UNDEF) label->setLocation(i,loc);
+		int loc=computeMergedLocation(label2, i);
+		int thisLoc=label.getLocation(i);
+		if (thisLoc==Location::UNDEF) label.setLocation(i,loc);
 	}
 	testInvariant();
 }
@@ -180,10 +180,10 @@ Node::mergeLabel(const Label& label2)
 void
 Node::setLabel(int argIndex, int onLocation)
 {
-	if (label==NULL) {
-		label=new Label(argIndex, onLocation);
+	if ( label.isNull() ) {
+		label = Label(argIndex, onLocation);
 	} else
-		label->setLocation(argIndex, onLocation);
+		label.setLocation(argIndex, onLocation);
 
 	testInvariant();
 }
@@ -192,10 +192,7 @@ Node::setLabel(int argIndex, int onLocation)
 void
 Node::setLabelBoundary(int argIndex)
 {
-	// See https://sourceforge.net/tracker/?func=detail&aid=3353871&group_id=128875&atid=713120
-	if (label == NULL) return;
-
-	int loc = label->getLocation(argIndex);
+	int loc = label.getLocation(argIndex);
 	// flip the loc
 	int newLoc;
 	switch (loc){
@@ -203,19 +200,19 @@ Node::setLabelBoundary(int argIndex)
 		case Location::INTERIOR: newLoc=Location::BOUNDARY; break;
 		default: newLoc=Location::BOUNDARY;  break;
 	}
-	label->setLocation(argIndex, newLoc);
+	label.setLocation(argIndex, newLoc);
 
 	testInvariant();
 }
 
 /*public*/
 int
-Node::computeMergedLocation(const Label* label2, int eltIndex)
+Node::computeMergedLocation(const Label& label2, int eltIndex)
 {
 	int loc=Location::UNDEF;
-	loc=label->getLocation(eltIndex);
-	if (!label2->isNull(eltIndex)) {
-		int nLoc=label2->getLocation(eltIndex);
+	loc=label.getLocation(eltIndex);
+	if (!label2.isNull(eltIndex)) {
+		int nLoc=label2.getLocation(eltIndex);
 		if (loc!=Location::BOUNDARY) loc=nLoc;
 	}
 
@@ -275,44 +272,10 @@ std::ostream& operator<< (std::ostream& os, const Node& node)
 {
 	os << "Node["<<&node<<"]" << std::endl
 	   << "  POINT(" << node.coord << ")" << std::endl
-	   << "  lbl: "+node.label->toString();
+	   << "  lbl: " << node.label;
 	return os;
 }
 
 } // namespace geos.geomgraph
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.24  2006/04/27 15:03:48  strk
- * standard algorithm used in addZ() for vector seek
- *
- * Revision 1.23  2006/04/07 16:01:51  strk
- * Port info, doxygen comments, testInvariant(), many assertionss, handling of
- * the NULL EdgeEndStar member
- *
- * Revision 1.22  2006/03/15 16:27:54  strk
- * operator<< for Node class
- *
- * Revision 1.21  2006/03/14 15:31:39  strk
- * Cleaned up toString funx (more WKT friendly)
- *
- * Revision 1.20  2006/03/14 12:55:55  strk
- * Headers split: geomgraphindex.h, nodingSnapround.h
- *
- * Revision 1.19  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.18  2006/03/02 12:12:00  strk
- * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
- *
- * Revision 1.17  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.16  2005/11/29 00:48:35  strk
- * Removed edgeList cache from EdgeEndRing. edgeMap is enough.
- * Restructured iterated access by use of standard ::iterator abstraction
- * with scoped typedefs.
- *
- **********************************************************************/
 

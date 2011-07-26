@@ -64,10 +64,8 @@ public:
 	 * Converts a Label to a Line label
 	 * (that is, one with no side Locations)
 	 *
-	 * Returns a newly allocated object,
-	 * responsibility of it to the caller.
 	 */
-	static Label* toLineLabel(const Label& label);
+	static Label toLineLabel(const Label& label);
 
 	/** \brief
 	 * Construct a Label with a single location for both Geometries.
@@ -96,7 +94,9 @@ public:
 	Label& operator= (const Label& l);
 
 	/** \brief
-	 * Initialize the locations to Location::UNDEF
+	 * Initialize both locations to Location::UNDEF
+	 * 
+	 * isNull() should return true after this kind of construction
 	 */
 	Label();
 
@@ -133,6 +133,8 @@ public:
 	void merge(const Label &lbl);
 
 	int getGeometryCount() const;
+
+	bool isNull() const;
 
 	bool isNull(int geomIndex) const;
 

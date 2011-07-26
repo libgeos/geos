@@ -1,9 +1,9 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/EdgeRing.java rev. 1.10 (JTS-1.10)
+ * Last port: geomgraph/EdgeRing.java r428 (JTS-1.12+)
  *
  **********************************************************************/
 
@@ -240,10 +240,9 @@ EdgeRing::computePoints(DirectedEdge *newStart)
 				de->getCoordinate());
 
 		edges.push_back(de);
-		Label *deLabel=de->getLabel();
-		assert(deLabel);
-		assert(deLabel->isArea());
-		mergeLabel(*deLabel);
+		const Label& deLabel = de->getLabel();
+		assert(deLabel.isArea());
+		mergeLabel(deLabel);
 		addPoints(de->getEdge(),de->isForward(),isFirstEdge);
 		isFirstEdge=false;
 		setEdgeRing(de,this);
@@ -302,7 +301,7 @@ EdgeRing::setInResult()
 
 /*protected*/
 void
-EdgeRing::mergeLabel(Label& deLabel)
+EdgeRing::mergeLabel(const Label& deLabel)
 {
 	mergeLabel(deLabel, 0);
 	mergeLabel(deLabel, 1);
@@ -313,7 +312,7 @@ EdgeRing::mergeLabel(Label& deLabel)
 
 /*protected*/
 void
-EdgeRing::mergeLabel(Label& deLabel, int geomIndex)
+EdgeRing::mergeLabel(const Label& deLabel, int geomIndex)
 {
 
 	testInvariant();
@@ -406,36 +405,4 @@ std::ostream& operator<< (std::ostream& os, const EdgeRing& er)
 
 } // namespace geos.geomgraph
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.25  2006/07/08 00:33:54  strk
- *         * configure.in: incremented CAPI minor version, to avoid                        falling behind any future version from the 2.2. branch.
- *         * source/geom/Geometry.cpp, source/geom/GeometryFactory.cpp,
- *         source/geomgraph/EdgeRing.cpp,
- *         source/headers/geos/geom/Geometry.h,
- *         source/headers/geos/geom/GeometryFactory.h,
- *         source/headers/geos/geom/GeometryFactory.inl,
- *         source/headers/geos/geomgraph/EdgeRing.h:
- *         updated doxygen comments (sync with JTS head).
- *         * source/headers/geos/platform.h.in: include <inttypes.h>
- *         rather then <stdint.h>
- *
- * Revision 1.24  2006/06/12 11:29:23  strk
- * unsigned int => size_t
- *
- * Revision 1.23  2006/04/06 09:41:55  strk
- * Added operator<<, added pts!=NULL assertion in testInvariant() function
- *
- * Revision 1.22  2006/03/29 13:53:56  strk
- * EdgeRing equipped with Invariant testing function and lots of exceptional assertions. Removed useless heap allocations, and pointers usages.
- *
- * Revision 1.21  2006/03/27 16:02:33  strk
- * Added INL file for MinimalEdgeRing, added many debugging blocks,
- * fixed memory leak in ConnectedInteriorTester (bug #59)
- *
- * Revision 1.20  2006/03/23 15:10:29  strk
- * Dropped by-pointer TopologyException constructor, various small cleanups
- *
- **********************************************************************/
 

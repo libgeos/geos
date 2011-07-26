@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
@@ -39,7 +38,7 @@ namespace relate { // geos.operation.relate
 EdgeEndBundle::EdgeEndBundle(EdgeEnd *e):
 	EdgeEnd(e->getEdge(),e->getCoordinate(),
 		e->getDirectedCoordinate(),
-		new Label(*(e->getLabel())))
+		e->getLabel())
 {
 	edgeEnds=new vector<EdgeEnd*>();
 	insert(e);
@@ -50,10 +49,6 @@ EdgeEndBundle::~EdgeEndBundle(){
 		delete (*edgeEnds)[i];
 	}
 	delete edgeEnds;
-}
-
-Label* EdgeEndBundle::getLabel(){
-	return label;
 }
 
 //Not needed
@@ -86,14 +81,12 @@ void EdgeEndBundle::computeLabel(
 			it != itEnd; it++)
 	{
 		EdgeEnd *e=*it;
-		if (e->getLabel()->isArea()) isArea=true;
+		if (e->getLabel().isArea()) isArea=true;
 	}
 	if (isArea) {
-		delete label;
-		label=new Label(Location::UNDEF,Location::UNDEF,Location::UNDEF);
+		label = Label(Location::UNDEF,Location::UNDEF,Location::UNDEF);
 	} else {
-		delete label;
-		label=new Label(Location::UNDEF);
+		label = Label(Location::UNDEF);
 	}
 	// compute the On label, and the side labels if present
 	for(int i=0;i<2;i++) {
@@ -113,7 +106,7 @@ EdgeEndBundle::computeLabelOn(int geomIndex, const algorithm::BoundaryNodeRule& 
 
 	for(vector<EdgeEnd*>::iterator it=edgeEnds->begin();it<edgeEnds->end();it++) {
 		EdgeEnd *e=*it;
-		int loc=e->getLabel()->getLocation(geomIndex);
+		int loc=e->getLabel().getLocation(geomIndex);
 		if (loc==Location::BOUNDARY) boundaryCount++;
 		if (loc==Location::INTERIOR) foundInterior=true;
 	}
@@ -123,7 +116,7 @@ EdgeEndBundle::computeLabelOn(int geomIndex, const algorithm::BoundaryNodeRule& 
 		loc = GeometryGraph::determineBoundary(boundaryNodeRule,
 		                                       boundaryCount);
 	}
-	label->setLocation(geomIndex,loc);
+	label.setLocation(geomIndex,loc);
 }
 
 
@@ -152,27 +145,24 @@ void EdgeEndBundle::computeLabelSides(int geomIndex) {
 void EdgeEndBundle::computeLabelSide(int geomIndex, int side) {
 	for(vector<EdgeEnd*>::iterator it=edgeEnds->begin();it<edgeEnds->end();it++) {
 		EdgeEnd *e=*it;
-		if (e->getLabel()->isArea()) {
-			int loc=e->getLabel()->getLocation(geomIndex,side);
+		if (e->getLabel().isArea()) {
+			int loc=e->getLabel().getLocation(geomIndex,side);
 			if (loc==Location::INTERIOR) {
-				label->setLocation(geomIndex,side,Location::INTERIOR);
+				label.setLocation(geomIndex,side,Location::INTERIOR);
 				return;
 			} else if (loc==Location::EXTERIOR) {
-				label->setLocation(geomIndex,side,Location::EXTERIOR);
+				label.setLocation(geomIndex,side,Location::EXTERIOR);
 			}
 		}
 	}
 }
 
-/**
-* Update the IM with the contribution for the computed label for the EdgeStubs.
-*/
-void EdgeEndBundle::updateIM(IntersectionMatrix *im) {
-	Edge::updateIM(label,im);
+void EdgeEndBundle::updateIM(IntersectionMatrix& im) {
+	Edge::updateIM(label, im);
 }
 
 string EdgeEndBundle::print() {
-	string out="EdgeEndBundle--> Label: "+label->toString()+"\n";
+	string out="EdgeEndBundle--> Label: "+label.toString()+"\n";
 	for(vector<EdgeEnd*>::iterator it=edgeEnds->begin();it<edgeEnds->end();it++) {
 		EdgeEnd *e=*it;
 		out+=e->print();
@@ -184,22 +174,3 @@ string EdgeEndBundle::print() {
 } // namespace geos.operation.relate
 } // namespace geos.operation
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.15  2006/06/12 11:29:24  strk
- * unsigned int => size_t
- *
- * Revision 1.14  2006/03/21 13:11:29  strk
- * opRelate.h header split
- *
- * Revision 1.13  2006/03/17 16:48:55  strk
- * LineIntersector and PointLocator made complete components of RelateComputer
- * (were statics const pointers before). Reduced inclusions from opRelate.h
- * and opValid.h, updated .cpp files to allow build.
- *
- * Revision 1.12  2006/02/19 19:46:50  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- **********************************************************************/
-

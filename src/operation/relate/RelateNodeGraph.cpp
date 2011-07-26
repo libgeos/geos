@@ -98,7 +98,7 @@ RelateNodeGraph::computeIntersectionNodes(GeometryGraph *geomGraph,
 	for( ; edgeIt<edges->end(); ++edgeIt)
 	{
 		Edge *e=*edgeIt;
-		int eLoc=e->getLabel()->getLocation(argIndex);
+		int eLoc=e->getLabel().getLocation(argIndex);
 		EdgeIntersectionList &eiL=e->getEdgeIntersectionList();
 		EdgeIntersectionList::iterator eiIt=eiL.begin();
 		EdgeIntersectionList::iterator eiEnd=eiL.end();
@@ -108,7 +108,7 @@ RelateNodeGraph::computeIntersectionNodes(GeometryGraph *geomGraph,
 			if (eLoc==Location::BOUNDARY)
 				n->setLabelBoundary(argIndex);
 			else {
-				if (n->getLabel()->isNull(argIndex))
+				if (n->getLabel().isNull(argIndex))
 				  n->setLabel(argIndex,Location::INTERIOR);
 			}
 		}
@@ -132,7 +132,7 @@ RelateNodeGraph::copyNodesAndLabels(GeometryGraph *geomGraph,int argIndex)
 	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
 		Node *graphNode=nodeIt->second;
 		Node *newNode=nodes->addNode(graphNode->getCoordinate());
-		newNode->setLabel(argIndex,graphNode->getLabel()->getLocation(argIndex));
+		newNode->setLabel(argIndex,graphNode->getLabel().getLocation(argIndex));
 		//node.print(System.out);
 	}
 }

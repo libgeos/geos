@@ -148,7 +148,7 @@ NodeMap::getBoundaryNodes(int geomIndex, vector<Node*>&bdyNodes) const
 	NodeMap::const_iterator it=nodeMap.begin();
 	for (;it!=nodeMap.end();it++) {
 		Node *node=it->second;
-		if (node->getLabel()->getLocation(geomIndex)==Location::BOUNDARY)
+		if (node->getLabel().getLocation(geomIndex)==Location::BOUNDARY)
 			bdyNodes.push_back(node);
 	}
 }

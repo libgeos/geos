@@ -64,11 +64,8 @@ EdgeEndBundleStar::insert(EdgeEnd *e)
 	}
 }
 
-/**
- * Update the IM with the contribution for the EdgeStubs around the node.
- */
 void
-EdgeEndBundleStar::updateIM(IntersectionMatrix *im)
+EdgeEndBundleStar::updateIM(IntersectionMatrix& im)
 {
 	//vector<EdgeEnd*> *edges=getEdges();
 	EdgeEndStar::iterator it=begin();

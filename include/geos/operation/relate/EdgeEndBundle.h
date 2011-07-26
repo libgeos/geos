@@ -50,13 +50,18 @@ class GEOS_DLL EdgeEndBundle: public geomgraph::EdgeEnd
 public:
 	EdgeEndBundle(geomgraph::EdgeEnd *e);
 	virtual ~EdgeEndBundle();
-	geomgraph::Label *getLabel();
 	std::vector<geomgraph::EdgeEnd*>* getEdgeEnds();
 	void insert(geomgraph::EdgeEnd *e);
 
 	void computeLabel(const algorithm::BoundaryNodeRule& bnr); 
 
-	void updateIM(geom::IntersectionMatrix *im);
+  /**
+   * \brief
+   * Update the IM with the contribution for the computed label for
+   * the EdgeStubs.
+   */
+	void updateIM(geom::IntersectionMatrix& im);
+
 	std::string print();
 protected:
 	std::vector<geomgraph::EdgeEnd*> *edgeEnds;

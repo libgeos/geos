@@ -1,9 +1,9 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/Edge.java rev. 1.4 (JTS-1.10)
+ * Last port: geomgraph/Edge.java r428 (JTS-1.12+)
  *
  **********************************************************************/
 
@@ -62,6 +62,7 @@ namespace geos {
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
+/** The edge component of a geometry graph */
 class GEOS_DLL Edge: public GraphComponent{
 using GraphComponent::updateIM;
 
@@ -91,7 +92,7 @@ public:
 
 	friend std::ostream& operator<< (std::ostream& os, const Edge& el);
 
-	static void updateIM(Label *lbl,geom::IntersectionMatrix *im);
+	static void updateIM(const Label& lbl, geom::IntersectionMatrix& im);
 
 	/// Externally-set, owned by Edge. FIXME: refuse ownership
 	geom::CoordinateSequence* pts;
@@ -100,8 +101,10 @@ public:
 
 	//Edge();
 
-	Edge(geom::CoordinateSequence* newPts, Label *newLabel);
+	/// Takes ownership of CoordinateSequence
+	Edge(geom::CoordinateSequence* newPts, const Label& newLabel);
 
+	/// Takes ownership of CoordinateSequence
 	Edge(geom::CoordinateSequence* newPts);
 
 	virtual ~Edge();
@@ -206,9 +209,10 @@ public:
 
 	/// Update the IM with the contribution for this component.
 	//
-	/// A component only contributes if it has a labelling for both parent geometries
+	/// A component only contributes if it has a labelling for both
+	/// parent geometries
 	///
-	virtual void computeIM(geom::IntersectionMatrix *im) {
+	virtual void computeIM(geom::IntersectionMatrix& im) {
 		updateIM(label, im);
 		testInvariant();
 	}
@@ -258,21 +262,4 @@ std::ostream& operator<< (std::ostream& os, const Edge& el);
 //#endif
 
 #endif // ifndef GEOS_GEOMGRAPH_EDGE_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.4  2006/04/05 18:28:42  strk
- * Moved testInvariant() methods from private to public, added
- * some comments about them.
- *
- * Revision 1.3  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.2  2006/03/14 11:03:14  strk
- * Added operator<< for Edge and EdgeList
- *
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/
 

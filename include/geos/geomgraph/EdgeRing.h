@@ -1,9 +1,9 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/EdgeRing.java rev. 1.10 (JTS-1.10)
+ * Last port: geomgraph/EdgeRing.java r428 (JTS-1.12+)
  *
  **********************************************************************/
 
@@ -55,6 +55,7 @@ namespace geos {
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
+/** EdgeRing */
 class GEOS_DLL EdgeRing {
 
 public:
@@ -152,7 +153,7 @@ protected:
 	/// throw(const TopologyException &)
 	void computePoints(DirectedEdge *newStart);
 
-	void mergeLabel(Label& deLabel);
+	void mergeLabel(const Label& deLabel);
 
 	/** \brief
 	 * Merge the RHS label from a DirectedEdge into the label for
@@ -166,7 +167,7 @@ protected:
 	 * information to the overall labelling, and is
 	 * simply skipped.
 	 */
-	void mergeLabel(Label& deLabel, int geomIndex);
+	void mergeLabel(const Label& deLabel, int geomIndex);
 
 	void addPoints(Edge *edge, bool isForward, bool isFirstEdge);
 
@@ -206,51 +207,5 @@ std::ostream& operator<< (std::ostream& os, const EdgeRing& er);
 #pragma warning(pop)
 #endif
 
-//#ifdef GEOS_INLINE
-//# include "geos/geomgraph/EdgeRing.inl"
-//#endif
-
 #endif // ifndef GEOS_GEOMGRAPH_EDGERING_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.9  2006/07/08 00:33:55  strk
- *         * configure.in: incremented CAPI minor version, to avoid                        falling behind any future version from the 2.2. branch.
- *         * source/geom/Geometry.cpp, source/geom/GeometryFactory.cpp,
- *         source/geomgraph/EdgeRing.cpp,
- *         source/headers/geos/geom/Geometry.h,
- *         source/headers/geos/geom/GeometryFactory.h,
- *         source/headers/geos/geom/GeometryFactory.inl,
- *         source/headers/geos/geomgraph/EdgeRing.h:
- *         updated doxygen comments (sync with JTS head).
- *         * source/headers/geos/platform.h.in: include <inttypes.h>
- *         rather then <stdint.h>
- *
- * Revision 1.8  2006/04/06 09:41:55  strk
- * Added operator<<, added pts!=NULL assertion in testInvariant() function
- *
- * Revision 1.7  2006/04/05 18:28:42  strk
- * Moved testInvariant() methods from private to public, added
- * some comments about them.
- *
- * Revision 1.6  2006/03/29 13:53:59  strk
- * EdgeRing equipped with Invariant testing function and lots of exceptional assertions. Removed useless heap allocations, and pointers usages.
- *
- * Revision 1.5  2006/03/27 16:02:34  strk
- * Added INL file for MinimalEdgeRing, added many debugging blocks,
- * fixed memory leak in ConnectedInteriorTester (bug #59)
- *
- * Revision 1.4  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.3  2006/03/20 12:32:57  strk
- * Added note about responsibility of return from ::toPolygon
- *
- * Revision 1.2  2006/03/15 17:17:41  strk
- * Added missing forward declarations
- *
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/
 

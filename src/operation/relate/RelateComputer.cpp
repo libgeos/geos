@@ -142,7 +142,7 @@ RelateComputer::computeIM()
 	//debugPrintln("Graph B isolated edges - ");
 	labelIsolatedEdges(1,0);
 	// update the IM from all components
-	updateIM(im.get());
+	updateIM( *im );
 	return im.release();
 }
 
@@ -155,6 +155,7 @@ RelateComputer::insertEdgeEnds(std::vector<EdgeEnd*> *ee)
 	}
 }
 
+/* private */
 void
 RelateComputer::computeProperIntersectionIM(SegmentIntersector *intersector,IntersectionMatrix *imX)
 {
@@ -219,7 +220,7 @@ RelateComputer::copyNodesAndLabels(int argIndex)
 		Node *graphNode=nodeIt->second;
 		Node *newNode=nodes.addNode(graphNode->getCoordinate());
 		newNode->setLabel(argIndex,
-				graphNode->getLabel()->getLocation(argIndex));
+				graphNode->getLabel().getLocation(argIndex));
 		//node.print(System.out);
 	}
 }
@@ -240,7 +241,7 @@ RelateComputer::computeIntersectionNodes(int argIndex)
 	for(std::vector<Edge*>::iterator i=edges->begin();i<edges->end();i++)
 	{
 		Edge *e=*i;
-		int eLoc=e->getLabel()->getLocation(argIndex);
+		int eLoc=e->getLabel().getLocation(argIndex);
 		EdgeIntersectionList &eiL=e->getEdgeIntersectionList();
 		EdgeIntersectionList::iterator it=eiL.begin();
 		EdgeIntersectionList::iterator end=eiL.end();
@@ -255,7 +256,7 @@ RelateComputer::computeIntersectionNodes(int argIndex)
 			}
 			else
 			{
-				if (n->getLabel()->isNull(argIndex))
+				if (n->getLabel().isNull(argIndex))
 				  n->setLabel(argIndex,Location::INTERIOR);
 			}
 		}
@@ -275,7 +276,7 @@ RelateComputer::labelIntersectionNodes(int argIndex)
 	std::vector<Edge*> *edges=(*arg)[argIndex]->getEdges();
 	for(std::vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
-		int eLoc=e->getLabel()->getLocation(argIndex);
+		int eLoc=e->getLabel().getLocation(argIndex);
 		EdgeIntersectionList &eiL=e->getEdgeIntersectionList();
 		EdgeIntersectionList::iterator eiIt=eiL.begin();
 		EdgeIntersectionList::iterator eiEnd=eiL.end();
@@ -284,7 +285,7 @@ RelateComputer::labelIntersectionNodes(int argIndex)
 		{
 			EdgeIntersection *ei=*eiIt;
 			RelateNode *n=(RelateNode*) nodes.find(ei->coord);
-			if (n->getLabel()->isNull(argIndex)) {
+			if (n->getLabel().isNull(argIndex)) {
 				if (eLoc==Location::BOUNDARY)
 				  n->setLabelBoundary(argIndex);
 				else
@@ -328,7 +329,7 @@ RelateComputer::labelNodeEdges()
 
 /*private*/
 void
-RelateComputer::updateIM(IntersectionMatrix *imX)
+RelateComputer::updateIM(IntersectionMatrix& imX)
 {
 	//Debug.println(im);
 	std::vector<Edge *>::iterator ei=isolatedEdges.begin();
@@ -374,9 +375,9 @@ RelateComputer::labelIsolatedEdge(Edge *e, int targetIndex, const Geometry *targ
 		// Possibly should use ptInArea locator instead?  We probably know here
 		// that the edge does not touch the bdy of the target Geometry
 		int loc=ptLocator.locate(e->getCoordinate(), target);
-		e->getLabel()->setAllLocations(targetIndex,loc);
+		e->getLabel().setAllLocations(targetIndex,loc);
 	} else {
-		e->getLabel()->setAllLocations(targetIndex,Location::EXTERIOR);
+		e->getLabel().setAllLocations(targetIndex,Location::EXTERIOR);
 	}
 	//System.out.println(e.getLabel());
 }
@@ -389,11 +390,11 @@ RelateComputer::labelIsolatedNodes()
 	for( ; nodeIt!=nodeEnd; nodeIt++)
 	{
 		Node *n=nodeIt->second;
-		Label *label=n->getLabel();
+		const Label& label = n->getLabel();
 		// isolated nodes should always have at least one geometry in their label
-		assert(label->getGeometryCount()>0); // node with empty label found
+		assert(label.getGeometryCount()>0); // node with empty label found
 		if (n->isIsolated()) {
-			if (label->isNull(0))
+			if (label.isNull(0))
 				labelIsolatedNode(n,0);
 			else
 				labelIsolatedNode(n,1);
@@ -407,7 +408,7 @@ RelateComputer::labelIsolatedNode(Node *n,int targetIndex)
 {
 	int loc=ptLocator.locate(n->getCoordinate(),
 			(*arg)[targetIndex]->getGeometry());
-	n->getLabel()->setAllLocations(targetIndex,loc);
+	n->getLabel().setAllLocations(targetIndex,loc);
 	//debugPrintln(n.getLabel());
 }
 

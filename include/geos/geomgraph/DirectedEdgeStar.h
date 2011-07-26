@@ -1,9 +1,9 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/DirectedEdgeStar.java rev. 1.4 (JTS-1.10)
+ * Last port: geomgraph/DirectedEdgeStar.java r428 (JTS-1.12+)
  *
  **********************************************************************/
 
@@ -91,7 +91,7 @@ public:
 	void mergeSymLabels();
 
 	/// Update incomplete dirEdge labels from the labelling for the node
-	void updateLabelling(Label *nodeLabel);
+	void updateLabelling(const Label& nodeLabel);
 
 
 	/**
@@ -167,20 +167,4 @@ private:
 //#endif
 
 #endif // ifndef GEOS_GEOMGRAPH_DIRECTEDEDGEENDSTAR_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.4  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.3  2006/03/23 15:10:29  strk
- * Dropped by-pointer TopologyException constructor, various small cleanups
- *
- * Revision 1.2  2006/03/15 17:17:41  strk
- * Added missing forward declarations
- *
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/
 

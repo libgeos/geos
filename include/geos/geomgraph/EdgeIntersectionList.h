@@ -1,9 +1,9 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/EdgeIntersectionList.java rev. 1.5 (JTS-1.10)
+ * Last port: geomgraph/EdgeIntersectionList.java r428 (JTS-1.12+)
  *
  **********************************************************************/
 
@@ -116,19 +116,5 @@ std::ostream& operator<< (std::ostream&, const EdgeIntersectionList&);
 #pragma warning(pop)
 #endif
 
-//#ifdef GEOS_INLINE
-//# include "geos/geomgraph/EdgeIntersectionList.inl"
-//#endif
-
 #endif // ifndef GEOS_GEOMGRAPH_EDGEINTERSECTIONLIST_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.2  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/
 

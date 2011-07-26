@@ -3,6 +3,11 @@ Changes in 3.4.0
 
 - C++ API changes:
   - Added BufferOp::setSingleSided 
+  - Signature of most functions taking a Label changed to take it
+    by reference rather than pointer.
+  - Signature of most functions taking an IntersectionMatrix changed
+    to take it by reference rather than pointer.
+  - GraphComponent::label is now a Label value (from a pointer)
 
 Changes in 3.3.0
 2011-05-30

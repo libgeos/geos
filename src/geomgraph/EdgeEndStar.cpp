@@ -1,11 +1,11 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
+ * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
- * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/EdgeEndStar.java rev. 1.8 (JTS-1.10)
+ * Last port: geomgraph/EdgeEndStar.java r428 (JTS-1.12+)
  *
  **********************************************************************/
 
@@ -133,11 +133,10 @@ EdgeEndStar::computeLabelling(std::vector<GeometryGraph*> *geomGraph)
 	{
 		EdgeEnd *e=*it;
 		assert(e);
-		Label *label=e->getLabel();
-		assert(label);
+		const Label& label = e->getLabel();
 		for(int geomi=0; geomi<2; geomi++)
 		{
-			if (label->isLine(geomi) && label->getLocation(geomi)==Location::BOUNDARY)
+			if (label.isLine(geomi) && label.getLocation(geomi) == Location::BOUNDARY)
 				hasDimensionalCollapseEdge[geomi]=true;
 		}
 	}
@@ -146,11 +145,10 @@ EdgeEndStar::computeLabelling(std::vector<GeometryGraph*> *geomGraph)
 	{
 		EdgeEnd *e=*it;
 		assert(e);
-		Label *label=e->getLabel();
-		assert(label);
+		Label& label = e->getLabel();
 		for(int geomi=0; geomi<2; ++geomi)
 		{
-			if (label->isAnyNull(geomi)) {
+			if (label.isAnyNull(geomi)) {
 				int loc=Location::UNDEF;
 				if (hasDimensionalCollapseEdge[geomi]){
 					loc=Location::EXTERIOR;
@@ -158,7 +156,7 @@ EdgeEndStar::computeLabelling(std::vector<GeometryGraph*> *geomGraph)
 					Coordinate& p=e->getCoordinate();
 					loc = getLocation(geomi, p, geomGraph);
 				}
-				label->setAllLocationsIfNull(geomi,loc);
+				label.setAllLocationsIfNull(geomi, loc);
 			}
 		}
 	}
@@ -215,8 +213,8 @@ EdgeEndStar::checkAreaLabelsConsistent(int geomIndex)
 	EdgeEndStar::reverse_iterator it=rbegin();
 
 	assert(*it);
-	Label *startLabel=(*it)->getLabel();
-	int startLoc=startLabel->getLocation(geomIndex, Position::LEFT);
+	const Label& startLabel = (*it)->getLabel();
+	int startLoc = startLabel.getLocation(geomIndex, Position::LEFT);
 
 	// Found unlabelled area edge
 	assert(startLoc!=Location::UNDEF);
@@ -227,16 +225,15 @@ EdgeEndStar::checkAreaLabelsConsistent(int geomIndex)
 	{
 		EdgeEnd *e=*it;
 		assert(e);
-		Label *eLabel=e->getLabel();
-		assert(eLabel);
+		const Label& eLabel = e->getLabel();
 
 		// we assume that we are only checking a area
 
 		// Found non-area edge
-		assert(eLabel->isArea(geomIndex));
+		assert(eLabel.isArea(geomIndex));
 
-		int leftLoc=eLabel->getLocation(geomIndex, Position::LEFT);
-		int rightLoc=eLabel->getLocation(geomIndex, Position::RIGHT);
+		int leftLoc=eLabel.getLocation(geomIndex, Position::LEFT);
+		int rightLoc=eLabel.getLocation(geomIndex, Position::RIGHT);
 		// check that edge is really a boundary between inside and outside!
 		if (leftLoc==rightLoc) {
 			return false;
@@ -270,11 +267,12 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
 	{
 		EdgeEnd *e=*it;
 		assert(e);
-		Label *label=e->getLabel();
-		assert(label);
-		if (label->isArea(geomIndex) &&
-			label->getLocation(geomIndex,Position::LEFT)!=Location::UNDEF)
-			startLoc=label->getLocation(geomIndex,Position::LEFT);
+		const Label& label = e->getLabel();
+		if (label.isArea(geomIndex) &&
+		    label.getLocation(geomIndex,Position::LEFT) != Location::UNDEF)
+		{
+			startLoc = label.getLocation(geomIndex, Position::LEFT);
+		}
 	}
 
 	// no labelled sides found, so no labels to propagate
@@ -285,19 +283,21 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
 	{
 		EdgeEnd *e=*it;
 		assert(e);
-		Label *label=e->getLabel();
-		assert(label);
+		Label& label = e->getLabel();
 		// set null ON values to be in current location
-		if (label->getLocation(geomIndex,Position::ON)==Location::UNDEF)
-			label->setLocation(geomIndex,Position::ON,currLoc);
+		if (label.getLocation(geomIndex,Position::ON) == Location::UNDEF)
+		{
+			label.setLocation(geomIndex,Position::ON,currLoc);
+		}
+
 		// set side labels (if any)
 		// if (label.isArea())  //ORIGINAL
-		if (label->isArea(geomIndex))
+		if (label.isArea(geomIndex))
 		{
-			int leftLoc=label->getLocation(geomIndex,
+			int leftLoc=label.getLocation(geomIndex,
 				Position::LEFT);
 
-			int rightLoc=label->getLocation(geomIndex,
+			int rightLoc=label.getLocation(geomIndex,
 				Position::RIGHT);
 
 			// if there is a right location, that is the next
@@ -324,12 +324,12 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
 				 * location.
 				 */
 				// found single null side
-				assert(label->getLocation(geomIndex,
+				assert(label.getLocation(geomIndex,
 					Position::LEFT)==Location::UNDEF);
 
-				label->setLocation(geomIndex,Position::RIGHT,
+				label.setLocation(geomIndex,Position::RIGHT,
 					currLoc);
-				label->setLocation(geomIndex,Position::LEFT,
+				label.setLocation(geomIndex,Position::LEFT,
 					currLoc);
 			}
 		}
@@ -352,120 +352,4 @@ EdgeEndStar::print()
 
 } // namespace geos.geomgraph
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.21  2006/04/04 13:35:55  strk
- * Port info, assertion checking, indentation
- *
- * Revision 1.20  2006/03/23 15:10:29  strk
- * Dropped by-pointer TopologyException constructor, various small cleanups
- *
- * Revision 1.19  2006/03/15 17:16:29  strk
- * streamlined headers inclusion
- *
- * Revision 1.18  2006/03/09 16:46:47  strk
- * geos::geom namespace definition, first pass at headers split
- *
- * Revision 1.17  2006/03/06 19:40:46  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.16  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.15  2006/03/02 12:12:00  strk
- * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
- *
- * Revision 1.14  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.13  2006/02/09 15:52:47  strk
- * GEOSException derived from std::exception; always thrown and cought by const ref.
- *
- * Revision 1.12  2005/12/07 20:51:47  strk
- * removed dead code
- *
- * Revision 1.11  2005/11/29 00:48:35  strk
- * Removed edgeList cache from EdgeEndRing. edgeMap is enough.
- * Restructured iterated access by use of standard ::iterator abstraction
- * with scoped typedefs.
- *
- * Revision 1.10  2005/11/21 16:03:20  strk
- *
- * Coordinate interface change:
- *         Removed setCoordinate call, use assignment operator
- *         instead. Provided a compile-time switch to
- *         make copy ctor and assignment operators non-inline
- *         to allow for more accurate profiling.
- *
- * Coordinate copies removal:
- *         NodeFactory::createNode() takes now a Coordinate reference
- *         rather then real value. This brings coordinate copies
- *         in the testLeaksBig.xml test from 654818 to 645991
- *         (tested in 2.1 branch). In the head branch Coordinate
- *         copies are 222198.
- *         Removed useless coordinate copies in ConvexHull
- *         operations
- *
- * STL containers heap allocations reduction:
- *         Converted many containers element from
- *         pointers to real objects.
- *         Made some use of .reserve() or size
- *         initialization when final container size is known
- *         in advance.
- *
- * Stateless classes allocations reduction:
- *         Provided ::instance() function for
- *         NodeFactories, to avoid allocating
- *         more then one (they are all
- *         stateless).
- *
- * HCoordinate improvements:
- *         Changed HCoordinate constructor by HCoordinates
- *         take reference rather then real objects.
- *         Changed HCoordinate::intersection to avoid
- *         a new allocation but rather return into a provided
- *         storage. LineIntersector changed to reflect
- *         the above change.
- *
- * Revision 1.9  2004/12/08 13:54:43  strk
- * gcc warnings checked and fixed, general cleanups.
- *
- * Revision 1.8  2004/11/23 19:53:06  strk
- * Had LineIntersector compute Z by interpolation.
- *
- * Revision 1.7  2004/11/22 11:34:49  strk
- * More debugging lines and comments/indentation cleanups
- *
- * Revision 1.6  2004/11/17 08:13:16  strk
- * Indentation changes.
- * Some Z_COMPUTATION activated by default.
- *
- * Revision 1.5  2004/11/01 16:43:04  strk
- * Added Profiler code.
- * Temporarly patched a bug in DoubleBits (must check drawbacks).
- * Various cleanups and speedups.
- *
- * Revision 1.4  2004/10/21 22:29:54  strk
- * Indentation changes and some more COMPUTE_Z rules
- *
- * Revision 1.3  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.2  2004/05/03 10:43:42  strk
- * Exception specification considered harmful - left as comment.
- *
- * Revision 1.1  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.18  2003/11/12 15:43:38  strk
- * Added some more throw specifications
- *
- * Revision 1.17  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
- **********************************************************************/
 
