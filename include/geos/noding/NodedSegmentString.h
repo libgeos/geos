@@ -83,7 +83,7 @@ public:
 	 * Creates a new segment string from a list of vertices.
 	 *
 	 * @param newPts CoordinateSequence representing the string,
-	 *                externally owned
+	 *               ownership transferred.
 	 *
 	 * @param data the user-defined data of this segment string
 	 *             (may be null)
@@ -95,7 +95,9 @@ public:
     {}
 
 	~NodedSegmentString()
-	{}
+	{
+		delete pts;
+	}
 
 	/**
 	 * Adds an intersection node for a given point and segment to this segment string.

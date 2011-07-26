@@ -61,11 +61,6 @@ SegmentNodeList::~SegmentNodeList()
 	{
 		delete splitEdges[i];
 	}
-
-	for(size_t i=0, n=splitCoordLists.size(); i<n; ++i)
-	{
-		delete splitCoordLists[i];
-	}
 }
 
 SegmentNode*
@@ -285,15 +280,13 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 	}
 	if (useIntPt1) 	pts->setAt(ei1->coord, ipt++);
 
+	// SegmentString takes ownership of CoordinateList 'pts'
 	SegmentString *ret = new NodedSegmentString(pts, edge.getData());
+
 #if GEOS_DEBUG
 	std::cerr<<" SegmentString created"<<std::endl;
 #endif
 	splitEdges.push_back(ret);
-
-	// Keep track of created CoordinateSequence to release
-	// it at this SegmentNodeList destruction time
-	splitCoordLists.push_back(pts);
 
 	return ret;
 }

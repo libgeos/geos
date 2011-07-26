@@ -37,7 +37,6 @@ PreparedLineString::~PreparedLineString()
 	for ( noding::SegmentString::ConstVect::size_type i = 0,
 	     ni = segStrings.size(); i < ni; ++i )
 	{
-		delete segStrings[ i ]->getCoordinates();
 		delete segStrings[ i ];
 	}
 }

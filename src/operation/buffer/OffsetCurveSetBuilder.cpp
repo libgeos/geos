@@ -72,7 +72,6 @@ OffsetCurveSetBuilder::~OffsetCurveSetBuilder()
 	for (size_t i=0, n=curveList.size(); i<n; ++i)
 	{
 		SegmentString* ss = curveList[i];
-		delete ss->getCoordinates();
 		delete ss;
 	}
 	for (size_t i=0, n=newLabels.size(); i<n; ++i)
@@ -119,6 +118,7 @@ OffsetCurveSetBuilder::addCurve(CoordinateSequence *coord,
 	// add the edge for a coordinate list which is a raw offset curve
 	Label *newlabel = new Label(0, Location::BOUNDARY, leftLoc, rightLoc);
 
+	// coord ownership transferred to SegmentString
 	SegmentString *e=new NodedSegmentString(coord, newlabel);
 
 	// SegmentString doesnt own the sequence, so we need to delete in

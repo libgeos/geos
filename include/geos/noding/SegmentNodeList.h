@@ -64,9 +64,6 @@ private:
 	// This vector is here to keep track of created splitEdges
 	std::vector<SegmentString*> splitEdges;
 
-	// This vector is here to keep track of created Coordinates
-	std::vector<geom::CoordinateSequence*> splitCoordLists;
-
 	/**
 	 * Checks the correctness of the set of split edges corresponding
 	 * to this edge

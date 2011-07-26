@@ -8,6 +8,7 @@ Changes in 3.4.0
   - Signature of most functions taking an IntersectionMatrix changed
     to take it by reference rather than pointer.
   - GraphComponent::label is now a Label value (from a pointer)
+  - NodedSegmentString takes ownership of CoordinateSequence now
 
 Changes in 3.3.0
 2011-05-30

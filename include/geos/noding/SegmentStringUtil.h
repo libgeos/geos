@@ -47,14 +47,7 @@ public:
 	 * @param geom the geometry to extract from
 	 * @param segStr a List of SegmentStrings (output parameter).
 	 *               Ownership of elements pushed to the vector
-	 *		 is transferred to caller. Note that the
-	 *		 CoordinateSequence associated with the
-	 *		 returned SegmentString elements are allocated
-	 *		 by this function, so must also be destroyed
-	 *		 by caller.
-	 *		 TODO: check if this can be optimized by leaving
-	 *		       ownership of actual CoordinateSequence
-	 *		       to the passed Geometry.
+	 *               is transferred to caller. 
 	 */
 	static void extractSegmentStrings(const geom::Geometry * g,
 					  SegmentString::ConstVect& segStr)
