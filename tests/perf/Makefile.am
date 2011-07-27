@@ -6,3 +6,6 @@ SUBDIRS = \
 	operation \
 	capi
 
+noinst_PROGRAMS = ClassSizes
+
+ClassSizes_SOURCES = ClassSizes.cpp
