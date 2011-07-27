@@ -375,6 +375,9 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 	// factory must be the same as the one used by the input
 	geomFact=g->getFactory();
 
+  { // This scope is here to force release of resources owned by 
+    // OffsetCurveSetBuilder when we're doing with it
+
 	OffsetCurveBuilder curveBuilder(precisionModel, bufParams);
 	OffsetCurveSetBuilder curveSetBuilder(*g, distance, curveBuilder);
 
@@ -394,7 +397,8 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 #endif
 
 	computeNodedEdges(bufferSegStrList, precisionModel);
-  // NOTE: bufferSegStrList should not be needed anymore from now on
+
+  } // bufferSegStrList and contents are released here
 
 #if GEOS_DEBUG > 1
 	std::cerr << std::endl << edgeList << std::endl;
@@ -409,6 +413,7 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 		graph.addEdges(edgeList.getEdges());
 
 		createSubgraphs(&graph, subgraphList);
+
 #if GEOS_DEBUG
 	std::cerr<<"Created "<<subgraphList.size()<<" subgraphs"<<std::endl;
 #if GEOS_DEBUG > 1
@@ -416,9 +421,18 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 		std::cerr << std::setprecision(10) << *(subgraphList[i]) << std::endl;
 #endif
 #endif
-		PolygonBuilder polyBuilder(geomFact);
-		buildSubgraphs(subgraphList, polyBuilder);
-		resultPolyList.reset( polyBuilder.getPolygons() );
+
+		{ // scope for earlier PolygonBuilder cleanupt
+		  PolygonBuilder polyBuilder(geomFact);
+		  buildSubgraphs(subgraphList, polyBuilder);
+
+		  resultPolyList.reset( polyBuilder.getPolygons() );
+		}
+
+		// Get rid of the subgraphs, shouldn't be needed anymore
+    for (size_t i=0, n=subgraphList.size(); i<n; i++) delete subgraphList[i];
+    subgraphList.clear();
+
 #if GEOS_DEBUG
 	std::cerr << "PolygonBuilder got " << resultPolyList->size()
 	          << " polygons" << std::endl;
@@ -427,24 +441,22 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 		std::cerr << (*resultPolyList)[i]->toString() << std::endl;
 #endif
 #endif
+
 		// just in case ...
-		if ( resultPolyList->empty() )
-		{
-			for (size_t i=0, n=subgraphList.size(); i<n; i++)
-				delete subgraphList[i];
-			return createEmptyResultGeometry();
-		}
+		if ( resultPolyList->empty() ) return createEmptyResultGeometry();
 
 		// resultPolyList ownership transferred here
 		resultGeom=geomFact->buildGeometry(resultPolyList.release());
+
 	} catch (const util::GEOSException& /* exc */) {
+
+		// In case they're still around
 		for (size_t i=0, n=subgraphList.size(); i<n; i++)
 			delete subgraphList[i];
+		subgraphList.clear();
+
 		throw;
 	} 
-
-	for (size_t i=0, n=subgraphList.size(); i<n; i++)
-		delete subgraphList[i];
 
 	return resultGeom;
 }
