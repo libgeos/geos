@@ -61,9 +61,6 @@ private:
 	// the parent edge
 	const NodedSegmentString& edge; 
 
-	// This vector is here to keep track of created splitEdges
-	std::vector<SegmentString*> splitEdges;
-
 	/**
 	 * Checks the correctness of the set of split edges corresponding
 	 * to this edge
@@ -77,6 +74,8 @@ private:
 	 * (and including) the two intersections.
 	 * The label for the new edge is the same as the label for the
 	 * parent edge.
+	 * 
+	 * ownership of return value is transferred
 	 */
 	SegmentString* createSplitEdge(SegmentNode *ei0, SegmentNode *ei1);
 

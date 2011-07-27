@@ -56,11 +56,6 @@ SegmentNodeList::~SegmentNodeList()
 	{
 		delete *it;
 	}
-
-	for(size_t i=0, n=splitEdges.size(); i<n; ++i)
-	{
-		delete splitEdges[i];
-	}
 }
 
 SegmentNode*
@@ -217,6 +212,7 @@ SegmentNodeList::addSplitEdges(std::vector<SegmentString*>& edgeList)
 #endif
 }
 
+/*private*/
 void
 SegmentNodeList::checkSplitEdgesCorrectness(std::vector<SegmentString*>& splitEdges)
 {
@@ -286,7 +282,6 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 #if GEOS_DEBUG
 	std::cerr<<" SegmentString created"<<std::endl;
 #endif
-	splitEdges.push_back(ret);
 
 	return ret;
 }

@@ -194,11 +194,13 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    // Node these SegmentStrings.
    Noder* noder = getNoder( precisionModel );
    noder->computeNodes( &curveList );
+
    SegmentString::NonConstVect* nodedEdges = noder->getNodedSubstrings();
 
    // Create a geometry out of the noded substrings.
    std::vector< Geometry* >* singleSidedNodedEdges =
       new std::vector< Geometry * >();
+   singleSidedNodedEdges->reserve(nodedEdges->size());
    for ( unsigned int i = 0, n = nodedEdges->size(); i < n; ++i )
    {
       SegmentString* ss = ( *nodedEdges )[i];
@@ -206,10 +208,12 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
       Geometry* tmp = geomFact->createLineString(
                         ss->getCoordinates()->clone()
                       );
+      delete ss;
+
       singleSidedNodedEdges->push_back( tmp );
    }
 
-   if ( nodedEdges != &curveList ) delete nodedEdges;
+   delete nodedEdges;
 
    for (size_t i=0, n=curveList.size(); i<n; ++i) delete curveList[i];
    curveList.clear();
@@ -526,25 +530,22 @@ std::cerr << "after noding: "
 		const Label* oldLabel = static_cast<const Label*>(segStr->getData());
 
 		CoordinateSequence* cs = CoordinateSequence::removeRepeatedPoints(segStr->getCoordinates());
+		delete segStr;
 		if ( cs->size() < 2 ) 
 		{
-			delete cs; // we need to take care of the memory here as cs is a new sequence
-			return; // don't insert collapsed edges
+			// don't insert collapsed edges
+			delete cs; 
+			return;
 		}
-		// we need to clone SegmentString coordinates
-		// as Edge will take ownership of them
-		// TODO: find a way to transfer ownership instead
-		// Who will own the edge ? FIXME: find out and handle that!
+
+		// Edge takes ownership of the CoordinateSequence
 		Edge* edge = new Edge(cs, *oldLabel);
 
 		// will take care of the Edge ownership
 		insertUniqueEdge(edge);
 	}
 
-	if ( nodedSegStrings != &bufferSegStrList )
-	{
-		delete nodedSegStrings;
-	}
+	delete nodedSegStrings;
 
 	if ( noder != workingNoder ) delete noder;
 }
