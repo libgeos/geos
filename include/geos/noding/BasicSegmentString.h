@@ -104,9 +104,5 @@ private:
 } // namespace geos.noding
 } // namespace geos
 
-#ifdef GEOS_INLINE
-# include "geos/noding/SegmentString.inl"
-#endif
-
 #endif // ndef GEOS_NODING_BASICSEGMENTSTRING_H
 

@@ -57,7 +57,6 @@
 #include <geos/geom/MultiLineString.inl>
 #include <geos/geom/MultiPolygon.inl>
 #include <geos/geom/CoordinateArraySequenceFactory.inl>
-#include <geos/noding/SegmentString.inl>
 #include <geos/noding/snapround/HotPixel.inl>
 #include <geos/noding/MCIndexNoder.inl>
 
