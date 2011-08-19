@@ -10,7 +10,7 @@ top_builddir=@top_builddir@
 check_PROGRAMS = memleak_mp_prep
 
 LIBS = $(top_builddir)/capi/libgeos_c.la
-INCLUDES = -I$(top_srcdir)/capi
+INCLUDES = -I$(top_srcdir)/include -I$(top_builddir)/capi
 
 memleak_mp_prep_SOURCES = memleak_mp_prep.c
 memleak_mp_prep_LDADD = $(LIBS)

@@ -7,6 +7,7 @@ Changes in 3.3.1
   - Fortify suspicious code found by static analisys tools
   - Fix for SOLARIS build 
   - Fix EMPTY result from GEOSOffsetCurve with distance 0 (#454)
+  - Fix out of source builds
 
 Changes in 3.3.0
 2011-05-30
