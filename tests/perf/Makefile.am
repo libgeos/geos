@@ -6,6 +6,8 @@ SUBDIRS = \
 	operation \
 	capi
 
+INCLUDES = -I$(top_srcdir)/include
+
 noinst_PROGRAMS = ClassSizes
 
 ClassSizes_SOURCES = ClassSizes.cpp
