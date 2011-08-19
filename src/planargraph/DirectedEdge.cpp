@@ -175,8 +175,9 @@ DirectedEdge::print() const
 std::ostream&
 operator << (std::ostream& s, const DirectedEdge& de)
 {
-	s << typeid(de).name() << ": " << de.p0 << " - " << de.p1;
-	s << " " << de.quadrant << ":" << de.angle;
+  s << typeid(de).name() << ": " << de.p0 << " - " << de.p1;
+  s << " " << de.quadrant << ":" << de.angle;
+  return s;
 }
 
 } // namespace planargraph
