@@ -53,7 +53,7 @@ namespace geom { // geos::geom
 /*protected*/
 Polygon::Polygon(const Polygon &p)
 	:
-	Geometry(p.getFactory())
+	Geometry(p)
 {
 	shell=new LinearRing(*p.shell);
 	size_t nholes=p.holes->size();

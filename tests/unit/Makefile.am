@@ -47,8 +47,9 @@ geos_unit_SOURCES = \
 	geom/CoordinateTest.cpp \
 	geom/DimensionTest.cpp \
 	geom/EnvelopeTest.cpp \
-	geom/Geometry/isRectangleTest.cpp \
+	geom/Geometry/clone.cpp \
 	geom/Geometry/coversTest.cpp \
+	geom/Geometry/isRectangleTest.cpp \
 	geom/GeometryFactoryTest.cpp \
 	geom/IntersectionMatrixTest.cpp \
 	geom/LinearRingTest.cpp \
