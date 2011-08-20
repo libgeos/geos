@@ -45,7 +45,7 @@ namespace geom { // geos::geom
 /*protected*/
 GeometryCollection::GeometryCollection(const GeometryCollection &gc)
 	:
-	Geometry(gc.getFactory())
+	Geometry(gc)
 {
 	size_t ngeoms=gc.geometries->size();
 

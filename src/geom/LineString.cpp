@@ -49,7 +49,7 @@ namespace geom { // geos::geom
 /*protected*/
 LineString::LineString(const LineString &ls)
 	:
-	Geometry(ls.getFactory()),
+	Geometry(ls),
 	points(ls.points->clone())
 {
 	//points=ls.points->clone();

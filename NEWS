@@ -8,6 +8,7 @@ Changes in 3.3.1
   - Fix for SOLARIS build 
   - Fix EMPTY result from GEOSOffsetCurve with distance 0 (#454)
   - Fix out of source builds
+  - Fix Geometry::clone to copy SRID (#464)
 
 Changes in 3.3.0
 2011-05-30

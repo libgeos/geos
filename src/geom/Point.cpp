@@ -62,7 +62,7 @@ Point::Point(CoordinateSequence *newCoords, const GeometryFactory *factory)
 /*protected*/
 Point::Point(const Point &p)
 	:
-	Geometry(p.getFactory()),
+	Geometry(p),
 	coordinates(p.coordinates->clone())
 {
 }
