@@ -20,8 +20,11 @@
 #include <geos/geom/util/SineStarFactory.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Envelope.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/LinearRing.h>
 
 #include <vector>
 #include <cmath>

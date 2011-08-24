@@ -55,6 +55,10 @@ RelateComputer::RelateComputer(std::vector<GeometryGraph*> *newArg):
 {
 }
 
+RelateComputer::~RelateComputer()
+{
+}
+
 IntersectionMatrix*
 RelateComputer::computeIM()
 {

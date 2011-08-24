@@ -337,6 +337,11 @@ private:
    */
   void addFillet(const geom::Coordinate &p, double startAngle,
                  double endAngle, int direction, double radius);
+private:
+	// An OffsetSegmentGenerator cannot be copied because of member "const BufferParameters& bufParams"
+	// Not declaring these functions triggers MSVC warning C4512: "assignment operator could not be generated"
+	OffsetSegmentGenerator(const OffsetSegmentGenerator&);
+	void operator=(const OffsetSegmentGenerator&);
 
 };
 
