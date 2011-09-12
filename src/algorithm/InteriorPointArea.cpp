@@ -1,9 +1,9 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011      Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -26,6 +26,7 @@
 
 #include <vector>
 #include <typeinfo>
+#include <memory> // for auto_ptr
 
 using namespace std;
 using namespace geos::geom;
@@ -88,19 +89,16 @@ InteriorPointArea::add(const Geometry *geom)
 void
 InteriorPointArea::addPolygon(const Geometry *geometry)
 {
-	LineString *bisector=horizontalBisector(geometry);
-	Geometry *intersections=bisector->intersection(geometry);
-	const Geometry *widestIntersection=widestGeometry(intersections);
-	const Envelope *env=widestIntersection->getEnvelopeInternal();
-	double width=env->getWidth();
-	if (!foundInterior || width>maxWidth) {
-		env->centre(interiorPoint);
-		maxWidth = width;
-		foundInterior=true;
-	}
-	//delete env;
-	delete bisector;
-	delete intersections;
+  auto_ptr<LineString> bisector ( horizontalBisector(geometry) );
+  auto_ptr<Geometry> intersections ( bisector->intersection(geometry) );
+  const Geometry *widestIntersection = widestGeometry(intersections.get());
+  const Envelope *env = widestIntersection->getEnvelopeInternal();
+  double width=env->getWidth();
+  if (!foundInterior || width>maxWidth) {
+    env->centre(interiorPoint);
+    maxWidth = width;
+    foundInterior=true;
+  }
 }
 
 //@return if geometry is a collection, the widest sub-geometry; otherwise,
@@ -148,12 +146,9 @@ InteriorPointArea::horizontalBisector(const Geometry *geometry)
 	(*cv)[1].x = envelope->getMaxX();
 	(*cv)[1].y = avgY;
 
-	//delete envelope;
-
 	CoordinateSequence *cl = factory->getCoordinateSequenceFactory()->create(cv);
 
 	LineString *ret = factory->createLineString(cl);
-	//delete cl;
 	return ret;
 }
 
