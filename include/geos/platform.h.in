@@ -95,6 +95,9 @@ extern "C"
    // Hack for OS/X <cmath> incorrectly re-defining isnan() into oblivion.
    // It does leave a version in std.
 #  define ISNAN(x) (std::isnan(x))
+# elif defined(__sun) || defined(__sun__)
+#  include <math.h>
+#  define ISNAN(x) (::isnan(x))
 # endif
 #endif
 
