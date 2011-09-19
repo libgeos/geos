@@ -102,12 +102,14 @@ namespace tut
     template<>
     void object::test<3>()
     {
+#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
       geom_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0, NaN -5)");
       ensure(0 != geom_);
       int r = GEOSisValidDetail(geom_, 0, &reason_, &loc_);
       ensure_equals(r, 0); // invalid
       ensure_equals(std::string(reason_), std::string("Invalid Coordinate"));
       ensure_equals(toWKT(loc_), "POINT (nan -5)");
+#endif
     }
 
     // Self intersecting ring forming hole
