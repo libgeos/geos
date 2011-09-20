@@ -191,9 +191,9 @@ protected:
 
 	std::vector<Geometry *>* geometries;
 
-	virtual Envelope::AutoPtr computeEnvelopeInternal() const;
+	Envelope::AutoPtr computeEnvelopeInternal() const;
 
-	virtual int compareToSameClass(const Geometry *gc) const;
+	int compareToSameClass(const Geometry *gc) const;
 
 };
 
