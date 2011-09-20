@@ -21,8 +21,11 @@
 #ifndef GEOS_GEOM_GEOMETRYFACTORY_H
 #define GEOS_GEOM_GEOMETRYFACTORY_H
 
-//#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Geometry.h>
+#include <geos/geom/GeometryCollection.h>
+#include <geos/geom/MultiPoint.h>
+#include <geos/geom/MultiLineString.h>
+#include <geos/geom/MultiPolygon.h>
 #include <geos/export.h>
 #include <geos/inline.h>
 
