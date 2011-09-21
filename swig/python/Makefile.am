@@ -22,7 +22,7 @@ pkgpyexec_LTLIBRARIES = _geos.la
 _geos_la_SOURCES = geos_wrap.cxx 
 
 # Only need to grab the capi header files
-_geos_la_CPPFLAGS = $(SWIG_PYTHON_CPPFLAGS) -I$(top_builddir)/capi
+_geos_la_CPPFLAGS = $(SWIG_PYTHON_CPPFLAGS) -I$(top_builddir)/capi -I$(top_srcdir)/include
 # Specify -module and -avoid-version so we can create a file called geos.dll/so which is what Python wants
 _geos_la_LDFLAGS = -no-undefined -module -avoid-version
 _geos_la_LIBADD = $(top_builddir)/capi/libgeos_c.la $(PYTHON_LDFLAGS)
