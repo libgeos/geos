@@ -34,6 +34,15 @@ namespace geos
 namespace linearref   // geos::linearref
 {
 
+/**
+ * \brief
+ * Computes the length index of the point
+ * on a linear Geometry nearest a given Coordinate.
+ *
+ * The nearest point is not necessarily unique; this class
+ * always computes the nearest point closest to
+ * the start of the geometry.
+ */
 class LengthIndexOfPoint
 {
 
@@ -53,17 +62,17 @@ public:
 	LengthIndexOfPoint(const geom::Geometry *linearGeom);
 
 	/**
-	 * Find the nearest location along a linear {@link Geometry} to a given point.
+	 * Find the nearest location along a linear Geometry to a given point.
 	 *
 	 * @param inputPt the coordinate to locate
 	 * @return the location of the nearest point
 	 */
 	double indexOf(const geom::Coordinate& inputPt) const;
 
-	/**
-	 * Finds the nearest index along the linear {@link Geometry}
-	 * to a given {@link Coordinate}
-	 * after the specified minimum index.
+	/** \brief
+	 * Finds the nearest index along the linear Geometry
+	 * to a given Coordinate after the specified minimum index.
+	 *
 	 * If possible the location returned will be strictly greater than the
 	 * <code>minLocation</code>.
 	 * If this is not possible, the

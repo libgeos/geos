@@ -6,6 +6,7 @@ Changes in 3.2.3
   - DistanceOp segfaults on MULTIPOLYGON with EMPTY elements (#367)
   - RobustDeterminant is not robust (#450)
   - Fix out-of-place build for python binding (#332)
+  - Fix LinearReferencing functions segfault (#353)
 
 Changes in 3.2.2
  

@@ -4403,36 +4403,52 @@ GEOSProject_r(GEOSContextHandle_t extHandle,
               const Geometry *g,
               const Geometry *p)
 {
+    if ( 0 == extHandle ) return -1.0;
+    GEOSContextHandleInternal_t *handle = 
+        reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( handle->initialized == 0 ) return -1.0;
 
     const geos::geom::Point* point = dynamic_cast<const geos::geom::Point*>(p);
     if (!point) {
-        if ( 0 == extHandle )
-        {
-            return -1.0;
-        }
-        GEOSContextHandleInternal_t *handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
-        if ( 0 == handle->initialized )
-        {
-            return -1.0;
-        }
-
         handle->ERROR_MESSAGE("third argument of GEOSProject_r must be Point*");
         return -1.0;
     }
+
     const geos::geom::Coordinate* inputPt = p->getCoordinate();
-    return geos::linearref::LengthIndexedLine(g).project(*inputPt);
+
+    try {
+        return geos::linearref::LengthIndexedLine(g).project(*inputPt);
+    } catch (const std::exception &e) {
+        handle->ERROR_MESSAGE("%s", e.what());
+        return -1.0;
+    } catch (...) {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+        return -1.0;
+    }
 }
 
 
 Geometry*
 GEOSInterpolate_r(GEOSContextHandle_t extHandle, const Geometry *g, double d)
 {
-    geos::linearref::LengthIndexedLine lil(g);
-    geos::geom::Coordinate coord = lil.extractPoint(d);
-    GEOSContextHandleInternal_t *handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
-    const GeometryFactory *gf = handle->geomFactory;
-    Geometry* point = gf->createPoint(coord);
-    return point;
+    if ( 0 == extHandle ) return 0;
+    GEOSContextHandleInternal_t *handle = 
+        reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( handle->initialized == 0 ) return 0;
+
+    try {
+    	geos::linearref::LengthIndexedLine lil(g);
+    	geos::geom::Coordinate coord = lil.extractPoint(d);
+    	const GeometryFactory *gf = handle->geomFactory;
+    	Geometry* point = gf->createPoint(coord);
+    	return point;
+    } catch (const std::exception &e) {
+        handle->ERROR_MESSAGE("%s", e.what());
+        return 0;
+    } catch (...) {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+        return 0;
+    }
 }
 
 

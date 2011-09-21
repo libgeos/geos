@@ -31,11 +31,11 @@
 namespace geos { namespace linearref
 {
 
-/**
+/** \brief
  * An iterator over the components and coordinates of a linear geometry
- * ({@link LineString}s and {@link MultiLineString}s.
+ * (LineString or MultiLineString).
  *
- * The standard usage pattern for a {@link LinearIterator} is:
+ * The standard usage pattern for a LinearIterator is:
  *
  * <pre>
  * for (LinearIterator it = new LinearIterator(...); it.hasNext(); it.next()) {
@@ -52,7 +52,7 @@ class LinearIterator
 {
 public:
 	/**
-	 * Creates an iterator initialized to the start of a linear {@link Geometry}
+	 * Creates an iterator initialized to the start of a linear Geometry
 	 *
 	 * @param linear the linear geometry to iterate over
 	 */
@@ -142,7 +142,8 @@ private:
 	const unsigned int numLines;
 
 	/**
-	 * Invariant: currentLine <> null if the iterator is pointing at a valid coordinate
+	 * Invariant: currentLine <> null if the iterator is pointing
+	 *            at a valid coordinate
 	 */
 	void loadCurrentLine();
 
