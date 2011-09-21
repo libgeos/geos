@@ -1,3 +1,52 @@
+2011-07-20 21:12  Sandro Santilli <strk@keybit.net>
+
+	* [r3447] NEWS: News item about #450 fix
+
+2011-07-20 21:11  Sandro Santilli <strk@keybit.net>
+
+	* [r3446] source/algorithm/RobustDeterminant.cpp,
+	  tests/unit/Makefile.am, tests/unit/capi/GEOSIntersectsTest.cpp:
+	  RobustDeterminant is not robust (#450)
+
+2011-07-20 20:48  Sandro Santilli <strk@keybit.net>
+
+	* [r3445] NEWS, source/operation/distance/DistanceOp.cpp,
+	  tests/unit/operation/distance/DistanceOpTest.cpp: Fix segfault in
+	  DistanceOp (#367)
+
+2011-07-05 10:53  Sandro Santilli <strk@keybit.net>
+
+	* [r3421] source/operation/valid/IndexedNestedRingTester.cpp,
+	  tests/xmltester/Makefile.am, tests/xmltester/tests/bug449.xml,
+	  tests/xmltester/tests/general/TestValid.xml: Re-fix #449 (#451)
+	  the JTS way
+
+2011-07-01 07:38  Sandro Santilli <strk@keybit.net>
+
+	* [r3396] tests/geostest/.deps: This directory shouldn't be in the
+	  repository
+
+2011-06-09 15:41  Sandro Santilli <strk@keybit.net>
+
+	* [r3393] NEWS, source/operation/valid/IndexedNestedRingTester.cpp,
+	  tests/xmltester/Makefile.am, tests/xmltester/tests/bug449.xml:
+	  Backport fix for bug #449 (#451)
+
+2010-04-21 16:21  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r2983] nmake.opt: * Updated nmake.opt with NMake version from
+	  Visual Studio 2010 release.
+
+2010-04-18 15:31  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r2981] capi/geos_c.h.in, configure.in,
+	  source/headers/geos/version.h.vc: Bump version numbers up for
+	  3.2.3
+
+2010-04-18 15:06  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r2979] ChangeLog, NEWS: Update NEWS and ChangeLog for 3.2.2
+
 2010-04-18 09:34  Sandro Santilli <strk@keybit.net>
 
 	* [r2978] tests/unit/capi/GEOSGetCentroidTest.cpp: Forgot to add
