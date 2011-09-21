@@ -11,6 +11,7 @@ Changes in 3.3.1
   - Fix out of source builds
   - Fix Geometry::clone to copy SRID (#464)
   - Fix for clang builds (#463)
+  - Fix out-of-place build for python binding (#332)
 
 Changes in 3.3.0
 2011-05-30

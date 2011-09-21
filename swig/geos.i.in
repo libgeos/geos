@@ -123,11 +123,11 @@ const char *GEOSversion();
 
 
 #ifdef SWIGPYTHON
-	%include ../python/python.i
+	%include @top_srcdir@/swig/python/python.i
 #endif
 
 #ifdef SWIGRUBY
-	%include ../ruby/ruby.i
+	%include @top_srcdir@/swig/ruby/ruby.i
 #endif
 
 
