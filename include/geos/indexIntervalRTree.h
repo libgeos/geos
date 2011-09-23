@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: indexIntervalRTree.h 2137 2008-07-25 21:00:09Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

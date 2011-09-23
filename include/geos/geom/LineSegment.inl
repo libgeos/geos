@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: LineSegment.inl 3257 2011-03-02 12:46:57Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

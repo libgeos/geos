@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: bigtest.h 1861 2006-10-12 15:33:40Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

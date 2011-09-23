@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: LineMergeEdge.cpp 3309 2011-04-27 15:47:14Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

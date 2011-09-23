@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: OverlayNodeFactory.h 3273 2011-03-26 14:02:03Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

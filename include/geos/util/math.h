@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: math.h 2854 2010-01-16 20:12:23Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

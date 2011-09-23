@@ -1,4 +1,4 @@
-// $Id$
+// $Id: LineStringSnapperTest.cpp 3157 2010-12-03 17:26:55Z strk $
 // 
 // Test Suite for geos::operation::overlay::snap::LineStringSnapper class.
 

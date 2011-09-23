@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: EdgeRing.cpp 3078 2010-07-01 21:44:33Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

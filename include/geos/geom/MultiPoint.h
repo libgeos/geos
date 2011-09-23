@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: MultiPoint.h 3211 2011-02-13 19:54:01Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: PreparedPolygonPredicate.h 2771 2009-12-03 19:29:54Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

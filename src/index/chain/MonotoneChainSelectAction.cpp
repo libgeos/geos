@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: MonotoneChainSelectAction.cpp 2477 2009-05-06 17:10:01Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

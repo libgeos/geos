@@ -1,5 +1,5 @@
 #################################################################################
-# $Id$
+# $Id: CMakeLists.txt 3385 2011-05-30 10:49:13Z mloskot $
 #
 # GEOS C library build configuration for CMake build system
 #

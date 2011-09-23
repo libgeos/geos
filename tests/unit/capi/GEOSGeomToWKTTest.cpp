@@ -1,4 +1,4 @@
-// $Id$
+// $Id: GEOSGeomToWKTTest.cpp 3075 2010-06-24 14:40:01Z warmerdam $
 // 
 // Test Suite for C-API GEOSGeomToWKT
 

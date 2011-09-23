@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: PointLocator.h 3174 2011-02-02 19:24:03Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

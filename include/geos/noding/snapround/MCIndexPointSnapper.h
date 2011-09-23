@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: MCIndexPointSnapper.h 3240 2011-02-23 14:37:39Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

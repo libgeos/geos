@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: Profiler.cpp 3409 2011-07-05 09:51:53Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: CentroidArea.h 2556 2009-06-06 22:22:28Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

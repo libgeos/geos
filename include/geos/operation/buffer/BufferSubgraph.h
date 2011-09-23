@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: BufferSubgraph.h 3301 2011-04-27 09:42:31Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

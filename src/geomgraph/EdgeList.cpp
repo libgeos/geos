@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: EdgeList.cpp 2548 2009-06-05 13:44:48Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

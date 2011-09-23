@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: MinimalEdgeRing.cpp 2564 2009-06-08 16:09:51Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

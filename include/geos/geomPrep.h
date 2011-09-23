@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: geomPrep.h 2157 2008-08-12 00:25:16Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

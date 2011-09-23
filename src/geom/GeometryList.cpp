@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: GeometryList.cpp 2952 2010-03-26 12:01:13Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

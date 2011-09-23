@@ -1,4 +1,4 @@
-// $Id$
+// $Id: LinearRingTest.cpp 3241 2011-02-23 15:45:40Z strk $
 // 
 // Test Suite for geos::geom::LinearRing class.
 

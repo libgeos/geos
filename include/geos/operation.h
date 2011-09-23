@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: operation.h 2431 2009-04-30 10:47:08Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

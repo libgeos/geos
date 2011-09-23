@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: BinaryOp.h 3207 2011-02-13 19:22:24Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

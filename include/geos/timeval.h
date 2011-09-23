@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: timeval.h 2787 2009-12-03 19:59:06Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: GeometricShapeFactory.cpp 3313 2011-04-28 10:04:27Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

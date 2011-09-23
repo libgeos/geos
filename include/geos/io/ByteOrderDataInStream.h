@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: ByteOrderDataInStream.h 2579 2009-06-15 14:03:52Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

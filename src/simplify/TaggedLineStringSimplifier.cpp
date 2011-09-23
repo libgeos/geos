@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: TaggedLineStringSimplifier.cpp 3275 2011-03-26 14:02:32Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: CoordinateOperation.cpp 2758 2009-12-01 16:16:18Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

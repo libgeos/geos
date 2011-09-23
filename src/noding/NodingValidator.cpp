@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: NodingValidator.cpp 1931 2006-12-05 09:59:04Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

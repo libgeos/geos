@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: Lineal.h 3232 2011-02-22 21:22:19Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

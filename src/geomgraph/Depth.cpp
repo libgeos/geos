@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: Depth.cpp 2544 2009-06-05 11:03:53Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

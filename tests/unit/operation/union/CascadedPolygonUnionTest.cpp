@@ -1,4 +1,4 @@
-// $Id$
+// $Id: CascadedPolygonUnionTest.cpp 3196 2011-02-10 15:51:16Z strk $
 // 
 // Test Suite for geos::operation::geounion::CascadedPolygonUnion class.
 

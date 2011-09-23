@@ -1,4 +1,4 @@
-// $Id$
+// $Id: CoordinateArraySequenceTest.cpp 3280 2011-04-13 11:52:12Z strk $
 // 
 // Test Suite for geos::geom::CoordinateArraySequence class.
 

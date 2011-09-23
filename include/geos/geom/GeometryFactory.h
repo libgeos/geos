@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: GeometryFactory.h 3470 2011-09-20 14:24:36Z hobu $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

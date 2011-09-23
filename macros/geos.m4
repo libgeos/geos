@@ -1,4 +1,4 @@
-dnl $Id$
+dnl $Id: geos.m4 2137 2008-07-25 21:00:09Z mloskot $
 dnl 
 dnl GEOS_INIT (MINIMUM_VERSION)
 dnl

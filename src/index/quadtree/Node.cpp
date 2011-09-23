@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: Node.cpp 3413 2011-07-05 09:52:19Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

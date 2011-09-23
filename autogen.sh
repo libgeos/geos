@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# $Id$
+# $Id: autogen.sh 3004 2010-06-18 09:52:07Z strk $
 #
 # GEOS Bootstrapping Script
 #

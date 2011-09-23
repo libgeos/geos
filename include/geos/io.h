@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: io.h 2174 2008-08-28 22:20:50Z sgillies $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: LinearIterator.cpp 3014 2010-06-19 11:23:44Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: DouglasPeuckerSimplifier.h 2785 2009-12-03 19:55:11Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

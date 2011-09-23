@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: BufferParameters.cpp 3432 2011-07-07 08:33:03Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

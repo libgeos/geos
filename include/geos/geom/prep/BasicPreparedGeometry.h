@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: BasicPreparedGeometry.h 2419 2009-04-29 08:22:16Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

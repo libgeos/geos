@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: MaximalEdgeRing.cpp 2731 2009-11-19 21:06:16Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

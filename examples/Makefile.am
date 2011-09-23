@@ -1,4 +1,4 @@
-# $Id$
+# $Id: Makefile.am 2850 2010-01-16 02:14:39Z mloskot $
 #
 # This file is part of project GEOS (http://trac.osgeo.org/geos/) 
 #

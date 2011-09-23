@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: IsValidOp.h 3258 2011-03-02 13:13:50Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

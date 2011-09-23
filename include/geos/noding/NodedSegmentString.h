@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: NodedSegmentString.h 3451 2011-07-26 16:23:30Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

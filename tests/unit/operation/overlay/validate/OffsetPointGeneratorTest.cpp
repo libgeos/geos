@@ -1,4 +1,4 @@
-// $Id$
+// $Id: OffsetPointGeneratorTest.cpp 2462 2009-05-04 21:28:26Z strk $
 // 
 // Test Suite for geos::operation::overlay::validate::OffsetPointGenerator class.
 

@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: IntervalSize.cpp 2411 2009-04-27 15:39:42Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

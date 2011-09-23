@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: CentroidPoint.cpp 3179 2011-02-03 19:59:23Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

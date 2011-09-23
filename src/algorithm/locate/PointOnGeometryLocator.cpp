@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: PointOnGeometryLocator.cpp 2161 2008-08-18 16:29:09Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

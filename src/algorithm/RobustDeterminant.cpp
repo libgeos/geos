@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: RobustDeterminant.cpp 3435 2011-07-20 08:46:34Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

@@ -1,4 +1,4 @@
-# $Id$
+# $Id: makefile.vc 2845 2010-01-13 17:54:37Z mloskot $
 #
 # NMAKE Makefile to build GEOS on Windows
 ###############################################################################

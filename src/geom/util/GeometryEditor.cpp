@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: GeometryEditor.cpp 3182 2011-02-04 10:12:57Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: AbstractSTRtree.cpp 2611 2009-07-15 18:53:02Z pramsey $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

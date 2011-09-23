@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: HotPixel.cpp 3237 2011-02-23 14:37:05Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

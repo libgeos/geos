@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: ConsistentAreaTester.cpp 2547 2009-06-05 13:41:50Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

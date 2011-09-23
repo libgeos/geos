@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: TopologyException.h 2824 2009-12-14 15:23:12Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

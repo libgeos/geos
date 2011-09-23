@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: ConnectedSubgraphFinder.cpp 2891 2010-01-28 18:42:24Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

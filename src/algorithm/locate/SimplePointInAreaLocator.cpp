@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: SimplePointInAreaLocator.cpp 2069 2007-12-21 20:47:01Z benjubb $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

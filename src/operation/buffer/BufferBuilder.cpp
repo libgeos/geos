@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: BufferBuilder.cpp 3454 2011-07-27 13:29:36Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

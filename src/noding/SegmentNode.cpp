@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: SegmentNode.cpp 3234 2011-02-23 10:25:20Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

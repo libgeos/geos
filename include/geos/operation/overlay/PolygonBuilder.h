@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: PolygonBuilder.h 3283 2011-04-18 15:08:55Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: GraphComponent.h 2563 2009-06-08 15:43:40Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

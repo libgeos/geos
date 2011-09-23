@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: LineSegmentIndex.cpp 1820 2006-09-06 16:54:23Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

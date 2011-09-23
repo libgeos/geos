@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: CoordinateSequenceFactory.h 2998 2010-05-31 16:25:57Z warmerdam $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

@@ -1,5 +1,5 @@
 #################################################################################
-# $Id$
+# $Id: CMakeLists.txt 3375 2011-05-22 23:34:04Z mloskot $
 #
 # GEOS tools (geos-config) build configuration for CMake build system
 #

@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: CoordinateSequenceFactory.cpp 2745 2009-11-26 21:21:56Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

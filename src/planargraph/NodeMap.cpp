@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: NodeMap.cpp 2733 2009-11-20 19:58:33Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

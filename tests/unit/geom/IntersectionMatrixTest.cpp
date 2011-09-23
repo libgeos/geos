@@ -1,4 +1,4 @@
-// $Id$
+// $Id: IntersectionMatrixTest.cpp 2761 2009-12-03 18:56:25Z mloskot $
 // 
 // Test Suite for geos::geom::IntersectionMatrix class.
 

@@ -1,4 +1,4 @@
-# $Id$
+# $Id: dirlist.mk 2967 2010-04-07 13:22:56Z mloskot $
 #
 # List of directories use by makefile.vc to clean .obj files
 #

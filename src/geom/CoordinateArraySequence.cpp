@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: CoordinateArraySequence.cpp 3278 2011-04-13 10:44:04Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

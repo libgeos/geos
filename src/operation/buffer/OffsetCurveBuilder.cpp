@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: OffsetCurveBuilder.cpp 3324 2011-05-04 16:30:36Z strk $
  *
  * GEOS-Geometry Engine Open Source
  * http://geos.refractions.net

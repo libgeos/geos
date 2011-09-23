@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: LineString.cpp 3461 2011-08-20 21:02:57Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

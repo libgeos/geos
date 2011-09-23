@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: ByteOrderDataInStream.inl 2853 2010-01-16 18:14:41Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

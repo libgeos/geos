@@ -1,4 +1,4 @@
-.. $Id$
+.. $Id: TESTING.txt 2137 2008-07-25 21:00:09Z mloskot $
 
 Author: Sean Gillies, sgillies@frii.com
 

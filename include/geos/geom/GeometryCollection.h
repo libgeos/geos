@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: GeometryCollection.h 3472 2011-09-20 14:35:57Z hobu $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

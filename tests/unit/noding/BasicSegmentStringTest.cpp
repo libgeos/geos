@@ -1,4 +1,4 @@
-// $Id$
+// $Id: BasicSegmentStringTest.cpp 2990 2010-05-18 19:18:54Z warmerdam $
 // 
 // Test Suite for geos::noding::BasicSegmentString class.
 

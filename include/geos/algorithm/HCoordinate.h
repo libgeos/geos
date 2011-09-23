@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: HCoordinate.h 3338 2011-05-10 09:50:44Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

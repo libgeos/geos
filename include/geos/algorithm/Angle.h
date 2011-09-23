@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: Angle.h 3363 2011-05-13 16:17:38Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

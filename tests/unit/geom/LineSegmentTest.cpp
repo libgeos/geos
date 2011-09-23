@@ -1,4 +1,4 @@
-// $Id$
+// $Id: LineSegmentTest.cpp 2344 2009-04-09 21:46:30Z mloskot $
 // 
 // Test Suite for geos::geom::LineSegment class.
 

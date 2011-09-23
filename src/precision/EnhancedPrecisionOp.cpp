@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: EnhancedPrecisionOp.cpp 2755 2009-11-30 17:29:48Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

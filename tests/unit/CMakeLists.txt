@@ -1,5 +1,5 @@
 #################################################################################
-# $Id$
+# $Id: CMakeLists.txt 3382 2011-05-30 09:41:41Z mloskot $
 #
 # GEOS unit tests build configuration for CMake build system
 #

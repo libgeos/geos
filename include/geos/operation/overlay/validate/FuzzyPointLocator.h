@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: FuzzyPointLocator.h 3255 2011-03-01 17:56:10Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

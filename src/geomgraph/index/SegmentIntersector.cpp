@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: SegmentIntersector.cpp 2723 2009-11-19 16:40:29Z pramsey $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

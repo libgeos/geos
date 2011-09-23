@@ -1,4 +1,4 @@
-// $Id$
+// $Id: UniqueCoordinateArrayFilterTest.cpp 2369 2009-04-15 10:18:16Z strk $
 // 
 // Test Suite for geos::util::UniqueCoordinateArrayFilter class.
 

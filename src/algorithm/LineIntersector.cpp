@@ -1,5 +1,5 @@
 /**********************************************************************
- * $Id$
+ * $Id: LineIntersector.cpp 3340 2011-05-10 09:51:31Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
