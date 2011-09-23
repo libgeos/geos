@@ -13,5 +13,6 @@ geos_HEADERS = \
     LinearIterator.h \
     LinearGeometryBuilder.h \
     LinearLocation.h \
+    LocationIndexedLine.h \
     LocationIndexOfLine.h \
     LocationIndexOfPoint.h

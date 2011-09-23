@@ -3,6 +3,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -13,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: linearref/LengthIndexedLine.java rev. 1.10
+ * Last port: linearref/LengthIndexedLine.java r463
  *
  **********************************************************************/
 
@@ -46,6 +47,8 @@ class GEOS_DLL LengthIndexedLine
 private:
 	const geom::Geometry *linearGeom;
 	LinearLocation locationOf(double index) const;
+	LinearLocation locationOf(double index, bool resolveLower) const;
+	double positiveIndex(double index) const;
 
 public:
 
@@ -73,12 +76,14 @@ public:
 
 
 	/**
+	 * \brief
 	 * Computes the {@link Coordinate} for the point
 	 * on the line at the given index, offset by the given distance.
+	 *
 	 * If the index is out of range the first or last point on the
 	 * line will be returned.
-	 * The computed point is offset to the left of the line if the offset distance is
-	 * positive, to the right if negative.
+	 * The computed point is offset to the left of the line if the
+	 * offset distance is positive, to the right if negative.
 	 *
 	 * The Z-ordinate of the computed point will be interpolated from
 	 * the Z-ordinates of the line segment containing it, if they exist.

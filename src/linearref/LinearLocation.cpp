@@ -3,6 +3,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -13,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: linearref/LinearLocation.java rev. 1.10
+ * Last port: linearref/LinearLocation.java r463
  *
  **********************************************************************/
 
@@ -318,11 +319,24 @@ LinearLocation::isOnSameSegment(const LinearLocation& loc) const
 	return false;
 }
 
+/* public */
+bool
+LinearLocation::isEndpoint(const Geometry& linearGeom) const
+{
+  const LineString& lineComp = dynamic_cast<const LineString&>(
+      *(linearGeom.getGeometryN(componentIndex)) );
+  // check for endpoint
+  unsigned int nseg = lineComp.getNumPoints() - 1;
+  return segmentIndex >= nseg
+        || (segmentIndex == nseg && segmentFraction >= 1.0);
+
+}
+
 
 ostream& operator<<(ostream &out, const LinearLocation &obj)
 {
-	return out << "LinearLocation(" << obj.componentIndex << ", " <<
-	       obj.segmentIndex << ", " << obj.segmentFraction << ")";
+	return out << "LinearLoc[" << obj.componentIndex << ", " <<
+	       obj.segmentIndex << ", " << obj.segmentFraction << "]";
 }
 
 } // namespace geos.linearref

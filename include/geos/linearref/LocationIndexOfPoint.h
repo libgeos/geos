@@ -3,6 +3,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -13,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: linearref/LinearGeometryBuilder.java rev. 1.10
+ * Last port: linearref/LinearGeometryBuilder.java r466
  *
  **********************************************************************/
 
@@ -42,12 +43,12 @@ class LocationIndexOfPoint
 private:
 	const geom::Geometry *linearGeom;
 
-	LinearLocation indexOfFromStart(const geom::Coordinate& inputPt, LinearLocation* minIndex) const;
+	LinearLocation indexOfFromStart(const geom::Coordinate& inputPt, const LinearLocation* minIndex) const;
 
 public:
 	static LinearLocation indexOf(const geom::Geometry *linearGeom, const geom::Coordinate& inputPt);
 
-	static LinearLocation indexOfAfter(const geom::Geometry *linearGeom, const geom::Coordinate& inputPt, LinearLocation* minIndex);
+	static LinearLocation indexOfAfter(const geom::Geometry *linearGeom, const geom::Coordinate& inputPt, const LinearLocation* minIndex);
 
 	LocationIndexOfPoint(const geom::Geometry *linearGeom);
 
@@ -73,7 +74,7 @@ public:
 	 * @param minLocation the minimum location for the point location
 	 * @return the location of the nearest point
 	 */
-	LinearLocation indexOfAfter(const geom::Coordinate& inputPt, LinearLocation* minIndex) const;
+	LinearLocation indexOfAfter(const geom::Coordinate& inputPt, const LinearLocation* minIndex) const;
 };
 }
 }

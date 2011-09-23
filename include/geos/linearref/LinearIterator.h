@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: linearref/LinearIterator.java rev. 1.10
+ * Last port: linearref/LinearIterator.java r463
  *
  **********************************************************************/
 
@@ -90,7 +90,7 @@ public:
 
 	/**
 	 * Checks whether the iterator cursor is pointing to the
-	 * endpoint of a linestring.
+	 * endpoint of a component {@link LineString}.
 	 *
 	 * @return <code>true</true> if the iterator is at an endpoint
 	 */
@@ -143,6 +143,8 @@ private:
 	/**
 	 * Invariant: currentLine <> null if the iterator is pointing
 	 *            at a valid coordinate
+	 *
+	 * @throws IllegalArgumentException if linearGeom is not {@link Lineal}
 	 */
 	void loadCurrentLine();
 
