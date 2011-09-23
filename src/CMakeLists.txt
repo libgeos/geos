@@ -78,13 +78,13 @@ else()
     PREFIX "lib"
     CLEAN_DIRECT_OUTPUT 1)
 
-endif()
-
 if(APPLE)
   set_target_properties(geos
     PROPERTIES
     BUILD_WITH_INSTALL_RPATH TRUE
     INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}")
+
+endif()
 endif()
 
 #################################################################################
