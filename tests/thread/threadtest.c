@@ -1,6 +1,5 @@
 /************************************************************************
  *
- * $Id: threadtest.c 2809 2009-12-06 01:05:24Z mloskot $
  *
  * Multithreaded test for C-Wrapper of GEOS library
  *

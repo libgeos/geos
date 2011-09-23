@@ -1,4 +1,3 @@
-// $Id: IsValidTest.cpp 2873 2010-01-18 18:15:40Z mloskot $
 // 
 // Test Suite for geos::operation::valid::IsValidOp class
 // Ported from JTS junit/operation/valid/IsValidTest.java rev. 1.1

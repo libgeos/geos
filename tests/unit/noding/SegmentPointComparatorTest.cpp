@@ -1,4 +1,3 @@
-// $Id: SegmentPointComparatorTest.cpp 3235 2011-02-23 10:25:28Z strk $
 // 
 // Test Suite for geos::noding::SegmentPointComparator class.
 //

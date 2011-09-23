@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: RayCrossingCounter.cpp 2357 2009-04-14 12:55:39Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

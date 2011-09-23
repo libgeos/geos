@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: LinearLocation.cpp 3019 2010-06-19 12:28:31Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

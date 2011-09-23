@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: IntersectionAdder.cpp 2319 2009-04-07 19:00:36Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

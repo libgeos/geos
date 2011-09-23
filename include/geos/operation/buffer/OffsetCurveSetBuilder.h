@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: OffsetCurveSetBuilder.h 3306 2011-04-27 14:13:45Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

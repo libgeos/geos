@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: CoordinateSequence.cpp 2793 2009-12-04 15:07:37Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: GeometryLocation.cpp 2561 2009-06-08 10:37:11Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

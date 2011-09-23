@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: LinearRing.cpp 3241 2011-02-23 15:45:40Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

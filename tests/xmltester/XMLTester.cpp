@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: XMLTester.cpp 3443 2011-07-20 14:32:26Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

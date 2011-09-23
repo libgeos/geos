@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: Polygonizer.cpp 2926 2010-02-22 22:21:29Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: InteriorPointPoint.cpp 2554 2009-06-06 21:14:51Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

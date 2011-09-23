@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: DistanceOp.cpp 3259 2011-03-02 13:45:13Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

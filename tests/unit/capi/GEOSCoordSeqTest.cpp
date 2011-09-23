@@ -1,4 +1,3 @@
-// $Id: GEOSCoordSeqTest.cpp 2485 2009-05-07 08:45:47Z strk $
 // 
 // Test Suite for C-API GEOSCoordSeq
 

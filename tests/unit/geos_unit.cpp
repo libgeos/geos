@@ -1,4 +1,3 @@
-// $Id: geos_unit.cpp 2796 2009-12-04 15:58:41Z mloskot $
 // 
 // Test Suite Runner
 //

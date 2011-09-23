@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: SimpleNestedRingTester.h 3274 2011-03-26 14:02:20Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

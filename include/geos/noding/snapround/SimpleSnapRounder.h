@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: SimpleSnapRounder.h 3239 2011-02-23 14:37:29Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

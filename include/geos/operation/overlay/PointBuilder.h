@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: PointBuilder.h 2757 2009-12-01 15:39:41Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

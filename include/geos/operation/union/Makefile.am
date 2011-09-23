@@ -1,4 +1,3 @@
-# $Id: Makefile.am 3296 2011-04-23 10:03:16Z strk $
 #
 # This file is part of project GEOS (http://trac.osgeo.org/geos/) 
 #

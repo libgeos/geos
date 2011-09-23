@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: CoordinateArraySequenceFactory.inl 2990 2010-05-18 19:18:54Z warmerdam $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

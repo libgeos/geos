@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: TopologyPreservingSimplifier.cpp 2762 2009-12-03 19:01:10Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

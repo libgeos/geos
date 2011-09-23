@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: SimpleGeometryPrecisionReducer.cpp 2368 2009-04-15 10:02:01Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

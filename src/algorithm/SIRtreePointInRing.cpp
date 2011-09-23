@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: SIRtreePointInRing.cpp 1986 2007-06-08 15:27:42Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

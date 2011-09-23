@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: DoubleBits.cpp 2409 2009-04-27 15:00:53Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

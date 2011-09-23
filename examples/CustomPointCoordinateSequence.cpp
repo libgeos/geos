@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: CustomPointCoordinateSequence.cpp 2088 2007-12-21 22:41:11Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

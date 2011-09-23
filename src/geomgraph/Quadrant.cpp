@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: Quadrant.cpp 2394 2009-04-20 09:37:55Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

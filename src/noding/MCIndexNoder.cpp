@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: MCIndexNoder.cpp 2479 2009-05-06 17:42:58Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

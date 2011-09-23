@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

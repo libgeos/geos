@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: BufferOp.h 3437 2011-07-20 09:03:35Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

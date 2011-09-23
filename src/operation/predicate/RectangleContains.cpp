@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: RectangleContains.cpp 2569 2009-06-08 17:12:04Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

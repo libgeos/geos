@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: TopologyValidationError.h 2572 2009-06-08 22:10:55Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

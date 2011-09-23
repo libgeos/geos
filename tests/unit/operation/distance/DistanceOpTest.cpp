@@ -1,4 +1,3 @@
-// $Id: DistanceOpTest.cpp 3287 2011-04-18 21:45:20Z strk $
 // 
 // Test Suite for geos::operation::distance::DistanceOp class.
 

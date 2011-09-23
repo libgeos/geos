@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: RelateNodeFactory.cpp 2543 2009-06-05 10:23:23Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

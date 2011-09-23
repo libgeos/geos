@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: WKBReader.cpp 2794 2009-12-04 15:20:38Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

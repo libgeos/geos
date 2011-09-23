@@ -1,4 +1,3 @@
-// $Id: PointLocatorTest.cpp 2344 2009-04-09 21:46:30Z mloskot $
 // 
 // Test Suite for geos::algorithm::PointLocator 
 // Ported from JTS junit/algorithm/PointLocator.java

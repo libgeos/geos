@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: ConnectedElementLocationFilter.h 2557 2009-06-08 09:30:55Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

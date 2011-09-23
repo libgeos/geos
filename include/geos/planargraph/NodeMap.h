@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: NodeMap.h 2958 2010-03-29 11:29:40Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: PreparedPolygonIntersects.h 2420 2009-04-29 08:56:14Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: CascadedPolygonUnion.h 3294 2011-04-22 18:46:37Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

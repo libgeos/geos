@@ -1,4 +1,3 @@
-// $Id$
 // 
 // Test Suite for geos::operation::polygonize::Polygonizer class.
 //

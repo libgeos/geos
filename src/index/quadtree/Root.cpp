@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: Root.cpp 2415 2009-04-27 19:38:44Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

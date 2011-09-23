@@ -1,4 +1,3 @@
-// $Id$
 // 
 // Test Suite for Geometry's clone() 
 

@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: ElevationMatrix.cpp 2873 2010-01-18 18:15:40Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

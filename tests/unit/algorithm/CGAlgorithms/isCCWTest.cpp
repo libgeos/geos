@@ -1,4 +1,3 @@
-// $Id: isCCWTest.cpp 3288 2011-04-19 07:57:14Z strk $
 // 
 // Test Suite for CGAlgorithms::isCCW() function
 // Ported from JTS junit/algorithm/IsCCWTest.java

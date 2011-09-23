@@ -1,4 +1,3 @@
-// $Id: LineStringTest.cpp 3181 2011-02-04 08:50:42Z strk $
 // 
 // Test Suite for geos::geom::LineString class.
 

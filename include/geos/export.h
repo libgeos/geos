@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: export.h 2834 2009-12-22 11:38:43Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

@@ -1,5 +1,4 @@
 #################################################################################
-# $Id: CMakeLists.txt 3384 2011-05-30 10:45:43Z mloskot $
 #
 # GEOS C++ library build configuration for CMake build system
 #

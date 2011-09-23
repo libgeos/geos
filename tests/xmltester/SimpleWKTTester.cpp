@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: SimpleWKTTester.cpp 2555 2009-06-06 22:17:20Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

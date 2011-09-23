@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: SweepLineIndex.cpp 3416 2011-07-05 09:52:42Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

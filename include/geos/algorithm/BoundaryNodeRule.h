@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: BoundaryNodeRule.h 3262 2011-03-04 16:30:48Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

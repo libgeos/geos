@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: GeometrySnapper.h 3225 2011-02-21 14:02:37Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

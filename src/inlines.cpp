@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: inlines.cpp 3456 2011-08-06 09:10:16Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

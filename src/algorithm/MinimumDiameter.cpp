@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: MinimumDiameter.cpp 3417 2011-07-05 09:52:48Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

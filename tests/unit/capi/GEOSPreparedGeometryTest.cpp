@@ -1,4 +1,3 @@
-// $Id: GEOSPreparedGeometryTest.cpp 3325 2011-05-04 17:45:05Z strk $
 // 
 // Test Suite for C-API GEOSPreparedGeometry
 

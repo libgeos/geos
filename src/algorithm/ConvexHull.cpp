@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: ConvexHull.cpp 3444 2011-07-20 15:40:27Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

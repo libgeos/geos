@@ -1,4 +1,3 @@
-// $Id: CoordinateListTest.cpp 3155 2010-12-03 13:57:00Z strk $
 // 
 // Test Suite for geos::geom::CoordinateList class.
 

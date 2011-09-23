@@ -1,4 +1,3 @@
-// $Id: LengthIndexedLineTest.cpp 2890 2010-01-27 22:25:48Z mloskot $
 // 
 // Ported from JTS junit/linearref/AbstractIndexedLineTest.java rev. 1.10
 // and  junit/linearref/LengthIndexedLineTest.java rev. 1.10

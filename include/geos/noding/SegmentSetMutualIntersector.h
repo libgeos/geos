@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: SegmentSetMutualIntersector.h 2194 2008-09-23 23:01:00Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

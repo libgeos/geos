@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: MonotoneChain.h 3332 2011-05-06 18:51:46Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

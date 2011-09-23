@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: PointOnGeometryLocator.h 2263 2009-01-29 18:56:00Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

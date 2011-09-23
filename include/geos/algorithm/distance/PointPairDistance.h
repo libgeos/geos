@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: PointPairDistance.h 2809 2009-12-06 01:05:24Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

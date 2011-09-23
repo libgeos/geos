@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: Point.h 3185 2011-02-07 15:39:27Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: geomUtil.h 2120 2008-01-30 22:34:13Z benjubb $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

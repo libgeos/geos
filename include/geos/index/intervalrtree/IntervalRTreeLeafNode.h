@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: IntervalRTreeLeafNode.h 2540 2009-06-05 09:28:04Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

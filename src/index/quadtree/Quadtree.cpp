@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: Quadtree.cpp 2410 2009-04-27 15:30:52Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

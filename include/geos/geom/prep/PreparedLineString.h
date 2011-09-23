@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: PreparedLineString.h 2811 2009-12-08 17:42:02Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

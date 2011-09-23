@@ -1,4 +1,3 @@
-// $Id: PolygonTest.cpp 3182 2011-02-04 10:12:57Z strk $
 // 
 // Test Suite for geos::geom::Polygon class.
 

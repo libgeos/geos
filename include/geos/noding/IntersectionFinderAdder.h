@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: IntersectionFinderAdder.h 2778 2009-12-03 19:44:00Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

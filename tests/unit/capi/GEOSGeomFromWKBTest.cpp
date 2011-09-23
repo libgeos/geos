@@ -1,4 +1,3 @@
-// $Id: GEOSGeomFromWKBTest.cpp 2809 2009-12-06 01:05:24Z mloskot $
 // 
 // Test Suite for C-API GEOSGeomFromWKB
 

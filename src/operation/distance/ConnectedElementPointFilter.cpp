@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: ConnectedElementPointFilter.cpp 2553 2009-06-06 00:55:55Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

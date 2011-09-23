@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: LinearComponentExtracter.h 2772 2009-12-03 19:30:54Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

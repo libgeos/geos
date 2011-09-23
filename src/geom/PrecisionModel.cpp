@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: PrecisionModel.cpp 3292 2011-04-22 13:04:20Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

@@ -1,5 +1,4 @@
 @ECHO OFF
-REM $Id: autogen.bat 3105 2010-10-10 11:32:36Z mloskot $
 REM
 REM This script generates headers for use with Visual C++ only
 REM

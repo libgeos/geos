@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: TestSweepLineSpeed.cpp 2163 2008-08-18 16:32:50Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

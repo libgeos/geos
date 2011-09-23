@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id$
  *
  * GEOS - Geometry Engine Open Source
  * http://trac.osgeo.org/geos

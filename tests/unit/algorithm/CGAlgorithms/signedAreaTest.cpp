@@ -1,4 +1,3 @@
-// $Id$
 // 
 // Test Suite for CGAlgorithms::signedArea() function
 

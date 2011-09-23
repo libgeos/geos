@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: DirectedEdge.h 3436 2011-07-20 08:46:43Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

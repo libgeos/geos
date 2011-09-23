@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: SortedPackedIntervalRTree.cpp 2768 2009-12-03 19:23:05Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: MCIndexSnapRounder.cpp 3372 2011-05-19 19:32:06Z warmerdam $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

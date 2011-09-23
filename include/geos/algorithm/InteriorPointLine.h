@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: InteriorPointLine.h 3164 2010-12-24 14:27:46Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

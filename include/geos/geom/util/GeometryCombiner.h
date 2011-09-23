@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: GeometryCombiner.h 3177 2011-02-03 19:58:51Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

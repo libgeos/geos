@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: ByteOrderValues.cpp 3253 2011-03-01 17:50:36Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

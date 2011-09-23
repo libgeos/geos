@@ -1,4 +1,3 @@
-// $Id: DimensionTest.cpp 2757 2009-12-01 15:39:41Z mloskot $
 // 
 // Test Suite for geos::geom::Location class.
 

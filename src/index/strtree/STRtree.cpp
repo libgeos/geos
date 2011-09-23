@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: STRtree.cpp 2685 2009-10-20 16:59:30Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

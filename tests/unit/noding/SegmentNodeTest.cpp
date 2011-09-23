@@ -1,4 +1,3 @@
-// $Id: SegmentNodeTest.cpp 3451 2011-07-26 16:23:30Z strk $
 // 
 // Test Suite for geos::noding::SegmentNode class.
 

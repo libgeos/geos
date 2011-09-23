@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: SubgraphDepthLocater.h 3245 2011-02-23 16:46:10Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

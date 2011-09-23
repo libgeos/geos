@@ -1,4 +1,3 @@
-// $Id: PointTest.cpp 3180 2011-02-03 21:50:17Z strk $
 // 
 // Test Suite for geos::geom::Point class.
 

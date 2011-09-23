@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: ScaledNoder.cpp 3319 2011-04-28 15:09:04Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

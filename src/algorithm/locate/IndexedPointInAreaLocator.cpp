@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: IndexedPointInAreaLocator.cpp 2868 2010-01-18 00:59:21Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: GeometryGraphOperation.cpp 2549 2009-06-05 17:50:34Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

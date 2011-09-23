@@ -1,4 +1,3 @@
-// $Id: DiscreteHausdorffDistanceTest.cpp 2873 2010-01-18 18:15:40Z mloskot $
 // 
 // Test Suite for geos::algorithm::distance::DiscreteHausdorffDistance
 // Ported from JTS junit/algorithm/distance/DiscreteHausdorffDistanceTest.java rev. 1.2

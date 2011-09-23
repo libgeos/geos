@@ -1,4 +1,3 @@
-# $Id: runtests.py 1820 2006-09-06 16:54:23Z mloskot $
 # ===========================================================================
 # Copyright 2004 Sean Gillies, sgillies@frii.com
 #

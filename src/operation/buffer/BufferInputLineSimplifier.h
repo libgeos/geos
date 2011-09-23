@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: BufferInputLineSimplifier.h 3246 2011-02-23 17:13:31Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

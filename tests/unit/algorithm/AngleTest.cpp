@@ -1,4 +1,3 @@
-// $Id$
 // 
 // Test Suite for geos::algorithm::Angle 
 // Ported from JTS junit/algorithm/AngleTest.java r378

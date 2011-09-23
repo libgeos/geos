@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: SIRtree.h 2961 2010-03-29 12:17:37Z mloskot $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net

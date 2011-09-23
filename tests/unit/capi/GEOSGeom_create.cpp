@@ -1,4 +1,3 @@
-// $Id: GEOSGeomToWKTTest.cpp 2424 2009-04-29 23:52:36Z mloskot $
 // 
 // Test Suite for C-API GEOSGeom_createPolygon
 

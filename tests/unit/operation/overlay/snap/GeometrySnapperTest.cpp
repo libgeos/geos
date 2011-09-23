@@ -1,4 +1,3 @@
-// $Id: GeometrySnapperTest.cpp 3144 2010-12-02 14:29:32Z strk $
 // 
 // Test Suite for geos::operation::overlay::snap::GeometrySnapper class.
 

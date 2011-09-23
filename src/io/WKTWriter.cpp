@@ -1,5 +1,4 @@
 /**********************************************************************
- * $Id: WKTWriter.cpp 3293 2011-04-22 13:51:38Z strk $
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
