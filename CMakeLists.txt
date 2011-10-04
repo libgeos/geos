@@ -69,7 +69,7 @@ endif()
 
 if(APPLE)
   option(GEOS_ENABLE_MACOSX_FRAMEWORK
-    "Set to OFF|ON (default) to build GEOS as a Mac OS X framework" ON)
+    "Set to OFF|ON (default) to build GEOS as a Mac OS X framework" OFF)
   option(GEOS_ENABLE_MACOSX_FRAMEWORK_UNIXCOMPAT
     "Set to ON|OFF (default) to add Unix compatibility to the Mac OS X framework" OFF)
 endif()
