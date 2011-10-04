@@ -21,7 +21,7 @@ set(geos_c_SOURCES
 
 file(GLOB geos_capi_HEADERS ${CMAKE_BINARY_DIR}/capi/*.h) # fix source_group issue
 
-if(NOT APPLE AND NOT GEOS_ENABLE_MACOSX_FRAMEWORK) 
+if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK) 
   # if building OS X framework, CAPI built into C++ library 
   add_library(geos_c SHARED ${geos_c_SOURCES}) 
 
@@ -33,12 +33,6 @@ if(NOT APPLE AND NOT GEOS_ENABLE_MACOSX_FRAMEWORK)
     VERSION ${CAPI_VERSION}
     CLEAN_DIRECT_OUTPUT 1)
 endif()
-
-if(APPLE) 
-  set_target_properties(geos PROPERTIES 
-  BUILD_WITH_INSTALL_RPATH TRUE 
-  INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}") 
-endif() 
 
 #################################################################################
 # Installation
@@ -53,7 +47,7 @@ else()
     DESTINATION include)
 endif()
 
-if(NOT APPLE AND NOT GEOS_ENABLE_MACOSX_FRAMEWORK) 
+if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK) 
   install(TARGETS geos_c
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib
