@@ -28,8 +28,8 @@ namespace sweepline { // geos.index.sweepline
 
 SweepLineIndex::SweepLineIndex()
 	:
-	nOverlaps(0),
-	indexBuilt(false)
+	indexBuilt(false),
+	nOverlaps(0)
 {
 	//events=new vector<SweepLineEvent*>();
 	//nOverlaps=0;
