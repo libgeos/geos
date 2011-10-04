@@ -38,6 +38,8 @@ Changes in 3.3.0
   - CAPI: GEOSRelatePatternMatch 
   - CAPI: GEOSCovers, GEOSCoveredBy (#396) 
   - CAPI: GEOSRelateBoundaryNodeRule (#399) 
+  - CAPI: GEOSGeom_getCoordinateDimension() (#311)
+  - CAPI: GEOSWKTWriter_setOutputDimension, GEOSWKTWriter_setOld3D (#292)
   -  PHP: new PHP5 bindings based on CAPI
 - Semantic C++ API changes:
   - Geometry inheritance chain changed to introduce Puntal, Lineal
