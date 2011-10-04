@@ -53,7 +53,7 @@ public:
     {
         ::geos::ignore_unused_variable_warning(coord);
         assert(0);
-    };
+    }
 
 	void filter_rw(geom::Coordinate *coord) const
 	{

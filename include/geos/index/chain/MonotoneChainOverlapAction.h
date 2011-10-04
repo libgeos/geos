@@ -51,9 +51,9 @@ protected:
 
 public:
 
-	MonotoneChainOverlapAction() {};
+	MonotoneChainOverlapAction() {}
 
-	virtual ~MonotoneChainOverlapAction() {};
+	virtual ~MonotoneChainOverlapAction() {}
 
 	/**
 	 * This function can be overridden if the original chains are needed

@@ -70,7 +70,7 @@ public:
 
 	EdgeEndStar();
 
-	virtual ~EdgeEndStar() {};
+	virtual ~EdgeEndStar() {}
 
 	/** \brief
 	 * Insert a EdgeEnd into this EdgeEndStar

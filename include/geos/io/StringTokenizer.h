@@ -42,7 +42,7 @@ public:
 	};
 	//StringTokenizer();
 	StringTokenizer(const std::string& txt);
-	~StringTokenizer() {};
+	~StringTokenizer() {}
 	int nextToken();
 	int peekNextToken();
 	double getNVal();

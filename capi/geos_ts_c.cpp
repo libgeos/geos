@@ -145,8 +145,8 @@ class CAPI_ItemVisitor : public geos::index::ItemVisitor {
     void *userdata;
   public:
     CAPI_ItemVisitor (GEOSQueryCallback cb, void *ud)
-        : ItemVisitor(), callback(cb), userdata(ud) {};
-    void visitItem (void *item) { callback(item, userdata); };
+        : ItemVisitor(), callback(cb), userdata(ud) {}
+    void visitItem (void *item) { callback(item, userdata); }
 };
 
 

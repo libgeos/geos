@@ -35,7 +35,7 @@ class GEOS_DLL MonotoneChainIndexer{
 
 public:
 
-	MonotoneChainIndexer(){};
+	MonotoneChainIndexer(){}
 
 	void getChainStartIndices(const geom::CoordinateSequence*, std::vector<int>&);
 

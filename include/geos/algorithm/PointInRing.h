@@ -30,7 +30,7 @@ namespace algorithm { // geos::algorithm
 
 class GEOS_DLL PointInRing{
 public:
-	virtual ~PointInRing(){};
+	virtual ~PointInRing(){}
 	virtual bool isInside(const geom::Coordinate& pt)=0;
 };
 

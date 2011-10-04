@@ -43,7 +43,7 @@ public:
 	static const NodeFactory &instance();
 	virtual ~NodeFactory() {}
 protected:
-	NodeFactory() {};
+	NodeFactory() {}
 };
 
 

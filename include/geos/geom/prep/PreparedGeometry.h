@@ -52,7 +52,7 @@ namespace prep { // geos::geom::prep
  */
 class GEOS_DLL PreparedGeometry {
 public:
-	virtual ~PreparedGeometry() {};
+	virtual ~PreparedGeometry() {}
 	
 	/**
 	 * Gets the original {@link Geometry} which has been prepared.

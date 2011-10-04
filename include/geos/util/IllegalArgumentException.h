@@ -43,7 +43,7 @@ public:
 		GEOSException("IllegalArgumentException", msg)
 	{}
 
-	~IllegalArgumentException() throw() {};
+	~IllegalArgumentException() throw() {}
 };
 
 } // namespace geos::util

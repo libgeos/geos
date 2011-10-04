@@ -57,7 +57,7 @@ public:
 	SimpleNoder(SegmentIntersector* nSegInt=NULL)
 		:
 		SinglePassNoder(nSegInt)
-	{};
+	{}
 
 	void computeNodes(std::vector<SegmentString*>* inputSegmentStrings);
 

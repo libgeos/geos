@@ -56,7 +56,7 @@ public:
 			std::vector<Edge*> *edges1,
 			SegmentIntersector *si)=0;
 
-	virtual ~EdgeSetIntersector(){};
+	virtual ~EdgeSetIntersector(){}
 };
 
 

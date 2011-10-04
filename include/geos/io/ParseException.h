@@ -44,7 +44,7 @@ public:
 
 	ParseException(const std::string& msg, double num);
 
-	~ParseException() throw() {};
+	~ParseException() throw() {}
 
 private:
 	static std::string stringify(double num);

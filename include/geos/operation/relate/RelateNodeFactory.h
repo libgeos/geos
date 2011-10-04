@@ -46,7 +46,7 @@ public:
 	geomgraph::Node* createNode(const geom::Coordinate &coord) const;
 	static const geomgraph::NodeFactory &instance();
 private:
-	RelateNodeFactory() {};
+	RelateNodeFactory() {}
 };
 
 

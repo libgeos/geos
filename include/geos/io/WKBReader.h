@@ -80,7 +80,7 @@ class GEOS_DLL WKBReader {
 
 public:
 
-	WKBReader(geom::GeometryFactory const& f): factory(f) {};
+	WKBReader(geom::GeometryFactory const& f): factory(f) {}
 
 	/// Inizialize parser with default GeometryFactory.
 	WKBReader();

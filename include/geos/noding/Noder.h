@@ -70,7 +70,7 @@ public:
 	virtual ~Noder() {}
 
 protected:
-	Noder(){};
+	Noder(){}
 };
 
 } // namespace geos.noding

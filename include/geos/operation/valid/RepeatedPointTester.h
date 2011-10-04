@@ -48,7 +48,7 @@ namespace valid { // geos::operation::valid
  */
 class GEOS_DLL RepeatedPointTester {
 public:
-	RepeatedPointTester() {};
+	RepeatedPointTester() {}
 	geom::Coordinate& getCoordinate();
 	bool hasRepeatedPoint(const geom::Geometry *g);
 	bool hasRepeatedPoint(const geom::CoordinateSequence *coord);

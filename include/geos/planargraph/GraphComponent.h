@@ -61,7 +61,7 @@ public:
 		isVisitedVar(false)
 		{}
 
-	virtual ~GraphComponent() {};
+	virtual ~GraphComponent() {}
 
 	/** \brief
 	 * Tests if a component has been visited during the course

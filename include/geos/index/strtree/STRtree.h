@@ -105,7 +105,7 @@ protected:
 	
 	IntersectsOp* getIntersectsOp() {
 		return &intersectsOp;
-	};
+	}
 
 public:
 

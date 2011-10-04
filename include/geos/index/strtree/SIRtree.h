@@ -93,7 +93,7 @@ protected:
 
 	AbstractNode* createNode(int level);
 
-	IntersectsOp* getIntersectsOp() {return intersectsOp;};
+	IntersectsOp* getIntersectsOp() {return intersectsOp;}
 
 	std::auto_ptr<BoundableList> sortBoundables(const BoundableList* input);
 
