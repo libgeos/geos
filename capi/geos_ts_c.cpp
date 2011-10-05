@@ -1231,7 +1231,7 @@ GEOSGeomToWKB_buf_r(GEOSContextHandle_t extHandle, const Geometry *g, size_t *si
     using geos::io::WKBWriter;
     try
     {
-        int byteOrder = static_cast<int>(handle->WKBByteOrder);
+        int byteOrder = handle->WKBByteOrder;
         WKBWriter w(handle->WKBOutputDims, byteOrder);
         std::ostringstream os(std::ios_base::binary);
         w.write(*g, os);
@@ -1317,7 +1317,7 @@ GEOSGeomToHEX_buf_r(GEOSContextHandle_t extHandle, const Geometry *g, size_t *si
     using geos::io::WKBWriter;
     try
     {
-        int byteOrder = static_cast<int>(handle->WKBByteOrder);
+        int byteOrder = handle->WKBByteOrder;
         WKBWriter w(handle->WKBOutputDims, byteOrder);
         std::ostringstream os(std::ios_base::binary);
         w.writeHEX(*g, os);
@@ -2577,7 +2577,7 @@ GEOSGeomGetNumPoints_r(GEOSContextHandle_t extHandle, const Geometry *g1)
 			handle->ERROR_MESSAGE("Argument is not a LineString");
 			return -1;
 		}
-		return ls->getNumPoints();
+		return static_cast<int>(ls->getNumPoints());
     }
     catch (const std::exception &e)
     {
@@ -3419,7 +3419,7 @@ GEOSCoordSeq_setOrdinate_r(GEOSContextHandle_t extHandle, CoordinateSequence *cs
 
     try
     {
-        cs->setOrdinate(static_cast<int>(idx), static_cast<int>(dim), val);
+        cs->setOrdinate(idx, dim, val);
         return 1;
     }
     catch (const std::exception &e)
@@ -3506,7 +3506,7 @@ GEOSCoordSeq_getOrdinate_r(GEOSContextHandle_t extHandle, const CoordinateSequen
 
     try
     {
-        double d = cs->getOrdinate(static_cast<int>(idx), static_cast<int>(dim));
+        double d = cs->getOrdinate(idx, dim);
         *val = d;
 
         return 1;
@@ -4907,7 +4907,7 @@ GEOSWKBWriter_getIncludeSRID_r(GEOSContextHandle_t extHandle, const GEOSWKBWrite
         try
         {
             int srid = writer->getIncludeSRID();
-            ret = static_cast<char>(srid);
+            ret = srid;
         }
         catch (...)
         {
@@ -5933,6 +5933,7 @@ GEOSBufferParams_create_r(GEOSContextHandle_t extHandle)
 void
 GEOSBufferParams_destroy_r(GEOSContextHandle_t extHandle, BufferParameters* p)
 {
+  (void)extHandle;
   delete p;     
 }
 
