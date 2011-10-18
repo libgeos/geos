@@ -28,18 +28,18 @@ set(CMAKE_MODULE_PATH "${geos_SOURCE_DIR}/cmake/modules")
 # GEOS release version
 # GEOS C++ library SONAME will use these encoding ABI break at every release
 set(VERSION_MAJOR 3)
-set(VERSION_MINOR 3)
-set(VERSION_PATCH 0)
+set(VERSION_MINOR 4)
+set(VERSION_PATCH dev)
 set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
 # JTS_PORT is the version of JTS this release is bound to
-set(JTS_PORT 1.10.0)
+set(JTS_PORT 1.12.0)
 message(STATUS "Setting GEOS version ${VERSION} as port of JTS ${JTS_PORT}")
 
 # GEOS C API version
-set(CAPI_INTERFACE_CURRENT 7)
-set(CAPI_INTERFACE_REVISION 1)
-set(CAPI_INTERFACE_AGE 6)
+set(CAPI_INTERFACE_CURRENT 9)
+set(CAPI_INTERFACE_REVISION 0)
+set(CAPI_INTERFACE_AGE 8)
 
 math(EXPR CAPI_VERSION_MAJOR "${CAPI_INTERFACE_CURRENT} - ${CAPI_INTERFACE_AGE}")
 set(CAPI_VERSION_MINOR ${CAPI_INTERFACE_AGE})
