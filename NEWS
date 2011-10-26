@@ -1,5 +1,9 @@
 Changes in 3.3.2
-????-??-??
+YYYY-MM-DD
+
+- Bug fixes / improvements
+    - Fixed CMAKE_CXX_FLAGS overridind -std=gnu++0x (#489)
+    - Missing versions update in CMake configuration (#490)
 
 Changes in 3.3.1
 2011-09-27
