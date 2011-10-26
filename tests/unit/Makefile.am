@@ -77,6 +77,7 @@ geos_unit_SOURCES = \
 	noding/SegmentNodeTest.cpp \
 	noding/SegmentPointComparatorTest.cpp \
 	operation/buffer/BufferOpTest.cpp \
+	operation/buffer/BufferParametersTest.cpp \
 	operation/distance/DistanceOpTest.cpp \
 	operation/IsSimpleOpTest.cpp \
 	operation/linemerge/LineMergerTest.cpp \
