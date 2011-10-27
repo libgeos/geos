@@ -1,5 +1,7 @@
 GEOS TODO:
 
+- Port Triangulation API from JTS-1.11
+
 - Feed PrecisionModel to OverlayResultValidator to set _TOLERANCE
 
 - Test unit tests for snapround package
