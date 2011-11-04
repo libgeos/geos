@@ -54,6 +54,12 @@ namespace tut
           return ret;
         }
 
+	void strToUpper(std::string &str)
+        {
+          for(size_t i = 0, len = str.size(); i < len; ++i)
+            str[i] = std::toupper(str[i]);
+        }
+
         ~test_capiisvaliddetail_data()
         {
             GEOSGeom_destroy(geom_);
@@ -105,9 +111,11 @@ namespace tut
       geom_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0, NaN -5)");
       ensure(0 != geom_);
       int r = GEOSisValidDetail(geom_, 0, &reason_, &loc_);
+      std::string wkt = toWKT(loc_);
+      strToUpper(wkt);
       ensure_equals(r, 0); // invalid
       ensure_equals(std::string(reason_), std::string("Invalid Coordinate"));
-      ensure_equals(toWKT(loc_), "POINT (nan -5)");
+      ensure_equals(wkt, "POINT (NAN -5)");
     }
 
     // Self intersecting ring forming hole
