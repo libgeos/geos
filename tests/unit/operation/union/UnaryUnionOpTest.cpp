@@ -1,5 +1,5 @@
 // 
-// Test Suite for geos::operation::geounion::CascadedPolygonUnion class.
+// Test Suite for geos::operation::geounion::UnaryUnionOp class.
 
 // tut
 #include <tut.hpp>
@@ -164,6 +164,18 @@ namespace tut
             NULL
         };
         doTest(geoms, "GEOMETRYCOLLECTION (POINT (80 50), POINT (100 70), LINESTRING (40 60, 120 110))");
+    }
+
+    template<>
+    template<>
+    void object::test<6>()
+    {
+        static char const* const geoms[] = 
+        {
+            "LINESTRING (0 0, 10 0, 5 -5, 5 5)",
+            NULL
+        };
+        doTest(geoms, "MULTILINESTRING ((0 0, 5 0), (5 0, 10 0, 5 -5, 5 0), (5 0, 5 5))");
     }
 
 } // namespace tut

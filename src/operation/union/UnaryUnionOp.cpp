@@ -82,13 +82,18 @@ UnaryUnionOp::Union()
 
   GeomAutoPtr unionLines;
   if (!lines.empty()) {
-#if 0
-      GeomAutoPtr lineGeom = geomFact->buildGeometry( lines.begin(),
-                                                      lines.end()    );
-      unionLines = unionNoOpt(*lineGeom);
-#endif
+      /* JTS compatibility NOTE:
+       * we use cascaded here for robustness [1]
+       * but also add a final unionNoOpt step to deal with
+       * self-intersecting lines [2]
+       *
+       * [1](http://trac.osgeo.org/geos/ticket/392
+       * [2](http://trac.osgeo.org/geos/ticket/482
+       *
+       */
       unionLines.reset( CascadedUnion::Union( lines.begin(),
                                               lines.end()   ) );
+      unionLines = unionNoOpt(*unionLines);
   }
 
   GeomAutoPtr unionPolygons;
