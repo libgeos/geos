@@ -75,7 +75,7 @@
         Check_Type($input, T_ARRAY);
 
         /* Get the length */
-        $2 = RARRAY($input)->len;
+        $2 = RARRAY_LEN($input);
       
         /* Allocate space for the C array. */
         $1 = (GeosLinearRing**) malloc($2*sizeof(GeosLinearRing*));
