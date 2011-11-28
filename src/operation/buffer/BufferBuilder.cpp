@@ -536,7 +536,7 @@ std::cerr << "after noding: "
 		if ( cs->size() < 2 ) 
 		{
 			delete cs; // we need to take care of the memory here as cs is a new sequence
-			return; // don't insert collapsed edges
+			continue; // don't insert collapsed edges
 		}
 		// we need to clone SegmentString coordinates
 		// as Edge will take ownership of them
