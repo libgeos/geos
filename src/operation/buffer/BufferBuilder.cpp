@@ -545,8 +545,9 @@ std::cerr << "after noding: "
 		if ( cs->size() < 2 ) 
 		{
 			// don't insert collapsed edges
+			// we need to take care of the memory here as cs is a new sequence
 			delete cs; 
-			return;
+			continue;
 		}
 
 		// Edge takes ownership of the CoordinateSequence
