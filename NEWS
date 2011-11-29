@@ -6,6 +6,7 @@ YYYY-MM-DD
     - Missing versions update in CMake configuration (#490)
     - Fix noding of self-intersecting lines through UnaryUnion (#482)
     - Fix handling of collapsed edges skipping in BufferOp (#494)
+    - Print up to 18 digits of precision for TopologyException points
 
 Changes in 3.3.1
 2011-09-27
