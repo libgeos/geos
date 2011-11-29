@@ -17,6 +17,7 @@
 
 #include <sstream>
 #include <string>
+#include <iomanip>
 
 #ifndef GEOS_INLINE
 # include <geos/geom/Coordinate.inl>
@@ -39,7 +40,7 @@ string
 Coordinate::toString() const
 {
 	ostringstream s;
-	s<<*this;
+	s << std::setprecision(17) << *this;
 	return s.str();
 }
 
