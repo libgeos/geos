@@ -7,6 +7,7 @@ YYYY-MM-DD
     - Fix noding of self-intersecting lines through UnaryUnion (#482)
     - Fix handling of collapsed edges skipping in BufferOp (#494)
     - Print up to 18 digits of precision for TopologyException points
+    - Fix noding with reduced precision in Buffer operation (#473)
 
 Changes in 3.3.1
 2011-09-27

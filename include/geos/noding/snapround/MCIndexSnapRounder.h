@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: noding/snapround/MCIndexSnapRounder.java r320 (JTS-1.12)
+ * Last port: noding/snapround/MCIndexSnapRounder.java r480 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -81,7 +81,9 @@ public:
 		pm(nPm),
 		scaleFactor(nPm.getScale()),
 		pointSnapper(0)
-  {}
+  {
+    li.setPrecisionModel(&pm);
+  }
 
 	std::vector<SegmentString*>* getNodedSubstrings() const {
 	  return NodedSegmentString::getNodedSubstrings(*nodedSegStrings);
