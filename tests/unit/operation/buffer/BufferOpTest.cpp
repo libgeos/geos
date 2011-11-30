@@ -305,5 +305,49 @@ namespace tut
         ensure(gBuffer2->equals(gBuffer1.get()));        
     }
 
+    // Test for ticket #473
+    template<>
+    template<>
+    void object::test<11>()
+    {
+        using geos::operation::buffer::BufferOp;
+        using geos::operation::buffer::BufferParameters;
+
+        std::string wkt0("\
+MULTILINESTRING(  \
+ (-22720.6801580484 130376.223341197, \
+  -22620.6136206117 130339.222540348, \
+  -22620.6133224902 130339.333510463), \
+ (-22720.3807106115 130487.193473695, \
+  -22620.3154956134 130450.192663993, \
+  -22620.3151974850 130450.303634126), \
+ (-22620.6133224902 130339.333510463, -22620.6127262471 130339.555450692),  \
+ (-22620.1376011539 130450.303157004, -22620.3151974850 130450.303634126),  \
+ (-22620.3151974850 130450.303634126, -22620.3146012281 130450.525574392),  \
+ (-21480.3713729115 130150.471377565, \
+  -21481.6134583498 130150.918429232, \
+  -21482.5899891895 130151.031891269, \
+  -21480.9946803241 130149.807142948),  \
+ (-21477.6185334698 130150.464355720,\
+  -21478.0611246018 130151.020338484,  \
+  -21377.8977465929 130114.034129489)  \
+)  \
+      ");
+
+        GeomPtr g0(wktreader.read(wkt0));
+
+        BufferParameters params(8, BufferParameters::CAP_SQUARE,
+                              BufferParameters::JOIN_MITRE,
+                              1.0);
+        const double distance = 5.0;
+        BufferOp op(g0.get(), params);
+        GeomPtr gBuffer(op.getResultGeometry(distance));
+
+        // We're basically only interested an rough sense of a
+        // meaningful result.
+        ensure_equals(gBuffer->getNumPoints(), std::size_t(46));
+        ensure_equals(int(gBuffer->getArea()), 3520);
+    }
+
 } // namespace tut
 
