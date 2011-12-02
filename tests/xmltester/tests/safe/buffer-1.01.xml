@@ -1,5 +1,6 @@
 <run>
 <precisionModel type="FLOATING"/>
+<resultMatcher>com.vividsolutions.jtstest.testrunner.BufferResultMatcher</resultMatcher>
 
 <case>
   <desc>GEOS 3.3.1 produces rectangle buffer, GEOS 3.2.0 fine (#494)</desc>
