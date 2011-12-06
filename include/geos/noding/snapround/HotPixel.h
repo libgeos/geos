@@ -152,7 +152,8 @@ public:
 	/**
 	 * Creates a new hot pixel.
 	 *
-	 * @param pt the coordinate at the centre of the pixel
+	 * @param pt the coordinate at the centre of the pixel.
+	 *           Will be kept by reference, so make sure to keep it alive.
 	 * @param scaleFact the scaleFactor determining the pixel size
 	 * @param li the intersector to use for testing intersection with
 	 *        line segments
