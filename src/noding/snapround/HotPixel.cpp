@@ -43,7 +43,7 @@ HotPixel::HotPixel(const Coordinate& newPt, double newScaleFactor,
 	:
 	li(newLi),
 	pt(newPt),
-	originalPt(pt),
+	originalPt(newPt),
 	scaleFactor(newScaleFactor)
 {
 	if (scaleFactor != 1.0) {

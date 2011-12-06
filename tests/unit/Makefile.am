@@ -62,7 +62,7 @@ geos_unit_SOURCES = \
 	geom/MultiPolygonTest.cpp \
 	geom/PointTest.cpp \
 	geom/PolygonTest.cpp \
-  geom/PrecisionModelTest.cpp \
+	geom/PrecisionModelTest.cpp \
 	geom/prep/PreparedGeometryFactoryTest.cpp \
 	geom/TriangleTest.cpp \
 	geom/util/GeometryExtracterTest.cpp \
@@ -77,6 +77,7 @@ geos_unit_SOURCES = \
 	noding/NodedSegmentStringTest.cpp \
 	noding/SegmentNodeTest.cpp \
 	noding/SegmentPointComparatorTest.cpp \
+	noding/snapround/HotPixelTest.cpp \
 	operation/buffer/BufferOpTest.cpp \
 	operation/buffer/BufferParametersTest.cpp \
 	operation/distance/DistanceOpTest.cpp \
