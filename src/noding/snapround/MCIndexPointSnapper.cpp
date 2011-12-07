@@ -12,7 +12,7 @@
  *
  **********************************************************************
  *
- * Last port: noding/snapround/MCIndexPointSnapper.java r320 (JTS-1.12)
+ * Last port: noding/snapround/MCIndexPointSnapper.java r486 (JTS-1.12+)
  *
  **********************************************************************/
 
@@ -129,43 +129,3 @@ MCIndexPointSnapper::snap(HotPixel& hotPixel,
 } // namespace geos.noding
 } // namespace geos
 
-/**********************************************************************
- * $Log$
- * Revision 1.9  2006/03/24 09:25:02  strk
- * Bugs #77 and #76: missing <algorithm>
- *
- * Revision 1.8  2006/03/22 18:12:32  strk
- * indexChain.h header split.
- *
- * Revision 1.7  2006/03/15 09:51:13  strk
- * streamlined headers usage
- *
- * Revision 1.6  2006/03/14 12:55:56  strk
- * Headers split: geomgraphindex.h, nodingSnapround.h
- *
- * Revision 1.5  2006/02/21 16:53:49  strk
- * MCIndexPointSnapper, MCIndexSnapRounder
- *
- * Revision 1.4  2006/02/20 10:14:18  strk
- * - namespaces geos::index::*
- * - Doxygen documentation cleanup
- *
- * Revision 1.3  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.2  2006/02/18 21:08:09  strk
- * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
- * - SegmentString::getCoordinates() doesn't return a clone anymore.
- * - SegmentString::getCoordinatesRO() obsoleted.
- * - SegmentString constructor does not promises constness of passed
- *   CoordinateSequence anymore.
- * - NEW ScaledNoder class
- * - Stubs for MCIndexPointSnapper and  MCIndexSnapRounder
- * - Simplified internal interaces of OffsetCurveBuilder and OffsetCurveSetBuilder
- *
- * Revision 1.1  2006/02/14 13:28:26  strk
- * New SnapRounding code ported from JTS-1.7 (not complete yet).
- * Buffer op optimized by using new snaprounding code.
- * Leaks fixed in XMLTester.
- *
- **********************************************************************/
