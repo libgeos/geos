@@ -418,6 +418,8 @@ XMLTester::resetCounters()
 void
 XMLTester::parseRun(const TiXmlNode* node)
 {
+	using geos::geom::PrecisionModel;
+
 	assert(node);
 
 	//dump_to_stdout(node);
@@ -425,6 +427,18 @@ XMLTester::parseRun(const TiXmlNode* node)
 	// Look for precisionModel element
 	const TiXmlElement* el = node->FirstChildElement("precisionModel");
 	if ( el ) parsePrecisionModel(el);
+	else pm.reset(new PrecisionModel());
+
+	if (verbose > 1)
+	{
+		std::cerr << *curr_file <<": run: Precision Model: " << pm->toString() <<std::endl;
+	}
+
+	factory.reset(new geom::GeometryFactory(pm.get()));
+	wktreader.reset(new io::WKTReader(factory.get()));
+	wktwriter.reset(new io::WKTWriter());
+	wkbreader.reset(new io::WKBReader(*factory));
+	wkbwriter.reset(new io::WKBWriter());
 
 	const TiXmlNode* casenode;
 	for ( casenode = node->FirstChild("case");
@@ -480,17 +494,6 @@ XMLTester::parsePrecisionModel(const TiXmlElement* el)
 		// NOTE: PrecisionModel discards offsets anyway...
 		pm.reset(new PrecisionModel(scale, offsetX, offsetY));
 	}
-
-	if (verbose > 1)
-	{
-		std::cerr << *curr_file <<": run: Precision Model: " << pm->toString() <<std::endl;
-	}
-
-	factory.reset(new geom::GeometryFactory(pm.get()));
-	wktreader.reset(new io::WKTReader(factory.get()));
-	wktwriter.reset(new io::WKTWriter());
-	wkbreader.reset(new io::WKBReader(*factory));
-	wkbwriter.reset(new io::WKBWriter());
 }
 
 
