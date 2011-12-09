@@ -37,7 +37,6 @@
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/noding/MCIndexNoder.h>
 #include <geos/noding/IntersectionAdder.h>
-#include <geos/noding/snapround/SimpleSnapRounder.h>
 
 
 
@@ -59,11 +58,10 @@ namespace buffer { // geos.operation.buffer
 static Profiler *profiler = Profiler::instance();
 #endif
 
-/*private*/
-double
-BufferOp::precisionScaleFactor(const Geometry *g,
-	double distance,
-	int maxPrecisionDigits)
+namespace {
+
+double OLDprecisionScaleFactor(const Geometry *g,
+	double distance, int maxPrecisionDigits)
 {
 	const Envelope *env=g->getEnvelopeInternal();
 	double envSize=(std::max)(env->getHeight(), env->getWidth());
@@ -75,6 +73,32 @@ BufferOp::precisionScaleFactor(const Geometry *g,
 	// scale factor is inverse of min Unit size, so flip sign of exponent
 	double scaleFactor=std::pow(10.0,-minUnitLog10);
 	return scaleFactor;
+}
+
+} // anonymous namespace
+
+/*private*/
+double
+BufferOp::precisionScaleFactor(const Geometry *g,
+	double distance,
+	int maxPrecisionDigits)
+{
+  const Envelope *env=g->getEnvelopeInternal();
+  double envMax = std::max(
+    std::max(fabs(env->getMaxX()), fabs(env->getMinX())),
+    std::max(fabs(env->getMaxY()), fabs(env->getMinY()))
+  );
+
+  double expandByDistance = distance > 0.0 ? distance : 0.0;
+  double bufEnvMax = envMax + 2 * expandByDistance;
+
+  // the smallest power of 10 greater than the buffer envelope
+  int bufEnvPrecisionDigits = (int) (std::log(bufEnvMax) / std::log(10) + 1.0);
+  int minUnitLog10 = maxPrecisionDigits - bufEnvPrecisionDigits;
+
+  double scaleFactor = std::pow(10.0, minUnitLog10);
+
+  return scaleFactor;
 }
 
 /*public static*/
@@ -106,7 +130,6 @@ BufferOp::computeGeometry()
 	std::cerr<<"BufferOp::computeGeometry: trying with original precision"<<std::endl;
 #endif
 
-	//bufferReducedPrecision(); return; // FIXME: remove this code
 	bufferOriginalPrecision();
 
 	if (resultGeometry!=NULL) return;
@@ -196,7 +219,14 @@ BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
 
 
 	PrecisionModel pm(1.0); // fixed as well
-	snapround::MCIndexSnapRounder inoder(pm); 
+
+#if 0 /* FIXME: MCIndexSnapRounder seems to be still bogus */
+  snapround::MCIndexSnapRounder inoder(pm);
+#else
+  algorithm::LineIntersector li(&fixedPM);
+  IntersectionAdder ia(li);
+  MCIndexNoder inoder(&ia);
+#endif
 
 	ScaledNoder noder(inoder, fixedPM.getScale());
 
@@ -212,20 +242,4 @@ BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
 } // namespace geos.operation.buffer
 } // namespace geos.operation
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.52  2006/05/04 15:49:39  strk
- * updated all Geometry::getDimension() methods to return Dimension::DimensionType (closes bug#93)
- *
- * Revision 1.51  2006/05/03 10:26:56  strk
- * Fixed misuse of precision model in noder (bufferFixedPrecision)
- *
- * Revision 1.50  2006/03/23 09:17:19  strk
- * precision.h header split, minor optimizations
- *
- * Revision 1.49  2006/03/15 18:56:30  strk
- * Temporary hack to avoid snapround:: Noders (still using ScaledNoder wrapper)
- * to allow for buffer_snapround.xml test to succeed
- **********************************************************************/
 
