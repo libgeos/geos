@@ -81,7 +81,7 @@ SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
 	$(srcdir)/tests/hole_red.xml \
 	$(srcdir)/tests/safe/16595.xml \
 	$(srcdir)/tests/safe/16596.xml \
-	$(srcdir)/tests/safe/buffer-1.01.xml
+	$(srcdir)/tests/safe/TestBufferJagged.xml
 
 INVALID_OUTPUT_XMLTESTS = 
 
