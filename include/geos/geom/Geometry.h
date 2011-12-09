@@ -876,6 +876,14 @@ std::string geosversion();
  */
 std::string jtsport();
 
+// We use this instead of std::pair<auto_ptr<Geometry>> because C++11
+// forbids that construct:
+// http://lwg.github.com/issues/lwg-closed.html#2068
+struct GeomPtrPair {
+	typedef std::auto_ptr<Geometry> GeomPtr;
+	GeomPtr first;
+	GeomPtr second;
+};
 
 } // namespace geos::geom
 } // namespace geos

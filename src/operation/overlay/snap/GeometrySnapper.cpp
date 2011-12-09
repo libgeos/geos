@@ -193,7 +193,7 @@ void
 GeometrySnapper::snap(const geom::Geometry& g0,
                       const geom::Geometry& g1,
                       double snapTolerance,
-                      GeometrySnapper::GeomPtrPair& snapGeom)
+                      geom::GeomPtrPair& snapGeom)
 {
 	GeometrySnapper snapper0(g0);
 	snapGeom.first = snapper0.snapTo(g1, snapTolerance);
