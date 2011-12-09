@@ -33,6 +33,7 @@
 namespace geos {
 	namespace geom {
 		class Geometry;
+		struct GeomPtrPair;
 	}
 }
 
@@ -106,12 +107,11 @@ private:
 
 	void computeSnapTolerance();
 
-	typedef std::pair<GeomPtr, GeomPtr> GeomPtrPair;
-
-	void snap(GeomPtrPair& ret);
+	void snap(geom::GeomPtrPair& ret);
 
 	void removeCommonBits(const geom::Geometry& geom0,
-	                      const geom::Geometry& geom1, GeomPtrPair& ret);
+	                      const geom::Geometry& geom1,
+	                      geom::GeomPtrPair& ret);
 
 	// re-adds common bits to the given geom
 	void prepareResult(geom::Geometry& geom);

@@ -51,7 +51,7 @@ SnapOverlayOp::computeSnapTolerance()
 auto_ptr<Geometry>
 SnapOverlayOp::getResultGeometry(OverlayOp::OpCode opCode)
 {
-	GeomPtrPair prepGeom;
+	geom::GeomPtrPair prepGeom;
 	snap(prepGeom);
 	GeomPtr result ( OverlayOp::overlayOp(prepGeom.first.get(),
 	                                      prepGeom.second.get(), opCode) );
@@ -61,9 +61,9 @@ SnapOverlayOp::getResultGeometry(OverlayOp::OpCode opCode)
 
 /* private */
 void
-SnapOverlayOp::snap(SnapOverlayOp::GeomPtrPair& snapGeom)
+SnapOverlayOp::snap(geom::GeomPtrPair& snapGeom)
 {
-	GeomPtrPair remGeom;
+	geom::GeomPtrPair remGeom;
 	removeCommonBits(geom0, geom1, remGeom);
 
 	GeometrySnapper::snap(*remGeom.first, *remGeom.second,
@@ -85,7 +85,7 @@ SnapOverlayOp::snap(SnapOverlayOp::GeomPtrPair& snapGeom)
 void
 SnapOverlayOp::removeCommonBits(const geom::Geometry& geom0,
                                 const geom::Geometry& geom1,
-				SnapOverlayOp::GeomPtrPair& remGeom)
+				geom::GeomPtrPair& remGeom)
 {
 	cbr.reset(new precision::CommonBitsRemover());
 	cbr->add(&geom0);

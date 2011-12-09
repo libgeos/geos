@@ -31,6 +31,7 @@ namespace geos {
 		//class PrecisionModel;
 		class Geometry;
 		class CoordinateSequence;
+		struct GeomPtrPair;
 	}
 }
 
@@ -59,7 +60,6 @@ class GEOS_DLL GeometrySnapper {
 public:
 
 	typedef std::auto_ptr<geom::Geometry> GeomPtr;
-	typedef std::pair<GeomPtr, GeomPtr> GeomPtrPair;
 
 	/**
 	 * Snaps two geometries together with a given tolerance.
@@ -72,7 +72,7 @@ public:
 	 */
 	static void snap(const geom::Geometry& g0,
 	                        const geom::Geometry& g1,
-	                        double snapTolerance, GeomPtrPair& ret);
+	                        double snapTolerance, geom::GeomPtrPair& ret);
 
 	static GeomPtr snapToSelf(const geom::Geometry& g0,
 	                        double snapTolerance, bool cleanResult);
