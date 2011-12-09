@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/union/CascadedPolygonUnion.java r320 (JTS-1.12)
+ * Last port: operation/union/CascadedPolygonUnion.java r487 (JTS-1.12+)
  *
  **********************************************************************/
 
@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <memory>
 
 #include "GeometryListHolder.h"
 
@@ -80,6 +81,22 @@ private:
      * this produces 2x2 "squares").
      */
     static int const STRTREE_NODE_CAPACITY = 4;
+
+    /**
+     * Computes a {@link Geometry} containing only {@link Polygonal} components.
+     *
+     * Extracts the {@link Polygon}s from the input
+     * and returns them as an appropriate {@link Polygonal} geometry.
+     * 
+     * If the input is already <tt>Polygonal</tt>, it is returned unchanged.
+     *
+     * A particular use case is to filter out non-polygonal components
+     * returned from an overlay operation.
+     *
+     * @param g the geometry to filter
+     * @return a Polygonal geometry
+     */
+    static std::auto_ptr<geom::Geometry> restrictToPolygons(std::auto_ptr<geom::Geometry> g);
 
 public:
     CascadedPolygonUnion();
@@ -154,9 +171,9 @@ private:
      * Unions a section of a list using a recursive binary union on each half
      * of the section.
      * 
-     * @param geoms
-     * @param start
-     * @param end
+     * @param geoms the list of geometries containing the section to union
+     * @param start the start index of the section
+     * @param end the index after the end of the section
      * @return the union of the list section
      */
     geom::Geometry* binaryUnion(GeometryListHolder* geoms, std::size_t start, 
@@ -185,7 +202,10 @@ private:
     geom::Geometry* unionOptimized(geom::Geometry* g0, geom::Geometry* g1);
 
     /**
-     * Unions two polygonal geometries.
+     * \brief
+     * Unions two polygonal geometries, restricting computation
+     * to the envelope intersection where possible.
+     *
      * The case of MultiPolygons is optimized to union only 
      * the polygons which lie in the intersection of the two geometry's
      * envelopes.
