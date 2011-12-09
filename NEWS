@@ -2,7 +2,7 @@ Changes in 3.3.2
 YYYY-MM-DD
 
 - Bug fixes / improvements
-    - Fixed CMAKE_CXX_FLAGS overridind -std=gnu++0x (#489)
+    - Fix CMAKE_CXX_FLAGS overriding -std=gnu++0x (#489)
     - Missing versions update in CMake configuration (#490)
     - Fix noding of self-intersecting lines through UnaryUnion (#482)
     - Fix handling of collapsed edges skipping in BufferOp (#494)
