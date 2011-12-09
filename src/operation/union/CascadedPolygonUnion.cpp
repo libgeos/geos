@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/union/CascadedPolygonUnion.java r320 (JTS-1.12)
+ * Last port: operation/union/CascadedPolygonUnion.java r487 (JTS-1.12+)
  *
  **********************************************************************/
 
@@ -24,6 +24,7 @@
 #include <geos/geom/Polygon.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/util/GeometryCombiner.h>
+#include <geos/geom/util/PolygonExtracter.h>
 #include <geos/index/strtree/STRtree.h>
 // std
 #include <cassert>
@@ -212,7 +213,36 @@ CascadedPolygonUnion::extractByEnvelope(geom::Envelope const& env,
 geom::Geometry* 
 CascadedPolygonUnion::unionActual(geom::Geometry* g0, geom::Geometry* g1)
 {
-    return g0->Union(g1);
+    return restrictToPolygons(std::auto_ptr<geom::Geometry>(g0->Union(g1))).release();
+}
+
+std::auto_ptr<geom::Geometry>
+CascadedPolygonUnion::restrictToPolygons(std::auto_ptr<geom::Geometry> g)
+{
+    using namespace geom;
+    using namespace std;
+
+    if ( dynamic_cast<Polygonal*>(g.get()) ) {
+      return g;
+    }
+
+    Polygon::ConstVect polygons;
+    util::PolygonExtracter::getPolygons(*g, polygons);
+
+    if (polygons.size() == 1)
+      return std::auto_ptr<Geometry>(polygons[0]->clone());
+
+    typedef vector<Geometry *> GeomVect;
+
+    Polygon::ConstVect::size_type n = polygons.size();
+    GeomVect* newpolys = new GeomVect(n);
+    for (Polygon::ConstVect::size_type i=0; i<n; ++i) {
+        (*newpolys)[i] = polygons[i]->clone();
+    }
+    return auto_ptr<Geometry>(
+      g->getFactory()->createMultiPolygon(newpolys)
+    );
+
 }
 
 } // namespace geos.operation.union

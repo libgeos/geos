@@ -9,6 +9,7 @@ YYYY-MM-DD
     - Print up to 18 digits of precision for TopologyException points
     - Fix noding with reduced precision in Buffer operation (#473)
     - Fix HotPixel original point invalidation (#498)
+    - Fix CascadedPolygonUnion to discard non-polygonal components (#499)
 
 Changes in 3.3.1
 2011-09-27
