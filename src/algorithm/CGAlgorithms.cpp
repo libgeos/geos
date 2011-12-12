@@ -307,18 +307,20 @@ CGAlgorithms::signedArea(const CoordinateSequence* ring)
 
 	if (npts<3) return 0.0;
 
+	Coordinate pp;
+	Coordinate cp = ring->getAt(0);
+	Coordinate np = ring->getAt(1);
+	double x0 = cp.x;
+        np.x -= x0;
 	double sum=0.0;
-	Coordinate p = ring->getAt(0);
-	double bx = p.x;
-	double by = p.y;
 	for (size_t i=1; i<npts; ++i)
 	{
-		ring->getAt(i, p);
-		double cx = p.x;
-		double cy = p.y;
-		sum += (bx+cx) * (cy-by);
-		bx = cx;
-		by = cy;
+		pp.y = cp.y;
+		cp.x = np.x;
+		cp.y = np.y;
+		ring->getAt(i, np);
+                np.x -= x0;
+		sum += cp.x * (np.y - pp.y);
 	}
 	return -sum/2.0;
 }

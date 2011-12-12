@@ -13,6 +13,7 @@ YYYY-MM-DD
     - Improve buffer robustness by reverting to non-snaprounding noder (#495)
     - Fix C++11 build by avoiding std::pair<auto_ptr> (#491)
     - Add --clibs to geos-config and GEOS_C_LIBS to geos.m4 (#497)
+    - Apply shoelace formula for area calculation (#485)
 
 Changes in 3.3.1
 2011-09-27
