@@ -28,8 +28,6 @@ namespace geos {
 namespace operation { // geos.operation
 namespace overlay { // geos.operation.overlay
 
-static const OverlayNodeFactory onf;
-
 Node*
 OverlayNodeFactory::createNode(const geom::Coordinate &coord) const
 {
@@ -39,6 +37,7 @@ OverlayNodeFactory::createNode(const geom::Coordinate &coord) const
 const NodeFactory &
 OverlayNodeFactory::instance() 
 {
+  static OverlayNodeFactory onf;
 	return onf;
 }
 
