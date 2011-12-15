@@ -343,8 +343,8 @@ struct overlayOp {
         {}
 
         geom::Geometry* operator() (const geom::Geometry* g0,
-			const geom::Geometry* g1)
-	{
+                                    const geom::Geometry* g1)
+        {
                 return OverlayOp::overlayOp(g0, g1, opCode);
         }
 
