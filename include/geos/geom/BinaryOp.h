@@ -194,8 +194,8 @@ SnapOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 	const Geometry& operand0 = *rG0;
 	const Geometry& operand1 = *rG1;
 #else // don't CBR before snapping
-	const Geometry& operand0 = *g0
-	const Geometry& operand1 = *g1
+	const Geometry& operand0 = *g0;
+	const Geometry& operand1 = *g1;
 #endif
 
 
