@@ -69,6 +69,7 @@
 #ifdef GEOS_DEBUG_BINARYOP
 # include <iostream>
 # include <iomanip>
+# include <sstream>
 #endif
 
 
@@ -151,6 +152,37 @@ check_valid(const Geometry& g, const std::string& label)
 	return true;
 }
 
+/* A single component may become a multi component */
+inline std::auto_ptr<Geometry>
+fix_snap_collapses(std::auto_ptr<Geometry> g, const std::string& label)
+{
+
+  // Areal geometries may become self-intersecting on snapping
+  if ( g->getGeometryTypeId() == GEOS_POLYGON ||
+       g->getGeometryTypeId() == GEOS_MULTIPOLYGON )
+  {
+
+    // TODO: use only ConsistentAreaTester
+    if ( ! check_valid(*g, label) ) {
+#if GEOS_DEBUG_BINARYOP
+      std::cerr << label << ": self-unioning" << std::endl;
+#endif
+      g = g->Union();
+#if GEOS_DEBUG_BINARYOP
+      std::stringstream ss;
+      ss << label << " self-unioned";
+      check_valid(*g, ss.str());
+#endif
+    }
+
+  }
+
+  // TODO: check linear collapses ? (!isSimple)
+
+  return g;
+}
+
+
 /// \brief
 /// Apply a binary operation to the given geometries
 /// after snapping them to each other after common-bits
@@ -202,15 +234,13 @@ SnapOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 
 	GeometrySnapper snapper0( operand0 );
 	GeomPtr snapG0( snapper0.snapTo(operand1, snapTolerance) );
+	snapG0 = fix_snap_collapses(snapG0, "SNAP: snapped geom 0");
 
 	// NOTE: second geom is snapped on the snapped first one
 	GeometrySnapper snapper1( operand1 );
 	GeomPtr snapG1( snapper1.snapTo(*snapG0, snapTolerance) );
+	snapG1 = fix_snap_collapses(snapG1, "SNAP: snapped geom 1");
 
-#if GEOS_DEBUG_BINARYOP
-	check_valid(*snapG0, "SNAP: snapped geom 0");
-	check_valid(*snapG1, "SNAP: snapped geom 1");
-#endif
 
 	// Run the binary op
 	GeomPtr result( _Op(snapG0.get(), snapG1.get()) );

@@ -15,6 +15,7 @@ YYYY-MM-DD
     - Add --clibs to geos-config and GEOS_C_LIBS to geos.m4 (#497)
     - Apply shoelace formula for area calculation (#485)
     - Fix default initialization issue for clang (#500)
+    - Improve overlay robustness by fixing areal validity on snapping (#488)
 
 Changes in 3.3.1
 2011-09-27
