@@ -64,6 +64,10 @@ LineStringSnapper::snapVertices(geom::CoordinateList& srcCoords,
 {
   if ( srcCoords.empty() ) return;
 
+#if GEOS_DEBUG
+cerr << "Snapping vertices of: " << srcCoords << endl;
+#endif
+
 	using geom::CoordinateList;
 
 	geom::Coordinate::ConstVect::const_iterator not_found = snapPts.end();
@@ -86,7 +90,7 @@ cerr << "Checking for a snap for source coordinate " << srcPt << endl;
 		if ( found == not_found )
 		{	// no snaps found (or no need to snap)
 #if GEOS_DEBUG
-cerr << "No snap found" << endl;
+cerr << " no snap found" << endl;
 #endif
 			continue;
 		}
@@ -95,14 +99,14 @@ cerr << "No snap found" << endl;
 		const Coordinate& snapPt = *(*found);
 		
 #if GEOS_DEBUG
-cerr << "Found snap point " << snapPt << endl;
+cerr << " found snap point " << snapPt << endl;
 #endif
 
 		// update src with snap pt
 		*it = snapPt;
 
 #if GEOS_DEBUG
-cerr << "Source point became " << srcPt << endl;
+cerr << " source point became " << srcPt << endl;
 #endif
 
 		// keep final closing point in synch (rings only)
@@ -129,10 +133,6 @@ LineStringSnapper::findSnapForVertex(const Coordinate& pt,
 		assert(*it);
 		const Coordinate& snapPt = *(*it);
 
-#if GEOS_DEBUG
-cerr << " misuring distance between snap point " << snapPt << " and source point " << pt << endl;
-#endif
-
 		// shouldn't we look for *all* segments to be snapped rather then a single one?
 		if ( snapPt.equals2D(pt) )
 		{
@@ -144,17 +144,21 @@ cerr << " points are equal, returning not-found " << endl;
 		}
 
 		double dist = snapPt.distance(pt);
+#if GEOS_DEBUG
+cerr << " distance from snap point " << snapPt << ": " << dist << endl;
+#endif
+
 		if ( dist < snapTolerance )
 		{
 #if GEOS_DEBUG
-cerr << " points are within distance (" << dist << ") returning iterator to snap point" << endl;
+cerr << " snap point within tolerance, returning iterator to it" << endl;
 #endif
 			return it;
 		}
 	}
 
 #if GEOS_DEBUG
-cerr << " No snap point within distance, returning not-found" << endl;
+cerr << " no snap point within distance, returning not-found" << endl;
 #endif
 
 	return end;
@@ -167,12 +171,12 @@ LineStringSnapper::snapSegments(geom::CoordinateList& srcCoords,
 			const geom::Coordinate::ConstVect& snapPts)
 {
 
-#if GEOS_DEBUG
-cerr << " Snapping segment from: " << srcCoords << endl;
-#endif
-
   // nothing to do if there are no source coords..
   if ( srcCoords.empty() ) return;
+
+#if GEOS_DEBUG
+cerr << "Snapping segments of: " << srcCoords << endl;
+#endif
 
 	for ( Coordinate::ConstVect::const_iterator
 			it=snapPts.begin(), end=snapPts.end();
@@ -234,7 +238,7 @@ LineStringSnapper::findSegmentToSnap(
 		seg.p1 = *to;
 
 #if GEOS_DEBUG
-cerr << " Checking segment " << seg << " for snapping against point " << snapPt << endl;
+cerr << " Checking segment " << seg << endl;
 #endif
 
 		/**                                                                              * Check if the snap pt is equal to one of
@@ -247,28 +251,45 @@ cerr << " Checking segment " << seg << " for snapping against point " << snapPt 
 		if ( seg.p0.equals2D(snapPt) || seg.p1.equals2D(snapPt) )
 		{
 
-#if GEOS_DEBUG
-cerr << " One of segment endpoints equal snap point, returning too_far" << endl;
-#endif
 			if (allowSnappingToSourceVertices) {
+#if GEOS_DEBUG
+cerr << "   snap point matches a segment endpoint, checking next segment"
+     << endl;
+#endif
 				continue;
 			} else {
+#if GEOS_DEBUG
+cerr << "   snap point matches a segment endpoint, giving up seek" << endl;
+#endif
 				return too_far;
 			}
 		}
 
 		double dist = seg.distance(snapPt);
+		if ( dist < snapTolerance ) {
+      if ( dist < minDist ) {
 #if GEOS_DEBUG
-cerr << " dist=" << dist << " minDist=" << minDist << " snapTolerance=" << snapTolerance << endl;
+cerr << "   snap point distance " << dist << " within tolerance "
+     << snapTolerance << " and closer than previous candidate " << minDist
+     << endl;
 #endif
-		if ( dist < minDist && dist < snapTolerance )
-		{
+        match = from;
+        minDist = dist;
+      }
 #if GEOS_DEBUG
-cerr << " Segment/snapPt distance within tolerance and closer then previous match (" << dist << ") " << endl;
+      else {
+cerr << "   snap point distance " << dist << " within tolerance "
+     << snapTolerance << " but not closer than previous candidate " << minDist
+     << endl;
+      }
 #endif
-			match = from;
-			minDist = dist;
-		}
+    }
+#if GEOS_DEBUG
+    else {
+cerr << "   snap point distance " << dist << " bigger than tolerance "
+     << snapTolerance << endl;
+    }
+#endif
 	}
 
 	return match;
