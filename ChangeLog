@@ -1,3 +1,194 @@
+2012-01-05 16:56  Sandro Santilli <strk@keybit.net>
+
+	* [r3556] NEWS, configure.in: Prepare for 3.3.2 release
+
+2011-12-16 14:12  Sandro Santilli <strk@keybit.net>
+
+	* [r3554] src/operation/overlay/snap/LineStringSnapper.cpp: Make
+	  debugging output of LineStringSnapper more readable
+
+2011-12-15 14:18  Sandro Santilli <strk@keybit.net>
+
+	* [r3552] NEWS, include/geos/geom/BinaryOp.h,
+	  tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/ticket/bug488.xml: Check validity after
+	  snapping in BinaryOp. Fixes bug #488
+	  
+	  Adds regression test. This is a GEOS-only approach.
+
+2011-12-15 11:35  Sandro Santilli <strk@keybit.net>
+
+	* [r3551] include/geos/operation/overlay/OverlayOp.h: indent
+
+2011-12-15 10:58  Sandro Santilli <strk@keybit.net>
+
+	* [r3549] include/geos/geom/BinaryOp.h: Fix build with
+	  CBR_BEFORE_SNAPPING undefined
+
+2011-12-12 15:11  Howard Butler <hobu.inc@gmail.com>
+
+	* [r3547] NEWS: a note about #500 fix
+
+2011-12-12 15:04  Howard Butler <hobu.inc@gmail.com>
+
+	* [r3545] src/operation/overlay/OverlayNodeFactory.cpp: apply patch
+	  for #500 to fix clang's complaint about a missing default
+	  initialization
+
+2011-12-12 10:09  Sandro Santilli <strk@keybit.net>
+
+	* [r3543] NEWS, src/algorithm/CGAlgorithms.cpp: Apply Shoelace
+	  formula for area calculation (#485)
+
+2011-12-12 09:57  Sandro Santilli <strk@keybit.net>
+
+	* [r3541] NEWS, macros/geos.m4, tools/geos-config.in: Add --clibs
+	  to geos-config and GEOS_C_LIBS to geos.m4 (#497)
+
+2011-12-09 10:46  Sandro Santilli <strk@keybit.net>
+
+	* [r3539] NEWS: typo
+
+2011-12-09 10:44  Sandro Santilli <strk@keybit.net>
+
+	* [r3538] NEWS, include/geos/geom/Geometry.h,
+	  include/geos/operation/overlay/snap/GeometrySnapper.h,
+	  include/geos/operation/overlay/snap/SnapOverlayOp.h,
+	  src/operation/overlay/snap/GeometrySnapper.cpp,
+	  src/operation/overlay/snap/SnapOverlayOp.cpp: Fix C++11 build by
+	  avoiding std::pair<auto_ptr> (#491)
+
+2011-12-09 10:12  Sandro Santilli <strk@keybit.net>
+
+	* [r3537] NEWS, src/operation/buffer/BufferOp.cpp,
+	  tests/unit/operation/buffer/BufferOpTest.cpp,
+	  tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/safe/TestBufferJagged.xml,
+	  tests/xmltester/tests/safe/buffer-1.01.xml: Improve buffer
+	  robustness by reverting to non snaprounding noder
+	  
+	  This commit fixes all cases reported in
+	  http://trac.osgeo.org/geos/wiki/BufferRobustness
+	  They include #495 and #494
+
+2011-12-09 08:47  Sandro Santilli <strk@keybit.net>
+
+	* [r3533] tests/xmltester/tests/general/TestUnaryUnionFloating.xml:
+	  Oops, forgot this one in previous commit
+
+2011-12-09 08:46  Sandro Santilli <strk@keybit.net>
+
+	* [r3532] NEWS,
+	  include/geos/operation/union/CascadedPolygonUnion.h,
+	  src/operation/union/CascadedPolygonUnion.cpp,
+	  tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/general/TestUnaryUnion.xml: Fix
+	  CascadedPolygonUnion to discard non-polygonal components created
+	  during unioning
+	  
+	  This is to avoid failures and provide more desirable behaviour.
+	  Includes automated testing. Closes ticket #499.
+
+2011-12-09 08:46  Sandro Santilli <strk@keybit.net>
+
+	* [r3531] tests/xmltester/XMLTester.cpp: Allow XML tests not to
+	  specify a precision model, defaulting to floating
+	  
+	  This allows running some JTS tests w/out touching them
+
+2011-12-06 17:26  Sandro Santilli <strk@keybit.net>
+
+	* [r3527] NEWS, include/geos/noding/snapround/HotPixel.h,
+	  src/noding/snapround/HotPixel.cpp, tests/unit/Makefile.am,
+	  tests/unit/noding/snapround,
+	  tests/unit/noding/snapround/HotPixelTest.cpp: HotPixel: do not
+	  invalidate reference to original point. Fixes #498.
+
+2011-12-02 09:44  Sandro Santilli <strk@keybit.net>
+
+	* [r3526] tests/xmltester/tests/safe/buffer-1.01.xml: Add
+	  <resultMatcher> tag to make the test runnable with JTS
+
+2011-11-30 09:49  Sandro Santilli <strk@keybit.net>
+
+	* [r3524] NEWS, include/geos/noding/snapround/MCIndexSnapRounder.h,
+	  src/noding/snapround/MCIndexSnapRounder.cpp,
+	  tests/unit/operation/buffer/BufferOpTest.cpp: Fix
+	  MCIndexSnapRounder use of provided precision model.
+	  
+	  Fixes bug #473 (RightmostEdgeFinder assertion failure).
+	  Includes regression test.
+
+2011-11-29 14:01  Sandro Santilli <strk@keybit.net>
+
+	* [r3521] NEWS, src/geom/Coordinate.cpp: Use 18 significant digits
+	  for TopologyException point coordinates
+
+2011-11-28 08:40  Sandro Santilli <strk@keybit.net>
+
+	* [r3519] NEWS, src/operation/buffer/BufferBuilder.cpp,
+	  tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/safe/buffer-1.01.xml: BufferBuilder: fix
+	  handling of collapsed edges skipping. Fixes #494.
+	  
+	  Includes regression test, provided by SAFE.
+
+2011-11-04 20:52  Sandro Santilli <strk@keybit.net>
+
+	* [r3516] tests/unit/capi/GEOSisValidDetailTest.cpp: Allow any case
+	  in NaN for testcase purposes (#486)
+
+2011-11-04 17:45  Sandro Santilli <strk@keybit.net>
+
+	* [r3513] NEWS, src/operation/union/UnaryUnionOp.cpp,
+	  tests/unit/operation/union/UnaryUnionOpTest.cpp,
+	  tests/xmltester/tests/general/TestUnaryUnion.xml: Fix noding of
+	  self-intersecting lines through UnaryUnion (#482)
+	  
+	  Includes updated tests from JTS
+
+2011-11-04 15:00  Sandro Santilli <strk@keybit.net>
+
+	* [r3512] src/index/sweepline/SweepLineIndex.cpp: Fix
+	  initialization order
+
+2011-10-26 16:08  Sandro Santilli <strk@keybit.net>
+
+	* [r3507] tests/unit/Makefile.am,
+	  tests/unit/operation/buffer/BufferParametersTest.cpp: Add test
+	  for BufferParameters class
+
+2011-10-26 14:29  Sandro Santilli <strk@keybit.net>
+
+	* [r3506] NEWS: Add changes introduced by last commit
+
+2011-10-19 00:47  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3503] CMakeLists.txt: ported from trunk: Fixed CMAKE_CXX_FLAGS
+	  overridind -std=gnu++0x (#489)
+
+2011-10-18 22:08  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3500] CMakeLists.txt: Missing versions update in CMake
+	  configuration (#490)
+
+2011-10-04 16:18  Sandro Santilli <strk@keybit.net>
+
+	* [r3496] NEWS: Add missing CAPI additions of 3.3.0 to NEWS file
+
+2011-09-27 16:02  Sandro Santilli <strk@keybit.net>
+
+	* [r3490] NEWS: Prepare slot for 3.3.2 news
+
+2011-09-27 15:41  Sandro Santilli <strk@keybit.net>
+
+	* [r3489] configure.in: Bump versions up for next (3.3.2) release
+
+2011-09-27 15:34  Sandro Santilli <strk@keybit.net>
+
+	* [r3487] ChangeLog, NEWS, configure.in: Set version to 3.3.1
+	  final, update ChangeLog and set release date in NEWS
+
 2011-09-27 12:41  Sandro Santilli <strk@keybit.net>
 
 	* [r3486] NEWS: Merge items
