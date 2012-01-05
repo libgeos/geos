@@ -1,5 +1,5 @@
 Changes in 3.3.2
-YYYY-MM-DD
+2012-01-05
 
 - Bug fixes / improvements
     - Fix CMAKE_CXX_FLAGS overriding -std=gnu++0x (#489)
