@@ -1,3 +1,9 @@
+Changes in 3.3.3
+2012-??-??
+
+- Bug fixes / improvements
+    - Fix MSVC compilation of ambiguous log() call #506
+
 Changes in 3.3.2
 2012-01-05
 
