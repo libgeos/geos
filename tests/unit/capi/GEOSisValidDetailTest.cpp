@@ -5,6 +5,7 @@
 // geos
 #include <geos_c.h>
 // std
+#include <cctype>
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
@@ -53,10 +54,13 @@ namespace tut
           return ret;
         }
 
-	void strToUpper(std::string &str)
+        void strToUpper(std::string &str)
         {
-          for(size_t i = 0, len = str.size(); i < len; ++i)
-            str[i] = std::toupper(str[i]);
+            using std::toupper;
+            using std::string;
+            
+            for(string::size_type i = 0, len = str.size(); i < len; ++i)
+                str[i] = static_cast<string::value_type>(toupper(str[i]));
         }
 
         ~test_capiisvaliddetail_data()
