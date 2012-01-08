@@ -156,11 +156,6 @@ endif()
 # Setup C/C++ library features
 #################################################################################
 
-include(TestForSTDNamespace)
-if (CMAKE_NO_STD_NAMESPACE)
-  message(FATAL_ERROR "Detected compiler does not support std namespace on STL classes")
-endif()
-
 # check header files
 include(CheckIncludeFiles)
 
