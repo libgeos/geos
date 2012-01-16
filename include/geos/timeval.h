@@ -10,6 +10,9 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ * Note: This code is in the public domain, see 
+ *       http://wyw.dcweb.cn/time.htm
+ *
  **********************************************************************/
 
 #ifndef GEOS_TIMEVAL_H
