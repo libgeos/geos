@@ -49,7 +49,7 @@ void usage()
         << "  " << module << " geos::geom::Envelope\n"
         << "  " << module << " geos::geom::Envelope 2\n"
         << endl
-        << "GEOS homepage: http://geos.refractions.net" << endl;
+        << "GEOS homepage: http://geos.osgeo.org" << endl;
 }
 
 int main(int argc, const char* argv[])

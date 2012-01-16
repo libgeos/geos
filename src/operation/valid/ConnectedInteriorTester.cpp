@@ -1,7 +1,7 @@
 /**********************************************************************
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.refractions.net
+ * http://geos.osgeo.org
  *
  * Copyright (C) 2007-2010 Safe Software Inc.
  * Copyright (C) 2005-2006 Refractions Research Inc.

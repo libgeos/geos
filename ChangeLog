@@ -11066,7 +11066,7 @@
 	* [r1801] ChangeLog, capi/geos_c.cpp, capi/geos_c.h.in,
 	  capi/geos_c.h.vc: Added equalsExact and normalize to the c api as
 	  discussed on the mailing list
-	  (http://geos.refractions.net/pipermail/geos-devel/2006-July/002452.html).
+	  (http://geos.osgeo.org/pipermail/geos-devel/2006-July/002452.html).
 
 2006-08-03 21:34  Charlie Savage <cfis@savagexi.com>
 
@@ -11168,7 +11168,7 @@
 2006-07-21 19:37  Charlie Savage <cfis@savagexi.com>
 
 	* [r1773] NEWS: Added note about inclusion of version.in.vc. See
-	  http://geos.refractions.net/pipermail/geos-devel/2006-July/002463.html
+	  http://geos.osgeo.org/pipermail/geos-devel/2006-July/002463.html
 	  for more info.
 
 2006-07-21 17:59  Sandro Santilli <strk@keybit.net>

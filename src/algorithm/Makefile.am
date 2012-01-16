@@ -32,7 +32,7 @@ libalgorithm_la_SOURCES = \
     SIRtreePointInRing.cpp 
 
 # Deprecated files
-# (http://geos.refractions.net/pipermail/geos-devel/2006-March/001828.html):
+# (http://geos.osgeo.org/pipermail/geos-devel/2006-March/001828.html):
 #NonRobustLineIntersector.cpp
 #RobustLineIntersector.cpp
 

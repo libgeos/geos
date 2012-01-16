@@ -1,7 +1,7 @@
 /**********************************************************************
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.refractions.net
+ * http://geos.osgeo.org
  *
  * Copyright (c) Olivier Devillers <Olivier.Devillers@sophia.inria.fr>
  * Copyright (C) 2006 Refractions Research Inc.

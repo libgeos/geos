@@ -1,7 +1,7 @@
 /**********************************************************************
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.refractions.net
+ * http://geos.osgeo.org
  *
  * Copyright (C) 2009   Ragi Y. Burhum <ragi@burhum.com>
  *
