@@ -12,6 +12,9 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ * Licensed open source here: http://spatialhash.codeplex.com/
+ * License: http://spatialhash.codeplex.com/license
+ *
  **********************************************************************
  *
  * Last port: algorithm/RobustDeterminant.java 1.15 (JTS-1.10)
