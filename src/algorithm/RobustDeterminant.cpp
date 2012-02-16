@@ -4,14 +4,29 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (c) Olivier Devillers <Olivier.Devillers@sophia.inria.fr>
- * Copyright (C) 2006 Refractions Research Inc.
+ * Copyright (c) 1995 Olivier Devillers <Olivier.Devillers@sophia.inria.fr>
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
+ *
+ **********************************************************************
+ *
+ * RobustDeterminant implements an algorithm to compute the
+ * sign of a 2x2 determinant for double precision values robustly.
+ * It is a direct translation of code developed by Olivier Devillers.
+ *
+ * The original code carries the following copyright notice:
+ *
+ * Author : Olivier Devillers
+ * Olivier.Devillers@sophia.inria.fr
+ * http:/www.inria.fr:/prisme/personnel/devillers/anglais/determinant.html
+ *
+ * Olivier Devillers has allowed the code to be distributed under
+ * the LGPL (2012-02-16) saying "It is ok for LGPL distribution."
  *
  **********************************************************************
  *
