@@ -2,6 +2,7 @@ Changes in 3.3.3
 2012-??-??
 
 - Bug fixes / improvements
+    - Fix simplification of collections with empty items (#519)
     - Fix MSVC compilation of ambiguous log() call (#506)
     - Fix CMake issues with std:: namespace detection (#493)
 
