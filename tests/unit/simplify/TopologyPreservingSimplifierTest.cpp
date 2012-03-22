@@ -5,6 +5,7 @@
 #include <utility.h>
 // geos
 #include <geos/io/WKTReader.h>
+#include <geos/io/WKTWriter.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
@@ -28,12 +29,15 @@ namespace tut
 		geos::geom::PrecisionModel pm;
 		geos::geom::GeometryFactory gf;
 		geos::io::WKTReader wktreader;
+		geos::io::WKTWriter wktwriter;
 
 		typedef geos::geom::Geometry::AutoPtr GeomPtr;
 
 		test_tpsimp_data()
-            : pm(1.0), gf(&pm), wktreader(&gf)
-		{}
+            : pm(1.0), gf(&pm), wktreader(&gf), wktwriter()
+		{
+			//wktwriter.setTrim(1);
+		}
 	};
 
 	typedef test_group<test_tpsimp_data> group;
@@ -206,6 +210,23 @@ namespace tut
 
 		ensure( "Simplified geometry is invalid!", simplified->isValid() );
         ensure_equals_geometry(g.get(), simplified.get() );
+    }
+
+    // GeometryCollection with empty elements
+    // See http://trac.osgeo.org/geos/ticket/519
+    template<>
+    template<>
+    void object::test<11>()
+    {
+        std::string wkt("GEOMETRYCOLLECTION ( \
+                    LINESTRING (0 0, 10 0), POLYGON EMPTY)");
+
+        GeomPtr g(wktreader.read(wkt));
+        GeomPtr simp= TopologyPreservingSimplifier::simplify(g.get(), 1);
+
+        ensure( "Simplified geometry is invalid!", simp->isValid() );
+	ensure_equals(wktwriter.write(simp.get()),
+		"GEOMETRYCOLLECTION (LINESTRING (0 0, 10 0))");
     }
 } // namespace tut
 

@@ -78,16 +78,21 @@ TaggedLineString::init()
 	     << endl;
 #endif
 
-	segs.reserve(pts->size()-1);
-
-	for (std::size_t i=0, n=pts->size()-1; i<n; i++)
+	if ( pts->size() )
 	{
-		TaggedLineSegment* seg = new TaggedLineSegment(
-				pts->getAt(i),
-				pts->getAt(i+1),
-				parentLine, i);
 
-		segs.push_back(seg);
+		segs.reserve(pts->size()-1);
+
+		for (std::size_t i=0, n=pts->size()-1; i<n; i++)
+		{
+			TaggedLineSegment* seg = new TaggedLineSegment(
+					pts->getAt(i),
+					pts->getAt(i+1),
+					parentLine, i);
+
+			segs.push_back(seg);
+		}
+
 	}
 
 #if GEOS_DEBUG
@@ -156,17 +161,17 @@ TaggedLineString::extractCoordinates(
 
 	std::size_t i=0, size=segs.size();
 
-	assert(size);
+	if ( size ) {
+		for (; i<size; i++)
+		{
+			TaggedLineSegment* seg = segs[i];
+			assert(seg);
+			pts->push_back(seg->p0);
+		}
 
-	for (; i<size; i++)
-	{
-		TaggedLineSegment* seg = segs[i];
-		assert(seg);
-		pts->push_back(seg->p0);
+		// add last point
+		pts->push_back(segs[size-1]->p1);
 	}
-
-	// add last point
-	pts->push_back(segs[size-1]->p1);
 
 	return pts;
 }
