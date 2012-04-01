@@ -11,15 +11,16 @@
 
 6: Tag the release:
    $ base=http://svn.osgeo.org/geos/
+   $ rev=3.3.PATCH
    $ svn copy -m "Tagged release MAJOR.MINOR.PATCH" \
-		$base/trunk $base/tags/MAJOR.MINOR.PATCH
+		$base/branches/3.3 $base/tags/$rev
 
 7: Export the tag and 'make dist-bzip2'. 
-   $ svn export http://svn.osgeo.org/geos/tags/MAJOR.MINOR.PATCH 
-   $ cd MAJOR.MINOR.PATCH
+   $ svn export http://svn.osgeo.org/geos/tags/$rev
+   $ cd $rev
    $ ./autogen.sh && ./configure && make dist-bzip2
 
-8: Copy the tarball to upload.osgeo.org:/download_data/download/geos
+8: Copy the tarball to upload.osgeo.org:/osgeo/download/geos
 
 9: Increment all the version numbers for the next release, as below.
 
