@@ -1,3 +1,37 @@
+2012-03-22 08:34  Sandro Santilli <strk@keybit.net>
+
+	* [r3574] NEWS, src/simplify/TaggedLineString.cpp,
+	  src/simplify/TaggedLineStringSimplifier.cpp,
+	  tests/unit/simplify/TopologyPreservingSimplifierTest.cpp: Fix
+	  simplification of collections with empty items (#519)
+
+2012-02-16 18:19  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r3572] src/algorithm/RobustDeterminant.cpp: Update provenance
+	  for Olivier Devillers.
+
+2012-01-08 13:46  Sandro Santilli <strk@keybit.net>
+
+	* [r3564] CMakeLists.txt, NEWS,
+	  tests/unit/capi/GEOSisValidDetailTest.cpp: Backports
+	  
+	  Missing <cctype> header for toupper. Fixed Visual C++ warning.
+	  Fixed (hopefully) CMake issues with std:: namespace detection
+	  (Ticket #493)
+
+2012-01-06 21:50  Sandro Santilli <strk@keybit.net>
+
+	* [r3560] NEWS, configure.in: Prepare for 3.3.3
+
+2012-01-06 21:34  Howard Butler <hobu.inc@gmail.com>
+
+	* [r3559] src/operation/buffer/BufferOp.cpp: Fix MSVC compilation
+	  of ambiguous log() call #506
+
+2012-01-05 17:00  Sandro Santilli <strk@keybit.net>
+
+	* [r3557] ChangeLog: Update ChangeLog for the 3.3.2 release
+
 2012-01-05 16:56  Sandro Santilli <strk@keybit.net>
 
 	* [r3556] NEWS, configure.in: Prepare for 3.3.2 release

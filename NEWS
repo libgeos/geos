@@ -1,5 +1,11 @@
-Changes in 3.3.3
+Changes in 3.3.4
 2012-??-??
+
+- Bug fixes / improvements
+    - ???
+
+Changes in 3.3.3
+2012-04-01
 
 - Bug fixes / improvements
     - Fix simplification of collections with empty items (#519)
