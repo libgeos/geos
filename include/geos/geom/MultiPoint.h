@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
@@ -84,7 +85,7 @@ public:
 
 	bool equalsExact(const Geometry *other, double tolerance=0) const;
 
-	Geometry *clone() const { return new MultiPoint(*this); }
+	Geometry *clone() const { return new MultiPoint(*this); };
 
 protected:
 

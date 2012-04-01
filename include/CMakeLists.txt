@@ -1,4 +1,5 @@
 #################################################################################
+# $Id$
 #
 # GEOS C++ library build configuration for CMake build system
 #

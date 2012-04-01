@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2005 Refractions Research Inc.
@@ -63,8 +64,11 @@ EdgeEndBundleStar::insert(EdgeEnd *e)
 	}
 }
 
+/**
+ * Update the IM with the contribution for the EdgeStubs around the node.
+ */
 void
-EdgeEndBundleStar::updateIM(IntersectionMatrix& im)
+EdgeEndBundleStar::updateIM(IntersectionMatrix *im)
 {
 	//vector<EdgeEnd*> *edges=getEdges();
 	EdgeEndStar::iterator it=begin();

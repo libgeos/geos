@@ -1,4 +1,5 @@
  #################################################################################
+# $Id$
 #
 # GEOS tests build configuration for CMake build system
 #

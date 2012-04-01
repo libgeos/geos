@@ -1,3 +1,4 @@
+// $Id$
 // 
 // Test Suite Runner
 //
@@ -49,7 +50,7 @@ void usage()
         << "  " << module << " geos::geom::Envelope\n"
         << "  " << module << " geos::geom::Envelope 2\n"
         << endl
-        << "GEOS homepage: http://geos.osgeo.org" << endl;
+        << "GEOS homepage: http://geos.refractions.net" << endl;
 }
 
 int main(int argc, const char* argv[])

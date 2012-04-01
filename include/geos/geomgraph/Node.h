@@ -1,9 +1,9 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
- * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/Node.java r411 (JTS-1.12+)
+ * Last port: geomgraph/Node.java rev. 1.7 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -58,7 +58,6 @@ namespace geos {
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-/** The node component of a geometry graph */
 class GEOS_DLL Node: public GraphComponent {
 using GraphComponent::setLabel;
 
@@ -108,7 +107,7 @@ public:
 	 * in the boundary.
 	 * The merged location is the maximum of the two input values.
 	 */
-	virtual int computeMergedLocation(const Label& label2, int eltIndex);
+	virtual int computeMergedLocation(const Label* label2, int eltIndex);
 
 	virtual std::string print();
 
@@ -140,7 +139,7 @@ protected:
 	/** \brief
 	 * Basic nodes do not compute IMs
 	 */
-	virtual void computeIM(geom::IntersectionMatrix& /*im*/) {}
+	virtual void computeIM(geom::IntersectionMatrix* /*im*/) {};
 
 private:
 

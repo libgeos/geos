@@ -1,3 +1,4 @@
+// $Id@
 // 
 // Test Suite for geos::noding::NodedSegmentString class.
 
@@ -75,12 +76,14 @@ namespace tut
 
         ensure_equals(cs->size(), 2u);
 
-        SegmentStringAutoPtr ss(makeSegmentString(cs.release()));
+        SegmentStringAutoPtr ss(makeSegmentString(cs.get()));
         ensure(0 != ss.get());
 
         ensure_equals(ss->size(), 2u);
 
         ensure_equals(ss->getData(), (void*)0);
+
+        ensure_equals(ss->getCoordinates(), cs.get());
 
         ensure_equals(ss->getCoordinate(0), c0);
 
@@ -110,12 +113,14 @@ namespace tut
 
     ensure_equals(cs->size(), 2u);
 
-    SegmentStringAutoPtr ss(makeSegmentString(cs.release()));
+    SegmentStringAutoPtr ss(makeSegmentString(cs.get()));
     ensure(0 != ss.get());
 
     ensure_equals(ss->size(), 2u);
 
     ensure_equals(ss->getData(), (void*)0);
+
+    ensure_equals(ss->getCoordinates(), cs.get());
 
     ensure_equals(ss->getCoordinate(0), c0);
 
@@ -148,12 +153,14 @@ namespace tut
 
     ensure_equals(cs->size(), 4u);
 
-    SegmentStringAutoPtr ss(makeSegmentString(cs.release()));
+    SegmentStringAutoPtr ss(makeSegmentString(cs.get()));
     ensure(0 != ss.get());
 
     ensure_equals(ss->size(), 4u);
 
     ensure_equals(ss->getData(), (void*)0);
+
+    ensure_equals(ss->getCoordinates(), cs.get());
 
     ensure_equals(ss->getCoordinate(0), c0);
 
@@ -208,7 +215,7 @@ namespace tut
         cs->add(p0);
         cs->add(p1);
 
-        SegmentStringAutoPtr ss(makeSegmentString(cs.release()));
+        SegmentStringAutoPtr ss(makeSegmentString(cs.get()));
 
         ensure_equals(ss->getNodeList().size(), 0u);
 

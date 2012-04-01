@@ -1,3 +1,4 @@
+# $Id$
 #
 # This file is part of project GEOS (http://trac.osgeo.org/geos/) 
 #
@@ -77,7 +78,6 @@ geos_unit_SOURCES = \
 	noding/SegmentNodeTest.cpp \
 	noding/SegmentPointComparatorTest.cpp \
 	noding/snapround/HotPixelTest.cpp \
-	noding/snapround/MCIndexSnapRounderTest.cpp \
 	operation/buffer/BufferOpTest.cpp \
 	operation/buffer/BufferParametersTest.cpp \
 	operation/distance/DistanceOpTest.cpp \
@@ -89,7 +89,6 @@ geos_unit_SOURCES = \
 	operation/overlay/validate/OverlayResultValidatorTest.cpp \
 	operation/overlay/snap/GeometrySnapperTest.cpp \
 	operation/overlay/snap/LineStringSnapperTest.cpp \
-	operation/polygonize/PolygonizeTest.cpp \
 	operation/sharedpaths/SharedPathsOpTest.cpp \
 	operation/union/CascadedPolygonUnionTest.cpp \
 	operation/union/UnaryUnionOpTest.cpp \
@@ -104,7 +103,6 @@ geos_unit_SOURCES = \
 	capi/GEOSGeomFromWKBTest.cpp \
 	capi/GEOSGeomToWKTTest.cpp \
 	capi/GEOSContainsTest.cpp \
-	capi/GEOSDistanceTest.cpp \
 	capi/GEOSIntersectsTest.cpp \
 	capi/GEOSWithinTest.cpp \
 	capi/GEOSSimplifyTest.cpp \

@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2005 Refractions Research Inc.
@@ -45,13 +46,16 @@ RelateNode::~RelateNode()
  * A component only contributes if it has a labelling for both parent geometries
  */
 void
-RelateNode::computeIM(IntersectionMatrix& im)
+RelateNode::computeIM(IntersectionMatrix *im)
 {
-	im.setAtLeastIfValid(label.getLocation(0), label.getLocation(1),0);
+	im->setAtLeastIfValid(label->getLocation(0),label->getLocation(1),0);
 }
 
+/**
+ * Update the IM with the contribution for the EdgeEnds incident on this node.
+ */
 void
-RelateNode::updateIMFromEdges(IntersectionMatrix& im)
+RelateNode::updateIMFromEdges(IntersectionMatrix *im)
 {
 	assert(dynamic_cast<EdgeEndBundleStar*>(edges));
 	EdgeEndBundleStar* eebs=static_cast<EdgeEndBundleStar*>(edges);
@@ -62,3 +66,17 @@ RelateNode::updateIMFromEdges(IntersectionMatrix& im)
 } // namespace geos.operation.relate
 } // namespace geos.operation
 } // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.12  2006/03/21 13:11:29  strk
+ * opRelate.h header split
+ *
+ * Revision 1.11  2006/03/20 16:57:44  strk
+ * spatialindex.h and opValid.h headers split
+ *
+ * Revision 1.10  2006/02/19 19:46:50  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
+ **********************************************************************/
+

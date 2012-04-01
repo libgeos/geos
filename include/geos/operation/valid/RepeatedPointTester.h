@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
@@ -48,7 +49,7 @@ namespace valid { // geos::operation::valid
  */
 class GEOS_DLL RepeatedPointTester {
 public:
-	RepeatedPointTester() {}
+	RepeatedPointTester() {};
 	geom::Coordinate& getCoordinate();
 	bool hasRepeatedPoint(const geom::Geometry *g);
 	bool hasRepeatedPoint(const geom::CoordinateSequence *coord);

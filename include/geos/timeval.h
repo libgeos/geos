@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2006 Wu Yongwei
  *
@@ -9,9 +10,6 @@
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
- *
- * Note: This code is in the public domain, see 
- *       http://wyw.dcweb.cn/time.htm
  *
  **********************************************************************/
 

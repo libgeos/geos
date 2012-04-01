@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2009-2010  Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
@@ -241,8 +242,7 @@ LineStringSnapper::findSegmentToSnap(
 cerr << " Checking segment " << seg << endl;
 #endif
 
-		/**
-		 * Check if the snap pt is equal to one of
+		/**                                                                              * Check if the snap pt is equal to one of
 		 * the segment endpoints.
 		 *
 		 * If the snap pt is already in the src list,

@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
@@ -13,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/Label.java r428 (JTS-1.12+)
+ * Last port: geomgraph/Label.java rev. 1.8 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -35,12 +36,12 @@ namespace geos {
 namespace geomgraph { // geos.geomgraph
 
 /*public static*/
-Label
+Label*
 Label::toLineLabel(const Label &label)
 {
-	Label lineLabel(Location::UNDEF);
+	Label *lineLabel=new Label(Location::UNDEF);
 	for (int i=0; i<2; i++) {
-		lineLabel.setLocation(i, label.getLocation(i));
+		lineLabel->setLocation(i, label.getLocation(i));
 	}
 	return lineLabel;
 }
@@ -83,12 +84,8 @@ Label::Label(const Label &l)
 }
 
 /*public*/
-Label&
-Label::operator=(const Label &l)
+Label::~Label()
 {
-	elt[0] = TopologyLocation(l.elt[0]);
-	elt[1] = TopologyLocation(l.elt[1]);
-	return *this;
 }
 
 /*public*/
@@ -188,13 +185,6 @@ Label::isNull(int geomIndex) const
 {
 	assert(geomIndex>=0 && geomIndex<2);
 	return elt[geomIndex].isNull();
-}
-
-/*public*/
-bool
-Label::isNull() const
-{
-	return elt[0].isNull() && elt[1].isNull();
 }
 
 /*public*/

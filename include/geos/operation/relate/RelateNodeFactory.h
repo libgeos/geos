@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2006 Refractions Research Inc.
  *
@@ -46,7 +47,7 @@ public:
 	geomgraph::Node* createNode(const geom::Coordinate &coord) const;
 	static const geomgraph::NodeFactory &instance();
 private:
-	RelateNodeFactory() {}
+	RelateNodeFactory() {};
 };
 
 

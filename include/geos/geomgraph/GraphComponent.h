@@ -1,9 +1,9 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
- * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/GraphComponent.java r428 (JTS-1.12+)
+ * Last port: geomgraph/GraphComponent.java rev. 1.3 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -25,12 +25,13 @@
 #include <geos/export.h>
 #include <geos/inline.h>
 
-#include <geos/geomgraph/Label.h>
-
 // Forward declarations
 namespace geos {
 	namespace geom {
 		class IntersectionMatrix;
+	}
+	namespace geomgraph {
+		class Label;
 	}
 }
 
@@ -38,26 +39,18 @@ namespace geos {
 namespace geomgraph { // geos.geomgraph
 
 
-/** \brief
- * A GraphComponent is the parent class for the objects'
- * that form a graph. 
- * 
- * Each GraphComponent can carry a Label.
- */
 class GEOS_DLL GraphComponent {
 public:
 	GraphComponent();
 
 	/*
-	 * GraphComponent copies the given Label.
+	 * GraphComponent takes ownership of the given Label.
+	 * newLabel is deleted by destructor.
 	 */
-	GraphComponent(const Label& newLabel); 
+	GraphComponent(Label* newLabel); 
 	virtual ~GraphComponent();
-
-	Label& getLabel() { return label; }
-	const Label& getLabel() const { return label; }
-	void setLabel(const Label& newLabel) { label = newLabel; }
-
+	Label* getLabel();
+	virtual void setLabel(Label* newLabel);
 	virtual void setInResult(bool isInResult) { isInResultVar=isInResult; }
 	virtual bool isInResult() const { return isInResultVar; }
 	virtual void setCovered(bool isCovered);
@@ -66,10 +59,10 @@ public:
 	virtual bool isVisited() const { return isVisitedVar; }
 	virtual void setVisited(bool isVisited) { isVisitedVar = isVisited; }
 	virtual bool isIsolated() const=0;
-	virtual void updateIM(geom::IntersectionMatrix& im);
+	virtual void updateIM(geom::IntersectionMatrix *im);
 protected:
-	Label label;
-	virtual void computeIM(geom::IntersectionMatrix& im)=0;
+	Label* label;
+	virtual void computeIM(geom::IntersectionMatrix *im)=0;
 private:
 	bool isInResultVar;
 	bool isCoveredVar;
@@ -80,4 +73,19 @@ private:
 } // namespace geos.geomgraph
 } // namespace geos
 
+//#ifdef GEOS_INLINE
+//# include "geos/geomgraph/GraphComponent.inl"
+//#endif
+
 #endif // ifndef GEOS_GEOMGRAPH_GRAPHCOMPONENT_H
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.2  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
+ * Revision 1.1  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
+ **********************************************************************/
+

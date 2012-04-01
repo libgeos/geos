@@ -1,3 +1,4 @@
+# $Id$
 #
 # This file is part of project GEOS (http://trac.osgeo.org/geos/) 
 #
@@ -13,6 +14,5 @@ geos_HEADERS = \
     LinearIterator.h \
     LinearGeometryBuilder.h \
     LinearLocation.h \
-    LocationIndexedLine.h \
     LocationIndexOfLine.h \
     LocationIndexOfPoint.h

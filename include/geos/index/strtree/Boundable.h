@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2006 Refractions Research Inc.
  *
@@ -38,7 +39,7 @@ public:
 	 * @see AbstractSTRtree::IntersectsOp
 	 */
 	virtual const void* getBounds() const=0;
-	virtual ~Boundable() {}
+	virtual ~Boundable() {};
 };
 
 

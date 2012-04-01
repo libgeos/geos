@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2009-2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2008-2010 Safe Software Inc.
@@ -144,11 +145,10 @@ public:
 		// throw (GEOSException);
 
 private:
-
 	/**
 	 * Compute the change in depth as an edge is crossed from R to L
 	 */
-	static int depthDelta(const geomgraph::Label& label);
+	static int depthDelta(geomgraph::Label *label);
 
 	const BufferParameters& bufParams; 
 

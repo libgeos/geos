@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -51,9 +52,9 @@ protected:
 
 public:
 
-	MonotoneChainOverlapAction() {}
+	MonotoneChainOverlapAction() {};
 
-	virtual ~MonotoneChainOverlapAction() {}
+	virtual ~MonotoneChainOverlapAction() {};
 
 	/**
 	 * This function can be overridden if the original chains are needed

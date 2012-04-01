@@ -1,3 +1,4 @@
+# $Id$
 #
 # This file is part of project GEOS (http://trac.osgeo.org/geos/) 
 #
@@ -32,7 +33,7 @@ libalgorithm_la_SOURCES = \
     SIRtreePointInRing.cpp 
 
 # Deprecated files
-# (http://geos.osgeo.org/pipermail/geos-devel/2006-March/001828.html):
+# (http://geos.refractions.net/pipermail/geos-devel/2006-March/001828.html):
 #NonRobustLineIntersector.cpp
 #RobustLineIntersector.cpp
 

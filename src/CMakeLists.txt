@@ -1,4 +1,5 @@
 #################################################################################
+# $Id$
 #
 # GEOS C++ library build configuration for CMake build system
 #
@@ -14,7 +15,7 @@
 file(GLOB_RECURSE geos_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 file(GLOB_RECURSE geos_ALL_HEADERS ${CMAKE_SOURCE_DIR}/include/*.h) # fix source_group issue
 
-if(GEOS_ENABLE_MACOSX_FRAMEWORK)
+if(APPLE AND GEOS_ENABLE_MACOSX_FRAMEWORK)
   # OS X frameworks don't have static libs
   # also 1 binary, so include CAPI here
   # and, make name all caps
@@ -77,20 +78,20 @@ else()
     PREFIX "lib"
     CLEAN_DIRECT_OUTPUT 1)
 
-endif()
+if(APPLE)
+  set_target_properties(geos
+    PROPERTIES
+    BUILD_WITH_INSTALL_RPATH TRUE
+    INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}")
 
-# if(APPLE)
-#   set_target_properties(geos
-#     PROPERTIES
-#     BUILD_WITH_INSTALL_RPATH TRUE
-#     INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}")
-# endif()
+endif()
+endif()
 
 #################################################################################
 # Installation
 #################################################################################
 
-if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK)
+if(NOT APPLE AND NOT GEOS_ENABLE_MACOSX_FRAMEWORK)
   install(TARGETS geos geos-static
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib

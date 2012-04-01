@@ -1,3 +1,4 @@
+// $Id$
 // 
 // Test Suite for geos::geom::Polygon class.
 
@@ -171,7 +172,7 @@ namespace tut
 	void object::test<6>()
 	{
 		//inform( "Test waiting for resolution of getEnvelope() issue." );
-		//http://geos.osgeo.org/pipermail/geos-devel/2006-April/002123.html
+		//http://geos.refractions.net/pipermail/geos-devel/2006-April/002123.html
 
 		//EnvelopeCPtr envelope = empty_poly_->getEnvelopeInternal();
 		//ensure( envelope != 0 );

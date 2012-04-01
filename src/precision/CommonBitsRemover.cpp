@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
@@ -53,7 +54,7 @@ public:
     {
         ::geos::ignore_unused_variable_warning(coord);
         assert(0);
-    }
+    };
 
 	void filter_rw(geom::Coordinate *coord) const
 	{

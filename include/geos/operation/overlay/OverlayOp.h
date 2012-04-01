@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2006 Refractions Research Inc.
  *
@@ -85,7 +86,7 @@ public:
 			OpCode opCode);
 		//throw(TopologyException *);
 
-	static bool isResultOfOp(const geomgraph::Label& label, OpCode opCode);
+	static bool isResultOfOp(geomgraph::Label *label, OpCode opCode);
 
 	/// This method will handle arguments of Location.NULL correctly
 	//

@@ -1,9 +1,9 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
- * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/DirectedEdge.java r428 (JTS-1.12)
+ * Last port: geomgraph/DirectedEdge.java rev. 1.5 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -134,9 +134,10 @@ DirectedEdge::setVisitedEdge(bool newIsVisited)
 bool
 DirectedEdge::isLineEdge()
 {
-	bool isLine = label.isLine(0) || label.isLine(1);
-	bool isExteriorIfArea0=!label.isArea(0) || label.allPositionsEqual(0,Location::EXTERIOR);
-	bool isExteriorIfArea1=!label.isArea(1) || label.allPositionsEqual(1,Location::EXTERIOR);
+	assert(label);
+	bool isLine=label->isLine(0) || label->isLine(1);
+	bool isExteriorIfArea0=!label->isArea(0) || label->allPositionsEqual(0,Location::EXTERIOR);
+	bool isExteriorIfArea1=!label->isArea(1) || label->allPositionsEqual(1,Location::EXTERIOR);
 	return isLine && isExteriorIfArea0 && isExteriorIfArea1;
 }
 
@@ -145,10 +146,11 @@ bool
 DirectedEdge::isInteriorAreaEdge()
 {
 	bool isInteriorAreaEdge=true;
+	assert(label);
 	for (int i=0; i<2; i++) {
-		if (!(label.isArea(i)
-			&& label.getLocation(i,Position::LEFT )==Location::INTERIOR
-			&& label.getLocation(i,Position::RIGHT)==Location::INTERIOR)) {
+		if (!(label->isArea(i)
+			&& label->getLocation(i,Position::LEFT )==Location::INTERIOR
+			&& label->getLocation(i,Position::RIGHT)==Location::INTERIOR)) {
 				isInteriorAreaEdge=false;
 		}
 	}
@@ -159,9 +161,12 @@ DirectedEdge::isInteriorAreaEdge()
 void
 DirectedEdge::computeDirectedLabel()
 {
-	label = edge->getLabel();
+	delete label;
+	assert(edge);
+	assert(edge->getLabel());
+	label=new Label(*(edge->getLabel()));
 	if (!isForwardVar)
-		label.flip();
+		label->flip();
 }
 
 /*public*/
@@ -224,4 +229,52 @@ DirectedEdge::printEdge()
 
 } // namespace geos.geomgraph
 } // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.21  2006/04/06 12:58:09  strk
+ * Added printing of EdgeRing if available
+ *
+ * Revision 1.20  2006/04/06 07:52:42  strk
+ * Fixed bug in ::print() function
+ *
+ * Revision 1.19  2006/04/03 17:05:22  strk
+ * Assertion checking, port info, cleanups
+ *
+ * Revision 1.18  2006/03/29 15:23:49  strk
+ * Moved GeometryGraph inlines from .h to .inl file
+ *
+ * Revision 1.17  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
+ * Revision 1.16  2006/03/23 15:10:29  strk
+ * Dropped by-pointer TopologyException constructor, various small cleanups
+ *
+ * Revision 1.15  2006/03/15 17:16:29  strk
+ * streamlined headers inclusion
+ *
+ * Revision 1.14  2006/03/15 15:26:58  strk
+ * Cleanups
+ *
+ * Revision 1.13  2006/03/14 15:31:39  strk
+ * Cleaned up toString funx (more WKT friendly)
+ *
+ * Revision 1.12  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
+ * Revision 1.11  2006/03/06 19:40:46  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
+ * Revision 1.10  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
+ * Revision 1.9  2006/02/28 14:34:04  strk
+ * Added many assertions and debugging output hunting for a bug in BufferOp
+ *
+ * Revision 1.8  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
+ * Revision 1.7  2006/02/09 15:52:47  strk
+ * GEOSException derived from std::exception; always thrown and cought by const ref.
+ **********************************************************************/
 

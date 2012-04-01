@@ -1,4 +1,5 @@
 @ECHO OFF
+REM $Id$
 REM
 REM This script generates headers for use with Visual C++ only
 REM

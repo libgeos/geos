@@ -1,5 +1,6 @@
 /************************************************************************
  *
+ * $Id$
  *
  * C-Wrapper for GEOS library
  *
@@ -11,7 +12,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- * Author: Sandro Santilli <strk@keybit.net>
+ * Author: Sandro Santilli <strk@refractions.net>
  * Thread Safety modifications: Chuck Thibert <charles.thibert@ingres.com>
  *
  ***********************************************************************/
@@ -145,8 +146,8 @@ class CAPI_ItemVisitor : public geos::index::ItemVisitor {
     void *userdata;
   public:
     CAPI_ItemVisitor (GEOSQueryCallback cb, void *ud)
-        : ItemVisitor(), callback(cb), userdata(ud) {}
-    void visitItem (void *item) { callback(item, userdata); }
+        : ItemVisitor(), callback(cb), userdata(ud) {};
+    void visitItem (void *item) { callback(item, userdata); };
 };
 
 
@@ -1231,7 +1232,7 @@ GEOSGeomToWKB_buf_r(GEOSContextHandle_t extHandle, const Geometry *g, size_t *si
     using geos::io::WKBWriter;
     try
     {
-        int byteOrder = handle->WKBByteOrder;
+        int byteOrder = static_cast<int>(handle->WKBByteOrder);
         WKBWriter w(handle->WKBOutputDims, byteOrder);
         std::ostringstream os(std::ios_base::binary);
         w.write(*g, os);
@@ -1317,7 +1318,7 @@ GEOSGeomToHEX_buf_r(GEOSContextHandle_t extHandle, const Geometry *g, size_t *si
     using geos::io::WKBWriter;
     try
     {
-        int byteOrder = handle->WKBByteOrder;
+        int byteOrder = static_cast<int>(handle->WKBByteOrder);
         WKBWriter w(handle->WKBOutputDims, byteOrder);
         std::ostringstream os(std::ios_base::binary);
         w.writeHEX(*g, os);
@@ -2577,7 +2578,7 @@ GEOSGeomGetNumPoints_r(GEOSContextHandle_t extHandle, const Geometry *g1)
 			handle->ERROR_MESSAGE("Argument is not a LineString");
 			return -1;
 		}
-		return static_cast<int>(ls->getNumPoints());
+		return ls->getNumPoints();
     }
     catch (const std::exception &e)
     {
@@ -3419,7 +3420,7 @@ GEOSCoordSeq_setOrdinate_r(GEOSContextHandle_t extHandle, CoordinateSequence *cs
 
     try
     {
-        cs->setOrdinate(idx, dim, val);
+        cs->setOrdinate(static_cast<int>(idx), static_cast<int>(dim), val);
         return 1;
     }
     catch (const std::exception &e)
@@ -3506,7 +3507,7 @@ GEOSCoordSeq_getOrdinate_r(GEOSContextHandle_t extHandle, const CoordinateSequen
 
     try
     {
-        double d = cs->getOrdinate(idx, dim);
+        double d = cs->getOrdinate(static_cast<int>(idx), static_cast<int>(dim));
         *val = d;
 
         return 1;
@@ -4907,7 +4908,7 @@ GEOSWKBWriter_getIncludeSRID_r(GEOSContextHandle_t extHandle, const GEOSWKBWrite
         try
         {
             int srid = writer->getIncludeSRID();
-            ret = srid;
+            ret = static_cast<char>(srid);
         }
         catch (...)
         {
@@ -5933,7 +5934,6 @@ GEOSBufferParams_create_r(GEOSContextHandle_t extHandle)
 void
 GEOSBufferParams_destroy_r(GEOSContextHandle_t extHandle, BufferParameters* p)
 {
-  (void)extHandle;
   delete p;     
 }
 

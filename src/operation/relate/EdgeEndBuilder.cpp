@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2005 Refractions Research Inc.
@@ -103,9 +104,9 @@ EdgeEndBuilder::createEdgeEndForPrev(Edge *edge, vector<EdgeEnd*> *l,
 	// if prev intersection is past the previous vertex, use it instead
 	if (eiPrev!=NULL && eiPrev->segmentIndex>=iPrev)
 		pPrev=eiPrev->coord; 
-	Label label( edge->getLabel() );
+	Label *label=new Label(*(edge->getLabel()));
 	// since edgeStub is oriented opposite to it's parent edge, have to flip sides for edge label
-	label.flip();
+	label->flip();
 	EdgeEnd *e=new EdgeEnd(edge,eiCurr->coord,pPrev,label);
 	//e.print(System.out);  System.out.println();
 	l->push_back(e);
@@ -130,7 +131,7 @@ EdgeEndBuilder::createEdgeEndForNext(Edge *edge, vector<EdgeEnd*> *l,
 	// if the next intersection is in the same segment as the current, use it as the endpoint
 	if (eiNext!=NULL && eiNext->segmentIndex==eiCurr->segmentIndex)
 		pNext=eiNext->coord; 
-	EdgeEnd *e = new EdgeEnd(edge, eiCurr->coord, pNext, edge->getLabel());
+	EdgeEnd *e=new EdgeEnd(edge,eiCurr->coord,pNext,new Label(*(edge->getLabel())));
 	//Debug.println(e);
 	l->push_back(e);
 }
@@ -138,4 +139,17 @@ EdgeEndBuilder::createEdgeEndForNext(Edge *edge, vector<EdgeEnd*> *l,
 } // namespace geos.operation.relate
 } // namespace geos.operation
 } // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.17  2006/03/21 13:11:29  strk
+ * opRelate.h header split
+ *
+ * Revision 1.16  2006/03/20 16:57:44  strk
+ * spatialindex.h and opValid.h headers split
+ *
+ * Revision 1.15  2006/02/19 19:46:50  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
+ **********************************************************************/
 

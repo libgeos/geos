@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2006      Refractions Research Inc.
  *
@@ -63,14 +64,14 @@ public:
 	 * The SegmentStrings have the same context as their parent.
 	 *
 	 * @return a newly allocated std::vector of const SegmentStrings.
-	 *         Caller is responsible to delete container and elements.
+	 *         Caller is responsible to delete it
 	 */
 	virtual std::vector<SegmentString*>* getNodedSubstrings() const=0;
 
 	virtual ~Noder() {}
 
 protected:
-	Noder(){}
+	Noder(){};
 };
 
 } // namespace geos.noding
@@ -81,4 +82,14 @@ protected:
 //#endif
 
 #endif // GEOS_NODING_NODER_H
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.2  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
+ * Revision 1.1  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
+ **********************************************************************/
 

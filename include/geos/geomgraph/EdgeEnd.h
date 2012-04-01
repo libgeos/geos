@@ -1,9 +1,9 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
- * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/EdgeEnd.java r428 (JTS-1.12+)
+ * Last port: geomgraph/EdgeEnd.java rev. 1.6 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -24,7 +24,6 @@
 
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h>  // for p0,p1
-#include <geos/geomgraph/Label.h>  // for composition
 #include <geos/inline.h>
 
 #include <string>
@@ -35,6 +34,7 @@ namespace geos {
 		class BoundaryNodeRule;
 	}
 	namespace geomgraph {
+		class Label;
 		class Edge;
 		class Node;
 	}
@@ -61,34 +61,23 @@ public:
 
 	EdgeEnd();
 
-	virtual ~EdgeEnd() {}
+	virtual ~EdgeEnd();
 
 	/**
 	 * NOTES:
-	 *  - Copies the given Label 
+	 *  - takes ownership of given Label (if any)
 	 *  - keeps a pointer to given Edge, make sure it's
 	 *    not deleted before the EdgeEnd.
 	 *  - copies given Coordinates (maybe we should avoid that)
 	 */
 	EdgeEnd(Edge* newEdge, const geom::Coordinate& newP0,
 			const geom::Coordinate& newP1,
-			const Label& newLabel);
-
-	/**
-	 * NOTES:
-	 *  - keeps a pointer to given Edge, make sure it's
-	 *    not deleted before the EdgeEnd.
-	 *  - copies given Coordinates (maybe we should avoid that)
-	 */
-	EdgeEnd(Edge* newEdge, const geom::Coordinate& newP0,
-			const geom::Coordinate& newP1);
+			Label* newLabel=NULL);
 
 	Edge* getEdge() { return edge; }
 	//virtual Edge* getEdge() { return edge; }
 
-	Label& getLabel() { return label; }
-
-	const Label& getLabel() const { return label; }
+	virtual Label* getLabel();
 
 	virtual geom::Coordinate& getCoordinate();
 
@@ -132,7 +121,7 @@ protected:
 
 	Edge* edge;// the parent edge of this edge end
 
-	Label label;
+	Label* label;
 
 	EdgeEnd(Edge* newEdge);
 
@@ -169,3 +158,26 @@ struct GEOS_DLL  EdgeEndLT {
 //#endif
 
 #endif // ifndef GEOS_GEOMGRAPH_EDGEEND_H
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.6  2006/06/14 14:32:20  strk
+ * EdgeEnd::getEdge() made non-virtual and inlined.
+ *
+ * Revision 1.5  2006/04/06 09:39:56  strk
+ * Added operator<<
+ *
+ * Revision 1.4  2006/04/03 17:05:22  strk
+ * Assertion checking, port info, cleanups
+ *
+ * Revision 1.3  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
+ * Revision 1.2  2006/03/15 15:27:24  strk
+ * cleanups
+ *
+ * Revision 1.1  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
+ **********************************************************************/
+

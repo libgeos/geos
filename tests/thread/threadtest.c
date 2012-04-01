@@ -1,5 +1,6 @@
 /************************************************************************
  *
+ * $Id$
  *
  * Multithreaded test for C-Wrapper of GEOS library
  *
@@ -10,7 +11,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- * Author: Sandro Santilli <strk@keybit.net>
+ * Author: Sandro Santilli <strk@refractions.net>
  *
  ***********************************************************************/
 

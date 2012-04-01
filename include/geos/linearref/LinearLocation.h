@@ -1,9 +1,9 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
- * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: linearref/LinearLocation.java r463
+ * Last port: linearref/LinearLocation.java rev. 1.10
  *
  **********************************************************************/
 
@@ -156,7 +156,7 @@ public:
 	 * given linear {@link Geometry} which is
 	 * referenced by this location.
 	 *
-	 * @param linearGeom the linear geometry referenced by this location
+	 * @param linearGeom a linear geometry
 	 * @return the <tt>Coordinate</tt> at the location
 	 */
 	geom::Coordinate getCoordinate(const geom::Geometry* linearGeom) const;
@@ -226,15 +226,6 @@ public:
 	 */
 	bool isOnSameSegment(const LinearLocation& loc) const;
 
-	/**
-	 * \brief
-	 * Tests whether this location is an endpoint of
-	 * the linear component it refers to.
-	 *
-	 * @param linearGeom the linear geometry referenced by this location
-	 * @return true if the location is a component endpoint
-	 */
-	bool isEndpoint(const geom::Geometry& linearGeom) const;
 
 	friend std::ostream& operator<< (std::ostream& out, const LinearLocation& obj );
 

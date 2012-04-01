@@ -1,4 +1,5 @@
 #################################################################################
+# $Id$
 #
 # GEOS unit tests build configuration for CMake build system
 #

@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2005-2006 Refractions Research Inc.
@@ -46,8 +47,6 @@ namespace planargraph { // geos.planargraph
 class GEOS_DLL DirectedEdge: public GraphComponent {
 
 public:
-
-  friend std::ostream& operator << (std::ostream&, const DirectedEdge&);
 
 	typedef std::list<DirectedEdge *> NonConstList;
 	typedef std::list<const DirectedEdge *> ConstList;
@@ -227,8 +226,6 @@ public:
 /// Strict Weak comparator function for containers
 bool pdeLessThan(DirectedEdge *first, DirectedEdge * second);
 
-/// Output operator 
-std::ostream& operator << (std::ostream&, const DirectedEdge&);
 
 
 } // namespace geos::planargraph

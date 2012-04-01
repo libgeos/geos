@@ -1,9 +1,9 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
- * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: linearref/LengthLocationMap.java r463
+ * Last port: linearref/LengthLocationMap.java rev. 1.10
  *
  **********************************************************************/
 
@@ -25,8 +25,10 @@
 #include <geos/geom/Geometry.h>
 #include <geos/linearref/LinearLocation.h>
 
-namespace geos {
-namespace linearref { // geos::linearref
+namespace geos
+{
+namespace linearref   // geos::linearref
+{
 
 /**
  * Computes the {@link LinearLocation} for a given length
@@ -43,8 +45,6 @@ private:
 
 	LinearLocation getLocationForward(double length) const;
 
-	LinearLocation resolveHigher(const LinearLocation& loc) const;
-
 public:
 
 	// TODO: cache computed cumulative length for each vertex
@@ -52,7 +52,6 @@ public:
 	// TODO: support measure index for fast mapping to a location
 
 	/**
-	 * \brief
 	 * Computes the {@link LinearLocation} for a
 	 * given length along a linear {@link Geometry}.
 	 *
@@ -60,28 +59,7 @@ public:
 	 * @param length the length index of the location
 	 * @return the {@link LinearLocation} for the length
 	 */
-	static LinearLocation getLocation(const geom::Geometry *linearGeom, double length)
-	{
-    LengthLocationMap locater(linearGeom);
-    return locater.getLocation(length);
-	}
-
-	/**
-	 * \brief
-	 * Computes the {@link LinearLocation} for a
-	 * given length along a linear {@link Geometry}.
-	 *
-	 * @param line the linear geometry to use
-	 * @param length the length index of the location
-	 * @param resolveLower if true lengths are resolved to the
-	 *                     lowest possible index 
-	 * @return the {@link LinearLocation} for the length
-	 */
-	static LinearLocation getLocation(const geom::Geometry *linearGeom, double length, bool resolveLower)
-  {
-    LengthLocationMap locater(linearGeom);
-    return locater.getLocation(length, resolveLower);
-  }
+	static LinearLocation getLocation(const geom::Geometry *linearGeom, double length);
 
 	/**
 	 * Computes the length for a given {@link LinearLocation}
@@ -96,26 +74,9 @@ public:
 	LengthLocationMap(const geom::Geometry *linearGeom);
 
 	/**
-	 * \brief
 	 * Compute the {@link LinearLocation} corresponding to a length.
-	 * 
 	 * Negative lengths are measured in reverse from end of the linear geometry.
 	 * Out-of-range values are clamped.
-	 * Ambiguous indexes are resolved to the lowest possible location value,
-	 * depending on the value of <tt>resolveLower</tt>.
-	 *
-	 * @param length the length index
-	 * @return the corresponding LinearLocation
-	 */
-	LinearLocation getLocation(double length, bool resolveLower) const;
-
-	/**
-	 * \brief
-	 * Compute the {@link LinearLocation} corresponding to a length.
-	 * 
-	 * Negative lengths are measured in reverse from end of the linear geometry.
-	 * Out-of-range values are clamped.
-	 * Ambiguous indexes are resolved to the lowest possible location value.
 	 *
 	 * @param length the length index
 	 * @return the corresponding LinearLocation
@@ -125,8 +86,6 @@ public:
 	double getLength(const LinearLocation& loc) const;
 
 };
-
-} // geos.linearref
-} // geos
-
+}
+}
 #endif

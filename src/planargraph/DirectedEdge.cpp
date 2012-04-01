@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -167,17 +168,11 @@ string
 DirectedEdge::print() const
 {
 	ostringstream s;
-  s << *this;
+	s<<typeid(*this).name()<<": "<<p0.toString()<<" - "<<p1.toString();
+	s<<" "<<quadrant<<":"<<angle;
 	return s.str();
 }
 
-std::ostream&
-operator << (std::ostream& s, const DirectedEdge& de)
-{
-  s << typeid(de).name() << ": " << de.p0 << " - " << de.p1;
-  s << " " << de.quadrant << ":" << de.angle;
-  return s;
-}
 
 } // namespace planargraph
 } // namespace geos

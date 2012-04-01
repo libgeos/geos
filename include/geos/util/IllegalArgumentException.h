@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2006 Refractions Research Inc.
@@ -43,7 +44,7 @@ public:
 		GEOSException("IllegalArgumentException", msg)
 	{}
 
-	~IllegalArgumentException() throw() {}
+	~IllegalArgumentException() throw() {};
 };
 
 } // namespace geos::util

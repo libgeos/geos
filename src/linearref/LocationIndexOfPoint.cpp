@@ -1,9 +1,9 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
- * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: linearref/LocationIndexOfPoint.java r466
+ * Last port: linearref/LocationIndexOfPoint.java rev. 1.35
  *
  **********************************************************************/
 
@@ -37,9 +37,7 @@ namespace geos
 namespace linearref   // geos.linearref
 {
 
-LinearLocation
-LocationIndexOfPoint::indexOfFromStart(const Coordinate& inputPt,
-  const LinearLocation* minIndex) const
+LinearLocation LocationIndexOfPoint::indexOfFromStart(const Coordinate& inputPt, LinearLocation* minIndex) const
 {
 	double minDistance = numeric_limits<double>::max();
 	int minComponentIndex = 0;
@@ -85,7 +83,7 @@ LinearLocation LocationIndexOfPoint::indexOf(const Geometry *linearGeom, const C
 	return locater.indexOf(inputPt);
 }
 
-LinearLocation LocationIndexOfPoint::indexOfAfter(const Geometry *linearGeom, const Coordinate& inputPt, const LinearLocation* minIndex)
+LinearLocation LocationIndexOfPoint::indexOfAfter(const Geometry *linearGeom, const Coordinate& inputPt, LinearLocation* minIndex)
 {
 	LocationIndexOfPoint locater(linearGeom);
 	return locater.indexOfAfter(inputPt, minIndex);
@@ -100,9 +98,7 @@ LinearLocation LocationIndexOfPoint::indexOf(const Coordinate& inputPt) const
 	return indexOfFromStart(inputPt, 0);
 }
 
-LinearLocation
-LocationIndexOfPoint::indexOfAfter(const Coordinate& inputPt,
-                                   const LinearLocation* minIndex) const
+LinearLocation LocationIndexOfPoint::indexOfAfter(const Coordinate& inputPt, LinearLocation* minIndex) const
 {
 	if (!minIndex) return indexOf(inputPt);
 

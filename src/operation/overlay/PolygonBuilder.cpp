@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2005 Refractions Research Inc.
@@ -150,7 +151,7 @@ PolygonBuilder::buildMaximalEdgeRings(const vector<DirectedEdge*> *dirEdges,
 	     << " inResult:" << de->isInResult() << endl
 	     << " isArea:" << de->getLabel()->isArea() << endl;
 #endif
-		if (de->isInResult() && de->getLabel().isArea())
+		if (de->isInResult() && de->getLabel()->isArea())
 		{
 			// if this edge has not yet been processed
 			if (de->getEdgeRing() == NULL)
@@ -398,4 +399,37 @@ PolygonBuilder::containsPoint(const Coordinate& p)
 } // namespace geos.operation.overlay
 } // namespace geos.operation
 } // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.43  2006/06/14 19:17:29  strk
+ * Fixed bug in findShell() needlessly erasing vector elements
+ *
+ * Revision 1.42  2006/06/14 13:59:24  strk
+ * Fixed bug in PolygonBuilder::placePolygonHoles, performance improved as a side effect.
+ *
+ * Revision 1.41  2006/06/13 23:26:46  strk
+ * cleanups
+ *
+ * Revision 1.40  2006/06/12 11:29:24  strk
+ * unsigned int => size_t
+ *
+ * Revision 1.39  2006/03/20 16:57:44  strk
+ * spatialindex.h and opValid.h headers split
+ *
+ * Revision 1.38  2006/03/20 13:20:29  strk
+ * Changed assertion to TopologyException for the "orphaned" hole case
+ * in order to allow for reduced precision ops to catch the case.
+ *
+ * Revision 1.37  2006/03/20 12:33:45  strk
+ * Simplified some privat methods to use refs instead of pointers, added
+ * debugging section for failiures of holes/shells associations
+ *
+ * Revision 1.36  2006/03/17 13:24:59  strk
+ * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
+ *
+ * Revision 1.35  2006/03/15 11:44:04  strk
+ * debug blocks, dumping SQL when GEOS_DEBUG > 1
+ *
+ **********************************************************************/
 

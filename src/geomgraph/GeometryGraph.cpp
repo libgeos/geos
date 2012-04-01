@@ -1,11 +1,11 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
- * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
- * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2005 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/GeometryGraph.java r428 (JTS-1.12+)
+ * Last port: geomgraph/GeometryGraph.java rev. 1.9 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -264,7 +264,7 @@ GeometryGraph::addPolygonRing(const LinearRing *lr, int cwLeft, int cwRight)
 		throw;
 	}
 
-	Edge *e=new Edge(coord, Label(argIndex, Location::BOUNDARY, left, right));
+	Edge *e=new Edge(coord,new Label(argIndex,Location::BOUNDARY,left,right));
 	lineEdgeMap[lr]=e;
 	insertEdge(e);
 	insertPoint(argIndex,coord->getAt(0), Location::BOUNDARY);
@@ -303,7 +303,7 @@ GeometryGraph::addLineString(const LineString *line)
 		return;
 	}
 
-	Edge *e=new Edge(coord, Label(argIndex, Location::INTERIOR));
+	Edge *e=new Edge(coord,new Label(argIndex,Location::INTERIOR));
 	lineEdgeMap[line]=e;
 	insertEdge(e);
 
@@ -397,14 +397,14 @@ GeometryGraph::insertPoint(int argIndex, const Coordinate& coord,
 	cerr<<"GeometryGraph::insertPoint("<<coord.toString()<<" called"<<endl;
 #endif
 	Node *n=nodes->addNode(coord);
-	Label& lbl = n->getLabel();
-	if ( lbl.isNull() )
+	Label *lbl=n->getLabel();
+	if (lbl==NULL)
 	{
 		n->setLabel(argIndex, onLocation);
 	}
 	else
 	{
-		lbl.setLocation(argIndex, onLocation);
+		lbl->setLocation(argIndex, onLocation);
 	}
 }
 
@@ -415,23 +415,24 @@ GeometryGraph::insertPoint(int argIndex, const Coordinate& coord,
  * iff if it is in the boundaries of an odd number of Geometries
  */
 void
-GeometryGraph::insertBoundaryPoint(int argIndex, const Coordinate& coord)
+GeometryGraph::insertBoundaryPoint(int argIndex,const Coordinate& coord)
 {
 	Node *n=nodes->addNode(coord);
-	// nodes always have labels
-	Label& lbl = n->getLabel();
+	Label *lbl=n->getLabel();
 
 	// the new point to insert is on a boundary
 	int boundaryCount=1;
 
 	// determine the current location for the point (if any)
-	int loc = lbl.getLocation(argIndex,Position::ON);
+  if ( NULL == lbl ) return;
+
+	int loc = lbl->getLocation(argIndex,Position::ON);
 	if (loc==Location::BOUNDARY) boundaryCount++;
 
 	// determine the boundary status of the point according to the
 	// Boundary Determination Rule
 	int newLoc = determineBoundary(boundaryNodeRule, boundaryCount);
-	lbl.setLocation(argIndex,newLoc);
+	lbl->setLocation(argIndex,newLoc);
 }
 
 /*private*/
@@ -442,8 +443,8 @@ GeometryGraph::addSelfIntersectionNodes(int argIndex)
 		i!=endIt; ++i)
 	{
 		Edge *e=*i;
-		int eLoc = e->getLabel().getLocation(argIndex);
-		EdgeIntersectionList &eiL = e->eiList;
+		int eLoc=e->getLabel()->getLocation(argIndex);
+		EdgeIntersectionList &eiL=e->eiList;
 		for (EdgeIntersectionList::iterator
 			eiIt=eiL.begin(), eiEnd=eiL.end();
 			eiIt!=eiEnd; ++eiIt)
@@ -540,4 +541,28 @@ GeometryGraph::determineBoundary(
 
 } // namespace geos.geomgraph
 } // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.30  2006/06/13 21:40:06  strk
+ * Cleanups and some more debugging lines
+ *
+ * Revision 1.29  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
+ * Revision 1.28  2006/06/09 07:42:13  strk
+ * * source/geomgraph/GeometryGraph.cpp, source/operation/buffer/OffsetCurveSetBuilder.cpp, source/operation/overlay/OverlayOp.cpp, source/operation/valid/RepeatedPointTester.cpp: Fixed warning after Polygon ring accessor methods changed to work with size_t. Small optimizations in loops.
+ *
+ * Revision 1.27  2006/04/07 09:54:30  strk
+ * Geometry::getNumGeometries() changed to return 'unsigned int'
+ * rather then 'int'
+ *
+ * Revision 1.26  2006/03/29 15:23:49  strk
+ * Moved GeometryGraph inlines from .h to .inl file
+ *
+ * Revision 1.25  2006/03/15 17:16:29  strk
+ * streamlined headers inclusion
+ *
+ **********************************************************************/
+
 

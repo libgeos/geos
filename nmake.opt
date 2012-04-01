@@ -1,11 +1,10 @@
+# $Id$
 #
 # nmake.opt - main configuration file for NMAKE makefiles
 #
 !MESSAGE **********************************************************************
 !MESSAGE *** GEOS Build Configuration ***
-
-# TODO: Confirm as redundant and remove, nmake /P displays _NMAKE_VER anyway.
-#!INCLUDE <ntwin32.mak>
+!INCLUDE <ntwin32.mak>
 
 ###############################################################################
 # For convenience, user may put custom settings to private mynmake.opt
@@ -89,9 +88,6 @@ GEOS_MSC = 1600
 !ELSEIF "$(_NMAKE_VER)" == "10.00.30319.01"
 GEOS_MSVC = 10.0
 GEOS_MSC = 1600
-!ELSEIF "$(_NMAKE_VER)" == "11.00.40825.2"
-GEOS_MSVC = 11.0
-GEOS_MSC = 1700
 !ELSE
 GEOS_MSVC = 0.0
 GEOS_MSC = 0

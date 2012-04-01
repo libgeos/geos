@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2006 Refractions Research Inc.
  *
@@ -52,7 +53,7 @@ namespace prep { // geos::geom::prep
  */
 class GEOS_DLL PreparedGeometry {
 public:
-	virtual ~PreparedGeometry() {}
+	virtual ~PreparedGeometry() {};
 	
 	/**
 	 * Gets the original {@link Geometry} which has been prepared.

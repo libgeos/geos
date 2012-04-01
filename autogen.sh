@@ -1,5 +1,6 @@
 #!/bin/sh
 #
+# $Id$
 #
 # GEOS Bootstrapping Script
 #

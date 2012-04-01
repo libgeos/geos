@@ -1,9 +1,9 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
- * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/EdgeEndStar.java r428 (JTS-1.12+)
+ * Last port: geomgraph/EdgeEndStar.java rev. 1.8 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -70,7 +70,7 @@ public:
 
 	EdgeEndStar();
 
-	virtual ~EdgeEndStar() {}
+	virtual ~EdgeEndStar() {};
 
 	/** \brief
 	 * Insert a EdgeEnd into this EdgeEndStar
@@ -200,4 +200,20 @@ EdgeEndStar::find(EdgeEnd *eSearch)
 #endif
 
 #endif // ifndef GEOS_GEOMGRAPH_EDGEENDSTAR_H
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.4  2006/06/12 10:49:43  strk
+ * unsigned int => size_t
+ *
+ * Revision 1.3  2006/04/04 13:35:55  strk
+ * Port info, assertion checking, indentation
+ *
+ * Revision 1.2  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
+ * Revision 1.1  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
+ **********************************************************************/
 

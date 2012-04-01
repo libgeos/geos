@@ -1,3 +1,4 @@
+# $Id$
 #
 # List of directories use by makefile.vc to clean .obj files
 #

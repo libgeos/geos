@@ -1,3 +1,4 @@
+// $Id$
 // 
 // Test Suite for geos::operation::IsSimpleOp class
 // Ported from JTS junit/operation/IsSimpleTest.java

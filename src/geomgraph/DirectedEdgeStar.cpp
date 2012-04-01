@@ -1,9 +1,9 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
- * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/DirectedEdgeStar.java r428 (JTS-1.12+)
+ * Last port: geomgraph/DirectedEdgeStar.java rev. 1.4 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -143,9 +143,10 @@ DirectedEdgeStar::computeLabelling(std::vector<GeometryGraph*> *geom)
 		assert(ee);
 		Edge *e=ee->getEdge();
 		assert(e);
-		const Label& eLabel=e->getLabel();
+		Label *eLabel=e->getLabel();
+		assert(eLabel);
 		for (int i=0; i<2; ++i) {
-			int eLoc=eLabel.getLocation(i);
+			int eLoc=eLabel->getLocation(i);
 			if (eLoc==Location::INTERIOR || eLoc==Location::BOUNDARY)
 				label.setLocation(i, Location::INTERIOR);
 		}
@@ -162,29 +163,32 @@ DirectedEdgeStar::mergeSymLabels()
 		assert(*it);
 		assert(dynamic_cast<DirectedEdge*>(*it));
 		DirectedEdge *de=static_cast<DirectedEdge*>(*it);
-		Label& deLabel = de->getLabel();
+		Label* deLabel=de->getLabel();
+		assert(deLabel);
 
 		DirectedEdge* deSym=de->getSym();
 		assert(deSym);
 
-		const Label& labelToMerge = deSym->getLabel();
+		Label* labelToMerge=deSym->getLabel();
+		assert(labelToMerge);
 
-		deLabel.merge(labelToMerge);
+		deLabel->merge(*labelToMerge);
 	}
 }
 
 /*public*/
 void
-DirectedEdgeStar::updateLabelling(const Label& nodeLabel)
+DirectedEdgeStar::updateLabelling(Label *nodeLabel)
 {
 	EdgeEndStar::iterator endIt=end();
 	for (EdgeEndStar::iterator it=begin(); it!=endIt; ++it)
 	{
 		DirectedEdge *de=dynamic_cast<DirectedEdge*>(*it);
 		assert(de);
-		Label& deLabel = de->getLabel();
-		deLabel.setAllLocationsIfNull(0, nodeLabel.getLocation(0));
-		deLabel.setAllLocationsIfNull(1, nodeLabel.getLocation(1));
+		Label *deLabel=de->getLabel();
+		assert(deLabel);
+		deLabel->setAllLocationsIfNull(0, nodeLabel->getLocation(0));
+		deLabel->setAllLocationsIfNull(1, nodeLabel->getLocation(1));
 	}
 }
 
@@ -229,7 +233,8 @@ DirectedEdgeStar::linkResultDirectedEdges()
 		assert(nextOut);
 
 		// skip de's that we're not interested in
-		if (!nextOut->getLabel().isArea()) continue;
+		assert(nextOut->getLabel());
+		if (!nextOut->getLabel()->isArea()) continue;
 
 		DirectedEdge *nextIn=nextOut->getSym();
 		assert(nextIn);
@@ -473,3 +478,16 @@ DirectedEdgeStar::print()
 
 } // namespace geos.geomgraph
 } // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.19  2006/04/04 16:07:40  strk
+ * More assertion checking, less overhead when built with NDEBUG defined
+ *
+ * Revision 1.18  2006/03/23 15:10:29  strk
+ * Dropped by-pointer TopologyException constructor, various small cleanups
+ *
+ * Revision 1.17  2006/03/15 17:16:29  strk
+ * streamlined headers inclusion
+ **********************************************************************/
+

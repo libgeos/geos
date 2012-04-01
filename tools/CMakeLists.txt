@@ -1,4 +1,5 @@
 #################################################################################
+# $Id$
 #
 # GEOS tools (geos-config) build configuration for CMake build system
 #

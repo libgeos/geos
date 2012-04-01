@@ -38,7 +38,7 @@ namespace
  * Tests provided condition.
  * Throws if false.
  */
-static inline void ensure(bool cond)
+void ensure(bool cond)
 {
     if (!cond)
     {
@@ -51,7 +51,7 @@ static inline void ensure(bool cond)
  * Tests provided condition.
  * Throws if true.
  */
-static inline void ensure_not(bool cond)
+void ensure_not(bool cond)
 {
     ensure(!cond);
 }
@@ -182,7 +182,7 @@ void ensure_errno(const M& msg, bool cond)
 /**
  * Unconditionally fails with message.
  */
-static inline void fail(const char* msg = "")
+void fail(const char* msg = "")
 {
     throw failure(msg);
 }

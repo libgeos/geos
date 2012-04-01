@@ -1,3 +1,4 @@
+# $Id$
 #
 # This file is part of project GEOS (http://trac.osgeo.org/geos/) 
 #
@@ -120,10 +121,6 @@ XMLTester_SOURCES = \
 	SingleSidedBufferResultMatcher.cpp
 
 XMLTester_LDADD = $(LIBS)
-
-# Intentionally drop -ansi -pedantic
-# See http://trac.osgeo.org/geos/ticket/319
-XMLTester_CXXFLAGS = 
 
 INCLUDES = -I$(top_srcdir)/include
 INCLUDES += -I$(top_srcdir)/src/io/tinyxml -DTIXML_USE_STL

@@ -1,3 +1,4 @@
+dnl $Id$
 dnl 
 dnl GEOS_INIT (MINIMUM_VERSION)
 dnl

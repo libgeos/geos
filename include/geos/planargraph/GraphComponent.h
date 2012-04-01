@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2005-2006 Refractions Research Inc.
@@ -61,7 +62,7 @@ public:
 		isVisitedVar(false)
 		{}
 
-	virtual ~GraphComponent() {}
+	virtual ~GraphComponent() {};
 
 	/** \brief
 	 * Tests if a component has been visited during the course

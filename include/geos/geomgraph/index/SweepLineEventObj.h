@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
@@ -28,7 +29,7 @@ namespace index { // geos::geomgraph::index
 // inherit from it.
 class GEOS_DLL SweepLineEventOBJ {
 public:
-	virtual ~SweepLineEventOBJ(){}
+	virtual ~SweepLineEventOBJ(){};
 };
 
 

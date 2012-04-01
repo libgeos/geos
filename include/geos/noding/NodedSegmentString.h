@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
@@ -82,7 +83,7 @@ public:
 	 * Creates a new segment string from a list of vertices.
 	 *
 	 * @param newPts CoordinateSequence representing the string,
-	 *               ownership transferred.
+	 *                externally owned
 	 *
 	 * @param data the user-defined data of this segment string
 	 *             (may be null)
@@ -94,9 +95,7 @@ public:
     {}
 
 	~NodedSegmentString()
-	{
-		delete pts;
-	}
+	{}
 
 	/**
 	 * Adds an intersection node for a given point and segment to this segment string.

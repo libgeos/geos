@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2006      Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
@@ -54,6 +55,16 @@ SegmentNodeList::~SegmentNodeList()
 	for(; it!=nodeMap.end(); it++)
 	{
 		delete *it;
+	}
+
+	for(size_t i=0, n=splitEdges.size(); i<n; ++i)
+	{
+		delete splitEdges[i];
+	}
+
+	for(size_t i=0, n=splitCoordLists.size(); i<n; ++i)
+	{
+		delete splitCoordLists[i];
 	}
 }
 
@@ -211,7 +222,6 @@ SegmentNodeList::addSplitEdges(std::vector<SegmentString*>& edgeList)
 #endif
 }
 
-/*private*/
 void
 SegmentNodeList::checkSplitEdgesCorrectness(std::vector<SegmentString*>& splitEdges)
 {
@@ -275,12 +285,15 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 	}
 	if (useIntPt1) 	pts->setAt(ei1->coord, ipt++);
 
-	// SegmentString takes ownership of CoordinateList 'pts'
 	SegmentString *ret = new NodedSegmentString(pts, edge.getData());
-
 #if GEOS_DEBUG
 	std::cerr<<" SegmentString created"<<std::endl;
 #endif
+	splitEdges.push_back(ret);
+
+	// Keep track of created CoordinateSequence to release
+	// it at this SegmentNodeList destruction time
+	splitCoordLists.push_back(pts);
 
 	return ret;
 }

@@ -1,3 +1,4 @@
+// $Id$
 // 
 // Test Suite for geos::noding::SegmentNode class.
 
@@ -67,7 +68,7 @@ namespace tut
 
         // Create SegmentString instance
         
-        NodedSegmentString segment(cs.release(), 0);
+        NodedSegmentString segment(cs.get(), 0);
 
         ensure_equals( segment.size(), coords_size );
 
@@ -115,7 +116,7 @@ namespace tut
 
         // Create SegmentString instance
         
-        NodedSegmentString segment(cs.release(), 0);
+        NodedSegmentString segment(cs.get(), 0);
 
         ensure_equals( segment.size(), coords_size );
 
@@ -157,7 +158,7 @@ namespace tut
 
         // Create SegmentString instance
         
-        NodedSegmentString segment(cs.release(), 0);
+        NodedSegmentString segment(cs.get(), 0);
 
         ensure_equals( segment.size(), coords_size );
 
@@ -199,7 +200,7 @@ namespace tut
 
         // Create SegmentString instance
         
-        NodedSegmentString segment(cs.release(), 0);
+        NodedSegmentString segment(cs.get(), 0);
 
         ensure_equals( segment.size(), coords_size );
 

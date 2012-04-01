@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
@@ -147,7 +148,7 @@ NodeMap::getBoundaryNodes(int geomIndex, vector<Node*>&bdyNodes) const
 	NodeMap::const_iterator it=nodeMap.begin();
 	for (;it!=nodeMap.end();it++) {
 		Node *node=it->second;
-		if (node->getLabel().getLocation(geomIndex)==Location::BOUNDARY)
+		if (node->getLabel()->getLocation(geomIndex)==Location::BOUNDARY)
 			bdyNodes.push_back(node);
 	}
 }

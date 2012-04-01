@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2006 Refractions Research Inc.
  *
@@ -51,14 +52,11 @@ public:
 
 	virtual ~RelateNode();
 
-	/**
-	 * Update the IM with the contribution for the EdgeEnds incident on this node.
-	 */
-	void updateIMFromEdges(geom::IntersectionMatrix& im);
+	void updateIMFromEdges(geom::IntersectionMatrix *im);
 
 protected:
 
-	void computeIM(geom::IntersectionMatrix& im);
+	void computeIM(geom::IntersectionMatrix *im);
 };
 
 
@@ -67,3 +65,11 @@ protected:
 } // namespace geos
 
 #endif // GEOS_OP_RELATE_RELATENODE_H
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.1  2006/03/21 13:11:29  strk
+ * opRelate.h header split
+ *
+ **********************************************************************/
+

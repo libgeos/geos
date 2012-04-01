@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -84,8 +85,8 @@ PointBuilder::extractNonCoveredResultNodes(OverlayOp::OpCode opCode)
 			 * in edge nodes being included even
 			 * if none of their incident edges are included
 			 */
-			const Label& label=n->getLabel();
-			if (OverlayOp::isResultOfOp(label, opCode)) 
+			Label *label=n->getLabel();
+			if (OverlayOp::isResultOfOp(label,opCode)) 
 				filterCoveredNodeToPoint(n);
 		}
 	}
@@ -104,4 +105,34 @@ PointBuilder::filterCoveredNodeToPoint(const Node *n)
 } // namespace geos.operation.overlay
 } // namespace geos.operation
 } // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.21  2006/06/05 15:36:34  strk
+ * Given OverlayOp funx code enum a name and renamed values to have a lowercase prefix. Drop all of noding headers from installed header set.
+ *
+ * Revision 1.20  2006/03/17 13:24:59  strk
+ * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
+ *
+ * Revision 1.19  2006/03/02 12:12:01  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
+ * Revision 1.18  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
+ * Revision 1.17  2005/11/15 12:14:05  strk
+ * Reduced heap allocations, made use of references when appropriate,
+ * small optimizations here and there.
+ *
+ * Revision 1.16  2005/06/28 01:07:02  strk
+ * improved extraction of result points in overlay op
+ *
+ * Revision 1.15  2005/06/25 10:20:39  strk
+ * OverlayOp speedup (JTS port)
+ *
+ * Revision 1.14  2005/02/05 05:44:47  strk
+ * Changed geomgraph nodeMap to use Coordinate pointers as keys, reduces
+ * lots of other Coordinate copies.
+ *
+ **********************************************************************/
 

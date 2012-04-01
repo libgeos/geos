@@ -1,7 +1,7 @@
 /**********************************************************************
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
@@ -118,7 +118,7 @@ private:
 	/**
 	 * update the IM with the sum of the IMs for each component
 	 */
-	void updateIM(geom::IntersectionMatrix& imX);
+	void updateIM(geom::IntersectionMatrix *imX);
 
 	/**
 	 * Processes isolated edges by computing their labelling and adding them

@@ -1,3 +1,4 @@
+# $Id$
 #
 # This file is part of project GEOS (http://trac.osgeo.org/geos/) 
 #
@@ -17,7 +18,7 @@ BUILT_SOURCES = geos_wrap.cxx
 rubyextensiondirdir = $(RUBY_EXTENSION_DIR)
 
 # Setup includes
-INCLUDES = -I$(RUBY_INCLUDE_DIR) -I$(RUBY_INCLUDE_DIR)/$(RUBY_SITE_ARCH)
+INCLUDES = -I$(RUBY_INCLUDE_DIR)
 
 # Build Ruby module as shared library
 rubyextensiondir_LTLIBRARIES = geos.la

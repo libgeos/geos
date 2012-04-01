@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2005-2006 Refractions Research Inc.
  *
@@ -9,10 +10,6 @@
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
- *
- **********************************************************************
- *
- * Last port: algorithm/ConvexHull.java r407 (JTS-1.12+)
  *
  **********************************************************************/
 

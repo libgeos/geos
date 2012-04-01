@@ -1,4 +1,5 @@
 #################################################################################
+# $Id$
 #
 # GEOS XML tests runner build configuration for CMake build system
 #

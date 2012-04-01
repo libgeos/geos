@@ -1,3 +1,4 @@
+// $Id$
 // 
 // Test Suite for geos::geom::GeometryFactory class.
 
@@ -219,7 +220,7 @@ namespace tut
 		ensure( "createEmptyGeometry() returned non-empty geometry.", geo->isEmpty() );
 
 		// TODO - mloskot
-		// http://geos.osgeo.org/pipermail/geos-devel/2006-March/001960.html
+		// http://geos.refractions.net/pipermail/geos-devel/2006-March/001960.html
 		/*		
 		ensure( geo->isSimple() );
 		ensure( geo->isValid() );
@@ -455,11 +456,11 @@ namespace tut
 		ensure( lr->getCoordinate() == 0 );
 
 		// TODO - mloskot
-		//http://geos.osgeo.org/pipermail/geos-devel/2006-March/001961.html
+		//http://geos.refractions.net/pipermail/geos-devel/2006-March/001961.html
 		//ensure( lr->isClosed() );
 		
 		// TODO - mloskot
-		//http://geos.osgeo.org/pipermail/geos-devel/2006-March/001962.html
+		//http://geos.refractions.net/pipermail/geos-devel/2006-March/001962.html
 		//ensure_equals( lr->getStartPoint(), lr->getEndPoint() );
 		
 		ensure_equals( lr->getGeometryTypeId(), geos::geom::GEOS_LINEARRING );
@@ -543,7 +544,7 @@ namespace tut
 		ensure( line->getCentroid() == 0 );
 		
 		// TODO - mloskot - waiting for some decision
-		// http://geos.osgeo.org/pipermail/geos-devel/2006-March/002006.html
+		// http://geos.refractions.net/pipermail/geos-devel/2006-March/002006.html
 		//ensure( line->getCoordinate() == 0 );
 
 		GeometryPtr geo = 0;
@@ -642,12 +643,12 @@ namespace tut
 		ensure( poly->getCentroid() == 0 );
 
 		// TODO - mloskot - waiting for some decision
-		// http://geos.osgeo.org/pipermail/geos-devel/2006-March/002006.html
+		// http://geos.refractions.net/pipermail/geos-devel/2006-March/002006.html
 		//ensure( poly->getCoordinate() == 0 );
 
 		GeometryPtr geo = 0;
 		// TODO - mloskot - waiting for resolution
-		// http://geos.osgeo.org/pipermail/geos-devel/2006-March/002011.html
+		// http://geos.refractions.net/pipermail/geos-devel/2006-March/002011.html
 		//geo = poly->getEnvelope();
 		//ensure( geo != 0 );
 		//ensure( geo->isEmpty() );
@@ -922,7 +923,7 @@ namespace tut
 		GeometryPtr geo = 0;
 
 		// TODO - mloskot - waiting for resolution
-		// http://geos.osgeo.org/pipermail/geos-devel/2006-March/002011.html
+		// http://geos.refractions.net/pipermail/geos-devel/2006-March/002011.html
 		//geo = poly->getEnvelope();
 		//ensure( geo != 0 );
 		//ensure( geo->isEmpty() );
@@ -1075,7 +1076,7 @@ namespace tut
 		GeometryPtr geo = 0;
 
 		// TODO - mloskot - waiting for resolution
-		// http://geos.osgeo.org/pipermail/geos-devel/2006-March/002011.html
+		// http://geos.refractions.net/pipermail/geos-devel/2006-March/002011.html
 		//geo = poly->getEnvelope();
 		//ensure( geo != 0 );
 		//ensure( geo->isEmpty() );

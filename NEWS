@@ -1,18 +1,50 @@
-Changes in 3.4.0
-????-??-??
+Changes in 3.3.4
+2012-??-??
 
-- C++ API changes:
-  - Added BufferOp::setSingleSided 
-  - Signature of most functions taking a Label changed to take it
-    by reference rather than pointer.
-  - Signature of most functions taking an IntersectionMatrix changed
-    to take it by reference rather than pointer.
-  - GraphComponent::label is now a Label value (from a pointer)
-  - NodedSegmentString takes ownership of CoordinateSequence now
 - Bug fixes / improvements
-  - Fixed Linear Referencing API to handle MultiLineStrings consistently
-    by always using the lowest possible index value, and by trimming
-    zero-length components from results (#323)
+    - ???
+
+Changes in 3.3.3
+2012-04-01
+
+- Bug fixes / improvements
+    - Fix simplification of collections with empty items (#519)
+    - Fix MSVC compilation of ambiguous log() call (#506)
+    - Fix CMake issues with std:: namespace detection (#493)
+
+Changes in 3.3.2
+2012-01-05
+
+- Bug fixes / improvements
+    - Fix CMAKE_CXX_FLAGS overriding -std=gnu++0x (#489)
+    - Missing versions update in CMake configuration (#490)
+    - Fix noding of self-intersecting lines through UnaryUnion (#482)
+    - Fix handling of collapsed edges skipping in BufferOp (#494)
+    - Print up to 18 digits of precision for TopologyException points
+    - Fix noding with reduced precision in Buffer operation (#473)
+    - Fix HotPixel original point invalidation (#498)
+    - Fix CascadedPolygonUnion to discard non-polygonal components (#499)
+    - Improve buffer robustness by reverting to non-snaprounding noder (#495)
+    - Fix C++11 build by avoiding std::pair<auto_ptr> (#491)
+    - Add --clibs to geos-config and GEOS_C_LIBS to geos.m4 (#497)
+    - Apply shoelace formula for area calculation (#485)
+    - Fix default initialization issue for clang (#500)
+    - Improve overlay robustness by fixing areal validity on snapping (#488)
+
+Changes in 3.3.1
+2011-09-27
+
+- Bug fixes / improvements
+  - Fix memory leak on invalid geometry in InteriorPointArea (#475)
+  - ValidOp abort in presence of 2 touching holes forming an island (#449)
+  - Enable prepared intersects operation for points
+  - Fortify suspicious code found by static analisys tools
+  - Fix for SOLARIS build (#461)
+  - Fix EMPTY result from GEOSOffsetCurve with distance 0 (#454)
+  - Fix Geometry::clone to copy SRID (#464)
+  - Fix for clang builds (#463)
+  - Fix out-of-place builds for python binding (#332) and regress testing
+  - Fix OS X framework cmake build (#385)
 
 Changes in 3.3.0
 2011-05-30

@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
@@ -13,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/PlanarGraph.java r428 (JTS-1.12+)
+ * Last port: geomgraph/PlanarGraph.java rev. 1.6 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -109,8 +110,8 @@ PlanarGraph::isBoundaryNode(int geomIndex, const Coordinate& coord)
 	Node *node=nodes->find(coord);
 	if (node==NULL) return false;
 
-	const Label& label = node->getLabel();
-	if (! label.isNull() && label.getLocation(geomIndex)==Location::BOUNDARY)
+	Label *label=node->getLabel();
+	if (label!=NULL && label->getLocation(geomIndex)==Location::BOUNDARY)
 			return true;
 
 	return false;
@@ -375,4 +376,41 @@ PlanarGraph::getNodeMap()
 
 } // namespace geos.geomgraph
 } // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.33  2006/06/12 11:29:23  strk
+ * unsigned int => size_t
+ *
+ * Revision 1.32  2006/05/04 12:17:27  strk
+ * Added comment about management of newly created DirectedEdges
+ *
+ * Revision 1.31  2006/04/27 15:07:15  strk
+ * use output operators in debugging lines
+ *
+ * Revision 1.30  2006/04/07 16:52:20  strk
+ * Port info, doxygen comments, assertion checking
+ *
+ * Revision 1.29  2006/03/15 17:16:29  strk
+ * streamlined headers inclusion
+ *
+ * Revision 1.28  2006/03/14 15:46:53  strk
+ * Added PlanarGraph::getNodes(vector&) func, to reduce useless heap allocations
+ *
+ * Revision 1.27  2006/03/09 16:46:47  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
+ * Revision 1.26  2006/03/06 19:40:46  strk
+ * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
+ *
+ * Revision 1.25  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
+ * Revision 1.24  2006/03/02 16:21:26  strk
+ * geos::precision namespace added
+ *
+ * Revision 1.23  2006/03/02 12:12:00  strk
+ * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
+ *
+ **********************************************************************/
 

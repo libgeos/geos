@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2006      Refractions Research Inc.
  *
@@ -12,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: noding/snapround/MCIndexPointSnapper.java r486 (JTS-1.12+)
+ * Last port: noding/snapround/MCIndexPointSnapper.java r320 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -89,4 +90,22 @@ private:
 } // namespace geos::noding
 } // namespace geos
 
+//#ifdef GEOS_INLINE
+//# include "geos/noding/snapround/MCIndexPointSnapper.inl"
+//#endif
+
 #endif // GEOS_NODING_SNAPROUND_MCINDEXPOINTSNAPPER_H
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.3  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
+ * Revision 1.2  2006/03/22 18:12:31  strk
+ * indexChain.h header split.
+ *
+ * Revision 1.1  2006/03/14 12:55:56  strk
+ * Headers split: geomgraphindex.h, nodingSnapround.h
+ *
+ **********************************************************************/
+

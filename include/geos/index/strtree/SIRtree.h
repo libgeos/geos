@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2006 Refractions Research Inc.
  *
@@ -93,7 +94,7 @@ protected:
 
 	AbstractNode* createNode(int level);
 
-	IntersectsOp* getIntersectsOp() {return intersectsOp;}
+	IntersectsOp* getIntersectsOp() {return intersectsOp;};
 
 	std::auto_ptr<BoundableList> sortBoundables(const BoundableList* input);
 

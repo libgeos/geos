@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
@@ -80,7 +81,7 @@ class GEOS_DLL WKBReader {
 
 public:
 
-	WKBReader(geom::GeometryFactory const& f): factory(f) {}
+	WKBReader(geom::GeometryFactory const& f): factory(f) {};
 
 	/// Inizialize parser with default GeometryFactory.
 	WKBReader();

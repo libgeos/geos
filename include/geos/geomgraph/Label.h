@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
@@ -13,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/Label.java r428 (JTS-1.12+)
+ * Last port: geomgraph/Label.java rev. 1.8 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -64,8 +65,10 @@ public:
 	 * Converts a Label to a Line label
 	 * (that is, one with no side Locations)
 	 *
+	 * Returns a newly allocated object,
+	 * responsibility of it to the caller.
 	 */
-	static Label toLineLabel(const Label& label);
+	static Label* toLineLabel(const Label& label);
 
 	/** \brief
 	 * Construct a Label with a single location for both Geometries.
@@ -91,14 +94,13 @@ public:
 	/// Copy ctor
 	Label(const Label &l);
 
-	Label& operator= (const Label& l);
-
 	/** \brief
-	 * Initialize both locations to Location::UNDEF
-	 * 
-	 * isNull() should return true after this kind of construction
+	 * Initialize the locations to Location::UNDEF
 	 */
 	Label();
+
+	/// I'd drop the 'virtual' modifier here --strk 2006-04-06
+	virtual ~Label();
 
 	/** \brief
 	 * Construct a Label with On, Left and Right locations for the
@@ -134,8 +136,6 @@ public:
 
 	int getGeometryCount() const;
 
-	bool isNull() const;
-
 	bool isNull(int geomIndex) const;
 
 	bool isAnyNull(int geomIndex) const;
@@ -157,7 +157,7 @@ public:
 
 	std::string toString() const;
 
-private:
+protected:
 
 	TopologyLocation elt[2];
 };
@@ -173,4 +173,17 @@ std::ostream& operator<< (std::ostream&, const Label&);
 //#endif
 
 #endif // ifndef GEOS_GEOMGRAPH_LABEL_H
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.3  2006/04/06 09:01:37  strk
+ * Doxygen comments, port info, operator<<, assertion checking
+ *
+ * Revision 1.2  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
+ * Revision 1.1  2006/03/09 16:46:49  strk
+ * geos::geom namespace definition, first pass at headers split
+ *
+ **********************************************************************/
 

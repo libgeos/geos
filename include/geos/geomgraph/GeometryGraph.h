@@ -1,9 +1,9 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
- * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: geomgraph/GeometryGraph.java r428 (JTS-1.12+)
+ * Last port: geomgraph/GeometryGraph.java rev. 1.9 (JTS-1.10)
  *
  **********************************************************************/
 
@@ -66,9 +66,6 @@ namespace geos {
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-/**
- * A GeometryGraph is a graph that models a given Geometry
- */
 class GEOS_DLL GeometryGraph: public PlanarGraph
 {
 using PlanarGraph::add;

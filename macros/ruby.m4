@@ -24,12 +24,9 @@ AC_DEFUN([AC_RUBY_DEVEL],
 
 		dnl Get Ruby bin directory
 		RUBY_BIN_DIR=`$RUBY -rrbconfig -e 'puts Config::CONFIG[["bindir"]]'`
-
-    dnl Get Ruby site arch
-		RUBY_SITE_ARCH=`$RUBY -rrbconfig -e 'puts Config::CONFIG[["sitearch"]]'`
-
+		
 		dnl Get Ruby include directory
-		RUBY_INCLUDE_DIR=`$RUBY -rrbconfig -e 'puts Config::CONFIG[["rubyhdrdir"]] || Config::CONFIG[["archdir"]]'`
+		RUBY_INCLUDE_DIR=`$RUBY -rrbconfig -e 'puts Config::CONFIG[["archdir"]]'`
 	
 		dnl Get Ruby lib directory
 		RUBY_LIB_DIR=`$RUBY -rrbconfig -e 'puts Config::CONFIG[["libdir"]]'`
@@ -46,7 +43,6 @@ AC_DEFUN([AC_RUBY_DEVEL],
     AC_MSG_NOTICE([Ruby executable is '$RUBY'])
     AC_MSG_NOTICE([Ruby version is '$RUBY_VERSION'])
     AC_MSG_NOTICE([Ruby bin directory is '$RUBY_BIN_DIR'])
-    AC_MSG_NOTICE([Ruby site arch is '$RUBY_SITE_ARCH'])
     AC_MSG_NOTICE([Ruby include directory is '$RUBY_INCLUDE_DIR'])
     AC_MSG_NOTICE([Ruby library directory is '$RUBY_LIB_DIR'])
     AC_MSG_NOTICE([Ruby extension directory is '$RUBY_EXTENSION_DIR'])
@@ -55,7 +51,6 @@ AC_DEFUN([AC_RUBY_DEVEL],
    
     AC_SUBST([RUBY_VERSION])
     AC_SUBST([RUBY_BIN_DIR])
-    AC_SUBST([RUBY_SITE_ARCH])
     AC_SUBST([RUBY_INCLUDE_DIR])
     AC_SUBST([RUBY_LIB_DIR])
     AC_SUBST([RUBY_EXTENSION_DIR])

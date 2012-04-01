@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
@@ -96,10 +97,10 @@ OverlayOp::overlayOp(const Geometry *geom0, const Geometry *geom1,
 
 /* static public */
 bool
-OverlayOp::isResultOfOp(const Label& label, OverlayOp::OpCode opCode)
+OverlayOp::isResultOfOp(Label *label, OverlayOp::OpCode opCode)
 {
-	int loc0 = label.getLocation(0);
-	int loc1 = label.getLocation(1);
+	int loc0=label->getLocation(0);
+	int loc1=label->getLocation(1);
 	return isResultOfOp(loc0, loc1, opCode);
 }
 
@@ -245,7 +246,7 @@ OverlayOp::copyPoints(int argIndex)
 		Node* newNode=graph.addNode(graphNode->getCoordinate());
 		assert(newNode);
 
-		newNode->setLabel(argIndex, graphNode->getLabel().getLocation(argIndex));
+		newNode->setLabel(argIndex,graphNode->getLabel()->getLocation(argIndex));
 	}
 }
 
@@ -335,7 +336,7 @@ OverlayOp::updateNodeLabelling()
 		assert( dynamic_cast<DirectedEdgeStar*>(ees) );
 		DirectedEdgeStar* des = static_cast<DirectedEdgeStar*>(ees);
 		Label &lbl = des->getLabel();
-		node->getLabel().merge(lbl);
+		node->getLabel()->merge(lbl);
 #if GEOS_DEBUG
 		cerr<<"     "<<node->print()<<endl;
 #endif
@@ -356,10 +357,10 @@ OverlayOp::labelIncompleteNodes()
 			it != itEnd; ++it )
 	{
 		Node *n=it->second;
-		const Label& label = n->getLabel();
+		Label *label=n->getLabel();
 		if (n->isIsolated())
 		{
-			if (label.isNull(0))
+			if (label->isNull(0))
 			{
 				labelIncompleteNode(n,0);
 			}
@@ -388,7 +389,7 @@ OverlayOp::labelIncompleteNode(Node *n, int targetIndex)
 #endif
 	const Geometry *targetGeom = arg[targetIndex]->getGeometry();
 	int loc=ptLocator.locate(n->getCoordinate(), targetGeom);
-	n->getLabel().setLocation(targetIndex, loc);
+	n->getLabel()->setLocation(targetIndex,loc);
 
 #if GEOS_DEBUG
 	cerr<<"   after location set: "<<n->print()<<endl;
@@ -523,11 +524,11 @@ OverlayOp::findResultAreaEdges(OverlayOp::OpCode opCode)
 	{
 		DirectedEdge *de=(DirectedEdge*) (*ee)[i];
 		// mark all dirEdges with the appropriate label
-		const Label& label = de->getLabel();
-		if ( label.isArea()
+		Label *label=de->getLabel();
+		if (label->isArea()
 			&& !de->isInteriorAreaEdge()
-			&& isResultOfOp(label.getLocation(0,Position::RIGHT),
-					label.getLocation(1,Position::RIGHT),
+			&& isResultOfOp(label->getLocation(0,Position::RIGHT),
+					label->getLocation(1,Position::RIGHT),
 					opCode)
 			)
 		{
@@ -804,30 +805,29 @@ OverlayOp::insertUniqueEdge(Edge *e)
 #if GEOS_DEBUG
 		cerr<<"  found identical edge, should merge Z"<<endl;
 #endif
+		Label *existingLabel=existingEdge->getLabel();
 
-		Label& existingLabel = existingEdge->getLabel();
-
-		Label labelToMerge = e->getLabel();
+		Label *labelToMerge=e->getLabel();
 
 		// check if new edge is in reverse direction to existing edge
 		// if so, must flip the label before merging it
 		if (!existingEdge->isPointwiseEqual(e))
 		{
-			labelToMerge.flip();
+//			labelToMerge=new Label(e->getLabel());
+			labelToMerge->flip();
 		}
-		Depth &depth = existingEdge->getDepth();
+		Depth &depth=existingEdge->getDepth();
 
 		// if this is the first duplicate found for this edge,
 		// initialize the depths
 		if (depth.isNull())
 		{
-			depth.add(existingLabel);
+			depth.add(*existingLabel);
 		}
 
-		depth.add(labelToMerge);
+		depth.add(*labelToMerge);
 
-		existingLabel.merge(labelToMerge);
-
+		existingLabel->merge(*labelToMerge);
 		//Debug.print("inserted edge: "); Debug.println(e);
 		//Debug.print("existing edge: "); Debug.println(existingEdge);
 		dupEdges.push_back(e);
@@ -851,8 +851,8 @@ OverlayOp::computeLabelsFromDepths()
 	for(size_t j=0, s=edgeList.getEdges().size(); j<s; ++j)
 	{
 		Edge *e=edgeList.get(j);
-		Label& lbl = e->getLabel();
-		Depth &depth = e->getDepth();
+		Label *lbl=e->getLabel();
+		Depth &depth=e->getDepth();
 
 		/*
 		 * Only check edges for which there were duplicates,
@@ -864,7 +864,7 @@ OverlayOp::computeLabelsFromDepths()
 		depth.normalize();
 		for (int i=0;i<2;i++)
 		{
-			if (!lbl.isNull(i) && lbl.isArea() && !depth.isNull(i))
+			if (!lbl->isNull(i) && lbl->isArea() && !depth.isNull(i))
 			{
 				/*
 				 * if the depths are equal, this edge is the result of
@@ -873,7 +873,7 @@ OverlayOp::computeLabelsFromDepths()
 				 * so it has collapsed to a line.
 				 */
 				if (depth.getDelta(i)==0) {
-					lbl.toLine(i);
+					lbl->toLine(i);
 				} else {
 					/*
 					 * This edge may be the result of a dimensional collapse,
@@ -882,9 +882,9 @@ OverlayOp::computeLabelsFromDepths()
 					 * side locations indicated by the depth values.
 					 */
 					assert(!depth.isNull(i,Position::LEFT)); // depth of LEFT side has not been initialized
-					lbl.setLocation(i,Position::LEFT,depth.getLocation(i,Position::LEFT));
+					lbl->setLocation(i,Position::LEFT,depth.getLocation(i,Position::LEFT));
 					assert(!depth.isNull(i,Position::RIGHT)); // depth of RIGHT side has not been initialized
-					lbl.setLocation(i,Position::RIGHT,depth.getLocation(i,Position::RIGHT));
+					lbl->setLocation(i,Position::RIGHT,depth.getLocation(i,Position::RIGHT));
 				}
 			}
 		}
@@ -1022,4 +1022,30 @@ OverlayOp::checkObviouslyWrongResult(OverlayOp::OpCode opCode)
 } // namespace geos.operation.overlay
 } // namespace geos.operation
 } // namespace geos
+
+/**********************************************************************
+ * $Log$
+ * Revision 1.77  2006/07/05 20:19:29  strk
+ * added checks for obviously wrong result of difference and intersection ops
+ *
+ * Revision 1.76  2006/06/14 15:38:16  strk
+ * Fixed just-introduced bug
+ *
+ * Revision 1.75  2006/06/14 15:03:32  strk
+ * * source/operation/overlay/OverlayOp.cpp: use NodeMap::container and related typedefs, removed (int) casts, optimized loops.
+ *
+ * Revision 1.74  2006/06/13 21:42:55  strk
+ * trimmed cvs log, cleanups
+ *
+ * Revision 1.73  2006/06/12 11:29:24  strk
+ * unsigned int => size_t
+ *
+ * Revision 1.72  2006/06/09 07:42:13  strk
+ * * source/geomgraph/GeometryGraph.cpp, source/operation/buffer/OffsetCurveSetBuilder.cpp, source/operation/overlay/OverlayOp.cpp, source/operation/valid/RepeatedPointTester.cpp: Fixed warning after Polygon ring accessor methods changed to work with size_t. Small optimizations in loops.
+ *
+ * Revision 1.71  2006/06/05 15:36:34  strk
+ * Given OverlayOp funx code enum a name and renamed values to have a lowercase prefix. Drop all of noding headers from installed header set.
+ *
+ *
+ **********************************************************************/
 

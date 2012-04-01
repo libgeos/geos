@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -51,6 +52,7 @@ PreparedPolygon::~PreparedPolygon()
 
 	for ( std::size_t i = 0, ni = segStrings.size(); i < ni; i++ )
 	{
+		delete segStrings[ i ]->getCoordinates();
 		delete segStrings[ i ];
 	}
 }

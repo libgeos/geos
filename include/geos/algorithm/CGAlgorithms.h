@@ -1,7 +1,7 @@
 /**********************************************************************
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2011 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
@@ -60,7 +60,7 @@ public:
 		STRAIGHT
 	};
 
-	CGAlgorithms(){}
+	CGAlgorithms(){};
 
 	/** \brief
 	 * Tests whether a point lies inside a ring.

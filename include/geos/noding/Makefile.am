@@ -1,3 +1,4 @@
+# $Id$
 #
 # This file is part of project GEOS (http://trac.osgeo.org/geos/) 
 #
@@ -31,6 +32,7 @@ geos_HEADERS = \
     SegmentPointComparator.h \
     SegmentSetMutualIntersector.h \
     SegmentString.h \
+    SegmentString.inl \
     SegmentStringUtil.h \
     SimpleNoder.h \
     SingleInteriorIntersectionFinder.h \

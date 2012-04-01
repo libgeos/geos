@@ -1,3 +1,4 @@
+// $Id$
 // 
 // Test Suite for CGAlgorithms::isPointInRing() function
 

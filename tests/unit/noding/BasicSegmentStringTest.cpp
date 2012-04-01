@@ -1,3 +1,4 @@
+// $Id$
 // 
 // Test Suite for geos::noding::BasicSegmentString class.
 

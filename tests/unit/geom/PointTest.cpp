@@ -1,3 +1,4 @@
+// $Id$
 // 
 // Test Suite for geos::geom::Point class.
 

@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2006 Refractions Research Inc.
  *
@@ -53,11 +54,7 @@ public:
 	
 	virtual ~EdgeEndBundleStar();
 	void insert(geomgraph::EdgeEnd *e);
-
-	/**
-	 * Update the IM with the contribution for the EdgeStubs around the node.
-	 */
-	void updateIM(geom::IntersectionMatrix& im);
+	void updateIM(geom::IntersectionMatrix *im);
 };
 
 

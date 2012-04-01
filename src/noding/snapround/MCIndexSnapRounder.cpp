@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2006 Refractions Research Inc.
  *
@@ -12,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: noding/snapround/MCIndexSnapRounder.java r486 (JTS-1.12+)
+ * Last port: noding/snapround/MCIndexSnapRounder.java r480 (JTS-1.12)
  *
  **********************************************************************/
 
@@ -112,7 +113,7 @@ MCIndexSnapRounder::computeNodes(SegmentString::NonConstVect* inputSegmentString
 {
 	nodedSegStrings = inputSegmentStrings;
 	MCIndexNoder noder;
-	pointSnapper.release(); // let it leak ?!
+	pointSnapper.release(); // let it leak
 	pointSnapper.reset(new MCIndexPointSnapper(noder.getIndex()));
 	snapRound(noder, inputSegmentStrings);
 
@@ -144,3 +145,58 @@ MCIndexSnapRounder::checkCorrectness(
 } // namespace geos.noding
 } // namespace geos
 
+/**********************************************************************
+ * $Log$
+ * Revision 1.11  2006/05/05 15:40:39  strk
+ * Had nodind validation error throw an exception for SimpleSnapRounder
+ * and MCIndexSnapRounder
+ *
+ * Revision 1.10  2006/04/03 10:44:19  strk
+ * Added missing headers
+ *
+ * Revision 1.9  2006/03/24 09:52:41  strk
+ * USE_INLINE => GEOS_INLINE
+ *
+ * Revision 1.8  2006/03/22 18:12:32  strk
+ * indexChain.h header split.
+ *
+ * Revision 1.7  2006/03/14 12:55:56  strk
+ * Headers split: geomgraphindex.h, nodingSnapround.h
+ *
+ * Revision 1.6  2006/03/03 10:46:21  strk
+ * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
+ *
+ * Revision 1.5  2006/02/23 11:54:20  strk
+ * - MCIndexPointSnapper
+ * - MCIndexSnapRounder
+ * - SnapRounding BufferOp
+ * - ScaledNoder
+ * - GEOSException hierarchy cleanups
+ * - SpatialIndex memory-friendly query interface
+ * - GeometryGraph::getBoundaryNodes memory-friendly
+ * - NodeMap::getBoundaryNodes memory-friendly
+ * - Cleanups in geomgraph::Edge
+ * - Added an XML test for snaprounding buffer (shows leaks, working on it)
+ *
+ * Revision 1.4  2006/02/21 16:53:49  strk
+ * MCIndexPointSnapper, MCIndexSnapRounder
+ *
+ * Revision 1.3  2006/02/19 19:46:49  strk
+ * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
+ *
+ * Revision 1.2  2006/02/18 21:08:09  strk
+ * - new CoordinateSequence::applyCoordinateFilter method (slow but useful)
+ * - SegmentString::getCoordinates() doesn't return a clone anymore.
+ * - SegmentString::getCoordinatesRO() obsoleted.
+ * - SegmentString constructor does not promises constness of passed
+ *   CoordinateSequence anymore.
+ * - NEW ScaledNoder class
+ * - Stubs for MCIndexPointSnapper and  MCIndexSnapRounder
+ * - Simplified internal interaces of OffsetCurveBuilder and OffsetCurveSetBuilder
+ *
+ * Revision 1.1  2006/02/14 13:28:26  strk
+ * New SnapRounding code ported from JTS-1.7 (not complete yet).
+ * Buffer op optimized by using new snaprounding code.
+ * Leaks fixed in XMLTester.
+ *
+ **********************************************************************/

@@ -1,7 +1,8 @@
 /**********************************************************************
+ * $Id$
  *
  * GEOS - Geometry Engine Open Source
- * http://geos.osgeo.org
+ * http://geos.refractions.net
  *
  * Copyright (C) 2006 Refractions Research Inc.
  *
@@ -49,18 +50,13 @@ class GEOS_DLL EdgeEndBundle: public geomgraph::EdgeEnd
 public:
 	EdgeEndBundle(geomgraph::EdgeEnd *e);
 	virtual ~EdgeEndBundle();
+	geomgraph::Label *getLabel();
 	std::vector<geomgraph::EdgeEnd*>* getEdgeEnds();
 	void insert(geomgraph::EdgeEnd *e);
 
 	void computeLabel(const algorithm::BoundaryNodeRule& bnr); 
 
-  /**
-   * \brief
-   * Update the IM with the contribution for the computed label for
-   * the EdgeStubs.
-   */
-	void updateIM(geom::IntersectionMatrix& im);
-
+	void updateIM(geom::IntersectionMatrix *im);
 	std::string print();
 protected:
 	std::vector<geomgraph::EdgeEnd*> *edgeEnds;
