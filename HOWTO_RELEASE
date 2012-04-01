@@ -19,7 +19,7 @@
    $ cd MAJOR.MINOR.PATCH
    $ ./autogen.sh && ./configure && make dist-bzip2
 
-8: Copy the tarball to upload.osgeo.org:/download_data/download/geos
+8: Copy the tarball to upload.osgeo.org:/osgeo/download/geos
 
 9: Increment all the version numbers for the next release, as below.
 
