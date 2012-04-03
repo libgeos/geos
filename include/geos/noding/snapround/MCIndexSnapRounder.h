@@ -75,7 +75,7 @@ class GEOS_DLL MCIndexSnapRounder: public Noder { // implments Noder
 
 public:
 
-	MCIndexSnapRounder(geom::PrecisionModel& nPm)
+	MCIndexSnapRounder(const geom::PrecisionModel& nPm)
     :
 		pm(nPm),
 		scaleFactor(nPm.getScale()),
@@ -103,7 +103,7 @@ public:
 private:
 
 	/// externally owned
-	geom::PrecisionModel& pm;
+	const geom::PrecisionModel& pm;
 
 	algorithm::LineIntersector li;
 
