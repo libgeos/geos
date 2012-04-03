@@ -96,9 +96,6 @@ private:
 
 	bool orientationVar;
 
-    // Declare type as noncopyable
-    OrientedCoordinateArray(const OrientedCoordinateArray& other);
-    OrientedCoordinateArray& operator=(const OrientedCoordinateArray& rhs);
 };
 
 } // namespace geos.noding
