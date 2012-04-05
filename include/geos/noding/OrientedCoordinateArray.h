@@ -98,6 +98,15 @@ private:
 
 };
 
+/// Strict weak ordering operator for OrientedCoordinateArray
+//
+/// This is the C++ equivalent of JTS's compareTo
+inline bool operator< ( const OrientedCoordinateArray& oca1,
+                        const OrientedCoordinateArray& oca2 )
+{
+  return oca1.compareTo(oca2)<0;
+}
+
 } // namespace geos.noding
 } // namespace geos
 

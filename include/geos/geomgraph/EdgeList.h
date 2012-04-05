@@ -66,7 +66,7 @@ private:
 			const noding::OrientedCoordinateArray *oca1,
 			const noding::OrientedCoordinateArray *oca2) const
 		{
-			return oca1->compareTo(*oca2)<0;
+			return *oca1 < *oca2;
 		}
 	};
 
