@@ -60,8 +60,20 @@ IteratedNoder::computeNodes(SegmentString::NonConstVect* segStrings)
 	nodedSegStrings = segStrings;
 	int nodingIterationCount = 0;
 	int lastNodesCreated = -1;
+	vector<SegmentString*> *lastStrings = 0;
 	do {
+
+		// NOTE: will change this.nodedSegStrings
 		node(nodedSegStrings, &numInteriorIntersections);
+
+		// Delete noded strings from previous iteration
+		if ( lastStrings ) {
+			for ( unsigned int i = 0, n = lastStrings->size(); i < n; ++i )
+				delete (*lastStrings)[i];
+			delete lastStrings;
+		}
+		lastStrings = nodedSegStrings;
+
 		nodingIterationCount++;
 		int nodesCreated = numInteriorIntersections;
 
