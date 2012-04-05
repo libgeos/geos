@@ -122,9 +122,18 @@ GeometryNoder::getNoded()
   extractSegmentStrings(argGeom, lineList);
 
   Noder& noder = getNoder();
+  SegmentString::NonConstVect* nodedEdges = 0;
 
-  noder.computeNodes( &lineList );
-  SegmentString::NonConstVect* nodedEdges = noder.getNodedSubstrings();
+  try {
+    noder.computeNodes( &lineList );
+    nodedEdges = noder.getNodedSubstrings();
+  }
+  catch (const std::exception& ex)
+  {
+    for (size_t i=0, n=lineList.size(); i<n; ++i)
+      delete lineList[i];
+    throw ex;
+  }
 
   std::auto_ptr<geom::Geometry> noded = toGeometry(*nodedEdges);
 
@@ -134,7 +143,6 @@ GeometryNoder::getNoded()
 
   for (size_t i=0, n=lineList.size(); i<n; ++i)
     delete lineList[i];
-  lineList.clear();
 
   return noded;
 }
