@@ -10695,15 +10695,15 @@ SWIG_init(void) {
   
   
   SWIG_Python_SetConstant(d, "GEOS_VERSION_MAJOR",SWIG_From_int(static_cast< int >(3)));
-  SWIG_Python_SetConstant(d, "GEOS_VERSION_MINOR",SWIG_From_int(static_cast< int >(3)));
-  SWIG_Python_SetConstant(d, "GEOS_VERSION",SWIG_FromCharPtr("3.3.4dev"));
+  SWIG_Python_SetConstant(d, "GEOS_VERSION_MINOR",SWIG_From_int(static_cast< int >(4)));
+  SWIG_Python_SetConstant(d, "GEOS_VERSION",SWIG_FromCharPtr("3.4.0dev"));
   SWIG_Python_SetConstant(d, "GEOS_JTS_PORT",SWIG_FromCharPtr("1.12.0"));
   SWIG_Python_SetConstant(d, "GEOS_CAPI_VERSION_MAJOR",SWIG_From_int(static_cast< int >(1)));
-  SWIG_Python_SetConstant(d, "GEOS_CAPI_VERSION_MINOR",SWIG_From_int(static_cast< int >(7)));
-  SWIG_Python_SetConstant(d, "GEOS_CAPI_VERSION_PATCH",SWIG_From_int(static_cast< int >(3)));
+  SWIG_Python_SetConstant(d, "GEOS_CAPI_VERSION_MINOR",SWIG_From_int(static_cast< int >(8)));
+  SWIG_Python_SetConstant(d, "GEOS_CAPI_VERSION_PATCH",SWIG_From_int(static_cast< int >(0)));
   SWIG_Python_SetConstant(d, "GEOS_CAPI_FIRST_INTERFACE",SWIG_From_int(static_cast< int >(1)));
-  SWIG_Python_SetConstant(d, "GEOS_CAPI_LAST_INTERFACE",SWIG_From_int(static_cast< int >((1+7))));
-  SWIG_Python_SetConstant(d, "GEOS_CAPI_VERSION",SWIG_FromCharPtr("3.3.4dev-CAPI-1.7.3"));
+  SWIG_Python_SetConstant(d, "GEOS_CAPI_LAST_INTERFACE",SWIG_From_int(static_cast< int >((1+8))));
+  SWIG_Python_SetConstant(d, "GEOS_CAPI_VERSION",SWIG_FromCharPtr("3.4.0dev-CAPI-1.8.0"));
   SWIG_Python_SetConstant(d, "GEOS_POINT",SWIG_From_int(static_cast< int >(GEOS_POINT)));
   SWIG_Python_SetConstant(d, "GEOS_LINESTRING",SWIG_From_int(static_cast< int >(GEOS_LINESTRING)));
   SWIG_Python_SetConstant(d, "GEOS_LINEARRING",SWIG_From_int(static_cast< int >(GEOS_LINEARRING)));
