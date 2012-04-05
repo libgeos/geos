@@ -55,7 +55,7 @@ public:
 	 */
 	OrientedCoordinateArray(const geom::CoordinateSequence& pts)
 		:
-		pts(pts),
+		pts(&pts),
 		orientationVar(orientation(pts))
 	{
 	}
@@ -92,7 +92,7 @@ private:
 	static bool orientation(const geom::CoordinateSequence& pts);
 
 	/// Externally owned
-	const geom::CoordinateSequence& pts;
+	const geom::CoordinateSequence* pts;
 
 	bool orientationVar;
 

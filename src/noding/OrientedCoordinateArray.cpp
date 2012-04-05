@@ -46,8 +46,8 @@ OrientedCoordinateArray::orientation(const CoordinateSequence& pts)
 int
 OrientedCoordinateArray::compareTo(const OrientedCoordinateArray& oca) const
 {
-	int comp = compareOriented(pts, orientationVar,
-                               oca.pts, oca.orientationVar);
+	int comp = compareOriented(*pts, orientationVar,
+                               *oca.pts, oca.orientationVar);
 #if 0 // MD - testing only
     int oldComp = SegmentStringDissolver.ptsComp.compare(pts, oca.pts);
     if ((oldComp == 0 || comp == 0) && oldComp != comp) {
