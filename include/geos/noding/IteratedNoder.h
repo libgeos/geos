@@ -12,7 +12,7 @@
  *
  **********************************************************************
  *
- * Last port: noding/IteratedNoder.java rev. 1.6 (JTS-1.9)
+ * Last port: noding/IteratedNoder.java r591 (JTS-1.12+)
  *
  **********************************************************************/
 
@@ -40,12 +40,13 @@ namespace geos {
 namespace geos {
 namespace noding { // geos::noding
 
-/**
+/** \brief
  * Nodes a set of SegmentStrings completely.
+ * 
  * The set of segmentStrings is fully noded;
  * i.e. noding is repeated until no further
  * intersections are detected.
- * <p>
+ * 
  * Iterated noding using a FLOATING precision model is not guaranteed to converge,
  * due to roundoff error.   This problem is detected and an exception is thrown.
  * Clients can choose to rerun the noding using a lower precision model.
