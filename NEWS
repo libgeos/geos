@@ -1,7 +1,10 @@
 Changes in 3.4.0
 ????-??-??
 
+- New things:
+  - CAPI: GEOSNode (#496)
 - C++ API changes:
+  - New noding::GeometryNoder class
   - Added BufferOp::setSingleSided 
   - Signature of most functions taking a Label changed to take it
     by reference rather than pointer.
