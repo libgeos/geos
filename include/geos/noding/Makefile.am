@@ -11,6 +11,7 @@ geos_HEADERS = \
     BasicSegmentString.h \
     FastNodingValidator.h \
     FastSegmentSetIntersectionFinder.h \
+    GeometryNoder.h \
     IntersectionAdder.h \
     IntersectionFinderAdder.h \
     IteratedNoder.h \

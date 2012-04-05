@@ -45,6 +45,7 @@
 #include <geos/algorithm/BoundaryNodeRule.h>
 #include <geos/simplify/DouglasPeuckerSimplifier.h>
 #include <geos/simplify/TopologyPreservingSimplifier.h>
+#include <geos/noding/GeometryNoder.h>
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/operation/linemerge/LineMerger.h>
@@ -1996,6 +1997,45 @@ GEOSUnaryUnion_r(GEOSContextHandle_t extHandle, const Geometry *g)
     try
     {
         GeomAutoPtr g3 ( g->Union() );
+        return g3.release();
+    }
+    catch (const std::exception &e)
+    {
+#if VERBOSE_EXCEPTIONS
+        std::ostringstream s; 
+        s << "Exception on GEOSUnaryUnion with following inputs:" << std::endl;
+        s << "A: "<<g1->toString() << std::endl;
+        s << "B: "<<g2->toString() << std::endl;
+        handle->NOTICE_MESSAGE("%s", s.str().c_str());
+#endif // VERBOSE_EXCEPTIONS
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+    
+    return NULL;
+}
+
+Geometry *
+GEOSNode_r(GEOSContextHandle_t extHandle, const Geometry *g)
+{
+    if ( 0 == extHandle )
+    {
+        return NULL;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return NULL;
+    }
+
+    try
+    {
+        std::auto_ptr<Geometry> g3 = geos::noding::GeometryNoder::node(*g);
         return g3.release();
     }
     catch (const std::exception &e)

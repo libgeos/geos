@@ -11,6 +11,7 @@ libnoding_la_SOURCES = \
 	BasicSegmentString.cpp \
 	FastNodingValidator.cpp \
 	FastSegmentSetIntersectionFinder.cpp \
+	GeometryNoder.cpp \
 	IntersectionAdder.cpp \
 	IntersectionFinderAdder.cpp \
 	IteratedNoder.cpp \

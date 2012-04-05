@@ -437,6 +437,12 @@ GEOSUnaryUnion(const Geometry *g1)
 }
 
 Geometry *
+GEOSNode(const Geometry *g)
+{
+    return GEOSNode_r( handle, g );
+}
+
+Geometry *
 GEOSUnionCascaded(const Geometry *g1)
 {
 	return GEOSUnionCascaded_r( handle, g1 );

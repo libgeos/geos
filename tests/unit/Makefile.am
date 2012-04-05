@@ -116,6 +116,7 @@ geos_unit_SOURCES = \
 	capi/GEOSGeom_extractUniquePointsTest.cpp \
 	capi/GEOSOrientationIndex.cpp \
 	capi/GEOSLineString_PointTest.cpp \
+	capi/GEOSNodeTest.cpp \
 	capi/GEOSSnapTest.cpp \
 	capi/GEOSSharedPathsTest.cpp \
 	capi/GEOSRelateBoundaryNodeRuleTest.cpp \

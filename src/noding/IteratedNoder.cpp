@@ -88,7 +88,7 @@ IteratedNoder::computeNodes(SegmentString::NonConstVect* segStrings)
 		{
 			stringstream s;
 			s<<"Iterated noding failed to converge after "<<
-                                    nodingIterationCount<<" iterations";
+                                    nodingIterationCount << " iterations";
 			throw util::TopologyException(s.str());
 		}
 		lastNodesCreated = nodesCreated;

@@ -573,6 +573,7 @@ extern GEOSGeometry GEOS_DLL *GEOSSymDifference(const GEOSGeometry* g1,
 extern GEOSGeometry GEOS_DLL *GEOSBoundary(const GEOSGeometry* g1);
 extern GEOSGeometry GEOS_DLL *GEOSUnion(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern GEOSGeometry GEOS_DLL *GEOSUnaryUnion(const GEOSGeometry* g1);
+extern GEOSGeometry GEOS_DLL *GEOSNode(const GEOSGeometry* g);
 
 /* @deprecated in 3.3.0: use GEOSUnaryUnion instead */
 extern GEOSGeometry GEOS_DLL *GEOSUnionCascaded(const GEOSGeometry* g1);
@@ -605,6 +606,8 @@ extern GEOSGeometry GEOS_DLL *GEOSPointOnSurface_r(GEOSContextHandle_t handle,
                                                    const GEOSGeometry* g1);
 extern GEOSGeometry GEOS_DLL *GEOSGetCentroid_r(GEOSContextHandle_t handle,
                                                 const GEOSGeometry* g);
+extern GEOSGeometry GEOS_DLL *GEOSNode_r(GEOSContextHandle_t handle,
+                                         const GEOSGeometry* g);
 
 /*
  * all arguments remain ownership of the caller
