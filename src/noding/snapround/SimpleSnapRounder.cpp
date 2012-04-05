@@ -54,7 +54,9 @@ SimpleSnapRounder::SimpleSnapRounder(const geom::PrecisionModel& newPm)
 std::vector<SegmentString*>*
 SimpleSnapRounder::getNodedSubstrings() const
 {
-	return nodedSegStrings;
+	std::vector<SegmentString*> *ret = new std::vector<SegmentString*>();
+	NodedSegmentString::getNodedSubstrings(nodedSegStrings->begin(), nodedSegStrings->end(), ret);
+	return ret;
 }
 
 /*public*/
@@ -76,17 +78,36 @@ void
 SimpleSnapRounder::checkCorrectness(
 		SegmentString::NonConstVect& inputSegmentStrings)
 {
-	auto_ptr<SegmentString::NonConstVect> resultSegStrings(
-		NodedSegmentString::getNodedSubstrings(inputSegmentStrings)
-	);
+  SegmentString::NonConstVect resultSegStrings;
+  NodedSegmentString::getNodedSubstrings(
+    inputSegmentStrings.begin(), inputSegmentStrings.end(), &resultSegStrings
+  );
 
-	NodingValidator nv(*(resultSegStrings.get()));
-	try {
-		nv.checkValid();
-	} catch (const std::exception &ex) {
-		std::cerr << ex.what() << std::endl;
-		throw;
-	}
+  NodingValidator nv(resultSegStrings);
+
+  try {
+    nv.checkValid();
+  }
+
+  catch (const std::exception &ex) {
+
+    for ( SegmentString::NonConstVect::iterator i=resultSegStrings.begin(),
+                                                e=resultSegStrings.end();
+          i!=e; ++i )
+    {
+      delete *i;
+    }
+
+    std::cerr << ex.what() << std::endl;
+    throw;
+  }
+
+  for ( SegmentString::NonConstVect::iterator i=resultSegStrings.begin(),
+                                              e=resultSegStrings.end();
+        i!=e; ++i )
+  {
+    delete *i;
+  }
  
 }
 
