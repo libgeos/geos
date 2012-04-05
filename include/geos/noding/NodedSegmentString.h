@@ -58,16 +58,24 @@ class GEOS_DLL NodedSegmentString : public NodableSegmentString
 {
 public:
 
-    static void getNodedSubstrings(SegmentString::ConstVect* segStrings,
+    // TODO: provide a templated method using an output iterator
+    template <class II>
+    static void getNodedSubstrings(II from, II too_far, 
         SegmentString::NonConstVect* resultEdgelist)
     {
-        for (ConstVect::size_type i=0, n=segStrings->size(); i<n; i++)
+        for (II i=from; i != too_far; ++i)
         {
-            NodedSegmentString const* nss = 
-                static_cast<NodedSegmentString const*>((*segStrings)[i]);
-
-            const_cast<NodedSegmentString*>(nss)->getNodeList().addSplitEdges( resultEdgelist);
+            NodedSegmentString * nss = dynamic_cast<NodedSegmentString*>(*i);
+            assert(nss);
+            nss->getNodeList().addSplitEdges(resultEdgelist);
         }
+    }
+
+    template <class C>
+    static void getNodedSubstrings(C *segStrings,
+        SegmentString::NonConstVect* resultEdgelist)
+    {
+        getNodedSubstrings(segStrings->begin(), segStrings->end(), resultEdgelist);
     }
 
 	static void getNodedSubstrings(const SegmentString::NonConstVect& segStrings,
