@@ -71,6 +71,7 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 10, 10 0, 0 10)");
         geom2_ = GEOSNode(geom1_);
+        ensure(geom2_);
 
         char* wkt_c = GEOSWKTWriter_write(w_, geom2_);
         std::string out(wkt_c); 
@@ -88,6 +89,7 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("MULTILINESTRING((0 0, 2 0, 4 0),(5 0, 3 0, 1 0))");
         geom2_ = GEOSNode(geom1_);
+        ensure(geom2_);
 
         char* wkt_c = GEOSWKTWriter_write(w_, geom2_);
         std::string out(wkt_c); 
@@ -105,6 +107,7 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("MULTILINESTRING((0 0, 2 0, 4 0),(0 0, 2 0, 4 0))");
         geom2_ = GEOSNode(geom1_);
+        ensure(geom2_);
 
         char* wkt_c = GEOSWKTWriter_write(w_, geom2_);
         std::string out(wkt_c); 
