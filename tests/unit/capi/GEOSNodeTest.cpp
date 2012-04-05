@@ -73,12 +73,13 @@ namespace tut
         geom2_ = GEOSNode(geom1_);
         ensure(geom2_);
 
+        GEOSNormalize(geom2_);
         char* wkt_c = GEOSWKTWriter_write(w_, geom2_);
         std::string out(wkt_c); 
         free(wkt_c);
 
         ensure_equals(out,
-          "MULTILINESTRING ((0 0, 5 5), (5 5, 10 10, 10 0, 5 5), (5 5, 0 10))"
+          "MULTILINESTRING ((5 5, 10 0, 10 10, 5 5), (0 10, 5 5), (0 0, 5 5))"
         );
     }
 
@@ -91,12 +92,13 @@ namespace tut
         geom2_ = GEOSNode(geom1_);
         ensure(geom2_);
 
+        GEOSNormalize(geom2_);
         char* wkt_c = GEOSWKTWriter_write(w_, geom2_);
         std::string out(wkt_c); 
         free(wkt_c);
 
         ensure_equals(out,
-          "MULTILINESTRING ((0 0, 1 0), (1 0, 2 0), (2 0, 3 0), (3 0, 4 0), (5 0, 4 0))"
+          "MULTILINESTRING ((4 0, 5 0), (3 0, 4 0), (2 0, 3 0), (1 0, 2 0), (0 0, 1 0))"
         );
     }
 
@@ -109,12 +111,13 @@ namespace tut
         geom2_ = GEOSNode(geom1_);
         ensure(geom2_);
 
+        GEOSNormalize(geom2_);
         char* wkt_c = GEOSWKTWriter_write(w_, geom2_);
         std::string out(wkt_c); 
         free(wkt_c);
 
         ensure_equals(out,
-          "MULTILINESTRING ((0 0, 2 0), (2 0, 4 0))"
+          "MULTILINESTRING ((2 0, 4 0), (0 0, 2 0))"
         );
     }
     
