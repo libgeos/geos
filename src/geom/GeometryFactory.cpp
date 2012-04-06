@@ -32,6 +32,8 @@
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/Envelope.h>
+#include <geos/geom/util/CoordinateOperation.h>
+#include <geos/geom/util/GeometryEditor.h>
 #include <geos/util/IllegalArgumentException.h>
 
 #include <cassert>
@@ -56,14 +58,23 @@ using namespace std;
 namespace geos {
 namespace geom { // geos::geom
 
-//namespace { 
-//	class gfCoordinateOperation: public CoordinateOperation {
-//	using CoordinateOperation::edit;
-//	public:
-//		virtual CoordinateSequence* edit(const CoordinateSequence *coordinates,
-//				const Geometry *geometry);
-//	};
-//}
+namespace { 
+
+class gfCoordinateOperation: public util::CoordinateOperation {
+using CoordinateOperation::edit;
+  const CoordinateSequenceFactory* _gsf;
+public:
+  gfCoordinateOperation(const CoordinateSequenceFactory* gsf)
+      : _gsf(gsf)
+  {}
+  CoordinateSequence* edit( const CoordinateSequence *coordSeq,
+                            const Geometry * )
+  {
+    return _gsf->create(*coordSeq);
+  }
+};
+
+} // anonymous namespace
 
 
 
@@ -696,13 +707,11 @@ Geometry*
 GeometryFactory::createGeometry(const Geometry *g) const
 {
 	// could this be cached to make this more efficient? Or maybe it isn't enough overhead to bother
-	return g->clone();
-	//GeometryEditor *editor=new GeometryEditor(this);
-	//gfCoordinateOperation *coordOp = new gfCoordinateOperation();
-	//Geometry *ret=editor->edit(g, coordOp);
-	//delete coordOp;
-	//delete editor;
-	//return ret;
+	//return g->clone();
+	util::GeometryEditor editor(this);
+	gfCoordinateOperation coordOp(coordinateListFactory);
+	Geometry *ret = editor.edit(g, &coordOp);
+	return ret;
 }
 
 /*public*/
