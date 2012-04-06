@@ -42,6 +42,13 @@ CoordinateArraySequenceFactory::create(std::size_t size, std::size_t dimension)
 	return new CoordinateArraySequence(size,dimension);
 }
 
+INLINE CoordinateSequence *
+CoordinateArraySequenceFactory::create(const CoordinateSequence& seq)
+		const
+{
+	return new CoordinateArraySequence(seq);
+}
+
 
 } // namespace geos::geom
 } // namespace geos

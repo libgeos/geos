@@ -59,6 +59,18 @@ CoordinateArraySequence::CoordinateArraySequence(
 {
 }
 
+CoordinateArraySequence::CoordinateArraySequence(
+    const CoordinateSequence &c )
+	:
+	CoordinateSequence(c),
+	vect(new vector<Coordinate>(c.size())),
+  dimension(c.getDimension())
+{
+  for (size_t i = 0, n = vect->size(); i < n; ++i) {
+      (*vect)[i] = c.getAt(i);
+  }
+}
+
 CoordinateSequence *
 CoordinateArraySequence::clone() const
 {

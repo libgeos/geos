@@ -37,7 +37,9 @@ namespace geom { // geos.geom
 class GEOS_DLL CoordinateArraySequence : public CoordinateSequence {
 public:
 
-    CoordinateArraySequence(const CoordinateArraySequence &cl);
+	CoordinateArraySequence(const CoordinateArraySequence &cl);
+
+	CoordinateArraySequence(const CoordinateSequence &cl);
 
 	CoordinateSequence *clone() const;
 

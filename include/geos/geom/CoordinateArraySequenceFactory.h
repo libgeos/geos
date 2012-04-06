@@ -55,6 +55,8 @@ public:
    	/** @see CoordinateSequenceFactory::create(std::size_t, int) */
 	CoordinateSequence *create(std::size_t size, std::size_t dimension=0) const;
 
+	CoordinateSequence *create(const CoordinateSequence &coordSeq) const;
+
 	/** \brief
 	 * Returns the singleton instance of CoordinateArraySequenceFactory
 	 */
@@ -72,19 +74,3 @@ typedef CoordinateArraySequenceFactory DefaultCoordinateSequenceFactory;
 #endif
 
 #endif // ndef GEOS_GEOM_COORDINATEARRAYSEQUENCEFACTORY_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.4  2006/06/12 11:29:23  strk
- * unsigned int => size_t
- *
- * Revision 1.3  2006/06/12 10:10:39  strk
- * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
- *
- * Revision 1.2  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/

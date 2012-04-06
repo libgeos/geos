@@ -12,7 +12,7 @@
  *
  **********************************************************************
  *
- * Last port: geom/CoordinateSequenceFactory.java rev 1.14 (JTS-1.10)
+ * Last port: geom/CoordinateSequenceFactory.java r591 (JTS-1.12)
  *
  **********************************************************************/
 
