@@ -24,11 +24,13 @@
 
 #include <geos/export.h>
 #include <geos/geom/GeometryFactory.h>
+#include <geos/geom/BinaryOp.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/util/GeometryExtracter.h>
-#include <geos/operation/overlay/snap/SnapIfNeededOverlayOp.h>
+#include <geos/operation/overlay/OverlayOp.h>
+//#include <geos/operation/overlay/snap/SnapIfNeededOverlayOp.h>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -182,12 +184,13 @@ private:
   std::auto_ptr<geom::Geometry> unionNoOpt(const geom::Geometry& g0)
   {
     using geos::operation::overlay::OverlayOp;
-    using geos::operation::overlay::snap::SnapIfNeededOverlayOp;
+    //using geos::operation::overlay::snap::SnapIfNeededOverlayOp;
 
     if ( ! empty.get() ) {
       empty.reset( geomFact->createEmptyGeometry() );
     }
-    return SnapIfNeededOverlayOp::overlayOp(g0, *empty, OverlayOp::opUNION);
+    //return SnapIfNeededOverlayOp::overlayOp(g0, *empty, OverlayOp::opUNION);
+    return BinaryOp(&g0, empty.get(), overlay::overlayOp(OverlayOp::opUNION));
   }
 
   /**
