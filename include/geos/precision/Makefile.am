@@ -12,4 +12,6 @@ geos_HEADERS = \
     CommonBitsOp.h \
     CommonBitsRemover.h \
     EnhancedPrecisionOp.h \
+    GeometryPrecisionReducer.h \
+    PrecisionReducerCoordinateOperation.h \
     SimpleGeometryPrecisionReducer.h

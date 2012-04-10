@@ -3,6 +3,7 @@ Changes in 3.4.0
 
 - New things:
   - CAPI: GEOSNode (#496)
+  - GeometryPrecisionReducer class
 - C++ API changes:
   - New noding::GeometryNoder class
   - Added BufferOp::setSingleSided 

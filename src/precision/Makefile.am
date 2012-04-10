@@ -12,6 +12,8 @@ libprecision_la_SOURCES = \
 	CommonBitsOp.cpp \
 	CommonBitsRemover.cpp \
 	EnhancedPrecisionOp.cpp \
+	GeometryPrecisionReducer.cpp \
+	PrecisionReducerCoordinateOperation.cpp \
 	SimpleGeometryPrecisionReducer.cpp 
 
 libprecision_la_LIBADD = 

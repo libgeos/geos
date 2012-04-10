@@ -97,6 +97,7 @@ geos_unit_SOURCES = \
 	operation/valid/ValidClosedRingTest.cpp \
 	operation/valid/ValidSelfTouchingRingFormingHoleTest.cpp \
 	precision/SimpleGeometryPrecisionReducerTest.cpp \
+	precision/GeometryPrecisionReducerTest.cpp \
 	simplify/DouglasPeuckerSimplifierTest.cpp \
 	simplify/TopologyPreservingSimplifierTest.cpp \
 	util/UniqueCoordinateArrayFilterTest.cpp \

@@ -38,6 +38,8 @@ using namespace geos::geom::util;
 namespace geos {
 namespace precision { // geos.precision
 
+namespace {
+
 class PrecisionReducerCoordinateOperation :
 		public geom::util::CoordinateOperation
 {
@@ -119,6 +121,7 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence *cs,
 	return noRepeatedCoords;
 }
 
+} // anonymous namespace
 
 //---------------------------------------------------------------
 
