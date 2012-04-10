@@ -154,32 +154,10 @@ check_valid(const Geometry& g, const std::string& label)
 
 /* A single component may become a multi component */
 inline std::auto_ptr<Geometry>
-fix_snap_collapses(std::auto_ptr<Geometry> g, const std::string& label)
+fix_self_intersections(std::auto_ptr<Geometry> g, const std::string& label)
 {
-
-  // Areal geometries may become self-intersecting on snapping
-  if ( g->getGeometryTypeId() == GEOS_POLYGON ||
-       g->getGeometryTypeId() == GEOS_MULTIPOLYGON )
-  {
-
-    // TODO: use only ConsistentAreaTester
-    if ( ! check_valid(*g, label) ) {
-#if GEOS_DEBUG_BINARYOP
-      std::cerr << label << ": self-unioning" << std::endl;
-#endif
-      g = g->Union();
-#if GEOS_DEBUG_BINARYOP
-      std::stringstream ss;
-      ss << label << " self-unioned";
-      check_valid(*g, ss.str());
-#endif
-    }
-
-  }
-
-  // TODO: check linear collapses ? (!isSimple)
-
-  return g;
+  // TODO: check for presence of self-intersections first ?
+  return g->Union();
 }
 
 
@@ -234,13 +212,12 @@ SnapOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 
 	GeometrySnapper snapper0( operand0 );
 	GeomPtr snapG0( snapper0.snapTo(operand1, snapTolerance) );
-	snapG0 = fix_snap_collapses(snapG0, "SNAP: snapped geom 0");
+	snapG0 = fix_self_intersections(snapG0, "SNAP: snapped geom 0");
 
 	// NOTE: second geom is snapped on the snapped first one
 	GeometrySnapper snapper1( operand1 );
 	GeomPtr snapG1( snapper1.snapTo(*snapG0, snapTolerance) );
-	snapG1 = fix_snap_collapses(snapG1, "SNAP: snapped geom 1");
-
+	snapG1 = fix_self_intersections(snapG1, "SNAP: snapped geom 1");
 
 	// Run the binary op
 	GeomPtr result( _Op(snapG0.get(), snapG1.get()) );
@@ -252,6 +229,7 @@ SnapOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 #if CBR_BEFORE_SNAPPING
 	// Add common bits back in
 	cbr.addCommonBits( result.get() );
+	result = fix_self_intersections(result, "SNAP: result (after common-bits addition)");
 #endif
 
 #if GEOS_DEBUG_BINARYOP
@@ -287,6 +265,13 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 		std::cerr << "Original exception: " << ex.what() << std::endl;
 #endif
 	}
+
+//#if GEOS_DEBUG_BINARYOP
+  // Should we just give up here ?
+  check_valid(*g0, "Input geom 0");
+  check_valid(*g1, "Input geom 1");
+//#endif
+
 #endif // USE_ORIGINAL_INPUT
 
 
@@ -328,7 +313,14 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 		cbr.addCommonBits( ret.get() ); 
 
 #if GEOS_DEBUG_BINARYOP
-		check_valid(*ret, "CBR: result (before common-bits addition)");
+		check_valid(*ret, "CBR: result (after common-bits addition)");
+#endif
+
+		// Common-bits removal policy could introduce self-intersections
+		ret = fix_self_intersections(ret, "CBR: result (after common-bits addition)");
+
+#if GEOS_DEBUG_BINARYOP
+		check_valid(*ret, "CBR: result (after common-bits addition and fix_self_intersections)");
 #endif
 
 #if GEOS_CHECK_COMMONBITS_VALIDITY
