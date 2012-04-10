@@ -46,6 +46,7 @@ HotPixel::HotPixel(const Coordinate& newPt, double newScaleFactor,
 	scaleFactor(newScaleFactor)
 {
 	if (scaleFactor != 1.0) {
+		assert( scaleFactor != 0 ); // or should it be an IllegalArgumentException ?
 		pt.x=scale(pt.x);
 		pt.y=scale(pt.y);
 	}
