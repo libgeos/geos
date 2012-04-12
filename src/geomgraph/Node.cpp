@@ -26,6 +26,7 @@
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geom/Location.h>
+#include <geos/util/IllegalArgumentException.h>
 
 #include <cmath>
 #include <string>
@@ -139,7 +140,12 @@ Node::add(EdgeEnd *e)
 	cerr<<"["<<this<<"] Node::add("<<e->print()<<")"<<endl;
 #endif
 	// Assert: start pt of e is equal to node point
-	assert(e->getCoordinate().equals2D(coord));
+	if ( ! e->getCoordinate().equals2D(coord) ) {
+		std::stringstream ss;
+		ss << "EdgeEnd with coordinate " << e->getCoordinate()
+		   << " invalid for node " << coord;
+		throw util::IllegalArgumentException(ss.str());
+  }
 
 	// It seems it's legal for edges to be NULL
 	// we'd not be honouring the promise of adding

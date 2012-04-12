@@ -2,6 +2,7 @@ Changes in 3.3.4
 2012-??-??
 
 - Bug fixes / improvements
+    - Do not abort on NaN overlay input (#530)
     - Reduce CommonBitsRemover harmful effects during overlay op (#527)
 
 Changes in 3.3.3
