@@ -232,6 +232,7 @@ PHP_METHOD(Geometry, length);
 PHP_METHOD(Geometry, distance);
 PHP_METHOD(Geometry, hausdorffDistance);
 PHP_METHOD(Geometry, snapTo);
+PHP_METHOD(Geometry, node);
 
 static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, __construct, NULL, 0)
@@ -293,6 +294,7 @@ static function_entry Geometry_methods[] = {
     PHP_ME(Geometry, distance, NULL, 0)
     PHP_ME(Geometry, hausdorffDistance, NULL, 0)
     PHP_ME(Geometry, snapTo, NULL, 0)
+    PHP_ME(Geometry, node, NULL, 0)
     {NULL, NULL, NULL}
 };
 
@@ -1892,6 +1894,21 @@ PHP_METHOD(Geometry, snapTo)
     other = getRelay(zobj, Geometry_ce_ptr);
 
     ret = GEOSSnap(this, other, tolerance);
+    if ( ! ret ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, ret);
+}
+
+PHP_METHOD(Geometry, node)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *ret;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    ret = GEOSNode(this);
     if ( ! ret ) RETURN_NULL(); /* should get an exception first */
 
     /* return_value is a zval */

@@ -2026,6 +2026,20 @@ MULTIPOINT(
             , $writer->write($snapped) );
     }
 
+    public function testGeometry_node()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setTrim(true);
+
+        $g = $reader->read('LINESTRING(0 0, 10 0, 5 -5, 5 5)');
+
+        $noded = $g->node();
+        $this->assertEquals('MULTILINESTRING ((0 0, 5 0), (5 0, 10 0, 5 -5, 5 0), (5 0, 5 5))'
+            , $writer->write($noded) );
+
+    }
+
     public function testWKBWriter__construct()
     {
         $writer = new GEOSWKBWriter();
