@@ -16,25 +16,25 @@
  *
  **********************************************************************/
 
-#include <noding/GeometryNoder.h>
-#include <noding/SegmentString.h>
-#include <noding/NodedSegmentString.h>
-#include <noding/OrientedCoordinateArray.h>
-#include <noding/Noder.h>
-#include <geom/Geometry.h>
-#include <geom/PrecisionModel.h>
-#include <geom/CoordinateSequence.h>
-#include <geom/GeometryFactory.h>
-#include <geom/LineString.h>
+#include <geos/noding/GeometryNoder.h>
+#include <geos/noding/SegmentString.h>
+#include <geos/noding/NodedSegmentString.h>
+#include <geos/noding/OrientedCoordinateArray.h>
+#include <geos/noding/Noder.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/PrecisionModel.h>
+#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/LineString.h>
 
-#include <noding/IteratedNoder.h>
+#include <geos/noding/IteratedNoder.h>
 
-#include <algorithm/LineIntersector.h>
-#include <noding/IntersectionAdder.h>
-#include <noding/MCIndexNoder.h>
+#include <geos/algorithm/LineIntersector.h>
+#include <geos/noding/IntersectionAdder.h>
+#include <geos/noding/MCIndexNoder.h>
 
-#include <noding/snapround/SimpleSnapRounder.h>
-#include <noding/snapround/MCIndexSnapRounder.h>
+#include <geos/noding/snapround/SimpleSnapRounder.h>
+#include <geos/noding/snapround/MCIndexSnapRounder.h>
 
 #include <memory> // for auto_ptr
 #include <iostream> 

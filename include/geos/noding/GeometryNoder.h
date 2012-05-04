@@ -19,7 +19,7 @@
 #ifndef GEOS_NODING_GEOMETRYNODER_H
 #define GEOS_NODING_GEOMETRYNODER_H
 
-#include <noding/SegmentString.h> // for NonConstVect
+#include <geos/noding/SegmentString.h> // for NonConstVect
 
 #include <memory> // for auto_ptr
 
