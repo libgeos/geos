@@ -74,11 +74,8 @@
 #include "Stackwalker.h"
 #endif
 
-// Undefine this to use Geometry methods for overlay operations
-//
-// Using BinaryOp gives more successes though...
-//
-#define USE_BINARYOP 1
+// Geometry methods do use BinaryOp internally
+#undef USE_BINARYOP
 
 using namespace geos;
 using namespace geos::operation::polygonize;

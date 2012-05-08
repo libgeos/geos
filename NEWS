@@ -5,6 +5,7 @@ Changes in 3.3.4
     - Do not abort on NaN overlay input (#530)
     - Reduce CommonBitsRemover harmful effects during overlay op (#527)
     - Better cross-compiler support (#534)
+    - Enable overlay ops short-circuits (#542)
 
 Changes in 3.3.3
 2012-04-01

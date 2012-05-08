@@ -50,6 +50,7 @@
 #include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/operation/overlay/OverlayOp.h>
+#include <geos/operation/overlay/snap/GeometrySnapper.h>
 #include <geos/operation/union/CascadedPolygonUnion.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/buffer/BufferParameters.h>
@@ -57,7 +58,6 @@
 #include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/sharedpaths/SharedPathsOp.h>
 #include <geos/linearref/LengthIndexedLine.h>
-#include <geos/geom/BinaryOp.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util/UniqueCoordinateArrayFilter.h>
 #include <geos/util/Machine.h>
@@ -1605,12 +1605,7 @@ GEOSIntersection_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geom
 
     try
     {
-        GeomAutoPtr g3(BinaryOp(g1, g2, overlayOp(OverlayOp::opINTERSECTION)));
-        return g3.release();
-
-        // XXX: old version
-        //Geometry *g3 = g1->intersection(g2);
-        //return g3;
+        return g1->intersection(g2);
     }
     catch (const std::exception &e)
     {
@@ -1850,12 +1845,7 @@ GEOSDifference_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geomet
 
     try
     {
-        GeomAutoPtr g3(BinaryOp(g1, g2, overlayOp(OverlayOp::opDIFFERENCE)));
-        return g3.release();
-
-        // XXX: old version
-        //Geometry *g3 = g1->difference(g2);
-        //return g3;
+        return g1->difference(g2);
     }
     catch (const std::exception &e)
     {
@@ -1918,10 +1908,7 @@ GEOSSymDifference_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geo
 
     try
     {
-        GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::opSYMDIFFERENCE));
-        return g3.release();
-        //Geometry *g3 = g1->symDifference(g2);
-        //return g3;
+        return g1->symDifference(g2);
     }
     catch (const std::exception &e)
     {
@@ -1953,12 +1940,7 @@ GEOSUnion_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g
 
     try
     {
-        GeomAutoPtr g3 = BinaryOp(g1, g2, overlayOp(OverlayOp::opUNION));
-        return g3.release();
-
-        // XXX: old version
-        //Geometry *g3 = g1->Union(g2);
-        //return g3;
+        return g1->Union(g2);
     }
     catch (const std::exception &e)
     {
