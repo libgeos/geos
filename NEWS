@@ -6,6 +6,7 @@ Changes in 3.3.4
     - Reduce CommonBitsRemover harmful effects during overlay op (#527)
     - Better cross-compiler support (#534)
     - Enable overlay ops short-circuits (#542)
+    - Envelope-based short-circuit for symDifference (#543)
 
 Changes in 3.3.3
 2012-04-01
