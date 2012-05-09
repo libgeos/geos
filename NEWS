@@ -7,6 +7,7 @@ Changes in 3.3.4
     - Better cross-compiler support (#534)
     - Enable overlay ops short-circuits (#542)
     - Envelope-based short-circuit for symDifference (#543)
+    - Fix support for PHP 5.4 (#513)
 
 Changes in 3.3.3
 2012-04-01

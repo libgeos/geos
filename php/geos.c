@@ -44,7 +44,11 @@ PHP_FUNCTION(GEOSLineMerge);
 PHP_FUNCTION(GEOSSharedPaths);
 PHP_FUNCTION(GEOSRelateMatch);
 
-static function_entry geos_functions[] = {
+#if PHP_VERSION_ID < 50399 
+#define zend_function_entry function_entry
+#endif
+
+static zend_function_entry geos_functions[] = {
     PHP_FE(GEOSVersion, NULL)
     PHP_FE(GEOSPolygonize, NULL)
     PHP_FE(GEOSLineMerge, NULL)
@@ -161,8 +165,12 @@ Gen_create_obj (zend_class_entry *type TSRMLS_DC,
 
     ALLOC_HASHTABLE(obj->std.properties);
     zend_hash_init(obj->std.properties, 0, NULL, ZVAL_PTR_DTOR, 0);
+#if PHP_VERSION_ID < 50399 
     zend_hash_copy(obj->std.properties, &type->default_properties,
         (copy_ctor_func_t)zval_add_ref, (void *)&tmp, sizeof(zval *));
+#else
+    object_properties_init(&(obj->std), type);
+#endif
 
     retval.handle = zend_objects_store_put(obj, NULL, st, NULL TSRMLS_CC);
     retval.handlers = handlers;
@@ -233,7 +241,7 @@ PHP_METHOD(Geometry, distance);
 PHP_METHOD(Geometry, hausdorffDistance);
 PHP_METHOD(Geometry, snapTo);
 
-static function_entry Geometry_methods[] = {
+static zend_function_entry Geometry_methods[] = {
     PHP_ME(Geometry, __construct, NULL, 0)
     PHP_ME(Geometry, __toString, NULL, 0)
     PHP_ME(Geometry, project, NULL, 0)
@@ -1906,7 +1914,7 @@ PHP_METHOD(Geometry, snapTo)
 PHP_METHOD(WKTReader, __construct);
 PHP_METHOD(WKTReader, read);
 
-static function_entry WKTReader_methods[] = {
+static zend_function_entry WKTReader_methods[] = {
     PHP_ME(WKTReader, __construct, NULL, 0)
     PHP_ME(WKTReader, read, NULL, 0)
     {NULL, NULL, NULL}
@@ -1984,7 +1992,7 @@ PHP_METHOD(WKTWriter, setOutputDimension);
 PHP_METHOD(WKTWriter, getOutputDimension);
 PHP_METHOD(WKTWriter, setOld3D);
 
-static function_entry WKTWriter_methods[] = {
+static zend_function_entry WKTWriter_methods[] = {
     PHP_ME(WKTWriter, __construct, NULL, 0)
     PHP_ME(WKTWriter, write, NULL, 0)
     PHP_ME(WKTWriter, setTrim, NULL, 0)
@@ -2156,7 +2164,7 @@ PHP_METHOD(WKBWriter, setIncludeSRID);
 PHP_METHOD(WKBWriter, getIncludeSRID);
 PHP_METHOD(WKBWriter, writeHEX);
 
-static function_entry WKBWriter_methods[] = {
+static zend_function_entry WKBWriter_methods[] = {
     PHP_ME(WKBWriter, __construct, NULL, 0)
     PHP_ME(WKBWriter, getOutputDimension, NULL, 0)
     PHP_ME(WKBWriter, setOutputDimension, NULL, 0)
@@ -2352,7 +2360,7 @@ PHP_METHOD(WKBWriter, setIncludeSRID)
 PHP_METHOD(WKBReader, __construct);
 PHP_METHOD(WKBReader, readHEX);
 
-static function_entry WKBReader_methods[] = {
+static zend_function_entry WKBReader_methods[] = {
     PHP_ME(WKBReader, __construct, NULL, 0)
     PHP_ME(WKBReader, readHEX, NULL, 0)
     {NULL, NULL, NULL}
