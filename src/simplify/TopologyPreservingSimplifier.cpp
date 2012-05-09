@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: simplify/TopologyPreservingSimplifier.java rev. 1.4 (JTS-1.7)
+ * Last port: simplify/TopologyPreservingSimplifier.java r536 (JTS-1.12+)
  *
  **********************************************************************/
 
@@ -178,6 +178,13 @@ LineStringTransformer::transformCoordinates(
 //----------------------------------------------------------------------
 
 /*
+ * A filter to add linear geometries to the linestring map
+ * with the appropriate minimum size constraint.
+ * Closed {@link LineString}s (including {@link LinearRing}s
+ * have a minimum output size constraint of 4,
+ * to ensure the output is valid.
+ * For all other linestrings, the minimum size is 2 points.
+ *
  * This class populates the given LineString=>TaggedLineString map
  * with newly created TaggedLineString objects.
  * Users must take care of deleting the map's values (elem.second).
@@ -195,6 +202,11 @@ public:
 	// no more needed
 	//friend class TopologyPreservingSimplifier;
 
+	/**
+	 * Filters linear geometries.
+	 *
+	 * geom a geometry of any type
+	 */
 	void filter_ro(const Geometry* geom);
 
 
@@ -226,16 +238,11 @@ LineStringMapBuilderFilter::filter_ro(const Geometry* geom)
 {
 	TaggedLineString* taggedLine;
 
-	if ( const LinearRing* lr =
-			dynamic_cast<const LinearRing*>(geom) )
-	{
-		taggedLine = new TaggedLineString(lr, 4);
-
-	}
-	else if ( const LineString* ls = 
+	if ( const LineString* ls = 
 			dynamic_cast<const LineString*>(geom) )
 	{
-		taggedLine = new TaggedLineString(ls, 2);
+    int minSize = ls->isClosed() ? 4 : 2;
+		taggedLine = new TaggedLineString(ls, minSize);
 	}
 	else
 	{
@@ -292,6 +299,10 @@ TopologyPreservingSimplifier::setDistanceTolerance(double d)
 std::auto_ptr<geom::Geometry> 
 TopologyPreservingSimplifier::getResultGeometry()
 {
+
+	// empty input produces an empty result
+	if (inputGeom->isEmpty()) return std::auto_ptr<Geometry>(inputGeom->clone());
+
 	LinesMap linestringMap;
 
 	std::auto_ptr<geom::Geometry> result;
@@ -354,36 +365,3 @@ TopologyPreservingSimplifier::getResultGeometry()
 } // namespace geos::simplify
 } // namespace geos
 
-/**********************************************************************
- * $Log$
- * Revision 1.8  2006/05/24 11:41:23  strk
- *         * source/headers/geos/simplify/TaggedLinesSimplifier.h,
- *         source/simplify/TaggedLinesSimplifier.cpp,
- *         source/simplify/TopologyPreservingSimplifier.cpp:
- *         fixed bug in TopologyPreservingSimplifier failing to
- *         detect intersections, refactored TaggedLinesSimplifier
- *         class to more closely match JTS and use templated
- *         functions.
- *
- * Revision 1.7  2006/05/19 17:44:29  strk
- *         * source/simplify/TopologyPreservingSimplifier.cpp:
- *         removed friend specification in
- *         TopologyPreservingSimplifier helper class
- *         (no more needed)
- *
- * Revision 1.6  2006/04/24 15:47:35  strk
- * Public constructors change made permanent
- *
- * Revision 1.5  2006/04/22 17:16:31  mloskot
- * Temporar fix of Bug #100. This report requires deeper analysis!.
- *
- * Revision 1.4  2006/04/13 21:52:35  strk
- * Many debugging lines and assertions added. Fixed bug in TaggedLineString class.
- *
- * Revision 1.3  2006/04/13 16:04:10  strk
- * Made TopologyPreservingSimplifier implementation successfully build
- *
- * Revision 1.2  2006/04/13 14:25:17  strk
- * TopologyPreservingSimplifier initial port
- *
- **********************************************************************/
