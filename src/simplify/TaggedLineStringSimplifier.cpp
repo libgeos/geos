@@ -12,7 +12,7 @@
  *
  **********************************************************************
  *
- * Last port: simplify/TaggedLineStringSimplifier.java rev. 1.8 (JTS-1.7.1)
+ * Last port: simplify/TaggedLineStringSimplifier.java r536 (JTS-1.12+)
  *
  **********************************************************************/
 

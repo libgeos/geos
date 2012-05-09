@@ -12,7 +12,7 @@
  *
  **********************************************************************
  *
- * Last port: simplify/TaggedLineStringSimplifier.java rev. 1.8 (JTS-1.7.1)
+ * Last port: simplify/TaggedLineStringSimplifier.java r536 (JTS-1.12+)
  *
  **********************************************************************
  *
@@ -77,6 +77,12 @@ public:
 	 */
 	void setDistanceTolerance(double d);
 
+	/**
+	 * Simplifies the given {@link TaggedLineString}
+	 * using the distance tolerance specified.
+	 *
+	 * @param line the linestring to simplify
+	 */
 	void simplify(TaggedLineString* line);
 
 
@@ -163,16 +169,3 @@ TaggedLineStringSimplifier::setDistanceTolerance(double d)
 
 #endif // GEOS_SIMPLIFY_TAGGEDLINESTRINGSIMPLIFIER_H
 
-/**********************************************************************
- * $Log$
- * Revision 1.3  2006/04/13 21:52:34  strk
- * Many debugging lines and assertions added. Fixed bug in TaggedLineString class.
- *
- * Revision 1.2  2006/04/13 10:39:12  strk
- * Initial implementation of TaggedLinesSimplifier class
- *
- * Revision 1.1  2006/04/12 17:19:57  strk
- * Ported TaggedLineStringSimplifier class, made LineSegment class
- * polymorphic to fix derivation of TaggedLineSegment
- *
- **********************************************************************/

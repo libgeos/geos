@@ -12,7 +12,7 @@
  *
  **********************************************************************
  *
- * Last port: simplify/TopologyPreservingSimplifier.java rev. 1.4 (JTS-1.7)
+ * Last port: simplify/TopologyPreservingSimplifier.java r536 (JTS-1.12+)
  *
  **********************************************************************
  *
