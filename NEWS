@@ -9,6 +9,7 @@ Changes in 3.3.4
     - Envelope-based short-circuit for symDifference (#543)
     - Fix support for PHP 5.4 (#513)
     - Fix TopologyPreservingSimplifier invalid output on closed line (#508)
+    - Reduce calls to ptNotInList, greatly speeding up Polygonizer (#545)
 
 Changes in 3.3.3
 2012-04-01

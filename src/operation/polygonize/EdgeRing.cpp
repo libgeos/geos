@@ -71,12 +71,17 @@ EdgeRing::findEdgeRingContaining(EdgeRing *testEr,
 		const CoordinateSequence *tryCoords =
 			tryRing->getCoordinatesRO();
 
-		testPt=ptNotInList(testRing->getCoordinatesRO(),
-			tryCoords);
+		if ( tryEnv->contains(testEnv) ) {
 
-		if (tryEnv->contains(testEnv)
-			&& CGAlgorithms::isPointInRing(testPt, tryCoords))
+			// TODO: don't copy testPt !
+			testPt = ptNotInList(testRing->getCoordinatesRO(), tryCoords);
+
+			if ( CGAlgorithms::isPointInRing(testPt, tryCoords) ) {
 				isContained=true;
+			}
+
+    }
+
 		// check if this new containing ring is smaller
 		// than the current minimum ring
 		if (isContained) {
@@ -97,6 +102,7 @@ EdgeRing::ptNotInList(const CoordinateSequence *testPts,
     for (std::size_t i = 0; i < npts; ++i)
     {
         const Coordinate& testPt = testPts->getAt(i);
+        // TODO: shouldn't this be ! isInList ?
         if (isInList(testPt, pts))
             return testPt;
     }
