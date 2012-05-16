@@ -217,6 +217,27 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 ################################################################################
+# Check libraries
+#################################################################################
+find_package(Boost 1.50.0)
+if(Boost_FOUND)
+
+  get_property(GEOS_COMPILE_DEFINITIONS
+    DIRECTORY ${CMAKE_SOURCE_DIR}
+    PROPERTY COMPILE_DEFINITIONS)
+
+  list(APPEND GEOS_COMPILE_DEFINITIONS "HAVE_BOOST=1")
+
+  set_property(DIRECTORY ${CMAKE_SOURCE_DIR}
+    PROPERTY COMPILE_DEFINITIONS ${GEOS_COMPILE_DEFINITIONS})
+
+  set_directory_properties(PROPERTIES INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS})
+
+  set_property(DIRECTORY ${CMAKE_SOURCE_DIR}
+    PROPERTY INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS})
+endif()
+
+################################################################################
 # Setup include directories
 #################################################################################
 
