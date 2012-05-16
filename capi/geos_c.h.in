@@ -137,6 +137,9 @@ typedef struct GEOSContextHandle_HS *GEOSContextHandle_t;
 
 typedef void (*GEOSQueryCallback)(void *item, void *userdata);
 
+typedef void * (*GEOSAllocator) (size_t size);
+typedef void   (*GEOSFreer)    (void *ptr);
+
 /************************************************************************
  *
  * Initialization, cleanup, version
@@ -148,6 +151,9 @@ typedef void (*GEOSQueryCallback)(void *item, void *userdata);
 extern void GEOS_DLL initGEOS(GEOSMessageHandler notice_function,
 	GEOSMessageHandler error_function);
 extern void GEOS_DLL finishGEOS(void);
+extern GEOSAllocator GEOS_DLL GEOS_setAllocator(GEOSAllocator nf);
+extern GEOSFreer GEOS_DLL GEOS_setFreer(GEOSFreer nf);
+
 
 extern GEOSContextHandle_t GEOS_DLL initGEOS_r(
                                     GEOSMessageHandler notice_function,

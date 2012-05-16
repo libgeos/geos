@@ -9,6 +9,7 @@ INCLUDES = -I$(top_srcdir)/include
 
 libutil_la_SOURCES = \
 	Assert.cpp \
+	CustomAllocators.cpp \
 	GeometricShapeFactory.cpp \
 	math.cpp \
 	Profiler.cpp 

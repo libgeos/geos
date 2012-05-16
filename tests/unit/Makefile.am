@@ -102,6 +102,7 @@ geos_unit_SOURCES = \
 	simplify/TopologyPreservingSimplifierTest.cpp \
 	util/UniqueCoordinateArrayFilterTest.cpp \
 	capi/GEOSCoordSeqTest.cpp \
+	capi/GEOSCustomAllocatorTest.cpp \
 	capi/GEOSGeomFromWKBTest.cpp \
 	capi/GEOSGeomToWKTTest.cpp \
 	capi/GEOSContainsTest.cpp \

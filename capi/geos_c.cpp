@@ -26,6 +26,9 @@
 #include <geos/operation/union/CascadedPolygonUnion.h>
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
 
+#include <stdexcept>
+#include <new>
+
 #ifdef _MSC_VER
 #pragma warning(disable : 4099)
 #endif
@@ -114,7 +117,7 @@ GEOSFree (void* buffer)
 { 
     GEOSFree_r( handle, buffer ); 
 } 
-    
+
 /****************************************************************
 ** relate()-related functions
 ** return 0 = false, 1 = true, 2 = error occured
