@@ -725,8 +725,8 @@ GeometryFactory::destroyGeometry(Geometry *g) const
 const GeometryFactory*
 GeometryFactory::getDefaultInstance() 
 {
-	static GeometryFactory defInstance;
-	return &defInstance;
+	static GeometryFactory* defInstance = new GeometryFactory();
+	return defInstance;
 }
 
 } // namespace geos::geom
