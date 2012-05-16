@@ -1,0 +1,80 @@
+// 
+// Test Suite for C-API GEOSConvexHull
+
+#include <tut.hpp>
+// geos
+#include <geos_c.h>
+// std
+#include <cstdarg>
+#include <cstdio>
+#include <cstdlib>
+
+namespace tut
+{
+    //
+    // Test Group
+    //
+
+    // Common data used in test cases.
+    struct test_capigeosconvexhull_data
+    {
+        GEOSGeometry* input_;
+        GEOSGeometry* expected_;
+
+        static void notice(const char *fmt, ...)
+        {
+            std::fprintf( stdout, "NOTICE: ");
+
+            va_list ap;
+            va_start(ap, fmt);
+            std::vfprintf(stdout, fmt, ap);
+            va_end(ap);
+        
+            std::fprintf(stdout, "\n");
+        }
+
+        test_capigeosconvexhull_data()
+            : input_(0), expected_(0)
+        {
+            initGEOS(notice, notice);
+        }       
+
+        ~test_capigeosconvexhull_data()
+        {
+            GEOSGeom_destroy(input_);
+            GEOSGeom_destroy(expected_);
+            input_ = 0;
+            expected_ = 0;
+            finishGEOS();
+        }
+
+    };
+
+    typedef test_group<test_capigeosconvexhull_data> group;
+    typedef group::object object;
+
+    group test_capigeoscontains_group("capi::GEOSConvexHull");
+
+    //
+    // Test Cases
+    //
+
+    template<>
+    template<>
+    void object::test<1>()
+    {
+        input_ = GEOSGeomFromWKT("MULTIPOINT (130 240, 130 240, 130 240, 570 240, 570 240, 570 240, 650 240)");
+        ensure( 0 != input_ );
+
+        expected_ = GEOSGeomFromWKT("LINESTRING (130 240, 650 240, 130 240)");   
+        ensure( 0 != expected_ );
+
+        GEOSGeometry* output = GEOSConvexHull(input_);
+        ensure( 0 != output );
+        ensure( 0 == GEOSisEmpty(output) );
+        // TODO
+        //ensure( 0 != GEOSEquals(output, expected_));
+    }
+ 
+} // namespace tut
+
