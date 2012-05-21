@@ -100,9 +100,6 @@ jtsport()
 
 Geometry::GeometryChangedFilter Geometry::geometryChangedFilter;
 
-// REMOVE THIS, use GeometryFactory::getDefaultInstance() directly
-const GeometryFactory* Geometry::INTERNAL_GEOMETRY_FACTORY=GeometryFactory::getDefaultInstance();
-
 Geometry::Geometry(const GeometryFactory *newFactory)
 	:
 	envelope(NULL),
@@ -110,7 +107,7 @@ Geometry::Geometry(const GeometryFactory *newFactory)
 	userData(NULL)
 {
 	if ( factory == NULL ) {
-		factory = INTERNAL_GEOMETRY_FACTORY;
+		factory = GeometryFactory::getDefaultInstance();
 	} 
 	SRID=factory->getSRID();
 }
