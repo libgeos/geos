@@ -158,6 +158,8 @@ extern "C" const char GEOS_DLL *GEOSjtsport();
 extern "C" char GEOS_DLL *GEOSasText(Geometry *g1);
 
 // --- Custom memory allocators -------------------------------- {
+using geos::util::CustomAllocators::GEOSAllocator;
+using geos::util::CustomAllocators::GEOSFreer;
 
 GEOSAllocator geos_alloc = std::malloc;
 GEOSFreer geos_free = std::free; 
