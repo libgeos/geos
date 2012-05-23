@@ -12,19 +12,24 @@
  *
  **********************************************************************/
 
+#ifndef GEOS_UTIL_CUSTOMALLOCATORS_H
+#define GEOS_UTIL_CUSTOMALLOCATORS_H
+
+#include <geos/export.h>
 #include <cstdlib> // size_t
 
 namespace geos {
 namespace util {
 namespace CustomAllocators {
 
-  typedef void * (*GEOSAllocator) (std::size_t size);
-  GEOSAllocator setAllocator(GEOSAllocator nf);
+  typedef void* (*GEOSAllocator) (std::size_t size);
+  GEOSAllocator GEOS_DLL setAllocator(GEOSAllocator nf);
 
-  typedef void   (*GEOSDeallocator)    (void *ptr);
-  GEOSDeallocator setDeallocator(GEOSDeallocator nf);
+  typedef void  (*GEOSDeallocator)(void *ptr);
+  GEOSDeallocator GEOS_DLL setDeallocator(GEOSDeallocator nf);
 
 }
 }
 }
 
+#endif // GEOS_UTIL_CUSTOMALLOCATORS_H

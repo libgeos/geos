@@ -19,6 +19,7 @@
 #ifndef GEOS_NODING_GEOMETRYNODER_H
 #define GEOS_NODING_GEOMETRYNODER_H
 
+#include <geos/export.h>
 #include <geos/noding/SegmentString.h> // for NonConstVect
 
 #include <memory> // for auto_ptr
@@ -36,7 +37,7 @@ namespace geos {
 namespace geos {
 namespace noding { // geos.noding
 
-class GeometryNoder
+class GEOS_DLL GeometryNoder
 {
 public:
 
