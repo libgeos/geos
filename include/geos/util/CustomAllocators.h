@@ -21,8 +21,8 @@ namespace CustomAllocators {
   typedef void * (*GEOSAllocator) (std::size_t size);
   GEOSAllocator setAllocator(GEOSAllocator nf);
 
-  typedef void   (*GEOSFreer)    (void *ptr);
-  GEOSFreer setFreer(GEOSFreer nf);
+  typedef void   (*GEOSDeallocator)    (void *ptr);
+  GEOSDeallocator setDeallocator(GEOSDeallocator nf);
 
 }
 }

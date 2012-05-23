@@ -23,7 +23,7 @@ namespace util {
 namespace CustomAllocators {
 
 GEOSAllocator geos_alloc = std::malloc;
-GEOSFreer geos_free = std::free;
+GEOSDeallocator geos_free = std::free;
 
 GEOSAllocator
 setAllocator(GEOSAllocator nf)
@@ -33,10 +33,10 @@ setAllocator(GEOSAllocator nf)
   return of;
 }
 
-GEOSFreer
-setFreer(GEOSFreer nf)
+GEOSDeallocator
+setDeallocator(GEOSDeallocator nf)
 {
-  GEOSFreer of = geos_free;
+  GEOSDeallocator of = geos_free;
   geos_free = nf;
   return of;
 }

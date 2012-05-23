@@ -159,10 +159,10 @@ extern "C" char GEOS_DLL *GEOSasText(Geometry *g1);
 
 // --- Custom memory allocators -------------------------------- {
 using geos::util::CustomAllocators::GEOSAllocator;
-using geos::util::CustomAllocators::GEOSFreer;
+using geos::util::CustomAllocators::GEOSDeallocator;
 
 GEOSAllocator geos_alloc = std::malloc;
-GEOSFreer geos_free = std::free; 
+GEOSDeallocator geos_free = std::free; 
 
 GEOSAllocator
 GEOS_setAllocator(GEOSAllocator nf)
@@ -173,12 +173,12 @@ GEOS_setAllocator(GEOSAllocator nf)
   return of;
 }
 
-GEOSFreer
-GEOS_setFreer(GEOSFreer nf)
+GEOSDeallocator
+GEOS_setDeallocator(GEOSDeallocator nf)
 {
-  GEOSFreer of = geos_free;
+  GEOSDeallocator of = geos_free;
   geos_free = nf;
-  geos::util::CustomAllocators::setFreer(geos_free);
+  geos::util::CustomAllocators::setDeallocator(geos_free);
   return of;
 }
 

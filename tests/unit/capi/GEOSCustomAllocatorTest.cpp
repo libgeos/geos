@@ -52,7 +52,7 @@ namespace tut
         test_capicustomallocators_data()
         {
             GEOS_setAllocator(t_alloc);
-            GEOS_setFreer(t_free);
+            GEOS_setDeallocator(t_free);
         }       
 
         ~test_capicustomallocators_data()
