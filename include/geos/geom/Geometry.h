@@ -849,8 +849,6 @@ private:
 	///
 	const GeometryFactory *factory;
 
-	static const GeometryFactory* INTERNAL_GEOMETRY_FACTORY;
-
 	void* userData;
 };
 
