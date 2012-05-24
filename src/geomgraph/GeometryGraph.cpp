@@ -495,7 +495,7 @@ GeometryGraph::GeometryGraph(int newArgIndex,
 	PlanarGraph(),
 	parentGeom(newParentGeom),
 	useBoundaryDeterminationRule(true),
-	boundaryNodeRule(algorithm::BoundaryNodeRule::OGC_SFS_BOUNDARY_RULE),
+    boundaryNodeRule(algorithm::BoundaryNodeRule::getBoundaryOGCSFS()),
 	argIndex(newArgIndex),
 	hasTooFewPointsVar(false)
 {
@@ -521,7 +521,7 @@ GeometryGraph::GeometryGraph()
 	PlanarGraph(),
 	parentGeom(NULL),
 	useBoundaryDeterminationRule(true),
-	boundaryNodeRule(algorithm::BoundaryNodeRule::OGC_SFS_BOUNDARY_RULE),
+    boundaryNodeRule(algorithm::BoundaryNodeRule::getBoundaryOGCSFS()),
 	argIndex(-1),
 	hasTooFewPointsVar(false)
 {

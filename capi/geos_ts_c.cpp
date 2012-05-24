@@ -751,19 +751,19 @@ GEOSRelateBoundaryNodeRule_r(GEOSContextHandle_t extHandle, const Geometry *g1, 
         switch (bnr) {
           case GEOSRELATE_BNR_MOD2: /* same as OGC */
             im = RelateOp::relate(g1, g2,
-              BoundaryNodeRule::MOD2_BOUNDARY_RULE);
+                BoundaryNodeRule::getBoundaryRuleMod2());
             break;
           case GEOSRELATE_BNR_ENDPOINT:
             im = RelateOp::relate(g1, g2,
-              BoundaryNodeRule::ENDPOINT_BOUNDARY_RULE);
+                BoundaryNodeRule::getBoundaryEndPoint());
             break;
           case GEOSRELATE_BNR_MULTIVALENT_ENDPOINT:
             im = RelateOp::relate(g1, g2,
-              BoundaryNodeRule::MULTIVALENT_ENDPOINT_BOUNDARY_RULE);
+                BoundaryNodeRule::getBoundaryMultivalentEndPoint());
             break;
           case GEOSRELATE_BNR_MONOVALENT_ENDPOINT:
             im = RelateOp::relate(g1, g2,
-              BoundaryNodeRule::MONOVALENT_ENDPOINT_BOUNDARY_RULE);
+                BoundaryNodeRule::getBoundaryMonovalentEndPoint());
             break;
           default:
             handle->ERROR_MESSAGE("Invalid boundary node rule %d", bnr);

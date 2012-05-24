@@ -53,9 +53,9 @@ GeometryGraphOperation::GeometryGraphOperation(const Geometry *g0,
 		setComputationPrecision(pm1);
 
 	arg[0]=new GeometryGraph(0, g0,
-		algorithm::BoundaryNodeRule::OGC_SFS_BOUNDARY_RULE);
+        algorithm::BoundaryNodeRule::getBoundaryOGCSFS());
 	arg[1]=new GeometryGraph(1, g1,
-		algorithm::BoundaryNodeRule::OGC_SFS_BOUNDARY_RULE);
+		algorithm::BoundaryNodeRule::getBoundaryOGCSFS());
 }
 
 GeometryGraphOperation::GeometryGraphOperation(const Geometry *g0,

@@ -122,20 +122,42 @@ class MonoValentEndPointBoundaryNodeRule : public BoundaryNodeRule
 	}
 };
 
+Mod2BoundaryNodeRule mod2Rule;
+EndPointBoundaryNodeRule endPointRule;
+MultiValentEndPointBoundaryNodeRule multiValentRule;
+MonoValentEndPointBoundaryNodeRule monoValentRule;
 
 } // anonymous namespace
 
-static Mod2BoundaryNodeRule mod2Rule;
-static EndPointBoundaryNodeRule endPointRule;
-static MultiValentEndPointBoundaryNodeRule multiValentRule;
-static MonoValentEndPointBoundaryNodeRule monoValentRule;
+//const BoundaryNodeRule& BoundaryNodeRule::MOD2_BOUNDARY_RULE = mod2Rule;
+const BoundaryNodeRule& BoundaryNodeRule::getBoundaryRuleMod2()
+{
+    return mod2Rule;
+}
 
-const BoundaryNodeRule& BoundaryNodeRule::MOD2_BOUNDARY_RULE = mod2Rule;
-const BoundaryNodeRule& BoundaryNodeRule::ENDPOINT_BOUNDARY_RULE = endPointRule;
-const BoundaryNodeRule& BoundaryNodeRule::MULTIVALENT_ENDPOINT_BOUNDARY_RULE = multiValentRule;
-const BoundaryNodeRule& BoundaryNodeRule::MONOVALENT_ENDPOINT_BOUNDARY_RULE = monoValentRule;
-const BoundaryNodeRule& BoundaryNodeRule::OGC_SFS_BOUNDARY_RULE = BoundaryNodeRule::MOD2_BOUNDARY_RULE;
+//const BoundaryNodeRule& BoundaryNodeRule::ENDPOINT_BOUNDARY_RULE = endPointRule;
+const BoundaryNodeRule& BoundaryNodeRule::getBoundaryEndPoint()
+{
+    return endPointRule;
+}
 
+//const BoundaryNodeRule& BoundaryNodeRule::MULTIVALENT_ENDPOINT_BOUNDARY_RULE = multiValentRule;
+const BoundaryNodeRule& BoundaryNodeRule::getBoundaryMultivalentEndPoint()
+{
+    return multiValentRule;
+}
+
+//const BoundaryNodeRule& BoundaryNodeRule::MONOVALENT_ENDPOINT_BOUNDARY_RULE = monoValentRule;
+const BoundaryNodeRule& BoundaryNodeRule::getBoundaryMonovalentEndPoint()
+{
+    return monoValentRule;
+}
+
+//const BoundaryNodeRule& BoundaryNodeRule::OGC_SFS_BOUNDARY_RULE = BoundaryNodeRule::MOD2_BOUNDARY_RULE;
+const BoundaryNodeRule& BoundaryNodeRule::getBoundaryOGCSFS()
+{
+    return getBoundaryRuleMod2();
+}
 
 } // namespace geos.algorithm
 } // namespace geos

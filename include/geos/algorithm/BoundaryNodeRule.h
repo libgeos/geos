@@ -72,28 +72,32 @@ public:
 	 *
 	 * @see Mod2BoundaryNodeRule
 	 */
-	static const BoundaryNodeRule& MOD2_BOUNDARY_RULE;
+	//static const BoundaryNodeRule& MOD2_BOUNDARY_RULE;
+    static const BoundaryNodeRule& getBoundaryRuleMod2();
 
 	/** \brief
 	 * The Endpoint Boundary Node Rule.
 	 *
 	 * @see EndPointBoundaryNodeRule
 	 */
-	static const BoundaryNodeRule& ENDPOINT_BOUNDARY_RULE;
+	//static const BoundaryNodeRule& ENDPOINT_BOUNDARY_RULE;
+    static const BoundaryNodeRule& getBoundaryEndPoint();
 
 	/** \brief
 	 * The MultiValent Endpoint Boundary Node Rule.
 	 *
 	 * @see MultiValentEndPointBoundaryNodeRule
 	 */
-	static const BoundaryNodeRule& MULTIVALENT_ENDPOINT_BOUNDARY_RULE;
+	//static const BoundaryNodeRule& MULTIVALENT_ENDPOINT_BOUNDARY_RULE;
+    static const BoundaryNodeRule& getBoundaryMultivalentEndPoint();
 
 	/** \brief
 	 * The Monovalent Endpoint Boundary Node Rule.
 	 *
 	 * @see MonoValentEndPointBoundaryNodeRule
 	 */
-	static const BoundaryNodeRule& MONOVALENT_ENDPOINT_BOUNDARY_RULE;
+	//static const BoundaryNodeRule& MONOVALENT_ENDPOINT_BOUNDARY_RULE;
+    static const BoundaryNodeRule& getBoundaryMonovalentEndPoint();
 
 	/** \brief
 	 * The Boundary Node Rule specified by the OGC Simple Features
@@ -101,8 +105,8 @@ public:
 	 *
 	 * @see Mod2BoundaryNodeRule
 	 */
-	static const BoundaryNodeRule& OGC_SFS_BOUNDARY_RULE;
-
+	//static const BoundaryNodeRule& OGC_SFS_BOUNDARY_RULE;
+    static const BoundaryNodeRule& getBoundaryOGCSFS();
 };
 
 } // namespace geos::algorithm
