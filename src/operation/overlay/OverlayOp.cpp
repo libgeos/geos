@@ -43,6 +43,7 @@
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geomgraph/Position.h>
 #include <geos/geomgraph/index/SegmentIntersector.h>
+#include <geos/util/Interrupt.h>
 #include <geos/util/TopologyException.h>
 #include <geos/geomgraph/EdgeNodingValidator.h>
 
@@ -655,6 +656,8 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 	copyPoints(0);
 	copyPoints(1);
 
+	GEOS_CHECK_FOR_INTERRUPTS();
+
 	// node the input Geometries
 	delete arg[0]->computeSelfNodes(li,false);
 	delete arg[1]->computeSelfNodes(li,false);
@@ -662,6 +665,8 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 #if GEOS_DEBUG
 	cerr<<"OverlayOp::computeOverlay: computed SelfNodes"<<endl;
 #endif
+
+	GEOS_CHECK_FOR_INTERRUPTS();
 
 	// compute intersections between edges of the two input geometries
 	delete arg[0]->computeEdgeIntersections(arg[1], &li,true);
@@ -672,15 +677,21 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 #endif
 
 
+	GEOS_CHECK_FOR_INTERRUPTS();
+
 	vector<Edge*> baseSplitEdges;
 	arg[0]->computeSplitEdges(&baseSplitEdges);
 	arg[1]->computeSplitEdges(&baseSplitEdges);
+
+	GEOS_CHECK_FOR_INTERRUPTS();
 
 	// add the noded edges to this result graph
 	insertUniqueEdges(&baseSplitEdges);
 	computeLabelsFromDepths();
 	replaceCollapsedEdges();
 	//Debug.println(edgeList);
+
+	GEOS_CHECK_FOR_INTERRUPTS();
 
 #ifdef ENABLE_EDGE_NODING_VALIDATOR // {
 	/**
@@ -730,7 +741,11 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 #endif // GEOS_DEBUG_VALIDATION }
 #endif // ENABLE_EDGE_NODING_VALIDATOR }
 
+	GEOS_CHECK_FOR_INTERRUPTS();
+
 	graph.addEdges(edgeList.getEdges());
+
+	GEOS_CHECK_FOR_INTERRUPTS();
 
 	// this can throw TopologyException *
 	computeLabelling();
@@ -740,6 +755,7 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 	//Debug.printWatch();
 	//nodeMap.print(System.out);
 
+	GEOS_CHECK_FOR_INTERRUPTS();
 
 	/*
 	 * The ordering of building the result Geometries is important.
@@ -750,6 +766,8 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 	 */
 	findResultAreaEdges(opCode);
 	cancelDuplicateResultEdges();
+
+	GEOS_CHECK_FOR_INTERRUPTS();
 
 	PolygonBuilder polyBuilder(geomFact);
 	
