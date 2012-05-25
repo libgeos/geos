@@ -21,6 +21,7 @@
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/index/chain/MonotoneChain.h> 
 #include <geos/index/chain/MonotoneChainBuilder.h> 
+#include <geos/util/Interrupt.h> 
 
 #include <cassert>
 #include <functional>
@@ -67,6 +68,8 @@ MCIndexNoder::intersectChains()
 			i != iEnd;
 			++i)
 	{
+
+		GEOS_CHECK_FOR_INTERRUPTS();
 
 		MonotoneChain* queryChain = *i;
 		assert(queryChain);
