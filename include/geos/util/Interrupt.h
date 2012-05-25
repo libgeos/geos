@@ -28,6 +28,8 @@ public:
 
   static void request() { requested = true; }
 
+  static void cancel() { requested = false; }
+
   static bool check() { return requested; }
 
   static void process() {
