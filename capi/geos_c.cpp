@@ -25,6 +25,7 @@
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/union/CascadedPolygonUnion.h>
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
+#include <geos/util/Interrupt.h>
 
 #include <stdexcept>
 #include <new>
@@ -110,6 +111,12 @@ finishGEOS ()
         finishGEOS_r( handle );
         handle = NULL;
     }
+}
+
+void
+GEOS_requestInterruption()
+{
+  geos::util::Interrupt::request();
 }
 
 void 
