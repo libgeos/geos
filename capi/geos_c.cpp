@@ -119,6 +119,12 @@ GEOS_requestInterruption()
   geos::util::Interrupt::request();
 }
 
+void
+GEOS_cancelInterruption()
+{
+  geos::util::Interrupt::cancel();
+}
+
 void 
 GEOSFree (void* buffer) 
 { 
