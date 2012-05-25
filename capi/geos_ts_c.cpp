@@ -58,7 +58,6 @@
 #include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/sharedpaths/SharedPathsOp.h>
 #include <geos/linearref/LengthIndexedLine.h>
-#include <geos/util/CustomAllocators.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util/UniqueCoordinateArrayFilter.h>
 #include <geos/util/Machine.h>
@@ -157,56 +156,12 @@ class CAPI_ItemVisitor : public geos::index::ItemVisitor {
 extern "C" const char GEOS_DLL *GEOSjtsport();
 extern "C" char GEOS_DLL *GEOSasText(Geometry *g1);
 
-// --- Custom memory allocators -------------------------------- {
-using geos::util::CustomAllocators::GEOSAllocator;
-using geos::util::CustomAllocators::GEOSDeallocator;
-
-GEOSAllocator geos_alloc = std::malloc;
-GEOSDeallocator geos_free = std::free; 
-
-GEOSAllocator
-GEOS_setAllocator(GEOSAllocator nf)
-{
-  GEOSAllocator of = geos_alloc;
-  geos_alloc = nf;
-  geos::util::CustomAllocators::setAllocator(geos_alloc);
-  return of;
-}
-
-GEOSDeallocator
-GEOS_setDeallocator(GEOSDeallocator nf)
-{
-  GEOSDeallocator of = geos_free;
-  geos_free = nf;
-  geos::util::CustomAllocators::setDeallocator(geos_free);
-  return of;
-}
-
-void*
-operator new (std::size_t size, const std::nothrow_t&) throw () {
-        //cout << "new(" << size << ") called" << endl;
-        return geos_alloc(size);
-}
-
-void operator delete (void *ptr) throw () {
-        //cout << "delete(" << ptr << ") called" << endl;
-        if ( ptr ) geos_free(ptr);
-}
-
-void* operator new (std::size_t size) throw (std::bad_alloc) {
-  if ( void* ret = operator new (size, std::nothrow) ) return ret;
-  throw std::bad_alloc();
-}
-
-// ---------------------------------------------------------------- }
-
-
 
 namespace { // anonymous
 
 char* gstrdup_s(const char* str, const std::size_t size)
 {
-    char* out = static_cast<char*>(geos_alloc(size + 1));
+    char* out = static_cast<char*>(malloc(size + 1));
     if (0 != out)
     {
         // as no strlen call necessary, memcpy may be faster than strcpy
@@ -239,7 +194,7 @@ initGEOS_r(GEOSMessageHandler nf, GEOSMessageHandler ef)
     GEOSContextHandleInternal_t *handle = 0;
     void *extHandle = 0;
 
-    extHandle = geos_alloc(sizeof(GEOSContextHandleInternal_t));
+    extHandle = malloc(sizeof(GEOSContextHandleInternal_t));
     if (0 != extHandle)
     {
         handle = static_cast<GEOSContextHandleInternal_t*>(extHandle);
@@ -292,7 +247,7 @@ void
 finishGEOS_r(GEOSContextHandle_t extHandle)
 {
     // Fix up freeing handle w.r.t. malloc above
-    geos_free(extHandle);
+    free(extHandle);
     extHandle = NULL;
 }
 
@@ -301,7 +256,7 @@ GEOSFree_r (GEOSContextHandle_t extHandle, void* buffer)
 { 
     assert(0 != extHandle);
 
-    geos_free(buffer); 
+    free(buffer); 
 } 
 
 //-----------------------------------------------------------
@@ -1286,7 +1241,7 @@ GEOSGeomToWKB_buf_r(GEOSContextHandle_t extHandle, const Geometry *g, size_t *si
         const std::size_t len = wkbstring.length();
 
         unsigned char* result = 0;
-        result = static_cast<unsigned char*>(geos_alloc(len));
+        result = static_cast<unsigned char*>(malloc(len));
         if (0 != result)
         {
             std::memcpy(result, wkbstring.c_str(), len);
@@ -4778,7 +4733,7 @@ GEOSWKBWriter_write_r(GEOSContextHandle_t extHandle, WKBWriter *writer, const Ge
         const std::size_t len = wkbstring.length();
 
         unsigned char *result = NULL;
-        result = (unsigned char*) geos_alloc(len);
+        result = (unsigned char*) malloc(len);
         std::memcpy(result, wkbstring.c_str(), len);
         *size = len;
         return result;
@@ -4822,7 +4777,7 @@ GEOSWKBWriter_writeHEX_r(GEOSContextHandle_t extHandle, WKBWriter *writer, const
         const std::size_t len = wkbstring.length();
 
         unsigned char *result = NULL;
-        result = (unsigned char*) geos_alloc(len);
+        result = (unsigned char*) malloc(len);
         std::memcpy(result, wkbstring.c_str(), len);
         *size = len;
         return result;
