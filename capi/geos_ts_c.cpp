@@ -59,6 +59,7 @@
 #include <geos/operation/sharedpaths/SharedPathsOp.h>
 #include <geos/linearref/LengthIndexedLine.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/util/Interrupt.h>
 #include <geos/util/UniqueCoordinateArrayFilter.h>
 #include <geos/util/Machine.h>
 #include <geos/version.h> 
@@ -205,6 +206,8 @@ initGEOS_r(GEOSMessageHandler nf, GEOSMessageHandler ef)
         handle->WKBByteOrder = getMachineByteOrder();
         handle->initialized = 1;
     }
+
+    geos::util::Interrupt::cancel();
 
     return static_cast<GEOSContextHandle_t>(extHandle);
 }

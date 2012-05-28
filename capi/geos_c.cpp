@@ -102,6 +102,8 @@ initGEOS (GEOSMessageHandler nf, GEOSMessageHandler ef)
         GEOSContext_setNoticeHandler_r(handle, nf);
         GEOSContext_setErrorHandler_r(handle, ef);
     }
+
+    geos::util::Interrupt::cancel();
 }
 
 void
@@ -114,13 +116,13 @@ finishGEOS ()
 }
 
 void
-GEOS_requestInterruption()
+GEOS_interruptRequest()
 {
   geos::util::Interrupt::request();
 }
 
 void
-GEOS_cancelInterruption()
+GEOS_interruptCancel()
 {
   geos::util::Interrupt::cancel();
 }

@@ -155,9 +155,9 @@ extern GEOSAllocator GEOS_DLL GEOS_setAllocator(GEOSAllocator nf);
 extern GEOSDeallocator GEOS_DLL GEOS_setDeallocator(GEOSDeallocator nf);
 
 /* Request safe interruption of operations */
-extern void GEOS_DLL GEOS_requestInterruption();
-/* Cancel a pending interruption */
-extern void GEOS_DLL GEOS_cancelInterruption();
+extern void GEOS_DLL GEOS_interruptRequest();
+/* Cancel a pending interruption request */
+extern void GEOS_DLL GEOS_interruptCancel();
 
 
 extern GEOSContextHandle_t GEOS_DLL initGEOS_r(
