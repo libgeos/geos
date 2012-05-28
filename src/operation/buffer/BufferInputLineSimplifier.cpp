@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -16,7 +16,7 @@
  *
  **********************************************************************/
 
-#include "BufferInputLineSimplifier.h"
+#include <geos/operation/buffer/BufferInputLineSimplifier.h>
 #include <geos/geom/CoordinateSequence.h> // for inlines
 #include <geos/geom/CoordinateArraySequence.h> // for constructing the return
 #include <geos/algorithm/CGAlgorithms.h> // for use
@@ -43,7 +43,7 @@ BufferInputLineSimplifier::BufferInputLineSimplifier(
 {}
 
 /*public static*/
-std::auto_ptr<geom::CoordinateSequence> 
+std::auto_ptr<geom::CoordinateSequence>
 BufferInputLineSimplifier::simplify(const geom::CoordinateSequence& inputLine,
                                     double distanceTol)
 {
@@ -52,7 +52,7 @@ BufferInputLineSimplifier::simplify(const geom::CoordinateSequence& inputLine,
 }
 
 /* public */
-std::auto_ptr<geom::CoordinateSequence> 
+std::auto_ptr<geom::CoordinateSequence>
 BufferInputLineSimplifier::simplify(double nDistanceTol)
 {
 	distanceTol = fabs(nDistanceTol);
@@ -121,12 +121,12 @@ BufferInputLineSimplifier::findNextNonDeletedIndex(unsigned int index) const
 }
 
 /* private */
-std::auto_ptr<geom::CoordinateSequence> 
+std::auto_ptr<geom::CoordinateSequence>
 BufferInputLineSimplifier::collapseLine() const
 {
 	std::auto_ptr<geom::CoordinateSequence> coordList(
 		new CoordinateArraySequence());
-	
+
 	for (size_t i=0, n=inputLine.size(); i<n; ++i)
 	{
 		if (isDeleted[i] != DELETE)

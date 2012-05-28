@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -25,6 +25,7 @@
 #include <geos/operation/buffer/OffsetSegmentGenerator.h>
 #include <geos/operation/buffer/OffsetSegmentString.h>
 #include <geos/operation/buffer/BufferOp.h>
+#include <geos/operation/buffer/BufferInputLineSimplifier.h>
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/geomgraph/Position.h>
 #include <geos/geom/CoordinateArraySequence.h>
@@ -34,8 +35,6 @@
 #include <geos/algorithm/NotRepresentableException.h>
 #include <geos/algorithm/HCoordinate.h>
 #include <geos/util.h>
-
-#include "BufferInputLineSimplifier.h"
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -152,7 +151,7 @@ OffsetSegmentGenerator::addNextSegment(const Coordinate &p, bool addStartPoint)
     (orientation==CGAlgorithms::CLOCKWISE
      && side==Position::LEFT)
     ||
-    (orientation==CGAlgorithms::COUNTERCLOCKWISE 
+    (orientation==CGAlgorithms::COUNTERCLOCKWISE
      && side==Position::RIGHT);
 
   if (orientation==0)
@@ -334,7 +333,7 @@ OffsetSegmentGenerator::addCollinear(bool addStartPoint)
   if (numInt>= 2)
   {
     /**
-     * Segments are collinear but reversing. 
+     * Segments are collinear but reversing.
      * Add an "end-cap" fillet
      * all the way around to other direction
      *
@@ -386,7 +385,7 @@ OffsetSegmentGenerator::addOutsideTurn(int orientation, bool addStartPoint)
   }
   else
   {
-    // add a circular fillet connecting the endpoints 
+    // add a circular fillet connecting the endpoints
     // of the offset segments
     if (addStartPoint) segList.addPt(offset0.p1);
 
@@ -423,7 +422,7 @@ OffsetSegmentGenerator::addInsideTurn(int orientation, bool addStartPoint)
   // since it is completely internal to the buffer polygon.
   //
   // In complex buffer cases the closing segment may cut across many
-  // other segments in the generated offset curve. 
+  // other segments in the generated offset curve.
   // In order to improve the performance of the noding, the closing
   // segment should be kept as short as possible.
   // (But not too short, since that would defeat it's purpose).
