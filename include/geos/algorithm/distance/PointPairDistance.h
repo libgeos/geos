@@ -19,26 +19,11 @@
 #ifndef GEOS_ALGORITHM_DISTANCE_POINTPAIRDISTANCE_H
 #define GEOS_ALGORITHM_DISTANCE_POINTPAIRDISTANCE_H
 
-//#include <geos/geom/LineSegment.h> // for composition
 #include <geos/platform.h> // for DoubleNotANumber
 #include <geos/geom/Coordinate.h> // for inlines
 
 #include <vector> // for composition
 #include <cassert>
-
-namespace geos {
-	namespace algorithm {
-		namespace distance {
-			//class PointPairDistance;
-		}
-	}
-	namespace geom {
-		//class Geometry;
-		class Coordinate; 
-		//class LineString; 
-		//class Polygon; 
-	}
-}
 
 namespace geos {
 namespace algorithm { // geos::algorithm
