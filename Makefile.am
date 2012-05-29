@@ -18,6 +18,8 @@ SUBDIRS =   \
     tests   \
     tools
 
+BUILT_SOURCES = geos_svn_revision.h
+
 EXTRA_DIST = acsite.m4 makefile.vc nmake.opt autogen.bat CMakeLists.txt \
   cmake/modules/CheckPrototypeExists.cmake \
   cmake/modules/COPYING-CMAKE-SCRIPTS \
