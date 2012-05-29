@@ -3,7 +3,7 @@
 LC_ALL="C" # what for ?
 
 top_srcdir="."
-rev_file=$top_srcdir.'/geos_svn_revision.h'
+rev_file=$top_srcdir'/geos_svn_revision.h'
 
 read_rev() {
 
@@ -75,8 +75,8 @@ write_defn() {
     fi
   fi
 
-  echo "#define GEOS_SVN_REVISION $rev" > $rev_file
-  echo "Wrote rev file at $rev" >&2
+  echo "#define GEOS_SVN_REVISION $rev" | tee $rev_file
+  echo "Wrote rev '$rev' in file '$rev_file'" >&2
 }
 
 # Read the svn revision number
