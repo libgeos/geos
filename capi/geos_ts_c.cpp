@@ -93,6 +93,7 @@
 #define GEOSWKBWriter_t geos::io::WKBWriter
 
 #include "geos_c.h"
+#include "../geos_svn_revision.h"
 
 // Intentional, to allow non-standard C elements like C99 functions to be
 // imported through C++ headers of C library, like <cmath>.
@@ -3273,7 +3274,9 @@ GEOSGetSRID_r(GEOSContextHandle_t extHandle, const Geometry *g)
 
 const char* GEOSversion()
 {
-    return GEOS_CAPI_VERSION;
+  static char version[256];
+  sprintf(version, "%s r%d", GEOS_CAPI_VERSION, GEOS_SVN_REVISION);
+  return version;
 }
 
 const char* GEOSjtsport()

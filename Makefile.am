@@ -21,7 +21,7 @@ SUBDIRS =   \
 EXTRA_DIST = acsite.m4 makefile.vc nmake.opt autogen.bat CMakeLists.txt \
   cmake/modules/CheckPrototypeExists.cmake \
   cmake/modules/COPYING-CMAKE-SCRIPTS \
-  cmake/cmake_uninstall.cmake.in
+  cmake/cmake_uninstall.cmake.in geos_svn_revision.h
 
 ACLOCAL_AMFLAGS = -I macros
 
@@ -36,3 +36,8 @@ authors.git: authors.svn
 
 svnrebase: authors.git
 	cd $(srcdir) && git svn rebase --authors-file authors.git
+
+geos_svn_revision.h:
+	sh tools/svn_repo_revision.sh $<
+
+.PHONY: geos_svn_revision.h
