@@ -42,8 +42,3 @@ IntervalRTreeLeafNode::query( double queryMin, double queryMax, index::ItemVisit
 } // geos::intervalrtree
 } // geos::index
 } // geos
-
-/**********************************************************************
- * $Log$
- *
- **********************************************************************/

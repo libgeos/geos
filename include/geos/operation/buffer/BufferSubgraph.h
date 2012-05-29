@@ -196,16 +196,3 @@ bool BufferSubgraphGT(BufferSubgraph *first, BufferSubgraph *second);
 
 #endif // ndef GEOS_OP_BUFFER_BUFFERSUBGRAPH_H
 
-/**********************************************************************
- * $Log$
- * Revision 1.3  2006/03/15 11:45:06  strk
- * doxygen comments
- *
- * Revision 1.2  2006/03/14 14:16:52  strk
- * operator<< for BufferSubgraph, more debugging calls
- *
- * Revision 1.1  2006/03/14 00:19:40  strk
- * opBuffer.h split, streamlined headers in some (not all) files in operation/buffer/
- *
- **********************************************************************/
-

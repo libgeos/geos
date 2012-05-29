@@ -364,16 +364,3 @@ private:
 
 #endif // GEOS_ALGORITHM_LINEINTERSECTOR_H
 
-/**********************************************************************
- * $Log$
- * Revision 1.3  2006/04/20 14:16:25  strk
- * Added some more doxygen comments
- *
- * Revision 1.2  2006/04/06 21:31:40  strk
- * Const correctness for debugging function
- *
- * Revision 1.1  2006/03/09 16:46:48  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/
-

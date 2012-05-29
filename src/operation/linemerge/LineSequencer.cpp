@@ -450,22 +450,3 @@ LineSequencer::reverse(planargraph::DirectedEdge::NonConstList& seq)
 } // namespace geos.operation.linemerge
 } // namespace geos.operation
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.10  2006/06/12 10:49:43  strk
- * unsigned int => size_t
- *
- * Revision 1.9  2006/03/24 11:04:44  strk
- * Changed assert() with Assert::isTrue in addReverseSubpath
- *
- * Revision 1.8  2006/03/24 10:44:07  strk
- * Fixed to build with -DNDEBUG
- *
- * Revision 1.7  2006/03/22 10:13:54  strk
- * opLinemerge.h split
- *
- * Revision 1.6  2006/03/21 21:42:54  strk
- * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
- *
- **********************************************************************/

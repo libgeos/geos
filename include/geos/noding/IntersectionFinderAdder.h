@@ -107,25 +107,4 @@ private:
 } // namespace geos.noding
 } // namespace geos
 
-//#ifdef GEOS_INLINE
-//# include "geos/noding/IntersectionFinderAdder.inl"
-//#endif
-
 #endif // GEOS_NODING_INTERSECTIONFINDERADDER_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.4  2006/05/03 15:06:30  strk
- * Better doxygen comment
- *
- * Revision 1.3  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.2  2006/03/14 12:55:56  strk
- * Headers split: geomgraphindex.h, nodingSnapround.h
- *
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/
-

@@ -234,18 +234,3 @@ LineMerger::getMergedLineStrings()
 } // namespace geos.operation.linemerge
 } // namespace geos.operation
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.15  2006/06/12 11:29:24  strk
- * unsigned int => size_t
- *
- * Revision 1.14  2006/03/22 10:13:54  strk
- * opLinemerge.h split
- *
- * Revision 1.13  2006/03/21 21:42:54  strk
- * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
- *
- **********************************************************************/
- 
-

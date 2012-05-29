@@ -38,16 +38,3 @@ NotRepresentableException::NotRepresentableException(std::string msg)
 } // namespace geos.algorithm
 } // namespace geos
 
-/**********************************************************************
- * $Log$
- * Revision 1.17  2006/04/04 08:16:46  strk
- * Changed GEOSException hierarchy to be derived from std::runtime_exception.
- * Removed the GEOSException::toString redundant method (use ::what() instead)
- *
- * Revision 1.16  2006/03/21 11:12:23  strk
- * Cleanups: headers inclusion and Log section
- *
- * Revision 1.15  2006/03/09 16:46:45  strk
- * geos::geom namespace definition, first pass at headers split
- **********************************************************************/
-

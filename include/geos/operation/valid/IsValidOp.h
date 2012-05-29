@@ -276,14 +276,3 @@ public:
 } // namespace geos
 
 #endif // GEOS_OP_ISVALIDOP_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.2  2006/03/29 13:53:59  strk
- * EdgeRing equipped with Invariant testing function and lots of exceptional assertions. Removed useless heap allocations, and pointers usages.
- *
- * Revision 1.1  2006/03/20 16:57:44  strk
- * spatialindex.h and opValid.h headers split
- *
- **********************************************************************/
-

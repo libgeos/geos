@@ -244,35 +244,3 @@ ElevationMatrix::elevate(Geometry *g) const
 } // namespace geos.operation.overlay
 } // namespace geos.operation
 } // namespace geos;
-
-/**********************************************************************
- * $Log$
- * Revision 1.15  2006/04/04 08:16:46  strk
- * Changed GEOSException hierarchy to be derived from std::runtime_exception.
- * Removed the GEOSException::toString redundant method (use ::what() instead)
- *
- * Revision 1.14  2006/03/17 13:24:59  strk
- * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
- *
- * Revision 1.13  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- * Revision 1.12  2006/03/06 19:40:47  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.11  2006/03/03 10:46:22  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.10  2006/03/02 12:12:01  strk
- * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
- *
- * Revision 1.9  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.8  2006/02/09 15:52:47  strk
- * GEOSException derived from std::exception; always thrown and cought by const ref.
- *
- * Revision 1.7  2005/12/11 10:41:56  strk
- * Fixed premature initialization of average Z value in ElevationMatrixFilter
- *
- **********************************************************************/

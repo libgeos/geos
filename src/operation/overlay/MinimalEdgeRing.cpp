@@ -52,17 +52,3 @@ MinimalEdgeRing::MinimalEdgeRing(geomgraph::DirectedEdge *start,
 } // namespace geos.operation
 } // namespace geos
 
-/**********************************************************************
- * $Log$
- * Revision 1.14  2006/03/27 16:02:34  strk
- * Added INL file for MinimalEdgeRing, added many debugging blocks,
- * fixed memory leak in ConnectedInteriorTester (bug #59)
- *
- * Revision 1.13  2006/03/17 13:24:59  strk
- * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
- *
- * Revision 1.12  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- **********************************************************************/
-

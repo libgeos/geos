@@ -143,22 +143,4 @@ private:
 } // namespace geos::noding
 } // namespace geos
 
-//#ifdef GEOS_INLINE
-//# include "geos/noding/snapround/SimpleSnapRounder.inl"
-//#endif
-
 #endif // GEOS_NODING_SNAPROUND_SIMPLESNAPROUNDER_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.3  2006/05/03 15:02:49  strk
- * moved some implementations from header to .cpp file (taken out of inline)
- *
- * Revision 1.2  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.1  2006/03/14 12:55:56  strk
- * Headers split: geomgraphindex.h, nodingSnapround.h
- *
- **********************************************************************/
-

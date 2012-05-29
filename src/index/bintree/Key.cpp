@@ -96,13 +96,3 @@ Key::computeInterval(int level, Interval *itemInterval)
 } // namespace geos.index.bintree
 } // namespace geos.index
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.11  2006/03/22 16:01:33  strk
- * indexBintree.h header split, classes renamed to match JTS
- *
- * Revision 1.10  2006/03/22 12:22:50  strk
- * indexQuadtree.h split
- **********************************************************************/
-

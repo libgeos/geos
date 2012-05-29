@@ -209,14 +209,3 @@ public:
 #endif
 
 #endif // GEOS_OP_POLYGONIZE_EDGERING_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.2  2006/05/02 14:32:49  strk
- * Added port info for polygonize/EdgeRing class, polygonize/EdgeRing.h header
- * not installed.
- *
- * Revision 1.1  2006/03/22 11:19:06  strk
- * opPolygonize.h headers split.
- *
- **********************************************************************/

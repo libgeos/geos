@@ -49,10 +49,3 @@ public:
 
 
 #endif // GEOS_UTIL_ASSERTIONFAILEDEXCEPTION_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/

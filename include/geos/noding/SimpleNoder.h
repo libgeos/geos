@@ -69,22 +69,4 @@ public:
 } // namespace geos.noding
 } // namespace geos
 
-//#ifdef GEOS_INLINE
-//# include "geos/noding/SimpleNoder.inl"
-//#endif
-
 #endif // GEOS_NODING_SIMPLENODER_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.3  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.2  2006/03/15 09:51:49  strk
- * streamlined header usage
- *
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/
-

@@ -130,24 +130,3 @@ QuadtreeNestedRingTester::buildQuadtree()
 } // namespace geos.operation
 } // namespace geos
 
-/**********************************************************************
- * $Log$
- * Revision 1.25  2006/06/12 11:29:24  strk
- * unsigned int => size_t
- *
- * Revision 1.24  2006/03/29 11:48:53  strk
- * Removed useless heap allocations in construction, enforced const correctness
- *
- * Revision 1.23  2006/03/22 12:22:50  strk
- * indexQuadtree.h split
- *
- * Revision 1.22  2006/03/20 16:57:44  strk
- * spatialindex.h and opValid.h headers split
- *
- * Revision 1.21  2006/03/17 16:48:55  strk
- * LineIntersector and PointLocator made complete components of RelateComputer
- * (were statics const pointers before). Reduced inclusions from opRelate.h
- * and opValid.h, updated .cpp files to allow build.
- *
- **********************************************************************/
-

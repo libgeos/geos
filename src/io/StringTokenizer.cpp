@@ -152,10 +152,3 @@ StringTokenizer::getSVal()
 
 } // namespace geos.io
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.16  2006/04/26 16:35:40  strk
- * Had WKTReader accept correct form for MultiPoint
- *
- **********************************************************************/

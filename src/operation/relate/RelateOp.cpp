@@ -78,18 +78,3 @@ RelateOp::getIntersectionMatrix()
 } // namespace geos.operation
 } // namespace geos
 
-/**********************************************************************
- * $Log$
- * Revision 1.19  2006/03/21 13:11:29  strk
- * opRelate.h header split
- *
- * Revision 1.18  2006/03/17 16:48:55  strk
- * LineIntersector and PointLocator made complete components of RelateComputer
- * (were statics const pointers before). Reduced inclusions from opRelate.h
- * and opValid.h, updated .cpp files to allow build.
- *
- * Revision 1.17  2006/02/19 19:46:50  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- **********************************************************************/
-

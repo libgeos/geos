@@ -118,26 +118,3 @@ GeometryGraphOperation::~GeometryGraphOperation()
 
 } // namespace geos.operation
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.23  2006/04/03 15:54:34  strk
- * - getArgGeometry() parameter type changed from 'int' to 'unsigned int'
- * - Added port informations
- * - minor assertions checking
- * - minor cleanups
- *
- * Revision 1.22  2006/03/21 21:42:54  strk
- * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
- *
- * Revision 1.21  2006/03/02 14:34:43  strk
- * GeometryGraphOperation::li made a non-static member, and not more a pointer
- *
- * Revision 1.20  2006/02/27 09:05:33  strk
- * Doxygen comments, a few inlines and general cleanups
- *
- * Revision 1.19  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- **********************************************************************/
-

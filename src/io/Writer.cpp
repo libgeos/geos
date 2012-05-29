@@ -48,28 +48,3 @@ Writer::toString()
 
 } // namespace geos.io
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.12  2006/06/01 11:49:36  strk
- * Reduced installed headers form geomgraph namespace
- *
- * Revision 1.11  2006/03/20 18:18:15  strk
- * io.h header split
- *
- * Revision 1.10  2006/03/06 15:23:14  strk
- * geos::io namespace
- *
- * Revision 1.9  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.8  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.7  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
- **********************************************************************/

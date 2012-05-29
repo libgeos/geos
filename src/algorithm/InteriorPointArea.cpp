@@ -154,17 +154,3 @@ InteriorPointArea::horizontalBisector(const Geometry *geometry)
 
 } // namespace geos.algorithm
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.22  2006/04/07 09:54:29  strk
- * Geometry::getNumGeometries() changed to return 'unsigned int'
- * rather then 'int'
- *
- * Revision 1.21  2006/03/21 11:12:23  strk
- * Cleanups: headers inclusion and Log section
- *
- * Revision 1.20  2006/03/09 16:46:45  strk
- * geos::geom namespace definition, first pass at headers split
- **********************************************************************/
-

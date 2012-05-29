@@ -385,17 +385,3 @@ GeometryTransformer::transformGeometryCollection(
 } // namespace geos.geom.util
 } // namespace geos.geom
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.3  2006/06/19 21:20:22  strk
- * updated port info
- *
- * Revision 1.2  2006/04/11 16:04:34  strk
- * geos::simplify::DouglasPeukerSimplifier class + unit test
- *
- * Revision 1.1  2006/04/11 12:21:48  strk
- * GeometryTransformer class ported
- *
- **********************************************************************/
-

@@ -210,18 +210,3 @@ private:
 #endif
 
 #endif // ndef GEOS_OP_OVERLAY_POLYGONBUILDER_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.3  2006/06/13 23:26:46  strk
- * cleanups
- *
- * Revision 1.2  2006/03/20 12:33:45  strk
- * Simplified some privat methods to use refs instead of pointers, added
- * debugging section for failiures of holes/shells associations
- *
- * Revision 1.1  2006/03/17 13:24:59  strk
- * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
- *
- **********************************************************************/
-

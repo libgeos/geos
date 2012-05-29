@@ -90,16 +90,3 @@ public:
 } // namespace geos
 
 #endif // GEOS_PRECISION_COMMONBITSREMOVER_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.3  2006/04/07 08:30:30  strk
- * made addCommonBits/removeCommonBits interface consistent, doxygen comments
- *
- * Revision 1.2  2006/04/06 14:36:52  strk
- * Cleanup in geos::precision namespace (leaks plugged, auto_ptr use, ...)
- *
- * Revision 1.1  2006/03/23 09:17:19  strk
- * precision.h header split, minor optimizations
- *
- **********************************************************************/

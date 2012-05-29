@@ -199,27 +199,3 @@ Node::testInvariant() const
 #endif
 
 #endif // ifndef GEOS_GEOMGRAPH_NODE_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.6  2006/06/01 11:49:36  strk
- * Reduced installed headers form geomgraph namespace
- *
- * Revision 1.5  2006/04/27 15:15:06  strk
- * Z check removed from invariant tester to avoid aborts due to differences in FP computations.
- *
- * Revision 1.4  2006/04/07 16:01:51  strk
- * Port info, doxygen comments, testInvariant(), many assertionss, handling of
- * the NULL EdgeEndStar member
- *
- * Revision 1.3  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.2  2006/03/15 16:27:54  strk
- * operator<< for Node class
- *
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/
-

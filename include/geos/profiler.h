@@ -188,33 +188,3 @@ std::ostream& operator<< (std::ostream& os, const Profiler&);
 #endif
 
 #endif // ndef GEOS_PROFILER_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.8  2006/06/12 11:29:23  strk
- * unsigned int => size_t
- *
- * Revision 1.7  2006/03/06 19:40:47  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.6  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.5  2005/02/01 14:18:04  strk
- * Made profiler start/stop inline
- *
- * Revision 1.4  2004/12/03 16:21:07  frank
- * dont try for sys/time.h with MSVC
- *
- * Revision 1.3  2004/11/30 16:44:16  strk
- * Added gettimeofday implementation for win32, curtesy of Wu Yongwei.
- *
- * Revision 1.2  2004/11/04 08:49:13  strk
- * Unlinked new documentation.
- *
- * Revision 1.1  2004/11/01 16:43:04  strk
- * Added Profiler code.
- * Temporarly patched a bug in DoubleBits (must check drawbacks).
- * Various cleanups and speedups.
- *
- **********************************************************************/

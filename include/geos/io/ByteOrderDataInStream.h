@@ -80,14 +80,3 @@ private:
 #endif
 
 #endif // #ifndef GEOS_IO_BYTEORDERDATAINSTREAM_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.2  2006/03/28 11:26:13  strk
- * ByteOrderDataInStream inlines moved to .inl file, updated
- * implementation files includes.
- *
- * Revision 1.1  2006/03/20 18:18:14  strk
- * io.h header split
- *
- **********************************************************************/

@@ -95,10 +95,3 @@ ConnectedSubgraphFinder::addEdges(Node* node,
 } // namespace geos.planargraph.algorithm
 } // namespace geos.planargraph 
 } // namespace geos 
-
-/**********************************************************************
- * $Log$
- * Revision 1.5  2006/03/21 21:42:54  strk
- * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
- *
- **********************************************************************/

@@ -174,13 +174,3 @@ SimpleGeometryPrecisionReducer::reduce(const Geometry *geom)
 } // namespace geos.precision
 } // namespace geos
 
-/**********************************************************************
- * $Log$
- * Revision 1.14  2006/04/03 13:56:54  strk
- * Made externally-owned PrecisionModel  const
- *
- * Revision 1.13  2006/03/23 09:17:19  strk
- * precision.h header split, minor optimizations
- *
- **********************************************************************/
-

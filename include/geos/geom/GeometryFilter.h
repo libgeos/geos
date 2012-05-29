@@ -66,24 +66,4 @@ public:
 } // namespace geos::geom
 } // namespace geos
 
-//#ifdef GEOS_INLINE
-//# include "geos/geom/GeometryFilter.inl"
-//#endif
-
 #endif // ndef GEOS_GEOM_GEOMETRYFILTER_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.4  2006/06/12 17:14:11  strk
- * added assert(0) version of filter_ro() and filter_rw() to allow implementations to only defined the required one.
- *
- * Revision 1.3  2006/06/08 11:20:24  strk
- * Added missing virtual destructor to abstract classes.
- *
- * Revision 1.2  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/

@@ -178,21 +178,3 @@ MCPointInRing::testLineSegment(const Coordinate& p, const LineSegment& seg)
 } // namespace geos.algorithm
 } // namespace geos
 
-/**********************************************************************
- * $Log$
- * Revision 1.27  2006/03/29 11:52:00  strk
- * const correctness, useless heap allocations removal
- *
- * Revision 1.26  2006/03/22 18:12:31  strk
- * indexChain.h header split.
- *
- * Revision 1.25  2006/03/22 16:01:33  strk
- * indexBintree.h header split, classes renamed to match JTS
- *
- * Revision 1.24  2006/03/21 11:12:23  strk
- * Cleanups: headers inclusion and Log section
- *
- * Revision 1.23  2006/03/09 16:46:45  strk
- * geos::geom namespace definition, first pass at headers split
- **********************************************************************/
-

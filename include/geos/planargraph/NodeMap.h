@@ -125,11 +125,3 @@ public:
 #endif
 
 #endif // GEOS_PLANARGRAPH_NODEMAP_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.1  2006/03/21 21:42:54  strk
- * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
- *
- **********************************************************************/
-

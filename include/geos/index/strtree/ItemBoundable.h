@@ -50,11 +50,3 @@ private:
 } // namespace geos
 
 #endif // GEOS_INDEX_STRTREE_ITEMBOUNDABLE_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.1  2006/03/21 10:47:34  strk
- * indexStrtree.h split
- *
- **********************************************************************/
-

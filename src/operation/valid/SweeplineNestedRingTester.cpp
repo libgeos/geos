@@ -103,16 +103,3 @@ SweeplineNestedRingTester::isInside(LinearRing *innerRing,LinearRing *searchRing
 } // namespace geos.operation
 } // namespace geos
 
-/**********************************************************************
- * $Log$
- * Revision 1.18  2006/06/12 11:29:24  strk
- * unsigned int => size_t
- *
- * Revision 1.17  2006/04/09 04:09:43  mloskot
- * Removed redundant semicolon reported by g++ -pedantic.
- *
- * Revision 1.16  2006/03/21 10:01:30  strk
- * indexSweepline.h header split
- *
- **********************************************************************/
-

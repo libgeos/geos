@@ -26,8 +26,3 @@ namespace prep { // geos.geom.prep
 } // namespace geos.geom.prep
 } // namespace geos.geom
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- *
- **********************************************************************/

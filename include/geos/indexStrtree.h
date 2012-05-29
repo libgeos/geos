@@ -35,16 +35,3 @@ namespace strtree { // geos.index.strtree
 #include <geos/index/strtree/STRtree.h>
 
 #endif // GEOS_INDEXSTRTREE_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.17  2006/06/01 10:28:46  strk
- * Reduced number of installed headers for the geos::index namespace
- *
- * Revision 1.16  2006/03/21 10:47:34  strk
- * indexStrtree.h split
- *
- * Revision 1.15  2006/03/09 16:46:48  strk
- * geos::geom namespace definition, first pass at headers split
- **********************************************************************/
-

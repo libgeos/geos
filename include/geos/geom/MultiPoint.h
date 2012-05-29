@@ -120,26 +120,4 @@ protected:
 } // namespace geos::geom
 } // namespace geos
 
-//#ifdef GEOS_INLINE
-//# include "geos/geom/MultiPoint.inl"
-//#endif
-
 #endif // ndef GEOS_GEOS_MULTIPOINT_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.4  2006/05/04 15:49:39  strk
- * updated all Geometry::getDimension() methods to return Dimension::DimensionType (closes bug#93)
- *
- * Revision 1.3  2006/04/28 10:55:39  strk
- * Geometry constructors made protected, to ensure all constructions use GeometryFactory,
- * which has been made friend of all Geometry derivates. getNumPoints() changed to return
- * size_t.
- *
- * Revision 1.2  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/

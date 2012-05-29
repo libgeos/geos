@@ -10,19 +10,6 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- **********************************************************************
- * $Log$
- * Revision 1.4  2004/07/19 10:30:05  strk
- * acconfig.h moved one directory up
- *
- * Revision 1.1  2004/07/02 13:20:42  strk
- * Header files moved under geos/ dir.
- *
- * Revision 1.2  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
 
 

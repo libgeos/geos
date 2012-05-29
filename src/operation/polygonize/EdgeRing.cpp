@@ -268,17 +268,3 @@ EdgeRing::addEdge(const CoordinateSequence *coords, bool isForward,
 } // namespace geos.operation.polygonize
 } // namespace geos.operation
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.2  2006/05/02 14:32:49  strk
- * Added port info for polygonize/EdgeRing class, polygonize/EdgeRing.h header
- * not installed.
- *
- * Revision 1.1  2006/05/02 14:22:30  strk
- * * source/operation/polygonize/: polygonizeEdgeRing.cpp renamed to EdgeRing.cpp, to follow JTS naming.
- *
- * Revision 1.16  2006/03/22 11:19:06  strk
- * opPolygonize.h headers split.
- *
- **********************************************************************/

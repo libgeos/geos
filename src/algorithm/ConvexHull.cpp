@@ -513,63 +513,6 @@ ConvexHull::cleanRing(const Coordinate::ConstVect &original,
 }
 
 
-///**
-// * @param  vertices  the vertices of a linear ring, which may or may not be
-// *      flattened (i.e. vertices collinear)
-// * @return a newly allocated CoordinateSequence
-// */
-//CoordinateSequence*
-//ConvexHull::cleanRing(const CoordinateSequence *original)
-//{
-//	Assert::equals(original->getAt(0),original->getAt(original->getSize()-1));
-//
-//	size_t npts=original->getSize();
-//
-//	vector<Coordinate> *newPts=new vector<Coordinate>;
-//	newPts->reserve(npts);
-//
-//	const Coordinate *previousDistinctCoordinate=NULL;
-//	for(size_t i=0; i<npts-1; ++i)
-//	{
-//		const Coordinate &currentCoordinate=original->getAt(i);
-//		const Coordinate &nextCoordinate=original->getAt(i+1);
-//
-//		// skip repeated points (shouldn't this have been already done elsewhere?)
-//		if (currentCoordinate==nextCoordinate) continue;
-//
-//		// skip collinear point
-//		if (previousDistinctCoordinate!=NULL && 
-//			isBetween(*previousDistinctCoordinate, currentCoordinate, nextCoordinate))
-//		{
-//			continue;
-//		}
-//
-//		newPts->push_back(currentCoordinate);
-//
-//		previousDistinctCoordinate=&currentCoordinate;
-//	}
-//
-//	newPts->push_back(original->getAt(npts-1));
-//
-//	CoordinateSequence *cleanedRing=geomFactory->getCoordinateSequenceFactory()->create(newPts);
-//	return cleanedRing;
-//}
-
 } // namespace geos.algorithm
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.22  2006/06/12 10:49:43  strk
- * unsigned int => size_t
- *
- * Revision 1.21  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.20  2006/03/21 11:12:23  strk
- * Cleanups: headers inclusion and Log section
- *
- * Revision 1.19  2006/03/09 16:46:45  strk
- * geos::geom namespace definition, first pass at headers split
- **********************************************************************/
 

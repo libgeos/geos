@@ -105,13 +105,3 @@ public:
 
 #endif
 
-/**********************************************************************
- * $Log$
- * Revision 1.2  2006/03/15 17:17:42  strk
- * Added missing forward declarations
- *
- * Revision 1.1  2006/03/14 12:55:56  strk
- * Headers split: geomgraphindex.h, nodingSnapround.h
- *
- **********************************************************************/
-

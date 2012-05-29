@@ -164,29 +164,3 @@ Quadtree::toString() const
 } // namespace geos.index.quadtree
 } // namespace geos.index
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.25  2006/04/03 08:29:30  strk
- * Added port info, cleaned up log message, minor assertion checking.
- *
- * Revision 1.24  2006/03/23 13:31:58  strk
- * Fixed to allow build with GEOS_DEBUG
- *
- * Revision 1.23  2006/03/22 12:22:50  strk
- * indexQuadtree.h split
- *
- * Revision 1.22  2006/03/20 16:57:44  strk
- * spatialindex.h and opValid.h headers split
- *
- * Revision 1.21  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.20  2006/03/02 12:12:00  strk
- * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
- *
- * Revision 1.19  2006/03/01 13:49:45  strk
- * Fixed debug lines (bug#36)
- *
- **********************************************************************/
-

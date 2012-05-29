@@ -272,10 +272,3 @@ BufferOp::setSingleSided(bool isSingleSided)
 
 #endif // ndef GEOS_OP_BUFFER_BUFFEROP_H
 
-/**********************************************************************
- * $Log$
- * Revision 1.1  2006/03/14 00:19:40  strk
- * opBuffer.h split, streamlined headers in some (not all) files in operation/buffer/
- *
- **********************************************************************/
-

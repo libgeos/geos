@@ -356,17 +356,3 @@ std::ostream& operator<< (std::ostream& os, const BufferSubgraph& bs)
 } // namespace geos.operation.buffer
 } // namespace geos.operation
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.34  2006/06/12 11:29:23  strk
- * unsigned int => size_t
- *
- * Revision 1.33  2006/05/04 12:33:32  strk
- * Added some comments about RightmostEdgeFinder only considering forward DirectedEdge
- *
- * Revision 1.32  2006/03/22 11:18:39  strk
- * Changed back 'unable to find edge to compute depths' from assertion to TopologyException
- *
- **********************************************************************/
-

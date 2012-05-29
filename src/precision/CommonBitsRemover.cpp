@@ -182,22 +182,3 @@ CommonBitsRemover::addCommonBits(Geometry *geom)
 } // namespace geos.precision
 } // namespace geos
 
-/**********************************************************************
- * $Log$
- * Revision 1.9  2006/04/07 08:28:25  strk
- * debugging lines, assertions
- *
- * Revision 1.8  2006/04/06 14:36:51  strk
- * Cleanup in geos::precision namespace (leaks plugged, auto_ptr use, ...)
- *
- * Revision 1.7  2006/03/23 09:17:19  strk
- * precision.h header split, minor optimizations
- *
- * Revision 1.6  2006/03/06 19:40:47  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.5  2006/03/02 16:21:26  strk
- * geos::precision namespace added
- *
- **********************************************************************/
-

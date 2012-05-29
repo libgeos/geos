@@ -100,14 +100,3 @@ private:
 } // namespace geos
 
 #endif // GEOS_IDX_QUADTREE_DOUBLEBITS_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.2  2006/05/23 14:29:33  strk
- * * source/headers/geos/index/quadtree/DoubleBits.h, source/index/quadtree/DoubleBits.cpp: const correctness and documentation.
- *
- * Revision 1.1  2006/03/22 12:22:50  strk
- * indexQuadtree.h split
- *
- **********************************************************************/
-

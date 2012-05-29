@@ -174,11 +174,3 @@ MonotoneChain::computeOverlaps(size_t start0, size_t end0,
 } // namespace geos.index.chain
 } // namespace geos.index
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.1  2006/03/22 18:12:32  strk
- * indexChain.h header split.
- *
- **********************************************************************/
-

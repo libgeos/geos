@@ -60,13 +60,3 @@ public:
 
 
 #endif // GEOS_UTIL_ASSERT_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.2  2006/03/14 17:46:26  strk
- * Removed unrequired include
- *
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/

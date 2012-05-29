@@ -354,33 +354,3 @@ ConnectedInteriorTester::hasUnvisitedShellEdge(std::vector<EdgeRing*> *edgeRings
 } // namespace geos.operation.valid
 } // namespace geos.operation
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.29  2006/06/12 11:29:24  strk
- * unsigned int => size_t
- *
- * Revision 1.28  2006/04/06 12:45:28  strk
- * Delayed deletion of newly allocated MaximalEdgeRings.
- * Existing 'valid' operation tests don't should instability with
- * this patch.
- *
- * Revision 1.27  2006/03/29 13:53:59  strk
- * EdgeRing equipped with Invariant testing function and lots of exceptional assertions. Removed useless heap allocations, and pointers usages.
- *
- * Revision 1.26  2006/03/27 16:02:34  strk
- * Added INL file for MinimalEdgeRing, added many debugging blocks,
- * fixed memory leak in ConnectedInteriorTester (bug #59)
- *
- * Revision 1.25  2006/03/27 14:20:46  strk
- * Added paranoid assertion checking and a note in header about responsibility of return from buildMaximalEdgeRings()
- *
- * Revision 1.24  2006/03/20 16:57:44  strk
- * spatialindex.h and opValid.h headers split
- *
- * Revision 1.23  2006/03/17 16:48:55  strk
- * LineIntersector and PointLocator made complete components of RelateComputer
- * (were statics const pointers before). Reduced inclusions from opRelate.h
- * and opValid.h, updated .cpp files to allow build.
- *
- **********************************************************************/

@@ -85,12 +85,3 @@ InteriorPointPoint::getInteriorPoint(Coordinate& ret) const
 } // namespace geos.algorithm
 } // namespace geos
 
-/**********************************************************************
- * $Log$
- * Revision 1.14  2006/03/21 11:12:23  strk
- * Cleanups: headers inclusion and Log section
- *
- * Revision 1.13  2006/03/09 16:46:45  strk
- * geos::geom namespace definition, first pass at headers split
- **********************************************************************/
-

@@ -51,10 +51,3 @@ private:
 
 #endif // GEOS_GEOMGRAPH_INDEX_MONOTONECHAININDEXER_H
 
-/**********************************************************************
- * $Log$
- * Revision 1.1  2006/03/14 12:55:55  strk
- * Headers split: geomgraphindex.h, nodingSnapround.h
- *
- **********************************************************************/
-

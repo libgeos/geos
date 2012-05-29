@@ -85,14 +85,3 @@ protected:
 } // namespace geos
 
 #endif // GEOS_IDX_QUADTREE_ROOT_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.2  2006/06/12 17:15:29  strk
- * Removed unused parameters warning
- *
- * Revision 1.1  2006/03/22 12:22:50  strk
- * indexQuadtree.h split
- *
- **********************************************************************/
-

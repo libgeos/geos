@@ -43,14 +43,3 @@ public:
 } // namespace geos
 
 #endif // GEOS_INDEX_SWEEPLINE_SWEEPLINEOVERLAPACTION_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.2  2006/06/08 11:20:24  strk
- * Added missing virtual destructor to abstract classes.
- *
- * Revision 1.1  2006/03/21 10:01:30  strk
- * indexSweepline.h header split
- *
- **********************************************************************/
-

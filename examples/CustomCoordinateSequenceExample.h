@@ -11,23 +11,6 @@
  * See the COPYING file for more information.
  *
  **********************************************************************
- * $Log$
- * Revision 1.2  2006/04/04 08:16:46  strk
- * Changed GEOSException hierarchy to be derived from std::runtime_exception.
- * Removed the GEOSException::toString redundant method (use ::what() instead)
- *
- * Revision 1.1  2004/07/08 19:41:27  strk
- * renamed to reflect JTS API.
- *
- * Revision 1.8  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.7  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
  **********************************************************************/
 
 

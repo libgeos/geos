@@ -295,20 +295,3 @@ bool operator!= ( const CoordinateSequence& s1, const CoordinateSequence& s2)
 
 } // namespace geos::geom
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.21  2006/06/12 16:51:23  strk
- * Added equality and inequality operators and tests
- *
- * Revision 1.20  2006/06/12 16:36:22  strk
- * indentation, notes about things to be fixed.
- *
- * Revision 1.19  2006/06/12 10:10:39  strk
- * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
- *
- * Revision 1.18  2006/05/03 19:47:27  strk
- * added operator<< for CoordinateSequence
- *
- **********************************************************************/
-

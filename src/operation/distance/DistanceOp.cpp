@@ -628,22 +628,3 @@ DistanceOp::isWithinDistance(const geom::Geometry& g0,
 } // namespace geos.operation.distance
 } // namespace geos.operation
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.24  2006/06/12 11:29:24  strk
- * unsigned int => size_t
- *
- * Revision 1.23  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.22  2006/03/23 12:12:01  strk
- * Fixes to allow build with -DGEOS_INLINE
- *
- * Revision 1.21  2006/03/21 17:55:01  strk
- * opDistance.h header split
- *
- * Revision 1.20  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- **********************************************************************/
-

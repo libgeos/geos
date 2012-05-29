@@ -38,11 +38,3 @@ MonotoneChainSelectAction::select(MonotoneChain& mc, unsigned int start)
 } // namespace geos.index.chain
 } // namespace geos.index
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.11  2006/03/22 18:12:32  strk
- * indexChain.h header split.
- *
- **********************************************************************/
-

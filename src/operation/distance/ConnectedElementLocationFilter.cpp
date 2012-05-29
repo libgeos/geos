@@ -67,17 +67,3 @@ void ConnectedElementLocationFilter::filter_rw(Geometry *geom){
 } // namespace geos.operation.distance
 } // namespace geos.operation
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.7  2006/03/21 17:55:01  strk
- * opDistance.h header split
- *
- * Revision 1.6  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.5  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- **********************************************************************/
-

@@ -90,10 +90,3 @@ NodeMap::find(const geom::Coordinate& coord)
 } //namespace planargraph 
 } //namespace geos 
 
-/**********************************************************************
- * $Log$
- * Revision 1.1  2006/03/21 21:42:54  strk
- * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
- *
- **********************************************************************/
-

@@ -378,30 +378,4 @@ GEOS_DLL std::ostream& operator<< (std::ostream&os, const IntersectionMatrix& im
 } // namespace geos::geom
 } // namespace geos
 
-//#ifdef GEOS_INLINE
-//# include "geos/geom/IntersectionMatrix.inl"
-//#endif
-
 #endif // ndef GEOS_GEOM_INTERSECTIONMATRIX_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.6  2006/05/17 17:41:10  strk
- * Added output operator + test
- *
- * Revision 1.5  2006/05/17 17:24:17  strk
- * Added port info, fixed isCoveredBy() comment.
- *
- * Revision 1.4  2006/05/17 17:20:10  strk
- * added isCovers() and isCoveredBy() public methods to IntersectionMatrix and associated tests.
- *
- * Revision 1.3  2006/04/09 01:46:13  mloskot
- * [SORRY] Added comments for doxygen based on JTS docs. Added row/col dimension consts. Added asserts in functions to check if given row/col is in range.
- *
- * Revision 1.2  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/

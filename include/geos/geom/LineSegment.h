@@ -382,32 +382,3 @@ bool operator==(const LineSegment& a, const LineSegment& b);
 #endif
 
 #endif // ndef GEOS_GEOM_LINESEGMENT_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.8  2006/07/21 14:49:58  strk
- * Fixed typo in comment
- *
- * Revision 1.7  2006/06/12 10:10:39  strk
- * Fixed getGeometryN() to take size_t rather then int, changed unsigned int parameters to size_t.
- *
- * Revision 1.6  2006/04/12 17:19:56  strk
- * Ported TaggedLineStringSimplifier class, made LineSegment class
- * polymorphic to fix derivation of TaggedLineSegment
- *
- * Revision 1.5  2006/03/28 09:14:12  strk
- * Headers inclusion fix.
- *
- * Revision 1.4  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.3  2006/03/16 13:28:22  strk
- * obsoleted getCoordinate(), replaced by operator[]
- *
- * Revision 1.2  2006/03/13 22:33:09  strk
- * Added missing forward declarations
- *
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/

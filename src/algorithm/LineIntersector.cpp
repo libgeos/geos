@@ -855,28 +855,3 @@ LineIntersector::safeHCoordinateIntersection(const Coordinate& p1,
 
 } // namespace geos.algorithm
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.42  2006/04/12 11:57:11  strk
- * Fixed debugging line
- *
- * Revision 1.41  2006/04/07 09:12:57  strk
- * kept isInSegmentEnvelopes() check even when not debugging
- *
- * Revision 1.40  2006/04/06 21:31:40  strk
- * Const correctness for debugging function
- *
- * Revision 1.39  2006/04/04 12:39:08  strk
- * Changed NotRepresentableCoordinate exception handler to throw
- * a TopologyException. This allows further handling.
- *
- * Revision 1.38  2006/03/21 11:12:23  strk
- * Cleanups: headers inclusion and Log section
- *
- * Revision 1.37  2006/03/16 10:38:14  strk
- * Bug #63 - Remove unreferenced local variable warning
- *
- * Revision 1.36  2006/03/09 16:46:45  strk
- * geos::geom namespace definition, first pass at headers split
- **********************************************************************/

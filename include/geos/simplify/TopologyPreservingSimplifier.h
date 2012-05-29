@@ -96,13 +96,3 @@ private:
 #endif
 
 #endif // GEOS_SIMPLIFY_TOPOLOGYPRESERVINGSIMPLIFIER_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.3  2006/04/13 16:04:10  strk
- * Made TopologyPreservingSimplifier implementation successfully build
- *
- * Revision 1.2  2006/04/13 14:25:17  strk
- * TopologyPreservingSimplifier initial port
- *
- **********************************************************************/

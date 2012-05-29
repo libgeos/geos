@@ -104,26 +104,3 @@ SweepLineEventLessThen::operator() (const SweepLineEvent *first, const SweepLine
 } // namespace geos.index
 } // namespace geos
 
-/**********************************************************************
- * $Log$
- * Revision 1.1  2006/03/21 10:01:30  strk
- * indexSweepline.h header split
- *
- * Revision 1.8  2006/03/02 14:53:44  strk
- * SweepLineEvent::DELETE=>DELETE_EVENT, INSERT=>INSERT_EVENT (#45)
- *
- * Revision 1.7  2006/02/20 10:14:18  strk
- * - namespaces geos::index::*
- * - Doxygen documentation cleanup
- *
- * Revision 1.6  2004/07/02 13:28:27  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.5  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
- **********************************************************************/
-

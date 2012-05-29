@@ -67,7 +67,3 @@ SingleInteriorIntersectionFinder::processIntersections(
 
 } // namespace geos.noding
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- **********************************************************************/

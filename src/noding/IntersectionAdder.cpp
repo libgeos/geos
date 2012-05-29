@@ -110,16 +110,3 @@ IntersectionAdder::processIntersections(
 
 } // namespace geos.noding
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.3  2006/03/15 09:51:12  strk
- * streamlined headers usage
- *
- * Revision 1.2  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.1  2006/02/16 08:19:07  strk
- * Missed from last commit
- *
- **********************************************************************/

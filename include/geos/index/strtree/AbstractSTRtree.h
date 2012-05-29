@@ -318,17 +318,3 @@ public:
 } // namespace geos
 
 #endif // GEOS_INDEX_STRTREE_ABSTRACTSTRTREE_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.3  2006/06/12 10:49:43  strk
- * unsigned int => size_t
- *
- * Revision 1.2  2006/06/08 11:20:24  strk
- * Added missing virtual destructor to abstract classes.
- *
- * Revision 1.1  2006/03/21 10:47:34  strk
- * indexStrtree.h split
- *
- **********************************************************************/
-

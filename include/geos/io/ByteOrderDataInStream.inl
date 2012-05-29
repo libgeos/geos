@@ -95,11 +95,3 @@ ByteOrderDataInStream::readDouble()
 } // namespace geos
 
 #endif // #ifndef GEOS_IO_BYTEORDERDATAINSTREAM_INL
-
-/**********************************************************************
- * $Log$
- * Revision 1.1  2006/03/28 11:26:13  strk
- * ByteOrderDataInStream inlines moved to .inl file, updated
- * implementation files includes.
- *
- **********************************************************************/

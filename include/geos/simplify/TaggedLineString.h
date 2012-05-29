@@ -129,31 +129,3 @@ private:
 #endif
 
 #endif // GEOS_SIMPLIFY_TAGGEDLINESTRING_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.7  2006/06/12 11:29:23  strk
- * unsigned int => size_t
- *
- * Revision 1.6  2006/04/13 21:52:34  strk
- * Many debugging lines and assertions added. Fixed bug in TaggedLineString class.
- *
- * Revision 1.5  2006/04/13 16:04:10  strk
- * Made TopologyPreservingSimplifier implementation successfully build
- *
- * Revision 1.4  2006/04/13 09:21:45  mloskot
- * Removed definition of copy ctor and assignment operator for TaggedLineString class.
- * According to following rule: Declaring, but not defining, private copy operations has
- * the effect of "turning off" copying for the class.
- *
- * Revision 1.3  2006/04/12 17:19:57  strk
- * Ported TaggedLineStringSimplifier class, made LineSegment class
- * polymorphic to fix derivation of TaggedLineSegment
- *
- * Revision 1.2  2006/04/12 15:20:37  strk
- * LineSegmentIndex class
- *
- * Revision 1.1  2006/04/12 14:22:12  strk
- * Initial implementation of TaggedLineSegment and TaggedLineString classes
- *
- **********************************************************************/

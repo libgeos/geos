@@ -64,17 +64,3 @@ namespace io { // geos.io
 using namespace geos::io;
 
 #endif
-
-/**********************************************************************
- * $Log$
- * Revision 1.29  2006/07/21 16:45:28  mloskot
- * Wrapped FIXME message with #warning directive to shout about potential headers removal in future.
- *
- * Revision 1.28  2006/06/01 11:49:36  strk
- * Reduced installed headers form geomgraph namespace
- *
- * Revision 1.27  2006/03/20 18:18:14  strk
- * io.h header split
- *
- **********************************************************************/
-

@@ -79,11 +79,3 @@ private:
 
 
 #endif // GEOS_ALGORITHM_LOCATE_SIMPLEPOINTINAREALOCATOR_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.1  2006/03/09 16:46:48  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/
-

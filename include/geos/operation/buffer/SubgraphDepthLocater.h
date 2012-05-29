@@ -121,13 +121,3 @@ private:
 
 #endif // ndef GEOS_OP_BUFFER_SUBGRAPHDEPTHLOCATER_H
 
-/**********************************************************************
- * $Log$
- * Revision 1.2  2006/03/15 15:50:11  strk
- * const correctness, cleanups
- *
- * Revision 1.1  2006/03/14 00:19:40  strk
- * opBuffer.h split, streamlined headers in some (not all) files in operation/buffer/
- *
- **********************************************************************/
-

@@ -235,14 +235,3 @@ std::ostream& operator << (std::ostream&, const DirectedEdge&);
 } // namespace geos
 
 #endif // GEOS_PLANARGRAPH_DIRECTEDEDGE_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.2  2006/06/12 15:46:08  strk
- * provided a memory friendly version of toEdges() method.
- *
- * Revision 1.1  2006/03/21 21:42:54  strk
- * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
- *
- **********************************************************************/
-

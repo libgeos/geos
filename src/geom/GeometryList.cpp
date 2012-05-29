@@ -78,12 +78,3 @@ GeometryList::operator[] (GeometryList::size_type i) const
 
 } // namespace geos.geom
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.1  2006/04/11 09:41:26  strk
- * Initial implementation of a GeometryList class, to be used to manage
- * lists of Geometry pointers.
- *
- **********************************************************************/
-

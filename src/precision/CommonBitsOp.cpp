@@ -169,23 +169,3 @@ CommonBitsOp::removeCommonBits(
 
 } // namespace geos.precision
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.10  2006/04/13 23:28:26  strk
- * "always build before commit" (forgot a closing paren)
- *
- * Revision 1.9  2006/04/13 23:23:52  strk
- * fixed bug in binary ops failing to consistently reduce operands.
- *
- * Revision 1.8  2006/04/07 08:27:12  strk
- * debugging blocks
- *
- * Revision 1.7  2006/04/06 14:36:51  strk
- * Cleanup in geos::precision namespace (leaks plugged, auto_ptr use, ...)
- *
- * Revision 1.6  2006/03/23 09:17:19  strk
- * precision.h header split, minor optimizations
- *
- **********************************************************************/
-

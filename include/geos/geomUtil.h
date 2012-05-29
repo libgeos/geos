@@ -37,10 +37,3 @@ namespace util { // geos.geom.util
 } // namespace geos
 
 #endif
-
-/**********************************************************************
- * $Log$
- * Revision 1.9  2006/03/09 16:46:48  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/

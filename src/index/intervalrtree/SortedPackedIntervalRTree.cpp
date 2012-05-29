@@ -145,8 +145,3 @@ SortedPackedIntervalRTree::query( double min, double max, index::ItemVisitor * v
 } // geos::intervalrtree
 } // geos::index
 } // geos
-
-/**********************************************************************
- * $Log$
- *
- **********************************************************************/

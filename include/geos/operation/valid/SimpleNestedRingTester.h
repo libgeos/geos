@@ -93,11 +93,3 @@ public:
 #endif
 
 #endif // GEOS_OP_SIMPLENESTEDRINGTESTER_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.1  2006/03/20 16:57:44  strk
- * spatialindex.h and opValid.h headers split
- *
- **********************************************************************/
-

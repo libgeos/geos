@@ -56,11 +56,3 @@ void ConnectedElementPointFilter::filter_ro(const Geometry *geom) {
 } // namespace geos.operation.distance
 } // namespace geos.operation
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.11  2006/03/21 17:55:01  strk
- * opDistance.h header split
- *
- **********************************************************************/
-

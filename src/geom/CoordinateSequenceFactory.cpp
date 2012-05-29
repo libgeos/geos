@@ -26,11 +26,3 @@ CoordinateSequenceFactory::~CoordinateSequenceFactory()
 
 } // namespace geos::geom
 }
-
-/**********************************************************************
- * $Log$
- * Revision 1.4  2006/04/03 10:56:58  strk
- * Removed implementation files build spec for fully-inlined classes
- *
- **********************************************************************/
-

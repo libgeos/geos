@@ -84,13 +84,3 @@ private:
 } // namespace geos
 
 #endif // GEOS_SIMPLIFY_DOUBGLASPEUCKERSIMPLIFIER_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.2  2006/04/13 10:39:12  strk
- * Initial implementation of TaggedLinesSimplifier class
- *
- * Revision 1.1  2006/04/11 16:04:34  strk
- * geos::simplify::DouglasPeukerSimplifier class + unit test
- *
- **********************************************************************/

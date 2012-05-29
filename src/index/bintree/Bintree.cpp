@@ -150,11 +150,3 @@ Bintree::collectStats(Interval *interval)
 } // namespace geos.index.bintree
 } // namespace geos.index
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.13  2006/03/22 16:01:33  strk
- * indexBintree.h header split, classes renamed to match JTS
- *
- **********************************************************************/
-

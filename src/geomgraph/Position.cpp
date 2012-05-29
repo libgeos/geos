@@ -45,35 +45,3 @@ int Position::opposite(int position){
 
 } // namespace geos.geomgraph
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.7  2006/03/15 17:16:29  strk
- * streamlined headers inclusion
- *
- * Revision 1.6  2006/03/09 16:01:59  strk
- * Fixed debugging lines
- *
- * Revision 1.5  2006/03/02 12:12:00  strk
- * Renamed DEBUG macros to GEOS_DEBUG, all wrapped in #ifndef block to allow global override (bug#43)
- *
- * Revision 1.4  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.3  2005/05/20 16:15:41  strk
- * Code cleanups
- *
- * Revision 1.2  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.5  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
- **********************************************************************/
-

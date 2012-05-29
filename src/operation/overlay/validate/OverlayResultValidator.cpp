@@ -247,7 +247,3 @@ OverlayResultValidator::computeBoundaryDistanceTolerance(
 } // namespace geos.operation
 } // namespace geos
 
-/**********************************************************************
- * $Log$
- **********************************************************************/
-

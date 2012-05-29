@@ -51,14 +51,3 @@ public:
 
 
 #endif // GEOS_UTIL_ILLEGALARGUMENTEXCEPTION_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.2  2006/04/04 08:16:46  strk
- * Changed GEOSException hierarchy to be derived from std::runtime_exception.
- * Removed the GEOSException::toString redundant method (use ::what() instead)
- *
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/

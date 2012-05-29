@@ -82,8 +82,3 @@ PreparedPolygonIntersects::intersects( const geom::Geometry * geom)
 } // geos::geom::prep
 } // geos::geom
 } // geos
-
-/**********************************************************************
- * $Log$
- *
- **********************************************************************/

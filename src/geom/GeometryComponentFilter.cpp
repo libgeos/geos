@@ -37,17 +37,3 @@ void GeometryComponentFilter::filter_ro(const Geometry *geom)
 
 } // namespace geos::geom
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.12  2006/04/13 14:25:17  strk
- * TopologyPreservingSimplifier initial port
- *
- * Revision 1.11  2006/03/22 16:58:34  strk
- * Removed (almost) all inclusions of geom.h.
- * Removed obsoleted .cpp files.
- * Fixed a bug in WKTReader not using the provided CoordinateSequence
- * implementation, optimized out some memory allocations.
- *
- **********************************************************************/
-

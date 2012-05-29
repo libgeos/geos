@@ -96,10 +96,3 @@ public:
 } // namespace geos
 
 #endif // GEOS_PRECISION_COMMONBITS_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.1  2006/03/23 09:17:19  strk
- * precision.h header split, minor optimizations
- *
- **********************************************************************/

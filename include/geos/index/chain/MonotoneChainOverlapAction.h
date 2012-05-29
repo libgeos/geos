@@ -87,10 +87,3 @@ public:
 
 #endif // GEOS_IDX_CHAIN_MONOTONECHAINOVERLAPACTION_H
 
-/**********************************************************************
- * $Log$
- * Revision 1.1  2006/03/22 18:12:31  strk
- * indexChain.h header split.
- *
- **********************************************************************/
-

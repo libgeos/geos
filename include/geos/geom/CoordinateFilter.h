@@ -62,24 +62,4 @@ public:
 } // namespace geos::geom
 } // namespace geos
 
-//#ifdef GEOS_INLINE
-//# include "geos/geom/CoordinateFilter.inl"
-//#endif
-
 #endif // ndef GEOS_GEOM_COORDINATEFILTER_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.4  2006/06/19 23:33:03  strk
- * Don't *require* CoordinateFilters to define both read-only and read-write methods.
- *
- * Revision 1.3  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.2  2006/03/13 21:13:54  strk
- * Added comment about possible refactoring
- *
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/

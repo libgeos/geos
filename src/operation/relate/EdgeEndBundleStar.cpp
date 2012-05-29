@@ -80,16 +80,3 @@ EdgeEndBundleStar::updateIM(IntersectionMatrix& im)
 } // namespace geos.operation
 } // namespace geos
 
-/**********************************************************************
- * $Log$
- * Revision 1.13  2006/03/21 13:11:29  strk
- * opRelate.h header split
- *
- * Revision 1.12  2006/03/20 16:57:44  strk
- * spatialindex.h and opValid.h headers split
- *
- * Revision 1.11  2006/02/19 19:46:50  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- **********************************************************************/
-

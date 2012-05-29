@@ -275,23 +275,3 @@ operator<< (std::ostream& os, const Label& l)
 
 } // namespace geos.geomgraph
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.10  2006/04/06 09:01:37  strk
- * Doxygen comments, port info, operator<<, assertion checking
- *
- * Revision 1.9  2006/04/03 17:05:22  strk
- * Assertion checking, port info, cleanups
- *
- * Revision 1.8  2006/03/14 12:55:55  strk
- * Headers split: geomgraphindex.h, nodingSnapround.h
- *
- * Revision 1.7  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.6  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- **********************************************************************/
-

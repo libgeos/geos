@@ -87,11 +87,3 @@ private:
 #endif
 
 #endif // GEOS_INDEX_SWEEPLINE_SWEEPLINEINDEX_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.1  2006/03/21 10:01:30  strk
- * indexSweepline.h header split
- *
- **********************************************************************/
-

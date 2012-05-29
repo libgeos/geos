@@ -49,8 +49,3 @@ PreparedPolygonContains::fullTopologicalPredicate( const geom::Geometry * geom)
 } // namespace geos.geom.prep
 } // namespace geos.geom
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- *
- **********************************************************************/

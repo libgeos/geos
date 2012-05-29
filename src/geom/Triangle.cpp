@@ -35,16 +35,3 @@ Triangle::inCentre(Coordinate& result)
 
 } // namespace geos::geom
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.7  2006/03/22 16:58:34  strk
- * Removed (almost) all inclusions of geom.h.
- * Removed obsoleted .cpp files.
- * Fixed a bug in WKTReader not using the provided CoordinateSequence
- * implementation, optimized out some memory allocations.
- *
- * Revision 1.6  2006/03/13 21:54:56  strk
- * Streamlined headers inclusion.
- **********************************************************************/
-

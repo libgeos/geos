@@ -145,8 +145,3 @@ IndexedPointInAreaLocator::IntervalIndexedGeometry::query( double min, double ma
 } // geos::algorithm::locate
 } // geos::algorithm
 } // geos
-
-/**********************************************************************
- * $Log$
- *
- **********************************************************************/

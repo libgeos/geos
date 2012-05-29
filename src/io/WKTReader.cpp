@@ -457,24 +457,3 @@ GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *token
 
 } // namespace geos.io
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.42  2006/04/26 16:35:40  strk
- * Had WKTReader accept correct form for MultiPoint
- *
- * Revision 1.41  2006/04/10 12:05:35  strk
- * Added inline-replicator implementation files to make sure
- * functions in .inl files are still available out-of-line.
- * A side effect is this should fix MingW build.
- *
- * Revision 1.40  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.39  2006/03/22 16:58:35  strk
- * Removed (almost) all inclusions of geom.h.
- * Removed obsoleted .cpp files.
- * Fixed a bug in WKTReader not using the provided CoordinateSequence
- * implementation, optimized out some memory allocations.
- *
- **********************************************************************/

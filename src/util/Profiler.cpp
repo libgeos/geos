@@ -167,39 +167,3 @@ operator<< (ostream &os, const Profiler &prof)
 
 } // namespace geos.util
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.10  2006/06/12 11:29:24  strk
- * unsigned int => size_t
- *
- * Revision 1.9  2006/03/07 14:18:34  strk
- * Profiler singleton implemented with a function-static Profiler instance
- *
- * Revision 1.8  2006/03/06 19:40:48  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.7  2006/03/03 10:46:22  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.6  2005/02/01 14:18:04  strk
- * Made profiler start/stop inline
- *
- * Revision 1.5  2005/02/01 13:44:59  strk
- * More profiling labels.
- *
- * Revision 1.4  2004/12/03 22:52:56  strk
- * enforced const return of CoordinateSequence::toVector() method to derivate classes.
- *
- * Revision 1.3  2004/11/08 12:15:35  strk
- * Added number of gathered timings in output.
- *
- * Revision 1.2  2004/11/08 11:19:39  strk
- * Profiler::get() always return a Profile (new if not existant).
- *
- * Revision 1.1  2004/11/01 16:43:04  strk
- * Added Profiler code.
- * Temporarly patched a bug in DoubleBits (must check drawbacks).
- * Various cleanups and speedups.
- *
- **********************************************************************/

@@ -72,10 +72,3 @@ private:
 
 #endif // GEOS_IDX_BINTREE_KEY_H
 
-/**********************************************************************
- * $Log$
- * Revision 1.1  2006/03/22 16:01:33  strk
- * indexBintree.h header split, classes renamed to match JTS
- *
- **********************************************************************/
-

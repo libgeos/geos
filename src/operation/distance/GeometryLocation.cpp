@@ -79,11 +79,3 @@ bool GeometryLocation::isInsideArea() {
 } // namespace geos.operation.distance
 } // namespace geos.operation
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.6  2006/03/21 17:55:01  strk
- * opDistance.h header split
- *
- **********************************************************************/
-

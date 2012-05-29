@@ -127,14 +127,3 @@ LineMergeGraph::~LineMergeGraph()
 } // namespace geos.operation.linemerge
 } // namespace geos.operation
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.15  2006/03/22 10:13:54  strk
- * opLinemerge.h split
- *
- * Revision 1.14  2006/03/21 21:42:54  strk
- * planargraph.h header split, planargraph:: classes renamed to match JTS symbols
- *
- **********************************************************************/
-

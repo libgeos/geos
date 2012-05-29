@@ -58,13 +58,3 @@ public:
 
 #endif // GEOS_ALGORITHM_SIRTREEPOINTINRING_H
 
-/**********************************************************************
- * $Log$
- * Revision 1.2  2006/03/21 11:12:23  strk
- * Cleanups: headers inclusion and Log section
- *
- * Revision 1.1  2006/03/09 16:46:48  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/
-

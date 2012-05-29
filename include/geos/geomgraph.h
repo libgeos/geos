@@ -76,27 +76,3 @@ namespace geomgraph { // geos.geomgraph
 //#include <geos/geomgraph/TopologyLocation.h>
 
 #endif // ifndef GEOS_GEOMGRAPH_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.42  2006/06/01 11:49:35  strk
- * Reduced installed headers form geomgraph namespace
- *
- * Revision 1.41  2006/03/09 16:46:48  strk
- * geos::geom namespace definition, first pass at headers split
- *
- * Revision 1.40  2006/03/06 19:40:46  strk
- * geos::util namespace. New GeometryCollection::iterator interface, many cleanups.
- *
- * Revision 1.39  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.38  2006/03/02 14:34:30  strk
- * GeometryGraphOperation::li made a non-static member, and not more a pointer
- *
- * Revision 1.37  2006/02/28 14:34:05  strk
- * Added many assertions and debugging output hunting for a bug in BufferOp
- *
- *
- **********************************************************************/
-

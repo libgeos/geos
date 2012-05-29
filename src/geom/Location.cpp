@@ -47,13 +47,3 @@ char Location::toLocationSymbol(int locationValue) {
 
 } // namespace geos::geom
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.15  2006/03/22 16:58:34  strk
- * Removed (almost) all inclusions of geom.h.
- * Removed obsoleted .cpp files.
- * Fixed a bug in WKTReader not using the provided CoordinateSequence
- * implementation, optimized out some memory allocations.
- *
- **********************************************************************/

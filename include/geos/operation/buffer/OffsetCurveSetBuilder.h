@@ -213,13 +213,3 @@ public:
 
 #endif // ndef GEOS_OP_BUFFER_OFFSETCURVESETBUILDER_H
 
-/**********************************************************************
- * $Log$
- * Revision 1.2  2006/05/04 10:15:20  strk
- * Doxygen comments
- *
- * Revision 1.1  2006/03/14 00:19:40  strk
- * opBuffer.h split, streamlined headers in some (not all) files in operation/buffer/
- *
- **********************************************************************/
-

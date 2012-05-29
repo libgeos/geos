@@ -192,13 +192,3 @@ DouglasPeuckerSimplifier::getResultGeometry()
 
 } // namespace geos::simplify
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.2  2006/04/13 16:44:49  strk
- * Fixed a bug in DPTransformer handling of MultiPolygons
- *
- * Revision 1.1  2006/04/11 16:04:34  strk
- * geos::simplify::DouglasPeukerSimplifier class + unit test
- *
- **********************************************************************/

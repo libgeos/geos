@@ -272,19 +272,3 @@ private:
 #endif
 
 #endif // #ifndef GEOS_IO_WKTWRITER_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.3  2006/06/12 16:55:53  strk
- * fixed compiler warnings, fixed some methods to omit unused parameters.
- *
- * Revision 1.2  2006/03/22 16:58:35  strk
- * Removed (almost) all inclusions of geom.h.
- * Removed obsoleted .cpp files.
- * Fixed a bug in WKTReader not using the provided CoordinateSequence
- * implementation, optimized out some memory allocations.
- *
- * Revision 1.1  2006/03/20 18:18:15  strk
- * io.h header split
- *
- **********************************************************************/

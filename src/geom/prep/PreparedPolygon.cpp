@@ -147,9 +147,3 @@ intersects( const geom::Geometry* g) const
 } // namespace geos.geom.prep
 } // namespace geos.geom
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- *
- **********************************************************************/
-

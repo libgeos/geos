@@ -189,14 +189,3 @@ std::ostream& operator<< (std::ostream& os, const CoordinateList& cl)
 #endif
 
 #endif // ndef GEOS_GEOM_COORDINATELIST_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.2  2006/07/21 17:05:22  strk
- * added operator<< for CoordinateList class
- *
- * Revision 1.1  2006/07/21 14:53:12  strk
- * CoordinateList class re-introduced, for list-based ops
- * (not strictly mapped to JTS version, not yet at least)
- *
- **********************************************************************/

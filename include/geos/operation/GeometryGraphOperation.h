@@ -88,17 +88,3 @@ protected:
 #endif
 
 #endif
-
-/**********************************************************************
- * $Log$
- * Revision 1.2  2006/04/03 15:54:33  strk
- * - getArgGeometry() parameter type changed from 'int' to 'unsigned int'
- * - Added port informations
- * - minor assertions checking
- * - minor cleanups
- *
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/
-

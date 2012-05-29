@@ -45,11 +45,3 @@ LineMergeEdge::getLine() const {
 } // namespace geos.operation.linemerge
 } // namespace geos.operation
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.6  2006/03/22 10:13:54  strk
- * opLinemerge.h split
- *
- **********************************************************************/
-

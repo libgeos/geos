@@ -104,14 +104,3 @@ public:
 } // namespace geos
 
 #endif // ndef GEOS_OP_OVERLAY_POINTBUILDER_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.2  2006/06/05 15:36:34  strk
- * Given OverlayOp funx code enum a name and renamed values to have a lowercase prefix. Drop all of noding headers from installed header set.
- *
- * Revision 1.1  2006/03/17 13:24:59  strk
- * opOverlay.h header splitted. Reduced header inclusions in operation/overlay implementation files. ElevationMatrixFilter code moved from own file to ElevationMatrix.cpp (ideally a class-private).
- *
- **********************************************************************/
-

@@ -498,22 +498,3 @@ GEOS_DLL bool operator==(const Envelope& a, const Envelope& b);
 #endif
 
 #endif // ndef GEOS_GEOM_ENVELOPE_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.4  2006/04/10 18:15:09  strk
- * Changed Geometry::envelope member to be of type auto_ptr<Envelope>.
- * Changed computeEnvelopeInternal() signater to return auto_ptr<Envelope>
- *
- * Revision 1.3  2006/04/05 14:04:25  strk
- * Fixed copy ctor to support "Null" Envelope copies.
- * Drop init(Envelope&) method.
- * Port info and various cleanups.
- *
- * Revision 1.2  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/

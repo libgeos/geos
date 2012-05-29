@@ -143,14 +143,3 @@ Root::insertContained(Node *tree, const Envelope *itemEnv, void *item)
 } // namespace geos.index.quadtree
 } // namespace geos.index
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.1  2006/03/22 14:28:53  strk
- * Filenames renamed to match class names (matching JTS)
- *
- * Revision 1.16  2006/03/22 12:22:50  strk
- * indexQuadtree.h split
- *
- **********************************************************************/
-

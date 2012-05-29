@@ -173,37 +173,3 @@ Depth::toString() const
 
 } // namespace geos.geomgraph
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.7  2006/03/15 17:16:29  strk
- * streamlined headers inclusion
- *
- * Revision 1.6  2006/03/03 10:46:21  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.5  2006/02/19 19:46:49  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- *
- * Revision 1.4  2005/11/14 18:14:03  strk
- * Reduced heap allocations made by TopologyLocation and Label objects.
- * Enforced const-correctness on GraphComponent.
- * Cleanups.
- *
- * Revision 1.3  2005/01/28 09:47:51  strk
- * Replaced sprintf uses with ostringstream.
- *
- * Revision 1.2  2004/07/02 13:28:26  strk
- * Fixed all #include lines to reflect headers layout change.
- * Added client application build tips in README.
- *
- * Revision 1.1  2004/03/19 09:48:45  ybychkov
- * "geomgraph" and "geomgraph/indexl" upgraded to JTS 1.4
- *
- * Revision 1.10  2003/11/07 01:23:42  pramsey
- * Add standard CVS headers licence notices and copyrights to all cpp and h
- * files.
- *
- *
- **********************************************************************/
-

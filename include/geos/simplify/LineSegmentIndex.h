@@ -87,13 +87,3 @@ private:
 #endif
 
 #endif // GEOS_SIMPLIFY_LINESEGMENTINDEX_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.2  2006/04/13 09:28:09  mloskot
- * Removed definition of copy ctor and assignment operator for LineSegmentString class.
- *
- * Revision 1.1  2006/04/12 15:20:37  strk
- * LineSegmentIndex class
- *
- **********************************************************************/

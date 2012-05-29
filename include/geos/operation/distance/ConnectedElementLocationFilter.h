@@ -79,10 +79,3 @@ public:
 
 #endif // GEOS_OP_DISTANCE_CONNECTEDELEMENTLOCATIONFILTER_H
 
-/**********************************************************************
- * $Log$
- * Revision 1.1  2006/03/21 17:55:01  strk
- * opDistance.h header split
- *
- **********************************************************************/
-

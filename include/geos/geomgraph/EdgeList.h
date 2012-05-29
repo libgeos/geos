@@ -128,17 +128,3 @@ std::ostream& operator<< (std::ostream& os, const EdgeList& el);
 #endif
 
 #endif // ifndef GEOS_GEOMGRAPH_EDGELIST_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.3  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.2  2006/03/14 11:03:15  strk
- * Added operator<< for Edge and EdgeList
- *
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/
-

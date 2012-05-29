@@ -38,10 +38,3 @@ PolygonizeEdge::getLine() {
 } // namespace geos.operation.polygonize
 } // namespace geos.operation
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.5  2006/03/22 11:19:06  strk
- * opPolygonize.h headers split.
- *
- **********************************************************************/

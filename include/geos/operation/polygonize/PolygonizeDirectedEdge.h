@@ -121,10 +121,3 @@ public:
 } // namespace geos
 
 #endif // GEOS_OP_POLYGONIZE_POLYGONIZEDIRECTEDEDGE_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.1  2006/03/22 11:19:06  strk
- * opPolygonize.h headers split.
- *
- **********************************************************************/

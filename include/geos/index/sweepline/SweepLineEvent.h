@@ -94,11 +94,3 @@ struct GEOS_DLL  SweepLineEventLessThen {
 } // namespace geos
 
 #endif // GEOS_INDEX_SWEEPLINE_SWEEPLINEEVENT_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.1  2006/03/21 10:01:30  strk
- * indexSweepline.h header split
- *
- **********************************************************************/
-

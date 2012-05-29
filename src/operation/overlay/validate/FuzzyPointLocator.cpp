@@ -150,7 +150,3 @@ FuzzyPointLocator::getLocation(const Coordinate& pt)
 } // namespace geos.operation
 } // namespace geos
 
-/**********************************************************************
- * $Log$
- **********************************************************************/
-

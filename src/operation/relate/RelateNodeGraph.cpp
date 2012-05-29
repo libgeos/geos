@@ -149,18 +149,3 @@ RelateNodeGraph::insertEdgeEnds(vector<EdgeEnd*> *ee)
 } // namespace geos.operation
 } // namespace geos
 
-/**********************************************************************
- * $Log$
- * Revision 1.19  2006/03/21 13:11:29  strk
- * opRelate.h header split
- *
- * Revision 1.18  2006/03/20 16:57:44  strk
- * spatialindex.h and opValid.h headers split
- *
- * Revision 1.17  2006/03/03 10:46:22  strk
- * Removed 'using namespace' from headers, added missing headers in .cpp files, removed useless includes in headers (bug#46)
- *
- * Revision 1.16  2006/02/19 19:46:50  strk
- * Packages <-> namespaces mapping for most GEOS internal code (uncomplete, but working). Dir-level libs for index/ subdirs.
- **********************************************************************/
-

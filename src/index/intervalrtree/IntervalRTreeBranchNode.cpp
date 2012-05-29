@@ -49,8 +49,3 @@ IntervalRTreeBranchNode::query( double queryMin, double queryMax, index::ItemVis
 } // geos::intervalrtree
 } // geos::index
 } // geos
-
-/**********************************************************************
- * $Log$
- *
- **********************************************************************/

@@ -379,24 +379,3 @@ OffsetCurveSetBuilder::isTriangleErodedCompletely(
 } // namespace geos.operation.buffer
 } // namespace geos.operation
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.36  2006/06/12 11:29:23  strk
- * unsigned int => size_t
- *
- * Revision 1.35  2006/06/09 07:42:13  strk
- * * source/geomgraph/GeometryGraph.cpp, source/operation/buffer/OffsetCurveSetBuilder.cpp, source/operation/overlay/OverlayOp.cpp, source/operation/valid/RepeatedPointTester.cpp: Fixed warning after Polygon ring accessor methods changed to work with size_t. Small optimizations in loops.
- *
- * Revision 1.34  2006/05/03 09:14:22  strk
- * * source/operation/buffer/OffsetCurveSetBuilder.cpp: used auto_ptr to protect leaks of CoordinateSequence
- * * source/noding/ScaledNoder.cpp, source/headers/geos/noding/ScaledNoder.h: ported JTS bugfix in scale method.
- *
- * Revision 1.33  2006/03/27 17:04:18  strk
- * Cleanups and explicit initializations
- *
- * Revision 1.32  2006/03/22 11:18:39  strk
- * Changed back 'unable to find edge to compute depths' from assertion to TopologyException
- *
- **********************************************************************/
-

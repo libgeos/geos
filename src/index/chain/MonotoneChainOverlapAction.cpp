@@ -40,11 +40,3 @@ MonotoneChainOverlapAction::overlap(MonotoneChain& mc1, size_t start1,
 } // namespace geos.index.chain
 } // namespace geos.index
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.11  2006/03/22 18:12:32  strk
- * indexChain.h header split.
- *
- **********************************************************************/
-

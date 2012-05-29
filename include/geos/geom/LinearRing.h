@@ -126,25 +126,4 @@ private:
 } // namespace geos::geom
 } // namespace geos
 
-//#ifdef GEOS_INLINE
-//# include "geos/geom/LinearRing.inl"
-//#endif
-
 #endif // ndef GEOS_GEOS_LINEARRING_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.4  2006/04/11 11:16:25  strk
- * Added LineString and LinearRing constructors by auto_ptr
- *
- * Revision 1.3  2006/04/10 17:35:44  strk
- * Changed LineString::points and Point::coordinates to be wrapped
- * in an auto_ptr<>. This should close bugs #86 and #89
- *
- * Revision 1.2  2006/03/24 09:52:41  strk
- * USE_INLINE => GEOS_INLINE
- *
- * Revision 1.1  2006/03/09 16:46:49  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/

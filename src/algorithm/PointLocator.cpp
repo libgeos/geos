@@ -166,19 +166,3 @@ PointLocator::locate(const Coordinate& p,const Polygon *poly)
 } // namespace geos.algorithm
 } // namespace geos
 
-/**********************************************************************
- * $Log$
- * Revision 1.31  2006/06/12 10:49:43  strk
- * unsigned int => size_t
- *
- * Revision 1.30  2006/04/07 09:54:29  strk
- * Geometry::getNumGeometries() changed to return 'unsigned int'
- * rather then 'int'
- *
- * Revision 1.29  2006/03/21 11:12:23  strk
- * Cleanups: headers inclusion and Log section
- *
- * Revision 1.28  2006/03/09 16:46:46  strk
- * geos::geom namespace definition, first pass at headers split
- **********************************************************************/
-

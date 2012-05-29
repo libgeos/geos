@@ -108,17 +108,3 @@ RightmostEdgeFinder::getCoordinate()
 
 #endif // ndef GEOS_OP_BUFFER_RIGHTMOSTEDGEFINDER_H
 
-/**********************************************************************
- * $Log$
- * Revision 1.3  2006/05/04 12:19:59  strk
- * Added note about findEdge() only scanning for forward DirectedEdges
- *
- * Revision 1.2  2006/04/05 09:20:25  strk
- * Added port informations and many assertion checking.
- * Fixed bug in getRightmostSide() method ( a "testing-only" corner case )
- *
- * Revision 1.1  2006/03/14 00:19:40  strk
- * opBuffer.h split, streamlined headers in some (not all) files in operation/buffer/
- *
- **********************************************************************/
-

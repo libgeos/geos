@@ -55,11 +55,3 @@ private:
 } // namespace geos
 
 #endif // GEOS_OP_RELATE_RELATENODEFACTORY_H
-
-/**********************************************************************
- * $Log$
- * Revision 1.1  2006/03/21 13:11:29  strk
- * opRelate.h header split
- *
- **********************************************************************/
-

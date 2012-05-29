@@ -23,8 +23,3 @@ namespace util { // geos.geom.util
 } // namespace geos.geom.util
 } // namespace geos.geom
 } // namespace geos
-
-/**********************************************************************
- * $Log$
- *
- **********************************************************************/

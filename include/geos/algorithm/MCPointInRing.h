@@ -83,19 +83,3 @@ private:
 
 #endif // GEOS_ALGORITHM_MCPOINTINRING_H
 
-/**********************************************************************
- * $Log$
- * Revision 1.4  2006/03/29 11:52:00  strk
- * const correctness, useless heap allocations removal
- *
- * Revision 1.3  2006/03/22 18:12:31  strk
- * indexChain.h header split.
- *
- * Revision 1.2  2006/03/22 16:01:33  strk
- * indexBintree.h header split, classes renamed to match JTS
- *
- * Revision 1.1  2006/03/09 16:46:48  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/
-
