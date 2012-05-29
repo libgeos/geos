@@ -7,9 +7,9 @@ rev_file=$top_srcdir.'/geos_svn_revision.h'
 
 read_rev() {
 
-    if test -d $top_srcdir."/.svn"; then
+    if test -d $top_srcdir"/.svn"; then
       read_rev_svn
-    elif test -d $top_srcdir."/.git"; then
+    elif test -d $top_srcdir"/.git"; then
       read_rev_git
     else
       echo "Can't fetch local revision (neither .svn nor .git found)" >&2
