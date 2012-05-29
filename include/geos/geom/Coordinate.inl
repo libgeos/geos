@@ -39,11 +39,6 @@ Coordinate::isNull() const
 }
 
 INLINE
-Coordinate::~Coordinate()
-{
-}
-
-INLINE
 Coordinate::Coordinate(double xNew, double yNew, double zNew)
 	:
 	x(xNew),
