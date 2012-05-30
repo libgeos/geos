@@ -1,3 +1,94 @@
+2012-05-30 06:42  Sandro Santilli <strk@keybit.net>
+
+	* [r3658] NEWS, capi/geos_c.h.in, configure.in,
+	  include/geos/version.h.vc, swig/python/geos.py,
+	  swig/python/geos_wrap.cxx: Fix release date and version for 3.3.4
+
+2012-05-21 14:12  Sandro Santilli <strk@keybit.net>
+
+	* [r3634] include/geos/geom/Geometry.h, src/geom/Geometry.cpp:
+	  Don't call GeometryFactory::getDefaultInstance() at startup
+	  (#540)
+
+2012-05-14 19:00  Sandro Santilli <strk@keybit.net>
+
+	* [r3628] NEWS, src/operation/polygonize/EdgeRing.cpp: Reduce calls
+	  to ptNotInList, greatly speeding up Polygonizer (#545)
+
+2012-05-09 18:02  Sandro Santilli <strk@keybit.net>
+
+	* [r3626] NEWS, include/geos/simplify/TaggedLineStringSimplifier.h,
+	  include/geos/simplify/TopologyPreservingSimplifier.h,
+	  src/simplify/TaggedLineStringSimplifier.cpp,
+	  src/simplify/TopologyPreservingSimplifier.cpp,
+	  tests/unit/simplify/TopologyPreservingSimplifierTest.cpp: Fix
+	  TopologyPreservingSimplifier invalid output on closed line (#508)
+
+2012-05-09 16:28  Sandro Santilli <strk@keybit.net>
+
+	* [r3624] NEWS, php/geos.c: Add support for PHP 5.4 (#513) --
+	  thanks voxik
+
+2012-05-08 18:23  Sandro Santilli <strk@keybit.net>
+
+	* [r3622] NEWS, src/geom/Geometry.cpp: Envelope-based short-circuit
+	  for Geometry->symDifference (#543)
+
+2012-05-08 17:35  Sandro Santilli <strk@keybit.net>
+
+	* [r3620] NEWS, capi/geos_ts_c.cpp, tests/xmltester/XMLTester.cpp:
+	  Geometry methods do use BinaryOp internally + shortcuts (#542)
+	  
+	  This commit changes both XMLTester and C-API to not use BinaryOp
+	  directly but rather rely on geometry methods to do that.
+
+2012-05-04 08:13  Sandro Santilli <strk@keybit.net>
+
+	* [r3617] NEWS, acsite.m4: Update PGAC_TYPE_64BIT_INT for better
+	  cross-compiler support (#534)
+
+2012-04-12 09:05  Sandro Santilli <strk@keybit.net>
+
+	* [r3613] NEWS, src/geomgraph/Node.cpp,
+	  tests/unit/capi/GEOSUnaryUnionTest.cpp: Throw an exception rather
+	  than aborting on NaN overlay input (#530)
+
+2012-04-10 15:32  Sandro Santilli <strk@keybit.net>
+
+	* [r3610] tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/ticket/bug527.xml: Add test for bug #527
+
+2012-04-10 15:16  Sandro Santilli <strk@keybit.net>
+
+	* [r3608] include/geos/operation/union/UnaryUnionOp.h: Have
+	  UnaryUnion use BinaryOp for the simple case
+	  
+	  See ticket #527 -- there's no infinite loop triggered by our
+	  testsuite...
+
+2012-04-10 15:02  Sandro Santilli <strk@keybit.net>
+
+	* [r3606] NEWS, include/geos/geom/BinaryOp.h: Reduce
+	  CommonBitsRemover harmful effects during overlay op (#527)
+
+2012-04-05 16:49  Sandro Santilli <strk@keybit.net>
+
+	* [r3600] swig/python/geos.py, swig/python/geos_wrap.cxx:
+	  Regenerate swig wrappers with SWIG 1.3.40
+
+2012-04-01 20:50  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r3584] HOWTO_RELEASE: Update howto release
+
+2012-04-01 20:42  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r3581] capi/geos_c.h.in, configure.in: Update version numbers
+	  after tag
+
+2012-04-01 20:33  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r3577] ChangeLog, NEWS: Update for 3.3.3 release
+
 2012-03-22 08:34  Sandro Santilli <strk@keybit.net>
 
 	* [r3574] NEWS, src/simplify/TaggedLineString.cpp,
