@@ -1,5 +1,5 @@
 Changes in 3.3.4
-2012-??-??
+2012-05-31
 
 - Bug fixes / improvements
     - Do not abort on NaN overlay input (#530)
