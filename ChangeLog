@@ -1,3 +1,7 @@
+2012-05-30 07:04  Sandro Santilli <strk@keybit.net>
+
+	* [r3659] ChangeLog: ChangeLog updated for 3.3.4
+
 2012-05-30 06:42  Sandro Santilli <strk@keybit.net>
 
 	* [r3658] NEWS, capi/geos_c.h.in, configure.in,
