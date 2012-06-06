@@ -53,7 +53,7 @@ namespace tut
     typedef test_group<test_capigeosconvexhull_data> group;
     typedef group::object object;
 
-    group test_capigeoscontains_group("capi::GEOSConvexHull");
+    group test_capigeosconvexhull_group("capi::GEOSConvexHull");
 
     //
     // Test Cases
