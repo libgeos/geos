@@ -57,6 +57,15 @@ Example usage:
 Using the C++ interface (discouraged)
 -------------------------------------
 
+NB: The C++ interface should not be used directly; the geos project
+views it as a bug for another program to use the C++ interface or even
+to directly link against the C++ library.  The C++ library name will
+change on every minor release because it is too hard to know if there
+have been ABI changes.  (The C libary uses the C++ interface, but the
+C library follows normal ABI-change-sensitive versioning, so programs
+that link only against the C library should work without relinking
+when geos is upgraded.)
+
 To compile programs against the C++ lib:
 
   CFLAGS += `geos-config --cflags`
