@@ -99,7 +99,7 @@ namespace tut
         finishGEOS();
     }
 
-    /// Test interrupt callback being reset by initGEOS
+    /// Test interrupt callback being NOT reset by initGEOS
     template<>
     template<>
     void object::test<2>()
@@ -120,7 +120,7 @@ namespace tut
 
         ensure("GEOSBufferWithStyle failed", 0 != geom2);
 
-        ensure_equals(numcalls, 0);
+        ensure("interrupt callback never called", numcalls > 0);
 
         GEOSGeom_destroy(geom1);
         GEOSGeom_destroy(geom2);
