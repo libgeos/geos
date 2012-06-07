@@ -209,6 +209,7 @@ initGEOS_r(GEOSMessageHandler nf, GEOSMessageHandler ef)
     }
 
     geos::util::Interrupt::cancel();
+    geos::util::Interrupt::registerCallback(0,0);
 
     return static_cast<GEOSContextHandle_t>(extHandle);
 }
