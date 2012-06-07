@@ -27,7 +27,7 @@ class GEOS_DLL Interrupt {
 
 public:
 
-  typedef void (Callback)(void *userdata);
+  typedef void (Callback)(void);
 
   /** 
    * Request interruption of operations
@@ -53,14 +53,18 @@ public:
    * The callback can be used to call Interrupt::request()
    *
    */
-  static void registerCallback(Callback *cb, void *arg) { callback = cb; callback_arg = arg; }
+  static Callback* registerCallback(Callback *cb) {
+    Callback* prev = callback;
+    callback = cb;
+    return prev;
+  }
 
   /**
    * Invoke the callback, if any. Process pending interruption, if any.
    *
    */
   static void process() {
-    if ( callback ) (*callback)(callback_arg);
+    if ( callback ) (*callback)();
     if ( requested ) {
       requested = false;
       interrupt();
@@ -77,8 +81,6 @@ private:
   static bool requested;
 
   static Callback *callback;
-
-  static void *callback_arg;
 
 };
 

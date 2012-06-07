@@ -155,8 +155,8 @@ extern void GEOS_DLL finishGEOS(void);
  * The callback will be invoked _before_ checking for
  * interruption, so can be used to request it.
  */
-typedef void (GEOSInterruptCallback)(void *arg);
-extern void GEOS_DLL GEOS_interruptRegisterCallback(GEOSInterruptCallback* cb, void *cbarg);
+typedef void (GEOSInterruptCallback)();
+extern GEOSInterruptCallback GEOS_DLL *GEOS_interruptRegisterCallback(GEOSInterruptCallback* cb);
 /* Request safe interruption of operations */
 extern void GEOS_DLL GEOS_interruptRequest();
 /* Cancel a pending interruption request */

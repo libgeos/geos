@@ -115,10 +115,10 @@ finishGEOS ()
     }
 }
 
-void
-GEOS_interruptRegisterCallback(GEOSInterruptCallback* cb, void *cbarg)
+GEOSInterruptCallback*
+GEOS_interruptRegisterCallback(GEOSInterruptCallback* cb)
 {
-  geos::util::Interrupt::registerCallback(cb, cbarg);
+  return geos::util::Interrupt::registerCallback(cb);
 }
 
 void

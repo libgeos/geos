@@ -19,8 +19,8 @@ namespace tut
     // Common data used in test cases.
     struct test_capiinterrupt_data
     {
-        static int alloc_count;
-        static int dealloc_count;
+        static int numcalls;
+        static GEOSInterruptCallback* nextcb;
 
         static void notice(const char *fmt, ...)
         {
@@ -42,21 +42,21 @@ namespace tut
         {
         }
 
-        static void interruptNow(void *)
+        static void interruptNow()
         {
           GEOS_interruptRequest();
         }
 
-        static void countCalls(void *arg)
+        static void countCalls()
         {
-          int* numcalls = reinterpret_cast<int*>(arg);
-          ++(*numcalls);
+          ++numcalls;
+          if ( nextcb ) (*nextcb)();
         }
 
     };
 
-    int test_capiinterrupt_data::alloc_count = 0;
-    int test_capiinterrupt_data::dealloc_count = 0;
+    int test_capiinterrupt_data::numcalls = 0;
+    GEOSInterruptCallback* test_capiinterrupt_data::nextcb = 0;
 
     typedef test_group<test_capiinterrupt_data> group;
     typedef group::object object;
@@ -72,11 +72,11 @@ namespace tut
     template<>
     void object::test<1>()
     {
-        int numcalls = 0;
+        numcalls = 0;
 
         initGEOS(notice, notice);
 
-        GEOS_interruptRegisterCallback(countCalls, &numcalls);
+        GEOS_interruptRegisterCallback(countCalls);
 
         ensure_equals(numcalls, 0);
 
@@ -93,7 +93,7 @@ namespace tut
         GEOSGeom_destroy(geom1);
         GEOSGeom_destroy(geom2);
 
-        GEOS_interruptRegisterCallback(0, 0); /* unregister */
+        GEOS_interruptRegisterCallback(0); /* unregister */
 
 
         finishGEOS();
@@ -104,9 +104,9 @@ namespace tut
     template<>
     void object::test<2>()
     {
-        int numcalls = 0;
+        numcalls = 0;
 
-        GEOS_interruptRegisterCallback(countCalls, &numcalls);
+        GEOS_interruptRegisterCallback(countCalls);
 
         initGEOS(notice, notice);
 
@@ -125,8 +125,7 @@ namespace tut
         GEOSGeom_destroy(geom1);
         GEOSGeom_destroy(geom2);
 
-        GEOS_interruptRegisterCallback(0, 0); /* unregister (shouldn't be needed) */
-
+        GEOS_interruptRegisterCallback(0); 
 
         finishGEOS();
     }
@@ -142,13 +141,38 @@ namespace tut
 
         ensure("GEOSGeomFromWKT failed", 0 != geom1);
 
-        GEOS_interruptRegisterCallback(interruptNow, 0); 
-        bool interrupted = false;
+        GEOS_interruptRegisterCallback(interruptNow); 
         GEOSGeometry *geom2 = GEOSBuffer(geom1, 1, 8);
         ensure("GEOSBuffer wasn't interrupted", 0 == geom2);
-        GEOS_interruptRegisterCallback(0, 0);  /* unregister */
+        GEOS_interruptRegisterCallback(0);  /* unregister */
 
         // TODO: check the actual exception ? (sent to notice() callback)
+
+        GEOSGeom_destroy(geom1);
+
+        finishGEOS();
+    }
+
+    /// Test chaining interrupt callbacks
+    template<>
+    template<>
+    void object::test<4>()
+    {
+        numcalls = 0;
+
+        initGEOS(notice, notice);
+
+        GEOSGeometry *geom1 = GEOSGeomFromWKT("LINESTRING(0 0, 1 0)");
+
+        ensure("GEOSGeomFromWKT failed", 0 != geom1);
+
+        GEOS_interruptRegisterCallback(interruptNow); 
+        nextcb = GEOS_interruptRegisterCallback(countCalls); 
+        GEOSGeometry *geom2 = GEOSBuffer(geom1, 1, 8);
+        ensure("GEOSBuffer wasn't interrupted", 0 == geom2);
+        ensure_equals(numcalls, 1);
+        GEOS_interruptRegisterCallback(0);  /* unregister */
+        nextcb = 0;
 
         GEOSGeom_destroy(geom1);
 
