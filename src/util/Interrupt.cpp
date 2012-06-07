@@ -25,7 +25,10 @@ public:
 };
 
 void
-Interrupt::interrupt() { throw InterruptedException(); }
+Interrupt::interrupt() {
+  requested = false;
+  throw InterruptedException();
+}
 
 bool Interrupt::requested = false;
 Interrupt::Callback *Interrupt::callback = 0;
