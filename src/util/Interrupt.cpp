@@ -28,6 +28,8 @@ void
 Interrupt::interrupt() { throw InterruptedException(); }
 
 bool Interrupt::requested = false;
+Interrupt::Callback *Interrupt::callback = 0;
+void *Interrupt::callback_arg = 0;
 
 } // namespace geos::util
 } // namespace geos

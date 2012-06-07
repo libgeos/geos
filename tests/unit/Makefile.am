@@ -107,6 +107,7 @@ geos_unit_SOURCES = \
 	capi/GEOSContainsTest.cpp \
 	capi/GEOSConvexHullTest.cpp \
 	capi/GEOSDistanceTest.cpp \
+	capi/GEOSInterruptTest.cpp \
 	capi/GEOSIntersectsTest.cpp \
 	capi/GEOSWithinTest.cpp \
 	capi/GEOSSimplifyTest.cpp \
