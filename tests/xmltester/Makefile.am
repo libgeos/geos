@@ -124,7 +124,7 @@ XMLTester_LDADD = $(LIBS)
 
 # Intentionally drop -ansi -pedantic
 # See http://trac.osgeo.org/geos/ticket/319
-XMLTester_CXXFLAGS = 
+XMLTester_CXXFLAGS = $(INLINE_FLAGS)
 
 INCLUDES = -I$(top_srcdir)/include
 INCLUDES += -I$(top_srcdir)/src/io/tinyxml -DTIXML_USE_STL
