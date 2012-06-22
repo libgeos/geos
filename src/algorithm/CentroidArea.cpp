@@ -14,6 +14,8 @@
  *
  **********************************************************************
  *
+ * Last port: algorithm/CentroidArea.java r612
+ *
  **********************************************************************/
 
 #include <geos/algorithm/CentroidArea.h>
@@ -57,20 +59,25 @@ CentroidArea::add(const CoordinateSequence *ring)
 	addShell(ring);
 }
 
+/* TODO: deprecate this */
 Coordinate*
 CentroidArea::getCentroid() const
 {
 	Coordinate *cent = new Coordinate();
-	cent->x = cg3.x/3.0/areasum2;
-	cent->y = cg3.y/3.0/areasum2;
+	getCentroid(*cent); // or return NULL on failure !
 	return cent;
 }
 
 bool
 CentroidArea::getCentroid(Coordinate& ret) const
 {
-	if ( areasum2 == 0.0 ) return false;
-	ret=Coordinate(cg3.x/3.0/areasum2, cg3.y/3.0/areasum2);
+	if ( areasum2 ) {
+		ret = Coordinate(cg3.x/3.0/areasum2, cg3.y/3.0/areasum2);
+	} else if ( totalLength ) {
+		ret = Coordinate(centSum.x/totalLength, centSum.y/totalLength);
+	} else {
+		return false;
+	}
 	return true;
 }
 
@@ -94,11 +101,12 @@ void
 CentroidArea::addShell(const CoordinateSequence *pts)
 {
 	bool isPositiveArea=!CGAlgorithms::isCCW(pts);
-    std::size_t const n=pts->getSize()-1;
+	std::size_t const n=pts->getSize()-1;
 	for(std::size_t i=0; i<n; ++i)
 	{
 		addTriangle(basePt, pts->getAt(i), pts->getAt(i+1), isPositiveArea);
 	}
+	addLinearSegments(*pts);
 }
 
 void
@@ -110,6 +118,7 @@ CentroidArea::addHole(const CoordinateSequence *pts)
 	{
 		addTriangle(basePt, pts->getAt(i), pts->getAt(i+1), isPositiveArea);
 	}
+	addLinearSegments(*pts);
 }
 
 void
@@ -147,24 +156,20 @@ CentroidArea::area2(const Coordinate &p1, const Coordinate &p2, const Coordinate
 	return (p2.x-p1.x)*(p3.y-p1.y)-(p3.x-p1.x)*(p2.y-p1.y);
 }
 
+void
+CentroidArea::addLinearSegments(const geom::CoordinateSequence& pts)
+{
+	std::size_t const n = pts.size()-1;
+	for (std::size_t i = 0; i < n; ++i) {
+		double segmentLen = pts[i].distance(pts[i + 1]);
+		totalLength += segmentLen;
+
+		double midx = (pts[i].x + pts[i + 1].x) / 2;
+		centSum.x += segmentLen * midx;
+		double midy = (pts[i].y + pts[i + 1].y) / 2;
+		centSum.y += segmentLen * midy;
+	}
+}
+
 } // namespace geos.algorithm
 } //namespace geos
-
-/**********************************************************************
- * $Log$
- * Revision 1.24  2006/06/08 17:58:57  strk
- * Polygon::getNumInteriorRing() return size_t, Polygon::interiorRingN() takes size_t.
- *
- * Revision 1.23  2006/04/07 09:54:28  strk
- * Geometry::getNumGeometries() changed to return 'unsigned int'
- * rather then 'int'
- *
- * Revision 1.22  2006/03/21 11:12:23  strk
- * Cleanups: headers inclusion and Log section
- *
- * Revision 1.21  2006/03/09 16:46:45  strk
- * geos::geom namespace definition, first pass at headers split
- *
- **********************************************************************/
-
-

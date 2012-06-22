@@ -102,6 +102,7 @@ geos_unit_SOURCES = \
 	capi/GEOSCoordSeqTest.cpp \
 	capi/GEOSGeomFromWKBTest.cpp \
 	capi/GEOSGeomToWKTTest.cpp \
+	capi/GEOSGetCentroidTest.cpp \
 	capi/GEOSContainsTest.cpp \
 	capi/GEOSIntersectsTest.cpp \
 	capi/GEOSWithinTest.cpp \
