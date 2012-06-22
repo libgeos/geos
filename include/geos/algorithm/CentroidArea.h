@@ -50,6 +50,10 @@ namespace algorithm { // geos::algorithm
  * The algorithm has been extended to handle holes and multi-polygons.
  * See <code>http://www.faqs.org/faqs/graphics/algorithms-faq/</code>
  * for further details of the basic approach.
+ * 
+ * The code has also be extended to handle degenerate (zero-area) polygons.
+ * In this case, the centroid of the line segments in the polygon
+ * will be returned.
  */
 class GEOS_DLL CentroidArea {
 
