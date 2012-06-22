@@ -151,5 +151,24 @@ namespace tut
 
     }
 
+    // Empty geometry -- see http://trac.osgeo.org/geos/ticket/560
+    template<>
+    template<>
+    void object::test<5>()
+    {
+        geom1_ = GEOSGeomFromWKT("LINESTRING EMPTY");
+
+        ensure( 0 != geom1_ );
+
+        geom2_ = GEOSGetCentroid(geom1_);
+
+        ensure( 0 != geom2_ );
+
+        wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+
+        ensure_equals(std::string(wkt_), std::string( "POINT EMPTY"));
+
+    }
+
 } // namespace tut
 

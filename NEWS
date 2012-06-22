@@ -4,6 +4,7 @@ Changes in 3.3.5
 - Bug fixes / improvements
     - Correctly increment CAPI lib version from 3.3.3 (#558)
     - Port robustness fix to CentroidArea (#559)
+    - Always return POINT from GEOSGetCentroid, even for EMPTY (#560)
 
 Changes in 3.3.4
 2012-05-31

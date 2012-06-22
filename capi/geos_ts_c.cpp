@@ -2763,7 +2763,7 @@ GEOSGetCentroid_r(GEOSContextHandle_t extHandle, const Geometry *g)
         if (0 == ret)
         {
             const GeometryFactory *gf = handle->geomFactory;
-            return gf->createGeometryCollection();
+            return gf->createPoint();
         }
         return ret;
     }
