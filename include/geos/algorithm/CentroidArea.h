@@ -11,6 +11,10 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
+ **********************************************************************
+ *
+ * Last port: algorithm/CentroidArea.java r612
+ *
  **********************************************************************/
 
 #ifndef GEOS_ALGORITHM_CENTROIDAREA_H
@@ -53,7 +57,8 @@ public:
 	CentroidArea()
 		:
 		basePt(0.0, 0.0),
-		areasum2(0)
+		areasum2(0.0),
+		totalLength(0.0)
 	{}
 
 	~CentroidArea() {}
@@ -74,9 +79,10 @@ public:
 	 */
 	void add(const geom::CoordinateSequence *ring);
 
+	// TODO: deprecate
 	geom::Coordinate* getCentroid() const;
 
-	/// Return false if a centroid couldn't be computed
+	/// Return false if a centroid couldn't be computed ( empty polygon )
 	bool getCentroid(geom::Coordinate& ret) const;
 
 private:
@@ -92,6 +98,10 @@ private:
 
 	/// partial centroid sum
 	geom::Coordinate cg3;
+
+	// data for linear centroid computation, if needed
+	geom::Coordinate centSum;
+	double totalLength;
 
 	void setBasePoint(const geom::Coordinate &newbasePt);
 
@@ -109,6 +119,17 @@ private:
 
 	static double area2(const geom::Coordinate &p1, const geom::Coordinate &p2,
 			const geom::Coordinate &p3);
+
+	/**
+	 * Adds the linear segments defined by an array of coordinates
+	 * to the linear centroid accumulators.
+	 *
+	 * This is done in case the polygon(s) have zero-area,
+	 * in which case the linear centroid is computed instead.
+	 *
+	 * @param pts an array of {@link Coordinate}s
+	 */
+	void addLinearSegments(const geom::CoordinateSequence& pts);
 
 };
 
