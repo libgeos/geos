@@ -46,6 +46,11 @@ set(CAPI_VERSION_MINOR ${CAPI_INTERFACE_AGE})
 set(CAPI_VERSION_PATCH ${CAPI_INTERFACE_REVISION})
 set(CAPI_VERSION "${CAPI_VERSION_MAJOR}.${CAPI_VERSION_MINOR}.${CAPI_VERSION_PATCH}")
 message(STATUS "Setting GEOS C API version ${CAPI_VERSION}")
+if (NOT WIN32)
+  set(CAPI_SOVERSION
+    "${CAPI_INTERFACE_CURRENT}.${CAPI_INTERFACE_REVISION}.${CAPI_INTERFACE_AGE}")
+  message(STATUS "Setting GEOS C API soversion ${CAPI_SOVERSION}")
+endif()
 
 #################################################################################
 # Check custom global options

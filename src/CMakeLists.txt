@@ -64,7 +64,6 @@ else()
   add_library(geos SHARED ${geos_SOURCES} ${geos_ALL_HEADERS})
   add_library(geos-static STATIC ${geos_SOURCES} ${geos_ALL_HEADERS})
 
-# TODO: Enable SOVERSION property
   set_target_properties(geos
     PROPERTIES
     DEFINE_SYMBOL GEOS_DLL_EXPORT

@@ -27,11 +27,19 @@ if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK)
 
   target_link_libraries(geos_c geos)
 
-  # TODO: Enable SOVERSION property
-  set_target_properties(geos_c
-    PROPERTIES
-    VERSION ${CAPI_VERSION}
-    CLEAN_DIRECT_OUTPUT 1)
+  if (WIN32)
+    set_target_properties(geos_c
+      PROPERTIES
+      VERSION ${CAPI_VERSION}
+      CLEAN_DIRECT_OUTPUT 1)
+  else()
+    set_target_properties(geos_c
+      PROPERTIES
+      VERSION ${CAPI_VERSION}
+      SOVERSION ${CAPI_SOVERSION}
+      CLEAN_DIRECT_OUTPUT 1)
+  endif()
+
 endif()
 
 #################################################################################
