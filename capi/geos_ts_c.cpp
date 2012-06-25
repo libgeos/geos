@@ -2060,8 +2060,8 @@ GEOSPointOnSurface_r(GEOSContextHandle_t extHandle, const Geometry *g1)
         if ( ! ret )
         {
             const GeometryFactory* gf = handle->geomFactory;
-            // return an empty collection 
-            return gf->createGeometryCollection();
+            // return an empty point 
+            return gf->createPoint();
         }
         return ret;
     }
