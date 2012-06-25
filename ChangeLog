@@ -1,3 +1,65 @@
+2012-06-25 10:49  Sandro Santilli <strk@keybit.net>
+
+	* [r3686] NEWS, configure.in: Set version to 3.3.5 final, and
+	  release date
+
+2012-06-25 10:20  Sandro Santilli <strk@keybit.net>
+
+	* [r3685] NEWS, capi/geos_ts_c.cpp, tests/unit/Makefile.am,
+	  tests/unit/capi/GEOSPointOnSurfaceTest.cpp: Always return POINT
+	  from GEOSPointOnSurface, even for EMPTY (#561)
+
+2012-06-24 15:16  Sandro Santilli <strk@keybit.net>
+
+	* [r3682] configure.in: 3.3.5 isn't final yet
+
+2012-06-22 15:46  Sandro Santilli <strk@keybit.net>
+
+	* [r3681] include/geos/algorithm/CentroidArea.h: Add note about
+	  handling of degenerate polygons
+
+2012-06-22 15:31  Sandro Santilli <strk@keybit.net>
+
+	* [r3678] NEWS, capi/geos_ts_c.cpp,
+	  tests/unit/capi/GEOSGetCentroidTest.cpp: Always return POINT from
+	  GEOSGetCentroid, even for EMPTY (#560)
+
+2012-06-22 15:02  Sandro Santilli <strk@keybit.net>
+
+	* [r3676] NEWS, include/geos/algorithm/CentroidArea.h,
+	  src/algorithm/CentroidArea.cpp, tests/unit/Makefile.am,
+	  tests/unit/capi/GEOSGetCentroidTest.cpp: Port robustness fix to
+	  CentroidArea (#559)
+
+2012-06-22 11:47  Sandro Santilli <strk@keybit.net>
+
+	* [r3675] capi/geos_c.h.in: Update version also for MSVC... (#558)
+
+2012-06-22 11:07  Sandro Santilli <strk@keybit.net>
+
+	* [r3674] NEWS, configure.in: Set CAPI interface revision to 5
+	  (#558)
+	  
+	  This is to resolve a problem with versioning of the CAPI library
+	  shipped with 3.3.3 (1.7.4) and 3.3.4 (1.7.3). So 3.3.5 will ship
+	  with 1.7.5 (ASAP).
+
+2012-06-06 07:04  Sandro Santilli <strk@keybit.net>
+
+	* [r3664] README, src/Makefile.am: Clarify problems with linking
+	  against C++ api (#553)
+	  
+	  Path by Greg Troxel.
+
+2012-05-31 19:16  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r3662] capi/geos_c.h.in, configure.in,
+	  include/geos/version.h.vc: Bump versions to 3.3.5
+
+2012-05-31 18:41  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r3661] ChangeLog: Update for 3.3.4
+
 2012-05-30 07:04  Sandro Santilli <strk@keybit.net>
 
 	* [r3659] ChangeLog: ChangeLog updated for 3.3.4
