@@ -15,22 +15,24 @@
 		$base/trunk $base/tags/MAJOR.MINOR.PATCH
 
 7: Export the tag and 'make dist-bzip2'. 
-   $ svn export http://svn.osgeo.org/geos/tags/MAJOR.MINOR.PATCH 
-   $ cd MAJOR.MINOR.PATCH
+   $ svn export $base/tags/$rev
+   $ cd $rev
    $ ./autogen.sh && ./configure && make dist-bzip2
 
-8: Copy the tarball to upload.osgeo.org:/osgeo/download/geos
+8: Verify that you can unpack and build the tarball
 
-9: Increment all the version numbers for the next release, as below.
+9: Copy the tarball to upload.osgeo.org:/osgeo/download/geos
 
-10: Increment CAPI_INTERFACE_X in configure.in
+10: Increment all the version numbers for the next release, as below.
+
+11: Increment CAPI_INTERFACE_X in configure.in
    - For a release with no interface changes just bump REVISION.
      [ Even if *nothing* changed in CAPI ]
    - Adding interfaces, bump CURRENT/AGE, set REVISION to 0.
    - Deleting interfaces / compatibility issues - bump CURRENT, others to zero
      [ THIS MUST BE CAREFULLY AVOIDED ]
 
-11: Increment release version:
+12: Increment release version:
    - In configure.in
    - In include/geos/version.h.vc 
    - In capi/geos_c.h.in
