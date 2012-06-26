@@ -13,6 +13,7 @@ SUBDIRS = \
     geomgraph \
     precision \
     simplify \
+    triangulate \
     util
 
 EXTRA_DIST = Makefile.vc dirlist.mk CMakeLists.txt info.plist.in
@@ -44,4 +45,5 @@ libgeos_la_LIBADD = \
     planargraph/libplanargraph.la \
     precision/libprecision.la \
     simplify/libsimplify.la \
+    triangulate/libtriangulate.la \
     util/libutil.la  

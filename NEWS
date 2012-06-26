@@ -2,6 +2,7 @@ Changes in 3.4.0
 ????-??-??
 
 - New things:
+  - Delaunay Triangulation API (#487)
   - Interruptibility API (C and C++)
   - CAPI: GEOSNode (#496) - PHP: Geometry->node
   - GeometryPrecisionReducer class

@@ -465,6 +465,8 @@ AC_OUTPUT([
 	include/geos/planargraph/algorithm/Makefile
 	include/geos/precision/Makefile
 	include/geos/simplify/Makefile
+	include/geos/triangulate/Makefile
+	include/geos/triangulate/quadedge/Makefile
 	include/geos/util/Makefile
 	include/geos/version.h
 	src/index/Makefile
@@ -492,6 +494,8 @@ AC_OUTPUT([
 	src/planargraph/Makefile
 	src/precision/Makefile
 	src/simplify/Makefile
+	src/triangulate/Makefile
+	src/triangulate/quadedge/Makefile
 	src/util/Makefile
 	swig/geos.i
 	swig/Makefile
