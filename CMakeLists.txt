@@ -1,5 +1,4 @@
 #################################################################################
-# $Id$
 #
 # Main GEOS build configuration file for CMake build system
 #
@@ -30,7 +29,7 @@ set(CMAKE_MODULE_PATH "${geos_SOURCE_DIR}/cmake/modules")
 # GEOS C++ library SONAME will use these encoding ABI break at every release
 set(VERSION_MAJOR 3)
 set(VERSION_MINOR 3)
-set(VERSION_PATCH 2dev)
+set(VERSION_PATCH 6dev)
 set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
 # JTS_PORT is the version of JTS this release is bound to
@@ -39,7 +38,7 @@ message(STATUS "Setting GEOS version ${VERSION} as port of JTS ${JTS_PORT}")
 
 # GEOS C API version
 set(CAPI_INTERFACE_CURRENT 8)
-set(CAPI_INTERFACE_REVISION 2)
+set(CAPI_INTERFACE_REVISION 6)
 set(CAPI_INTERFACE_AGE 7)
 
 math(EXPR CAPI_VERSION_MAJOR "${CAPI_INTERFACE_CURRENT} - ${CAPI_INTERFACE_AGE}")
@@ -47,6 +46,10 @@ set(CAPI_VERSION_MINOR ${CAPI_INTERFACE_AGE})
 set(CAPI_VERSION_PATCH ${CAPI_INTERFACE_REVISION})
 set(CAPI_VERSION "${CAPI_VERSION_MAJOR}.${CAPI_VERSION_MINOR}.${CAPI_VERSION_PATCH}")
 message(STATUS "Setting GEOS C API version ${CAPI_VERSION}")
+if (NOT WIN32)
+  set(CAPI_SOVERSION ${CAPI_VERSION_MAJOR})
+  message(STATUS "Setting GEOS C API soversion ${CAPI_SOVERSION}")
+endif()
 
 #################################################################################
 # Check custom global options
@@ -70,7 +73,7 @@ endif()
 
 if(APPLE)
   option(GEOS_ENABLE_MACOSX_FRAMEWORK
-    "Set to OFF|ON (default) to build GEOS as a Mac OS X framework" ON)
+    "Set to ON|OFF (default) to build GEOS as a Mac OS X framework" OFF)
   option(GEOS_ENABLE_MACOSX_FRAMEWORK_UNIXCOMPAT
     "Set to ON|OFF (default) to add Unix compatibility to the Mac OS X framework" OFF)
 endif()

@@ -1,5 +1,4 @@
 #################################################################################
-# $Id$
 #
 # GEOS C++ library build configuration for CMake build system
 #
@@ -15,7 +14,7 @@
 file(GLOB_RECURSE geos_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 file(GLOB_RECURSE geos_ALL_HEADERS ${CMAKE_SOURCE_DIR}/include/*.h) # fix source_group issue
 
-if(APPLE AND GEOS_ENABLE_MACOSX_FRAMEWORK)
+if(GEOS_ENABLE_MACOSX_FRAMEWORK)
   # OS X frameworks don't have static libs
   # also 1 binary, so include CAPI here
   # and, make name all caps
@@ -65,7 +64,6 @@ else()
   add_library(geos SHARED ${geos_SOURCES} ${geos_ALL_HEADERS})
   add_library(geos-static STATIC ${geos_SOURCES} ${geos_ALL_HEADERS})
 
-# TODO: Enable SOVERSION property
   set_target_properties(geos
     PROPERTIES
     DEFINE_SYMBOL GEOS_DLL_EXPORT
@@ -78,20 +76,20 @@ else()
     PREFIX "lib"
     CLEAN_DIRECT_OUTPUT 1)
 
-if(APPLE)
-  set_target_properties(geos
-    PROPERTIES
-    BUILD_WITH_INSTALL_RPATH TRUE
-    INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}")
+endif()
 
-endif()
-endif()
+# if(APPLE)
+#   set_target_properties(geos
+#     PROPERTIES
+#     BUILD_WITH_INSTALL_RPATH TRUE
+#     INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}")
+# endif()
 
 #################################################################################
 # Installation
 #################################################################################
 
-if(NOT APPLE AND NOT GEOS_ENABLE_MACOSX_FRAMEWORK)
+if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK)
   install(TARGETS geos geos-static
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib
