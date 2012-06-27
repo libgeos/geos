@@ -12,7 +12,7 @@
  *
  **********************************************************************
  *
- * Last port: triangulate/DelaunayTriangulationBuilder.java rev. r524
+ * Last port: triangulate/DelaunayTriangulationBuilder.java r524
  *
  **********************************************************************/
 

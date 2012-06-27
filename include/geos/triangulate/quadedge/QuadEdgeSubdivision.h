@@ -12,7 +12,7 @@
  *
  **********************************************************************
  *
- * Last port: triangulate/quadedge/QuadEdgeSubdivision.java rev. r524
+ * Last port: triangulate/quadedge/QuadEdgeSubdivision.java r524
  *
  **********************************************************************/
 

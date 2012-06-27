@@ -12,7 +12,7 @@
  *
  **********************************************************************
  *
- * Last port: triangulate/quadedge/QuadEdge.java rev. r524
+ * Last port: triangulate/quadedge/QuadEdge.java r524
  *
  **********************************************************************/
 
@@ -24,7 +24,8 @@ namespace quadedge { //geos.triangulate.quadedge
 
 using namespace geos::geom;
 
-std::auto_ptr<QuadEdge> QuadEdge::makeEdge(const Vertex &o, const Vertex &d)
+std::auto_ptr<QuadEdge>
+QuadEdge::makeEdge(const Vertex &o, const Vertex &d)
 {
 	QuadEdge *q0 = new QuadEdge();
 	//q1-q3 are free()'d by q0
@@ -49,7 +50,8 @@ std::auto_ptr<QuadEdge> QuadEdge::makeEdge(const Vertex &o, const Vertex &d)
 	return std::auto_ptr<QuadEdge>(base);
 }
 
-std::auto_ptr<QuadEdge> QuadEdge::connect(QuadEdge &a, QuadEdge &b) 
+std::auto_ptr<QuadEdge>
+QuadEdge::connect(QuadEdge &a, QuadEdge &b) 
 {
 	std::auto_ptr<QuadEdge> q0 = makeEdge(a.dest(), b.orig());
 	splice(*q0, a.lNext());
@@ -57,7 +59,8 @@ std::auto_ptr<QuadEdge> QuadEdge::connect(QuadEdge &a, QuadEdge &b)
 	return q0;
 }
 
-void QuadEdge::splice(QuadEdge &a, QuadEdge &b)
+void
+QuadEdge::splice(QuadEdge &a, QuadEdge &b)
 {
 	QuadEdge &alpha = a.oNext().rot();
 	QuadEdge &beta = b.oNext().rot();
@@ -73,7 +76,8 @@ void QuadEdge::splice(QuadEdge &a, QuadEdge &b)
 	beta.setNext(&t4);
 }
 
-void QuadEdge::swap(QuadEdge &e)
+void
+QuadEdge::swap(QuadEdge &e)
 {
 	QuadEdge &a = e.oPrev();
 	QuadEdge &b = e.sym().oPrev();
@@ -92,7 +96,8 @@ QuadEdge::~QuadEdge()
 {
 }
 
-void QuadEdge::free()
+void
+QuadEdge::free()
 {
 	if(_rot)
 	{
@@ -111,7 +116,8 @@ void QuadEdge::free()
 	}
 }
 
-const QuadEdge& QuadEdge::getPrimary() const
+const QuadEdge&
+QuadEdge::getPrimary() const
 {
 	if (orig().getCoordinate().compareTo(dest().getCoordinate()) <= 0)
 		return *this;
@@ -119,17 +125,20 @@ const QuadEdge& QuadEdge::getPrimary() const
 		return sym();
 }
 
-void QuadEdge::setData(void* data)
+void
+QuadEdge::setData(void* data)
 {
 	this->data = data;
 }
 
-void* QuadEdge::getData()
+void*
+QuadEdge::getData()
 {
 	return data;
 }
 
-void QuadEdge::remove()
+void
+QuadEdge::remove()
 {
 	rot().rot().rot().isAlive = false;
 	rot().rot().isAlive = false;
@@ -137,7 +146,8 @@ void QuadEdge::remove()
 	isAlive = false;
 }
 
-bool QuadEdge::equalsNonOriented(const QuadEdge &qe) const
+bool
+QuadEdge::equalsNonOriented(const QuadEdge &qe) const
 {
 	if (equalsOriented(qe))
 		return true;
@@ -146,7 +156,8 @@ bool QuadEdge::equalsNonOriented(const QuadEdge &qe) const
 	return false;
 }
 
-bool QuadEdge::equalsOriented(const QuadEdge &qe) const
+bool
+QuadEdge::equalsOriented(const QuadEdge &qe) const
 {
 	if (orig().getCoordinate().equals2D(qe.orig().getCoordinate())
 			&& dest().getCoordinate().equals2D(qe.dest().getCoordinate()))
@@ -154,7 +165,8 @@ bool QuadEdge::equalsOriented(const QuadEdge &qe) const
 	return false;
 }
 
-std::auto_ptr<LineSegment> QuadEdge::toLineSegment() const
+std::auto_ptr<LineSegment>
+QuadEdge::toLineSegment() const
 {
 	return std::auto_ptr<geom::LineSegment>(
 			new geom::LineSegment(vertex.getCoordinate(), dest().getCoordinate()));

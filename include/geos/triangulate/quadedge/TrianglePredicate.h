@@ -12,7 +12,7 @@
  *
  **********************************************************************
  *
- * Last port: triangulate/quadedge/TrianglePredicate.java rev. r524
+ * Last port: triangulate/quadedge/TrianglePredicate.java r524
  *
  **********************************************************************/
 

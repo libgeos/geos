@@ -12,7 +12,7 @@
  *
  **********************************************************************
  *
- * Last port: triangulate/quadedge/TrianglePredicate.java rev. r524
+ * Last port: triangulate/quadedge/TrianglePredicate.java r524
  *
  **********************************************************************/
 
@@ -23,7 +23,8 @@
 namespace geos {
 namespace geom { // geos.geom
 
-bool TrianglePredicate::isInCircleNonRobust(
+bool
+TrianglePredicate::isInCircleNonRobust(
 		const Coordinate &a, const Coordinate &b, const Coordinate &c, 
 		const Coordinate &p)
 {
@@ -36,7 +37,8 @@ bool TrianglePredicate::isInCircleNonRobust(
 	return isInCircle;
 }
 
-bool TrianglePredicate::isInCircleNormalized(
+bool
+TrianglePredicate::isInCircleNormalized(
 		const Coordinate &a, const Coordinate &b, const Coordinate &c, 
 		const Coordinate &p)
 {
@@ -58,14 +60,16 @@ bool TrianglePredicate::isInCircleNormalized(
 	return disc > 0;
 }
 
-double TrianglePredicate::triArea(const Coordinate &a,
+double
+TrianglePredicate::triArea(const Coordinate &a,
 		const Coordinate &b, const Coordinate &c)
 {
 	return (b.x - a.x) * (c.y - a.y) 
 		- (b.y - a.y) * (c.x - a.x);
 }
 
-bool TrianglePredicate::isInCircleRobust(
+bool
+TrianglePredicate::isInCircleRobust(
 		const Coordinate &a, const Coordinate &b, const Coordinate &c, 
 		const Coordinate &p) 
 {

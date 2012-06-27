@@ -12,7 +12,7 @@
  *
  **********************************************************************
  *
- * Last port: triangulate/quadedge/QuadEdgeSubdivision.java rev. r524
+ * Last port: triangulate/quadedge/QuadEdgeSubdivision.java r524
  *
  **********************************************************************/
 #include <geos/triangulate/quadedge/QuadEdgeSubdivision.h>
@@ -41,7 +41,8 @@ namespace geos {
 namespace triangulate { //geos.triangulate
 namespace quadedge { //geos.triangulate.quadedge
 
-void QuadEdgeSubdivision::getTriangleEdges(const QuadEdge &startQE,
+void
+QuadEdgeSubdivision::getTriangleEdges(const QuadEdge &startQE,
 		const QuadEdge* triEdge[3])
 {
 	triEdge[0] = &startQE;
@@ -80,7 +81,8 @@ QuadEdgeSubdivision::~QuadEdgeSubdivision()
 	}
 }
 
-void QuadEdgeSubdivision::createFrame(const geom::Envelope &env)
+void
+QuadEdgeSubdivision::createFrame(const geom::Envelope &env)
 {
 	double deltaX = env.getWidth();
 	double deltaY = env.getHeight();
@@ -100,7 +102,8 @@ void QuadEdgeSubdivision::createFrame(const geom::Envelope &env)
 			.getCoordinate());
 	frameEnv.expandToInclude(frameVertex[2].getCoordinate());
 }
-void QuadEdgeSubdivision::initSubdiv(QuadEdge* initEdges[3])
+void
+QuadEdgeSubdivision::initSubdiv(QuadEdge* initEdges[3])
 {
 	std::auto_ptr<QuadEdge> tmp_auto_ptr;
 	// build initial subdivision from frame
@@ -123,7 +126,8 @@ void QuadEdgeSubdivision::initSubdiv(QuadEdge* initEdges[3])
 	QuadEdge::splice(initEdges[2]->sym(), *initEdges[0]);
 }
 
-QuadEdge& QuadEdgeSubdivision::makeEdge(const Vertex &o, const Vertex &d)
+QuadEdge&
+QuadEdgeSubdivision::makeEdge(const Vertex &o, const Vertex &d)
 {
 	std::auto_ptr<QuadEdge> q0 = QuadEdge::makeEdge(o, d);
 	QuadEdge *q0_ptr = q0.get();
@@ -133,7 +137,8 @@ QuadEdge& QuadEdgeSubdivision::makeEdge(const Vertex &o, const Vertex &d)
 	return *q0_ptr;
 }
 
-QuadEdge& QuadEdgeSubdivision::connect(QuadEdge &a, QuadEdge &b)
+QuadEdge&
+QuadEdgeSubdivision::connect(QuadEdge &a, QuadEdge &b)
 {
 	std::auto_ptr<QuadEdge> q0 = QuadEdge::connect(a, b);
 	QuadEdge *q0_ptr = q0.get();
@@ -143,7 +148,8 @@ QuadEdge& QuadEdgeSubdivision::connect(QuadEdge &a, QuadEdge &b)
 	return *q0_ptr;
 }
 
-void QuadEdgeSubdivision::remove(QuadEdge &e)
+void
+QuadEdgeSubdivision::remove(QuadEdge &e)
 {
 	QuadEdge::splice(e, e.oPrev());
 	QuadEdge::splice(e.sym(), e.sym().oPrev());
@@ -159,7 +165,8 @@ void QuadEdgeSubdivision::remove(QuadEdge &e)
 	removedEdges.push_back(&e);
 }
 
-QuadEdge* QuadEdgeSubdivision::locateFromEdge(const Vertex &v,
+QuadEdge*
+QuadEdgeSubdivision::locateFromEdge(const Vertex &v,
 		const QuadEdge &startEdge) const
 {
 	int iter = 0;
@@ -198,7 +205,8 @@ QuadEdge* QuadEdgeSubdivision::locateFromEdge(const Vertex &v,
 	return e;
 }
 
-QuadEdge* QuadEdgeSubdivision::locate(const Coordinate &p0, const Coordinate &p1)
+QuadEdge*
+QuadEdgeSubdivision::locate(const Coordinate &p0, const Coordinate &p1)
 {
 	// find an edge containing one of the points
 	QuadEdge *e = locator->locate(Vertex(p0));
@@ -219,7 +227,8 @@ QuadEdge* QuadEdgeSubdivision::locate(const Coordinate &p0, const Coordinate &p1
 	return NULL;
 }
 
-QuadEdge& QuadEdgeSubdivision::insertSite(const Vertex &v)
+QuadEdge&
+QuadEdgeSubdivision::insertSite(const Vertex &v)
 {
 	QuadEdge *e = locate(v);
 
@@ -241,14 +250,16 @@ QuadEdge& QuadEdgeSubdivision::insertSite(const Vertex &v)
 	return *startEdge;
 }
 
-bool QuadEdgeSubdivision::isFrameEdge(const QuadEdge &e) const
+bool
+QuadEdgeSubdivision::isFrameEdge(const QuadEdge &e) const
 {
 	if (isFrameVertex(e.orig()) || isFrameVertex(e.dest()))
 		return true;
 	return false;
 }
 
-bool QuadEdgeSubdivision::isFrameBorderEdge(const QuadEdge &e) const
+bool
+QuadEdgeSubdivision::isFrameBorderEdge(const QuadEdge &e) const
 {
 	// check other vertex of triangle to left of edge
 	Vertex vLeftTriOther = e.lNext().dest();
@@ -262,7 +273,8 @@ bool QuadEdgeSubdivision::isFrameBorderEdge(const QuadEdge &e) const
 	return false;
 }
 
-bool QuadEdgeSubdivision::isFrameVertex(const Vertex &v) const
+bool
+QuadEdgeSubdivision::isFrameVertex(const Vertex &v) const
 {
 	if (v.equals(frameVertex[0]))
 		return true;
@@ -273,7 +285,8 @@ bool QuadEdgeSubdivision::isFrameVertex(const Vertex &v) const
 	return false;
 }
 
-bool QuadEdgeSubdivision::isOnEdge(const QuadEdge &e, const Coordinate &p) const
+bool
+QuadEdgeSubdivision::isOnEdge(const QuadEdge &e, const Coordinate &p) const
 {
 	geom::LineSegment seg;
 	seg.setCoordinates(e.orig().getCoordinate(), e.dest().getCoordinate());
@@ -282,7 +295,8 @@ bool QuadEdgeSubdivision::isOnEdge(const QuadEdge &e, const Coordinate &p) const
 	return dist < edgeCoincidenceTolerance;
 }
 
-bool QuadEdgeSubdivision::isVertexOfEdge(const QuadEdge &e, const Vertex &v) const
+bool
+QuadEdgeSubdivision::isVertexOfEdge(const QuadEdge &e, const Vertex &v) const
 {
 	if ((v.equals(e.orig(), tolerance)) || (v.equals(e.dest(), tolerance))) {
 		return true;
@@ -290,7 +304,8 @@ bool QuadEdgeSubdivision::isVertexOfEdge(const QuadEdge &e, const Vertex &v) con
 	return false;
 }
 
-std::auto_ptr<QuadEdgeSubdivision::QuadEdgeList> QuadEdgeSubdivision::getPrimaryEdges(bool includeFrame)
+std::auto_ptr<QuadEdgeSubdivision::QuadEdgeList>
+QuadEdgeSubdivision::getPrimaryEdges(bool includeFrame)
 {
 	QuadEdgeList *edges = new QuadEdgeList();
 	QuadEdgeStack edgeStack;
@@ -319,7 +334,8 @@ std::auto_ptr<QuadEdgeSubdivision::QuadEdgeList> QuadEdgeSubdivision::getPrimary
 	return std::auto_ptr<QuadEdgeList>(edges);
 }
 
-QuadEdge** QuadEdgeSubdivision::fetchTriangleToVisit(QuadEdge *edge,
+QuadEdge**
+QuadEdgeSubdivision::fetchTriangleToVisit(QuadEdge *edge,
 		QuadEdgeStack &edgeStack, bool includeFrame, QuadEdgeSet &visitedEdges)
 {
 	QuadEdge *curr = edge;
@@ -350,7 +366,8 @@ QuadEdge** QuadEdgeSubdivision::fetchTriangleToVisit(QuadEdge *edge,
 	return triEdges;
 }
 
-class QuadEdgeSubdivision::TriangleCoordinatesVisitor : public TriangleVisitor {
+class
+QuadEdgeSubdivision::TriangleCoordinatesVisitor : public TriangleVisitor {
 private:
 	QuadEdgeSubdivision::TriList *triCoords;
 	CoordinateArraySequenceFactory coordSeqFact;
@@ -372,13 +389,15 @@ public:
 	}
 }; 
 
-void QuadEdgeSubdivision::getTriangleCoordinates(QuadEdgeSubdivision::TriList* triList, bool includeFrame)
+void
+QuadEdgeSubdivision::getTriangleCoordinates(QuadEdgeSubdivision::TriList* triList, bool includeFrame)
 {
 	TriangleCoordinatesVisitor visitor(triList);
 	visitTriangles((TriangleVisitor*)&visitor, includeFrame);
 }
 
-void QuadEdgeSubdivision::visitTriangles(TriangleVisitor *triVisitor, bool includeFrame)
+void
+QuadEdgeSubdivision::visitTriangles(TriangleVisitor *triVisitor, bool includeFrame)
 {
 
 	QuadEdgeStack edgeStack;
@@ -398,7 +417,8 @@ void QuadEdgeSubdivision::visitTriangles(TriangleVisitor *triVisitor, bool inclu
 	}
 }
 
-std::auto_ptr<geom::MultiLineString> QuadEdgeSubdivision::getEdges(const geom::GeometryFactory& geomFact)
+std::auto_ptr<geom::MultiLineString>
+QuadEdgeSubdivision::getEdges(const geom::GeometryFactory& geomFact)
 {
 	std::auto_ptr<QuadEdgeList> quadEdges(getPrimaryEdges(false));
 	std::vector<Geometry *> edges(quadEdges->size());
@@ -425,7 +445,8 @@ std::auto_ptr<geom::MultiLineString> QuadEdgeSubdivision::getEdges(const geom::G
 	return std::auto_ptr<MultiLineString>(result);
 }
 
-std::auto_ptr<GeometryCollection> QuadEdgeSubdivision::getTriangles( const GeometryFactory &geomFact)
+std::auto_ptr<GeometryCollection>
+QuadEdgeSubdivision::getTriangles( const GeometryFactory &geomFact)
 {
 	TriList triPtsList;
 	getTriangleCoordinates(&triPtsList, false);
