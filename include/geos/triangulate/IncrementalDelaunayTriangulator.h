@@ -65,14 +65,15 @@ public:
 	 * 
 	 * @param vertices a Collection of Vertex
 	 * 
-   * @throws LocateFailureException if the location algorithm fails to converge in a reasonable number of iterations
+	 * @throws LocateFailureException if the location algorithm
+	 *         fails to converge in a reasonable number of iterations
 	 */
 	void insertSites(const VertexList& vertices);
 
 	/**
 	 * Inserts a new point into a subdivision representing a Delaunay
-	 * triangulation, and fixes the affected edges so that the result is still a
-	 * Delaunay triangulation.
+	 * triangulation, and fixes the affected edges so that the result
+	 * is still a Delaunay triangulation.
 	 * <p>
 	 * 
 	 * @return a quadedge containing the inserted vertex
