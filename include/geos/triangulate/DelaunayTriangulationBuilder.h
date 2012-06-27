@@ -23,18 +23,23 @@
 
 
 namespace geos {
-namespace geom{
-	class CoordinateSequence;
-	class Geometry;
-	class MultiLineString;
-	class GeometryCollection;
-	class GeometryFactory;
+  namespace geom{
+	  class CoordinateSequence;
+	  class Geometry;
+	  class MultiLineString;
+	  class GeometryCollection;
+	  class GeometryFactory;
+  }
+  namespace triangulate { 
+    namespace quadedge { 
+      class QuadEdgeSubdivision;
+    }
+  }
 }
 
+namespace geos {
 namespace triangulate { //geos.triangulate
-namespace quadedge { //geos.triangulate.quadedge
 
-class QuadEdgeSubdivision;
 
 /**
  * A utility class which creates Delaunay Triangulations
@@ -67,7 +72,7 @@ public:
 private:
 	geom::CoordinateSequence* siteCoords;
 	double tolerance;
-	QuadEdgeSubdivision *subdiv;
+	quadedge::QuadEdgeSubdivision *subdiv;
 	
 public:
 	/**
@@ -111,11 +116,11 @@ private:
 	
 public:
 	/**
-	 * Gets the {@link QuadEdgeSubdivision} which models the computed triangulation.
+	 * Gets the {@link quadedge::QuadEdgeSubdivision} which models the computed triangulation.
 	 * 
 	 * @return the subdivision containing the triangulation
 	 */
-	QuadEdgeSubdivision& getSubdivision();
+	quadedge::QuadEdgeSubdivision& getSubdivision();
 	
 	/**
 	 * Gets the edges of the computed triangulation as a {@link MultiLineString}.
@@ -123,7 +128,7 @@ public:
 	 * @param geomFact the geometry factory to use to create the output
 	 * @return the edges of the triangulation. The caller takes ownership of the returned object.
 	 */
-	std::auto_ptr<geom::MultiLineString> getEdges(geom::GeometryFactory &geomFact);
+	std::auto_ptr<geom::MultiLineString> getEdges(const geom::GeometryFactory &geomFact);
 	
 	/**
 	 * Gets the faces of the computed triangulation as a {@link GeometryCollection} 
@@ -132,11 +137,10 @@ public:
 	 * @param geomFact the geometry factory to use to create the output
 	 * @return the faces of the triangulation. The caller takes ownership of the returned object.
 	 */
-	std::auto_ptr<geom::GeometryCollection> getTriangles(geom::GeometryFactory& geomFact);
+	std::auto_ptr<geom::GeometryCollection> getTriangles(const geom::GeometryFactory& geomFact);
 
 };
 
-}//namespace geos.triangulate.quadedge
 } //namespace geos.triangulate
 } //namespace goes
 

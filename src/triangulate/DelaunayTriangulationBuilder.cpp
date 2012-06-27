@@ -28,11 +28,11 @@
 
 namespace geos {
 namespace triangulate { //geos.triangulate
-namespace quadedge { //geos.triangulate.quadedge
 
 using namespace geos::geom;
 
-CoordinateSequence* DelaunayTriangulationBuilder::extractUniqueCoordinates(
+CoordinateSequence*
+DelaunayTriangulationBuilder::extractUniqueCoordinates(
 		const Geometry& geom)
 {
 	geom::CoordinateSequence *coords = geom.getCoordinates();
@@ -40,7 +40,8 @@ CoordinateSequence* DelaunayTriangulationBuilder::extractUniqueCoordinates(
 	return coords;
 }
 
-void DelaunayTriangulationBuilder::unique(CoordinateSequence& coords)
+void
+DelaunayTriangulationBuilder::unique(CoordinateSequence& coords)
 {
 	std::vector<Coordinate> coordVector;
 	coords.toVector(coordVector);
@@ -49,7 +50,8 @@ void DelaunayTriangulationBuilder::unique(CoordinateSequence& coords)
 	coords.removeRepeatedPoints();
 }
 
-IncrementalDelaunayTriangulator::VertexList* DelaunayTriangulationBuilder::toVertices(
+IncrementalDelaunayTriangulator::VertexList*
+DelaunayTriangulationBuilder::toVertices(
 		const CoordinateSequence &coords)
 {
 	IncrementalDelaunayTriangulator::VertexList* vertexList =
@@ -57,7 +59,7 @@ IncrementalDelaunayTriangulator::VertexList* DelaunayTriangulationBuilder::toVer
 
 	for(size_t iter=0; iter < coords.size(); ++iter)
 	{
-		vertexList->push_back(Vertex(coords.getAt(iter)));
+		vertexList->push_back(quadedge::Vertex(coords.getAt(iter)));
 	}
 	return vertexList;
 }
@@ -75,7 +77,8 @@ DelaunayTriangulationBuilder::~DelaunayTriangulationBuilder()
 		delete subdiv;
 }
 
-void DelaunayTriangulationBuilder::setSites(const Geometry& geom)
+void
+DelaunayTriangulationBuilder::setSites(const Geometry& geom)
 {
 	if(siteCoords)
 		delete siteCoords;
@@ -83,7 +86,8 @@ void DelaunayTriangulationBuilder::setSites(const Geometry& geom)
 	siteCoords = extractUniqueCoordinates(geom);
 }
 
-void DelaunayTriangulationBuilder::setSites(const CoordinateSequence& coords)
+void
+DelaunayTriangulationBuilder::setSites(const CoordinateSequence& coords)
 {
 	if(siteCoords)
 		delete siteCoords;
@@ -92,7 +96,8 @@ void DelaunayTriangulationBuilder::setSites(const CoordinateSequence& coords)
 	unique(*siteCoords);
 }
 
-void DelaunayTriangulationBuilder::create()
+void
+DelaunayTriangulationBuilder::create()
 {
 	if(subdiv != NULL || siteCoords == NULL)
 		return;
@@ -100,33 +105,35 @@ void DelaunayTriangulationBuilder::create()
 	Envelope siteEnv;
 	siteCoords ->expandEnvelope(siteEnv);
 	IncrementalDelaunayTriangulator::VertexList* vertices = toVertices(*siteCoords);
-	subdiv = new QuadEdgeSubdivision(siteEnv, tolerance);
+	subdiv = new quadedge::QuadEdgeSubdivision(siteEnv, tolerance);
 	IncrementalDelaunayTriangulator triangulator = IncrementalDelaunayTriangulator(subdiv);
 	triangulator.insertSites(*vertices);
 	delete vertices;
 }
 
-QuadEdgeSubdivision& DelaunayTriangulationBuilder::getSubdivision()
+quadedge::QuadEdgeSubdivision&
+DelaunayTriangulationBuilder::getSubdivision()
 {
 	create();
 	return *subdiv;
 }
 
-std::auto_ptr<MultiLineString> DelaunayTriangulationBuilder::getEdges(
-		GeometryFactory& geomFact)
+std::auto_ptr<MultiLineString>
+DelaunayTriangulationBuilder::getEdges(
+    const GeometryFactory& geomFact)
 {
 	create();
 	return subdiv->getEdges(geomFact);
 }
 
-std::auto_ptr<geom::GeometryCollection> DelaunayTriangulationBuilder::getTriangles(
-		geom::GeometryFactory& geomFact)
+std::auto_ptr<geom::GeometryCollection>
+DelaunayTriangulationBuilder::getTriangles(
+		const geom::GeometryFactory& geomFact)
 {
 	create();
 	return subdiv->getTriangles(geomFact);
 }
 
-}//namespace geos.triangulate.quadedge
 } //namespace geos.triangulate
 } //namespace goes
 
