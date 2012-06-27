@@ -169,6 +169,20 @@ namespace tut
 "MULTILINESTRING ((8.5 1, 10 10), (8 2, 10 10), (8 2, 8.5 1), (7 8, 10 10), (7 8, 8 2), (3 8, 10 10), (3 8, 7 8), (2 2, 8.5 1), (2 2, 8 2), (2 2, 7 8), (2 2, 3 8), (0.5 9, 10 10), (0.5 9, 3 8), (0.5 9, 2 2), (0 0, 8.5 1), (0 0, 2 2), (0 0, 0.5 9))"
         );
     }
+
+    // Four points with a tolerance making one collapse
+    template<>
+    template<>
+    void object::test<6>()
+    {
+        geom1_ = GEOSGeomFromWKT("MULTIPOINT(0 0, 10 0, 10 10, 11 10)");
+
+        GEOSGeom_destroy(geom2_);
+        geom2_ = GEOSDelaunayTriangulation(geom1_, 2, 1);
+        ensure_equals_wkt(geom2_, 
+"MULTILINESTRING ((10 0, 10 10), (0 0, 10 10), (0 0, 10 0))"
+        );
+    }
     
 } // namespace tut
 
