@@ -105,6 +105,7 @@ geos_unit_SOURCES = \
 	triangulate/DelaunayTest.cpp \
 	util/UniqueCoordinateArrayFilterTest.cpp \
 	capi/GEOSCoordSeqTest.cpp \
+	capi/GEOSDelaunayTriangulationTest.cpp \
 	capi/GEOSGeomFromWKBTest.cpp \
 	capi/GEOSGeomToWKTTest.cpp \
 	capi/GEOSGetCentroidTest.cpp \

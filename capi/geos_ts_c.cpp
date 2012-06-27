@@ -3,7 +3,7 @@
  *
  * C-Wrapper for GEOS library
  *
- * Copyright (C) 2010 2011 Sandro Santilli <strk@keybit.net>
+ * Copyright (C) 2010-2012 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -58,6 +58,7 @@
 #include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/sharedpaths/SharedPathsOp.h>
 #include <geos/linearref/LengthIndexedLine.h>
+#include <geos/triangulate/DelaunayTriangulationBuilder.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util/Interrupt.h>
 #include <geos/util/UniqueCoordinateArrayFilter.h>
@@ -6124,6 +6125,39 @@ GEOSBufferWithParams_r(GEOSContextHandle_t extHandle, const Geometry *g1, const 
         BufferOp op(g1, *bp);
         Geometry *g3 = op.getResultGeometry(width);
         return g3;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+    
+    return NULL;
+}
+
+Geometry *
+GEOSDelaunayTriangulation_r(GEOSContextHandle_t extHandle, const Geometry *g1, double tolerance, int onlyEdges)
+{
+    if ( 0 == extHandle ) return NULL;
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized ) return NULL;
+
+    using geos::triangulate::DelaunayTriangulationBuilder;
+
+    try
+    {
+      DelaunayTriangulationBuilder builder;
+      builder.setTolerance(tolerance);
+      builder.setSites(*g1);
+
+      if ( onlyEdges ) return builder.getEdges( *g1->getFactory() ).release();
+      else return builder.getTriangles( *g1->getFactory() ).release();
+
     }
     catch (const std::exception &e)
     {

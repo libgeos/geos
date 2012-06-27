@@ -720,6 +720,27 @@ extern GEOSGeometry GEOS_DLL *GEOSSnap(const GEOSGeometry* g1,
 extern GEOSGeometry GEOS_DLL *GEOSSnap_r(GEOSContextHandle_t handle,
   const GEOSGeometry* g1, const GEOSGeometry* g2, double tolerance);
 
+/*
+ * Return a Delaunay triangulation of the vertex of the given geometry
+ *
+ * @param g the input geometry whose vertex will be used as "sites"
+ * @param tolerance optional snapping tolerance to use for improved robustness
+ * @param onlyEdges if non-zero will return a MULTILINESTRING, otherwise it will
+ *                  return a GEOMETRYCOLLECTION containing triangular POLYGONs.
+ *
+ * @return  a newly allocated geometry, or NULL on exception
+ */
+extern GEOSGeometry GEOS_DLL * GEOSDelaunayTriangulation( 
+                                  const GEOSGeometry *g,
+                                  double tolerance,
+                                  int onlyEdges );
+
+extern GEOSGeometry GEOS_DLL * GEOSDelaunayTriangulation_r( 
+                                  GEOSContextHandle_t handle,
+                                  const GEOSGeometry *g,
+                                  double tolerance,
+                                  int onlyEdges );
+
 /************************************************************************
  *
  *  Binary predicates - return 2 on exception, 1 on true, 0 on false

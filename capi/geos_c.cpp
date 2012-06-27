@@ -1258,4 +1258,10 @@ GEOSBufferWithParams(const Geometry* g, const GEOSBufferParams* p, double w)
   return GEOSBufferWithParams_r(handle, g, p, w);
 }
 
+Geometry *
+GEOSDelaunayTriangulation(const Geometry *g, double tolerance, int onlyEdges)
+{
+  return GEOSDelaunayTriangulation_r(handle, g, tolerance, onlyEdges);
+}
+
 } /* extern "C" */
