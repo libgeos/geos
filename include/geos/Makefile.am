@@ -13,6 +13,7 @@ SUBDIRS = \
     planargraph \
     precision \
     simplify \
+    triangulate \
     util
 
 EXTRA_DIST = version.h version.h.vc platform.h.vc platform.h.cmake
