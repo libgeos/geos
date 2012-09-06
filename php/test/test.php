@@ -5,11 +5,21 @@
 
 dl("geos.so");
 
-require_once 'PHPUnit/Framework.php';
+$phpunit_versions = explode('.', PHPUnit_Runner_Version::id());
+$phpunit_version = $phpunit_versions[0] . $phpunit_versions[1];
+if ( $phpunit_version < 36 ) require_once 'PHPUnit/Framework.php';
 
 
 class test extends PHPUnit_Framework_TestCase
 {
+    # This method override is needed to support phpunit < 3.5 (Ubuntu 10.04 ships 3.4)
+    static public function assertType($x, $y)
+    {
+        global $phpunit_version;
+        if ( $phpunit_version < 35 ) return PHPUnit_Framework_TestCase::assertType($x, $y);
+        else return PHPUnit_Framework_TestCase::assertInternalType($x, $y);
+    }
+
     public function testGEOSVersion()
     {
         $this->assertContains('-CAPI-', GEOSVersion());
