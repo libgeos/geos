@@ -28,6 +28,11 @@ togheter with the rest of the GEOS testsuite.
 You can still run 'make check' from this dir for
 localized (php-only) testing.
 
+Note that you'll need phpunit installed for this to work.
+To install:
+
+  sudo pear install --force --alldeps phpunit/phpunit
+
 INSTALL
 -------
 
