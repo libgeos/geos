@@ -156,8 +156,12 @@ check_valid(const Geometry& g, const std::string& label)
 inline std::auto_ptr<Geometry>
 fix_self_intersections(std::auto_ptr<Geometry> g, const std::string& label)
 {
-  // TODO: check for presence of self-intersections first ?
-  return g->Union();
+#ifdef GEOS_DEBUG_BINARYOP
+	std::cerr << label << " fix_self_intersection (UnaryUnion)" << std::endl;
+#endif
+  // TODO: check for the sole self-intersections case ?
+  if ( ! check_valid(*g, label) ) return g->Union();
+  else return std::auto_ptr<Geometry>(g->clone());
 }
 
 

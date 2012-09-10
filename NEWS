@@ -3,6 +3,7 @@ YYYY-MM-DD
 
 - Bug fixes / improvements
     - Add support for testing with phpunit 3.6 (not loosing support for 3.4)
+    - Segfault from intersection (#586)
 
 Changes in 3.3.5
 2012-06-25
