@@ -13,7 +13,7 @@
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/GeometryFactory.h>
 
-#include <stdio.h>
+//#include <stdio.h>
 
 using namespace geos::triangulate;
 using namespace geos::triangulate::quadedge;
@@ -59,6 +59,7 @@ namespace tut
 		expected->normalize();
 			
 		ensure(results->equalsExact(expected, 1e-7));
+		ensure(results->getCoordinateDimension() == expected->getCoordinateDimension());
 
 		delete sites;
 		delete expected;
@@ -90,7 +91,7 @@ namespace tut
 	template<>
 	void object::test<2>()
 	{
-		const char * wkt = "MULTIPOINT ((10 10 1), (10 20 2), (20 20 3))";
+		const char * wkt = "MULTIPOINT ((10 10), (10 20), (20 20))";
 		const char* expectedEdges = "MULTILINESTRING ((10 20, 20 20), (10 10, 10 20), (10 10, 20 20))";
 		const char * expectedTri = "GEOMETRYCOLLECTION (POLYGON ((10 20, 10 10, 20 20, 10 20)))";
 
@@ -144,6 +145,19 @@ namespace tut
 		const char* expectedEdges = "MULTILINESTRING ((0 200, 180 200), (0 0, 0 200), (0 0, 180 0), (180 200, 180 0), (152.625 146.75, 180 0), (152.625 146.75, 180 200), (152.625 146.75, 160 180), (160 180, 180 200), (0 200, 160 180), (20 180, 160 180), (0 200, 20 180), (20 180, 30 160), (30 160, 0 200), (0 0, 30 160), (30 160, 70 90), (0 0, 70 90), (70 90, 150 30), (150 30, 0 0), (150 30, 160 20), (0 0, 160 20), (160 20, 180 0), (152.625 146.75, 160 20), (150 30, 152.625 146.75), (70 90, 152.625 146.75), (30 160, 152.625 146.75), (30 160, 160 180))";
 
 		runDelaunay(wkt, false, expectedEdges);
+	}
+	
+	// 7 - Test grid (2.5d)
+	template<>
+	template<>
+	void object::test<7>()
+	{
+		const char * wkt = "MULTIPOINT ((10 10 1), (10 20 2), (20 20 3), (20 10 1.5), (20 0 2.5), (10 0 3.5), (0 0 0), (0 10 .5), (0 20 .25))";
+		const char* expectedEdges = "MULTILINESTRING ((10 20 2, 20 20 3), (0 20 .25, 10 20 2), (0 10 .5, 0 20 .25), (0 0 0, 0 10 .5), (0 0 0, 10 0 3.5), (10 0 3.5, 20 0 2.5), (20 0 2.5, 20 10 1.5), (20 10 1.5, 20 20 3), (10 20 2, 20 10 1.5), (10 10 1, 20 10 1.6), (10 10 1, 10 20 2), (10 10 1, 0 20 .25), (10 10 1, 0 10 .5), (10 0 3.5, 10 10 1), (0 10 .5, 10 0 3.5), (10 10 1, 20 0 2.5))";
+		const char * expectedTri = "GEOMETRYCOLLECTION (POLYGON ((0 20 .25, 0 10 .5, 10 10 1, 0 20 .25)), POLYGON ((0 20 .25, 10 10 1, 10 20 2, 0 20 .25)), POLYGON ((10 20 2, 10 10 1, 20 10 1.5, 10 20 2)), POLYGON ((10 20 2, 20 10 1.5, 20 20 3, 10 20 2)), POLYGON ((10 0 3.5, 20 0 2.5, 10 10 1, 10 0 3.5)), POLYGON ((10 0 3.5, 10 10 1, 0 10 .5, 10 0 3.5)), POLYGON ((10 0 3.5, 0 10 .5, 0 0 0, 10 0 3.5)), POLYGON ((10 10 1, 20 0 2.5, 20 10 1.5, 10 10 1)))";
+
+		runDelaunay(wkt, false, expectedEdges);
+		runDelaunay(wkt, true, expectedTri);
 	}
 } // namespace tut
 

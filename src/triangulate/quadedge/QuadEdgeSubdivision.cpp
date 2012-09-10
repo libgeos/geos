@@ -24,6 +24,7 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateArraySequenceFactory.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/GeometryFactory.h>
@@ -379,7 +380,7 @@ public:
 
 	void visit(QuadEdge* triEdges[3])
 	{
-		geom::CoordinateSequence *coordSeq = coordSeqFact.create(4,2);
+		geom::CoordinateSequence *coordSeq = coordSeqFact.create(4,0);
 		for (int i = 0; i < 3; i++) {
 			Vertex v = triEdges[i]->orig();
 			coordSeq->setAt(v.getCoordinate(), i);
@@ -422,12 +423,12 @@ QuadEdgeSubdivision::getEdges(const geom::GeometryFactory& geomFact)
 {
 	std::auto_ptr<QuadEdgeList> quadEdges(getPrimaryEdges(false));
 	std::vector<Geometry *> edges(quadEdges->size());
-	CoordinateArraySequenceFactory coordSeqFact;
+	const CoordinateSequenceFactory *coordSeqFact = geomFact.getCoordinateSequenceFactory();
 	int i = 0;
 	for (QuadEdgeSubdivision::QuadEdgeList::iterator it = quadEdges->begin(); it != quadEdges->end(); ++it)
 	{
 		QuadEdge *qe = *it;
-		CoordinateSequence *coordSeq = coordSeqFact.create((std::vector<geom::Coordinate>*)NULL, 2);;
+		CoordinateSequence *coordSeq = coordSeqFact->create((std::vector<geom::Coordinate>*)NULL);;
 
 		coordSeq->add(qe->orig().getCoordinate());
 		coordSeq->add(qe->dest().getCoordinate());
