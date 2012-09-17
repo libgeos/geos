@@ -1,6 +1,9 @@
 Changes in 3.2.4
 ????-??-??
 
+- Bug fixes / improvements
+  - Fix build with GCC 4.6 (#592)
+
 Changes in 3.2.3
 2011-09-21
 
