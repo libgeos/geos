@@ -20,6 +20,7 @@
 #include <geos/export.h>
 
 #include <vector>
+#include <cstdlib> // for size_t
 
 // Forward declarations
 namespace geos {

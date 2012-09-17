@@ -66,14 +66,14 @@ Bintree::~Bintree()
 int
 Bintree::depth()
 {
-	if (root!=NULL) return root->depth();
+	if (root!=0) return root->depth();
 	return 0;
 }
 
 int
 Bintree::size()
 {
-	if (root!=NULL) return root->size();
+	if (root!=0) return root->size();
 	return 0;
 }
 
@@ -85,7 +85,7 @@ Bintree::size()
 int
 Bintree::nodeSize()
 {
-	if (root!=NULL) return root->nodeSize();
+	if (root!=0) return root->nodeSize();
 	return 0;
 }
 

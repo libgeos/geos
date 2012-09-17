@@ -32,7 +32,7 @@ namespace strtree { // geos.index.strtree
  */
 AbstractNode::AbstractNode(int newLevel, int capacity) {
 	childBoundables.reserve(capacity);
-	bounds=NULL;
+	bounds=0;
 	level=newLevel;
 }
 
@@ -42,7 +42,7 @@ AbstractNode::~AbstractNode() {
 const void *
 AbstractNode::getBounds() const
 {
-	if (bounds==NULL) {
+	if (bounds==0) {
 		bounds = computeBounds();
 	}
 	return bounds;
@@ -61,7 +61,7 @@ int AbstractNode::getLevel() {
  * (wrapped in an ItemBoundable)
  */
 void AbstractNode::addChildBoundable(Boundable *childBoundable) {
-	assert(bounds==NULL);
+	assert(bounds==0);
 	childBoundables.push_back(childBoundable);
 }
 

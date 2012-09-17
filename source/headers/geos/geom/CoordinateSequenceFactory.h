@@ -23,6 +23,7 @@
 
 #include <geos/export.h>
 #include <vector>
+#include <cstdlib> // for size_t
 
 //#include <geos/geom/Coordinate.h>
 #include <geos/inline.h>

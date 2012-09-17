@@ -56,7 +56,7 @@ public:
 		:
 		graph(newGraph),
 		rings(),
-		nestedPt(NULL)
+		nestedPt(0)
 	{}
 
 	~SimpleNestedRingTester() {
@@ -67,7 +67,7 @@ public:
 	}
 
 	/*
-	 * Be aware that the returned Coordinate (if != NULL)
+	 * Be aware that the returned Coordinate (if != 0)
 	 * will point to storage owned by one of the LinearRing
 	 * previously added. If you destroy them, this
 	 * will point to an invalid memory address.

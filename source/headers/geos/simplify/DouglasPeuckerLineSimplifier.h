@@ -23,6 +23,7 @@
 #include <geos/export.h>
 #include <vector>
 #include <memory> // for auto_ptr
+#include <cstdlib> // for size_t
 
 // Forward declarations
 namespace geos {
