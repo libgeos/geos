@@ -40,6 +40,6 @@ svnrebase: authors.git
 	cd $(srcdir) && git svn rebase --authors-file authors.git
 
 geos_svn_revision.h:
-	sh tools/svn_repo_revision.sh $<
+	sh $(srcdir)/tools/svn_repo_revision.sh $<
 
 .PHONY: geos_svn_revision.h
