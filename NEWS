@@ -1,9 +1,9 @@
 Changes in 3.3.6
-YYYY-MM-DD
+2012-11-15 -- that's Post-GIS day !
 
 - Bug fixes / improvements
     - Add support for testing with phpunit 3.6 (not loosing support for 3.4)
-    - Segfault from intersection (#586)
+    - Segfault from intersection (#586, #598, #599)
 
 Changes in 3.3.5
 2012-06-25
