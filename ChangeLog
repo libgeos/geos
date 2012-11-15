@@ -1,3 +1,69 @@
+2012-11-15 16:31  Sandro Santilli <strk@keybit.net>
+
+	* [r3722] NEWS, configure.in, swig/python/geos.py,
+	  swig/python/geos_wrap.cxx: Set version to 3.3.6
+
+2012-11-15 15:59  Sandro Santilli <strk@keybit.net>
+
+	* [r3721] tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/ticket/bug599.xml: Add automated test for
+	  #599 (succeeds)
+
+2012-09-10 09:17  Sandro Santilli <strk@keybit.net>
+
+	* [r3714] tests/xmltester/tests/ticket/bug586.xml: Tweak the test
+	  for bug 586 to succeed while still being small
+
+2012-09-10 08:05  Sandro Santilli <strk@keybit.net>
+
+	* [r3713] NEWS, include/geos/geom/BinaryOp.h,
+	  tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/ticket/bug586.xml: Do not try to fix valid
+	  geometries (#586)
+	  
+	  Fixes a stack overflow in BinaryOp, includes testcase
+
+2012-09-07 11:26  Sandro Santilli <strk@keybit.net>
+
+	* [r3709] swig/python/geos.py, swig/python/geos_wrap.cxx:
+	  Regenerate swig files with swig 2.0.4
+
+2012-09-06 18:15  Sandro Santilli <strk@keybit.net>
+
+	* [r3707] php/test/test.php: Use version_compare to compare
+	  versions...
+
+2012-09-06 18:05  Sandro Santilli <strk@keybit.net>
+
+	* [r3706] NEWS, php/README, php/test/test.php: Add support for
+	  phpunit 3.6 (not loosing support for 3.4)
+	  
+	  I don't have phpunit-3.4 anymore so if anyone does please see
+	  if "make check" still works (with php enabled)
+	  
+	  NOTE: Ubuntu 10.04 ships phpunit 3.4
+
+2012-06-26 20:42  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3698] CMakeLists.txt, cmake/cmake_uninstall.cmake.in,
+	  include/CMakeLists.txt, src/CMakeLists.txt: [CMake] Merged recent
+	  fixes from trunk. Updated version numbers according to
+	  configure.in
+
+2012-06-25 15:15  Sandro Santilli <strk@keybit.net>
+
+	* [r3690] HOWTO_RELEASE: Add tarball verification step
+
+2012-06-25 11:59  Sandro Santilli <strk@keybit.net>
+
+	* [r3689] NEWS, capi/geos_c.h.in, configure.in,
+	  include/geos/version.h.vc: Set 3.3 branch ready for work on 3.3.6
+	  release.
+
+2012-06-25 10:50  Sandro Santilli <strk@keybit.net>
+
+	* [r3687] ChangeLog: Update ChangeLog for release 3.3.5
+
 2012-06-25 10:49  Sandro Santilli <strk@keybit.net>
 
 	* [r3686] NEWS, configure.in: Set version to 3.3.5 final, and
