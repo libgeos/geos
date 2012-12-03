@@ -88,7 +88,7 @@ extern "C"
 #else
 # if defined(_MSC_VER)
 #  define ISNAN(x) _isnan(x)
-# elif defined(__MINGW32__)
+# elif defined(__MINGW32__) || defined(__CYGWIN__)
 // sandro furieri: sanitizing MinGW32
 #  define ISNAN(x) (std::isnan(x))
 # elif defined(__OSX__) || defined(__APPLE__)
