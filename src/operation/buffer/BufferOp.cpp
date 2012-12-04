@@ -22,6 +22,7 @@
 #include <cmath>
 
 #include <geos/profiler.h>
+#include <geos/precision/GeometryPrecisionReducer.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/buffer/BufferBuilder.h>
 #include <geos/geom/Geometry.h>
@@ -235,8 +236,22 @@ BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
 
 	bufBuilder.setNoder(&noder);
 
+	// Reduce precision of the input geometry
+	// TODO: perhaps this should be done within BufferBuilder,
+	//       after (or as part of) input simplification ?
+	// NOTE: this reduction is not in JTS (yet)
+	const Geometry *workGeom = argGeom;
+	const PrecisionModel& argPM = *(argGeom->getFactory()->getPrecisionModel());
+	std::auto_ptr<Geometry> fixedGeom;
+	if ( argPM.getType() != PrecisionModel::FIXED || argPM.getScale() != fixedPM.getScale() )
+	{
+		using precision::GeometryPrecisionReducer;
+		fixedGeom = GeometryPrecisionReducer::reduce(*argGeom, fixedPM);
+		workGeom = fixedGeom.get();
+	}
+
 	// this may throw an exception, if robustness errors are encountered
-	resultGeometry=bufBuilder.buffer(argGeom, distance);
+	resultGeometry = bufBuilder.buffer(workGeom, distance);
 }
 
 } // namespace geos.operation.buffer
