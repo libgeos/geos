@@ -1,3 +1,9 @@
+Changes in 3.3.7dev
+2012-MM-DD 
+
+- Bug fixes / improvements
+    - Fix abort in RightmostEdgeFinder (#605)
+
 Changes in 3.3.6
 2012-11-15 -- that's Post-GIS day !
 

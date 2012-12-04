@@ -25,6 +25,7 @@
 #include <geos/geomgraph/Position.h>
 #include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/Edge.h>
+#include <geos/util/TopologyException.h>
 
 #include <vector>
 #include <cassert>
@@ -72,6 +73,14 @@ RightmostEdgeFinder::findEdge(std::vector<DirectedEdge*>* dirEdgeList)
 		++checked;
 #endif
 	}
+
+  if ( ! minDe ) {
+    // I don't know why, but it looks like this can happen
+    // (invalid PlanarGraph, I think)
+    // See http://trac.osgeo.org/geos/ticket/605#comment:17
+    //
+    throw util::TopologyException("No forward edges found in buffer subgraph");
+  }
 
 #ifndef NDEBUG
 	assert(checked>0);
