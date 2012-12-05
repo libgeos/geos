@@ -152,8 +152,11 @@ void
 BufferOp::bufferReducedPrecision()
 {
 
-	// try and compute with decreasing precision
-	for (int precDigits=MAX_PRECISION_DIGITS; precDigits >= 0; precDigits--)
+	// try and compute with decreasing precision,
+	// up to a min, to avoid gross results
+	// (not in JTS, see http://trac.osgeo.org/geos/ticket/605)
+#define MIN_PRECISION_DIGITS 6
+	for (int precDigits=MAX_PRECISION_DIGITS; precDigits >= MIN_PRECISION_DIGITS; precDigits--)
 	{
 #if GEOS_DEBUG
 		std::cerr<<"BufferOp::computeGeometry: trying with precDigits "<<precDigits<<std::endl;
