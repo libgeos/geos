@@ -3,6 +3,8 @@ Changes in 3.3.7dev
 
 - Bug fixes / improvements
     - Fix abort in RightmostEdgeFinder (#605)
+    - Do not force precision reduction below 6 significant digits
+      while trying to obtain a valid Buffer output (#605)
 
 Changes in 3.3.6
 2012-11-15 -- that's Post-GIS day !
