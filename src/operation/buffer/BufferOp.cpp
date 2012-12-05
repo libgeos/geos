@@ -240,9 +240,19 @@ BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
 	bufBuilder.setNoder(&noder);
 
 	// Reduce precision of the input geometry
-	// TODO: perhaps this should be done within BufferBuilder,
-	//       after (or as part of) input simplification ?
-	// NOTE: this reduction is not in JTS (yet)
+	//
+	// NOTE: this reduction is not in JTS and should supposedly 
+	//       not be needed because the PrecisionModel we pass
+	//       to the BufferBuilder above (with setWorkingPrecisionModel)
+	//       should be used to round coordinates emitted by the
+	//       OffsetCurveBuilder, thus effectively producing a fully
+	//       rounded input to the noder.
+	//       Nonetheless the amount of scrambling done by rounding here
+	//       is known to fix at least one case in which MCIndexNoder
+	//       would fail: http://trac.osgeo.org/geos/ticket/605
+	//
+	// TODO: follow JTS in MCIndexSnapRounder usage
+	//
 	const Geometry *workGeom = argGeom;
 	const PrecisionModel& argPM = *(argGeom->getFactory()->getPrecisionModel());
 	std::auto_ptr<Geometry> fixedGeom;
