@@ -274,6 +274,8 @@ OBJ = \
 	precision\CommonBitsOp.$(EXT) \
 	precision\CommonBitsRemover.$(EXT) \
 	precision\EnhancedPrecisionOp.$(EXT) \
+	precision\GeometryPrecisionReducer.$(EXT) \
+	precision\PrecisionReducerCoordinateOperation.$(EXT) \
 	precision\SimpleGeometryPrecisionReducer.$(EXT) \
 	simplify\DouglasPeuckerLineSimplifier.$(EXT) \
 	simplify\DouglasPeuckerSimplifier.$(EXT) \
