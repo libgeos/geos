@@ -119,7 +119,13 @@ namespace tut
       strToUpper(wkt);
       ensure_equals(r, 0); // invalid
       ensure_equals(std::string(reason_), std::string("Invalid Coordinate"));
-      ensure_equals(wkt, "POINT (NAN -5)");
+      std::string exp1 = "POINT (NAN -5)";
+      std::string exp2 = "POINT (-1#IND -5)";
+      std::stringstream ss;
+      ss << "Expected '" << exp1 << "' or '" << exp2 << "', Obtained '" << wkt;
+      ensure(ss.str(),
+        wkt == "POINT (NAN -5)" ||
+        wkt == "POINT (-1#IND -5)");
     }
 
     // Self intersecting ring forming hole
