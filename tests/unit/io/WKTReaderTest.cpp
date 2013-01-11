@@ -134,7 +134,42 @@ namespace tut
             ex.what();
         } catch (...) {
             ensure( !"Got unexpected exception" );
-	}
+        }
+    }
+
+    // POINT(0 0) http://trac.osgeo.org/geos/ticket/610
+    template<>
+    template<>
+    void object::test<7>()
+    {         
+        GeomPtr geom;
+
+        try
+        {
+            // use FLOATING model
+            namespace ggm = geos::geom;
+            namespace gio = geos::io;
+            ggm::PrecisionModel pm(ggm::PrecisionModel::FLOATING);
+            ggm::GeometryFactory gf(&pm);
+            gio::WKTReader wktReader(&gf);
+            const std::string str = " POINT (0 0) ";
+            geom.reset(wktReader.read(str)); //HERE IT FAILS
+
+            geos::geom::CoordinateSequence *coords = geom->getCoordinates();
+            ensure_equals(coords->getDimension(), 2U);
+            ensure_distance(coords->getX(0), 0.0, 1e-12);
+            ensure_distance( coords->getY(0), 0.0, 1e-12);
+            delete coords;
+        }
+        catch (const geos::util::IllegalArgumentException& ex)
+        {
+            ensure( "Did get expected exception" );
+            ex.what();
+        }
+        catch (...)
+        {
+            ensure( !"Got unexpected exception" );
+        }
     }
 } // namespace tut
 
