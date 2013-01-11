@@ -167,6 +167,24 @@ namespace tut
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 
         ensure_equals(std::string(wkt_), std::string( "POINT EMPTY"));
+    }
+
+    // Single point linestring -- see http://trac.osgeo.org/geos/ticket/609
+    template<>
+    template<>
+    void object::test<6>()
+    {
+        geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 0 0)");
+
+        ensure( 0 != geom1_ );
+
+        geom2_ = GEOSPointOnSurface(geom1_);
+
+        ensure( 0 != geom2_ );
+
+        wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+
+        ensure_equals(std::string(wkt_), std::string( "POINT (0 0)"));
 
     }
 
