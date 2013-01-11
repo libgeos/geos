@@ -48,8 +48,8 @@ InteriorPointLine::InteriorPointLine(const Geometry *g)
 		std::cerr << "Centroid: " << centroid << std::endl;
 #endif
 		addInterior(g);
-		if (!hasInterior) addEndpoints(g);
 	}
+	if (!hasInterior) addEndpoints(g);
 }
 
 InteriorPointLine::~InteriorPointLine()
@@ -119,8 +119,11 @@ InteriorPointLine::addEndpoints(const Geometry *geom)
 void
 InteriorPointLine::addEndpoints(const CoordinateSequence *pts)
 {
-	add(pts->getAt(0));
-	add(pts->getAt(pts->getSize()-1));
+  size_t npts = pts->size();
+  if ( npts ) {
+    add(pts->getAt(0));
+    if ( npts > 1 ) add(pts->getAt(npts-1));
+  }
 }
 
 /*private*/
