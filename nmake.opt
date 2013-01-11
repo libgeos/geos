@@ -149,10 +149,12 @@ MPFLAGS = /MP
 GEOS_CFLAGS = /D "GEOS_INLINE"
 !ENDIF
 
-!MESSAGE *** Using CFLAGS $(GEOS_CFLAGS)
-!MESSAGE *** Using CPPFLAGS $(GEOS_CPPFLAGS)
+!MESSAGE *** Using GEOS_CFLAGS $(GEOS_CFLAGS)
+!MESSAGE *** Using GEOS_CPPFLAGS $(GEOS_CPPFLAGS)
 
-CFLAGS= $(MPFLAGS) $(GEOS_CFLAGS) $(GEOS_CPPFLAGS) $(GEOS_INCLUDE)
+CFLAGS=$(MPFLAGS) $(GEOS_CFLAGS) $(GEOS_CPPFLAGS) $(GEOS_INCLUDE)
+
+!MESSAGE *** Complete CFLAGS $(CFLAGS)
 
 ###############################################################################
 # Output location
