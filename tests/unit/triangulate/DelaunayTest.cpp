@@ -5,6 +5,7 @@
 // tut
 #include <tut.hpp>
 // geos
+#include <geos/triangulate/quadedge/QuadEdge.h>
 #include <geos/triangulate/quadedge/QuadEdgeSubdivision.h>
 #include <geos/triangulate/IncrementalDelaunayTriangulator.h>
 #include <geos/triangulate/DelaunayTriangulationBuilder.h>
