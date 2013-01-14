@@ -957,7 +957,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 			GeomAutoPtr gRealRes(gT->getCentroid());
 
 			if ( gRealRes.get() ) gRealRes->normalize();
-			else gRealRes.reset(factory->createGeometryCollection());
+			else gRealRes.reset(factory->createPoint());
 			gRealRes->normalize();
 
 			if (gRes->compareTo(gRealRes.get())==0) success=1;

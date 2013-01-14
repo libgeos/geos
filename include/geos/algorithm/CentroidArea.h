@@ -53,6 +53,9 @@ namespace algorithm { // geos::algorithm
  * The code has also be extended to handle degenerate (zero-area) polygons.
  * In this case, the centroid of the line segments in the polygon
  * will be returned.
+ *
+ * @deprecated use Centroid instead
+ *
  */
 class GEOS_DLL CentroidArea {
 

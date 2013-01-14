@@ -34,9 +34,7 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/util/IllegalArgumentException.h>
-#include <geos/algorithm/CentroidPoint.h>
-#include <geos/algorithm/CentroidLine.h>
-#include <geos/algorithm/CentroidArea.h>
+#include <geos/algorithm/Centroid.h>
 #include <geos/algorithm/InteriorPointPoint.h>
 #include <geos/algorithm/InteriorPointLine.h>
 #include <geos/algorithm/InteriorPointArea.h>
@@ -202,30 +200,8 @@ bool
 Geometry::getCentroid(Coordinate& ret) const
 {
 	if ( isEmpty() ) { return false; }
-
-	Coordinate c;
-
-	int dim=getDimension();
-	if(dim==0) {
-		CentroidPoint cent; 
-		cent.add(this);
-		if ( ! cent.getCentroid(c) )
-				return false;
-	} else if (dim==1) {
-		CentroidLine cent;
-		cent.add(this);
-		if ( ! cent.getCentroid(c) ) 
-			return false;
-	} else {
-		CentroidArea cent;
-		cent.add(this);
-		if ( ! cent.getCentroid(c) )
-			return false;
-	}
-
-	getPrecisionModel()->makePrecise(c);
-	ret=c;
-
+	if ( ! Centroid::getCentroid(*this, ret) ) return false;
+	getPrecisionModel()->makePrecise(ret); // not in JTS
 	return true;
 }
 

@@ -30,6 +30,7 @@ namespace geos {
 namespace geos {
 namespace algorithm { // geos::algorithm
 
+/// @deprecated use Centroid instead
 class GEOS_DLL CentroidPoint {
 
 private:

@@ -12,6 +12,7 @@ INCLUDES = -I$(top_srcdir)/include
 libalgorithm_la_SOURCES = \
     Angle.cpp \
     BoundaryNodeRule.cpp \
+    Centroid.cpp \
     CentroidArea.cpp \
     CentroidLine.cpp \
     CentroidPoint.cpp \

@@ -13,6 +13,7 @@ geos_HEADERS = \
     Angle.h \
     BoundaryNodeRule.h \
     CentralEndpointIntersector.h \
+    Centroid.h \
     CentroidArea.h \
     CentroidLine.h \
     CentroidPoint.h \
