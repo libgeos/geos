@@ -3,7 +3,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
- * Copyright (C) 2011      Sandro Santilli <strk@keybit.net>
+ * Copyright (C) 2013 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -11,6 +11,10 @@
  * the terms of the GNU Lesser General Public Licence as published
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
+ *
+ **********************************************************************
+ *
+ * Last port: algorithm/InteriorPointArea.java r728 (JTS-1.13+)
  *
  **********************************************************************/
 
@@ -89,13 +93,25 @@ InteriorPointArea::add(const Geometry *geom)
 void
 InteriorPointArea::addPolygon(const Geometry *geometry)
 {
+  if (geometry->isEmpty()) return;
+
+  Coordinate intPt;
+  double width;
+
   auto_ptr<LineString> bisector ( horizontalBisector(geometry) );
-  auto_ptr<Geometry> intersections ( bisector->intersection(geometry) );
-  const Geometry *widestIntersection = widestGeometry(intersections.get());
-  const Envelope *env = widestIntersection->getEnvelopeInternal();
-  double width=env->getWidth();
+  if ( bisector->getLength() == 0.0 ) {
+    width = 0;
+    intPt = bisector->getCoordinateN(0);
+  }
+  else {
+    auto_ptr<Geometry> intersections ( bisector->intersection(geometry) );
+    const Geometry *widestIntersection = widestGeometry(intersections.get());
+    const Envelope *env = widestIntersection->getEnvelopeInternal();
+    width=env->getWidth();
+    env->centre(intPt);
+  }
   if (!foundInterior || width>maxWidth) {
-    env->centre(interiorPoint);
+    interiorPoint = intPt;
     maxWidth = width;
     foundInterior=true;
   }
