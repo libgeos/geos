@@ -15,14 +15,42 @@
 #include <geos/util/Interrupt.h>
 #include <geos/util/GEOSException.h> // for inheritance
 
+namespace {
+  /* Could these be portably stored in thread-specific space ? */
+  bool requested = false;
+
+  geos::util::Interrupt::Callback *callback = 0;
+}
+
 namespace geos {
 namespace util { // geos::util
 
 class GEOS_DLL InterruptedException: public GEOSException {
 public:
-	InterruptedException() :
-		GEOSException("InterruptedException", "Interrupted!") {}
+    InterruptedException() :
+        GEOSException("InterruptedException", "Interrupted!") {}
 };
+
+void Interrupt::request() { requested = true; }
+
+void Interrupt::cancel() { requested = false; }
+
+bool Interrupt::check() { return requested; }
+
+Interrupt::Callback* Interrupt::registerCallback(Interrupt::Callback *cb) {
+    Callback* prev = callback;
+    callback = cb;
+    return prev;
+  }
+
+void Interrupt::process() {
+    if ( callback ) (*callback)();
+    if ( requested ) {
+        requested = false;
+        interrupt();
+    }
+}
+
 
 void
 Interrupt::interrupt() {
@@ -30,8 +58,6 @@ Interrupt::interrupt() {
   throw InterruptedException();
 }
 
-bool Interrupt::requested = false;
-Interrupt::Callback *Interrupt::callback = 0;
 
 } // namespace geos::util
 } // namespace geos

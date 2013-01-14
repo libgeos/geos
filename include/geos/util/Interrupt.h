@@ -35,13 +35,13 @@ public:
    * Operations will be terminated by a GEOSInterrupt
    * exception at first occasion.
    */
-  static void request() { requested = true; }
+  static void request();
 
   /** Cancel a pending interruption request */
-  static void cancel() { requested = false; }
+  static void cancel();
 
   /** Check if an interruption request is pending */
-  static bool check() { return requested; }
+  static bool check();
 
   /** \brief
    * Register a callback that will be invoked
@@ -53,34 +53,16 @@ public:
    * The callback can be used to call Interrupt::request()
    *
    */
-  static Callback* registerCallback(Callback *cb) {
-    Callback* prev = callback;
-    callback = cb;
-    return prev;
-  }
+  static Callback* registerCallback(Callback *cb);
 
   /**
    * Invoke the callback, if any. Process pending interruption, if any.
    *
    */
-  static void process() {
-    if ( callback ) (*callback)();
-    if ( requested ) {
-      requested = false;
-      interrupt();
-    }
-  }
+  static void process();
 
   /* Perform the actual interruption (simply throw an exception) */
   static void interrupt();
-
-private:
-
-  /* Could these be portably stored in thread-specific space ? */
-
-  static bool requested;
-
-  static Callback *callback;
 
 };
 
