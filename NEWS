@@ -7,6 +7,7 @@ Changes in 3.3.7dev
       while trying to obtain a valid Buffer output (#605)
     - Fix GEOSPointOnSurface with zero-length linestring (#609)
     - Fix EMPTY return from zero-area polygon (#613)
+    - Segfault from symdifference (#615)
 
 Changes in 3.3.6
 2012-11-15 -- that's Post-GIS day !

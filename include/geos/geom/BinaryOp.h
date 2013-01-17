@@ -4,6 +4,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.refractions.net
  *
+ * Copyright (C) 2013 Sandro Santilli <strk@keybit.net>
  * Copyright (C) 2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -50,6 +51,8 @@
 #define GEOS_GEOM_BINARYOP_H
 
 #include <geos/geom/Geometry.h>
+#include <geos/geom/GeometryCollection.h>
+#include <geos/geom/Polygon.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/precision/CommonBitsRemover.h>
 #include <geos/precision/SimpleGeometryPrecisionReducer.h>
@@ -152,16 +155,52 @@ check_valid(const Geometry& g, const std::string& label)
 	return true;
 }
 
-/* A single component may become a multi component */
+/*
+ * Attempt to fix noding of multilines and
+ * self-intersection of multipolygons 
+ *
+ * May return the input untouched.
+ */
 inline std::auto_ptr<Geometry>
 fix_self_intersections(std::auto_ptr<Geometry> g, const std::string& label)
 {
 #ifdef GEOS_DEBUG_BINARYOP
 	std::cerr << label << " fix_self_intersection (UnaryUnion)" << std::endl;
 #endif
-  // TODO: check for the sole self-intersections case ?
-  if ( ! check_valid(*g, label) ) return g->Union();
-  else return std::auto_ptr<Geometry>(g->clone());
+
+  // Only multi-components can be fixed by UnaryUnion
+  if ( ! dynamic_cast<const GeometryCollection*>(g.get()) ) return g;
+
+  using operation::valid::IsValidOp;
+
+  IsValidOp ivo(g.get());
+
+  // Polygon is valid, nothing to do
+  if ( ivo.isValid() ) return g;
+
+  // Not all invalidities can be fixed by this code
+
+  using operation::valid::TopologyValidationError;
+  TopologyValidationError* err = ivo.getValidationError();
+  switch ( err->getErrorType() ) {
+    case TopologyValidationError::eRingSelfIntersection:
+    case TopologyValidationError::eTooFewPoints: // collapsed lines
+#ifdef GEOS_DEBUG_BINARYOP
+	    std::cerr << label << " ATTEMPT_TO_FIX: " << err->getErrorType() << ": " << *g << std::endl;
+#endif
+      g = g->Union();
+#ifdef GEOS_DEBUG_BINARYOP
+	    std::cerr << label << " ATTEMPT_TO_FIX succeeded.. " << std::endl;
+#endif
+      return g;
+    case TopologyValidationError::eSelfIntersection:
+      // this one is within a single component, won't be fixed
+    default:
+#ifdef GEOS_DEBUG_BINARYOP
+	    std::cerr << label << " invalidity is: " << err->getErrorType() << std::endl;
+#endif
+      return g;
+  }
 }
 
 
@@ -270,11 +309,11 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 #endif
 	}
 
-//#if GEOS_DEBUG_BINARYOP
+#if GEOS_DEBUG_BINARYOP
   // Should we just give up here ?
   check_valid(*g0, "Input geom 0");
   check_valid(*g1, "Input geom 1");
-//#endif
+#endif
 
 #endif // USE_ORIGINAL_INPUT
 
