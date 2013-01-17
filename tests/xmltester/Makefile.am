@@ -32,11 +32,11 @@ SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
 	$(srcdir)/tests/ticket/bug392.xml \
 	$(srcdir)/tests/ticket/bug398.xml \
 	$(srcdir)/tests/ticket/bug434.xml \
-	$(srcdir)/tests/ticket/bug488.xml \
 	$(srcdir)/tests/ticket/bug527.xml \
 	$(srcdir)/tests/ticket/bug586.xml \
 	$(srcdir)/tests/ticket/bug599.xml \
 	$(srcdir)/tests/ticket/bug605.xml \
+	$(srcdir)/tests/ticket/bug615.xml \
 	$(srcdir)/tests/general/TestBoundary.xml \
 	$(srcdir)/tests/general/TestBuffer.xml \
 	$(srcdir)/tests/general/TestBufferMitredJoin.xml \
@@ -90,7 +90,8 @@ SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
 INVALID_OUTPUT_XMLTESTS = 
 
 FAILING_XMLTESTS = \
-	$(srcdir)/tests/failure/TestOverlay.xml
+	$(srcdir)/tests/failure/TestOverlay.xml \
+	$(srcdir)/tests/ticket/bug488.xml 
 
 XMLTESTS=$(SAFE_XMLTESTS) $(INVALID_OUTPUT_XMLTESTS) $(FAILING_XMLTESTS)
 
