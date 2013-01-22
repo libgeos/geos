@@ -1,5 +1,5 @@
-Changes in 3.3.7dev
-2012-MM-DD 
+Changes in 3.3.7
+2013-01-22 
 
 - Bug fixes / improvements
     - Fix abort in RightmostEdgeFinder (#605)
