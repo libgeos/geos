@@ -1,3 +1,85 @@
+2013-01-22 18:21  Sandro Santilli <strk@keybit.net>
+
+	* [r3752] NEWS, configure.in, swig/python/geos.py,
+	  swig/python/geos_wrap.cxx: Set version to 3.3.7
+
+2013-01-17 12:04  Sandro Santilli <strk@keybit.net>
+
+	* [r3750] NEWS, include/geos/geom/BinaryOp.h,
+	  tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/ticket/bug615.xml: Only attempt to fix
+	  self-intersection between multiple components
+	  
+	  Doing this reduces the likelyhood of entering an infinite
+	  recursion
+	  whereas UnaryUnion (meant to fix that) would enter the
+	  self-intersection
+	  attempt again. Fixes #615 for which a test is added.
+	  
+	  This also gives us back an exception with the input of ticket
+	  #488,
+	  which is the same behavior JTS exposes. The (bogus) test for it
+	  is disabled by this commit.
+
+2013-01-14 11:08  Sandro Santilli <strk@keybit.net>
+
+	* [r3746] NEWS, include/geos/algorithm/InteriorPointArea.h,
+	  src/algorithm/InteriorPointArea.cpp,
+	  tests/xmltester/tests/general/TestInteriorPoint.xml: Fix EMPTY
+	  return from zero-area polygon (#613)
+
+2013-01-14 11:05  Sandro Santilli <strk@keybit.net>
+
+	* [r3745] tests/xmltester/XMLTester.cpp: Have XMLTester use POINT
+	  EMPTY for a null return from getInteriorPoint
+
+2013-01-11 14:25  Sandro Santilli <strk@keybit.net>
+
+	* [r3739] NEWS, src/algorithm/InteriorPointLine.cpp,
+	  tests/unit/capi/GEOSPointOnSurfaceTest.cpp: Fix
+	  GEOSPointOnSurface with zero-length linestring (#609)
+
+2012-12-06 17:44  Sandro Santilli <strk@keybit.net>
+
+	* [r3738] tests/unit/capi/GEOSisValidDetailTest.cpp: Accept weird
+	  NAN values in testcase, sometimes seen on windows...
+
+2012-12-05 11:00  Sandro Santilli <strk@keybit.net>
+
+	* [r3735] swig/python/geos.py, swig/python/geos_wrap.cxx:
+	  Regenerate swig wrappers (due to version change)
+
+2012-12-05 07:41  Sandro Santilli <strk@keybit.net>
+
+	* [r3732] NEWS, src/operation/buffer/BufferOp.cpp: Do not reduce
+	  precision below 6 significant digits.
+	  
+	  Avoids gross results (preferring an exception)
+	  See http://trac.osgeo.org/geos/ticket/605
+
+2012-12-04 21:43  Sandro Santilli <strk@keybit.net>
+
+	* [r3730] NEWS, src/operation/buffer/RightmostEdgeFinder.cpp: Fix
+	  abort in Buffer op (RightmostEdgeFinder)
+	  
+	  Rather than aborting we throw a TopologyException,
+	  because the problem occurs when noding isn't correct.
+	  See http://trac.osgeo.org/geos/ticket/605
+
+2012-12-04 21:39  Sandro Santilli <strk@keybit.net>
+
+	* [r3729] src/operation/buffer/BufferSubgraph.cpp: typo in comment
+
+2012-11-15 17:35  Sandro Santilli <strk@keybit.net>
+
+	* [r3725] HOWTO_RELEASE, capi/geos_c.h.in, configure.in,
+	  include/geos/version.h.vc: Prepare codebase for next 3.3 release
+	  (3.3.7)
+
+2012-11-15 16:37  Sandro Santilli <strk@keybit.net>
+
+	* [r3723] ChangeLog: Updated ChangeLog for 3.3.6 release
+
 2012-11-15 16:31  Sandro Santilli <strk@keybit.net>
 
 	* [r3722] NEWS, configure.in, swig/python/geos.py,
