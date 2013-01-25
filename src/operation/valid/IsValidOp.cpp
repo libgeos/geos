@@ -528,7 +528,7 @@ IsValidOp::checkShellNotNested(const LinearRing *shell, const Polygon *p,
 	int nholes = p->getNumInteriorRing();
 	if (nholes<=0) {
 		validErr=new TopologyValidationError(
-			TopologyValidationError::eNestedHoles,
+			TopologyValidationError::eNestedShells,
 			*shellPt);
 		return;
 	}
