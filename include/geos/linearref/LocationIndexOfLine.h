@@ -13,12 +13,12 @@
  *
  **********************************************************************
  *
- * Last port: linearref/LinearGeometryBuilder.java rev. 1.10
+ * Last port: linearref/LocationIndexOfLine.java r731
  *
  **********************************************************************/
 
-#ifndef GEOS_LINEARREF_LINEARGEOMETRYBUILDER_H
-#define GEOS_LINEARREF_LINEARGEOMETRYBUILDER_H
+#ifndef GEOS_LINEARREF_LOCATIONINDEXOFLINE_H
+#define GEOS_LINEARREF_LOCATIONINDEXOFLINE_H
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Geometry.h>

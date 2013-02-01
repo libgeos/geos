@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: linearref/LengthIndexedLine.java rev. 1.35
+ * Last port: linearref/LengthIndexedLine.java r731
  *
  **********************************************************************/
 
