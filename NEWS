@@ -3,6 +3,7 @@ Changes in 3.3.8
 
 - Bug fixes / improvements
     - IsValidOp: throw proper error on nested shells (#608)
+    - Fix header guards (#617, #618, #619)
 
 Changes in 3.3.7
 2013-01-22 
