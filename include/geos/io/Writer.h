@@ -35,6 +35,7 @@ namespace io {
 class GEOS_DLL Writer {
 public:
 	Writer();
+	Writer(std::size_t initial_string_buffer_size);
 	~Writer();
 	void write(std::string txt);
 	std::string toString();
