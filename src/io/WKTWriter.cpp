@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -313,24 +313,22 @@ WKTWriter::appendPointText(const Coordinate* coordinate, int /*level*/,
 	}
 }
 
-/* pritected */
+/* protected */
 void
 WKTWriter::appendCoordinate(const Coordinate* coordinate,
 		Writer *writer)
 {
-	string out="";
-	out+=writeNumber(coordinate->x);
-	out+=" ";
-	out+=writeNumber(coordinate->y);
-    if( outputDimension == 3 )
-    {
-        out+=" ";
-        if( ISNAN(coordinate->z) )
-            out+=writeNumber(0.0);
-        else
-            out+=writeNumber(coordinate->z);
-    }
-	writer->write(out);
+	writer->write(writeNumber(coordinate->x));
+	writer->write(" ");
+	writer->write(writeNumber(coordinate->y));
+	if( outputDimension == 3 )
+	{
+		writer->write(" ");
+		if( ISNAN(coordinate->z) )
+			writer->write(writeNumber(0.0));
+		else
+			writer->write(writeNumber(coordinate->z));
+	}
 }
 
 /* protected */
@@ -342,7 +340,7 @@ WKTWriter::writeNumber(double d) {
   if ( ! trim ) ss << std::fixed;
   ss << std::setprecision(decimalPlaces >= 0 ? decimalPlaces : 0) << d;
 
-	return ss.str();
+  return ss.str();
 }
 
 void
