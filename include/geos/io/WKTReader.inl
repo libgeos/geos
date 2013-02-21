@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -30,10 +30,10 @@ namespace geos {
 namespace io {
 
 INLINE
-WKTReader::WKTReader(const geom::GeometryFactory *gf)
+WKTReader::WKTReader(const geom::GeometryFactory &gf)
 	:
-	geometryFactory(gf),
-	precisionModel(gf->getPrecisionModel())
+	geometryFactory(&gf),
+	precisionModel(gf.getPrecisionModel())
 {
 #if GEOS_DEBUG
     std::cerr << "\nGEOS_DEBUG: WKTReader::WKTReader(const GeometryFactory *gf)\n";

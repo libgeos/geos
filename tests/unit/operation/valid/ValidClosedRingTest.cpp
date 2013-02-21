@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::operation::valid::IsValidOp class
 // Ported from JTS junit/operation/valid/ValidClosedRingTest.java rev. 1.1
 
@@ -44,7 +44,7 @@ namespace tut
         geos::io::WKTReader rdr;
 
         test_validclosedring_data()
-			: pm_(1), factory_(&pm_, 0), rdr(&factory_)
+			: pm_(1), factory_(&pm_, 0), rdr(factory_)
         {}
 
 	GeomPtr fromWKT(const std::string& wkt)

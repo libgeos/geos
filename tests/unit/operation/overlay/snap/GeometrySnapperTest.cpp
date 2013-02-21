@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::operation::overlay::snap::GeometrySnapper class.
 
 // tut
@@ -33,7 +33,7 @@ namespace tut
         test_geometrysnapper_data()
                 :
                 factory(), // initialize before use!
-                reader(&factory)
+                reader(factory)
         {
         }
     };

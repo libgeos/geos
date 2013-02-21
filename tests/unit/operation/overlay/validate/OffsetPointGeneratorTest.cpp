@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::operation::overlay::validate::OffsetPointGenerator class.
 
 // tut
@@ -38,7 +38,7 @@ namespace tut
 		test_offsetpointgenerator_data()
 			:
 			gf(),
-			wktreader(&gf)
+			wktreader(gf)
 		{
 		}
 
@@ -66,7 +66,7 @@ namespace tut
 		}
 
 	};
-	
+
 
 	typedef test_group<test_offsetpointgenerator_data> group;
 	typedef group::object object;

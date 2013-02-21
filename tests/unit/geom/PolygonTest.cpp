@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::geom::Polygon class.
 
 #include <tut.hpp>
@@ -42,8 +42,8 @@ namespace tut
 		PolygonPtr poly_;
 		const size_t poly_size_;
 
-		test_polygon_data() 
-			: pm_(1), factory_(&pm_, 0), reader_(&factory_),
+		test_polygon_data()
+			: pm_(1), factory_(&pm_, 0), reader_(factory_),
                 empty_poly_(factory_.createPolygon()), poly_size_(7)
 		{
 			// Create non-empty LinearRing
@@ -52,7 +52,7 @@ namespace tut
 			poly_ = dynamic_cast<PolygonPtr>(geo);
 		}
 
-        ~test_polygon_data() 
+        ~test_polygon_data()
         {
             // FREE MEMORY
             factory_.destroyGeometry(poly_);
@@ -107,11 +107,11 @@ namespace tut
 			// Exterior (clone is required here because Polygon takes ownership)
 			GeometryPtr geo = ring.clone();
 			LinearRingPtr exterior = dynamic_cast<LinearRingPtr>(geo);
-			
+
 			// Create non-empty Polygon
 			//geos::geom::Polygon poly(exterior, 0, &factory_);
 			PolygonAutoPtr poly(factory_.createPolygon(exterior, 0));
-			
+
 			ensure( !poly->isEmpty() );
 			ensure( poly->isSimple() );
 			ensure( poly->isValid() );
@@ -183,7 +183,7 @@ namespace tut
 	template<>
 	void object::test<7>()
 	{
-		GeometryPtr boundary = empty_poly_->getBoundary();	
+		GeometryPtr boundary = empty_poly_->getBoundary();
 		ensure( boundary != 0 );
 		ensure( boundary->isEmpty() );
 		factory_.destroyGeometry(boundary);
@@ -194,7 +194,7 @@ namespace tut
 	template<>
 	void object::test<8>()
 	{
-		GeometryPtr hull = empty_poly_->convexHull();	
+		GeometryPtr hull = empty_poly_->convexHull();
 		ensure( hull != 0 );
 		ensure( hull->isEmpty() );
 		factory_.destroyGeometry(hull);
@@ -222,7 +222,7 @@ namespace tut
 	void object::test<11>()
 	{
 		ensure_equals( empty_poly_->getBoundaryDimension(), geos::geom::Dimension::L );
-	}	
+	}
 
 	// Test of getNumPoints() for empty Polygon
 	template<>
@@ -247,7 +247,7 @@ namespace tut
 	{
 		ensure_equals( empty_poly_->getArea(), 0.0 );
 	}
-    
+
     // Test of isEmpty() for non-empty Polygon
     template<>
     template<>
@@ -264,7 +264,7 @@ namespace tut
 	{
 		ensure( poly_ != 0 );
 
-		GeometryPtr envelope = poly_->getEnvelope();	
+		GeometryPtr envelope = poly_->getEnvelope();
 		ensure( envelope != 0 );
 		ensure( !envelope->isEmpty() );
 		ensure_equals( envelope->getDimension(), geos::geom::Dimension::A );
@@ -280,7 +280,7 @@ namespace tut
 	{
 		ensure( poly_ != 0 );
 
-		GeometryPtr boundary = poly_->getBoundary();	
+		GeometryPtr boundary = poly_->getBoundary();
 		ensure( boundary != 0 );
 
 		// OGC 05-126, Version: 1.1.0, Chapter 6.1.10 Surface
@@ -297,7 +297,7 @@ namespace tut
 	{
 		ensure( poly_ != 0 );
 
-		GeometryPtr hull = poly_->convexHull();	
+		GeometryPtr hull = poly_->convexHull();
 		ensure( hull != 0 );
 		ensure( !hull->isEmpty() );
 		ensure_equals( hull->getGeometryTypeId(), geos::geom::GEOS_POLYGON );
@@ -365,7 +365,7 @@ namespace tut
 		ensure( poly_ != 0 );
 		ensure( poly_->getArea() != 0.0 );
 	}
-	
+
 	// Test of getCoordinates() for non-empty Polygon
     template<>
     template<>
@@ -430,7 +430,7 @@ namespace tut
 		geo = reader_.read("POLYGON ((0 0, 100 0, 100 100, 0 100, 0 0), (1 1, 1 10, 10 10, 10 1, 1 1) )");
 		ensure( geo != 0 );
 		ensure_equals( geo->getGeometryTypeId(), geos::geom::GEOS_POLYGON );
-		
+
 		PolygonPtr poly = dynamic_cast<PolygonPtr>(geo);
 		ensure( poly != 0 );
 		ensure_equals( poly->getNumInteriorRing(), holesNum );
@@ -498,7 +498,7 @@ namespace tut
     template<>
     template<>
     void object::test<34>()
-	{		
+	{
 		PointPtr point = empty_poly_->getCentroid();
 		ensure( point == 0 );
 	}
@@ -507,7 +507,7 @@ namespace tut
     template<>
     template<>
     void object::test<35>()
-	{	
+	{
 		geos::geom::Coordinate centroid;
 		bool isCentroid = empty_poly_->getCentroid(centroid);
 		ensure( !isCentroid );
@@ -531,7 +531,7 @@ namespace tut
     template<>
     template<>
     void object::test<37>()
-	{	
+	{
 		geos::geom::Coordinate centroid;
 		bool isCentroid = poly_->getCentroid(centroid);
 		ensure( isCentroid );

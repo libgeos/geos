@@ -1,5 +1,5 @@
-// 
-// Test Suite for geos::io::WKBReader 
+//
+// Test Suite for geos::io::WKBReader
 // Uses geos::io::WKTReader to check correctness.
 // Uses geos::io::WKBWriter to check correctness.
 // Currently only tests 2D geoms of all (7) types.
@@ -47,7 +47,7 @@ namespace tut
 			xdrwkbwriter(2, geos::io::WKBConstants::wkbXDR),
 			// 2D only, NDR (little endian)
 			ndrwkbwriter(2, geos::io::WKBConstants::wkbNDR),
-			wktreader(&gf)
+			wktreader(gf)
 		{}
 
 		void testInputOutput(const std::string& WKT,
@@ -101,7 +101,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<1>()
-	{         
+	{
 		testInputOutput(
 
 			// WKT
@@ -120,7 +120,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<2>()
-	{         
+	{
 
 		testInputOutput(
 
@@ -141,7 +141,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<3>()
-	{         
+	{
 		testInputOutput(
 
 			// WKT
@@ -161,7 +161,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<4>()
-	{         
+	{
 
 		testInputOutput(
 
@@ -182,7 +182,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<5>()
-	{         
+	{
 
 		testInputOutput(
 
@@ -203,7 +203,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<6>()
-	{         
+	{
 
 		testInputOutput(
 
@@ -220,11 +220,11 @@ namespace tut
 
 	}
 
-	// 7 - Read a collection 
+	// 7 - Read a collection
 	template<>
 	template<>
 	void object::test<7>()
-	{         
+	{
 
 		testInputOutput(
 

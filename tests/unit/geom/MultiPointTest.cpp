@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::geom::MultiPoint class.
 
 // tut
@@ -36,7 +36,7 @@ namespace tut
 
 		test_multipoint_data()
 			:
-			pm_(1.0), factory_(&pm_, 0), reader_(&factory_),
+			pm_(1.0), factory_(&pm_, 0), reader_(factory_),
 			empty_mp_(factory_.createMultiPoint()), mp_size_(5)
 		{
 			// Create non-empty MultiPoint
@@ -72,7 +72,7 @@ namespace tut
 	{
 		const size_t size0 = 0;
 		MultiPointAutoPtr mp(factory_.createMultiPoint());
-		
+
 		ensure( mp->isEmpty() );
 		ensure( mp->isSimple() );
 		ensure( mp->isValid() );
@@ -89,7 +89,7 @@ namespace tut
 		const size_t size0 = 0;
 		MultiPointAutoPtr copy(dynamic_cast<geos::geom::MultiPoint*>(empty_mp_->clone()));
 		ensure( 0 != copy.get() );
-		
+
 		ensure( copy->isEmpty() );
 		ensure( copy->isSimple() );
 		ensure( copy->isValid() );
@@ -147,7 +147,7 @@ namespace tut
 	template<>
 	void object::test<7>()
 	{
-		GeometryPtr envelope = empty_mp_->getEnvelope();	
+		GeometryPtr envelope = empty_mp_->getEnvelope();
 		ensure( envelope != 0 );
 		ensure( envelope->isEmpty() );
 		factory_.destroyGeometry(envelope);
@@ -158,7 +158,7 @@ namespace tut
 	template<>
 	void object::test<8>()
 	{
-		GeometryPtr boundary = empty_mp_->getBoundary();	
+		GeometryPtr boundary = empty_mp_->getBoundary();
 		ensure( boundary != 0 );
 		ensure( boundary->isEmpty() );
 		factory_.destroyGeometry(boundary);
@@ -169,7 +169,7 @@ namespace tut
 	template<>
 	void object::test<9>()
 	{
-		GeometryPtr hull = empty_mp_->convexHull();	
+		GeometryPtr hull = empty_mp_->convexHull();
 		ensure( hull != 0 );
 		ensure( hull->isEmpty() );
 		factory_.destroyGeometry(hull);
@@ -206,7 +206,7 @@ namespace tut
 	void object::test<13>()
 	{
 		ensure_equals( empty_mp_->getBoundaryDimension(), geos::geom::Dimension::False );
-	}	
+	}
 
 	// Test of getNumPoints() for empty MultiPoint
 	template<>
@@ -248,7 +248,7 @@ namespace tut
 	{
 		ensure(mp_ != 0);
 
-		GeometryPtr envelope = mp_->getEnvelope();	
+		GeometryPtr envelope = mp_->getEnvelope();
 		ensure( envelope != 0 );
 		ensure( !envelope->isEmpty() );
 		ensure_equals( envelope->getDimension(), geos::geom::Dimension::A );
@@ -264,7 +264,7 @@ namespace tut
 	{
 		ensure(mp_ != 0);
 
-		GeometryPtr boundary = mp_->getBoundary();	
+		GeometryPtr boundary = mp_->getBoundary();
 		ensure( boundary != 0 );
 
 		// OGC 05-126, Version: 1.1.0, Chapter 6.1.5 MultiPoint
@@ -281,7 +281,7 @@ namespace tut
 	{
 		ensure(mp_ != 0);
 
-		GeometryPtr hull = mp_->convexHull();	
+		GeometryPtr hull = mp_->convexHull();
 		ensure( hull != 0 );
 		ensure( !hull->isEmpty() );
 		ensure_equals( hull->getGeometryTypeId(), geos::geom::GEOS_LINESTRING );
@@ -373,7 +373,7 @@ namespace tut
 		}
 		catch (geos::io::ParseException const& e)
 		{
-			const char* msg = e.what(); // ok 
+			const char* msg = e.what(); // ok
 			ensure( msg != 0 );
 		}
 	}

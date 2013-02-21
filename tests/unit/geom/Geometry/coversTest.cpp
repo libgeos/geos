@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for Geometry's covers() and coveredBy() functions
 
 // tut
@@ -25,7 +25,7 @@ struct test_contains_data
 	geos::io::WKTReader reader;
 
 	test_contains_data()
-	    : reader(&factory)
+	    : reader(factory)
 	{}
 };
 

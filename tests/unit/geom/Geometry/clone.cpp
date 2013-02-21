@@ -1,5 +1,5 @@
-// 
-// Test Suite for Geometry's clone() 
+//
+// Test Suite for Geometry's clone()
 
 // tut
 #include <tut.hpp>
@@ -25,7 +25,7 @@ struct test_geometry_clone_data
 	geos::io::WKTReader reader;
 
 	test_geometry_clone_data()
-	    : reader(&factory)
+	    : reader(factory)
 	{}
 };
 

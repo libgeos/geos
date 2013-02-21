@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::operation::geounion::UnaryUnionOp class.
 
 // tut
@@ -36,7 +36,7 @@ namespace tut
 
         test_unaryuniontest_data()
           : gf(),
-            wktreader(&gf)
+            wktreader(gf)
         {
           wktwriter.setTrim(true);
         }
@@ -136,7 +136,7 @@ namespace tut
     template<>
     void object::test<4>()
     {
-        static char const* const geoms[] = 
+        static char const* const geoms[] =
         {
             "POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))",
             "MULTIPOLYGON (((20 0, 20 10, 40 10, 40 0, 20 0)),((5 5, 5 8, 8 8, 8 5, 5 5)))",
@@ -154,7 +154,7 @@ namespace tut
     template<>
     void object::test<5>()
     {
-        static char const* const geoms[] = 
+        static char const* const geoms[] =
         {
             "LINESTRING (40 60, 120 110)",
             "POINT (120 110)",
@@ -170,7 +170,7 @@ namespace tut
     template<>
     void object::test<6>()
     {
-        static char const* const geoms[] = 
+        static char const* const geoms[] =
         {
             "LINESTRING (0 0, 10 0, 5 -5, 5 5)",
             NULL

@@ -1,5 +1,5 @@
 // $Id$
-// 
+//
 // Test Suite for geos::noding::OrientedCoordinateArray class.
 
 #include <tut.hpp>
@@ -34,7 +34,7 @@ namespace tut
         typedef std::auto_ptr<Geometry> GeomPtr;
 
         test_orientedcoordinatearray_data()
-          : pm_(), factory_(&pm_), reader_(&factory_) {}
+          : pm_(), factory_(&pm_), reader_(factory_) {}
 
         CoordSeqPtr coords_from_wkt(const char *wkt) {
           GeomPtr g ( reader_.read(wkt) );

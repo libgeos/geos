@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::precision::SimpleGeometryPrecisionReducer class.
 
 // tut
@@ -35,7 +35,7 @@ namespace tut
             pm_float_(),
             pm_fixed_(1),
             factory_(&pm_float_, 0),
-            reader_(&factory_),
+            reader_(factory_),
             reducer_(&pm_fixed_),
             reducer2_(&pm_fixed_)
         {

@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::operation::linemerge::LineMerger class.
 
 // tut
@@ -42,7 +42,7 @@ namespace tut
     LineVect* mrgGeoms;
 
     test_linemerger_data()
-      : gf(), wktreader(&gf), wktwriter(), mrgGeoms(0)
+      : gf(), wktreader(gf), wktwriter(), mrgGeoms(0)
     {
       wktwriter.setTrim(true);
     }
@@ -129,7 +129,7 @@ namespace tut
 
       return false;
     }
- 
+
 
 
   private:

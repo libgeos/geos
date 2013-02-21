@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::geom::LinearRing class.
 
 // tut
@@ -48,7 +48,7 @@ namespace tut
 		const size_t ring_size_;
 
 		test_linearring_data()
-			: pm_(1000), factory_(&pm_, 0), reader_(&factory_),
+			: pm_(1000), factory_(&pm_, 0), reader_(factory_),
 			empty_ring_(new geos::geom::CoordinateArraySequence(), &factory_),
 			ring_size_(7)
 		{
@@ -173,7 +173,7 @@ namespace tut
 	template<>
 	void object::test<8>()
 	{
-		GeometryPtr envelope = empty_ring_.getEnvelope();	
+		GeometryPtr envelope = empty_ring_.getEnvelope();
 		ensure( envelope != 0 );
 		ensure( envelope->isEmpty() );
 		factory_.destroyGeometry(envelope);
@@ -184,7 +184,7 @@ namespace tut
 	template<>
 	void object::test<9>()
 	{
-		GeometryPtr boundary = empty_ring_.getBoundary();	
+		GeometryPtr boundary = empty_ring_.getBoundary();
 		ensure( boundary != 0 );
 		ensure( boundary->isEmpty() );
 		factory_.destroyGeometry(boundary);
@@ -195,7 +195,7 @@ namespace tut
 	template<>
 	void object::test<10>()
 	{
-		GeometryPtr hull = empty_ring_.convexHull();	
+		GeometryPtr hull = empty_ring_.convexHull();
 		ensure( hull != 0 );
 		ensure( hull->isEmpty() );
 		factory_.destroyGeometry(hull);
@@ -223,7 +223,7 @@ namespace tut
 	void object::test<13>()
 	{
 		ensure_equals( empty_ring_.getBoundaryDimension(), geos::geom::Dimension::False );
-	}	
+	}
 
 	// Test of getNumPoints() for empty LinearRing
 	template<>
@@ -265,7 +265,7 @@ namespace tut
 	{
 		ensure(ring_ != 0);
 		ensure( ring_->isClosed() );
-		ensure( ring_->isRing() );		
+		ensure( ring_->isRing() );
 	}
 
     // Test of getEnvelope() for non-empty LinearRing
@@ -275,7 +275,7 @@ namespace tut
 	{
 		ensure(ring_ != 0);
 
-		GeometryPtr envelope = ring_->getEnvelope();	
+		GeometryPtr envelope = ring_->getEnvelope();
 		ensure( envelope != 0 );
 		ensure( !envelope->isEmpty() );
 		ensure_equals( envelope->getDimension(), geos::geom::Dimension::A );
@@ -291,7 +291,7 @@ namespace tut
 	{
 		ensure(ring_ != 0);
 
-		GeometryPtr boundary = ring_->getBoundary();	
+		GeometryPtr boundary = ring_->getBoundary();
 		ensure( boundary != 0 );
 
 		// OGC 05-126, Version: 1.1.0, Chapter 6.1.6 Curve
@@ -308,7 +308,7 @@ namespace tut
 	{
 		ensure(ring_ != 0);
 
-		GeometryPtr hull = ring_->convexHull();	
+		GeometryPtr hull = ring_->convexHull();
 		ensure( hull != 0 );
 		ensure( !hull->isEmpty() );
 		ensure_equals( hull->getGeometryTypeId(), geos::geom::GEOS_POLYGON );
@@ -394,7 +394,7 @@ namespace tut
 		}
 		catch (geos::util::IllegalArgumentException const& e)
 		{
-			const char* msg = e.what(); // ok 
+			const char* msg = e.what(); // ok
 			ensure( msg != 0 );
 		}
 	}
@@ -422,11 +422,11 @@ namespace tut
 		}
 		catch (geos::util::IllegalArgumentException const& e)
 		{
-			const char* msg = e.what(); // ok 
+			const char* msg = e.what(); // ok
 			ensure( msg != 0 );
 		}
 	}
-	
+
 	// Test of getGeometryType() for non-empty LinearRing
     template<>
     template<>

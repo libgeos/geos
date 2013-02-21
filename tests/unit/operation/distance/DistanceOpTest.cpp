@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::operation::distance::DistanceOp class.
 
 // tut
@@ -35,7 +35,7 @@ namespace tut
 		typedef std::auto_ptr<geos::geom::CoordinateSequence> CSPtr;
 
 		test_distanceop_data()
-            : gf(), wktreader(&gf)
+            : gf(), wktreader(gf)
 		{}
 	};
 

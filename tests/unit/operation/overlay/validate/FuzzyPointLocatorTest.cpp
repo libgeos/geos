@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::operation::overlay::validate::FuzzyPointLocator class.
 
 
@@ -36,14 +36,14 @@ namespace tut
 		test_fuzzypointlocator_data()
 			:
 			gf(),
-			wktreader(&gf),
+			wktreader(gf),
 			wkbreader(gf)
 		{
 			std::string wkt("POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))");
 			g.reset(wktreader.read(wkt));
 		}
 	};
-	
+
 
 	typedef test_group<test_fuzzypointlocator_data> group;
 	typedef group::object object;
@@ -65,11 +65,11 @@ namespace tut
 		FuzzyPointLocator locator(*g, 10);
 
 		ensure_equals(locator.getLocation(Coordinate(10, 0)),
-			Location::BOUNDARY); 
+			Location::BOUNDARY);
 
 		// 8 units away from boundary
 		ensure_equals(locator.getLocation(Coordinate(18, 5)),
-			Location::BOUNDARY); 
+			Location::BOUNDARY);
 	}
 
 	template<>
@@ -90,11 +90,11 @@ namespace tut
 
 		// 10 units away from boundary
 		ensure_equals(locator.getLocation(Coordinate(20, 2)),
-			Location::EXTERIOR); 
+			Location::EXTERIOR);
 
 		// 10 units away from boundary
 		ensure_equals(locator.getLocation(Coordinate(-10, 5)),
-			Location::EXTERIOR); 
+			Location::EXTERIOR);
 	}
 
 	template<>
@@ -109,11 +109,11 @@ namespace tut
 
 		// 5 units away from boundary
 		ensure_equals(locator.getLocation(Coordinate(5, 5)),
-			Location::BOUNDARY); 
+			Location::BOUNDARY);
 
 		// 2 units away from boundary
 		ensure_equals(locator.getLocation(Coordinate(2, 8)),
-			Location::BOUNDARY); 
+			Location::BOUNDARY);
 	}
 
 	template<>
@@ -128,11 +128,11 @@ namespace tut
 
 		// 5 units away from boundary
 		ensure_equals(locator.getLocation(Coordinate(5, 5)),
-			Location::INTERIOR); 
+			Location::INTERIOR);
 
 		// 3 units away from boundary
 		ensure_equals(locator.getLocation(Coordinate(3, 7)),
-			Location::INTERIOR); 
+			Location::INTERIOR);
 	}
 
 
@@ -150,7 +150,7 @@ namespace tut
 		FuzzyPointLocator locator(*g0, 0.00001);
 
 		// On the boundary ?
-		ensure_equals(locator.getLocation(pt), Location::BOUNDARY); 
+		ensure_equals(locator.getLocation(pt), Location::BOUNDARY);
 
 	}
 
@@ -170,7 +170,7 @@ namespace tut
 		FuzzyPointLocator locator(*g0, 0.000001);
 
 		// On the boundary ?
-		ensure_equals(locator.getLocation(pt), Location::INTERIOR); 
+		ensure_equals(locator.getLocation(pt), Location::INTERIOR);
 
 	}
 
@@ -190,7 +190,7 @@ namespace tut
 		FuzzyPointLocator locator(*g0, 0.000001);
 
 		// On the boundary ?
-		ensure_equals(locator.getLocation(pt), Location::EXTERIOR); 
+		ensure_equals(locator.getLocation(pt), Location::EXTERIOR);
 
 	}
 
