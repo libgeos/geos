@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::geom::GeometryFactory class.
 
 // tut
@@ -29,12 +29,12 @@
 /*!
  * \brief
  * Write brief comment for tut here.
- * 
+ *
  * Write detailed description for tut here.
- * 
+ *
  * \remarks
  * Write remarks for tut here.
- * 
+ *
  * \see
  * Separate items with the '|' character.
  */
@@ -58,7 +58,7 @@ namespace tut
         geos::io::WKTReader reader_;
 
         test_geometryfactory_data()
-            : x_(5), y_(10), z_(15), srid_(666), pm_(1.0), factory_(&pm_, srid_), reader_(&factory_)
+            : x_(5), y_(10), z_(15), srid_(666), pm_(1.0), factory_(&pm_, srid_), reader_(factory_)
         {}
     private:
         // Declare type as noncopyable
@@ -89,7 +89,7 @@ namespace tut
 		ensure( "createEmptyGeometry() returned null pointer.", geo != 0 );
 		ensure_equals( geo->getSRID() , gf.getSRID() );
 		ensure_equals( geo->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FLOATING );
-		
+
 		// FREE MEMORY
 		gf.destroyGeometry(geo);
 	}
@@ -118,7 +118,7 @@ namespace tut
 			ensure( "createEmptyGeometry() returned null pointer.", geo != 0 );
 			ensure_equals( geo->getSRID() , gf.getSRID() );
 			ensure_equals( geo->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FIXED );
-			
+
 			// FREE MEMORY
 			gf.destroyGeometry(geo);
 		}
@@ -146,7 +146,7 @@ namespace tut
 			ensure( "createEmptyGeometry() returned null pointer.", geo != 0 );
 			ensure_equals( geo->getSRID() , gf.getSRID() );
 			ensure_equals( geo->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FLOATING );
-			
+
 			// FREE MEMORY
 			gf.destroyGeometry(geo);
 		}
@@ -170,7 +170,7 @@ namespace tut
 		ensure( "createEmptyGeometry() returned null pointer.", geo != 0 );
 		ensure_equals( geo->getSRID() , gf.getSRID() );
 		ensure_equals( geo->getPrecisionModel()->getType(), PrecisionModel::FIXED );
-		
+
 		// FREE MEMORY
 		gf.destroyGeometry(geo);
 	}
@@ -192,7 +192,7 @@ namespace tut
 		ensure( "createEmptyGeometry() returned null pointer.", geo != 0 );
 		ensure_equals( geo->getSRID() , gf.getSRID() );
 		ensure_equals( geo->getPrecisionModel()->getType(), PrecisionModel::FIXED );
-		
+
 		// FREE MEMORY
 		gf.destroyGeometry(geo);
 	}
@@ -220,7 +220,7 @@ namespace tut
 
 		// TODO - mloskot
 		// http://geos.osgeo.org/pipermail/geos-devel/2006-March/001960.html
-		/*		
+		/*
 		ensure( geo->isSimple() );
 		ensure( geo->isValid() );
 
@@ -265,7 +265,7 @@ namespace tut
 		ensure_equals( pt->getGeometryTypeId(), geos::geom::GEOS_POINT );
 		ensure_equals( pt->getDimension(), geos::geom::Dimension::P );
 		ensure_equals( pt->getBoundaryDimension(), geos::geom::Dimension::False );
-		ensure_equals( pt->getNumPoints(), 0u );	
+		ensure_equals( pt->getNumPoints(), 0u );
 		ensure_equals( pt->getLength(), 0.0 );
 		ensure_equals( pt->getArea(), 0.0 );
 
@@ -318,7 +318,7 @@ namespace tut
 		ensure_equals( pt->getGeometryTypeId(), geos::geom::GEOS_POINT );
 		ensure_equals( pt->getDimension(), geos::geom::Dimension::P );
 		ensure_equals( pt->getBoundaryDimension(), geos::geom::Dimension::False );
-		ensure_equals( pt->getNumPoints(), 1u );	
+		ensure_equals( pt->getNumPoints(), 1u );
 		ensure_equals( pt->getLength(), 0.0 );
 		ensure_equals( pt->getArea(), 0.0 );
 
@@ -376,7 +376,7 @@ namespace tut
 		ensure_equals( pt->getGeometryTypeId(), geos::geom::GEOS_POINT );
 		ensure_equals( pt->getDimension(), geos::geom::Dimension::P );
 		ensure_equals( pt->getBoundaryDimension(), geos::geom::Dimension::False );
-		ensure_equals( pt->getNumPoints(), 1u );	
+		ensure_equals( pt->getNumPoints(), 1u );
 		ensure_equals( pt->getLength(), 0.0 );
 		ensure_equals( pt->getArea(), 0.0 );
 
@@ -432,7 +432,7 @@ namespace tut
 		ensure_equals( pt->getGeometryTypeId(), geos::geom::GEOS_POINT );
 		ensure_equals( pt->getDimension(), geos::geom::Dimension::P );
 		ensure_equals( pt->getBoundaryDimension(), geos::geom::Dimension::False );
-		ensure_equals( pt->getNumPoints(), 1u );	
+		ensure_equals( pt->getNumPoints(), 1u );
 		ensure_equals( pt->getLength(), 0.0 );
 		ensure_equals( pt->getArea(), 0.0 );
 
@@ -457,11 +457,11 @@ namespace tut
 		// TODO - mloskot
 		//http://geos.osgeo.org/pipermail/geos-devel/2006-March/001961.html
 		//ensure( lr->isClosed() );
-		
+
 		// TODO - mloskot
 		//http://geos.osgeo.org/pipermail/geos-devel/2006-March/001962.html
 		//ensure_equals( lr->getStartPoint(), lr->getEndPoint() );
-		
+
 		ensure_equals( lr->getGeometryTypeId(), geos::geom::GEOS_LINEARRING );
 		ensure_equals( lr->getDimension(), geos::geom::Dimension::L );
 		ensure_equals( lr->getBoundaryDimension(), geos::geom::Dimension::False );
@@ -500,7 +500,7 @@ namespace tut
 		ensure_equals( lr->getArea(), 0.0 );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(lr);	
+		factory_.destroyGeometry(lr);
 	}
 
 	// Test of createLinearRing(const CoordinateSequence& coordinates) const
@@ -517,7 +517,7 @@ namespace tut
 		ensure_equals( lr->getNumPoints(), size );
 		ensure( lr->isSimple() );
 		ensure( lr->getCoordinate() != 0 );
-		
+
 		ensure_equals( lr->getGeometryTypeId(), geos::geom::GEOS_LINEARRING );
 		ensure_equals( lr->getDimension(), geos::geom::Dimension::L );
 		ensure_equals( lr->getBoundaryDimension(), geos::geom::Dimension::False );
@@ -535,13 +535,13 @@ namespace tut
 	void object::test<15>()
 	{
 		LineStringPtr line = factory_.createLineString();
-		
+
 		ensure( "createLineString() returned null pointer.", line != 0 );
 		ensure( "createLineString() returned non-empty point.", line->isEmpty() );
 		ensure( line->isSimple() );
 		ensure( line->isValid() );
 		ensure( line->getCentroid() == 0 );
-		
+
 		// TODO - mloskot - waiting for some decision
 		// http://geos.osgeo.org/pipermail/geos-devel/2006-March/002006.html
 		//ensure( line->getCoordinate() == 0 );
@@ -600,7 +600,7 @@ namespace tut
 		ensure_equals( line->getArea(), 0.0 );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(line);	
+		factory_.destroyGeometry(line);
 	}
 
 	// Test of createLineString(const CoordinateSequence& coordinates) const
@@ -617,7 +617,7 @@ namespace tut
 		ensure_equals( line->getNumPoints(), size );
 		ensure( line->isSimple() );
 		ensure( line->getCoordinate() != 0 );
-		
+
 		ensure_equals( line->getGeometryTypeId(), geos::geom::GEOS_LINESTRING );
 		ensure_equals( line->getDimension(), geos::geom::Dimension::L );
 		ensure_equals( line->getBoundaryDimension(), geos::geom::Dimension::False );
@@ -719,7 +719,7 @@ namespace tut
 		ensure( poly->getLength() != 0.0 );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(poly);	
+		factory_.destroyGeometry(poly);
 	}
 
 	// Test of createPolygon(const LinearRing& shell, const std::vector<Geometry*>& holes) const
@@ -809,11 +809,11 @@ namespace tut
 		try
 		{
 			ensure( !col->isSimple() );
-			fail("IllegalArgumentException expected"); 
+			fail("IllegalArgumentException expected");
 		}
 		catch ( geos::util::IllegalArgumentException const& e )
 		{
-			const char* msg = e.what(); // ok 
+			const char* msg = e.what(); // ok
 			ensure( msg != 0 );
 		}
 
@@ -1054,7 +1054,7 @@ namespace tut
 		ensure( mp->isSimple() );
 		ensure_equals( mp->getNumGeometries(), size );
 		ensure_equals( mp->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT );
-		
+
 		// FREE MEMORY
 		factory_.destroyGeometry(mp);
 	}
@@ -1108,7 +1108,7 @@ namespace tut
 	void object::test<29>()
 	{
 		using geos::geom::Coordinate;
-		
+
 		const std::size_t size = 5;
 		const std::size_t lineSize = 2;
 
@@ -1150,7 +1150,7 @@ namespace tut
 	void object::test<30>()
 	{
 		using geos::geom::Coordinate;
-		
+
 		const std::size_t size = 5;
 		const std::size_t lineSize = 2;
 

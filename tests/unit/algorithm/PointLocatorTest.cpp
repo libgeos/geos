@@ -1,5 +1,5 @@
-// 
-// Test Suite for geos::algorithm::PointLocator 
+//
+// Test Suite for geos::algorithm::PointLocator
 // Ported from JTS junit/algorithm/PointLocator.java
 
 #include <tut.hpp>
@@ -43,7 +43,7 @@ namespace tut
 	//
 	static PrecisionModel pm;
 	static GeometryFactory gf(&pm);
-        static geos::io::WKTReader reader(&gf);
+        static geos::io::WKTReader reader(gf);
 
 	typedef std::auto_ptr<Geometry> GeomPtr;
 
@@ -65,7 +65,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<1>()
-	{         
+	{
 		runPtLocator(Location::INTERIOR, Coordinate(10, 10),
 		    "POLYGON ((0 0, 0 20, 20 20, 20 0, 0 0))");
 	}
@@ -74,7 +74,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<2>()
-	{         
+	{
 		runPtLocator(Location::INTERIOR, Coordinate(0, 0),
 			"POLYGON ((-40 80, -40 -80, 20 0, 20 -100, 40 40, 80 -80, 100 80, 140 -20, 120 140, 40 180,     60 40, 0 120, -20 -20, -40 80))");
 	}
@@ -83,7 +83,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<3>()
-	{         
+	{
 		runPtLocator(Location::BOUNDARY, Coordinate(0, 0),
                      "GEOMETRYCOLLECTION( LINESTRING(0 0, 10 10), LINEARRING(10 10, 10 20, 20 10, 10 10))");
 	}
@@ -92,11 +92,11 @@ namespace tut
 	template<>
 	template<>
 	void object::test<4>()
-	{         
+	{
 	    runPtLocator(Location::EXTERIOR, Coordinate(11, 11),
 	                     "LINEARRING(10 10, 10 20, 20 10, 10 10)");
 	}
-		      
+
 
 
 } // namespace tut

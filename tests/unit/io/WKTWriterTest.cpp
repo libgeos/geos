@@ -38,7 +38,7 @@ namespace tut
                 :
                 pm(1000.0),
                 gf(&pm),
-                wktreader(&gf)
+                wktreader(gf)
             {}
 
 	};
@@ -139,7 +139,7 @@ namespace tut
   {         
     PrecisionModel pm3(0.001);
     GeometryFactory gf3(&pm3);
-    WKTReader wktreader3(&gf3);
+    WKTReader wktreader3(gf3);
     GeomPtr geom ( wktreader3.read("POINT(123456 654321)") );
 
     std::string  result = wktwriter.write( geom.get() );

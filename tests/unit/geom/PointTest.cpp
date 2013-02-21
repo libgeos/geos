@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::geom::Point class.
 
 #include <tut.hpp>
@@ -44,14 +44,14 @@ namespace tut
 	PointPtr point_;
 
 	test_point_data()
-	    : pm_(1000), factory_(&pm_, 0), reader_(&factory_), empty_point_(factory_.createPoint())
+	    : pm_(1000), factory_(&pm_, 0), reader_(factory_), empty_point_(factory_.createPoint())
 	{
 	    // Create non-empty Point
 	    GeometryPtr geo = 0;
 	    geo = reader_.read("POINT(1.234 5.678)");
 	    point_ = dynamic_cast<PointPtr>(geo);
 	}
-	
+
 	~test_point_data()
 	{
 	    factory_.destroyGeometry(point_);
@@ -83,15 +83,15 @@ namespace tut
     {
 		using geos::geom::Coordinate;
 		using geos::geom::CoordinateArraySequence;
-		
+
 		CoordinateArraySequence* coords = new CoordinateArraySequence();
 		ensure( coords != 0 );
 		coords->add(Coordinate(1.234, 5.678));
 
 		PointAutoPtr point(factory_.createPoint(coords));
 		ensure( !point->isEmpty() );
-        
-        // currently the empty CoordinateArraySequence constructor 
+
+        // currently the empty CoordinateArraySequence constructor
         // produces a dimension 3 sequence.
         ensure( point->getCoordinateDimension() == 3 );
     }
@@ -122,7 +122,7 @@ namespace tut
 			// TODO - mloskot - Bug #89: Possible memory leaks caused by Point constructor
 			//delete coords;
 
-			const char* msg = e.what(); // ok 
+			const char* msg = e.what(); // ok
 			ensure( msg != 0 );
 		}
     }
@@ -165,7 +165,7 @@ namespace tut
 	template<>
 	void object::test<8>()
 	{
-		GeometryPtr envelope = empty_point_->getEnvelope();	
+		GeometryPtr envelope = empty_point_->getEnvelope();
 		ensure( envelope != 0 );
 		ensure( envelope->isEmpty() );
 		factory_.destroyGeometry(envelope);
@@ -176,7 +176,7 @@ namespace tut
 	template<>
 	void object::test<9>()
 	{
-		GeometryPtr boundary = empty_point_->getBoundary();	
+		GeometryPtr boundary = empty_point_->getBoundary();
 		ensure( boundary != 0 );
 		ensure( boundary->isEmpty() );
 		factory_.destroyGeometry(boundary);
@@ -187,7 +187,7 @@ namespace tut
 	template<>
 	void object::test<10>()
 	{
-		GeometryPtr hull = empty_point_->convexHull();	
+		GeometryPtr hull = empty_point_->convexHull();
 		ensure( hull != 0 );
 		ensure( hull->isEmpty() );
 		factory_.destroyGeometry(hull);
@@ -224,7 +224,7 @@ namespace tut
 	void object::test<14>()
 	{
 		ensure_equals( empty_point_->getBoundaryDimension(), geos::geom::Dimension::False );
-	}	
+	}
 
 	// Test of getNumPoints() for empty Point
 	template<>
@@ -279,7 +279,7 @@ namespace tut
 	template<>
 	void object::test<21>()
 	{
-		GeometryPtr envelope = point_->getEnvelope();	
+		GeometryPtr envelope = point_->getEnvelope();
 		ensure( envelope != 0 );
 		ensure( !envelope->isEmpty() );
 		factory_.destroyGeometry(envelope);
@@ -290,7 +290,7 @@ namespace tut
 	template<>
 	void object::test<22>()
 	{
-		GeometryPtr boundary = point_->getBoundary();	
+		GeometryPtr boundary = point_->getBoundary();
 		ensure( boundary != 0 );
 		ensure( boundary->isEmpty() );
 		factory_.destroyGeometry(boundary);
@@ -301,7 +301,7 @@ namespace tut
 	template<>
 	void object::test<23>()
 	{
-		GeometryPtr hull = point_->convexHull();	
+		GeometryPtr hull = point_->convexHull();
 		ensure( hull != 0 );
 		ensure( !hull->isEmpty() );
 		factory_.destroyGeometry(hull);
@@ -338,7 +338,7 @@ namespace tut
 	void object::test<27>()
 	{
 		ensure_equals( empty_point_->getBoundaryDimension(), geos::geom::Dimension::False );
-	}	
+	}
 
 	// Test of getNumPoints() for non-empty Point
 	template<>
@@ -381,10 +381,10 @@ namespace tut
 	{
 		GeometryPtr p1 = reader_.read("POINT(1.234 5.678)");
 		GeometryPtr p2 = reader_.read("POINT(1.234 5.678)");
-		
+
 		// WARNING! If test fails, memory leaks occur.
 		ensure( p1->equals(p2) );
-		
+
 		// FREE MEMORY
 		factory_.destroyGeometry(p1);
 		factory_.destroyGeometry(p2);
@@ -397,10 +397,10 @@ namespace tut
 	{
 		GeometryPtr p1 = reader_.read("POINT(1.23 5.67)");
 		GeometryPtr p2 = reader_.read("POINT(1.23 5.67)");
-		
+
 		// WARNING! If test fails, memory leaks occur.
 		ensure( p1->equals(p2) );
-		
+
 		// FREE MEMORY
 		factory_.destroyGeometry(p1);
 		factory_.destroyGeometry(p2);
@@ -413,10 +413,10 @@ namespace tut
 	{
 		GeometryPtr p1 = reader_.read("POINT(1.235 5.678)");
 		GeometryPtr p2 = reader_.read("POINT(1.234 5.678)");
-		
+
 		// WARNING! If test fails, memory leaks occur.
 		ensure( !p1->equals(p2) );
-		
+
 		// FREE MEMORY
 		factory_.destroyGeometry(p1);
 		factory_.destroyGeometry(p2);
@@ -429,10 +429,10 @@ namespace tut
 	{
 		GeometryPtr p1 = reader_.read("POINT(1.2334 5.678)");
 		GeometryPtr p2 = reader_.read("POINT(1.2333 5.678)");
-		
+
 		// WARNING! If test fails, memory leaks occur.
 		ensure( p1->equals(p2) );
-		
+
 		// FREE MEMORY
 		factory_.destroyGeometry(p1);
 		factory_.destroyGeometry(p2);
@@ -445,7 +445,7 @@ namespace tut
 	{
 		GeometryPtr p1 = reader_.read("POINT(1.2334 5.678)");
 		GeometryPtr p2 = reader_.read("POINT(1.2335 5.678)");
-		
+
 		// WARNING! If test fails, memory leaks occur.
 		ensure( !p1->equals(p2) );
 
@@ -464,7 +464,7 @@ namespace tut
 
 		// WARNING! If test fails, memory leaks occur.
 		ensure( !p1->equals(p2) );
-		
+
 		// FREE MEMORY
 		factory_.destroyGeometry(p1);
 		factory_.destroyGeometry(p2);
@@ -477,7 +477,7 @@ namespace tut
 	{
 		GeometryPtr p1 = reader_.read("POINT(1.2324 5.678)");
 		GeometryPtr p2 = reader_.read("POINT EMPTY");
-		
+
 		// WARNING! If test fails, memory leaks occur.
 		ensure( !p1->equals(p2) );
 

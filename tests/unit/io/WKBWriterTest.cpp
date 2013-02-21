@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::io::WKBWriter
 
 // tut
@@ -36,7 +36,7 @@ namespace tut
 			:
 			pm(1000.0),
 			gf(&pm),
-			wktreader(&gf),
+			wktreader(gf),
             wkbreader(gf)
 		{}
 
@@ -56,7 +56,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<1>()
-	{         
+	{
             geos::geom::Geometry *geom = wktreader.read("POINT(-117 33)");
 			std::stringstream result_stream;
 
@@ -84,7 +84,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<2>()
-	{         
+	{
             geos::geom::Geometry *geom = wktreader.read("POINT(-117 33 11)");
 			std::stringstream result_stream;
 
@@ -110,7 +110,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<3>()
-	{         
+	{
             geos::geom::Geometry *geom = wktreader.read("POINT(-117 33 11)");
 			std::stringstream result_stream;
 

@@ -1,5 +1,5 @@
 // $Id$
-// 
+//
 // Test Suite for geos::precision::GeometryPrecisionReducer class.
 
 // tut
@@ -40,7 +40,7 @@ namespace tut
             pm_fixed_(1),
             factory_(&pm_float_, 0),
             factory_fixed_(&pm_fixed_, 0),
-            reader_(&factory_),
+            reader_(factory_),
             reducer_(pm_fixed_),
             reducerKeepCollapse_(pm_fixed_),
             reducerChangePM_(factory_fixed_)

@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::operation::overlay::validate::OverlayResultValidator class.
 
 // tut
@@ -38,12 +38,12 @@ namespace tut
 		test_overlayresultvalidator_data()
 			:
 			gf(),
-			wktreader(&gf)
+			wktreader(gf)
 		{
 		}
 
 	};
-	
+
 
 	typedef test_group<test_overlayresultvalidator_data> group;
 	typedef group::object object;
@@ -154,7 +154,7 @@ namespace tut
 
 	template<>
 	template<>
-	void object::test<6>() 
+	void object::test<6>()
 	{
 
 		std::string wkt0("POLYGON ((20.0 40.0, 20.0 200.0, 180.0 200.0, 180.0 120.0, 140.0 120.0, 180.0 119.0, 180.0 40.0, 20.0 40.0), (140.0 160.0, 80.0 120.0, 140.0 80.0, 140.0 160.0))");

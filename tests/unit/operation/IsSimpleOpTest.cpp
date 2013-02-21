@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::operation::IsSimpleOp class
 // Ported from JTS junit/operation/IsSimpleTest.java
 
@@ -32,7 +32,7 @@ namespace tut
         double tolerance_;
 
         test_issimpleop_data()
-			: pm_(1), factory_(&pm_, 0), reader_(&factory_), tolerance_(0.00005)
+			: pm_(1), factory_(&pm_, 0), reader_(factory_), tolerance_(0.00005)
         {}
     };
 

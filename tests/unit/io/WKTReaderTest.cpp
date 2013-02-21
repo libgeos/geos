@@ -1,5 +1,5 @@
-// 
-// Test Suite for geos::io::WKTReader 
+//
+// Test Suite for geos::io::WKTReader
 
 // tut
 #include <tut.hpp>
@@ -36,7 +36,7 @@ namespace tut
 			:
 			pm(1.0),
 			gf(&pm),
-			wktreader(&gf)
+			wktreader(gf)
 		{
             wktwriter.setOutputDimension( 3 );
         }
@@ -57,7 +57,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<1>()
-	{         
+	{
             GeomPtr geom(wktreader.read("POINT(-117 33)"));
             geos::geom::CoordinateSequence *coords = geom->getCoordinates();
 
@@ -71,7 +71,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<2>()
-	{         
+	{
             GeomPtr geom(wktreader.read("POINT(-117 33 10)"));
             geos::geom::CoordinateSequence *coords = geom->getCoordinates();
 
@@ -84,7 +84,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<3>()
-	{         
+	{
             GeomPtr geom(wktreader.read("LINESTRING(-117 33, -116 34)"));
             geos::geom::CoordinateSequence *coords = geom->getCoordinates();
 
@@ -97,13 +97,13 @@ namespace tut
 	template<>
 	template<>
 	void object::test<4>()
-	{         
+	{
             GeomPtr geom(wktreader.read("LINESTRING ZM (-117 33 2 3, -116 34 4 5)"));
             geos::geom::CoordinateSequence *coords = geom->getCoordinates();
 
             ensure( coords->getDimension() == 3 );
 
-            ensure_equals( wktwriter.write(geom.get()), 
+            ensure_equals( wktwriter.write(geom.get()),
                            std::string("LINESTRING Z (-117 33 2, -116 34 4)") );
 
             delete coords;
@@ -113,9 +113,9 @@ namespace tut
 	template<>
 	template<>
 	void object::test<5>()
-	{         
+	{
             GeomPtr geom(wktreader.read("LineString (-117 33 2, -116 34 4)"));
-            ensure_equals( wktwriter.write(geom.get()), 
+            ensure_equals( wktwriter.write(geom.get()),
                            std::string("LINESTRING Z (-117 33 2, -116 34 4)") );
     }
 
@@ -123,7 +123,7 @@ namespace tut
     template<>
     template<>
     void object::test<6>()
-    {         
+    {
         GeomPtr geom;
 
         try {
@@ -141,7 +141,7 @@ namespace tut
     template<>
     template<>
     void object::test<7>()
-    {         
+    {
         GeomPtr geom;
 
         try
@@ -151,7 +151,7 @@ namespace tut
             namespace gio = geos::io;
             ggm::PrecisionModel pm(ggm::PrecisionModel::FLOATING);
             ggm::GeometryFactory gf(&pm);
-            gio::WKTReader wktReader(&gf);
+            gio::WKTReader wktReader(gf);
             const std::string str = " POINT (0 0) ";
             geom.reset(wktReader.read(str)); //HERE IT FAILS
 

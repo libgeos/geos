@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::geom::LineString class.
 
 // tut
@@ -15,7 +15,7 @@
 #include <geos/io/WKTReader.h>
 #include <geos/util/GEOSException.h>
 #include <geos/util/IllegalArgumentException.h>
-// std 
+// std
 #include <string>
 #include <cmath>
 #include <cassert>
@@ -35,16 +35,16 @@ namespace tut
 		geos::geom::PrecisionModel pm_;
 		geos::geom::GeometryFactory factory_;
 		geos::io::WKTReader reader_;
-		
+
 		LineStringPtr empty_line_;
 
 		test_linestring_data()
-			: pm_(1000), factory_(&pm_, 0), reader_(&factory_),
+			: pm_(1000), factory_(&pm_, 0), reader_(factory_),
 			empty_line_(factory_.createLineString(new geos::geom::CoordinateArraySequence()))
 		{
             assert(0 != empty_line_);
         }
-		
+
         ~test_linestring_data()
         {
             factory_.destroyGeometry(empty_line_);
@@ -92,7 +92,7 @@ namespace tut
 
 		CoordArrayPtr pseq = new geos::geom::CoordinateArraySequence();
 		ensure( "sequence is null pointer.", pseq != 0 );
-		
+
 		pseq->add(Coordinate(0, 0, 0));
 		pseq->add(Coordinate(5, 5, 5));
 		pseq->add(Coordinate(10, 10, 10));
@@ -175,7 +175,7 @@ namespace tut
 
 		CoordArrayPtr pseq = new geos::geom::CoordinateArraySequence();
 		ensure( "sequence is null pointer.", pseq != 0 );
-		
+
 		pseq->add(Coordinate(0, 0, 0));
 		pseq->add(Coordinate(5, 5, 5));
 		pseq->add(Coordinate(10, 10, 10));
@@ -236,7 +236,7 @@ namespace tut
     void object::test<6>()
 	{
 		GeometryPtr geo = 0;
-		geo = empty_line_->getEnvelope();	
+		geo = empty_line_->getEnvelope();
 		ensure( geo != 0 );
 		ensure( geo->isEmpty() );
 		factory_.destroyGeometry(geo);
@@ -248,7 +248,7 @@ namespace tut
     void object::test<7>()
 	{
 		GeometryPtr geo = 0;
-		geo = empty_line_->getBoundary();	
+		geo = empty_line_->getBoundary();
 		ensure( geo != 0 );
 		ensure( geo->isEmpty() );
 		factory_.destroyGeometry(geo);
@@ -260,7 +260,7 @@ namespace tut
     void object::test<8>()
 	{
 		GeometryPtr geo = 0;
-		geo = empty_line_->convexHull();	
+		geo = empty_line_->convexHull();
 		ensure( geo != 0 );
 		ensure( geo->isEmpty() );
 		factory_.destroyGeometry(geo);
@@ -288,7 +288,7 @@ namespace tut
     void object::test<11>()
 	{
 		ensure_equals( empty_line_->getBoundaryDimension(), geos::geom::Dimension::P );
-	}	
+	}
 
 	// Test of getNumPoints() for empty linestring
     template<>
@@ -329,7 +329,7 @@ namespace tut
 		ensure( !line->isClosed() );
 		ensure( !line->isRing() );
         ensure( line->getCoordinateDimension() == 2 );
-		
+
 		// FREE TESTED LINESTRING
 		factory_.destroyGeometry(line);
 	}
@@ -344,8 +344,8 @@ namespace tut
 
 		LineStringPtr line = dynamic_cast<LineStringPtr>(geo);
 		ensure(line != 0);
-		
-		GeometryPtr envelope = line->getEnvelope();	
+
+		GeometryPtr envelope = line->getEnvelope();
 		ensure( envelope != 0 );
 		ensure( !envelope->isEmpty() );
 		ensure_equals( envelope->getDimension(), geos::geom::Dimension::A );
@@ -366,8 +366,8 @@ namespace tut
 
 		LineStringPtr line = dynamic_cast<LineStringPtr>(geo);
 		ensure(line != 0);
-		
-		GeometryPtr boundary = line->getBoundary();	
+
+		GeometryPtr boundary = line->getBoundary();
 		ensure( boundary != 0 );
 		ensure( !boundary->isEmpty() );
 		ensure_equals( boundary->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT );
@@ -388,8 +388,8 @@ namespace tut
 
 		LineStringPtr line = dynamic_cast<LineStringPtr>(geo);
 		ensure(line != 0);
-		
-		GeometryPtr hull = line->convexHull();	
+
+		GeometryPtr hull = line->convexHull();
 		ensure( hull != 0 );
 		ensure( !hull->isEmpty() );
 		ensure_equals( hull->getGeometryTypeId(), geos::geom::GEOS_POLYGON );

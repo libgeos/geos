@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::operation::valid::IsValidOp class
 // Ported from JTS junit/operation/valid/ValidSelfTouchingRingFormingHoleTest.java rev. 1.4
 
@@ -44,7 +44,7 @@ namespace tut
         geos::io::WKTReader rdr;
 
         test_ValidSelfTouchingRingFormingHole_data()
-			: pm_(1), factory_(&pm_, 0), rdr(&factory_)
+			: pm_(1), factory_(&pm_, 0), rdr(factory_)
         {}
 
 	GeomPtr fromWKT(const std::string& wkt)

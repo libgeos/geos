@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::operation::polygonize::Polygonizer class.
 //
 // Port of junit/operation/polygonize/PolygonizeTest.java
@@ -40,7 +40,7 @@ namespace tut
 
         test_polygonizetest_data()
           : gf(),
-            wktreader(&gf)
+            wktreader(gf)
         {
           wktwriter.setTrim(true);
         }
@@ -74,7 +74,7 @@ namespace tut
         }
 
         template <class T>
-        bool contains( T& cnt, const Geom* g) 
+        bool contains( T& cnt, const Geom* g)
         {
           for (typename T::iterator i=cnt.begin(), e=cnt.end(); i!=e; ++i) {
             const Geom* element = *i;
@@ -86,13 +86,13 @@ namespace tut
         }
 
         template <class T, class S>
-        bool compare( T& ex, S& ob) 
+        bool compare( T& ex, S& ob)
         {
           using std::cout;
           using std::endl;
 
           if ( ex.size() != ob.size() ) {
-            cout << "Expected " << ex.size() << " polygons, obtained " 
+            cout << "Expected " << ex.size() << " polygons, obtained "
                  << ob.size() << endl;
             return false;
           }
@@ -105,7 +105,7 @@ namespace tut
           }
 
           return true;
-        
+
         }
 
         bool doTest(const char* const* inputWKT, const char* const* expectWKT)
