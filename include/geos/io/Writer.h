@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -35,6 +35,7 @@ namespace io {
 class GEOS_DLL Writer {
 public:
 	Writer();
+	Writer(unsigned int buf_prealloc_size);
 	~Writer();
 	void write(std::string txt);
 	std::string toString();
