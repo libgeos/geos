@@ -30,6 +30,11 @@ Writer::Writer()
 	str="";
 }
 
+Writer::Writer(std::size_t initial_string_buffer_size)
+{
+	str.reserve(initial_string_buffer_size);
+}
+
 Writer::~Writer()
 {
 }
