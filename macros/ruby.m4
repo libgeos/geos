@@ -23,25 +23,25 @@ AC_DEFUN([AC_RUBY_DEVEL],
 		RUBY_VERSION=`$RUBY -e "puts RUBY_VERSION"`
 
 		dnl Get Ruby bin directory
-		RUBY_BIN_DIR=`$RUBY -rrbconfig -e 'puts Config::CONFIG[["bindir"]]'`
+		RUBY_BIN_DIR=`$RUBY -rrbconfig -e 'puts RbConfig::CONFIG[["bindir"]] || Config::CONFIG[["bindir"]]'`
 
     dnl Get Ruby site arch
-		RUBY_SITE_ARCH=`$RUBY -rrbconfig -e 'puts Config::CONFIG[["sitearch"]]'`
+		RUBY_SITE_ARCH=`$RUBY -rrbconfig -e 'puts RbConfig::CONFIG[["sitearch"]] || Config::CONFIG[["sitearch"]]'`
 
 		dnl Get Ruby include directory
-		RUBY_INCLUDE_DIR=`$RUBY -rrbconfig -e 'puts Config::CONFIG[["rubyhdrdir"]] || Config::CONFIG[["archdir"]]'`
+		RUBY_INCLUDE_DIR=`$RUBY -rrbconfig -e 'puts RbConfig::CONFIG[["rubyhdrdir"]] || Config::CONFIG[["archdir"]]'`
 	
 		dnl Get Ruby lib directory
-		RUBY_LIB_DIR=`$RUBY -rrbconfig -e 'puts Config::CONFIG[["libdir"]]'`
+		RUBY_LIB_DIR=`$RUBY -rrbconfig -e 'puts RbConfig::CONFIG[["libdir"]] || Config::CONFIG[["libdir"]]'`
 
 		dnl Get Ruby extensions directory
-		RUBY_EXTENSION_DIR=`$RUBY -rrbconfig -e 'puts Config::CONFIG[["sitearchdir"]]'`
+		RUBY_EXTENSION_DIR=`$RUBY -rrbconfig -e 'puts RbConfig::CONFIG[["sitearchdir"]] || Config::CONFIG[["sitearchdir"]]'`
 
 		dnl Get Ruby shared library name, this does not include the lib prefix or extension name
-		RUBY_SO_NAME=`$RUBY -rrbconfig -e 'puts Config::CONFIG[["RUBY_SO_NAME"]]'`
+		RUBY_SO_NAME=`$RUBY -rrbconfig -e 'puts puts RbConfig::CONFIG[["LIBRUBY_SO"]] || Config::CONFIG[["RUBY_SO_NAME"]]'`
 		
 		dnl Get Ruby shared libary name
-		RUBY_SHARED_LIB=`$RUBY -rrbconfig -e 'puts Config::CONFIG[["LIBRUBY"]]'`
+		RUBY_SHARED_LIB=`$RUBY -rrbconfig -e 'puts RbConfig::CONFIG[["LIBRUBY"]] || Config::CONFIG[["LIBRUBY"]]'`
 		
     AC_MSG_NOTICE([Ruby executable is '$RUBY'])
     AC_MSG_NOTICE([Ruby version is '$RUBY_VERSION'])
