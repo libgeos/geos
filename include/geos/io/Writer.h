@@ -35,6 +35,7 @@ namespace io {
 class GEOS_DLL Writer {
 public:
 	Writer();
+	void reserve(std::size_t capacity);
 	~Writer();
 	void write(const std::string& txt);
 	const std::string& toString();

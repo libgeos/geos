@@ -29,6 +29,12 @@ Writer::Writer()
 {
 }
 
+void
+Writer::reserve(std::size_t capacity)
+{
+  str.reserve(capacity);
+}
+
 Writer::~Writer()
 {
 }

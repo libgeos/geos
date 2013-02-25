@@ -45,6 +45,42 @@ namespace tut
     ensure_equals(writer.toString(), "Hello World!");
   }
 
+	template<>
+	template<>
+	void object::test<2>()
+	{         
+    geos::io::Writer writer;
+
+    writer.reserve(512);
+    writer.write("Hello ");
+    writer.write("World!");
+    ensure_equals(writer.toString(), "Hello World!");
+  }
+
+	template<>
+	template<>
+	void object::test<3>()
+	{         
+    geos::io::Writer writer;
+
+    writer.reserve(1);
+    writer.write("Hello ");
+    writer.write("World!");
+    ensure_equals(writer.toString(), "Hello World!");
+  }
+
+	template<>
+	template<>
+	void object::test<4>()
+	{         
+    geos::io::Writer writer;
+
+    writer.reserve(512);
+    writer.write("Hello World!");
+    writer.reserve(1);
+    ensure_equals(writer.toString(), "Hello World!");
+  }
+
 } // namespace tut
 
 
