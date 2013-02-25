@@ -71,6 +71,7 @@ geos_unit_SOURCES = \
 	io/WKBWriterTest.cpp \
 	io/WKTReaderTest.cpp \
 	io/WKTWriterTest.cpp \
+	io/WriterTest.cpp \
 	linearref/LengthIndexedLineTest.cpp \
 	noding/BasicSegmentStringTest.cpp \
 	noding/NodedSegmentStringTest.cpp \

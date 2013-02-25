@@ -36,8 +36,8 @@ class GEOS_DLL Writer {
 public:
 	Writer();
 	~Writer();
-	void write(std::string txt);
-	std::string toString();
+	void write(const std::string& txt);
+	const std::string& toString();
 private:
 	std::string str;
 };

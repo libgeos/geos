@@ -27,7 +27,6 @@ namespace io { // geos.io
 
 Writer::Writer()
 {
-	str="";
 }
 
 Writer::~Writer()
@@ -35,12 +34,12 @@ Writer::~Writer()
 }
 
 void
-Writer::write(string txt)
+Writer::write(const std::string& txt)
 {
-	str+=txt;
+	str.append(txt);
 }
 
-string
+const std::string&
 Writer::toString()
 {
 	return str;

@@ -16,7 +16,8 @@ Changes in 3.4.0
   - Signature of most functions taking an IntersectionMatrix changed
     to take it by reference rather than pointer.
   - GraphComponent::label is now a Label value (from a pointer)
-  -e NodedSegmentString takes ownership of CoordinateSenuence now
+  - NodedSegmentString takes ownership of CoordinateSenuence now
+  - io::Writer's toString() returns by const ref, write() takes a const ref
 - Bug fixes / improvements
   - Improve Buffer robustness by reducing input precision on topology
     exception (#605)
