@@ -41,6 +41,17 @@ WKTReader::WKTReader(const geom::GeometryFactory *gf)
 }
 
 INLINE
+WKTReader::WKTReader(const geom::GeometryFactory &gf)
+	:
+	geometryFactory(&gf),
+	precisionModel(gf.getPrecisionModel())
+{
+#if GEOS_DEBUG
+    std::cerr << "\nGEOS_DEBUG: WKTReader::WKTReader(const GeometryFactory &gf)\n";
+#endif
+}
+
+INLINE
 WKTReader::WKTReader()
 	:
 	geometryFactory(geom::GeometryFactory::getDefaultInstance()),

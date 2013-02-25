@@ -67,6 +67,9 @@ public:
 	 * so be sure you'll keep the factory alive for the
 	 * whole WKTReader and created Geometry life.
 	 */
+	WKTReader(const geom::GeometryFactory &gf);
+
+	/** @deprecated in 3.4.0 */
 	WKTReader(const geom::GeometryFactory *gf);
 
 	/**
