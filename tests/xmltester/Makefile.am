@@ -34,6 +34,7 @@ SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
 	$(srcdir)/tests/ticket/bug398.xml \
 	$(srcdir)/tests/ticket/bug434.xml \
 	$(srcdir)/tests/ticket/bug527.xml \
+	$(srcdir)/tests/ticket/bug582.xml \
 	$(srcdir)/tests/ticket/bug586.xml \
 	$(srcdir)/tests/ticket/bug599.xml \
 	$(srcdir)/tests/ticket/bug615.xml \

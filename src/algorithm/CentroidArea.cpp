@@ -38,7 +38,8 @@ namespace algorithm { // geos.algorithm
 void
 CentroidArea::add(const Geometry *geom)
 {
-	if(const Polygon *poly=dynamic_cast<const Polygon*>(geom)) {
+  if(geom->isEmpty()) return;
+	else if(const Polygon *poly=dynamic_cast<const Polygon*>(geom)) {
 		setBasePoint(poly->getExteriorRing()->getCoordinateN(0));
 		add(poly);
 	}
