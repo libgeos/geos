@@ -1,5 +1,5 @@
 Changes in 3.3.8
-2013-MM-DD
+2013-02-28
 
 - Bug fixes / improvements
     - IsValidOp: throw proper error on nested shells (#608)

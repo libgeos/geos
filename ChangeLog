@@ -1,3 +1,61 @@
+2013-02-28 09:45  Sandro Santilli <strk@keybit.net>
+
+	* [r3774] NEWS, src/algorithm/CentroidArea.cpp,
+	  tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/ticket/bug582.xml: Fix centroid computation
+	  for collections with empty components
+	  
+	  Fixes bug #582
+
+2013-02-21 10:25  Sandro Santilli <strk@keybit.net>
+
+	* [r3766] NEWS, src/io/WKTWriter.cpp: WKTWriter::appendCoordinate
+	  optimisation
+	  
+	  Modified the WKTWriter::appendCoordinate method to not create an
+	  intermediate std::string, but instead write directly into the
+	  Writer
+	  object. The result is a small performance improvement.
+	  
+	  Patch by Mats Taraldsvik <mats.taraldsvik@norkart.no>
+
+2013-02-01 06:37  Sandro Santilli <strk@keybit.net>
+
+	* [r3764] NEWS: Add header guard news
+
+2013-02-01 06:34  Sandro Santilli <strk@keybit.net>
+
+	* [r3763] include/geos/io/CLocalizer.h: Add header guard to
+	  CLocalizer (#619)
+
+2013-02-01 06:31  Sandro Santilli <strk@keybit.net>
+
+	* [r3761] include/geos/linearref/LocationIndexOfLine.h,
+	  src/linearref/LocationIndexOfLine.cpp: Fix header guard and port
+	  info in LocatioNIndexOfLine (#618)
+
+2013-02-01 06:27  Sandro Santilli <strk@keybit.net>
+
+	* [r3759] include/geos/geom/util/GeometryExtracter.h: Fix header
+	  guard in GeometryExtracter (#617)
+
+2013-01-25 17:29  Sandro Santilli <strk@keybit.net>
+
+	* [r3757] capi/geos_c.h.in, configure.in,
+	  include/geos/version.h.vc: Prepare codebase for next 3.3 release
+	  (3.3.8)
+
+2013-01-25 17:26  Sandro Santilli <strk@keybit.net>
+
+	* [r3756] NEWS, src/operation/valid/IsValidOp.cpp: IsValidOp: throw
+	  proper error on nested shells (#608)
+	  
+	  Thanks geomworx
+
+2013-01-22 18:39  Sandro Santilli <strk@keybit.net>
+
+	* [r3753] ChangeLog: Updated for 3.3.7 release
+
 2013-01-22 18:21  Sandro Santilli <strk@keybit.net>
 
 	* [r3752] NEWS, configure.in, swig/python/geos.py,
