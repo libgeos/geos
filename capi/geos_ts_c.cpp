@@ -4556,6 +4556,13 @@ GEOSWKBReader_destroy_r(GEOSContextHandle_t extHandle, WKBReader *reader)
     }
 }
 
+struct membuf : public std::streambuf
+{
+  membuf(char* s, std::size_t n)
+  {
+    setg(s, s, s + n);
+  }
+};
 
 Geometry*
 GEOSWKBReader_read_r(GEOSContextHandle_t extHandle, WKBReader *reader, const unsigned char *wkb, size_t size)
@@ -4577,11 +4584,15 @@ GEOSWKBReader_read_r(GEOSContextHandle_t extHandle, WKBReader *reader, const uns
 
     try
     {
-        std::string wkbstring(reinterpret_cast<const char*>(wkb), size); // make it binary !
-        std::istringstream is(std::ios_base::binary);
-        is.str(wkbstring);
-        is.seekg(0, std::ios::beg); // rewind reader pointer
-        
+        //std::string wkbstring(reinterpret_cast<const char*>(wkb), size); // make it binary !
+        //std::istringstream is(std::ios_base::binary);
+        //is.str(wkbstring);
+        //is.seekg(0, std::ios::beg); // rewind reader pointer
+
+        // http://stackoverflow.com/questions/2079912/simpler-way-to-create-a-c-memorystream-from-char-size-t-without-copying-t
+        membuf mb((char*)wkb, size);
+        istream is(&mb);
+
         Geometry *g = reader->read(is);
         return g;
     }
@@ -4736,7 +4747,8 @@ GEOSWKBWriter_write_r(GEOSContextHandle_t extHandle, WKBWriter *writer, const Ge
     {
         std::ostringstream os(std::ios_base::binary);
         writer->write(*geom, os);
-        std::string wkbstring(os.str());
+
+        const std::string& wkbstring = os.str();
         const std::size_t len = wkbstring.length();
 
         unsigned char *result = NULL;
