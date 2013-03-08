@@ -4,6 +4,7 @@ Changes in 3.3.9
 - Bug fixes / improvements
     - Fix area boundary return from GEOSPointOnSurface (#623)
     - Speedup GEOSWKBReader_read (#621)
+    - Fix RobustLineIntersector handling of invalid intersection points (#622)
 
 Changes in 3.3.8
 2013-02-28

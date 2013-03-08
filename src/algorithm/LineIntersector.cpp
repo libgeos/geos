@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/RobustLineIntersector.java rev. 1.38 (JTS-1.10)
+ * Last port: algorithm/RobustLineIntersector.java r785 (JTS-1.13+)
  *
  **********************************************************************/
 
@@ -22,7 +22,7 @@
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/algorithm/HCoordinate.h>
 #include <geos/algorithm/NotRepresentableException.h>
-#include <geos/algorithm/CentralEndpointIntersector.h>
+//#include <geos/algorithm/CentralEndpointIntersector.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/Envelope.h>
@@ -53,6 +53,54 @@ using namespace geos::geom;
 
 namespace geos {
 namespace algorithm { // geos.algorithm
+
+namespace { // anonymous
+
+/**
+ * Finds the endpoint of the segments P and Q which
+ * is closest to the other segment.
+ * This is a reasonable surrogate for the true
+ * intersection points in ill-conditioned cases
+ * (e.g. where two segments are nearly coincident,
+ * or where the endpoint of one segment lies almost on the other segment).
+ * <p>
+ * This replaces the older CentralEndpoint heuristic,
+ * which chose the wrong endpoint in some cases
+ * where the segments had very distinct slopes
+ * and one endpoint lay almost on the other segment.
+ *
+ * @param p1 an endpoint of segment P
+ * @param p2 an endpoint of segment P
+ * @param q1 an endpoint of segment Q
+ * @param q2 an endpoint of segment Q
+ * @return the nearest endpoint to the other segment
+ */
+Coordinate nearestEndpoint(const Coordinate& p1, const Coordinate& p2,
+    const Coordinate& q1, const Coordinate& q2)
+{
+  Coordinate nearestPt = p1;
+  double minDist = CGAlgorithms::distancePointLine(p1, q1, q2);
+
+  double dist = CGAlgorithms::distancePointLine(p2, q1, q2);
+  if (dist < minDist) {
+    minDist = dist;
+    nearestPt = p2;
+  }
+  dist = CGAlgorithms::distancePointLine(q1, p1, p2);
+  if (dist < minDist) {
+    minDist = dist;
+    nearestPt = q1;
+  }
+  dist = CGAlgorithms::distancePointLine(q2, p1, p2);
+  if (dist < minDist) {
+    minDist = dist;
+    nearestPt = q2;
+  }
+  return nearestPt;
+}
+
+
+} // anonymous namespace
 
 /*public static*/
 double
@@ -716,7 +764,8 @@ LineIntersector::intersection(const Coordinate& p1,
 
 	if (! isInSegmentEnvelopes(intPt))
 	{
-		intPt = CentralEndpointIntersector::getIntersection(p1, p2, q1, q2);
+		//intPt = CentralEndpointIntersector::getIntersection(p1, p2, q1, q2);
+		intPt = nearestEndpoint(p1, p2, q1, q2);
 #if GEOS_DEBUG
 		cerr << "Intersection outside segment envelopes, snapped to "
 		     << intPt.toString() << endl;
@@ -850,34 +899,11 @@ LineIntersector::safeHCoordinateIntersection(const Coordinate& p1,
 
 	} catch (const NotRepresentableException& /* e */) {
 		// compute an approximate result
-		intPt = CentralEndpointIntersector::getIntersection(p1, p2, q1, q2);
+		//intPt = CentralEndpointIntersector::getIntersection(p1, p2, q1, q2);
+		intPt = nearestEndpoint(p1, p2, q1, q2);
     	}
 }
 
 } // namespace geos.algorithm
 } // namespace geos
 
-/**********************************************************************
- * $Log$
- * Revision 1.42  2006/04/12 11:57:11  strk
- * Fixed debugging line
- *
- * Revision 1.41  2006/04/07 09:12:57  strk
- * kept isInSegmentEnvelopes() check even when not debugging
- *
- * Revision 1.40  2006/04/06 21:31:40  strk
- * Const correctness for debugging function
- *
- * Revision 1.39  2006/04/04 12:39:08  strk
- * Changed NotRepresentableCoordinate exception handler to throw
- * a TopologyException. This allows further handling.
- *
- * Revision 1.38  2006/03/21 11:12:23  strk
- * Cleanups: headers inclusion and Log section
- *
- * Revision 1.37  2006/03/16 10:38:14  strk
- * Bug #63 - Remove unreferenced local variable warning
- *
- * Revision 1.36  2006/03/09 16:46:45  strk
- * geos::geom namespace definition, first pass at headers split
- **********************************************************************/
