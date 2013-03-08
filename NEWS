@@ -7,6 +7,7 @@ Changes in 3.3.8
     - WKTWriter::appendCoordinate optimisation
     - Fix centroid computation for collections with empty components (#582)
     - Speedup GEOSWKBReader_read (#621)
+    - Fix area boundary return from GEOSPointOnSurface (#623)
 
 Changes in 3.3.7
 2013-01-22 
