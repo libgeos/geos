@@ -1,3 +1,10 @@
+Changes in 3.3.9
+2012-MM-DD
+
+- Bug fixes / improvements
+    - Fix area boundary return from GEOSPointOnSurface (#623)
+    - Speedup GEOSWKBReader_read (#621)
+
 Changes in 3.3.8
 2013-02-28
 
@@ -6,8 +13,6 @@ Changes in 3.3.8
     - Fix header guards (#617, #618, #619)
     - WKTWriter::appendCoordinate optimisation
     - Fix centroid computation for collections with empty components (#582)
-    - Speedup GEOSWKBReader_read (#621)
-    - Fix area boundary return from GEOSPointOnSurface (#623)
 
 Changes in 3.3.7
 2013-01-22 
