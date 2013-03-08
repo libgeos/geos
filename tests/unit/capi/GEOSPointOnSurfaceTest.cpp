@@ -147,7 +147,7 @@ namespace tut
 
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 
-        ensure_equals(std::string(wkt_), std::string( "POINT (56.528833 25.210333)" ) );
+        ensure_equals(std::string(wkt_), std::string( "POINT (56.528917 25.210417)" ) );
 
     }
 

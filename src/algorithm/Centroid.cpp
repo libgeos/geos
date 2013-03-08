@@ -25,6 +25,7 @@
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/LineString.h>
 
+
 #include <cmath> // for std::abs
 
 using namespace geos::geom;
