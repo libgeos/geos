@@ -32,6 +32,7 @@ EXT = $(OBJ_EXT)
 OBJ = \
     algorithm\Angle.$(EXT) \
     algorithm\BoundaryNodeRule.$(EXT) \
+    algorithm\Centroid.$(EXT) \
 	algorithm\CentroidArea.$(EXT) \
 	algorithm\CentroidLine.$(EXT) \
 	algorithm\CentroidPoint.$(EXT) \
