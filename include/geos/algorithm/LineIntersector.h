@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/RobustLineIntersector.java rev. 1.38 (JTS-1.10)
+ * Last port: algorithm/RobustLineIntersector.java r785 (JTS-1.13+)
  *
  **********************************************************************/
 
