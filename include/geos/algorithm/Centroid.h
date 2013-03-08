@@ -25,11 +25,11 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Geometry;
-		class Polygon;
-		class CoordinateSequence;
-	}
+    namespace geom {
+        class Geometry;
+        class Polygon;
+        class CoordinateSequence;
+    }
 }
 
 
