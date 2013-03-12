@@ -38,7 +38,7 @@ AC_DEFUN([AC_RUBY_DEVEL],
 		RUBY_EXTENSION_DIR=`$RUBY -rrbconfig -e 'puts RbConfig::CONFIG[["sitearchdir"]] || Config::CONFIG[["sitearchdir"]]'`
 
 		dnl Get Ruby shared library name, this does not include the lib prefix or extension name
-		RUBY_SO_NAME=`$RUBY -rrbconfig -e 'puts puts RbConfig::CONFIG[["LIBRUBY_SO"]] || Config::CONFIG[["RUBY_SO_NAME"]]'`
+		RUBY_SO_NAME=`$RUBY -rrbconfig -e 'puts RbConfig::CONFIG[["LIBRUBY_SO"]] || Config::CONFIG[["RUBY_SO_NAME"]]'`
 		
 		dnl Get Ruby shared libary name
 		RUBY_SHARED_LIB=`$RUBY -rrbconfig -e 'puts RbConfig::CONFIG[["LIBRUBY"]] || Config::CONFIG[["LIBRUBY"]]'`
