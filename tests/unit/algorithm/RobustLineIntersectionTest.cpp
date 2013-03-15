@@ -229,7 +229,8 @@ namespace tut
     std::vector<Coordinate> savePt = pt;
 
 		geos::algorithm::LineIntersector li;
-    li.setPrecisionModel(new PrecisionModel(scaleFactor));
+    PrecisionModel lpm(scaleFactor);
+    li.setPrecisionModel(&lpm);
     li.computeIntersection(pt[0], pt[1], pt[2], pt[3]);
 
     // check that input points are unchanged

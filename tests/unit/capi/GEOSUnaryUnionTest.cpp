@@ -198,12 +198,12 @@ namespace tut
     template<>
     void object::test<9>()
     {
-	const char* hexwkb = "010200000002000000000000000000F8FF000000000000F8FF0000000000000000000000000000F03F";
+        const char* hexwkb = "010200000002000000000000000000F8FF000000000000F8FF0000000000000000000000000000F03F";
         geom1_ = GEOSGeomFromHEX_buf((const unsigned char*)hexwkb, std::strlen(hexwkb));
         ensure( 0 != geom1_ );
 
         geom2_ = GEOSUnaryUnion(geom1_);
-	ensure( 0 == geom2_ );
+        ensure( 0 == geom2_ );
 
     }
 

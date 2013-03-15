@@ -74,6 +74,7 @@ namespace tut
         ensure( 0 == GEOSisEmpty(output) );
         // TODO
         //ensure( 0 != GEOSEquals(output, expected_));
+        GEOSGeom_destroy(output);
     }
  
 } // namespace tut
