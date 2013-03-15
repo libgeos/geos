@@ -46,17 +46,18 @@
 #include <geos/simplify/DouglasPeuckerSimplifier.h>
 #include <geos/simplify/TopologyPreservingSimplifier.h>
 #include <geos/noding/GeometryNoder.h>
-#include <geos/operation/valid/IsValidOp.h>
-#include <geos/operation/polygonize/Polygonizer.h>
+#include <geos/operation/buffer/BufferBuilder.h>
+#include <geos/operation/buffer/BufferOp.h>
+#include <geos/operation/buffer/BufferParameters.h>
+#include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
-#include <geos/operation/union/CascadedPolygonUnion.h>
-#include <geos/operation/buffer/BufferOp.h>
-#include <geos/operation/buffer/BufferParameters.h>
-#include <geos/operation/buffer/BufferBuilder.h>
+#include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/sharedpaths/SharedPathsOp.h>
+#include <geos/operation/union/CascadedPolygonUnion.h>
+#include <geos/operation/valid/IsValidOp.h>
 #include <geos/linearref/LengthIndexedLine.h>
 #include <geos/triangulate/DelaunayTriangulationBuilder.h>
 #include <geos/util/IllegalArgumentException.h>
@@ -1149,6 +1150,39 @@ GEOSLength_r(GEOSContextHandle_t extHandle, const Geometry *g, double *length)
     
     return 0;
 }
+
+CoordinateSequence *
+GEOSNearestPoints_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g2)
+{
+    if ( 0 == extHandle )
+    {
+        return NULL;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return NULL;
+    }
+
+    try
+    {
+        if (g1->isEmpty() || g2->isEmpty()) return 0;
+        return geos::operation::distance::DistanceOp::nearestPoints(g1, g2);
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+    
+    return NULL;
+}
+
 
 Geometry *
 GEOSGeomFromWKT_r(GEOSContextHandle_t extHandle, const char *wkt)

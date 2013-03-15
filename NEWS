@@ -9,6 +9,7 @@ Changes in 3.4.0
   - BufferInputLineSimplifier header exposed (#548)
   - New Centroid class supporting mixed geometry components (#612)
   - io::Writer::reserve() method
+  - CAPI: GEOSNearestPoints
 - C++ API changes:
   - New noding::GeometryNoder class
   - Added BufferOp::setSingleSided 

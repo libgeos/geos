@@ -302,6 +302,12 @@ GEOSLength(const Geometry *g, double *length)
     return GEOSLength_r( handle, g, length );
 }
 
+CoordinateSequence *
+GEOSNearestPoints(const Geometry *g1, const Geometry *g2)
+{
+    return GEOSNearestPoints_r( handle, g1, g2 );
+}
+
 Geometry *
 GEOSGeomFromWKT(const char *wkt)
 {

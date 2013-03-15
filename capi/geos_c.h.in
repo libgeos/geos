@@ -1191,6 +1191,15 @@ extern int GEOS_DLL GEOSHausdorffDistanceDensify_r(GEOSContextHandle_t handle,
 extern int GEOS_DLL GEOSGeomGetLength_r(GEOSContextHandle_t handle,
                                    const GEOSGeometry *g1, double *length);
 
+/* Return 0 on exception, the closest points of the two geometries otherwise.
+ * The first point comes from g1 geometry and the second point comes from g2.
+ */
+extern GEOSCoordSequence GEOS_DLL *GEOSNearestPoints(
+  const GEOSGeometry* g1, const GEOSGeometry* g2);
+extern GEOSCoordSequence GEOS_DLL *GEOSNearestPoints_r(
+  GEOSContextHandle_t handle, const GEOSGeometry* g1, const GEOSGeometry* g2);
+
+
 /************************************************************************
  *
  * Algorithms
