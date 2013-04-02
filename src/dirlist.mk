@@ -35,10 +35,13 @@ GEOS_DIRLIST =  \
 	operation\polygonize \
 	operation\predicate \
 	operation\relate \
+	operation\sharedpaths \
 	operation\union \
 	operation\valid \
 	planargraph \
 	planargraph\algorithm \
 	precision \
 	simplify \
+	triangulate \
+	triangulate\quadedge \
 	util
