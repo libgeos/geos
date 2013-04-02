@@ -332,11 +332,11 @@ $(LIBNAME):	$(GEOS_ROOT)\include\geos\platform.h $(GEOS_ROOT)\include\geos\versi
 	$(LINK) /lib /out:$(LIBNAME) $(OBJ)
 
 $(DLLNAME):	$(OBJ)
-	$(LINK) /dll /debug $(OBJ) /out:$(DLLNAME) /implib:$(SLIBNAME)
+	$(LINK) /dll /debug $(LINKER_FLAGS) $(OBJ) /out:$(DLLNAME) /implib:$(SLIBNAME)
 	if exist $(DLLNAME).manifest mt -manifest $(DLLNAME).manifest -outputresource:$(DLLNAME);2
 
 $(CDLLNAME): ..\capi\geos_c.obj ..\capi\geos_ts_c.obj $(DLLNAME)
-	$(LINK) /dll /debug ..\capi\geos_c.obj ..\capi\geos_ts_c.obj $(LIBNAME) /out:$(CDLLNAME) /implib:$(CLIBNAME)
+	$(LINK) /dll /debug $(LINKER_FLAGS) ..\capi\geos_c.obj ..\capi\geos_ts_c.obj $(LIBNAME) /out:$(CDLLNAME) /implib:$(CLIBNAME)
 	if exist $(CDLLNAME).manifest mt -manifest $(CDLLNAME).manifest -outputresource:$(CDLLNAME);2
   
 $(GEOS_ROOT)\include\geos\platform.h: $(GEOS_ROOT)\include\geos\platform.h.vc

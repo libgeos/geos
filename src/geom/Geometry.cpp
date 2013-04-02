@@ -60,6 +60,12 @@
 #include <cassert>
 #include <memory>
 
+#ifdef _MSC_VER
+#  ifdef MSVC_USE_VLD
+#    include <vld.h>
+#  endif
+#endif
+
 #define SHORTCIRCUIT_PREDICATES 1
 
 using namespace std;
