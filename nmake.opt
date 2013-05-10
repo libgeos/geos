@@ -49,6 +49,16 @@ BUILD_BATCH = NO
 !MESSAGE *** Setting BUILD_BATCH $(BUILD_BATCH)
 
 ###############################################################################
+# Set WIN64=YES if you are building for 64-bit windows (x64).
+# Alternatively, pass WIN64=YES as NMAKE command line argument.
+###############################################################################
+!IFNDEF WIN64
+WIN64 = NO
+!ENDIF
+
+!MESSAGE *** Setting WIN64 $(WIN64)
+
+###############################################################################
 # Derive version of Visual C++ being used from NMAKE if not specified
 #
 # WARNING:
