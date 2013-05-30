@@ -133,5 +133,88 @@ namespace tut
         ensure_equals(out, "LINESTRING (0 0, 9 0)");
     }
 
+    /// See http://trac.osgeo.org/geos/ticket/501
+    template<>
+    template<>
+    void object::test<5>()
+    {
+        geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0)");
+        geom2_ = GEOSGeomFromWKT("LINESTRING(0 0, 9 0, 10 0, 11 0)");
+        geom3_ = GEOSSnap(geom1_, geom2_, 2);
+
+        char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
+        std::string out(wkt_c); 
+        free(wkt_c);
+
+        //ensure_equals(out, "LINESTRING (0 0, 9 0, 10 0)");
+        ensure_equals(out, "LINESTRING (0 0, 9 0, 10 0, 11 0)");
+    }
+
+    /// Test snapping of equidistant segments to outlyers snap point
+    template<>
+    template<>
+    void object::test<6>()
+    {
+        geom1_ = GEOSGeomFromWKT("LINESTRING(0 3,4 1,0 1)");
+        geom2_ = GEOSGeomFromWKT("MULTIPOINT(5 0,4 1)");
+        geom3_ = GEOSSnap(geom1_, geom2_, 2);
+
+        char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
+        std::string out(wkt_c); 
+        free(wkt_c);
+
+        ensure_equals(out, "LINESTRING (0 3, 4 1, 5 0, 0 1)");
+        //ensure_equals(out, "LINESTRING (0 3, 4 1, 0 1)");
+    }
+
+    /// Test snapping of equidistant segments to outlyers snap point
+    /// Same as the above but with the snap points order reversed
+    template<>
+    template<>
+    void object::test<7>()
+    {
+        geom1_ = GEOSGeomFromWKT("LINESTRING(0 3,4 1,0 1)");
+        geom2_ = GEOSGeomFromWKT("MULTIPOINT(4 1,5 0)");
+        geom3_ = GEOSSnap(geom1_, geom2_, 2);
+
+        char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
+        std::string out(wkt_c); 
+        free(wkt_c);
+
+        ensure_equals(out, "LINESTRING (0 3, 4 1, 5 0, 0 1)");
+        //ensure_equals(out, "LINESTRING (0 3, 4 1, 0 1)");
+    }
+
+    /// Test snapping of closed ring to outlyers snap point
+    template<>
+    template<>
+    void object::test<8>()
+    {
+        geom1_ = GEOSGeomFromWKT("LINESTRING(0 0,10 0,10 10,0 10,0 0)");
+        geom2_ = GEOSGeomFromWKT("MULTIPOINT(0 0,-1 0)");
+        geom3_ = GEOSSnap(geom1_, geom2_, 3);
+
+        char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
+        std::string out(wkt_c); 
+        free(wkt_c);
+
+        ensure_equals(out, "LINESTRING (-1 0, 0 0, 10 0, 10 10, 0 10, -1 0)");
+    }
+
+    template<>
+    template<>
+    void object::test<9>()
+    {
+        geom1_ = GEOSGeomFromWKT("LINESTRING(0 2,5 2,9 2,5 0)");
+        geom2_ = GEOSGeomFromWKT("POINT(5 0)");
+        geom3_ = GEOSSnap(geom1_, geom2_, 3);
+
+        char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
+        std::string out(wkt_c); 
+        free(wkt_c);
+
+        ensure_equals(out, "LINESTRING (0 2, 5 2, 9 2, 5 0)");
+    }
+
 } // namespace tut
 
