@@ -3,6 +3,8 @@ Makefile.in
 Makefile
 .libs
 .deps
+.gdb_history
+.vimrc
 *.o
 *.lo
 *.la
