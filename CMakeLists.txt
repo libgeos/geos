@@ -237,7 +237,20 @@ include_directories(${geos_BINARY_DIR}/include)
 # Setup checks and generate config headers
 #################################################################################
 
-# TODO: output to CMAKE_CURRENT_BINARY_DIR instead of CMAKE_SOURCE_DIR
+# Determine SVN/Git revision
+message(STATUS "Generating revision header ${CMAKE_SOURCE_DIR}/geos_svn_revision.h")
+find_program(SH sh)
+if(SH)
+  execute_process(COMMAND ${SH} -c 
+    "cd ${CMAKE_SOURCE_DIR} && ${CMAKE_SOURCE_DIR}/tools/svn_repo_revision.sh")
+
+  file(RENAME "${CMAKE_SOURCE_DIR}/geos_svn_revision.h"
+    "${CMAKE_BINARY_DIR}/geos_svn_revision.h")
+else()
+  message("*** sh-compatible command not found, cannot create geos_svn_revision.h")
+  message("*** Check SVN revision and create revision header manually:")
+  message("*** echo '#define GEOS_SVN_REVISION XYZ' > ${CMAKE_SOURCE_DIR}/geos_svn_revision.h")
+endif()
 
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h)
   message(STATUS "Disabling existing ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h")
