@@ -107,81 +107,7 @@ cerr << "   snap point distance " << dist
 	return match;
 }
 
-/*private*/
-#if 0 // changed to start looping from snap points
-void
-LineStringSnapper::snapVertices(geom::CoordinateList& srcCoords,
-			const geom::Coordinate::ConstVect& snapPts)
-{
-  if ( srcCoords.empty() ) return;
 
-#if GEOS_DEBUG
-cerr << "Snapping vertices of: " << std::setprecision(15) << srcCoords << endl;
-#endif
-
-	using geom::CoordinateList;
-
-	geom::Coordinate::ConstVect::const_iterator not_found = snapPts.end();
-
-	// try snapping vertices
-	// if src is a ring then don't snap final vertex
-	CoordinateList::iterator it = srcCoords.begin();
-	CoordinateList::iterator end = srcCoords.end(); 
-	CoordinateList::iterator last = end; --last;
-  if ( isClosed ) --end;
-	for ( ; it != end; ++it )
-	{
-		Coordinate& srcPt = *it;
-
-#if GEOS_DEBUG
-cerr << "Checking for a snap for source coordinate " << srcPt << endl;
-#endif
-
-		geom::Coordinate::ConstVect::const_iterator found = findSnapForVertex(srcPt, snapPts);
-		if ( found == not_found )
-		{	// no snaps found (or no need to snap)
-#if GEOS_DEBUG
-cerr << " no snap found" << endl;
-#endif
-			continue;
-		}
-
-		assert(*found);
-		const Coordinate& snapPt = *(*found);
-
-#if 1
-    // Check if closest vertex for found snap is ourselves ?
-    CoordinateList::iterator vertpos = findVertexToSnap(snapPt, srcCoords.begin(), srcCoords.end());
-    if ( vertpos != it ) {
-#if GEOS_DEBUG
-cerr << " Snap found but it has a vertex point closer than this one" << endl;
-      continue;
-#endif
-    }
-#endif
-
-		
-#if GEOS_DEBUG
-cerr << " found snap point " << snapPt << endl;
-#endif
-
-		// update src with snap pt
-		*it = snapPt;
-
-#if GEOS_DEBUG
-cerr << " source point became " << srcPt << endl;
-#endif
-
-		// keep final closing point in synch (rings only)
-		if (it == srcCoords.begin() && isClosed)
-		{
-			*last = snapPt;
-		}
-	}
-}
-#endif
-
-#if 1
 /*private*/
 void
 LineStringSnapper::snapVertices(geom::CoordinateList& srcCoords,
@@ -218,18 +144,6 @@ cerr << " No vertex to snap" << endl;
 			continue;
 		}
 
-#if 0
-    // Check if closest snap for found vertex is ourselves ?
-    Coordinate::ConstVect::const_iterator snappos =
-        findSnapForVertex(*vertpos, snapPts);
-    if ( snappos != it ) {
-#if GEOS_DEBUG
-cerr << " Vertex found but it has a snap point closer than this one" << endl;
-      continue;
-#endif
-    }
-#endif
-
 #if GEOS_DEBUG
 cerr << " Vertex to be snapped found, snapping" << endl;
 #endif
@@ -249,7 +163,6 @@ cerr << " After vertex snapping, srcCoors are: " << srcCoords << endl;
 #endif
 
 }
-#endif
 
 /*private*/
 Coordinate::ConstVect::const_iterator
