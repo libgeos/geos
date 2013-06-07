@@ -46,6 +46,7 @@
 #include <geos/simplify/DouglasPeuckerSimplifier.h>
 #include <geos/simplify/TopologyPreservingSimplifier.h>
 #include <geos/noding/GeometryNoder.h>
+#include <geos/noding/Noder.h>
 #include <geos/operation/buffer/BufferBuilder.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/buffer/BufferParameters.h>
