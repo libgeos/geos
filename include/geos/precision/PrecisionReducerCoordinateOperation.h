@@ -43,6 +43,9 @@ private:
 
 	bool removeCollapsed;
 
+    PrecisionReducerCoordinateOperation(PrecisionReducerCoordinateOperation const&); /*= delete*/
+    PrecisionReducerCoordinateOperation& operator=(PrecisionReducerCoordinateOperation const&); /*= delete*/
+
 public:
 
 	PrecisionReducerCoordinateOperation( const geom::PrecisionModel& pm,

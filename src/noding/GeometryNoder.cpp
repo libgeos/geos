@@ -64,6 +64,9 @@ public:
   }
 private:
   SegmentString::NonConstVect& _to;
+
+  SegmentStringExtractor(SegmentStringExtractor const&); /*= delete*/
+  SegmentStringExtractor& operator=(SegmentStringExtractor const&); /*= delete*/
 };
 
 }

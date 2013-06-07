@@ -61,6 +61,9 @@ private:
                                           const geom::GeometryFactory& oldGF,
                                           const geom::PrecisionModel& newPM );
 
+  GeometryPrecisionReducer(GeometryPrecisionReducer const&); /*= delete*/
+  GeometryPrecisionReducer& operator=(GeometryPrecisionReducer const&); /*= delete*/
+
 public:
 
   /**

@@ -62,6 +62,8 @@ private:
 
   std::auto_ptr<geom::Geometry> toGeometry(SegmentString::NonConstVect& noded);
 
+  GeometryNoder(GeometryNoder const&); /*= delete*/
+  GeometryNoder& operator=(GeometryNoder const&); /*= delete*/
 };
 
 } // namespace geos.noding
