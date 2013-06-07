@@ -171,7 +171,7 @@ public:
 		return ret;
 	}
 
-	inline int size() const { return ptList ? ptList->size() : 0 ; }
+	inline size_t size() const { return ptList ? ptList->size() : 0 ; }
 
 };
 
