@@ -43,7 +43,7 @@ RayCrossingCounter::locatePointInRing(const geom::Coordinate& point,
 {
 	RayCrossingCounter rcc(point);
 
-	for (int i = 1, ni = ring.size(); i < ni; i++) 
+	for (std::size_t i = 1, ni = ring.size(); i < ni; i++) 
 	{
 		const geom::Coordinate & p1 = ring[ i ];
 		const geom::Coordinate & p2 = ring[ i - 1 ];
@@ -62,7 +62,7 @@ RayCrossingCounter::locatePointInRing(const geom::Coordinate& point,
 {
 	RayCrossingCounter rcc(point);
 
-	for (int i = 1, ni = ring.size(); i < ni; i++) 
+	for (std::size_t i = 1, ni = ring.size(); i < ni; i++) 
 	{
 		const geom::Coordinate & p1 = *ring[ i ];
 		const geom::Coordinate & p2 = *ring[ i - 1 ];

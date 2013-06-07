@@ -164,7 +164,7 @@ WKBWriter::writePolygon(const Polygon &g)
 	writeGeometryType(WKBConstants::wkbPolygon, g.getSRID());
 	writeSRID(g.getSRID());
 	
-	int nholes = g.getNumInteriorRing();
+	std::size_t nholes = g.getNumInteriorRing();
 	writeInt(nholes+1);
 
 	const LineString* ls = g.getExteriorRing();
@@ -174,7 +174,7 @@ WKBWriter::writePolygon(const Polygon &g)
 	assert(cs);
 
 	writeCoordinateSequence(*cs, true);
-	for (int i=0; i<nholes; i++)
+	for (std::size_t i=0; i<nholes; i++)
 	{
 		ls = g.getInteriorRingN(i);
 		assert(ls);
@@ -195,11 +195,11 @@ WKBWriter::writeGeometryCollection(const GeometryCollection &g,
 	writeGeometryType(wkbtype, g.getSRID());
 	writeSRID(g.getSRID());
 	
-	int ngeoms = g.getNumGeometries();
+	std::size_t ngeoms = g.getNumGeometries();
 	writeInt(ngeoms);
 
 	assert(outStream);
-	for (int i=0; i<ngeoms; i++)
+	for (std::size_t i=0; i<ngeoms; i++)
 	{
 		const Geometry* elem = g.getGeometryN(i);
 		assert(elem);
@@ -272,12 +272,12 @@ void
 WKBWriter::writeCoordinateSequence(const CoordinateSequence &cs,
 	bool sized) 
 {
-	int size = cs.getSize();
+	std::size_t size = cs.getSize();
 	bool is3d=false;
 	if ( outputDimension > 2) is3d = true;
 
 	if (sized) writeInt(size);
-	for (int i=0; i<size; i++) writeCoordinate(cs, i, is3d);
+	for (std::size_t i=0; i<size; i++) writeCoordinate(cs, i, is3d);
 }
 
 void

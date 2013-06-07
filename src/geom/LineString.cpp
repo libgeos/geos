@@ -236,8 +236,8 @@ bool
 LineString::isCoordinate(Coordinate& pt) const
 {
 	assert(points.get());
-	int npts=points->getSize();
-	for (int i = 0; i<npts; i++) {
+	std::size_t npts=points->getSize();
+	for (std::size_t i = 0; i<npts; i++) {
 		if (points->getAt(i)==pt) {
 			return true;
 		}
@@ -263,8 +263,8 @@ LineString::computeEnvelopeInternal() const
 	double miny = c.y;
 	double maxx = c.x;
 	double maxy = c.y;
-	int npts=points->getSize();
-	for (int i=1; i<npts; i++) {
+	std::size_t npts=points->getSize();
+	for (std::size_t i=1; i<npts; i++) {
 		const Coordinate &c=points->getAt(i);
 		minx = minx < c.x ? minx : c.x;
 		maxx = maxx > c.x ? maxx : c.x;
@@ -330,10 +330,10 @@ void
 LineString::normalize()
 {
 	assert(points.get());
-	int npts=points->getSize();
-	int n=npts/2;
-	for (int i=0; i<n; i++) {
-		int j = npts - 1 - i;
+	std::size_t npts=points->getSize();
+	std::size_t n=npts/2;
+	for (std::size_t i=0; i<n; i++) {
+		std::size_t j = npts - 1 - i;
 		if (!(points->getAt(i)==points->getAt(j))) {
 			if (points->getAt(i).compareTo(points->getAt(j)) > 0) {
 				CoordinateSequence::reverse(points.get());
@@ -349,11 +349,11 @@ LineString::compareToSameClass(const Geometry *ls) const
 	const LineString *line=dynamic_cast<const LineString*>(ls);
 	assert(line);
 	// MD - optimized implementation
-	int mynpts=points->getSize();
-	int othnpts=line->points->getSize();
+	std::size_t mynpts=points->getSize();
+	std::size_t othnpts=line->points->getSize();
 	if ( mynpts > othnpts ) return 1;
 	if ( mynpts < othnpts ) return -1;
-	for (int i=0; i<mynpts; i++)
+	for (std::size_t i=0; i<mynpts; i++)
 	{
 		int cmp=points->getAt(i).compareTo(line->points->getAt(i));
 		if (cmp) return cmp;

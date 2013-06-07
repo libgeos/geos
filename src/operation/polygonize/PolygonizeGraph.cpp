@@ -382,7 +382,7 @@ PolygonizeGraph::computeNextCCWEdges(Node *node, long label)
 	 * Must use a SIGNED int here to allow for beak condition
 	 * to be true.
 	 */
-	for(int i=edges.size()-1; i>=0; --i)
+	for(int i=static_cast<int>(edges.size())-1; i>=0; --i)
 	{
 		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)edges[i];
 		PolygonizeDirectedEdge *sym=(PolygonizeDirectedEdge*) de->getSym();
