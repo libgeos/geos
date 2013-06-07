@@ -90,7 +90,7 @@ namespace {
 	  
 	  void process(const LineString& line) {
       const CoordinateSequence* seq = line.getCoordinatesRO();
-      for (int i = 0, s = seq->size(); i < s; i++) {
+      for (std::size_t i = 0, s = seq->size(); i < s; i++) {
         double y = seq->getY(i);
         updateInterval(y);
       }
@@ -107,6 +107,9 @@ namespace {
         }
       }
     }
+
+    SafeBisectorFinder(SafeBisectorFinder const&); /*= delete*/
+    SafeBisectorFinder& operator=(SafeBisectorFinder const&); /*= delete*/
   };
 
 } // anonymous namespace
