@@ -171,7 +171,7 @@ LineStringSnapper::findSnapForVertex(const Coordinate& pt,
 {
 	Coordinate::ConstVect::const_iterator end = snapPts.end();
 	Coordinate::ConstVect::const_iterator candidate = end;
-	double minDist;
+	double minDist = snapTolerance;
 
 	// TODO: use std::find_if
 	for ( Coordinate::ConstVect::const_iterator
@@ -195,12 +195,10 @@ cerr << " points are equal, returning not-found " << endl;
 cerr << " distance from snap point " << snapPt << ": " << dist << endl;
 #endif
 
-		if ( dist < snapTolerance )
+		if ( dist < minDist )
 		{
-      if ( candidate == end || dist < minDist ) {
-        minDist = dist;
-        candidate = it;
-      }
+      minDist = dist;
+      candidate = it;
 		}
 	}
 
