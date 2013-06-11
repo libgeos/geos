@@ -7,6 +7,7 @@ Changes in 3.3.9
     - Fix RobustLineIntersector handling of invalid intersection points (#622)
     - Reduce likelyhood of invalid output from snap operation (#629, #501)
     - Reduce memory fragmentation of prepared Polygon/Point intersection op
+    - Fix mingw64 compile (#630)
 
 Changes in 3.3.8
 2013-02-28
