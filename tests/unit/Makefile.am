@@ -80,7 +80,6 @@ geos_unit_SOURCES = \
 	noding/SegmentPointComparatorTest.cpp \
 	noding/snapround/HotPixelTest.cpp \
 	noding/snapround/MCIndexSnapRounderTest.cpp \
-	operation/buffer/BufferBuilderTest.cpp \
 	operation/buffer/BufferOpTest.cpp \
 	operation/buffer/BufferParametersTest.cpp \
 	operation/distance/DistanceOpTest.cpp \

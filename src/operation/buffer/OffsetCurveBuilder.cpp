@@ -145,7 +145,7 @@ OffsetCurveBuilder::getSingleSidedLineCurve(const CoordinateSequence* inputPts,
     const CoordinateSequence& simp2 = *simp2_;
 
     int n2 = simp2.size() - 1;
-    segGen->initSideSegments(simp2[n2], simp2[n2-1], Position::RIGHT);
+    segGen->initSideSegments(simp2[n2], simp2[n2-1], Position::LEFT);
     segGen->addFirstSegment();
     for (int i = n2-2; i >= 0; --i) {
       segGen->addNextSegment(simp2[i], true);
