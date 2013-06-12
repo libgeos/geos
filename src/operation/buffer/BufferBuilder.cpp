@@ -150,6 +150,7 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    // First, generate the two-sided buffer using a butt-cap.
    BufferParameters modParams = bufParams;
    modParams.setEndCapStyle(BufferParameters::CAP_FLAT); 
+   modParams.setSingleSided(false); // ignore parameter for areal-only geometries
    Geometry* buf = 0;
 
    // This is a (temp?) hack to workaround the fact that

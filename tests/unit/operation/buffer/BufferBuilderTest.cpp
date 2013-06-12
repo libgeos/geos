@@ -101,6 +101,8 @@ namespace tut
             // Left-side offset curve expected with 5+ vertices
             ensure(gB->getNumPoints() >= g0->getNumPoints());
 
+            // For left-side offset curve, the offset will be at the left side of the input line
+            // and retain the same direction.
             ensure_equals(
                 CGAlgorithms::isCCW(dynamic_cast<LineString*>(g0.get())->getCoordinatesRO()),
                 CGAlgorithms::isCCW(dynamic_cast<LineString*>(gB.get())->getCoordinatesRO()));
@@ -114,11 +116,11 @@ namespace tut
             // Right-side offset curve expected with 5+ vertices
             ensure(gB->getNumPoints() >= g0->getNumPoints());
 
-            // FIXME: this check if failing
-            // We need to decide if bufferLineSingleSided should take care of reversing coords order --mloskot
-            //ensure_equals(
-            //    CGAlgorithms::isCCW(dynamic_cast<LineString*>(g0.get())->getCoordinatesRO()),
-            //    CGAlgorithms::isCCW(dynamic_cast<LineString*>(gB.get())->getCoordinatesRO()));
+            // For right-side offset curve, it'll be at the right side
+            // and in the opposite direction.
+            ensure_equals(
+                CGAlgorithms::isCCW(dynamic_cast<LineString*>(g0.get())->getCoordinatesRO()),
+                !CGAlgorithms::isCCW(dynamic_cast<LineString*>(gB.get())->getCoordinatesRO()));
         }
     }
 

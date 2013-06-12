@@ -138,7 +138,24 @@ public:
 	geom::Geometry* buffer(const geom::Geometry *g, double distance);
 		// throw (GEOSException);
 
-	/// Not in JTS: this is a GEOS extension
+	/**
+     * Generates offset curve for linear geometry.
+     *
+	 * @param g non-areal geometry object
+     * @param distance width of offset
+     * @param leftSide controls on which side of the input geometry
+     *        offset curve is generated.
+     *
+     * @note For left-side offset curve, the offset will be at the left side
+     *       of the input line and retain the same direction.
+     *       For right-side offset curve, it'll be at the right side
+     *       and in the opposite direction.
+     *
+     * @note BufferParameters::setSingleSided parameter, which is specific to
+     *       areal geometries only, is ignored by this routine.
+     *
+     * @note Not in JTS: this is a GEOS extension
+	 */
 	geom::Geometry* bufferLineSingleSided( const geom::Geometry* g,
 	                                double distance, bool leftSide ) ;
 		// throw (GEOSException);
