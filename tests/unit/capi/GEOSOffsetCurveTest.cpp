@@ -188,5 +188,43 @@ namespace tut
         ));
     }
 
+    // left-side and right-side curve
+    // See http://trac.osgeo.org/postgis/ticket/633
+    template<>
+    template<>
+    void object::test<7>()
+    {
+        std::string wkt0("LINESTRING ("
+            "665.7317504882812500 133.0762634277343700,"
+            "1774.4752197265625000 19.9391822814941410,"
+            "756.2413940429687500 466.8306579589843700,"
+            "626.1337890625000000 1898.0147705078125000,"
+            "433.8007202148437500 404.6052856445312500)");
+        
+        geom1_ = GEOSGeomFromWKT(wkt0.c_str());
+        ensure( 0 != geom1_ );
+
+        double width = 57.164000837203;
+
+        // left-sided
+        {
+            geom2_ = GEOSOffsetCurve(geom1_, width, 8, GEOSBUF_JOIN_MITRE, 5.57);
+            ensure( 0 != geom2_ );
+            ensure(GEOSGeomGetNumPoints(geom2_) >= GEOSGeomGetNumPoints(geom1_));
+            wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+            //ensure_equals(std::string(wkt_), ...);
+        }
+
+        // right-sided
+        {
+            width = -width;
+            geom2_ = GEOSOffsetCurve(geom1_, width, 8, GEOSBUF_JOIN_MITRE, 5.57);
+            ensure( 0 != geom2_ );
+            ensure(GEOSGeomGetNumPoints(geom2_) >= GEOSGeomGetNumPoints(geom1_));
+            wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+            //ensure_equals(std::string(wkt_), ...);
+        }
+    }
+
 } // namespace tut
 
