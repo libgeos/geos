@@ -10,7 +10,9 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
+#include <geos/geom/LineString.h>
 #include <geos/algorithm/PointLocator.h>
+#include <geos/algorithm/CGAlgorithms.h>
 #include <geos/io/WKTReader.h>
 #include <geos/geom/CoordinateSequence.h>
 // std
@@ -62,6 +64,8 @@ namespace tut
     {
         using geos::operation::buffer::BufferBuilder;
         using geos::operation::buffer::BufferParameters;
+        using geos::algorithm::CGAlgorithms;
+        using geos::geom::LineString;
 
         // Original input from test in ticket #633
         //std::string wkt0("LINESTRING ("
@@ -91,20 +95,30 @@ namespace tut
 
         // left-side
         {
-            GeomPtr gBuffer(builder.bufferLineSingleSided(g0.get(), distance, true));
-            ensure(0 != gBuffer.get());
-            ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
+            GeomPtr gB(builder.bufferLineSingleSided(g0.get(), distance, true));
+            ensure(0 != gB.get());
+            ensure_equals(gB->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
             // Left-side offset curve expected with 5+ vertices
-            ensure(gBuffer->getNumPoints() >= g0->getNumPoints());
+            ensure(gB->getNumPoints() >= g0->getNumPoints());
+
+            ensure_equals(
+                CGAlgorithms::isCCW(dynamic_cast<LineString*>(g0.get())->getCoordinatesRO()),
+                CGAlgorithms::isCCW(dynamic_cast<LineString*>(gB.get())->getCoordinatesRO()));
         }
 
         // right-side
         {
-            GeomPtr gBuffer(builder.bufferLineSingleSided(g0.get(), distance, false));
-            ensure(0 != gBuffer.get());
-            ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
+            GeomPtr gB(builder.bufferLineSingleSided(g0.get(), distance, false));
+            ensure(0 != gB.get());
+            ensure_equals(gB->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
             // Right-side offset curve expected with 5+ vertices
-            ensure(gBuffer->getNumPoints() >= g0->getNumPoints());
+            ensure(gB->getNumPoints() >= g0->getNumPoints());
+
+            // FIXME: this check if failing
+            // We need to decide if bufferLineSingleSided should take care of reversing coords order --mloskot
+            //ensure_equals(
+            //    CGAlgorithms::isCCW(dynamic_cast<LineString*>(g0.get())->getCoordinatesRO()),
+            //    CGAlgorithms::isCCW(dynamic_cast<LineString*>(gB.get())->getCoordinatesRO()));
         }
     }
 
