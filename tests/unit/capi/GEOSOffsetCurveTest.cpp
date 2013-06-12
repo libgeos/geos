@@ -210,6 +210,7 @@ namespace tut
         {
             geom2_ = GEOSOffsetCurve(geom1_, width, 8, GEOSBUF_JOIN_MITRE, 5.57);
             ensure( 0 != geom2_ );
+            // likely, 5 >= 5
             ensure(GEOSGeomGetNumPoints(geom2_) >= GEOSGeomGetNumPoints(geom1_));
             wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
             //ensure_equals(std::string(wkt_), ...);
@@ -220,6 +221,7 @@ namespace tut
             width = -width;
             geom2_ = GEOSOffsetCurve(geom1_, width, 8, GEOSBUF_JOIN_MITRE, 5.57);
             ensure( 0 != geom2_ );
+            // likely, 5 >= 7
             ensure(GEOSGeomGetNumPoints(geom2_) >= GEOSGeomGetNumPoints(geom1_));
             wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
             //ensure_equals(std::string(wkt_), ...);
