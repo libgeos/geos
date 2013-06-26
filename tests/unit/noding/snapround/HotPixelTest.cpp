@@ -7,6 +7,7 @@
 #include <geos/noding/snapround/HotPixel.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Envelope.h>
+#include <geos/geom/PrecisionModel.h>
 // std
 #include <memory>
 
@@ -22,6 +23,7 @@ namespace tut
 
     typedef geos::geom::Coordinate Coordinate;
     typedef geos::geom::Envelope Envelope;
+    typedef geos::geom::PrecisionModel PrecisionModel;
     typedef geos::algorithm::LineIntersector LineIntersector;
     typedef geos::noding::snapround::HotPixel HotPixel;
 
@@ -86,6 +88,26 @@ namespace tut
 
     p1.y = 11; // intersection point not within 0.075 distance
     ensure_not( "hp.intersects(0 10, 20 11)", hp.intersects(p0, p1));
+
+  }
+
+  // Test intersects
+  // See http://trac.osgeo.org/geos/ticket/635
+  template<>
+  template<>
+  void object::test<3>()
+  {
+
+    double scale = 1.0;
+    Coordinate p1(0,0);
+    Coordinate p2(3,2);
+    Coordinate p3(1,1);
+
+    PrecisionModel pm(scale);
+    LineIntersector li(&pm);
+    HotPixel hp(p3, scale, li);
+
+    ensure(hp.intersects(p1,p2));
 
   }
 
