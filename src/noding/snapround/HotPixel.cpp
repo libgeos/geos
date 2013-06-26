@@ -83,7 +83,7 @@ HotPixel::initCorners(const Coordinate& pt)
 	corner[0] = Coordinate(maxx, maxy);
 	corner[1] = Coordinate(minx, maxy);
 	corner[2] = Coordinate(minx, miny);
-	corner[3] = Coordinate(maxx, maxy);
+	corner[3] = Coordinate(maxx, miny);
 }
 
 bool
