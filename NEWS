@@ -9,6 +9,7 @@ Changes in 3.3.9
     - Reduce memory fragmentation of prepared Polygon/Point intersection op
     - Fix mingw64 compile (#630)
     - Fix bug in HotPixel constructor (#635)
+    - Fix install location of linearref headers (#624)
 
 Changes in 3.3.8
 2013-02-28

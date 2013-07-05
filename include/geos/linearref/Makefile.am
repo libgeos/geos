@@ -4,7 +4,7 @@
 #
 EXTRA_DIST = 
 
-geosdir = $(includedir)/geos/algorithm
+geosdir = $(includedir)/geos/linearref
 
 geos_HEADERS = \
     ExtractLineByLocation.h \
