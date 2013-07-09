@@ -10,5 +10,4 @@ geosdir = $(includedir)/geos/triangulate
 
 geos_HEADERS = \
 	IncrementalDelaunayTriangulator.h \
-	DelaunayTriangulationBuilder.h \
-	VoronoiDiagramBuilder.h 
+	DelaunayTriangulationBuilder.h 

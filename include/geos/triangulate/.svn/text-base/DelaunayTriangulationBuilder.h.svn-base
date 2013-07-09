@@ -29,7 +29,6 @@ namespace geos {
 	  class MultiLineString;
 	  class GeometryCollection;
 	  class GeometryFactory;
-	  class Envelope;
   }
   namespace triangulate { 
     namespace quadedge { 
@@ -139,8 +138,6 @@ public:
 	 * @return the faces of the triangulation. The caller takes ownership of the returned object.
 	 */
 	std::auto_ptr<geom::GeometryCollection> getTriangles(const geom::GeometryFactory& geomFact);
-
-	static geom::Envelope envelope(const geom::CoordinateSequence& coords);
 
 };
 

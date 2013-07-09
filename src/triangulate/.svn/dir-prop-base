@@ -1,0 +1,12 @@
+K 10
+svn:ignore
+V 49
+.libs
+.deps
+Makefile
+Makefile.in
+*.lo
+*.la
+*.obj
+
+END

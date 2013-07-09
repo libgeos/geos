@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/geos/!svn/ver/3765/trunk/include/geos/triangulate
+END
+DelaunayTriangulationBuilder.h
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/geos/!svn/ver/3701/trunk/include/geos/triangulate/DelaunayTriangulationBuilder.h
+END
+IncrementalDelaunayTriangulator.h
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/geos/!svn/ver/3700/trunk/include/geos/triangulate/IncrementalDelaunayTriangulator.h
+END
+Makefile.am
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/geos/!svn/ver/3693/trunk/include/geos/triangulate/Makefile.am
+END

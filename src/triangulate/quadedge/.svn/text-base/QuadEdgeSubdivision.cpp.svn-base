@@ -18,7 +18,6 @@
 #include <geos/triangulate/quadedge/QuadEdgeSubdivision.h>
 
 #include <vector>
-#include <set>
 
 #include <geos/geom/Polygon.h>
 #include <geos/geom/LineSegment.h>
@@ -27,7 +26,6 @@
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateArraySequenceFactory.h>
-#include <geos/geom/CoordinateList.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/util/IllegalArgumentException.h>
@@ -37,7 +35,6 @@
 #include <geos/triangulate/quadedge/LastFoundQuadEdgeLocator.h>
 #include <geos/triangulate/quadedge/LocateFailureException.h>
 #include <geos/triangulate/quadedge/TriangleVisitor.h>
-#include <geos/geom/Triangle.h>
 
 using namespace geos::geom;
 
@@ -393,33 +390,6 @@ public:
 	}
 }; 
 
-class
-QuadEdgeSubdivision::TriangleCircumcenterVisitor : public TriangleVisitor
-{
-public:
-	TriangleCircumcenterVisitor()
-	{
-	}
-	void visit(QuadEdge* triEdges[3])
-	{
-		Coordinate a = triEdges[0]->orig().getCoordinate();
-		Coordinate b = triEdges[1]->orig().getCoordinate();
-		Coordinate c = triEdges[2]->orig().getCoordinate();
-
-		//Port circumcenter to geom::triangle.
-		Triangle *triangle = new Triangle(a,b,c);
-		Coordinate cc;
-		(*triangle).circumcentre(cc);
-
-		Vertex *ccVertex = new Vertex(cc);
-
-		for(int i=0 ; i<3 ; i++){
-			triEdges[i]->rot().setOrig(*ccVertex);
-		}
-	}
-};
-
-
 void
 QuadEdgeSubdivision::getTriangleCoordinates(QuadEdgeSubdivision::TriList* triList, bool includeFrame)
 {
@@ -500,106 +470,6 @@ QuadEdgeSubdivision::getTriangles( const GeometryFactory &geomFact)
 
 	return std::auto_ptr<GeometryCollection>(ret);
 }
-
-//Methods for VoronoiDiagram
-std::auto_ptr<geom::GeometryCollection> 
-QuadEdgeSubdivision::getVoronoiDiagram(const geom::GeometryFactory& geomFact)
-{
-	std::vector<geom::Geometry*> vorCells;
-	getVoronoiCellPolygons(vorCells,geomFact);
-
-	GeometryCollection* ret = geomFact.createGeometryCollection(vorCells);
-	return std::auto_ptr<GeometryCollection>(ret);
-}
-
-void
-QuadEdgeSubdivision::getVoronoiCellPolygons(std::vector<geom::Geometry *> &cells ,const geom::GeometryFactory& geomFact)
-{
-	TriangleCircumcenterVisitor* tricircumVisitor = new TriangleCircumcenterVisitor();
-	visitTriangles((TriangleVisitor*)tricircumVisitor, true);
-
-	QuadEdgeList *edges = getVertexUniqueEdges(false);
-	for(QuadEdgeSubdivision::QuadEdgeList::iterator it=(*edges).begin() ; it!=(*edges).end() ; ++it)
-	{
-		QuadEdge *qe = *it;
-		Polygon *poly;
-		getVoronoiCellPolygon(qe,geomFact);
-		cells.push_back(static_cast<Geometry*>(poly));
-	}
-}
-Polygon* 
-QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFactory& geomFact)
-{
-	std::vector<Coordinate> cellPts;
-	QuadEdge startQE = *qe;
-	do{
-		Coordinate cc = (*qe).rot().orig().getCoordinate();
-		cellPts.push_back(cc);
-		*qe = (*qe).oPrev();
-
-	}while (!(*qe).testEqualQuadEdge(startQE));
-
-
-	//CoordList from a vector of Coordinates.
-	geom::CoordinateList coordList(cellPts);
-	//for checking close ring in CoordList class:
-	coordList.closeRing();
-	
-	if(coordList.size() < 4)
-	{
-		cout << coordList << endl;
-		coordList.insert(coordList.end(),*(coordList.end()),true);
-//		coordList.insert(coordList.end(),coordList.get(coordList.size()-1),true);
-	}
-
-	std::auto_ptr<Coordinate::Vect> pts = coordList.toCoordinateArray();
-	std::vector<Coordinate> *pts_pass = pts.get();
-	geom::CoordinateSequence *pts_seq;
-	(*pts_seq).add(pts_pass,true);
-	geom::Polygon *cellPoly = geomFact.createPolygon(geomFact.createLinearRing(pts_seq),NULL);
-
-	Vertex v = startQE.orig();
-	Coordinate *c;
-	*c = v.getCoordinate();
-	(*cellPoly).setUserData(reinterpret_cast<void*>(c));
-	
-	return cellPoly;
-}
-
-QuadEdgeSubdivision::QuadEdgeList* QuadEdgeSubdivision::getVertexUniqueEdges(bool includeFrame)
-{
-	QuadEdgeList *edges;
-	std::set<Vertex> visitedVertices;
-//	std::unordered_set<quadedge::Vertex> visitedVertices;
-	for(QuadEdgeSubdivision::QuadEdgeList::iterator it=(*edges).begin() ; it!=(*edges).end() ; ++it)
-	{
-		QuadEdge *qe = (QuadEdge*)(*it);
-		Vertex v = (*qe).orig();
-
-		std::set<Vertex>::iterator got = visitedVertices.find(v);
-		if(got == visitedVertices.end())
-		{
-			visitedVertices.insert(v);
-			if(includeFrame || ! QuadEdgeSubdivision::isFrameVertex(v))
-			{
-				(*edges).push_back(qe);
-			}
-		}
-		QuadEdge *qd;
-		*qd = (*qe).sym();
-		Vertex vd = (*qd).orig();
-		
-		got = visitedVertices.find(vd);
-		if(got == visitedVertices.end()){
-			visitedVertices.insert(vd);
-			if(includeFrame || ! QuadEdgeSubdivision::isFrameVertex(vd)){
-				(*edges).push_back(qd);
-			}
-		}
-	}
-	return edges;
-}
-
 
 } //namespace geos.triangulate.quadedge
 } //namespace geos.triangulate
