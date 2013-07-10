@@ -159,7 +159,7 @@ public:
 	}
 	void closeRing()
 	{
-		if(coords.size() > 0)
+		if(!coords.empty())
 		{
 			if(! (*(coords.begin())).equals(*(coords.end())))
 			{
