@@ -22,7 +22,10 @@
  *
  *	- Currently you have to explicitly GEOSGeom_destroy() all
  *	  GEOSGeom objects to avoid memory leaks, and to GEOSFree()
- *	  all returned char * (unless const). 
+ *	  all returned char * (unless const).
+ *
+ *	- Functions ending with _r are thread safe; see details in RFC 3
+ *	  http://trac.osgeo.org/geos/wiki/RFC3
  *
  ***********************************************************************/
 
@@ -1248,7 +1251,7 @@ extern GEOSGeometry GEOS_DLL *GEOSWKTReader_read_r(GEOSContextHandle_t handle,
 /* WKT Writer */
 extern GEOSWKTWriter GEOS_DLL *GEOSWKTWriter_create();
 extern void GEOS_DLL GEOSWKTWriter_destroy(GEOSWKTWriter* writer);
-extern char GEOS_DLL *GEOSWKTWriter_write(GEOSWKTWriter* reader, const GEOSGeometry* g);
+extern char GEOS_DLL *GEOSWKTWriter_write(GEOSWKTWriter* writer, const GEOSGeometry* g);
 extern void GEOS_DLL GEOSWKTWriter_setTrim(GEOSWKTWriter *writer, char trim);
 extern void GEOS_DLL GEOSWKTWriter_setRoundingPrecision(GEOSWKTWriter *writer, int precision);
 extern void GEOS_DLL GEOSWKTWriter_setOutputDimension(GEOSWKTWriter *writer, int dim);
@@ -1260,7 +1263,7 @@ extern GEOSWKTWriter GEOS_DLL *GEOSWKTWriter_create_r(
 extern void GEOS_DLL GEOSWKTWriter_destroy_r(GEOSContextHandle_t handle,
                                              GEOSWKTWriter* writer);
 extern char GEOS_DLL *GEOSWKTWriter_write_r(GEOSContextHandle_t handle,
-                                            GEOSWKTWriter* reader,
+                                            GEOSWKTWriter* writer,
                                             const GEOSGeometry* g);
 extern void GEOS_DLL GEOSWKTWriter_setTrim_r(GEOSContextHandle_t handle,
                                             GEOSWKTWriter *writer,
