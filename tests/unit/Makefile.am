@@ -106,6 +106,7 @@ geos_unit_SOURCES = \
 	triangulate/quadedge/QuadEdgeTest.cpp \
 	triangulate/quadedge/QuadEdgeSubdivisionTest.cpp \
 	triangulate/DelaunayTest.cpp \
+	triangulate/VoronoiTest.cpp \
 	util/UniqueCoordinateArrayFilterTest.cpp \
 	capi/GEOSCoordSeqTest.cpp \
 	capi/GEOSDelaunayTriangulationTest.cpp \
