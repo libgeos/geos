@@ -12,6 +12,9 @@ Options:
      [--version]
      [--libs]
      [--clibs]
+     [--cclibs]
+     [--static-clibs]
+     [--static-cclibs]
      [--cflags]
      [--ldflags]
      [--includes]
@@ -38,10 +41,21 @@ case $1 in
     echo -I${prefix}/include 
       ;;
     --libs)
+      # TODO: make an alias for --clibs
+      # see http://trac.osgeo.org/geos/ticket/497
       echo -L${libdir} -lgeos
       ;;
     --clibs)
       echo -L${libdir} -lgeos_c
+      ;;
+    --cclibs)
+      echo -L${libdir} -lgeos
+      ;;
+    --static-clibs)
+      echo -L${libdir} -lgeos_c -lgeos -m
+      ;;
+    --static-cclibs)
+      echo -L${libdir} -lgeos -m
       ;;
     --ldflags)
       echo -L${libdir}
