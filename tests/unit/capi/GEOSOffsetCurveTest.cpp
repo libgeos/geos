@@ -213,6 +213,8 @@ namespace tut
             // likely, 5 >= 5
             ensure(GEOSGeomGetNumPoints(geom2_) >= GEOSGeomGetNumPoints(geom1_));
             wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+            GEOSGeom_destroy(geom2_);
+            GEOSFree(wkt_);
             //ensure_equals(std::string(wkt_), ...);
         }
 
