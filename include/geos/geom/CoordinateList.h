@@ -159,13 +159,10 @@ public:
 	}
 	void closeRing()
 	{
-		if(!coords.empty())
+		if(!coords.empty() && ! (*(coords.begin())).equals(*(coords.end())))
 		{
-			if(! (*(coords.begin())).equals(*(coords.end())))
-			{
-				Coordinate c= *(coords.begin());
-				coords.insert(coords.begin(),c);
-			}
+			Coordinate c= *(coords.begin());
+			coords.insert(coords.end(),c);
 		}
 	}
 
