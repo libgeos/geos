@@ -2017,6 +2017,26 @@ MULTIPOINT(
 
     }
 
+    public function testGeometry_delaunayTriangulation()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        $g = $reader->read('POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))');
+
+        $b = $g->delaunayTriangulation();
+        $this->assertEquals(
+'GEOMETRYCOLLECTION (POLYGON ((0 1, 0 0, 1 0, 0 1)), POLYGON ((0 1, 1 0, 1 1, 0 1)))'
+            , $writer->write($b));
+
+        $b = $g->delaunayTriangulation(0,true);
+        $this->assertEquals(
+'MULTILINESTRING ((0 1, 1 1), (0 0, 0 1), (0 0, 1 0), (1 0, 1 1), (0 1, 1 0))'
+            , $writer->write($b));
+
+    }
+
     public function testGeometry_snapTo()
     {
         $reader = new GEOSWKTReader();
