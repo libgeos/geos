@@ -91,7 +91,7 @@ public:
 
 private:
 	QuadEdgeList quadEdges;
-	QuadEdgeList removedEdges;
+	QuadEdgeList createdEdges;
 	QuadEdge* startingEdges[3];
 	double tolerance;
 	double edgeCoincidenceTolerance;

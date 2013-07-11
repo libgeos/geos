@@ -63,19 +63,16 @@ QuadEdgeSubdivision::QuadEdgeSubdivision(const geom::Envelope &env, double toler
 	createFrame(env);
 	initSubdiv(startingEdges);
 	quadEdges.push_back(startingEdges[0]);
+	createdEdges.push_back(startingEdges[0]);
 	quadEdges.push_back(startingEdges[1]);
+	createdEdges.push_back(startingEdges[1]);
 	quadEdges.push_back(startingEdges[2]);
+	createdEdges.push_back(startingEdges[2]);
 }
 
 QuadEdgeSubdivision::~QuadEdgeSubdivision()
 {
-	for(QuadEdgeList::iterator iter=quadEdges.begin(); iter!=quadEdges.end(); ++iter)
-	{
-		(*iter)->free();
-		delete *iter;
-	}
-
-	for(QuadEdgeList::iterator iter=removedEdges.begin(); iter!=removedEdges.end(); ++iter)
+	for(QuadEdgeList::iterator iter=createdEdges.begin(); iter!=createdEdges.end(); ++iter)
 	{
 		(*iter)->free();
 		delete *iter;
@@ -134,6 +131,7 @@ QuadEdgeSubdivision::makeEdge(const Vertex &o, const Vertex &d)
 	QuadEdge *q0_ptr = q0.get();
 	q0.release();
 
+	createdEdges.push_back(q0_ptr);
 	quadEdges.push_back(q0_ptr);
 	return *q0_ptr;
 }
@@ -145,6 +143,7 @@ QuadEdgeSubdivision::connect(QuadEdge &a, QuadEdge &b)
 	QuadEdge *q0_ptr = q0.get();
 	q0.release();
 
+	createdEdges.push_back(q0_ptr);
 	quadEdges.push_back(q0_ptr);
 	return *q0_ptr;
 }
@@ -161,9 +160,6 @@ QuadEdgeSubdivision::remove(QuadEdge &e)
 	//mark these edges as removed
 	e.remove();
 
-	//keep a list of removed edges so that we can
-	//properly free memory
-	removedEdges.push_back(&e);
 }
 
 QuadEdge*

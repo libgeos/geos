@@ -41,13 +41,14 @@ namespace tut
 	group test_incdelaunaytri_group("geos::triangulate::Delaunay");
 
 	//helper function for funning triangulation
-	void runDelaunay(const char *sitesWkt, bool computeTriangles, const char *expectedWkt)
+	void runDelaunay(const char *sitesWkt, bool computeTriangles, const char *expectedWkt, double tolerance=0.0)
 	{
 		WKTReader reader;
 		std::auto_ptr<Geometry> results;
 		Geometry *sites = reader.read(sitesWkt);
 		Geometry *expected = reader.read(expectedWkt);
 		DelaunayTriangulationBuilder builder;
+		builder.setTolerance(tolerance);
 		GeometryFactory geomFact;
 
 		builder.setSites(*sites);
@@ -59,8 +60,8 @@ namespace tut
 		results->normalize();
 		expected->normalize();
 			
-		ensure(results->equalsExact(expected, 1e-7));
-		ensure(results->getCoordinateDimension() == expected->getCoordinateDimension());
+		ensure(results->toString(), results->equalsExact(expected, 1e-7));
+		ensure_equals(results->getCoordinateDimension(), expected->getCoordinateDimension());
 
 		delete sites;
 		delete expected;
@@ -159,6 +160,17 @@ namespace tut
 
 		runDelaunay(wkt, false, expectedEdges);
 		runDelaunay(wkt, true, expectedTri);
+	}
+
+	// 8 - Tolerance robustness - http://trac.osgeo.org/geos/ticket/604
+	template<>
+	template<>
+	void object::test<8>()
+	{
+		const char * wkt = "MULTIPOINT(-118.3964065 56.0557,-118.396406 56.0475,-118.396407 56.04,-118.3968 56)";
+		const char* expectedEdges = "MULTILINESTRING ((-118.3964065 56.0557, -118.396406 56.0475), (-118.396407 56.04, -118.396406 56.0475), (-118.3968 56, -118.396407 56.04))";
+
+		runDelaunay(wkt, false, expectedEdges, 0.001);
 	}
 } // namespace tut
 

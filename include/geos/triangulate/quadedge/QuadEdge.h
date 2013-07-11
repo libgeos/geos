@@ -33,14 +33,14 @@ namespace quadedge { //geos.triangulate.quadedge
  * The quadedge algebra was described in a well-known paper by Guibas and Stolfi,
  * "Primitives for the manipulation of general subdivisions and the computation of Voronoi diagrams", 
  * <i>ACM Transactions on Graphics</i>, 4(2), 1985, 75-123.
- * <p>
+ * 
  * Each edge object is part of a quartet of 4 edges,
  * linked via their <tt>_rot</tt> references.
  * Any edge in the group may be accessed using a series of {@link #rot()} operations.
  * Quadedges in a subdivision are linked together via their <tt>next</tt> references.
  * The linkage between the quadedge quartets determines the topology
  * of the subdivision. 
- * <p>
+ *
  * The edge class does not contain separate information for vertice or faces; a vertex is implicitly
  * defined as a ring of edges (created using the <tt>next</tt> field).
  * 
@@ -150,6 +150,8 @@ public:
 	 * this quadedge quartet, but indicates
 	 * that this quadedge quartet no longer participates
 	 * in a subdivision.
+	 *
+	 * NOTE: called "delete" in JTS
 	 *
 	 */
 	void remove();
