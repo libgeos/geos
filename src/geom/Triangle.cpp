@@ -43,7 +43,7 @@ void Triangle::circumcentre(Coordinate& result)
 	double by = p1.y - cy;
 
 	double denom = 2 * det(ax,ay,bx,by);
-	double numx = det(ay , ax * ax + ay , by , bx * bx + by * by);
+	double numx = det(ay , ax * ax + ay * ay , by , bx * bx + by * by);
 	double numy = det(ax, ax * ax + ay * ay, bx, bx * bx + by * by);
 
 	double ccx = cx - numx / denom;

@@ -66,7 +66,7 @@ public:
 	 * @param resultPoint the point into which to write the inCentre of the triangle
 	 */
 
-	void circumcentre(Coordinate& resultPoint);
+	void circumcentre(Coordinate& result);
 private:
 
 	/** 
