@@ -21,6 +21,7 @@
 #include <algorithm>
 #include <math.h>
 #include <vector>
+#include <iostream>
 
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Coordinate.h>
@@ -53,6 +54,7 @@ VoronoiDiagramBuilder::~VoronoiDiagramBuilder()
 	   	delete diagramEnv;
 }
 
+
 void VoronoiDiagramBuilder::setSites(const geom::Geometry& geom)
 {
    siteCoords = DelaunayTriangulationBuilder::extractUniqueCoordinates(geom);
@@ -62,7 +64,12 @@ void VoronoiDiagramBuilder::setSites(const geom::CoordinateSequence& coords)
 {
    CoordinateSequence* coords_cpy = coords.clone();
    DelaunayTriangulationBuilder::unique(*coords_cpy);
-   *siteCoords = *coords_cpy;
+   siteCoords = coords_cpy->clone();
+
+   //problem is with assignment operator: rectify:
+   std::string str = siteCoords->toString();		//remove
+   std::cout << str << std::endl;			//remove
+   delete coords_cpy;
 }
 
 void VoronoiDiagramBuilder::setClipEnvelope(const geom::Envelope& clpEnv)
