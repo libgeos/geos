@@ -173,25 +173,14 @@ QuadEdge::toLineSegment() const
 }
 
 bool
-QuadEdge::testEqualQuadEdge(const QuadEdge& qe2)
+QuadEdge::operator!=(const QuadEdge& qe)
 {
-	/*
-	   if(&qe1 == NULL && &qe2 == NULL)
-	   {
-	   return 1;
-	   }
-	   else if((&qe1==NULL && &qe2!=NULL) || (&qe1!=NULL && &qe2==NULL))
-	   {
-	   return 0;
-	   }
-	 */
-	//when both of them are not null:
-	if((*_rot).testEqualQuadEdge(qe2.rot()) && (*next).testEqualQuadEdge(qe2.oNext()) //&& (*data == *(qe2.data)) 
-			&& (isAlive == qe2.isAlive) /*&& orig()==qe2.orig()*/)
+	if(this == NULL && &qe == NULL)
+		return 0;
+	if( (*_rot != *(qe._rot)) || (*next != *(qe.next)) || isAlive != qe.isAlive || !vertex.equals(qe.vertex) )
 		return 1;
 	else
 		return 0;
-
 }
 
 } //namespace geos.triangulate.quadedge

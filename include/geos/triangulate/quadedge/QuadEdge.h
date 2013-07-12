@@ -357,7 +357,7 @@ public:
 	  * @param QuadEdge qe
 	  * @return bool
 	  */
-	bool testEqualQuadEdge(const QuadEdge& qe2);
+	bool operator!=(const QuadEdge& qe);
 };
 
 } //namespace geos.triangulate.quadedge
