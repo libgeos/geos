@@ -50,25 +50,27 @@ VoronoiDiagramBuilder::~VoronoiDiagramBuilder()
 		delete subdiv;
 	if(clipEnv)
 	   	delete clipEnv;
-	if(diagramEnv)
-	   	delete diagramEnv;
+//	if(diagramEnv)
+//	   	delete diagramEnv;
 }
 
 
 void VoronoiDiagramBuilder::setSites(const geom::Geometry& geom)
 {
    siteCoords = DelaunayTriangulationBuilder::extractUniqueCoordinates(geom);
+//   std::cout << "Size After "<< siteCoords->getSize() << std::endl;
 }
 
 void VoronoiDiagramBuilder::setSites(const geom::CoordinateSequence& coords)
 {
+//   std::cout << "Size before:: "<< coords.getSize() << std::endl;
    CoordinateSequence* coords_cpy = coords.clone();
    DelaunayTriangulationBuilder::unique(*coords_cpy);
    siteCoords = coords_cpy->clone();
 
-   //problem is with assignment operator: rectify:
-   std::string str = siteCoords->toString();		//remove
-   std::cout << str << std::endl;			//remove
+//   std::string str = siteCoords->toString();		//remove
+//   std::cout << str << std::endl;			//remove
+//   std::cout << "Size after:: "<<siteCoords->getSize() << std::endl;
    delete coords_cpy;
 }
 
@@ -88,7 +90,9 @@ void VoronoiDiagramBuilder::create()
    if(subdiv!=NULL)
       return;
    geom::Envelope siteEnv = DelaunayTriangulationBuilder::envelope(*siteCoords);
-   *diagramEnv = siteEnv;
+   std::cout << siteEnv.toString() << endl;
+   diagramEnv = &siteEnv;
+   std::cout << diagramEnv->toString() << endl;
    //adding buffer around the final envelope
    double expandBy = fmax(diagramEnv->getWidth() , diagramEnv->getHeight());
    diagramEnv->expandBy(expandBy);
@@ -97,15 +101,16 @@ void VoronoiDiagramBuilder::create()
 
    IncrementalDelaunayTriangulator::VertexList* vertices = DelaunayTriangulationBuilder::toVertices(*siteCoords);
 
-   quadedge::QuadEdgeSubdivision qes(siteEnv,tolerance);
-   *subdiv = qes;
+   subdiv = new quadedge::QuadEdgeSubdivision(siteEnv,tolerance);
    IncrementalDelaunayTriangulator triangulator(subdiv);
    triangulator.insertSites(*vertices);
+   delete vertices;
 }
 
 quadedge::QuadEdgeSubdivision* VoronoiDiagramBuilder::getSubdivision()
 {
    create();
+   std::cout << "Done with create()\n";
    return subdiv;
 }
 

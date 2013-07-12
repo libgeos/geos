@@ -23,7 +23,7 @@ int main()
 {
 	WKTReader reader;
 	geos::triangulate::VoronoiDiagramBuilder builder;
-	Geometry* sites = reader.read("MULTIPOINT ((150 240), (180 300), (300 290), (230 330), (244 284), (230 250))");
+	Geometry* sites = reader.read("MULTIPOINT ((150 240), (180 300), (300 290), (230 330), (244 284), (230 250), (150 240) , (230 250))");
 	Coordinate a(180,300);
 	Coordinate b(300,290);
 	Coordinate c(230,330);
@@ -43,11 +43,20 @@ int main()
 	v->push_back(h);
 
 	geos::geom::CoordinateArraySequence *seq = new CoordinateArraySequence(v);
-
-	cout << "Elements before setSites: "<< seq->getSize() << endl;
+	
+	//set sites using CoordinateArraySequence
 	builder.setSites(*seq);
-	cout << "Elements before setSites: "<< seq->getSize() << endl;
+	//set sites using Geometry
+//	builder.setSites(*sites);
 
+	//getting the subdiv()
+	QuadEdgeSubdivision* subdiv = builder.getSubdivision();
+
+	cout << "Tolerance:: " << subdiv->getTolerance() << endl;
+	cout << "Envelope:: " << subdiv->getEnvelope().toString() << endl;
+
+	GeometryFactory geomFact;
+	builder.getDiagram(geomFact);
 	delete seq;
 	delete sites;
 //	delete v;

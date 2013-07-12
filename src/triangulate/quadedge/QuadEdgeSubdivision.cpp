@@ -537,7 +537,7 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFac
 		cellPts.push_back(cc);
 		*qe = (*qe).oPrev();
 
-	}while (!(*qe).testEqualQuadEdge(startQE));
+	}while (*qe != startQE);
 
 
 	//CoordList from a vector of Coordinates.
@@ -568,13 +568,12 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFac
 
 QuadEdgeSubdivision::QuadEdgeList* QuadEdgeSubdivision::getVertexUniqueEdges(bool includeFrame)
 {
-	QuadEdgeList *edges;
+	QuadEdgeList *edges = new QuadEdgeList();
 	std::set<Vertex> visitedVertices;
-//	std::unordered_set<quadedge::Vertex> visitedVertices;
-	for(QuadEdgeSubdivision::QuadEdgeList::iterator it=(*edges).begin() ; it!=(*edges).end() ; ++it)
+	for(QuadEdgeSubdivision::QuadEdgeList::iterator it=quadEdges.begin() ; it!=quadEdges.end() ; ++it)
 	{
 		QuadEdge *qe = (QuadEdge*)(*it);
-		Vertex v = (*qe).orig();
+		Vertex v = qe->orig();
 
 		std::set<Vertex>::iterator got = visitedVertices.find(v);
 		if(got == visitedVertices.end())
@@ -582,18 +581,17 @@ QuadEdgeSubdivision::QuadEdgeList* QuadEdgeSubdivision::getVertexUniqueEdges(boo
 			visitedVertices.insert(v);
 			if(includeFrame || ! QuadEdgeSubdivision::isFrameVertex(v))
 			{
-				(*edges).push_back(qe);
+				edges->push_back(qe);
 			}
 		}
-		QuadEdge *qd;
-		*qd = (*qe).sym();
-		Vertex vd = (*qd).orig();
+		QuadEdge *qd = (QuadEdge*)&(qe->sym());
+		Vertex vd = qd->orig();
 		
 		got = visitedVertices.find(vd);
 		if(got == visitedVertices.end()){
 			visitedVertices.insert(vd);
 			if(includeFrame || ! QuadEdgeSubdivision::isFrameVertex(vd)){
-				(*edges).push_back(qd);
+				edges->push_back(qd);
 			}
 		}
 	}
