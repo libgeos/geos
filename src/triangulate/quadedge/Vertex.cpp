@@ -192,10 +192,11 @@ double Vertex::interpolateZ(const Coordinate &p, const Coordinate &p0,
 
 bool operator<(const Vertex& v1 ,const Vertex& v2)
 {
-	if( (v1.getCoordinate()).equals(v2.getCoordinate()) )
-		return 0;
-	else
+	if(v1.getCoordinate().x < v2.getCoordinate().x)
 		return 1;
+	else if(v1.getCoordinate().x == v2.getCoordinate().x && v1.getCoordinate().y < v2.getCoordinate().y)
+		return 1;
+	return 0;
 }
 
 } //namespace geos.triangulate.quadedge
