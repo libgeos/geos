@@ -52,6 +52,8 @@ GeometryCollection::GeometryCollection(const GeometryCollection &gc)
 	for(size_t i=0; i<ngeoms; ++i)
 	{
 		(*geometries)[i]=(*gc.geometries)[i]->clone();
+    // Drop SRID from inner geoms
+		(*geometries)[i]->setSRID(0);
 	}
 }
 
@@ -68,6 +70,13 @@ GeometryCollection::GeometryCollection(vector<Geometry *> *newGeoms, const Geome
 		return;
 	}
 	geometries=newGeoms;
+
+  // Drop SRID from inner geoms
+	size_t ngeoms=geometries->size();
+	for(size_t i=0; i<ngeoms; ++i)
+	{
+		(*geometries)[i]->setSRID(0);
+	}
 }
 
 /*
