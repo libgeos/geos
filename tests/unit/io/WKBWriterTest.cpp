@@ -37,8 +37,8 @@ namespace tut
 			:
 			pm(1000.0),
 			gf(&pm),
-			wktreader(&gf),
-            wkbreader(gf)
+      wktreader(&gf),
+      wkbreader(gf)
 		{}
 
 	};
@@ -132,6 +132,31 @@ namespace tut
 
             delete geom;
     }
+
+	// 4 - Test that SRID is output only once
+  // See http://trac.osgeo.org/geos/ticket/583
+	template<>
+	template<>
+	void object::test<4>()
+	{         
+    typedef geos::geom::Geometry Geom;
+    typedef std::vector<Geom *> GeomVect;
+    GeomVect *geoms = new GeomVect;
+    geoms->push_back( wktreader.read("POLYGON((0 0,1 0,1 1,0 1,0 0))") );
+    geoms->back()->setSRID(4326);
+    Geom *geom = gf.createGeometryCollection(geoms);
+    std::stringstream result_stream;
+
+    wkbwriter.setOutputDimension( 2 );
+    wkbwriter.setByteOrder( 1 );
+    wkbwriter.setIncludeSRID( 1 );
+    wkbwriter.writeHEX( *geom, result_stream );
+    delete geom;
+
+    std::string actual = result_stream.str();
+    ensure_equals( actual, "0107000000010000000103000000010000000500000000000000000000000000000000000000000000000000F03F0000000000000000000000000000F03F000000000000F03F0000000000000000000000000000F03F00000000000000000000000000000000");
+
+  }
 
 
 } // namespace tut
