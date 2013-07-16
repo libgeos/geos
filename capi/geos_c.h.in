@@ -968,9 +968,9 @@ extern char GEOS_DLL *GEOSRelate_r(GEOSContextHandle_t handle,
                                    const GEOSGeometry* g2);
 
 /* return 2 on exception, 1 on true, 0 on false */
-extern char GEOS_DLL GEOSRelatePatternMatch(const char* mat, const char *pat);
+extern char GEOS_DLL GEOSRelatePatternMatch(const char *mat, const char *pat);
 extern char GEOS_DLL GEOSRelatePatternMatch_r(GEOSContextHandle_t handle,
-                                         const char* mat,
+                                         const char *mat,
                                          const char *pat);
 
 /* return NULL on exception, a string to GEOSFree otherwise */
