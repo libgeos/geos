@@ -384,7 +384,7 @@ private:
 private:
 	class TriangleCoordinatesVisitor; 
 
-	class TriangleCircumcenterVisitor;
+	class TriangleCircumcentreVisitor;
 
 public:
 	/**
@@ -407,11 +407,11 @@ public:
 
 	std::auto_ptr<geom::GeometryCollection> getVoronoiDiagram(const geom::GeometryFactory& geomFact);
 
-	void getVoronoiCellPolygons(std::vector<geom::Geometry *> &cells ,const geom::GeometryFactory& geomFact);
+	std::vector<geom::Geometry*>& getVoronoiCellPolygons(const geom::GeometryFactory& geomFact);
 
 	QuadEdgeList* getVertexUniqueEdges(bool includeFrame);
 
-	Polygon* getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFactory& geomFact);
+	geom::Polygon* getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFactory& geomFact);
 
 private:
 	bool testEqualQuadEdge(const QuadEdge &qe1,const QuadEdge &qe2);

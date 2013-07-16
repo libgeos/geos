@@ -19,6 +19,7 @@
 
 #include <vector>
 #include <set>
+#include <iostream>
 
 #include <geos/geom/Polygon.h>
 #include <geos/geom/LineSegment.h>
@@ -40,6 +41,7 @@
 #include <geos/geom/Triangle.h>
 
 using namespace geos::geom;
+using namespace std;
 
 namespace geos {
 namespace triangulate { //geos.triangulate
@@ -394,10 +396,10 @@ public:
 }; 
 
 class
-QuadEdgeSubdivision::TriangleCircumcenterVisitor : public TriangleVisitor
+QuadEdgeSubdivision::TriangleCircumcentreVisitor : public TriangleVisitor
 {
 public:
-	TriangleCircumcenterVisitor()
+	TriangleCircumcentreVisitor()
 	{
 	}
 	void visit(QuadEdge* triEdges[3])
@@ -505,64 +507,142 @@ QuadEdgeSubdivision::getTriangles( const GeometryFactory &geomFact)
 std::auto_ptr<geom::GeometryCollection> 
 QuadEdgeSubdivision::getVoronoiDiagram(const geom::GeometryFactory& geomFact)
 {
-	std::vector<geom::Geometry*> vorCells;
-	getVoronoiCellPolygons(vorCells,geomFact);
+	std::vector<geom::Geometry*> vorCells = getVoronoiCellPolygons(geomFact);
 
-	GeometryCollection* ret = geomFact.createGeometryCollection(vorCells);
+/*	cout << "Number of polygons:: "<<vorCells.size() << endl;
+	for(std::vector<geom::Geometry*>::iterator it = vorCells.begin() ; it!=vorCells.end() ; ++it)
+	{
+		cout << "Details about the polygon::\n";
+		cout << "Type of Geometry::"<<(*it)->getGeometryType() << endl;
+		cout << "Number of points::"<<(*it)->getNumPoints() << endl;
+		cout << "Points are as follows::\n";
+		CoordinateSequence *seq = (*it)->getCoordinates();
+		std::vector<Coordinate> *vec = (std::vector<Coordinate>*)seq->toVector();
+		for(std::vector<Coordinate>::iterator it2=vec->begin() ; it2!=vec->end() ; ++it2)
+		{
+			cout << it2->toString() << ", ";
+		}
+		cout << "\n" << endl;
+		//print the Coordinates::
+	}
+*/	
+	GeometryCollection *ret = geomFact.createGeometryCollection(vorCells);
+	cout << "In here\n";
+
+	//free memory::
+	for(std::vector<geom::Geometry*>::iterator it = vorCells.begin() ; it!=vorCells.end() ; ++it)
+	{
+		delete *it;
+	}
+	vorCells.clear();
 	return std::auto_ptr<GeometryCollection>(ret);
 }
 
-void
-QuadEdgeSubdivision::getVoronoiCellPolygons(std::vector<geom::Geometry *> &cells ,const geom::GeometryFactory& geomFact)
+std::vector<geom::Geometry*>&
+QuadEdgeSubdivision::getVoronoiCellPolygons(const geom::GeometryFactory& geomFact)
 {
-	TriangleCircumcenterVisitor* tricircumVisitor = new TriangleCircumcenterVisitor();
+	std::vector<geom::Geometry*> cells;
+	TriangleCircumcentreVisitor* tricircumVisitor = new TriangleCircumcentreVisitor();
 	visitTriangles((TriangleVisitor*)tricircumVisitor, true);
 
 	QuadEdgeList *edges = getVertexUniqueEdges(false);
+
 	for(QuadEdgeSubdivision::QuadEdgeList::iterator it=(*edges).begin() ; it!=(*edges).end() ; ++it)
 	{
 		QuadEdge *qe = *it;
-		Polygon *poly;
-		getVoronoiCellPolygon(qe,geomFact);
+		geom::Polygon *poly = getVoronoiCellPolygon(qe,geomFact);
+
+//		cout << "Number of points::"<< poly->getNumPoints() << endl;
+//		cout << "Points are as follows::\n";
+//		CoordinateSequence *seq = poly->getCoordinates();
+//		std::vector<Coordinate> *vec = (std::vector<Coordinate>*)seq->toVector();
+//		for(std::vector<Coordinate>::iterator i=vec->begin() ; i!=vec->end() ; ++i)
+//		{
+//			cout << i->toString() << ", ";
+//		}
+//		cout << "\n" << endl;
+		
 		cells.push_back(static_cast<Geometry*>(poly));
 	}
+
+/*	for(std::vector<geom::Geometry*>::iterator it = cells.begin() ; it!=cells.end() ; ++it)
+	{
+		cout << "Details about the polygon::\n";
+		cout << "Type of Geometry::"<<(*it)->getGeometryType() << endl;
+		cout << "Number of points::"<<(*it)->getNumPoints() << endl;
+		cout << "Points are as follows::\n";
+		CoordinateSequence *seq = (*it)->getCoordinates();
+		std::vector<Coordinate> *vec = (std::vector<Coordinate>*)seq->toVector();
+		for(std::vector<Coordinate>::iterator it2=vec->begin() ; it2!=vec->end() ; ++it2)
+		{
+			cout << it2->toString() << ", ";
+		}
+		cout << "\n" << endl;
+		//print the Coordinates::
+	}
+*/
+	return cells;
 }
 Polygon* 
 QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFactory& geomFact)
 {
 	std::vector<Coordinate> cellPts;
-	QuadEdge startQE = *qe;
+	QuadEdge *startQE = qe;
 	do{
-		Coordinate cc = (*qe).rot().orig().getCoordinate();
+		Coordinate cc = qe->rot().orig().getCoordinate();
+		cout << cc.x << " " << cc.y <<endl;
 		cellPts.push_back(cc);
-		*qe = (*qe).oPrev();
+		qe = &qe->oPrev();
+	//	cout << "trapped here\n";
 
-	}while (*qe != startQE);
+	}while ( qe != startQE);
 
 
 	//CoordList from a vector of Coordinates.
 	geom::CoordinateList coordList(cellPts);
 	//for checking close ring in CoordList class:
 	coordList.closeRing();
-	
+/*	cout << "CoordList after closeRing" <<endl;
+	for(CoordinateList::iterator it=coordList.begin() ; it!=coordList.end() ; ++it)
+	{
+		cout << it->x  << " " <<  it->y << ", ";
+	}
+	cout << "\n" << endl;
+*/	
 	if(coordList.size() < 4)
 	{
 		cout << coordList << endl;
 		coordList.insert(coordList.end(),*(coordList.end()),true);
 //		coordList.insert(coordList.end(),coordList.get(coordList.size()-1),true);
 	}
-
+/*	cout << "CoordList after coordList.insert():" <<endl;
+	for(CoordinateList::iterator it=coordList.begin() ; it!=coordList.end() ; ++it)
+	{
+		cout << it->x  << " " <<  it->y << ", ";
+	}
+	cout << "\n" << endl;
+*/	
 	std::auto_ptr<Coordinate::Vect> pts = coordList.toCoordinateArray();
 	std::vector<Coordinate> *pts_pass = pts.get();
-	geom::CoordinateSequence *pts_seq;
-	(*pts_seq).add(pts_pass,true);
+	geom::CoordinateArraySequence *pts_seq = new geom::CoordinateArraySequence(pts_pass);
 	geom::Polygon *cellPoly = geomFact.createPolygon(geomFact.createLinearRing(pts_seq),NULL);
 
-	Vertex v = startQE.orig();
-	Coordinate *c;
+	Vertex v = startQE->orig();
+	Coordinate *c = new Coordinate();
 	*c = v.getCoordinate();
 	(*cellPoly).setUserData(reinterpret_cast<void*>(c));
 	
+	cout << "Number of points::"<< cellPoly->getNumPoints() << endl;
+	cout << "Points are as follows::\n";
+	CoordinateSequence *seq = cellPoly->getCoordinates();
+	std::vector<Coordinate> *vec = (std::vector<Coordinate>*)seq->toVector();
+	for(std::vector<Coordinate>::iterator it=vec->begin() ; it!=vec->end() ; ++it)
+	{
+		cout << it->toString() << ", ";
+	}
+	cout << "\n" << endl;
+	
+
 	return cellPoly;
 }
 
@@ -575,25 +655,40 @@ QuadEdgeSubdivision::QuadEdgeList* QuadEdgeSubdivision::getVertexUniqueEdges(boo
 		QuadEdge *qe = (QuadEdge*)(*it);
 		Vertex v = qe->orig();
 
-		std::set<Vertex>::iterator got = visitedVertices.find(v);
-		if(got == visitedVertices.end())
+
+//		cout << "Vertex to be checked\n";//remove
+//		cout << v.getX() << " " << v.getY() << endl;//remove
+//		std::set<Vertex*>::iterator got = visitedVertices.find(v);
+		if(visitedVertices.find(v) == visitedVertices.end())	//if v not found
 		{
+//			cout << "Vertex to be entered: " << v.getX() << " " << v.getY() << endl;//
 			visitedVertices.insert(v);
 			if(includeFrame || ! QuadEdgeSubdivision::isFrameVertex(v))
 			{
+//				cout << "edge that is entered: having origin as:\n" << endl;
+//				cout << "origin Coordinates:: " << qe->orig().getX() << " " << qe->orig().getY() << endl;
+//				cout << "Destination Coordinates:: " << qe->dest().getX() << " " << qe->dest().getY() << endl;
 				edges->push_back(qe);
 			}
 		}
-		QuadEdge *qd = (QuadEdge*)&(qe->sym());
+		QuadEdge *qd = &(qe->sym());
 		Vertex vd = qd->orig();
-		
-		got = visitedVertices.find(vd);
-		if(got == visitedVertices.end()){
+
+//		cout << "Sym Vertex to be checked\n";	////remove
+//		cout << vd.getX() << " " << vd.getY() << endl;		///remove
+
+//		got = visitedVertices.find(vd);
+		if(visitedVertices.find(vd) == visitedVertices.end()){
+//			cout << "sym Vertex to be entered: " << vd.getX() << " " << vd.getY() << endl;//
 			visitedVertices.insert(vd);
 			if(includeFrame || ! QuadEdgeSubdivision::isFrameVertex(vd)){
+//				cout << "sym edge that is entered: having origin as:\n" << endl;
+//				cout << "origin Coordinates:: " << qd->orig().getX() << " " << qd->orig().getY() << endl;
+//				cout << "Destination Coordinates:: " << qd->dest().getX() << " " << qd->dest().getY() << endl;
 				edges->push_back(qd);
 			}
 		}
+//		cout << "\n\n";
 	}
 	return edges;
 }

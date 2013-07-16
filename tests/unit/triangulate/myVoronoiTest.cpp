@@ -23,7 +23,7 @@ int main()
 {
 	WKTReader reader;
 	geos::triangulate::VoronoiDiagramBuilder builder;
-	Geometry* sites = reader.read("MULTIPOINT ((150 240), (180 300), (300 290), (230 330), (244 284), (230 250), (150 240) , (230 250))");
+//	Geometry* sites = reader.read("MULTIPOINT ((150 240), (180 300), (300 290), (230 330), (244 284), (230 250), (150 240) , (230 250))");
 	Coordinate a(180,300);
 	Coordinate b(300,290);
 	Coordinate c(230,330);
@@ -52,13 +52,34 @@ int main()
 	//getting the subdiv()
 	QuadEdgeSubdivision* subdiv = builder.getSubdivision();
 
-	cout << "Tolerance:: " << subdiv->getTolerance() << endl;
-	cout << "Envelope:: " << subdiv->getEnvelope().toString() << endl;
+//	cout << "Tolerance:: " << subdiv->getTolerance() << endl;
+//	cout << "Envelope:: " << subdiv->getEnvelope().toString() << endl;
 
 	GeometryFactory geomFact;
+
+//	std::list<QuadEdge*> *qlist = subdiv->getVertexUniqueEdges(false);
+/*	for(std::list<QuadEdge*>::iterator it=qlist->begin() ; it!=qlist->end() ; ++it)
+	{
+		cout << "origin Coordinates:: " << (*it)->rot().orig().getX() << " " << (*it)->rot().orig().getY() << endl;
+		cout << "Destination Coordinates:: " << (*it)->rot().dest().getX() << " " << (*it)->rot().dest().getY() << endl;
+		cout << endl;
+	}*/
+/*	std::list<QuadEdge*>::iterator it=qlist->begin();
+	QuadEdge *qe;
+	*qe = (*it)->oPrev();
+	while(1)
+	{
+		cout << "origin Coordinates:: " << qe->rot().orig().getX() << " " << qe->rot().orig().getY() << endl;
+		cout << "Destination Coordinates:: " << qe->rot().dest().getX() << " " << qe->rot().dest().getY() << endl;
+		cout << endl;
+		*qe = qe->oPrev();
+
+	}*/
 	builder.getDiagram(geomFact);
+
+	cout << "EXIT NOW\n";
 	delete seq;
-	delete sites;
+//	delete sites;
 //	delete v;
 
 
