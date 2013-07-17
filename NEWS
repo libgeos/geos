@@ -2,6 +2,7 @@ Changes in 3.3.9
 2012-MM-DD
 
 - Bug fixes / improvements
+    - Fix OffsetCurve op in presence of duplicated vertices (#602)
     - Fix LineSegmentVisitor copy ctor (#636)
     - Fix area boundary return from GEOSPointOnSurface (#623)
     - Speedup GEOSWKBReader_read (#621)

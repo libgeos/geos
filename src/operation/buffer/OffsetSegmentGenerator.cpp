@@ -135,6 +135,10 @@ OffsetSegmentGenerator::initSideSegments(const Coordinate &nS1,
 void
 OffsetSegmentGenerator::addNextSegment(const Coordinate &p, bool addStartPoint)
 {
+
+  // do nothing if points are equal
+  if (s2==p) return;
+
   // s0-s1-s2 are the coordinates of the previous segment
   // and the current one
   s0=s1;
@@ -144,9 +148,6 @@ OffsetSegmentGenerator::addNextSegment(const Coordinate &p, bool addStartPoint)
   computeOffsetSegment(seg0, side, distance, offset0);
   seg1.setCoordinates(s1, s2);
   computeOffsetSegment(seg1, side, distance, offset1);
-
-  // do nothing if points are equal
-  if (s1==s2) return;
 
   int orientation=CGAlgorithms::computeOrientation(s0, s1, s2);
   bool outsideTurn =

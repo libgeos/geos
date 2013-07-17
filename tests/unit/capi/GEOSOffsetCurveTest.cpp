@@ -189,5 +189,96 @@ namespace tut
         ));
     }
 
+    // left-side and right-side curve
+    // See http://trac.osgeo.org/postgis/ticket/633
+    template<>
+    template<>
+    void object::test<7>()
+    {
+        std::string wkt0("LINESTRING ("
+            "665.7317504882812500 133.0762634277343700,"
+            "1774.4752197265625000 19.9391822814941410,"
+            "756.2413940429687500 466.8306579589843700,"
+            "626.1337890625000000 1898.0147705078125000,"
+            "433.8007202148437500 404.6052856445312500)");
+        
+        geom1_ = GEOSGeomFromWKT(wkt0.c_str());
+        ensure( 0 != geom1_ );
+
+        double width = 57.164000837203;
+
+        // left-sided
+        {
+            geom2_ = GEOSOffsetCurve(geom1_, width, 8, GEOSBUF_JOIN_MITRE, 5.57);
+            ensure( 0 != geom2_ );
+            // likely, 5 >= 5
+            ensure(GEOSGeomGetNumPoints(geom2_) >= GEOSGeomGetNumPoints(geom1_));
+            wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+            GEOSGeom_destroy(geom2_);
+            GEOSFree(wkt_);
+            //ensure_equals(std::string(wkt_), ...);
+        }
+
+        // right-sided
+        {
+            width = -width;
+            geom2_ = GEOSOffsetCurve(geom1_, width, 8, GEOSBUF_JOIN_MITRE, 5.57);
+            ensure( 0 != geom2_ );
+            // likely, 5 >= 7
+            ensure(GEOSGeomGetNumPoints(geom2_) >= GEOSGeomGetNumPoints(geom1_));
+            wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+            //ensure_equals(std::string(wkt_), ...);
+        }
+    }
+
+    // Test duplicated inner vertex in input 
+    // See http://trac.osgeo.org/postgis/ticket/602
+    template<>
+    template<>
+    void object::test<8>()
+    {
+        double width = -1;
+
+        geom1_ = GEOSGeomFromWKT("LINESTRING(0 0,0 10,0 10,10 10)");
+        ensure( 0 != geom1_ );
+
+        geom2_ = GEOSOffsetCurve(geom1_, width, 8, GEOSBUF_JOIN_ROUND, 0);
+        ensure( "Unexpected exception", 0 != geom2_ );
+        wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+        ensure_equals(std::string(wkt_), "LINESTRING (10 9, 1 9, 1 0)");
+    }
+
+    // Test duplicated final vertex in input 
+    // See http://trac.osgeo.org/postgis/ticket/602
+    template<>
+    template<>
+    void object::test<9>()
+    {
+        double width = -1;
+
+        geom1_ = GEOSGeomFromWKT("LINESTRING(0 0,0 10,0 10)");
+        ensure( 0 != geom1_ );
+
+        geom2_ = GEOSOffsetCurve(geom1_, width, 8, GEOSBUF_JOIN_ROUND, 0);
+        ensure( "Unexpected exception", 0 != geom2_ );
+        wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+        ensure_equals(std::string(wkt_), "LINESTRING (1 10, 1 0)");
+    }
+
+    // Test only duplicated vertex in input 
+    // See http://trac.osgeo.org/postgis/ticket/602
+    template<>
+    template<>
+    void object::test<10>()
+    {
+        double width = -1;
+
+        geom1_ = GEOSGeomFromWKT("LINESTRING(0 10,0 10,0 10)");
+        ensure( 0 != geom1_ );
+
+        geom2_ = GEOSOffsetCurve(geom1_, width, 8, GEOSBUF_JOIN_ROUND, 0);
+        ensure( "Missing expected exception", 0 == geom2_ );
+    }
+
 } // namespace tut
 

@@ -81,7 +81,6 @@ BufferInputLineSimplifier::deleteShallowConcavities()
 	 * This ensures that end caps are generated consistently.
 	 */
 	unsigned int index = 1;
-	//int maxIndex = inputLine.size() - 1;
 
 	unsigned int midIndex = findNextNonDeletedIndex(index);
 	unsigned int lastIndex = findNextNonDeletedIndex(midIndex);
@@ -131,7 +130,7 @@ BufferInputLineSimplifier::collapseLine() const
 	for (size_t i=0, n=inputLine.size(); i<n; ++i)
 	{
 		if (isDeleted[i] != DELETE)
-			coordList->add(inputLine[i]);
+			coordList->add(inputLine[i], false);
 	}
 
 	return coordList;
