@@ -84,6 +84,7 @@ public:
 		if ( this == &o ) return *this;
 		querySeg = o.querySeg;
 		items.reset(new vector<LineSegment*>(*(o.items.get())));
+		return *this;
 	}
 
 	void visitItem(void* item)

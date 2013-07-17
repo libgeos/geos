@@ -2,6 +2,7 @@ Changes in 3.3.9
 2012-MM-DD
 
 - Bug fixes / improvements
+    - Fix LineSegmentVisitor copy ctor (#636)
     - Fix area boundary return from GEOSPointOnSurface (#623)
     - Speedup GEOSWKBReader_read (#621)
     - Fix RobustLineIntersector handling of invalid intersection points (#622)
