@@ -36,6 +36,7 @@
 #include <geos/algorithm/NotRepresentableException.h>
 #include <geos/algorithm/HCoordinate.h>
 #include <geos/util.h>
+#include <geos/util/IllegalArgumentException.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -128,6 +129,8 @@ OffsetCurveBuilder::getSingleSidedLineCurve(const CoordinateSequence* inputPts,
 
 
     int n1 = simp1.size() - 1;
+    if ( ! n1 ) 
+      throw util::IllegalArgumentException("Cannot get offset of single-vertex line");
     segGen->initSideSegments(simp1[0], simp1[1], Position::LEFT);
     segGen->addFirstSegment();
     for (int i = 2; i <= n1; ++i) {
@@ -145,6 +148,8 @@ OffsetCurveBuilder::getSingleSidedLineCurve(const CoordinateSequence* inputPts,
     const CoordinateSequence& simp2 = *simp2_;
 
     int n2 = simp2.size() - 1;
+    if ( ! n2 ) 
+      throw util::IllegalArgumentException("Cannot get offset of single-vertex line");
     segGen->initSideSegments(simp2[n2], simp2[n2-1], Position::LEFT);
     segGen->addFirstSegment();
     for (int i = n2-2; i >= 0; --i) {
