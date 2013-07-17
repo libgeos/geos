@@ -117,4 +117,42 @@ namespace tut
 		ensure( center.y < 4.3 );
 		ensure( 0 != ISNAN( center.z ) );
     }
+    // Test circumcentre()
+    template<>
+    template<>
+    void object::test<6>()
+    {
+	    using geos::geom::Triangle;
+	    using geos::geom::Coordinate;
+
+	    Coordinate x1(5,7);
+	    Coordinate x2(6,6);
+	    Coordinate x3(2,-2);
+
+	    Coordinate y1(3,3);
+	    Coordinate y2(9,10);
+	    Coordinate y3(6,7);
+
+	    Triangle t1(x1,x2,x3);
+
+	    Triangle t2(y1,y2,y3);
+
+	    Coordinate c1(0,0);
+	    t1.circumcentre(c1);
+	    Coordinate c2(0,0);
+	    t2.circumcentre(c2);
+	   // cout << "CicumCenter of triangle ABC:: " << c1.x << " " << c1.y << endl;
+
+	   // cout << "CicumCenter of triangle DEF:: " << c2.x << " " << c2.y << endl;
+
+	    // For t1:
+	    ensure_equals(c1.x ,2 );
+	    ensure_equals(c1.y ,3 );
+
+	    //For t2:
+
+	    ensure_equals(c2.x ,30.5 );
+	    ensure_equals(c2.y ,- 14.5 );
+    }
+
 } // namespace tut
