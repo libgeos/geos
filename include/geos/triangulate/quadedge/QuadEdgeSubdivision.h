@@ -407,11 +407,11 @@ public:
 
 	std::auto_ptr<geom::GeometryCollection> getVoronoiDiagram(const geom::GeometryFactory& geomFact);
 
-	std::vector<geom::Geometry*>& getVoronoiCellPolygons(const geom::GeometryFactory& geomFact);
+	std::vector<geom::Geometry*> getVoronoiCellPolygons(const geom::GeometryFactory& geomFact);
 
 	QuadEdgeList* getVertexUniqueEdges(bool includeFrame);
 
-	geom::Polygon* getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFactory& geomFact);
+	Geometry* getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFactory& geomFact);
 
 private:
 	bool testEqualQuadEdge(const QuadEdge &qe1,const QuadEdge &qe2);

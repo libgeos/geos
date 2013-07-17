@@ -509,25 +509,7 @@ QuadEdgeSubdivision::getVoronoiDiagram(const geom::GeometryFactory& geomFact)
 {
 	std::vector<geom::Geometry*> vorCells = getVoronoiCellPolygons(geomFact);
 
-/*	cout << "Number of polygons:: "<<vorCells.size() << endl;
-	for(std::vector<geom::Geometry*>::iterator it = vorCells.begin() ; it!=vorCells.end() ; ++it)
-	{
-		cout << "Details about the polygon::\n";
-		cout << "Type of Geometry::"<<(*it)->getGeometryType() << endl;
-		cout << "Number of points::"<<(*it)->getNumPoints() << endl;
-		cout << "Points are as follows::\n";
-		CoordinateSequence *seq = (*it)->getCoordinates();
-		std::vector<Coordinate> *vec = (std::vector<Coordinate>*)seq->toVector();
-		for(std::vector<Coordinate>::iterator it2=vec->begin() ; it2!=vec->end() ; ++it2)
-		{
-			cout << it2->toString() << ", ";
-		}
-		cout << "\n" << endl;
-		//print the Coordinates::
-	}
-*/	
 	GeometryCollection *ret = geomFact.createGeometryCollection(vorCells);
-	cout << "In here\n";
 
 	//free memory::
 	for(std::vector<geom::Geometry*>::iterator it = vorCells.begin() ; it!=vorCells.end() ; ++it)
@@ -538,7 +520,7 @@ QuadEdgeSubdivision::getVoronoiDiagram(const geom::GeometryFactory& geomFact)
 	return std::auto_ptr<GeometryCollection>(ret);
 }
 
-std::vector<geom::Geometry*>&
+std::vector<geom::Geometry*>
 QuadEdgeSubdivision::getVoronoiCellPolygons(const geom::GeometryFactory& geomFact)
 {
 	std::vector<geom::Geometry*> cells;
@@ -550,47 +532,20 @@ QuadEdgeSubdivision::getVoronoiCellPolygons(const geom::GeometryFactory& geomFac
 	for(QuadEdgeSubdivision::QuadEdgeList::iterator it=(*edges).begin() ; it!=(*edges).end() ; ++it)
 	{
 		QuadEdge *qe = *it;
-		geom::Polygon *poly = getVoronoiCellPolygon(qe,geomFact);
-
-//		cout << "Number of points::"<< poly->getNumPoints() << endl;
-//		cout << "Points are as follows::\n";
-//		CoordinateSequence *seq = poly->getCoordinates();
-//		std::vector<Coordinate> *vec = (std::vector<Coordinate>*)seq->toVector();
-//		for(std::vector<Coordinate>::iterator i=vec->begin() ; i!=vec->end() ; ++i)
-//		{
-//			cout << i->toString() << ", ";
-//		}
-//		cout << "\n" << endl;
+		Geometry *poly = getVoronoiCellPolygon(qe,geomFact);
 		
-		cells.push_back(static_cast<Geometry*>(poly));
+		cells.push_back(poly);
 	}
-
-/*	for(std::vector<geom::Geometry*>::iterator it = cells.begin() ; it!=cells.end() ; ++it)
-	{
-		cout << "Details about the polygon::\n";
-		cout << "Type of Geometry::"<<(*it)->getGeometryType() << endl;
-		cout << "Number of points::"<<(*it)->getNumPoints() << endl;
-		cout << "Points are as follows::\n";
-		CoordinateSequence *seq = (*it)->getCoordinates();
-		std::vector<Coordinate> *vec = (std::vector<Coordinate>*)seq->toVector();
-		for(std::vector<Coordinate>::iterator it2=vec->begin() ; it2!=vec->end() ; ++it2)
-		{
-			cout << it2->toString() << ", ";
-		}
-		cout << "\n" << endl;
-		//print the Coordinates::
-	}
-*/
 	return cells;
 }
-Polygon* 
+Geometry* 
 QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFactory& geomFact)
 {
 	std::vector<Coordinate> cellPts;
 	QuadEdge *startQE = qe;
 	do{
 		Coordinate cc = qe->rot().orig().getCoordinate();
-		cout << cc.x << " " << cc.y <<endl;
+	//	cout << cc.x << " " << cc.y <<endl;
 		cellPts.push_back(cc);
 		qe = &qe->oPrev();
 	//	cout << "trapped here\n";
@@ -602,26 +557,14 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFac
 	geom::CoordinateList coordList(cellPts);
 	//for checking close ring in CoordList class:
 	coordList.closeRing();
-/*	cout << "CoordList after closeRing" <<endl;
-	for(CoordinateList::iterator it=coordList.begin() ; it!=coordList.end() ; ++it)
-	{
-		cout << it->x  << " " <<  it->y << ", ";
-	}
-	cout << "\n" << endl;
-*/	
+
 	if(coordList.size() < 4)
 	{
 		cout << coordList << endl;
 		coordList.insert(coordList.end(),*(coordList.end()),true);
 //		coordList.insert(coordList.end(),coordList.get(coordList.size()-1),true);
 	}
-/*	cout << "CoordList after coordList.insert():" <<endl;
-	for(CoordinateList::iterator it=coordList.begin() ; it!=coordList.end() ; ++it)
-	{
-		cout << it->x  << " " <<  it->y << ", ";
-	}
-	cout << "\n" << endl;
-*/	
+	
 	std::auto_ptr<Coordinate::Vect> pts = coordList.toCoordinateArray();
 	std::vector<Coordinate> *pts_pass = pts.get();
 	geom::CoordinateArraySequence *pts_seq = new geom::CoordinateArraySequence(pts_pass);
@@ -632,18 +575,7 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFac
 	*c = v.getCoordinate();
 	(*cellPoly).setUserData(reinterpret_cast<void*>(c));
 	
-	cout << "Number of points::"<< cellPoly->getNumPoints() << endl;
-	cout << "Points are as follows::\n";
-	CoordinateSequence *seq = cellPoly->getCoordinates();
-	std::vector<Coordinate> *vec = (std::vector<Coordinate>*)seq->toVector();
-	for(std::vector<Coordinate>::iterator it=vec->begin() ; it!=vec->end() ; ++it)
-	{
-		cout << it->toString() << ", ";
-	}
-	cout << "\n" << endl;
-	
-
-	return cellPoly;
+	return cellPoly->clone();
 }
 
 QuadEdgeSubdivision::QuadEdgeList* QuadEdgeSubdivision::getVertexUniqueEdges(bool includeFrame)
