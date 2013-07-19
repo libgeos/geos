@@ -350,7 +350,7 @@ QuadEdgeSubdivision::fetchTriangleToVisit(QuadEdge *edge,
 	do
 	{
 		triEdges[edgeCount] = curr;
-
+	//	cout << "This is in fetchTriangle:: " <<triEdges[edgeCount]->orig().getCoordinate() << endl;
 		if (isFrameEdge(*curr))
 			isFrame = true;
 
@@ -408,15 +408,19 @@ public:
 		Coordinate b = triEdges[1]->orig().getCoordinate();
 		Coordinate c = triEdges[2]->orig().getCoordinate();
 
+	//	cout << "Triangle coords as a,b,c::" << a << ", "<< b << ", " << c << endl;
 		//Port circumcenter to geom::triangle.
 		Triangle *triangle = new Triangle(a,b,c);
 		Coordinate cc;
 		(*triangle).circumcentre(cc);
 
+	//	cout << "circumcentre:: " << cc << endl;
+
 		Vertex *ccVertex = new Vertex(cc);
 
 		for(int i=0 ; i<3 ; i++){
 			triEdges[i]->rot().setOrig(*ccVertex);
+	//		cout << "This is in visit method:: " << triEdges[i]->rot().orig().getCoordinate() << endl;
 		}
 	}
 };
@@ -435,7 +439,7 @@ QuadEdgeSubdivision::visitTriangles(TriangleVisitor *triVisitor, bool includeFra
 
 	QuadEdgeStack edgeStack;
 	edgeStack.push(startingEdges[0]);
-
+//	cout << "edgeStack element 1:: " << edgeStack.top()->orig().getCoordinate() << endl;
 	QuadEdgeSet visitedEdges;
 
 	while (!edgeStack.empty()) {
@@ -529,6 +533,10 @@ QuadEdgeSubdivision::getVoronoiCellPolygons(const geom::GeometryFactory& geomFac
 
 	QuadEdgeList *edges = getVertexUniqueEdges(false);
 
+/*	for(QuadEdgeList::iterator it=edges->begin() ; it!=edges->end() ; ++it)
+	{
+		cout << (*it)->rot().orig().getCoordinate() << endl;
+	}*/
 	for(QuadEdgeSubdivision::QuadEdgeList::iterator it=(*edges).begin() ; it!=(*edges).end() ; ++it)
 	{
 		QuadEdge *qe = *it;
@@ -570,10 +578,13 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFac
 	geom::CoordinateArraySequence *pts_seq = new geom::CoordinateArraySequence(pts_pass);
 	geom::Polygon *cellPoly = geomFact.createPolygon(geomFact.createLinearRing(pts_seq),NULL);
 
+
 	Vertex v = startQE->orig();
 	Coordinate *c = new Coordinate();
 	*c = v.getCoordinate();
 	(*cellPoly).setUserData(reinterpret_cast<void*>(c));
+	
+//	cout << cellPoly->toString() << endl << endl;
 	
 	return cellPoly->clone();
 }
@@ -588,9 +599,8 @@ QuadEdgeSubdivision::QuadEdgeList* QuadEdgeSubdivision::getVertexUniqueEdges(boo
 		Vertex v = qe->orig();
 
 
-//		cout << "Vertex to be checked\n";//remove
-//		cout << v.getX() << " " << v.getY() << endl;//remove
-//		std::set<Vertex*>::iterator got = visitedVertices.find(v);
+	//	cout << "Vertex to be checked\n";//remove
+	//	cout << v.getX() << " " << v.getY() << endl;//remove
 		if(visitedVertices.find(v) == visitedVertices.end())	//if v not found
 		{
 //			cout << "Vertex to be entered: " << v.getX() << " " << v.getY() << endl;//
@@ -609,7 +619,6 @@ QuadEdgeSubdivision::QuadEdgeList* QuadEdgeSubdivision::getVertexUniqueEdges(boo
 //		cout << "Sym Vertex to be checked\n";	////remove
 //		cout << vd.getX() << " " << vd.getY() << endl;		///remove
 
-//		got = visitedVertices.find(vd);
 		if(visitedVertices.find(vd) == visitedVertices.end()){
 //			cout << "sym Vertex to be entered: " << vd.getX() << " " << vd.getY() << endl;//
 			visitedVertices.insert(vd);
