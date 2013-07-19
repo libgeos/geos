@@ -55,14 +55,14 @@ namespace tut
 		builder.setSites(*sites);
 		results=builder.getDiagram(geomFact);
 
-//		std::string out = writer.write(results.get());
+		std::string out = writer.write(results.get());
 
 	//	std::cout << out << endl;
 		results->normalize();
 		expected->normalize();
 			
 		ensure(results->equalsExact(expected, 1e-7));
-//		ensure(results->getCoordinateDimension() == expected->getCoordinateDimension());
+		ensure(results->getCoordinateDimension() == expected->getCoordinateDimension());
 
 		delete sites;
 		delete expected;
@@ -74,23 +74,13 @@ namespace tut
 	template<>
 	void object::test<1>()
 	{
-		const char *wkt = "MULTIPOINT ((71,85) , (130,150) , (130,160) )";
-		const char *expected = "GEOMETRYCOLLECTION (POLYGON ((2 16, 2 206.9076923076923, 97.15282392026577 120.53820598006644, 135.02898550724638 16, 2 16)), POLYGON ((2 206.9076923076923, 2 219, 209 219, 209 148.5, 97.15282392026577 120.53820598006644, 2 206.9076923076923)),POLYGON ((209 148.5, 209 16, 135.02898550724638 16, 97.15282392026577 120.53820598006644, 209 148.5)))";
+		const char *wkt = "MULTIPOINT ((150 200), (180 270), (275 163))";
+
+		const char *expected = "GEOMETRYCOLLECTION (POLYGON ((25 38, 25 295, 221.20588235294116 210.91176470588235, 170.024 38, 25 38)), POLYGON ((400 369.6542056074766, 400 38, 170.024 38, 221.20588235294116 210.91176470588235, 400 369.6542056074766)), POLYGON ((25 295, 25 395, 400 395, 400 369.6542056074766, 221.20588235294116 210.91176470588235, 25 295)))";
+
 
 		runVoronoi(wkt,expected);
-		
-		/*		
-		//Create a subdivision centered at (0,0)
-		QuadEdgeSubdivision sub(Envelope(-100, 100, -100, 100), .00001);
-		//make a triagulaor to work on sub
-		IncrementalDelaunayTriangulator triangulator(&sub);
-
-		triangulator.insertSite(Vertex(0, 0));
-
-		//extract the triangles from the subdivision
-		GeometryFactory geomFact;
-		std::auto_ptr<GeometryCollection> tris = sub.getTriangles(geomFact);
-*/	}
-
+				
+	}
 } // namespace tut
 
