@@ -47,7 +47,7 @@ public:
 	 * @param resultPoint the point into which to write the inCentre of the triangle
 	 */
 
-	void inCentre(Coordinate& result);
+	void inCentre(Coordinate& resultPoint);
 
 	/**
 	 * Computes the circumcentre of a triangle. The circumcentre is the centre of
@@ -66,7 +66,7 @@ public:
 	 * @param resultPoint the point into which to write the inCentre of the triangle
 	 */
 
-	void circumcentre(Coordinate& result);
+	void circumcentre(Coordinate& resultPoint);
 private:
 
 	/** 

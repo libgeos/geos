@@ -133,26 +133,41 @@ namespace tut
 	    Coordinate y2(9,10);
 	    Coordinate y3(6,7);
 
+	    Coordinate a1(5,10);
+	    Coordinate a2(11,23);
+	    Coordinate a3(22,19);
+
 	    Triangle t1(x1,x2,x3);
 
 	    Triangle t2(y1,y2,y3);
 
-	    Coordinate c1(0,0);
-	    t1.circumcentre(c1);
-	    Coordinate c2(0,0);
-	    t2.circumcentre(c2);
-	   // cout << "CicumCenter of triangle ABC:: " << c1.x << " " << c1.y << endl;
-
-	   // cout << "CicumCenter of triangle DEF:: " << c2.x << " " << c2.y << endl;
+	    Triangle t3(a1,a2,a3);
 
 	    // For t1:
+	    Coordinate c1(0,0);
+	    t1.circumcentre(c1); 
 	    ensure_equals(c1.x ,2 );
 	    ensure_equals(c1.y ,3 );
-
+	    ensure( 0 != ISNAN( c1.z ) );
+	    
 	    //For t2:
-
+	    Coordinate c2(0,0);
+	    t2.circumcentre(c2);
 	    ensure_equals(c2.x ,30.5 );
 	    ensure_equals(c2.y ,- 14.5 );
+	    ensure( 0 != ISNAN( c2.z ) );
+
+	   
+	    //For t3:
+	    Coordinate c3(0,0);
+	    t3.circumcentre(c3);
+	    ensure( std::fabs(c3.x - 13.0) < 1 );
+	    ensure( c3.y > 13.7 );
+	    ensure( c3.y < 13.8 );
+	    ensure( 0 != ISNAN( c3.z ) );
+	    // cout << "CicumCenter of triangle ABC:: " << c1.x << " " << c1.y << endl;
+
+	  //  std::cout << "CicumCenter of triangle DEF:: " << c2.x << " " << c2.y << std::endl;
     }
 
 } // namespace tut
