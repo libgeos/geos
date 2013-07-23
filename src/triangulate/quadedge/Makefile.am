@@ -15,6 +15,6 @@ libquadedge_la_SOURCES = \
 	QuadEdgeLocator.cpp  \
 	LastFoundQuadEdgeLocator.cpp \
 	LocateFailureException.cpp \
-	TriangleVisitor.cpp 
+	TriangleVisitor.cpp
 
 libquadedge_la_LIBADD = 

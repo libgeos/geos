@@ -43,15 +43,15 @@ namespace quadedge { //geos.triangulate.quadedge
  * Models a site (node) in a {@link QuadEdgeSubdivision}. 
  * The sites can be points on a line string representing a
  * linear site. 
- * <p>
+ * 
  * The vertex can be considered as a vector with a norm, length, inner product, cross
  * product, etc. Additionally, point relations (e.g., is a point to the left of a line, the circle
  * defined by this point and two others, etc.) are also defined in this class.
- * <p>
+ *
  * It is common to want to attach user-defined data to 
  * the vertices of a subdivision.  
  * One way to do this is to subclass <tt>Vertex</tt>
- * to carry any desired information (see {@link ConstraintVertex}.
+ * to carry any desired information (see {@link ConstraintVertex}).
  * 
  * @author JTS: David Skea
  * @author JTS: Martin Davis
@@ -264,8 +264,6 @@ private:
 	static double interpolateZ(const geom::Coordinate &p, const geom::Coordinate &p0, 
 			const geom::Coordinate &p1);
 };
-
-GEOS_DLL bool operator<(const Vertex& v1 ,const Vertex& v2);
 
 } //namespace geos.triangulate.quadedge
 } //namespace geos.triangulate

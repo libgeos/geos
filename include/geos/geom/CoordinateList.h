@@ -157,15 +157,6 @@ public:
 		ret->assign(coords.begin(), coords.end());
 		return ret;
 	}
-	void closeRing()
-	{
-		if(!coords.empty() && ! (*(coords.begin())).equals(*(coords.end())))
-		{
-			Coordinate c= *(coords.begin());
-			coords.insert(coords.end(),c);
-		}
-	}
-
 private:
 
 	std::list<Coordinate> coords;

@@ -129,43 +129,6 @@ namespace tut
     clist.insert(it, Coordinate(0, 0), false);
     ensure_equals( clist.size(), 3u );
   }
-  //Test to check the functioning of closeRing() method.
-  template<>
-  template<>
-  void object::test<3>()
-  {
-	  using geos::geom::Coordinate;
 
-	  const Coordinate a(0,0);
-	  const Coordinate b(10,10);
-	  const Coordinate c(45,60);
-	  const Coordinate d(100,0);
-
-	  std::auto_ptr< std::vector<Coordinate> > v( new std::vector<Coordinate>() );
-	  v->push_back(a);                 
-	  v->push_back(b);                         
-	  v->push_back(c);                                 
-	  v->push_back(d);                                         
-	  geos::geom::CoordinateList coordlist(*v);
-
-	  coordlist.closeRing(); 
-
-	  geos::geom::CoordinateList::iterator it1,it2;
-	  it1 = coordlist.begin();
-	  it2 = --coordlist.end();
-	  ensure_equals(*it1,*it2);
-
-	  /* for(CoordinateList::iterator it=coordlist.begin() ; it!=coordlist.end() ; ++it)
-	     {                                                                                       
-	     cout << (*it).x << " " << (*it).y << endl;
-	     }*/                                                                                               
-
-
-	  //If the list is empty::
-	  coordlist.erase(coordlist.begin(),coordlist.end());
-	  coordlist.closeRing();
-	  ensure_equals(coordlist.empty(), true);
-
-  }
 
 } // namespace tut

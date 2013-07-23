@@ -10,8 +10,7 @@ INCLUDES = -I$(top_srcdir)/include
 
 libtriangulate_la_SOURCES = \
 	IncrementalDelaunayTriangulator.cpp \
-	DelaunayTriangulationBuilder.cpp \
-	VoronoiDiagramBuilder.cpp
+	DelaunayTriangulationBuilder.cpp 
 
 libtriangulate_la_LIBADD = \
     quadedge/libquadedge.la
