@@ -352,6 +352,14 @@ public:
 	 * @return a LineSegment
 	 */
 	std::auto_ptr<geom::LineSegment> toLineSegment() const;
+
+//
+	/**
+	  * For comparing two QuadEdge Objects
+	  * @param QuadEdge qe
+	  * @return bool
+	  */
+	bool operator!=(const QuadEdge& qe);
 };
 
 } //namespace geos.triangulate.quadedge

@@ -172,6 +172,17 @@ QuadEdge::toLineSegment() const
 			new geom::LineSegment(vertex.getCoordinate(), dest().getCoordinate()));
 }
 
+bool
+QuadEdge::operator!=(const QuadEdge& qe)
+{
+	if(this == NULL && &qe == NULL)
+		return 0;
+	if( (*_rot != *(qe._rot)) || (*next != *(qe.next)) || isAlive != qe.isAlive || !vertex.equals(qe.vertex) )
+		return 1;
+	else
+		return 0;
+}
+
 } //namespace geos.triangulate.quadedge
 } //namespace geos.triangulate
 } //namespace goes

@@ -265,6 +265,8 @@ private:
 			const geom::Coordinate &p1);
 };
 
+GEOS_DLL bool operator<(const Vertex& v1 ,const Vertex& v2);
+
 } //namespace geos.triangulate.quadedge
 } //namespace geos.triangulate
 } //namespace geos
