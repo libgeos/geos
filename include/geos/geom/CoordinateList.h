@@ -157,7 +157,6 @@ public:
 		ret->assign(coords.begin(), coords.end());
 		return ret;
 	}
-
 private:
 
 	std::list<Coordinate> coords;
