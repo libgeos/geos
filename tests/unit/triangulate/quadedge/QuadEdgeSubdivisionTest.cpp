@@ -16,6 +16,8 @@
 #include <geos/io/WKTReader.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Coordinate.h>
+
+#include <vector>
 // std
 #include <stdio.h>
 

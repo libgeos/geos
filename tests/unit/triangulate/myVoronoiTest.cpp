@@ -9,7 +9,7 @@
 #include <geos/io/WKTReader.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/GeometryFactory.h>
-
+#include <vector>
 #include <stdio.h>
 
 using namespace geos::triangulate;
@@ -22,16 +22,25 @@ using namespace std;
 int main()
 {
 	WKTReader reader;
+	WKTWriter writer;
 	geos::triangulate::VoronoiDiagramBuilder builder;
 //	Geometry* sites = reader.read("MULTIPOINT ((150 240), (180 300), (300 290), (230 330), (244 284), (230 250), (150 240) , (230 250))");
+//	Geometry* sites = reader.read("MULTIPOINT ((71 85) , (130 150) , (130 160) )");
+//	Geometry* sites = reader.read("MULTIPOINT ((150 200), (180 270), (275 163))");
+//	Geometry* sites = reader.read("MULTIPOINT ((170 210), (190 240), (230 280), (296 225), (245 183), (200 230), (200 140), (330 1    80), (150 290), (210 330))");
+	Geometry* sites = reader.read("MULTIPOINT ((150 200), (180 270), (275 163))");
+
+	std::auto_ptr<GeometryCollection> results;
+	
 	Coordinate a(180,300);
 	Coordinate b(300,290);
 	Coordinate c(230,330);
 	Coordinate d(244,284);
 	Coordinate e(230,250);
 	Coordinate f(150,240);
-	Coordinate g(150,240);
+	Coordinate g(250,240);
 	Coordinate h(230,330);
+	Coordinate i(200,300);
 	std::vector<Coordinate>* v = new std::vector<Coordinate>();
 	v->push_back(a);
 	v->push_back(b);
@@ -41,108 +50,31 @@ int main()
 	v->push_back(f);
 	v->push_back(g);
 	v->push_back(h);
+	v->push_back(i);
 
 	geos::geom::CoordinateArraySequence *seq = new CoordinateArraySequence(v);
-	
-	//set sites using CoordinateArraySequence
-	builder.setSites(*seq);
-	//set sites using Geometry
-//	builder.setSites(*sites);
+	builder.setSites(*sites);
 
 	//getting the subdiv()
 	QuadEdgeSubdivision* subdiv = builder.getSubdivision();
 
-//	cout << "Tolerance:: " << subdiv->getTolerance() << endl;
-//	cout << "Envelope:: " << subdiv->getEnvelope().toString() << endl;
-
+//	cout << "Tolerance::" <<subdiv->getTolerance() << endl;
+//	cout << "Envelope" << subdiv->getEnvelope().toString() << endl;
 	GeometryFactory geomFact;
 
-//	std::list<QuadEdge*> *qlist = subdiv->getVertexUniqueEdges(false);
-/*	for(std::list<QuadEdge*>::iterator it=qlist->begin() ; it!=qlist->end() ; ++it)
-	{
-		cout << "origin Coordinates:: " << (*it)->rot().orig().getX() << " " << (*it)->rot().orig().getY() << endl;
-		cout << "Destination Coordinates:: " << (*it)->rot().dest().getX() << " " << (*it)->rot().dest().getY() << endl;
-		cout << endl;
-	}*/
-/*	std::list<QuadEdge*>::iterator it=qlist->begin();
-	QuadEdge *qe;
-	*qe = (*it)->oPrev();
-	while(1)
-	{
-		cout << "origin Coordinates:: " << qe->rot().orig().getX() << " " << qe->rot().orig().getY() << endl;
-		cout << "Destination Coordinates:: " << qe->rot().dest().getX() << " " << qe->rot().dest().getY() << endl;
-		cout << endl;
-		*qe = qe->oPrev();
+//	results = subdiv->getVoronoiDiagram(geomFact);
+	std::vector<Geometry*> vorCells = subdiv->getVoronoiCellPolygons( geomFact );
 
-	}*/
-	builder.getDiagram(geomFact);
+	for(std::vector<Geometry*>::iterator it=vorCells.begin() ; it!=vorCells.end() ; ++it)
+	{
+		cout << (*it)->toString() << endl;
+	}
+//	results = builder.getDiagram(geomFact);
 
-	cout << "EXIT NOW\n";
+//	string out = writer.write(results.get());
+//	cout << out << endl;
+
 	delete seq;
-//	delete sites;
-//	delete v;
-
-
+	delete sites;
 	return 0;
 }
-/*
-namespace tut
-{
-	//
-	// Test Group
-	//
-
-	// dummy data, not used
-	struct test_voronoidiag_data
-	{
-		test_voronoidiag_data()
-		{
-		}
-	};
-
-	typedef test_group<test_voronoidiag_data> group;
-	typedef group::object object;
-
-	group test_voronoidiag_group("geos::triangulate::Voronoi");
-
-	//helper function for funning triangulation
-	void runVoronoi(const char *sitesWkt, const char *expectedWkt)
-	{
-		WKTReader reader;
-		WKTWriter writer;
-		std::auto_ptr<GeometryCollection> results;
-		Geometry *sites = reader.read(sitesWkt);
-		Geometry *expected = reader.read(expectedWkt);
-		VoronoiDiagramBuilder builder;
-		GeometryFactory geomFact;
-
-		builder.setSites(*sites);
-		results=builder.getDiagram(geomFact);
-
-//		std::string out = writer.write(results.get());
-
-	//	std::cout << out << endl;
-		results->normalize();
-		expected->normalize();
-			
-		ensure(results->equalsExact(expected, 1e-7));
-//		ensure(results->getCoordinateDimension() == expected->getCoordinateDimension());
-
-		delete sites;
-		delete expected;
-	}
-
-	// Test Cases
-	// 1 - test
-	template<>
-	template<>
-	void object::test<1>()
-	{
-		const char *wkt = "MULTIPOINT ((71 85) , (130 150) , (130 160) )";
-		const char *expected = "GEOMETRYCOLLECTION (POLYGON ((2 16, 2 206.9076923076923, 97.15282392026577 120.53820598006644, 135.02898550724638 16, 2 16)), POLYGON ((2 206.9076923076923, 2 219, 209 219, 209 148.5, 97.15282392026577 120.53820598006644, 2 206.9076923076923)),POLYGON ((209 148.5, 209 16, 135.02898550724638 16, 97.15282392026577 120.53820598006644, 209 148.5)))";
-
-		runVoronoi(wkt,expected);
-		
-	}
-
-} */

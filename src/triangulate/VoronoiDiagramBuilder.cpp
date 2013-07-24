@@ -88,7 +88,9 @@ void VoronoiDiagramBuilder::create()
    if(subdiv!=NULL)
       return;
    geom::Envelope siteEnv = DelaunayTriangulationBuilder::envelope(*siteCoords);
-//   std::cout << siteEnv.toString() << endl;
+   std::cout << siteEnv.toString() << endl;
+   std::cout << siteEnv.getWidth() << endl;
+   std::cout << siteEnv.getHeight() << endl;
 //   diagramEnv = &siteEnv;
    diagramEnv = new Envelope();
    *diagramEnv = siteEnv;
@@ -164,6 +166,10 @@ VoronoiDiagramBuilder::clipGeometryCollection(const geom::GeometryCollection& ge
 			clipped.push_back(result);
 		}
 //		delete g;
+	}
+	for(std::vector<Geometry*>::iterator it=clipped.begin() ; it!= clipped.end() ; ++it)
+	{
+		cout << (*it)->toString() << endl << endl;
 	}
 	GeometryCollection* ret = geom.getFactory()->createGeometryCollection(clipped);
 	return std::auto_ptr<GeometryCollection>(ret);
