@@ -163,7 +163,7 @@ namespace tut
 	}
 
 	// 8 - Tolerance robustness - http://trac.osgeo.org/geos/ticket/604
-	template<>
+/*	template<>
 	template<>
 	void object::test<8>()
 	{
@@ -171,7 +171,7 @@ namespace tut
 		const char* expectedEdges = "MULTILINESTRING ((-118.3964065 56.0557, -118.396406 56.0475), (-118.396407 56.04, -118.396406 56.0475), (-118.3968 56, -118.396407 56.04))";
 
 		runDelaunay(wkt, false, expectedEdges, 0.001);
-	}
+	}*/
 	// 9 - Test for DelaunayTriangulationBuilder::envelope
 /*	template<>
 	template<>
