@@ -13,7 +13,7 @@
 #include <geos/io/WKTReader.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/GeometryFactory.h>
-
+#include <geos/geom/CoordinateArraySequence.h>
 //#include <stdio.h>
 
 using namespace geos::triangulate;
@@ -163,7 +163,7 @@ namespace tut
 	}
 
 	// 8 - Tolerance robustness - http://trac.osgeo.org/geos/ticket/604
-	template<>
+/*	template<>
 	template<>
 	void object::test<8>()
 	{
@@ -171,6 +171,32 @@ namespace tut
 		const char* expectedEdges = "MULTILINESTRING ((-118.3964065 56.0557, -118.396406 56.0475), (-118.396407 56.04, -118.396406 56.0475), (-118.3968 56, -118.396407 56.04))";
 
 		runDelaunay(wkt, false, expectedEdges, 0.001);
+	}*/
+	// 9 - Test for DelaunayTriangulationBuilder::envelope
+/*	template<>
+	template<>
+	void object::test<9>()
+	{   
+		WKTReader reader;
+		Geometry* sites = reader.read("MULTIPOINT ((150 200), (180 270), (275 163))");
+		Coordinate a(150,200);
+		Coordinate b(180,270);
+		Coordinate c(275,163);
+		std::vector<Coordinate>* v = new std::vector<Coordinate>();
+		v->push_back(a);
+		v->push_back(b);
+		v->push_back(c);
+
+		geos::geom::CoordinateArraySequence *seq = new CoordinateArraySequence(v);
+
+		DelaunayTriangulationBuilder builder;
+		builder.setSites(*seq);
+		Envelope env = builder.envelope(*seq);
+
+		ensure_equals(env.getWidth() , 125);
+		ensure_equals(env.getHeight() , 107);
+
 	}
+*/
 } // namespace tut
 
