@@ -159,9 +159,9 @@ public:
 	}
 	void closeRing()
 	{   
-		if(!coords.empty() && ! (*(coords.begin())).equals(*(coords.end())))
+		if(!coords.empty() && ! (*(coords.begin())).equals(*(coords.rbegin())))
 		{   
-			Coordinate c= *(coords.begin());
+			const Coordinate &c = *(coords.begin());
 			coords.insert(coords.end(),c);
 		}   
 	}   
