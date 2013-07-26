@@ -173,7 +173,7 @@ namespace tut
 		runDelaunay(wkt, false, expectedEdges, 0.001);
 	}
 	// 9 - Test for DelaunayTriangulationBuilder::envelope
-/*	template<>
+	template<>
 	template<>
 	void object::test<9>()
 	{   
@@ -197,6 +197,6 @@ namespace tut
 		ensure_equals(env.getHeight() , 107);
 
 	}
-*/
+
 } // namespace tut
 
