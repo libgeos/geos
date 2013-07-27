@@ -157,6 +157,15 @@ public:
 		ret->assign(coords.begin(), coords.end());
 		return ret;
 	}
+	void closeRing()
+	{   
+		if(!coords.empty() && ! (*(coords.begin())).equals(*(coords.rbegin())))
+		{   
+			Coordinate c= *(coords.begin());
+			coords.insert(coords.end(),c);
+		}   
+	}   
+
 
 private:
 
