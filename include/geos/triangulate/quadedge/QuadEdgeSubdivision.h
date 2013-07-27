@@ -23,11 +23,18 @@
 #include <list>
 #include <stack>
 #include <set>
+#include <vector>
 
+#include <geos/geom/Geometry.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/GeometryCollection.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/triangulate/quadedge/QuadEdgeLocator.h>
 #include <geos/triangulate/quadedge/Vertex.h>
+
+using namespace geos::geom;
 
 namespace geos {
 
@@ -37,6 +44,7 @@ namespace geom {
 	class GeometryCollection;
 	class GeometryFactory;
 	class Coordinate;
+	class Geometry;
 }
 
 namespace triangulate { //geos.triangulate
@@ -372,7 +380,8 @@ private:
 	void getTriangleCoordinates(TriList* triList, bool includeFrame);
 
 private:
-	class TriangleCoordinatesVisitor; 
+	class TriangleCoordinatesVisitor;
+	class TriangleCircumcentreVisitor;
 
 public:
 	/**
@@ -392,6 +401,15 @@ public:
 	 * @return a GeometryCollection of triangular Polygons. The caller takes ownership of the returned object.
 	 */
 	std::auto_ptr<geom::GeometryCollection> getTriangles(const geom::GeometryFactory &geomFact);
+
+	std::auto_ptr<geom::GeometryCollection> getVoronoiDiagram(const geom::GeometryFactory& geomFact);
+
+	std::vector<geom::Geometry*> getVoronoiCellPolygons(const geom::GeometryFactory& geomFact);
+
+	QuadEdgeList* getVertexUniqueEdges(bool includeFrame);
+
+	Geometry* getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFactory& geomFact);
+
 
 };
 
