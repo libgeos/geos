@@ -61,6 +61,7 @@
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/linearref/LengthIndexedLine.h>
 #include <geos/triangulate/DelaunayTriangulationBuilder.h>
+#include <geos/triangulate/VoronoiDiagramBuilder.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util/Interrupt.h>
 #include <geos/util/UniqueCoordinateArrayFilter.h>
@@ -6217,6 +6218,35 @@ GEOSDelaunayTriangulation_r(GEOSContextHandle_t extHandle, const Geometry *g1, d
     
     return NULL;
 }
+Geometry* 
+GEOSVoronoiDiagramBuilder_r(GEOSContextHandle_t extHandle, const Geometry *g1,double tolerance)
+{
+	if ( 0 == extHandle ) return NULL;
+
+	GEOSContextHandleInternal_t *handle = 0; 
+	handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+	if ( 0 == handle->initialized ) return NULL;
+
+	using geos::triangulate::VoronoiDiagramBuilder;
+
+	try
+	{
+		VoronoiDiagramBuilder builder;
+		builder.setSites(*g1);
+		builder.setTolerance(tolerance);
+		return builder.getDiagram(*(g1->getFactory())).release();
+	}
+	catch(const std::exception &e)
+	{
+		handle->ERROR_MESSAGE("%s", e.what());
+	}
+	catch(...)
+	{
+		handle->ERROR_MESSAGE("Unknow exception thrown");
+	}
+
+	return NULL;
+}
+
 
 } /* extern "C" */
-
