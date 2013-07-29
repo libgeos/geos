@@ -1270,4 +1270,10 @@ GEOSDelaunayTriangulation(const Geometry *g, double tolerance, int onlyEdges)
   return GEOSDelaunayTriangulation_r(handle, g, tolerance, onlyEdges);
 }
 
+Geometry*
+GEOSVoronoiDiagramBuilder(const Geometry *g, double tolerance)
+{
+	return GEOSVoronoiDiagramBuilder_r(handle, g, tolerance);
+}
+
 } /* extern "C" */
