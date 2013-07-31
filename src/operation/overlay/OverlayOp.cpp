@@ -13,9 +13,7 @@
  *
  ***********************************************************************
  *
- * Last port: operation/overlay/OverlayOp.java rev. 1.31 (JTS-1.10)
- *
- * NOTE: Use of EdgeNodingValidator is not strictly the same
+ * Last port: operation/overlay/OverlayOp.java r567 (JTS-1.12+)
  *
  **********************************************************************/
 
@@ -705,40 +703,31 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 	 * In the future hopefully a faster check can be developed.
 	 *
 	 */
-	if ( resultPrecisionModel->isFloating() ) // NOTE: this is not in JTS
-	{
-
-		try
-		{
-			// Will throw TopologyException if noding is
-			// found to be invalid
-			EdgeNodingValidator::checkValid(edgeList.getEdges());
-		}
-		catch (const util::TopologyException& ex)
-		{
-#ifdef GEOS_DEBUG_VALIDATION // {
-			cout << "EdgeNodingValidator found noding invalid: " << ex.what() << endl;
-#endif // }
-                        // In the error scenario, the edgeList is not properly
-                        // deleted. Cannot add to the destructor of EdgeList
-                        // (as it should) because 
-                        // "graph.addEdges(edgeList.getEdges());" below
-                        // takes over edgeList ownership in the success case.
-                        edgeList.clearList();
-
-			throw ex;
-		}
-#ifdef GEOS_DEBUG_VALIDATION // {
+  try
+  {
+    // Will throw TopologyException if noding is
+    // found to be invalid
+    EdgeNodingValidator::checkValid(edgeList.getEdges());
+#ifdef GEOS_DEBUG_VALIDATION 
 		cout << "EdgeNodingValidator accepted the noding" << endl;
-#endif // }
+#endif
+  }
+  catch (const util::TopologyException& ex)
+  {
+#ifdef GEOS_DEBUG_VALIDATION
+    cout << "EdgeNodingValidator found noding invalid: " << ex.what() << endl;
+#endif
 
-	}
-#ifdef GEOS_DEBUG_VALIDATION // {
-	else
-	{
-		cout << "Did not run EdgeNodingValidator as the precision model is not floating" << endl;
-	}
-#endif // GEOS_DEBUG_VALIDATION }
+    // In the error scenario, the edgeList is not properly
+    // deleted. Cannot add to the destructor of EdgeList
+    // (as it should) because 
+    // "graph.addEdges(edgeList.getEdges());" below
+    // takes over edgeList ownership in the success case.
+    edgeList.clearList();
+
+    throw ex;
+  }
+
 #endif // ENABLE_EDGE_NODING_VALIDATOR }
 
 	GEOS_CHECK_FOR_INTERRUPTS();

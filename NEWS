@@ -11,6 +11,7 @@ Changes in 3.4.0
   - io::Writer::reserve() method
   - CAPI: GEOSNearestPoints
   - Add --cclibs, --static-clibs and --static-cclibs to geos-config (#497)
+  - Early bail out of overlay exception if input is invalid
 
 - C++ API changes:
   - New noding::GeometryNoder class
@@ -23,6 +24,8 @@ Changes in 3.4.0
   - NodedSegmentString takes ownership of CoordinateSenuence now
   - io::Writer's toString() returns by const ref, write() takes a const ref
 - Bug fixes / improvements
+  - Improve Overlay robustness by reducing input precision on topology
+    exception and by refusing to accept unnoded output (#459)
   - Improve Buffer robustness by reducing input precision on topology
     exception (#605)
   - Fixed Linear Referencing API to handle MultiLineStrings consistently
