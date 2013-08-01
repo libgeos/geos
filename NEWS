@@ -1,11 +1,11 @@
 Changes in 3.4.0
-????-??-??
+2013-08-??
 
 - New things:
   - Delaunay Triangulation API (#487, #565, #570, #567)
   - Interruptibility API (C and C++)
   - CAPI: GEOSNode (#496) - PHP: Geometry->node
-  - GeometryPrecisionReducer class
+  - GeometryPrecisionReducer class (#496, #526)
   - BufferInputLineSimplifier header exposed (#548)
   - New Centroid class supporting mixed geometry components (#612)
   - io::Writer::reserve() method
@@ -23,11 +23,19 @@ Changes in 3.4.0
   - GraphComponent::label is now a Label value (from a pointer)
   - NodedSegmentString takes ownership of CoordinateSenuence now
   - io::Writer's toString() returns by const ref, write() takes a const ref
+  - Unify prototypes of WKTReader and WKBReader constructor (#310) 
+  - GeometryCollection::computeEnvelopInternal and 
+    GeometryCollection::compareToSameClass are marked virtual (#478)
+  
 - Bug fixes / improvements
+  - A point interpolated from a line does not always intersect 
+    the same line (#323) 
+  - Port ConvexHull robustness fix from JTS-1.13 (#457)
   - Improve Overlay robustness by reducing input precision on topology
     exception and by refusing to accept unnoded output (#459)
   - Improve Buffer robustness by reducing input precision on topology
     exception (#605)
+  - Mismatch segment sides in OffsetCurveBuilder (#633 )
   - Fixed Linear Referencing API to handle MultiLineStrings consistently
     by always using the lowest possible index value, and by trimming
     zero-length components from results (#323)
