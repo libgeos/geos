@@ -744,6 +744,16 @@ extern GEOSGeometry GEOS_DLL * GEOSDelaunayTriangulation_r(
                                   double tolerance,
                                   int onlyEdges);
 
+//Voronoi Diagram Builder:
+extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagramBuilder(
+				const GEOSGeometry *g,  
+				double tolerance);
+
+extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagramBuilder_r(
+				GEOSContextHandle_t extHandle, 
+				const GEOSGeometry *g1, 
+				double tolerance);
+
 /************************************************************************
  *
  *  Binary predicates - return 2 on exception, 1 on true, 0 on false
