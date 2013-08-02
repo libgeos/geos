@@ -353,14 +353,12 @@ clean:
 	@IF EXIST $(SLIBNAME) $(RM) $(SLIBNAME)
 	@IF EXIST $(CLIBNAME) $(RM) $(CLIBNAME)
 	@IF EXIST $(CDLLNAME) $(RM) $(CDLLNAME)
-	-@del ..\capi\*.obj
-	-@del *.exe
-	-@del *.exp
-	-@del *.ilk
-	-@del *.manifest
-	-@del *.obj
-	-@del *.pdb
-	-@FOR %d IN ( $(GEOS_DIRLIST) ) DO del %d\*.obj
+	-@del /s *.exe
+	-@del /s *.exp
+	-@del /s *.ilk
+	-@del /s *.manifest
+	-@del /s *.obj
+	-@del /s *.pdb
 
 TestSweepLineSpeed.exe:	$(LIBNAME) \
 		..\tests\bigtest\GeometryTestFactory.obj \
