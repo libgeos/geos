@@ -46,7 +46,6 @@ geos_HEADERS = \
     opRelate.h \
     opValid.h \
     planargraph.h \
-    platform.h \
     precision.h \
     profiler.h \
     spatialIndex.h \
