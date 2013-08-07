@@ -136,7 +136,8 @@ geos_unit_SOURCES = \
 	capi/GEOSRelateBoundaryNodeRuleTest.cpp \
 	capi/GEOSRelatePatternMatchTest.cpp \
 	capi/GEOSUnaryUnionTest.cpp \
-	capi/GEOSisValidDetailTest.cpp
+	capi/GEOSisValidDetailTest.cpp \
+	capi/GEOSVoronoiDiagramBuilderTest.cpp 
 
 noinst_HEADERS = \
 	utility.h
