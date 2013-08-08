@@ -1,3 +1,4433 @@
+2013-08-04 20:05  Regina Obe <lr@pcorp.us>
+
+	* [r3866] include/geos/Makefile.am: #601 do not incude platform.h
+	  in tar ball.
+
+2013-08-04 12:27  Sandro Santilli <strk@keybit.net>
+
+	* [r3864] src/triangulate/DelaunayTriangulationBuilder.cpp: Avoid
+	  Coordinate copies in DelaunayTriangulationBuilder::envelope
+
+2013-08-04 12:23  Sandro Santilli <strk@keybit.net>
+
+	* [r3863] tests/unit/triangulate/DelaunayTest.cpp: Simplify
+	  testcase for DelaunayTriangulationBuilder::envelope
+
+2013-08-04 11:58  Sandro Santilli <strk@keybit.net>
+
+	* [r3862] include/geos/triangulate/DelaunayTriangulationBuilder.h,
+	  src/triangulate/DelaunayTriangulationBuilder.cpp,
+	  tests/unit/triangulate/DelaunayTest.cpp: envelope() method added
+	  to DelaunayTriangulationBuilder class
+	  
+	  Includes testcase. Patch by Vishal Tiwari
+
+2013-08-03 15:37  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3861] CMakeLists.txt, tools/geos_svn_revision_cmake.h.in: Add
+	  geos_svn_revision.h generator to CMake config
+	  
+	  Patch from David Burken attached to #643
+
+2013-08-02 22:38  Regina Obe <lr@pcorp.us>
+
+	* [r3860] src/Makefile.vc: #607 Makefile.vc 'clean' step leaks obj
+	  files
+
+2013-08-01 21:13  Regina Obe <lr@pcorp.us>
+
+	* [r3858] NEWS: updates add some missing ticket items and add
+	  ticket numbers where missing
+
+2013-07-31 21:25  Sean Gillies <sgillies@frii.com>
+
+	* [r3857] src/operation/polygonize/EdgeRing.cpp: Print to stderr
+	  only in debug mode
+
+2013-07-31 20:38  Regina Obe <lr@pcorp.us>
+
+	* [r3856] AUTHORS: #641 - distinguish between active and inactive
+	  group and add Regina Obe to list.
+
+2013-07-31 14:13  Regina Obe <lr@pcorp.us>
+
+	* [r3855] acsite.m4:
+
+2013-07-31 14:07  Regina Obe <lr@pcorp.us>
+
+	* [r3854] authors.svn: add myself to author list
+
+2013-07-31 09:42  Sandro Santilli <strk@keybit.net>
+
+	* [r3853] NEWS, include/geos/geom/BinaryOp.h,
+	  include/geos/operation/overlay/OverlayOp.h,
+	  src/operation/overlay/OverlayOp.cpp, tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/ticket/bug392.xml,
+	  tests/xmltester/tests/ticket/bug459.xml,
+	  tests/xmltester/tests/ticket/bug527.xml,
+	  tests/xmltester/tests/ticket/bug586.xml,
+	  tests/xmltester/tests/ticket/bug599.xml: Improve overlay
+	  robustness
+	  
+	  - Validate CBR results before accepting them
+	  - Enable overlay node validator even for FIXED precision
+	  - Enable geometry-reduction policy
+	  - Bail out on exception from overlay if any input is invalid
+	  
+	  Fixes bug #459
+
+2013-07-31 08:34  Sandro Santilli <strk@keybit.net>
+
+	* [r3852] tests/xmltester/tests/buffer.xml: Do not expect invalid
+	  output from buffer
+	  
+	  The test verification code is tollerant, but better fix this
+
+2013-07-31 08:30  Sandro Santilli <strk@keybit.net>
+
+	* [r3851] tests/xmltester/tests/ticket/bug275.xml: Turn test for
+	  ticket 275 into an "area test".
+	  
+	  Area test checks that the area of the Union between two
+	  geometries
+	  is about the same as the sum of area of symdifference + area of
+	  intersection.
+
+2013-07-25 21:00  Sandro Santilli <strk@keybit.net>
+
+	* [r3850] include/geos/geom/CoordinateList.h: Fix
+	  CoordinateList.closeRing() use of past-the-end operator
+
+2013-07-25 20:51  Sandro Santilli <strk@keybit.net>
+
+	* [r3849] include/geos/geom/CoordinateList.h,
+	  tests/unit/geom/CoordinateListTest.cpp: closeRing() method added
+	  in CoordinateList class
+	  
+	  Patch by Vishal Tiwari <hi.vishal123@gmail.com>
+
+2013-07-23 11:01  Sandro Santilli <strk@keybit.net>
+
+	* [r3848] capi/geos_c.cpp, capi/geos_c.h.in: Cosmetic changes into
+	  the CAPI code, by Mike Toews
+	  
+	  - Replace "reader" with "writer" in prototypes
+	  - describe "_r" functions
+	  - Function arguments with only one geometry changed from g1 to g
+	  - Rename nf -> ef for
+	  GEOSContext_setErrorHandler_rsetErrorHandler_r
+	  - Move GEOSBuffer* declaration to top of buffer related function
+	  section
+	  - Change char* mat to char *mat
+	  - Fix typos in comments
+	  - Clip trailing white space, and other white space consistencies
+	  - Other minor rearrangements for consistency
+
+2013-07-17 16:07  Sandro Santilli <strk@keybit.net>
+
+	* [r3846] src/operation/buffer/OffsetCurveBuilder.cpp,
+	  tests/unit/capi/GEOSOffsetCurveTest.cpp: Make GEOSOffsetCurve
+	  survive single-point input (with an exception)
+
+2013-07-17 15:58  Sandro Santilli <strk@keybit.net>
+
+	* [r3845] src/operation/buffer/BufferInputLineSimplifier.cpp,
+	  src/operation/buffer/OffsetSegmentGenerator.cpp,
+	  tests/unit/capi/GEOSOffsetCurveTest.cpp: Fix OffsetCurve op in
+	  presence of duplicated vertices (#602)
+
+2013-07-17 13:05  Sandro Santilli <strk@keybit.net>
+
+	* [r3844] src/simplify/LineSegmentIndex.cpp: Fix LineSegmentVisitor
+	  copy ctor (#636)
+
+2013-07-15 15:21  Sandro Santilli <strk@keybit.net>
+
+	* [r3840] src/geom/GeometryCollection.cpp,
+	  tests/unit/io/WKBWriterTest.cpp: Drop SRID from
+	  geometrycollection elements (#583)
+
+2013-07-12 12:37  Sandro Santilli <strk@keybit.net>
+
+	* [r3839] tests/unit/geom/Geometry/coversTest.cpp: Add test for
+	  #580 (successful)
+
+2013-07-11 15:58  Sandro Santilli <strk@keybit.net>
+
+	* [r3837] tests/unit/capi/GEOSOffsetCurveTest.cpp: Fix memory leak
+	  in testcase
+
+2013-07-11 15:54  Sandro Santilli <strk@keybit.net>
+
+	* [r3836] tests/unit/capi/GEOSOffsetCurveTest.cpp: Drop carriage
+	  returns
+
+2013-07-11 15:34  Sandro Santilli <strk@keybit.net>
+
+	* [r3835] include/geos/triangulate/quadedge/QuadEdge.h,
+	  include/geos/triangulate/quadedge/QuadEdgeSubdivision.h,
+	  include/geos/triangulate/quadedge/Vertex.h,
+	  src/triangulate/quadedge/QuadEdgeSubdivision.cpp,
+	  tests/unit/triangulate/DelaunayTest.cpp: Fix memory in
+	  QuadEdgeSubdivision (#604)
+
+2013-07-11 08:21  Sandro Santilli <strk@keybit.net>
+
+	* [r3834] NEWS, php/geos.c, php/test/test.php: Expose Delaunay
+	  triangulation to PHP API (#567)
+
+2013-07-11 07:36  Sandro Santilli <strk@keybit.net>
+
+	* [r3833] php/test/test.php: Fix test after changes in
+	  PointOnSurface
+
+2013-07-11 05:49  Sandro Santilli <strk@keybit.net>
+
+	* [r3832] NEWS, tools/geos-config.in: Add --cclibs, --static-clibs
+	  and --static-cclibs to geos-config (#497)
+
+2013-07-11 05:46  Sandro Santilli <strk@keybit.net>
+
+	* [r3831] NEWS: Add 3.3.1 to 3.3.8 section
+
+2013-07-11 05:42  Sandro Santilli <strk@keybit.net>
+
+	* [r3830] NEWS: Cleanup NEWS file confused in r3816
+
+2013-07-05 14:56  Sandro Santilli <strk@keybit.net>
+
+	* [r3829] include/geos/linearref/Makefile.am: Fix install location
+	  of linearref headers (#624)
+
+2013-06-28 10:33  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3827] nmake.opt: Add NMAKE version from Visual Studio 2012
+	  Update 3 RTM
+
+2013-06-26 16:27  Sandro Santilli <strk@keybit.net>
+
+	* [r3826] src/noding/snapround/HotPixel.cpp,
+	  tests/unit/noding/snapround/HotPixelTest.cpp: Fix typo in
+	  HotPixel corners initializer
+	  
+	  Patch by Mickael BORNE <mickael.borne@ign.fr>
+
+2013-06-26 16:03  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3824] nmake.opt: Add another NMAKE version from Visual Studio
+	  2012
+
+2013-06-12 16:08  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3823] include/geos/operation/buffer/BufferBuilder.h,
+	  src/operation/buffer/BufferBuilder.cpp,
+	  tests/unit/operation/buffer/BufferBuilderTest.cpp: Final
+	  clarification of BufferBuilder::bufferLineSingleSided behaviour
+	  (ticket #633)
+	  * Ignore BufferParameters::setSingleSided() parameter as it is
+	  specific to areal geometries.
+	  * Document semantic of input parameters.
+	  * Document order of coordinates in generated output (conforms to
+	  PostGIS behaviour).
+	  * Add test for coordinates order assumptions.
+
+2013-06-12 14:06  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3822] tests/unit/operation/buffer/BufferBuilderTest.cpp: Update
+	  single side offset curve tests to check uniform coordinates order
+	  in output (ticket #633). We need to decide if
+	  BufferBuilder::bufferLineSingleSided should take care of
+	  reversing coordinates if necessary.
+
+2013-06-12 13:22  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3821] tests/unit/Makefile.am,
+	  tests/unit/operation/buffer/BufferBuilderTest.cpp: Add updated
+	  C++ API test case for the left/right offset curve (ticket #633)
+
+2013-06-12 09:56  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3820] tests/unit/capi/GEOSOffsetCurveTest.cpp: Add comment
+	  missing from previous commit.
+
+2013-06-12 09:50  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3819] tests/unit/capi/GEOSOffsetCurveTest.cpp: Add test case
+	  for #633 based on GEOSOffsetCurve from C-API. Passing negative
+	  distance for right-sided offset curve generates correct/expected
+	  output. Interestingly, equivalent test using BufferBuilder
+	  directly, from C++ API, does not pass.
+
+2013-06-11 15:29  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3818] src/operation/buffer/OffsetCurveBuilder.cpp,
+	  tests/unit/Makefile.am,
+	  tests/unit/operation/buffer/BufferBuilderTest.cpp: Revert r3817
+	  as partial or incorrect fix. See ticket #633 for details.
+
+2013-06-11 14:19  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3817] src/operation/buffer/OffsetCurveBuilder.cpp,
+	  tests/unit/Makefile.am,
+	  tests/unit/operation/buffer/BufferBuilderTest.cpp: * Fix bug in
+	  OffsetCurveBuilder case for right-side offset curve used
+	  left-side flag to initialise the side segments.
+	  * Corresponding test case attached.
+
+2013-06-11 12:42  Sandro Santilli <strk@keybit.net>
+
+	* [r3816] NEWS, include/geos/profiler.h: Fix for mingw64 compile,
+	  by Regina Obe (#630)
+
+2013-06-07 09:29  Sandro Santilli <strk@keybit.net>
+
+	* [r3814] src/operation/overlay/snap/LineStringSnapper.cpp:
+	  Simplify code looking for closer vertex snap
+
+2013-06-07 09:21  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3813] capi/geos_ts_c.cpp: Fix incomplete type of Node at the
+	  point of destruction (by GeometryNoder) leading to never called
+	  destructor bug.
+
+2013-06-07 09:13  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3812] src/algorithm/RayCrossingCounter.cpp,
+	  src/geom/LineString.cpp,
+	  src/geomgraph/index/SimpleSweepLineIntersector.cpp,
+	  src/io/WKBWriter.cpp,
+	  src/operation/buffer/BufferInputLineSimplifier.cpp,
+	  src/operation/linemerge/LineSequencer.cpp,
+	  src/operation/polygonize/PolygonizeGraph.cpp: Correct int and
+	  std::size_t mismatch for 64-bit target.
+
+2013-06-07 09:10  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3811] src/algorithm/InteriorPointArea.cpp: * Disable copy
+	  constructor and assignment operator.
+	  * Correct int and std::size_t mismatch for 64-bit target.
+
+2013-06-07 09:02  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3810] include/geos/noding/GeometryNoder.h,
+	  include/geos/precision/GeometryPrecisionReducer.h,
+	  include/geos/precision/PrecisionReducerCoordinateOperation.h,
+	  src/noding/GeometryNoder.cpp: Disable copy constructor and
+	  assignment operator
+
+2013-06-07 08:30  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3809] include/geos/operation/buffer/OffsetSegmentString.h:
+	  Correct return type of OffsetSegmentString::size() to be size_t
+
+2013-06-06 20:18  Sandro Santilli <strk@keybit.net>
+
+	* [r3808] examples/CPCLException.cpp,
+	  examples/CoordinateSequencesExample.cpp,
+	  examples/CustomCoordinateSequenceExample.cpp,
+	  examples/CustomCoordinateSequenceExample.h,
+	  examples/CustomPointCoordinateSequence.cpp, examples/Makefile.am:
+	  Drop obsoleted files
+
+2013-06-06 16:39  Sandro Santilli <strk@keybit.net>
+
+	* [r3807] src/operation/overlay/snap/LineStringSnapper.cpp: Drop
+	  commented out / disabled code
+
+2013-06-05 22:18  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3806] ., CMakeLists.txt: Implement generating
+	  geos_svn_revision.h using shell script.
+
+2013-06-05 08:52  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3805] CMakeLists.txt: Make Visual C++ 11.0 recognised by CMake
+	  configuration
+
+2013-06-03 07:36  Sandro Santilli <strk@keybit.net>
+
+	* [r3803] src/geom/prep/PreparedPolygonIntersects.cpp:
+	  Short-circuit prepared polygon/point intersection
+	  
+	  Reduces memory fragmentation for area-puntal ops
+
+2013-05-30 20:16  Sandro Santilli <strk@keybit.net>
+
+	* [r3800] include/geos/operation/overlay/snap/LineStringSnapper.h,
+	  src/operation/overlay/snap/LineStringSnapper.cpp,
+	  tests/unit/capi/GEOSSnapTest.cpp: Improve snap algorithm reducing
+	  likelyhood of invalid output
+	  
+	  - Snap input vertices to closest snap point (#629)
+	  - Do not snap segments to external points (#501)
+	  - Never snap multiple vertices to the same snap point
+	  
+	  Work funded by Tuscany Region - SITA. Contract "Support to the
+	  use
+	  of GFOSS (Geographic Free and Open Source Software) Desktop
+	  tools"
+	  (CIG Z3B06FA6D7).
+
+2013-05-23 17:21  Sandro Santilli <strk@keybit.net>
+
+	* [r3799] Makefile.am, tools/svn_repo_revision.sh: Create
+	  geos_svn_revision.h in the source tree
+	  
+	  It's a generated source, should always be in the tarball anyway
+
+2013-05-23 15:51  Sandro Santilli <strk@keybit.net>
+
+	* [r3798] tools/Makefile.am: Distribute svn_repo_revision.sh
+
+2013-05-10 08:40  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3797] nmake.opt: Add NMAKE option WIN64 to simplify x64 build
+	  configuration
+
+2013-05-09 10:04  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3796] nmake.opt: Add NMAKE version from Visual Studio 2012
+	  Update 3
+
+2013-04-02 09:24  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3795] src/dirlist.mk: Add missing directories
+
+2013-04-02 09:20  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3794] nmake.opt, src/Makefile.vc, src/geom/Geometry.cpp: Add
+	  Visual Leak Detector (VLD) support to GEOS core
+	  * Add MSVC_VLD_DIR option to nmake.opt to enable/disable VLD
+	  * Add optional #include <vld.h> to Geometry.cpp
+
+2013-03-15 18:48  Sandro Santilli <strk@keybit.net>
+
+	* [r3793] tests/unit/algorithm/RobustLineIntersectionTest.cpp,
+	  tests/unit/capi/GEOSConvexHullTest.cpp,
+	  tests/unit/capi/GEOSUnaryUnionTest.cpp: Fix memory leaks in unit
+	  tests
+
+2013-03-15 18:05  Sandro Santilli <strk@keybit.net>
+
+	* [r3792] NEWS, capi/geos_c.cpp, capi/geos_c.h.in,
+	  capi/geos_ts_c.cpp, tests/unit/Makefile.am,
+	  tests/unit/capi/GEOSNearestPointsTest.cpp: Add GEOSNearestPoints
+	  CAPI function
+	  
+	  Contributed by Richard Frith-Macdonald
+	  <richard@tiptree.demon.co.uk>
+
+2013-03-15 15:36  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3791] nmake.opt: Add x64 NMAKE version from Visual Studio 2012
+	  Update 1
+
+2013-03-12 16:20  Sandro Santilli <strk@keybit.net>
+
+	* [r3790] macros/ruby.m4: Fix "puts puts" typo in ruby macro (#625)
+
+2013-03-11 11:19  Sandro Santilli <strk@keybit.net>
+
+	* [r3789] tests/unit/algorithm/RobustLineIntersectionTest.cpp: Port
+	  new RobustLineIntersection test from JTS
+
+2013-03-08 17:51  Sandro Santilli <strk@keybit.net>
+
+	* [r3787] include/geos/algorithm/LineIntersector.h,
+	  src/algorithm/LineIntersector.cpp,
+	  tests/unit/algorithm/RobustLineIntersectionTest.cpp: Fix
+	  RobustLineIntersector handling of invalid intersection points
+	  (#622)
+	  
+	  Adds new testcases. Many of them fail, probably due to the lack
+	  of
+	  double double use, but one of them only fails with the old
+	  RobustLineIntersector heuristic handling invalid intersection
+	  points
+
+2013-03-08 17:48  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3786] src/Makefile.vc: Add algorithm/Centroid.obj
+
+2013-03-08 17:41  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3785] include/geos/algorithm/Centroid.h: Untabify
+
+2013-03-08 17:37  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3784] nmake.opt: Add NMAKE version from Visual Studio 2012
+	  Update 1
+
+2013-03-08 13:02  Sandro Santilli <strk@keybit.net>
+
+	* [r3781] include/geos/algorithm/InteriorPointArea.h,
+	  src/algorithm/Centroid.cpp, src/algorithm/InteriorPointArea.cpp,
+	  tests/unit/capi/GEOSPointOnSurfaceTest.cpp,
+	  tests/xmltester/tests/general/TestInteriorPoint.xml: Fix
+	  GEOSPointOnSurface returning point on boundary (#623)
+	  
+	  Ports SafeBisector for InteriorPointArea from JTS
+
+2013-03-05 14:46  Sandro Santilli <strk@keybit.net>
+
+	* [r3779] capi/geos_ts_c.cpp: Speedup GEOSWKBWriter_read_r (#621)
+	  
+	  Patch by Daniel Zeitlin
+
+2013-03-01 11:58  Sandro Santilli <strk@keybit.net>
+
+	* [r3778] HOWTO_RELEASE: Add wiki update and announce steps
+
+2013-02-28 09:40  Sandro Santilli <strk@keybit.net>
+
+	* [r3773] src/algorithm/CentroidArea.cpp,
+	  tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/ticket/bug582.xml: Fix centroid computation
+	  for collections with empty components
+	  
+	  Fixes bug #582
+
+2013-02-25 11:41  Sandro Santilli <strk@keybit.net>
+
+	* [r3772] macros/ruby.m4, swig/ruby/geos_wrap.cxx: Update
+	  macros/ruby.m4 for ruby 1.9.x
+	  
+	  Used RbConfig instead of obsolete and deprecated Config.
+	  Updated SWIG generated files.
+	  
+	  Patch by Kashif Rasul <kashif.rasul@gmail.com>
+
+2013-02-25 11:11  Sandro Santilli <strk@keybit.net>
+
+	* [r3771] include/geos/platform.h.in: Fix build under cygwin (#595)
+	  
+	  Thanks Jason Huntley
+
+2013-02-25 11:04  Sandro Santilli <strk@keybit.net>
+
+	* [r3770] include/geos/io/WKTReader.h,
+	  include/geos/io/WKTReader.inl: Deprecate WKTReader constructor
+	  taking GeometryFactory by pointer
+	  
+	  Add constructor taking it by reference, for consistency with
+	  WKBReader
+	  Closes #310
+
+2013-02-25 10:37  Sandro Santilli <strk@keybit.net>
+
+	* [r3769] NEWS, include/geos/io/Writer.h, src/io/Writer.cpp,
+	  tests/unit/io/WriterTest.cpp: New ::reserve(size_t) method for
+	  io::Writer class
+
+2013-02-25 10:34  Sandro Santilli <strk@keybit.net>
+
+	* [r3768] NEWS, include/geos/io/Writer.h, src/io/Writer.cpp,
+	  tests/unit/Makefile.am, tests/unit/io/WriterTest.cpp: io::Writer:
+	  take and give strings by const ref, use .append, testcase
+
+2013-02-21 10:29  Sandro Santilli <strk@keybit.net>
+
+	* [r3767] src/io/WKTWriter.cpp: WKTWriter::appendCoordinate
+	  optimisation
+	  
+	  Modified the WKTWriter::appendCoordinate method to not create an
+	  intermediate std::string, but instead write directly into the
+	  Writer
+	  object. The result is a small performance improvement.
+	  
+	  Patch by Mats Taraldsvik <mats.taraldsvik@norkart.no>
+
+2013-02-15 13:46  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3765] include/geos/triangulate,
+	  include/geos/triangulate/quadedge, src/triangulate,
+	  src/triangulate/quadedge: Update svn:ignore property
+
+2013-02-01 06:31  Sandro Santilli <strk@keybit.net>
+
+	* [r3762] include/geos/io/CLocalizer.h: Add header guard to
+	  CLocalizer (#619)
+
+2013-02-01 06:28  Sandro Santilli <strk@keybit.net>
+
+	* [r3760] include/geos/linearref/LocationIndexOfLine.h,
+	  src/linearref/LocationIndexOfLine.cpp: Fix header guard and port
+	  info in LocatioNIndexOfLine (#618)
+
+2013-02-01 06:25  Sandro Santilli <strk@keybit.net>
+
+	* [r3758] include/geos/geom/util/GeometryExtracter.h: Fix header
+	  guard in GeometryExtracter (#617)
+
+2013-01-25 17:19  Sandro Santilli <strk@keybit.net>
+
+	* [r3755] src/operation/valid/IsValidOp.cpp: IsValidOp: throw
+	  proper error on nested shells (#608)
+	  
+	  Thanks geomworx
+
+2013-01-17 12:07  Sandro Santilli <strk@keybit.net>
+
+	* [r3751] include/geos/geom/BinaryOp.h,
+	  tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/ticket/bug615.xml: Only attempt to fix
+	  self-intersection between multiple components
+	  
+	  Doing this reduces the likelyhood of entering an infinite
+	  recursion
+	  whereas UnaryUnion (meant to fix that) would enter the
+	  self-intersection
+	  attempt again. Fixes #615 for which a test is added.
+	  
+	  This also gives us back an exception with the input of ticket
+	  #488,
+	  which is the same behavior JTS exposes. The (bogus) test for it
+	  is disabled by this commit.
+
+2013-01-14 16:15  Sandro Santilli <strk@keybit.net>
+
+	* [r3749] NEWS, include/geos/algorithm/Centroid.h,
+	  include/geos/algorithm/CentroidArea.h,
+	  include/geos/algorithm/CentroidLine.h,
+	  include/geos/algorithm/CentroidPoint.h,
+	  include/geos/algorithm/Makefile.am, src/algorithm/Centroid.cpp,
+	  src/algorithm/Makefile.am, src/geom/Geometry.cpp,
+	  tests/xmltester/XMLTester.cpp,
+	  tests/xmltester/tests/general/TestCentroid.xml: Fix EMPTY return
+	  from single-point lines and zero-length polygons
+	  
+	  This commit ports new Centroid class from JTS (#612)
+
+2013-01-14 11:16  Sandro Santilli <strk@keybit.net>
+
+	* [r3748] include/geos/algorithm/InteriorPointArea.h,
+	  src/algorithm/InteriorPointArea.cpp,
+	  tests/xmltester/tests/general/TestInteriorPoint.xml: Fix EMPTY
+	  return from zero-area polygon (#613)
+
+2013-01-14 11:12  Sandro Santilli <strk@keybit.net>
+
+	* [r3747] tests/xmltester/XMLTester.cpp: Have XMLTester use POINT
+	  EMPTY for a null return from getInteriorPoint
+
+2013-01-14 09:50  Sandro Santilli <strk@keybit.net>
+
+	* [r3744] include/geos/util/Interrupt.h, src/util/Interrupt.cpp:
+	  Move static class members of Interrupt out of header (#611)
+	  
+	  Patch by Mateusz Loskot
+
+2013-01-11 17:15  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3743] tests/unit/triangulate/DelaunayTest.cpp: Missing
+	  QuadEdge.h causing incomplete types.
+
+2013-01-11 17:11  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3742] nmake.opt: Report general and custom flags separately
+
+2013-01-11 14:58  Sandro Santilli <strk@keybit.net>
+
+	* [r3741] src/algorithm/InteriorPointLine.cpp,
+	  tests/unit/capi/GEOSPointOnSurfaceTest.cpp: Fix
+	  GEOSPointOnSurface with zero-length linestring (#609)
+
+2013-01-11 14:35  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3740] tests/unit/io/WKTReaderTest.cpp: Added test<7>() for the
+	  poorly reported bug ticket #610 - bug not reproducible.
+
+2012-12-06 08:23  Sandro Santilli <strk@keybit.net>
+
+	* [r3737] configure.in: See if AC_CONFIG_HEADERS makes winnie
+	  happier
+	  
+	  ... and also how many other builds it breaks, if any
+
+2012-12-06 08:04  Sandro Santilli <strk@keybit.net>
+
+	* [r3736] src/Makefile.vc: Add missing classes to build script for
+	  evil compiler
+	  
+	  Curtesy of Geoff Evans
+
+2012-12-05 09:06  Sandro Santilli <strk@keybit.net>
+
+	* [r3734] src/operation/buffer/BufferOp.cpp: Add note about
+	  rounding in fixed precision buffer op (#605)
+
+2012-12-05 07:56  Sandro Santilli <strk@keybit.net>
+
+	* [r3733] src/operation/buffer/BufferOp.cpp: Do not reduce
+	  precision below 6 significant digits.
+	  
+	  Avoids gross results (preferring an exception)
+	  See http://trac.osgeo.org/geos/ticket/605
+
+2012-12-04 21:50  Sandro Santilli <strk@keybit.net>
+
+	* [r3731] NEWS: Add note about BufferOp robustness improvement
+
+2012-12-04 21:22  Sandro Santilli <strk@keybit.net>
+
+	* [r3728] src/operation/buffer/BufferOp.cpp,
+	  tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/ticket/bug605.xml: Reduce coordinates
+	  precision on robustness issues in BufferOp
+	  
+	  Fixes #605, adds test for it
+
+2012-12-04 19:26  Sandro Santilli <strk@keybit.net>
+
+	* [r3727] src/operation/buffer/RightmostEdgeFinder.cpp: Fix an
+	  abort in Buffer op (RightmostEdgeFinder)
+	  
+	  Rather than abort we throw a TopologyException, because the
+	  problem
+	  seems to occur when noding isn't correct.
+	  See http://trac.osgeo.org/geos/ticket/605
+
+2012-12-04 17:23  Sandro Santilli <strk@keybit.net>
+
+	* [r3726] tests/unit/Makefile.am,
+	  tests/unit/noding/OrientedCoordinateArray.cpp: Add unit test for
+	  OrientedCoordinateArray
+
+2012-11-15 15:55  Sandro Santilli <strk@keybit.net>
+
+	* [r3720] tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/ticket/bug599.xml: Add automated test for
+	  #599 (succeeds)
+
+2012-10-26 14:01  Sandro Santilli <strk@keybit.net>
+
+	* [r3719] Makefile.am: Fix building outside the source tree
+
+2012-09-10 10:34  Sandro Santilli <strk@keybit.net>
+
+	* [r3716] NEWS, src/triangulate/quadedge/QuadEdgeSubdivision.cpp,
+	  tests/unit/triangulate/DelaunayTest.cpp: Add Z support in
+	  delaunay triangulation (#570)
+	  
+	  Thanks Benjamin Campbell
+
+2012-09-10 09:23  Sandro Santilli <strk@keybit.net>
+
+	* [r3715] tests/xmltester/tests/ticket/bug586.xml: Tweak the test
+	  for bug 586 to succeed while still being small
+
+2012-09-10 08:00  Sandro Santilli <strk@keybit.net>
+
+	* [r3712] tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/ticket/bug586.xml: Add test for bug #586
+
+2012-09-10 07:56  Sandro Santilli <strk@keybit.net>
+
+	* [r3711] include/geos/geom/BinaryOp.h: Do not try to fix valid
+	  geometries (#586)
+
+2012-09-07 12:01  Sandro Santilli <strk@keybit.net>
+
+	* [r3710] swig/python/geos.py, swig/python/geos_wrap.cxx:
+	  Regenerate swig files with swig 2.0.4
+
+2012-09-06 18:22  Sandro Santilli <strk@keybit.net>
+
+	* [r3708] php/README, php/test/test.php: Add support for phpunit
+	  3.6 (not loosing support for 3.4)
+	  
+	  I don't have phpunit-3.4 anymore so if anyone does please see
+	  if "make check" still works (with php enabled)
+	  
+	  NOTE: Ubuntu 10.04 ships phpunit 3.4
+
+2012-07-27 08:09  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3705] src/Makefile.vc: Updated NMAKE makefile with recently
+	  added source files (Ticket #574)
+
+2012-07-26 22:43  Sandro Santilli <strk@keybit.net>
+
+	* [r3704] include/geos/Makefile.am: Don't live triangulate includes
+	  out of build (#573)
+	  
+	  Thanks Sandro Furieri
+
+2012-06-27 10:53  Sandro Santilli <strk@keybit.net>
+
+	* [r3703] tests/unit/capi/GEOSDelaunayTriangulationTest.cpp: Add
+	  test for Delaunay triangulation with a tolerance
+
+2012-06-27 10:43  Sandro Santilli <strk@keybit.net>
+
+	* [r3702] NEWS, capi/geos_c.cpp, capi/geos_c.h.in,
+	  capi/geos_ts_c.cpp, tests/unit/Makefile.am,
+	  tests/unit/capi/GEOSDelaunayTriangulationTest.cpp: Expose
+	  Delaunay triangulation to C-API (#565)
+
+2012-06-27 10:43  Sandro Santilli <strk@keybit.net>
+
+	* [r3701] include/geos/triangulate/DelaunayTriangulationBuilder.h,
+	  src/triangulate/DelaunayTriangulationBuilder.cpp: Const-correct
+	  getTriangles / getEdges and move to proper namespace
+
+2012-06-27 10:43  Sandro Santilli <strk@keybit.net>
+
+	* [r3700]
+	  include/geos/triangulate/IncrementalDelaunayTriangulator.h:
+	  indent
+
+2012-06-27 09:23  Sandro Santilli <strk@keybit.net>
+
+	* [r3699] include/geos/triangulate/DelaunayTriangulationBuilder.h,
+	  include/geos/triangulate/IncrementalDelaunayTriangulator.h,
+	  include/geos/triangulate/quadedge/LastFoundQuadEdgeLocator.h,
+	  include/geos/triangulate/quadedge/LocateFailureException.h,
+	  include/geos/triangulate/quadedge/QuadEdge.h,
+	  include/geos/triangulate/quadedge/QuadEdgeLocator.h,
+	  include/geos/triangulate/quadedge/QuadEdgeSubdivision.h,
+	  include/geos/triangulate/quadedge/TrianglePredicate.h,
+	  include/geos/triangulate/quadedge/TriangleVisitor.h,
+	  include/geos/triangulate/quadedge/Vertex.h,
+	  src/triangulate/quadedge/LastFoundQuadEdgeLocator.cpp,
+	  src/triangulate/quadedge/LocateFailureException.cpp,
+	  src/triangulate/quadedge/QuadEdge.cpp,
+	  src/triangulate/quadedge/QuadEdgeLocator.cpp,
+	  src/triangulate/quadedge/QuadEdgeSubdivision.cpp,
+	  src/triangulate/quadedge/TrianglePredicate.cpp,
+	  src/triangulate/quadedge/TriangleVisitor.cpp,
+	  src/triangulate/quadedge/Vertex.cpp: Indent and port info style
+
+2012-06-26 20:41  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3697] CMakeLists.txt: [CMake] Corrected description of default
+	  value for GEOS_ENABLE_MACOSX_FRAMEWORK option
+
+2012-06-26 20:34  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3696] NEWS: Updated NEWS file with changes related to ticket
+	  #446
+
+2012-06-26 20:29  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3695] tests/perf, tests/perf/operation/predicate: Updated
+	  svn:ignore for tests/perf
+
+2012-06-26 17:17  Sandro Santilli <strk@keybit.net>
+
+	* [r3694] include/geos/triangulate/DelaunayTriangulationBuilder.h:
+	  typo
+
+2012-06-26 17:11  Sandro Santilli <strk@keybit.net>
+
+	* [r3693] NEWS, configure.in, include/geos/triangulate,
+	  include/geos/triangulate/DelaunayTriangulationBuilder.h,
+	  include/geos/triangulate/IncrementalDelaunayTriangulator.h,
+	  include/geos/triangulate/Makefile.am,
+	  include/geos/triangulate/quadedge,
+	  include/geos/triangulate/quadedge/LastFoundQuadEdgeLocator.h,
+	  include/geos/triangulate/quadedge/LocateFailureException.h,
+	  include/geos/triangulate/quadedge/Makefile.am,
+	  include/geos/triangulate/quadedge/QuadEdge.h,
+	  include/geos/triangulate/quadedge/QuadEdgeLocator.h,
+	  include/geos/triangulate/quadedge/QuadEdgeSubdivision.h,
+	  include/geos/triangulate/quadedge/TrianglePredicate.h,
+	  include/geos/triangulate/quadedge/TriangleVisitor.h,
+	  include/geos/triangulate/quadedge/Vertex.h, src/Makefile.am,
+	  src/triangulate,
+	  src/triangulate/DelaunayTriangulationBuilder.cpp,
+	  src/triangulate/IncrementalDelaunayTriangulator.cpp,
+	  src/triangulate/Makefile.am, src/triangulate/quadedge,
+	  src/triangulate/quadedge/LastFoundQuadEdgeLocator.cpp,
+	  src/triangulate/quadedge/LocateFailureException.cpp,
+	  src/triangulate/quadedge/Makefile.am,
+	  src/triangulate/quadedge/QuadEdge.cpp,
+	  src/triangulate/quadedge/QuadEdgeLocator.cpp,
+	  src/triangulate/quadedge/QuadEdgeSubdivision.cpp,
+	  src/triangulate/quadedge/TrianglePredicate.cpp,
+	  src/triangulate/quadedge/TriangleVisitor.cpp,
+	  src/triangulate/quadedge/Vertex.cpp, tests/unit/Makefile.am,
+	  tests/unit/triangulate, tests/unit/triangulate/DelaunayTest.cpp,
+	  tests/unit/triangulate/quadedge,
+	  tests/unit/triangulate/quadedge/QuadEdgeSubdivisionTest.cpp,
+	  tests/unit/triangulate/quadedge/QuadEdgeTest.cpp: Port Delaunay
+	  Triangulation API from JTS (#487)
+	  
+	  Work contributed by Benjamin Campbell
+
+2012-06-25 23:31  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3692] CMakeLists.txt: [CMake] Fixed incorrect SOVERSION value.
+	  The SOVERSION is now set with CAPI_VERSION_CURRENT -
+	  CAPI_VERSION_AGE (Ticket #446)
+
+2012-06-25 15:17  Sandro Santilli <strk@keybit.net>
+
+	* [r3691] HOWTO_RELEASE: Add tarball verification step
+
+2012-06-25 10:19  Sandro Santilli <strk@keybit.net>
+
+	* [r3684] capi/geos_ts_c.cpp, tests/unit/Makefile.am,
+	  tests/unit/capi/GEOSPointOnSurfaceTest.cpp: Always return POINT
+	  from GEOSPointOnSurface, even for EMPTY (#561)
+
+2012-06-24 22:22  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3683] CMakeLists.txt, capi/CMakeLists.txt, src/CMakeLists.txt:
+	  [CMake] Set SOVERSION property on C API shared library using
+	  CAPI_INTERFACE_* values (Ticket #446).
+
+2012-06-22 15:44  Sandro Santilli <strk@keybit.net>
+
+	* [r3680] include/geos/algorithm/CentroidArea.h: Add note about
+	  handling of degenerate polygons
+
+2012-06-22 15:32  Sandro Santilli <strk@keybit.net>
+
+	* [r3679] capi/geos_ts_c.cpp,
+	  tests/unit/capi/GEOSGetCentroidTest.cpp: Always return POINT from
+	  GEOSGetCentroid, even for EMPTY (#560)
+
+2012-06-22 15:03  Sandro Santilli <strk@keybit.net>
+
+	* [r3677] include/geos/algorithm/CentroidArea.h,
+	  src/algorithm/CentroidArea.cpp, tests/unit/Makefile.am,
+	  tests/unit/capi/GEOSGetCentroidTest.cpp: Port robustness fix to
+	  CentroidArea (#559)
+
+2012-06-11 09:18  Sandro Santilli <strk@keybit.net>
+
+	* [r3673] tests/xmltester/Makefile.am: Retain GEOS_INLINE define
+	  while building XMLTester (#319, #472)
+
+2012-06-07 15:11  Sandro Santilli <strk@keybit.net>
+
+	* [r3672] capi/geos_c.cpp, capi/geos_c.h.in,
+	  include/geos/util/Interrupt.h, src/util/Interrupt.cpp,
+	  tests/unit/capi/GEOSInterruptTest.cpp: Allow chaining interrupt
+	  callbacks, drop arg parameter
+
+2012-06-07 15:10  Sandro Santilli <strk@keybit.net>
+
+	* [r3671] capi/geos_ts_c.cpp,
+	  tests/unit/capi/GEOSInterruptTest.cpp: Revert the interrupt
+	  request callback reset on initGEOS
+	  
+	  Once you set a callback why would you want it unregistered on
+	  initGEOS ? You will not want that....
+
+2012-06-07 14:41  Sandro Santilli <strk@keybit.net>
+
+	* [r3670] src/util/Interrupt.cpp: Clear interruption request flag
+	  just before interrupting
+
+2012-06-07 10:24  Sandro Santilli <strk@keybit.net>
+
+	* [r3669] capi/geos_c.h.in: Drop orphaned custom allocation
+	  signatures from C-API header
+
+2012-06-07 10:23  Sandro Santilli <strk@keybit.net>
+
+	* [r3668] tests/unit/capi/GEOSInterruptTest.cpp: Test that initGEOS
+	  clears the interrupt callback
+	  
+	  Also explicitly cleanup the callback after each test.
+
+2012-06-07 10:23  Sandro Santilli <strk@keybit.net>
+
+	* [r3667] capi/geos_ts_c.cpp: Unregister the interrupt request on
+	  initGEOS
+
+2012-06-07 10:07  Sandro Santilli <strk@keybit.net>
+
+	* [r3666] NEWS, capi/geos_c.cpp, capi/geos_c.h.in,
+	  include/geos/util/Interrupt.h, src/util/Interrupt.cpp,
+	  tests/unit/Makefile.am, tests/unit/capi/GEOSInterruptTest.cpp:
+	  Add support for registering interruption-checking callback.
+	  
+	  This is to enhance flexibility of the interruption request model.
+
+2012-06-06 14:15  Sandro Santilli <strk@keybit.net>
+
+	* [r3665] tests/unit/Makefile.am,
+	  tests/unit/capi/GEOSConvexHullTest.cpp: Enable
+	  capi::GEOSConvexHull test, and fix it (#555)
+
+2012-06-06 07:03  Sandro Santilli <strk@keybit.net>
+
+	* [r3663] README, src/Makefile.am: Clarify problems with linking
+	  against C++ api (#553)
+	  
+	  Path by Greg Troxel.
+
+2012-05-29 19:23  Sandro Santilli <strk@keybit.net>
+
+	* [r3657] include/geos/algorithm/distance/PointPairDistance.h: No
+	  need to forward declare Coordinate (full definition included)
+
+2012-05-29 19:23  Sandro Santilli <strk@keybit.net>
+
+	* [r3656] include/geos/geom/Coordinate.h,
+	  include/geos/geom/Coordinate.inl: Do not define an empty
+	  destructor for Coordinate
+
+2012-05-29 16:41  Sandro Santilli <strk@keybit.net>
+
+	* [r3655] Makefile.am: Make sure to build geos_svn_config.h
+
+2012-05-29 10:04  Sandro Santilli <strk@keybit.net>
+
+	* [r3654] Makefile.am, capi/geos_ts_c.cpp: Include SVN revision in
+	  GEOSversion output
+
+2012-05-29 10:04  Sandro Santilli <strk@keybit.net>
+
+	* [r3653] tools/svn_repo_revision.sh: Fix revision file path
+
+2012-05-29 09:48  Sandro Santilli <strk@keybit.net>
+
+	* [r3652] tools/svn_repo_revision.sh: Fix test for directory
+	  existance
+
+2012-05-29 09:45  Sandro Santilli <strk@keybit.net>
+
+	* [r3651] tools/svn_repo_revision.sh: Add script to fetch SVN
+	  revision from git or SVN
+
+2012-05-29 08:42  Sandro Santilli <strk@keybit.net>
+
+	* [r3650] doc/example.cpp, examples/CPCLException.cpp,
+	  examples/CoordinateSequencesExample.cpp,
+	  examples/CustomCoordinateSequenceExample.cpp,
+	  examples/CustomCoordinateSequenceExample.h,
+	  examples/CustomPointCoordinateSequence.cpp, include/acconfig.h,
+	  include/geos/algorithm/CentralEndpointIntersector.h,
+	  include/geos/algorithm/CentroidArea.h,
+	  include/geos/algorithm/CentroidLine.h,
+	  include/geos/algorithm/CentroidPoint.h,
+	  include/geos/algorithm/ConvexHull.h,
+	  include/geos/algorithm/InteriorPointArea.h,
+	  include/geos/algorithm/InteriorPointLine.h,
+	  include/geos/algorithm/InteriorPointPoint.h,
+	  include/geos/algorithm/LineIntersector.h,
+	  include/geos/algorithm/MCPointInRing.h,
+	  include/geos/algorithm/MinimumDiameter.h,
+	  include/geos/algorithm/NotRepresentableException.h,
+	  include/geos/algorithm/PointInRing.h,
+	  include/geos/algorithm/PointLocator.h,
+	  include/geos/algorithm/RayCrossingCounter.h,
+	  include/geos/algorithm/RobustDeterminant.h,
+	  include/geos/algorithm/SIRtreePointInRing.h,
+	  include/geos/algorithm/SimplePointInRing.h,
+	  include/geos/algorithm/distance/DiscreteHausdorffDistance.h,
+	  include/geos/algorithm/distance/DistanceToPoint.h,
+	  include/geos/algorithm/distance/PointPairDistance.h,
+	  include/geos/algorithm/locate/IndexedPointInAreaLocator.h,
+	  include/geos/algorithm/locate/PointOnGeometryLocator.h,
+	  include/geos/algorithm/locate/SimplePointInAreaLocator.h,
+	  include/geos/geom/CoordinateArraySequence.h,
+	  include/geos/geom/CoordinateFilter.h,
+	  include/geos/geom/CoordinateList.h,
+	  include/geos/geom/CoordinateSequence.h,
+	  include/geos/geom/Dimension.h, include/geos/geom/Envelope.h,
+	  include/geos/geom/Geometry.h,
+	  include/geos/geom/GeometryCollection.h,
+	  include/geos/geom/GeometryComponentFilter.h,
+	  include/geos/geom/GeometryFactory.h,
+	  include/geos/geom/GeometryFilter.h,
+	  include/geos/geom/GeometryList.h,
+	  include/geos/geom/IntersectionMatrix.h,
+	  include/geos/geom/LineSegment.h, include/geos/geom/LineString.h,
+	  include/geos/geom/LinearRing.h,
+	  include/geos/geom/MultiLineString.h,
+	  include/geos/geom/MultiPoint.h, include/geos/geom/MultiPolygon.h,
+	  include/geos/geom/Polygon.h, include/geos/geom/PrecisionModel.h,
+	  include/geos/geom/Triangle.h,
+	  include/geos/geom/prep/AbstractPreparedPolygonContains.h,
+	  include/geos/geom/prep/BasicPreparedGeometry.h,
+	  include/geos/geom/prep/PreparedGeometry.h,
+	  include/geos/geom/prep/PreparedGeometryFactory.h,
+	  include/geos/geom/prep/PreparedLineString.h,
+	  include/geos/geom/prep/PreparedPoint.h,
+	  include/geos/geom/prep/PreparedPolygon.h,
+	  include/geos/geom/prep/PreparedPolygonContains.h,
+	  include/geos/geom/prep/PreparedPolygonContainsProperly.h,
+	  include/geos/geom/prep/PreparedPolygonCovers.h,
+	  include/geos/geom/prep/PreparedPolygonIntersects.h,
+	  include/geos/geom/prep/PreparedPolygonPredicate.h,
+	  include/geos/geom/util/ComponentCoordinateExtracter.h,
+	  include/geos/geom/util/CoordinateOperation.h,
+	  include/geos/geom/util/GeometryCombiner.h,
+	  include/geos/geom/util/GeometryEditor.h,
+	  include/geos/geom/util/GeometryEditorOperation.h,
+	  include/geos/geom/util/GeometryTransformer.h,
+	  include/geos/geom/util/LinearComponentExtracter.h,
+	  include/geos/geom/util/PointExtracter.h,
+	  include/geos/geom/util/PolygonExtracter.h,
+	  include/geos/geom/util/ShortCircuitedGeometryVisitor.h,
+	  include/geos/geomPrep.h, include/geos/geomUtil.h,
+	  include/geos/geomgraph.h, include/geos/geomgraph/Depth.h,
+	  include/geos/geomgraph/DirectedEdge.h,
+	  include/geos/geomgraph/EdgeList.h,
+	  include/geos/geomgraph/EdgeNodingValidator.h,
+	  include/geos/geomgraph/GeometryGraph.h,
+	  include/geos/geomgraph/Node.h,
+	  include/geos/geomgraph/NodeFactory.h,
+	  include/geos/geomgraph/NodeMap.h,
+	  include/geos/geomgraph/Position.h,
+	  include/geos/geomgraph/Quadrant.h,
+	  include/geos/geomgraph/index/EdgeSetIntersector.h,
+	  include/geos/geomgraph/index/MonotoneChain.h,
+	  include/geos/geomgraph/index/MonotoneChainEdge.h,
+	  include/geos/geomgraph/index/MonotoneChainIndexer.h,
+	  include/geos/geomgraph/index/SegmentIntersector.h,
+	  include/geos/geomgraph/index/SimpleEdgeSetIntersector.h,
+	  include/geos/geomgraph/index/SimpleMCSweepLineIntersector.h,
+	  include/geos/geomgraph/index/SimpleSweepLineIntersector.h,
+	  include/geos/geomgraph/index/SweepLineEvent.h,
+	  include/geos/geomgraph/index/SweepLineEventObj.h,
+	  include/geos/geomgraph/index/SweepLineSegment.h,
+	  include/geos/index/bintree/Bintree.h,
+	  include/geos/index/bintree/Interval.h,
+	  include/geos/index/bintree/Key.h,
+	  include/geos/index/bintree/Node.h,
+	  include/geos/index/bintree/NodeBase.h,
+	  include/geos/index/bintree/Root.h,
+	  include/geos/index/chain/MonotoneChain.h,
+	  include/geos/index/chain/MonotoneChainOverlapAction.h,
+	  include/geos/index/chain/MonotoneChainSelectAction.h,
+	  include/geos/index/intervalrtree/IntervalRTreeBranchNode.h,
+	  include/geos/index/intervalrtree/IntervalRTreeLeafNode.h,
+	  include/geos/index/intervalrtree/IntervalRTreeNode.h,
+	  include/geos/index/intervalrtree/SortedPackedIntervalRTree.h,
+	  include/geos/index/quadtree/DoubleBits.h,
+	  include/geos/index/quadtree/IntervalSize.h,
+	  include/geos/index/quadtree/Key.h,
+	  include/geos/index/quadtree/Node.h,
+	  include/geos/index/quadtree/NodeBase.h,
+	  include/geos/index/quadtree/Quadtree.h,
+	  include/geos/index/quadtree/Root.h,
+	  include/geos/index/strtree/AbstractNode.h,
+	  include/geos/index/strtree/AbstractSTRtree.h,
+	  include/geos/index/strtree/Boundable.h,
+	  include/geos/index/strtree/Interval.h,
+	  include/geos/index/strtree/ItemBoundable.h,
+	  include/geos/index/strtree/SIRtree.h,
+	  include/geos/index/strtree/STRtree.h,
+	  include/geos/index/sweepline/SweepLineEvent.h,
+	  include/geos/index/sweepline/SweepLineIndex.h,
+	  include/geos/index/sweepline/SweepLineInterval.h,
+	  include/geos/index/sweepline/SweepLineOverlapAction.h,
+	  include/geos/indexStrtree.h, include/geos/indexSweepline.h,
+	  include/geos/io.h, include/geos/io/ByteOrderDataInStream.h,
+	  include/geos/io/ByteOrderDataInStream.inl,
+	  include/geos/io/ByteOrderValues.h,
+	  include/geos/io/ParseException.h,
+	  include/geos/io/StringTokenizer.h,
+	  include/geos/io/WKBConstants.h, include/geos/io/WKBReader.h,
+	  include/geos/io/WKBWriter.h, include/geos/io/WKTReader.h,
+	  include/geos/io/WKTReader.inl, include/geos/io/WKTWriter.h,
+	  include/geos/io/Writer.h,
+	  include/geos/noding/FastNodingValidator.h,
+	  include/geos/noding/IntersectionAdder.h,
+	  include/geos/noding/IntersectionFinderAdder.h,
+	  include/geos/noding/IteratedNoder.h,
+	  include/geos/noding/MCIndexNoder.h,
+	  include/geos/noding/MCIndexSegmentSetMutualIntersector.h,
+	  include/geos/noding/NodableSegmentString.h,
+	  include/geos/noding/NodedSegmentString.h,
+	  include/geos/noding/NodingValidator.h,
+	  include/geos/noding/Octant.h, include/geos/noding/ScaledNoder.h,
+	  include/geos/noding/SegmentIntersectionDetector.h,
+	  include/geos/noding/SegmentIntersector.h,
+	  include/geos/noding/SegmentNode.h,
+	  include/geos/noding/SegmentNodeList.h,
+	  include/geos/noding/SegmentSetMutualIntersector.h,
+	  include/geos/noding/SegmentStringUtil.h,
+	  include/geos/noding/SimpleNoder.h,
+	  include/geos/noding/SingleInteriorIntersectionFinder.h,
+	  include/geos/noding/SinglePassNoder.h,
+	  include/geos/noding/snapround/HotPixel.h,
+	  include/geos/noding/snapround/SimpleSnapRounder.h,
+	  include/geos/operation/GeometryGraphOperation.h,
+	  include/geos/operation/IsSimpleOp.h,
+	  include/geos/operation/buffer/BufferBuilder.h,
+	  include/geos/operation/buffer/BufferInputLineSimplifier.h,
+	  include/geos/operation/buffer/BufferOp.h,
+	  include/geos/operation/buffer/BufferSubgraph.h,
+	  include/geos/operation/buffer/OffsetCurveSetBuilder.h,
+	  include/geos/operation/buffer/RightmostEdgeFinder.h,
+	  include/geos/operation/buffer/SubgraphDepthLocater.h,
+	  include/geos/operation/distance/ConnectedElementLocationFilter.h,
+	  include/geos/operation/distance/ConnectedElementPointFilter.h,
+	  include/geos/operation/distance/DistanceOp.h,
+	  include/geos/operation/distance/GeometryLocation.h,
+	  include/geos/operation/linemerge/EdgeString.h,
+	  include/geos/operation/linemerge/LineMergeDirectedEdge.h,
+	  include/geos/operation/linemerge/LineMergeEdge.h,
+	  include/geos/operation/linemerge/LineMergeGraph.h,
+	  include/geos/operation/linemerge/LineMerger.h,
+	  include/geos/operation/linemerge/LineSequencer.h,
+	  include/geos/operation/overlay/EdgeSetNoder.h,
+	  include/geos/operation/overlay/ElevationMatrix.h,
+	  include/geos/operation/overlay/ElevationMatrixCell.h,
+	  include/geos/operation/overlay/LineBuilder.h,
+	  include/geos/operation/overlay/MaximalEdgeRing.h,
+	  include/geos/operation/overlay/MinimalEdgeRing.h,
+	  include/geos/operation/overlay/OverlayNodeFactory.h,
+	  include/geos/operation/overlay/OverlayOp.h,
+	  include/geos/operation/overlay/PointBuilder.h,
+	  include/geos/operation/overlay/PolygonBuilder.h,
+	  include/geos/operation/overlay/snap/SnapIfNeededOverlayOp.h,
+	  include/geos/operation/overlay/snap/SnapOverlayOp.h,
+	  include/geos/operation/overlay/validate/FuzzyPointLocator.h,
+	  include/geos/operation/overlay/validate/OffsetPointGenerator.h,
+	  include/geos/operation/overlay/validate/OverlayResultValidator.h,
+	  include/geos/operation/polygonize/EdgeRing.h,
+	  include/geos/operation/polygonize/PolygonizeDirectedEdge.h,
+	  include/geos/operation/polygonize/PolygonizeEdge.h,
+	  include/geos/operation/polygonize/PolygonizeGraph.h,
+	  include/geos/operation/polygonize/Polygonizer.h,
+	  include/geos/operation/relate/EdgeEndBuilder.h,
+	  include/geos/operation/relate/EdgeEndBundle.h,
+	  include/geos/operation/relate/EdgeEndBundleStar.h,
+	  include/geos/operation/relate/RelateComputer.h,
+	  include/geos/operation/relate/RelateNodeFactory.h,
+	  include/geos/operation/relate/RelateNodeGraph.h,
+	  include/geos/operation/relate/RelateOp.h,
+	  include/geos/operation/union/CascadedPolygonUnion.h,
+	  include/geos/operation/valid/ConnectedInteriorTester.h,
+	  include/geos/operation/valid/ConsistentAreaTester.h,
+	  include/geos/operation/valid/IsValidOp.h,
+	  include/geos/operation/valid/QuadtreeNestedRingTester.h,
+	  include/geos/operation/valid/RepeatedPointTester.h,
+	  include/geos/operation/valid/SimpleNestedRingTester.h,
+	  include/geos/operation/valid/SweeplineNestedRingTester.h,
+	  include/geos/operation/valid/TopologyValidationError.h,
+	  include/geos/planargraph/DirectedEdge.h,
+	  include/geos/planargraph/DirectedEdgeStar.h,
+	  include/geos/planargraph/Edge.h,
+	  include/geos/planargraph/GraphComponent.h,
+	  include/geos/planargraph/Node.h,
+	  include/geos/planargraph/NodeMap.h,
+	  include/geos/planargraph/PlanarGraph.h,
+	  include/geos/planargraph/Subgraph.h,
+	  include/geos/precision/CommonBits.h,
+	  include/geos/precision/CommonBitsOp.h,
+	  include/geos/precision/CommonBitsRemover.h,
+	  include/geos/precision/EnhancedPrecisionOp.h,
+	  include/geos/precision/SimpleGeometryPrecisionReducer.h,
+	  include/geos/profiler.h,
+	  include/geos/simplify/DouglasPeuckerLineSimplifier.h,
+	  include/geos/simplify/DouglasPeuckerSimplifier.h,
+	  include/geos/simplify/LineSegmentIndex.h,
+	  include/geos/simplify/TaggedLineSegment.h,
+	  include/geos/simplify/TaggedLineString.h,
+	  include/geos/simplify/TaggedLinesSimplifier.h,
+	  include/geos/simplify/TopologyPreservingSimplifier.h,
+	  include/geos/spatialIndex.h, include/geos/unload.h,
+	  include/geos/util/Assert.h,
+	  include/geos/util/AssertionFailedException.h,
+	  include/geos/util/CoordinateArrayFilter.h,
+	  include/geos/util/GEOSException.h,
+	  include/geos/util/GeometricShapeFactory.h,
+	  include/geos/util/IllegalArgumentException.h,
+	  include/geos/util/TopologyException.h,
+	  include/geos/util/UniqueCoordinateArrayFilter.h,
+	  include/geos/util/UnsupportedOperationException.h,
+	  include/geos/util/math.h, src/algorithm/CentroidArea.cpp,
+	  src/algorithm/CentroidLine.cpp, src/algorithm/CentroidPoint.cpp,
+	  src/algorithm/ConvexHull.cpp,
+	  src/algorithm/InteriorPointArea.cpp,
+	  src/algorithm/InteriorPointLine.cpp,
+	  src/algorithm/InteriorPointPoint.cpp,
+	  src/algorithm/LineIntersector.cpp,
+	  src/algorithm/MCPointInRing.cpp,
+	  src/algorithm/MinimumDiameter.cpp,
+	  src/algorithm/NotRepresentableException.cpp,
+	  src/algorithm/PointLocator.cpp,
+	  src/algorithm/RayCrossingCounter.cpp,
+	  src/algorithm/SIRtreePointInRing.cpp,
+	  src/algorithm/SimplePointInRing.cpp,
+	  src/algorithm/locate/IndexedPointInAreaLocator.cpp,
+	  src/algorithm/locate/PointOnGeometryLocator.cpp,
+	  src/algorithm/locate/SimplePointInAreaLocator.cpp,
+	  src/geom/CoordinateArraySequence.cpp,
+	  src/geom/CoordinateSequence.cpp,
+	  src/geom/CoordinateSequenceFactory.cpp, src/geom/Dimension.cpp,
+	  src/geom/Envelope.cpp, src/geom/GeometryCollection.cpp,
+	  src/geom/GeometryComponentFilter.cpp,
+	  src/geom/GeometryFactory.cpp, src/geom/GeometryList.cpp,
+	  src/geom/IntersectionMatrix.cpp, src/geom/LineSegment.cpp,
+	  src/geom/LineString.cpp, src/geom/LinearRing.cpp,
+	  src/geom/Location.cpp, src/geom/MultiLineString.cpp,
+	  src/geom/MultiPoint.cpp, src/geom/MultiPolygon.cpp,
+	  src/geom/Polygon.cpp, src/geom/PrecisionModel.cpp,
+	  src/geom/Triangle.cpp,
+	  src/geom/prep/AbstractPreparedPolygonContains.cpp,
+	  src/geom/prep/BasicPreparedGeometry.cpp,
+	  src/geom/prep/PreparedGeometry.cpp,
+	  src/geom/prep/PreparedGeometryFactory.cpp,
+	  src/geom/prep/PreparedLineString.cpp,
+	  src/geom/prep/PreparedPoint.cpp,
+	  src/geom/prep/PreparedPolygon.cpp,
+	  src/geom/prep/PreparedPolygonContains.cpp,
+	  src/geom/prep/PreparedPolygonContainsProperly.cpp,
+	  src/geom/prep/PreparedPolygonCovers.cpp,
+	  src/geom/prep/PreparedPolygonIntersects.cpp,
+	  src/geom/prep/PreparedPolygonPredicate.cpp,
+	  src/geom/util/ComponentCoordinateExtracter.cpp,
+	  src/geom/util/CoordinateOperation.cpp,
+	  src/geom/util/GeometryEditor.cpp,
+	  src/geom/util/GeometryTransformer.cpp, src/geomgraph/Depth.cpp,
+	  src/geomgraph/EdgeList.cpp,
+	  src/geomgraph/EdgeNodingValidator.cpp, src/geomgraph/Label.cpp,
+	  src/geomgraph/NodeFactory.cpp, src/geomgraph/Position.cpp,
+	  src/geomgraph/Quadrant.cpp,
+	  src/geomgraph/index/MonotoneChainEdge.cpp,
+	  src/geomgraph/index/MonotoneChainIndexer.cpp,
+	  src/geomgraph/index/SegmentIntersector.cpp,
+	  src/geomgraph/index/SimpleEdgeSetIntersector.cpp,
+	  src/geomgraph/index/SimpleMCSweepLineIntersector.cpp,
+	  src/geomgraph/index/SimpleSweepLineIntersector.cpp,
+	  src/geomgraph/index/SweepLineEvent.cpp,
+	  src/geomgraph/index/SweepLineSegment.cpp,
+	  src/index/bintree/Bintree.cpp, src/index/bintree/Interval.cpp,
+	  src/index/bintree/Key.cpp, src/index/bintree/Node.cpp,
+	  src/index/bintree/NodeBase.cpp, src/index/bintree/Root.cpp,
+	  src/index/chain/MonotoneChain.cpp,
+	  src/index/chain/MonotoneChainOverlapAction.cpp,
+	  src/index/chain/MonotoneChainSelectAction.cpp,
+	  src/index/intervalrtree/IntervalRTreeBranchNode.cpp,
+	  src/index/intervalrtree/IntervalRTreeLeafNode.cpp,
+	  src/index/intervalrtree/IntervalRTreeNode.cpp,
+	  src/index/intervalrtree/SortedPackedIntervalRTree.cpp,
+	  src/index/quadtree/DoubleBits.cpp,
+	  src/index/quadtree/IntervalSize.cpp, src/index/quadtree/Key.cpp,
+	  src/index/quadtree/Node.cpp, src/index/quadtree/NodeBase.cpp,
+	  src/index/quadtree/Quadtree.cpp, src/index/quadtree/Root.cpp,
+	  src/index/strtree/AbstractNode.cpp,
+	  src/index/strtree/AbstractSTRtree.cpp,
+	  src/index/strtree/Interval.cpp,
+	  src/index/strtree/ItemBoundable.cpp,
+	  src/index/strtree/SIRtree.cpp, src/index/strtree/STRtree.cpp,
+	  src/index/sweepline/SweepLineEvent.cpp,
+	  src/index/sweepline/SweepLineIndex.cpp,
+	  src/index/sweepline/SweepLineInterval.cpp,
+	  src/io/ByteOrderValues.cpp, src/io/ParseException.cpp,
+	  src/io/StringTokenizer.cpp, src/io/Unload.cpp,
+	  src/io/WKTReader.cpp, src/io/Writer.cpp,
+	  src/noding/FastNodingValidator.cpp,
+	  src/noding/IntersectionAdder.cpp,
+	  src/noding/IntersectionFinderAdder.cpp,
+	  src/noding/MCIndexNoder.cpp, src/noding/NodedSegmentString.cpp,
+	  src/noding/NodingValidator.cpp, src/noding/Octant.cpp,
+	  src/noding/ScaledNoder.cpp,
+	  src/noding/SegmentIntersectionDetector.cpp,
+	  src/noding/SegmentNode.cpp, src/noding/SegmentNodeList.cpp,
+	  src/noding/SegmentStringUtil.cpp, src/noding/SimpleNoder.cpp,
+	  src/noding/SingleInteriorIntersectionFinder.cpp,
+	  src/noding/snapround/HotPixel.cpp,
+	  src/noding/snapround/SimpleSnapRounder.cpp,
+	  src/operation/GeometryGraphOperation.cpp,
+	  src/operation/buffer/BufferSubgraph.cpp,
+	  src/operation/buffer/OffsetCurveSetBuilder.cpp,
+	  src/operation/buffer/RightmostEdgeFinder.cpp,
+	  src/operation/buffer/SubgraphDepthLocater.cpp,
+	  src/operation/distance/ConnectedElementLocationFilter.cpp,
+	  src/operation/distance/ConnectedElementPointFilter.cpp,
+	  src/operation/distance/DistanceOp.cpp,
+	  src/operation/distance/GeometryLocation.cpp,
+	  src/operation/linemerge/EdgeString.cpp,
+	  src/operation/linemerge/LineMergeDirectedEdge.cpp,
+	  src/operation/linemerge/LineMergeEdge.cpp,
+	  src/operation/linemerge/LineMergeGraph.cpp,
+	  src/operation/linemerge/LineMerger.cpp,
+	  src/operation/linemerge/LineSequencer.cpp,
+	  src/operation/overlay/EdgeSetNoder.cpp,
+	  src/operation/overlay/ElevationMatrix.cpp,
+	  src/operation/overlay/ElevationMatrixCell.cpp,
+	  src/operation/overlay/MaximalEdgeRing.cpp,
+	  src/operation/overlay/MinimalEdgeRing.cpp,
+	  src/operation/overlay/OverlayNodeFactory.cpp,
+	  src/operation/overlay/validate/FuzzyPointLocator.cpp,
+	  src/operation/overlay/validate/OverlayResultValidator.cpp,
+	  src/operation/polygonize/EdgeRing.cpp,
+	  src/operation/polygonize/PolygonizeDirectedEdge.cpp,
+	  src/operation/polygonize/PolygonizeEdge.cpp,
+	  src/operation/polygonize/PolygonizeGraph.cpp,
+	  src/operation/polygonize/Polygonizer.cpp,
+	  src/operation/relate/EdgeEndBundleStar.cpp,
+	  src/operation/relate/RelateNodeFactory.cpp,
+	  src/operation/relate/RelateNodeGraph.cpp,
+	  src/operation/relate/RelateOp.cpp,
+	  src/operation/valid/ConnectedInteriorTester.cpp,
+	  src/operation/valid/ConsistentAreaTester.cpp,
+	  src/operation/valid/IndexedNestedRingTester.h,
+	  src/operation/valid/QuadtreeNestedRingTester.cpp,
+	  src/operation/valid/RepeatedPointTester.cpp,
+	  src/operation/valid/SimpleNestedRingTester.cpp,
+	  src/operation/valid/SweeplineNestedRingTester.cpp,
+	  src/operation/valid/TopologyValidationError.cpp,
+	  src/planargraph/DirectedEdge.cpp,
+	  src/planargraph/DirectedEdgeStar.cpp, src/planargraph/Edge.cpp,
+	  src/planargraph/Node.cpp, src/planargraph/NodeMap.cpp,
+	  src/planargraph/PlanarGraph.cpp, src/planargraph/Subgraph.cpp,
+	  src/planargraph/algorithm/ConnectedSubgraphFinder.cpp,
+	  src/precision/CommonBits.cpp, src/precision/CommonBitsOp.cpp,
+	  src/precision/CommonBitsRemover.cpp,
+	  src/precision/EnhancedPrecisionOp.cpp,
+	  src/precision/SimpleGeometryPrecisionReducer.cpp,
+	  src/simplify/DouglasPeuckerLineSimplifier.cpp,
+	  src/simplify/DouglasPeuckerSimplifier.cpp,
+	  src/simplify/LineSegmentIndex.cpp,
+	  src/simplify/TaggedLineSegment.cpp,
+	  src/simplify/TaggedLineString.cpp,
+	  src/simplify/TaggedLineStringSimplifier.cpp,
+	  src/simplify/TaggedLinesSimplifier.cpp, src/util/Assert.cpp,
+	  src/util/Profiler.cpp, tests/bigtest/GeometryTestFactory.cpp,
+	  tests/bigtest/TestSweepLineSpeed.cpp, tests/bigtest/bigtest.h,
+	  tests/xmltester/CTS.cpp, tests/xmltester/SimpleWKTTester.cpp,
+	  tests/xmltester/Stackwalker.h: Drop embedded RCS logs
+
+2012-05-28 12:29  Sandro Santilli <strk@keybit.net>
+
+	* [r3649] NEWS,
+	  include/geos/operation/buffer/BufferInputLineSimplifier.h,
+	  include/geos/operation/buffer/Makefile.am,
+	  src/operation/buffer/BufferInputLineSimplifier.cpp,
+	  src/operation/buffer/BufferInputLineSimplifier.h,
+	  src/operation/buffer/Makefile.am,
+	  src/operation/buffer/OffsetCurveBuilder.cpp,
+	  src/operation/buffer/OffsetSegmentGenerator.cpp: Install
+	  BufferInputLineSimplifier.h header (#548)
+	  
+	  Thanks ylan for the patch
+
+2012-05-28 07:48  Sandro Santilli <strk@keybit.net>
+
+	* [r3648] capi/geos_c.cpp, capi/geos_c.h.in, capi/geos_ts_c.cpp:
+	  Rename interrupt request/cancel methods, cancel interrupt in init
+
+2012-05-25 15:50  Sandro Santilli <strk@keybit.net>
+
+	* [r3647] NEWS, capi/geos_ts_c.cpp,
+	  include/geos/util/CustomAllocators.h,
+	  include/geos/util/Makefile.am, src/util/CustomAllocators.cpp,
+	  src/util/Makefile.am, tests/unit/Makefile.am,
+	  tests/unit/capi/GEOSCustomAllocatorTest.cpp: Revert the whole
+	  custom memory allocation work (#540)
+	  
+	  It wasn't well done. Pity.
+
+2012-05-25 15:26  Sandro Santilli <strk@keybit.net>
+
+	* [r3646] capi/geos_c.cpp, capi/geos_c.h.in: Expose interrupt
+	  request cancel to the C-API
+
+2012-05-25 12:26  Sandro Santilli <strk@keybit.net>
+
+	* [r3645] include/geos/util/Interrupt.h: Add method to cancel an
+	  interruption request in util::Interrupt
+
+2012-05-25 12:15  Sandro Santilli <strk@keybit.net>
+
+	* [r3644] src/noding/MCIndexNoder.cpp: Add strategic check for
+	  interrupt in MCIndexNoder loop
+	  
+	  Greatly increases interruptability of buffer operations in
+	  presence of many polygons.
+
+2012-05-25 10:54  Sandro Santilli <strk@keybit.net>
+
+	* [r3643] src/operation/buffer/BufferBuilder.cpp,
+	  src/operation/overlay/OverlayOp.cpp: Check for interruption in
+	  OverlayOp and BufferBuilder
+	  
+	  These are just two operations known to take a lot of time.
+	  It'll take a better analisys to find appropriate check point.
+	  
+	  The checks could as well be put within graph operation loops or
+	  Coordinate constructors...
+
+2012-05-25 10:54  Sandro Santilli <strk@keybit.net>
+
+	* [r3642] capi/geos_c.cpp, capi/geos_c.h.in,
+	  include/geos/util/Interrupt.h, include/geos/util/Makefile.am,
+	  src/util/Interrupt.cpp, src/util/Makefile.am: Initial support for
+	  an explicit mechanism to request interruption
+	  
+	  This commit provides a GEOS_CHECK_FOR_INTERRUPTS macro for
+	  internal
+	  use but adds no users.
+	  
+	  Early tests shows that registering a SIGINT handler is an
+	  effective
+	  way to request interruption of running GEOS operations.
+
+2012-05-24 06:00  Sandro Santilli <strk@keybit.net>
+
+	* [r3641] include/geos/geom/Geometry.h, src/geom/Geometry.cpp:
+	  Don't call GeometryFactory::getDefaultInstance() at startup
+	  (#540)
+
+2012-05-24 00:23  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3640] capi/geos_ts_c.cpp,
+	  include/geos/algorithm/BoundaryNodeRule.h,
+	  src/algorithm/BoundaryNodeRule.cpp,
+	  src/geomgraph/GeometryGraph.cpp,
+	  src/operation/GeometryGraphOperation.cpp: Replaced static
+	  members/references to global boundary rule objects with static
+	  methods providing access to those objects. The previous
+	  implementation was troublesome for exports from Windows DLL. From
+	  POV, it is just syntactical change. Semantically nothing has
+	  changed.
+
+2012-05-24 00:21  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3639] capi/CMakeLists.txt: [CMake] Link GEOS C-API library
+	  against geos.dll instead of static geos.lib to avoid breaking ODR
+	  for allocators.
+
+2012-05-23 23:53  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3638] include/geos/noding/GeometryNoder.h,
+	  include/geos/util/CustomAllocators.h: Added missing GEOS_DLL
+	  directive to GeometryNoder and custom allocators.
+
+2012-05-23 23:34  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3637] src/algorithm/distance, src/linearref,
+	  src/operation/overlay/snap, src/operation/overlay/validate:
+	  Updated svn:ignore patterns
+
+2012-05-23 23:03  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3636] capi/geos_c.h.in, capi/geos_ts_c.cpp,
+	  include/geos/util/CustomAllocators.h,
+	  src/util/CustomAllocators.cpp,
+	  tests/unit/capi/GEOSCustomAllocatorTest.cpp: Renamed Freer to
+	  Deallocator
+
+2012-05-23 22:57  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3635] capi/geos_ts_c.cpp: Missing namespace prevented Visual
+	  C++ compiler to find GEOSAllocator and GEOSFreer
+
+2012-05-16 16:47  Sandro Santilli <strk@keybit.net>
+
+	* [r3633] src/util/CustomAllocators.cpp,
+	  tests/unit/capi/GEOSCustomAllocatorTest.cpp: Fix CustomAllocators
+	  to really use the custom allocators
+	  
+	  Improve the unit test for it
+
+2012-05-16 12:20  Sandro Santilli <strk@keybit.net>
+
+	* [r3632] src/geom/GeometryFactory.cpp: Lazily create default
+	  GeometryFactory instance (#540)
+	  
+	  Seems to fix a problem with mismatch of allocator and deallocator
+	  for the static object
+
+2012-05-16 12:20  Sandro Santilli <strk@keybit.net>
+
+	* [r3631] NEWS, capi/geos_c.cpp, capi/geos_c.h.in,
+	  capi/geos_ts_c.cpp, include/geos/util/CustomAllocators.h,
+	  include/geos/util/Makefile.am, src/util/CustomAllocators.cpp,
+	  src/util/Makefile.am, tests/unit/Makefile.am,
+	  tests/unit/capi/GEOSCustomAllocatorTest.cpp: Allow passing custom
+	  memory managment functions (#540)
+	  
+	  This is both in the C++ library _and_ the C library.
+
+2012-05-16 10:29  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3630] tests/unit/capi/GEOSConvexHullTest.cpp: New test for
+	  C-API convex hull func.
+
+2012-05-14 19:03  Sandro Santilli <strk@keybit.net>
+
+	* [r3629] src/operation/polygonize/EdgeRing.cpp: Reduce calls to
+	  ptNotInList, greatly speeding up Polygonizer (#545)
+
+2012-05-09 18:02  Sandro Santilli <strk@keybit.net>
+
+	* [r3627] include/geos/simplify/TaggedLineStringSimplifier.h,
+	  include/geos/simplify/TopologyPreservingSimplifier.h,
+	  src/simplify/TaggedLineStringSimplifier.cpp,
+	  src/simplify/TopologyPreservingSimplifier.cpp,
+	  tests/unit/simplify/TopologyPreservingSimplifierTest.cpp: Fix
+	  TopologyPreservingSimplifier invalid output on closed line (#508)
+
+2012-05-09 16:28  Sandro Santilli <strk@keybit.net>
+
+	* [r3625] php/geos.c: Add support for PHP 5.4 (#513) -- thanks
+	  voxik
+
+2012-05-08 18:41  Sandro Santilli <strk@keybit.net>
+
+	* [r3623] src/geom/Geometry.cpp: Envelope-based short-circuit for
+	  Geometry->symDifference (#543)
+
+2012-05-08 17:39  Sandro Santilli <strk@keybit.net>
+
+	* [r3621] capi/geos_ts_c.cpp, tests/xmltester/XMLTester.cpp:
+	  Geometry methods do use BinaryOp internally + shortcuts (#542)
+	  
+	  This commit changes both XMLTester and C-API to not use BinaryOp
+	  directly but rather rely on geometry methods to do that.
+
+2012-05-04 14:51  Sandro Santilli <strk@keybit.net>
+
+	* [r3619] include/geos/noding/GeometryNoder.h,
+	  src/noding/GeometryNoder.cpp: Correct include directives for
+	  GeometryNoder (#538)
+
+2012-05-04 08:24  Sandro Santilli <strk@keybit.net>
+
+	* [r3618] acsite.m4: Update PGAC_TYPE_64BIT_INT for better
+	  cross-compiler support (#534)
+
+2012-05-03 10:08  Sandro Santilli <strk@keybit.net>
+
+	* [r3616] tests/perf/ClassSizes.cpp: Check size of "intt64"
+
+2012-04-27 07:01  Sandro Santilli <strk@keybit.net>
+
+	* [r3615] NEWS, php/geos.c, php/test/test.php: Expose GEOSNode to
+	  PHP api
+
+2012-04-12 09:07  Sandro Santilli <strk@keybit.net>
+
+	* [r3614] src/geomgraph/Node.cpp,
+	  tests/unit/capi/GEOSUnaryUnionTest.cpp: Throw an exception rather
+	  than aborting on NaN overlay input (#530)
+
+2012-04-10 17:01  Sandro Santilli <strk@keybit.net>
+
+	* [r3612] src/noding/snapround/HotPixel.cpp: Abort if HotPixel is
+	  constructed with zero scale (#529)
+
+2012-04-10 15:58  Sandro Santilli <strk@keybit.net>
+
+	* [r3611] tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/ticket/bug527.xml: Add test for bug #527
+
+2012-04-10 15:16  Sandro Santilli <strk@keybit.net>
+
+	* [r3609] include/geos/operation/union/UnaryUnionOp.h: Have
+	  UnaryUnion use BinaryOp for the simple case
+	  
+	  See ticket #527 -- there's no infinite loop triggered by our
+	  testsuite...
+
+2012-04-10 15:04  Sandro Santilli <strk@keybit.net>
+
+	* [r3607] include/geos/geom/BinaryOp.h: Reduce CommonBitsRemover
+	  harmful effects during overlay op (#527)
+
+2012-04-10 08:38  Sandro Santilli <strk@keybit.net>
+
+	* [r3605] NEWS, include/geos/precision/GeometryPrecisionReducer.h,
+	  include/geos/precision/Makefile.am,
+	  include/geos/precision/PrecisionReducerCoordinateOperation.h,
+	  src/precision/GeometryPrecisionReducer.cpp,
+	  src/precision/Makefile.am,
+	  src/precision/PrecisionReducerCoordinateOperation.cpp,
+	  src/precision/SimpleGeometryPrecisionReducer.cpp,
+	  tests/unit/Makefile.am,
+	  tests/unit/precision/GeometryPrecisionReducerTest.cpp: Port
+	  GeometryPrecisionReducer, include testcase
+
+2012-04-06 19:04  Sandro Santilli <strk@keybit.net>
+
+	* [r3604] src/geom/GeometryFactory.cpp: Deep copy Geometry with
+	  GeometryFactory.createGeometry()
+	  
+	  Uses the CoordinateSequenceFactory of the factory
+
+2012-04-06 19:03  Sandro Santilli <strk@keybit.net>
+
+	* [r3603] include/geos/geom/CoordinateArraySequence.h,
+	  include/geos/geom/CoordinateArraySequenceFactory.h,
+	  include/geos/geom/CoordinateArraySequenceFactory.inl,
+	  include/geos/geom/CoordinateSequenceFactory.h,
+	  src/geom/CoordinateArraySequence.cpp,
+	  src/geom/CoordinateArraySequenceFactory.cpp,
+	  src/geom/CoordinateSequenceFactory.cpp: Add CoordinateSequence
+	  deep copy trhough CoordinateSequenceFactory
+
+2012-04-05 17:07  Sandro Santilli <strk@keybit.net>
+
+	* [r3602] tests/unit/capi/GEOSNodeTest.cpp: Normalize noded
+	  geometry before comparing with expected value
+	  
+	  In this way we can change the noding implementation w/out
+	  breaking the tests.
+
+2012-04-05 16:56  Sandro Santilli <strk@keybit.net>
+
+	* [r3601] swig/python/geos_wrap.cxx: Regnerate geos wrapper with
+	  correct version for this branch
+
+2012-04-05 16:47  Sandro Santilli <strk@keybit.net>
+
+	* [r3599] swig/python/geos.py, swig/python/geos_wrap.cxx:
+	  Regenerate swig wrappers with SWIG 1.3.40
+
+2012-04-05 14:53  Sandro Santilli <strk@keybit.net>
+
+	* [r3598] src/noding/snapround/SimpleSnapRounder.cpp: Fix
+	  SimpleSnapRounder::getNodedSubstrings, fix leak on exception
+
+2012-04-05 14:37  Sandro Santilli <strk@keybit.net>
+
+	* [r3597] src/noding/GeometryNoder.cpp: Clean memory on exception
+
+2012-04-05 14:23  Sandro Santilli <strk@keybit.net>
+
+	* [r3596] include/geos/noding/NodedSegmentString.h: Generalize
+	  NodedSegmentString::getNodedSubstrings
+
+2012-04-05 14:14  Sandro Santilli <strk@keybit.net>
+
+	* [r3595] tests/unit/capi/GEOSNodeTest.cpp: Ensure GEOSNode doesn't
+	  throw an exception with current tests
+
+2012-04-05 13:43  Sandro Santilli <strk@keybit.net>
+
+	* [r3594] NEWS: Add note about GEOSNode
+
+2012-04-05 13:40  Sandro Santilli <strk@keybit.net>
+
+	* [r3593] capi/geos_c.cpp, capi/geos_c.h.in, capi/geos_ts_c.cpp,
+	  include/geos/noding/GeometryNoder.h,
+	  include/geos/noding/Makefile.am, src/noding/GeometryNoder.cpp,
+	  src/noding/IteratedNoder.cpp, src/noding/Makefile.am,
+	  tests/unit/Makefile.am, tests/unit/capi/GEOSNodeTest.cpp: Add
+	  GEOSNode C-API interface (#496)
+	  
+	  Includes a new GeometryNoder C++ class and regression testing.
+
+2012-04-05 12:05  Sandro Santilli <strk@keybit.net>
+
+	* [r3592] src/noding/IteratedNoder.cpp: Fix memory leak with
+	  IteratedNoder
+
+2012-04-05 11:07  Sandro Santilli <strk@keybit.net>
+
+	* [r3591] include/geos/noding/IteratedNoder.h,
+	  src/noding/IteratedNoder.cpp: Update port info and cleanup
+	  IteratedNoder
+
+2012-04-05 10:30  Sandro Santilli <strk@keybit.net>
+
+	* [r3590] include/geos/geomgraph/EdgeList.h,
+	  include/geos/noding/OrientedCoordinateArray.h: Make
+	  OrientedCoordinateArray comparable
+
+2012-04-05 10:30  Sandro Santilli <strk@keybit.net>
+
+	* [r3589] include/geos/noding/OrientedCoordinateArray.h,
+	  src/noding/OrientedCoordinateArray.cpp: Make
+	  OrientedCoordinateArray assignable
+
+2012-04-03 14:23  Sandro Santilli <strk@keybit.net>
+
+	* [r3588] include/geos/noding/OrientedCoordinateArray.h: Make
+	  OrientedCoordinateArray copyable
+
+2012-04-03 12:59  Sandro Santilli <strk@keybit.net>
+
+	* [r3587] include/geos/noding/snapround/MCIndexSnapRounder.h:
+	  Const-correct PrecisionModel use in MCIndexSnapRounder
+
+2012-04-01 20:50  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r3585] HOWTO_RELEASE: Update howto release
+
+2012-04-01 20:45  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r3583] capi/geos_c.h.in: Sync up versions advertised in capi to
+	  those in configure.in
+
+2012-03-27 08:37  Sandro Santilli <strk@keybit.net>
+
+	* [r3576] src/operation/overlay/snap/LineStringSnapper.cpp:
+	  Indent..
+
+2012-03-22 08:39  Sandro Santilli <strk@keybit.net>
+
+	* [r3575] src/simplify/TaggedLineString.cpp,
+	  src/simplify/TaggedLineStringSimplifier.cpp,
+	  tests/unit/simplify/TopologyPreservingSimplifierTest.cpp: Fix
+	  simplification of collections with empty items (#519)
+
+2012-02-20 21:34  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r3573] CMakeLists.txt: Synch patch level version with autoconf
+	  number
+
+2012-02-16 18:19  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r3568] src/algorithm/RobustDeterminant.cpp: Update provenance
+	  for Olivier Devillers.
+
+2012-01-16 20:36  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r3567] src/algorithm/RobustDeterminant.cpp: More info on
+	  provenance.
+
+2012-01-16 20:15  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r3566] include/geos/timeval.h: Update provenenance
+
+2012-01-16 18:00  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r3565] ChangeLog, capi/geos_c.cpp, capi/geos_c.h.in,
+	  capi/geos_ts_c.cpp, debian/copyright, debian/geos-config.1,
+	  doc/example.cpp, examples/CPCLException.cpp,
+	  examples/CoordinateSequencesExample.cpp,
+	  examples/CustomCoordinateSequenceExample.cpp,
+	  examples/CustomCoordinateSequenceExample.h,
+	  examples/CustomPointCoordinateSequence.cpp, include/acconfig.h,
+	  include/geos.h, include/geos/algorithm/Angle.h,
+	  include/geos/algorithm/BoundaryNodeRule.h,
+	  include/geos/algorithm/CGAlgorithms.h,
+	  include/geos/algorithm/CentralEndpointIntersector.h,
+	  include/geos/algorithm/CentroidArea.h,
+	  include/geos/algorithm/CentroidLine.h,
+	  include/geos/algorithm/CentroidPoint.h,
+	  include/geos/algorithm/ConvexHull.h,
+	  include/geos/algorithm/ConvexHull.inl,
+	  include/geos/algorithm/HCoordinate.h,
+	  include/geos/algorithm/InteriorPointArea.h,
+	  include/geos/algorithm/InteriorPointLine.h,
+	  include/geos/algorithm/InteriorPointPoint.h,
+	  include/geos/algorithm/LineIntersector.h,
+	  include/geos/algorithm/MCPointInRing.h,
+	  include/geos/algorithm/MinimumDiameter.h,
+	  include/geos/algorithm/NotRepresentableException.h,
+	  include/geos/algorithm/PointInRing.h,
+	  include/geos/algorithm/PointLocator.h,
+	  include/geos/algorithm/RayCrossingCounter.h,
+	  include/geos/algorithm/RobustDeterminant.h,
+	  include/geos/algorithm/SIRtreePointInRing.h,
+	  include/geos/algorithm/SimplePointInRing.h,
+	  include/geos/algorithm/distance/DiscreteHausdorffDistance.h,
+	  include/geos/algorithm/distance/DistanceToPoint.h,
+	  include/geos/algorithm/distance/PointPairDistance.h,
+	  include/geos/algorithm/locate/IndexedPointInAreaLocator.h,
+	  include/geos/algorithm/locate/PointOnGeometryLocator.h,
+	  include/geos/algorithm/locate/SimplePointInAreaLocator.h,
+	  include/geos/export.h, include/geos/geom.h,
+	  include/geos/geom/BinaryOp.h, include/geos/geom/Coordinate.h,
+	  include/geos/geom/Coordinate.inl,
+	  include/geos/geom/CoordinateArraySequence.h,
+	  include/geos/geom/CoordinateArraySequenceFactory.h,
+	  include/geos/geom/CoordinateArraySequenceFactory.inl,
+	  include/geos/geom/CoordinateFilter.h,
+	  include/geos/geom/CoordinateList.h,
+	  include/geos/geom/CoordinateSequence.h,
+	  include/geos/geom/CoordinateSequenceFactory.h,
+	  include/geos/geom/CoordinateSequenceFilter.h,
+	  include/geos/geom/Dimension.h, include/geos/geom/Envelope.h,
+	  include/geos/geom/Envelope.inl, include/geos/geom/Geometry.h,
+	  include/geos/geom/GeometryCollection.h,
+	  include/geos/geom/GeometryCollection.inl,
+	  include/geos/geom/GeometryComponentFilter.h,
+	  include/geos/geom/GeometryFactory.h,
+	  include/geos/geom/GeometryFactory.inl,
+	  include/geos/geom/GeometryFilter.h,
+	  include/geos/geom/GeometryList.h,
+	  include/geos/geom/IntersectionMatrix.h,
+	  include/geos/geom/LineSegment.h,
+	  include/geos/geom/LineSegment.inl,
+	  include/geos/geom/LineString.h, include/geos/geom/Lineal.h,
+	  include/geos/geom/LinearRing.h, include/geos/geom/Location.h,
+	  include/geos/geom/MultiLineString.h,
+	  include/geos/geom/MultiLineString.inl,
+	  include/geos/geom/MultiPoint.h, include/geos/geom/MultiPolygon.h,
+	  include/geos/geom/MultiPolygon.inl, include/geos/geom/Point.h,
+	  include/geos/geom/Polygon.h, include/geos/geom/Polygonal.h,
+	  include/geos/geom/PrecisionModel.h,
+	  include/geos/geom/PrecisionModel.inl, include/geos/geom/Puntal.h,
+	  include/geos/geom/Triangle.h,
+	  include/geos/geom/prep/AbstractPreparedPolygonContains.h,
+	  include/geos/geom/prep/BasicPreparedGeometry.h,
+	  include/geos/geom/prep/PreparedGeometry.h,
+	  include/geos/geom/prep/PreparedGeometryFactory.h,
+	  include/geos/geom/prep/PreparedLineString.h,
+	  include/geos/geom/prep/PreparedLineStringIntersects.h,
+	  include/geos/geom/prep/PreparedPoint.h,
+	  include/geos/geom/prep/PreparedPolygon.h,
+	  include/geos/geom/prep/PreparedPolygonContains.h,
+	  include/geos/geom/prep/PreparedPolygonContainsProperly.h,
+	  include/geos/geom/prep/PreparedPolygonCovers.h,
+	  include/geos/geom/prep/PreparedPolygonIntersects.h,
+	  include/geos/geom/prep/PreparedPolygonPredicate.h,
+	  include/geos/geom/util/ComponentCoordinateExtracter.h,
+	  include/geos/geom/util/CoordinateOperation.h,
+	  include/geos/geom/util/GeometryCombiner.h,
+	  include/geos/geom/util/GeometryEditor.h,
+	  include/geos/geom/util/GeometryEditorOperation.h,
+	  include/geos/geom/util/GeometryExtracter.h,
+	  include/geos/geom/util/GeometryTransformer.h,
+	  include/geos/geom/util/LinearComponentExtracter.h,
+	  include/geos/geom/util/PointExtracter.h,
+	  include/geos/geom/util/PolygonExtracter.h,
+	  include/geos/geom/util/ShortCircuitedGeometryVisitor.h,
+	  include/geos/geom/util/SineStarFactory.h,
+	  include/geos/geomPrep.h, include/geos/geomUtil.h,
+	  include/geos/geomgraph.h, include/geos/geomgraph/Depth.h,
+	  include/geos/geomgraph/DirectedEdge.h,
+	  include/geos/geomgraph/DirectedEdge.inl,
+	  include/geos/geomgraph/DirectedEdgeStar.h,
+	  include/geos/geomgraph/Edge.h, include/geos/geomgraph/EdgeEnd.h,
+	  include/geos/geomgraph/EdgeEndStar.h,
+	  include/geos/geomgraph/EdgeIntersection.h,
+	  include/geos/geomgraph/EdgeIntersectionList.h,
+	  include/geos/geomgraph/EdgeList.h,
+	  include/geos/geomgraph/EdgeNodingValidator.h,
+	  include/geos/geomgraph/EdgeRing.h,
+	  include/geos/geomgraph/GeometryGraph.h,
+	  include/geos/geomgraph/GeometryGraph.inl,
+	  include/geos/geomgraph/GraphComponent.h,
+	  include/geos/geomgraph/Label.h, include/geos/geomgraph/Node.h,
+	  include/geos/geomgraph/NodeFactory.h,
+	  include/geos/geomgraph/NodeMap.h,
+	  include/geos/geomgraph/PlanarGraph.h,
+	  include/geos/geomgraph/Position.h,
+	  include/geos/geomgraph/Quadrant.h,
+	  include/geos/geomgraph/TopologyLocation.h,
+	  include/geos/geomgraph/index/EdgeSetIntersector.h,
+	  include/geos/geomgraph/index/MonotoneChain.h,
+	  include/geos/geomgraph/index/MonotoneChainEdge.h,
+	  include/geos/geomgraph/index/MonotoneChainIndexer.h,
+	  include/geos/geomgraph/index/SegmentIntersector.h,
+	  include/geos/geomgraph/index/SimpleEdgeSetIntersector.h,
+	  include/geos/geomgraph/index/SimpleMCSweepLineIntersector.h,
+	  include/geos/geomgraph/index/SimpleSweepLineIntersector.h,
+	  include/geos/geomgraph/index/SweepLineEvent.h,
+	  include/geos/geomgraph/index/SweepLineEventObj.h,
+	  include/geos/geomgraph/index/SweepLineSegment.h,
+	  include/geos/geomgraphindex.h, include/geos/geosAlgorithm.h,
+	  include/geos/index/ItemVisitor.h,
+	  include/geos/index/SpatialIndex.h,
+	  include/geos/index/bintree/Bintree.h,
+	  include/geos/index/bintree/Interval.h,
+	  include/geos/index/bintree/Key.h,
+	  include/geos/index/bintree/Node.h,
+	  include/geos/index/bintree/NodeBase.h,
+	  include/geos/index/bintree/Root.h,
+	  include/geos/index/chain/MonotoneChain.h,
+	  include/geos/index/chain/MonotoneChainBuilder.h,
+	  include/geos/index/chain/MonotoneChainOverlapAction.h,
+	  include/geos/index/chain/MonotoneChainSelectAction.h,
+	  include/geos/index/intervalrtree/IntervalRTreeBranchNode.h,
+	  include/geos/index/intervalrtree/IntervalRTreeLeafNode.h,
+	  include/geos/index/intervalrtree/IntervalRTreeNode.h,
+	  include/geos/index/intervalrtree/SortedPackedIntervalRTree.h,
+	  include/geos/index/quadtree/DoubleBits.h,
+	  include/geos/index/quadtree/IntervalSize.h,
+	  include/geos/index/quadtree/Key.h,
+	  include/geos/index/quadtree/Node.h,
+	  include/geos/index/quadtree/NodeBase.h,
+	  include/geos/index/quadtree/Quadtree.h,
+	  include/geos/index/quadtree/Root.h,
+	  include/geos/index/strtree/AbstractNode.h,
+	  include/geos/index/strtree/AbstractSTRtree.h,
+	  include/geos/index/strtree/Boundable.h,
+	  include/geos/index/strtree/Interval.h,
+	  include/geos/index/strtree/ItemBoundable.h,
+	  include/geos/index/strtree/SIRtree.h,
+	  include/geos/index/strtree/STRtree.h,
+	  include/geos/index/sweepline/SweepLineEvent.h,
+	  include/geos/index/sweepline/SweepLineIndex.h,
+	  include/geos/index/sweepline/SweepLineInterval.h,
+	  include/geos/index/sweepline/SweepLineOverlapAction.h,
+	  include/geos/indexBintree.h, include/geos/indexChain.h,
+	  include/geos/indexIntervalRTree.h, include/geos/indexQuadtree.h,
+	  include/geos/indexStrtree.h, include/geos/indexSweepline.h,
+	  include/geos/inline.h, include/geos/io.h,
+	  include/geos/io/ByteOrderDataInStream.h,
+	  include/geos/io/ByteOrderDataInStream.inl,
+	  include/geos/io/ByteOrderValues.h, include/geos/io/CLocalizer.h,
+	  include/geos/io/ParseException.h,
+	  include/geos/io/StringTokenizer.h,
+	  include/geos/io/WKBConstants.h, include/geos/io/WKBReader.h,
+	  include/geos/io/WKBWriter.h, include/geos/io/WKTReader.h,
+	  include/geos/io/WKTReader.inl, include/geos/io/WKTWriter.h,
+	  include/geos/io/Writer.h,
+	  include/geos/linearref/ExtractLineByLocation.h,
+	  include/geos/linearref/LengthIndexOfPoint.h,
+	  include/geos/linearref/LengthIndexedLine.h,
+	  include/geos/linearref/LengthLocationMap.h,
+	  include/geos/linearref/LinearGeometryBuilder.h,
+	  include/geos/linearref/LinearIterator.h,
+	  include/geos/linearref/LinearLocation.h,
+	  include/geos/linearref/LocationIndexOfLine.h,
+	  include/geos/linearref/LocationIndexOfPoint.h,
+	  include/geos/linearref/LocationIndexedLine.h,
+	  include/geos/noding.h, include/geos/noding/BasicSegmentString.h,
+	  include/geos/noding/FastNodingValidator.h,
+	  include/geos/noding/FastSegmentSetIntersectionFinder.h,
+	  include/geos/noding/IntersectionAdder.h,
+	  include/geos/noding/IntersectionFinderAdder.h,
+	  include/geos/noding/IteratedNoder.h,
+	  include/geos/noding/MCIndexNoder.h,
+	  include/geos/noding/MCIndexNoder.inl,
+	  include/geos/noding/MCIndexSegmentSetMutualIntersector.h,
+	  include/geos/noding/NodableSegmentString.h,
+	  include/geos/noding/NodedSegmentString.h,
+	  include/geos/noding/Noder.h,
+	  include/geos/noding/NodingValidator.h,
+	  include/geos/noding/Octant.h,
+	  include/geos/noding/OrientedCoordinateArray.h,
+	  include/geos/noding/ScaledNoder.h,
+	  include/geos/noding/SegmentIntersectionDetector.h,
+	  include/geos/noding/SegmentIntersector.h,
+	  include/geos/noding/SegmentNode.h,
+	  include/geos/noding/SegmentNodeList.h,
+	  include/geos/noding/SegmentPointComparator.h,
+	  include/geos/noding/SegmentSetMutualIntersector.h,
+	  include/geos/noding/SegmentString.h,
+	  include/geos/noding/SegmentStringUtil.h,
+	  include/geos/noding/SimpleNoder.h,
+	  include/geos/noding/SingleInteriorIntersectionFinder.h,
+	  include/geos/noding/SinglePassNoder.h,
+	  include/geos/noding/snapround/HotPixel.h,
+	  include/geos/noding/snapround/HotPixel.inl,
+	  include/geos/noding/snapround/MCIndexPointSnapper.h,
+	  include/geos/noding/snapround/MCIndexSnapRounder.h,
+	  include/geos/noding/snapround/SimpleSnapRounder.h,
+	  include/geos/nodingSnapround.h, include/geos/opBuffer.h,
+	  include/geos/opDistance.h, include/geos/opLinemerge.h,
+	  include/geos/opOverlay.h, include/geos/opPolygonize.h,
+	  include/geos/opPredicate.h, include/geos/opRelate.h,
+	  include/geos/opValid.h, include/geos/operation.h,
+	  include/geos/operation/GeometryGraphOperation.h,
+	  include/geos/operation/IsSimpleOp.h,
+	  include/geos/operation/buffer/BufferBuilder.h,
+	  include/geos/operation/buffer/BufferOp.h,
+	  include/geos/operation/buffer/BufferParameters.h,
+	  include/geos/operation/buffer/BufferSubgraph.h,
+	  include/geos/operation/buffer/OffsetCurveBuilder.h,
+	  include/geos/operation/buffer/OffsetCurveSetBuilder.h,
+	  include/geos/operation/buffer/OffsetSegmentGenerator.h,
+	  include/geos/operation/buffer/OffsetSegmentString.h,
+	  include/geos/operation/buffer/RightmostEdgeFinder.h,
+	  include/geos/operation/buffer/SubgraphDepthLocater.h,
+	  include/geos/operation/distance/ConnectedElementLocationFilter.h,
+	  include/geos/operation/distance/ConnectedElementPointFilter.h,
+	  include/geos/operation/distance/DistanceOp.h,
+	  include/geos/operation/distance/GeometryLocation.h,
+	  include/geos/operation/linemerge/EdgeString.h,
+	  include/geos/operation/linemerge/LineMergeDirectedEdge.h,
+	  include/geos/operation/linemerge/LineMergeEdge.h,
+	  include/geos/operation/linemerge/LineMergeGraph.h,
+	  include/geos/operation/linemerge/LineMerger.h,
+	  include/geos/operation/linemerge/LineSequencer.h,
+	  include/geos/operation/overlay/EdgeSetNoder.h,
+	  include/geos/operation/overlay/ElevationMatrix.h,
+	  include/geos/operation/overlay/ElevationMatrixCell.h,
+	  include/geos/operation/overlay/LineBuilder.h,
+	  include/geos/operation/overlay/MaximalEdgeRing.h,
+	  include/geos/operation/overlay/MinimalEdgeRing.h,
+	  include/geos/operation/overlay/MinimalEdgeRing.inl,
+	  include/geos/operation/overlay/OverlayNodeFactory.h,
+	  include/geos/operation/overlay/OverlayOp.h,
+	  include/geos/operation/overlay/PointBuilder.h,
+	  include/geos/operation/overlay/PolygonBuilder.h,
+	  include/geos/operation/overlay/snap/GeometrySnapper.h,
+	  include/geos/operation/overlay/snap/LineStringSnapper.h,
+	  include/geos/operation/overlay/snap/SnapIfNeededOverlayOp.h,
+	  include/geos/operation/overlay/snap/SnapOverlayOp.h,
+	  include/geos/operation/overlay/validate/FuzzyPointLocator.h,
+	  include/geos/operation/overlay/validate/OffsetPointGenerator.h,
+	  include/geos/operation/overlay/validate/OverlayResultValidator.h,
+	  include/geos/operation/polygonize/EdgeRing.h,
+	  include/geos/operation/polygonize/PolygonizeDirectedEdge.h,
+	  include/geos/operation/polygonize/PolygonizeEdge.h,
+	  include/geos/operation/polygonize/PolygonizeGraph.h,
+	  include/geos/operation/polygonize/Polygonizer.h,
+	  include/geos/operation/predicate/RectangleContains.h,
+	  include/geos/operation/predicate/RectangleIntersects.h,
+	  include/geos/operation/predicate/SegmentIntersectionTester.h,
+	  include/geos/operation/relate/EdgeEndBuilder.h,
+	  include/geos/operation/relate/EdgeEndBundle.h,
+	  include/geos/operation/relate/EdgeEndBundleStar.h,
+	  include/geos/operation/relate/RelateComputer.h,
+	  include/geos/operation/relate/RelateNode.h,
+	  include/geos/operation/relate/RelateNodeFactory.h,
+	  include/geos/operation/relate/RelateNodeGraph.h,
+	  include/geos/operation/relate/RelateOp.h,
+	  include/geos/operation/sharedpaths/SharedPathsOp.h,
+	  include/geos/operation/union/CascadedPolygonUnion.h,
+	  include/geos/operation/union/GeometryListHolder.h,
+	  include/geos/operation/union/PointGeometryUnion.h,
+	  include/geos/operation/union/UnaryUnionOp.h,
+	  include/geos/operation/valid/ConnectedInteriorTester.h,
+	  include/geos/operation/valid/ConsistentAreaTester.h,
+	  include/geos/operation/valid/IsValidOp.h,
+	  include/geos/operation/valid/QuadtreeNestedRingTester.h,
+	  include/geos/operation/valid/RepeatedPointTester.h,
+	  include/geos/operation/valid/SimpleNestedRingTester.h,
+	  include/geos/operation/valid/SweeplineNestedRingTester.h,
+	  include/geos/operation/valid/TopologyValidationError.h,
+	  include/geos/planargraph.h,
+	  include/geos/planargraph/DirectedEdge.h,
+	  include/geos/planargraph/DirectedEdgeStar.h,
+	  include/geos/planargraph/Edge.h,
+	  include/geos/planargraph/GraphComponent.h,
+	  include/geos/planargraph/Node.h,
+	  include/geos/planargraph/NodeMap.h,
+	  include/geos/planargraph/PlanarGraph.h,
+	  include/geos/planargraph/Subgraph.h,
+	  include/geos/planargraph/algorithm/ConnectedSubgraphFinder.h,
+	  include/geos/platform.h.cmake, include/geos/platform.h.vc,
+	  include/geos/precision.h, include/geos/precision/CommonBits.h,
+	  include/geos/precision/CommonBitsOp.h,
+	  include/geos/precision/CommonBitsRemover.h,
+	  include/geos/precision/EnhancedPrecisionOp.h,
+	  include/geos/precision/SimpleGeometryPrecisionReducer.h,
+	  include/geos/profiler.h,
+	  include/geos/simplify/DouglasPeuckerLineSimplifier.h,
+	  include/geos/simplify/DouglasPeuckerSimplifier.h,
+	  include/geos/simplify/LineSegmentIndex.h,
+	  include/geos/simplify/TaggedLineSegment.h,
+	  include/geos/simplify/TaggedLineString.h,
+	  include/geos/simplify/TaggedLineStringSimplifier.h,
+	  include/geos/simplify/TaggedLinesSimplifier.h,
+	  include/geos/simplify/TopologyPreservingSimplifier.h,
+	  include/geos/spatialIndex.h, include/geos/timeval.h,
+	  include/geos/unload.h, include/geos/util.h,
+	  include/geos/util/Assert.h,
+	  include/geos/util/AssertionFailedException.h,
+	  include/geos/util/CoordinateArrayFilter.h,
+	  include/geos/util/GEOSException.h,
+	  include/geos/util/GeometricShapeFactory.h,
+	  include/geos/util/IllegalArgumentException.h,
+	  include/geos/util/IllegalStateException.h,
+	  include/geos/util/Machine.h,
+	  include/geos/util/TopologyException.h,
+	  include/geos/util/UniqueCoordinateArrayFilter.h,
+	  include/geos/util/UnsupportedOperationException.h,
+	  include/geos/util/math.h, include/geos/version.h.in,
+	  include/geos/version.h.vc, src/algorithm/Angle.cpp,
+	  src/algorithm/BoundaryNodeRule.cpp,
+	  src/algorithm/CGAlgorithms.cpp, src/algorithm/CentroidArea.cpp,
+	  src/algorithm/CentroidLine.cpp, src/algorithm/CentroidPoint.cpp,
+	  src/algorithm/ConvexHull.cpp, src/algorithm/HCoordinate.cpp,
+	  src/algorithm/InteriorPointArea.cpp,
+	  src/algorithm/InteriorPointLine.cpp,
+	  src/algorithm/InteriorPointPoint.cpp,
+	  src/algorithm/LineIntersector.cpp,
+	  src/algorithm/MCPointInRing.cpp, src/algorithm/Makefile.am,
+	  src/algorithm/MinimumDiameter.cpp,
+	  src/algorithm/NotRepresentableException.cpp,
+	  src/algorithm/PointLocator.cpp,
+	  src/algorithm/RayCrossingCounter.cpp,
+	  src/algorithm/RobustDeterminant.cpp,
+	  src/algorithm/SIRtreePointInRing.cpp,
+	  src/algorithm/SimplePointInRing.cpp,
+	  src/algorithm/distance/DiscreteHausdorffDistance.cpp,
+	  src/algorithm/distance/DistanceToPoint.cpp,
+	  src/algorithm/locate/IndexedPointInAreaLocator.cpp,
+	  src/algorithm/locate/PointOnGeometryLocator.cpp,
+	  src/algorithm/locate/SimplePointInAreaLocator.cpp,
+	  src/geom/Coordinate.cpp, src/geom/CoordinateArraySequence.cpp,
+	  src/geom/CoordinateArraySequenceFactory.cpp,
+	  src/geom/CoordinateSequence.cpp,
+	  src/geom/CoordinateSequenceFactory.cpp, src/geom/Dimension.cpp,
+	  src/geom/Envelope.cpp, src/geom/Geometry.cpp,
+	  src/geom/GeometryCollection.cpp,
+	  src/geom/GeometryComponentFilter.cpp,
+	  src/geom/GeometryFactory.cpp, src/geom/GeometryList.cpp,
+	  src/geom/IntersectionMatrix.cpp, src/geom/LineSegment.cpp,
+	  src/geom/LineString.cpp, src/geom/LinearRing.cpp,
+	  src/geom/Location.cpp, src/geom/MultiLineString.cpp,
+	  src/geom/MultiPoint.cpp, src/geom/MultiPolygon.cpp,
+	  src/geom/Point.cpp, src/geom/Polygon.cpp,
+	  src/geom/PrecisionModel.cpp, src/geom/Triangle.cpp,
+	  src/geom/prep/AbstractPreparedPolygonContains.cpp,
+	  src/geom/prep/BasicPreparedGeometry.cpp,
+	  src/geom/prep/PreparedGeometry.cpp,
+	  src/geom/prep/PreparedGeometryFactory.cpp,
+	  src/geom/prep/PreparedLineString.cpp,
+	  src/geom/prep/PreparedLineStringIntersects.cpp,
+	  src/geom/prep/PreparedPoint.cpp,
+	  src/geom/prep/PreparedPolygon.cpp,
+	  src/geom/prep/PreparedPolygonContains.cpp,
+	  src/geom/prep/PreparedPolygonContainsProperly.cpp,
+	  src/geom/prep/PreparedPolygonCovers.cpp,
+	  src/geom/prep/PreparedPolygonIntersects.cpp,
+	  src/geom/prep/PreparedPolygonPredicate.cpp,
+	  src/geom/util/ComponentCoordinateExtracter.cpp,
+	  src/geom/util/CoordinateOperation.cpp,
+	  src/geom/util/GeometryCombiner.cpp,
+	  src/geom/util/GeometryEditor.cpp,
+	  src/geom/util/GeometryTransformer.cpp,
+	  src/geom/util/ShortCircuitedGeometryVisitor.cpp,
+	  src/geom/util/SineStarFactory.cpp, src/geomgraph/Depth.cpp,
+	  src/geomgraph/DirectedEdge.cpp,
+	  src/geomgraph/DirectedEdgeStar.cpp, src/geomgraph/Edge.cpp,
+	  src/geomgraph/EdgeEnd.cpp, src/geomgraph/EdgeEndStar.cpp,
+	  src/geomgraph/EdgeIntersectionList.cpp,
+	  src/geomgraph/EdgeList.cpp,
+	  src/geomgraph/EdgeNodingValidator.cpp,
+	  src/geomgraph/EdgeRing.cpp, src/geomgraph/GeometryGraph.cpp,
+	  src/geomgraph/GraphComponent.cpp, src/geomgraph/Label.cpp,
+	  src/geomgraph/Node.cpp, src/geomgraph/NodeFactory.cpp,
+	  src/geomgraph/NodeMap.cpp, src/geomgraph/PlanarGraph.cpp,
+	  src/geomgraph/Position.cpp, src/geomgraph/Quadrant.cpp,
+	  src/geomgraph/TopologyLocation.cpp,
+	  src/geomgraph/index/MonotoneChainEdge.cpp,
+	  src/geomgraph/index/MonotoneChainIndexer.cpp,
+	  src/geomgraph/index/SegmentIntersector.cpp,
+	  src/geomgraph/index/SimpleEdgeSetIntersector.cpp,
+	  src/geomgraph/index/SimpleMCSweepLineIntersector.cpp,
+	  src/geomgraph/index/SimpleSweepLineIntersector.cpp,
+	  src/geomgraph/index/SweepLineEvent.cpp,
+	  src/geomgraph/index/SweepLineSegment.cpp,
+	  src/index/bintree/Bintree.cpp, src/index/bintree/Interval.cpp,
+	  src/index/bintree/Key.cpp, src/index/bintree/Node.cpp,
+	  src/index/bintree/NodeBase.cpp, src/index/bintree/Root.cpp,
+	  src/index/chain/MonotoneChain.cpp,
+	  src/index/chain/MonotoneChainBuilder.cpp,
+	  src/index/chain/MonotoneChainOverlapAction.cpp,
+	  src/index/chain/MonotoneChainSelectAction.cpp,
+	  src/index/intervalrtree/IntervalRTreeBranchNode.cpp,
+	  src/index/intervalrtree/IntervalRTreeLeafNode.cpp,
+	  src/index/intervalrtree/IntervalRTreeNode.cpp,
+	  src/index/intervalrtree/SortedPackedIntervalRTree.cpp,
+	  src/index/quadtree/DoubleBits.cpp,
+	  src/index/quadtree/IntervalSize.cpp, src/index/quadtree/Key.cpp,
+	  src/index/quadtree/Node.cpp, src/index/quadtree/NodeBase.cpp,
+	  src/index/quadtree/Quadtree.cpp, src/index/quadtree/Root.cpp,
+	  src/index/strtree/AbstractNode.cpp,
+	  src/index/strtree/AbstractSTRtree.cpp,
+	  src/index/strtree/Interval.cpp,
+	  src/index/strtree/ItemBoundable.cpp,
+	  src/index/strtree/SIRtree.cpp, src/index/strtree/STRtree.cpp,
+	  src/index/sweepline/SweepLineEvent.cpp,
+	  src/index/sweepline/SweepLineIndex.cpp,
+	  src/index/sweepline/SweepLineInterval.cpp, src/inlines.cpp,
+	  src/io/ByteOrderDataInStream.cpp, src/io/ByteOrderValues.cpp,
+	  src/io/CLocalizer.cpp, src/io/ParseException.cpp,
+	  src/io/StringTokenizer.cpp, src/io/Unload.cpp,
+	  src/io/WKBReader.cpp, src/io/WKBWriter.cpp, src/io/WKTReader.cpp,
+	  src/io/WKTWriter.cpp, src/io/Writer.cpp,
+	  src/linearref/ExtractLineByLocation.cpp,
+	  src/linearref/LengthIndexOfPoint.cpp,
+	  src/linearref/LengthIndexedLine.cpp,
+	  src/linearref/LengthLocationMap.cpp,
+	  src/linearref/LinearGeometryBuilder.cpp,
+	  src/linearref/LinearIterator.cpp,
+	  src/linearref/LinearLocation.cpp,
+	  src/linearref/LocationIndexOfLine.cpp,
+	  src/linearref/LocationIndexOfPoint.cpp,
+	  src/linearref/Makefile.am, src/noding/BasicSegmentString.cpp,
+	  src/noding/FastNodingValidator.cpp,
+	  src/noding/FastSegmentSetIntersectionFinder.cpp,
+	  src/noding/IntersectionAdder.cpp,
+	  src/noding/IntersectionFinderAdder.cpp,
+	  src/noding/IteratedNoder.cpp, src/noding/MCIndexNoder.cpp,
+	  src/noding/MCIndexSegmentSetMutualIntersector.cpp,
+	  src/noding/NodedSegmentString.cpp,
+	  src/noding/NodingValidator.cpp, src/noding/Octant.cpp,
+	  src/noding/OrientedCoordinateArray.cpp,
+	  src/noding/ScaledNoder.cpp,
+	  src/noding/SegmentIntersectionDetector.cpp,
+	  src/noding/SegmentNode.cpp, src/noding/SegmentNodeList.cpp,
+	  src/noding/SegmentString.cpp, src/noding/SegmentStringUtil.cpp,
+	  src/noding/SimpleNoder.cpp,
+	  src/noding/SingleInteriorIntersectionFinder.cpp,
+	  src/noding/snapround/HotPixel.cpp,
+	  src/noding/snapround/MCIndexPointSnapper.cpp,
+	  src/noding/snapround/MCIndexSnapRounder.cpp,
+	  src/noding/snapround/SimpleSnapRounder.cpp,
+	  src/operation/GeometryGraphOperation.cpp,
+	  src/operation/IsSimpleOp.cpp,
+	  src/operation/buffer/BufferBuilder.cpp,
+	  src/operation/buffer/BufferInputLineSimplifier.cpp,
+	  src/operation/buffer/BufferInputLineSimplifier.h,
+	  src/operation/buffer/BufferOp.cpp,
+	  src/operation/buffer/BufferParameters.cpp,
+	  src/operation/buffer/BufferSubgraph.cpp,
+	  src/operation/buffer/OffsetCurveBuilder.cpp,
+	  src/operation/buffer/OffsetCurveSetBuilder.cpp,
+	  src/operation/buffer/OffsetSegmentGenerator.cpp,
+	  src/operation/buffer/RightmostEdgeFinder.cpp,
+	  src/operation/buffer/SubgraphDepthLocater.cpp,
+	  src/operation/distance/ConnectedElementLocationFilter.cpp,
+	  src/operation/distance/ConnectedElementPointFilter.cpp,
+	  src/operation/distance/DistanceOp.cpp,
+	  src/operation/distance/GeometryLocation.cpp,
+	  src/operation/linemerge/EdgeString.cpp,
+	  src/operation/linemerge/LineMergeDirectedEdge.cpp,
+	  src/operation/linemerge/LineMergeEdge.cpp,
+	  src/operation/linemerge/LineMergeGraph.cpp,
+	  src/operation/linemerge/LineMerger.cpp,
+	  src/operation/linemerge/LineSequencer.cpp,
+	  src/operation/overlay/EdgeSetNoder.cpp,
+	  src/operation/overlay/ElevationMatrix.cpp,
+	  src/operation/overlay/ElevationMatrixCell.cpp,
+	  src/operation/overlay/LineBuilder.cpp,
+	  src/operation/overlay/MaximalEdgeRing.cpp,
+	  src/operation/overlay/MinimalEdgeRing.cpp,
+	  src/operation/overlay/OverlayNodeFactory.cpp,
+	  src/operation/overlay/OverlayOp.cpp,
+	  src/operation/overlay/PointBuilder.cpp,
+	  src/operation/overlay/PolygonBuilder.cpp,
+	  src/operation/overlay/snap/GeometrySnapper.cpp,
+	  src/operation/overlay/snap/LineStringSnapper.cpp,
+	  src/operation/overlay/snap/SnapIfNeededOverlayOp.cpp,
+	  src/operation/overlay/snap/SnapOverlayOp.cpp,
+	  src/operation/overlay/validate/FuzzyPointLocator.cpp,
+	  src/operation/overlay/validate/OffsetPointGenerator.cpp,
+	  src/operation/overlay/validate/OverlayResultValidator.cpp,
+	  src/operation/polygonize/EdgeRing.cpp,
+	  src/operation/polygonize/PolygonizeDirectedEdge.cpp,
+	  src/operation/polygonize/PolygonizeEdge.cpp,
+	  src/operation/polygonize/PolygonizeGraph.cpp,
+	  src/operation/polygonize/Polygonizer.cpp,
+	  src/operation/predicate/RectangleContains.cpp,
+	  src/operation/predicate/RectangleIntersects.cpp,
+	  src/operation/predicate/SegmentIntersectionTester.cpp,
+	  src/operation/relate/EdgeEndBuilder.cpp,
+	  src/operation/relate/EdgeEndBundle.cpp,
+	  src/operation/relate/EdgeEndBundleStar.cpp,
+	  src/operation/relate/RelateComputer.cpp,
+	  src/operation/relate/RelateNode.cpp,
+	  src/operation/relate/RelateNodeFactory.cpp,
+	  src/operation/relate/RelateNodeGraph.cpp,
+	  src/operation/relate/RelateOp.cpp,
+	  src/operation/sharedpaths/SharedPathsOp.cpp,
+	  src/operation/union/CascadedPolygonUnion.cpp,
+	  src/operation/union/PointGeometryUnion.cpp,
+	  src/operation/union/UnaryUnionOp.cpp,
+	  src/operation/valid/ConnectedInteriorTester.cpp,
+	  src/operation/valid/ConsistentAreaTester.cpp,
+	  src/operation/valid/IndexedNestedRingTester.cpp,
+	  src/operation/valid/IndexedNestedRingTester.h,
+	  src/operation/valid/IsValidOp.cpp,
+	  src/operation/valid/QuadtreeNestedRingTester.cpp,
+	  src/operation/valid/RepeatedPointTester.cpp,
+	  src/operation/valid/SimpleNestedRingTester.cpp,
+	  src/operation/valid/SweeplineNestedRingTester.cpp,
+	  src/operation/valid/TopologyValidationError.cpp,
+	  src/planargraph/DirectedEdge.cpp,
+	  src/planargraph/DirectedEdgeStar.cpp, src/planargraph/Edge.cpp,
+	  src/planargraph/Node.cpp, src/planargraph/NodeMap.cpp,
+	  src/planargraph/PlanarGraph.cpp, src/planargraph/Subgraph.cpp,
+	  src/planargraph/algorithm/ConnectedSubgraphFinder.cpp,
+	  src/precision/CommonBits.cpp, src/precision/CommonBitsOp.cpp,
+	  src/precision/CommonBitsRemover.cpp,
+	  src/precision/EnhancedPrecisionOp.cpp,
+	  src/precision/SimpleGeometryPrecisionReducer.cpp,
+	  src/simplify/DouglasPeuckerLineSimplifier.cpp,
+	  src/simplify/DouglasPeuckerSimplifier.cpp,
+	  src/simplify/LineSegmentIndex.cpp,
+	  src/simplify/TaggedLineSegment.cpp,
+	  src/simplify/TaggedLineString.cpp,
+	  src/simplify/TaggedLineStringSimplifier.cpp,
+	  src/simplify/TaggedLinesSimplifier.cpp,
+	  src/simplify/TopologyPreservingSimplifier.cpp,
+	  src/util/Assert.cpp, src/util/GeometricShapeFactory.cpp,
+	  src/util/Profiler.cpp, src/util/math.cpp,
+	  tests/bigtest/GeometryTestFactory.cpp,
+	  tests/bigtest/TestSweepLineSpeed.cpp, tests/bigtest/bigtest.h,
+	  tests/geostest/geostest.c, tests/perf/ClassSizes.cpp,
+	  tests/perf/operation/buffer/IteratedBufferStressTest.cpp,
+	  tests/perf/operation/predicate/RectangleIntersectsPerfTest.cpp,
+	  tests/thread/badthreadtest.c, tests/thread/threadtest.c,
+	  tests/unit/algorithm/InteriorPointAreaTest.cpp,
+	  tests/unit/geom/GeometryFactoryTest.cpp,
+	  tests/unit/geom/PolygonTest.cpp, tests/unit/geos_unit.cpp,
+	  tests/xmltester/BufferResultMatcher.cpp,
+	  tests/xmltester/BufferResultMatcher.h, tests/xmltester/CTS.cpp,
+	  tests/xmltester/SimpleWKTTester.cpp,
+	  tests/xmltester/SingleSidedBufferResultMatcher.cpp,
+	  tests/xmltester/SingleSidedBufferResultMatcher.h,
+	  tests/xmltester/Stackwalker.h, tests/xmltester/XMLTester.cpp,
+	  tests/xmltester/XMLTester.h, tests/xmltester/safe_to_xml.sh,
+	  tests/xmltester/tests/robustness.xml: Complete Note#1 in the
+	  http://wiki.osgeo.org/wiki/GEOS_Provenance_Review to get out of
+	  incubation.
+
+2012-01-07 21:09  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3563] CMakeLists.txt: Fixed (hopefully) CMake issues with std::
+	  namespace detection (Ticket #493)
+
+2012-01-07 21:08  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3562] tests/unit/capi/GEOSisValidDetailTest.cpp: Missing
+	  <cctype> header for toupper. Fixed Visual C++ warning.
+
+2012-01-06 21:53  Sandro Santilli <strk@keybit.net>
+
+	* [r3561] src/operation/buffer/BufferOp.cpp: Forward port: Fix MSVC
+	  compilation of ambiguous log() call #506
+
+2011-12-16 14:15  Sandro Santilli <strk@keybit.net>
+
+	* [r3555] src/operation/overlay/snap/LineStringSnapper.cpp: Make
+	  debugging output of LineStringSnapper more readable
+
+2011-12-15 14:36  Sandro Santilli <strk@keybit.net>
+
+	* [r3553] include/geos/geom/BinaryOp.h,
+	  tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/ticket/bug488.xml: Check validity after
+	  snapping in BinaryOp. Fixes bug #488
+	  
+	  Adds regression test. This is a GEOS-only approach.
+
+2011-12-15 11:34  Sandro Santilli <strk@keybit.net>
+
+	* [r3550] include/geos/operation/overlay/OverlayOp.h: indent
+
+2011-12-15 08:59  Sandro Santilli <strk@keybit.net>
+
+	* [r3548] include/geos/geom/BinaryOp.h: Fix build with
+	  CBR_BEFORE_SNAPPING undefined
+
+2011-12-12 15:09  Howard Butler <hobu.inc@gmail.com>
+
+	* [r3546] src/operation/overlay/OverlayNodeFactory.cpp: apply patch
+	  for #500 to fix clang's complaint about a missing default
+	  initialization
+
+2011-12-12 10:10  Sandro Santilli <strk@keybit.net>
+
+	* [r3544] src/algorithm/CGAlgorithms.cpp: Apply Shoelace formula
+	  for area calculation (#485)
+
+2011-12-12 09:59  Sandro Santilli <strk@keybit.net>
+
+	* [r3542] macros/geos.m4, tools/geos-config.in: Add --clibs to
+	  geos-config and GEOS_C_LIBS to geos.m4 (#497)
+
+2011-12-09 10:54  Sandro Santilli <strk@keybit.net>
+
+	* [r3540] include/geos/geom/Geometry.h,
+	  include/geos/operation/overlay/snap/GeometrySnapper.h,
+	  include/geos/operation/overlay/snap/SnapOverlayOp.h,
+	  src/operation/overlay/snap/GeometrySnapper.cpp,
+	  src/operation/overlay/snap/SnapOverlayOp.cpp: Fix C++11 build by
+	  avoiding std::pair<auto_ptr> (#491)
+
+2011-12-09 10:04  Sandro Santilli <strk@keybit.net>
+
+	* [r3536] .gitignore: Ignore built performance tests
+
+2011-12-09 10:04  Sandro Santilli <strk@keybit.net>
+
+	* [r3535] src/operation/buffer/BufferOp.cpp,
+	  tests/unit/operation/buffer/BufferOpTest.cpp,
+	  tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/safe/TestBufferJagged.xml,
+	  tests/xmltester/tests/safe/buffer-1.01.xml: Improve buffer
+	  robustness by reverting to non snaprounding noder
+	  
+	  This commit fixes all cases reported in
+	  http://trac.osgeo.org/geos/wiki/BufferRobustness
+	  They include #495 and #494
+
+2011-12-09 08:48  Sandro Santilli <strk@keybit.net>
+
+	* [r3534] include/geos/operation/union/CascadedPolygonUnion.h,
+	  src/operation/union/CascadedPolygonUnion.cpp,
+	  tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/general/TestUnaryUnion.xml,
+	  tests/xmltester/tests/general/TestUnaryUnionFloating.xml: Fix
+	  CascadedPolygonUnion to discard non-polygonal components created
+	  during unioning
+	  
+	  This is to avoid failures and provide more desirable behaviour.
+	  Includes automated testing. Closes ticket #499.
+
+2011-12-07 15:13  Sandro Santilli <strk@keybit.net>
+
+	* [r3530] include/geos/noding/snapround/MCIndexPointSnapper.h,
+	  include/geos/noding/snapround/MCIndexSnapRounder.h,
+	  src/noding/snapround/MCIndexPointSnapper.cpp,
+	  src/noding/snapround/MCIndexSnapRounder.cpp: Update port info for
+	  MCIndexPointSnapper and MCIndexSnapRounder
+
+2011-12-07 11:17  Sandro Santilli <strk@keybit.net>
+
+	* [r3529] tests/unit/Makefile.am,
+	  tests/unit/noding/snapround/MCIndexSnapRounderTest.cpp: Add a
+	  simple test for MCIndexSnapRounderTest
+	  
+	  The test would fail before the fix in r3528
+
+2011-12-06 17:26  Sandro Santilli <strk@keybit.net>
+
+	* [r3528] include/geos/noding/snapround/HotPixel.h,
+	  src/noding/snapround/HotPixel.cpp, tests/unit/Makefile.am,
+	  tests/unit/noding/snapround,
+	  tests/unit/noding/snapround/HotPixelTest.cpp: HotPixel: do not
+	  invalidate reference to original point. Fixes #498.
+
+2011-12-02 09:42  Sandro Santilli <strk@keybit.net>
+
+	* [r3525] tests/xmltester/tests/safe/buffer-1.01.xml: Add
+	  <resultMatcher> tag to make the test runnable with JTS
+
+2011-11-30 09:45  Sandro Santilli <strk@keybit.net>
+
+	* [r3523] include/geos/noding/snapround/MCIndexSnapRounder.h,
+	  src/noding/snapround/MCIndexSnapRounder.cpp,
+	  tests/unit/operation/buffer/BufferOpTest.cpp: Fix
+	  MCIndexSnapRounder use of provided precision model.
+	  
+	  Fixes bug #473 (RightmostEdgeFinder assertion failure).
+	  Includes regression test.
+
+2011-11-29 14:01  Sandro Santilli <strk@keybit.net>
+
+	* [r3522] src/geom/Coordinate.cpp: Use 18 significant digits for
+	  TopologyException point coordinates
+
+2011-11-28 08:53  Sandro Santilli <strk@keybit.net>
+
+	* [r3520] src/operation/buffer/BufferBuilder.cpp,
+	  tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/safe/buffer-1.01.xml: BufferBuilder: fix
+	  handling of collapsed edges skipping. Fixes #494.
+	  
+	  Includes regression test, provided by SAFE.
+
+2011-11-24 22:07  Sandro Santilli <strk@keybit.net>
+
+	* [r3518] macros/ruby.m4, swig/ruby/Makefile.am,
+	  swig/ruby/geos_wrap.cxx, swig/ruby/ruby.i: Fix to get swig/ruby
+	  compiling for ruby 1.9
+	  
+	  Patch by Kashif Rasul
+
+2011-11-06 03:25  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3517] nmake.opt: * GEOS builds with Visual C++ from Visual
+	  Studio 11(Developer Preview).
+	  * Added related _NMAKE_VER case to nmake.opt.
+
+2011-11-04 20:41  Sandro Santilli <strk@keybit.net>
+
+	* [r3515] tests/unit/capi/GEOSisValidDetailTest.cpp: Allow any case
+	  in NaN for testcase purposes (#486)
+
+2011-11-04 17:59  Sandro Santilli <strk@keybit.net>
+
+	* [r3514] src/operation/union/UnaryUnionOp.cpp,
+	  tests/unit/operation/union/UnaryUnionOpTest.cpp,
+	  tests/xmltester/tests/general/TestUnaryUnion.xml: Fix noding of
+	  self-intersecting lines through UnaryUnion (#482)
+	  
+	  Includes updated tests from JTS
+
+2011-10-28 23:13  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3511] tests/perf, tests/perf/capi,
+	  tests/perf/operation/predicate: Updated svn:ignore property
+
+2011-10-27 07:04  Sandro Santilli <strk@keybit.net>
+
+	* [r3510] TODO: Add JTS triangulation api item
+
+2011-10-26 16:49  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3509] tests/unit/operation/buffer/BufferOpTest.cpp: * Test of
+	  two ways of executing buffer operation.
+	  * Test problems with BufferOp when using BufferParameters
+	  reported by Markus Meyer.
+	  * TODO: if possible, replace sample WKT with WKT from Markus.
+
+2011-10-26 16:14  Sandro Santilli <strk@keybit.net>
+
+	* [r3508] tests/unit/Makefile.am,
+	  tests/unit/operation/buffer/BufferParametersTest.cpp: Add test
+	  for BufferParameters class
+
+2011-10-26 14:16  Sandro Santilli <strk@keybit.net>
+
+	* [r3505] authors.svn: Add missing entries in the author file.
+	  Order alphabetically.
+
+2011-10-26 14:16  Sandro Santilli <strk@keybit.net>
+
+	* [r3504] NEWS: Add missing CAPI additions of 3.3.0 to NEWS file
+
+2011-10-19 00:45  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3502] CMakeLists.txt: Fixed CMAKE_CXX_FLAGS overridind
+	  -std=gnu++0x (#489)
+
+2011-10-18 22:12  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3501] CMakeLists.txt: Missing 3.4.0 versions update in CMake
+	  configuration
+
+2011-10-05 23:24  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3499] capi/geos_ts_c.cpp: Removed redundant casts between
+	  integer types
+
+2011-10-05 00:09  Howard Butler <hobu.inc@gmail.com>
+
+	* [r3498] tests/unit/tut/tut_assert.hpp: declare these functions
+	  static inline to silence unused-function warning
+
+2011-10-04 20:46  Howard Butler <hobu.inc@gmail.com>
+
+	* [r3497] capi/geos_ts_c.cpp,
+	  include/geos/algorithm/CGAlgorithms.h,
+	  include/geos/algorithm/PointInRing.h,
+	  include/geos/geom/MultiPoint.h,
+	  include/geos/geom/prep/PreparedGeometry.h,
+	  include/geos/geomgraph/EdgeEndStar.h,
+	  include/geos/geomgraph/Node.h,
+	  include/geos/geomgraph/NodeFactory.h,
+	  include/geos/geomgraph/index/EdgeSetIntersector.h,
+	  include/geos/geomgraph/index/MonotoneChainIndexer.h,
+	  include/geos/geomgraph/index/SweepLineEventObj.h,
+	  include/geos/index/chain/MonotoneChainOverlapAction.h,
+	  include/geos/index/strtree/Boundable.h,
+	  include/geos/index/strtree/SIRtree.h,
+	  include/geos/index/strtree/STRtree.h,
+	  include/geos/io/ParseException.h,
+	  include/geos/io/StringTokenizer.h, include/geos/io/WKBReader.h,
+	  include/geos/noding/Noder.h, include/geos/noding/SimpleNoder.h,
+	  include/geos/operation/relate/RelateNodeFactory.h,
+	  include/geos/operation/valid/RepeatedPointTester.h,
+	  include/geos/planargraph/GraphComponent.h,
+	  include/geos/util/IllegalArgumentException.h,
+	  include/geos/util/IllegalStateException.h,
+	  include/geos/util/UnsupportedOperationException.h,
+	  src/precision/CommonBitsRemover.cpp: remove extra ;'s to satisfy
+	  pedantic warning
+
+2011-10-04 15:48  Howard Butler <hobu.inc@gmail.com>
+
+	* [r3495] CMakeLists.txt: turn off framework building by default on
+	  APPLE
+
+2011-10-04 15:43  Howard Butler <hobu.inc@gmail.com>
+
+	* [r3494] ., capi, cmake, include, src, tests, tests/bigtest,
+	  tests/unit, tests/xmltester, tools: propsets to svn:ignore CMake
+	  build junk
+
+2011-10-04 15:42  Howard Butler <hobu.inc@gmail.com>
+
+	* [r3493] capi/CMakeLists.txt, src/CMakeLists.txt: fix up
+	  non-framework CMake builds on APPLE
+
+2011-10-04 15:32  Howard Butler <hobu.inc@gmail.com>
+
+	* [r3492] src/index/sweepline/SweepLineIndex.cpp: fix up order
+	  initialization
+
+2011-09-28 17:23  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3491] tests/unit/simplify/DouglasPeuckerSimplifierTest.cpp: *
+	  Added interesting test<11> case to Douglas-Peucker unit
+	  * Visual C++ build on Windows x86-32 is all green and happy
+	  throwing ok:737
+
+2011-09-23 12:14  Sandro Santilli <strk@keybit.net>
+
+	* [r3484] NEWS, include/geos/linearref/LengthIndexedLine.h,
+	  include/geos/linearref/LengthLocationMap.h,
+	  include/geos/linearref/LinearIterator.h,
+	  include/geos/linearref/LinearLocation.h,
+	  include/geos/linearref/LocationIndexOfPoint.h,
+	  include/geos/linearref/LocationIndexedLine.h,
+	  include/geos/linearref/Makefile.am,
+	  src/linearref/LengthIndexedLine.cpp,
+	  src/linearref/LengthLocationMap.cpp,
+	  src/linearref/LinearIterator.cpp,
+	  src/linearref/LinearLocation.cpp,
+	  src/linearref/LocationIndexOfPoint.cpp: Fixed handling of Linear
+	  Referencing over MultiLineStrings to always return lowest index,
+	  and to trim zero-length result components (#323)
+	  
+	  Includes test. This is a port of JTS changesets 463, 464 and 465
+
+2011-09-23 12:14  Sandro Santilli <strk@keybit.net>
+
+	* [r3483] tests/unit/linearref/LengthIndexedLineTest.cpp: Port
+	  updates to the LenghtIndexedLineTest testcase (see #323)
+	  
+	  Note that the test fails if the library isn't also fixed
+
+2011-09-23 01:03  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3482] CMakeLists.txt, Makefile.am, autogen.bat, autogen.sh,
+	  capi/CMakeLists.txt, capi/Makefile.am, capi/geos_c.cpp,
+	  capi/geos_c.h.in, capi/geos_ts_c.cpp,
+	  cmake/cmake_uninstall.cmake.in, configure.in, doc/Makefile.am,
+	  doc/example.cpp, examples/CPCLException.cpp,
+	  examples/CoordinateSequencesExample.cpp,
+	  examples/CustomCoordinateSequenceExample.cpp,
+	  examples/CustomCoordinateSequenceExample.h,
+	  examples/CustomPointCoordinateSequence.cpp, examples/Makefile.am,
+	  include/CMakeLists.txt, include/Makefile.am, include/acconfig.h,
+	  include/geos.h, include/geos/Makefile.am,
+	  include/geos/algorithm/Angle.h,
+	  include/geos/algorithm/BoundaryNodeRule.h,
+	  include/geos/algorithm/CentralEndpointIntersector.h,
+	  include/geos/algorithm/CentroidArea.h,
+	  include/geos/algorithm/CentroidLine.h,
+	  include/geos/algorithm/CentroidPoint.h,
+	  include/geos/algorithm/ConvexHull.h,
+	  include/geos/algorithm/ConvexHull.inl,
+	  include/geos/algorithm/HCoordinate.h,
+	  include/geos/algorithm/InteriorPointArea.h,
+	  include/geos/algorithm/InteriorPointLine.h,
+	  include/geos/algorithm/InteriorPointPoint.h,
+	  include/geos/algorithm/LineIntersector.h,
+	  include/geos/algorithm/MCPointInRing.h,
+	  include/geos/algorithm/Makefile.am,
+	  include/geos/algorithm/MinimumDiameter.h,
+	  include/geos/algorithm/NotRepresentableException.h,
+	  include/geos/algorithm/PointInRing.h,
+	  include/geos/algorithm/PointLocator.h,
+	  include/geos/algorithm/RayCrossingCounter.h,
+	  include/geos/algorithm/RobustDeterminant.h,
+	  include/geos/algorithm/SIRtreePointInRing.h,
+	  include/geos/algorithm/SimplePointInRing.h,
+	  include/geos/algorithm/distance/DiscreteHausdorffDistance.h,
+	  include/geos/algorithm/distance/DistanceToPoint.h,
+	  include/geos/algorithm/distance/Makefile.am,
+	  include/geos/algorithm/distance/PointPairDistance.h,
+	  include/geos/algorithm/locate/IndexedPointInAreaLocator.h,
+	  include/geos/algorithm/locate/Makefile.am,
+	  include/geos/algorithm/locate/PointOnGeometryLocator.h,
+	  include/geos/algorithm/locate/SimplePointInAreaLocator.h,
+	  include/geos/export.h, include/geos/geom.h,
+	  include/geos/geom/BinaryOp.h, include/geos/geom/Coordinate.h,
+	  include/geos/geom/Coordinate.inl,
+	  include/geos/geom/CoordinateArraySequence.h,
+	  include/geos/geom/CoordinateArraySequenceFactory.h,
+	  include/geos/geom/CoordinateArraySequenceFactory.inl,
+	  include/geos/geom/CoordinateFilter.h,
+	  include/geos/geom/CoordinateList.h,
+	  include/geos/geom/CoordinateSequence.h,
+	  include/geos/geom/CoordinateSequenceFactory.h,
+	  include/geos/geom/CoordinateSequenceFilter.h,
+	  include/geos/geom/Dimension.h, include/geos/geom/Envelope.h,
+	  include/geos/geom/Envelope.inl, include/geos/geom/Geometry.h,
+	  include/geos/geom/GeometryCollection.h,
+	  include/geos/geom/GeometryCollection.inl,
+	  include/geos/geom/GeometryComponentFilter.h,
+	  include/geos/geom/GeometryFactory.h,
+	  include/geos/geom/GeometryFactory.inl,
+	  include/geos/geom/GeometryFilter.h,
+	  include/geos/geom/GeometryList.h,
+	  include/geos/geom/IntersectionMatrix.h,
+	  include/geos/geom/LineSegment.h,
+	  include/geos/geom/LineSegment.inl,
+	  include/geos/geom/LineString.h, include/geos/geom/Lineal.h,
+	  include/geos/geom/LinearRing.h, include/geos/geom/Location.h,
+	  include/geos/geom/Makefile.am,
+	  include/geos/geom/MultiLineString.h,
+	  include/geos/geom/MultiLineString.inl,
+	  include/geos/geom/MultiPoint.h, include/geos/geom/MultiPolygon.h,
+	  include/geos/geom/MultiPolygon.inl, include/geos/geom/Point.h,
+	  include/geos/geom/Polygon.h, include/geos/geom/Polygonal.h,
+	  include/geos/geom/PrecisionModel.h,
+	  include/geos/geom/PrecisionModel.inl, include/geos/geom/Puntal.h,
+	  include/geos/geom/Triangle.h,
+	  include/geos/geom/prep/BasicPreparedGeometry.h,
+	  include/geos/geom/prep/Makefile.am,
+	  include/geos/geom/prep/PreparedGeometry.h,
+	  include/geos/geom/prep/PreparedGeometryFactory.h,
+	  include/geos/geom/prep/PreparedLineString.h,
+	  include/geos/geom/prep/PreparedPoint.h,
+	  include/geos/geom/prep/PreparedPolygon.h,
+	  include/geos/geom/prep/PreparedPolygonContains.h,
+	  include/geos/geom/prep/PreparedPolygonContainsProperly.h,
+	  include/geos/geom/prep/PreparedPolygonCovers.h,
+	  include/geos/geom/prep/PreparedPolygonIntersects.h,
+	  include/geos/geom/prep/PreparedPolygonPredicate.h,
+	  include/geos/geom/util/ComponentCoordinateExtracter.h,
+	  include/geos/geom/util/CoordinateOperation.h,
+	  include/geos/geom/util/GeometryCombiner.h,
+	  include/geos/geom/util/GeometryEditor.h,
+	  include/geos/geom/util/GeometryEditorOperation.h,
+	  include/geos/geom/util/GeometryExtracter.h,
+	  include/geos/geom/util/GeometryTransformer.h,
+	  include/geos/geom/util/LinearComponentExtracter.h,
+	  include/geos/geom/util/Makefile.am,
+	  include/geos/geom/util/PointExtracter.h,
+	  include/geos/geom/util/PolygonExtracter.h,
+	  include/geos/geom/util/ShortCircuitedGeometryVisitor.h,
+	  include/geos/geomPrep.h, include/geos/geomUtil.h,
+	  include/geos/geomgraph.h, include/geos/geomgraph/Depth.h,
+	  include/geos/geomgraph/EdgeList.h,
+	  include/geos/geomgraph/EdgeNodingValidator.h,
+	  include/geos/geomgraph/Makefile.am,
+	  include/geos/geomgraph/NodeFactory.h,
+	  include/geos/geomgraph/NodeMap.h,
+	  include/geos/geomgraph/Position.h,
+	  include/geos/geomgraph/Quadrant.h,
+	  include/geos/geomgraph/index/EdgeSetIntersector.h,
+	  include/geos/geomgraph/index/Makefile.am,
+	  include/geos/geomgraph/index/MonotoneChain.h,
+	  include/geos/geomgraph/index/MonotoneChainEdge.h,
+	  include/geos/geomgraph/index/MonotoneChainIndexer.h,
+	  include/geos/geomgraph/index/SegmentIntersector.h,
+	  include/geos/geomgraph/index/SimpleEdgeSetIntersector.h,
+	  include/geos/geomgraph/index/SimpleMCSweepLineIntersector.h,
+	  include/geos/geomgraph/index/SimpleSweepLineIntersector.h,
+	  include/geos/geomgraph/index/SweepLineEvent.h,
+	  include/geos/geomgraph/index/SweepLineEventObj.h,
+	  include/geos/geomgraph/index/SweepLineSegment.h,
+	  include/geos/geomgraphindex.h, include/geos/geosAlgorithm.h,
+	  include/geos/index/ItemVisitor.h, include/geos/index/Makefile.am,
+	  include/geos/index/SpatialIndex.h,
+	  include/geos/index/bintree/Bintree.h,
+	  include/geos/index/bintree/Interval.h,
+	  include/geos/index/bintree/Key.h,
+	  include/geos/index/bintree/Makefile.am,
+	  include/geos/index/bintree/Node.h,
+	  include/geos/index/bintree/NodeBase.h,
+	  include/geos/index/bintree/Root.h,
+	  include/geos/index/chain/Makefile.am,
+	  include/geos/index/chain/MonotoneChain.h,
+	  include/geos/index/chain/MonotoneChainOverlapAction.h,
+	  include/geos/index/chain/MonotoneChainSelectAction.h,
+	  include/geos/index/intervalrtree/IntervalRTreeBranchNode.h,
+	  include/geos/index/intervalrtree/IntervalRTreeLeafNode.h,
+	  include/geos/index/intervalrtree/IntervalRTreeNode.h,
+	  include/geos/index/intervalrtree/Makefile.am,
+	  include/geos/index/intervalrtree/SortedPackedIntervalRTree.h,
+	  include/geos/index/quadtree/DoubleBits.h,
+	  include/geos/index/quadtree/IntervalSize.h,
+	  include/geos/index/quadtree/Key.h,
+	  include/geos/index/quadtree/Makefile.am,
+	  include/geos/index/quadtree/Node.h,
+	  include/geos/index/quadtree/NodeBase.h,
+	  include/geos/index/quadtree/Quadtree.h,
+	  include/geos/index/quadtree/Root.h,
+	  include/geos/index/strtree/AbstractNode.h,
+	  include/geos/index/strtree/AbstractSTRtree.h,
+	  include/geos/index/strtree/Boundable.h,
+	  include/geos/index/strtree/Interval.h,
+	  include/geos/index/strtree/ItemBoundable.h,
+	  include/geos/index/strtree/Makefile.am,
+	  include/geos/index/strtree/SIRtree.h,
+	  include/geos/index/strtree/STRtree.h,
+	  include/geos/index/sweepline/Makefile.am,
+	  include/geos/index/sweepline/SweepLineEvent.h,
+	  include/geos/index/sweepline/SweepLineIndex.h,
+	  include/geos/index/sweepline/SweepLineInterval.h,
+	  include/geos/index/sweepline/SweepLineOverlapAction.h,
+	  include/geos/indexBintree.h, include/geos/indexChain.h,
+	  include/geos/indexIntervalRTree.h, include/geos/indexQuadtree.h,
+	  include/geos/indexStrtree.h, include/geos/indexSweepline.h,
+	  include/geos/inline.h, include/geos/io.h,
+	  include/geos/io/ByteOrderDataInStream.h,
+	  include/geos/io/ByteOrderDataInStream.inl,
+	  include/geos/io/ByteOrderValues.h, include/geos/io/CLocalizer.h,
+	  include/geos/io/Makefile.am, include/geos/io/ParseException.h,
+	  include/geos/io/StringTokenizer.h,
+	  include/geos/io/WKBConstants.h, include/geos/io/WKBReader.h,
+	  include/geos/io/WKBWriter.h, include/geos/io/WKTReader.h,
+	  include/geos/io/WKTReader.inl, include/geos/io/WKTWriter.h,
+	  include/geos/io/Writer.h,
+	  include/geos/linearref/ExtractLineByLocation.h,
+	  include/geos/linearref/LengthIndexOfPoint.h,
+	  include/geos/linearref/LengthIndexedLine.h,
+	  include/geos/linearref/LengthLocationMap.h,
+	  include/geos/linearref/LinearGeometryBuilder.h,
+	  include/geos/linearref/LinearIterator.h,
+	  include/geos/linearref/LinearLocation.h,
+	  include/geos/linearref/LocationIndexOfLine.h,
+	  include/geos/linearref/LocationIndexOfPoint.h,
+	  include/geos/linearref/Makefile.am, include/geos/noding.h,
+	  include/geos/noding/BasicSegmentString.h,
+	  include/geos/noding/FastNodingValidator.h,
+	  include/geos/noding/IntersectionAdder.h,
+	  include/geos/noding/IntersectionFinderAdder.h,
+	  include/geos/noding/IteratedNoder.h,
+	  include/geos/noding/MCIndexNoder.h,
+	  include/geos/noding/MCIndexNoder.inl,
+	  include/geos/noding/Makefile.am,
+	  include/geos/noding/NodableSegmentString.h,
+	  include/geos/noding/NodedSegmentString.h,
+	  include/geos/noding/NodingValidator.h,
+	  include/geos/noding/Octant.h,
+	  include/geos/noding/OrientedCoordinateArray.h,
+	  include/geos/noding/ScaledNoder.h,
+	  include/geos/noding/SegmentIntersectionDetector.h,
+	  include/geos/noding/SegmentIntersector.h,
+	  include/geos/noding/SegmentNode.h,
+	  include/geos/noding/SegmentNodeList.h,
+	  include/geos/noding/SegmentSetMutualIntersector.h,
+	  include/geos/noding/SegmentStringUtil.h,
+	  include/geos/noding/SimpleNoder.h,
+	  include/geos/noding/SingleInteriorIntersectionFinder.h,
+	  include/geos/noding/SinglePassNoder.h,
+	  include/geos/noding/snapround/HotPixel.h,
+	  include/geos/noding/snapround/HotPixel.inl,
+	  include/geos/noding/snapround/MCIndexPointSnapper.h,
+	  include/geos/noding/snapround/MCIndexSnapRounder.h,
+	  include/geos/noding/snapround/Makefile.am,
+	  include/geos/noding/snapround/SimpleSnapRounder.h,
+	  include/geos/nodingSnapround.h, include/geos/opBuffer.h,
+	  include/geos/opDistance.h, include/geos/opLinemerge.h,
+	  include/geos/opOverlay.h, include/geos/opPolygonize.h,
+	  include/geos/opPredicate.h, include/geos/opRelate.h,
+	  include/geos/opValid.h, include/geos/operation.h,
+	  include/geos/operation/GeometryGraphOperation.h,
+	  include/geos/operation/IsSimpleOp.h,
+	  include/geos/operation/Makefile.am,
+	  include/geos/operation/buffer/BufferBuilder.h,
+	  include/geos/operation/buffer/BufferOp.h,
+	  include/geos/operation/buffer/BufferParameters.h,
+	  include/geos/operation/buffer/BufferSubgraph.h,
+	  include/geos/operation/buffer/Makefile.am,
+	  include/geos/operation/buffer/OffsetCurveBuilder.h,
+	  include/geos/operation/buffer/OffsetCurveSetBuilder.h,
+	  include/geos/operation/buffer/OffsetSegmentGenerator.h,
+	  include/geos/operation/buffer/OffsetSegmentString.h,
+	  include/geos/operation/buffer/RightmostEdgeFinder.h,
+	  include/geos/operation/buffer/SubgraphDepthLocater.h,
+	  include/geos/operation/distance/ConnectedElementLocationFilter.h,
+	  include/geos/operation/distance/ConnectedElementPointFilter.h,
+	  include/geos/operation/distance/DistanceOp.h,
+	  include/geos/operation/distance/GeometryLocation.h,
+	  include/geos/operation/distance/Makefile.am,
+	  include/geos/operation/linemerge/EdgeString.h,
+	  include/geos/operation/linemerge/LineMergeDirectedEdge.h,
+	  include/geos/operation/linemerge/LineMergeEdge.h,
+	  include/geos/operation/linemerge/LineMergeGraph.h,
+	  include/geos/operation/linemerge/LineMerger.h,
+	  include/geos/operation/linemerge/LineSequencer.h,
+	  include/geos/operation/linemerge/Makefile.am,
+	  include/geos/operation/overlay/EdgeSetNoder.h,
+	  include/geos/operation/overlay/ElevationMatrix.h,
+	  include/geos/operation/overlay/ElevationMatrixCell.h,
+	  include/geos/operation/overlay/LineBuilder.h,
+	  include/geos/operation/overlay/Makefile.am,
+	  include/geos/operation/overlay/MaximalEdgeRing.h,
+	  include/geos/operation/overlay/MinimalEdgeRing.h,
+	  include/geos/operation/overlay/MinimalEdgeRing.inl,
+	  include/geos/operation/overlay/OverlayNodeFactory.h,
+	  include/geos/operation/overlay/OverlayOp.h,
+	  include/geos/operation/overlay/PointBuilder.h,
+	  include/geos/operation/overlay/PolygonBuilder.h,
+	  include/geos/operation/overlay/snap/GeometrySnapper.h,
+	  include/geos/operation/overlay/snap/LineStringSnapper.h,
+	  include/geos/operation/overlay/snap/Makefile.am,
+	  include/geos/operation/overlay/snap/SnapIfNeededOverlayOp.h,
+	  include/geos/operation/overlay/snap/SnapOverlayOp.h,
+	  include/geos/operation/overlay/validate/FuzzyPointLocator.h,
+	  include/geos/operation/overlay/validate/OffsetPointGenerator.h,
+	  include/geos/operation/overlay/validate/OverlayResultValidator.h,
+	  include/geos/operation/polygonize/EdgeRing.h,
+	  include/geos/operation/polygonize/Makefile.am,
+	  include/geos/operation/polygonize/PolygonizeDirectedEdge.h,
+	  include/geos/operation/polygonize/PolygonizeEdge.h,
+	  include/geos/operation/polygonize/PolygonizeGraph.h,
+	  include/geos/operation/polygonize/Polygonizer.h,
+	  include/geos/operation/predicate/Makefile.am,
+	  include/geos/operation/predicate/RectangleContains.h,
+	  include/geos/operation/relate/EdgeEndBuilder.h,
+	  include/geos/operation/relate/EdgeEndBundle.h,
+	  include/geos/operation/relate/EdgeEndBundleStar.h,
+	  include/geos/operation/relate/Makefile.am,
+	  include/geos/operation/relate/RelateNodeFactory.h,
+	  include/geos/operation/relate/RelateNodeGraph.h,
+	  include/geos/operation/relate/RelateOp.h,
+	  include/geos/operation/sharedpaths/Makefile.am,
+	  include/geos/operation/sharedpaths/SharedPathsOp.h,
+	  include/geos/operation/union/CascadedPolygonUnion.h,
+	  include/geos/operation/union/CascadedUnion.h,
+	  include/geos/operation/union/GeometryListHolder.h,
+	  include/geos/operation/union/Makefile.am,
+	  include/geos/operation/union/PointGeometryUnion.h,
+	  include/geos/operation/union/UnaryUnionOp.h,
+	  include/geos/operation/valid/ConnectedInteriorTester.h,
+	  include/geos/operation/valid/ConsistentAreaTester.h,
+	  include/geos/operation/valid/IsValidOp.h,
+	  include/geos/operation/valid/Makefile.am,
+	  include/geos/operation/valid/QuadtreeNestedRingTester.h,
+	  include/geos/operation/valid/RepeatedPointTester.h,
+	  include/geos/operation/valid/SimpleNestedRingTester.h,
+	  include/geos/operation/valid/SweeplineNestedRingTester.h,
+	  include/geos/operation/valid/TopologyValidationError.h,
+	  include/geos/planargraph.h,
+	  include/geos/planargraph/DirectedEdge.h,
+	  include/geos/planargraph/DirectedEdgeStar.h,
+	  include/geos/planargraph/Edge.h,
+	  include/geos/planargraph/GraphComponent.h,
+	  include/geos/planargraph/Makefile.am,
+	  include/geos/planargraph/Node.h,
+	  include/geos/planargraph/NodeMap.h,
+	  include/geos/planargraph/PlanarGraph.h,
+	  include/geos/planargraph/Subgraph.h,
+	  include/geos/planargraph/algorithm/ConnectedSubgraphFinder.h,
+	  include/geos/planargraph/algorithm/Makefile.am,
+	  include/geos/platform.h.cmake, include/geos/platform.h.vc,
+	  include/geos/precision.h, include/geos/precision/CommonBits.h,
+	  include/geos/precision/CommonBitsOp.h,
+	  include/geos/precision/CommonBitsRemover.h,
+	  include/geos/precision/EnhancedPrecisionOp.h,
+	  include/geos/precision/Makefile.am,
+	  include/geos/precision/SimpleGeometryPrecisionReducer.h,
+	  include/geos/profiler.h,
+	  include/geos/simplify/DouglasPeuckerLineSimplifier.h,
+	  include/geos/simplify/DouglasPeuckerSimplifier.h,
+	  include/geos/simplify/LineSegmentIndex.h,
+	  include/geos/simplify/Makefile.am,
+	  include/geos/simplify/TaggedLineSegment.h,
+	  include/geos/simplify/TaggedLineString.h,
+	  include/geos/simplify/TaggedLineStringSimplifier.h,
+	  include/geos/simplify/TaggedLinesSimplifier.h,
+	  include/geos/simplify/TopologyPreservingSimplifier.h,
+	  include/geos/spatialIndex.h, include/geos/timeval.h,
+	  include/geos/unload.h, include/geos/util.h,
+	  include/geos/util/Assert.h,
+	  include/geos/util/AssertionFailedException.h,
+	  include/geos/util/CoordinateArrayFilter.h,
+	  include/geos/util/GEOSException.h,
+	  include/geos/util/GeometricShapeFactory.h,
+	  include/geos/util/IllegalArgumentException.h,
+	  include/geos/util/IllegalStateException.h,
+	  include/geos/util/Machine.h, include/geos/util/Makefile.am,
+	  include/geos/util/TopologyException.h,
+	  include/geos/util/UniqueCoordinateArrayFilter.h,
+	  include/geos/util/UnsupportedOperationException.h,
+	  include/geos/util/math.h, include/geos/version.h.in,
+	  include/geos/version.h.vc, macros/Makefile.am, macros/geos.m4,
+	  makefile.vc, nmake.opt, src/CMakeLists.txt, src/Makefile.am,
+	  src/Makefile.vc, src/algorithm/Angle.cpp,
+	  src/algorithm/BoundaryNodeRule.cpp,
+	  src/algorithm/CentroidArea.cpp, src/algorithm/CentroidLine.cpp,
+	  src/algorithm/CentroidPoint.cpp, src/algorithm/ConvexHull.cpp,
+	  src/algorithm/HCoordinate.cpp,
+	  src/algorithm/InteriorPointLine.cpp,
+	  src/algorithm/InteriorPointPoint.cpp,
+	  src/algorithm/LineIntersector.cpp,
+	  src/algorithm/MCPointInRing.cpp, src/algorithm/Makefile.am,
+	  src/algorithm/MinimumDiameter.cpp,
+	  src/algorithm/NotRepresentableException.cpp,
+	  src/algorithm/PointLocator.cpp,
+	  src/algorithm/RayCrossingCounter.cpp,
+	  src/algorithm/RobustDeterminant.cpp,
+	  src/algorithm/SIRtreePointInRing.cpp,
+	  src/algorithm/SimplePointInRing.cpp,
+	  src/algorithm/distance/DiscreteHausdorffDistance.cpp,
+	  src/algorithm/distance/DistanceToPoint.cpp,
+	  src/algorithm/distance/Makefile.am,
+	  src/algorithm/locate/IndexedPointInAreaLocator.cpp,
+	  src/algorithm/locate/Makefile.am,
+	  src/algorithm/locate/PointOnGeometryLocator.cpp,
+	  src/algorithm/locate/SimplePointInAreaLocator.cpp,
+	  src/dirlist.mk, src/geom/Coordinate.cpp,
+	  src/geom/CoordinateArraySequence.cpp,
+	  src/geom/CoordinateArraySequenceFactory.cpp,
+	  src/geom/CoordinateSequence.cpp,
+	  src/geom/CoordinateSequenceFactory.cpp, src/geom/Dimension.cpp,
+	  src/geom/Envelope.cpp, src/geom/Geometry.cpp,
+	  src/geom/GeometryCollection.cpp,
+	  src/geom/GeometryComponentFilter.cpp,
+	  src/geom/GeometryFactory.cpp, src/geom/GeometryList.cpp,
+	  src/geom/IntersectionMatrix.cpp, src/geom/LineSegment.cpp,
+	  src/geom/LineString.cpp, src/geom/LinearRing.cpp,
+	  src/geom/Location.cpp, src/geom/Makefile.am,
+	  src/geom/MultiLineString.cpp, src/geom/MultiPoint.cpp,
+	  src/geom/MultiPolygon.cpp, src/geom/Point.cpp,
+	  src/geom/Polygon.cpp, src/geom/PrecisionModel.cpp,
+	  src/geom/Triangle.cpp, src/geom/prep/BasicPreparedGeometry.cpp,
+	  src/geom/prep/Makefile.am, src/geom/prep/PreparedGeometry.cpp,
+	  src/geom/prep/PreparedGeometryFactory.cpp,
+	  src/geom/prep/PreparedLineString.cpp,
+	  src/geom/prep/PreparedPoint.cpp,
+	  src/geom/prep/PreparedPolygon.cpp,
+	  src/geom/prep/PreparedPolygonContains.cpp,
+	  src/geom/prep/PreparedPolygonContainsProperly.cpp,
+	  src/geom/prep/PreparedPolygonCovers.cpp,
+	  src/geom/prep/PreparedPolygonIntersects.cpp,
+	  src/geom/prep/PreparedPolygonPredicate.cpp,
+	  src/geom/util/ComponentCoordinateExtracter.cpp,
+	  src/geom/util/CoordinateOperation.cpp,
+	  src/geom/util/GeometryCombiner.cpp,
+	  src/geom/util/GeometryEditor.cpp,
+	  src/geom/util/GeometryTransformer.cpp, src/geom/util/Makefile.am,
+	  src/geom/util/ShortCircuitedGeometryVisitor.cpp,
+	  src/geom/util/SineStarFactory.cpp, src/geomgraph/Depth.cpp,
+	  src/geomgraph/EdgeList.cpp,
+	  src/geomgraph/EdgeNodingValidator.cpp, src/geomgraph/Makefile.am,
+	  src/geomgraph/NodeFactory.cpp, src/geomgraph/NodeMap.cpp,
+	  src/geomgraph/Position.cpp, src/geomgraph/Quadrant.cpp,
+	  src/geomgraph/index/Makefile.am,
+	  src/geomgraph/index/MonotoneChainEdge.cpp,
+	  src/geomgraph/index/MonotoneChainIndexer.cpp,
+	  src/geomgraph/index/SegmentIntersector.cpp,
+	  src/geomgraph/index/SimpleEdgeSetIntersector.cpp,
+	  src/geomgraph/index/SimpleMCSweepLineIntersector.cpp,
+	  src/geomgraph/index/SimpleSweepLineIntersector.cpp,
+	  src/geomgraph/index/SweepLineEvent.cpp,
+	  src/geomgraph/index/SweepLineSegment.cpp, src/index/Makefile.am,
+	  src/index/bintree/Bintree.cpp, src/index/bintree/Interval.cpp,
+	  src/index/bintree/Key.cpp, src/index/bintree/Makefile.am,
+	  src/index/bintree/Node.cpp, src/index/bintree/NodeBase.cpp,
+	  src/index/bintree/Root.cpp, src/index/chain/Makefile.am,
+	  src/index/chain/MonotoneChain.cpp,
+	  src/index/chain/MonotoneChainOverlapAction.cpp,
+	  src/index/chain/MonotoneChainSelectAction.cpp,
+	  src/index/intervalrtree/IntervalRTreeBranchNode.cpp,
+	  src/index/intervalrtree/IntervalRTreeLeafNode.cpp,
+	  src/index/intervalrtree/IntervalRTreeNode.cpp,
+	  src/index/intervalrtree/Makefile.am,
+	  src/index/intervalrtree/SortedPackedIntervalRTree.cpp,
+	  src/index/quadtree/DoubleBits.cpp,
+	  src/index/quadtree/IntervalSize.cpp, src/index/quadtree/Key.cpp,
+	  src/index/quadtree/Makefile.am, src/index/quadtree/Node.cpp,
+	  src/index/quadtree/NodeBase.cpp, src/index/quadtree/Quadtree.cpp,
+	  src/index/quadtree/Root.cpp, src/index/strtree/AbstractNode.cpp,
+	  src/index/strtree/AbstractSTRtree.cpp,
+	  src/index/strtree/Interval.cpp,
+	  src/index/strtree/ItemBoundable.cpp,
+	  src/index/strtree/Makefile.am, src/index/strtree/SIRtree.cpp,
+	  src/index/strtree/STRtree.cpp, src/index/sweepline/Makefile.am,
+	  src/index/sweepline/SweepLineEvent.cpp,
+	  src/index/sweepline/SweepLineIndex.cpp,
+	  src/index/sweepline/SweepLineInterval.cpp, src/inlines.cpp,
+	  src/io/ByteOrderDataInStream.cpp, src/io/ByteOrderValues.cpp,
+	  src/io/CLocalizer.cpp, src/io/Makefile.am,
+	  src/io/ParseException.cpp, src/io/StringTokenizer.cpp,
+	  src/io/Unload.cpp, src/io/WKBReader.cpp, src/io/WKBWriter.cpp,
+	  src/io/WKTReader.cpp, src/io/WKTWriter.cpp, src/io/Writer.cpp,
+	  src/linearref/ExtractLineByLocation.cpp,
+	  src/linearref/LengthIndexOfPoint.cpp,
+	  src/linearref/LengthIndexedLine.cpp,
+	  src/linearref/LengthLocationMap.cpp,
+	  src/linearref/LinearGeometryBuilder.cpp,
+	  src/linearref/LinearIterator.cpp,
+	  src/linearref/LinearLocation.cpp,
+	  src/linearref/LocationIndexOfLine.cpp,
+	  src/linearref/LocationIndexOfPoint.cpp,
+	  src/linearref/Makefile.am, src/noding/BasicSegmentString.cpp,
+	  src/noding/FastNodingValidator.cpp,
+	  src/noding/IntersectionAdder.cpp,
+	  src/noding/IntersectionFinderAdder.cpp,
+	  src/noding/IteratedNoder.cpp, src/noding/MCIndexNoder.cpp,
+	  src/noding/Makefile.am, src/noding/NodedSegmentString.cpp,
+	  src/noding/NodingValidator.cpp, src/noding/Octant.cpp,
+	  src/noding/OrientedCoordinateArray.cpp,
+	  src/noding/ScaledNoder.cpp,
+	  src/noding/SegmentIntersectionDetector.cpp,
+	  src/noding/SegmentNode.cpp, src/noding/SegmentNodeList.cpp,
+	  src/noding/SegmentStringUtil.cpp, src/noding/SimpleNoder.cpp,
+	  src/noding/SingleInteriorIntersectionFinder.cpp,
+	  src/noding/snapround/HotPixel.cpp,
+	  src/noding/snapround/MCIndexPointSnapper.cpp,
+	  src/noding/snapround/MCIndexSnapRounder.cpp,
+	  src/noding/snapround/Makefile.am,
+	  src/noding/snapround/SimpleSnapRounder.cpp,
+	  src/operation/GeometryGraphOperation.cpp,
+	  src/operation/IsSimpleOp.cpp, src/operation/Makefile.am,
+	  src/operation/buffer/BufferBuilder.cpp,
+	  src/operation/buffer/BufferInputLineSimplifier.cpp,
+	  src/operation/buffer/BufferInputLineSimplifier.h,
+	  src/operation/buffer/BufferOp.cpp,
+	  src/operation/buffer/BufferParameters.cpp,
+	  src/operation/buffer/BufferSubgraph.cpp,
+	  src/operation/buffer/Makefile.am,
+	  src/operation/buffer/OffsetCurveBuilder.cpp,
+	  src/operation/buffer/OffsetCurveSetBuilder.cpp,
+	  src/operation/buffer/OffsetSegmentGenerator.cpp,
+	  src/operation/buffer/RightmostEdgeFinder.cpp,
+	  src/operation/buffer/SubgraphDepthLocater.cpp,
+	  src/operation/distance/ConnectedElementLocationFilter.cpp,
+	  src/operation/distance/ConnectedElementPointFilter.cpp,
+	  src/operation/distance/DistanceOp.cpp,
+	  src/operation/distance/GeometryLocation.cpp,
+	  src/operation/distance/Makefile.am,
+	  src/operation/linemerge/EdgeString.cpp,
+	  src/operation/linemerge/LineMergeDirectedEdge.cpp,
+	  src/operation/linemerge/LineMergeEdge.cpp,
+	  src/operation/linemerge/LineMergeGraph.cpp,
+	  src/operation/linemerge/LineMerger.cpp,
+	  src/operation/linemerge/LineSequencer.cpp,
+	  src/operation/linemerge/Makefile.am,
+	  src/operation/overlay/EdgeSetNoder.cpp,
+	  src/operation/overlay/ElevationMatrix.cpp,
+	  src/operation/overlay/ElevationMatrixCell.cpp,
+	  src/operation/overlay/Makefile.am,
+	  src/operation/overlay/MaximalEdgeRing.cpp,
+	  src/operation/overlay/MinimalEdgeRing.cpp,
+	  src/operation/overlay/OverlayNodeFactory.cpp,
+	  src/operation/overlay/snap/GeometrySnapper.cpp,
+	  src/operation/overlay/snap/LineStringSnapper.cpp,
+	  src/operation/overlay/snap/SnapIfNeededOverlayOp.cpp,
+	  src/operation/overlay/snap/SnapOverlayOp.cpp,
+	  src/operation/overlay/validate/FuzzyPointLocator.cpp,
+	  src/operation/overlay/validate/OffsetPointGenerator.cpp,
+	  src/operation/overlay/validate/OverlayResultValidator.cpp,
+	  src/operation/polygonize/EdgeRing.cpp,
+	  src/operation/polygonize/Makefile.am,
+	  src/operation/polygonize/PolygonizeDirectedEdge.cpp,
+	  src/operation/polygonize/PolygonizeEdge.cpp,
+	  src/operation/polygonize/PolygonizeGraph.cpp,
+	  src/operation/polygonize/Polygonizer.cpp,
+	  src/operation/predicate/Makefile.am,
+	  src/operation/predicate/RectangleContains.cpp,
+	  src/operation/relate/EdgeEndBundleStar.cpp,
+	  src/operation/relate/Makefile.am,
+	  src/operation/relate/RelateNodeFactory.cpp,
+	  src/operation/relate/RelateNodeGraph.cpp,
+	  src/operation/relate/RelateOp.cpp,
+	  src/operation/sharedpaths/Makefile.am,
+	  src/operation/sharedpaths/SharedPathsOp.cpp,
+	  src/operation/union/CascadedPolygonUnion.cpp,
+	  src/operation/union/CascadedUnion.cpp,
+	  src/operation/union/Makefile.am,
+	  src/operation/union/PointGeometryUnion.cpp,
+	  src/operation/union/UnaryUnionOp.cpp,
+	  src/operation/valid/ConnectedInteriorTester.cpp,
+	  src/operation/valid/ConsistentAreaTester.cpp,
+	  src/operation/valid/IndexedNestedRingTester.cpp,
+	  src/operation/valid/IndexedNestedRingTester.h,
+	  src/operation/valid/IsValidOp.cpp,
+	  src/operation/valid/Makefile.am,
+	  src/operation/valid/QuadtreeNestedRingTester.cpp,
+	  src/operation/valid/RepeatedPointTester.cpp,
+	  src/operation/valid/SimpleNestedRingTester.cpp,
+	  src/operation/valid/SweeplineNestedRingTester.cpp,
+	  src/operation/valid/TopologyValidationError.cpp,
+	  src/planargraph/DirectedEdge.cpp,
+	  src/planargraph/DirectedEdgeStar.cpp, src/planargraph/Edge.cpp,
+	  src/planargraph/Makefile.am, src/planargraph/Node.cpp,
+	  src/planargraph/NodeMap.cpp, src/planargraph/PlanarGraph.cpp,
+	  src/planargraph/Subgraph.cpp,
+	  src/planargraph/algorithm/ConnectedSubgraphFinder.cpp,
+	  src/precision/CommonBits.cpp, src/precision/CommonBitsOp.cpp,
+	  src/precision/CommonBitsRemover.cpp,
+	  src/precision/EnhancedPrecisionOp.cpp, src/precision/Makefile.am,
+	  src/precision/SimpleGeometryPrecisionReducer.cpp,
+	  src/simplify/DouglasPeuckerLineSimplifier.cpp,
+	  src/simplify/DouglasPeuckerSimplifier.cpp,
+	  src/simplify/LineSegmentIndex.cpp, src/simplify/Makefile.am,
+	  src/simplify/TaggedLineSegment.cpp,
+	  src/simplify/TaggedLineString.cpp,
+	  src/simplify/TaggedLineStringSimplifier.cpp,
+	  src/simplify/TaggedLinesSimplifier.cpp,
+	  src/simplify/TopologyPreservingSimplifier.cpp,
+	  src/util/Assert.cpp, src/util/GeometricShapeFactory.cpp,
+	  src/util/Makefile.am, src/util/Profiler.cpp, src/util/math.cpp,
+	  swig/Makefile.am, swig/python/Makefile.am,
+	  swig/python/tests/Makefile.am, swig/python/tests/TESTING.txt,
+	  swig/python/tests/runtests.py, swig/ruby/Makefile.am,
+	  swig/ruby/test/Makefile.am, tests/CMakeLists.txt,
+	  tests/Makefile.am, tests/bigtest/CMakeLists.txt,
+	  tests/bigtest/GeometryTestFactory.cpp, tests/bigtest/Makefile.am,
+	  tests/bigtest/TestSweepLineSpeed.cpp, tests/bigtest/bigtest.h,
+	  tests/geostest/Makefile.am, tests/geostest/geostest.c,
+	  tests/perf/Makefile.am, tests/perf/capi/Makefile.am,
+	  tests/perf/operation/Makefile.am,
+	  tests/perf/operation/buffer/IteratedBufferStressTest.cpp,
+	  tests/perf/operation/buffer/Makefile.am,
+	  tests/thread/Makefile.am, tests/thread/badthreadtest.c,
+	  tests/thread/threadtest.c, tests/unit/CMakeLists.txt,
+	  tests/unit/Makefile.am, tests/unit/algorithm/AngleTest.cpp,
+	  tests/unit/algorithm/CGAlgorithms/computeOrientationTest.cpp,
+	  tests/unit/algorithm/CGAlgorithms/isCCWTest.cpp,
+	  tests/unit/algorithm/CGAlgorithms/isPointInRingTest.cpp,
+	  tests/unit/algorithm/CGAlgorithms/signedAreaTest.cpp,
+	  tests/unit/algorithm/ConvexHullTest.cpp,
+	  tests/unit/algorithm/PointLocatorTest.cpp,
+	  tests/unit/algorithm/RobustLineIntersectionTest.cpp,
+	  tests/unit/algorithm/RobustLineIntersectorTest.cpp,
+	  tests/unit/algorithm/distance/DiscreteHausdorffDistanceTest.cpp,
+	  tests/unit/capi/GEOSBufferTest.cpp,
+	  tests/unit/capi/GEOSContainsTest.cpp,
+	  tests/unit/capi/GEOSCoordSeqTest.cpp,
+	  tests/unit/capi/GEOSGeomFromWKBTest.cpp,
+	  tests/unit/capi/GEOSGeomToWKTTest.cpp,
+	  tests/unit/capi/GEOSGeom_create.cpp,
+	  tests/unit/capi/GEOSGeom_extractUniquePointsTest.cpp,
+	  tests/unit/capi/GEOSIntersectsTest.cpp,
+	  tests/unit/capi/GEOSOffsetCurveTest.cpp,
+	  tests/unit/capi/GEOSOrientationIndex.cpp,
+	  tests/unit/capi/GEOSPolygonizer_getCutEdgesTest.cpp,
+	  tests/unit/capi/GEOSPreparedGeometryTest.cpp,
+	  tests/unit/capi/GEOSRelateBoundaryNodeRuleTest.cpp,
+	  tests/unit/capi/GEOSRelatePatternMatchTest.cpp,
+	  tests/unit/capi/GEOSSimplifyTest.cpp,
+	  tests/unit/capi/GEOSSnapTest.cpp,
+	  tests/unit/capi/GEOSUnaryUnionTest.cpp,
+	  tests/unit/capi/GEOSWithinTest.cpp,
+	  tests/unit/capi/GEOSisValidDetailTest.cpp,
+	  tests/unit/geom/CoordinateArraySequenceFactoryTest.cpp,
+	  tests/unit/geom/CoordinateArraySequenceTest.cpp,
+	  tests/unit/geom/CoordinateListTest.cpp,
+	  tests/unit/geom/CoordinateTest.cpp,
+	  tests/unit/geom/DimensionTest.cpp,
+	  tests/unit/geom/EnvelopeTest.cpp,
+	  tests/unit/geom/Geometry/clone.cpp,
+	  tests/unit/geom/Geometry/coversTest.cpp,
+	  tests/unit/geom/Geometry/isRectangleTest.cpp,
+	  tests/unit/geom/GeometryFactoryTest.cpp,
+	  tests/unit/geom/IntersectionMatrixTest.cpp,
+	  tests/unit/geom/LineSegmentTest.cpp,
+	  tests/unit/geom/LineStringTest.cpp,
+	  tests/unit/geom/LinearRingTest.cpp,
+	  tests/unit/geom/LocationTest.cpp,
+	  tests/unit/geom/MultiLineStringTest.cpp,
+	  tests/unit/geom/MultiPointTest.cpp,
+	  tests/unit/geom/MultiPolygonTest.cpp,
+	  tests/unit/geom/PointTest.cpp, tests/unit/geom/PolygonTest.cpp,
+	  tests/unit/geom/PrecisionModelTest.cpp,
+	  tests/unit/geom/TriangleTest.cpp,
+	  tests/unit/geom/prep/PreparedGeometryFactoryTest.cpp,
+	  tests/unit/geom/util/GeometryExtracterTest.cpp,
+	  tests/unit/geos_unit.cpp,
+	  tests/unit/index/quadtree/DoubleBitsTest.cpp,
+	  tests/unit/io/ByteOrderValuesTest.cpp,
+	  tests/unit/io/WKBReaderTest.cpp, tests/unit/io/WKBWriterTest.cpp,
+	  tests/unit/io/WKTReaderTest.cpp, tests/unit/io/WKTWriterTest.cpp,
+	  tests/unit/linearref/LengthIndexedLineTest.cpp,
+	  tests/unit/noding/BasicSegmentStringTest.cpp,
+	  tests/unit/noding/NodedSegmentStringTest.cpp,
+	  tests/unit/noding/SegmentNodeTest.cpp,
+	  tests/unit/noding/SegmentPointComparatorTest.cpp,
+	  tests/unit/operation/IsSimpleOpTest.cpp,
+	  tests/unit/operation/buffer/BufferOpTest.cpp,
+	  tests/unit/operation/distance/DistanceOpTest.cpp,
+	  tests/unit/operation/overlay/snap/GeometrySnapperTest.cpp,
+	  tests/unit/operation/overlay/snap/LineStringSnapperTest.cpp,
+	  tests/unit/operation/overlay/validate/FuzzyPointLocatorTest.cpp,
+	  tests/unit/operation/overlay/validate/OffsetPointGeneratorTest.cpp,
+	  tests/unit/operation/overlay/validate/OverlayResultValidatorTest.cpp,
+	  tests/unit/operation/polygonize/PolygonizeTest.cpp,
+	  tests/unit/operation/union/CascadedPolygonUnionTest.cpp,
+	  tests/unit/operation/union/UnaryUnionOpTest.cpp,
+	  tests/unit/operation/valid/IsValidTest.cpp,
+	  tests/unit/operation/valid/ValidClosedRingTest.cpp,
+	  tests/unit/operation/valid/ValidSelfTouchingRingFormingHoleTest.cpp,
+	  tests/unit/precision/SimpleGeometryPrecisionReducerTest.cpp,
+	  tests/unit/simplify/DouglasPeuckerSimplifierTest.cpp,
+	  tests/unit/simplify/TopologyPreservingSimplifierTest.cpp,
+	  tests/unit/util/UniqueCoordinateArrayFilterTest.cpp,
+	  tests/unit/utility.h, tests/xmltester/BufferResultMatcher.cpp,
+	  tests/xmltester/BufferResultMatcher.h,
+	  tests/xmltester/CMakeLists.txt, tests/xmltester/CTS.cpp,
+	  tests/xmltester/Makefile.am, tests/xmltester/SimpleWKTTester.cpp,
+	  tests/xmltester/SingleSidedBufferResultMatcher.cpp,
+	  tests/xmltester/SingleSidedBufferResultMatcher.h,
+	  tests/xmltester/Stackwalker.h, tests/xmltester/XMLTester.cpp,
+	  tests/xmltester/XMLTester.h, tools/CMakeLists.txt,
+	  tools/Makefile.am: Removed Subversion Id keyword from all text
+	  files (#480)
+
+2011-09-23 00:16  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3481] AUTHORS, CMakeLists.txt, COPYING, ChangeLog,
+	  HOWTO_RELEASE, INSTALL, Makefile.am, NEWS, README, TODO,
+	  acsite.m4, autogen.bat, autogen.sh, capi/CMakeLists.txt,
+	  capi/Makefile.am, capi/geos_c.cpp, capi/geos_c.h.in,
+	  capi/geos_ts_c.cpp, configure.in, debian/Makefile,
+	  debian/README.Debian, debian/changelog, debian/compat,
+	  debian/control, debian/copyright, debian/geos-config.1,
+	  debian/libgeos-dev.dirs, debian/libgeos-dev.docs,
+	  debian/libgeos-dev.install, debian/libgeos-dev.manpages,
+	  debian/libgeos-doc.doc-base, debian/libgeos-doc.docs,
+	  debian/libgeos.dirs, debian/libgeos.docs, debian/libgeos.install,
+	  debian/makedoc, debian/rules, debian/watch, doc/Doxyfile.in,
+	  doc/Makefile.am, doc/README, doc/example.cpp, doc/example.tosql,
+	  examples/CPCLException.cpp,
+	  examples/CoordinateSequencesExample.cpp,
+	  examples/CustomCoordinateSequenceExample.cpp,
+	  examples/CustomCoordinateSequenceExample.h,
+	  examples/CustomPointCoordinateSequence.cpp, examples/Makefile.am,
+	  include/CMakeLists.txt, include/Makefile.am, include/acconfig.h,
+	  include/geos.h, include/geos/Makefile.am,
+	  include/geos/algorithm/Angle.h,
+	  include/geos/algorithm/BoundaryNodeRule.h,
+	  include/geos/algorithm/CGAlgorithms.h,
+	  include/geos/algorithm/CentralEndpointIntersector.h,
+	  include/geos/algorithm/CentroidArea.h,
+	  include/geos/algorithm/CentroidLine.h,
+	  include/geos/algorithm/CentroidPoint.h,
+	  include/geos/algorithm/ConvexHull.h,
+	  include/geos/algorithm/ConvexHull.inl,
+	  include/geos/algorithm/HCoordinate.h,
+	  include/geos/algorithm/InteriorPointArea.h,
+	  include/geos/algorithm/InteriorPointLine.h,
+	  include/geos/algorithm/InteriorPointPoint.h,
+	  include/geos/algorithm/LineIntersector.h,
+	  include/geos/algorithm/MCPointInRing.h,
+	  include/geos/algorithm/Makefile.am,
+	  include/geos/algorithm/MinimumDiameter.h,
+	  include/geos/algorithm/NotRepresentableException.h,
+	  include/geos/algorithm/PointInRing.h,
+	  include/geos/algorithm/PointLocator.h,
+	  include/geos/algorithm/RayCrossingCounter.h,
+	  include/geos/algorithm/RobustDeterminant.h,
+	  include/geos/algorithm/SIRtreePointInRing.h,
+	  include/geos/algorithm/SimplePointInRing.h,
+	  include/geos/algorithm/distance/DiscreteHausdorffDistance.h,
+	  include/geos/algorithm/distance/DistanceToPoint.h,
+	  include/geos/algorithm/distance/Makefile.am,
+	  include/geos/algorithm/distance/PointPairDistance.h,
+	  include/geos/algorithm/locate/IndexedPointInAreaLocator.h,
+	  include/geos/algorithm/locate/Makefile.am,
+	  include/geos/algorithm/locate/PointOnGeometryLocator.h,
+	  include/geos/algorithm/locate/SimplePointInAreaLocator.h,
+	  include/geos/export.h, include/geos/geom.h,
+	  include/geos/geom/BinaryOp.h, include/geos/geom/Coordinate.h,
+	  include/geos/geom/Coordinate.inl,
+	  include/geos/geom/CoordinateArraySequence.h,
+	  include/geos/geom/CoordinateArraySequenceFactory.h,
+	  include/geos/geom/CoordinateArraySequenceFactory.inl,
+	  include/geos/geom/CoordinateFilter.h,
+	  include/geos/geom/CoordinateList.h,
+	  include/geos/geom/CoordinateSequence.h,
+	  include/geos/geom/CoordinateSequenceFactory.h,
+	  include/geos/geom/CoordinateSequenceFilter.h,
+	  include/geos/geom/Dimension.h, include/geos/geom/Envelope.h,
+	  include/geos/geom/Envelope.inl, include/geos/geom/Geometry.h,
+	  include/geos/geom/GeometryCollection.h,
+	  include/geos/geom/GeometryCollection.inl,
+	  include/geos/geom/GeometryComponentFilter.h,
+	  include/geos/geom/GeometryFactory.h,
+	  include/geos/geom/GeometryFactory.inl,
+	  include/geos/geom/GeometryFilter.h,
+	  include/geos/geom/GeometryList.h,
+	  include/geos/geom/IntersectionMatrix.h,
+	  include/geos/geom/LineSegment.h,
+	  include/geos/geom/LineSegment.inl,
+	  include/geos/geom/LineString.h, include/geos/geom/Lineal.h,
+	  include/geos/geom/LinearRing.h, include/geos/geom/Location.h,
+	  include/geos/geom/Makefile.am,
+	  include/geos/geom/MultiLineString.h,
+	  include/geos/geom/MultiLineString.inl,
+	  include/geos/geom/MultiPoint.h, include/geos/geom/MultiPolygon.h,
+	  include/geos/geom/MultiPolygon.inl, include/geos/geom/Point.h,
+	  include/geos/geom/Polygon.h, include/geos/geom/Polygonal.h,
+	  include/geos/geom/PrecisionModel.h,
+	  include/geos/geom/PrecisionModel.inl, include/geos/geom/Puntal.h,
+	  include/geos/geom/Triangle.h,
+	  include/geos/geom/prep/AbstractPreparedPolygonContains.h,
+	  include/geos/geom/prep/BasicPreparedGeometry.h,
+	  include/geos/geom/prep/Makefile.am,
+	  include/geos/geom/prep/PreparedGeometry.h,
+	  include/geos/geom/prep/PreparedGeometryFactory.h,
+	  include/geos/geom/prep/PreparedLineString.h,
+	  include/geos/geom/prep/PreparedLineStringIntersects.h,
+	  include/geos/geom/prep/PreparedPoint.h,
+	  include/geos/geom/prep/PreparedPolygon.h,
+	  include/geos/geom/prep/PreparedPolygonContains.h,
+	  include/geos/geom/prep/PreparedPolygonContainsProperly.h,
+	  include/geos/geom/prep/PreparedPolygonCovers.h,
+	  include/geos/geom/prep/PreparedPolygonIntersects.h,
+	  include/geos/geom/prep/PreparedPolygonPredicate.h,
+	  include/geos/geom/util/ComponentCoordinateExtracter.h,
+	  include/geos/geom/util/CoordinateOperation.h,
+	  include/geos/geom/util/GeometryCombiner.h,
+	  include/geos/geom/util/GeometryEditor.h,
+	  include/geos/geom/util/GeometryEditorOperation.h,
+	  include/geos/geom/util/GeometryTransformer.h,
+	  include/geos/geom/util/LinearComponentExtracter.h,
+	  include/geos/geom/util/Makefile.am,
+	  include/geos/geom/util/PointExtracter.h,
+	  include/geos/geom/util/PolygonExtracter.h,
+	  include/geos/geom/util/ShortCircuitedGeometryVisitor.h,
+	  include/geos/geomPrep.h, include/geos/geomUtil.h,
+	  include/geos/geomgraph.h, include/geos/geomgraph/Depth.h,
+	  include/geos/geomgraph/DirectedEdge.h,
+	  include/geos/geomgraph/DirectedEdge.inl,
+	  include/geos/geomgraph/DirectedEdgeStar.h,
+	  include/geos/geomgraph/Edge.h, include/geos/geomgraph/EdgeEnd.h,
+	  include/geos/geomgraph/EdgeEndStar.h,
+	  include/geos/geomgraph/EdgeIntersection.h,
+	  include/geos/geomgraph/EdgeIntersectionList.h,
+	  include/geos/geomgraph/EdgeList.h,
+	  include/geos/geomgraph/EdgeNodingValidator.h,
+	  include/geos/geomgraph/EdgeRing.h,
+	  include/geos/geomgraph/GeometryGraph.h,
+	  include/geos/geomgraph/GeometryGraph.inl,
+	  include/geos/geomgraph/GraphComponent.h,
+	  include/geos/geomgraph/Label.h,
+	  include/geos/geomgraph/Makefile.am,
+	  include/geos/geomgraph/Node.h,
+	  include/geos/geomgraph/NodeFactory.h,
+	  include/geos/geomgraph/NodeMap.h,
+	  include/geos/geomgraph/PlanarGraph.h,
+	  include/geos/geomgraph/Position.h,
+	  include/geos/geomgraph/Quadrant.h,
+	  include/geos/geomgraph/TopologyLocation.h,
+	  include/geos/geomgraph/index/EdgeSetIntersector.h,
+	  include/geos/geomgraph/index/Makefile.am,
+	  include/geos/geomgraph/index/MonotoneChain.h,
+	  include/geos/geomgraph/index/MonotoneChainEdge.h,
+	  include/geos/geomgraph/index/MonotoneChainIndexer.h,
+	  include/geos/geomgraph/index/SegmentIntersector.h,
+	  include/geos/geomgraph/index/SimpleEdgeSetIntersector.h,
+	  include/geos/geomgraph/index/SimpleMCSweepLineIntersector.h,
+	  include/geos/geomgraph/index/SimpleSweepLineIntersector.h,
+	  include/geos/geomgraph/index/SweepLineEvent.h,
+	  include/geos/geomgraph/index/SweepLineEventObj.h,
+	  include/geos/geomgraph/index/SweepLineSegment.h,
+	  include/geos/geomgraphindex.h, include/geos/geosAlgorithm.h,
+	  include/geos/index/ItemVisitor.h, include/geos/index/Makefile.am,
+	  include/geos/index/SpatialIndex.h,
+	  include/geos/index/bintree/Bintree.h,
+	  include/geos/index/bintree/Interval.h,
+	  include/geos/index/bintree/Key.h,
+	  include/geos/index/bintree/Makefile.am,
+	  include/geos/index/bintree/Node.h,
+	  include/geos/index/bintree/NodeBase.h,
+	  include/geos/index/bintree/Root.h,
+	  include/geos/index/chain/Makefile.am,
+	  include/geos/index/chain/MonotoneChain.h,
+	  include/geos/index/chain/MonotoneChainBuilder.h,
+	  include/geos/index/chain/MonotoneChainOverlapAction.h,
+	  include/geos/index/chain/MonotoneChainSelectAction.h,
+	  include/geos/index/intervalrtree/IntervalRTreeBranchNode.h,
+	  include/geos/index/intervalrtree/IntervalRTreeLeafNode.h,
+	  include/geos/index/intervalrtree/IntervalRTreeNode.h,
+	  include/geos/index/intervalrtree/Makefile.am,
+	  include/geos/index/intervalrtree/SortedPackedIntervalRTree.h,
+	  include/geos/index/quadtree/DoubleBits.h,
+	  include/geos/index/quadtree/IntervalSize.h,
+	  include/geos/index/quadtree/Key.h,
+	  include/geos/index/quadtree/Makefile.am,
+	  include/geos/index/quadtree/Node.h,
+	  include/geos/index/quadtree/NodeBase.h,
+	  include/geos/index/quadtree/Quadtree.h,
+	  include/geos/index/quadtree/Root.h,
+	  include/geos/index/strtree/AbstractNode.h,
+	  include/geos/index/strtree/AbstractSTRtree.h,
+	  include/geos/index/strtree/Boundable.h,
+	  include/geos/index/strtree/Interval.h,
+	  include/geos/index/strtree/ItemBoundable.h,
+	  include/geos/index/strtree/Makefile.am,
+	  include/geos/index/strtree/SIRtree.h,
+	  include/geos/index/strtree/STRtree.h,
+	  include/geos/index/sweepline/Makefile.am,
+	  include/geos/index/sweepline/SweepLineEvent.h,
+	  include/geos/index/sweepline/SweepLineIndex.h,
+	  include/geos/index/sweepline/SweepLineInterval.h,
+	  include/geos/index/sweepline/SweepLineOverlapAction.h,
+	  include/geos/indexBintree.h, include/geos/indexChain.h,
+	  include/geos/indexIntervalRTree.h, include/geos/indexQuadtree.h,
+	  include/geos/indexStrtree.h, include/geos/indexSweepline.h,
+	  include/geos/inline.h, include/geos/io.h,
+	  include/geos/io/ByteOrderDataInStream.h,
+	  include/geos/io/ByteOrderDataInStream.inl,
+	  include/geos/io/ByteOrderValues.h, include/geos/io/CLocalizer.h,
+	  include/geos/io/Makefile.am, include/geos/io/ParseException.h,
+	  include/geos/io/StringTokenizer.h,
+	  include/geos/io/WKBConstants.h, include/geos/io/WKBReader.h,
+	  include/geos/io/WKBWriter.h, include/geos/io/WKTReader.h,
+	  include/geos/io/WKTReader.inl, include/geos/io/WKTWriter.h,
+	  include/geos/io/Writer.h,
+	  include/geos/linearref/ExtractLineByLocation.h,
+	  include/geos/linearref/LengthIndexOfPoint.h,
+	  include/geos/linearref/LengthIndexedLine.h,
+	  include/geos/linearref/LengthLocationMap.h,
+	  include/geos/linearref/LinearGeometryBuilder.h,
+	  include/geos/linearref/LinearIterator.h,
+	  include/geos/linearref/LinearLocation.h,
+	  include/geos/linearref/LocationIndexOfLine.h,
+	  include/geos/linearref/LocationIndexOfPoint.h,
+	  include/geos/linearref/Makefile.am, include/geos/noding.h,
+	  include/geos/noding/BasicSegmentString.h,
+	  include/geos/noding/FastNodingValidator.h,
+	  include/geos/noding/FastSegmentSetIntersectionFinder.h,
+	  include/geos/noding/IntersectionAdder.h,
+	  include/geos/noding/IntersectionFinderAdder.h,
+	  include/geos/noding/IteratedNoder.h,
+	  include/geos/noding/MCIndexNoder.h,
+	  include/geos/noding/MCIndexNoder.inl,
+	  include/geos/noding/MCIndexSegmentSetMutualIntersector.h,
+	  include/geos/noding/Makefile.am,
+	  include/geos/noding/NodableSegmentString.h,
+	  include/geos/noding/NodedSegmentString.h,
+	  include/geos/noding/Noder.h,
+	  include/geos/noding/NodingValidator.h,
+	  include/geos/noding/Octant.h,
+	  include/geos/noding/OrientedCoordinateArray.h,
+	  include/geos/noding/ScaledNoder.h,
+	  include/geos/noding/SegmentIntersectionDetector.h,
+	  include/geos/noding/SegmentIntersector.h,
+	  include/geos/noding/SegmentNode.h,
+	  include/geos/noding/SegmentNodeList.h,
+	  include/geos/noding/SegmentSetMutualIntersector.h,
+	  include/geos/noding/SegmentString.h,
+	  include/geos/noding/SegmentStringUtil.h,
+	  include/geos/noding/SimpleNoder.h,
+	  include/geos/noding/SingleInteriorIntersectionFinder.h,
+	  include/geos/noding/SinglePassNoder.h,
+	  include/geos/noding/snapround/HotPixel.h,
+	  include/geos/noding/snapround/HotPixel.inl,
+	  include/geos/noding/snapround/MCIndexPointSnapper.h,
+	  include/geos/noding/snapround/MCIndexSnapRounder.h,
+	  include/geos/noding/snapround/Makefile.am,
+	  include/geos/noding/snapround/SimpleSnapRounder.h,
+	  include/geos/nodingSnapround.h, include/geos/opBuffer.h,
+	  include/geos/opDistance.h, include/geos/opLinemerge.h,
+	  include/geos/opOverlay.h, include/geos/opPolygonize.h,
+	  include/geos/opPredicate.h, include/geos/opRelate.h,
+	  include/geos/opValid.h, include/geos/operation.h,
+	  include/geos/operation/GeometryGraphOperation.h,
+	  include/geos/operation/IsSimpleOp.h,
+	  include/geos/operation/Makefile.am,
+	  include/geos/operation/buffer/BufferBuilder.h,
+	  include/geos/operation/buffer/BufferOp.h,
+	  include/geos/operation/buffer/BufferParameters.h,
+	  include/geos/operation/buffer/BufferSubgraph.h,
+	  include/geos/operation/buffer/Makefile.am,
+	  include/geos/operation/buffer/OffsetCurveBuilder.h,
+	  include/geos/operation/buffer/OffsetCurveSetBuilder.h,
+	  include/geos/operation/buffer/OffsetSegmentString.h,
+	  include/geos/operation/buffer/RightmostEdgeFinder.h,
+	  include/geos/operation/buffer/SubgraphDepthLocater.h,
+	  include/geos/operation/distance/ConnectedElementLocationFilter.h,
+	  include/geos/operation/distance/ConnectedElementPointFilter.h,
+	  include/geos/operation/distance/DistanceOp.h,
+	  include/geos/operation/distance/GeometryLocation.h,
+	  include/geos/operation/distance/Makefile.am,
+	  include/geos/operation/linemerge/EdgeString.h,
+	  include/geos/operation/linemerge/LineMergeDirectedEdge.h,
+	  include/geos/operation/linemerge/LineMergeEdge.h,
+	  include/geos/operation/linemerge/LineMergeGraph.h,
+	  include/geos/operation/linemerge/LineMerger.h,
+	  include/geos/operation/linemerge/LineSequencer.h,
+	  include/geos/operation/linemerge/Makefile.am,
+	  include/geos/operation/overlay/EdgeSetNoder.h,
+	  include/geos/operation/overlay/ElevationMatrix.h,
+	  include/geos/operation/overlay/ElevationMatrixCell.h,
+	  include/geos/operation/overlay/LineBuilder.h,
+	  include/geos/operation/overlay/Makefile.am,
+	  include/geos/operation/overlay/MaximalEdgeRing.h,
+	  include/geos/operation/overlay/MinimalEdgeRing.h,
+	  include/geos/operation/overlay/MinimalEdgeRing.inl,
+	  include/geos/operation/overlay/OverlayNodeFactory.h,
+	  include/geos/operation/overlay/OverlayOp.h,
+	  include/geos/operation/overlay/PointBuilder.h,
+	  include/geos/operation/overlay/PolygonBuilder.h,
+	  include/geos/operation/overlay/snap/GeometrySnapper.h,
+	  include/geos/operation/overlay/snap/LineStringSnapper.h,
+	  include/geos/operation/overlay/snap/Makefile.am,
+	  include/geos/operation/overlay/snap/SnapIfNeededOverlayOp.h,
+	  include/geos/operation/overlay/snap/SnapOverlayOp.h,
+	  include/geos/operation/overlay/validate/FuzzyPointLocator.h,
+	  include/geos/operation/overlay/validate/OffsetPointGenerator.h,
+	  include/geos/operation/overlay/validate/OverlayResultValidator.h,
+	  include/geos/operation/polygonize/EdgeRing.h,
+	  include/geos/operation/polygonize/Makefile.am,
+	  include/geos/operation/polygonize/PolygonizeDirectedEdge.h,
+	  include/geos/operation/polygonize/PolygonizeEdge.h,
+	  include/geos/operation/polygonize/PolygonizeGraph.h,
+	  include/geos/operation/polygonize/Polygonizer.h,
+	  include/geos/operation/predicate/Makefile.am,
+	  include/geos/operation/predicate/RectangleContains.h,
+	  include/geos/operation/predicate/RectangleIntersects.h,
+	  include/geos/operation/predicate/SegmentIntersectionTester.h,
+	  include/geos/operation/relate/EdgeEndBuilder.h,
+	  include/geos/operation/relate/EdgeEndBundle.h,
+	  include/geos/operation/relate/EdgeEndBundleStar.h,
+	  include/geos/operation/relate/Makefile.am,
+	  include/geos/operation/relate/RelateComputer.h,
+	  include/geos/operation/relate/RelateNode.h,
+	  include/geos/operation/relate/RelateNodeFactory.h,
+	  include/geos/operation/relate/RelateNodeGraph.h,
+	  include/geos/operation/relate/RelateOp.h,
+	  include/geos/operation/union/CascadedPolygonUnion.h,
+	  include/geos/operation/union/Makefile.am,
+	  include/geos/operation/valid/ConnectedInteriorTester.h,
+	  include/geos/operation/valid/ConsistentAreaTester.h,
+	  include/geos/operation/valid/IsValidOp.h,
+	  include/geos/operation/valid/Makefile.am,
+	  include/geos/operation/valid/QuadtreeNestedRingTester.h,
+	  include/geos/operation/valid/RepeatedPointTester.h,
+	  include/geos/operation/valid/SimpleNestedRingTester.h,
+	  include/geos/operation/valid/SweeplineNestedRingTester.h,
+	  include/geos/operation/valid/TopologyValidationError.h,
+	  include/geos/planargraph.h,
+	  include/geos/planargraph/DirectedEdge.h,
+	  include/geos/planargraph/DirectedEdgeStar.h,
+	  include/geos/planargraph/Edge.h,
+	  include/geos/planargraph/GraphComponent.h,
+	  include/geos/planargraph/Makefile.am,
+	  include/geos/planargraph/Node.h,
+	  include/geos/planargraph/NodeMap.h,
+	  include/geos/planargraph/PlanarGraph.h,
+	  include/geos/planargraph/Subgraph.h,
+	  include/geos/planargraph/algorithm/ConnectedSubgraphFinder.h,
+	  include/geos/planargraph/algorithm/Makefile.am,
+	  include/geos/platform.h.cmake, include/geos/platform.h.in,
+	  include/geos/platform.h.vc, include/geos/precision.h,
+	  include/geos/precision/CommonBits.h,
+	  include/geos/precision/CommonBitsOp.h,
+	  include/geos/precision/CommonBitsRemover.h,
+	  include/geos/precision/EnhancedPrecisionOp.h,
+	  include/geos/precision/Makefile.am,
+	  include/geos/precision/SimpleGeometryPrecisionReducer.h,
+	  include/geos/profiler.h,
+	  include/geos/simplify/DouglasPeuckerLineSimplifier.h,
+	  include/geos/simplify/DouglasPeuckerSimplifier.h,
+	  include/geos/simplify/LineSegmentIndex.h,
+	  include/geos/simplify/Makefile.am,
+	  include/geos/simplify/TaggedLineSegment.h,
+	  include/geos/simplify/TaggedLineString.h,
+	  include/geos/simplify/TaggedLineStringSimplifier.h,
+	  include/geos/simplify/TaggedLinesSimplifier.h,
+	  include/geos/simplify/TopologyPreservingSimplifier.h,
+	  include/geos/spatialIndex.h, include/geos/timeval.h,
+	  include/geos/unload.h, include/geos/util.h,
+	  include/geos/util/Assert.h,
+	  include/geos/util/AssertionFailedException.h,
+	  include/geos/util/CoordinateArrayFilter.h,
+	  include/geos/util/GEOSException.h,
+	  include/geos/util/GeometricShapeFactory.h,
+	  include/geos/util/IllegalArgumentException.h,
+	  include/geos/util/Makefile.am,
+	  include/geos/util/TopologyException.h,
+	  include/geos/util/UniqueCoordinateArrayFilter.h,
+	  include/geos/util/UnsupportedOperationException.h,
+	  include/geos/util/math.h, include/geos/version.h.in,
+	  include/geos/version.h.vc, macros/Makefile.am,
+	  macros/ac_pkg_swig.m4, macros/ac_python_devel.m4,
+	  macros/boost.m4, macros/geos.m4, macros/python.m4,
+	  macros/ruby.m4, makefile.vc, src/CMakeLists.txt, src/Makefile.am,
+	  src/Makefile.vc, src/algorithm/Angle.cpp,
+	  src/algorithm/BoundaryNodeRule.cpp,
+	  src/algorithm/CGAlgorithms.cpp, src/algorithm/CentroidArea.cpp,
+	  src/algorithm/CentroidLine.cpp, src/algorithm/CentroidPoint.cpp,
+	  src/algorithm/ConvexHull.cpp, src/algorithm/HCoordinate.cpp,
+	  src/algorithm/InteriorPointArea.cpp,
+	  src/algorithm/InteriorPointLine.cpp,
+	  src/algorithm/InteriorPointPoint.cpp,
+	  src/algorithm/LineIntersector.cpp,
+	  src/algorithm/MCPointInRing.cpp, src/algorithm/Makefile.am,
+	  src/algorithm/MinimumDiameter.cpp,
+	  src/algorithm/NotRepresentableException.cpp,
+	  src/algorithm/PointLocator.cpp,
+	  src/algorithm/RayCrossingCounter.cpp,
+	  src/algorithm/RobustDeterminant.cpp,
+	  src/algorithm/SIRtreePointInRing.cpp,
+	  src/algorithm/SimplePointInRing.cpp,
+	  src/algorithm/distance/DiscreteHausdorffDistance.cpp,
+	  src/algorithm/distance/DistanceToPoint.cpp,
+	  src/algorithm/distance/Makefile.am,
+	  src/algorithm/locate/IndexedPointInAreaLocator.cpp,
+	  src/algorithm/locate/Makefile.am,
+	  src/algorithm/locate/PointOnGeometryLocator.cpp,
+	  src/algorithm/locate/SimplePointInAreaLocator.cpp,
+	  src/dirlist.mk, src/geom/Coordinate.cpp,
+	  src/geom/CoordinateArraySequence.cpp,
+	  src/geom/CoordinateArraySequenceFactory.cpp,
+	  src/geom/CoordinateSequence.cpp,
+	  src/geom/CoordinateSequenceFactory.cpp, src/geom/Dimension.cpp,
+	  src/geom/Envelope.cpp, src/geom/Geometry.cpp,
+	  src/geom/GeometryCollection.cpp,
+	  src/geom/GeometryComponentFilter.cpp,
+	  src/geom/GeometryFactory.cpp, src/geom/GeometryList.cpp,
+	  src/geom/IntersectionMatrix.cpp, src/geom/LineSegment.cpp,
+	  src/geom/LineString.cpp, src/geom/LinearRing.cpp,
+	  src/geom/Location.cpp, src/geom/Makefile.am,
+	  src/geom/MultiLineString.cpp, src/geom/MultiPoint.cpp,
+	  src/geom/MultiPolygon.cpp, src/geom/Point.cpp,
+	  src/geom/Polygon.cpp, src/geom/PrecisionModel.cpp,
+	  src/geom/Triangle.cpp,
+	  src/geom/prep/AbstractPreparedPolygonContains.cpp,
+	  src/geom/prep/BasicPreparedGeometry.cpp,
+	  src/geom/prep/Makefile.am, src/geom/prep/PreparedGeometry.cpp,
+	  src/geom/prep/PreparedGeometryFactory.cpp,
+	  src/geom/prep/PreparedLineString.cpp,
+	  src/geom/prep/PreparedLineStringIntersects.cpp,
+	  src/geom/prep/PreparedPoint.cpp,
+	  src/geom/prep/PreparedPolygon.cpp,
+	  src/geom/prep/PreparedPolygonContains.cpp,
+	  src/geom/prep/PreparedPolygonContainsProperly.cpp,
+	  src/geom/prep/PreparedPolygonCovers.cpp,
+	  src/geom/prep/PreparedPolygonIntersects.cpp,
+	  src/geom/prep/PreparedPolygonPredicate.cpp,
+	  src/geom/util/ComponentCoordinateExtracter.cpp,
+	  src/geom/util/CoordinateOperation.cpp,
+	  src/geom/util/GeometryCombiner.cpp,
+	  src/geom/util/GeometryEditor.cpp,
+	  src/geom/util/GeometryTransformer.cpp, src/geom/util/Makefile.am,
+	  src/geom/util/ShortCircuitedGeometryVisitor.cpp,
+	  src/geomgraph/Depth.cpp, src/geomgraph/DirectedEdge.cpp,
+	  src/geomgraph/DirectedEdgeStar.cpp, src/geomgraph/Edge.cpp,
+	  src/geomgraph/EdgeEnd.cpp, src/geomgraph/EdgeEndStar.cpp,
+	  src/geomgraph/EdgeIntersectionList.cpp,
+	  src/geomgraph/EdgeList.cpp,
+	  src/geomgraph/EdgeNodingValidator.cpp,
+	  src/geomgraph/EdgeRing.cpp, src/geomgraph/GeometryGraph.cpp,
+	  src/geomgraph/GraphComponent.cpp, src/geomgraph/Label.cpp,
+	  src/geomgraph/Makefile.am, src/geomgraph/Node.cpp,
+	  src/geomgraph/NodeFactory.cpp, src/geomgraph/NodeMap.cpp,
+	  src/geomgraph/PlanarGraph.cpp, src/geomgraph/Position.cpp,
+	  src/geomgraph/Quadrant.cpp, src/geomgraph/TopologyLocation.cpp,
+	  src/geomgraph/index/Makefile.am,
+	  src/geomgraph/index/MonotoneChainEdge.cpp,
+	  src/geomgraph/index/MonotoneChainIndexer.cpp,
+	  src/geomgraph/index/SegmentIntersector.cpp,
+	  src/geomgraph/index/SimpleEdgeSetIntersector.cpp,
+	  src/geomgraph/index/SimpleMCSweepLineIntersector.cpp,
+	  src/geomgraph/index/SimpleSweepLineIntersector.cpp,
+	  src/geomgraph/index/SweepLineEvent.cpp,
+	  src/geomgraph/index/SweepLineSegment.cpp, src/index/Makefile.am,
+	  src/index/bintree/Bintree.cpp, src/index/bintree/Interval.cpp,
+	  src/index/bintree/Key.cpp, src/index/bintree/Makefile.am,
+	  src/index/bintree/Node.cpp, src/index/bintree/NodeBase.cpp,
+	  src/index/bintree/Root.cpp, src/index/chain/Makefile.am,
+	  src/index/chain/MonotoneChain.cpp,
+	  src/index/chain/MonotoneChainBuilder.cpp,
+	  src/index/chain/MonotoneChainOverlapAction.cpp,
+	  src/index/chain/MonotoneChainSelectAction.cpp,
+	  src/index/intervalrtree/IntervalRTreeBranchNode.cpp,
+	  src/index/intervalrtree/IntervalRTreeLeafNode.cpp,
+	  src/index/intervalrtree/IntervalRTreeNode.cpp,
+	  src/index/intervalrtree/Makefile.am,
+	  src/index/intervalrtree/SortedPackedIntervalRTree.cpp,
+	  src/index/quadtree/DoubleBits.cpp,
+	  src/index/quadtree/IntervalSize.cpp, src/index/quadtree/Key.cpp,
+	  src/index/quadtree/Makefile.am, src/index/quadtree/Node.cpp,
+	  src/index/quadtree/NodeBase.cpp, src/index/quadtree/Quadtree.cpp,
+	  src/index/quadtree/Root.cpp, src/index/strtree/AbstractNode.cpp,
+	  src/index/strtree/AbstractSTRtree.cpp,
+	  src/index/strtree/Interval.cpp,
+	  src/index/strtree/ItemBoundable.cpp,
+	  src/index/strtree/Makefile.am, src/index/strtree/SIRtree.cpp,
+	  src/index/strtree/STRtree.cpp, src/index/sweepline/Makefile.am,
+	  src/index/sweepline/SweepLineEvent.cpp,
+	  src/index/sweepline/SweepLineIndex.cpp,
+	  src/index/sweepline/SweepLineInterval.cpp, src/inlines.cpp,
+	  src/io/ByteOrderDataInStream.cpp, src/io/ByteOrderValues.cpp,
+	  src/io/CLocalizer.cpp, src/io/Makefile.am,
+	  src/io/ParseException.cpp, src/io/StringTokenizer.cpp,
+	  src/io/Unload.cpp, src/io/WKBReader.cpp, src/io/WKBWriter.cpp,
+	  src/io/WKTReader.cpp, src/io/WKTWriter.cpp, src/io/Writer.cpp,
+	  src/linearref/ExtractLineByLocation.cpp,
+	  src/linearref/LengthIndexOfPoint.cpp,
+	  src/linearref/LengthIndexedLine.cpp,
+	  src/linearref/LengthLocationMap.cpp,
+	  src/linearref/LinearGeometryBuilder.cpp,
+	  src/linearref/LinearIterator.cpp,
+	  src/linearref/LinearLocation.cpp,
+	  src/linearref/LocationIndexOfLine.cpp,
+	  src/linearref/LocationIndexOfPoint.cpp,
+	  src/linearref/Makefile.am, src/noding/BasicSegmentString.cpp,
+	  src/noding/FastNodingValidator.cpp,
+	  src/noding/FastSegmentSetIntersectionFinder.cpp,
+	  src/noding/IntersectionAdder.cpp,
+	  src/noding/IntersectionFinderAdder.cpp,
+	  src/noding/IteratedNoder.cpp, src/noding/MCIndexNoder.cpp,
+	  src/noding/MCIndexSegmentSetMutualIntersector.cpp,
+	  src/noding/Makefile.am, src/noding/NodedSegmentString.cpp,
+	  src/noding/NodingValidator.cpp, src/noding/Octant.cpp,
+	  src/noding/OrientedCoordinateArray.cpp,
+	  src/noding/ScaledNoder.cpp,
+	  src/noding/SegmentIntersectionDetector.cpp,
+	  src/noding/SegmentNode.cpp, src/noding/SegmentNodeList.cpp,
+	  src/noding/SegmentString.cpp, src/noding/SegmentStringUtil.cpp,
+	  src/noding/SimpleNoder.cpp,
+	  src/noding/SingleInteriorIntersectionFinder.cpp,
+	  src/noding/snapround/HotPixel.cpp,
+	  src/noding/snapround/MCIndexPointSnapper.cpp,
+	  src/noding/snapround/MCIndexSnapRounder.cpp,
+	  src/noding/snapround/Makefile.am,
+	  src/noding/snapround/SimpleSnapRounder.cpp,
+	  src/operation/GeometryGraphOperation.cpp,
+	  src/operation/IsSimpleOp.cpp, src/operation/Makefile.am,
+	  src/operation/buffer/BufferBuilder.cpp,
+	  src/operation/buffer/BufferInputLineSimplifier.cpp,
+	  src/operation/buffer/BufferInputLineSimplifier.h,
+	  src/operation/buffer/BufferOp.cpp,
+	  src/operation/buffer/BufferParameters.cpp,
+	  src/operation/buffer/BufferSubgraph.cpp,
+	  src/operation/buffer/Makefile.am,
+	  src/operation/buffer/OffsetCurveBuilder.cpp,
+	  src/operation/buffer/OffsetCurveSetBuilder.cpp,
+	  src/operation/buffer/RightmostEdgeFinder.cpp,
+	  src/operation/buffer/SubgraphDepthLocater.cpp,
+	  src/operation/distance/ConnectedElementLocationFilter.cpp,
+	  src/operation/distance/ConnectedElementPointFilter.cpp,
+	  src/operation/distance/DistanceOp.cpp,
+	  src/operation/distance/GeometryLocation.cpp,
+	  src/operation/distance/Makefile.am,
+	  src/operation/linemerge/EdgeString.cpp,
+	  src/operation/linemerge/LineMergeDirectedEdge.cpp,
+	  src/operation/linemerge/LineMergeEdge.cpp,
+	  src/operation/linemerge/LineMergeGraph.cpp,
+	  src/operation/linemerge/LineMerger.cpp,
+	  src/operation/linemerge/LineSequencer.cpp,
+	  src/operation/linemerge/Makefile.am,
+	  src/operation/overlay/EdgeSetNoder.cpp,
+	  src/operation/overlay/ElevationMatrix.cpp,
+	  src/operation/overlay/ElevationMatrixCell.cpp,
+	  src/operation/overlay/LineBuilder.cpp,
+	  src/operation/overlay/Makefile.am,
+	  src/operation/overlay/MaximalEdgeRing.cpp,
+	  src/operation/overlay/MinimalEdgeRing.cpp,
+	  src/operation/overlay/OverlayNodeFactory.cpp,
+	  src/operation/overlay/OverlayOp.cpp,
+	  src/operation/overlay/PointBuilder.cpp,
+	  src/operation/overlay/PolygonBuilder.cpp,
+	  src/operation/overlay/snap/GeometrySnapper.cpp,
+	  src/operation/overlay/snap/LineStringSnapper.cpp,
+	  src/operation/overlay/snap/SnapIfNeededOverlayOp.cpp,
+	  src/operation/overlay/snap/SnapOverlayOp.cpp,
+	  src/operation/overlay/validate/FuzzyPointLocator.cpp,
+	  src/operation/overlay/validate/OffsetPointGenerator.cpp,
+	  src/operation/overlay/validate/OverlayResultValidator.cpp,
+	  src/operation/polygonize/EdgeRing.cpp,
+	  src/operation/polygonize/Makefile.am,
+	  src/operation/polygonize/PolygonizeDirectedEdge.cpp,
+	  src/operation/polygonize/PolygonizeEdge.cpp,
+	  src/operation/polygonize/PolygonizeGraph.cpp,
+	  src/operation/polygonize/Polygonizer.cpp,
+	  src/operation/predicate/Makefile.am,
+	  src/operation/predicate/RectangleContains.cpp,
+	  src/operation/predicate/RectangleIntersects.cpp,
+	  src/operation/predicate/SegmentIntersectionTester.cpp,
+	  src/operation/relate/EdgeEndBuilder.cpp,
+	  src/operation/relate/EdgeEndBundle.cpp,
+	  src/operation/relate/EdgeEndBundleStar.cpp,
+	  src/operation/relate/Makefile.am,
+	  src/operation/relate/RelateComputer.cpp,
+	  src/operation/relate/RelateNode.cpp,
+	  src/operation/relate/RelateNodeFactory.cpp,
+	  src/operation/relate/RelateNodeGraph.cpp,
+	  src/operation/relate/RelateOp.cpp,
+	  src/operation/union/CascadedPolygonUnion.cpp,
+	  src/operation/union/Makefile.am,
+	  src/operation/valid/ConnectedInteriorTester.cpp,
+	  src/operation/valid/ConsistentAreaTester.cpp,
+	  src/operation/valid/IndexedNestedRingTester.cpp,
+	  src/operation/valid/IndexedNestedRingTester.h,
+	  src/operation/valid/IsValidOp.cpp,
+	  src/operation/valid/Makefile.am,
+	  src/operation/valid/QuadtreeNestedRingTester.cpp,
+	  src/operation/valid/RepeatedPointTester.cpp,
+	  src/operation/valid/SimpleNestedRingTester.cpp,
+	  src/operation/valid/SweeplineNestedRingTester.cpp,
+	  src/operation/valid/TopologyValidationError.cpp,
+	  src/planargraph/DirectedEdge.cpp,
+	  src/planargraph/DirectedEdgeStar.cpp, src/planargraph/Edge.cpp,
+	  src/planargraph/Makefile.am, src/planargraph/Node.cpp,
+	  src/planargraph/NodeMap.cpp, src/planargraph/PlanarGraph.cpp,
+	  src/planargraph/Subgraph.cpp,
+	  src/planargraph/algorithm/ConnectedSubgraphFinder.cpp,
+	  src/precision/CommonBits.cpp, src/precision/CommonBitsOp.cpp,
+	  src/precision/CommonBitsRemover.cpp,
+	  src/precision/EnhancedPrecisionOp.cpp, src/precision/Makefile.am,
+	  src/precision/SimpleGeometryPrecisionReducer.cpp,
+	  src/simplify/DouglasPeuckerLineSimplifier.cpp,
+	  src/simplify/DouglasPeuckerSimplifier.cpp,
+	  src/simplify/LineSegmentIndex.cpp, src/simplify/Makefile.am,
+	  src/simplify/TaggedLineSegment.cpp,
+	  src/simplify/TaggedLineString.cpp,
+	  src/simplify/TaggedLineStringSimplifier.cpp,
+	  src/simplify/TaggedLinesSimplifier.cpp,
+	  src/simplify/TopologyPreservingSimplifier.cpp,
+	  src/util/Assert.cpp, src/util/GeometricShapeFactory.cpp,
+	  src/util/Makefile.am, src/util/Profiler.cpp, src/util/math.cpp,
+	  swig/Makefile.am, swig/python/Makefile.am, swig/python/geos.pth,
+	  swig/python/geos.py, swig/python/python.i,
+	  swig/python/tests/Makefile.am, swig/python/tests/TESTING.txt,
+	  swig/python/tests/example.py, swig/python/tests/runtests.py,
+	  swig/python/tests/test_geometry.py, swig/ruby/Makefile.am,
+	  swig/ruby/ruby.i, swig/ruby/test/Makefile.am,
+	  swig/ruby/test/example.rb, swig/ruby/test/geos_tests.rb,
+	  swig/ruby/test/test_buffer.rb,
+	  swig/ruby/test/test_combinations.rb,
+	  swig/ruby/test/test_coordinate_sequence.rb,
+	  swig/ruby/test/test_envelope.rb, swig/ruby/test/test_geometry.rb,
+	  swig/ruby/test/test_helper.rb, swig/ruby/test/test_io.rb,
+	  swig/ruby/test/test_operations.rb,
+	  swig/ruby/test/test_relations.rb, swig/ruby/test/test_srid.rb,
+	  swig/ruby/test/test_version.rb, tests/CMakeLists.txt,
+	  tests/Makefile.am, tests/bigtest/GeometryTestFactory.cpp,
+	  tests/bigtest/Makefile.am, tests/bigtest/TestSweepLineSpeed.cpp,
+	  tests/bigtest/bigtest.h, tests/bigtest/bug234.cpp,
+	  tests/geostest/geostest.c,
+	  tests/perf/operation/buffer/IteratedBufferStressTest.cpp,
+	  tests/thread/badthreadtest.c, tests/thread/threadtest.c,
+	  tests/unit/CMakeLists.txt, tests/unit/Makefile.am,
+	  tests/unit/algorithm/CGAlgorithms/computeOrientationTest.cpp,
+	  tests/unit/algorithm/CGAlgorithms/isCCWTest.cpp,
+	  tests/unit/algorithm/CGAlgorithms/isPointInRingTest.cpp,
+	  tests/unit/algorithm/ConvexHullTest.cpp,
+	  tests/unit/algorithm/PointLocatorTest.cpp,
+	  tests/unit/algorithm/RobustLineIntersectionTest.cpp,
+	  tests/unit/algorithm/RobustLineIntersectorTest.cpp,
+	  tests/unit/algorithm/distance/DiscreteHausdorffDistanceTest.cpp,
+	  tests/unit/capi/GEOSBufferTest.cpp,
+	  tests/unit/capi/GEOSContainsTest.cpp,
+	  tests/unit/capi/GEOSCoordSeqTest.cpp,
+	  tests/unit/capi/GEOSGeomFromWKBTest.cpp,
+	  tests/unit/capi/GEOSGeomToWKTTest.cpp,
+	  tests/unit/capi/GEOSPolygonizer_getCutEdgesTest.cpp,
+	  tests/unit/capi/GEOSPreparedGeometryTest.cpp,
+	  tests/unit/capi/GEOSSimplifyTest.cpp,
+	  tests/unit/capi/GEOSWithinTest.cpp,
+	  tests/unit/geom/CoordinateArraySequenceFactoryTest.cpp,
+	  tests/unit/geom/CoordinateArraySequenceTest.cpp,
+	  tests/unit/geom/CoordinateListTest.cpp,
+	  tests/unit/geom/CoordinateTest.cpp,
+	  tests/unit/geom/DimensionTest.cpp,
+	  tests/unit/geom/EnvelopeTest.cpp,
+	  tests/unit/geom/Geometry/coversTest.cpp,
+	  tests/unit/geom/Geometry/isRectangleTest.cpp,
+	  tests/unit/geom/GeometryFactoryTest.cpp,
+	  tests/unit/geom/IntersectionMatrixTest.cpp,
+	  tests/unit/geom/LineSegmentTest.cpp,
+	  tests/unit/geom/LineStringTest.cpp,
+	  tests/unit/geom/LinearRingTest.cpp,
+	  tests/unit/geom/LocationTest.cpp,
+	  tests/unit/geom/MultiLineStringTest.cpp,
+	  tests/unit/geom/MultiPointTest.cpp,
+	  tests/unit/geom/MultiPolygonTest.cpp,
+	  tests/unit/geom/PointTest.cpp, tests/unit/geom/PolygonTest.cpp,
+	  tests/unit/geom/TriangleTest.cpp,
+	  tests/unit/geom/prep/PreparedGeometryFactoryTest.cpp,
+	  tests/unit/geos_unit.cpp,
+	  tests/unit/index/quadtree/DoubleBitsTest.cpp,
+	  tests/unit/io/ByteOrderValuesTest.cpp,
+	  tests/unit/io/WKBReaderTest.cpp,
+	  tests/unit/linearref/LengthIndexedLineTest.cpp,
+	  tests/unit/noding/BasicSegmentStringTest.cpp,
+	  tests/unit/noding/NodedSegmentStringTest.cpp,
+	  tests/unit/noding/SegmentNodeTest.cpp,
+	  tests/unit/noding/SegmentPointComparatorTest.cpp,
+	  tests/unit/operation/IsSimpleOpTest.cpp,
+	  tests/unit/operation/buffer/BufferOpTest.cpp,
+	  tests/unit/operation/distance/DistanceOpTest.cpp,
+	  tests/unit/operation/overlay/snap/GeometrySnapperTest.cpp,
+	  tests/unit/operation/overlay/snap/LineStringSnapperTest.cpp,
+	  tests/unit/operation/overlay/validate/FuzzyPointLocatorTest.cpp,
+	  tests/unit/operation/overlay/validate/OffsetPointGeneratorTest.cpp,
+	  tests/unit/operation/overlay/validate/OverlayResultValidatorTest.cpp,
+	  tests/unit/operation/union/CascadedPolygonUnionTest.cpp,
+	  tests/unit/operation/valid/IsValidTest.cpp,
+	  tests/unit/operation/valid/ValidClosedRingTest.cpp,
+	  tests/unit/operation/valid/ValidSelfTouchingRingFormingHoleTest.cpp,
+	  tests/unit/precision/SimpleGeometryPrecisionReducerTest.cpp,
+	  tests/unit/simplify/DouglasPeuckerSimplifierTest.cpp,
+	  tests/unit/simplify/TopologyPreservingSimplifierTest.cpp,
+	  tests/unit/tut/tut.hpp, tests/unit/tut/tut_assert.hpp,
+	  tests/unit/tut/tut_console_reporter.hpp,
+	  tests/unit/tut/tut_exception.hpp, tests/unit/tut/tut_posix.hpp,
+	  tests/unit/tut/tut_reporter.hpp,
+	  tests/unit/tut/tut_restartable.hpp,
+	  tests/unit/tut/tut_result.hpp, tests/unit/tut/tut_runner.hpp,
+	  tests/unit/util/UniqueCoordinateArrayFilterTest.cpp,
+	  tests/unit/utility.h, tests/xmltester/BufferResultMatcher.cpp,
+	  tests/xmltester/BufferResultMatcher.h,
+	  tests/xmltester/CMakeLists.txt, tests/xmltester/CTS.cpp,
+	  tests/xmltester/Makefile.am, tests/xmltester/SimpleWKTTester.cpp,
+	  tests/xmltester/SingleSidedBufferResultMatcher.cpp,
+	  tests/xmltester/SingleSidedBufferResultMatcher.h,
+	  tests/xmltester/Stackwalker.cpp, tests/xmltester/Stackwalker.h,
+	  tests/xmltester/WKTIn, tests/xmltester/WKTOut,
+	  tests/xmltester/XMLTester.cpp, tests/xmltester/XMLTester.h,
+	  tests/xmltester/testrunner.sh,
+	  tests/xmltester/tests/TestIsValid.xml,
+	  tests/xmltester/tests/buffer.xml,
+	  tests/xmltester/tests/general/TestCentroid.xml,
+	  tests/xmltester/tests/general/TestInteriorPoint.xml,
+	  tests/xmltester/tests/general/TestValid.xml,
+	  tests/xmltester/tests/general/TestValid2-big.xml,
+	  tests/xmltester/tests/general/TestValid2.xml,
+	  tests/xmltester/tests/hexwkb.xml,
+	  tests/xmltester/tests/linemerge.xml,
+	  tests/xmltester/tests/robustness.xml,
+	  tests/xmltester/tests/test.xml,
+	  tests/xmltester/tests/testLeaksBig.xml,
+	  tests/xmltester/tinyxml/tinystr.cpp,
+	  tests/xmltester/tinyxml/tinystr.h,
+	  tests/xmltester/tinyxml/tinyxml.cpp,
+	  tests/xmltester/tinyxml/tinyxml.h,
+	  tests/xmltester/tinyxml/tinyxmlerror.cpp,
+	  tests/xmltester/tinyxml/tinyxmlparser.cpp, tools/CMakeLists.txt,
+	  tools/Makefile.am, tools/geos-config.in: Removed Subversion
+	  svn:keywords property (#480)
+
+2011-09-21 08:11  Sandro Santilli <strk@keybit.net>
+
+	* [r3475] swig/geos.i.in, swig/python/Makefile.am: Fix out-of-place
+	  build for python binding (#332)
+
+2011-09-20 14:35  Howard Butler <hobu.inc@gmail.com>
+
+	* [r3472] include/geos/geom/GeometryCollection.h: mark concrete
+	  implementations as non-virtual for
+	  GeometryCollection::computeEnvelopInternal and
+	  GeometryCollection::compareToSameClass #478
+
+2011-09-20 14:24  Howard Butler <hobu.inc@gmail.com>
+
+	* [r3470] include/geos/geom/GeometryFactory.h: apply clang fix for
+	  #463
+
+2011-09-19 15:07  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r3469] tests/unit/capi/GEOSisValidDetailTest.cpp: Disable unit
+	  test relying on C99 feature if GEOS built using Visual C++
+
+2011-09-17 15:53  Sandro Santilli <strk@keybit.net>
+
+	* [r3468] include/geos/platform.h.in: Use the global isnan from
+	  math.h for Solaris (#461)
+
+2011-09-12 07:47  Sandro Santilli <strk@keybit.net>
+
+	* [r3465] src/algorithm/InteriorPointArea.cpp,
+	  tests/unit/Makefile.am,
+	  tests/unit/algorithm/InteriorPointAreaTest.cpp: Fix memory leak
+	  on invalid geometry in InteriorPointArea (#475)
+
+2011-08-24 14:55  Sandro Santilli <strk@keybit.net>
+
+	* [r3463] include/geos/operation/buffer/OffsetSegmentGenerator.h,
+	  include/geos/operation/relate/RelateComputer.h,
+	  src/geom/util/SineStarFactory.cpp,
+	  src/operation/relate/RelateComputer.cpp: Fix warnings on MSVC
+	  2008 64 Bit (#470)
+
+2011-08-20 21:02  Sandro Santilli <strk@keybit.net>
+
+	* [r3461] src/geom/GeometryCollection.cpp, src/geom/LineString.cpp,
+	  src/geom/Point.cpp, src/geom/Polygon.cpp, tests/unit/Makefile.am,
+	  tests/unit/geom/Geometry/clone.cpp: Forward port fix for #464
+	  (Geometry.clone SRID copy)
+
+2011-08-19 09:42  Sandro Santilli <strk@keybit.net>
+
+	* [r3458] src/planargraph/DirectedEdge.cpp: Fix missing return from
+	  DirectedEdge output operator
+
+2011-08-19 09:41  Sandro Santilli <strk@keybit.net>
+
+	* [r3457] tests/perf/Makefile.am, tests/perf/capi/Makefile.am: Fix
+	  out-of-source builds
+
+2011-08-06 09:10  Sandro Santilli <strk@keybit.net>
+
+	* [r3456] include/geos/noding/BasicSegmentString.h,
+	  src/inlines.cpp: Drop dangling references to SegmentString.inl
+	  (ticket #467)
+
+2011-07-27 13:55  Sandro Santilli <strk@keybit.net>
+
+	* [r3455] tests/perf/ClassSizes.cpp, tests/perf/Makefile.am: Add
+	  test file printing sizes of some classes
+
+2011-07-27 13:29  Sandro Santilli <strk@keybit.net>
+
+	* [r3454] src/operation/buffer/BufferBuilder.cpp: Earlier release
+	  of input segment strings, earlier release of buffer subgraphs.
+
+2011-07-27 08:12  Sandro Santilli <strk@keybit.net>
+
+	* [r3453] include/geos/noding/Noder.h,
+	  include/geos/noding/SegmentNodeList.h,
+	  src/noding/SegmentNodeList.cpp,
+	  src/operation/buffer/BufferBuilder.cpp: Change Noder interface to
+	  transfer ownership of noded segment strings to caller. Delete
+	  them as soon as converted to Edges in BufferOp.
+
+2011-07-26 16:36  Sandro Santilli <strk@keybit.net>
+
+	* [r3452] include/geos/noding/Makefile.am,
+	  include/geos/noding/SegmentString.h,
+	  include/geos/noding/SegmentString.inl,
+	  src/noding/SegmentString.cpp: Update class documentation and port
+	  info. Drop empty .inl file.
+
+2011-07-26 16:23  Sandro Santilli <strk@keybit.net>
+
+	* [r3451] NEWS, include/geos/noding/NodedSegmentString.h,
+	  include/geos/noding/SegmentNodeList.h,
+	  include/geos/noding/SegmentStringUtil.h,
+	  src/geom/prep/AbstractPreparedPolygonContains.cpp,
+	  src/geom/prep/PreparedLineString.cpp,
+	  src/geom/prep/PreparedLineStringIntersects.cpp,
+	  src/geom/prep/PreparedPolygon.cpp,
+	  src/geom/prep/PreparedPolygonContainsProperly.cpp,
+	  src/geom/prep/PreparedPolygonIntersects.cpp,
+	  src/noding/SegmentNodeList.cpp,
+	  src/operation/buffer/BufferBuilder.cpp,
+	  src/operation/buffer/OffsetCurveSetBuilder.cpp,
+	  tests/unit/noding/NodedSegmentStringTest.cpp,
+	  tests/unit/noding/SegmentNodeTest.cpp: Have NodedSegmentString
+	  take ownership of CoordinateSequence
+
+2011-07-26 15:09  Sandro Santilli <strk@keybit.net>
+
+	* [r3450] NEWS, include/geos/geomgraph/DirectedEdge.h,
+	  include/geos/geomgraph/DirectedEdge.inl,
+	  include/geos/geomgraph/DirectedEdgeStar.h,
+	  include/geos/geomgraph/Edge.h, include/geos/geomgraph/EdgeEnd.h,
+	  include/geos/geomgraph/EdgeEndStar.h,
+	  include/geos/geomgraph/EdgeIntersectionList.h,
+	  include/geos/geomgraph/EdgeRing.h,
+	  include/geos/geomgraph/GeometryGraph.h,
+	  include/geos/geomgraph/GeometryGraph.inl,
+	  include/geos/geomgraph/GraphComponent.h,
+	  include/geos/geomgraph/Label.h, include/geos/geomgraph/Node.h,
+	  include/geos/geomgraph/PlanarGraph.h,
+	  include/geos/operation/buffer/BufferBuilder.h,
+	  include/geos/operation/overlay/OverlayOp.h,
+	  include/geos/operation/relate/EdgeEndBundle.h,
+	  include/geos/operation/relate/EdgeEndBundleStar.h,
+	  include/geos/operation/relate/RelateComputer.h,
+	  include/geos/operation/relate/RelateNode.h,
+	  src/geomgraph/DirectedEdge.cpp,
+	  src/geomgraph/DirectedEdgeStar.cpp, src/geomgraph/Edge.cpp,
+	  src/geomgraph/EdgeEnd.cpp, src/geomgraph/EdgeEndStar.cpp,
+	  src/geomgraph/EdgeIntersectionList.cpp,
+	  src/geomgraph/EdgeRing.cpp, src/geomgraph/GeometryGraph.cpp,
+	  src/geomgraph/GraphComponent.cpp, src/geomgraph/Label.cpp,
+	  src/geomgraph/Node.cpp, src/geomgraph/NodeMap.cpp,
+	  src/geomgraph/PlanarGraph.cpp,
+	  src/operation/buffer/BufferBuilder.cpp,
+	  src/operation/overlay/LineBuilder.cpp,
+	  src/operation/overlay/OverlayOp.cpp,
+	  src/operation/overlay/PointBuilder.cpp,
+	  src/operation/overlay/PolygonBuilder.cpp,
+	  src/operation/relate/EdgeEndBuilder.cpp,
+	  src/operation/relate/EdgeEndBundle.cpp,
+	  src/operation/relate/EdgeEndBundleStar.cpp,
+	  src/operation/relate/RelateComputer.cpp,
+	  src/operation/relate/RelateNode.cpp,
+	  src/operation/relate/RelateNodeGraph.cpp,
+	  src/operation/valid/ConnectedInteriorTester.cpp: Use
+	  geomgraph::Label by value (less extra-heap), cleanups and port
+	  sync.
+
+2011-07-21 09:54  Sandro Santilli <strk@keybit.net>
+
+	* [r3449] include/geos/geomgraph/Label.h, src/geomgraph/Label.cpp:
+	  Make geomgraph::Label non virtual, implement assignment operator,
+	  drop old logs, sync port info.
+
+2011-07-21 09:54  Sandro Santilli <strk@keybit.net>
+
+	* [r3448] include/geos/geomgraph/TopologyLocation.h,
+	  src/geomgraph/TopologyLocation.cpp: Add assignment operator to
+	  TopologyLocation, drop old logs, sync port info
+
+2011-07-20 15:40  Sandro Santilli <strk@keybit.net>
+
+	* [r3444] include/geos/algorithm/ConvexHull.h,
+	  include/geos/algorithm/ConvexHull.inl,
+	  src/algorithm/ConvexHull.cpp: Port JTS robustness fix for
+	  ConvexHull (ticket #457)
+
+2011-07-20 14:32  Sandro Santilli <strk@keybit.net>
+
+	* [r3443] tests/xmltester/XMLTester.cpp: Allow XML tests not to
+	  specify a precision model, defaulting to floating
+	  
+	  This allows running some JTS tests w/out touching them
+
+2011-07-20 14:19  Sandro Santilli <strk@keybit.net>
+
+	* [r3442] tests/unit/Makefile.am,
+	  tests/unit/capi/GEOSDistanceTest.cpp: Add unit test for bug #337.
+
+2011-07-20 14:04  Sandro Santilli <strk@keybit.net>
+
+	* [r3441] tests/xmltester/Makefile.am: Reset CXXFLAGS for building
+	  XMLTester, should fix bug #319 (non-c++98 tinyxml)
+
+2011-07-20 11:45  Sandro Santilli <strk@keybit.net>
+
+	* [r3439] src/operation/buffer/BufferBuilder.cpp,
+	  tests/unit/capi/GEOSOffsetCurveTest.cpp: Have GEOSOffsetCurve
+	  with distance 0 return the input (fixes bug #454)
+
+2011-07-20 09:12  Sandro Santilli <strk@keybit.net>
+
+	* [r3438] NEWS: Add note about new BufferOp interface
+
+2011-07-20 09:03  Sandro Santilli <strk@keybit.net>
+
+	* [r3437] include/geos/operation/buffer/BufferOp.h: Add
+	  setSingleSided interface to BufferOp-accessible BufferParam
+	  setters
+	  
+	  Patch by Tai Meng <tai.meng@safe.com>
+
+2011-07-20 08:46  Sandro Santilli <strk@keybit.net>
+
+	* [r3436] include/geos/planargraph/DirectedEdge.h,
+	  src/planargraph/DirectedEdge.cpp: Add output operator for
+	  planargraph::DirectedEdge class
+
+2011-07-20 08:46  Sandro Santilli <strk@keybit.net>
+
+	* [r3435] src/algorithm/RobustDeterminant.cpp: Drop unused variable
+
+2011-07-20 08:46  Sandro Santilli <strk@keybit.net>
+
+	* [r3434] tests/unit/operation/polygonize/PolygonizeTest.cpp: Add
+	  port info
+
+2011-07-20 08:46  Sandro Santilli <strk@keybit.net>
+
+	* [r3433] tests/unit/Makefile.am, tests/unit/operation/polygonize,
+	  tests/unit/operation/polygonize/PolygonizeTest.cpp: Port JTS unit
+	  test for Polygonizer class (very light..)
+
+2011-07-07 08:33  Sandro Santilli <strk@keybit.net>
+
+	* [r3432] src/operation/buffer/BufferParameters.cpp: Include
+	  platform.h, fixing SOLARIS build. Patch by Tai Meng
+	  <tai.meng@safe.com>.
+
+2011-07-06 07:02  Sandro Santilli <strk@keybit.net>
+
+	* [r3429] include/geos/geomgraph/GeometryGraph.h,
+	  include/geos/geomgraph/GeometryGraph.inl,
+	  src/geomgraph/GeometryGraph.cpp: Nodes always have labels (ported
+	  JTS fix to GeometryGraph::insertBoundaryPoint). Update port info.
+
+2011-07-06 07:02  Sandro Santilli <strk@keybit.net>
+
+	* [r3428] include/geos/geomgraph/Node.h, src/geomgraph/Node.cpp:
+	  Update port info for geomgraph::Node after GEOS fix was ported to
+	  JTS
+
+2011-07-05 13:59  Sandro Santilli <strk@keybit.net>
+
+	* [r3427] Makefile.am: svn update before running svn2cl
+
+2011-07-05 11:07  Sandro Santilli <strk@keybit.net>
+
+	* [r3425] src/operation/valid/IndexedNestedRingTester.cpp,
+	  src/operation/valid/IndexedNestedRingTester.h: Update port info
+	  for IndexedNestedRingTester class
+
+2011-07-05 10:58  Sandro Santilli <strk@keybit.net>
+
+	* [r3424] NEWS: Changes of 3.3.1 do not belong in trunk (aimed at
+	  3.4.0)
+
+2011-07-05 10:56  Sandro Santilli <strk@keybit.net>
+
+	* [r3423] src/operation/valid/IndexedNestedRingTester.cpp,
+	  tests/xmltester/tests/general/TestValid.xml: Fix #449 (Assertion
+	  fails checking validity of polygon) the JTS way.
+
+2011-07-05 10:56  Sandro Santilli <strk@keybit.net>
+
+	* [r3422] src/operation/valid/IndexedNestedRingTester.cpp,
+	  tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/ticket/bug449.xml: Revert "When checking
+	  for validity, do not abort if every vertex of an hole is also a
+	  vertex of another one. Fixes bug #449, including regress
+	  testing." (will redo the JTS way)
+	  
+	  This reverts commit 7d2306c8dca2f0f1c5722640758578c1d59c7295.
+
+2011-07-05 09:52  Sandro Santilli <strk@keybit.net>
+
+	* [r3417] src/algorithm/MinimumDiameter.cpp: Initialize
+	  MinimumDiamiter::minPtIndex in the constructor, to make static
+	  analisys tools happier
+
+2011-07-05 09:52  Sandro Santilli <strk@keybit.net>
+
+	* [r3416] src/index/sweepline/SweepLineIndex.cpp: Initialize
+	  SweepLineIndex::indexBuilt in ctor
+
+2011-07-05 09:52  Sandro Santilli <strk@keybit.net>
+
+	* [r3415] include/geos/algorithm/LineIntersector.h: Initialize
+	  LineIntersector::isProperVar in constructor (not really needed
+	  but makes less noise under static analisys tools)
+
+2011-07-05 09:52  Sandro Santilli <strk@keybit.net>
+
+	* [r3414] include/geos/geom/prep/PreparedPoint.h,
+	  src/geom/prep/PreparedPoint.cpp: Fix bogus override of
+	  PreparedGeometry::intersect by PreparedPoint
+
+2011-07-05 09:52  Sandro Santilli <strk@keybit.net>
+
+	* [r3413] src/index/quadtree/Node.cpp: Assert that the variable
+	  used as array index is not negative before using it (quadtree)
+
+2011-07-05 09:52  Sandro Santilli <strk@keybit.net>
+
+	* [r3412] src/geomgraph/GeometryGraph.cpp: Avoid segfalting when an
+	  added node has no label in GeometryGraph::insertBoundaryPoint.
+	  See
+	  https://sourceforge.net/tracker/?func=detail&aid=3353879&group_id=128875&atid=713120
+
+2011-07-05 09:52  Sandro Santilli <strk@keybit.net>
+
+	* [r3411] src/geomgraph/Node.cpp: Avoid segfaulting when
+	  Node.setLabelBoundary is called against a node with null label.
+	  See
+	  https://sourceforge.net/tracker/?func=detail&aid=3353871&group_id=128875&atid=713120
+
+2011-07-05 09:52  Sandro Santilli <strk@keybit.net>
+
+	* [r3410] src/index/bintree/Node.cpp: Assert that the variable used
+	  as array index is not negative before using it.
+
+2011-07-05 09:51  Sandro Santilli <strk@keybit.net>
+
+	* [r3409] src/util/Profiler.cpp: Do not dereference past-the-end
+	  iterator on invalid call
+
+2011-07-01 08:22  Sandro Santilli <strk@keybit.net>
+
+	* [r3398] tests/unit/capi/GEOSBufferTest.cpp: Add test for ticket
+	  #455 (bad result from the deprecated GEOSSingleSidedBuffer). It
+	  passes here in trunk, good!
+
+2011-07-01 08:22  Sandro Santilli <strk@keybit.net>
+
+	* [r3397] NEWS: NEWS item about #449
+
+2011-06-27 11:45  Sandro Santilli <strk@keybit.net>
+
+	* [r3394] configure.in: Bump versions up assuming a new minor
+	  release will come out from trunk. Closes #453
+
+2011-06-09 15:28  Sandro Santilli <strk@keybit.net>
+
+	* [r3392] src/operation/valid/IndexedNestedRingTester.cpp,
+	  tests/xmltester/Makefile.am,
+	  tests/xmltester/tests/ticket/bug449.xml: When checking for
+	  validity, do not abort if every vertex of an hole is also a
+	  vertex of another one. Fixes bug #449, including regress testing.
+
+2011-06-02 20:18  Sandro Santilli <strk@keybit.net>
+
+	* [r3390] php/test/test.php: Refine test for #448
+
+2011-06-02 20:13  Sandro Santilli <strk@keybit.net>
+
+	* [r3389] php/test/test.php: Add test for bug #448
+
+2011-05-30 12:50  Sandro Santilli <strk@keybit.net>
+
+	* [r3387] ChangeLog: Update for release
+
 2011-05-30 12:48  Sandro Santilli <strk@keybit.net>
 
 	* [r3386] NEWS, configure.in: Set version to 3.3.0 (final) - Set
@@ -11066,7 +15496,7 @@
 	* [r1801] ChangeLog, capi/geos_c.cpp, capi/geos_c.h.in,
 	  capi/geos_c.h.vc: Added equalsExact and normalize to the c api as
 	  discussed on the mailing list
-	  (http://geos.osgeo.org/pipermail/geos-devel/2006-July/002452.html).
+	  (http://geos.refractions.net/pipermail/geos-devel/2006-July/002452.html).
 
 2006-08-03 21:34  Charlie Savage <cfis@savagexi.com>
 
@@ -11168,7 +15598,7 @@
 2006-07-21 19:37  Charlie Savage <cfis@savagexi.com>
 
 	* [r1773] NEWS: Added note about inclusion of version.in.vc. See
-	  http://geos.osgeo.org/pipermail/geos-devel/2006-July/002463.html
+	  http://geos.refractions.net/pipermail/geos-devel/2006-July/002463.html
 	  for more info.
 
 2006-07-21 17:59  Sandro Santilli <strk@keybit.net>
@@ -16892,7 +21322,7 @@
 	  undeprecated Geometry::setSRID
 	  and Geometry::getSRID
 
-2006-02-09 01:47  frank
+2006-02-09 01:47  Frank Warmerdam <warmerdam@pobox.com>
 
 	* [r1049] source/io/WKBReader.cpp: Botched last fix. Hopefully this
 	  is better.
@@ -16902,7 +21332,7 @@
 	* [r1048] ChangeLog, source/operation/linemerge/LineSequencer.cpp:
 	  Added missing <limits> include
 
-2006-02-09 00:06  frank
+2006-02-09 00:06  Frank Warmerdam <warmerdam@pobox.com>
 
 	* [r1047] ChangeLog, source/io/WKBReader.cpp: Fixed support for
 	  consuming WKB for 'POLYGON EMPTY' with numRings==0.
@@ -17214,12 +21644,12 @@
 	  - New ShortCircuitedGeometryVisitor class
 	  - New operation/predicate package
 
-2006-01-30 21:59  frank
+2006-01-30 21:59  Frank Warmerdam <warmerdam@pobox.com>
 
 	* [r1027] source/algorithm/LineIntersector.cpp: yikes! comment out
 	  debug define again
 
-2006-01-30 21:58  frank
+2006-01-30 21:58  Frank Warmerdam <warmerdam@pobox.com>
 
 	* [r1026] ChangeLog, source/algorithm/LineIntersector.cpp: fixed up
 	  some debug messages
@@ -18033,15 +22463,15 @@
 	  source/headers/geos/noding.h, source/noding/SegmentNodeList.cpp:
 	  Reduced set<> lookups
 
-2005-11-07 13:17  frank
+2005-11-07 13:17  Frank Warmerdam <warmerdam@pobox.com>
 
 	* [r888] VisualStudio: no longer used
 
-2005-11-07 13:17  frank
+2005-11-07 13:17  Frank Warmerdam <warmerdam@pobox.com>
 
 	* [r887] Makefile.am: removed VisualStudio, no longer distributed
 
-2005-11-07 13:16  frank
+2005-11-07 13:16  Frank Warmerdam <warmerdam@pobox.com>
 
 	* [r886] VisualStudio/.cvsignore: obsolete
 
@@ -18159,40 +22589,40 @@
 
 	* [r868] configure.in: typo fixed
 
-2005-10-21 02:46  frank
+2005-10-21 02:46  Frank Warmerdam <warmerdam@pobox.com>
 
 	* [r867] AUTHORS: added myself to authors - isn't that cheeky!
 
-2005-10-21 02:45  frank
+2005-10-21 02:45  Frank Warmerdam <warmerdam@pobox.com>
 
 	* [r866] README: added note on source\makefile.vc
 
-2005-10-21 02:44  frank
+2005-10-21 02:44  Frank Warmerdam <warmerdam@pobox.com>
 
 	* [r865] source/Makefile.vc: added a wee readme
 
-2005-10-21 02:41  frank
+2005-10-21 02:41  Frank Warmerdam <warmerdam@pobox.com>
 
 	* [r864] source/Makefile.vc: added DLL building, and geostest.exe
 
-2005-10-21 02:41  frank
+2005-10-21 02:41  Frank Warmerdam <warmerdam@pobox.com>
 
 	* [r863] source/capi/geos_c.h.in: need to DLL export C API
 
-2005-10-21 02:37  frank
+2005-10-21 02:37  Frank Warmerdam <warmerdam@pobox.com>
 
 	* [r862] source/capi/geos_c.cpp: DLL Export functions
 
-2005-10-21 02:37  frank
+2005-10-21 02:37  Frank Warmerdam <warmerdam@pobox.com>
 
 	* [r861] source/capi/geostest.c: avoid non-portable vasprintf, make
 	  big buffer static
 
-2005-10-21 01:57  frank
+2005-10-21 01:57  Frank Warmerdam <warmerdam@pobox.com>
 
 	* [r860] source/Makefile.vc: updated for 3.0.0 and added C API
 
-2005-10-20 20:37  frank
+2005-10-20 20:37  Frank Warmerdam <warmerdam@pobox.com>
 
 	* [r859] source/headers/geos/platform.h.vc: added
 	  getMachineByteOrder(), convert to unix text mode
@@ -18619,7 +23049,7 @@
 	* [r752] CHANGES, NEWS: Changes file renamed back to NEWS, automake
 	  insists on finding it.
 
-2005-05-30 16:20  autorun
+2005-05-30 16:20  No Body <no@body.net>
 
 	* [r750] NEWS: Blank news file to molfify new versions of autoconf
 
@@ -19283,7 +23713,7 @@
 	  source/headers/geos/Makefile.am: Added VisualStudio dir in
 	  distribution, removed platform.h and version.h from it.
 
-2004-12-04 01:20  frank
+2004-12-04 01:20  Frank Warmerdam <warmerdam@pobox.com>
 
 	* [r621] source/Makefile.vc: removed dll delete
 
@@ -19297,25 +23727,25 @@
 	  const return of CoordinateSequence::toVector() method to derivate
 	  classes.
 
-2004-12-03 16:26  frank
+2004-12-03 16:26  Frank Warmerdam <warmerdam@pobox.com>
 
 	* [r619] source/headers/geos/platform.h.vc: added headers
 
-2004-12-03 16:25  frank
+2004-12-03 16:25  Frank Warmerdam <warmerdam@pobox.com>
 
 	* [r618] source/Makefile.vc: New
 
-2004-12-03 16:22  frank
+2004-12-03 16:22  Frank Warmerdam <warmerdam@pobox.com>
 
 	* [r617] source/headers/geos/geom.h: update to use I64 on MSVC for
 	  64 bit integer constants, also toVector chg.
 
-2004-12-03 16:21  frank
+2004-12-03 16:21  Frank Warmerdam <warmerdam@pobox.com>
 
 	* [r616] source/headers/geos/profiler.h: dont try for sys/time.h
 	  with MSVC
 
-2004-12-03 16:19  frank
+2004-12-03 16:19  Frank Warmerdam <warmerdam@pobox.com>
 
 	* [r615] source/headers/geos/platform.h.vc: New
 
@@ -20844,7 +25274,7 @@
 
 	* [r432] doc/geosDoxygen.conf: re-generated with doxygen 1.2.15
 
-2004-07-01 15:47  cvs
+2004-07-01 15:47  No Body <no@body.net>
 
 	* [r431] doc/geosDoxygen.conf: Added doxygen file for better doco
 	  generation.
@@ -23706,7 +28136,7 @@
 	* [r107] source/examples/Makefile.am: Build support for new example
 	  programs.
 
-2003-04-04 00:18  dblasby
+2003-04-04 00:18  David Blasby <dblasby@gmail.com>
 
 	* [r106] INSTALL: added comment about running ./autogen.sh
 
@@ -24138,7 +28568,7 @@
 	  source/graph/EdgeEndStar.cpp, source/headers/graph.h: Small
 	  changes in PointCoordinateList and EdgeEndStar.
 
-2003-02-11 19:01  mbdavis
+2003-02-11 19:01  Martin Davis <mtnclimb@gmail.com>
 
 	* [r55] source/geom/Geometry.cpp: fixed duplicate for loop index
 
@@ -24286,7 +28716,7 @@
 	  tools/Makefile.in: New build changes necessary to build under
 	  Linux GNU.
 
-2002-10-23 02:21  nvine
+2002-10-23 02:21  Norman Vine <nhv@cape.com>
 
 	* [r40] configure.in, source/Makefile.am, source/geom/Geometry.cpp,
 	  source/geom/GeometryCollection.cpp, source/geom/Makefile.am,
@@ -24718,7 +29148,7 @@
 	  Envelope.cpp, LineSegment.cpp, Location.cpp, geom.h, platform.h:
 	  Initial revision
 
-2002-06-07 17:47  cvs
+2002-06-07 17:47  No Body <no@body.net>
 
 	* [r1] .: New repository initialized by cvs2svn.
 

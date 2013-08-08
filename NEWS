@@ -1,5 +1,5 @@
 Changes in 3.4.0
-2013-08-??
+2013-08-1x
 
 - New things:
   - Delaunay Triangulation API (#487, #565, #570, #567)
@@ -41,6 +41,9 @@ Changes in 3.4.0
     zero-length components from results (#323)
   - Fixed CMake configuration to set correct SOVERSION (current - age)
   - Fix EMPTY return from single-point lines and zero-length polygons (#612)
+  - CMakeLists.txt, tools/geos_svn_revision_cmake.h.in: Add
+	  geos_svn_revision.h generator to CMake config (#643)
+	- Makefile.vc 'clean' step leaks obj files (#607) 
   
 Changes in 3.3.8
 2013-02-28
