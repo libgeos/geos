@@ -405,19 +405,16 @@ public:
 		Coordinate b = triEdges[1]->orig().getCoordinate();
 		Coordinate c = triEdges[2]->orig().getCoordinate();
 
-	//	cout << "Triangle coords as a,b,c::" << a << ", "<< b << ", " << c << endl;
 		//Port circumcenter to geom::triangle.
 		Triangle *triangle = new Triangle(a,b,c);
 		Coordinate cc;
 		(*triangle).circumcentre(cc);
 
-	//	cout << "circumcentre:: " << cc << endl;
 
 		Vertex *ccVertex = new Vertex(cc);
 
 		for(int i=0 ; i<3 ; i++){
 			triEdges[i]->rot().setOrig(*ccVertex);
-	//		cout << "This is in visit method:: " << triEdges[i]->rot().orig().getCoordinate() << endl;
 		}
 	}
 };
@@ -531,10 +528,6 @@ QuadEdgeSubdivision::getVoronoiCellPolygons(const geom::GeometryFactory& geomFac
 
 	QuadEdgeList *edges = getVertexUniqueEdges(false);
 
-/*	for(QuadEdgeList::iterator it=edges->begin() ; it!=edges->end() ; ++it)
-	{
-		cout << (*it)->rot().orig().getCoordinate() << endl;
-	}*/
 	for(QuadEdgeSubdivision::QuadEdgeList::iterator it=(*edges).begin() ; it!=(*edges).end() ; ++it)
 	{
 		QuadEdge *qe = *it;
@@ -551,10 +544,8 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFac
 	QuadEdge *startQE = qe;
 	do{
 		Coordinate cc = qe->rot().orig().getCoordinate();
-	//	cout << cc.x << " " << cc.y <<endl;
 		cellPts.push_back(cc);
 		qe = &qe->oPrev();
-	//	cout << "trapped here\n";
 
 	}while ( qe != startQE);
 
@@ -568,7 +559,6 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFac
 	{
 		cout << coordList << endl;
 		coordList.insert(coordList.end(),*(coordList.end()),true);
-//		coordList.insert(coordList.end(),coordList.get(coordList.size()-1),true);
 	}
 	
 	std::auto_ptr<Coordinate::Vect> pts = coordList.toCoordinateArray();
@@ -576,13 +566,10 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFac
 	geom::CoordinateArraySequence *pts_seq = new geom::CoordinateArraySequence(pts_pass);
 	geom::Polygon *cellPoly = geomFact.createPolygon(geomFact.createLinearRing(pts_seq),NULL);
 
-
 	Vertex v = startQE->orig();
 	Coordinate *c = new Coordinate();
 	*c = v.getCoordinate();
 	(*cellPoly).setUserData(reinterpret_cast<void*>(c));
-	
-//	cout << cellPoly->toString() << endl << endl;
 	
 	return cellPoly->clone();
 }
@@ -597,44 +584,27 @@ QuadEdgeSubdivision::QuadEdgeList* QuadEdgeSubdivision::getVertexUniqueEdges(boo
 		Vertex v = qe->orig();
 
 
-	//	cout << "Vertex to be checked\n";//remove
-	//	cout << v.getX() << " " << v.getY() << endl;//remove
 		if(visitedVertices.find(v) == visitedVertices.end())	//if v not found
 		{
-//			cout << "Vertex to be entered: " << v.getX() << " " << v.getY() << endl;//
 			visitedVertices.insert(v);
 			if(includeFrame || ! QuadEdgeSubdivision::isFrameVertex(v))
 			{
-//				cout << "edge that is entered: having origin as:\n" << endl;
-//				cout << "origin Coordinates:: " << qe->orig().getX() << " " << qe->orig().getY() << endl;
-//				cout << "Destination Coordinates:: " << qe->dest().getX() << " " << qe->dest().getY() << endl;
 				edges->push_back(qe);
 			}
 		}
 		QuadEdge *qd = &(qe->sym());
 		Vertex vd = qd->orig();
 
-//		cout << "Sym Vertex to be checked\n";	////remove
-//		cout << vd.getX() << " " << vd.getY() << endl;		///remove
 
 		if(visitedVertices.find(vd) == visitedVertices.end()){
-//			cout << "sym Vertex to be entered: " << vd.getX() << " " << vd.getY() << endl;//
 			visitedVertices.insert(vd);
 			if(includeFrame || ! QuadEdgeSubdivision::isFrameVertex(vd)){
-//				cout << "sym edge that is entered: having origin as:\n" << endl;
-//				cout << "origin Coordinates:: " << qd->orig().getX() << " " << qd->orig().getY() << endl;
-//				cout << "Destination Coordinates:: " << qd->dest().getX() << " " << qd->dest().getY() << endl;
 				edges->push_back(qd);
 			}
 		}
-//		cout << "\n\n";
 	}
 	return edges;
 }
-
-
-
-
 
 } //namespace geos.triangulate.quadedge
 } //namespace geos.triangulate
