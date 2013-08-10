@@ -1,6 +1,6 @@
 
 // 
-// Test Suite for geos::triangulate::quadedge::QuadEdge
+// Test Suite for geos::triangulate::Voronoi
 //
 // tut
 #include <tut.hpp>
@@ -17,9 +17,7 @@
 
 #include <geos/geom/CoordinateArraySequence.h>
 //#include <stdio.h>
-#include <iostream>
 
-using namespace std;
 using namespace geos::triangulate;
 using namespace geos::triangulate::quadedge;
 using namespace geos::geom;
@@ -52,7 +50,6 @@ namespace tut
 	        geos::triangulate::VoronoiDiagramBuilder builder;
 		Geometry* sites = reader.read(sitesWkt);
 		Geometry* expected = reader.read(expectedWkt);
-//		cout << "Here are the sites::" << sites->toString() << endl;
 		std::auto_ptr<GeometryCollection> results;
 		GeometryFactory geomFact;
 		builder.setSites(*sites);
@@ -60,9 +57,6 @@ namespace tut
 		//set Tolerance:
 		builder.setTolerance(tolerance);
 		results = builder.getDiagram(geomFact);
-
-//		string out = writer.write(results.get());
-//		cout << out << endl;
 
 		results->normalize();
 		expected->normalize();
@@ -98,9 +92,9 @@ namespace tut
 
 		//getting the subdiv()
 		QuadEdgeSubdivision* subdiv = builder.getSubdivision();
-		
-//		cout << "Tolerance::" <<subdiv->getTolerance() << endl;
-//		cout << "Envelope" << subdiv->getEnvelope().toString() << endl;
+
+		ensure_equals(subdiv->getTolerance() , 0);
+		ensure_equals(subdiv->getEnvelope().toString(),"Env[-3540:4020,-3436:4050]");
 
 	}
 	// 1 - Case with a single point
