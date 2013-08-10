@@ -21,7 +21,7 @@
 #include <algorithm>
 #include <math.h>
 #include <vector>
-#include <iostream>
+//#include <iostream>
 
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Coordinate.h>
@@ -88,12 +88,8 @@ void VoronoiDiagramBuilder::create()
    if(subdiv!=NULL)
       return;
    geom::Envelope siteEnv = DelaunayTriangulationBuilder::envelope(*siteCoords);
-//   std::cout << siteEnv.toString() << endl;
-//   diagramEnv = &siteEnv;
    diagramEnv = new Envelope();
    *diagramEnv = siteEnv;
-//   std::cout << "diagramEnv::"<< diagramEnv->toString() << endl;
-//   std::cout << "siteEnv::"<< siteEnv.toString() << endl;
    //adding buffer around the final envelope
    double expandBy = fmax(diagramEnv->getWidth() , diagramEnv->getHeight());
    diagramEnv->expandBy(expandBy);
@@ -106,8 +102,6 @@ void VoronoiDiagramBuilder::create()
    IncrementalDelaunayTriangulator triangulator(subdiv);
    triangulator.insertSites(*vertices);
    delete vertices;
-//   std::cout << "diagramEnv::"<< diagramEnv->toString() << endl;
-//   std::cout << "siteEnv::"<< siteEnv.toString() << endl;
 }
 
 quadedge::QuadEdgeSubdivision* VoronoiDiagramBuilder::getSubdivision()
@@ -123,9 +117,6 @@ VoronoiDiagramBuilder::getDiagram(const geom::GeometryFactory& geomFact)
 	create();
 	std::auto_ptr<geom::GeometryCollection> polys = subdiv->getVoronoiDiagram(geomFact);
 
-//	std::cout << "This is before clip fun called::" << diagramEnv->toString() << endl;
-//	cout << writer.write(polys.get()) << endl;
-//	cout << "Out of the getVoronoiDiagram methods" << endl;
 	return clipGeometryCollection(*polys,*diagramEnv);
 }
 
@@ -135,35 +126,27 @@ VoronoiDiagramBuilder::clipGeometryCollection(const geom::GeometryCollection& ge
 	geos::io::WKTWriter writer;
 	geom::Geometry* clipPoly = geom.getFactory()->toGeometry(&clipEnv);
 	std::vector<Geometry*> clipped;
-//	cout << "Envelope details::" << endl;
-//	cout << "Height:: " << clipEnv.getHeight() << " " << "Width::" << clipEnv.getWidth() << endl << endl;
 	for(int i=0 ; i < geom.getNumGeometries() ; i++)
 	{
 		Geometry* g = (Geometry*)geom.getGeometryN(i);
 
-//		cout << writer.write(g) << endl << endl;
-		//	   Geometry* g = ge->clone();
 		Geometry* result=NULL;
 
 		// don't clip unless necessary
 		if(clipEnv.contains(g->getEnvelopeInternal()))
 		{
-//			cout << "This g in contained in clipEnv::" << writer.write(g) << endl << endl;
 			result = g;
 		}
 		else if(clipEnv.intersects(g->getEnvelopeInternal()))
 		{
-//			cout << "This g intersects in clipEnv::" << writer.write(g) << endl << endl;
 			result = clipPoly->intersection(g);
 			result->setUserData(g->getUserData());
 		}
 
 		if(result!=NULL && !result->isEmpty() )
 		{
-//			cout << "This g is pushed in clipped vector::" << writer.write(g) << endl << endl;
 			clipped.push_back(result);
 		}
-//		delete g;
 	}
 	GeometryCollection* ret = geom.getFactory()->createGeometryCollection(clipped);
 	return std::auto_ptr<GeometryCollection>(ret);
