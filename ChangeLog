@@ -1,3 +1,8 @@
+2013-08-08 04:25  Regina Obe <lr@pcorp.us>
+
+	* [r3867] ChangeLog, NEWS: update news and change log in prep for
+	  Aug 10 release of 3.4.0
+
 2013-08-04 20:05  Regina Obe <lr@pcorp.us>
 
 	* [r3866] include/geos/Makefile.am: #601 do not incude platform.h
