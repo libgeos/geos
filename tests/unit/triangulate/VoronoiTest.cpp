@@ -159,8 +159,27 @@ namespace tut
 		
 		runVoronoi(wkt,expected,6);
 	}
+	template<>
+	template<>
+	void object::test<8>()
+	{
+		const char *wkt = "MULTIPOINT ((170 270), (177 275), (190 230), (230 250), (210 290), (240 280), (240 250))";
 
+		const char *expected = "GEOMETRYCOLLECTION (POLYGON ((100 210, 100 360, 150 360, 200 260, 100 210)), POLYGON ((150 360, 250 360, 220 270, 200 260, 150 360)), POLYGON ((100 160, 100 210, 200 260, 235 190, 247 160, 100 160)), POLYGON ((220 270, 235 265, 235 190, 200 260, 220 270)), POLYGON ((250 360, 310 360, 310 265, 235 265, 220 270, 250 360)), POLYGON ((310 265, 310 160, 247 160, 235 190, 235 265, 310 265)))";
 
+		runVoronoi(wkt,expected,10);
+	}
+	//Taking tolerance very very high
+	template<>
+	template<>
+	void object::test<9>()
+	{
+		const char *wkt = "MULTIPOINT ((155 271), (150 360), (260 360), (271 265), (280 260), (270 370), (154 354), (150 260))";
+
+		const char *expected = "GEOMETRYCOLLECTION (POLYGON ((20 130, 20 310, 205 310, 215 299, 215 130, 20 130)), POLYGON ((205 500, 410 500, 410 338, 215 299, 205 310, 205 500)), POLYGON ((20 310, 20 500, 205 500, 205 310, 20 310)), POLYGON ((410 338, 410 130, 215 130, 215 299, 410 338)))";
+
+		runVoronoi(wkt,expected,100);
+	}
 
 } // namespace tut
 
