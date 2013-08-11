@@ -1,5 +1,5 @@
 Changes in 3.4.0
-2013-08-1x
+2013-08-11
 
 - New things:
   - Delaunay Triangulation API (#487, #565, #570, #567)
