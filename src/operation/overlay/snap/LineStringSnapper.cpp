@@ -262,7 +262,7 @@ cerr << " No segment to snap" << endl;
     CoordinateList::iterator to = segpos; ++to;
     LineSegment seg(*segpos, *to);
     double pf = seg.projectionFactor(snapPt);
-    if ( pf > 1.0 ) {
+    if ( pf >= 1.0 ) {
 #if GEOS_DEBUG
       cerr << " Segment to be snapped is closer on his end point" << endl;
 #endif
@@ -301,7 +301,7 @@ cerr << " No segment to snap" << endl;
         srcCoords.insert(segpos, newSnapPt);
       }
     }
-    else if ( pf < 0.0 ) {
+    else if ( pf <= 0.0 ) {
 #if GEOS_DEBUG
       cerr << " Segment to be snapped is closer on his start point" << endl;
 #endif
@@ -346,7 +346,7 @@ cerr << " Before seg-snapping, srcCoors are: " << srcCoords << endl;
       }
     }
     else {
-      assert(pf != 0.0);
+      //assert(pf != 0.0);
 #if GEOS_DEBUG
 cerr << " Segment to be snapped found, projection factor is " << pf << ", inserting point" << endl;
 #endif
