@@ -43,6 +43,7 @@ namespace tut
             initGEOS(notice, notice);
             w_ = GEOSWKTWriter_create();
             GEOSWKTWriter_setTrim(w_, 1);
+            GEOSWKTWriter_setRoundingPrecision(w_, 8);
         }       
 
         ~test_capigeossnap_data()
@@ -215,6 +216,22 @@ namespace tut
         free(wkt_c);
 
         ensure_equals(out, "LINESTRING (0 2, 5 2, 9 2, 5 0)");
+    }
+
+    // See http://trac.osgeo.org/geos/ticket/649
+    template<>
+    template<>
+    void object::test<10>()
+    {
+        geom1_ = GEOSGeomFromWKT("LINESTRING(-71.1317 42.2511,-71.1317 42.2509)");
+        geom2_ = GEOSGeomFromWKT("MULTIPOINT(-71.1261 42.2703,-71.1257 42.2703,-71.1261 42.2702)");
+        geom3_ = GEOSSnap(geom1_, geom2_, 0.5);
+
+        char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
+        std::string out(wkt_c); 
+        free(wkt_c);
+
+        ensure_equals(out, "LINESTRING (-71.1257 42.2703, -71.1261 42.2703, -71.1261 42.2702, -71.1317 42.2509)");
     }
 
 } // namespace tut
