@@ -1,3 +1,10 @@
+Changes in 3.4.1
+2013-08-DD
+
+- Bug fixes / improvements
+  - Assertion failure snapping line to points of rectangle
+    smaller than tolerance (#649)
+
 Changes in 3.4.0
 2013-08-11
 
