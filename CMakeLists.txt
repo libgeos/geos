@@ -254,7 +254,9 @@ MACRO (GET_SVN_REVISION)
 ENDMACRO(GET_SVN_REVISION)
 
 # Determine SVN/Git revision
-GET_SVN_REVISION()
+if(EXISTS "${CMAKE_SOURCE_DIR}/.svn")
+  GET_SVN_REVISION()
+endif()
 if ( NOT ${Project_WC_REVISION} EQUAL 0 )
    set( GEOS_SVN_REVISION ${Project_WC_REVISION} )
    configure_file ( 
