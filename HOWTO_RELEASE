@@ -6,6 +6,7 @@
 3: Generate the ChangeLog by running 'make cl'
 
 4: Update the NEWS file (extract most important things from the ChangeLog)
+   Make sure to update the release date
 
 5. Commit the new ChangeLog and NEWS files.
 
