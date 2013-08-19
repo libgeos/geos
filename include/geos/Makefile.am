@@ -16,7 +16,7 @@ SUBDIRS = \
     simplify \
     util
 
-EXTRA_DIST = version.h version.h.vc platform.h.vc platform.h.cmake
+EXTRA_DIST = version.h.vc platform.h.vc platform.h.cmake
 
 geosdir = $(includedir)/geos
 
@@ -51,5 +51,9 @@ geos_HEADERS = \
     spatialIndex.h \
     timeval.h \
     unload.h \
-    util.h \
-    version.h
+    util.h
+
+nodist_geos_HEADERS = \
+ version.h \
+ platform.h
+ 
