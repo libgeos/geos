@@ -190,16 +190,6 @@ double Vertex::interpolateZ(const Coordinate &p, const Coordinate &p0,
 	return pz;
 }
 
-bool operator<(const Vertex& v1 ,const Vertex& v2) 
-{
-	if(v1.getCoordinate().x < v2.getCoordinate().x)
-		return 1;
-	else if(v1.getCoordinate().x == v2.getCoordinate().x && v1.getCoordinate().y < v2.getCoordinate().y)
-		return 1;
-	return 0;
-}
-
-
 } //namespace geos.triangulate.quadedge
 } //namespace geos.triangulate
 } //namespace geos
