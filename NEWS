@@ -1,3 +1,11 @@
+Changes in 3.4.2
+2013-08-DD
+
+- Bug fixes / improvements
+  - Use a double for PrecisionModel scale, avoiding overflows (#652)
+  - isnan workaround OS detection missing NetBSD, DragonFly, Sun nuance (#650)
+  - Do not distribute platform.h and version.h, but install both (#601)
+
 Changes in 3.4.1
 2013-08-17
 
