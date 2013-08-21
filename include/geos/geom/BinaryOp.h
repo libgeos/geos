@@ -456,14 +456,14 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
               << std::endl;
 #endif
 
-		long unsigned int maxScale = 1e16;
+		double maxScale = 1e16;
 
     // Don't use a scale bigger than the input one
     if ( g0scale && g0scale < maxScale ) maxScale = g0scale;
     if ( g1scale && g1scale < maxScale ) maxScale = g1scale;
 
 
-		for (long unsigned int scale=maxScale; scale >= 1; scale /= 10)
+		for (double scale=maxScale; scale >= 1; scale /= 10)
 		{
 			PrecisionModel pm(scale);
 			GeometryFactory gf(&pm);
