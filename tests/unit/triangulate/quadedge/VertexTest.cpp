@@ -48,11 +48,19 @@ namespace tut
 		Vertex v4(10,30);
 		Vertex v5(10,10);
 
+<<<<<<< HEAD
 		ensure_equals(v1<v2,1);
 		ensure_equals(v1<v3,0u);
 		ensure_equals(v1<v4,1u);
 		ensure_equals(v1<v5,0u);
 		ensure_equals(v4<v5,0u);
+=======
+		ensure(v1<v2);
+		ensure(!(v1<v3));
+		ensure(v1<v4);
+		ensure(!(v1<v5));
+		ensure(!(v4<v5));
+>>>>>>> 3b4fddb024a1442111f9dcc2df3b50da369008dc
 	}
 
 } // namespace tut

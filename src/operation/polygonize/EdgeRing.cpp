@@ -226,10 +226,12 @@ EdgeRing::getRingInternal()
 	try {
 		ring=factory->createLinearRing(*ringPts);
 	} catch (const std::exception& e) {
+#if GEOS_DEBUG
 		// FIXME: print also ringPts
 		std::cerr << "EdgeRing::getRingInternal: "
 		          << e.what()
 		          << endl;
+#endif
 	}
 	return ring;
 }
