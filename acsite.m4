@@ -34,7 +34,9 @@ int does_int64_work()
   return 1;
 }
 main() {
-  exit(! does_int64_work());
+  if (does_int64_work())
+    exit(0);
+  exit(-1);
 }],
 [Ac_cachevar=yes],
 [Ac_cachevar=no],

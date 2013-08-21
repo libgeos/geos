@@ -265,7 +265,13 @@ private:
 			const geom::Coordinate &p1);
 };
 
+<<<<<<< HEAD
 GEOS_DLL bool operator<(const Vertex& v1 ,const Vertex& v2);
+=======
+inline bool operator<(const Vertex& v1, const Vertex& v2) {
+  return v1.getCoordinate() < v2.getCoordinate();
+}
+>>>>>>> coordinatelist
 
 } //namespace geos.triangulate.quadedge
 } //namespace geos.triangulate

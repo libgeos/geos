@@ -105,6 +105,7 @@ geos_unit_SOURCES = \
 	simplify/TopologyPreservingSimplifierTest.cpp \
 	triangulate/quadedge/QuadEdgeTest.cpp \
 	triangulate/quadedge/QuadEdgeSubdivisionTest.cpp \
+	triangulate/quadedge/VertexTest.cpp \
 	triangulate/DelaunayTest.cpp \
 	util/UniqueCoordinateArrayFilterTest.cpp \
 	capi/GEOSCoordSeqTest.cpp \

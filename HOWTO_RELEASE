@@ -40,6 +40,9 @@
      - VERSION_MINOR for NEW interfaces in the C lib
      - VERSION_MAJOR for SUBSTANTIAL additions or C lib ABI break
        [ THIS MUST BE CAREFULLY AVOIDED ]
+   - In main CMakeLists.txt main one
+      - VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH
+      - CAPI_INTERFACE_*
 
 13: Update wiki page http://trac.osgeo.org/geos/ at Download section
     - Add latest release

@@ -49,16 +49,21 @@
 #ifndef GEOS_GEOM_BINARYOP_H
 #define GEOS_GEOM_BINARYOP_H
 
+#include <geos/algorithm/BoundaryNodeRule.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/Polygon.h>
+#include <geos/geom/Lineal.h>
 #include <geos/geom/PrecisionModel.h>
+#include <geos/geom/GeometryFactory.h>
 #include <geos/precision/CommonBitsRemover.h>
 #include <geos/precision/SimpleGeometryPrecisionReducer.h>
+#include <geos/precision/GeometryPrecisionReducer.h>
 
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
 
 #include <geos/simplify/TopologyPreservingSimplifier.h>
+#include <geos/operation/IsSimpleOp.h>
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/valid/TopologyValidationError.h>
 #include <geos/util/TopologyException.h>
@@ -88,7 +93,7 @@
  * robustness problems (handles TopologyExceptions)
  */
 #ifndef USE_PRECISION_REDUCTION_POLICY
-//# define USE_PRECISION_REDUCTION_POLICY 1
+# define USE_PRECISION_REDUCTION_POLICY 1
 #endif
 
 /*
@@ -133,24 +138,41 @@ namespace geos {
 namespace geom { // geos::geom
 
 inline bool
-check_valid(const Geometry& g, const std::string& label)
+check_valid(const Geometry& g, const std::string& label, bool doThrow=false, bool validOnly=false)
 {
-	operation::valid::IsValidOp ivo(&g);
-	if ( ! ivo.isValid() )
-	{
+  if ( dynamic_cast<const Lineal*>(&g) ) {
+    if ( ! validOnly ) {
+      operation::IsSimpleOp sop(g, algorithm::BoundaryNodeRule::getBoundaryEndPoint());
+      if ( ! sop.isSimple() )
+      {
+        if ( doThrow ) {
+          throw geos::util::TopologyException(
+            label + " is not simple");
+        }
+        return false;
+      }
+    }
+  } else {
+    operation::valid::IsValidOp ivo(&g);
+    if ( ! ivo.isValid() )
+    {
+      using operation::valid::TopologyValidationError;
+      TopologyValidationError* err = ivo.getValidationError();
 #ifdef GEOS_DEBUG_BINARYOP
-		using operation::valid::TopologyValidationError;
-		TopologyValidationError* err = ivo.getValidationError();
-		std::cerr << label << " is INVALID: "
-			<< err->toString()
-			<< " (" << std::setprecision(20)
-			<< err->getCoordinate() << ")"
-			<< std::endl;
-#else
-        (void)label;
+      std::cerr << label << " is INVALID: "
+        << err->toString()
+        << " (" << std::setprecision(20)
+        << err->getCoordinate() << ")"
+        << std::endl;
 #endif
-		return false;
-	} 
+      if ( doThrow ) {
+        throw geos::util::TopologyException(
+          label + " is invalid: " + err->toString(),
+                err->getCoordinate());
+      }
+      return false;
+    } 
+  }
 	return true;
 }
 
@@ -254,12 +276,12 @@ SnapOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 
 	GeometrySnapper snapper0( operand0 );
 	GeomPtr snapG0( snapper0.snapTo(operand1, snapTolerance) );
-	snapG0 = fix_self_intersections(snapG0, "SNAP: snapped geom 0");
+	//snapG0 = fix_self_intersections(snapG0, "SNAP: snapped geom 0");
 
 	// NOTE: second geom is snapped on the snapped first one
 	GeometrySnapper snapper1( operand1 );
 	GeomPtr snapG1( snapper1.snapTo(*snapG0, snapTolerance) );
-	snapG1 = fix_self_intersections(snapG1, "SNAP: snapped geom 1");
+	//snapG1 = fix_self_intersections(snapG1, "SNAP: snapped geom 1");
 
 	// Run the binary op
 	GeomPtr result( _Op(snapG0.get(), snapG1.get()) );
@@ -271,11 +293,10 @@ SnapOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 #if CBR_BEFORE_SNAPPING
 	// Add common bits back in
 	cbr.addCommonBits( result.get() );
-	result = fix_self_intersections(result, "SNAP: result (after common-bits addition)");
-#endif
+	//result = fix_self_intersections(result, "SNAP: result (after common-bits addition)");
 
-#if GEOS_DEBUG_BINARYOP
-	check_valid(*result, "SNAP: result (after common-bits addition");
+  check_valid(*result, "CBR: result (after common-bits addition)", true);
+
 #endif
 
 	return result;
@@ -308,6 +329,9 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 #endif
 	}
 
+  check_valid(*g0, "Input geom 0", true, true);
+  check_valid(*g1, "Input geom 1", true, true);
+
 #if GEOS_DEBUG_BINARYOP
   // Should we just give up here ?
   check_valid(*g0, "Input geom 0");
@@ -315,7 +339,6 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 #endif
 
 #endif // USE_ORIGINAL_INPUT
-
 
 #ifdef USE_COMMONBITS_POLICY
 	// Try removing common bits (possibly obsoleted by snapping below)
@@ -354,16 +377,7 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 
 		cbr.addCommonBits( ret.get() ); 
 
-#if GEOS_DEBUG_BINARYOP
-		check_valid(*ret, "CBR: result (after common-bits addition)");
-#endif
-
-		// Common-bits removal policy could introduce self-intersections
-		ret = fix_self_intersections(ret, "CBR: result (after common-bits addition)");
-
-#if GEOS_DEBUG_BINARYOP
-		check_valid(*ret, "CBR: result (after common-bits addition and fix_self_intersections)");
-#endif
+		check_valid(*ret, "CBR: result (after common-bits addition)", true);
 
 #if GEOS_CHECK_COMMONBITS_VALIDITY
 		// check that result is a valid geometry after the
@@ -424,8 +438,6 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 
 #endif // USE_SNAPPING_POLICY }
 
-
-
 // {
 #if USE_PRECISION_REDUCTION_POLICY
 
@@ -433,29 +445,53 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 	// Try reducing precision
 	try
 	{
-		int maxPrecision=25;
+		long unsigned int g0scale = g0->getFactory()->getPrecisionModel()->getScale();
+		long unsigned int g1scale = g1->getFactory()->getPrecisionModel()->getScale();
 
-		for (int precision=maxPrecision; precision; --precision)
-		{
-			std::auto_ptr<PrecisionModel> pm(new PrecisionModel(precision));
 #if GEOS_DEBUG_BINARYOP
-			std::cerr << "Trying with precision " << precision << std::endl;
+		std::cerr << "Original input scales are: "
+              << g0scale
+              << " and " 
+              << g1scale
+              << std::endl;
 #endif
 
-			precision::SimpleGeometryPrecisionReducer reducer( pm.get() );
-			GeomPtr rG0( reducer.reduce(g0) );
-			GeomPtr rG1( reducer.reduce(g1) );
+		double maxScale = 1e16;
+
+    // Don't use a scale bigger than the input one
+    if ( g0scale && g0scale < maxScale ) maxScale = g0scale;
+    if ( g1scale && g1scale < maxScale ) maxScale = g1scale;
+
+
+		for (double scale=maxScale; scale >= 1; scale /= 10)
+		{
+			PrecisionModel pm(scale);
+			GeometryFactory gf(&pm);
+#if GEOS_DEBUG_BINARYOP
+			std::cerr << "Trying with scale " << scale << std::endl;
+#endif
+
+			precision::GeometryPrecisionReducer reducer( gf );
+			GeomPtr rG0( reducer.reduce(*g0) );
+			GeomPtr rG1( reducer.reduce(*g1) );
 
 			try
 			{
 				ret.reset( _Op(rG0.get(), rG1.get()) );
+        // restore original precision (least precision between inputs)
+        if ( g0->getFactory()->getPrecisionModel()->compareTo( g1->getFactory()->getPrecisionModel() ) < 0 ) {
+          ret.reset( g0->getFactory()->createGeometry(ret.get()) );
+        }
+        else {
+          ret.reset( g1->getFactory()->createGeometry(ret.get()) );
+        }
 				return ret;
 			}
 			catch (const geos::util::TopologyException& ex)
 			{
-				if ( precision == 1 ) throw ex;
+				if ( scale == 1 ) throw ex;
 #if GEOS_DEBUG_BINARYOP
-				std::cerr << "Reduced with precision (" << precision << "): "
+				std::cerr << "Reduced with scale (" << scale << "): "
 				          << ex.what() << std::endl;
 #endif
 			}
@@ -472,6 +508,10 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 
 #endif
 // USE_PRECISION_REDUCTION_POLICY }
+
+
+
+
 
 // {
 #if USE_TP_SIMPLIFY_POLICY 

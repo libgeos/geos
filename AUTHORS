@@ -30,15 +30,18 @@ State Survey of Bavaria.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Developers:
-
-  Yury Bychkov (me@yury.ca) - Initial Porting
-  Sandro Santilli (strk@keybit.net) - Bug Fixing / Maintenance
+  Active:
   Martin Davis (mbdavis@refractions.net) - Architecture
-  Dave Blasby (dblasby@gmail.com) - PostGIS Connectivity
-  Norman Vine (nvine@cape.com) - Porting / C++ Expertise
-  Fernando Villa (fvilla@zoo.uvm.edu) - GNU Build System
-  Paul Ramsey (pramsey@refractions.net) - Coordination / Build
-  Sean Gillies (sgillies@frii.com) - Scripting Interface
-  Frank Warmerdam (warmerdam@pobox.com) - VStudio porting
   Mateusz Loskot (mateusz@loskot.net) - Unit testing
+  Regina Obe (lr@pcorp.us) - QA / Windows
+  Paul Ramsey (pramsey@refractions.net) - Coordination / Build
+  Sandro Santilli (strk@keybit.net) - Bug Fixing / Maintenance
+  Frank Warmerdam (warmerdam@pobox.com) - VStudio porting
+
+  In Active:
+  Dave Blasby (dblasby@gmail.com) - PostGIS Connectivity
+  Yury Bychkov (me@yury.ca) - Initial Porting
+  Sean Gillies (sgillies@frii.com) - Scripting Interface
+  Fernando Villa (fvilla@zoo.uvm.edu) - GNU Build System
+  Norman Vine (nvine@cape.com) - Porting / C++ Expertise
 

@@ -177,6 +177,7 @@ namespace tut
 	template<>
 	void object::test<9>()
 	{   
+<<<<<<< HEAD
 		WKTReader reader;
 		Geometry* sites = reader.read("MULTIPOINT ((150 200), (180 270), (275 163))");
 		Coordinate a(150,200);
@@ -192,6 +193,16 @@ namespace tut
 		DelaunayTriangulationBuilder builder;
 		builder.setSites(*seq);
 		Envelope env = builder.envelope(*seq);
+=======
+		std::vector<Coordinate>* v = new std::vector<Coordinate>();
+		v->push_back( Coordinate (150,200) );
+		v->push_back( Coordinate (180,270) );
+		v->push_back( Coordinate (275,163) );
+
+		geos::geom::CoordinateArraySequence *seq = new CoordinateArraySequence(v);
+
+		Envelope env = DelaunayTriangulationBuilder::envelope(*seq);
+>>>>>>> coordinatelist
 
 		ensure_equals(env.getWidth() , 125);
 		ensure_equals(env.getHeight() , 107);

@@ -12,7 +12,7 @@
  *
  ***********************************************************************
  *
- * Last port: operation/overlay/OverlayOp.java rev. 1.31 (JTS-1.10)
+ * Last port: operation/overlay/OverlayOp.java r567 (JTS-1.12+)
  *
  **********************************************************************/
 
@@ -59,7 +59,7 @@ namespace geos {
 namespace operation { // geos::operation
 namespace overlay { // geos::operation::overlay
 
-/// Computes the overlay of two Geometry. 
+/// Computes the geometric overlay of two Geometry. 
 //
 /// The overlay can be used to determine any
 /// boolean combination of the geometries.
@@ -74,17 +74,42 @@ public:
 	/// the resultants of the overlay.
 	///
 	enum OpCode {
-		opINTERSECTION=1,
-		opUNION,
-		opDIFFERENCE,
-		opSYMDIFFERENCE
+		/// The code for the Intersection overlay operation.
+		opINTERSECTION = 1,
+		/// The code for the Union overlay operation.
+		opUNION = 2,
+		/// The code for the Difference overlay operation.
+		opDIFFERENCE = 3,
+		/// The code for the Symmetric Difference overlay operation.
+		opSYMDIFFERENCE = 4
 	};
 
+	/**
+	 * Computes an overlay operation for the given geometry arguments.
+	 *
+	 * @param geom0 the first geometry argument
+	 * @param geom1 the second geometry argument
+	 * @param opCode the code for the desired overlay operation
+	 * @return the result of the overlay operation
+	 * @throws TopologyException if a robustness problem is encountered
+	 */
 	static geom::Geometry* overlayOp(const geom::Geometry *geom0,
 			const geom::Geometry *geom1,
 			OpCode opCode);
 		//throw(TopologyException *);
 
+	/**
+	 * Tests whether a point with a given topological {@link Label}
+	 * relative to two geometries is contained in
+	 * the result of overlaying the geometries using
+	 * a given overlay operation.
+	 * 
+	 * The method handles arguments of {@link Location#NONE} correctly
+	 *
+	 * @param label the topological label of the point
+	 * @param opCode the code for the overlay operation to test
+	 * @return true if the label locations correspond to the overlayOpCode
+	 */
 	static bool isResultOfOp(const geomgraph::Label& label, OpCode opCode);
 
 	/// This method will handle arguments of Location.NULL correctly
@@ -102,9 +127,23 @@ public:
 
 	virtual ~OverlayOp(); // FIXME: virtual ?
 
-	geom::Geometry* getResultGeometry(OpCode funcCode);
+	/**
+	 * Gets the result of the overlay for a given overlay operation.
+	 * 
+	 * Note: this method can be called once only.
+	 *
+	 * @param overlayOpCode the overlay operation to perform
+	 * @return the compute result geometry
+	 * @throws TopologyException if a robustness problem is encountered
+	 */
+	geom::Geometry* getResultGeometry(OpCode overlayOpCode);
 		// throw(TopologyException *);
 
+	/**
+	 * Gets the graph constructed to compute the overlay.
+	 *
+	 * @return the overlay graph
+	 */
 	geomgraph::PlanarGraph& getGraph() { return graph; }
 
 	/** \brief
