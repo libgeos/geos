@@ -33,7 +33,7 @@ set(VERSION_PATCH 0dev)
 set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
 # JTS_PORT is the version of JTS this release is bound to
-set(JTS_PORT 1.12.0)
+set(JTS_PORT 1.13.0)
 message(STATUS "Setting GEOS version ${VERSION} as port of JTS ${JTS_PORT}")
 
 # GEOS C API version
