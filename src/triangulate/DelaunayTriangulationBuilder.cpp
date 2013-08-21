@@ -134,23 +134,15 @@ DelaunayTriangulationBuilder::getTriangles(
 	return subdiv->getTriangles(geomFact);
 }
 
-<<<<<<< HEAD
-geom::Envelope DelaunayTriangulationBuilder::envelope(const geom::CoordinateSequence& coords)
-=======
 geom::Envelope
 DelaunayTriangulationBuilder::envelope(const geom::CoordinateSequence& coords)
->>>>>>> coordinatelist
 {
 	Envelope env;
 	std::vector<Coordinate> coord_vector;
 	coords.toVector(coord_vector);
 	for(std::vector<Coordinate>::iterator it= coord_vector.begin() ; it!=coord_vector.end() ; ++it)
 	{   
-<<<<<<< HEAD
-		Coordinate coord = *it;
-=======
 		const Coordinate& coord = *it;
->>>>>>> coordinatelist
 		env.expandToInclude(coord);
 	}   
 	return env;
