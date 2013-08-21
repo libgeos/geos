@@ -13,7 +13,7 @@
 #include <geos/io/WKTReader.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/GeometryFactory.h>
-
+#include <geos/geom/CoordinateArraySequence.h>
 //#include <stdio.h>
 
 using namespace geos::triangulate;
@@ -172,5 +172,24 @@ namespace tut
 
 		runDelaunay(wkt, false, expectedEdges, 0.001);
 	}
+	// 9 - Test for DelaunayTriangulationBuilder::envelope
+	template<>
+	template<>
+	void object::test<9>()
+	{   
+		std::vector<Coordinate>* v = new std::vector<Coordinate>();
+		v->push_back( Coordinate (150,200) );
+		v->push_back( Coordinate (180,270) );
+		v->push_back( Coordinate (275,163) );
+
+		geos::geom::CoordinateArraySequence *seq = new CoordinateArraySequence(v);
+
+		Envelope env = DelaunayTriangulationBuilder::envelope(*seq);
+
+		ensure_equals(env.getWidth() , 125);
+		ensure_equals(env.getHeight() , 107);
+
+	}
+
 } // namespace tut
 
