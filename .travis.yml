@@ -1,0 +1,21 @@
+# .travis.yml
+# Configure Travis CI service for GEOS
+language: cpp
+
+compiler:
+    - g++
+#  - clang
+
+before_install: ./tools/ci/before_install.sh
+
+script: ./tools/ci/script.sh
+
+notifications:
+    on_success: always # [always|never|change] # default: change
+    on_failure: always # [always|never|change] # default: always
+    #irc: "chat.freenode.net#postgis"
+    # Uncomment and edit below for notifications by e-mail
+    email:
+        recipients:
+            - mateusz@loskot.net
+
