@@ -121,11 +121,14 @@ namespace tut
       ensure_equals(std::string(reason_), std::string("Invalid Coordinate"));
       std::string exp1 = "POINT (NAN -5)";
       std::string exp2 = "POINT (-1#IND -5)";
+      // http://trac.osgeo.org/geos/ticket/656
+      std::string exp3 = "POINT (1.#QNAN -5)";
       std::stringstream ss;
-      ss << "Expected '" << exp1 << "' or '" << exp2 << "', Obtained '" << wkt;
+      ss << "Expected '" << exp1 << "' or '" << exp2 << "' or '" << exp3 << "', Obtained '" << wkt;
       ensure(ss.str(),
-        wkt == "POINT (NAN -5)" ||
-        wkt == "POINT (-1#IND -5)");
+        wkt == exp1 ||
+        wkt == exp2 ||
+        wkt == exp3);
     }
 
     // Self intersecting ring forming hole
