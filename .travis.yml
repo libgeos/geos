@@ -1,0 +1,33 @@
+# .travis.yml - Travis CI service confiuration for GEOS
+#
+# Copyright (C) 2013 Mateusz Loskot <mateusz@loskot.net>
+#
+# This is free software; you can redistribute and/or modify it under
+# the terms of the GNU Lesser General Public Licence as published
+# by the Free Software Foundation. 
+# See the COPYING file for more information.
+#
+language: cpp
+
+compiler:
+    - g++
+    - clang
+
+env:
+    matrix:
+        - GEOS_TRAVIS_BUILD=autotools
+        - GEOS_TRAVIS_BUILD=cmake
+
+before_install: ./tools/ci/before_install.sh
+
+script: ./tools/ci/script.sh
+
+notifications:
+    on_success: always # [always|never|change] # default: change
+    on_failure: always # [always|never|change] # default: always
+    irc: "chat.freenode.net#postgis"
+    email:
+        recipients:
+            #- geos-devel@lists.osgeo.org # TODO: whitelist this e-mail
+            - mateusz@loskot.net
+
