@@ -25,9 +25,9 @@ script: ./tools/ci/script.sh
 notifications:
     on_success: always # [always|never|change] # default: change
     on_failure: always # [always|never|change] # default: always
-    #irc: "chat.freenode.net#postgis"
-    # Uncomment and edit below for notifications by e-mail
+    irc: "chat.freenode.net#postgis"
     email:
         recipients:
+            #- geos-devel@lists.osgeo.org # TODO: whitelist this e-mail
             - mateusz@loskot.net
 
