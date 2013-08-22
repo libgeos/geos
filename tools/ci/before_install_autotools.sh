@@ -11,4 +11,4 @@
 #
 source ${TRAVIS_BUILD_DIR}/tools/ci/common.sh
 
-#sudo apt-get install -qq make
+sudo apt-get install -qq make
