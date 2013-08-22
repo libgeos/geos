@@ -33,5 +33,30 @@ Triangle::inCentre(Coordinate& result)
 	result = Coordinate(inCentreX, inCentreY);
 }
 
+void Triangle::circumcentre(Coordinate& result)
+{
+	double cx = p2.x;
+	double cy = p2.y;
+	double ax = p0.x - cx; 
+	double ay = p0.y - cy; 
+	double bx = p1.x - cx; 
+	double by = p1.y - cy; 
+
+	double denom = 2 * det(ax,ay,bx,by);
+	double numx = det(ay , ax * ax + ay * ay , by , bx * bx + by * by);
+	double numy = det(ax, ax * ax + ay * ay, bx, bx * bx + by * by);
+
+	double ccx = cx - numx / denom;
+	double ccy = cy + numy / denom;
+
+	result = Coordinate(ccx,ccy);
+}
+
+double Triangle::det(double m00 , double m01 , double m10 , double m11) const
+{
+	return m00 * m11 - m01 * m10;
+}
+
+
 } // namespace geos::geom
 } // namespace geos

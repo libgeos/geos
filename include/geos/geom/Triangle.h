@@ -47,6 +47,43 @@ public:
 	 * @param resultPoint the point into which to write the inCentre of the triangle
 	 */
 	void inCentre(Coordinate& resultPoint);
+
+	/** 
+	 * Computes the circumcentre of a triangle. The circumcentre is the centre of
+	 * the circumcircle, the smallest circle which encloses the triangle. It is
+	 * also the common intersection point of the perpendicular bisectors of the
+	 * sides of the triangle, and is the only point which has equal distance to
+	 * all three vertices of the triangle.
+	 * <p>
+	 * The circumcentre does not necessarily lie within the triangle. For example,
+	 * the circumcentre of an obtuse isoceles triangle lies outside the triangle.
+	 * <p>
+	 * This method uses an algorithm due to J.R.Shewchuk which uses normalization
+	 * to the origin to improve the accuracy of computation. (See <i>Lecture Notes
+	 * on Geometric Robustness</i>, Jonathan Richard Shewchuk, 1999).
+	 * 
+	 * @param resultPoint the point into which to write the inCentre of the triangle
+	 */
+	void circumcentre(Coordinate& resultPoint);
+
+private:
+
+	/** 
+	 * Computes the determinant of a 2x2 matrix. Uses standard double-precision
+	 * arithmetic, so is susceptible to round-off error.
+	 * 
+	 * @param m00
+	 *          the [0,0] entry of the matrix
+	 * @param m01
+	 *          the [0,1] entry of the matrix
+	 * @param m10
+	 *          the [1,0] entry of the matrix
+	 * @param m11
+	 *          the [1,1] entry of the matrix
+	 * @return the determinant
+	 */
+	double det(double m00 , double m01 , double m10 , double m11) const;
+
 };
 
 
