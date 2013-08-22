@@ -11,6 +11,9 @@
 #
 source ${TRAVIS_BUILD_DIR}/tools/ci/common.sh
 
+cd ${TRAVIS_BUILD_DIR}
+./autogen.sh
+cd -
 ${TRAVIS_BUILD_DIR}/configure
 run_make
 run_test
