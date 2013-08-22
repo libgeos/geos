@@ -111,7 +111,6 @@ namespace tut
     template<>
     void object::test<3>()
     {
-#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
       geom_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0, NaN -5)");
       ensure(0 != geom_);
       int r = GEOSisValidDetail(geom_, 0, &reason_, &loc_);
@@ -119,8 +118,16 @@ namespace tut
       strToUpper(wkt);
       ensure_equals(r, 0); // invalid
       ensure_equals(std::string(reason_), std::string("Invalid Coordinate"));
-      ensure_equals(wkt, "POINT (NAN -5)");
-#endif
+      std::string exp1 = "POINT (NAN -5)";
+      std::string exp2 = "POINT (-1#IND -5)";
+      // http://trac.osgeo.org/geos/ticket/656
+      std::string exp3 = "POINT (1.#QNAN -5)";
+      std::stringstream ss;
+      ss << "Expected '" << exp1 << "' or '" << exp2 << "' or '" << exp3 << "', Obtained '" << wkt;
+      ensure(ss.str(),
+        wkt == exp1 ||
+        wkt == exp2 ||
+        wkt == exp3);
     }
 
     // Self intersecting ring forming hole
