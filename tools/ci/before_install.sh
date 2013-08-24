@@ -12,6 +12,7 @@
 source ${TRAVIS_BUILD_DIR}/tools/ci/common.sh
 
 sudo apt-get update -qq
+sudo apt-get install -qq gcc-multilib g++-multilib
 
 before_install="${TRAVIS_BUILD_DIR}/tools/ci/before_install_${GEOS_BUILD_TOOL}.sh"
 [ -x ${before_install} ] && ${before_install} || echo "nothing to run"
