@@ -25,11 +25,16 @@ before_install: ./tools/ci/before_install.sh
 script: ./tools/ci/script.sh
 
 notifications:
-    on_success: always # [always|never|change] # default: change
-    on_failure: always # [always|never|change] # default: always
-    irc: "chat.freenode.net#postgis"
+    irc:
+        channels:
+            - "chat.freenode.net#postgis"
+        on_success: always # [always|never|change] # default: change
+        on_failure: always # [always|never|change] # default: always
+        use_notice: true
     email:
         recipients:
             #- geos-devel@lists.osgeo.org # TODO: whitelist this e-mail
             - mateusz@loskot.net
+        on_success: change
+        on_failure: always
 
