@@ -13,6 +13,6 @@ source ${TRAVIS_BUILD_DIR}/tools/ci/common.sh
 
 sudo apt-get update -qq
 
-before_install="${TRAVIS_BUILD_DIR}/tools/ci/before_install_${GEOS_TRAVIS_BUILD}.sh"
+before_install="${TRAVIS_BUILD_DIR}/tools/ci/before_install_${GEOS_BUILD_TOOL}.sh"
 [ -x ${before_install} ] && ${before_install} || echo "nothing to run"
 
