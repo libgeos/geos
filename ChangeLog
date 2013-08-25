@@ -1,3 +1,67 @@
+2013-08-22 07:44  Sandro Santilli <strk@keybit.net>
+
+	* [r3915] .travis.yml, tools/ci, tools/ci/before_install.sh,
+	  tools/ci/before_install_autotools.sh,
+	  tools/ci/before_install_cmake.sh, tools/ci/common.sh,
+	  tools/ci/script.sh, tools/ci/script_autotools.sh,
+	  tools/ci/script_cmake.sh: Configure Travis CI for GEOS (#657)
+	  
+	  Configurations for GCC and clang with both Autotools and CMake.
+	  Enable IRC notifications
+	  
+	  Contributed by Mateusz Loskot <mateusz@loskot.net>
+
+2013-08-22 06:35  Sandro Santilli <strk@keybit.net>
+
+	* [r3911] tests/unit/capi/GEOSisValidDetailTest.cpp: Accept
+	  multiple NaN representations (#656)
+
+2013-08-21 13:44  Sandro Santilli <strk@keybit.net>
+
+	* [r3906] CMakeLists.txt, capi/geos_c.h.in, configure.in: Fix CAPI
+	  version to 1.8.2, and fix a missing c++ version too
+
+2013-08-21 13:44  Sandro Santilli <strk@keybit.net>
+
+	* [r3905] NEWS: Fill up 3.4.2 NEWS section so far
+
+2013-08-21 13:44  Sandro Santilli <strk@keybit.net>
+
+	* [r3904] include/geos/geom/BinaryOp.h: Use a double for
+	  PrecisionModel scale, avoiding overflows
+	  
+	  Fixes #652
+
+2013-08-21 11:14  Regina Obe <lr@pcorp.us>
+
+	* [r3903] include/geos/platform.h.in: #650 isnan workaround OS
+	  detection missing NetBSD, DragonFly, Sun nuance
+
+2013-08-19 15:39  Regina Obe <lr@pcorp.us>
+
+	* [r3897] include/geos/Makefile.am: #601 backport trunk fix -- do
+	  not include platform.h , version.h in tar ball, but install
+
+2013-08-17 17:56  Regina Obe <lr@pcorp.us>
+
+	* [r3895] HOWTO_RELEASE, NEWS: update news release date and
+	  reminder to do so for future
+
+2013-08-17 17:47  Regina Obe <lr@pcorp.us>
+
+	* [r3893] capi/geos_c.h.in, configure.in,
+	  include/geos/version.h.vc: bump versions to 3.4.2dev (3.4.2)
+
+2013-08-17 14:06  Regina Obe <lr@pcorp.us>
+
+	* [r3891] CMakeLists.txt, configure.in: other changes in
+	  preparation for 3.4.1 release
+
+2013-08-17 04:22  Regina Obe <lr@pcorp.us>
+
+	* [r3890] ChangeLog, NEWS: update news and changelog in preparation
+	  for geos 3.4.1
+
 2013-08-17 03:09  Regina Obe <lr@pcorp.us>
 
 	* [r3888] CMakeLists.txt: #644 only do svn check if there is a .svn
