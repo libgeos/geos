@@ -25,16 +25,9 @@
 #include <set>
 #include <vector>
 
-#include <geos/geom/Geometry.h>
-#include <geos/geom/GeometryFactory.h>
-#include <geos/geom/Polygon.h>
-#include <geos/geom/GeometryCollection.h>
-#include <geos/geom/Envelope.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/triangulate/quadedge/QuadEdgeLocator.h>
 #include <geos/triangulate/quadedge/Vertex.h>
-
-using namespace geos::geom;
 
 namespace geos {
 
@@ -45,6 +38,7 @@ namespace geom {
 	class GeometryFactory;
 	class Coordinate;
 	class Geometry;
+	class Envelope;
 }
 
 namespace triangulate { //geos.triangulate
@@ -405,11 +399,9 @@ public:
 	/**  
 	 * Gets the cells in the Voronoi diagram for this triangulation.
 	 * The cells are returned as a {@link GeometryCollection} of {@link Polygon}s
-	 * <p>
 	 * The userData of each polygon is set to be the {@link Coordinate}
 	 * of the cell site.  This allows easily associating external 
 	 * data associated with the sites to the cells.
-	 * 
 	 * @param geomFact a geometry factory
 	 * @return a GeometryCollection of Polygons
 	 */
@@ -419,11 +411,9 @@ public:
 	/**  
 	 * Gets a List of {@link Polygon}s for the Voronoi cells 
 	 * of this triangulation.
-	 * <p>
 	 * The userData of each polygon is set to be the {@link Coordinate}
 	 * of the cell site.  This allows easily associating external 
 	 * data associated with the sites to the cells.
-	 * 
 	 * @param geomFact a geometry factory
 	 * @return a List of Polygons
 	 */
@@ -435,7 +425,6 @@ public:
 	 * vertices are a unique set which includes
 	 * all vertices in the subdivision. 
 	 * The frame vertices can be included if required.
-	 * <p>
 	 * This is useful for algorithms which require traversing the 
 	 * subdivision starting at all vertices.
 	 * Returning a quadedge for each vertex
@@ -443,7 +432,6 @@ public:
 	 * the alternative of finding the actual vertices
 	 * using {@link #getVertices} and then locating 
 	 * quadedges attached to them.
-	 * 
 	 * @param includeFrame true if the frame vertices should be included
 	 * @return a collection of QuadEdge with the vertices of the subdivision as their origins
 	 */
@@ -453,17 +441,15 @@ public:
 	/**
 	 * Gets the Voronoi cell around a site specified
 	 * by the origin of a QuadEdge.
-	 * <p>
 	 * The userData of the polygon is set to be the {@link Coordinate}
 	 * of the site.  This allows attaching external 
 	 * data associated with the site to this cell polygon.
-	 * 
 	 * @param qe a quadedge originating at the cell site
 	 * @param geomFact a factory for building the polygon
 	 * @return a polygon indicating the cell extent
 	 */
 
-	Geometry* getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFactory& geomFact);
+	geom::Geometry* getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFactory& geomFact);
 
 
 };
