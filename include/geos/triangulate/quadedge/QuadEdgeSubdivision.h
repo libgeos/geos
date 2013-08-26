@@ -418,7 +418,7 @@ public:
 	 * @return a List of Polygons
 	 */
 
-	std::vector<geom::Geometry*> getVoronoiCellPolygons(const geom::GeometryFactory& geomFact);
+	std::auto_ptr< std::vector<geom::Geometry*> > getVoronoiCellPolygons(const geom::GeometryFactory& geomFact);
 
 	/**
 	 * Gets a collection of {@link QuadEdge}s whose origin

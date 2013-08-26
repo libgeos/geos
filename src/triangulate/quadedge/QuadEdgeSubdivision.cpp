@@ -396,20 +396,12 @@ class
 QuadEdgeSubdivision::TriangleCircumcentreVisitor : public TriangleVisitor
 {
 public:
-	TriangleCircumcentreVisitor()
-	{
-	}
 	void visit(QuadEdge* triEdges[3])
 	{
-		Coordinate a = triEdges[0]->orig().getCoordinate();
-		Coordinate b = triEdges[1]->orig().getCoordinate();
-		Coordinate c = triEdges[2]->orig().getCoordinate();
-
-		//Port circumcenter to geom::triangle.
-		Triangle *triangle = new Triangle(a,b,c);
+		Triangle triangle(triEdges[0]->orig().getCoordinate(),
+				triEdges[1]->orig().getCoordinate(), triEdges[2]->orig().getCoordinate());
 		Coordinate cc;
-		triangle->circumcentre(cc);
-
+		triangle.circumcentre(cc);
 
 		Vertex ccVertex(cc);
 
@@ -506,20 +498,20 @@ QuadEdgeSubdivision::getTriangles( const GeometryFactory &geomFact)
 std::auto_ptr<geom::GeometryCollection> 
 QuadEdgeSubdivision::getVoronoiDiagram(const geom::GeometryFactory& geomFact)
 {
-	std::vector<geom::Geometry*> vorCells = getVoronoiCellPolygons(geomFact);
+	std::auto_ptr< std::vector<geom::Geometry*> > vorCells = getVoronoiCellPolygons(geomFact);
 
-	GeometryCollection *ret = geomFact.createGeometryCollection(vorCells);
+	GeometryCollection *ret = geomFact.createGeometryCollection(*vorCells);
 
 	//free memory::
-	for(std::vector<geom::Geometry*>::iterator it = vorCells.begin() ; it!=vorCells.end() ; ++it)
+	for(std::vector<geom::Geometry*>::iterator it = vorCells->begin() ; it!=vorCells->end() ; ++it)
 	{
 		delete *it;
 	}
-	vorCells.clear();
+	vorCells->clear();
 	return std::auto_ptr<GeometryCollection>(ret);
 }
 
-std::vector<geom::Geometry*>
+std::auto_ptr< std::vector<geom::Geometry*> >
 QuadEdgeSubdivision::getVoronoiCellPolygons(const geom::GeometryFactory& geomFact)
 {
 	std::vector<geom::Geometry*> cells;
@@ -535,7 +527,7 @@ QuadEdgeSubdivision::getVoronoiCellPolygons(const geom::GeometryFactory& geomFac
 		
 		cells.push_back(poly);
 	}
-	return cells;
+	return std::auto_ptr< std::vector<geom::Geometry*> >(&cells);
 }
 Geometry* 
 QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFactory& geomFact)
@@ -574,7 +566,8 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFac
 	return cellPoly->clone();
 }
 
-QuadEdgeSubdivision::QuadEdgeList* QuadEdgeSubdivision::getVertexUniqueEdges(bool includeFrame)
+QuadEdgeSubdivision::QuadEdgeList* 
+QuadEdgeSubdivision::getVertexUniqueEdges(bool includeFrame)
 {
 	QuadEdgeList *edges = new QuadEdgeList();
 	std::set<Vertex> visitedVertices;
