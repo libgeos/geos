@@ -395,31 +395,28 @@ public:
 	 * @return a GeometryCollection of triangular Polygons. The caller takes ownership of the returned object.
 	 */
 	std::auto_ptr<geom::GeometryCollection> getTriangles(const geom::GeometryFactory &geomFact);
-
 	/**  
 	 * Gets the cells in the Voronoi diagram for this triangulation.
 	 * The cells are returned as a {@link GeometryCollection} of {@link Polygon}s
 	 * The userData of each polygon is set to be the {@link Coordinate}
 	 * of the cell site.  This allows easily associating external 
 	 * data associated with the sites to the cells.
+	 *
 	 * @param geomFact a geometry factory
 	 * @return a GeometryCollection of Polygons
 	 */
-
 	std::auto_ptr<geom::GeometryCollection> getVoronoiDiagram(const geom::GeometryFactory& geomFact);
-
 	/**  
 	 * Gets a List of {@link Polygon}s for the Voronoi cells 
 	 * of this triangulation.
 	 * The userData of each polygon is set to be the {@link Coordinate}
 	 * of the cell site.  This allows easily associating external 
 	 * data associated with the sites to the cells.
+	 *
 	 * @param geomFact a geometry factory
 	 * @return a List of Polygons
 	 */
-
 	std::auto_ptr< std::vector<geom::Geometry*> > getVoronoiCellPolygons(const geom::GeometryFactory& geomFact);
-
 	/**
 	 * Gets a collection of {@link QuadEdge}s whose origin
 	 * vertices are a unique set which includes
@@ -432,26 +429,23 @@ public:
 	 * the alternative of finding the actual vertices
 	 * using {@link #getVertices} and then locating 
 	 * quadedges attached to them.
+	 *
 	 * @param includeFrame true if the frame vertices should be included
 	 * @return a collection of QuadEdge with the vertices of the subdivision as their origins
 	 */
-
 	QuadEdgeList* getVertexUniqueEdges(bool includeFrame);
-
 	/**
 	 * Gets the Voronoi cell around a site specified
 	 * by the origin of a QuadEdge.
 	 * The userData of the polygon is set to be the {@link Coordinate}
 	 * of the site.  This allows attaching external 
 	 * data associated with the site to this cell polygon.
+	 *
 	 * @param qe a quadedge originating at the cell site
 	 * @param geomFact a factory for building the polygon
 	 * @return a polygon indicating the cell extent
 	 */
-
 	geom::Geometry* getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFactory& geomFact);
-
-
 };
 
 } //namespace geos.triangulate.quadedge
