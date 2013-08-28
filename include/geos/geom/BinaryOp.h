@@ -446,8 +446,10 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 	// Try reducing precision
 	try
 	{
-		long unsigned int g0scale = g0->getFactory()->getPrecisionModel()->getScale();
-		long unsigned int g1scale = g1->getFactory()->getPrecisionModel()->getScale();
+		long unsigned int g0scale = 
+            static_cast<long unsigned int>(g0->getFactory()->getPrecisionModel()->getScale());
+		long unsigned int g1scale = 
+            static_cast<long unsigned int>(g1->getFactory()->getPrecisionModel()->getScale());
 
 #if GEOS_DEBUG_BINARYOP
 		std::cerr << "Original input scales are: "
@@ -505,6 +507,7 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 #if GEOS_DEBUG_BINARYOP
 		std::cerr << "Reduced: " << ex.what() << std::endl;
 #endif
+        ::geos::ignore_unused_variable_warning(ex);
 	}
 
 #endif
