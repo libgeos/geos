@@ -185,6 +185,7 @@ check_valid(const Geometry& g, const std::string& label, bool doThrow=false, boo
 inline std::auto_ptr<Geometry>
 fix_self_intersections(std::auto_ptr<Geometry> g, const std::string& label)
 {
+  ::geos::ignore_unused_variable_warning(label);
 #ifdef GEOS_DEBUG_BINARYOP
 	std::cerr << label << " fix_self_intersection (UnaryUnion)" << std::endl;
 #endif
