@@ -104,6 +104,9 @@ namespace tut
           delete vct[i];
       }
 
+    private:
+        test_mcidxsnprndr_data(test_mcidxsnprndr_data const&); // = delete
+        test_mcidxsnprndr_data& operator=(test_mcidxsnprndr_data const&); // = delete
     };
 
 

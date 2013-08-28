@@ -93,6 +93,9 @@ public:
 private:
     int             current_test_id_;
     std::string     current_test_name_;
+
+    test_object(test_object const&); // = delete
+    test_object& operator=(test_object const&); // = delete
 };
 
 
