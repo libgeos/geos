@@ -27,6 +27,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/algorithm/CGAlgorithms.h>
+#include <geos/util.h>
 
 #include <vector>
 #include <cassert>
@@ -46,50 +47,50 @@ namespace polygonize { // geos.operation.polygonize
 /*public*/
 EdgeRing *
 EdgeRing::findEdgeRingContaining(EdgeRing *testEr,
-	vector<EdgeRing*> *shellList)
+    vector<EdgeRing*> *shellList)
 {
-	const LinearRing *testRing=testEr->getRingInternal();
-	if ( ! testRing ) return NULL;
-	const Envelope *testEnv=testRing->getEnvelopeInternal();
-	Coordinate testPt=testRing->getCoordinateN(0);
-	EdgeRing *minShell=NULL;
-	const Envelope *minEnv=NULL;
+    const LinearRing *testRing=testEr->getRingInternal();
+    if ( ! testRing ) return NULL;
+    const Envelope *testEnv=testRing->getEnvelopeInternal();
+    Coordinate testPt=testRing->getCoordinateN(0);
+    EdgeRing *minShell=NULL;
+    const Envelope *minEnv=NULL;
 
-	typedef std::vector<EdgeRing*> ERList;
-	for(ERList::size_type i=0, e=shellList->size(); i<e; ++i) {
-		EdgeRing *tryShell=(*shellList)[i];
-		LinearRing *tryRing=tryShell->getRingInternal();
-		const Envelope *tryEnv=tryRing->getEnvelopeInternal();
-		if (minShell!=NULL) minEnv=minShell->getRingInternal()->getEnvelopeInternal();
-		bool isContained=false;
+    typedef std::vector<EdgeRing*> ERList;
+    for(ERList::size_type i=0, e=shellList->size(); i<e; ++i) {
+        EdgeRing *tryShell=(*shellList)[i];
+        LinearRing *tryRing=tryShell->getRingInternal();
+        const Envelope *tryEnv=tryRing->getEnvelopeInternal();
+        if (minShell!=NULL) minEnv=minShell->getRingInternal()->getEnvelopeInternal();
+        bool isContained=false;
 
-		// the hole envelope cannot equal the shell envelope
+        // the hole envelope cannot equal the shell envelope
 
-		if (tryEnv->equals(testEnv)) continue;
+        if (tryEnv->equals(testEnv)) continue;
 
-		const CoordinateSequence *tryCoords =
-			tryRing->getCoordinatesRO();
+        const CoordinateSequence *tryCoords =
+            tryRing->getCoordinatesRO();
 
-		if ( tryEnv->contains(testEnv) ) {
+        if ( tryEnv->contains(testEnv) ) {
 
-			// TODO: don't copy testPt !
-			testPt = ptNotInList(testRing->getCoordinatesRO(), tryCoords);
+            // TODO: don't copy testPt !
+            testPt = ptNotInList(testRing->getCoordinatesRO(), tryCoords);
 
-			if ( CGAlgorithms::isPointInRing(testPt, tryCoords) ) {
-				isContained=true;
-			}
+            if ( CGAlgorithms::isPointInRing(testPt, tryCoords) ) {
+                isContained=true;
+            }
 
     }
 
-		// check if this new containing ring is smaller
-		// than the current minimum ring
-		if (isContained) {
-			if (minShell==NULL || minEnv->contains(tryEnv)) {
-				minShell=tryShell;
-			}
-		}
-	}
-	return minShell;
+        // check if this new containing ring is smaller
+        // than the current minimum ring
+        if (isContained) {
+            if (minShell==NULL || minEnv->contains(tryEnv)) {
+                minShell=tryShell;
+            }
+        }
+    }
+    return minShell;
 }
 
 /*public static*/
@@ -124,125 +125,126 @@ EdgeRing::isInList(const Coordinate& pt,
 
 /*public*/
 EdgeRing::EdgeRing(const GeometryFactory *newFactory)
-	:
-	factory(newFactory),
-	ring(0),
-	ringPts(0),
-	holes(0)
+    :
+    factory(newFactory),
+    ring(0),
+    ringPts(0),
+    holes(0)
 {
 #ifdef DEBUG_ALLOC
-	cerr<<"["<<this<<"] EdgeRing(factory)"<<endl;
+    cerr<<"["<<this<<"] EdgeRing(factory)"<<endl;
 #endif // DEBUG_ALLOC
 }
 
 EdgeRing::~EdgeRing()
 {
 #ifdef DEBUG_ALLOC
-	cerr<<"["<<this<<"] ~EdgeRing()"<<endl;
+    cerr<<"["<<this<<"] ~EdgeRing()"<<endl;
 #endif // DEBUG_ALLOC
-	if ( holes )
-	{
-		for (GeomVect::size_type i=0, e=holes->size(); i<e; ++i)
-			delete (*holes)[i];
-		delete holes;
-	}
-	delete ring;
-	delete ringPts;
+    if ( holes )
+    {
+        for (GeomVect::size_type i=0, e=holes->size(); i<e; ++i)
+            delete (*holes)[i];
+        delete holes;
+    }
+    delete ring;
+    delete ringPts;
 }
 
 /*public*/
 void
 EdgeRing::add(const DirectedEdge *de){
-	deList.push_back(de);
+    deList.push_back(de);
 }
 
 /*public*/
 bool
 EdgeRing::isHole(){
-	getRingInternal();
-	return CGAlgorithms::isCCW(ring->getCoordinatesRO());
+    getRingInternal();
+    return CGAlgorithms::isCCW(ring->getCoordinatesRO());
 }
 
 /*public*/
 void
 EdgeRing::addHole(LinearRing *hole)
 {
-	if (holes==NULL)
-		holes=new vector<Geometry*>();
-	holes->push_back(hole);
+    if (holes==NULL)
+        holes=new vector<Geometry*>();
+    holes->push_back(hole);
 }
 
 /*public*/
 Polygon*
 EdgeRing::getPolygon()
 {
-	Polygon *poly=factory->createPolygon(ring, holes);
-	ring=NULL;
-	holes=NULL;
-	return poly;
+    Polygon *poly=factory->createPolygon(ring, holes);
+    ring=NULL;
+    holes=NULL;
+    return poly;
 }
 
 /*public*/
 bool
 EdgeRing::isValid()
 {
-	if ( ! getRingInternal() ) return false; // computes cached ring
-	return ring->isValid();
+    if ( ! getRingInternal() ) return false; // computes cached ring
+    return ring->isValid();
 }
 
 /*private*/
 CoordinateSequence*
 EdgeRing::getCoordinates()
 {
-	if (ringPts==NULL)
-	{
-		ringPts=factory->getCoordinateSequenceFactory()->create(NULL);
-		for (DeList::size_type i=0, e=deList.size(); i<e; ++i) {
-			const DirectedEdge *de=deList[i];
-			assert(dynamic_cast<PolygonizeEdge*>(de->getEdge()));
-			PolygonizeEdge *edge=static_cast<PolygonizeEdge*>(de->getEdge());
-			addEdge(edge->getLine()->getCoordinatesRO(),
-				de->getEdgeDirection(), ringPts);
-		}
-	}
-	return ringPts;
+    if (ringPts==NULL)
+    {
+        ringPts=factory->getCoordinateSequenceFactory()->create(NULL);
+        for (DeList::size_type i=0, e=deList.size(); i<e; ++i) {
+            const DirectedEdge *de=deList[i];
+            assert(dynamic_cast<PolygonizeEdge*>(de->getEdge()));
+            PolygonizeEdge *edge=static_cast<PolygonizeEdge*>(de->getEdge());
+            addEdge(edge->getLine()->getCoordinatesRO(),
+                de->getEdgeDirection(), ringPts);
+        }
+    }
+    return ringPts;
 }
 
 /*public*/
 LineString*
 EdgeRing::getLineString()
 {
-	getCoordinates();
-	return factory->createLineString(*ringPts);
+    getCoordinates();
+    return factory->createLineString(*ringPts);
 }
 
 /*public*/
 LinearRing *
 EdgeRing::getRingInternal()
 {
-	if (ring!=NULL) return ring;
+    if (ring!=NULL) return ring;
 
-	getCoordinates();
-	try {
-		ring=factory->createLinearRing(*ringPts);
-	} catch (const std::exception& e) {
+    getCoordinates();
+    try {
+        ring=factory->createLinearRing(*ringPts);
+    } catch (const std::exception& e) {
 #if GEOS_DEBUG
-		// FIXME: print also ringPts
-		std::cerr << "EdgeRing::getRingInternal: "
-		          << e.what()
-		          << endl;
+        // FIXME: print also ringPts
+        std::cerr << "EdgeRing::getRingInternal: "
+                  << e.what()
+                  << endl;
 #endif
-	}
-	return ring;
+        ::geos::ignore_unused_variable_warning(e);
+    }
+    return ring;
 }
 
 /*public*/
 LinearRing *
 EdgeRing::getRingOwnership()
 {
-	LinearRing *ret = getRingInternal();
-	ring = NULL;
-	return ret;
+    LinearRing *ret = getRingInternal();
+    ring = NULL;
+    return ret;
 }
 
 /*private*/
