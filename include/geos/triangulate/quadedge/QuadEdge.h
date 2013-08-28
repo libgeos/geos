@@ -110,7 +110,7 @@ private:
 	QuadEdge();
 
 public:
-	~QuadEdge();
+	virtual ~QuadEdge();
 
 	/**
 	 * Free the QuadEdge quartet associated with this QuadEdge by a connect()

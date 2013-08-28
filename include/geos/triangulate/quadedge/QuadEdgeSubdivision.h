@@ -112,7 +112,7 @@ public:
 	 */
 	QuadEdgeSubdivision(const geom::Envelope &env, double tolerance);
 
-	~QuadEdgeSubdivision();
+	virtual ~QuadEdgeSubdivision();
 
 private:
 	virtual void createFrame(const geom::Envelope &env);
