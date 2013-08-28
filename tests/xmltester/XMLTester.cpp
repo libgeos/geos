@@ -799,7 +799,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 			expected_result=printGeom(gRes.get());
 
 			if ( testValidOutput )
-				success &= testValid(gRealRes.get(), "result");
+				success &= int(testValid(gRealRes.get(), "result"));
 		}
 
 		else if (opName=="union")
@@ -823,7 +823,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 			expected_result=printGeom(gRes.get());
 
 			if ( testValidOutput )
-				success &= testValid(gRealRes.get(), "result");
+				success &= int(testValid(gRealRes.get(), "result"));
 		}
 
 		else if (opName=="difference")
@@ -846,7 +846,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 			expected_result=printGeom(gRes.get());
 
 			if ( testValidOutput )
-				success &= testValid(gRealRes.get(), "result");
+				success &= int(testValid(gRealRes.get(), "result"));
 		}
 
 		else if (opName=="symdifference")
@@ -868,7 +868,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 			expected_result=printGeom(gRes.get());
 
 			if ( testValidOutput )
-				success &= testValid(gRealRes.get(), "result");
+				success &= int(testValid(gRealRes.get(), "result"));
 		}
 
 		else if (opName=="intersects")
@@ -943,7 +943,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 			expected_result=printGeom(gRes.get());
 
 			if ( testValidOutput )
-				success &= testValid(gRealRes.get(), "result");
+				success &= int(testValid(gRealRes.get(), "result"));
 		}
 
 		else if (opName=="getcentroid")
@@ -966,7 +966,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 			expected_result=printGeom(gRes.get());
 
 			if ( testValidOutput ) 
-				success &= testValid(gRealRes.get(), "result");
+				success &= int(testValid(gRealRes.get(), "result"));
 		}
 
 		else if (opName=="issimple")
@@ -998,7 +998,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 			expected_result=printGeom(gRes.get());
 
 			if ( testValidOutput ) 
-				success &= testValid(gRealRes.get(), "result");
+				success &= int(testValid(gRealRes.get(), "result"));
 		}
 
 		else if (opName=="buffer")
@@ -1035,7 +1035,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 			expected_result=printGeom(gRes.get());
 
 			if ( testValidOutput )
-				success &= testValid(gRealRes.get(), "result");
+				success &= int(testValid(gRealRes.get(), "result"));
 		}
 
 		else if (opName=="buffersinglesided")
@@ -1080,7 +1080,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 			expected_result=printGeom(gRes.get());
 
 			if ( testValidOutput )
-				success &= testValid(gRealRes.get(), "result");
+				success &= int(testValid(gRealRes.get(), "result"));
 		}
 
 		else if (opName=="buffermitredjoin")
@@ -1118,7 +1118,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 			expected_result=printGeom(gRes.get());
 
 			if ( testValidOutput ) 
-				success &= testValid(gRealRes.get(), "result");
+				success &= int(testValid(gRealRes.get(), "result"));
 		}
 
 
@@ -1140,7 +1140,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 			expected_result=printGeom(gRes.get());
 
 			if ( testValidOutput ) 
-				success &= testValid(gRealRes.get(), "result");
+				success &= int(testValid(gRealRes.get(), "result"));
 		}
 
 		else if (opName=="iswithindistance")
@@ -1182,7 +1182,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 			expected_result=printGeom(gRes.get());
 
 			if ( testValidOutput )
-				success &= testValid(gRealRes.get(), "result");
+				success &= int(testValid(gRealRes.get(), "result"));
 		}
 
 		else if (opName=="linemerge")
@@ -1209,7 +1209,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 			expected_result=printGeom(gRes.get());
 
 			if ( testValidOutput ) 
-				success &= testValid(gRealRes.get(), "result");
+				success &= int(testValid(gRealRes.get(), "result"));
 		}
 
 		else if (opName=="areatest")
@@ -1236,7 +1236,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 
 			if ( testValidOutput )
 			{
-				validOut &= testValid(gI.get(), "areatest intersection");
+				validOut &= int(testValid(gI.get(), "areatest intersection"));
 			}
 
 			if ( verbose > 1 )
@@ -1253,7 +1253,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 
 			if ( testValidOutput )
 			{
-				validOut &= testValid(gI.get(), "areatest difference(a,b)");
+				validOut &= int(testValid(gI.get(), "areatest difference(a,b)"));
 			}
 
 			if ( verbose > 1 )
@@ -1270,7 +1270,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 
 			if ( testValidOutput )
 			{
-				validOut &= testValid(gI.get(), "areatest difference(b,a)");
+				validOut &= int(testValid(gI.get(), "areatest difference(b,a)"));
 			}
 
 			if ( verbose > 1 )
@@ -1287,7 +1287,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 
 			if ( testValidOutput )
 			{
-				validOut &= testValid(gI.get(), "areatest symdifference");
+				validOut &= int(testValid(gI.get(), "areatest symdifference"));
 			}
 
 			if ( verbose > 1 )
