@@ -34,7 +34,6 @@ notifications:
     email:
         recipients:
             #- geos-devel@lists.osgeo.org # TODO: whitelist this e-mail
-            - mateusz@loskot.net
         on_success: change
         on_failure: always
 
