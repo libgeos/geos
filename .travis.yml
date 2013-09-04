@@ -1,6 +1,5 @@
 # .travis.yml - Travis CI service confiuration for GEOS
 #
-# Copyright (C) 2013 Mateusz Loskot <mateusz@loskot.net>
 #
 # This is free software; you can redistribute and/or modify it under
 # the terms of the GNU Lesser General Public Licence as published
@@ -34,7 +33,6 @@ notifications:
     email:
         recipients:
             #- geos-devel@lists.osgeo.org # TODO: whitelist this e-mail
-            - mateusz@loskot.net
         on_success: change
         on_failure: always
 
