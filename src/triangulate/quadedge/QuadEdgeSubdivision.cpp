@@ -500,21 +500,15 @@ QuadEdgeSubdivision::getVoronoiDiagram(const geom::GeometryFactory& geomFact)
 {
 	std::auto_ptr< std::vector<geom::Geometry*> > vorCells = getVoronoiCellPolygons(geomFact);
 
-	GeometryCollection *ret = geomFact.createGeometryCollection(*vorCells);
+	GeometryCollection *ret = geomFact.createGeometryCollection(vorCells.release());
 
-	//free memory::
-	for(std::vector<geom::Geometry*>::iterator it = vorCells->begin() ; it!=vorCells->end() ; ++it)
-	{
-		delete *it;
-	}
-	vorCells->clear();
 	return std::auto_ptr<GeometryCollection>(ret);
 }
 
 std::auto_ptr< std::vector<geom::Geometry*> >
 QuadEdgeSubdivision::getVoronoiCellPolygons(const geom::GeometryFactory& geomFact)
 {
-	std::vector<geom::Geometry*> cells;
+	std::auto_ptr< std::vector<geom::Geometry*> > cells(new std::vector<geom::Geometry*>);
 	TriangleCircumcentreVisitor* tricircumVisitor = new TriangleCircumcentreVisitor();
 	visitTriangles((TriangleVisitor*)tricircumVisitor, true);
 
@@ -525,9 +519,9 @@ QuadEdgeSubdivision::getVoronoiCellPolygons(const geom::GeometryFactory& geomFac
 		QuadEdge *qe = *it;
 		Geometry *poly = getVoronoiCellPolygon(qe,geomFact);
 		
-		cells.push_back(poly);
+		cells->push_back(poly);
 	}
-	return std::auto_ptr< std::vector<geom::Geometry*> >(&cells);
+	return cells;
 }
 Geometry* 
 QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFactory& geomFact)

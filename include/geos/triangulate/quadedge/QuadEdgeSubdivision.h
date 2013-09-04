@@ -395,6 +395,7 @@ public:
 	 * @return a GeometryCollection of triangular Polygons. The caller takes ownership of the returned object.
 	 */
 	std::auto_ptr<geom::GeometryCollection> getTriangles(const geom::GeometryFactory &geomFact);
+	
 	/**  
 	 * Gets the cells in the Voronoi diagram for this triangulation.
 	 * The cells are returned as a {@link GeometryCollection} of {@link Polygon}s
@@ -406,6 +407,7 @@ public:
 	 * @return a GeometryCollection of Polygons
 	 */
 	std::auto_ptr<geom::GeometryCollection> getVoronoiDiagram(const geom::GeometryFactory& geomFact);
+	
 	/**  
 	 * Gets a List of {@link Polygon}s for the Voronoi cells 
 	 * of this triangulation.
@@ -417,6 +419,7 @@ public:
 	 * @return a List of Polygons
 	 */
 	std::auto_ptr< std::vector<geom::Geometry*> > getVoronoiCellPolygons(const geom::GeometryFactory& geomFact);
+	
 	/**
 	 * Gets a collection of {@link QuadEdge}s whose origin
 	 * vertices are a unique set which includes
@@ -434,6 +437,7 @@ public:
 	 * @return a collection of QuadEdge with the vertices of the subdivision as their origins
 	 */
 	QuadEdgeList* getVertexUniqueEdges(bool includeFrame);
+	
 	/**
 	 * Gets the Voronoi cell around a site specified
 	 * by the origin of a QuadEdge.
