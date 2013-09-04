@@ -1,5 +1,5 @@
 Changes in 3.3.9
-2012-MM-DD
+2012-09-04
 
 - Bug fixes / improvements
     - Fix OffsetCurve op in presence of duplicated vertices (#602)
