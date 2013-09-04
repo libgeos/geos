@@ -35,7 +35,7 @@
 #endif
 
 #ifndef GEOS_VERSION_PATCH
-#define GEOS_VERSION_PATCH 8
+#define GEOS_VERSION_PATCH 9
 #endif
 
 #ifndef GEOS_VERSION
