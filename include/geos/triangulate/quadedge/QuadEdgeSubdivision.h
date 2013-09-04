@@ -436,7 +436,7 @@ public:
 	 * @param includeFrame true if the frame vertices should be included
 	 * @return a collection of QuadEdge with the vertices of the subdivision as their origins
 	 */
-	QuadEdgeList* getVertexUniqueEdges(bool includeFrame);
+	std::auto_ptr<QuadEdgeSubdivision::QuadEdgeList> getVertexUniqueEdges(bool includeFrame);
 	
 	/**
 	 * Gets the Voronoi cell around a site specified
@@ -449,7 +449,7 @@ public:
 	 * @param geomFact a factory for building the polygon
 	 * @return a polygon indicating the cell extent
 	 */
-	geom::Geometry* getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFactory& geomFact);
+	std::auto_ptr<geom::Geometry> getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFactory& geomFact);
 };
 
 } //namespace geos.triangulate.quadedge

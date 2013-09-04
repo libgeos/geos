@@ -499,10 +499,7 @@ std::auto_ptr<geom::GeometryCollection>
 QuadEdgeSubdivision::getVoronoiDiagram(const geom::GeometryFactory& geomFact)
 {
 	std::auto_ptr< std::vector<geom::Geometry*> > vorCells = getVoronoiCellPolygons(geomFact);
-
-	GeometryCollection *ret = geomFact.createGeometryCollection(vorCells.release());
-
-	return std::auto_ptr<GeometryCollection>(ret);
+	return std::auto_ptr<GeometryCollection>(geomFact.createGeometryCollection(vorCells.release()));
 }
 
 std::auto_ptr< std::vector<geom::Geometry*> >
@@ -512,18 +509,20 @@ QuadEdgeSubdivision::getVoronoiCellPolygons(const geom::GeometryFactory& geomFac
 	TriangleCircumcentreVisitor* tricircumVisitor = new TriangleCircumcentreVisitor();
 	visitTriangles((TriangleVisitor*)tricircumVisitor, true);
 
-	QuadEdgeList *edges = getVertexUniqueEdges(false);
+	std::auto_ptr<QuadEdgeSubdivision::QuadEdgeList> edges = getVertexUniqueEdges(false);
 
 	for(QuadEdgeSubdivision::QuadEdgeList::iterator it=edges->begin() ; it!=edges->end() ; ++it)
 	{
 		QuadEdge *qe = *it;
-		Geometry *poly = getVoronoiCellPolygon(qe,geomFact);
-		
-		cells->push_back(poly);
+		std::auto_ptr<geom::Geometry> poly = getVoronoiCellPolygon(qe,geomFact);
+
+		cells->push_back(poly.get());
+		poly.release();
 	}
+	edges.release();
 	return cells;
 }
-Geometry* 
+std::auto_ptr<geom::Geometry>
 QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFactory& geomFact)
 {
 	std::vector<Coordinate> cellPts;
@@ -548,22 +547,20 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFac
 	}
 	
 	std::auto_ptr<Coordinate::Vect> pts = coordList.toCoordinateArray();
-	std::vector<Coordinate> *pts_pass = pts.get();
-	geom::CoordinateArraySequence *pts_seq = new geom::CoordinateArraySequence(pts_pass);
-	geom::Polygon *cellPoly = geomFact.createPolygon(geomFact.createLinearRing(pts_seq),NULL);
+	geom::Polygon *cellPoly = 
+		geomFact.createPolygon(geomFact.createLinearRing(new geom::CoordinateArraySequence(pts.get())),NULL);
 
 	Vertex v = startQE->orig();
 	Coordinate c(0,0);
 	c = v.getCoordinate();
 	cellPoly->setUserData(reinterpret_cast<void*>(&c));
-	
-	return cellPoly->clone();
+	return std::auto_ptr<geom::Geometry>(cellPoly->clone());
 }
 
-QuadEdgeSubdivision::QuadEdgeList* 
+std::auto_ptr<QuadEdgeSubdivision::QuadEdgeList>
 QuadEdgeSubdivision::getVertexUniqueEdges(bool includeFrame)
 {
-	QuadEdgeList *edges = new QuadEdgeList();
+	std::auto_ptr<QuadEdgeSubdivision::QuadEdgeList> edges(new QuadEdgeList());
 	std::set<Vertex> visitedVertices;
 	for(QuadEdgeSubdivision::QuadEdgeList::iterator it=quadEdges.begin() ; it!=quadEdges.end() ; ++it)
 	{
