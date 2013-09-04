@@ -1,3 +1,166 @@
+2013-09-04 21:05  Sandro Santilli <strk@keybit.net>
+
+	* [r3937] NEWS: Update NEWS file for 3.3.9
+
+2013-09-04 21:04  Sandro Santilli <strk@keybit.net>
+
+	* [r3936] configure.in, include/geos/version.h.vc: Set version to
+	  final
+
+2013-08-21 15:48  Sandro Santilli <strk@keybit.net>
+
+	* [r3909] tests/unit/capi/GEOSisValidDetailTest.cpp: Accept yet
+	  another NaN representation (#656)
+
+2013-08-19 15:45  robe
+
+	* [r3898] include/geos/Makefile.am: #601 backport trunk fix -- do
+	  not include platform.h , version.h in tar ball, but install
+
+2013-08-16 15:29  Sandro Santilli <strk@keybit.net>
+
+	* [r3887] src/operation/overlay/snap/LineStringSnapper.cpp,
+	  tests/unit/capi/GEOSSnapTest.cpp: Fix assertion failure in
+	  snapping code (#649)
+	  
+	  The bug affected attempts to snapping lines to the points
+	  of a rectangle with a side smaller than the tolerance.
+
+2013-08-11 11:43  Sandro Santilli <strk@keybit.net>
+
+	* [r3881] include/geos/platform.h.in,
+	  tests/xmltester/testrunner.sh, tools/geos-config.in: Fix
+	  eol-style property for scripts (#645)
+
+2013-08-04 17:43  robe
+
+	* [r3865] include/geos/Makefile.am: #601 do not incude platform.h
+	  in tar ball.
+
+2013-08-02 22:33  robe
+
+	* [r3859] src/Makefile.vc: #607 Makefile.vc 'clean' step leaks obj
+	  files
+
+2013-07-17 16:11  Sandro Santilli <strk@keybit.net>
+
+	* [r3847] NEWS, src/operation/buffer/BufferInputLineSimplifier.cpp,
+	  src/operation/buffer/OffsetCurveBuilder.cpp,
+	  src/operation/buffer/OffsetSegmentGenerator.cpp,
+	  tests/unit/capi/GEOSOffsetCurveTest.cpp: Fix OffsetCurve op in
+	  presence of duplicated vertices (#602)
+
+2013-07-17 12:57  Sandro Santilli <strk@keybit.net>
+
+	* [r3843] NEWS, src/simplify/LineSegmentIndex.cpp: Fix
+	  LineSegmentVisitor copy ctor (#636)
+
+2013-07-15 15:39  Sandro Santilli <strk@keybit.net>
+
+	* [r3842] NEWS: Add NEWS item about multigeom and SRIDs
+
+2013-07-15 15:30  Sandro Santilli <strk@keybit.net>
+
+	* [r3841] src/geom/GeometryCollection.cpp,
+	  tests/unit/io/WKBWriterTest.cpp: Drop SRID from
+	  geometrycollection elements (#583)
+
+2013-07-12 12:33  Sandro Santilli <strk@keybit.net>
+
+	* [r3838] tests/unit/geom/Geometry/coversTest.cpp: Add test for
+	  #580 (successful)
+
+2013-07-05 14:43  Sandro Santilli <strk@keybit.net>
+
+	* [r3828] NEWS, include/geos/linearref/Makefile.am: Fix install
+	  location of linearref headers (#624)
+
+2013-06-26 16:22  Sandro Santilli <strk@keybit.net>
+
+	* [r3825] NEWS, src/noding/snapround/HotPixel.cpp,
+	  tests/unit/noding/snapround/HotPixelTest.cpp: Fix typo in
+	  HotPixel corners initializer
+	  
+	  Patch by Mickael BORNE <mickael.borne@ign.fr>
+
+2013-06-11 12:36  Sandro Santilli <strk@keybit.net>
+
+	* [r3815] NEWS, include/geos/profiler.h: Fix for mingw64 compile,
+	  by Regina Obe (#630)
+
+2013-06-03 07:41  Sandro Santilli <strk@keybit.net>
+
+	* [r3804] NEWS, src/geom/prep/PreparedPolygonIntersects.cpp:
+	  Short-circuit prepared polygon/point intersection
+	  
+	  Reduces memory fragmentation for area-puntal ops
+
+2013-05-30 21:00  Sandro Santilli <strk@keybit.net>
+
+	* [r3802] .gitignore: Ignore some service files
+
+2013-05-30 20:27  Sandro Santilli <strk@keybit.net>
+
+	* [r3801] NEWS,
+	  include/geos/operation/overlay/snap/LineStringSnapper.h,
+	  src/operation/overlay/snap/LineStringSnapper.cpp,
+	  tests/unit/capi/GEOSSnapTest.cpp: Improve snap algorithm reducing
+	  likelyhood of invalid output
+	  
+	  - Snap input vertices to closest snap point (#629)
+	  - Do not snap segments to external points (#501)
+	  - Never snap multiple vertices to the same snap point
+	  
+	  Work funded by Tuscany Region - SITA. Contract "Support to the
+	  use
+	  of GFOSS (Geographic Free and Open Source Software) Desktop
+	  tools"
+	  (CIG Z3B06FA6D7).
+
+2013-03-08 18:01  Sandro Santilli <strk@keybit.net>
+
+	* [r3788] NEWS, include/geos/algorithm/LineIntersector.h,
+	  src/algorithm/LineIntersector.cpp,
+	  tests/unit/algorithm/RobustLineIntersectionTest.cpp: Fix
+	  RobustLineIntersector handling of invalid intersection points
+	  (#622)
+	  
+	  Adds new testcases. Many of them fail, probably due to the lack
+	  of
+	  double double use, but one of them only fails with the old
+	  RobustLineIntersector heuristic handling invalid intersection
+	  points
+
+2013-03-08 13:29  Sandro Santilli <strk@keybit.net>
+
+	* [r3783] NEWS: Put NEWS entries for 3.3.9 where they belong
+
+2013-03-08 13:22  Sandro Santilli <strk@keybit.net>
+
+	* [r3782] NEWS, include/geos/algorithm/InteriorPointArea.h,
+	  src/algorithm/InteriorPointArea.cpp,
+	  tests/unit/capi/GEOSPointOnSurfaceTest.cpp,
+	  tests/xmltester/tests/general/TestInteriorPoint.xml: Fix
+	  GEOSPointOnSurface returning point on boundary (#623)
+	  
+	  Ports SafeBisector for InteriorPointArea from JTS
+
+2013-03-05 14:55  Sandro Santilli <strk@keybit.net>
+
+	* [r3780] NEWS, capi/geos_ts_c.cpp: Speedup GEOSWKBWriter_read_r
+	  (#621)
+	  
+	  Patch by Daniel Zeitlin
+
+2013-02-28 12:01  Sandro Santilli <strk@keybit.net>
+
+	* [r3777] capi/geos_c.h.in, configure.in,
+	  include/geos/version.h.vc: Prepare for 3.3.9
+
+2013-02-28 10:38  Sandro Santilli <strk@keybit.net>
+
+	* [r3775] ChangeLog, NEWS, configure.in: Release 3.3.8
+
 2013-02-28 09:45  Sandro Santilli <strk@keybit.net>
 
 	* [r3774] NEWS, src/algorithm/CentroidArea.cpp,
