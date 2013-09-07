@@ -9,6 +9,7 @@
 #include <geos/triangulate/quadedge/QuadEdge.h>
 #include <geos/triangulate/quadedge/QuadEdgeSubdivision.h>
 #include <geos/triangulate/DelaunayTriangulationBuilder.h>
+#include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -33,7 +34,14 @@ namespace tut
 	// dummy data, not used
 	struct test_quadedgesub_data
 	{
+		geos::geom::PrecisionModel pm;
+		geos::geom::GeometryFactory gf;
+		geos::io::WKTReader reader;
 		test_quadedgesub_data()
+      :
+			pm(),
+			gf(&pm),
+			reader(gf)
 		{
 		}
 	};
@@ -74,7 +82,6 @@ namespace tut
 	template<>
 	void object::test<2>()
 	{
-		WKTReader reader;
 		Geometry* sites;
 		QuadEdgeSubdivision* subdiv;
 		sites = reader.read("MULTIPOINT ((150 200), (180 270), (275 163))");
