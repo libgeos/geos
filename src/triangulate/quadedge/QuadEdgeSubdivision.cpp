@@ -546,14 +546,14 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFac
 	}
 	
 	std::auto_ptr<Coordinate::Vect> pts = coordList.toCoordinateArray();
-	geom::Polygon *cellPoly = 
-		geomFact.createPolygon(geomFact.createLinearRing(new geom::CoordinateArraySequence(pts.release())),NULL);
+	std::auto_ptr<geom::Geometry> cellPoly( 
+		geomFact.createPolygon(geomFact.createLinearRing(new geom::CoordinateArraySequence(pts.release())),NULL));
 
 	Vertex v = startQE->orig();
 	Coordinate c(0,0);
 	c = v.getCoordinate();
 	cellPoly->setUserData(reinterpret_cast<void*>(&c));
-	return std::auto_ptr<geom::Geometry>(cellPoly);
+	return cellPoly;
 }
 
 std::auto_ptr<QuadEdgeSubdivision::QuadEdgeList>
