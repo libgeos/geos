@@ -99,6 +99,11 @@ namespace tut
 		polys->normalize();
 		expected->normalize();
 		ensure(polys->equalsExact(expected, 1e-7));
+		delete siteCoords;
+		delete sites;
+		delete subdiv;
+		delete vertices;
+		delete expected;
 //		ensure(polys->getCoordinateDimension() == expected->getCoordinateDimension());
 	}
 

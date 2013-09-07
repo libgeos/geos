@@ -516,10 +516,9 @@ QuadEdgeSubdivision::getVoronoiCellPolygons(const geom::GeometryFactory& geomFac
 		QuadEdge *qe = *it;
 		std::auto_ptr<geom::Geometry> poly = getVoronoiCellPolygon(qe,geomFact);
 
-		cells->push_back(poly.get());
-		poly.release();
+		cells->push_back(poly.release());
 	}
-	edges.release();
+	delete tricircumVisitor;
 	return cells;
 }
 std::auto_ptr<geom::Geometry>
@@ -548,13 +547,14 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFac
 	
 	std::auto_ptr<Coordinate::Vect> pts = coordList.toCoordinateArray();
 	geom::Polygon *cellPoly = 
-		geomFact.createPolygon(geomFact.createLinearRing(new geom::CoordinateArraySequence(pts.get())),NULL);
+		geomFact.createPolygon(geomFact.createLinearRing(new geom::CoordinateArraySequence(pts.release())),NULL);
 
+	std::auto_ptr<geom::Geometry> ret_cellPoly(cellPoly->clone());
 	Vertex v = startQE->orig();
 	Coordinate c(0,0);
 	c = v.getCoordinate();
 	cellPoly->setUserData(reinterpret_cast<void*>(&c));
-	return std::auto_ptr<geom::Geometry>(cellPoly->clone());
+	return ret_cellPoly;
 }
 
 std::auto_ptr<QuadEdgeSubdivision::QuadEdgeList>
