@@ -122,7 +122,7 @@ std::auto_ptr<geom::GeometryCollection>
 VoronoiDiagramBuilder::clipGeometryCollection(const geom::GeometryCollection& geom, const geom::Envelope& clipEnv)
 {
 	geom::Geometry* clipPoly = geom.getFactory()->toGeometry(&clipEnv);
-	std::vector<Geometry*> clipped;
+	std::auto_ptr< std::vector<Geometry*> >clipped(new std::vector<Geometry*>);
 	for(int i=0 ; i < geom.getNumGeometries() ; i++)
 	{
 		Geometry* g = (Geometry*)geom.getGeometryN(i);
@@ -140,11 +140,11 @@ VoronoiDiagramBuilder::clipGeometryCollection(const geom::GeometryCollection& ge
 
 		if(result!=NULL && !result->isEmpty() )
 		{
-			clipped.push_back(result);
+			clipped->push_back(result);
 		}
 	}
 	delete clipPoly;
-	return std::auto_ptr<GeometryCollection>(geom.getFactory()->createGeometryCollection(clipped));
+	return std::auto_ptr<GeometryCollection>(geom.getFactory()->createGeometryCollection(clipped.release()));
 }
 
 } //namespace geos.triangulate
