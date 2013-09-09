@@ -150,14 +150,14 @@ typedef struct GEOSContextHandle_HS
     int WKBByteOrder;
     int initialized;
 
-    GEOSContextHandle_HS(GEOSMessageHandler_r nf, void *nd, void(*free_nd)(void*), GEOSMessageHandler_r ef, void *ed, void(*free_ed)(void*))
+    GEOSContextHandle_HS()
     {
       memset(msgBuffer, 0, sizeof(msgBuffer));
       geomFactory = GeometryFactory::getDefaultInstance();
       WKBOutputDims = 2;
       WKBByteOrder = getMachineByteOrder();
-      setNoticeHandler(nf, nd, free_nd);
-      setErrorHandler(ef, ed, free_ed);
+      setNoticeHandler(NULL);
+      setErrorHandler(NULL);
       initialized = 1;
     }
 
@@ -242,7 +242,7 @@ typedef struct GEOSContextHandle_HS
         if (noticeMessageOld) {
           noticeMessageOld("%s", msgBuffer);
         } else {
-          noticeMessageNew(this, noticeData, "%s", msgBuffer);
+          noticeMessageNew(this, noticeData, msgBuffer);
         }
       }
     }
@@ -263,7 +263,7 @@ typedef struct GEOSContextHandle_HS
         if (errorMessageOld) {
           errorMessageOld("%s", msgBuffer);
         } else {
-          errorMessageNew(this, errorData, "%s", msgBuffer);
+          errorMessageNew(this, errorData, msgBuffer);
         }
       }
     }
@@ -322,7 +322,7 @@ extern "C" {
 GEOSContextHandle_t
 initGEOS_r(GEOSMessageHandler nf, GEOSMessageHandler ef)
 {
-  GEOSContextHandle_t handle = initGEOS_r_v2(NULL, NULL, NULL, NULL, NULL, NULL);
+  GEOSContextHandle_t handle = GEOS_init_r();
 
   if (0 != handle) {
       GEOSContext_setNoticeHandler_r(handle, nf);
@@ -333,9 +333,9 @@ initGEOS_r(GEOSMessageHandler nf, GEOSMessageHandler ef)
 }
 
 GEOSContextHandle_t
-initGEOS_r_v2(GEOSMessageHandler_r nf, void *nd, void(*free_nd)(void*), GEOSMessageHandler_r ef, void *ed, void(*free_ed)(void*))
+GEOS_init_r()
 {
-    GEOSContextHandleInternal_t *handle = new GEOSContextHandleInternal_t(nf, nd, free_nd, ef, ed, free_ed);
+    GEOSContextHandleInternal_t *handle = new GEOSContextHandleInternal_t();
 
     geos::util::Interrupt::cancel();
 
@@ -369,7 +369,7 @@ GEOSContext_setErrorHandler_r(GEOSContextHandle_t extHandle, GEOSMessageHandler 
 }
 
 GEOSMessageHandler_r
-GEOSContext_setNoticeHandler_r_v2(GEOSContextHandle_t extHandle, GEOSMessageHandler_r nf, void *userData, void(*freeUserData)(void*)) {
+GEOSContext_setNoticeMessageHandler_r(GEOSContextHandle_t extHandle, GEOSMessageHandler_r nf, void *userData, void(*freeUserData)(void*)) {
     GEOSContextHandleInternal_t *handle = 0;
     handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
     if ( 0 == handle->initialized )
@@ -381,7 +381,7 @@ GEOSContext_setNoticeHandler_r_v2(GEOSContextHandle_t extHandle, GEOSMessageHand
 }
 
 GEOSMessageHandler_r
-GEOSContext_setErrorHandler_r_v2(GEOSContextHandle_t extHandle, GEOSMessageHandler_r ef, void *userData, void(*freeUserData)(void*))
+GEOSContext_setErrorMessageHandler_r(GEOSContextHandle_t extHandle, GEOSMessageHandler_r ef, void *userData, void(*freeUserData)(void*))
 {
     GEOSContextHandleInternal_t *handle = 0;
     handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
@@ -399,6 +399,12 @@ finishGEOS_r(GEOSContextHandle_t extHandle)
     // Fix up freeing handle w.r.t. malloc above
     delete extHandle;
     extHandle = NULL;
+}
+
+void
+GEOS_finish_r(GEOSContextHandle_t extHandle)
+{
+    finishGEOS_r(extHandle);
 }
 
 void 
