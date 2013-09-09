@@ -92,7 +92,10 @@ extern "C" {
  *
  ************************************************************************/
 
+typedef struct GEOSContextHandle_HS *GEOSContextHandle_t;
+
 typedef void (*GEOSMessageHandler)(const char *fmt, ...);
+typedef void (*GEOSMessageHandler_r)(GEOSContextHandle_t handle, void *data, const char *fmt, ...);
 
 /* When we're included by geos_c.cpp, those are #defined to the original
  * JTS definitions via preprocessor. We don't touch them to allow the
@@ -136,8 +139,6 @@ enum GEOSByteOrders {
     GEOS_WKB_NDR = 1 /* Little Endian */
 };
 
-typedef struct GEOSContextHandle_HS *GEOSContextHandle_t;
-
 typedef void (*GEOSQueryCallback)(void *item, void *userdata);
 
 /************************************************************************
@@ -169,12 +170,28 @@ extern void GEOS_DLL GEOS_interruptCancel();
 extern GEOSContextHandle_t GEOS_DLL initGEOS_r(
                                     GEOSMessageHandler notice_function,
                                     GEOSMessageHandler error_function);
+extern GEOSContextHandle_t GEOS_DLL initGEOS_r_v2(
+                                    GEOSMessageHandler_r notice_function,
+                                    void *notice_user_data,
+                                    void(*free_notice_user_data)(void*),
+                                    GEOSMessageHandler_r error_function,
+                                    void *error_user_data,
+                                    void(*free_error_user_data)(void*));
 extern void GEOS_DLL finishGEOS_r(GEOSContextHandle_t handle);
 
 extern GEOSMessageHandler GEOS_DLL GEOSContext_setNoticeHandler_r(GEOSContextHandle_t extHandle,
                                                                   GEOSMessageHandler nf);
 extern GEOSMessageHandler GEOS_DLL GEOSContext_setErrorHandler_r(GEOSContextHandle_t extHandle,
                                                                  GEOSMessageHandler ef);
+
+extern GEOSMessageHandler_r GEOS_DLL GEOSContext_setNoticeHandler_r_v2(GEOSContextHandle_t extHandle,
+                                                                       GEOSMessageHandler_r nf,
+                                                                       void *userData,
+                                                                       void(*freeUserData)(void*));
+extern GEOSMessageHandler_r GEOS_DLL GEOSContext_setErrorHandler_r_v2(GEOSContextHandle_t extHandle,
+                                                                      GEOSMessageHandler_r ef,
+                                                                      void *userData,
+                                                                      void(*freeUserData)(void*));
 
 extern const char GEOS_DLL *GEOSversion();
 
