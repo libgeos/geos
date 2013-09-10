@@ -21,7 +21,7 @@
 #include <algorithm>
 #include <math.h>
 #include <vector>
-//#include <iostream>
+#include <iostream>
 
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Coordinate.h>
@@ -123,14 +123,14 @@ VoronoiDiagramBuilder::clipGeometryCollection(const geom::GeometryCollection& ge
 {
 	geom::Geometry* clipPoly = geom.getFactory()->toGeometry(&clipEnv);
 	std::auto_ptr< std::vector<Geometry*> >clipped(new std::vector<Geometry*>);
-	for(int i=0 ; i < geom.getNumGeometries() ; i++)
+	for(std::size_t i=0 ; i < geom.getNumGeometries() ; i++)
 	{
 		Geometry* g = (Geometry*)geom.getGeometryN(i);
 		Geometry* result=NULL;
 		// don't clip unless necessary
 		if(clipEnv.contains(g->getEnvelopeInternal()))
 		{
-			result = g;
+			result = g->clone();
 		}
 		else if(clipEnv.intersects(g->getEnvelopeInternal()))
 		{
