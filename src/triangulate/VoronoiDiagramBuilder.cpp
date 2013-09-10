@@ -30,8 +30,6 @@
 #include <geos/triangulate/IncrementalDelaunayTriangulator.h>
 #include <geos/triangulate/DelaunayTriangulationBuilder.h>
 #include <geos/triangulate/quadedge/QuadEdgeSubdivision.h>
-// WKT writer
-#include <geos/io/WKTWriter.h>
 
 namespace geos {
 namespace triangulate { //geos.triangulate
