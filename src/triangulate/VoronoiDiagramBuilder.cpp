@@ -21,7 +21,6 @@
 #include <algorithm>
 #include <math.h>
 #include <vector>
-#include <iostream>
 
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Coordinate.h>
