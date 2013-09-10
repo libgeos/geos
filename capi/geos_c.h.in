@@ -204,15 +204,12 @@ extern GEOSMessageHandler GEOS_DLL GEOSContext_setErrorHandler_r(GEOSContextHand
  * @param extHandle the GEOS context
  * @param nf the message handler
  * @param userData optional user data pointer that will be passed to the message handler
- * @param freeUserData If not NULL this function will be called with userData as parameter on a subsequent call
- *                     to this function or when the given GEOS context is destroyed
  *
  * @return the previously configured message handler or NULL if no message handler was configured
  */
 extern GEOSMessageHandler_r GEOS_DLL GEOSContext_setNoticeMessageHandler_r(GEOSContextHandle_t extHandle,
                                                                            GEOSMessageHandler_r nf,
-                                                                           void *userData,
-                                                                           void(*freeUserData)(void*));
+                                                                           void *userData);
 
 /*
  * Sets an error message handler on the given GEOS context.
@@ -220,15 +217,12 @@ extern GEOSMessageHandler_r GEOS_DLL GEOSContext_setNoticeMessageHandler_r(GEOSC
  * @param extHandle the GEOS context
  * @param ef the message handler
  * @param userData optional user data pointer that will be passed to the message handler
- * @param freeUserData If not NULL this function will be called with userData as parameter on a subsequent call
- *                     to this function or when the given GEOS context is destroyed
  *
  * @return the previously configured message handler or NULL if no message handler was configured
  */
 extern GEOSMessageHandler_r GEOS_DLL GEOSContext_setErrorMessageHandler_r(GEOSContextHandle_t extHandle,
                                                                           GEOSMessageHandler_r ef,
-                                                                          void *userData,
-                                                                          void(*freeUserData)(void*));
+                                                                          void *userData);
 
 extern const char GEOS_DLL *GEOSversion();
 

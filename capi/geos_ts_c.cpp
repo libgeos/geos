@@ -141,11 +141,9 @@ typedef struct GEOSContextHandle_HS
     GEOSMessageHandler noticeMessageOld;
     GEOSMessageHandler_r noticeMessageNew;
     void *noticeData;
-    void(*freeNoticeData)(void*);
     GEOSMessageHandler errorMessageOld;
     GEOSMessageHandler_r errorMessageNew;
     void *errorData;
-    void(*freeErrorData)(void*);
     int WKBOutputDims;
     int WKBByteOrder;
     int initialized;
@@ -161,24 +159,14 @@ typedef struct GEOSContextHandle_HS
       initialized = 1;
     }
 
-    ~ GEOSContextHandle_HS()
-    {
-      setNoticeHandler(NULL);
-      setErrorHandler(NULL);
-    }
-
     GEOSMessageHandler
     setNoticeHandler(GEOSMessageHandler nf)
     {
         GEOSMessageHandler f = noticeMessageOld;
         noticeMessageOld = nf;
         noticeMessageNew = NULL;
-        if (freeNoticeData) {
-          freeNoticeData(noticeData);
-        }
         noticeData = NULL;
-        freeNoticeData = NULL;        
-        
+
         return f;
     }
 
@@ -188,41 +176,29 @@ typedef struct GEOSContextHandle_HS
         GEOSMessageHandler f = errorMessageOld;
         errorMessageOld = nf;
         errorMessageNew = NULL;
-        if (freeErrorData) {
-          freeErrorData(errorData);
-        }
         errorData = NULL;
-        freeErrorData = NULL;        
-        
+
         return f;
     }
 
     GEOSMessageHandler_r
-    setNoticeHandler(GEOSMessageHandler_r nf, void *userData, void(*freeUserData)(void*)) {
+    setNoticeHandler(GEOSMessageHandler_r nf, void *userData) {
         GEOSMessageHandler_r f = noticeMessageNew;
         noticeMessageOld = NULL;
         noticeMessageNew = nf;
-        if (freeNoticeData) {
-          freeNoticeData(noticeData);
-        }
         noticeData = userData;
-        freeNoticeData = freeUserData;        
-        
+
         return f;
     }
 
     GEOSMessageHandler_r
-    setErrorHandler(GEOSMessageHandler_r ef, void *userData, void(*freeUserData)(void*))
+    setErrorHandler(GEOSMessageHandler_r ef, void *userData)
     {
         GEOSMessageHandler_r f = errorMessageNew;
         errorMessageOld = NULL;
         errorMessageNew = ef;
-        if (freeErrorData) {
-          freeErrorData(errorData);
-        }
         errorData = userData;
-        freeErrorData = freeUserData;        
-        
+
         return f;
     }
 
@@ -369,7 +345,7 @@ GEOSContext_setErrorHandler_r(GEOSContextHandle_t extHandle, GEOSMessageHandler 
 }
 
 GEOSMessageHandler_r
-GEOSContext_setNoticeMessageHandler_r(GEOSContextHandle_t extHandle, GEOSMessageHandler_r nf, void *userData, void(*freeUserData)(void*)) {
+GEOSContext_setNoticeMessageHandler_r(GEOSContextHandle_t extHandle, GEOSMessageHandler_r nf, void *userData) {
     GEOSContextHandleInternal_t *handle = 0;
     handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
     if ( 0 == handle->initialized )
@@ -377,11 +353,11 @@ GEOSContext_setNoticeMessageHandler_r(GEOSContextHandle_t extHandle, GEOSMessage
         return NULL;
     }
 
-    return handle->setNoticeHandler(nf, userData, freeUserData);
+    return handle->setNoticeHandler(nf, userData);
 }
 
 GEOSMessageHandler_r
-GEOSContext_setErrorMessageHandler_r(GEOSContextHandle_t extHandle, GEOSMessageHandler_r ef, void *userData, void(*freeUserData)(void*))
+GEOSContext_setErrorMessageHandler_r(GEOSContextHandle_t extHandle, GEOSMessageHandler_r ef, void *userData)
 {
     GEOSContextHandleInternal_t *handle = 0;
     handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
@@ -390,7 +366,7 @@ GEOSContext_setErrorMessageHandler_r(GEOSContextHandle_t extHandle, GEOSMessageH
         return NULL;
     }
 
-    return handle->setErrorHandler(ef, userData, freeUserData);
+    return handle->setErrorHandler(ef, userData);
 }
 
 void
