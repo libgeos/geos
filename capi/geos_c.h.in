@@ -99,14 +99,14 @@ typedef void (*GEOSMessageHandler)(const char *fmt, ...);
 /*
  * A GEOS message handler function.
  *
- * @param handle the GEOS context that generated the message
- * @param data the user data pointer that was passed to GEOS when registering this message handler.
  * @param message the message contents
+ * @param userdata the user data pointer that was passed to GEOS when registering this message handler.
+ * 
  *
  * @see GEOSContext_setErrorMessageHandler
  * @see GEOSContext_setNoticeMessageHandler
  */
-typedef void (*GEOSMessageHandler_r)(GEOSContextHandle_t handle, void *data, const char *message);
+typedef void (*GEOSMessageHandler_r)(const char *message, void *userdata);
 
 /* When we're included by geos_c.cpp, those are #defined to the original
  * JTS definitions via preprocessor. We don't touch them to allow the

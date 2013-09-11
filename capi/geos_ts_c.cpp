@@ -218,7 +218,7 @@ typedef struct GEOSContextHandle_HS
         if (noticeMessageOld) {
           noticeMessageOld("%s", msgBuffer);
         } else {
-          noticeMessageNew(this, noticeData, msgBuffer);
+          noticeMessageNew(msgBuffer, noticeData);
         }
       }
     }
@@ -239,7 +239,7 @@ typedef struct GEOSContextHandle_HS
         if (errorMessageOld) {
           errorMessageOld("%s", msgBuffer);
         } else {
-          errorMessageNew(this, errorData, msgBuffer);
+          errorMessageNew(msgBuffer, errorData);
         }
       }
     }
