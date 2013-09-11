@@ -178,14 +178,15 @@ extern void GEOS_DLL GEOS_interruptRequest();
 extern void GEOS_DLL GEOS_interruptCancel();
 
 /*
- * @deprecated initialize using GEOS_init_r() and set the message handlers using GEOSContext_setNoticeHandler_r and/or
- *             GEOSContext_setErrorHandler_r subsequently.
+ * @deprecated in 3.5.0
+ *     initialize using GEOS_init_r() and set the message handlers using
+ *     GEOSContext_setNoticeHandler_r and/or GEOSContext_setErrorHandler_r
  */
 extern GEOSContextHandle_t GEOS_DLL initGEOS_r(
                                     GEOSMessageHandler notice_function,
                                     GEOSMessageHandler error_function);
 /*
- * @deprecated replaced by GEOS_finish_r.
+ * @deprecated in 3.5.0 replaced by GEOS_finish_r.
  */
 extern void GEOS_DLL finishGEOS_r(GEOSContextHandle_t handle);
 
