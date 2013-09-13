@@ -59,6 +59,7 @@ namespace tut
 //	  cout << "OUTPUT STRING::" << out << endl << endl;
 //	  cout << "Expected STRING::" << out_exp << endl << endl;
           ensure_equals(out, out_exp);
+	  GEOSGeom_destroy(exp_g);
         }
 
         ~test_capigeosvoronoidiagrambuilder_data()
