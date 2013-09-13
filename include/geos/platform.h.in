@@ -78,6 +78,8 @@ extern "C"
 #else
 # if defined(_MSC_VER)
 #  define FINITE(x) _finite(static_cast<double>(x))    
+# elif defined(__hpux__) && defined(__ia64__)
+#  define FINITE(x) (_Isfinite(x))
 # else
 #  define FINITE(x) (isfinite(x))
 # endif
