@@ -111,7 +111,7 @@ geos_unit_SOURCES = \
 	util/UniqueCoordinateArrayFilterTest.cpp \
 	capi/GEOSCoordSeqTest.cpp \
 	capi/GEOSDelaunayTriangulationTest.cpp \
-	capi/GEOSVoronoiDiagramBuilderTest.cpp \
+	capi/GEOSVoronoiDiagramTest.cpp \
 	capi/GEOSGeomFromWKBTest.cpp \
 	capi/GEOSGeomToWKTTest.cpp \
 	capi/GEOSGetCentroidTest.cpp \

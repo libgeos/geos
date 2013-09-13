@@ -752,11 +752,11 @@ extern GEOSGeometry GEOS_DLL * GEOSDelaunayTriangulation_r(
  * 
  * @return a newly allocated geometry, or NULL on exception.
  */
-extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagramBuilder(
+extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagram(
 				const GEOSGeometry *g,  
 				double tolerance);
 
-extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagramBuilder_r(
+extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagram_r(
 				GEOSContextHandle_t extHandle, 
 				const GEOSGeometry *g1, 
 				double tolerance);

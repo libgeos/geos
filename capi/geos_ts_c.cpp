@@ -6219,7 +6219,7 @@ GEOSDelaunayTriangulation_r(GEOSContextHandle_t extHandle, const Geometry *g1, d
     return NULL;
 }
 Geometry* 
-GEOSVoronoiDiagramBuilder_r(GEOSContextHandle_t extHandle, const Geometry *g1,double tolerance)
+GEOSVoronoiDiagram_r(GEOSContextHandle_t extHandle, const Geometry *g1,double tolerance)
 {
 	if ( 0 == extHandle ) return NULL;
 
