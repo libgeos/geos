@@ -1,6 +1,9 @@
 Changes in 3.4.3-dev
 YYYY-MM-DD
 
+- Bug fixes / improvements
+ - Fix build on HP-UX 11.23 (#664)
+
 Changes in 3.4.2
 2013-08-25
 
