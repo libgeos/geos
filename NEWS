@@ -2,6 +2,7 @@ Changes in 3.5.0
 2013-MM-DD
 
 - New things:
+  - Voronoi API (#627)
   ...
 
 Changes in 3.4.2

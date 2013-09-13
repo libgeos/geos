@@ -20,6 +20,7 @@
 #define GEOS_TRIANGULATE_VORONOIDIAGRAMBUILDER_H
 
 #include <geos/triangulate/quadedge/QuadEdgeSubdivision.h>
+#include <geos/geom/Envelope.h> // for composition 
 #include <memory>
 #include <iostream>
 
@@ -29,7 +30,6 @@ namespace geos {
 	class CoordinateSequence;
 	class GeometryCollection;
 	class GeometryFactory;
-	class Envelope;
 }
 namespace triangulate { //geos.triangulate
 
@@ -44,13 +44,6 @@ namespace triangulate { //geos.triangulate
  *
  */
 class GEOS_DLL VoronoiDiagramBuilder{
-private:
-	geom::CoordinateSequence* siteCoords;
-	double tolerance;
-	quadedge::QuadEdgeSubdivision* subdiv;
-	geom::Envelope* clipEnv;
-	geom::Envelope* diagramEnv;
-	
 public:
 	/** 
 	 * Creates a new Voronoi diagram builder.
@@ -81,9 +74,11 @@ public:
 	 * The diagram will be clipped to the larger
 	 * of this envelope or an envelope surrounding the sites.
 	 * 
-	 * @param clipEnv the clip envelope.
+	 * @param clipEnv the clip envelope; must be kept alive by
+	 *                caller until done with this instance;
+	 *                set to 0 for no clipping.
 	 */
-	void setClipEnvelope(const geom::Envelope& clipEnv);
+	void setClipEnvelope(const geom::Envelope* clipEnv);
 	
 	/**
 	 * Sets the snapping tolerance which will be used
@@ -92,14 +87,14 @@ public:
 	 * 
 	 * @param tolerance the tolerance distance to use
 	 */
-	void setTolerance(const double tolerance);
+	void setTolerance(double tolerance);
 	
 	/**
 	 * Gets the {@link QuadEdgeSubdivision} which models the computed diagram.
 	 * 
 	 * @return the subdivision containing the triangulation
 	 */
-	quadedge::QuadEdgeSubdivision* getSubdivision();
+	std::auto_ptr<quadedge::QuadEdgeSubdivision> getSubdivision();
 	
 	/**
 	 * Gets the faces of the computed diagram as a {@link GeometryCollection} 
@@ -111,6 +106,13 @@ public:
 	std::auto_ptr<geom::GeometryCollection> getDiagram(const geom::GeometryFactory& geomFact);
 
 private:
+
+	std::auto_ptr<geom::CoordinateSequence> siteCoords;
+	double tolerance;
+	std::auto_ptr<quadedge::QuadEdgeSubdivision> subdiv;
+	const geom::Envelope* clipEnv; // externally owned
+	geom::Envelope diagramEnv;
+
 	void create();
 	
 	static std::auto_ptr<geom::GeometryCollection> 

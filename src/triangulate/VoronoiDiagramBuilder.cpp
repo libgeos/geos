@@ -38,70 +38,61 @@ using namespace geos::geom;
 
 
 VoronoiDiagramBuilder::VoronoiDiagramBuilder() :
-	siteCoords(NULL), tolerance(0.0), subdiv(NULL) , clipEnv(NULL), diagramEnv(NULL)
+	tolerance(0.0), clipEnv(0)
 {
 }
 
 VoronoiDiagramBuilder::~VoronoiDiagramBuilder()
 {
-	if(siteCoords)
-		delete siteCoords;
-	if(subdiv)
-		delete subdiv;
-	if(clipEnv)
-	   	delete clipEnv;
-	if(diagramEnv)
-	   	delete diagramEnv;
 }
 
 void 
 VoronoiDiagramBuilder::setSites(const geom::Geometry& geom)
 {
-	siteCoords = DelaunayTriangulationBuilder::extractUniqueCoordinates(geom);
+	siteCoords.reset( DelaunayTriangulationBuilder::extractUniqueCoordinates(geom) );
 }
 
 void 
 VoronoiDiagramBuilder::setSites(const geom::CoordinateSequence& coords)
 {
-	siteCoords = coords.clone();
+	siteCoords.reset( coords.clone() );
 	DelaunayTriangulationBuilder::unique(*siteCoords);
 }
 
 void 
-VoronoiDiagramBuilder::setClipEnvelope(const geom::Envelope& clipEnv)
+VoronoiDiagramBuilder::setClipEnvelope(const geom::Envelope* nClipEnv)
 {
-	*(this->clipEnv) = clipEnv;
+	clipEnv = nClipEnv;
 }
 
 void 
-VoronoiDiagramBuilder::setTolerance(const double tolerance)
+VoronoiDiagramBuilder::setTolerance(double nTolerance)
 {
-	this->tolerance = tolerance;
+	tolerance = nTolerance;
 }
 
 void 
 VoronoiDiagramBuilder::create()
 {
-	if(subdiv!=NULL)
-		return;
-	geom::Envelope siteEnv = DelaunayTriangulationBuilder::envelope(*siteCoords);
-	diagramEnv = new Envelope();
-	*diagramEnv = siteEnv;
+	if( subdiv.get() ) return;
+
+	diagramEnv = DelaunayTriangulationBuilder::envelope(*siteCoords);
 	//adding buffer around the final envelope
-	double expandBy = fmax(diagramEnv->getWidth() , diagramEnv->getHeight());
-	diagramEnv->expandBy(expandBy);
-	if(clipEnv!=NULL)
-		diagramEnv->expandToInclude(clipEnv);
+	double expandBy = fmax(diagramEnv.getWidth() , diagramEnv.getHeight());
+	diagramEnv.expandBy(expandBy);
+	if(clipEnv)
+		diagramEnv.expandToInclude(clipEnv);
 
-	IncrementalDelaunayTriangulator::VertexList* vertices = DelaunayTriangulationBuilder::toVertices(*siteCoords);
+	std::auto_ptr<IncrementalDelaunayTriangulator::VertexList> vertices (
+    DelaunayTriangulationBuilder::toVertices(*siteCoords)
+  );
 
-	subdiv = new quadedge::QuadEdgeSubdivision(*diagramEnv,tolerance);
-	IncrementalDelaunayTriangulator triangulator(subdiv);
+	subdiv.reset( new quadedge::QuadEdgeSubdivision(diagramEnv,tolerance) );
+	IncrementalDelaunayTriangulator triangulator(subdiv.get());
 	triangulator.insertSites(*vertices);
-	delete vertices;
 }
 
-quadedge::QuadEdgeSubdivision* 
+std::auto_ptr<quadedge::QuadEdgeSubdivision> 
 VoronoiDiagramBuilder::getSubdivision()
 {
 	create();
@@ -113,35 +104,35 @@ VoronoiDiagramBuilder::getDiagram(const geom::GeometryFactory& geomFact)
 {
 	create();
 	std::auto_ptr<geom::GeometryCollection> polys = subdiv->getVoronoiDiagram(geomFact);
-	return clipGeometryCollection(*polys,*diagramEnv);
+	return clipGeometryCollection(*polys,diagramEnv);
 }
 
 std::auto_ptr<geom::GeometryCollection> 
 VoronoiDiagramBuilder::clipGeometryCollection(const geom::GeometryCollection& geom, const geom::Envelope& clipEnv)
 {
-	geom::Geometry* clipPoly = geom.getFactory()->toGeometry(&clipEnv);
+	std::auto_ptr<geom::Geometry> clipPoly ( geom.getFactory()->toGeometry(&clipEnv) );
 	std::auto_ptr< std::vector<Geometry*> >clipped(new std::vector<Geometry*>);
 	for(std::size_t i=0 ; i < geom.getNumGeometries() ; i++)
 	{
-		Geometry* g = (Geometry*)geom.getGeometryN(i);
-		Geometry* result=NULL;
+		const Geometry* g = geom.getGeometryN(i);
+		std::auto_ptr<Geometry> result;
 		// don't clip unless necessary
 		if(clipEnv.contains(g->getEnvelopeInternal()))
 		{
-			result = g->clone();
+			result.reset( g->clone() );
+      // TODO: check if userData is correctly cloned here?
 		}
 		else if(clipEnv.intersects(g->getEnvelopeInternal()))
 		{
-			result = clipPoly->intersection(g);
-			result->setUserData(g->getUserData());
+			result.reset( clipPoly->intersection(g) );
+			result->setUserData(((Geometry*)g)->getUserData()); // TODO: needed ?
 		}
 
-		if(result!=NULL && !result->isEmpty() )
+		if(result.get() && !result->isEmpty() )
 		{
-			clipped->push_back(result);
+			clipped->push_back(result.release());
 		}
 	}
-	delete clipPoly;
 	return std::auto_ptr<GeometryCollection>(geom.getFactory()->createGeometryCollection(clipped.release()));
 }
 

@@ -47,10 +47,10 @@ namespace tut
 	void runVoronoi(const char *sitesWkt, const char *expectedWkt , const double tolerance)
 	{
 		WKTReader reader;
-	        WKTWriter writer;
-	        geos::triangulate::VoronoiDiagramBuilder builder;
-		Geometry* sites = reader.read(sitesWkt);
-		Geometry* expected = reader.read(expectedWkt);
+		WKTWriter writer;
+		geos::triangulate::VoronoiDiagramBuilder builder;
+		std::auto_ptr<Geometry> sites ( reader.read(sitesWkt) );
+		std::auto_ptr<Geometry> expected ( reader.read(expectedWkt) );
 		std::auto_ptr<GeometryCollection> results;
 		GeometryFactory geomFact;
 		builder.setSites(*sites);
@@ -62,11 +62,9 @@ namespace tut
 		results->normalize();
 		expected->normalize();
 
-		ensure(results->equalsExact(expected, 1e-7));
+		ensure(results->equalsExact(expected.get(), 1e-7));
 		ensure(results->getCoordinateDimension() == expected->getCoordinateDimension());
 
-		delete sites;
-		delete expected;
 	}
 
 	// Test Cases
@@ -88,15 +86,14 @@ namespace tut
 		v->push_back(c);
 		v->push_back(d);
 
-		geos::geom::CoordinateArraySequence *seq = new CoordinateArraySequence(v.release());
-		builder.setSites(*seq);
+		geos::geom::CoordinateArraySequence seq(v.release());
+		builder.setSites(seq);
 
 		//getting the subdiv()
-		QuadEdgeSubdivision* subdiv = builder.getSubdivision();
+		std::auto_ptr<QuadEdgeSubdivision> subdiv = builder.getSubdivision();
 
 		ensure_equals(subdiv->getTolerance() , 0);
 		ensure_equals(subdiv->getEnvelope().toString(),"Env[-3540:4020,-3436:4050]");
-		delete seq;
 
 	}
 	// 1 - Case with a single point
