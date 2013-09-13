@@ -754,12 +754,14 @@ extern GEOSGeometry GEOS_DLL * GEOSDelaunayTriangulation_r(
  */
 extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagram(
 				const GEOSGeometry *g,  
-				double tolerance);
+				double tolerance,
+				int onlyEdges);
 
 extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagram_r(
 				GEOSContextHandle_t extHandle, 
 				const GEOSGeometry *g1, 
-				double tolerance);
+				double tolerance,
+				int onlyEdges);
 
 
 /************************************************************************
