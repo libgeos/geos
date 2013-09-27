@@ -29,6 +29,7 @@ class GEOS_DLL Interval {
 public:
 	Interval(Interval *other);
 	Interval(double newMin, double newMax);
+	void init(double newMin, double newMax);
 	double getCentre();
 	Interval* expandToInclude(Interval *other);
 	bool intersects(Interval *other);
