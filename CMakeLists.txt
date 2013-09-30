@@ -268,10 +268,10 @@ else()
    find_program(SH sh)
    if(SH)
       execute_process(COMMAND ${SH} -c 
-      "cd ${CMAKE_SOURCE_DIR} && ${CMAKE_SOURCE_DIR}/tools/svn_repo_revision.sh")
+      "cd ${CMAKE_CURRENT_SOURCE_DIR} && ${CMAKE_CURRENT_SOURCE_DIR}/tools/svn_repo_revision.sh")
 
-      file(RENAME "${CMAKE_SOURCE_DIR}/geos_svn_revision.h"
-      "${CMAKE_BINARY_DIR}/geos_svn_revision.h")
+      file(RENAME "${CMAKE_CURRENT_SOURCE_DIR}/geos_svn_revision.h"
+      "${CMAKE_CURRENT_BINARY_DIR}/geos_svn_revision.h")
    else()
       message("*** sh-compatible command not found, cannot create geos_svn_revision.h")
       message("*** Check SVN revision and create revision header manually:")
