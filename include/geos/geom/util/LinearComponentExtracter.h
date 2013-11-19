@@ -50,32 +50,16 @@ public:
 	 * efficient to create a single LinearComponentExtracterFilter instance
 	 * and pass it to multiple geometries.
 	 */
-	static void getLines(const Geometry &geom, std::vector<const LineString*> &ret)
-	{
-		LinearComponentExtracter lce(ret);
-		geom.apply_ro(&lce);
-	}
-
+	static void getLines(const Geometry &geom, std::vector<const LineString*> &ret);
 	/**
 	 * Constructs a LinearComponentExtracterFilter with a list in which
 	 * to store LineStrings found.
 	 */
-	LinearComponentExtracter(std::vector<const LineString*> &newComps)
-		:
-		comps(newComps)
-		{}
+	LinearComponentExtracter(std::vector<const LineString*> &newComps);
 
-	void filter_rw(Geometry *geom)
-	{
-if ( const LineString *ls=dynamic_cast<const LineString *>(geom) )
-		comps.push_back(ls);
-	}
+	void filter_rw(Geometry *geom);
 
-	void filter_ro(const Geometry *geom)
-	{
-if ( const LineString *ls=dynamic_cast<const LineString *>(geom) )
-		comps.push_back(ls);
-	}
+	void filter_ro(const Geometry *geom);
 
 };
 

@@ -38,32 +38,17 @@ public:
 	 * efficient to create a single PointExtracter filter instance
 	 * and pass it to multiple geometries.
 	 */
-	static void getPoints(const Geometry &geom, Point::ConstVect &ret)
-	{
-		PointExtracter pe(ret);
-		geom.apply_ro(&pe);
-	}
+	static void getPoints(const Geometry &geom, Point::ConstVect &ret);
 
 	/**
 	 * Constructs a PointExtracterFilter with a list in which
 	 * to store Points found.
 	 */
-	PointExtracter(Point::ConstVect& newComps)
-		:
-		comps(newComps)
-		{}
+	PointExtracter(Point::ConstVect& newComps);
 
-	void filter_rw(Geometry *geom)
-	{
-if ( const Point *p=dynamic_cast<const Point *>(geom) )
-		comps.push_back(p);
-	}
+	void filter_rw(Geometry *geom);
 
-	void filter_ro(const Geometry *geom)
-	{
-if ( const Point *p=dynamic_cast<const Point *>(geom) )
-		comps.push_back(p);
-	}
+	void filter_ro(const Geometry *geom);
 
 private:
 

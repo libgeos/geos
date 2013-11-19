@@ -12,4 +12,7 @@ libgeomutil_la_SOURCES = \
     GeometryTransformer.cpp \
     ShortCircuitedGeometryVisitor.cpp \
     SineStarFactory.cpp \
-    GeometryCombiner.cpp
+    GeometryCombiner.cpp \
+    LinearComponentExtracter.cpp \
+    PointExtracter.cpp \
+    PolygonExtracter.cpp

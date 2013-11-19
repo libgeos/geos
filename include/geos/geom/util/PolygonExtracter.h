@@ -40,35 +40,17 @@ public:
 	 * efficient to create a single PolygonExtracterFilter instance
 	 * and pass it to multiple geometries.
 	 */
-	static void getPolygons(const Geometry &geom, std::vector<const Polygon*>& ret)
-	{
-		PolygonExtracter pe(ret);
-		geom.apply_ro(&pe);
-	}
+	static void getPolygons(const Geometry &geom, std::vector<const Polygon*>& ret);
 
 	/**
 	 * Constructs a PolygonExtracterFilter with a list in which
 	 * to store Polygons found.
 	 */
-	PolygonExtracter(std::vector<const Polygon*>& newComps)
-		:
-		comps(newComps)
-		{}
+	PolygonExtracter(std::vector<const Polygon*>& newComps);
 
-	void filter_rw(Geometry *geom) {
-		if ( const Polygon *p=dynamic_cast<const Polygon *>(geom) )
-		{
-			comps.push_back(p);
-		}
-	}
+	void filter_rw(Geometry *geom);
 
-	void filter_ro(const Geometry *geom)
-	{
-		if ( const Polygon *p=dynamic_cast<const Polygon *>(geom) )
-		{
-			comps.push_back(p);
-		}
-	}
+	void filter_ro(const Geometry *geom);
 
 private:
 

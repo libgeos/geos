@@ -45,44 +45,17 @@ public:
 	 * efficient to create a single ComponentCoordinateFilter instance
 	 * and pass it to multiple geometries.
 	 */
-	static void getCoordinates(const Geometry &geom, std::vector<const Coordinate*> &ret)
-	{
-		ComponentCoordinateExtracter cce(ret);
-		geom.apply_ro(&cce);
-	}
+	static void getCoordinates(const Geometry &geom, std::vector<const Coordinate*> &ret);
 
 	/**
 	 * Constructs a ComponentCoordinateFilter with a list in which
 	 * to store Coordinates found.
 	 */
-	ComponentCoordinateExtracter( std::vector<const Coordinate*> &newComps)
-		:
-		comps(newComps)
-		{}
+	ComponentCoordinateExtracter( std::vector<const Coordinate*> &newComps);
 
-	void filter_rw( Geometry * geom)
-	{
-		if (	geom->getGeometryTypeId() == geos::geom::GEOS_LINEARRING 
-			||	geom->getGeometryTypeId() == geos::geom::GEOS_LINESTRING
-			||	geom->getGeometryTypeId() == geos::geom::GEOS_POINT ) 
-			comps.push_back( geom->getCoordinate() );
-		//if (	typeid( *geom ) == typeid( LineString )
-		//	||	typeid( *geom ) == typeid( Point ) )
-		//if ( const Coordinate *ls=dynamic_cast<const Coordinate *>(geom) )
-		//	comps.push_back(ls);
-	}
+	void filter_rw( Geometry * geom);
 
-	void filter_ro( const Geometry * geom)
-	{
-		//if (	typeid( *geom ) == typeid( LineString )
-		//	||	typeid( *geom ) == typeid( Point ) )
-		if (	geom->getGeometryTypeId() == geos::geom::GEOS_LINEARRING 
-			||	geom->getGeometryTypeId() == geos::geom::GEOS_LINESTRING
-			||	geom->getGeometryTypeId() == geos::geom::GEOS_POINT ) 
-			comps.push_back( geom->getCoordinate() );
-		//if ( const Coordinate *ls=dynamic_cast<const Coordinate *>(geom) )
-		//	comps.push_back(ls);
-	}
+	void filter_ro( const Geometry * geom);
 
 private:
 

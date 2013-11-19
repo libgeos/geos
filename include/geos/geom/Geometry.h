@@ -832,13 +832,10 @@ private:
 
 	int getClassSortIndex() const;
 
-	class GeometryChangedFilter : public GeometryComponentFilter
+	class GEOS_DLL GeometryChangedFilter : public GeometryComponentFilter
 	{
 	public:
-		void filter_rw(Geometry* geom)
-		{
-			geom->geometryChangedAction();
-		}
+		void filter_rw(Geometry* geom);
 	};
 
 	static GeometryChangedFilter geometryChangedFilter;

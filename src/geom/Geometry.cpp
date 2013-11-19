@@ -687,6 +687,11 @@ Geometry::getClassSortIndex() const
 #endif
 }
 
+void Geometry::GeometryChangedFilter::filter_rw(Geometry* geom)
+{
+   geom->geometryChangedAction();
+}
+
 int
 Geometry::compare(vector<Coordinate> a, vector<Coordinate> b) const
 {
