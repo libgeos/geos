@@ -276,13 +276,15 @@ dnl --------------------------------------------------------------------
 use_swig=false
 if test x"$use_python" = xtrue ||
    test x"$use_ruby" = xtrue; then
-	AC_PROG_SWIG(1.3.28)
-	if test x"$SWIG" != "x"; then
-	    SWIG_ENABLE_CXX	
-            AC_SUBST(SWIG)           
- 
-            use_swig=true 
-	fi
+  AC_PROG_SWIG(1.3.28)
+  if test x"$SWIG" != "x"; then
+    SWIG_ENABLE_CXX	
+    AC_SUBST(SWIG)           
+    use_swig=true 
+  else
+    use_python=false
+    use_ruby=false
+  fi
 fi
 AM_CONDITIONAL(ENABLE_SWIG, [ test x"$use_swig" = xtrue ])
 
@@ -293,8 +295,8 @@ dnl --------------------------------------------------------------------
 
 if test x"$use_python" = xtrue; then
 	dnl Check for Python 
-        AM_PATH_PYTHON	
-        SWIG_PYTHON
+  AM_PATH_PYTHON	
+  SWIG_PYTHON
 
 	if test x"$PYTHON" = "x"; then
 		use_python=false
