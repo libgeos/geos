@@ -20,6 +20,7 @@
 // std
 #include <stdio.h>
 #include <iostream>
+#include <algorithm>
 using namespace geos::triangulate::quadedge;
 using namespace geos::triangulate;
 using namespace geos::geom;
@@ -88,7 +89,7 @@ namespace tut
 		CoordinateSequence* siteCoords = DelaunayTriangulationBuilder::extractUniqueCoordinates(*sites);
 		Envelope Env = DelaunayTriangulationBuilder::envelope(*siteCoords);
 
-		double expandBy = fmax(Env.getWidth() , Env.getHeight());
+		double expandBy = std::max(Env.getWidth() , Env.getHeight());
 		Env.expandBy(expandBy);
 
 		IncrementalDelaunayTriangulator::VertexList* vertices = DelaunayTriangulationBuilder::toVertices(*siteCoords);

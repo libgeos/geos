@@ -78,7 +78,7 @@ VoronoiDiagramBuilder::create()
 
 	diagramEnv = DelaunayTriangulationBuilder::envelope(*siteCoords);
 	//adding buffer around the final envelope
-	double expandBy = fmax(diagramEnv.getWidth() , diagramEnv.getHeight());
+	double expandBy = std::max(diagramEnv.getWidth() , diagramEnv.getHeight());
 	diagramEnv.expandBy(expandBy);
 	if(clipEnv)
 		diagramEnv.expandToInclude(clipEnv);
