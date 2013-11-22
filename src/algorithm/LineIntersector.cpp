@@ -335,8 +335,8 @@ LineIntersector::computeIntersection(const Coordinate& p,const Coordinate& p1,co
 
 	// do between check first, since it is faster than the orientation test
 	if(Envelope::intersects(p1,p2,p)) {
-		if ((CGAlgorithms::orientationIndex(p1,p2,p)==0)&&
-			(CGAlgorithms::orientationIndex(p2,p1,p)==0)) {
+		if  (LineIntersector::hasIntersection(p, p1, p2) ==true) //checking if there is an intersection at all
+			{
 			isProperVar=true;
 			if ((p==p1)||(p==p2)) // 2d only test
 			{
@@ -368,10 +368,33 @@ bool
 LineIntersector::hasIntersection(const Coordinate& p, const Coordinate& p1, const Coordinate& p2)
 {
 	if(Envelope::intersects(p1,p2,p)) {
-		if ((CGAlgorithms::orientationIndex(p1,p2,p)==0)&&
-			(CGAlgorithms::orientationIndex(p2,p1,p)==0)) {
-			return true;
-		}
+	//computing the 2points Left and right that are the offset of the point by min_precision.
+	//if the Left point is left from the line and the right point right of the line, or any on the line, return true, else return false
+	
+		double min_precision = pow(10,-12) ; 
+		//this parameter control the epsilon. for instance, 2 lines having the same coordinates to 12 digits will be same lines
+	
+
+			//computing theoffsetted points
+			Coordinate pL;Coordinate pR;
+			short int positionL; short int positionR;
+	
+			 pL.x= p.x+min_precision*(p1.y-p2.y)/2;
+			 pL.y= p.y+min_precision*(p2.x-p1.x)/2;
+			
+			 pR.x= p.x-min_precision*(p1.y-p2.y)/2;
+			 pR.y= p.y-min_precision*(p2.x-p1.x)/2;
+			
+			positionL = CGAlgorithms::orientationIndex(p1,p2,pL);
+			positionR = CGAlgorithms::orientationIndex(p1,p2,pR);
+			
+			//note : I don't know if we have to reverse check, I'm guessing it was for robustness issue: now it's not really necessary??
+			
+			if(  (positionL==1 && positionR==-1) || positionL==0 || positionR==0) {
+				return true;
+			} else { 
+				return false;
+			}
 	}
 	return false;
 }
