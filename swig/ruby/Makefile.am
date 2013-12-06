@@ -22,7 +22,7 @@ INCLUDES = -I$(RUBY_INCLUDE_DIR) -I$(RUBY_INCLUDE_DIR)/$(RUBY_SITE_ARCH)
 # Build Ruby module as shared library
 rubyextensiondir_LTLIBRARIES = geos.la
 geos_la_SOURCES = geos_wrap.cxx
-geos_la_LIBADD =  $(top_builddir)/capi/libgeos_c.la -l$(RUBY_SO_NAME)
+geos_la_LIBADD =  $(top_builddir)/capi/libgeos_c.la $(RUBY_SO_NAME)
 
 # Only need to grab the capi header files
 geos_la_CPPFLAGS = -I$(top_builddir)/capi
