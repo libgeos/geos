@@ -15,6 +15,7 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
+#include <geos/util/GEOSException.h>
 // std
 #include <sstream>
 #include <string>
@@ -240,6 +241,25 @@ namespace tut
 		);
 
 	}
+
+  // 8 - Invalid HEXWKB for missing HEX char (#675)
+  template<>
+  template<>
+  void object::test<8>()
+  {         
+    std::stringstream hexwkb;
+    // NOTE: add a 0 to make valid
+    hexwkb << "01010000000000000000000000000000000000000";
+    //hexwkb << "0";
+    std::string err;
+    try {
+    GeomPtr gWKB_ndr(wkbreader.readHEX(hexwkb));
+    } catch (const geos::util::GEOSException& ex) {
+      err = ex.what();
+    }
+    ensure("Missing expected error", !err.empty());
+    ensure_equals(err, "ParseException: Premature end of HEX string");
+  }
 
 
 } // namespace tut
