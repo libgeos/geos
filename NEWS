@@ -4,6 +4,7 @@ YYYY-MM-DD
 - Bug fixes / improvements
  - Fix build on HP-UX 11.23 (#664)
  - Throw a ParseException on missing chars from HEXWKB string (#675)
+ - Fix ruby binding build (https://github.com/libgeos/libgeos/pull/32)
 
 Changes in 3.4.2
 2013-08-25
