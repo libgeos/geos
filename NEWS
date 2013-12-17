@@ -1,6 +1,9 @@
 Changes in 3.3.10
 YYYY-MM-DD
 
+- Bug fixes / improvements
+    - Throw a ParseException on missing chars from HEXWKB string (#675)
+
 Changes in 3.3.9
 2013-09-04
 
