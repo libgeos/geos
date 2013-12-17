@@ -81,14 +81,15 @@ WKBReader::readHEX(istream &is)
 	// setup input/output stream
 	stringstream os(ios_base::binary|ios_base::in|ios_base::out);
 
-	unsigned char high, low, result_high, result_low, value;
+	unsigned char result_high, result_low, value;
+	char high, low;
 
-	while(!is.eof())//readsome(&str[0], 2))
+	while( (high = is.get()) != char_traits<char>::eof() ) 
 	{
-		// get the high part of the byte
-		is >> high;
 		// geth the low part of the byte
-		is >> low;
+		low = is.get();
+		if ( low == char_traits<char>::eof() )
+		  throw ParseException("Premature end of HEX string");
 
 		switch (high)
 		{
