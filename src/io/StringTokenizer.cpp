@@ -37,6 +37,41 @@ StringTokenizer::StringTokenizer(const string &txt)
 	iter=str.begin();
 }
 
+double strtod_with_vc_fix(const char * str, char ** str_end)
+{
+	double dbl = strtod(str, str_end);
+#if _MSC_VER && !__INTEL_COMPILER
+	// Special handling of NAN and INF in MSVC, where strtod returns 0.0
+	// for NAN and INF.		
+	// This fixes failing test GEOSisValidDetail::test<3>, maybe others
+	// as well.
+	// Note: this hack is not robust, Boost lexical_cast or
+	// std::stod (C++11) would be better.
+	if (*str_end[0] != '\0')
+	{
+		char sign = 0;
+		const char *pos = str;
+		if (*pos == '+' || *pos == '-')
+			sign = *pos++;
+
+		if (stricmp(pos, "inf") == 0)
+		{
+			if (!sign || sign == '+')
+				dbl = std::numeric_limits<double>::infinity();
+			else
+				dbl = -(std::numeric_limits<double>::infinity)();
+			*str_end[0] = '\0';
+		}
+		else if (stricmp(pos, "nan") == 0)
+		{
+			dbl = std::numeric_limits<double>::quiet_NaN();
+			*str_end[0] = '\0';
+		}
+	}
+#endif
+	return dbl;
+}
+
 /*public*/
 int
 StringTokenizer::nextToken()
@@ -76,7 +111,7 @@ StringTokenizer::nextToken()
 		iter=str.begin()+pos;
 	}
 	char *stopstring;
-	double dbl=strtod(tok.c_str(),&stopstring);
+	double dbl=strtod_with_vc_fix(tok.c_str(),&stopstring);
 	if (*stopstring=='\0') {
 		ntok=dbl;
 		stok="";
@@ -124,7 +159,7 @@ StringTokenizer::peekNextToken()
 	}
 
 	char *stopstring;
-	double dbl=strtod(tok.c_str(),&stopstring);
+	double dbl = strtod_with_vc_fix(tok.c_str(), &stopstring);
 	if (*stopstring=='\0') {
 		ntok=dbl;
 		stok="";
