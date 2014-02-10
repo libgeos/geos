@@ -5,7 +5,7 @@
 
 noinst_LTLIBRARIES = libio.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 libio_la_SOURCES = \
 	ParseException.cpp \

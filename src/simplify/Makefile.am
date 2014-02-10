@@ -5,7 +5,7 @@ SUBDIRS =
 
 noinst_LTLIBRARIES = libsimplify.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 libsimplify_la_SOURCES = \
     DouglasPeuckerLineSimplifier.cpp \

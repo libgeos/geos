@@ -132,8 +132,8 @@ XMLTester_LDADD = $(LIBS)
 # See http://trac.osgeo.org/geos/ticket/319
 XMLTester_CXXFLAGS = $(INLINE_FLAGS)
 
-INCLUDES = -I$(top_srcdir)/include
-INCLUDES += -I$(top_srcdir)/src/io/tinyxml -DTIXML_USE_STL
+AM_CPPFLAGS = -I$(top_srcdir)/include
+AM_CPPFLAGS += -I$(top_srcdir)/src/io/tinyxml -DTIXML_USE_STL
 
 static:
 	$(CXX) $(CXXFLAGS) -I../include -o staticXMLTester XMLTester.cpp MarkupSTL.o ../../src/geom/.libs/libgeos.a

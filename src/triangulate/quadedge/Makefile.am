@@ -5,7 +5,7 @@ SUBDIRS =
 
 noinst_LTLIBRARIES = libquadedge.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 libquadedge_la_SOURCES = \
 	QuadEdge.cpp \

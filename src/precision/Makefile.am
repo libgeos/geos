@@ -5,7 +5,7 @@ SUBDIRS =
 
 noinst_LTLIBRARIES = libprecision.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 libprecision_la_SOURCES = \
 	CommonBits.cpp \

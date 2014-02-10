@@ -5,7 +5,7 @@ SUBDIRS =
 
 noinst_LTLIBRARIES = libplanargraph.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 libplanargraph_la_SOURCES = \
     DirectedEdge.cpp \

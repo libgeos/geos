@@ -7,7 +7,7 @@ SUBDIRS = \
 
 noinst_LTLIBRARIES = libalgorithm.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 libalgorithm_la_SOURCES = \
     Angle.cpp \

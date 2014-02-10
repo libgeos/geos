@@ -12,5 +12,5 @@ LIBS = $(top_builddir)/src/libgeos.la
 IteratedBufferStressTest_SOURCES = IteratedBufferStressTest.cpp 
 IteratedBufferStressTest_LDADD = $(LIBS)
 
-INCLUDES = -I$(top_srcdir)/include
-INCLUDES += -I$(top_srcdir)/src/io/markup
+AM_CPPFLAGS = -I$(top_srcdir)/include
+AM_CPPFLAGS += -I$(top_srcdir)/src/io/markup

@@ -5,7 +5,7 @@ SUBDIRS =
 
 noinst_LTLIBRARIES = libopdistance.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 libopdistance_la_SOURCES = \
     ConnectedElementLocationFilter.cpp \

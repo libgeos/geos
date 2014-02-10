@@ -12,5 +12,5 @@ LIBS = $(top_builddir)/src/libgeos.la
 RectangleIntersectsPerfTest_SOURCES = RectangleIntersectsPerfTest.cpp 
 RectangleIntersectsPerfTest_LDADD = $(LIBS)
 
-INCLUDES = -I$(top_srcdir)/include
-INCLUDES += -I$(top_srcdir)/src/io/markup
+AM_CPPFLAGS = -I$(top_srcdir)/include
+AM_CPPFLAGS += -I$(top_srcdir)/src/io/markup

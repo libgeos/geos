@@ -1,7 +1,7 @@
 #
 # This file is part of project GEOS (http://trac.osgeo.org/geos/) 
 #
-INCLUDES = -I$(top_srcdir)/include -I$(top_srcdir)/tests/unit/tut -I$(top_builddir)/capi
+AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/tests/unit/tut -I$(top_builddir)/capi
 
 EXTRA_DIST = \
 	brokengrammar \

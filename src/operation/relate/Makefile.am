@@ -5,7 +5,7 @@ SUBDIRS =
 
 noinst_LTLIBRARIES = liboprelate.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 liboprelate_la_SOURCES = \
     EdgeEndBuilder.cpp \

@@ -6,7 +6,7 @@ top_srcdir=@top_srcdir@
 GEOS_CAPI_VERSION="@VERSION@-CAPI-@CAPI_VERSION@"
 GEOS_JTS_PORT="@JTS_PORT@"
 
-INCLUDES = -I$(top_srcdir)/include
+AM_CPPFLAGS = -I$(top_srcdir)/include
 
 capidir = $(includedir)
 

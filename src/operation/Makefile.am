@@ -15,7 +15,7 @@ SUBDIRS = \
 
 noinst_LTLIBRARIES = liboperation.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 liboperation_la_SOURCES = \
 	GeometryGraphOperation.cpp \

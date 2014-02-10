@@ -5,7 +5,7 @@ SUBDIRS = index
 
 noinst_LTLIBRARIES = libgeomgraph.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 libgeomgraph_la_SOURCES = \
 	Depth.cpp \

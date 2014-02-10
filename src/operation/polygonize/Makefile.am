@@ -5,7 +5,7 @@ SUBDIRS =
 
 noinst_LTLIBRARIES = liboppolygonize.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 liboppolygonize_la_SOURCES = \
     PolygonizeDirectedEdge.cpp \

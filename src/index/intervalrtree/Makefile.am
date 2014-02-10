@@ -3,7 +3,7 @@
 #
 noinst_LTLIBRARIES = libintervalrtree.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 libintervalrtree_la_SOURCES = \
 	IntervalRTreeBranchNode.cpp \

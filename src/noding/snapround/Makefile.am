@@ -5,7 +5,7 @@ SUBDIRS =
 
 noinst_LTLIBRARIES = libsnapround.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 libsnapround_la_SOURCES = \
     HotPixel.cpp \

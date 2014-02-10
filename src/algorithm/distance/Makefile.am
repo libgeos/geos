@@ -5,7 +5,7 @@ SUBDIRS =
 
 noinst_LTLIBRARIES = libdistance.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 libdistance_la_SOURCES = \
     DiscreteHausdorffDistance.cpp \

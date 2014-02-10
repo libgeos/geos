@@ -3,7 +3,7 @@
 #
 noinst_LTLIBRARIES = libindexsweepline.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 libindexsweepline_la_SOURCES = \
     SweepLineEvent.cpp \

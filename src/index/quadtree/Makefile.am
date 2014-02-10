@@ -3,7 +3,7 @@
 #
 noinst_LTLIBRARIES = libindexquadtree.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 libindexquadtree_la_SOURCES = \
     DoubleBits.cpp \

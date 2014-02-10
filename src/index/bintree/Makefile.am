@@ -3,7 +3,7 @@
 #
 noinst_LTLIBRARIES = libindexbintree.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 libindexbintree_la_SOURCES = \
     Bintree.cpp \

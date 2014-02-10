@@ -5,7 +5,7 @@ SUBDIRS =
 
 noinst_LTLIBRARIES = libutil.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 libutil_la_SOURCES = \
 	Assert.cpp \

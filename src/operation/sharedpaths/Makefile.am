@@ -5,7 +5,7 @@ SUBDIRS =
 
 noinst_LTLIBRARIES = libopsharedpaths.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 libopsharedpaths_la_SOURCES = \
     SharedPathsOp.cpp 

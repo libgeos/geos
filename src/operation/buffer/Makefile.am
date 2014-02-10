@@ -5,7 +5,7 @@ SUBDIRS =
 
 noinst_LTLIBRARIES = libopbuffer.la
 
-INCLUDES = -I$(top_srcdir)/include
+AM_CPPFLAGS = -I$(top_srcdir)/include
 
 libopbuffer_la_SOURCES = \
 	BufferBuilder.cpp \

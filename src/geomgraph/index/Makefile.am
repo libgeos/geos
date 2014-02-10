@@ -3,7 +3,7 @@
 #
 noinst_LTLIBRARIES = libgeomgraphindex.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 libgeomgraphindex_la_SOURCES = \
     MonotoneChainEdge.cpp \

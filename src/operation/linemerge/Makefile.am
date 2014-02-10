@@ -5,7 +5,7 @@ SUBDIRS =
 
 noinst_LTLIBRARIES = liboplinemerge.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 liboplinemerge_la_SOURCES = \
 	EdgeString.cpp \

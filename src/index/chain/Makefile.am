@@ -3,7 +3,7 @@
 #
 noinst_LTLIBRARIES = libindexchain.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 libindexchain_la_SOURCES = \
 	MonotoneChain.cpp \

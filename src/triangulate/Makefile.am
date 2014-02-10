@@ -6,7 +6,7 @@ SUBDIRS = \
 
 noinst_LTLIBRARIES = libtriangulate.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 libtriangulate_la_SOURCES = \
 	IncrementalDelaunayTriangulator.cpp \

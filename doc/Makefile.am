@@ -12,7 +12,7 @@ LIBS = $(top_builddir)/src/libgeos.la
 example_SOURCES = example.cpp 
 example_LDADD = $(LIBS)
 
-INCLUDES = -I$(top_srcdir)/include
+AM_CPPFLAGS = -I$(top_srcdir)/include
 
 DOXYGEN = doxygen
 

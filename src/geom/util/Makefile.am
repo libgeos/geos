@@ -3,7 +3,7 @@
 #
 noinst_LTLIBRARIES = libgeomutil.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 libgeomutil_la_SOURCES = \
     ComponentCoordinateExtracter.cpp \

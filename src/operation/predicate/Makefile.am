@@ -6,7 +6,7 @@
 
 noinst_LTLIBRARIES = liboppredicate.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 liboppredicate_la_SOURCES = \
     RectangleIntersects.cpp \

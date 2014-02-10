@@ -8,7 +8,7 @@ SUBDIRS=\
 noinst_LTLIBRARIES = \
     libgeom.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 libgeom_la_SOURCES = \
     Coordinate.cpp \

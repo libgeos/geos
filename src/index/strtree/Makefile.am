@@ -3,7 +3,7 @@
 #
 noinst_LTLIBRARIES = libindexstrtree.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 libindexstrtree_la_SOURCES = \
     AbstractNode.cpp \

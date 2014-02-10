@@ -18,7 +18,7 @@ SUBDIRS = \
 
 EXTRA_DIST = Makefile.vc dirlist.mk CMakeLists.txt info.plist.in
 
-INCLUDES = -I$(top_srcdir)/include
+AM_CPPFLAGS = -I$(top_srcdir)/include
 
 lib_LTLIBRARIES = libgeos.la
 

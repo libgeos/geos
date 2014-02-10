@@ -5,7 +5,7 @@ SUBDIRS =
 
 noinst_LTLIBRARIES = liblocation.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 liblocation_la_SOURCES = \
 	IndexedPointInAreaLocator.cpp \

@@ -3,7 +3,7 @@
 #
 noinst_LTLIBRARIES = liblinearref.la
 
-INCLUDES = -I$(top_srcdir)/include
+AM_CPPFLAGS = -I$(top_srcdir)/include
 
 liblinearref_la_SOURCES = \
     ExtractLineByLocation.cpp \

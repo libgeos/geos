@@ -5,7 +5,7 @@ SUBDIRS =
 
 noinst_LTLIBRARIES = libopunion.la
 
-INCLUDES = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include 
 
 libopunion_la_SOURCES = \
     CascadedPolygonUnion.cpp \
