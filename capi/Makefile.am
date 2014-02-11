@@ -21,7 +21,7 @@ DIR_SOURCES = \
     $(NULL)
 
 libgeos_c_la_SOURCES = $(DIR_SOURCES)
-libgeos_c_la_CPPFLAGS = -DGEOS_CAPI_VERSION='$(GEOS_CAPI_VERSION)' -DGEOS_JTS_PORT='$(GEOS_JTS_PORT)'
+libgeos_c_la_CPPFLAGS = $(AM_CPPFLAGS) -DGEOS_CAPI_VERSION='$(GEOS_CAPI_VERSION)' -DGEOS_JTS_PORT='$(GEOS_JTS_PORT)'
 libgeos_c_la_LIBADD = $(top_builddir)/src/libgeos.la
 libgeos_c_la_LDFLAGS = \
     -version-info @CAPI_INTERFACE_CURRENT@:@CAPI_INTERFACE_REVISION@:@CAPI_INTERFACE_AGE@ \
