@@ -15,6 +15,7 @@
 #include <sstream>
 #include <string>
 #include <memory>
+#include <cmath>
 
 namespace tut
 {
