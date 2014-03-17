@@ -87,6 +87,9 @@ OBJ = \
 	geom\util\GeometryCombiner.$(EXT) \
 	geom\util\ShortCircuitedGeometryVisitor.$(EXT) \
 	geom\util\SineStarFactory.$(EXT) \
+	geom\util\LinearComponentExtracter.$(EXT) \
+	geom\util\PolygonExtracter.$(EXT) \
+	geom\util\PointExtracter.$(EXT) \
 	geom\prep\AbstractPreparedPolygonContains.$(EXT) \
 	geom\prep\BasicPreparedGeometry.$(EXT) \
 	geom\prep\PreparedGeometry.$(EXT) \
@@ -288,6 +291,7 @@ OBJ = \
 	simplify\TopologyPreservingSimplifier.$(EXT) \
 	triangulate\DelaunayTriangulationBuilder.$(EXT) \
 	triangulate\IncrementalDelaunayTriangulator.$(EXT) \
+	triangulate\VoronoiDiagramBuilder.$(EXT) \
 	triangulate\quadedge\LastFoundQuadEdgeLocator.$(EXT) \
 	triangulate\quadedge\LocateFailureException.$(EXT) \
 	triangulate\quadedge\QuadEdge.$(EXT) \
