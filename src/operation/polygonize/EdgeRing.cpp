@@ -27,7 +27,8 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/algorithm/CGAlgorithms.h>
-#include <geos/util.h>
+#include <geos/util/IllegalArgumentException.h>
+#include <geos/util.h> // TODO: drop this, includes too much
 
 #include <vector>
 #include <cassert>
@@ -226,7 +227,7 @@ EdgeRing::getRingInternal()
     getCoordinates();
     try {
         ring=factory->createLinearRing(*ringPts);
-    } catch (const std::exception& e) {
+    } catch (const geos::util::IllegalArgumentException& e) {
 #if GEOS_DEBUG
         // FIXME: print also ringPts
         std::cerr << "EdgeRing::getRingInternal: "
