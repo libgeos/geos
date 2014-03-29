@@ -24,6 +24,7 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Polygon.h>
+#include <geos/util/Interrupt.h>
 // std
 #include <vector>
 
@@ -266,6 +267,7 @@ Polygonizer::findValidRings(const vector<EdgeRing*>& edgeRingList,
 			// returned LineString ownership is transferred.
 			invalidRingList.push_back(er->getLineString());
 		}
+		GEOS_CHECK_FOR_INTERRUPTS();
 	}
 }
 
@@ -282,6 +284,7 @@ Polygonizer::findShellsAndHoles(const vector<EdgeRing*>& edgeRingList)
 			holeList.push_back(er);
 		else
 			shellList.push_back(er);
+		GEOS_CHECK_FOR_INTERRUPTS();
 	}
 }
 
@@ -293,6 +296,7 @@ Polygonizer::assignHolesToShells(const vector<EdgeRing*>& holeList, vector<EdgeR
 	{
 		EdgeRing *holeER=holeList[i];
 		assignHoleToShell(holeER, shellList);
+		GEOS_CHECK_FOR_INTERRUPTS();
 	}
 }
 
