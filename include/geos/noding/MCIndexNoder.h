@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -102,7 +102,7 @@ public:
 			index::chain::MonotoneChainOverlapAction(),
 			si(newSi)
 		{}
-
+		using index::chain::MonotoneChainOverlapAction::overlap;
 		void overlap(index::chain::MonotoneChain& mc1, std::size_t start1,
             index::chain::MonotoneChain& mc2, std::size_t start2);
     private:
@@ -112,7 +112,7 @@ public:
         SegmentOverlapAction(const SegmentOverlapAction& other);
         SegmentOverlapAction& operator=(const SegmentOverlapAction& rhs);
 	};
-	
+
 };
 
 } // namespace geos.noding

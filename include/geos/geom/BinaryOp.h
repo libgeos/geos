@@ -188,6 +188,8 @@ fix_self_intersections(std::auto_ptr<Geometry> g, const std::string& label)
   ::geos::ignore_unused_variable_warning(label);
 #ifdef GEOS_DEBUG_BINARYOP
 	std::cerr << label << " fix_self_intersection (UnaryUnion)" << std::endl;
+#else
+    (void)(label);
 #endif
 
   // Only multi-components can be fixed by UnaryUnion

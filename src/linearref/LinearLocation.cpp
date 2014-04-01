@@ -88,7 +88,8 @@ LinearLocation::normalize()
 	{
 		segmentFraction = 1.0;
 	}
-
+// componentIndex has type unsigned int, so it cannot be negative
+#if 0
 	if (componentIndex < 0)
 	{
 		componentIndex = 0;
@@ -100,6 +101,7 @@ LinearLocation::normalize()
 		segmentIndex = 0;
 		segmentFraction = 0.0;
 	}
+#endif
 	if (segmentFraction == 1.0)
 	{
 		segmentFraction = 0.0;
@@ -204,7 +206,7 @@ LinearLocation::getCoordinate(const Geometry* linearGeom) const
 	const LineString* lineComp = dynamic_cast<const LineString *> (linearGeom->getGeometryN(componentIndex));
 	if ( ! lineComp ) {
 		throw util::IllegalArgumentException("LinearLocation::getCoordinate only works with LineString geometries");
-	}  
+	}
 	Coordinate p0 = lineComp->getCoordinateN(segmentIndex);
 	if (segmentIndex >= lineComp->getNumPoints() - 1)
 		return p0;
@@ -232,11 +234,13 @@ LinearLocation::getSegment(const Geometry* linearGeom) const
 bool
 LinearLocation::isValid(const Geometry* linearGeom) const
 {
-	if (componentIndex < 0 || componentIndex >= linearGeom->getNumGeometries())
+	// componentIndex is unsigned
+	if (/*componentIndex < 0 || */componentIndex >= linearGeom->getNumGeometries())
 		return false;
 
 	const LineString* lineComp = dynamic_cast<const LineString*> (linearGeom->getGeometryN(componentIndex));
-	if (segmentIndex < 0 || segmentIndex > lineComp->getNumPoints())
+	// segmentIndex is unsigned
+	if (/*segmentIndex < 0 || */segmentIndex > lineComp->getNumPoints())
 		return false;
 	if (segmentIndex == lineComp->getNumPoints() && segmentFraction != 0.0)
 		return false;
