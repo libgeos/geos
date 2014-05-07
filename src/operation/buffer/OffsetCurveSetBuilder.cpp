@@ -37,6 +37,7 @@
 #include <geos/geomgraph/Label.h>
 #include <geos/noding/NodedSegmentString.h>
 
+#include <algorithm> // for min
 #include <cmath>
 #include <cassert>
 #include <memory>
