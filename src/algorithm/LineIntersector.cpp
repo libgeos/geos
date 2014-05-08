@@ -29,6 +29,7 @@
 //#include <geos/util/Assert.h> // changed to TopologyException
 //#include <geos/util/TopologyException.h> // we don't throw anymore
 
+#include <algorithm> // for max()
 #include <string>
 #include <cmath> // for fabs()
 #include <cassert> 
@@ -125,7 +126,7 @@ LineIntersector::computeEdgeDistance(const Coordinate& p,const Coordinate& p0,co
 		// <FIX>
 		// hack to ensure that non-endpoints always have a non-zero distance
 		if (dist == 0.0 && !(p==p0)) {
-			dist=max(pdx,pdy);
+			dist=(std::max)(pdx,pdy);
 		}
 	}
 	assert(!(dist == 0.0 && !(p==p0))); // Bad distance calculation

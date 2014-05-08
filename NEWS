@@ -6,6 +6,7 @@ YYYY-MM-DD
  - Throw a ParseException on missing chars from HEXWKB string (#675)
  - Fix ruby binding build (https://github.com/libgeos/libgeos/pull/32)
  - Make polygonize operation interruptable
+ - Update for Visual Studio 2013 (#691)
 
 Changes in 3.4.2
 2013-08-25

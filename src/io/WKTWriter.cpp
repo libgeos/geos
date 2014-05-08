@@ -33,6 +33,7 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/util/IllegalArgumentException.h>
 
+#include <algorithm> // for min
 #include <typeinfo>
 #include <cstdio> // should avoid this
 #include <string>
@@ -179,7 +180,7 @@ void
 WKTWriter::appendGeometryTaggedText(const Geometry *geometry, int level,
 		Writer *writer)
 {
-  outputDimension = min( defaultOutputDimension,
+  outputDimension = (std::min)( defaultOutputDimension,
                          geometry->getCoordinateDimension() );
 
   indent(level, writer);
