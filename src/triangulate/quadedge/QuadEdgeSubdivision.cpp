@@ -505,6 +505,13 @@ QuadEdgeSubdivision::getVoronoiDiagram(const geom::GeometryFactory& geomFact)
 	return std::auto_ptr<GeometryCollection>(geomFact.createGeometryCollection(vorCells.release()));
 }
 
+std::auto_ptr<geom::MultiLineString> 
+QuadEdgeSubdivision::getVoronoiDiagramEdges(const geom::GeometryFactory& geomFact)
+{
+	std::auto_ptr< std::vector<geom::Geometry*> > vorCells = getVoronoiCellEdges(geomFact);
+	return std::auto_ptr<MultiLineString>(geomFact.createMultiLineString(vorCells.release()));
+}
+
 std::auto_ptr< std::vector<geom::Geometry*> >
 QuadEdgeSubdivision::getVoronoiCellPolygons(const geom::GeometryFactory& geomFact)
 {
@@ -524,6 +531,27 @@ QuadEdgeSubdivision::getVoronoiCellPolygons(const geom::GeometryFactory& geomFac
 	delete tricircumVisitor;
 	return cells;
 }
+
+std::auto_ptr< std::vector<geom::Geometry*> >
+QuadEdgeSubdivision::getVoronoiCellEdges(const geom::GeometryFactory& geomFact)
+{
+	std::auto_ptr< std::vector<geom::Geometry*> > cells(new std::vector<geom::Geometry*>);
+	TriangleCircumcentreVisitor* tricircumVisitor = new TriangleCircumcentreVisitor();
+	visitTriangles((TriangleVisitor*)tricircumVisitor, true);
+
+	std::auto_ptr<QuadEdgeSubdivision::QuadEdgeList> edges = getVertexUniqueEdges(false);
+
+	for(QuadEdgeSubdivision::QuadEdgeList::iterator it=edges->begin() ; it!=edges->end() ; ++it)
+	{
+		QuadEdge *qe = *it;
+		std::auto_ptr<geom::Geometry> poly = getVoronoiCellEdge(qe,geomFact);
+
+		cells->push_back(poly.release());
+	}
+	delete tricircumVisitor;
+	return cells;
+}
+
 std::auto_ptr<geom::Geometry>
 QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFactory& geomFact)
 {
@@ -557,6 +585,35 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFac
 	c = v.getCoordinate();
 	cellPoly->setUserData(reinterpret_cast<void*>(&c));
 	return cellPoly;
+}
+
+std::auto_ptr<geom::Geometry>
+QuadEdgeSubdivision::getVoronoiCellEdge(QuadEdge* qe ,const geom::GeometryFactory& geomFact)
+{
+	std::vector<Coordinate> cellPts;
+	QuadEdge *startQE = qe;
+	do{
+		Coordinate cc = qe->rot().orig().getCoordinate();
+		cellPts.push_back(cc);
+		qe = &qe->oPrev();
+
+	}while ( qe != startQE);
+
+
+	//CoordList from a vector of Coordinates.
+	geom::CoordinateList coordList(cellPts);
+	//for checking close ring in CoordList class:
+	coordList.closeRing();
+
+	std::auto_ptr<Coordinate::Vect> pts = coordList.toCoordinateArray();
+	std::auto_ptr<geom::Geometry> cellEdge( 
+		geomFact.createLineString(new geom::CoordinateArraySequence(pts.release())));
+
+	Vertex v = startQE->orig();
+	Coordinate c(0,0);
+	c = v.getCoordinate();
+	cellEdge->setUserData(reinterpret_cast<void*>(&c));
+	return cellEdge;
 }
 
 std::auto_ptr<QuadEdgeSubdivision::QuadEdgeList>

@@ -107,6 +107,17 @@ VoronoiDiagramBuilder::getDiagram(const geom::GeometryFactory& geomFact)
 	return clipGeometryCollection(*polys,diagramEnv);
 }
 
+std::auto_ptr<geom::Geometry>
+VoronoiDiagramBuilder::getDiagramEdges(const geom::GeometryFactory& geomFact)
+{
+	create();
+	std::auto_ptr<geom::MultiLineString> edges = subdiv->getVoronoiDiagramEdges(geomFact);
+  if ( edges->isEmpty() ) return std::auto_ptr<Geometry>(edges.release());
+  std::auto_ptr<geom::Geometry> clipPoly ( geomFact.toGeometry(&diagramEnv) );
+  std::auto_ptr<Geometry> clipped( clipPoly->intersection(edges.get()) );
+	return clipped;
+}
+
 std::auto_ptr<geom::GeometryCollection> 
 VoronoiDiagramBuilder::clipGeometryCollection(const geom::GeometryCollection& geom, const geom::Envelope& clipEnv)
 {

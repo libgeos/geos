@@ -95,7 +95,7 @@ public:
 	 * @return the subdivision containing the triangulation
 	 */
 	std::auto_ptr<quadedge::QuadEdgeSubdivision> getSubdivision();
-	
+
 	/**
 	 * Gets the faces of the computed diagram as a {@link GeometryCollection} 
 	 * of {@link Polygon}s, clipped as specified.
@@ -104,6 +104,15 @@ public:
 	 * @return the faces of the diagram
 	 */
 	std::auto_ptr<geom::GeometryCollection> getDiagram(const geom::GeometryFactory& geomFact);
+
+	/**
+	 * Gets the faces of the computed diagram as a {@link GeometryCollection} 
+	 * of {@link LineString}s, clipped as specified.
+	 * 
+	 * @param geomFact the geometry factory to use to create the output
+	 * @return the faces of the diagram
+	 */
+	std::auto_ptr<geom::Geometry> getDiagramEdges(const geom::GeometryFactory& geomFact);
 
 private:
 

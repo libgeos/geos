@@ -6234,8 +6234,8 @@ GEOSVoronoiDiagram_r(GEOSContextHandle_t extHandle, const Geometry *g1,double to
 		VoronoiDiagramBuilder builder;
 		builder.setSites(*g1);
 		builder.setTolerance(tolerance);
-		if(onlyEdges) return builder.getSubdivision()->getEdges(*g1->getFactory()).release();
-		else return builder.getDiagram(*(g1->getFactory())).release();
+		if(onlyEdges) return builder.getDiagramEdges(*g1->getFactory()).release();
+		else return builder.getDiagram(*g1->getFactory()).release();
 	}    
 	catch(const std::exception &e)
 	{    
