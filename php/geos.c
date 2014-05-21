@@ -242,6 +242,7 @@ PHP_METHOD(Geometry, hausdorffDistance);
 PHP_METHOD(Geometry, snapTo);
 PHP_METHOD(Geometry, node);
 PHP_METHOD(Geometry, delaunayTriangulation);
+PHP_METHOD(Geometry, voronoiDiagram);
 
 static zend_function_entry Geometry_methods[] = {
     PHP_ME(Geometry, __construct, NULL, 0)
@@ -305,6 +306,7 @@ static zend_function_entry Geometry_methods[] = {
     PHP_ME(Geometry, snapTo, NULL, 0)
     PHP_ME(Geometry, node, NULL, 0)
     PHP_ME(Geometry, delaunayTriangulation, NULL, 0)
+    PHP_ME(Geometry, voronoiDiagram, NULL, 0)
     {NULL, NULL, NULL}
 };
 
@@ -2587,11 +2589,10 @@ PHP_FUNCTION(GEOSSharedPaths)
 /**
  * GEOSGeometry::delaunayTriangulation([<tolerance>], [<onlyEdges>])
  *
- * styleArray keys supported:
  *  'tolerance'
  *       Type: double
  *       snapping tolerance to use for improved robustness
- *  'edgesOnly'
+ *  'onlyEdges'
  *       Type: boolean
  *       if true will return a MULTILINESTRING, otherwise (the default)
  *       it will return a GEOMETRYCOLLECTION containing triangular POLYGONs.
@@ -2611,6 +2612,40 @@ PHP_METHOD(Geometry, delaunayTriangulation)
     }
 
     ret = GEOSDelaunayTriangulation(this, tolerance, edgeonly ? 1 : 0);
+    if ( ! ret ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, ret);
+}
+
+/**
+ * GEOSGeometry::voronoiDiagram([<tolerance>], [<onlyEdges>])
+ *
+ * styleArray keys supported:
+ *  'tolerance'
+ *       Type: double
+ *       snapping tolerance to use for improved robustness
+ *  'onlyEdges'
+ *       Type: boolean
+ *       if true will return a MULTILINESTRING, otherwise (the default)
+ *       it will return a GEOMETRYCOLLECTION containing POLYGONs.
+ */
+PHP_METHOD(Geometry, voronoiDiagram)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *ret;
+    double tolerance = 0.0;
+    zend_bool edgeonly = 0;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|db",
+            &tolerance, &edgeonly) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    ret = GEOSVoronoiDiagram(this, tolerance, edgeonly ? 1 : 0);
     if ( ! ret ) RETURN_NULL(); /* should get an exception first */
 
     /* return_value is a zval */

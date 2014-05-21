@@ -2037,6 +2037,26 @@ MULTIPOINT(
 
     }
 
+    public function testGeometry_voronoiDiagram()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        $g = $reader->read('MULTIPOINT(0 0, 100 0, 100 100, 0 100)');
+
+        $b = $g->voronoiDiagram(0);
+        $this->assertEquals(
+'GEOMETRYCOLLECTION (POLYGON ((50 200, 200 200, 200 50, 50 50, 50 200)), POLYGON ((-100 50, -100 200, 50 200, 50 50, -100 50)), POLYGON ((50 -100, -100 -100, -100 50, 50 50, 50 -100)), POLYGON ((200 50, 200 -100, 50 -100, 50 50, 200 50)))'
+            , $writer->write($b));
+
+        $b = $g->voronoiDiagram(0, 1);
+        $this->assertEquals(
+'MULTILINESTRING ((50 50, 50 200), (200 50, 50 50), (50 50, -100 50), (50 50, 50 -100))'
+            , $writer->write($b));
+
+    }
+
     public function testGeometry_snapTo()
     {
         $reader = new GEOSWKTReader();
