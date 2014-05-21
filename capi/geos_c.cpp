@@ -1271,9 +1271,9 @@ GEOSDelaunayTriangulation(const Geometry *g, double tolerance, int onlyEdges)
 }
 
 Geometry*
-GEOSVoronoiDiagram(const Geometry *g, double tolerance, int onlyEdges)
+GEOSVoronoiDiagram(const Geometry *g, const Geometry *env, double tolerance, int onlyEdges)
 {
-  return GEOSVoronoiDiagram_r(handle, g, tolerance, onlyEdges);
+  return GEOSVoronoiDiagram_r(handle, g, env, tolerance, onlyEdges);
 }
 
 } /* extern "C" */

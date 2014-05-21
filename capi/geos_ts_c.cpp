@@ -6219,7 +6219,7 @@ GEOSDelaunayTriangulation_r(GEOSContextHandle_t extHandle, const Geometry *g1, d
     return NULL;
 }
 Geometry* 
-GEOSVoronoiDiagram_r(GEOSContextHandle_t extHandle, const Geometry *g1,double tolerance ,int onlyEdges)
+GEOSVoronoiDiagram_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *env, double tolerance ,int onlyEdges)
 {
 	if ( 0 == extHandle ) return NULL;
 
@@ -6234,6 +6234,7 @@ GEOSVoronoiDiagram_r(GEOSContextHandle_t extHandle, const Geometry *g1,double to
 		VoronoiDiagramBuilder builder;
 		builder.setSites(*g1);
 		builder.setTolerance(tolerance);
+    if(env) builder.setClipEnvelope(env->getEnvelopeInternal());
 		if(onlyEdges) return builder.getDiagramEdges(*g1->getFactory()).release();
 		else return builder.getDiagram(*g1->getFactory()).release();
 	}    

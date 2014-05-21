@@ -2045,7 +2045,7 @@ MULTIPOINT(
 
         $g = $reader->read('MULTIPOINT(0 0, 100 0, 100 100, 0 100)');
 
-        $b = $g->voronoiDiagram(0);
+        $b = $g->voronoiDiagram();
         $this->assertEquals(
 'GEOMETRYCOLLECTION (POLYGON ((50 200, 200 200, 200 50, 50 50, 50 200)), POLYGON ((-100 50, -100 200, 50 200, 50 50, -100 50)), POLYGON ((50 -100, -100 -100, -100 50, 50 50, 50 -100)), POLYGON ((200 50, 200 -100, 50 -100, 50 50, 200 50)))'
             , $writer->write($b));
@@ -2053,6 +2053,11 @@ MULTIPOINT(
         $b = $g->voronoiDiagram(0, 1);
         $this->assertEquals(
 'MULTILINESTRING ((50 50, 50 200), (200 50, 50 50), (50 50, -100 50), (50 50, 50 -100))'
+            , $writer->write($b));
+
+        $b = $g->voronoiDiagram(0, 1, $g->buffer(1000));
+        $this->assertEquals(
+'MULTILINESTRING ((50 50, 50 1100), (1100 50, 50 50), (50 50, -1000 50), (50 50, 50 -1000))'
             , $writer->write($b));
 
     }

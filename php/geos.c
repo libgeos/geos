@@ -156,7 +156,6 @@ static zend_object_value
 Gen_create_obj (zend_class_entry *type TSRMLS_DC,
     zend_objects_free_object_storage_t st, zend_object_handlers* handlers)
 {
-    zval *tmp;
     zend_object_value retval;
 
     Proxy *obj = (Proxy *)emalloc(sizeof(Proxy));
@@ -2620,9 +2619,8 @@ PHP_METHOD(Geometry, delaunayTriangulation)
 }
 
 /**
- * GEOSGeometry::voronoiDiagram([<tolerance>], [<onlyEdges>])
+ * GEOSGeometry::voronoiDiagram([<tolerance>], [<onlyEdges>], [<extent>])
  *
- * styleArray keys supported:
  *  'tolerance'
  *       Type: double
  *       snapping tolerance to use for improved robustness
@@ -2630,22 +2628,28 @@ PHP_METHOD(Geometry, delaunayTriangulation)
  *       Type: boolean
  *       if true will return a MULTILINESTRING, otherwise (the default)
  *       it will return a GEOMETRYCOLLECTION containing POLYGONs.
+ *  'extent'
+ *       Type: geometry
+ *       Clip returned diagram by the extent of the given geometry
  */
 PHP_METHOD(Geometry, voronoiDiagram)
 {
     GEOSGeometry *this;
     GEOSGeometry *ret;
+    zval *zobj = 0;
+    GEOSGeometry *env = 0;
     double tolerance = 0.0;
     zend_bool edgeonly = 0;
 
     this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|db",
-            &tolerance, &edgeonly) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "|dbo",
+            &tolerance, &edgeonly, &zobj) == FAILURE) {
         RETURN_NULL();
     }
 
-    ret = GEOSVoronoiDiagram(this, tolerance, edgeonly ? 1 : 0);
+    if ( zobj ) env = getRelay(zobj, Geometry_ce_ptr);
+    ret = GEOSVoronoiDiagram(this, env, tolerance, edgeonly ? 1 : 0);
     if ( ! ret ) RETURN_NULL(); /* should get an exception first */
 
     /* return_value is a zval */

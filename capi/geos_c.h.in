@@ -748,18 +748,25 @@ extern GEOSGeometry GEOS_DLL * GEOSDelaunayTriangulation_r(
  * Returns the Voronoi polygons of a set of Vertices given as input
  * 
  * @param g the input geometry whose vertex will be used as sites.
- * @param tolerance optional snapping tolerance to use for improved robustness
+ * @param tolerance snapping tolerance to use for improved robustness
+ * @param onlyEdges whether to return only edges of the voronoi cells
+ * @param env clipping envelope for the returned diagram, automatically
+ *            determined if NULL.
+ *            The diagram will be clipped to the larger
+ *            of this envelope or an envelope surrounding the sites.
  * 
  * @return a newly allocated geometry, or NULL on exception.
  */
 extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagram(
-				const GEOSGeometry *g,  
+				const GEOSGeometry *g,
+				const GEOSGeometry *env,
 				double tolerance,
 				int onlyEdges);
 
 extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagram_r(
 				GEOSContextHandle_t extHandle, 
-				const GEOSGeometry *g1, 
+				const GEOSGeometry *g, 
+				const GEOSGeometry *env,
 				double tolerance,
 				int onlyEdges);
 
