@@ -28,10 +28,16 @@ namespace strtree { // geos.index.strtree
 
 Interval::Interval(Interval *other)
 {
-	Interval(other->imin,other->imax);
+	init(other->imin, other->imax);
 }
 
 Interval::Interval(double newMin,double newMax)
+{
+	init(newMin, newMax);
+}
+
+void
+Interval::init(double newMin, double newMax)
 {
 	assert(newMin<=newMax);
 	imin=newMin;
