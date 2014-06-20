@@ -25,7 +25,7 @@ geos_la_SOURCES = geos_wrap.cxx
 geos_la_LIBADD =  $(top_builddir)/capi/libgeos_c.la $(RUBY_SO_NAME)
 
 # Only need to grab the capi header files
-geos_la_CPPFLAGS = -I$(top_builddir)/capi
+geos_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(top_builddir)/capi
 
 # Specify -module and -avoid-version so we can create a file called geos.dll/so which is what Ruby wants
 geos_la_LDFLAGS = -no-undefined  -module -avoid-version -L$(RUBY_LIB_DIR)
