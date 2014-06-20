@@ -106,7 +106,7 @@ protected:
 		{
 			const Boundable* childBoundable=b[i];
 			if (bounds==NULL) {
-				bounds=new Interval((Interval*)childBoundable->getBounds());
+				bounds=new Interval(*((Interval*)childBoundable->getBounds()));
 			} else {
 				bounds->expandToInclude((Interval*)childBoundable->getBounds());
 			}

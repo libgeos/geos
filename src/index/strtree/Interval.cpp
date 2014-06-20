@@ -26,11 +26,6 @@ namespace geos {
 namespace index { // geos.index
 namespace strtree { // geos.index.strtree
 
-Interval::Interval(Interval *other)
-{
-	Interval(other->imin,other->imax);
-}
-
 Interval::Interval(double newMin,double newMax)
 {
 	assert(newMin<=newMax);
@@ -45,7 +40,7 @@ Interval::getCentre()
 }
 
 Interval*
-Interval::expandToInclude(Interval *other)
+Interval::expandToInclude(const Interval *other)
 {
 	imax=max(imax,other->imax);
 	imin=min(imin,other->imin);
@@ -53,17 +48,13 @@ Interval::expandToInclude(Interval *other)
 }
 
 bool
-Interval::intersects(Interval *other)
+Interval::intersects(const Interval *other) const
 {
 	return !(other->imin>imax || other->imax<imin);
 }
 
 bool
-Interval::equals(void *o) {
-	if (typeid(o)!=typeid(Interval)) {
-		return false;
-	}
-	Interval *other=(Interval*) o;
+Interval::equals(const Interval *other) const {
 	return imin==other->imin && imax==other->imax;
 }
 
