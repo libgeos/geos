@@ -25,7 +25,7 @@ namespace geos {
 namespace util { // geos::util
 
 /** 
- * \brief Indicates one or more legal arguments.
+ * \brief Indicates one or more illegal arguments.
  *
  * This exception is thrown - for example - when
  * trying to apply set-theoretic methods to a

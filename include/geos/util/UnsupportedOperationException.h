@@ -28,7 +28,7 @@ namespace util { // geos::util
 /**
  * \class UnsupportedOperationException util.h geos.h
  *
- * \brief Indicates that the requested operation is unsopported.
+ * \brief Indicates that the requested operation is unsupported.
  *
  * This exception is thrown - for example - when requesting the
  * X or Y member of an empty Point
