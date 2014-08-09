@@ -122,7 +122,7 @@ elseif(MSVC)
   #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
   string(REGEX REPLACE "/W[0-9]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
-  if(MSVC80 OR MSVC90 OR MSVC10 OR MSVC11)
+  if(MSVC80 OR MSVC90 OR MSVC10 OR MSVC11 OR MSVC12 OR MSVC13)
 
     # Option is to enable the /MP switch for Visual Studio 2005 or later
     option(GEOS_MSVC_ENABLE_MP
