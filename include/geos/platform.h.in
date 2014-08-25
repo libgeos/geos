@@ -94,7 +94,7 @@ extern "C"
 // sandro furieri: sanitizing MinGW32
 #  define ISNAN(x) (std::isnan(x))
 # elif defined(__OSX__) || defined(__APPLE__) || \
-       defined(__NetBSD__) || defined(__DragonFly__) ||	\
+       defined(__NetBSD__) || defined(__DragonFly__) || defined (__OpenBSD__) || \
        (defined(__sun) && defined(__GNUC__))
    // Hack for OS/X <cmath> incorrectly re-defining isnan() into oblivion.
    // It does leave a version in std.
