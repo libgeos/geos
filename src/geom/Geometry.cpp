@@ -435,6 +435,10 @@ Geometry::equals(const Geometry *g) const
 	if (! getEnvelopeInternal()->equals(g->getEnvelopeInternal()))
 		return false;
 #endif
+
+	if (isEmpty()) return g->isEmpty();
+	else if (g->isEmpty()) return isEmpty();
+
 	auto_ptr<IntersectionMatrix> im ( relate(g) );
 	bool res=im->isEquals(getDimension(), g->getDimension());
 	return res;

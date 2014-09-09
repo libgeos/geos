@@ -325,7 +325,7 @@ Envelope::covers(const Envelope& other) const
 bool
 Envelope::equals(const Envelope* other) const
 {
-	if (isNull() || other->isNull()) { return false; }
+	if (isNull()) return other->isNull();
 	return  other->getMinX() == minx &&
 			other->getMaxX() == maxx &&
 			other->getMinY() == miny &&

@@ -2,6 +2,7 @@ Changes in 3.4.3-dev
 YYYY-MM-DD
 
 - Bug fixes / improvements
+ - Fix Empty to Empty equals (#703)
  - Fix build on OpenBSD (#700)
  - Fix build on HP-UX 11.23 (#664)
  - Throw a ParseException on missing chars from HEXWKB string (#675)
