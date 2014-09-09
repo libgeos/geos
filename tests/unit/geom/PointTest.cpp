@@ -371,7 +371,7 @@ namespace tut
 	{
 		GeometryAutoPtr geo(empty_point_->clone());
 
-		ensure( !empty_point_->equals(geo.get()) );
+		ensure( empty_point_->equals(geo.get()) );
 	}
 
 	// Test of equals() for non-empty Point (1.234,5.678)
