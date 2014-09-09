@@ -103,6 +103,9 @@ namespace tut
         ensure( !zero2.isNull() );
         ensure( !box.isNull() );
 
+        /* See http://trac.osgeo.org/geos/ticket/703 */
+        ensure( empty.equals( &empty ) );
+
         ensure( !empty.equals( &zero ) );
         ensure( !zero.equals( &empty ) );
 
