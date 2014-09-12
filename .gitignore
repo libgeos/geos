@@ -5,6 +5,7 @@ Makefile
 geos_svn_revision.h
 .libs
 .deps
+.vimrc
 *.o
 *.lo
 *.la
@@ -33,6 +34,7 @@ include/geos/stamp-h2
 include/geos/version.h
 include/stamp-h1
 install-sh
+compile
 libtool
 ltmain.sh
 missing
