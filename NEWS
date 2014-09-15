@@ -3,6 +3,7 @@ Changes in 3.5.0
 
 - New things:
   - Voronoi API (#627)
+  - PHP: Geometry->normalize method
   - GEOS_USE_ONLY_R_API macro support (#695)
   ...
 

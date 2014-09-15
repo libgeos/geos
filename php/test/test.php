@@ -2047,8 +2047,8 @@ MULTIPOINT(
 
         $b = $g->voronoiDiagram();
         $this->assertEquals(
-'GEOMETRYCOLLECTION (POLYGON ((50 200, 200 200, 200 50, 50 50, 50 200)), POLYGON ((-100 50, -100 200, 50 200, 50 50, -100 50)), POLYGON ((50 -100, -100 -100, -100 50, 50 50, 50 -100)), POLYGON ((200 50, 200 -100, 50 -100, 50 50, 200 50)))'
-            , $writer->write($b));
+'GEOMETRYCOLLECTION (POLYGON ((50 50, 50 200, 200 200, 200 50, 50 50)), POLYGON ((50 -100, 50 50, 200 50, 200 -100, 50 -100)), POLYGON ((-100 50, -100 200, 50 200, 50 50, -100 50)), POLYGON ((-100 -100, -100 50, 50 50, 50 -100, -100 -100)))'
+            , $writer->write($b->normalize()));
 
         $b = $g->voronoiDiagram(0, 1);
         $this->assertEquals(
