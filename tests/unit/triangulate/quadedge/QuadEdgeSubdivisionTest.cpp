@@ -10,10 +10,12 @@
 #include <geos/triangulate/quadedge/QuadEdgeSubdivision.h>
 #include <geos/triangulate/DelaunayTriangulationBuilder.h>
 #include <geos/geom/PrecisionModel.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/Polygon.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequence.h>
-//#include <geos/io/WKTWriter.h>
+#include <geos/io/WKTWriter.h>
 #include <geos/io/WKTReader.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Coordinate.h>
@@ -38,12 +40,15 @@ namespace tut
 		geos::geom::PrecisionModel pm;
 		geos::geom::GeometryFactory gf;
 		geos::io::WKTReader reader;
+		geos::io::WKTWriter writer;
 		test_quadedgesub_data()
       :
 			pm(),
 			gf(&pm),
-			reader(gf)
+			reader(gf),
+			writer()
 		{
+			writer.setTrim(true);
 		}
 	};
 
@@ -114,6 +119,51 @@ namespace tut
 		delete expected;
 //		ensure(polys->getCoordinateDimension() == expected->getCoordinateDimension());
 	}
+
+  // Test that returned polygons do not have duplicated points
+  // See http://trac.osgeo.org/geos/ticket/705
+  template<> template<> void object::test<3>()
+  {
+    const char *wkt = 
+      "MULTIPOINT ("
+        " (170 270),"
+        " (190 230),"
+        " (230 250),"
+        " (210 290)"
+      ")";
+    std::auto_ptr<Geometry> sites ( reader.read(wkt) );
+    std::auto_ptr<CoordinateSequence> siteCoords (
+      DelaunayTriangulationBuilder::extractUniqueCoordinates(*sites)
+    );
+
+    Envelope env = DelaunayTriangulationBuilder::envelope(*siteCoords);
+    double expandBy = std::max(env.getWidth() , env.getHeight());
+    env.expandBy(expandBy);
+    std::auto_ptr<QuadEdgeSubdivision> subdiv(
+      new quadedge::QuadEdgeSubdivision(env,10)
+    );
+
+    std::auto_ptr<IncrementalDelaunayTriangulator::VertexList> vertices (
+      DelaunayTriangulationBuilder::toVertices(*siteCoords)
+    );
+
+    IncrementalDelaunayTriangulator triangulator(subdiv.get());
+    triangulator.insertSites(*vertices);
+
+    //Test for getVoronoiDiagram::
+    GeometryFactory geomFact;
+    std::auto_ptr<GeometryCollection> polys = subdiv->getVoronoiDiagram(geomFact);
+    for (std::size_t i=0; i<polys->getNumGeometries(); ++i) {
+      const Polygon* p = dynamic_cast<const Polygon*>(polys->getGeometryN(i));
+      ensure(p);
+      std::auto_ptr<CoordinateSequence> cs (
+        p->getExteriorRing()->getCoordinates()
+      );
+      size_t from = cs->size();
+      cs->removeRepeatedPoints();
+      ensure_equals(from, cs->size());
+    }
+  }
 
 } // namespace tut
 

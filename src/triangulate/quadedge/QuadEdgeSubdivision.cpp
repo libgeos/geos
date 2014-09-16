@@ -559,7 +559,8 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFac
 	QuadEdge *startQE = qe;
 	do{
 		Coordinate cc = qe->rot().orig().getCoordinate();
-		cellPts.push_back(cc);
+		if ( cellPts.empty() || cellPts.back() != cc ) // no duplicates
+			cellPts.push_back(cc);
 		qe = &qe->oPrev();
 
 	}while ( qe != startQE);
@@ -572,7 +573,6 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFac
 
 	if(coordList.size() < 4)
 	{
-		cout << coordList << endl;
 		coordList.insert(coordList.end(),*(coordList.end()),true);
 	}
 	
@@ -594,7 +594,8 @@ QuadEdgeSubdivision::getVoronoiCellEdge(QuadEdge* qe ,const geom::GeometryFactor
 	QuadEdge *startQE = qe;
 	do{
 		Coordinate cc = qe->rot().orig().getCoordinate();
-		cellPts.push_back(cc);
+		if ( cellPts.empty() || cellPts.back() != cc ) // no duplicates
+			cellPts.push_back(cc);
 		qe = &qe->oPrev();
 
 	}while ( qe != startQE);
