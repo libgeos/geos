@@ -45,21 +45,23 @@ namespace tut
 
         void ensure_equals_wkt(GEOSGeometry* g, const char* exp)
         {
+          GEOSGeometry* exp_g = GEOSGeomFromWKT(exp);
+
           GEOSNormalize(g);
-          char* wkt_c = GEOSWKTWriter_write(w_, g);
-          std::string out(wkt_c);
-          free(wkt_c);
+          GEOSNormalize(exp_g);
+          bool eq = GEOSEqualsExact(g, exp_g, 1e-10);
+          if ( ! eq ) {
+            using namespace std;
+            char *wkt_exp = GEOSWKTWriter_write(w_, exp_g);
+            char *wkt_obt = GEOSWKTWriter_write(w_, g);
+            cout << "Expected: " << wkt_exp << endl;
+            cout << "Obtained: " << wkt_obt << endl;
+            free(wkt_exp);
+            free(wkt_obt);
+          }
 
-	  GEOSGeometry* exp_g = GEOSGeomFromWKT(exp);
-	  GEOSNormalize(exp_g);
-	  char* wkt_c2 = GEOSWKTWriter_write(w_, exp_g); 
-	  std::string out_exp(wkt_c2);
-	  free(wkt_c2);
-
-//	  cout << "OUTPUT STRING::" << out << endl << endl;
-//	  cout << "Expected STRING::" << out_exp << endl << endl;
-          ensure_equals(out, out_exp);
-	  GEOSGeom_destroy(exp_g);
+          ensure(eq);
+          GEOSGeom_destroy(exp_g);
         }
 
         ~test_capigeosvoronoidiagram_data()
