@@ -62,8 +62,15 @@ namespace tut
 		results->normalize();
 		expected->normalize();
 
-		ensure(results->equalsExact(expected.get(), 1e-7));
-		ensure(results->getCoordinateDimension() == expected->getCoordinateDimension());
+		ensure_equals(results->getCoordinateDimension(), expected->getCoordinateDimension());
+		bool eq = results->equalsExact(expected.get(), 1e-7);
+		if ( ! eq ) {
+			writer.setTrim(true);
+			cout << endl;
+			cout << " Expected: " << writer.write(expected.get()) << endl;
+			cout << " Obtained: " << writer.write(results.get()) << endl;
+		}
+		ensure(eq);
 
 	}
 
