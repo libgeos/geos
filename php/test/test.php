@@ -689,9 +689,9 @@ class test extends PHPUnit_Framework_TestCase
         $g = $reader->read('POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))');
         $g2 = $reader->read('POLYGON((5 -5, 5 5, 15 5, 15 -5, 5 -5))');
         $gi = $g->intersection($g2);
-        $this->assertEquals(
+        $this->assertTrue($gi->equals($reader->read(
 'POLYGON ((10 5, 10 0, 5 0, 5 5, 10 5))'
-            , $writer->write($gi));
+            )));
         $g2 = $reader->read('POLYGON((10 0, 20 0, 20 -5, 10 -5, 10 0))');
         $gi = $g->intersection($g2);
         $this->assertEquals( 'POINT (10 0)'
