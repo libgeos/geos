@@ -2052,13 +2052,13 @@ MULTIPOINT(
 
         $b = $g->voronoiDiagram(0, 1);
         $this->assertEquals(
-'MULTILINESTRING ((50 50, 50 200), (200 50, 50 50), (50 50, -100 50), (50 50, 50 -100))'
-            , $writer->write($b));
+'MULTILINESTRING ((50 50, 200 50), (50 50, 50 200), (50 -100, 50 50), (-100 50, 50 50))'
+            , $writer->write($b->normalize()));
 
         $b = $g->voronoiDiagram(0, 1, $g->buffer(1000));
         $this->assertEquals(
-'MULTILINESTRING ((50 50, 50 1100), (1100 50, 50 50), (50 50, -1000 50), (50 50, 50 -1000))'
-            , $writer->write($b));
+'MULTILINESTRING ((50 50, 1100 50), (50 50, 50 1100), (50 -1000, 50 50), (-1000 50, 50 50))'
+            , $writer->write($b->normalize()));
 
     }
 
