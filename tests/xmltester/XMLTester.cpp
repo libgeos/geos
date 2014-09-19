@@ -59,6 +59,7 @@
 #include <fstream>
 #include <functional>
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include <cstring>
 #include <memory>
@@ -290,7 +291,7 @@ XMLTester::setVerbosityLevel(int value)
 
 /*private*/
 void
-XMLTester::printTest(bool success, const std::string& expected_result, const std::string& actual_result)
+XMLTester::printTest(bool success, const std::string& expected_result, const std::string& actual_result, const util::Profile &prof)
 {
     if ( sqlOutput )
     {
@@ -329,7 +330,8 @@ XMLTester::printTest(bool success, const std::string& expected_result, const std
         std::cout << " case" << caseCount << ":";
         std::cout << " test" << testCount << ": "
             << opSignature; 
-        std::cout << ": " << (success?"ok.":"failed.")<<std::endl;
+        std::cout << ": " << (success?"ok.":"failed.");
+        std::cout << " (" << std::setprecision(15) << round(prof.getTot()/1000) << " ms)" << std::endl;
 
         std::cout << "\tDescription: " << curr_case_desc << std::endl;
 
@@ -749,11 +751,10 @@ XMLTester::parseTest(const TiXmlNode* node)
     // if needed (geometry normalization, for example)
     std::string expected_result=opRes;
 
+    util::Profile profile("op");
+
     try
     {
-
-        util::Profile profile("op");
-
         if (opName=="relate")
         {
             std::auto_ptr<geom::IntersectionMatrix> im(gA->relate(gB));
@@ -785,11 +786,15 @@ XMLTester::parseTest(const TiXmlNode* node)
             GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
 
+            profile.start();
+
 #ifndef USE_BINARYOP
             GeomAutoPtr gRealRes(gA->intersection(gB));
 #else
             GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opINTERSECTION));
 #endif
+
+            profile.stop();
 
             gRealRes->normalize();
 
@@ -1407,7 +1412,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 
     if ((!success && verbose) || verbose > 1)
     {
-        printTest(!!success, expected_result, actual_result);
+        printTest(!!success, expected_result, actual_result, profile);
     }
 
     if (test_predicates && gB && gA) {

@@ -17,6 +17,7 @@
 
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/PrecisionModel.h>
+#include <geos/profiler.h>
 #include "tinyxml/tinyxml.h"
 
 using namespace geos;
@@ -43,7 +44,7 @@ private:
 	static std::string trimBlanks(const std::string &in);
 	void printGeom(std::ostream& os, const geom::Geometry *g);
 	std::string printGeom(const geom::Geometry *g);
-	void printTest(bool success, const std::string& expected_result, const std::string& actual_result);
+	void printTest(bool success, const std::string& expected_result, const std::string& actual_result, const util::Profile&);
 
 	geom::Geometry *gA;
 	geom::Geometry *gB;
