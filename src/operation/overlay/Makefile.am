@@ -1,6 +1,9 @@
 #
 # This file is part of project GEOS (http://trac.osgeo.org/geos/) 
 #
+
+AUTOMAKE_OPTIONS = subdir-objects
+
 SUBDIRS = 
 
 noinst_LTLIBRARIES = libopoverlay.la

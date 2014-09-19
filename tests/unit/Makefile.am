@@ -1,6 +1,9 @@
 #
 # This file is part of project GEOS (http://trac.osgeo.org/geos/) 
 #
+
+AUTOMAKE_OPTIONS = subdir-objects
+
 AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/tests/unit/tut -I$(top_builddir)/capi
 
 TESTS = geos_unit

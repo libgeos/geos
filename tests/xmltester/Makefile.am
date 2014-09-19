@@ -5,6 +5,8 @@
 #top_srcdir=@top_srcdir@
 #top_builddir=@top_builddir@
 
+AUTOMAKE_OPTIONS = subdir-objects
+
 TESTS = testrunner
 
 CLEANFILES = testrunner 
