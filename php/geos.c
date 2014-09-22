@@ -2205,6 +2205,7 @@ PHP_METHOD(WKBWriter, getByteOrder);
 PHP_METHOD(WKBWriter, setByteOrder);
 PHP_METHOD(WKBWriter, setIncludeSRID);
 PHP_METHOD(WKBWriter, getIncludeSRID);
+PHP_METHOD(WKBWriter, write);
 PHP_METHOD(WKBWriter, writeHEX);
 
 static zend_function_entry WKBWriter_methods[] = {
@@ -2215,6 +2216,7 @@ static zend_function_entry WKBWriter_methods[] = {
     PHP_ME(WKBWriter, setByteOrder, NULL, 0)
     PHP_ME(WKBWriter, getIncludeSRID, NULL, 0)
     PHP_ME(WKBWriter, setIncludeSRID, NULL, 0)
+    PHP_ME(WKBWriter, write, NULL, 0)
     PHP_ME(WKBWriter, writeHEX, NULL, 0)
     {NULL, NULL, NULL}
 };
@@ -2291,6 +2293,38 @@ PHP_METHOD(WKBWriter, setOutputDimension)
 
     GEOSWKBWriter_setOutputDimension(writer, dim);
 
+}
+
+/**
+ * string GEOSWKBWriter::write(GEOSGeometry)
+ */
+PHP_METHOD(WKBWriter, write)
+{
+    GEOSWKBWriter *writer;
+    zval *zobj;
+    GEOSGeometry *geom;
+    char *ret;
+    size_t retsize;
+    char* retstr;
+
+    writer = (GEOSWKBWriter*)getRelay(getThis(), WKBWriter_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "o", &zobj)
+        == FAILURE)
+    {
+        RETURN_NULL();
+    }
+
+    geom = getRelay(zobj, Geometry_ce_ptr);
+
+    ret = (char*)GEOSWKBWriter_write(writer, geom, &retsize);
+    /* we'll probably get an exception if ret is null */
+    if ( ! ret ) RETURN_NULL();
+
+    retstr = estrndup(ret, retsize);
+    GEOSFree(ret);
+
+    RETURN_STRINGL(retstr, retsize, 0);
 }
 
 /**
@@ -2401,10 +2435,12 @@ PHP_METHOD(WKBWriter, setIncludeSRID)
 /* -- class GEOSWKBReader -------------------- */
 
 PHP_METHOD(WKBReader, __construct);
+PHP_METHOD(WKBReader, read);
 PHP_METHOD(WKBReader, readHEX);
 
 static zend_function_entry WKBReader_methods[] = {
     PHP_ME(WKBReader, __construct, NULL, 0)
+    PHP_ME(WKBReader, read, NULL, 0)
     PHP_ME(WKBReader, readHEX, NULL, 0)
     {NULL, NULL, NULL}
 };
@@ -2444,6 +2480,31 @@ PHP_METHOD(WKBReader, __construct)
     }
 
     setRelay(object, obj);
+}
+
+PHP_METHOD(WKBReader, read)
+{
+    GEOSWKBReader *reader;
+    GEOSGeometry *geom;
+    unsigned char* wkb;
+    int wkblen;
+
+    reader = (GEOSWKBReader*)getRelay(getThis(), WKBReader_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "s",
+        &wkb, &wkblen) == FAILURE)
+    {
+        RETURN_NULL();
+    }
+
+    geom = GEOSWKBReader_read(reader, wkb, wkblen);
+    /* we'll probably get an exception if geom is null */
+    if ( ! geom ) RETURN_NULL();
+
+    /* return_value is a zval */
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, geom);
+
 }
 
 PHP_METHOD(WKBReader, readHEX)

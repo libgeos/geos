@@ -5,6 +5,7 @@ Changes in 3.5.0
   - Voronoi API (#627)
   - PHP: Geometry->normalize method
   - GEOS_USE_ONLY_R_API macro support (#695)
+  - PHP: WKBReader->read() & WKBWriter::write() methods (Benjamin Morel)
   ...
 
 Changes in 3.4.2
