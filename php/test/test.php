@@ -2151,7 +2151,6 @@ MULTIPOINT(
         } catch (Exception $e) {
             $this->assertContains('LITTLE (1) or BIG (0)', $e->getMessage());
         }
-
     }
 
     public function testWKBWriter_getsetIncludeSRID()
@@ -2165,230 +2164,79 @@ MULTIPOINT(
         $this->assertEquals(FALSE, $writer->getIncludeSRID());
     }
 
-    public function testWKBWriter_write()
+    /**
+     * @dataProvider providerWKBWriter_write
+     *
+     * @param integer $byteOrder       The byte order: 0 for BIG endian, 1 for LITTLE endian.
+     * @param integer $inputDimension  The input dimension: 2 or 3.
+     * @param integer $outputDimension The output dimension: 2 or 3.
+     * @param boolean $includeSrid     Whether to include the SRID in the output.
+     * @param string  $wkb             The expected HEX WKB output.
+     */
+    public function testWKBWriter_write($byteOrder, $inputDimension, $outputDimension, $includeSrid, $wkb)
     {
-        $writer = new GEOSWKBWriter();
         $reader = new GEOSWKTReader();
+        $writer = new GEOSWKBWriter();
 
-        try {
-            $writer->write(1);
-            $this->assertTrue(FALSE); # this is just to fail if we get here
-        } catch (Exception $e) {
-            $this->assertContains('expects parameter 1', $e->getMessage());
+        $writer->setByteOrder($byteOrder);
+        $writer->setOutputDimension($outputDimension);
+        $writer->setIncludeSRID($includeSrid);
+
+        if ($inputDimension === 3) {
+            $g = $reader->read('POINT(6 7 8)');
+            $g->setSRID(53);
+        } else {
+            $g = $reader->read('POINT(6 7)');
+            $g->setSRID(43);
         }
 
-        $g = $reader->read('POINT(6 7)');
-        $g->setSRID(43);
-
-        $writer->setOutputDimension(2); // 2D
-
-        // 2D LITTLE endian
-        $writer->setByteOrder(1);
-        $this->assertEquals(
-            hex2bin('010100000000000000000018400000000000001C40'),
-            $writer->write($g));
-        // 2D LITTLE endian + SRID
-        $writer->setIncludeSRID(TRUE);
-        $this->assertEquals(
-            hex2bin('01010000202B00000000000000000018400000000000001C40'),
-            $writer->write($g));
-        $writer->setIncludeSRID(FALSE);
-
-        // 2D BIG endian
-        $writer->setByteOrder(0);
-        $this->assertEquals(hex2bin('00000000014018000000000000401C000000000000'),
-            $writer->write($g));
-        // 2D BIG endian + SRID
-        $writer->setIncludeSRID(TRUE);
-        $this->assertEquals(
-            hex2bin('00200000010000002B4018000000000000401C000000000000'),
-            $writer->write($g));
-        $writer->setIncludeSRID(FALSE);
-
-        $writer->setOutputDimension(3); // 3D
-
-        // 3D LITTLE endian (2D input)
-        $writer->setByteOrder(1);
-        $this->assertEquals(
-            hex2bin('010100000000000000000018400000000000001C40'),
-            $writer->write($g));
-        // 3D LITTLE endian + SRID  (2D input)
-        $writer->setIncludeSRID(TRUE);
-        $this->assertEquals(
-            hex2bin('01010000202B00000000000000000018400000000000001C40'),
-            $writer->write($g));
-        $writer->setIncludeSRID(FALSE);
-
-        // 3D BIG endian (2D input)
-        $writer->setByteOrder(0);
-        $this->assertEquals(hex2bin('00000000014018000000000000401C000000000000'),
-            $writer->write($g));
-        // 3D BIG endian + SRID (2D input)
-        $writer->setIncludeSRID(TRUE);
-        $this->assertEquals(
-            hex2bin('00200000010000002B4018000000000000401C000000000000'),
-            $writer->write($g));
-        $writer->setIncludeSRID(FALSE);
-
-
-        $g = $reader->read('POINT(6 7 8)');
-        $g->setSRID(53);
-
-        $writer->setOutputDimension(2); // 2D
-
-        // 2D LITTLE endian (3D input)
-        $writer->setByteOrder(1);
-        $this->assertEquals(hex2bin('010100000000000000000018400000000000001C40'),
-            $writer->write($g));
-        // 2D LITTLE endian + SRID (3D input)
-        $writer->setIncludeSRID(TRUE);
-        $writer->setByteOrder(1);
-        $this->assertEquals(
-            hex2bin('01010000203500000000000000000018400000000000001C40'),
-            $writer->write($g));
-        $writer->setIncludeSRID(FALSE);
-        // 2D BIG endian (3D input)
-        $writer->setByteOrder(0);
-        $this->assertEquals(hex2bin('00000000014018000000000000401C000000000000'),
-            $writer->write($g));
-        // 2D BIG endian + SRID (3D input)
-        $writer->setIncludeSRID(TRUE);
-        $this->assertEquals(
-            hex2bin('0020000001000000354018000000000000401C000000000000'),
-            $writer->write($g));
-        $writer->setIncludeSRID(FALSE);
-
-        $writer->setOutputDimension(3); // 3D
-
-        // 3D LITTLE endian (3D input)
-        $writer->setByteOrder(1);
-        $this->assertEquals(
-            hex2bin('010100008000000000000018400000000000001C400000000000002040'),
-            $writer->write($g));
-        // 3D BIG endian (3D input)
-        $writer->setByteOrder(0);
-        $this->assertEquals(
-            hex2bin('00800000014018000000000000401C0000000000004020000000000000'),
-            $writer->write($g));
-        // 3D BIG endian + SRID (3D input)
-        $writer->setIncludeSRID(TRUE);
-        $this->assertEquals(
-            hex2bin('00A0000001000000354018000000000000401C0000000000004020000000000000'),
-            $writer->write($g));
-        $writer->setIncludeSRID(FALSE);
+        $this->assertSame(hex2bin($wkb), $writer->write($g));
+        $this->assertSame($wkb, $writer->writeHEX($g));
     }
 
-    public function testWKBWriter_writeHEX()
+    public function providerWKBWriter_write()
+    {
+        return array(
+            // 2D input
+            array(1, 2, 2, false, '010100000000000000000018400000000000001C40'),        // 2D LITTLE endian
+            array(1, 2, 2, true, '01010000202B00000000000000000018400000000000001C40'), // 2D LITTLE endian + SRID
+            array(0, 2, 2, false, '00000000014018000000000000401C000000000000'),        // 2D BIG endian
+            array(0, 2, 2, true, '00200000010000002B4018000000000000401C000000000000'), // 2D BIG endian + SRID
+            array(1, 2, 3, false, '010100000000000000000018400000000000001C40'),        // 3D LITTLE endian
+            array(1, 2, 3, true, '01010000202B00000000000000000018400000000000001C40'), // 3D LITTLE endian + SRID
+            array(0, 2, 3, false, '00000000014018000000000000401C000000000000'),        // 3D BIG endian
+            array(0, 2, 3, true, '00200000010000002B4018000000000000401C000000000000'), // 3D BIG endian + SRID
+
+            // 3D input
+            array(1, 3, 2, false, '010100000000000000000018400000000000001C40'),                        // 2D LITTLE endian
+            array(1, 3, 2, true, '01010000203500000000000000000018400000000000001C40'),                 // 2D LITTLE endian + SRID
+            array(0, 3, 2, false, '00000000014018000000000000401C000000000000'),                        // 2D BIG endian
+            array(0, 3, 2, true, '0020000001000000354018000000000000401C000000000000'),                 // 2D BIG endian + SRID
+            array(1, 3, 3, false, '010100008000000000000018400000000000001C400000000000002040'),        // 3D LITTLE endian
+            array(1, 3, 3, true, '01010000A03500000000000000000018400000000000001C400000000000002040'), // 3D LITTLE endian + SRID
+            array(0, 3, 3, false, '00800000014018000000000000401C0000000000004020000000000000'),        // 3D BIG endian
+            array(0, 3, 3, true, '00A0000001000000354018000000000000401C0000000000004020000000000000'), // 3D BIG endian + SRID
+        );
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage expects parameter 1
+     */
+    public function testInvalidWriteThrowsException()
     {
         $writer = new GEOSWKBWriter();
-        $reader = new GEOSWKTReader();
+        $writer->write(1);
+    }
 
-        try {
-            $writer->writeHEX(1);
-            $this->assertTrue(FALSE); # this is just to fail if we get here
-        } catch (Exception $e) {
-            $this->assertContains('expects parameter 1', $e->getMessage());
-        }
-
-        $g = $reader->read('POINT(6 7)');
-        $g->setSRID(43);
-
-        $writer->setOutputDimension(2); // 2D
-
-        // 2D LITTLE endian
-        $writer->setByteOrder(1);
-        $this->assertEquals(
-            '010100000000000000000018400000000000001C40',
-            $writer->writeHEX($g));
-        // 2D LITTLE endian + SRID 
-        $writer->setIncludeSRID(TRUE);
-        $this->assertEquals(
-            '01010000202B00000000000000000018400000000000001C40',
-            $writer->writeHEX($g));
-        $writer->setIncludeSRID(FALSE);
-
-        // 2D BIG endian
-        $writer->setByteOrder(0);
-        $this->assertEquals('00000000014018000000000000401C000000000000',
-            $writer->writeHEX($g));
-        // 2D BIG endian + SRID
-        $writer->setIncludeSRID(TRUE); 
-        $this->assertEquals(
-            '00200000010000002B4018000000000000401C000000000000',
-            $writer->writeHEX($g));
-        $writer->setIncludeSRID(FALSE); 
-
-        $writer->setOutputDimension(3); // 3D
-
-        // 3D LITTLE endian (2D input)
-        $writer->setByteOrder(1);
-        $this->assertEquals(
-            '010100000000000000000018400000000000001C40',
-            $writer->writeHEX($g));
-        // 3D LITTLE endian + SRID  (2D input)
-        $writer->setIncludeSRID(TRUE);
-        $this->assertEquals(
-            '01010000202B00000000000000000018400000000000001C40',
-            $writer->writeHEX($g));
-        $writer->setIncludeSRID(FALSE);
-
-        // 3D BIG endian (2D input)
-        $writer->setByteOrder(0);
-        $this->assertEquals('00000000014018000000000000401C000000000000',
-            $writer->writeHEX($g));
-        // 3D BIG endian + SRID (2D input)
-        $writer->setIncludeSRID(TRUE); 
-        $this->assertEquals(
-            '00200000010000002B4018000000000000401C000000000000',
-            $writer->writeHEX($g));
-        $writer->setIncludeSRID(FALSE); 
-
-
-        $g = $reader->read('POINT(6 7 8)');
-        $g->setSRID(53);
-
-        $writer->setOutputDimension(2); // 2D
-
-        // 2D LITTLE endian (3D input)
-        $writer->setByteOrder(1);
-        $this->assertEquals('010100000000000000000018400000000000001C40',
-            $writer->writeHEX($g));
-        // 2D LITTLE endian + SRID (3D input)
-        $writer->setIncludeSRID(TRUE);
-        $writer->setByteOrder(1);
-        $this->assertEquals(
-            '01010000203500000000000000000018400000000000001C40',
-            $writer->writeHEX($g));
-        $writer->setIncludeSRID(FALSE);
-        // 2D BIG endian (3D input)
-        $writer->setByteOrder(0);
-        $this->assertEquals('00000000014018000000000000401C000000000000',
-            $writer->writeHEX($g));
-        // 2D BIG endian + SRID (3D input)
-        $writer->setIncludeSRID(TRUE);
-        $this->assertEquals(
-            '0020000001000000354018000000000000401C000000000000',
-            $writer->writeHEX($g));
-        $writer->setIncludeSRID(FALSE);
-
-        $writer->setOutputDimension(3); // 3D
-
-        // 3D LITTLE endian (3D input)
-        $writer->setByteOrder(1);
-        $this->assertEquals(
-            '010100008000000000000018400000000000001C400000000000002040',
-            $writer->writeHEX($g));
-        // 3D BIG endian (3D input)
-        $writer->setByteOrder(0); 
-        $this->assertEquals(
-            '00800000014018000000000000401C0000000000004020000000000000',
-            $writer->writeHEX($g));
-        // 3D BIG endian + SRID (3D input)
-        $writer->setIncludeSRID(TRUE);
-        $this->assertEquals(
-          '00A0000001000000354018000000000000401C0000000000004020000000000000',
-          $writer->writeHEX($g));
-        $writer->setIncludeSRID(FALSE);
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage expects parameter 1
+     */
+    public function testInvalidWriteHEXThrowsException()
+    {
+        $writer = new GEOSWKBWriter();
+        $writer->writeHEX(1);
     }
 
     public function testWKBReader__construct()
@@ -2397,7 +2245,14 @@ MULTIPOINT(
         $this->assertNotNull($reader);
     }
 
-    public function testWKBReader_read()
+    /**
+     * @dataProvider providerWKBReader_read
+     *
+     * @param string  $wkb  The WKB to read.
+     * @param boolean $is3D Whether the geometry is 3D (true) or 2D (false).
+     * @param integer $srid The expected result SRID.
+     */
+    public function testWKBReader_read($wkb, $is3D, $srid)
     {
         $reader = new GEOSWKBReader();
 
@@ -2405,114 +2260,29 @@ MULTIPOINT(
         $writer->setTrim(TRUE);
         $writer->setOutputDimension(3);
 
-        // 2D LITTLE endian
-        $g = $reader->read(hex2bin(
-            '010100000000000000000018400000000000001C40'
-        ));
-        $this->assertEquals('POINT (6 7)', $writer->write($g));
-        $this->assertEquals(0, $g->getSRID());
+        $wkt = $is3D ? 'POINT Z (6 7 8)' : 'POINT (6 7)';
 
-        // 2D BIG endian
-        $g = $reader->read(hex2bin(
-            '00000000014018000000000000401C000000000000'
-        ));
-        $this->assertEquals('POINT (6 7)', $writer->write($g));
-        $this->assertEquals(0, $g->getSRID());
+        $g = $reader->read(hex2bin($wkb));
+        $this->assertSame($wkt, $writer->write($g));
+        $this->assertSame($srid, $g->getSRID());
 
-        // 2D LITTLE endian + SRID
-        $g = $reader->read(hex2bin(
-            '01010000202B00000000000000000018400000000000001C40'
-        ));
-        $this->assertEquals('POINT (6 7)', $writer->write($g));
-        $this->assertEquals(43, $g->getSRID());
-
-        // 2D BIG endian + SRID
-        $g = $reader->read(hex2bin(
-            '00200000010000002B4018000000000000401C000000000000'
-        ));
-        $this->assertEquals('POINT (6 7)', $writer->write($g));
-        $this->assertEquals(43, $g->getSRID());
-
-        // 3D LITTLE endian
-        $g = $reader->read(hex2bin(
-            '010100008000000000000018400000000000001C400000000000002040'
-        ));
-        $this->assertEquals('POINT Z (6 7 8)', $writer->write($g));
-        $this->assertEquals(0, $g->getSRID());
-
-        // 3D BIG endian
-        $g = $reader->read(hex2bin(
-            '00800000014018000000000000401C0000000000004020000000000000'
-        ));
-        $this->assertEquals('POINT Z (6 7 8)', $writer->write($g));
-        $this->assertEquals(0, $g->getSRID());
-
-        // 3D BIG endian + SRID
-        $g = $reader->read(hex2bin(
-            '00A0000001000000354018000000000000401C0000000000004020000000000000'
-        ));
-        $this->assertEquals('POINT Z (6 7 8)', $writer->write($g));
-        $this->assertEquals(53, $g->getSRID());
+        $g = $reader->readHEX($wkb);
+        $this->assertSame($wkt, $writer->write($g));
+        $this->assertSame($srid, $g->getSRID());
     }
 
-    public function testWKBReader_readHEX()
+    public function providerWKBReader_read()
     {
-        $reader = new GEOSWKBReader();
-
-        $writer = new GEOSWKTWriter();
-        $writer->setTrim(TRUE);
-        $writer->setOutputDimension(3);
-
-        
-        // 2D LITTLE endian
-        $g = $reader->readHEX(
-            '010100000000000000000018400000000000001C40'
+        return array(
+            array('010100000000000000000018400000000000001C40',                         false,  0), // 2D LITTLE endian,
+            array('00000000014018000000000000401C000000000000',                         false,  0), // 2D BIG endian,
+            array('01010000202B00000000000000000018400000000000001C40',                 false, 43), // 2D LITTLE endian + SRID
+            array('00200000010000002B4018000000000000401C000000000000',                 false, 43), // 2D BIG endian + SRID,
+            array('010100008000000000000018400000000000001C400000000000002040',         true,   0), // 3D LITTLE endian
+            array('01010000A03500000000000000000018400000000000001C400000000000002040', true,  53), // 3D LITTLE endian + SRID
+            array('00800000014018000000000000401C0000000000004020000000000000',         true,   0), // 3D BIG endian
+            array('00A0000001000000354018000000000000401C0000000000004020000000000000', true,  53), // 3D BIG endian + SRID
         );
-        $this->assertEquals('POINT (6 7)', $writer->write($g));
-        $this->assertEquals(0, $g->getSRID());
-
-        // 2D BIG endian
-        $g = $reader->readHEX(
-            '00000000014018000000000000401C000000000000'
-        );
-        $this->assertEquals('POINT (6 7)', $writer->write($g));
-        $this->assertEquals(0, $g->getSRID());
-
-        // 2D LITTLE endian + SRID 
-        $g = $reader->readHEX(
-            '01010000202B00000000000000000018400000000000001C40'
-        );
-        $this->assertEquals('POINT (6 7)', $writer->write($g));
-        $this->assertEquals(43, $g->getSRID());
-
-        // 2D BIG endian + SRID
-        $g = $reader->readHEX(
-            '00200000010000002B4018000000000000401C000000000000'
-        );
-        $this->assertEquals('POINT (6 7)', $writer->write($g));
-        $this->assertEquals(43, $g->getSRID());
-
-        // 3D LITTLE endian 
-        $g = $reader->readHEX(
-            '010100008000000000000018400000000000001C400000000000002040'
-        );
-        $this->assertEquals('POINT Z (6 7 8)', $writer->write($g));
-        $this->assertEquals(0, $g->getSRID());
-
-        // 3D BIG endian 
-        $g = $reader->readHEX(
-            '00800000014018000000000000401C0000000000004020000000000000'
-        );
-        $this->assertEquals('POINT Z (6 7 8)', $writer->write($g));
-        $this->assertEquals(0, $g->getSRID());
-
-        // 3D BIG endian + SRID
-        $g = $reader->readHEX(
-          '00A0000001000000354018000000000000401C0000000000004020000000000000'
-        );
-        $this->assertEquals('POINT Z (6 7 8)', $writer->write($g));
-        $this->assertEquals(53, $g->getSRID());
-
     }
 
     public function testGEOSRelateMatch()
@@ -2522,5 +2292,4 @@ MULTIPOINT(
         $this->assertTrue(GEOSRelateMatch('0FFFFFFF2', 'TFFFFFFF2'));
         $this->assertFalse(GEOSRelateMatch('0FFFFFFF2', '0FFFFFFFF'));
     }
-
 }
