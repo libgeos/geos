@@ -37,6 +37,7 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Location.h>
 #include <geos/geom/Point.h>
+#include <geos/geom/Envelope.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/Polygon.h>
@@ -165,6 +166,9 @@ GeometryGraph::computeSplitEdges(vector<Edge*> *edgelist)
 #endif
 		e->eiList.addSplitEdges(edgelist);
 	}
+#if GEOS_DEBUG
+	cerr<<"["<<this<<"] GeometryGraph::computeSplitEdges() completed "<<endl;
+#endif
 }
 
 void
@@ -343,12 +347,32 @@ GeometryGraph::addPoint(Coordinate& pt)
 	insertPoint(argIndex,pt,Location::INTERIOR);
 }
 
+template <class T, class C>
+void collect_intersecting_edges(const Envelope *env, T start, T end, C &to)
+{
+  for (T i=start; i != end; ++i)
+  {
+    Edge *e = *i;
+    if ( e->getEnvelope()->intersects(env) ) to.push_back(e);
+  }
+}
+
 /*public*/
 SegmentIntersector*
-GeometryGraph::computeSelfNodes(LineIntersector *li, bool computeRingSelfNodes)
+GeometryGraph::computeSelfNodes(LineIntersector &li,
+  bool computeRingSelfNodes, const Envelope *env)
 {
-	SegmentIntersector *si=new SegmentIntersector(li,true,false);
+	SegmentIntersector *si=new SegmentIntersector(&li,true,false);
     	auto_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
+
+	typedef vector<Edge*> EC;
+	EC *se = edges;
+	EC self_edges_copy;
+	if ( env ) { // TODO: ... and env does not cover self geom env
+		collect_intersecting_edges(env, se->begin(), se->end(), self_edges_copy);
+    cerr << "(computeSelfNodes) Self edges reduced from " << se->size() << " to " << self_edges_copy.size() << endl;
+		se = &self_edges_copy;
+	}
 
 	// optimized test for Polygons and Rings
 	if (! computeRingSelfNodes
@@ -356,11 +380,11 @@ GeometryGraph::computeSelfNodes(LineIntersector *li, bool computeRingSelfNodes)
 	    || dynamic_cast<const Polygon*>(parentGeom)
 	    || dynamic_cast<const MultiPolygon*>(parentGeom) ))
 	{
-		esi->computeIntersections(edges, si, false);
+		esi->computeIntersections(se, si, false);
 	}
 	else
 	{
-		esi->computeIntersections(edges, si, true);
+		esi->computeIntersections(se, si, true);
 	}
 
 #if GEOS_DEBUG
@@ -373,7 +397,7 @@ GeometryGraph::computeSelfNodes(LineIntersector *li, bool computeRingSelfNodes)
 
 SegmentIntersector*
 GeometryGraph::computeEdgeIntersections(GeometryGraph *g,
-	LineIntersector *li, bool includeProper)
+	LineIntersector *li, bool includeProper, const Envelope *env)
 {
 #if GEOS_DEBUG
 	cerr<<"GeometryGraph::computeEdgeIntersections call"<<endl;
@@ -382,7 +406,25 @@ GeometryGraph::computeEdgeIntersections(GeometryGraph *g,
 
 	si->setBoundaryNodes(getBoundaryNodes(), g->getBoundaryNodes());
 	auto_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
-	esi->computeIntersections(edges, g->edges, si);
+
+	typedef vector<Edge*> EC;
+
+	EC self_edges_copy;
+	EC other_edges_copy;
+
+	EC *se = edges;
+	EC *oe = g->edges;
+	if ( env ) { // TODO: ... and env does not cover self geom env
+		collect_intersecting_edges(env, se->begin(), se->end(), self_edges_copy);
+    cerr << "Self edges reduced from " << se->size() << " to " << self_edges_copy.size() << endl;
+		se = &self_edges_copy;
+	}
+	if ( env ) { // TODO: ... and env does not cover other geom env
+		collect_intersecting_edges(env, oe->begin(), oe->end(), other_edges_copy);
+    cerr << "Other edges reduced from " << oe->size() << " to " << other_edges_copy.size() << endl;
+		oe = &other_edges_copy;
+	}
+	esi->computeIntersections(se, oe, si);
 #if GEOS_DEBUG
 	cerr<<"GeometryGraph::computeEdgeIntersections returns"<<endl;
 #endif

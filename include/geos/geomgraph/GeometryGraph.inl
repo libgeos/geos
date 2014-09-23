@@ -26,14 +26,6 @@
 namespace geos {
 namespace geomgraph { // geos::geomgraph
 
-INLINE index::SegmentIntersector*
-GeometryGraph::computeSelfNodes(
-		algorithm::LineIntersector& li,
-		bool computeRingSelfNodes)
-{
-	return computeSelfNodes(&li, computeRingSelfNodes);
-}
-
 INLINE void
 GeometryGraph::getBoundaryNodes(std::vector<Node*>&bdyNodes)
 {

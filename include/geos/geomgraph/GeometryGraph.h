@@ -48,6 +48,7 @@ namespace geos {
 		class Geometry;
 		class GeometryCollection;
 		class Point;
+		class Envelope;
 	}
 	namespace algorithm {
 		class LineIntersector;
@@ -212,16 +213,21 @@ public:
 	 */
 	index::SegmentIntersector* computeSelfNodes(
 			algorithm::LineIntersector *li,
-			bool computeRingSelfNodes);
+			bool computeRingSelfNodes,
+			const geom::Envelope *env=0)
+	{
+		return computeSelfNodes(*li, computeRingSelfNodes, env);
+	}
 
 	// Quick inline calling the function above, the above should probably
 	// be deprecated.
 	index::SegmentIntersector* computeSelfNodes(
 			algorithm::LineIntersector& li,
-			bool computeRingSelfNodes);
+			bool computeRingSelfNodes, const geom::Envelope *env=0);
 
 	index::SegmentIntersector* computeEdgeIntersections(GeometryGraph *g,
-		algorithm::LineIntersector *li, bool includeProper);
+		algorithm::LineIntersector *li, bool includeProper,
+		const geom::Envelope *env=0);
 
 	std::vector<Edge*> *getEdges();
 

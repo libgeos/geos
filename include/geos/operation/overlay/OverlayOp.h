@@ -38,6 +38,7 @@ namespace geos {
 	namespace geom {
 		class Geometry;
 		class Coordinate;
+		class Envelope;
 		class GeometryFactory;
 		class Polygon;
 		class LineString;
@@ -240,7 +241,7 @@ private:
 	 * but in the original arg Geometry it is actually
 	 * in the interior due to the Boundary Determination Rule)
 	 */
-	void copyPoints(int argIndex);
+	void copyPoints(int argIndex, const geom::Envelope *env=0);
 
 	/** \brief
 	 * Compute initial labelling for all DirectedEdges at each node.

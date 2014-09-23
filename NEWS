@@ -7,6 +7,9 @@ Changes in 3.5.0
   - GEOS_USE_ONLY_R_API macro support (#695)
   - PHP: WKBReader->read() & WKBWriter::write() methods (Benjamin Morel)
   ...
+- Improvements:
+  - Speed-up intersection and difference between geometries
+    with small bounding box overlap.
 
 Changes in 3.4.2
 2013-08-25

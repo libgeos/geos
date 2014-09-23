@@ -232,20 +232,40 @@ OverlayOp::replaceCollapsedEdges()
 
 /*private*/
 void
-OverlayOp::copyPoints(int argIndex)
+OverlayOp::copyPoints(int argIndex, const Envelope *env)
 {
+#define GEOS_DEBUG_COPY_POINTS 1
+
+#ifdef GEOS_DEBUG_COPY_POINTS
+	int copied = 0;
+#endif
+
+	//env = 0; // WARNING: uncomment to disable env-optimization
+
+	// TODO: set env to null if it covers arg geometry envelope
+
 	NodeMap::container& nodeMap=arg[argIndex]->getNodeMap()->nodeMap;
 	for ( NodeMap::const_iterator it=nodeMap.begin(), itEnd=nodeMap.end();
 			it != itEnd; ++it )
 	{
 		Node* graphNode=it->second;
 		assert(graphNode);
+		const Coordinate &coord = graphNode->getCoordinate();
 
-		Node* newNode=graph.addNode(graphNode->getCoordinate());
+		if ( env && ! env->covers(coord) ) continue;
+
+#ifdef GEOS_DEBUG_COPY_POINTS
+		++copied;
+#endif
+		Node* newNode=graph.addNode(coord);
 		assert(newNode);
 
 		newNode->setLabel(argIndex, graphNode->getLabel().getLocation(argIndex));
 	}
+
+#ifdef GEOS_DEBUG_COPY_POINTS
+	cerr << "Copied " << copied << " nodes out of " << nodeMap.size() << " for geom " << argIndex << endl;
+#endif
 }
 
 /*private*/
@@ -648,17 +668,41 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 	//throw(TopologyException *)
 {
 
+	// Compute the target envelope
+	const Envelope *env = 0;
+	const Envelope *env0 = getArgGeometry(0)->getEnvelopeInternal();
+	const Envelope *env1 = getArgGeometry(1)->getEnvelopeInternal();
+	Envelope opEnv;
+	if ( resultPrecisionModel->isFloating() )
+	{
+		// Envelope-based optimization only works in floating precision
+		switch (opCode) {
+			case opINTERSECTION:
+				env0->intersection(*env1, opEnv);
+				env = &opEnv;
+				break;
+			case opDIFFERENCE:
+				opEnv = *env0;
+				env = &opEnv;
+				break;
+			default:
+				break;
+		}
+	}
+	//env = 0; // WARNING: uncomment to disable env-optimization
+
 	// copy points from input Geometries.
 	// This ensures that any Point geometries
 	// in the input are considered for inclusion in the result set
-	copyPoints(0);
-	copyPoints(1);
+	copyPoints(0, env);
+	copyPoints(1, env);
 
 	GEOS_CHECK_FOR_INTERRUPTS();
 
 	// node the input Geometries
-	delete arg[0]->computeSelfNodes(li,false);
-	delete arg[1]->computeSelfNodes(li,false);
+	delete arg[0]->computeSelfNodes(li, false, env);
+	GEOS_CHECK_FOR_INTERRUPTS();
+	delete arg[1]->computeSelfNodes(li, false, env);
 
 #if GEOS_DEBUG
 	cerr<<"OverlayOp::computeOverlay: computed SelfNodes"<<endl;
@@ -667,7 +711,7 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 	GEOS_CHECK_FOR_INTERRUPTS();
 
 	// compute intersections between edges of the two input geometries
-	delete arg[0]->computeEdgeIntersections(arg[1], &li,true);
+	delete arg[0]->computeEdgeIntersections(arg[1], &li, true, env);
 
 #if GEOS_DEBUG
 	cerr<<"OverlayOp::computeOverlay: computed EdgeIntersections"<<endl;
@@ -679,6 +723,7 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 
 	vector<Edge*> baseSplitEdges;
 	arg[0]->computeSplitEdges(&baseSplitEdges);
+	GEOS_CHECK_FOR_INTERRUPTS();
 	arg[1]->computeSplitEdges(&baseSplitEdges);
 
 	GEOS_CHECK_FOR_INTERRUPTS();
