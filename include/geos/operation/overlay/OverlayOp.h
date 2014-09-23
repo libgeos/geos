@@ -201,7 +201,7 @@ private:
 
 	void computeOverlay(OpCode opCode); // throw(TopologyException *);
 
-	void insertUniqueEdges(std::vector<geomgraph::Edge*> *edges);
+	void insertUniqueEdges(std::vector<geomgraph::Edge*> *edges, const geom::Envelope *env=0);
 
 	/*
 	 * If either of the GeometryLocations for the existing label is

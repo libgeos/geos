@@ -190,20 +190,20 @@ OverlayOp::getResultGeometry(OverlayOp::OpCode funcCode)
 
 /*private*/
 void
-OverlayOp::insertUniqueEdges(vector<Edge*> *edges)
+OverlayOp::insertUniqueEdges(vector<Edge*> *edges, const Envelope *env)
 {
+  for(size_t i=0, n=edges->size(); i<n; ++i) {
+    Edge *e = (*edges)[i];
+		if ( env && ! env->intersects(e->getEnvelope()) ) continue;
+#if GEOS_DEBUG
+		cerr <<" "<< e->print() << endl;
+#endif 
+    insertUniqueEdge(e);
+  }
+/*
 	for_each(edges->begin(), edges->end(),
 			bind1st(mem_fun(&OverlayOp::insertUniqueEdge), this));
-
-#if GEOS_DEBUG
-	cerr<<"OverlayOp::insertUniqueEdges("<<edges->size()<<"): "<<endl;
-	for(size_t i=0;i<edges->size();i++) {
-		Edge *e=(*edges)[i];
-		if ( ! e ) cerr <<" NULL"<<endl;
-		cerr <<" "<< e->print() << endl;
-	}
-#endif // GEOS_DEBUG
-
+*/
 }
 
 /*private*/
@@ -729,7 +729,7 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 	GEOS_CHECK_FOR_INTERRUPTS();
 
 	// add the noded edges to this result graph
-	insertUniqueEdges(&baseSplitEdges);
+	insertUniqueEdges(&baseSplitEdges, env);
 	computeLabelsFromDepths();
 	replaceCollapsedEdges();
 	//Debug.println(edgeList);
@@ -750,6 +750,9 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 	 */
   try
   {
+#ifdef GEOS_DEBUG_VALIDATION 
+		cout << "EdgeNodingValidator about to evaluate " << edgeList.getEdges().size() << " edges" << endl;
+#endif
     // Will throw TopologyException if noding is
     // found to be invalid
     EdgeNodingValidator::checkValid(edgeList.getEdges());
