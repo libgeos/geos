@@ -78,6 +78,7 @@ ZEND_GET_MODULE(geos)
 
 static void noticeHandler(const char *fmt, ...)
 {
+    TSRMLS_FETCH();
     char message[256];
     va_list args;
     va_start(args, fmt);
@@ -89,6 +90,7 @@ static void noticeHandler(const char *fmt, ...)
 
 static void errorHandler(const char *fmt, ...)
 {
+    TSRMLS_FETCH();
     char message[256];
     va_list args;
     va_start(args, fmt);
@@ -96,7 +98,7 @@ static void errorHandler(const char *fmt, ...)
     va_end(args);
 
     /* TODO: use a GEOSException ? */
-    zend_throw_exception_ex(zend_exception_get_default(TSRMLS_CC),
+    zend_throw_exception_ex(zend_exception_get_default(TSRMLS_C),
         1 TSRMLS_CC, "%s", message); 
 
 }
@@ -108,12 +110,14 @@ typedef struct Proxy_t {
 
 static void 
 setRelay(zval* val, void* obj) {
+    TSRMLS_FETCH();
     Proxy* proxy = (Proxy*)zend_object_store_get_object(val TSRMLS_CC);
     proxy->relay = obj;
 }
 
 static inline void *
 getRelay(zval* val, zend_class_entry* ce) {
+    TSRMLS_FETCH();
     Proxy *proxy =  (Proxy*)zend_object_store_get_object(val TSRMLS_CC);
     if ( proxy->std.ce != ce ) {
         php_error_docref(NULL TSRMLS_CC, E_ERROR,
@@ -153,9 +157,10 @@ static long getZvalAsDouble(zval* val)
 }
 
 static zend_object_value
-Gen_create_obj (zend_class_entry *type TSRMLS_DC,
+Gen_create_obj (zend_class_entry *type,
     zend_objects_free_object_storage_t st, zend_object_handlers* handlers)
 {
+    TSRMLS_FETCH();
     zval *tmp;
     zend_object_value retval;
 
@@ -411,6 +416,7 @@ Geometry_deserialize(zval **object, zend_class_entry *ce, const unsigned char *b
 static void
 dumpGeometry(GEOSGeometry* g, zval* array)
 {
+    TSRMLS_FETCH();
     int ngeoms, i;
 
     /*
