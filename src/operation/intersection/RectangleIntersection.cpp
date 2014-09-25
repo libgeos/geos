@@ -467,8 +467,10 @@ RectangleIntersection::clip_polygon_to_polygons(const geom::Polygon * g,
   using geos::algorithm::CGAlgorithms;
   if( parts.empty() )
   {
-    const Coordinate rectCorner(rect.xmin(), rect.ymin());
-    if ( CGAlgorithms::locatePointInRing(rectCorner,
+    Coordinate rectCenter(rect.xmin(), rect.ymin());
+    rectCenter.x += (rect.xmax()-rect.xmin())/2;
+    rectCenter.y += (rect.ymax()-rect.ymin())/2;
+    if ( CGAlgorithms::locatePointInRing(rectCenter,
                           *g->getExteriorRing()->getCoordinatesRO())
          != Location::INTERIOR )
     {
