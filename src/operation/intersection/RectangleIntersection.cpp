@@ -470,7 +470,7 @@ RectangleIntersection::clip_polygon_to_polygons(const geom::Polygon * g,
     const Coordinate rectCorner(rect.xmin(), rect.ymin());
     if ( CGAlgorithms::locatePointInRing(rectCorner,
                           *g->getExteriorRing()->getCoordinatesRO())
-         == Location::EXTERIOR )
+         != Location::INTERIOR )
     {
       return;
     }
