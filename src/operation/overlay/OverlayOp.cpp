@@ -234,7 +234,7 @@ OverlayOp::replaceCollapsedEdges()
 void
 OverlayOp::copyPoints(int argIndex, const Envelope *env)
 {
-#define GEOS_DEBUG_COPY_POINTS 1
+//#define GEOS_DEBUG_COPY_POINTS 1
 
 #ifdef GEOS_DEBUG_COPY_POINTS
 	int copied = 0;

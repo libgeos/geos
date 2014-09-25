@@ -368,9 +368,9 @@ GeometryGraph::computeSelfNodes(LineIntersector &li,
 	typedef vector<Edge*> EC;
 	EC *se = edges;
 	EC self_edges_copy;
-	if ( env ) { // TODO: ... and env does not cover self geom env
+	if ( env && ! env->covers(parentGeom->getEnvelopeInternal()) ) {
 		collect_intersecting_edges(env, se->begin(), se->end(), self_edges_copy);
-    cerr << "(computeSelfNodes) Self edges reduced from " << se->size() << " to " << self_edges_copy.size() << endl;
+    //cerr << "(computeSelfNodes) Self edges reduced from " << se->size() << " to " << self_edges_copy.size() << endl;
 		se = &self_edges_copy;
 	}
 
@@ -414,14 +414,14 @@ GeometryGraph::computeEdgeIntersections(GeometryGraph *g,
 
 	EC *se = edges;
 	EC *oe = g->edges;
-	if ( env ) { // TODO: ... and env does not cover self geom env
+	if ( env && ! env->covers(parentGeom->getEnvelopeInternal()) ) {
 		collect_intersecting_edges(env, se->begin(), se->end(), self_edges_copy);
-    cerr << "Self edges reduced from " << se->size() << " to " << self_edges_copy.size() << endl;
+    //cerr << "Self edges reduced from " << se->size() << " to " << self_edges_copy.size() << endl;
 		se = &self_edges_copy;
 	}
-	if ( env ) { // TODO: ... and env does not cover other geom env
+	if ( env && ! env->covers(g->parentGeom->getEnvelopeInternal()) ) {
 		collect_intersecting_edges(env, oe->begin(), oe->end(), other_edges_copy);
-    cerr << "Other edges reduced from " << oe->size() << " to " << other_edges_copy.size() << endl;
+    //cerr << "Other edges reduced from " << oe->size() << " to " << other_edges_copy.size() << endl;
 		oe = &other_edges_copy;
 	}
 	esi->computeIntersections(se, oe, si);
