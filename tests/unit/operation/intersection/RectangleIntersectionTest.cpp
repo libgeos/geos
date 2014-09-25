@@ -1503,4 +1503,18 @@ namespace tut
         "POLYGON((0 8,8 8, 8 2, 0 2, 0 4, 5 4, 5 6, 0 6, 0 8))";
       doClipTest(inp, exp, r);
     }
+
+    // Hole outside the rect shares the lower-left corner
+    template<> template<> void object::test<207>()
+    {
+      Rectangle r(0,0,10,10);
+      const char *inp =
+        "POLYGON ("
+          "(-10 -10,-10 20,20 20,20 -10,-10 -10)," // CW
+          "(-5 -5,0 -5,0 0,-5 0,-5 -5)"     // CCW
+        ")";
+      const char *exp =
+        "POLYGON((0 0,0 10,10 10,10 0,0 0))";
+      doClipTest(inp, exp, r);
+    }
 }

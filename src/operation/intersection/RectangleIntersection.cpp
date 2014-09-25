@@ -519,7 +519,10 @@ RectangleIntersection::clip_polygon_to_polygons(const geom::Polygon * g,
 		  else
 			{
         using geos::algorithm::CGAlgorithms;
-			  if( CGAlgorithms::isPointInRing(Coordinate(rect.xmin(), rect.ymin()),
+        Coordinate rectCenter(rect.xmin(), rect.ymin());
+        rectCenter.x += (rect.xmax()-rect.xmin())/2;
+        rectCenter.y += (rect.ymax()-rect.ymin())/2;
+			  if( CGAlgorithms::isPointInRing(rectCenter,
             g->getInteriorRingN(i)->getCoordinatesRO()) )
 				{
 				  // Completely inside the hole
