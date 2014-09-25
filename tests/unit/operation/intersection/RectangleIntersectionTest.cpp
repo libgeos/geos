@@ -100,7 +100,7 @@ namespace tut
 
     };
 
-    typedef test_group<test_rectangleintersectiontest_data, 256> group;
+    typedef test_group<test_rectangleintersectiontest_data, 255> group;
     typedef group::object object;
 
     group test_rectangleintersectiontest_group("geos::operation::intersection::RectangleIntersection");
