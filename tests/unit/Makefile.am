@@ -89,6 +89,7 @@ geos_unit_SOURCES = \
 	operation/buffer/BufferOpTest.cpp \
 	operation/buffer/BufferParametersTest.cpp \
 	operation/distance/DistanceOpTest.cpp \
+	operation/intersection/RectangleIntersectionTest.cpp \
 	operation/IsSimpleOpTest.cpp \
 	operation/linemerge/LineMergerTest.cpp \
 	operation/linemerge/LineSequencerTest.cpp \
@@ -114,6 +115,7 @@ geos_unit_SOURCES = \
 	triangulate/DelaunayTest.cpp \
 	triangulate/VoronoiTest.cpp \
 	util/UniqueCoordinateArrayFilterTest.cpp \
+	capi/GEOSClipByRectTest.cpp \
 	capi/GEOSCoordSeqTest.cpp \
 	capi/GEOSDelaunayTriangulationTest.cpp \
 	capi/GEOSVoronoiDiagramTest.cpp \

@@ -39,6 +39,8 @@
 #include <geos/algorithm/InteriorPointLine.h>
 #include <geos/algorithm/InteriorPointArea.h>
 #include <geos/algorithm/ConvexHull.h>
+#include <geos/operation/intersection/Rectangle.h>
+#include <geos/operation/intersection/RectangleIntersection.h>
 #include <geos/operation/predicate/RectangleContains.h>
 #include <geos/operation/predicate/RectangleIntersects.h>
 #include <geos/operation/relate/RelateOp.h>
@@ -67,6 +69,7 @@
 #endif
 
 #define SHORTCIRCUIT_PREDICATES 1
+//#define USE_RECTANGLE_INTERSECTION 1
 
 using namespace std;
 using namespace geos::algorithm;
@@ -500,14 +503,32 @@ Geometry*
 Geometry::intersection(const Geometry *other) const
 {
 	/**
-         * TODO: MD - add optimization for P-A case using Point-In-Polygon
-         */
+   * TODO: MD - add optimization for P-A case using Point-In-Polygon
+   */
 
 	// special case: if one input is empty ==> empty
 	if (isEmpty() || other->isEmpty() )
 	{
 		return getFactory()->createGeometryCollection();
 	}
+
+#ifdef USE_RECTANGLE_INTERSECTION
+	// optimization for rectangle arguments
+  using operation::intersection::Rectangle;
+  using operation::intersection::RectangleIntersection;
+	if ( isRectangle() ) {
+    const Envelope* env = getEnvelopeInternal();
+    Rectangle rect(env->getMinX(), env->getMinY(),
+                   env->getMaxX(), env->getMaxY());
+    return RectangleIntersection::clip(*other, rect).release();
+  }
+	if (other->isRectangle()) {
+    const Envelope* env = other->getEnvelopeInternal();
+    Rectangle rect(env->getMinX(), env->getMinY(),
+                   env->getMaxX(), env->getMaxY());
+    return RectangleIntersection::clip(*this, rect).release();
+  }
+#endif
 
 	return BinaryOp(this, other, overlayOp(OverlayOp::opINTERSECTION)).release();
 }

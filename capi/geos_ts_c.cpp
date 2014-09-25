@@ -54,6 +54,8 @@
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
+#include <geos/operation/intersection/Rectangle.h>
+#include <geos/operation/intersection/RectangleIntersection.h>
 #include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/sharedpaths/SharedPathsOp.h>
@@ -2148,6 +2150,48 @@ GEOSPointOnSurface_r(GEOSContextHandle_t extHandle, const Geometry *g1)
     }
     catch (const std::exception &e)
     {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+    
+    return NULL;
+}
+
+Geometry *
+GEOSClipByRect_r(GEOSContextHandle_t extHandle, const Geometry *g, double xmin, double ymin, double xmax, double ymax)
+{
+    if ( 0 == extHandle )
+    {
+        return NULL;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return NULL;
+    }
+
+    try
+    {
+        using geos::operation::intersection::Rectangle;
+        using geos::operation::intersection::RectangleIntersection;
+        Rectangle rect(xmin, ymin, xmax, ymax);
+        std::auto_ptr<Geometry> g3 = RectangleIntersection::clip(*g, rect);
+        return g3.release();
+    }
+    catch (const std::exception &e)
+    {
+#if VERBOSE_EXCEPTIONS
+        std::ostringstream s; 
+        s << "Exception on GEOSClipByRect with following inputs:" << std::endl;
+        s << "A: "<<g1->toString() << std::endl;
+        s << "B: "<<g2->toString() << std::endl;
+        handle->NOTICE_MESSAGE("%s", s.str().c_str());
+#endif // VERBOSE_EXCEPTIONS
         handle->ERROR_MESSAGE("%s", e.what());
     }
     catch (...)

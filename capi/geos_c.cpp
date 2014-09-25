@@ -485,6 +485,11 @@ GEOSPointOnSurface(const Geometry *g)
 }
 
 
+Geometry *
+GEOSClipByRect(const Geometry *g, double xmin, double ymin, double xmax, double ymax)
+{
+    return GEOSClipByRect_r( handle, g, xmin, ymin, xmax, ymax );
+}
 
 
 

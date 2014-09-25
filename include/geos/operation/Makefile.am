@@ -4,6 +4,7 @@
 SUBDIRS = \
     buffer \
     distance \
+    intersection \
     linemerge \
     overlay \
     polygonize \

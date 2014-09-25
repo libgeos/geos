@@ -6,6 +6,7 @@ Changes in 3.5.0
   - PHP: Geometry->normalize method
   - GEOS_USE_ONLY_R_API macro support (#695)
   - PHP: WKBReader->read() & WKBWriter::write() methods (Benjamin Morel)
+  - RectangleIntersection, GEOSClipByRect (Mika Heiskanen, Sandro Santilli)
   ...
 - Improvements:
   - Speed-up intersection and difference between geometries

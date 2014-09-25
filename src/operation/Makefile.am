@@ -4,6 +4,7 @@
 SUBDIRS = \
     buffer \
     distance \
+    intersection \
     linemerge \
     overlay \
     polygonize \
@@ -24,6 +25,7 @@ liboperation_la_SOURCES = \
 liboperation_la_LIBADD = \
     buffer/libopbuffer.la \
     distance/libopdistance.la \
+    intersection/libopintersection.la \
     linemerge/liboplinemerge.la \
     overlay/libopoverlay.la \
     polygonize/liboppolygonize.la \
