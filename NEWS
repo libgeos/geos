@@ -10,6 +10,7 @@ YYYY-MM-DD
  - Fix ruby binding build (https://github.com/libgeos/libgeos/pull/32)
  - Make polygonize operation interruptable
  - Update for Visual Studio 2013 (#691)
+ - Fix support of PHP bindings for version < 5.4.0 (#709)
 
 Changes in 3.4.2
 2013-08-25
