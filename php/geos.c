@@ -171,7 +171,7 @@ Gen_create_obj (zend_class_entry *type,
     zend_hash_init(obj->std.properties, 0, NULL, ZVAL_PTR_DTOR, 0);
 #if PHP_VERSION_ID < 50399 
     zend_hash_copy(obj->std.properties, &type->default_properties,
-        (copy_ctor_func_t)zval_add_ref, (void *)&tmp, sizeof(zval *));
+        (copy_ctor_func_t)zval_add_ref, NULL, sizeof(zval *));
 #else
     object_properties_init(&(obj->std), type);
 #endif
