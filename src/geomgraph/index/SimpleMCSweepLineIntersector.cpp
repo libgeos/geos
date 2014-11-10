@@ -21,6 +21,7 @@
 #include <geos/geomgraph/index/MonotoneChain.h>
 #include <geos/geomgraph/index/SweepLineEvent.h>
 #include <geos/geomgraph/Edge.h>
+#include <geos/util/Interrupt.h>
 
 using namespace std;
 
@@ -93,6 +94,7 @@ SimpleMCSweepLineIntersector::add(Edge *edge, void* edgeSet)
 	events.reserve(events.size()+(n*2));
 	for(size_t i=0; i<n; ++i)
 	{
+		GEOS_CHECK_FOR_INTERRUPTS();
 		MonotoneChain *mc=new MonotoneChain(mce,i);
 		SweepLineEvent *insertEvent=new SweepLineEvent(edgeSet,mce->getMinX(i),NULL,mc);
 		events.push_back(insertEvent);
@@ -111,6 +113,7 @@ SimpleMCSweepLineIntersector::prepareEvents()
 	sort(events.begin(), events.end(), SweepLineEventLessThen());
 	for(size_t i=0; i<events.size(); ++i)
 	{
+		GEOS_CHECK_FOR_INTERRUPTS();
 		SweepLineEvent *ev=events[i];
 		if (ev->isDelete())
 		{
@@ -126,6 +129,7 @@ SimpleMCSweepLineIntersector::computeIntersections(SegmentIntersector *si)
 	prepareEvents();
 	for(size_t i=0; i<events.size(); ++i)
 	{
+		GEOS_CHECK_FOR_INTERRUPTS();
 		SweepLineEvent *ev=events[i];
 		if (ev->isInsert())
 		{
