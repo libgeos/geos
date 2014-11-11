@@ -44,6 +44,7 @@
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/GeometryCollection.h>
+#include <geos/util/Interrupt.h>
 
 #include <geos/inline.h>
 
@@ -393,7 +394,7 @@ void
 GeometryGraph::insertPoint(int argIndex, const Coordinate& coord,
 	int onLocation)
 {
-#if GEOS_DEBUG
+#if GEOS_DEBUG > 1
 	cerr<<"GeometryGraph::insertPoint("<<coord.toString()<<" called"<<endl;
 #endif
 	Node *n=nodes->addNode(coord);
@@ -450,6 +451,7 @@ GeometryGraph::addSelfIntersectionNodes(int argIndex)
 		{
 			EdgeIntersection *ei=*eiIt;
 			addSelfIntersectionNode(argIndex, ei->coord, eLoc);
+			GEOS_CHECK_FOR_INTERRUPTS();
 		}
 	}
 }

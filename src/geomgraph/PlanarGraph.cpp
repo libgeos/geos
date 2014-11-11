@@ -71,6 +71,10 @@ PlanarGraph::PlanarGraph()
 /*public*/
 PlanarGraph::~PlanarGraph()
 {
+#if GEOS_DEBUG
+	std::cerr << "~PlanarGraph" << std::endl;
+#endif
+
 	delete nodes;
 #if 1 // FIXME: PlanarGraph should *not* own edges!
 	for(size_t i=0, n=edges->size(); i<n; i++) {
@@ -166,7 +170,7 @@ Node*
 PlanarGraph::addNode(Node *node)
 {
 	assert(nodes);
-#if GEOS_DEBUG
+#if GEOS_DEBUG > 1
 	cerr << "PlanarGraph::addNode(Node * " << *node 
 		<< ")" << endl;
 #endif
@@ -177,7 +181,7 @@ PlanarGraph::addNode(Node *node)
 Node*
 PlanarGraph::addNode(const Coordinate& coord)
 {
-#if GEOS_DEBUG
+#if GEOS_DEBUG > 1
 	cerr << "PlanarGraph::addNode(Coordinate& "
 		<< coord << ")" << endl;
 #endif

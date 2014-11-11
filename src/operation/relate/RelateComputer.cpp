@@ -36,8 +36,18 @@
 #include <geos/geomgraph/EdgeIntersectionList.h>
 #include <geos/geomgraph/EdgeIntersection.h>
 
+#include <geos/util/Interrupt.h>
+
 #include <vector>
 #include <cassert>
+
+#ifndef GEOS_DEBUG
+#define GEOS_DEBUG 0
+#endif
+
+#if GEOS_DEBUG
+# include <iostream>
+#endif
 
 using namespace geos::geom;
 using namespace geos::geomgraph;
@@ -72,19 +82,61 @@ RelateComputer::computeIM()
 		return im.release();
 	}
 
+#if GEOS_DEBUG
+	std::cerr << "RelateComputer::computeIM: "
+            << "computing self nodes 1"
+            << std::endl;
+#endif
+
 	std::auto_ptr<SegmentIntersector> si1 (
 		(*arg)[0]->computeSelfNodes(&li,false)
 	);
+
+	GEOS_CHECK_FOR_INTERRUPTS();
+
+#if GEOS_DEBUG
+	std::cerr << "RelateComputer::computeIM: "
+            << "computing self nodes 2"
+            << std::endl;
+#endif
+
 	std::auto_ptr<SegmentIntersector> si2 (
 		(*arg)[1]->computeSelfNodes(&li,false)
 	);
+
+	GEOS_CHECK_FOR_INTERRUPTS();
+
+#if GEOS_DEBUG
+	std::cerr << "RelateComputer::computeIM: "
+            << "computing edge intersections"
+            << std::endl;
+#endif
 
 	// compute intersections between edges of the two input geometries
 	std::auto_ptr< SegmentIntersector> intersector (
     (*arg)[0]->computeEdgeIntersections((*arg)[1], &li,false)
   );
+
+	GEOS_CHECK_FOR_INTERRUPTS();
+
+#if GEOS_DEBUG
+	std::cerr << "RelateComputer::computeIM: "
+            << "copying intersection nodes"
+            << std::endl;
+#endif
+
 	computeIntersectionNodes(0);
 	computeIntersectionNodes(1);
+
+	GEOS_CHECK_FOR_INTERRUPTS();
+
+#if GEOS_DEBUG
+	std::cerr << "RelateComputer::computeIM: "
+            << "copying nodes and labels"
+            << std::endl;
+#endif
+
+	GEOS_CHECK_FOR_INTERRUPTS();
 
 	/*
 	 * Copy the labelling for the nodes in the parent Geometries.
@@ -94,20 +146,39 @@ RelateComputer::computeIM()
 	copyNodesAndLabels(0);
 	copyNodesAndLabels(1);
 
+	GEOS_CHECK_FOR_INTERRUPTS();
+
 	/*
 	 * complete the labelling for any nodes which only have a
 	 * label for a single geometry
 	 */
 	//Debug.addWatch(nodes.find(new Coordinate(110, 200)));
 	//Debug.printWatch();
+#if GEOS_DEBUG
+	std::cerr << "RelateComputer::computeIM: "
+            << "labeling isolated nodes"
+            << std::endl;
+#endif
 	labelIsolatedNodes();
 	//Debug.printWatch();
+
+#if GEOS_DEBUG
+	std::cerr << "RelateComputer::computeIM: "
+            << "computing proper intersection matrix"
+            << std::endl;
+#endif
 
 	/*
 	 * If a proper intersection was found, we can set a lower bound
 	 * on the IM.
 	 */
 	computeProperIntersectionIM(intersector.get(), im.get());
+
+#if GEOS_DEBUG
+	std::cerr << "RelateComputer::computeIM: "
+            << "computing improper intersections"
+            << std::endl;
+#endif
 
 	/*
 	 * Now process improper intersections
@@ -141,6 +212,11 @@ RelateComputer::computeIM()
 	 * since isolated components will not have been replaced by new
 	 * components formed by intersections.
 	 */
+#if GEOS_DEBUG
+	std::cerr << "RelateComputer::computeIM: "
+            << "computing labeling for isolated components"
+            << std::endl;
+#endif
 	//debugPrintln("Graph A isolated edges - ");
 	labelIsolatedEdges(0,1);
 	//debugPrintln("Graph B isolated edges - ");
