@@ -6,9 +6,12 @@ geos_svn_revision.h
 .libs
 .deps
 .vimrc
+.dirstamp
 *.o
 *.lo
 *.la
+*.log
+*.trs
 macros/libtool.m4
 macros/ltoptions.m4
 macros/ltsugar.m4
