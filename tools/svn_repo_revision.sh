@@ -29,7 +29,7 @@ read_rev_git() {
     echo 0;
   fi
 
-  rev=`${git_exe} log --grep=git-svn -1 | grep git-svn | cut -d@ -f2 | cut -d' ' -f1`
+  rev=`cd ${top_srcdir} && ${git_exe} log --grep=git-svn -1 | grep git-svn | cut -d@ -f2 | cut -d' ' -f1`
 
   if test -z "$rev"; then
     echo "Can't fetch SVN revision from git log" >&2 
