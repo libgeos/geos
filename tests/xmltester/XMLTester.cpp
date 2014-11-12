@@ -38,6 +38,7 @@
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/util.h>
+#include <geos/util/Interrupt.h>
 //#include <geos/geomgraph.h>
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKBWriter.h>
@@ -68,6 +69,8 @@
 #include <cmath>
 #include <stdexcept>
 #include <algorithm>
+
+#include <signal.h>
 
 #if defined(_MSC_VER) && defined(GEOS_TEST_USE_STACKWALKER)
 #include <windows.h>
@@ -1454,6 +1457,12 @@ usage(char *me, int exitcode, std::ostream &os)
     std::exit(exitcode);
 }
 
+void
+request_interrupt(int sig)
+{
+  geos::util::Interrupt::request();
+}
+
 int
 main(int argC, char* argV[])
 {
@@ -1466,6 +1475,8 @@ main(int argC, char* argV[])
 #endif
 
     if ( argC < 2 ) usage(argV[0], 1, std::cerr);
+
+    signal(15, request_interrupt);
 
     XMLTester tester;
     tester.setVerbosityLevel(verbose);
