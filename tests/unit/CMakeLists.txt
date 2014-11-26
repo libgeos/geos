@@ -34,3 +34,8 @@ if(GEOS_ENABLE_TESTS)
 endif()
 
 message(STATUS "${STATUS_MESSAGE} - ${STATUS_RESULT}")
+
+#################################################################################
+# Group source files for IDE source explorers (e.g. Visual Studio)
+#################################################################################
+GenerateSourceGroups(tests/unit)

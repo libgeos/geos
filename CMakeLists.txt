@@ -323,6 +323,7 @@ endif()
 #################################################################################
 # Configure subdirectories
 #################################################################################
+include(GenerateSourceGroups)
 
 add_subdirectory(include)
 add_subdirectory(src)

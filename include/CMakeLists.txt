@@ -50,3 +50,8 @@ if(APPLE AND GEOS_ENABLE_MACOSX_FRAMEWORK)
   install(CODE 
     "execute_process(COMMAND ln -sfh Versions/Current/Headers \"$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/GEOS.framework/Headers\")")
 endif()
+
+#################################################################################
+# Group source files for IDE source explorers (e.g. Visual Studio)
+#################################################################################
+GenerateSourceGroups(include)
