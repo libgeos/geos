@@ -1,0 +1,9 @@
+This package implements doubled-double arithmetic (>30dp) on
+IEEE 754 floating-point hardware in C++.
+
+Please read INSTALL.
+
+The definitive site for this code is
+http://www-epidem.plantsci.cam.ac.uk/~kbriggs/doubledouble.html
+
+Keith Briggs kmb28@cam.ac.uk
