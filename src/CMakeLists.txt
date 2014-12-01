@@ -14,6 +14,14 @@
 file(GLOB_RECURSE geos_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 file(GLOB_RECURSE geos_ALL_HEADERS ${CMAKE_SOURCE_DIR}/include/*.h) # fix source_group issue
 
+# Building with Visual C++ x86_64 needs to compile the asm utilities first
+if (MSVC AND "x${CMAKE_VS_PLATFORM_NAME}" STREQUAL "xx64")
+  set(TTMATH_MSVC64_ASM ttmathuint_x86_64_msvc.asm) 
+  enable_language(ASM_MASM)
+  message(STATUS "Enabled MASM to compile '${TTMATH_MSVC64_ASM}'")
+  list(INSERT geos_SOURCES 0 ${CMAKE_CURRENT_SOURCE_DIR}/algorithm/ttmath/${TTMATH_MSVC64_ASM})
+endif()
+
 if(GEOS_ENABLE_MACOSX_FRAMEWORK)
   # OS X frameworks don't have static libs
   # also 1 binary, so include CAPI here
