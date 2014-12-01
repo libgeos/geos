@@ -373,6 +373,21 @@ LineIntersector::hasIntersection(const Coordinate& p, const Coordinate& p1, cons
 			(CGAlgorithms::orientationIndex(p2,p1,p)==0)) {
 			return true;
 		}
+
+        // p intersects (p1,p2) if
+        // 1) lies on the segment (p1,p2) if x/y-projections intersect
+        if (p.x <= (std::max)(p1.x, p2.x) && p.x >= (std::min)(p1.x, p2.x) &&
+            p.y <= (std::max)(p1.y, p2.y) && p.y >= (std::min)(p1.y, p2.y))
+        {
+            // 2) p is collinear with p1 and p2 
+            double area = fabs(((p1.x - p.x) * (p2.y - p.y) - (p2.x - p.x) * (p1.y - p.y)) / 2);
+            double dx = p2.x - p1.x;
+            double dy = p2.y - p1.y;
+            double len = sqrt(dx * dx + dy * dy);
+            double err = 1e-6 * len; err *= err; // fraction of length to test area close-to-zero
+            if (area <= err)
+                return true;
+        }
 	}
 	return false;
 }
