@@ -1,0 +1,601 @@
+Version 0.9.3  (2012.11.28):
+    * fixed:   in Big::FromDouble(double value) (only 32 bit version)
+               buffer overflow in referencing to UInt<2>
+               this was used when 'value' was in so called "unnormalized" state
+               (E=0 and F is nonzero)
+               it produced incorrect mantissa (on about 8th decimal digit up)
+    * added:   Parser::InitCGamma()
+               initializing coefficients used when calculating the gamma (or factorial) function
+               this speed up the next calculations
+               you don't have to call this method explicitly
+               these coefficients will be calculated when needed
+    * added:   option 'group_digits' to Conv struct
+               you can set how many digits should be grouped
+    * changed: small optimizations in UInt::ToString() and Big::FromString()
+
+
+Version 0.9.2 (2010.09.23):
+    * fixed:   Big::Add() sometimes incorrectly rounded the last bit from its mantissa
+    * fixed:   Big::BigAnd() Big::BigOr() Big::BigXor() should have set NaN
+               when the argument was negative (they only returned 2)
+    * fixed:   recurrence calling in Big::FromString(const std::string &, uint, const wchar_t **, bool *)
+               it should have the signature: Big::FromString(const std::string &, uint, const char **, bool *)               
+    * fixed:   Big::ToString method
+               in some cases when in the output string the exponent should be equal zero
+               the method changes the exponent to one so the last digit from the mantissa
+               was lost
+    * fixed:   Big::ToDouble(double &) set always +INF (infinity)
+               when the value was too large (even for negative values)
+               (it should set -INF in such a case)
+    * added:   some missing operators
+               UInt::operator~()    /* bitwise neg  */
+               UInt::operator&()    /* bitwise and  */
+               UInt::operator&=()
+               UInt::operator|()    /* bitwise or   */
+               UInt::operator|=()
+               UInt::operator^()    /* bitwise xor  */
+               UInt::operator^=()
+               Big::operator&()
+               Big::operator&=()
+               Big::operator|()
+               Big::operator|=()
+               Big::operator^()
+               Big::operator^=()
+               for Big<> we do not define bitwise neg
+               Big::operator++()
+               Big::operator++(int)
+               Big::operator--()
+               Big::operator--(int)
+    * added:   macro TTMATH_DONT_USE_WCHAR
+               if defined then the library does not use wide characters
+               (wchar_t, std::wstring, ...) this is a workaround for some compilers
+    * added:   bool UInt::IsOnlyTheHighestBitSet()
+               bool UInt::IsOnlyTheLowestBitSet()
+               returning true if only the highest/lowest bit is set
+    * added:   uint Int::MulInt(sint ss2)       
+    * added:   void UInt::Swap(UInt<value_size> & ss2)       
+               void Big::Swap(UInt<value_size> & ss2)
+               method for swapping this for an argument
+    * added:   macro TTMATH_BIG_DEFAULT_CLEAR
+               when defined the default constructor from Big<> clears its mantissa and exponent
+               Big<1, 2> var;
+               var.mantissa and var.exponent will be set to zero
+               (but var has the NaN flag set too - it is not zero value, this is mainly for debug purposes)
+    * added:   only on 32bit platforms:
+               uint UInt::FromUInt(uint64_t n)
+               uint Int::FromInt(int64_t n)
+               void Big::FromUInt(uint64_t n)
+               void Big::FromInt(int64_t n)        
+               and appropriate constructors and operators
+    * added:   TTMATH_FORCEASM macro
+               asm version of the library is available by default only for:
+               x86 and amd64 platforms and for Microsoft Visual and GCC compilers,
+               but you can force using asm version (the same asm as for Microsoft Visual)
+               by defining TTMATH_FORCEASM macro
+               you have to be sure that your compiler accept such an asm format
+    * added:   some missing methods for converting
+               for UInt<>, Int<> and Big<> classes:
+               uint ToUInt()
+               sint ToInt()
+               ToUInt(uint32_t &)
+               ToInt(uint32_t &)
+               ToInt(int32_t &)
+               ToUInt(uint64_t &)
+               ToInt(uint64_t &)
+               ToInt(int64_t &)
+               FromUInt(uint32_t &)
+               FromInt(uint32_t &)
+               FromInt(int32_t &)
+               FromUInt(uint64_t &)
+               FromInt(uint64_t &)
+               FromInt(int64_t &)
+               and appropriate constructors and operators
+    * added:   double Big::ToDouble() /there was only Big::ToDouble(double &) /
+               uint Big::ToFloat(float &)
+               float Big::ToFloat()
+    * changed: now asm version is available only on x86 and amd64
+               (and only for GCC and MS VC compilers)
+    * removed: macro TTMATH_RELEASE (now the 'release' version is default)
+               for debug version define TTMATH_DEBUG macro
+               TTMATH_DEBUG is also automatically defined when DEBUG or _DEBUG is set
+    * removed: macro TTMATH_REFERENCE_ASSERT from all methods in public interface
+
+
+Version 0.9.1 (2010.02.07):
+    * fixed:   the parser didn't use characters for changing the base (# and &)
+               those characters were skipped
+               (this bug was introduced in 0.9.0)
+    * fixed:   added in the parser: operator's associativity
+               operator ^ (powering) is right-associative:
+               sample: 2^3^4 is equal 2^(3^4) and it is: 2.41e+24
+               previously was: 2^3^4 = (2^3)^4 = 4096
+    * fixed:   in Big::ToString_CreateNewMantissaAndExponent() changed the formula:
+               new_exp_ = [log base (2^exponent)] + 1
+               now the part '+ 1' is only made when the logarithm is positive and with fraction
+               if the value is negative we can only skip the fraction, previously
+               we lost some last digits from the new mantissa
+               Consider this binary value (32 bit mantissa):
+               (bin)1.0000000000000000000000000000011
+               previously ToString() gave 1, now we have: 1.000000001
+    * changed: in Big::ToString() the base rounding is made only if the result value
+               would not be an integer, e.g. if the value is 1.999999999999 then
+               the base rounding will not be done - because as the result would be 2
+    * added:   IEEE 754 half-to-even rounding (bankers' rounding) to the following
+               floating point algorithms: Big::Add, Big::Sub, Big::Mul, Big::Div
+    * added:   static sint UInt<value_size>::FindLowestBitInWord(uint x)
+               this method is looking for the lowest set bit in a word
+    * added:   UInt::FindLowestBit(uint & table_id, uint & index)
+               this method is looking for the lowest set bit
+
+               
+Version 0.9.0 (2009.11.25):
+    * added:   support for wide characters (wchar_t, std::wstring)
+    * added:   Big::IsInteger()
+               returns true if the value is integer (without fraction)
+               (NaN flag is not checked)
+    * added:   global Gamma() function
+    * added:   gamma() function to the parser
+    * added:   CGamma<ValueType> class
+               is used with Gamma() and Factorial() in multithreaded environment
+    * added:   multithread support for Big<> class
+               you should compile with TTMATH_MULTITHREADS
+               and use TTMATH_MULTITHREADS_HELPER macro somewhere in your *.cpp file
+    * added:   x86_64 asm code for Microsoft Visual compiler
+               file: ttmathuint_x86_64_msvc.asm
+               (this file should be compiled first because MS VC doesn't support inline assembler in x86_64 mode) 
+    * added:   flag TTMATH_BIG_ZERO to Big<> class
+               if this flag is set then there is a value zero
+               Big::IsZero() is faster now
+    * added:   Big::ClearInfoBit(unsigned char)
+               Big::SetInfoBit(unsigned char)
+               Big::IsInfoBit(unsigned char)
+               some methods for manipulating the info flags
+    * added:   macro: TTMATH_BITS(min_bits)
+		       which returns the number of machine words 
+		       capable to hold min_bits bits
+    * added:   bool Parser::Calculated()
+               this method returns true is something was calculated
+               (at least one mathematical operator was used or a function or variable)
+    * added:   to the parser: operator percentage
+               e.g. 1000-50%=1000-(1000*0,5)=500
+    * added:   struct: Conv
+               consists of some parameters used
+               in ToString() and FromString()
+    * added:   Big::ToString() can group digits
+               e.g. 1234567 -> 1`234`567
+    * added:   Parser::SetGroup(int g)
+               Parser::SetComma(int c, int c2 = 0)
+               Parser::SetParamSep(int s)
+    * added:   std::string  UInt::ToString(uint b = 10)
+               std::wstring UInt::ToWString(uint b = 10)
+               std::string  Int::ToString(uint b = 10)
+               std::wstring Int::ToWString(uint b = 10)
+               uint         Big::ToString(std::string & result, const Conv & conv)
+               uint         Big::ToString(std::wstring & result, const Conv & conv)
+               std::string  Big::ToString(const Conv & conv)
+               std::string  Big::ToString()
+               std::wstring Big::ToWString(const Conv & conv)
+               std::wstring Big::ToWString()
+    * added:   uint FromString(const char * source, const Conv & conv, const char **, bool *)
+               uint FromString(const wchar_t * source, const Conv & conv, const wchar_t **, bool *)
+               uint FromString(const std::string & string, const Conv & conv, const wchar_t **, bool *)
+               uint FromString(const std::wstring & string, const Conv & conv, const wchar_t **, bool *)
+    * added:   UInt::Sqrt() - a new algorithm for calculating the square root
+    * added:   to the parser: function frac() - returns a value without the integer part
+               (only fraction remains)
+    * added:   Int::DivInt(sint divisor, sint * remainder)
+    * added:   const char * UInt::LibTypeStr()
+               const char * Big::LibTypeStr()
+               LibTypeCode UInt::LibType()
+               LibTypeCode Big::LibType()
+               returning a string/enum represents the currect type of the library
+               we have following types:
+                   asm_vc_32   - with asm code designed for Microsoft Visual C++ (32 bits)
+                   asm_gcc_32  - with asm code designed for GCC (32 bits)
+                   asm_vc_64   - with asm for VC (64 bit)
+                   asm_gcc_64  - with asm for GCC (64 bit)
+                   no_asm_32   - pure C++ version (32 bit) - without any asm code
+                   no_asm_64   - pure C++ version (64 bit) - without any asm code
+    * added:   UInt::operator>>(int)
+               UInt::operator>>=(int)
+               UInt::operator<<(int)
+               UInt::operator<<=(int)
+    * changed: Factorial() is using the Gamma() function now
+    * changed: Big::Div(ss2)
+               Big::Mod(ss2)
+               they return 2 when ss2 is zero
+               previously returned 1
+    * changed: algorithms in Big::Sqrt() and ttmath::Root(x ; n)
+               they were not too much accurate for some integers
+               e.g. Root(16;4) returned a value very closed to 2 (not exactly 2)
+    * changed: added specializations to Big::ToString() when the base is equal 4, 8 or 16
+               the previous version was not accurate on some last digits (after the comma operator)
+               consider this binary value (32 bit mantissa):
+               base 2: 1.1111 1111 1111 1111 1111 1111 1110 101
+               previous ToString() gave:
+                  base 4:  1.33333333333332
+                  base 8:  1.777777777
+                  base 16: 1.FFFFFF
+               now we have:
+                  base 4:  1.3333333333333222
+                  base 8:  1.77777777724
+                  base 16: 1.FFFFFFEA
+    * changed: in Big::ToString() some additional rounding (base_round) is now made only 
+               when the value is not an integer
+    * changed: another compilers than MS VC or GCC by default use no asm version (TTMATH_NOASM)
+    * removed: Parser<>::SetFactorialMax() method
+               the factorial() is such a fast now that we don't need the method longer
+    * removed: ErrorCode::err_too_big_factorial
+    * removed: macros: TTMATH_COMMA_CHARACTER_1 and TTMATH_COMMA_CHARACTER_2
+               the comma characters we have in Conv struct now
+               
+
+Version 0.8.6 (2009.10.25):
+    * fixed:   UInt::SetBitInWord(uint & value, uint bit) set 1 if the bit was
+               equal 1 (should be set 2)
+               this affected only no-asm parts - when macro TTMATH_NOASM was defined
+    * fixed:   UInt<value_size>::MulInt(uint ss2)
+               there was a buffer overflow when value_size was equal 1
+    * fixed:   UInt::AddVector() and UInt::SubVector() didn't want to compile
+               when macro TTMATH_NOASM was defined
+    * fixed:   Big::operator>> didn't correctly recognize values in scientific mode (with 'e' character)
+    * fixed:   Int::FromString(const tt_string & s, uint b = 10)
+               didn't use 'b' (always was '10')
+    * fixed:   buffer overflow in Big::ToInt(Int<int_size> & result)
+    * fixed:   powering algorithm in:
+               UInt::Pow(UInt<value_size> pow)
+               Big::Pow(UInt<pow_size> pow)
+               Big::PowUInt(Big<exp, man> pow)
+               when 'pow' was sufficient large the algorithm returned carry
+               but the result could have been calculated correctly
+
+
+Version 0.8.5 (2009.06.16):
+    * fixed:   Big::Mod(x) didn't correctly return a carry
+               and the result was sometimes very big (even greater than x)
+    * fixed:   global function Mod(x) didn't set an ErrorCode object
+    * fixed:   global function Round() didn't test a carry
+               now it sets ErrorCode object
+    * changed: function Sin(x) to Sin(x, ErrorCode * err=0)
+               when x was very big the function returns zero
+               now it sets ErrorCode object to err_overflow
+               and the result has a NaN flag set
+               the same is to Cos() function
+    * changed: PrepareSin(x) is using Big::Mod() now when reducing 2PI period
+               should be a little accurate especially on a very big 'x'
+    * changed: uint Mul(const UInt<value_size> & ss2, uint algorithm = 100)
+               void MulBig(const UInt<value_size> & ss2, UInt<value_size*2> & result, uint algorithm = 100)
+               those methods by default use MulFastest() and MulFastestBig()
+    * changed: changed a little Mul2Big() to cooperate with Mul3Big()
+    * added:   uint UInt::Mul3(const UInt<value_size> & ss2)
+               void UInt::Mul3Big(const UInt<value_size> & ss2, UInt<value_size*2> & result)
+               a new multiplication algorithm: Karatsuba multiplication,
+               on a vector UInt<100> with all items different from zero this algorithm is faster
+               about 3 times than Mul2Big(), and on a vector UInt<1000> with all items different from
+               zero this algorithm is faster more than 5 times than Mul2Big()
+               (measured on 32bit platform with GCC 4.3.3 with -O3 and -DTTMATH_RELEASE)
+    * added:   uint MulFastest(const UInt<value_size> & ss2)
+               void MulFastestBig(const UInt<value_size> & ss2, UInt<value_size*2> & result)
+               those methods are trying to select the fastest multiplication algorithm
+    * added:   uint AddVector(const uint * ss1, const uint * ss2, uint ss1_size, uint ss2_size, uint * result)
+               uint SubVector(const uint * ss1, const uint * ss2, uint ss1_size, uint ss2_size, uint * result)
+               three forms: asm x86, asm x86_64, no-asm
+               those methods are used by the Karatsuba multiplication algorithm
+    * added:   to Big<> class: support for NaN flag (Not a Number)
+               bool Big::IsNan() - returns true if the NaN flag is set
+               void Big::SetNan() - sets the NaN flag
+               The NaN flag is set by default after creating an object:
+                 Big<1, 2> a;    // NaN is set (it means the object has not a valid number)
+                 std::cout << a; // cout gives "NaN"
+                 a = 123;        // now NaN is not set
+                 std::cout << a; // cout gives "123"
+               The NaN is set if there was a carry during calculations
+                 a.Mul(very_big_value); // a will have a NaN set
+               The NaN is set if an argument is NaN too
+                 b.SetNan();
+                 a.Add(b);  // a will have NaN because b has NaN too
+               If you try to do something on a NaN object, the result is a NaN too
+                 a.SetNan();
+                 a.Add(2);  // a is still a NaN 
+               The NaN is set if you use incorrect arguments
+                 a.Ln(-10); // a will have the NaN flag
+               The only way to clear the NaN flag is to assign a correct value or other correct object,
+               supposing 'a' has NaN flag, to remove the flag you can either:
+                 a = 10;
+                 a.FromInt(30);
+                 a.SetOne(); 
+                 a.FromBig(other_object_without_nan);
+                 etc.
+               
+               
+Version 0.8.4 (2009.05.08):
+    * fixed:   UInt::DivInt() didn't check whether the divisor is zero
+               there was a hardware interruption when the divisor was zero
+               (now the method returns one)
+    * fixed:   the problem with GCC optimization on x86_64
+               sometimes when using -O2 or -O3 GCC doesn't set correctly
+               the stack pointer (actually the stack is used for other things)
+               and you can't use instructions like push/pop in assembler code.
+               All the asm code in x86_64 have been rewritten, now instructions
+               push/pop are not used, other thing which have access to stack 
+               (like "m" (mask) constraints in Rcl2 and Rcr2) have also gone away,
+               now the library works well with -O2 and -O3 and the asm code
+               is a little faster
+    * added:   UInt::PrintLog(const char * msg, std::ostream & output)
+               used (for debugging purposes) by macro TTMATH_LOG(msg)
+               (it is used in nearly all methods in UInt class)
+    * added:   macro TTMATH_DEBUG_LOG: when defined then TTMATH_LOG() 
+               put some debug information (to std::cout)
+    * added:   ttmathuint_x86.h, ttmathuint_x86_64.h, ttmathuint_noasm.h, 
+               all the methods which are using assembler code have been 
+               rewritten to no-asm forms, now we have:
+               1. asm for x86      file: ttmathuint_x86.h
+               2. asm for x86_64   file: ttmathuint_x86_64.h
+               3. no asm           file: ttmathuint_noasm.h
+                  (it's used when macro TTMATH_NOASM is defined)
+               The third form can be used on x86 and x86_64 as well and
+               on other platforms with a little effort.
+                              
+
+Version 0.8.3 (2009.04.06):
+    * fixed:   RclMoveAllWords() and RcrMoveAllWords() sometimes didn't return
+               the proper carry, (when 'bits' was greater than or equal to 'value_size')
+               this had impact on Rcl() and Rcr(), they also returned the wrong carry	
+    * fixed:   UInt::Div() didn't return a correct result when the divisor was equal 1
+               there was an error in UInt::DivInt() - when the divisor was 1 it returned
+               zero and the carry was set
+    * fixed:   there was a TTMATH_REREFENCE_ASSERT error in Big::PowUInt() caused by: start.Mul(start)
+    * fixed:   Big::Add incorrectly rounded 'this' when both exponents were equal
+               it caused that sometimes when adding a zero the result has changed
+               this had impact among other things on FromString() method
+               "0,8" had different binary representation from "0,80"
+    * fixed:   template Big::FromBig(const Big<another_exp, another_man> & another)
+               didn't correctly set the exponent (when the mantisses had different size -
+               when 'man' was different from 'another_man')
+               this had impact on operator= too
+               sample:
+               Big<2,3> a = 100;
+               Big<3,5> b;
+               b = a; // b had a wrong value
+    * fixed:   Big::Pow(const Big<exp, man> & pow)
+               it's using PowInt() only when pow.exponent is in range (-man*TTMATH_BITS_PER_UINT; 0]
+               previously the powering 'hung' on an input like this: "(1+ 1e-10000) ^ 10e100000000"
+               (there was 10e100000000 iterations in PowInt())
+    * fixed:   in function DegToRad(const ValueType & x, ErrorCode * err = 0) it is better
+               to make division first and then mutliplication -- the result is more
+               accurate especially when x is: 90,180,270 or 360
+    * fixed:   the parser didn't correctly treat operators for changing the base
+               (radix) -- operators '#' and '&', e.g.:
+               '#sin(1)' was equal '0' -- there was a zero from '#' and then
+               it was multipied by 'sin(1)'
+               the parser didn't check whether Big::FromString() has actually
+               read a proper value -- the method Big::FromString() didn't have
+               something to report such a situation
+    * fixed:   Big::FromString() when the base is 10, the method reads the scientific
+               part only if such a part it correctly supplied, e.g:
+               '1234e10', '1234e+10', '1234e-5'
+               previous '1234e' was treated as: '1234e0' (now parsing stops on 'e' and
+               the 'e' can be parsed by other parsers, e.g. the mathematical
+               parser -- now in the parser would be: '1234e' = '1234 * e' = '3354,3597...' )
+    * changed: renamed: Big::PowUInt(UInt<pow_size> pow) -> Big::Pow(UInt<pow_size> pow)
+               it returns 2 when there is: 0^0
+    * changed: renamed: Big::PowInt(Int<pow_size> pow) -> Big::Pow(Int<pow_size> pow)
+               it returns 2 when there is: 0^0 or 0^(-something)
+    * changed: renamed: Big::PowBUInt() -> PowUInt(), Big::PowBInt() -> Big::PowInt()
+               they return 2 when the arguments are incorrect (like above)
+    * changed: UInt::SetBitInWord(uint & value, uint bit) is taking the first argument by a reference now,
+               the specific bit is set in the 'value' and the method returns the last state of the bit (zero or one)
+    * changed: UInt::SetBit(uint bit_index) - it's using TTMATH_ASSERT now
+    * changed: the size of built-in variables (constants) in ttmathbig.h
+               now they consist of 256 32bit words
+               macro TTMATH_BUILTIN_VARIABLES_SIZE is equal: 256u on a 32bit platform and 128ul on a 64bit platform
+    * changed: the asm code in ttmathuint.h and ttmathuint64.h has been completely rewritten
+               now UInt<> is faster about 15-30% than UInt<> from 0.8.2
+               this has impact on Big<> too - it's faster about 10% now
+    * changed: in the parser: the form with operators '#' and '&' is as follows:
+               [-|+][#|&]numeric_value
+               previous was: [-|+][#|&][-|+]numeric_value
+    * changed: in the parser: the short form of multiplication has the same
+               priority as the normal multiplication, e.g.:
+               '2x^3' = 2 * (x^3)
+               previous the priority was greater than powering priority
+               previous: '2x^3' = (2*x) ^ 3
+    * added:   UInt::GetBit(uint bit_index) - returning the state of the specific bit
+    * added:   Big::operator=(double) and Big::Big(double)
+    * added:   UInt::Pow(UInt<value_size> pow) and Int::Pow(Int<value_size> pow)
+    * added:   global template functions in ttmath.h:
+               ValueType GradToRad(const ValueType & x, ErrorCode * err = 0)
+               ValueType RadToGrad(const ValueType & x, ErrorCode * err = 0)
+               ValueType DegToGrad(const ValueType & x, ErrorCode * err = 0)
+               ValueType DegToGrad(const ValueType & d, const ValueType & m,
+                                   const ValueType & s, ErrorCode * err = 0)
+               ValueType GradToDeg(const ValueType & x, ErrorCode * err = 0)
+    * added:   Parser::SetDegRadGrad(int angle) - 0 deg, 1 rad (default), 2 grad
+               this affects following functions (in the parser only): sin, cos, tan, cot,
+               asin, acos, atan, acot
+    * added:   functions to the parser: gradtorad(grad), radtograd(rad), degtograd(deg),
+               degtograd(d,m,s), gradtodeg(grad)
+    * added:   UInt::FromString, added a parametr 'after_source'
+               which is pointing at the end of the parsed string
+    * added:   Int::FromString(): parameter 'const char ** after_source = 0'
+               if exists it's pointing at the end of the parsed string
+    * added:   to UInt::FromString(), Int::FromString(), Big::FromString():
+               parameter 'bool * value_read = 0' - (if exists) tells
+               whether something has actually been read (at least one digit)
+    * added:   Objects::IsDefined(const std::string & name)
+               returning true if such an object is defined
+    * removed: Big::FromString() this method doesn't longer recognize operators
+               for changing the base ('#' and '&')
+
+
+Version 0.8.2 (2008.06.18):
+    * added:   UInt::BitNot2() this method has been proposed by
+               Arek <kmicicc AnTispam users.sourceforge.net>
+    * changed: Int::FromInt(const Int<argument_size> & p), 
+               Int::FromInt(sint value) (it returns zero now)
+               Int::operator=(uint i)
+               Int::Int(uint i)
+    * added:   Int::FromUInt(const UInt<argument_size> & p),
+               Int::FromUInt(uint value)
+               and appropriate constructors and assignment 
+               operators as well
+    * changed: Big::FromInt(Int<int_size> value),
+    * added:   Big::FromUInt(UInt<int_size> value),
+               Big::operator=(const UInt<int_size> & value)
+               Big::Big(const UInt<int_size> & value)
+    * changed: the parser is allowed to recognize values which
+               begin with a dot, e.g '.5' is treated as '0.5'
+    * added:   a method Big::FromDouble(double) which converts from
+               standard double into a Big
+    * added:   uint Big::ToDouble(double&) - converting into double
+    * added:   Big::FromBig() and an operator= and a contructor
+               for converting from another kind of a Big class
+    * added:   to the parser: avg(), sum()
+    * added:   'decimal_point' parameter into Big::ToString(...)
+    * fixed:   Big::operator>> didn't use TTMATH_COMMA_CHARACTER_2 macro
+    * added:   a short form of multiplication (without the '*' character)
+               e.g. '5y', (it's used only if the second parameter
+               is a variable or function)
+    * changed: variables and functions are case-sensitive now
+    * added:   variables and functions can have underline characters
+               in their names
+    * changed: 'max_digit_after_comma' in Big::ToString()
+               remove the -2 state
+    * added:   'remove_trailing_zeroes' in Big::ToString()
+               it's either true or false
+    * fixed/changed: the way of using Big::SetSign()
+               the method do not check whether there is a zero or not now
+               (even if there's a zero the method can set a sign bit)
+               I changed this due to some prior errors
+               (errors corrected in revision 17, 49 and 58)
+
+
+Version 0.8.1 (2007.04.17):
+    * fixed:   Big::PowFrac(..) didn't return a correct error code
+               (when 'this' was negative)
+    * added:   Root(x; index) (and to the parser as well)
+    * added:   macro: TTMATH_PRERELEASE_VER (can be either zero or one)
+    * added:   UInt::MulInt(int, UInt<int another_size>::&)
+    * added:   Big::MulUInt(uint)
+    * changed: Big::MulInt(sint)
+    * added:   Big::ToUInt(uint &)
+    * changed: Big::ToInt(sint&)
+    * changed: Factorial() it uses Big::MulUInt() at the beginning
+               (faster now especially more on a 32bit platform)
+    * added:   doxygen.cfg for generating a documentation from the doxygen
+    * changed: UInt::Rcl(uint c=0) and UInt::Rcr(uint c=0) into
+               UInt::Rcl2(uint bits, uint c) and UInt::Rcr2(uint bits, uint c)
+               now they can move more than one bit and they are only private
+    * fixed:   UInt::Rcl(uint bits, uint c) and UInt::Rcr(uint bits, uint c)
+               didn't correctly return a carry if the 'bits' were equal
+               to 'value_size*TTMATH_BITS_PER_UINT'
+    * changed: UInt::Rcl(uint bits, uint c) and UInt::Rcr(uint bits, uint c)
+               into UInt::Rcl(uint bits, uint c=0) and
+               UInt::Rcr(uint bits, uint c=0)
+               they are faster now when the bits is greater than a half of
+               the TTMATH_BITS_PER_UINT
+    * changed: UInt::CompensationToLeft() it's faster now
+    * changed: more small changes where there were UInt::Rcl(uint c=0) and
+               UInt::Rcr(uint c=0) used
+    * changed: as the Big type uses UInt::Rcl() and UInt::Rcr() a lot then
+               it is much faster now (about 5-25%)
+    * added:   ASinh(), ACosh(), ATanh() /ATgh()/, ACoth() /ACtgh()/
+               and to the parser as well
+    * added:   UInt::BitAnd(), UInt::BitOr(), UInt::BitXor(), UInt::BitNot(),
+               Big::BitAnd(), Big::BitOr(), Big::BitXor()
+    * added:   to the parser: bitand(), bitor(), bitxor()
+               /band(), bor(), bxor()/
+    * changed: the way of parsing operators in the mathematical parser
+               (the parser is not too much greedy now)
+ 
+    
+Version 0.8.0 (2007.03.28):
+    * added:   into the parser: SetFactorialMax()
+    * added:   DegToDeg(deg, min, sec), DegToRad(deg), DegToRad(deg, min, sec),
+               RadToDeg(rad), Ceil(x), Floor(x), Sqrt(x), Sinh(x), Cosh(x),
+               Tanh(x) /Tgh(x)/, Coth(x) /Ctgh(x)/
+    * changed: class Objects in ttmathobjects.h has been completely rewritten,
+               we can change the names of user-defined variables or functions,
+               and the names are case-sensitive now
+    * added:   class History which is used in functions which take a lot of time
+               during calculating e.g. Factorial(x)
+    * added:   Tg(x) a wrapper for Tan(x)
+    * changed: CTan(x) is Cot(x) now
+    * added:   Ctg(x) a wrapper for Cot(x) 
+    * added:   ATg(x) a wrapper for ATan(x)
+    * changed: ACTan(x) is ACot(x) now
+    * added:   ACtg(x) a wrapper for ACot(x)
+    * added:   UInt::PrintTable() (for debugging etc.)
+    * changed: the methods Big::SetPi() Big::SetE() and Big::SetLn2() have
+               been rewritten, now they have 128 32bit words (it's about
+               1232 valid decimal digits)
+    * fixed:   previous values from Big::SetPi() Big::SetE() and
+               Big::SetLn2() were not too much accurate (last 2-3 words were wrong)
+    * added:   Big::SetLn10() (128 32bit words as well)
+    * added:   macro TTMATH_BUILTIN_VARIABLES_SIZE which is equal 128u on
+               32bit platforms and 64ul on 64bit platforms (128/2=64)
+    * added:   macros TTMATH_PLATFORM32 and TTMATH_PLATFORM64
+    * changed: a small optimisation in UInt::Mul2Big()
+    * added:   at the end of ttmath.h: #include "ttmathparser.h"
+               this is for convenience for a programmer, he can only use #include
+               with ttmath.h even if he uses the parser
+    * added:   to samples: big.cpp, parser.cpp
+    * added/changes/fixed: in copy-constructors and operators= in Int,
+               Uint and Big (more info in the commit log)
+    * renamed: Big::SetDotOne() into Big::Set05()
+    * changes: a few small optimisations in Big
+    * deleted: the word 'virtual' from destructors: UInt, Int, Big
+               (types in this library are not projected to be base-classes for
+               another ones derived from them)
+    * and more small changes (look at the commit log)    
+
+
+Version 0.7.2 (2007.03.09):
+    * added:   Big::Mod - the remainder from a division
+    * added:   Big::Sgn - the 'sign' from the value (-1,0,1)
+    * added:   global functions Mod and Sgn too
+    * added:   checking whether a user gives a correct value of a variable or function
+               (user-defined variables/functions in the mathematical parser)
+    * added:   into the parser: logical operators: > < >= <= == != && ||
+    * added:   into the parser: logical functions: and() or() not() if()
+    * added:   ErrorCode::err_unknown_operator when the parser couldn't read an operator
+
+
+Version 0.7.1 (2007.02.27):
+    * fixed:   the error 'overflow during printing' which was caused
+               by Big::FromInt(Int<int_size> value) (the sign has to be set at the end)
+    * fixed:   many small errors
+    * added:   ATan (arctan), ACTan (arc ctan) functions
+
+
+Version 0.7.0 (2007.02.24):
+    * finished: support for 64bit platforms
+    * added:   ASin (arcsin), ACos (arccos) functions
+    
+    
+Version 0.6.4 (2007.01.29):
+    * fixed:   the problem with a sign in the mathematical parser /-(1) was 1/
+    * added:   UInt::AddInt and UInt::SubInt
+    * changed: UInt::AddOne and UInt::SubOne (much faster now)
+    * added:   UInt::SetBitInWord
+    * changed: UInt::SetBit (much faster now)
+               UInt::AddTwoUints renamed to UInt::AddTwoInts
+               UInt::FindLeadingBit32 renamed to UInt::FindLeadingBitInWord
+               UInt::Mul64 renamed to UInt::MulTwoWords
+               UInt::Div64 renamed to UInt::DivTwoWords
+    * added:   UInt::SetBitInWord
+    * and more small changes in UInt type
+    * start adding support for Amd64 (not finished yet) (added ttmathuint64.h)
+    
+    
+Version 0.6.3 (2007.01.22):
+    * changed: position of arguments (x and base) in logarithm functions are swapped
+    * changed: it's possible to use any multiplication algorithms in the same time
+               (macros UINT_MUL_VERSION_'X' have gone)
+    * added:   ExceptionInfo, ReferenceError and RuntimeError classes
+    * changed: the mess in macros has been cleaned up
+    * added:   TTMATH_RELEASE macro
+
+
+Version 0.6.2 (2007.01.10):
+    * added:   New division algorithm (radix b) where b is 2^32

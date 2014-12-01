@@ -1,0 +1,24 @@
+Dear Colleague,
+
+I have released version 2.2 of my C++ software package `doubledouble' which
+implements doubled-double (approximately 30 decimal place) floating point
+arithmetic on IEEE 754 floating-point hardware.
+
+This version includes many improvements suggested by Stefan Bauberger, Roger
+Schlafly, Wayne Hayes, Victor Shoup, Tony Dixon, and Alan Miller. These include
+new functions, portability enhancements and improvements to many details.
+
+This is a development of code formerly released as `Quad version 2.0'.  The
+name Quad has been dropped as the code does NOT implement the IEEE quadruple
+precision format.   The name `doubledouble' was chosen instead since it is
+distinctive and reminds one that an unusual data type is being used, and it
+describes the format of two adjacent doubles. 
+
+The code may be downloaded from
+http://www-epidem.plantsci.cam.ac.uk/~kbriggs/doubledouble.html
+
+Except where otherwise indicated by comments in the code, this software is
+covered by the GNU Public License, as described in the included COPYLEFT
+notice.
+
+Keith Briggs kmb28@cam.ac.uk
