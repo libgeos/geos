@@ -3,6 +3,7 @@
 
 #include <tut.hpp>
 // geos
+#include <geos/io/WKBReader.h>
 #include <geos/io/WKTReader.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/CGAlgorithms.h>
@@ -250,6 +251,69 @@ namespace tut
     ensure_equals(CGAlgorithms::computeOrientation(p1, p2, q), -1);
 
 	}
+
+    // Test intersects: point on segment with FLOAT PM
+    // X coordinate of 3rd and 4th vertises of the line are not 
+    // float-point exact with X coordinate of the point.
+    // The X values differ after 14th decimal place:
+    // POINT (-23.1094689600055080 50.5195368635957180)
+    // --------------------^^^^^^^------------^^^^^^^^
+    // LINESTRING 3rd and 4th points
+    //        -23.1094689600055150 50.5223376452201340, 
+    //        -23.1094689600055010 50.5169177629559480,
+    // --------------------^^^^^^^------------^^^^^^^^
+    // So, in float-point precision model, the point does DOES NOT intersect the segment.
+    template<>
+    template<>
+    void object::test<14>()
+    {
+        geos::io::WKBReader reader;
+        
+        // POINT located between 3rd and 4th vertex of LINESTRING
+        // POINT(-23.1094689600055080 50.5195368635957180)
+        std::string point("01010000009a266328061c37c0e21a172f80424940");
+        // LINESTRING(-23.122057005539 50.5201976774794,-23.1153476966995 50.5133404815199,-23.1094689600055150 50.5223376452201340,-23.1094689600055010 50.5169177629559480,-23.0961967920942 50.5330464848094,-23.0887991006034 50.5258515213185,-23.0852302622362 50.5264582238409)
+        std::string line("0102000000070000009909bf203f1f37c05c1d66d6954249404afe386d871d37c0a7eb1124b54149409c266328061c37c056d8bff5db42494098266328061c37c0034f7b5c2a42494060065c5aa01837c08ac001de3a4449408401b189bb1637c0b04e471a4f43494014ef84a6d11537c0b20dabfb62434940");
+        std::stringstream sPoint(point);
+        GeomPtr gPoint(reader.readHEX(sPoint));
+        std::stringstream sLine(line);
+        GeomPtr gLine(reader.readHEX(sLine));
+        int ret = gLine->intersects(gPoint.get());
+        ensure_equals(ret, 0);
+    }
+
+    // Test intersects: point on segment with FIXED PM
+    // X coordinate of 3rd and 4th vertises of the line are not 
+    // float-point exact with X coordinate of the point.
+    // The X values differ after 14th decimal place:
+    // POINT (-23.1094689600055080 50.5195368635957180)
+    // --------------------^^^^^^^------------^^^^^^^^
+    // LINESTRING 3rd and 4th points
+    //        -23.1094689600055150 50.5223376452201340, 
+    //        -23.1094689600055010 50.5169177629559480,
+    // --------------------^^^^^^^------------^^^^^^^^
+    // So, if float-point values are trimmed up to 14 decimal digits, the point DOES intersect the segment.
+
+    template<>
+    template<>
+    void object::test<15>()
+    {
+        geos::geom::PrecisionModel pm(1e+13);
+        geos::geom::GeometryFactory factory(&pm);
+        geos::io::WKBReader reader(factory);
+
+        // POINT located between 3rd and 4th vertex of LINESTRING
+        // POINT(-23.1094689600055080 50.5195368635957180)
+        std::string point("01010000009a266328061c37c0e21a172f80424940");
+        // LINESTRING(-23.122057005539 50.5201976774794,-23.1153476966995 50.5133404815199,-23.1094689600055150 50.5223376452201340,-23.1094689600055010 50.5169177629559480,-23.0961967920942 50.5330464848094,-23.0887991006034 50.5258515213185,-23.0852302622362 50.5264582238409)
+        std::string line("0102000000070000009909bf203f1f37c05c1d66d6954249404afe386d871d37c0a7eb1124b54149409c266328061c37c056d8bff5db42494098266328061c37c0034f7b5c2a42494060065c5aa01837c08ac001de3a4449408401b189bb1637c0b04e471a4f43494014ef84a6d11537c0b20dabfb62434940");
+        std::stringstream sPoint(point);
+        GeomPtr gPoint(reader.readHEX(sPoint));
+        std::stringstream sLine(line);
+        GeomPtr gLine(reader.readHEX(sLine));
+        int ret = gLine->intersects(gPoint.get());
+        ensure_equals(ret, 1);
+    }
 
 } // namespace tut
 
