@@ -45,8 +45,8 @@ RayCrossingCounter::locatePointInRing(const geom::Coordinate& point,
 
 	for (std::size_t i = 1, ni = ring.size(); i < ni; i++) 
 	{
-		const geom::Coordinate & p1 = ring[ i ];
-		const geom::Coordinate & p2 = ring[ i - 1 ];
+		const geom::Coordinate & p1 = ring[ i - 1 ];
+		const geom::Coordinate & p2 = ring[ i ];
 
 		rcc.countSegment(p1, p2);
 
@@ -64,8 +64,8 @@ RayCrossingCounter::locatePointInRing(const geom::Coordinate& point,
 
 	for (std::size_t i = 1, ni = ring.size(); i < ni; i++) 
 	{
-		const geom::Coordinate & p1 = *ring[ i ];
-		const geom::Coordinate & p2 = *ring[ i - 1 ];
+		const geom::Coordinate & p1 = *ring[ i - 1 ];
+		const geom::Coordinate & p2 = *ring[ i ];
 
 		rcc.countSegment(p1, p2);
 
@@ -75,6 +75,20 @@ RayCrossingCounter::locatePointInRing(const geom::Coordinate& point,
 	return rcc.getLocation();
 }
 
+/*public static*/
+int
+RayCrossingCounter::orientationIndex(const geom::Coordinate& p1,
+         const geom::Coordinate& p2, const geom::Coordinate& q)
+{
+	// travelling along p1->p2, turn counter clockwise to get to q return 1,
+	// travelling along p1->p2, turn clockwise to get to q return -1,
+	// p1, p2 and q are colinear return 0.
+	double dx1=p2.x-p1.x;
+	double dy1=p2.y-p1.y;
+	double dx2=q.x-p2.x;
+	double dy2=q.y-p2.y;
+	return RobustDeterminant::signOfDet2x2(dx1,dy1,dx2,dy2);
+}
 
 void 
 RayCrossingCounter::countSegment(const geom::Coordinate& p1,
@@ -124,30 +138,20 @@ RayCrossingCounter::countSegment(const geom::Coordinate& p1,
 	if (((p1.y > point.y) && (p2.y <= point.y)) ||
 		((p2.y > point.y) && (p1.y <= point.y)) ) 
 	{
-		// translate the segment so that the test point lies
-		// on the origin
-		double x1 = p1.x - point.x;
-		double y1 = p1.y - point.y;
-		double x2 = p2.x - point.x;
-		double y2 = p2.y - point.y;
-
-		// The translated segment straddles the x-axis.
-		// Compute the sign of the ordinate of intersection
-		// with the x-axis. (y2 != y1, so denominator
-		// will never be 0.0)
-                        // MD - faster & more robust computation?
-                double xIntSign = RobustDeterminant::signOfDet2x2(x1, y1, x2, y2);
-		if (xIntSign == 0.0) 
+		// For an upward edge, orientationIndex will be positive when p1->p2
+		// crosses ray. Conversely, downward edges should have negative sign.
+		int sign = orientationIndex(p1, p2, point);
+		if (sign == 0)
 		{
 			isPointOnSegment = true;
 			return;
 		}
 
-		if (y2 < y1)
-			xIntSign = -xIntSign;
+		if (p2.y < p1.y)
+			sign = -sign;
 
 		// The segment crosses the ray if the sign is strictly positive.
-		if (xIntSign > 0.0) 
+		if (sign > 0)
 			crossingCount++;
 	}
 }

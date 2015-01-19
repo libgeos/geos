@@ -42,14 +42,7 @@ namespace algorithm { // geos.algorithm
 int
 CGAlgorithms::orientationIndex(const Coordinate& p1,const Coordinate& p2,const Coordinate& q)
 {
-	// travelling along p1->p2, turn counter clockwise to get to q return 1,
-	// travelling along p1->p2, turn clockwise to get to q return -1,
-	// p1, p2 and q are colinear return 0.
-	double dx1=p2.x-p1.x;
-	double dy1=p2.y-p1.y;
-	double dx2=q.x-p2.x;
-	double dy2=q.y-p2.y;
-	return RobustDeterminant::signOfDet2x2(dx1,dy1,dx2,dy2);
+	return RayCrossingCounter::orientationIndex(p1, p2, q);
 }
 
 /*public static*/

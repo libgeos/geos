@@ -93,6 +93,22 @@ public:
 	static int locatePointInRing(const geom::Coordinate& p,
 	         const std::vector<const geom::Coordinate*>& ring);
 
+	/** \brief
+	 * Returns the index of the direction of the point <code>q</code>
+	 * relative to a vector specified by <code>p1-p2</code>.
+	 *
+	 * @param p1 the origin point of the vector
+	 * @param p2 the final point of the vector
+	 * @param q the point to compute the direction to
+	 *
+	 * @return 1 if q is counter-clockwise (left) from p1-p2
+	 * @return -1 if q is clockwise (right) from p1-p2
+	 * @return 0 if q is collinear with p1-p2
+	 */
+	static int orientationIndex(const geom::Coordinate& p1,
+	         const geom::Coordinate& p2,
+	         const geom::Coordinate& q);
+
 	RayCrossingCounter(const geom::Coordinate& point)
 	:	point( point),
 		crossingCount( 0),
