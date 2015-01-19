@@ -2,6 +2,7 @@ Changes in 3.4.3-dev
 YYYY-MM-DD
 
 - Bug fixes / improvements
+ - Improve robustness of intersection testing (#716)
  - Fixed compilation against thread-safe PHP (#541)
  - Fix Empty to Empty equals (#703)
  - Fix build on OpenBSD (#700)
