@@ -7,6 +7,8 @@ Makefile
 *.o
 *.lo
 *.la
+*.trs
+*.log
 macros/libtool.m4
 macros/ltoptions.m4
 macros/ltsugar.m4
@@ -39,7 +41,6 @@ swig/geos.i
 autom4te.cache/
 capi/geos_c.h
 config.guess
-config.log
 config.status
 config.sub
 configure
