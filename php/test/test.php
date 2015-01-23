@@ -1056,7 +1056,7 @@ MULTIPOINT(
         $g = $reader->read('POLYGON((0 0, 0 10, 5 5, 10 10, 10 0, 0 0))');
         $b = $g->pointOnSurface();
         $this->assertEquals(
-'POINT (2 5)'
+'POINT (1 8)'
             , $writer->write($b));
     }
 
