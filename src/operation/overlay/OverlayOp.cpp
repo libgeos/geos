@@ -194,7 +194,10 @@ OverlayOp::insertUniqueEdges(vector<Edge*> *edges, const Envelope *env)
 {
   for(size_t i=0, n=edges->size(); i<n; ++i) {
     Edge *e = (*edges)[i];
-		if ( env && ! env->intersects(e->getEnvelope()) ) continue;
+		if ( env && ! env->intersects(e->getEnvelope()) ) {
+		  dupEdges.push_back(e); // or could it be deleted directly ?
+      continue;
+    }
 #if GEOS_DEBUG
 		cerr <<" "<< e->print() << endl;
 #endif 
