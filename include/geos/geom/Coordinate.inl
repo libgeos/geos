@@ -30,20 +30,22 @@ Coordinate::setNull()
 	x=DoubleNotANumber;
 	y=DoubleNotANumber;
 	z=DoubleNotANumber;
+	m=DoubleNotANumber;
 }
 
 INLINE bool
 Coordinate::isNull() const
 {
-	return (ISNAN(x) && ISNAN(y) && ISNAN(z));
+	return (ISNAN(x) && ISNAN(y) && ISNAN(z) && ISNAN(m));
 }
 
 INLINE
-Coordinate::Coordinate(double xNew, double yNew, double zNew)
+Coordinate::Coordinate(double xNew, double yNew, double zNew, double mNew)
 	:
 	x(xNew),
 	y(yNew),
-	z(zNew)
+	z(zNew),
+	m(mNew)
 {}
 
 INLINE bool
@@ -75,6 +77,21 @@ Coordinate::equals3D(const Coordinate& other) const
 {
 	return (x == other.x) && ( y == other.y) && 
 		((z == other.z)||(ISNAN(z) && ISNAN(other.z)));
+}
+
+INLINE bool
+Coordinate::equals3DM(const Coordinate& other) const
+{
+    return (x == other.x) && ( y == other.y) &&
+        ((m == other.m)||(ISNAN(m) && ISNAN(other.m)));
+}
+
+INLINE bool
+Coordinate::equals4D(const Coordinate& other) const
+{
+    return (x == other.x) && ( y == other.y) &&
+        ((z == other.z)||(ISNAN(z) && ISNAN(other.z))) &&
+        ((m == other.m)||(ISNAN(m) && ISNAN(other.m)));
 }
 
 INLINE double

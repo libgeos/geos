@@ -146,11 +146,12 @@ namespace tut
         ensure( !small.contains( 5, 5 ) );
 
         // Test coordinate
-        geos::geom::Coordinate origin(0, 0, 0);
+        geos::geom::Coordinate origin(0, 0, 0, 0);
 
         ensure_equals( origin.x, 0 );
         ensure_equals( origin.y, 0 );
         ensure_equals( origin.z, 0 );
+        ensure_equals( origin.m, 0 );
         ensure( small.contains( origin ) );
     }
 
@@ -185,11 +186,12 @@ namespace tut
         ensure( !with_origin.intersects( -200, 200 ) );
 
         // Test intersection with coordinate
-        geos::geom::Coordinate origin(0, 0, 0);
+        geos::geom::Coordinate origin(0, 0, 0, 0);
 
         ensure_equals( origin.x, 0 );
         ensure_equals( origin.y, 0 );
         ensure_equals( origin.z, 0 );
+        ensure_equals( origin.m, 0 );
         ensure( with_origin.intersects( origin ) );
 
     }

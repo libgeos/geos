@@ -310,6 +310,20 @@ public:
 	virtual std::size_t getDimension() const=0;
 
 	/**
+	 * Returns whether the coordinates in this sequence have a Z value.
+	 *
+	 * @return whether the coordinates in this sequence have a Z value.
+	 */
+	virtual bool getHasZ() const=0;
+
+	/**
+	 * Returns whether the coordinates in this sequence have a M value.
+	 *
+	 * @return whether the coordinates in this sequence have a M value.
+	 */
+	virtual bool getHasM() const=0;
+
+	/**
 	 * Returns the ordinate of a coordinate in this sequence.
 	 * Ordinate indices 0 and 1 are assumed to be X and Y.
 	 * Ordinates indices greater than 1 have user-defined semantics

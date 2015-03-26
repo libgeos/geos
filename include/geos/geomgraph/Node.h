@@ -113,8 +113,10 @@ public:
 	virtual std::string print();
 
 	virtual const std::vector<double> &getZ() const;
+	virtual const std::vector<double> &getM() const;
 
 	virtual void addZ(double);
+	virtual void addM(double);
 
 	/** \brief
 	 * Tests whether any incident edge is flagged as
@@ -145,8 +147,10 @@ protected:
 private:
 
 	std::vector<double> zvals;
+	std::vector<double> mvals;
 
 	double ztot;
+	double mtot;
 
 };
 

@@ -52,7 +52,8 @@ LinearLocation::pointAlongSegmentByFraction(const Coordinate& p0, const Coordina
 	double y = (p1.y - p0.y) * frac + p0.y;
 	// interpolate Z value. If either input Z is NaN, result z will be NaN as well.
 	double z = (p1.z - p0.z) * frac + p0.z;
-	return Coordinate(x, y, z);
+	double m = (p1.m - p0.m) * frac + p0.m;
+	return Coordinate(x, y, z, m);
 }
 
 /* public */

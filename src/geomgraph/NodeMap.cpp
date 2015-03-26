@@ -78,6 +78,7 @@ NodeMap::addNode(const Coordinate& coord)
                 cerr<<" already found ("<<node->getCoordinate().toString()<<") - adding Z"<<endl;
 #endif
                 node->addZ(coord.z);
+                node->addM(coord.m);
         }
         return node;
 }

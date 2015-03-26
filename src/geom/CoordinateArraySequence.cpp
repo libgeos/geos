@@ -32,21 +32,40 @@ namespace geom { // geos::geom
 
 CoordinateArraySequence::CoordinateArraySequence():
 	vect(new vector<Coordinate>()),
-        dimension(3)
+	hasZ(1),
+	hasM(0)
 {
 }
 
-CoordinateArraySequence::CoordinateArraySequence(size_t n, 
-                                                 size_t dimension_in ):
-	vect(new vector<Coordinate>(n)),
-        dimension(dimension_in)
+CoordinateArraySequence::CoordinateArraySequence(size_t n, std::size_t dimension, bool dim3isM):
+	vect(new vector<Coordinate>(n))
 {
+	if(dimension == 0) {
+		hasZ = hasM = -1;
+	}else if(dimension < 3){
+		hasZ = hasM = 0;
+	}else if(dimension == 3){
+		hasZ = !dim3isM;
+		hasM = dim3isM;
+	}else /*if(dimension == 4)*/{
+		hasZ = hasM = 1;
+	}
 }
 
-CoordinateArraySequence::CoordinateArraySequence(
-    vector<Coordinate> *coords, size_t dimension_in )
-        : vect(coords), dimension(dimension_in)
+CoordinateArraySequence::CoordinateArraySequence(vector<Coordinate> *coords, std::size_t dimension, bool dim3isM)
+		: vect(coords)
 {
+	if(dimension == 0) {
+		hasZ = hasM = -1;
+	}else if(dimension < 3){
+		hasZ = hasM = 0;
+	}else if(dimension == 3){
+		hasZ = !dim3isM;
+		hasM = dim3isM;
+	}else /*if(dimension == 4)*/{
+		hasZ = hasM = 1;
+	}
+
 	if ( ! vect ) vect = new vector<Coordinate>();
 }
 
@@ -55,7 +74,8 @@ CoordinateArraySequence::CoordinateArraySequence(
 	:
 	CoordinateSequence(c),
 	vect(new vector<Coordinate>(*(c.vect))),
-        dimension(c.getDimension())
+	hasZ(c.getHasZ()),
+	hasM(c.getHasM())
 {
 }
 
@@ -64,7 +84,8 @@ CoordinateArraySequence::CoordinateArraySequence(
 	:
 	CoordinateSequence(c),
 	vect(new vector<Coordinate>(c.size())),
-  dimension(c.getDimension())
+	hasZ(c.getHasZ()),
+	hasM(c.getHasM())
 {
   for (size_t i = 0, n = vect->size(); i < n; ++i) {
       (*vect)[i] = c.getAt(i);
@@ -89,21 +110,30 @@ CoordinateArraySequence::toVector() const
 	return vect; //new vector<Coordinate>(vect->begin(),vect->end());
 }
 
-std::size_t 
-CoordinateArraySequence::getDimension() const
+bool
+CoordinateArraySequence::getHasZ() const
 {
-    if( dimension != 0 )
-        return dimension;
+	if( hasZ == -1 ) {
+		if( vect->size() == 0 ) {
+			hasZ = true;
+		} else {
+			hasZ = !ISNAN((*vect)[0].z);
+		}
+	}
+	return hasZ;
+}
 
-    if( vect->size() == 0 )
-        return 3;
-
-    if( ISNAN((*vect)[0].z) )
-        dimension = 2;
-    else
-        dimension = 3;
-
-    return dimension;
+bool
+CoordinateArraySequence::getHasM() const
+{
+	if( hasM == -1) {
+		if( vect->size() == 0 ) {
+			hasM = true;
+		} else {
+			hasM = !ISNAN((*vect)[0].m);
+		}
+	}
+	return hasM;
 }
 
 void
@@ -224,6 +254,8 @@ CoordinateArraySequence::getOrdinate(size_t index, size_t ordinateIndex) const
 			return (*vect)[index].y;
 		case CoordinateSequence::Z:
 			return (*vect)[index].z;
+		case CoordinateSequence::M:
+			return (*vect)[index].m;
 		default:
 			return DoubleNotANumber;
 	}
@@ -244,6 +276,9 @@ CoordinateArraySequence::setOrdinate(size_t index, size_t ordinateIndex,
 		case CoordinateSequence::Z:
 			(*vect)[index].z = value;
 			break;
+		case CoordinateSequence::M:
+		(*vect)[index].m = value;
+		break;
 		default:
 		{
 			std::stringstream ss;
@@ -261,7 +296,8 @@ CoordinateArraySequence::apply_rw(const CoordinateFilter *filter)
 	{
 		filter->filter_rw(&(*i));
 	}
-	dimension = 0; // re-check (see http://trac.osgeo.org/geos/ticket/435)
+	// re-check (see http://trac.osgeo.org/geos/ticket/435)
+	hasZ = hasM = -1;
 }
 
 void

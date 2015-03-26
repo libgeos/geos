@@ -36,6 +36,7 @@
 #define GEOS_DEBUG 0
 #endif
 #define COMPUTE_Z 1
+#define COMPUTE_M 1
 
 using namespace std;
 using namespace geos::algorithm;
@@ -195,6 +196,9 @@ LineBuilder::buildLines(OverlayOp::OpCode /* opCode */)
 #if COMPUTE_Z
 		propagateZ(cs);
 #endif
+#if COMPUTE_M
+		propagateM(cs);
+#endif
 		LineString *line=geometryFactory->createLineString(cs);
 		resultLineList->push_back(line);
 		e->setInResult(true);
@@ -280,6 +284,93 @@ LineBuilder::propagateZ(CoordinateSequence *cs)
 		{
 			buf = cs->getAt(j);
 			buf.z = z;
+			cs->setAt(buf, j);
+		}
+	}
+
+}
+
+
+
+/*
+ * If the given CoordinateSequence has mixed m and m-less vertexes
+ * set M for all vertexes missing it.
+ * The M value is interpolated between m vertexes and copied
+ * from a m vertex to the end.
+ */
+void
+LineBuilder::propagateM(CoordinateSequence *cs)
+{
+	size_t i;
+#if GEOS_DEBUG
+	cerr<<"LineBuilder::propagateM() called"<<endl;
+#endif
+
+	vector<int>vm; // vertex m
+	size_t cssize = cs->getSize();
+	for (i=0; i<cssize; i++)
+	{
+		if ( !ISNAN(cs->getAt(i).m) ) vm.push_back(i);
+	}
+
+#if GEOS_DEBUG
+	cerr<<"  found "<<vm.size()<<" m vertexes"<<endl;
+#endif
+
+	if ( vm.size() == 0 )
+	{
+#if GEOS_DEBUG
+		cerr<<"  nothing to do"<<endl;
+#endif
+		return;
+	}
+
+	Coordinate buf;
+
+	// fill initial part
+	if ( vm[0] != 0 )
+	{
+		double m = cs->getAt(vm[0]).m;
+		for (int j=0; j<vm[0]; j++)
+		{
+			buf = cs->getAt(j);
+			buf.m = m;
+			cs->setAt(buf, j);
+		}
+	}
+
+	// interpolate inbetweens
+	size_t prev=vm[0];
+	for (i=1; i<vm.size(); i++)
+	{
+		int curr=vm[i];
+		int dist = curr-prev;
+		if (dist > 1)
+		{
+			const Coordinate &cto = cs->getAt(curr);
+			const Coordinate &cfrom = cs->getAt(prev);
+			double gap = cto.m-cfrom.m;
+			double mstep = gap/dist;
+			double m = cfrom.m;
+			for (int j=prev+1; j<curr; j++)
+			{
+				buf = cs->getAt(j);
+				m+=mstep;
+				buf.m = m;
+				cs->setAt(buf, j);
+			}
+		}
+		prev = curr;
+	}
+
+	// fill final part
+	if ( prev < cssize-1 )
+	{
+		double m = cs->getAt(prev).m;
+		for (size_t j=prev+1; j<cssize; j++)
+		{
+			buf = cs->getAt(j);
+			buf.m = m;
 			cs->setAt(buf, j);
 		}
 	}

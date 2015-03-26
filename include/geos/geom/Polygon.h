@@ -92,6 +92,8 @@ public:
 
 	/// Returns coordinate dimension.
 	virtual int getCoordinateDimension() const;
+	virtual bool getHasZ() const;
+	virtual bool getHasM() const;
 
 	/// Returns 1 (Polygon boundary is a MultiLineString)
 	int getBoundaryDimension() const;

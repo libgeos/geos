@@ -26,21 +26,23 @@ INLINE CoordinateSequence *
 CoordinateArraySequenceFactory::create() const
 {
     return new CoordinateArraySequence(
-                reinterpret_cast<std::vector<Coordinate>*>(0), 0);
+                reinterpret_cast<std::vector<Coordinate>*>(0), 0, false);
 }
 
 INLINE CoordinateSequence *
 CoordinateArraySequenceFactory::create(std::vector<Coordinate> *coords,
-		size_t dimension ) const
+                                       std::size_t dimension,
+                                       bool dim3isM) const
 {
-	return new CoordinateArraySequence(coords,dimension);
+	return new CoordinateArraySequence(coords, dimension, dim3isM);
 }
 
 INLINE CoordinateSequence *
-CoordinateArraySequenceFactory::create(std::size_t size, std::size_t dimension)
-		const
+CoordinateArraySequenceFactory::create(std::size_t size,
+                                       std::size_t dimension,
+                                       bool dim3isM) const
 {
-	return new CoordinateArraySequence(size,dimension);
+	return new CoordinateArraySequence(size, dimension, dim3isM);
 }
 
 INLINE CoordinateSequence *

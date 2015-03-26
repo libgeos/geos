@@ -85,13 +85,16 @@ public:
 	/// z-coordinate
 	double z;
 
+	/// m-coordinate
+	double m;
+
 	void setNull();
 
 	static Coordinate& getNull();
 
 	bool isNull() const;
 
-	Coordinate(double xNew=0.0, double yNew=0.0, double zNew=DoubleNotANumber);
+	Coordinate(double xNew=0.0, double yNew=0.0, double zNew=DoubleNotANumber, double mNew=DoubleNotANumber);
 
 	bool equals2D(const Coordinate& other) const;
 
@@ -101,8 +104,14 @@ public:
 	/// TODO: deprecate this, move logic to CoordinateLessThen instead
 	int compareTo(const Coordinate& other) const;
 
-	/// 3D comparison 
+	/// 3D XYZ comparison
 	bool equals3D(const Coordinate& other) const;
+
+	/// 3D XYM comparison
+	bool equals3DM(const Coordinate& other) const;
+
+	/// 4D XYZM comparison
+	bool equals4D(const Coordinate& other) const;
 
 	///  Returns a string of the form <I>(x,y,z)</I> .
 	std::string toString() const;

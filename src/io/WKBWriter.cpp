@@ -49,17 +49,16 @@ WKBWriter::WKBWriter(int dims, int bo, bool srid):
 {
 	if ( dims < 2 || dims > 3 )
 		throw util::IllegalArgumentException("WKB output dimension must be 2 or 3");
-    outputDimension = defaultOutputDimension;
 }
 
 /* public */
 void
-WKBWriter::setOutputDimension(int dims)
+WKBWriter::setOutputDimension(int dims, bool preferM)
 {
-	if ( dims < 2 || dims > 3 )
-		throw util::IllegalArgumentException("WKB output dimension must be 2 or 3");
-
-    defaultOutputDimension = dims;
+	if ( dims < 2 || dims > 4 )
+		throw util::IllegalArgumentException("WKT output dimension must be 2 or 3 or 4");
+	defaultOutputDimension = dims;
+	defaultOutputPreferM = preferM;
 }
 
 WKBWriter::~WKBWriter()
@@ -82,9 +81,13 @@ WKBWriter::writeHEX(const Geometry &g, ostream &os)
 void
 WKBWriter::write(const Geometry &g, ostream &os) 
 {
-    outputDimension = defaultOutputDimension;
-    if( outputDimension > g.getCoordinateDimension() )
-        outputDimension = g.getCoordinateDimension();
+	outputZ = (defaultOutputDimension == 4 ||
+			   (defaultOutputDimension == 3 && (!defaultOutputPreferM || !g.getHasM()))
+			  ) && g.getHasZ();
+    outputM = (defaultOutputDimension == 4 ||
+			   (defaultOutputDimension == 3 && defaultOutputPreferM) ||
+			   (defaultOutputDimension == 3 && !g.getHasZ())
+			  ) && g.getHasM();
 
 	outStream = &os;
 
@@ -244,8 +247,9 @@ WKBWriter::setByteOrder(int bo)
 void
 WKBWriter::writeGeometryType(int typeId, int SRID) 
 {
-	int flag3D = (outputDimension == 3) ? 0x80000000 : 0;
-    int typeInt = typeId | flag3D;
+	int flag3D = outputZ ? 0x80000000 : 0;
+	int flagM = outputM ? 0x40000000 : 0;
+	int typeInt = typeId | flag3D | flagM;
         
     if (includeSRID && SRID != 0)
         typeInt = typeInt | 0x20000000;
@@ -273,16 +277,13 @@ WKBWriter::writeCoordinateSequence(const CoordinateSequence &cs,
 	bool sized) 
 {
 	std::size_t size = cs.getSize();
-	bool is3d=false;
-	if ( outputDimension > 2) is3d = true;
 
 	if (sized) writeInt(size);
-	for (std::size_t i=0; i<size; i++) writeCoordinate(cs, i, is3d);
+	for (std::size_t i=0; i<size; i++) writeCoordinate(cs, i);
 }
 
 void
-WKBWriter::writeCoordinate(const CoordinateSequence &cs, int idx,
-	bool is3d) 
+WKBWriter::writeCoordinate(const CoordinateSequence &cs, int idx)
 {
 #if DEBUG_WKB_WRITER
 	cout<<"writeCoordinate: X:"<<cs.getX(idx)<<" Y:"<<cs.getY(idx)<<endl;
@@ -293,10 +294,17 @@ WKBWriter::writeCoordinate(const CoordinateSequence &cs, int idx,
 	outStream->write(reinterpret_cast<char *>(buf), 8);
 	ByteOrderValues::putDouble(cs.getY(idx), buf, byteOrder);
 	outStream->write(reinterpret_cast<char *>(buf), 8);
-	if ( is3d )
+	if ( outputZ )
 	{
 		ByteOrderValues::putDouble(
 			cs.getOrdinate(idx, CoordinateSequence::Z),
+			buf, byteOrder);
+		outStream->write(reinterpret_cast<char *>(buf), 8);
+	}
+	if ( outputM )
+	{
+		ByteOrderValues::putDouble(
+			cs.getOrdinate(idx, CoordinateSequence::M),
 			buf, byteOrder);
 		outStream->write(reinterpret_cast<char *>(buf), 8);
 	}

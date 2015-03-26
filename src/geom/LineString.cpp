@@ -141,6 +141,18 @@ LineString::getCoordinateDimension() const
     return (int) points->getDimension();
 }
 
+bool
+LineString::getHasZ() const
+{
+	return points->getHasZ();
+}
+
+bool
+LineString::getHasM() const
+{
+	return points->getHasM();
+}
+
 int
 LineString::getBoundaryDimension() const
 {

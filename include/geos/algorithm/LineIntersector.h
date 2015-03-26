@@ -54,6 +54,11 @@ public:
 	/// the given point p
 	static double interpolateZ(const geom::Coordinate &p, const geom::Coordinate &p0, const geom::Coordinate &p1);
 
+	/// \brief
+	/// Return a M value being the interpolation of M from p0 and p1 at
+	/// the given point p
+	static double interpolateM(const geom::Coordinate &p, const geom::Coordinate &p0, const geom::Coordinate &p1);
+
 
 	/// Computes the "edge distance" of an intersection point p in an edge.
 	//

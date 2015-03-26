@@ -57,8 +57,10 @@
 #endif
 
 #define COMPUTE_Z 1
+#define COMPUTE_M 1
 #define USE_ELEVATION_MATRIX 1
 #define USE_INPUT_AVGZ 0
+#define USE_INPUT_AVGM 1
 
 // A result validator using FuzzyPointLocator to
 // check validity of result. Pretty expensive...
@@ -164,6 +166,14 @@ OverlayOp::OverlayOp(const Geometry *g0, const Geometry *g1)
 #endif
 #endif // USE_ELEVATION_MATRIX
 #endif // COMPUTE_Z
+#if COMPUTE_M
+#if USE_INPUT_AVGM
+	avgm[0] = DoubleNotANumber;
+	avgm[1] = DoubleNotANumber;
+	avgmcomputed[0] = false;
+	avgmcomputed[1] = false;
+#endif // USE_INPUT_AVGM
+#endif // COMPUTE_M
 }
 
 OverlayOp::~OverlayOp()
@@ -416,6 +426,10 @@ OverlayOp::labelIncompleteNode(Node *n, int targetIndex)
 	cerr<<"   after location set: "<<n->print()<<endl;
 #endif
 
+#if defined(COMPUTE_Z) || defined(COMPUTE_M)
+	const LineString *line = dynamic_cast<const LineString *>(targetGeom);
+	const Polygon *poly = dynamic_cast<const Polygon *>(targetGeom);
+#endif
 #if COMPUTE_Z
 	/*
 	 * If this node has been labeled INTERIOR of a line
@@ -425,12 +439,10 @@ OverlayOp::labelIncompleteNode(Node *n, int targetIndex)
 	 * by LineIntersector invoked by CGAlgorithms::isOnLine
 	 * invoked by PointLocator.
 	 */
-	const LineString *line = dynamic_cast<const LineString *>(targetGeom);
 	if ( loc == Location::INTERIOR && line )
 	{
 		mergeZ(n, line);
 	}
-	const Polygon *poly = dynamic_cast<const Polygon *>(targetGeom);
 	if ( loc == Location::BOUNDARY && poly )
 	{
 		mergeZ(n, poly);
@@ -442,6 +454,30 @@ OverlayOp::labelIncompleteNode(Node *n, int targetIndex)
 	}
 #endif // USE_INPUT_AVGZ
 #endif // COMPUTE_Z
+#if COMPUTE_M
+	/*
+	 * If this node has been labeled INTERIOR of a line
+	 * or BOUNDARY of a polygon we must merge
+	 * M values of the intersected segment.
+	 * The intersection point has been already computed
+	 * by LineIntersector invoked by CGAlgorithms::isOnLine
+	 * invoked by PointLocator.
+	 */
+	if ( loc == Location::INTERIOR && line )
+	{
+		mergeM(n, line);
+	}
+	if ( loc == Location::BOUNDARY && poly )
+	{
+		mergeM(n, poly);
+	}
+#if USE_INPUT_AVGM
+	if ( loc == Location::INTERIOR && poly )
+	{
+		n->addM(getAverageM(targetIndex));
+	}
+#endif // USE_INPUT_AVGM
+#endif // COMPUTE_M
 }
 
 /*static private*/
@@ -483,6 +519,47 @@ OverlayOp::getAverageZ(int targetIndex)
 	avgz[targetIndex] = getAverageZ(p);
 	avgzcomputed[targetIndex] = true;
 	return avgz[targetIndex];
+}
+
+/*static private*/
+double
+OverlayOp::getAverageM(const Polygon *poly)
+{
+	double totm = 0.0;
+	int mcount = 0;
+
+	const CoordinateSequence *pts =
+		poly->getExteriorRing()->getCoordinatesRO();
+	size_t npts=pts->getSize();
+	for (size_t i=0; i<npts; ++i)
+	{
+		const Coordinate &c = pts->getAt(i);
+		if ( !ISNAN(c.m) )
+		{
+			totm += c.m;
+			mcount++;
+		}
+	}
+
+	if ( mcount ) return totm/mcount;
+	else return DoubleNotANumber;
+}
+
+/*private*/
+double
+OverlayOp::getAverageM(int targetIndex)
+{
+	if ( avgmcomputed[targetIndex] ) return avgm[targetIndex];
+
+	const Geometry *targetGeom = arg[targetIndex]->getGeometry();
+
+	// OverlayOp::getAverageM(int) called with a ! polygon
+	assert(targetGeom->getGeometryTypeId() == GEOS_POLYGON);
+
+	const Polygon* p = dynamic_cast<const Polygon*>(targetGeom);
+	avgm[targetIndex] = getAverageM(p);
+	avgmcomputed[targetIndex] = true;
+	return avgm[targetIndex];
 }
 
 /*private*/
@@ -528,6 +605,57 @@ OverlayOp::mergeZ(Node *n, const LineString *line) const
 			else
 			{
 				n->addZ(LineIntersector::interpolateZ(p,
+					p0, p1));
+			}
+			return 1;
+		}
+	}
+	return 0;
+}
+
+/*private*/
+int
+OverlayOp::mergeM(Node *n, const Polygon *poly) const
+{
+	const LineString *ls;
+	int found = 0;
+	ls = poly->getExteriorRing();
+	found = mergeM(n, ls);
+	if ( found ) return 1;
+	for (size_t i=0, nr=poly->getNumInteriorRing(); i<nr; ++i)
+	{
+		ls = poly->getInteriorRingN(i);
+		found = mergeM(n, ls);
+		if ( found ) return 1;
+	}
+	return 0;
+}
+
+/*private*/
+int
+OverlayOp::mergeM(Node *n, const LineString *line) const
+{
+	const CoordinateSequence *pts = line->getCoordinatesRO();
+	const Coordinate &p = n->getCoordinate();
+	LineIntersector li;
+	for(size_t i=1, size=pts->size(); i<size; ++i)
+	{
+		const Coordinate &p0=pts->getAt(i-1);
+		const Coordinate &p1=pts->getAt(i);
+		li.computeIntersection(p, p0, p1);
+		if (li.hasIntersection())
+		{
+			if ( p == p0 )
+			{
+				n->addM(p0.m);
+			}
+			else if ( p == p1 )
+			{
+				n->addM(p1.m);
+			}
+			else
+			{
+				n->addM(LineIntersector::interpolateM(p,
 					p0, p1));
 			}
 			return 1;

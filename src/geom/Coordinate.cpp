@@ -46,11 +46,14 @@ Coordinate::toString() const
 
 std::ostream& operator<< (std::ostream& os, const Coordinate& c)
 {
-	if ( ISNAN(c.z) )
+	os << c.x << " " << c.y;
+	if ( !ISNAN(c.z) )
 	{
-		os << c.x << " " << c.y;
-	} else {
-		os << c.x << " " << c.y << " " << c.z;
+		os << " " << c.z;
+	}
+	if ( !ISNAN(c.m) )
+	{
+		os << " m:" << c.m;
 	}
 	return os;
 }

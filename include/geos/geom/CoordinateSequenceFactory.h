@@ -66,11 +66,14 @@ public:
 	 * an empty sequence.
 	 *
 	 * @param coordinates the coordinates
-     * @param dimension 0, 2 or 3 with 0 indicating unknown at this time.
+	 * @param dimension the dimension of the coordinates in the sequence
+	 * 	(0=unknown, 2, 3 or 4 - ignored if not user specifiable)
+	 * @param dim3isM only if dimension=3, specifies whether dim 3 is Z or M
+	 * 	(0=false, 1=true)
 	 */
-	virtual CoordinateSequence *create(
-            std::vector<Coordinate> *coordinates,
-            std::size_t dimension=0 ) const=0;
+	virtual CoordinateSequence *create( std::vector<Coordinate> *coordinates,
+	                                    std::size_t dimension = 0,
+	                                    bool dim3isM = false ) const=0;
 
 	/** \brief
 	 * Creates a CoordinateSequence of the specified size and dimension.
@@ -80,10 +83,13 @@ public:
 	 *
 	 * @param size the number of coordinates in the sequence
 	 * @param dimension the dimension of the coordinates in the sequence
-	 * 	(0=unknown, 2, or 3 - ignored if not user specifiable)
+	 * 	(0=unknown, 2, 3 or 4 - ignored if not user specifiable)
+	 * @param dim3isM only if dimension=3, specifies whether dim 3 is Z or M
+	 * 	(0=false, 1=true)
 	 */
-	virtual CoordinateSequence *create(std::size_t size,
-                                           std::size_t dimension=0) const=0;
+	virtual CoordinateSequence *create( std::size_t size,
+	                                    std::size_t dimension = 0,
+	                                    bool dim3isM = false) const=0;
 
 	/** \brief
 	 * Creates a CoordinateSequence which is a copy of the given one.

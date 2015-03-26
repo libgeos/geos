@@ -40,6 +40,9 @@
 #ifndef COMPUTE_Z
 #define COMPUTE_Z 1
 #endif
+#ifndef COMPUTE_M
+#define COMPUTE_M 1
+#endif
 
 using namespace std;
 using namespace geos::geom;
@@ -72,6 +75,19 @@ Node::Node(const Coordinate& newCoord, EdgeEndStar* newEdges)
 		}
 	}
 #endif // COMPUTE_Z
+#if COMPUTE_M
+	mtot = 0;
+	addM(newCoord.m);
+	if ( edges )
+	{
+		EdgeEndStar::iterator endIt = edges->end();
+		for (EdgeEndStar::iterator it=edges->begin(); it!=endIt; ++it)
+		{
+			EdgeEnd *ee = *it;
+			addM(ee->getCoordinate().m);
+		}
+	}
+#endif // COMPUTE_M
 
 	testInvariant();
 }
@@ -157,6 +173,9 @@ Node::add(EdgeEnd *e)
 	e->setNode(this);
 #if COMPUTE_Z
 	addZ(e->getCoordinate().z);
+#endif
+#if COMPUTE_M
+	addM(e->getCoordinate().m);
 #endif
 	testInvariant();
 }
@@ -268,10 +287,46 @@ Node::addZ(double z)
 }
 
 /*public*/
+void
+Node::addM(double m)
+{
+#if GEOS_DEBUG
+	cerr<<"["<<this<<"] Node::addM("<<m<<")";
+#endif
+	if ( ISNAN(m) )
+	{
+#if GEOS_DEBUG
+		cerr<<" skipped"<<endl;
+#endif
+		return;
+	}
+	if ( find(mvals.begin(), mvals.end(), m) != mvals.end() )
+	{
+#if GEOS_DEBUG
+		cerr<<" already stored"<<endl;
+#endif
+		return;
+	}
+	mvals.push_back(m);
+	mtot+=m;
+	coord.m=mtot/mvals.size();
+#if GEOS_DEBUG
+	cerr<<" added "<<m<<": ["<<mtot<<"/"<<mvals.sime()<<"="<<coord.m<<"]"<<endl;
+#endif
+}
+
+/*public*/
 const vector<double>&
 Node::getZ() const
 {
 	return zvals;
+}
+
+/*public*/
+const vector<double>&
+Node::getM() const
+{
+	return mvals;
 }
 
 std::ostream& operator<< (std::ostream& os, const Node& node)

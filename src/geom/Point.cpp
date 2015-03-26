@@ -102,6 +102,18 @@ Point::getCoordinateDimension() const
     return (int) coordinates->getDimension();
 }
 
+bool
+Point::getHasZ() const
+{
+	return coordinates->getHasZ();
+}
+
+bool
+Point::getHasM() const
+{
+	return coordinates->getHasM();
+}
+
 int
 Point::getBoundaryDimension() const
 {

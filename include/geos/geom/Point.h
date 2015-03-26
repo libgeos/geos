@@ -97,6 +97,8 @@ public:
 
 	/// Returns coordinate dimension.
 	virtual int getCoordinateDimension() const;
+	virtual bool getHasZ() const;
+	virtual bool getHasM() const;
 
 	/// Returns Dimension::False (Point has no boundary)
 	int getBoundaryDimension() const;

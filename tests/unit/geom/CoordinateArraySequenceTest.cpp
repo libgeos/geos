@@ -27,12 +27,17 @@ namespace tut
         struct Filter : public geos::geom::CoordinateFilter
         {
           bool is3d;
-          Filter() : is3d(false) {}
+          bool isM;
+          Filter() : is3d(false), isM(false) {}
           void filter_rw(geos::geom::Coordinate* c) const {
             if ( is3d ) {
               if ( ISNAN(c->z) ) c->z = 0.0;
             }
             else c->z = DoubleNotANumber;
+            if ( isM ) {
+              if ( ISNAN(c->m) ) c->m = 0.0;
+            }
+            else c->m = DoubleNotANumber;
           }
         };
     };
@@ -190,8 +195,8 @@ namespace tut
 
 		// Create non-empty sequence
 		std::vector<Coordinate>* col = new std::vector<Coordinate>();
-		col->push_back(Coordinate(1, 2, 3));
-		col->push_back(Coordinate(5, 10, 15));
+		col->push_back(Coordinate(1, 2, 3, 4));
+		col->push_back(Coordinate(5, 10, 15, 20));
 		
 		const size_t size = 2;
 		geos::geom::CoordinateArraySequence sequence(col);
@@ -204,9 +209,11 @@ namespace tut
 		ensure_equals( sequence.getAt(0).x, 1 );
 		ensure_equals( sequence.getAt(0).y, 2 );
 		ensure_equals( sequence.getAt(0).z, 3 );
+		ensure_equals( sequence.getAt(0).m, 4 );
 		ensure_equals( sequence.getAt(1).x, 5 );
 		ensure_equals( sequence.getAt(1).y, 10 );
 		ensure_equals( sequence.getAt(1).z, 15 );
+		ensure_equals( sequence.getAt(1).m, 20 );
 
 		// Second version of getAt()
 		Coordinate buf;
@@ -215,11 +222,13 @@ namespace tut
 		ensure_equals( buf.x, 1 );
 		ensure_equals( buf.y, 2 );
 		ensure_equals( buf.z, 3 );
+		ensure_equals( buf.m, 4 );
 		
 		sequence.getAt(1, buf);
 		ensure_equals( buf.x, 5 );
 		ensure_equals( buf.y, 10 );
 		ensure_equals( buf.z, 15 );
+		ensure_equals( buf.m, 20 );
 	}
 
     // Test of add()
@@ -237,7 +246,7 @@ namespace tut
 		ensure_equals( sequence.size(), size );
 
 		// Add coordinates
-		Coordinate tmp(1, 2, 3);		
+		Coordinate tmp(1, 2, 3, 4);
 		sequence.add(tmp); // insert copy of tmp
 		const size_t sizeOne = 1;
 
@@ -247,6 +256,7 @@ namespace tut
 		tmp.x = 5;
 		tmp.y = 10;
 		tmp.z = 15;
+		tmp.m = 20;
 		sequence.add(tmp); // insert copy of tmp
 		const size_t sizeTwo = 2;
 		
@@ -261,9 +271,10 @@ namespace tut
 		ensure_equals( sequence.getAt(0).x, 1 );
 		ensure_equals( sequence.getAt(0).y, 2 );
 		ensure_equals( sequence.getAt(0).z, 3 );
+		ensure_equals( sequence.getAt(0).m, 4 );
 		ensure_equals( sequence.getAt(1).x, 5 );
 		ensure_equals( sequence.getAt(1).y, 10 );
-		ensure_equals( sequence.getAt(1).z, 15 );
+		ensure_equals( sequence.getAt(1).m, 20 );
 	}
 
     // Test of setAt()
@@ -282,17 +293,18 @@ namespace tut
 		ensure( sequence.hasRepeatedPoints() );
 
 		// Set new values to first coordinate
-		Coordinate first(1, 2, 3);
+		Coordinate first(1, 2, 3, 4);
 		sequence.setAt(first, 0);
 
 		ensure_equals( sequence.size(), size );
 		ensure_equals( sequence.getAt(0).x, 1 );
 		ensure_equals( sequence.getAt(0).y, 2 );
 		ensure_equals( sequence.getAt(0).z, 3 );
+		ensure_equals( sequence.getAt(0).m, 4 );
 
 
 		// Set new values to second coordinate 
-		Coordinate second(5, 10, 15);
+		Coordinate second(5, 10, 15, 20);
 		sequence.setAt(second, 1);
 
 		ensure_equals( sequence.size(), size );
@@ -300,6 +312,7 @@ namespace tut
 		ensure_equals( sequence.getAt(1).x, 5 );
 		ensure_equals( sequence.getAt(1).y, 10 );
 		ensure_equals( sequence.getAt(1).z, 15 );
+		ensure_equals( sequence.getAt(1).m, 20 );
 
 		ensure( !sequence.hasRepeatedPoints() );
 	}
@@ -367,9 +380,9 @@ namespace tut
 		// Create collection of points
 		const std::vector<Coordinate>::size_type sizeCol = 3;
 		std::vector<Coordinate> col;
-		col.push_back(Coordinate(1, 2, 3));
-		col.push_back(Coordinate(5, 10, 15));
-		col.push_back(Coordinate(9, 18, 27));
+		col.push_back(Coordinate(1, 2, 3, 4));
+		col.push_back(Coordinate(5, 10, 15, 20));
+		col.push_back(Coordinate(9, 18, 27, 36));
 
 		ensure( "std::vector bug assumed!", !col.empty() );
 		ensure_equals( "std::vector bug assumed!", col.size(), sizeCol );
@@ -385,14 +398,17 @@ namespace tut
 		ensure_equals( sequence.getAt(0).x, 1 );
 		ensure_equals( sequence.getAt(0).y, 2 );
 		ensure_equals( sequence.getAt(0).z, 3 );
+		ensure_equals( sequence.getAt(0).m, 4 );
 
 		ensure_equals( sequence.getAt(1).x, 5 );
 		ensure_equals( sequence.getAt(1).y, 10 );
 		ensure_equals( sequence.getAt(1).z, 15 );
+		ensure_equals( sequence.getAt(1).m, 20 );
 
 		ensure_equals( sequence.getAt(2).x, 9 );
 		ensure_equals( sequence.getAt(2).y, 18 );
 		ensure_equals( sequence.getAt(2).z, 27 );
+		ensure_equals( sequence.getAt(2).m, 36 );
 	}
 
 	// Test of removeRepeatedPoints
@@ -479,7 +495,7 @@ namespace tut
 		using geos::geom::CoordinateArraySequence;
 		using geos::geom::CoordinateSequence;
 
-		Coordinate c1(1, 2, 3);
+		Coordinate c1(1, 2, 3, 4);
 
 		CoordinateArraySequence sequence1;
 
@@ -487,14 +503,17 @@ namespace tut
 
 		ensure_equals( sequence1[0], c1 );
 
-		sequence1.setOrdinate(0, CoordinateSequence::X, 4);
-		ensure_equals( sequence1[0].x, 4 );
+		sequence1.setOrdinate(0, CoordinateSequence::X, 5);
+		ensure_equals( sequence1[0].x, 5 );
 
-		sequence1.setOrdinate(0, CoordinateSequence::Y, 5);
-		ensure_equals( sequence1[0].y, 5 );
+		sequence1.setOrdinate(0, CoordinateSequence::Y, 6);
+		ensure_equals( sequence1[0].y, 6 );
 
-		sequence1.setOrdinate(0, CoordinateSequence::Z, 6);
-		ensure_equals( sequence1[0].z, 6 );
+		sequence1.setOrdinate(0, CoordinateSequence::Z, 7);
+		ensure_equals( sequence1[0].z, 7 );
+
+		sequence1.setOrdinate(0, CoordinateSequence::M, 8);
+		ensure_equals( sequence1[0].m, 8 );
 
 	}
 
@@ -507,7 +526,7 @@ namespace tut
 		using geos::geom::CoordinateArraySequence;
 		using geos::geom::CoordinateSequence;
 
-		Coordinate c1(1, 2, 3);
+		Coordinate c1(1, 2, 3, 4);
 
 		CoordinateArraySequence sequence1;
 
@@ -515,16 +534,19 @@ namespace tut
 
 		ensure_equals( sequence1[0], c1 );
 
-		// Order: Y, X, Z
+		// Order: Y, X, Z, M
 
-		sequence1.setOrdinate(0, CoordinateSequence::Y, 5);
-		ensure_equals( sequence1[0].y, 5 );
+		sequence1.setOrdinate(0, CoordinateSequence::Y, 6);
+		ensure_equals( sequence1[0].y, 6 );
 
-		sequence1.setOrdinate(0, CoordinateSequence::X, 4);
-		ensure_equals( sequence1[0].x, 4 );
+		sequence1.setOrdinate(0, CoordinateSequence::X, 5);
+		ensure_equals( sequence1[0].x, 5 );
 
-		sequence1.setOrdinate(0, CoordinateSequence::Z, 6);
-		ensure_equals( sequence1[0].z, 6 );
+		sequence1.setOrdinate(0, CoordinateSequence::Z, 7);
+		ensure_equals( sequence1[0].z, 7 );
+
+		sequence1.setOrdinate(0, CoordinateSequence::M, 8);
+		ensure_equals( sequence1[0].m, 8 );
 
 	}
 
@@ -544,29 +566,33 @@ namespace tut
 		std::auto_ptr<CoordinateSequence> sequence1ptr(factory->create(4, 2));
 		CoordinateSequence& seq = *sequence1ptr;
 
-		// Index: 0 - Order: Y, X, Z
+		// Index: 0 - Order: Y, X, Z, M
 
 		seq.setOrdinate(0, CoordinateSequence::Y,  5); ensure_equals( seq[0].y, 5 );
 		seq.setOrdinate(0, CoordinateSequence::Z,  6); ensure_equals( seq[0].z, 6 );
 		seq.setOrdinate(0, CoordinateSequence::X,  4); ensure_equals( seq[0].x, 4 );
+		seq.setOrdinate(0, CoordinateSequence::M,  7); ensure_equals( seq[0].m, 7 );
 
-		// Index: 1 - Order: Z, X, Y
+		// Index: 1 - Order: Z, X, Y, M
 
 		seq.setOrdinate(1, CoordinateSequence::Z,  9); ensure_equals( seq[1].z, 9 );
 		seq.setOrdinate(1, CoordinateSequence::X,  8); ensure_equals( seq[1].x, 8 );
 		seq.setOrdinate(1, CoordinateSequence::Y,  7); ensure_equals( seq[1].y, 7 );
+		seq.setOrdinate(1, CoordinateSequence::M,  10); ensure_equals( seq[1].m, 10 );
 
-		// Index: 2 - Order: X, Y, Z
+		// Index: 2 - Order: X, Y, Z, M
 
 		seq.setOrdinate(2, CoordinateSequence::X,  34); ensure_equals( seq[2].x, 34 );
 		seq.setOrdinate(2, CoordinateSequence::Y,  -45); ensure_equals( seq[2].y, -45 );
 		seq.setOrdinate(2, CoordinateSequence::Z,  152); ensure_equals( seq[2].z, 152 );
+		seq.setOrdinate(2, CoordinateSequence::M,  -163); ensure_equals( seq[2].m, -163 );
 
-		// Index: 3 - Order: Y, Z, X
+		// Index: 3 - Order: Y, Z, X, M
 
 		seq.setOrdinate(3, CoordinateSequence::Y,  63); ensure_equals( seq[3].y, 63 );
 		seq.setOrdinate(3, CoordinateSequence::Z,  13); ensure_equals( seq[3].z, 13 );
 		seq.setOrdinate(3, CoordinateSequence::X,  -65); ensure_equals( seq[3].x, -65 );
+		seq.setOrdinate(3, CoordinateSequence::M,  -13); ensure_equals( seq[3].m, -13 );
 
 	}
 

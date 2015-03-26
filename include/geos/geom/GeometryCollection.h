@@ -106,6 +106,8 @@ public:
 
 	/// Returns coordinate dimension.
 	virtual int getCoordinateDimension() const;
+	virtual bool getHasZ() const;
+	virtual bool getHasM() const;
 
 	virtual Geometry* getBoundary() const;
 

@@ -116,6 +116,7 @@ namespace tut
 		ensure( center.y > 4.2 );
 		ensure( center.y < 4.3 );
 		ensure( 0 != ISNAN( center.z ) );
+		ensure( 0 != ISNAN( center.m ) );
     }
     // Test circumcentre()
         template<>
@@ -149,6 +150,7 @@ namespace tut
 		ensure_equals(c1.x ,2 );
 		ensure_equals(c1.y ,3 );
 		ensure( 0 != ISNAN( c1.z ) );
+		ensure( 0 != ISNAN( c1.m ) );
 
 		//For t2:
 		Coordinate c2(0,0);
@@ -156,6 +158,7 @@ namespace tut
 		ensure_equals(c2.x ,30.5 );
 		ensure_equals(c2.y ,- 14.5 );
 		ensure( 0 != ISNAN( c2.z ) );
+		ensure( 0 != ISNAN( c2.m ) );
 
 
 		//For t3:
@@ -165,6 +168,7 @@ namespace tut
 		ensure( c3.y > 13.7 );
 		ensure( c3.y < 13.8 );
 		ensure( 0 != ISNAN( c3.z ) );
+		ensure( 0 != ISNAN( c3.m ) );
 		// cout << "CicumCenter of triangle ABC:: " << c1.x << " " << c1.y << endl;
 
 		//  std::cout << "CicumCenter of triangle DEF:: " << c2.x << " " << c2.y << std::endl;
