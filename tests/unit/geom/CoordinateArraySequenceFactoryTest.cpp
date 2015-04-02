@@ -162,5 +162,34 @@ namespace tut
 		}
 	}
 
+	// Test of create() without arguments
+	template<>
+	template<>
+	void object::test<5>()
+	{
+		using geos::geom::Coordinate;
+
+		try
+		{
+			CoordinateFactoryCPtr factory = geos::geom::CoordinateArraySequenceFactory::instance();
+
+			ensure( 0 != factory );
+
+			const size_t size0 = 0;
+			CoordinateSequencePtr sequence = factory->create();
+
+			ensure( 0 != sequence);
+			ensure( sequence->isEmpty() );
+			ensure_equals( sequence->size(), size0 );
+
+			// FREE MEMORY
+			delete sequence;
+		}
+		catch (std::exception& e)
+		{
+			fail( e.what() );
+		}
+	}
+
 
 } // namespace tut

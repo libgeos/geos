@@ -198,7 +198,7 @@ EdgeRing::getCoordinates()
 {
     if (ringPts==NULL)
     {
-        ringPts=factory->getCoordinateSequenceFactory()->create(NULL);
+        ringPts=factory->getCoordinateSequenceFactory()->create();
         for (DeList::size_type i=0, e=deList.size(); i<e; ++i) {
             const DirectedEdge *de=deList[i];
             assert(dynamic_cast<PolygonizeEdge*>(de->getEdge()));

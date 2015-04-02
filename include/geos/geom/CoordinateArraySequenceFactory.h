@@ -50,7 +50,9 @@ public:
 	 */
 	CoordinateSequence *create(std::vector<Coordinate> *coords) const;
 
-	CoordinateSequence *create(std::vector<Coordinate> *coords, std::size_t dims) const;
+	CoordinateSequence *create() const;
+
+	CoordinateSequence *create(std::vector<Coordinate> *coords, std::size_t dims=0) const;
 
    	/** @see CoordinateSequenceFactory::create(std::size_t, int) */
 	CoordinateSequence *create(std::size_t size, std::size_t dimension=0) const;
