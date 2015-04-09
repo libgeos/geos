@@ -2574,7 +2574,7 @@ GEOSGeomGetEndPoint_r(GEOSContextHandle_t extHandle, const Geometry *g1)
 }
 
 /*
- * Call only on LINESTRING
+ * Call only on LINESTRING or MULTILINESTRING
  * return 2 on exception, 1 on true, 0 on false
  */
 char
@@ -2595,13 +2595,20 @@ GEOSisClosed_r(GEOSContextHandle_t extHandle, const Geometry *g1)
     try
     {
     	using geos::geom::LineString;
+    	using geos::geom::MultiLineString;
+
     	const LineString *ls = dynamic_cast<const LineString *>(g1);
-    	if ( ! ls )
-    	{
-    		handle->ERROR_MESSAGE("Argument is not a LineString");
-    		return 2;
+    	if ( ls ) {
+    	    return ls->isClosed();
     	}
-    	return ls->isClosed();
+
+    	const MultiLineString *mls = dynamic_cast<const MultiLineString *>(g1);
+    	if ( mls ) {
+    	    return mls->isClosed();
+    	}
+
+        handle->ERROR_MESSAGE("Argument is not a LineString or MultiLineString");
+        return 2;
     }
     catch (const std::exception &e)
     {
