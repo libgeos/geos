@@ -11,6 +11,7 @@ Changes in 3.5.0
 - Improvements:
   - Speed-up intersection and difference between geometries
     with small bounding box overlap.
+  - CAPI: add MULTILINESTRING support for GEOSisClosed (Benjamin Morel)
 
 Changes in 3.4.2
 2013-08-25
