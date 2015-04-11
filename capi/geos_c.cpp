@@ -25,6 +25,7 @@
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/union/CascadedPolygonUnion.h>
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
+#include <geos/algorithm/distance/DiscreteDTWDistance.h>
 #include <geos/util/Interrupt.h>
 
 #include <stdexcept>

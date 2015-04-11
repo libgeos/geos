@@ -41,6 +41,7 @@ geos_unit_SOURCES = \
 	algorithm/CGAlgorithms/signedAreaTest.cpp \
 	algorithm/ConvexHullTest.cpp \
 	algorithm/distance/DiscreteHausdorffDistanceTest.cpp \
+	algorithm/distance/DiscreteDTWDistanceTest.cpp \
 	algorithm/PointLocatorTest.cpp \
 	algorithm/RobustLineIntersectionTest.cpp \
 	algorithm/RobustLineIntersectorTest.cpp \

@@ -52,6 +52,7 @@ OBJ = \
 	algorithm\SimplePointInRing.$(EXT) \
 	algorithm\SIRtreePointInRing.$(EXT) \
 	algorithm\distance\DiscreteHausdorffDistance.$(EXT) \
+  algorithm\distance\DiscreteDTWDistance.$(EXT) \
 	algorithm\distance\DistanceToPoint.$(EXT) \
 	algorithm\locate\IndexedPointInAreaLocator.$(EXT) \
 	algorithm\locate\PointOnGeometryLocator.$(EXT) \

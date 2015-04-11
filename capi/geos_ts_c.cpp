@@ -41,6 +41,7 @@
 #include <geos/io/WKTWriter.h>
 #include <geos/io/WKBWriter.h>
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
+#include <geos/algorithm/distance/DiscreteDTWDistance.h>
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/algorithm/BoundaryNodeRule.h>
 #include <geos/simplify/DouglasPeuckerSimplifier.h>
@@ -133,6 +134,7 @@ using geos::operation::buffer::BufferParameters;
 using geos::operation::buffer::BufferBuilder;
 using geos::util::IllegalArgumentException;
 using geos::algorithm::distance::DiscreteHausdorffDistance;
+using geos::algorithm::distance::DiscreteDTWDistance;
 
 typedef std::auto_ptr<Geometry> GeomAutoPtr;
 
@@ -1084,6 +1086,61 @@ GEOSHausdorffDistanceDensify_r(GEOSContextHandle_t extHandle, const Geometry *g1
         handle->ERROR_MESSAGE("Unknown exception thrown");
     }
     
+    return 0;
+}
+
+/*
+ * Call only on LINESTRINGs
+ */
+
+int
+GEOSDTWDistance_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g2, double *dist)
+{
+    assert(0 != dist);
+
+    if ( 0 == extHandle )
+    {
+        return 0;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return 0;
+    }
+    try
+    {
+        using geos::geom::LineString;
+        const LineString *ls1 = dynamic_cast<const LineString *>(g1);
+        const LineString *ls2 = dynamic_cast<const LineString *>(g2);
+        if ( ! ls1 || ! ls2 )
+        {
+            handle->ERROR_MESSAGE("Argument(s) is(are) not a Linestring");
+            return NULL;
+        }
+        try
+        {
+            *dist = DiscreteDTWDistance::distance(*ls1, *ls2);
+            return 1;
+        }
+        catch (const std::exception &e)
+        {
+            handle->ERROR_MESSAGE("%s", e.what());
+        }
+        catch (...)
+        {
+            handle->ERROR_MESSAGE("Unknown exception thrown");
+        }
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
     return 0;
 }
 
