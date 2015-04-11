@@ -53,11 +53,22 @@ namespace geos {
 namespace algorithm {
 namespace distance {
 /** \brief
- * An algorithm for computing a gaussian-penalized Dynamic Time Warp distance metric.
+ * An algorithm for computing a Dynamic Time Warp distance metric.
  *
- * Given two linestrings, the algorithm computes the aggregated DTW penalty
+ * Given two linestrings, the algorithm computes the (euclidean-cost) Dynamic Time Warp value
  * that represents the difference between the linestring sequences.
- * @TODO (mredmond): better documentation here
+ * Useful for curve alignment (low values mean relatively similar linestring trajectories).
+ * See http://en.wikipedia.org/wiki/Dynamic_time_warping for more. We implement the most naive, brute force
+ * implementation first - more performant implementations to come.
+ *
+ * Runtime: O(n*m) where input linestring1 has n elements, and input linestring2 has m elements.
+ * Space: O(n*m)
+ *
+ * Low hanging fruit for optimization:
+ * -Decimate input linestrings to reduce n, m.
+ * - Implement Sakoe-Chiba band to reduce space complexity.
+ * - Implement FastDTW (see link on wiki page) to reduce to
+ *   quasi-linear time O(sqrt(n) * sqrt(m)) and linear space.
  */
 class GEOS_DLL DiscreteDTWDistance
 {

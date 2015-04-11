@@ -50,7 +50,7 @@ DiscreteDTWDistance::compute()
 {
   // TODO @mredmond: implement FastDTW (progressive resolution coarsening and projection of optimal warp path)
   // from https://gi.cebitec.uni-bielefeld.de/teaching/2007summer/jclub/papers/Salvador2004.pdf
-  // 10-100x performance gains!!
+  // 10-100x performance gains, turns algorithm from quadratic (O(n*m)) into quasi-linear (O(sqrt(n) * sqrt(m))).
   if ( l0.isEmpty() || l1.isEmpty() )
   {
     throw util::IllegalArgumentException("Linestring arguments should be non-empty.");
@@ -61,6 +61,9 @@ DiscreteDTWDistance::compute()
   const CoordinateSequence* l0_seq = l0.getCoordinatesRO();
   const CoordinateSequence* l1_seq = l1.getCoordinatesRO();
 
+  // This can be implemented to use constant space if we only keep track of the most recently updated rows -
+  // however, if you use constant space, you lose the ability to trace the path backwards through the table,
+  // which may be desirable in the future.
   std::vector<std::vector<double> > dtw_table(n+1, std::vector<double> (m+1, 0));
   dtw_table[0][0] = 0;
   // Boundary conditions are cost = +infinity

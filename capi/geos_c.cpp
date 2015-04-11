@@ -292,6 +292,13 @@ GEOSHausdorffDistanceDensify(const Geometry *g1, const Geometry *g2, double dens
 }
 
 int
+GEOSDTWDistance(const Geometry *g1, const Geometry *g2, double *dist)
+{
+    return GEOSDTWDistance_r( handle, g1, g2, dist );
+}
+
+
+int
 GEOSArea(const Geometry *g, double *area)
 {
     return GEOSArea_r( handle, g, area );
