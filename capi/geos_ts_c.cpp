@@ -1117,21 +1117,10 @@ GEOSDTWDistance_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geome
         if ( ! ls1 || ! ls2 )
         {
             handle->ERROR_MESSAGE("Argument(s) is(are) not a Linestring");
-            return NULL;
+            return 0;
         }
-        try
-        {
-            *dist = DiscreteDTWDistance::distance(*ls1, *ls2);
-            return 1;
-        }
-        catch (const std::exception &e)
-        {
-            handle->ERROR_MESSAGE("%s", e.what());
-        }
-        catch (...)
-        {
-            handle->ERROR_MESSAGE("Unknown exception thrown");
-        }
+        *dist = DiscreteDTWDistance::distance(*ls1, *ls2);
+        return 1;
     }
     catch (const std::exception &e)
     {

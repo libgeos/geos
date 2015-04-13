@@ -1,6 +1,4 @@
-//
 // Test Suite for geos::algorithm::distance::DiscreteDTWDistance
-
 
 #include <tut.hpp>
 // geos
@@ -26,97 +24,88 @@ namespace geos {
 }
 
 using namespace geos::geom;
-using namespace geos::algorithm::distance; // for Location
+using namespace geos::algorithm::distance;
 
 namespace tut
 {
-	// Test Group
+    // Test Group
+    struct test_DiscreteDTWDistance_data {
 
-	// Test data, not used
-	struct test_DiscreteDTWDistance_data {
+        test_DiscreteDTWDistance_data():
+            pm(),
+            gf(&pm),
+            reader(&gf)
+        {}
 
+        static const double TOLERANCE;
 
-    test_DiscreteDTWDistance_data()
-      :
-      pm(),
-      gf(&pm),
-      reader(&gf)
-    {}
+        void runTest(const std::string& wkt1, const std::string& wkt2, double expectedDistance)
+        {
+            const LineString* ls1 = dynamic_cast<const LineString*>(reader.read(wkt1));
+            const LineString* ls2 = dynamic_cast<const LineString*>(reader.read(wkt2));
 
-    static const double TOLERANCE;
+            double distance = DiscreteDTWDistance::distance(*ls1, *ls2);
+            double diff = std::fabs(distance-expectedDistance);
+            //std::cerr << "expectedDistance:" << expectedDistance << " actual distance:" << distance << std::endl;
+            ensure( diff <= TOLERANCE );
+        }
 
-    void runTest(const std::string& wkt1, const std::string& wkt2,
-                 double expectedDistance)
+        PrecisionModel pm;
+        GeometryFactory gf;
+        geos::io::WKTReader reader;
+    };
+    const double test_DiscreteDTWDistance_data::TOLERANCE = 0.00001;
+
+    typedef test_group<test_DiscreteDTWDistance_data> group;
+    typedef group::object object;
+
+    group test_DiscreteDTWDistance_group("geos::algorithm::distance::DiscreteDTWDistance");
+
+    //
+    // Test Cases
+    //
+
+    // Empty first string should throw an illegal argument exception.
+    template<>
+    template<>
+    void object::test<1>()
     {
-      const Geometry* g1 = reader.read(wkt1);
-      const Geometry* g2 = reader.read(wkt2);
-      const LineString* ls1 = dynamic_cast<const LineString*>(g1);
-      const LineString* ls2 = dynamic_cast<const LineString*>(g2);
-
-      double distance = DiscreteDTWDistance::distance(*ls1, *ls2);
-      double diff = std::fabs(distance-expectedDistance);
-      //std::cerr << "expectedDistance:" << expectedDistance << " actual distance:" << distance << std::endl;
-      ensure( diff <= TOLERANCE );
+        try
+        {
+            runTest("LINESTRING EMPTY", "LINESTRING (0 0, 2 0)", 1.0);
+        }
+        catch (const geos::util::IllegalArgumentException& e)
+        {
+        }
     }
 
-    PrecisionModel pm;
-    GeometryFactory gf;
-    geos::io::WKTReader reader;
-
-	};
-	const double test_DiscreteDTWDistance_data::TOLERANCE = 0.00001;
-
-	typedef test_group<test_DiscreteDTWDistance_data> group;
-	typedef group::object object;
-
-	group test_DiscreteDTWDistance_group("geos::algorithm::distance::DiscreteDTWDistance");
-	//
-	// Test Cases
-	//
-
-	// Empty first string should throw an illegal argument exception.
-	template<>
-	template<>
-	void object::test<1>()
-	{
-    try
+    // Empty second string should throw an illegal argument exception.
+    template<>
+    template<>
+    void object::test<2>()
     {
-      runTest("LINESTRING EMPTY", "LINESTRING (0 0, 2 0)", 1.0);
+        try
+        {
+            runTest("LINESTRING (0 0, 2 0)", "LINESTRING EMPTY", 1.0);
+        }
+        catch (const geos::util::IllegalArgumentException& e)
+        {
+        }
     }
-    catch (const geos::util::IllegalArgumentException& e)
+
+    // Identical linestrings should have a DTW distance of zero.
+    template<>
+    template<>
+    void object::test<3>()
     {
+        runTest("LINESTRING (0 0, 2 0, 2 1, 3 2)", "LINESTRING (0 0, 2 0, 2 1, 3 2)", 0.0);
     }
-	}
 
-	// Empty second string should throw an illegal argument exception.
-	template<>
-	template<>
-	void object::test<2>()
-	{
-    try
+    // DTW should not be zero, even for equivalent segments, when discretization is different.
+    template<>
+    template<>
+    void object::test<4>()
     {
-      runTest("LINESTRING (0 0, 2 0)", "LINESTRING EMPTY", 1.0);
+        runTest("LINESTRING (0 0, 3 0, 6 0)", "LINESTRING (0 0, 2 0, 4 0, 6 0)", 2.0);
     }
-    catch (const geos::util::IllegalArgumentException& e)
-    {
-    }
-	}
-
-	// Identical linestrings should have a DTW distance of zero.
-	template<>
-	template<>
-	void object::test<3>()
-	{
-    runTest("LINESTRING (0 0, 2 0, 2 1, 3 2)", "LINESTRING (0 0, 2 0, 2 1, 3 2)", 0.0);
-	}
-
-  // DTW should not be zero, even for equivalent segments, when discretization is different.
-  template<>
-  template<>
-  void object::test<4>()
-  {
-    runTest("LINESTRING (0 0, 3 0, 6 0)", "LINESTRING (0 0, 2 0, 4 0, 6 0)", 2.0);
-  }
-
 }
-
