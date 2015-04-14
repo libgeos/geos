@@ -57,16 +57,14 @@ DiscreteDTWDistance::compute()
     std::vector<std::vector<double> > dtw_table(n+1, std::vector<double> (m+1, 0));
     dtw_table[0][0] = 0;
     // Boundary conditions are cost = +infinity
-    for ( int i = 1; i <= n; ++i)
+    for ( size_t i = 1; i <= n; ++i)
     {
         dtw_table[i][0] = std::numeric_limits<double>::infinity();
     }
-    for ( int i = 1; i <= m; ++i)
+    for ( size_t i = 1; i <= m; ++i)
     {
         dtw_table[0][i] = std::numeric_limits<double>::infinity();
     }
-
-    //int path_length = 1;
 
     for ( size_t i = 1; i <= n; ++i)
     {
@@ -76,25 +74,7 @@ DiscreteDTWDistance::compute()
             double path1_cost = dtw_table[i-1][j-1];
             double path2_cost = dtw_table[i][j-1];
             double path3_cost = dtw_table[i-1][j];
-            if ( path1_cost <= path2_cost && path1_cost <= path3_cost )
-            {
-                dtw_table[i][j] = cost + path1_cost;
-                //path_length += 2;
-            }
-            else if ( path2_cost <= path1_cost && path2_cost <= path3_cost )
-            {
-                dtw_table[i][j] = cost + path2_cost;
-                //path_length += 1;
-            }
-            else if ( path3_cost <= path1_cost && path3_cost <= path2_cost )
-            {
-                dtw_table[i][j] = cost + path3_cost;
-                //path_length += 1;
-            }
-            else
-            {
-                throw util::AssertionFailedException("Something went awry when comparing path1, path2, and path3 costs.");
-            }
+            dtw_table[i][j] = cost + std::min(std::min(path1_cost, path2_cost), path3_cost);
         }
     }
     return dtw_table[n][m];
