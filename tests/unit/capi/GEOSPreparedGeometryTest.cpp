@@ -4,7 +4,8 @@
 #include <tut.hpp>
 // geos
 #include <geos_c.h>
-#include <geos.h>
+#include <geos/io/WKBReader.h>
+#include <geos/geom/PrecisionModel.h>
 // std
 #include <cstdarg>
 #include <cstdio>
@@ -187,17 +188,13 @@ namespace tut
     template<>
     void object::test<7>()
     {
-        geos::io::WKBReader reader;
-        
         // POINT located between 3rd and 4th vertex of LINESTRING
         // POINT(-23.1094689600055080 50.5195368635957180)
         std::string point("01010000009a266328061c37c0e21a172f80424940");
         // LINESTRING(-23.122057005539 50.5201976774794,-23.1153476966995 50.5133404815199,-23.1094689600055150 50.5223376452201340,-23.1094689600055010 50.5169177629559480,-23.0961967920942 50.5330464848094,-23.0887991006034 50.5258515213185,-23.0852302622362 50.5264582238409)
         std::string line("0102000000070000009909bf203f1f37c05c1d66d6954249404afe386d871d37c0a7eb1124b54149409c266328061c37c056d8bff5db42494098266328061c37c0034f7b5c2a42494060065c5aa01837c08ac001de3a4449408401b189bb1637c0b04e471a4f43494014ef84a6d11537c0b20dabfb62434940");
-        std::stringstream sPoint(point);
-        geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sPoint));
-        std::stringstream sLine(line);
-        geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sLine));
+        geom1_ = GEOSGeomFromHEX_buf(reinterpret_cast<const unsigned char*>(line.data()), line.size());
+        geom2_ = GEOSGeomFromHEX_buf(reinterpret_cast<const unsigned char*>(point.data()), point.size());
 
         prepGeom1_ = GEOSPrepare(geom1_);
         ensure(0 != prepGeom1_);
