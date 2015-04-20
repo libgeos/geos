@@ -43,13 +43,6 @@ namespace geom { // geos::geom
 class GEOS_DLL CoordinateArraySequenceFactory: public CoordinateSequenceFactory {
 
 public:
-
-	/** \brief
-	 * Returns a CoordinateArraySequence based on the given vector
-	 * (the vector is not copied - callers give up ownership).
-	 */
-	CoordinateSequence *create(std::vector<Coordinate> *coords) const;
-
 	CoordinateSequence *create() const;
 
 	CoordinateSequence *create(std::vector<Coordinate> *coords, std::size_t dims=0) const;
