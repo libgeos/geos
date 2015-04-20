@@ -74,7 +74,7 @@ WKTReader::getCoordinates(StringTokenizer *tokenizer)
 	size_t dim;
 	string nextToken=getNextEmptyOrOpener(tokenizer);
 	if (nextToken=="EMPTY") {
-		return geometryFactory->getCoordinateSequenceFactory()->create(NULL);
+		return geometryFactory->getCoordinateSequenceFactory()->create();
 		//new CoordinateArraySequence(); 
 	}
 
@@ -290,7 +290,7 @@ WKTReader::readMultiPointText(StringTokenizer *tokenizer)
 		// Try to parse deprecated form "MULTIPOINT(0 0, 1 1)"
 		const CoordinateSequenceFactory* csf = \
 			geometryFactory->getCoordinateSequenceFactory();
-		CoordinateSequence *coords = csf->create(NULL);
+		CoordinateSequence *coords = csf->create();
 		try {
 			do {
 				Coordinate coord;

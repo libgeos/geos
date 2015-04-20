@@ -22,10 +22,11 @@
 namespace geos {
 namespace geom { // geos::geom
 
-INLINE CoordinateSequence*
-CoordinateArraySequenceFactory::create(std::vector<Coordinate> *coords) const
+INLINE CoordinateSequence *
+CoordinateArraySequenceFactory::create() const
 {
-	return new CoordinateArraySequence(coords,3);
+    return new CoordinateArraySequence(
+                reinterpret_cast<std::vector<Coordinate>*>(0), 0);
 }
 
 INLINE CoordinateSequence *

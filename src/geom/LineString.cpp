@@ -71,7 +71,7 @@ LineString::validateConstruction()
 {
 	if (points.get()==NULL)
 	{
-		points.reset(getFactory()->getCoordinateSequenceFactory()->create(NULL));
+		points.reset(getFactory()->getCoordinateSequenceFactory()->create());
 		return;
 	}
 

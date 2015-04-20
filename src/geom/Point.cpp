@@ -49,7 +49,7 @@ Point::Point(CoordinateSequence *newCoords, const GeometryFactory *factory)
 	coordinates(newCoords)
 {
 	if (coordinates.get()==NULL) {
-		coordinates.reset(factory->getCoordinateSequenceFactory()->create(NULL));
+		coordinates.reset(factory->getCoordinateSequenceFactory()->create());
 		return;
 	}        
 	if (coordinates->getSize() != 1)

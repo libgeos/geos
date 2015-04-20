@@ -104,7 +104,7 @@ CoordinateSequence*
 Polygon::getCoordinates() const
 {
 	if (isEmpty()) {
-		return getFactory()->getCoordinateSequenceFactory()->create(NULL);
+		return getFactory()->getCoordinateSequenceFactory()->create();
 	}
 
 	vector<Coordinate> *cl = new vector<Coordinate>;

@@ -12,6 +12,8 @@ Changes in 3.5.0
   - Speed-up intersection and difference between geometries
     with small bounding box overlap.
   - CAPI: add MULTILINESTRING support for GEOSisClosed (Benjamin Morel)
+- C++ API changes:
+  - Added no-parameter CoordinateSequenceFactory::create method (Sandro Mani)
 
 Changes in 3.4.2
 2013-08-25
