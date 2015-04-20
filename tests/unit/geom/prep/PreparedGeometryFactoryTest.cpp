@@ -77,9 +77,8 @@ namespace tut
         try
         {
             GeometryPtr nullgeom = 0; // intentionally nullptr
-            prep::PreparedGeometry const* pg = 0;
 
-            pg = prep::PreparedGeometryFactory::prepare(nullgeom);
+            prep::PreparedGeometryFactory::prepare(nullgeom);
 
             fail("IllegalArgumentException expected");
         }
@@ -98,11 +97,9 @@ namespace tut
         try
         {
             GeometryPtr nullgeom = 0; // intentionally nullptr
-            prep::PreparedGeometry const* pg = 0;
 
             prep::PreparedGeometryFactory pgf;
-
-            pg = pgf.create(nullgeom);
+            pgf.create(nullgeom);
 
             fail("IllegalArgumentException expected");
         }
