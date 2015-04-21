@@ -41,8 +41,11 @@ namespace tut
 
         void runTest(const std::string& wkt1, const std::string& wkt2, double expectedDistance)
         {
-            const LineString* ls1 = dynamic_cast<const LineString*>(reader.read(wkt1));
-            const LineString* ls2 = dynamic_cast<const LineString*>(reader.read(wkt2));
+            const std::auto_ptr<Geometry> g1(reader.read(wkt1));
+            const std::auto_ptr<Geometry> g2(reader.read(wkt2));
+
+            const LineString* ls1 = dynamic_cast<const LineString*>(g1.get());
+            const LineString* ls2 = dynamic_cast<const LineString*>(g2.get());
 
             double distance = DiscreteDTWDistance::distance(*ls1, *ls2);
             double diff = std::fabs(distance-expectedDistance);
