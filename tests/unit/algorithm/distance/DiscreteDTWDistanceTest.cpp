@@ -17,10 +17,10 @@
 #include <memory>
 
 namespace geos {
-	namespace geom {
-		class Geometry;
-    class LineString;
-	}
+    namespace geom {
+        class Geometry;
+        class LineString;
+    }
 }
 
 using namespace geos::geom;

@@ -30,9 +30,9 @@ OBJ_EXT = obj
 EXT = $(OBJ_EXT)
 
 OBJ = \
-    algorithm\Angle.$(EXT) \
-    algorithm\BoundaryNodeRule.$(EXT) \
-    algorithm\Centroid.$(EXT) \
+	algorithm\Angle.$(EXT) \
+	algorithm\BoundaryNodeRule.$(EXT) \
+	algorithm\Centroid.$(EXT) \
 	algorithm\CentroidArea.$(EXT) \
 	algorithm\CentroidLine.$(EXT) \
 	algorithm\CentroidPoint.$(EXT) \
@@ -52,7 +52,7 @@ OBJ = \
 	algorithm\SimplePointInRing.$(EXT) \
 	algorithm\SIRtreePointInRing.$(EXT) \
 	algorithm\distance\DiscreteHausdorffDistance.$(EXT) \
-  algorithm\distance\DiscreteDTWDistance.$(EXT) \
+	algorithm\distance\DiscreteDTWDistance.$(EXT) \
 	algorithm\distance\DistanceToPoint.$(EXT) \
 	algorithm\locate\IndexedPointInAreaLocator.$(EXT) \
 	algorithm\locate\PointOnGeometryLocator.$(EXT) \
@@ -176,7 +176,7 @@ OBJ = \
 	noding\BasicSegmentString.$(EXT) \
 	noding\FastNodingValidator.$(EXT) \
 	noding\FastSegmentSetIntersectionFinder.$(EXT) \
-    noding\GeometryNoder.$(EXT) \
+	noding\GeometryNoder.$(EXT) \
 	noding\IntersectionAdder.$(EXT) \
 	noding\IntersectionFinderAdder.$(EXT) \
 	noding\IteratedNoder.$(EXT) \
@@ -303,7 +303,7 @@ OBJ = \
 	triangulate\quadedge\Vertex.$(EXT) \
 	util\Assert.$(EXT) \
 	util\GeometricShapeFactory.$(EXT) \
-    util\Interrupt.$(EXT) \
+	util\Interrupt.$(EXT) \
 	util\math.$(EXT) \
 	util\Profiler.$(EXT) \
 	linearref\ExtractLineByLocation.$(EXT) \
