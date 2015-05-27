@@ -36,7 +36,11 @@
 #define GEOS_DEBUG 0
 #endif
 #define COMPUTE_Z 1
-#define COMPUTE_M 1
+#ifdef GEOS_MVALUES
+# define COMPUTE_M 1
+#else
+# undef COMPUTE_M
+#endif
 
 using namespace std;
 using namespace geos::algorithm;
@@ -291,7 +295,7 @@ LineBuilder::propagateZ(CoordinateSequence *cs)
 }
 
 
-
+#ifdef GEOS_MVALUES
 /*
  * If the given CoordinateSequence has mixed m and m-less vertexes
  * set M for all vertexes missing it.
@@ -376,7 +380,7 @@ LineBuilder::propagateM(CoordinateSequence *cs)
 	}
 
 }
-
+#endif
 
 
 void

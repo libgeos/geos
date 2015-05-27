@@ -158,6 +158,7 @@ GeometryCollection::getHasZ() const
 	return hasZ;
 }
 
+#ifdef GEOS_MVALUES
 bool
 GeometryCollection::getHasM() const
 {
@@ -168,6 +169,7 @@ GeometryCollection::getHasM() const
 	}
 	return hasM;
 }
+#endif
 
 size_t
 GeometryCollection::getNumGeometries() const

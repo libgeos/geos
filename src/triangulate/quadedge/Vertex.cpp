@@ -38,9 +38,11 @@ Vertex::Vertex(double _x, double _y, double _z): p( _x, _y, _z)
 {
 }
 
+#ifdef GEOS_MVALUES
 Vertex::Vertex(double _x, double _y, double _z, double _m): p( _x, _y, _z, _m)
 {
 }
+#endif
 
 Vertex::Vertex(const Coordinate &_p) : p(_p)
 {
@@ -125,8 +127,12 @@ std::auto_ptr<Vertex> Vertex::midPoint(const Vertex &a)
 	double xm = (p.x + a.getX()) / 2.0;
 	double ym = (p.y + a.getY()) / 2.0;
 	double zm = (p.z + a.getZ()) / 2.0;
+#ifdef GEOS_MVALUES
 	double mm = (p.m + a.getM()) / 2.0;
 	return std::auto_ptr<Vertex>(new Vertex(xm, ym, zm, mm));
+#else
+	return std::auto_ptr<Vertex>(new Vertex(xm, ym, zm));
+#endif
 }
 
 std::auto_ptr<Vertex> Vertex::circleCenter(const Vertex &b, const Vertex &c) const
@@ -195,6 +201,7 @@ double Vertex::interpolateZ(const Coordinate &p, const Coordinate &p0,
 	return pz;
 }
 
+#ifdef GEOS_MVALUES
 double Vertex::interpolateMValue(const Vertex &v0, const Vertex &v1,
 		const Vertex &v2) const
 {
@@ -240,6 +247,7 @@ double Vertex::interpolateM(const Coordinate &p, const Coordinate &p0,
 	double pm = p0.m + dm * (ptLen / segLen);
 	return pm;
 }
+#endif
 
 } //namespace geos.triangulate.quadedge
 } //namespace geos.triangulate

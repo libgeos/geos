@@ -85,8 +85,10 @@ public:
 	/// z-coordinate
 	double z;
 
+#ifdef GEOS_MVALUES
 	/// m-coordinate
 	double m;
+#endif
 
 	void setNull();
 
@@ -94,7 +96,11 @@ public:
 
 	bool isNull() const;
 
+#ifdef GEOS_MVALUES
 	Coordinate(double xNew=0.0, double yNew=0.0, double zNew=DoubleNotANumber, double mNew=DoubleNotANumber);
+#else
+	Coordinate(double xNew=0.0, double yNew=0.0, double zNew=DoubleNotANumber);
+#endif
 
 	bool equals2D(const Coordinate& other) const;
 
@@ -107,11 +113,13 @@ public:
 	/// 3D XYZ comparison
 	bool equals3D(const Coordinate& other) const;
 
+#ifdef GEOS_MVALUES
 	/// 3D XYM comparison
 	bool equals3DM(const Coordinate& other) const;
 
 	/// 4D XYZM comparison
 	bool equals4D(const Coordinate& other) const;
+#endif
 
 	///  Returns a string of the form <I>(x,y,z)</I> .
 	std::string toString() const;

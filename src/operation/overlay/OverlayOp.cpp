@@ -57,7 +57,11 @@
 #endif
 
 #define COMPUTE_Z 1
-#define COMPUTE_M 1
+#ifdef GEOS_MVALUES
+# define COMPUTE_M 1
+#else
+# undef COMPUTE_M
+#endif
 #define USE_ELEVATION_MATRIX 1
 #define USE_INPUT_AVGZ 0
 #define USE_INPUT_AVGM 1
@@ -521,6 +525,7 @@ OverlayOp::getAverageZ(int targetIndex)
 	return avgz[targetIndex];
 }
 
+#ifdef GEOS_MVALUES
 /*static private*/
 double
 OverlayOp::getAverageM(const Polygon *poly)
@@ -561,6 +566,7 @@ OverlayOp::getAverageM(int targetIndex)
 	avgmcomputed[targetIndex] = true;
 	return avgm[targetIndex];
 }
+#endif
 
 /*private*/
 int
@@ -613,6 +619,7 @@ OverlayOp::mergeZ(Node *n, const LineString *line) const
 	return 0;
 }
 
+#ifdef GEOS_MVALUES
 /*private*/
 int
 OverlayOp::mergeM(Node *n, const Polygon *poly) const
@@ -663,6 +670,7 @@ OverlayOp::mergeM(Node *n, const LineString *line) const
 	}
 	return 0;
 }
+#endif
 
 /*private*/
 void

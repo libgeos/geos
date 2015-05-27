@@ -106,7 +106,9 @@ public:
 	/// Returns coordinate dimension.
 	virtual int getCoordinateDimension() const;
 	virtual bool getHasZ() const;
+#ifdef GEOS_MVALUES
 	virtual bool getHasM() const;
+#endif
 
 	/**
 	 * \brief

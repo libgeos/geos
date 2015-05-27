@@ -113,10 +113,14 @@ public:
 	virtual std::string print();
 
 	virtual const std::vector<double> &getZ() const;
+#ifdef GEOS_MVALUES
 	virtual const std::vector<double> &getM() const;
+#endif
 
 	virtual void addZ(double);
+#ifdef GEOS_MVALUES
 	virtual void addM(double);
+#endif
 
 	/** \brief
 	 * Tests whether any incident edge is flagged as

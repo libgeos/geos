@@ -82,8 +82,13 @@ WKTReader::getCoordinates(StringTokenizer *tokenizer)
 	Coordinate coord;
 	getPreciseCoordinate(tokenizer, coord, hasZ, hasM);
 
+#ifdef GEOS_MVALUES
 	std::size_t dim = 2 + hasZ + hasM;
 	bool dim3isM = hasM && !hasZ;
+#else
+	std::size_t dim = 2 + hasZ;
+	bool dim3isM = false;
+#endif
 	CoordinateSequence *coordinates = \
 			geometryFactory->getCoordinateSequenceFactory()->create(
 				(size_t)0, dim, dim3isM);
@@ -112,12 +117,16 @@ WKTReader::getPreciseCoordinate(StringTokenizer *tokenizer,
 	coord.x=getNextNumber(tokenizer);
 	coord.y=getNextNumber(tokenizer);
 	coord.z=DoubleNotANumber;
+#ifdef GEOS_MVALUES
 	coord.m=DoubleNotANumber;
+#endif
 	if (isNumberNext(tokenizer)) {
 		if(hasZ)
-		coord.z=getNextNumber(tokenizer);
+			coord.z=getNextNumber(tokenizer);
+#ifdef GEOS_MVALUES
 		else if(hasM)
 			coord.m=getNextNumber(tokenizer);
+#endif
 		else {
 			// Old-style WKT, three values but no Z in type
 			hasZ = true;
@@ -125,9 +134,11 @@ WKTReader::getPreciseCoordinate(StringTokenizer *tokenizer,
 		}
 	}
 	if (isNumberNext(tokenizer)) {
+#ifdef GEOS_MVALUES
 		if(hasZ && hasM)
 			coord.m=getNextNumber(tokenizer);
 		else
+#endif
 			// Discard bogous value
 			getNextNumber(tokenizer);
 	}

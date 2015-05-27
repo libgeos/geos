@@ -81,13 +81,18 @@ WKBWriter::writeHEX(const Geometry &g, ostream &os)
 void
 WKBWriter::write(const Geometry &g, ostream &os) 
 {
+#ifdef GEOS_MVALUES
 	outputZ = (defaultOutputDimension == 4 ||
 			   (defaultOutputDimension == 3 && (!defaultOutputPreferM || !g.getHasM()))
 			  ) && g.getHasZ();
-    outputM = (defaultOutputDimension == 4 ||
+	outputM = (defaultOutputDimension == 4 ||
 			   (defaultOutputDimension == 3 && defaultOutputPreferM) ||
 			   (defaultOutputDimension == 3 && !g.getHasZ())
 			  ) && g.getHasM();
+#else
+	outputZ = defaultOutputDimension == 3 && g.getHasZ();
+	outputM = false;
+#endif
 
 	outStream = &os;
 
@@ -301,6 +306,7 @@ WKBWriter::writeCoordinate(const CoordinateSequence &cs, int idx)
 			buf, byteOrder);
 		outStream->write(reinterpret_cast<char *>(buf), 8);
 	}
+#ifdef GEOS_MVALUES
 	if ( outputM )
 	{
 		ByteOrderValues::putDouble(
@@ -308,6 +314,7 @@ WKBWriter::writeCoordinate(const CoordinateSequence &cs, int idx)
 			buf, byteOrder);
 		outStream->write(reinterpret_cast<char *>(buf), 8);
 	}
+#endif
 }
 
 

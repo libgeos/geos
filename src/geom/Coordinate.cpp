@@ -51,10 +51,12 @@ std::ostream& operator<< (std::ostream& os, const Coordinate& c)
 	{
 		os << " " << c.z;
 	}
+#ifdef GEOS_MVALUES
 	if ( !ISNAN(c.m) )
 	{
 		os << " m:" << c.m;
 	}
+#endif
 	return os;
 }
 

@@ -75,7 +75,9 @@ public:
 
 	Vertex(double _x, double _y, double _z);
 
+#ifdef GEOS_MVALUES
 	Vertex(double _x, double _y, double _z, double _m);
+#endif
 
 	Vertex(const geom::Coordinate &_p);
 
@@ -93,17 +95,21 @@ public:
 		return p.z;
 	}
 
+#ifdef GEOS_MVALUES
 	inline double getM() const {
 		return p.m;
 	}
+#endif
 
 	inline void setZ(double _z) {
 		p.z = _z;
 	}
 
+#ifdef GEOS_MVALUES
 	inline void setM(double _m) {
 		p.m = _m;
 	}
+#endif
 
 	inline const geom::Coordinate& getCoordinate() const {
 		return p;
@@ -274,6 +280,7 @@ private:
 	static double interpolateZ(const geom::Coordinate &p, const geom::Coordinate &p0, 
 			const geom::Coordinate &p1);
 
+#ifdef GEOS_MVALUES
 	/**
 	 * For this vertex enclosed in a triangle defined by three verticies v0, v1 and v2, interpolate
 	 * a m value from the surrounding vertices.
@@ -297,6 +304,7 @@ private:
 	 */
 	static double interpolateM(const geom::Coordinate &p, const geom::Coordinate &p0,
 			const geom::Coordinate &p1);
+#endif
 };
 
 inline bool operator<(const Vertex& v1, const Vertex& v2) {

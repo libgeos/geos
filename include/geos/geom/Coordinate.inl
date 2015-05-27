@@ -30,15 +30,22 @@ Coordinate::setNull()
 	x=DoubleNotANumber;
 	y=DoubleNotANumber;
 	z=DoubleNotANumber;
+#ifdef GEOS_MVALUES
 	m=DoubleNotANumber;
+#endif
 }
 
 INLINE bool
 Coordinate::isNull() const
 {
+#ifdef GEOS_MVALUES
 	return (ISNAN(x) && ISNAN(y) && ISNAN(z) && ISNAN(m));
+#else
+	return (ISNAN(x) && ISNAN(y) && ISNAN(z));
+#endif
 }
 
+#ifdef GEOS_MVALUES
 INLINE
 Coordinate::Coordinate(double xNew, double yNew, double zNew, double mNew)
 	:
@@ -47,6 +54,15 @@ Coordinate::Coordinate(double xNew, double yNew, double zNew, double mNew)
 	z(zNew),
 	m(mNew)
 {}
+#else
+INLINE
+Coordinate::Coordinate(double xNew, double yNew, double zNew)
+	:
+	x(xNew),
+	y(yNew),
+	z(zNew)
+{}
+#endif
 
 INLINE bool
 Coordinate::equals2D(const Coordinate& other) const
@@ -79,6 +95,7 @@ Coordinate::equals3D(const Coordinate& other) const
 		((z == other.z)||(ISNAN(z) && ISNAN(other.z)));
 }
 
+#ifdef GEOS_MVALUES
 INLINE bool
 Coordinate::equals3DM(const Coordinate& other) const
 {
@@ -93,6 +110,7 @@ Coordinate::equals4D(const Coordinate& other) const
         ((z == other.z)||(ISNAN(z) && ISNAN(other.z))) &&
         ((m == other.m)||(ISNAN(m) && ISNAN(other.m)));
 }
+#endif
 
 INLINE double
 Coordinate::distance(const Coordinate& p) const

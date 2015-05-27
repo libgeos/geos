@@ -402,7 +402,9 @@ void object::test<25>()
     double projIndex = indexedLine.project(Coordinate(5, 5));
     Coordinate projPt = indexedLine.extractPoint(projIndex);
     ensure(0 != ISNAN(projPt.z));
+#ifdef GEOS_MVALUES
     ensure(0 != ISNAN(projPt.m));
+#endif
 }
 
 /**

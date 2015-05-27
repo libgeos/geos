@@ -180,6 +180,7 @@ Polygon::getHasZ() const
 	return hasZ;
 }
 
+#ifdef GEOS_MVALUES
 bool
 Polygon::getHasM() const
 {
@@ -196,6 +197,7 @@ Polygon::getHasM() const
 
 	return hasM;
 }
+#endif
 
 int
 Polygon::getBoundaryDimension() const

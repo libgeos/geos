@@ -307,8 +307,10 @@ public:
 	/// Returns whether this Geometry has Z values.
 	virtual bool getHasZ() const=0;
 
+#ifdef GEOS_MVALUES
 	/// Returns whether this Geometry has M values.
 	virtual bool getHasM() const=0;
+#endif
 
 	/**
 	 * \brief

@@ -40,8 +40,12 @@
 #ifndef COMPUTE_Z
 #define COMPUTE_Z 1
 #endif
-#ifndef COMPUTE_M
-#define COMPUTE_M 1
+#ifdef GEOS_MVALUES
+# ifndef COMPUTE_M
+#  define COMPUTE_M 1
+# endif
+#else
+# undef COMPUTE_M
 #endif
 
 using namespace std;
@@ -286,6 +290,7 @@ Node::addZ(double z)
 #endif
 }
 
+#ifdef GEOS_MVALUES
 /*public*/
 void
 Node::addM(double m)
@@ -314,6 +319,7 @@ Node::addM(double m)
 	cerr<<" added "<<m<<": ["<<mtot<<"/"<<mvals.sime()<<"="<<coord.m<<"]"<<endl;
 #endif
 }
+#endif
 
 /*public*/
 const vector<double>&
@@ -322,12 +328,14 @@ Node::getZ() const
 	return zvals;
 }
 
+#ifdef GEOS_MVALUES
 /*public*/
 const vector<double>&
 Node::getM() const
 {
 	return mvals;
 }
+#endif
 
 std::ostream& operator<< (std::ostream& os, const Node& node)
 {

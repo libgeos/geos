@@ -64,8 +64,13 @@ WKTWriter::WKTWriter():
 void
 WKTWriter::setOutputDimension(int dims, bool preferM)
 {
+#ifdef GEOS_MVALUES
 	if ( dims < 2 || dims > 4 )
 		throw util::IllegalArgumentException("WKT output dimension must be 2 or 3 or 4");
+#else
+	if ( dims < 2 || dims > 3 )
+		throw util::IllegalArgumentException("WKT output dimension must be 2 or 3");
+#endif
 	defaultOutputDimension = dims;
 	defaultOutputPreferM = preferM;
 }
@@ -182,6 +187,7 @@ void
 WKTWriter::appendGeometryTaggedText(const Geometry *geometry, int level,
 		Writer *writer)
 {
+#ifdef GEOS_MVALUES
   outputZ = (defaultOutputDimension == 4 ||
 			 (defaultOutputDimension == 3 && (!defaultOutputPreferM || !geometry->getHasM()))
 			) && geometry->getHasZ();
@@ -189,6 +195,10 @@ WKTWriter::appendGeometryTaggedText(const Geometry *geometry, int level,
 			 (defaultOutputDimension == 3 && defaultOutputPreferM) ||
 			 (defaultOutputDimension == 3 && !geometry->getHasZ())
 			) && geometry->getHasM();
+#else
+  outputZ = defaultOutputDimension == 3 && geometry->getHasZ();
+  outputM = false;
+#endif
 
   indent(level, writer);
   if ( const Point* point = dynamic_cast<const Point*>(geometry) )
@@ -399,6 +409,7 @@ WKTWriter::appendCoordinate(const Coordinate* coordinate,
 		else
 			writer->write(writeNumber(coordinate->z));
 	}
+#ifdef GEOS_MVALUES
 	if( outputM )
 	{
 		writer->write(" ");
@@ -407,6 +418,7 @@ WKTWriter::appendCoordinate(const Coordinate* coordinate,
 		else
 			writer->write(writeNumber(coordinate->m));
 	}
+#endif
 }
 
 /* protected */

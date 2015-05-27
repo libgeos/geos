@@ -92,7 +92,7 @@ namespace tut
             delete coords;
     }
 
-	// 4 - Ensure we can read ZM geometries
+	// 4 - Ensure we can read ZM geometries (discarding M if GEOS compiled without M support)
 	template<>
 	template<>
 	void object::test<4>()
@@ -100,12 +100,17 @@ namespace tut
             GeomPtr geom(wktreader.read("LINESTRING ZM (-117 33 2 3, -116 34 4 5)"));
             geos::geom::CoordinateSequence *coords = geom->getCoordinates();
 
+#ifdef GEOS_MVALUES
             ensure( coords->getDimension() == 4 );
-
             wktwriter.setOutputDimension( 4 );
             ensure_equals( wktwriter.write(geom.get()), 
                      std::string("LINESTRING ZM (-117 33 2 3, -116 34 4 5)") );
-
+#else
+            ensure( coords->getDimension() == 3 );
+            wktwriter.setOutputDimension( 3 );
+            ensure_equals( wktwriter.write(geom.get()), 
+                     std::string("LINESTRING Z (-117 33 2, -116 34 4)") );
+#endif
             delete coords;
     }
 
@@ -190,6 +195,7 @@ namespace tut
 			delete coords;
 	}
 
+#ifdef GEOS_MVALUES
 	// 9 - Ensure we can read M geometries
 	template<>
 	template<>
@@ -227,6 +233,8 @@ namespace tut
 
 			delete coords;
 	}
+#endif
+
 } // namespace tut
 
 

@@ -128,6 +128,7 @@ private:
 	 */
 	void propagateZ(geom::CoordinateSequence *cs);
 
+#ifdef GEOS_MVALUES
 	/*
 	 * If the given CoordinateSequence has mixed m and m-less vertexes
 	 * set M for all vertexes missing it.
@@ -135,6 +136,7 @@ private:
 	 * from a m vertex to the end.
 	 */
 	void propagateM(geom::CoordinateSequence *cs);
+#endif
 };
 
 } // namespace geos::operation::overlay

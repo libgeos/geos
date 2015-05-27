@@ -111,11 +111,17 @@ public:
 
 	void expandEnvelope(Envelope &env) const;
 
+#ifdef GEOS_MVALUES
 	std::size_t getDimension() const{ return 2 + getHasZ() + getHasM(); }
+#else
+	std::size_t getDimension() const{ return 2 + getHasZ(); }
+#endif
 
 	bool getHasZ() const;
 
+#ifdef GEOS_MVALUES
 	bool getHasM() const;
+#endif
 
 	void apply_rw(const CoordinateFilter *filter); 
 
@@ -126,7 +132,9 @@ public:
 private:
 	std::vector<Coordinate> *vect;
 	mutable int hasZ;
+#ifdef GEOS_MVALUES
 	mutable int hasM;
+#endif
 };
 
 /// This is for backward API compatibility

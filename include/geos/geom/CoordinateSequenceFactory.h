@@ -69,7 +69,7 @@ public:
 	 * @param dimension the dimension of the coordinates in the sequence
 	 * 	(0=unknown, 2, 3 or 4 - ignored if not user specifiable)
 	 * @param dim3isM only if dimension=3, specifies whether dim 3 is Z or M
-	 * 	(0=false, 1=true)
+	 * 	(0=false, 1=true). Ignored if GEOS compiled without M support.
 	 */
 	virtual CoordinateSequence *create( std::vector<Coordinate> *coordinates,
 	                                    std::size_t dimension = 0,
@@ -85,7 +85,7 @@ public:
 	 * @param dimension the dimension of the coordinates in the sequence
 	 * 	(0=unknown, 2, 3 or 4 - ignored if not user specifiable)
 	 * @param dim3isM only if dimension=3, specifies whether dim 3 is Z or M
-	 * 	(0=false, 1=true)
+	 * 	(0=false, 1=true). Ignored if GEOS compiled without M support.
 	 */
 	virtual CoordinateSequence *create( std::size_t size,
 	                                    std::size_t dimension = 0,

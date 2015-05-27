@@ -47,9 +47,13 @@
 #define COMPUTE_Z 1
 #endif // COMPUTE_Z
 
-#ifndef COMPUTE_M
-#define COMPUTE_M 1
-#endif // COMPUTE_M
+#ifdef GEOS_MVALUES
+# ifndef COMPUTE_M
+#  define COMPUTE_M 1
+# endif // COMPUTE_M
+#else
+# undef COMPUTE_M
+#endif
 
 using namespace std;
 
@@ -331,6 +335,7 @@ LineIntersector::interpolateZ(const Coordinate &p,
 
 }
 
+#ifdef GEOS_MVALUES
 /*public static*/
 double
 LineIntersector::interpolateM(const Coordinate &p,
@@ -397,7 +402,7 @@ LineIntersector::interpolateM(const Coordinate &p,
 	return interpolated;
 
 }
-
+#endif
 
 /*public*/
 void
