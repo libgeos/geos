@@ -129,6 +129,7 @@ if test x"$enable_mvalues" = xtrue; then
 	MVALUES_FLAGS="-DGEOS_MVALUES"
 	AM_CXXFLAGS="$AM_CXXFLAGS $MVALUES_FLAGS"
     AC_MSG_RESULT([yes])
+    AC_DEFINE(GEOS_MVALUES, [1], [Has M values support])
 else
     AC_MSG_RESULT([no])
 fi
@@ -545,6 +546,7 @@ AC_OUTPUT([
 
 dnl -- echo "---------------------------------------"
 dnl -- echo "Boost UTF: $use_boost_utf"
+echo "Enable M values: $enable_mvalues"
 echo "Swig: $use_swig"
 echo "Python bindings: $use_python"
 echo "Ruby bindings: $use_ruby"
