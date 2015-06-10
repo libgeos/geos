@@ -61,6 +61,9 @@
 /* Set to 1 if Visual C++ finite is defined */
 #cmakedefine HAVE_FINITE 1
 
+/* Set to 1 if M values are supported */
+#cmakedefine GEOS_MVALUES
+
 
 #ifdef HAVE_IEEEFP_H
 extern "C"

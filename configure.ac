@@ -127,7 +127,6 @@ MVALUES_FLAGS=
 AC_SUBST(MVALUES_FLAGS)
 if test x"$enable_mvalues" = xtrue; then
 	MVALUES_FLAGS="-DGEOS_MVALUES"
-	AM_CXXFLAGS="$AM_CXXFLAGS $MVALUES_FLAGS"
     AC_MSG_RESULT([yes])
     AC_DEFINE(GEOS_MVALUES, [1], [Has M values support])
 else

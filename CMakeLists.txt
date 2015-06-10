@@ -150,7 +150,7 @@ message(STATUS
   "Setting GEOS compilation with small functions inlining - ${GEOS_ENABLE_INLINE}")
 
 if(GEOS_ENABLE_M)
-  add_definitions(-DGEOS_MVALUES)
+  set(GEOS_MVALUES 1)
 endif()
 message(STATUS
   "Setting GEOS compilation with M support - ${GEOS_ENABLE_M}")
