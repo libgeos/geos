@@ -23,6 +23,8 @@
 #include <geos/geom/LinearRing.h>
 #include <geos/algorithm/CGAlgorithms.h>
 
+#include <cmath> // for fabs()
+
 namespace geos {
 namespace operation { // geos::operation
 namespace intersection { // geos::operation::intersection
