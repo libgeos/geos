@@ -152,6 +152,14 @@ typedef struct GEOSContextHandle_HS
     int initialized;
 
     GEOSContextHandle_HS()
+      :
+      geomFactory(0),
+      noticeMessageOld(0),
+      noticeMessageNew(0),
+      noticeData(0),
+      errorMessageOld(0),
+      errorMessageNew(0),
+      errorData(0)
     {
       memset(msgBuffer, 0, sizeof(msgBuffer));
       geomFactory = GeometryFactory::getDefaultInstance();
