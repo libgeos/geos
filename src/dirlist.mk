@@ -28,6 +28,7 @@ GEOS_DIRLIST =  \
 	operation \
 	operation\buffer \
 	operation\distance \
+	operation\intersection \
 	operation\linemerge \
 	operation\overlay \
 	operation\overlay\snap \
