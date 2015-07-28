@@ -18,6 +18,7 @@
  *
  **********************************************************************/
 
+#include <geos/platform.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/io/Writer.h>
 #include <geos/io/CLocalizer.h>

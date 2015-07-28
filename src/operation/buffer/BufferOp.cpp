@@ -21,6 +21,7 @@
 #include <algorithm>
 #include <cmath>
 
+#include <geos/platform.h>
 #include <geos/profiler.h>
 #include <geos/precision/GeometryPrecisionReducer.h>
 #include <geos/operation/buffer/BufferOp.h>
