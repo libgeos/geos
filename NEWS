@@ -13,7 +13,9 @@ YYYY-MM-DD
  - Make polygonize operation interruptable
  - Make relate-based operations interruptable (#711)
  - Update for Visual Studio 2013 (#691)
- - Update for Visual Studio 2015 (r4054)
+ - Update for Visual Studio 2015 (r4054, r4062)
+ - Update for Microsoft NMAKE (r4063)
+ - Fix compilation issues while building with Visual C++ (#701)
  - Fix support of PHP bindings for version < 5.4.0 (#709)
 
 Changes in 3.4.2
