@@ -248,6 +248,7 @@ PHP_METHOD(Geometry, snapTo);
 PHP_METHOD(Geometry, node);
 PHP_METHOD(Geometry, delaunayTriangulation);
 PHP_METHOD(Geometry, voronoiDiagram);
+PHP_METHOD(Geometry, clipByRect);
 
 static zend_function_entry Geometry_methods[] = {
     PHP_ME(Geometry, __construct, NULL, 0)
@@ -313,6 +314,7 @@ static zend_function_entry Geometry_methods[] = {
     PHP_ME(Geometry, node, NULL, 0)
     PHP_ME(Geometry, delaunayTriangulation, NULL, 0)
     PHP_ME(Geometry, voronoiDiagram, NULL, 0)
+    PHP_ME(Geometry, clipByRect, NULL, 0)
     {NULL, NULL, NULL}
 };
 
@@ -762,6 +764,30 @@ PHP_METHOD(Geometry, intersection)
     other = getRelay(zobj, Geometry_ce_ptr);
 
     ret = GEOSIntersection(this, other);
+    if ( ! ret ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, ret);
+}
+
+/**
+ * GEOSGeometry GEOSGeometry::clipByRect(xmin,ymin,xmax,ymax)
+ */
+PHP_METHOD(Geometry, clipByRect)
+{
+    GEOSGeometry *this;
+    GEOSGeometry *ret;
+    double xmin,ymin,xmax,ymax;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "dddd",
+            &xmin, &ymin, &xmax, &ymax) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    ret = GEOSClipByRect(this, xmin, ymin, xmax, ymax);
     if ( ! ret ) RETURN_NULL(); /* should get an exception first */
 
     /* return_value is a zval */

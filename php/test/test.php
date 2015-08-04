@@ -753,6 +753,38 @@ class test extends PHPUnit_Framework_TestCase
             , $writer->write($gi));
     }
 
+    public function testGeometry_clipByRect()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        /* POINT */
+        $g = $reader->read('POINT(0 0)');
+        $gi = $g->clipByRect(-1,-1,1,1);
+        $this->assertEquals( 'POINT (0 0)'
+            , $writer->write($gi));
+        $gi = $g->clipByRect(1,1,2,2);
+        $this->assertEquals( 'GEOMETRYCOLLECTION EMPTY'
+            , $writer->write($gi));
+
+        /* LINE */
+        $g = $reader->read('LINESTRING(0 0, 10 0)');
+        $gi = $g->clipByRect(1,-1,2,1);
+        $this->assertEquals( 'LINESTRING (1 0, 2 0)'
+            , $writer->write($gi));
+
+        /* POLY */
+        $g = $reader->read('POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))');
+        $gi = $g->clipByRect(1,1,5,5);
+        $this->assertEquals( 'POLYGON ((1 1, 1 5, 5 5, 5 1, 1 1))'
+            , $writer->write($gi));
+        $gi = $g->clipByRect(-1,-1,5,5);
+        $this->assertEquals( 'POLYGON ((0 0, 0 5, 5 5, 5 0, 0 0))'
+            , $writer->write($gi));
+
+    }
+
     public function testGeometry_convexHull()
     {
         $reader = new GEOSWKTReader();
