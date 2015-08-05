@@ -7,6 +7,8 @@
 # by the Free Software Foundation. 
 # See the COPYING file for more information.
 #
+sudo: false
+
 language: cpp
 
 compiler:
@@ -20,7 +22,13 @@ env:
         - GEOS_BUILD_TOOL=cmake CFLAGS=-m32 CXXFLAGS=-m32
         - GEOS_BUILD_TOOL=cmake CFLAGS=-m64 CXXFLAGS=-m64
 
-before_install: ./tools/ci/before_install.sh
+addons:
+  apt:
+    packages:
+    - gcc-multilib
+    - g++-multilib
+    - cmake
+    - make
 
 script: ./tools/ci/script.sh
 
