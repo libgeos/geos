@@ -15,11 +15,15 @@ compiler:
     - clang
 
 env:
-    matrix:
-        - GEOS_BUILD_TOOL=autotools CFLAGS=-m32 CXXFLAGS=-m32
-        - GEOS_BUILD_TOOL=autotools CFLAGS=-m64 CXXFLAGS=-m64
-        - GEOS_BUILD_TOOL=cmake CFLAGS=-m32 CXXFLAGS=-m32
-        - GEOS_BUILD_TOOL=cmake CFLAGS=-m64 CXXFLAGS=-m64
+    - GEOS_BUILD_TOOL=autotools CFLAGS=-m32 CXXFLAGS=-m32
+    - GEOS_BUILD_TOOL=autotools CFLAGS=-m64 CXXFLAGS=-m64
+    - GEOS_BUILD_TOOL=cmake CFLAGS=-m32 CXXFLAGS=-m32
+    - GEOS_BUILD_TOOL=cmake CFLAGS=-m64 CXXFLAGS=-m64
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - env: GEOS_BUILD_TOOL=cmake CFLAGS=-m64 CXXFLAGS=-m64
 
 addons:
   apt:
