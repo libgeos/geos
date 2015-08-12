@@ -28,7 +28,7 @@
 // has already generated the stubs for the contents of this file. 
 // Hence we need to supress it to avoid "multiple definition" errors
 // during the final link phase
-#if !defined(_MSC_VER) && !defined(__MINGW64_VERSION_MAJOR) && (!defined(__MINGW32__) || defined(__MINGW32__) && !defined(GEOS_DLL_EXPORT))
+#if !defined(_MSC_VER) && (!defined(__MINGW32__) || defined(__MINGW32__) && !defined(GEOS_DLL_EXPORT) && !defined(DLL_EXPORT) )
 
 // If using cygwin then we suppress the "multiple definition" errors by
 // ignoring this section completely; the cygwin linker seems to handle
@@ -60,6 +60,7 @@
 #include <geos/noding/MCIndexNoder.inl>
 
 #endif // defined __CYGWIN__
+
 #endif // defined __MINGW32__ and !defined GEOS_DLL_EXPORT
 
 #endif // defined GEOS_INLINE
