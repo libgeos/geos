@@ -217,10 +217,10 @@ dnl --------------------------------------------------------------------
 dnl Find a working 64bit integer
 PGAC_TYPE_64BIT_INT([int64_t])
 if test x"$HAVE_INT64_T_64" = x"no" ; then
-  PGAC_TYPE_64BIT_INT([long int])
-  if test x"$HAVE_LONG_INT_64" = x"no" ; then
-    PGAC_TYPE_64BIT_INT([long long int])
-    if test x"$HAVE_LONG_LONG_INT_64" = x"no" ; then
+  PGAC_TYPE_64BIT_INT([long long int])
+  if test x"$HAVE_LONG_LONG_INT_64" = x"no" ; then
+    PGAC_TYPE_64BIT_INT([long int])
+    if test x"$HAVE_LONG_INT_64" = x"no" ; then
       AC_MSG_WARN([Could not find a working 64bit int type, you may experience weird bugs (undefined behaviour)]);
     fi
   fi
