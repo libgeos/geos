@@ -48,7 +48,7 @@ public:
 	 * The optimization here is that computing topology for the test
 	 * geometry is avoided. This can be significant for large geometries.
 	 */
-	bool intersects(const geom::Geometry* g);
+	bool intersects(const geom::Geometry* g) const;
 
 };
 
