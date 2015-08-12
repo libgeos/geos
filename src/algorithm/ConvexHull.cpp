@@ -248,12 +248,18 @@ ConvexHull::getConvexHull()
 		reduce(inputPts);
 	}
 
+    GEOS_CHECK_FOR_INTERRUPTS();
+    
 	// sort points for Graham scan.
 	preSort(inputPts);
+
+    GEOS_CHECK_FOR_INTERRUPTS();
 
 	// Use Graham scan to find convex hull.
 	Coordinate::ConstVect cHS;
 	grahamScan(inputPts, cHS);
+
+    GEOS_CHECK_FOR_INTERRUPTS();
 
 	return lineOrPolygon(cHS);
 
