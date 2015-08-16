@@ -10,7 +10,7 @@
 5. Commit the new ChangeLog and NEWS files.
 
 6: Tag the release:
-   $ base=http://svn.osgeo.org/geos/
+   $ base=https://svn.osgeo.org/geos/
    $ svn copy -m "Tagged release MAJOR.MINOR.PATCH" \
 		$base/trunk $base/tags/MAJOR.MINOR.PATCH
 
