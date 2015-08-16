@@ -33,7 +33,7 @@
      [ THIS MUST BE CAREFULLY AVOIDED ]
 
 12: Increment release version:
-   - In configure.in
+   - In configure.ac
    - In include/geos/version.h.vc 
    - In capi/geos_c.h.in
      - VERSION_PATCH for bugfixes/improvements (even breaking C++ API)

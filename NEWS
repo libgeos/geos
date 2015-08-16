@@ -1,5 +1,13 @@
+Changes in 3.6.0
+2015-MM-DD
+
+- New things:
+- Improvements:
+- C++ API changes:
+
+
 Changes in 3.5.0
-2013-MM-DD
+2015-08-16
 
 - New things:
   - Voronoi API (#627)
