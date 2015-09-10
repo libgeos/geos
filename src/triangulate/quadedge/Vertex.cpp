@@ -38,6 +38,12 @@ Vertex::Vertex(double _x, double _y, double _z): p( _x, _y, _z)
 {
 }
 
+#ifdef GEOS_MVALUES
+Vertex::Vertex(double _x, double _y, double _z, double _m): p( _x, _y, _z, _m)
+{
+}
+#endif
+
 Vertex::Vertex(const Coordinate &_p) : p(_p)
 {
 }
@@ -121,7 +127,12 @@ std::auto_ptr<Vertex> Vertex::midPoint(const Vertex &a)
 	double xm = (p.x + a.getX()) / 2.0;
 	double ym = (p.y + a.getY()) / 2.0;
 	double zm = (p.z + a.getZ()) / 2.0;
+#ifdef GEOS_MVALUES
+	double mm = (p.m + a.getM()) / 2.0;
+	return std::auto_ptr<Vertex>(new Vertex(xm, ym, zm, mm));
+#else
 	return std::auto_ptr<Vertex>(new Vertex(xm, ym, zm));
+#endif
 }
 
 std::auto_ptr<Vertex> Vertex::circleCenter(const Vertex &b, const Vertex &c) const
@@ -189,6 +200,54 @@ double Vertex::interpolateZ(const Coordinate &p, const Coordinate &p0,
 	double pz = p0.z + dz * (ptLen / segLen);
 	return pz;
 }
+
+#ifdef GEOS_MVALUES
+double Vertex::interpolateMValue(const Vertex &v0, const Vertex &v1,
+		const Vertex &v2) const
+{
+	double x0 = v0.getX();
+	double y0 = v0.getY();
+	double a = v1.getX() - x0;
+	double b = v2.getX() - x0;
+	double c = v1.getY() - y0;
+	double d = v2.getY() - y0;
+	double det = a * d - b * c;
+	double dx = this->getX() - x0;
+	double dy = this->getY() - y0;
+	double t = (d * dx - b * dy) / det;
+	double u = (-c * dx + a * dy) / det;
+	double m = v0.getM() + t * (v1.getM() - v0.getM()) + u * (v2.getM() - v0.getM());
+	return m;
+}
+
+double Vertex::interpolateM(const Coordinate &p, const Coordinate &v0,
+		const Coordinate &v1, const Coordinate &v2)
+{
+	double x0 = v0.x;
+	double y0 = v0.y;
+	double a = v1.x - x0;
+	double b = v2.x - x0;
+	double c = v1.y - y0;
+	double d = v2.y - y0;
+	double det = a * d - b * c;
+	double dx = p.x - x0;
+	double dy = p.y - y0;
+	double t = (d * dx - b * dy) / det;
+	double u = (-c * dx + a * dy) / det;
+	double m = v0.m + t * (v1.m - v0.m) + u * (v2.m - v0.m);
+	return m;
+}
+
+double Vertex::interpolateM(const Coordinate &p, const Coordinate &p0,
+		const Coordinate &p1)
+{
+	double segLen = p0.distance(p1);
+	double ptLen = p.distance(p0);
+	double dm = p1.m - p0.m;
+	double pm = p0.m + dm * (ptLen / segLen);
+	return pm;
+}
+#endif
 
 } //namespace geos.triangulate.quadedge
 } //namespace geos.triangulate

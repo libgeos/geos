@@ -63,10 +63,11 @@ public:
 
 	/// Construct sequence taking ownership of given Coordinate vector
 	CoordinateArraySequence(std::vector<Coordinate> *coords,
-                                std::size_t dimension = 0);
+	                        std::size_t dimension = 0, bool dim3isM = false);
         
 	/// Construct sequence allocating space for n coordinates
-	CoordinateArraySequence(std::size_t n, std::size_t dimension = 0);
+	CoordinateArraySequence(std::size_t n,
+	                        std::size_t dimension = 0, bool dim3isM = false);
 
 	~CoordinateArraySequence();
 
@@ -110,7 +111,17 @@ public:
 
 	void expandEnvelope(Envelope &env) const;
 
-    std::size_t getDimension() const;
+#ifdef GEOS_MVALUES
+	std::size_t getDimension() const{ return 2 + getHasZ() + getHasM(); }
+#else
+	std::size_t getDimension() const{ return 2 + getHasZ(); }
+#endif
+
+	bool getHasZ() const;
+
+#ifdef GEOS_MVALUES
+	bool getHasM() const;
+#endif
 
 	void apply_rw(const CoordinateFilter *filter); 
 
@@ -120,7 +131,10 @@ public:
 
 private:
 	std::vector<Coordinate> *vect;
-    mutable std::size_t dimension;
+	mutable int hasZ;
+#ifdef GEOS_MVALUES
+	mutable int hasM;
+#endif
 };
 
 /// This is for backward API compatibility

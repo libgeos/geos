@@ -253,16 +253,16 @@ WKBReader::readGeometry()
 	cout<<"WKB geometryType: "<<geometryType<<endl;
 #endif
 
-	bool hasZ = ((typeInt & 0x80000000) != 0);
-	if (hasZ) inputDimension = 3;
-	else inputDimension = 2; // doesn't handle M currently
+	hasZ = ((typeInt & 0x80000000) != 0);
+	hasM = ((typeInt & 0x40000000) != 0);
 
 #if DEBUG_WKB_READER
 	cout<<"WKB hasZ: "<<hasZ<<endl;
+	cout<<"WKB hasM: "<<hasM<<endl;
 #endif
 
 #if DEBUG_WKB_READER
-	cout<<"WKB dimensions: "<<inputDimension<<endl;
+	cout<<"WKB dimensions: "<<(2 + hasZ + hasM)<<endl;
 #endif
 
 	bool hasSRID = ((typeInt & 0x20000000) != 0);
@@ -276,8 +276,11 @@ WKBReader::readGeometry()
 
 
 	// allocate space for ordValues 
-	if ( ordValues.size() < inputDimension )
-		ordValues.resize(inputDimension);
+#ifdef GEOS_MVALUES
+	ordValues.resize(4);
+#else
+	ordValues.resize(3);
+#endif
 
 	Geometry *result;
 
@@ -317,7 +320,14 @@ Point *
 WKBReader::readPoint()
 {
 	readCoordinate();
-	if(inputDimension == 3){
+#ifdef GEOS_MVALUES
+	if(hasZ && hasM){
+		return factory.createPoint(Coordinate(ordValues[0], ordValues[1], ordValues[2], ordValues[3]));
+	}else if(hasM){
+		return factory.createPoint(Coordinate(ordValues[0], ordValues[1], DoubleNotANumber, ordValues[3]));
+	}else 
+#endif
+	if(hasZ){
 	  return factory.createPoint(Coordinate(ordValues[0], ordValues[1], ordValues[2]));
 	}else{
 	  return factory.createPoint(Coordinate(ordValues[0], ordValues[1]));
@@ -479,15 +489,24 @@ WKBReader::readGeometryCollection()
 CoordinateSequence *
 WKBReader::readCoordinateSequence(int size)
 {
-	CoordinateSequence *seq = factory.getCoordinateSequenceFactory()->create(size, inputDimension);
-	unsigned int targetDim = seq->getDimension();
-	if ( targetDim > inputDimension )
-		targetDim = inputDimension;
+	std::size_t dim = 2 + hasZ + hasM;
+#ifdef GEOS_MVALUES
+	bool dim3isM = hasM && !hasZ;
+#else
+	bool dim3isM = false;
+#endif
+	CoordinateSequence *seq = factory.getCoordinateSequenceFactory()->create(
+				size, dim, dim3isM);
 	for (int i=0; i<size; i++) {
 		readCoordinate();
-		for (unsigned int j=0; j<targetDim; j++) {
-			seq->setOrdinate(i, j, ordValues[j]);
-		}
+		seq->setOrdinate(i, 0, ordValues[0]);
+		seq->setOrdinate(i, 1, ordValues[1]);
+		if(hasZ)
+			seq->setOrdinate(i, 2, ordValues[2]);
+#ifdef GEOS_MVALUES
+		if(hasM)
+			seq->setOrdinate(i, 3, ordValues[3]);
+#endif
 	}
 	return seq;
 }
@@ -496,11 +515,14 @@ void
 WKBReader::readCoordinate()
 {
 	const PrecisionModel &pm = *factory.getPrecisionModel();
-	for (unsigned int i=0; i<inputDimension; ++i)
-	{
-		if ( i <= 1 ) ordValues[i] = pm.makePrecise(dis.readDouble());
-		else ordValues[i] = dis.readDouble();
-	}
+	ordValues[0] = pm.makePrecise(dis.readDouble());
+	ordValues[1] = pm.makePrecise(dis.readDouble());
+	if(hasZ)
+		ordValues[2] = dis.readDouble();
+#ifdef GEOS_MVALUES
+	if(hasM)
+		ordValues[3] = dis.readDouble();
+#endif
 #if DEBUG_WKB_READER
 	cout<<"WKB coordinate: "<<ordValues[0]<<","<<ordValues[1]<<endl;
 #endif

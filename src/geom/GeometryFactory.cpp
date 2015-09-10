@@ -248,8 +248,18 @@ GeometryFactory::createPoint(const Coordinate& coordinate) const
 	if (coordinate.isNull()) {
 		return createPoint();
 	} else {
-		std::size_t dim = ISNAN(coordinate.z) ? 2 : 3;
-		CoordinateSequence *cl = coordinateListFactory->create(new vector<Coordinate>(1, coordinate), dim);
+		bool hasZ = !ISNAN(coordinate.z);
+#ifdef GEOS_MVALUES
+		bool hasM = !ISNAN(coordinate.m);
+		std::size_t dim = 2 + hasZ + hasM;
+		bool dim3isM = hasM && !hasZ;
+		CoordinateSequence *cl = coordinateListFactory->create(
+					new vector<Coordinate>(1, coordinate), dim, dim3isM);
+#else
+		std::size_t dim = 2 + hasZ;
+		CoordinateSequence *cl = coordinateListFactory->create(
+					new vector<Coordinate>(1, coordinate), dim);
+#endif
 		//cl->setAt(coordinate, 0);
 		Point *ret = createPoint(cl);
 		return ret;

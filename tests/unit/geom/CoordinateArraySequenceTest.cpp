@@ -27,12 +27,19 @@ namespace tut
         struct Filter : public geos::geom::CoordinateFilter
         {
           bool is3d;
-          Filter() : is3d(false) {}
+          bool isM;
+          Filter() : is3d(false), isM(false) {}
           void filter_rw(geos::geom::Coordinate* c) const {
             if ( is3d ) {
               if ( ISNAN(c->z) ) c->z = 0.0;
             }
             else c->z = DoubleNotANumber;
+#ifdef GEOS_MVALUES
+            if ( isM ) {
+              if ( ISNAN(c->m) ) c->m = 0.0;
+            }
+            else c->m = DoubleNotANumber;
+#endif
           }
         };
     };
@@ -190,8 +197,13 @@ namespace tut
 
 		// Create non-empty sequence
 		std::vector<Coordinate>* col = new std::vector<Coordinate>();
+#ifdef GEOS_MVALUES
+		col->push_back(Coordinate(1, 2, 3, 4));
+		col->push_back(Coordinate(5, 10, 15, 20));
+#else
 		col->push_back(Coordinate(1, 2, 3));
 		col->push_back(Coordinate(5, 10, 15));
+#endif
 		
 		const size_t size = 2;
 		geos::geom::CoordinateArraySequence sequence(col);
@@ -204,9 +216,15 @@ namespace tut
 		ensure_equals( sequence.getAt(0).x, 1 );
 		ensure_equals( sequence.getAt(0).y, 2 );
 		ensure_equals( sequence.getAt(0).z, 3 );
+#ifdef GEOS_MVALUES
+		ensure_equals( sequence.getAt(0).m, 4 );
+#endif
 		ensure_equals( sequence.getAt(1).x, 5 );
 		ensure_equals( sequence.getAt(1).y, 10 );
 		ensure_equals( sequence.getAt(1).z, 15 );
+#ifdef GEOS_MVALUES
+		ensure_equals( sequence.getAt(1).m, 20 );
+#endif
 
 		// Second version of getAt()
 		Coordinate buf;
@@ -215,11 +233,17 @@ namespace tut
 		ensure_equals( buf.x, 1 );
 		ensure_equals( buf.y, 2 );
 		ensure_equals( buf.z, 3 );
+#ifdef GEOS_MVALUES
+		ensure_equals( buf.m, 4 );
+#endif
 		
 		sequence.getAt(1, buf);
 		ensure_equals( buf.x, 5 );
 		ensure_equals( buf.y, 10 );
 		ensure_equals( buf.z, 15 );
+#ifdef GEOS_MVALUES
+		ensure_equals( buf.m, 20 );
+#endif
 	}
 
     // Test of add()
@@ -237,7 +261,11 @@ namespace tut
 		ensure_equals( sequence.size(), size );
 
 		// Add coordinates
-		Coordinate tmp(1, 2, 3);		
+#ifdef GEOS_MVALUES
+		Coordinate tmp(1, 2, 3, 4);
+#else
+		Coordinate tmp(1, 2, 3);
+#endif
 		sequence.add(tmp); // insert copy of tmp
 		const size_t sizeOne = 1;
 
@@ -247,6 +275,9 @@ namespace tut
 		tmp.x = 5;
 		tmp.y = 10;
 		tmp.z = 15;
+#ifdef GEOS_MVALUES
+		tmp.m = 20;
+#endif
 		sequence.add(tmp); // insert copy of tmp
 		const size_t sizeTwo = 2;
 		
@@ -261,9 +292,14 @@ namespace tut
 		ensure_equals( sequence.getAt(0).x, 1 );
 		ensure_equals( sequence.getAt(0).y, 2 );
 		ensure_equals( sequence.getAt(0).z, 3 );
+#ifdef GEOS_MVALUES
+		ensure_equals( sequence.getAt(0).m, 4 );
+#endif
 		ensure_equals( sequence.getAt(1).x, 5 );
 		ensure_equals( sequence.getAt(1).y, 10 );
-		ensure_equals( sequence.getAt(1).z, 15 );
+#ifdef GEOS_MVALUES
+		ensure_equals( sequence.getAt(1).m, 20 );
+#endif
 	}
 
     // Test of setAt()
@@ -282,17 +318,28 @@ namespace tut
 		ensure( sequence.hasRepeatedPoints() );
 
 		// Set new values to first coordinate
+#ifdef GEOS_MVALUES
+		Coordinate first(1, 2, 3, 4);
+#else
 		Coordinate first(1, 2, 3);
+#endif
 		sequence.setAt(first, 0);
 
 		ensure_equals( sequence.size(), size );
 		ensure_equals( sequence.getAt(0).x, 1 );
 		ensure_equals( sequence.getAt(0).y, 2 );
 		ensure_equals( sequence.getAt(0).z, 3 );
+#ifdef GEOS_MVALUES
+		ensure_equals( sequence.getAt(0).m, 4 );
+#endif
 
 
 		// Set new values to second coordinate 
+#ifdef GEOS_MVALUES
+		Coordinate second(5, 10, 15, 20);
+#else
 		Coordinate second(5, 10, 15);
+#endif
 		sequence.setAt(second, 1);
 
 		ensure_equals( sequence.size(), size );
@@ -300,6 +347,9 @@ namespace tut
 		ensure_equals( sequence.getAt(1).x, 5 );
 		ensure_equals( sequence.getAt(1).y, 10 );
 		ensure_equals( sequence.getAt(1).z, 15 );
+#ifdef GEOS_MVALUES
+		ensure_equals( sequence.getAt(1).m, 20 );
+#endif
 
 		ensure( !sequence.hasRepeatedPoints() );
 	}
@@ -367,9 +417,15 @@ namespace tut
 		// Create collection of points
 		const std::vector<Coordinate>::size_type sizeCol = 3;
 		std::vector<Coordinate> col;
+#ifdef GEOS_MVALUES
+		col.push_back(Coordinate(1, 2, 3, 4));
+		col.push_back(Coordinate(5, 10, 15, 20));
+		col.push_back(Coordinate(9, 18, 27, 36));
+#else
 		col.push_back(Coordinate(1, 2, 3));
 		col.push_back(Coordinate(5, 10, 15));
 		col.push_back(Coordinate(9, 18, 27));
+#endif
 
 		ensure( "std::vector bug assumed!", !col.empty() );
 		ensure_equals( "std::vector bug assumed!", col.size(), sizeCol );
@@ -385,14 +441,23 @@ namespace tut
 		ensure_equals( sequence.getAt(0).x, 1 );
 		ensure_equals( sequence.getAt(0).y, 2 );
 		ensure_equals( sequence.getAt(0).z, 3 );
+#ifdef GEOS_MVALUES
+		ensure_equals( sequence.getAt(0).m, 4 );
+#endif
 
 		ensure_equals( sequence.getAt(1).x, 5 );
 		ensure_equals( sequence.getAt(1).y, 10 );
 		ensure_equals( sequence.getAt(1).z, 15 );
+#ifdef GEOS_MVALUES
+		ensure_equals( sequence.getAt(1).m, 20 );
+#endif
 
 		ensure_equals( sequence.getAt(2).x, 9 );
 		ensure_equals( sequence.getAt(2).y, 18 );
 		ensure_equals( sequence.getAt(2).z, 27 );
+#ifdef GEOS_MVALUES
+		ensure_equals( sequence.getAt(2).m, 36 );
+#endif
 	}
 
 	// Test of removeRepeatedPoints
@@ -479,7 +544,11 @@ namespace tut
 		using geos::geom::CoordinateArraySequence;
 		using geos::geom::CoordinateSequence;
 
+#ifdef GEOS_MVALUES
+		Coordinate c1(1, 2, 3, 4);
+#else
 		Coordinate c1(1, 2, 3);
+#endif
 
 		CoordinateArraySequence sequence1;
 
@@ -487,14 +556,19 @@ namespace tut
 
 		ensure_equals( sequence1[0], c1 );
 
-		sequence1.setOrdinate(0, CoordinateSequence::X, 4);
-		ensure_equals( sequence1[0].x, 4 );
+		sequence1.setOrdinate(0, CoordinateSequence::X, 5);
+		ensure_equals( sequence1[0].x, 5 );
 
-		sequence1.setOrdinate(0, CoordinateSequence::Y, 5);
-		ensure_equals( sequence1[0].y, 5 );
+		sequence1.setOrdinate(0, CoordinateSequence::Y, 6);
+		ensure_equals( sequence1[0].y, 6 );
 
-		sequence1.setOrdinate(0, CoordinateSequence::Z, 6);
-		ensure_equals( sequence1[0].z, 6 );
+		sequence1.setOrdinate(0, CoordinateSequence::Z, 7);
+		ensure_equals( sequence1[0].z, 7 );
+
+#ifdef GEOS_MVALUES
+		sequence1.setOrdinate(0, CoordinateSequence::M, 8);
+		ensure_equals( sequence1[0].m, 8 );
+#endif
 
 	}
 
@@ -507,7 +581,11 @@ namespace tut
 		using geos::geom::CoordinateArraySequence;
 		using geos::geom::CoordinateSequence;
 
+#ifdef GEOS_MVALUES
+		Coordinate c1(1, 2, 3, 4);
+#else
 		Coordinate c1(1, 2, 3);
+#endif
 
 		CoordinateArraySequence sequence1;
 
@@ -515,16 +593,21 @@ namespace tut
 
 		ensure_equals( sequence1[0], c1 );
 
-		// Order: Y, X, Z
+		// Order: Y, X, Z, (M)
 
-		sequence1.setOrdinate(0, CoordinateSequence::Y, 5);
-		ensure_equals( sequence1[0].y, 5 );
+		sequence1.setOrdinate(0, CoordinateSequence::Y, 6);
+		ensure_equals( sequence1[0].y, 6 );
 
-		sequence1.setOrdinate(0, CoordinateSequence::X, 4);
-		ensure_equals( sequence1[0].x, 4 );
+		sequence1.setOrdinate(0, CoordinateSequence::X, 5);
+		ensure_equals( sequence1[0].x, 5 );
 
-		sequence1.setOrdinate(0, CoordinateSequence::Z, 6);
-		ensure_equals( sequence1[0].z, 6 );
+		sequence1.setOrdinate(0, CoordinateSequence::Z, 7);
+		ensure_equals( sequence1[0].z, 7 );
+
+#ifdef GEOS_MVALUES
+		sequence1.setOrdinate(0, CoordinateSequence::M, 8);
+		ensure_equals( sequence1[0].m, 8 );
+#endif
 
 	}
 
@@ -544,29 +627,41 @@ namespace tut
 		std::auto_ptr<CoordinateSequence> sequence1ptr(factory->create(4, 2));
 		CoordinateSequence& seq = *sequence1ptr;
 
-		// Index: 0 - Order: Y, X, Z
+		// Index: 0 - Order: Y, X, Z, M
 
 		seq.setOrdinate(0, CoordinateSequence::Y,  5); ensure_equals( seq[0].y, 5 );
 		seq.setOrdinate(0, CoordinateSequence::Z,  6); ensure_equals( seq[0].z, 6 );
 		seq.setOrdinate(0, CoordinateSequence::X,  4); ensure_equals( seq[0].x, 4 );
+#ifdef GEOS_MVALUES
+		seq.setOrdinate(0, CoordinateSequence::M,  7); ensure_equals( seq[0].m, 7 );
+#endif
 
-		// Index: 1 - Order: Z, X, Y
+		// Index: 1 - Order: Z, X, Y, M
 
 		seq.setOrdinate(1, CoordinateSequence::Z,  9); ensure_equals( seq[1].z, 9 );
 		seq.setOrdinate(1, CoordinateSequence::X,  8); ensure_equals( seq[1].x, 8 );
 		seq.setOrdinate(1, CoordinateSequence::Y,  7); ensure_equals( seq[1].y, 7 );
+#ifdef GEOS_MVALUES
+		seq.setOrdinate(1, CoordinateSequence::M,  10); ensure_equals( seq[1].m, 10 );
+#endif
 
-		// Index: 2 - Order: X, Y, Z
+		// Index: 2 - Order: X, Y, Z, M
 
 		seq.setOrdinate(2, CoordinateSequence::X,  34); ensure_equals( seq[2].x, 34 );
 		seq.setOrdinate(2, CoordinateSequence::Y,  -45); ensure_equals( seq[2].y, -45 );
 		seq.setOrdinate(2, CoordinateSequence::Z,  152); ensure_equals( seq[2].z, 152 );
+#ifdef GEOS_MVALUES
+		seq.setOrdinate(2, CoordinateSequence::M,  -163); ensure_equals( seq[2].m, -163 );
+#endif
 
-		// Index: 3 - Order: Y, Z, X
+		// Index: 3 - Order: Y, Z, X, M
 
 		seq.setOrdinate(3, CoordinateSequence::Y,  63); ensure_equals( seq[3].y, 63 );
 		seq.setOrdinate(3, CoordinateSequence::Z,  13); ensure_equals( seq[3].z, 13 );
 		seq.setOrdinate(3, CoordinateSequence::X,  -65); ensure_equals( seq[3].x, -65 );
+#ifdef GEOS_MVALUES
+		seq.setOrdinate(3, CoordinateSequence::M,  -13); ensure_equals( seq[3].m, -13 );
+#endif
 
 	}
 

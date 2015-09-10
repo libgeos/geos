@@ -127,6 +127,16 @@ private:
 	 * from a 3d vertex to the end.
 	 */
 	void propagateZ(geom::CoordinateSequence *cs);
+
+#ifdef GEOS_MVALUES
+	/*
+	 * If the given CoordinateSequence has mixed m and m-less vertexes
+	 * set M for all vertexes missing it.
+	 * The M value is interpolated between m vertexes and copied
+	 * from a m vertex to the end.
+	 */
+	void propagateM(geom::CoordinateSequence *cs);
+#endif
 };
 
 } // namespace geos::operation::overlay

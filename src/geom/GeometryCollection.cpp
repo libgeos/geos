@@ -147,6 +147,30 @@ GeometryCollection::getCoordinateDimension() const
 	return dimension;
 }
 
+bool
+GeometryCollection::getHasZ() const
+{
+	bool hasZ = false;
+	for (size_t i=0, n=geometries->size(); i<n; ++i)
+	{
+		hasZ|=(*geometries)[i]->getHasZ();
+	}
+	return hasZ;
+}
+
+#ifdef GEOS_MVALUES
+bool
+GeometryCollection::getHasM() const
+{
+	bool hasM = false;
+	for (size_t i=0, n=geometries->size(); i<n; ++i)
+	{
+		hasM|=(*geometries)[i]->getHasZ();
+	}
+	return hasM;
+}
+#endif
+
 size_t
 GeometryCollection::getNumGeometries() const
 {

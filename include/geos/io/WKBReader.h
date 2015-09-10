@@ -119,8 +119,8 @@ private:
 
 	const geom::GeometryFactory &factory;
 
-	// for now support the WKB standard only - may be generalized later
-	unsigned int inputDimension;
+	bool hasZ;
+	bool hasM;
 
 	ByteOrderDataInStream dis;
 

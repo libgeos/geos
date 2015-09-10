@@ -299,7 +299,11 @@ public:
 	static void reverse(CoordinateSequence *cl);
 
 	/// Standard ordinate index values
+#ifdef GEOS_MVALUES
 	enum { X,Y,Z,M };
+#else
+	enum { X,Y,Z };
+#endif
 
 	/**
 	 * Returns the dimension (number of ordinates in each coordinate)
@@ -308,6 +312,22 @@ public:
 	 * @return the dimension of the sequence.
 	 */
 	virtual std::size_t getDimension() const=0;
+
+	/**
+	 * Returns whether the coordinates in this sequence have a Z value.
+	 *
+	 * @return whether the coordinates in this sequence have a Z value.
+	 */
+	virtual bool getHasZ() const=0;
+
+#ifdef GEOS_MVALUES
+	/**
+	 * Returns whether the coordinates in this sequence have a M value.
+	 *
+	 * @return whether the coordinates in this sequence have a M value.
+	 */
+	virtual bool getHasM() const=0;
+#endif
 
 	/**
 	 * Returns the ordinate of a coordinate in this sequence.

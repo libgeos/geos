@@ -353,6 +353,21 @@ private:
 	 */
 	int mergeZ(geomgraph::Node *n, const geom::LineString *line) const;
 
+#ifdef GEOS_MVALUES
+	/** \brief
+	 * Merge M values of node with those of the segment or vertex in
+	 * the given Polygon it is on.
+	 */
+	int mergeM(geomgraph::Node *n, const geom::Polygon *poly) const;
+
+	/**
+	 * Merge M values of node with those of the segment or vertex in
+	 * the given LineString it is on.
+	 * @returns 1 if an intersection is found, 0 otherwise.
+	 */
+	int mergeM(geomgraph::Node *n, const geom::LineString *line) const;
+#endif
+
 	/**
 	 * Average Z of input geometries
 	 */
@@ -361,6 +376,17 @@ private:
 
 	double getAverageZ(int targetIndex);
 	static double getAverageZ(const geom::Polygon *poly);
+
+#ifdef GEOS_MVALUES
+	/**
+	 * Average M of input geometries
+	 */
+	double avgm[2];
+	bool avgmcomputed[2];
+
+	double getAverageM(int targetIndex);
+	static double getAverageM(const geom::Polygon *poly);
+#endif
 
 	ElevationMatrix *elevationMatrix;
 

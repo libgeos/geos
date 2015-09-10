@@ -71,23 +71,32 @@ WKTReader::read(const string &wellKnownText)
 CoordinateSequence*
 WKTReader::getCoordinates(StringTokenizer *tokenizer)
 {
-	size_t dim;
-	string nextToken=getNextEmptyOrOpener(tokenizer);
+	bool hasZ = false;
+	bool hasM = false;
+	string nextToken=getNextDimensionalityOrOpener(tokenizer, hasZ, hasM);
 	if (nextToken=="EMPTY") {
 		return geometryFactory->getCoordinateSequenceFactory()->create();
 		//new CoordinateArraySequence(); 
 	}
 
 	Coordinate coord;
-	getPreciseCoordinate(tokenizer, coord, dim);
+	getPreciseCoordinate(tokenizer, coord, hasZ, hasM);
 
+#ifdef GEOS_MVALUES
+	std::size_t dim = 2 + hasZ + hasM;
+	bool dim3isM = hasM && !hasZ;
+#else
+	std::size_t dim = 2 + hasZ;
+	bool dim3isM = false;
+#endif
 	CoordinateSequence *coordinates = \
-            geometryFactory->getCoordinateSequenceFactory()->create((size_t)0,dim);
+			geometryFactory->getCoordinateSequenceFactory()->create(
+				(size_t)0, dim, dim3isM);
 	coordinates->add(coord);
 	try {
 		nextToken=getNextCloserOrComma(tokenizer);
 		while (nextToken==",") {
-			getPreciseCoordinate(tokenizer, coord, dim );
+			getPreciseCoordinate(tokenizer, coord, hasZ, hasM );
 			coordinates->add(coord);
 			nextToken=getNextCloserOrComma(tokenizer);
 		}
@@ -102,21 +111,36 @@ WKTReader::getCoordinates(StringTokenizer *tokenizer)
 void
 WKTReader::getPreciseCoordinate(StringTokenizer *tokenizer, 
                                 Coordinate& coord,
-                                size_t &dim )
+                                bool& hasZ,
+                                bool hasM)
 {
 	coord.x=getNextNumber(tokenizer);
 	coord.y=getNextNumber(tokenizer);
+	coord.z=DoubleNotANumber;
+#ifdef GEOS_MVALUES
+	coord.m=DoubleNotANumber;
+#endif
 	if (isNumberNext(tokenizer)) {
-		coord.z=getNextNumber(tokenizer);
-		dim = 3;
-        
-        // If there is a fourth value (M) read and discard it.
-        if (isNumberNext(tokenizer)) 
-            getNextNumber(tokenizer);
-
-	} else {
-		coord.z=DoubleNotANumber;
-		dim = 2;
+		if(hasZ)
+			coord.z=getNextNumber(tokenizer);
+#ifdef GEOS_MVALUES
+		else if(hasM)
+			coord.m=getNextNumber(tokenizer);
+#endif
+		else {
+			// Old-style WKT, three values but no Z in type
+			hasZ = true;
+			coord.z=getNextNumber(tokenizer);
+		}
+	}
+	if (isNumberNext(tokenizer)) {
+#ifdef GEOS_MVALUES
+		if(hasZ && hasM)
+			coord.m=getNextNumber(tokenizer);
+		else
+#endif
+			// Discard bogous value
+			getNextNumber(tokenizer);
 	}
 	precisionModel->makePrecise(coord);
 }
@@ -152,14 +176,19 @@ WKTReader::getNextNumber(StringTokenizer *tokenizer)
 }
 
 string
-WKTReader::getNextEmptyOrOpener(StringTokenizer *tokenizer)
+WKTReader::getNextDimensionalityOrOpener(StringTokenizer *tokenizer, bool& hasZ, bool& hasM)
 {
 	string nextWord=getNextWord(tokenizer);
 
     // Skip the Z, M or ZM of an SF1.2 3/4 dim coordinate. 
-    if (nextWord == "Z" || nextWord == "M" || nextWord == "ZM" )
+	if (nextWord == "Z" || nextWord == "M" || nextWord == "ZM" ) {
+		hasZ = (nextWord == "Z" || nextWord == "ZM");
+		hasM = (nextWord == "M" || nextWord == "ZM");
         nextWord = getNextWord(tokenizer);
-
+	} else {
+		hasZ = false;
+		hasM = false;
+	}
 	if (nextWord=="EMPTY" || nextWord=="(") {
 		return nextWord;
 	}
@@ -247,14 +276,15 @@ WKTReader::readGeometryTaggedText(StringTokenizer *tokenizer)
 Point*
 WKTReader::readPointText(StringTokenizer *tokenizer)
 {
-	size_t dim;
-	string nextToken=getNextEmptyOrOpener(tokenizer);
+	bool hasZ = false;
+	bool hasM = false;
+	string nextToken=getNextDimensionalityOrOpener(tokenizer, hasZ, hasM);
 	if (nextToken=="EMPTY") {
 		return geometryFactory->createPoint(Coordinate::getNull());
 	}
 
 	Coordinate coord;
-	getPreciseCoordinate(tokenizer, coord, dim);
+	getPreciseCoordinate(tokenizer, coord, hasZ, hasM);
 	getNextCloser(tokenizer);
 
 	return geometryFactory->createPoint(coord);
@@ -276,7 +306,9 @@ LinearRing* WKTReader::readLinearRingText(StringTokenizer *tokenizer) {
 MultiPoint*
 WKTReader::readMultiPointText(StringTokenizer *tokenizer)
 {
-	string nextToken=getNextEmptyOrOpener(tokenizer);
+	bool hasZ = false;
+	bool hasM = false;
+	string nextToken=getNextDimensionalityOrOpener(tokenizer, hasZ, hasM);
 	if (nextToken=="EMPTY") {
 		return geometryFactory->createMultiPoint();
 	}
@@ -285,8 +317,6 @@ WKTReader::readMultiPointText(StringTokenizer *tokenizer)
 
 	if ( tok == StringTokenizer::TT_NUMBER )
 	{
-		size_t dim;
-
 		// Try to parse deprecated form "MULTIPOINT(0 0, 1 1)"
 		const CoordinateSequenceFactory* csf = \
 			geometryFactory->getCoordinateSequenceFactory();
@@ -294,7 +324,7 @@ WKTReader::readMultiPointText(StringTokenizer *tokenizer)
 		try {
 			do {
 				Coordinate coord;
-				getPreciseCoordinate(tokenizer, coord, dim);
+				getPreciseCoordinate(tokenizer, coord, hasZ, hasM);
 				coords->add(coord);
 				nextToken=getNextCloserOrComma(tokenizer);
 			} while(nextToken == ",");
@@ -365,11 +395,14 @@ WKTReader::readMultiPointText(StringTokenizer *tokenizer)
 }
 
 Polygon*
-WKTReader::readPolygonText(StringTokenizer *tokenizer)
+WKTReader
+::readPolygonText(StringTokenizer *tokenizer)
 {
 	Polygon *poly=NULL;
 	LinearRing *shell=NULL;
-	string nextToken=getNextEmptyOrOpener(tokenizer);
+	bool hasZ = false;
+	bool hasM = false;
+	string nextToken=getNextDimensionalityOrOpener(tokenizer, hasZ, hasM);
 	if (nextToken=="EMPTY") {
 		return geometryFactory->createPolygon(NULL,NULL);
 	}
@@ -395,7 +428,9 @@ WKTReader::readPolygonText(StringTokenizer *tokenizer)
 }
 
 MultiLineString* WKTReader::readMultiLineStringText(StringTokenizer *tokenizer) {
-	string nextToken=getNextEmptyOrOpener(tokenizer);
+	bool hasZ = false;
+	bool hasM = false;
+	string nextToken=getNextDimensionalityOrOpener(tokenizer, hasZ, hasM);
 	if (nextToken=="EMPTY") {
 		return geometryFactory->createMultiLineString(NULL);
 	}
@@ -415,7 +450,9 @@ MultiLineString* WKTReader::readMultiLineStringText(StringTokenizer *tokenizer) 
 }
 
 MultiPolygon* WKTReader::readMultiPolygonText(StringTokenizer *tokenizer) {
-	string nextToken=getNextEmptyOrOpener(tokenizer);
+	bool hasZ = false;
+	bool hasM = false;
+	string nextToken=getNextDimensionalityOrOpener(tokenizer, hasZ, hasM);
 	if (nextToken=="EMPTY") {
 		return geometryFactory->createMultiPolygon(NULL);
 	}
@@ -435,7 +472,9 @@ MultiPolygon* WKTReader::readMultiPolygonText(StringTokenizer *tokenizer) {
 }
 
 GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *tokenizer) {
-	string nextToken=getNextEmptyOrOpener(tokenizer);
+	bool hasZ = false;
+	bool hasM = false;
+	string nextToken=getNextDimensionalityOrOpener(tokenizer, hasZ, hasM);
 	if (nextToken=="EMPTY") {
 		return geometryFactory->createGeometryCollection(NULL);
 	}

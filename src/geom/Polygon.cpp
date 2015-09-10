@@ -163,6 +163,42 @@ Polygon::getCoordinateDimension() const
 	return dimension;
 }
 
+bool
+Polygon::getHasZ() const
+{
+	bool hasZ = false;
+
+	if( shell != NULL )
+		hasZ |= shell->getHasZ();
+
+	size_t nholes=holes->size();
+	for (size_t i=0; i<nholes; ++i)
+	{
+		hasZ |= (*holes)[i]->getHasZ();
+	}
+
+	return hasZ;
+}
+
+#ifdef GEOS_MVALUES
+bool
+Polygon::getHasM() const
+{
+	bool hasM = false;
+
+	if( shell != NULL )
+		hasM |= shell->getHasM();
+
+	size_t nholes=holes->size();
+	for (size_t i=0; i<nholes; ++i)
+	{
+		hasM |= (*holes)[i]->getHasM();
+	}
+
+	return hasM;
+}
+#endif
+
 int
 Polygon::getBoundaryDimension() const
 {

@@ -88,7 +88,7 @@ public:
 protected:
 	geom::CoordinateSequence* getCoordinates(io::StringTokenizer *tokenizer);
 	double getNextNumber(io::StringTokenizer *tokenizer);
-	std::string getNextEmptyOrOpener(io::StringTokenizer *tokenizer);
+	std::string getNextDimensionalityOrOpener(io::StringTokenizer *tokenizer, bool& hasZ, bool& hasM);
 	std::string getNextCloserOrComma(io::StringTokenizer *tokenizer);
 	std::string getNextCloser(io::StringTokenizer *tokenizer);
 	std::string getNextWord(io::StringTokenizer *tokenizer);
@@ -105,7 +105,7 @@ private:
 	const geom::GeometryFactory *geometryFactory;
 	const geom::PrecisionModel *precisionModel;
 
-	void getPreciseCoordinate(io::StringTokenizer *tokenizer, geom::Coordinate&, std::size_t &dim );
+	void getPreciseCoordinate(io::StringTokenizer *tokenizer, geom::Coordinate&, bool& hasZ , bool hasM);
 
 	bool isNumberNext(io::StringTokenizer *tokenizer);
 };

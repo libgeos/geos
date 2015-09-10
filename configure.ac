@@ -83,6 +83,15 @@ AC_ARG_ENABLE([inline], [  --disable-inline    Disable inlining],
 	[enable_inline=true]
 )
 
+AC_ARG_ENABLE([mvalues], [  --disable-mvalues    Disable M values support],
+	[case "${enableval}" in
+		yes) enable_mvalues=true ;;
+		no)  enable_mvalues=false ;;
+		*) AC_MSG_ERROR(bad value ${enableval} for --enable-mvalues);;
+	esac],
+	[enable_mvalues=true]
+)
+
 AC_ARG_ENABLE([cassert], [  --disable-cassert   Disable assertion checking],
 	[case "${enableval}" in
 		yes) enable_cassert=true ;;
@@ -109,6 +118,17 @@ if test x"$enable_inline" = xtrue; then
 	INLINE_FLAGS="-DGEOS_INLINE"
 	AM_CXXFLAGS="$AM_CXXFLAGS $INLINE_FLAGS"
     AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+fi
+
+AC_MSG_CHECKING([if requested to enable M values support])
+MVALUES_FLAGS=
+AC_SUBST(MVALUES_FLAGS)
+if test x"$enable_mvalues" = xtrue; then
+	MVALUES_FLAGS="-DGEOS_MVALUES"
+    AC_MSG_RESULT([yes])
+    AC_DEFINE(GEOS_MVALUES, [1], [Has M values support])
 else
     AC_MSG_RESULT([no])
 fi
@@ -525,6 +545,7 @@ AC_OUTPUT([
 
 dnl -- echo "---------------------------------------"
 dnl -- echo "Boost UTF: $use_boost_utf"
+echo "Enable M values: $enable_mvalues"
 echo "Swig: $use_swig"
 echo "Python bindings: $use_python"
 echo "Ruby bindings: $use_ruby"

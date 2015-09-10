@@ -13,6 +13,9 @@
 /* Set to 1 if you have ieeefp.h */
 #undef HAVE_IEEEFP_H
 
+/* Set to 1 if M values are supported */
+#undef GEOS_MVALUES
+
 /* Has finite */
 #undef HAVE_FINITE
 

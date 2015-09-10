@@ -51,6 +51,7 @@ namespace tut
         const int x_;
         const int y_;
         const int z_;
+        const int m_;
 
         const int srid_;
         geos::geom::PrecisionModel pm_;
@@ -58,7 +59,7 @@ namespace tut
         geos::io::WKTReader reader_;
 
         test_geometryfactory_data()
-            : x_(5), y_(10), z_(15), srid_(666), pm_(1.0), factory_(&pm_, srid_), reader_(&factory_)
+            : x_(5), y_(10), z_(15), m_(20), srid_(666), pm_(1.0), factory_(&pm_, srid_), reader_(&factory_)
         {}
     private:
         // Declare type as noncopyable
@@ -278,7 +279,11 @@ namespace tut
 	template<>
 	void object::test<9>()
 	{
+#ifdef GEOS_MVALUES
+		geos::geom::Coordinate coord(x_, y_, z_, m_);
+#else
 		geos::geom::Coordinate coord(x_, y_, z_);
+#endif
 
 		PointPtr pt = factory_.createPoint(coord);
 
@@ -293,6 +298,9 @@ namespace tut
 		ensure_equals( pcoord->x, x_ );
 		ensure_equals( pcoord->y, y_ );
 		ensure_equals( pcoord->z, z_ );
+#ifdef GEOS_MVALUES
+		ensure_equals( pcoord->m, m_ );
+#endif
 
 		GeometryPtr geo = 0;
 		geo = pt->getEnvelope();
@@ -331,7 +339,11 @@ namespace tut
 	template<>
 	void object::test<10>()
 	{
+#ifdef GEOS_MVALUES
+		geos::geom::Coordinate coord(x_, y_, z_, m_);
+#else
 		geos::geom::Coordinate coord(x_, y_, z_);
+#endif
 
 		CoordArrayPtr sequence = new geos::geom::CoordinateArraySequence();
 
@@ -351,6 +363,9 @@ namespace tut
 		ensure_equals( pcoord->x, x_ );
 		ensure_equals( pcoord->y, y_ );
 		ensure_equals( pcoord->z, z_ );
+#ifdef GEOS_MVALUES
+		ensure_equals( pcoord->m, m_ );
+#endif
 
 		GeometryPtr geo = 0;
 		geo = pt->getEnvelope();
@@ -389,7 +404,11 @@ namespace tut
 	template<>
 	void object::test<11>()
 	{
+#ifdef GEOS_MVALUES
+		geos::geom::Coordinate coord(x_, y_, z_, m_);
+#else
 		geos::geom::Coordinate coord(x_, y_, z_);
+#endif
 
 		geos::geom::CoordinateArraySequence sequence;
 		sequence.add(coord);
@@ -407,6 +426,9 @@ namespace tut
 		ensure_equals( pcoord->x, x_ );
 		ensure_equals( pcoord->y, y_ );
 		ensure_equals( pcoord->z, z_ );
+#ifdef GEOS_MVALUES
+		ensure_equals( pcoord->m, m_ );
+#endif
 
 		GeometryPtr geo = 0;
 		geo = pt->getEnvelope();
@@ -840,7 +862,11 @@ namespace tut
 		std::vector<GeometryPtr>* vec = new std::vector<GeometryPtr>();
 
 		// Add single point
+#ifdef GEOS_MVALUES
+		Coordinate coord(x_, y_, z_, m_);
+#else
 		Coordinate coord(x_, y_, z_);
+#endif
 		GeometryPtr point = factory_.createPoint(coord);
 		ensure( point != 0 );
 		vec->push_back(point);
@@ -871,7 +897,11 @@ namespace tut
 	void object::test<23>()
 	{
 		const std::size_t size = 3;
+#ifdef GEOS_MVALUES
+		geos::geom::Coordinate coord(x_, y_, z_, m_);
+#else
 		geos::geom::Coordinate coord(x_, y_, z_);
+#endif
 
 		std::vector<GeometryPtr> vec;
 
@@ -882,12 +912,18 @@ namespace tut
 		coord.x *= 2;
 		coord.y *= 2;
 		coord.z *= 2;
+#ifdef GEOS_MVALUES
+		coord.m *= 2;
+#endif
 		geo = factory_.createPoint(coord);
 		vec.push_back(geo);
 
 		coord.x *= 3;
 		coord.y *= 3;
 		coord.z *= 3;
+#ifdef GEOS_MVALUES
+		coord.m *= 3;
+#endif
 		geo = factory_.createPoint(coord);
 		vec.push_back(geo);
 
@@ -955,7 +991,11 @@ namespace tut
 	void object::test<25>()
 	{
 		const std::size_t size = 3;
+#ifdef GEOS_MVALUES
+		geos::geom::Coordinate coord(x_, y_, z_, m_);
+#else
 		geos::geom::Coordinate coord(x_, y_, z_);
+#endif
 
 		std::vector<GeometryPtr>* vec = new std::vector<GeometryPtr>();
 
@@ -967,6 +1007,9 @@ namespace tut
 		coord.x *= 2;
 		coord.y *= 2;
 		coord.z *= 2;
+#ifdef GEOS_MVALUES
+		coord.m *= 2;
+#endif
 		geo = factory_.createPoint(coord);
 		ensure( geo != 0 );
 		vec->push_back(geo);
@@ -974,6 +1017,9 @@ namespace tut
 		coord.x *= 3;
 		coord.y *= 3;
 		coord.z *= 3;
+#ifdef GEOS_MVALUES
+		coord.m *= 3;
+#endif
 		geo = factory_.createPoint(coord);
 		ensure( geo != 0 );
 		vec->push_back(geo);
@@ -996,7 +1042,11 @@ namespace tut
 	void object::test<26>()
 	{
 		const std::size_t size = 3;
+#ifdef GEOS_MVALUES
+		geos::geom::Coordinate coord(x_, y_, z_, m_);
+#else
 		geos::geom::Coordinate coord(x_, y_, z_);
+#endif
 
 		std::vector<GeometryPtr> vec;
 
@@ -1007,12 +1057,18 @@ namespace tut
 		coord.x *= 2;
 		coord.y *= 2;
 		coord.z *= 2;
+#ifdef GEOS_MVALUES
+		coord.m *= 2;
+#endif
 		geo = factory_.createPoint(coord);
 		vec.push_back(geo);
 
 		coord.x *= 3;
 		coord.y *= 3;
 		coord.z *= 3;
+#ifdef GEOS_MVALUES
+		coord.m *= 3;
+#endif
 		geo = factory_.createPoint(coord);
 		vec.push_back(geo);
 
@@ -1246,7 +1302,11 @@ namespace tut
 		typedef std::vector<PointPtr> PointVect;
 
 		const std::size_t size = 3;
+#ifdef GEOS_MVALUES
+		geos::geom::Coordinate coord(x_, y_, z_, m_);
+#else
 		geos::geom::Coordinate coord(x_, y_, z_);
+#endif
 
 		PointVect vec;
 
@@ -1257,12 +1317,18 @@ namespace tut
 		coord.x *= 2;
 		coord.y *= 2;
 		coord.z *= 2;
+#ifdef GEOS_MVALUES
+		coord.m *= 2;
+#endif
 		geo = factory_.createPoint(coord);
 		vec.push_back(geo);
 
 		coord.x *= 3;
 		coord.y *= 3;
 		coord.z *= 3;
+#ifdef GEOS_MVALUES
+		coord.m *= 3;
+#endif
 		geo = factory_.createPoint(coord);
 		vec.push_back(geo);
 

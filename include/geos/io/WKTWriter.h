@@ -161,11 +161,19 @@ public:
 	/*
 	 * Sets the output dimension used by the <code>WKBWriter</code>.  
 	 *
-	 * @param newOutputDimension Supported values are 2 or 3. 
-	 *        Note that 3 indicates up to 3 dimensions will be
-	 *        written but 2D WKB is still produced for 2D geometries.
+	 * @param newOutputDimension Supported values are 2, 3 or 4.
+	 *        If the geometry has XYZ values, 3 indicates that a 3DZ WKT will be
+	 *        produced.
+	 *        If the geometry has XYM values, 3 indicates that a 3DM WKT will
+	 *        be produced.
+	 *        If the geometry has XYZM values, 3 indicates that a 3DZ WKT will
+	 *        be produced, unless preferM = true.
+	 *        If the geometry has only XY values, a 2D WKT will be produced
+	 *        regardless of the passed value.
+	 * @param preferM Whether to write M values instead of Z values if
+	 *                newOutputDimensions = 3 and geometry has XYZM values.
 	 */
-	void setOutputDimension(int newOutputDimension);
+	void setOutputDimension(int newOutputDimension, bool preferM = false);
 	
 protected:
 
@@ -254,7 +262,9 @@ private:
 	int level;
 
 	int defaultOutputDimension;
-    int outputDimension;
+	bool defaultOutputPreferM;
+	bool outputZ;
+	bool outputM;
     bool old3D;
 
 	void writeFormatted(

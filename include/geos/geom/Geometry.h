@@ -300,8 +300,17 @@ public:
 	/// Returns the dimension of this Geometry (0=point, 1=line, 2=surface)
 	virtual Dimension::DimensionType getDimension() const=0; //Abstract
 
-	/// Returns the coordinate dimension of this Geometry (2=XY, 3=XYZ, 4=XYZM in future).
+	/// Returns the coordinate dimension of this Geometry (2=XY, 3=XYZ or XYM, 4=XYZM).
+	/// @see getHasZ and getHasM to distinguish between XYZ and XYM.
 	virtual int getCoordinateDimension() const=0; //Abstract
+
+	/// Returns whether this Geometry has Z values.
+	virtual bool getHasZ() const=0;
+
+#ifdef GEOS_MVALUES
+	/// Returns whether this Geometry has M values.
+	virtual bool getHasM() const=0;
+#endif
 
 	/**
 	 * \brief

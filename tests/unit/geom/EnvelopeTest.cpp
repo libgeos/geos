@@ -146,11 +146,18 @@ namespace tut
         ensure( !small.contains( 5, 5 ) );
 
         // Test coordinate
+#ifdef GEOS_MVALUES
+        geos::geom::Coordinate origin(0, 0, 0, 0);
+#else
         geos::geom::Coordinate origin(0, 0, 0);
+#endif
 
         ensure_equals( origin.x, 0 );
         ensure_equals( origin.y, 0 );
         ensure_equals( origin.z, 0 );
+#ifdef GEOS_MVALUES
+        ensure_equals( origin.m, 0 );
+#endif
         ensure( small.contains( origin ) );
     }
 
@@ -185,11 +192,18 @@ namespace tut
         ensure( !with_origin.intersects( -200, 200 ) );
 
         // Test intersection with coordinate
+#ifdef GEOS_MVALUES
+        geos::geom::Coordinate origin(0, 0, 0, 0);
+#else
         geos::geom::Coordinate origin(0, 0, 0);
+#endif
 
         ensure_equals( origin.x, 0 );
         ensure_equals( origin.y, 0 );
         ensure_equals( origin.z, 0 );
+#ifdef GEOS_MVALUES
+        ensure_equals( origin.m, 0 );
+#endif
         ensure( with_origin.intersects( origin ) );
 
     }

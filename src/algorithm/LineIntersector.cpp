@@ -48,6 +48,14 @@
 #define COMPUTE_Z 1
 #endif // COMPUTE_Z
 
+#ifdef GEOS_MVALUES
+# ifndef COMPUTE_M
+#  define COMPUTE_M 1
+# endif // COMPUTE_M
+#else
+# undef COMPUTE_M
+#endif
+
 using namespace std;
 
 using namespace geos::geom;
@@ -328,6 +336,74 @@ LineIntersector::interpolateZ(const Coordinate &p,
 
 }
 
+#ifdef GEOS_MVALUES
+/*public static*/
+double
+LineIntersector::interpolateM(const Coordinate &p,
+	const Coordinate &p1, const Coordinate &p2)
+{
+#if GEOS_DEBUG
+	cerr<<"LineIntersector::interpolateM("<<p.toString()<<", "<<p1.toString()<<", "<<p2.toString()<<")"<<endl;
+#endif
+
+	if ( ISNAN(p1.m) )
+	{
+#if GEOS_DEBUG
+		cerr<<" p1 do not have a M"<<endl;
+#endif
+		return p2.m; // might be DoubleNotANumber again
+	}
+
+	if ( ISNAN(p2.m) )
+	{
+#if GEOS_DEBUG
+		cerr<<" p2 do not have a M"<<endl;
+#endif
+		return p1.m; // might be DoubleNotANumber again
+	}
+
+	if (p==p1)
+	{
+#if GEOS_DEBUG
+		cerr<<" p==p1, returning "<<p1.m<<endl;
+#endif
+		return p1.m;
+	}
+	if (p==p2)
+	{
+#if GEOS_DEBUG
+		cerr<<" p==p2, returning "<<p2.m<<endl;
+#endif
+		return p2.m;
+	}
+
+	//double mgap = fabs(p2.m - p1.m);
+	double mgap = p2.m - p1.m;
+	if ( ! mgap )
+	{
+#if GEOS_DEBUG
+		cerr<<" no mgap, returning "<<p2.m<<endl;
+#endif
+		return p2.m;
+	}
+	double xoff = (p2.x-p1.x);
+	double yoff = (p2.y-p1.y);
+	double seglen = (xoff*xoff+yoff*yoff);
+	xoff = (p.x-p1.x);
+	yoff = (p.y-p1.y);
+	double pdist = (xoff*xoff+yoff*yoff);
+	double fract = sqrt(pdist/seglen);
+	double moff = mgap*fract;
+	//double interpolated = p1.m < p2.m ? p1.m+moff : p1.m-moff;
+	double interpolated = p1.m+moff;
+#if GEOS_DEBUG
+	cerr<<" mgap:"<<mgap<<" seglen:"<<seglen<<" pdist:"<<pdist
+		<<" fract:"<<fract<<" m:"<<interpolated<<endl;
+#endif
+	return interpolated;
+
+}
+#endif
 
 /*public*/
 void
@@ -344,8 +420,8 @@ LineIntersector::computeIntersection(const Coordinate& p,const Coordinate& p1,co
 			{
 				isProperVar=false;
 			}
-#if COMPUTE_Z
 			intPt[0]=p;
+#if COMPUTE_Z
 #if GEOS_DEBUG
 			cerr<<"RobustIntersector::computeIntersection(Coordinate,Coordinate,Coordinate) calling interpolateZ"<<endl;
 #endif
@@ -358,6 +434,19 @@ LineIntersector::computeIntersection(const Coordinate& p,const Coordinate& p1,co
 					intPt[0].z = (intPt[0].z+z)/2;
 			}
 #endif // COMPUTE_Z
+#if COMPUTE_M
+#if GEOS_DEBUG
+			cerr<<"RobustIntersector::computeIntersection(Coordinate,Coordinate,Coordinate) calling interpolateZ"<<endl;
+#endif
+			double m = interpolateM(p, p1, p2);
+			if ( !ISNAN(m) )
+			{
+				if ( ISNAN(intPt[0].m) )
+					intPt[0].m = m;
+				else
+					intPt[0].m = (intPt[0].m+m)/2;
+			}
+#endif // COMPUTE_M
 			result=POINT_INTERSECTION;
 			return;
 		}
@@ -447,8 +536,12 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 	 */
 	if (Pq1==0 || Pq2==0 || Qp1==0 || Qp2==0) {
 #if COMPUTE_Z
-		int hits=0;
+		int hitsz=0;
 		double z=0.0;
+#endif
+#if COMPUTE_M
+		int hitsm=0;
+		double m=0.0;
 #endif
 		isProperVar=false;
 
@@ -475,7 +568,14 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 			if ( !ISNAN(p1.z) )
 			{
 				z += p1.z;
-				hits++;
+				hitsz++;
+			}
+#endif
+#if COMPUTE_M
+			if ( !ISNAN(p1.m) )
+			{
+				m += p1.m;
+				hitsm++;
 			}
 #endif
 		}
@@ -485,7 +585,14 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 			if ( !ISNAN(p2.z) )
 			{
 				z += p2.z;
-				hits++;
+				hitsz++;
+			}
+#endif
+#if COMPUTE_M
+			if ( !ISNAN(p2.m) )
+			{
+				m += p2.m;
+				hitsm++;
 			}
 #endif
 		}
@@ -499,7 +606,14 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 			if ( !ISNAN(q1.z) )
 			{
 				z += q1.z;
-				hits++;
+				hitsz++;
+			}
+#endif
+#if COMPUTE_M
+			if ( !ISNAN(q1.m) )
+			{
+				m += q1.m;
+				hitsm++;
 			}
 #endif
 		}
@@ -509,7 +623,14 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 			if ( !ISNAN(q2.z) )
 			{
 				z += q2.z;
-				hits++;
+				hitsz++;
+			}
+#endif
+#if COMPUTE_M
+			if ( !ISNAN(q2.m) )
+			{
+				m += q2.m;
+				hitsm++;
 			}
 #endif
 		}
@@ -519,7 +640,14 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 			if ( !ISNAN(p1.z) )
 			{
 				z += p1.z;
-				hits++;
+				hitsz++;
+			}
+#endif
+#if COMPUTE_M
+			if ( !ISNAN(p1.m) )
+			{
+				m += p1.m;
+				hitsm++;
 			}
 #endif
 		}
@@ -529,16 +657,29 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 			if ( !ISNAN(p2.z) )
 			{
 				z += p2.z;
-				hits++;
+				hitsz++;
+			}
+#endif
+#if COMPUTE_M
+			if ( !ISNAN(p2.m) )
+			{
+				m += p2.m;
+				hitsm++;
 			}
 #endif
 		}
 #if COMPUTE_Z
 #if GEOS_DEBUG
-		cerr<<"LineIntersector::computeIntersect: z:"<<z<<" hits:"<<hits<<endl;
+		cerr<<"LineIntersector::computeIntersect: z:"<<z<<" hits:"<<hitsz<<endl;
 #endif // GEOS_DEBUG
-		if ( hits ) intPt[0].z = z/hits;
+		if ( hitsz ) intPt[0].z = z/hitsz;
 #endif // COMPUTE_Z
+#if COMPUTE_M
+#if GEOS_DEBUG
+		cerr<<"LineIntersector::computeIntersect: m:"<<m<<" hits:"<<hitsm<<endl;
+#endif // GEOS_DEBUG
+		if ( hitsm ) intPt[0].m = m/hitsm;
+#endif // COMPUTE_M
 	} else {
 		isProperVar=true;
 		intersection(p1, p2, q1, q2, intPt[0]);
@@ -555,12 +696,20 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 {
 #if COMPUTE_Z
 	double ztot;
-	int hits;
+	int hitsz;
 	double p2z;
 	double p1z;
 	double q1z;
 	double q2z;
-#endif // COMPUTE_Z
+#endif // COMPUTE_M
+#if COMPUTE_M
+	double mtot;
+	int hitsm;
+	double p2m;
+	double p1m;
+	double q1m;
+	double q2m;
+#endif // COMPUTE_M
 
 #if GEOS_DEBUG
 	cerr<<"LineIntersector::computeCollinearIntersection called"<<endl;
@@ -579,20 +728,36 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		intPt[0]=q1;
 #if COMPUTE_Z
 		ztot=0;
-		hits=0;
+		hitsz=0;
 		q1z = interpolateZ(q1, p1, p2);
-		if (!ISNAN(q1z)) { ztot+=q1z; hits++; }
-		if (!ISNAN(q1.z)) { ztot+=q1.z; hits++; }
-		if ( hits ) intPt[0].z = ztot/hits;
+		if (!ISNAN(q1z)) { ztot+=q1z; hitsz++; }
+		if (!ISNAN(q1.z)) { ztot+=q1.z; hitsz++; }
+		if ( hitsz ) intPt[0].z = ztot/hitsz;
+#endif
+#if COMPUTE_M
+		mtot=0;
+		hitsm=0;
+		q1m = interpolateM(q1, p1, p2);
+		if (!ISNAN(q1m)) { mtot+=q1m; hitsm++; }
+		if (!ISNAN(q1.m)) { mtot+=q1.m; hitsm++; }
+		if ( hitsm ) intPt[0].m = mtot/hitsm;
 #endif
 		intPt[1]=q2;
 #if COMPUTE_Z
 		ztot=0;
-		hits=0;
+		hitsz=0;
 		q2z = interpolateZ(q2, p1, p2);
-		if (!ISNAN(q2z)) { ztot+=q2z; hits++; }
-		if (!ISNAN(q2.z)) { ztot+=q2.z; hits++; }
-		if ( hits ) intPt[1].z = ztot/hits;
+		if (!ISNAN(q2z)) { ztot+=q2z; hitsz++; }
+		if (!ISNAN(q2.z)) { ztot+=q2.z; hitsz++; }
+		if ( hitsz ) intPt[1].z = ztot/hitsz;
+#endif
+#if COMPUTE_M
+		mtot=0;
+		hitsm=0;
+		q2m = interpolateM(q2, p1, p2);
+		if (!ISNAN(q2m)) { mtot+=q2m; hitsm++; }
+		if (!ISNAN(q2.m)) { mtot+=q2.m; hitsm++; }
+		if ( hitsm ) intPt[1].m = mtot/hitsm;
 #endif
 #if GEOS_DEBUG
 		cerr<<" intPt[0]: "<<intPt[0].toString()<<endl;
@@ -607,20 +772,36 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		intPt[0]=p1;
 #if COMPUTE_Z
 		ztot=0;
-		hits=0;
+		hitsz=0;
 		p1z = interpolateZ(p1, q1, q2);
-		if (!ISNAN(p1z)) { ztot+=p1z; hits++; }
-		if (!ISNAN(p1.z)) { ztot+=p1.z; hits++; }
-		if ( hits ) intPt[0].z = ztot/hits;
+		if (!ISNAN(p1z)) { ztot+=p1z; hitsz++; }
+		if (!ISNAN(p1.z)) { ztot+=p1.z; hitsz++; }
+		if ( hitsz ) intPt[0].z = ztot/hitsz;
+#endif
+#if COMPUTE_M
+		mtot=0;
+		hitsm=0;
+		p1m = interpolateM(p1, q1, q2);
+		if (!ISNAN(p1m)) { mtot+=p1m; hitsm++; }
+		if (!ISNAN(p1.m)) { mtot+=p1.m; hitsm++; }
+		if ( hitsm ) intPt[0].m = mtot/hitsm;
 #endif
 		intPt[1]=p2;
 #if COMPUTE_Z
 		ztot=0;
-		hits=0;
+		hitsz=0;
 		p2z = interpolateZ(p2, q1, q2);
-		if (!ISNAN(p2z)) { ztot+=p2z; hits++; }
-		if (!ISNAN(p2.z)) { ztot+=p2.z; hits++; }
-		if ( hits ) intPt[1].z = ztot/hits;
+		if (!ISNAN(p2z)) { ztot+=p2z; hitsz++; }
+		if (!ISNAN(p2.z)) { ztot+=p2.z; hitsz++; }
+		if ( hitsz ) intPt[1].z = ztot/hitsz;
+#endif
+#if COMPUTE_M
+		mtot=0;
+		hitsm=0;
+		p2m = interpolateM(p2, q1, q2);
+		if (!ISNAN(p2m)) { mtot+=p2m; hitsm++; }
+		if (!ISNAN(p2.m)) { mtot+=p2.m; hitsm++; }
+		if ( hitsm ) intPt[1].m = mtot/hitsm;
 #endif
 		return COLLINEAR_INTERSECTION;
 	}
@@ -631,20 +812,36 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		intPt[0]=q1;
 #if COMPUTE_Z
 		ztot=0;
-		hits=0;
+		hitsz=0;
 		q1z = interpolateZ(q1, p1, p2);
-		if (!ISNAN(q1z)) { ztot+=q1z; hits++; }
-		if (!ISNAN(q1.z)) { ztot+=q1.z; hits++; }
-		if ( hits ) intPt[0].z = ztot/hits;
+		if (!ISNAN(q1z)) { ztot+=q1z; hitsz++; }
+		if (!ISNAN(q1.z)) { ztot+=q1.z; hitsz++; }
+		if ( hitsz ) intPt[0].z = ztot/hitsz;
+#endif
+#if COMPUTE_M
+		mtot=0;
+		hitsm=0;
+		q1m = interpolateM(q1, p1, p2);
+		if (!ISNAN(q1m)) { mtot+=q1m; hitsm++; }
+		if (!ISNAN(q1.m)) { mtot+=q1.m; hitsm++; }
+		if ( hitsm ) intPt[0].m = mtot/hitsm;
 #endif
 		intPt[1]=p1;
 #if COMPUTE_Z
 		ztot=0;
-		hits=0;
+		hitsz=0;
 		p1z = interpolateZ(p1, q1, q2);
-		if (!ISNAN(p1z)) { ztot+=p1z; hits++; }
-		if (!ISNAN(p1.z)) { ztot+=p1.z; hits++; }
-		if ( hits ) intPt[1].z = ztot/hits;
+		if (!ISNAN(p1z)) { ztot+=p1z; hitsz++; }
+		if (!ISNAN(p1.z)) { ztot+=p1.z; hitsz++; }
+		if ( hitsz ) intPt[1].z = ztot/hitsz;
+#endif
+#if COMPUTE_M
+		mtot=0;
+		hitsm=0;
+		p1m = interpolateM(p1, q1, q2);
+		if (!ISNAN(p1m)) { mtot+=p1m; hitsm++; }
+		if (!ISNAN(p1.m)) { mtot+=p1.m; hitsm++; }
+		if ( hitsm ) intPt[1].m = mtot/hitsm;
 #endif
 #if GEOS_DEBUG
 		cerr<<" intPt[0]: "<<intPt[0].toString()<<endl;
@@ -659,20 +856,36 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		intPt[0]=q1;
 #if COMPUTE_Z
 		ztot=0;
-		hits=0;
+		hitsz=0;
 		q1z = interpolateZ(q1, p1, p2);
-		if (!ISNAN(q1z)) { ztot+=q1z; hits++; }
-		if (!ISNAN(q1.z)) { ztot+=q1.z; hits++; }
-		if ( hits ) intPt[0].z = ztot/hits;
+		if (!ISNAN(q1z)) { ztot+=q1z; hitsz++; }
+		if (!ISNAN(q1.z)) { ztot+=q1.z; hitsz++; }
+		if ( hitsz ) intPt[0].z = ztot/hitsz;
+#endif
+#if COMPUTE_M
+		mtot=0;
+		hitsm=0;
+		q1m = interpolateM(q1, p1, p2);
+		if (!ISNAN(q1m)) { mtot+=q1m; hitsm++; }
+		if (!ISNAN(q1.m)) { mtot+=q1.m; hitsm++; }
+		if ( hitsm ) intPt[0].m = mtot/hitsm;
 #endif
 		intPt[1]=p2;
 #if COMPUTE_Z
 		ztot=0;
-		hits=0;
+		hitsz=0;
 		p2z = interpolateZ(p2, q1, q2);
-		if (!ISNAN(p2z)) { ztot+=p2z; hits++; }
-		if (!ISNAN(p2.z)) { ztot+=p2.z; hits++; }
-		if ( hits ) intPt[1].z = ztot/hits;
+		if (!ISNAN(p2z)) { ztot+=p2z; hitsz++; }
+		if (!ISNAN(p2.z)) { ztot+=p2.z; hitsz++; }
+		if ( hitsz ) intPt[1].z = ztot/hitsz;
+#endif
+#if COMPUTE_M
+		mtot=0;
+		hitsm=0;
+		p2m = interpolateM(p2, q1, q2);
+		if (!ISNAN(p2m)) { mtot+=p2m; hitsm++; }
+		if (!ISNAN(p2.m)) { mtot+=p2.m; hitsm++; }
+		if ( hitsm ) intPt[1].m = mtot/hitsm;
 #endif
 #if GEOS_DEBUG
 		cerr<<" intPt[0]: "<<intPt[0].toString()<<endl;
@@ -687,20 +900,36 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		intPt[0]=q2;
 #if COMPUTE_Z
 		ztot=0;
-		hits=0;
+		hitsz=0;
 		q2z = interpolateZ(q2, p1, p2);
-		if (!ISNAN(q2z)) { ztot+=q2z; hits++; }
-		if (!ISNAN(q2.z)) { ztot+=q2.z; hits++; }
-		if ( hits ) intPt[0].z = ztot/hits;
+		if (!ISNAN(q2z)) { ztot+=q2z; hitsz++; }
+		if (!ISNAN(q2.z)) { ztot+=q2.z; hitsz++; }
+		if ( hitsz ) intPt[0].z = ztot/hitsz;
+#endif
+#if COMPUTE_M
+		mtot=0;
+		hitsm=0;
+		q2m = interpolateM(q2, p1, p2);
+		if (!ISNAN(q2m)) { mtot+=q2m; hitsm++; }
+		if (!ISNAN(q2.m)) { mtot+=q2.m; hitsm++; }
+		if ( hitsm ) intPt[0].m = mtot/hitsm;
 #endif
 		intPt[1]=p1;
 #if COMPUTE_Z
 		ztot=0;
-		hits=0;
+		hitsz=0;
 		p1z = interpolateZ(p1, q1, q2);
-		if (!ISNAN(p1z)) { ztot+=p1z; hits++; }
-		if (!ISNAN(p1.z)) { ztot+=p1.z; hits++; }
-		if ( hits ) intPt[1].z = ztot/hits;
+		if (!ISNAN(p1z)) { ztot+=p1z; hitsz++; }
+		if (!ISNAN(p1.z)) { ztot+=p1.z; hitsz++; }
+		if ( hitsz ) intPt[1].z = ztot/hitsz;
+#endif
+#if COMPUTE_M
+		mtot=0;
+		hitsm=0;
+		p1m = interpolateM(p1, q1, q2);
+		if (!ISNAN(p1m)) { mtot+=p1m; hitsm++; }
+		if (!ISNAN(p1.m)) { mtot+=p1.m; hitsm++; }
+		if ( hitsm ) intPt[1].m = mtot/hitsm;
 #endif
 #if GEOS_DEBUG
 		cerr<<" intPt[0]: "<<intPt[0].toString()<<endl;
@@ -715,20 +944,37 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		intPt[0]=q2;
 #if COMPUTE_Z
 		ztot=0;
-		hits=0;
+		hitsz=0;
 		q2z = interpolateZ(q2, p1, p2);
-		if (!ISNAN(q2z)) { ztot+=q2z; hits++; }
-		if (!ISNAN(q2.z)) { ztot+=q2.z; hits++; }
-		if ( hits ) intPt[0].z = ztot/hits;
+		if (!ISNAN(q2z)) { ztot+=q2z; hitsz++; }
+		if (!ISNAN(q2.z)) { ztot+=q2.z; hitsz++; }
+		if ( hitsz ) intPt[0].z = ztot/hitsz;
+#endif
+#if COMPUTE_M
+		mtot=0;
+		hitsm=0;
+		q2m = interpolateM(q2, p1, p2);
+		if (!ISNAN(q2m)) { mtot+=q2m; hitsm++; }
+		if (!ISNAN(q2.m)) { mtot+=q2.m; hitsm++; }
+		if ( hitsm ) intPt[0].m = mtot/hitsm;
 #endif
 		intPt[1]=p2;
 #if COMPUTE_Z
 		ztot=0;
-		hits=0;
+		hitsz=0;
 		p2z = interpolateZ(p2, q1, q2);
-		if (!ISNAN(p2z)) { ztot+=p2z; hits++; }
-		if (!ISNAN(p2.z)) { ztot+=p2.z; hits++; }
-		if ( hits ) intPt[1].z = ztot/hits;
+		if (!ISNAN(p2z)) { ztot+=p2z; hitsz++; }
+		if (!ISNAN(p2.z)) { ztot+=p2.z; hitsz++; }
+		if ( hitsz ) intPt[1].z = ztot/hitsz;
+#endif
+
+#if COMPUTE_M
+		mtot=0;
+		hitsm=0;
+		p2m = interpolateM(p2, q1, q2);
+		if (!ISNAN(p2m)) { mtot+=p2m; hitsm++; }
+		if (!ISNAN(p2.m)) { mtot+=p2.m; hitsm++; }
+		if ( hitsm ) intPt[1].m = mtot/hitsm;
 #endif
 #if GEOS_DEBUG
 		cerr<<" intPt[0]: "<<intPt[0].toString()<<endl;
@@ -787,6 +1033,16 @@ LineIntersector::intersection(const Coordinate& p1,
 	if ( !ISNAN(zq)) { ztot += zq; zvals++; }
 	if ( zvals ) intPt.z = ztot/zvals;
 #endif // COMPUTE_Z
+
+#if COMPUTE_M
+	double mtot = 0;
+	double mvals = 0;
+	double mp = interpolateM(intPt, p1, p2);
+	double mq = interpolateM(intPt, q1, q2);
+	if ( !ISNAN(mp)) { mtot += mp; mvals++; }
+	if ( !ISNAN(mq)) { mtot += mq; mvals++; }
+	if ( mvals ) intPt.m = mtot/mvals;
+#endif // COMPUTE_M
 
 }
 
@@ -883,6 +1139,21 @@ LineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 	n01.z -= normPt.z;
 	n10.z -= normPt.z;
 	n11.z -= normPt.z;
+#endif
+
+#if COMPUTE_M
+	double minM0 = n00.m < n01.m ? n00.m : n01.m;
+	double minM1 = n10.m < n11.m ? n10.m : n11.m;
+	double maxM0 = n00.m > n01.m ? n00.m : n01.m;
+	double maxM1 = n10.m > n11.m ? n10.m : n11.m;
+	double intMinM = minM0 > minM1 ? minM0 : minM1;
+	double intMaxM = maxM0 < maxM1 ? maxM0 : maxM1;
+	double intMidM = (intMinM + intMaxM) / 2.0;
+	normPt.m = intMidM;
+	n00.m -= normPt.m;
+	n01.m -= normPt.m;
+	n10.m -= normPt.m;
+	n11.m -= normPt.m;
 #endif
 }
 

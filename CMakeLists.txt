@@ -61,6 +61,9 @@ option(GEOS_ENABLE_TESTS
 option(GEOS_ENABLE_INLINE
   "Set to OFF|ON (default) to control GEOS compilation with small functions inlining" ON)
 
+option(GEOS_ENABLE_M
+  "Set to OFF|ON (default) to control whether geos supports M values" ON)
+
 if(NOT MSVC)
   option(GEOS_ENABLE_ASSERT
     "Set to ON|OFF (default) to build GEOS with assert() macro enabled" OFF) 
@@ -145,6 +148,12 @@ if(GEOS_ENABLE_INLINE)
 endif()
 message(STATUS
   "Setting GEOS compilation with small functions inlining - ${GEOS_ENABLE_INLINE}")
+
+if(GEOS_ENABLE_M)
+  set(GEOS_MVALUES 1)
+endif()
+message(STATUS
+  "Setting GEOS compilation with M support - ${GEOS_ENABLE_M}")
 
 if(NOT MSVC)
   if(GEOS_ENABLE_ASSERT)

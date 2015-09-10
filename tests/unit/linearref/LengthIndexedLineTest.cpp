@@ -388,7 +388,7 @@ void object::test<24>()
 }
 
 /**
- * Tests that if the input does not have Z ordinates, neither does the output.
+ * Tests that if the input does not have Z and M ordinates, neither does the output.
  *
  */
 // testComputeZNaN()
@@ -402,6 +402,9 @@ void object::test<25>()
     double projIndex = indexedLine.project(Coordinate(5, 5));
     Coordinate projPt = indexedLine.extractPoint(projIndex);
     ensure(0 != ISNAN(projPt.z));
+#ifdef GEOS_MVALUES
+    ensure(0 != ISNAN(projPt.m));
+#endif
 }
 
 /**

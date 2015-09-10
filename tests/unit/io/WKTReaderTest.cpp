@@ -38,7 +38,6 @@ namespace tut
 			gf(&pm),
 			wktreader(&gf)
 		{
-            wktwriter.setOutputDimension( 3 );
         }
 
 	};
@@ -93,7 +92,7 @@ namespace tut
             delete coords;
     }
 
-	// 4 - Ensure we can read ZM geometries, just discarding the M.
+	// 4 - Ensure we can read ZM geometries (discarding M if GEOS compiled without M support)
 	template<>
 	template<>
 	void object::test<4>()
@@ -101,11 +100,17 @@ namespace tut
             GeomPtr geom(wktreader.read("LINESTRING ZM (-117 33 2 3, -116 34 4 5)"));
             geos::geom::CoordinateSequence *coords = geom->getCoordinates();
 
-            ensure( coords->getDimension() == 3 );
-
+#ifdef GEOS_MVALUES
+            ensure( coords->getDimension() == 4 );
+            wktwriter.setOutputDimension( 4 );
             ensure_equals( wktwriter.write(geom.get()), 
-                           std::string("LINESTRING Z (-117 33 2, -116 34 4)") );
-
+                     std::string("LINESTRING ZM (-117 33 2 3, -116 34 4 5)") );
+#else
+            ensure( coords->getDimension() == 3 );
+            wktwriter.setOutputDimension( 3 );
+            ensure_equals( wktwriter.write(geom.get()), 
+                     std::string("LINESTRING Z (-117 33 2, -116 34 4)") );
+#endif
             delete coords;
     }
 
@@ -115,6 +120,7 @@ namespace tut
 	void object::test<5>()
 	{         
             GeomPtr geom(wktreader.read("LineString (-117 33 2, -116 34 4)"));
+			wktwriter.setOutputDimension( 3 );
             ensure_equals( wktwriter.write(geom.get()), 
                            std::string("LINESTRING Z (-117 33 2, -116 34 4)") );
     }
@@ -137,7 +143,7 @@ namespace tut
         }
     }
 
-    // POINT(0 0) http://trac.osgeo.org/geos/ticket/610
+	// 7- POINT(0 0) http://trac.osgeo.org/geos/ticket/610
     template<>
     template<>
     void object::test<7>()
@@ -171,6 +177,64 @@ namespace tut
             ensure( !"Got unexpected exception" );
         }
     }
+
+	// 8 - Ensure we can read Z geometries
+	template<>
+	template<>
+	void object::test<8>()
+	{
+			GeomPtr geom(wktreader.read("LINESTRING Z (-117 33 2, -116 34 4)"));
+			geos::geom::CoordinateSequence *coords = geom->getCoordinates();
+
+			ensure( coords->getDimension() == 3 );
+
+			wktwriter.setOutputDimension( 3 );
+			ensure_equals( wktwriter.write(geom.get()),
+						   std::string("LINESTRING Z (-117 33 2, -116 34 4)") );
+
+			delete coords;
+	}
+
+#ifdef GEOS_MVALUES
+	// 9 - Ensure we can read M geometries
+	template<>
+	template<>
+	void object::test<9>()
+	{
+			GeomPtr geom(wktreader.read("LINESTRING M (-117 33 2, -116 34 4)"));
+			geos::geom::CoordinateSequence *coords = geom->getCoordinates();
+
+			ensure( coords->getDimension() == 3 );
+
+			wktwriter.setOutputDimension( 3 );
+			ensure_equals( wktwriter.write(geom.get()),
+						   std::string("LINESTRING M (-117 33 2, -116 34 4)") );
+
+			delete coords;
+	}
+
+	// 10 - Ensure we can output only XYZ or XYM of XYZM geometries
+	template<>
+	template<>
+	void object::test<10>()
+	{
+			GeomPtr geom(wktreader.read("LINESTRING ZM (-117 33 2 3, -116 34 4 5)"));
+			geos::geom::CoordinateSequence *coords = geom->getCoordinates();
+
+			ensure( coords->getDimension() == 4 );
+
+			wktwriter.setOutputDimension( 3 );
+			ensure_equals( wktwriter.write(geom.get()),
+						   std::string("LINESTRING Z (-117 33 2, -116 34 4)") );
+
+			wktwriter.setOutputDimension( 3, true );
+			ensure_equals( wktwriter.write(geom.get()),
+						   std::string("LINESTRING M (-117 33 3, -116 34 5)") );
+
+			delete coords;
+	}
+#endif
+
 } // namespace tut
 
 

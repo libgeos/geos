@@ -92,6 +92,10 @@ public:
 
 	/// Returns coordinate dimension.
 	virtual int getCoordinateDimension() const;
+	virtual bool getHasZ() const;
+#ifdef GEOS_MVALUES
+	virtual bool getHasM() const;
+#endif
 
 	/// Returns 1 (Polygon boundary is a MultiLineString)
 	int getBoundaryDimension() const;
