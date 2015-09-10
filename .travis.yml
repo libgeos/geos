@@ -23,7 +23,7 @@ env:
 matrix:
   fast_finish: true
   allow_failures:
-    - env: GEOS_BUILD_TOOL=cmake CFLAGS=-m64 CXXFLAGS=-m64
+    #- env: GEOS_BUILD_TOOL=cmake CFLAGS=-m64 CXXFLAGS=-m64
 
 addons:
   apt:
