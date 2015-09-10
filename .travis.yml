@@ -10,6 +10,10 @@ sudo: false
 
 language: cpp
 
+os:
+  - linux
+  - osx
+
 compiler:
     - g++
     - clang
@@ -24,6 +28,7 @@ matrix:
   fast_finish: true
   allow_failures:
     #- env: GEOS_BUILD_TOOL=cmake CFLAGS=-m64 CXXFLAGS=-m64
+    - os: osx
 
 addons:
   apt:
