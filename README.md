@@ -1,112 +1,110 @@
-====================================
 GEOS -- Geometry Engine, Open Source
 ====================================
 
-[![Build Status](https://secure.travis-ci.org/libgeos/libgeos.png)]
+Status: [![Build Status](https://secure.travis-ci.org/libgeos/libgeos.png)]
 (http://travis-ci.org/libgeos/libgeos)
 
-BUILDING, TESTING, INSTALLING
-=============================
+Website: http://trac.osgeo.org/geos
 
-Unix
-----
+
+## Building, testing, installing
+
+### Unix
 
 Using Autotools:
-  ./autogen.sh  # in ${srcdir}, if obtained from SVN
-  ${srcdir}/configure # in build dir
+
+    ./autogen.sh  # in ${srcdir}, if obtained from SVN or GIT
+    ${srcdir}/configure # in build dir
 
 Using CMake:
-  cmake ${srcdir} # in build dir
+
+    cmake ${srcdir} # in build dir
 
 Now, all versions:
-  make
-  make check
-  make install # as root
-  ldconfig # as root
 
-Win32
------
+    make
+    make check
+    make install # as root
+    ldconfig # as root
 
-If you use Microsoft Visual C++ (7.1 or later) compiler, you can build 
-GEOS using NMAKE program and provided makefile.vc files.
 
-If you are building from SVN checkout, first run: autogen.bat
+### Microsoft Windows
+
+If you use Microsoft Visual C++ (7.1 or later) compiler, you can build
+GEOS using NMAKE program and provided `makefile.vc` files.
+
+If you are building from SVN or GIT checkout, first run: `autogen.bat`
 Then:
 
-  nmake /f makefile.vc MSVC_VER=1400
+    nmake /f makefile.vc MSVC_VER=1400
 
-where 1400 is version number of Visual C++ compiler, here Visual C++ 8.0 
-from Visual Studio 2005 (supported versions are 1300, 1310, 1400 and 1500). 
+where 1400 is version number of Visual C++ compiler, here Visual C++ 8.0
+from Visual Studio 2005 (supported versions are 1300, 1310, 1400 and 1500).
 The bootstrap.bat step is required to generate a couple of header files.
 
-In order to build debug configuration of GEOS, additional flag DEBUG=1 
+In order to build debug configuration of GEOS, additional flag `DEBUG=1`
 is required:
 
-  nmake /f makefile.vc MSVC_VER=1400 DEBUG=1
+    nmake /f makefile.vc MSVC_VER=1400 DEBUG=1
 
 
-CLIENT APPLICATIONS
-===================
+## Client 
 
-Using the C interface (recommended)
------------------------------------
+### Using the C interface (recommended)
 
 To compile programs against the C lib (recommended):
 
-  CFLAGS += `geos-config --cflags`
-  LDFLAGS += `geos-config --ldflags` -lgeos_c
-  #include <geos_c.h>
+    CFLAGS += `geos-config --cflags`
+    LDFLAGS += `geos-config --ldflags` -lgeos_c
+    #include <geos_c.h>
 
 Example usage:
 
-  capi/geostest.c contains basic usage examples.
+    capi/geostest.c contains basic usage examples.
 
-Using the C++ interface (discouraged)
--------------------------------------
+### Using the C++ interface (discouraged)
 
-NB: The C++ interface should not be used directly; the geos project
+NB: The C++ interface should not be used directly; the GEOS project
 views it as a bug for another program to use the C++ interface or even
 to directly link against the C++ library.  The C++ library name will
 change on every minor release because it is too hard to know if there
-have been ABI changes.  (The C libary uses the C++ interface, but the
+have been ABI changes.  (The C library uses the C++ interface, but the
 C library follows normal ABI-change-sensitive versioning, so programs
 that link only against the C library should work without relinking
-when geos is upgraded.)
+when GEOS is upgraded.)
 
 To compile programs against the C++ lib:
 
-  CFLAGS += `geos-config --cflags`
-  LDFLAGS += `geos-config --ldflags` -lgeos
-  #include <geos.h>
+    CFLAGS += `geos-config --cflags`
+    LDFLAGS += `geos-config --ldflags` -lgeos
+    #include <geos.h>
 
-Example usage:
+Basic usage examples can be found in `doc/example.cpp`.
 
-  doc/example.cpp contains basic usage examples.
 
-Scripting language bindings
----------------------------
+### Scripting language bindings
 
-Ruby bindings are fully supported. To build, use the --enable-ruby option
+Ruby bindings are fully supported. To build, use the `--enable-ruby` option
 when configuring:
 
-  ./configure ... --enable-ruby
+    ./configure ... --enable-ruby
 
-PHP bindings are fully supported. To build, use the --enable-php option
+PHP bindings are fully supported. To build, use the `--enable-php` option
 when configuring:
 
-  ./configure ... --enable-php
-    
+    ./configure ... --enable-php
+
 Since version 3.0, the Python bindings are unsupported. Recommended options:
 
  1. Become or recruit a new maintainer.
- 2. Use Shapely (http://pypi.python.org/pypi/Shapely) with Python
+ 2. Use [Shapely](http://pypi.python.org/pypi/Shapely) with Python
     versions 2.4 or greater.
  3. Simply call functions from libgeos_c via Python ctypes.
 
-DOCUMENTATION
-=============
+## Documentation
 
-  cd doc; make doxygen-html
+To build Doxygen documentation:
 
-  http://trac.osgeo.org/geos
+    cd doc
+    make doxygen-html
 
