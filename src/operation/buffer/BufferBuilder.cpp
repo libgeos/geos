@@ -163,7 +163,7 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    }
 
    // Create MultiLineStrings from this polygon.
-   Geometry* bufLineString = buf->getBoundary();
+   std::auto_ptr<Geometry> bufLineString ( buf->getBoundary() );
 
 #ifdef GEOS_DEBUG_SSB
    std::cerr << "input|" << *l << std::endl;
@@ -339,7 +339,6 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    // Clean up.
    if ( noder != workingNoder ) delete noder;
    geomFact->destroyGeometry( buf );
-   geomFact->destroyGeometry( bufLineString );
    geomFact->destroyGeometry( singleSided );
    geomFact->destroyGeometry( intersectedLines );
 
