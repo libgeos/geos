@@ -84,6 +84,7 @@ GeometryFactory::GeometryFactory()
 	precisionModel(new PrecisionModel()),
 	SRID(0),
 	coordinateListFactory(CoordinateArraySequenceFactory::instance())
+	,_geometryCount(0),_autoDestroy(false)
 {
 #if GEOS_DEBUG
 	std::cerr << "GEOS_DEBUG: GeometryFactory["<<this<<"]::GeometryFactory()" << std::endl;
@@ -96,6 +97,7 @@ GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID,
 		CoordinateSequenceFactory* nCoordinateSequenceFactory)
 	:
 	SRID(newSRID)
+	,_geometryCount(0),_autoDestroy(false)
 {
 #if GEOS_DEBUG
 	std::cerr << "GEOS_DEBUG: GeometryFactory["<<this<<"]::GeometryFactory(PrecisionModel["<<pm<<"], SRID)" << std::endl;
@@ -119,6 +121,7 @@ GeometryFactory::GeometryFactory(
 	:
 	precisionModel(new PrecisionModel()),
 	SRID(0)
+	,_geometryCount(0),_autoDestroy(false)
 {
 #if GEOS_DEBUG
 	std::cerr << "GEOS_DEBUG: GeometryFactory["<<this<<"]::GeometryFactory(CoordinateSequenceFactory["<<nCoordinateSequenceFactory<<"])" << std::endl;
@@ -135,6 +138,7 @@ GeometryFactory::GeometryFactory(const PrecisionModel *pm)
 	:
 	SRID(0),
 	coordinateListFactory(CoordinateArraySequenceFactory::instance())
+	,_geometryCount(0),_autoDestroy(false)
 {
 #if GEOS_DEBUG
 	std::cerr << "GEOS_DEBUG: GeometryFactory["<<this<<"]::GeometryFactory(PrecisionModel["<<pm<<"])" << std::endl;
@@ -151,6 +155,7 @@ GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID)
 	:
 	SRID(newSRID),
 	coordinateListFactory(CoordinateArraySequenceFactory::instance())
+	,_geometryCount(0),_autoDestroy(false)
 {
 #if GEOS_DEBUG
 	std::cerr << "GEOS_DEBUG: GeometryFactory["<<this<<"]::GeometryFactory(PrecisionModel["<<pm<<"], SRID)" << std::endl;
@@ -169,6 +174,8 @@ GeometryFactory::GeometryFactory(const GeometryFactory &gf)
 	precisionModel=new PrecisionModel(*(gf.precisionModel));
 	SRID=gf.SRID;
 	coordinateListFactory=gf.coordinateListFactory;
+  _autoDestroy=false;
+  _geometryCount=0;
 }
 
 /*public*/
@@ -727,6 +734,31 @@ GeometryFactory::getDefaultInstance()
 {
 	static GeometryFactory* defInstance = new GeometryFactory();
 	return defInstance;
+}
+
+/*private*/
+void
+GeometryFactory::addChild(const Geometry *) const
+{
+	++_geometryCount;
+}
+
+/*private*/
+void
+GeometryFactory::delChild(const Geometry *) const
+{
+	if ( ! --_geometryCount )
+	{
+		if ( _autoDestroy ) delete this;
+	}
+}
+
+void
+GeometryFactory::autoDestroy()
+{
+	assert(!_autoDestroy); // don't call me twice !
+	_autoDestroy = true;
+	if ( ! _geometryCount ) delete this;
 }
 
 } // namespace geos::geom

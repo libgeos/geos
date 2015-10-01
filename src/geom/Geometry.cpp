@@ -116,6 +116,7 @@ Geometry::Geometry(const GeometryFactory *newFactory)
 		factory = GeometryFactory::getDefaultInstance();
 	} 
 	SRID=factory->getSRID();
+	factory->addChild(this);
 }
 
 Geometry::Geometry(const Geometry &geom)
@@ -132,6 +133,7 @@ Geometry::Geometry(const Geometry &geom)
 	//envelope(new Envelope(*(geom.envelope.get())));
 	//SRID=geom.getSRID();
 	//userData=NULL;
+	factory->addChild(this);
 }
 
 bool
@@ -808,7 +810,7 @@ Geometry::getLength() const
 
 Geometry::~Geometry()
 {
-	//delete envelope;
+	factory->delChild(this);
 }
 
 bool

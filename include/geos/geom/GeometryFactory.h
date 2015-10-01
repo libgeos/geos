@@ -383,10 +383,25 @@ public:
 	/// Destroy a Geometry, or release it
 	void destroyGeometry(Geometry *g) const;
 
+	/// Request that the instance is deleted when last child Geometry is
+	/// deleted. Do not use the instance anymore after calling this function
+	/// (unless you're a live child!).
+	void autoDestroy();
+
 private:
+
 	const PrecisionModel* precisionModel;
 	int SRID;
 	const CoordinateSequenceFactory *coordinateListFactory;
+
+	mutable int _geometryCount;
+	bool _autoDestroy;
+
+friend class Geometry;
+
+	void addChild(const Geometry *g) const;
+	void delChild(const Geometry *g) const;
+
 };
 
 } // namespace geos::geom

@@ -1280,4 +1280,16 @@ namespace tut
 		}
 	}
 
+	// Test of autoDestroy
+	template<>
+	template<>
+	void object::test<37>()
+	{
+		geos::geom::GeometryFactory *fact = new geos::geom::GeometryFactory();
+		geos::geom::Geometry *pt = fact->createPoint();
+		fact->autoDestroy();
+		delete pt;
+		// check with valgrind that there's no memory leak !
+	}
+
 } // namespace tut
