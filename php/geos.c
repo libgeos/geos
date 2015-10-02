@@ -204,6 +204,7 @@ PHP_METHOD(Geometry, relate);
 PHP_METHOD(Geometry, relateBoundaryNodeRule); 
 PHP_METHOD(Geometry, simplify); /* also does topology-preserving */
 PHP_METHOD(Geometry, normalize);
+PHP_METHOD(Geometry, setPrecision);
 PHP_METHOD(Geometry, extractUniquePoints); 
 PHP_METHOD(Geometry, disjoint);
 PHP_METHOD(Geometry, touches);
@@ -270,6 +271,7 @@ static zend_function_entry Geometry_methods[] = {
     PHP_ME(Geometry, relateBoundaryNodeRule, NULL, 0)
     PHP_ME(Geometry, simplify, NULL, 0)
     PHP_ME(Geometry, normalize, NULL, 0)
+    PHP_ME(Geometry, setPrecision, NULL, 0)
     PHP_ME(Geometry, extractUniquePoints, NULL, 0)
     PHP_ME(Geometry, disjoint, NULL, 0)
     PHP_ME(Geometry, touches, NULL, 0)
@@ -1033,6 +1035,32 @@ PHP_METHOD(Geometry, simplify)
     } else {
         ret = GEOSSimplify(this, tolerance);
     }
+
+    if ( ! ret ) RETURN_NULL(); /* should get an exception first */
+
+    /* return_value is a zval */
+    object_init_ex(return_value, Geometry_ce_ptr);
+    setRelay(return_value, ret);
+}
+
+/**
+ * GEOSGeometry GEOSGeometry::setPrecision(gridsize, [flags])
+ */
+PHP_METHOD(Geometry, setPrecision)
+{
+    GEOSGeometry *this;
+    double gridSize;
+    long int flags = 0;
+    GEOSGeometry *ret;
+
+    this = (GEOSGeometry*)getRelay(getThis(), Geometry_ce_ptr);
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "d|l",
+            &gridSize, &flags) == FAILURE) {
+        RETURN_NULL();
+    }
+
+    ret = GEOSGeom_setPrecision(this, gridSize, flags);
 
     if ( ! ret ) RETURN_NULL(); /* should get an exception first */
 
@@ -2883,6 +2911,11 @@ PHP_MINIT_FUNCTION(geos)
 
     REGISTER_LONG_CONSTANT("GEOSVALID_ALLOW_SELFTOUCHING_RING_FORMING_HOLE",
         GEOSVALID_ALLOW_SELFTOUCHING_RING_FORMING_HOLE,
+        CONST_CS|CONST_PERSISTENT);
+
+    REGISTER_LONG_CONSTANT("GEOS_PREC_NO_TOPO", GEOS_PREC_NO_TOPO,
+        CONST_CS|CONST_PERSISTENT);
+    REGISTER_LONG_CONSTANT("GEOS_PREC_KEEP_COLLAPSED", GEOS_PREC_NO_TOPO,
         CONST_CS|CONST_PERSISTENT);
 
     REGISTER_LONG_CONSTANT("GEOSRELATE_BNR_MOD2", GEOSRELATE_BNR_MOD2,
