@@ -112,7 +112,7 @@ public:
 	 * the given {@link PrecisionModel} and spatial-reference ID,
 	 * and the default CoordinateSequence implementation.
 	 *
-	 * @param pm the PrecisionModel to use
+	 * @param pm the PrecisionModel to use, will be copied internally
 	 * @param newSRID the SRID to use
 	 */
 	GeometryFactory(const PrecisionModel* pm, int newSRID);

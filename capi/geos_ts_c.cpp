@@ -4255,7 +4255,9 @@ GEOSGeom_setPrecision_r(GEOSContextHandle_t extHandle, const GEOSGeometry *g,
         std::auto_ptr<PrecisionModel> newpm;
         if ( gridSize ) newpm.reset( new PrecisionModel(1.0/gridSize) );
         else newpm.reset( new PrecisionModel() );
-        std::auto_ptr<GeometryFactory> gf ( new GeometryFactory(newpm.get()) );
+        std::auto_ptr<GeometryFactory> gf (
+            new GeometryFactory( newpm.get(), g->getSRID() )
+        );
         Geometry *ret;
         if ( gridSize && (
               forceSnap > 0 ||
