@@ -55,10 +55,10 @@ namespace tut
       typedef std::vector<SegmentString*> SegStrVct;
       typedef std::vector<Geometry*> GeomVct;
 
-      const geos::geom::GeometryFactory gf_;
+      const geos::geom::GeometryFactory *gf_;
 
       test_mcidxsnprndr_data()
-            : gf_()
+            : gf_(geos::geom::GeometryFactory::getDefaultInstance())
       {}
 
       GeomPtr getGeometry(SegStrVct& vct)
@@ -67,9 +67,9 @@ namespace tut
         for (SegStrVct::size_type i=0, n=vct.size(); i<n; ++i)
         {
           SegmentString* ss = vct[i];
-          lines->push_back( gf_.createLineString(*(ss->getCoordinates())) );
+          lines->push_back( gf_->createLineString(*(ss->getCoordinates())) );
         }
-        return GeomPtr(gf_.createMultiLineString(lines));
+        return GeomPtr(gf_->createMultiLineString(lines));
       }
 
       void getSegmentStrings(const Geometry& g, SegStrVct& vct)

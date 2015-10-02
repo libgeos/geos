@@ -12,7 +12,7 @@ using namespace geos::geom;
 using namespace std;
 
 int main() {
- GeometryFactory factory;
+ GeometryFactory::unique_ptr factory = GeometryFactory::create();
 
  vector< Geometry * > *polys1 = new vector<Geometry*>();
  vector< Geometry * > *polys2 = new vector<Geometry*>();
@@ -24,8 +24,8 @@ int main() {
  coords1.add(Coordinate(5, 5));
  coords1.add(Coordinate(5, 1));
  coords1.add(Coordinate(1, 1));
- holes1->push_back( factory.createLinearRing() );
- polys1->push_back( factory.createPolygon(factory.createLinearRing(coords1), holes1) );
+ holes1->push_back( factory->createLinearRing() );
+ polys1->push_back( factory->createPolygon(factory->createLinearRing(coords1), holes1) );
 
  CoordinateArraySequence coords2;
  coords2.add(Coordinate(3, 3));
@@ -33,10 +33,10 @@ int main() {
  coords2.add(Coordinate(4, 4));
  coords2.add(Coordinate(4, 3));
  coords2.add(Coordinate(3, 3));
- polys2->push_back( factory.createPolygon(factory.createLinearRing(coords2), new vector<Geometry*>) );
+ polys2->push_back( factory->createPolygon(factory->createLinearRing(coords2), new vector<Geometry*>) );
 
- MultiPolygon *mpoly1 = factory.createMultiPolygon(polys1);
- MultiPolygon *mpoly2 = factory.createMultiPolygon(polys2);
+ MultiPolygon *mpoly1 = factory->createMultiPolygon(polys1);
+ MultiPolygon *mpoly2 = factory->createMultiPolygon(polys2);
 
  cout << "      Mpoly1: " << mpoly1->toString() << endl;
  cout << "      Mpoly2: " << mpoly2->toString() << endl;

@@ -25,7 +25,6 @@ namespace tut
 	// Common data used by tests
 	struct test_fuzzypointlocator_data
 	{
-		geos::geom::GeometryFactory gf;
 		geos::io::WKTReader wktreader;
 		geos::io::WKBReader wkbreader;
 
@@ -35,9 +34,8 @@ namespace tut
 
 		test_fuzzypointlocator_data()
 			:
-			gf(),
-			wktreader(&gf),
-			wkbreader(gf)
+			wktreader(),
+			wkbreader()
 		{
 			std::string wkt("POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))");
 			g.reset(wktreader.read(wkt));

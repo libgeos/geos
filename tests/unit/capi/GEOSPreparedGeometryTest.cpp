@@ -219,7 +219,7 @@ namespace tut
     void object::test<8>()
     {
         geos::geom::PrecisionModel pm(1e+13);
-        geos::geom::GeometryFactory *factory = new geos::geom::GeometryFactory(&pm);
+        geos::geom::GeometryFactory::unique_ptr factory = geos::geom::GeometryFactory::create(&pm);
         geos::io::WKBReader reader(*factory);
 
         // POINT located between 3rd and 4th vertex of LINESTRING
@@ -236,8 +236,6 @@ namespace tut
         ensure(0 != prepGeom1_);
         int ret = GEOSPreparedIntersects(prepGeom1_, geom2_);
         ensure_equals(ret, 1);
-
-        factory->autoDestroy();
     }
 
     // Test PreparedIntersects: point on vertex (default FLOAT PM)

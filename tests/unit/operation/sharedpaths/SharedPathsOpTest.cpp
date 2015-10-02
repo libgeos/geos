@@ -28,7 +28,6 @@ namespace tut
   {
     typedef geos::operation::sharedpaths::SharedPathsOp SharedPathsOp;
 
-    geos::geom::GeometryFactory gf;
     geos::io::WKTReader wktreader;
     geos::io::WKTWriter wktwriter;
 
@@ -38,7 +37,7 @@ namespace tut
     SharedPathsOp::PathList backDir;
 
     test_shpathop_data()
-      : gf(), wktreader(&gf), wktwriter()
+      : wktreader(), wktwriter()
     {
       wktwriter.setTrim(true);
     }

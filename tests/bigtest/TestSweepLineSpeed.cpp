@@ -53,7 +53,8 @@ void run(int nPts, GeometryFactory *fact) {
 
 int main(int /* argc */, char** /* argv[] */) {
 
-	GeometryFactory *fact=new GeometryFactory();
+	GeometryFactory::unique_ptr factptr = GeometryFactory::create();
+	GeometryFactory* fact = factptr.get();
 
 	run(1000,fact);
 	run(2000,fact);
@@ -70,8 +71,6 @@ int main(int /* argc */, char** /* argv[] */) {
 //	_CrtDumpMemoryLeaks();
 
 	cout << "Done" << endl;
-
-    // FIXME - mloskot: Who's gonna to eat the 'fact'? Mr. Leak!
 
 	return 0;
 }

@@ -4,7 +4,6 @@
 // tut
 #include <tut.hpp>
 // geos
-#include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Polygon.h>
 #include <geos/io/WKTReader.h>
@@ -23,12 +22,11 @@ namespace tut {
 struct test_geometry_normalize_data
 {
   typedef std::auto_ptr<geos::geom::Geometry> GeomAutoPtr;
-  geos::geom::GeometryFactory factory;
   geos::io::WKTReader reader;
   geos::io::WKTWriter writer;
 
   test_geometry_normalize_data()
-      : reader(&factory), writer()
+      : reader(), writer()
   {
     writer.setTrim(true);
   }

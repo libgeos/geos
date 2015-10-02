@@ -107,7 +107,7 @@ GeometryPrecisionReducer::fixPolygonalTopology(const geom::Geometry& geom )
    * geometry to targetPM, buffer in that model, then flip back
    */
   auto_ptr<Geometry> tmp;
-  auto_ptr<GeometryFactory> tmpFactory;
+  GeometryFactory::unique_ptr tmpFactory;
 
   const Geometry* geomToBuffer = &geom;
 
@@ -128,12 +128,12 @@ GeometryPrecisionReducer::fixPolygonalTopology(const geom::Geometry& geom )
 }
 
 /* private */
-auto_ptr<GeometryFactory>
+GeometryFactory::unique_ptr
 GeometryPrecisionReducer::createFactory( const GeometryFactory& oldGF,
                                          const PrecisionModel& newPM )
 {
-  auto_ptr<GeometryFactory> newFactory(
-    new GeometryFactory(&newPM,
+  GeometryFactory::unique_ptr newFactory(
+    GeometryFactory::create(&newPM,
                         oldGF.getSRID(),
                         const_cast<CoordinateSequenceFactory*>(oldGF.getCoordinateSequenceFactory()))
   );

@@ -27,7 +27,7 @@ namespace tut
 	// Common data used by tests
 	struct test_offsetpointgenerator_data
 	{
-		geos::geom::GeometryFactory gf;
+		const geos::geom::GeometryFactory& gf;
 		geos::io::WKTReader wktreader;
 		geos::algorithm::PointLocator locator;
 
@@ -37,7 +37,7 @@ namespace tut
 
 		test_offsetpointgenerator_data()
 			:
-			gf(),
+			gf(*GeometryFactory::getDefaultInstance()),
 			wktreader(&gf)
 		{
 		}

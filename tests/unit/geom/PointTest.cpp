@@ -36,15 +36,17 @@ namespace tut
 	typedef geos::geom::Point* PointPtr;
 	typedef std::auto_ptr<geos::geom::Point> PointAutoPtr;
 	typedef geos::geom::Point const* PointCPtr;
+	typedef geos::geom::GeometryFactory GeometryFactory;
 
 	geos::geom::PrecisionModel pm_;
-	geos::geom::GeometryFactory factory_;
+	GeometryFactory::unique_ptr factory_;
 	geos::io::WKTReader reader_;
 	PointAutoPtr empty_point_;
 	PointPtr point_;
 
 	test_point_data()
-	    : pm_(1000), factory_(&pm_, 0), reader_(&factory_), empty_point_(factory_.createPoint())
+	    : pm_(1000), factory_(GeometryFactory::create(&pm_, 0))
+      , reader_(factory_.get()), empty_point_(factory_->createPoint())
 	{
 	    // Create non-empty Point
 	    GeometryPtr geo = 0;
@@ -54,7 +56,7 @@ namespace tut
 	
 	~test_point_data()
 	{
-	    factory_.destroyGeometry(point_);
+	    factory_->destroyGeometry(point_);
 	}
     };
 
@@ -72,7 +74,7 @@ namespace tut
     template<>
     void object::test<1>()
     {
-		PointAutoPtr point(factory_.createPoint());
+		PointAutoPtr point(factory_->createPoint());
 		ensure( point->isEmpty() );
     }
 
@@ -88,7 +90,7 @@ namespace tut
 		ensure( coords != 0 );
 		coords->add(Coordinate(1.234, 5.678));
 
-		PointAutoPtr point(factory_.createPoint(coords));
+		PointAutoPtr point(factory_->createPoint(coords));
 		ensure( !point->isEmpty() );
         
         // currently the empty CoordinateArraySequence constructor 
@@ -113,7 +115,7 @@ namespace tut
 			coords->add(Coordinate(1.234, 5.678));
 			coords->add(Coordinate(4.321, 8.765));
 
-			PointAutoPtr point(factory_.createPoint(coords));
+			PointAutoPtr point(factory_->createPoint(coords));
 
 			fail("IllegalArgumentException expected.");
 		}
@@ -168,7 +170,7 @@ namespace tut
 		GeometryPtr envelope = empty_point_->getEnvelope();	
 		ensure( envelope != 0 );
 		ensure( envelope->isEmpty() );
-		factory_.destroyGeometry(envelope);
+		factory_->destroyGeometry(envelope);
 	}
 
 	// Test of getBoundary() for empty Point
@@ -179,7 +181,7 @@ namespace tut
 		GeometryPtr boundary = empty_point_->getBoundary();	
 		ensure( boundary != 0 );
 		ensure( boundary->isEmpty() );
-		factory_.destroyGeometry(boundary);
+		factory_->destroyGeometry(boundary);
 	}
 
 	// Test of convexHull() for empty Point
@@ -190,7 +192,7 @@ namespace tut
 		GeometryPtr hull = empty_point_->convexHull();	
 		ensure( hull != 0 );
 		ensure( hull->isEmpty() );
-		factory_.destroyGeometry(hull);
+		factory_->destroyGeometry(hull);
 	}
 
 	// Test of getGeometryTypeId() for empty Point
@@ -282,7 +284,7 @@ namespace tut
 		GeometryPtr envelope = point_->getEnvelope();	
 		ensure( envelope != 0 );
 		ensure( !envelope->isEmpty() );
-		factory_.destroyGeometry(envelope);
+		factory_->destroyGeometry(envelope);
 	}
 
 	// Test of getBoundary() for non-empty Point
@@ -293,7 +295,7 @@ namespace tut
 		GeometryPtr boundary = point_->getBoundary();	
 		ensure( boundary != 0 );
 		ensure( boundary->isEmpty() );
-		factory_.destroyGeometry(boundary);
+		factory_->destroyGeometry(boundary);
 	}
 
 	// Test of convexHull() for non-empty Point
@@ -304,7 +306,7 @@ namespace tut
 		GeometryPtr hull = point_->convexHull();	
 		ensure( hull != 0 );
 		ensure( !hull->isEmpty() );
-		factory_.destroyGeometry(hull);
+		factory_->destroyGeometry(hull);
 	}
 
 	// Test of getGeometryTypeId() for non-empty Point
@@ -386,8 +388,8 @@ namespace tut
 		ensure( p1->equals(p2) );
 		
 		// FREE MEMORY
-		factory_.destroyGeometry(p1);
-		factory_.destroyGeometry(p2);
+		factory_->destroyGeometry(p1);
+		factory_->destroyGeometry(p2);
 	}
 
 	// Test of equals() for non-empty Point (1.23 5.67)
@@ -402,8 +404,8 @@ namespace tut
 		ensure( p1->equals(p2) );
 		
 		// FREE MEMORY
-		factory_.destroyGeometry(p1);
-		factory_.destroyGeometry(p2);
+		factory_->destroyGeometry(p1);
+		factory_->destroyGeometry(p2);
 	}
 
 	// Test of equals() for non-empty Points (1.235 5.678) and (1.234 5.678)
@@ -418,8 +420,8 @@ namespace tut
 		ensure( !p1->equals(p2) );
 		
 		// FREE MEMORY
-		factory_.destroyGeometry(p1);
-		factory_.destroyGeometry(p2);
+		factory_->destroyGeometry(p1);
+		factory_->destroyGeometry(p2);
 	}
 
 	// Test of equals() for non-empty Points (1.2334 5.678) and (1.2333 5.678)
@@ -434,8 +436,8 @@ namespace tut
 		ensure( p1->equals(p2) );
 		
 		// FREE MEMORY
-		factory_.destroyGeometry(p1);
-		factory_.destroyGeometry(p2);
+		factory_->destroyGeometry(p1);
+		factory_->destroyGeometry(p2);
 	}
 
 	// Test of equals() for non-empty Points (1.2334 5.678) and (1.2335 5.678)
@@ -450,8 +452,8 @@ namespace tut
 		ensure( !p1->equals(p2) );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(p1);
-		factory_.destroyGeometry(p2);
+		factory_->destroyGeometry(p1);
+		factory_->destroyGeometry(p2);
 	}
 
 	// Test of equals() for non-empty Points (1.2324 5.678) and (1.2325 5.678)
@@ -466,8 +468,8 @@ namespace tut
 		ensure( !p1->equals(p2) );
 		
 		// FREE MEMORY
-		factory_.destroyGeometry(p1);
-		factory_.destroyGeometry(p2);
+		factory_->destroyGeometry(p1);
+		factory_->destroyGeometry(p2);
 	}
 
 	// Test of equals() for non-empty Points (1.2324 5.678) and (EMPTY)
@@ -482,8 +484,8 @@ namespace tut
 		ensure( !p1->equals(p2) );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(p1);
-		factory_.destroyGeometry(p2);
+		factory_->destroyGeometry(p1);
+		factory_->destroyGeometry(p2);
 	}
 
 	// Test of equals() for non-empty Points with negative coordiantes
@@ -506,11 +508,11 @@ namespace tut
 		ensure( p3->equals(pHi) );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(pLo);
-		factory_.destroyGeometry(pHi);
-		factory_.destroyGeometry(p1);
-		factory_.destroyGeometry(p2);
-		factory_.destroyGeometry(p3);
+		factory_->destroyGeometry(pLo);
+		factory_->destroyGeometry(pHi);
+		factory_->destroyGeometry(p1);
+		factory_->destroyGeometry(p2);
+		factory_->destroyGeometry(p3);
 	}
 
 	// Test of getCoordinateDimension() for 2d/3d.

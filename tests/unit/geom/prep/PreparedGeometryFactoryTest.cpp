@@ -27,14 +27,17 @@ namespace tut
     // Common data used by tests
     struct test_preparedgeometryfactory_data
     {
+        typedef geos::geom::GeometryFactory GeometryFactory;
         GeometryPtr g_;
         PreparedGeometryPtr pg_;
         geos::geom::PrecisionModel pm_;
-        geos::geom::GeometryFactory factory_;
+        geos::geom::GeometryFactory::unique_ptr factory_;
         geos::io::WKTReader reader_;
 
         test_preparedgeometryfactory_data()
-            : g_(0), pg_(0), pm_(1.0), factory_(&pm_), reader_(&factory_)
+            : g_(0), pg_(0), pm_(1.0)
+            , factory_(GeometryFactory::create(&pm_))
+            , reader_(factory_.get())
         {
             assert(0 == g_);
             assert(0 == pg_);
@@ -44,7 +47,7 @@ namespace tut
         {
             // FREE MEMORY per test case
             prep::PreparedGeometryFactory::destroy(pg_);
-            factory_.destroyGeometry(g_);
+            factory_->destroyGeometry(g_);
             pg_ = 0;
             g_ = 0;
         }
@@ -115,7 +118,7 @@ namespace tut
     template<>
     void object::test<4>()
     {
-        g_ = factory_.createEmptyGeometry();
+        g_ = factory_->createEmptyGeometry();
         ensure( 0 != g_ );
         
         pg_ = prep::PreparedGeometryFactory::prepare(g_);
@@ -129,7 +132,7 @@ namespace tut
     template<>
     void object::test<5>()
     {
-        g_ = factory_.createEmptyGeometry();
+        g_ = factory_->createEmptyGeometry();
         ensure( 0 != g_ );
         
         prep::PreparedGeometryFactory pgf;
@@ -144,7 +147,7 @@ namespace tut
     template<>
     void object::test<6>()
     {
-        g_ = factory_.createPoint();
+        g_ = factory_->createPoint();
         ensure( 0 != g_ );
         
         pg_ = prep::PreparedGeometryFactory::prepare(g_);
@@ -158,7 +161,7 @@ namespace tut
     template<>
     void object::test<7>()
     {
-        g_ = factory_.createPoint();
+        g_ = factory_->createPoint();
         ensure( 0 != g_ );
         
         prep::PreparedGeometryFactory pgf;
@@ -173,7 +176,7 @@ namespace tut
     template<>
     void object::test<8>()
     {
-        g_ = factory_.createLineString();
+        g_ = factory_->createLineString();
         ensure( 0 != g_ );
         
         pg_ = prep::PreparedGeometryFactory::prepare(g_);
@@ -187,7 +190,7 @@ namespace tut
     template<>
     void object::test<9>()
     {
-        g_ = factory_.createLineString();
+        g_ = factory_->createLineString();
         ensure( 0 != g_ );
         
         prep::PreparedGeometryFactory pgf;
@@ -201,7 +204,7 @@ namespace tut
     template<>
     void object::test<10>()
     {
-        g_ = factory_.createPolygon();
+        g_ = factory_->createPolygon();
         ensure( 0 != g_ );
         
         pg_ = prep::PreparedGeometryFactory::prepare(g_);
@@ -215,7 +218,7 @@ namespace tut
     template<>
     void object::test<11>()
     {
-        g_ = factory_.createPolygon();
+        g_ = factory_->createPolygon();
         ensure( 0 != g_ );
         
         prep::PreparedGeometryFactory pgf;
@@ -230,7 +233,7 @@ namespace tut
     template<>
     void object::test<12>()
     {
-        g_ = factory_.createMultiPoint();
+        g_ = factory_->createMultiPoint();
         ensure( 0 != g_ );
         
         pg_ = prep::PreparedGeometryFactory::prepare(g_);
@@ -244,7 +247,7 @@ namespace tut
     template<>
     void object::test<13>()
     {
-        g_ = factory_.createMultiPoint();
+        g_ = factory_->createMultiPoint();
         ensure( 0 != g_ );
         
         prep::PreparedGeometryFactory pgf;
@@ -259,7 +262,7 @@ namespace tut
     template<>
     void object::test<14>()
     {
-        g_ = factory_.createMultiLineString();
+        g_ = factory_->createMultiLineString();
         ensure( 0 != g_ );
         
         pg_ = prep::PreparedGeometryFactory::prepare(g_);
@@ -273,7 +276,7 @@ namespace tut
     template<>
     void object::test<15>()
     {
-        g_ = factory_.createMultiLineString();
+        g_ = factory_->createMultiLineString();
         ensure( 0 != g_ );
         
         prep::PreparedGeometryFactory pgf;
@@ -288,7 +291,7 @@ namespace tut
     template<>
     void object::test<16>()
     {
-        g_ = factory_.createMultiPolygon();
+        g_ = factory_->createMultiPolygon();
         ensure( 0 != g_ );
         
         pg_ = prep::PreparedGeometryFactory::prepare(g_);
@@ -302,7 +305,7 @@ namespace tut
     template<>
     void object::test<17>()
     {
-        g_ = factory_.createMultiPolygon();
+        g_ = factory_->createMultiPolygon();
         ensure( 0 != g_ );
         
         prep::PreparedGeometryFactory pgf;

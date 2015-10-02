@@ -33,9 +33,10 @@ namespace tut
 		// Typedefs used as short names by test cases
 		typedef std::auto_ptr<geos::geom::Geometry> GeometryAutoPtr;
 		typedef std::auto_ptr<geos::geom::Polygon> PolygonAutoPtr;
+		typedef geos::geom::GeometryFactory GeometryFactory;
 
 		geos::geom::PrecisionModel pm_;
-		geos::geom::GeometryFactory factory_;
+		GeometryFactory::unique_ptr factory_;
 		geos::io::WKTReader reader_;
 
 		PolygonAutoPtr empty_poly_;
@@ -43,8 +44,10 @@ namespace tut
 		const size_t poly_size_;
 
 		test_polygon_data() 
-			: pm_(1), factory_(&pm_, 0), reader_(&factory_),
-                empty_poly_(factory_.createPolygon()), poly_size_(7)
+			: pm_(1)
+      , factory_(GeometryFactory::create(&pm_, 0))
+      , reader_(factory_.get())
+      , empty_poly_(factory_->createPolygon()), poly_size_(7)
 		{
 			// Create non-empty LinearRing
 			GeometryPtr geo = 0;
@@ -55,7 +58,7 @@ namespace tut
         ~test_polygon_data() 
         {
             // FREE MEMORY
-            factory_.destroyGeometry(poly_);
+            factory_->destroyGeometry(poly_);
         }
 
     private:
@@ -98,7 +101,7 @@ namespace tut
 		try
 		{
 			// Create non-empty LinearRing instance
-			geos::geom::LinearRing ring(coords, &factory_);
+			geos::geom::LinearRing ring(coords, factory_.get());
 			ensure( !ring.isEmpty() );
 			ensure( ring.isClosed() );
 			ensure( ring.isRing() );
@@ -110,7 +113,7 @@ namespace tut
 			
 			// Create non-empty Polygon
 			//geos::geom::Polygon poly(exterior, 0, &factory_);
-			PolygonAutoPtr poly(factory_.createPolygon(exterior, 0));
+			PolygonAutoPtr poly(factory_->createPolygon(exterior, 0));
 			
 			ensure( !poly->isEmpty() );
 			ensure( poly->isSimple() );
@@ -186,7 +189,7 @@ namespace tut
 		GeometryPtr boundary = empty_poly_->getBoundary();	
 		ensure( boundary != 0 );
 		ensure( boundary->isEmpty() );
-		factory_.destroyGeometry(boundary);
+		factory_->destroyGeometry(boundary);
 	}
 
 	// Test of convexHull() for empty Polygon
@@ -197,7 +200,7 @@ namespace tut
 		GeometryPtr hull = empty_poly_->convexHull();	
 		ensure( hull != 0 );
 		ensure( hull->isEmpty() );
-		factory_.destroyGeometry(hull);
+		factory_->destroyGeometry(hull);
 	}
 
 	// Test of getGeometryTypeId() for empty Polygon
@@ -270,7 +273,7 @@ namespace tut
 		ensure_equals( envelope->getDimension(), geos::geom::Dimension::A );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(envelope);
+		factory_->destroyGeometry(envelope);
 	}
 
 	// Test of getBoundary() for non-empty Polygon
@@ -287,7 +290,7 @@ namespace tut
 		ensure( "[OGC] The boundary of Polygin is the set of closed Curves.", !boundary->isEmpty() );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(boundary);
+		factory_->destroyGeometry(boundary);
 	}
 
 	// Test of convexHull() for non-empty Polygon
@@ -304,7 +307,7 @@ namespace tut
 		ensure_equals( hull->getDimension(), geos::geom::Dimension::A );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(hull);
+		factory_->destroyGeometry(hull);
 	}
 
 	// Test of getGeometryTypeId() for non-empty Polygon
@@ -394,7 +397,7 @@ namespace tut
 		ensure( geo != 0 );
 		ensure( geo->equals(poly_) );
 
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 	}
 
 	// Test of getExteriorRing() for non-empty Polygon
@@ -441,7 +444,7 @@ namespace tut
 
 		ensure_equals( interior->getGeometryTypeId(), geos::geom::GEOS_LINEARRING );
 
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 	}
 
 	// Test of getCoordiante() for non-empty Polygon
@@ -524,7 +527,7 @@ namespace tut
 		ensure_equals( point->getGeometryTypeId(), geos::geom::GEOS_POINT );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(point);
+		factory_->destroyGeometry(point);
 	}
 
 	// Test of Geometry::getCentroid(Coordinate& ret) const for non-empty Polygon
@@ -552,7 +555,7 @@ namespace tut
 		ensure( pointCoord != 0 );
 		geos::geom::Coordinate pointCentr(*pointCoord);
 		// FREE MEMORY
-		factory_.destroyGeometry(point);
+		factory_->destroyGeometry(point);
 
 		// Second centroid
 		geos::geom::Coordinate coordCentr;

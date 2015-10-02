@@ -49,7 +49,7 @@ namespace tut
 		Geometry *expected = reader.read(expectedWkt);
 		DelaunayTriangulationBuilder builder;
 		builder.setTolerance(tolerance);
-		GeometryFactory geomFact;
+    const GeometryFactory& geomFact(*GeometryFactory::getDefaultInstance());
 
 		builder.setSites(*sites);
 		if(computeTriangles)
@@ -84,7 +84,7 @@ namespace tut
 		triangulator.insertSite(Vertex(0, 0));
 
 		//extract the triangles from the subdivision
-		GeometryFactory geomFact;
+    const GeometryFactory& geomFact(*GeometryFactory::getDefaultInstance());
 		std::auto_ptr<GeometryCollection> tris = sub.getTriangles(geomFact);
 	}
 

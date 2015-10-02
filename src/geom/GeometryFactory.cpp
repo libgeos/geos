@@ -78,7 +78,7 @@ public:
 
 
 
-/*public*/
+/*protected*/
 GeometryFactory::GeometryFactory()
 	:
 	precisionModel(new PrecisionModel()),
@@ -92,7 +92,11 @@ GeometryFactory::GeometryFactory()
 #endif
 }
 
-/*public*/
+/*public static*/
+GeometryFactory::unique_ptr
+GeometryFactory::create() { return GeometryFactory::unique_ptr(new GeometryFactory()); }
+
+/*protected*/
 GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID,
 		CoordinateSequenceFactory* nCoordinateSequenceFactory)
 	:
@@ -115,7 +119,17 @@ GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID,
 	}
 }
 
-/*public*/
+/*public static*/
+GeometryFactory::unique_ptr
+GeometryFactory::create(const PrecisionModel* pm, int newSRID,
+		CoordinateSequenceFactory* nCoordinateSequenceFactory)
+{
+  return GeometryFactory::unique_ptr(
+    new GeometryFactory(pm, newSRID, nCoordinateSequenceFactory)
+  );
+}
+
+/*protected*/
 GeometryFactory::GeometryFactory(
 		CoordinateSequenceFactory* nCoordinateSequenceFactory)
 	:
@@ -133,7 +147,17 @@ GeometryFactory::GeometryFactory(
 	}
 }
 
-/*public*/
+/*public static*/
+GeometryFactory::unique_ptr
+GeometryFactory::create(
+		CoordinateSequenceFactory* nCoordinateSequenceFactory)
+{
+  return GeometryFactory::unique_ptr(
+    new GeometryFactory(nCoordinateSequenceFactory)
+  );
+}
+
+/*protected*/
 GeometryFactory::GeometryFactory(const PrecisionModel *pm)
 	:
 	SRID(0),
@@ -150,7 +174,16 @@ GeometryFactory::GeometryFactory(const PrecisionModel *pm)
 	}
 }
 
-/*public*/
+/*public static*/
+GeometryFactory::unique_ptr
+GeometryFactory::create(const PrecisionModel *pm)
+{
+  return GeometryFactory::unique_ptr(
+    new GeometryFactory(pm)
+  );
+}
+
+/*protected*/
 GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID)
 	:
 	SRID(newSRID),
@@ -167,7 +200,16 @@ GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID)
 	}
 }
 
-/*public*/
+/*public static*/
+GeometryFactory::unique_ptr
+GeometryFactory::create(const PrecisionModel* pm, int newSRID)
+{
+  return GeometryFactory::unique_ptr(
+    new GeometryFactory(pm, newSRID)
+  );
+}
+
+/*protected*/
 GeometryFactory::GeometryFactory(const GeometryFactory &gf)
 {
 	assert(gf.precisionModel);
@@ -178,7 +220,16 @@ GeometryFactory::GeometryFactory(const GeometryFactory &gf)
   _geometryCount=0;
 }
 
-/*public*/
+/*public static*/
+GeometryFactory::unique_ptr
+GeometryFactory::create(const GeometryFactory &gf)
+{
+  return GeometryFactory::unique_ptr(
+    new GeometryFactory(gf)
+  );
+}
+
+/*public virtual*/
 GeometryFactory::~GeometryFactory(){
 #if GEOS_DEBUG
 	std::cerr << "GEOS_DEBUG: GeometryFactory["<<this<<"]::~GeometryFactory()" << std::endl;
@@ -754,7 +805,7 @@ GeometryFactory::delChild(const Geometry *) const
 }
 
 void
-GeometryFactory::autoDestroy()
+GeometryFactory::destroy()
 {
 	assert(!_autoDestroy); // don't call me twice !
 	_autoDestroy = true;

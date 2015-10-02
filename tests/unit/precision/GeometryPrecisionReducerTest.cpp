@@ -25,11 +25,12 @@ namespace tut
     struct test_gpr_data
     {
         typedef std::auto_ptr<geos::geom::Geometry> GeometryPtr;
+        typedef geos::geom::GeometryFactory GeometryFactory;
 
         geos::geom::PrecisionModel pm_float_;
         geos::geom::PrecisionModel pm_fixed_;
-        geos::geom::GeometryFactory factory_;
-        geos::geom::GeometryFactory factory_fixed_;
+        GeometryFactory::unique_ptr factory_;
+        GeometryFactory::unique_ptr factory_fixed_;
         geos::io::WKTReader reader_;
         geos::precision::GeometryPrecisionReducer reducer_;
         geos::precision::GeometryPrecisionReducer reducerKeepCollapse_; // keep collapse
@@ -38,12 +39,12 @@ namespace tut
         test_gpr_data() :
             pm_float_(),
             pm_fixed_(1),
-            factory_(&pm_float_, 0),
-            factory_fixed_(&pm_fixed_, 0),
-            reader_(&factory_),
+            factory_(GeometryFactory::create(&pm_float_, 0)),
+            factory_fixed_(GeometryFactory::create(&pm_fixed_, 0)),
+            reader_(factory_.get()),
             reducer_(pm_fixed_),
             reducerKeepCollapse_(pm_fixed_),
-            reducerChangePM_(factory_fixed_)
+            reducerChangePM_(*factory_fixed_)
         {
             reducerKeepCollapse_.setRemoveCollapsedComponents(false);
         }
@@ -171,7 +172,7 @@ namespace tut
         GeometryPtr result(reducerChangePM_.reduce(*g1));
 
         ensure( result->equalsExact(g2.get()) );
-        ensure( result->getFactory() == &factory_fixed_ );
+        ensure( result->getFactory() == factory_fixed_.get() );
     }
 
     // Test points with changed PM
@@ -185,7 +186,7 @@ namespace tut
         GeometryPtr result(reducerChangePM_.reduce(*g1));
 
         ensure( result->equalsExact(g2.get()) );
-        ensure( result->getFactory() == &factory_fixed_ );
+        ensure( result->getFactory() == factory_fixed_.get() );
     }
 
 

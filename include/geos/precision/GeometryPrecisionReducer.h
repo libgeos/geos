@@ -20,6 +20,7 @@
 #define GEOS_PRECISION_GEOMETRYPRECISIONREDUCER_H
 
 #include <geos/export.h>
+#include <geos/geom/GeometryFactory.h> // for GeometryFactory::unique_ptr
 #include <memory> // for auto_ptr
 
 // Forward declarations
@@ -57,7 +58,7 @@ private:
   std::auto_ptr<geom::Geometry> fixPolygonalTopology(
                                                  const geom::Geometry& geom );
 
-  std::auto_ptr<geom::GeometryFactory> createFactory(
+  geom::GeometryFactory::unique_ptr createFactory(
                                           const geom::GeometryFactory& oldGF,
                                           const geom::PrecisionModel& newPM );
 

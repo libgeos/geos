@@ -469,12 +469,12 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 		for (double scale=maxScale; scale >= 1; scale /= 10)
 		{
 			PrecisionModel pm(scale);
-			GeometryFactory gf(&pm);
+			GeometryFactory::unique_ptr gf = GeometryFactory::create(&pm);
 #if GEOS_DEBUG_BINARYOP
 			std::cerr << "Trying with scale " << scale << std::endl;
 #endif
 
-			precision::GeometryPrecisionReducer reducer( gf );
+			precision::GeometryPrecisionReducer reducer( *gf );
 			GeomPtr rG0( reducer.reduce(*g0) );
 			GeomPtr rG1( reducer.reduce(*g1) );
 

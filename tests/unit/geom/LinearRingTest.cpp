@@ -40,7 +40,7 @@ namespace tut
 		typedef geos::geom::LinearRing const* LinearRingCPtr;
 
 		geos::geom::PrecisionModel pm_;
-		geos::geom::GeometryFactory factory_;
+		geos::geom::GeometryFactory::unique_ptr factory_;
 		geos::io::WKTReader reader_;
 
 		geos::geom::LinearRing empty_ring_;
@@ -48,8 +48,9 @@ namespace tut
 		const size_t ring_size_;
 
 		test_linearring_data()
-			: pm_(1000), factory_(&pm_, 0), reader_(&factory_),
-			empty_ring_(new geos::geom::CoordinateArraySequence(), &factory_),
+			: pm_(1000), factory_(geos::geom::GeometryFactory::create(&pm_, 0))
+      , reader_(factory_.get())
+      , empty_ring_(new geos::geom::CoordinateArraySequence(), factory_.get()),
 			ring_size_(7)
 		{
 			// Create non-empty LinearRing
@@ -60,7 +61,7 @@ namespace tut
 
 		~test_linearring_data()
 		{
-			factory_.destroyGeometry(ring_);
+			factory_->destroyGeometry(ring_);
         }
 
     private:
@@ -103,7 +104,7 @@ namespace tut
 		try
 		{
 			// Create non-empty linearring instance
-			geos::geom::LinearRing ring(coords, &factory_);
+			geos::geom::LinearRing ring(coords, factory_.get());
 			ensure( !ring.isEmpty() );
 			ensure( ring.isClosed() );
 			ensure( ring.isRing() );
@@ -176,7 +177,7 @@ namespace tut
 		GeometryPtr envelope = empty_ring_.getEnvelope();	
 		ensure( envelope != 0 );
 		ensure( envelope->isEmpty() );
-		factory_.destroyGeometry(envelope);
+		factory_->destroyGeometry(envelope);
 	}
 
 	// Test of getBoundary() for empty LinearRing
@@ -187,7 +188,7 @@ namespace tut
 		GeometryPtr boundary = empty_ring_.getBoundary();	
 		ensure( boundary != 0 );
 		ensure( boundary->isEmpty() );
-		factory_.destroyGeometry(boundary);
+		factory_->destroyGeometry(boundary);
 	}
 
 	// Test of convexHull() for empty LinearRing
@@ -198,7 +199,7 @@ namespace tut
 		GeometryPtr hull = empty_ring_.convexHull();	
 		ensure( hull != 0 );
 		ensure( hull->isEmpty() );
-		factory_.destroyGeometry(hull);
+		factory_->destroyGeometry(hull);
 	}
 
 	// Test of getGeometryTypeId() for empty LinearRing
@@ -281,7 +282,7 @@ namespace tut
 		ensure_equals( envelope->getDimension(), geos::geom::Dimension::A );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(envelope);
+		factory_->destroyGeometry(envelope);
 	}
 
 	// Test of getBoundary() for non-empty LinearRing
@@ -298,7 +299,7 @@ namespace tut
 		ensure( "[OGC] The boundary of a closed Curve must be empty.", boundary->isEmpty() );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(boundary);
+		factory_->destroyGeometry(boundary);
 	}
 
 	// Test of convexHull() for non-empty LinearRing
@@ -315,7 +316,7 @@ namespace tut
 		ensure_equals( hull->getDimension(), geos::geom::Dimension::A );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(hull);
+		factory_->destroyGeometry(hull);
 	}
 
 	// Test of getGeometryTypeId() for non-empty LinearRing
@@ -388,7 +389,7 @@ namespace tut
 			ensure(geo != 0);
 
 			// FREE TESTED LINEARRING
-			factory_.destroyGeometry(geo);
+			factory_->destroyGeometry(geo);
 
 			fail("IllegalArgumentException expected.");
 		}
@@ -416,7 +417,7 @@ namespace tut
 			ensure( !ring->isValid() );
 
 			// FREE TESTED LINEARRING
-			factory_.destroyGeometry(geo);
+			factory_->destroyGeometry(geo);
 
 			fail("IllegalArgumentException expected.");
 		}

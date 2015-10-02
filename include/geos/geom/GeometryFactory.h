@@ -66,12 +66,34 @@ namespace geom { // geos::geom
  */
 class GEOS_DLL GeometryFactory {
 public:
+
+  // TODO: typedef std::unique_ptr<GeometryFactory,destroy>
+  class unique_ptr {
+    mutable GeometryFactory *_f;
+  public:
+    // Copying an auto_unique_ptr transfers ownership
+    unique_ptr(const unique_ptr& o): _f(o.release()) {};
+    GeometryFactory* release() const { GeometryFactory *f = _f; _f=0; return f; }
+    void reset(GeometryFactory* f) { if ( _f ) _f->destroy(); _f = f; }
+    // assigning an auto_unique_ptr transfers ownership
+    unique_ptr& operator=(const unique_ptr& o) {
+      reset( o.release() );
+      return *this;
+    }
+    GeometryFactory* get() const { return _f; }
+    GeometryFactory* operator->() const { return _f; }
+    GeometryFactory& operator*() { return *_f; };
+    unique_ptr(): _f(0) {}
+    unique_ptr(GeometryFactory* f): _f(f) {}
+    ~unique_ptr() { reset(0); }
+  };
+
 	/**
 	 * \brief 
 	 * Constructs a GeometryFactory that generates Geometries having a
 	 * floating PrecisionModel and a spatial-reference ID of 0.
 	 */
-	GeometryFactory();
+	static GeometryFactory::unique_ptr create();
 
 	/**
 	 * \brief
@@ -85,7 +107,7 @@ public:
 	 *     and must be available for the whole lifetime
 	 *     of the GeometryFactory
 	 */
-	GeometryFactory(const PrecisionModel *pm, int newSRID,
+	static GeometryFactory::unique_ptr create(const PrecisionModel *pm, int newSRID,
 		CoordinateSequenceFactory *nCoordinateSequenceFactory);
 
 	/**
@@ -94,7 +116,7 @@ public:
 	 * given CoordinateSequence implementation, a double-precision floating
 	 * PrecisionModel and a spatial-reference ID of 0.
 	 */
-	GeometryFactory(CoordinateSequenceFactory *nCoordinateSequenceFactory);
+	static GeometryFactory::unique_ptr create(CoordinateSequenceFactory *nCoordinateSequenceFactory);
 
 	/**
 	 * \brief
@@ -104,7 +126,7 @@ public:
 	 *
 	 * @param pm the PrecisionModel to use
 	 */
-	GeometryFactory(const PrecisionModel *pm);
+	static GeometryFactory::unique_ptr create(const PrecisionModel *pm);
 
 	/**
 	 * \brief
@@ -115,14 +137,14 @@ public:
 	 * @param pm the PrecisionModel to use, will be copied internally
 	 * @param newSRID the SRID to use
 	 */
-	GeometryFactory(const PrecisionModel* pm, int newSRID);
+	static GeometryFactory::unique_ptr create(const PrecisionModel* pm, int newSRID);
 
 	/**
 	 * \brief Copy constructor
 	 *
 	 * @param gf the GeometryFactory to clone from
 	 */
-	GeometryFactory(const GeometryFactory &gf);
+	static GeometryFactory::unique_ptr create(const GeometryFactory &gf);
 
 	/**
 	 * \brief 
@@ -132,9 +154,6 @@ public:
 	 */
 	static const GeometryFactory*
 	getDefaultInstance();
-
-	/// Destructor
-	virtual ~GeometryFactory();
 
 //Skipped a lot of list to array convertors
 
@@ -383,10 +402,76 @@ public:
 	/// Destroy a Geometry, or release it
 	void destroyGeometry(Geometry *g) const;
 
-	/// Request that the instance is deleted when last child Geometry is
+	/// Request that the instance is deleted.
+  //
+  /// It will really be deleted only after last child Geometry is
 	/// deleted. Do not use the instance anymore after calling this function
 	/// (unless you're a live child!).
-	void autoDestroy();
+	///
+	void destroy();
+
+protected:
+
+	/**
+	 * \brief 
+	 * Constructs a GeometryFactory that generates Geometries having a
+	 * floating PrecisionModel and a spatial-reference ID of 0.
+	 */
+	GeometryFactory();
+
+	/**
+	 * \brief
+	 * Constructs a GeometryFactory that generates Geometries having
+	 * the given PrecisionModel, spatial-reference ID, and
+	 * CoordinateSequence implementation.
+	 *
+	 * NOTES:
+	 * (1) the given PrecisionModel is COPIED
+	 * (2) the CoordinateSequenceFactory is NOT COPIED
+	 *     and must be available for the whole lifetime
+	 *     of the GeometryFactory
+	 */
+	GeometryFactory(const PrecisionModel *pm, int newSRID,
+		CoordinateSequenceFactory *nCoordinateSequenceFactory);
+
+	/**
+	 * \brief
+	 * Constructs a GeometryFactory that generates Geometries having the
+	 * given CoordinateSequence implementation, a double-precision floating
+	 * PrecisionModel and a spatial-reference ID of 0.
+	 */
+	GeometryFactory(CoordinateSequenceFactory *nCoordinateSequenceFactory);
+
+	/**
+	 * \brief
+	 * Constructs a GeometryFactory that generates Geometries having
+	 * the given PrecisionModel and the default CoordinateSequence
+	 * implementation.
+	 *
+	 * @param pm the PrecisionModel to use
+	 */
+	GeometryFactory(const PrecisionModel *pm);
+
+	/**
+	 * \brief
+	 * Constructs a GeometryFactory that generates Geometries having
+	 * the given {@link PrecisionModel} and spatial-reference ID,
+	 * and the default CoordinateSequence implementation.
+	 *
+	 * @param pm the PrecisionModel to use, will be copied internally
+	 * @param newSRID the SRID to use
+	 */
+	GeometryFactory(const PrecisionModel* pm, int newSRID);
+
+	/**
+	 * \brief Copy constructor
+	 *
+	 * @param gf the GeometryFactory to clone from
+	 */
+	GeometryFactory(const GeometryFactory &gf);
+
+	/// Destructor
+	virtual ~GeometryFactory();
 
 private:
 

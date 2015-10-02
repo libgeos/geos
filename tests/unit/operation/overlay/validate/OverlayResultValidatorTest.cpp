@@ -27,7 +27,6 @@ namespace tut
 	// Common data used by tests
 	struct test_overlayresultvalidator_data
 	{
-		geos::geom::GeometryFactory gf;
 		geos::io::WKTReader wktreader;
 		geos::algorithm::PointLocator locator;
 
@@ -37,8 +36,7 @@ namespace tut
 
 		test_overlayresultvalidator_data()
 			:
-			gf(),
-			wktreader(&gf)
+			wktreader()
 		{
 		}
 

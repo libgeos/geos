@@ -23,10 +23,11 @@ namespace tut
     struct test_sgpr_data
     {
         typedef std::auto_ptr<geos::geom::Geometry> GeometryPtr;
+        typedef geos::geom::GeometryFactory GeometryFactory;
 
         geos::geom::PrecisionModel pm_float_;
         geos::geom::PrecisionModel pm_fixed_;
-        geos::geom::GeometryFactory factory_;
+        GeometryFactory::unique_ptr factory_;
         geos::io::WKTReader reader_;
         geos::precision::SimpleGeometryPrecisionReducer reducer_;
         geos::precision::SimpleGeometryPrecisionReducer reducer2_; // keep collapse
@@ -34,8 +35,8 @@ namespace tut
         test_sgpr_data() :
             pm_float_(),
             pm_fixed_(1),
-            factory_(&pm_float_, 0),
-            reader_(&factory_),
+            factory_(GeometryFactory::create(&pm_float_, 0)),
+            reader_(factory_.get()),
             reducer_(&pm_fixed_),
             reducer2_(&pm_fixed_)
         {

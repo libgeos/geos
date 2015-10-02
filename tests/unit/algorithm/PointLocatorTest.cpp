@@ -42,8 +42,8 @@ namespace tut
 	// for the same reason...
 	//
 	static PrecisionModel pm;
-	static GeometryFactory gf(&pm);
-        static geos::io::WKTReader reader(&gf);
+	static GeometryFactory::unique_ptr gf = GeometryFactory::create(&pm);
+	static geos::io::WKTReader reader(gf.get());
 
 	typedef std::auto_ptr<Geometry> GeomPtr;
 

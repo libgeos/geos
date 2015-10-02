@@ -33,12 +33,13 @@ namespace tut
     struct test_isvalidop_data
     {
 	typedef std::auto_ptr<Geometry> GeomPtr;
+        typedef geos::geom::GeometryFactory GeometryFactory;
 
         geos::geom::PrecisionModel pm_;
-        geos::geom::GeometryFactory factory_;
+        GeometryFactory::unique_ptr factory_;
 
         test_isvalidop_data()
-			: pm_(1), factory_(&pm_, 0)
+			: pm_(1), factory_(GeometryFactory::create(&pm_, 0))
         {}
     };
 
@@ -59,7 +60,7 @@ namespace tut
 	CoordinateSequence* cs = new CoordinateArraySequence();
 	cs->add(Coordinate(0.0, 0.0));
 	cs->add(Coordinate(1.0, DoubleNotANumber));
-	GeomPtr line ( factory_.createLineString(cs) );
+	GeomPtr line ( factory_->createLineString(cs) );
 
 
 	IsValidOp isValidOp(line.get());

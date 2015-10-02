@@ -36,13 +36,11 @@ static const double TOLERANCE_DIST = 0.001;
 struct test_lengthindexedline_data
 {
     test_lengthindexedline_data()
-        : pm(), gf(&pm), reader(&gf), writer()
+        : reader(), writer()
     {
       writer.setTrim(true);
     }
     
-    PrecisionModel pm;
-    GeometryFactory gf;
     geos::io::WKTReader reader;
     geos::io::WKTWriter writer;
     

@@ -54,11 +54,13 @@ namespace tut
 
         const int srid_;
         geos::geom::PrecisionModel pm_;
-        geos::geom::GeometryFactory factory_;
+        geos::geom::GeometryFactory::unique_ptr factory_;
         geos::io::WKTReader reader_;
 
         test_geometryfactory_data()
-            : x_(5), y_(10), z_(15), srid_(666), pm_(1.0), factory_(&pm_, srid_), reader_(&factory_)
+            : x_(5), y_(10), z_(15), srid_(666), pm_(1.0),
+factory_(geos::geom::GeometryFactory::create(&pm_, srid_)),
+reader_(factory_.get())
         {}
     private:
         // Declare type as noncopyable
@@ -80,18 +82,19 @@ namespace tut
 	template<>
 	void object::test<1>()
 	{
-		geos::geom::GeometryFactory gf;
+		using geos::geom::GeometryFactory;
+		GeometryFactory::unique_ptr gf = GeometryFactory::create();
 
-		ensure_equals( gf.getSRID(), 0 );
-		ensure_equals( gf.getPrecisionModel()->getType(), geos::geom::PrecisionModel::FLOATING );
+		ensure_equals( gf->getSRID(), 0 );
+		ensure_equals( gf->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FLOATING );
 
-		geos::geom::Geometry* geo = gf.createEmptyGeometry();
+		geos::geom::Geometry* geo = gf->createEmptyGeometry();
 		ensure( "createEmptyGeometry() returned null pointer.", geo != 0 );
-		ensure_equals( geo->getSRID() , gf.getSRID() );
+		ensure_equals( geo->getSRID() , gf->getSRID() );
 		ensure_equals( geo->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FLOATING );
 		
 		// FREE MEMORY
-		gf.destroyGeometry(geo);
+		gf->destroyGeometry(geo);
 	}
 
 	// Test of user's constructor
@@ -107,20 +110,20 @@ namespace tut
 
 		{
 			PrecisionModel pm(1.0);
-			GeometryFactory gf(&pm, srid_, &csf);
+			GeometryFactory::unique_ptr gf = GeometryFactory::create(&pm, srid_, &csf);
 
-			ensure_equals( gf.getSRID(), srid_ );
-			ensure_equals( gf.getPrecisionModel()->getType(), geos::geom::PrecisionModel::FIXED );
+			ensure_equals( gf->getSRID(), srid_ );
+			ensure_equals( gf->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FIXED );
 
-			ensure_equals( &csf, gf.getCoordinateSequenceFactory() );
+			ensure_equals( &csf, gf->getCoordinateSequenceFactory() );
 
-			GeometryPtr geo = gf.createEmptyGeometry();
+			GeometryPtr geo = gf->createEmptyGeometry();
 			ensure( "createEmptyGeometry() returned null pointer.", geo != 0 );
-			ensure_equals( geo->getSRID() , gf.getSRID() );
+			ensure_equals( geo->getSRID() , gf->getSRID() );
 			ensure_equals( geo->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FIXED );
 			
 			// FREE MEMORY
-			gf.destroyGeometry(geo);
+			gf->destroyGeometry(geo);
 		}
 		// csf lifetime must exceed lifetime of the GeometryFactory instance
 
@@ -137,18 +140,18 @@ namespace tut
 		CoordinateArraySequenceFactory csf;
 
 		{
-			GeometryFactory gf(&csf);
+			GeometryFactory::unique_ptr gf = GeometryFactory::create(&csf);
 
-			ensure_equals( gf.getSRID(), 0 );
-			ensure_equals( gf.getPrecisionModel()->getType(), geos::geom::PrecisionModel::FLOATING );
+			ensure_equals( gf->getSRID(), 0 );
+			ensure_equals( gf->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FLOATING );
 
-			GeometryPtr geo = gf.createEmptyGeometry();
+			GeometryPtr geo = gf->createEmptyGeometry();
 			ensure( "createEmptyGeometry() returned null pointer.", geo != 0 );
-			ensure_equals( geo->getSRID() , gf.getSRID() );
+			ensure_equals( geo->getSRID() , gf->getSRID() );
 			ensure_equals( geo->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FLOATING );
 			
 			// FREE MEMORY
-			gf.destroyGeometry(geo);
+			gf->destroyGeometry(geo);
 		}
 		// csf lifetime must exceed lifetime of the GeometryFactory instance
 	}
@@ -159,20 +162,21 @@ namespace tut
 	void object::test<4>()
 	{
 		using geos::geom::PrecisionModel;
+		using geos::geom::GeometryFactory;
 
 		PrecisionModel pm(PrecisionModel::FIXED);
-		geos::geom::GeometryFactory gf(&pm);
+		GeometryFactory::unique_ptr gf(GeometryFactory::create(&pm));
 
-		ensure_equals( gf.getSRID(), 0 );
-		ensure_equals( gf.getPrecisionModel()->getType(), PrecisionModel::FIXED );
+		ensure_equals( gf->getSRID(), 0 );
+		ensure_equals( gf->getPrecisionModel()->getType(), PrecisionModel::FIXED );
 
-		GeometryPtr geo = gf.createEmptyGeometry();
+		GeometryPtr geo = gf->createEmptyGeometry();
 		ensure( "createEmptyGeometry() returned null pointer.", geo != 0 );
-		ensure_equals( geo->getSRID() , gf.getSRID() );
+		ensure_equals( geo->getSRID() , gf->getSRID() );
 		ensure_equals( geo->getPrecisionModel()->getType(), PrecisionModel::FIXED );
 		
 		// FREE MEMORY
-		gf.destroyGeometry(geo);
+		gf->destroyGeometry(geo);
 	}
 
 	// Test of user's constructor
@@ -181,20 +185,21 @@ namespace tut
 	void object::test<5>()
 	{
 		using geos::geom::PrecisionModel;
+		using geos::geom::GeometryFactory;
 
 		PrecisionModel pm(PrecisionModel::FIXED);
-		geos::geom::GeometryFactory gf(&pm, srid_);
+		GeometryFactory::unique_ptr gf(GeometryFactory::create(&pm, srid_));
 
-		ensure_equals( gf.getSRID(), srid_ );
-		ensure_equals( gf.getPrecisionModel()->getType(), PrecisionModel::FIXED );
+		ensure_equals( gf->getSRID(), srid_ );
+		ensure_equals( gf->getPrecisionModel()->getType(), PrecisionModel::FIXED );
 
-		GeometryPtr geo = gf.createEmptyGeometry();
+		GeometryPtr geo = gf->createEmptyGeometry();
 		ensure( "createEmptyGeometry() returned null pointer.", geo != 0 );
-		ensure_equals( geo->getSRID() , gf.getSRID() );
+		ensure_equals( geo->getSRID() , gf->getSRID() );
 		ensure_equals( geo->getPrecisionModel()->getType(), PrecisionModel::FIXED );
 		
 		// FREE MEMORY
-		gf.destroyGeometry(geo);
+		gf->destroyGeometry(geo);
 	}
 
 	// Test of copy constructor
@@ -202,10 +207,11 @@ namespace tut
 	template<>
 	void object::test<6>()
 	{
-		geos::geom::GeometryFactory gf(factory_);
+		using geos::geom::GeometryFactory;
+		GeometryFactory::unique_ptr gf(GeometryFactory::create(*factory_));
 
-		ensure_equals( factory_.getSRID(), gf.getSRID() );
-		ensure_equals( factory_.getPrecisionModel()->getType(), gf.getPrecisionModel()->getType() );
+		ensure_equals( factory_->getSRID(), gf->getSRID() );
+		ensure_equals( factory_->getPrecisionModel()->getType(), gf->getPrecisionModel()->getType() );
 	}
 
 	// Test of createEmptyGeometry() const
@@ -213,7 +219,7 @@ namespace tut
 	template<>
 	void object::test<7>()
 	{
-		GeometryPtr geo = factory_.createEmptyGeometry();
+		GeometryPtr geo = factory_->createEmptyGeometry();
 
 		ensure( "createEmptyGeometry() returned null pointer.", geo != 0 );
 		ensure( "createEmptyGeometry() returned non-empty geometry.", geo->isEmpty() );
@@ -229,7 +235,7 @@ namespace tut
 		*/
 
 		// FREE MEMORY
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 	}
 
 	// Test of createPoint() const
@@ -237,7 +243,7 @@ namespace tut
 	template<>
 	void object::test<8>()
 	{
-		PointPtr pt = factory_.createPoint();
+		PointPtr pt = factory_->createPoint();
 
 		ensure( "createPoint() returned null pointer.", pt != 0 );
 		ensure( "createPoint() returned non-empty point.", pt->isEmpty() );
@@ -250,17 +256,17 @@ namespace tut
 		geo = pt->getEnvelope();
 		ensure( geo != 0 );
 		ensure( geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		geo = pt->getBoundary();
 		ensure( geo != 0 );
 		ensure( geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		geo = pt->convexHull();
 		ensure( geo != 0 );
 		ensure( geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		ensure_equals( pt->getGeometryTypeId(), geos::geom::GEOS_POINT );
 		ensure_equals( pt->getDimension(), geos::geom::Dimension::P );
@@ -270,7 +276,7 @@ namespace tut
 		ensure_equals( pt->getArea(), 0.0 );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(pt);
+		factory_->destroyGeometry(pt);
 	}
 
 	// Test of createPoint(const Coordinate &coordinate) const
@@ -280,7 +286,7 @@ namespace tut
 	{
 		geos::geom::Coordinate coord(x_, y_, z_);
 
-		PointPtr pt = factory_.createPoint(coord);
+		PointPtr pt = factory_->createPoint(coord);
 
 		ensure( "createPoint() returned null pointer.", pt != 0 );
 		ensure( "createPoint() returned empty point.", !pt->isEmpty() );
@@ -298,22 +304,22 @@ namespace tut
 		geo = pt->getEnvelope();
 		ensure( geo != 0 );
 		ensure( !geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		geo = pt->getCentroid();
 		ensure( geo != 0 );
 		ensure( !geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		geo = pt->getBoundary();
 		ensure( geo != 0 );
 		ensure( geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		geo = pt->convexHull();
 		ensure( geo != 0 );
 		ensure( !geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		ensure_equals( pt->getGeometryTypeId(), geos::geom::GEOS_POINT );
 		ensure_equals( pt->getDimension(), geos::geom::Dimension::P );
@@ -323,7 +329,7 @@ namespace tut
 		ensure_equals( pt->getArea(), 0.0 );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(pt);
+		factory_->destroyGeometry(pt);
 	}
 
 	// Test of createPoint(CoordinateSequence *coordinates) const
@@ -338,7 +344,7 @@ namespace tut
 		ensure( "sequence is null pointer.", sequence != 0 );
 		sequence->add(coord);
 
-		PointPtr pt = factory_.createPoint(sequence);
+		PointPtr pt = factory_->createPoint(sequence);
 
 		ensure( "createPoint() returned null pointer.", pt != 0 );
 		ensure( "createPoint() returned empty point.", !pt->isEmpty() );
@@ -356,22 +362,22 @@ namespace tut
 		geo = pt->getEnvelope();
 		ensure( geo != 0 );
 		ensure( !geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		geo = pt->getCentroid();
 		ensure( geo != 0 );
 		ensure( !geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		geo = pt->getBoundary();
 		ensure( geo != 0 );
 		ensure( geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		geo = pt->convexHull();
 		ensure( geo != 0 );
 		ensure( !geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		ensure_equals( pt->getGeometryTypeId(), geos::geom::GEOS_POINT );
 		ensure_equals( pt->getDimension(), geos::geom::Dimension::P );
@@ -381,7 +387,7 @@ namespace tut
 		ensure_equals( pt->getArea(), 0.0 );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(pt);
+		factory_->destroyGeometry(pt);
 	}
 
 	// Test of createPoint(const CoordinateSequence &coordinates) const
@@ -394,7 +400,7 @@ namespace tut
 		geos::geom::CoordinateArraySequence sequence;
 		sequence.add(coord);
 
-		PointPtr pt = factory_.createPoint(sequence);
+		PointPtr pt = factory_->createPoint(sequence);
 
 		ensure( "createPoint() returned null pointer.", pt != 0 );
 		ensure( "createPoint() returned empty point.", !pt->isEmpty() );
@@ -412,22 +418,22 @@ namespace tut
 		geo = pt->getEnvelope();
 		ensure( geo != 0 );
 		ensure( !geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		geo = pt->getCentroid();
 		ensure( geo != 0 );
 		ensure( !geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		geo = pt->getBoundary();
 		ensure( geo != 0 );
 		ensure( geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		geo = pt->convexHull();
 		ensure( geo != 0 );
 		ensure( !geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		ensure_equals( pt->getGeometryTypeId(), geos::geom::GEOS_POINT );
 		ensure_equals( pt->getDimension(), geos::geom::Dimension::P );
@@ -437,7 +443,7 @@ namespace tut
 		ensure_equals( pt->getArea(), 0.0 );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(pt);
+		factory_->destroyGeometry(pt);
 	}
 
 	// Test of createLinearRing() const
@@ -445,7 +451,7 @@ namespace tut
 	template<>
 	void object::test<12>()
 	{
-		LinearRingPtr lr = factory_.createLinearRing();
+		LinearRingPtr lr = factory_->createLinearRing();
 
 		ensure( "createLinearRing() returned null pointer.", lr != 0 );
 		ensure( "createLinearRing() returned non-empty point.", lr->isEmpty() );
@@ -470,7 +476,7 @@ namespace tut
 		ensure_equals( lr->getArea(), 0.0 );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(lr);
+		factory_->destroyGeometry(lr);
 	}
 
 	// Test of createLinearRing(CoordinateSequence* newCoords) const
@@ -483,7 +489,7 @@ namespace tut
 		ensure( coords != 0 );
 		ensure_equals( coords->getSize(), size );
 
-		LinearRingPtr lr = factory_.createLinearRing(coords);
+		LinearRingPtr lr = factory_->createLinearRing(coords);
 		ensure( "createLinearRing() returned null pointer.", lr != 0 );
 		ensure( "createLinearRing() returned empty point.", !lr->isEmpty() );
 		ensure( lr->isSimple() );
@@ -500,7 +506,7 @@ namespace tut
 		ensure_equals( lr->getArea(), 0.0 );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(lr);	
+		factory_->destroyGeometry(lr);	
 	}
 
 	// Test of createLinearRing(const CoordinateSequence& coordinates) const
@@ -512,7 +518,7 @@ namespace tut
 		geos::geom::CoordinateArraySequence coords(size);
 		ensure_equals( coords.getSize(), size );
 
-		LinearRingPtr lr = factory_.createLinearRing(coords);
+		LinearRingPtr lr = factory_->createLinearRing(coords);
 		ensure( "createLinearRing() returned empty point.", !lr->isEmpty() );
 		ensure_equals( lr->getNumPoints(), size );
 		ensure( lr->isSimple() );
@@ -526,7 +532,7 @@ namespace tut
 		ensure_equals( lr->getArea(), 0.0 );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(lr);
+		factory_->destroyGeometry(lr);
 	}
 
 	// Test of createLineString() const
@@ -534,7 +540,7 @@ namespace tut
 	template<>
 	void object::test<15>()
 	{
-		LineStringPtr line = factory_.createLineString();
+		LineStringPtr line = factory_->createLineString();
 		
 		ensure( "createLineString() returned null pointer.", line != 0 );
 		ensure( "createLineString() returned non-empty point.", line->isEmpty() );
@@ -550,17 +556,17 @@ namespace tut
 		geo = line->getEnvelope();
 		ensure( geo != 0 );
 		ensure( geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		geo = line->getBoundary();
 		ensure( geo != 0 );
 		ensure( geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		geo = line->convexHull();
 		ensure( geo != 0 );
 		ensure( geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		ensure_equals( line->getGeometryTypeId(), geos::geom::GEOS_LINESTRING );
 		ensure_equals( line->getDimension(), geos::geom::Dimension::L );
@@ -570,7 +576,7 @@ namespace tut
 		ensure_equals( line->getArea(), 0.0 );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(line);
+		factory_->destroyGeometry(line);
 	}
 
 	// Test of createLineString(CoordinateSequence* coordinates) const
@@ -583,7 +589,7 @@ namespace tut
 		ensure( coords != 0 );
 		ensure_equals( coords->getSize(), size );
 
-		LineStringPtr line = factory_.createLineString(coords);
+		LineStringPtr line = factory_->createLineString(coords);
 		ensure( "createLineString() returned null pointer.", line != 0 );
 		ensure( "createLineString() returned empty point.", !line->isEmpty() );
 		ensure( line->isSimple() );
@@ -600,7 +606,7 @@ namespace tut
 		ensure_equals( line->getArea(), 0.0 );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(line);	
+		factory_->destroyGeometry(line);	
 	}
 
 	// Test of createLineString(const CoordinateSequence& coordinates) const
@@ -612,7 +618,7 @@ namespace tut
 		geos::geom::CoordinateArraySequence coords(size);
 		ensure_equals( coords.getSize(), size );
 
-		LineStringPtr line = factory_.createLineString(coords);
+		LineStringPtr line = factory_->createLineString(coords);
 		ensure( "createLineString() returned empty point.", !line->isEmpty() );
 		ensure_equals( line->getNumPoints(), size );
 		ensure( line->isSimple() );
@@ -626,14 +632,14 @@ namespace tut
 		ensure_equals( line->getArea(), 0.0 );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(line);
+		factory_->destroyGeometry(line);
 	}
 	// Test of createPolygon() const
 	template<>
 	template<>
 	void object::test<18>()
 	{
-		PolygonPtr poly = factory_.createPolygon();
+		PolygonPtr poly = factory_->createPolygon();
 
 		ensure( "createPolygon() returned null pointer.", poly != 0 );
 		ensure( "createPolygon() returned non-empty point.", poly->isEmpty() );
@@ -651,17 +657,17 @@ namespace tut
 		//geo = poly->getEnvelope();
 		//ensure( geo != 0 );
 		//ensure( geo->isEmpty() );
-		//factory_.destroyGeometry(geo);
+		//factory_->destroyGeometry(geo);
 
 		geo = poly->getBoundary();
 		ensure( geo != 0 );
 		ensure( geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		geo = poly->convexHull();
 		ensure( geo != 0 );
 		ensure( geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		ensure_equals( poly->getGeometryTypeId(), geos::geom::GEOS_POLYGON );
 		ensure_equals( poly->getDimension(), geos::geom::Dimension::A );
@@ -671,7 +677,7 @@ namespace tut
 		ensure_equals( poly->getArea(), 0.0 );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(poly);
+		factory_->destroyGeometry(poly);
 	}
 
 	// Test of createPolygon(LinearRing* shell, std::vector<Geometry*>* holes) const
@@ -695,7 +701,7 @@ namespace tut
 		ensure_equals( coords->getSize(), size );
 
 		// Create exterior ring
-		LinearRingPtr exterior = factory_.createLinearRing(coords);
+		LinearRingPtr exterior = factory_->createLinearRing(coords);
 		ensure( "createLinearRing returned null pointer.", exterior != 0 );
 		ensure( "createLinearRing() returned empty point.", !exterior->isEmpty() );
 		ensure( exterior->isSimple() );
@@ -707,7 +713,7 @@ namespace tut
 		ensure( exterior->getLength() != 0.0 );
 
 		// Create polygon
-		PolygonPtr poly = factory_.createPolygon(exterior, 0);
+		PolygonPtr poly = factory_->createPolygon(exterior, 0);
 		ensure( "createPolygon returned null pointer.", poly != 0 );
 		ensure( "createPolygon() returned empty point.", !poly->isEmpty() );
 		ensure( poly->isSimple() );
@@ -719,7 +725,7 @@ namespace tut
 		ensure( poly->getLength() != 0.0 );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(poly);	
+		factory_->destroyGeometry(poly);	
 	}
 
 	// Test of createPolygon(const LinearRing& shell, const std::vector<Geometry*>& holes) const
@@ -744,7 +750,7 @@ namespace tut
 		ensure_equals( coords->getSize(), exteriorSize );
 
 		// Create exterior ring
-		LinearRingPtr exterior = factory_.createLinearRing(coords);
+		LinearRingPtr exterior = factory_->createLinearRing(coords);
 		ensure( "createLinearRing returned null pointer.", exterior != 0 );
 		ensure( "createLinearRing() returned empty point.", !exterior->isEmpty() );
 		ensure( exterior->isSimple() );
@@ -769,7 +775,7 @@ namespace tut
 		holes.push_back(hole);
 
 		// Create polygon using copy ctor
-		PolygonPtr poly = factory_.createPolygon((*exterior), holes);
+		PolygonPtr poly = factory_->createPolygon((*exterior), holes);
 		ensure( "createPolygon returned null pointer.", poly != 0 );
 		ensure( "createPolygon() returned empty point.", !poly->isEmpty() );
 		ensure( poly->isSimple() );
@@ -791,8 +797,8 @@ namespace tut
 		}
 		holes.clear();
 
-		factory_.destroyGeometry(exterior);
-		factory_.destroyGeometry(poly);
+		factory_->destroyGeometry(exterior);
+		factory_->destroyGeometry(poly);
 	}
 
 	// Test of createGeometryCollection() const
@@ -800,7 +806,7 @@ namespace tut
 	template<>
 	void object::test<21>()
 	{
-		GeometryColPtr col = factory_.createGeometryCollection();
+		GeometryColPtr col = factory_->createGeometryCollection();
 
 		ensure( "createGeometryCollection() returned null pointer.", col != 0 );
 		ensure( col->isEmpty() );
@@ -826,7 +832,7 @@ namespace tut
 		ensure_equals( col->getArea(), 0.0 );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(col);
+		factory_->destroyGeometry(col);
 	}
 
 	// Test of createGeometryCollection(std::vector<Geometry*>* newGeoms) const
@@ -841,7 +847,7 @@ namespace tut
 
 		// Add single point
 		Coordinate coord(x_, y_, z_);
-		GeometryPtr point = factory_.createPoint(coord);
+		GeometryPtr point = factory_->createPoint(coord);
 		ensure( point != 0 );
 		vec->push_back(point);
 
@@ -852,17 +858,17 @@ namespace tut
 		coords->setAt(Coordinate(5, 5), 1);
 		coords->setAt(Coordinate(10, 5), 2);
 		ensure_equals( coords->getSize(), 3u );
-		GeometryPtr line = factory_.createLineString(coords);
+		GeometryPtr line = factory_->createLineString(coords);
 		vec->push_back(line);
 
 		// Create geometry collection
-		GeometryColPtr col = factory_.createGeometryCollection(vec);
+		GeometryColPtr col = factory_->createGeometryCollection(vec);
 		ensure( coords != 0 );
 		ensure_equals( col->getGeometryTypeId(), geos::geom::GEOS_GEOMETRYCOLLECTION );
 		ensure_equals( col->getNumGeometries(), 2u );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(col);
+		factory_->destroyGeometry(col);
 	}
 
 	// Test of createGeometryCollection(const std::vector<Geometry*>& newGeoms) const
@@ -876,29 +882,29 @@ namespace tut
 		std::vector<GeometryPtr> vec;
 
 		GeometryPtr geo = 0;
-		geo = factory_.createPoint(coord);
+		geo = factory_->createPoint(coord);
 		vec.push_back(geo);
 
 		coord.x *= 2;
 		coord.y *= 2;
 		coord.z *= 2;
-		geo = factory_.createPoint(coord);
+		geo = factory_->createPoint(coord);
 		vec.push_back(geo);
 
 		coord.x *= 3;
 		coord.y *= 3;
 		coord.z *= 3;
-		geo = factory_.createPoint(coord);
+		geo = factory_->createPoint(coord);
 		vec.push_back(geo);
 
 		// Factory creates copy of the vec collection
-		GeometryColPtr col = factory_.createGeometryCollection(vec);
+		GeometryColPtr col = factory_->createGeometryCollection(vec);
 		ensure( col != 0 );
 		ensure_equals( col->getGeometryTypeId() , geos::geom::GEOS_GEOMETRYCOLLECTION );
 		ensure_equals( col->getNumGeometries() , size );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(col);
+		factory_->destroyGeometry(col);
 		std::vector<GeometryPtr>::const_iterator it;
 		for (it = vec.begin(); it != vec.end(); ++it)
 		{
@@ -911,7 +917,7 @@ namespace tut
 	template<>
 	void object::test<24>()
 	{
-		MultiPointPtr mp = factory_.createMultiPoint();
+		MultiPointPtr mp = factory_->createMultiPoint();
 
 		ensure( "createMultiPoint() returned null pointer.", mp != 0 );
 		ensure( "createMultiPoint() returned non-empty point.", mp->isEmpty() );
@@ -926,17 +932,17 @@ namespace tut
 		//geo = poly->getEnvelope();
 		//ensure( geo != 0 );
 		//ensure( geo->isEmpty() );
-		//factory_.destroyGeometry(geo);
+		//factory_->destroyGeometry(geo);
 
 		geo = mp->getBoundary();
 		ensure( geo != 0 );
 		ensure( geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		geo = mp->convexHull();
 		ensure( geo != 0 );
 		ensure( geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		ensure_equals( mp->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT );
 		ensure_equals( mp->getDimension(), geos::geom::Dimension::P );
@@ -946,7 +952,7 @@ namespace tut
 		ensure_equals( mp->getArea(), 0.0 );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(mp);
+		factory_->destroyGeometry(mp);
 	}
 
 	// Test of createMultiPoint(std::vector<Geometry*>* newPoints) const
@@ -960,26 +966,26 @@ namespace tut
 		std::vector<GeometryPtr>* vec = new std::vector<GeometryPtr>();
 
 		GeometryPtr geo = 0;
-		geo = factory_.createPoint(coord);
+		geo = factory_->createPoint(coord);
 		ensure( geo != 0 );
 		vec->push_back(geo);
 
 		coord.x *= 2;
 		coord.y *= 2;
 		coord.z *= 2;
-		geo = factory_.createPoint(coord);
+		geo = factory_->createPoint(coord);
 		ensure( geo != 0 );
 		vec->push_back(geo);
 
 		coord.x *= 3;
 		coord.y *= 3;
 		coord.z *= 3;
-		geo = factory_.createPoint(coord);
+		geo = factory_->createPoint(coord);
 		ensure( geo != 0 );
 		vec->push_back(geo);
 
 		// Factory creates copy of the vec collection
-		MultiPointPtr mp = factory_.createMultiPoint(vec);
+		MultiPointPtr mp = factory_->createMultiPoint(vec);
 		ensure( mp != 0 );
 		ensure( mp->isValid() );
 		ensure( mp->isSimple() );
@@ -987,7 +993,7 @@ namespace tut
 		ensure_equals( mp->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(mp);
+		factory_->destroyGeometry(mp);
 	}
 
 	// Test of createMultiPoint(const std::vector<Geometry*>& fromPoints) const
@@ -1001,23 +1007,23 @@ namespace tut
 		std::vector<GeometryPtr> vec;
 
 		GeometryPtr geo = 0;
-		geo = factory_.createPoint(coord);
+		geo = factory_->createPoint(coord);
 		vec.push_back(geo);
 
 		coord.x *= 2;
 		coord.y *= 2;
 		coord.z *= 2;
-		geo = factory_.createPoint(coord);
+		geo = factory_->createPoint(coord);
 		vec.push_back(geo);
 
 		coord.x *= 3;
 		coord.y *= 3;
 		coord.z *= 3;
-		geo = factory_.createPoint(coord);
+		geo = factory_->createPoint(coord);
 		vec.push_back(geo);
 
 		// Factory creates copy of the vec collection
-		MultiPointPtr mp = factory_.createMultiPoint(vec);
+		MultiPointPtr mp = factory_->createMultiPoint(vec);
 		ensure( mp != 0 );
 		ensure( mp->isValid() );
 		ensure( mp->isSimple() );
@@ -1025,7 +1031,7 @@ namespace tut
 		ensure_equals( mp->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(mp);
+		factory_->destroyGeometry(mp);
 		std::vector<GeometryPtr>::const_iterator it;
 		for (it = vec.begin(); it != vec.end(); ++it)
 		{
@@ -1048,7 +1054,7 @@ namespace tut
 		coords.setAt(Coordinate(10, 5), 2);
 		ensure_equals( coords.getSize(), size );
 
-		MultiPointPtr mp = factory_.createMultiPoint(coords);
+		MultiPointPtr mp = factory_->createMultiPoint(coords);
 		ensure( mp != 0 );
 		ensure( mp->isValid() );
 		ensure( mp->isSimple() );
@@ -1056,7 +1062,7 @@ namespace tut
 		ensure_equals( mp->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT );
 		
 		// FREE MEMORY
-		factory_.destroyGeometry(mp);
+		factory_->destroyGeometry(mp);
 	}
 
 	// Test of createMultiLineString() const
@@ -1064,7 +1070,7 @@ namespace tut
 	template<>
 	void object::test<28>()
 	{
-		MultiLineStringPtr mls = factory_.createMultiLineString();
+		MultiLineStringPtr mls = factory_->createMultiLineString();
 
 		ensure( "createMultiLineString() returned null pointer.", mls != 0 );
 		ensure( "createMultiLineString() returned non-empty point.", mls->isEmpty() );
@@ -1079,17 +1085,17 @@ namespace tut
 		//geo = poly->getEnvelope();
 		//ensure( geo != 0 );
 		//ensure( geo->isEmpty() );
-		//factory_.destroyGeometry(geo);
+		//factory_->destroyGeometry(geo);
 
 		geo = mls->getBoundary();
 		ensure( geo != 0 );
 		ensure( geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		geo = mls->convexHull();
 		ensure( geo != 0 );
 		ensure( geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		ensure_equals( mls->getGeometryTypeId(), geos::geom::GEOS_MULTILINESTRING );
 		ensure_equals( mls->getDimension(), geos::geom::Dimension::L );
@@ -1099,7 +1105,7 @@ namespace tut
 		ensure_equals( mls->getArea(), 0.0 );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(mls);
+		factory_->destroyGeometry(mls);
 	}
 
 	// Test of createMultiLineString(std::vector<Geometry*>* newLines) const
@@ -1123,7 +1129,7 @@ namespace tut
 			coords->setAt(Coordinate(5 + factor, 5 + factor), 1);
 			ensure_equals( coords->getSize(), lineSize );
 
-			LineStringPtr line = factory_.createLineString(coords);
+			LineStringPtr line = factory_->createLineString(coords);
 			ensure( "createLineString() returned empty point.", !line->isEmpty() );
 			ensure_equals( line->getNumPoints(), lineSize );
 			ensure( line->isSimple() );
@@ -1133,7 +1139,7 @@ namespace tut
 			lines->push_back(line);
 		}
 
-		MultiLineStringPtr mls = factory_.createMultiLineString(lines);
+		MultiLineStringPtr mls = factory_->createMultiLineString(lines);
 		ensure( mls != 0 );
 		// TODO - mloskot - why isValid() returns false?
 		//ensure( mls->isValid() );
@@ -1141,7 +1147,7 @@ namespace tut
 		ensure_equals( mls->getGeometryTypeId(), geos::geom::GEOS_MULTILINESTRING );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(mls);
+		factory_->destroyGeometry(mls);
 	}
 
 	// Test of createMultiLineString(const std::vector<Geometry*>& fromLines) const
@@ -1165,7 +1171,7 @@ namespace tut
 			coords->setAt(Coordinate(5 + factor, 5 + factor), 1);
 			ensure_equals( coords->getSize(), lineSize );
 
-			LineStringPtr line = factory_.createLineString(coords);
+			LineStringPtr line = factory_->createLineString(coords);
 			ensure( "createLineString() returned empty point.", !line->isEmpty() );
 			ensure_equals( line->getNumPoints(), lineSize );
 			ensure( line->isSimple() );
@@ -1175,7 +1181,7 @@ namespace tut
 			lines.push_back(line);
 		}
 
-		MultiLineStringPtr mls = factory_.createMultiLineString(lines);
+		MultiLineStringPtr mls = factory_->createMultiLineString(lines);
 		ensure( mls != 0 );
 		// TODO - mloskot - why isValid() returns false?
 		//ensure( mls->isValid() );
@@ -1183,7 +1189,7 @@ namespace tut
 		ensure_equals( mls->getGeometryTypeId(), geos::geom::GEOS_MULTILINESTRING );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(mls);
+		factory_->destroyGeometry(mls);
 		std::vector<GeometryPtr>::const_iterator it;
 		for (it = lines.begin(); it != lines.end(); ++it)
 		{
@@ -1251,23 +1257,23 @@ namespace tut
 		PointVect vec;
 
 		PointPtr geo = 0;
-		geo = factory_.createPoint(coord);
+		geo = factory_->createPoint(coord);
 		vec.push_back(geo);
 
 		coord.x *= 2;
 		coord.y *= 2;
 		coord.z *= 2;
-		geo = factory_.createPoint(coord);
+		geo = factory_->createPoint(coord);
 		vec.push_back(geo);
 
 		coord.x *= 3;
 		coord.y *= 3;
 		coord.z *= 3;
-		geo = factory_.createPoint(coord);
+		geo = factory_->createPoint(coord);
 		vec.push_back(geo);
 
 		// Factory creates copy of the vec collection
-		GeometryAutoPtr g = factory_.buildGeometry(vec.begin(), vec.end());
+		GeometryAutoPtr g = factory_->buildGeometry(vec.begin(), vec.end());
 		ensure( g.get() != 0 );
 		ensure_equals( g->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT );
 		ensure_equals( g->getNumGeometries(), size );
@@ -1278,18 +1284,6 @@ namespace tut
 		{
 			delete (*it);
 		}
-	}
-
-	// Test of autoDestroy
-	template<>
-	template<>
-	void object::test<37>()
-	{
-		geos::geom::GeometryFactory *fact = new geos::geom::GeometryFactory();
-		geos::geom::Geometry *pt = fact->createPoint();
-		fact->autoDestroy();
-		delete pt;
-		// check with valgrind that there's no memory leak !
 	}
 
 } // namespace tut

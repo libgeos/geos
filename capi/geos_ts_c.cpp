@@ -4255,9 +4255,8 @@ GEOSGeom_setPrecision_r(GEOSContextHandle_t extHandle, const GEOSGeometry *g,
         std::auto_ptr<PrecisionModel> newpm;
         if ( gridSize ) newpm.reset( new PrecisionModel(1.0/gridSize) );
         else newpm.reset( new PrecisionModel() );
-        std::auto_ptr<GeometryFactory> gf (
-            new GeometryFactory( newpm.get(), g->getSRID() )
-        );
+        GeometryFactory::unique_ptr gf =
+            GeometryFactory::create( newpm.get(), g->getSRID() );
         Geometry *ret;
         if ( gridSize && (
               forceSnap > 0 ||
@@ -4268,13 +4267,11 @@ GEOSGeom_setPrecision_r(GEOSContextHandle_t extHandle, const GEOSGeometry *g,
           // We need to snap the geometry
           GeometryPrecisionReducer reducer( *gf );
           ret = reducer.reduce( *g ).release();
-          gf.release()->autoDestroy();
         }
         else
         {
           // No need or willing to snap, just change the factory
           ret = gf->createGeometry(g);
-          gf.release()->autoDestroy();
         }
         return ret;
     }

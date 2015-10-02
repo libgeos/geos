@@ -31,7 +31,7 @@ namespace tut
 	struct test_wkbreader_data
 	{
 		geos::geom::PrecisionModel pm;
-		geos::geom::GeometryFactory gf;
+		geos::geom::GeometryFactory::unique_ptr gf;
 		geos::io::WKBReader wkbreader;
 		geos::io::WKBWriter xdrwkbwriter;
 		geos::io::WKBWriter ndrwkbwriter;
@@ -42,13 +42,13 @@ namespace tut
 		test_wkbreader_data()
 			:
 			pm(1.0),
-			gf(&pm),
-			wkbreader(gf),
+			gf(geos::geom::GeometryFactory::create(&pm)),
+			wkbreader(*gf),
 			// 2D only, XDR (big endian)
 			xdrwkbwriter(2, geos::io::WKBConstants::wkbXDR),
 			// 2D only, NDR (little endian)
 			ndrwkbwriter(2, geos::io::WKBConstants::wkbNDR),
-			wktreader(&gf)
+			wktreader(gf.get())
 		{}
 
 		void testInputOutput(const std::string& WKT,

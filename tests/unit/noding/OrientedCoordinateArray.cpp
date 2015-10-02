@@ -26,15 +26,19 @@ namespace tut
     // Common data used by all tests
     struct test_orientedcoordinatearray_data
     {
+        typedef geos::geom::GeometryFactory GeometryFactory;
+
         geos::geom::PrecisionModel pm_;
-        geos::geom::GeometryFactory factory_;
+        GeometryFactory::unique_ptr factory_;
         geos::io::WKTReader reader_;
 
         typedef std::auto_ptr<CoordinateSequence> CoordSeqPtr;
         typedef std::auto_ptr<Geometry> GeomPtr;
 
         test_orientedcoordinatearray_data()
-          : pm_(), factory_(&pm_), reader_(&factory_) {}
+          : pm_()
+          , factory_(GeometryFactory::create(&pm_))
+          , reader_(factory_.get()) {}
 
         CoordSeqPtr coords_from_wkt(const char *wkt) {
           GeomPtr g ( reader_.read(wkt) );

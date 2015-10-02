@@ -27,8 +27,6 @@ namespace tut
 	// Common data used by tests
 	struct test_dpsimp_data
 	{
-		geos::geom::PrecisionModel pm;
-		geos::geom::GeometryFactory gf;
 		geos::io::WKTReader wktreader;
         geos::io::WKTWriter wktwriter;
 
@@ -36,9 +34,7 @@ namespace tut
 
 		test_dpsimp_data()
 			:
-			pm(geos::geom::PrecisionModel::FLOATING),
-			gf(&pm),
-			wktreader(&gf)
+			wktreader()
 		{}
 	};
 

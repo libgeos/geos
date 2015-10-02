@@ -6,7 +6,6 @@
 // geos
 #include <geos/operation/intersection/Rectangle.h>
 #include <geos/operation/intersection/RectangleIntersection.h>
-#include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/Point.h>
@@ -27,7 +26,6 @@ namespace tut
     // Common data used by tests
     struct test_rectangleintersectiontest_data
     {
-        geos::geom::GeometryFactory gf;
         geos::io::WKTReader wktreader;
         geos::io::WKTWriter wktwriter;
 
@@ -37,8 +35,7 @@ namespace tut
         typedef geos::operation::intersection::RectangleIntersection RectangleIntersection;
 
         test_rectangleintersectiontest_data()
-          : gf(),
-            wktreader(&gf)
+          : wktreader()
         {
           wktwriter.setTrim(true);
         }

@@ -25,9 +25,10 @@ namespace tut
 	struct test_multipoint_data
 	{
 		typedef std::auto_ptr<geos::geom::MultiPoint> MultiPointAutoPtr;
+		typedef geos::geom::GeometryFactory GeometryFactory;
 
 		geos::geom::PrecisionModel pm_;
-		geos::geom::GeometryFactory factory_;
+		geos::geom::GeometryFactory::unique_ptr factory_;
 		geos::io::WKTReader reader_;
 
 		MultiPointAutoPtr empty_mp_;
@@ -36,8 +37,9 @@ namespace tut
 
 		test_multipoint_data()
 			:
-			pm_(1.0), factory_(&pm_, 0), reader_(&factory_),
-			empty_mp_(factory_.createMultiPoint()), mp_size_(5)
+			pm_(1.0), factory_(GeometryFactory::create(&pm_, 0))
+      , reader_(factory_.get())
+      , empty_mp_(factory_->createMultiPoint()), mp_size_(5)
 		{
 			// Create non-empty MultiPoint
 			GeometryPtr geo = 0;
@@ -47,7 +49,7 @@ namespace tut
 
 		~test_multipoint_data()
 		{
-			factory_.destroyGeometry(mp_);
+			factory_->destroyGeometry(mp_);
 		}
 
     private:
@@ -71,7 +73,7 @@ namespace tut
 	void object::test<1>()
 	{
 		const size_t size0 = 0;
-		MultiPointAutoPtr mp(factory_.createMultiPoint());
+		MultiPointAutoPtr mp(factory_->createMultiPoint());
 		
 		ensure( mp->isEmpty() );
 		ensure( mp->isSimple() );
@@ -115,7 +117,7 @@ namespace tut
 		ensure_equals( mp->getNumGeometries(), size0 );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 	}
 
 	// Test of isEmpty() for empty MultiPoint
@@ -150,7 +152,7 @@ namespace tut
 		GeometryPtr envelope = empty_mp_->getEnvelope();	
 		ensure( envelope != 0 );
 		ensure( envelope->isEmpty() );
-		factory_.destroyGeometry(envelope);
+		factory_->destroyGeometry(envelope);
 	}
 
 	// Test of getBoundary() for empty MultiPoint
@@ -161,7 +163,7 @@ namespace tut
 		GeometryPtr boundary = empty_mp_->getBoundary();	
 		ensure( boundary != 0 );
 		ensure( boundary->isEmpty() );
-		factory_.destroyGeometry(boundary);
+		factory_->destroyGeometry(boundary);
 	}
 
 	// Test of convexHull() for empty MultiPoint
@@ -172,7 +174,7 @@ namespace tut
 		GeometryPtr hull = empty_mp_->convexHull();	
 		ensure( hull != 0 );
 		ensure( hull->isEmpty() );
-		factory_.destroyGeometry(hull);
+		factory_->destroyGeometry(hull);
 	}
 
 	// Test of getGeometryTypeId() for empty MultiPoint
@@ -254,7 +256,7 @@ namespace tut
 		ensure_equals( envelope->getDimension(), geos::geom::Dimension::A );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(envelope);
+		factory_->destroyGeometry(envelope);
 	}
 
 	// Test of getBoundary() for non-empty LinearRing
@@ -271,7 +273,7 @@ namespace tut
 		ensure( "[OGC] The boundary of a MultiPoint is the empty set.", boundary->isEmpty() );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(boundary);
+		factory_->destroyGeometry(boundary);
 	}
 
 	// Test of convexHull() for non-empty LinearRing
@@ -288,7 +290,7 @@ namespace tut
 		ensure_equals( hull->getDimension(), geos::geom::Dimension::L );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(hull);
+		factory_->destroyGeometry(hull);
 	}
 
 	// Test of getGeometryTypeId() for non-empty LinearRing
@@ -367,7 +369,7 @@ namespace tut
 			ensure(geo != 0);
 
 			// FREE TESTED LINEARRING
-			factory_.destroyGeometry(geo);
+			factory_->destroyGeometry(geo);
 
 			fail("ParseException expected.");
 		}
