@@ -838,6 +838,12 @@ GEOSGeom_clone(const Geometry *g)
     return GEOSGeom_clone_r( handle, g );
 }
 
+GEOSGeometry *
+GEOSGeom_setPrecision(const GEOSGeometry *g, double gridSize, int flags)
+{
+	return GEOSGeom_setPrecision_r(handle, g, gridSize, flags);
+}
+
 int
 GEOSGeom_getDimensions(const Geometry *g)
 {

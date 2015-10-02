@@ -1356,6 +1356,45 @@ MULTIPOINT(
             , $writer->write($gs));
     }
 
+    public function testGeometry_setPrecision()
+    {
+        $reader = new GEOSWKTReader();
+        $writer = new GEOSWKTWriter();
+        $writer->setRoundingPrecision(0);
+
+        $g = $reader->read('LINESTRING(0 0, 3 4, 5 10, 10 0, 10 9, 5 11, 0 9)');
+        $g = $g->setPrecision(2);
+        $this->assertEquals(
+            'LINESTRING (0 0, 4 4, 6 10, 10 0, 10 10, 6 12, 0 10)'
+            , $writer->write($g));
+
+        $g = $g->setPrecision(0);
+        $this->assertEquals(
+            'LINESTRING (0 0, 4 4, 6 10, 10 0, 10 10, 6 12, 0 10)'
+            , $writer->write($g));
+
+        $g = $g->setPrecision(8);
+        $this->assertEquals(
+            'LINESTRING (0 0, 8 8, 8 0, 8 8, 8 16, 0 8)'
+            , $writer->write($g));
+
+        $g = $g->setPrecision(10);
+        $this->assertEquals(
+            'LINESTRING (0 0, 10 10, 10 0, 10 10, 10 20, 0 10)'
+            , $writer->write($g));
+
+        $g = $g->setPrecision(20);
+        $this->assertEquals(
+            'LINESTRING (0 0, 20 20, 20 0, 20 20, 0 20)'
+            , $writer->write($g));
+
+        $g = $reader->read('POLYGON((0 0, 2 0, 2 2, 0 2, 0 0))');
+        $g = $g->setPrecision(20);
+        $this->assertEquals(
+            'POLYGON EMPTY'
+            , $writer->write($g));
+    }
+
     public function testGeometry_extractUniquePoints()
     {
         $reader = new GEOSWKTReader();
