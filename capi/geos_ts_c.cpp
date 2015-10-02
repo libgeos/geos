@@ -61,6 +61,7 @@
 #include <geos/operation/sharedpaths/SharedPathsOp.h>
 #include <geos/operation/union/CascadedPolygonUnion.h>
 #include <geos/operation/valid/IsValidOp.h>
+#include <geos/precision/GeometryPrecisionReducer.h>
 #include <geos/linearref/LengthIndexedLine.h>
 #include <geos/triangulate/DelaunayTriangulationBuilder.h>
 #include <geos/triangulate/VoronoiDiagramBuilder.h>
@@ -132,6 +133,7 @@ using geos::operation::overlay::overlayOp;
 using geos::operation::geounion::CascadedPolygonUnion;
 using geos::operation::buffer::BufferParameters;
 using geos::operation::buffer::BufferBuilder;
+using geos::precision::GeometryPrecisionReducer;
 using geos::util::IllegalArgumentException;
 using geos::algorithm::distance::DiscreteHausdorffDistance;
 
@@ -4223,6 +4225,65 @@ GEOSGeom_clone_r(GEOSContextHandle_t extHandle, const Geometry *g)
         handle->ERROR_MESSAGE("Unknown exception thrown");
     }
     
+    return NULL;
+}
+
+GEOSGeometry *
+GEOSGeom_setPrecision_r(GEOSContextHandle_t extHandle, const GEOSGeometry *g,
+                                          double gridSize, int forceSnap)
+{
+    using namespace geos::geom;
+
+    assert(0 != g);
+
+    if ( 0 == extHandle )
+    {
+        return NULL;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return NULL;
+    }
+
+    try
+    {
+        const PrecisionModel *pm = g->getPrecisionModel();
+        double cursize = pm->isFloating() ? 0 : 1.0/pm->getScale();
+        std::auto_ptr<PrecisionModel> newpm;
+        if ( gridSize ) newpm.reset( new PrecisionModel(1.0/gridSize) );
+        else newpm.reset( new PrecisionModel() );
+        GeometryFactory::unique_ptr gf =
+            GeometryFactory::create( newpm.get(), g->getSRID() );
+        Geometry *ret;
+        if ( gridSize && (
+              forceSnap > 0 ||
+              ( forceSnap == 0 && cursize != gridSize )
+             )
+           )
+        {
+          // We need to snap the geometry
+          GeometryPrecisionReducer reducer( *gf );
+          ret = reducer.reduce( *g ).release();
+        }
+        else
+        {
+          // No need or willing to snap, just change the factory
+          ret = gf->createGeometry(g);
+        }
+        return ret;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
     return NULL;
 }
 
