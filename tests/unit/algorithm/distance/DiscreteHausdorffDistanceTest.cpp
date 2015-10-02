@@ -41,8 +41,8 @@ namespace tut
 	test_DiscreteHausdorffDistance_data()
 		:
 		pm(),
-		gf(&pm),
-		reader(&gf)
+		gf(GeometryFactory::create(&pm)),
+		reader(gf.get())
 	{}
 
 	static const double TOLERANCE;
@@ -73,8 +73,8 @@ namespace tut
 	}
 
 	PrecisionModel pm;
-	GeometryFactory gf;
-        geos::io::WKTReader reader;
+	GeometryFactory::unique_ptr gf;
+  geos::io::WKTReader reader;
 
 	};
 	const double test_DiscreteHausdorffDistance_data::TOLERANCE = 0.00001;

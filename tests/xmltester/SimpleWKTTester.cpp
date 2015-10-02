@@ -39,7 +39,9 @@ int main(int /*argc*/, char** /*argv*/)
 		ifstream in("WKTIn");
 		string instr;
 		string outstr;
-		WKTReader *r = new WKTReader(new GeometryFactory(new PrecisionModel(),10));
+		PrecisionModel pm;
+    GeometryFactory::unique_ptr gf = GeometryFactory::create(&pm, 10);
+		WKTReader *r = new WKTReader(gf.get());
 		WKTWriter *w = new WKTWriter();
 		Geometry *g;
 

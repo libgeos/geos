@@ -21,11 +21,13 @@ namespace tut {
 struct test_geometry_clone_data
 {
 	typedef std::auto_ptr<geos::geom::Geometry> GeomAutoPtr;
-	geos::geom::GeometryFactory factory;
+	typedef geos::geom::GeometryFactory GeometryFactory;
+	GeometryFactory::unique_ptr factory;
 	geos::io::WKTReader reader;
 
 	test_geometry_clone_data()
-	    : reader(&factory)
+	    : factory(GeometryFactory::create())
+	    , reader(factory.get())
 	{}
 };
 

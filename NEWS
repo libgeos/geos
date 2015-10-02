@@ -4,6 +4,7 @@ Changes in 3.6.0
 - New things:
 - Improvements:
 - C++ API changes:
+  - Automatic memory management for GeometryFactory objects
 
 
 Changes in 3.5.0

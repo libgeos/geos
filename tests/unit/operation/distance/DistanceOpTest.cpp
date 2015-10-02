@@ -28,14 +28,13 @@ namespace tut
 	// Common data used by tests
 	struct test_distanceop_data
 	{
-		geos::geom::GeometryFactory gf;
 		geos::io::WKTReader wktreader;
 
 		typedef geos::geom::Geometry::AutoPtr GeomPtr;
 		typedef std::auto_ptr<geos::geom::CoordinateSequence> CSPtr;
 
 		test_distanceop_data()
-            : gf(), wktreader(&gf)
+            : wktreader()
 		{}
 	};
 
@@ -462,14 +461,15 @@ namespace tut
 	template<>
 	void object::test<19>()
 	{
+        using geos::geom::GeometryFactory;
         const char* wkb_geom1 = "01060000000100000001030000000100000000000000";
         const char* wkb_geom2 = "010100000000000000000000000000000000000000";
 
         geos::geom::PrecisionModel precision(geos::geom::PrecisionModel::FLOATING);
-        geos::geom::GeometryFactory f(&precision);
+        GeometryFactory::unique_ptr f(GeometryFactory::create(&precision));
         std::istringstream istr1(wkb_geom1);
         std::istringstream istr2(wkb_geom2);
-        geos::io::WKBReader wkb(f);
+        geos::io::WKBReader wkb(*f);
         GeomPtr g1(wkb.readHEX(istr1));
         GeomPtr g2(wkb.readHEX(istr2));
         ensure(g1->isValid());

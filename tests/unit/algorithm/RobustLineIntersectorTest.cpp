@@ -238,13 +238,13 @@ namespace tut
     using geos::geom::GeometryFactory;
     using geos::geom::LineString;
 
-    GeometryFactory factory;
+    GeometryFactory::unique_ptr factory = GeometryFactory::create();
     CoordinateSequence* cs = new CoordinateArraySequence();
     cs->add(p1);
     cs->add(p2);
 
-    GeomPtr l ( factory.createLineString(cs) );
-    GeomPtr p ( factory.createPoint(q) );
+    GeomPtr l ( factory->createLineString(cs) );
+    GeomPtr p ( factory->createPoint(q) );
     ensure(!l->intersects(p.get()));
 
     ensure(!CGAlgorithms::isOnLine(q, cs));
@@ -298,9 +298,10 @@ namespace tut
     template<>
     void object::test<15>()
     {
+        using geos::geom::GeometryFactory;
         geos::geom::PrecisionModel pm(1e+13);
-        geos::geom::GeometryFactory factory(&pm);
-        geos::io::WKBReader reader(factory);
+        GeometryFactory::unique_ptr factory = GeometryFactory::create(&pm);
+        geos::io::WKBReader reader(*factory);
 
         // POINT located between 3rd and 4th vertex of LINESTRING
         // POINT(-23.1094689600055080 50.5195368635957180)

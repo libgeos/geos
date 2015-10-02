@@ -25,13 +25,16 @@ namespace tut
     struct test_uniquecoordinatearrayfilter_data
 	{
 		typedef std::auto_ptr<geos::geom::Geometry> GeometryPtr;
+		typedef geos::geom::GeometryFactory GeometryFactory;
 		
 		geos::geom::PrecisionModel pm_;
-		geos::geom::GeometryFactory factory_;
+		GeometryFactory::unique_ptr factory_;
 		geos::io::WKTReader reader_;
 
 		test_uniquecoordinatearrayfilter_data()
-			: pm_(1), factory_(&pm_, 0), reader_(&factory_)
+			: pm_(1)
+      , factory_(GeometryFactory::create(&pm_, 0))
+      , reader_(factory_.get())
 		{}		
 	};
 

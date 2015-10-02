@@ -25,15 +25,15 @@ namespace tut
     // Common data used by tests
     struct test_cascadedpolygonuniontest_data
     {
-        geos::geom::GeometryFactory gf;
+        const geos::geom::GeometryFactory& gf;
         geos::io::WKTReader wktreader;
         geos::io::WKTWriter wktwriter;
 
         typedef geos::geom::Geometry::AutoPtr GeomPtr;
 
         test_cascadedpolygonuniontest_data()
-          : gf(),
-            wktreader(&gf)
+          : gf(*geos::geom::GeometryFactory::getDefaultInstance())
+          , wktreader(&gf)
         {}
     };
 

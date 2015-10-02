@@ -435,7 +435,7 @@ XMLTester::parseRun(const TiXmlNode* node)
         std::cerr << *curr_file <<": run: Precision Model: " << pm->toString() <<std::endl;
     }
 
-    factory.reset(new geom::GeometryFactory(pm.get()));
+    factory = geom::GeometryFactory::create(pm.get());
     wktreader.reset(new io::WKTReader(factory.get()));
     wktwriter.reset(new io::WKTWriter());
     wkbreader.reset(new io::WKBReader(*factory));

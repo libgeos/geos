@@ -41,7 +41,7 @@ public:
   RectangleIntersectsPerfTest()
     :
     pm(),
-    fact(&pm, 0)
+    fact(GeometryFactory::create(&pm, 0))
   {}
 
   void test(int nPts)
@@ -78,7 +78,7 @@ private:
   static const int NUM_LINE_PTS = 1000;
 
   PrecisionModel pm;
-  GeometryFactory fact;
+  GeometryFactory::unique_ptr fact;
 
   void testRectangles(const Geometry& target, int nRect, double rectSize)
   {
@@ -122,7 +122,7 @@ private:
         Envelope envRect(
             baseX, baseX + dx,
             baseY, baseY + dy);
-        Geometry* rect = fact.toGeometry(&envRect);
+        Geometry* rect = fact->toGeometry(&envRect);
         rectList.push_back(rect);
       }
     }
@@ -133,7 +133,7 @@ private:
   {
       using geos::geom::util::SineStarFactory;
 
-      SineStarFactory gsf(&fact);
+      SineStarFactory gsf(fact.get());
       gsf.setCentre(origin);
       gsf.setSize(size);
       gsf.setNumPoints(nPts);

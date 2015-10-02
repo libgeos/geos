@@ -21,11 +21,14 @@ namespace tut {
 struct test_contains_data
 {
 	typedef std::auto_ptr<geos::geom::Geometry> GeomAutoPtr;
-	geos::geom::GeometryFactory factory;
+	typedef geos::geom::GeometryFactory GeometryFactory;
+
+	geos::geom::GeometryFactory::unique_ptr factory;
 	geos::io::WKTReader reader;
 
 	test_contains_data()
-	    : reader(&factory)
+	    : factory(GeometryFactory::create())
+	    , reader(factory.get())
 	{}
 };
 

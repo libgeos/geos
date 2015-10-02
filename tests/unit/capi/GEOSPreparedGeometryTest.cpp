@@ -219,8 +219,8 @@ namespace tut
     void object::test<8>()
     {
         geos::geom::PrecisionModel pm(1e+13);
-        geos::geom::GeometryFactory factory(&pm);
-        geos::io::WKBReader reader(factory);
+        geos::geom::GeometryFactory::unique_ptr factory = geos::geom::GeometryFactory::create(&pm);
+        geos::io::WKBReader reader(*factory);
 
         // POINT located between 3rd and 4th vertex of LINESTRING
         // POINT(-23.1094689600055080 50.5195368635957180)

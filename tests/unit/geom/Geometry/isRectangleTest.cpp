@@ -4,7 +4,6 @@
 // tut
 #include <tut.hpp>
 // geos
-#include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Polygon.h>
 #include <geos/io/WKTReader.h>
@@ -19,11 +18,9 @@ namespace tut
 
     struct test_isrectangle_data
     {
-        geos::geom::GeometryFactory factory;
         geos::io::WKTReader reader;
 
         test_isrectangle_data()
-            : reader(&factory)
         {}
     };
 

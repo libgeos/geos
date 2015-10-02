@@ -52,7 +52,7 @@ namespace tut
 		std::auto_ptr<Geometry> sites ( reader.read(sitesWkt) );
 		std::auto_ptr<Geometry> expected ( reader.read(expectedWkt) );
 		std::auto_ptr<GeometryCollection> results;
-		GeometryFactory geomFact;
+    const GeometryFactory& geomFact(*GeometryFactory::getDefaultInstance());
 		builder.setSites(*sites);
 
 		//set Tolerance:

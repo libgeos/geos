@@ -39,21 +39,22 @@ namespace tut
 		// Typedefs used as short names by test cases
         typedef std::auto_ptr<geos::geom::Geometry> GeometryAPtr;
         typedef std::auto_ptr<geos::geom::LineString> LineStringAPtr;
+        typedef geos::geom::GeometryFactory GeometryFactory;
 
         GeometryPtr geom_;
         geos::geom::PrecisionModel pm_;
-        geos::geom::GeometryFactory factory_;
+        geos::geom::GeometryFactory::unique_ptr factory_;
         geos::io::WKTReader reader_;
 
         test_convexhull_data()
-			: geom_(0), pm_(1), factory_(&pm_, 0), reader_(&factory_)
+			: geom_(0), pm_(1), factory_(GeometryFactory::create(&pm_, 0)), reader_(factory_.get())
         {
             assert(0 == geom_);
         }
 
         ~test_convexhull_data()
         {
-            factory_.destroyGeometry(geom_);
+            factory_->destroyGeometry(geom_);
             geom_ = 0;
         }
     };

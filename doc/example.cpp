@@ -84,7 +84,7 @@ void wkt_print_geoms(vector<Geometry *> *geoms);
 // but that would be boring because you'd need to specify
 // a PrecisionModel and a SRID everytime: those infos are
 // cached inside a GeometryFactory object.
-GeometryFactory *global_factory;
+GeometryFactory::unique_ptr global_factory;
 
 //#define DEBUG_STREAM_STATE 1
 
@@ -335,7 +335,7 @@ create_simple_collection(vector<Geometry *> *geoms)
 Polygon *
 create_circle(double centerX, double centerY, double radius)
 {
-	geos::util::GeometricShapeFactory shapefactory(global_factory);
+	geos::util::GeometricShapeFactory shapefactory(global_factory.get());
 	shapefactory.setCentre(Coordinate(centerX, centerY));
 	shapefactory.setSize(radius);
 	// same as:
@@ -351,7 +351,7 @@ create_circle(double centerX, double centerY, double radius)
 Polygon *
 create_ellipse(double centerX, double centerY, double width, double height)
 {
-	geos::util::GeometricShapeFactory shapefactory(global_factory);
+	geos::util::GeometricShapeFactory shapefactory(global_factory.get());
 	shapefactory.setCentre(Coordinate(centerX, centerY));
 	shapefactory.setHeight(height);
 	shapefactory.setWidth(width);
@@ -366,7 +366,7 @@ create_ellipse(double centerX, double centerY, double width, double height)
 Polygon *
 create_rectangle(double llX, double llY, double width, double height)
 {
-	geos::util::GeometricShapeFactory shapefactory(global_factory);
+	geos::util::GeometricShapeFactory shapefactory(global_factory.get());
 	shapefactory.setBase(Coordinate(llX, llY));
 	shapefactory.setHeight(height);
 	shapefactory.setWidth(width);
@@ -383,7 +383,7 @@ create_rectangle(double llX, double llY, double width, double height)
 LineString *
 create_arc(double llX, double llY, double width, double height, double startang, double endang)
 {
-	geos::util::GeometricShapeFactory shapefactory(global_factory);
+	geos::util::GeometricShapeFactory shapefactory(global_factory.get());
 	shapefactory.setBase(Coordinate(llX, llY));
 	shapefactory.setHeight(height);
 	shapefactory.setWidth(width);
@@ -395,7 +395,7 @@ create_arc(double llX, double llY, double width, double height, double startang,
 auto_ptr<Polygon>
 create_sinestar(double cx, double cy, double size, int nArms, double armLenRat)
 {
-	geos::geom::util::SineStarFactory fact(global_factory);
+	geos::geom::util::SineStarFactory fact(global_factory.get());
 	fact.setCentre(Coordinate(cx, cy));
 	fact.setSize(size);
 	fact.setNumPoints(nArms*5);
@@ -416,7 +416,7 @@ void do_all()
 
 	// Initialize global factory with defined PrecisionModel
 	// and a SRID of -1 (undefined).
-	global_factory = new GeometryFactory(pm, -1);
+	global_factory = GeometryFactory::create(pm, -1);
 
 	// We do not need PrecisionMode object anymore, it has
 	// been copied to global_factory private storage
@@ -1080,8 +1080,6 @@ cout<<"-------------------------------------------------------------------------
 		delete (*geoms)[i];
 	}
 	delete geoms;
-
-	delete global_factory;
 }
 
 int

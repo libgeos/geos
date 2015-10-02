@@ -69,7 +69,7 @@ namespace operation { // geos.operation
 namespace valid { // geos.operation.valid
 
 ConnectedInteriorTester::ConnectedInteriorTester(GeometryGraph &newGeomGraph):
-	geometryFactory(new GeometryFactory()),
+	geometryFactory(GeometryFactory::create()),
 	geomGraph(newGeomGraph),
 	disconnectedRingcoord()
 {
@@ -77,7 +77,6 @@ ConnectedInteriorTester::ConnectedInteriorTester(GeometryGraph &newGeomGraph):
 
 ConnectedInteriorTester::~ConnectedInteriorTester()
 {
-	delete geometryFactory;
 }
 
 Coordinate&
@@ -219,7 +218,7 @@ ConnectedInteriorTester::buildEdgeRings(std::vector<EdgeEnd*> *dirEdges,
 		if(de->isInResult() && de->getEdgeRing()==NULL)
 		{
 			MaximalEdgeRing* er = new MaximalEdgeRing(de,
-			                                   geometryFactory);
+			                                   geometryFactory.get());
 			// We track MaximalEdgeRings allocations
 			// using the private maximalEdgeRings vector
 			maximalEdgeRings.push_back(er);

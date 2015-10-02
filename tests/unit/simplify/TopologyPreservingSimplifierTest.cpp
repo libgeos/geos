@@ -28,14 +28,18 @@ namespace tut
 	struct test_tpsimp_data
 	{
 		geos::geom::PrecisionModel pm;
-		geos::geom::GeometryFactory gf;
+		typedef geos::geom::GeometryFactory GeometryFactory;
+		GeometryFactory::unique_ptr gf;
 		geos::io::WKTReader wktreader;
 		geos::io::WKTWriter wktwriter;
 
 		typedef geos::geom::Geometry::AutoPtr GeomPtr;
 
 		test_tpsimp_data()
-            : pm(1.0), gf(&pm), wktreader(&gf), wktwriter()
+            : pm(1.0)
+            , gf(GeometryFactory::create(&pm))
+            , wktreader(gf.get())
+            , wktwriter()
 		{
 			//wktwriter.setTrim(1);
 		}

@@ -26,7 +26,7 @@ namespace tut
     struct test_geometryextracter_data
     {
       geos::geom::PrecisionModel pm;
-      geos::geom::GeometryFactory gf;
+      geos::geom::GeometryFactory::unique_ptr gf;
       geos::io::WKTReader wktreader;
       geos::io::WKTWriter wktwriter;
 
@@ -38,8 +38,8 @@ namespace tut
       test_geometryextracter_data()
         :
         pm(1.0),
-        gf(&pm),
-        wktreader(&gf)
+        gf(geos::geom::GeometryFactory::create(&pm)),
+        wktreader(gf.get())
       {
       }
     };

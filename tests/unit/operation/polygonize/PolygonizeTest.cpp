@@ -29,7 +29,6 @@ namespace tut
     // Common data used by tests
     struct test_polygonizetest_data
     {
-        geos::geom::GeometryFactory gf;
         geos::io::WKTReader wktreader;
         geos::io::WKTWriter wktwriter;
 
@@ -39,8 +38,7 @@ namespace tut
         typedef geos::operation::polygonize::Polygonizer Polygonizer;
 
         test_polygonizetest_data()
-          : gf(),
-            wktreader(&gf)
+          : wktreader()
         {
           wktwriter.setTrim(true);
         }

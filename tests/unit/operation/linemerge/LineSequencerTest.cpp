@@ -30,7 +30,6 @@ namespace tut
     typedef std::vector<geos::geom::Geometry*> GeomVect;
     typedef std::vector<geos::geom::LineString*> LineVect;
 
-    geos::geom::GeometryFactory gf;
     geos::io::WKTReader wktreader;
     geos::io::WKTWriter wktwriter;
 
@@ -40,7 +39,7 @@ namespace tut
     GeomVect inpGeoms;
 
     test_linesequencer_data()
-      : gf(), wktreader(&gf), wktwriter()
+      : wktreader(), wktwriter()
     {
       wktwriter.setTrim(true);
     }

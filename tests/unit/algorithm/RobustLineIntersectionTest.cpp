@@ -244,14 +244,14 @@ namespace tut
 	test_robustlineintersection_data()
 		:
 		pm(),
-		gf(&pm),
-		reader(&gf)
+		gf(GeometryFactory::create(&pm)),
+		reader(gf.get())
 	{
 	}
 
 	PrecisionModel pm;
-	GeometryFactory gf;
-        geos::io::WKTReader reader;
+	GeometryFactory::unique_ptr gf;
+  geos::io::WKTReader reader;
 
 	};
 

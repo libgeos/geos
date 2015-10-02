@@ -33,21 +33,23 @@ namespace tut
 		typedef std::auto_ptr<geos::geom::LineString> LineStringAutoPtr;
 
 		geos::geom::PrecisionModel pm_;
-		geos::geom::GeometryFactory factory_;
+		geos::geom::GeometryFactory::unique_ptr factory_;
 		geos::io::WKTReader reader_;
 		
 		LineStringPtr empty_line_;
 
 		test_linestring_data()
-			: pm_(1000), factory_(&pm_, 0), reader_(&factory_),
-			empty_line_(factory_.createLineString(new geos::geom::CoordinateArraySequence()))
+			: pm_(1000)
+      , factory_(geos::geom::GeometryFactory::create(&pm_, 0))
+      , reader_(factory_.get())
+      , empty_line_(factory_->createLineString(new geos::geom::CoordinateArraySequence()))
 		{
             assert(0 != empty_line_);
         }
 		
         ~test_linestring_data()
         {
-            factory_.destroyGeometry(empty_line_);
+            factory_->destroyGeometry(empty_line_);
             empty_line_ = 0;
         }
     };
@@ -73,7 +75,7 @@ namespace tut
 		ensure( "sequence is null pointer.", pseq != 0 );
 
 		// Create empty linstring instance
-		LineStringAutoPtr ls(factory_.createLineString(pseq));
+		LineStringAutoPtr ls(factory_->createLineString(pseq));
 
 		ensure( ls->isEmpty() );
 		ensure( ls->isSimple() );
@@ -100,7 +102,7 @@ namespace tut
 		ensure_equals( pseq->size(), size3 );
 
 		// Create non-empty linstring instance
-		LineStringAutoPtr ls(factory_.createLineString(pseq));
+		LineStringAutoPtr ls(factory_->createLineString(pseq));
 
 		ensure( !ls->isEmpty() );
 		ensure( ls->isSimple() );
@@ -113,17 +115,17 @@ namespace tut
 		geo = ls->getEnvelope();
 		ensure( geo != 0 );
 		ensure( !geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		geo = ls->getBoundary();
 		ensure( geo != 0 );
 		ensure( !geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		geo = ls->convexHull();
 		ensure( geo != 0 );
 		ensure( !geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		ensure_equals( ls->getGeometryTypeId(), geos::geom::GEOS_LINESTRING );
 		ensure_equals( ls->getDimension(), geos::geom::Dimension::L );
@@ -149,7 +151,7 @@ namespace tut
 			ensure_equals( pseq->size(), 1u );
 
 			// Create incomplete linstring
-			LineStringAutoPtr ls(factory_.createLineString(pseq));
+			LineStringAutoPtr ls(factory_->createLineString(pseq));
 			fail("IllegalArgumentException expected.");
 		}
 		catch (geos::util::IllegalArgumentException const& e)
@@ -183,7 +185,7 @@ namespace tut
 		ensure_equals( pseq->size(), size );
 
 		// Create examplar of linstring instance
-		LineStringAutoPtr examplar(factory_.createLineString(pseq));
+		LineStringAutoPtr examplar(factory_->createLineString(pseq));
 
 		// Create copy
 		LineStringAutoPtr copy(dynamic_cast<geos::geom::LineString*>(examplar->clone()));
@@ -201,17 +203,17 @@ namespace tut
 		geo = copy->getEnvelope();
 		ensure( geo != 0 );
 		ensure( !geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		geo = copy->getBoundary();
 		ensure( geo != 0 );
 		ensure( !geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		geo = copy->convexHull();
 		ensure( geo != 0 );
 		ensure( !geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 
 		ensure_equals( copy->getGeometryTypeId(), geos::geom::GEOS_LINESTRING );
 		ensure_equals( copy->getDimension(), geos::geom::Dimension::L );
@@ -239,7 +241,7 @@ namespace tut
 		geo = empty_line_->getEnvelope();	
 		ensure( geo != 0 );
 		ensure( geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 	}
 
     // Test of getBoundary() for empty linestring
@@ -251,7 +253,7 @@ namespace tut
 		geo = empty_line_->getBoundary();	
 		ensure( geo != 0 );
 		ensure( geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 	}
 
     // Test of convexHull() for empty linestring
@@ -263,7 +265,7 @@ namespace tut
 		geo = empty_line_->convexHull();	
 		ensure( geo != 0 );
 		ensure( geo->isEmpty() );
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 	}
 
     // Test of getGeometryTypeId() for empty linestring
@@ -331,7 +333,7 @@ namespace tut
         ensure( line->getCoordinateDimension() == 2 );
 		
 		// FREE TESTED LINESTRING
-		factory_.destroyGeometry(line);
+		factory_->destroyGeometry(line);
 	}
 
     // Test of getEnvelope() for non-empty linestring
@@ -350,10 +352,10 @@ namespace tut
 		ensure( !envelope->isEmpty() );
 		ensure_equals( envelope->getDimension(), geos::geom::Dimension::A );
 
-		factory_.destroyGeometry(envelope);
+		factory_->destroyGeometry(envelope);
 
 		// FREE TESTED LINESTRING
-		factory_.destroyGeometry(line);
+		factory_->destroyGeometry(line);
 	}
 
 	// Test of getBoundary() for non-empty linestring
@@ -372,10 +374,10 @@ namespace tut
 		ensure( !boundary->isEmpty() );
 		ensure_equals( boundary->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT );
 		ensure_equals( boundary->getDimension(), geos::geom::Dimension::P );
-		factory_.destroyGeometry(boundary);
+		factory_->destroyGeometry(boundary);
 
 		// FREE TESTED LINESTRING
-		factory_.destroyGeometry(line);
+		factory_->destroyGeometry(line);
 	}
 
 	// Test of convexHull() for non-empty linestring
@@ -394,10 +396,10 @@ namespace tut
 		ensure( !hull->isEmpty() );
 		ensure_equals( hull->getGeometryTypeId(), geos::geom::GEOS_POLYGON );
 		ensure_equals( hull->getDimension(), geos::geom::Dimension::A );
-		factory_.destroyGeometry(hull);
+		factory_->destroyGeometry(hull);
 
 		// FREE TESTED LINESTRING
-		factory_.destroyGeometry(line);
+		factory_->destroyGeometry(line);
 	}
 
 	// Test of getGeometryTypeId() for non-empty linestring
@@ -411,7 +413,7 @@ namespace tut
 		ensure_equals( geo->getGeometryTypeId(), geos::geom::GEOS_LINESTRING );
 
 		// FREE TESTED LINESTRING
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 	}
 
 	// Test of getDimension() for non-empty linestring
@@ -425,7 +427,7 @@ namespace tut
 		ensure_equals( geo->getDimension(), geos::geom::Dimension::L );
 
 		// FREE TESTED LINESTRING
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 	}
 
 	// Test of getBoundaryDimension() for non-empty linestring
@@ -439,7 +441,7 @@ namespace tut
 		ensure_equals( geo->getBoundaryDimension(), geos::geom::Dimension::P );
 
 		// FREE TESTED LINESTRING
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 	}
 
 	// Test of getNumPoints() for non-empty linestring
@@ -454,7 +456,7 @@ namespace tut
 		ensure_equals( geo->getNumPoints(), size );
 
 		// FREE TESTED LINESTRING
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 	}
 
 	// Test of getLength() for non-empty linestring
@@ -473,7 +475,7 @@ namespace tut
 		ensure( diff <= tolerance );
 
 		// FREE TESTED LINESTRING
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 	}
 
 	// Test of getArea() for non-empty linestring
@@ -487,7 +489,7 @@ namespace tut
 		ensure_equals( geo->getArea(), 0.0 );
 
 		// FREE TESTED LINESTRING
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 	}
 
 	// Test of getGeometryType() for non-empty Polygon
@@ -502,7 +504,7 @@ namespace tut
 		ensure_equals( geo->getGeometryType(), type );
 
 		// FREE MEMORY
-		factory_.destroyGeometry(geo);
+		factory_->destroyGeometry(geo);
 	}
 
 } // namespace tut

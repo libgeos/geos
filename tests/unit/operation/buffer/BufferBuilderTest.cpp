@@ -29,7 +29,7 @@ namespace tut
     // Common data used by tests
     struct test_bufferbuilder_data
     {
-        geos::geom::GeometryFactory gf;
+        const geos::geom::GeometryFactory &gf;
         geos::io::WKTReader wktreader;
         int const default_quadrant_segments;
 
@@ -37,7 +37,9 @@ namespace tut
         typedef std::auto_ptr<geos::geom::CoordinateSequence> CSPtr;
 
         test_bufferbuilder_data()
-            : gf(), wktreader(&gf), default_quadrant_segments(geos::operation::buffer::BufferParameters::DEFAULT_QUADRANT_SEGMENTS)
+            : gf(*geos::geom::GeometryFactory::getDefaultInstance())
+            , wktreader(&gf)
+            , default_quadrant_segments(geos::operation::buffer::BufferParameters::DEFAULT_QUADRANT_SEGMENTS)
         {
             ensure_equals(default_quadrant_segments, int(8));
         }

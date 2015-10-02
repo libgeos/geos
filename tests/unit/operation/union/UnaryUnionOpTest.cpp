@@ -26,7 +26,8 @@ namespace tut
     // Common data used by tests
     struct test_unaryuniontest_data
     {
-        geos::geom::GeometryFactory gf;
+        typedef geos::geom::GeometryFactory GeometryFactory;
+        GeometryFactory::unique_ptr gf;
         geos::io::WKTReader wktreader;
         geos::io::WKTWriter wktwriter;
 
@@ -35,8 +36,8 @@ namespace tut
         typedef geos::operation::geounion::UnaryUnionOp UnaryUnionOp;
 
         test_unaryuniontest_data()
-          : gf(),
-            wktreader(&gf)
+          : gf(GeometryFactory::create()),
+            wktreader(gf.get())
         {
           wktwriter.setTrim(true);
         }
@@ -85,7 +86,7 @@ namespace tut
 
           GeomPtr result;
           if ( geoms.empty() )
-            result = UnaryUnionOp::Union(geoms, gf);
+            result = UnaryUnionOp::Union(geoms, *gf);
           else
             result = UnaryUnionOp::Union(geoms);
 

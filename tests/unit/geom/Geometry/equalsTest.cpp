@@ -21,11 +21,10 @@ namespace tut {
 struct test_equals_data
 {
 	typedef std::auto_ptr<geos::geom::Geometry> GeomAutoPtr;
-	geos::geom::GeometryFactory factory;
 	geos::io::WKTReader reader;
 
 	test_equals_data()
-	    : reader(&factory)
+	    : reader()
 	{}
 };
 

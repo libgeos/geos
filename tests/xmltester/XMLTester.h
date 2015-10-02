@@ -51,7 +51,7 @@ private:
 	geom::Geometry *gT;
 
 	std::auto_ptr<geom::PrecisionModel> pm;
-	std::auto_ptr<geom::GeometryFactory> factory;
+	geom::GeometryFactory::unique_ptr factory;
 	std::auto_ptr<io::WKTReader> wktreader;
 	std::auto_ptr<io::WKTWriter> wktwriter;
 	std::auto_ptr<io::WKBReader> wkbreader;

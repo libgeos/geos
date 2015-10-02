@@ -24,16 +24,13 @@ namespace tut
     {
         typedef std::auto_ptr<geos::geom::Geometry> GeomAutoPtr;
 
-        geos::geom::GeometryFactory factory;
-
         geos::io::WKTReader reader;
 
         typedef geos::operation::overlay::snap::GeometrySnapper GeometrySnapper;
 
         test_geometrysnapper_data()
                 :
-                factory(), // initialize before use!
-                reader(&factory)
+                reader()
         {
         }
     };

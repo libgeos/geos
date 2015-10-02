@@ -23,6 +23,7 @@
 #include <geos/export.h>
 
 #include <geos/geom/Coordinate.h> // for composition
+#include <geos/geom/GeometryFactory.h> // for GeometryFactory::unique_ptr
 
 #include <vector>
 
@@ -83,7 +84,7 @@ protected:
 
 private:
 
-	geom::GeometryFactory *geometryFactory;
+	geom::GeometryFactory::unique_ptr geometryFactory;
 
 	geomgraph::GeometryGraph &geomGraph;
 

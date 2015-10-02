@@ -27,7 +27,7 @@ namespace tut
 	struct test_wkbwriter_data
 	{
 		geos::geom::PrecisionModel pm;
-		geos::geom::GeometryFactory gf;
+		geos::geom::GeometryFactory::unique_ptr gf;
 		geos::io::WKTReader wktreader;
 		geos::io::WKTWriter wktwriter;
 		geos::io::WKBReader wkbreader;
@@ -36,9 +36,9 @@ namespace tut
 		test_wkbwriter_data()
 			:
 			pm(1000.0),
-			gf(&pm),
-      wktreader(&gf),
-      wkbreader(gf)
+			gf(geos::geom::GeometryFactory::create(&pm)),
+      wktreader(gf.get()),
+      wkbreader(*gf)
 		{}
 
 	};
@@ -144,7 +144,7 @@ namespace tut
     GeomVect *geoms = new GeomVect;
     geoms->push_back( wktreader.read("POLYGON((0 0,1 0,1 1,0 1,0 0))") );
     geoms->back()->setSRID(4326);
-    Geom *geom = gf.createGeometryCollection(geoms);
+    Geom *geom = gf->createGeometryCollection(geoms);
     std::stringstream result_stream;
 
     wkbwriter.setOutputDimension( 2 );
