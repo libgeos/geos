@@ -941,6 +941,26 @@ extern const GEOSGeometry GEOS_DLL *GEOSGetGeometryN_r(
 extern int GEOS_DLL GEOSNormalize_r(GEOSContextHandle_t handle,
                                     GEOSGeometry* g);
 
+/**
+ * Set the geometry's precision, optionally rounding all its
+ * coordinates to the precision grid (if it changes).
+ *
+ * @param gridSize size of the precision grid, or 0 for FLOATING
+ *                 precision.
+ * @param forceSnap specifies whether snapping to the precision grid
+ *                  should be forced: -1 prevents snapping, which can
+ *                  be used when the input is known to be already
+ *                  rounded to the target grid; 0 only snaps if the
+ *                  new precision grid is not equal or compatible with
+ *                  the new precision grid; 1 always snaps.
+ * @retuns NULL on exception or a new GEOSGeometry object
+ *
+ */
+extern GEOSGeometry GEOS_DLL *GEOSGeom_setPrecision_r(
+                                       GEOSContextHandle_t handle,
+                                       const GEOSGeometry *g,
+                                       double gridSize, int forceSnap);
+
 /* Return -1 on exception */
 extern int GEOS_DLL GEOSGetNumInteriorRings_r(GEOSContextHandle_t handle,
                                               const GEOSGeometry* g);
@@ -1686,6 +1706,10 @@ extern const GEOSGeometry GEOS_DLL *GEOSGetGeometryN(const GEOSGeometry* g, int 
 
 /* Return -1 on exception */
 extern int GEOS_DLL GEOSNormalize(GEOSGeometry* g);
+
+/* Return -1 on exception */
+extern GEOSGeometry GEOS_DLL *GEOSGeom_setPrecision(
+	const GEOSGeometry *g, double gridSize, int forceSnap);
 
 /* Return -1 on exception */
 extern int GEOS_DLL GEOSGetNumInteriorRings(const GEOSGeometry* g);
