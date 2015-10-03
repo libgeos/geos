@@ -18,8 +18,20 @@
 #ifndef GEOS_TIMEVAL_H
 #define GEOS_TIMEVAL_H
 
+#if !defined(_WIN32)
+#error This header is dedicated to Windows platform only
+#endif
+
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
+#endif
+
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+
+#ifndef STRICT
+#define STRICT
 #endif
 
 #include <winsock2.h>
