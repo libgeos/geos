@@ -19,7 +19,7 @@ if(NOT CMAKE_VERSION)
 endif()
 
 # Location of custom CMake modules with macros used by GEOS
-set(CMAKE_MODULE_PATH "${GEOS_SOURCE_DIR}/cmake/modules")
+set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
 
 #################################################################################
 # Setup GEOS version
@@ -225,13 +225,13 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 #################################################################################
 
 # for including GEOS C++ API headers
-include_directories(${GEOS_SOURCE_DIR}/include)
+include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # for including build-specific GEOS C API headers
-include_directories(${GEOS_BINARY_DIR}/capi)
+include_directories(${PROJECT_BINARY_DIR}/capi)
 
 # for including build-specific version.h, platform.h and geos_c.h
-include_directories(${geos_BINARY_DIR}/include)
+include_directories(${PROJECT_BINARY_DIR}/include)
 
 #################################################################################
 # Setup checks and generate config headers
@@ -254,56 +254,58 @@ MACRO (GET_SVN_REVISION)
 ENDMACRO(GET_SVN_REVISION)
 
 # Determine SVN/Git revision
-if(EXISTS "${CMAKE_SOURCE_DIR}/.svn")
+if(EXISTS "${PROJECT_SOURCE_DIR}/.svn")
   GET_SVN_REVISION()
 endif()
+message(STATUS "Generating GEOS revision header in ${PROJECT_BINARY_DIR}/geos_svn_revision.h")
 if ( NOT ${Project_WC_REVISION} EQUAL 0 )
    set( GEOS_SVN_REVISION ${Project_WC_REVISION} )
    configure_file ( 
       "${PROJECT_SOURCE_DIR}/tools/geos_svn_revision_cmake.h.in"
-      "${PROJECT_SOURCE_DIR}/geos_svn_revision.h" )
-      # "${geos_BINARY_DIR}/include/geos_svn_revision.h" )
+      "${PROJECT_BINARY_DIR}/include/geos_svn_revision.h" )
 else()
-   message(STATUS "Generating revision header ${CMAKE_SOURCE_DIR}/geos_svn_revision.h")
    find_program(SH sh)
    if(SH)
       execute_process(COMMAND ${SH} -c 
-      "cd ${CMAKE_SOURCE_DIR} && ${CMAKE_SOURCE_DIR}/tools/svn_repo_revision.sh")
+      "cd ${PROJECT_SOURCE_DIR} && ${PROJECT_SOURCE_DIR}/tools/svn_repo_revision.sh")
 
-      file(RENAME "${CMAKE_SOURCE_DIR}/geos_svn_revision.h"
-      "${CMAKE_BINARY_DIR}/geos_svn_revision.h")
+      file(RENAME "${PROJECT_SOURCE_DIR}/geos_svn_revision.h"
+      "${PROJECT_BINARY_DIR}/geos_svn_revision.h")
    else()
       message("*** sh-compatible command not found, cannot create geos_svn_revision.h")
       message("*** Check SVN revision and create revision header manually:")
-      message("*** echo '#define GEOS_SVN_REVISION XYZ' > ${CMAKE_SOURCE_DIR}/geos_svn_revision.h")
+      message("*** echo '#define GEOS_SVN_REVISION XYZ' > ${PROJECT_SOURCE_DIR}/geos_svn_revision.h")
    endif()
 endif()
 # End: Determine SVN/Git revision
 
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h)
-  message(STATUS "Disabling existing ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h")
+if(EXISTS ${PROJECT_SOURCE_DIR}/include/geos/platform.h)
+  message(STATUS "Disabling existing ${PROJECT_SOURCE_DIR}/include/geos/platform.h")
 
   if(${CMAKE_MAJOR_VERSION} EQUAL 2 AND ${CMAKE_MINOR_VERSION} EQUAL 6)
-    file(REMOVE ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h)
+    file(REMOVE ${PROJECT_SOURCE_DIR}/include/geos/platform.h)
     set(PH_RESULT "removed")
   else()
     file(RENAME
-      ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h
-      ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h.disabled)
+      ${PROJECT_SOURCE_DIR}/include/geos/platform.h
+      ${PROJECT_SOURCE_DIR}/include/geos/platform.h.disabled)
       set(PH_RESULT "renamed")
   endif()
 
-  message(STATUS "Disabling existing ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h - ${PH_RESULT}")
+  message(STATUS "Disabling existing ${PROJECT_SOURCE_DIR}/include/geos/platform.h - ${PH_RESULT}")
 endif()
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h.cmake 
-  ${CMAKE_CURRENT_BINARY_DIR}/include/geos/platform.h)
+message(STATUS "Generating GEOS ${PROJECT_BINARY_DIR}/include/geos/platform.h")
+configure_file(${PROJECT_SOURCE_DIR}/include/geos/platform.h.cmake 
+  ${PROJECT_BINARY_DIR}/include/geos/platform.h)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/geos/version.h.in
-  ${CMAKE_CURRENT_BINARY_DIR}/include/geos/version.h @ONLY)
+message(STATUS "Generating GEOS ${PROJECT_BINARY_DIR}/include/geos/version.h")
+configure_file(${PROJECT_SOURCE_DIR}/include/geos/version.h.in
+  ${PROJECT_BINARY_DIR}/include/geos/version.h @ONLY)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/capi/geos_c.h.in
-  ${CMAKE_CURRENT_BINARY_DIR}/capi/geos_c.h @ONLY)
+message(STATUS "Generating GEOS ${PROJECT_BINARY_DIR}/capi/geos_c.h")
+configure_file(${PROJECT_SOURCE_DIR}/capi/geos_c.h.in
+  ${PROJECT_BINARY_DIR}/capi/geos_c.h @ONLY)
 
 #################################################################################
 # Configure tests
@@ -330,12 +332,12 @@ add_subdirectory(tools)
 # Install/Uninstall
 #################################################################################
 
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/cmake/cmake_uninstall.cmake"
+configure_file("${PROJECT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
+  "${PROJECT_BINARY_DIR}/cmake/cmake_uninstall.cmake"
   IMMEDIATE @ONLY)
 
 add_custom_target(uninstall
-  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake/cmake_uninstall.cmake") 
+  "${CMAKE_COMMAND}" -P "${PROJECT_BINARY_DIR}/cmake/cmake_uninstall.cmake") 
 
 #################################################################################
 # DEBUG settings - TODO: make a summary
