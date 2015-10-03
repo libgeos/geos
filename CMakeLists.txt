@@ -10,7 +10,7 @@
 # See the COPYING file for more information.
 #
 #################################################################################
-project(geos)
+project(GEOS)
 cmake_minimum_required(VERSION 2.6)
 
 if(NOT CMAKE_VERSION)
@@ -19,7 +19,7 @@ if(NOT CMAKE_VERSION)
 endif()
 
 # Location of custom CMake modules with macros used by GEOS
-set(CMAKE_MODULE_PATH "${geos_SOURCE_DIR}/cmake/modules")
+set(CMAKE_MODULE_PATH "${GEOS_SOURCE_DIR}/cmake/modules")
 
 #################################################################################
 # Setup GEOS version
@@ -225,10 +225,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 #################################################################################
 
 # for including GEOS C++ API headers
-include_directories(${geos_SOURCE_DIR}/include)
+include_directories(${GEOS_SOURCE_DIR}/include)
 
 # for including build-specific GEOS C API headers
-include_directories(${geos_BINARY_DIR}/capi)
+include_directories(${GEOS_BINARY_DIR}/capi)
 
 # for including build-specific version.h, platform.h and geos_c.h
 include_directories(${geos_BINARY_DIR}/include)
