@@ -238,7 +238,7 @@ OverlayResultValidator::computeBoundaryDistanceTolerance(
 {
     using geos::operation::overlay::snap::GeometrySnapper;
 
-    return (std::min)(GeometrySnapper::computeSizeBasedSnapTolerance(g0),
+    return std::min(GeometrySnapper::computeSizeBasedSnapTolerance(g0),
                       GeometrySnapper::computeSizeBasedSnapTolerance(g1));
 }
 

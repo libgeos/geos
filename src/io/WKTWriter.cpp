@@ -181,7 +181,7 @@ void
 WKTWriter::appendGeometryTaggedText(const Geometry *geometry, int level,
 		Writer *writer)
 {
-  outputDimension = (std::min)( defaultOutputDimension,
+  outputDimension = std::min( defaultOutputDimension,
                          geometry->getCoordinateDimension() );
 
   indent(level, writer);
