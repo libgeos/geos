@@ -310,14 +310,9 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/capi/geos_c.h.in
 #################################################################################
 
 if(GEOS_ENABLE_TESTS)
-
- # Include CTest support
- include(CTest)
- enable_testing()
-
+  enable_testing()
   # Define "make check" as alias for "make test"
   add_custom_target(check COMMAND ctest)
-
 endif()
 
 #################################################################################
