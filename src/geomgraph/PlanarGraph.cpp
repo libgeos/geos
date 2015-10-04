@@ -133,13 +133,12 @@ PlanarGraph::insertEdge(Edge *e)
 void
 PlanarGraph::add(EdgeEnd* e)
 {
+	assert(edgeEndList);
+	edgeEndList->push_back(e);
 
 	assert(e);
 	assert(nodes);
 	nodes->add(e);
-
-	assert(edgeEndList);
-	edgeEndList->push_back(e);
 }
 
 /*public*/
@@ -213,10 +212,20 @@ PlanarGraph::addEdges(const vector<Edge*>& edgesToAdd)
 		// by the ::add(EdgeEnd) call
 		DirectedEdge *de1=new DirectedEdge(e, true);
 		DirectedEdge *de2=new DirectedEdge(e, false);
-
 		de1->setSym(de2);
 		de2->setSym(de1);
-		add(de1);
+
+		// ::add may throw, then de2 will not be registered for deletion
+		try
+		{
+			add(de1);
+		}
+		catch (...)
+		{
+			delete de2;
+			// no need to delete de1 which has already been registered in edgeEndList
+			throw;
+		}
 		add(de2);
 	}
 }
