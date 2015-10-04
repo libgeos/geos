@@ -151,7 +151,7 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    BufferParameters modParams = bufParams;
    modParams.setEndCapStyle(BufferParameters::CAP_FLAT); 
    modParams.setSingleSided(false); // ignore parameter for areal-only geometries
-   Geometry* buf = 0;
+   std::auto_ptr<Geometry> buf;
 
    // This is a (temp?) hack to workaround the fact that
    // BufferBuilder BufferParamaters are immutable after
@@ -159,11 +159,11 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    // style to FLAT for single-sided buffering
    {
       BufferBuilder tmp(modParams);
-      buf = tmp.buffer( l, distance );
+      buf.reset( tmp.buffer( l, distance ) );
    }
 
    // Create MultiLineStrings from this polygon.
-   Geometry* bufLineString = buf->getBoundary();
+   std::auto_ptr<Geometry> bufLineString ( buf->getBoundary() );
 
 #ifdef GEOS_DEBUG_SSB
    std::cerr << "input|" << *l << std::endl;
@@ -219,8 +219,8 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    for (size_t i=0, n=curveList.size(); i<n; ++i) delete curveList[i];
    curveList.clear();
 
-   Geometry* singleSided = geomFact->createMultiLineString(
-      singleSidedNodedEdges );
+   std::auto_ptr<Geometry> singleSided ( geomFact->createMultiLineString(
+      singleSidedNodedEdges ) );
 
 #ifdef GEOS_DEBUG_SSB
      std::cerr << "edges|" << *singleSided << std::endl;
@@ -233,7 +233,7 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    //       diverge from original offset curves due to the addition of
    //       intersections with caps and joins curves
    using geos::operation::overlay::snap::SnapOverlayOp;
-   Geometry* intersectedLines = SnapOverlayOp::overlayOp(*singleSided, *bufLineString, OverlayOp::opINTERSECTION).release();
+   std::auto_ptr<Geometry> intersectedLines = SnapOverlayOp::overlayOp(*singleSided, *bufLineString, OverlayOp::opINTERSECTION);
 
 #ifdef GEOS_DEBUG_SSB
      std::cerr << "intersection" << "|" << *intersectedLines << std::endl;
@@ -241,7 +241,7 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
 
    // Merge result lines together.
    LineMerger lineMerge;
-   lineMerge.add( intersectedLines );
+   lineMerge.add( intersectedLines.get() );
    std::auto_ptr< std::vector< LineString* > > mergedLines (
 	lineMerge.getMergedLineStrings() );
 
@@ -338,10 +338,10 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
 
    // Clean up.
    if ( noder != workingNoder ) delete noder;
-   geomFact->destroyGeometry( buf );
-   geomFact->destroyGeometry( bufLineString );
-   geomFact->destroyGeometry( singleSided );
-   geomFact->destroyGeometry( intersectedLines );
+   buf.reset();
+   bufLineString.reset();
+   singleSided.reset();
+   intersectedLines.reset();
 
    if ( mergedLinesGeom->size() > 1 )
    {      
