@@ -1,7 +1,8 @@
 Changes in 3.5.1
 2015-MM-dd
 
-- Improvements:
+- Bug fixes / improvements
+  - Fix memory leaks in single-sided buffers (#747)
 
 
 Changes in 3.5.0
