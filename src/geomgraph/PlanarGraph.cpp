@@ -133,6 +133,8 @@ PlanarGraph::insertEdge(Edge *e)
 void
 PlanarGraph::add(EdgeEnd* e)
 {
+	// It is critical to add the edge to the edgeEndList first,
+	// then it is safe to follow with any potentially throwing operations.
 	assert(edgeEndList);
 	edgeEndList->push_back(e);
 
@@ -210,23 +212,14 @@ PlanarGraph::addEdges(const vector<Edge*>& edgesToAdd)
 		// PlanarGraph destructor will delete all DirectedEdges 
 		// in edgeEndList, which is where these are added
 		// by the ::add(EdgeEnd) call
-		DirectedEdge *de1=new DirectedEdge(e, true);
-		DirectedEdge *de2=new DirectedEdge(e, false);
-		de1->setSym(de2);
-		de2->setSym(de1);
+		std::auto_ptr<DirectedEdge> de1(new DirectedEdge(e, true));
+		std::auto_ptr<DirectedEdge> de2(new DirectedEdge(e, false));
+		de1->setSym(de2.get());
+		de2->setSym(de1.get());
 
-		// ::add may throw, then de2 will not be registered for deletion
-		try
-		{
-			add(de1);
-		}
-		catch (...)
-		{
-			delete de2;
-			// no need to delete de1 which has already been registered in edgeEndList
-			throw;
-		}
-		add(de2);
+		// First, ::add takes the ownership, then follows with operations that may throw.
+		add(de1.release());
+		add(de2.release());
 	}
 }
 
