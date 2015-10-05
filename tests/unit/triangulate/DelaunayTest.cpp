@@ -181,14 +181,12 @@ namespace tut
 		v->push_back( Coordinate (150,200) );
 		v->push_back( Coordinate (180,270) );
 		v->push_back( Coordinate (275,163) );
+		geos::geom::CoordinateArraySequence seq(v);
 
-		geos::geom::CoordinateArraySequence *seq = new CoordinateArraySequence(v);
-
-		Envelope env = DelaunayTriangulationBuilder::envelope(*seq);
+		Envelope env = DelaunayTriangulationBuilder::envelope(seq);
 
 		ensure_equals(env.getWidth() , 125);
 		ensure_equals(env.getHeight() , 107);
-
 	}
 
 } // namespace tut
