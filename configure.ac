@@ -16,7 +16,7 @@ JTS_PORT=1.13.0
 dnl -- Version info for the CAPI
 CAPI_INTERFACE_CURRENT=11
 CAPI_INTERFACE_REVISION=0
-CAPI_INTERFACE_AGE=9
+CAPI_INTERFACE_AGE=10
 
 dnl
 dnl -- Release versions / C++ library SONAME will use these
