@@ -844,6 +844,12 @@ GEOSGeom_setPrecision(const GEOSGeometry *g, double gridSize, int flags)
 	return GEOSGeom_setPrecision_r(handle, g, gridSize, flags);
 }
 
+double
+GEOSGeom_getPrecision(const GEOSGeometry *g)
+{
+	return GEOSGeom_getPrecision_r(handle, g);
+}
+
 int
 GEOSGeom_getDimensions(const Geometry *g)
 {

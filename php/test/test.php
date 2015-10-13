@@ -1367,32 +1367,38 @@ MULTIPOINT(
         $this->assertEquals(
             'LINESTRING (0 0, 4 4, 6 10, 10 0, 10 10, 6 12, 0 10)'
             , $writer->write($g));
+        $this->assertEquals($g->getPrecision(), 2);
 
         $g = $g->setPrecision(0);
         $this->assertEquals(
             'LINESTRING (0 0, 4 4, 6 10, 10 0, 10 10, 6 12, 0 10)'
             , $writer->write($g));
+        $this->assertEquals($g->getPrecision(), 0);
 
         $g = $g->setPrecision(8);
         $this->assertEquals(
             'LINESTRING (0 0, 8 8, 8 0, 8 8, 8 16, 0 8)'
             , $writer->write($g));
+        $this->assertEquals($g->getPrecision(), 8);
 
         $g = $g->setPrecision(10);
         $this->assertEquals(
             'LINESTRING (0 0, 10 10, 10 0, 10 10, 10 20, 0 10)'
             , $writer->write($g));
+        $this->assertEquals($g->getPrecision(), 10);
 
         $g = $g->setPrecision(20);
         $this->assertEquals(
             'LINESTRING (0 0, 20 20, 20 0, 20 20, 0 20)'
             , $writer->write($g));
+        $this->assertEquals($g->getPrecision(), 20);
 
         $g = $reader->read('POLYGON((0 0, 2 0, 2 2, 0 2, 0 0))');
         $g = $g->setPrecision(20);
         $this->assertEquals(
             'POLYGON EMPTY'
             , $writer->write($g));
+        $this->assertEquals($g->getPrecision(), 20);
     }
 
     public function testGeometry_extractUniquePoints()

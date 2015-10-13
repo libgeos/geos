@@ -111,7 +111,13 @@ GeometryEditor::editPolygon(const Polygon *polygon,GeometryEditorOperation *oper
   );
 	if (newPolygon->isEmpty()) {
 		//RemoveSelectedPlugIn relies on this behaviour. [Jon Aquino]
-		return newPolygon;
+		if ( newPolygon->getFactory() != factory ) {
+		  Polygon *ret = factory->createPolygon(NULL, NULL);
+		  delete newPolygon;
+		  return ret;
+		} else {
+		  return newPolygon;
+		}
 	}
 
 	Geometry* editResult = edit(newPolygon->getExteriorRing(),operation);

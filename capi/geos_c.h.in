@@ -969,6 +969,16 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_setPrecision_r(
                                        const GEOSGeometry *g,
                                        double gridSize, int flags);
 
+/**
+ * Get a geometry's precision
+ *
+ * @return the size of the geometry's precision grid, 0 for FLOATING
+ *         precision or -1 on exception
+ */
+extern double GEOS_DLL GEOSGeom_getPrecision_r(
+                                       GEOSContextHandle_t handle,
+                                       const GEOSGeometry *g);
+
 /* Return -1 on exception */
 extern int GEOS_DLL GEOSGetNumInteriorRings_r(GEOSContextHandle_t handle,
                                               const GEOSGeometry* g);
@@ -1718,6 +1728,9 @@ extern int GEOS_DLL GEOSNormalize(GEOSGeometry* g);
 /* Return NULL on exception */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_setPrecision(
 	const GEOSGeometry *g, double gridSize, int flags);
+
+/* Return -1 on exception */
+extern double GEOS_DLL GEOSGeom_getPrecision(const GEOSGeometry *g);
 
 /* Return -1 on exception */
 extern int GEOS_DLL GEOSGetNumInteriorRings(const GEOSGeometry* g);

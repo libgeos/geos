@@ -90,9 +90,13 @@ namespace tut
     {
         geom1_ = fromWKT("POLYGON EMPTY");
         ensure(geom1_);
+        double scale = GEOSGeom_getPrecision(geom1_);
+        ensure_equals(scale, 0.0);
         geom3_ = GEOSGeom_setPrecision(geom1_, 2.0, 0);
         ensure(geom3_);
         ensure_equals(toWKT(geom3_), std::string("POLYGON EMPTY"));
+        scale = GEOSGeom_getPrecision(geom3_);
+        ensure_equals(scale, 2.0);
     }
 
     template<>
@@ -138,6 +142,10 @@ namespace tut
         geom3_ = GEOSIntersection(geom1_, geom2_);
         ensure(geom3_);
         ensure_equals(toWKT(geom3_), std::string("POINT (3 20)"));
+        double scale = GEOSGeom_getPrecision(geom1_);
+        ensure_equals(scale, 0.5);
+        scale = GEOSGeom_getPrecision(geom2_);
+        ensure_equals(scale, 2.0);
     }
 
     // Retain (or not) topology

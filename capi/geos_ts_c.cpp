@@ -4285,6 +4285,43 @@ GEOSGeom_setPrecision_r(GEOSContextHandle_t extHandle, const GEOSGeometry *g,
     return NULL;
 }
 
+double
+GEOSGeom_getPrecision_r(GEOSContextHandle_t extHandle, const GEOSGeometry *g)
+{
+    using namespace geos::geom;
+
+    assert(0 != g);
+
+    if ( 0 == extHandle )
+    {
+        return -1;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return -1;
+    }
+
+    try
+    {
+        const PrecisionModel *pm = g->getPrecisionModel();
+        double cursize = pm->isFloating() ? 0 : 1.0/pm->getScale();
+        return cursize;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return -1;
+}
+
 int
 GEOSGeom_getDimensions_r(GEOSContextHandle_t extHandle, const Geometry *g)
 {
