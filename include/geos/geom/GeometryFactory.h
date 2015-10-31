@@ -479,13 +479,13 @@ private:
 	int SRID;
 	const CoordinateSequenceFactory *coordinateListFactory;
 
-	mutable int _geometryCount;
+	mutable int _refCount;
 	bool _autoDestroy;
 
 friend class Geometry;
 
-	void addChild(const Geometry *g) const;
-	void delChild(const Geometry *g) const;
+	void addRef() const;
+	void dropRef() const;
 
 };
 
