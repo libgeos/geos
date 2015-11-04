@@ -254,29 +254,35 @@ MACRO (GET_SVN_REVISION)
 ENDMACRO(GET_SVN_REVISION)
 
 # Determine SVN/Git revision
-if(EXISTS "${CMAKE_SOURCE_DIR}/.svn")
+set(GEOS_BUILD_PACKAGED TRUE)
+if(EXISTS "${PROJECT_SOURCE_DIR}/.svn")
+  set(GEOS_BUILD_PACKAGED FALSE)
   GET_SVN_REVISION()
+elseif(EXISTS "${PROJECT_SOURCE_DIR}/.git")
+  set(GEOS_BUILD_PACKAGED FALSE)
 endif()
-if ( NOT ${Project_WC_REVISION} EQUAL 0 )
-   set( GEOS_SVN_REVISION ${Project_WC_REVISION} )
-   configure_file ( 
-      "${PROJECT_SOURCE_DIR}/tools/geos_svn_revision_cmake.h.in"
-      "${PROJECT_SOURCE_DIR}/geos_svn_revision.h" )
-      # "${geos_BINARY_DIR}/include/geos_svn_revision.h" )
-else()
-   message(STATUS "Generating revision header ${CMAKE_SOURCE_DIR}/geos_svn_revision.h")
-   find_program(SH sh)
-   if(SH)
-      execute_process(COMMAND ${SH} -c 
-      "cd ${CMAKE_SOURCE_DIR} && ${CMAKE_SOURCE_DIR}/tools/svn_repo_revision.sh")
 
-      file(RENAME "${CMAKE_SOURCE_DIR}/geos_svn_revision.h"
-      "${CMAKE_BINARY_DIR}/geos_svn_revision.h")
-   else()
-      message("*** sh-compatible command not found, cannot create geos_svn_revision.h")
-      message("*** Check SVN revision and create revision header manually:")
-      message("*** echo '#define GEOS_SVN_REVISION XYZ' > ${CMAKE_SOURCE_DIR}/geos_svn_revision.h")
-   endif()
+if (NOT GEOS_BUILD_PACKAGED)
+  message(STATUS "Generating GEOS revision header in ${PROJECT_BINARY_DIR}/geos_svn_revision.h")
+  if ( NOT ${Project_WC_REVISION} EQUAL 0 )
+     set( GEOS_SVN_REVISION ${Project_WC_REVISION} )
+     configure_file ( 
+        "${PROJECT_SOURCE_DIR}/tools/geos_svn_revision_cmake.h.in"
+        "${PROJECT_BINARY_DIR}/include/geos_svn_revision.h" )
+  else()
+     find_program(SH sh)
+     if(SH)
+        execute_process(COMMAND ${SH} -c 
+        "cd ${PROJECT_SOURCE_DIR} && ${PROJECT_SOURCE_DIR}/tools/svn_repo_revision.sh")
+
+        file(RENAME "${PROJECT_SOURCE_DIR}/geos_svn_revision.h"
+        "${PROJECT_BINARY_DIR}/geos_svn_revision.h")
+     else()
+        message("*** sh-compatible command not found, cannot create geos_svn_revision.h")
+        message("*** Check SVN revision and create revision header manually:")
+        message("*** echo '#define GEOS_SVN_REVISION XYZ' > ${PROJECT_SOURCE_DIR}/geos_svn_revision.h")
+     endif()
+  endif()
 endif()
 # End: Determine SVN/Git revision
 
