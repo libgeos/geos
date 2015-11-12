@@ -437,6 +437,18 @@ GEOSConvexHull(const Geometry *g)
 }
 
 Geometry *
+GEOSMinimumRotatedRectangle(const Geometry *g)
+{
+    return GEOSMinimumRotatedRectangle_r( handle, g );
+}
+
+Geometry *
+GEOSMinimumDiameter(const Geometry *g)
+{
+    return GEOSMinimumDiameter_r( handle, g );
+}
+
+Geometry *
 GEOSDifference(const Geometry *g1, const Geometry *g2)
 {
     return GEOSDifference_r( handle, g1, g2 );

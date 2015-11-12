@@ -12,6 +12,10 @@
  * See the COPYING file for more information.
  *
  **********************************************************************
+ *
+ * Last port: algorithm/MinimumDiameter.java r966
+ *
+ **********************************************************************
  * 
  * TODO:
  * 	- avoid heap allocation for LineSegment and Coordinate
@@ -23,6 +27,7 @@
 #include <geos/geom/Geometry.h>
 #include <geos/geom/LineSegment.h>
 #include <geos/geom/Polygon.h>
+#include <geos/geom/Point.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
@@ -67,6 +72,7 @@ MinimumDiameter::MinimumDiameter(const Geometry* newInputGeom)
 	minWidth=0.0;
 	inputGeom=newInputGeom;
 	isConvex=false;
+	convexHullPts=NULL;
 }
 
 /**
@@ -86,12 +92,14 @@ MinimumDiameter::MinimumDiameter(const Geometry* newInputGeom, const bool newIsC
 	minWidth=0.0;
 	inputGeom=newInputGeom;
 	isConvex=newIsConvex;
+	convexHullPts=NULL;
 }
 
 MinimumDiameter::~MinimumDiameter()
 {
 	delete minBaseSeg;
 	delete minWidthPt;
+	delete convexHullPts;
 }
 
 /**
@@ -177,42 +185,45 @@ void
 MinimumDiameter::computeWidthConvex(const Geometry *geom)
 {
 	//System.out.println("Input = " + geom);
-	CoordinateSequence* pts=NULL;
+	delete convexHullPts;
 	if (typeid(*geom)==typeid(Polygon))
 	{
 		const Polygon* p = dynamic_cast<const Polygon*>(geom);
-		pts=p->getExteriorRing()->getCoordinates();
+		convexHullPts=p->getExteriorRing()->getCoordinates();
 	}
 	else
 	{
-		pts=geom->getCoordinates();
+		convexHullPts=geom->getCoordinates();
 	}
 
 	// special cases for lines or points or degenerate rings
-	switch(pts->getSize())
+	switch(convexHullPts->getSize())
 	{
 		case 0:
 			minWidth=0.0;
+			delete minWidthPt;
 			minWidthPt=NULL;
+			delete minBaseSeg;
 			minBaseSeg=NULL;
 			break;
 		case 1:
 			minWidth = 0.0;
-			minWidthPt=new Coordinate(pts->getAt(0));
-			minBaseSeg->p0=pts->getAt(0);
-			minBaseSeg->p1=pts->getAt(0);
+			delete minWidthPt;
+			minWidthPt=new Coordinate(convexHullPts->getAt(0));
+			minBaseSeg->p0=convexHullPts->getAt(0);
+			minBaseSeg->p1=convexHullPts->getAt(0);
 			break;
 		case 2:
 		case 3:
 			minWidth = 0.0;
-			minWidthPt=new Coordinate(pts->getAt(0));
-			minBaseSeg->p0=pts->getAt(0);
-			minBaseSeg->p1=pts->getAt(1);
+			delete minWidthPt;
+			minWidthPt=new Coordinate(convexHullPts->getAt(0));
+			minBaseSeg->p0=convexHullPts->getAt(0);
+			minBaseSeg->p1=convexHullPts->getAt(1);
 			break;
 		default:
-			computeConvexRingMinDiameter(pts);
+			computeConvexRingMinDiameter(convexHullPts);
 	}
-	delete pts; 
 }
 
 /**
@@ -273,6 +284,111 @@ MinimumDiameter::getNextIndex(const CoordinateSequence *pts,
 {
 	if (++index >= pts->getSize()) index = 0;
 	return index;
+}
+
+Geometry* MinimumDiameter::getMinimumRectangle()
+{
+	computeMinimumDiameter();
+
+	if ( !minBaseSeg || !convexHullPts )
+	{
+		//return empty polygon
+		return inputGeom->getFactory()->createPolygon();
+	}
+
+	// check if minimum rectangle is degenerate (a point or line segment)
+	if (minWidth == 0.0) {
+		if (minBaseSeg->p0.equals2D(minBaseSeg->p1)) {
+			return inputGeom->getFactory()->createPoint(minBaseSeg->p0);
+		}
+		return minBaseSeg->toGeometry(*inputGeom->getFactory()).release();
+	}
+
+	// deltas for the base segment of the minimum diameter
+	double dx = minBaseSeg->p1.x - minBaseSeg->p0.x;
+	double dy = minBaseSeg->p1.y - minBaseSeg->p0.y;
+
+	double minPara = DoubleMax;
+	double maxPara = -DoubleMax;
+	double minPerp = DoubleMax;
+	double maxPerp = -DoubleMax;
+
+	// compute maxima and minima of lines parallel and perpendicular to base segment
+	std::size_t const n=convexHullPts->getSize();
+	for (std::size_t i = 0; i < n; ++i) {
+
+		double paraC = computeC(dx, dy, convexHullPts->getAt(i));
+		if (paraC > maxPara) maxPara = paraC;
+		if (paraC < minPara) minPara = paraC;
+
+		double perpC = computeC(-dy, dx, convexHullPts->getAt(i));
+		if (perpC > maxPerp) maxPerp = perpC;
+		if (perpC < minPerp) minPerp = perpC;
+	}
+
+	// compute lines along edges of minimum rectangle
+	LineSegment maxPerpLine = computeSegmentForLine(-dx, -dy, maxPerp);
+	LineSegment minPerpLine = computeSegmentForLine(-dx, -dy, minPerp);
+	LineSegment maxParaLine = computeSegmentForLine(-dy, dx, maxPara);
+	LineSegment minParaLine = computeSegmentForLine(-dy, dx, minPara);
+
+	// compute vertices of rectangle (where the para/perp max & min lines intersect)
+	Coordinate p0, p1, p2, p3;
+	maxParaLine.lineIntersection(maxPerpLine, p0);
+	minParaLine.lineIntersection(maxPerpLine, p1);
+	minParaLine.lineIntersection(minPerpLine, p2);
+	maxParaLine.lineIntersection(minPerpLine, p3);
+
+	const CoordinateSequenceFactory *csf =
+	inputGeom->getFactory()->getCoordinateSequenceFactory();
+
+	geom::CoordinateSequence *seq = csf->create(5, 2);
+	seq->setAt(p0, 0);
+	seq->setAt(p1, 1);
+	seq->setAt(p2, 2);
+	seq->setAt(p3, 3);
+	seq->setAt(p0, 4); // close
+
+	LinearRing* shell = inputGeom->getFactory()->createLinearRing( seq );
+	return inputGeom->getFactory()->createPolygon( shell, NULL );
+}
+
+double MinimumDiameter::computeC(double a, double b, const Coordinate& p)
+{
+	return a * p.y - b * p.x;
+}
+
+LineSegment MinimumDiameter::computeSegmentForLine(double a, double b, double c)
+{
+	Coordinate p0;
+	Coordinate p1;
+	/*
+	* Line eqn is ax + by = c
+	* Slope is a/b.
+	* If slope is steep, use y values as the inputs
+	*/
+	if (fabs(b) > fabs(a) ) {
+		p0 = Coordinate(0.0, c/b);
+		p1 = Coordinate(1.0, c/b - a/b);
+	}
+	else {
+		p0 = Coordinate(c/a, 0.0);
+		p1 = Coordinate(c/a - b/a, 1.0);
+	}
+	return LineSegment(p0, p1);
+}
+
+
+Geometry *MinimumDiameter::getMinimumRectangle(Geometry *geom)
+{
+	MinimumDiameter md( geom );
+	return md.getMinimumRectangle();
+}
+
+Geometry *MinimumDiameter::getMinimumDiameter(Geometry *geom)
+{
+	MinimumDiameter md( geom );
+	return md.getDiameter();
 }
 
 } // namespace geos.algorithm
