@@ -350,6 +350,13 @@ EdgeEndStar::print()
 	return out;
 }
 
+std::ostream&
+operator<< (std::ostream& os, const EdgeEndStar& ee)
+{
+	os << print();
+	return os;
+}
+
 } // namespace geos.geomgraph
 } // namespace geos
 

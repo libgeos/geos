@@ -196,9 +196,23 @@ RelateComputer::computeIM()
 	std::auto_ptr< std::vector<EdgeEnd*> > ee1 (
 		eeBuilder.computeEdgeEnds((*arg)[1]->getEdges())
   );
+
+#if GEOS_DEBUG
+	std::cerr << "RelateComputer::computeIM: "
+            << "inserting edge ends"
+            << std::endl;
+#endif
+
 	insertEdgeEnds(ee1.get());
 	//Debug.println("==== NodeList ===");
 	//Debug.print(nodes);
+
+#if GEOS_DEBUG
+	std::cerr << "RelateComputer::computeIM: "
+            << "labeling node edges"
+            << std::endl;
+#endif
+
 	labelNodeEdges();
 
 	/**
@@ -401,6 +415,11 @@ RelateComputer::labelNodeEdges()
 	{
 		assert(dynamic_cast<RelateNode*>(nodeIt->second));
 		RelateNode *node=static_cast<RelateNode*>(nodeIt->second);
+#if GEOS_DEBUG
+    std::cerr << "RelateComputer::labelNodeEdges: "
+              << "node edges: " << *(node->getEdges())
+              << std::endl;
+#endif
 		node->getEdges()->computeLabelling(arg);
 		//Debug.print(node.getEdges());
 		//node.print(System.out);

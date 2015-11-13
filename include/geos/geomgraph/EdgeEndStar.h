@@ -63,6 +63,8 @@ namespace geomgraph { // geos.geomgraph
 class GEOS_DLL EdgeEndStar {
 public:
 
+	friend std::ostream& operator<< (std::ostream&, const EdgeEndStar&);
+
 	typedef std::set<EdgeEnd *, EdgeEndLT> container;
 
 	typedef container::iterator iterator;
@@ -187,6 +189,7 @@ EdgeEndStar::find(EdgeEnd *eSearch)
 	return edgeMap.find(eSearch);
 }
 
+std::ostream& operator<< (std::ostream&, const EdgeEnd&);
 
 } // namespace geos.geomgraph
 } // namespace geos
