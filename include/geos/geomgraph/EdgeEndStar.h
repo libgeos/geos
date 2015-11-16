@@ -63,11 +63,10 @@ namespace geomgraph { // geos.geomgraph
 class GEOS_DLL EdgeEndStar {
 public:
 
-	friend std::ostream& operator<< (std::ostream&, const EdgeEndStar&);
-
 	typedef std::set<EdgeEnd *, EdgeEndLT> container;
 
 	typedef container::iterator iterator;
+	typedef container::const_iterator const_iterator;
 	typedef container::reverse_iterator reverse_iterator;
 
 	EdgeEndStar();
@@ -88,6 +87,8 @@ public:
 	 */
 	virtual geom::Coordinate& getCoordinate();
 
+	const geom::Coordinate& getCoordinate() const;
+
 	virtual std::size_t getDegree();
 
 	virtual iterator begin();
@@ -98,8 +99,11 @@ public:
 
 	virtual reverse_iterator rend();
 
-	virtual container &getEdges();
+	virtual const_iterator begin() const { return edgeMap.begin(); }
 
+	virtual const_iterator end() const { return edgeMap.end(); }
+
+	virtual container &getEdges();
 
 	virtual EdgeEnd* getNextCW(EdgeEnd *ee);
 
@@ -114,7 +118,7 @@ public:
 	//virtual int findIndex(EdgeEnd *eSearch);
 	virtual iterator find(EdgeEnd *eSearch);
 
-	virtual std::string print();
+	virtual std::string print() const;
 
 protected:
 
@@ -189,7 +193,7 @@ EdgeEndStar::find(EdgeEnd *eSearch)
 	return edgeMap.find(eSearch);
 }
 
-std::ostream& operator<< (std::ostream&, const EdgeEnd&);
+std::ostream& operator<< (std::ostream&, const EdgeEndStar&);
 
 } // namespace geos.geomgraph
 } // namespace geos

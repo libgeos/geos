@@ -92,6 +92,8 @@ public:
 
 	virtual geom::Coordinate& getCoordinate();
 
+	const geom::Coordinate& getCoordinate() const { return p0; }
+
 	virtual geom::Coordinate& getDirectedCoordinate();
 
 	virtual int getQuadrant();
@@ -126,7 +128,7 @@ public:
 
 	virtual void computeLabel(const algorithm::BoundaryNodeRule& bnr);
 
-	virtual std::string print();
+	virtual std::string print() const;
 
 protected:
 

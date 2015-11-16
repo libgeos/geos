@@ -190,7 +190,7 @@ EdgeEnd::computeLabel(const algorithm::BoundaryNodeRule& /*boundaryNodeRule*/)
 
 /*public*/
 std::string
-EdgeEnd::print()
+EdgeEnd::print() const
 {
 	std::ostringstream s;
 

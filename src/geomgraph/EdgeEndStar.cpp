@@ -29,6 +29,7 @@
 #include <cassert>
 #include <string>
 #include <vector>
+#include <sstream>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -61,6 +62,13 @@ EdgeEndStar::getCoordinate()
 	EdgeEnd *e=*it;
 	assert(e);
 	return e->getCoordinate();
+}
+
+/*public*/
+const Coordinate&
+EdgeEndStar::getCoordinate() const
+{
+	return const_cast<EdgeEndStar*>(this)->getCoordinate();
 }
 
 /*public*/
@@ -338,22 +346,23 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
 
 /*public*/
 std::string
-EdgeEndStar::print()
+EdgeEndStar::print() const
 {
-	std::string out="EdgeEndStar:   " + getCoordinate().toString()+"\n";
-	for (EdgeEndStar::iterator it=begin(), itEnd=end(); it!=itEnd; ++it)
-	{
-		EdgeEnd *e=*it;
-		assert(e);
-		out+=e->print();
-	}
-	return out;
+	std::ostringstream s;
+  s << *this;
+  return s.str();
 }
 
 std::ostream&
-operator<< (std::ostream& os, const EdgeEndStar& ee)
+operator<< (std::ostream& os, const EdgeEndStar& es)
 {
-	os << print();
+	os << "EdgeEndStar:   " << es.getCoordinate() << "\n";
+	for (EdgeEndStar::const_iterator it=es.begin(), itEnd=es.end(); it!=itEnd; ++it)
+	{
+		const EdgeEnd *e=*it;
+		assert(e);
+		os << *e;
+	}
 	return os;
 }
 
