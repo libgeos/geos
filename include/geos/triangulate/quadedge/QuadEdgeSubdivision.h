@@ -78,7 +78,7 @@ const double EDGE_COINCIDENCE_TOL_FACTOR = 1000;
  */
 class GEOS_DLL QuadEdgeSubdivision {
 public:
-	typedef std::list<QuadEdge*> QuadEdgeList;
+	typedef std::vector<QuadEdge*> QuadEdgeList;
 
 	/**
 	 * Gets the edges for the triangle to the left of the given {@link QuadEdge}.

@@ -17,6 +17,7 @@
  **********************************************************************/
 #include <geos/triangulate/quadedge/QuadEdgeSubdivision.h>
 
+#include <algorithm>
 #include <vector>
 #include <set>
 #include <iostream>
@@ -159,8 +160,8 @@ QuadEdgeSubdivision::remove(QuadEdge &e)
     QuadEdge::splice(e, e.oPrev());
     QuadEdge::splice(e.sym(), e.sym().oPrev());
 
-    // this is inefficient on an ArrayList, but this method should be called infrequently
-    quadEdges.remove(&e);
+    // this is inefficient on a std::vector, but this method should be called infrequently
+    quadEdges.erase(std::remove(quadEdges.begin(), quadEdges.end(), &e), quadEdges.end());
 
     //mark these edges as removed
     e.remove();
