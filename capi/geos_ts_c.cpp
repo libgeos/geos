@@ -3151,6 +3151,7 @@ GEOSGeom_createCollection_r(GEOSContextHandle_t extHandle, int type, Geometry **
                 break;
             default:
                 handle->ERROR_MESSAGE("Unsupported type request for PostGIS2GEOS_collection");
+                delete vgeoms;
                 g = 0;
                 
         }
@@ -4177,6 +4178,7 @@ GEOSGeom_createPolygon_r(GEOSContextHandle_t extHandle, Geometry *shell, Geometr
         if ( ! nshell )
         {
             handle->ERROR_MESSAGE("Shell is not a LinearRing");
+            delete vholes;
             return NULL;
         }
         const GeometryFactory *gf = handle->geomFactory;

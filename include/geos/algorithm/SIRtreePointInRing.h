@@ -49,6 +49,7 @@ private:
 			geom::LineSegment *seg);
 public:
 	SIRtreePointInRing(geom::LinearRing *newRing);
+	~SIRtreePointInRing();
 	bool isInside(const geom::Coordinate& pt);
 };
 
