@@ -80,4 +80,20 @@ namespace tut
         GEOSGeom_destroy(output);
     }
 
+    template<>
+    template<>
+    void object::test<2>()
+    {
+        input_ = GEOSGeomFromWKT("LINESTRING (0 0,0 10, 10 10)");
+        ensure( 0 != input_ );
+
+        GEOSGeometry* output = GEOSMinimumWidth(input_);
+        ensure( 0 != output );
+        ensure( 0 == GEOSisEmpty(output) );
+
+        wkt_ = GEOSWKTWriter_write(wktw_, output);
+        ensure_equals(std::string(wkt_), std::string( "LINESTRING (5 5, 0 10)"));
+        GEOSGeom_destroy(output);
+    }
+
 } // namespace tut
