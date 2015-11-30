@@ -538,10 +538,24 @@ extern GEOSGeometry GEOS_DLL *GEOSIntersection_r(GEOSContextHandle_t handle,
                                                  const GEOSGeometry* g2);
 extern GEOSGeometry GEOS_DLL *GEOSConvexHull_r(GEOSContextHandle_t handle,
                                                const GEOSGeometry* g);
+
+/* Returns the minimum rotated rectangular POLYGON which encloses the input geometry. The rectangle
+ * has width equal to the minimum diameter, and a longer length. If the convex hill of the input is
+ * degenerate (a line or point) a LINESTRING or POINT is returned. The minimum rotated rectangle can
+ * be used as an extremely generalized representation for the given geometry.
+ */
 extern GEOSGeometry GEOS_DLL *GEOSMinimumRotatedRectangle_r(GEOSContextHandle_t handle,
                                                const GEOSGeometry* g);
-extern GEOSGeometry GEOS_DLL *GEOSMinimumDiameter_r(GEOSContextHandle_t handle,
+
+/* Returns a LINESTRING geometry which represents the minimum diameter of the geometry.
+ * The minimum diameter is defined to be the width of the smallest band that
+ * contains the geometry, where a band is a strip of the plane defined
+ * by two parallel lines. This can be thought of as the smallest hole that the geometry
+ * can be moved through, with a single rotation.
+ */
+extern GEOSGeometry GEOS_DLL *GEOSMinimumWidth_r(GEOSContextHandle_t handle,
                                                const GEOSGeometry* g);
+
 extern GEOSGeometry GEOS_DLL *GEOSDifference_r(GEOSContextHandle_t handle,
                                                const GEOSGeometry* g1,
                                                const GEOSGeometry* g2);
@@ -1452,8 +1466,22 @@ extern void GEOS_DLL GEOSGeom_destroy(GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSEnvelope(const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSIntersection(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern GEOSGeometry GEOS_DLL *GEOSConvexHull(const GEOSGeometry* g);
+
+/* Returns the minimum rotated rectangular POLYGON which encloses the input geometry. The rectangle
+ * has width equal to the minimum diameter, and a longer length. If the convex hill of the input is
+ * degenerate (a line or point) a LINESTRING or POINT is returned. The minimum rotated rectangle can
+ * be used as an extremely generalized representation for the given geometry.
+ */
 extern GEOSGeometry GEOS_DLL *GEOSMinimumRotatedRectangle(const GEOSGeometry* g);
-extern GEOSGeometry GEOS_DLL *GEOSMinimumDiameter(const GEOSGeometry* g);
+
+/* Returns a LINESTRING geometry which represents the minimum diameter of the geometry.
+ * The minimum diameter is defined to be the width of the smallest band that
+ * contains the geometry, where a band is a strip of the plane defined
+ * by two parallel lines. This can be thought of as the smallest hole that the geometry
+ * can be moved through, with a single rotation.
+ */
+extern GEOSGeometry GEOS_DLL *GEOSMinimumWidth(const GEOSGeometry* g);
+
 extern GEOSGeometry GEOS_DLL *GEOSDifference(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern GEOSGeometry GEOS_DLL *GEOSSymDifference(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern GEOSGeometry GEOS_DLL *GEOSBoundary(const GEOSGeometry* g);

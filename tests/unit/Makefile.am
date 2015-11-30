@@ -132,7 +132,7 @@ geos_unit_SOURCES = \
 	capi/GEOSIntersectsTest.cpp \
 	capi/GEOSIntersectionTest.cpp \
 	capi/GEOSMinimumRectangleTest.cpp \
-	capi/GEOSMinimumDiameterTest.cpp \
+	capi/GEOSMinimumWidthTest.cpp \
 	capi/GEOSNearestPointsTest.cpp \
 	capi/GEOSWithinTest.cpp \
 	capi/GEOSSimplifyTest.cpp \

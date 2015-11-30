@@ -2044,7 +2044,7 @@ GEOSMinimumRotatedRectangle_r(GEOSContextHandle_t extHandle, const Geometry *g)
 }
 
 Geometry *
-GEOSMinimumDiameter_r(GEOSContextHandle_t extHandle, const Geometry *g)
+GEOSMinimumWidth_r(GEOSContextHandle_t extHandle, const Geometry *g)
 {
     if ( 0 == extHandle )
     {
