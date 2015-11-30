@@ -1,0 +1,83 @@
+//
+// Test Suite for C-API GEOSMinimumDiameter
+#include <tut.hpp>
+// geos
+#include <geos_c.h>
+// std
+#include <cstdarg>
+#include <cstdio>
+#include <cstdlib>
+
+namespace tut
+{
+    //
+    // Test Group
+    //
+
+    // Common data used in test cases.
+    struct test_capigeosminimumdiameter_data
+    {
+        GEOSGeometry* input_;
+        GEOSWKTWriter* wktw_;
+        char* wkt_;
+
+        static void notice(const char *fmt, ...)
+        {
+            std::fprintf( stdout, "NOTICE: ");
+
+            va_list ap;
+            va_start(ap, fmt);
+            std::vfprintf(stdout, fmt, ap);
+            va_end(ap);
+
+            std::fprintf(stdout, "\n");
+        }
+
+        test_capigeosminimumdiameter_data()
+            : input_(0), wkt_(0)
+        {
+            initGEOS(notice, notice);
+            wktw_ = GEOSWKTWriter_create();
+            GEOSWKTWriter_setTrim(wktw_, 1);
+            GEOSWKTWriter_setRoundingPrecision(wktw_, 8);
+        }
+
+        ~test_capigeosminimumdiameter_data()
+        {
+            GEOSGeom_destroy(input_);
+            input_ = 0;
+            GEOSWKTWriter_destroy(wktw_);
+            GEOSFree(wkt_);
+            wkt_ = 0;
+            finishGEOS();
+        }
+
+    };
+
+    typedef test_group<test_capigeosminimumdiameter_data> group;
+    typedef group::object object;
+
+    group test_capigeosminimumdiameter_group("capi::GEOSMinimumDiameter");
+
+    //
+    // Test Cases
+    //
+
+    template<>
+    template<>
+    void object::test<1>()
+    {
+        input_ = GEOSGeomFromWKT("POLYGON ((0 0, 0 15, 5 10, 5 0, 0 0))");
+        ensure( 0 != input_ );
+
+        GEOSGeometry* output = GEOSMinimumDiameter(input_);
+        ensure( 0 != output );
+        ensure( 0 == GEOSisEmpty(output) );
+
+        wkt_ = GEOSWKTWriter_write(wktw_, output);
+        ensure_equals(std::string(wkt_), std::string( "LINESTRING (0 0, 5 0)"));
+
+        GEOSGeom_destroy(output);
+    }
+
+} // namespace tut
