@@ -12,7 +12,7 @@
  *
  **********************************************************************
  *
- * Last port: triangulate/Vertex.java r524
+ * Last port: triangulate/Vertex.java r705
  *
  **********************************************************************/
 
@@ -51,24 +51,21 @@ int Vertex::classify(const Vertex &p0, const Vertex &p1)
 	std::auto_ptr<Vertex> a = p1.sub(p0);
 	std::auto_ptr<Vertex> b = p2.sub(p0);
 	double sa = a->crossProduct(*b);
-	int ret;
 
 	if (sa > 0.0)
-		ret =  LEFT;
+		return LEFT;
 	if (sa < 0.0)
-		ret =  RIGHT;
+		return RIGHT;
 	if ((a->getX() * b->getX() < 0.0) || (a->getY() * b->getY() < 0.0))
-		ret =  BEHIND;
+		return BEHIND;
 	if (a->magn() < b->magn())
-		ret =  BEYOND;
+		return BEYOND;
 	if (p0.equals(p2))
-		ret =  ORIGIN;
+		return ORIGIN;
 	if (p1.equals(p2))
-		ret =  DESTINATION;
+		return DESTINATION;
 	else
-		ret =  BETWEEN;
-
-	return ret;
+		return BETWEEN;
 }
 
 bool Vertex::isInCircle(const Vertex &a, const Vertex &b, const Vertex &c) const

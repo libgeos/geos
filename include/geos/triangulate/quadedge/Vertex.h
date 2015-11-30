@@ -12,7 +12,7 @@
  *
  **********************************************************************
  *
- * Last port: triangulate/quadedge/Vertex.java r524
+ * Last port: triangulate/quadedge/Vertex.java r705
  *
  **********************************************************************/
 
@@ -248,7 +248,17 @@ private:
 			const Vertex &v2) const;
 
 	/**
-	 * Interpolates the Z value of a point enclosed in a 3D triangle.
+	 * Interpolates the Z-value (height) of a point enclosed in a triangle
+	 * whose vertices all have Z values.
+	 * The containing triangle must not be degenerate
+	 * (in other words, the three vertices must enclose a
+	 * non-zero area).
+	 *
+	 * @param p the point to interpolate the Z value of
+	 * @param v0 a vertex of a triangle containing the p
+	 * @param v1 a vertex of a triangle containing the p
+	 * @param v2 a vertex of a triangle containing the p
+	 * @return the interpolated Z-value (height) of the point
 	 */
 	static double interpolateZ(const geom::Coordinate &p, const geom::Coordinate &v0, 
 			const geom::Coordinate &v1, const geom::Coordinate &v2);
@@ -259,7 +269,7 @@ private:
 	 * @param p
 	 * @param p0
 	 * @param p1
-	 * @return
+	 * @return the interpolated Z value
 	 */
 	static double interpolateZ(const geom::Coordinate &p, const geom::Coordinate &p0, 
 			const geom::Coordinate &p1);
