@@ -43,6 +43,7 @@
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/algorithm/BoundaryNodeRule.h>
+#include <geos/algorithm/MinimumDiameter.h>
 #include <geos/simplify/DouglasPeuckerSimplifier.h>
 #include <geos/simplify/TopologyPreservingSimplifier.h>
 #include <geos/noding/GeometryNoder.h>
@@ -2006,6 +2007,76 @@ GEOSConvexHull_r(GEOSContextHandle_t extHandle, const Geometry *g1)
     
     return NULL;
 }
+
+
+Geometry *
+GEOSMinimumRotatedRectangle_r(GEOSContextHandle_t extHandle, const Geometry *g)
+{
+    if ( 0 == extHandle )
+    {
+        return NULL;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return NULL;
+    }
+
+    try
+    {
+        geos::algorithm::MinimumDiameter m(g);
+
+        Geometry *g3 = m.getMinimumRectangle();
+        return g3;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return NULL;
+}
+
+Geometry *
+GEOSMinimumDiameter_r(GEOSContextHandle_t extHandle, const Geometry *g)
+{
+    if ( 0 == extHandle )
+    {
+        return NULL;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return NULL;
+    }
+
+    try
+    {
+        geos::algorithm::MinimumDiameter m(g);
+
+        Geometry *g3 = m.getDiameter();
+        return g3;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return NULL;
+}
+
 
 Geometry *
 GEOSDifference_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g2)

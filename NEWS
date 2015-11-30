@@ -4,6 +4,8 @@ Changes in 3.6.0
 - New things:
   - CAPI: GEOSGeom_setPrecision (#713) - PHP: Geometry->setPrecision
   - CAPI: GEOSGeom_getPrecision - PHP: Geometry->getPrecision
+  - CAPI: GEOSMinimumRotatedRectangle and GEOSMinimumDiameter
+    (#729, Nyall Dawson)
 - Improvements:
   - ...
 - C++ API changes:

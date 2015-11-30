@@ -538,6 +538,10 @@ extern GEOSGeometry GEOS_DLL *GEOSIntersection_r(GEOSContextHandle_t handle,
                                                  const GEOSGeometry* g2);
 extern GEOSGeometry GEOS_DLL *GEOSConvexHull_r(GEOSContextHandle_t handle,
                                                const GEOSGeometry* g);
+extern GEOSGeometry GEOS_DLL *GEOSMinimumRotatedRectangle_r(GEOSContextHandle_t handle,
+                                               const GEOSGeometry* g);
+extern GEOSGeometry GEOS_DLL *GEOSMinimumDiameter_r(GEOSContextHandle_t handle,
+                                               const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSDifference_r(GEOSContextHandle_t handle,
                                                const GEOSGeometry* g1,
                                                const GEOSGeometry* g2);
@@ -1448,6 +1452,8 @@ extern void GEOS_DLL GEOSGeom_destroy(GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSEnvelope(const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSIntersection(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern GEOSGeometry GEOS_DLL *GEOSConvexHull(const GEOSGeometry* g);
+extern GEOSGeometry GEOS_DLL *GEOSMinimumRotatedRectangle(const GEOSGeometry* g);
+extern GEOSGeometry GEOS_DLL *GEOSMinimumDiameter(const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSDifference(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern GEOSGeometry GEOS_DLL *GEOSSymDifference(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern GEOSGeometry GEOS_DLL *GEOSBoundary(const GEOSGeometry* g);

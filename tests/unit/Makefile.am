@@ -41,6 +41,7 @@ geos_unit_SOURCES = \
 	algorithm/CGAlgorithms/signedAreaTest.cpp \
 	algorithm/ConvexHullTest.cpp \
 	algorithm/distance/DiscreteHausdorffDistanceTest.cpp \
+	algorithm/MinimumDiameterTest.cpp \
 	algorithm/PointLocatorTest.cpp \
 	algorithm/RobustLineIntersectionTest.cpp \
 	algorithm/RobustLineIntersectorTest.cpp \
@@ -130,6 +131,8 @@ geos_unit_SOURCES = \
 	capi/GEOSInterruptTest.cpp \
 	capi/GEOSIntersectsTest.cpp \
 	capi/GEOSIntersectionTest.cpp \
+	capi/GEOSMinimumRectangleTest.cpp \
+	capi/GEOSMinimumDiameterTest.cpp \
 	capi/GEOSNearestPointsTest.cpp \
 	capi/GEOSWithinTest.cpp \
 	capi/GEOSSimplifyTest.cpp \
