@@ -41,6 +41,11 @@ SIRtreePointInRing::SIRtreePointInRing(LinearRing *newRing):
 	buildIndex();
 }
 
+SIRtreePointInRing::~SIRtreePointInRing()
+{
+	delete sirTree;
+}
+
 void
 SIRtreePointInRing::buildIndex()
 {
