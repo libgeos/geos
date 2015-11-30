@@ -443,9 +443,9 @@ GEOSMinimumRotatedRectangle(const Geometry *g)
 }
 
 Geometry *
-GEOSMinimumDiameter(const Geometry *g)
+GEOSMinimumWidth(const Geometry *g)
 {
-    return GEOSMinimumDiameter_r( handle, g );
+    return GEOSMinimumWidth_r( handle, g );
 }
 
 Geometry *
