@@ -261,6 +261,22 @@ namespace tut
     ensure_equals(err, "ParseException: Premature end of HEX string");
   }
 
+  // 9 - Extended HEXWKB (3dZ + srid)
+  template<>
+  template<>
+  void object::test<9>()
+  {         
+    std::stringstream hexwkb;
+    hexwkb <<
+// SRID=4326;POINT(1 2 3)
+// NDR HEXEWKB
+"01010000A0E6100000000000000000F03F00000000000000400000000000000840";
+    std::string err;
+    GeomPtr gWKB(wkbreader.readHEX(hexwkb));
+    ensure_equals(gWKB->getSRID(), 4326);
+    ensure_equals(gWKB->getCoordinateDimension(), 3);
+  }
+
 
 } // namespace tut
 
