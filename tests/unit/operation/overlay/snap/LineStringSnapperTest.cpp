@@ -293,7 +293,6 @@ namespace tut
   }
 
   // Test two candidate vertices snaps
-/* The following one fails, I bet in JTS too.. but haven't tested
   template<>
   template<>
   void object::test<8>()
@@ -329,6 +328,5 @@ namespace tut
     ensure_equals(ret->operator[](1), src_b);
     ensure_equals(ret->operator[](2), src_c);
   }
-*/
 
 } // namespace tut
