@@ -2,6 +2,7 @@ Changes in 3.4.3-dev
 YYYY-MM-DD
 
 - Bug fixes / improvements
+ - Fix snapping of last segment of a closed linestring (#758)
  - Improve robustness of intersection testing (#716)
  - Fixed build configuration for NMAKE with Visual Leak Detector enabled (#715)
  - Fixed compilation against thread-safe PHP (#541)
