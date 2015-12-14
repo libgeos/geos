@@ -153,13 +153,20 @@ cerr << " Vertex to be snapped found, snapping" << endl;
     if (vertpos == srcCoords.begin() && isClosed)
     {
       vertpos = srcCoords.end(); --vertpos;
+#if GEOS_DEBUG
+cerr << " Snapped vertex was first in a closed line, also snapping last" << endl;
+#endif
       *vertpos = snapPt;
     }
+
+#if GEOS_DEBUG
+cerr << " After snapping of vertex " << snapPt << ", srcCoors are: " << srcCoords << endl;
+#endif
 
 	}
 
 #if GEOS_DEBUG
-cerr << " After vertex snapping, srcCoors are: " << srcCoords << endl;
+cerr << " After vertices snapping, srcCoors are: " << srcCoords << endl;
 #endif
 
 }
@@ -333,9 +340,11 @@ cerr << " Before seg-snapping, srcCoors are: " << srcCoords << endl;
       LineSegment prevSeg(*segpos, seg.p0);
       if ( prevSeg.distance(newSnapPt) < seg.distance(newSnapPt) ) {
 #if GEOS_DEBUG
-        cerr << " Prev segment closer, inserting " << newSnapPt << " into " << prevSeg << endl;
+        cerr << " Prev segment closer, inserting " << newSnapPt << " into "
+             << prevSeg << endl;
 #endif
         // insert into prev segment
+        ++segpos;
         srcCoords.insert(segpos, newSnapPt);
       } else {
 #if GEOS_DEBUG

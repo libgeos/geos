@@ -329,4 +329,49 @@ namespace tut
     ensure_equals(ret->operator[](2), src_c);
   }
 
+  // Snap of last segment in closed linestring
+  // See https://trac.osgeo.org/geos/ticket/758
+  template<>
+  template<>
+  void object::test<9>()
+  {
+    using geos::geom::Coordinate;
+    using geos::operation::overlay::snap::LineStringSnapper;
+
+    typedef std::auto_ptr<Coordinate::Vect> CoordsVectAptr;
+
+
+    // Source: (1 1, 5 9, 9 1, 1 1)
+    Coordinate src_a(1, 1);
+    Coordinate src_b(5, 9);
+    Coordinate src_c(9, 1);
+    Coordinate::Vect srcCoords;
+    srcCoords.push_back(src_a);
+    srcCoords.push_back(src_b);
+    srcCoords.push_back(src_c);
+    srcCoords.push_back(src_a);
+
+    // Snap: (0 0, 10 0, 1 0.5)
+    Coordinate snp_a(0, 0);
+    Coordinate snp_b(10, 0);
+    Coordinate snp_c(1, 0.5);
+    Coordinate::ConstVect snpCoords;
+    snpCoords.push_back( &snp_a );
+    snpCoords.push_back( &snp_b );
+    snpCoords.push_back( &snp_c );
+
+    // Snap with tolerance of 2
+    // (both first and second point could be snapped)
+    LineStringSnapper snapper(srcCoords, 2);
+
+    // Expect: (0 0, 5 9, 10 0, 1 0.5, 0 0)
+    CoordsVectAptr ret(snapper.snapTo(snpCoords));
+    ensure_equals(ret->size(), 5u);
+    ensure_equals(ret->operator[](0), snp_a); //  0 0
+    ensure_equals(ret->operator[](1), src_b); //  5 9
+    ensure_equals(ret->operator[](2), snp_b); // 10 0
+    ensure_equals(ret->operator[](3), snp_c); //  1 0.5
+    ensure_equals(ret->operator[](4), snp_a); //  0 0
+  }
+
 } // namespace tut

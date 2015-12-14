@@ -5,6 +5,7 @@ Changes in 3.5.1
   - Fix CMake configuration to allow build from released sources package (#753)
   - Fix memory leaks in single-sided buffers (#747), PlanarGraph and tests
   - Fix GeometryEditor to correctly update factory of empty geometries (#749)
+  - Fix snapping of last segment of a closed linestring (#758)
 
 Changes in 3.5.0
 2015-08-15
