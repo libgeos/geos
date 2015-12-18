@@ -768,6 +768,15 @@ XMLTester::parseTest(const TiXmlNode* node)
 
             if (actual_result==opRes) success=1;
         }
+        else if (opName=="relatestring")
+        {
+            std::auto_ptr<geom::IntersectionMatrix> im(gA->relate(gB));
+            assert(im.get());
+
+            actual_result=im->toString();
+
+            if (actual_result==opRes) success=1;
+        }
 
         else if (opName=="isvalid")
         {
