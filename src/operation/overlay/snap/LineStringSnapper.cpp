@@ -224,7 +224,6 @@ void
 LineStringSnapper::snapSegments(geom::CoordinateList& srcCoords,
 			const geom::Coordinate::ConstVect& snapPts)
 {
-
   // nothing to do if there are no source coords..
   if ( srcCoords.empty() ) return;
 
@@ -232,6 +231,12 @@ LineStringSnapper::snapSegments(geom::CoordinateList& srcCoords,
 cerr << "Snapping segments of: " << srcCoords << endl;
 #endif
 
+	// Recursively snap segments till nothing moves
+	// See https://trac.osgeo.org/geos/ticket/760
+	bool moved = false;
+	do
+	{
+	moved = false;
 	for ( Coordinate::ConstVect::const_iterator
 			it=snapPts.begin(), end=snapPts.end();
 			it != end;
@@ -254,6 +259,8 @@ cerr << " No segment to snap" << endl;
 #endif
 			continue;
 		}
+
+    moved = true;
 
     /* Check if the snap point falls outside of the segment */
     // If the snap point is outside, this means that an endpoint
@@ -364,6 +371,8 @@ cerr << " Segment to be snapped found, projection factor is " << pf << ", insert
       srcCoords.insert(segpos, snapPt);
     }
 	}
+	// While things keep moving
+	} while (moved);
 
 #if GEOS_DEBUG
 cerr << " After segment snapping, srcCoors are: " << srcCoords << endl;
