@@ -96,6 +96,22 @@ Changes in 3.4.0
   - CMakeLists.txt, tools/geos_svn_revision_cmake.h.in: Add
 	  geos_svn_revision.h generator to CMake config (#643)
 	- Makefile.vc 'clean' step leaks obj files (#607) 
+
+Changes in 3.3.9
+2013-09-04
+
+- Bug fixes / improvements
+    - Fix OffsetCurve op in presence of duplicated vertices (#602)
+    - Fix LineSegmentVisitor copy ctor (#636)
+    - Fix area boundary return from GEOSPointOnSurface (#623)
+    - Speedup GEOSWKBReader_read (#621)
+    - Fix RobustLineIntersector handling of invalid intersection points (#622)
+    - Reduce likelyhood of invalid output from snap operation (#629, #501)
+    - Reduce memory fragmentation of prepared Polygon/Point intersection op
+    - Fix mingw64 compile (#630)
+    - Fix bug in HotPixel constructor (#635)
+    - Fix install location of linearref headers (#624)
+    - Fix multi-geometry constructor to drop SRID from components (#583)
   
 Changes in 3.3.8
 2013-02-28
