@@ -3199,6 +3199,49 @@ GEOSGeomGetY_r(GEOSContextHandle_t extHandle, const Geometry *g1, double *y)
 }
 
 /*
+ * For POINT
+ * returns 0 on exception, otherwise 1
+ */
+int
+GEOSGeomGetZ_r(GEOSContextHandle_t extHandle, const Geometry *g1, double *z)
+{
+    if ( 0 == extHandle )
+    {
+        return 0;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return 0;
+    }
+
+    try
+    {
+        using geos::geom::Point;
+        const Point *po = dynamic_cast<const Point *>(g1);
+        if ( ! po )
+        {
+            handle->ERROR_MESSAGE("Argument is not a Point");
+            return 0;
+        }
+        *z = po->getZ();
+        return 1;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return 0;
+}
+
+/*
  * Call only on polygon
  * Return a copy of the internal Geometry.
  */

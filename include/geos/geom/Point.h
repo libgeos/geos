@@ -113,6 +113,7 @@ public:
 
 	double getX() const;
 	double getY() const;
+  double getZ() const;
 	const Coordinate* getCoordinate() const override;
 	std::string getGeometryType() const override;
 	GeometryTypeId getGeometryTypeId() const override;

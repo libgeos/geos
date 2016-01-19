@@ -666,6 +666,16 @@ GEOSGeomGetY(const Geometry *g, double *y)
 }
 
 /*
+ * For POINT
+ * returns 0 on exception, otherwise 1
+ */
+int
+GEOSGeomGetZ(const Geometry *g1, double *z)
+{
+	return GEOSGeomGetZ_r(handle, g1, z);
+}
+
+/*
  * Call only on polygon
  * Return a copy of the internal Geometry.
  */
