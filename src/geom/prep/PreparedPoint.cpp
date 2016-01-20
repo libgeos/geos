@@ -30,7 +30,7 @@ PreparedPoint::intersects(const geom::Geometry* g) const
 	if (! envelopesIntersect( g)) return false;
 
 	const Point *pt_geom = dynamic_cast<const Point *>(g);
-	if (pt_geom) 
+	if (pt_geom && getGeometry().getGeometryTypeId() == GEOS_POINT)
         return getGeometry().equals(g);
 
 	// This avoids computing topology for the test geometry

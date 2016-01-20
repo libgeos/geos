@@ -96,8 +96,15 @@ namespace tut
 	    runPtLocator(Location::EXTERIOR, Coordinate(11, 11),
 	                     "LINEARRING(10 10, 10 20, 20 10, 10 10)");
 	}
-		      
 
+	// 5 - TestPointLocator Point inside MultiPoint
+	template<>
+	template<>
+	void object::test<5>()
+	{
+		runPtLocator(Location::INTERIOR, Coordinate(0, 0),
+				"MULTIPOINT ((1 1), (0 0))");
+	}
 
 } // namespace tut
 
