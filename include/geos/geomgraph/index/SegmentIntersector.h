@@ -56,6 +56,10 @@ private:
 
 	bool hasProperInterior;
 
+	bool isDone;
+	
+	bool isDoneWhenProperInt;
+
 	// the proper intersection point found
 	geom::Coordinate properIntersectionPoint;
 
@@ -99,6 +103,8 @@ public:
 		hasIntersectionVar(false),
 		hasProper(false),
 		hasProperInterior(false),
+		isDone(false),
+		isDoneWhenProperInt(false),
 		li(newLi),
 		includeProper(newIncludeProper),
 		recordIsolated(newRecordIsolated),
@@ -123,6 +129,10 @@ public:
 
 	void addIntersections(Edge *e0, int segIndex0, Edge *e1, int segIndex1);
 
+	void setIsDoneIfProperInt(bool isDoneWhenProperInt);
+
+	bool getIsDone();
+	
 };
 
 } // namespace geos.geomgraph.index

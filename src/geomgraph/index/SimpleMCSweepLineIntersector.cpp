@@ -135,6 +135,10 @@ SimpleMCSweepLineIntersector::computeIntersections(SegmentIntersector *si)
 		{
 			processOverlaps(i,ev->getDeleteEventIndex(),ev,si);
 		}
+		if (si->getIsDone()) 
+		{
+			break;
+		}	
 	}
 }
 

@@ -219,11 +219,24 @@ public:
 		return computeSelfNodes(*li, computeRingSelfNodes, env);
 	}
 
+	index::SegmentIntersector* computeSelfNodes(
+			algorithm::LineIntersector *li,
+			bool computeRingSelfNodes,
+			bool isDoneIfProperInt,
+			const geom::Envelope *env=0)
+	{
+		return computeSelfNodes(*li, computeRingSelfNodes, isDoneIfProperInt, env);
+	}
+
 	// Quick inline calling the function above, the above should probably
 	// be deprecated.
 	index::SegmentIntersector* computeSelfNodes(
 			algorithm::LineIntersector& li,
 			bool computeRingSelfNodes, const geom::Envelope *env=0);
+
+	index::SegmentIntersector* computeSelfNodes(
+			algorithm::LineIntersector& li,
+			bool computeRingSelfNodes, bool isDoneIfProperInt, const geom::Envelope *env=0);
 
 	index::SegmentIntersector* computeEdgeIntersections(GeometryGraph *g,
 		algorithm::LineIntersector *li, bool includeProper,

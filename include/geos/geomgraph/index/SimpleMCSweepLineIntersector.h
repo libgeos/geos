@@ -20,6 +20,7 @@
 #include <vector>
 
 #include <geos/geomgraph/index/EdgeSetIntersector.h> // for inheritance
+#include <geos/geomgraph/index/SegmentIntersector.h>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -31,7 +32,7 @@ namespace geos {
 	namespace geomgraph {
 		class Edge;
 		namespace index {
-			class SegmentIntersector;
+			// class SegmentIntersector;
 			class SweepLineEvent;
 		}
 	}
