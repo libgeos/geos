@@ -18,7 +18,6 @@
 
 
 #include <geos/geom/prep/PreparedPoint.h>
-#include <geos/geom/Point.h>
 
 namespace geos {
 namespace geom { // geos.geom
