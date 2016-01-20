@@ -73,6 +73,18 @@ SegmentIntersector::hasIntersection()
 	return hasIntersectionVar;
 }
 
+void 
+SegmentIntersector::setIsDoneIfProperInt(bool idwpi) 
+{
+	isDoneWhenProperInt = idwpi;
+}
+
+bool 
+SegmentIntersector::getIsDone() 
+{
+	return isDone;
+}
+
 /*
  * A proper intersection is an intersection which is interior to at least two
  * line segments.  Note that a proper intersection is not necessarily
@@ -184,6 +196,10 @@ SegmentIntersector::addIntersections(Edge *e0,int segIndex0,Edge *e1,int segInde
 				cerr<<"SegmentIntersector::addIntersections(): properIntersectionPoint: "<<properIntersectionPoint.toString()<<endl;
 #endif // DEBUG_INTERSECT
 				hasProper=true;
+				if (isDoneWhenProperInt) 
+				{
+					isDone = true;
+				}
 				if (!isBoundaryPoint(li,bdyNodes))
 					hasProperInterior=true;
 			}

@@ -363,30 +363,34 @@ SegmentIntersector*
 GeometryGraph::computeSelfNodes(LineIntersector &li,
   bool computeRingSelfNodes, const Envelope *env)
 {
-	SegmentIntersector *si=new SegmentIntersector(&li,true,false);
-    	auto_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
+	return computeSelfNodes(li, computeRingSelfNodes, false, env);
+}
+
+SegmentIntersector*
+GeometryGraph::computeSelfNodes(LineIntersector &li,
+  bool computeRingSelfNodes, bool isDoneIfProperInt, const Envelope *env)
+{
+	SegmentIntersector *si = new SegmentIntersector(&li, true, false);
+	si->setIsDoneIfProperInt(isDoneIfProperInt);
+	auto_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
 
 	typedef vector<Edge*> EC;
 	EC *se = edges;
 	EC self_edges_copy;
+
 	if ( env && ! env->covers(parentGeom->getEnvelopeInternal()) ) {
 		collect_intersecting_edges(env, se->begin(), se->end(), self_edges_copy);
     //cerr << "(computeSelfNodes) Self edges reduced from " << se->size() << " to " << self_edges_copy.size() << endl;
 		se = &self_edges_copy;
 	}
 
-	// optimized test for Polygons and Rings
-	if (! computeRingSelfNodes
-	    && ( dynamic_cast<const LinearRing*>(parentGeom)
+	bool isRings = dynamic_cast<const LinearRing*>(parentGeom)
 	    || dynamic_cast<const Polygon*>(parentGeom)
-	    || dynamic_cast<const MultiPolygon*>(parentGeom) ))
-	{
-		esi->computeIntersections(se, si, false);
-	}
-	else
-	{
-		esi->computeIntersections(se, si, true);
-	}
+	    || dynamic_cast<const MultiPolygon*>(parentGeom);
+
+	bool computeAllSegments = computeRingSelfNodes || ! isRings;
+	
+	esi->computeIntersections(se, si, computeAllSegments);
 
 #if GEOS_DEBUG
 	cerr << "SegmentIntersector # tests = " << si->numTests << endl;
