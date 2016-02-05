@@ -21,6 +21,7 @@
 
 #include <string>
 #include <cstdlib>
+#include <limits>
 
 using namespace std;
 
