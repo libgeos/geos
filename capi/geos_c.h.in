@@ -814,6 +814,10 @@ extern void GEOS_DLL GEOSSTRtree_query_r(GEOSContextHandle_t handle,
                                          const GEOSGeometry *g,
                                          GEOSQueryCallback callback,
                                          void *userdata);
+extern const void* GEOS_DLL GEOSSTRtree_nearest_r(GEOSContextHandle_t handle,
+                                                          GEOSSTRtree *tree,
+                                                          const GEOSGeometry* g,
+                                                          int (*distancefn)(const void* item1, const void* item2, double* distance));
 extern void GEOS_DLL GEOSSTRtree_iterate_r(GEOSContextHandle_t handle,
                                        GEOSSTRtree *tree,
                                        GEOSQueryCallback callback,
@@ -1659,6 +1663,9 @@ extern void GEOS_DLL GEOSSTRtree_query(GEOSSTRtree *tree,
                                        const GEOSGeometry *g,
                                        GEOSQueryCallback callback,
                                        void *userdata);
+extern const void* GEOS_DLL GEOSSTRtree_nearest(GEOSSTRtree *tree,
+                                        const GEOSGeometry* g,
+                                        int (*distancefn)(const void* item1, const void* item2, double* distance));
 extern void GEOS_DLL GEOSSTRtree_iterate(GEOSSTRtree *tree,
                                        GEOSQueryCallback callback,
                                        void *userdata);

@@ -34,7 +34,8 @@
 #include <geos/geom/Coordinate.h> 
 #include <geos/geom/IntersectionMatrix.h> 
 #include <geos/geom/Envelope.h> 
-#include <geos/index/strtree/STRtree.h> 
+#include <geos/index/strtree/STRtree.h>
+#include <geos/index/strtree/GeometryItemDistance.h>
 #include <geos/index/ItemVisitor.h>
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKBReader.h>
@@ -5943,6 +5944,77 @@ GEOSSTRtree_query_r(GEOSContextHandle_t extHandle,
 
         handle->ERROR_MESSAGE("Unknown exception thrown");
     }
+}
+
+const void *
+GEOSSTRtree_nearest_r(GEOSContextHandle_t extHandle,
+                      geos::index::strtree::STRtree *tree,
+                      const geos::geom::Geometry* g,
+                      int (*distancefn)(const void* item1, const void* item2, double* distance))
+{
+
+    GEOSContextHandleInternal_t *handle = 0;
+    try
+    {
+        if (distancefn) {
+            struct CustomItemDistance : public ItemDistance {
+                CustomItemDistance(int (*distancefn)(const void* item1, const void* item2, double* distance))
+                        : distancefn(distancefn) {}
+
+                int (*distancefn)(const void* item1, const void* item2, double* distance);
+
+                double distance(const ItemBoundable* item1, const ItemBoundable* item2) {
+                    const void* a = item1->getItem();
+                    const void* b = item2->getItem();
+                    double d;
+
+                    if (!distancefn(a, b, &d)) {
+                        throw std::runtime_error(std::string("Failed to compute distance."));
+                    }
+
+                    return d;
+                }
+            };
+
+            CustomItemDistance itemDistance(distancefn);
+            return tree->nearestNeighbour(g->getEnvelopeInternal(), g, &itemDistance);
+        } else {
+            GeometryItemDistance itemDistance = GeometryItemDistance();
+            return tree->nearestNeighbour(g->getEnvelopeInternal(), g, &itemDistance);
+        }
+    }
+    catch (const std::exception &e)
+    {
+        if ( 0 == extHandle )
+        {
+            return NULL;
+        }
+
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if ( 0 == handle->initialized )
+        {
+            return NULL;
+        }
+
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        if ( 0 == extHandle )
+        {
+            return NULL;
+        }
+
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if ( 0 == handle->initialized )
+        {
+            return NULL;
+        }
+
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return NULL;
 }
 
 void 

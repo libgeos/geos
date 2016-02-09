@@ -18,6 +18,7 @@
  **********************************************************************/
 
 #include <geos/index/strtree/STRtree.h>
+#include <geos/index/strtree/BoundablePair.h>
 #include <geos/geom/Envelope.h>
 
 #include <vector>
@@ -181,6 +182,80 @@ STRtree::verticalSlices(BoundableList* childBoundables, size_t sliceCount)
 		}
 	}
 	return slices;
+}
+
+/*public*/
+const void* STRtree::nearestNeighbour(const Envelope* env, const void* item, ItemDistance* itemDist) {
+	build();
+
+	ItemBoundable bnd = ItemBoundable(env, (void*) item);
+	BoundablePair bp(getRoot(), &bnd, itemDist);
+
+	return nearestNeighbour(&bp);
+}
+
+const void* STRtree::nearestNeighbour(BoundablePair* initBndPair) {
+	return nearestNeighbour(initBndPair, DoubleInfinity);
+}
+
+const void* STRtree::nearestNeighbour(BoundablePair* initBndPair, double maxDistance) {
+	double distanceLowerBound = maxDistance;
+	BoundablePair* minPair = NULL;
+
+	BoundablePair::BoundablePairQueue priQ;
+	priQ.push(initBndPair);
+
+	while(!priQ.empty() && distanceLowerBound > 0.0) {
+		BoundablePair* bndPair = priQ.top();
+		double currentDistance = bndPair->getDistance();
+
+		/**
+		 * If the distance for the first node in the queue
+		 * is >= the current minimum distance, all other nodes
+		 * in the queue must also have a greater distance.
+		 * So the current minDistance must be the true minimum,
+		 * and we are done.
+		 */
+		if (currentDistance >= distanceLowerBound)
+			break;
+
+		priQ.pop();
+
+		/**
+		 * If the pair members are leaves
+		 * then their distance is the exact lower bound.
+		 * Update the distanceLowerBound to reflect this
+		 * (which must be smaller, due to the test
+		 * immediately prior to this).
+		 */
+		if (bndPair->isLeaves()) {
+			distanceLowerBound = currentDistance;
+			minPair = bndPair;
+		} else {
+			/**
+			 * Otherwise, expand one side of the pair,
+			 * (the choice of which side to expand is heuristically determined)
+			 * and insert the new expanded pairs into the queue
+			 */
+			bndPair->expandToQueue(priQ, distanceLowerBound);
+		}
+
+		if (bndPair != initBndPair && bndPair != minPair)
+            delete bndPair;
+	}
+
+	/* Free any remaining BoundablePairs in the queue */
+	while(!priQ.empty()) {
+		BoundablePair* bp = priQ.top();
+		priQ.pop();
+		delete bp;
+	}
+
+	const void* retval = dynamic_cast<const ItemBoundable*>(minPair->getBoundable(0))->getItem();
+	if (minPair != initBndPair)
+        delete minPair;
+
+	return retval;
 }
 
 class STRAbstractNode: public AbstractNode{
