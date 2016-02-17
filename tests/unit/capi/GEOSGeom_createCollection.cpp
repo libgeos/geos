@@ -5,7 +5,9 @@
 // geos
 #include <geos_c.h>
 // std
+#if (defined(_MSC_VER) && _MSC_VER >= 1600) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
 #include <array>
+#endif
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
