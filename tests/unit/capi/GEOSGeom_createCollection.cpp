@@ -73,6 +73,7 @@ namespace tut
         ensure_equals(GEOSGetNumGeometries_r(handle_, geom_), geom_size);
     }
 
+#if (defined(_MSC_VER) && _MSC_VER >= 1600) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
     // Create collection from constant length std::array
     template<>
     template<>
@@ -88,6 +89,7 @@ namespace tut
             geoms.data(), static_cast<int>(geoms.size()));
         ensure_equals(GEOSGetNumGeometries_r(handle_, geom_), geom_size);
     }
+#endif
 
     // Create collection from dynamic length std::vector of geometries
     template<>
