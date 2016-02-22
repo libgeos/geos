@@ -186,7 +186,7 @@ namespace tut
         ensure(0 != prepGeom1_);
 
         int ret = GEOSPreparedIntersects(prepGeom1_, geom2_);
-        ensure_equals(ret, 1);
+        ensure_equals(ret, 0);
     }
 
     // Test PreparedIntersects: point on vertex
