@@ -59,8 +59,7 @@ int RobustDeterminant::signOfDet2x2(double x1,double y1,double x2,double y2) {
 	double k;
 
   // Protect against non-finite numbers
-  if ( ISNAN(x1)   || ISNAN(y1)   || ISNAN(x2)   || ISNAN(y2) ||
-       !FINITE(x1) || !FINITE(y1) || !FINITE(x2) || !FINITE(y2) )
+  if ( !FINITE(x1) || !FINITE(y1) || !FINITE(x2) || !FINITE(y2) )
   {
     throw util::IllegalArgumentException("RobustDeterminant encountered non-finite numbers ");
   }
