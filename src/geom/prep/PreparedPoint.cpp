@@ -18,7 +18,6 @@
 
 
 #include <geos/geom/prep/PreparedPoint.h>
-#include <geos/geom/Point.h>
 
 namespace geos {
 namespace geom { // geos.geom
@@ -28,10 +27,6 @@ bool
 PreparedPoint::intersects(const geom::Geometry* g)
 {
 	if (! envelopesIntersect( g)) return false;
-
-	const Point *pt_geom = dynamic_cast<const Point *>(g);
-	if (pt_geom) 
-        return getGeometry().equals(g);
 
 	// This avoids computing topology for the test geometry
 	return isAnyTargetComponentInTest( g);

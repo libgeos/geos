@@ -18,6 +18,7 @@ YYYY-MM-DD
  - Update for Microsoft NMAKE (r4063)
  - Fix compilation issues while building with Visual C++ (#701)
  - Fix support of PHP bindings for version < 5.4.0 (#709)
+ - Fix incorrect return from prepared multipoint intersects (#764)
 
 Changes in 3.4.2
 2013-08-25
