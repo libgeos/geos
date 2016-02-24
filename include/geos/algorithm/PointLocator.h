@@ -31,6 +31,7 @@ namespace geos {
 		class LinearRing;
 		class LineString;
 		class Polygon;
+		class Point;
 	}
 }
 
@@ -92,6 +93,8 @@ private:
 	void computeLocation(const geom::Coordinate& p, const geom::Geometry *geom);
 
 	void updateLocationInfo(int loc);
+
+	int locate(const geom::Coordinate& p, const geom::Point *pt);
 
 	int locate(const geom::Coordinate& p, const geom::LineString *l);
 

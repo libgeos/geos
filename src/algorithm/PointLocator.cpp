@@ -20,6 +20,7 @@
 #include <geos/algorithm/PointLocator.h>
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/geom/Geometry.h>
+#include <geos/geom/Point.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/MultiLineString.h>
@@ -61,8 +62,11 @@ PointLocator::locate(const Coordinate& p, const Geometry *geom)
 void
 PointLocator::computeLocation(const Coordinate& p, const Geometry *geom)
 {
-
-	if (const LineString *ls=dynamic_cast<const LineString*>(geom))
+	if (const Point *pt=dynamic_cast<const Point*>(geom))
+	{
+		updateLocationInfo(locate(p, pt));
+	}
+	else if (const LineString *ls=dynamic_cast<const LineString*>(geom))
 	{
 		updateLocationInfo(locate(p, ls));
 	}
@@ -107,6 +111,17 @@ PointLocator::updateLocationInfo(int loc)
 {
 	if (loc==Location::INTERIOR) isIn=true;
 	if (loc==Location::BOUNDARY) ++numBoundaries;
+}
+
+/* private */
+int
+PointLocator::locate(const Coordinate& p, const Point *pt)
+{
+	// no point in doing envelope test, since equality test is just as fast
+	const Coordinate *ptCoord = pt->getCoordinate();
+	if (ptCoord->equals2D(p))
+		return Location::INTERIOR;
+	return Location::EXTERIOR;
 }
 
 /* private */
