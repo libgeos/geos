@@ -509,9 +509,6 @@ RectangleIntersectionBuilder::reverseLines()
     delete ol;
   }
   lines = new_lines;
-#if GEOS_DEBUG
-  std::cout << "After lines reverse, parts are " << *this << std::endl;
-#endif
 }
 
 

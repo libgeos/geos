@@ -3134,8 +3134,7 @@ GEOSGeom_createEmptyCollection_r(GEOSContextHandle_t extHandle, int type)
 
 #ifdef GEOS_DEBUG
     char buf[256];
-    sprintf(buf, "createCollection: requested type %d, ngeoms: %d",
-            type, ngeoms);
+    sprintf(buf, "createCollection: requested type %d", type);
     handle->NOTICE_MESSAGE("%s", buf);// TODO: Can handle->NOTICE_MESSAGE format that directly? 
 #endif
 

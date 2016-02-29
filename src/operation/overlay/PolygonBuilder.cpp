@@ -148,7 +148,7 @@ PolygonBuilder::buildMaximalEdgeRings(const vector<DirectedEdge*> *dirEdges,
 	cerr << "  dirEdge " << i << endl
 	     << de->printEdge() << endl
 	     << " inResult:" << de->isInResult() << endl
-	     << " isArea:" << de->getLabel()->isArea() << endl;
+	     << " isArea:" << de->getLabel().isArea() << endl;
 #endif
 		if (de->isInResult() && de->getLabel().isArea())
 		{
