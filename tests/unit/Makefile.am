@@ -94,6 +94,7 @@ geos_unit_SOURCES = \
 	operation/IsSimpleOpTest.cpp \
 	operation/linemerge/LineMergerTest.cpp \
 	operation/linemerge/LineSequencerTest.cpp \
+    operation/overlay/OverlayOpUnionTest.cpp \
 	operation/overlay/validate/FuzzyPointLocatorTest.cpp \
 	operation/overlay/validate/OffsetPointGeneratorTest.cpp \
 	operation/overlay/validate/OverlayResultValidatorTest.cpp \
