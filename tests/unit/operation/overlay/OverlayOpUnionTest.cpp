@@ -32,7 +32,7 @@ namespace tut
     typedef test_group<test_overlayopunion_data> group;
     typedef group::object object;
 
-    group test_issimpleop_group("geos::operation::OverlayOp::UNION");
+    group test_overlayopunion_group("geos::operation::OverlayOp::UNION");
 
     //
     // Test Cases
