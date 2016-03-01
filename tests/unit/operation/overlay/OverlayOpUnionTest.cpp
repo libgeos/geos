@@ -38,7 +38,7 @@ namespace tut
     // Test Cases
     //
 
-    // 1 - Union four segments of a square
+    // 1 - Union four connected segments of a square
     template<>
     template<>
     void object::test<1>()
@@ -59,6 +59,10 @@ namespace tut
 
         // Assert
         ensure_equals(lines1234->getGeometryTypeId(), geos::geom::GEOS_MULTILINESTRING);
+        
+        // NOTE: Since the union operation makes no effort to simplify and
+        // drop nodes of degree 2 from the built topology,
+        // do not expect GEOS_LINESTRING.
     }
 
 } // namespace tut
