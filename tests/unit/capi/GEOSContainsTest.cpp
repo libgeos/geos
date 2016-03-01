@@ -171,30 +171,54 @@ namespace tut
     // Test outer rectangle contains inner rectangle with one coincident vertex
     // and two vertices of the inner rectangle are on the boundary (lay on segments)
     // of the outer rectangle.
+    // Precision model should not affect the containment test result.
     template<>
     template<>
     void object::test<5>()
     {
-        geos::geom::PrecisionModel pm; // (1e+13);
-        geos::geom::GeometryFactory::unique_ptr factory = geos::geom::GeometryFactory::create(&pm);
-        geos::io::WKBReader reader(*factory);
-
         // Coincident vertext at -753.167968418005 93709.4279185742
         //POLYGON ((-753.167968418005 93754.0955183194,-816.392328351464 93754.0955183194,-816.392328351464 93709.4279185742,-753.167968418005 93709.4279185742,-753.167968418005 93754.0955183194))
         std::string const outer("01030000800100000005000000bd70d3ff578987c09e373e87a1e3f6400000000000000000a9f60b7d238389c09e373e87a1e3f6400000000000000000a9f60b7d238389c09625c1d8d6e0f6400000000000000000bd70d3ff578987c09625c1d8d6e0f6400000000000000000bd70d3ff578987c09e373e87a1e3f6400000000000000000");
-        std::istringstream sOuter(outer);
-        geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sOuter));
         //POLYGON ((-753.167968418005 93747.6909727677,-799.641978447015 93747.6909727677,-799.641978447015 93709.4279185742,-753.167968418005 93709.4279185742,-753.167968418005 93747.6909727677))
         std::string const inner("01030000800100000005000000bd70d3ff578987c0f875390e3be3f6400000000000000000579598c522fd88c0f875390e3be3f6400000000000000000579598c522fd88c09625c1d8d6e0f6400000000000000000bd70d3ff578987c09625c1d8d6e0f6400000000000000000bd70d3ff578987c0f875390e3be3f6400000000000000000");
-        std::istringstream sInner(inner);
-        geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sInner));
-        ensure(0 != geom1_);
-        ensure(0 != geom2_);
 
-        int ret = GEOSContains(geom1_, geom2_);
-        ensure_equals(ret, 1);
-        ret = GEOSContains(geom2_, geom1_);
-        ensure_equals(ret, 0);
+        // A contains B if precision is limited to 1e+10
+        {
+            geos::geom::PrecisionModel pm(1e+10);
+            geos::geom::GeometryFactory::unique_ptr factory = geos::geom::GeometryFactory::create(&pm);
+            geos::io::WKBReader reader(*factory);
+
+            std::istringstream sOuter(outer);
+            geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sOuter));
+            std::istringstream sInner(inner);
+            geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sInner));
+            ensure(0 != geom1_);
+            ensure(0 != geom2_);
+
+            int ret = GEOSContains(geom1_, geom2_);
+            ensure_equals(ret, 1);
+            ret = GEOSContains(geom2_, geom1_);
+            ensure_equals(ret, 0);
+        }
+
+        // A contains B if FLOATING PM is used with extended precision
+        {
+            geos::geom::PrecisionModel pm;
+            geos::geom::GeometryFactory::unique_ptr factory = geos::geom::GeometryFactory::create(&pm);
+            geos::io::WKBReader reader(*factory);
+
+            std::istringstream sOuter(outer);
+            geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sOuter));
+            std::istringstream sInner(inner);
+            geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sInner));
+            ensure(0 != geom1_);
+            ensure(0 != geom2_);
+
+            int ret = GEOSContains(geom1_, geom2_);
+            ensure_equals(ret, 1);
+            ret = GEOSContains(geom2_, geom1_);
+            ensure_equals(ret, 0);
+        }
     }
 
 } // namespace tut
