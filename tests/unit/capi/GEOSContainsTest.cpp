@@ -162,7 +162,7 @@ namespace tut
             ensure(0 != geom2_);
 
             int ret = GEOSContains(geom1_, geom2_);
-            ensure_equals(ret, 1);
+            ensure_equals(ret, 0);
             ret = GEOSContains(geom2_, geom1_);
             ensure_equals(ret, 0);
         }
@@ -190,6 +190,11 @@ namespace tut
         geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sInner));
         ensure(0 != geom1_);
         ensure(0 != geom2_);
+
+        int ret = GEOSContains(geom1_, geom2_);
+        ensure_equals(ret, 1);
+        ret = GEOSContains(geom2_, geom1_);
+        ensure_equals(ret, 0);
     }
 
 } // namespace tut
