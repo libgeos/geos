@@ -160,6 +160,7 @@ namespace tut
     doTest(inpWKT, expWKT);
   }
 
+  // Only lines with coincident vertices may be merged.
   template<> template<>
   void object::test<2>()
   {
@@ -181,6 +182,7 @@ namespace tut
     doTest(inpWKT, expWKT);
   }
 
+  // Two intersecting/crossing segments must not merge
   template<> template<>
   void object::test<3>()
   {
