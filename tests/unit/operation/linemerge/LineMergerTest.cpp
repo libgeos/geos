@@ -232,6 +232,47 @@ namespace tut
     doTest(inpWKT, expWKT);
   }
 
+  // Merge segments of a triangle
+  template<> template<>
+  void object::test<7>()
+  {
+      const char* inpWKT[] = {
+        "LINESTRING(0 0, 0 5)",
+        "LINESTRING(0 5, 5 5)",
+        "LINESTRING(5 5, 5 0)",
+        "LINESTRING(5 0, 0 0)",
+        NULL };
+      const char* expWKT[] = {
+        "LINESTRING(0 0, 0 5, 5 5, 5 0, 0 0)",
+          NULL };
+
+      doTest(inpWKT, expWKT);
+  }
+
+  // Merge union of segments of a triangle
+  template<> template<>
+  void object::test<8>()
+  {
+      GeomPtr line1(readWKT("LINESTRING(0 0, 0 5)"));
+      GeomPtr line2(readWKT("LINESTRING(0 5, 5 5)"));
+      GeomPtr line3(readWKT("LINESTRING(5 5, 5 0)"));
+      GeomPtr line4(readWKT("LINESTRING(5 0, 0 0)"));
+      // Union segments incrementally
+      GeomPtr lines12(line1->Union(line2.get()));
+      GeomPtr lines123(lines12->Union(line3.get())); 
+      GeomPtr lines1234(lines123->Union(line4.get()));
+
+      // MultiLineString expected by design, see corresponding test in OverlayOpUnionTest
+      ensure_equals(lines1234->getGeometryTypeId(), geos::geom::GEOS_MULTILINESTRING);
+
+      // Merge MultiLineString into LineString
+      LineMerger lineMerger;
+      lineMerger.add(lines1234.get());
+      mrgGeoms = lineMerger.getMergedLineStrings();
+
+      GeomPtr expected(readWKT("LINESTRING(0 0, 0 5, 5 5, 5 0, 0 0)"));
+      ensure(contains(*mrgGeoms, expected.get(), true));
+  }
 
 } // namespace tut
 

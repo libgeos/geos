@@ -43,26 +43,24 @@ namespace tut
     template<>
     void object::test<1>()
     {
-        // Arrange
-        geos::geom::PrecisionModel pm(1e+13);
-        GeometryFactoryPtr factory = geos::geom::GeometryFactory::create(&pm);
+        GeometryFactoryPtr factory = geos::geom::GeometryFactory::create();
         geos::io::WKTReader reader(*factory);
         GeometryPtr line1(reader.read("LINESTRING(0 0, 0 5)"));
         GeometryPtr line2(reader.read("LINESTRING(0 5, 5 5)"));
         GeometryPtr line3(reader.read("LINESTRING(5 5, 5 0)"));
         GeometryPtr line4(reader.read("LINESTRING(5 0, 0 0)"));
 
-        // Act: union segments incrementally
+        // union segments incrementally
         GeometryPtr lines12(line1->Union(line2.get()));
         GeometryPtr lines123(lines12->Union(line3.get())); 
         GeometryPtr lines1234(lines123->Union(line4.get()));
 
-        // Assert
         ensure_equals(lines1234->getGeometryTypeId(), geos::geom::GEOS_MULTILINESTRING);
         
         // NOTE: Since the union operation makes no effort to simplify and
         // drop nodes of degree 2 from the built topology,
         // do not expect GEOS_LINESTRING.
+        // See LineMergerTest where the test triangle is generated as a single LineString.
     }
 
 } // namespace tut
