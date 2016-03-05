@@ -31,7 +31,7 @@ struct test_geometryfilter_data
 typedef test_group<test_geometryfilter_data> group;
 typedef group::object object;
 
-group test_point_group("geos::geom::GeometryFilter");
+group test_geometryfilter_group("geos::geom::GeometryFilter");
 
 //
 // Test Cases
