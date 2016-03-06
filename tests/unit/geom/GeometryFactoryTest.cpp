@@ -1125,8 +1125,8 @@ reader_(factory_.get())
 			const std::size_t factor = i * i;
 			CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(lineSize);
 			ensure( coords != 0 );
-			coords->setAt(Coordinate(0 + factor, 0 + factor), 0);
-			coords->setAt(Coordinate(5 + factor, 5 + factor), 1);
+			coords->setAt(Coordinate(0. + factor, 0. + factor), 0);
+			coords->setAt(Coordinate(5. + factor, 5. + factor), 1);
 			ensure_equals( coords->getSize(), lineSize );
 
 			LineStringPtr line = factory_->createLineString(coords);
@@ -1167,8 +1167,8 @@ reader_(factory_.get())
 			const std::size_t factor = i * i;
 			CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(lineSize);
 			ensure( coords != 0 );
-			coords->setAt(Coordinate(0 + factor, 0 + factor), 0);
-			coords->setAt(Coordinate(5 + factor, 5 + factor), 1);
+			coords->setAt(Coordinate(0. + factor, 0. + factor), 0);
+			coords->setAt(Coordinate(5. + factor, 5. + factor), 1);
 			ensure_equals( coords->getSize(), lineSize );
 
 			LineStringPtr line = factory_->createLineString(coords);

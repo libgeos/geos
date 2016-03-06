@@ -202,7 +202,7 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    std::vector< Geometry* >* singleSidedNodedEdges =
       new std::vector< Geometry * >();
    singleSidedNodedEdges->reserve(nodedEdges->size());
-   for ( unsigned int i = 0, n = nodedEdges->size(); i < n; ++i )
+   for ( std::size_t i = 0, n = nodedEdges->size(); i < n; ++i )
    {
       SegmentString* ss = ( *nodedEdges )[i];
 
