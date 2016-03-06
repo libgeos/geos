@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -147,17 +147,17 @@ enum GeometryTypeId {
  *  that the coordinates of an intersection point may contain twice as many bits
  *  of precision as the coordinates of the input line segments. In order to
  *  represent these constructed points explicitly, JTS must truncate them to fit
- *  the PrecisionModel. 
+ *  the PrecisionModel.
  *
  *  Unfortunately, truncating coordinates moves them slightly. Line segments
  *  which would not be coincident in the exact result may become coincident in
  *  the truncated representation. This in turn leads to "topology collapses" --
  *  situations where a computed element has a lower dimension than it would in
- *  the exact result. 
+ *  the exact result.
  *
  *  When JTS detects topology collapses during the computation of spatial
  *  analysis methods, it will throw an exception. If possible the exception will
- *  report the location of the collapse. 
+ *  report the location of the collapse.
  *
  *  equals(Object) and hashCode are not overridden, so that when two
  *  topologically equal Geometries are added to HashMaps and HashSets, they
@@ -193,7 +193,7 @@ public:
 	 *
 	 * @return the factory for this geometry
 	 */
-	const GeometryFactory* getFactory() const { return factory; }
+	const GeometryFactory* getFactory() const { return _factory; }
 
 	/**
 	* \brief
@@ -201,14 +201,14 @@ public:
 	* a Geometry.
 	* An example use might be to add an object representing a
 	* Coordinate Reference System.
-	* 
+	*
 	* Note that user data objects are not present in geometries created
 	* by construction methods.
 	*
 	* @param newUserData an object, the semantics for which are
 	* defined by the application using this Geometry
 	*/
-	void setUserData(void* newUserData) { userData=newUserData; }
+	void setUserData(void* newUserData) { _userData=newUserData; }
 
 	/**
 	* \brief
@@ -216,7 +216,7 @@ public:
 	*
 	* @return the user data object, or <code>null</code> if none set
 	*/
-	void* getUserData() { return userData; }
+	void* getUserData() { return _userData; }
 
 	/*
 	 * \brief
@@ -264,7 +264,7 @@ public:
 	virtual std::size_t getNumPoints() const=0; //Abstract
 
 	/// Returns false if the Geometry not simple.
-	virtual bool isSimple() const; 
+	virtual bool isSimple() const;
 
 	/// Return a string representation of this Geometry type
 	virtual std::string getGeometryType() const=0; //Abstract
@@ -308,7 +308,7 @@ public:
 	 * Returns the boundary, or an empty geometry of appropriate
 	 * dimension if this <code>Geometry</code>  is empty.
 	 *
-	 * (In the case of zero-dimensional geometries, 
+	 * (In the case of zero-dimensional geometries,
 	 * an empty GeometryCollection is returned.)
 	 * For a discussion of this function, see the OpenGIS Simple
 	 * Features Specification. As stated in SFS Section 2.1.13.1,
@@ -335,7 +335,7 @@ public:
 
 	/**
 	 * Tests whether this geometry is disjoint from the specified geometry.
-	 * 
+	 *
 	 * The <code>disjoint</code> predicate has the following equivalent
 	 * definitions:
 	 *  - The two geometries have no point in common
@@ -362,7 +362,7 @@ public:
 
 	/**
 	 * Tests whether this geometry crosses the specified geometry.
-	 * 
+	 *
 	 * The <code>crosses</code> predicate has the following equivalent
 	 * definitions:
 	 *  - The geometries have some but not all interior points in common.
@@ -372,7 +372,7 @@ public:
 	 *    - <code>[0********]</code> (for L/L situations)
 	 * For any other combination of dimensions this predicate returns
 	 * <code>false</code>.
-	 * 
+	 *
 	 * The SFS defined this predicate only for P/L, P/A, L/L, and L/A
 	 * situations.
 	 * JTS extends the definition to apply to L/P, A/P and A/L situations
@@ -438,10 +438,10 @@ public:
 	/** \brief
 	 * Returns <code>true</code> if this geometry covers the
 	 * specified geometry.
-	 * 
+	 *
 	 * The <code>covers</code> predicate has the following
 	 * equivalent definitions:
-	 * 
+	 *
 	 * - Every point of the other geometry is a point of this geometry.
 	 * - The DE-9IM Intersection Matrix for the two geometries is
 	 *    <code>T*****FF*</code>
@@ -450,7 +450,7 @@ public:
 	 *    or <code>****T*FF*</code>
 	 * - <code>g.coveredBy(this)</code>
 	 *   (<code>covers</code> is the inverse of <code>coveredBy</code>)
-	 * 
+	 *
 	 * If either geometry is empty, the value of this predicate
 	 * is <tt>false</tt>.
 	 *
@@ -463,10 +463,10 @@ public:
 	 * As an added benefit, <code>covers</code> is more amenable to
 	 * optimization, and hence should be more performant.
 	 *
-	 * @param  g 
+	 * @param  g
 	 *         the <code>Geometry</code> with which to compare this
 	 *         <code>Geometry</code>
-	 * 
+	 *
 	 * @return <code>true</code> if this <code>Geometry</code>
 	 *                           covers <code>g</code>
 	 *
@@ -490,10 +490,10 @@ public:
 	 *    or <code>[**F*TF***]</code>
 	 *  - <code>g.covers(this)</code>
 	 *    (<code>coveredBy</code> is the converse of <code>covers</code>)
-	 * 
+	 *
 	 * If either geometry is empty, the value of this predicate
 	 * is <tt>false</tt>.
-	 * 
+	 *
 	 * This predicate is similar to {@link #within},
 	 * but is more inclusive (i.e. returns <tt>true</tt> for more cases).
 	 *
@@ -514,7 +514,7 @@ public:
 	virtual std::string toString() const;
 
 	virtual std::string toText() const;
-	
+
 	/// Returns a buffer region around this Geometry having the given width.
 	//
 	/// @throws util::TopologyException if a robustness error occurs
@@ -534,7 +534,7 @@ public:
 	 * Computes a buffer area around this geometry having the given
 	 * width and with a specified accuracy of approximation for circular
 	 * arcs, and using a specified end cap style.
-	 * 
+	 *
 	 * Buffer area boundaries can contain circular arcs.
 	 * To represent these arcs using linear geometry they must be
 	 * approximated with line segments.
@@ -542,15 +542,15 @@ public:
 	 * The <code>quadrantSegments</code> argument allows controlling the
 	 * accuracy of the approximation by specifying the number of line
 	 * segments used to represent a quadrant of a circle
-	 * 
+	 *
 	 * The end cap style specifies the buffer geometry that will be
 	 * created at the ends of linestrings.  The styles provided are:
-	 * 
+	 *
 	 * - BufferOp::CAP_ROUND - (default) a semi-circle
 	 * - BufferOp::CAP_BUTT  - a straight line perpendicular to the
 	 *                         end segment
 	 * - BufferOp::CAP_SQUARE - a half-square
-	 * 
+	 *
 	 *
 	 * @param distance the width of the buffer
 	 *                 (may be positive, negative or 0)
@@ -600,9 +600,9 @@ public:
   /**
    * Computes the union of all the elements of this geometry. Heterogeneous
    * {@link GeometryCollection}s are fully supported.
-   * 
+   *
    * The result obeys the following contract:
-   * 
+   *
    * - Unioning a set of {@link LineString}s has the effect of fully noding
    *   and dissolving the linework.
    * - Unioning a set of {@link Polygon}s will always
@@ -676,7 +676,7 @@ public:
 	 * Apply a fiter to each component of this geometry.
 	 * The filter is expected to provide a .filter(const Geometry*)
 	 * method.
-	 * 
+	 *
 	 * I intend similar templated methods to replace
 	 * all the virtual apply_rw and apply_ro functions...
 	 *                --strk(2005-02-06);
@@ -766,7 +766,7 @@ protected:
 
 	/// The bounding box of this Geometry
 	mutable std::auto_ptr<Envelope> envelope;
-	
+
 	/// Returns true if the array contains any non-empty Geometrys.
 	static bool hasNonEmptyElements(const std::vector<Geometry *>* geometries);
 
@@ -844,9 +844,9 @@ private:
 	//
 	/// Externally owned
 	///
-	const GeometryFactory *factory;
+	const GeometryFactory* _factory;
 
-	void* userData;
+	void* _userData;
 };
 
 /// \brief

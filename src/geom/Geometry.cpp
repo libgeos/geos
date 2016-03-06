@@ -109,21 +109,21 @@ Geometry::GeometryChangedFilter Geometry::geometryChangedFilter;
 Geometry::Geometry(const GeometryFactory *newFactory)
 	:
 	envelope(NULL),
-	factory(newFactory),
-	userData(NULL)
+	_factory(newFactory),
+	_userData(NULL)
 {
-	if ( factory == NULL ) {
-		factory = GeometryFactory::getDefaultInstance();
+	if ( _factory == NULL ) {
+		_factory = GeometryFactory::getDefaultInstance();
 	} 
-	SRID=factory->getSRID();
-	factory->addRef();
+	SRID=_factory->getSRID();
+	_factory->addRef();
 }
 
 Geometry::Geometry(const Geometry &geom)
 	:
 	SRID(geom.getSRID()),
-	factory(geom.factory),
-	userData(NULL)
+	_factory(geom._factory),
+	_userData(NULL)
 {
 	if ( geom.envelope.get() )
 	{
@@ -132,8 +132,8 @@ Geometry::Geometry(const Geometry &geom)
 	//factory=geom.factory; 
 	//envelope(new Envelope(*(geom.envelope.get())));
 	//SRID=geom.getSRID();
-	//userData=NULL;
-	factory->addRef();
+	//_userData=NULL;
+	_factory->addRef();
 }
 
 bool
@@ -578,7 +578,7 @@ Geometry::Union(const Geometry *other) const
 			v->push_back(other->clone());
 		}
 
-		out = factory->buildGeometry(v);
+		out = _factory->buildGeometry(v);
 		return out;
 	}
 #endif
@@ -642,7 +642,7 @@ Geometry::symDifference(const Geometry *other) const
 			v->push_back(other->clone());
 		}
 
-		return factory->buildGeometry(v);
+		return _factory->buildGeometry(v);
 	}
 
 	return BinaryOp(this, other, overlayOp(OverlayOp::opSYMDIFFERENCE)).release();
@@ -810,7 +810,7 @@ Geometry::getLength() const
 
 Geometry::~Geometry()
 {
-	factory->dropRef();
+	_factory->dropRef();
 }
 
 bool
@@ -870,7 +870,7 @@ Geometry::isSimple() const
 const PrecisionModel*
 Geometry::getPrecisionModel() const
 {
-	return factory->getPrecisionModel();
+	return _factory->getPrecisionModel();
 }
 
 } // namespace geos::geom

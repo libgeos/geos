@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -44,7 +44,7 @@ struct CoordinateLessThen;
  * Unlike objects of type Point (which contain additional
  * information such as an envelope, a precision model, and spatial
  * reference system information), a Coordinate only contains
- * ordinate values and accessor methods. 
+ * ordinate values and accessor methods.
  *
  * Coordinate objects are two-dimensional points, with an additional
  * z-ordinate. JTS does not support any operations on the z-ordinate except
@@ -54,14 +54,14 @@ struct CoordinateLessThen;
  * The standard comparison functions will ignore the z-ordinate.
  *
  */
-// Define the following to make assignments and copy constructions 
+// Define the following to make assignments and copy constructions
 // NON-inline (will let profilers report usages)
 //#define PROFILE_COORDINATE_COPIES 1
 class GEOS_DLL Coordinate {
 
 private:
 
-	static Coordinate nullCoord;
+	static Coordinate _nullCoord;
 
 public:
 	/// A set of const Coordinate pointers
@@ -101,7 +101,7 @@ public:
 	/// TODO: deprecate this, move logic to CoordinateLessThen instead
 	int compareTo(const Coordinate& other) const;
 
-	/// 3D comparison 
+	/// 3D comparison
 	bool equals3D(const Coordinate& other) const;
 
 	///  Returns a string of the form <I>(x,y,z)</I> .
