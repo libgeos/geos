@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -108,7 +108,7 @@ EdgeEndStar::computeLabelling(std::vector<GeometryGraph*> *geomGraph)
 	 * In all other cases (e.g. the node is on a line, on a point, or
 	 * not on the geometry at all) the edge
 	 * has the location EXTERIOR for the geometry.
-	 * 
+	 *
 	 * Note that the edge cannot be on the BOUNDARY of the geometry,
 	 * since then there would have been a parallel edge from the
 	 * Geometry at this node also labelled BOUNDARY
@@ -218,10 +218,8 @@ EdgeEndStar::checkAreaLabelsConsistent(int geomIndex)
 	if (edgeMap.size()==0) return true;
 
 	// initialize startLoc to location of last L side (if any)
-	EdgeEndStar::reverse_iterator it=rbegin();
-
-	assert(*it);
-	const Label& startLabel = (*it)->getLabel();
+	assert(*rbegin());
+	const Label& startLabel = (*rbegin())->getLabel();
 	int startLoc = startLabel.getLocation(geomIndex, Position::LEFT);
 
 	// Found unlabelled area edge

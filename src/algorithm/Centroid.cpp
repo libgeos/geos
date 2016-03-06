@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -70,14 +70,14 @@ Centroid::add(const Geometry& geom)
 {
   if (geom.isEmpty()) return;
 
-  if (const Point* g = dynamic_cast<const Point*>(&geom)) {
-    addPoint(*g->getCoordinate());
+  if (const Point* pt = dynamic_cast<const Point*>(&geom)) {
+    addPoint(*pt->getCoordinate());
   }
-  else if (const LineString* g = dynamic_cast<const LineString*>(&geom)) {
-    addLineSegments(*g->getCoordinatesRO());
+  else if (const LineString* ls = dynamic_cast<const LineString*>(&geom)) {
+    addLineSegments(*ls->getCoordinatesRO());
   }
-  else if (const Polygon* g = dynamic_cast<const Polygon*>(&geom)) {
-    add(*g);
+  else if (const Polygon* p = dynamic_cast<const Polygon*>(&geom)) {
+    add(*p);
   }
   else if (const GeometryCollection* g = dynamic_cast<const GeometryCollection*>(&geom)) {
     for (size_t i = 0; i < g->getNumGeometries(); i++) {

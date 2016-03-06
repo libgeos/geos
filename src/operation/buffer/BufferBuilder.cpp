@@ -10,7 +10,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -32,9 +32,9 @@
 #include <geos/operation/buffer/BufferSubgraph.h>
 #include <geos/operation/buffer/SubgraphDepthLocater.h>
 #include <geos/operation/overlay/OverlayOp.h>
-#include <geos/operation/overlay/snap/SnapOverlayOp.h> 
-#include <geos/operation/overlay/PolygonBuilder.h> 
-#include <geos/operation/overlay/OverlayNodeFactory.h> 
+#include <geos/operation/overlay/snap/SnapOverlayOp.h>
+#include <geos/operation/overlay/PolygonBuilder.h>
+#include <geos/operation/overlay/OverlayNodeFactory.h>
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/noding/IntersectionAdder.h>
@@ -65,7 +65,7 @@
 #define GEOS_DEBUG 0
 #endif
 
-#ifndef JTS_DEBUG 
+#ifndef JTS_DEBUG
 #define JTS_DEBUG 0
 #endif
 
@@ -149,7 +149,7 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
 
    // First, generate the two-sided buffer using a butt-cap.
    BufferParameters modParams = bufParams;
-   modParams.setEndCapStyle(BufferParameters::CAP_FLAT); 
+   modParams.setEndCapStyle(BufferParameters::CAP_FLAT);
    modParams.setSingleSided(false); // ignore parameter for areal-only geometries
    std::auto_ptr<Geometry> buf;
 
@@ -174,10 +174,12 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    OffsetCurveBuilder curveBuilder( precisionModel, modParams );
    std::vector< CoordinateSequence* > lineList;
 
-   std::auto_ptr< CoordinateSequence > coords ( g->getCoordinates() );
-   curveBuilder.getSingleSidedLineCurve( coords.get(), distance,
-                                         lineList, leftSide, !leftSide );
-   coords.reset();
+   {
+       std::auto_ptr< CoordinateSequence > coords(g->getCoordinates());
+       curveBuilder.getSingleSidedLineCurve(coords.get(), distance,
+           lineList, leftSide, !leftSide);
+       coords.reset();
+   }
 
    // Create a SegmentString from these coordinates.
    SegmentString::NonConstVect curveList;
@@ -261,9 +263,9 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
          // included.
          //
          // Let's try and estimate a more accurate bound instead of just assuming
-         // 98%. With 98%, the episilon grows as the buffer distance grows, 
+         // 98%. With 98%, the episilon grows as the buffer distance grows,
          // so that at large distance, artifacts may skip through this filter
-         // Let the length of the line play a factor in the distance, which is still 
+         // Let the length of the line play a factor in the distance, which is still
          // going to be bounded by 98%. Take 10% of the length of the line  from the buffer distance
          // to try and minimize any artifacts.
          const double ptDistAllowance = std::max(distance - l->getLength()*0.1, distance * 0.98);
@@ -275,7 +277,7 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
          // Clean up the front of the list.
          // Loop until the line's end is not inside the buffer width from
          // the startPoint.
-         while ( coords->size() > 1 && 
+         while ( coords->size() > 1 &&
                  coords->front().distance( startPoint ) < ptDistAllowance )
          {
             // Record the end segment length.
@@ -290,7 +292,7 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
             // reference point, then delete the point.
             coords->deleteAt( 0 );
          }
-         while ( coords->size() > 1 && 
+         while ( coords->size() > 1 &&
                  coords->front().distance( endPoint ) < ptDistAllowance )
          {
             double segLength = coords->front().distance( ( *coords )[1] );
@@ -343,7 +345,7 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    intersectedLines.reset();
 
    if ( mergedLinesGeom->size() > 1 )
-   {      
+   {
       return geomFact->createMultiLineString( mergedLinesGeom );
    }
    else if ( mergedLinesGeom->size() == 1 )
@@ -375,7 +377,7 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 	// factory must be the same as the one used by the input
 	geomFact=g->getFactory();
 
-  { // This scope is here to force release of resources owned by 
+  { // This scope is here to force release of resources owned by
     // OffsetCurveSetBuilder when we're doing with it
 
 	OffsetCurveBuilder curveBuilder(precisionModel, bufParams);
@@ -464,7 +466,7 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 		subgraphList.clear();
 
 		throw;
-	} 
+	}
 
 	return resultGeom;
 }
@@ -551,11 +553,11 @@ std::cerr << "after noding: "
 
 		CoordinateSequence* cs = CoordinateSequence::removeRepeatedPoints(segStr->getCoordinates());
 		delete segStr;
-		if ( cs->size() < 2 ) 
+		if ( cs->size() < 2 )
 		{
 			// don't insert collapsed edges
 			// we need to take care of the memory here as cs is a new sequence
-			delete cs; 
+			delete cs;
 			continue;
 		}
 
@@ -599,7 +601,7 @@ BufferBuilder::insertUniqueEdge(Edge *e)
 		int newDelta = existingDelta + mergeDelta;
 		existingEdge->setDepthDelta(newDelta);
 
-		// we have memory release responsibility 
+		// we have memory release responsibility
 		delete e;
 
 	} else {   // no matching existing edge was found
