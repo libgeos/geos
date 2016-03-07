@@ -42,4 +42,9 @@ svnrebase: authors.git
 geos_svn_revision.h:
 	top_srcdir=$(srcdir) sh $(srcdir)/tools/svn_repo_revision.sh
 
+VALGRIND = $(LIBTOOL) --mode=execute valgrind --leak-check=full --error-exitcode=1
+
+valgrindcheck:
+	$(VALGRIND) tests/unit/geos_unit
+
 .PHONY: geos_svn_revision.h
