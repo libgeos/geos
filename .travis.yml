@@ -39,10 +39,10 @@ script: ./tools/ci/script.sh
 notifications:
     irc:
         channels:
-            - "chat.freenode.net#postgis"
+            - "chat.freenode.net#postgis-activity"
         on_success: always # [always|never|change] # default: change
         on_failure: always # [always|never|change] # default: always
-        use_notice: true
+        use_notice: false
     email:
         recipients:
             #- geos-devel@lists.osgeo.org # TODO: whitelist this e-mail
