@@ -9,7 +9,6 @@
 #include <geos/io/WKTReader.h>
 // std
 #include <memory>
-#include <string>
 
 namespace tut {
 
