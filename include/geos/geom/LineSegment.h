@@ -61,7 +61,7 @@ public:
 
 	Coordinate p0; /// Segment start
 
-	Coordinate p1; /// Segemnt end
+	Coordinate p1; /// Segment end
 
 	LineSegment();
 
