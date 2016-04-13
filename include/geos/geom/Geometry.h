@@ -656,7 +656,7 @@ public:
 
 	/**
 	 *  Performs an operation on the coordinates in this Geometry's
-	 *  CoordinateSequences.s
+	 *  CoordinateSequences.
 	 *  If the filter reports that a coordinate value has been changed,
 	 *  {@link #geometryChanged} will be called automatically.
 	 *

@@ -60,12 +60,12 @@ namespace geom { // geos::geom
  *  pair of consecutive vertices.
  *  Consecutive vertices may be equal.
  *  The line segments in the line may intersect each other (in other words,
- *  the linestring may "curl back" in itself and self-intersect.
+ *  the linestring may "curl back" in itself and self-intersect).
  *  Linestrings with exactly two identical points are invalid.
  *  
  *  A linestring must have either 0 or 2 or more points.
  *  If these conditions are not met, the constructors throw
- *  an {@link IllegalArgumentException}
+ *  an {@link IllegalArgumentException}.
  */
 class GEOS_DLL LineString: public virtual Geometry, public Lineal {
 
@@ -79,10 +79,11 @@ public:
 	virtual ~LineString();
 
 	/**
-	 * Creates and returns a full copy of this {@link LineString} object.
-	 * (including all coordinates contained by it).
+	 * \brief
+	 * Creates and returns a full copy of this {@link LineString} object
+	 * (including all coordinates contained by it)
 	 *
-	 * @return a clone of this instance
+	 * @return A clone of this instance
 	 */
 	virtual Geometry *clone() const;
 
@@ -164,7 +165,7 @@ public:
 	 * Normalizes a LineString. 
 	 *
 	 * A normalized linestring
-	 * has the first point which is not equal to it's reflected point
+	 * has the first point which is not equal to its reflected point
 	 * less than the reflected point.
 	 */
 	virtual void normalize();
@@ -178,7 +179,7 @@ public:
 
 	/**
 	 * Creates a LineString whose coordinates are in the reverse
-	 * order of this objects
+	 * order of this object's
 	 *
 	 * @return a LineString with coordinates in the reverse order
 	 */
