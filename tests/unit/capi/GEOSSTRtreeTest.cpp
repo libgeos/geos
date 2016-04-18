@@ -7,8 +7,32 @@
 // std
 #include <cstdarg>
 #include <cstdio>
-#include <cstdlib>
 #include <cstring>
+#include <cmath>
+
+struct INTPOINT {
+	INTPOINT(int x, int y) : x{x}, y{y} {}
+	int x;
+	int y;
+};
+
+static GEOSGeometry* INTPOINT2GEOS(INTPOINT* p) {
+	GEOSCoordSequence* seq = GEOSCoordSeq_create(1, 2);
+	GEOSCoordSeq_setX(seq, 0, p->x);
+	GEOSCoordSeq_setY(seq, 0, p->y);
+	return GEOSGeom_createPoint(seq);
+}
+
+static int INTPOINT_dist(const void* a, const void* b, double* distance, void* userdata) {
+	INTPOINT* p1 = (INTPOINT*) a;
+	INTPOINT* p2 = (INTPOINT*) b;
+
+	int dx = p2->x - p1->x;
+	int dy = p2->y - p1->y;
+
+	*distance = sqrt(dx*dx + dy*dy);
+	return 1;
+}
 
 namespace tut
 {
@@ -61,8 +85,7 @@ namespace tut
 		GEOSSTRtree_insert(tree, g2, g2);
 		GEOSSTRtree_insert(tree, g3, g3);
 
-		const GEOSGeometry* g5 = (GEOSGeometry*) GEOSSTRtree_nearest(tree, g4,
-		(int (*)(const void* item1, const void* item2, double* distance))(GEOSDistance));
+		const GEOSGeometry* g5 = GEOSSTRtree_nearest(tree, g4);
 		ensure(g5 == g2);
 
 		GEOSGeom_destroy(g1);
@@ -78,12 +101,12 @@ namespace tut
 	template<>
 	void object::test<2>()
 	{
-		int ngeoms = 100;
+		size_t ngeoms = 100;
 		std::vector<GEOSGeometry*> geoms;
 		std::vector<GEOSGeometry*> queryPoints;
 		GEOSSTRtree* tree = GEOSSTRtree_create(ngeoms);
 
-		for (int i = 0; i < ngeoms; i++) {
+		for (auto i = 0; i < ngeoms; i++) {
 			GEOSCoordSequence* seq = GEOSCoordSeq_create(1, 2);
 			GEOSCoordSeq_setX(seq, 0, std::rand());
 			GEOSCoordSeq_setY(seq, 0, std::rand());
@@ -91,18 +114,18 @@ namespace tut
 			GEOSSTRtree_insert(tree, geoms[i], geoms[i]);
 		}
 
-		for (int i = 0; i < ngeoms; i++) {
+		for (auto i = 0; i < ngeoms; i++) {
 			GEOSCoordSequence* seq = GEOSCoordSeq_create(1, 2);
 			GEOSCoordSeq_setX(seq, 0, std::rand());
 			GEOSCoordSeq_setY(seq, 0, std::rand());
 			queryPoints.push_back(GEOSGeom_createPoint(seq));
 		}
 
-		for (int i = 0; i < ngeoms; i++) {
-			const GEOSGeometry* nearest = (GEOSGeometry*) GEOSSTRtree_nearest(tree, queryPoints[i], NULL);
+		for (auto i = 0; i < ngeoms; i++) {
+			const GEOSGeometry* nearest = GEOSSTRtree_nearest(tree, queryPoints[i]);
 			const GEOSGeometry* nearestBruteForce = NULL;
-			double nearestBruteForceDistance;
-			for (int j = 0; j < ngeoms; j++) {
+			double nearestBruteForceDistance = std::numeric_limits<double>::max();
+			for (auto j = 0; j < ngeoms; j++) {
 				double distance;
 				GEOSDistance(queryPoints[i], geoms[j], &distance);
 
@@ -123,6 +146,49 @@ namespace tut
 		GEOSSTRtree_destroy(tree);
 	}
 
+	// GEOSSTRtree_nearest returns NULL on empty tree
+	template<>
+	template<>
+	void object::test<3>()
+	{
+		GEOSSTRtree* tree = GEOSSTRtree_create(10);
+		GEOSGeometry* g1 = GEOSGeomFromWKT("POINT (3 3)");
+		const GEOSGeometry* g2 = GEOSSTRtree_nearest(tree, g1);
+
+		ensure(g2 == NULL);
+
+		GEOSGeom_destroy(g1);
+		GEOSSTRtree_destroy(tree);
+	}
+
+	// GEOSSTRtree_nearest with a user-defined type
+	template<>
+	template<>
+	void object::test<4>()
+	{
+		INTPOINT p1(1, 1);
+		INTPOINT p2(4, 4);
+		INTPOINT p3(3, 3);
+
+		GEOSGeometry* g1 = INTPOINT2GEOS(&p1);
+		GEOSGeometry* g2 = INTPOINT2GEOS(&p2);
+		GEOSGeometry* g3 = INTPOINT2GEOS(&p3);
+
+		GEOSSTRtree* tree = GEOSSTRtree_create(4);
+		GEOSSTRtree_insert(tree, g1, &p1);
+		GEOSSTRtree_insert(tree, g2, &p2);
+
+		const INTPOINT* p4 = (const INTPOINT*) GEOSSTRtree_nearest_generic(tree, &p3, g3, &INTPOINT_dist, NULL);
+
+		ensure (p4 == &p2);
+
+		GEOSGeom_destroy(g1);
+		GEOSGeom_destroy(g2);
+		GEOSGeom_destroy(g3);
+		GEOSSTRtree_destroy(tree);
+	}
 
 } // namespace tut
+
+
 
