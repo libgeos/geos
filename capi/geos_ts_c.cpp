@@ -5947,10 +5947,12 @@ GEOSSTRtree_query_r(GEOSContextHandle_t extHandle,
 }
 
 const void *
-GEOSSTRtree_nearest_r(GEOSContextHandle_t extHandle,
-                      geos::index::strtree::STRtree *tree,
-                      const geos::geom::Geometry* g,
-                      int (*distancefn)(const void* item1, const void* item2, double* distance))
+GEOSSTRtree_nearest_generic_r(GEOSContextHandle_t extHandle,
+                              geos::index::strtree::STRtree *tree,
+                              const void* item,
+                              const geos::geom::Geometry* itemEnvelope,
+                              int (*distancefn)(const void* item1, const void* item2, double* distance, void* userdata),
+                              void* userdata)
 {
 
     GEOSContextHandleInternal_t *handle = 0;
@@ -5958,17 +5960,18 @@ GEOSSTRtree_nearest_r(GEOSContextHandle_t extHandle,
     {
         if (distancefn) {
             struct CustomItemDistance : public ItemDistance {
-                CustomItemDistance(int (*distancefn)(const void* item1, const void* item2, double* distance))
-                        : distancefn(distancefn) {}
+                CustomItemDistance(int (*p_distancefn)(const void* item1, const void* item2, double* distance, void* p_userdata), void* p_userdata)
+                        : m_distancefn(p_distancefn), m_userdata(p_userdata) {}
 
-                int (*distancefn)(const void* item1, const void* item2, double* distance);
+                int (*m_distancefn)(const void* item1, const void* item2, double* distance, void* userdata);
+                void* m_userdata;
 
                 double distance(const ItemBoundable* item1, const ItemBoundable* item2) {
                     const void* a = item1->getItem();
                     const void* b = item2->getItem();
                     double d;
 
-                    if (!distancefn(a, b, &d)) {
+                    if (!m_distancefn(a, b, &d, m_userdata)) {
                         throw std::runtime_error(std::string("Failed to compute distance."));
                     }
 
@@ -5976,11 +5979,11 @@ GEOSSTRtree_nearest_r(GEOSContextHandle_t extHandle,
                 }
             };
 
-            CustomItemDistance itemDistance(distancefn);
-            return tree->nearestNeighbour(g->getEnvelopeInternal(), g, &itemDistance);
+            CustomItemDistance itemDistance(distancefn, userdata);
+            return tree->nearestNeighbour(itemEnvelope->getEnvelopeInternal(), item, &itemDistance);
         } else {
             GeometryItemDistance itemDistance = GeometryItemDistance();
-            return tree->nearestNeighbour(g->getEnvelopeInternal(), g, &itemDistance);
+            return tree->nearestNeighbour(itemEnvelope->getEnvelopeInternal(), item, &itemDistance);
         }
     }
     catch (const std::exception &e)

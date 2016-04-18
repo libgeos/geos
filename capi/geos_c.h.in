@@ -814,10 +814,19 @@ extern void GEOS_DLL GEOSSTRtree_query_r(GEOSContextHandle_t handle,
                                          const GEOSGeometry *g,
                                          GEOSQueryCallback callback,
                                          void *userdata);
+
 extern const void* GEOS_DLL GEOSSTRtree_nearest_r(GEOSContextHandle_t handle,
+                                                  GEOSSTRtree *tree,
+                                                  const GEOSGeometry* geom);
+
+
+extern const void* GEOS_DLL GEOSSTRtree_nearest_generic_r(GEOSContextHandle_t handle,
                                                           GEOSSTRtree *tree,
-                                                          const GEOSGeometry* g,
-                                                          int (*distancefn)(const void* item1, const void* item2, double* distance));
+                                                          const void* item,
+                                                          const GEOSGeometry* itemEnvelope,
+                                                          int (*distancefn)(const void* item1, const void* item2, double* distance, void* userdata),
+                                                          void* userdata);
+
 extern void GEOS_DLL GEOSSTRtree_iterate_r(GEOSContextHandle_t handle,
                                        GEOSSTRtree *tree,
                                        GEOSQueryCallback callback,
@@ -1655,20 +1664,92 @@ extern char GEOS_DLL GEOSPreparedWithin(const GEOSPreparedGeometry* pg1, const G
  * GEOSGeometry ownership is retained by caller
  */
 
+/*
+ * Create a new R-tree using the Sort-Tile-Recursive algorithm (STRtree) for two-dimensional
+ * spatial data.
+ *
+ * @param nodeCapacity the maximum number of child nodes that a node may have.  The minimum
+ *            recommended capacity value is 4.  If unsure, use a default node capacity of 10.
+ * @return a pointer to the created tree
+ */
 extern GEOSSTRtree GEOS_DLL *GEOSSTRtree_create(size_t nodeCapacity);
+
+/*
+ * Insert an item into an STRtree
+ *
+ * @param tree the STRtree in which the item should be inserted
+ * @param g a GEOSGeometry whose envelope corresponds to the extent of 'item'
+ * @param item the item to insert into the tree
+ */
 extern void GEOS_DLL GEOSSTRtree_insert(GEOSSTRtree *tree,
                                         const GEOSGeometry *g,
                                         void *item);
+
+/*
+ * Query an STRtree for items intersecting a specified envelope
+ *
+ * @param tree the STRtree to search
+ * @param g a GEOSGeomety from which a query envelope will be extracted
+ * @param callback a function to be executed for each item in the tree whose envelope intersects
+ *            the envelope of 'g'.  The callback function should take two parameters: a void
+ *            pointer representing the located item in the tree, and a void userdata pointer.
+ * @param userdata an optional pointer to pe passed to 'callback' as an argument
+ */
 extern void GEOS_DLL GEOSSTRtree_query(GEOSSTRtree *tree,
                                        const GEOSGeometry *g,
                                        GEOSQueryCallback callback,
                                        void *userdata);
-extern const void* GEOS_DLL GEOSSTRtree_nearest(GEOSSTRtree *tree,
-                                        const GEOSGeometry* g,
-                                        int (*distancefn)(const void* item1, const void* item2, double* distance));
+/*
+ * Returns the nearest item in the STRtree to the supplied GEOSGeometry
+ *
+ * @param tree the STRtree to search
+ * @param geom the geometry with which the tree should be queried
+ * @return a const pointer to the nearest GEOSGeometry in the tree to 'geom', or NULL in
+ *            case of exception
+ */
+extern const GEOSGeometry* GEOS_DLL GEOSSTRtree_nearest(GEOSSTRtree *tree, const GEOSGeometry* geom);
+
+/*
+ * Returns the nearest item in the STRtree to the supplied item
+ *
+ * @param tree the STRtree to search
+ * @param item the item with which the tree should be queried
+ * @param itemEnvelope a GEOSGeometry having the bounding box of 'item'
+ * @param distancefn a function that can compute the distance between two items
+ *            in the STRtree.  The function should return zero in case of error,
+ *            and should store the computed distance to the location pointed to by
+ *            the 'distance' argument.  The computed distance between two items
+ *            must not exceed the Cartesian distance between their envelopes.
+ * @param userdata optional pointer to arbitrary data; will be passed to distancefn
+ *            each time it is called.
+ * @return a const pointer to the nearest item in the tree to 'item', or NULL in
+ *            case of exception
+ */
+extern const void* GEOS_DLL GEOSSTRtree_nearest_generic(GEOSSTRtree *tree,
+                                                        const void* item,
+                                                        const GEOSGeometry* itemEnvelope,
+                                                        int (*distancefn)(const void* item1, const void* item2, double* distance, void* userdata),
+                                                        void* userdata);
+/*
+ * Iterates over all items in the STRtree
+ *
+ * @param tree the STRtree over which to iterate
+ * @param callback a function to be executed for each item in the tree.
+ */
 extern void GEOS_DLL GEOSSTRtree_iterate(GEOSSTRtree *tree,
                                        GEOSQueryCallback callback,
                                        void *userdata);
+
+/*
+ * Removes an item from the STRtree
+ *
+ * @param tree the STRtree from which to remove an item
+ * @param g the envelope of the item to remove
+ * @param the item to remove
+ * @return 0 if the item was not removed;
+ *         1 if the item was removed;
+ *         2 if an exception occurred
+ */
 extern char GEOS_DLL GEOSSTRtree_remove(GEOSSTRtree *tree,
                                         const GEOSGeometry *g,
                                         void *item);
