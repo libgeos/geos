@@ -11,7 +11,7 @@
 #include <cmath>
 
 struct INTPOINT {
-	INTPOINT(int x, int y) : x{x}, y{y} {}
+	INTPOINT(int x, int y) : x(x), y(y) {}
 	int x;
 	int y;
 };
@@ -106,7 +106,7 @@ namespace tut
 		std::vector<GEOSGeometry*> queryPoints;
 		GEOSSTRtree* tree = GEOSSTRtree_create(ngeoms);
 
-		for (auto i = 0; i < ngeoms; i++) {
+		for (size_t i = 0; i < ngeoms; i++) {
 			GEOSCoordSequence* seq = GEOSCoordSeq_create(1, 2);
 			GEOSCoordSeq_setX(seq, 0, std::rand());
 			GEOSCoordSeq_setY(seq, 0, std::rand());
@@ -114,18 +114,18 @@ namespace tut
 			GEOSSTRtree_insert(tree, geoms[i], geoms[i]);
 		}
 
-		for (auto i = 0; i < ngeoms; i++) {
+		for (size_t i = 0; i < ngeoms; i++) {
 			GEOSCoordSequence* seq = GEOSCoordSeq_create(1, 2);
 			GEOSCoordSeq_setX(seq, 0, std::rand());
 			GEOSCoordSeq_setY(seq, 0, std::rand());
 			queryPoints.push_back(GEOSGeom_createPoint(seq));
 		}
 
-		for (auto i = 0; i < ngeoms; i++) {
+		for (size_t i = 0; i < ngeoms; i++) {
 			const GEOSGeometry* nearest = GEOSSTRtree_nearest(tree, queryPoints[i]);
 			const GEOSGeometry* nearestBruteForce = NULL;
 			double nearestBruteForceDistance = std::numeric_limits<double>::max();
-			for (auto j = 0; j < ngeoms; j++) {
+			for (size_t j = 0; j < ngeoms; j++) {
 				double distance;
 				GEOSDistance(queryPoints[i], geoms[j], &distance);
 
@@ -138,7 +138,7 @@ namespace tut
 			ensure(nearest == nearestBruteForce || GEOSEquals(nearest, nearestBruteForce));
 		}
 
-		for (int i = 0; i < ngeoms; i++) {
+		for (size_t i = 0; i < ngeoms; i++) {
 			GEOSGeom_destroy(geoms[i]);
 			GEOSGeom_destroy(queryPoints[i]);
 		}
