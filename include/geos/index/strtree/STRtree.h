@@ -20,6 +20,8 @@
 #define GEOS_INDEX_STRTREE_STRTREE_H
 
 #include <geos/export.h>
+#include <geos/index/strtree/ItemDistance.h>
+#include <geos/index/strtree/BoundablePair.h>
 #include <geos/index/strtree/AbstractSTRtree.h> // for inheritance
 #include <geos/index/SpatialIndex.h> // for inheritance
 #include <geos/geom/Envelope.h> // for inlines
@@ -136,6 +138,10 @@ public:
 	void query(const geom::Envelope *searchEnv, ItemVisitor& visitor) {
 		return AbstractSTRtree::query(searchEnv, visitor);
 	}
+
+	const void* nearestNeighbour(const geom::Envelope *env, const void* item, ItemDistance* itemDist);
+	const void* nearestNeighbour(BoundablePair* initBndPair);
+	const void* nearestNeighbour(BoundablePair* initBndPair, double maxDistance);
 
 	bool remove(const geom::Envelope *itemEnv, void* item) {
 		return AbstractSTRtree::remove(itemEnv, item);

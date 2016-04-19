@@ -55,7 +55,9 @@ AbstractSTRtree::~AbstractSTRtree()
 void
 AbstractSTRtree::build()
 {
-	assert(!built);
+	if(built)
+		return;
+
 	root=(itemBoundables->empty()?createNode(0):createHigherLevels(itemBoundables,-1));
 	built=true;
 }
