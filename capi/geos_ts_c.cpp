@@ -5951,7 +5951,7 @@ GEOSSTRtree_nearest_generic_r(GEOSContextHandle_t extHandle,
                               geos::index::strtree::STRtree *tree,
                               const void* item,
                               const geos::geom::Geometry* itemEnvelope,
-                              int (*distancefn)(const void* item1, const void* item2, double* distance, void* userdata),
+                              GEOSDistanceCallback distancefn,
                               void* userdata)
 {
 
@@ -5960,10 +5960,10 @@ GEOSSTRtree_nearest_generic_r(GEOSContextHandle_t extHandle,
     {
         if (distancefn) {
             struct CustomItemDistance : public ItemDistance {
-                CustomItemDistance(int (*p_distancefn)(const void* item1, const void* item2, double* distance, void* p_userdata), void* p_userdata)
+                CustomItemDistance(GEOSDistanceCallback p_distancefn, void* p_userdata)
                         : m_distancefn(p_distancefn), m_userdata(p_userdata) {}
 
-                int (*m_distancefn)(const void* item1, const void* item2, double* distance, void* userdata);
+                GEOSDistanceCallback m_distancefn;
                 void* m_userdata;
 
                 double distance(const ItemBoundable* item1, const ItemBoundable* item2) {

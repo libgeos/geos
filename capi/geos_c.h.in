@@ -153,6 +153,7 @@ enum GEOSByteOrders {
 };
 
 typedef void (*GEOSQueryCallback)(void *item, void *userdata);
+typedef int (*GEOSDistanceCallback)(const void *item1, const void* item2, double* distance, void* userdata);
 
 /************************************************************************
  *
@@ -824,7 +825,7 @@ extern const void* GEOS_DLL GEOSSTRtree_nearest_generic_r(GEOSContextHandle_t ha
                                                           GEOSSTRtree *tree,
                                                           const void* item,
                                                           const GEOSGeometry* itemEnvelope,
-                                                          int (*distancefn)(const void* item1, const void* item2, double* distance, void* userdata),
+                                                          GEOSDistanceCallback distancefn,
                                                           void* userdata);
 
 extern void GEOS_DLL GEOSSTRtree_iterate_r(GEOSContextHandle_t handle,
@@ -1700,8 +1701,10 @@ extern void GEOS_DLL GEOSSTRtree_query(GEOSSTRtree *tree,
                                        GEOSQueryCallback callback,
                                        void *userdata);
 /*
- * Returns the nearest item in the STRtree to the supplied GEOSGeometry
- *
+ * Returns the nearest item in the STRtree to the supplied GEOSGeometry.
+ * All items in the tree MUST be of type GEOSGeometry.  If this is not the case, use
+ * GEOSSTRtree_nearest_generic instead.
+*
  * @param tree the STRtree to search
  * @param geom the geometry with which the tree should be queried
  * @return a const pointer to the nearest GEOSGeometry in the tree to 'geom', or NULL in
@@ -1728,7 +1731,7 @@ extern const GEOSGeometry* GEOS_DLL GEOSSTRtree_nearest(GEOSSTRtree *tree, const
 extern const void* GEOS_DLL GEOSSTRtree_nearest_generic(GEOSSTRtree *tree,
                                                         const void* item,
                                                         const GEOSGeometry* itemEnvelope,
-                                                        int (*distancefn)(const void* item1, const void* item2, double* distance, void* userdata),
+                                                        GEOSDistanceCallback distancefn,
                                                         void* userdata);
 /*
  * Iterates over all items in the STRtree
