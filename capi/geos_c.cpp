@@ -1146,6 +1146,22 @@ GEOSSTRtree_query (geos::index::strtree::STRtree *tree,
     GEOSSTRtree_query_r( handle, tree, g, cb, userdata );
 }
 
+const GEOSGeometry *
+GEOSSTRtree_nearest (geos::index::strtree::STRtree *tree,
+                     const geos::geom::Geometry *g)
+{
+    return (const GEOSGeometry*) GEOSSTRtree_nearest_generic( tree, g, g, NULL, NULL);
+}
+
+const void* GEOSSTRtree_nearest_generic(GEOSSTRtree *tree,
+                                        const void* item,
+                                        const GEOSGeometry* itemEnvelope,
+                                        GEOSDistanceCallback distancefn,
+                                        void* userdata)
+{
+    return GEOSSTRtree_nearest_generic_r( handle, tree, item, itemEnvelope, distancefn, userdata);
+}
+
 void
 GEOSSTRtree_iterate(geos::index::strtree::STRtree *tree,
                     GEOSQueryCallback callback,
