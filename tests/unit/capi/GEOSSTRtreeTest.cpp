@@ -188,6 +188,48 @@ namespace tut
 		GEOSSTRtree_destroy(tree);
 	}
 
+	// GEOSSTRtree_nearest with a tree of empty geometries
+	template<>
+	template<>
+	void object::test<5>() {
+		GEOSGeometry* g1 = GEOSGeomFromWKT("LINESTRING EMPTY");
+		GEOSGeometry* g2 = GEOSGeomFromWKT("POINT (2 7)");
+
+		GEOSSTRtree* tree = GEOSSTRtree_create(4);
+		GEOSSTRtree_insert(tree, g1, g1);
+
+		const GEOSGeometry* g3 = GEOSSTRtree_nearest(tree, g2);
+		ensure(g3 == NULL);
+
+		GEOSGeom_destroy(g1);
+		GEOSGeom_destroy(g2);
+		GEOSSTRtree_destroy(tree);
+	}
+
+	// GEOSSTRtree_nearest with a tree containing some empty geometries
+	template<>
+	template<>
+	void object::test<6>() {
+		GEOSGeometry* g1 = GEOSGeomFromWKT("LINESTRING EMPTY");
+		GEOSGeometry* g2 = GEOSGeomFromWKT("POINT (2 7)");
+		GEOSGeometry* g3 = GEOSGeomFromWKT("POINT (12 97)");
+		GEOSGeometry* g4 = GEOSGeomFromWKT("LINESTRING (3 8, 4 8)");
+
+		GEOSSTRtree* tree = GEOSSTRtree_create(4);
+		GEOSSTRtree_insert(tree, g1, g1);
+		GEOSSTRtree_insert(tree, g2, g2);
+		GEOSSTRtree_insert(tree, g3, g3);
+
+		const GEOSGeometry* g5 = (const GEOSGeometry*) GEOSSTRtree_nearest(tree, g4);
+		ensure(g5 == g2);
+
+		GEOSGeom_destroy(g1);
+		GEOSGeom_destroy(g2);
+		GEOSGeom_destroy(g3);
+		GEOSGeom_destroy(g4);
+		GEOSSTRtree_destroy(tree);
+	}
+
 } // namespace tut
 
 
