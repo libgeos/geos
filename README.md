@@ -1,3 +1,6 @@
+Debbie:
+ [![Build Status](http://debbie.postgis.net:8080/buildStatus/icon?job=GEOS_Trunk)]
+ (http://debbie.postgis.net:8080/view/GEOS/job/GEOS_Trunk/)
 Travis:
  [![Travis](https://secure.travis-ci.org/libgeos/libgeos.png)]
  (http://travis-ci.org/libgeos/libgeos)
