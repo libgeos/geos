@@ -11,7 +11,10 @@ geos_HEADERS = \
     AbstractNode.h \
     AbstractSTRtree.h \
     Boundable.h \
+    BoundablePair.h \
+    GeometryItemDistance.h \
     Interval.h \
     ItemBoundable.h \
+    ItemDistance.h \
     SIRtree.h \
     STRtree.h
