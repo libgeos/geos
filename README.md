@@ -7,6 +7,9 @@ Travis:
 GitLab-CI:
  [![Gitlab-CI](https://gitlab.com/geos/libgeos/badges/svn-trunk/build.svg)]
  (https://gitlab.com/geos/libgeos/commits/svn-trunk)
+Drone:
+ [![drone.io](https://drone.io/github.com/libgeos/libgeos/status.png)]
+ (https://drone.io/github.com/libgeos/libgeos/latest)
 
 This file is here to play nicely with modern code repositories.
 Actual readme is [here](README).
