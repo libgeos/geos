@@ -35,10 +35,11 @@ const Boundable* BoundablePair::getBoundable(int i) const {
 	return boundable2;
 }
 
-double BoundablePair::distance() {
+double BoundablePair::distance() const {
 	// if items, compute exact distance
-	if (isLeaves())
+	if (isLeaves()) {
 		return itemDistance->distance((ItemBoundable*) boundable1, (ItemBoundable*) boundable2);
+	}
 
 	// otherwise compute distance between bounds of boundables
 	const geom::Envelope* e1 = (const geom::Envelope*) boundable1->getBounds();
@@ -99,11 +100,9 @@ void BoundablePair::expand(const Boundable* bndComposite, const Boundable* bndOt
 	std::vector<Boundable*> *children = ((AbstractNode*) bndComposite)->getChildBoundables();
 	for(std::vector<Boundable*>::iterator it = children->begin(); it != children->end(); ++it) {
 		Boundable* child = *it;
-		BoundablePair* bp = new BoundablePair(child, bndOther, itemDistance);
-		if (bp->getDistance() < minDistance) {
-			priQ.push(bp);
-		} else {
-			delete bp;
+		std::auto_ptr<BoundablePair> bp(new BoundablePair(child, bndOther, itemDistance));
+		if (minDistance == std::numeric_limits<double>::infinity() || bp->getDistance() < minDistance) {
+			priQ.push(bp.release());
 		}
 	}
 }

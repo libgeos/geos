@@ -11,4 +11,6 @@ geos_HEADERS = \
 	ConnectedElementLocationFilter.h \
 	ConnectedElementPointFilter.h \
 	DistanceOp.h \
+	FacetSequence.h \
+	FacetSequenceTreeBuilder.h \
 	GeometryLocation.h

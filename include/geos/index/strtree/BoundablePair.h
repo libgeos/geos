@@ -78,7 +78,7 @@ class BoundablePair {
 		 *
 		 * @return
 		 */
-		double distance();
+		double distance() const;
 
 		/**
 		 * Gets the minimum possible distance between the Boundables in
