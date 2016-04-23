@@ -104,7 +104,7 @@ namespace tut
 		size_t ngeoms = 100;
 		std::vector<GEOSGeometry*> geoms;
 		std::vector<GEOSGeometry*> queryPoints;
-		GEOSSTRtree* tree = GEOSSTRtree_create(ngeoms);
+		GEOSSTRtree* tree = GEOSSTRtree_create(8);
 
 		for (size_t i = 0; i < ngeoms; i++) {
 			GEOSCoordSequence* seq = GEOSCoordSeq_create(1, 2);
