@@ -1,5 +1,5 @@
 #
-# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+# This file is part of project GEOS (http://trac.osgeo.org/geos/)
 #
 # NOTE: Make sure that 'src' appears first.
 # 'capi' and 'doc' surely rely on availability of libgeos
@@ -26,6 +26,9 @@ EXTRA_DIST = acsite.m4 makefile.vc nmake.opt autogen.bat CMakeLists.txt \
   cmake/cmake_uninstall.cmake.in geos_svn_revision.h
 
 ACLOCAL_AMFLAGS = -I macros
+
+README: README.md
+	ln -s README.md README
 
 cl:
 	cd $(srcdir) && svn update && svn2cl --authors=authors.svn -i -o ChangeLog
