@@ -27,9 +27,6 @@ EXTRA_DIST = acsite.m4 makefile.vc nmake.opt autogen.bat CMakeLists.txt \
 
 ACLOCAL_AMFLAGS = -I macros
 
-README: README.md
-	ln -s README.md README
-
 cl:
 	cd $(srcdir) && svn update && svn2cl --authors=authors.svn -i -o ChangeLog
 

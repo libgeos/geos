@@ -50,7 +50,6 @@ if [ ! ${AUTOMAKE} ]; then
 fi
 AUTOMAKE_VER=`${AUTOMAKE} --version | grep -E "^.*[0-9]$" | sed 's/^.* //'`
 
-
 for libtoolize in libtoolize glibtoolize; do
     LIBTOOLIZE=`which $libtoolize 2>/dev/null`
     if test -x "${LIBTOOLIZE}"; then
@@ -67,6 +66,10 @@ AMOPTS="--add-missing --copy -Woverride"
 if test "$OSTYPE" = "IRIX" -o "$OSTYPE" = "IRIX64"; then
    AMOPTS=$AMOPTS" --include-deps";
 fi
+
+# README is needed by libtoolize (and GNU standards)
+echo "* Symlinking README.md to README"
+ln -s README.md README
 
 LTOPTS="--force --copy"
 echo "* Running ${LIBTOOLIZE} (${LIBTOOLIZE_VER})"
