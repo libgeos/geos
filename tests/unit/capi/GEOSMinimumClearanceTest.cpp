@@ -120,4 +120,13 @@ namespace tut
                       3.49284983912134e-05);
     }
 
+    template<>
+    template<>
+    void object::test<5>()
+    {
+        testClearance("POLYGON EMPTY",
+                      "LINESTRING EMPTY",
+                      std::numeric_limits<double>::infinity());
+    }
+
 } // namespace tut

@@ -162,6 +162,7 @@ void MinimumClearance::compute() {
 
     // initialize to "No Distance Exists" state
     minClearancePts = std::auto_ptr<CoordinateSequence>(inputGeom->getFactory()->getCoordinateSequenceFactory()->create(2, 2));
+    minClearance = std::numeric_limits<double>::infinity();
 
     // handle empty geometries
     if (inputGeom->isEmpty())
