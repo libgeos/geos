@@ -12,7 +12,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/distance/FacetSequenceTreeBuilder.java (JTS-1.14)
+ * Last port: operation/distance/FacetSequenceTreeBuilder.java (f6187ee2 JTS-1.14)
  *
  **********************************************************************/
 

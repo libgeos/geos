@@ -12,7 +12,7 @@
  *
  **********************************************************************
  *
- * Last port: precision/MinimumClearance.java (JTS-1.14)
+ * Last port: precision/MinimumClearance.java (f6187ee2 JTS-1.14)
  *
  **********************************************************************/
 
