@@ -11,6 +11,8 @@ libopdistance_la_SOURCES = \
     ConnectedElementLocationFilter.cpp \
     ConnectedElementPointFilter.cpp \
     DistanceOp.cpp \
+    FacetSequence.cpp \
+    FacetSequenceTreeBuilder.cpp \
     GeometryLocation.cpp 
 
 libopdistance_la_LIBADD = 

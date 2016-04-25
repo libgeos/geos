@@ -116,6 +116,7 @@ using namespace std;
 #undef VERBOSE_EXCEPTIONS
 
 #include <geos/export.h>
+#include <geos/precision/MinimumClearance.h>
 
 
 // import the most frequently used definitions globally
@@ -2076,6 +2077,72 @@ GEOSMinimumWidth_r(GEOSContextHandle_t extHandle, const Geometry *g)
     }
 
     return NULL;
+}
+
+Geometry *
+GEOSMinimumClearanceLine_r(GEOSContextHandle_t extHandle, const Geometry *g)
+{
+    if ( 0 == extHandle )
+    {
+        return NULL;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return NULL;
+    }
+
+    try
+    {
+        geos::precision::MinimumClearance mc(g);
+        return mc.getLine().release();
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return NULL;
+}
+
+int
+GEOSMinimumClearance_r(GEOSContextHandle_t extHandle, const Geometry *g, double *d)
+{
+    if ( 0 == extHandle )
+    {
+        return 2;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return 2;
+    }
+
+    try
+    {
+        geos::precision::MinimumClearance mc(g);
+        double res = mc.getDistance();
+        *d = res;
+        return 0;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return 2;
 }
 
 

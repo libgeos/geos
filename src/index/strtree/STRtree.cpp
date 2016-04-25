@@ -27,6 +27,7 @@
 #include <algorithm> // std::sort
 #include <iostream> // for debugging
 #include <limits>
+#include <geos/util/GEOSException.h>
 
 using namespace std;
 using namespace geos::geom;
@@ -191,14 +192,19 @@ const void* STRtree::nearestNeighbour(const Envelope* env, const void* item, Ite
 	ItemBoundable bnd = ItemBoundable(env, (void*) item);
 	BoundablePair bp(getRoot(), &bnd, itemDist);
 
+	return nearestNeighbour(&bp).first;
+}
+
+std::pair<const void*, const void*> STRtree::nearestNeighbour(BoundablePair* initBndPair) {
+	return nearestNeighbour(initBndPair, std::numeric_limits<double>::infinity());
+}
+
+std::pair<const void*, const void*> STRtree::nearestNeighbour(ItemDistance * itemDist) {
+	BoundablePair bp(this->getRoot(), this->getRoot(), itemDist);
 	return nearestNeighbour(&bp);
 }
 
-const void* STRtree::nearestNeighbour(BoundablePair* initBndPair) {
-	return nearestNeighbour(initBndPair, DoubleInfinity);
-}
-
-const void* STRtree::nearestNeighbour(BoundablePair* initBndPair, double maxDistance) {
+std::pair<const void*, const void*> STRtree::nearestNeighbour(BoundablePair* initBndPair, double maxDistance) {
 	double distanceLowerBound = maxDistance;
 	BoundablePair* minPair = NULL;
 
@@ -216,7 +222,7 @@ const void* STRtree::nearestNeighbour(BoundablePair* initBndPair, double maxDist
 		 * So the current minDistance must be the true minimum,
 		 * and we are done.
 		 */
-		if (currentDistance >= distanceLowerBound)
+		if (minPair && currentDistance >= distanceLowerBound)
 			break;
 
 		priQ.pop();
@@ -246,16 +252,21 @@ const void* STRtree::nearestNeighbour(BoundablePair* initBndPair, double maxDist
 
 	/* Free any remaining BoundablePairs in the queue */
 	while(!priQ.empty()) {
-		BoundablePair* bp = priQ.top();
+		BoundablePair* bndPair = priQ.top();
 		priQ.pop();
-		delete bp;
+		if (bndPair != initBndPair)
+            delete bndPair;
 	}
 
-	const void* retval = dynamic_cast<const ItemBoundable*>(minPair->getBoundable(0))->getItem();
+	if (!minPair)
+		throw util::GEOSException("Error computing nearest neighbor");
+
+	const void* item0 = dynamic_cast<const ItemBoundable*>(minPair->getBoundable(0))->getItem();
+	const void* item1 = dynamic_cast<const ItemBoundable*>(minPair->getBoundable(1))->getItem();
 	if (minPair != initBndPair)
         delete minPair;
 
-	return retval;
+	return std::pair<const void*, const void*>(item0, item1);
 }
 
 class STRAbstractNode: public AbstractNode{

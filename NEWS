@@ -6,6 +6,9 @@ Changes in 3.6.0
   - CAPI: GEOSGeom_getPrecision - PHP: Geometry->getPrecision
   - CAPI: GEOSMinimumRotatedRectangle and GEOSMinimumWidth
     (#729, Nyall Dawson)
+  - CAPI: GEOSSTRtree_nearest (#768, Dan Baston)
+  - CAPI: GEOSMinimumClearance and GEOSMinimumClearanceLine
+    (#776, Dan Baston)
 - Improvements:
   - ...
 - C++ API changes:

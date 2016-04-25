@@ -449,6 +449,18 @@ GEOSMinimumWidth(const Geometry *g)
 }
 
 Geometry *
+GEOSMinimumClearanceLine(const Geometry *g)
+{
+    return GEOSMinimumClearanceLine_r( handle, g );
+}
+
+int
+GEOSMinimumClearance(const Geometry *g, double *d)
+{
+    return GEOSMinimumClearance_r( handle, g, d);
+}
+
+Geometry *
 GEOSDifference(const Geometry *g1, const Geometry *g2)
 {
     return GEOSDifference_r( handle, g1, g2 );
