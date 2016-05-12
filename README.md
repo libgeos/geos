@@ -1,3 +1,9 @@
+Debbie:
+ [![Debbie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Branch_3.5)]
+ (https://debbie.postgis.net/view/PostGIS/job/GEOS_Branch_3.5/)
+Winnie:
+ [![Winnie](https://debbie.postgis.net:444/view/GEOS/job/GEOS_matrix_branch_3.5/badge/icon)]
+ (https://debbie.postgis.net:444/view/GEOS/job/GEOS_matrix_branch_3.5/)
 Travis:
  [![Travis](https://api.travis-ci.org/libgeos/libgeos.svg?branch=svn-3.5)
  (http://travis-ci.org/libgeos/libgeos?branch=svn-3.5)
