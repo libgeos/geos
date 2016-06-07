@@ -63,7 +63,7 @@ option(GEOS_ENABLE_INLINE
 
 if(NOT MSVC)
   option(GEOS_ENABLE_ASSERT
-    "Set to ON|OFF (default) to build GEOS with assert() macro enabled" OFF) 
+    "Set to ON|OFF (default) to build GEOS with assert() macro enabled" OFF)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
@@ -117,7 +117,7 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_REQUIRED_DEFINITIONS "${CMAKE_REQUIRED_DEFINITIONS} -D_ISOC99_SOURCE=1")
 
 elseif(MSVC)
-    
+
   # Set pedantic mode by default
   #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
   string(REGEX REPLACE "/W[0-9]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
@@ -132,9 +132,10 @@ elseif(MSVC)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
     endif()
     message(STATUS "Setting Visual Studio 2005+ option /MP to ${GEOS_MSVC_ENABLE_MP}")
-    
+
     add_definitions(-D_SCL_SECURE_NO_WARNINGS)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+    add_definitions(-DNOMINMAX)
   endif()
 
 endif()
@@ -238,7 +239,7 @@ include_directories(${PROJECT_BINARY_DIR}/include)
 
 #################################################################################
 #  MACRO: GET_SVN_REVISION
-#  
+#
 #  DESCRIPTION:
 #      MACRO FOR GETTING THE SVN revision for this build
 #################################################################################
@@ -265,13 +266,13 @@ if (NOT GEOS_BUILD_PACKAGED)
   message(STATUS "Generating GEOS revision header in ${PROJECT_BINARY_DIR}/geos_svn_revision.h")
   if ( NOT ${Project_WC_REVISION} EQUAL 0 )
      set( GEOS_SVN_REVISION ${Project_WC_REVISION} )
-     configure_file ( 
+     configure_file (
         "${PROJECT_SOURCE_DIR}/tools/geos_svn_revision_cmake.h.in"
-        "${PROJECT_BINARY_DIR}/include/geos_svn_revision.h" )
+        "${PROJECT_BINARY_DIR}/geos_svn_revision.h" )
   else()
      find_program(SH sh)
      if(SH)
-        execute_process(COMMAND ${SH} -c 
+        execute_process(COMMAND ${SH} -c
         "cd ${PROJECT_SOURCE_DIR} && ${PROJECT_SOURCE_DIR}/tools/svn_repo_revision.sh")
 
         file(RENAME "${PROJECT_SOURCE_DIR}/geos_svn_revision.h"
@@ -302,7 +303,7 @@ if(EXISTS ${PROJECT_SOURCE_DIR}/include/geos/platform.h)
 endif()
 
 message(STATUS "Generating GEOS ${PROJECT_BINARY_DIR}/include/geos/platform.h")
-configure_file(${PROJECT_SOURCE_DIR}/include/geos/platform.h.cmake 
+configure_file(${PROJECT_SOURCE_DIR}/include/geos/platform.h.cmake
   ${PROJECT_BINARY_DIR}/include/geos/platform.h)
 
 message(STATUS "Generating GEOS ${PROJECT_BINARY_DIR}/include/geos/version.h")
@@ -343,7 +344,7 @@ configure_file("${PROJECT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
   IMMEDIATE @ONLY)
 
 add_custom_target(uninstall
-  "${CMAKE_COMMAND}" -P "${PROJECT_BINARY_DIR}/cmake/cmake_uninstall.cmake") 
+  "${CMAKE_COMMAND}" -P "${PROJECT_BINARY_DIR}/cmake/cmake_uninstall.cmake")
 
 #################################################################################
 # DEBUG settings - TODO: make a summary
