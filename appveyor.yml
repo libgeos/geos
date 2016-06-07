@@ -37,7 +37,7 @@ before_build:
         $G="Visual Studio 14 2015 Win64"
       }
       Write-Host "Running CMake:" -ForegroundColor Magenta
-      cmake.exe -G $G -DCMAKE_BUILD_TYPE=$env:CFG %APPVEYOR_BUILD_FOLDER%
+      cmake.exe -G $G -DCMAKE_BUILD_TYPE=$env:CFG $env:APPVEYOR_BUILD_FOLDER
       Write-Host "Running MSBuild:" -ForegroundColor Magenta
   - ps: 
 
