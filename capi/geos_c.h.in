@@ -823,12 +823,12 @@ extern void GEOS_DLL GEOSSTRtree_query_r(GEOSContextHandle_t handle,
                                          GEOSQueryCallback callback,
                                          void *userdata);
 
-extern const void* GEOS_DLL GEOSSTRtree_nearest_r(GEOSContextHandle_t handle,
+extern const void GEOS_DLL *GEOSSTRtree_nearest_r(GEOSContextHandle_t handle,
                                                   GEOSSTRtree *tree,
                                                   const GEOSGeometry* geom);
 
 
-extern const void* GEOS_DLL GEOSSTRtree_nearest_generic_r(GEOSContextHandle_t handle,
+extern const void GEOS_DLL *GEOSSTRtree_nearest_generic_r(GEOSContextHandle_t handle,
                                                           GEOSSTRtree *tree,
                                                           const void* item,
                                                           const GEOSGeometry* itemEnvelope,
@@ -1743,7 +1743,7 @@ extern void GEOS_DLL GEOSSTRtree_query(GEOSSTRtree *tree,
  * @return a const pointer to the nearest GEOSGeometry in the tree to 'geom', or NULL in
  *            case of exception
  */
-extern const GEOSGeometry* GEOS_DLL GEOSSTRtree_nearest(GEOSSTRtree *tree, const GEOSGeometry* geom);
+extern const GEOSGeometry GEOS_DLL *GEOSSTRtree_nearest(GEOSSTRtree *tree, const GEOSGeometry* geom);
 
 /*
  * Returns the nearest item in the STRtree to the supplied item
@@ -1761,7 +1761,7 @@ extern const GEOSGeometry* GEOS_DLL GEOSSTRtree_nearest(GEOSSTRtree *tree, const
  * @return a const pointer to the nearest item in the tree to 'item', or NULL in
  *            case of exception
  */
-extern const void* GEOS_DLL GEOSSTRtree_nearest_generic(GEOSSTRtree *tree,
+extern const void GEOS_DLL *GEOSSTRtree_nearest_generic(GEOSSTRtree *tree,
                                                         const void* item,
                                                         const GEOSGeometry* itemEnvelope,
                                                         GEOSDistanceCallback distancefn,

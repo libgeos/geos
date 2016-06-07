@@ -1,15 +1,15 @@
 #
 # Building on Win32 with Visual C++ 7.0, 7.1, 8.0 or 9.0
 ###############################################################################
-# 
+#
 # Produces:
 #  geos.lib: static library for use of C or C++ API.
 #  geos.dll: DLL - only exports the C API
-#  geos_i.lib: stub library to link against for use of geos.dll. 
+#  geos_i.lib: stub library to link against for use of geos.dll.
 #
 #  geos_d.lib: debug static library for use of C or C++ API.
 #  geos_d.dll: debug DLL - only exports the C API
-#  geos_i_d.lib: debug stub library to link against for use of geos.dll. 
+#  geos_i_d.lib: debug stub library to link against for use of geos.dll.
 #
 # This makefile mostly maintained by Frank Warmerdam <warmerdam@pobox.com>
 # with support by Mateusz Loskot <mateusz@loskot.net>
@@ -30,9 +30,9 @@ OBJ_EXT = obj
 EXT = $(OBJ_EXT)
 
 OBJ = \
-    algorithm\Angle.$(EXT) \
-    algorithm\BoundaryNodeRule.$(EXT) \
-    algorithm\Centroid.$(EXT) \
+	algorithm\Angle.$(EXT) \
+	algorithm\BoundaryNodeRule.$(EXT) \
+	algorithm\Centroid.$(EXT) \
 	algorithm\CentroidArea.$(EXT) \
 	algorithm\CentroidLine.$(EXT) \
 	algorithm\CentroidPoint.$(EXT) \
@@ -154,6 +154,8 @@ OBJ = \
 	index\quadtree\Quadtree.$(EXT) \
 	index\strtree\AbstractNode.$(EXT) \
 	index\strtree\AbstractSTRtree.$(EXT) \
+	index\strtree\BoundablePair.$(EXT) \
+	index\strtree\GeometryItemDistance.$(EXT) \
 	index\strtree\Interval.$(EXT) \
 	index\strtree\ItemBoundable.$(EXT) \
 	index\strtree\SIRtree.$(EXT) \
@@ -175,7 +177,7 @@ OBJ = \
 	noding\BasicSegmentString.$(EXT) \
 	noding\FastNodingValidator.$(EXT) \
 	noding\FastSegmentSetIntersectionFinder.$(EXT) \
-    noding\GeometryNoder.$(EXT) \
+	noding\GeometryNoder.$(EXT) \
 	noding\IntersectionAdder.$(EXT) \
 	noding\IntersectionFinderAdder.$(EXT) \
 	noding\IteratedNoder.$(EXT) \
@@ -201,7 +203,7 @@ OBJ = \
 	operation\IsSimpleOp.$(EXT) \
 	operation\buffer\BufferBuilder.$(EXT) \
 	operation\buffer\BufferInputLineSimplifier.$(EXT) \
- 	operation\buffer\BufferParameters.$(EXT) \
+	operation\buffer\BufferParameters.$(EXT) \
 	operation\buffer\BufferOp.$(EXT) \
 	operation\buffer\BufferSubgraph.$(EXT) \
 	operation\buffer\OffsetCurveBuilder.$(EXT) \
@@ -282,6 +284,7 @@ OBJ = \
 	precision\CommonBitsRemover.$(EXT) \
 	precision\EnhancedPrecisionOp.$(EXT) \
 	precision\GeometryPrecisionReducer.$(EXT) \
+	precision\MinimumClearance.$(EXT) \
 	precision\PrecisionReducerCoordinateOperation.$(EXT) \
 	precision\SimpleGeometryPrecisionReducer.$(EXT) \
 	simplify\DouglasPeuckerLineSimplifier.$(EXT) \
@@ -305,7 +308,7 @@ OBJ = \
 	triangulate\quadedge\Vertex.$(EXT) \
 	util\Assert.$(EXT) \
 	util\GeometricShapeFactory.$(EXT) \
-    util\Interrupt.$(EXT) \
+	util\Interrupt.$(EXT) \
 	util\math.$(EXT) \
 	util\Profiler.$(EXT) \
 	linearref\ExtractLineByLocation.$(EXT) \
@@ -332,7 +335,7 @@ all: $(LIBNAME) $(DLLNAME) $(CDLLNAME) TestSweepLineSpeed.exe geostest.exe
 
 check: all
 	TestSweepLineSpeed.exe
-	
+
 
 $(LIBNAME):	$(GEOS_ROOT)\include\geos\platform.h $(GEOS_ROOT)\include\geos\version.h ..\capi\geos_c.h $(OBJ)
 	if exist $(LIBNAME) del $(LIBNAME)
@@ -345,7 +348,7 @@ $(DLLNAME):	$(OBJ)
 $(CDLLNAME): ..\capi\geos_c.obj ..\capi\geos_ts_c.obj $(DLLNAME)
 	$(LINK) /dll /debug $(LINKER_FLAGS) ..\capi\geos_c.obj ..\capi\geos_ts_c.obj $(LIBNAME) /out:$(CDLLNAME) /implib:$(CLIBNAME)
 	if exist $(CDLLNAME).manifest mt -manifest $(CDLLNAME).manifest -outputresource:$(CDLLNAME);2
-  
+
 $(GEOS_ROOT)\include\geos\platform.h: $(GEOS_ROOT)\include\geos\platform.h.vc
 	$(CP) $(GEOS_ROOT)\include\geos\platform.h.vc $(GEOS_ROOT)\include\geos\platform.h
 
@@ -358,7 +361,7 @@ $(GEOS_ROOT)\include\geos\version.h: $(GEOS_ROOT)\include\geos\version.h.vc
 	$(CP) ..\capi\geos_c.h.in ..\capi\geos_c.h
 
 .cpp.obj:
-    $(CC) $(CFLAGS) /c $*.cpp /Fo$@
+	$(CC) $(CFLAGS) /c $*.cpp /Fo$@
 
 {..\capi}.cpp.obj:
 	$(CC) $(CFLAGS) /D "GEOS_DLL_EXPORT" /c $*.cpp /Fo$@
@@ -367,7 +370,7 @@ $(GEOS_ROOT)\include\geos\version.h: $(GEOS_ROOT)\include\geos\version.h.vc
 	$(CC) $(CFLAGS) /c $*.c /Fo$@
 
 clean:
-    @ECHO "*** Cleaning GEOS source tree"
+	@ECHO "*** Cleaning GEOS source tree"
 	@IF EXIST $(LIBNAME)  $(RM) $(LIBNAME)
 	@IF EXIST $(SLIBNAME) $(RM) $(SLIBNAME)
 	@IF EXIST $(DLLNAME)  $(RM) $(DLLNAME)

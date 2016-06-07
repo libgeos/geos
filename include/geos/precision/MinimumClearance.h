@@ -25,7 +25,7 @@
 
 namespace geos {
 namespace precision {
-class MinimumClearance {
+class GEOS_DLL MinimumClearance {
     private:
         const geom::Geometry* inputGeom;
         double minClearance;
