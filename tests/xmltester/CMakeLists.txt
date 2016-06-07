@@ -56,10 +56,10 @@ if(GEOS_ENABLE_TESTS)
     ${XMLTESTS_DIR}/buffer.xml
     ${XMLTESTS_DIR}/test.xml
     ${XMLTESTS_DIR}/singlesidedbuffer.xml
-    ${XMLTESTS_DIR}/bug176.xml
-    ${XMLTESTS_DIR}/bug188.xml
-    ${XMLTESTS_DIR}/bug244.xml
-    ${XMLTESTS_DIR}/bug275.xml
+    ${XMLTESTS_DIR}/ticket/bug176.xml
+    ${XMLTESTS_DIR}/ticket/bug188.xml
+    ${XMLTESTS_DIR}/ticket/bug244.xml
+    ${XMLTESTS_DIR}/ticket/bug275.xml
     ${XMLTESTS_DIR}/general/TestBoundary.xml
     ${XMLTESTS_DIR}/general/TestBuffer.xml
     ${XMLTESTS_DIR}/general/TestBufferMitredJoin.xml

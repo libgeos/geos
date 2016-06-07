@@ -10,7 +10,7 @@
 # See the COPYING file for more information.
 #
 #################################################################################
-project(geos)
+project(GEOS)
 cmake_minimum_required(VERSION 2.6)
 
 if(NOT CMAKE_VERSION)
@@ -19,7 +19,7 @@ if(NOT CMAKE_VERSION)
 endif()
 
 # Location of custom CMake modules with macros used by GEOS
-set(CMAKE_MODULE_PATH "${geos_SOURCE_DIR}/cmake/modules")
+set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
 
 #################################################################################
 # Setup GEOS version
@@ -63,7 +63,7 @@ option(GEOS_ENABLE_INLINE
 
 if(NOT MSVC)
   option(GEOS_ENABLE_ASSERT
-    "Set to ON|OFF (default) to build GEOS with assert() macro enabled" OFF) 
+    "Set to ON|OFF (default) to build GEOS with assert() macro enabled" OFF)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
@@ -117,12 +117,12 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_REQUIRED_DEFINITIONS "${CMAKE_REQUIRED_DEFINITIONS} -D_ISOC99_SOURCE=1")
 
 elseif(MSVC)
-    
+
   # Set pedantic mode by default
   #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
   string(REGEX REPLACE "/W[0-9]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
-  if(MSVC80 OR MSVC90 OR MSVC10 OR MSVC11 OR MSVC12 OR MSVC13)
+  if(NOT (MSVC_VERSION LESS 1400)) # Visual Studio 2005 or later
 
     # Option is to enable the /MP switch for Visual Studio 2005 or later
     option(GEOS_MSVC_ENABLE_MP
@@ -132,7 +132,7 @@ elseif(MSVC)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
     endif()
     message(STATUS "Setting Visual Studio 2005+ option /MP to ${GEOS_MSVC_ENABLE_MP}")
-    
+
     add_definitions(-D_SCL_SECURE_NO_WARNINGS)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
     add_definitions(-DNOMINMAX)
@@ -225,13 +225,13 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 #################################################################################
 
 # for including GEOS C++ API headers
-include_directories(${geos_SOURCE_DIR}/include)
+include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # for including build-specific GEOS C API headers
-include_directories(${geos_BINARY_DIR}/capi)
+include_directories(${PROJECT_BINARY_DIR}/capi)
 
 # for including build-specific version.h, platform.h and geos_c.h
-include_directories(${geos_BINARY_DIR}/include)
+include_directories(${PROJECT_BINARY_DIR}/include)
 
 #################################################################################
 # Setup checks and generate config headers
@@ -239,7 +239,7 @@ include_directories(${geos_BINARY_DIR}/include)
 
 #################################################################################
 #  MACRO: GET_SVN_REVISION
-#  
+#
 #  DESCRIPTION:
 #      MACRO FOR GETTING THE SVN revision for this build
 #################################################################################
@@ -266,13 +266,13 @@ if (NOT GEOS_BUILD_PACKAGED)
   message(STATUS "Generating GEOS revision header in ${PROJECT_BINARY_DIR}/geos_svn_revision.h")
   if ( NOT ${Project_WC_REVISION} EQUAL 0 )
      set( GEOS_SVN_REVISION ${Project_WC_REVISION} )
-     configure_file ( 
+     configure_file (
         "${PROJECT_SOURCE_DIR}/tools/geos_svn_revision_cmake.h.in"
-        "${PROJECT_BINARY_DIR}/include/geos_svn_revision.h" )
+        "${PROJECT_BINARY_DIR}/geos_svn_revision.h" )
   else()
      find_program(SH sh)
      if(SH)
-        execute_process(COMMAND ${SH} -c 
+        execute_process(COMMAND ${SH} -c
         "cd ${PROJECT_SOURCE_DIR} && ${PROJECT_SOURCE_DIR}/tools/svn_repo_revision.sh")
 
         file(RENAME "${PROJECT_SOURCE_DIR}/geos_svn_revision.h"
@@ -286,44 +286,42 @@ if (NOT GEOS_BUILD_PACKAGED)
 endif()
 # End: Determine SVN/Git revision
 
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h)
-  message(STATUS "Disabling existing ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h")
+if(EXISTS ${PROJECT_SOURCE_DIR}/include/geos/platform.h)
+  message(STATUS "Disabling existing ${PROJECT_SOURCE_DIR}/include/geos/platform.h")
 
   if(${CMAKE_MAJOR_VERSION} EQUAL 2 AND ${CMAKE_MINOR_VERSION} EQUAL 6)
-    file(REMOVE ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h)
+    file(REMOVE ${PROJECT_SOURCE_DIR}/include/geos/platform.h)
     set(PH_RESULT "removed")
   else()
     file(RENAME
-      ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h
-      ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h.disabled)
+      ${PROJECT_SOURCE_DIR}/include/geos/platform.h
+      ${PROJECT_SOURCE_DIR}/include/geos/platform.h.disabled)
       set(PH_RESULT "renamed")
   endif()
 
-  message(STATUS "Disabling existing ${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h - ${PH_RESULT}")
+  message(STATUS "Disabling existing ${PROJECT_SOURCE_DIR}/include/geos/platform.h - ${PH_RESULT}")
 endif()
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/geos/platform.h.cmake 
-  ${CMAKE_CURRENT_BINARY_DIR}/include/geos/platform.h)
+message(STATUS "Generating GEOS ${PROJECT_BINARY_DIR}/include/geos/platform.h")
+configure_file(${PROJECT_SOURCE_DIR}/include/geos/platform.h.cmake
+  ${PROJECT_BINARY_DIR}/include/geos/platform.h)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/geos/version.h.in
-  ${CMAKE_CURRENT_BINARY_DIR}/include/geos/version.h @ONLY)
+message(STATUS "Generating GEOS ${PROJECT_BINARY_DIR}/include/geos/version.h")
+configure_file(${PROJECT_SOURCE_DIR}/include/geos/version.h.in
+  ${PROJECT_BINARY_DIR}/include/geos/version.h @ONLY)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/capi/geos_c.h.in
-  ${CMAKE_CURRENT_BINARY_DIR}/capi/geos_c.h @ONLY)
+message(STATUS "Generating GEOS ${PROJECT_BINARY_DIR}/capi/geos_c.h")
+configure_file(${PROJECT_SOURCE_DIR}/capi/geos_c.h.in
+  ${PROJECT_BINARY_DIR}/capi/geos_c.h @ONLY)
 
 #################################################################################
 # Configure tests
 #################################################################################
 
 if(GEOS_ENABLE_TESTS)
-
- # Include CTest support
- include(CTest)
- enable_testing()
-
+  enable_testing()
   # Define "make check" as alias for "make test"
   add_custom_target(check COMMAND ctest)
-
 endif()
 
 #################################################################################
@@ -341,12 +339,12 @@ add_subdirectory(tools)
 # Install/Uninstall
 #################################################################################
 
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/cmake/cmake_uninstall.cmake"
+configure_file("${PROJECT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
+  "${PROJECT_BINARY_DIR}/cmake/cmake_uninstall.cmake"
   IMMEDIATE @ONLY)
 
 add_custom_target(uninstall
-  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake/cmake_uninstall.cmake") 
+  "${CMAKE_COMMAND}" -P "${PROJECT_BINARY_DIR}/cmake/cmake_uninstall.cmake")
 
 #################################################################################
 # DEBUG settings - TODO: make a summary
