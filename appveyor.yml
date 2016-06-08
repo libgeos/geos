@@ -48,6 +48,7 @@ build:
 
 test_script:
   - ps: |
+      Write-Host "Running CTest:" -ForegroundColor Magenta
       $cmd = 'ctest -V --output-on-failure -C ' + $Env:CFG
       iex "& $cmd"
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
