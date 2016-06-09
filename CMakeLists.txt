@@ -264,6 +264,13 @@ endif()
 
 if (NOT GEOS_BUILD_PACKAGED)
   message(STATUS "Generating GEOS revision header in ${PROJECT_BINARY_DIR}/geos_svn_revision.h")
+
+  # CI builds (Travis CI, AppVeyor, etc.) perform git clone, not svn checkout.
+  # So, CI environment needs a dummy revision to generate the required header. 
+  if (DEFINED ENV{CI}
+     set(Project_WC_REVISION 999999)
+  endif()
+
   if ( NOT ${Project_WC_REVISION} EQUAL 0 )
      set( GEOS_SVN_REVISION ${Project_WC_REVISION} )
      configure_file (
