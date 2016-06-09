@@ -267,7 +267,7 @@ if (NOT GEOS_BUILD_PACKAGED)
 
   # CI builds (Travis CI, AppVeyor, etc.) perform git clone, not svn checkout.
   # So, CI environment needs a dummy revision to generate the required header. 
-  if (DEFINED ENV{CI}
+  if (DEFINED ENV{CI})
      set(Project_WC_REVISION 999999)
   endif()
 
