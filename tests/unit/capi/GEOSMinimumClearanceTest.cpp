@@ -60,7 +60,7 @@ namespace tut
 
             ensure(!error);
             if (clearance == std::numeric_limits<double>::infinity()) {
-                ensure_equals(d, clearance);
+                ensure(d == clearance);
             } else {
                 ensure_equals("clearance", d, clearance, 1e-12);
             }
