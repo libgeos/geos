@@ -4,6 +4,7 @@ YYYY-MM-DD
 - Bug fixes / improvements
     - Throw a ParseException on missing chars from HEXWKB string (#675)
     - Fix Empty to Empty equals (#703)
+    - Fix build against GCC 3.5.0+ (#784)
 
 Changes in 3.3.9
 2013-09-04
