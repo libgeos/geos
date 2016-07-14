@@ -9,6 +9,7 @@ Changes in 3.5.1
   - Fix memory exhaustion case in isvalid (#757)
   - Fix Windows build with Visual Studio 2008 (#766)
   - Fix incorrect return from prepared multipoint intersects (#764)
+  - Fix build against GCC 3.5.0+ (#784)
 
 Changes in 3.5.0
 2015-08-15

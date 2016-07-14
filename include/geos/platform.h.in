@@ -86,7 +86,7 @@ extern "C"
 #endif
 
 #if defined(HAVE_ISNAN)
-# define ISNAN(x) (isnan(x))
+# define ISNAN(x) (std::isnan(x))
 #else
 # if defined(_MSC_VER)
 #  define ISNAN(x) _isnan(x)
