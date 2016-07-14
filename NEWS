@@ -19,6 +19,7 @@ YYYY-MM-DD
  - Fix compilation issues while building with Visual C++ (#701)
  - Fix support of PHP bindings for version < 5.4.0 (#709)
  - Fix incorrect return from prepared multipoint intersects (#764)
+ - Fix build against GCC 3.5.0+ (#784)
 
 Changes in 3.4.2
 2013-08-25
