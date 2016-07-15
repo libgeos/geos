@@ -41,7 +41,8 @@ Then:
     nmake /f makefile.vc MSVC_VER=1400
 
 where 1400 is version number of Visual C++ compiler, here Visual C++ 8.0
-from Visual Studio 2005 (supported versions are 1300, 1310, 1400 and 1500).
+from Visual Studio 2005 (supported versions are 1300, 1310, 1400, 1500,
+1600, 1700, 1800 and 1900).
 The bootstrap.bat step is required to generate a couple of header files.
 
 In order to build debug configuration of GEOS, additional flag `DEBUG=1`
