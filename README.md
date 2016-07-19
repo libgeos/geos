@@ -94,10 +94,10 @@ when configuring:
 
     ./configure ... --enable-ruby
 
-PHP bindings are fully supported. To build, use the `--enable-php` option
-when configuring:
+Since version 3.6.0 PHP bindings are not included in the core
+library anymore but available as a separate project:
 
-    ./configure ... --enable-php
+    https://git.osgeo.org/gogs/geos/php-geos
 
 Since version 3.0, the Python bindings are unsupported. Recommended options:
 
