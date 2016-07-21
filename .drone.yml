@@ -9,12 +9,12 @@ pipeline:
     depth: 50
     recursive: false
   build:
-    image: &test-image
+    image: *test-image
     commands:
       - ./autogen.sh
       - CXXFLAGS="-O0 -Werror" ./configure
       - make
   check:
-    image: &test-image
+    image: *test-image
     commands:
       - CXXFLAGS="-O0 -Werror" make distcheck
