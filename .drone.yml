@@ -17,4 +17,4 @@ pipeline:
   check:
     image: *test-image
     commands:
-      - CXXFLAGS="-O0" make distcheck
+      - CXXFLAGS="-O0" make check
