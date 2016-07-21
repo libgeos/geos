@@ -1,6 +1,6 @@
 # See http://readme.drone.io/0.5/usage/overview
 
-# See https://git.osgeo.org/gogs/geos/geos/docker/build-test
+# See https://git.osgeo.org/gogs/geos/geos-docker
 test-image: &test-image docker.kbt.io/geos/build-test:alpine
 
 pipeline:
@@ -12,9 +12,9 @@ pipeline:
     image: *test-image
     commands:
       - ./autogen.sh
-      - CXXFLAGS="-O0 -Werror" ./configure
+      - CXXFLAGS="-O0" ./configure
       - make
   check:
     image: *test-image
     commands:
-      - CXXFLAGS="-O0 -Werror" make distcheck
+      - CXXFLAGS="-O0" make distcheck

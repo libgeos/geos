@@ -1,5 +1,0 @@
-Here we put instructions to build docker images for different
-purposes, initially for running build agents in isolation.
-
-Each image configuration is in its own directory, which should
-contain additional information about the specific image.
