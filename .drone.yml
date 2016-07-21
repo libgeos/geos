@@ -1,9 +1,20 @@
-# See http://readme.drone.io/usage/overview
+# See http://readme.drone.io/0.5/usage/overview
+
+# See https://git.osgeo.org/gogs/geos/geos/docker/build-test
+test-image: &test-image docker.kbt.io/geos/build-test:alpine
+
 pipeline:
+  clone:
+    image: git
+    depth: 50
+    recursive: false
   build:
-    image: docker.kbt.io/geos/build-test:alpine
+    image: &test-image
     commands:
       - ./autogen.sh
-      - ./configure
+      - CXXFLAGS="-O0 -Werror" ./configure
       - make
-      - make check
+  check:
+    image: &test-image
+    commands:
+      - CXXFLAGS="-O0 -Werror" make distcheck
