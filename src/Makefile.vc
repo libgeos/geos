@@ -210,9 +210,6 @@ OBJ = \
 	operation\distance\ConnectedElementPointFilter.$(EXT) \
 	operation\distance\DistanceOp.$(EXT) \
 	operation\distance\GeometryLocation.$(EXT) \
-	operation\intersection\Rectangle.$(EXT) \
-	operation\intersection\RectangleIntersection.$(EXT) \
-	operation\intersection\RectangleIntersectionBuilder.$(EXT) \
 	operation\linemerge\EdgeString.$(EXT) \
 	operation\linemerge\LineMergeDirectedEdge.$(EXT) \
 	operation\linemerge\LineMergeEdge.$(EXT) \
