@@ -265,21 +265,19 @@ MACRO (GET_SVN_REVISION)
 ENDMACRO(GET_SVN_REVISION)
 
 # Determine SVN/Git revision
-set(GEOS_BUILD_PACKAGED TRUE)
+# Determine SVN/Git revision
 if(EXISTS "${PROJECT_SOURCE_DIR}/.svn")
-  set(GEOS_BUILD_PACKAGED FALSE)
   GET_SVN_REVISION()
-elseif(EXISTS "${PROJECT_SOURCE_DIR}/.git")
-  set(GEOS_BUILD_PACKAGED FALSE)
-elseif(DEFINED ENV{CI})
-  set(GEOS_BUILD_PACKAGED FALSE)
 endif()
 
-if (NOT GEOS_BUILD_PACKAGED)
+# geos_svn_revision.h does not exists in source or binary directory, we generate it
+if( NOT EXISTS "${PROJECT_SOURCE_DIR}/geos_svn_revision.h" AND
+    NOT EXISTS "${PROJECT_BINARY_DIR}/geos_svn_revision.h")
+
   message(STATUS "Generating GEOS revision header in ${PROJECT_BINARY_DIR}/geos_svn_revision.h")
 
   # CI builds (Travis CI, AppVeyor, etc.) perform git clone, not svn checkout.
-  # So, CI environment needs a dummy revision to generate the required header. 
+  # So, CI environment needs a dummy revision to generate the required header.
   if (DEFINED ENV{CI})
      set(Project_WC_REVISION 999999)
   endif()
