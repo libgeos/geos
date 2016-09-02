@@ -61,22 +61,38 @@ if(GEOS_ENABLE_MACOSX_FRAMEWORK)
 
 else()
 
-  add_library(geos SHARED ${geos_SOURCES} ${geos_ALL_HEADERS})
-  add_library(geos-static STATIC ${geos_SOURCES} ${geos_ALL_HEADERS})
+  if(GEOS_BUILD_SHARED)
+    add_library(geos SHARED ${geos_SOURCES} ${geos_ALL_HEADERS})
 
-  set_target_properties(geos
-    PROPERTIES
-    DEFINE_SYMBOL GEOS_DLL_EXPORT
-    VERSION ${VERSION}
-    CLEAN_DIRECT_OUTPUT 1)
+    set_target_properties(geos
+      PROPERTIES
+      DEFINE_SYMBOL GEOS_DLL_EXPORT
+      VERSION ${VERSION}
+      CLEAN_DIRECT_OUTPUT 1)
 
-  set_target_properties(geos-static
-    PROPERTIES
-    OUTPUT_NAME "geos"
-    PREFIX "lib"
-    CLEAN_DIRECT_OUTPUT 1)
+    install(TARGETS geos
+      RUNTIME DESTINATION bin
+      LIBRARY DESTINATION lib
+      ARCHIVE DESTINATION lib)
+  endif()
 
-endif()
+  if(GEOS_BUILD_STATIC)
+    add_library(geos-static STATIC ${geos_SOURCES} ${geos_ALL_HEADERS})
+
+    set_target_properties(geos-static
+      PROPERTIES
+      OUTPUT_NAME "geos"
+      PREFIX "lib"
+      CLEAN_DIRECT_OUTPUT 1)
+
+    install(TARGETS geos-static
+      RUNTIME DESTINATION bin
+      LIBRARY DESTINATION lib
+      ARCHIVE DESTINATION lib)
+
+  endif()
+
+endif() # (GEOS_ENABLE_MACOSX_FRAMEWORK)
 
 # if(APPLE)
 #   set_target_properties(geos
@@ -85,16 +101,6 @@ endif()
 #     INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}")
 # endif()
 
-#################################################################################
-# Installation
-#################################################################################
-
-if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK)
-  install(TARGETS geos geos-static
-    RUNTIME DESTINATION bin
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib)
-endif()
 
 #################################################################################
 # Group source files for IDE source explorers (e.g. Visual Studio)

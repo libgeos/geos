@@ -216,7 +216,7 @@ public:
 	*
 	* @return the user data object, or <code>null</code> if none set
 	*/
-	void* getUserData() { return _userData; }
+	void* getUserData() const { return _userData; }
 
 	/*
 	 * \brief

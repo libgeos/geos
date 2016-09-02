@@ -138,6 +138,7 @@ geos_unit_SOURCES = \
 	capi/GEOSNearestPointsTest.cpp \
 	capi/GEOSWithinTest.cpp \
 	capi/GEOSSimplifyTest.cpp \
+	capi/GEOSUserDataTest.cpp \
 	capi/GEOSPreparedGeometryTest.cpp \
 	capi/GEOSPointOnSurfaceTest.cpp \
 	capi/GEOSPolygonizer_getCutEdgesTest.cpp \
