@@ -239,6 +239,11 @@ include_directories(${PROJECT_BINARY_DIR}/capi)
 # for including build-specific version.h, platform.h and geos_c.h
 include_directories(${PROJECT_BINARY_DIR}/include)
 
+# for geos_ts.cpp which does #include "../geos_svn_revision.h" whereas
+# CMake generates geos_svn_revision.h in build directory,
+# to not to pollute source tree. 
+include_directories(${PROJECT_BINARY_DIR})
+
 #################################################################################
 # Setup checks and generate config headers
 #################################################################################
@@ -265,6 +270,8 @@ if(EXISTS "${PROJECT_SOURCE_DIR}/.svn")
   set(GEOS_BUILD_PACKAGED FALSE)
   GET_SVN_REVISION()
 elseif(EXISTS "${PROJECT_SOURCE_DIR}/.git")
+  set(GEOS_BUILD_PACKAGED FALSE)
+elseif(DEFINED ENV{CI})
   set(GEOS_BUILD_PACKAGED FALSE)
 endif()
 

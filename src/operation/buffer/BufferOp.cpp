@@ -60,8 +60,7 @@ namespace buffer { // geos.operation.buffer
 static Profiler *profiler = Profiler::instance();
 #endif
 
-namespace {
-
+#if 0
 double OLDprecisionScaleFactor(const Geometry *g,
 	double distance, int maxPrecisionDigits)
 {
@@ -76,8 +75,7 @@ double OLDprecisionScaleFactor(const Geometry *g,
 	double scaleFactor=std::pow(10.0,-minUnitLog10);
 	return scaleFactor;
 }
-
-} // anonymous namespace
+#endif
 
 /*private*/
 double

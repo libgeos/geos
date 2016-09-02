@@ -1,9 +1,12 @@
 Changes in 3.6.0
 2015-MM-DD
 
+- Important / Breaking Changes:
+  - The PHP binding moved to its own repository:
+    http://git.osgeo.org/gogs/geos/php-geos (#765)
 - New things:
   - CAPI: GEOSGeom_setPrecision (#713) - PHP: Geometry->setPrecision
-  - CAPI: GEOSGeom_getPrecision - PHP: Geometry->getPrecision
+  - CAPI: GEOSGeom_getPrecision
   - CAPI: GEOSMinimumRotatedRectangle and GEOSMinimumWidth
     (#729, Nyall Dawson)
   - CAPI: GEOSSTRtree_nearest (#768, Dan Baston)
@@ -36,14 +39,14 @@ Changes in 3.4.2
 2013-08-25
 
 - Bug fixes / improvements
-  - Use a double for PrecisionModel scale, avoiding overflows 
+  - Use a double for PrecisionModel scale, avoiding overflows
     should fix 32-bit regression failures (#652)
   - isnan workaround OS detection missing NetBSD, DragonFly, Sun nuance (#650)
   - Do not distribute platform.h and version.h, but install both (#601)
-  - Non-standard ChangeLog file in 3.4.0 and 3.4.1 releases (#654) 
+  - Non-standard ChangeLog file in 3.4.0 and 3.4.1 releases (#654)
   - new travis bot (#657)
   - accept multiple Nan representations (#656)
-		
+
 
 Changes in 3.4.1
 2013-08-17
@@ -70,7 +73,7 @@ Changes in 3.4.0
 
 - C++ API changes:
   - New noding::GeometryNoder class
-  - Added BufferOp::setSingleSided 
+  - Added BufferOp::setSingleSided
   - Signature of most functions taking a Label changed to take it
     by reference rather than pointer.
   - Signature of most functions taking an IntersectionMatrix changed
@@ -78,13 +81,13 @@ Changes in 3.4.0
   - GraphComponent::label is now a Label value (from a pointer)
   - NodedSegmentString takes ownership of CoordinateSenuence now
   - io::Writer's toString() returns by const ref, write() takes a const ref
-  - Unify prototypes of WKTReader and WKBReader constructor (#310) 
-  - GeometryCollection::computeEnvelopInternal and 
+  - Unify prototypes of WKTReader and WKBReader constructor (#310)
+  - GeometryCollection::computeEnvelopInternal and
     GeometryCollection::compareToSameClass are marked virtual (#478)
-  
+
 - Bug fixes / improvements
-  - A point interpolated from a line does not always intersect 
-    the same line (#323) 
+  - A point interpolated from a line does not always intersect
+    the same line (#323)
   - Port ConvexHull robustness fix from JTS-1.13 (#457)
   - Improve Overlay robustness by reducing input precision on topology
     exception and by refusing to accept unnoded output (#459)
@@ -98,7 +101,7 @@ Changes in 3.4.0
   - Fix EMPTY return from single-point lines and zero-length polygons (#612)
   - CMakeLists.txt, tools/geos_svn_revision_cmake.h.in: Add
 	  geos_svn_revision.h generator to CMake config (#643)
-	- Makefile.vc 'clean' step leaks obj files (#607) 
+	- Makefile.vc 'clean' step leaks obj files (#607)
 
 Changes in 3.3.9
 2013-09-04
@@ -115,7 +118,7 @@ Changes in 3.3.9
     - Fix bug in HotPixel constructor (#635)
     - Fix install location of linearref headers (#624)
     - Fix multi-geometry constructor to drop SRID from components (#583)
-  
+
 Changes in 3.3.8
 2013-02-28
 
@@ -126,7 +129,7 @@ Changes in 3.3.8
     - Fix centroid computation for collections with empty components (#582)
 
 Changes in 3.3.7
-2013-01-22 
+2013-01-22
 
 - Bug fixes / improvements
     - Fix abort in RightmostEdgeFinder (#605)
@@ -225,10 +228,10 @@ Changes in 3.3.0
           the polygonizer
   - CAPI: GEOSOrientationIndex
   - CAPI: GEOSSharedPaths to find shared paths and their orientation
-  - CAPI: GEOSSnap 
-  - CAPI: GEOSRelatePatternMatch 
-  - CAPI: GEOSCovers, GEOSCoveredBy (#396) 
-  - CAPI: GEOSRelateBoundaryNodeRule (#399) 
+  - CAPI: GEOSSnap
+  - CAPI: GEOSRelatePatternMatch
+  - CAPI: GEOSCovers, GEOSCoveredBy (#396)
+  - CAPI: GEOSRelateBoundaryNodeRule (#399)
   - CAPI: GEOSGeom_getCoordinateDimension() (#311)
   - CAPI: GEOSWKTWriter_setOutputDimension, GEOSWKTWriter_setOld3D (#292)
   -  PHP: new PHP5 bindings based on CAPI
@@ -251,13 +254,13 @@ Changes in 3.3.0
   - Fix NodedSegmentString to handle zero-length line segments correctly
     (via safeOctant)
   - Fixed buffer OffsetCurveSetBuilder to handle "flat" rings correctly
-  - Added illegal state check in LineSegment::pointAlongOffset() 
+  - Added illegal state check in LineSegment::pointAlongOffset()
   - Improved performance of RectangleIntersects by always using
     segment-scanning and refining SegmentIntersectionTester
   - Reduce memory use in PreparedGeometry predicates (#342)
   - Fix infinite loop in RobustDeterminant with nan/inf input (#357)
 
-Changes in 3.2.0 
+Changes in 3.2.0
 2009-12-14
 
 - Add Single-sided buffer operation
@@ -279,7 +282,7 @@ Changes in 3.1.0
 
 - PreparedGeometry operations for very fast predicate testing.
   - Intersects()
-  - Covers() 
+  - Covers()
   - CoveredBy()
   - ContainsProperly()
 - Easier builds under MSVC and OpenSolaris
@@ -306,7 +309,7 @@ Changes in 3.0.0
 	- Added GEOSSimplify() and GEOSTopologyPreserveSimplify()
 	  to the C API
 	- Added closed ring checks in IsValidOp
-	- Multi-input support in XMLTester 
+	- Multi-input support in XMLTester
 	- HEXWKB I/O
 	- Envelope(string) ctor
 	- Ruby interface
@@ -355,7 +358,7 @@ Changes in 3.0.0
 	  contains() ops
 	- Inlined all planarGraphComponent class
 	- More iterators returning methods and inlining in planargraph.
-	- Obsoleted toInternalGeometry/fromInternalGeometry 
+	- Obsoleted toInternalGeometry/fromInternalGeometry
 	- Improved buffering speed and robustness by using Snap Rounding
 
 - Semantic changes
@@ -401,7 +404,7 @@ Changes in 3.0.0
 	  result of overlaying polygons containing touching holes (#13)
 	- Fixed integer conversion bug
 	- Fixed PointLocator handling of LinearRings
-	- Added missing ::clone() methods for Multi* geoms 
+	- Added missing ::clone() methods for Multi* geoms
 
 - (Partial) Detailed list of changes:
 	- Changed SegmentNode to contain a *real* Coordinate (not a pointer)
@@ -425,7 +428,7 @@ Changes in 3.0.0
 	- CoordinateSequence API changes:
 		- point index and size related functions
 	  	  use unsigned int rather then int
-	- Changed EdgeEndStar to maintain a single container for EdgeEnds 
+	- Changed EdgeEndStar to maintain a single container for EdgeEnds
 	- Changed PlanarGraph::addEdges to take a const vector by ref
 	  rathern then a non-const vector by pointer
 	- Changed EdgeList::addAll to take a const vector by ref
@@ -450,17 +453,17 @@ Changes in 2.2.1
 
 - Support for MingW builds
 - Bugfix in Polygonizer chocking on invalid LineString inputs
-- CAPI: small leak removed in GEOSHasZ() 
+- CAPI: small leak removed in GEOSHasZ()
 
 Changes in 2.2.0
 
 - Performance improvement in OverlayOp::insertUniqueEdge()
 - CoordinateSequence copy removal in EdgeRing
-- Minor memory allocation improvements 
+- Minor memory allocation improvements
 - Higher dimensions interface for CoordinateSequence
 - Added getCoordinatesRO for Point class
 - NEW WKB IO
-- NEW Simplified and stabler C API 
+- NEW Simplified and stabler C API
 
 Changes in 2.1.4
 

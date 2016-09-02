@@ -214,6 +214,8 @@ OBJ = \
 	operation\distance\ConnectedElementLocationFilter.$(EXT) \
 	operation\distance\ConnectedElementPointFilter.$(EXT) \
 	operation\distance\DistanceOp.$(EXT) \
+	operation\distance\FacetSequence.$(EXT) \
+	operation\distance\FacetSequenceTreeBuilder.$(EXT) \
 	operation\distance\GeometryLocation.$(EXT) \
 	operation\intersection\Rectangle.$(EXT) \
 	operation\intersection\RectangleIntersection.$(EXT) \

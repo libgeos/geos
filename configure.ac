@@ -130,7 +130,7 @@ else
 fi
 
 dnl --------------------------------------------------------------------
-dnl - Append default C++ and C flags 
+dnl - Append default C++ and C flags
 dnl --------------------------------------------------------------------
 
 dnl In order for AC_LIBTOOL_COMPILER_OPTION to use
@@ -138,10 +138,10 @@ dnl the C compiler we need the hack below.
 dnl It is likely a bug in the libtool macro file to
 dnl require AC_LIBTOOL_LANG_CXX_CONFIG in *addition*
 dnl to AC_LANG(CXX) or AC_LANG_PUSH(CXX)/AC_LANG_POP()
-dnl 
+dnl
 AC_LIBTOOL_LANG_CXX_CONFIG
 
-# Set default AM_CXXFLAGS and AM_CFLAGS 
+# Set default AM_CXXFLAGS and AM_CFLAGS
 # -pedantic: ISO does not support long long
 # we add -Wno-long-long to avoid those messages
 WARNFLAGS=""
@@ -256,21 +256,7 @@ AC_ARG_ENABLE([ruby], [  --enable-ruby    Enable build of ruby module],
 )
 
 dnl --------------------------------------------------------------------
-dnl - check whether php is required for the build
-dnl --------------------------------------------------------------------
-
-AC_ARG_ENABLE([php], [  --enable-php    Enable build of php module],
-	[case "${enableval}" in
-		yes) use_php=true ;;
-		no)  use_php=false ;;
-		*) AC_MSG_ERROR(bad value ${enableval} for --enable-php) ;;
-	esac],
-	[use_php=false]
-)
-
-
-dnl --------------------------------------------------------------------
-dnl - check for swig if python, ruby or php are enabled
+dnl - check for swig if python or ruby are enabled
 dnl --------------------------------------------------------------------
 
 use_swig=false
@@ -278,9 +264,9 @@ if test x"$use_python" = xtrue ||
    test x"$use_ruby" = xtrue; then
   AC_PROG_SWIG(1.3.28)
   if test x"$SWIG" != "x"; then
-    SWIG_ENABLE_CXX	
-    AC_SUBST(SWIG)           
-    use_swig=true 
+    SWIG_ENABLE_CXX
+    AC_SUBST(SWIG)
+    use_swig=true
   else
     use_python=false
     use_ruby=false
@@ -294,14 +280,14 @@ dnl - check for python if enabled
 dnl --------------------------------------------------------------------
 
 if test x"$use_python" = xtrue; then
-	dnl Check for Python 
-  AM_PATH_PYTHON	
+	dnl Check for Python
+  AM_PATH_PYTHON
   SWIG_PYTHON
 
 	if test x"$PYTHON" = "x"; then
 		use_python=false
 	fi
-	
+
 	AC_SUBST(PYTHON)
 	AC_SUBST(SWIG_PYTHON_CPPFLAGS)
 	AC_SUBST(SWIG_PYTHON_OPT)
@@ -314,7 +300,7 @@ dnl - check for ruby if enabled
 dnl --------------------------------------------------------------------
 
 if test x"$use_ruby" = xtrue; then
-	dnl Check for Ruby 
+	dnl Check for Ruby
 	AC_RUBY_DEVEL
 
 	if test x"$RUBY" = x; then
@@ -323,32 +309,6 @@ if test x"$use_ruby" = xtrue; then
 
 fi
 AM_CONDITIONAL(ENABLE_RUBY, [ test x"$use_ruby" = xtrue ])
-
-dnl --------------------------------------------------------------------
-dnl - check for php if enabled
-dnl --------------------------------------------------------------------
-
-if test x"$use_php" = xtrue; then
-	dnl Check for PHP 
-	AC_PATH_PROG(PHP_CONFIG, php-config)
-
-	if test x"$PHP_CONFIG" = x; then
-		AC_MSG_WARN([php-config not found, php support disabled])
-		use_php=false
-	else
-
-		dnl TODO: check for version, we want PHP5 dev files
-
-		AC_PATH_PROG(PHP, php) dnl for unit testing
-		AC_PATH_PROG(PHPUNIT, phpunit) dnl for unit testing
-	fi
-
-
-fi
-AM_CONDITIONAL(ENABLE_PHP, [ test x"$use_php" = xtrue ])
-AM_CONDITIONAL(HAVE_PHP, [ test x"$PHP" != x ])
-AM_CONDITIONAL(HAVE_PHP_UNIT, [ test x"$PHPUNIT" != x ])
-
 
 dnl --------------------------------------------------------------------
 dnl - do operating-system specific things
@@ -383,7 +343,7 @@ dnl				AM_CXXFLAGS="$AM_CXXFLAGS -Wnon-virtual-dtor -Woverloaded-virtual"
 esac
 
 dnl --------------------------------------------------------------------
-dnl - check for boost 
+dnl - check for boost
 dnl --------------------------------------------------------------------
 
 dnl -- AX_BOOST(1.32)
@@ -414,13 +374,13 @@ AC_SUBST(CAPI_INTERFACE_AGE)
 dnl output stuff ----------------------------------------------------------
 
 AC_OUTPUT([
-	Makefile 
+	Makefile
 	capi/Makefile
 	capi/geos_c.h
 	doc/Doxyfile
 	doc/Makefile
 	macros/Makefile
-	src/Makefile 
+	src/Makefile
 	src/algorithm/Makefile
 	src/algorithm/locate/Makefile
 	src/algorithm/distance/Makefile
@@ -506,8 +466,6 @@ AC_OUTPUT([
 	swig/python/tests/Makefile
 	swig/ruby/Makefile
 	swig/ruby/test/Makefile
-	php/Makefile
-	php/test/Makefile
 	tests/Makefile
 	tests/bigtest/Makefile
 	tests/unit/Makefile
@@ -528,14 +486,5 @@ dnl -- echo "Boost UTF: $use_boost_utf"
 echo "Swig: $use_swig"
 echo "Python bindings: $use_python"
 echo "Ruby bindings: $use_ruby"
-
-echo "PHP bindings: $use_php"
-if test x"$use_php" = xtrue; then
- echo " PHP: $PHP"
- echo " PHPUNIT: $PHPUNIT"
- if test x"$PHP" = x -o x"$PHPUNIT" = x; then
-   AC_MSG_WARN([PHP Unit testing disabled (missing PHP or PHPUNIT)])
- fi
-fi
 
 dnl -- echo "---------------------------------------"
