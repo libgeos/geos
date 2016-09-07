@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSGeom_createCollection
 
 #include <tut.hpp>
@@ -36,12 +36,12 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
         test_capigeosgeom_createcollection_data()
-            : geom_(0), handle_(initGEOS_r(notice, notice))
+            : handle_(initGEOS_r(notice, notice)), geom_(0)
         {
         }
 
