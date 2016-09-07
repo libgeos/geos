@@ -5,6 +5,7 @@ Changes in 3.6.0
   - The PHP binding moved to its own repository:
     http://git.osgeo.org/gogs/geos/php-geos (#765)
 - New things:
+  - CAPI: GEOSGeom_{get,set}UserData (Rashad Kanavath)
   - CAPI: GEOSGeom_setPrecision (#713) - PHP: Geometry->setPrecision
   - CAPI: GEOSGeom_getPrecision
   - CAPI: GEOSMinimumRotatedRectangle and GEOSMinimumWidth

@@ -955,6 +955,12 @@ extern int GEOS_DLL GEOSGetSRID_r(GEOSContextHandle_t handle,
 extern void GEOS_DLL GEOSSetSRID_r(GEOSContextHandle_t handle,
                                    GEOSGeometry* g, int SRID);
 
+extern void* GEOS_DLL GEOSGeom_getUserData_r(GEOSContextHandle_t handle,
+const GEOSGeometry* g);
+
+extern void GEOS_DLL GEOSGeom_setUserData_r(GEOSContextHandle_t handle,
+                                   GEOSGeometry* g, void* userData);
+
 /* May be called on all geometries in GEOS 3.x, returns -1 on error and 1
  * for non-multi geometries. Older GEOS versions only accept
  * GeometryCollections or Multi* geometries here, and are likely to crash
@@ -1861,6 +1867,11 @@ extern int GEOS_DLL GEOSGeomTypeId(const GEOSGeometry* g);
 extern int GEOS_DLL GEOSGetSRID(const GEOSGeometry* g);
 
 extern void GEOS_DLL GEOSSetSRID(GEOSGeometry* g, int SRID);
+
+extern void* GEOS_DLL GEOSGeom_getUserData(const GEOSGeometry* g);
+
+extern void GEOS_DLL GEOSGeom_setUserData(GEOSGeometry* g, void* userData);
+
 
 /* May be called on all geometries in GEOS 3.x, returns -1 on error and 1
  * for non-multi geometries. Older GEOS versions only accept

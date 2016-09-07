@@ -2526,6 +2526,26 @@ GEOSGeom_destroy_r(GEOSContextHandle_t extHandle, Geometry *a)
 }
 
 void
+GEOSGeom_setUserData_r(GEOSContextHandle_t extHandle, Geometry *g, void* userData)
+{
+    assert(0 != g);
+
+    if ( 0 == extHandle )
+    {
+        return;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return;
+    }
+
+    g->setUserData(userData);
+}
+
+void
 GEOSSetSRID_r(GEOSContextHandle_t extHandle, Geometry *g, int srid)
 {
     assert(0 != g);
@@ -3599,6 +3619,39 @@ GEOSLineMerge_r(GEOSContextHandle_t extHandle, const Geometry *g)
     }
 
     return out;
+}
+
+ void*
+GEOSGeom_getUserData_r(GEOSContextHandle_t extHandle, const Geometry *g)
+{
+    assert(0 != g);
+
+    if ( 0 == extHandle )
+    {
+        return 0;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return 0;
+    }
+
+    try
+    {
+        return g->getUserData();
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return NULL;
 }
 
 int
