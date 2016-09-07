@@ -718,13 +718,13 @@ GEOSSetSRID(Geometry *g, int srid)
 }
 
 void * 
-GEOS_getUserData(const Geometry *g)
+GEOSGeom_getUserData(const Geometry *g)
 {
     return GEOSGeom_getUserData_r( handle, g );
 }
 
 void
-GEOS_setUserData(Geometry *g, void* userData)
+GEOSGeom_setUserData(Geometry *g, void* userData)
 {
     return GEOSGeom_setUserData_r( handle, g, userData );
 }

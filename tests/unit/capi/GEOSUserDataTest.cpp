@@ -67,9 +67,9 @@ namespace tut
         ensure ( 0 != GEOSisEmpty(geom_) );
 
         int in = 1;
-        GEOS_setUserData(geom_, &in);
+        GEOSGeom_setUserData(geom_, &in);
 
-        int* out = (int *)GEOS_getUserData(geom_);
+        int* out = (int *)GEOSGeom_getUserData(geom_);
 
         ensure_equals(*out, 1);
     }
@@ -92,9 +92,9 @@ namespace tut
         in.a = 1;
         in.b = 2;
 
-        GEOS_setUserData(geom_, &in);
+        GEOSGeom_setUserData(geom_, &in);
 
-        struct UserData* out = (struct UserData* )GEOS_getUserData(geom_);
+        struct UserData* out = (struct UserData* )GEOSGeom_getUserData(geom_);
 
         ensure_equals(in.a, out->a);
         ensure_equals(in.b, out->b);

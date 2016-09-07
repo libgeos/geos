@@ -2526,7 +2526,7 @@ GEOSGeom_destroy_r(GEOSContextHandle_t extHandle, Geometry *a)
 }
 
 void
-GEOS_setUserData_r(GEOSContextHandle_t extHandle, Geometry *g, void* userData)
+GEOSGeom_setUserData_r(GEOSContextHandle_t extHandle, Geometry *g, void* userData)
 {
     assert(0 != g);
 
@@ -3622,7 +3622,7 @@ GEOSLineMerge_r(GEOSContextHandle_t extHandle, const Geometry *g)
 }
 
  void*
-GEOS_getUserData_r(GEOSContextHandle_t extHandle, const Geometry *g)
+GEOSGeom_getUserData_r(GEOSContextHandle_t extHandle, const Geometry *g)
 {
     assert(0 != g);
 
