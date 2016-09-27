@@ -955,7 +955,7 @@ extern int GEOS_DLL GEOSGetSRID_r(GEOSContextHandle_t handle,
 extern void GEOS_DLL GEOSSetSRID_r(GEOSContextHandle_t handle,
                                    GEOSGeometry* g, int SRID);
 
-extern void* GEOS_DLL GEOSGeom_getUserData_r(GEOSContextHandle_t handle,
+extern void GEOS_DLL *GEOSGeom_getUserData_r(GEOSContextHandle_t handle,
 const GEOSGeometry* g);
 
 extern void GEOS_DLL GEOSGeom_setUserData_r(GEOSContextHandle_t handle,
@@ -1868,7 +1868,7 @@ extern int GEOS_DLL GEOSGetSRID(const GEOSGeometry* g);
 
 extern void GEOS_DLL GEOSSetSRID(GEOSGeometry* g, int SRID);
 
-extern void* GEOS_DLL GEOSGeom_getUserData(const GEOSGeometry* g);
+extern void GEOS_DLL *GEOSGeom_getUserData(const GEOSGeometry* g);
 
 extern void GEOS_DLL GEOSGeom_setUserData(GEOSGeometry* g, void* userData);
 
