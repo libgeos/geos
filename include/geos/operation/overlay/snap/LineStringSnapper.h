@@ -60,9 +60,10 @@ public:
 	 * @param nSnapTolerance the snap tolerance to use
 	 */
 	LineStringSnapper(const geom::Coordinate::Vect& nSrcPts,
-	                                          double nSnapTol)
+	                  double nSnapTol, const geom::Geometry *nSnapGeom=0)
 		:
 		srcPts(nSrcPts),
+		snapGeom(nSnapGeom),
 		snapTolerance(nSnapTol),
 		allowSnappingToSourceVertices(false)
 	{
@@ -80,6 +81,8 @@ public:
 private:
 
 	const geom::Coordinate::Vect& srcPts;
+
+	const geom::Geometry* snapGeom;
 
 	double snapTolerance;
 

@@ -24,8 +24,10 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateList.h>
-#include <geos/util/UniqueCoordinateArrayFilter.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/LineString.h>
 #include <geos/geom/LineSegment.h>
+#include <geos/util/UniqueCoordinateArrayFilter.h>
 
 #include <vector>
 #include <memory>
@@ -269,7 +271,7 @@ cerr << " No segment to snap" << endl;
     CoordinateList::iterator to = segpos; ++to;
     LineSegment seg(*segpos, *to);
     double pf = seg.projectionFactor(snapPt);
-    if ( pf >= 1.0 ) {
+    if ( 0 && pf >= 1.0 ) {
 #if GEOS_DEBUG
       cerr << " Segment to be snapped is closer on his end point" << endl;
 #endif
@@ -308,7 +310,7 @@ cerr << " No segment to snap" << endl;
         srcCoords.insert(segpos, newSnapPt);
       }
     }
-    else if ( pf <= 0.0 ) {
+    else if ( 0 && pf <= 0.0 ) {
 #if GEOS_DEBUG
       cerr << " Segment to be snapped is closer on his start point" << endl;
 #endif
@@ -362,6 +364,9 @@ cerr << " Segment to be snapped found, projection factor is " << pf << ", insert
       // insert must happen one-past first point (before next point)
       ++segpos;
       srcCoords.insert(segpos, snapPt);
+#if GEOS_DEBUG
+cerr << " After point insertion, srcCoors are: " << srcCoords << endl;
+#endif
     }
 	}
 
@@ -439,6 +444,25 @@ cerr << "   snap point distance " << dist
 #endif
 
     if ( dist == 0.0 ) return from; // can't find any closer
+
+    /**
+     * Check if the segment is already covered by linework of input
+     * geometry, we won't re-snap those
+     */
+    if ( snapGeom && seg.toGeometry(*(snapGeom->getFactory()))->coveredBy(snapGeom) )
+		{
+#if GEOS_DEBUG
+cerr << "   segment " <<  seg << " covered by snapGeom, won't move"
+     << endl;
+#endif
+			continue;
+		}
+#if GEOS_DEBUG
+		else
+		{
+cerr << "   segment " <<  seg << " not covered by snapGeom" << endl;
+		}
+#endif
 
     match = from;
     minDist = dist;

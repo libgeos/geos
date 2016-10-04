@@ -34,6 +34,8 @@
 #include <memory>
 #include <algorithm>
 
+#define GEOS_DEBUG 1
+
 //using namespace std;
 using namespace geos::geom;
 
@@ -52,6 +54,8 @@ private:
 
 	const Coordinate::ConstVect& snapPts;
 
+	const Geometry* snapGeom;
+
 	CoordinateSequence::AutoPtr snapLine(
 			const CoordinateSequence* srcPts)
 	{
@@ -59,7 +63,7 @@ private:
 
 		assert(srcPts);
 		assert(srcPts->toVector());
-		LineStringSnapper snapper(*(srcPts->toVector()), snapTol);
+		LineStringSnapper snapper(*(srcPts->toVector()), snapTol, snapGeom);
 		auto_ptr<Coordinate::Vect> newPts = snapper.snapTo(snapPts);
 
 		const CoordinateSequenceFactory* cfact = factory->getCoordinateSequenceFactory();
@@ -69,10 +73,11 @@ private:
 public:
 
 	SnapTransformer(double nSnapTol,
-			const Coordinate::ConstVect& nSnapPts)
+			const Coordinate::ConstVect& nSnapPts, const Geometry* nSnapGeom=0)
 		:
 		snapTol(nSnapTol),
-		snapPts(nSnapPts)
+		snapPts(nSnapPts),
+		snapGeom(nSnapGeom)
 	{
 	}
 
@@ -112,7 +117,8 @@ GeometrySnapper::snapTo(const geom::Geometry& g, double snapTolerance)
 
 	// Apply a SnapTransformer to source geometry
 	// (we need a pointer for dynamic polymorphism)
-	auto_ptr<GeometryTransformer> snapTrans(new SnapTransformer(snapTolerance, *snapPts));
+	auto_ptr<GeometryTransformer> snapTrans(new
+		SnapTransformer(snapTolerance, *snapPts, &g));
 	return snapTrans->transform(&srcGeom);
 }
 
