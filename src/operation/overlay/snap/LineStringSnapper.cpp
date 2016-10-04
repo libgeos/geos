@@ -28,6 +28,7 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/LineSegment.h>
 #include <geos/util/UniqueCoordinateArrayFilter.h>
+#include <geos/geom/util/LinearComponentExtracter.h>
 
 #include <vector>
 #include <memory>
@@ -50,6 +51,25 @@ namespace geos {
 namespace operation { // geos.operation
 namespace overlay { // geos.operation.overlay
 namespace snap { // geos.operation.overlay.snap
+
+namespace {
+
+struct TaggedCoordIterator {
+	TaggedCoordIterator(const Coordinate &p, const CoordinateList::iterator i, double d)
+		: snapPt(p), it(i), dist(d) {}
+	const Coordinate &snapPt;
+	const CoordinateList::iterator it;
+	double dist;
+};
+
+bool operator < (const TaggedCoordIterator &a, const TaggedCoordIterator &b) {
+	return a.dist < b.dist;
+}
+
+} // anonymous
+
+
+
 
 /*public*/
 std::auto_ptr<Coordinate::Vect>
@@ -109,24 +129,6 @@ cerr << "   snap point distance " << dist
 
 	return match;
 }
-
-namespace {
-
-struct TaggedCoordIterator {
-	TaggedCoordIterator(const Coordinate &p, const CoordinateList::iterator i, double d)
-		: snapPt(p), it(i), dist(d) {}
-	const Coordinate &snapPt;
-	const CoordinateList::iterator it;
-	double dist;
-};
-
-bool operator < (const TaggedCoordIterator &a, const TaggedCoordIterator &b) {
-	return a.dist < b.dist;
-}
-
-} // anonymous
-
-
 
 /*private*/
 void
@@ -487,7 +489,7 @@ cerr << "   snap point distance " << dist
      * Check if the segment is already covered by linework of input
      * geometry, we won't re-snap those
      */
-    if ( snapGeom && seg.toGeometry(*(snapGeom->getFactory()))->coveredBy(snapGeom) )
+    if ( snapLinesCover(seg) )
 		{
 #if GEOS_DEBUG
 cerr << "   segment " <<  seg << " covered by snapGeom, won't move"
@@ -508,6 +510,29 @@ cerr << "   segment " <<  seg << " not covered by snapGeom" << endl;
 	}
 
 	return match;
+}
+
+/* private */
+void
+LineStringSnapper::setSnapGeom(const Geometry& nSnapGeom)
+{
+	geom::util::LinearComponentExtracter::getLines(nSnapGeom, snapLines);
+}
+
+/* private */
+bool
+LineStringSnapper::snapLinesCover(const LineSegment& ls)
+{
+	if (snapLines.empty()) return false;
+
+	std::vector<const LineString*>::iterator it=snapLines.begin(), itE=snapLines.end();
+	std::auto_ptr<Geometry> line ( ls.toGeometry(*(*it)->getFactory()) );
+	while (it != itE)
+	{
+		const LineString *snapSeg = *it++;
+		if ( line->coveredBy(snapSeg) ) return true;
+	}
+	return false;
 }
 
 } // namespace geos.operation.snap

@@ -25,14 +25,15 @@
 #include <geos/geom/CoordinateList.h>
 
 #include <memory>
+#include <vector>
 
 // Forward declarations
 namespace geos {
 	namespace geom {
-		//class PrecisionModel;
-		//class CoordinateSequence;
 		class CoordinateList;
+		class LineString;
 		class Geometry;
+		class LineSegment;
 	}
 }
 
@@ -63,12 +64,12 @@ public:
 	                  double nSnapTol, const geom::Geometry *nSnapGeom=0)
 		:
 		srcPts(nSrcPts),
-		snapGeom(nSnapGeom),
 		snapTolerance(nSnapTol),
 		allowSnappingToSourceVertices(false)
 	{
 		size_t s = srcPts.size();
 		isClosed = s < 2 ? false : srcPts[0].equals2D(srcPts[s-1]);
+		if ( nSnapGeom ) setSnapGeom(*nSnapGeom);
 	}
 
 	// Snap points are assumed to be all distinct points (a set would be better, uh ?)
@@ -82,13 +83,16 @@ private:
 
 	const geom::Coordinate::Vect& srcPts;
 
-	const geom::Geometry* snapGeom;
+	std::vector<const geom::LineString*> snapLines;
 
 	double snapTolerance;
 
 	bool allowSnappingToSourceVertices;
 	bool isClosed;
 
+	bool snapLinesCover(const geom::LineSegment &ls);
+
+	void setSnapGeom(const geom::Geometry& snapGeom);
 
 	// Modifies first arg
 	void snapVertices(geom::CoordinateList& srcCoords,
