@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  ***********************************************************************
@@ -42,7 +42,7 @@ namespace operation { // geos.operation
 namespace overlay { // geos.operation.overlay
 namespace snap { // geos.operation.overlay.snap
 
-const double GeometrySnapper::snapPrecisionFactor = 1e-9; 
+const double GeometrySnapper::snapPrecisionFactor = 1e-9;
 
 class SnapTransformer: public geos::geom::util::GeometryTransformer {
 
@@ -106,7 +106,7 @@ GeometrySnapper::snapTo(const geom::Geometry& g, double snapTolerance)
 
 	using std::auto_ptr;
 	using geom::util::GeometryTransformer;
-	
+
 	// Get snap points
 	auto_ptr<Coordinate::ConstVect> snapPts=extractTargetCoordinates(g);
 
@@ -123,7 +123,7 @@ GeometrySnapper::snapToSelf(double snapTolerance, bool cleanResult)
 
 	using std::auto_ptr;
 	using geom::util::GeometryTransformer;
-	
+
 	// Get snap points
 	auto_ptr<Coordinate::ConstVect> snapPts=extractTargetCoordinates(srcGeom);
 
@@ -132,7 +132,7 @@ GeometrySnapper::snapToSelf(double snapTolerance, bool cleanResult)
 	auto_ptr<GeometryTransformer> snapTrans(new SnapTransformer(snapTolerance, *snapPts));
 
 	GeomPtr result = snapTrans->transform(&srcGeom);
-	
+
 	if (cleanResult && ( dynamic_cast<const Polygon*>(result.get()) ||
 	                     dynamic_cast<const MultiPolygon*>(result.get()) ) )
 	{
