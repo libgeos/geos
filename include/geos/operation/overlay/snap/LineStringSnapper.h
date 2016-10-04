@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  ***********************************************************************
@@ -28,7 +28,7 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom { 
+	namespace geom {
 		//class PrecisionModel;
 		//class CoordinateSequence;
 		class CoordinateList;
@@ -102,7 +102,7 @@ private:
    * Source segments are "cracked" at a snap vertex.
    * A single input segment may be snapped several times
    * to different snap vertices.
-   * 
+   *
    * For each distinct snap vertex, at most one source segment
    * is snapped to.  This prevents "cracking" multiple segments
    * at the same point, which would likely cause
