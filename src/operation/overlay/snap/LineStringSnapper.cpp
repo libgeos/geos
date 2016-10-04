@@ -68,10 +68,11 @@ CoordinateList::iterator
 LineStringSnapper::findVertexToSnap(
 			const Coordinate& snapPt,
 			CoordinateList::iterator from,
-			CoordinateList::iterator too_far)
+			CoordinateList::iterator too_far,
+			double &minDist)
 {
-	double minDist = snapTolerance; // make sure the first closer then
-	                                // snapTolerance is accepted
+	minDist = snapTolerance; // make sure the first closer then
+	                         // snapTolerance is accepted
 	CoordinateList::iterator match=too_far;
 
 	for ( ; from != too_far; ++from)
@@ -99,15 +100,32 @@ cerr << "   snap point distance " << dist
          << minDist << endl;
 #endif
 
-    if ( dist == 0.0 ) return from; // can't find any closer
-
     match = from;
     minDist = dist;
+
+    if ( minDist == 0.0 ) return from; // can't find any closer
 
 	}
 
 	return match;
 }
+
+namespace {
+
+struct TaggedCoordIterator {
+	TaggedCoordIterator(const Coordinate &p, const CoordinateList::iterator i, double d)
+		: snapPt(p), it(i), dist(d) {}
+	const Coordinate &snapPt;
+	const CoordinateList::iterator it;
+	double dist;
+};
+
+bool operator < (const TaggedCoordIterator &a, const TaggedCoordIterator &b) {
+	return a.dist < b.dist;
+}
+
+} // anonymous
+
 
 
 /*private*/
@@ -122,6 +140,9 @@ LineStringSnapper::snapVertices(geom::CoordinateList& srcCoords,
 cerr << "Snapping vertices of: " << srcCoords << endl;
 #endif
 
+	std::multiset<TaggedCoordIterator> taggedCoords;
+
+	/* Sort snap points by distance */
 	for ( Coordinate::ConstVect::const_iterator
 			it=snapPts.begin(), end=snapPts.end();
 			it != end;
@@ -136,8 +157,9 @@ cerr << "Checking for a vertex to snap to snapPt " << snapPt << endl;
 
 		CoordinateList::iterator too_far = srcCoords.end();
     if ( isClosed ) --too_far;
+		double minDist;
 		CoordinateList::iterator vertpos =
-			findVertexToSnap(snapPt, srcCoords.begin(), too_far);
+			findVertexToSnap(snapPt, srcCoords.begin(), too_far, minDist);
 		if ( vertpos == too_far)
 		{
 #if GEOS_DEBUG
@@ -147,8 +169,24 @@ cerr << " No vertex to snap" << endl;
 		}
 
 #if GEOS_DEBUG
-cerr << " Vertex to be snapped found, snapping" << endl;
+cerr << " Vertex " << *vertpos << " at distance " << minDist << endl;
 #endif
+
+		taggedCoords.insert( TaggedCoordIterator(snapPt, vertpos, minDist) );
+	}
+
+	for ( std::multiset<TaggedCoordIterator>::const_iterator
+			it=taggedCoords.begin(), end=taggedCoords.end();
+			it != end;
+			++it)
+	{
+		const Coordinate& snapPt = it->snapPt;
+		CoordinateList::iterator vertpos = it->it;
+
+#if GEOS_DEBUG
+cerr << " Vertex " << *vertpos << " to be snapped to " << snapPt << endl;
+#endif
+
     *vertpos = snapPt;
 
     // keep final closing point in synch (rings only)
