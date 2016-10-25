@@ -14,7 +14,7 @@
    $ svn copy -m "Tagged release MAJOR.MINOR.PATCH" \
 		$base/trunk $base/tags/MAJOR.MINOR.PATCH
 
-7: Export the tag and 'make dist-bzip2'. 
+7: Export the tag and 'make dist-bzip2'.
    $ svn export $base/tags/$rev
    $ cd $rev
    $ ./autogen.sh && ./configure && make dist-bzip2
@@ -25,7 +25,7 @@
 
 10: Increment all the version numbers for the next release, as below.
 
-11: Increment CAPI_INTERFACE_X in configure.in
+11: Increment CAPI_INTERFACE_X in configure.ac
    - For a release with no interface changes just bump REVISION.
      [ Even if *nothing* changed in CAPI ]
    - Adding interfaces, bump CURRENT/AGE, set REVISION to 0.
@@ -34,7 +34,7 @@
 
 12: Increment release version:
    - In configure.ac
-   - In include/geos/version.h.vc 
+   - In include/geos/version.h.vc
    - In capi/geos_c.h.in
      - VERSION_PATCH for bugfixes/improvements (even breaking C++ API)
      - VERSION_MINOR for NEW interfaces in the C lib
@@ -48,5 +48,5 @@
     - Add latest release
     - Remove previos patch level release (if any)
 
-14: Announce 
-   
+14: Announce
+

@@ -25,7 +25,7 @@
  *	  all returned char * (unless const).
  *
  *	- Functions ending with _r are thread safe; see details in RFC 3
- *	  http://trac.osgeo.org/geos/wiki/RFC3. 
+ *	  http://trac.osgeo.org/geos/wiki/RFC3.
  *	  To avoid using by accident non _r functions,
  *	  define GEOS_USE_ONLY_R_API before including geos_c.h
  *
@@ -59,9 +59,9 @@ extern "C" {
 #if defined(_MSC_VER)
 #include <geos/version.h>
 #define GEOS_CAPI_VERSION_MAJOR 1
-#define GEOS_CAPI_VERSION_MINOR 10
+#define GEOS_CAPI_VERSION_MINOR 11
 #define GEOS_CAPI_VERSION_PATCH 0
-#define GEOS_CAPI_VERSION "3.6.0-CAPI-1.10.0"
+#define GEOS_CAPI_VERSION "3.7.0-CAPI-1.11.0"
 #else
 #ifndef GEOS_VERSION_MAJOR
 #define GEOS_VERSION_MAJOR @VERSION_MAJOR@
@@ -693,7 +693,7 @@ extern GEOSGeometry GEOS_DLL * GEOSDelaunayTriangulation_r(
 
 /*
  * Returns the Voronoi polygons of a set of Vertices given as input
- * 
+ *
  * @param g the input geometry whose vertex will be used as sites.
  * @param tolerance snapping tolerance to use for improved robustness
  * @param onlyEdges whether to return only edges of the voronoi cells
@@ -701,12 +701,12 @@ extern GEOSGeometry GEOS_DLL * GEOSDelaunayTriangulation_r(
  *            determined if NULL.
  *            The diagram will be clipped to the larger
  *            of this envelope or an envelope surrounding the sites.
- * 
+ *
  * @return a newly allocated geometry, or NULL on exception.
  */
 extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagram_r(
-				GEOSContextHandle_t extHandle, 
-				const GEOSGeometry *g, 
+				GEOSContextHandle_t extHandle,
+				const GEOSGeometry *g,
 				const GEOSGeometry *env,
 				double tolerance,
 				int onlyEdges);
@@ -1635,7 +1635,7 @@ extern GEOSGeometry GEOS_DLL * GEOSDelaunayTriangulation(
 
 /*
  * Returns the Voronoi polygons of a set of Vertices given as input
- * 
+ *
  * @param g the input geometry whose vertex will be used as sites.
  * @param tolerance snapping tolerance to use for improved robustness
  * @param onlyEdges whether to return only edges of the voronoi cells
@@ -1643,7 +1643,7 @@ extern GEOSGeometry GEOS_DLL * GEOSDelaunayTriangulation(
  *            determined if NULL.
  *            The diagram will be clipped to the larger
  *            of this envelope or an envelope surrounding the sites.
- * 
+ *
  * @return a newly allocated geometry, or NULL on exception.
  */
 extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagram(

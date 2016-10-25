@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -30,7 +30,7 @@
 #endif
 
 #ifndef GEOS_VERSION_MINOR
-#define GEOS_VERSION_MINOR 6
+#define GEOS_VERSION_MINOR 7
 #endif
 
 #ifndef GEOS_VERSION_PATCH
@@ -38,7 +38,7 @@
 #endif
 
 #ifndef GEOS_VERSION
-#define GEOS_VERSION "3.6.0"
+#define GEOS_VERSION "3.7.0"
 #endif
 
 #ifndef GEOS_JTS_PORT
