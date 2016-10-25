@@ -1,3 +1,185 @@
+2016-08-03 19:28  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r4246] ., nmake.opt: Merged revision(s) 4244 from trunk:
+	  Add NMAKE version from VS2015 Update 3
+
+2016-07-15 16:38  Sandro Santilli <strk@keybit.net>
+
+	* [r4232] .drone.yml: Add a "make check" step to the drone config
+
+2016-07-14 11:06  Sandro Santilli <strk@keybit.net>
+
+	* [r4225] NEWS, configure.ac, include/geos/platform.h.in: Look for
+	  isnan in std:: namespace
+	  
+	  Fully qualify isnan call when HAVE_ISNAN is defined
+	  Tested with gcc 4.8.4
+	  
+	  Fixes build with GCC-5.3.0 and higher.
+	  Closes #784
+
+2016-07-12 17:48  Sandro Santilli <strk@keybit.net>
+
+	* [r4223] README.md: Use https for travis badge
+
+2016-07-12 17:47  Sandro Santilli <strk@keybit.net>
+
+	* [r4222] .drone.yml: Add .drone.yml
+
+2016-06-07 09:27  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r4210] CMakeLists.txt, tests/xmltester/CMakeLists.txt: Update
+	  CMake configuration based on trunk/CMakeLists.txt
+
+2016-05-12 09:36  Sandro Santilli <strk@keybit.net>
+
+	* [r4206] README.md: Add debbie and winnie build badges
+
+2016-04-22 16:19  Sandro Santilli <strk@keybit.net>
+
+	* [r4192] .gitlab-ci.yml, README.md: Add gitlab-ci config and badge
+
+2016-03-07 10:23  Sandro Santilli <strk@keybit.net>
+
+	* [r4171] .travis.yml: Report build activity in #postgis-activity
+	  (not #postgis)
+	  
+	  Also do not use notices
+
+2016-02-24 11:50  Sandro Santilli <strk@keybit.net>
+
+	* [r4150] NEWS, include/geos/algorithm/PointLocator.h,
+	  src/algorithm/PointLocator.cpp, src/geom/prep/PreparedPoint.cpp,
+	  tests/unit/algorithm/PointLocatorTest.cpp: Fix incorrect return
+	  from PreparedPoint::intersects
+	  
+	  Includes unit test
+	  
+	  Patch by Daniel Baston via
+	  https://github.com/libgeos/libgeos/pull/60
+	  
+	  See #764 (for 3.5 branch)
+	  Reverts r4081
+
+2016-02-05 08:00  Sandro Santilli <strk@keybit.net>
+
+	* [r4143] NEWS, src/io/StringTokenizer.cpp: Include <limits> in
+	  StringTokenizer
+	  
+	  Patch by Jeff Mckenna
+	  Closes #766
+
+2016-01-20 00:02  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r4140] NEWS, include/geos/geomgraph/GeometryGraph.h,
+	  include/geos/geomgraph/index/SegmentIntersector.h,
+	  include/geos/geomgraph/index/SimpleMCSweepLineIntersector.h,
+	  src/geomgraph/GeometryGraph.cpp,
+	  src/geomgraph/index/SegmentIntersector.cpp,
+	  src/geomgraph/index/SimpleMCSweepLineIntersector.cpp,
+	  src/operation/valid/ConsistentAreaTester.cpp,
+	  src/operation/valid/IsValidOp.cpp: #757, fix memory exhaustion
+	  case in isvalid
+
+2015-12-31 08:25  Sandro Santilli <strk@keybit.net>
+
+	* [r4139] NEWS: Add missing 3.3.9 section
+
+2015-12-14 17:20  Sandro Santilli <strk@keybit.net>
+
+	* [r4131] NEWS, src/operation/overlay/snap/LineStringSnapper.cpp,
+	  tests/unit/operation/overlay/snap/LineStringSnapperTest.cpp: Fix
+	  snapping of last segment in a closed linestring
+	  
+	  See #758
+
+2015-12-14 17:20  Sandro Santilli <strk@keybit.net>
+
+	* [r4130]
+	  tests/unit/operation/overlay/snap/LineStringSnapperTest.cpp:
+	  Enable a commented-out test (works)
+
+2015-11-21 16:01  Sandro Santilli <strk@keybit.net>
+
+	* [r4120] include/geos/triangulate/quadedge/QuadEdgeSubdivision.h,
+	  src/triangulate/quadedge/QuadEdgeSubdivision.cpp: use std::vector
+	  instead of std::list to avoid size() bottleneck
+	  
+	  Patch by Daniel Baston via
+	  https://github.com/libgeos/libgeos/pull/55
+
+2015-11-04 20:41  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r4116] NEWS: Add #753 fix
+
+2015-11-04 20:37  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r4115] ., CMakeLists.txt, include/geos/platform.h.cmake: Merged
+	  revision(s) 4112,4114 from trunk:
+	  Add #define NOMINMAX for Visual C++
+	  ........
+	  CMake should not try to generate geos_svn_revision.h if GEOS is
+	  built from packaged sources.
+	  Fixes #753
+
+2015-10-13 11:43  Sandro Santilli <strk@keybit.net>
+
+	* [r4110] NEWS, src/geom/util/GeometryEditor.cpp: Fix
+	  GeometryEditor to correctly update factory of empty geometries
+	  
+	  Closes #749
+
+2015-10-05 12:55  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r4107] NEWS: Revert accidental removal of whitespaces in r4106.
+
+2015-10-05 09:45  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r4106] NEWS: Update NEWS item about memory leaks fixes
+
+2015-10-05 09:44  Mateusz Loskot <mateusz@loskot.net>
+
+	* [r4105] ., src/geomgraph/PlanarGraph.cpp,
+	  tests/unit/triangulate/DelaunayTest.cpp: Merged revision(s)
+	  4099-4100, 4104 from trunk:
+	  Fix memory leaks (two) due to misuse of CoordinateArraySequence
+	  ........
+	  Make adding edges a bit more exception safe and helps to avoid
+	  memory leaks when PlanarGraph::add(de1) throws, leaving de2
+	  behind.
+	  This also fixes memory leak in case of self-union with NaN
+	  coordinates, revealed by GEOSUnaryUnionTest/test<9>.
+	  ........
+	  Use std::auto_ptr to simplify r4100 fix of a memory leak
+	  potential
+	  ........
+
+2015-10-04 16:09  Sandro Santilli <strk@keybit.net>
+
+	* [r4102] NEWS: Add NEWS item about memory leaks fixes
+
+2015-10-04 16:08  Sandro Santilli <strk@keybit.net>
+
+	* [r4101] src/operation/buffer/BufferBuilder.cpp: Fix a few
+	  potential (one confirmed) leak in single sided buffer
+	  
+	  See #747
+
+2015-08-16 22:29  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r4088] NEWS: Add 3.5.1 entry to NEWS
+
+2015-08-16 22:28  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r4087] CMakeLists.txt, HOWTO_RELEASE, capi/geos_c.h.in,
+	  configure.ac, include/geos/version.h.vc: Bump branch versions for
+	  3.5.1
+
+2015-08-14 18:34  Paul Ramsey <pramsey@cleverelephant.ca>
+
+	* [r4084] CMakeLists.txt, ChangeLog, HOWTO_RELEASE, NEWS,
+	  configure.ac: Ready to tag'n'bag 3.5.0
+
 2015-08-14 18:22  Paul Ramsey <pramsey@cleverelephant.ca>
 
 	* [r4083] .: Branch for release

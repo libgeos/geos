@@ -1,5 +1,5 @@
 Changes in 3.5.1
-2015-MM-dd
+2015-10-25
 
 - Bug fixes / improvements
   - Fix CMake configuration to allow build from released sources package (#753)
