@@ -1,20 +1,17 @@
 Changes in 3.6.0
-2015-MM-DD
+2016-MM-DD
 
 - Important / Breaking Changes:
   - The PHP binding moved to its own repository:
     http://git.osgeo.org/gogs/geos/php-geos (#765)
 - New things:
   - CAPI: GEOSGeom_{get,set}UserData (Rashad Kanavath)
-  - CAPI: GEOSGeom_setPrecision (#713) - PHP: Geometry->setPrecision
-  - CAPI: GEOSGeom_getPrecision
+  - CAPI: GEOSGeom_{set,get}Precision (#713)
   - CAPI: GEOSMinimumRotatedRectangle and GEOSMinimumWidth
     (#729, Nyall Dawson)
   - CAPI: GEOSSTRtree_nearest (#768, Dan Baston)
   - CAPI: GEOSMinimumClearance and GEOSMinimumClearanceLine
     (#776, Dan Baston)
-- Improvements:
-  - ...
 - C++ API changes:
   - Automatic memory management for GeometryFactory objects
 
