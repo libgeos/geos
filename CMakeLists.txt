@@ -6,7 +6,7 @@
 #
 # This is free software; you can redistribute and/or modify it under
 # the terms of the GNU Lesser General Public Licence as published
-# by the Free Software Foundation. 
+# by the Free Software Foundation.
 # See the COPYING file for more information.
 #
 #################################################################################
@@ -29,7 +29,7 @@ set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
 # GEOS C++ library SONAME will use these encoding ABI break at every release
 set(VERSION_MAJOR 3)
 set(VERSION_MINOR 6)
-set(VERSION_PATCH 0dev)
+set(VERSION_PATCH 0)
 set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
 # JTS_PORT is the version of JTS this release is bound to
@@ -241,7 +241,7 @@ include_directories(${PROJECT_BINARY_DIR}/include)
 
 # for geos_ts.cpp which does #include "../geos_svn_revision.h" whereas
 # CMake generates geos_svn_revision.h in build directory,
-# to not to pollute source tree. 
+# to not to pollute source tree.
 include_directories(${PROJECT_BINARY_DIR})
 
 #################################################################################
