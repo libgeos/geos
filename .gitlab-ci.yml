@@ -9,4 +9,5 @@ test:
     - ./configure
     - make
     - make check
+    - install -m 755 /bin/true /usr/local/bin/git2cl
     - make distcheck
