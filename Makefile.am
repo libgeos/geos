@@ -7,6 +7,11 @@
 # is not able to detect required build order but blindly
 # relies on the order items in SUBDIRS appear.
 #
+
+# foreign is needed to avoid enforced ChangeLog in EXTRA_DIST
+# (we'll still take care of adding it ourselves)
+AUTOMAKE_OPTIONS = foreign
+
 SUBDIRS =   \
     include \
     src     \
@@ -26,8 +31,18 @@ EXTRA_DIST = acsite.m4 makefile.vc nmake.opt autogen.bat CMakeLists.txt \
 
 ACLOCAL_AMFLAGS = -I macros
 
-cl:
-	cd $(srcdir) && svn update && svn2cl --authors=authors.svn -i -o ChangeLog
+dist-hook: gen-ChangeLog
+
+gen-ChangeLog:
+	cd $(distdir) && owd=`pwd` && \
+  cd ../ && cd $(srcdir) && \
+	if test -d .git; then \
+		git2cl > $${owd}/ChangeLog; \
+	elif test -d .svn; then \
+		svn2cl --authors=authors.svn -i -o $${owd}/ChangeLog; \
+	elif test -f ChangeLog; then \
+		cp ChangeLog  $${owd}/ChangeLog; \
+	fi
 
 apidoc doxygen:
 	cd doc && make $@
