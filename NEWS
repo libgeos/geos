@@ -1,5 +1,5 @@
-Changes in 3.4.3-dev
-YYYY-MM-DD
+Changes in 3.4.3
+2016-10-27
 
 - Bug fixes / improvements
  - Fix snapping of last segment of a closed linestring (#758)
