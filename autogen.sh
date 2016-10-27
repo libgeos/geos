@@ -67,10 +67,6 @@ if test "$OSTYPE" = "IRIX" -o "$OSTYPE" = "IRIX64"; then
    AMOPTS=$AMOPTS" --include-deps";
 fi
 
-# README is needed by libtoolize (and GNU standards)
-echo "* Symlinking README.md to README"
-ln -s README.md README
-
 LTOPTS="--force --copy"
 echo "* Running ${LIBTOOLIZE} (${LIBTOOLIZE_VER})"
 echo "   OPTIONS = ${LTOPTS}"
