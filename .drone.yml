@@ -5,7 +5,7 @@ test-image: &test-image docker.kbt.io/geos/build-test:alpine
 
 pipeline:
   clone:
-    image: git
+    image: plugins/git
     depth: 50
     recursive: false
   build:
