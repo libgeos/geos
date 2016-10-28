@@ -21,6 +21,10 @@
 #include <geos/index/strtree/AbstractNode.h>
 #include <geos/util/IllegalArgumentException.h>
 
+namespace geos {
+namespace index {
+namespace strtree {
+
 BoundablePair::BoundablePair(const Boundable* boundable1, const Boundable* boundable2, ItemDistance* itemDistance) :
 	boundable1(boundable1),
 	boundable2(boundable2),
@@ -105,5 +109,9 @@ void BoundablePair::expand(const Boundable* bndComposite, const Boundable* bndOt
 			priQ.push(bp.release());
 		}
 	}
+}
+
+}
+}
 }
 

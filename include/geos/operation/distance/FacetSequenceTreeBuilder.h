@@ -24,10 +24,6 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/operation/distance/FacetSequence.h>
 
-using namespace geos::geom;
-using namespace geos::index::strtree;
-using namespace geos::operation::distance;
-
 namespace geos {
     namespace operation {
         namespace distance {
@@ -39,11 +35,11 @@ namespace geos {
                 // Seems to be better to use a minimum node capacity
                 static const int STR_TREE_NODE_CAPACITY = 4;
 
-                static void addFacetSequences(const CoordinateSequence* pts, std::vector<FacetSequence*> & sections);
-                static std::vector<FacetSequence*> * computeFacetSequences(const Geometry* g);
+                static void addFacetSequences(const geom::CoordinateSequence* pts, std::vector<FacetSequence*> & sections);
+                static std::vector<FacetSequence*> * computeFacetSequences(const geom::Geometry* g);
 
             public:
-                static STRtree* build(const Geometry* g);
+                static geos::index::strtree::STRtree* build(const geom::Geometry* g);
             };
         }
     }

@@ -279,6 +279,12 @@ GEOSDistance(const Geometry *g1, const Geometry *g2, double *dist)
 }
 
 int
+GEOSDistanceIndexed(const Geometry *g1, const Geometry *g2, double *dist)
+{
+    return GEOSDistanceIndexed_r( handle, g1, g2, dist );
+}
+
+int
 GEOSHausdorffDistance(const Geometry *g1, const Geometry *g2, double *dist)
 {
     return GEOSHausdorffDistance_r( handle, g1, g2, dist );

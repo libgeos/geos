@@ -204,6 +204,11 @@ std::pair<const void*, const void*> STRtree::nearestNeighbour(ItemDistance * ite
 	return nearestNeighbour(&bp);
 }
 
+std::pair<const void*, const void*> STRtree::nearestNeighbour(STRtree* tree, ItemDistance* itemDist) {
+	BoundablePair bp(getRoot(), tree->getRoot(), itemDist);
+	return nearestNeighbour(&bp);
+}
+
 std::pair<const void*, const void*> STRtree::nearestNeighbour(BoundablePair* initBndPair, double maxDistance) {
 	double distanceLowerBound = maxDistance;
 	BoundablePair* minPair = NULL;

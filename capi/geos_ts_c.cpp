@@ -53,6 +53,7 @@
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/operation/distance/DistanceOp.h>
+#include <geos/operation/distance/IndexedFacetDistance.h>
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
@@ -134,6 +135,7 @@ using geos::io::WKBWriter;
 using geos::operation::overlay::OverlayOp;
 using geos::operation::overlay::overlayOp;
 using geos::operation::geounion::CascadedPolygonUnion;
+using geos::operation::distance::IndexedFacetDistance;
 using geos::operation::buffer::BufferParameters;
 using geos::operation::buffer::BufferBuilder;
 using geos::precision::GeometryPrecisionReducer;
@@ -1143,6 +1145,40 @@ GEOSDistance_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry
     try
     {
         *dist = g1->distance(g2);
+        return 1;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return 0;
+}
+
+int
+GEOSDistanceIndexed_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Geometry *g2, double *dist)
+{
+    assert(0 != dist);
+
+    if ( 0 == extHandle )
+    {
+        return 0;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return 0;
+    }
+
+    try
+    {
+        *dist = IndexedFacetDistance::distance(g1, g2);
         return 1;
     }
     catch (const std::exception &e)
@@ -6074,6 +6110,7 @@ GEOSSTRtree_nearest_generic_r(GEOSContextHandle_t extHandle,
                               GEOSDistanceCallback distancefn,
                               void* userdata)
 {
+    using namespace geos::index::strtree;
 
     GEOSContextHandleInternal_t *handle = 0;
 

@@ -36,13 +36,10 @@
  * @author Martin Davis
  *
  */
-
-using namespace geos::index::strtree;
-
-
 namespace geos {
 namespace index {
 namespace strtree {
+
 class BoundablePair {
 	private:
 		const Boundable* boundable1;

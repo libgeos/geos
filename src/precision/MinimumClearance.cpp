@@ -25,6 +25,10 @@
 #include <geos/geom/LineSegment.h>
 #include <geos/index/ItemVisitor.h>
 
+using namespace geos::geom;
+using namespace geos::operation::distance;
+using namespace geos::index::strtree;
+
 namespace geos {
 namespace precision {
 

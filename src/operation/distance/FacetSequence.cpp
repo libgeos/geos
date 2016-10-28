@@ -19,6 +19,7 @@
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/operation/distance/FacetSequence.h>
 
+using namespace geos::geom;
 using namespace geos::operation::distance;
 using namespace geos::algorithm;
 
@@ -37,7 +38,7 @@ bool FacetSequence::isPoint() const {
     return end - start == 1;
 }
 
-double FacetSequence::distance(const FacetSequence & facetSeq) {
+double FacetSequence::distance(const FacetSequence & facetSeq) const {
     bool isPointThis = isPoint();
     bool isPointOther = facetSeq.isPoint();
 

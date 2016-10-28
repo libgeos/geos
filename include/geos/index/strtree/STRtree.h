@@ -143,10 +143,12 @@ public:
 	std::pair<const void*, const void*> nearestNeighbour(BoundablePair* initBndPair);
 	std::pair<const void*, const void*> nearestNeighbour(ItemDistance* itemDist);
 	std::pair<const void*, const void*> nearestNeighbour(BoundablePair* initBndPair, double maxDistance);
+	std::pair<const void*, const void*> nearestNeighbour(STRtree *tree, ItemDistance *itemDist);
 
 	bool remove(const geom::Envelope *itemEnv, void* item) {
 		return AbstractSTRtree::remove(itemEnv, item);
 	}
+
 };
 
 } // namespace geos::index::strtree

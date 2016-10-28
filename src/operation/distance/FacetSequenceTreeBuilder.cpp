@@ -20,6 +20,13 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/Point.h>
 
+using namespace geos::geom;
+using namespace geos::index::strtree;
+
+namespace geos {
+namespace operation {
+namespace distance {
+
 STRtree* FacetSequenceTreeBuilder::build(const Geometry* g) {
     std::auto_ptr<STRtree> tree(new STRtree(STR_TREE_NODE_CAPACITY));
     std::auto_ptr<std::vector<FacetSequence*> > sections(computeFacetSequences(g));
@@ -74,3 +81,8 @@ void FacetSequenceTreeBuilder::addFacetSequences(const CoordinateSequence* pts, 
         i += FACET_SEQUENCE_SIZE;
     }
 }
+
+}
+}
+}
+
