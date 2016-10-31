@@ -34,6 +34,8 @@ namespace geos {
 
                 double getDistance(const geom::Geometry * g) const;
 
+                ~IndexedFacetDistance();
+
             private:
                 std::auto_ptr<geos::index::strtree::STRtree> cachedTree;
 
