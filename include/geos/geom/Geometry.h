@@ -641,8 +641,8 @@ public:
 	virtual Geometry* symDifference(const Geometry *other) const;
 
 	/** \brief
-	 * Returns true if the two Geometrys are exactly equal,
-	 * up to a specified tolerance.
+	 * Returns true iff the two Geometrys are of the same type and their
+	 * vertices corresponding by index are equal up to a specified tolerance.
 	 */
 	virtual bool equalsExact(const Geometry *other, double tolerance=0)
 		const=0; //Abstract
