@@ -6066,6 +6066,14 @@ GEOSSTRtree_query_r(GEOSContextHandle_t extHandle,
     }
 }
 
+const GEOSGeometry *
+GEOSSTRtree_nearest_r(GEOSContextHandle_t extHandle,
+                      geos::index::strtree::STRtree *tree,
+                      const geos::geom::Geometry* geom)
+{
+    return (const GEOSGeometry*) GEOSSTRtree_nearest_generic_r( extHandle, tree, geom, geom->getEnvelope(), NULL, NULL);
+}
+
 const void *
 GEOSSTRtree_nearest_generic_r(GEOSContextHandle_t extHandle,
                               geos::index::strtree::STRtree *tree,

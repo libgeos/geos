@@ -717,7 +717,7 @@ GEOSSetSRID(Geometry *g, int srid)
     return GEOSSetSRID_r( handle, g, srid );
 }
 
-void * 
+void *
 GEOSGeom_getUserData(const Geometry *g)
 {
     return GEOSGeom_getUserData_r( handle, g );
@@ -1174,7 +1174,7 @@ const GEOSGeometry *
 GEOSSTRtree_nearest (geos::index::strtree::STRtree *tree,
                      const geos::geom::Geometry *g)
 {
-    return (const GEOSGeometry*) GEOSSTRtree_nearest_generic( tree, g, g, NULL, NULL);
+    return GEOSSTRtree_nearest_r( handle, tree, g);
 }
 
 const void* GEOSSTRtree_nearest_generic(GEOSSTRtree *tree,
