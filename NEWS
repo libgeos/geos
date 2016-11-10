@@ -1,5 +1,10 @@
-Changes in 3.6.0
+Changes in 3.6.1
 2016-MM-DD
+
+- Bug fixes / improvements
+
+Changes in 3.6.0
+2016-10-25
 
 - Important / Breaking Changes:
   - The PHP binding moved to its own repository:
