@@ -10,7 +10,7 @@
  * by the Free Software Foundation. 
  * See the COPYING file for more information.
  *
- * Author: Sandro Santilli <strk@keybit.net>
+ * Author: Sandro Santilli <strk@kbt.io>
  *
  ***********************************************************************/
 

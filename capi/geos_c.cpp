@@ -3,7 +3,7 @@
  *
  * C-Wrapper for GEOS library
  *
- * Copyright (C) 2010 2011 Sandro Santilli <strk@keybit.net>
+ * Copyright (C) 2010 2011 Sandro Santilli <strk@kbt.io>
  * Copyright (C) 2005-2006 Refractions Research Inc.
  *
  * This is free software; you can redistribute and/or modify it under
@@ -11,7 +11,7 @@
  * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
- * Author: Sandro Santilli <strk@keybit.net>
+ * Author: Sandro Santilli <strk@kbt.io>
  *
  ***********************************************************************/
 

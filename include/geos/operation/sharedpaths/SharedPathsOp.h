@@ -3,7 +3,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
- * Copyright (C) 2010      Sandro Santilli <strk@keybit.net>
+ * Copyright (C) 2010      Sandro Santilli <strk@kbt.io>
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -14,7 +14,7 @@
  *
  * Last port: original work
  *
- * Developed by Sandro Santilli (strk@keybit.net)
+ * Developed by Sandro Santilli (strk@kbt.io)
  * for Faunalia (http://www.faunalia.it)
  * with funding from Regione Toscana - Settore SISTEMA INFORMATIVO
  * TERRITORIALE ED AMBIENTALE - for the project: "Sviluppo strumenti
@@ -53,7 +53,7 @@ namespace sharedpaths { // geos.operation.sharedpaths
  * Paths reported as shared are given in the direction they
  * appear in the first geometry.
  *
- * Developed by Sandro Santilli (strk@keybit.net)
+ * Developed by Sandro Santilli (strk@kbt.io)
  * for Faunalia (http://www.faunalia.it)
  * with funding from Regione Toscana - Settore SISTEMA INFORMATIVO
  * TERRITORIALE ED AMBIENTALE - for the project: "Sviluppo strumenti

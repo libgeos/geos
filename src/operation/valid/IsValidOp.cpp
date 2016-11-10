@@ -4,7 +4,7 @@
  * http://geos.osgeo.org
  *
  * Copyright (C) 2010 Safe Software Inc.
- * Copyright (C) 2010 Sandro Santilli <strk@keybit.net>
+ * Copyright (C) 2010 Sandro Santilli <strk@kbt.io>
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  * Copyright (C) 2005 Refractions Research Inc.
  *
