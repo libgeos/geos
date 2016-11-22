@@ -52,10 +52,10 @@ case $1 in
       echo -L${libdir} -lgeos
       ;;
     --static-clibs)
-      echo -L${libdir} -lgeos_c -lgeos -m
+      echo -L${libdir} -lgeos_c -lgeos -lm
       ;;
     --static-cclibs)
-      echo -L${libdir} -lgeos -m
+      echo -L${libdir} -lgeos -lm
       ;;
     --ldflags)
       echo -L${libdir}
