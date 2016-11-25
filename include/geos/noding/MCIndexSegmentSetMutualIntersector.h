@@ -88,6 +88,7 @@ public:
         SegmentOverlapAction& operator=(const SegmentOverlapAction& rhs);
 
     public:
+        using index::chain::MonotoneChainOverlapAction::overlap;
         SegmentOverlapAction(SegmentIntersector & si) :
           index::chain::MonotoneChainOverlapAction(), si(si)
           {}

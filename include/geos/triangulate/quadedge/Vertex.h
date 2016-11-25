@@ -79,6 +79,9 @@ public:
 
 	Vertex();
 
+	virtual ~Vertex() {
+	}
+
 	inline double getX() const {
 		return p.x;
 	}

@@ -122,7 +122,7 @@ public:
 	* 
 	* @return the coordinate for the intersection location
 	*/
-	const geom::Coordinate * const getIntersection()  const
+	const geom::Coordinate * getIntersection()  const
 	{    
 		return intPt;  
 	}
