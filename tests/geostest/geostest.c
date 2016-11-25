@@ -337,6 +337,12 @@ do_all(char *inputfile)
 	/* Hausdorff Distance with densification */
 	if ( GEOSHausdorffDistanceDensify(g1, g2, 0.001, &dist) ) printf("HausdorffDistanceDensify: %g\n", dist);
 
+	/* Frechet Distance */
+	if ( GEOSFrechetDistance(g1, g2, &dist) ) printf("FrechetDistance: %g\n", dist);
+
+	/* Frechet Distance with densification */
+	if ( GEOSFrechetDistanceDensify(g1, g2, 0.1, &dist) ) printf("FrechetDistanceDensify: %g\n", dist);
+
 	/* Area */
 	if ( GEOSArea(g1, &area) ) printf("Area 1: %g\n", area);
 	if ( GEOSArea(g2, &area) ) printf("Area 2: %g\n", area);

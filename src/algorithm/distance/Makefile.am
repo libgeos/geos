@@ -9,6 +9,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/include
 
 libdistance_la_SOURCES = \
     DiscreteHausdorffDistance.cpp \
+    DiscreteFrechetDistance.cpp \
     DistanceToPoint.cpp 
 
 libdistance_la_LIBADD = 
