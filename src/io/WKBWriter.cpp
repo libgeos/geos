@@ -163,6 +163,11 @@ WKBWriter::writePolygon(const Polygon &g)
 	
 	writeGeometryType(WKBConstants::wkbPolygon, g.getSRID());
 	writeSRID(g.getSRID());
+
+	if (g.isEmpty()) {
+		writeInt(0);
+		return;
+	}
 	
 	std::size_t nholes = g.getNumInteriorRing();
 	writeInt(nholes+1);
