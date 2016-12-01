@@ -159,6 +159,30 @@ namespace tut
 
   }
 
+    // 5 - Check WKB representation of empty polygon
+    // See http://trac.osgeo.org/geos/ticket/680
+    template<>
+    template<>
+    void object::test<5>()
+    {
+        geos::geom::Geometry *geom = wktreader.read("POLYGON EMPTY");
+        geom->setSRID(4326);
+        std::stringstream result_stream;
+
+        wkbwriter.setOutputDimension( 2 );
+        wkbwriter.setByteOrder( 1 );
+        wkbwriter.setIncludeSRID( 1 );
+        wkbwriter.writeHEX( *geom, result_stream );
+
+        std::string actual = result_stream.str();
+        ensure_equals( actual, "0103000020E610000000000000" );
+
+        geos::geom::Geometry *geom2 = wkbreader.readHEX(result_stream);
+        assert( geom->equals(geom2) );
+
+        delete geom;
+        delete geom2;
+    }
 
 } // namespace tut
 
