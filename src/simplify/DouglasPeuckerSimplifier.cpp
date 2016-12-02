@@ -89,6 +89,7 @@ DPTransformer::DPTransformer(double t)
 	:
 	distanceTolerance(t)
 {
+	setSkipTransformedInvalidInteriorRings(true);
 }
 
 Geometry::AutoPtr

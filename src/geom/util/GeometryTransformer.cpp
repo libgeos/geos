@@ -59,11 +59,17 @@ GeometryTransformer::GeometryTransformer()
 	pruneEmptyGeometry(true),
 	preserveGeometryCollectionType(true),
 	preserveCollections(false),
-	preserveType(false)
+	preserveType(false),
+	skipTransformedInvalidInteriorRings(false)
 {}
 
 GeometryTransformer::~GeometryTransformer()
 {
+}
+
+void GeometryTransformer::setSkipTransformedInvalidInteriorRings(bool b)
+{
+	skipTransformedInvalidInteriorRings = b;
 }
 
 /*public*/
@@ -283,6 +289,8 @@ GeometryTransformer::transformPolygon(
 
 		if ( ! dynamic_cast<LinearRing*>(hole.get()) )
 		{
+			if ( skipTransformedInvalidInteriorRings )
+			    continue;
 			isAllValidLinearRings = false;
 		}
 
