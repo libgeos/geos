@@ -99,6 +99,8 @@ public:
 
 	std::auto_ptr<Geometry> transform(const Geometry* nInputGeom);
 
+	void setSkipTransformedInvalidInteriorRings(bool b);
+
 protected:
 
 	const GeometryFactory* factory;
@@ -177,6 +179,11 @@ private:
 	 * <code>true</code> if the type of the input should be preserved
 	 */
 	bool preserveType;
+
+	/**
+	 * <code>true</code> if transformed invalid interior rings should be skipped
+	 */
+	bool skipTransformedInvalidInteriorRings;
 
 	// Declare type as noncopyable
 	GeometryTransformer(const GeometryTransformer& other);

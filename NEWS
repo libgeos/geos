@@ -5,6 +5,7 @@ Changes in 3.6.1
   - Fix GEOSSTRtree_nearest_r signature and add implementation (#796)
   - Fix --static-clibs and --static-cclibs returns from geos-config
   - Fix WKB representation of empty polygon (#680).
+  - Fix empty GEOSSimplify return on inner ring collapse (#741)
 
 Changes in 3.6.0
 2016-10-25
