@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -66,14 +66,14 @@ namespace util { // geos.geom.util
  * the parent geometries types change appropriately to maintain valid structure.
  * Subclasses will override whichever <code>transformX</code> methods
  * they need to to handle particular Geometry types.
- * 
+ *
  * A typically usage would be a transformation that may transform Polygons into
  * Polygons, LineStrings
  * or Points.  This class would likely need to override the
  * {@link transformMultiPolygon} method to ensure that if input Polygons
  * change type the result is a GeometryCollection,
  * not a MultiPolygon
- * 
+ *
  * The default behaviour of this class is to simply recursively transform
  * each Geometry component into an identical object by copying.
  *
@@ -178,9 +178,9 @@ private:
 	 */
 	bool preserveType;
 
-    // Declare type as noncopyable
-    GeometryTransformer(const GeometryTransformer& other);
-    GeometryTransformer& operator=(const GeometryTransformer& rhs);
+	// Declare type as noncopyable
+	GeometryTransformer(const GeometryTransformer& other);
+	GeometryTransformer& operator=(const GeometryTransformer& rhs);
 };
 
 
