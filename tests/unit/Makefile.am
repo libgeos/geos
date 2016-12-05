@@ -1,5 +1,5 @@
 #
-# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+# This file is part of project GEOS (http://trac.osgeo.org/geos/)
 #
 
 AUTOMAKE_OPTIONS = subdir-objects
@@ -41,6 +41,7 @@ geos_unit_SOURCES = \
 	algorithm/CGAlgorithms/signedAreaTest.cpp \
 	algorithm/ConvexHullTest.cpp \
 	algorithm/distance/DiscreteHausdorffDistanceTest.cpp \
+	algorithm/distance/DiscreteFrechetDistanceTest.cpp \
 	algorithm/MinimumDiameterTest.cpp \
 	algorithm/PointLocatorTest.cpp \
 	algorithm/RobustLineIntersectionTest.cpp \
@@ -128,6 +129,8 @@ geos_unit_SOURCES = \
 	capi/GEOSContainsTest.cpp \
 	capi/GEOSConvexHullTest.cpp \
 	capi/GEOSDistanceTest.cpp \
+	capi/GEOSHausdorffDistanceTest.cpp \
+	capi/GEOSFrechetDistanceTest.cpp \
 	capi/GEOSEqualsTest.cpp \
 	capi/GEOSInterruptTest.cpp \
 	capi/GEOSIntersectsTest.cpp \

@@ -25,6 +25,7 @@
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/union/CascadedPolygonUnion.h>
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
+#include <geos/algorithm/distance/DiscreteFrechetDistance.h>
 #include <geos/util/Interrupt.h>
 
 #include <stdexcept>
@@ -294,6 +295,18 @@ int
 GEOSHausdorffDistanceDensify(const Geometry *g1, const Geometry *g2, double densifyFrac, double *dist)
 {
     return GEOSHausdorffDistanceDensify_r( handle, g1, g2, densifyFrac, dist );
+}
+
+int
+GEOSFrechetDistance(const Geometry *g1, const Geometry *g2, double *dist)
+{
+    return GEOSFrechetDistance_r( handle, g1, g2, dist );
+}
+
+int
+GEOSFrechetDistanceDensify(const Geometry *g1, const Geometry *g2, double densifyFrac, double *dist)
+{
+    return GEOSFrechetDistanceDensify_r( handle, g1, g2, densifyFrac, dist );
 }
 
 int

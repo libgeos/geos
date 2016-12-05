@@ -9,5 +9,6 @@ geosdir = $(includedir)/geos/algorithm/distance
 
 geos_HEADERS = \
     DiscreteHausdorffDistance.h \
+    DiscreteFrechetDistance.h \
     DistanceToPoint.h \
     PointPairDistance.h

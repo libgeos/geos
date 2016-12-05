@@ -1111,6 +1111,14 @@ extern int GEOS_DLL GEOSHausdorffDistanceDensify_r(GEOSContextHandle_t handle,
                                    const GEOSGeometry *g1,
                                    const GEOSGeometry *g2,
                                    double densifyFrac, double *dist);
+extern int GEOS_DLL GEOSFrechetDistance_r(GEOSContextHandle_t handle,
+                                   const GEOSGeometry *g1,
+                                   const GEOSGeometry *g2,
+                                   double *dist);
+extern int GEOS_DLL GEOSFrechetDistanceDensify_r(GEOSContextHandle_t handle,
+                                   const GEOSGeometry *g1,
+                                   const GEOSGeometry *g2,
+                                   double densifyFrac, double *dist);
 extern int GEOS_DLL GEOSGeomGetLength_r(GEOSContextHandle_t handle,
                                    const GEOSGeometry *g, double *length);
 
@@ -1971,6 +1979,10 @@ extern int GEOS_DLL GEOSDistanceIndexed(const GEOSGeometry* g1, const GEOSGeomet
 extern int GEOS_DLL GEOSHausdorffDistance(const GEOSGeometry *g1,
         const GEOSGeometry *g2, double *dist);
 extern int GEOS_DLL GEOSHausdorffDistanceDensify(const GEOSGeometry *g1,
+        const GEOSGeometry *g2, double densifyFrac, double *dist);
+extern int GEOS_DLL GEOSFrechetDistance(const GEOSGeometry *g1,
+        const GEOSGeometry *g2, double *dist);
+extern int GEOS_DLL GEOSFrechetDistanceDensify(const GEOSGeometry *g1,
         const GEOSGeometry *g2, double densifyFrac, double *dist);
 extern int GEOS_DLL GEOSGeomGetLength(const GEOSGeometry *g, double *length);
 
