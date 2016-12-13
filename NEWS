@@ -1,5 +1,5 @@
 Changes in 3.6.1
-2016-11-30
+2016-MM-DD
 
 - Bug fixes / improvements
   - Fix GEOSSTRtree_nearest_r signature and add implementation (#796)
