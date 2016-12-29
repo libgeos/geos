@@ -34,6 +34,7 @@
 #include <geos/geom/CoordinateSequence.h>
 
 #include <typeinfo>
+#include <cmath> // for fabs()
 
 using namespace geos::geom;
 
