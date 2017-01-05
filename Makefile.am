@@ -41,7 +41,10 @@ gen-ChangeLog:
 	elif test -d .svn; then \
 		svn2cl --authors=authors.svn -i -o $${owd}/ChangeLog; \
 	elif test -f ChangeLog; then \
+		echo "NOTE: distributing ChangeLog found in source dir"; \
 		cp ChangeLog  $${owd}/ChangeLog; \
+	else \
+		echo "WARNING: could not find a ChangeLog" >&2; \
 	fi
 
 apidoc doxygen:

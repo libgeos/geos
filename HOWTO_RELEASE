@@ -4,7 +4,7 @@
 - Run 'make distcheck', fix any problem with it.
 
 - Update the NEWS file (extract most important things from the
-  repository log). Make sure to update the release date 
+  repository log). Make sure to update the release date
 
 - Commit the changes in the NEWS file.
 
@@ -13,12 +13,10 @@
    $ svn copy -m "Tagged release MAJOR.MINOR.PATCH" \
 		$base/trunk $base/tags/MAJOR.MINOR.PATCH
 
-- Export the tag and 'make dist-bzip2'. 
-  $ svn export $base/tags/$rev
-  $ cd $rev
-  $ ./autogen.sh && ./configure && make dist-bzip2
+- Build a tarball: make dist-bzip2
 
-- Verify that you can unpack and build the tarball
+- Verify that you can unpack and build the generated tarball
+  (and that it contains a correct ChangeLog)
 
 - Copy the tarball to upload.osgeo.org:/osgeo/download/geos
 
@@ -33,7 +31,7 @@
 
 - Increment release version:
    - In configure.in
-   - In include/geos/version.h.vc 
+   - In include/geos/version.h.vc
    - In capi/geos_c.h.in
      - VERSION_PATCH for bugfixes/improvements (even breaking C++ API)
      - VERSION_MINOR for NEW interfaces in the C lib
@@ -47,5 +45,5 @@
     - Add latest release
     - Remove previos patch level release (if any)
 
-- Announce 
-   
+- Announce
+
