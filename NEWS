@@ -1,6 +1,9 @@
 Changes in 3.6.2dev
 2017-MM-DD
 
+- Bug fixes / improvements
+  - Allow building against python 3 (#774)
+
 Changes in 3.6.1
 2016-12-24
 
