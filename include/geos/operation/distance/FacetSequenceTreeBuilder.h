@@ -27,7 +27,7 @@
 namespace geos {
     namespace operation {
         namespace distance {
-            class FacetSequenceTreeBuilder {
+            class GEOS_DLL FacetSequenceTreeBuilder {
             private:
                 // 6 seems to be a good facet sequence size
                 static const int FACET_SEQUENCE_SIZE = 6;
