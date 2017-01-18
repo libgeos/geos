@@ -5,6 +5,15 @@ YYYY-MM-DD
   - CAPI: GEOSDistanceIndexed (#795, Dan Baston)
   - CAPI: GEOSFrechetDistance (#797, Shinichi SUGIYAMA)
 
+Changes in 3.6.1
+2016-12-24
+
+- Bug fixes / improvements
+  - Fix GEOSSTRtree_nearest_r signature and add implementation (#796)
+  - Fix --static-clibs and --static-cclibs returns from geos-config
+  - Fix WKB representation of empty polygon (#680).
+  - Fix empty GEOSSimplify return on inner ring collapse (#741)
+
 Changes in 3.6.0
 2016-10-25
 
