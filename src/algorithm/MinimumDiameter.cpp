@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -16,7 +16,7 @@
  * Last port: algorithm/MinimumDiameter.java r966
  *
  **********************************************************************
- * 
+ *
  * TODO:
  * 	- avoid heap allocation for LineSegment and Coordinate
  *
@@ -49,7 +49,7 @@ namespace algorithm { // geos.algorithm
  * by two parallel lines.
  * This can be thought of as the smallest hole that the geometry can be
  * moved through, with a single rotation.
- * 
+ *
  * The first step in the algorithm is computing the convex hull of the Geometry.
  * If the input Geometry is known to be convex, a hint can be supplied to
  * avoid this computation.
@@ -268,7 +268,7 @@ MinimumDiameter::findMaxPerpDistance(const CoordinateSequence *pts,
 	if (maxPerpDistance < minWidth) {
 		minPtIndex = maxIndex;
 		minWidth = maxPerpDistance;
-		delete minWidthPt; 
+		delete minWidthPt;
 		minWidthPt = new Coordinate(pts->getAt(minPtIndex));
 		delete minBaseSeg;
 		minBaseSeg = new LineSegment(*seg);
