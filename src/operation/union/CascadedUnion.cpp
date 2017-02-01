@@ -116,7 +116,7 @@ CascadedUnion::reduceToGeometries(index::strtree::ItemsList* geomTree)
             geoms->push_back(reinterpret_cast<geom::Geometry*>((*i).get_geometry()));
         }
         else {
-            assert(!"should never be reached");
+            assert(!static_cast<bool>("should never be reached"));
         }
     }
 
@@ -195,4 +195,3 @@ CascadedUnion::unionActual(geom::Geometry* g0, geom::Geometry* g1)
 } // namespace geos.operation.union
 } // namespace geos.operation
 } // namespace geos
-

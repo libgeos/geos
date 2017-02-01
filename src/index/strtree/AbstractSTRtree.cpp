@@ -370,7 +370,7 @@ ItemsList* AbstractSTRtree::itemsTree(AbstractNode* node)
                 static_cast<ItemBoundable*>(childBoundable)->getItem());
         }
         else {
-            assert(!"should never be reached");
+            assert(!static_cast<bool>("should never be reached"));
         }
     }
     if (valuesTreeForNode->empty()) 
@@ -395,4 +395,3 @@ ItemsList* AbstractSTRtree::itemsTree()
 } // namespace geos.index.strtree
 } // namespace geos.index
 } // namespace geos
-
