@@ -99,7 +99,7 @@ GeometryEditor::edit(const Geometry *geometry, GeometryEditorOperation *operatio
   }
 
     // Unsupported Geometry classes should be caught in the GeometryEditorOperation.
-    assert(!"SHOULD NEVER GET HERE");
+    assert(!static_cast<bool>("SHOULD NEVER GET HERE"));
     return NULL;
 }
 
