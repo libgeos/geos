@@ -139,7 +139,7 @@ CascadedPolygonUnion::reduceToGeometries(index::strtree::ItemsList* geomTree)
             geoms->push_back(reinterpret_cast<geom::Geometry*>((*i).get_geometry()));
         }
         else {
-            assert(!"should never be reached");
+            assert(!static_cast<bool>("should never be reached"));
         }
     }
 
@@ -247,4 +247,3 @@ CascadedPolygonUnion::restrictToPolygons(std::auto_ptr<geom::Geometry> g)
 } // namespace geos.operation.union
 } // namespace geos.operation
 } // namespace geos
-

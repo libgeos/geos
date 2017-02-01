@@ -4,6 +4,7 @@ Changes in 3.6.2dev
 - Bug fixes / improvements
   - Allow building against python 3 (#774)
   - Fix build with android-ndk and other compilers (#799)
+  - Allows compiling with -Wpointer-bool-conversion (#638)
 
 Changes in 3.6.1
 2016-12-24
