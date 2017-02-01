@@ -132,7 +132,7 @@ public:
 	 */
 	void computeDepths(DirectedEdge *de);
 
-	std::string print();
+	virtual std::string print() const;
 
 private:
 
