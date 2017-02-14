@@ -871,6 +871,11 @@ LineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 	n11.x -= normPt.x;    n11.y -= normPt.y;
 
 #if COMPUTE_Z
+
+	// Only do this if input does have Z
+	// See https://trac.osgeo.org/geos/ticket/811
+	if( ISNAN(n00.z) ) return;
+
 	double minZ0 = n00.z < n01.z ? n00.z : n01.z;
 	double minZ1 = n10.z < n11.z ? n10.z : n11.z;
 	double maxZ0 = n00.z > n01.z ? n00.z : n01.z;

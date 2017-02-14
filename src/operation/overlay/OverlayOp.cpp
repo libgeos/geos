@@ -425,6 +425,11 @@ OverlayOp::labelIncompleteNode(Node *n, int targetIndex)
 	 * by LineIntersector invoked by CGAlgorithms::isOnLine
 	 * invoked by PointLocator.
 	 */
+
+	// Only do this if input does have Z
+	// See https://trac.osgeo.org/geos/ticket/811
+	if(targetGeom->getCoordinateDimension() < 3 ) return;
+
 	const LineString *line = dynamic_cast<const LineString *>(targetGeom);
 	if ( loc == Location::INTERIOR && line )
 	{
