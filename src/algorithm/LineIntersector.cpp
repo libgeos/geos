@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -33,7 +33,7 @@
 #include <algorithm> // for max()
 #include <string>
 #include <cmath> // for fabs()
-#include <cassert> 
+#include <cassert>
 
 
 #ifndef GEOS_DEBUG
@@ -404,7 +404,7 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 	int Pq1=CGAlgorithms::orientationIndex(p1,p2,q1);
 	int Pq2=CGAlgorithms::orientationIndex(p1,p2,q2);
 
-	if ((Pq1>0 && Pq2>0) || (Pq1<0 && Pq2<0)) 
+	if ((Pq1>0 && Pq2>0) || (Pq1<0 && Pq2<0))
 	{
 #if GEOS_DEBUG
 		cerr<<" NO_INTERSECTION"<<endl;
@@ -455,16 +455,16 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 		/* Check for two equal endpoints.
 		 * This is done explicitly rather than by the orientation tests
 		 * below in order to improve robustness.
-		 * 
+		 *
 		 * (A example where the orientation tests fail
 		 *  to be consistent is:
-		 * 
+		 *
 		 * LINESTRING ( 19.850257749638203 46.29709338043669,
 		 * 			20.31970698357233 46.76654261437082 )
 		 * and
 		 * LINESTRING ( -48.51001596420236 -22.063180333403878,
 		 * 			19.850257749638203 46.29709338043669 )
-		 * 
+		 *
 		 * which used to produce the result:
 		 * (20.31970698357233, 46.76654261437082, NaN)
 		 */
@@ -772,7 +772,7 @@ LineIntersector::intersection(const Coordinate& p1,
 		     << intPt.toString() << endl;
 #endif
 	}
- 
+
 	if (precisionModel!=NULL) {
 		precisionModel->makePrecise(intPt);
 	}
@@ -848,17 +848,17 @@ LineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 	double minY0 = n00.y < n01.y ? n00.y : n01.y;
 	double maxX0 = n00.x > n01.x ? n00.x : n01.x;
 	double maxY0 = n00.y > n01.y ? n00.y : n01.y;
-	
+
 	double minX1 = n10.x < n11.x ? n10.x : n11.x;
 	double minY1 = n10.y < n11.y ? n10.y : n11.y;
 	double maxX1 = n10.x > n11.x ? n10.x : n11.x;
 	double maxY1 = n10.y > n11.y ? n10.y : n11.y;
-	
+
 	double intMinX = minX0 > minX1 ? minX0 : minX1;
 	double intMaxX = maxX0 < maxX1 ? maxX0 : maxX1;
 	double intMinY = minY0 > minY1 ? minY0 : minY1;
 	double intMaxY = maxY0 < maxY1 ? maxY0 : maxY1;
-	
+
 	double intMidX = (intMinX + intMaxX) / 2.0;
 	double intMidY = (intMinY + intMaxY) / 2.0;
 

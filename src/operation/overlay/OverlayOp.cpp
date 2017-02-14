@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  ***********************************************************************
@@ -117,7 +117,7 @@ OverlayOp::isResultOfOp(int loc0, int loc1, OverlayOp::OpCode opCode)
 		case opDIFFERENCE:
 			return loc0==Location::INTERIOR && loc1!=Location::INTERIOR;
 		case opSYMDIFFERENCE:
-			return (loc0==Location::INTERIOR && loc1!=Location::INTERIOR) 
+			return (loc0==Location::INTERIOR && loc1!=Location::INTERIOR)
 				|| (loc0!=Location::INTERIOR && loc1==Location::INTERIOR);
 	}
 	return false;
@@ -200,7 +200,7 @@ OverlayOp::insertUniqueEdges(vector<Edge*> *edges, const Envelope *env)
     }
 #if GEOS_DEBUG
 		cerr <<" "<< e->print() << endl;
-#endif 
+#endif
     insertUniqueEdge(e);
   }
 /*
@@ -229,7 +229,7 @@ OverlayOp::replaceCollapsedEdges()
 
 			// should we keep this alive some more ?
 			delete e;
-		} 
+		}
 	}
 }
 
@@ -513,7 +513,7 @@ OverlayOp::mergeZ(Node *n, const LineString *line) const
 	for(size_t i=1, size=pts->size(); i<size; ++i)
 	{
 		const Coordinate &p0=pts->getAt(i-1);
-		const Coordinate &p1=pts->getAt(i);	
+		const Coordinate &p1=pts->getAt(i);
 		li.computeIntersection(p, p0, p1);
 		if (li.hasIntersection())
 		{
@@ -659,7 +659,7 @@ OverlayOp::computeGeometry(vector<Point*> *nResultPointList,
 	geomList->insert(geomList->end(),
 			nResultPolyList->begin(),
 			nResultPolyList->end());
-			
+
 	// build the most specific geometry possible
 	Geometry *g=geomFact->buildGeometry(geomList);
 	return g;
@@ -753,13 +753,13 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 	 */
   try
   {
-#ifdef GEOS_DEBUG_VALIDATION 
+#ifdef GEOS_DEBUG_VALIDATION
 		cout << "EdgeNodingValidator about to evaluate " << edgeList.getEdges().size() << " edges" << endl;
 #endif
     // Will throw TopologyException if noding is
     // found to be invalid
     EdgeNodingValidator::checkValid(edgeList.getEdges());
-#ifdef GEOS_DEBUG_VALIDATION 
+#ifdef GEOS_DEBUG_VALIDATION
 		cout << "EdgeNodingValidator accepted the noding" << endl;
 #endif
   }
@@ -771,7 +771,7 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 
     // In the error scenario, the edgeList is not properly
     // deleted. Cannot add to the destructor of EdgeList
-    // (as it should) because 
+    // (as it should) because
     // "graph.addEdges(edgeList.getEdges());" below
     // takes over edgeList ownership in the success case.
     edgeList.clearList();
@@ -810,7 +810,7 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 	GEOS_CHECK_FOR_INTERRUPTS();
 
 	PolygonBuilder polyBuilder(geomFact);
-	
+
 	// might throw a TopologyException *
 	polyBuilder.add(&graph);
 
@@ -839,7 +839,7 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 #if USE_ELEVATION_MATRIX
 	elevationMatrix->elevate(resultGeom);
 #endif // USE_ELEVATION_MATRIX
-	
+
 }
 
 /*protected*/
@@ -1008,7 +1008,7 @@ OverlayOp::checkObviouslyWrongResult(OverlayOp::OpCode opCode)
 		}
 	}
 
-	else if ( opCode == opDIFFERENCE 
+	else if ( opCode == opDIFFERENCE
 		&& arg[0]->getGeometry()->getDimension() == Dimension::A
 		&& arg[1]->getGeometry()->getDimension() == Dimension::A )
 	{
