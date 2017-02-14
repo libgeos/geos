@@ -449,7 +449,7 @@ DirectedEdgeStar::computeDepths(EdgeEndStar::iterator startIt,
 
 /*public*/
 std::string
-DirectedEdgeStar::print()
+DirectedEdgeStar::print() const
 {
 	std::string out="DirectedEdgeStar: " + getCoordinate().toString();
 

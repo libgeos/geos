@@ -6,6 +6,7 @@ Changes in 3.6.2dev
   - Fix build with android-ndk and other compilers (#799)
   - Allows compiling with -Wpointer-bool-conversion (#638)
   - Fix unhandled exception on invalid fp operation (#811)
+  - Fix overloaded virtual print in DirectedEdge* (#812)
 
 Changes in 3.6.1
 2016-12-24
