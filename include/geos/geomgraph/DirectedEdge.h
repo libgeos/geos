@@ -81,7 +81,7 @@ public:
 
 	void setDepth(int position, int newDepth);
 
-	int getDepthDelta();
+	int getDepthDelta() const;
 
 	/// Marks both DirectedEdges attached to a given Edge.
 	//
@@ -142,7 +142,7 @@ public:
 	 */
 	void setEdgeDepths(int position, int newDepth);
 
-	std::string print();
+	virtual std::string print() const;
 
 	std::string printEdge();
 

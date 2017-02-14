@@ -113,7 +113,7 @@ DirectedEdge::setDepth(int position, int newDepth)
 
 /*public*/
 int
-DirectedEdge::getDepthDelta()
+DirectedEdge::getDepthDelta() const
 {
 	int depthDelta=edge->getDepthDelta();
 	if (!isForwardVar) depthDelta=-depthDelta;
@@ -185,7 +185,7 @@ DirectedEdge::setEdgeDepths(int position, int newDepth)
 
 /*public*/
 std::string
-DirectedEdge::print()
+DirectedEdge::print() const
 {
 	std::stringstream ss;
 	ss << EdgeEnd::print();
