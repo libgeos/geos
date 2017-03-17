@@ -218,6 +218,7 @@ OBJ = \
 	operation\distance\FacetSequence.$(EXT) \
 	operation\distance\FacetSequenceTreeBuilder.$(EXT) \
 	operation\distance\GeometryLocation.$(EXT) \
+	operation\distance\IndexedFacetDistance.$(EXT) \
 	operation\intersection\Rectangle.$(EXT) \
 	operation\intersection\RectangleIntersection.$(EXT) \
 	operation\intersection\RectangleIntersectionBuilder.$(EXT) \
