@@ -9,6 +9,7 @@ configuration: Release
 branches:
   only:
     - svn-trunk
+    - svn-3.6
     - svn-3.5
 
 shallow_clone: true
@@ -19,10 +20,8 @@ matrix:
 
 environment:
   matrix:
-    - CFG: Release
-      PLATFORM: Win32
-    - CFG: Release
-      PLATFORM: Win64
+    - platform: x86
+    - platform: x64
 
 init:
   - ps: |
