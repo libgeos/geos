@@ -1,4 +1,4 @@
-/**********************************************************************
+﻿/**********************************************************************
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
@@ -22,6 +22,11 @@
 #include <geos/export.h>
 #include <geos/geom/Geometry.h> // for inheritance
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4589) // warning C4589 : Constructor of abstract class 'Lineal' ignores initializer for virtual base class 'Geometry'
+#endif
+
 namespace geos {
 namespace geom { // geos::geom
 
@@ -37,5 +42,9 @@ protected:
 
 } // namespace geos::geom
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // ndef GEOS_GEOM_LINEAL_H
