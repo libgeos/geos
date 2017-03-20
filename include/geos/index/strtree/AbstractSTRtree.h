@@ -1,4 +1,4 @@
-/**********************************************************************
+﻿/**********************************************************************
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
@@ -193,11 +193,11 @@ protected:
 	virtual std::auto_ptr<BoundableList> createParentBoundables(
 			BoundableList* childBoundables, int newLevel);
 
-	virtual AbstractNode* lastNode(BoundableList* nodes)
+	virtual AbstractNode* lastNode(BoundableList* nodeList)
 	{
-		assert(!nodes->empty());
+		assert(!nodeList->empty());
 		// Cast from Boundable to AbstractNode
-		return static_cast<AbstractNode*>( nodes->back() );
+		return static_cast<AbstractNode*>(nodeList->back() );
 	}
 
 	virtual AbstractNode* getRoot() {

@@ -1,4 +1,4 @@
-/**********************************************************************
+﻿/**********************************************************************
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
@@ -794,7 +794,7 @@ LineIntersector::intersection(const Coordinate& p1,
 void
 LineIntersector::intersectionWithNormalization(const Coordinate& p1,
 	const Coordinate& p2, const Coordinate& q1, const Coordinate& q2,
-	Coordinate &intPt) const
+	Coordinate &intPtOut) const
 {
 	Coordinate n1=p1;
 	Coordinate n2=p2;
@@ -803,10 +803,10 @@ LineIntersector::intersectionWithNormalization(const Coordinate& p1,
 	Coordinate normPt;
 	normalizeToEnvCentre(n1, n2, n3, n4, normPt);
 
-	safeHCoordinateIntersection(n1, n2, n3, n4, intPt);
+	safeHCoordinateIntersection(n1, n2, n3, n4, intPtOut);
 
-	intPt.x += normPt.x;
-	intPt.y += normPt.y;
+	intPtOut.x += normPt.x;
+	intPtOut.y += normPt.y;
 }
 
 
@@ -832,11 +832,11 @@ LineIntersector::smallestInAbsValue(double x1,double x2,double x3,double x4) con
 
 /*private*/
 bool
-LineIntersector::isInSegmentEnvelopes(const Coordinate& intPt) const
+LineIntersector::isInSegmentEnvelopes(const Coordinate& pt) const
 {
 	Envelope env0(*inputLines[0][0], *inputLines[0][1]);
 	Envelope env1(*inputLines[1][0], *inputLines[1][1]);
-	return env0.contains(intPt) && env1.contains(intPt);
+	return env0.contains(pt) && env1.contains(pt);
 }
 
 /*private*/
@@ -895,10 +895,10 @@ LineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 void
 LineIntersector::safeHCoordinateIntersection(const Coordinate& p1,
 		const Coordinate& p2, const Coordinate& q1,
-		const Coordinate& q2, Coordinate& intPt) const
+		const Coordinate& q2, Coordinate& intPtOut) const
 {
 	try {
-		HCoordinate::intersection(p1, p2, q1, q2, intPt);
+		HCoordinate::intersection(p1, p2, q1, q2, intPtOut);
 #if GEOS_DEBUG
 		cerr<<" HCoordinate found intersection h:"<<intPt.toString()<<endl;
 #endif
@@ -906,7 +906,7 @@ LineIntersector::safeHCoordinateIntersection(const Coordinate& p1,
 	} catch (const NotRepresentableException& /* e */) {
 		// compute an approximate result
 		//intPt = CentralEndpointIntersector::getIntersection(p1, p2, q1, q2);
-		intPt = nearestEndpoint(p1, p2, q1, q2);
+		intPtOut = nearestEndpoint(p1, p2, q1, q2);
     	}
 }
 
