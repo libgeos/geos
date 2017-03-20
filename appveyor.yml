@@ -20,8 +20,10 @@ matrix:
 
 environment:
   matrix:
-    - platform: x86
-    - platform: x64
+    - PLATFORM: x86
+      GENERATOR: "Visual Studio 14 2015"
+    - PLATFORM: x64
+      GENERATOR: "Visual Studio 14 2015 Win64"
 
 init:
   - ps: |
@@ -29,28 +31,16 @@ init:
       Get-ChildItem Env: | %{"{0}={1}" -f $_.Name,$_.Value}
 
 before_build:
-  - ps: |
-      if ($env:PLATFORM -Match "x86") {
-        $G="Visual Studio 14 2015"
-      } elseif ($env:PLATFORM -Match "x64") {
-        $G="Visual Studio 14 2015 Win64"
-      }
-      Write-Host "Running CMake:" -ForegroundColor Magenta
-      cmake.exe -G $G -DCMAKE_BUILD_TYPE=$env:CONFIGURATION -DGEOS_ENABLE_TESTS=OFF -DGEOS_BUILD_SHARED=OFF $env:APPVEYOR_BUILD_FOLDER
-      Write-Host "Running MSBuild:" -ForegroundColor Magenta
-  - ps: 
+  - ps: 'Write-Host "Running cmake: $env:GENERATOR" -ForegroundColor Magenta'
+  - cmake.exe -G "%GENERATOR%" -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DGEOS_ENABLE_TESTS=OFF -DGEOS_BUILD_SHARED=OFF %APPVEYOR_BUILD_FOLDER%
 
-build:
-  parallel: true
-  project: GEOS.sln
-  verbosity: minimal
+build_script:
+  - ps: 'Write-Host "Running cmake --build:" -ForegroundColor Magenta'
+  - cmake --build . --config %CONFIGURATION%
 
 test_script:
-  - ps: |
-      Write-Host "Running CTest:" -ForegroundColor Magenta
-#      $cmd = 'ctest -V --output-on-failure -C ' + $Env:CFG
-#      iex "& $cmd"
-#      if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
+  - ps: 'Write-Host "Running CTest:" -ForegroundColor Magenta'
+  - ctest -V --output-on-failure -C %CONFIGURATION%
 
 # If you need to debug AppVeyor session (https://www.appveyor.com/docs/how-to/rdp-to-build-worker), then:
 # 1. Uncomment the on_finish section below:
