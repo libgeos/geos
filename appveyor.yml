@@ -26,8 +26,8 @@ environment:
       GENERATOR: "Visual Studio 14 2015 Win64"
     - PLATFORM: x86
       GENERATOR: "NMake Makefiles"
-    #- PLATFORM: x64
-    #  GENERATOR: "NMake Makefiles"
+    - PLATFORM: x64
+      GENERATOR: "NMake Makefiles"
 
 init:
   - ps: 'Write-Host "Building GEOS branch: $env:APPVEYOR_REPO_BRANCH" -ForegroundColor Magenta'
