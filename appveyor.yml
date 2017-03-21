@@ -37,7 +37,7 @@ init:
 
 before_build:
   - ps: 'Write-Host "Running cmake: $env:GENERATOR" -ForegroundColor Magenta'
-  - cmake.exe -G "%GENERATOR%" -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DGEOS_ENABLE_TESTS=OFF %APPVEYOR_BUILD_FOLDER%
+  - cmake.exe -G "%GENERATOR%" -DCMAKE_BUILD_TYPE=%CONFIGURATION% %APPVEYOR_BUILD_FOLDER%
 
 build_script:
   - ps: 'Write-Host "Running cmake --build:" -ForegroundColor Magenta'
