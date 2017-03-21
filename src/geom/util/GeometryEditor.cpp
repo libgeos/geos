@@ -1,4 +1,4 @@
-/**********************************************************************
+﻿/**********************************************************************
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
@@ -155,7 +155,7 @@ GeometryEditor::editGeometryCollection(const GeometryCollection *collection, Geo
 {
 	GeometryCollection *newCollection = dynamic_cast<GeometryCollection*>( operation->edit(collection,factory) );
 	vector<Geometry*> *geometries = new vector<Geometry*>();
-	for (unsigned int i=0, n=newCollection->getNumGeometries(); i<n; i++)
+	for (std::size_t i=0, n=newCollection->getNumGeometries(); i<n; i++)
 	{
 		Geometry *geometry = edit(newCollection->getGeometryN(i),
 			operation);

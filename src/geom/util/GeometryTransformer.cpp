@@ -1,4 +1,4 @@
-/**********************************************************************
+﻿/**********************************************************************
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
@@ -335,7 +335,7 @@ GeometryTransformer::transformMultiPolygon(
 
 	auto_ptr< vector<Geometry*> > transGeomList( new vector<Geometry*>() );
 
-	for (unsigned int i=0, n=geom->getNumGeometries(); i<n; i++)
+	for (std::size_t i=0, n=geom->getNumGeometries(); i<n; i++)
 	{
 		const Polygon* p = dynamic_cast<const Polygon*>(
 				geom->getGeometryN(i));
@@ -366,7 +366,7 @@ GeometryTransformer::transformGeometryCollection(
 
 	vector<Geometry*>* transGeomList = new vector<Geometry*>();
 
-	for (unsigned int i=0, n=geom->getNumGeometries(); i<n; i++)
+	for (std::size_t i=0, n=geom->getNumGeometries(); i<n; i++)
 	{
 		Geometry::AutoPtr transformGeom = transform(
 			geom->getGeometryN(i)); // no parent ?
