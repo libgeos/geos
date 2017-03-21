@@ -24,12 +24,16 @@ environment:
       GENERATOR: "Visual Studio 14 2015"
     - PLATFORM: x64
       GENERATOR: "Visual Studio 14 2015 Win64"
+    - PLATFORM: x64
+      GENERATOR: "NMake Makefiles"
 
 init:
   - ps: 'Write-Host "Building GEOS branch: $env:APPVEYOR_REPO_BRANCH" -ForegroundColor Magenta'
   #- ps: |
   #  Write-Host "Build worker environment variables:" -ForegroundColor Magenta
   #      Get-ChildItem Env: | %{"{0}={1}" -f $_.Name,$_.Value}
+  - if "%GENERATOR%"=="NMake Makefiles" if "%PLATFORM%"=="x86" call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
+  - if "%GENERATOR%"=="NMake Makefiles" if "%PLATFORM%"=="x64" "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
 
 before_build:
   - ps: 'Write-Host "Running cmake: $env:GENERATOR" -ForegroundColor Magenta'
