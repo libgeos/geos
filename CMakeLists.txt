@@ -342,11 +342,22 @@ if(GEOS_ENABLE_TESTS)
   add_custom_target(check COMMAND ctest)
 endif()
 
+
+#################################################################################
+# IDE specifics
+#################################################################################
+if (MSVC_IDE)
+  # Visual Studio 2017 supports .editorconfig, copy it next to generated .sln
+  message(STATUS "Copying .editorconfig file to ${PROJECT_BINARY_DIR}")
+  file(COPY "${PROJECT_SOURCE_DIR}/.editorconfig"
+    DESTINATION "${PROJECT_BINARY_DIR}")
+endif()
+
+include(GenerateSourceGroups)
+
 #################################################################################
 # Configure subdirectories
 #################################################################################
-include(GenerateSourceGroups)
-
 add_subdirectory(include)
 add_subdirectory(src)
 add_subdirectory(capi)
