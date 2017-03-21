@@ -26,7 +26,7 @@ environment:
       GENERATOR: "Visual Studio 14 2015 Win64"
 
 init:
-  - ps: 'Write-Host "Building GEOS branch: $env:APPVEYOR_REPO_BRANCH" -ForegroundColor'
+  - ps: 'Write-Host "Building GEOS branch: $env:APPVEYOR_REPO_BRANCH" -ForegroundColor Magenta'
   #- ps: |
   #  Write-Host "Build worker environment variables:" -ForegroundColor Magenta
   #      Get-ChildItem Env: | %{"{0}={1}" -f $_.Name,$_.Value}
