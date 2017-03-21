@@ -743,10 +743,10 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 void
 LineIntersector::intersection(const Coordinate& p1,
 	const Coordinate& p2, const Coordinate& q1, const Coordinate& q2,
-	Coordinate &intPt) const
+	Coordinate &intPtOut) const
 {
 
-	intersectionWithNormalization(p1, p2, q1, q2, intPt);
+	intersectionWithNormalization(p1, p2, q1, q2, intPtOut);
 
 	/*
 	 * Due to rounding it can happen that the computed intersection is
@@ -763,10 +763,10 @@ LineIntersector::intersection(const Coordinate& p1,
 	 * int point = (2097408.2633752143,1144595.8008114607)
 	 */
 
-	if (! isInSegmentEnvelopes(intPt))
+	if (! isInSegmentEnvelopes(intPtOut))
 	{
 		//intPt = CentralEndpointIntersector::getIntersection(p1, p2, q1, q2);
-		intPt = nearestEndpoint(p1, p2, q1, q2);
+	  intPtOut = nearestEndpoint(p1, p2, q1, q2);
 #if GEOS_DEBUG
 		cerr << "Intersection outside segment envelopes, snapped to "
 		     << intPt.toString() << endl;
@@ -774,18 +774,18 @@ LineIntersector::intersection(const Coordinate& p1,
 	}
 
 	if (precisionModel!=NULL) {
-		precisionModel->makePrecise(intPt);
+		precisionModel->makePrecise(intPtOut);
 	}
 
 
 #if COMPUTE_Z
 	double ztot = 0;
 	double zvals = 0;
-	double zp = interpolateZ(intPt, p1, p2);
-	double zq = interpolateZ(intPt, q1, q2);
+	double zp = interpolateZ(intPtOut, p1, p2);
+	double zq = interpolateZ(intPtOut, q1, q2);
 	if ( !ISNAN(zp)) { ztot += zp; zvals++; }
 	if ( !ISNAN(zq)) { ztot += zq; zvals++; }
-	if ( zvals ) intPt.z = ztot/zvals;
+	if ( zvals ) intPtOut.z = ztot/zvals;
 #endif // COMPUTE_Z
 
 }
