@@ -26,13 +26,14 @@ environment:
       GENERATOR: "Visual Studio 14 2015 Win64"
 
 init:
-  - ps: |
-      Write-Host "Build worker environment variables:" -ForegroundColor Magenta
-      Get-ChildItem Env: | %{"{0}={1}" -f $_.Name,$_.Value}
+  - ps: 'Write-Host "Building GEOS branch: $env:APPVEYOR_REPO_BRANCH" -ForegroundColor'
+  #- ps: |
+  #  Write-Host "Build worker environment variables:" -ForegroundColor Magenta
+  #      Get-ChildItem Env: | %{"{0}={1}" -f $_.Name,$_.Value}
 
 before_build:
   - ps: 'Write-Host "Running cmake: $env:GENERATOR" -ForegroundColor Magenta'
-  - cmake.exe -G "%GENERATOR%" -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DGEOS_ENABLE_TESTS=OFF -DGEOS_BUILD_SHARED=OFF %APPVEYOR_BUILD_FOLDER%
+  - cmake.exe -G "%GENERATOR%" -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DGEOS_ENABLE_TESTS=OFF %APPVEYOR_BUILD_FOLDER%
 
 build_script:
   - ps: 'Write-Host "Running cmake --build:" -ForegroundColor Magenta'
