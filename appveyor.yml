@@ -36,6 +36,7 @@ init:
   #      Get-ChildItem Env: | %{"{0}={1}" -f $_.Name,$_.Value}
   - if "%GENERATOR%"=="NMake Makefiles" if "%PLATFORM%"=="x86" call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
   - if "%GENERATOR%"=="NMake Makefiles" if "%PLATFORM%"=="x64" "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
+  - if "%GENERATOR%"=="NMake Makefiles" if "%PLATFORM%"=="x64" call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
 
 before_build:
   - ps: 'Write-Host "Running cmake: $env:GENERATOR" -ForegroundColor Magenta'
