@@ -24,6 +24,8 @@ environment:
       GENERATOR: "Visual Studio 14 2015"
     - PLATFORM: x64
       GENERATOR: "Visual Studio 14 2015 Win64"
+    - PLATFORM: x86
+      GENERATOR: "NMake Makefiles"
     - PLATFORM: x64
       GENERATOR: "NMake Makefiles"
 
