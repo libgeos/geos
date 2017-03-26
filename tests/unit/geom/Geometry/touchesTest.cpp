@@ -124,6 +124,8 @@ void object::test<5>()
     GeomAutoPtr b(breader.readHEX(wkbB));
 
     ensure(a->touches(b.get()));
+    ensure(!a->disjoint(b.get()));
+    ensure(a->intersects(b.get()));
 }
 
 template<>
@@ -139,6 +141,8 @@ void object::test<6>()
     GeomAutoPtr b(breader.readHEX(wkbB));
 
     ensure(a->touches(b.get()));
+    ensure(!a->disjoint(b.get()));
+    ensure(a->intersects(b.get()));
 }
 
 template<>
@@ -153,7 +157,10 @@ void object::test<7>()
     GeomAutoPtr a(breader.readHEX(wkbA));
     GeomAutoPtr b(breader.readHEX(wkbB));
 
+    // almost-touching (float-point robustness issue likely)
     ensure(!a->touches(b.get()));
+    ensure(!a->disjoint(b.get()));
+    ensure(a->intersects(b.get()));
 }
 
 } // namespace tut
