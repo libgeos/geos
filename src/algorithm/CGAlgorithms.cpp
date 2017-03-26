@@ -1,4 +1,4 @@
-/**********************************************************************
+﻿/**********************************************************************
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
@@ -329,9 +329,9 @@ CGAlgorithms::length(const CoordinateSequence* pts)
 
 	double len = 0.0;
 
-	const Coordinate& p = pts->getAt(0);
-	double x0 = p.x;
-	double y0 = p.y;
+	const Coordinate& p0 = pts->getAt(0);
+	double x0 = p0.x;
+	double y0 = p0.y;
 
 	for(size_t i = 1; i < npts; ++i)
 	{
