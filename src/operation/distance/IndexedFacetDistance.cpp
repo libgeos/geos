@@ -26,7 +26,7 @@ using namespace geos::index::strtree;
 namespace geos {
     namespace operation {
         namespace distance {
-            struct : public index::ItemVisitor {
+            struct Deleter : public index::ItemVisitor {
                 void visitItem(void * item) {
                     delete static_cast<FacetSequence*>(item);
                 }
