@@ -1,4 +1,4 @@
-_build
+/*build*
 aclocal.m4
 Makefile.in
 Makefile
@@ -58,3 +58,4 @@ include/config.h.in
 authors.git
 !/docker/**/README
 !/docker/**/Makefile
+/.vs*
