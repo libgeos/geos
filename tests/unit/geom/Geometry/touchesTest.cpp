@@ -157,7 +157,7 @@ void object::test<7>()
     GeomAutoPtr a(breader.readHEX(wkbA));
     GeomAutoPtr b(breader.readHEX(wkbB));
 
-    // almost-touching (float-point robustness issue likely)
+    // segments do not just touch, but intersect (float-point robustness issue likely)
     ensure(!a->touches(b.get()));
     ensure(!a->disjoint(b.get()));
     ensure(a->intersects(b.get()));
