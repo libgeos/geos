@@ -18,8 +18,8 @@ if(NOT CMAKE_VERSION)
       "${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}")
 endif()
 
-# Location of custom CMake modules with macros used by GEOS
-set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
+# Add custom GEOS modules for CMake
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
 
 #################################################################################
 # Setup GEOS version
@@ -354,6 +354,10 @@ if (MSVC_IDE)
 endif()
 
 include(GenerateSourceGroups)
+
+# Enable target debugging for CMake Tools in Visual Studio Code
+# https://github.com/vector-of-bool/vscode-cmake-tools
+include(CMakeToolsHelpers OPTIONAL)
 
 #################################################################################
 # Configure subdirectories
