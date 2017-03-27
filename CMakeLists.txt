@@ -55,9 +55,6 @@ endif()
 # Check custom global options
 #################################################################################
 
-option(GEOS_ENABLE_TESTS
-  "Set to OFF|ON (default) to control build of GEOS tests package" ON)
-
 option(GEOS_ENABLE_INLINE
   "Set to OFF|ON (default) to control GEOS compilation with small functions inlining" ON)
 
@@ -65,6 +62,12 @@ if(NOT MSVC)
   option(GEOS_ENABLE_ASSERT
     "Set to ON|OFF (default) to build GEOS with assert() macro enabled" OFF)
 endif()
+
+option(GEOS_ENABLE_TESTS
+  "Set to OFF|ON (default) to control build of GEOS tests package" ON)
+
+option(GEOS_ENABLE_TESTS_UNIT2_ONLY
+  "Set to ON|OFF (default) to enable only new tests based on Catch (WIP: experimental)." OFF)
 
 option(GEOS_BUILD_STATIC
   "Set to OFF|ON (default) to build GEOS static libraries" ON)
@@ -336,12 +339,11 @@ configure_file(${PROJECT_SOURCE_DIR}/capi/geos_c.h.in
 # Configure tests
 #################################################################################
 
-if(GEOS_ENABLE_TESTS)
+if(GEOS_ENABLE_TESTS OR GEOS_ENABLE_TESTS_UNIT2_ONLY)
   enable_testing()
   # Define "make check" as alias for "make test"
   add_custom_target(check COMMAND ctest)
 endif()
-
 
 #################################################################################
 # IDE specifics
