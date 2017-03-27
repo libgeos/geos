@@ -27,3 +27,13 @@ indent_style = space
 # Visual-C files want carriage returns too
 [*.vc]
 end_of_line = crlf
+
+# CMake configuration files
+[CMakeLists.txt]
+indent_style = space
+indent_size = 2
+
+# CMake modules
+[*.cmake]
+indent_style = space
+indent_size = 2
