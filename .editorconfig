@@ -23,6 +23,7 @@ indent_size = 2
 # YML files want space indentation
 [*.yml]
 indent_style = space
+indent_size = 2
 
 # Visual-C files want carriage returns too
 [*.vc]
