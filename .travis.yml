@@ -25,11 +25,14 @@ matrix:
 
 addons:
   apt:
+    sources:
+      - george-edison55-precise-backports
     packages:
-    - gcc-multilib
-    - g++-multilib
-    - cmake
-    - make
+      - cmake
+      - cmake-data
+      - g++-multilib
+      - gcc-multilib
+      - make
 
 script: ./tools/ci/script.sh
 
@@ -50,4 +53,4 @@ notifications:
             - https://webhooks.gitter.im/e/a38e35772d115f246fb9
         on_success: always  # options: [always|never|change] default: always
         on_failure: always  # options: [always|never|change] default: always
-        on_start: always     # options: [always|never|change] default: always
+        on_start: always    # options: [always|never|change] default: always
