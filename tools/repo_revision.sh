@@ -68,14 +68,14 @@ write_defn() {
   # Do not override the file if new detected
   # revision isn't zero nor different from the existing one
   if test -f $rev_file; then
-    oldrev=`grep GEOS_SVN_REVISION ${rev_file} | awk '{print $2}'`
+    oldrev=`grep GEOS_REVISION ${rev_file} | awk '{print $2}'`
     if test "$rev" = 0 -o "$rev" = "$oldrev"; then
       echo "Not updating existing rev file at $oldrev" >&2
       return;
     fi
   fi
 
-  echo "#define GEOS_SVN_REVISION $rev" | tee $rev_file
+  echo "#define GEOS_REVISION $rev" | tee $rev_file
   echo "Wrote rev '$rev' in file '$rev_file'" >&2
 }
 

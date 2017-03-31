@@ -288,9 +288,9 @@ if( NOT EXISTS "${PROJECT_SOURCE_DIR}/geos_revision.h" AND
   endif()
 
   if ( NOT ${Project_WC_REVISION} EQUAL 0 )
-     set( GEOS_SVN_REVISION ${Project_WC_REVISION} )
+     set( GEOS_REVISION ${Project_WC_REVISION} )
      configure_file (
-        "${PROJECT_SOURCE_DIR}/tools/geos_svn_revision_cmake.h.in"
+        "${PROJECT_SOURCE_DIR}/tools/geos_revision_cmake.h.in"
         "${PROJECT_BINARY_DIR}/geos_revision.h" )
   else()
      find_program(SH sh)
@@ -303,7 +303,7 @@ if( NOT EXISTS "${PROJECT_SOURCE_DIR}/geos_revision.h" AND
      else()
         message("*** sh-compatible command not found, cannot create geos_revision.h")
         message("*** Check SVN revision and create revision header manually:")
-        message("*** echo '#define GEOS_SVN_REVISION XYZ' > ${PROJECT_SOURCE_DIR}/geos_revision.h")
+        message("*** echo '#define GEOS_REVISION XYZ' > ${PROJECT_SOURCE_DIR}/geos_revision.h")
      endif()
   endif()
 endif()
