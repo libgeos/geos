@@ -296,7 +296,7 @@ if( NOT EXISTS "${PROJECT_SOURCE_DIR}/geos_revision.h" AND
      find_program(SH sh)
      if(SH)
         execute_process(COMMAND ${SH} -c
-        "cd ${PROJECT_SOURCE_DIR} && ${PROJECT_SOURCE_DIR}/tools/svn_repo_revision.sh")
+        "cd ${PROJECT_SOURCE_DIR} && ${PROJECT_SOURCE_DIR}/tools/repo_revision.sh")
 
         file(RENAME "${PROJECT_SOURCE_DIR}/geos_revision.h"
         "${PROJECT_BINARY_DIR}/geos_revision.h")

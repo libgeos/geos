@@ -54,7 +54,7 @@ svnrebase: authors.git
 	cd $(srcdir) && git svn rebase --authors-file authors.git
 
 geos_revision.h:
-	top_srcdir=$(srcdir) sh $(srcdir)/tools/svn_repo_revision.sh
+	top_srcdir=$(srcdir) sh $(srcdir)/tools/repo_revision.sh
 
 VALGRIND = $(LIBTOOL) --mode=execute valgrind --leak-check=full --error-exitcode=1
 
