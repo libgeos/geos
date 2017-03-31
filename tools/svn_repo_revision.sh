@@ -3,7 +3,7 @@
 LC_ALL="C" # what for ?
 
 [ -z "$top_srcdir" ] && top_srcdir="."
-rev_file=$top_srcdir'/geos_svn_revision.h'
+rev_file=$top_srcdir'/geos_revision.h'
 
 read_rev() {
 

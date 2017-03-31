@@ -22,12 +22,12 @@ SUBDIRS =   \
     tests   \
     tools
 
-BUILT_SOURCES = geos_svn_revision.h
+BUILT_SOURCES = geos_revision.h
 
 EXTRA_DIST = acsite.m4 makefile.vc nmake.opt autogen.bat CMakeLists.txt \
   cmake/modules/CheckPrototypeExists.cmake \
   cmake/modules/COPYING-CMAKE-SCRIPTS \
-  cmake/cmake_uninstall.cmake.in geos_svn_revision.h
+  cmake/cmake_uninstall.cmake.in geos_revision.h
 
 ACLOCAL_AMFLAGS = -I macros
 
@@ -53,7 +53,7 @@ authors.git: authors.svn
 svnrebase: authors.git
 	cd $(srcdir) && git svn rebase --authors-file authors.git
 
-geos_svn_revision.h:
+geos_revision.h:
 	top_srcdir=$(srcdir) sh $(srcdir)/tools/svn_repo_revision.sh
 
 VALGRIND = $(LIBTOOL) --mode=execute valgrind --leak-check=full --error-exitcode=1
@@ -61,4 +61,4 @@ VALGRIND = $(LIBTOOL) --mode=execute valgrind --leak-check=full --error-exitcode
 valgrindcheck:
 	$(VALGRIND) tests/unit/geos_unit
 
-.PHONY: geos_svn_revision.h
+.PHONY: geos_revision.h

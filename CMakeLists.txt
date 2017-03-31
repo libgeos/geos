@@ -244,8 +244,8 @@ include_directories(${PROJECT_BINARY_DIR}/capi)
 # for including build-specific version.h, platform.h and geos_c.h
 include_directories(${PROJECT_BINARY_DIR}/include)
 
-# for geos_ts.cpp which does #include "../geos_svn_revision.h" whereas
-# CMake generates geos_svn_revision.h in build directory,
+# for geos_ts.cpp which does #include "../geos_revision.h" whereas
+# CMake generates geos_revision.h in build directory,
 # to not to pollute source tree.
 include_directories(${PROJECT_BINARY_DIR})
 
@@ -275,11 +275,11 @@ if(EXISTS "${PROJECT_SOURCE_DIR}/.svn")
   GET_SVN_REVISION()
 endif()
 
-# geos_svn_revision.h does not exists in source or binary directory, we generate it
-if( NOT EXISTS "${PROJECT_SOURCE_DIR}/geos_svn_revision.h" AND
-    NOT EXISTS "${PROJECT_BINARY_DIR}/geos_svn_revision.h")
+# geos_revision.h does not exists in source or binary directory, we generate it
+if( NOT EXISTS "${PROJECT_SOURCE_DIR}/geos_revision.h" AND
+    NOT EXISTS "${PROJECT_BINARY_DIR}/geos_revision.h")
 
-  message(STATUS "Generating GEOS revision header in ${PROJECT_BINARY_DIR}/geos_svn_revision.h")
+  message(STATUS "Generating GEOS revision header in ${PROJECT_BINARY_DIR}/geos_revision.h")
 
   # CI builds (Travis CI, AppVeyor, etc.) perform git clone, not svn checkout.
   # So, CI environment needs a dummy revision to generate the required header.
@@ -291,19 +291,19 @@ if( NOT EXISTS "${PROJECT_SOURCE_DIR}/geos_svn_revision.h" AND
      set( GEOS_SVN_REVISION ${Project_WC_REVISION} )
      configure_file (
         "${PROJECT_SOURCE_DIR}/tools/geos_svn_revision_cmake.h.in"
-        "${PROJECT_BINARY_DIR}/geos_svn_revision.h" )
+        "${PROJECT_BINARY_DIR}/geos_revision.h" )
   else()
      find_program(SH sh)
      if(SH)
         execute_process(COMMAND ${SH} -c
         "cd ${PROJECT_SOURCE_DIR} && ${PROJECT_SOURCE_DIR}/tools/svn_repo_revision.sh")
 
-        file(RENAME "${PROJECT_SOURCE_DIR}/geos_svn_revision.h"
-        "${PROJECT_BINARY_DIR}/geos_svn_revision.h")
+        file(RENAME "${PROJECT_SOURCE_DIR}/geos_revision.h"
+        "${PROJECT_BINARY_DIR}/geos_revision.h")
      else()
-        message("*** sh-compatible command not found, cannot create geos_svn_revision.h")
+        message("*** sh-compatible command not found, cannot create geos_revision.h")
         message("*** Check SVN revision and create revision header manually:")
-        message("*** echo '#define GEOS_SVN_REVISION XYZ' > ${PROJECT_SOURCE_DIR}/geos_svn_revision.h")
+        message("*** echo '#define GEOS_SVN_REVISION XYZ' > ${PROJECT_SOURCE_DIR}/geos_revision.h")
      endif()
   endif()
 endif()

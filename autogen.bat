@@ -14,4 +14,4 @@ set GEOS_HEADERS=include\geos
 COPY %GEOS_HEADERS%\version.h.vc %GEOS_HEADERS%\version.h 
 COPY %GEOS_HEADERS%\platform.h.vc %GEOS_HEADERS%\platform.h
 COPY capi\geos_c.h.in capi\geos_c.h
-@ECHO #define GEOS_SVN_REVISION 0 > geos_svn_revision.h
+@ECHO #define GEOS_SVN_REVISION 0 > geos_revision.h
