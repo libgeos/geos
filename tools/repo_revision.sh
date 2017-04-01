@@ -32,7 +32,7 @@ read_rev_git() {
   rev=`cd ${top_srcdir} && ${git_exe} log --grep=git-svn -1 | grep git-svn | cut -d@ -f2 | cut -d' ' -f1`
 
   if test -z "$rev"; then
-    echo "Can't fetch SVN revision from git log" >&2 
+    echo "Can't fetch SVN revision from git log" >&2
     echo 0
   else
     echo $rev
@@ -82,5 +82,5 @@ write_defn() {
 # Read the svn revision number
 svn_rev=`read_rev`
 
-# Write it 
+# Write it
 write_defn $svn_rev
