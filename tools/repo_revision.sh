@@ -35,7 +35,7 @@ read_rev_git() {
     echo "Can't fetch SVN revision from git log" >&2
     echo 0
   else
-    echo $rev
+    echo r$rev
   fi
 }
 
@@ -57,7 +57,7 @@ read_rev_svn() {
     echo "Can't fetch SVN revision with `svn info`" >&2
     echo 0
   else
-    echo ${svn_info}
+    echo r${svn_info}
   fi
 }
 
@@ -75,7 +75,7 @@ write_defn() {
     fi
   fi
 
-  echo "#define GEOS_REVISION $rev" | tee $rev_file
+  echo "#define GEOS_REVISION \"$rev\"" | tee $rev_file
   echo "Wrote rev '$rev' in file '$rev_file'" >&2
 }
 

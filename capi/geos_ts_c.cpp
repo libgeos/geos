@@ -3796,7 +3796,7 @@ GEOSGetSRID_r(GEOSContextHandle_t extHandle, const Geometry *g)
 const char* GEOSversion()
 {
   static char version[256];
-  sprintf(version, "%s r%d", GEOS_CAPI_VERSION, GEOS_REVISION);
+  sprintf(version, "%s " GEOS_REVISION, GEOS_CAPI_VERSION);
   return version;
 }
 
