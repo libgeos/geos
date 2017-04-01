@@ -29,14 +29,24 @@ read_rev_git() {
     echo 0;
   fi
 
-  rev=`cd ${top_srcdir} && ${git_exe} log --grep=git-svn -1 | grep git-svn | cut -d@ -f2 | cut -d' ' -f1`
+  last_commit=`cd ${top_srcdir} && ${git_exe} log -1`
 
-  if test -z "$rev"; then
-    echo "Can't fetch SVN revision from git log" >&2
+  if test -z "$last_commit"; then
+    echo "Can't fetch last commit info from git log" >&2
     echo 0
-  else
-    echo r$rev
+    return
   fi
+
+  svnrev=`echo "$last_commit" | grep git-svn | cut -d@ -f2 | cut -d' ' -f1`
+  if test -n "$svnrev"; then
+    # Last commit has SVN metadata, we'll use that
+    echo r$svnrev
+    return
+  fi
+
+  # Last commit has no SVN metadata, we'll use sha
+  sha=`cd ${top_srcdir} && ${git_exe} describe --always`
+  echo $sha
 }
 
 read_rev_svn() {
