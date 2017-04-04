@@ -3,7 +3,7 @@ _build
 aclocal.m4
 Makefile.in
 Makefile
-geos_svn_revision.h
+geos_revision.h
 .libs
 .deps
 .vimrc
