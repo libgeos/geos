@@ -1,4 +1,4 @@
-/**********************************************************************
+﻿/**********************************************************************
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
@@ -30,7 +30,7 @@ namespace util { // geos.geom.util
 void
 ShortCircuitedGeometryVisitor::applyTo(const Geometry &geom)
 {
-	for (unsigned int i=0, n=geom.getNumGeometries(); i<n; ++i)
+	for (std::size_t i=0, n=geom.getNumGeometries(); i<n; ++i)
 	{
 		const Geometry *element = geom.getGeometryN(i);
 		if (dynamic_cast<const GeometryCollection*>(element))

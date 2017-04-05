@@ -11,15 +11,15 @@
 #
 #################################################################################
 project(GEOS)
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.0.0)
 
 if(NOT CMAKE_VERSION)
     set(CMAKE_VERSION
       "${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}")
 endif()
 
-# Location of custom CMake modules with macros used by GEOS
-set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
+# Add custom GEOS modules for CMake
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
 
 #################################################################################
 # Setup GEOS version
@@ -55,9 +55,6 @@ endif()
 # Check custom global options
 #################################################################################
 
-option(GEOS_ENABLE_TESTS
-  "Set to OFF|ON (default) to control build of GEOS tests package" ON)
-
 option(GEOS_ENABLE_INLINE
   "Set to OFF|ON (default) to control GEOS compilation with small functions inlining" ON)
 
@@ -65,6 +62,12 @@ if(NOT MSVC)
   option(GEOS_ENABLE_ASSERT
     "Set to ON|OFF (default) to build GEOS with assert() macro enabled" OFF)
 endif()
+
+option(GEOS_ENABLE_TESTS
+  "Set to OFF|ON (default) to control build of GEOS tests package" ON)
+
+option(GEOS_ENABLE_TESTS_UNIT2_ONLY
+  "Set to ON|OFF (default) to enable only new tests based on Catch (WIP: experimental)." OFF)
 
 option(GEOS_BUILD_STATIC
   "Set to OFF|ON (default) to build GEOS static libraries" ON)
@@ -87,6 +90,8 @@ endif()
 #################################################################################
 # Setup C/C++ compiler options
 #################################################################################
+set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if(NOT MSVC_IDE)
   if(NOT CMAKE_BUILD_TYPE)
@@ -239,8 +244,8 @@ include_directories(${PROJECT_BINARY_DIR}/capi)
 # for including build-specific version.h, platform.h and geos_c.h
 include_directories(${PROJECT_BINARY_DIR}/include)
 
-# for geos_ts.cpp which does #include "../geos_svn_revision.h" whereas
-# CMake generates geos_svn_revision.h in build directory,
+# for geos_ts.cpp which does #include "../geos_revision.h" whereas
+# CMake generates geos_revision.h in build directory,
 # to not to pollute source tree.
 include_directories(${PROJECT_BINARY_DIR})
 
@@ -270,11 +275,11 @@ if(EXISTS "${PROJECT_SOURCE_DIR}/.svn")
   GET_SVN_REVISION()
 endif()
 
-# geos_svn_revision.h does not exists in source or binary directory, we generate it
-if( NOT EXISTS "${PROJECT_SOURCE_DIR}/geos_svn_revision.h" AND
-    NOT EXISTS "${PROJECT_BINARY_DIR}/geos_svn_revision.h")
+# geos_revision.h does not exists in source or binary directory, we generate it
+if( NOT EXISTS "${PROJECT_SOURCE_DIR}/geos_revision.h" AND
+    NOT EXISTS "${PROJECT_BINARY_DIR}/geos_revision.h")
 
-  message(STATUS "Generating GEOS revision header in ${PROJECT_BINARY_DIR}/geos_svn_revision.h")
+  message(STATUS "Generating GEOS revision header in ${PROJECT_BINARY_DIR}/geos_revision.h")
 
   # CI builds (Travis CI, AppVeyor, etc.) perform git clone, not svn checkout.
   # So, CI environment needs a dummy revision to generate the required header.
@@ -283,22 +288,22 @@ if( NOT EXISTS "${PROJECT_SOURCE_DIR}/geos_svn_revision.h" AND
   endif()
 
   if ( NOT ${Project_WC_REVISION} EQUAL 0 )
-     set( GEOS_SVN_REVISION ${Project_WC_REVISION} )
+     set( GEOS_REVISION ${Project_WC_REVISION} )
      configure_file (
-        "${PROJECT_SOURCE_DIR}/tools/geos_svn_revision_cmake.h.in"
-        "${PROJECT_BINARY_DIR}/geos_svn_revision.h" )
+        "${PROJECT_SOURCE_DIR}/tools/geos_revision_cmake.h.in"
+        "${PROJECT_BINARY_DIR}/geos_revision.h" )
   else()
      find_program(SH sh)
      if(SH)
         execute_process(COMMAND ${SH} -c
-        "cd ${PROJECT_SOURCE_DIR} && ${PROJECT_SOURCE_DIR}/tools/svn_repo_revision.sh")
+        "cd ${PROJECT_SOURCE_DIR} && ${PROJECT_SOURCE_DIR}/tools/repo_revision.sh")
 
-        file(RENAME "${PROJECT_SOURCE_DIR}/geos_svn_revision.h"
-        "${PROJECT_BINARY_DIR}/geos_svn_revision.h")
+        file(RENAME "${PROJECT_SOURCE_DIR}/geos_revision.h"
+        "${PROJECT_BINARY_DIR}/geos_revision.h")
      else()
-        message("*** sh-compatible command not found, cannot create geos_svn_revision.h")
+        message("*** sh-compatible command not found, cannot create geos_revision.h")
         message("*** Check SVN revision and create revision header manually:")
-        message("*** echo '#define GEOS_SVN_REVISION XYZ' > ${PROJECT_SOURCE_DIR}/geos_svn_revision.h")
+        message("*** echo '#define GEOS_REVISION XYZ' > ${PROJECT_SOURCE_DIR}/geos_revision.h")
      endif()
   endif()
 endif()
@@ -336,17 +341,31 @@ configure_file(${PROJECT_SOURCE_DIR}/capi/geos_c.h.in
 # Configure tests
 #################################################################################
 
-if(GEOS_ENABLE_TESTS)
+if(GEOS_ENABLE_TESTS OR GEOS_ENABLE_TESTS_UNIT2_ONLY)
   enable_testing()
   # Define "make check" as alias for "make test"
   add_custom_target(check COMMAND ctest)
 endif()
 
 #################################################################################
-# Configure subdirectories
+# IDE specifics
 #################################################################################
+if (MSVC_IDE)
+  # Visual Studio 2017 supports .editorconfig, copy it next to generated .sln
+  message(STATUS "Copying .editorconfig file to ${PROJECT_BINARY_DIR}")
+  file(COPY "${PROJECT_SOURCE_DIR}/.editorconfig"
+    DESTINATION "${PROJECT_BINARY_DIR}")
+endif()
+
 include(GenerateSourceGroups)
 
+# Enable target debugging for CMake Tools in Visual Studio Code
+# https://github.com/vector-of-bool/vscode-cmake-tools
+include(CMakeToolsHelpers OPTIONAL)
+
+#################################################################################
+# Configure subdirectories
+#################################################################################
 add_subdirectory(include)
 add_subdirectory(src)
 add_subdirectory(capi)

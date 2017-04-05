@@ -1,8 +1,8 @@
-_build
+/*build*
 aclocal.m4
 Makefile.in
 Makefile
-geos_svn_revision.h
+geos_revision.h
 .libs
 .deps
 .vimrc
@@ -58,3 +58,4 @@ include/config.h.in
 authors.git
 !/docker/**/README
 !/docker/**/Makefile
+/.vs*

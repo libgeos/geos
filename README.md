@@ -5,9 +5,9 @@ Project homepage: http://geos.osgeo.org/
 
 ## Build status
 
-| Debbie | Travis CI | GitLab CI | AppVeyor | Drone | OSGeo |
-|:--- |:--- |:--- |:--- |:--- |:--- |
-| [![trunk](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Trunk)](https://debbie.postgis.net/view/GEOS/job/GEOS_Trunk/) | [![trunk](https://secure.travis-ci.org/libgeos/libgeos.png)](https://travis-ci.org/libgeos/libgeos) | [![trunk](https://gitlab.com/geos/libgeos/badges/svn-trunk/build.svg)](https://gitlab.com/geos/libgeos/commits/svn-trunk) | [![trunk](https://ci.appveyor.com/api/projects/status/c4b47oa8k50qyqo5/branch/svn-trunk?svg=true)](https://ci.appveyor.com/project/mloskot/libgeos/branch/svn-trunk) | [![master](https://drone.io/github.com/libgeos/libgeos/status.png)](https://drone.io/github.com/libgeos/libgeos/latest) | [![status](https://drone.osgeo.kbt.io/api/badges/geos/geos/status.svg?branch=svn-trunk)](https://drone.osgeo.kbt.io/geos/geos?branch=svn-trunk, alt=status) |
+| Debbie | Winnie | Dronie | Travis CI | GitLab CI | AppVeyor |
+|:---    |:---    | :---   |:---       |:---       |:---      |
+| [![debbie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Trunk)](https://debbie.postgis.net/view/GEOS/job/GEOS_Trunk/) | [![winnie](https://debbie.postgis.net:444/view/GEOS/job/GEOS_matrix_trunk/badge/icon)](https://debbie.postgis.net:444/view/GEOS/job/GEOS_matrix_trunk/) | [![dronie](https://drone.osgeo.kbt.io/api/badges/geos/geos/status.svg?branch=svn-trunk)](https://drone.osgeo.kbt.io/geos/geos?branch=svn-trunk) | [![travis](https://secure.travis-ci.org/libgeos/libgeos.svg)](https://travis-ci.org/libgeos/libgeos) | [![gitlab-ci](https://gitlab.com/geos/libgeos/badges/svn-trunk/build.svg)](https://gitlab.com/geos/libgeos/commits/svn-trunk) | [![appveyor](https://ci.appveyor.com/api/projects/status/srkb0umxje3mkwso/branch/svn-trunk?svg=true)](https://ci.appveyor.com/project/mloskot/libgeos/branch/svn-trunk) |
 
 More on: https://trac.osgeo.org/geos#BuildandInstall
 
@@ -104,7 +104,7 @@ Since version 3.0, the Python bindings are unsupported. Recommended options:
  1. Become or recruit a new maintainer.
  2. Use [Shapely](http://pypi.python.org/pypi/Shapely) with Python
     versions 2.4 or greater.
- 3. Simply call functions from libgeos_c via Python ctypes.
+ 3. Simply call functions from `libgeos_c` via Python ctypes.
 
 ## Documentation
 

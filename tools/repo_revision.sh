@@ -3,7 +3,7 @@
 LC_ALL="C" # what for ?
 
 [ -z "$top_srcdir" ] && top_srcdir="."
-rev_file=$top_srcdir'/geos_svn_revision.h'
+rev_file=$top_srcdir'/geos_revision.h'
 
 read_rev() {
 
@@ -29,14 +29,24 @@ read_rev_git() {
     echo 0;
   fi
 
-  rev=`cd ${top_srcdir} && ${git_exe} log --grep=git-svn -1 | grep git-svn | cut -d@ -f2 | cut -d' ' -f1`
+  last_commit=`cd ${top_srcdir} && ${git_exe} log -1`
 
-  if test -z "$rev"; then
-    echo "Can't fetch SVN revision from git log" >&2 
+  if test -z "$last_commit"; then
+    echo "Can't fetch last commit info from git log" >&2
     echo 0
-  else
-    echo $rev
+    return
   fi
+
+  svnrev=`echo "$last_commit" | grep git-svn | cut -d@ -f2 | cut -d' ' -f1`
+  if test -n "$svnrev"; then
+    # Last commit has SVN metadata, we'll use that
+    echo r$svnrev
+    return
+  fi
+
+  # Last commit has no SVN metadata, we'll use sha
+  sha=`cd ${top_srcdir} && ${git_exe} describe --always`
+  echo $sha
 }
 
 read_rev_svn() {
@@ -57,7 +67,7 @@ read_rev_svn() {
     echo "Can't fetch SVN revision with `svn info`" >&2
     echo 0
   else
-    echo ${svn_info}
+    echo r${svn_info}
   fi
 }
 
@@ -68,19 +78,19 @@ write_defn() {
   # Do not override the file if new detected
   # revision isn't zero nor different from the existing one
   if test -f $rev_file; then
-    oldrev=`grep GEOS_SVN_REVISION ${rev_file} | awk '{print $2}'`
+    oldrev=`grep GEOS_REVISION ${rev_file} | awk '{print $2}'`
     if test "$rev" = 0 -o "$rev" = "$oldrev"; then
       echo "Not updating existing rev file at $oldrev" >&2
       return;
     fi
   fi
 
-  echo "#define GEOS_SVN_REVISION $rev" | tee $rev_file
+  echo "#define GEOS_REVISION \"$rev\"" | tee $rev_file
   echo "Wrote rev '$rev' in file '$rev_file'" >&2
 }
 
 # Read the svn revision number
 svn_rev=`read_rev`
 
-# Write it 
+# Write it
 write_defn $svn_rev

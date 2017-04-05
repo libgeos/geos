@@ -1,4 +1,4 @@
-version: 1.0.{build}
+﻿version: 1.0.{build}
 
 os: Visual Studio 2015
 
@@ -9,6 +9,7 @@ configuration: Release
 branches:
   only:
     - svn-trunk
+    - svn-3.6
     - svn-3.5
 
 shallow_clone: true
@@ -19,39 +20,45 @@ matrix:
 
 environment:
   matrix:
-    - CFG: Debug
-      PLATFORM: Win32
-    - CFG: Release
-      PLATFORM: Win64
+    - PLATFORM: x86
+      BUILDER: CMake
+      GENERATOR: "Visual Studio 14 2015"
+    - PLATFORM: x64
+      BUILDER: CMake
+      GENERATOR: "Visual Studio 14 2015 Win64"
+    - PLATFORM: x86
+      BUILDER: CMake
+      GENERATOR: "NMake Makefiles"
+    - PLATFORM: x64
+      BUILDER: CMake
+      GENERATOR: "NMake Makefiles"
+    - PLATFORM: x86
+      BUILDER: NMake
+      GENERATOR: "NMake Makefiles"
 
 init:
-  - ps: |
-      Write-Host "Build worker environment variables:" -ForegroundColor Magenta
-      Get-ChildItem Env: | %{"{0}={1}" -f $_.Name,$_.Value}
+  - ps: 'Write-Host "Building GEOS branch: $env:APPVEYOR_REPO_BRANCH" -ForegroundColor Magenta'
+  #- ps: |
+  #  Write-Host "Build worker environment variables:" -ForegroundColor Magenta
+  #      Get-ChildItem Env: | %{"{0}={1}" -f $_.Name,$_.Value}
+  - if "%GENERATOR%"=="NMake Makefiles" if "%PLATFORM%"=="x86" call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
+  - if "%GENERATOR%"=="NMake Makefiles" if "%PLATFORM%"=="x64" "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
+  - if "%GENERATOR%"=="NMake Makefiles" if "%PLATFORM%"=="x64" call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
 
 before_build:
-  - ps: |
-      if ($env:PLATFORM -Match "Win32") {
-        $G="Visual Studio 14 2015"
-      } elseif ($env:PLATFORM -Match "Win64") {
-        $G="Visual Studio 14 2015 Win64"
-      }
-      Write-Host "Running CMake:" -ForegroundColor Magenta
-      cmake.exe -G $G -DCMAKE_BUILD_TYPE=$env:CFG $env:APPVEYOR_BUILD_FOLDER
-      Write-Host "Running MSBuild:" -ForegroundColor Magenta
-  - ps: 
+  - ps: 'Write-Host "Running $env:BUILDER with $env:GENERATOR" -ForegroundColor Magenta'
+  - if "%BUILDER%"=="CMake" cmake.exe -G "%GENERATOR%" -DCMAKE_BUILD_TYPE=%CONFIGURATION% %APPVEYOR_BUILD_FOLDER%
+  - if "%BUILDER%"=="NMake" .\autogen.bat
 
-build:
-  parallel: true
-  project: GEOS.sln
-  verbosity: minimal
+build_script:
+  - ps: 'Write-Host "Running $env:BUILDER:" -ForegroundColor Magenta'
+  - if "%BUILDER%"=="CMake" cmake --build . --config %CONFIGURATION%
+  - if "%BUILDER%"=="NMake" nmake /f makefile.vc
 
 test_script:
-  - ps: |
-      Write-Host "Running CTest:" -ForegroundColor Magenta
-      $cmd = 'ctest -V --output-on-failure -C ' + $Env:CFG
-      iex "& $cmd"
-      if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
+  - ps: 'Write-Host "Running tests:" -ForegroundColor Magenta'
+  - if "%BUILDER%"=="CMake" ctest -V --output-on-failure -C %CONFIGURATION%
+  - if "%BUILDER%"=="NMake" echo *** NMake does NOT build tests ***
 
 # If you need to debug AppVeyor session (https://www.appveyor.com/docs/how-to/rdp-to-build-worker), then:
 # 1. Uncomment the on_finish section below:
