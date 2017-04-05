@@ -7,7 +7,7 @@ Project homepage: http://geos.osgeo.org/
 
 | Debbie | Travis CI | GitLab CI | AppVeyor | OSGeo (Drone) |
 |:--- |:--- |:--- |:--- |:--- |
-| [![trunk](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Trunk)](https://debbie.postgis.net/view/GEOS/job/GEOS_Trunk/) | [![trunk](https://secure.travis-ci.org/libgeos/libgeos.png)](https://travis-ci.org/libgeos/libgeos) | [![trunk](https://gitlab.com/geos/libgeos/badges/svn-trunk/build.svg)](https://gitlab.com/geos/libgeos/commits/svn-trunk) | [![trunk](https://ci.appveyor.com/api/projects/status/srkb0umxje3mkwso/branch/svn-trunk?svg=true)](https://ci.appveyor.com/project/mloskot/libgeos/branch/svn-trunk) | [![trunk](https://drone.osgeo.kbt.io/api/badges/geos/geos/status.svg?branch=svn-trunk)](https://drone.osgeo.kbt.io/geos/geos?branch=svn-trunk) |
+| [![trunk](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Trunk)](https://debbie.postgis.net/view/GEOS/job/GEOS_Trunk/) | [![trunk](https://secure.travis-ci.org/libgeos/libgeos.svg)](https://travis-ci.org/libgeos/libgeos) | [![trunk](https://gitlab.com/geos/libgeos/badges/svn-trunk/build.svg)](https://gitlab.com/geos/libgeos/commits/svn-trunk) | [![trunk](https://ci.appveyor.com/api/projects/status/srkb0umxje3mkwso/branch/svn-trunk?svg=true)](https://ci.appveyor.com/project/mloskot/libgeos/branch/svn-trunk) | [![trunk](https://drone.osgeo.kbt.io/api/badges/geos/geos/status.svg?branch=svn-trunk)](https://drone.osgeo.kbt.io/geos/geos?branch=svn-trunk) |
 
 More on: https://trac.osgeo.org/geos#BuildandInstall
 
