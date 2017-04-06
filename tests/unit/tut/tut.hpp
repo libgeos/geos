@@ -1,6 +1,9 @@
 #ifndef TUT_H_GUARD
 #define TUT_H_GUARD
+#include <tut/tut_config.hpp>
 
+#undef public
+#undef private
 #include <iostream>
 #include <map>
 #include <vector>
@@ -9,11 +12,6 @@
 #include <sstream>
 #include <iterator>
 #include <algorithm>
-#include <typeinfo>
-
-#if defined(linux)
-#define TUT_USE_POSIX
-#endif
 
 #include "tut_exception.hpp"
 #include "tut_result.hpp"
@@ -35,6 +33,9 @@
 namespace tut
 {
 
+template <class, int>
+class test_group;
+
 /**
  * Test object. Contains data test run upon and default test method
  * implementation. Inherited from Data to allow tests to
@@ -43,12 +44,29 @@ namespace tut
 template <class Data>
 class test_object : public Data, public test_object_posix
 {
+    template<class D, int M>
+    friend class test_group;
+
+    void set_test_group(const char *group)
+    {
+        current_test_group_ = group;
+    }
+
+    void set_test_id(int current_test_id)
+    {
+        current_test_id_ = current_test_id;
+    }
+
 public:
 
     /**
      * Default constructor
      */
     test_object()
+        : called_method_was_a_dummy_test_(false),
+          current_test_id_(0),
+          current_test_name_(),
+          current_test_group_()
     {
     }
 
@@ -62,9 +80,9 @@ public:
         return current_test_name_;
     }
 
-    void set_test_id(int current_test_id)
+    const std::string& get_test_group() const
     {
-        current_test_id_ = current_test_id;
+        return current_test_group_;
     }
 
     int get_test_id() const
@@ -86,16 +104,17 @@ public:
      * Used to detect usused test numbers and avoid unnecessary
      * test object creation which may be time-consuming depending
      * on operations described in Data::Data() and Data::~Data().
-     * TODO: replace with throwing special exception from default test.
      */
     bool called_method_was_a_dummy_test_;
+
+    virtual ~test_object()
+    {
+    }
 
 private:
     int             current_test_id_;
     std::string     current_test_name_;
-
-    test_object(test_object const&); // = delete
-    test_object& operator=(test_object const&); // = delete
+    std::string     current_test_group_;
 };
 
 
@@ -129,6 +148,9 @@ struct tests_registerer<Test, Group, 0>
 template <class Data, int MaxTestsInGroup = 50>
 class test_group : public group_base, public test_group_posix
 {
+    test_group(const test_group&);
+    void operator=(const test_group&);
+
     const char* name_;
 
     typedef void (test_object<Data>::*testmethod)();
@@ -142,13 +164,15 @@ class test_group : public group_base, public test_group_posix
     tests tests_;
     tests_iterator current_test_;
 
-	enum seh_result
-	{
-		SEH_OK,
-		SEH_CTOR,
-		SEH_TEST,
-		SEH_DUMMY
-	};
+    enum seh_result
+    {
+        SEH_OK,
+#if defined(TUT_USE_SEH)
+        SEH_CTOR,
+        SEH_TEST,
+#endif
+        SEH_DUMMY
+    };
 
     /**
      * Exception-in-destructor-safe smart-pointer class.
@@ -204,11 +228,16 @@ class test_group : public group_base, public test_group_posix
         {
             try
             {
+#if defined(TUT_USE_SEH)
                 if (delete_obj() == false)
                 {
                     throw warning("destructor of test object raised"
                         " an SEH exception");
                 }
+#else
+                bool d = delete_obj();
+                assert(d && "delete failed with SEH disabled: runtime bug?");
+#endif
             }
             catch (const std::exception& ex)
             {
@@ -271,7 +300,9 @@ public:
      * Creates and registers test group with specified name.
      */
     test_group(const char* name)
-        : name_(name)
+        : name_(name),
+          tests_(),
+          current_test_()
     {
         // register itself
         runner.get().register_group(name_,this);
@@ -284,7 +315,9 @@ public:
      * This constructor is used in self-test run only.
      */
     test_group(const char* name, test_runner& another_runner)
-        : name_(name)
+        : name_(name),
+          tests_(),
+          current_test_()
     {
         // register itself
         another_runner.register_group(name_, this);
@@ -370,22 +403,23 @@ public:
         try
         {
             switch (run_test_seh_(ti->second, obj, current_test_name, ti->first))
-			{
-				case SEH_CTOR:
-					throw bad_ctor("seh");
-					break;
+            {
+#if defined(TUT_USE_SEH)
+                case SEH_CTOR:
+                    throw bad_ctor("seh");
+                    break;
 
-				case SEH_TEST:
-					throw seh("seh");
-					break;
+                case SEH_TEST:
+                    throw seh("seh");
+                    break;
+#endif
+                case SEH_DUMMY:
+                    tr.result = test_result::dummy;
+                    break;
 
-				case SEH_DUMMY:
-					tr.result = test_result::dummy;
-					break;
-
-				case SEH_OK:
-					// ok
-					break;
+                case SEH_OK:
+                    // ok
+                    break;
             }
         }
         catch (const rethrown& ex)
@@ -396,13 +430,13 @@ public:
         catch (const tut_error& ex)
         {
             tr.result = ex.result();
-            tr.exception_typeid = typeid(ex).name();
+            tr.exception_typeid = ex.type();
             tr.message = ex.what();
         }
         catch (const std::exception& ex)
         {
             tr.result = test_result::ex;
-            tr.exception_typeid = typeid(ex).name();
+            tr.exception_typeid = type_name(ex);
             tr.message = ex.what();
         }
         catch (...)
@@ -436,12 +470,12 @@ public:
         __try
         {
 #endif
-        if (obj.get() == 0)
-        {
-            reset_holder_(obj);
-        }
+            if (obj.get() == 0)
+            {
+                reset_holder_(obj);
+            }
 
-        obj->called_method_was_a_dummy_test_ = false;
+            obj->called_method_was_a_dummy_test_ = false;
 
 #if defined(TUT_USE_SEH)
 
@@ -449,6 +483,7 @@ public:
             {
 #endif
                 obj.get()->set_test_id(current_test_id);
+                obj.get()->set_test_group(name_);
                 (obj.get()->*tm)();
 #if defined(TUT_USE_SEH)
             }
@@ -459,20 +494,20 @@ public:
             }
 #endif
 
-        if (obj->called_method_was_a_dummy_test_)
-        {
-            // do not call obj.release(); reuse object
-            return SEH_DUMMY;
-        }
+            if (obj->called_method_was_a_dummy_test_)
+            {
+                // do not call obj.release(); reuse object
+                return SEH_DUMMY;
+            }
 
-        current_test_name = obj->get_test_name();
-        obj.permit_throw();
-        obj.release();
+            current_test_name = obj->get_test_name();
+            obj.permit_throw();
+            obj.release();
 #if defined(TUT_USE_SEH)
         }
         __except(handle_seh_(::GetExceptionCode()))
         {
-			return SEH_CTOR;
+            return SEH_CTOR;
         }
 #endif
         return SEH_OK;
@@ -534,5 +569,5 @@ inline int handle_seh_(DWORD excode)
 #endif
 }
 
-#endif
+#endif // TUT_H_GUARD
 

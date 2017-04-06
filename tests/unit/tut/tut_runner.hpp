@@ -62,24 +62,27 @@ struct callback
      * Called when a group started
      * @param name Name of the group
      */
-    virtual void group_started(const std::string& /*name*/)
+    virtual void group_started(const std::string& name)
     {
+        (void)name;
     }
 
     /**
      * Called when a test finished.
      * @param tr Test results.
      */
-    virtual void test_completed(const test_result& /*tr*/)
+    virtual void test_completed(const test_result& tr)
     {
+        (void)tr;
     }
 
     /**
      * Called when a group is completed
      * @param name Name of the group
      */
-    virtual void group_completed(const std::string& /*name*/)
+    virtual void group_completed(const std::string& name)
     {
+        (void)name;
     }
 
     /**
@@ -87,6 +90,11 @@ struct callback
      */
     virtual void run_completed()
     {
+    }
+
+    virtual bool all_ok() const
+    {
+        return true;
     }
 private:
     callback(const callback &);
@@ -111,11 +119,15 @@ public:
      * Constructor
      */
     test_runner()
+        : groups_(),
+          callbacks_()
     {
     }
 
     /**
      * Stores another group for getting by name.
+     * @param name new group object
+     * @param gr new callback object
      */
     void register_group(const std::string& name, group_base* gr)
     {
@@ -127,15 +139,16 @@ public:
         if (groups_.find(name) != groups_.end())
         {
             std::string msg("attempt to add already existent group " + name);
-            // this exception terminates application so we use cerr also
-            // TODO: should this message appear in stream?
-            std::cerr << msg << std::endl;
             throw tut_error(msg);
         }
 
         groups_.insert( std::make_pair(name, gr) );
     }
 
+    /**
+     * Stores one callback object.
+     * @param cb new callback object
+     */
     void set_callback(callback *cb)
     {
         clear_callbacks();
@@ -143,7 +156,8 @@ public:
     }
 
     /**
-     * Stores callback object.
+     * Add callback object.
+     * @param cb new callback object
      */
     void insert_callback(callback* cb)
     {
@@ -153,11 +167,18 @@ public:
         }
     }
 
+    /**
+     * Remove callback object.
+     * @param cb callback to remove
+     */
     void erase_callback(callback* cb)
     {
         callbacks_.erase(cb);
     }
 
+    /**
+     * Remove all callback objects.
+     */
     void clear_callbacks()
     {
         callbacks_.clear();
@@ -165,12 +186,17 @@ public:
 
     /**
      * Returns callback list.
+     * @return     callback list
      */
     const callbacks &get_callbacks() const
     {
         return callbacks_;
     }
 
+    /**
+     * Set callback list.
+     * @param cb new callback list
+     */
     void set_callbacks(const callbacks &cb)
     {
         callbacks_ = cb;
@@ -178,23 +204,20 @@ public:
 
     /**
      * Returns list of known test groups.
+     * @return     groups list
      */
     const groupnames list_groups() const
     {
         groupnames ret;
-        const_iterator i = groups_.begin();
-        const_iterator e = groups_.end();
-        while (i != e)
+        for(const_iterator i = groups_.begin(); i != groups_.end(); ++i)
         {
             ret.push_back(i->first);
-            ++i;
         }
         return ret;
     }
 
     /**
      * Runs all tests in all groups.
-     * @param callback Callback object if exists; null otherwise
      */
     void run_tests() const
     {
@@ -216,6 +239,7 @@ public:
 
     /**
      * Runs all tests in specified group.
+     * @param group_name group to test
      */
     void run_tests(const std::string& group_name) const
     {
@@ -236,6 +260,10 @@ public:
 
     /**
      * Runs one test in specified group.
+     * @param group_name group to test
+     * @param n run case in test
+     * @param tr result of this case
+     * @return  true if test is ok, otherwise false
      */
     bool run_test(const std::string& group_name, int n, test_result &tr) const
     {
@@ -356,4 +384,5 @@ extern test_runner_singleton runner;
 
 }
 
-#endif
+#endif // TUT_RUNNER_H_GUARD
+

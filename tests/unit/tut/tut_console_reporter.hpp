@@ -1,8 +1,13 @@
 #ifndef TUT_CONSOLE_REPORTER
 #define TUT_CONSOLE_REPORTER
-
-#include <tut.hpp>
+#include <tut/tut.hpp>
 #include <cassert>
+
+#if defined(TUT_USE_POSIX)
+#include <sys/types.h>
+#include <unistd.h>
+#endif
+
 
 /**
  * Template Unit Tests Framework for C++.
@@ -17,29 +22,32 @@ std::ostream& operator<<(std::ostream& os, const tut::test_result& tr)
 {
     switch(tr.result)
     {
-    case tut::test_result::ok:
-        os << '.';
-        break;
-    case tut::test_result::fail:
-        os << '[' << tr.test << "=F]";
-        break;
-    case tut::test_result::ex_ctor:
-        os << '[' << tr.test << "=C]";
-        break;
-    case tut::test_result::ex:
-        os << '[' << tr.test << "=X]";
-        break;
-    case tut::test_result::warn:
-        os << '[' << tr.test << "=W]";
-        break;
-    case tut::test_result::term:
-        os << '[' << tr.test << "=T]";
-        break;
-    case tut::test_result::rethrown:
-        os << '[' << tr.test << "=P]";
-        break;
-    case tut::test_result::dummy:
-        assert(!"Should never be called");
+        case tut::test_result::ok:
+            os << '.';
+            break;
+        case tut::test_result::fail:
+            os << '[' << tr.test << "=F]";
+            break;
+        case tut::test_result::ex_ctor:
+            os << '[' << tr.test << "=C]";
+            break;
+        case tut::test_result::ex:
+            os << '[' << tr.test << "=X]";
+            break;
+        case tut::test_result::warn:
+            os << '[' << tr.test << "=W]";
+            break;
+        case tut::test_result::term:
+            os << '[' << tr.test << "=T]";
+            break;
+        case tut::test_result::rethrown:
+            os << '[' << tr.test << "=P]";
+            break;
+        case tut::test_result::skipped:
+            os << '[' << tr.test << "=S]";
+            break;
+        case tut::test_result::dummy:
+            throw tut::tut_error("console reporter called for dummy test result");
     }
 
     return os;
@@ -60,6 +68,8 @@ class console_reporter : public tut::callback
     not_passed_list not_passed;
     std::ostream& os;
 
+    console_reporter(const console_reporter &);
+    console_reporter &operator=(const console_reporter &);
 public:
 
     int ok_count;
@@ -67,15 +77,33 @@ public:
     int failures_count;
     int terminations_count;
     int warnings_count;
+    int skipped_count;
 
     console_reporter()
-        : os(std::cout)
+        : current_group(),
+          not_passed(),
+          os(std::cout),
+          ok_count(0),
+          exceptions_count(0),
+          failures_count(0),
+          terminations_count(0),
+          warnings_count(0),
+          skipped_count(0)
     {
         init();
     }
 
     console_reporter(std::ostream& out)
-        : os(out)
+        : current_group(),
+          not_passed(),
+          os(out),
+          ok_count(0),
+          exceptions_count(0),
+          failures_count(0),
+          terminations_count(0),
+          warnings_count(0),
+          skipped_count(0)
+
     {
         init();
     }
@@ -114,11 +142,15 @@ public:
             case test_result::term:
                 terminations_count++;
                 break;
+            case test_result::skipped:
+                skipped_count++;
+                break;
             case tut::test_result::dummy:
-                assert(!"Should never be called");
+                assert( (tr.result != tut::test_result::dummy) && "Should never be called");
         } // switch
 
-        if (tr.result != tut::test_result::ok)
+        if ( (tr.result != tut::test_result::ok) &&
+             (tr.result != tut::test_result::skipped) )
         {
             not_passed.push_back(tr);
         }
@@ -181,12 +213,12 @@ public:
                 {
                     if (tr.result == test_result::fail)
                     {
-                        os << "     failed assertion: \"" << tr.message << "\""
+                        os << "     failed assertion: `" << tr.message << "`"
                             << std::endl;
                     }
                     else
                     {
-                        os << "     message: \"" << tr.message << "\""
+                        os << "     message: `" << tr.message << "`"
                             << std::endl;
                     }
                 }
@@ -214,11 +246,17 @@ public:
         {
             os << " warnings:" << warnings_count;
         }
+
         os << " ok:" << ok_count;
+
+        if(skipped_count > 0)
+        {
+            os << " skipped:" << skipped_count;
+        }
         os << std::endl;
     }
 
-    bool all_ok() const
+    virtual bool all_ok() const
     {
         return not_passed.empty();
     }
@@ -232,6 +270,7 @@ private:
         failures_count = 0;
         terminations_count = 0;
         warnings_count = 0;
+        skipped_count = 0;
         not_passed.clear();
     }
 };
