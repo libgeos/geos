@@ -5,9 +5,10 @@ Project homepage: http://geos.osgeo.org/
 
 ## Build status
 
-| Debbie | Winnie | Dronie | Travis CI | GitLab CI | AppVeyor |
-|:---    |:---    |:---    |:---       |:---       |:---      |
-| [![debbie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Branch_3.6)](https://debbie.postgis.net/view/GEOS/job/GEOS_Branch_3.6/) | [![winnie](https://debbie.postgis.net:444/view/GEOS/job/GEOS_matrix_branch_3.6/badge/icon)](https://debbie.postgis.net:444/view/GEOS/job/GEOS_matrix_branch_3.6/) | [![dronie](https://drone.osgeo.kbt.io/api/badges/geos/geos/status.svg?branch=svn-3.6)](https://drone.osgeo.kbt.io/geos/geos?branch=svn-3.6) | [![travis](https://secure.travis-ci.org/libgeos/libgeos.svg?branch=svn-3.6)](https://travis-ci.org/libgeos/libgeos?branch=svn-3.6) | [![gitlab-ci](https://gitlab.com/geos/libgeos/badges/svn-3.6/build.svg)](https://gitlab.com/geos/libgeos/commits/svn-3.6) | [![appveyor](https://ci.appveyor.com/api/projects/status/c4b47oa8k50qyqo5/branch/svn-3.6?svg=true)](https://ci.appveyor.com/project/mloskot/libgeos/branch/svn-3.6) |
+| branch / CI | Debbie | Winnie | Dronie | Travis CI | GitLab CI | AppVeyor |
+|:---         |:---    |:---    |:---    |:---       |:---       |:---      |
+| svn-trunk   | n/a    | n/a    | n/a    | [![travis](https://travis-ci.org/OSGeo/geos.svg?branch=svn-trunk)](https://travis-ci.org/OSGeo/geos?branch=svn-trunk) | n/a | [![appveyor](https://ci.appveyor.com/api/projects/status/ao909hwpsb1yu062/branch/svn-trunk?svg=true)](https://ci.appveyor.com/project/OSGeo/geos/branch/svn-trunk) |
+| svn-3.6     | [![debbie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Branch_3.6)](https://debbie.postgis.net/view/GEOS/job/GEOS_Branch_3.6/) | [![winnie](https://debbie.postgis.net:444/view/GEOS/job/GEOS_matrix_branch_3.6/badge/icon)](https://debbie.postgis.net:444/view/GEOS/job/GEOS_matrix_branch_3.6/) | [![dronie](https://drone.osgeo.kbt.io/api/badges/geos/geos/status.svg?branch=svn-3.6)](https://drone.osgeo.kbt.io/geos/geos?branch=svn-3.6) | [![travis](https://travis-ci.org/OSGeo/geos.svg?branch=svn-3.6)](https://travis-ci.org/OSGeo/geos?branch=svn-3.6) | [![gitlab-ci](https://gitlab.com/geos/libgeos/badges/svn-3.6/build.svg)](https://gitlab.com/geos/libgeos/commits/svn-3.6) | [![appveyor](https://ci.appveyor.com/api/projects/status/ao909hwpsb1yu062/branch/svn-3.6?svg=true)](https://ci.appveyor.com/project/OSGeo/geos/branch/svn-3.6) |
 
 More on: https://trac.osgeo.org/geos#BuildandInstall
 
