@@ -186,7 +186,7 @@ bool deserialize(std::istream& is, tut::test_result& tr)
     }
     return true;
 }
-};
+}
 
 /**
  * Restartable test runner wrapper.
@@ -207,11 +207,12 @@ public:
      */
     restartable_wrapper(const std::string& dir = ".")
         : runner_(runner.get()),
-          dir_(dir)
+          callbacks_(),
+          dir_(dir),
+          log_( dir + '/' + "log.tut" ),
+          jrn_( dir + '/' + "journal.tut" )
     {
         // dozen: it works, but it would be better to use system path separator
-        jrn_ = dir_ + '/' + "journal.tut";
-        log_ = dir_ + '/' + "log.tut";
     }
 
     /**

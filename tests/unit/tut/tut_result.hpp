@@ -1,10 +1,46 @@
 #ifndef TUT_RESULT_H_GUARD
 #define TUT_RESULT_H_GUARD
+#include <tut/tut_config.hpp>
 
 #include <string>
 
+#if defined(TUT_USE_RTTI)
+#if (defined(_MSC_VER) && !defined(_CPPRTTI)) || (defined(__GNUC__) && !defined(__GXX_RTTI))
+#undef TUT_USE_RTTI
+#endif
+#endif
+
+#if defined(TUT_USE_RTTI)
+#include <typeinfo>
+#endif
+
+#if defined(TUT_USE_POSIX)
+#include <sys/types.h>
+#include <unistd.h>
+#endif
+
 namespace tut
 {
+
+#if defined(TUT_USE_RTTI)
+template<typename T>
+inline std::string type_name(const T& t)
+{
+    return typeid(t).name();
+}
+#else
+template<typename T>
+inline std::string type_name(const T& t)
+{
+    return "Unknown type, RTTI disabled";
+}
+
+inline std::string type_name(const std::exception&)
+{
+    return "Unknown std::exception, RTTI disabled";
+}
+#endif
+
 
 #if defined(TUT_USE_POSIX)
 struct test_result_posix
@@ -14,11 +50,18 @@ struct test_result_posix
     {
     }
 
+    virtual ~test_result_posix()
+    {
+    }
+
     pid_t pid;
 };
 #else
 struct test_result_posix
 {
+    virtual ~test_result_posix()
+    {
+    }
 };
 #endif
 
@@ -46,22 +89,19 @@ struct test_result : public test_result_posix
     std::string name;
 
     /**
-     * ok - test finished successfully
-     * fail - test failed with ensure() or fail() methods
-     * ex - test throwed an exceptions
-     * warn - test finished successfully, but test destructor throwed
-     * term - test forced test application to terminate abnormally
+     * result of a test
      */
     enum result_type
     {
-        ok,
-        fail,
-        ex,
-        warn,
-        term,
-        ex_ctor,
-        rethrown,
-        dummy
+        ok,       ///< test finished successfully
+        fail,     ///< test failed with ensure() or fail() methods
+        ex,       ///< test throwed an exceptions
+        warn,     ///< test finished successfully, but test destructor throwed
+        term,     ///< test forced test application to terminate abnormally
+        ex_ctor,  ///<
+        rethrown, ///<
+        skipped,  ///<
+        dummy     ///<
     };
 
     result_type result;
@@ -76,8 +116,12 @@ struct test_result : public test_result_posix
      * Default constructor.
      */
     test_result()
-        : test(0),
-          result(ok)
+        : group(),
+          test(0),
+          name(),
+          result(ok),
+          message(),
+          exception_typeid()
     {
     }
 
@@ -89,7 +133,9 @@ struct test_result : public test_result_posix
         : group(grp),
           test(pos),
           name(test_name),
-          result(res)
+          result(res),
+          message(),
+          exception_typeid()
     {
     }
 
@@ -104,7 +150,7 @@ struct test_result : public test_result_posix
           name(test_name),
           result(res),
           message(ex.what()),
-          exception_typeid(typeid(ex).name())
+          exception_typeid(type_name(ex))
     {
     }
 
@@ -120,6 +166,10 @@ struct test_result : public test_result_posix
           result(res),
           message(msg),
           exception_typeid(ex_typeid)
+    {
+    }
+
+    virtual ~test_result()
     {
     }
 };

@@ -1,5 +1,12 @@
 #ifndef TUT_FORK_H_GUARD
 #define TUT_FORK_H_GUARD
+#include <tut/tut_config.hpp>
+
+#if __cplusplus >= 201103L
+#define TUT_UNIQUE_PTR std::unique_ptr
+#else
+#define TUT_UNIQUE_PTR std::auto_ptr
+#endif
 
 #if defined(TUT_USE_POSIX)
 #include <errno.h>
@@ -44,7 +51,7 @@ private:
 
         if(tr.result != test_result::ok)
         {
-            std::stringstream ss;
+            std::ostringstream ss;
             ss << int(tr.result) << "\n"
                 << tr.group << "\n"
                 << tr.test << "\n"
@@ -57,6 +64,10 @@ private:
             ensure_errno("write() failed", w == size);
         }
     }
+
+    virtual ~test_group_posix()
+    {
+    }
 };
 
 template<typename T>
@@ -64,24 +75,36 @@ struct tut_posix
 {
     pid_t fork()
     {
+#ifdef TUT_USE_RTTI
         test_object<T> *self = dynamic_cast< tut::test_object<T>* >(this);
         ensure("trying to call 'tut_fork' in ctor of test object", self != NULL);
+#else
+        test_object<T> *self = static_cast< tut::test_object<T>* >(this);
+#endif
 
         return self->fork_();
     }
 
     pid_t waitpid(pid_t pid, int *status, int flags = 0)
     {
+#ifdef TUT_USE_RTTI
         test_object<T> *self = dynamic_cast< tut::test_object<T>* >(this);
         ensure("trying to call 'tut_waitpid' in ctor of test object", self != NULL);
+#else
+        test_object<T> *self = static_cast< tut::test_object<T>* >(this);
+#endif
 
         return self->waitpid_(pid, status, flags);
     }
 
     void ensure_child_exit(pid_t pid, int exit_status = 0)
     {
+#ifdef TUT_USE_RTTI
         test_object<T> *self = dynamic_cast< tut::test_object<T>* >(this);
         ensure("trying to call 'ensure_child_exit' in ctor of test object", self != NULL);
+#else
+        test_object<T> *self = static_cast< tut::test_object<T>* >(this);
+#endif
 
         int status;
         self->waitpid_(pid, &status);
@@ -92,8 +115,12 @@ struct tut_posix
 
     void ensure_child_signal(pid_t pid, int signal = SIGTERM)
     {
+#ifdef TUT_USE_RTTI
         test_object<T> *self = dynamic_cast< tut::test_object<T>* >(this);
         ensure("trying to call 'ensure_child_signal' in ctor of test object", self != NULL);
+#else
+        test_object<T> *self = static_cast< tut::test_object<T>* >(this);
+#endif
 
         int status;
         self->waitpid_(pid, &status);
@@ -103,10 +130,12 @@ struct tut_posix
 
     std::set<pid_t> get_pids() const
     {
-        using namespace std;
-
+#ifdef TUT_USE_RTTI
         const test_object<T> *self = dynamic_cast< const tut::test_object<T>* >(this);
         ensure("trying to call 'get_pids' in ctor of test object", self != NULL);
+#else
+        const test_object<T> *self = static_cast< const tut::test_object<T>* >(this);
+#endif
 
         return self->get_pids_();
     }
@@ -126,7 +155,8 @@ public:
      * Default constructor
      */
     test_object_posix()
-        : pipe_(-1)
+        : pids_(),
+          pipe_(-1)
     {
     }
 
@@ -142,7 +172,7 @@ public:
 
         if(!pids_.empty())
         {
-            std::stringstream ss;
+            std::ostringstream ss;
 
             // in parent, reap children
             for(std::map<pid_t, int>::iterator i = pids_.begin(); i != pids_.end(); ++i)
@@ -158,7 +188,11 @@ public:
 
             if(!ss.str().empty())
             {
+#if __cplusplus >= 201103L
+                std::cerr << ss.rdbuf() << std::endl;
+#else
                 fail(ss.str().c_str());
+#endif
             }
         }
     }
@@ -226,7 +260,7 @@ private:
             else
             {
                 // cannot kill, we are in trouble
-                std::stringstream ss;
+                std::ostringstream ss;
                 char e[1024];
                 ss << "child " << pid << " could not be killed with SIGTERM, " << strerror_r(errno, e, sizeof(e)) << std::endl;
                 fail(ss.str());
@@ -257,7 +291,7 @@ private:
                 }
                 else
                 {
-                    std::stringstream ss;
+                    std::ostringstream ss;
                     char e[1024];
                     ss << "child " << pid << " could not be killed with SIGKILL, " << strerror_r(errno, e, sizeof(e)) << std::endl;
                     fail(ss.str());
@@ -269,7 +303,7 @@ private:
 
             ensure_equals("child process exists after SIGKILL", ::kill(pid, 0), -1);
 
-            std::stringstream ss;
+            std::ostringstream ss;
             ss << "child " << pid << " had to be killed with SIGKILL";
             fail(ss.str());
         }
@@ -361,7 +395,7 @@ private:
     {
         if(WIFSIGNALED(status))
         {
-            std::stringstream ss;
+            std::ostringstream ss;
             ss << "child killed by signal " << WTERMSIG(status)
                 << ": expected exit with code " << exit_status;
 
@@ -372,7 +406,7 @@ private:
         {
             if(WEXITSTATUS(status) != exit_status)
             {
-                std::stringstream ss;
+                std::ostringstream ss;
                 ss << "child exited, expected '"
                     << exit_status
                     << "' actual '"
@@ -385,7 +419,7 @@ private:
 
         if(WIFSTOPPED(status))
         {
-            std::stringstream ss;
+            std::ostringstream ss;
             ss << "child stopped by signal " << WTERMSIG(status)
                 << ": expected exit with code " << exit_status;
             throw failure(ss.str().c_str());
@@ -398,7 +432,7 @@ private:
         {
             if(WTERMSIG(status) != signal)
             {
-                std::stringstream ss;
+                std::ostringstream ss;
                 ss << "child killed by signal, expected '"
                     << signal
                     << "' actual '"
@@ -410,7 +444,7 @@ private:
 
         if(WIFEXITED(status))
         {
-            std::stringstream ss;
+            std::ostringstream ss;
             ss << "child exited with code " << WEXITSTATUS(status)
                 << ": expected signal " << signal;
 
@@ -419,7 +453,7 @@ private:
 
         if(WIFSTOPPED(status))
         {
-            std::stringstream ss;
+            std::ostringstream ss;
             ss << "child stopped by signal " << WTERMSIG(status)
                 << ": expected kill by signal " << signal;
 
@@ -453,12 +487,19 @@ namespace tut
 
 struct test_object_posix
 {
+    virtual ~test_object_posix()
+    {
+    }
 };
 
 struct test_group_posix
 {
     template<typename T>
     void send_result_(const T*, const test_result &)
+    {
+    }
+
+    virtual ~test_group_posix()
     {
     }
 };
