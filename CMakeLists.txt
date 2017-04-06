@@ -252,62 +252,27 @@ include_directories(${PROJECT_BINARY_DIR})
 #################################################################################
 # Setup checks and generate config headers
 #################################################################################
+find_package(Git)
 
-#################################################################################
-#  MACRO: GET_SVN_REVISION
-#
-#  DESCRIPTION:
-#      MACRO FOR GETTING THE SVN revision for this build
-#################################################################################
-MACRO (GET_SVN_REVISION)
-   FIND_PACKAGE(Subversion)
-   IF(SUBVERSION_FOUND)
-      Subversion_WC_INFO(${PROJECT_SOURCE_DIR} Project)
-      # MESSAGE("Current revision is ${Project_WC_REVISION}")
-      # Subversion_WC_LOG(${PROJECT_SOURCE_DIR} Project)
-      # MESSAGE("Last changed log is ${Project_LAST_CHANGED_LOG}")
-   ENDIF()
-ENDMACRO(GET_SVN_REVISION)
+message(STATUS "Generating GEOS ${PROJECT_BINARY_DIR}/geos_revision.h")
+file(WRITE ${CMAKE_BINARY_DIR}/geos_revision.h.in "\#define GEOS_REVISION \"@GEOS_REVISION@\"\n")
 
-# Determine SVN/Git revision
-# Determine SVN/Git revision
-if(EXISTS "${PROJECT_SOURCE_DIR}/.svn")
-  GET_SVN_REVISION()
-endif()
+file(WRITE ${CMAKE_BINARY_DIR}/geos_revision.cmake
+"
+execute_process(COMMAND \${GIT} describe --tags --always
+  WORKING_DIRECTORY \${CWD}
+  OUTPUT_VARIABLE GEOS_REVISION
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+configure_file(\${SRC} \${DST} @ONLY)
+")
 
-# geos_revision.h does not exists in source or binary directory, we generate it
-if( NOT EXISTS "${PROJECT_SOURCE_DIR}/geos_revision.h" AND
-    NOT EXISTS "${PROJECT_BINARY_DIR}/geos_revision.h")
-
-  message(STATUS "Generating GEOS revision header in ${PROJECT_BINARY_DIR}/geos_revision.h")
-
-  # CI builds (Travis CI, AppVeyor, etc.) perform git clone, not svn checkout.
-  # So, CI environment needs a dummy revision to generate the required header.
-  if (DEFINED ENV{CI})
-     set(Project_WC_REVISION 999999)
-  endif()
-
-  if ( NOT ${Project_WC_REVISION} EQUAL 0 )
-     set( GEOS_REVISION ${Project_WC_REVISION} )
-     configure_file (
-        "${PROJECT_SOURCE_DIR}/tools/geos_revision_cmake.h.in"
-        "${PROJECT_BINARY_DIR}/geos_revision.h" )
-  else()
-     find_program(SH sh)
-     if(SH)
-        execute_process(COMMAND ${SH} -c
-        "cd ${PROJECT_SOURCE_DIR} && ${PROJECT_SOURCE_DIR}/tools/repo_revision.sh")
-
-        file(RENAME "${PROJECT_SOURCE_DIR}/geos_revision.h"
-        "${PROJECT_BINARY_DIR}/geos_revision.h")
-     else()
-        message("*** sh-compatible command not found, cannot create geos_revision.h")
-        message("*** Check SVN revision and create revision header manually:")
-        message("*** echo '#define GEOS_REVISION XYZ' > ${PROJECT_SOURCE_DIR}/geos_revision.h")
-     endif()
-  endif()
-endif()
-# End: Determine SVN/Git revision
+add_custom_target(geos_revision
+  COMMAND ${CMAKE_COMMAND}
+    -D CWD=${CMAKE_CURRENT_SOURCE_DIR}
+    -D GIT=${GIT_EXECUTABLE}
+    -D SRC=${PROJECT_BINARY_DIR}/geos_revision.h.in
+    -D DST=${PROJECT_BINARY_DIR}/geos_revision.h
+    -P ${PROJECT_BINARY_DIR}/geos_revision.cmake)
 
 if(EXISTS ${PROJECT_SOURCE_DIR}/include/geos/platform.h)
   message(STATUS "Disabling existing ${PROJECT_SOURCE_DIR}/include/geos/platform.h")

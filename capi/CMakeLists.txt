@@ -6,7 +6,7 @@
 #
 # This is free software; you can redistribute and/or modify it under
 # the terms of the GNU Lesser General Public Licence as published
-# by the Free Software Foundation. 
+# by the Free Software Foundation.
 # See the COPYING file for more information.
 #
 #################################################################################
@@ -21,9 +21,9 @@ set(geos_c_SOURCES
 
 file(GLOB geos_capi_HEADERS ${CMAKE_BINARY_DIR}/capi/*.h) # fix source_group issue
 
-if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK) 
-  # if building OS X framework, CAPI built into C++ library 
-  add_library(geos_c SHARED ${geos_c_SOURCES}) 
+if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK)
+  # if building OS X framework, CAPI built into C++ library
+  add_library(geos_c SHARED ${geos_c_SOURCES})
 
   target_link_libraries(geos_c geos)
 
@@ -42,6 +42,8 @@ if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK)
 
 endif()
 
+add_dependencies(geos_c geos_revision)
+
 #################################################################################
 # Installation
 #################################################################################
@@ -55,7 +57,7 @@ else()
     DESTINATION include)
 endif()
 
-if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK) 
+if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK)
   install(TARGETS geos_c
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib
