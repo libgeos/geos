@@ -2,7 +2,7 @@
 // Test Suite for PreparedGeometry's touches() functions
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 #include <utility.h>
 // geos
 #include <geos/geom/prep/PreparedGeometryFactory.h>

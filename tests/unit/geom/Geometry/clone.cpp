@@ -2,7 +2,7 @@
 // Test Suite for Geometry's clone()
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>

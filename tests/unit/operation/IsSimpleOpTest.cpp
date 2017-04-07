@@ -2,7 +2,7 @@
 // Test Suite for geos::operation::IsSimpleOp class
 // Ported from JTS junit/operation/IsSimpleTest.java
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/operation/IsSimpleOp.h>
 #include <geos/geom/Coordinate.h>

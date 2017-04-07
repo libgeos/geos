@@ -2,7 +2,7 @@
 // Test Suite for geos::operation::linemerge::LineMerger class.
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/platform.h>

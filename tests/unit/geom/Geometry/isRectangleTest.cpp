@@ -2,7 +2,7 @@
 // Test Suite for Geometry::isRectangle() function
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Polygon.h>

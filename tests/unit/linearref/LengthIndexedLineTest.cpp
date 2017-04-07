@@ -2,7 +2,7 @@
 // Ported from JTS junit/linearref/AbstractIndexedLineTestCase.java r466
 // and  junit/linearref/LengthIndexedLineTestCase.java r466
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 #include <utility.h>
 // geos
 #include <geos/platform.h>

@@ -1,7 +1,7 @@
 //
 // Ported from JTS junit/algorithm/RobustLineIntersectionTest.java r788
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/io/WKTReader.h>
 #include <geos/algorithm/LineIntersector.h>

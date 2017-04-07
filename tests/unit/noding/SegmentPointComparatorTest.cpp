@@ -4,7 +4,7 @@
 // Ports tests found in jts/junit/noding/SegmentPointComparatorTest.java
 // and jts/junit/noding/SegmentPointComparatorFullTest.java
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/noding/SegmentNode.h>
 #include <geos/noding/SegmentPointComparator.h>

@@ -2,7 +2,7 @@
 // Test Suite for geos::geom::CoordinateList class.
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateList.h>

@@ -2,7 +2,7 @@
 // Test Suite for geos::operation::overlay::snap::GeometrySnapper class.
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
 #include <geos/geom/Geometry.h>

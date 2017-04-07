@@ -2,7 +2,7 @@
 // Test Suite for geos::operation::buffer::BufferBuilder class.
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/operation/buffer/BufferBuilder.h>
 #include <geos/operation/buffer/BufferParameters.h>

@@ -2,7 +2,7 @@
 // Test Suite for geos::operation::sharedpaths::SharedPathsOp class.
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/operation/sharedpaths/SharedPathsOp.h>
 #include <geos/platform.h>

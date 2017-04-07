@@ -3,7 +3,7 @@
 // Ported from JTS junit/algorithm/IsCCWTest.java
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/geom/Polygon.h>

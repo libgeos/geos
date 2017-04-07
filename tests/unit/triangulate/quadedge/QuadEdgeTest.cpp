@@ -2,7 +2,7 @@
 // Test Suite for geos::triangulate::quadedge::QuadEdge
 //
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/triangulate/quadedge/Vertex.h>
 #include <geos/triangulate/quadedge/QuadEdge.h>

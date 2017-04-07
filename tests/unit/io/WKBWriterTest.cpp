@@ -2,7 +2,7 @@
 // Test Suite for geos::io::WKBWriter
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKBWriter.h>

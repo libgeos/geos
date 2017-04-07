@@ -2,7 +2,7 @@
 // Test Suite for geos::operation::valid::IsValidOp class
 // Ported from JTS junit/operation/valid/ValidSelfTouchingRingFormingHoleTest.java rev. 1.4
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/geom/Coordinate.h>

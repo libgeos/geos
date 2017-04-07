@@ -1,7 +1,7 @@
 //
 // Test Suite for geos::geom::GeometryFilter class.
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>

@@ -2,7 +2,7 @@
 // Test Suite for geos::algorithm::ConvexHull
 // Ported from JTS junit/algorithm/ConvexHullTest.java
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 #include <utility.h>
 // geos
 #include <geos/algorithm/ConvexHull.h>

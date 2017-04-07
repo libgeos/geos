@@ -1,6 +1,6 @@
 //
 // Test Suite for C-API GEOSMinimumClearance
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos_c.h>
 // std

@@ -2,7 +2,7 @@
 // Test Suite for geos::geom::LinearRing class.
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/Coordinate.h>

@@ -1,7 +1,7 @@
 //
 // Test Suite for geos::geom::IntersectionMatrix class.
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/geom/Dimension.h>

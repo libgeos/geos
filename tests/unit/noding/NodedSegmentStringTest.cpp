@@ -1,7 +1,7 @@
 //
 // Test Suite for geos::noding::NodedSegmentString class.
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/noding/Octant.h>

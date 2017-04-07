@@ -2,7 +2,7 @@
 // Test Suite for geos::geom::LineString class.
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 #include <utility.h>
 // geos
 #include <geos/geom/LineString.h>

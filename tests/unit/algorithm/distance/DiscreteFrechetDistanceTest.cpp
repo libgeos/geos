@@ -2,7 +2,7 @@
 // Test Suite for geos::algorithm::distance::DiscreteFrechetDistance
 //
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/platform.h>
 #include <geos/io/WKTReader.h>

@@ -2,7 +2,7 @@
 // Test Suite for geos::util::UniqueCoordinateArrayFilter class.
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/util/UniqueCoordinateArrayFilter.h>
 #include <geos/geom/Coordinate.h>

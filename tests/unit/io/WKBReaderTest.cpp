@@ -6,7 +6,7 @@
 // Tests NDR and XDR input and output .
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKBConstants.h>

@@ -1,7 +1,7 @@
 //
 // Test Suite for C-API GEOSGeom_createPolygon
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos_c.h>
 // std

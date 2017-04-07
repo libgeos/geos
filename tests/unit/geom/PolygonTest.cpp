@@ -1,7 +1,7 @@
 //
 // Test Suite for geos::geom::Polygon class.
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 #include <utility.h>
 // geos
 #include <geos/geom/Polygon.h>

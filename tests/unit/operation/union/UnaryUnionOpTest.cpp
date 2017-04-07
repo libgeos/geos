@@ -2,7 +2,7 @@
 // Test Suite for geos::operation::geounion::UnaryUnionOp class.
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/operation/union/UnaryUnionOp.h>
 #include <geos/geom/GeometryFactory.h>

@@ -1,7 +1,7 @@
 //
 // Test Suite for geos::noding::snapround::MCIndexSnapRounder class.
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/noding/SegmentNode.h>
 #include <geos/noding/Noder.h>

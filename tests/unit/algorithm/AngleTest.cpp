@@ -2,7 +2,7 @@
 // Test Suite for geos::algorithm::Angle
 // Ported from JTS junit/algorithm/AngleTest.java r378
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/geom/Coordinate.h>
 #include <geos/algorithm/Angle.h>

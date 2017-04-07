@@ -2,7 +2,7 @@
 // Test Suite for geos::operation::overlay::validate::OverlayResultValidator class.
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/overlay/validate/OverlayResultValidator.h>

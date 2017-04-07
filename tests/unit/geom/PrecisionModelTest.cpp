@@ -2,7 +2,7 @@
 // Test Suite for geos::geom::PrecisionModel class.
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/Coordinate.h>

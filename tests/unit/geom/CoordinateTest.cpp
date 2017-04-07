@@ -1,7 +1,7 @@
 //
 // Test Suite for geos::geom::Coordinate class.
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/platform.h>
 #include <geos/geom/Coordinate.h>

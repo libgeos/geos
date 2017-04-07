@@ -2,7 +2,7 @@
 // Test Suite for geos::operation::distance::DistanceOp class.
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/platform.h>

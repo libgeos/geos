@@ -2,7 +2,7 @@
 // Test Suite for geos::geom::Triangle class.
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/platform.h>
 #include <geos/geom/Triangle.h>

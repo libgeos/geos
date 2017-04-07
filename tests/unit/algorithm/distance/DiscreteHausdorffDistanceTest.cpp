@@ -3,7 +3,7 @@
 // Ported from JTS junit/algorithm/distance/DiscreteHausdorffDistanceTest.java rev. 1.2
 
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/platform.h>
 #include <geos/io/WKTReader.h>

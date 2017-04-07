@@ -2,7 +2,7 @@
 // Test Suite for geos::algorithm::PointLocator
 // Ported from JTS junit/algorithm/PointLocator.java
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/io/WKTReader.h>
 #include <geos/algorithm/PointLocator.h>

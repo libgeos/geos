@@ -11,12 +11,11 @@
 #
 #################################################################################
 
-set(STATUS_MESSAGE "Enable GEOS Unit Tests build")
+set(STATUS_MESSAGE "Enable GEOSuUnit Tests build")
 set(STATUS_RESULT "OFF")
 
 if(GEOS_ENABLE_TESTS)
   include_directories(${CMAKE_SOURCE_DIR}/capi)
-  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/tut)
   include_directories(${CMAKE_CURRENT_SOURCE_DIR})
   
   file(GLOB_RECURSE geos_unit_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)

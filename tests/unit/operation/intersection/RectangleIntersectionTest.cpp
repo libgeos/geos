@@ -2,7 +2,7 @@
 // Test Suite for geos::operation::intersection::RectangleIntersection class.
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/operation/intersection/Rectangle.h>
 #include <geos/operation/intersection/RectangleIntersection.h>

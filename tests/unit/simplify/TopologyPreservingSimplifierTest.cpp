@@ -2,7 +2,7 @@
 //
 // Last port: junit/simplify/TopologyPreservingSimplifierTest.java r536
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 #include <utility.h>
 // geos
 #include <geos/io/WKTReader.h>

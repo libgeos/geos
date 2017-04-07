@@ -2,7 +2,7 @@
 // Test Suite for geos::geom::Envelope class.
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Coordinate.h>

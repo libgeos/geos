@@ -2,7 +2,7 @@
 // Test Suite for CGAlgorithms::computeOrientation() function
 // Ported from JTS junit/algorithm/ComputeOrientationTest.java
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/geom/Coordinate.h>

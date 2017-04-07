@@ -2,7 +2,7 @@
 // Test Suite for geos::precision::SimpleGeometryPrecisionReducer class.
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/precision/SimpleGeometryPrecisionReducer.h>
 #include <geos/geom/Geometry.h>

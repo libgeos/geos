@@ -1,7 +1,7 @@
 //
 // Test Suite for geos::geom::Point class.
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/geom/Point.h>
 #include <geos/geom/Coordinate.h>

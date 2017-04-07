@@ -1,7 +1,7 @@
 //
 // Test Suite for geos::noding::SegmentNode class.
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/noding/SegmentNode.h>
 #include <geos/noding/NodedSegmentString.h>

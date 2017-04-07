@@ -15,7 +15,7 @@
 //
 // Test Suite for geos::algorithm::MinimumDiameter
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/geom/Coordinate.h>
 #include <geos/algorithm/MinimumDiameter.h>

@@ -1,7 +1,7 @@
 //
 // Test Suite for geos::index::quadtree::DoubleBits class.
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/index/quadtree/DoubleBits.h>
 

@@ -2,7 +2,7 @@
 // Test Suite for geos::io::Writer
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/io/Writer.h>
 // std

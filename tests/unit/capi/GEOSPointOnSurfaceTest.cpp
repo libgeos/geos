@@ -2,7 +2,7 @@
 //
 // Test Suite for C-API GEOSPointOnSurface
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos_c.h>
 // std

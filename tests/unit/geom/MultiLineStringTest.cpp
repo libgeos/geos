@@ -1,7 +1,7 @@
 //
 // Test Suite for geos::geom::MultiLineString class.
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/geom/MultiLineString.h>
 

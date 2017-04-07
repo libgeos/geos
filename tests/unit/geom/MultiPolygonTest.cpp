@@ -1,7 +1,7 @@
 //
 // Test Suite for geos::geom::MultiPolygon class.
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/geom/MultiPolygon.h>
 

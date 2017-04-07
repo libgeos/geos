@@ -2,7 +2,7 @@
 // Test Suite for geos::operation::valid::IsValidOp class
 // Ported from JTS junit/operation/valid/IsValidTest.java rev. 1.1
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/platform.h>
 #include <geos/operation/valid/IsValidOp.h>

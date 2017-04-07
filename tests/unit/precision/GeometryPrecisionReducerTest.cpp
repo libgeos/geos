@@ -3,7 +3,7 @@
 // Test Suite for geos::precision::GeometryPrecisionReducer class.
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/precision/GeometryPrecisionReducer.h>
 #include <geos/geom/Geometry.h>

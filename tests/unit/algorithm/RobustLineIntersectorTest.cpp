@@ -1,7 +1,7 @@
 //
 // Ported from JTS junit/algorithm/RobustLineIntersectorTest.java rev. 1.1
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKTReader.h>

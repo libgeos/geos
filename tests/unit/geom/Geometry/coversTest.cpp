@@ -2,7 +2,7 @@
 // Test Suite for Geometry's covers(), coveredBy() and contains() functions
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>

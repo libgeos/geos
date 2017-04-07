@@ -2,7 +2,7 @@
 // Test Suite for geos::io::ByteOrderValues
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/io/ByteOrderValues.h>
 #include <geos/platform.h> // for int64

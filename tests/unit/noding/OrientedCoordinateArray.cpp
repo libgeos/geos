@@ -2,7 +2,7 @@
 //
 // Test Suite for geos::noding::OrientedCoordinateArray class.
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/noding/OrientedCoordinateArray.h>
 #include <geos/io/WKTReader.h>

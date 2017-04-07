@@ -2,7 +2,7 @@
 // Test Suite for geos::geom::Location class.
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/geom/Location.h>
 #include <geos/util/IllegalArgumentException.h>

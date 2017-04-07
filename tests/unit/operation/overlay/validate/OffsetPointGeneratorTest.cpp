@@ -2,7 +2,7 @@
 // Test Suite for geos::operation::overlay::validate::OffsetPointGenerator class.
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/operation/overlay/validate/OffsetPointGenerator.h>
 #include <geos/geom/GeometryFactory.h>

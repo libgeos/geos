@@ -2,7 +2,7 @@
 // Test Suite for CGAlgorithms::isPointInRing() function
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/geom/Polygon.h>

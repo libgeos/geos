@@ -2,7 +2,7 @@
 // Test Suite for geos::geom::util::GeometryExtracter class.
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/platform.h>
 #include <geos/geom/PrecisionModel.h>

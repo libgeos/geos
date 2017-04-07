@@ -8,8 +8,8 @@
 #endif
 
 // tut
-#include <tut.hpp>
-#include <tut_reporter.hpp>
+#include <tut/tut.hpp>
+#include <tut/tut_reporter.hpp>
 // geos
 #include <geos/unload.h>
 // std

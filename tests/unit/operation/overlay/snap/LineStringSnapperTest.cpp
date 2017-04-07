@@ -2,7 +2,7 @@
 // Test Suite for geos::operation::overlay::snap::LineStringSnapper class.
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/operation/overlay/snap/LineStringSnapper.h>
 #include <geos/geom/Coordinate.h>

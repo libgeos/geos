@@ -1,7 +1,7 @@
 //
 // Test Suite for geos::operation::OverlayOp class for UNION
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/geom/Geometry.h>

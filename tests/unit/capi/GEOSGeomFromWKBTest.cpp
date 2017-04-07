@@ -1,7 +1,7 @@
 //
 // Test Suite for C-API GEOSGeomFromWKB
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 #include <utility.h> // wkb_hex_decoder
 // geos
 #include <geos_c.h>

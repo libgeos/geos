@@ -2,7 +2,7 @@
 // Test Suite for geos::geom::prep::PreparedGeometryFactory class.
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 #include <utility.h>
 // geos
 #include <geos/geom/prep/PreparedGeometryFactory.h>

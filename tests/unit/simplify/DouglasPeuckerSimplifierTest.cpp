@@ -1,7 +1,7 @@
 //
 // Test Suite for geos::simplify::DouglasPeuckerSimplifierTest
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTWriter.h>

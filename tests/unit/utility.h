@@ -5,7 +5,7 @@
 #define GEOS_TUT_UTILITY_H_INCLUDED
 
 // tut
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>

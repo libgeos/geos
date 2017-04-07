@@ -1,7 +1,7 @@
 //
 // Test Suite for geos::noding::snapround::HotPixel class.
 
-#include <tut.hpp>
+#include <tut/tut.hpp>
 // geos
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/noding/snapround/HotPixel.h>
