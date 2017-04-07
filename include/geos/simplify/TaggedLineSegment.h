@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -19,9 +19,9 @@
  * NOTES: Use of this class by DP simplification algorithms
  * makes it useless for a TaggedLineSegment to store copies
  * of coordinates. Using pointers would be good enough here.
- * We don't do it to avoid having to break inheritance from 
+ * We don't do it to avoid having to break inheritance from
  * LineSegment, which has copies intead. Wheter LineSegment
- * itself should be refactored can be discussed. 
+ * itself should be refactored can be discussed.
  *  --strk 2006-04-12
  *
  **********************************************************************/

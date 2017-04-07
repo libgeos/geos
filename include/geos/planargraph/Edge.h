@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -31,7 +31,7 @@
 
 // Forward declarations
 namespace geos {
-	namespace planargraph { 
+	namespace planargraph {
 		class DirectedEdgeStar;
 		class DirectedEdge;
 		class Edge;
@@ -47,7 +47,7 @@ namespace planargraph { // geos.planargraph
  *
  * An undirected edge in fact simply acts as a central point of reference
  * for two opposite DirectedEdge.
- * 
+ *
  * Usually a client using a PlanarGraph will subclass Edge
  * to add its own application-specific data and methods.
  */
@@ -134,7 +134,7 @@ public:
 };
 
 /// Print a Edge
-std::ostream& operator<<(std::ostream& os, const Edge& n); 
+std::ostream& operator<<(std::ostream& os, const Edge& n);
 
 /// For backward compatibility
 //typedef Edge planarEdge;

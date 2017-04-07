@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -49,7 +49,7 @@ Interval::init(double nmin, double nmax)
 		max=nmin;
 	}
 }
- 
+
 double
 Interval::getMin() const
 {
@@ -67,27 +67,27 @@ Interval::getWidth() const
 {
 	return max-min;
 }
- 
+
 void
 Interval::expandToInclude(Interval *interval)
 {
 	if (interval->max>max) max=interval->max;
 	if (interval->min<min) min=interval->min;
 }
- 
+
 bool
 Interval::overlaps(const Interval *interval) const
 {
 	return overlaps(interval->min,interval->max);
 }
- 
+
 bool
 Interval::overlaps(double nmin, double nmax) const
 {
 	if (min>nmax || max<nmin) return false;
 	return true;
 }
- 
+
 bool
 Interval::contains(const Interval *interval) const
 {

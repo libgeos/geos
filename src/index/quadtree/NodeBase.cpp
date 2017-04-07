@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -17,9 +17,9 @@
  *
  **********************************************************************/
 
-#include <geos/index/quadtree/NodeBase.h> 
-#include <geos/index/quadtree/Node.h> 
-#include <geos/index/ItemVisitor.h> 
+#include <geos/index/quadtree/NodeBase.h>
+#include <geos/index/quadtree/Node.h>
+#include <geos/index/ItemVisitor.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/util.h>
@@ -257,7 +257,7 @@ NodeBase::remove(const Envelope* itemEnv, void* item)
 
 	// otherwise, try and remove the item from the list of items
 	// in this node
-	vector<void*>::iterator foundIter = 
+	vector<void*>::iterator foundIter =
 		find(items.begin(), items.end(), item);
 	if ( foundIter != items.end() ) {
 		items.erase(foundIter);

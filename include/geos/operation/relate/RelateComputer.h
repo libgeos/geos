@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -64,7 +64,7 @@ namespace relate { // geos::operation::relate
  * RelateComputer does not need to build a complete graph structure to compute
  * the IntersectionMatrix.  The relationship between the geometries can
  * be computed by simply examining the labelling of edges incident on each node.
- * 
+ *
  * RelateComputer does not currently support arbitrary GeometryCollections.
  * This is because GeometryCollections can contain overlapping Polygons.
  * In order to correct compute relate on overlapping Polygons, they
@@ -85,7 +85,7 @@ private:
 	algorithm::PointLocator ptLocator;
 
 	/// the arg(s) of the operation
-	std::vector<geomgraph::GeometryGraph*> *arg; 
+	std::vector<geomgraph::GeometryGraph*> *arg;
 
 	geomgraph::NodeMap nodes;
 

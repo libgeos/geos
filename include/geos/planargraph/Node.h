@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -24,7 +24,7 @@
 
 // Forward declarations
 namespace geos {
-	namespace planargraph { 
+	namespace planargraph {
 		//class DirectedEdgeStar;
 		class DirectedEdge;
 	}
@@ -45,10 +45,10 @@ namespace planargraph { // geos.planargraph
 class GEOS_DLL Node: public GraphComponent {
 protected:
 
-	/// The location of this Node 
+	/// The location of this Node
 	geom::Coordinate pt;
 
-	/// The collection of DirectedEdges that leave this Node 
+	/// The collection of DirectedEdges that leave this Node
 	DirectedEdgeStar *deStar;
 
 public:
@@ -59,7 +59,7 @@ public:
 	 * Returns all Edges that connect the two nodes (which are
 	 * assumed to be different).
 	 *
-	 * Note: returned vector is newly allocated, ownership to 
+	 * Note: returned vector is newly allocated, ownership to
 	 * the caller.
 	 */
 	static std::vector<Edge*>* getEdgesBetween(Node *node0,
@@ -127,7 +127,7 @@ public:
 };
 
 /// Print a Node
-std::ostream& operator<<(std::ostream& os, const Node& n); 
+std::ostream& operator<<(std::ostream& os, const Node& n);
 
 
 /// For backward compatibility

@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -26,7 +26,7 @@ namespace geos {
 namespace geom { // geos.geom
 
 /** \brief
- * Contains classes and interfaces implementing algorithms that optimize the 
+ * Contains classes and interfaces implementing algorithms that optimize the
  * performance of repeated calls to specific geometric operations.
  */
 namespace prep { // geos.geom.prep

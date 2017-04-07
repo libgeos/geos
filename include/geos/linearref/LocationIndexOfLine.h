@@ -54,7 +54,7 @@ public:
 	 * Determines the location of a subline along a linear {@link Geometry}.
 	 *
 	 * The location is reported as a pair of {@link LinearLocation}s.
-	 * 
+	 *
 	 * <b>Note:</b> Currently this algorithm is not guaranteed to
 	 * return the correct substring in some situations where
 	 * an endpoint of the test line occurs more than once in the input line.

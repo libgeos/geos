@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSGeomFromWKB
 
 #include <tut.hpp>
@@ -33,7 +33,7 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
@@ -42,7 +42,7 @@ namespace tut
         {
             initGEOS(notice, notice);
             reader_ = GEOSWKTReader_create();
-        }       
+        }
 
         ~test_capigeosgeomfromwkb_data()
         {
@@ -101,7 +101,7 @@ namespace tut
         std::string ewkb("01010000200400000000000000000000000000000000000000");
         test_wkb(ewkb, wkt);
     }
-    
+
     template<>
     template<>
     void object::test<3>()

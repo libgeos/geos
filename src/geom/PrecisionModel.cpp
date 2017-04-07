@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -68,7 +68,7 @@ PrecisionModel::makePrecise(double val) const
 void
 PrecisionModel::makePrecise(Coordinate& coord) const
 {
-	// optimization for full precision 
+	// optimization for full precision
 	if (modelType==FLOATING) return;
 
 	coord.x=makePrecise(coord.x);
@@ -179,7 +179,7 @@ PrecisionModel::setScale(double newScale)
 		// throw IllegalArgumentException
 {
 	if ( newScale <= 0 )
-		throw util::IllegalArgumentException("PrecisionModel scale cannot be 0"); 
+		throw util::IllegalArgumentException("PrecisionModel scale cannot be 0");
     scale = std::fabs(newScale);
 }
 
@@ -197,7 +197,7 @@ PrecisionModel::getOffsetY() const
 	return 0;
 }
 
-  
+
 string
 PrecisionModel::toString() const
 {

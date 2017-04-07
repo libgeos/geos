@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSPolygonizeGetCutEdges
 
 #include <tut.hpp>
@@ -27,14 +27,14 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
         test_capigeospolygonizegetcutedges_data()
         {
             initGEOS(notice, notice);
-        }       
+        }
 
         ~test_capigeospolygonizegetcutedges_data()
         {
@@ -100,6 +100,6 @@ namespace tut
                 GEOSGeom_destroy(geoms[i]);
         }
     }
-    
+
 } // namespace tut
 

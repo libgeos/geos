@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -25,8 +25,8 @@
 
 // Forward declarations
 namespace geos {
-	namespace index { 
-		namespace bintree { 
+	namespace index {
+		namespace bintree {
 			class Interval;
 			class Root;
 		}
@@ -49,7 +49,7 @@ namespace bintree { // geos::index::bintree
  * This implementation does not require specifying the extent of the inserted
  * items beforehand.  It will automatically expand to accomodate any extent
  * of dataset.
- * 
+ *
  * This index is different to the Interval Tree of Edelsbrunner
  * or the Segment Tree of Bentley.
  */

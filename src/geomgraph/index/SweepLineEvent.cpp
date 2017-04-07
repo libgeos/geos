@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -39,7 +39,7 @@ SweepLineEvent::SweepLineEvent(void* newEdgeSet, double x,
 SweepLineEvent::~SweepLineEvent(){
 	if (eventType==DELETE_EVENT) {
 		delete insertEvent;
-		delete obj; 
+		delete obj;
 	}
 }
 

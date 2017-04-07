@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -43,7 +43,7 @@ NodedSegmentString::getNodeList()
 
 /*static private*/
 int
-NodedSegmentString::safeOctant(const Coordinate& p0, const Coordinate& p1) 
+NodedSegmentString::safeOctant(const Coordinate& p0, const Coordinate& p1)
 {
   if ( p0.equals2D(p1) ) return 0;
 	return Octant::octant(p0, p1);

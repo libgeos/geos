@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -104,7 +104,7 @@ LineSequencer::isSequenced(const Geometry* geom)
 		lastNode = endNode;
 	}
 	return true;
-} 
+}
 
 /* private */
 bool
@@ -194,7 +194,7 @@ LineSequencer::computeSequence()
 
 	// Result is not linear
 	assert(dynamic_cast<LineString *>(sequencedGeometry.get())
-		|| dynamic_cast<MultiLineString *>(sequencedGeometry.get())); 
+		|| dynamic_cast<MultiLineString *>(sequencedGeometry.get()));
 }
 
 /*private*/
@@ -224,7 +224,7 @@ LineSequencer::buildSequencedGeometry(const Sequences& sequences)
 				lineToAdd = reverse(line);
 			} else {
 				Geometry* lineClone = line->clone();
-				lineToAdd = dynamic_cast<LineString *>(lineClone); 
+				lineToAdd = dynamic_cast<LineString *>(lineClone);
 				assert(lineToAdd);
 			}
 
@@ -254,7 +254,7 @@ LineSequencer::reverse(const LineString *line)
 const planargraph::Node*
 LineSequencer::findLowestDegreeNode(const planargraph::Subgraph& graph)
 {
-	size_t minDegree = numeric_limits<size_t>::max(); 
+	size_t minDegree = numeric_limits<size_t>::max();
 	const planargraph::Node* minDegreeNode = NULL;
 	for (planargraph::NodeMap::container::const_iterator
 		it = graph.nodeBegin(), itEnd = graph.nodeEnd();
@@ -332,7 +332,7 @@ LineSequencer::addReverseSubpath(const planargraph::DirectedEdge *de,
 }
 
 /*private*/
-planargraph::DirectedEdge::NonConstList* 
+planargraph::DirectedEdge::NonConstList*
 LineSequencer::findSequence(planargraph::Subgraph& graph)
 {
 	using planargraph::DirectedEdge;
@@ -371,8 +371,8 @@ LineSequencer::findSequence(planargraph::Subgraph& graph)
 }
 
 /* private */
-planargraph::DirectedEdge::NonConstList* 
-LineSequencer::orient(planargraph::DirectedEdge::NonConstList* seq) 
+planargraph::DirectedEdge::NonConstList*
+LineSequencer::orient(planargraph::DirectedEdge::NonConstList* seq)
 {
 	using namespace geos::planargraph;
 
@@ -397,7 +397,7 @@ LineSequencer::orient(planargraph::DirectedEdge::NonConstList* seq)
 			hasObviousStartNode = true;
 			flipSeq = true;
 		}
-		if (startEdge->getFromNode()->getDegree() == 1 && 
+		if (startEdge->getFromNode()->getDegree() == 1 &&
 				startEdge->getEdgeDirection() == true)
 		{
 			hasObviousStartNode = true;
@@ -431,7 +431,7 @@ LineSequencer::orient(planargraph::DirectedEdge::NonConstList* seq)
 }
 
 /* private */
-planargraph::DirectedEdge::NonConstList* 
+planargraph::DirectedEdge::NonConstList*
 LineSequencer::reverse(planargraph::DirectedEdge::NonConstList& seq)
 {
 	using namespace geos::planargraph;
@@ -445,7 +445,7 @@ LineSequencer::reverse(planargraph::DirectedEdge::NonConstList& seq)
 	return newSeq;
 }
 
- 
+
 
 } // namespace geos.operation.linemerge
 } // namespace geos.operation

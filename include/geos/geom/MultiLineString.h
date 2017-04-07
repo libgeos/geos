@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -66,7 +66,7 @@ public:
 	 */
 	int getBoundaryDimension() const;
 
-	/// Returns a (possibly empty) MultiPoint 
+	/// Returns a (possibly empty) MultiPoint
 	Geometry* getBoundary() const;
 
 	std::string getGeometryType() const;
@@ -109,7 +109,7 @@ protected:
 	 * 	The GeometryFactory used to create this geometry.
 	 *	Caller must keep the factory alive for the life-time
 	 *	of the constructed MultiLineString.
-	 * 	
+	 *
 	 */
 	MultiLineString(std::vector<Geometry *> *newLines,
 			const GeometryFactory *newFactory);

@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSPreparedGeometry
 
 #include <tut.hpp>
@@ -37,7 +37,7 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
@@ -45,7 +45,7 @@ namespace tut
             : geom1_(0), geom2_(0), prepGeom1_(0), prepGeom2_(0)
         {
             initGEOS(notice, notice);
-        }       
+        }
 
         ~test_capigeospreparedgeometry_data()
         {
@@ -85,7 +85,7 @@ namespace tut
 
     // Test PreparedContainsProperly
     // Taken from regress/regress_ogc_prep.sql of postgis
-    // as of revno 3936 
+    // as of revno 3936
     // ref: containsproperly200 (a)
     template<>
     template<>
@@ -104,7 +104,7 @@ namespace tut
 
     // Test PreparedContainsProperly
     // Taken from regress/regress_ogc_prep.sql of postgis
-    // as of revno 3936 
+    // as of revno 3936
     // ref: containsproperly200 (b)
     template<>
     template<>
@@ -124,7 +124,7 @@ namespace tut
     // Test PreparedIntersects
     // Also used as a linestring leakage reported
     // by http://trac.osgeo.org/geos/ticket/305
-    // 
+    //
     template<>
     template<>
     void object::test<4>()
@@ -173,13 +173,13 @@ namespace tut
     }
 
     // Test PreparedIntersects: point on segment with FLOAT PM
-    // X coordinate of 3rd and 4th vertises of the line are not 
+    // X coordinate of 3rd and 4th vertises of the line are not
     // float-point exact with X coordinate of the point.
     // The X values differ after 14th decimal place:
     // POINT (-23.1094689600055080 50.5195368635957180)
     // --------------------^^^^^^^------------^^^^^^^^
     // LINESTRING 3rd and 4th points
-    //        -23.1094689600055150 50.5223376452201340, 
+    //        -23.1094689600055150 50.5223376452201340,
     //        -23.1094689600055010 50.5169177629559480,
     // --------------------^^^^^^^------------^^^^^^^^
     // So, in float-point precision model, the point does DOES NOT intersect the segment.
@@ -203,13 +203,13 @@ namespace tut
     }
 
     // Test PreparedIntersects: point on segment with FIXED PM
-    // X coordinate of 3rd and 4th vertises of the line are not 
+    // X coordinate of 3rd and 4th vertises of the line are not
     // float-point exact with X coordinate of the point.
     // The X values differ after 14th decimal place:
     // POINT (-23.1094689600055080 50.5195368635957180)
     // --------------------^^^^^^^------------^^^^^^^^
     // LINESTRING 3rd and 4th points
-    //        -23.1094689600055150 50.5223376452201340, 
+    //        -23.1094689600055150 50.5223376452201340,
     //        -23.1094689600055010 50.5169177629559480,
     // --------------------^^^^^^^------------^^^^^^^^
     // So, if float-point values are trimmed up to 14 decimal digits, the point DOES intersect the segment.

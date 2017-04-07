@@ -1,5 +1,5 @@
 
-// 
+//
 // Test Suite for geos::triangulate::quadedge::QuadEdge
 //
 // tut
@@ -59,7 +59,7 @@ namespace tut
 
 		results->normalize();
 		expected->normalize();
-			
+
 		ensure(results->toString(), results->equalsExact(expected, 1e-7));
 		ensure_equals(results->getCoordinateDimension(), expected->getCoordinateDimension());
 
@@ -148,7 +148,7 @@ namespace tut
 
 		runDelaunay(wkt, false, expectedEdges);
 	}
-	
+
 	// 7 - Test grid (2.5d)
 	template<>
 	template<>
@@ -176,7 +176,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<9>()
-	{   
+	{
 		std::vector<Coordinate>* v = new std::vector<Coordinate>();
 		v->push_back( Coordinate (150,200) );
 		v->push_back( Coordinate (180,270) );

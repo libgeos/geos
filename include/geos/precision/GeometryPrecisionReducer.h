@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  ***********************************************************************
@@ -25,7 +25,7 @@
 
 // Forward declarations
 namespace geos {
-  namespace geom { 
+  namespace geom {
     class PrecisionModel;
     class GeometryFactory;
     class Geometry;
@@ -37,7 +37,7 @@ namespace precision { // geos.precision
 
 /** \brief
  * Reduces the precision of a {@link Geometry}
- * according to the supplied {@link PrecisionModel}, 
+ * according to the supplied {@link PrecisionModel},
  * ensuring that the result is topologically valid.
  */
 class GEOS_DLL GeometryPrecisionReducer {

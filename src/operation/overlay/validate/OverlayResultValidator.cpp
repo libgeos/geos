@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  ***********************************************************************
@@ -71,7 +71,7 @@ auto_ptr<MultiPoint>
 toMultiPoint(vector<Coordinate>& coords)
 {
 	const GeometryFactory& gf = *(GeometryFactory::getDefaultInstance());
-	const CoordinateSequenceFactory& csf = 
+	const CoordinateSequenceFactory& csf =
 			*(gf.getCoordinateSequenceFactory());
 
 	auto_ptr< vector<Coordinate> > nc ( new vector<Coordinate>(coords) );

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -40,19 +40,19 @@ namespace triangulate { //geos.triangulate
 namespace quadedge { //geos.triangulate.quadedge
 
 /**
- * Models a site (node) in a {@link QuadEdgeSubdivision}. 
+ * Models a site (node) in a {@link QuadEdgeSubdivision}.
  * The sites can be points on a line string representing a
- * linear site. 
- * 
+ * linear site.
+ *
  * The vertex can be considered as a vector with a norm, length, inner product, cross
  * product, etc. Additionally, point relations (e.g., is a point to the left of a line, the circle
  * defined by this point and two others, etc.) are also defined in this class.
  *
- * It is common to want to attach user-defined data to 
- * the vertices of a subdivision.  
+ * It is common to want to attach user-defined data to
+ * the vertices of a subdivision.
  * One way to do this is to subclass <tt>Vertex</tt>
  * to carry any desired information (see {@link ConstraintVertex}).
- * 
+ *
  * @author JTS: David Skea
  * @author JTS: Martin Davis
  * @author Benjamin Campbell
@@ -117,7 +117,7 @@ public:
 
 	/**
 	 * Computes the cross product k = u X v.
-	 * 
+	 *
 	 * @param v a vertex
 	 * @return returns the magnitude of u X v
 	 */
@@ -128,7 +128,7 @@ public:
 
 	/**
 	 * Computes the inner or dot product
-	 * 
+	 *
 	 * @param v, a vertex
 	 * @return returns the dot product u.v
 	 */
@@ -139,7 +139,7 @@ public:
 
 	/**
 	 * Computes the scalar product c(v)
-	 * 
+	 *
 	 * @param v, a vertex
 	 * @return returns the scaled vector
 	 */
@@ -173,9 +173,9 @@ public:
    **********************************************************************************************/
 
 	/**
-	 * Tests if the vertex is inside the circle defined by 
-	 * the triangle with vertices a, b, c (oriented counter-clockwise). 
-	 * 
+	 * Tests if the vertex is inside the circle defined by
+	 * the triangle with vertices a, b, c (oriented counter-clockwise).
+	 *
 	 * @param a a vertex of the triangle
 	 * @param b a vertex of the triangle
 	 * @param c a vertex of the triangle
@@ -186,16 +186,16 @@ public:
 	/**
 	 * Tests whether the triangle formed by this vertex and two
 	 * other vertices is in CCW orientation.
-	 * 
+	 *
 	 * @param b a vertex
 	 * @param c a vertex
 	 * @returns true if the triangle is oriented CCW
 	 */
-	inline bool isCCW(const Vertex &b, const Vertex &c) const 
+	inline bool isCCW(const Vertex &b, const Vertex &c) const
 	{
 		// is equal to the signed area of the triangle
 
-		return (b.p.x - p.x) * (c.p.y - p.y) 
+		return (b.p.x - p.x) * (c.p.y - p.y)
 			- (b.p.y - p.y) * (c.p.x - p.x) > 0;
 	}
 
@@ -216,7 +216,7 @@ private:
 	 * given tolerance B, the associated triangle is considered skinny. For an equal lateral
 	 * triangle this value is 0.57735. The ratio is related to the minimum triangle angle theta by:
 	 * circumRadius/shortestEdge = 1/(2sin(theta)).
-	 * 
+	 *
 	 * @param b second vertex of the triangle
 	 * @param c third vertex of the triangle
 	 * @return ratio of circumradius to shortest edge.
@@ -225,7 +225,7 @@ private:
 
 	/**
 	 * returns a new vertex that is mid-way between this vertex and another end point.
-	 * 
+	 *
 	 * @param a the other end point.
 	 * @return the point mid-way between this and that.
 	 */
@@ -233,7 +233,7 @@ private:
 
 	/**
 	 * Computes the centre of the circumcircle of this vertex and two others.
-	 * 
+	 *
 	 * @param b
 	 * @param c
 	 * @return the Coordinate which is the circumcircle of the 3 points.
@@ -260,18 +260,18 @@ private:
 	 * @param v2 a vertex of a triangle containing the p
 	 * @return the interpolated Z-value (height) of the point
 	 */
-	static double interpolateZ(const geom::Coordinate &p, const geom::Coordinate &v0, 
+	static double interpolateZ(const geom::Coordinate &p, const geom::Coordinate &v0,
 			const geom::Coordinate &v1, const geom::Coordinate &v2);
 
 	/**
 	 * Computes the interpolated Z-value for a point p lying on the segment p0-p1
-	 * 
+	 *
 	 * @param p
 	 * @param p0
 	 * @param p1
 	 * @return the interpolated Z value
 	 */
-	static double interpolateZ(const geom::Coordinate &p, const geom::Coordinate &p0, 
+	static double interpolateZ(const geom::Coordinate &p, const geom::Coordinate &p0,
 			const geom::Coordinate &p1);
 };
 

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -27,7 +27,7 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom { 
+	namespace geom {
 		class Envelope;
 		class CoordinateFilter;
 		class Coordinate;
@@ -48,13 +48,13 @@ namespace geom { // geos::geom
  * may want to experiment with another implementation, such as an array of Xs
  * and an array of Ys. or you might want to use your own coordinate class, one
  * that supports extra attributes like M-values.
- * 
+ *
  * You can do this by implementing the CoordinateSequence and
  * CoordinateSequenceFactory interfaces. You would then create a
  * GeometryFactory parameterized by your CoordinateSequenceFactory, and use
  * this GeometryFactory to create new Geometries. All of these new Geometries
  * will use your CoordinateSequence implementation.
- * 
+ *
  */
 class GEOS_DLL CoordinateSequence {
 
@@ -122,7 +122,7 @@ public:
 	 * because the array needs to be built from scratch.
 	 *
 	 * This method is a port of the toCoordinateArray() method of JTS.
-	 * It is not much used as memory management requires us to 
+	 * It is not much used as memory management requires us to
 	 * know wheter we should or not delete the returned object
 	 * in a consistent way. Our options are: use shared_ptr<Coordinate>
 	 * or always keep ownerhips of an eventual newly created vector.
@@ -141,7 +141,7 @@ public:
 	virtual	void toVector(std::vector<Coordinate>& coords) const=0;
 
 	/**
-	 * \brief Add an array of coordinates 
+	 * \brief Add an array of coordinates
 	 * @param vc The coordinates
 	 * @param allowRepeated if set to false, repeated coordinates
 	 * 	are collapsed
@@ -153,7 +153,7 @@ public:
 	//void add(CoordinateSequence *cl,bool allowRepeated,bool direction);
 
 	/** \brief
-	 *  Add an array of coordinates 
+	 *  Add an array of coordinates
 	 *
 	 *  @param cl The coordinates
 	 *
@@ -212,8 +212,8 @@ public:
 
 	/// Substitute Coordinate list with a copy of the given vector
 	virtual	void setPoints(const std::vector<Coordinate> &v)=0;
-	
-	/// Returns true if contains any two consecutive points 
+
+	/// Returns true if contains any two consecutive points
 	bool hasRepeatedPoints() const;
 
 	/// Returns lower-left Coordinate in list
@@ -239,7 +239,7 @@ public:
 
 	/** \brief
 	 *  Returns true if given CoordinateSequence contains
-	 *  any two consecutive Coordinate 
+	 *  any two consecutive Coordinate
 	 */
 	static bool hasRepeatedPoints(const CoordinateSequence *cl);
 
@@ -268,7 +268,7 @@ public:
 	/**
 	 * \brief
 	 * Returns true if the two arrays are identical, both null,
-	 * or pointwise equal 
+	 * or pointwise equal
 	 */
 	static bool equals(const CoordinateSequence *cl1,
 			const CoordinateSequence *cl2);
@@ -369,7 +369,7 @@ public:
 	 *       actually, define iterators on Geometry
 	 */
 	template <class T>
-	void applyCoordinateFilter(T& f) 
+	void applyCoordinateFilter(T& f)
 	{
 		Coordinate c;
 		for(std::size_t i=0, n=size(); i<n; ++i)

@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -40,7 +40,7 @@ namespace buffer { // geos.operation.buffer
 ///
 /// @author Martin Davis
 ///
-class OffsetSegmentString 
+class OffsetSegmentString
 {
 
 private:
@@ -48,9 +48,9 @@ private:
 	geom::CoordinateArraySequence* ptList;
 
 	const geom::PrecisionModel* precisionModel;
-  
+
 	/** \brief
-	 * The distance below which two adjacent points on the curve 
+	 * The distance below which two adjacent points on the curve
 	 * are considered to be coincident.
 	 *
 	 * This is chosen to be a small fraction of the offset distance.
@@ -60,7 +60,7 @@ private:
 	/** \brief
 	 * Tests whether the given point is redundant relative to the previous
 	 * point in the list (up to tolerance)
-	 * 
+	 *
 	 * @param pt
 	 * @return true if the point is redundant
 	 */
@@ -74,10 +74,10 @@ private:
 			return true;
 		return false;
 	}
-	
+
 
 public:
-	
+
 	friend std::ostream& operator<< (std::ostream& os, const OffsetSegmentString& node);
 
 	OffsetSegmentString()
@@ -95,23 +95,23 @@ public:
 
 	void reset()
 	{
-		if ( ptList ) ptList->clear(); 
+		if ( ptList ) ptList->clear();
 		else ptList = new geom::CoordinateArraySequence();
 
 		precisionModel = NULL;
 		minimumVertexDistance = 0.0;
 	}
-	
+
 	void setPrecisionModel(const geom::PrecisionModel* nPrecisionModel)
 	{
 		precisionModel = nPrecisionModel;
 	}
-	
+
 	void setMinimumVertexDistance(double nMinVertexDistance)
 	{
 		minimumVertexDistance = nMinVertexDistance;
 	}
-	
+
 	void addPt(const geom::Coordinate& pt)
 	{
 		assert(precisionModel);
@@ -141,7 +141,7 @@ public:
       }
     }
   }
-	
+
 	/// Check that points are a ring
 	//
 	/// add the startpoint again if they are not

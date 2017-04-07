@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::noding::snapround::HotPixel class.
 
 #include <tut.hpp>

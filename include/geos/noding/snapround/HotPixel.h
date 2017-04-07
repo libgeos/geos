@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -54,7 +54,7 @@ namespace snapround { // geos::noding::snapround
  * A hot pixel contains the interior of the tolerance square and
  * the boundary
  * <b>minus</b> the top and right segments.
- * 
+ *
  * The hot pixel operations are all computed in the integer domain
  * to avoid rounding problems.
  *
@@ -81,7 +81,7 @@ private:
 
 	/** \brief
 	 * The corners of the hot pixel
-	 * 
+	 *
 	 * In the order:
 	 *  1 0
 	 *  2 3
@@ -89,7 +89,7 @@ private:
 	std::vector<geom::Coordinate> corner;
 
 	/// Owned by this class, constructed on demand
-	mutable std::auto_ptr<geom::Envelope> safeEnv; 
+	mutable std::auto_ptr<geom::Envelope> safeEnv;
 
 	void initCorners(const geom::Coordinate& pt);
 
@@ -108,20 +108,20 @@ private:
 	 * can take advantage of the fact that because the hot pixel edges
 	 * do not lie on the coordinate grid.  It is sufficient to check
 	 * if there is at least one of:
-	 * 
+	 *
 	 * - a proper intersection with the segment and any hot pixel edge
 	 * - an intersection between the segment and both the left
 	 *   and bottom edges
 	 * - an intersection between a segment endpoint and the hot
 	 *   pixel coordinate
-	 * 
+	 *
 	 * @param p0
 	 * @param p1
 	 * @return
 	 */
 	bool intersectsToleranceSquare(const geom::Coordinate& p0,
 			const geom::Coordinate& p1) const;
- 
+
 
 	/** \brief
 	 * Test whether the given segment intersects
@@ -142,7 +142,7 @@ private:
 
 	bool intersectsScaled(const geom::Coordinate& p0,
 			const geom::Coordinate& p1) const;
- 
+
     // Declare type as noncopyable
     HotPixel(const HotPixel& other);
     HotPixel& operator=(const HotPixel& rhs);
@@ -185,7 +185,7 @@ public:
 	 */
 	bool intersects(const geom::Coordinate& p0,
 			const geom::Coordinate& p1) const;
- 
+
 	/**
 	 * Adds a new node (equal to the snap pt) to the specified segment
 	 * if the segment passes through the hot pixel

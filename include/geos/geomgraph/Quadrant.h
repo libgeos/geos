@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -75,7 +75,7 @@ public:
 	 */
 	static bool isOpposite(int quad1, int quad2);
 
-	/* 
+	/*
 	 * Returns the right-hand quadrant of the halfplane defined by
 	 * the two quadrants,
 	 * or -1 if the quadrants are opposite, or the quadrant if they

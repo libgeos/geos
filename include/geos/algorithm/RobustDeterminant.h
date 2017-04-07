@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -30,7 +30,7 @@ namespace algorithm { // geos::algorithm
  * sign of a 2x2 determinant for double precision values robustly.
  *
  * It is a direct translation of code developed by Olivier Devillers.
- * 
+ *
  * The original code carries the following copyright notice:
  *
  * <pre>

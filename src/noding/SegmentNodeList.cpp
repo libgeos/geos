@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -68,7 +68,7 @@ SegmentNodeList::add(const Coordinate& intPt, size_t segmentIndex)
 		return eiNew;
 	} else {
 
-		// sanity check 
+		// sanity check
 		assert(eiNew->coord.equals2D(intPt));
 
 		delete eiNew;
@@ -266,7 +266,7 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 		npts--;
 	}
 
-	CoordinateSequence *pts = new CoordinateArraySequence(npts); 
+	CoordinateSequence *pts = new CoordinateArraySequence(npts);
 	size_t ipt = 0;
 	pts->setAt(ei0->coord, ipt++);
 	for (size_t i=ei0->segmentIndex+1; i<=ei1->segmentIndex; i++)

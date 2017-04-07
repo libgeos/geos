@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -17,8 +17,8 @@
  *
  **********************************************************************/
 
-#include <geos/index/quadtree/Node.h> 
-#include <geos/index/quadtree/Key.h> 
+#include <geos/index/quadtree/Node.h>
+#include <geos/index/quadtree/Key.h>
 #include <geos/geom/Envelope.h>
 
 #include <string>
@@ -121,7 +121,7 @@ Node::insertNode(std::auto_ptr<Node> node)
 
 	if (node->level == level-1)
 	{
-		// We take ownership of node 
+		// We take ownership of node
 		delete subnode[index];
 		subnode[index] = node.release();
 
@@ -136,7 +136,7 @@ Node::insertNode(std::auto_ptr<Node> node)
 		// childNode takes ownership of node
 		childNode->insertNode(node);
 
-		// We take ownership of childNode 
+		// We take ownership of childNode
 		delete subnode[index];
 		subnode[index] = childNode.release();
 	}

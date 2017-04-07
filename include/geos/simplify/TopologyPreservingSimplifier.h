@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -27,7 +27,7 @@
 #include <geos/geom/Geometry.h>
 #include <geos/simplify/TaggedLinesSimplifier.h>
 #include <memory> // for auto_ptr
-#include <map> 
+#include <map>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -45,10 +45,10 @@ namespace simplify { // geos::simplify
  *
  * The simplification uses a maximum distance difference algorithm
  * similar to the one used in the Douglas-Peucker algorithm.
- * 
+ *
  * In particular, if the input is an areal geometry
  * ( Polygon or MultiPolygon )
- * 
+ *
  *  -  The result has the same number of shells and holes (rings) as the input,
  *     in the same order
  *  -  The result rings touch at <b>no more</b> than the number of touching point in the input

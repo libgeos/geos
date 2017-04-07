@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -24,7 +24,7 @@
 
 // Forward declarations
 namespace geos {
-	namespace planargraph { 
+	namespace planargraph {
 		class PlanarGraph;
 		class Subgraph;
 		class Node;
@@ -37,7 +37,7 @@ namespace algorithm { // geos::planargraph::algorithm
 
 /** \brief
  * Finds all connected {@link Subgraph}s of a PlanarGraph.
- * 
+ *
  * <b>Note:</b> uses the <code>isVisited</code> flag on the nodes.
  */
 class GEOS_DLL ConnectedSubgraphFinder

@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::geom::CoordinateArraySequence class.
 
 #include <tut.hpp>
@@ -152,7 +152,7 @@ namespace tut
 			ensure( sequence->hasRepeatedPoints() );
 			ensure_equals( sequence->getAt(0), sequence->getAt(size1000 - 1) );
 			ensure_equals( sequence->getAt(0), sequence->getAt(size1000 / 2) );
-			
+
 			// FREE MEMORY
 			delete sequence;
 		}

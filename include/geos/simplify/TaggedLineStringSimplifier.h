@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -151,7 +151,7 @@ private:
 	void remove(const TaggedLineString* line,
 			std::size_t start,
 			std::size_t end);
- 
+
 };
 
 inline void

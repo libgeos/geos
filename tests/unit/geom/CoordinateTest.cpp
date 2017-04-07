@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::geom::Coordinate class.
 
 #include <tut.hpp>
@@ -69,7 +69,7 @@ namespace tut
         ensure_equals( original.x, x );
         ensure_equals( original.y, y );
         ensure_equals( original.z, z );
-        
+
         // Use copy ctor
         geos::geom::Coordinate copy(original);
         ensure_equals( copy.x, x );
@@ -93,7 +93,7 @@ namespace tut
         ensure_equals( original.x, x );
         ensure_equals( original.y, y );
         ensure_equals( original.z, z );
-        
+
         // Use copy ctor
         geos::geom::Coordinate copy(original);
 

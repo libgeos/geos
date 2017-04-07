@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -49,7 +49,7 @@ namespace algorithm { // geos::algorithm
  * The algorithm has been extended to handle holes and multi-polygons.
  * See <code>http://www.faqs.org/faqs/graphics/algorithms-faq/</code>
  * for further details of the basic approach.
- * 
+ *
  * The code has also be extended to handle degenerate (zero-area) polygons.
  * In this case, the centroid of the line segments in the polygon
  * will be returned.
@@ -100,8 +100,8 @@ private:
 	// temporary variable to hold centroid of triangle
 	geom::Coordinate triangleCent3;
 
-	/// Partial area sum 
-	double areasum2;       
+	/// Partial area sum
+	double areasum2;
 
 	/// partial centroid sum
 	geom::Coordinate cg3;
@@ -117,7 +117,7 @@ private:
 	void addShell(const geom::CoordinateSequence *pts);
 
 	void addHole(const geom::CoordinateSequence *pts);
-	
+
 	void addTriangle(const geom::Coordinate &p0, const geom::Coordinate &p1,
 			const geom::Coordinate &p2,bool isPositiveArea);
 

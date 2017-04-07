@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  ***********************************************************************
@@ -19,7 +19,7 @@
 #ifndef GEOS_OP_OVERLAY_SNAP_SNAPOVERLAYOP_H
 #define GEOS_OP_OVERLAY_SNAP_SNAPOVERLAYOP_H
 
-#include <geos/operation/overlay/OverlayOp.h> // for enums 
+#include <geos/operation/overlay/OverlayOp.h> // for enums
 #include <geos/precision/CommonBitsRemover.h> // for dtor visibility by auto_ptr
 
 #include <memory> // for auto_ptr
@@ -98,7 +98,7 @@ public:
 		computeSnapTolerance();
 	}
 
-	
+
 	typedef std::auto_ptr<geom::Geometry> GeomPtr;
 
 	GeomPtr getResultGeometry(OverlayOp::OpCode opCode);
@@ -128,7 +128,7 @@ private:
     SnapOverlayOp(const SnapOverlayOp& other);
     SnapOverlayOp& operator=(const SnapOverlayOp& rhs);
 };
- 
+
 } // namespace geos::operation::overlay::snap
 } // namespace geos::operation::overlay
 } // namespace geos::operation

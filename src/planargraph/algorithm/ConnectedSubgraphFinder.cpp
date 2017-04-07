@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -47,11 +47,11 @@ ConnectedSubgraphFinder::getConnectedSubgraphs(vector<Subgraph *>& subgraphs)
 			subgraphs.push_back(findSubgraph(node));
 		}
 	}
- 
+
 }
 
 /*private*/
-Subgraph* 
+Subgraph*
 ConnectedSubgraphFinder::findSubgraph(Node* node)
 {
 	Subgraph* subgraph = new Subgraph(graph);
@@ -93,5 +93,5 @@ ConnectedSubgraphFinder::addEdges(Node* node,
 
 
 } // namespace geos.planargraph.algorithm
-} // namespace geos.planargraph 
-} // namespace geos 
+} // namespace geos.planargraph
+} // namespace geos

@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  *********************************************************************
@@ -18,7 +18,7 @@
  * architectural design choices.
  *
  * 			--strk;
- * 
+ *
  * DEBUGGING TIPS:
  *  use -D__USE_MALLOC at compile time for gcc 2.91, 2.95, 3.0 and 3.1
  *  and GLIBCXX_FORCE_NEW or GLIBCPP_FORCE_NEW at run time with gcc 3.2.2+
@@ -118,7 +118,7 @@ void WKBtest(vector<Geometry*>*geoms)
 			" good:"<<s.good()<<
 			" eof:"<<s.eof()<<
 			" bad:"<<s.bad()<<
-			" fail:"<<s.fail()<<endl; 
+			" fail:"<<s.fail()<<endl;
 #endif
 
 #if DEBUG_STREAM_STATE
@@ -127,20 +127,20 @@ void WKBtest(vector<Geometry*>*geoms)
 			" good:"<<s.good()<<
 			" eof:"<<s.eof()<<
 			" bad:"<<s.bad()<<
-			" fail:"<<s.fail()<<endl; 
+			" fail:"<<s.fail()<<endl;
 #endif
 
 		wkbWriter.write(*gin, s);
 #if DEBUG_STREAM_STATE
 		cout<<"wkbWriter wrote and reached ";
-		cout<<"p:"<<s.tellp()<<" g:"<<s.tellg()<<endl; 
+		cout<<"p:"<<s.tellp()<<" g:"<<s.tellg()<<endl;
 
 		cout<<"State of stream before DUMP: ";
 		cout<<"p:"<<s.tellp()<<" g:"<<s.tellg()<<
 			" good:"<<s.good()<<
 			" eof:"<<s.eof()<<
 			" bad:"<<s.bad()<<
-			" fail:"<<s.fail()<<endl; 
+			" fail:"<<s.fail()<<endl;
 #endif
 
 #if DEBUG_STREAM_STATE
@@ -149,7 +149,7 @@ void WKBtest(vector<Geometry*>*geoms)
 			" good:"<<s.good()<<
 			" eof:"<<s.eof()<<
 			" bad:"<<s.bad()<<
-			" fail:"<<s.fail()<<endl; 
+			" fail:"<<s.fail()<<endl;
 #endif
 
 		s.seekg(0, ios::beg); // rewind reader pointer
@@ -160,7 +160,7 @@ void WKBtest(vector<Geometry*>*geoms)
 			" good:"<<s.good()<<
 			" eof:"<<s.eof()<<
 			" bad:"<<s.bad()<<
-			" fail:"<<s.fail()<<endl; 
+			" fail:"<<s.fail()<<endl;
 #endif
 
 		gout = wkbReader.read(s);
@@ -171,7 +171,7 @@ void WKBtest(vector<Geometry*>*geoms)
 			" good:"<<s.good()<<
 			" eof:"<<s.eof()<<
 			" bad:"<<s.bad()<<
-			" fail:"<<s.fail()<<endl; 
+			" fail:"<<s.fail()<<endl;
 #endif
 
 		gin->normalize();
@@ -227,7 +227,7 @@ create_point(double x, double y)
 // This function will create a LinearString
 // geometry with the shape of the letter U
 // having top-left corner at given coordinates
-// and 'side' height and width 
+// and 'side' height and width
 LineString *
 create_ushaped_linestring(double xoffset, double yoffset, double side)
 {
@@ -239,7 +239,7 @@ create_ushaped_linestring(double xoffset, double yoffset, double side)
 	cl->add(Coordinate(xoffset+side, yoffset+side));
 	cl->add(Coordinate(xoffset+side, yoffset));
 
-	// Now that we have a CoordinateSequence we can create 
+	// Now that we have a CoordinateSequence we can create
 	// the linestring.
 	// The newly created LineString will take ownership
 	// of the CoordinateSequence.
@@ -248,13 +248,13 @@ create_ushaped_linestring(double xoffset, double yoffset, double side)
 	// This is what you do if you want the new LineString
 	// to make a copy of your CoordinateSequence:
 	// LineString *ls = global_factory->createLineString(*cl);
-	
+
 	return ls; // our LineString
 }
 
 // This function will create a LinearRing
-// geometry rapresenting a square with the given origin 
-// and side 
+// geometry rapresenting a square with the given origin
+// and side
 LinearRing *
 create_square_linearring(double xoffset, double yoffset, double side)
 {
@@ -267,7 +267,7 @@ create_square_linearring(double xoffset, double yoffset, double side)
 	cl->add(Coordinate(xoffset+side, yoffset));
 	cl->add(Coordinate(xoffset, yoffset));
 
-	// Now that we have a CoordinateSequence we can create 
+	// Now that we have a CoordinateSequence we can create
 	// the linearring.
 	// The newly created LinearRing will take ownership
 	// of the CoordinateSequence.
@@ -276,23 +276,23 @@ create_square_linearring(double xoffset, double yoffset, double side)
 	// This is what you do if you want the new LinearRing
 	// to make a copy of your CoordinateSequence:
 	// LinearRing *lr = global_factory->createLinearRing(*cl);
-	
+
 	return lr; // our LinearRing
 }
 
 // This function will create a Polygon
-// geometry rapresenting a square with the given origin 
+// geometry rapresenting a square with the given origin
 // and side and with a central hole 1/3 sided.
 Polygon *
 create_square_polygon(double xoffset, double yoffset, double side)
 {
-	// We need a LinearRing for the polygon shell 
+	// We need a LinearRing for the polygon shell
 	LinearRing *outer = create_square_linearring(xoffset,yoffset,side);
 
-	// And another for the hole 
+	// And another for the hole
 	LinearRing *inner = create_square_linearring(xoffset+(side/3),
 			yoffset+(side/3),(side/3));
-	
+
 	// If we need to specify any hole, we do it using
 	// a vector of Geometry pointers (I don't know why
 	// not LinearRings)
@@ -378,7 +378,7 @@ create_rectangle(double llX, double llY, double width, double height)
 //
 // This function uses GeometricShapeFactory to render
 // an arc having lower-left corner at given coordinates,
-// given sizes and given angles. 
+// given sizes and given angles.
 //
 LineString *
 create_arc(double llX, double llY, double width, double height, double startang, double endang)
@@ -409,7 +409,7 @@ void do_all()
 {
 	vector<Geometry *> *geoms = new vector<Geometry *>;
 	vector<Geometry *> *newgeoms;
-	
+
 	// Define a precision model using 0,0 as the reference origin
 	// and 2.0 as coordinates scale.
 	PrecisionModel *pm = new PrecisionModel(2.0, 0, 0);
@@ -460,7 +460,7 @@ void do_all()
 	/////////////////////////////////////////////
 	// CENTROID
 	/////////////////////////////////////////////
-	
+
 	// Find centroid of each base geometry
 	newgeoms = new vector<Geometry *>;
 	for (unsigned int i=0; i<geoms->size(); i++) {
@@ -477,11 +477,11 @@ void do_all()
 		delete (*newgeoms)[i];
 	}
 	delete newgeoms;
-	
+
 	/////////////////////////////////////////////
 	// BUFFER
 	/////////////////////////////////////////////
-	
+
 	newgeoms = new vector<Geometry *>;
 	for (unsigned int i=0; i<geoms->size(); i++) {
 		Geometry *g = (*geoms)[i];
@@ -501,11 +501,11 @@ void do_all()
 		delete (*newgeoms)[i];
 	}
 	delete newgeoms;
-	
+
 	/////////////////////////////////////////////
 	// CONVEX HULL
 	/////////////////////////////////////////////
-	
+
 	// Make convex hulls of geometries
 	newgeoms = new vector<Geometry *>;
 	for (unsigned int i=0; i<geoms->size(); i++) {
@@ -564,7 +564,7 @@ cout<<"-------------------------------------------------------------------------
 		}
 		cout<<endl;
 	}
-	
+
 	/////////////////////////////////////////////
 	// TOUCHES
 	/////////////////////////////////////////////
@@ -718,7 +718,7 @@ cout<<"-------------------------------------------------------------------------
 	/////////////////////////////////////////////
 	// OVERLAPS
 	/////////////////////////////////////////////
-	
+
 	cout<<endl;
 	cout<<"   OVERLAPS   ";
 	for (unsigned int i=0; i<geoms->size(); i++) {
@@ -766,7 +766,7 @@ cout<<"-------------------------------------------------------------------------
 				string pattern = "212101212";
 				if ( g1->relate(g2, pattern) ) cout<<" 1\t";
 				else cout<<" 0\t";
-				
+
 				// get the intersectionMatrix itself
 				im=g1->relate(g2);
 				delete im; // delete afterwards
@@ -920,12 +920,12 @@ cout<<"-------------------------------------------------------------------------
 		delete (*newgeoms)[i];
 	}
 	delete newgeoms;
-	
+
 
 	/////////////////////////////////////////////
 	// INTERSECTION
 	/////////////////////////////////////////////
-	
+
 	// Compute intersection of adhiacent geometries
 	newgeoms = new vector<Geometry *>;
 	for (unsigned int i=0; i<geoms->size()-1; i++) {
@@ -958,7 +958,7 @@ cout<<"-------------------------------------------------------------------------
 	/////////////////////////////////////////////
 	// DIFFERENCE
 	/////////////////////////////////////////////
-	
+
 	// Compute difference of adhiacent geometries
 	newgeoms = new vector<Geometry *>;
 	for (unsigned int i=0; i<geoms->size()-1; i++) {
@@ -987,11 +987,11 @@ cout<<"-------------------------------------------------------------------------
 		delete (*newgeoms)[i];
 	}
 	delete newgeoms;
-	
+
 	/////////////////////////////////////////////
 	// SYMMETRIC DIFFERENCE
 	/////////////////////////////////////////////
-	
+
 	// Compute symmetric difference of adhiacent geometries
 	newgeoms = new vector<Geometry *>;
 	for (unsigned int i=0; i<geoms->size()-1; i++) {
@@ -1024,7 +1024,7 @@ cout<<"-------------------------------------------------------------------------
 #endif // COMBINATIONS
 
 #if LINEMERGE
-	
+
 	/////////////////////////////////////////////
 	// LINEMERGE
 	/////////////////////////////////////////////
@@ -1038,7 +1038,7 @@ cout<<"-------------------------------------------------------------------------
 
 	cout<<endl<<"----- HERE IS THE LINEMERGE OUTPUT ------"<<endl;
 	wkt_print_geoms(newgeoms);
-	
+
 	// Delete the resulting geoms
 	for (unsigned int i=0; i<newgeoms->size(); i++) {
 		delete (*newgeoms)[i];
@@ -1062,7 +1062,7 @@ cout<<"-------------------------------------------------------------------------
 
 	cout<<endl<<"----- HERE IS POLYGONIZE OUTPUT ------"<<endl;
 	wkt_print_geoms(newgeoms);
-	
+
 	// Delete the resulting geoms
 	for (unsigned int i=0; i<newgeoms->size(); i++) {
 		delete (*newgeoms)[i];
@@ -1075,7 +1075,7 @@ cout<<"-------------------------------------------------------------------------
 	// CLEANUP
 	/////////////////////////////////////////////
 
-	// Delete base geometries 
+	// Delete base geometries
 	for (unsigned int i=0; i<geoms->size(); i++) {
 		delete (*geoms)[i];
 	}
@@ -1091,7 +1091,7 @@ main()
 		do_all();
 	}
 	// All exception thrown by GEOS are subclasses of this
-	// one, so this is a catch-all 
+	// one, so this is a catch-all
 	catch (const GEOSException& exc)
 	{
 		cerr <<"GEOS Exception: "<<exc.what()<<"\n";

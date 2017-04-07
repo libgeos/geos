@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -32,7 +32,7 @@ namespace geom { // geos::geom
 
 const int IntersectionMatrix::firstDim = 3;
 const int IntersectionMatrix::secondDim = 3;
-	
+
 /*public*/
 IntersectionMatrix::IntersectionMatrix()
 {
@@ -140,7 +140,7 @@ IntersectionMatrix::matches(const string& actualDimensionSymbols,
 {
 	IntersectionMatrix m(actualDimensionSymbols);
 	bool result=m.matches(requiredDimensionSymbols);
-	
+
 	return result;
 }
 
@@ -150,7 +150,7 @@ IntersectionMatrix::set(int row, int col, int dimensionValue)
 {
 	assert( row >= 0 && row < firstDim );
 	assert( col >= 0 && col < secondDim );
-		
+
 	matrix[row][col] = dimensionValue;
 }
 
@@ -174,7 +174,7 @@ IntersectionMatrix::setAtLeast(int row, int col, int minimumDimensionValue)
 {
 	assert( row >= 0 && row < firstDim );
 	assert( col >= 0 && col < secondDim );
-	
+
 	if (matrix[row][col] < minimumDimensionValue)
 	{
 		matrix[row][col] = minimumDimensionValue;
@@ -187,7 +187,7 @@ IntersectionMatrix::setAtLeastIfValid(int row, int col, int minimumDimensionValu
 {
 	assert( row >= 0 && row < firstDim );
 	assert( col >= 0 && col < secondDim );
-	
+
 	if (row >= 0 && col >= 0)
 	{
 		setAtLeast(row, col, minimumDimensionValue);
@@ -225,7 +225,7 @@ IntersectionMatrix::get(int row, int col) const
 {
 	assert( row >= 0 && row < firstDim );
 	assert( col >= 0 && col < secondDim );
-	
+
 	return matrix[row][col];
 }
 
@@ -401,7 +401,7 @@ IntersectionMatrix::isCoveredBy() const
 //Not sure
 IntersectionMatrix*
 IntersectionMatrix::transpose()
-{		
+{
 	int temp = matrix[1][0];
 	matrix[1][0] = matrix[0][1];
 	matrix[0][1] = temp;

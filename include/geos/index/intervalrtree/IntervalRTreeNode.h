@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  *
@@ -32,13 +32,13 @@ namespace geos {
 namespace index {
 namespace intervalrtree {
 
-class IntervalRTreeNode 
+class IntervalRTreeNode
 {
 private:
 protected:
 	double min;
 	double max;
- 
+
 	bool intersects( double queryMin, double queryMax) const
 	{
 		if (min > queryMax || max < queryMin)
@@ -60,28 +60,28 @@ public:
 		max( max )
 	{ }
 
-	virtual ~IntervalRTreeNode() 
+	virtual ~IntervalRTreeNode()
 	{ }
 
 	double getMin() const
-	{ 
-		return min; 
+	{
+		return min;
 	}
-	
-	double getMax() const 
-	{ 
-		return max; 
+
+	double getMax() const
+	{
+		return max;
 	}
-	
+
 	virtual void query( double queryMin, double queryMax, ItemVisitor * visitor) const =0;
-	
+
 	//std::string toString()
 	//{
 	//	return WKTWriter.toLineString(new Coordinate(min, 0), new Coordinate(max, 0));
 	//}
-  
 
-	//class NodeComparator 
+
+	//class NodeComparator
 	//{
 	//public:
 		static bool compare( const IntervalRTreeNode * n1, const IntervalRTreeNode * n2)

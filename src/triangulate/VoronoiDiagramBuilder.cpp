@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -46,32 +46,32 @@ VoronoiDiagramBuilder::~VoronoiDiagramBuilder()
 {
 }
 
-void 
+void
 VoronoiDiagramBuilder::setSites(const geom::Geometry& geom)
 {
 	siteCoords.reset( DelaunayTriangulationBuilder::extractUniqueCoordinates(geom) );
 }
 
-void 
+void
 VoronoiDiagramBuilder::setSites(const geom::CoordinateSequence& coords)
 {
 	siteCoords.reset( coords.clone() );
 	DelaunayTriangulationBuilder::unique(*siteCoords);
 }
 
-void 
+void
 VoronoiDiagramBuilder::setClipEnvelope(const geom::Envelope* nClipEnv)
 {
 	clipEnv = nClipEnv;
 }
 
-void 
+void
 VoronoiDiagramBuilder::setTolerance(double nTolerance)
 {
 	tolerance = nTolerance;
 }
 
-void 
+void
 VoronoiDiagramBuilder::create()
 {
 	if( subdiv.get() ) return;
@@ -92,7 +92,7 @@ VoronoiDiagramBuilder::create()
 	triangulator.insertSites(*vertices);
 }
 
-std::auto_ptr<quadedge::QuadEdgeSubdivision> 
+std::auto_ptr<quadedge::QuadEdgeSubdivision>
 VoronoiDiagramBuilder::getSubdivision()
 {
 	create();
@@ -118,7 +118,7 @@ VoronoiDiagramBuilder::getDiagramEdges(const geom::GeometryFactory& geomFact)
 	return clipped;
 }
 
-std::auto_ptr<geom::GeometryCollection> 
+std::auto_ptr<geom::GeometryCollection>
 VoronoiDiagramBuilder::clipGeometryCollection(const geom::GeometryCollection& geom, const geom::Envelope& clipEnv)
 {
 	std::auto_ptr<geom::Geometry> clipPoly ( geom.getFactory()->toGeometry(&clipEnv) );

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  *
@@ -37,7 +37,7 @@ namespace noding { // geos::noding
 class SegmentSetMutualIntersector
 {
 public:
-	
+
     SegmentSetMutualIntersector()
         : segInt(0)
     {}
@@ -57,10 +57,10 @@ public:
 	}
 
 	/**
-	 * 
+	 *
 	 * @param segStrings0 a collection of {@link SegmentString}s to node
 	 */
-	virtual void setBaseSegments(SegmentString::ConstVect* segStrings) = 0; 
+	virtual void setBaseSegments(SegmentString::ConstVect* segStrings) = 0;
 
 	/**
 	 * Computes the intersections for two collections of {@link SegmentString}s.

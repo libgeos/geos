@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -38,14 +38,14 @@ namespace geomgraph { // geos.geomgraph
 /** \brief
  * A TopologyLocation is the labelling of a
  * GraphComponent's topological relationship to a single Geometry.
- * 
+ *
  * If the parent component is an area edge, each side and the edge itself
  * have a topological location.  These locations are named
- * 
+ *
  *  - ON: on the edge
  *  - LEFT: left-hand side of the edge
  *  - RIGHT: right-hand side
- * 
+ *
  * If the parent component is a line edge or node, there is a single
  * topological relationship attribute, ON.
  *
@@ -73,7 +73,7 @@ public:
 	 * Geometry.
 	 *
 	 * Possible values for the
-	 * parameters are Location::UNDEF, Location::EXTERIOR, Location::BOUNDARY, 
+	 * parameters are Location::UNDEF, Location::EXTERIOR, Location::BOUNDARY,
 	 * and Location::INTERIOR.
 	 *
 	 * @see Location

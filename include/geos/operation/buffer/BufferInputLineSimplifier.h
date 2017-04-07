@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -41,7 +41,7 @@ namespace buffer { // geos.operation.buffer
 /** \brief
  * Simplifies a buffer input line to
  * remove concavities with shallow depth.
- * 
+ *
  * The most important benefit of doing this
  * is to reduce the number of points and the complexity of
  * shape which will be buffered.
@@ -49,17 +49,17 @@ namespace buffer { // geos.operation.buffer
  * the quantized fillet arcs (although this issue
  * should be eliminated in any case by the
  * offset curve generation logic).
- * 
+ *
  * A key aspect of the simplification is that it
  * affects inside (concave or inward) corners only.
  * Convex (outward) corners are preserved, since they
  * are required to ensure that the generated buffer curve
  * lies at the correct distance from the input geometry.
- * 
+ *
  * Another important heuristic used is that the end segments
  * of the input are never simplified.  This ensures that
  * the client buffer code is able to generate end caps faithfully.
- * 
+ *
  * No attempt is made to avoid self-intersections in the output.
  * This is acceptable for use for generating a buffer offset curve,
  * since the buffer algorithm is insensitive to invalid polygonal

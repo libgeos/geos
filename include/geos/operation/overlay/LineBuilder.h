@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  ***********************************************************************
@@ -21,7 +21,7 @@
 
 #include <geos/export.h>
 
-#include <geos/operation/overlay/OverlayOp.h> // for OverlayOp::OpCode enum 
+#include <geos/operation/overlay/OverlayOp.h> // for OverlayOp::OpCode enum
 
 #include <vector>
 
@@ -82,9 +82,9 @@ public:
 	 * an area boundary, if they are in the result of the overlay operation,
 	 * and if they are not covered by a result area.
 	 *
-	 * @param de the directed edge to test. 
+	 * @param de the directed edge to test.
 	 * @param opCode the overlap operation
-	 * @param edges the list of included line edges. 
+	 * @param edges the list of included line edges.
 	 */
 	void collectLineEdge(geomgraph::DirectedEdge *de,
 			OverlayOp::OpCode opCode,
@@ -105,11 +105,11 @@ private:
 	 * Collect edges from Area inputs which should be in the result but
 	 * which have not been included in a result area.
 	 * This happens ONLY:
-	 * 
+	 *
 	 *  -  during an intersection when the boundaries of two
 	 *     areas touch in a line segment
 	 *  -   OR as a result of a dimensional collapse.
-	 * 
+	 *
 	 */
 	void collectBoundaryTouchEdge(geomgraph::DirectedEdge *de,
 			OverlayOp::OpCode opCode,

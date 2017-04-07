@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -67,11 +67,11 @@ WKBWriter::~WKBWriter()
 }
 
 void
-WKBWriter::writeHEX(const Geometry &g, ostream &os) 
+WKBWriter::writeHEX(const Geometry &g, ostream &os)
 {
 	// setup input/output stream
 	stringstream stream;
-  
+
 	// write the geometry in wkb format
 	this->write(g, stream);
 
@@ -80,7 +80,7 @@ WKBWriter::writeHEX(const Geometry &g, ostream &os)
 }
 
 void
-WKBWriter::write(const Geometry &g, ostream &os) 
+WKBWriter::write(const Geometry &g, ostream &os)
 {
     outputDimension = defaultOutputDimension;
     if( outputDimension > g.getCoordinateDimension() )
@@ -109,7 +109,7 @@ WKBWriter::write(const Geometry &g, ostream &os)
   }
 
   if ( const MultiLineString* x = dynamic_cast<const MultiLineString*>(&g) )
-  { 
+  {
     return writeGeometryCollection(*x, WKBConstants::wkbMultiLineString);
   }
 
@@ -118,7 +118,7 @@ WKBWriter::write(const Geometry &g, ostream &os)
     return writeGeometryCollection(*x, WKBConstants::wkbMultiPolygon);
   }
 
-  if ( const GeometryCollection* x = 
+  if ( const GeometryCollection* x =
        dynamic_cast<const GeometryCollection*>(&g) )
   {
     return writeGeometryCollection(*x, WKBConstants::wkbGeometryCollection);
@@ -128,13 +128,13 @@ WKBWriter::write(const Geometry &g, ostream &os)
 }
 
 void
-WKBWriter::writePoint(const Point &g) 
+WKBWriter::writePoint(const Point &g)
 {
 	if (g.isEmpty()) throw
 		util::IllegalArgumentException("Empty Points cannot be represented in WKB");
 
 	writeByteOrder();
-	
+
 	writeGeometryType(WKBConstants::wkbPoint, g.getSRID());
 	writeSRID(g.getSRID());
 
@@ -144,23 +144,23 @@ WKBWriter::writePoint(const Point &g)
 }
 
 void
-WKBWriter::writeLineString(const LineString &g) 
+WKBWriter::writeLineString(const LineString &g)
 {
 	writeByteOrder();
-	
+
 	writeGeometryType(WKBConstants::wkbLineString, g.getSRID());
 	writeSRID(g.getSRID());
-	
+
 	const CoordinateSequence* cs=g.getCoordinatesRO();
 	assert(cs);
 	writeCoordinateSequence(*cs, true);
 }
 
 void
-WKBWriter::writePolygon(const Polygon &g) 
+WKBWriter::writePolygon(const Polygon &g)
 {
 	writeByteOrder();
-	
+
 	writeGeometryType(WKBConstants::wkbPolygon, g.getSRID());
 	writeSRID(g.getSRID());
 
@@ -168,7 +168,7 @@ WKBWriter::writePolygon(const Polygon &g)
 		writeInt(0);
 		return;
 	}
-	
+
 	std::size_t nholes = g.getNumInteriorRing();
 	writeInt(nholes+1);
 
@@ -193,13 +193,13 @@ WKBWriter::writePolygon(const Polygon &g)
 
 void
 WKBWriter::writeGeometryCollection(const GeometryCollection &g,
-	int wkbtype) 
+	int wkbtype)
 {
 	writeByteOrder();
-	
+
 	writeGeometryType(wkbtype, g.getSRID());
 	writeSRID(g.getSRID());
-	
+
 	std::size_t ngeoms = g.getNumGeometries();
 	writeInt(ngeoms);
 
@@ -214,13 +214,13 @@ WKBWriter::writeGeometryCollection(const GeometryCollection &g,
 }
 
 void
-WKBWriter::writeByteOrder() 
+WKBWriter::writeByteOrder()
 {
 	if (byteOrder == ByteOrderValues::ENDIAN_LITTLE)
 	{
 		buf[0] = WKBConstants::wkbNDR;
 	}
-	else 
+	else
 	{
 		buf[0] = WKBConstants::wkbXDR;
 	}
@@ -247,26 +247,26 @@ WKBWriter::setByteOrder(int bo)
 }
 
 void
-WKBWriter::writeGeometryType(int typeId, int SRID) 
+WKBWriter::writeGeometryType(int typeId, int SRID)
 {
 	int flag3D = (outputDimension == 3) ? 0x80000000 : 0;
     int typeInt = typeId | flag3D;
-        
+
     if (includeSRID && SRID != 0)
         typeInt = typeInt | 0x20000000;
-        
+
 	writeInt(typeInt);
 }
 
 void
-WKBWriter::writeSRID(int SRID) 
+WKBWriter::writeSRID(int SRID)
 {
     if (includeSRID && SRID != 0)
         writeInt(SRID);
 }
 
 void
-WKBWriter::writeInt(int val) 
+WKBWriter::writeInt(int val)
 {
 	ByteOrderValues::putInt(val, buf, byteOrder);
 	outStream->write(reinterpret_cast<char *>(buf), 4);
@@ -275,7 +275,7 @@ WKBWriter::writeInt(int val)
 
 void
 WKBWriter::writeCoordinateSequence(const CoordinateSequence &cs,
-	bool sized) 
+	bool sized)
 {
 	std::size_t size = cs.getSize();
 	bool is3d=false;
@@ -287,7 +287,7 @@ WKBWriter::writeCoordinateSequence(const CoordinateSequence &cs,
 
 void
 WKBWriter::writeCoordinate(const CoordinateSequence &cs, int idx,
-	bool is3d) 
+	bool is3d)
 {
 #if DEBUG_WKB_WRITER
 	cout<<"writeCoordinate: X:"<<cs.getX(idx)<<" Y:"<<cs.getY(idx)<<endl;

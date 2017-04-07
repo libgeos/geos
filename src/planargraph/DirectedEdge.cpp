@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -40,7 +40,7 @@ DirectedEdge::toEdges(vector<DirectedEdge*>& dirEdges, vector<Edge*>& edges)
 
 /*public*/
 vector<Edge*>*
-DirectedEdge::toEdges(vector<DirectedEdge*>& dirEdges) 
+DirectedEdge::toEdges(vector<DirectedEdge*>& dirEdges)
 {
 	vector<Edge*> *edges=new vector<Edge*>();
 	toEdges(dirEdges, *edges);
@@ -73,7 +73,7 @@ DirectedEdge::getEdge() const
 /*public*/
 void
 DirectedEdge::setEdge(Edge* newParentEdge)
-{ 
+{
 	parentEdge=newParentEdge;
 }
 
@@ -94,7 +94,7 @@ DirectedEdge::getDirectionPt() const
 /*public*/
 bool
 DirectedEdge::getEdgeDirection() const
-{ 
+{
 	return edgeDirection;
 }
 
@@ -108,28 +108,28 @@ DirectedEdge::getFromNode() const
 /*public*/
 Node*
 DirectedEdge::getToNode() const
-{ 
+{
 	return to;
 }
 
 /*public*/
 Coordinate&
 DirectedEdge::getCoordinate() const
-{ 
+{
 	return from->getCoordinate();
 }
 
 /*public*/
 double
 DirectedEdge::getAngle() const
-{ 
+{
 	return angle;
 }
 
 /*public*/
 DirectedEdge*
 DirectedEdge::getSym() const
-{ 
+{
 	return sym;
 }
 
@@ -139,7 +139,7 @@ DirectedEdge::getSym() const
  */
 void
 DirectedEdge::setSym(DirectedEdge *newSym)
-{ 
+{
 	sym = newSym;
 }
 

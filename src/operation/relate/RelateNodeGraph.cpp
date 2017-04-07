@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -85,7 +85,7 @@ RelateNodeGraph::build(GeometryGraph *geomGraph)
  * This allows nodes created by either self-intersections or
  * mutual intersections to be labelled.
  * Endpoint nodes will already be labelled from when they were inserted.
- * 
+ *
  * Precondition: edge intersections have been computed.
  */
 void

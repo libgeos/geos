@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -31,13 +31,13 @@
 #pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
 #endif
 
-// Forward declarations 
+// Forward declarations
 namespace geos {
-	namespace geom { 
+	namespace geom {
 		class LineString;
 		class Coordinate;
 	}
-	namespace planargraph { 
+	namespace planargraph {
 		class Node;
 		class Edge;
 		class DirectedEdge;
@@ -72,10 +72,10 @@ public:
 
 	/** \brief
 	 * Adds an Edge, DirectedEdges, and Nodes for the given
-	 * LineString representation of an edge. 
-	 * 
+	 * LineString representation of an edge.
+	 *
 	 * Empty lines or lines with all coordinates equal are not added.
-	 * 
+	 *
 	 * @param lineString the linestring to add to the graph
 	 */
 	void addEdge(const geom::LineString *lineString);

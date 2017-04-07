@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -26,12 +26,12 @@ namespace noding { // geos::noding
 
 
 
-void 
+void
 SegmentIntersectionDetector::
-processIntersections(	
+processIntersections(
 	noding::SegmentString * e0, int segIndex0,
 	noding::SegmentString * e1, int segIndex1 )
-{  	
+{
 	// don't bother intersecting a segment with itself
 	if (e0 == e1 && segIndex0 == segIndex1) return;
 
@@ -42,7 +42,7 @@ processIntersections(
 
 	li->computeIntersection( p00, p01, p10, p11);
 
-	if (li->hasIntersection()) 
+	if (li->hasIntersection())
 	{
 		// record intersection info
 		_hasIntersection = true;
@@ -58,11 +58,11 @@ processIntersections(
 		// OR no location has yet been recorded
 		// save the location data
 		bool saveLocation = true;
-		
-		if (findProper && !isProper) 
+
+		if (findProper && !isProper)
 			saveLocation = false;
 
-		if (!intPt || saveLocation) 
+		if (!intPt || saveLocation)
 		{
 			// record intersection location (approximate)
 			intPt = &li->getIntersection(0);
@@ -78,7 +78,7 @@ processIntersections(
 		}
 	}
 }
-  
+
 
 } // geos::noding
 } // geos

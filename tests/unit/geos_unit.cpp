@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite Runner
 //
 #ifdef _MSC_VER
@@ -10,7 +10,7 @@
 // tut
 #include <tut.hpp>
 #include <tut_reporter.hpp>
-// geos 
+// geos
 #include <geos/unload.h>
 // std
 #include <cstdlib>
@@ -83,7 +83,7 @@ int main(int argc, const char* argv[])
             tut::groupnames::difference_type d = std::distance(b, e);
 
             std::cout << "Registered " << d << " test groups:\n" << std::endl;
-            
+
             while ( b != e )
             {
                 std::cout << "  " << *b << std::endl;
@@ -114,5 +114,5 @@ int main(int argc, const char* argv[])
     // XXX - mloskot - this should be removed in future!
     geos::io::Unload::Release();
 
-    return (visi.all_ok() ? EXIT_SUCCESS : EXIT_FAILURE);   
+    return (visi.all_ok() ? EXIT_SUCCESS : EXIT_FAILURE);
 }

@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -49,11 +49,11 @@ namespace {
    * and finding the Y-ordinate interval
    * which contains the centre of the Y extent.
    * The centre of this interval is returned as the bisector Y-ordinate.
-   * 
+   *
    * @author mdavis
    *
    */
-  class SafeBisectorFinder 
+  class SafeBisectorFinder
   {
   public:
 	  static double getBisectorY(const Polygon& poly)
@@ -80,14 +80,14 @@ namespace {
 		  return bisectY;
 	  }
 
-	  
-	private:  
+
+	private:
 	  const Polygon& poly;
-	  
+
 	  double centreY;
 	  double hiY;
 	  double loY;
-	  
+
 	  void process(const LineString& line) {
       const CoordinateSequence* seq = line.getCoordinatesRO();
       for (std::size_t i = 0, s = seq->size(); i < s; i++) {
@@ -130,7 +130,7 @@ InteriorPointArea::~InteriorPointArea()
 }
 
 /*public*/
-bool 
+bool
 InteriorPointArea::getInteriorPoint(Coordinate& ret) const
 {
 	if ( ! foundInterior ) return false;

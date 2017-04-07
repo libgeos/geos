@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -73,14 +73,14 @@ SegmentIntersector::hasIntersection()
 	return hasIntersectionVar;
 }
 
-void 
-SegmentIntersector::setIsDoneIfProperInt(bool idwpi) 
+void
+SegmentIntersector::setIsDoneIfProperInt(bool idwpi)
 {
 	isDoneWhenProperInt = idwpi;
 }
 
-bool 
-SegmentIntersector::getIsDone() 
+bool
+SegmentIntersector::getIsDone()
 {
 	return isDone;
 }
@@ -117,7 +117,7 @@ SegmentIntersector::hasProperInteriorIntersection()
 bool
 SegmentIntersector::isTrivialIntersection(Edge *e0,int segIndex0,Edge *e1,int segIndex1)
 {
-//	if (e0->equals(e1)) 
+//	if (e0->equals(e1))
 	if (e0==e1) {
 		if (li->getIntersectionNum()==1) {
 			if (isAdjacentSegments(segIndex0,segIndex1))
@@ -196,7 +196,7 @@ SegmentIntersector::addIntersections(Edge *e0,int segIndex0,Edge *e1,int segInde
 				cerr<<"SegmentIntersector::addIntersections(): properIntersectionPoint: "<<properIntersectionPoint.toString()<<endl;
 #endif // DEBUG_INTERSECT
 				hasProper=true;
-				if (isDoneWhenProperInt) 
+				if (isDoneWhenProperInt)
 				{
 					isDone = true;
 				}

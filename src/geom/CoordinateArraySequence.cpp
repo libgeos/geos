@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -36,7 +36,7 @@ CoordinateArraySequence::CoordinateArraySequence():
 {
 }
 
-CoordinateArraySequence::CoordinateArraySequence(size_t n, 
+CoordinateArraySequence::CoordinateArraySequence(size_t n,
                                                  size_t dimension_in ):
 	vect(new vector<Coordinate>(n)),
         dimension(dimension_in)
@@ -89,7 +89,7 @@ CoordinateArraySequence::toVector() const
 	return vect; //new vector<Coordinate>(vect->begin(),vect->end());
 }
 
-std::size_t 
+std::size_t
 CoordinateArraySequence::getDimension() const
 {
     if( dimension != 0 )
@@ -279,7 +279,7 @@ CoordinateArraySequence::removeRepeatedPoints()
 	// We use == operator, which is 2D only
 	vector<Coordinate>::iterator new_end = \
 		std::unique(vect->begin(), vect->end());
-	
+
 	vect->erase(new_end, vect->end());
 
 	return *this;

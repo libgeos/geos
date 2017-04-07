@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSGeomToWKT
 
 #include <tut.hpp>
@@ -30,7 +30,7 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
@@ -38,7 +38,7 @@ namespace tut
             : geom1_(0)
         {
             initGEOS(notice, notice);
-        }       
+        }
 
         ~test_capigeosgeomtowkt_data()
         {
@@ -53,19 +53,19 @@ namespace tut
             ensure ( 0 != geom1_ );
 
             char* wkt_c = GEOSGeomToWKT(geom1_);
-            std::string out(wkt_c); 
+            std::string out(wkt_c);
         free(wkt_c);
 
             ensure_equals(out, wkt);
         }
-        
+
         void test_wkt(std::string const& wkt, std::string::size_type n)
         {
             geom1_ = GEOSGeomFromWKT(wkt.c_str());
             ensure ( 0 != geom1_ );
 
             char* wkt_c = GEOSGeomToWKT(geom1_);
-            std::string out(wkt_c); 
+            std::string out(wkt_c);
         free(wkt_c);
 
             ensure_equals(out.substr(0, n), wkt.substr(0, n));
@@ -77,7 +77,7 @@ namespace tut
             ensure ( 0 != geom1_ );
 
             char* wkt_c = GEOSWKTWriter_write(writer,geom1_);
-            std::string out(wkt_c); 
+            std::string out(wkt_c);
             free(wkt_c);
 
             ensure_equals(out, wkt);
@@ -99,28 +99,28 @@ namespace tut
     {
         test_wkt("POINT EMPTY");
     }
-    
+
     template<>
     template<>
     void object::test<2>()
     {
         test_wkt("LINESTRING EMPTY");
     }
-    
+
     template<>
     template<>
     void object::test<3>()
     {
         test_wkt("POLYGON EMPTY");
     }
-    
+
     template<>
     template<>
     void object::test<4>()
     {
         test_wkt("MULTIPOINT EMPTY");
     }
-    
+
     template<>
     template<>
     void object::test<5>()
@@ -151,21 +151,21 @@ namespace tut
     {
         test_wkt("LINESTRING (0 0, 5 5, 10 5, 10 10)", 13);
     }
-    
+
     template<>
     template<>
     void object::test<9>()
     {
         test_wkt("POLYGON ((0 10, 5 5, 10 5, 15 10, 10 15, 5 15, 0 10))", 11);
     }
-    
+
     template<>
     template<>
     void object::test<10>()
     {
         test_wkt("MULTIPOINT (0 0, 5 5, 10 10, 15 15, 20 20)", 13);
     }
-    
+
     template<>
     template<>
     void object::test<11>()
@@ -188,12 +188,12 @@ namespace tut
     {
         GEOSWKTWriter *writer = GEOSWKTWriter_create();
 
-        ensure( "getOutputDimension_1", 
+        ensure( "getOutputDimension_1",
                 GEOSWKTWriter_getOutputDimension(writer) == 2 );
 
         GEOSWKTWriter_setTrim( writer, 1 );
         GEOSWKTWriter_setOutputDimension( writer, 3 );
-        ensure( "getOutputDimension_2", 
+        ensure( "getOutputDimension_2",
                 GEOSWKTWriter_getOutputDimension(writer) == 3 );
 
         test_writer_wkt(writer, "POINT Z (10 13 3)");

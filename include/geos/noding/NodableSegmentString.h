@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  *
@@ -31,22 +31,22 @@ namespace noding { // geos::noding
 /** \brief
  * An interface for classes which support adding nodes to
  * a segment string.
- * 
+ *
  * @author Martin Davis
  */
-class GEOS_DLL NodableSegmentString : public SegmentString 
+class GEOS_DLL NodableSegmentString : public SegmentString
 {
 private:
 protected:
 public:
 	NodableSegmentString(const void* newContext)
 		:
-		SegmentString( newContext ) 
+		SegmentString( newContext )
 	{ }
 
 	/**
 	 * Adds an intersection node for a given point and segment to this segment string.
-	 * 
+	 *
 	 * @param intPt the location of the intersection
 	 * @param segmentIndex the index of the segment containing the intersection
 	 */

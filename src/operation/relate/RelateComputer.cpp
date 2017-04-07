@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -374,7 +374,7 @@ RelateComputer::labelIntersectionNodes(int argIndex)
 		EdgeIntersectionList &eiL=e->getEdgeIntersectionList();
 		EdgeIntersectionList::iterator eiIt=eiL.begin();
 		EdgeIntersectionList::iterator eiEnd=eiL.end();
-		
+
 		for( ; eiIt!=eiEnd; ++eiIt)
 		{
 			EdgeIntersection *ei=*eiIt;

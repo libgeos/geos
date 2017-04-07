@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -16,7 +16,7 @@
 #define GEOS_GEOM_TRIANGLE_H
 
 #include <geos/export.h>
-#include <geos/geom/Coordinate.h> 
+#include <geos/geom/Coordinate.h>
 
 #include <geos/inline.h>
 
@@ -48,7 +48,7 @@ public:
 	 */
 	void inCentre(Coordinate& resultPoint);
 
-	/** 
+	/**
 	 * Computes the circumcentre of a triangle. The circumcentre is the centre of
 	 * the circumcircle, the smallest circle which encloses the triangle. It is
 	 * also the common intersection point of the perpendicular bisectors of the
@@ -61,17 +61,17 @@ public:
 	 * This method uses an algorithm due to J.R.Shewchuk which uses normalization
 	 * to the origin to improve the accuracy of computation. (See <i>Lecture Notes
 	 * on Geometric Robustness</i>, Jonathan Richard Shewchuk, 1999).
-	 * 
+	 *
 	 * @param resultPoint the point into which to write the inCentre of the triangle
 	 */
 	void circumcentre(Coordinate& resultPoint);
 
 private:
 
-	/** 
+	/**
 	 * Computes the determinant of a 2x2 matrix. Uses standard double-precision
 	 * arithmetic, so is susceptible to round-off error.
-	 * 
+	 *
 	 * @param m00
 	 *          the [0,0] entry of the matrix
 	 * @param m01

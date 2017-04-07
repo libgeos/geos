@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -86,7 +86,7 @@ namespace geom { // geos::geom
 
 
 /*
- * Return current GEOS version 
+ * Return current GEOS version
  */
 string
 geosversion()
@@ -114,7 +114,7 @@ Geometry::Geometry(const GeometryFactory *newFactory)
 {
 	if ( _factory == NULL ) {
 		_factory = GeometryFactory::getDefaultInstance();
-	} 
+	}
 	SRID=_factory->getSRID();
 	_factory->addRef();
 }
@@ -129,7 +129,7 @@ Geometry::Geometry(const Geometry &geom)
 	{
 		envelope.reset(new Envelope(*(geom.envelope)));
 	}
-	//factory=geom.factory; 
+	//factory=geom.factory;
 	//envelope(new Envelope(*(geom.envelope.get())));
 	//SRID=geom.getSRID();
 	//_userData=NULL;
@@ -137,7 +137,7 @@ Geometry::Geometry(const Geometry &geom)
 }
 
 bool
-Geometry::hasNonEmptyElements(const vector<Geometry *>* geometries) 
+Geometry::hasNonEmptyElements(const vector<Geometry *>* geometries)
 {
 	for (size_t i=0; i<geometries->size(); i++) {
 		if (!(*geometries)[i]->isEmpty()) {
@@ -148,7 +148,7 @@ Geometry::hasNonEmptyElements(const vector<Geometry *>* geometries)
 }
 
 bool
-Geometry::hasNullElements(const CoordinateSequence* list) 
+Geometry::hasNullElements(const CoordinateSequence* list)
 {
 	size_t npts=list->getSize();
 	for (size_t i=0; i<npts; ++i) {
@@ -160,7 +160,7 @@ Geometry::hasNullElements(const CoordinateSequence* list)
 }
 
 bool
-Geometry::hasNullElements(const vector<Geometry *>* lrs) 
+Geometry::hasNullElements(const vector<Geometry *>* lrs)
 {
 	size_t n=lrs->size();
 	for (size_t i=0; i<n; ++i) {
@@ -170,7 +170,7 @@ Geometry::hasNullElements(const vector<Geometry *>* lrs)
 	}
 	return false;
 }
-	
+
 /* public */
 bool
 Geometry::isWithinDistance(const Geometry *geom,double cDistance) const
@@ -699,7 +699,7 @@ Geometry::getClassSortIndex() const
 	else if ( typeid(*this) == typeid(MultiLineString)    ) return 4;
 	else if ( typeid(*this) == typeid(Polygon)            ) return 5;
 	else if ( typeid(*this) == typeid(MultiPolygon)       ) return 6;
-	else 
+	else
 	{
 		assert(typeid(*this) == typeid(GeometryCollection)); // unsupported class
 		return 7;
@@ -769,7 +769,7 @@ Geometry::compare(vector<Geometry *> a, vector<Geometry *> b) const
 
 /**
  *  Returns the minimum distance between this Geometry
- *  and the other Geometry 
+ *  and the other Geometry
  *
  * @param  other  the Geometry from which to compute the distance
  */

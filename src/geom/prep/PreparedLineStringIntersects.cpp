@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -17,11 +17,11 @@
  **********************************************************************/
 
 
-#include <geos/algorithm/PointLocator.h> 
+#include <geos/algorithm/PointLocator.h>
 #include <geos/geom/prep/PreparedLineString.h>
 #include <geos/geom/prep/PreparedLineStringIntersects.h>
-#include <geos/geom/util/ComponentCoordinateExtracter.h> 
-#include <geos/geom/Coordinate.h> 
+#include <geos/geom/util/ComponentCoordinateExtracter.h>
+#include <geos/geom/Coordinate.h>
 #include <geos/noding/SegmentStringUtil.h>
 #include <geos/noding/FastSegmentSetIntersectionFinder.h>
 
@@ -65,20 +65,20 @@ namespace prep { // geos.geom.prep
 		}
 
 		if ( segsIntersect ) return true;
-		
+
 		// For L/L case we are done
-		if ( g->getDimension() == 1 ) 
+		if ( g->getDimension() == 1 )
 			return false;
-		
+
 		// For L/A case, need to check for proper inclusion of the target in the test
 		if (	g->getDimension() == 2
-			&&	prepLine.isAnyTargetComponentInTest(g) ) 
+			&&	prepLine.isAnyTargetComponentInTest(g) )
 			return true;
-		
+
 		// For L/P case, need to check if any points lie on line(s)
 		if ( g->getDimension() == 0 )
 			return isAnyTestPointInTarget(g);
-		
+
 		return false;
 	}
 

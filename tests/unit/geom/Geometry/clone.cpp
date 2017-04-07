@@ -1,5 +1,5 @@
-// 
-// Test Suite for Geometry's clone() 
+//
+// Test Suite for Geometry's clone()
 
 // tut
 #include <tut.hpp>

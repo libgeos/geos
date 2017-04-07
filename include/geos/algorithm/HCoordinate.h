@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -50,7 +50,7 @@ public:
 	/** \brief
 	 * Computes the (approximate) intersection point between two line
 	 * segments using homogeneous coordinates.
-	 * 
+	 *
 	 * Note that this algorithm is
 	 * not numerically stable; i.e. it can produce intersection points which
 	 * lie outside the envelope of the line segments themselves.  In order

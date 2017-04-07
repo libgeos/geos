@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -59,5 +59,5 @@ std::ostream& operator<<(std::ostream& os, const Node& n) {
 	return os;
 }
 
-} // namespace planargraph 
-} // namespace geos 
+} // namespace planargraph
+} // namespace geos

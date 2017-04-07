@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::geom::Envelope class.
 
 // tut
@@ -29,7 +29,7 @@ namespace tut
     template<>
     template<>
     void object::test<1>()
-    {         
+    {
         geos::geom::Envelope empty;
 
         ensure( empty.isNull() );

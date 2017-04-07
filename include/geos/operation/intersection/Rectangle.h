@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -106,12 +106,12 @@ class GEOS_DLL Rectangle
   {
 	Inside    = 1,
 	Outside   = 2,
-                
+
 	Left        = 4,
 	Top         = 8,
 	Right       = 16,
 	Bottom      = 32,
-                
+
 	TopLeft     = Top|Left,                 // 12
 	TopRight    = Top|Right,                // 24
 	BottomLeft  = Bottom|Left,              // 36

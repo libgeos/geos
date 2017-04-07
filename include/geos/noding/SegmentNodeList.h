@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -58,7 +58,7 @@ private:
 	std::set<SegmentNode*,SegmentNodeLT> nodeMap;
 
 	// the parent edge
-	const NodedSegmentString& edge; 
+	const NodedSegmentString& edge;
 
 	/**
 	 * Checks the correctness of the set of split edges corresponding
@@ -73,7 +73,7 @@ private:
 	 * (and including) the two intersections.
 	 * The label for the new edge is the same as the label for the
 	 * parent edge.
-	 * 
+	 *
 	 * ownership of return value is transferred
 	 */
 	SegmentString* createSplitEdge(SegmentNode *ei0, SegmentNode *ei1);
@@ -138,7 +138,7 @@ public:
 	 *	   destroyed at SegmentNodeList destruction time.
 	 *
 	 * @param intPt the intersection Coordinate, will be copied
-	 * @param segmentIndex 
+	 * @param segmentIndex
 	 */
 	SegmentNode* add(const geom::Coordinate& intPt, std::size_t segmentIndex);
 

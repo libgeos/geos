@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -70,7 +70,7 @@ sqlPrint(const std::string& table, std::vector<SegmentString*>& ssv)
 }
 #endif // GEOS_DEBUG > 1
 
-} // anonym namespace 
+} // anonym namespace
 
 class ScaledNoder::Scaler : public geom::CoordinateFilter {
 public:

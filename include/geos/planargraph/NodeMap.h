@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -29,7 +29,7 @@
 
 // Forward declarations
 namespace geos {
-	namespace planargraph { 
+	namespace planargraph {
 		class DirectedEdgeStar;
 		class DirectedEdge;
 		class Edge;
@@ -50,7 +50,7 @@ public:
 	typedef std::map<geom::Coordinate, Node*, geom::CoordinateLessThen> container;
 private:
 	container nodeMap;
-public:  
+public:
 	/**
 	 * \brief Constructs a NodeMap without any Nodes.
 	 */

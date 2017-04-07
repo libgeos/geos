@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -294,7 +294,7 @@ Envelope::expandToInclude(const Envelope* other)
 }
 
 /*public*/
-bool 
+bool
 Envelope::covers(double x, double y) const
 {
 	if (isNull()) return false;
@@ -306,12 +306,12 @@ Envelope::covers(double x, double y) const
 
 
 /*public*/
-bool 
+bool
 Envelope::covers(const Envelope& other) const
 {
 	if (isNull() || other.isNull()) return false;
 
-	return 
+	return
 		other.getMinX() >= minx &&
 		other.getMaxX() <= maxx &&
 		other.getMinY() >= miny &&
@@ -401,7 +401,7 @@ Envelope::split(const string &str, const string &delimiters)
   {
     // Found a token, add it to the vector.
     tokens.push_back(str.substr(lastPos, pos - lastPos));
-    
+
     // Skip delimiters.  Note the "not_of"
     lastPos = str.find_first_not_of(delimiters, pos);
 

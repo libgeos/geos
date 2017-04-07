@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -16,8 +16,8 @@
  *
  **********************************************************************/
 
-#include <geos/index/chain/MonotoneChainBuilder.h> 
-#include <geos/index/chain/MonotoneChain.h> 
+#include <geos/index/chain/MonotoneChainBuilder.h>
+#include <geos/index/chain/MonotoneChain.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geomgraph/Quadrant.h>
 
@@ -104,7 +104,7 @@ MonotoneChainBuilder::findChainEnd(const CoordinateSequence& pts, std::size_t st
         // skip any zero-length segments at the start of the sequence
         // (since they cannot be used to establish a quadrant)
 	while ( safeStart < npts - 1
-		&& pts[safeStart].equals2D(pts[safeStart+1]) ) 
+		&& pts[safeStart].equals2D(pts[safeStart+1]) )
 	{
 		++safeStart;
 	}
@@ -129,7 +129,7 @@ MonotoneChainBuilder::findChainEnd(const CoordinateSequence& pts, std::size_t st
 			                               pts[last]      );
 			if (quad != chainQuad) break;
 		}
-		++last;	
+		++last;
 	}
 #if GEOS_DEBUG
 	std::cerr<<"MonotoneChainBuilder::findChainEnd() returning"<<std::endl;

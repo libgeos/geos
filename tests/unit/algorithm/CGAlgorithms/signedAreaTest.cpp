@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for CGAlgorithms::signedArea() function
 
 // tut
@@ -38,7 +38,7 @@ namespace tut
         {
             assert(0 == cs_);
         }
-        
+
         ~test_signedarea_data()
         {
             delete cs_;

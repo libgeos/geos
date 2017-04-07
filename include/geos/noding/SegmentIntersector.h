@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -62,7 +62,7 @@ public:
 	 * \brief
 	 * Reports whether the client of this class
 	 * needs to continue testing all intersections in an arrangement.
-	 * 
+	 *
 	 * @return true if there is not need to continue testing segments
 	 *
 	 * The default implementation always return false (process all intersections).
@@ -71,13 +71,13 @@ public:
 		return false;
 	}
 
-	virtual ~SegmentIntersector() 
+	virtual ~SegmentIntersector()
 	{ }
 
 protected:
 
 	SegmentIntersector() {}
- 
+
 };
 
 /// Temporary typedef for namespace transition

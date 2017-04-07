@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -49,7 +49,7 @@ namespace algorithm { // geos::algorithm
  *
  * The convex hull is the smallest convex Geometry that contains all the
  * points in the input Geometry.
- * 
+ *
  * Uses the Graham Scan algorithm.
  *
  * Last port: algorithm/ConvexHull.java rev. 1.26 (JTS-1.7)
@@ -111,7 +111,7 @@ private:
 	 * ordering about point o.  First checks radial ordering.
 	 * If points are collinear, the comparison is based
 	 * on their distance to the origin.
-	 * 
+	 *
 	 * p < q iff
 	 *
 	 * - ang(o-p) < ang(o-q) (e.g. o-p-q is CCW)
@@ -167,7 +167,7 @@ public:
 	 * Returns a Geometry that represents the convex hull of
 	 * the input geometry.
 	 * The returned geometry contains the minimal number of points
-	 * needed to represent the convex hull. 
+	 * needed to represent the convex hull.
 	 * In particular, no more than two consecutive points
 	 * will be collinear.
 	 *

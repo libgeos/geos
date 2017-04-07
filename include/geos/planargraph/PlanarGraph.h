@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -31,10 +31,10 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom { 
+	namespace geom {
 		class Coordinate;
 	}
-	namespace planargraph { 
+	namespace planargraph {
 		class DirectedEdge;
 		class Edge;
 		class Node;
@@ -48,7 +48,7 @@ namespace planargraph { // geos.planargraph
  * \class PlanarGraph planargraph.h geos/planargraph.h
  * \brief
  * Represents a directed graph which is embeddable in a planar surface.
- * 
+ *
  * This class and the other classes in this package serve as a framework for
  * building planar graphs for specific algorithms. This class must be
  * subclassed to expose appropriate methods to construct the graph. This allows
@@ -152,7 +152,7 @@ public:
 	 * Returns the Nodes in this PlanarGraph.
 	 *
 	 * @param nodes : the nodes are push_back'ed here
-	 */  
+	 */
 	void getNodes(std::vector<Node*>& nodes) { nodeMap.getNodes(nodes); }
 
 	/**

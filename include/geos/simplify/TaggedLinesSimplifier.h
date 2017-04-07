@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -77,7 +77,7 @@ public:
 	 *      inequality and dereference operators.
 	 *	Dereference operator must return a TaggedLineString*
 	 *
-	 * @param begin iterator to the first element 
+	 * @param begin iterator to the first element
 	 *              to be simplified.
 	 * @param end an iterator to one-past-last element
 	 *            to be simplified.

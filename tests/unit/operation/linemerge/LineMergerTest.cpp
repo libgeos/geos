@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::operation::linemerge::LineMerger class.
 
 // tut
@@ -128,7 +128,7 @@ namespace tut
 
       return false;
     }
- 
+
 
 
   private:
@@ -261,7 +261,7 @@ namespace tut
       GeomPtr line4(readWKT("LINESTRING(5 0, 0 0)"));
       // Union segments incrementally
       GeomPtr lines12(line1->Union(line2.get()));
-      GeomPtr lines123(lines12->Union(line3.get())); 
+      GeomPtr lines123(lines12->Union(line3.get()));
       GeomPtr lines1234(lines123->Union(line4.get()));
 
       // MultiLineString expected by design, see corresponding test in OverlayOpUnionTest

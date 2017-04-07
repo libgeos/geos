@@ -1,4 +1,4 @@
-// 
+//
 // Ported from JTS junit/algorithm/RobustLineIntersectionTest.java r788
 
 #include <tut.hpp>
@@ -8,7 +8,7 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h> // required for use in auto_ptr
-#include <geos/geom/LineString.h> 
+#include <geos/geom/LineString.h>
 #include <geos/geom/Coordinate.h>
 // std
 #include <sstream>
@@ -21,7 +21,7 @@ namespace geos {
 	}
 }
 
-using namespace geos::geom; // 
+using namespace geos::geom; //
 
 namespace tut
 {
@@ -270,7 +270,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<1>()
-	{         
+	{
                 checkIntersection(
                                 "LINESTRING (588750.7429703881 4518950.493668233, 588748.2060409798 4518933.9452804085)",
                                 "LINESTRING (588745.824857241 4518940.742239175, 588748.2060437313 4518933.9452791475)",
@@ -283,7 +283,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<2>()
-	{         
+	{
                 checkIntersection(
                                 "LINESTRING (588743.626135934 4518924.610969561, 588732.2822865889 4518925.4314047815)",
                                 "LINESTRING (588739.1191384895 4518927.235700594, 588731.7854614238 4518924.578370095)",
@@ -302,11 +302,11 @@ namespace tut
 	template<>
 	template<>
 	void object::test<3>()
-	{         
+	{
 	   std::vector<Coordinate> intPt;
 	   intPt.push_back(Coordinate(2089426.5233462777, 1180182.3877339689));
 	   intPt.push_back(Coordinate(2085646.6891757075, 1195618.7333999649));
-		
+
            checkIntersection(
                                 "LINESTRING ( 2089426.5233462777 1180182.3877339689, 2085646.6891757075 1195618.7333999649 )",
                                 "LINESTRING ( 1889281.8148903656 1997547.0560044837, 2259977.3672235999 483675.17050843034 )",
@@ -320,10 +320,10 @@ namespace tut
 	template<>
 	template<>
 	void object::test<4>()
-	{         
+	{
 	   std::vector<Coordinate> intPt;
 	   intPt.push_back(Coordinate(4348437.0557510145, 5552597.375203926));
-		
+
                 checkIntersection(
                                 "LINESTRING (4348433.262114629 5552595.478385733, 4348440.849387404 5552599.272022122 )",
                                 "LINESTRING (4348433.26211463  5552595.47838573,  4348440.8493874   5552599.27202212  )",
@@ -338,7 +338,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<5>()
-	{         
+	{
 	   std::vector<Coordinate> pt;
 	   pt.push_back(Coordinate(4348433.262114629, 5552595.478385733));
 	   pt.push_back(Coordinate(4348440.849387404, 5552599.272022122));
@@ -347,7 +347,7 @@ namespace tut
 
 	   std::vector<Coordinate> intPt;
 	   intPt.push_back(Coordinate(4348437.0557510145, 5552597.375203926));
-		
+
 	   checkIntersection( pt, 1, intPt, 0);
 	}
 #endif // fails
@@ -361,7 +361,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<6>()
-	{         
+	{
     checkIntersection(
         "LINESTRING (305690.0434123494 254176.46578338774, 305601.9999843455 254243.19999846347)",
         "LINESTRING (305689.6153764265 254177.33102743194, 305692.4999844298 254171.4999983967)",
@@ -382,7 +382,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<7>()
-	{         
+	{
     checkIntersectionNone(
         "LINESTRING (-5.9 163.1, 76.1 250.7)",
         "LINESTRING (14.6 185.0, 96.6 272.6)");
@@ -401,7 +401,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<8>()
-	{         
+	{
     checkIntersectionNone(
         "LINESTRING (-42.0 163.2, 21.2 265.2)",
         "LINESTRING (-26.2 188.7, 37.0 290.7)");

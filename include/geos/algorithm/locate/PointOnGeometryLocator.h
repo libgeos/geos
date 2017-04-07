@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  *
@@ -18,7 +18,7 @@
 
 namespace geos {
 	namespace geom {
-		class Coordinate; 
+		class Coordinate;
 	}
 }
 
@@ -29,7 +29,7 @@ namespace locate { // geos::algorithm::locate
 /** \brief
  * An interface for classes which determine the {@link Location} of
  * points in {@link Polygon} or {@link MultiPolygon} geometries.
- * 
+ *
  * @author Martin Davis
  */
 class PointOnGeometryLocator
@@ -37,14 +37,14 @@ class PointOnGeometryLocator
 private:
 protected:
 public:
-	virtual ~PointOnGeometryLocator() 
+	virtual ~PointOnGeometryLocator()
 	{ }
 
 	/**
 	 * Determines the {@link Location} of a point in an areal {@link Geometry}.
-	 * 
+	 *
 	 * @param p the point to test
-	 * @return the location of the point in the geometry  
+	 * @return the location of the point in the geometry
 	 */
 	virtual int locate( const geom::Coordinate * /*const*/ p) =0;
 };

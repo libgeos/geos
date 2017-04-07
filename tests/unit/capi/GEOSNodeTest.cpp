@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSNode
 
 #include <tut.hpp>
@@ -31,7 +31,7 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
@@ -41,7 +41,7 @@ namespace tut
             initGEOS(notice, notice);
             w_ = GEOSWKTWriter_create();
             GEOSWKTWriter_setTrim(w_, 1);
-        }       
+        }
 
         ~test_capigeosnode_data()
         {
@@ -75,7 +75,7 @@ namespace tut
 
         GEOSNormalize(geom2_);
         char* wkt_c = GEOSWKTWriter_write(w_, geom2_);
-        std::string out(wkt_c); 
+        std::string out(wkt_c);
         free(wkt_c);
 
         ensure_equals(out,
@@ -94,7 +94,7 @@ namespace tut
 
         GEOSNormalize(geom2_);
         char* wkt_c = GEOSWKTWriter_write(w_, geom2_);
-        std::string out(wkt_c); 
+        std::string out(wkt_c);
         free(wkt_c);
 
         ensure_equals(out,
@@ -113,14 +113,14 @@ namespace tut
 
         GEOSNormalize(geom2_);
         char* wkt_c = GEOSWKTWriter_write(w_, geom2_);
-        std::string out(wkt_c); 
+        std::string out(wkt_c);
         free(wkt_c);
 
         ensure_equals(out,
           "MULTILINESTRING ((2 0, 4 0), (0 0, 2 0))"
         );
     }
-    
+
 
 } // namespace tut
 

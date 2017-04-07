@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSGeom_setPrecision_r
 
 #include <tut.hpp>
@@ -31,7 +31,7 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
@@ -57,7 +57,7 @@ namespace tut
             GEOSWKTWriter_setTrim(wktw_, 1);
             GEOSWKTWriter_setRoundingPrecision(wktw_, 10);
             //GEOSWKTWriter_setOutputDimension(wktw_, 3);
-        }       
+        }
 
         ~test_capigeosgeomsetprecision_data()
         {
@@ -181,6 +181,6 @@ namespace tut
           "LINESTRING (0 0, 0 0)"
         ));
     }
- 
+
 } // namespace tut
 

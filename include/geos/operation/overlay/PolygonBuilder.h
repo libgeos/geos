@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -116,7 +116,7 @@ private:
 
 	/**
 	 * This method takes a list of MinimalEdgeRings derived from a
-	 * MaximalEdgeRing, and tests whether they form a Polygon. 
+	 * MaximalEdgeRing, and tests whether they form a Polygon.
 	 * This is the case if there is a single shell
 	 * in the list.  In this case the shell is returned.
 	 * The other possibility is that they are a series of connected
@@ -132,7 +132,7 @@ private:
 	 * MinimalEdgeRings) to its shell.
 	 * Determining the holes for a MinimalEdgeRing polygon serves two
 	 * purposes:
-	 * 
+	 *
 	 *  - it is faster than using a point-in-polygon check later on.
 	 *  - it ensures correctness, since if the PIP test was used the point
 	 *    chosen might lie on the shell, which might return an incorrect
@@ -179,7 +179,7 @@ private:
 	 *
 	 * ring A contains ring B iff envelope(ring A)
 	 * contains envelope(ring B)
-	 * 
+	 *
 	 * This routine is only safe to use if the chosen point of the hole
 	 * is known to be properly contained in a shell
 	 * (which is guaranteed to be the case if the hole does not touch

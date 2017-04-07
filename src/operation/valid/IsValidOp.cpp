@@ -10,7 +10,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -27,12 +27,12 @@
 #include <geos/operation/valid/ConnectedInteriorTester.h>
 #include <geos/operation/valid/ConnectedInteriorTester.h>
 #include <geos/util/UnsupportedOperationException.h>
-#include <geos/geomgraph/index/SegmentIntersector.h> 
-#include <geos/geomgraph/GeometryGraph.h> 
-#include <geos/geomgraph/Edge.h> 
-#include <geos/algorithm/MCPointInRing.h> 
-#include <geos/algorithm/CGAlgorithms.h> 
-#include <geos/algorithm/LineIntersector.h> 
+#include <geos/geomgraph/index/SegmentIntersector.h>
+#include <geos/geomgraph/GeometryGraph.h>
+#include <geos/geomgraph/Edge.h>
+#include <geos/algorithm/MCPointInRing.h>
+#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/LineIntersector.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/LinearRing.h>
@@ -263,7 +263,7 @@ IsValidOp::checkValid(const MultiPolygon *g)
 
 	for(unsigned int i=0; i<ngeoms; ++i)
 	{
-		const Polygon *p=polys[i]; 
+		const Polygon *p=polys[i];
 		checkHolesInShell(p, &graph);
 		if (validErr!=NULL) return;
 	}
@@ -381,7 +381,7 @@ IsValidOp::checkHolesInShell(const Polygon *p, GeometryGraph *graph)
 
 	const LinearRing *shell=static_cast<const LinearRing*>(
 			p->getExteriorRing());
-         
+
 	int nholes = p->getNumInteriorRing();
 
 	if(shell->isEmpty())
@@ -454,7 +454,7 @@ IsValidOp::checkHolesNotNested(const Polygon *p, GeometryGraph *graph)
 
 		const LinearRing *innerHole=static_cast<const LinearRing*>(
 				p->getInteriorRingN(i));
-   
+
 		//empty holes always pass
 		if(innerHole->isEmpty()) continue;
 
@@ -531,7 +531,7 @@ IsValidOp::checkShellNotNested(const LinearRing *shell, const Polygon *p,
 			*shellPt);
 		return;
 	}
-	
+
 	/**
 	 * Check if the shell is inside one of the holes.
 	 * This is the case if one of the calls to checkShellInsideHole

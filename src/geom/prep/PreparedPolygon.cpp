@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -38,7 +38,7 @@ namespace prep { // geos.geom.prep
 //
 // public:
 //
-PreparedPolygon::PreparedPolygon(const geom::Geometry * geom) 
+PreparedPolygon::PreparedPolygon(const geom::Geometry * geom)
     : BasicPreparedGeometry(geom), segIntFinder(0), ptOnGeomLoc(0)
 {
 	isRectangle = getGeometry().isRectangle();
@@ -56,7 +56,7 @@ PreparedPolygon::~PreparedPolygon()
 }
 
 
-noding::FastSegmentSetIntersectionFinder * 
+noding::FastSegmentSetIntersectionFinder *
 PreparedPolygon::
 getIntersectionFinder() const
 {
@@ -68,79 +68,79 @@ getIntersectionFinder() const
 	return segIntFinder;
 }
 
-algorithm::locate::PointOnGeometryLocator * 
+algorithm::locate::PointOnGeometryLocator *
 PreparedPolygon::
 getPointLocator() const
 {
-	if (! ptOnGeomLoc) 
+	if (! ptOnGeomLoc)
 		ptOnGeomLoc = new algorithm::locate::IndexedPointInAreaLocator( getGeometry() );
 
 	return ptOnGeomLoc;
 }
 
-bool 
+bool
 PreparedPolygon::
 contains( const geom::Geometry * g) const
 {
     // short-circuit test
-    if ( !envelopeCovers( g) ) 
+    if ( !envelopeCovers( g) )
 		return false;
-  	
+
     // optimization for rectangles
     if ( isRectangle )
     {
         geom::Geometry const& geom = getGeometry();
         geom::Polygon const& poly = dynamic_cast<geom::Polygon const&>(geom);
-       
+
         return operation::predicate::RectangleContains::contains(poly, *g);
     }
 
 	return PreparedPolygonContains::contains(this, g);
 }
 
-bool 
+bool
 PreparedPolygon::
 containsProperly( const geom::Geometry* g) const
 {
     // short-circuit test
-    if ( !envelopeCovers( g) ) 
+    if ( !envelopeCovers( g) )
 		return false;
 
 	return PreparedPolygonContainsProperly::containsProperly( this, g);
 }
 
-bool 
+bool
 PreparedPolygon::
 covers( const geom::Geometry* g) const
 {
     // short-circuit test
-    if ( !envelopeCovers( g) ) 
+    if ( !envelopeCovers( g) )
 		return false;
 
     // optimization for rectangle arguments
-    if ( isRectangle) 
+    if ( isRectangle)
 		return true;
 
 	return PreparedPolygonCovers::covers( this, g);
 }
 
-bool 
+bool
 PreparedPolygon::
 intersects( const geom::Geometry* g) const
 {
   	// envelope test
-  	if ( !envelopesIntersect( g) ) 
+  	if ( !envelopesIntersect( g) )
 		return false;
-  	
+
     // optimization for rectangles
     if ( isRectangle )
     {
         geom::Geometry const& geom = getGeometry();
         geom::Polygon const& poly = dynamic_cast<geom::Polygon const&>(geom);
-        
+
         return operation::predicate::RectangleIntersects::intersects(poly, *g);
     }
-    
+
 	return PreparedPolygonIntersects::intersects( this, g);
 }
 

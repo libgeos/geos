@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  ***********************************************************************
@@ -167,7 +167,7 @@ LineBuilder::collectBoundaryTouchEdge(DirectedEdge *de,
 	if (de->isInteriorAreaEdge()) return;
 
 	// if the edge linework is already included, don't include it again
-	if (de->getEdge()->isInResult()) return; 
+	if (de->getEdge()->isInResult()) return;
 
 	// sanity check for labelling of result edgerings
 	assert( ! ( de->isInResult() || de->getSym()->isInResult() )
@@ -177,7 +177,7 @@ LineBuilder::collectBoundaryTouchEdge(DirectedEdge *de,
 
 	// include the linework if it's in the result of the operation
 	const Label& label = de->getLabel();
-	if ( OverlayOp::isResultOfOp(label, opCode) 
+	if ( OverlayOp::isResultOfOp(label, opCode)
 		&& opCode == OverlayOp::opINTERSECTION )
 	{
 		edges->push_back(de->getEdge());
@@ -225,7 +225,7 @@ LineBuilder::propagateZ(CoordinateSequence *cs)
 #if GEOS_DEBUG
 	cerr<<"  found "<<v3d.size()<<" 3d vertexes"<<endl;
 #endif
-	
+
 	if ( v3d.size() == 0 )
 	{
 #if GEOS_DEBUG

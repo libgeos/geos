@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -52,27 +52,27 @@ RepeatedPointTester::hasRepeatedPoint(const Geometry *g)
 	if ( dynamic_cast<const MultiPoint*>(g) ) return false;
 
 	// LineString also handles LinearRings
-	if ( const LineString* x = dynamic_cast<const LineString*>(g) ) 
+	if ( const LineString* x = dynamic_cast<const LineString*>(g) )
   {
     return hasRepeatedPoint(x->getCoordinatesRO());
   }
 
-	if ( const Polygon* x = dynamic_cast<const Polygon*>(g) ) 
+	if ( const Polygon* x = dynamic_cast<const Polygon*>(g) )
   {
     return hasRepeatedPoint(x);
   }
 
-	if ( const MultiPolygon* x = dynamic_cast<const MultiPolygon*>(g) ) 
+	if ( const MultiPolygon* x = dynamic_cast<const MultiPolygon*>(g) )
   {
     return hasRepeatedPoint(x);
   }
 
-	if ( const MultiLineString* x = dynamic_cast<const MultiLineString*>(g) ) 
+	if ( const MultiLineString* x = dynamic_cast<const MultiLineString*>(g) )
   {
     return hasRepeatedPoint(x);
   }
 
-	if ( const GeometryCollection* x = dynamic_cast<const GeometryCollection*>(g) ) 
+	if ( const GeometryCollection* x = dynamic_cast<const GeometryCollection*>(g) )
   {
     return hasRepeatedPoint(x);
   }

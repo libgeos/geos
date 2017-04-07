@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  *
@@ -25,10 +25,10 @@
 
 // forward declarations
 namespace geos {
-	namespace geom { 
+	namespace geom {
 		class Geometry;
 
-		namespace prep { 
+		namespace prep {
 			class PreparedPolygon;
 		}
 	}
@@ -43,23 +43,23 @@ namespace prep { // geos::geom::prep
  * Computes the <tt>covers</tt> spatial relationship predicate
  * for a {@link PreparedPolygon} relative to all other {@link Geometry} classes.
  *
- * Uses short-circuit tests and indexing to improve performance. 
- * 
+ * Uses short-circuit tests and indexing to improve performance.
+ *
  * It is not possible to short-circuit in all cases, in particular
  * in the case where the test geometry touches the polygon linework.
  * In this case full topology must be computed.
- * 
+ *
  * @author Martin Davis
  *
  */
-class PreparedPolygonCovers : public AbstractPreparedPolygonContains 
+class PreparedPolygonCovers : public AbstractPreparedPolygonContains
 {
 private:
 protected:
 	/**
 	 * Computes the full topological <tt>covers</tt> predicate.
 	 * Used when short-circuit tests are not conclusive.
-	 * 
+	 *
 	 * @param geom the test geometry
 	 * @return true if this prepared polygon covers the test geometry
 	 */
@@ -69,7 +69,7 @@ public:
 	/**
 	 * Computes the </tt>covers</tt> predicate between a {@link PreparedPolygon}
 	 * and a {@link Geometry}.
-	 * 
+	 *
 	 * @param prep the prepared polygon
 	 * @param geom a test geometry
 	 * @return true if the polygon covers the geometry
@@ -82,16 +82,16 @@ public:
 
 	/**
 	 * Creates an instance of this operation.
-	 * 
+	 *
 	 * @param prepPoly the PreparedPolygon to evaluate
 	 */
 	PreparedPolygonCovers(const PreparedPolygon * const prep)
-	:	AbstractPreparedPolygonContains( prep, false) 
+	:	AbstractPreparedPolygonContains( prep, false)
 	{ }
-		
+
 	/**
 	 * Tests whether this PreparedPolygon <tt>covers</tt> a given geometry.
-	 * 
+	 *
 	 * @param geom the test geometry
 	 * @return true if the test geometry is covered
 	 */
@@ -99,7 +99,7 @@ public:
 	{
 		return eval( geom);
 	}
-	
+
 };
 
 } // geos::geom::prep

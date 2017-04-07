@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -111,14 +111,14 @@ SharedPathsOp::findLinearIntersections(PathList& to)
   std::auto_ptr<Geometry> full ( OverlayOp::overlayOp(
     &_g1, &_g2, OverlayOp::opINTERSECTION) );
 
-  // NOTE: intersection of equal lines yelds splitted lines, 
+  // NOTE: intersection of equal lines yelds splitted lines,
   //       should we sew them back ?
 
   for (size_t i=0, n=full->getNumGeometries(); i<n; ++i)
   {
     const Geometry* sub = full->getGeometryN(i);
     const LineString* path = dynamic_cast<const LineString*>(sub);
-    if ( path ) { 
+    if ( path ) {
       // NOTE: we're making a copy here, wouldn't be needed
       //       for a simple predicate
       to.push_back(_gf.createLineString(*path).release());
@@ -150,7 +150,7 @@ SharedPathsOp::isForward(const geom::LineString& edge,
 
   /*
    * We move the coordinate somewhat closer, to avoid
-   * vertices of the geometry being checked (geom). 
+   * vertices of the geometry being checked (geom).
    *
    * This is mostly only needed when one of the two points
    * of the edge is an endpoint of a _closed_ geom.

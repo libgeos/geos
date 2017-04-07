@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -24,7 +24,7 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom { 
+	namespace geom {
 		class Coordinate;
 	}
 }
@@ -64,7 +64,7 @@ public:
 	/// Construct sequence taking ownership of given Coordinate vector
 	CoordinateArraySequence(std::vector<Coordinate> *coords,
                                 std::size_t dimension = 0);
-        
+
 	/// Construct sequence allocating space for n coordinates
 	CoordinateArraySequence(std::size_t n, std::size_t dimension = 0);
 
@@ -112,9 +112,9 @@ public:
 
     std::size_t getDimension() const;
 
-	void apply_rw(const CoordinateFilter *filter); 
+	void apply_rw(const CoordinateFilter *filter);
 
-	void apply_ro(CoordinateFilter *filter) const; 
+	void apply_ro(CoordinateFilter *filter) const;
 
 	virtual CoordinateSequence& removeRepeatedPoints();
 

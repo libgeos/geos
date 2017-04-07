@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -30,22 +30,22 @@ namespace geom { // geos::geom
 /** \brief
  * Implementation of Dimensionally Extended Nine-Intersection Model
  * (DE-9IM) matrix.
- * 
+ *
  * Dimensionally Extended Nine-Intersection Model (DE-9IM) matrix.
  * This class can used to represent both computed DE-9IM's (like 212FF1FF2)
  * as well as patterns for matching them (like T*T******).
- * 
+ *
  * Methods are provided to:
  *
  *  - set and query the elements of the matrix in a convenient fashion
  *  - convert to and from the standard string representation
  *    (specified in SFS Section 2.1.13.2).
  *  - test to see if a matrix matches a given pattern string.
- * 
+ *
  * For a description of the DE-9IM, see the
  * <a href="http://www.opengis.org/techno/specs.htm">OpenGIS Simple
  * Features Specification for SQL.</a>
- * 
+ *
  * \todo Suggestion: add equal and not-equal operator to this class.
  */
 class GEOS_DLL IntersectionMatrix {
@@ -64,7 +64,7 @@ public:
 	 * Overriden constructor.
 	 *
 	 * Creates an IntersectionMatrix with the given dimension symbols.
-	 * 
+	 *
 	 * @param elements - reference to string containing pattern
 	 *                   of dimension values for elements.
 	 */
@@ -74,15 +74,15 @@ public:
 	 * Copy constructor.
 	 *
 	 * Creates an IntersectionMatrix with the same elements as other.
-	 * 
+	 *
 	 * \todo Add assignment operator to make this class fully copyable.
 	 */
 	IntersectionMatrix(const IntersectionMatrix &other);
 
 	/** \brief
-	 * Returns whether the elements of this IntersectionMatrix 
+	 * Returns whether the elements of this IntersectionMatrix
 	 * satisfies the required dimension symbols.
-	 * 
+	 *
 	 * @param requiredDimensionSymbols - nine dimension symbols with
 	 *        which to compare the elements of this IntersectionMatrix.
 	 *        Possible values are {T, F, * , 0, 1, 2}.
@@ -93,13 +93,13 @@ public:
 
 	/** \brief
 	 * Tests if given dimension value satisfies the dimension symbol.
-	 * 
+	 *
 	 * @param actualDimensionValue - valid dimension value stored in
-	 *        the IntersectionMatrix. 
+	 *        the IntersectionMatrix.
 	 *        Possible values are {TRUE, FALSE, DONTCARE, 0, 1, 2}.
 	 * @param requiredDimensionSymbol - a character used in the string
 	 *        representation of an IntersectionMatrix.
-	 *        Possible values are {T, F, * , 0, 1, 2}. 
+	 *        Possible values are {T, F, * , 0, 1, 2}.
 	 * @return true if the dimension symbol encompasses the
 	 *         dimension value.
 	 */
@@ -109,7 +109,7 @@ public:
 	/** \brief
 	 * Returns true if each of the actual dimension symbols satisfies
 	 * the corresponding required dimension symbol.
-	 * 
+	 *
 	 * @param actualDimensionSymbols - nine dimension symbols to validate.
 	 *        Possible values are {T, F, * , 0, 1, 2}.
 	 * @param requiredDimensionSymbols - nine dimension symbols to
@@ -126,16 +126,16 @@ public:
 	 *
 	 * Addition is defined by taking the maximum dimension value
 	 * of each position in the summand matrices.
-	 * 
+	 *
 	 * @param other - the matrix to add.
-	 * 
+	 *
 	 * \todo Why the 'other' matrix is not passed by const-reference?
 	 */
 	void add(IntersectionMatrix* other);
 
 	/** \brief
 	 * Changes the value of one of this IntersectionMatrixs elements.
-	 * 
+	 *
 	 * @param row - the row of this IntersectionMatrix, indicating
 	 *        the interior, boundary or exterior of the first Geometry.
 	 * @param column - the column of this IntersectionMatrix,
@@ -148,7 +148,7 @@ public:
 	/** \brief
 	 * Changes the elements of this IntersectionMatrix to the dimension
 	 * symbols in dimensionSymbols.
-	 * 
+	 *
 	 * @param dimensionSymbols - nine dimension symbols to which to
 	 *        set this IntersectionMatrix elements.
 	 *        Possible values are {T, F, * , 0, 1, 2}.
@@ -158,7 +158,7 @@ public:
 	/** \brief
 	 * Changes the specified element to minimumDimensionValue if the
 	 * element is less.
-	 * 
+	 *
 	 * @param row - the row of this IntersectionMatrix, indicating
 	 *        the interior, boundary or exterior of the first Geometry.
 	 * @param column -  the column of this IntersectionMatrix, indicating
@@ -173,7 +173,7 @@ public:
 	 * If row >= 0 and column >= 0, changes the specified element
 	 * to minimumDimensionValue if the element is less.
 	 * Does nothing if row <0 or column < 0.
-	 * 
+	 *
 	 * @param row -
 	 *        the row of this IntersectionMatrix,
 	 *        indicating the interior, boundary or exterior of the
@@ -194,7 +194,7 @@ public:
 	/** \brief
 	 * For each element in this IntersectionMatrix, changes the element to
 	 * the corresponding minimum dimension symbol if the element is less.
-	 * 
+	 *
 	 * @param minimumDimensionSymbols -
 	 *        nine dimension symbols with which
 	 *        to compare the elements of this IntersectionMatrix.
@@ -205,7 +205,7 @@ public:
 
 	/** \brief
 	 * Changes the elements of this IntersectionMatrix to dimensionValue.
-	 * 
+	 *
 	 * @param dimensionValue -
 	 *        the dimension value to which to set this
 	 *        IntersectionMatrix elements. Possible values {TRUE,
@@ -215,7 +215,7 @@ public:
 
 	/** \brief
 	 * Returns the value of one of this IntersectionMatrixs elements.
-	 * 
+	 *
 	 * @param row -
 	 *        the row of this IntersectionMatrix, indicating the
 	 *        interior, boundary or exterior of the first Geometry.
@@ -230,7 +230,7 @@ public:
 
 	/** \brief
 	 * Returns true if this IntersectionMatrix is FF*FF****.
-	 * 
+	 *
 	 * @return true if the two Geometrys related by this
 	 *         IntersectionMatrix are disjoint.
 	 */
@@ -238,7 +238,7 @@ public:
 
 	/** \brief
 	 * Returns true if isDisjoint returns false.
-	 * 
+	 *
 	 * @return true if the two Geometrys related by this
 	 *         IntersectionMatrix intersect.
 	 */
@@ -247,7 +247,7 @@ public:
 	/** \brief
 	 * Returns true if this IntersectionMatrix is FT*******, F**T*****
 	 * or F***T****.
-	 * 
+	 *
 	 * @param dimensionOfGeometryA - the dimension of the first Geometry.
 	 *
 	 * @param dimensionOfGeometryB - the dimension of the second Geometry.
@@ -264,14 +264,14 @@ public:
 	 * - T*T****** (for a point and a curve, a point and an area or
 	 *   a line and an area)
 	 * - 0******** (for two curves)
-	 * 
+	 *
 	 * @param dimensionOfGeometryA - he dimension of the first Geometry.
 	 *
 	 * @param dimensionOfGeometryB - the dimension of the second Geometry.
 	 *
 	 * @return true if the two Geometry's related by this
 	 *         IntersectionMatrix cross.
-	 * 
+	 *
 	 * For this function to return true, the Geometrys must be a point
 	 * and a curve; a point and a surface; two curves; or a curve and
 	 * a surface.
@@ -281,21 +281,21 @@ public:
 
 	/** \brief
 	 * Returns true if this IntersectionMatrix is T*F**F***.
-	 * 
+	 *
 	 * @return true if the first Geometry is within the second.
 	 */
 	bool isWithin() const;
 
 	/** \brief
 	 * Returns true if this IntersectionMatrix is T*****FF*.
-	 * 
+	 *
 	 * @return true if the first Geometry contains the second.
 	 */
 	bool isContains() const;
 
 	/** \brief
 	 * Returns true if this IntersectionMatrix is T*F**FFF*.
-	 * 
+	 *
 	 * @param dimensionOfGeometryA - he dimension of the first Geometry.
 	 * @param dimensionOfGeometryB - the dimension of the second Geometry.
 	 * @return true if the two Geometry's related by this
@@ -309,11 +309,11 @@ public:
 	 * Returns true if this IntersectionMatrix is:
 	 * - T*T***T** (for two points or two surfaces)
 	 * - 1*T***T** (for two curves)
-	 * 
+	 *
 	 * @param dimensionOfGeometryA - he dimension of the first Geometry.
 	 * @param dimensionOfGeometryB - the dimension of the second Geometry.
 	 * @return true if the two Geometry's related by this
-	 *         IntersectionMatrix overlap.  
+	 *         IntersectionMatrix overlap.
 	 *
 	 * For this function to return true, the Geometrys must be two points,
 	 * two curves or two surfaces.
@@ -331,12 +331,12 @@ public:
 	 */
 	bool isCovers() const;
 
-	    
+
 	/** \brief
 	 * Returns true if this IntersectionMatrix is <code>T*F**F***</code>
    	 * <code>*TF**F***</code> or <code>**FT*F***</code>
 	 * or <code>**F*TF***</code>
-	 * 
+	 *
 	 * @return <code>true</code> if the first Geometry is covered by
 	 * the second
 	 */
@@ -344,9 +344,9 @@ public:
 
 	/** \brief
 	 * Transposes this IntersectionMatrix.
-	 * 
+	 *
 	 * @return this IntersectionMatrix as a convenience.
-	 * 
+	 *
 	 * \todo It returns 'this' pointer so why not to return const-pointer?
 	 * \todo May be it would be better to return copy of transposed matrix?
 	 */
@@ -355,7 +355,7 @@ public:
 	/** \brief
 	 * Returns a nine-character String representation of this
 	 * IntersectionMatrix.
-	 * 
+	 *
 	 * @return the nine dimension symbols of this IntersectionMatrix
 	 * in row-major order.
 	 */
@@ -366,10 +366,10 @@ private:
 	static const int firstDim; // = 3;
 
 	static const int secondDim; // = 3;
-			
+
 	// Internal buffer for 3x3 matrix.
 	int matrix[3][3];
-	
+
 }; // class IntersectionMatrix
 
 GEOS_DLL std::ostream& operator<< (std::ostream&os, const IntersectionMatrix& im);

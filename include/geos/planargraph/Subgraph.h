@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -19,7 +19,7 @@
 #include <geos/export.h>
 #include <geos/planargraph/NodeMap.h> // for composition
 
-#include <vector> 
+#include <vector>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -28,7 +28,7 @@
 
 // Forward declarations
 namespace geos {
-	namespace planargraph { 
+	namespace planargraph {
 		class PlanarGraph;
 		class DirectedEdge;
 		class Edge;
@@ -98,7 +98,7 @@ public:
 		return dirEdges.begin();
 	}
 
-	
+
 	/**
 	 * Returns an {@link Iterator} over the {@link Edge}s in this
 	 * graph, in the order in which they were added.
@@ -115,16 +115,16 @@ public:
 	 * in this graph.
 	 */
 	NodeMap::container::iterator nodeBegin() {
-		return nodeMap.begin(); 
+		return nodeMap.begin();
 	}
 	NodeMap::container::const_iterator nodeEnd() const {
-		return nodeMap.end(); 
+		return nodeMap.end();
 	}
 	NodeMap::container::iterator nodeEnd() {
-		return nodeMap.end(); 
+		return nodeMap.end();
 	}
 	NodeMap::container::const_iterator nodeBegin() const {
-		return nodeMap.begin(); 
+		return nodeMap.begin();
 	}
 
 	/**
@@ -140,7 +140,7 @@ protected:
 	std::set<Edge*> edges;
 	std::vector<const DirectedEdge*> dirEdges;
 	NodeMap nodeMap;
-    
+
     // Declare type as noncopyable
     Subgraph(const Subgraph& other);
     Subgraph& operator=(const Subgraph& rhs);

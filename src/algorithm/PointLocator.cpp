@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -147,7 +147,7 @@ PointLocator::locateInPolygonRing(const Coordinate& p, const LinearRing *ring)
 
 	const CoordinateSequence *cl = ring->getCoordinatesRO();
 
-	if (CGAlgorithms::isOnLine(p,cl)) 
+	if (CGAlgorithms::isOnLine(p,cl))
 		return Location::BOUNDARY;
 	if (CGAlgorithms::isPointInRing(p,cl))
 		return Location::INTERIOR;

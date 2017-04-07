@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSCoordSeq
 
 #include <tut.hpp>
@@ -30,14 +30,14 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
         test_capigeoscoordseq_data() : cs_(0)
         {
             initGEOS(notice, notice);
-        }       
+        }
 
         ~test_capigeoscoordseq_data()
         {
@@ -63,7 +63,7 @@ namespace tut
     void object::test<1>()
     {
         cs_ = GEOSCoordSeq_create(5, 3);
-        
+
         unsigned int size;
         unsigned int dims;
 
@@ -92,15 +92,15 @@ namespace tut
             ensure_equals( ycheck, y );
             ensure_equals( zcheck, z );
         }
-    }   
-    
+    }
+
     // Test not swapped setX/setY calls (see bug #133, fixed)
     template<>
     template<>
     void object::test<2>()
     {
         cs_ = GEOSCoordSeq_create(1, 3);
-        
+
         unsigned int size;
         unsigned int dims;
 
@@ -127,7 +127,7 @@ namespace tut
         ensure_equals( xcheck, x );
         ensure_equals( ycheck, y );
         ensure_equals( zcheck, z );
-    }   
+    }
 
     // Test not swapped setOrdinate calls (see bug #133, fixed)
     template<>
@@ -135,7 +135,7 @@ namespace tut
     void object::test<3>()
     {
         cs_ = GEOSCoordSeq_create(1, 3);
-        
+
         unsigned int size;
         unsigned int dims;
 
@@ -162,7 +162,7 @@ namespace tut
         ensure_equals( xcheck, x );
         ensure_equals( ycheck, y );
         ensure_equals( zcheck, z );
-    }   
+    }
 
     // Test swapped setX calls (see bug #133, fixed)
     template<>
@@ -170,7 +170,7 @@ namespace tut
     void object::test<4>()
     {
         cs_ = GEOSCoordSeq_create(1, 3);
-        
+
         unsigned int size;
         unsigned int dims;
 
@@ -197,7 +197,7 @@ namespace tut
         ensure_equals( xcheck, x );
         ensure_equals( ycheck, y );
         ensure_equals( zcheck, z );
-    }   
+    }
 
     // Test swapped setOrdinate calls (see bug #133, fixed)
     template<>
@@ -205,7 +205,7 @@ namespace tut
     void object::test<5>()
     {
         cs_ = GEOSCoordSeq_create(1, 3);
-        
+
         unsigned int size;
         unsigned int dims;
 
@@ -232,7 +232,7 @@ namespace tut
         ensure_equals( xcheck, x );
         ensure_equals( ycheck, y );
         ensure_equals( zcheck, z );
-    }   
+    }
 
     // Test getDimensions call (see bug #135)
     template<>
@@ -240,7 +240,7 @@ namespace tut
     void object::test<6>()
     {
         cs_ = GEOSCoordSeq_create(1, 2);
-        
+
         unsigned int size;
         unsigned int dims;
 
@@ -255,7 +255,7 @@ namespace tut
 	//
         ensure ( dims >= 2u );
 
-    }   
-    
+    }
+
 } // namespace tut
 

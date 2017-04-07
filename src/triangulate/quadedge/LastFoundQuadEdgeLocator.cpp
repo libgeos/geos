@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -37,7 +37,7 @@ LastFoundQuadEdgeLocator::init()
 QuadEdge*
 LastFoundQuadEdgeLocator::findEdge()
 {
-	// assume there is an edge 
+	// assume there is an edge
 	return *(subdiv->getEdges().begin());
 }
 
