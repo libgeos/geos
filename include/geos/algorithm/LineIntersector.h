@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -47,7 +47,7 @@ namespace algorithm { // geos::algorithm
  *
  */
 class GEOS_DLL LineIntersector {
-public:	
+public:
 
 	/// \brief
 	/// Return a Z value being the interpolation of Z from p0 and p1 at
@@ -63,12 +63,12 @@ public:
 	/// It relies on the fact that either the x or the y ordinates of the
 	/// points in the edge are unique, depending on whether the edge is longer in
 	/// the horizontal or vertical direction.
-	/// 
+	///
 	/// NOTE: This function may produce incorrect distances
 	///  for inputs where p is not precisely on p1-p2
 	/// (E.g. p = (139,9) p1 = (139,10), p2 = (280,1) produces distanct
 	/// 0.0, which is incorrect.
-	/// 
+	///
 	/// My hypothesis is that the function is safe to use for points which are the
 	/// result of <b>rounding</b> points which lie on the line,
 	/// but not safe to use for <b>truncated</b> points.
@@ -162,7 +162,7 @@ public:
 	///
 	int getIntersectionNum() const { return result; }
 
-	
+
 	/// Returns the intIndex'th intersection point
 	//
 	/// @param intIndex is 0 or 1
@@ -193,12 +193,12 @@ public:
 
 	/** \brief
 	 * Tests whether an intersection is proper.
-	 * 
+	 *
 	 * The intersection between two line segments is considered proper if
 	 * they intersect in a single point in the interior of both segments
 	 * (e.g. the intersection is a single point and is not equal to any of the
 	 * endpoints).
-	 * 
+	 *
 	 * The intersection between a point and a line segment is considered proper
 	 * if the point lies in the interior of the segment (e.g. is not equal to
 	 * either of the endpoints).
@@ -355,7 +355,7 @@ private:
 			 const geom::Coordinate& q1,
 			 const geom::Coordinate& q2,
 			 geom::Coordinate& intPt) const;
-		   
+
 };
 
 } // namespace geos::algorithm

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  *
@@ -24,10 +24,10 @@
 #include <geos/geom/prep/PreparedPolygonPredicate.h> // inherited
 
 namespace geos {
-	namespace geom { 
+	namespace geom {
 		class Geometry;
 
-		namespace prep { 
+		namespace prep {
 			class PreparedPolygon;
 		}
 	}
@@ -41,9 +41,9 @@ namespace prep { // geos::geom::prep
  * \brief
  * Computes the <tt>intersects</tt> spatial relationship predicate
  * for {@link PreparedPolygon}s relative to all other {@link Geometry} classes.
- * 
- * Uses short-circuit tests and indexing to improve performance. 
- * 
+ *
+ * Uses short-circuit tests and indexing to improve performance.
+ *
  * @author Martin Davis
  *
  */
@@ -55,7 +55,7 @@ public:
 	/**
 	 * Computes the intersects predicate between a {@link PreparedPolygon}
 	 * and a {@link Geometry}.
-	 * 
+	 *
 	 * @param prep the prepared polygon
 	 * @param geom a test geometry
 	 * @return true if the polygon intersects the geometry
@@ -65,19 +65,19 @@ public:
 		PreparedPolygonIntersects polyInt(prep);
 		return polyInt.intersects( geom);
 	}
-	
+
 	/**
 	 * Creates an instance of this operation.
-	 * 
+	 *
 	 * @param prepPoly the PreparedPolygon to evaluate
 	 */
 	PreparedPolygonIntersects( const PreparedPolygon * const prep)
 	:	PreparedPolygonPredicate( prep)
 	{ }
-	
+
 	/**
 	 * Tests whether this PreparedPolygon intersects a given geometry.
-	 * 
+	 *
 	 * @param geom the test geometry
 	 * @return true if the test geometry intersects
 	 */

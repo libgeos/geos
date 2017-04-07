@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSSimplify
 
 #include <tut.hpp>
@@ -32,7 +32,7 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
@@ -43,7 +43,7 @@ namespace tut
             w_ = GEOSWKTWriter_create();
             GEOSWKTWriter_setTrim(w_, 1);
             GEOSWKTWriter_setRoundingPrecision(w_, 8);
-        }       
+        }
 
         ~test_capigeossnap_data()
         {
@@ -78,12 +78,12 @@ namespace tut
         geom3_ = GEOSSnap(geom1_, geom2_, 1);
 
         char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
-        std::string out(wkt_c); 
+        std::string out(wkt_c);
         free(wkt_c);
 
         ensure_equals(out, "POLYGON ((0.5 0, 10 0, 10 10, 0 10, 0.5 0))");
     }
-    
+
     /// Line snapped to line (vertex)
     template<>
     template<>
@@ -94,7 +94,7 @@ namespace tut
         geom3_ = GEOSSnap(geom1_, geom2_, 2);
 
         char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
-        std::string out(wkt_c); 
+        std::string out(wkt_c);
         free(wkt_c);
 
         ensure_equals(out, "LINESTRING (-29 -20, 50 60, 51 0)");
@@ -110,7 +110,7 @@ namespace tut
         geom3_ = GEOSSnap(geom1_, geom2_, 2);
 
         char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
-        std::string out(wkt_c); 
+        std::string out(wkt_c);
         free(wkt_c);
 
         ensure_equals(out,
@@ -128,7 +128,7 @@ namespace tut
         geom3_ = GEOSSnap(geom1_, geom2_, 2);
 
         char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
-        std::string out(wkt_c); 
+        std::string out(wkt_c);
         free(wkt_c);
 
         ensure_equals(out, "LINESTRING (0 0, 9 0)");
@@ -144,7 +144,7 @@ namespace tut
         geom3_ = GEOSSnap(geom1_, geom2_, 2);
 
         char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
-        std::string out(wkt_c); 
+        std::string out(wkt_c);
         free(wkt_c);
 
         //ensure_equals(out, "LINESTRING (0 0, 9 0, 10 0)");
@@ -161,7 +161,7 @@ namespace tut
         geom3_ = GEOSSnap(geom1_, geom2_, 2);
 
         char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
-        std::string out(wkt_c); 
+        std::string out(wkt_c);
         free(wkt_c);
 
         ensure_equals(out, "LINESTRING (0 3, 4 1, 5 0, 0 1)");
@@ -179,7 +179,7 @@ namespace tut
         geom3_ = GEOSSnap(geom1_, geom2_, 2);
 
         char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
-        std::string out(wkt_c); 
+        std::string out(wkt_c);
         free(wkt_c);
 
         ensure_equals(out, "LINESTRING (0 3, 4 1, 5 0, 0 1)");
@@ -196,7 +196,7 @@ namespace tut
         geom3_ = GEOSSnap(geom1_, geom2_, 3);
 
         char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
-        std::string out(wkt_c); 
+        std::string out(wkt_c);
         free(wkt_c);
 
         ensure_equals(out, "LINESTRING (-1 0, 0 0, 10 0, 10 10, 0 10, -1 0)");
@@ -211,7 +211,7 @@ namespace tut
         geom3_ = GEOSSnap(geom1_, geom2_, 3);
 
         char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
-        std::string out(wkt_c); 
+        std::string out(wkt_c);
         free(wkt_c);
 
         ensure_equals(out, "LINESTRING (0 2, 5 2, 9 2, 5 0)");
@@ -227,7 +227,7 @@ namespace tut
         geom3_ = GEOSSnap(geom1_, geom2_, 0.5);
 
         char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
-        std::string out(wkt_c); 
+        std::string out(wkt_c);
         free(wkt_c);
 
         ensure_equals(out, "LINESTRING (-71.1257 42.2703, -71.1261 42.2703, -71.1261 42.2702, -71.1317 42.2509)");

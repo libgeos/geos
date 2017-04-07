@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -51,7 +51,7 @@ static bool yComparator(Boundable *a, Boundable *b)
     // NOTE - mloskot:
     // The problem of instability is directly related to mathematical definition of
     // "strict weak ordering" as a fundamental requirement for binary predicate:
-    // 
+    //
     // if a is less than b then b is not less than a,
     // if a is less than b and b is less than c
     // then a is less than c,
@@ -64,19 +64,19 @@ static bool yComparator(Boundable *a, Boundable *b)
 	// In particular, when inlines are on (for Envelope::getMinY and getMaxY)
 	// things are fine, but when they are off we can even get a memory corruption !!
 	//return STRtree::centreY(aEnv) < STRtree::centreY(bEnv);
-    
+
     // NOTE - mloskot:
     // This comparison does not answer if a is "lower" than b
     // what is required for sorting. This comparison only answeres
     // if a and b are "almost the same" or different
-    
+
     /*NOTE - cfis
-      In debug mode VC++ checks the predicate in both directions.  
-      
+      In debug mode VC++ checks the predicate in both directions.
+
       If !_Pred(_Left, _Right)
       Then an exception is thrown if _Pred(_Right, _Left).
       See xutility around line 320:
-      
+
       	bool __CLRCALL_OR_CDECL _Debug_lt_pred(_Pr _Pred, _Ty1& _Left, _Ty2& _Right,
 		const wchar_t *_Where, unsigned int _Line)*/
 
@@ -91,12 +91,12 @@ static bool yComparator(Boundable *a, Boundable *b)
 
 /*public*/
 STRtree::STRtree(size_t nodeCapacity): AbstractSTRtree(nodeCapacity)
-{ 
+{
 }
 
 /*public*/
 STRtree::~STRtree()
-{ 
+{
 }
 
 bool
@@ -171,8 +171,8 @@ STRtree::verticalSlices(BoundableList* childBoundables, size_t sliceCount)
 
 	for (size_t j=0; j<sliceCount; j++)
 	{
-		(*slices)[j]=new BoundableList(); 
-		(*slices)[j]->reserve(sliceCapacity); 
+		(*slices)[j]=new BoundableList();
+		(*slices)[j]->reserve(sliceCapacity);
 		size_t boundablesAddedToSlice = 0;
 		while (i<nchilds && boundablesAddedToSlice<sliceCapacity)
 		{

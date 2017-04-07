@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -38,7 +38,7 @@ namespace locate { // geos::algorithm::locate
  *
  * This algorithm is suitable for use in cases where
  * only one or a few points will be tested against a given area.
- * 
+ *
  * The algorithm used is only guaranteed to return correct results
  * for points which are <b>not</b> on the boundary of the Geometry.
  *
@@ -55,11 +55,11 @@ public:
 	static bool containsPointInPolygon(const geom::Coordinate& p,
 			const geom::Polygon *poly);
 
-	SimplePointInAreaLocator( const geom::Geometry * g) 
+	SimplePointInAreaLocator( const geom::Geometry * g)
 	:	g( g)
 	{ }
 
-	int locate( const geom::Coordinate * p) 
+	int locate( const geom::Coordinate * p)
 	{
 		return locate( *p, g);
 	}

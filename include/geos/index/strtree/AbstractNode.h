@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -31,12 +31,12 @@ namespace strtree { // geos::index::strtree
 
 /** \brief
  * A node of the STR tree.
- * 
+ *
  * The children of this node are either more nodes
  * (AbstractNodes) or real data (ItemBoundables).
  *
  * If this node contains real data (rather than nodes),
- * then we say that this node is a "leaf node".  
+ * then we say that this node is a "leaf node".
  *
  */
 class GEOS_DLL AbstractNode: public Boundable {
@@ -65,12 +65,12 @@ public:
 	 * test for intersection with the bounds of other Boundables.
 	 * The class of object returned depends on the subclass of
 	 * AbstractSTRtree.
-	 * 
+	 *
 	 * @return an Envelope (for STRtrees), an Interval (for SIRtrees),
 	 *	or other object (for other subclasses of AbstractSTRtree)
 	 *
 	 * @see AbstractSTRtree::IntersectsOp
-	 */  
+	 */
 	const void* getBounds() const;
 
 	int getLevel();

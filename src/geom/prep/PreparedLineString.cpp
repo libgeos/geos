@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -40,7 +40,7 @@ PreparedLineString::~PreparedLineString()
 	}
 }
 
-noding::FastSegmentSetIntersectionFinder * 
+noding::FastSegmentSetIntersectionFinder *
 PreparedLineString::getIntersectionFinder()
 {
 	if (! segIntFinder)
@@ -52,16 +52,16 @@ PreparedLineString::getIntersectionFinder()
 	return segIntFinder;
 }
 
-bool 
+bool
 PreparedLineString::intersects(const geom::Geometry * g) const
 {
 	if (! envelopesIntersect(g))
     {
         return false;
     }
-    
+
     PreparedLineString& prep = *(const_cast<PreparedLineString*>(this));
-    
+
     return PreparedLineStringIntersects::intersects(prep, g);
 }
 

@@ -106,7 +106,7 @@ double LengthIndexOfPoint::indexOfFromStart(const Coordinate& inputPt, double mi
 	return ptMeasure;
 }
 
-double LengthIndexOfPoint::segmentNearestMeasure(const LineSegment* seg, 
+double LengthIndexOfPoint::segmentNearestMeasure(const LineSegment* seg,
                                                  const Coordinate& inputPt,
                                                  double segmentStartMeasure) const
 {

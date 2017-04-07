@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -63,8 +63,8 @@ SegmentIntersectionTester::hasIntersection(
     for (size_type j = 1; j < seq1size && !hasIntersectionVar; ++j)
 		{
       seq1.getAt(j-1, pt10);
-      seq1.getAt(j, pt11); 
-		
+      seq1.getAt(j, pt11);
+
 			li.computeIntersection(pt00, pt01, pt10, pt11);
 			if (li.hasIntersection()) hasIntersectionVar = true;
 		}
@@ -92,7 +92,7 @@ SegmentIntersectionTester::hasIntersectionWithEnvelopeFilter(
   for (size_type i = 1; i<seq1size && !hasIntersectionVar; ++i)
 	{
     seq1.getAt(i-1, pt10);
-    seq1.getAt(i, pt11); 
+    seq1.getAt(i, pt11);
 
     // skip test if segment does not intersect query envelope
     if (! lineEnv->intersects(Envelope(pt10, pt11))) continue;
@@ -101,7 +101,7 @@ SegmentIntersectionTester::hasIntersectionWithEnvelopeFilter(
 		{
       seq0.getAt(j - 1, pt00);
       seq0.getAt(j, pt01);
-		
+
 			li.computeIntersection(pt00, pt01, pt10, pt11);
 			if (li.hasIntersection()) hasIntersectionVar = true;
 		}

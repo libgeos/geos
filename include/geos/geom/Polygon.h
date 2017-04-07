@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -113,7 +113,7 @@ public:
 	 * @return <code>true</code>
 	 */
 	bool isSimple() const;
-	
+
 	/// Returns the exterior ring (shell)
 	const LineString* getExteriorRing() const;
 
@@ -158,7 +158,7 @@ protected:
 	Polygon(const Polygon &p);
 
 	/**
-	 * Constructs a <code>Polygon</code> with the given exterior 
+	 * Constructs a <code>Polygon</code> with the given exterior
 	 * and interior boundaries.
 	 *
 	 * @param  newShell  the outer boundary of the new Polygon,
@@ -168,12 +168,12 @@ protected:
 	 *
 	 * @param  newHoles  the LinearRings defining the inner
 	 *                   boundaries of the new Polygon, or
-	 *                   null or empty LinearRing 
+	 *                   null or empty LinearRing
 	 *                   if the empty  geometry is to be created.
 	 *
 	 * @param newFactory the GeometryFactory used to create this geometry
 	 *
-	 * Polygon will take ownership of Shell and Holes LinearRings 
+	 * Polygon will take ownership of Shell and Holes LinearRings
 	 */
 	Polygon(LinearRing *newShell, std::vector<Geometry *> *newHoles,
 		const GeometryFactory *newFactory);

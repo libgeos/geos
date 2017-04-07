@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -152,7 +152,7 @@ private:
    * can be to be snapped
    */
   static const double INSIDE_TURN_VERTEX_SNAP_DISTANCE_FACTOR; // 1.0E-3;
-   
+
   /**
    * Factor which controls how close curve vertices can be to be snapped
    */
@@ -182,7 +182,7 @@ private:
   /// with default-or-better quantization) the closing segments
   /// can be made quite short.  This substantially improves
   /// performance (due to fewer intersections being created).
-  /// 
+  ///
   /// A closingSegFactor of 0 results in lines to the corner vertex.
   /// A closingSegFactor of 1 results in lines halfway
   /// to the corner vertex.
@@ -194,12 +194,12 @@ private:
   ///
   int closingSegLengthFactor; // 1;
 
-  /// Owned by this object, destroyed by dtor 
+  /// Owned by this object, destroyed by dtor
   //
   /// This actually gets created multiple times
   /// and each of the old versions is pushed
   /// to the ptLists std::vector to ensure all
-  /// created CoordinateSequences are properly 
+  /// created CoordinateSequences are properly
   /// destroyed.
   ///
   OffsetSegmentString segList;
@@ -208,7 +208,7 @@ private:
 
   const geom::PrecisionModel* precisionModel;
 
-  const BufferParameters& bufParams; 
+  const BufferParameters& bufParams;
 
   algorithm::LineIntersector li;
 
@@ -257,7 +257,7 @@ private:
   /// \brief
   /// Adds a bevel join connecting the two offset segments
   /// around a reflex corner.
-  // 
+  //
   /// @param offset0 the first offset segment
   /// @param offset1 the second offset segment
   ///
@@ -282,15 +282,15 @@ private:
 
   /// Adds the offset points for an outside (convex) turn
   //
-  /// @param orientation 
-  /// @param addStartPoint  
+  /// @param orientation
+  /// @param addStartPoint
   ///
   void addOutsideTurn(int orientation, bool addStartPoint);
 
   /// Adds the offset points for an inside (concave) turn
   //
-  /// @param orientation 
-  /// @param addStartPoint  
+  /// @param orientation
+  /// @param addStartPoint
   ///
   void addInsideTurn(int orientation, bool addStartPoint);
 
@@ -312,7 +312,7 @@ private:
 
   /**
    * Adds points for a circular fillet around a reflex corner.
-   * 
+   *
    * Adds the start and end points
    *
    * @param p base point of curve
@@ -325,7 +325,7 @@ private:
                  const geom::Coordinate &p1,
                  int direction, double radius);
 
-  /** 
+  /**
    * Adds points for a circular fillet arc between two specified angles.
    *
    * The start and end point for the fillet are not added -

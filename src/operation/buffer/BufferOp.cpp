@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -165,7 +165,7 @@ BufferOp::bufferReducedPrecision()
 		} catch (const util::TopologyException& ex) {
 			saveException=ex;
 			// don't propagate the exception - it will be detected by fact that resultGeometry is null
-		} 
+		}
 
 		if (resultGeometry!=NULL) {
 			// debug
@@ -195,7 +195,7 @@ BufferOp::bufferOriginalPrecision()
 		saveException=ex;
 
 		//std::cerr<<ex->toString()<<std::endl;
-	} 
+	}
 	//std::cerr<<"done"<<std::endl;
 }
 
@@ -240,7 +240,7 @@ BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
 
 	// Reduce precision of the input geometry
 	//
-	// NOTE: this reduction is not in JTS and should supposedly 
+	// NOTE: this reduction is not in JTS and should supposedly
 	//       not be needed because the PrecisionModel we pass
 	//       to the BufferBuilder above (with setWorkingPrecisionModel)
 	//       should be used to round coordinates emitted by the

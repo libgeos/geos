@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -71,7 +71,7 @@ HotPixel::getSafeEnvelope() const
 
 /*private*/
 void
-HotPixel::initCorners(const Coordinate& pt) 
+HotPixel::initCorners(const Coordinate& pt)
 {
 	double tolerance = 0.5;
 	minx = pt.x - tolerance;

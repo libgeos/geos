@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -41,15 +41,15 @@ namespace util { // geos.geom.util
  * No validation of the result geometry is performed.
  * (The only case where invalidity is possible is where {@link Polygonal}
  * geometries are combined and result in a self-intersection).
- * 
+ *
  * @see GeometryFactory#buildGeometry
  */
-class GeometryCombiner 
+class GeometryCombiner
 {
 public:
     /**
      * Combines a collection of geometries.
-     * 
+     *
      * @param geoms the geometries to combine (ownership left to caller)
      * @return the combined geometry
      */
@@ -57,7 +57,7 @@ public:
 
     /**
      * Combines two geometries.
-     * 
+     *
      * @param g0 a geometry to combine (ownership left to caller)
      * @param g1 a geometry to combine (ownership left to caller)
      * @return the combined geometry
@@ -66,7 +66,7 @@ public:
 
     /**
      * Combines three geometries.
-     * 
+     *
      * @param g0 a geometry to combine (ownership left to caller)
      * @param g1 a geometry to combine (ownership left to caller)
      * @param g2 a geometry to combine (ownership left to caller)
@@ -82,14 +82,14 @@ private:
 public:
     /**
      * Creates a new combiner for a collection of geometries
-     * 
+     *
      * @param geoms the geometries to combine
      */
     GeometryCombiner(std::vector<Geometry*> const& geoms);
 
     /**
      * Extracts the GeometryFactory used by the geometries in a collection
-     * 
+     *
      * @param geoms
      * @return a GeometryFactory
      */
@@ -98,7 +98,7 @@ public:
     /**
      * Computes the combination of the input geometries
      * to produce the most appropriate {@link Geometry} or {@link GeometryCollection}
-     * 
+     *
      * @return a Geometry which is the combination of the inputs
      */
     Geometry* combine();

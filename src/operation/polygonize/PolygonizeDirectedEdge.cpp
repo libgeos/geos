@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -55,14 +55,14 @@ PolygonizeDirectedEdge::PolygonizeDirectedEdge(Node *newFrom,
  */
 long
 PolygonizeDirectedEdge::getLabel() const
-{ 
+{
 	return label;
 }
 
 /*
  * Attaches an identifier to this directed edge.
  */
-void PolygonizeDirectedEdge::setLabel(long newLabel) { 
+void PolygonizeDirectedEdge::setLabel(long newLabel) {
 	label=newLabel;
 }
 
@@ -93,7 +93,7 @@ PolygonizeDirectedEdge::setNext(PolygonizeDirectedEdge *newNext)
  */
 bool
 PolygonizeDirectedEdge::isInRing() const
-{ 
+{
 	return edgeRing!=NULL;
 }
 

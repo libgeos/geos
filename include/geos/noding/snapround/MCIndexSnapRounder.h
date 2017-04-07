@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -61,7 +61,7 @@ namespace snapround { // geos::noding::snapround
  * Snap Rounding assumes that all vertices lie on a uniform grid
  * (hence the precision model of the input must be fixed precision,
  * and all the input vertices must be rounded to that precision).
- * 
+ *
  * This implementation uses a monotone chains and a spatial index to
  * speed up the intersection tests.
  *
@@ -89,7 +89,7 @@ public:
   }
 
 	void computeNodes(std::vector<SegmentString*>* segStrings);
- 
+
 	/**
 	 * Computes nodes introduced as a result of
 	 * snapping segments to vertices of other segments
@@ -115,7 +115,7 @@ private:
 
 	void snapRound(MCIndexNoder& noder, std::vector<SegmentString*>* segStrings);
 
-	
+
 	/**
 	 * Computes all interior intersections in the collection of SegmentStrings,
 	 * and push their Coordinate to the provided vector.
@@ -138,7 +138,7 @@ private:
 	 * This has n^2 performance.
 	 */
 	void computeVertexSnaps(NodedSegmentString* e);
-	
+
 	void checkCorrectness(std::vector<SegmentString*>& inputSegmentStrings);
 
     // Declare type as noncopyable

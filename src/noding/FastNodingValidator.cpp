@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -54,7 +54,7 @@ FastNodingValidator::getErrorMessage() const
 	if (isValidVar) return std::string("no intersections found");
 
 	//return std::string("found non-noded intersection etc etc");
-	
+
 	const std::vector<Coordinate>& intSegs = segInt->getIntersectionSegments();
 	assert(intSegs.size() == 4);
 	return "found non-noded intersection between "

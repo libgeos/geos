@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -52,7 +52,7 @@ SimplePointInAreaLocator::containsPoint(const Coordinate& p,const Geometry *geom
 	{
 		return containsPointInPolygon(p, poly);
 	}
-	
+
 	if (const GeometryCollection *col = dynamic_cast<const GeometryCollection*>(geom))
 	{
 		for (GeometryCollection::const_iterator
@@ -61,7 +61,7 @@ SimplePointInAreaLocator::containsPoint(const Coordinate& p,const Geometry *geom
 				++it)
 		{
 			const Geometry *g2=*it;
-			assert (g2!=geom); 
+			assert (g2!=geom);
 			if (containsPoint(p,g2)) return true;
 		}
 	}

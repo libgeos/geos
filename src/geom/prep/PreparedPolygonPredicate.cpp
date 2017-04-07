@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -37,7 +37,7 @@ namespace prep { // geos.geom.prep
 //
 // protected:
 //
-bool 
+bool
 PreparedPolygonPredicate::isAllTestComponentsInTarget(const geom::Geometry* testGeom) const
 {
     geom::Coordinate::ConstVect pts;
@@ -55,7 +55,7 @@ PreparedPolygonPredicate::isAllTestComponentsInTarget(const geom::Geometry* test
     return true;
 }
 
-bool 
+bool
 PreparedPolygonPredicate::isAllTestComponentsInTargetInterior(
 		const geom::Geometry* testGeom) const
 {
@@ -74,7 +74,7 @@ PreparedPolygonPredicate::isAllTestComponentsInTargetInterior(
     return true;
 }
 
-bool 
+bool
 PreparedPolygonPredicate::isAnyTestComponentInTarget(
 		const geom::Geometry* testGeom) const
 {
@@ -93,7 +93,7 @@ PreparedPolygonPredicate::isAnyTestComponentInTarget(
     return false;
 }
 
-bool 
+bool
 PreparedPolygonPredicate::isAnyTestComponentInTargetInterior(
 	const geom::Geometry * testGeom) const
 {
@@ -104,7 +104,7 @@ PreparedPolygonPredicate::isAnyTestComponentInTargetInterior(
     {
         const Coordinate * pt = pts[i];
         const int loc = prepPoly->getPointLocator()->locate(pt);
-        if (geom::Location::INTERIOR == loc) 
+        if (geom::Location::INTERIOR == loc)
         {
             return true;
         }

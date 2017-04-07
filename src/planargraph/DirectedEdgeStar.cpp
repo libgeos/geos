@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -138,7 +138,7 @@ DirectedEdgeStar::getIndex(const Edge *edge)
 /*
  * Returns the zero-based index of the given DirectedEdge, after sorting
  * in ascending order by angle with the positive x-axis.
- */  
+ */
 int
 DirectedEdgeStar::getIndex(const DirectedEdge *dirEdge)
 {
@@ -154,20 +154,20 @@ DirectedEdgeStar::getIndex(const DirectedEdge *dirEdge)
 
 /*
  * Returns the remainder when i is divided by the number of edges in this
- * DirectedEdgeStar. 
+ * DirectedEdgeStar.
  */
 int
 DirectedEdgeStar::getIndex(int i) const
 {
 	int modi = i % (int)outEdges.size();
-	//I don't think modi can be 0 (assuming i is positive) [Jon Aquino 10/28/2003] 
+	//I don't think modi can be 0 (assuming i is positive) [Jon Aquino 10/28/2003]
 	if (modi < 0) modi += (int)outEdges.size();
 	return modi;
 }
 
 /*
  * Returns the DirectedEdge on the left-hand side of the given
- * DirectedEdge (which must be a member of this DirectedEdgeStar). 
+ * DirectedEdge (which must be a member of this DirectedEdgeStar).
  */
 DirectedEdge*
 DirectedEdgeStar::getNextEdge(DirectedEdge *dirEdge)

@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -42,7 +42,7 @@ RightmostEdgeFinder::RightmostEdgeFinder()
 	:
 	minIndex(-1), // FIXME: don't use -1 as a sentinel, or we won't be
 	              // able to use an unsigned int here
-	minCoord(Coordinate::getNull()), 
+	minCoord(Coordinate::getNull()),
 	minDe(NULL),
 	orientedDe(NULL)
 {
@@ -162,7 +162,7 @@ RightmostEdgeFinder::findRightmostEdgeAtVertex()
 
 	// rightmost point expected to be interior vertex of edge
 	assert(minIndex>0);
-	assert((size_t)minIndex<pts->getSize()); 
+	assert((size_t)minIndex<pts->getSize());
 
 	const Coordinate& pPrev=pts->getAt(minIndex-1);
 	const Coordinate& pNext=pts->getAt(minIndex+1);
@@ -210,7 +210,7 @@ RightmostEdgeFinder::checkForRightmostCoordinate(DirectedEdge *de)
      // of a non-horizontal segment
      // <FIX> MD 19 Sep 03 - NO!  we can test all vertices,
      // since the rightmost must have a non-horiz segment adjacent to it
-		if (minCoord.isNull() || 
+		if (minCoord.isNull() ||
 			coord->getAt(i).x > minCoord.x )
 		{
 			minDe = de;
@@ -256,7 +256,7 @@ RightmostEdgeFinder::getRightmostSideOfSegment(DirectedEdge *de, int i)
 	if ( i < 0 || i+1 >= (int)coord->getSize() ) return -1;
 
 	// indicates edge is parallel to x-axis
-	if (coord->getAt(i).y == coord->getAt(i+1).y) return -1;   
+	if (coord->getAt(i).y == coord->getAt(i+1).y) return -1;
 
 	int pos=Position::LEFT;
 	if (coord->getAt(i).y < coord->getAt(i+1).y) pos=Position::RIGHT;

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -88,7 +88,7 @@ public:
 	/** \brief
 	 * Gets the octant of the segment starting at vertex index.
 	 *
-	 * @param index the index of the vertex starting the segment. 
+	 * @param index the index of the vertex starting the segment.
 	 *        Must not be the last index in the vertex list
 	 * @return the octant of the segment at the vertex
 	 */

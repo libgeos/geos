@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -62,7 +62,7 @@ namespace geom { // geos::geom
  *  The line segments in the line may intersect each other (in other words,
  *  the linestring may "curl back" in itself and self-intersect).
  *  Linestrings with exactly two identical points are invalid.
- *  
+ *
  *  A linestring must have either 0 or 2 or more points.
  *  If these conditions are not met, the constructors throw
  *  an {@link IllegalArgumentException}.
@@ -162,7 +162,7 @@ public:
 	void apply_ro(CoordinateSequenceFilter& filter) const;
 
 	/** \brief
-	 * Normalizes a LineString. 
+	 * Normalizes a LineString.
 	 *
 	 * A normalized linestring
 	 * has the first point which is not equal to its reflected point

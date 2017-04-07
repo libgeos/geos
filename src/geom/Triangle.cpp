@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -37,10 +37,10 @@ void Triangle::circumcentre(Coordinate& result)
 {
 	double cx = p2.x;
 	double cy = p2.y;
-	double ax = p0.x - cx; 
-	double ay = p0.y - cy; 
-	double bx = p1.x - cx; 
-	double by = p1.y - cy; 
+	double ax = p0.x - cx;
+	double ay = p0.y - cy;
+	double bx = p1.x - cx;
+	double by = p1.y - cy;
 
 	double denom = 2 * det(ax,ay,bx,by);
 	double numx = det(ay , ax * ax + ay * ay , by , bx * bx + by * by);

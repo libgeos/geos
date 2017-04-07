@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSWithin
 
 #include <tut.hpp>
@@ -29,7 +29,7 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
@@ -37,7 +37,7 @@ namespace tut
             : geom1_(0), geom2_(0)
         {
             initGEOS(notice, notice);
-        }       
+        }
 
         ~test_capigeoswithin_data()
         {
@@ -84,7 +84,7 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("POLYGON((1 1,1 5,5 5,5 1,1 1))");
         geom2_ = GEOSGeomFromWKT("POINT(2 2)");
-        
+
         ensure( 0 != geom1_ );
         ensure( 0 != geom2_ );
 
@@ -96,25 +96,25 @@ namespace tut
 
         ensure_equals(int(r2), 1);
     }
-    
+
     template<>
     template<>
     void object::test<3>()
     {
         geom1_ = GEOSGeomFromWKT("MULTIPOLYGON(((0 0,0 10,10 10,10 0,0 0)))");
         geom2_ = GEOSGeomFromWKT("POLYGON((1 1,1 2,2 2,2 1,1 1))");
-        
+
         ensure( 0 != geom1_ );
         ensure( 0 != geom2_ );
 
         char const r1 = GEOSWithin(geom1_, geom2_);
 
         ensure_equals(int(r1), 0);
-        
+
         char const r2 = GEOSWithin(geom2_, geom1_);
 
         ensure_equals(int(r2), 1);
     }
- 
+
 } // namespace tut
 

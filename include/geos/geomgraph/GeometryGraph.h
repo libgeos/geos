@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -111,7 +111,7 @@ private:
 
 	bool hasTooFewPointsVar;
 
-	geom::Coordinate invalidPoint; 
+	geom::Coordinate invalidPoint;
 
 	/// Allocates a new EdgeSetIntersector. Remember to delete it!
 	index::EdgeSetIntersector* createEdgeSetIntersector();
@@ -246,7 +246,7 @@ public:
 
 	bool hasTooFewPoints();
 
-	const geom::Coordinate& getInvalidPoint(); 
+	const geom::Coordinate& getInvalidPoint();
 
 	const algorithm::BoundaryNodeRule& getBoundaryNodeRule() const
 	{ return boundaryNodeRule; }

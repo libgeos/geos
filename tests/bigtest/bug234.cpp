@@ -46,4 +46,4 @@ int main() {
  delete mpoly1;
  delete mpoly2;
  delete intersection;
-} 
+}

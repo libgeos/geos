@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  *
@@ -30,7 +30,7 @@ namespace noding { // geos::noding
 
 /** \brief
  * Utility methods for processing {@link SegmentString}s.
- * 
+ *
  * @author Martin Davis
  *
  */
@@ -42,11 +42,11 @@ public:
 	 * to {@link SegmentString}s.
 	 *
 	 * The SegmentString data item is set to be the source Geometry.
-	 * 
+	 *
 	 * @param geom the geometry to extract from
 	 * @param segStr a List of SegmentStrings (output parameter).
 	 *               Ownership of elements pushed to the vector
-	 *               is transferred to caller. 
+	 *               is transferred to caller.
 	 */
 	static void extractSegmentStrings(const geom::Geometry * g,
 					  SegmentString::ConstVect& segStr)

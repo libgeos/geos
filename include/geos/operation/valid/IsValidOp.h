@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -62,7 +62,7 @@ class GEOS_DLL IsValidOp {
 friend class Unload;
 private:
 	/// the base Geometry to be validated
-	const geom::Geometry *parentGeometry; 
+	const geom::Geometry *parentGeometry;
 
 	bool isChecked;
 
@@ -122,12 +122,12 @@ private:
 	 * This routine assumes that the holes are disjoint.
 	 * To ensure this, holes have previously been tested
 	 * to ensure that:
-	 * 
+	 *
 	 *  - they do not partially overlap
 	 *    (checked by <code>checkRelateConsistency</code>)
 	 *  - they are not identical
 	 *    (checked by <code>checkRelateConsistency</code>)
-	 * 
+	 *
 	 */
 	void checkHolesNotNested(const geom::Polygon *p,
 			geomgraph::GeometryGraph *graph);
@@ -135,9 +135,9 @@ private:
 	/**
 	 * Tests that no element polygon is wholly in the interior of another
 	 * element polygon.
-	 * 
+	 *
 	 * Preconditions:
-	 * 
+	 *
 	 * - shells do not partially overlap
 	 * - shells do not touch along an edge
 	 * - no duplicate rings exist
@@ -150,11 +150,11 @@ private:
 			geomgraph::GeometryGraph *graph);
 
 	/**
-	 * Check if a shell is incorrectly nested within a polygon. 
+	 * Check if a shell is incorrectly nested within a polygon.
 	 * This is the case if the shell is inside the polygon shell,
 	 * but not inside a polygon hole.
 	 * (If the shell is inside a polygon hole, the nesting is valid.)
-	 * 
+	 *
 	 * The algorithm used relies on the fact that the rings must be
 	 * properly contained.
 	 * E.g. they cannot partially overlap (this has been previously
@@ -215,7 +215,7 @@ public:
 
 	/**
 	 * Tests whether a {@link Geometry} is valid.
-	 * 
+	 *
 	 * @param geom the Geometry to test
 	 * @return true if the geometry is valid
 	 */

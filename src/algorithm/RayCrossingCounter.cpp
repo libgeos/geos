@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -37,13 +37,13 @@ namespace algorithm {
 //
 // public:
 //
-/*static*/ int 
+/*static*/ int
 RayCrossingCounter::locatePointInRing(const geom::Coordinate& point,
-                         const geom::CoordinateSequence& ring) 
+                         const geom::CoordinateSequence& ring)
 {
 	RayCrossingCounter rcc(point);
 
-	for (std::size_t i = 1, ni = ring.size(); i < ni; i++) 
+	for (std::size_t i = 1, ni = ring.size(); i < ni; i++)
 	{
 		const geom::Coordinate & p1 = ring[ i - 1 ];
 		const geom::Coordinate & p2 = ring[ i ];
@@ -56,13 +56,13 @@ RayCrossingCounter::locatePointInRing(const geom::Coordinate& point,
 	return rcc.getLocation();
 }
 
-/*static*/ int 
+/*static*/ int
 RayCrossingCounter::locatePointInRing(const geom::Coordinate& point,
 	         const std::vector<const geom::Coordinate*>& ring)
 {
 	RayCrossingCounter rcc(point);
 
-	for (std::size_t i = 1, ni = ring.size(); i < ni; i++) 
+	for (std::size_t i = 1, ni = ring.size(); i < ni; i++)
 	{
 		const geom::Coordinate & p1 = *ring[ i - 1 ];
 		const geom::Coordinate & p2 = *ring[ i ];
@@ -90,20 +90,20 @@ RayCrossingCounter::orientationIndex(const geom::Coordinate& p1,
 	return RobustDeterminant::signOfDet2x2(dx1,dy1,dx2,dy2);
 }
 
-void 
+void
 RayCrossingCounter::countSegment(const geom::Coordinate& p1,
-                                 const geom::Coordinate& p2) 
+                                 const geom::Coordinate& p2)
 {
-	// For each segment, check if it crosses 
+	// For each segment, check if it crosses
 	// a horizontal ray running from the test point in
 	// the positive x direction.
-	
+
 	// check if the segment is strictly to the left of the test point
 	if (p1.x < point.x && p2.x < point.x)
 		return;
-	
+
 	// check if the point is equal to the current ring vertex
-	if (point.x == p2.x && point.y == p2.y) 
+	if (point.x == p2.x && point.y == p2.y)
 	{
 		isPointOnSegment = true;
 		return;
@@ -111,18 +111,18 @@ RayCrossingCounter::countSegment(const geom::Coordinate& p1,
 
 	// For horizontal segments, check if the point is on the segment.
 	// Otherwise, horizontal segments are not counted.
-	if (p1.y == point.y && p2.y == point.y) 
+	if (p1.y == point.y && p2.y == point.y)
 	{
 		double minx = p1.x;
 		double maxx = p2.x;
 
-		if (minx > maxx) 
+		if (minx > maxx)
 		{
 			minx = p2.x;
 			maxx = p1.x;
 		}
-		
-		if (point.x >= minx && point.x <= maxx) 
+
+		if (point.x >= minx && point.x <= maxx)
 			isPointOnSegment = true;
 
 		return;
@@ -136,7 +136,7 @@ RayCrossingCounter::countSegment(const geom::Coordinate& p1,
 	// - a downward edge excludes its starting endpoint, and includes its
 	//   final endpoint
 	if (((p1.y > point.y) && (p2.y <= point.y)) ||
-		((p2.y > point.y) && (p1.y <= point.y)) ) 
+		((p2.y > point.y) && (p1.y <= point.y)) )
 	{
 		// For an upward edge, orientationIndex will be positive when p1->p2
 		// crosses ray. Conversely, downward edges should have negative sign.
@@ -157,8 +157,8 @@ RayCrossingCounter::countSegment(const geom::Coordinate& p1,
 }
 
 
-int 
-RayCrossingCounter::getLocation() 
+int
+RayCrossingCounter::getLocation()
 {
 	if (isPointOnSegment)
 		return geom::Location::BOUNDARY;
@@ -167,12 +167,12 @@ RayCrossingCounter::getLocation()
 	// of X-crossings is odd.
 	if ((crossingCount % 2) == 1)
 		return geom::Location::INTERIOR;
-	
+
 	return geom::Location::EXTERIOR;
 }
 
 
-bool 
+bool
 RayCrossingCounter::isPointInPolygon()
 {
 	return getLocation() != geom::Location::EXTERIOR;

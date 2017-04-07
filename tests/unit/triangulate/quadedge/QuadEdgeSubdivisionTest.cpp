@@ -1,5 +1,5 @@
 
-// 
+//
 // Test Suite for geos::triangulate::quadedge::QuadEdge
 //
 // tut
@@ -120,7 +120,7 @@ namespace tut
   // See http://trac.osgeo.org/geos/ticket/705
   template<> template<> void object::test<3>()
   {
-    const char *wkt = 
+    const char *wkt =
       "MULTIPOINT ("
         " (170 270),"
         " (190 230),"

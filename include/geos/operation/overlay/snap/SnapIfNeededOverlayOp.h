@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  ***********************************************************************
@@ -19,7 +19,7 @@
 #ifndef GEOS_OP_OVERLAY_SNAP_SNAPIFNEEDEDOVERLAYOP_H
 #define GEOS_OP_OVERLAY_SNAP_SNAPIFNEEDEDOVERLAYOP_H
 
-#include <geos/operation/overlay/OverlayOp.h> // for enums 
+#include <geos/operation/overlay/OverlayOp.h> // for enums
 
 #include <memory> // for auto_ptr
 
@@ -90,7 +90,7 @@ public:
 	{
 	}
 
-	
+
 	typedef std::auto_ptr<geom::Geometry> GeomPtr;
 
 	GeomPtr getResultGeometry(OverlayOp::OpCode opCode);
@@ -104,7 +104,7 @@ private:
     SnapIfNeededOverlayOp(const SnapIfNeededOverlayOp& other);
     SnapIfNeededOverlayOp& operator=(const SnapIfNeededOverlayOp& rhs);
 };
- 
+
 
 } // namespace geos::operation::overlay::snap
 } // namespace geos::operation::overlay

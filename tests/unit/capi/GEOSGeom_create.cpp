@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSGeom_createPolygon
 
 #include <tut.hpp>
@@ -31,14 +31,14 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
         test_capigeosgeom_create_data()
             : geom1_(0), handle_(initGEOS_r(notice, notice))
         {
-        }       
+        }
 
         ~test_capigeosgeom_create_data()
         {
@@ -78,7 +78,7 @@ namespace tut
         ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_LINESTRING);
         GEOSGeom_destroy(geom1_); geom1_=0;
     }
-    
+
 
     // EMPTY polygon
     template<>

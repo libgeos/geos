@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -55,7 +55,7 @@ CommonBitsOp::CommonBitsOp(bool nReturnToOriginalPrecision)
 {
 #if GEOS_DEBUG
 	std::cerr << "CommonBitsOp[" << this
-	          << "]::CommonBitsOp(bool " 
+	          << "]::CommonBitsOp(bool "
 		  << nReturnToOriginalPrecision << ")"
 		  << std::endl;
 #endif
@@ -150,7 +150,7 @@ CommonBitsOp::removeCommonBits(
 		const geom::Geometry* geom1,
 		std::auto_ptr<geom::Geometry>& rgeom0,
 		std::auto_ptr<geom::Geometry>& rgeom1)
-	
+
 {
 	cbr.reset(new CommonBitsRemover());
 

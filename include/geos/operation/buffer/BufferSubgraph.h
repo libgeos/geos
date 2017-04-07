@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -53,7 +53,7 @@ namespace buffer { // geos.operation.buffer
 /**
  * \brief
  * A connected subset of the graph of DirectedEdge and geomgraph::Node.
- * 
+ *
  * Its edges will generate either
  * - a single polygon in the complete buffer, with zero or more holes, or
  * -  ne or more connected holes
@@ -107,7 +107,7 @@ public:
 
 	friend std::ostream& operator<< (std::ostream& os, const BufferSubgraph& bs);
 
-	BufferSubgraph(); 
+	BufferSubgraph();
 
 	~BufferSubgraph();
 
@@ -150,7 +150,7 @@ public:
 	 * Coordinate.
 	 *
 	 * This defines a partial ordering on the graphs such that:
-	 * 
+	 *
 	 * g1 >= g2 <==> Ring(g2) does not contain Ring(g1)
 	 *
 	 * where Polygon(g) is the buffer polygon that is built from g.

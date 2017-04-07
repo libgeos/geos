@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -172,7 +172,7 @@ PlanarGraph::addNode(Node *node)
 {
 	assert(nodes);
 #if GEOS_DEBUG > 1
-	cerr << "PlanarGraph::addNode(Node * " << *node 
+	cerr << "PlanarGraph::addNode(Node * " << *node
 		<< ")" << endl;
 #endif
 	return nodes->addNode(node);
@@ -209,7 +209,7 @@ PlanarGraph::addEdges(const vector<Edge*>& edgesToAdd)
 		assert(e);
 		edges->push_back(e);
 
-		// PlanarGraph destructor will delete all DirectedEdges 
+		// PlanarGraph destructor will delete all DirectedEdges
 		// in edgeEndList, which is where these are added
 		// by the ::add(EdgeEnd) call
 		std::auto_ptr<DirectedEdge> de1(new DirectedEdge(e, true));
@@ -362,7 +362,7 @@ PlanarGraph::matchInSameDirection(const Coordinate& p0, const Coordinate& p1,
 string
 PlanarGraph::printEdges()
 {
-	
+
     std::ostringstream oss;
     oss << "Edges: ";
 	for(size_t i=0, n=edges->size(); i<n; ++i)

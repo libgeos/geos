@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -40,7 +40,7 @@ namespace geos {
 namespace geom { // geos::geom
 
 /**
- * \brief 
+ * \brief
  * Models an OGC SFS <code>LinearRing</code>.
  *
  * A LinearRing is a LineString which is both closed and simple.
@@ -48,7 +48,7 @@ namespace geom { // geos::geom
  * the first and last coordinate in the ring must be equal,
  * and the interior of the ring must not self-intersect.
  * Either orientation of the ring is allowed.
- * 
+ *
  * A ring must have either 0 or 4 or more points.
  * The first and last points must be equal (in 2D).
  * If these conditions are not met, the constructors throw

@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -133,7 +133,7 @@ public:
 	}
 
 
-	virtual Depth &getDepth() { 
+	virtual Depth &getDepth() {
 		testInvariant();
 		return depth;
 	}
@@ -226,7 +226,7 @@ public:
 
 	/**
 	 * equals is defined to be:
-	 * 
+	 *
 	 * e1 equals e2
 	 * <b>iff</b>
 	 * the coordinates of e1 are the same or the reverse of the coordinates in e2

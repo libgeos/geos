@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for Geometry::isRectangle() function
 
 // tut
@@ -40,7 +40,7 @@ namespace tut
     {
         const std::string wkt("POLYGON ((0 0, 0 100, 100 100, 100 0, 0 0))");
         geos::geom::Geometry* g = reader.read(wkt);
-        
+
         geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
         ensure( "Geometry is not a Polygon: " + wkt, poly != 0 );
         ensure( poly->isRectangle() );
@@ -55,7 +55,7 @@ namespace tut
     {
         const std::string wkt("POLYGON ((0 0, 0 200, 100 200, 100 0, 0 0))");
         geos::geom::Geometry* g = reader.read(wkt);
-        
+
         geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
         ensure( "Geometry is not a Polygon: " + wkt, poly != 0 );
         ensure( poly->isRectangle() );
@@ -71,7 +71,7 @@ namespace tut
         const std::string wkt("POLYGON ((0 0, 0 100, 100 100, 100 0, 0 0), \
                               (10 10, 10 90, 90 90, 90 10, 10 10) ))");
         geos::geom::Geometry* g = reader.read(wkt);
-        
+
         geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
         ensure( "Geometry is not a Polygon: " + wkt, poly != 0 );
         ensure( !poly->isRectangle() );
@@ -86,7 +86,7 @@ namespace tut
     {
         const std::string wkt("POLYGON ((0 0, 0 100, 99 100, 100 0, 0 0))");
         geos::geom::Geometry* g = reader.read(wkt);
-        
+
         geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
         ensure( "Geometry is not a Polygon: " + wkt, poly != 0 );
         ensure( !poly->isRectangle() );
@@ -101,7 +101,7 @@ namespace tut
     {
         const std::string wkt("POLYGON ((0 0, 0 100, 100 50, 100 100, 100 0, 0 0))");
         geos::geom::Geometry* g = reader.read(wkt);
-        
+
         geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
         ensure( "Geometry is not a Polygon: " + wkt, poly != 0 );
         ensure( !poly->isRectangle() );
@@ -116,7 +116,7 @@ namespace tut
     {
         const std::string wkt("POLYGON ((0 0, 0 100, 100 0, 0 0))");
         geos::geom::Geometry* g = reader.read(wkt);
-        
+
         geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
         ensure( "Geometry is not a Polygon: " + wkt, poly != 0 );
         ensure( !poly->isRectangle() );
@@ -131,7 +131,7 @@ namespace tut
     {
         const std::string wkt("POLYGON ((0 0, 0 100, 100 0, 100 100, 0 0))");
         geos::geom::Geometry* g = reader.read(wkt);
-        
+
         geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
         ensure( "Geometry is not a Polygon: " + wkt, poly != 0 );
         ensure( !poly->isRectangle() );

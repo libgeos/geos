@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -27,9 +27,9 @@ namespace util { // geos.geom.util
 
          void ComponentCoordinateExtracter::filter_rw( Geometry * geom)
          {
-            if (	geom->getGeometryTypeId() == geos::geom::GEOS_LINEARRING 
+            if (	geom->getGeometryTypeId() == geos::geom::GEOS_LINEARRING
                ||	geom->getGeometryTypeId() == geos::geom::GEOS_LINESTRING
-               ||	geom->getGeometryTypeId() == geos::geom::GEOS_POINT ) 
+               ||	geom->getGeometryTypeId() == geos::geom::GEOS_POINT )
                comps.push_back( geom->getCoordinate() );
             //if (	typeid( *geom ) == typeid( LineString )
             //	||	typeid( *geom ) == typeid( Point ) )
@@ -41,9 +41,9 @@ namespace util { // geos.geom.util
          {
             //if (	typeid( *geom ) == typeid( LineString )
             //	||	typeid( *geom ) == typeid( Point ) )
-            if (	geom->getGeometryTypeId() == geos::geom::GEOS_LINEARRING 
+            if (	geom->getGeometryTypeId() == geos::geom::GEOS_LINEARRING
                ||	geom->getGeometryTypeId() == geos::geom::GEOS_LINESTRING
-               ||	geom->getGeometryTypeId() == geos::geom::GEOS_POINT ) 
+               ||	geom->getGeometryTypeId() == geos::geom::GEOS_POINT )
                comps.push_back( geom->getCoordinate() );
             //if ( const Coordinate *ls=dynamic_cast<const Coordinate *>(geom) )
             //	comps.push_back(ls);

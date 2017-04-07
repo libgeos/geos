@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::geom::prep::PreparedGeometryFactory class.
 
 // tut
@@ -42,7 +42,7 @@ namespace tut
             assert(0 == g_);
             assert(0 == pg_);
         }
-        
+
         ~test_preparedgeometryfactory_data()
         {
             // FREE MEMORY per test case
@@ -120,7 +120,7 @@ namespace tut
     {
         g_ = factory_->createEmptyGeometry();
         ensure( 0 != g_ );
-        
+
         pg_ = prep::PreparedGeometryFactory::prepare(g_);
         ensure( 0 != pg_ );
 
@@ -134,14 +134,14 @@ namespace tut
     {
         g_ = factory_->createEmptyGeometry();
         ensure( 0 != g_ );
-        
+
         prep::PreparedGeometryFactory pgf;
         pg_ = pgf.create(g_);
         ensure( 0 != pg_ );
-        
+
         ensure_equals_geometry( g_, pg_ );
     }
-    
+
     // Test prepare empty POINT
     template<>
     template<>
@@ -149,10 +149,10 @@ namespace tut
     {
         g_ = factory_->createPoint();
         ensure( 0 != g_ );
-        
+
         pg_ = prep::PreparedGeometryFactory::prepare(g_);
         ensure( 0 != pg_ );
-        
+
         ensure_equals_geometry( g_, pg_ );
     }
 
@@ -163,14 +163,14 @@ namespace tut
     {
         g_ = factory_->createPoint();
         ensure( 0 != g_ );
-        
+
         prep::PreparedGeometryFactory pgf;
         pg_ = pgf.create(g_);
         ensure( 0 != pg_ );
 
         ensure_equals_geometry( g_, pg_ );
     }
-    
+
     // Test prepare empty LINESTRING
     template<>
     template<>
@@ -178,7 +178,7 @@ namespace tut
     {
         g_ = factory_->createLineString();
         ensure( 0 != g_ );
-        
+
         pg_ = prep::PreparedGeometryFactory::prepare(g_);
         ensure( 0 != pg_ );
 
@@ -192,13 +192,13 @@ namespace tut
     {
         g_ = factory_->createLineString();
         ensure( 0 != g_ );
-        
+
         prep::PreparedGeometryFactory pgf;
         pg_ = pgf.create(g_);
-        
+
         ensure_equals_geometry( g_, pg_ );
     }
-    
+
     // Test prepare empty POLYGON
     template<>
     template<>
@@ -206,10 +206,10 @@ namespace tut
     {
         g_ = factory_->createPolygon();
         ensure( 0 != g_ );
-        
+
         pg_ = prep::PreparedGeometryFactory::prepare(g_);
         ensure( 0 != pg_ );
-        
+
         ensure_equals_geometry( g_, pg_ );
     }
 
@@ -220,14 +220,14 @@ namespace tut
     {
         g_ = factory_->createPolygon();
         ensure( 0 != g_ );
-        
+
         prep::PreparedGeometryFactory pgf;
         pg_ = pgf.create(g_);
         ensure( 0 != pg_ );
-        
+
         ensure_equals_geometry( g_, pg_ );
     }
-    
+
     // Test prepare empty MULTIPOINT
     template<>
     template<>
@@ -235,10 +235,10 @@ namespace tut
     {
         g_ = factory_->createMultiPoint();
         ensure( 0 != g_ );
-        
+
         pg_ = prep::PreparedGeometryFactory::prepare(g_);
         ensure( 0 != pg_ );
-        
+
         ensure_equals_geometry( g_, pg_ );
     }
 
@@ -249,14 +249,14 @@ namespace tut
     {
         g_ = factory_->createMultiPoint();
         ensure( 0 != g_ );
-        
+
         prep::PreparedGeometryFactory pgf;
         pg_ = pgf.create(g_);
         ensure( 0 != pg_ );
-        
+
         ensure_equals_geometry( g_, pg_ );
     }
-    
+
     // Test prepare empty MULTILINESTRING
     template<>
     template<>
@@ -264,10 +264,10 @@ namespace tut
     {
         g_ = factory_->createMultiLineString();
         ensure( 0 != g_ );
-        
+
         pg_ = prep::PreparedGeometryFactory::prepare(g_);
         ensure( 0 != pg_ );
-        
+
         ensure_equals_geometry( g_, pg_ );
     }
 
@@ -278,14 +278,14 @@ namespace tut
     {
         g_ = factory_->createMultiLineString();
         ensure( 0 != g_ );
-        
+
         prep::PreparedGeometryFactory pgf;
         pg_ = pgf.create(g_);
         ensure( 0 != pg_ );
-        
+
         ensure_equals_geometry( g_, pg_ );
     }
-    
+
     // Test prepare empty MULTIPOLYGON
     template<>
     template<>
@@ -293,10 +293,10 @@ namespace tut
     {
         g_ = factory_->createMultiPolygon();
         ensure( 0 != g_ );
-        
+
         pg_ = prep::PreparedGeometryFactory::prepare(g_);
         ensure( 0 != pg_ );
-        
+
         ensure_equals_geometry( g_, pg_ );
     }
 
@@ -307,11 +307,11 @@ namespace tut
     {
         g_ = factory_->createMultiPolygon();
         ensure( 0 != g_ );
-        
+
         prep::PreparedGeometryFactory pgf;
         pg_ = pgf.create(g_);
         ensure( 0 != pg_ );
-        
+
         ensure_equals_geometry( g_, pg_ );
     }
 
@@ -322,13 +322,13 @@ namespace tut
     {
         g_ = reader_.read("POINT(1.234 5.678)");
         ensure( 0 != g_ );
-        
+
         pg_ = prep::PreparedGeometryFactory::prepare(g_);
         ensure( 0 != pg_ );
-        
+
         ensure_equals_geometry( g_, pg_ );
     }
-    
+
     // Test create non-empty POINT
     template<>
     template<>
@@ -336,11 +336,11 @@ namespace tut
     {
         g_ = reader_.read("POINT(1.234 5.678)");
         ensure( 0 != g_ );
-        
+
         prep::PreparedGeometryFactory pgf;
         pg_ = pgf.create(g_);
         ensure( 0 != pg_ );
-        
+
         ensure_equals_geometry( g_, pg_ );
     }
 
@@ -351,13 +351,13 @@ namespace tut
     {
 		g_ = reader_.read("LINESTRING (0 0, 5 5, 10 5, 10 10)");
         ensure( 0 != g_ );
-        
+
         pg_ = prep::PreparedGeometryFactory::prepare(g_);
         ensure( 0 != pg_ );
 
         ensure_equals_geometry( g_, pg_ );
     }
-    
+
     // Test create non-empty LINESTRING
     template<>
     template<>
@@ -365,14 +365,14 @@ namespace tut
     {
 		g_ = reader_.read("LINESTRING (0 0, 5 5, 10 5, 10 10)");
         ensure( 0 != g_ );
-        
+
         prep::PreparedGeometryFactory pgf;
         pg_ = pgf.create(g_);
         ensure( 0 != pg_ );
-        
+
         ensure_equals_geometry( g_, pg_ );
     }
-    
+
     // Test prepare non-empty LINESTRING
     template<>
     template<>
@@ -380,13 +380,13 @@ namespace tut
     {
         g_ = reader_.read("POLYGON((0 10, 5 5, 10 5, 15 10, 10 15, 5 15, 0 10))");
         ensure( 0 != g_ );
-        
+
         pg_ = prep::PreparedGeometryFactory::prepare(g_);
         ensure( 0 != pg_ );
 
         ensure_equals_geometry( g_, pg_ );
     }
-    
+
     // Test create non-empty LINESTRING
     template<>
     template<>
@@ -394,14 +394,14 @@ namespace tut
     {
         g_ = reader_.read("POLYGON((0 10, 5 5, 10 5, 15 10, 10 15, 5 15, 0 10))");
         ensure( 0 != g_ );
-        
+
         prep::PreparedGeometryFactory pgf;
         pg_ = pgf.create(g_);
         ensure( 0 != pg_ );
-        
+
         ensure_equals_geometry( g_, pg_ );
     }
-  
+
     // Test prepare non-empty MULTIPOINT
     template<>
     template<>
@@ -409,13 +409,13 @@ namespace tut
     {
         g_ = reader_.read("MULTIPOINT(0 0, 5 5, 10 10, 15 15, 20 20)");
         ensure( 0 != g_ );
-        
+
         pg_ = prep::PreparedGeometryFactory::prepare(g_);
         ensure( 0 != pg_ );
-        
+
         ensure_equals_geometry( g_, pg_ );
     }
-    
+
     // Test create non-empty MULTIPOINT
     template<>
     template<>
@@ -423,11 +423,11 @@ namespace tut
     {
         g_ = reader_.read("MULTIPOINT(0 0, 5 5, 10 10, 15 15, 20 20)");
         ensure( 0 != g_ );
-        
+
         prep::PreparedGeometryFactory pgf;
         pg_ = pgf.create(g_);
         ensure( 0 != pg_ );
-        
+
         ensure_equals_geometry( g_, pg_ );
     }
 
@@ -438,13 +438,13 @@ namespace tut
     {
 		g_ = reader_.read("MULTILINESTRING ((20 120, 120 20), (20 20, 120 120))");
         ensure( 0 != g_ );
-        
+
         pg_ = prep::PreparedGeometryFactory::prepare(g_);
         ensure( 0 != pg_ );
 
         ensure_equals_geometry( g_, pg_ );
     }
-    
+
     // Test create non-empty MULTILINESTRING
     template<>
     template<>
@@ -452,14 +452,14 @@ namespace tut
     {
 		g_ = reader_.read("MULTILINESTRING ((20 120, 120 20), (20 20, 120 120))");
         ensure( 0 != g_ );
-        
+
         prep::PreparedGeometryFactory pgf;
         pg_ = pgf.create(g_);
         ensure( 0 != pg_ );
-        
+
         ensure_equals_geometry( g_, pg_ );
     }
-    
+
     // Test prepare non-empty POLYGON
     template<>
     template<>
@@ -467,13 +467,13 @@ namespace tut
     {
         g_ = reader_.read("MULTIPOLYGON(((0 0, 10 0, 10 10, 0 10, 0 0),(2 2, 2 6, 6 4, 2 2)),((60 60, 60 50, 70 40, 60 60)))");
         ensure( 0 != g_ );
-        
+
         pg_ = prep::PreparedGeometryFactory::prepare(g_);
         ensure( 0 != pg_ );
 
         ensure_equals_geometry( g_, pg_ );
     }
-    
+
     // Test create non-empty POLYGON
     template<>
     template<>
@@ -481,11 +481,11 @@ namespace tut
     {
         g_ = reader_.read("MULTIPOLYGON(((0 0, 10 0, 10 10, 0 10, 0 0),(2 2, 2 6, 6 4, 2 2)),((60 60, 60 50, 70 40, 60 60)))");
         ensure( 0 != g_ );
-        
+
         prep::PreparedGeometryFactory pgf;
         pg_ = pgf.create(g_);
         ensure( 0 != pg_ );
-        
+
         ensure_equals_geometry( g_, pg_ );
     }
 

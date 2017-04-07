@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -76,7 +76,7 @@ namespace buffer { // geos.operation.buffer
  *
  * Allows setting the level of approximation for circular arcs,
  * and the precision model in which to carry out the computation.
- * 
+ *
  * When computing buffers in floating point double-precision
  * it can happen that the process of iterated noding can fail to converge
  * (terminate).
@@ -167,7 +167,7 @@ private:
 	 */
 	static int depthDelta(const geomgraph::Label& label);
 
-	const BufferParameters& bufParams; 
+	const BufferParameters& bufParams;
 
 	const geom::PrecisionModel* workingPrecisionModel;
 
@@ -233,7 +233,7 @@ private:
 	 * @return the empty result geometry, transferring ownership to caller.
 	 */
 	geom::Geometry* createEmptyResultGeometry() const;
-    
+
     // Declare type as noncopyable
     BufferBuilder(const BufferBuilder& other);
     BufferBuilder& operator=(const BufferBuilder& rhs);

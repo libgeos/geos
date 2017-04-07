@@ -1,5 +1,5 @@
 
-// 
+//
 // Test Suite for geos::triangulate::quadedge::Vertex
 //
 // tut
@@ -37,7 +37,7 @@ namespace tut
 	// Test Cases
 	//
 
-	// 1 - Test for operator< 
+	// 1 - Test for operator<
 	template<>
 	template<>
 	void object::test<1>()

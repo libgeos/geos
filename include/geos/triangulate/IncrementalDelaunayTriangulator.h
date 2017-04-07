@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -35,11 +35,11 @@ namespace quadedge {
 /**
  * Computes a Delauanay Triangulation of a set of {@link Vertex}es, using an
  * incrementatal insertion algorithm.
- * 
+ *
  * @author JTS: Martin Davis
  * @author Benjamin Campbell
  */
-class GEOS_DLL IncrementalDelaunayTriangulator 
+class GEOS_DLL IncrementalDelaunayTriangulator
 {
 private:
 	quadedge::QuadEdgeSubdivision *subdiv;
@@ -49,7 +49,7 @@ public:
 	/**
 	 * Creates a new triangulator using the given {@link QuadEdgeSubdivision}.
 	 * The triangulator uses the tolerance of the supplied subdivision.
-	 * 
+	 *
 	 * @param subdiv
 	 *          a subdivision in which to build the TIN
 	 */
@@ -62,9 +62,9 @@ public:
 	 * unique up to the provided tolerance value. (i.e. no two vertices should be
 	 * closer than the provided tolerance value). They do not have to be rounded
 	 * to the tolerance grid, however.
-	 * 
+	 *
 	 * @param vertices a Collection of Vertex
-	 * 
+	 *
 	 * @throws LocateFailureException if the location algorithm
 	 *         fails to converge in a reasonable number of iterations
 	 */
@@ -75,7 +75,7 @@ public:
 	 * triangulation, and fixes the affected edges so that the result
 	 * is still a Delaunay triangulation.
 	 * <p>
-	 * 
+	 *
 	 * @return a quadedge containing the inserted vertex
 	 */
 	quadedge::QuadEdge& insertSite(const quadedge::Vertex &v);

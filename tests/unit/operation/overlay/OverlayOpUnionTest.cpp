@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::operation::OverlayOp class for UNION
 
 #include <tut.hpp>
@@ -52,11 +52,11 @@ namespace tut
 
         // union segments incrementally
         GeometryPtr lines12(line1->Union(line2.get()));
-        GeometryPtr lines123(lines12->Union(line3.get())); 
+        GeometryPtr lines123(lines12->Union(line3.get()));
         GeometryPtr lines1234(lines123->Union(line4.get()));
 
         ensure_equals(lines1234->getGeometryTypeId(), geos::geom::GEOS_MULTILINESTRING);
-        
+
         // NOTE: Since the union operation makes no effort to simplify and
         // drop nodes of degree 2 from the built topology,
         // do not expect GEOS_LINESTRING.

@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -98,7 +98,7 @@ void
 Key::computeKey(const Envelope& itemEnv)
 {
 	level=computeQuadLevel(itemEnv);
-	env.init(); // reset to null 
+	env.init(); // reset to null
 	computeKey(level, itemEnv);
 	// MD - would be nice to have a non-iterative form of this algorithm
 	while (!env.contains(itemEnv)) {

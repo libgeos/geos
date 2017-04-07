@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -50,7 +50,7 @@ namespace relate { // geos::operation::relate
  *
  * Also supports building a topological graph of a single Geometry, to
  * allow verification of valid topology.
- * 
+ *
  * It is <b>not</b> necessary to create a fully linked
  * PlanarGraph to determine relationships, since it is sufficient
  * to know how the Geometries interact locally around the nodes.

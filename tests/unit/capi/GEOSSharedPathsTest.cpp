@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSSharedPaths
 
 #include <tut.hpp>
@@ -32,7 +32,7 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
@@ -42,7 +42,7 @@ namespace tut
             initGEOS(notice, notice);
             w_ = GEOSWKTWriter_create();
             GEOSWKTWriter_setTrim(w_, 1);
-        }       
+        }
 
         ~test_capigeossharedpaths_data()
         {
@@ -79,7 +79,7 @@ namespace tut
         ensure(!geom3_);
     }
 
-    /// Line to line sharing 
+    /// Line to line sharing
     template<>
     template<>
     void object::test<2>()
@@ -89,10 +89,10 @@ namespace tut
         geom3_ = GEOSSharedPaths(geom1_, geom2_);
 
         char* wkt_c = GEOSWKTWriter_write(w_, geom3_);
-        std::string out(wkt_c); 
+        std::string out(wkt_c);
         free(wkt_c);
 
-        ensure_equals(out, 
+        ensure_equals(out,
 "GEOMETRYCOLLECTION (MULTILINESTRING ((50 60, 50 70)), MULTILINESTRING EMPTY)"
         );
     }

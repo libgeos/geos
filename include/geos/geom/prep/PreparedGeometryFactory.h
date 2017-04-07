@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  *
@@ -40,12 +40,12 @@ namespace prep { // geos::geom::prep
 /**
  * \brief
  * A factory for creating {@link PreparedGeometry}s.
- * 
+ *
  * It chooses an appropriate implementation of PreparedGeometry
  * based on the geoemtric type of the input geometry.
  * In the future, the factory may accept hints that indicate
  * special optimizations which can be performed.
- * 
+ *
  * @author Martin Davis
  *
  */
@@ -55,19 +55,19 @@ public:
 
 	/**
 	* Creates a new {@link PreparedGeometry} appropriate for the argument {@link Geometry}.
-	* 
+	*
 	* @param geom the geometry to prepare
 	* @return the prepared geometry
 	*/
-	static const PreparedGeometry * prepare(const geom::Geometry * geom) 
+	static const PreparedGeometry * prepare(const geom::Geometry * geom)
 	{
 		PreparedGeometryFactory pf;
-		return pf.create(geom); 
+		return pf.create(geom);
 	}
-    
+
     /**
  	* Destroys {@link PreparedGeometry} allocated with the factory.
- 	* 
+ 	*
 	* @param geom to be deallocated
 	*/
     static void destroy(const PreparedGeometry* geom)
@@ -77,7 +77,7 @@ public:
 
 	/**
  	* Creates a new {@link PreparedGeometry} appropriate for the argument {@link Geometry}.
- 	* 
+ 	*
 	* @param geom the geometry to prepare
 	* @return the prepared geometry
 	*/

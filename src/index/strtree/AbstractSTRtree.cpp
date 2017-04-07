@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -38,7 +38,7 @@ AbstractSTRtree::~AbstractSTRtree()
     BoundableList::iterator end = itemBoundables->end();
 	while (it != end)
 	{
-		delete *it; 
+		delete *it;
         ++it;
 	}
 	delete itemBoundables;
@@ -140,7 +140,7 @@ AbstractSTRtree::query(const void* searchBounds, ItemVisitor& visitor)
 	if (!built) build();
 
 	if (itemBoundables->empty()) assert(root->getBounds()==NULL);
-	
+
 	if (getIntersectsOp()->intersects(root->getBounds(),searchBounds))
 	{
 		query(searchBounds, *root, visitor);
@@ -349,17 +349,17 @@ AbstractSTRtree::boundablesAtLevel(int level, AbstractNode* top,
 	return;
 }
 
-ItemsList* AbstractSTRtree::itemsTree(AbstractNode* node) 
+ItemsList* AbstractSTRtree::itemsTree(AbstractNode* node)
 {
     std::auto_ptr<ItemsList> valuesTreeForNode (new ItemsList());
 
     BoundableList::iterator end = node->getChildBoundables()->end();
-    for (BoundableList::iterator i = node->getChildBoundables()->begin(); 
-         i != end; ++i) 
+    for (BoundableList::iterator i = node->getChildBoundables()->begin();
+         i != end; ++i)
     {
         Boundable* childBoundable = *i;
         if (dynamic_cast<AbstractNode*>(childBoundable)) {
-            ItemsList* valuesTreeForChild = 
+            ItemsList* valuesTreeForChild =
                 itemsTree(static_cast<AbstractNode*>(childBoundable));
             // only add if not null (which indicates an item somewhere in this tree
             if (valuesTreeForChild != NULL)
@@ -373,7 +373,7 @@ ItemsList* AbstractSTRtree::itemsTree(AbstractNode* node)
             assert(!static_cast<bool>("should never be reached"));
         }
     }
-    if (valuesTreeForNode->empty()) 
+    if (valuesTreeForNode->empty())
         return NULL;
 
     return valuesTreeForNode.release();
@@ -381,8 +381,8 @@ ItemsList* AbstractSTRtree::itemsTree(AbstractNode* node)
 
 ItemsList* AbstractSTRtree::itemsTree()
 {
-    if (!built) { 
-        build(); 
+    if (!built) {
+        build();
     }
 
     ItemsList* valuesTree (itemsTree(root));

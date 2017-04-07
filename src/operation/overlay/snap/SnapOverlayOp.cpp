@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  ***********************************************************************
@@ -19,7 +19,7 @@
 #include <geos/operation/overlay/snap/SnapOverlayOp.h>
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
 #include <geos/precision/CommonBitsRemover.h>
-#include <geos/geom/Geometry.h> 
+#include <geos/geom/Geometry.h>
 
 #include <cassert>
 #include <limits> // for numeric_limits

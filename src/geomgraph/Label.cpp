@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -232,7 +232,7 @@ Label::isLine(int geomIndex) const
 bool
 Label::isEqualOnSide(const Label& lbl, int side) const
 {
-	return 
+	return
 		elt[0].isEqualOnSide(lbl.elt[0], side)
 		&& elt[1].isEqualOnSide(lbl.elt[1], side);
 }

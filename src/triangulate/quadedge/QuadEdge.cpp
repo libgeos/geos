@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -51,7 +51,7 @@ QuadEdge::makeEdge(const Vertex &o, const Vertex &d)
 }
 
 std::auto_ptr<QuadEdge>
-QuadEdge::connect(QuadEdge &a, QuadEdge &b) 
+QuadEdge::connect(QuadEdge &a, QuadEdge &b)
 {
 	std::auto_ptr<QuadEdge> q0 = makeEdge(a.dest(), b.orig());
 	splice(*q0, a.lNext());
@@ -121,7 +121,7 @@ QuadEdge::getPrimary() const
 {
 	if (orig().getCoordinate().compareTo(dest().getCoordinate()) <= 0)
 		return *this;
-	else 
+	else
 		return sym();
 }
 

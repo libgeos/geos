@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSOffsetCurve
 
 #include <tut.hpp>
@@ -33,7 +33,7 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
@@ -43,7 +43,7 @@ namespace tut
             initGEOS(notice, notice);
             wktw_ = GEOSWKTWriter_create();
             GEOSWKTWriter_setTrim(wktw_, 1);
-        }       
+        }
 
         ~test_capioffsetcurve_data()
         {
@@ -200,7 +200,7 @@ namespace tut
             "756.2413940429687500 466.8306579589843700,"
             "626.1337890625000000 1898.0147705078125000,"
             "433.8007202148437500 404.6052856445312500)");
-        
+
         geom1_ = GEOSGeomFromWKT(wkt0.c_str());
         ensure( 0 != geom1_ );
 
@@ -230,7 +230,7 @@ namespace tut
         }
     }
 
-    // Test duplicated inner vertex in input 
+    // Test duplicated inner vertex in input
     // See http://trac.osgeo.org/postgis/ticket/602
     template<>
     template<>
@@ -247,7 +247,7 @@ namespace tut
         ensure_equals(std::string(wkt_), "LINESTRING (10 9, 1 9, 1 0)");
     }
 
-    // Test duplicated final vertex in input 
+    // Test duplicated final vertex in input
     // See http://trac.osgeo.org/postgis/ticket/602
     template<>
     template<>
@@ -264,7 +264,7 @@ namespace tut
         ensure_equals(std::string(wkt_), "LINESTRING (1 10, 1 0)");
     }
 
-    // Test only duplicated vertex in input 
+    // Test only duplicated vertex in input
     // See http://trac.osgeo.org/postgis/ticket/602
     template<>
     template<>

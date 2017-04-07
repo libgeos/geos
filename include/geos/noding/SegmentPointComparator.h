@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -41,7 +41,7 @@ class GEOS_DLL SegmentPointComparator {
 public:
 
 	/**
-	 * Compares two Coordinates for their relative position along a 
+	 * Compares two Coordinates for their relative position along a
 	 * segment lying in the specified Octant.
 	 *
 	 * @return -1 node0 occurs first
@@ -69,7 +69,7 @@ public:
 		}
 		assert(0); // invalid octant value
 		return 0;
-	 
+
 	}
 
 	static int relativeSign(double x0, double x1)
@@ -87,7 +87,7 @@ public:
 		if (compareSign1 > 0) return 1;
 		return 0;
 	}
- 
+
 };
 
 } // namespace geos.noding

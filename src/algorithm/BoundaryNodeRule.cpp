@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -25,7 +25,7 @@ namespace algorithm { // geos.algorithm
 // namespace. In GEOS they are hidden and only accessible as singleton
 // from BoundaryNodeRule static const references
 //
-namespace { 
+namespace {
 
 /**
  * A {@link BoundaryNodeRule} specifies that points are in the

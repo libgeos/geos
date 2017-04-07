@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  *
@@ -21,9 +21,9 @@
 #define GEOS_GEOM_PREP_BASICPREPAREDGEOMETRY_H
 
 #include <geos/geom/prep/PreparedGeometry.h> // for inheritance
-//#include <geos/algorithm/PointLocator.h> 
-//#include <geos/geom/util/ComponentCoordinateExtracter.h> 
-#include <geos/geom/Coordinate.h> 
+//#include <geos/algorithm/PointLocator.h>
+//#include <geos/geom/util/ComponentCoordinateExtracter.h>
+#include <geos/geom/Coordinate.h>
 //#include <geos/geom/Location.h>
 
 #include <vector>
@@ -44,19 +44,19 @@ namespace prep { // geos::geom::prep
 // * \class BasicPreparedGeometry
 
 /**
- * 
+ *
  * \brief
  * A base class for {@link PreparedGeometry} subclasses.
- * 
+ *
  * Contains default implementations for methods, which simply delegate
  * to the equivalent {@link Geometry} methods.
  * This class may be used as a "no-op" class for Geometry types
  * which do not have a corresponding {@link PreparedGeometry} implementation.
- * 
+ *
  * @author Martin Davis
  *
  */
-class BasicPreparedGeometry: public PreparedGeometry 
+class BasicPreparedGeometry: public PreparedGeometry
 {
 private:
 	const geom::Geometry * baseGeom;
@@ -67,21 +67,21 @@ protected:
 	 * Sets the original {@link Geometry} which will be prepared.
 	 */
 	void setGeometry( const geom::Geometry * geom );
-	
+
 	/**
-	 * Determines whether a Geometry g interacts with 
+	 * Determines whether a Geometry g interacts with
 	 * this geometry by testing the geometry envelopes.
-	 *  
+	 *
 	 * @param g a Geometry
 	 * @return true if the envelopes intersect
 	 */
 	bool envelopesIntersect(const geom::Geometry* g) const;
 
 	/**
-	 * Determines whether the envelope of 
+	 * Determines whether the envelope of
 	 * this geometry covers the Geometry g.
-	 * 
-	 *  
+	 *
+	 *
 	 * @param g a Geometry
 	 * @return true if g is contained in this envelope
 	 */
@@ -100,8 +100,8 @@ public:
 	/**
 	 * Gets the list of representative points for this geometry.
 	 * One vertex is included for every component of the geometry
-	 * (i.e. including one for every ring of polygonal geometries) 
-	 * 
+	 * (i.e. including one for every ring of polygonal geometries)
+	 *
 	 * @return a List of Coordinate
 	 */
 	const Coordinate::ConstVect * getRepresentativePoints()  const
@@ -110,10 +110,10 @@ public:
 	}
 
 	/**
-	 * Tests whether any representative of the target geometry 
+	 * Tests whether any representative of the target geometry
 	 * intersects the test geometry.
 	 * This is useful in A/A, A/L, A/P, L/P, and P/P cases.
-	 * 
+	 *
 	 * @param geom the test geometry
 	 * @param repPts the representative points of the target geometry
 	 * @return true if any component intersects the areal test geometry

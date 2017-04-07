@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -42,11 +42,11 @@ namespace noding { // geos::noding
 
 /** \brief
  * Nodes a set of SegmentStrings completely.
- * 
+ *
  * The set of segmentStrings is fully noded;
  * i.e. noding is repeated until no further
  * intersections are detected.
- * 
+ *
  * Iterated noding using a FLOATING precision model is not guaranteed to converge,
  * due to roundoff error.   This problem is detected and an exception is thrown.
  * Clients can choose to rerun the noding using a lower precision model.
@@ -96,7 +96,7 @@ public:
 	std::vector<SegmentString*>* getNodedSubstrings() const {
 		return nodedSegStrings;
 	}
- 
+
 
 	/**
 	 * Fully nodes a list of {@link SegmentStrings}, i.e. peforms noding iteratively

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -83,7 +83,7 @@ private:
 	 */
 	bool isTrivialIntersection(const SegmentString* e0, int segIndex0,
 			const SegmentString* e1, int segIndex1);
- 
+
     // Declare type as noncopyable
     IntersectionAdder(const IntersectionAdder& other);
     IntersectionAdder& operator=(const IntersectionAdder& rhs);
@@ -160,7 +160,7 @@ public:
 		SegmentString* e0,  int segIndex0,
 		SegmentString* e1,  int segIndex1);
 
- 
+
 	static bool isAdjacentSegments(int i1, int i2) {
 		return std::abs(i1 - i2) == 1;
 	}
@@ -174,7 +174,7 @@ public:
 		return false;
 	}
 };
- 
+
 
 } // namespace geos.noding
 } // namespace geos

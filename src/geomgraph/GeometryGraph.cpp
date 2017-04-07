@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -29,11 +29,11 @@
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/Position.h>
 
-#include <geos/geomgraph/index/SimpleMCSweepLineIntersector.h> 
-#include <geos/geomgraph/index/SegmentIntersector.h> 
+#include <geos/geomgraph/index/SimpleMCSweepLineIntersector.h>
+#include <geos/geomgraph/index/SegmentIntersector.h>
 #include <geos/geomgraph/index/EdgeSetIntersector.h>
 
-#include <geos/geom/CoordinateArraySequence.h> 
+#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Location.h>
 #include <geos/geom/Point.h>
@@ -75,9 +75,9 @@ namespace geomgraph { // geos.geomgraph
  * for determining whether
  * a component (node or edge) that appears multiple times in elements
  * of a MultiGeometry is in the boundary or the interior of the Geometry
- * 
+ *
  * The SFS uses the "Mod-2 Rule", which this function implements
- * 
+ *
  * An alternative (and possibly more intuitive) rule would be
  * the "At Most One Rule":
  *    isInBoundary = (componentCount == 1)
@@ -128,7 +128,7 @@ CoordinateSequence*
 GeometryGraph::getBoundaryPoints()
 {
 
-	if ( ! boundaryPoints.get() ) 
+	if ( ! boundaryPoints.get() )
 	{
 		// Collection will be destroied by GeometryGraph dtor
 		vector<Node*>* coll = getBoundaryNodes();
@@ -389,7 +389,7 @@ GeometryGraph::computeSelfNodes(LineIntersector &li,
 	    || dynamic_cast<const MultiPolygon*>(parentGeom);
 
 	bool computeAllSegments = computeRingSelfNodes || ! isRings;
-	
+
 	esi->computeIntersections(se, si, computeAllSegments);
 
 #if GEOS_DEBUG

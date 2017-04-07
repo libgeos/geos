@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -88,7 +88,7 @@ public:
 	/**
 	 * \brief Reads a Geometry from an istream.
 	 *
-	 * @param is the stream to read from 
+	 * @param is the stream to read from
 	 * @return the Geometry read
 	 * @throws IOException
 	 * @throws ParseException
@@ -99,7 +99,7 @@ public:
 	/**
 	 * \brief Reads a Geometry from an istream in hex format.
 	 *
-	 * @param is the stream to read from 
+	 * @param is the stream to read from
 	 * @return the Geometry read
 	 * @throws IOException
 	 * @throws ParseException
@@ -114,7 +114,7 @@ public:
 	 * @param os is the stream to write to
 	 */
 	static std::ostream &printHEX(std::istream &is, std::ostream &os);
- 
+
 private:
 
 	const geom::GeometryFactory &factory;

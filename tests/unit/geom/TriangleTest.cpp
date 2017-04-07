@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::geom::Triangle class.
 
 // tut
@@ -57,7 +57,7 @@ namespace tut
     void object::test<2>()
     {
 		geos::geom::Triangle abc(a, b, c);
-		
+
 		ensure_equals( abc.p0, a );
 		ensure_equals( abc.p1, b );
 		ensure_equals( abc.p2, c );
@@ -108,7 +108,7 @@ namespace tut
     {
 		geos::geom::Coordinate center;
 		geos::geom::Triangle abc(a, b, c);
-		
+
 		// Expected: ~4.2426406871192857
 		abc.inCentre(center);
 		// 1e-16 fails sometimes
@@ -121,7 +121,7 @@ namespace tut
         template<>
 	template<>
 	void object::test<6>()
-	{   
+	{
 		using geos::geom::Triangle;
 		using geos::geom::Coordinate;
 

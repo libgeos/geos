@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -38,7 +38,7 @@ namespace geos {
 	}
 	namespace index {
 		namespace quadtree {
-			// class Root; 
+			// class Root;
 		}
 	}
 }
@@ -53,7 +53,7 @@ namespace quadtree { // geos::index::quadtree
  * of 2D rectangles.  If other kinds of spatial objects
  * need to be indexed they can be represented by their
  * envelopes
- * 
+ *
  * The quadtree structure is used to provide a primary filter
  * for range rectangle queries.  The query() method returns a list of
  * all objects which <i>may</i> intersect the query rectangle.  Note that
@@ -65,7 +65,7 @@ namespace quadtree { // geos::index::quadtree
  * This implementation does not require specifying the extent of the inserted
  * items beforehand.  It will automatically expand to accomodate any extent
  * of dataset.
- * 
+ *
  * This data structure is also known as an <i>MX-CIF quadtree</i>
  * following the usage of Samet and others.
  */
@@ -120,7 +120,7 @@ public:
 
 	/// Returns the number of items in the tree.
 	int size();
-	
+
 	void insert(const geom::Envelope *itemEnv, void *item);
 
 	/** \brief

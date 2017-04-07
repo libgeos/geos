@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -244,7 +244,7 @@ int RobustDeterminant::signOfDet2x2(double x1,double y1,double x2,double y2) {
 		k=std::floor(x1/x2);
 		x1=x1-k*x2;
 		y1=y1-k*y2;
-		
+
 		/*
 		*  testing if R (new U1) is in U2 rectangle
 		*/

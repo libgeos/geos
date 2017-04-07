@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -47,7 +47,7 @@ IntersectionAdder::isTrivialIntersection(const SegmentString* e0,
 		return true;
 	}
 	return false;
- 
+
 }
 
 /*public*/
@@ -85,7 +85,7 @@ IntersectionAdder::processIntersections(
 
 	// if the segments are adjacent they have at least
 	// one trivial intersection,
-	// the shared endpoint.  Don't bother adding it if it 
+	// the shared endpoint.  Don't bother adding it if it
 	// is the only intersection.
 	if (! isTrivialIntersection(e0, segIndex0, e1, segIndex1))
 	{
@@ -99,7 +99,7 @@ IntersectionAdder::processIntersections(
 
 		if (li.isProper()) {
 			numProperIntersections++;
-			//Debug.println(li.toString()); 
+			//Debug.println(li.toString());
 			//Debug.println(li.getIntersection(0));
 //properIntersectionPoint = (Coordinate) li.getIntersection(0).clone();
 			hasProper = true;

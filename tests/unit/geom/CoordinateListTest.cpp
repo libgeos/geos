@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::geom::CoordinateList class.
 
 // tut
@@ -40,7 +40,7 @@ namespace tut
     void object::test<1>()
     {
 		using geos::geom::Coordinate;
-		
+
 		const Coordinate a(0, 0);
 		const Coordinate b(10, 10);
 		const Coordinate c(20, 20);
@@ -124,7 +124,7 @@ namespace tut
     clist.insert(clist.end(), Coordinate(1, 1), true);
     ensure_equals( clist.size(), 3u );
 
-    geos::geom::CoordinateList::iterator it = clist.end(); 
+    geos::geom::CoordinateList::iterator it = clist.end();
     --it;
     clist.insert(it, Coordinate(0, 0), false);
     ensure_equals( clist.size(), 3u );
@@ -142,13 +142,13 @@ namespace tut
 	  const Coordinate d(100,0);
 
 	  std::auto_ptr< std::vector<Coordinate> > v( new std::vector<Coordinate>() );
-	  v->push_back(a);                 
-	  v->push_back(b);                         
-	  v->push_back(c);                                 
-	  v->push_back(d);                                         
+	  v->push_back(a);
+	  v->push_back(b);
+	  v->push_back(c);
+	  v->push_back(d);
 	  geos::geom::CoordinateList coordlist(*v);
 
-	  coordlist.closeRing(); 
+	  coordlist.closeRing();
 
 	  geos::geom::CoordinateList::iterator it1,it2;
 	  it1 = coordlist.begin();
@@ -156,9 +156,9 @@ namespace tut
 	  ensure_equals(*it1,*it2);
 
 	  /* for(CoordinateList::iterator it=coordlist.begin() ; it!=coordlist.end() ; ++it)
-	     {                                                                                       
+	     {
 	     cout << (*it).x << " " << (*it).y << endl;
-	     }*/                                                                                               
+	     }*/
 
 
 	  //If the list is empty::

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -58,8 +58,8 @@ GeometryCombiner::GeometryCombiner(std::vector<Geometry*> const& geoms)
 {
 }
 
-GeometryFactory const* 
-GeometryCombiner::extractFactory(std::vector<Geometry*> const& geoms) 
+GeometryFactory const*
+GeometryCombiner::extractFactory(std::vector<Geometry*> const& geoms)
 {
     return geoms.empty() ? NULL : geoms.front()->getFactory();
 }
@@ -69,8 +69,8 @@ Geometry* GeometryCombiner::combine()
     std::vector<Geometry*> elems;
 
     std::vector<Geometry*>::const_iterator end = inputGeoms.end();
-    for (std::vector<Geometry*>::const_iterator i = inputGeoms.begin(); 
-         i != end; ++i) 
+    for (std::vector<Geometry*>::const_iterator i = inputGeoms.begin();
+         i != end; ++i)
     {
         extractElements(*i, elems);
     }
@@ -86,7 +86,7 @@ Geometry* GeometryCombiner::combine()
     return geomFactory->buildGeometry(elems);
 }
 
-void 
+void
 GeometryCombiner::extractElements(Geometry* geom, std::vector<Geometry*>& elems)
 {
     if (geom == NULL)

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -25,7 +25,7 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom { 
+	namespace geom {
 		class Geometry;
 	}
 }
@@ -52,7 +52,7 @@ private:
 	const geom::Geometry *component;
 	int segIndex;
 	geom::Coordinate pt;
-public:  
+public:
 	/** \brief
 	 * A Special value of segmentIndex used for locations
 	 * inside area geometries.
@@ -80,7 +80,7 @@ public:
 	 *
 	 * @param component the component of the geometry containing the point
 	 * @param pt the coordinate of the location
-	 */  
+	 */
 	GeometryLocation(const geom::Geometry *component,
 	                      const geom::Coordinate &pt);
 
@@ -91,7 +91,7 @@ public:
 
 	/**
 	 * Returns the segment index for this location.
-	 * 
+	 *
 	 * If the location is inside an
 	 * area, the index will have the value INSIDE_AREA;
 	 *

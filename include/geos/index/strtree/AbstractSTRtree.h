@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -27,9 +27,9 @@
 
 // Forward declarations
 namespace geos {
-	namespace index { 
+	namespace index {
 		class ItemVisitor;
-		namespace strtree { 
+		namespace strtree {
 			class Boundable;
 			class AbstractNode;
 		}
@@ -44,7 +44,7 @@ namespace strtree { // geos::index::strtree
 typedef std::vector<Boundable*> BoundableList;
 //typedef std::list<Boundable*> BoundableList;
 
-/// list contains boundables or lists of boundables. The lists are owned by 
+/// list contains boundables or lists of boundables. The lists are owned by
 /// this class, the plain boundables are held by reference only.
 class ItemsList;
 
@@ -123,11 +123,11 @@ public:
  * STR-packed R-trees are described in:
  * P. Rigaux, Michel Scholl and Agnes Voisard. Spatial Databases With
  * Application To GIS. Morgan Kaufmann, San Francisco, 2002.
- * 
- * This implementation is based on Boundables rather than just AbstractNodes, 
- * because the STR algorithm operates on both nodes and 
+ *
+ * This implementation is based on Boundables rather than just AbstractNodes,
+ * because the STR algorithm operates on both nodes and
  * data, both of which are treated here as Boundables.
- * 
+ *
  */
 class GEOS_DLL AbstractSTRtree {
 
@@ -137,7 +137,7 @@ private:
 
 	/**
 	 * Creates the levels higher than the given level
-	 * 
+	 *
 	 * @param boundablesOfALevel
 	 *            the level to build on
 	 * @param level
@@ -161,7 +161,7 @@ protected:
 	/** \brief
 	 * A test for intersection between two bounds, necessary because
 	 * subclasses of AbstractSTRtree have different implementations of
-	 * bounds. 
+	 * bounds.
 	 */
 	class GEOS_DLL IntersectsOp {
 		public:
@@ -223,7 +223,7 @@ protected:
 	void query(const void* searchBounds, ItemVisitor& visitor);
 
 	void query(const void* searchBounds, const AbstractNode& node, ItemVisitor& visitor);
-  
+
 	///  Also builds the tree, if necessary.
 	bool remove(const void* itemEnv, void* item);
 
@@ -239,7 +239,7 @@ protected:
 	 * @see IntersectsOp
 	 */
 	virtual IntersectsOp *getIntersectsOp()=0;
- 
+
 
 public:
 
@@ -296,15 +296,15 @@ public:
 			BoundableList* boundables);
 
     /**
-     * Gets a tree structure (as a nested list) 
+     * Gets a tree structure (as a nested list)
      * corresponding to the structure of the items and nodes in this tree.
      * <p>
-     * The returned {@link List}s contain either {@link Object} items, 
+     * The returned {@link List}s contain either {@link Object} items,
      * or Lists which correspond to subtrees of the tree
      * Subtrees which do not contain any items are not included.
      * <p>
      * Builds the tree if necessary.
-     * 
+     *
      * @note The caller is responsible for releasing the list
      *
      * @return a List of items and/or Lists

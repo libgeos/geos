@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -58,14 +58,14 @@ public:
 	friend std::ostream& operator<< (std::ostream& os, const SegmentNode& n);
 
 	/// the point of intersection (own copy)
-	geom::Coordinate coord;  
+	geom::Coordinate coord;
 
 	/// the index of the containing line segment in the parent edge
-	unsigned int segmentIndex;  
+	unsigned int segmentIndex;
 
 	/// Construct a node on the given NodedSegmentString
 	//
-	/// @param ss the parent NodedSegmentString 
+	/// @param ss the parent NodedSegmentString
 	///
 	/// @param coord the coordinate of the intersection, will be copied
 	///

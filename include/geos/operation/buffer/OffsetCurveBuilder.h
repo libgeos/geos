@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -23,7 +23,7 @@
 #include <geos/export.h>
 
 #include <geos/operation/buffer/BufferParameters.h> // for composition
-#include <geos/operation/buffer/OffsetSegmentGenerator.h> 
+#include <geos/operation/buffer/OffsetSegmentGenerator.h>
 
 #include <vector>
 #include <memory> // for auto_ptr
@@ -116,7 +116,7 @@ public:
 	 *
 	 * NOTE: this is a GEOS extension
 	 */
-	void getSingleSidedLineCurve(const geom::CoordinateSequence* inputPts, 
+	void getSingleSidedLineCurve(const geom::CoordinateSequence* inputPts,
 	     double distance, std::vector<geom::CoordinateSequence*>& lineList,
 	     bool leftSide, bool rightSide ) ;
 
@@ -138,7 +138,7 @@ private:
 
 	const geom::PrecisionModel* precisionModel;
 
-	const BufferParameters& bufParams; 
+	const BufferParameters& bufParams;
 
 	/**
 	 * Use a value which results in a potential distance error which is

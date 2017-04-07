@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -66,7 +66,7 @@ private:
 	/**
 	 * Get the subquad for the index.
 	 * If it doesn't exist, create it.
-	 * 
+	 *
 	 * Ownership of the returned object belongs to this class.
 	 */
 	Node* getSubnode(int index);

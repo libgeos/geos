@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSisValidDetail
 
 #include <tut.hpp>
@@ -33,7 +33,7 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
@@ -44,7 +44,7 @@ namespace tut
             wktw_ = GEOSWKTWriter_create();
             GEOSWKTWriter_setTrim(wktw_, 1);
             GEOSWKTWriter_setOutputDimension(wktw_, 3);
-        }       
+        }
 
         std::string toWKT(GEOSGeometry* g)
         {
@@ -58,7 +58,7 @@ namespace tut
         {
             using std::toupper;
             using std::string;
-            
+
             for(string::size_type i = 0, len = str.size(); i < len; ++i)
                 str[i] = static_cast<string::value_type>(toupper(str[i]));
         }

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -83,7 +83,7 @@ WKBReader::readHEX(istream &is)
 	unsigned char result_high, result_low, value;
 	char high, low;
 
-	while( (high = is.get()) != char_traits<char>::eof() ) 
+	while( (high = is.get()) != char_traits<char>::eof() )
 	{
 		// geth the low part of the byte
 		low = is.get();
@@ -275,7 +275,7 @@ WKBReader::readGeometry()
 	if (hasSRID) SRID = dis.readInt(); // read SRID
 
 
-	// allocate space for ordValues 
+	// allocate space for ordValues
 	if ( ordValues.size() < inputDimension )
 		ordValues.resize(inputDimension);
 

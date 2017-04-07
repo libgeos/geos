@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::algorithm::ConvexHull
 // Ported from JTS junit/algorithm/ConvexHullTest.java
 
@@ -72,7 +72,7 @@ namespace tut
 	template<>
     template<>
     void object::test<1>()
-    {   
+    {
         using geos::geom::LineString;
 
         GeometryAPtr lineGeom(reader_.read("LINESTRING (30 220, 240 220, 240 220)"));
@@ -91,7 +91,7 @@ namespace tut
 	template<>
     template<>
     void object::test<2>()
-    {   
+    {
         using geos::geom::LineString;
 
         GeometryAPtr geom(reader_.read("MULTIPOINT (130 240, 130 240, 130 240, 570 240, 570 240, 570 240, 650 240)"));
@@ -109,7 +109,7 @@ namespace tut
 	template<>
     template<>
     void object::test<3>()
-    {   
+    {
         using geos::geom::LineString;
 
         GeometryAPtr geom(reader_.read("MULTIPOINT (0 0, 0 0, 10 0)"));
@@ -122,12 +122,12 @@ namespace tut
         geom_ = geom->convexHull();
         ensure( convexHull->equalsExact(geom_) );
     }
-		      
+
 	// 4 - Test convex hull of multipoint
 	template<>
     template<>
     void object::test<4>()
-    {   
+    {
         using geos::geom::LineString;
 
         GeometryAPtr geom(reader_.read("MULTIPOINT (0 0, 10 0, 10 0)"));
@@ -145,7 +145,7 @@ namespace tut
 	template<>
     template<>
     void object::test<5>()
-    {   
+    {
         using geos::geom::LineString;
 
         GeometryAPtr geom(reader_.read("MULTIPOINT (0 0, 5 0, 10 0)"));
@@ -163,7 +163,7 @@ namespace tut
 	template<>
     template<>
     void object::test<6>()
-    {   
+    {
         using geos::geom::LineString;
 
         GeometryAPtr geom(reader_.read("MULTIPOINT (0 0, 5 1, 10 0)"));
@@ -182,7 +182,7 @@ namespace tut
 	template<>
     template<>
     void object::test<7>()
-    {   
+    {
         using geos::geom::LineString;
 
         GeometryAPtr geom(reader_.read("MULTIPOINT (0 0, 0 0, 5 0, 5 0, 10 0, 10 0)"));

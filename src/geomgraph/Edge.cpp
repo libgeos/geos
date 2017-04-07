@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -27,9 +27,9 @@
 #include <sstream>
 
 #include <geos/geomgraph/Edge.h>
-#include <geos/geomgraph/Position.h> 
-#include <geos/geomgraph/Label.h> 
-#include <geos/geomgraph/index/MonotoneChainEdge.h> 
+#include <geos/geomgraph/Position.h>
+#include <geos/geomgraph/Label.h>
+#include <geos/geomgraph/index/MonotoneChainEdge.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -59,7 +59,7 @@ using namespace geos::algorithm;
  * Handles edges from both L and A geometrys.
  */
 void
-Edge::updateIM(const Label& lbl, IntersectionMatrix& im) 
+Edge::updateIM(const Label& lbl, IntersectionMatrix& im)
 {
 	im.setAtLeastIfValid(lbl.getLocation(0,Position::ON),
 	                      lbl.getLocation(1,Position::ON),
@@ -203,8 +203,8 @@ Edge::equals(const Edge& e) const
 {
 	testInvariant();
 
-	unsigned int npts1=getNumPoints(); 
-	unsigned int npts2=e.getNumPoints(); 
+	unsigned int npts1=getNumPoints();
+	unsigned int npts2=e.getNumPoints();
 
 	if (npts1 != npts2 ) return false;
 
@@ -257,7 +257,7 @@ Edge::print() const
 	ss << *this;
 	return ss.str();
 }
-  
+
 // Dunno how to implemente this in terms of operator<<
 string
 Edge::printReverse() const

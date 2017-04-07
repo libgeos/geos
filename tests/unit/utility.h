@@ -1,8 +1,8 @@
-// 
+//
 // GEOS Unit Test utilities, extension of TUT Framework namespace
 //
 #ifndef GEOS_TUT_UTILITY_H_INCLUDED
-#define GEOS_TUT_UTILITY_H_INCLUDED 
+#define GEOS_TUT_UTILITY_H_INCLUDED
 
 // tut
 #include <tut.hpp>
@@ -128,7 +128,7 @@ inline void ensure_equals_geometry(T const* lhs, T const* rhs)
 
     using geos::geom::Polygon;
     using geos::geom::GeometryCollection;
-    
+
     ensure_equals("is-valid do not match",
                   lhs->isValid(), rhs->isValid());
 
@@ -201,7 +201,7 @@ inline void ensure_equals_geometry(geos::geom::GeometryCollection const* lhs,
     {
         Geometry const* g1 = lhs->getGeometryN(i);
         Geometry const* g2 = rhs->getGeometryN(i);
-        ensure_equals_geometry(g1, g2); // breaks on failure 
+        ensure_equals_geometry(g1, g2); // breaks on failure
     }
 }
 
@@ -211,7 +211,7 @@ inline void ensure_equals_geometry(geos::geom::Geometry const* lhs,
 {
     assert(0 != lhs);
     assert(0 != rhs);
-    
+
     geos::geom::Geometry const& pg = rhs->getGeometry();
     ensure_equals_geometry(lhs, &pg);
 }

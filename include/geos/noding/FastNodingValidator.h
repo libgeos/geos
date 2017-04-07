@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -40,17 +40,17 @@ namespace noding { // geos.noding
  * Validates that a collection of {@link SegmentString}s is correctly noded.
  *
  * Uses indexes to improve performance.
- * Does NOT check a-b-a collapse situations. 
+ * Does NOT check a-b-a collapse situations.
  * Also does not check for endpt-interior vertex intersections.
  * This should not be a problem, since the noders should be
  * able to compute intersections between vertices correctly.
- * User may either test the valid condition, or request that a 
- * {@link TopologyException} 
+ * User may either test the valid condition, or request that a
+ * {@link TopologyException}
  * be thrown.
  *
  * @version 1.7
  */
-class FastNodingValidator 
+class FastNodingValidator
 {
 
 public:
@@ -65,9 +65,9 @@ public:
 	}
 
 	/**
-	 * Checks for an intersection and 
+	 * Checks for an intersection and
 	 * reports if one is found.
-	 * 
+	 *
 	 * @return true if the arrangement contains an interior intersection
 	 */
 	bool isValid()
@@ -75,15 +75,15 @@ public:
 		execute();
 		return isValidVar;
 	}
-  
+
 	/**
 	 * Returns an error message indicating the segments containing
 	 * the intersection.
-	 * 
+	 *
 	 * @return an error message documenting the intersection location
 	 */
 	std::string getErrorMessage() const;
-  
+
 	/**
 	 * Checks for an intersection and throws
 	 * a TopologyException if one is found.
@@ -101,7 +101,7 @@ private:
 	std::auto_ptr<SingleInteriorIntersectionFinder> segInt;
 
 	bool isValidVar;
-	
+
 	void execute()
 	{
 		if (segInt.get() != NULL) return;
@@ -109,7 +109,7 @@ private:
 	}
 
 	void checkInteriorIntersections();
-  
+
     // Declare type as noncopyable
     FastNodingValidator(const FastNodingValidator& other);
     FastNodingValidator& operator=(const FastNodingValidator& rhs);

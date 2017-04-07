@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::geom::Location class.
 
 // tut
@@ -70,9 +70,9 @@ namespace tut
 			ensure_equals( Dimension::toDimensionSymbol(curve), '1' );
 			ensure_equals( Dimension::toDimensionSymbol(surface), '2' );
 		}
-		catch ( geos::util::IllegalArgumentException const& e ) 
+		catch ( geos::util::IllegalArgumentException const& e )
 		{
-			fail( e.what() ); 
+			fail( e.what() );
 		}
     }
 
@@ -83,18 +83,18 @@ namespace tut
     {
 		using geos::geom::Dimension;
 
-		try 
+		try
 		{
 			Dimension::toDimensionSymbol(101);
 			Dimension::toDimensionSymbol(-101);
-		
-			fail("IllegalArgumentException expected"); 
+
+			fail("IllegalArgumentException expected");
 		}
-		catch ( geos::util::IllegalArgumentException const& e ) 
-		{ 
-			const char* msg = e.what(); // ok 
+		catch ( geos::util::IllegalArgumentException const& e )
+		{
+			const char* msg = e.what(); // ok
 			ensure( msg != 0 );
-		} 
+		}
     }
 
     // Test of toDimensionValue()
@@ -115,9 +115,9 @@ namespace tut
 			ensure_equals( Dimension::toDimensionValue('1'), curve );
 			ensure_equals( Dimension::toDimensionValue('2'), surface );
 		}
-		catch ( geos::util::IllegalArgumentException const& e ) 
+		catch ( geos::util::IllegalArgumentException const& e )
 		{
-			fail( e.what() ); 
+			fail( e.what() );
 		}
     }
 
@@ -128,18 +128,18 @@ namespace tut
     {
 		using geos::geom::Dimension;
 
-		try 
+		try
 		{
 			Dimension::toDimensionValue('X');
 			Dimension::toDimensionValue('9');
-		
-			fail("IllegalArgumentException expected"); 
+
+			fail("IllegalArgumentException expected");
 		}
-		catch ( geos::util::IllegalArgumentException const& e ) 
-		{ 
-			const char* msg = e.what(); // ok 
+		catch ( geos::util::IllegalArgumentException const& e )
+		{
+			const char* msg = e.what(); // ok
 			ensure( msg != 0 );
-		} 
+		}
     }
 
 } // namespace tut

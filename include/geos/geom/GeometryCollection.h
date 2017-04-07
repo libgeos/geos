@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -49,7 +49,7 @@ namespace geom { // geos::geom
  *
  * \brief Represents a collection of heterogeneous Geometry objects.
  *
- * Collections of Geometry of the same type are 
+ * Collections of Geometry of the same type are
  * represented by GeometryCollection subclasses MultiPoint,
  * MultiLineString, MultiPolygon.
  */
@@ -82,12 +82,12 @@ public:
 	 * \brief
 	 * Collects all coordinates of all subgeometries into a
 	 * CoordinateSequence.
-	 * 
+	 *
 	 * Note that the returned coordinates are copies, so
 	 * you want be able to use them to modify the geometries
 	 * in place. Also you'll need to delete the CoordinateSequence
 	 * when finished using it.
-	 * 
+	 *
 	 * @return the collected coordinates
 	 *
 	 */

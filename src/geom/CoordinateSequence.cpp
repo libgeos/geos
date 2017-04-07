@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -64,7 +64,7 @@ CoordinateSequence::atLeastNCoordinatesOrNothing(size_t n,
 		// FIXME: return NULL rather then empty coordinate array
 		return CoordinateArraySequenceFactory::instance()->create();
 	}
-}      
+}
 
 
 bool

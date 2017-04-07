@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -43,7 +43,7 @@ double strtod_with_vc_fix(const char * str, char ** str_end)
 	double dbl = strtod(str, str_end);
 #if _MSC_VER && !__INTEL_COMPILER
 	// Special handling of NAN and INF in MSVC, where strtod returns 0.0
-	// for NAN and INF.		
+	// for NAN and INF.
 	// This fixes failing test GEOSisValidDetail::test<3>, maybe others
 	// as well.
 	// Note: this hack is not robust, Boost lexical_cast or

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -42,8 +42,8 @@ namespace geos {
 	}
 	namespace geom {
 		class Geometry;
-		class Coordinate; 
-		//class CoordinateSequence; 
+		class Coordinate;
+		//class CoordinateSequence;
 	}
 	namespace index {
 		namespace intervalrtree {
@@ -67,7 +67,7 @@ namespace distance { // geos::algorithm::distance
  * or the geometries with line segments densified by a given fraction.
  * Also determines two points of the Geometries which are separated by the
  * computed distance.
- * 
+ *
  * This algorithm is an approximation to the standard Hausdorff distance.
  * Specifically,
  * <pre>
@@ -82,12 +82,12 @@ namespace distance { // geos::algorithm::distance
  * The default approximation is exact or close enough for a large subset of
  * useful cases.
  * Examples of these are:
- * 
+ *
  * - computing distance between Linestrings that are roughly parallel to
  *   each other, and roughly equal in length.  This occurs in matching
  *   linear networks.
  * - Testing similarity of geometries.
- * 
+ *
  * An example where the default approximation is not close is:
  * <pre>
  *   A = LINESTRING (0 0, 100 0, 10 100, 10 100)

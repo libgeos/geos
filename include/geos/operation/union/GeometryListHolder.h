@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -40,7 +40,7 @@ public:
     GeometryListHolder() {}
     ~GeometryListHolder()
     {
-        std::for_each(ownedItems.begin(), ownedItems.end(), 
+        std::for_each(ownedItems.begin(), ownedItems.end(),
             &GeometryListHolder::deleteItem);
     }
 
@@ -53,7 +53,7 @@ public:
 
     geom::Geometry* getGeometry(std::size_t index)
     {
-      if (index >= this->base_type::size()) 
+      if (index >= this->base_type::size())
           return NULL;
       return (*this)[index];
     }

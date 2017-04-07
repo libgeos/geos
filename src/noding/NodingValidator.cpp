@@ -8,10 +8,10 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
- ********************************************************************** 
+ **********************************************************************
  *
  * Last port: noding/NodingValidator.java rev. 1.6 (JTS-1.7)
  *
@@ -36,7 +36,7 @@ namespace noding { // geos.noding
 
 /*public*/
 void
-NodingValidator::checkValid() 
+NodingValidator::checkValid()
 {
 	checkEndPtVertexIntersections();
 	checkInteriorIntersections();
@@ -82,7 +82,7 @@ NodingValidator::checkCollapse(const Coordinate& p0,
 
 /*private*/
 void
-NodingValidator::checkInteriorIntersections() 
+NodingValidator::checkInteriorIntersections()
 {
 	for (SegmentString::NonConstVect::const_iterator
 		it = segStrings.begin(), itEnd = segStrings.end();
@@ -98,13 +98,13 @@ NodingValidator::checkInteriorIntersections()
 			checkInteriorIntersections(*ss0, *ss1);
 		}
 	}
- 
+
 }
 
 /* private */
 void
 NodingValidator::checkInteriorIntersections(const SegmentString& ss0,
-		const SegmentString& ss1) 
+		const SegmentString& ss1)
 {
 	const CoordinateSequence& pts0 = *(ss0.getCoordinates());
 	const CoordinateSequence& pts1 = *(ss1.getCoordinates());
@@ -120,7 +120,7 @@ NodingValidator::checkInteriorIntersections(const SegmentString& ss0,
 void
 NodingValidator::checkInteriorIntersections(
 		const SegmentString& e0, unsigned int segIndex0,
-		const SegmentString& e1, unsigned int segIndex1) 
+		const SegmentString& e1, unsigned int segIndex1)
 {
 	if (&e0 == &e1 && segIndex0 == segIndex1) return;
 	const Coordinate& p00 = e0.getCoordinates()->getAt(segIndex0);
@@ -184,9 +184,9 @@ NodingValidator::checkEndPtVertexIntersections(const Coordinate& testPt,
 	}
 }
 
- 
 
- 
+
+
 
 /* private */
 bool

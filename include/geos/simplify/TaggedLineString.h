@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -62,7 +62,7 @@ class GEOS_DLL TaggedLineString {
 public:
 
 	typedef std::vector<geom::Coordinate> CoordVect;
-	
+
 	typedef std::auto_ptr<CoordVect> CoordVectPtr;
 
 	typedef geom::CoordinateSequence CoordSeq;

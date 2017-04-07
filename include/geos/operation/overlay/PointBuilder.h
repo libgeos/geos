@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  ***********************************************************************
@@ -74,7 +74,7 @@ private:
 	void filterCoveredNodeToPoint(const geomgraph::Node *);
 
 	/// Allocated a construction time, but not owned.
-	/// Make sure you take ownership of it, getting 
+	/// Make sure you take ownership of it, getting
 	/// it from build()
 	std::vector<geom::Point*> *resultPointList;
 

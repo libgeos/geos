@@ -1,5 +1,5 @@
 // $Id: GEOSNearestPointsTest.cpp 2424 2009-04-29 23:52:36Z mloskot $
-// 
+//
 // Test Suite for C-API GEOSNearestPoints
 
 #include <tut.hpp>
@@ -30,7 +30,7 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
@@ -38,7 +38,7 @@ namespace tut
             : geom1_(0), geom2_(0)
         {
             initGEOS(notice, notice);
-        }       
+        }
 
         ~test_capigeosnearestpoints_data()
         {
@@ -83,7 +83,7 @@ namespace tut
         geom1_ = GEOSGeomFromWKT("POLYGON((1 1,1 5,5 5,5 1,1 1))");
         // geom2_ = GEOSGeomFromWKT("POINT(8 8)");
         geom2_ = GEOSGeomFromWKT("POLYGON((8 8, 9 9, 9 10, 8 8))");
-        
+
         ensure( 0 != geom1_ );
         ensure( 0 != geom2_ );
 
@@ -115,6 +115,6 @@ namespace tut
 
         GEOSCoordSeq_destroy(coords_);
     }
-    
+
 } // namespace tut
 

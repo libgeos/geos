@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -106,10 +106,10 @@ RectangleIntersection::clip_point(const geom::Point * g,
 {
   if(g == NULL)
 	return;
-  
+
   double x = g->getX();
   double y = g->getY();
-  
+
   if(rect.position(x,y) == Rectangle::Inside)
 	parts.add(dynamic_cast<geom::Point*>(g->clone()));
 }
@@ -569,7 +569,7 @@ RectangleIntersection::clip_linestring(const geom::LineString * g,
 
   if(clip_linestring_parts(g, parts, rect))
 	parts.add(dynamic_cast<geom::LineString *>(g->clone()));
-  
+
 }
 
 void
@@ -593,7 +593,7 @@ RectangleIntersection::clip_multilinestring(const geom::MultiLineString * g,
 {
   if(g == NULL || g->isEmpty())
 	return;
-  
+
   for(int i=0, n=g->getNumGeometries(); i<n; ++i)
 	{
 	  clip_linestring(dynamic_cast<const geom::LineString *>(g->getGeometryN(i)),
@@ -626,7 +626,7 @@ RectangleIntersection::clip_geometrycollection(
 {
   if(g == NULL || g->isEmpty())
 	return;
-  
+
   for(int i=0, n=g->getNumGeometries(); i<n; ++i)
 	{
 	  clip_geom(g->getGeometryN(i),

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  *
@@ -30,10 +30,10 @@ namespace geos {
 			class PointOnGeometryLocator;
 		}
 	}
-	namespace geom { 
+	namespace geom {
 		class Geometry;
 
-		namespace prep { 
+		namespace prep {
 			class PreparedPolygon;
 		}
 	}
@@ -50,11 +50,11 @@ namespace prep { // geos::geom::prep
 /**
  * \brief
  * A base class for predicate operations on {@link PreparedPolygon}s.
- * 
+ *
  * @author mbdavis
  *
  */
-class PreparedPolygonPredicate 
+class PreparedPolygonPredicate
 {
 private:
     // Declare type as noncopyable
@@ -65,11 +65,11 @@ protected:
 	const PreparedPolygon * const prepPoly;
 
 	/** \brief
-	 * Tests whether all components of the test Geometry 
+	 * Tests whether all components of the test Geometry
 	 * are contained in the target geometry.
 	 *
 	 * Handles both linear and point components.
-	 * 
+	 *
 	 * @param geom a geometry to test
 	 * @return true if all components of the argument are contained
 	 *              in the target geometry
@@ -77,11 +77,11 @@ protected:
 	bool isAllTestComponentsInTarget(const geom::Geometry * testGeom) const;
 
 	/** \brief
-	 * Tests whether all components of the test Geometry 
+	 * Tests whether all components of the test Geometry
 	 * are contained in the interior of the target geometry.
 	 *
 	 * Handles both linear and point components.
-	 * 
+	 *
 	 * @param geom a geometry to test
 	 * @return true if all componenta of the argument are contained in
 	 *              the target geometry interior
@@ -93,7 +93,7 @@ protected:
 	 * the area of the target geometry.
 	 *
 	 * Handles test geometries with both linear and point components.
-	 * 
+	 *
 	 * @param geom a geometry to test
 	 * @return true if any component of the argument intersects the
 	 *              prepared geometry
@@ -105,7 +105,7 @@ protected:
 	 * the interior of the target geometry.
 	 *
 	 * Handles test geometries with both linear and point components.
-	 * 
+	 *
 	 * @param geom a geometry to test
 	 * @return true if any component of the argument intersects the
 	 *              prepared area geometry interior
@@ -113,9 +113,9 @@ protected:
 	bool isAnyTestComponentInTargetInterior( const geom::Geometry * testGeom) const;
 
 	/**
-	 * Tests whether any component of the target geometry 
+	 * Tests whether any component of the target geometry
 	 * intersects the test geometry (which must be an areal geometry)
-	 * 
+	 *
 	 * @param geom the test geometry
 	 * @param repPts the representative points of the target geometry
 	 * @return true if any component intersects the areal test geometry
@@ -125,7 +125,7 @@ protected:
 public:
 	/**
 	 * Creates an instance of this operation.
-	 * 
+	 *
 	 * @param prepPoly the PreparedPolygon to evaluate
 	 */
 	PreparedPolygonPredicate( const PreparedPolygon * const prepPoly)

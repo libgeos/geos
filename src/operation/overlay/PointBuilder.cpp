@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  ***********************************************************************
@@ -80,12 +80,12 @@ PointBuilder::extractNonCoveredResultNodes(OverlayOp::OpCode opCode)
 		{
 
 			/**
-			 * For nodes on edges, only INTERSECTION can result 
+			 * For nodes on edges, only INTERSECTION can result
 			 * in edge nodes being included even
 			 * if none of their incident edges are included
 			 */
 			const Label& label=n->getLabel();
-			if (OverlayOp::isResultOfOp(label, opCode)) 
+			if (OverlayOp::isResultOfOp(label, opCode))
 				filterCoveredNodeToPoint(n);
 		}
 	}

@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -51,11 +51,11 @@ namespace valid { // geos::operation::valid
  * is consistent with the OGC-SFS semantics for area geometries.
  *
  * Checks include:
- * 
+ *
  * - testing for rings which self-intersect (both properly
  *   and at nodes)
  * - testing for duplicate rings
- * 
+ *
  * If an inconsistency if found the location of the problem
  * is recorded.
  */
@@ -66,16 +66,16 @@ namespace valid { // geos::operation::valid
  * This check is required for any reasonable polygonal model
  * (including the OGC-SFS model, as well as models which allow ring
  * self-intersection at single points)
- * 
+ *
  * Checks include:
- * 
+ *
  *  - test for rings which properly intersect
  *    (but not for ring self-intersection, or intersections at vertices)
  *  - test for consistent labelling at all node points
  *    (this detects vertex intersections with invalid topology,
  *    i.e. where the exterior side of an edge lies in the interior of the area)
  *  - test for duplicate rings
- * 
+ *
  * If an inconsistency is found the location of the problem
  * is recorded and is available to the caller.
  *

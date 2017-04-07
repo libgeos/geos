@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -22,7 +22,7 @@
 #define GEOS_GEOMGRAPH_LABEL_H
 
 #include <geos/export.h>
-#include <geos/geomgraph/TopologyLocation.h> 
+#include <geos/geomgraph/TopologyLocation.h>
 
 #include <geos/inline.h>
 
@@ -36,7 +36,7 @@ namespace geomgraph { // geos.geomgraph
  * of a topology graph to a given <code>Geometry</code>.
  * This class supports labels for relationships to two <code>Geometry</code>s,
  * which is sufficient for algorithms for binary operations.
- * 
+ *
  * Topology graphs support the concept of labeling nodes and edges in the graph.
  * The label of a node or edge specifies its topological relationship to one or
  * more geometries.  (In fact, since JTS operations have only two arguments labels
@@ -75,7 +75,7 @@ public:
 	/** \brief
 	 * Construct a Label with the location specified
 	 * for the given Geometry.
-	 * 
+	 *
 	 * Other geometry location will be set to
 	 * Location::UNDEF.
 	 */
@@ -95,7 +95,7 @@ public:
 
 	/** \brief
 	 * Initialize both locations to Location::UNDEF
-	 * 
+	 *
 	 * isNull() should return true after this kind of construction
 	 */
 	Label();

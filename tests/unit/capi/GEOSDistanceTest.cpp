@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSDistance
 
 #include <tut.hpp>
@@ -36,7 +36,7 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
@@ -46,7 +46,7 @@ namespace tut
             initGEOS(notice, notice);
             w_ = GEOSWKTWriter_create();
             GEOSWKTWriter_setTrim(w_, 1);
-        }       
+        }
 
         ~test_capigeosdistance_data()
         {

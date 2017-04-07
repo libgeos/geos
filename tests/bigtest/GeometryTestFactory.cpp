@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -66,7 +66,7 @@ CoordinateSequence* GeometryTestFactory::createBox(double minx, double miny,int 
 	* @param nPts the number of points in the star
 	*/
 CoordinateSequence* GeometryTestFactory::createCircle(double basex,double basey,double size,int nPts) {
-	CoordinateSequence *pts=new CoordinateArraySequence(nPts+1); 
+	CoordinateSequence *pts=new CoordinateArraySequence(nPts+1);
 	double len=size/2.0;
 
 	for(int i=0;i<nPts;i++) {
@@ -102,7 +102,7 @@ CoordinateSequence* GeometryTestFactory::createSineStar(double basex,double base
 	if (nArmPt<5) nArmPt=5;
 
 	//int nPts2=nArmPt*nArms;
-	CoordinateSequence *pts=new CoordinateArraySequence(); 
+	CoordinateSequence *pts=new CoordinateArraySequence();
 
 	double starAng=0.0;
 

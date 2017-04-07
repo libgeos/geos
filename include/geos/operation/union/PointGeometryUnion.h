@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -37,14 +37,14 @@ namespace operation { // geos::operation
 namespace geounion {  // geos::operation::geounion
 
 /**
- * \brief 
+ * \brief
  * Computes the union of a {@link Puntal} geometry with
  * another arbitrary {@link Geometry}.
  *
  * Does not copy any component geometries.
  *
  */
-class GEOS_DLL PointGeometryUnion 
+class GEOS_DLL PointGeometryUnion
 {
 public:
 

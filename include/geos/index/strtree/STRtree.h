@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -35,8 +35,8 @@
 
 // Forward declarations
 namespace geos {
-	namespace index { 
-		namespace strtree { 
+	namespace index {
+		namespace strtree {
 			class Boundable;
 		}
 	}
@@ -48,17 +48,17 @@ namespace strtree { // geos::index::strtree
 
 /**
  * \brief
- * A query-only R-tree created using the Sort-Tile-Recursive (STR) algorithm. 
- * For two-dimensional spatial data. 
+ * A query-only R-tree created using the Sort-Tile-Recursive (STR) algorithm.
+ * For two-dimensional spatial data.
  *
  * The STR packed R-tree is simple to implement and maximizes space
  * utilization; that is, as many leaves as possible are filled to capacity.
  * Overlap between nodes is far less than in a basic R-tree. However, once the
  * tree has been built (explicitly or on the first call to #query), items may
- * not be added or removed. 
- * 
+ * not be added or removed.
+ *
  * Described in: P. Rigaux, Michel Scholl and Agnes Voisard. Spatial
- * Databases With Application To GIS. Morgan Kaufmann, San Francisco, 2002. 
+ * Databases With Application To GIS. Morgan Kaufmann, San Francisco, 2002.
  *
  */
 class GEOS_DLL STRtree: public AbstractSTRtree, public SpatialIndex
@@ -104,7 +104,7 @@ private:
 protected:
 
 	AbstractNode* createNode(int level);
-	
+
 	IntersectsOp* getIntersectsOp() {
 		return &intersectsOp;
 	}

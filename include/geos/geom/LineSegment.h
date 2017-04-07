@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -45,7 +45,7 @@ namespace geom { // geos::geom
  * Represents a line segment defined by two Coordinate.
  * Provides methods to compute various geometric properties
  * and relationships of line segments.
- * 
+ *
  * This class is designed to be easily mutable (to the extent of
  * having its contained points public).
  * This supports a common pattern of reusing a single LineSegment
@@ -211,7 +211,7 @@ public:
 	 *         (positive is to the left, negative is to the right)
 	 *
 	 * @param ret will be set to the point at that distance and offset
-	 * 
+	 *
 	 * @throws IllegalStateException if the segment has zero length
 	 */
 	void pointAlongOffset(double segmentLengthFraction,
@@ -220,8 +220,8 @@ public:
 
 	/** \brief
 	 * Compute the projection factor for the projection of the point p
-	 * onto this LineSegment. 
-	 * 
+	 * onto this LineSegment.
+	 *
 	 * The projection factor is the constant r
 	 * by which the vector for this segment must be multiplied to
 	 * equal the vector for the projection of p on the line
@@ -244,7 +244,7 @@ public:
 	 * If the point is beyond either ends of the line segment,
 	 * the closest fractional value (<tt>0.0</tt> or <tt>1.0</tt>)
 	 * is returned.
-	 * 
+	 *
 	 * Essentially, this is the {@link #projectionFactor} clamped to
 	 * the range <tt>[0.0, 1.0]</tt>.
 	 *
@@ -257,7 +257,7 @@ public:
 	/** \brief
 	 * Compute the projection of a point onto the line determined
 	 * by this line segment.
-	 * 
+	 *
 	 * Note that the projected point
 	 * may lie outside the line segment.  If this is the case,
 	 * the projection factor will lie outside the range [0.0, 1.0].
@@ -266,12 +266,12 @@ public:
 
 	/** \brief
 	 * Project a line segment onto this line segment and return the resulting
-	 * line segment. 
+	 * line segment.
 	 *
 	 * The returned line segment will be a subset of
 	 * the target line line segment.  This subset may be null, if
 	 * the segments are oriented in such a way that there is no projection.
-	 * 
+	 *
 	 * Note that the returned line may have zero length (i.e. the same endpoints).
 	 * This can happen for instance if the lines are perpendicular to one another.
 	 *
@@ -329,7 +329,7 @@ public:
 	 * if there is one.
 	 * There may be 0, 1 or many intersection points between two segments.
 	 * If there are 0, null is returned. If there is 1 or more, a single
-	 * one is returned (chosen at the discretion of the algorithm). 
+	 * one is returned (chosen at the discretion of the algorithm).
 	 * If more information is required about the details of the
 	 * intersection, the LineIntersector class should be used.
 	 *

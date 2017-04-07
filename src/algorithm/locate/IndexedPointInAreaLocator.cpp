@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -24,14 +24,14 @@
 #include <geos/index/intervalrtree/SortedPackedIntervalRTree.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/algorithm/RayCrossingCounter.h>
-#include <geos/index/ItemVisitor.h> 
+#include <geos/index/ItemVisitor.h>
 
 #include <algorithm>
 #include <typeinfo>
 
 namespace geos {
-namespace algorithm { 
-namespace locate { 
+namespace algorithm {
+namespace locate {
 //
 // private:
 //
@@ -45,13 +45,13 @@ IndexedPointInAreaLocator::IntervalIndexedGeometry::~IntervalIndexedGeometry( )
 {
 	delete index;
 
-	for ( size_t i = 0, ni = allocatedSegments.size(); i < ni; ++i ) 
+	for ( size_t i = 0, ni = allocatedSegments.size(); i < ni; ++i )
 	{
 		delete allocatedSegments[i];
 	}
 }
 
-void 
+void
 IndexedPointInAreaLocator::IntervalIndexedGeometry::init( const geom::Geometry & g)
 {
 	geom::LineString::ConstVect lines;
@@ -68,23 +68,23 @@ IndexedPointInAreaLocator::IntervalIndexedGeometry::init( const geom::Geometry &
 	}
 }
 
-void 
+void
 IndexedPointInAreaLocator::IntervalIndexedGeometry::addLine( geom::CoordinateSequence * pts)
 {
-	for ( size_t i = 1, ni = pts->size(); i < ni; i++ ) 
+	for ( size_t i = 1, ni = pts->size(); i < ni; i++ )
 	{
 		geom::LineSegment * seg = new geom::LineSegment( (*pts)[ i - 1 ], (*pts)[ i ]);
 		double const min = std::min( seg->p0.y, seg->p1.y);
 		double const max = std::max( seg->p0.y, seg->p1.y);
-		
+
 		// NOTE: seg ownership still ours
 		allocatedSegments.push_back(seg);
 		index->insert( min, max, seg);
 	}
-} 
+}
 
 
-void 
+void
 IndexedPointInAreaLocator::buildIndex( const geom::Geometry & g)
 {
 	index = new IndexedPointInAreaLocator::IntervalIndexedGeometry( g);
@@ -102,11 +102,11 @@ IndexedPointInAreaLocator::IndexedPointInAreaLocator( const geom::Geometry & g)
 :	areaGeom( g)
 {
 	if (	typeid( areaGeom) != typeid( geom::Polygon)
-		&&	typeid( areaGeom) != typeid( geom::MultiPolygon) ) 
+		&&	typeid( areaGeom) != typeid( geom::MultiPolygon) )
 		throw new util::IllegalArgumentException("Argument must be Polygonal");
 
 	//areaGeom = g;
-	
+
 	buildIndex( areaGeom);
 }
 
@@ -115,7 +115,7 @@ IndexedPointInAreaLocator::~IndexedPointInAreaLocator()
 	delete index;
 }
 
-int 
+int
 IndexedPointInAreaLocator::locate( const geom::Coordinate * /*const*/ p)
 {
 	algorithm::RayCrossingCounter rcc(*p);
@@ -127,7 +127,7 @@ IndexedPointInAreaLocator::locate( const geom::Coordinate * /*const*/ p)
 	return rcc.getLocation();
 }
 
-void 
+void
 IndexedPointInAreaLocator::SegmentVisitor::visitItem( void * item)
 {
 	geom::LineSegment * seg = (geom::LineSegment *)item;
@@ -135,7 +135,7 @@ IndexedPointInAreaLocator::SegmentVisitor::visitItem( void * item)
 	counter->countSegment( (*seg)[ 0 ], (*seg)[ 1 ]);
 }
 
-void 
+void
 IndexedPointInAreaLocator::IntervalIndexedGeometry::query( double min, double max, index::ItemVisitor * visitor)
 {
 	index->query( min, max, visitor);

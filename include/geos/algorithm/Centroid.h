@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -105,14 +105,14 @@ private:
   double areasum2;
   double totalLength;
   int ptCount;
-  
+
   /**
    * Adds a Geometry to the centroid total.
    *
    * @param geom the geometry to add
    */
   void add(const geom::Geometry& geom);
-  
+
   void setBasePoint(const geom::Coordinate& basePt);
 
   void add(const geom::Polygon& poly);

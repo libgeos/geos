@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -52,9 +52,9 @@ const double EDGE_COINCIDENCE_TOL_FACTOR = 1000;
 
 /**
  * A class that contains the {@link QuadEdge}s representing a planar
- * subdivision that models a triangulation. 
+ * subdivision that models a triangulation.
  * The subdivision is constructed using the
- * quadedge algebra defined in the classs {@link QuadEdge}. 
+ * quadedge algebra defined in the classs {@link QuadEdge}.
  * All metric calculations
  * are done in the {@link Vertex} class.
  * In addition to a triangulation, subdivisions
@@ -71,7 +71,7 @@ const double EDGE_COINCIDENCE_TOL_FACTOR = 1000;
  * edges. The frame is used to provide a bounded "container" for all edges
  * within a TIN. Normally the frame edges, frame connecting edges, and frame
  * triangles are not included in client processing.
- * 
+ *
  * @author JTS: David Skea
  * @author JTS: Martin Davis
  * @author Benjamin Campbell
@@ -82,10 +82,10 @@ public:
 
 	/**
 	 * Gets the edges for the triangle to the left of the given {@link QuadEdge}.
-	 * 
+	 *
 	 * @param startQE
 	 * @param triEdge
-	 * 
+	 *
 	 * @throws IllegalArgumentException
 	 *           if the edges do not form a triangle
 	 */
@@ -107,7 +107,7 @@ public:
 	 * Creates a new instance of a quad-edge subdivision based on a frame triangle
 	 * that encloses a supplied bounding box. A new super-bounding box that
 	 * contains the triangle is computed and stored.
-	 * 
+	 *
 	 * @param env
 	 *          the bouding box to surround
 	 * @param tolerance
@@ -119,14 +119,14 @@ public:
 
 private:
 	virtual void createFrame(const geom::Envelope &env);
-	
+
 	virtual void initSubdiv(QuadEdge* initEdges[3]);
-	
+
 public:
 	/**
 	 * Gets the vertex-equality tolerance value
 	 * used in this subdivision
-	 * 
+	 *
 	 * @return the tolerance value
 	 */
 	inline double getTolerance() const {
@@ -135,7 +135,7 @@ public:
 
 	/**
 	 * Gets the envelope of the Subdivision (including the frame).
-	 * 
+	 *
 	 * @return the envelope
 	 */
 	inline const geom::Envelope& getEnvelope() const {
@@ -145,7 +145,7 @@ public:
 	/**
 	 * Gets the collection of base {@link QuadEdge}s (one for every pair of
 	 * vertices which is connected).
-	 * 
+	 *
 	 * @return a QuadEdgeList
 	 */
 	inline const QuadEdgeList& getEdges() const {
@@ -155,7 +155,7 @@ public:
 	/**
 	 * Sets the {@link QuadEdgeLocator} to use for locating containing triangles
 	 * in this subdivision.
-	 * 
+	 *
 	 * @param locator
 	 *          a QuadEdgeLocator
 	 */
@@ -165,7 +165,7 @@ public:
 
 	/**
 	 * Creates a new quadedge, recording it in the edges list.
-	 * 
+	 *
 	 * @param o
 	 * @param d
 	 * @return
@@ -176,7 +176,7 @@ public:
 	 * Creates a new QuadEdge connecting the destination of a to the origin of b,
 	 * in such a way that all three have the same left face after the connection
 	 * is complete. The quadedge is recorded in the edges list.
-	 * 
+	 *
 	 * @param a
 	 * @param b
 	 * @return
@@ -186,22 +186,22 @@ public:
 	/**
 	 * Deletes a quadedge from the subdivision. Linked quadedges are updated to
 	 * reflect the deletion.
-	 * 
+	 *
 	 * @param e
 	 *          the quadedge to delete
 	 */
 	void remove(QuadEdge &e);
 
 	/**
-	 * Locates an edge of a triangle which contains a location 
-	 * specified by a Vertex v. 
+	 * Locates an edge of a triangle which contains a location
+	 * specified by a Vertex v.
 	 * The edge returned has the
 	 * property that either v is on e, or e is an edge of a triangle containing v.
 	 * The search starts from startEdge amd proceeds on the general direction of v.
 	 * <p>
 	 * This locate algorithm relies on the subdivision being Delaunay. For
 	 * non-Delaunay subdivisions, this may loop for ever.
-	 * 
+	 *
 	 * @param v the location to search for
 	 * @param startEdge an edge of the subdivision to start searching at
 	 * @returns a QuadEdge which contains v, or is on the edge of a triangle containing v
@@ -214,9 +214,9 @@ public:
 			const QuadEdge &startEdge) const;
 
 	/**
-	 * Finds a quadedge of a triangle containing a location 
+	 * Finds a quadedge of a triangle containing a location
 	 * specified by a {@link Vertex}, if one exists.
-	 * 
+	 *
 	 * @param x the vertex to locate
 	 * @return a quadedge on the edge of a triangle which touches or contains the location
 	 * @return null if no such triangle exists. The returned pointer should not be
@@ -229,7 +229,7 @@ public:
 	/**
 	 * Finds a quadedge of a triangle containing a location
 	 * specified by a {@link Coordinate}, if one exists.
-	 * 
+	 *
 	 * @param p the Coordinate to locate
 	 * @return a quadedge on the edge of a triangle which touches or contains the location
 	 * @return null if no such triangle exists. The returned pointer should not be
@@ -242,7 +242,7 @@ public:
 	/**
 	 * Locates the edge between the given vertices, if it exists in the
 	 * subdivision.
-	 * 
+	 *
 	 * @param p0 a coordinate
 	 * @param p1 another coordinate
 	 * @return the edge joining the coordinates, if present
@@ -262,7 +262,7 @@ public:
 	 * This method does NOT check if the inserted vertex falls on an edge. This
 	 * must be checked by the caller, since this situation may cause erroneous
 	 * triangulation
-	 * 
+	 *
 	 * @param v
 	 *          the vertex to insert
 	 * @return a new quad edge terminating in v
@@ -271,7 +271,7 @@ public:
 
 	/**
 	 * Tests whether a QuadEdge is an edge incident on a frame triangle vertex.
-	 * 
+	 *
 	 * @param e
 	 *          the edge to test
 	 * @return true if the edge is connected to the frame triangle
@@ -282,7 +282,7 @@ public:
 	 * Tests whether a QuadEdge is an edge on the border of the frame facets and
 	 * the internal facets. E.g. an edge which does not itself touch a frame
 	 * vertex, but which touches an edge which does.
-	 * 
+	 *
 	 * @param e
 	 *          the edge to test
 	 * @return true if the edge is on the border of the frame
@@ -291,7 +291,7 @@ public:
 
 	/**
 	 * Tests whether a vertex is a vertex of the outer triangle.
-	 * 
+	 *
 	 * @param v
 	 *          the vertex to test
 	 * @return true if the vertex is an outer triangle vertex
@@ -302,7 +302,7 @@ public:
 	/**
 	 * Tests whether a {@link Coordinate} lies on a {@link QuadEdge}, up to a
 	 * tolerance determined by the subdivision tolerance.
-	 * 
+	 *
 	 * @param e
 	 *          a QuadEdge
 	 * @param p
@@ -314,7 +314,7 @@ public:
 	/**
 	 * Tests whether a {@link Vertex} is the start or end vertex of a
 	 * {@link QuadEdge}, up to the subdivision tolerance distance.
-	 * 
+	 *
 	 * @param e
 	 * @param v
 	 * @return true if the vertex is a endpoint of the edge
@@ -322,17 +322,17 @@ public:
 	bool isVertexOfEdge(const QuadEdge &e, const Vertex &v) const;
 
 	/**
-	 * Gets all primary quadedges in the subdivision. 
+	 * Gets all primary quadedges in the subdivision.
 	 * A primary edge is a {@link QuadEdge}
-	 * which occupies the 0'th position in its array of associated quadedges. 
+	 * which occupies the 0'th position in its array of associated quadedges.
 	 * These provide the unique geometric edges of the triangulation.
-	 * 
+	 *
 	 * @param includeFrame true if the frame edges are to be included
 	 * @return a List of QuadEdges. The caller takes ownership of the returned QuadEdgeList but not the
 	 * items it contains.
 	 */
 	std::auto_ptr<QuadEdgeList> getPrimaryEdges(bool includeFrame);
-  
+
 	/*****************************************************************************
 	 * Visitors
 	 ****************************************************************************/
@@ -354,7 +354,7 @@ private:
 	/**
 	 * Stores the edges for a visited triangle. Also pushes sym (neighbour) edges
 	 * on stack to visit later.
-	 * 
+	 *
 	 * @param edge
 	 * @param edgeStack
 	 * @param includeFrame
@@ -367,7 +367,7 @@ private:
 
 	/**
 	 * Gets the coordinates for each triangle in the subdivision as an array.
-	 * 
+	 *
 	 * @param includeFrame
 	 *          true if the frame triangles should be included
 	 * @param triList a list of Coordinate[4] representing each triangle
@@ -382,7 +382,7 @@ public:
 	/**
 	 * Gets the geometry for the edges in the subdivision as a {@link MultiLineString}
 	 * containing 2-point lines.
-	 * 
+	 *
 	 * @param geomFact the GeometryFactory to use
 	 * @return a MultiLineString. The caller takes ownership of the returned object.
 	 */
@@ -391,17 +391,17 @@ public:
 	/**
 	 * Gets the geometry for the triangles in a triangulated subdivision as a {@link GeometryCollection}
 	 * of triangular {@link Polygon}s.
-	 * 
+	 *
 	 * @param geomFact the GeometryFactory to use
 	 * @return a GeometryCollection of triangular Polygons. The caller takes ownership of the returned object.
 	 */
 	std::auto_ptr<geom::GeometryCollection> getTriangles(const geom::GeometryFactory &geomFact);
 
-	/**  
+	/**
 	 * Gets the cells in the Voronoi diagram for this triangulation.
 	 * The cells are returned as a {@link GeometryCollection} of {@link Polygon}s
 	 * The userData of each polygon is set to be the {@link Coordinate}
-	 * of the cell site.  This allows easily associating external 
+	 * of the cell site.  This allows easily associating external
 	 * data associated with the sites to the cells.
 	 *
 	 * @param geomFact a geometry factory
@@ -409,11 +409,11 @@ public:
 	 */
 	std::auto_ptr<geom::GeometryCollection> getVoronoiDiagram(const geom::GeometryFactory& geomFact);
 
-	/**  
+	/**
 	 * Gets the cells in the Voronoi diagram for this triangulation.
 	 * The cells are returned as a {@link GeometryCollection} of {@link LineString}s
 	 * The userData of each polygon is set to be the {@link Coordinate}
-	 * of the cell site.  This allows easily associating external 
+	 * of the cell site.  This allows easily associating external
 	 * data associated with the sites to the cells.
 	 *
 	 * @param geomFact a geometry factory
@@ -421,11 +421,11 @@ public:
 	 */
 	std::auto_ptr<geom::MultiLineString> getVoronoiDiagramEdges(const geom::GeometryFactory& geomFact);
 
-	/**  
-	 * Gets a List of {@link Polygon}s for the Voronoi cells 
+	/**
+	 * Gets a List of {@link Polygon}s for the Voronoi cells
 	 * of this triangulation.
 	 * The userData of each polygon is set to be the {@link Coordinate}
-	 * of the cell site.  This allows easily associating external 
+	 * of the cell site.  This allows easily associating external
 	 * data associated with the sites to the cells.
 	 *
 	 * @param geomFact a geometry factory
@@ -433,29 +433,29 @@ public:
 	 */
 	std::auto_ptr< std::vector<geom::Geometry*> > getVoronoiCellPolygons(const geom::GeometryFactory& geomFact);
 
-	/**  
-	 * Gets a List of {@link LineString}s for the Voronoi cells 
+	/**
+	 * Gets a List of {@link LineString}s for the Voronoi cells
 	 * of this triangulation.
 	 * The userData of each LineString is set to be the {@link Coordinate}
-	 * of the cell site.  This allows easily associating external 
+	 * of the cell site.  This allows easily associating external
 	 * data associated with the sites to the cells.
 	 *
 	 * @param geomFact a geometry factory
 	 * @return a List of LineString
 	 */
 	std::auto_ptr< std::vector<geom::Geometry*> > getVoronoiCellEdges(const geom::GeometryFactory& geomFact);
-	
+
 	/**
 	 * Gets a collection of {@link QuadEdge}s whose origin
 	 * vertices are a unique set which includes
-	 * all vertices in the subdivision. 
+	 * all vertices in the subdivision.
 	 * The frame vertices can be included if required.
-	 * This is useful for algorithms which require traversing the 
+	 * This is useful for algorithms which require traversing the
 	 * subdivision starting at all vertices.
 	 * Returning a quadedge for each vertex
-	 * is more efficient than 
+	 * is more efficient than
 	 * the alternative of finding the actual vertices
-	 * using {@link #getVertices} and then locating 
+	 * using {@link #getVertices} and then locating
 	 * quadedges attached to them.
 	 *
 	 * @param includeFrame true if the frame vertices should be included
@@ -467,7 +467,7 @@ public:
 	 * Gets the Voronoi cell around a site specified
 	 * by the origin of a QuadEdge.
 	 * The userData of the polygon is set to be the {@link Coordinate}
-	 * of the site.  This allows attaching external 
+	 * of the site.  This allows attaching external
 	 * data associated with the site to this cell polygon.
 	 *
 	 * @param qe a quadedge originating at the cell site
@@ -480,7 +480,7 @@ public:
 	 * Gets the Voronoi cell edge around a site specified
 	 * by the origin of a QuadEdge.
 	 * The userData of the LineString is set to be the {@link Coordinate}
-	 * of the site.  This allows attaching external 
+	 * of the site.  This allows attaching external
 	 * data associated with the site to this cell polygon.
 	 *
 	 * @param qe a quadedge originating at the cell site

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -36,7 +36,7 @@ namespace quadtree { // geos::index::quadtree
  * For some operations (such as determining the exponent)
  * this is more accurate than using mathematical operations
  * (which suffer from round-off error).
- * 
+ *
  * The algorithms and constants in this class
  * apply only to IEEE-754 double-precision floating point format.
  *

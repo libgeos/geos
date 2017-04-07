@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -74,7 +74,7 @@ PolygonBuilder::add(PlanarGraph *graph)
 
 	size_t eeSize=ee.size();
 
-#if GEOS_DEBUG 
+#if GEOS_DEBUG
 	cerr << __FUNCTION__ << ": PlanarGraph has " << eeSize << " EdgeEnds" << endl;
 #endif
 

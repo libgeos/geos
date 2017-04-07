@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSBuffer and GEOSBufferWithStyle
 
 #include <tut.hpp>
@@ -34,7 +34,7 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
@@ -44,7 +44,7 @@ namespace tut
             initGEOS(notice, notice);
             wktw_ = GEOSWKTWriter_create();
             GEOSWKTWriter_setTrim(wktw_, 1);
-        }       
+        }
 
         ~test_capigeosbuffer_data()
         {
@@ -222,7 +222,7 @@ namespace tut
         ensure_distance(area_, 111.803, 0.001);
     }
 
-    // Buffer with flat end cap on a 2-vertices horizontal line 
+    // Buffer with flat end cap on a 2-vertices horizontal line
     template<>
     template<>
     void object::test<8>()
@@ -248,7 +248,7 @@ namespace tut
         ));
     }
 
-    // Buffer with square end cap on a 2-vertices horizontal line 
+    // Buffer with square end cap on a 2-vertices horizontal line
     template<>
     template<>
     void object::test<9>()

@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -45,11 +45,11 @@ namespace geos {
 		class MultiLineString;
 		class MultiPolygon;
 		class PrecisionModel;
-	} 
+	}
 	namespace io {
 		class Writer;
-	} 
-} 
+	}
+}
 
 
 namespace geos {
@@ -60,15 +60,15 @@ namespace io {
  *
  * \brief Outputs the textual representation of a Geometry.
  * See also WKTReader.
- * 
+ *
  * The WKTWriter outputs coordinates rounded to the precision
  * model. No more than the maximum number of necessary decimal places will be
  * output.
- * 
+ *
  * The Well-known Text format is defined in the <A
  * HREF="http://www.opengis.org/techno/specs.htm">OpenGIS Simple Features
  * Specification for SQL</A>.
- * 
+ *
  * A non-standard "LINEARRING" tag is used for LinearRings. The WKT spec does
  * not define a special tag for LinearRings. The standard tag to use is
  * "LINESTRING".
@@ -101,7 +101,7 @@ public:
 	 *
 	 * @return the WKT
 	 */
-	static std::string toLineString(const geom::CoordinateSequence& seq); 
+	static std::string toLineString(const geom::CoordinateSequence& seq);
 
 	/**
 	 * Generates the WKT for a 2-point <code>LineString</code>.
@@ -121,7 +121,7 @@ public:
 	 * @return the WKT
 	 */
 	static std::string toPoint(const geom::Coordinate& p0);
- 
+
 	/**
 	 * Sets the rounding precision when writing the WKT
 	 * a precision of -1 disables it
@@ -159,14 +159,14 @@ public:
 	int getOutputDimension() const { return defaultOutputDimension; }
 
 	/*
-	 * Sets the output dimension used by the <code>WKBWriter</code>.  
+	 * Sets the output dimension used by the <code>WKBWriter</code>.
 	 *
-	 * @param newOutputDimension Supported values are 2 or 3. 
+	 * @param newOutputDimension Supported values are 2 or 3.
 	 *        Note that 3 indicates up to 3 dimensions will be
 	 *        written but 2D WKB is still produced for 2D geometries.
 	 */
 	void setOutputDimension(int newOutputDimension);
-	
+
 protected:
 
   int decimalPlaces;

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -34,12 +34,12 @@ namespace noding { // geos.noding
  * Methods for computing and working with octants of the Cartesian plane.
  *
  * Octants are numbered as follows:
- * 
- *   2|1 
+ *
+ *   2|1
  * 3  |  0
  * ---+--
  * 4  |  7
- *   5|6 
+ *   5|6
  *
  * If line segments lie along a coordinate axis, the octant is the lower of the two
  * possible values.
@@ -61,7 +61,7 @@ public:
 	 * Returns the octant of a directed line segment from p0 to p1.
 	 */
 	static int octant(const geom::Coordinate& p0, const geom::Coordinate& p1);
-	
+
     static int octant(const geom::Coordinate* p0, const geom::Coordinate* p1)
     {
         ::geos::ignore_unused_variable_warning(p0);

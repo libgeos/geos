@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for Geometry's equals() function
 
 // tut

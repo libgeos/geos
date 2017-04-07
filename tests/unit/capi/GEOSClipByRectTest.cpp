@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSClipByRect
 
 #include <tut.hpp>
@@ -32,7 +32,7 @@ namespace tut
       va_start(ap, fmt);
       std::vfprintf(stdout, fmt, ap);
       va_end(ap);
-    
+
       std::fprintf(stdout, "\n");
     }
 
@@ -56,7 +56,7 @@ namespace tut
       w_ = GEOSWKTWriter_create();
       GEOSWKTWriter_setTrim(w_, 1);
       GEOSWKTWriter_setRoundingPrecision(w_, 8);
-    }     
+    }
 
     ~test_capigeosclipbyrect_data()
     {
@@ -81,7 +81,7 @@ namespace tut
   // Test Cases
   //
 
-  /// Point outside 
+  /// Point outside
   template<> template<> void object::test<1>()
   {
     geom1_ = GEOSGeomFromWKT("POINT(0 0)");
@@ -89,7 +89,7 @@ namespace tut
     isEqual(geom2_, "POINT EMPTY");
   }
 
-  /// Point inside 
+  /// Point inside
   template<> template<> void object::test<2>()
   {
     geom1_ = GEOSGeomFromWKT("POINT(15 15)");
@@ -105,7 +105,7 @@ namespace tut
     isEqual(geom2_, "POINT EMPTY");
   }
 
-  /// Line outside 
+  /// Line outside
   template<> template<> void object::test<4>()
   {
     geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, -5 5)");
@@ -113,7 +113,7 @@ namespace tut
     isEqual(geom2_, "LINESTRING EMPTY");
   }
 
-  /// Line inside 
+  /// Line inside
   template<> template<> void object::test<5>()
   {
     geom1_ = GEOSGeomFromWKT("LINESTRING(15 15, 16 15)");

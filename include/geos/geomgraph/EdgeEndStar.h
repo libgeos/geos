@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -137,7 +137,7 @@ private:
 
 	virtual int getLocation(int geomIndex,
 		const geom::Coordinate& p,
-		std::vector<GeometryGraph*> *geom); 
+		std::vector<GeometryGraph*> *geom);
 
 	/** \brief
 	 * The location of the point for this star in

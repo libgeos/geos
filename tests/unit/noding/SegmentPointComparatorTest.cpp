@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::noding::SegmentPointComparator class.
 //
 // Ports tests found in jts/junit/noding/SegmentPointComparatorTest.java
@@ -37,7 +37,7 @@ namespace tut
         typedef geos::geom::Coordinate Coordinate;
         typedef geos::geom::LineSegment LineSegment;
         typedef geos::geom::PrecisionModel PrecisionModel;
-	
+
         PrecisionModel pm;
 
         test_segmentpointcomparator_data()
@@ -133,7 +133,7 @@ namespace tut
         checkNodePosition(0, 1, 0, 1, 1, -1);
     }
 
-    // testQuadrant0 
+    // testQuadrant0
     template<>
     template<>
     void object::test<2>()

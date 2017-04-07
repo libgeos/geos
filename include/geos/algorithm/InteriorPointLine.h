@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -39,7 +39,7 @@ namespace algorithm { // geos::algorithm
  * Computes a point in the interior of an linear geometry.
  *
  * <h2>Algorithm</h2>
- * 
+ *
  * - Find an interior vertex which is closest to
  *   the centroid of the linestring.
  * - If there is no interior vertex, find the endpoint which is
@@ -69,7 +69,7 @@ private:
 	void addInterior(const geom::Geometry *geom);
 
 	void addInterior(const geom::CoordinateSequence *pts);
-	
+
 	void addEndpoints(const geom::Geometry *geom);
 
 	void addEndpoints(const geom::CoordinateSequence *pts);

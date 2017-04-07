@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -32,7 +32,7 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom { 
+	namespace geom {
 		class LineString;
 		class LinearRing;
 		class Polygon;
@@ -41,7 +41,7 @@ namespace geos {
 		class GeometryFactory;
 		class Coordinate;
 	}
-	namespace planargraph { 
+	namespace planargraph {
 		class DirectedEdge;
 	}
 }
@@ -56,7 +56,7 @@ namespace polygonize { // geos::operation::polygonize
  */
 class GEOS_DLL EdgeRing {
 private:
-	const geom::GeometryFactory *factory; 
+	const geom::GeometryFactory *factory;
 
 	typedef std::vector<const planargraph::DirectedEdge*> DeList;
 	DeList deList;
@@ -88,7 +88,7 @@ public:
 	 *
 	 * The innermost enclosing ring is the <i>smallest</i> enclosing ring.
 	 * The algorithm used depends on the fact that:
-	 * 
+	 *
 	 * ring A contains ring B iff envelope(ring A) contains envelope(ring B)
 	 *
 	 * This routine is only safe to use if the chosen point of the hole

@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -19,7 +19,7 @@
  **********************************************************************/
 
 #include <geos/geomgraph/EdgeEnd.h>
-#include <geos/geomgraph/Node.h> // for assertions 
+#include <geos/geomgraph/Node.h> // for assertions
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/Quadrant.h>

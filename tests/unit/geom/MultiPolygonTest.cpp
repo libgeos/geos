@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::geom::MultiPolygon class.
 
 #include <tut.hpp>

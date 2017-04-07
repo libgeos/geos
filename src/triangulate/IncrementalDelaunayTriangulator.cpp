@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -30,12 +30,12 @@ using namespace quadedge;
 IncrementalDelaunayTriangulator::IncrementalDelaunayTriangulator(
         QuadEdgeSubdivision *subdiv) :
     subdiv(subdiv), isUsingTolerance(subdiv->getTolerance() > 0.0)
-{ 
+{
 }
 
 void IncrementalDelaunayTriangulator::insertSites(const VertexList& vertices)
 {
-    for (VertexList::const_iterator x=vertices.begin(); 
+    for (VertexList::const_iterator x=vertices.begin();
             x != vertices.end(); ++x) {
         insertSite(*x);
     }
@@ -58,17 +58,17 @@ QuadEdge& IncrementalDelaunayTriangulator::insertSite(const Vertex &v)
 
     if (subdiv->isVertexOfEdge(*e, v)) {
         // point is already in subdivision.
-        return *e; 
-    } 
+        return *e;
+    }
     else if (subdiv->isOnEdge(*e, v.getCoordinate())) {
-        // the point lies exactly on an edge, so delete the edge 
+        // the point lies exactly on an edge, so delete the edge
         // (it will be replaced by a pair of edges which have the point as a vertex)
         e = &e->oPrev();
         subdiv->remove(e->oNext());
     }
 
     /**
-     * Connect the new point to the vertices of the containing triangle 
+     * Connect the new point to the vertices of the containing triangle
      * (or quadrilateral, if the new point fell on an existing edge.)
      */
     QuadEdge* base = &subdiv->makeEdge(e->orig(), v);
