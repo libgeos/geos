@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -69,7 +69,7 @@ DelaunayTriangulationBuilder::DelaunayTriangulationBuilder() :
 {
 }
 
-DelaunayTriangulationBuilder::~DelaunayTriangulationBuilder() 
+DelaunayTriangulationBuilder::~DelaunayTriangulationBuilder()
 {
 	if(siteCoords)
 		delete siteCoords;
@@ -141,10 +141,10 @@ DelaunayTriangulationBuilder::envelope(const geom::CoordinateSequence& coords)
 	std::vector<Coordinate> coord_vector;
 	coords.toVector(coord_vector);
 	for(std::vector<Coordinate>::iterator it= coord_vector.begin() ; it!=coord_vector.end() ; ++it)
-	{   
+	{
 		const Coordinate& coord = *it;
 		env.expandToInclude(coord);
-	}   
+	}
 	return env;
 }
 

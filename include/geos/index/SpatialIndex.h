@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -35,7 +35,7 @@ namespace index {
 /** \brief
  * Abstract class defines basic insertion and query operations supported by
  * classes implementing spatial index algorithms.
- * 
+ *
  * A spatial index typically provides a primary filter for range rectangle queries. A
  * secondary filter is required to test for exact intersection. Of course, this
  * secondary filter may consist of other tests besides intersection, such as
@@ -46,7 +46,7 @@ namespace index {
  */
 class GEOS_DLL SpatialIndex {
 public:
-	
+
     virtual ~SpatialIndex() {}
 
 	/** \brief

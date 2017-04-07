@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -61,7 +61,7 @@ Polygonizer::LineStringAdder::filter_ro(const Geometry *g)
  * as the input Geometry
  */
 Polygonizer::Polygonizer():
-	lineStringAdder(this), 
+	lineStringAdder(this),
 	graph(NULL),
 	dangles(),
 	cutEdges(),
@@ -212,7 +212,7 @@ Polygonizer::polygonize()
 	polyList=new vector<Polygon*>();
 
 	// if no geometries were supplied it's possible graph could be null
-	if (graph==NULL) return; 
+	if (graph==NULL) return;
 
 	graph->deleteDangles(dangles);
 
@@ -253,7 +253,7 @@ Polygonizer::findValidRings(const vector<EdgeRing*>& edgeRingList,
 	vector<LineString*>& invalidRingList)
 {
 	typedef vector<EdgeRing*> EdgeRingList;
-	
+
 	for (EdgeRingList::size_type i=0, n=edgeRingList.size(); i<n; ++i)
 	{
 		EdgeRing *er = edgeRingList[i];
@@ -275,7 +275,7 @@ Polygonizer::findValidRings(const vector<EdgeRing*>& edgeRingList,
 void
 Polygonizer::findShellsAndHoles(const vector<EdgeRing*>& edgeRingList)
 {
-	holeList.clear(); 
+	holeList.clear();
 	shellList.clear();
 	for (unsigned int i=0, n=edgeRingList.size(); i<n; ++i)
 	{

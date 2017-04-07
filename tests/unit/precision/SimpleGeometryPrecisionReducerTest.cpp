@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::precision::SimpleGeometryPrecisionReducer class.
 
 // tut

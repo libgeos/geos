@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -49,8 +49,8 @@ namespace geos {
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-/** 
- * A EdgeList is a list of Edges. 
+/**
+ * A EdgeList is a list of Edges.
  *
  * It supports locating edges
  * that are pointwise equals to a target edge.
@@ -72,7 +72,7 @@ private:
 
 	/**
 	 * An index of the edges, for fast lookup.
-	 * 
+	 *
 	 * OrientedCoordinateArray objects are owned by us.
 	 * TODO: optimize by dropping the OrientedCoordinateArray
 	 *       construction as a whole, and use CoordinateSequence

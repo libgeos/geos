@@ -50,7 +50,7 @@ private:
 
 	double indexOfFromStart(const geom::Coordinate& inputPt, const double minIndex) const;
 
-	double segmentNearestMeasure(const geom::LineSegment *seg, 
+	double segmentNearestMeasure(const geom::LineSegment *seg,
                                const geom::Coordinate& inputPt,
                                double segmentStartMeasure) const;
 public:

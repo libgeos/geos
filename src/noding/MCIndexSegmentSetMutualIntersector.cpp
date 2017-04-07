@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -34,7 +34,7 @@ namespace geos {
 namespace noding { // geos::noding
 
 /*private*/
-void 
+void
 MCIndexSegmentSetMutualIntersector::addToIndex(SegmentString* segStr)
 {
     MonoChains segChains;
@@ -53,7 +53,7 @@ MCIndexSegmentSetMutualIntersector::addToIndex(SegmentString* segStr)
 }
 
 /*private*/
-void 
+void
 MCIndexSegmentSetMutualIntersector::intersectChains()
 {
     MCIndexSegmentSetMutualIntersector::SegmentOverlapAction overlapAction( *segInt);
@@ -71,21 +71,21 @@ MCIndexSegmentSetMutualIntersector::intersectChains()
 
             queryChain->computeOverlaps( testChain, &overlapAction);
             nOverlaps++;
-            if (segInt->isDone()) 
+            if (segInt->isDone())
                 return;
         }
     }
 }
 
 /*private*/
-void 
+void
 MCIndexSegmentSetMutualIntersector::addToMonoChains(SegmentString* segStr)
 {
     MonoChains segChains;
     MonotoneChainBuilder::getChains(segStr->getCoordinates(),
                                     segStr, segChains);
 
-    MonoChains::size_type n = segChains.size(); 
+    MonoChains::size_type n = segChains.size();
     monoChains.reserve(monoChains.size() + n);
     for (MonoChains::size_type i = 0; i < n; i++)
     {
@@ -96,7 +96,7 @@ MCIndexSegmentSetMutualIntersector::addToMonoChains(SegmentString* segStr)
 }
 
 /* public */
-MCIndexSegmentSetMutualIntersector::MCIndexSegmentSetMutualIntersector() 
+MCIndexSegmentSetMutualIntersector::MCIndexSegmentSetMutualIntersector()
 :	monoChains(),
 index(new geos::index::strtree::STRtree()),
 indexCounter(0),
@@ -106,7 +106,7 @@ nOverlaps(0)
 }
 
 /* public */
-MCIndexSegmentSetMutualIntersector::~MCIndexSegmentSetMutualIntersector() 
+MCIndexSegmentSetMutualIntersector::~MCIndexSegmentSetMutualIntersector()
 {
     delete index;
 
@@ -114,7 +114,7 @@ MCIndexSegmentSetMutualIntersector::~MCIndexSegmentSetMutualIntersector()
 
     for (i = chainStore.begin(), e = chainStore.end(); i != e; ++i) {
         delete *i;
-    } 
+    }
 
     for (i = monoChains.begin(), e = monoChains.end(); i != e; i++) {
       delete *i;
@@ -122,7 +122,7 @@ MCIndexSegmentSetMutualIntersector::~MCIndexSegmentSetMutualIntersector()
 }
 
 /* public */
-void 
+void
 MCIndexSegmentSetMutualIntersector::setBaseSegments(SegmentString::ConstVect* segStrings)
 {
     // NOTE - mloskot: const qualifier is removed silently, dirty.
@@ -136,7 +136,7 @@ MCIndexSegmentSetMutualIntersector::setBaseSegments(SegmentString::ConstVect* se
 }
 
 /*public*/
-void 
+void
 MCIndexSegmentSetMutualIntersector::process(SegmentString::ConstVect * segStrings)
 {
     processCounter = indexCounter + 1;
@@ -159,7 +159,7 @@ MCIndexSegmentSetMutualIntersector::process(SegmentString::ConstVect * segString
 
 
 /* public */
-void 
+void
 MCIndexSegmentSetMutualIntersector::SegmentOverlapAction::overlap(
 	MonotoneChain& mc1, size_t start1, MonotoneChain& mc2, size_t start2)
 {

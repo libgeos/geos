@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -27,7 +27,7 @@ namespace geos {
 
 /** \brief
  * Contains classes that implement topology graphs.
- * 
+ *
  * The Java Topology Suite (JTS) is a Java API that implements a core
  * set of spatial data operations using an explicit precision model
  * and robust geometric algorithms. JTS is int ended to be used in the
@@ -39,15 +39,15 @@ namespace geos {
  * specification; in this case JTS attempts to choose a reasonable and
  * consistent alternative.  Differences from and elaborations of the SFS
  * are documented in this specification.
- * 
+ *
  * <h2>Package Specification</h2>
- * 
+ *
  * <ul>
  *   <li>Java Topology Suite Technical Specifications
  *   <li><A HREF="http://www.opengis.org/techno/specs.htm">
  *       OpenGIS Simple Features Specification for SQL</A>
  * </ul>
- * 
+ *
  */
 namespace geomgraph { // geos.geomgraph
 } // namespace geos.geomgraph

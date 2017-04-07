@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::io::Writer
 
 // tut
@@ -37,7 +37,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<1>()
-	{         
+	{
     geos::io::Writer writer;
 
     writer.write("Hello ");
@@ -48,7 +48,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<2>()
-	{         
+	{
     geos::io::Writer writer;
 
     writer.reserve(512);
@@ -60,7 +60,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<3>()
-	{         
+	{
     geos::io::Writer writer;
 
     writer.reserve(1);
@@ -72,7 +72,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<4>()
-	{         
+	{
     geos::io::Writer writer;
 
     writer.reserve(512);

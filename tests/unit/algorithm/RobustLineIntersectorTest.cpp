@@ -1,4 +1,4 @@
-// 
+//
 // Ported from JTS junit/algorithm/RobustLineIntersectorTest.java rev. 1.1
 
 #include <tut.hpp>
@@ -10,7 +10,7 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h> // required for use in auto_ptr
-#include <geos/geom/LineString.h> 
+#include <geos/geom/LineString.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -21,7 +21,7 @@
 #include <memory>
 
 
-using namespace geos::geom; // 
+using namespace geos::geom; //
 using geos::algorithm::LineIntersector;
 using geos::algorithm::CGAlgorithms;
 
@@ -57,7 +57,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<1>()
-	{         
+	{
     LineIntersector i;
     Coordinate p1(10, 10);
     Coordinate p2(20, 20);
@@ -77,7 +77,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<2>()
-	{         
+	{
     LineIntersector i;
     Coordinate p1(10, 10);
     Coordinate p2(20, 10);
@@ -95,7 +95,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<3>()
-	{         
+	{
     LineIntersector i;
     Coordinate p1(10, 10);
     Coordinate p2(20, 10);
@@ -113,7 +113,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<4>()
-	{         
+	{
     LineIntersector i;
     Coordinate p1(10, 10);
     Coordinate p2(20, 10);
@@ -131,7 +131,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<5>()
-	{         
+	{
     LineIntersector i;
     Coordinate p1(10, 10);
     Coordinate p2(20, 10);
@@ -149,7 +149,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<6>()
-	{         
+	{
     i.computeIntersection(Coordinate(100, 100), Coordinate(10, 100),
         Coordinate(100, 10), Coordinate(100, 100));
     ensure("hasIntersection", i.hasIntersection());
@@ -160,7 +160,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<7>()
-	{         
+	{
     i.computeIntersection(Coordinate(190, 50), Coordinate(120, 100),
         Coordinate(120, 100), Coordinate(50, 150));
     ensure("hasIntersection", i.hasIntersection());
@@ -172,7 +172,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<8>()
-	{         
+	{
     i.computeIntersection(Coordinate(180, 200), Coordinate(160, 180),
         Coordinate(220, 240), Coordinate(140, 160));
     ensure("hasIntersection", i.hasIntersection());
@@ -183,7 +183,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<9>()
-	{         
+	{
     i.computeIntersection(Coordinate(30, 10), Coordinate(30, 30),
         Coordinate(10, 10), Coordinate(90, 11));
     ensure("hasIntersection", i.hasIntersection());
@@ -195,7 +195,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<10>()
-	{         
+	{
     i.computeIntersection(Coordinate(10, 30), Coordinate(10, 0),
         Coordinate(11, 90), Coordinate(10, 10));
     ensure("hasIntersection", i.hasIntersection());
@@ -207,7 +207,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<11>()
-	{         
+	{
 	    ensure_equals(CGAlgorithms::computeOrientation(
 		Coordinate(-123456789, -40),
 		Coordinate(0, 0),
@@ -218,7 +218,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<12>()
-	{         
+	{
 	    ensure_equals(CGAlgorithms::computeOrientation(
 		Coordinate(10, 10),
 		Coordinate(20, 20),
@@ -229,7 +229,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<13>()
-	{         
+	{
     Coordinate p1(-123456789, -40);
     Coordinate p2(381039468754763.0, 123456789);
     Coordinate q(0, 0);
@@ -253,13 +253,13 @@ namespace tut
 	}
 
     // Test intersects: point on segment with FLOAT PM
-    // X coordinate of 3rd and 4th vertises of the line are not 
+    // X coordinate of 3rd and 4th vertises of the line are not
     // float-point exact with X coordinate of the point.
     // The X values differ after 14th decimal place:
     // POINT (-23.1094689600055080 50.5195368635957180)
     // --------------------^^^^^^^------------^^^^^^^^
     // LINESTRING 3rd and 4th points
-    //        -23.1094689600055150 50.5223376452201340, 
+    //        -23.1094689600055150 50.5223376452201340,
     //        -23.1094689600055010 50.5169177629559480,
     // --------------------^^^^^^^------------^^^^^^^^
     // So, in float-point precision model, the point does DOES NOT intersect the segment.
@@ -268,7 +268,7 @@ namespace tut
     void object::test<14>()
     {
         geos::io::WKBReader reader;
-        
+
         // POINT located between 3rd and 4th vertex of LINESTRING
         // POINT(-23.1094689600055080 50.5195368635957180)
         std::string point("01010000009a266328061c37c0e21a172f80424940");
@@ -283,13 +283,13 @@ namespace tut
     }
 
     // Test intersects: point on segment with FIXED PM
-    // X coordinate of 3rd and 4th vertises of the line are not 
+    // X coordinate of 3rd and 4th vertises of the line are not
     // float-point exact with X coordinate of the point.
     // The X values differ after 14th decimal place:
     // POINT (-23.1094689600055080 50.5195368635957180)
     // --------------------^^^^^^^------------^^^^^^^^
     // LINESTRING 3rd and 4th points
-    //        -23.1094689600055150 50.5223376452201340, 
+    //        -23.1094689600055150 50.5223376452201340,
     //        -23.1094689600055010 50.5169177629559480,
     // --------------------^^^^^^^------------^^^^^^^^
     // So, if float-point values are trimmed up to 14 decimal digits, the point DOES intersect the segment.

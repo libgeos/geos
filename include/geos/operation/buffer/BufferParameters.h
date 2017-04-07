@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -140,7 +140,7 @@ public:
 	/// \brief
 	/// Sets the number of line segments used to approximate
 	/// an angle fillet.
-	// 
+	//
 	/// - If <tt>quadSegs</tt> >= 1, joins are round,
 	///   and <tt>quadSegs</tt> indicates the number of
 	///   segments to use to approximate a quarter-circle.
@@ -150,7 +150,7 @@ public:
 	///   <pre>
 	///    mitreLimit = |<tt>quadSegs</tt>|
 	///    </pre>
-	/// 
+	///
 	/// For round joins, <tt>quadSegs</tt> determines the maximum
 	/// error in the approximation to the true buffer curve.
 	///
@@ -223,7 +223,7 @@ public:
 	/// @return the limit value
 	///
 	double getMitreLimit() const { return mitreLimit; }
- 
+
 	/// Sets the limit on the mitre ratio used for very sharp corners.
 	//
 	/// The mitre ratio is the ratio of the distance from the corner
@@ -245,11 +245,11 @@ public:
 	/**
 	 * Sets whether the computed buffer should be single-sided.
 	 * A single-sided buffer is constructed on only one side of each input line.
-	 * 
+	 *
 	 * The side used is determined by the sign of the buffer distance:
 	 * - a positive distance indicates the left-hand side
 	 * - a negative distance indicates the right-hand side
-	 * 
+	 *
 	 * The single-sided buffer of point geometries is
 	 * the same as the regular buffer.
 	 *

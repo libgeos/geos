@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API custom allocators
 
 #include <tut.hpp>
@@ -30,13 +30,13 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
         test_capiinterrupt_data()
         {
-        }       
+        }
 
         ~test_capiinterrupt_data()
         {
@@ -125,7 +125,7 @@ namespace tut
         GEOSGeom_destroy(geom1);
         GEOSGeom_destroy(geom2);
 
-        GEOS_interruptRegisterCallback(0); 
+        GEOS_interruptRegisterCallback(0);
 
         finishGEOS();
     }
@@ -141,7 +141,7 @@ namespace tut
 
         ensure("GEOSGeomFromWKT failed", 0 != geom1);
 
-        GEOS_interruptRegisterCallback(interruptNow); 
+        GEOS_interruptRegisterCallback(interruptNow);
         GEOSGeometry *geom2 = GEOSBuffer(geom1, 1, 8);
         ensure("GEOSBuffer wasn't interrupted", 0 == geom2);
         GEOS_interruptRegisterCallback(0);  /* unregister */
@@ -166,8 +166,8 @@ namespace tut
 
         ensure("GEOSGeomFromWKT failed", 0 != geom1);
 
-        GEOS_interruptRegisterCallback(interruptNow); 
-        nextcb = GEOS_interruptRegisterCallback(countCalls); 
+        GEOS_interruptRegisterCallback(interruptNow);
+        nextcb = GEOS_interruptRegisterCallback(countCalls);
         GEOSGeometry *geom2 = GEOSBuffer(geom1, 1, 8);
         ensure("GEOSBuffer wasn't interrupted", 0 == geom2);
         ensure_equals(numcalls, 1);

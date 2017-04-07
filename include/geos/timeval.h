@@ -7,10 +7,10 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
- * Note: This code is in the public domain, see 
+ * Note: This code is in the public domain, see
  *       http://wyw.dcweb.cn/time.htm
  *
  **********************************************************************/
@@ -109,9 +109,9 @@ __inline int gettimeofday(struct timeval *tv, struct timezone *tz)
     }
 
     if (tz)
-    {   
+    {
         GetTimeZoneInformation(&tzi);
-		
+
         tz->tz_minuteswest = tzi.Bias;
 		if (tzi.StandardDate.wMonth != 0)
         {

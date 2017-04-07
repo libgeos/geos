@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -47,10 +47,10 @@ public:
 	/// Constant representing counterclockwise orientation
 	static const int COUNTERCLOCKWISE = CGAlgorithms::COUNTERCLOCKWISE;
 
-	/// Constant representing clockwise orientation 
+	/// Constant representing clockwise orientation
 	static const int CLOCKWISE = CGAlgorithms::CLOCKWISE;
 
-	/// Constant representing no orientation 
+	/// Constant representing no orientation
 	static const int NONE = CGAlgorithms::COLLINEAR;
 
 	/// Converts from radians to degrees.
@@ -93,7 +93,7 @@ public:
 	/// Tests whether the angle between p0-p1-p2 is acute.
 	//
 	/// An angle is acute if it is less than 90 degrees.
-	/// 
+	///
 	/// Note: this implementation is not precise (determistic) for
 	///       angles very close to 90 degrees.
 	///
@@ -108,7 +108,7 @@ public:
 	/// Tests whether the angle between p0-p1-p2 is obtuse.
 	//
 	/// An angle is obtuse if it is greater than 90 degrees.
-	/// 
+	///
 	/// Note: this implementation is not precise (determistic) for
 	///       angles very close to 90 degrees.
 	///

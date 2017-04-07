@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -52,25 +52,25 @@ namespace geomgraph { // geos.geomgraph
 /**
  * \brief
  * Represents a directed graph which is embeddable in a planar surface.
- * 
+ *
  * The computation of the IntersectionMatrix relies on the use of a structure
  * called a "topology graph".  The topology graph contains nodes and edges
  * corresponding to the nodes and line segments of a Geometry. Each
  * node and edge in the graph is labeled with its topological location
  * relative to the source geometry.
- * 
+ *
  * Note that there is no requirement that points of self-intersection
  * be a vertex.
  * Thus to obtain a correct topology graph, Geometry objects must be
  * self-noded before constructing their graphs.
  *
  * Two fundamental operations are supported by topology graphs:
- * 
+ *
  *  - Computing the intersections between all the edges and nodes of
  *    a single graph
  *  - Computing the intersections between the edges and nodes of two
  *    different graphs
- * 
+ *
  */
 class GEOS_DLL PlanarGraph {
 public:

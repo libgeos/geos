@@ -74,7 +74,7 @@ public:
 	 * @param line the linear geometry to use
 	 * @param length the length index of the location
 	 * @param resolveLower if true lengths are resolved to the
-	 *                     lowest possible index 
+	 *                     lowest possible index
 	 * @return the {@link LinearLocation} for the length
 	 */
 	static LinearLocation getLocation(const geom::Geometry *linearGeom, double length, bool resolveLower)
@@ -98,7 +98,7 @@ public:
 	/**
 	 * \brief
 	 * Compute the {@link LinearLocation} corresponding to a length.
-	 * 
+	 *
 	 * Negative lengths are measured in reverse from end of the linear geometry.
 	 * Out-of-range values are clamped.
 	 * Ambiguous indexes are resolved to the lowest possible location value,
@@ -112,7 +112,7 @@ public:
 	/**
 	 * \brief
 	 * Compute the {@link LinearLocation} corresponding to a length.
-	 * 
+	 *
 	 * Negative lengths are measured in reverse from end of the linear geometry.
 	 * Out-of-range values are clamped.
 	 * Ambiguous indexes are resolved to the lowest possible location value.

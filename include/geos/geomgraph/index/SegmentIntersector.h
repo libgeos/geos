@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -57,7 +57,7 @@ private:
 	bool hasProperInterior;
 
 	bool isDone;
-	
+
 	bool isDoneWhenProperInt;
 
 	// the proper intersection point found
@@ -132,7 +132,7 @@ public:
 	void setIsDoneIfProperInt(bool isDoneWhenProperInt);
 
 	bool getIsDone();
-	
+
 };
 
 } // namespace geos.geomgraph.index

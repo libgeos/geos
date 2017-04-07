@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSContains
 
 #include <tut.hpp>
@@ -31,7 +31,7 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
@@ -39,7 +39,7 @@ namespace tut
             : geom1_(0), geom2_(0)
         {
             initGEOS(notice, notice);
-        }       
+        }
 
         ~test_capigeoscontains_data()
         {
@@ -86,7 +86,7 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("POLYGON((1 1,1 5,5 5,5 1,1 1))");
         geom2_ = GEOSGeomFromWKT("POINT(2 2)");
-        
+
         ensure( 0 != geom1_ );
         ensure( 0 != geom2_ );
 
@@ -98,21 +98,21 @@ namespace tut
 
         ensure_equals(int(r2), 0);
     }
-    
+
     template<>
     template<>
     void object::test<3>()
     {
         geom1_ = GEOSGeomFromWKT("MULTIPOLYGON(((0 0,0 10,10 10,10 0,0 0)))");
         geom2_ = GEOSGeomFromWKT("POLYGON((1 1,1 2,2 2,2 1,1 1))");
-        
+
         ensure( 0 != geom1_ );
         ensure( 0 != geom2_ );
 
         char const r1 = GEOSContains(geom1_, geom2_);
 
         ensure_equals(int(r1), 1);
-        
+
         char const r2 = GEOSContains(geom2_, geom1_);
 
         ensure_equals(int(r2), 0);
@@ -167,7 +167,7 @@ namespace tut
             ensure_equals(ret, 0);
         }
     }
- 
+
     // Test outer rectangle contains inner rectangle with one coincident vertex
     // and two vertices of the inner rectangle are on the boundary (lay on segments)
     // of the outer rectangle.

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -27,7 +27,7 @@
 #include <geos/inline.h>
 
 #include <functional> // std::mem_fun, std::bind1st
-#include <algorithm> // std::for_each 
+#include <algorithm> // std::for_each
 #include <vector>
 
 
@@ -96,14 +96,14 @@ MCIndexSnapRounder::computeVertexSnaps(SegmentString::NonConstVect& edges)
 
 /*private*/
 void
-MCIndexSnapRounder::snapRound(MCIndexNoder& noder, 
+MCIndexSnapRounder::snapRound(MCIndexNoder& noder,
 		SegmentString::NonConstVect* segStrings)
 {
 	vector<Coordinate> intersections;
  	findInteriorIntersections(noder, segStrings, intersections);
 	computeIntersectionSnaps(intersections);
 	computeVertexSnaps(*segStrings);
-	
+
 }
 
 /*public*/

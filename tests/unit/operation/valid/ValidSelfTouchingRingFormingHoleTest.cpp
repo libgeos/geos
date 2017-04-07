@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::operation::valid::IsValidOp class
 // Ported from JTS junit/operation/valid/ValidSelfTouchingRingFormingHoleTest.java rev. 1.4
 

@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -26,7 +26,7 @@ namespace operation { // geos.operation
 namespace distance { // geos.operation.distance
 
 /**
-* Constructs a GeometryLocation specifying a point on a geometry, as well as the 
+* Constructs a GeometryLocation specifying a point on a geometry, as well as the
 * segment that the point is on (or INSIDE_AREA if the point is not on a segment).
 */
 GeometryLocation::GeometryLocation(const Geometry *newComponent, int newSegIndex, const Coordinate &newPt)
@@ -38,7 +38,7 @@ GeometryLocation::GeometryLocation(const Geometry *newComponent, int newSegIndex
 
 /**
 * Constructs a GeometryLocation specifying a point inside an area geometry.
-*/  
+*/
 GeometryLocation::GeometryLocation(const Geometry *newComponent, const Coordinate &newPt)
 {
 	component = newComponent;
@@ -49,7 +49,7 @@ GeometryLocation::GeometryLocation(const Geometry *newComponent, const Coordinat
 /**
 * Returns the geometry associated with this location.
 */
-const Geometry* GeometryLocation::getGeometryComponent() { 
+const Geometry* GeometryLocation::getGeometryComponent() {
 	return component;
 }
 /**
@@ -60,7 +60,7 @@ const Geometry* GeometryLocation::getGeometryComponent() {
 */
 int
 GeometryLocation::getSegmentIndex()
-{ 
+{
 	return segIndex;
 }
 /**
@@ -68,11 +68,11 @@ GeometryLocation::getSegmentIndex()
 */
 Coordinate&
 GeometryLocation::getCoordinate()
-{ 
+{
 	return pt;
 }
 
-bool GeometryLocation::isInsideArea() { 
+bool GeometryLocation::isInsideArea() {
 	return segIndex == INSIDE_AREA;
 }
 

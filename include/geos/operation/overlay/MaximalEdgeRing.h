@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -49,13 +49,13 @@ namespace overlay { // geos::operation::overlay
  * A ring of {@link edges} which may contain nodes of degree > 2.
  *
  * A MaximalEdgeRing may represent two different spatial entities:
- * 
+ *
  * - a single polygon possibly containing inversions (if the ring is oriented CW)
  * - a single hole possibly containing exversions (if the ring is oriented CCW)
- * 
+ *
  * If the MaximalEdgeRing represents a polygon,
  * the interior of the polygon is strongly connected.
- * 
+ *
  * These are the form of rings used to define polygons under some spatial data models.
  * However, under the OGC SFS model, {@link MinimalEdgeRings} are required.
  * A MaximalEdgeRing can be converted to a list of MinimalEdgeRings using the

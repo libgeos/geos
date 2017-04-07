@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for CGAlgorithms::isPointInRing() function
 
 // tut
@@ -28,13 +28,13 @@ namespace tut
 
         geos::geom::CoordinateSequence* cs_;
         geos::io::WKTReader reader_;
-        
+
         test_ispointinring_data()
             : cs_(0)
         {
             assert(0 == cs_);
         }
-        
+
         ~test_ispointinring_data()
         {
             delete cs_;

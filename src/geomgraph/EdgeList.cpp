@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -22,7 +22,7 @@
 
 #include <geos/geomgraph/Edge.h>
 #include <geos/geomgraph/EdgeList.h>
-#include <geos/noding/OrientedCoordinateArray.h> 
+#include <geos/noding/OrientedCoordinateArray.h>
 #include <geos/profiler.h>
 
 #ifndef GEOS_DEBUG
@@ -139,7 +139,7 @@ operator<< (std::ostream&os, const EdgeList& el)
 	for(std::size_t j=0, s=el.edges.size(); j<s; ++j)
 	{
        		Edge *e=el.edges[j];
-		os << "  " << *e << std::endl; 
+		os << "  " << *e << std::endl;
 	}
 	return os;
 }

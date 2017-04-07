@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -34,11 +34,11 @@ namespace index { // geos.geomgraph.index
  * MonotoneChains are a way of partitioning the segments of an edge to
  * allow for fast searching of intersections.
  * They have the following properties:
- * 
+ *
  *  -  the segments within a monotone chain will never intersect each other
  *  -  the envelope of any contiguous subset of the segments in a monotone
  *     chain is simply the envelope of the endpoints of the subset.
- * 
+ *
  * Property 1 means that there is no need to test pairs of segments from
  * within the same monotone chain for intersection.
  * Property 2 allows binary search to be used to find the intersection
@@ -139,7 +139,7 @@ MonotoneChainEdge::computeIntersectsForChain(int start0, int end0,
 	env2.init(p10,p11);
 
 	if (!env1.intersects(&env2)) return;
-	// the chains overlap, so split each in half and iterate 
+	// the chains overlap, so split each in half and iterate
 	// (binary search)
 	int mid0=(start0+end0)/2;
 	int mid1=(start1+end1)/2;

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -41,7 +41,7 @@ namespace precision { // geos.precision
 /** \brief
  * Provides versions of Geometry spatial functions which use
  * common bit removal to reduce the likelihood of robustness problems.
- * 
+ *
  * In the current implementation no rounding is performed on the
  * reshifted result geometry, which means that it is possible
  * that the returned Geometry is invalid.
@@ -152,7 +152,7 @@ public:
 	/**
 	 * If required, returning the result to the orginal precision
 	 * if required.
-	 * 
+	 *
 	 * In this current implementation, no rounding is performed on the
 	 * reshifted result geometry, which means that it is possible
 	 * that the returned Geometry is invalid.

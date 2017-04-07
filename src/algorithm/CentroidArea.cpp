@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -42,7 +42,7 @@ CentroidArea::add(const Geometry *geom)
 		setBasePoint(poly->getExteriorRing()->getCoordinateN(0));
 		add(poly);
 	}
-	else if(const GeometryCollection *gc=dynamic_cast<const GeometryCollection*>(geom)) 
+	else if(const GeometryCollection *gc=dynamic_cast<const GeometryCollection*>(geom))
 	{
         for(std::size_t i=0, n=gc->getNumGeometries(); i<n; ++i)
 		{

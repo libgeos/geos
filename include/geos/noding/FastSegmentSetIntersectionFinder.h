@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  *
@@ -26,7 +26,7 @@
 
 //forward declarations
 namespace geos {
-	namespace noding { 
+	namespace noding {
 		class SegmentIntersectionDetector;
 		class SegmentSetMutualIntersector;
 		//class MCIndexSegmentSetMutualIntersector : public SegmentSetMutualIntersector;
@@ -49,7 +49,7 @@ namespace noding { // geos::noding
 class FastSegmentSetIntersectionFinder
 {
 private:
-	MCIndexSegmentSetMutualIntersector * segSetMutInt; 
+	MCIndexSegmentSetMutualIntersector * segSetMutInt;
 	geos::algorithm::LineIntersector * lineIntersector;
 
 protected:
@@ -57,11 +57,11 @@ public:
 	FastSegmentSetIntersectionFinder( SegmentString::ConstVect * baseSegStrings);
 
 	~FastSegmentSetIntersectionFinder();
-	
+
 	/**
 	 * Gets the segment set intersector used by this class.
 	 * This allows other uses of the same underlying indexed structure.
-	 * 
+	 *
 	 * @return the segment set intersector used
 	 */
 	SegmentSetMutualIntersector * getSegmentSetIntersector()

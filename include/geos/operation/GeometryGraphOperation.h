@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -75,7 +75,7 @@ protected:
 	/** \brief
 	 * The operation args into an array so they can be accessed by index
 	 */
-	std::vector<geomgraph::GeometryGraph*> arg; 
+	std::vector<geomgraph::GeometryGraph*> arg;
 
 	void setComputationPrecision(const geom::PrecisionModel* pm);
 };

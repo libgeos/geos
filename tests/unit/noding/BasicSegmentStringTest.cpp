@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::noding::BasicSegmentString class.
 
 #include <tut.hpp>
@@ -26,7 +26,7 @@ namespace tut
 
     	typedef std::auto_ptr<geos::noding::BasicSegmentString> \
 		SegmentStringAutoPtr;
-	
+
 	const geos::geom::CoordinateSequenceFactory* csFactory;
 
 	SegmentStringAutoPtr
@@ -42,7 +42,7 @@ namespace tut
 		csFactory(geos::geom::CoordinateArraySequenceFactory::instance())
 	{
 	}
-	
+
 	~test_basicsegmentstring_data()
 	{
 	}

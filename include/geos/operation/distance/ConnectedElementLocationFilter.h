@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -27,10 +27,10 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom { 
+	namespace geom {
 		class Geometry;
 	}
-	namespace operation { 
+	namespace operation {
 		namespace distance {
 			class GeometryLocation;
 		}
@@ -46,7 +46,7 @@ namespace distance { // geos::operation::distance
  * A ConnectedElementPointFilter extracts a single point
  * from each connected element in a Geometry
  * (e.g. a polygon, linestring or point)
- * and returns them in a list. The elements of the list are 
+ * and returns them in a list. The elements of the list are
  * DistanceOp::GeometryLocation.
  */
 class GEOS_DLL ConnectedElementLocationFilter: public geom::GeometryFilter {
@@ -58,9 +58,9 @@ public:
 	/**
 	 * Returns a list containing a point from each Polygon, LineString, and Point
 	 * found inside the specified geometry. Thus, if the specified geometry is
-	 * not a GeometryCollection, an empty list will be returned. The elements of the list 
+	 * not a GeometryCollection, an empty list will be returned. The elements of the list
 	 * are {@link com.vividsolutions.jts.operation.distance.GeometryLocation}s.
-	 */  
+	 */
 	static std::vector<GeometryLocation*>* getLocations(const geom::Geometry *geom);
 
 	ConnectedElementLocationFilter(std::vector<GeometryLocation*> *newLocations)

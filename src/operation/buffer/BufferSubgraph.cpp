@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -69,7 +69,7 @@ BufferSubgraph::create(Node *node)
 {
 	addReachable(node);
 
-	// We are assuming that dirEdgeList 
+	// We are assuming that dirEdgeList
 	// contains *at leas* ONE forward DirectedEdge
 	finder.findEdge(&dirEdgeList);
 
@@ -263,7 +263,7 @@ BufferSubgraph::compareTo(BufferSubgraph *graph)
 void
 BufferSubgraph::computeDepths(DirectedEdge *startEdge)
 {
-	set<Node *> nodesVisited; 
+	set<Node *> nodesVisited;
 	list<Node*> nodeQueue; // Used to be a vector
 	Node *startNode=startEdge->getNode();
 	nodeQueue.push_back(startNode);
@@ -276,7 +276,7 @@ BufferSubgraph::computeDepths(DirectedEdge *startEdge)
 		//System.out.println(nodes.size() + " queue: " + nodeQueue.size());
 		Node *n=nodeQueue.front(); // [0];
 		//nodeQueue.erase(nodeQueue.begin());
-		nodeQueue.pop_front(); 
+		nodeQueue.pop_front();
 
 		nodesVisited.insert(n);
 

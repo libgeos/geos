@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -28,10 +28,10 @@ namespace io {
 
 /*
  * \class ByteOrderValues io.h geos.h
- * 
+ *
  * Methods to read and write primitive datatypes from/to byte
  * sequences, allowing the byte order to be specified
- * 
+ *
  * Similar to the standard Java <code>ByteBuffer</code> class.
  */
 class GEOS_DLL ByteOrderValues {

@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::operation::overlay::snap::LineStringSnapper class.
 
 // tut
@@ -104,7 +104,7 @@ namespace tut
 		CoordsVectAptr ret(snapper.snapTo(snpCoords));
 
 		// snap point a should be inserted
-		ensure_equals(ret->size(), 3u); 
+		ensure_equals(ret->size(), 3u);
 		ensure_equals(ret->operator[](0), src_a);
 		ensure_equals(ret->operator[](1), snp_a);
 		ensure_equals(ret->operator[](2), src_b);

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -64,14 +64,14 @@ public:
 	 * @param nMap - reference to LinesMap instance.
 	 */
 	LineStringTransformer(LinesMap& simp);
-	
+
 protected:
 
 	CoordinateSequence::AutoPtr transformCoordinates(
 			const CoordinateSequence* coords,
 			const Geometry* parent);
-	
-private:	
+
+private:
 
 	LinesMap& linestringMap;
 
@@ -155,7 +155,7 @@ LineStringTransformer::transformCoordinates(
 	{
 		LinesMap::iterator it = linestringMap.find(parent);
 		assert( it != linestringMap.end() );
-		
+
 		TaggedLineString* taggedLine = it->second;
 #if GEOS_DEBUG
 		std::cerr << "LineStringTransformer[" << this << "] "
@@ -237,7 +237,7 @@ LineStringMapBuilderFilter::filter_ro(const Geometry* geom)
 {
 	TaggedLineString* taggedLine;
 
-	if ( const LineString* ls = 
+	if ( const LineString* ls =
 			dynamic_cast<const LineString*>(geom) )
 	{
     int minSize = ls->isClosed() ? 4 : 2;
@@ -251,7 +251,7 @@ LineStringMapBuilderFilter::filter_ro(const Geometry* geom)
 	// Duplicated Geometry pointers shouldn't happen
 	if ( ! linestringMap.insert(std::make_pair(geom, taggedLine)).second )
 	{
-		std::cerr << __FILE__ << ":" << __LINE__ 
+		std::cerr << __FILE__ << ":" << __LINE__
 		     << "Duplicated Geometry components detected"
 		     << std::endl;
 
@@ -295,7 +295,7 @@ TopologyPreservingSimplifier::setDistanceTolerance(double d)
 
 
 /*public*/
-std::auto_ptr<geom::Geometry> 
+std::auto_ptr<geom::Geometry>
 TopologyPreservingSimplifier::getResultGeometry()
 {
 

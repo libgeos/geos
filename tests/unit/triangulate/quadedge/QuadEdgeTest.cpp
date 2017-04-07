@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::triangulate::quadedge::QuadEdge
 //
 // tut
@@ -39,7 +39,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<1>()
-	{		 
+	{
 		Vertex v1(0, 0);
 		Vertex v2(0, 1);
 
@@ -71,7 +71,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<2>()
-	{		 
+	{
 		Vertex v1(0, 0);
 		Vertex v2(0, 1);
 
@@ -103,7 +103,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<3>()
-	{		 
+	{
 		Vertex v1(0, 0);
 		Vertex v2(0, 1);
 

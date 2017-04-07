@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -46,7 +46,7 @@ namespace relate { // geos::operation::relate
  *
  * This class supports specifying a custom algorithm::BoundaryNodeRule
  * to be used during the relate computation.
- * 
+ *
  * <b>Note:</b> custom Boundary Node Rules do not (currently)
  * affect the results of other Geometry methods (such
  * as {@link Geometry::getBoundary}.  The results of

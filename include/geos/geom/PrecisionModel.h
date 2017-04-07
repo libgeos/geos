@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -46,7 +46,7 @@ namespace geom { // geos::geom
  *
  * In other words, specifies the grid of allowable
  * points for all <code>Geometry</code>s.
- * 
+ *
  * The makePrecise method allows rounding a coordinate to
  * a "precise" value; that is, one whose
  * precision is known exactly.
@@ -115,7 +115,7 @@ public:
 		FLOATING_SINGLE
 
 	} Type;
-	
+
 	/// Creates a PrecisionModel with a default precision of FLOATING.
 	PrecisionModel(void);
 
@@ -146,7 +146,7 @@ public:
 	PrecisionModel(double newScale, double newOffsetX, double newOffsetY);
 
 	/**
-	 * \brief 
+	 * \brief
 	 * Creates a PrecisionModel with Fixed precision.
 	 *
 	 * Fixed-precision coordinates are represented as precise
@@ -179,7 +179,7 @@ public:
 	 * Asymmetric Arithmetic Rounding is used, to provide
 	 * uniform rounding behaviour no matter where the number is
 	 * on the number line.
-	 * 
+	 *
 	 * <b>Note:</b> Java's <code>Math#rint</code> uses the "Banker's Rounding" algorithm,
 	 * which is not suitable for precision operations elsewhere in JTS.
 	 */

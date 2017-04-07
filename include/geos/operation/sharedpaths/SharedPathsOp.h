@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -28,7 +28,7 @@
 
 #include <geos/export.h> // for GEOS_DLL
 
-#include <vector> 
+#include <vector>
 
 // Forward declarations
 namespace geos {
@@ -101,7 +101,7 @@ public:
   ///
   SharedPathsOp(const geom::Geometry& g1, const geom::Geometry& g2);
 
-  /// Get shared paths 
+  /// Get shared paths
   //
   /// @param sameDir
   ///   Shared edges having the same direction are pushed

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -33,7 +33,7 @@ class QuadEdgeSubdivision;
 * Locates {@link QuadEdge}s in a {@link QuadEdgeSubdivision},
 * optimizing the search by starting in the
 * locality of the last edge found.
-* 
+*
 * @author JTS: Martin Davis
 * @author Benjamin Campbell
 */
@@ -58,7 +58,7 @@ public:
 	 * @return The caller _does not_ take ownership of the returned object.
 	 */
 	virtual QuadEdge* locate(const Vertex &v);
-}; 
+};
 
 } //namespace geos.triangulate.quadedge
 } //namespace geos.triangulate

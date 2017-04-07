@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -21,7 +21,7 @@
 #include <vector>
 
 #include <geos/profiler.h>
-#include <geos/util/TopologyException.h> 
+#include <geos/util/TopologyException.h>
 #include <geos/noding/IteratedNoder.h>
 #include <geos/noding/SegmentString.h>
 #include <geos/noding/MCIndexNoder.h>

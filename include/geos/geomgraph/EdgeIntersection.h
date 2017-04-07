@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -36,7 +36,7 @@ namespace geomgraph { // geos.geomgraph
 
 /**
  * Represents a point on an edge which intersects with another edge.
- * 
+ *
  * The intersection may either be a single point, or a line segment
  * (in which case this point is the start of the line segment)
  * The intersection point must be precise.

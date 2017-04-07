@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -23,13 +23,13 @@
 
 #include <geos/planargraph/DirectedEdge.h> // for inheritance
 
-// Forward declarations 
+// Forward declarations
 namespace geos {
-	namespace geom { 
+	namespace geom {
 		class Coordinate;
 		//class LineString;
 	}
-	namespace planargraph { 
+	namespace planargraph {
 		class Node;
 	}
 }
@@ -41,7 +41,7 @@ namespace linemerge { // geos::operation::linemerge
 
 /**
  * \brief
- * A planargraph::DirectedEdge of a LineMergeGraph. 
+ * A planargraph::DirectedEdge of a LineMergeGraph.
  *
  */
 class GEOS_DLL LineMergeDirectedEdge: public planargraph::DirectedEdge {
@@ -58,7 +58,7 @@ public:
 	 * @param edgeDirection
 	 *        whether this DirectedEdge's direction is the same as or
 	 *        opposite to that of the parent Edge (if any)
-	 */  
+	 */
 	LineMergeDirectedEdge(planargraph::Node *from,
 			planargraph::Node *to,
 			const geom::Coordinate& directionPt,
@@ -66,7 +66,7 @@ public:
 
 	/**
 	* Returns the directed edge that starts at this directed edge's end point, or null
-	* if there are zero or multiple directed edges starting there.  
+	* if there are zero or multiple directed edges starting there.
 	* @return
 	*/
 	LineMergeDirectedEdge* getNext();

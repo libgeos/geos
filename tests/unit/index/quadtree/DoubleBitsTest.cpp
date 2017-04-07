@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::index::quadtree::DoubleBits class.
 
 #include <tut.hpp>

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -73,7 +73,7 @@ private:
 	std::auto_ptr<index::quadtree::Quadtree> index;
 
 	std::vector<geom::Envelope*> newEnvelopes;
-	
+
 	// Copying is turned off
 	LineSegmentIndex(const LineSegmentIndex&);
 	LineSegmentIndex& operator=(const LineSegmentIndex&);

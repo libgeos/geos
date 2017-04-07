@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -38,7 +38,7 @@ namespace simplify { // geos::simplify
  *
  * Ensures that any polygonal geometries returned are valid.
  * Simple lines are not guaranteed to remain simple after simplification.
- * 
+ *
  * Note that in general D-P does not preserve topology -
  * e.g. polygons can be split, collapse to lines or disappear
  * holes can be created or disappear,

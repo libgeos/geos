@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSRelateBoundaryNodeRule
 
 #include <tut.hpp>
@@ -30,7 +30,7 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
@@ -38,7 +38,7 @@ namespace tut
             : geom1_(0), geom2_(0), pat_(0)
         {
             initGEOS(notice, notice);
-        }       
+        }
 
         ~test_capigeosrelateboundarynoderule_data()
         {

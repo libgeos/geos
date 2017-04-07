@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  *
@@ -27,8 +27,8 @@ namespace geos {
 	}
 	namespace geom {
 		class Geometry;
-		class Coordinate; 
-		class CoordinateSequence; 
+		class Coordinate;
+		class CoordinateSequence;
 		class LineSegment;
 	}
 	namespace index {
@@ -48,11 +48,11 @@ namespace locate { // geos::algorithm::locate
  *
  * This algorithm is suitable for use in cases where
  * many points will be tested against a given area.
- * 
+ *
  * @author Martin Davis
  *
  */
-class IndexedPointInAreaLocator : public PointOnGeometryLocator 
+class IndexedPointInAreaLocator : public PointOnGeometryLocator
 {
 private:
 	class IntervalIndexedGeometry
@@ -80,11 +80,11 @@ private:
 		algorithm::RayCrossingCounter * counter;
 
 	public:
-		SegmentVisitor( algorithm::RayCrossingCounter * counter) 
+		SegmentVisitor( algorithm::RayCrossingCounter * counter)
 		:	counter( counter)
 		{ }
-		
-		~SegmentVisitor() 
+
+		~SegmentVisitor()
 		{ }
 
 		void visitItem( void * item);
@@ -108,12 +108,12 @@ public:
 	IndexedPointInAreaLocator( const geom::Geometry & g);
 
 	~IndexedPointInAreaLocator();
-    
+
 	/**
 	 * Determines the {@link Location} of a point in an areal {@link Geometry}.
-	 * 
+	 *
 	 * @param p the point to test
-	 * @return the location of the point in the geometry  
+	 * @return the location of the point in the geometry
 	 */
 	int locate( const geom::Coordinate * /*const*/ p);
 

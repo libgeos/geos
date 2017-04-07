@@ -8,10 +8,10 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
- ********************************************************************** 
+ **********************************************************************
  *
  * This includes all headers from geos/algorithm.
  * It is reccommended you avoid to include this file, but rather
@@ -50,9 +50,9 @@ namespace geos {
 
 /** \brief
  * Contains classes and interfaces implementing fundamental computational geometry algorithms.
- * 
+ *
  * <H3>Robustness</H3>
- * 
+ *
  * Geometrical algorithms involve a combination of combinatorial and numerical computation.  As with
  * all numerical computation using finite-precision numbers, the algorithms chosen are susceptible to
  * problems of robustness.  A robustness problem occurs when a numerical calculation produces an
@@ -64,9 +64,9 @@ namespace geos {
  * the non-robust versions.  Fortunately, JTS is sensitive to robustness problems in only a few key
  * functions (such as line intersection and the point-in-polygon test).  There are efficient robust
  * algorithms available for these functions, and these algorithms are implemented in JTS.
- * 
+ *
  * <H3>Computational Performance</H3>
- * 
+ *
  * Runtime performance is an important consideration for a production-quality implementation of
  * geometric algorithms.  The most computationally intensive algorithm used in JTS is intersection
  * detection.  JTS methods need to determine both all intersection between the line segments in a
@@ -78,16 +78,16 @@ namespace geos {
  * detection.  Unfortunately, many of them involve substantial code complexity.  JTS tries to balance code
  * simplicity with performance gains.  It uses some simple techniques to produce substantial performance
  * gains for common types of input data.
- * 
- * 
+ *
+ *
  * <h2>Package Specification</h2>
- * 
+ *
  * <ul>
  *   <li>Java Topology Suite Technical Specifications
  *   <li><A HREF="http://www.opengis.org/techno/specs.htm">
  *       OpenGIS Simple Features Specification for SQL</A>
  * </ul>
- * 
+ *
  */
 namespace algorithm { // geos::algorithm
 

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  *
@@ -51,7 +51,7 @@ namespace noding { // geos::noding
  *
  * @version 1.7
  */
-class MCIndexSegmentSetMutualIntersector : public SegmentSetMutualIntersector 
+class MCIndexSegmentSetMutualIntersector : public SegmentSetMutualIntersector
 {
 public:
 
@@ -63,18 +63,18 @@ public:
 	 * by this class and destroyed on next call to ::process.
 	 * Copy them if you need them alive for longer.
 	 */
-	std::vector<index::chain::MonotoneChain *>& getMonotoneChains() 
-	{ 
-		return monoChains; 
+	std::vector<index::chain::MonotoneChain *>& getMonotoneChains()
+	{
+		return monoChains;
 	}
 
-	index::SpatialIndex* getIndex() 
-	{ 
-		return index; 
+	index::SpatialIndex* getIndex()
+	{
+		return index;
 	}
 
 	void setBaseSegments(SegmentString::ConstVect* segStrings);
-  
+
 	// NOTE: re-populates the MonotoneChain vector with newly created chains
 	void process(SegmentString::ConstVect* segStrings);
 
@@ -111,12 +111,12 @@ private:
 	int processCounter;
 	// statistics
 	int nOverlaps;
-	
+
 	/* memory management helper, holds MonotoneChain objects used
 	 * in the SpatialIndex. It's cleared when the SpatialIndex is
 	 */
 	MonoChains chainStore;
-      
+
 	void addToIndex( SegmentString * segStr);
 
 	void intersectChains();

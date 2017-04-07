@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -38,7 +38,7 @@ void run(int nPts, GeometryFactory *fact) {
 	double armLen=50.0;
 	int nArms=10;
 	Polygon *poly=GeometryTestFactory::createSineStar(fact,0.0,0.0,size,armLen,nArms,nPts);
-	Polygon *box=GeometryTestFactory::createSineStar(fact,0.0,size/2,size,armLen,nArms,nPts); 
+	Polygon *box=GeometryTestFactory::createSineStar(fact,0.0,size/2,size,armLen,nArms,nPts);
     //Polygon *box=GeometryTestFactory::createBox(fact,0,0,1,100.0);
 
 	startTime=clock();
@@ -47,7 +47,7 @@ void run(int nPts, GeometryFactory *fact) {
 	double totalTime=(double)(endTime-startTime);
 	printf( "n Pts: %i  Executed in %6.0f ms.\n",nPts,totalTime);
     //cout << "n Pts: " << nPts << "   Executed in " << totalTime << endl;
-    
+
     // FIXME - mloskot: Why generated test geometries are not destroyed?"
 }
 

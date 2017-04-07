@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -43,7 +43,7 @@ LinearRing::LinearRing(CoordinateSequence* newCoords,
 	Geometry(newFactory),
 	LineString(newCoords, newFactory)
 {
-	validateConstruction();	
+	validateConstruction();
 }
 
 /*public*/
@@ -53,7 +53,7 @@ LinearRing::LinearRing(CoordinateSequence::AutoPtr newCoords,
 	Geometry(newFactory),
 	LineString(newCoords, newFactory)
 {
-	validateConstruction();	
+	validateConstruction();
 }
 
 
@@ -80,7 +80,7 @@ LinearRing::validateConstruction()
 }
 
 
-		
+
 // superclass LineString will delete internal CoordinateSequence
 LinearRing::~LinearRing(){
 }

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -80,12 +80,12 @@ BufferResultMatcher::isSymDiffAreaInTolerance(
 	                   overlayOp(OverlayOp::opSYMDIFFERENCE));
 
 	double areaDiff = diff->getArea();
-	
-	// can't get closer than difference area = 0 ! 
+
+	// can't get closer than difference area = 0 !
 	// This also handles case when symDiff is empty
 	if (areaDiff <= 0.0) return true;
 
-	if (area <= 0) return false; 
+	if (area <= 0) return false;
 	double frac = areaDiff / area;
 
 	bool ret = frac < MAX_RELATIVE_AREA_DIFFERENCE;

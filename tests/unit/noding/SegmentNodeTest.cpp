@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::noding::SegmentNode class.
 
 #include <tut.hpp>
@@ -26,7 +26,7 @@ namespace tut
 
     	typedef std::auto_ptr<geos::noding::SegmentString>
             SegmentStringPtr;
-	
+
         const geos::geom::CoordinateSequenceFactory* factory_;
 
         test_segmentnode_data()
@@ -66,7 +66,7 @@ namespace tut
         ensure_equals( cs->size(), coords_size );
 
         // Create SegmentString instance
-        
+
         NodedSegmentString segment(cs.release(), 0);
 
         ensure_equals( segment.size(), coords_size );
@@ -80,10 +80,10 @@ namespace tut
             ensure_equals( node.segmentIndex, segment_index );
 
             // only first endpoint is considered interior
-            ensure( node.isInterior() ); 
+            ensure( node.isInterior() );
 
-            // 
-            // TODO - mloskot 
+            //
+            // TODO - mloskot
             //  1. What's the purpose of isEndPoint() and how to test it?
             //  2. Add new test cases
             //
@@ -114,7 +114,7 @@ namespace tut
         ensure_equals( cs->size(), coords_size );
 
         // Create SegmentString instance
-        
+
         NodedSegmentString segment(cs.release(), 0);
 
         ensure_equals( segment.size(), coords_size );
@@ -128,7 +128,7 @@ namespace tut
             ensure_equals( node.segmentIndex, segment_index );
 
             // on first endpoint ...
-            ensure( ! node.isInterior() ); 
+            ensure( ! node.isInterior() );
 
         }
 
@@ -156,7 +156,7 @@ namespace tut
         ensure_equals( cs->size(), coords_size );
 
         // Create SegmentString instance
-        
+
         NodedSegmentString segment(cs.release(), 0);
 
         ensure_equals( segment.size(), coords_size );
@@ -170,7 +170,7 @@ namespace tut
             ensure_equals( node.segmentIndex, segment_index );
 
             // on first endpoint ...
-            ensure( node.isInterior() ); 
+            ensure( node.isInterior() );
 
         }
 
@@ -198,7 +198,7 @@ namespace tut
         ensure_equals( cs->size(), coords_size );
 
         // Create SegmentString instance
-        
+
         NodedSegmentString segment(cs.release(), 0);
 
         ensure_equals( segment.size(), coords_size );
@@ -212,7 +212,7 @@ namespace tut
             ensure_equals( node.segmentIndex, segment_index );
 
             // on first endpoint ...
-            ensure( node.isInterior() ); 
+            ensure( node.isInterior() );
 
         }
 

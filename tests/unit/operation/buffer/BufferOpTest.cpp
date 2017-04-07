@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::operation::buffer::BufferOp class.
 
 // tut
@@ -107,7 +107,7 @@ namespace tut
         // Buffer point with custom parameters: 32 quadrant segments
         int const segments = 32;
         BufferParameters params(segments);
-        
+
         BufferOp op(g0.get(), params);
 
         double const distance = 1.0;
@@ -304,7 +304,7 @@ namespace tut
         ensure(gBuffer2->getNumPoints() >= std::size_t(5));
 
         ensure(gBuffer1->equals(gBuffer2.get()));
-        ensure(gBuffer2->equals(gBuffer1.get()));        
+        ensure(gBuffer2->equals(gBuffer1.get()));
     }
 
     // Test for ticket #473

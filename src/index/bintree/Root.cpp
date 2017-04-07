@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -64,7 +64,7 @@ Root::insert(Interval *itemInterval,void* item)
 void
 Root::insertContained(Node *tree, Interval *itemInterval, void* item)
 {
-	using geos::index::quadtree::IntervalSize;  
+	using geos::index::quadtree::IntervalSize;
 
 	assert(tree->getInterval()->contains(itemInterval));
 

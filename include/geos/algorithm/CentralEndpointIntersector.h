@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -46,14 +46,14 @@ namespace algorithm { // geos::algorithm
  *
  * This is effective in cases where the segments are nearly parallel
  * and should intersect at an endpoint.
- * It is also a reasonable strategy for cases where the 
+ * It is also a reasonable strategy for cases where the
  * endpoint of one segment lies on or almost on the interior of another one.
  * Taking the most central endpoint ensures that the computed intersection
  * point lies in the envelope of the segments.
- * Also, by always returning one of the input points, this should result 
+ * Also, by always returning one of the input points, this should result
  * in reducing segment fragmentation.
- * Intended to be used as a last resort for 
- * computing ill-conditioned intersection situations which 
+ * Intended to be used as a last resort for
+ * computing ill-conditioned intersection situations which
  * cause other methods to fail.
  *
  * @author Martin Davis
@@ -61,7 +61,7 @@ namespace algorithm { // geos::algorithm
  */
 class GEOS_DLL CentralEndpointIntersector {
 
-public:	
+public:
 
 	static const geom::Coordinate& getIntersection(const geom::Coordinate& p00,
 			const geom::Coordinate& p01, const geom::Coordinate& p10,
@@ -123,7 +123,7 @@ private:
 
 	/**
 	 * Determines a point closest to the given point.
-	 * 
+	 *
 	 * @param p the point to compare against
 	 * @param p1 a potential result point
 	 * @param p2 a potential result point

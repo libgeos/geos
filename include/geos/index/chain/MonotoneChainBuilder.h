@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -28,8 +28,8 @@ namespace geos {
 	namespace geom {
 		class CoordinateSequence;
 	}
-	namespace index { 
-		namespace chain { 
+	namespace index {
+		namespace chain {
 			class MonotoneChain;
 		}
 	}

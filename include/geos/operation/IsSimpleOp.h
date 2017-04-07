@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -63,21 +63,21 @@ namespace operation { // geos.operation
  *
  *  - A Geometry is simple if and only if the only self-intersections
  *    are at boundary points.
- * 
+ *
  * This definition relies on the definition of boundary points.
  * The SFS uses the Mod-2 rule to determine which points are on the boundary of
  * lineal geometries, but this class supports
  * using other {@link BoundaryNodeRule}s as well.
  *
  * Simplicity is defined for each {@link Geometry} subclass as follows:
- * 
+ *
  *  - Valid polygonal geometries are simple by definition, so
  *    <code>isSimple</code> trivially returns true.
  *    (Hint: in order to check if a polygonal geometry has self-intersections,
  *    use {@link Geometry::isValid}).
  *
  *  - Linear geometries are simple iff they do not self-intersect at points
- *    other than boundary points. 
+ *    other than boundary points.
  *    (Using the Mod-2 rule, this means that closed linestrings
  *    cannot be touched at their endpoints, since these are
  *    interior points, not boundary points).
@@ -200,7 +200,7 @@ private:
 			geom::CoordinateLessThen>&endPoints,
 			const geom::Coordinate *p, bool isClosed);
 
-	bool isClosedEndpointsInInterior; 
+	bool isClosedEndpointsInInterior;
 
 	bool isSimpleMultiPoint(const geom::MultiPoint& mp);
 

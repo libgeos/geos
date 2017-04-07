@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -129,7 +129,7 @@ void
 DirectedEdgeStar::computeLabelling(std::vector<GeometryGraph*> *geom)
 	//throw(TopologyException *)
 {
-	// this call can throw a TopologyException 
+	// this call can throw a TopologyException
 	// we don't have any cleanup to do...
 	EdgeEndStar::computeLabelling(geom);
 
@@ -156,7 +156,7 @@ DirectedEdgeStar::computeLabelling(std::vector<GeometryGraph*> *geom)
 void
 DirectedEdgeStar::mergeSymLabels()
 {
-	EdgeEndStar::iterator endIt=end(); 
+	EdgeEndStar::iterator endIt=end();
 	for (EdgeEndStar::iterator it=begin(); it!=endIt; ++it)
 	{
 		assert(*it);
@@ -210,7 +210,7 @@ DirectedEdgeStar::getResultAreaEdges()
 
 /*public*/
 void
-DirectedEdgeStar::linkResultDirectedEdges() 
+DirectedEdgeStar::linkResultDirectedEdges()
 	// throw(TopologyException *)
 {
 	// make sure edges are copied to resultAreaEdges list
@@ -319,8 +319,8 @@ DirectedEdgeStar::linkAllDirectedEdges()
 	DirectedEdge *firstIn=NULL;
 
 	// link edges in CW order
-	EdgeEndStar::reverse_iterator rbeginIt=rbegin(); 
-	EdgeEndStar::reverse_iterator rendIt=rend(); 
+	EdgeEndStar::reverse_iterator rbeginIt=rbegin();
+	EdgeEndStar::reverse_iterator rendIt=rend();
 	for(EdgeEndStar::reverse_iterator it=rbeginIt; it!=rendIt; ++it)
 	{
 		assert(*it);

@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSGeom_extractUniquePoints_r
 
 #include <tut.hpp>
@@ -31,7 +31,7 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
@@ -39,7 +39,7 @@ namespace tut
                 : geom1_(0), geom2_(0), geom3_(0)
         {
             handle_ = initGEOS_r(notice, notice);
-        }       
+        }
 
         ~test_capigeosextractuniquepoints_data()
         {
@@ -97,6 +97,6 @@ namespace tut
         ensure(0 != GEOSEquals_r(handle_, geom3_, geom2_));
     }
 
- 
+
 } // namespace tut
 

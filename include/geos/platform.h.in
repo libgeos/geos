@@ -38,7 +38,7 @@ extern "C"
 
 #if defined(__GNUC__) && defined(_WIN32)
 /* For MingW the appropriate definitions are included in
- math.h and float.h but the definitions in 
+ math.h and float.h but the definitions in
  math.h are only included if __STRICT_ANSI__
  is not defined.  Since GEOS is compiled with -ansi that
  means those definitions are not available. */
@@ -77,7 +77,7 @@ extern "C"
 # define FINITE(x) (finite(x))
 #else
 # if defined(_MSC_VER)
-#  define FINITE(x) _finite(static_cast<double>(x))    
+#  define FINITE(x) _finite(static_cast<double>(x))
 # elif defined(__hpux__) && defined(__ia64__)
 #  define FINITE(x) (_Isfinite(x))
 # else

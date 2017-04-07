@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  ***********************************************************************
@@ -18,11 +18,11 @@
 
 #include <geos/operation/overlay/validate/OffsetPointGenerator.h>
 #include <geos/geom/Geometry.h>
-#include <geos/geom/LineString.h> 
-#include <geos/geom/MultiPoint.h> 
-#include <geos/geom/CoordinateSequence.h> 
+#include <geos/geom/LineString.h>
+#include <geos/geom/MultiPoint.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/util/LinearComponentExtracter.h> 
+#include <geos/geom/util/LinearComponentExtracter.h>
 
 #include <cassert>
 #include <functional>

@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::geom::MultiLineString class.
 
 #include <tut.hpp>

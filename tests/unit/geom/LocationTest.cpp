@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::geom::Location class.
 
 // tut
@@ -65,18 +65,18 @@ namespace tut
     {
 		using geos::geom::Location;
 
-		try 
+		try
 		{
 			Location::toLocationSymbol(101);
 			Location::toLocationSymbol(-101);
-		
-			fail("IllegalArgumentException expected"); 
+
+			fail("IllegalArgumentException expected");
 		}
-		catch ( geos::util::IllegalArgumentException const& e ) 
-		{ 
-			const char* msg = e.what(); // ok 
+		catch ( geos::util::IllegalArgumentException const& e )
+		{
+			const char* msg = e.what(); // ok
 			ensure( msg != 0 );
-		} 
+		}
     }
 
 } // namespace tut

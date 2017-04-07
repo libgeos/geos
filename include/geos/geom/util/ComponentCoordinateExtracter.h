@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -30,12 +30,12 @@ namespace geom { // geos::geom
 namespace util { // geos::geom::util
 
 /** \brief
- * Extracts a single representative {@link Coordinate} 
+ * Extracts a single representative {@link Coordinate}
  * from each connected component of a {@link Geometry}.
  *
  * @version 1.9
  */
-class ComponentCoordinateExtracter : public GeometryComponentFilter 
+class ComponentCoordinateExtracter : public GeometryComponentFilter
 {
 public:
 	/**

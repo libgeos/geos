@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -23,8 +23,8 @@
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/spatialIndex.h>
 #include <geos/geom/Envelope.h>
-#include <geos/index/chain/MonotoneChainSelectAction.h> 
-#include <geos/index/chain/MonotoneChain.h> 
+#include <geos/index/chain/MonotoneChainSelectAction.h>
+#include <geos/index/chain/MonotoneChain.h>
 #include <geos/util.h>
 
 #include <algorithm>
@@ -124,7 +124,7 @@ MCIndexPointSnapper::snap(HotPixel& hotPixel,
 
 	return hotPixelSnapAction.isNodeAdded();
 }
- 
+
 } // namespace geos.noding.snapround
 } // namespace geos.noding
 } // namespace geos

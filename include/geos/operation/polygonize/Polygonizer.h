@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -33,13 +33,13 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom { 
+	namespace geom {
 		class Geometry;
 		class LineString;
 		class Polygon;
 	}
-	namespace operation { 
-		namespace polygonize { 
+	namespace operation {
+		namespace polygonize {
 			class EdgeRing;
 			class PolygonizeGraph;
 		}
@@ -59,9 +59,9 @@ namespace polygonize { // geos::operation::polygonize
  * The edges must be correctly noded; that is, they must only meet
  * at their endpoints.  The Polygonizer will still run on incorrectly noded input
  * but will not form polygons from incorrected noded edges.
- * 
+ *
  * The Polygonizer reports the follow kinds of errors:
- * 
+ *
  * - <b>Dangles</b> - edges which have one or both ends which are
  *   not incident on another edge endpoint
  * - <b>Cut Edges</b> - edges which are connected at both ends but

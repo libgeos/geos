@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::operation::linemerge::LineSequencer class.
 
 // tut
@@ -71,7 +71,7 @@ namespace tut
 
       if ( ! sequencer.isSequenceable() ) {
       	ensure( expectedWKT.empty() );
-      } else {  
+      } else {
         GeomPtr expected = readWKT(expectedWKT);
         GeomPtr result ( sequencer.getSequencedLineStrings() );
         ensure( expected->equalsExact( result.get() ) );
@@ -124,7 +124,7 @@ namespace tut
       "LINESTRING ( 0 20, 0 30 )",
       "LINESTRING ( 0 10, 0 20 )",
       NULL };
-    const char* expWKT = 
+    const char* expWKT =
       "MULTILINESTRING ((0 0, 0 10), (0 10, 0 20), (0 20, 0 30))";
 
     runLineSequencer(inpWKT, expWKT);
@@ -138,7 +138,7 @@ namespace tut
       "LINESTRING ( 0 0, 0 10 )",
       "LINESTRING ( 0 10, 0 0 )",
       NULL };
-    const char* expWKT = 
+    const char* expWKT =
       "MULTILINESTRING ((0 0, 0 10), (0 10, 0 0))";
     runLineSequencer(inpWKT, expWKT);
   }
@@ -153,7 +153,7 @@ namespace tut
       "LINESTRING ( 0 30, 0 00 )",
       "LINESTRING ( 0 10, 0 20 )",
       NULL };
-    const char* expWKT = 
+    const char* expWKT =
       "MULTILINESTRING ((0 0, 0 10), (0 10, 0 20), (0 20, 0 30), (0 30, 0 0))";
     runLineSequencer(inpWKT, expWKT);
   }
@@ -168,7 +168,7 @@ namespace tut
       "LINESTRING ( 0 0, 0 20 )",
       "LINESTRING ( 0 20, 0 0 )",
       NULL };
-    const char* expWKT = 
+    const char* expWKT =
       "MULTILINESTRING ((0 10, 0 0), (0 0, 0 20), (0 20, 0 0), (0 0, 0 10))";
     runLineSequencer(inpWKT, expWKT);
   }
@@ -185,7 +185,7 @@ namespace tut
       "LINESTRING ( 0 10, 0 20 )",
       "LINESTRING ( 10 10, 10 20 )",
       "LINESTRING ( 0 20, 10 20 )",
- 
+
       "LINESTRING ( 10 20, 30 30 )",
       NULL };
     const char* expWKT = "";
@@ -201,7 +201,7 @@ namespace tut
       "LINESTRING ( 0 10, 10 10 )",
       "LINESTRING ( 10 10, 10 20, 0 10 )",
       NULL };
-    const char* expWKT = 
+    const char* expWKT =
 "MULTILINESTRING ((0 0, 0 10), (0 10, 10 10), (10 10, 10 20, 0 10))";
     runLineSequencer(inpWKT, expWKT);
   }
@@ -216,7 +216,7 @@ namespace tut
       "LINESTRING ( 0 30, 0 20 )",
       "LINESTRING ( 0 20, 0 10 )",
       NULL };
-    const char* expWKT = 
+    const char* expWKT =
         "MULTILINESTRING ((0 0, 0 10), (0 10, 10 10, 10 20, 0 10), (0 10, 0 20), (0 20, 0 30))";
     runLineSequencer(inpWKT, expWKT);
   }
@@ -233,7 +233,7 @@ namespace tut
       "LINESTRING ( 0 60, 0 50 )",
       "LINESTRING ( 0 40, 0 50 )",
       NULL };
-    const char* expWKT = 
+    const char* expWKT =
 "MULTILINESTRING ((0 0, 0 10), (0 10, 10 10, 10 20, 0 10), (0 10, 0 20), (0 20, 0 30), (0 40, 0 50), (0 50, 0 60))";
     runLineSequencer(inpWKT, expWKT);
   }
@@ -251,7 +251,7 @@ namespace tut
       "LINESTRING ( 0 60, 0 50 )",
       "LINESTRING ( 0 40, 0 50 )",
       NULL };
-    const char* expWKT = 
+    const char* expWKT =
         "MULTILINESTRING ((0 0, 0 10), (0 10, 40 40, 40 20, 0 10), (0 10, 10 10, 10 20, 0 10), (0 10, 0 20), (0 20, 0 30), (0 40, 0 50), (0 50, 0 60))";
 
     runLineSequencer(inpWKT, expWKT);

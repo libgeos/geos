@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::geom::PrecisionModel class.
 
 // tut
@@ -25,9 +25,9 @@ namespace tut
                       double x2, double y2)
         {
               Coordinate p(x1, y1);
-      
+
               pm.makePrecise(p);
-      
+
               Coordinate pPrecise(x2, y2);
               ensure(p.equals2D(pPrecise));
         }

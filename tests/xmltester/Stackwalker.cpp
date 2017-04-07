@@ -29,7 +29,7 @@
 
 #include "Stackwalker.h"
 
-// If the following is defined, only the used memories are stored in the hash-table. 
+// If the following is defined, only the used memories are stored in the hash-table.
 // If the memory is freed, it will be removed from the hash-table (to reduce memory)
 // Consequences: At DeInitAllocHook, only Leaks will be reported
 #define HASH_ENTRY_REMOVE_AT_FREE
@@ -426,12 +426,12 @@ void IMallocHashInsert(void *pData, CONTEXT &Context, size_t nDataSize) {
 }
 
 // IMallocHashFind
-//   Wird ALLOC_ENTRY_NOT_FOUND zurückgegeben, so wurde der Key nicht 
+//   Wird ALLOC_ENTRY_NOT_FOUND zurückgegeben, so wurde der Key nicht
 //   gefunden, ansonsten wird ein Zeiger auf den Hash-Eintrag zurückgegeben
-//   ACHTUNG: In einem preemptiven Tasking-System kann hier nicht 
-//            garantiert werden, ob der Zeiger noch gültig ist, wenn er 
+//   ACHTUNG: In einem preemptiven Tasking-System kann hier nicht
+//            garantiert werden, ob der Zeiger noch gültig ist, wenn er
 //            zurückgegeben wird, da er von einem anderen Thread schon
-//            freigegeben sein könnte. 
+//            freigegeben sein könnte.
 //            Die synchronisation muß eine Ebene höher erfolgen
 static IMallocHashEntryType *IMallocHashFind(void *pData) {
   ULONG HashIdx;
@@ -549,7 +549,7 @@ static BOOL __stdcall ReadProcMemoryFromIMallocHash(HANDLE pData, LPCVOID lpBase
     if (dwSize != nSize)
       return FALSE;
   }
-  
+
   if (*lpNumberOfBytesRead == 0)  // Der Speicher konnte nicht gefunden werden
     return FALSE;
 
@@ -769,7 +769,7 @@ static void AllocHashInsert(long lRequestID, CONTEXT &Context, size_t nDataSize)
   else {
     // Entry is not empy! make a list of entries for this hash value...
     // change statistical data
-    // if this happens often, you should increase the hah size or change the heash-function; 
+    // if this happens often, you should increase the hah size or change the heash-function;
     // to fasten the allocation time
     AllocHashCollisions++;
     AllocHashCurrentCollisions++;
@@ -953,7 +953,7 @@ static BOOL __stdcall ReadProcMemoryFromHash(HANDLE hRequestID, LPCVOID lpBaseAd
     if (dwSize != nSize)
       return FALSE;
   }
-  
+
   if (*lpNumberOfBytesRead == 0)  // Memory could not be found
     return FALSE;
 
@@ -1063,7 +1063,7 @@ typedef struct _CrtMemBlockHeader
 } _CrtMemBlockHeader;
 #define pbData(pblock) ((unsigned char *)((_CrtMemBlockHeader *)pblock + 1))
 #define pHdr(pbData) (((_CrtMemBlockHeader *)pbData)-1)
- 
+
 // </CRT_INTERNALS>
 
 
@@ -1089,13 +1089,13 @@ static void DeactivateMallocStackwalker(void) {
 
 // MyAllocHook is Single-Threaded, that means the the calls are serialized in the calling function!
 // Special case for VC 5
-#if _MSC_VER <= 1100 
-static int MyAllocHook(int nAllocType, void *pvData, 
-      size_t nSize, int nBlockUse, long lRequest, 
+#if _MSC_VER <= 1100
+static int MyAllocHook(int nAllocType, void *pvData,
+      size_t nSize, int nBlockUse, long lRequest,
       const char * szFileName, int nLine ) {
 #else
-static int MyAllocHook(int nAllocType, void *pvData, 
-      size_t nSize, int nBlockUse, long lRequest, 
+static int MyAllocHook(int nAllocType, void *pvData,
+      size_t nSize, int nBlockUse, long lRequest,
       const unsigned char * szFileName, int nLine ) {
 #endif
   static TCHAR *operation[] = { _T(""), _T("ALLOCATIONG"), _T("RE-ALLOCATING"), _T("FREEING") };
@@ -1175,7 +1175,7 @@ static int MyAllocHook(int nAllocType, void *pvData,
       if(g_ulShowStackAtAlloc > 0) {
       // No valid RequestID found, display error
       _ftprintf(g_fFile, _T("###### No valid RequestID for FREEING! (0x%X)\n"), pvData);
- 
+
       }
     }
   }  // freeing
@@ -1619,7 +1619,7 @@ int InitAllocCheckWN(eAllocCheckOutput eOutput, LPCTSTR pszFileName, ULONG ulSho
   else
     g_ulShowStackAtAlloc = 0;
 
-  if (pszFileName != NULL) 
+  if (pszFileName != NULL)
     g_pszAllocLogName = _tcsdup(pszFileName);
   else
     g_pszAllocLogName = NULL;
@@ -1844,7 +1844,7 @@ std::string SimpleXMLEncode(PCSTR szText)
 // #################################################################################
 // #################################################################################
 // Here the Stackwalk-Part begins.
-//   Some of the code is from an example from a book 
+//   Some of the code is from an example from a book
 //   But I couldn´t find the reference anymore... sorry...
 //   If someone knowns, please let me know...
 // #################################################################################
@@ -1858,9 +1858,9 @@ std::string SimpleXMLEncode(PCSTR szText)
 // earliest opportunity, to avoid the interesting stackframes being gone
 // by the time you do the dump.
 
-// status: 
+// status:
 // - EXCEPTION_CONTINUE_SEARCH: exception wird weitergereicht
-// - EXCEPTION_CONTINUE_EXECUTION: 
+// - EXCEPTION_CONTINUE_EXECUTION:
 // - EXCEPTION_EXECUTE_HANDLER:
 DWORD StackwalkFilter( EXCEPTION_POINTERS *ep, DWORD status, LPCTSTR pszLogFile)
 {
@@ -1886,7 +1886,7 @@ DWORD StackwalkFilter( EXCEPTION_POINTERS *ep, DWORD status, LPCTSTR pszLogFile)
         free(pszTemp);
       }
     }
-  }  // if (pszLogFile != NULL) 
+  }  // if (pszLogFile != NULL)
   if (fFile == NULL) {
     fFile = stdout;
   }
@@ -1894,7 +1894,7 @@ DWORD StackwalkFilter( EXCEPTION_POINTERS *ep, DWORD status, LPCTSTR pszLogFile)
   // Write infos about the exception
   if (g_CallstackOutputType == ACOutput_XML)
   {
-    _ftprintf(fFile, _T("<EXCEPTION code=\"%8.8X\" addr=\"%8.8X\" "), 
+    _ftprintf(fFile, _T("<EXCEPTION code=\"%8.8X\" addr=\"%8.8X\" "),
       ep->ExceptionRecord->ExceptionCode,
       ep->ExceptionRecord->ExceptionAddress);
     WriteDateTime(fFile, TRUE);
@@ -1903,7 +1903,7 @@ DWORD StackwalkFilter( EXCEPTION_POINTERS *ep, DWORD status, LPCTSTR pszLogFile)
   }
   else
   {
-    _ftprintf(fFile, _T("######## EXCEPTION: 0x%8.8X at address: 0x%8.8X"), 
+    _ftprintf(fFile, _T("######## EXCEPTION: 0x%8.8X at address: 0x%8.8X"),
       ep->ExceptionRecord->ExceptionCode,
       ep->ExceptionRecord->ExceptionAddress);
     _ftprintf(fFile, _T(": %s %s\n"), GetExpectionCodeText(ep->ExceptionRecord->ExceptionCode),
@@ -1946,7 +1946,7 @@ void ShowStack( HANDLE hThread, CONTEXT& c, LPCTSTR pszLogFile)
         free(pszTemp);
       }
     }
-  }  // if (pszLogFile != NULL) 
+  }  // if (pszLogFile != NULL)
   if (fFile == NULL) {
     fFile = stdout;
   }
@@ -2094,7 +2094,7 @@ static void ShowStackRM( HANDLE hThread, CONTEXT& c, FILE *fLogFile, PREAD_PROCE
     // On NT, this is not necessary, but it won't hurt.
     EnumAndLoadModuleSymbols( hProcess, GetCurrentProcessId(), fLogFile );
 
-    if (tt) 
+    if (tt)
       free( tt );
   }  // bFirstTime = TRUE
   bFirstTime = FALSE;
@@ -2221,7 +2221,7 @@ static void ShowStackRM( HANDLE hThread, CONTEXT& c, FILE *fLogFile, PREAD_PROCE
             _ftprintf(fLogFile, _T("<STACKENTRY "));
             bXMLTagWrote = TRUE;
             fprintf(fLogFile, "decl=\"%s\" decl_offset=\"%+ld\" ", SimpleXMLEncode(undName).c_str(), (long) offsetFromSymbol);
-            fprintf(fLogFile, "srcfile=\"%s\" line=\"%lu\" line_offset=\"%+ld\" ", 
+            fprintf(fLogFile, "srcfile=\"%s\" line=\"%lu\" line_offset=\"%+ld\" ",
               SimpleXMLEncode(Line.FileName).c_str(), Line.LineNumber, offsetFromLine, undName);
             break;
           }
@@ -2274,7 +2274,7 @@ static void ShowStackRM( HANDLE hThread, CONTEXT& c, FILE *fLogFile, PREAD_PROCE
           if (g_CallstackOutputType == ACOutput_XML)
           {
             // now, check if the XML-Entry is written...
-            if (bXMLTagWrote == FALSE) 
+            if (bXMLTagWrote == FALSE)
             {
               _ftprintf(fLogFile, _T("<STACKENTRY "));
               bXMLTagWrote = TRUE;

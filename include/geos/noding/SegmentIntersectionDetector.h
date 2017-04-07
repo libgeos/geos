@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  *
@@ -29,7 +29,7 @@ namespace noding { // geos::noding
 
 /** \brief
  * Detects and records an intersection between two {@link SegmentString}s,
- * if one exists.  
+ * if one exists.
  *
  * This strategy can be configured to search for proper intersections.
  * In this case, the presence of any intersection will still be recorded,
@@ -40,7 +40,7 @@ namespace noding { // geos::noding
  *
  * @version 1.7
  */
-class SegmentIntersectionDetector : public SegmentIntersector 
+class SegmentIntersectionDetector : public SegmentIntersector
 {
 private:
 	LineIntersector * li;
@@ -57,7 +57,7 @@ private:
 
 protected:
 public:
-	SegmentIntersectionDetector( LineIntersector * li) 
+	SegmentIntersectionDetector( LineIntersector * li)
 		:
 		li( li),
 		findProper(false),
@@ -80,66 +80,66 @@ public:
 	{
 		this->findProper = findProper;
 	}
-  
+
 	void setFindAllIntersectionTypes( bool findAllTypes)
 	{
 		this->findAllTypes = findAllTypes;
 	}
-  
+
 	/**
 	 * Tests whether an intersection was found.
-	 * 
+	 *
 	 * @return true if an intersection was found
 	 */
 	bool hasIntersection() const
-	{ 
-		return _hasIntersection; 
+	{
+		return _hasIntersection;
 	}
-  
+
 	/**
 	 * Tests whether a proper intersection was found.
-	 * 
+	 *
 	 * @return true if a proper intersection was found
 	 */
-	bool hasProperIntersection() const 
-	{ 
-		return _hasProperIntersection; 
+	bool hasProperIntersection() const
+	{
+		return _hasProperIntersection;
 	}
-  
+
 	/**
 	 * Tests whether a non-proper intersection was found.
-	 * 
+	 *
 	 * @return true if a non-proper intersection was found
 	 */
 	bool hasNonProperIntersection() const
-	{ 
-		return _hasNonProperIntersection; 
+	{
+		return _hasNonProperIntersection;
 	}
-  
+
 	/**
 	* Gets the computed location of the intersection.
 	* Due to round-off, the location may not be exact.
-	* 
+	*
 	* @return the coordinate for the intersection location
 	*/
 	const geom::Coordinate * const getIntersection()  const
-	{    
-		return intPt;  
+	{
+		return intPt;
 	}
 
 
 	/**
 	 * Gets the endpoints of the intersecting segments.
-	 * 
+	 *
 	 * @return an array of the segment endpoints (p00, p01, p10, p11)
 	 */
 	const geom::CoordinateSequence * getIntersectionSegments() const
 	{
 		return intSegments;
 	}
-  
+
 	bool isDone() const
-	{ 
+	{
 		// If finding all types, we can stop
 		// when both possible types have been found.
 		if (findAllTypes)
@@ -162,7 +162,7 @@ public:
 	 */
 	void processIntersections(	noding::SegmentString * e0, int segIndex0,
 								noding::SegmentString * e1, int segIndex1 );
-  
+
 };
 
 } // namespace geos::noding

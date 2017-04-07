@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -44,13 +44,13 @@ public:
 		/*
 		 * An indicator that a Location is to the
 		 * <i>left</i> of a GraphComponent
-		 */  
+		 */
 		LEFT,
 
 		/*
 		 * An indicator that a Location is to the
 		 * <i>right</i> of a GraphComponent
-		 */  
+		 */
 		RIGHT
 	};
 

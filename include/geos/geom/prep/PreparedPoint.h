@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  *
@@ -29,22 +29,22 @@ namespace prep { // geos::geom::prep
 /**
  * \brief
  * A prepared version of {@link Point} or {@link MultiPoint} geometries.
- * 
+ *
  * @author Martin Davis
  *
  */
-class PreparedPoint: public BasicPreparedGeometry 
+class PreparedPoint: public BasicPreparedGeometry
 {
 private:
 protected:
 public:
-	PreparedPoint(const Geometry * geom) 
-		: BasicPreparedGeometry( geom) 
+	PreparedPoint(const Geometry * geom)
+		: BasicPreparedGeometry( geom)
 	{ }
 
 	/**
 	 * Tests whether this point intersects a {@link Geometry}.
-	 * 
+	 *
 	 * The optimization here is that computing topology for the test
 	 * geometry is avoided. This can be significant for large geometries.
 	 */

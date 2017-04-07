@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -87,7 +87,7 @@ CGAlgorithms::isOnLine(const Coordinate& p, const CoordinateSequence* pt)
 	const Coordinate *pp=&(pt->getAt(0));
 	for(size_t i=1; i<ptsize; ++i)
 	{
-		const Coordinate &p1=pt->getAt(i);	
+		const Coordinate &p1=pt->getAt(i);
 		if ( LineIntersector::hasIntersection(p, *pp, p1) )
 			return true;
 		pp=&p1;
@@ -156,7 +156,7 @@ CGAlgorithms::isCCW(const CoordinateSequence* ring)
 	int disc = computeOrientation(*prev, *hiPt, *next);
 
 	/**
-	 *  If disc is exactly 0, lines are collinear. 
+	 *  If disc is exactly 0, lines are collinear.
 	 * There are two possible cases:
 	 *  (1) the lines lie along the x axis in opposite directions
 	 *  (2) the lines lie on top of one another

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -159,7 +159,7 @@ double Vertex::interpolateZValue(const Vertex &v0, const Vertex &v1,
 	return z;
 }
 
-double Vertex::interpolateZ(const Coordinate &p, const Coordinate &v0, 
+double Vertex::interpolateZ(const Coordinate &p, const Coordinate &v0,
 		const Coordinate &v1, const Coordinate &v2)
 {
 	double x0 = v0.x;
@@ -177,7 +177,7 @@ double Vertex::interpolateZ(const Coordinate &p, const Coordinate &v0,
 	return z;
 }
 
-double Vertex::interpolateZ(const Coordinate &p, const Coordinate &p0, 
+double Vertex::interpolateZ(const Coordinate &p, const Coordinate &p0,
 		const Coordinate &p1)
 {
 	double segLen = p0.distance(p1);

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -23,7 +23,7 @@
 #include <geos/geom/Geometry.h> // for auto_ptr
 
 #include <memory> // for auto_ptr
-#include <vector> 
+#include <vector>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -50,7 +50,7 @@ public:
 	/// this an auto_ptr<>. @see create()
 	typedef std::auto_ptr<GeometryList> AutoPtr;
 
-	/// Create an empty GeometryList 
+	/// Create an empty GeometryList
 	static GeometryList::AutoPtr create();
 
 	/// Add a geometry to the list (takes ownership)

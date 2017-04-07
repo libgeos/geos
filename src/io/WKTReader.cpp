@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -75,7 +75,7 @@ WKTReader::getCoordinates(StringTokenizer *tokenizer)
 	string nextToken=getNextEmptyOrOpener(tokenizer);
 	if (nextToken=="EMPTY") {
 		return geometryFactory->getCoordinateSequenceFactory()->create();
-		//new CoordinateArraySequence(); 
+		//new CoordinateArraySequence();
 	}
 
 	Coordinate coord;
@@ -100,7 +100,7 @@ WKTReader::getCoordinates(StringTokenizer *tokenizer)
 }
 
 void
-WKTReader::getPreciseCoordinate(StringTokenizer *tokenizer, 
+WKTReader::getPreciseCoordinate(StringTokenizer *tokenizer,
                                 Coordinate& coord,
                                 size_t &dim )
 {
@@ -109,9 +109,9 @@ WKTReader::getPreciseCoordinate(StringTokenizer *tokenizer,
 	if (isNumberNext(tokenizer)) {
 		coord.z=getNextNumber(tokenizer);
 		dim = 3;
-        
+
         // If there is a fourth value (M) read and discard it.
-        if (isNumberNext(tokenizer)) 
+        if (isNumberNext(tokenizer))
             getNextNumber(tokenizer);
 
 	} else {
@@ -156,7 +156,7 @@ WKTReader::getNextEmptyOrOpener(StringTokenizer *tokenizer)
 {
 	string nextWord=getNextWord(tokenizer);
 
-    // Skip the Z, M or ZM of an SF1.2 3/4 dim coordinate. 
+    // Skip the Z, M or ZM of an SF1.2 3/4 dim coordinate.
     if (nextWord == "Z" || nextWord == "M" || nextWord == "ZM" )
         nextWord = getNextWord(tokenizer);
 
@@ -320,7 +320,7 @@ WKTReader::readMultiPointText(StringTokenizer *tokenizer)
 			} while(nextToken == ",");
 			return geometryFactory->createMultiPoint(points);
 		} catch (...) {
-			// clean up 
+			// clean up
 			for (size_t i=0; i<points->size(); i++)
 			{
 				delete (*points)[i];
@@ -330,7 +330,7 @@ WKTReader::readMultiPointText(StringTokenizer *tokenizer)
 		}
 	}
 
-	else 
+	else
 	{
 		stringstream err;
 		err << "Unexpected token: ";

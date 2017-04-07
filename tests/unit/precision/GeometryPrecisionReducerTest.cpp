@@ -1,5 +1,5 @@
 // $Id$
-// 
+//
 // Test Suite for geos::precision::GeometryPrecisionReducer class.
 
 // tut

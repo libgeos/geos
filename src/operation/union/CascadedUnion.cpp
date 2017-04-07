@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -48,7 +48,7 @@ geom::Geometry* CascadedUnion::Union()
     /**
      * A spatial index to organize the collection
      * into groups of close geometries.
-     * This makes unioning more efficient, since vertices are more likely 
+     * This makes unioning more efficient, since vertices are more likely
      * to be eliminated on each round.
      */
     index::strtree::STRtree index(STRTREE_NODE_CAPACITY);
@@ -81,7 +81,7 @@ geom::Geometry* CascadedUnion::binaryUnion(GeometryListHolder* geoms)
     return binaryUnion(geoms, 0, geoms->size());
 }
 
-geom::Geometry* CascadedUnion::binaryUnion(GeometryListHolder* geoms, 
+geom::Geometry* CascadedUnion::binaryUnion(GeometryListHolder* geoms,
     std::size_t start, std::size_t end)
 {
     if (end - start <= 1) {
@@ -99,7 +99,7 @@ geom::Geometry* CascadedUnion::binaryUnion(GeometryListHolder* geoms,
     }
 }
 
-GeometryListHolder* 
+GeometryListHolder*
 CascadedUnion::reduceToGeometries(index::strtree::ItemsList* geomTree)
 {
     std::auto_ptr<GeometryListHolder> geoms (new GeometryListHolder());
@@ -123,7 +123,7 @@ CascadedUnion::reduceToGeometries(index::strtree::ItemsList* geomTree)
     return geoms.release();
 }
 
-geom::Geometry* 
+geom::Geometry*
 CascadedUnion::unionSafe(geom::Geometry* g0, geom::Geometry* g1)
 {
     if (g0 == NULL && g1 == NULL)
@@ -137,7 +137,7 @@ CascadedUnion::unionSafe(geom::Geometry* g0, geom::Geometry* g1)
     return unionOptimized(g0, g1);
 }
 
-geom::Geometry* 
+geom::Geometry*
 CascadedUnion::unionOptimized(geom::Geometry* g0, geom::Geometry* g1)
 {
     geom::Envelope const* g0Env = g0->getEnvelopeInternal();
@@ -149,13 +149,13 @@ CascadedUnion::unionOptimized(geom::Geometry* g0, geom::Geometry* g1)
     if (g0->getNumGeometries() <= 1 && g1->getNumGeometries() <= 1)
         return unionActual(g0, g1);
 
-    geom::Envelope commonEnv; 
+    geom::Envelope commonEnv;
     g0Env->intersection(*g1Env, commonEnv);
     return unionUsingEnvelopeIntersection(g0, g1, commonEnv);
 }
 
-geom::Geometry* 
-CascadedUnion::unionUsingEnvelopeIntersection(geom::Geometry* g0, 
+geom::Geometry*
+CascadedUnion::unionUsingEnvelopeIntersection(geom::Geometry* g0,
     geom::Geometry* g1, geom::Envelope const& common)
 {
     std::vector<geom::Geometry*> disjointPolys;
@@ -169,13 +169,13 @@ CascadedUnion::unionUsingEnvelopeIntersection(geom::Geometry* g0,
     return geom::util::GeometryCombiner::combine(disjointPolys);
 }
 
-geom::Geometry* 
-CascadedUnion::extractByEnvelope(geom::Envelope const& env, 
+geom::Geometry*
+CascadedUnion::extractByEnvelope(geom::Envelope const& env,
     geom::Geometry* geom, std::vector<geom::Geometry*>& disjointGeoms)
 {
     std::vector<geom::Geometry*> intersectingGeoms;
 
-    for (std::size_t i = 0; i < geom->getNumGeometries(); i++) { 
+    for (std::size_t i = 0; i < geom->getNumGeometries(); i++) {
         geom::Geometry* elem = const_cast<geom::Geometry*>(geom->getGeometryN(i));
         if (elem->getEnvelopeInternal()->intersects(env))
             intersectingGeoms.push_back(elem);
@@ -186,7 +186,7 @@ CascadedUnion::extractByEnvelope(geom::Envelope const& env,
     return geomFactory->buildGeometry(intersectingGeoms);
 }
 
-geom::Geometry* 
+geom::Geometry*
 CascadedUnion::unionActual(geom::Geometry* g0, geom::Geometry* g1)
 {
     return g0->Union(g1);

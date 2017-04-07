@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSOrientationIndex*
 
 #include <tut.hpp>
@@ -30,14 +30,14 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
         test_capigeosorientationindex_data()
             : handle_(initGEOS_r(notice, notice))
         {
-        }       
+        }
 
         ~test_capigeosorientationindex_data()
         {

@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::geom::util::GeometryExtracter class.
 
 // tut
@@ -72,7 +72,7 @@ namespace tut
       ensure_equals( lst_lines.size(), 0u );
     }
 
-    // Test extraction of multiple types 
+    // Test extraction of multiple types
     template<>
     template<>
     void object::test<2>()

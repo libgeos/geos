@@ -92,12 +92,12 @@ LineString* ExtractLineByLocation::computeLine(const LinearLocation& start, cons
 
     const unsigned int indexStep = 1;
 	unsigned int startSegmentIndex = start.getSegmentIndex();
-    
+
 	if (start.getSegmentFraction() > 0.0)
     {
 		startSegmentIndex += indexStep;
     }
-	
+
     unsigned int lastSegmentIndex = end.getSegmentIndex();
 	if (end.getSegmentFraction() == 1.0)
     {

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -187,7 +187,7 @@ QuadEdgeSubdivision::locateFromEdge(const Vertex &v,
          * invalid subdivision. So just fail completely. (An alternative would be
          * to perform an exhaustive search for the containing triangle, but this
          * would mask errors in the subdivision topology)
-         * 
+         *
          * This can also happen if two vertices are located very close together,
          * since the orientation predicates may experience precision failures.
          */
@@ -393,7 +393,7 @@ public:
         coordSeq->setAt(triEdges[0]->orig().getCoordinate(), 3);
         triCoords->push_back(coordSeq);
     }
-}; 
+};
 
 
 class
@@ -499,14 +499,14 @@ QuadEdgeSubdivision::getTriangles( const GeometryFactory &geomFact)
 
 
 //Methods for VoronoiDiagram
-std::auto_ptr<geom::GeometryCollection> 
+std::auto_ptr<geom::GeometryCollection>
 QuadEdgeSubdivision::getVoronoiDiagram(const geom::GeometryFactory& geomFact)
 {
 	std::auto_ptr< std::vector<geom::Geometry*> > vorCells = getVoronoiCellPolygons(geomFact);
 	return std::auto_ptr<GeometryCollection>(geomFact.createGeometryCollection(vorCells.release()));
 }
 
-std::auto_ptr<geom::MultiLineString> 
+std::auto_ptr<geom::MultiLineString>
 QuadEdgeSubdivision::getVoronoiDiagramEdges(const geom::GeometryFactory& geomFact)
 {
 	std::auto_ptr< std::vector<geom::Geometry*> > vorCells = getVoronoiCellEdges(geomFact);
@@ -576,9 +576,9 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFac
 	{
 		coordList.insert(coordList.end(),*(coordList.end()),true);
 	}
-	
+
 	std::auto_ptr<Coordinate::Vect> pts = coordList.toCoordinateArray();
-	std::auto_ptr<geom::Geometry> cellPoly( 
+	std::auto_ptr<geom::Geometry> cellPoly(
 		geomFact.createPolygon(geomFact.createLinearRing(new geom::CoordinateArraySequence(pts.release())),NULL));
 
 	Vertex v = startQE->orig();
@@ -608,7 +608,7 @@ QuadEdgeSubdivision::getVoronoiCellEdge(QuadEdge* qe ,const geom::GeometryFactor
 	coordList.closeRing();
 
 	std::auto_ptr<Coordinate::Vect> pts = coordList.toCoordinateArray();
-	std::auto_ptr<geom::Geometry> cellEdge( 
+	std::auto_ptr<geom::Geometry> cellEdge(
 		geomFact.createLineString(new geom::CoordinateArraySequence(pts.release())));
 
 	Vertex v = startQE->orig();

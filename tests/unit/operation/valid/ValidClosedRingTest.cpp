@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::operation::valid::IsValidOp class
 // Ported from JTS junit/operation/valid/ValidClosedRingTest.java rev. 1.1
 

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -25,21 +25,21 @@ namespace geom { // geos.geom
 
 bool
 TrianglePredicate::isInCircleNonRobust(
-		const Coordinate &a, const Coordinate &b, const Coordinate &c, 
+		const Coordinate &a, const Coordinate &b, const Coordinate &c,
 		const Coordinate &p)
 {
-	bool isInCircle = 
+	bool isInCircle =
 		(a.x * a.x + a.y * a.y) * triArea(b, c, p)
 		- (b.x * b.x + b.y * b.y) * triArea(a, c, p)
 		+ (c.x * c.x + c.y * c.y) * triArea(a, b, p)
-		- (p.x * p.x + p.y * p.y) * triArea(a, b, c) 
+		- (p.x * p.x + p.y * p.y) * triArea(a, b, c)
 		> 0;
 	return isInCircle;
 }
 
 bool
 TrianglePredicate::isInCircleNormalized(
-		const Coordinate &a, const Coordinate &b, const Coordinate &c, 
+		const Coordinate &a, const Coordinate &b, const Coordinate &c,
 		const Coordinate &p)
 {
 	double adx = a.x - p.x;
@@ -64,18 +64,18 @@ double
 TrianglePredicate::triArea(const Coordinate &a,
 		const Coordinate &b, const Coordinate &c)
 {
-	return (b.x - a.x) * (c.y - a.y) 
+	return (b.x - a.x) * (c.y - a.y)
 		- (b.y - a.y) * (c.x - a.x);
 }
 
 bool
 TrianglePredicate::isInCircleRobust(
-		const Coordinate &a, const Coordinate &b, const Coordinate &c, 
-		const Coordinate &p) 
+		const Coordinate &a, const Coordinate &b, const Coordinate &c,
+		const Coordinate &p)
 {
 	//checkRobustInCircle(a, b, c, p);
-	//	return isInCircleNonRobust(a, b, c, p);	   
-	return isInCircleNormalized(a, b, c, p);	   
+	//	return isInCircleNonRobust(a, b, c, p);
+	return isInCircleNormalized(a, b, c, p);
 }
 
 } // namespace geos.geom

@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for CGAlgorithms::isCCW() function
 // Ported from JTS junit/algorithm/IsCCWTest.java
 
@@ -39,7 +39,7 @@ namespace tut
         {
             assert(0 == cs_);
         }
-        
+
         ~test_isccw_data()
         {
             delete cs_;

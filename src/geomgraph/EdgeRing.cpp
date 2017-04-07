@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -94,7 +94,7 @@ EdgeRing::~EdgeRing()
 	{
 		delete pts;
 	}
-	else 
+	else
 	{
 		delete ring;
 	}
@@ -351,11 +351,11 @@ EdgeRing::addPoints(Edge *edge, bool isForward, bool isFirstEdge)
 			pts->add(edgePts->getAt(i));
 		}
 	}
-	
+
 	else { // is backward
 		size_t startIndex=numEdgePts-1;
 		if (isFirstEdge) startIndex=numEdgePts;
-		//for (int i=startIndex;i>=0;i--) 
+		//for (int i=startIndex;i>=0;i--)
 		for (size_t i=startIndex; i>0; --i)
 		{
 			pts->add(edgePts->getAt(i-1));

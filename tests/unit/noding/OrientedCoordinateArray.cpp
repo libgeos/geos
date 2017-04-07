@@ -1,5 +1,5 @@
 // $Id$
-// 
+//
 // Test Suite for geos::noding::OrientedCoordinateArray class.
 
 #include <tut.hpp>

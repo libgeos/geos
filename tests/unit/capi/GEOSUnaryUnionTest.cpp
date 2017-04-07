@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSUnaryUnion
 
 #include <tut.hpp>
@@ -31,7 +31,7 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
@@ -42,7 +42,7 @@ namespace tut
             wktw_ = GEOSWKTWriter_create();
             GEOSWKTWriter_setTrim(wktw_, 1);
             GEOSWKTWriter_setOutputDimension(wktw_, 3);
-        }       
+        }
 
         std::string toWKT(GEOSGeometry* g)
         {

@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -22,7 +22,7 @@
 #define GEOS_OP_BUFFER_BUFFEROP_H
 
 #include <geos/export.h>
-#include <geos/operation/buffer/BufferParameters.h> // for enum values 
+#include <geos/operation/buffer/BufferParameters.h> // for enum values
 
 #include <geos/util/TopologyException.h> // for composition
 
@@ -61,19 +61,19 @@ namespace buffer { // geos.operation.buffer
  * The buffer operation always returns a polygonal result.
  * The negative or zero-distance buffer of lines and points is always
  * an empty Polygon.
- * 
+ *
  * Since true buffer curves may contain circular arcs,
  * computed buffer polygons can only be approximations to the true geometry.
  * The user can control the accuracy of the curve approximation by specifying
  * the number of linear segments with which to approximate a curve.
- * 
+ *
  * The end cap style of a linear buffer may be specified.
  * The following end cap styles are supported:
  * - CAP_ROUND - the usual round end caps
  * - CAP_BUTT - end caps are truncated flat at the line ends
  * - CAP_SQUARE - end caps are squared off at the buffer distance
  *   beyond the line ends
- * 
+ *
  */
 class GEOS_DLL BufferOp {
 
@@ -83,7 +83,7 @@ private:
 	/**
 	 *  A number of digits of precision which leaves some computational "headroom"
 	 *  for floating point operations.
-	 * 
+	 *
 	 *  This value should be less than the decimal precision of double-precision values (16).
 	 */
 	static const int MAX_PRECISION_DIGITS = 12;
@@ -211,14 +211,14 @@ public:
 
 	/**
 	 * Sets whether the computed buffer should be single-sided.
-	 * 
+	 *
 	 * A single-sided buffer is constructed on only one side
 	 * of each input line.
-	 * 
+	 *
 	 * The side used is determined by the sign of the buffer distance:
 	 * - a positive distance indicates the left-hand side
 	 * - a negative distance indicates the right-hand side
-	 * 
+	 *
 	 * The single-sided buffer of point geometries is
 	 * the same as the regular buffer.
 	 *

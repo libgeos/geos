@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -115,19 +115,19 @@ public:
 	 * \brief Returns the zero-based index of the given DirectedEdge,
 	 * after sorting in ascending order
 	 * by angle with the positive x-axis.
-	 */  
+	 */
 	int getIndex(const DirectedEdge *dirEdge);
 
 	/**
 	 * \brief Returns the remainder when i is divided by the number of
-	 * edges in this DirectedEdgeStar. 
+	 * edges in this DirectedEdgeStar.
 	 */
 	int getIndex(int i) const;
 
 	/**
 	 * \brief Returns the DirectedEdge on the left-hand side
 	 * of the given DirectedEdge (which must be a member of this
-	 * DirectedEdgeStar). 
+	 * DirectedEdgeStar).
 	 */
 	DirectedEdge* getNextEdge(DirectedEdge *dirEdge);
 };

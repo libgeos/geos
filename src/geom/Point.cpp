@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -51,7 +51,7 @@ Point::Point(CoordinateSequence *newCoords, const GeometryFactory *factory)
 	if (coordinates.get()==NULL) {
 		coordinates.reset(factory->getCoordinateSequenceFactory()->create());
 		return;
-	}        
+	}
 	if (coordinates->getSize() != 1)
 	{
 		throw util::IllegalArgumentException("Point coordinate list must contain a single element");
@@ -219,8 +219,8 @@ Point::equalsExact(const Geometry *other, double tolerance) const
 		return false;
 	}
 
-	// assume the isEquivalentClass would return false 
-	// if other is not a point 
+	// assume the isEquivalentClass would return false
+	// if other is not a point
 	assert(dynamic_cast<const Point*>(other));
 
 	if ( isEmpty() ) return other->isEmpty();

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -103,7 +103,7 @@ private:
     }
 
 		sw.stop();
-		cout << g.getNumPoints() << " points: " << sw.getTot() << " usecs" << endl; 
+		cout << g.getNumPoints() << " points: " << sw.getTot() << " usecs" << endl;
 
   }
 

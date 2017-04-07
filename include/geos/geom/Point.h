@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -59,12 +59,12 @@ namespace geom { // geos::geom
  * Implementation of Point.
  *
  * A Point is valid iff:
- * 
+ *
  * - the coordinate which defines it is a valid coordinate
  *   (i.e does not have an NaN X or Y ordinate)
  *
  */
-class GEOS_DLL Point : public virtual Geometry, public Puntal 
+class GEOS_DLL Point : public virtual Geometry, public Puntal
 {
 
 public:
@@ -150,10 +150,10 @@ protected:
 	 *	the empty geometry.
 	 *
 	 * @param newFactory the GeometryFactory used to create this geometry
-	 */  
+	 */
 	Point(CoordinateSequence *newCoords, const GeometryFactory *newFactory);
 
-	Point(const Point &p); 
+	Point(const Point &p);
 
 	Envelope::AutoPtr computeEnvelopeInternal() const;
 

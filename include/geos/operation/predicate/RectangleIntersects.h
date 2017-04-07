@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -42,7 +42,7 @@ namespace predicate { // geos::operation::predicate
  *
  * This class works for all input geometries, including
  * {@link GeometryCollection}s.
- * 
+ *
  * As a further optimization,
  * this class can be used to test
  * many geometries against a single
@@ -86,7 +86,7 @@ public:
 	static bool intersects(const geom::Polygon &rectangle,
 			const geom::Geometry &b)
 	{
-		RectangleIntersects rp(rectangle); 
+		RectangleIntersects rp(rectangle);
 		return rp.intersects(b);
 	}
 

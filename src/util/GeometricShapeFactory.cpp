@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -47,7 +47,7 @@ GeometricShapeFactory::GeometricShapeFactory(const GeometryFactory* factory)
 }
 
 void
-GeometricShapeFactory::setBase(const Coordinate& base) 
+GeometricShapeFactory::setBase(const Coordinate& base)
 {
 	dim.setBase(base);
 }
@@ -99,22 +99,22 @@ GeometricShapeFactory::createRectangle()
 	for (i = 0; i < nSide; i++) {
 		double x = env->getMinX() + i * XsegLen;
 		double y = env->getMinY();
-		(*vc)[ipt++] = coord(x, y); 
+		(*vc)[ipt++] = coord(x, y);
 	}
 	for (i = 0; i < nSide; i++) {
 		double x = env->getMaxX();
 		double y = env->getMinY() + i * YsegLen;
-		(*vc)[ipt++] = coord(x, y); 
+		(*vc)[ipt++] = coord(x, y);
 	}
 	for (i = 0; i < nSide; i++) {
 		double x = env->getMaxX() - i * XsegLen;
 		double y = env->getMaxY();
-		(*vc)[ipt++] = coord(x, y); 
+		(*vc)[ipt++] = coord(x, y);
 	}
 	for (i = 0; i < nSide; i++) {
 		double x = env->getMinX();
 		double y = env->getMaxY() - i * YsegLen;
-		(*vc)[ipt++] = coord(x, y); 
+		(*vc)[ipt++] = coord(x, y);
 	}
 	(*vc)[ipt++] = (*vc)[0];
 	CoordinateSequence *cs = geomFact->getCoordinateSequenceFactory()->create(vc);
@@ -161,8 +161,8 @@ GeometricShapeFactory::createArc(double startAng, double angExtent)
 	env.reset();
 
 	double angSize = angExtent;
-	if (angSize <= 0.0 || angSize > 2 * M_PI) 
-		angSize = 2 * M_PI; 
+	if (angSize <= 0.0 || angSize > 2 * M_PI)
+		angSize = 2 * M_PI;
 	double angInc = angSize / ( nPts - 1 );
 
 	vector<Coordinate> *pts = new vector<Coordinate>(nPts);
@@ -190,8 +190,8 @@ GeometricShapeFactory::createArcPolygon(double startAng, double angExtent)
 	env.reset();
 
 	double angSize = angExtent;
-	if (angSize <= 0.0 || angSize > 2 * M_PI) 
-		angSize = 2 * M_PI; 
+	if (angSize <= 0.0 || angSize > 2 * M_PI)
+		angSize = 2 * M_PI;
 	double angInc = angSize / ( nPts - 1 );
 
 	vector<Coordinate> *pts = new vector<Coordinate>(nPts + 2);

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -29,9 +29,9 @@
 #pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
 #endif
 
-// Forward declarations 
+// Forward declarations
 namespace geos {
-	namespace geom { 
+	namespace geom {
 		class LineString;
 		class GeometryFactory;
 		class Geometry;
@@ -39,8 +39,8 @@ namespace geos {
 	namespace planargraph {
 		class Node;
 	}
-	namespace operation { 
-		namespace linemerge { 
+	namespace operation {
+		namespace linemerge {
 			class EdgeString;
 			class LineMergeDirectedEdge;
 		}
@@ -62,11 +62,11 @@ namespace linemerge { // geos::operation::linemerge
  * in which case a node is simply chosen as a starting point.
  * The direction of each merged LineString will be that of the majority
  * of the LineStrings from which it was derived.
- * 
+ *
  * Any dimension of Geometry is handled.
  * The constituent linework is extracted to form the edges.
  * The edges must be correctly noded; that is, they must only meet
- * at their endpoints. 
+ * at their endpoints.
  *
  * The LineMerger will still run on incorrectly noded input
  * but will not form polygons from incorrected noded edges.
@@ -119,7 +119,7 @@ public:
 	 *
 	 * Any dimension of Geometry may be added; the constituent
 	 * linework will be extracted.
-	 */  
+	 */
 	void add(const geom::Geometry *geometry);
 
 	/**

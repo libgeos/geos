@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -43,7 +43,7 @@ MonotoneChain::MonotoneChain(const geom::CoordinateSequence& newPts,
 }
 
 MonotoneChain::~MonotoneChain()
-{ 
+{
     delete env;
 }
 
@@ -107,7 +107,7 @@ MonotoneChain::computeSelect(const Envelope& searchEnv,
     {
         computeSelect(searchEnv,start0,mid,mcs);
     }
-    
+
     if (mid < end0)
     {
         computeSelect(searchEnv,mid,end0,mcs);
@@ -161,7 +161,7 @@ MonotoneChain::computeOverlaps(size_t start0, size_t end0,
         if (mid1<end1)
             computeOverlaps(start0, mid0, mc, mid1, end1, mco);
     }
-    
+
     if (mid0<end0)
     {
         if (start1<mid1)

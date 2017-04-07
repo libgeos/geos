@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  ***********************************************************************
@@ -60,7 +60,7 @@ namespace geos {
 namespace operation { // geos::operation
 namespace overlay { // geos::operation::overlay
 
-/// Computes the geometric overlay of two Geometry. 
+/// Computes the geometric overlay of two Geometry.
 //
 /// The overlay can be used to determine any
 /// boolean combination of the geometries.
@@ -104,7 +104,7 @@ public:
 	 * relative to two geometries is contained in
 	 * the result of overlaying the geometries using
 	 * a given overlay operation.
-	 * 
+	 *
 	 * The method handles arguments of {@link Location#NONE} correctly
 	 *
 	 * @param label the topological label of the point
@@ -120,7 +120,7 @@ public:
 	static bool isResultOfOp(int loc0, int loc1, OpCode opCode);
 
 	/// Construct an OverlayOp with the given Geometry args.
-	// 
+	//
 	/// Ownership of passed args will remain to caller, and
 	/// the OverlayOp won't change them in any way.
 	///
@@ -130,7 +130,7 @@ public:
 
 	/**
 	 * Gets the result of the overlay for a given overlay operation.
-	 * 
+	 *
 	 * Note: this method can be called once only.
 	 *
 	 * @param overlayOpCode the overlay operation to perform
@@ -253,10 +253,10 @@ private:
 	 */
 	void computeLabelling(); // throw(TopologyException *);
 
-	/** 
+	/**
 	 * For nodes which have edges from only one Geometry incident on them,
 	 * the previous step will have left their dirEdges with no
-	 * labelling for the other Geometry. 
+	 * labelling for the other Geometry.
 	 * However, the sym dirEdge may have a labelling for the other
 	 * Geometry, so merge the two labels.
 	 */
@@ -264,7 +264,7 @@ private:
 
 	void updateNodeLabelling();
 
-	/** 
+	/**
 	 * Incomplete nodes are nodes whose labels are incomplete.
 	 *
 	 * (e.g. the location for one Geometry is NULL).
@@ -277,7 +277,7 @@ private:
 	 * labelled by the initial process of adding nodes to the nodeList.
 	 * To complete the labelling we need to check for nodes that
 	 * lie in the interior of edges, and in the interior of areas.
-	 * 
+	 *
 	 * When each node labelling is completed, the labelling of the
 	 * incident edges is updated, to complete their labelling as well.
 	 */
@@ -290,7 +290,7 @@ private:
 
 	/** \brief
 	 * Find all edges whose label indicates that they are in the result
-	 * area(s), according to the operation being performed. 
+	 * area(s), according to the operation being performed.
 	 *
 	 * Since we want polygon shells to be
 	 * oriented CW, choose dirEdges with the interior of the result
@@ -330,14 +330,14 @@ private:
 
 	/**
 	 * Build a Geometry containing all Geometries in the given vectors.
-	 * Takes element's ownership, vector control is left to caller. 
+	 * Takes element's ownership, vector control is left to caller.
 	 */
 	geom::Geometry* computeGeometry(
 			std::vector<geom::Point*> *nResultPointList,
 			std::vector<geom::LineString*> *nResultLineList,
 			std::vector<geom::Polygon*> *nResultPolyList);
 
-	/// Caches for memory management 
+	/// Caches for memory management
 	std::vector<geomgraph::Edge *>dupEdges;
 
 	/** \brief

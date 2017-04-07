@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -30,7 +30,7 @@ namespace planargraph { // geos.planargraph
  *
  * Maintains flags of use in generic graph algorithms.
  * Provides two flags:
- * 
+ *
  *  - <b>marked</b> - typically this is used to indicate a state that
  *    persists for the course of the graph's lifetime.  For instance,
  *    it can be used to indicate that a component has been logically

@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -68,7 +68,7 @@ public:
 	 * The ring may be oriented in either direction.
 	 * A point lying exactly on the ring boundary is considered
 	 * to be inside the ring.
-	 * 
+	 *
 	 * This algorithm does not first check the
 	 * point against the envelope of the ring.
 	 *
@@ -90,7 +90,7 @@ public:
 	 * on the boundary, or in the exterior of a ring.
 	 *
 	 * The ring may be oriented in either direction.
-	 * 
+	 *
 	 * This method does <i>not</i> first check the point against
 	 * the envelope of the ring.
 	 *
@@ -119,7 +119,7 @@ public:
 	/** \brief
 	 * Computes whether a ring defined by an array of Coordinate is
 	 * oriented counter-clockwise.
-	 * 
+	 *
 	 *  - The list of points is assumed to have the first and last
 	 *    points equal.
 	 *  - This will handle coordinate lists which contain repeated points.

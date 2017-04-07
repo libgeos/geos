@@ -19,7 +19,7 @@
 namespace tut
 {
 	using namespace geos::simplify;
-	
+
 	//
 	// Test Group
 	//
@@ -105,7 +105,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<4>()
-	{         
+	{
 		std::string wkt("POLYGON ((3312459.605 6646878.353, \
       3312460.524 6646875.969, 3312459.427 6646878.421, \
       3312460.014 6646886.391, 3312465.889 6646887.398, \
@@ -139,7 +139,7 @@ namespace tut
 	template<>
 	template<>
 	void object::test<5>()
-	{         
+	{
 		std::string wkt("POLYGON((20 220, 40 220, 60 220, 80 220, \
                     100 220, 120 220, 140 220, 140 180, 100 180, \
                     60 180, 20 180, 20 220))");
@@ -159,7 +159,7 @@ namespace tut
 	{
     std::string wkt("POLYGON ((40 240, 160 241, 280 240, 280 160, \
                         160 240, 40 140, 40 240))");
-    
+
     GeomPtr g(wktreader.read(wkt));
 		GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
 
@@ -178,7 +178,7 @@ namespace tut
 
         std::string wkt_expected("POLYGON ((80 200, 240 200, 240 60, 80 60, 80 200), \
                     (120 120, 220 120, 180 199, 160 200, 140 199, 120 120))");
-        
+
         GeomPtr g(wktreader.read(wkt));
 		GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), 10.0);
 
@@ -294,7 +294,7 @@ namespace tut
 		ensure( "Simplified geometry is invalid!", simplified->isValid() );
         ensure_equals_geometry(g.get(), simplified.get() );
     }
-    
+
     // GeometryCollection
     template<>
 	template<>

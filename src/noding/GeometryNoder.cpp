@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -37,7 +37,7 @@
 #include <geos/noding/snapround/MCIndexSnapRounder.h>
 
 #include <memory> // for auto_ptr
-#include <iostream> 
+#include <iostream>
 
 namespace geos {
 namespace noding { // geos.noding
@@ -56,7 +56,7 @@ public:
   void filter_ro(const geom::Geometry * g) {
     const geom::LineString *ls = dynamic_cast<const geom::LineString *>(g);
     if ( ls ) {
-      geom::CoordinateSequence* coord = ls->getCoordinates(); 
+      geom::CoordinateSequence* coord = ls->getCoordinates();
       // coord ownership transferred to SegmentString
       SegmentString *ss = new NodedSegmentString(coord, 0);
       _to.push_back(ss);
@@ -104,7 +104,7 @@ GeometryNoder::toGeometry(SegmentString::NonConstVect& nodedEdges)
 
     const geom::CoordinateSequence* coords = ss->getCoordinates();
 
-    // Check if an equivalent edge is known 
+    // Check if an equivalent edge is known
     OrientedCoordinateArray oca1( *coords );
     if ( ocas.insert(oca1).second ) {
       geom::Geometry* tmp = geomFact->createLineString( coords->clone() );
@@ -118,7 +118,7 @@ GeometryNoder::toGeometry(SegmentString::NonConstVect& nodedEdges)
 }
 
 /* public */
-std::auto_ptr<geom::Geometry> 
+std::auto_ptr<geom::Geometry>
 GeometryNoder::getNoded()
 {
   SegmentString::NonConstVect lineList;
@@ -185,7 +185,7 @@ GeometryNoder::getNoder()
 #endif
   }
   return *noder;
-  
+
 
 }
 

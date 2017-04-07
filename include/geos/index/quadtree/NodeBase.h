@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -57,7 +57,7 @@ private:
 
 	void visitItems(const geom::Envelope* searchEnv,
 			ItemVisitor& visitor);
-	
+
 public:
 
 	static int getSubnodeIndex(const geom::Envelope *env,
@@ -97,7 +97,7 @@ public:
 	 * @return <code>true</code> if the item was found and removed
 	 */
 	bool remove(const geom::Envelope* itemEnv, void* item);
- 
+
 	bool hasItems() const;
 
 	bool hasChildren() const;
@@ -117,7 +117,7 @@ protected:
 	 *  0 | 1
 	 * </pre>
 	 *
-	 * Nodes are owned by this class 
+	 * Nodes are owned by this class
 	 */
 	Node* subnode[4];
 
@@ -130,7 +130,7 @@ protected:
 inline bool
 NodeBase::hasChildren() const
 {
-	for (int i = 0; i < 4; i++) 
+	for (int i = 0; i < 4; i++)
 		if (subnode[i]) return true;
 	return false;
 }

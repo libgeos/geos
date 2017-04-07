@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for CGAlgorithms::computeOrientation() function
 // Ported from JTS junit/algorithm/ComputeOrientationTest.java
 
@@ -62,7 +62,7 @@ namespace tut
     template<>
     template<>
     void object::test<2>()
-    {    
+    {
         Coordinate c1(1.0000000000004998, -7.989685402102996);
         Coordinate c2(10.0, -7.004368924503866);
         Coordinate c3(1.0000000000005, -7.989685402102996);

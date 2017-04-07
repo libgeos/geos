@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  *
@@ -21,7 +21,7 @@
 #define GEOS_GEOM_PREP_PREPAREDPOLYGON_H
 
 #include <geos/geom/prep/BasicPreparedGeometry.h> // for inheritance
-#include <geos/noding/SegmentString.h> 
+#include <geos/noding/SegmentString.h>
 
 namespace geos {
 	namespace noding {
@@ -41,11 +41,11 @@ namespace prep { // geos::geom::prep
 /**
  * \brief
  * A prepared version of {@link Polygon} or {@link MultiPolygon} geometries.
- * 
+ *
  * @author mbdavis
  *
  */
-class PreparedPolygon : public BasicPreparedGeometry 
+class PreparedPolygon : public BasicPreparedGeometry
 {
 private:
 	bool isRectangle;
@@ -57,10 +57,10 @@ protected:
 public:
 	PreparedPolygon( const geom::Geometry * geom);
 	~PreparedPolygon( );
-  
+
 	noding::FastSegmentSetIntersectionFinder * getIntersectionFinder() const;
 	algorithm::locate::PointOnGeometryLocator * getPointLocator() const;
-	
+
 	bool contains( const geom::Geometry* g) const;
 	bool containsProperly( const geom::Geometry* g) const;
 	bool covers( const geom::Geometry* g) const;

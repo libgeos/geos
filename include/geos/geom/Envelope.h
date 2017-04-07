@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -41,7 +41,7 @@ class Coordinate;
  *
  * It is often used to represent the bounding box of a Geometry,
  * e.g. the minimum and maximum x and y values of the Coordinates.
- *  
+ *
  * Note that Envelopes support infinite or half-infinite regions, by using
  * the values of <code>Double_POSITIVE_INFINITY</code> and
  * <code>Double_NEGATIVE_INFINITY</code>.
@@ -95,7 +95,7 @@ public:
 	Envelope& operator=(const Envelope& e);
 
 	/** \brief
-	 *  Create an <code>Envelope</code> from an Envelope 
+	 *  Create an <code>Envelope</code> from an Envelope
 	 *  string representation produced by Envelope.toString()
 	 */
 	Envelope(const std::string &str);
@@ -262,7 +262,7 @@ public:
 	 * Expands this envelope by a given distance in all directions.
 	 * Both positive and negative distances are supported.
 	 *
-	 * @param deltaX the distance to expand the envelope along 
+	 * @param deltaX the distance to expand the envelope along
 	 *               the X axis
 	 * @param deltaY the distance to expand the envelope along
 	 *               the Y axis
@@ -310,7 +310,7 @@ public:
 	/** \brief
 	 * Tests if the <code>Envelope other</code> lies wholely
 	 * inside this <code>Envelope</code> (inclusive of the boundary).
-	 * 
+	 *
 	 * Note that this is <b>not</b> the same definition as the SFS
 	 * <tt>contains</tt>, which would exclude the envelope boundary.
 	 *
@@ -420,7 +420,7 @@ public:
 	 *
 	 * @param  other the <code>Envelope</code> to check
 	 * @return true if this <code>Envelope</code> covers the
-	 * <code>other</code> 
+	 * <code>other</code>
 	 */
 	bool covers(const Envelope& other) const;
 
@@ -467,7 +467,7 @@ private:
 	 * Splits a string into parts based on the supplied delimiters.
 	 *
 	 * This is a generic function that really belongs in a utility
-	 * file somewhere 
+	 * file somewhere
 	 */
 	std::vector<std::string> split(const std::string &str,
 			const std::string &delimiters = " ");

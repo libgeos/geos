@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -33,18 +33,18 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom { 
+	namespace geom {
 		class LineString;
 		class GeometryFactory;
 		class Coordinate;
 		class CoordinateSequence;
 	}
-	namespace planargraph { 
+	namespace planargraph {
 		class Node;
 		class Edge;
 		class DirectedEdge;
 	}
-	namespace operation { 
+	namespace operation {
 		namespace polygonize {
 			class EdgeRing;
 			class PolygonizeDirectedEdge;
@@ -61,7 +61,7 @@ namespace polygonize { // geos::operation::polygonize
  * Represents a planar graph of edges that can be used to compute a
  * polygonization, and implements the algorithms to compute the
  * EdgeRings formed by the graph.
- * 
+ *
  * The marked flag on DirectedEdge is used to indicate that a directed edge
  * has be logically deleted from the graph.
  *

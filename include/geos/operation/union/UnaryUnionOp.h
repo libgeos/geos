@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -56,9 +56,9 @@ namespace geounion {  // geos::operation::geounion
  * geometries it is possible to take advantage of various optimizations
  * to improve performance.
  * Heterogeneous {@link GeometryCollection}s are fully supported.
- * 
+ *
  * The result obeys the following contract:
- * 
+ *
  * - Unioning a set of overlapping {@link Polygons}s has the effect of
  *   merging the areas (i.e. the same effect as
  *   iteratively unioning all individual polygons together).
@@ -213,7 +213,7 @@ private:
 
   std::auto_ptr<geom::Geometry> empty;
 };
- 
+
 
 } // namespace geos::operation::union
 } // namespace geos::operation

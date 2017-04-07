@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -19,9 +19,9 @@
 #include <memory> // for auto_ptr
 #include <cassert> // for assert
 #include <algorithm> // for copy
-#include <geos/operation/union/PointGeometryUnion.h> 
-#include <geos/geom/Coordinate.h> 
-#include <geos/geom/Puntal.h> 
+#include <geos/operation/union/PointGeometryUnion.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/Puntal.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/Geometry.h>

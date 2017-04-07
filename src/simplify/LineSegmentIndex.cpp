@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -19,8 +19,8 @@
 #include <geos/simplify/LineSegmentIndex.h>
 #include <geos/simplify/TaggedLineSegment.h>
 #include <geos/simplify/TaggedLineString.h>
-#include <geos/index/quadtree/Quadtree.h> 
-#include <geos/index/ItemVisitor.h> 
+#include <geos/index/quadtree/Quadtree.h>
+#include <geos/index/ItemVisitor.h>
 #include <geos/geom/LineSegment.h>
 #include <geos/geom/Envelope.h>
 
@@ -156,7 +156,7 @@ LineSegmentIndex::remove(const LineSegment* seg)
 }
 
 /*public*/
-auto_ptr< vector<LineSegment*> > 
+auto_ptr< vector<LineSegment*> >
 LineSegmentIndex::query(const LineSegment* querySeg) const
 {
 	Envelope env(querySeg->p0, querySeg->p1);

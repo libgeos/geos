@@ -1,4 +1,4 @@
-// 
+//
 // Ported from JTS junit/linearref/AbstractIndexedLineTestCase.java r466
 // and  junit/linearref/LengthIndexedLineTestCase.java r466
 
@@ -11,7 +11,7 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h> // required for use in auto_ptr
-#include <geos/geom/LineString.h> 
+#include <geos/geom/LineString.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/linearref/LengthIndexedLine.h>
 
@@ -21,8 +21,8 @@
 #include <string>
 #include <memory>
 
-using namespace geos::geom; 
-using namespace geos::linearref; 
+using namespace geos::geom;
+using namespace geos::linearref;
 using namespace std;
 
 /**
@@ -40,40 +40,40 @@ struct test_lengthindexedline_data
     {
       writer.setTrim(true);
     }
-    
+
     geos::io::WKTReader reader;
     geos::io::WKTWriter writer;
-    
+
     void checkExpected(Geometry* result, string const& expected)
     {
         GeomPtr subLine(reader.read(expected));
         checkExpected(result, subLine.get());
     }
-    
+
     void checkExpected(Geometry* result, const Geometry* expected)
     {
       bool isEqual = result->equalsExact(expected, 1.0e-5);
       ensure_equals("Expect: "+writer.write(expected)+" Obtained: "+writer.write(result), isEqual, true);
     }
-    
+
     void runIndicesOfThenExtract(string const& inputStr, string const& subLineStr)
     {
         GeomPtr input(reader.read(inputStr));
         GeomPtr subLine(reader.read(subLineStr));
         GeomPtr result(indicesOfThenExtract(input.get(), subLine.get()));
-        
+
         checkExpected(result.get(), subLine.get());
     }
-    
+
     bool indexOfAfterCheck(Geometry* linearGeom, Coordinate testPt)
     {
         LengthIndexedLine indexedLine(linearGeom);
-        
+
         // check locations are consecutive
         double loc1 = indexedLine.indexOf(testPt);
         double loc2 = indexedLine.indexOfAfter(testPt, loc1);
         if (loc2 <= loc1) return false;
-        
+
         // check extracted points are the same as the input
         Coordinate pt1 = indexedLine.extractPoint(loc1);
         Coordinate pt2 = indexedLine.extractPoint(loc2);
@@ -240,7 +240,7 @@ template<>
 template<>
 void object::test<10>()
 {
-    runIndexOfAfterTest("LINESTRING (0 0, 0 10, 10 10, 10 0, 0 0)", 
+    runIndexOfAfterTest("LINESTRING (0 0, 0 10, 10 10, 10 0, 0 0)",
                         "POINT (0 0)");
 }
 
@@ -249,7 +249,7 @@ template<>
 template<>
 void object::test<11>()
 {
-    runIndexOfAfterTest("LINESTRING (0 0, 0 60, 50 60, 50 20, -20 20)", 
+    runIndexOfAfterTest("LINESTRING (0 0, 0 60, 50 60, 50 20, -20 20)",
                         "POINT (0 20)");
 }
 
@@ -382,7 +382,7 @@ void object::test<24>()
     double projIndex = indexedLine.project(Coordinate(5, 5));
     Coordinate projPt = indexedLine.extractPoint(projIndex);
     //    System.out.println(projPt);
-    ensure(projPt.equals3D(Coordinate(5, 5, 5)));  
+    ensure(projPt.equals3D(Coordinate(5, 5, 5)));
 }
 
 /**
@@ -445,12 +445,12 @@ void object::test<27>()
 
 
 
- 
+
 
 #if 0
 template<>
 template<>
-void object::test<28>() 
+void object::test<28>()
 {
 
   GeomPtr linearGeom(reader.read(
@@ -469,6 +469,6 @@ void object::test<28>()
   ensure_equals(projPt, Coordinate(0, 2));
 }
 #endif
-   
+
 } // namespace tut
 

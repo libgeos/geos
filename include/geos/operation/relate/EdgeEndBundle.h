@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -44,7 +44,7 @@ namespace relate { // geos::operation::relate
  * A collection of geomgraph::EdgeEnd objects which
  * originate at the same point and have the same direction.
  */
-class GEOS_DLL EdgeEndBundle: public geomgraph::EdgeEnd 
+class GEOS_DLL EdgeEndBundle: public geomgraph::EdgeEnd
 {
 public:
 	EdgeEndBundle(geomgraph::EdgeEnd *e);
@@ -52,7 +52,7 @@ public:
 	std::vector<geomgraph::EdgeEnd*>* getEdgeEnds();
 	void insert(geomgraph::EdgeEnd *e);
 
-	void computeLabel(const algorithm::BoundaryNodeRule& bnr); 
+	void computeLabel(const algorithm::BoundaryNodeRule& bnr);
 
   /**
    * \brief
@@ -84,7 +84,7 @@ protected:
 	 * lying on
 	 * top of a Polygon edge.) In this case the Boundary is
 	 * given precendence.
-	 * 
+	 *
 	 * These observations result in the following rules for computing
 	 * the ON location:
 	 *  - if there are an odd number of Bdy edges, the attribute is Bdy
@@ -92,7 +92,7 @@ protected:
 	 *    is Int
 	 *  - if there are any Int edges, the attribute is Int
 	 *  - otherwise, the attribute is NULL.
-	 * 
+	 *
 	 */
 	void computeLabelOn(int geomIndex,
 		const algorithm::BoundaryNodeRule& boundaryNodeRule);

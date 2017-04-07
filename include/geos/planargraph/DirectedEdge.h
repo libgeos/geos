@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -25,7 +25,7 @@
 
 // Forward declarations
 namespace geos {
-	namespace planargraph { 
+	namespace planargraph {
 		class Edge;
 		class Node;
 	}
@@ -84,7 +84,7 @@ public:
 	 * Add parent Edge (possibly null) of each of the given DirectedEdges
 	 * to the given parentEdges vector.
 	 *
-	 * NOTE: parents are pushed to the parentEdges vector, make sure 
+	 * NOTE: parents are pushed to the parentEdges vector, make sure
 	 * it is empty if index-based corrispondence is important.
 	 */
 	static void toEdges( std::vector<DirectedEdge*>& dirEdges,
@@ -182,7 +182,7 @@ public:
 	 * Using the obvious algorithm of simply computing the angle is
 	 * not robust, since the angle calculation is susceptible to roundoff.
 	 * A robust algorithm is:
-	 * 
+	 *
 	 * - first compare the quadrants.
 	 *   If the quadrants are different, it it
 	 *   trivial to determine which std::vector is "greater".
@@ -190,7 +190,7 @@ public:
 	 *   RobustCGAlgorithms::computeOrientation(Coordinate, Coordinate, Coordinate)
 	 *   function can be used to decide the relative orientation of
 	 *   the vectors.
-	 * 
+	 *
 	 */
 	int compareTo(const DirectedEdge* obj) const;
 
@@ -203,7 +203,7 @@ public:
 	 * Using the obvious algorithm of simply computing the angle is
 	 * not robust, since the angle calculation is susceptible to roundoff.
 	 * A robust algorithm is:
-	 * 
+	 *
 	 * - first compare the quadrants.
 	 *   If the quadrants are different, it it trivial to determine
 	 *   which std::vector is "greater".
@@ -227,7 +227,7 @@ public:
 /// Strict Weak comparator function for containers
 bool pdeLessThan(DirectedEdge *first, DirectedEdge * second);
 
-/// Output operator 
+/// Output operator
 std::ostream& operator << (std::ostream&, const DirectedEdge&);
 
 

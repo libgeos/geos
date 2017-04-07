@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -20,7 +20,7 @@
 #include <geos/simplify/TaggedLineSegment.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineString.h>
-#include <geos/geom/Geometry.h> // for auto_ptr destructor 
+#include <geos/geom/Geometry.h> // for auto_ptr destructor
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
 
@@ -111,7 +111,7 @@ TaggedLineString::getMinimumSize() const
 }
 
 /*public*/
-const geom::LineString* 
+const geom::LineString*
 TaggedLineString::getParent() const
 {
 	return parentLine;
@@ -186,7 +186,7 @@ TaggedLineString::getResultSize() const
 
 /*public*/
 TaggedLineSegment*
-TaggedLineString::getSegment(std::size_t i) 
+TaggedLineString::getSegment(std::size_t i)
 {
 	return segs[i];
 }

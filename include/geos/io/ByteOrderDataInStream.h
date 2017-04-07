@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -34,7 +34,7 @@ namespace io {
 
 /*
  * \class ByteOrderDataInStream io.h geos.h
- * 
+ *
  * Allows reading an stream of primitive datatypes from an underlying
  * istream, with the representation being in either common byte ordering.
  *

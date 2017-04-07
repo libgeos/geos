@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -195,7 +195,7 @@ PolygonizeGraph::convertMaximalToMinimalEdgeRings(
 			computeNextCCWEdges(node, label);
 		}
 
-		intNodes.clear(); 
+		intNodes.clear();
 	}
 }
 
@@ -268,7 +268,7 @@ PolygonizeGraph::findLabeledEdgeRings(std::vector<DirectedEdge*> &dirEdges,
 
 		findDirEdgesInRing(de, edges);
 		label(edges, currLabel);
-		edges.clear(); 
+		edges.clear();
 
 		++currLabel;
 	}
@@ -450,7 +450,7 @@ PolygonizeGraph::deleteDangles(std::vector<const LineString*>& dangleLines)
 	std::set<const LineString*> uniqueDangles;
 
 	while (!nodeStack.empty()) {
-		Node *node=nodeStack.back(); 
+		Node *node=nodeStack.back();
 		nodeStack.pop_back();
 		deleteAllEdges(node);
 		std::vector<DirectedEdge*> &nodeOutEdges=node->getOutEdges()->getEdges();

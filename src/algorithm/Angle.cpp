@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -16,7 +16,7 @@
  *
  **********************************************************************/
 
-#include <cmath> 
+#include <cmath>
 
 #include <geos/algorithm/Angle.h>
 #include <geos/algorithm/CGAlgorithms.h>
@@ -25,11 +25,11 @@
 namespace geos {
 namespace algorithm { // geos.algorithm
 
-namespace { 
+namespace {
 	const double PI = 3.14159265358979323846;
 }
 
-const double Angle::PI_TIMES_2 = 2.0 * PI; 
+const double Angle::PI_TIMES_2 = 2.0 * PI;
 const double Angle::PI_OVER_2 = PI / 2.0;
 const double Angle::PI_OVER_4 = PI / 4.0;
 

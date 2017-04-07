@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -21,11 +21,11 @@
 #define GEOS_GEOM_COORDINATELIST_H
 
 #include <geos/export.h>
-#include <geos/geom/Coordinate.h> 
+#include <geos/geom/Coordinate.h>
 
 #include <list>
 #include <ostream> // for operator<<
-#include <memory> // for auto_ptr 
+#include <memory> // for auto_ptr
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -34,7 +34,7 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom { 
+	namespace geom {
 		//class Coordinate;
 	}
 }
@@ -123,7 +123,7 @@ public:
 	 *
 	 * @return an iterator to the newly installed coordinate
 	 *         (or previous, if equal and repeated are not allowed)
-	 * 
+	 *
 	 * NOTE: when allowRepeated is false _next_ point is not checked
 	 *       this matches JTS behavior
 	 */
@@ -158,13 +158,13 @@ public:
 		return ret;
 	}
 	void closeRing()
-	{   
+	{
 		if(!coords.empty() && ! (*(coords.begin())).equals(*(coords.rbegin())))
-		{   
+		{
 			const Coordinate &c = *(coords.begin());
 			coords.insert(coords.end(),c);
-		}   
-	}   
+		}
+	}
 
 
 private:

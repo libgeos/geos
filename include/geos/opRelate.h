@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -22,7 +22,7 @@ namespace operation { // geos::operation
 
 /** \brief
  * Contains classes to implement the computation of the spatial relationships of <CODE>Geometry</CODE>s.
- * 
+ *
  * The <code>relate</code> algorithm computes the <code>IntersectionMatrix</code> describing the
  * relationship of two <code>Geometry</code>s.  The algorithm for computing <code>relate</code>
  * uses the intersection operations supported by topology graphs.  Although the <code>relate</code>
@@ -40,9 +40,9 @@ namespace operation { // geos::operation
  *   <LI>Compute the labeling for isolated components of the graph (see below)
  *   <LI>Compute the <code>IntersectionMatrix</code> from the labels on the nodes and edges.
  * </UL>
- * 
+ *
  * <H3>Labeling isolated components</H3>
- * 
+ *
  * Isolated components are components (edges or nodes) of an input <code>Geometry</code> which
  * do not contain any intersections with the other input <code>Geometry</code>.  The
  * topological relationship of these components to the other input <code>Geometry</code>
@@ -53,15 +53,15 @@ namespace operation { // geos::operation
  * edge of the <code>Geometry</code>).  If the other <code>Geometry</code> is 2-dimensional,
  * a Point-In-Polygon test can be used to determine whether the isolated component is in the
  * interior or exterior.
- * 
+ *
  * <h2>Package Specification</h2>
- * 
+ *
  * <ul>
  *   <li>Java Topology Suite Technical Specifications
  *   <li><A HREF="http://www.opengis.org/techno/specs.htm">
  *       OpenGIS Simple Features Specification for SQL</A>
  * </ul>
- * 
+ *
  */
 namespace relate { // geos.operation.relate
 
