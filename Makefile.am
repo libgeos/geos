@@ -62,3 +62,8 @@ valgrindcheck:
 	$(VALGRIND) tests/unit/geos_unit
 
 .PHONY: geos_revision.h
+
+check-local:
+	! find . -name '*.cpp' -o -name '*.h' | \
+		grep -v ^./tests/xmltester/tinyxml | \
+		xargs grep -Pn '[\t ]$$'
