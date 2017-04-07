@@ -12,6 +12,5 @@
 #################################################################################
 
 add_subdirectory(unit)
-add_subdirectory(unit2)
 add_subdirectory(xmltester)
 add_subdirectory(bigtest)
