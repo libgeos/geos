@@ -10,14 +10,20 @@ TESTS = geos_unit
 
 EXTRA_DIST = \
 	tut/tut_assert.hpp \
-	tut/tut_exception.hpp \
-	tut/tut.hpp \
-	tut/tut_posix.hpp \
+	tut/tut_config.hpp \
 	tut/tut_console_reporter.hpp \
+	tut/tut_cppunit_reporter.hpp \
+	tut/tut_exception.hpp \
+	tut/tut_fpt.hpp \
+	tut/tut.hpp \
+	tut/tut_macros.hpp \
+	tut/tut_main.hpp \
+	tut/tut_posix.hpp \
 	tut/tut_reporter.hpp \
 	tut/tut_restartable.hpp \
 	tut/tut_result.hpp \
 	tut/tut_runner.hpp \
+	tut/tut_xml_reporter.hpp \
 	CMakeLists.txt
 
 
