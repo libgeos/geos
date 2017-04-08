@@ -9,9 +9,7 @@
 - Commit the changes in the NEWS file.
 
 - Tag the release:
-   $ base=https://svn.osgeo.org/geos/
-   $ svn copy -m "Tagged release MAJOR.MINOR.PATCH" \
-		$base/trunk $base/tags/MAJOR.MINOR.PATCH
+   $ git tag MAJOR.MINOR.PATCH
 
 - Build a tarball: make dist-bzip2
 
