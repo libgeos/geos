@@ -11,7 +11,7 @@
 #
 #################################################################################
 
-if(UNIX)
+if(UNIX OR MINGW)
 
   if(APPLE AND GEOS_ENABLE_MACOSX_FRAMEWORK AND GEOS_ENABLE_MACOSX_FRAMEWORK_UNIXCOMPAT)
     set(installdest GEOS.framework/Versions/${VERSION_MAJOR}/unix/bin)
