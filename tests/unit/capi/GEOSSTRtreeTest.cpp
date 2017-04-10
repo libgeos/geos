@@ -30,7 +30,7 @@ static int INTPOINT_dist(const void* a, const void* b, double* distance, void* u
 	int dx = p2->x - p1->x;
 	int dy = p2->y - p1->y;
 
-	*distance = sqrt(dx*dx + dy*dy);
+	*distance = sqrt(static_cast<double>(dx*dx) + dy*dy);
 	return 1;
 }
 
