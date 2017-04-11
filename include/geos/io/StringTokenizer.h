@@ -41,7 +41,7 @@ public:
 		TT_WORD
 	};
 	//StringTokenizer();
-	StringTokenizer(const std::string& txt);
+	explicit StringTokenizer(const std::string& txt);
 	~StringTokenizer() {}
 	int nextToken();
 	int peekNextToken();

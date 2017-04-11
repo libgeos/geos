@@ -31,10 +31,10 @@ namespace io { // geos.io
 /*public*/
 StringTokenizer::StringTokenizer(const string &txt)
 	:
-	str(txt)
+	str(txt),
+	stok(""),
+	ntok(0.0)
 {
-	stok="";
-	ntok=0.0;
 	iter=str.begin();
 }
 
