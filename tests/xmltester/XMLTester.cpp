@@ -39,6 +39,7 @@
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/util.h>
 #include <geos/util/Interrupt.h>
+#include <geos/util/math.h>
 //#include <geos/geomgraph.h>
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKBWriter.h>
@@ -334,7 +335,7 @@ XMLTester::printTest(bool success, const std::string& expected_result, const std
         std::cout << " test" << testCount << ": "
             << opSignature;
         std::cout << ": " << (success?"ok.":"failed.");
-        std::cout << " (" << std::setprecision(15) << round(prof.getTot()/1000) << " ms)" << std::endl;
+        std::cout << " (" << std::setprecision(15) << geos::util::round(prof.getTot()/1000) << " ms)" << std::endl;
 
         std::cout << "\tDescription: " << curr_case_desc << std::endl;
 
