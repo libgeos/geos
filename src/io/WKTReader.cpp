@@ -400,13 +400,23 @@ MultiLineString* WKTReader::readMultiLineStringText(StringTokenizer *tokenizer) 
 		return geometryFactory->createMultiLineString(NULL);
 	}
 	vector<Geometry *> *lineStrings=new vector<Geometry *>();
-	LineString *lineString=readLineStringText(tokenizer);
-	lineStrings->push_back(lineString);
-	nextToken=getNextCloserOrComma(tokenizer);
-	while(nextToken==",") {
-		LineString *lineString=readLineStringText(tokenizer);
+	LineString *lineString = NULL;
+	try {
+		lineString=readLineStringText(tokenizer);
 		lineStrings->push_back(lineString);
+		lineString=NULL;
 		nextToken=getNextCloserOrComma(tokenizer);
+		while(nextToken==",") {
+			lineString=readLineStringText(tokenizer);
+			lineStrings->push_back(lineString);
+			lineString=NULL;
+			nextToken=getNextCloserOrComma(tokenizer);
+		}
+	} catch (...) {
+		for (int i=0; i < lineStrings->size(); i++)
+			delete (*lineStrings)[i];
+		delete lineStrings;
+		throw;
 	}
 	MultiLineString *ret = geometryFactory->createMultiLineString(lineStrings);
 	//for (int i=0; i<lineStrings->size(); i++) delete (*lineStrings)[i];
@@ -420,13 +430,23 @@ MultiPolygon* WKTReader::readMultiPolygonText(StringTokenizer *tokenizer) {
 		return geometryFactory->createMultiPolygon(NULL);
 	}
 	vector<Geometry *> *polygons=new vector<Geometry *>();
-	Polygon *polygon=readPolygonText(tokenizer);
-	polygons->push_back(polygon);
-	nextToken=getNextCloserOrComma(tokenizer);
-	while(nextToken==",") {
-		Polygon *polygon=readPolygonText(tokenizer);
+	Polygon *polygon = NULL;
+	try {
+		polygon=readPolygonText(tokenizer);
 		polygons->push_back(polygon);
+		polygon=NULL;
 		nextToken=getNextCloserOrComma(tokenizer);
+		while(nextToken==",") {
+			polygon=readPolygonText(tokenizer);
+			polygons->push_back(polygon);
+			polygon=NULL;
+			nextToken=getNextCloserOrComma(tokenizer);
+		}
+	} catch (...) {
+		for (int i=0; i < polygons->size(); i++)
+			delete (*polygons)[i];
+		delete polygons;
+		throw;
 	}
 	MultiPolygon *ret = geometryFactory->createMultiPolygon(polygons);
 	//for (int i=0; i<polygons->size(); i++) delete (*polygons)[i];
@@ -440,14 +460,23 @@ GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *token
 		return geometryFactory->createGeometryCollection(NULL);
 	}
 	vector<Geometry *> *geoms=new vector<Geometry *>();
-	Geometry *geom;
-	geom=readGeometryTaggedText(tokenizer);
-	geoms->push_back(geom);
-	nextToken=getNextCloserOrComma(tokenizer);
-	while(nextToken==",") {
+	Geometry *geom=NULL;
+	try {
 		geom=readGeometryTaggedText(tokenizer);
 		geoms->push_back(geom);
+		geom=NULL;
 		nextToken=getNextCloserOrComma(tokenizer);
+		while(nextToken==",") {
+			geom=readGeometryTaggedText(tokenizer);
+			geoms->push_back(geom);
+			geom=NULL;
+			nextToken=getNextCloserOrComma(tokenizer);
+		}
+	} catch (...) {
+		for (int i=0; i < geoms->size(); i++)
+			delete (*geoms)[i];
+    delete geoms;
+		throw;
 	}
 	GeometryCollection *ret = geometryFactory->createGeometryCollection(geoms);
 	//for (int i=0; i<geoms->size(); i++) delete (*geoms)[i];
