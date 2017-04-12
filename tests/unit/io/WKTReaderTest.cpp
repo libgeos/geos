@@ -171,6 +171,27 @@ namespace tut
             ensure( !"Got unexpected exception" );
         }
     }
+
+    // 8 - invalid WKT (see https://trac.osgeo.org/geos/ticket/830)
+    template<>
+    template<>
+    void object::test<8>()
+    {
+        // All of these strings cause an exception during read().
+        std::vector<std::string> wkt;
+        wkt.push_back("MULTILINESTRING(");
+        wkt.push_back("MULTIPOLYGON(");
+        wkt.push_back("MULTIPOLYGON(EMPTY(");
+        wkt.push_back("GEOMETRYCOLLECTION(");
+        wkt.push_back("GEOMETRYCOLLECTION(LINEARRING(");
+        for (size_t i = 0; i < wkt.size(); i++) {
+            try {
+                wktreader.read(wkt[i]);
+                ensure( !"Didn't get expected exception" );
+            } catch (...) {
+                ensure( "Did get expected exception" );
+            }
+        }
+    }
+
 } // namespace tut
-
-
