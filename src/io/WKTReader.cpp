@@ -413,7 +413,7 @@ MultiLineString* WKTReader::readMultiLineStringText(StringTokenizer *tokenizer) 
 			nextToken=getNextCloserOrComma(tokenizer);
 		}
 	} catch (...) {
-		for (int i=0; i < lineStrings->size(); i++)
+		for (size_t i=0; i < lineStrings->size(); i++)
 			delete (*lineStrings)[i];
 		delete lineStrings;
 		throw;
@@ -443,7 +443,7 @@ MultiPolygon* WKTReader::readMultiPolygonText(StringTokenizer *tokenizer) {
 			nextToken=getNextCloserOrComma(tokenizer);
 		}
 	} catch (...) {
-		for (int i=0; i < polygons->size(); i++)
+		for (size_t i=0; i < polygons->size(); i++)
 			delete (*polygons)[i];
 		delete polygons;
 		throw;
@@ -473,7 +473,7 @@ GeometryCollection* WKTReader::readGeometryCollectionText(StringTokenizer *token
 			nextToken=getNextCloserOrComma(tokenizer);
 		}
 	} catch (...) {
-		for (int i=0; i < geoms->size(); i++)
+		for (size_t i=0; i < geoms->size(); i++)
 			delete (*geoms)[i];
     delete geoms;
 		throw;
