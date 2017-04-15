@@ -10,6 +10,7 @@ Changes in 3.6.2dev
   - AppVeyor CI build added (#813)
   - Clean up numerous MSVC warnings, notably C4275 and C4589 (#814)
   - Bump CMake version to 3.0.0 (#817)
+  - Fix leaks in WKT parser (#830)
 
 Changes in 3.6.1
 2016-12-24
