@@ -1,4 +1,4 @@
-/**********************************************************************
+﻿/**********************************************************************
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
@@ -39,7 +39,6 @@
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/util.h>
 #include <geos/util/Interrupt.h>
-#include <geos/util/math.h>
 //#include <geos/geomgraph.h>
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKBWriter.h>
@@ -87,6 +86,34 @@ using namespace geos::operation::linemerge;
 using std::runtime_error;
 
 namespace {
+
+// Asymmetric Rounding Algorithm  - equivalent to Java Math.round()
+// Copy from geos/util/math.cpp
+double java_math_round(double val)
+{
+	double n;
+	double f = std::fabs(std::modf(val, &n));
+
+	if (val >= 0)
+	{
+		if (f < 0.5) {
+			return std::floor(val);
+		} else if (f > 0.5) {
+			return std::ceil(val);
+		} else {
+			return (n + 1.0);
+		}
+	} else {
+		if (f < 0.5) {
+			return std::ceil(val);
+		} else if (f > 0.5) {
+			return std::floor(val);
+		} else {
+			return n;
+		}
+	}
+} // java_math_round
+
 
 // a utility function defining a very simple method to indent a line of text
 const char * getIndent( unsigned int numIndents )
@@ -335,7 +362,7 @@ XMLTester::printTest(bool success, const std::string& expected_result, const std
         std::cout << " test" << testCount << ": "
             << opSignature;
         std::cout << ": " << (success?"ok.":"failed.");
-        std::cout << " (" << std::setprecision(15) << geos::util::round(prof.getTot()/1000) << " ms)" << std::endl;
+        std::cout << " (" << std::setprecision(15) << java_math_round(prof.getTot()/1000) << " ms)" << std::endl;
 
         std::cout << "\tDescription: " << curr_case_desc << std::endl;
 
