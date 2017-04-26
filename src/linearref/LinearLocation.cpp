@@ -89,17 +89,6 @@ LinearLocation::normalize()
 		segmentFraction = 1.0;
 	}
 
-	if (componentIndex < 0)
-	{
-		componentIndex = 0;
-		segmentIndex = 0;
-		segmentFraction = 0.0;
-	}
-	if (segmentIndex < 0)
-	{
-		segmentIndex = 0;
-		segmentFraction = 0.0;
-	}
 	if (segmentFraction == 1.0)
 	{
 		segmentFraction = 0.0;
@@ -232,11 +221,11 @@ LinearLocation::getSegment(const Geometry* linearGeom) const
 bool
 LinearLocation::isValid(const Geometry* linearGeom) const
 {
-	if (componentIndex < 0 || componentIndex >= linearGeom->getNumGeometries())
+	if (componentIndex >= linearGeom->getNumGeometries())
 		return false;
 
 	const LineString* lineComp = dynamic_cast<const LineString*> (linearGeom->getGeometryN(componentIndex));
-	if (segmentIndex < 0 || segmentIndex > lineComp->getNumPoints())
+	if (segmentIndex > lineComp->getNumPoints())
 		return false;
 	if (segmentIndex == lineComp->getNumPoints() && segmentFraction != 0.0)
 		return false;
