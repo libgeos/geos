@@ -26,7 +26,7 @@ indent_style = space
 indent_size = 2
 
 # Visual-C files want carriage returns too
-[*.vc]
+[*.{vc,opt}]
 end_of_line = crlf
 
 # CMake configuration files
