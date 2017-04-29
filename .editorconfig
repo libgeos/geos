@@ -25,6 +25,10 @@ indent_size = 2
 indent_style = space
 indent_size = 2
 
+# appveyor.yml is meant for windows (mloskot said)
+[appveyor.yml]
+end_of_line = crlf
+
 # Visual-C files want carriage returns too
 [*.{vc,opt}]
 end_of_line = crlf
