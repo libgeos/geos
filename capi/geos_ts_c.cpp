@@ -75,6 +75,14 @@
 #include <geos/util/Machine.h>
 #include <geos/version.h>
 
+#ifdef HAVE_BOOST
+#include <boost/geometry.hpp>
+#include <boost/geometry/geometries/point_xy.hpp>
+#include <boost/geometry/geometries/geometries.hpp>
+#include <boost/geometry/multi/geometries/multi_geometries.hpp>
+#include <boost/geometry/algorithms/convex_hull.hpp>
+#endif // HAVE_BOOST
+
 // This should go away
 #include <cmath> // finite
 #include <cstdarg>
@@ -2084,6 +2092,94 @@ GEOSSingleSidedBuffer_r(GEOSContextHandle_t extHandle, const Geometry *g1, doubl
     return NULL;
 }
 
+#ifdef HAVE_BOOST
+Geometry *
+GEOSConvexHull_r(GEOSContextHandle_t extHandle, const Geometry *g1)
+{
+    if ( 0 == extHandle )
+    {
+        return NULL;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return NULL;
+    }
+
+    if ( g1 == NULL )
+    {
+        return NULL;
+    }
+
+    try
+    {
+        handle->NOTICE_MESSAGE("I'm Boost.Geometry");
+        namespace bg = boost::geometry;
+        typedef bg::model::d2::point_xy<double> point_t;
+        typedef bg::model::polygon<point_t> polygon_t;
+        typedef bg::model::ring<point_t> ring_t;
+
+        CoordinateSequence* pcs = g1->getCoordinates();
+        if (pcs == NULL)
+            return NULL;
+
+        std::size_t const pts_size = pcs->size();
+        std::vector<point_t> points(pts_size);
+        {
+            CoordinateSequence const& cs = *pcs;
+            for (std::size_t i=0; i < pts_size; ++i)
+            {
+                points[i].x(cs[i].x);
+                points[i].y(cs[i].y);
+            }
+        }
+        delete pcs;
+        handle->NOTICE_MESSAGE("I'm Boost.Geometry after the loop");
+
+        bg::model::multi_point<point_t> bgmpoint(points.cbegin(), points.cend());
+        
+        handle->NOTICE_MESSAGE("I'm Boost.Geometry after the multi_point");
+
+        ring_t ch;
+        bg::convex_hull(bgmpoint, ch);
+        //std::cout << "input:  " << bg::dsv(bgmpoint) << std::endl;
+        //std::cout << "hull: " << bg::dsv(ch) << std::endl;
+
+        handle->NOTICE_MESSAGE("I'm Boost.Geometry after the convex_hull");
+
+        using namespace geos::geom;
+        typedef std::vector<Coordinate> CoordVect;
+
+        CoordVect* cv = new std::vector<Coordinate>();
+        cv->reserve(ch.size() + 1); // close
+        for (ring_t::const_iterator it = ch.begin(), end = ch.cend(); it != end; ++it)
+        {
+            cv->push_back(Coordinate(it->x(), it->y(), 0));
+        }
+        cv->push_back(Coordinate(ch[0].x(), ch[0].y(), 0));
+
+        const GeometryFactory *gf = g1->getFactory();
+        CoordinateSequence* newcs = new CoordinateArraySequence(cv, 3);
+        // TODO: create a point for 1-vertex sequence, a line for 2-vertex sequence, a polygon otherwise
+        LinearRing *shell = gf->createLinearRing(newcs);
+        return gf->createPolygon(shell, NULL);
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return NULL;
+}
+
+#else
+
 Geometry *
 GEOSConvexHull_r(GEOSContextHandle_t extHandle, const Geometry *g1)
 {
@@ -2150,6 +2246,8 @@ GEOSMinimumRotatedRectangle_r(GEOSContextHandle_t extHandle, const Geometry *g)
 
     return NULL;
 }
+
+#endif // HAVE_BOOST
 
 Geometry *
 GEOSMinimumWidth_r(GEOSContextHandle_t extHandle, const Geometry *g)
