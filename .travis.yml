@@ -16,7 +16,7 @@ compiler:
 
 branches:
   only:
-    - svn-trunk
+    - master
     - svn-3.6
     - svn-3.5
 
