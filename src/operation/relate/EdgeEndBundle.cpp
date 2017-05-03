@@ -161,7 +161,7 @@ void EdgeEndBundle::updateIM(IntersectionMatrix& im) {
 	Edge::updateIM(label, im);
 }
 
-string EdgeEndBundle::print() {
+string EdgeEndBundle::print() const {
 	string out="EdgeEndBundle--> Label: "+label.toString()+"\n";
 	for(vector<EdgeEnd*>::iterator it=edgeEnds->begin();it<edgeEnds->end();it++) {
 		EdgeEnd *e=*it;
