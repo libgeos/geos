@@ -72,7 +72,7 @@ namespace tut
         geoms[2] = GEOSGeom_createEmptyPoint_r(handle_);
         // takes ownership of individual geometries
         geom_ = GEOSGeom_createCollection_r(handle_, GEOS_MULTIPOINT, geoms, geom_size);
-        ensure_equals(GEOSGetNumGeometries_r(handle_, geom_), geom_size);
+        ensure_equals(GEOSGetNumGeometries_r(handle_, geom_), (int)geom_size);
     }
 
 #if (defined(_MSC_VER) && _MSC_VER >= 1600) || __cplusplus > 199711L || defined(__GXX_EXPERIMENTAL_CXX0X__)
