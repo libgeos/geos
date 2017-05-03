@@ -723,7 +723,8 @@ GeometryFactory::buildGeometry(const vector<Geometry *> &fromGeoms) const
 	size_t i;
 
 	for (i=0; i<fromGeoms.size(); i++) {
-		string partClass(typeid(*fromGeoms[i]).name());
+		Geometry *geom = fromGeoms[i];
+		string partClass(typeid(*geom).name());
 		if (geomClass=="NULL") {
 			geomClass=partClass;
 		} else if (geomClass!=partClass) {
