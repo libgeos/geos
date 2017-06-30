@@ -88,6 +88,12 @@
 #endif
 
 /*
+ * Check validity of operation between original geometries
+ */
+#define GEOS_CHECK_ORIGINAL_RESULT_VALIDITY 0
+
+
+/*
  * Define this to use PrecisionReduction policy
  * in an attempt at by-passing binary operation
  * robustness problems (handles TopologyExceptions)
@@ -95,6 +101,17 @@
 #ifndef USE_PRECISION_REDUCTION_POLICY
 # define USE_PRECISION_REDUCTION_POLICY 1
 #endif
+
+/*
+ * Check validity of operation performed
+ * by precision reduction policy.
+ *
+ * Precision reduction policy reduces precision of inputs
+ * and restores it in the result. The restore phase may
+ * introduce invalidities.
+ *
+ */
+#define GEOS_CHECK_PRECISION_REDUCTION_VALIDITY 0
 
 /*
  * Define this to use TopologyPreserving simplification policy
@@ -133,6 +150,12 @@
 #ifndef USE_SNAPPING_POLICY
 # define USE_SNAPPING_POLICY 1
 #endif
+
+/*
+ * Check validity of result from SnapOp
+ */
+#define GEOS_CHECK_SNAPPINGOP_VALIDITY 0
+
 
 namespace geos {
 namespace geom { // geos::geom
@@ -320,6 +343,14 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 		std::cerr << "Trying with original input." << std::endl;
 #endif
 		ret.reset(_Op(g0, g1));
+
+#if GEOS_CHECK_ORIGINAL_RESULT_VALIDITY
+		check_valid(*ret, "Overlay result between original inputs", true, true);
+#endif
+
+#if GEOS_DEBUG_BINARYOP
+		std::cerr << "Attempt with original input succeeded" << std::endl;
+#endif
 		return ret;
 	}
 	catch (const geos::util::TopologyException& ex)
@@ -329,17 +360,10 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 		std::cerr << "Original exception: " << ex.what() << std::endl;
 #endif
 	}
-
-  check_valid(*g0, "Input geom 0", true, true);
-  check_valid(*g1, "Input geom 1", true, true);
-
-#if GEOS_DEBUG_BINARYOP
-  // Should we just give up here ?
-  check_valid(*g0, "Input geom 0");
-  check_valid(*g1, "Input geom 1");
-#endif
-
 #endif // USE_ORIGINAL_INPUT
+
+	check_valid(*g0, "Input geom 0", true, true);
+	check_valid(*g1, "Input geom 1", true, true);
 
 #ifdef USE_COMMONBITS_POLICY
 	// Try removing common bits (possibly obsoleted by snapping below)
@@ -378,24 +402,13 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 
 		cbr.addCommonBits( ret.get() );
 
-		check_valid(*ret, "CBR: result (after common-bits addition)", true);
-
 #if GEOS_CHECK_COMMONBITS_VALIDITY
-		// check that result is a valid geometry after the
-		// reshift to orginal precision (see EnhancedPrecisionOp)
-		using operation::valid::IsValidOp;
-		using operation::valid::TopologyValidationError;
-		IsValidOp ivo(ret.get());
-		if ( ! ivo.isValid() )
-		{
-			TopologyValidationError* e = ivo.getValidationError();
-			throw geos::util::TopologyException(
-				"Result of overlay became invalid "
-				"after re-addin common bits of operand "
-				"coordinates: " + e->toString(),
-			        e->getCoordinate());
-		}
-#endif // GEOS_CHECK_COMMONBITS_VALIDITY
+		check_valid(*ret, "CBR: result (after common-bits addition)", true);
+#endif
+
+#if GEOS_DEBUG_BINARYOP
+		std::cerr << "Attempt with CBR succeeded" << std::endl;
+#endif
 
 		return ret;
 	}
@@ -423,8 +436,11 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 
 	try {
 		ret = SnapOp(g0, g1, _Op);
+#if GEOS_CHECK_SNAPPINGOP_VALIDITY
+		check_valid(*ret, "SNAP: result", true, true);
+#endif
 #if GEOS_DEBUG_BINARYOP
-	std::cerr << "SnapOp succeeded" << std::endl;
+		std::cerr << "SnapOp succeeded" << std::endl;
 #endif
 		return ret;
 
@@ -478,6 +494,11 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 			GeomPtr rG0( reducer.reduce(*g0) );
 			GeomPtr rG1( reducer.reduce(*g1) );
 
+#if GEOS_DEBUG_BINARYOP
+			check_valid(*rG0, "PR: geom 0 (after precision reduction)");
+			check_valid(*rG1, "PR: geom 1 (after precision reduction)");
+#endif
+
 			try
 			{
 				ret.reset( _Op(rG0.get(), rG1.get()) );
@@ -488,15 +509,23 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
         else {
           ret.reset( g1->getFactory()->createGeometry(ret.get()) );
         }
+
+#if GEOS_CHECK_PRECISION_REDUCTION_VALIDITY
+				check_valid(*ret, "PR: result (after restore of original precision)", true);
+#endif
+
+#if GEOS_DEBUG_BINARYOP
+				std::cerr << "Attempt with scale " << scale << " succeeded" << std::endl;
+#endif
 				return ret;
 			}
 			catch (const geos::util::TopologyException& ex)
 			{
-				if ( scale == 1 ) throw ex;
 #if GEOS_DEBUG_BINARYOP
 				std::cerr << "Reduced with scale (" << scale << "): "
 				          << ex.what() << std::endl;
 #endif
+				if ( scale == 1 ) throw ex;
 			}
 
 		}
@@ -507,7 +536,7 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 #if GEOS_DEBUG_BINARYOP
 		std::cerr << "Reduced: " << ex.what() << std::endl;
 #endif
-        ::geos::ignore_unused_variable_warning(ex);
+		::geos::ignore_unused_variable_warning(ex);
 	}
 
 #endif
@@ -565,6 +594,17 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 
 #endif
 // USE_TP_SIMPLIFY_POLICY }
+
+#if GEOS_DEBUG_BINARYOP
+	std::cerr << "No attempts worked to union " << std::endl;
+	std::cerr << "Input geometries:" << std::endl
+	          << "<A>" << std::endl
+					  << g0->toString() << std::endl
+						<< "</A>" << std::endl
+	          << "<B>" << std::endl
+					  << g1->toString() << std::endl
+						<< "</B>" << std::endl;
+#endif
 
 	throw origException;
 }
