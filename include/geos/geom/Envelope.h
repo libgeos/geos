@@ -26,6 +26,7 @@
 
 #include <string>
 #include <vector>
+#include <ostream> // for operator<<
 #include <memory>
 
 namespace geos {
@@ -53,6 +54,8 @@ class Coordinate;
 class GEOS_DLL Envelope {
 
 public:
+
+	friend std::ostream& operator<< (std::ostream& os, const Envelope& cl);
 
 	typedef std::auto_ptr<Envelope> AutoPtr;
 
@@ -489,6 +492,9 @@ private:
 
 /// Checks if two Envelopes are equal (2D only check)
 GEOS_DLL bool operator==(const Envelope& a, const Envelope& b);
+
+/// Output operator
+GEOS_DLL std::ostream& operator<< (std::ostream& os, const Envelope& o);
 
 } // namespace geos::geom
 } // namespace geos

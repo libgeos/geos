@@ -332,12 +332,21 @@ Envelope::equals(const Envelope* other) const
 			other->getMaxY() == maxy;
 }
 
+/* public */
+std::ostream& operator<< (std::ostream& os, const Envelope& o)
+{
+	os << "Env[" << o.minx << ":" << o.maxx << ","
+		 << o.miny << ":" << o.maxy << "]";
+	return os;
+}
+
+
 /*public*/
 string
 Envelope::toString() const
 {
 	ostringstream s;
-	s<<"Env["<<minx<<":"<<maxx<<","<<miny<<":"<<maxy<<"]";
+	s<<*this;
 	return s.str();
 }
 
