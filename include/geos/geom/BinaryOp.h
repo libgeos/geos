@@ -72,6 +72,7 @@
 #include <memory> // for auto_ptr
 
 //#define GEOS_DEBUG_BINARYOP 1
+#define GEOS_DEBUG_BINARYOP_PRINT_INVALID 1
 
 #ifdef GEOS_DEBUG_BINARYOP
 # include <iostream>
@@ -186,7 +187,13 @@ check_valid(const Geometry& g, const std::string& label, bool doThrow=false, boo
         << err->toString()
         << " (" << std::setprecision(20)
         << err->getCoordinate() << ")"
-        << std::endl;
+        << std::endl
+#ifdef GEOS_DEBUG_BINARYOP_PRINT_INVALID
+        << "<A>" << std::endl
+        << g.toString()
+        << std::endl
+#endif
+        ;
 #endif
       if ( doThrow ) {
         throw geos::util::TopologyException(
