@@ -1,5 +1,5 @@
 #
-# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+# This file is part of project GEOS (http://trac.osgeo.org/geos/)
 #
 #prefix=@prefix@
 #top_srcdir=@top_srcdir@
@@ -9,7 +9,7 @@ AUTOMAKE_OPTIONS = subdir-objects
 
 TESTS = testrunner
 
-CLEANFILES = testrunner 
+CLEANFILES = testrunner
 
 EXTRA_DIST = testrunner.sh CMakeLists.txt
 
@@ -43,6 +43,7 @@ SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
 	$(srcdir)/tests/ticket/bug605.xml \
 	$(srcdir)/tests/ticket/bug615.xml \
 	$(srcdir)/tests/ticket/bug716.xml \
+	$(srcdir)/tests/ticket/bug837.xml \
 	$(srcdir)/tests/general/TestBoundary.xml \
 	$(srcdir)/tests/general/TestBuffer.xml \
 	$(srcdir)/tests/general/TestBufferMitredJoin.xml \
@@ -93,11 +94,11 @@ SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
 	$(srcdir)/tests/safe/16596.xml \
 	$(srcdir)/tests/safe/TestBufferJagged.xml
 
-INVALID_OUTPUT_XMLTESTS = 
+INVALID_OUTPUT_XMLTESTS =
 
 FAILING_XMLTESTS = \
 	$(srcdir)/tests/failure/TestOverlay.xml \
-	$(srcdir)/tests/ticket/bug488.xml 
+	$(srcdir)/tests/ticket/bug488.xml
 
 XMLTESTS=$(SAFE_XMLTESTS) $(INVALID_OUTPUT_XMLTESTS) $(FAILING_XMLTESTS)
 

@@ -2,6 +2,7 @@ Changes in 3.6.2dev
 2017-MM-DD
 
 - Bug fixes / improvements
+  - Fix exception in UnaryUnion of collection of touching polygons (#837)
   - Allow building against python 3 (#774)
   - Fix build with android-ndk and other compilers (#799)
   - Allows compiling with -Wpointer-bool-conversion (#638)
