@@ -152,6 +152,12 @@
 # define USE_SNAPPING_POLICY 1
 #endif
 
+/* Remove common bits before snapping */
+#ifndef CBR_BEFORE_SNAPPING
+# define CBR_BEFORE_SNAPPING 1
+#endif
+
+
 /*
  * Check validity of result from SnapOp
  */
@@ -267,8 +273,6 @@ SnapOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 {
 	typedef std::auto_ptr<Geometry> GeomPtr;
 
-#define CBR_BEFORE_SNAPPING 1
-
 	//using geos::precision::GeometrySnapper;
 	using geos::operation::overlay::snap::GeometrySnapper;
 
@@ -372,7 +376,7 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 	check_valid(*g0, "Input geom 0", true, true);
 	check_valid(*g1, "Input geom 1", true, true);
 
-#ifdef USE_COMMONBITS_POLICY
+#if USE_COMMONBITS_POLICY
 	// Try removing common bits (possibly obsoleted by snapping below)
 	//
 	// NOTE: this policy was _later_ implemented
