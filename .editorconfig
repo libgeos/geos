@@ -51,7 +51,12 @@ indent_size = 2
 indent_style = space
 indent_size = 2
 
-# XMLTester.cpp wants space indent
-[tests/xmltester/{XMLTester,Stackwalker}.cpp]
+# XMLTester.cpp wants 2-space indent
+[tests/xmltester/XMLTester.cpp]
+indent_style = space
+indent_size = 4
+
+# Stackwalker.cpp wants 4-space indent
+[tests/xmltester/Stackwalker.cpp]
 indent_style = space
 indent_size = 2
