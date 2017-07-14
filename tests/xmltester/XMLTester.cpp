@@ -34,6 +34,7 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/BinaryOp.h>
 #include <geos/operation/overlay/OverlayOp.h>
+#include <geos/operation/overlay/snap/GeometrySnapper.h>
 #include <geos/operation/buffer/BufferBuilder.h>
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/operation/buffer/BufferOp.h>
@@ -200,6 +201,16 @@ normalize_filename(const std::string& str)
     tolower(newstring);
 
     return newstring;
+}
+
+static int
+checkOverlaySuccess(geom::Geometry const& gRes, geom::Geometry const& gRealRes)
+{
+    double tol = operation::overlay::snap::GeometrySnapper::computeSizeBasedSnapTolerance(gRes);
+    if ( gRes.equals(&gRealRes) ) return 1;
+    std::cerr << "Using an overlay tolerance of " << tol << std::endl;
+    if ( gRes.equalsExact(&gRealRes, tol) ) return 1;
+    return 0;
 }
 
 /* Could be an XMLTester class private but oh well.. */
@@ -862,7 +873,7 @@ XMLTester::parseTest(const TiXmlNode* node)
                 gRealRes = gA->Union();
             }
 
-            if (gRes->equals(gRealRes.get())) success=1;
+            success = checkOverlaySuccess(*gRes, *gRealRes);
 
             actual_result=printGeom(gRealRes.get());
             expected_result=printGeom(gRes.get());
