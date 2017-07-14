@@ -42,3 +42,8 @@ indent_size = 2
 [*.cmake]
 indent_style = space
 indent_size = 2
+
+# This directory was found to be using spaces
+[src/operation/union/*.cpp]
+indent_style = space
+indent_size = 2
