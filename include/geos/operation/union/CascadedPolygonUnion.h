@@ -229,13 +229,13 @@ private:
 
     void extractByEnvelope(geom::Envelope const& env,
         geom::Geometry* geom,
-				std::vector<geom::Geometry*>& intersectingGeoms,
-				std::vector<geom::Geometry*>& disjointGeoms);
+        std::vector<geom::Geometry*>& intersectingGeoms,
+        std::vector<geom::Geometry*>& disjointGeoms);
 
     void extractByEnvelope(geom::Envelope const& env,
-				std::vector<geom::Geometry*>& sourceGeoms,
-				std::vector<geom::Geometry*>& intersectingGeoms,
-				std::vector<geom::Geometry*>& disjointGeoms);
+        std::vector<geom::Geometry*>& sourceGeoms,
+        std::vector<geom::Geometry*>& intersectingGeoms,
+        std::vector<geom::Geometry*>& disjointGeoms);
 
     /**
      * Encapsulates the actual unioning of two polygonal geometries.

@@ -20,7 +20,7 @@
 namespace geos {
   namespace geom {
     class Geometry;
-	}
+  }
 }
 
 namespace geos {
