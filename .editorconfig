@@ -50,3 +50,8 @@ indent_size = 2
 [include/geos/operation/union/*.{h,inl}]
 indent_style = space
 indent_size = 2
+
+# XMLTester.cpp wants space indent
+[tests/xmltester/XMLTester.cpp]
+indent_style = space
+indent_size = 2
