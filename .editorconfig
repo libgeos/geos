@@ -38,3 +38,11 @@ indent_size = 2
 [*.cmake]
 indent_style = space
 indent_size = 2
+
+# operation/union directories were found to be using spaces
+[src/operation/union/*.cpp]
+indent_style = space
+indent_size = 2
+[include/geos/operation/union/*.{h,inl}]
+indent_style = space
+indent_size = 2
