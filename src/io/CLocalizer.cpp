@@ -28,6 +28,10 @@ namespace io {
 
 CLocalizer::CLocalizer()
 {
+#ifdef _MSC_VER
+    // Avoid multithreading issues caused by setlocale
+    _configthreadlocale(_ENABLE_PER_THREAD_LOCALE);
+#endif
     char* p = std::setlocale(LC_NUMERIC, NULL);
     if (0 != p)
     {
