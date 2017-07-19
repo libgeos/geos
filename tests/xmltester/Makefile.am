@@ -62,6 +62,9 @@ SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
 	$(srcdir)/tests/general/TestFunctionPL.xml \
 	$(srcdir)/tests/general/TestFunctionPP.xml \
 	$(srcdir)/tests/general/TestInteriorPoint.xml \
+  $(srcdir)/tests/general/TestPreparedPointPredicate.xml \
+  $(srcdir)/tests/general/TestPreparedPolygonPredicate.xml \
+  $(srcdir)/tests/general/TestPreparedPredicatesWithGeometryCollection.xml \
 	$(srcdir)/tests/general/TestRectanglePredicate.xml \
 	$(srcdir)/tests/general/TestRelateAA.xml \
 	$(srcdir)/tests/general/TestRelateLA.xml \

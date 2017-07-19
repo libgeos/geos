@@ -4,11 +4,3 @@ Tests found in JTS/testxml/general and not ported as of rev 3991 (Jun 30 2014)
 TestDensify.xml
  - requires densify::Densifier still unported
 
-TestPreparedPointPredicate.xml
- - requires using custom operation (PreparedGeometryOperation)
-
-TestPreparedPolygonPredicate.xml
- - requires using custom operation (PreparedGeometryOperation)
-
-TestPreparedPredicatesWithGeometryCollection.xml
- - requires using custom operation (PreparedGeometryOperation)

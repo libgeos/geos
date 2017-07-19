@@ -32,6 +32,8 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/geom/PrecisionModel.h>
+#include <geos/geom/prep/PreparedGeometry.h>
+#include <geos/geom/prep/PreparedGeometryFactory.h>
 #include <geos/geom/BinaryOp.h>
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
@@ -84,9 +86,14 @@
 using namespace geos;
 using namespace geos::operation::polygonize;
 using namespace geos::operation::linemerge;
+using namespace geos::geom::prep;
 using std::runtime_error;
 
 namespace {
+
+std::auto_ptr<const PreparedGeometry> prepare( const geom::Geometry *g ) {
+    return std::auto_ptr<const PreparedGeometry> ( PreparedGeometryFactory::prepare(g) );
+}
 
 // Asymmetric Rounding Algorithm  - equivalent to Java Math.round()
 // Copy from geos/util/math.cpp
@@ -469,10 +476,30 @@ XMLTester::parseRun(const TiXmlNode* node)
     if ( el ) parsePrecisionModel(el);
     else pm.reset(new PrecisionModel());
 
+    // Look for geometryOperation, if any
+    usePrepared = false;
+    el = node->FirstChildElement("geometryOperation");
+    if ( el ) {
+        const TiXmlNode* txt = el->FirstChild();
+        if ( txt ) {
+            std::string op = trimBlanks(txt->Value());
+            if ( op.find("PreparedGeometryOperation") ) {
+                usePrepared = true;
+            } else {
+                std::cerr << *curr_file
+                          <<": WARNING: unknown geometryOperation: "
+                          << op << std::endl;
+            }
+        }
+    }
+
     if (verbose > 1)
     {
-        std::cerr << *curr_file <<": run: Precision Model: " << pm->toString() <<std::endl;
+        std::cerr << *curr_file <<": run: Precision Model: " << pm->toString();
+        if ( usePrepared ) std::cerr << " (prepared)";
+        std::cerr << std::endl;
     }
+
 
     factory = geom::GeometryFactory::create(pm.get());
     wktreader.reset(new io::WKTReader(factory.get()));
@@ -535,7 +562,6 @@ XMLTester::parsePrecisionModel(const TiXmlElement* el)
         pm.reset(new PrecisionModel(scale, offsetX, offsetY));
     }
 }
-
 
 bool
 XMLTester::testValid(const geom::Geometry* g, const std::string& label)
@@ -932,8 +958,12 @@ XMLTester::parseTest(const TiXmlNode* node)
             geom::Geometry *g1 = opArg1 == "B" ? gB : gA;
             geom::Geometry *g2 = opArg2 == "B" ? gB : gA;
 
-            if (g1->intersects(g2)) actual_result="true";
-            else actual_result="false";
+            actual_result="false";
+            if ( usePrepared )
+            {
+                if ( prepare(g1)->intersects(g2) ) actual_result="true";
+            }
+            else if (g1->intersects(g2)) actual_result="true";
 
             if (actual_result==opRes) success=1;
         }
@@ -943,8 +973,12 @@ XMLTester::parseTest(const TiXmlNode* node)
             geom::Geometry *g1 = opArg1 == "B" ? gB : gA;
             geom::Geometry *g2 = opArg2 == "B" ? gB : gA;
 
-            if (g1->contains(g2)) actual_result="true";
-            else actual_result="false";
+            actual_result="false";
+            if ( usePrepared )
+            {
+                if ( prepare(g1)->contains(g2) ) actual_result="true";
+            }
+            else if (g1->contains(g2)) actual_result="true";
 
             if (actual_result==opRes) success=1;
         }
@@ -954,8 +988,12 @@ XMLTester::parseTest(const TiXmlNode* node)
             geom::Geometry *g1 = opArg1 == "B" ? gB : gA;
             geom::Geometry *g2 = opArg2 == "B" ? gB : gA;
 
-            if (g1->within(g2)) actual_result="true";
-            else actual_result="false";
+            actual_result="false";
+            if ( usePrepared )
+            {
+                if ( prepare(g1)->within(g2) ) actual_result="true";
+            }
+            else if (g1->within(g2)) actual_result="true";
 
             if (actual_result==opRes) success=1;
         }
@@ -965,8 +1003,12 @@ XMLTester::parseTest(const TiXmlNode* node)
             geom::Geometry *g1 = opArg1 == "B" ? gB : gA;
             geom::Geometry *g2 = opArg2 == "B" ? gB : gA;
 
-            if (g1->covers(g2)) actual_result="true";
-            else actual_result="false";
+            actual_result="false";
+            if ( usePrepared )
+            {
+                if ( prepare(g1)->covers(g2) ) actual_result="true";
+            }
+            else if (g1->covers(g2)) actual_result="true";
 
             if (actual_result==opRes) success=1;
         }
@@ -976,8 +1018,12 @@ XMLTester::parseTest(const TiXmlNode* node)
             geom::Geometry *g1 = opArg1 == "B" ? gB : gA;
             geom::Geometry *g2 = opArg2 == "B" ? gB : gA;
 
-            if (g1->coveredBy(g2)) actual_result="true";
-            else actual_result="false";
+            actual_result="false";
+            if ( usePrepared )
+            {
+                if ( prepare(g1)->coveredBy(g2) ) actual_result="true";
+            }
+            else if (g1->coveredBy(g2)) actual_result="true";
 
             if (actual_result==opRes) success=1;
         }
@@ -1483,6 +1529,14 @@ XMLTester::runPredicates(const geom::Geometry *gA, const geom::Geometry *gB)
     std::cout << "\t    Within:\tAB=" << (gA->within(gB)?"T":"F") << ", BA=" << (gB->within(gA)?"T":"F") << std::endl;
     std::cout << "\t  Contains:\tAB=" << (gA->contains(gB)?"T":"F") << ", BA=" << (gB->contains(gA)?"T":"F") << std::endl;
     std::cout << "\t  Overlaps:\tAB=" << (gA->overlaps(gB)?"T":"F") << ", BA=" << (gB->overlaps(gA)?"T":"F") << std::endl;
+
+    std::cout << "\t  Prepared Disjoint:\tAB=" << (prepare(gA)->disjoint(gB)?"T":"F") << ", BA=" << (prepare(gB)->disjoint(gA)?"T":"F") << std::endl;
+    std::cout << "\tPrepared Intersects:\tAB=" << (prepare(gA)->intersects(gB)?"T":"F") << ", BA=" << (prepare(gB)->intersects(gA)?"T":"F") << std::endl;
+    std::cout << "\t   Prepared Touches:\tAB=" << (prepare(gA)->touches(gB)?"T":"F") << ", BA=" << (prepare(gB)->touches(gA)?"T":"F") << std::endl;
+    std::cout << "\t   Prepared Crosses:\tAB=" << (prepare(gA)->crosses(gB)?"T":"F") << ", BA=" << (prepare(gB)->crosses(gA)?"T":"F") << std::endl;
+    std::cout << "\t    Prepared Within:\tAB=" << (prepare(gA)->within(gB)?"T":"F") << ", BA=" << (prepare(gB)->within(gA)?"T":"F") << std::endl;
+    std::cout << "\t  Prepared Contains:\tAB=" << (prepare(gA)->contains(gB)?"T":"F") << ", BA=" << (prepare(gB)->contains(gA)?"T":"F") << std::endl;
+    std::cout << "\t Prepared Overlaps:\tAB=" << (prepare(gA)->overlaps(gB)?"T":"F") << ", BA=" << (prepare(gB)->overlaps(gA)?"T":"F") << std::endl;
 }
 
 XMLTester::~XMLTester()
