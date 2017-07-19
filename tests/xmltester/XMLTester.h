@@ -50,6 +50,7 @@ private:
 	geom::Geometry *gB;
 	geom::Geometry *gT;
 
+	bool usePrepared;
 	std::auto_ptr<geom::PrecisionModel> pm;
 	geom::GeometryFactory::unique_ptr factory;
 	std::auto_ptr<io::WKTReader> wktreader;
