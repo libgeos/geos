@@ -1,5 +1,5 @@
-Changes in 3.6.2dev
-2017-MM-DD
+Changes in 3.6.2
+2017-07-25
 
 - Bug fixes / improvements
   - Fix exception in UnaryUnion of collection of touching polygons (#837)
