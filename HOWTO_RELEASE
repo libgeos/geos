@@ -1,47 +1,47 @@
-- Verify that the versions currently set (see 10 and 11 below) make
+1. Verify that the versions currently set (see 10 and 11 below) make
    sense for this release.
 
-- Run 'make distcheck', fix any problem with it.
+2. Run 'make distcheck', fix any problem with it.
 
-- Update the NEWS file (extract most important things from the
-  repository log). Make sure to update the release date
+3. Update the NEWS file (extract most important things from the
+   repository log). Make sure to update the release date
 
-- Commit the changes in the NEWS file.
+4. Commit the changes in the NEWS file.
 
-- Tag the release:
+5. Tag the release:
    $ git tag MAJOR.MINOR.PATCH
 
-- Run 'make dist-bzip2'.
-  $ ./autogen.sh && ./configure && make dist-bzip2
+6. Run 'make dist-bzip2'.
+   $ ./autogen.sh && ./configure && make dist-bzip2
 
-- Verify that you can unpack and build the tarball
+7. Verify that you can unpack and build the tarball
 
-- Copy the tarball to upload.osgeo.org:/osgeo/download/geos
+8. Copy the tarball to upload.osgeo.org:/osgeo/download/geos
 
-- Increment all the version numbers for the next release, as below.
+9. Increment all the version numbers for the next release, as below.
 
-- Increment CAPI_INTERFACE_X in configure.in
-   - For a release with no interface changes just bump REVISION.
-     [ Even if *nothing* changed in CAPI ]
-   - Adding interfaces, bump CURRENT/AGE, set REVISION to 0.
-   - Deleting interfaces / compatibility issues - bump CURRENT, others to zero
-     [ THIS MUST BE CAREFULLY AVOIDED ]
+10. Increment CAPI_INTERFACE_X in configure.ac
+    - For a release with no interface changes just bump REVISION.
+      [ Even if *nothing* changed in CAPI ]
+    - Adding interfaces, bump CURRENT/AGE, set REVISION to 0.
+    - Deleting interfaces / compatibility issues - bump CURRENT, others to zero
+      [ THIS MUST BE CAREFULLY AVOIDED ]
 
-- Increment release version:
-   - In configure.in
-   - In include/geos/version.h.vc
-   - In capi/geos_c.h.in
-     - VERSION_PATCH for bugfixes/improvements (even breaking C++ API)
-     - VERSION_MINOR for NEW interfaces in the C lib
-     - VERSION_MAJOR for SUBSTANTIAL additions or C lib ABI break
-       [ THIS MUST BE CAREFULLY AVOIDED ]
-   - In main CMakeLists.txt main one
-      - VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH
-      - CAPI_INTERFACE_*
+11. Increment release version:
+    - In configure.in
+    - In include/geos/version.h.vc
+    - In capi/geos_c.h.in
+      - VERSION_PATCH for bugfixes/improvements (even breaking C++ API)
+      - VERSION_MINOR for NEW interfaces in the C lib
+      - VERSION_MAJOR for SUBSTANTIAL additions or C lib ABI break
+        [ THIS MUST BE CAREFULLY AVOIDED ]
+    - In main CMakeLists.txt main one
+       - VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH
+       - CAPI_INTERFACE_*
 
-- Update wiki page https://trac.osgeo.org/geos/ at Download section
+12. Update wiki page https://trac.osgeo.org/geos/ at Download section
     - Add latest release
     - Remove previos patch level release (if any)
 
-- Announce
+13. Announce
 
