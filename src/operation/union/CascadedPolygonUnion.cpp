@@ -75,9 +75,9 @@ check_valid(const geos::geom::Geometry& g, const std::string& label, bool doThro
         << err->getCoordinate() << ")"
         << std::endl
 #ifdef GEOS_DEBUG_CASCADED_UNION_PRINT_INVALID
-        << "<A>" << std::endl
-        << g.toString()
-        << std::endl
+        << "<a>" << std::endl
+        << g.toString() << std::endl
+        << "</a>" << std::endl
 #endif
         ;
 #endif // GEOS_DEBUG_CASCADED_UNION
@@ -263,7 +263,19 @@ CascadedPolygonUnion::unionUsingEnvelopeIntersection(geom::Geometry* g0,
     std::auto_ptr<geom::Geometry> u(unionActual(g0Int.get(), g1Int.get()));
 
 #if GEOS_DEBUG_CASCADED_UNION
-    check_valid(*u, "unionUsingEnvelopeIntersection unionActual return");
+    if ( ! check_valid(*u, "unionUsingEnvelopeIntersection unionActual return") )
+    {
+#if GEOS_DEBUG_CASCADED_UNION_PRINT_INVALID
+      std::cerr << " union between the following is invalid"
+        << "<a>" << std::endl
+        << *g0Int << std::endl
+        << "</a>" << std::endl
+        << "<b>" << std::endl
+        << *g1Int << std::endl
+        << "</b>" << std::endl
+        ;
+#endif
+    }
 #endif
 
     if ( disjointPolys.empty() ) return u.release();

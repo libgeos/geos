@@ -198,6 +198,7 @@ check_valid(const Geometry& g, const std::string& label, bool doThrow=false, boo
         << "<A>" << std::endl
         << g.toString()
         << std::endl
+        << "</A>" << std::endl
 #endif
         ;
 #endif
