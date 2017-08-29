@@ -90,8 +90,9 @@ endif()
 #################################################################################
 # Setup C/C++ compiler options
 #################################################################################
-set(CMAKE_CXX_STANDARD 98)
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+#set(CMAKE_CXX_EXTENSIONS OFF)
 
 if(NOT MSVC_IDE)
   if(NOT CMAKE_BUILD_TYPE)
