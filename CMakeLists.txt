@@ -10,16 +10,12 @@
 # See the COPYING file for more information.
 #
 #################################################################################
-project(GEOS)
 cmake_minimum_required(VERSION 3.0.0)
 
 if(NOT CMAKE_VERSION)
     set(CMAKE_VERSION
       "${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}")
 endif()
-
-# Add custom GEOS modules for CMake
-list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
 
 #################################################################################
 # Setup GEOS version
@@ -50,6 +46,14 @@ if (NOT WIN32)
   set(CAPI_SOVERSION ${CAPI_VERSION_MAJOR})
   message(STATUS "Setting GEOS C API soversion ${CAPI_SOVERSION}")
 endif()
+
+#################################################################################
+# Set GEOS project
+#################################################################################
+project(GEOS LANGUAGES C CXX)
+
+# Add custom GEOS modules for CMake
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
 
 #################################################################################
 # Check custom global options
