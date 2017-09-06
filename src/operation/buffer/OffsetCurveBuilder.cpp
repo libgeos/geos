@@ -67,7 +67,7 @@ OffsetCurveBuilder::getLineCurve(const CoordinateSequence *inputPts,
 
   double posDistance = std::abs(distance);
 
-  std::auto_ptr<OffsetSegmentGenerator> segGen = getSegGen(posDistance);
+  std::unique_ptr<OffsetSegmentGenerator> segGen = getSegGen(posDistance);
   if (inputPts->getSize() <= 1) {
     computePointCurve(inputPts->getAt(0), *segGen);
   } else {
@@ -118,12 +118,12 @@ OffsetCurveBuilder::getSingleSidedLineCurve(const CoordinateSequence* inputPts,
 
 	double distTol = simplifyTolerance(distance);
 
-  std::auto_ptr<OffsetSegmentGenerator> segGen = getSegGen(distance);
+  std::unique_ptr<OffsetSegmentGenerator> segGen = getSegGen(distance);
 
   if ( leftSide ) {
 	  //--------- compute points for left side of line
     // Simplify the appropriate side of the line before generating
-    std::auto_ptr<CoordinateSequence> simp1_ =
+    std::unique_ptr<CoordinateSequence> simp1_ =
       BufferInputLineSimplifier::simplify( *inputPts, distTol );
     const CoordinateSequence& simp1 = *simp1_;
 
@@ -143,7 +143,7 @@ OffsetCurveBuilder::getSingleSidedLineCurve(const CoordinateSequence* inputPts,
 
     //---------- compute points for right side of line
     // Simplify the appropriate side of the line before generating
-    std::auto_ptr<CoordinateSequence> simp2_ =
+    std::unique_ptr<CoordinateSequence> simp2_ =
       BufferInputLineSimplifier::simplify( *inputPts, -distTol );
     const CoordinateSequence& simp2 = *simp2_;
 
@@ -181,7 +181,7 @@ OffsetCurveBuilder::getRingCurve(const CoordinateSequence *inputPts,
 		return;
 	}
 
-  std::auto_ptr<OffsetSegmentGenerator> segGen = getSegGen(std::abs(distance));
+  std::unique_ptr<OffsetSegmentGenerator> segGen = getSegGen(std::abs(distance));
 	computeRingBufferCurve(*inputPts, side, *segGen);
   segGen->getCoordinates(lineList);
 }
@@ -202,7 +202,7 @@ OffsetCurveBuilder::computeLineBufferCurve(const CoordinateSequence& inputPts,
 
 	//--------- compute points for left side of line
 	// Simplify the appropriate side of the line before generating
-	std::auto_ptr<CoordinateSequence> simp1_ =
+	std::unique_ptr<CoordinateSequence> simp1_ =
 		BufferInputLineSimplifier::simplify(inputPts, distTol);
 	const CoordinateSequence& simp1 = *simp1_;
 
@@ -218,7 +218,7 @@ OffsetCurveBuilder::computeLineBufferCurve(const CoordinateSequence& inputPts,
 
 	//---------- compute points for right side of line
 	// Simplify the appropriate side of the line before generating
-	std::auto_ptr<CoordinateSequence> simp2_ =
+	std::unique_ptr<CoordinateSequence> simp2_ =
 		BufferInputLineSimplifier::simplify(inputPts, -distTol);
 	const CoordinateSequence& simp2 = *simp2_;
 
@@ -244,7 +244,7 @@ OffsetCurveBuilder::computeRingBufferCurve(const CoordinateSequence& inputPts,
 	// ensure that correct side is simplified
 	if (side == Position::RIGHT)
 		distTol = -distTol;
-	std::auto_ptr<CoordinateSequence> simp_ =
+	std::unique_ptr<CoordinateSequence> simp_ =
 		BufferInputLineSimplifier::simplify(inputPts, distTol);
 	const CoordinateSequence& simp = *simp_;
 
@@ -272,7 +272,7 @@ OffsetCurveBuilder::computeSingleSidedBufferCurve(
 
     //---------- compute points for right side of line
     // Simplify the appropriate side of the line before generating
-    std::auto_ptr<CoordinateSequence> simp2_ =
+    std::unique_ptr<CoordinateSequence> simp2_ =
       BufferInputLineSimplifier::simplify(inputPts, -distTol);
     const CoordinateSequence& simp2 = *simp2_;
 
@@ -290,7 +290,7 @@ OffsetCurveBuilder::computeSingleSidedBufferCurve(
 
     //--------- compute points for left side of line
     // Simplify the appropriate side of the line before generating
-    std::auto_ptr<CoordinateSequence> simp1_ =
+    std::unique_ptr<CoordinateSequence> simp1_ =
       BufferInputLineSimplifier::simplify(inputPts, distTol);
     const CoordinateSequence& simp1 = *simp1_;
 
@@ -307,10 +307,10 @@ OffsetCurveBuilder::computeSingleSidedBufferCurve(
 }
 
 /*private*/
-std::auto_ptr<OffsetSegmentGenerator>
+std::unique_ptr<OffsetSegmentGenerator>
 OffsetCurveBuilder::getSegGen(double dist)
 {
-  std::auto_ptr<OffsetSegmentGenerator> osg(
+  std::unique_ptr<OffsetSegmentGenerator> osg(
     new OffsetSegmentGenerator(precisionModel, bufParams, dist)
   );
   return osg;

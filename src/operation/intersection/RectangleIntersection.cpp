@@ -660,14 +660,14 @@ RectangleIntersection::clip_geom(const geom::Geometry * g,
 }
 
 /* public static */
-std::auto_ptr<geom::Geometry>
+std::unique_ptr<geom::Geometry>
 RectangleIntersection::clipBoundary(const geom::Geometry & g, const Rectangle & rect)
 {
   RectangleIntersection ri(g,rect);
   return ri.clipBoundary();
 }
 
-std::auto_ptr<geom::Geometry>
+std::unique_ptr<geom::Geometry>
 RectangleIntersection::clipBoundary()
 {
   RectangleIntersectionBuilder parts(*_gf);
@@ -679,14 +679,14 @@ RectangleIntersection::clipBoundary()
 }
 
 /* public static */
-std::auto_ptr<geom::Geometry>
+std::unique_ptr<geom::Geometry>
 RectangleIntersection::clip(const geom::Geometry & g, const Rectangle & rect)
 {
   RectangleIntersection ri(g,rect);
   return ri.clip();
 }
 
-std::auto_ptr<geom::Geometry>
+std::unique_ptr<geom::Geometry>
 RectangleIntersection::clip()
 {
   RectangleIntersectionBuilder parts(*_gf);

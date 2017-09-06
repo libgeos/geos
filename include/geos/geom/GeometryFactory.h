@@ -65,35 +65,26 @@ namespace geom { // geos::geom
  * It is assumed that input Coordinates meet the given precision.
  */
 class GEOS_DLL GeometryFactory {
+private:
+
+	struct GeometryFactoryDeleter
+	{
+		void operator()(GeometryFactory* p) const
+		{
+			p->destroy();
+		}
+	};
+
 public:
 
-  // TODO: typedef std::unique_ptr<GeometryFactory,destroy>
-  class unique_ptr {
-    mutable GeometryFactory *_f;
-  public:
-    // Copying an auto_unique_ptr transfers ownership
-    unique_ptr(const unique_ptr& o): _f(o.release()) {};
-    GeometryFactory* release() const { GeometryFactory *f = _f; _f=0; return f; }
-    void reset(GeometryFactory* f) { if ( _f ) _f->destroy(); _f = f; }
-    // assigning an auto_unique_ptr transfers ownership
-    unique_ptr& operator=(const unique_ptr& o) {
-      reset( o.release() );
-      return *this;
-    }
-    GeometryFactory* get() const { return _f; }
-    GeometryFactory* operator->() const { return _f; }
-    GeometryFactory& operator*() { return *_f; };
-    unique_ptr(): _f(0) {}
-    unique_ptr(GeometryFactory* f): _f(f) {}
-    ~unique_ptr() { reset(0); }
-  };
+	using Ptr = std::unique_ptr<GeometryFactory, GeometryFactoryDeleter>;
 
 	/**
 	 * \brief
 	 * Constructs a GeometryFactory that generates Geometries having a
 	 * floating PrecisionModel and a spatial-reference ID of 0.
 	 */
-	static GeometryFactory::unique_ptr create();
+	static GeometryFactory::Ptr create();
 
 	/**
 	 * \brief
@@ -107,7 +98,7 @@ public:
 	 *     and must be available for the whole lifetime
 	 *     of the GeometryFactory
 	 */
-	static GeometryFactory::unique_ptr create(const PrecisionModel *pm, int newSRID,
+	static GeometryFactory::Ptr create(const PrecisionModel *pm, int newSRID,
 		CoordinateSequenceFactory *nCoordinateSequenceFactory);
 
 	/**
@@ -116,7 +107,7 @@ public:
 	 * given CoordinateSequence implementation, a double-precision floating
 	 * PrecisionModel and a spatial-reference ID of 0.
 	 */
-	static GeometryFactory::unique_ptr create(CoordinateSequenceFactory *nCoordinateSequenceFactory);
+	static GeometryFactory::Ptr create(CoordinateSequenceFactory *nCoordinateSequenceFactory);
 
 	/**
 	 * \brief
@@ -126,7 +117,7 @@ public:
 	 *
 	 * @param pm the PrecisionModel to use
 	 */
-	static GeometryFactory::unique_ptr create(const PrecisionModel *pm);
+	static GeometryFactory::Ptr create(const PrecisionModel *pm);
 
 	/**
 	 * \brief
@@ -137,14 +128,14 @@ public:
 	 * @param pm the PrecisionModel to use, will be copied internally
 	 * @param newSRID the SRID to use
 	 */
-	static GeometryFactory::unique_ptr create(const PrecisionModel* pm, int newSRID);
+	static GeometryFactory::Ptr create(const PrecisionModel* pm, int newSRID);
 
 	/**
 	 * \brief Copy constructor
 	 *
 	 * @param gf the GeometryFactory to clone from
 	 */
-	static GeometryFactory::unique_ptr create(const GeometryFactory &gf);
+	static GeometryFactory::Ptr create(const GeometryFactory &gf);
 
 	/**
 	 * \brief
@@ -224,8 +215,8 @@ public:
 	/// Construct a LinearRing taking ownership of given arguments
 	LinearRing* createLinearRing(CoordinateSequence* newCoords) const;
 
-	std::auto_ptr<Geometry> createLinearRing(
-			std::auto_ptr<CoordinateSequence> newCoords) const;
+	std::unique_ptr<Geometry> createLinearRing(
+			std::unique_ptr<CoordinateSequence> newCoords) const;
 
 	/// Construct a LinearRing with a deep-copy of given arguments
 	LinearRing* createLinearRing(
@@ -268,13 +259,13 @@ public:
 	LineString* createLineString() const;
 
 	/// Copy a LineString
-	std::auto_ptr<LineString> createLineString(const LineString& ls) const;
+	std::unique_ptr<LineString> createLineString(const LineString& ls) const;
 
 	/// Construct a LineString taking ownership of given argument
 	LineString* createLineString(CoordinateSequence* coordinates) const;
 
-	std::auto_ptr<Geometry> createLineString(
-			std::auto_ptr<CoordinateSequence> coordinates) const;
+	std::unique_ptr<Geometry> createLineString(
+			std::unique_ptr<CoordinateSequence> coordinates) const;
 
 	/// Construct a LineString with a deep-copy of given argument
 	LineString* createLineString(
@@ -322,7 +313,7 @@ public:
   /// @param toofar end iterator
   ///
   template <class T>
-	std::auto_ptr<Geometry> buildGeometry(T from, T toofar) const
+	std::unique_ptr<Geometry> buildGeometry(T from, T toofar) const
   {
     bool isHeterogeneous = false;
     size_t count = 0;
@@ -341,12 +332,12 @@ public:
 
     // for the empty geometry, return an empty GeometryCollection
     if ( count == 0 ) {
-      return std::auto_ptr<Geometry>( createGeometryCollection() );
+      return std::unique_ptr<Geometry>( createGeometryCollection() );
     }
 
     // for the single geometry, return a clone
     if ( count == 1 ) {
-      return std::auto_ptr<Geometry>( (*from)->clone() );
+      return std::unique_ptr<Geometry>( (*from)->clone() );
     }
 
     // Now we know it is a collection
@@ -364,20 +355,20 @@ public:
 
     // for an heterogeneous ...
     if ( isHeterogeneous ) {
-      return std::auto_ptr<Geometry>( createGeometryCollection(fromGeoms) );
+      return std::unique_ptr<Geometry>( createGeometryCollection(fromGeoms) );
     }
 
     // At this point we know the collection is not hetereogenous.
     if ( dynamic_cast<const Polygon*>(*from) ) {
-      return std::auto_ptr<Geometry>( createMultiPolygon(fromGeoms) );
+      return std::unique_ptr<Geometry>( createMultiPolygon(fromGeoms) );
     } else if ( dynamic_cast<const LineString*>(*from) ) {
-      return std::auto_ptr<Geometry>( createMultiLineString(fromGeoms) );
+      return std::unique_ptr<Geometry>( createMultiLineString(fromGeoms) );
     } else if ( dynamic_cast<const Point*>(*from) ) {
-      return std::auto_ptr<Geometry>( createMultiPoint(fromGeoms) );
+      return std::unique_ptr<Geometry>( createMultiPoint(fromGeoms) );
     }
     // FIXME: Why not to throw an exception? --mloskot
     assert(0); // buildGeomtry encountered an unkwnon geometry type
-    return std::auto_ptr<Geometry>(); // nullptr
+    return std::unique_ptr<Geometry>(); // nullptr
   }
 
 	/** \brief

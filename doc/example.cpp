@@ -392,7 +392,7 @@ create_arc(double llX, double llY, double width, double height, double startang,
 	return shapefactory.createArc(startang, endang);
 }
 
-auto_ptr<Polygon>
+unique_ptr<Polygon>
 create_sinestar(double cx, double cy, double size, int nArms, double armLenRat)
 {
 	geos::geom::util::SineStarFactory fact(global_factory.get());

@@ -54,7 +54,7 @@ LineMergeGraph::addEdge(const LineString *lineString)
 	cerr<<"Adding LineString "<<lineString->toString()<<endl;
 #endif
 
-	std::auto_ptr<CoordinateSequence> coordinates (
+	std::unique_ptr<CoordinateSequence> coordinates (
 		CoordinateSequence::removeRepeatedPoints(lineString->getCoordinatesRO())
 	);
 

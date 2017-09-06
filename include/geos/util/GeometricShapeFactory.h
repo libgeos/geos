@@ -59,7 +59,7 @@ namespace util { // geos::util
  *  gsf.setSize(100);
  *  gsf.setNumPoints(100);
  *  gsf.setBase(Coordinate(0, 0));
- *  std::auto_ptr<Polygon> rect ( gsf.createRectangle() );
+ *  std::unique_ptr<Polygon> rect ( gsf.createRectangle() );
  * </pre>
  *
  */

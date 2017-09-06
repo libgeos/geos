@@ -34,7 +34,7 @@ namespace tut
     geos::io::WKTWriter wktwriter;
 
     typedef geos::geom::Geometry Geom;
-    typedef geos::geom::Geometry::AutoPtr GeomPtr;
+    typedef geos::geom::Geometry::Ptr GeomPtr;
 
     GeomVect inpGeoms;
     GeomVect expGeoms;

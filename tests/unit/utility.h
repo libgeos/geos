@@ -90,23 +90,6 @@ inline Type const* instanceOf(InstanceType const* instance)
     return dynamic_cast<Type const*>(instance);
 }
 
-template <typename Dst, typename Src>
-std::auto_ptr<Dst> dynamic_cast_auto_ptr(std::auto_ptr<Src>& ptr)
-{
-    Dst* res = dynamic_cast<Dst*>(ptr.get());
-    if (0 != res)
-    {
-        ptr.release();
-    }
-    return std::auto_ptr<Dst>(res);
-}
-
-template <typename Dst, typename Src>
-std::auto_ptr<Dst> static_cast_auto_ptr(std::auto_ptr<Src>& ptr)
-{
-    return std::auto_ptr<Dst>(static_cast<Dst*>(ptr.release()));
-}
-
 //
 // Geometries structure comparators
 //

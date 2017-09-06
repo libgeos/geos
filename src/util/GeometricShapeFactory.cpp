@@ -89,7 +89,7 @@ GeometricShapeFactory::createRectangle()
 	int ipt = 0;
 	int nSide = nPts / 4;
 	if (nSide < 1) nSide = 1;
-	std::auto_ptr<Envelope> env ( dim.getEnvelope() );
+	std::unique_ptr<Envelope> env ( dim.getEnvelope() );
 	double XsegLen = env->getWidth() / nSide;
 	double YsegLen = env->getHeight() / nSide;
 
@@ -126,7 +126,7 @@ GeometricShapeFactory::createRectangle()
 Polygon*
 GeometricShapeFactory::createCircle()
 {
-	std::auto_ptr<Envelope> env ( dim.getEnvelope() );
+	std::unique_ptr<Envelope> env ( dim.getEnvelope() );
 	double xRadius = env->getWidth() / 2.0;
 	double yRadius = env->getHeight() / 2.0;
 
@@ -152,7 +152,7 @@ GeometricShapeFactory::createCircle()
 LineString*
 GeometricShapeFactory::createArc(double startAng, double angExtent)
 {
-	std::auto_ptr<Envelope> env ( dim.getEnvelope() );
+	std::unique_ptr<Envelope> env ( dim.getEnvelope() );
 	double xRadius = env->getWidth() / 2.0;
 	double yRadius = env->getHeight() / 2.0;
 
@@ -181,7 +181,7 @@ GeometricShapeFactory::createArc(double startAng, double angExtent)
 Polygon*
 GeometricShapeFactory::createArcPolygon(double startAng, double angExtent)
 {
-	std::auto_ptr<Envelope> env ( dim.getEnvelope() );
+	std::unique_ptr<Envelope> env ( dim.getEnvelope() );
 	double xRadius = env->getWidth() / 2.0;
 	double yRadius = env->getHeight() / 2.0;
 

@@ -37,11 +37,11 @@ namespace tut
 
     struct test_ValidSelfTouchingRingFormingHole_data
     {
-	typedef std::auto_ptr<Geometry> GeomPtr;
+	typedef std::unique_ptr<Geometry> GeomPtr;
 
         geos::geom::PrecisionModel pm_;
         typedef geos::geom::GeometryFactory GeometryFactory;
-        geos::geom::GeometryFactory::unique_ptr factory_;
+        geos::geom::GeometryFactory::Ptr factory_;
         geos::io::WKTReader rdr;
 
         test_ValidSelfTouchingRingFormingHole_data()

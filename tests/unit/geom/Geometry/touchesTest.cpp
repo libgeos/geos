@@ -20,10 +20,10 @@ namespace tut {
 
 struct test_touches_data
 {
-    typedef std::auto_ptr<geos::geom::Geometry> GeomAutoPtr;
+    typedef std::unique_ptr<geos::geom::Geometry> GeomPtr;
     typedef geos::geom::GeometryFactory GeometryFactory;
 
-    geos::geom::GeometryFactory::unique_ptr factory;
+    geos::geom::GeometryFactory::Ptr factory;
     geos::io::WKTReader reader;
     geos::io::WKBReader breader;
 
@@ -48,11 +48,11 @@ template<>
 template<>
 void object::test<1>()
 {
-    GeomAutoPtr g1(reader.read(
+    GeomPtr g1(reader.read(
         "POINT (0 0)"
         ));
 
-    GeomAutoPtr g2(reader.read(
+    GeomPtr g2(reader.read(
         "POINT (0 0)"
         ));
 
@@ -65,11 +65,11 @@ template<>
 template<>
 void object::test<2>()
 {
-    GeomAutoPtr g1(reader.read(
+    GeomPtr g1(reader.read(
         "LINESTRING(0 0, 1 1, 0 2)"
         ));
 
-    GeomAutoPtr g2(reader.read(
+    GeomPtr g2(reader.read(
         "POINT (1 1)"
         ));
 
@@ -82,11 +82,11 @@ template<>
 template<>
 void object::test<3>()
 {
-    GeomAutoPtr g1(reader.read(
+    GeomPtr g1(reader.read(
         "LINESTRING(0 0, 1 1, 0 2)"
         ));
 
-    GeomAutoPtr g2(reader.read(
+    GeomPtr g2(reader.read(
         "POINT (0 2)"
         ));
 
@@ -99,11 +99,11 @@ template<>
 template<>
 void object::test<4>()
 {
-    GeomAutoPtr g1(reader.read(
+    GeomPtr g1(reader.read(
         "LINESTRING (-612844.96290006 279079.117329031,-257704.820935236 574364.179187424)"
         ));
 
-    GeomAutoPtr g2(reader.read(
+    GeomPtr g2(reader.read(
         "POINT (-257704.820935236 574364.179187424)"
         ));
 
@@ -120,8 +120,8 @@ void object::test<5>()
     // B: LINESTRING(-2119.81532027122 4257.47493284327,-2119.81532027122 2326.7198668134)
     std::stringstream wkbA("01020000000200000010efda91826fabc0a8e5329579a1b040008633595f6c8bc0a8e5329579a1b040");
     std::stringstream wkbB("0102000000020000005999a871a18fa0c0a8e5329579a1b0405999a871a18fa0c0180a6292702da240");
-    GeomAutoPtr a(breader.readHEX(wkbA));
-    GeomAutoPtr b(breader.readHEX(wkbB));
+    GeomPtr a(breader.readHEX(wkbA));
+    GeomPtr b(breader.readHEX(wkbB));
 
     ensure(a->touches(b.get()));
     ensure(!a->disjoint(b.get()));
@@ -137,8 +137,8 @@ void object::test<6>()
     // B: LINESTRING(1098.10978977856 4137.73818456235,1921.2999342099 2177.04893146225)
     std::stringstream wkbA("010200000003000000603f483e8ac87ac092ba62a50373b1405851bb6c70289140b6d9a9f9bc29b04060a2990ed55799401226341da5a8b540");
     std::stringstream wkbB("0102000000020000005851bb6c70289140b6d9a9f9bc29b040d019f42133059e40406c8b0d1902a140");
-    GeomAutoPtr a(breader.readHEX(wkbA));
-    GeomAutoPtr b(breader.readHEX(wkbB));
+    GeomPtr a(breader.readHEX(wkbA));
+    GeomPtr b(breader.readHEX(wkbB));
 
     ensure(a->touches(b.get()));
     ensure(!a->disjoint(b.get()));
@@ -154,8 +154,8 @@ void object::test<7>()
     // B: LINESTRING(4151.39687094207 3823.42922032493,6112.08612404217 2461.42370862944)
     std::stringstream wkbA("01020000000200000098e8f0fe581eaa40ea70df8b95b2a3408c9532b39e5fb340417cd4fc9005b440");
     std::stringstream wkbB("010200000002000000ec8455996537b040b834c4c2dbdead4086a8390c16e0b740f86456f0d83aa340");
-    GeomAutoPtr a(breader.readHEX(wkbA));
-    GeomAutoPtr b(breader.readHEX(wkbB));
+    GeomPtr a(breader.readHEX(wkbA));
+    GeomPtr b(breader.readHEX(wkbB));
 
     // segments do not just touch, but intersect (float-point robustness issue likely)
     ensure(!a->touches(b.get()));

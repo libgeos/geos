@@ -29,7 +29,7 @@ namespace tut
         geos::io::WKTReader wktreader;
         geos::io::WKTWriter wktwriter;
 
-        typedef geos::geom::Geometry::AutoPtr GeomPtr;
+        typedef geos::geom::Geometry::Ptr GeomPtr;
 
         test_cascadedpolygonuniontest_data()
           : gf(*geos::geom::GeometryFactory::getDefaultInstance())
@@ -48,7 +48,7 @@ namespace tut
     {
         typedef std::vector<geos::geom::Polygon*>::iterator iterator;
 
-        std::auto_ptr<geos::geom::Geometry> unionAll;
+        std::unique_ptr<geos::geom::Geometry> unionAll;
         iterator end = geoms->end();
         for (iterator i = geoms->begin(); i != end; ++i)
         {
@@ -74,8 +74,8 @@ namespace tut
     void test_runner(test_cascadedpolygonuniontest_data& t,
         std::vector<geos::geom::Polygon*>* geoms)
     {
-        std::auto_ptr<geos::geom::Geometry> union1(unionIterated(geoms));
-        std::auto_ptr<geos::geom::Geometry> union2(unionCascaded(geoms));
+        std::unique_ptr<geos::geom::Geometry> union1(unionIterated(geoms));
+        std::unique_ptr<geos::geom::Geometry> union2(unionCascaded(geoms));
 
         // For now we compare the WKT representations of the two generated
         // geometries which works well for simple geometries only.
@@ -127,7 +127,7 @@ namespace tut
     {
         for (int i = 0; i < num; ++i) {
             for (int j = 0; j < num; ++j) {
-                std::auto_ptr<geos::geom::Point> pt(
+                std::unique_ptr<geos::geom::Point> pt(
                     gf.createPoint(geos::geom::Coordinate(i, j)));
                 g->push_back(dynamic_cast<geos::geom::Polygon*>(pt->buffer(radius)));
             }

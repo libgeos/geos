@@ -249,10 +249,10 @@ GeometryCollection::normalize()
 	sort(geometries->begin(), geometries->end(), GeometryGreaterThen());
 }
 
-Envelope::AutoPtr
+Envelope::Ptr
 GeometryCollection::computeEnvelopeInternal() const
 {
-	Envelope::AutoPtr envelope(new Envelope());
+	Envelope::Ptr envelope(new Envelope());
 	for (size_t i=0; i<geometries->size(); i++) {
 		const Envelope *env=(*geometries)[i]->getEnvelopeInternal();
 		envelope->expandToInclude(env);
@@ -270,7 +270,7 @@ GeometryCollection::compareToSameClass(const Geometry *g) const
 const Coordinate*
 GeometryCollection::getCoordinate() const
 {
-	// should use auto_ptr here or return NULL or throw an exception !
+	// should use unique_ptr here or return NULL or throw an exception !
 	// 	--strk;
 	if (isEmpty()) return new Coordinate();
     	return (*geometries)[0]->getCoordinate();

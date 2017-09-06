@@ -7,7 +7,7 @@
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/Geometry.h> // required for use in auto_ptr
+#include <geos/geom/Geometry.h> // required for use in unique_ptr
 #include <geos/geom/LineString.h>
 #include <geos/geom/Coordinate.h>
 // std
@@ -31,7 +31,7 @@ namespace tut
 
 	struct test_robustlineintersection_data
 	{
-	typedef std::auto_ptr<Geometry> GeomPtr;
+	typedef std::unique_ptr<Geometry> GeomPtr;
 
 	bool equals(const Coordinate& p0, const Coordinate& p1,
 	            double distanceTolerance)
@@ -136,7 +136,7 @@ namespace tut
 
                 GeomPtr g(reader.read(expectedWKT));
 
-		std::auto_ptr<CoordinateSequence> cs ( g->getCoordinates() );
+		std::unique_ptr<CoordinateSequence> cs ( g->getCoordinates() );
 
 	        std::vector<Coordinate> intPt;
 		for (size_t i=0; i<cs->size(); ++i)
@@ -250,7 +250,7 @@ namespace tut
 	}
 
 	PrecisionModel pm;
-	GeometryFactory::unique_ptr gf;
+	GeometryFactory::Ptr gf;
   geos::io::WKTReader reader;
 
 	};

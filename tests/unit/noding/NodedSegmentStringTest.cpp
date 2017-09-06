@@ -21,10 +21,10 @@ namespace tut
     struct test_nodedsegmentstring_data
     {
 
-        typedef std::auto_ptr<geos::geom::CoordinateSequence> \
+        typedef std::unique_ptr<geos::geom::CoordinateSequence> \
         CoordinateSequenceAutoPtr;
 
-        typedef std::auto_ptr<geos::noding::NodedSegmentString> \
+        typedef std::unique_ptr<geos::noding::NodedSegmentString> \
         SegmentStringAutoPtr;
 
     const geos::geom::CoordinateSequenceFactory* csFactory;
@@ -255,7 +255,7 @@ namespace tut
 //      SegmentString::NonConstVect inputStrings;
 //      inputStrings.push_back(makeSegmentString(cs2.get()).get());
 //
-//      std::auto_ptr<SegmentString::NonConstVect> nodedStrings(
+//      std::unique_ptr<SegmentString::NonConstVect> nodedStrings(
 //          NodedSegmentString::getNodedSubstrings(inputStrings)
 //      );
 //

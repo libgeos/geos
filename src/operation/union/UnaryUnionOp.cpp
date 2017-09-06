@@ -16,7 +16,7 @@
  *
  **********************************************************************/
 
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 #include <cassert> // for assert
 #include <algorithm> // for copy
 
@@ -42,11 +42,11 @@ namespace operation { // geos::operation
 namespace geounion {  // geos::operation::geounion
 
 /*private*/
-std::auto_ptr<geom::Geometry>
-UnaryUnionOp::unionWithNull(std::auto_ptr<geom::Geometry> g0,
-                            std::auto_ptr<geom::Geometry> g1)
+std::unique_ptr<geom::Geometry>
+UnaryUnionOp::unionWithNull(std::unique_ptr<geom::Geometry> g0,
+                            std::unique_ptr<geom::Geometry> g1)
 {
-  std::auto_ptr<geom::Geometry> ret;
+  std::unique_ptr<geom::Geometry> ret;
   if ( ( ! g0.get() ) && ( ! g1.get() ) ) return ret;
 
   if ( ! g0.get() ) return g1;
@@ -57,13 +57,13 @@ UnaryUnionOp::unionWithNull(std::auto_ptr<geom::Geometry> g0,
 }
 
 /*public*/
-std::auto_ptr<geom::Geometry>
+std::unique_ptr<geom::Geometry>
 UnaryUnionOp::Union()
 {
   using geom::Puntal;
-  typedef std::auto_ptr<geom::Geometry> GeomAutoPtr;
+  typedef std::unique_ptr<geom::Geometry> GeomPtr;
 
-  GeomAutoPtr ret;
+  GeomPtr ret;
   if ( ! geomFact ) return ret;
 
   /**
@@ -73,14 +73,14 @@ UnaryUnionOp::Union()
    * This is not the case for polygons, so Cascaded Union is required.
    */
 
-  GeomAutoPtr unionPoints;
+  GeomPtr unionPoints;
   if (!points.empty()) {
-      GeomAutoPtr ptGeom = geomFact->buildGeometry( points.begin(),
+      GeomPtr ptGeom = geomFact->buildGeometry( points.begin(),
                                                     points.end()    );
       unionPoints = unionNoOpt(*ptGeom);
   }
 
-  GeomAutoPtr unionLines;
+  GeomPtr unionLines;
   if (!lines.empty()) {
       /* JTS compatibility NOTE:
        * we use cascaded here for robustness [1]
@@ -96,7 +96,7 @@ UnaryUnionOp::Union()
       unionLines = unionNoOpt(*unionLines);
   }
 
-  GeomAutoPtr unionPolygons;
+  GeomPtr unionPolygons;
   if (!polygons.empty()) {
       unionPolygons.reset( CascadedPolygonUnion::Union( polygons.begin(),
                                                         polygons.end()   ) );
@@ -107,15 +107,15 @@ UnaryUnionOp::Union()
    * but is mitigated by unioning lines and points first
    */
 
-  GeomAutoPtr unionLA = unionWithNull(unionLines, unionPolygons);
+  GeomPtr unionLA = unionWithNull(std::move(unionLines), std::move(unionPolygons));
   assert(!unionLines.get()); assert(!unionPolygons.get());
 
   if ( ! unionPoints.get() ) {
-    ret = unionLA;
+    ret = std::move(unionLA);
     assert(!unionLA.get());
   }
   else if ( ! unionLA.get() ) {
-    ret = unionPoints;
+    ret = std::move(unionPoints);
     assert(!unionPoints.get());
   }
   else {

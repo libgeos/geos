@@ -40,7 +40,7 @@ namespace tut
 		typedef geos::geom::LinearRing const* LinearRingCPtr;
 
 		geos::geom::PrecisionModel pm_;
-		geos::geom::GeometryFactory::unique_ptr factory_;
+		geos::geom::GeometryFactory::Ptr factory_;
 		geos::io::WKTReader reader_;
 
 		geos::geom::LinearRing empty_ring_;

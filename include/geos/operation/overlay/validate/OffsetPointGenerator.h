@@ -21,12 +21,12 @@
 
 #include <geos/export.h>
 #include <geos/algorithm/PointLocator.h> // for composition
-#include <geos/geom/Geometry.h> // for auto_ptr visibility of dtor
-#include <geos/geom/MultiPoint.h> // for auto_ptr visibility of dtor
+#include <geos/geom/Geometry.h> // for unique_ptr visibility of dtor
+#include <geos/geom/MultiPoint.h> // for unique_ptr visibility of dtor
 #include <geos/geom/Coordinate.h> // for use in vector
 
 #include <vector>
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -57,7 +57,7 @@ public:
 	OffsetPointGenerator(const geom::Geometry& geom, double offset);
 
 	/// Gets the computed offset points.
-	std::auto_ptr< std::vector<geom::Coordinate> > getPoints();
+	std::unique_ptr< std::vector<geom::Coordinate> > getPoints();
 
 private:
 
@@ -65,7 +65,7 @@ private:
 
 	double offsetDistance;
 
-	std::auto_ptr< std::vector<geom::Coordinate> > offsetPts;
+	std::unique_ptr< std::vector<geom::Coordinate> > offsetPts;
 
 	void extractPoints(const geom::LineString* line);
 

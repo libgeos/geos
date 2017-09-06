@@ -27,7 +27,7 @@
 #include <geos/inline.h>
 
 #include <iostream> // for ostream
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 
 // Forward declarations
 namespace geos {
@@ -364,7 +364,7 @@ public:
 	 * @param gf the geometery factory to use
 	 * @return a LineString with the same geometry as this segment
 	 */
-	std::auto_ptr<LineString> toGeometry(const GeometryFactory& gf) const;
+	std::unique_ptr<LineString> toGeometry(const GeometryFactory& gf) const;
 
 };
 

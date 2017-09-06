@@ -21,7 +21,7 @@
 
 #include <vector>
 #include <list>
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 #include <cassert> // for inlines
 #include <algorithm>
 
@@ -149,7 +149,7 @@ private:
 			BoundableList* boundablesOfALevel,
 			int level);
 
-	virtual std::auto_ptr<BoundableList> sortBoundables(const BoundableList* input)=0;
+	virtual std::unique_ptr<BoundableList> sortBoundables(const BoundableList* input)=0;
 
 	bool remove(const void* searchBounds, AbstractNode& node, void* item);
 	bool removeItem(AbstractNode& node, void* item);
@@ -183,14 +183,14 @@ protected:
 
 	std::vector <AbstractNode *> *nodes;
 
-	// Ownership to caller (TODO: return by auto_ptr)
+	// Ownership to caller (TODO: return by unique_ptr)
 	virtual AbstractNode* createNode(int level)=0;
 
 	/**
 	 * Sorts the childBoundables then divides them into groups of size M, where
 	 * M is the node capacity.
 	 */
-	virtual std::auto_ptr<BoundableList> createParentBoundables(
+	virtual std::unique_ptr<BoundableList> createParentBoundables(
 			BoundableList* childBoundables, int newLevel);
 
 	virtual AbstractNode* lastNode(BoundableList* nodeList)
@@ -227,7 +227,7 @@ protected:
 	///  Also builds the tree, if necessary.
 	bool remove(const void* itemEnv, void* item);
 
-	std::auto_ptr<BoundableList> boundablesAtLevel(int level);
+	std::unique_ptr<BoundableList> boundablesAtLevel(int level);
 
 	// @@ should be size_t, probably
 	std::size_t nodeCapacity;

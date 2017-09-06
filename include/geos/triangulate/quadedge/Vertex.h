@@ -143,18 +143,18 @@ public:
 	 * @param v, a vertex
 	 * @return returns the scaled vector
 	 */
-	inline std::auto_ptr<Vertex> times(double c) const {
-		return std::auto_ptr<Vertex>(new Vertex(c * p.x, c * p.y));
+	inline std::unique_ptr<Vertex> times(double c) const {
+		return std::unique_ptr<Vertex>(new Vertex(c * p.x, c * p.y));
 	}
 
 	/* Vector addition */
-	inline std::auto_ptr<Vertex> sum(Vertex v) const {
-		return std::auto_ptr<Vertex>(new Vertex(p.x + v.getX(), p.y + v.getY()));
+	inline std::unique_ptr<Vertex> sum(Vertex v) const {
+		return std::unique_ptr<Vertex>(new Vertex(p.x + v.getX(), p.y + v.getY()));
 	}
 
 	/* and subtraction */
-	inline std::auto_ptr<Vertex> sub(const Vertex &v) const {
-		return std::auto_ptr<Vertex>(new Vertex(p.x - v.getX(), p.y - v.getY()));
+	inline std::unique_ptr<Vertex> sub(const Vertex &v) const {
+		return std::unique_ptr<Vertex>(new Vertex(p.x - v.getX(), p.y - v.getY()));
 	}
 
 	/* magnitude of vector */
@@ -163,8 +163,8 @@ public:
 	}
 
 	/* returns k X v (cross product). this is a vector perpendicular to v */
-	inline std::auto_ptr<Vertex> cross() const {
-		return std::auto_ptr<Vertex>(new Vertex(p.y, -p.x));
+	inline std::unique_ptr<Vertex> cross() const {
+		return std::unique_ptr<Vertex>(new Vertex(p.y, -p.x));
 	}
 
   /** ************************************************************* */
@@ -203,7 +203,7 @@ public:
 	bool leftOf(const QuadEdge &e) const;
 
 private:
-	static std::auto_ptr<algorithm::HCoordinate> bisector(const Vertex &a, const Vertex &b);
+	static std::unique_ptr<algorithm::HCoordinate> bisector(const Vertex &a, const Vertex &b);
 
 	inline double distance(const Vertex &v1, const Vertex &v2)
 	{
@@ -229,7 +229,7 @@ private:
 	 * @param a the other end point.
 	 * @return the point mid-way between this and that.
 	 */
-	virtual std::auto_ptr<Vertex> midPoint(const Vertex &a);
+	virtual std::unique_ptr<Vertex> midPoint(const Vertex &a);
 
 	/**
 	 * Computes the centre of the circumcircle of this vertex and two others.
@@ -238,7 +238,7 @@ private:
 	 * @param c
 	 * @return the Coordinate which is the circumcircle of the 3 points.
 	 */
-	virtual std::auto_ptr<Vertex> circleCenter(const Vertex &b, const Vertex &c) const;
+	virtual std::unique_ptr<Vertex> circleCenter(const Vertex &b, const Vertex &c) const;
 
 	/**
 	 * For this vertex enclosed in a triangle defined by three verticies v0, v1 and v2, interpolate

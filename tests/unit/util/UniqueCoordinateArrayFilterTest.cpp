@@ -24,11 +24,11 @@ namespace tut
     // Common data used in test cases.
     struct test_uniquecoordinatearrayfilter_data
 	{
-		typedef std::auto_ptr<geos::geom::Geometry> GeometryPtr;
+		typedef std::unique_ptr<geos::geom::Geometry> GeometryPtr;
 		typedef geos::geom::GeometryFactory GeometryFactory;
 
 		geos::geom::PrecisionModel pm_;
-		GeometryFactory::unique_ptr factory_;
+		GeometryFactory::Ptr factory_;
 		geos::io::WKTReader reader_;
 
 		test_uniquecoordinatearrayfilter_data()
@@ -60,7 +60,7 @@ namespace tut
 		GeometryPtr geo(reader_.read(wkt));
 
 		ensure_equals( geo->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT );
-		std::auto_ptr<geos::geom::CoordinateSequence> cs;
+		std::unique_ptr<geos::geom::CoordinateSequence> cs;
 		cs.reset(geo->getCoordinates());
 		ensure_equals(cs->getSize(), size5 );
 

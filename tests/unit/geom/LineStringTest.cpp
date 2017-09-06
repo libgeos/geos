@@ -30,10 +30,10 @@ namespace tut
     struct test_linestring_data
     {
 		// Typedefs used as short names by test cases
-		typedef std::auto_ptr<geos::geom::LineString> LineStringAutoPtr;
+		typedef std::unique_ptr<geos::geom::LineString> LineStringAutoPtr;
 
 		geos::geom::PrecisionModel pm_;
-		geos::geom::GeometryFactory::unique_ptr factory_;
+		geos::geom::GeometryFactory::Ptr factory_;
 		geos::io::WKTReader reader_;
 
 		LineStringPtr empty_line_;

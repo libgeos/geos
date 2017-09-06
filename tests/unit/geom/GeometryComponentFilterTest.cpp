@@ -16,10 +16,10 @@ namespace tut
 
 struct test_geometrycomponentfilter_data
 {
-    typedef geos::geom::Geometry::AutoPtr GeometryPtr; // owner
+    typedef geos::geom::Geometry::Ptr GeometryPtr; // owner
     typedef std::vector<geos::geom::Geometry const*> GeometryRefArray; // observer
 
-    geos::geom::GeometryFactory::unique_ptr gf;
+    geos::geom::GeometryFactory::Ptr gf;
     geos::io::WKTReader reader;
     test_geometrycomponentfilter_data()
         : gf(geos::geom::GeometryFactory::create())

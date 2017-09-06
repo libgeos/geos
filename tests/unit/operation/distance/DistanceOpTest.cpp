@@ -30,8 +30,8 @@ namespace tut
 	{
 		geos::io::WKTReader wktreader;
 
-		typedef geos::geom::Geometry::AutoPtr GeomPtr;
-		typedef std::auto_ptr<geos::geom::CoordinateSequence> CSPtr;
+		typedef geos::geom::Geometry::Ptr GeomPtr;
+		typedef std::unique_ptr<geos::geom::CoordinateSequence> CSPtr;
 
 		test_distanceop_data()
             : wktreader()
@@ -466,7 +466,7 @@ namespace tut
         const char* wkb_geom2 = "010100000000000000000000000000000000000000";
 
         geos::geom::PrecisionModel precision(geos::geom::PrecisionModel::FLOATING);
-        GeometryFactory::unique_ptr f(GeometryFactory::create(&precision));
+        GeometryFactory::Ptr f(GeometryFactory::create(&precision));
         std::istringstream istr1(wkb_geom1);
         std::istringstream istr2(wkb_geom2);
         geos::io::WKBReader wkb(*f);

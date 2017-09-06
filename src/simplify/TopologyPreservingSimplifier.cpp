@@ -18,20 +18,20 @@
 
 #include <geos/simplify/TopologyPreservingSimplifier.h>
 #include <geos/simplify/TaggedLinesSimplifier.h>
-#include <geos/simplify/LineSegmentIndex.h> // for auto_ptr dtor
+#include <geos/simplify/LineSegmentIndex.h> // for unique_ptr dtor
 #include <geos/simplify/TaggedLineString.h>
-#include <geos/simplify/TaggedLineStringSimplifier.h> // for auto_ptr dtor
-#include <geos/algorithm/LineIntersector.h> // for auto_ptr dtor
+#include <geos/simplify/TaggedLineStringSimplifier.h> // for unique_ptr dtor
+#include <geos/algorithm/LineIntersector.h> // for unique_ptr dtor
 // for LineStringTransformer inheritance
 #include <geos/geom/util/GeometryTransformer.h>
 // for LineStringMapBuilderFilter inheritance
 #include <geos/geom/GeometryComponentFilter.h>
-#include <geos/geom/Geometry.h> // for auto_ptr dtor
+#include <geos/geom/Geometry.h> // for unique_ptr dtor
 #include <geos/geom/LineString.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/util/IllegalArgumentException.h>
 
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 #include <map>
 #include <cassert>
 #include <iostream>
@@ -67,7 +67,7 @@ public:
 
 protected:
 
-	CoordinateSequence::AutoPtr transformCoordinates(
+	CoordinateSequence::Ptr transformCoordinates(
 			const CoordinateSequence* coords,
 			const Geometry* parent);
 
@@ -142,7 +142,7 @@ LineStringTransformer::LineStringTransformer(LinesMap& nMap)
 }
 
 /*protected*/
-CoordinateSequence::AutoPtr
+CoordinateSequence::Ptr
 LineStringTransformer::transformCoordinates(
 		const CoordinateSequence* coords,
 		const Geometry* parent)
@@ -187,10 +187,7 @@ LineStringTransformer::transformCoordinates(
  * This class populates the given LineString=>TaggedLineString map
  * with newly created TaggedLineString objects.
  * Users must take care of deleting the map's values (elem.second).
- * Would be nice if auto_ptr<> worked in a container, but it doesn't :(
- *
- * mloskot: So, let's write our own "shared smart pointer" or better ask
- * PCS about using Boost's shared_ptr.
+ * TODO: Consider container of unique_ptr
  *
  */
 class LineStringMapBuilderFilter: public geom::GeometryComponentFilter
@@ -263,7 +260,7 @@ LineStringMapBuilderFilter::filter_ro(const Geometry* geom)
 } // end of module-statics
 
 /*public static*/
-std::auto_ptr<geom::Geometry>
+std::unique_ptr<geom::Geometry>
 TopologyPreservingSimplifier::simplify(
 		const geom::Geometry* geom,
 		double tolerance)
@@ -295,16 +292,16 @@ TopologyPreservingSimplifier::setDistanceTolerance(double d)
 
 
 /*public*/
-std::auto_ptr<geom::Geometry>
+std::unique_ptr<geom::Geometry>
 TopologyPreservingSimplifier::getResultGeometry()
 {
 
 	// empty input produces an empty result
-	if (inputGeom->isEmpty()) return std::auto_ptr<Geometry>(inputGeom->clone());
+	if (inputGeom->isEmpty()) return std::unique_ptr<Geometry>(inputGeom->clone());
 
 	LinesMap linestringMap;
 
-	std::auto_ptr<geom::Geometry> result;
+	std::unique_ptr<geom::Geometry> result;
 
 	try {
 		LineStringMapBuilderFilter lsmbf(linestringMap);

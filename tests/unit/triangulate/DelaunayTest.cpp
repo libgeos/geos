@@ -44,7 +44,7 @@ namespace tut
 	void runDelaunay(const char *sitesWkt, bool computeTriangles, const char *expectedWkt, double tolerance=0.0)
 	{
 		WKTReader reader;
-		std::auto_ptr<Geometry> results;
+		std::unique_ptr<Geometry> results;
 		Geometry *sites = reader.read(sitesWkt);
 		Geometry *expected = reader.read(expectedWkt);
 		DelaunayTriangulationBuilder builder;
@@ -85,7 +85,7 @@ namespace tut
 
 		//extract the triangles from the subdivision
     const GeometryFactory& geomFact(*GeometryFactory::getDefaultInstance());
-		std::auto_ptr<GeometryCollection> tris = sub.getTriangles(geomFact);
+		std::unique_ptr<GeometryCollection> tris = sub.getTriangles(geomFact);
 	}
 
 	// 2 - Test Triangle

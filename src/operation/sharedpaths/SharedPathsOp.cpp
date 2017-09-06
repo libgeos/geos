@@ -108,7 +108,7 @@ SharedPathsOp::findLinearIntersections(PathList& to)
   // TODO: optionally use the tolerance,
   //       snapping _g2 over _g1 ?
 
-  std::auto_ptr<Geometry> full ( OverlayOp::overlayOp(
+  std::unique_ptr<Geometry> full ( OverlayOp::overlayOp(
     &_g1, &_g2, OverlayOp::opINTERSECTION) );
 
   // NOTE: intersection of equal lines yelds splitted lines,

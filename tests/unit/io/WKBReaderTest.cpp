@@ -31,13 +31,13 @@ namespace tut
 	struct test_wkbreader_data
 	{
 		geos::geom::PrecisionModel pm;
-		geos::geom::GeometryFactory::unique_ptr gf;
+		geos::geom::GeometryFactory::Ptr gf;
 		geos::io::WKBReader wkbreader;
 		geos::io::WKBWriter xdrwkbwriter;
 		geos::io::WKBWriter ndrwkbwriter;
 		geos::io::WKTReader wktreader;
 
-		typedef std::auto_ptr<geos::geom::Geometry> GeomPtr;
+		typedef std::unique_ptr<geos::geom::Geometry> GeomPtr;
 
 		test_wkbreader_data()
 			:

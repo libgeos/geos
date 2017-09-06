@@ -41,21 +41,20 @@ namespace index { // geos.index
 namespace quadtree { // geos.index.quadtree
 
 /* public static */
-std::auto_ptr<Node>
+std::unique_ptr<Node>
 Node::createNode(const Envelope& env)
 {
 	Key key(env);
-
-	std::auto_ptr<Envelope> nenv ( new Envelope(key.getEnvelope()) );
-	std::auto_ptr<Node> node (
-		new Node(nenv, key.getLevel())
+	std::unique_ptr<Envelope> envelope(new Envelope(key.getEnvelope()));
+	std::unique_ptr<Node> node (
+		new Node(std::move(envelope), key.getLevel())
 	);
-	return node;
+	return std::move(node);
 }
 
 /* static public */
-std::auto_ptr<Node>
-Node::createExpanded(std::auto_ptr<Node> node, const Envelope& addEnv)
+std::unique_ptr<Node>
+Node::createExpanded(std::unique_ptr<Node> node, const Envelope& addEnv)
 {
 	Envelope expandEnv(addEnv);
 	if ( node.get() ) // should this be asserted ?
@@ -67,10 +66,10 @@ Node::createExpanded(std::auto_ptr<Node> node, const Envelope& addEnv)
 	cerr<<"Node::createExpanded computed "<<expandEnv.toString()<<endl;
 #endif
 
-	std::auto_ptr<Node> largerNode = createNode(expandEnv);
+	std::unique_ptr<Node> largerNode = createNode(expandEnv);
 	if ( node.get() ) // should this be asserted ?
 	{
-		largerNode->insertNode(node);
+		largerNode->insertNode(std::move(node));
 	}
 
 	return largerNode;
@@ -112,7 +111,7 @@ Node::find(const Envelope *searchEnv)
 }
 
 void
-Node::insertNode(std::auto_ptr<Node> node)
+Node::insertNode(std::unique_ptr<Node> node)
 {
 	assert( env->contains(node->getEnvelope()) );
 
@@ -131,10 +130,10 @@ Node::insertNode(std::auto_ptr<Node> node)
 	{
 		// the quad is not a direct child, so make a new child
 		// quad to contain it and recursively insert the quad
-		std::auto_ptr<Node> childNode ( createSubnode(index) );
+		std::unique_ptr<Node> childNode ( createSubnode(index) );
 
 		// childNode takes ownership of node
-		childNode->insertNode(node);
+		childNode->insertNode(std::move(node));
 
 		// We take ownership of childNode
 		delete subnode[index];
@@ -153,7 +152,7 @@ Node::getSubnode(int index)
 	return subnode[index];
 }
 
-std::auto_ptr<Node>
+std::unique_ptr<Node>
 Node::createSubnode(int index)
 {
 	// create a new subquad in the appropriate quadrant
@@ -188,8 +187,8 @@ Node::createSubnode(int index)
 			maxy=env->getMaxY();
 			break;
 	}
-	std::auto_ptr<Envelope> sqEnv ( new Envelope(minx,maxx,miny,maxy) );
-	std::auto_ptr<Node> node ( new Node(sqEnv, level-1) );
+	std::unique_ptr<Envelope> sqEnv ( new Envelope(minx,maxx,miny,maxy) );
+	std::unique_ptr<Node> node ( new Node(std::move(sqEnv), level-1) );
 	return node;
 }
 

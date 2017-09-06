@@ -129,7 +129,7 @@ public:
 	 * @param geomFact the geometry factory to use to create the output
 	 * @return the edges of the triangulation. The caller takes ownership of the returned object.
 	 */
-	std::auto_ptr<geom::MultiLineString> getEdges(const geom::GeometryFactory &geomFact);
+	std::unique_ptr<geom::MultiLineString> getEdges(const geom::GeometryFactory &geomFact);
 
 	/**
 	 * Gets the faces of the computed triangulation as a {@link GeometryCollection}
@@ -138,7 +138,7 @@ public:
 	 * @param geomFact the geometry factory to use to create the output
 	 * @return the faces of the triangulation. The caller takes ownership of the returned object.
 	 */
-	std::auto_ptr<geom::GeometryCollection> getTriangles(const geom::GeometryFactory& geomFact);
+	std::unique_ptr<geom::GeometryCollection> getTriangles(const geom::GeometryFactory& geomFact);
 
 	/**
 	 * Computes the {@link Envelope} of a collection of {@link Coordinate}s.

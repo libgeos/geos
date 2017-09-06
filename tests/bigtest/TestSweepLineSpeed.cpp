@@ -53,7 +53,7 @@ void run(int nPts, GeometryFactory *fact) {
 
 int main(int /* argc */, char** /* argv[] */) {
 
-	GeometryFactory::unique_ptr factptr = GeometryFactory::create();
+	GeometryFactory::Ptr factptr = GeometryFactory::create();
 	GeometryFactory* fact = factptr.get();
 
 	run(1000,fact);

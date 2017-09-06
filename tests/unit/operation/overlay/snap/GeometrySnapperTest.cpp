@@ -22,7 +22,7 @@ namespace tut
     // Common data used by tests
     struct test_geometrysnapper_data
     {
-        typedef std::auto_ptr<geos::geom::Geometry> GeomAutoPtr;
+        typedef std::unique_ptr<geos::geom::Geometry> GeomPtr;
 
         geos::io::WKTReader reader;
 
@@ -49,21 +49,21 @@ namespace tut
     template<>
     void object::test<1>()
     {
-        GeomAutoPtr src(reader.read(
+        GeomPtr src(reader.read(
                 "POLYGON ((0 0, 0 100, 100 100, 100 0, 0 0))"
         ));
 
         GeometrySnapper snapper( *(src.get()) );
 
-        GeomAutoPtr snap(reader.read(
+        GeomPtr snap(reader.read(
                 "MULTIPOINT ((0 0), (0 100.0000001), (100 100), (100 0))"
         ));
 
-        GeomAutoPtr expected(reader.read(
+        GeomPtr expected(reader.read(
                 "POLYGON ((0 0, 0 100.0000001, 100 100, 100 0, 0 0))"
         ));
 
-        GeomAutoPtr ret(snapper.snapTo( *(snap.get()), 0.000001 ));
+        GeomPtr ret(snapper.snapTo( *(snap.get()), 0.000001 ));
 
         ensure( ret->equalsExact(expected.get(),0) );
 
@@ -74,21 +74,21 @@ namespace tut
     template<>
     void object::test<2>()
     {
-        GeomAutoPtr src(reader.read(
+        GeomPtr src(reader.read(
                 "POLYGON ((0 0, 0 100, 100 100, 100 0, 0 0))"
         ));
 
         GeometrySnapper snapper( *(src.get()) );
 
-        GeomAutoPtr snap(reader.read(
+        GeomPtr snap(reader.read(
                 "MULTIPOINT ((0.0000001 50))"
         ));
 
-        GeomAutoPtr expected(reader.read(
+        GeomPtr expected(reader.read(
                 "POLYGON ((0 0, 0.0000001 50, 0 100, 100 100, 100 0, 0 0))"
         ));
 
-        GeomAutoPtr ret(snapper.snapTo( *(snap.get()), 0.000001 ));
+        GeomPtr ret(snapper.snapTo( *(snap.get()), 0.000001 ));
 
         ensure( ret->equalsExact(expected.get(),0) );
     }

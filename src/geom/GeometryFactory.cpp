@@ -93,8 +93,8 @@ GeometryFactory::GeometryFactory()
 }
 
 /*public static*/
-GeometryFactory::unique_ptr
-GeometryFactory::create() { return GeometryFactory::unique_ptr(new GeometryFactory()); }
+GeometryFactory::Ptr
+GeometryFactory::create() { return GeometryFactory::Ptr(new GeometryFactory()); }
 
 /*protected*/
 GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID,
@@ -120,11 +120,11 @@ GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID,
 }
 
 /*public static*/
-GeometryFactory::unique_ptr
+GeometryFactory::Ptr
 GeometryFactory::create(const PrecisionModel* pm, int newSRID,
 		CoordinateSequenceFactory* nCoordinateSequenceFactory)
 {
-  return GeometryFactory::unique_ptr(
+  return GeometryFactory::Ptr(
     new GeometryFactory(pm, newSRID, nCoordinateSequenceFactory)
   );
 }
@@ -148,11 +148,11 @@ GeometryFactory::GeometryFactory(
 }
 
 /*public static*/
-GeometryFactory::unique_ptr
+GeometryFactory::Ptr
 GeometryFactory::create(
 		CoordinateSequenceFactory* nCoordinateSequenceFactory)
 {
-  return GeometryFactory::unique_ptr(
+  return GeometryFactory::Ptr(
     new GeometryFactory(nCoordinateSequenceFactory)
   );
 }
@@ -175,10 +175,10 @@ GeometryFactory::GeometryFactory(const PrecisionModel *pm)
 }
 
 /*public static*/
-GeometryFactory::unique_ptr
+GeometryFactory::Ptr
 GeometryFactory::create(const PrecisionModel *pm)
 {
-  return GeometryFactory::unique_ptr(
+  return GeometryFactory::Ptr(
     new GeometryFactory(pm)
   );
 }
@@ -201,10 +201,10 @@ GeometryFactory::GeometryFactory(const PrecisionModel* pm, int newSRID)
 }
 
 /*public static*/
-GeometryFactory::unique_ptr
+GeometryFactory::Ptr
 GeometryFactory::create(const PrecisionModel* pm, int newSRID)
 {
-  return GeometryFactory::unique_ptr(
+  return GeometryFactory::Ptr(
     new GeometryFactory(pm, newSRID)
   );
 }
@@ -221,10 +221,10 @@ GeometryFactory::GeometryFactory(const GeometryFactory &gf)
 }
 
 /*public static*/
-GeometryFactory::unique_ptr
+GeometryFactory::Ptr
 GeometryFactory::create(const GeometryFactory &gf)
 {
-  return GeometryFactory::unique_ptr(
+  return GeometryFactory::Ptr(
     new GeometryFactory(gf)
   );
 }
@@ -470,10 +470,10 @@ GeometryFactory::createLinearRing(CoordinateSequence* newCoords) const
 }
 
 /*public*/
-Geometry::AutoPtr
-GeometryFactory::createLinearRing(CoordinateSequence::AutoPtr newCoords) const
+Geometry::Ptr
+GeometryFactory::createLinearRing(CoordinateSequence::Ptr newCoords) const
 {
-	return Geometry::AutoPtr(new LinearRing(newCoords, this));
+	return Geometry::Ptr(new LinearRing(std::move(newCoords), this));
 }
 
 /*public*/
@@ -615,10 +615,10 @@ GeometryFactory::createLineString() const
 }
 
 /*public*/
-std::auto_ptr<LineString>
+std::unique_ptr<LineString>
 GeometryFactory::createLineString(const LineString& ls) const
 {
-	return std::auto_ptr<LineString>(new LineString(ls));
+	return std::unique_ptr<LineString>(new LineString(ls));
 }
 
 /*public*/
@@ -630,11 +630,11 @@ GeometryFactory::createLineString(CoordinateSequence *newCoords)
 }
 
 /*public*/
-Geometry::AutoPtr
-GeometryFactory::createLineString(CoordinateSequence::AutoPtr newCoords)
+Geometry::Ptr
+GeometryFactory::createLineString(CoordinateSequence::Ptr newCoords)
 	const
 {
-	return Geometry::AutoPtr(new LineString(newCoords, this));
+	return Geometry::Ptr(new LineString(std::move(newCoords), this));
 }
 
 /*public*/

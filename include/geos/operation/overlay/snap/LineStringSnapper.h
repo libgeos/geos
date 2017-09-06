@@ -71,7 +71,7 @@ public:
 	}
 
 	// Snap points are assumed to be all distinct points (a set would be better, uh ?)
-	std::auto_ptr<geom::Coordinate::Vect> snapTo(const geom::Coordinate::ConstVect& snapPts);
+	std::unique_ptr<geom::Coordinate::Vect> snapTo(const geom::Coordinate::ConstVect& snapPts);
 
 	void setAllowSnappingToSourceVertices(bool allow) {
 		allowSnappingToSourceVertices = allow;

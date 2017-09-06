@@ -30,16 +30,16 @@ namespace tut
 	typedef geos::geom::Coordinate const* CoordinateCPtr;
 
 	typedef geos::geom::Geometry* GeometryPtr;
-	typedef std::auto_ptr<geos::geom::Geometry> GeometryAutoPtr;
+	typedef std::unique_ptr<geos::geom::Geometry> GeometryAutoPtr;
 	typedef geos::geom::Geometry const* GeometryCPtr;
 
 	typedef geos::geom::Point* PointPtr;
-	typedef std::auto_ptr<geos::geom::Point> PointAutoPtr;
+	typedef std::unique_ptr<geos::geom::Point> PointAutoPtr;
 	typedef geos::geom::Point const* PointCPtr;
 	typedef geos::geom::GeometryFactory GeometryFactory;
 
 	geos::geom::PrecisionModel pm_;
-	GeometryFactory::unique_ptr factory_;
+	GeometryFactory::Ptr factory_;
 	geos::io::WKTReader reader_;
 	PointAutoPtr empty_point_;
 	PointPtr point_;

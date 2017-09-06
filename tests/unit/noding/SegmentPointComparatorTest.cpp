@@ -28,10 +28,10 @@ namespace tut
     struct test_segmentpointcomparator_data
     {
 
-        typedef std::auto_ptr<geos::geom::CoordinateSequence>
+        typedef std::unique_ptr<geos::geom::CoordinateSequence>
             CoordinateSequenceAutoPtr;
 
-        typedef std::auto_ptr<geos::noding::SegmentString>
+        typedef std::unique_ptr<geos::noding::SegmentString>
             SegmentStringAutoPtr;
 
         typedef geos::geom::Coordinate Coordinate;

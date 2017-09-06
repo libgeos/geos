@@ -79,15 +79,15 @@ private:
 	 * group them into runs of size M (the node capacity). For each run, creates
 	 * a new (parent) node.
 	 */
-	std::auto_ptr<BoundableList> createParentBoundables(BoundableList* childBoundables, int newLevel);
+	std::unique_ptr<BoundableList> createParentBoundables(BoundableList* childBoundables, int newLevel);
 
-	std::auto_ptr<BoundableList> createParentBoundablesFromVerticalSlices(std::vector<BoundableList*>* verticalSlices, int newLevel);
+	std::unique_ptr<BoundableList> createParentBoundablesFromVerticalSlices(std::vector<BoundableList*>* verticalSlices, int newLevel);
 
 	STRIntersectsOp intersectsOp;
 
-	std::auto_ptr<BoundableList> sortBoundables(const BoundableList* input);
+	std::unique_ptr<BoundableList> sortBoundables(const BoundableList* input);
 
-	std::auto_ptr<BoundableList> createParentBoundablesFromVerticalSlice(
+	std::unique_ptr<BoundableList> createParentBoundablesFromVerticalSlice(
 			BoundableList* childBoundables,
 			int newLevel);
 

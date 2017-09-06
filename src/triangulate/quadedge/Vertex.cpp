@@ -48,8 +48,8 @@ Vertex::Vertex() : p() {
 int Vertex::classify(const Vertex &p0, const Vertex &p1)
 {
 	Vertex &p2 = *this;
-	std::auto_ptr<Vertex> a = p1.sub(p0);
-	std::auto_ptr<Vertex> b = p2.sub(p0);
+	std::unique_ptr<Vertex> a = p1.sub(p0);
+	std::unique_ptr<Vertex> b = p2.sub(p0);
 	double sa = a->crossProduct(*b);
 
 	if (sa > 0.0)
@@ -83,7 +83,7 @@ bool Vertex::leftOf(const QuadEdge &e) const {
 	return isCCW(e.orig(), e.dest());
 }
 
-std::auto_ptr<HCoordinate> Vertex::bisector(const Vertex &a, const Vertex &b)
+std::unique_ptr<HCoordinate> Vertex::bisector(const Vertex &a, const Vertex &b)
 {
 	// returns the perpendicular bisector of the line segment ab
 	double dx = b.getX() - a.getX();
@@ -91,12 +91,12 @@ std::auto_ptr<HCoordinate> Vertex::bisector(const Vertex &a, const Vertex &b)
 	HCoordinate l1 = HCoordinate(a.getX() + dx / 2.0, a.getY() + dy / 2.0, 1.0);
 	HCoordinate l2 = HCoordinate(a.getX() - dy + dx / 2.0, a.getY() + dx + dy / 2.0, 1.0);
 
-	return std::auto_ptr<HCoordinate>(new HCoordinate(l1, l2));
+	return std::unique_ptr<HCoordinate>(new HCoordinate(l1, l2));
 }
 
 double Vertex::circumRadiusRatio(const Vertex &b, const Vertex &c)
 {
-	std::auto_ptr<Vertex> x(circleCenter(b, c));
+	std::unique_ptr<Vertex> x(circleCenter(b, c));
 	double radius = distance(*x, b);
 	double edgeLength = distance(*this, b);
 	double el = distance(b, c);
@@ -113,24 +113,24 @@ double Vertex::circumRadiusRatio(const Vertex &b, const Vertex &c)
 	return radius / edgeLength;
 }
 
-std::auto_ptr<Vertex> Vertex::midPoint(const Vertex &a)
+std::unique_ptr<Vertex> Vertex::midPoint(const Vertex &a)
 {
 	double xm = (p.x + a.getX()) / 2.0;
 	double ym = (p.y + a.getY()) / 2.0;
 	double zm = (p.z + a.getZ()) / 2.0;
-	return std::auto_ptr<Vertex>(new Vertex(xm, ym, zm));
+	return std::unique_ptr<Vertex>(new Vertex(xm, ym, zm));
 }
 
-std::auto_ptr<Vertex> Vertex::circleCenter(const Vertex &b, const Vertex &c) const
+std::unique_ptr<Vertex> Vertex::circleCenter(const Vertex &b, const Vertex &c) const
 {
-	std::auto_ptr<Vertex> a(new Vertex(getX(), getY()));
+	std::unique_ptr<Vertex> a(new Vertex(getX(), getY()));
 	// compute the perpendicular bisector of cord ab
-	std::auto_ptr<HCoordinate> cab = bisector(*a, b);
+	std::unique_ptr<HCoordinate> cab = bisector(*a, b);
 	// compute the perpendicular bisector of cord bc
-	std::auto_ptr<HCoordinate> cbc = bisector(b, c);
+	std::unique_ptr<HCoordinate> cbc = bisector(b, c);
 	// compute the intersection of the bisectors (circle radii)
-	std::auto_ptr<HCoordinate> hcc(new HCoordinate(*cab, *cbc));
-	std::auto_ptr<Vertex> cc;
+	std::unique_ptr<HCoordinate> hcc(new HCoordinate(*cab, *cbc));
+	std::unique_ptr<Vertex> cc;
 
 	try
 	{

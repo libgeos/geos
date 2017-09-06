@@ -79,7 +79,7 @@ public:
     :
 		pm(nPm),
 		scaleFactor(nPm.getScale()),
-		pointSnapper(0)
+		pointSnapper(nullptr)
   {
     li.setPrecisionModel(&pm);
   }
@@ -111,7 +111,7 @@ private:
 
 	std::vector<SegmentString*>* nodedSegStrings;
 
-	std::auto_ptr<MCIndexPointSnapper> pointSnapper;
+	std::unique_ptr<MCIndexPointSnapper> pointSnapper;
 
 	void snapRound(MCIndexNoder& noder, std::vector<SegmentString*>* segStrings);
 

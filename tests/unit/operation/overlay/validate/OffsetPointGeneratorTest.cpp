@@ -31,7 +31,7 @@ namespace tut
 		geos::io::WKTReader wktreader;
 		geos::algorithm::PointLocator locator;
 
-		typedef geos::geom::Geometry::AutoPtr GeomPtr;
+		typedef geos::geom::Geometry::Ptr GeomPtr;
 
 		GeomPtr g;
 
@@ -55,7 +55,7 @@ namespace tut
 			for (size_t i=0, n=coords.size(); i<n; ++i)
 			{
 				const Coordinate& c = coords[i];
-				auto_ptr<Geometry> pg(gf.createPoint(c));
+				unique_ptr<Geometry> pg(gf.createPoint(c));
 				double rdist =  g->distance(pg.get());
 				if ( rdist > dist )
 				{
@@ -84,7 +84,7 @@ namespace tut
 		using geos::operation::overlay::validate::OffsetPointGenerator;
 		using geos::geom::Coordinate;
 		using geos::algorithm::PointLocator;
-		using std::auto_ptr;
+		using std::unique_ptr;
 		using std::vector;
 
 		std::string wkt("POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))");
@@ -93,7 +93,7 @@ namespace tut
 		double dist = 10;
 		OffsetPointGenerator gen(*g, dist);
 
-		auto_ptr< vector<Coordinate> > coords(gen.getPoints());
+		unique_ptr< vector<Coordinate> > coords(gen.getPoints());
 
 		ensure_equals(coords->size(), (g->getNumPoints()-1)*2);
 
@@ -108,7 +108,7 @@ namespace tut
 		using geos::operation::overlay::validate::OffsetPointGenerator;
 		using geos::geom::Location;
 		using geos::geom::Coordinate;
-		using std::auto_ptr;
+		using std::unique_ptr;
 		using std::vector;
 
 		std::string wkt("POLYGON((0 0, 10 0, 10 5, 10 10, 0 10, 0 0))");
@@ -118,7 +118,7 @@ namespace tut
 
 		OffsetPointGenerator gen(*g, dist);
 
-		auto_ptr< vector<Coordinate> > coords(gen.getPoints());
+		unique_ptr< vector<Coordinate> > coords(gen.getPoints());
 
 		ensure_equals(coords->size(), 10u);
 
@@ -132,7 +132,7 @@ namespace tut
 		using geos::operation::overlay::validate::OffsetPointGenerator;
 		using geos::geom::Location;
 		using geos::geom::Coordinate;
-		using std::auto_ptr;
+		using std::unique_ptr;
 		using std::vector;
 
 		std::string wkt("POINT(10 -10)");
@@ -142,7 +142,7 @@ namespace tut
 
 		OffsetPointGenerator gen(*g, dist);
 
-		auto_ptr< vector<Coordinate> > coords(gen.getPoints());
+		unique_ptr< vector<Coordinate> > coords(gen.getPoints());
 
 		ensure_equals(coords->size(), 0u);
 
@@ -156,7 +156,7 @@ namespace tut
 		using geos::operation::overlay::validate::OffsetPointGenerator;
 		using geos::geom::Location;
 		using geos::geom::Coordinate;
-		using std::auto_ptr;
+		using std::unique_ptr;
 		using std::vector;
 
 		std::string wkt("LINESTRING(10 -10, 5 600)");
@@ -166,7 +166,7 @@ namespace tut
 
 		OffsetPointGenerator gen(*g, dist);
 
-		auto_ptr< vector<Coordinate> > coords(gen.getPoints());
+		unique_ptr< vector<Coordinate> > coords(gen.getPoints());
 
 		ensure_equals(coords->size(), 2u);
 
@@ -180,7 +180,7 @@ namespace tut
 		using geos::operation::overlay::validate::OffsetPointGenerator;
 		using geos::geom::Location;
 		using geos::geom::Coordinate;
-		using std::auto_ptr;
+		using std::unique_ptr;
 		using std::vector;
 
 		std::string wkt("MULTILINESTRING((10 -10, 5 600), (1045 -12, 0 0, -435 34))");
@@ -190,7 +190,7 @@ namespace tut
 
 		OffsetPointGenerator gen(*g, dist);
 
-		auto_ptr< vector<Coordinate> > coords(gen.getPoints());
+		unique_ptr< vector<Coordinate> > coords(gen.getPoints());
 
 		ensure_equals(coords->size(), 6u);
 

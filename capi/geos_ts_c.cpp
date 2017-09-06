@@ -144,7 +144,7 @@ using geos::util::IllegalArgumentException;
 using geos::algorithm::distance::DiscreteHausdorffDistance;
 using geos::algorithm::distance::DiscreteFrechetDistance;
 
-typedef std::auto_ptr<Geometry> GeomAutoPtr;
+typedef std::unique_ptr<Geometry> GeomPtr;
 
 typedef struct GEOSContextHandle_HS
 {
@@ -2402,7 +2402,7 @@ GEOSUnaryUnion_r(GEOSContextHandle_t extHandle, const Geometry *g)
 
     try
     {
-        GeomAutoPtr g3 ( g->Union() );
+        GeomPtr g3 ( g->Union() );
         return g3.release();
     }
     catch (const std::exception &e)
@@ -2441,7 +2441,7 @@ GEOSNode_r(GEOSContextHandle_t extHandle, const Geometry *g)
 
     try
     {
-        std::auto_ptr<Geometry> g3 = geos::noding::GeometryNoder::node(*g);
+        std::unique_ptr<Geometry> g3 = geos::noding::GeometryNoder::node(*g);
         return g3.release();
     }
     catch (const std::exception &e)
@@ -2560,7 +2560,7 @@ GEOSClipByRect_r(GEOSContextHandle_t extHandle, const Geometry *g, double xmin, 
         using geos::operation::intersection::Rectangle;
         using geos::operation::intersection::RectangleIntersection;
         Rectangle rect(xmin, ymin, xmax, ymax);
-        std::auto_ptr<Geometry> g3 = RectangleIntersection::clip(*g, rect);
+        std::unique_ptr<Geometry> g3 = RectangleIntersection::clip(*g, rect);
         return g3.release();
     }
     catch (const std::exception &e)
@@ -4551,10 +4551,10 @@ GEOSGeom_setPrecision_r(GEOSContextHandle_t extHandle, const GEOSGeometry *g,
     {
         const PrecisionModel *pm = g->getPrecisionModel();
         double cursize = pm->isFloating() ? 0 : 1.0/pm->getScale();
-        std::auto_ptr<PrecisionModel> newpm;
+        std::unique_ptr<PrecisionModel> newpm;
         if ( gridSize ) newpm.reset( new PrecisionModel(1.0/gridSize) );
         else newpm.reset( new PrecisionModel() );
-        GeometryFactory::unique_ptr gf =
+        GeometryFactory::Ptr gf =
             GeometryFactory::create( newpm.get(), g->getSRID() );
         Geometry *ret;
         if ( gridSize && cursize != gridSize )
@@ -4701,7 +4701,7 @@ GEOSSimplify_r(GEOSContextHandle_t extHandle, const Geometry *g1, double toleran
     try
     {
         using namespace geos::simplify;
-        Geometry::AutoPtr g(DouglasPeuckerSimplifier::simplify(g1, tolerance));
+        Geometry::Ptr g(DouglasPeuckerSimplifier::simplify(g1, tolerance));
         return g.release();
     }
     catch (const std::exception &e)
@@ -4734,7 +4734,7 @@ GEOSTopologyPreserveSimplify_r(GEOSContextHandle_t extHandle, const Geometry *g1
     try
     {
         using namespace geos::simplify;
-        Geometry::AutoPtr g(TopologyPreservingSimplifier::simplify(g1, tolerance));
+        Geometry::Ptr g(TopologyPreservingSimplifier::simplify(g1, tolerance));
         return g.release();
     }
     catch (const std::exception &e)
@@ -6578,7 +6578,7 @@ GEOSSharedPaths_r(GEOSContextHandle_t extHandle, const GEOSGeometry* g1, const G
     const GeometryFactory* factory = g1->getFactory();
     size_t count;
 
-    std::auto_ptr< std::vector<Geometry*> > out1(
+    std::unique_ptr< std::vector<Geometry*> > out1(
       new std::vector<Geometry*>()
     );
     count = forw.size();
@@ -6586,11 +6586,11 @@ GEOSSharedPaths_r(GEOSContextHandle_t extHandle, const GEOSGeometry* g1, const G
     for (size_t i=0; i<count; ++i) {
         out1->push_back(forw[i]);
     }
-    std::auto_ptr<Geometry> out1g (
+    std::unique_ptr<Geometry> out1g (
       factory->createMultiLineString(out1.release())
     );
 
-    std::auto_ptr< std::vector<Geometry*> > out2(
+    std::unique_ptr< std::vector<Geometry*> > out2(
       new std::vector<Geometry*>()
     );
     count = back.size();
@@ -6598,18 +6598,18 @@ GEOSSharedPaths_r(GEOSContextHandle_t extHandle, const GEOSGeometry* g1, const G
     for (size_t i=0; i<count; ++i) {
         out2->push_back(back[i]);
     }
-    std::auto_ptr<Geometry> out2g (
+    std::unique_ptr<Geometry> out2g (
       factory->createMultiLineString(out2.release())
     );
 
-    std::auto_ptr< std::vector<Geometry*> > out(
+    std::unique_ptr< std::vector<Geometry*> > out(
       new std::vector<Geometry*>()
     );
     out->reserve(2);
     out->push_back(out1g.release());
     out->push_back(out2g.release());
 
-    std::auto_ptr<Geometry> outg (
+    std::unique_ptr<Geometry> outg (
       factory->createGeometryCollection(out.release())
     );
 
@@ -6630,7 +6630,7 @@ GEOSSnap_r(GEOSContextHandle_t extHandle, const GEOSGeometry* g1,
 
     try{
       GeometrySnapper snapper( *g1 );
-      std::auto_ptr<Geometry> ret = snapper.snapTo(*g2, tolerance);
+      std::unique_ptr<Geometry> ret = snapper.snapTo(*g2, tolerance);
       return ret.release();
     }
     catch (const std::exception &e)

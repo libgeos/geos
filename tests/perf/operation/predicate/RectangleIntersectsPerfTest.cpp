@@ -48,7 +48,7 @@ public:
   {
     double size = 100;
     Coordinate origin(0, 0);
-    auto_ptr<Geometry> sinePoly (
+    unique_ptr<Geometry> sinePoly (
       createSineStar(origin, size, nPts)->getBoundary()
     );
 
@@ -60,7 +60,7 @@ public:
     using geos::precision::SimpleGeometryPrecisionReducer;
     PrecisionModel pm(size/10);
     SimpleGeometryPrecisionReducer reducer(&pm);
-    auto_ptr<Geometry> sinePolyCrinkly ( reducer.reduce(sinePoly.get()) );
+    unique_ptr<Geometry> sinePolyCrinkly ( reducer.reduce(sinePoly.get()) );
     sinePoly.reset();
 
     Geometry& target = *sinePolyCrinkly;
@@ -128,7 +128,7 @@ private:
     }
   }
 
-  auto_ptr<Polygon> createSineStar(const Coordinate& origin,
+  unique_ptr<Polygon> createSineStar(const Coordinate& origin,
                                     double size, int nPts)
   {
       using geos::geom::util::SineStarFactory;
@@ -139,7 +139,7 @@ private:
       gsf.setNumPoints(nPts);
       gsf.setArmLengthRatio(2);
       gsf.setNumArms(20);
-      auto_ptr<Polygon> poly = gsf.createSineStar();
+      unique_ptr<Polygon> poly = gsf.createSineStar();
       return poly;
   }
 

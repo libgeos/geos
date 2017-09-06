@@ -26,7 +26,7 @@
 #include <geos/export.h>
 #include <geos/geom/Geometry.h>
 #include <geos/simplify/TaggedLinesSimplifier.h>
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 #include <map>
 
 #ifdef _MSC_VER
@@ -60,7 +60,7 @@ class GEOS_DLL TopologyPreservingSimplifier
 
 public:
 
-	static std::auto_ptr<geom::Geometry> simplify(
+	static std::unique_ptr<geom::Geometry> simplify(
 			const geom::Geometry* geom,
 			double tolerance);
 
@@ -78,13 +78,13 @@ public:
 	 */
 	void setDistanceTolerance(double tolerance);
 
-	std::auto_ptr<geom::Geometry> getResultGeometry();
+	std::unique_ptr<geom::Geometry> getResultGeometry();
 
 private:
 
 	const geom::Geometry* inputGeom;
 
-	std::auto_ptr<TaggedLinesSimplifier> lineSimplifier;
+	std::unique_ptr<TaggedLinesSimplifier> lineSimplifier;
 
 };
 

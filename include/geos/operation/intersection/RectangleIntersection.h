@@ -83,7 +83,7 @@ class GEOS_DLL RectangleIntersection
    * @return the clipped geometry
    * @return NULL if the geometry is outside the {@link Rectangle}
    */
-  static std::auto_ptr<geom::Geometry> clip(const geom::Geometry & geom,
+  static std::unique_ptr<geom::Geometry> clip(const geom::Geometry & geom,
 							   const Rectangle & rect);
 
   /**
@@ -98,16 +98,16 @@ class GEOS_DLL RectangleIntersection
    * @return the clipped geometry
    * @return NULL if the geometry is outside the {@link Rectangle}
    */
-  static std::auto_ptr<geom::Geometry> clipBoundary(const geom::Geometry & geom,
+  static std::unique_ptr<geom::Geometry> clipBoundary(const geom::Geometry & geom,
 									   const Rectangle & rect);
 
 private:
 
   RectangleIntersection(const geom::Geometry& geom, const Rectangle& rect);
 
-  std::auto_ptr<geom::Geometry> clipBoundary();
+  std::unique_ptr<geom::Geometry> clipBoundary();
 
-  std::auto_ptr<geom::Geometry> clip();
+  std::unique_ptr<geom::Geometry> clip();
 
   const geom::Geometry &_geom;
   const Rectangle &_rect;

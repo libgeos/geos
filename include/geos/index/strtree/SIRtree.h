@@ -88,14 +88,14 @@ protected:
 	 * Sorts the childBoundables then divides them into groups of size M, where
 	 * M is the node capacity.
 	 */
-	std::auto_ptr<BoundableList> createParentBoundables(
+	std::unique_ptr<BoundableList> createParentBoundables(
 			BoundableList* childBoundables, int newLevel);
 
 	AbstractNode* createNode(int level);
 
 	IntersectsOp* getIntersectsOp() {return intersectsOp;}
 
-	std::auto_ptr<BoundableList> sortBoundables(const BoundableList* input);
+	std::unique_ptr<BoundableList> sortBoundables(const BoundableList* input);
 
 private:
 

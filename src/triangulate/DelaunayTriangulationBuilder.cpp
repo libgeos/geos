@@ -118,7 +118,7 @@ DelaunayTriangulationBuilder::getSubdivision()
 	return *subdiv;
 }
 
-std::auto_ptr<MultiLineString>
+std::unique_ptr<MultiLineString>
 DelaunayTriangulationBuilder::getEdges(
     const GeometryFactory& geomFact)
 {
@@ -126,7 +126,7 @@ DelaunayTriangulationBuilder::getEdges(
 	return subdiv->getEdges(geomFact);
 }
 
-std::auto_ptr<geom::GeometryCollection>
+std::unique_ptr<geom::GeometryCollection>
 DelaunayTriangulationBuilder::getTriangles(
 		const geom::GeometryFactory& geomFact)
 {

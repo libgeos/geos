@@ -24,7 +24,7 @@ namespace quadedge { //geos.triangulate.quadedge
 
 using namespace geos::geom;
 
-std::auto_ptr<QuadEdge>
+std::unique_ptr<QuadEdge>
 QuadEdge::makeEdge(const Vertex &o, const Vertex &d)
 {
 	QuadEdge *q0 = new QuadEdge();
@@ -47,13 +47,13 @@ QuadEdge::makeEdge(const Vertex &o, const Vertex &d)
 	base->setOrig(o);
 	base->setDest(d);
 
-	return std::auto_ptr<QuadEdge>(base);
+	return std::unique_ptr<QuadEdge>(base);
 }
 
-std::auto_ptr<QuadEdge>
+std::unique_ptr<QuadEdge>
 QuadEdge::connect(QuadEdge &a, QuadEdge &b)
 {
-	std::auto_ptr<QuadEdge> q0 = makeEdge(a.dest(), b.orig());
+	std::unique_ptr<QuadEdge> q0 = makeEdge(a.dest(), b.orig());
 	splice(*q0, a.lNext());
 	splice(q0->sym(), b);
 	return q0;
@@ -165,10 +165,10 @@ QuadEdge::equalsOriented(const QuadEdge &qe) const
 	return false;
 }
 
-std::auto_ptr<LineSegment>
+std::unique_ptr<LineSegment>
 QuadEdge::toLineSegment() const
 {
-	return std::auto_ptr<geom::LineSegment>(
+	return std::unique_ptr<geom::LineSegment>(
 			new geom::LineSegment(vertex.getCoordinate(), dest().getCoordinate()));
 }
 

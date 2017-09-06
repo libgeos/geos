@@ -20,9 +20,9 @@
 #define GEOS_OP_OVERLAY_SNAP_SNAPOVERLAYOP_H
 
 #include <geos/operation/overlay/OverlayOp.h> // for enums
-#include <geos/precision/CommonBitsRemover.h> // for dtor visibility by auto_ptr
+#include <geos/precision/CommonBitsRemover.h> // for dtor visibility by unique_ptr
 
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -58,7 +58,7 @@ class GEOS_DLL SnapOverlayOp
 
 public:
 
-	static std::auto_ptr<geom::Geometry>
+	static std::unique_ptr<geom::Geometry>
 	overlayOp(const geom::Geometry& g0, const geom::Geometry& g1,
 	          OverlayOp::OpCode opCode)
 	{
@@ -66,25 +66,25 @@ public:
 		return op.getResultGeometry(opCode);
 	}
 
-	static std::auto_ptr<geom::Geometry>
+	static std::unique_ptr<geom::Geometry>
 	intersection(const geom::Geometry& g0, const geom::Geometry& g1)
 	{
 		return overlayOp(g0, g1, OverlayOp::opINTERSECTION);
 	}
 
-	static std::auto_ptr<geom::Geometry>
+	static std::unique_ptr<geom::Geometry>
 	Union(const geom::Geometry& g0, const geom::Geometry& g1)
 	{
 		return overlayOp(g0, g1, OverlayOp::opUNION);
 	}
 
-	static std::auto_ptr<geom::Geometry>
+	static std::unique_ptr<geom::Geometry>
 	difference(const geom::Geometry& g0, const geom::Geometry& g1)
 	{
 		return overlayOp(g0, g1, OverlayOp::opDIFFERENCE);
 	}
 
-	static std::auto_ptr<geom::Geometry>
+	static std::unique_ptr<geom::Geometry>
 	symDifference(const geom::Geometry& g0, const geom::Geometry& g1)
 	{
 		return overlayOp(g0, g1, OverlayOp::opSYMDIFFERENCE);
@@ -99,7 +99,7 @@ public:
 	}
 
 
-	typedef std::auto_ptr<geom::Geometry> GeomPtr;
+	typedef std::unique_ptr<geom::Geometry> GeomPtr;
 
 	GeomPtr getResultGeometry(OverlayOp::OpCode opCode);
 
@@ -122,7 +122,7 @@ private:
 
 	double snapTolerance;
 
-	std::auto_ptr<precision::CommonBitsRemover> cbr;
+	std::unique_ptr<precision::CommonBitsRemover> cbr;
 
     // Declare type as noncopyable
     SnapOverlayOp(const SnapOverlayOp& other);

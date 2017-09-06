@@ -63,11 +63,11 @@ public:
 
 	typedef std::vector<geom::Coordinate> CoordVect;
 
-	typedef std::auto_ptr<CoordVect> CoordVectPtr;
+	typedef std::unique_ptr<CoordVect> CoordVectPtr;
 
 	typedef geom::CoordinateSequence CoordSeq;
 
-	typedef std::auto_ptr<geom::CoordinateSequence> CoordSeqPtr;
+	typedef std::unique_ptr<geom::CoordinateSequence> CoordSeqPtr;
 
 	TaggedLineString(const geom::LineString* nParentLine,
 			std::size_t minimumSize=2);
@@ -92,11 +92,11 @@ public:
 
 	const std::vector<TaggedLineSegment*>& getSegments() const;
 
-	void addToResult(std::auto_ptr<TaggedLineSegment> seg);
+	void addToResult(std::unique_ptr<TaggedLineSegment> seg);
 
-	std::auto_ptr<geom::Geometry> asLineString() const;
+	std::unique_ptr<geom::Geometry> asLineString() const;
 
-	std::auto_ptr<geom::Geometry> asLinearRing() const;
+	std::unique_ptr<geom::Geometry> asLinearRing() const;
 
 private:
 

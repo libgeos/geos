@@ -132,7 +132,7 @@ namespace tut
         // A contains B if precision is limited to 1e+10
         {
             geos::geom::PrecisionModel pm(1e+10);
-            geos::geom::GeometryFactory::unique_ptr factory = geos::geom::GeometryFactory::create(&pm);
+            geos::geom::GeometryFactory::Ptr factory = geos::geom::GeometryFactory::create(&pm);
             geos::io::WKBReader reader(*factory);
 
             std::istringstream sOuter(outer);
@@ -151,7 +151,7 @@ namespace tut
         // A does NOT contain B if precision is extended to 1e+11 or beyond
         {
             geos::geom::PrecisionModel pm(1e+11);
-            geos::geom::GeometryFactory::unique_ptr factory = geos::geom::GeometryFactory::create(&pm);
+            geos::geom::GeometryFactory::Ptr factory = geos::geom::GeometryFactory::create(&pm);
             geos::io::WKBReader reader(*factory);
 
             std::istringstream sOuter(outer);
@@ -185,7 +185,7 @@ namespace tut
         // A contains B if precision is limited to 1e+10
         {
             geos::geom::PrecisionModel pm(1e+10);
-            geos::geom::GeometryFactory::unique_ptr factory = geos::geom::GeometryFactory::create(&pm);
+            geos::geom::GeometryFactory::Ptr factory = geos::geom::GeometryFactory::create(&pm);
             geos::io::WKBReader reader(*factory);
 
             std::istringstream sOuter(outer);
@@ -204,7 +204,7 @@ namespace tut
         // A contains B if FLOATING PM is used with extended precision
         {
             geos::geom::PrecisionModel pm;
-            geos::geom::GeometryFactory::unique_ptr factory = geos::geom::GeometryFactory::create(&pm);
+            geos::geom::GeometryFactory::Ptr factory = geos::geom::GeometryFactory::create(&pm);
             geos::io::WKBReader reader(*factory);
 
             std::istringstream sOuter(outer);

@@ -30,7 +30,7 @@ using namespace geos::geom;
 using namespace geos::io;
 using namespace std;
 
-typedef auto_ptr<Geometry> GeomPtr;
+typedef unique_ptr<Geometry> GeomPtr;
 
 GeomPtr doBuffer(const Geometry& g, double dist)
 {

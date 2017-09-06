@@ -28,7 +28,7 @@
 #include <memory>
 
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateSequence.h> // for auto_ptr<CoordinateSequence>
+#include <geos/geom/CoordinateSequence.h> // for unique_ptr<CoordinateSequence>
 #include <geos/geomgraph/PlanarGraph.h>
 #include <geos/geom/LineString.h> // for LineStringLT
 
@@ -105,9 +105,9 @@ private:
 	int argIndex;
 
 	/// Cache for fast responses to getBoundaryPoints
-	std::auto_ptr< geom::CoordinateSequence > boundaryPoints;
+	std::unique_ptr< geom::CoordinateSequence > boundaryPoints;
 
-	std::auto_ptr< std::vector<Node*> > boundaryNodes;
+	std::unique_ptr< std::vector<Node*> > boundaryNodes;
 
 	bool hasTooFewPointsVar;
 

@@ -105,11 +105,11 @@ private:
 
 	void simplify(TaggedLineString& line);
 
-	std::auto_ptr<LineSegmentIndex> inputIndex;
+	std::unique_ptr<LineSegmentIndex> inputIndex;
 
-	std::auto_ptr<LineSegmentIndex> outputIndex;
+	std::unique_ptr<LineSegmentIndex> outputIndex;
 
-	std::auto_ptr<TaggedLineStringSimplifier> taggedlineSimplifier;
+	std::unique_ptr<TaggedLineStringSimplifier> taggedlineSimplifier;
 };
 
 } // namespace geos::simplify

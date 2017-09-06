@@ -27,10 +27,10 @@ namespace tut
 		typedef geos::geom::GeometryFactory GeometryFactory;
 		typedef geos::io::WKTReader WKTReader;
 		typedef geos::io::WKTWriter WKTWriter;
-		typedef std::auto_ptr<geos::geom::Geometry> GeomPtr;
+		typedef std::unique_ptr<geos::geom::Geometry> GeomPtr;
 
 		PrecisionModel pm;
-		GeometryFactory::unique_ptr gf;
+		GeometryFactory::Ptr gf;
 		WKTReader wktreader;
 		WKTWriter wktwriter;
 
@@ -138,7 +138,7 @@ namespace tut
   void object::test<5>()
   {
     PrecisionModel pm3(0.001);
-    GeometryFactory::unique_ptr gf3(GeometryFactory::create(&pm3));
+    GeometryFactory::Ptr gf3(GeometryFactory::create(&pm3));
     WKTReader wktreader3(gf3.get());
     GeomPtr geom ( wktreader3.read("POINT(123456 654321)") );
 

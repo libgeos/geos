@@ -29,7 +29,7 @@ class GEOS_DLL MinimumClearance {
     private:
         const geom::Geometry* inputGeom;
         double minClearance;
-        std::auto_ptr<geom::CoordinateSequence> minClearancePts;
+        std::unique_ptr<geom::CoordinateSequence> minClearancePts;
 
         void compute();
     public:
@@ -50,7 +50,7 @@ class GEOS_DLL MinimumClearance {
          * @return the value of the minimum clearance distance
          * or <tt>LINESTRING EMPTY</tt> if no Minimum Clearance distance exists
          */
-        std::auto_ptr<geom::LineString> getLine();
+        std::unique_ptr<geom::LineString> getLine();
 };
 }
 }

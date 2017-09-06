@@ -27,11 +27,11 @@ namespace tut
     struct test_unaryuniontest_data
     {
         typedef geos::geom::GeometryFactory GeometryFactory;
-        GeometryFactory::unique_ptr gf;
+        GeometryFactory::Ptr gf;
         geos::io::WKTReader wktreader;
         geos::io::WKTWriter wktwriter;
 
-        typedef geos::geom::Geometry::AutoPtr GeomPtr;
+        typedef geos::geom::Geometry::Ptr GeomPtr;
         typedef geos::geom::Geometry Geom;
         typedef geos::operation::geounion::UnaryUnionOp UnaryUnionOp;
 

@@ -29,7 +29,7 @@
 #include <geos/operation/relate/RelateNode.h>
 #include <geos/operation/relate/EdgeEndBundle.h>
 
-#include <memory> // auto_ptr
+#include <memory> // unique_ptr
 #include <cassert>
 
 using namespace std;
@@ -69,7 +69,7 @@ ConsistentAreaTester::isNodeConsistentArea()
 	 * To fully check validity, it is necessary to
 	 * compute ALL intersections, including self-intersections within a single edge.
 	 */
-	auto_ptr<SegmentIntersector> intersector(geomGraph->computeSelfNodes(&li, true, true));
+	unique_ptr<SegmentIntersector> intersector(geomGraph->computeSelfNodes(&li, true, true));
 	/**
 	* A proper intersection means that the area is not consistent.
 	*/

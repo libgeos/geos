@@ -43,7 +43,7 @@ BufferInputLineSimplifier::BufferInputLineSimplifier(
 {}
 
 /*public static*/
-std::auto_ptr<geom::CoordinateSequence>
+std::unique_ptr<geom::CoordinateSequence>
 BufferInputLineSimplifier::simplify(const geom::CoordinateSequence& inputLine,
                                     double distanceTol)
 {
@@ -52,7 +52,7 @@ BufferInputLineSimplifier::simplify(const geom::CoordinateSequence& inputLine,
 }
 
 /* public */
-std::auto_ptr<geom::CoordinateSequence>
+std::unique_ptr<geom::CoordinateSequence>
 BufferInputLineSimplifier::simplify(double nDistanceTol)
 {
 	distanceTol = fabs(nDistanceTol);
@@ -120,10 +120,10 @@ BufferInputLineSimplifier::findNextNonDeletedIndex(unsigned int index) const
 }
 
 /* private */
-std::auto_ptr<geom::CoordinateSequence>
+std::unique_ptr<geom::CoordinateSequence>
 BufferInputLineSimplifier::collapseLine() const
 {
-	std::auto_ptr<geom::CoordinateSequence> coordList(
+	std::unique_ptr<geom::CoordinateSequence> coordList(
 		new CoordinateArraySequence());
 
 	for (size_t i=0, n=inputLine.size(); i<n; ++i)

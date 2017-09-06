@@ -62,7 +62,7 @@ public:
 
 	friend std::ostream& operator<< (std::ostream& os, const Envelope& o);
 
-	typedef std::auto_ptr<Envelope> AutoPtr;
+	typedef std::unique_ptr<Envelope> Ptr;
 
 	/** \brief
 	 * Creates a null <code>Envelope</code>.

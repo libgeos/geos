@@ -37,7 +37,7 @@ namespace geos {
                 ~IndexedFacetDistance();
 
             private:
-                std::auto_ptr<geos::index::strtree::STRtree> cachedTree;
+                std::unique_ptr<geos::index::strtree::STRtree> cachedTree;
 
             };
         }

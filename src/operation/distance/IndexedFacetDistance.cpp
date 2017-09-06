@@ -44,7 +44,7 @@ namespace geos {
                     }
                 } itemDistance;
 
-                std::auto_ptr<STRtree> tree2(FacetSequenceTreeBuilder::build(g));
+                std::unique_ptr<STRtree> tree2(FacetSequenceTreeBuilder::build(g));
 
                 std::pair<const void*, const void*> obj = cachedTree->nearestNeighbour(tree2.get(), dynamic_cast<ItemDistance*>(&itemDistance));
 

@@ -36,7 +36,7 @@
 #include <geos/noding/snapround/SimpleSnapRounder.h>
 #include <geos/noding/snapround/MCIndexSnapRounder.h>
 
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 #include <iostream>
 
 namespace geos {
@@ -73,7 +73,7 @@ private:
 
 
 /* public static */
-std::auto_ptr<geom::Geometry>
+std::unique_ptr<geom::Geometry>
 GeometryNoder::node(const geom::Geometry& geom)
 {
   GeometryNoder noder(geom);
@@ -88,7 +88,7 @@ GeometryNoder::GeometryNoder(const geom::Geometry& g)
 }
 
 /* private */
-std::auto_ptr<geom::Geometry>
+std::unique_ptr<geom::Geometry>
 GeometryNoder::toGeometry(SegmentString::NonConstVect& nodedEdges)
 {
   const geom::GeometryFactory *geomFact = argGeom.getFactory();
@@ -112,13 +112,13 @@ GeometryNoder::toGeometry(SegmentString::NonConstVect& nodedEdges)
     }
   }
 
-  std::auto_ptr<geom::Geometry> noded ( geomFact->createMultiLineString( lines ) );
+  std::unique_ptr<geom::Geometry> noded ( geomFact->createMultiLineString( lines ) );
 
   return noded;
 }
 
 /* public */
-std::auto_ptr<geom::Geometry>
+std::unique_ptr<geom::Geometry>
 GeometryNoder::getNoded()
 {
   SegmentString::NonConstVect lineList;
@@ -138,7 +138,7 @@ GeometryNoder::getNoded()
     throw ex;
   }
 
-  std::auto_ptr<geom::Geometry> noded = toGeometry(*nodedEdges);
+  std::unique_ptr<geom::Geometry> noded = toGeometry(*nodedEdges);
 
   for ( unsigned int i = 0, n = nodedEdges->size(); i < n; ++i )
     delete ( *nodedEdges )[i];

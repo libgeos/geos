@@ -46,9 +46,9 @@ namespace tut
     void object::test<1>()
     {
         const std::string wkt("LINESTRING ( 0 0, 0 1, 1 1)");
-        Geometry::AutoPtr geom(reader_.read(wkt));
+        Geometry::Ptr geom(reader_.read(wkt));
 
-        CoordinateSequence::AutoPtr pts(geom->getCoordinates());
+        CoordinateSequence::Ptr pts(geom->getCoordinates());
 
         int const a = CGAlgorithms::computeOrientation(pts->getAt(0), pts->getAt(1), pts->getAt(2));
         int const b = CGAlgorithms::computeOrientation(pts->getAt(0), pts->getAt(1), pts->getAt(2));

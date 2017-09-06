@@ -9,7 +9,7 @@
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/Geometry.h> // required for use in auto_ptr
+#include <geos/geom/Geometry.h> // required for use in unique_ptr
 #include <geos/geom/LineString.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Point.h>
@@ -34,7 +34,7 @@ namespace tut
 
 	struct test_robustlineintersector_data {
 
-	typedef std::auto_ptr<Geometry> GeomPtr;
+	typedef std::unique_ptr<Geometry> GeomPtr;
 
 	LineIntersector i;
 
@@ -238,7 +238,7 @@ namespace tut
     using geos::geom::GeometryFactory;
     using geos::geom::LineString;
 
-    GeometryFactory::unique_ptr factory = GeometryFactory::create();
+    GeometryFactory::Ptr factory = GeometryFactory::create();
     CoordinateSequence* cs = new CoordinateArraySequence();
     cs->add(p1);
     cs->add(p2);
@@ -300,7 +300,7 @@ namespace tut
     {
         using geos::geom::GeometryFactory;
         geos::geom::PrecisionModel pm(1e+13);
-        GeometryFactory::unique_ptr factory = GeometryFactory::create(&pm);
+        GeometryFactory::Ptr factory = GeometryFactory::create(&pm);
         geos::io::WKBReader reader(*factory);
 
         // POINT located between 3rd and 4th vertex of LINESTRING

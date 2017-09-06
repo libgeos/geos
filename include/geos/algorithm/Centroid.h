@@ -21,7 +21,7 @@
 
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h> // for composition
-#include <memory> // for std::auto_ptr
+#include <memory> // for std::unique_ptr
 
 // Forward declarations
 namespace geos {
@@ -97,7 +97,7 @@ public:
 
 private:
 
-  std::auto_ptr<geom::Coordinate> areaBasePt;
+  std::unique_ptr<geom::Coordinate> areaBasePt;
   geom::Coordinate triangleCent3;
   geom::Coordinate cg3;
   geom::Coordinate lineCentSum;

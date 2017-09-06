@@ -16,7 +16,7 @@
  *
  **********************************************************************/
 
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 #include <cassert> // for assert
 #include <algorithm> // for copy
 #include <geos/operation/union/PointGeometryUnion.h>
@@ -35,7 +35,7 @@ namespace operation { // geos::operation
 namespace geounion {  // geos::operation::geounion
 
 /* public */
-std::auto_ptr<geom::Geometry>
+std::unique_ptr<geom::Geometry>
 PointGeometryUnion::Union() const
 {
   using namespace geom;
@@ -57,10 +57,10 @@ PointGeometryUnion::Union() const
 
   // if no points are in exterior, return the other geom
   if (exteriorCoords.empty())
-          return std::auto_ptr<Geometry>(otherGeom.clone());
+          return std::unique_ptr<Geometry>(otherGeom.clone());
 
   // make a puntal geometry of appropriate size
-  std::auto_ptr<Geometry> ptComp;
+  std::unique_ptr<Geometry> ptComp;
 
   if (exteriorCoords.size() == 1) {
     ptComp.reset( geomFact->createPoint(*(exteriorCoords.begin())) );
@@ -73,13 +73,13 @@ PointGeometryUnion::Union() const
   }
 
   // add point component to the other geometry
-  return std::auto_ptr<Geometry> (
+  return std::unique_ptr<Geometry> (
     GeometryCombiner::combine(ptComp.get(), &otherGeom)
   );
 }
 
 /* public  static */
-std::auto_ptr<geom::Geometry>
+std::unique_ptr<geom::Geometry>
 PointGeometryUnion::Union(const geom::Puntal& pointGeom,
       const geom::Geometry& otherGeom)
 {

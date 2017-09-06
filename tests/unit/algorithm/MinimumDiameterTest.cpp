@@ -36,13 +36,13 @@ namespace tut
     // dummy data, not used
     struct test_minimumdiameter_data {
       typedef geos::geom::Geometry Geometry;
-      typedef std::auto_ptr<geos::geom::Geometry> GeomPtr;
+      typedef std::unique_ptr<geos::geom::Geometry> GeomPtr;
 
       typedef geos::geom::Coordinate Coordinate;
       typedef geos::algorithm::MinimumDiameter MinimumDiameter;
 
       geos::io::WKTReader reader;
-      std::auto_ptr<Geometry> geom;
+      std::unique_ptr<Geometry> geom;
 
       test_minimumdiameter_data()
       {}

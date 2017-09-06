@@ -90,7 +90,7 @@ private:
 	geomgraph::NodeMap nodes;
 
 	/// this intersection matrix will hold the results compute for the relate
-	std::auto_ptr<geom::IntersectionMatrix> im;
+	std::unique_ptr<geom::IntersectionMatrix> im;
 
 	std::vector<geomgraph::Edge*> isolatedEdges;
 

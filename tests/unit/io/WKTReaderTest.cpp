@@ -26,11 +26,11 @@ namespace tut
 	struct test_wktreader_data
 	{
 		geos::geom::PrecisionModel pm;
-		geos::geom::GeometryFactory::unique_ptr gf;
+		geos::geom::GeometryFactory::Ptr gf;
 		geos::io::WKTReader wktreader;
 		geos::io::WKTWriter wktwriter;
 
-		typedef std::auto_ptr<geos::geom::Geometry> GeomPtr;
+		typedef std::unique_ptr<geos::geom::Geometry> GeomPtr;
 
 		test_wktreader_data()
 			:
@@ -150,7 +150,7 @@ namespace tut
             namespace ggm = geos::geom;
             namespace gio = geos::io;
             ggm::PrecisionModel pm(ggm::PrecisionModel::FLOATING);
-            ggm::GeometryFactory::unique_ptr gf = ggm::GeometryFactory::create(&pm);
+            ggm::GeometryFactory::Ptr gf = ggm::GeometryFactory::create(&pm);
             gio::WKTReader wktReader(gf.get());
             const std::string str = " POINT (0 0) ";
             geom.reset(wktReader.read(str)); //HERE IT FAILS

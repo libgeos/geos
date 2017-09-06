@@ -60,7 +60,7 @@ namespace io { // geos.io
 Geometry *
 WKTReader::read(const string &wellKnownText)
 {
-	//auto_ptr<StringTokenizer> tokenizer(new StringTokenizer(wellKnownText));
+	//unique_ptr<StringTokenizer> tokenizer(new StringTokenizer(wellKnownText));
         CLocalizer clocale;
 	StringTokenizer tokenizer(wellKnownText);
 	Geometry *g=NULL;

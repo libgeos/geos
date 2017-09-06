@@ -28,7 +28,7 @@
 
 #include <vector>
 #include <list>
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -106,7 +106,7 @@ private:
 	const geom::GeometryFactory *factory;
 	unsigned int lineCount;
 	bool isRun;
-	std::auto_ptr<geom::Geometry> sequencedGeometry;
+	std::unique_ptr<geom::Geometry> sequencedGeometry;
 	bool isSequenceableVar;
 
 	void addLine(const geom::LineString *lineString);
@@ -205,7 +205,7 @@ public:
 		factory(0),
 		lineCount(0),
 		isRun(false),
-		sequencedGeometry(0),
+		sequencedGeometry(nullptr),
 		isSequenceableVar(false)
 		{}
 

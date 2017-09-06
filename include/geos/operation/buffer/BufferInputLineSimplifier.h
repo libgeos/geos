@@ -87,7 +87,7 @@ public:
 	 * @param distanceTol simplification distance tolerance to use
 	 * @return a simplified version of the coordinate sequence
 	 */
-	static std::auto_ptr<geom::CoordinateSequence> simplify(
+	static std::unique_ptr<geom::CoordinateSequence> simplify(
 		const geom::CoordinateSequence& inputLine, double distanceTol);
 
 	BufferInputLineSimplifier(const geom::CoordinateSequence& input);
@@ -102,7 +102,7 @@ public:
 	 * @param distanceTol simplification distance tolerance to use
 	 * @return the simplified coordinate list
 	 */
-	std::auto_ptr<geom::CoordinateSequence> simplify(double distanceTol);
+	std::unique_ptr<geom::CoordinateSequence> simplify(double distanceTol);
 
 private:
 
@@ -124,7 +124,7 @@ private:
 	 */
 	unsigned int findNextNonDeletedIndex(unsigned int index) const;
 
-	std::auto_ptr<geom::CoordinateSequence> collapseLine() const;
+	std::unique_ptr<geom::CoordinateSequence> collapseLine() const;
 
 	bool isDeletable(int i0, int i1, int i2, double distanceTol) const;
 

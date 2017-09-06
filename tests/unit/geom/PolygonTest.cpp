@@ -31,12 +31,12 @@ namespace tut
     struct test_polygon_data
     {
 		// Typedefs used as short names by test cases
-		typedef std::auto_ptr<geos::geom::Geometry> GeometryAutoPtr;
-		typedef std::auto_ptr<geos::geom::Polygon> PolygonAutoPtr;
+		typedef std::unique_ptr<geos::geom::Geometry> GeometryAutoPtr;
+		typedef std::unique_ptr<geos::geom::Polygon> PolygonAutoPtr;
 		typedef geos::geom::GeometryFactory GeometryFactory;
 
 		geos::geom::PrecisionModel pm_;
-		GeometryFactory::unique_ptr factory_;
+		GeometryFactory::Ptr factory_;
 		geos::io::WKTReader reader_;
 
 		PolygonAutoPtr empty_poly_;

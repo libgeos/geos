@@ -28,8 +28,8 @@ namespace operation {
 namespace distance {
 
 STRtree* FacetSequenceTreeBuilder::build(const Geometry* g) {
-    std::auto_ptr<STRtree> tree(new STRtree(STR_TREE_NODE_CAPACITY));
-    std::auto_ptr<std::vector<FacetSequence*> > sections(computeFacetSequences(g));
+    std::unique_ptr<STRtree> tree(new STRtree(STR_TREE_NODE_CAPACITY));
+    std::unique_ptr<std::vector<FacetSequence*> > sections(computeFacetSequences(g));
     for (std::vector<FacetSequence*>::iterator it = sections->begin(); it != sections->end(); ++it) {
         FacetSequence* section = *it;
         tree->insert(section->getEnvelope(), section);
@@ -40,7 +40,7 @@ STRtree* FacetSequenceTreeBuilder::build(const Geometry* g) {
 }
 
 std::vector<FacetSequence*> * FacetSequenceTreeBuilder::computeFacetSequences(const Geometry* g) {
-    std::auto_ptr<std::vector<FacetSequence*> > sections(new std::vector<FacetSequence*>());
+    std::unique_ptr<std::vector<FacetSequence*> > sections(new std::vector<FacetSequence*>());
 
     class FacetSequenceAdder;
     class FacetSequenceAdder : public geom::GeometryComponentFilter {

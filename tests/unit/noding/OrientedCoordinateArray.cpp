@@ -29,11 +29,11 @@ namespace tut
         typedef geos::geom::GeometryFactory GeometryFactory;
 
         geos::geom::PrecisionModel pm_;
-        GeometryFactory::unique_ptr factory_;
+        GeometryFactory::Ptr factory_;
         geos::io::WKTReader reader_;
 
-        typedef std::auto_ptr<CoordinateSequence> CoordSeqPtr;
-        typedef std::auto_ptr<Geometry> GeomPtr;
+        typedef std::unique_ptr<CoordinateSequence> CoordSeqPtr;
+        typedef std::unique_ptr<Geometry> GeomPtr;
 
         test_orientedcoordinatearray_data()
           : pm_()

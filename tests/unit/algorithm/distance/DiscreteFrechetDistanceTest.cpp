@@ -9,7 +9,7 @@
 #include <geos/algorithm/distance/DiscreteFrechetDistance.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/Geometry.h> // required for use in auto_ptr
+#include <geos/geom/Geometry.h> // required for use in unique_ptr
 #include <geos/geom/Coordinate.h>
 // std
 #include <cmath>
@@ -35,7 +35,7 @@ namespace tut
 	// Test data, not used
 	struct test_DiscreteFrechetDistance_data {
 
-	typedef std::auto_ptr<Geometry> GeomPtr;
+	typedef std::unique_ptr<Geometry> GeomPtr;
 
 	test_DiscreteFrechetDistance_data()
 		:
@@ -72,7 +72,7 @@ namespace tut
 	}
 
 	PrecisionModel pm;
-	GeometryFactory::unique_ptr gf;
+	GeometryFactory::Ptr gf;
 	geos::io::WKTReader reader;
 
 	};

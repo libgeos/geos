@@ -87,21 +87,21 @@ class GEOS_DLL UnaryUnionOp
 public:
 
   template <typename T>
-  static std::auto_ptr<geom::Geometry> Union(const T& geoms)
+  static std::unique_ptr<geom::Geometry> Union(const T& geoms)
   {
     UnaryUnionOp op(geoms);
     return op.Union();
   }
 
   template <class T>
-  static std::auto_ptr<geom::Geometry> Union(const T& geoms,
+  static std::unique_ptr<geom::Geometry> Union(const T& geoms,
       geom::GeometryFactory& geomFact)
   {
     UnaryUnionOp op(geoms, geomFact);
     return op.Union();
   }
 
-  static std::auto_ptr<geom::Geometry> Union(const geom::Geometry& geom)
+  static std::unique_ptr<geom::Geometry> Union(const geom::Geometry& geom)
   {
     UnaryUnionOp op(geom);
     return op.Union();
@@ -140,7 +140,7 @@ public:
    * @return an empty GEOMETRYCOLLECTION if no geometries were provided
    *         in the input
    */
-  std::auto_ptr<geom::Geometry> Union();
+  std::unique_ptr<geom::Geometry> Union();
 
 private:
 
@@ -181,7 +181,7 @@ private:
    * @param g0 a geometry
    * @return the union of the input geometry
    */
-  std::auto_ptr<geom::Geometry> unionNoOpt(const geom::Geometry& g0)
+  std::unique_ptr<geom::Geometry> unionNoOpt(const geom::Geometry& g0)
   {
     using geos::operation::overlay::OverlayOp;
     //using geos::operation::overlay::snap::SnapIfNeededOverlayOp;
@@ -202,8 +202,8 @@ private:
    * @return the union of the input(s)
    * @return null if both inputs are null
    */
-  std::auto_ptr<geom::Geometry> unionWithNull(std::auto_ptr<geom::Geometry> g0,
-                                              std::auto_ptr<geom::Geometry> g1);
+  std::unique_ptr<geom::Geometry> unionWithNull(std::unique_ptr<geom::Geometry> g0,
+                                              std::unique_ptr<geom::Geometry> g1);
 
   std::vector<const geom::Polygon*> polygons;
   std::vector<const geom::LineString*> lines;
@@ -211,7 +211,7 @@ private:
 
   const geom::GeometryFactory* geomFact;
 
-  std::auto_ptr<geom::Geometry> empty;
+  std::unique_ptr<geom::Geometry> empty;
 };
 
 

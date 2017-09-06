@@ -140,7 +140,7 @@ void RectangleIntersectionBuilder::add(geom::Point * thePoint)
   points.push_back(thePoint);
 }
 
-std::auto_ptr<geom::Geometry>
+std::unique_ptr<geom::Geometry>
 RectangleIntersectionBuilder::build()
 {
   // Total number of objects
@@ -148,7 +148,7 @@ RectangleIntersectionBuilder::build()
   std::size_t n = polygons.size() + lines.size() + points.size();
 
   if(n == 0)
-	return std::auto_ptr<Geometry>(_gf.createGeometryCollection());
+	return std::unique_ptr<Geometry>(_gf.createGeometryCollection());
 
   std::vector<Geometry *> *geoms = new std::vector<Geometry *>;
   geoms->reserve(n);
@@ -165,7 +165,7 @@ RectangleIntersectionBuilder::build()
       geoms->push_back(*i);
   points.clear();
 
-  return std::auto_ptr<Geometry>(
+  return std::unique_ptr<Geometry>(
     (*geoms)[0]->getFactory()->buildGeometry(geoms)
   );
 }

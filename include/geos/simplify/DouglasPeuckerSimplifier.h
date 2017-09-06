@@ -20,7 +20,7 @@
 #define GEOS_SIMPLIFY_DOUBGLASPEUCKERSIMPLIFIER_H
 
 #include <geos/export.h>
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 
 // Forward declarations
 namespace geos {
@@ -51,7 +51,7 @@ class GEOS_DLL DouglasPeuckerSimplifier {
 
 public:
 
-	static std::auto_ptr<geom::Geometry> simplify(
+	static std::unique_ptr<geom::Geometry> simplify(
 			const geom::Geometry* geom,
 			double tolerance);
 
@@ -69,7 +69,7 @@ public:
 	 */
 	void setDistanceTolerance(double tolerance);
 
-	std::auto_ptr<geom::Geometry> getResultGeometry();
+	std::unique_ptr<geom::Geometry> getResultGeometry();
 
 
 private:

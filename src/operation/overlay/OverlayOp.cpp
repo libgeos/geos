@@ -50,7 +50,7 @@
 #include <functional>
 #include <vector>
 #include <sstream>
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0

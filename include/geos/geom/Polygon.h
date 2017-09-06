@@ -27,12 +27,12 @@
 #include <geos/platform.h>
 #include <geos/geom/Geometry.h> // for inheritance
 #include <geos/geom/Polygonal.h> // for inheritance
-#include <geos/geom/Envelope.h> // for proper use of auto_ptr<>
+#include <geos/geom/Envelope.h> // for proper use of unique_ptr<>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
 
 #include <geos/inline.h>
 
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 
 // Forward declarations
 namespace geos {
@@ -182,7 +182,7 @@ protected:
 
 	std::vector<Geometry *> *holes; //Actually vector<LinearRing *>
 
-	Envelope::AutoPtr computeEnvelopeInternal() const;
+	Envelope::Ptr computeEnvelopeInternal() const;
 
 private:
 

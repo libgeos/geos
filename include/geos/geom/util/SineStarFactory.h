@@ -106,7 +106,7 @@ public:
    *
    * @return the geometry representing the sine star
    */
-  std::auto_ptr<Polygon> createSineStar() const;
+  std::unique_ptr<Polygon> createSineStar() const;
 
 
 };

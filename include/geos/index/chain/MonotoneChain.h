@@ -22,7 +22,7 @@
 #include <geos/export.h>
 #include <geos/geom/Envelope.h> // for inline
 
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 
 // Forward declarations
 namespace geos {
@@ -119,7 +119,7 @@ public:
 	 * Allocates a new CoordinateSequence to hold the Coordinates
 	 *
 	 */
-	std::auto_ptr<geom::CoordinateSequence> getCoordinates() const;
+	std::unique_ptr<geom::CoordinateSequence> getCoordinates() const;
 
 	/**
 	 * Determine all the line segments in the chain whose envelopes overlap

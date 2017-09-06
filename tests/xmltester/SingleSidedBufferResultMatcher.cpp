@@ -74,7 +74,7 @@ SingleSidedBufferResultMatcher::isBoundaryHausdorffDistanceInTolerance(
 	const geom::Geometry& actualBuffer,
 	const geom::Geometry& expectedBuffer, double distance)
 {
-	typedef std::auto_ptr<geom::Geometry> GeomPtr;
+	typedef std::unique_ptr<geom::Geometry> GeomPtr;
 
 	using geos::algorithm::distance::DiscreteHausdorffDistance;
 

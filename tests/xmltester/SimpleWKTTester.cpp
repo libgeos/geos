@@ -40,7 +40,7 @@ int main(int /*argc*/, char** /*argv*/)
 		string instr;
 		string outstr;
 		PrecisionModel pm;
-    GeometryFactory::unique_ptr gf = GeometryFactory::create(&pm, 10);
+    GeometryFactory::Ptr gf = GeometryFactory::create(&pm, 10);
 		WKTReader *r = new WKTReader(gf.get());
 		WKTWriter *w = new WKTWriter();
 		Geometry *g;

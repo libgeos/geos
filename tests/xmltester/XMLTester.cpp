@@ -91,8 +91,8 @@ using std::runtime_error;
 
 namespace {
 
-std::auto_ptr<const PreparedGeometry> prepare( const geom::Geometry *g ) {
-    return std::auto_ptr<const PreparedGeometry> ( PreparedGeometryFactory::prepare(g) );
+std::unique_ptr<const PreparedGeometry> prepare( const geom::Geometry *g ) {
+    return std::unique_ptr<const PreparedGeometry> ( PreparedGeometryFactory::prepare(g) );
 }
 
 // Asymmetric Rounding Algorithm  - equivalent to Java Math.round()
@@ -303,15 +303,15 @@ std::cerr << "SingleSidedBufferResultMatcher FAILED" << std::endl;
 
 XMLTester::XMLTester()
     :
-    gA(0),
-    gB(0),
-    gT(0),
-    pm(0),
-    factory(0),
-    wktreader(0),
-    wktwriter(0),
-    wkbreader(0),
-    wkbwriter(0),
+    gA(nullptr),
+    gB(nullptr),
+    gT(nullptr),
+    pm(nullptr),
+    factory(nullptr),
+    wktreader(nullptr),
+    wktwriter(nullptr),
+    wkbreader(nullptr),
+    wkbwriter(nullptr),
     test_predicates(0),
     failed(0),
     succeeded(0),
@@ -745,7 +745,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 {
     using namespace operation::overlay;
 
-    typedef std::auto_ptr< geom::Geometry > GeomAutoPtr;
+    typedef std::unique_ptr< geom::Geometry > GeomPtr;
 
     int success=0; // no success by default
     std::string opName;
@@ -825,7 +825,7 @@ XMLTester::parseTest(const TiXmlNode* node)
     {
         if (opName=="relate")
         {
-            std::auto_ptr<geom::IntersectionMatrix> im(gA->relate(gB));
+            std::unique_ptr<geom::IntersectionMatrix> im(gA->relate(gB));
             assert(im.get());
 
             if (im->matches(opArg3)) actual_result="true";
@@ -835,7 +835,7 @@ XMLTester::parseTest(const TiXmlNode* node)
         }
         else if (opName=="relatestring")
         {
-            std::auto_ptr<geom::IntersectionMatrix> im(gA->relate(gB));
+            std::unique_ptr<geom::IntersectionMatrix> im(gA->relate(gB));
             assert(im.get());
 
             actual_result=im->toString();
@@ -860,15 +860,15 @@ XMLTester::parseTest(const TiXmlNode* node)
         else if (opName=="intersection")
         {
 
-            GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
+            GeomPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
 
             profile.start();
 
 #ifndef USE_BINARYOP
-            GeomAutoPtr gRealRes(gA->intersection(gB));
+            GeomPtr gRealRes(gA->intersection(gB));
 #else
-            GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opINTERSECTION));
+            GeomPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opINTERSECTION));
 #endif
 
             profile.stop();
@@ -886,9 +886,9 @@ XMLTester::parseTest(const TiXmlNode* node)
 
         else if (opName=="union")
         {
-            GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
+            GeomPtr gRes(parseGeometry(opRes, "expected"));
 
-            GeomAutoPtr gRealRes;
+            GeomPtr gRealRes;
             if ( gB ) {
 #ifndef USE_BINARYOP
                 gRealRes.reset(gA->Union(gB));
@@ -911,13 +911,13 @@ XMLTester::parseTest(const TiXmlNode* node)
         else if (opName=="difference")
         {
 
-            GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
+            GeomPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
 
 #ifndef USE_BINARYOP
-            GeomAutoPtr gRealRes(gA->difference(gB));
+            GeomPtr gRealRes(gA->difference(gB));
 #else
-            GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opDIFFERENCE));
+            GeomPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opDIFFERENCE));
 #endif
 
             gRealRes->normalize();
@@ -933,13 +933,13 @@ XMLTester::parseTest(const TiXmlNode* node)
 
         else if (opName=="symdifference")
         {
-            GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
+            GeomPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
 
 #ifndef USE_BINARYOP
-            GeomAutoPtr gRealRes(gA->symDifference(gB));
+            GeomPtr gRealRes(gA->symDifference(gB));
 #else
-            GeomAutoPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opSYMDIFFERENCE));
+            GeomPtr gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opSYMDIFFERENCE));
 #endif
 
             gRealRes->normalize();
@@ -1033,10 +1033,10 @@ XMLTester::parseTest(const TiXmlNode* node)
             geom::Geometry *gT=gA;
             if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
-            GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
+            GeomPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
 
-            GeomAutoPtr gRealRes(gT->getBoundary());
+            GeomPtr gRealRes(gT->getBoundary());
             gRealRes->normalize();
 
             if (gRes->compareTo(gRealRes.get())==0) success=1;
@@ -1053,10 +1053,10 @@ XMLTester::parseTest(const TiXmlNode* node)
             geom::Geometry *gT=gA;
             if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
-            GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
+            GeomPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
 
-            GeomAutoPtr gRealRes(gT->getCentroid());
+            GeomPtr gRealRes(gT->getCentroid());
 
             if ( gRealRes.get() ) gRealRes->normalize();
             else gRealRes.reset(factory->createPoint());
@@ -1088,10 +1088,10 @@ XMLTester::parseTest(const TiXmlNode* node)
             geom::Geometry *gT=gA;
             if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
-            GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
+            GeomPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
 
-            GeomAutoPtr gRealRes(gT->convexHull());
+            GeomPtr gRealRes(gT->convexHull());
             gRealRes->normalize();
 
             if (gRes->compareTo(gRealRes.get())==0) success=1;
@@ -1110,12 +1110,12 @@ XMLTester::parseTest(const TiXmlNode* node)
             geom::Geometry *gT=gA;
             if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
-            GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
+            GeomPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
 
             profile.start();
 
-            GeomAutoPtr gRealRes;
+            GeomPtr gRealRes;
             double dist = std::atof(opArg2.c_str());
 
             BufferParameters params;
@@ -1147,12 +1147,12 @@ XMLTester::parseTest(const TiXmlNode* node)
             geom::Geometry *gT=gA;
             if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
-            GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
+            GeomPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
 
             profile.start();
 
-            GeomAutoPtr gRealRes;
+            GeomPtr gRealRes;
             double dist = std::atof(opArg2.c_str());
 
             BufferParameters params ;
@@ -1192,12 +1192,12 @@ XMLTester::parseTest(const TiXmlNode* node)
             geom::Geometry *gT=gA;
             if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
-            GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
+            GeomPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
 
             profile.start();
 
-            GeomAutoPtr gRealRes;
+            GeomPtr gRealRes;
             double dist = std::atof(opArg2.c_str());
 
             BufferParameters params;
@@ -1229,10 +1229,10 @@ XMLTester::parseTest(const TiXmlNode* node)
             geom::Geometry *gT=gA;
             if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
 
-            GeomAutoPtr gRes(parseGeometry(opRes, "expected"));
+            GeomPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
 
-            GeomAutoPtr gRealRes(gT->getInteriorPoint());
+            GeomPtr gRealRes(gT->getInteriorPoint());
             if ( gRealRes.get() ) gRealRes->normalize();
             else gRealRes.reset(factory->createPoint());
 
@@ -1261,7 +1261,7 @@ XMLTester::parseTest(const TiXmlNode* node)
         else if (opName=="polygonize")
         {
 
-            GeomAutoPtr gRes(wktreader->read(opRes));
+            GeomPtr gRes(wktreader->read(opRes));
             gRes->normalize();
 
             Polygonizer plgnzr;
@@ -1274,7 +1274,7 @@ XMLTester::parseTest(const TiXmlNode* node)
                 newgeoms->push_back((*polys)[i]);
             delete polys;
 
-            GeomAutoPtr gRealRes(factory->createGeometryCollection(newgeoms));
+            GeomPtr gRealRes(factory->createGeometryCollection(newgeoms));
             gRealRes->normalize();
 
 
@@ -1289,7 +1289,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 
         else if (opName=="linemerge")
         {
-            GeomAutoPtr gRes(wktreader->read(opRes));
+            GeomPtr gRes(wktreader->read(opRes));
             gRes->normalize();
 
             geom::Geometry *gT=gA;
@@ -1298,11 +1298,11 @@ XMLTester::parseTest(const TiXmlNode* node)
 
             LineMerger merger;
             merger.add(gT);
-            std::auto_ptr< std::vector<geom::LineString *> > lines ( merger.getMergedLineStrings() );
+            std::unique_ptr< std::vector<geom::LineString *> > lines ( merger.getMergedLineStrings() );
             std::vector<geom::Geometry *>*newgeoms = new std::vector<geom::Geometry *>(lines->begin(),
                     lines->end());
 
-            GeomAutoPtr gRealRes(factory->createGeometryCollection(newgeoms));
+            GeomPtr gRealRes(factory->createGeometryCollection(newgeoms));
             gRealRes->normalize();
 
             if (gRes->compareTo(gRealRes.get())==0) success=1;
@@ -1330,9 +1330,9 @@ XMLTester::parseTest(const TiXmlNode* node)
         std::cerr << "Running intersection for areatest" << std::endl;
             }
 #ifndef USE_BINARYOP
-            GeomAutoPtr gI(gA->intersection(gB));
+            GeomPtr gI(gA->intersection(gB));
 #else
-            GeomAutoPtr gI = BinaryOp(gA, gB,
+            GeomPtr gI = BinaryOp(gA, gB,
                     overlayOp(OverlayOp::opINTERSECTION));
 #endif
 
@@ -1347,9 +1347,9 @@ XMLTester::parseTest(const TiXmlNode* node)
             }
 
 #ifndef USE_BINARYOP
-            GeomAutoPtr gDab(gA->difference(gB));
+            GeomPtr gDab(gA->difference(gB));
 #else
-            GeomAutoPtr gDab = BinaryOp(gA, gB,
+            GeomPtr gDab = BinaryOp(gA, gB,
                     overlayOp(OverlayOp::opDIFFERENCE));
 #endif
 
@@ -1364,9 +1364,9 @@ XMLTester::parseTest(const TiXmlNode* node)
             }
 
 #ifndef USE_BINARYOP
-            GeomAutoPtr gDba(gB->difference(gA));
+            GeomPtr gDba(gB->difference(gA));
 #else
-            GeomAutoPtr gDba = BinaryOp(gB, gA,
+            GeomPtr gDba = BinaryOp(gB, gA,
                     overlayOp(OverlayOp::opDIFFERENCE));
 #endif
 
@@ -1381,9 +1381,9 @@ XMLTester::parseTest(const TiXmlNode* node)
             }
 
 #ifndef USE_BINARYOP
-            GeomAutoPtr gSD(gA->symDifference(gB));
+            GeomPtr gSD(gA->symDifference(gB));
 #else
-            GeomAutoPtr gSD = BinaryOp(gA, gB,
+            GeomPtr gSD = BinaryOp(gA, gB,
                     overlayOp(OverlayOp::opSYMDIFFERENCE));
 #endif
 
@@ -1398,9 +1398,9 @@ XMLTester::parseTest(const TiXmlNode* node)
             }
 
 #ifndef USE_BINARYOP
-            GeomAutoPtr gU(gA->Union(gB));
+            GeomPtr gU(gA->Union(gB));
 #else
-            GeomAutoPtr gU = BinaryOp(gA, gB,
+            GeomPtr gU = BinaryOp(gA, gB,
                     overlayOp(OverlayOp::opUNION));
 #endif
 
@@ -1663,7 +1663,7 @@ main(int argC, char* argV[])
  * XMLTester binary ops invoked using the new BinaryOp template function.
  *
  * Revision 1.31  2006/04/07 13:26:38  strk
- * Use of auto_ptr<> to prevent confusing leaks in tester
+ * Use of unique_ptr<> to prevent confusing leaks in tester
  *
  * Revision 1.30  2006/03/22 16:01:33  strk
  * indexBintree.h header split, classes renamed to match JTS

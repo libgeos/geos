@@ -82,7 +82,7 @@ public:
 			const GeometryFactory *newFactory);
 
 	/// Hopefully cleaner version of the above
-	LinearRing(CoordinateSequence::AutoPtr points,
+	LinearRing(CoordinateSequence::Ptr points,
 			const GeometryFactory *newFactory);
 
 	virtual Geometry *clone() const { return new LinearRing(*this); }

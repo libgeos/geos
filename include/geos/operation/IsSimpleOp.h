@@ -22,10 +22,10 @@
 #define GEOS_OPERATION_ISSIMPLEOP_H
 
 #include <geos/export.h>
-#include <geos/geom/Coordinate.h> // for dtor visibility by auto_ptr (compos)
+#include <geos/geom/Coordinate.h> // for dtor visibility by unique_ptr (compos)
 
 #include <map>
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -206,7 +206,7 @@ private:
 
 	const geom::Geometry* geom;
 
-	std::auto_ptr<geom::Coordinate> nonSimpleLocation;
+	std::unique_ptr<geom::Coordinate> nonSimpleLocation;
 };
 
 } // namespace geos.operation

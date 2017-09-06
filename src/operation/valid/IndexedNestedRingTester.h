@@ -91,7 +91,7 @@ private:
 	// CHECK: Owned by (seems unused)?
 	//geom::Envelope* totalEnv;
 
-	// Owned by us (use auto_ptr ?)
+	// Owned by us (use unique_ptr ?)
 	geos::index::SpatialIndex* index; // 'index' in JTS
 
 	// Externally owned, if not null

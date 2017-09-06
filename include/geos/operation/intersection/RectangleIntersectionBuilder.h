@@ -74,7 +74,7 @@ private:
   /**
    * \brief Build the result geometry from partial results and clean up
    */
-  std::auto_ptr<geom::Geometry> build();
+  std::unique_ptr<geom::Geometry> build();
 
   /**
    * \brief Build polygons from parts left by clipping one

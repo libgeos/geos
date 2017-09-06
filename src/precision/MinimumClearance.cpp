@@ -39,14 +39,14 @@ double MinimumClearance::getDistance() {
     return minClearance;
 }
 
-std::auto_ptr<LineString> MinimumClearance::getLine() {
+std::unique_ptr<LineString> MinimumClearance::getLine() {
     compute();
 
     // return empty line string if no min pts were found
     if (minClearance == std::numeric_limits<double>::infinity())
-        return std::auto_ptr<LineString>(inputGeom->getFactory()->createLineString());
+        return std::unique_ptr<LineString>(inputGeom->getFactory()->createLineString());
 
-    return std::auto_ptr<LineString>(inputGeom->getFactory()->createLineString(minClearancePts->clone()));
+    return std::unique_ptr<LineString>(inputGeom->getFactory()->createLineString(minClearancePts->clone()));
 }
 
 void MinimumClearance::compute() {
@@ -165,7 +165,7 @@ void MinimumClearance::compute() {
         return;
 
     // initialize to "No Distance Exists" state
-    minClearancePts = std::auto_ptr<CoordinateSequence>(inputGeom->getFactory()->getCoordinateSequenceFactory()->create(2, 2));
+    minClearancePts = std::unique_ptr<CoordinateSequence>(inputGeom->getFactory()->getCoordinateSequenceFactory()->create(2, 2));
     minClearance = std::numeric_limits<double>::infinity();
 
     // handle empty geometries

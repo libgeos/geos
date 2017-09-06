@@ -49,8 +49,8 @@ namespace tut
       typedef geos::geom::PrecisionModel PrecisionModel;
       typedef geos::geom::CoordinateSequence CoordinateSequence;
 
-      typedef std::auto_ptr<CoordinateSequence> CoordSeqPtr;
-      typedef std::auto_ptr<Geometry> GeomPtr;
+      typedef std::unique_ptr<CoordinateSequence> CoordSeqPtr;
+      typedef std::unique_ptr<Geometry> GeomPtr;
 
       typedef std::vector<SegmentString*> SegStrVct;
       typedef std::vector<Geometry*> GeomVct;
@@ -136,7 +136,7 @@ namespace tut
 
       ensure_equals( nodable.size(), 1u );
       noder.computeNodes(&nodable);
-      std::auto_ptr<SegStrVct> noded ( noder.getNodedSubstrings() );
+      std::unique_ptr<SegStrVct> noded ( noder.getNodedSubstrings() );
 
       ensure_equals( "1e-5", noded->size(), 178u );
 

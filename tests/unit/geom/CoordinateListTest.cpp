@@ -48,7 +48,7 @@ namespace tut
 
 		geos::geom::CoordinateList::iterator it, it2;
 
-		std::auto_ptr< std::vector<Coordinate> > col( new std::vector<Coordinate>() );
+		std::unique_ptr< std::vector<Coordinate> > col( new std::vector<Coordinate>() );
 		col->push_back(a);
 		col->push_back(b);
 		col->push_back(c);
@@ -141,7 +141,7 @@ namespace tut
 	  const Coordinate c(45,60);
 	  const Coordinate d(100,0);
 
-	  std::auto_ptr< std::vector<Coordinate> > v( new std::vector<Coordinate>() );
+	  std::unique_ptr< std::vector<Coordinate> > v( new std::vector<Coordinate>() );
 	  v->push_back(a);
 	  v->push_back(b);
 	  v->push_back(c);

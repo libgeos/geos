@@ -31,7 +31,7 @@ namespace tut
         GeometryPtr g_;
         PreparedGeometryPtr pg_;
         geos::geom::PrecisionModel pm_;
-        geos::geom::GeometryFactory::unique_ptr factory_;
+        geos::geom::GeometryFactory::Ptr factory_;
         geos::io::WKTReader reader_;
 
         test_preparedgeometryfactory_data()

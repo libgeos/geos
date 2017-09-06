@@ -24,7 +24,7 @@ namespace tut
 
     struct test_ispointinring_data
     {
-	    typedef std::auto_ptr<geos::geom::Geometry> GeomPtr;
+	    typedef std::unique_ptr<geos::geom::Geometry> GeomPtr;
 
         geos::geom::CoordinateSequence* cs_;
         geos::io::WKTReader reader_;

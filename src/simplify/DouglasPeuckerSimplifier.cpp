@@ -18,16 +18,16 @@
 
 #include <geos/simplify/DouglasPeuckerSimplifier.h>
 #include <geos/simplify/DouglasPeuckerLineSimplifier.h>
-#include <geos/geom/Geometry.h> // for AutoPtr typedefs
+#include <geos/geom/Geometry.h> // for Ptr typedefs
 #include <geos/geom/MultiPolygon.h>
-#include <geos/geom/CoordinateSequence.h> // for AutoPtr typedefs
+#include <geos/geom/CoordinateSequence.h> // for Ptr typedefs
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/util/GeometryTransformer.h> // for DPTransformer inheritance
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util.h>
 
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 #include <cassert>
 
 #ifndef GEOS_DEBUG
@@ -51,15 +51,15 @@ public:
 
 protected:
 
-	CoordinateSequence::AutoPtr transformCoordinates(
+	CoordinateSequence::Ptr transformCoordinates(
 			const CoordinateSequence* coords,
 			const Geometry* parent);
 
-	Geometry::AutoPtr transformPolygon(
+	Geometry::Ptr transformPolygon(
 			const Polygon* geom,
 			const Geometry* parent);
 
-	Geometry::AutoPtr transformMultiPolygon(
+	Geometry::Ptr transformMultiPolygon(
 			const MultiPolygon* geom,
 			const Geometry* parent);
 
@@ -79,7 +79,7 @@ private:
 	 *        self-intersections
 	 * @return a valid area geometry
 	 */
-	Geometry::AutoPtr createValidArea(const Geometry* roughAreaGeom);
+	Geometry::Ptr createValidArea(const Geometry* roughAreaGeom);
 
 	double distanceTolerance;
 
@@ -92,13 +92,13 @@ DPTransformer::DPTransformer(double t)
 	setSkipTransformedInvalidInteriorRings(true);
 }
 
-Geometry::AutoPtr
+Geometry::Ptr
 DPTransformer::createValidArea(const Geometry* roughAreaGeom)
 {
-	return Geometry::AutoPtr(roughAreaGeom->buffer(0.0));
+	return Geometry::Ptr(roughAreaGeom->buffer(0.0));
 }
 
-CoordinateSequence::AutoPtr
+CoordinateSequence::Ptr
 DPTransformer::transformCoordinates(
 		const CoordinateSequence* coords,
 		const Geometry* parent)
@@ -108,17 +108,17 @@ DPTransformer::transformCoordinates(
 	const Coordinate::Vect* inputPts = coords->toVector();
 	assert(inputPts);
 
-	std::auto_ptr<Coordinate::Vect> newPts =
+	std::unique_ptr<Coordinate::Vect> newPts =
 			DouglasPeuckerLineSimplifier::simplify(*inputPts,
 				distanceTolerance);
 
-	return CoordinateSequence::AutoPtr(
+	return CoordinateSequence::Ptr(
 		factory->getCoordinateSequenceFactory()->create(
 			newPts.release()
 		));
 }
 
-Geometry::AutoPtr
+Geometry::Ptr
 DPTransformer::transformPolygon(
 		const Polygon* geom,
 		const Geometry* parent)
@@ -128,7 +128,7 @@ DPTransformer::transformPolygon(
 	std::cerr << "DPTransformer::transformPolygon(Polygon " << geom << ", Geometry " << parent << ");" << std::endl;
 #endif
 
-	Geometry::AutoPtr roughGeom(GeometryTransformer::transformPolygon(geom, parent));
+	Geometry::Ptr roughGeom(GeometryTransformer::transformPolygon(geom, parent));
 
         // don't try and correct if the parent is going to do this
 	if ( dynamic_cast<const MultiPolygon*>(parent) )
@@ -139,7 +139,7 @@ DPTransformer::transformPolygon(
 	return createValidArea(roughGeom.get());
 }
 
-Geometry::AutoPtr
+Geometry::Ptr
 DPTransformer::transformMultiPolygon(
 		const MultiPolygon* geom,
 		const Geometry* parent)
@@ -147,7 +147,7 @@ DPTransformer::transformMultiPolygon(
 #if GEOS_DEBUG
 	std::cerr << "DPTransformer::transformMultiPolygon(MultiPolygon " << geom << ", Geometry " << parent << ");" << std::endl;
 #endif
-	Geometry::AutoPtr roughGeom(GeometryTransformer::transformMultiPolygon(geom, parent));
+	Geometry::Ptr roughGeom(GeometryTransformer::transformMultiPolygon(geom, parent));
         return createValidArea(roughGeom.get());
 }
 
@@ -158,7 +158,7 @@ DPTransformer::transformMultiPolygon(
 //DouglasPeuckerSimplifier::
 
 /*public static*/
-Geometry::AutoPtr
+Geometry::Ptr
 DouglasPeuckerSimplifier::simplify(const Geometry* geom,
 		double tolerance)
 {
@@ -183,7 +183,7 @@ DouglasPeuckerSimplifier::setDistanceTolerance(double tol)
 	distanceTolerance = tol;
 }
 
-Geometry::AutoPtr
+Geometry::Ptr
 DouglasPeuckerSimplifier::getResultGeometry()
 {
 	DPTransformer t(distanceTolerance);

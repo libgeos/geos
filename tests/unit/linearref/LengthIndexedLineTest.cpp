@@ -10,7 +10,7 @@
 #include <geos/io/WKTWriter.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/Geometry.h> // required for use in auto_ptr
+#include <geos/geom/Geometry.h> // required for use in unique_ptr
 #include <geos/geom/LineString.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/linearref/LengthIndexedLine.h>
@@ -30,7 +30,7 @@ using namespace std;
  */
 namespace tut {
 
-typedef auto_ptr<Geometry> GeomPtr;
+typedef unique_ptr<Geometry> GeomPtr;
 static const double TOLERANCE_DIST = 0.001;
 
 struct test_lengthindexedline_data
