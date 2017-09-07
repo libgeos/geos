@@ -133,7 +133,7 @@ dnl --------------------------------------------------------------------
 dnl - Append default C++ and C flags
 dnl --------------------------------------------------------------------
 
-AX_CXX_COMPILE_STDCXX_11([ext],[mandatory])
+AX_CXX_COMPILE_STDCXX_11([noext],[mandatory])
 
 WARNFLAGS=""
 AC_LANG_PUSH([C++])
@@ -155,7 +155,6 @@ AC_LIBTOOL_LANG_CXX_CONFIG
 # -pedantic: ISO does not support long long
 # we add -Wno-long-long to avoid those messages
 AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -pedantic], [dummy_cv_pedantic], [-pedantic], [], [WARNFLAGS="$WARNFLAGS -pedantic"], [])
-AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -ansi], [dummy_cv_ansi], [-ansi], [], [WARNFLAGS="$WARNFLAGS -ansi"], [])
 AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -Wall], [dummy_cv_wall], [-Wall], [], [WARNFLAGS="$WARNFLAGS -Wall"], [])
 AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -Wno-long-long], [dummy_cv_wno_long_long], [-Wno-long-long], [], [WARNFLAGS="$WARNFLAGS -Wno-long-long"], [])
 
