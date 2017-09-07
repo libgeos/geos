@@ -1,8 +1,8 @@
- #################################################################################
+#################################################################################
 #
-# GEOS tests build configuration for CMake build system
+# CMake configuration for GEOS perf/operation tests
 #
-# Copyright (C) 2009 Mateusz Loskot <mateusz@loskot.net>
+# Copyright (C) 2017 Mateusz Loskot <mateusz@loskot.net>
 #
 # This is free software; you can redistribute and/or modify it under
 # the terms of the GNU Lesser General Public Licence as published
@@ -11,7 +11,5 @@
 #
 #################################################################################
 
-add_subdirectory(unit)
-add_subdirectory(xmltester)
-add_subdirectory(bigtest)
-add_subdirectory(perf)
+add_subdirectory(buffer)
+add_subdirectory(predicate)
