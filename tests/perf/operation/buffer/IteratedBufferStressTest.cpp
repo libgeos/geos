@@ -73,7 +73,7 @@ int
 main()
 {
 	PrecisionModel pm;
-	GeometryFactory::unique_ptr gf = GeometryFactory::create(&pm);
+	GeometryFactory::Ptr gf = GeometryFactory::create(&pm);
 	WKTReader rdr(gf.get());
 
 	string inputWKT =
