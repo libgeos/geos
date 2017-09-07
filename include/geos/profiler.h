@@ -177,10 +177,10 @@ public:
 
 
 /** \brief Return a string representing the Profile */
-std::ostream& operator<< (std::ostream& os, const Profile&);
+GEOS_DLL std::ostream& operator<< (std::ostream& os, const Profile&);
 
 /** \brief Return a string representing the Profiler */
-std::ostream& operator<< (std::ostream& os, const Profiler&);
+GEOS_DLL std::ostream& operator<< (std::ostream& os, const Profiler&);
 
 } // namespace geos::util
 } // namespace geos
