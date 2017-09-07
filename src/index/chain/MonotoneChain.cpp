@@ -66,10 +66,10 @@ MonotoneChain::getLineSegment(size_t index, LineSegment& ls) const
     ls.p1 = pts[index+1];
 }
 
-std::auto_ptr<CoordinateSequence>
+std::unique_ptr<CoordinateSequence>
 MonotoneChain::getCoordinates() const
 {
-    return std::auto_ptr<CoordinateSequence>(pts.clone());
+    return std::unique_ptr<CoordinateSequence>(pts.clone());
 }
 
 void

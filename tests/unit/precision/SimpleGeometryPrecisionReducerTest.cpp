@@ -22,12 +22,12 @@ namespace tut
     // Common data used by tests
     struct test_sgpr_data
     {
-        typedef std::auto_ptr<geos::geom::Geometry> GeometryPtr;
+        typedef std::unique_ptr<geos::geom::Geometry> GeometryPtr;
         typedef geos::geom::GeometryFactory GeometryFactory;
 
         geos::geom::PrecisionModel pm_float_;
         geos::geom::PrecisionModel pm_fixed_;
-        GeometryFactory::unique_ptr factory_;
+        GeometryFactory::Ptr factory_;
         geos::io::WKTReader reader_;
         geos::precision::SimpleGeometryPrecisionReducer reducer_;
         geos::precision::SimpleGeometryPrecisionReducer reducer2_; // keep collapse

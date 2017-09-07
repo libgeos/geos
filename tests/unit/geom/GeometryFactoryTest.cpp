@@ -54,7 +54,7 @@ namespace tut
 
         const int srid_;
         geos::geom::PrecisionModel pm_;
-        geos::geom::GeometryFactory::unique_ptr factory_;
+        geos::geom::GeometryFactory::Ptr factory_;
         geos::io::WKTReader reader_;
 
         test_geometryfactory_data()
@@ -83,7 +83,7 @@ reader_(factory_.get())
 	void object::test<1>()
 	{
 		using geos::geom::GeometryFactory;
-		GeometryFactory::unique_ptr gf = GeometryFactory::create();
+		GeometryFactory::Ptr gf = GeometryFactory::create();
 
 		ensure_equals( gf->getSRID(), 0 );
 		ensure_equals( gf->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FLOATING );
@@ -110,7 +110,7 @@ reader_(factory_.get())
 
 		{
 			PrecisionModel pm(1.0);
-			GeometryFactory::unique_ptr gf = GeometryFactory::create(&pm, srid_, &csf);
+			GeometryFactory::Ptr gf = GeometryFactory::create(&pm, srid_, &csf);
 
 			ensure_equals( gf->getSRID(), srid_ );
 			ensure_equals( gf->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FIXED );
@@ -140,7 +140,7 @@ reader_(factory_.get())
 		CoordinateArraySequenceFactory csf;
 
 		{
-			GeometryFactory::unique_ptr gf = GeometryFactory::create(&csf);
+			GeometryFactory::Ptr gf = GeometryFactory::create(&csf);
 
 			ensure_equals( gf->getSRID(), 0 );
 			ensure_equals( gf->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FLOATING );
@@ -165,7 +165,7 @@ reader_(factory_.get())
 		using geos::geom::GeometryFactory;
 
 		PrecisionModel pm(PrecisionModel::FIXED);
-		GeometryFactory::unique_ptr gf(GeometryFactory::create(&pm));
+		GeometryFactory::Ptr gf(GeometryFactory::create(&pm));
 
 		ensure_equals( gf->getSRID(), 0 );
 		ensure_equals( gf->getPrecisionModel()->getType(), PrecisionModel::FIXED );
@@ -188,7 +188,7 @@ reader_(factory_.get())
 		using geos::geom::GeometryFactory;
 
 		PrecisionModel pm(PrecisionModel::FIXED);
-		GeometryFactory::unique_ptr gf(GeometryFactory::create(&pm, srid_));
+		GeometryFactory::Ptr gf(GeometryFactory::create(&pm, srid_));
 
 		ensure_equals( gf->getSRID(), srid_ );
 		ensure_equals( gf->getPrecisionModel()->getType(), PrecisionModel::FIXED );
@@ -208,7 +208,7 @@ reader_(factory_.get())
 	void object::test<6>()
 	{
 		using geos::geom::GeometryFactory;
-		GeometryFactory::unique_ptr gf(GeometryFactory::create(*factory_));
+		GeometryFactory::Ptr gf(GeometryFactory::create(*factory_));
 
 		ensure_equals( factory_->getSRID(), gf->getSRID() );
 		ensure_equals( factory_->getPrecisionModel()->getType(), gf->getPrecisionModel()->getType() );
@@ -1248,7 +1248,7 @@ reader_(factory_.get())
 	template<>
 	void object::test<36>()
 	{
-    typedef std::auto_ptr<geos::geom::Geometry> GeometryAutoPtr;
+    typedef std::unique_ptr<geos::geom::Geometry> GeometryAutoPtr;
 		typedef std::vector<PointPtr> PointVect;
 
 		const std::size_t size = 3;

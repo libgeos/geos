@@ -60,7 +60,7 @@ public:
 	 * @return the new QuadEdge* The caller is reponsible for
 	 * freeing the returned pointer
 	 */
-	static std::auto_ptr<QuadEdge> makeEdge(const Vertex &o, const Vertex &d);
+	static std::unique_ptr<QuadEdge> makeEdge(const Vertex &o, const Vertex &d);
 
 	/**
 	 * Creates a new QuadEdge connecting the destination of a to the origin of
@@ -71,7 +71,7 @@ public:
 	 * @return the new QuadEdge* The caller is reponsible for
 	 * freeing the returned pointer
 	 */
-	static std::auto_ptr<QuadEdge> connect(QuadEdge &a, QuadEdge &b);
+	static std::unique_ptr<QuadEdge> connect(QuadEdge &a, QuadEdge &b);
 
 	/**
 	 * Splices two edges together or apart.
@@ -351,7 +351,7 @@ public:
 	 *
 	 * @return a LineSegment
 	 */
-	std::auto_ptr<geom::LineSegment> toLineSegment() const;
+	std::unique_ptr<geom::LineSegment> toLineSegment() const;
 };
 
 } //namespace geos.triangulate.quadedge

@@ -21,7 +21,7 @@ namespace tut {
 
 struct test_geometry_normalize_data
 {
-  typedef std::auto_ptr<geos::geom::Geometry> GeomAutoPtr;
+  typedef std::unique_ptr<geos::geom::Geometry> GeomPtr;
   geos::io::WKTReader reader;
   geos::io::WKTWriter writer;
 
@@ -34,13 +34,13 @@ struct test_geometry_normalize_data
   void
   runTest(const char *from, const char *exp)
   {
-    GeomAutoPtr g1(reader.read(from));
+    GeomPtr g1(reader.read(from));
     ensure(g1.get());
-    GeomAutoPtr g2(g1->clone());
+    GeomPtr g2(g1->clone());
     ensure(g2.get());
     g2->normalize();
 
-    GeomAutoPtr ge(reader.read(exp));
+    GeomPtr ge(reader.read(exp));
     bool eq = g2->equalsExact(ge.get());
     if ( ! eq ) {
       using namespace std;

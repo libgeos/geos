@@ -541,7 +541,7 @@ namespace tut
 		typedef geos::geom::CoordinateSequenceFactory const* CoordinateFactoryCPtr;
 		CoordinateFactoryCPtr factory = geos::geom::CoordinateArraySequenceFactory::instance();
 
-		std::auto_ptr<CoordinateSequence> sequence1ptr(factory->create(4, 2));
+		std::unique_ptr<CoordinateSequence> sequence1ptr(factory->create(4, 2));
 		CoordinateSequence& seq = *sequence1ptr;
 
 		// Index: 0 - Order: Y, X, Z

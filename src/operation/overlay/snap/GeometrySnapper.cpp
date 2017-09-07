@@ -52,18 +52,18 @@ private:
 
 	const Coordinate::ConstVect& snapPts;
 
-	CoordinateSequence::AutoPtr snapLine(
+	CoordinateSequence::Ptr snapLine(
 			const CoordinateSequence* srcPts)
 	{
-		using std::auto_ptr;
+		using std::unique_ptr;
 
 		assert(srcPts);
 		assert(srcPts->toVector());
 		LineStringSnapper snapper(*(srcPts->toVector()), snapTol);
-		auto_ptr<Coordinate::Vect> newPts = snapper.snapTo(snapPts);
+		unique_ptr<Coordinate::Vect> newPts = snapper.snapTo(snapPts);
 
 		const CoordinateSequenceFactory* cfact = factory->getCoordinateSequenceFactory();
-		return auto_ptr<CoordinateSequence>(cfact->create(newPts.release()));
+		return unique_ptr<CoordinateSequence>(cfact->create(newPts.release()));
 	}
 
 public:
@@ -76,7 +76,7 @@ public:
 	{
 	}
 
-	CoordinateSequence::AutoPtr transformCoordinates(
+	CoordinateSequence::Ptr transformCoordinates(
 			const CoordinateSequence* coords,
 			const Geometry* parent)
 	{
@@ -88,10 +88,10 @@ public:
 };
 
 /*private*/
-std::auto_ptr<Coordinate::ConstVect>
+std::unique_ptr<Coordinate::ConstVect>
 GeometrySnapper::extractTargetCoordinates(const Geometry& g)
 {
-	std::auto_ptr<Coordinate::ConstVect> snapPts(new Coordinate::ConstVect());
+	std::unique_ptr<Coordinate::ConstVect> snapPts(new Coordinate::ConstVect());
 	util::UniqueCoordinateArrayFilter filter(*snapPts);
 	g.apply_ro(&filter);
 	// integrity check
@@ -100,36 +100,36 @@ GeometrySnapper::extractTargetCoordinates(const Geometry& g)
 }
 
 /*public*/
-std::auto_ptr<geom::Geometry>
+std::unique_ptr<geom::Geometry>
 GeometrySnapper::snapTo(const geom::Geometry& g, double snapTolerance)
 {
 
-	using std::auto_ptr;
+	using std::unique_ptr;
 	using geom::util::GeometryTransformer;
 
 	// Get snap points
-	auto_ptr<Coordinate::ConstVect> snapPts=extractTargetCoordinates(g);
+	unique_ptr<Coordinate::ConstVect> snapPts=extractTargetCoordinates(g);
 
 	// Apply a SnapTransformer to source geometry
 	// (we need a pointer for dynamic polymorphism)
-	auto_ptr<GeometryTransformer> snapTrans(new SnapTransformer(snapTolerance, *snapPts));
+	unique_ptr<GeometryTransformer> snapTrans(new SnapTransformer(snapTolerance, *snapPts));
 	return snapTrans->transform(&srcGeom);
 }
 
 /*public*/
-std::auto_ptr<geom::Geometry>
+std::unique_ptr<geom::Geometry>
 GeometrySnapper::snapToSelf(double snapTolerance, bool cleanResult)
 {
 
-	using std::auto_ptr;
+	using std::unique_ptr;
 	using geom::util::GeometryTransformer;
 
 	// Get snap points
-	auto_ptr<Coordinate::ConstVect> snapPts=extractTargetCoordinates(srcGeom);
+	unique_ptr<Coordinate::ConstVect> snapPts=extractTargetCoordinates(srcGeom);
 
 	// Apply a SnapTransformer to source geometry
 	// (we need a pointer for dynamic polymorphism)
-	auto_ptr<GeometryTransformer> snapTrans(new SnapTransformer(snapTolerance, *snapPts));
+	unique_ptr<GeometryTransformer> snapTrans(new SnapTransformer(snapTolerance, *snapPts));
 
 	GeomPtr result = snapTrans->transform(&srcGeom);
 

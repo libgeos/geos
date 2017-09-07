@@ -74,8 +74,8 @@ namespace tut
 		ensure(!sub.isOnEdge(e, Coordinate(10, 10)));
 		ensure(!sub.isVertexOfEdge(e, Vertex(10, 10)));
 
-		GeometryFactory::unique_ptr geomFact(GeometryFactory::create());
-		std::auto_ptr<GeometryCollection> tris = sub.getTriangles(*geomFact);
+		GeometryFactory::Ptr geomFact(GeometryFactory::create());
+		std::unique_ptr<GeometryCollection> tris = sub.getTriangles(*geomFact);
 		tris.reset();
 		//WKTWriter wkt;
 		//printf("%s\n", wkt.writeFormatted(tris).c_str());
@@ -100,7 +100,7 @@ namespace tut
 
 		//Test for getVoronoiDiagram::
 		const GeometryFactory& geomFact(*GeometryFactory::getDefaultInstance());
-		std::auto_ptr<GeometryCollection> polys = subdiv->getVoronoiDiagram(geomFact);
+		std::unique_ptr<GeometryCollection> polys = subdiv->getVoronoiDiagram(geomFact);
 		const char *expected_str = "GEOMETRYCOLLECTION (POLYGON ((-5849.974929324658 2268.0517257497568, -4529.9920486948895 2247.139449440667, 221.20588235294116 210.91176470588235, -684.4227119984187 -2848.644297291955, -5849.974929324658 2268.0517257497568)), POLYGON ((212.5 -3774.5, -684.4227119984187 -2848.644297291955, 221.20588235294116 210.91176470588235, 2448.7167655626645 2188.608343256571, 6235.0370264064295 2248.0370264064295, 212.5 -3774.5)), POLYGON ((-4529.9920486948895 2247.139449440667, 2448.7167655626645 2188.608343256571, 221.20588235294116 210.91176470588235, -4529.9920486948895 2247.139449440667)))";
 //		std::cout << polys->toString() << std::endl;
 
@@ -127,19 +127,19 @@ namespace tut
         " (230 250),"
         " (210 290)"
       ")";
-    std::auto_ptr<Geometry> sites ( reader.read(wkt) );
-    std::auto_ptr<CoordinateSequence> siteCoords (
+    std::unique_ptr<Geometry> sites ( reader.read(wkt) );
+    std::unique_ptr<CoordinateSequence> siteCoords (
       DelaunayTriangulationBuilder::extractUniqueCoordinates(*sites)
     );
 
     Envelope env = DelaunayTriangulationBuilder::envelope(*siteCoords);
     double expandBy = std::max(env.getWidth() , env.getHeight());
     env.expandBy(expandBy);
-    std::auto_ptr<QuadEdgeSubdivision> subdiv(
+    std::unique_ptr<QuadEdgeSubdivision> subdiv(
       new quadedge::QuadEdgeSubdivision(env,10)
     );
 
-    std::auto_ptr<IncrementalDelaunayTriangulator::VertexList> vertices (
+    std::unique_ptr<IncrementalDelaunayTriangulator::VertexList> vertices (
       DelaunayTriangulationBuilder::toVertices(*siteCoords)
     );
 
@@ -148,11 +148,11 @@ namespace tut
 
     //Test for getVoronoiDiagram::
 		const GeometryFactory& geomFact(*GeometryFactory::getDefaultInstance());
-    std::auto_ptr<GeometryCollection> polys = subdiv->getVoronoiDiagram(geomFact);
+    std::unique_ptr<GeometryCollection> polys = subdiv->getVoronoiDiagram(geomFact);
     for (std::size_t i=0; i<polys->getNumGeometries(); ++i) {
       const Polygon* p = dynamic_cast<const Polygon*>(polys->getGeometryN(i));
       ensure(p);
-      std::auto_ptr<CoordinateSequence> cs (
+      std::unique_ptr<CoordinateSequence> cs (
         p->getExteriorRing()->getCoordinates()
       );
       size_t from = cs->size();

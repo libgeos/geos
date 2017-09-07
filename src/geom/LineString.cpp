@@ -92,11 +92,11 @@ LineString::LineString(CoordinateSequence *newCoords,
 }
 
 /*public*/
-LineString::LineString(CoordinateSequence::AutoPtr newCoords,
+LineString::LineString(CoordinateSequence::Ptr newCoords,
 		const GeometryFactory *factory)
 	:
 	Geometry(factory),
-	points(newCoords)
+	points(std::move(newCoords))
 {
 	validateConstruction();
 }
@@ -246,7 +246,7 @@ LineString::isCoordinate(Coordinate& pt) const
 }
 
 /*protected*/
-Envelope::AutoPtr
+Envelope::Ptr
 LineString::computeEnvelopeInternal() const
 {
 	if (isEmpty()) {
@@ -254,7 +254,7 @@ LineString::computeEnvelopeInternal() const
 		// as it would indicate "unknown"
 		// envelope. In this case we
 		// *know* the envelope is EMPTY.
-		return Envelope::AutoPtr(new Envelope());
+		return Envelope::Ptr(new Envelope());
 	}
 
 	assert(points.get());
@@ -275,7 +275,7 @@ LineString::computeEnvelopeInternal() const
 	// caller expects a newly allocated Envelope.
 	// this function won't be called twice, unless
 	// cached Envelope is invalidated (set to NULL)
-	return Envelope::AutoPtr(new Envelope(minx, maxx, miny, maxy));
+	return Envelope::Ptr(new Envelope(minx, maxx, miny, maxy));
 }
 
 bool

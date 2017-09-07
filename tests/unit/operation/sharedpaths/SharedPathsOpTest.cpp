@@ -31,7 +31,7 @@ namespace tut
     geos::io::WKTReader wktreader;
     geos::io::WKTWriter wktwriter;
 
-    typedef geos::geom::Geometry::AutoPtr GeomPtr;
+    typedef geos::geom::Geometry::Ptr GeomPtr;
 
     SharedPathsOp::PathList forwDir;
     SharedPathsOp::PathList backDir;

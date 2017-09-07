@@ -20,7 +20,7 @@
 #include <geos/simplify/TaggedLineSegment.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineString.h>
-#include <geos/geom/Geometry.h> // for auto_ptr destructor
+#include <geos/geom/Geometry.h> // for unique_ptr destructor
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
 
@@ -126,7 +126,7 @@ TaggedLineString::getParentCoordinates() const
 }
 
 /*public*/
-CoordinateSequence::AutoPtr
+CoordinateSequence::Ptr
 TaggedLineString::getResultCoordinates() const
 {
 
@@ -144,7 +144,7 @@ TaggedLineString::getResultCoordinates() const
 
 
 	CoordVect* v = pts.release();
-	return CoordinateSequence::AutoPtr(parentLine->getFactory()->getCoordinateSequenceFactory()->create(v));
+	return CoordinateSequence::Ptr(parentLine->getFactory()->getCoordinateSequenceFactory()->create(v));
 
 }
 
@@ -214,7 +214,7 @@ TaggedLineString::getSegments() const
 }
 
 /*public*/
-auto_ptr<Geometry>
+unique_ptr<Geometry>
 TaggedLineString::asLineString() const
 {
 	return parentLine->getFactory()->createLineString(
@@ -222,7 +222,7 @@ TaggedLineString::asLineString() const
 }
 
 /*public*/
-auto_ptr<Geometry>
+unique_ptr<Geometry>
 TaggedLineString::asLinearRing() const
 {
 	return parentLine->getFactory()->createLinearRing(
@@ -231,7 +231,7 @@ TaggedLineString::asLinearRing() const
 
 /*public*/
 void
-TaggedLineString::addToResult(auto_ptr<TaggedLineSegment> seg)
+TaggedLineString::addToResult(unique_ptr<TaggedLineSegment> seg)
 {
 #if GEOS_DEBUG
 	cerr << "TaggedLineString[" << this << "] adding "

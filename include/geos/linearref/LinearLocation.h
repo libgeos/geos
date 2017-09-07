@@ -22,7 +22,7 @@
 #define GEOS_LINEARREF_LINEARLOCATION_H
 
 #include <string>
-#include <memory> // for std::auto_ptr
+#include <memory> // for std::unique_ptr
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Geometry.h>
@@ -168,7 +168,7 @@ public:
 	 * @param linearGeom a linear geometry
 	 * @return the <tt>LineSegment</tt> containing the location
 	 */
-	std::auto_ptr<geom::LineSegment> getSegment(const geom::Geometry* linearGeom) const;
+	std::unique_ptr<geom::LineSegment> getSegment(const geom::Geometry* linearGeom) const;
 
 	/**
 	 * Tests whether this location refers to a valid

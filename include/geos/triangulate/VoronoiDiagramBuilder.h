@@ -94,7 +94,7 @@ public:
 	 *
 	 * @return the subdivision containing the triangulation
 	 */
-	std::auto_ptr<quadedge::QuadEdgeSubdivision> getSubdivision();
+	std::unique_ptr<quadedge::QuadEdgeSubdivision> getSubdivision();
 
 	/**
 	 * Gets the faces of the computed diagram as a {@link GeometryCollection}
@@ -103,7 +103,7 @@ public:
 	 * @param geomFact the geometry factory to use to create the output
 	 * @return the faces of the diagram
 	 */
-	std::auto_ptr<geom::GeometryCollection> getDiagram(const geom::GeometryFactory& geomFact);
+	std::unique_ptr<geom::GeometryCollection> getDiagram(const geom::GeometryFactory& geomFact);
 
 	/**
 	 * Gets the faces of the computed diagram as a {@link GeometryCollection}
@@ -112,19 +112,19 @@ public:
 	 * @param geomFact the geometry factory to use to create the output
 	 * @return the faces of the diagram
 	 */
-	std::auto_ptr<geom::Geometry> getDiagramEdges(const geom::GeometryFactory& geomFact);
+	std::unique_ptr<geom::Geometry> getDiagramEdges(const geom::GeometryFactory& geomFact);
 
 private:
 
-	std::auto_ptr<geom::CoordinateSequence> siteCoords;
+	std::unique_ptr<geom::CoordinateSequence> siteCoords;
 	double tolerance;
-	std::auto_ptr<quadedge::QuadEdgeSubdivision> subdiv;
+	std::unique_ptr<quadedge::QuadEdgeSubdivision> subdiv;
 	const geom::Envelope* clipEnv; // externally owned
 	geom::Envelope diagramEnv;
 
 	void create();
 
-	static std::auto_ptr<geom::GeometryCollection>
+	static std::unique_ptr<geom::GeometryCollection>
 		clipGeometryCollection(const geom::GeometryCollection& geom, const geom::Envelope& clipEnv);
 
 };

@@ -60,7 +60,7 @@ HotPixel::getSafeEnvelope() const
 
 	if (safeEnv.get() == NULL) {
 		double safeTolerance = SAFE_ENV_EXPANSION_FACTOR / scaleFactor;
-		safeEnv = auto_ptr<Envelope>(new Envelope(originalPt.x - safeTolerance,
+		safeEnv = unique_ptr<Envelope>(new Envelope(originalPt.x - safeTolerance,
 			originalPt.x + safeTolerance,
 			originalPt.y - safeTolerance,
 			originalPt.y + safeTolerance

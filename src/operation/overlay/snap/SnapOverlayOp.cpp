@@ -23,7 +23,7 @@
 
 #include <cassert>
 #include <limits> // for numeric_limits
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -48,7 +48,7 @@ SnapOverlayOp::computeSnapTolerance()
 }
 
 /* public */
-auto_ptr<Geometry>
+unique_ptr<Geometry>
 SnapOverlayOp::getResultGeometry(OverlayOp::OpCode opCode)
 {
 	geom::GeomPtrPair prepGeom;

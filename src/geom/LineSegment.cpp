@@ -303,13 +303,13 @@ LineSegment::pointAlongOffset(double segmentLengthFraction,
 }
 
 /* public */
-std::auto_ptr<LineString>
+std::unique_ptr<LineString>
 LineSegment::toGeometry(const GeometryFactory& gf) const
 {
 	CoordinateSequence *cl=new CoordinateArraySequence();
 	cl->add(p0);
 	cl->add(p1);
-	return std::auto_ptr<LineString>(
+	return std::unique_ptr<LineString>(
 		gf.createLineString(cl) // ownership transferred
 	);
 }

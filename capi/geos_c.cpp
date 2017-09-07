@@ -80,7 +80,7 @@ using geos::operation::overlay::OverlayOp;
 using geos::operation::overlay::overlayOp;
 using geos::operation::geounion::CascadedPolygonUnion;
 
-typedef std::auto_ptr<Geometry> GeomAutoPtr;
+typedef std::unique_ptr<Geometry> GeomPtr;
 
 //## GLOBALS ################################################
 

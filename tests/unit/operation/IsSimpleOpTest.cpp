@@ -28,7 +28,7 @@ namespace tut
     {
         typedef geos::geom::GeometryFactory GeometryFactory;
         geos::geom::PrecisionModel pm_;
-        GeometryFactory::unique_ptr factory_;
+        GeometryFactory::Ptr factory_;
         geos::io::WKTReader reader_;
         double tolerance_;
 
@@ -55,7 +55,7 @@ namespace tut
     void object::test<1>()
     {
         const std::string wkt("MULTILINESTRING ((20 120, 120 20), (20 20, 120 120))");
-        const Geometry::AutoPtr geom(reader_.read(wkt));
+        const Geometry::Ptr geom(reader_.read(wkt));
 
         // TODO - mloskot: What about support of new features of BoundaryNodeRule, in JTS
 
@@ -79,7 +79,7 @@ namespace tut
     void object::test<2>()
     {
         const std::string wkt("MULTILINESTRING ((100 100, 20 20, 200 20, 100 100), (100 200, 100 100))");
-        const Geometry::AutoPtr geom(reader_.read(wkt));
+        const Geometry::Ptr geom(reader_.read(wkt));
 
         IsSimpleOp op;
         bool simple = op.isSimpleLinearGeometry(geom.get());
@@ -93,7 +93,7 @@ namespace tut
     void object::test<3>()
     {
         const std::string wkt("LINESTRING (100 100, 20 20, 200 20, 100 100)");
-        const Geometry::AutoPtr geom(reader_.read(wkt));
+        const Geometry::Ptr geom(reader_.read(wkt));
 
         IsSimpleOp op;
         bool simple = op.isSimpleLinearGeometry(geom.get());

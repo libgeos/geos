@@ -21,7 +21,7 @@
 #include <geos/geom/LineSegment.h>
 
 #include <vector>
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 
 namespace geos {
 
@@ -75,7 +75,7 @@ DouglasPeuckerLineSimplifier::simplify()
 		}
 	}
 
-	// auto_ptr transfer ownership to its
+	// unique_ptr transfer ownership to its
 	// returned copy
 	return coordList;
 }

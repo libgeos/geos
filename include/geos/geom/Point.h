@@ -25,15 +25,15 @@
 #include <geos/platform.h>
 #include <geos/geom/Geometry.h> // for inheritance
 #include <geos/geom/Puntal.h> // for inheritance
-#include <geos/geom/CoordinateSequence.h> // for proper use of auto_ptr<>
-#include <geos/geom/Envelope.h> // for proper use of auto_ptr<>
+#include <geos/geom/CoordinateSequence.h> // for proper use of unique_ptr<>
+#include <geos/geom/Envelope.h> // for proper use of unique_ptr<>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
 
 #include <geos/inline.h>
 
 #include <string>
 #include <vector>
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -155,7 +155,7 @@ protected:
 
 	Point(const Point &p);
 
-	Envelope::AutoPtr computeEnvelopeInternal() const;
+	Envelope::Ptr computeEnvelopeInternal() const;
 
 	int compareToSameClass(const Geometry *p) const;
 
@@ -164,7 +164,7 @@ private:
 	/**
 	 *  The <code>Coordinate</code> wrapped by this <code>Point</code>.
 	 */
-	std::auto_ptr<CoordinateSequence> coordinates;
+	std::unique_ptr<CoordinateSequence> coordinates;
 };
 
 } // namespace geos::geom

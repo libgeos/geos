@@ -47,11 +47,11 @@ LinearRing::LinearRing(CoordinateSequence* newCoords,
 }
 
 /*public*/
-LinearRing::LinearRing(CoordinateSequence::AutoPtr newCoords,
+LinearRing::LinearRing(CoordinateSequence::Ptr newCoords,
 		const GeometryFactory *newFactory)
 	:
 	Geometry(newFactory),
-	LineString(newCoords, newFactory)
+	LineString(std::move(newCoords), newFactory)
 {
 	validateConstruction();
 }

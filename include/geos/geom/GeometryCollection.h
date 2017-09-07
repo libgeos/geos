@@ -23,14 +23,14 @@
 #include <geos/export.h>
 #include <geos/geom/Geometry.h> // for inheritance
 //#include <geos/platform.h>
-#include <geos/geom/Envelope.h> // for proper use of auto_ptr<>
+#include <geos/geom/Envelope.h> // for proper use of unique_ptr<>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
 
 #include <geos/inline.h>
 
 #include <string>
 #include <vector>
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 
 // Forward declarations
 namespace geos {
@@ -190,7 +190,7 @@ protected:
 
 	std::vector<Geometry *>* geometries;
 
-	Envelope::AutoPtr computeEnvelopeInternal() const;
+	Envelope::Ptr computeEnvelopeInternal() const;
 
 	int compareToSameClass(const Geometry *gc) const;
 

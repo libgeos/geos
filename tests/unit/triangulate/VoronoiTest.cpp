@@ -49,9 +49,9 @@ namespace tut
 		WKTReader reader;
 		WKTWriter writer;
 		geos::triangulate::VoronoiDiagramBuilder builder;
-		std::auto_ptr<Geometry> sites ( reader.read(sitesWkt) );
-		std::auto_ptr<Geometry> expected ( reader.read(expectedWkt) );
-		std::auto_ptr<GeometryCollection> results;
+		std::unique_ptr<Geometry> sites ( reader.read(sitesWkt) );
+		std::unique_ptr<Geometry> expected ( reader.read(expectedWkt) );
+		std::unique_ptr<GeometryCollection> results;
     const GeometryFactory& geomFact(*GeometryFactory::getDefaultInstance());
 		builder.setSites(*sites);
 
@@ -87,7 +87,7 @@ namespace tut
 		Coordinate d(244,284);
 
 		geos::triangulate::VoronoiDiagramBuilder builder;
-		std::auto_ptr< std::vector<Coordinate> > v(new std::vector<Coordinate>());
+		std::unique_ptr< std::vector<Coordinate> > v(new std::vector<Coordinate>());
 		v->push_back(a);
 		v->push_back(b);
 		v->push_back(c);
@@ -97,7 +97,7 @@ namespace tut
 		builder.setSites(seq);
 
 		//getting the subdiv()
-		std::auto_ptr<QuadEdgeSubdivision> subdiv = builder.getSubdivision();
+		std::unique_ptr<QuadEdgeSubdivision> subdiv = builder.getSubdivision();
 
 		ensure_equals(subdiv->getTolerance() , 0);
 		ensure_equals(subdiv->getEnvelope().toString(),"Env[-3540:4020,-3436:4050]");

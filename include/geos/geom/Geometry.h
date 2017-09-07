@@ -171,13 +171,13 @@ public:
 	friend class GeometryFactory;
 
 	/// A vector of const Geometry pointers
-	typedef std::vector<const Geometry *> ConstVect;
+	using ConstVect = std::vector<const Geometry *>;
 
 	/// A vector of non-const Geometry pointers
-	typedef std::vector<Geometry *> NonConstVect;
+	using NonConstVect = std::vector<Geometry *>;
 
-	/// An auto_ptr of Geometry
-	typedef std::auto_ptr<Geometry> AutoPtr;
+	/// An unique_ptr of Geometry
+	using Ptr = std::unique_ptr<Geometry> ;
 
 	/// Make a deep-copy of this Geometry
 	virtual Geometry* clone() const=0;
@@ -614,7 +614,7 @@ public:
    *
    * @see UnaryUnionOp
    */
-  AutoPtr Union() const;
+  Ptr Union() const;
 		// throw(IllegalArgumentException *, TopologyException *);
 
 	/**
@@ -765,7 +765,7 @@ public:
 protected:
 
 	/// The bounding box of this Geometry
-	mutable std::auto_ptr<Envelope> envelope;
+	mutable std::unique_ptr<Envelope> envelope;
 
 	/// Returns true if the array contains any non-empty Geometrys.
 	static bool hasNonEmptyElements(const std::vector<Geometry *>* geometries);
@@ -794,7 +794,7 @@ protected:
 
 	//virtual void checkEqualPrecisionModel(Geometry *other);
 
-	virtual Envelope::AutoPtr computeEnvelopeInternal() const=0; //Abstract
+	virtual Envelope::Ptr computeEnvelopeInternal() const=0; //Abstract
 
 	virtual int compareToSameClass(const Geometry *geom) const=0; //Abstract
 
@@ -870,11 +870,11 @@ std::string geosversion();
  */
 std::string jtsport();
 
-// We use this instead of std::pair<auto_ptr<Geometry>> because C++11
+// We use this instead of std::pair<unique_ptr<Geometry>> because C++11
 // forbids that construct:
 // http://lwg.github.com/issues/lwg-closed.html#2068
 struct GeomPtrPair {
-	typedef std::auto_ptr<Geometry> GeomPtr;
+	typedef std::unique_ptr<Geometry> GeomPtr;
 	GeomPtr first;
 	GeomPtr second;
 };

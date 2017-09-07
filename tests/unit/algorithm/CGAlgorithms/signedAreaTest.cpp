@@ -27,7 +27,7 @@ namespace tut
 
     struct test_signedarea_data
     {
-	    typedef std::auto_ptr<geos::geom::Geometry> GeometryPtr;
+	    typedef std::unique_ptr<geos::geom::Geometry> GeometryPtr;
 
         geos::geom::CoordinateSequence* cs_;
         geos::io::WKTReader reader_;

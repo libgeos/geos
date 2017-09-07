@@ -144,14 +144,14 @@ Point::getBoundary() const
 	return getFactory()->createGeometryCollection(NULL);
 }
 
-Envelope::AutoPtr
+Envelope::Ptr
 Point::computeEnvelopeInternal() const
 {
 	if (isEmpty()) {
-		return Envelope::AutoPtr(new Envelope());
+		return Envelope::Ptr(new Envelope());
 	}
 
-	return Envelope::AutoPtr(new Envelope(getCoordinate()->x,
+	return Envelope::Ptr(new Envelope(getCoordinate()->x,
 			getCoordinate()->x, getCoordinate()->y,
 			getCoordinate()->y));
 }

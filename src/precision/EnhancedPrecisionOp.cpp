@@ -19,7 +19,7 @@
 
 #include <geos/precision/EnhancedPrecisionOp.h>
 #include <geos/precision/CommonBitsOp.h>
-#include <geos/precision/CommonBitsRemover.h> // for auto_ptr composition
+#include <geos/precision/CommonBitsRemover.h> // for unique_ptr composition
 #include <geos/geom/Geometry.h>
 #include <geos/util/GEOSException.h>
 

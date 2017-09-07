@@ -183,7 +183,7 @@ LineSequencer::computeSequence()
 	Sequences* sequences = findSequences();
 	if (sequences == NULL) return;
 
-	sequencedGeometry = auto_ptr<Geometry>(buildSequencedGeometry(*sequences));
+	sequencedGeometry = unique_ptr<Geometry>(buildSequencedGeometry(*sequences));
 	isSequenceableVar = true;
 
 	delAll(*sequences);
@@ -201,7 +201,7 @@ LineSequencer::computeSequence()
 Geometry*
 LineSequencer::buildSequencedGeometry(const Sequences& sequences)
 {
-	auto_ptr<Geometry::NonConstVect> lines(new Geometry::NonConstVect);
+	unique_ptr<Geometry::NonConstVect> lines(new Geometry::NonConstVect);
 
 	for (Sequences::const_iterator
 		i1=sequences.begin(), i1End=sequences.end();

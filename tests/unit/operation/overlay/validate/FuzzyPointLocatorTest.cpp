@@ -28,7 +28,7 @@ namespace tut
 		geos::io::WKTReader wktreader;
 		geos::io::WKBReader wkbreader;
 
-		typedef geos::geom::Geometry::AutoPtr GeomPtr;
+		typedef geos::geom::Geometry::Ptr GeomPtr;
 
 		GeomPtr g;
 

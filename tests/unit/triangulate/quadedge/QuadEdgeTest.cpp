@@ -46,9 +46,9 @@ namespace tut
 		Vertex v3(1, 0);
 		Vertex v4(1, 1);
 
-		std::auto_ptr<QuadEdge> q0;
-		std::auto_ptr<QuadEdge> r0;
-		std::auto_ptr<QuadEdge> s0;
+		std::unique_ptr<QuadEdge> q0;
+		std::unique_ptr<QuadEdge> r0;
+		std::unique_ptr<QuadEdge> s0;
 
 		q0 = QuadEdge::makeEdge(v1, v2);
 		r0 = QuadEdge::makeEdge(v3, v4);
@@ -78,9 +78,9 @@ namespace tut
 		Vertex v3(1, 0);
 		Vertex v4(1, 1);
 
-		std::auto_ptr<QuadEdge> q0;
-		std::auto_ptr<QuadEdge> r0;
-		std::auto_ptr<QuadEdge> s0;
+		std::unique_ptr<QuadEdge> q0;
+		std::unique_ptr<QuadEdge> r0;
+		std::unique_ptr<QuadEdge> s0;
 
 		q0 = QuadEdge::makeEdge(v1, v2);
 		r0 = QuadEdge::makeEdge(v2, v3);
@@ -110,11 +110,11 @@ namespace tut
 		Vertex v3(1, 0);
 		Vertex v4(1, 1);
 
-		std::auto_ptr<QuadEdge> q0;
-		std::auto_ptr<QuadEdge> r0;
-		std::auto_ptr<QuadEdge> s0;
-		std::auto_ptr<QuadEdge> t0;
-		std::auto_ptr<QuadEdge> u0;
+		std::unique_ptr<QuadEdge> q0;
+		std::unique_ptr<QuadEdge> r0;
+		std::unique_ptr<QuadEdge> s0;
+		std::unique_ptr<QuadEdge> t0;
+		std::unique_ptr<QuadEdge> u0;
 
 		//make a quadilateral
 		q0 = QuadEdge::makeEdge(v1, v2);

@@ -24,7 +24,7 @@
 #include <geos/inline.h>
 
 #include <geos/geom/Coordinate.h> // for composition
-#include <geos/geom/Envelope.h> // for auto_ptr
+#include <geos/geom/Envelope.h> // for unique_ptr
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -89,7 +89,7 @@ private:
 	std::vector<geom::Coordinate> corner;
 
 	/// Owned by this class, constructed on demand
-	mutable std::auto_ptr<geom::Envelope> safeEnv;
+	mutable std::unique_ptr<geom::Envelope> safeEnv;
 
 	void initCorners(const geom::Coordinate& pt);
 

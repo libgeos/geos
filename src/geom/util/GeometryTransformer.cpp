@@ -1,4 +1,4 @@
-﻿/**********************************************************************
+/**********************************************************************
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
@@ -73,7 +73,7 @@ void GeometryTransformer::setSkipTransformedInvalidInteriorRings(bool b)
 }
 
 /*public*/
-auto_ptr<Geometry>
+unique_ptr<Geometry>
 GeometryTransformer::transform(const Geometry* nInputGeom)
 {
 	using geos::util::IllegalArgumentException;
@@ -105,17 +105,17 @@ GeometryTransformer::transform(const Geometry* nInputGeom)
 	throw IllegalArgumentException("Unknown Geometry subtype.");
 }
 
-std::auto_ptr<CoordinateSequence>
+std::unique_ptr<CoordinateSequence>
 GeometryTransformer::createCoordinateSequence(
-		std::auto_ptr< std::vector<Coordinate> > coords)
+		std::unique_ptr< std::vector<Coordinate> > coords)
 {
-	return std::auto_ptr<CoordinateSequence>(
+	return std::unique_ptr<CoordinateSequence>(
 		factory->getCoordinateSequenceFactory()->create(
 				coords.release())
 	);
 }
 
-std::auto_ptr<CoordinateSequence>
+std::unique_ptr<CoordinateSequence>
 GeometryTransformer::transformCoordinates(
 		const CoordinateSequence* coords,
 		const Geometry* parent)
@@ -126,10 +126,10 @@ GeometryTransformer::transformCoordinates(
 	std::cerr << "GeometryTransformer::transformCoordinates(CoordinateSequence " << coords <<", Geometry " << parent << ");" << std::endl;
 #endif
 
-	return std::auto_ptr<CoordinateSequence>(coords->clone());
+	return std::unique_ptr<CoordinateSequence>(coords->clone());
 }
 
-Geometry::AutoPtr
+Geometry::Ptr
 GeometryTransformer::transformPoint(
 		const Point* geom,
 		const Geometry* parent)
@@ -140,13 +140,13 @@ GeometryTransformer::transformPoint(
 	std::cerr << "GeometryTransformer::transformPoint(Point " << geom <<", Geometry " << parent << ");" << std::endl;
 #endif
 
-	CoordinateSequence::AutoPtr cs(transformCoordinates(
+	CoordinateSequence::Ptr cs(transformCoordinates(
 		geom->getCoordinatesRO(), geom));
 
-	return Geometry::AutoPtr(factory->createPoint(cs.release()));
+	return Geometry::Ptr(factory->createPoint(cs.release()));
 }
 
-Geometry::AutoPtr
+Geometry::Ptr
 GeometryTransformer::transformMultiPoint(
 		const MultiPoint* geom,
 		const Geometry* parent)
@@ -164,7 +164,7 @@ GeometryTransformer::transformMultiPoint(
 		const Point* p = dynamic_cast<const Point*>(geom->getGeometryN(i));
 		assert(p);
 
-		Geometry::AutoPtr transformGeom = transformPoint(p, geom);
+		Geometry::Ptr transformGeom = transformPoint(p, geom);
 		if ( transformGeom.get() == NULL ) continue;
 		if ( transformGeom->isEmpty() ) continue;
 
@@ -172,11 +172,11 @@ GeometryTransformer::transformMultiPoint(
 		transGeomList->push_back(transformGeom.release());
 	}
 
-	return Geometry::AutoPtr(factory->buildGeometry(transGeomList));
+	return Geometry::Ptr(factory->buildGeometry(transGeomList));
 
 }
 
-Geometry::AutoPtr
+Geometry::Ptr
 GeometryTransformer::transformLinearRing(
 		const LinearRing* geom,
 		const Geometry* parent)
@@ -187,7 +187,7 @@ GeometryTransformer::transformLinearRing(
 	std::cerr << "GeometryTransformer::transformLinearRing(LinearRing " << geom <<", Geometry " << parent << ");" << std::endl;
 #endif
 
-	CoordinateSequence::AutoPtr seq(transformCoordinates(
+	CoordinateSequence::Ptr seq(transformCoordinates(
 		geom->getCoordinatesRO(), geom));
 
 	unsigned int seqSize = seq->size();
@@ -195,14 +195,15 @@ GeometryTransformer::transformLinearRing(
 	// ensure a valid LinearRing
 	if ( seqSize > 0 && seqSize < 4 && ! preserveType )
 	{
-		return factory->createLineString(seq);
+		return factory->createLineString(std::move(seq));
 	}
-
-	return factory->createLinearRing(seq);
-
+	else
+	{
+		return factory->createLinearRing(std::move(seq));
+	}
 }
 
-Geometry::AutoPtr
+Geometry::Ptr
 GeometryTransformer::transformLineString(
 		const LineString* geom,
 		const Geometry* parent)
@@ -218,7 +219,7 @@ GeometryTransformer::transformLineString(
 		transformCoordinates(geom->getCoordinatesRO(), geom));
 }
 
-Geometry::AutoPtr
+Geometry::Ptr
 GeometryTransformer::transformMultiLineString(
 		const MultiLineString* geom,
 		const Geometry* parent)
@@ -237,7 +238,7 @@ GeometryTransformer::transformMultiLineString(
 				geom->getGeometryN(i));
 		assert(l);
 
-		Geometry::AutoPtr transformGeom = transformLineString(l, geom);
+		Geometry::Ptr transformGeom = transformLineString(l, geom);
 		if ( transformGeom.get() == NULL ) continue;
 		if ( transformGeom->isEmpty() ) continue;
 
@@ -245,11 +246,11 @@ GeometryTransformer::transformMultiLineString(
 		transGeomList->push_back(transformGeom.release());
 	}
 
-	return Geometry::AutoPtr(factory->buildGeometry(transGeomList));
+	return Geometry::Ptr(factory->buildGeometry(transGeomList));
 
 }
 
-Geometry::AutoPtr
+Geometry::Ptr
 GeometryTransformer::transformPolygon(
 		const Polygon* geom,
 		const Geometry* parent)
@@ -266,7 +267,7 @@ GeometryTransformer::transformPolygon(
 			geom->getExteriorRing());
 	assert(lr);
 
-	Geometry::AutoPtr shell = transformLinearRing(lr, geom);
+	Geometry::Ptr shell = transformLinearRing(lr, geom);
 	if ( shell.get() == NULL
 		|| ! dynamic_cast<LinearRing*>(shell.get())
 		|| shell->isEmpty() )
@@ -281,7 +282,7 @@ GeometryTransformer::transformPolygon(
 			geom->getInteriorRingN(i));
 		assert(lr);
 
-		Geometry::AutoPtr hole(transformLinearRing(lr, geom));
+		Geometry::Ptr hole(transformLinearRing(lr, geom));
 
 		if ( hole.get() == NULL || hole->isEmpty() ) {
 			continue;
@@ -302,7 +303,7 @@ GeometryTransformer::transformPolygon(
 		Geometry* sh = shell.release();
 		LinearRing* lr = dynamic_cast<LinearRing*>(sh);
     assert(lr);
-		return Geometry::AutoPtr(factory->createPolygon(lr, holes));
+		return Geometry::Ptr(factory->createPolygon(lr, holes));
 	}
 	else
 	{
@@ -317,12 +318,12 @@ GeometryTransformer::transformPolygon(
 
 		delete holes; // :(
 
-		return Geometry::AutoPtr(factory->buildGeometry(components));
+		return Geometry::Ptr(factory->buildGeometry(components));
 	}
 
 }
 
-Geometry::AutoPtr
+Geometry::Ptr
 GeometryTransformer::transformMultiPolygon(
 		const MultiPolygon* geom,
 		const Geometry* parent)
@@ -333,7 +334,7 @@ GeometryTransformer::transformMultiPolygon(
 	std::cerr << "GeometryTransformer::transformMultiPolygon(MultiPolygon " << geom <<", Geometry " << parent << ");" << std::endl;
 #endif
 
-	auto_ptr< vector<Geometry*> > transGeomList( new vector<Geometry*>() );
+	unique_ptr< vector<Geometry*> > transGeomList( new vector<Geometry*>() );
 
 	for (std::size_t i=0, n=geom->getNumGeometries(); i<n; i++)
 	{
@@ -341,7 +342,7 @@ GeometryTransformer::transformMultiPolygon(
 				geom->getGeometryN(i));
 		assert(p);
 
-		Geometry::AutoPtr transformGeom = transformPolygon(p, geom);
+		Geometry::Ptr transformGeom = transformPolygon(p, geom);
 		if ( transformGeom.get() == NULL ) continue;
 		if ( transformGeom->isEmpty() ) continue;
 
@@ -349,11 +350,11 @@ GeometryTransformer::transformMultiPolygon(
 		transGeomList->push_back(transformGeom.release());
 	}
 
-	return Geometry::AutoPtr(factory->buildGeometry(transGeomList.release()));
+	return Geometry::Ptr(factory->buildGeometry(transGeomList.release()));
 
 }
 
-Geometry::AutoPtr
+Geometry::Ptr
 GeometryTransformer::transformGeometryCollection(
 		const GeometryCollection* geom,
 		const Geometry* parent)
@@ -368,7 +369,7 @@ GeometryTransformer::transformGeometryCollection(
 
 	for (std::size_t i=0, n=geom->getNumGeometries(); i<n; i++)
 	{
-		Geometry::AutoPtr transformGeom = transform(
+		Geometry::Ptr transformGeom = transform(
 			geom->getGeometryN(i)); // no parent ?
 		if ( transformGeom.get() == NULL ) continue;
 		if ( pruneEmptyGeometry && transformGeom->isEmpty() ) continue;
@@ -379,12 +380,12 @@ GeometryTransformer::transformGeometryCollection(
 
 	if ( preserveGeometryCollectionType )
 	{
-		return Geometry::AutoPtr(factory->createGeometryCollection(
+		return Geometry::Ptr(factory->createGeometryCollection(
 			transGeomList));
 	}
 	else
 	{
-		return Geometry::AutoPtr(factory->buildGeometry(transGeomList));
+		return Geometry::Ptr(factory->buildGeometry(transGeomList));
 	}
 
 }

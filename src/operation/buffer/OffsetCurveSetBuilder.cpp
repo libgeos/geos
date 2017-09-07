@@ -203,7 +203,7 @@ OffsetCurveSetBuilder::addLineString(const LineString *line)
 #if GEOS_DEBUG
 	std::cerr<<__FUNCTION__<<": "<<line->toString()<<std::endl;
 #endif
-	std::auto_ptr<CoordinateSequence> coord(CoordinateSequence::removeRepeatedPoints(line->getCoordinatesRO()));
+	std::unique_ptr<CoordinateSequence> coord(CoordinateSequence::removeRepeatedPoints(line->getCoordinatesRO()));
 #if GEOS_DEBUG
 	std::cerr<<" After coordinate removal: "<<coord->toString()<<std::endl;
 #endif

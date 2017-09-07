@@ -81,7 +81,7 @@ namespace {
 
 // Debug routine
 template <class Iterator>
-std::auto_ptr<Geometry>
+std::unique_ptr<Geometry>
 convertSegStrings(const GeometryFactory* fact, Iterator it, Iterator et)
 {
   std::vector<Geometry*> lines;
@@ -91,7 +91,7 @@ convertSegStrings(const GeometryFactory* fact, Iterator it, Iterator et)
     lines.push_back(line);
     ++it;
   }
-  return std::auto_ptr<Geometry>(fact->buildGeometry(lines));
+  return std::unique_ptr<Geometry>(fact->buildGeometry(lines));
 }
 
 }
@@ -151,7 +151,7 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    BufferParameters modParams = bufParams;
    modParams.setEndCapStyle(BufferParameters::CAP_FLAT);
    modParams.setSingleSided(false); // ignore parameter for areal-only geometries
-   std::auto_ptr<Geometry> buf;
+   std::unique_ptr<Geometry> buf;
 
    // This is a (temp?) hack to workaround the fact that
    // BufferBuilder BufferParamaters are immutable after
@@ -163,7 +163,7 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    }
 
    // Create MultiLineStrings from this polygon.
-   std::auto_ptr<Geometry> bufLineString ( buf->getBoundary() );
+   std::unique_ptr<Geometry> bufLineString ( buf->getBoundary() );
 
 #ifdef GEOS_DEBUG_SSB
    std::cerr << "input|" << *l << std::endl;
@@ -175,7 +175,7 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    std::vector< CoordinateSequence* > lineList;
 
    {
-       std::auto_ptr< CoordinateSequence > coords(g->getCoordinates());
+       std::unique_ptr< CoordinateSequence > coords(g->getCoordinates());
        curveBuilder.getSingleSidedLineCurve(coords.get(), distance,
            lineList, leftSide, !leftSide);
        coords.reset();
@@ -221,7 +221,7 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    for (size_t i=0, n=curveList.size(); i<n; ++i) delete curveList[i];
    curveList.clear();
 
-   std::auto_ptr<Geometry> singleSided ( geomFact->createMultiLineString(
+   std::unique_ptr<Geometry> singleSided ( geomFact->createMultiLineString(
       singleSidedNodedEdges ) );
 
 #ifdef GEOS_DEBUG_SSB
@@ -235,7 +235,7 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    //       diverge from original offset curves due to the addition of
    //       intersections with caps and joins curves
    using geos::operation::overlay::snap::SnapOverlayOp;
-   std::auto_ptr<Geometry> intersectedLines = SnapOverlayOp::overlayOp(*singleSided, *bufLineString, OverlayOp::opINTERSECTION);
+   std::unique_ptr<Geometry> intersectedLines = SnapOverlayOp::overlayOp(*singleSided, *bufLineString, OverlayOp::opINTERSECTION);
 
 #ifdef GEOS_DEBUG_SSB
      std::cerr << "intersection" << "|" << *intersectedLines << std::endl;
@@ -244,7 +244,7 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    // Merge result lines together.
    LineMerger lineMerge;
    lineMerge.add( intersectedLines.get() );
-   std::auto_ptr< std::vector< LineString* > > mergedLines (
+   std::unique_ptr< std::vector< LineString* > > mergedLines (
 	lineMerge.getMergedLineStrings() );
 
    // Convert the result into a std::vector< Geometry* >.
@@ -255,7 +255,7 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
    {
       // Remove end points if they are a part of the original line to be
       // buffered.
-      CoordinateSequence::AutoPtr coords(mergedLines->back()->getCoordinates());
+      CoordinateSequence::Ptr coords(mergedLines->back()->getCoordinates());
       if ( NULL != coords.get() )
       {
          // Use 98% of the buffer width as the point-distance requirement - this
@@ -411,7 +411,7 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 #endif
 
 	Geometry* resultGeom=NULL;
-	std::auto_ptr< std::vector<Geometry*> > resultPolyList;
+	std::unique_ptr< std::vector<Geometry*> > resultPolyList;
 	std::vector<BufferSubgraph*> subgraphList;
 
 	try {

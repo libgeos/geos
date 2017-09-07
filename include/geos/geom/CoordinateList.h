@@ -25,7 +25,7 @@
 
 #include <list>
 #include <ostream> // for operator<<
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -151,9 +151,9 @@ public:
 		return coords.erase(first, last);
 	}
 
-	std::auto_ptr<Coordinate::Vect> toCoordinateArray() const
+	std::unique_ptr<Coordinate::Vect> toCoordinateArray() const
 	{
-		std::auto_ptr<Coordinate::Vect> ret(new Coordinate::Vect);
+		std::unique_ptr<Coordinate::Vect> ret(new Coordinate::Vect);
 		ret->assign(coords.begin(), coords.end());
 		return ret;
 	}

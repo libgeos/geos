@@ -78,11 +78,11 @@ Root::insert(const Envelope *itemEnv, void* item)
 	 */
 	if (node==NULL || !node->getEnvelope()->contains(itemEnv))
 	{
-		std::auto_ptr<Node> snode (node); // may be NULL
+		std::unique_ptr<Node> snode (node); // may be NULL
 		node = 0; subnode[index] = 0;
 
-		std::auto_ptr<Node> largerNode =
-			Node::createExpanded(snode, *itemEnv);
+		std::unique_ptr<Node> largerNode =
+			Node::createExpanded(std::move(snode), *itemEnv);
 
 #if GEOS_DEBUG
 		std::cerr<<"("<<this<<") created expanded node " << largerNode.get() << " containing previously reported subnode" << std::endl;

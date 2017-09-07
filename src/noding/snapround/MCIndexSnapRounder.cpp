@@ -126,7 +126,7 @@ void
 MCIndexSnapRounder::checkCorrectness(
 	SegmentString::NonConstVect& inputSegmentStrings)
 {
-	auto_ptr<SegmentString::NonConstVect> resultSegStrings(
+	unique_ptr<SegmentString::NonConstVect> resultSegStrings(
 		NodedSegmentString::getNodedSubstrings(inputSegmentStrings)
 	);
 

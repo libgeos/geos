@@ -50,7 +50,7 @@
 #include <geos/inline.h>
 
 #include <vector>
-#include <memory> // auto_ptr
+#include <memory> // unique_ptr
 #include <cassert>
 #include <typeinfo>
 
@@ -372,7 +372,7 @@ GeometryGraph::computeSelfNodes(LineIntersector &li,
 {
 	SegmentIntersector *si = new SegmentIntersector(&li, true, false);
 	si->setIsDoneIfProperInt(isDoneIfProperInt);
-	auto_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
+	unique_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
 
 	typedef vector<Edge*> EC;
 	EC *se = edges;
@@ -410,7 +410,7 @@ GeometryGraph::computeEdgeIntersections(GeometryGraph *g,
 	SegmentIntersector *si=new SegmentIntersector(li, includeProper, true);
 
 	si->setBoundaryNodes(getBoundaryNodes(), g->getBoundaryNodes());
-	auto_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
+	unique_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
 
 	typedef vector<Edge*> EC;
 

@@ -63,15 +63,15 @@ AbstractSTRtree::build()
 }
 
 /*protected*/
-std::auto_ptr<BoundableList>
+std::unique_ptr<BoundableList>
 AbstractSTRtree::createParentBoundables(BoundableList* childBoundables,
 		int newLevel)
 {
 	assert(!childBoundables->empty());
-	std::auto_ptr< BoundableList > parentBoundables ( new BoundableList() );
+	std::unique_ptr< BoundableList > parentBoundables ( new BoundableList() );
 	parentBoundables->push_back(createNode(newLevel));
 
-	std::auto_ptr< BoundableList > sortedChildBoundables ( sortBoundables(childBoundables) );
+	std::unique_ptr< BoundableList > sortedChildBoundables ( sortBoundables(childBoundables) );
 
 	for (BoundableList::iterator i=sortedChildBoundables->begin(),
 			e=sortedChildBoundables->end();
@@ -96,7 +96,7 @@ AbstractNode*
 AbstractSTRtree::createHigherLevels(BoundableList* boundablesOfALevel, int level)
 {
 	assert(!boundablesOfALevel->empty());
-	std::auto_ptr< BoundableList > parentBoundables (
+	std::unique_ptr< BoundableList > parentBoundables (
 			createParentBoundables(boundablesOfALevel,level+1)
 			);
 
@@ -304,10 +304,10 @@ AbstractSTRtree::iterate(ItemVisitor& visitor)
 }
 
 /*protected*/
-std::auto_ptr<BoundableList>
+std::unique_ptr<BoundableList>
 AbstractSTRtree::boundablesAtLevel(int level)
 {
-	std::auto_ptr<BoundableList> boundables ( new BoundableList() );
+	std::unique_ptr<BoundableList> boundables ( new BoundableList() );
 	boundablesAtLevel(level, root, boundables.get());
 	return boundables;
 }
@@ -351,7 +351,7 @@ AbstractSTRtree::boundablesAtLevel(int level, AbstractNode* top,
 
 ItemsList* AbstractSTRtree::itemsTree(AbstractNode* node)
 {
-    std::auto_ptr<ItemsList> valuesTreeForNode (new ItemsList());
+    std::unique_ptr<ItemsList> valuesTreeForNode (new ItemsList());
 
     BoundableList::iterator end = node->getChildBoundables()->end();
     for (BoundableList::iterator i = node->getChildBoundables()->begin();

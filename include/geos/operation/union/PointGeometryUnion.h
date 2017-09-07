@@ -48,7 +48,7 @@ class GEOS_DLL PointGeometryUnion
 {
 public:
 
-  static std::auto_ptr<geom::Geometry> Union(
+  static std::unique_ptr<geom::Geometry> Union(
       const geom::Puntal& pointGeom,
       const geom::Geometry& otherGeom);
 
@@ -56,7 +56,7 @@ public:
   PointGeometryUnion(const geom::Puntal& pointGeom,
                      const geom::Geometry& otherGeom);
 
-  std::auto_ptr<geom::Geometry> Union() const;
+  std::unique_ptr<geom::Geometry> Union() const;
 
 private:
   const geom::Geometry& pointGeom;

@@ -42,7 +42,7 @@ namespace tut
 		using geos::geom::Coordinate;
 		using geos::operation::overlay::snap::LineStringSnapper;
 
-		typedef std::auto_ptr<Coordinate::Vect> CoordsVectAptr;
+		typedef std::unique_ptr<Coordinate::Vect> CoordsVectAptr;
 
 
 		// source coordinates
@@ -80,7 +80,7 @@ namespace tut
 		using geos::geom::Coordinate;
 		using geos::operation::overlay::snap::LineStringSnapper;
 
-		typedef std::auto_ptr<Coordinate::Vect> CoordsVectAptr;
+		typedef std::unique_ptr<Coordinate::Vect> CoordsVectAptr;
 
 
 		// source coordinates
@@ -119,7 +119,7 @@ namespace tut
 		using geos::geom::Coordinate;
 		using geos::operation::overlay::snap::LineStringSnapper;
 
-		typedef std::auto_ptr<Coordinate::Vect> CoordsVectAptr;
+		typedef std::unique_ptr<Coordinate::Vect> CoordsVectAptr;
 
 
 		// source coordinates
@@ -164,7 +164,7 @@ namespace tut
 		using geos::geom::Coordinate;
 		using geos::operation::overlay::snap::LineStringSnapper;
 
-		typedef std::auto_ptr<Coordinate::Vect> CoordsVectAptr;
+		typedef std::unique_ptr<Coordinate::Vect> CoordsVectAptr;
 
 
 		// source coordinates
@@ -196,7 +196,7 @@ namespace tut
 		using geos::geom::Coordinate;
 		using geos::operation::overlay::snap::LineStringSnapper;
 
-		typedef std::auto_ptr<Coordinate::Vect> CoordsVectAptr;
+		typedef std::unique_ptr<Coordinate::Vect> CoordsVectAptr;
 
 
 		// source coordinates
@@ -223,7 +223,7 @@ namespace tut
 		using geos::geom::Coordinate;
 		using geos::operation::overlay::snap::LineStringSnapper;
 
-		typedef std::auto_ptr<Coordinate::Vect> CoordsVectAptr;
+		typedef std::unique_ptr<Coordinate::Vect> CoordsVectAptr;
 
 
 		// source coordinates
@@ -252,7 +252,7 @@ namespace tut
     using geos::geom::Coordinate;
     using geos::operation::overlay::snap::LineStringSnapper;
 
-    typedef std::auto_ptr<Coordinate::Vect> CoordsVectAptr;
+    typedef std::unique_ptr<Coordinate::Vect> CoordsVectAptr;
 
 
     // Source: (0 0, 10 0, 0 1)
@@ -300,7 +300,7 @@ namespace tut
     using geos::geom::Coordinate;
     using geos::operation::overlay::snap::LineStringSnapper;
 
-    typedef std::auto_ptr<Coordinate::Vect> CoordsVectAptr;
+    typedef std::unique_ptr<Coordinate::Vect> CoordsVectAptr;
 
 
     // Source: (0 0, 1 0, 1 1)
@@ -338,7 +338,7 @@ namespace tut
     using geos::geom::Coordinate;
     using geos::operation::overlay::snap::LineStringSnapper;
 
-    typedef std::auto_ptr<Coordinate::Vect> CoordsVectAptr;
+    typedef std::unique_ptr<Coordinate::Vect> CoordsVectAptr;
 
 
     // Source: (1 1, 5 9, 9 1, 1 1)

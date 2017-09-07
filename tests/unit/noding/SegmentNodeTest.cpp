@@ -21,10 +21,10 @@ namespace tut
     struct test_segmentnode_data
     {
 
-    	typedef std::auto_ptr<geos::geom::CoordinateSequence>
+    	typedef std::unique_ptr<geos::geom::CoordinateSequence>
             CoordSeqPtr;
 
-    	typedef std::auto_ptr<geos::noding::SegmentString>
+    	typedef std::unique_ptr<geos::noding::SegmentString>
             SegmentStringPtr;
 
         const geos::geom::CoordinateSequenceFactory* factory_;

@@ -26,7 +26,7 @@
 #include <geos/operation/buffer/OffsetSegmentGenerator.h>
 
 #include <vector>
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -168,7 +168,7 @@ private:
 	void computeRingBufferCurve(const geom::CoordinateSequence& inputPts,
 	                            int side, OffsetSegmentGenerator& segGen);
 
-  std::auto_ptr<OffsetSegmentGenerator> getSegGen(double dist);
+  std::unique_ptr<OffsetSegmentGenerator> getSegGen(double dist);
 
   void computePointCurve(const geom::Coordinate& pt,
                          OffsetSegmentGenerator& segGen);

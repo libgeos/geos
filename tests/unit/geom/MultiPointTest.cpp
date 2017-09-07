@@ -24,11 +24,11 @@ namespace tut
 	// Common data used by tests
 	struct test_multipoint_data
 	{
-		typedef std::auto_ptr<geos::geom::MultiPoint> MultiPointAutoPtr;
+		typedef std::unique_ptr<geos::geom::MultiPoint> MultiPointAutoPtr;
 		typedef geos::geom::GeometryFactory GeometryFactory;
 
 		geos::geom::PrecisionModel pm_;
-		geos::geom::GeometryFactory::unique_ptr factory_;
+		geos::geom::GeometryFactory::Ptr factory_;
 		geos::io::WKTReader reader_;
 
 		MultiPointAutoPtr empty_mp_;

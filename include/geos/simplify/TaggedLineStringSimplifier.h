@@ -94,7 +94,7 @@ private:
 	// externally owned
 	LineSegmentIndex* outputIndex;
 
-	std::auto_ptr<algorithm::LineIntersector> li;
+	std::unique_ptr<algorithm::LineIntersector> li;
 
 	/// non-const as segments are possibly added to it
 	TaggedLineString* line;
@@ -124,7 +124,7 @@ private:
 	bool hasInteriorIntersection(const geom::LineSegment& seg0,
 			const geom::LineSegment& seg1) const;
 
-	std::auto_ptr<TaggedLineSegment> flatten(
+	std::unique_ptr<TaggedLineSegment> flatten(
 			std::size_t start, std::size_t end);
 
 	/** \brief

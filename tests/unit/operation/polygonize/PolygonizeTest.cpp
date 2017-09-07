@@ -32,7 +32,7 @@ namespace tut
         geos::io::WKTReader wktreader;
         geos::io::WKTWriter wktwriter;
 
-        typedef geos::geom::Geometry::AutoPtr GeomPtr;
+        typedef geos::geom::Geometry::Ptr GeomPtr;
         typedef geos::geom::Geometry Geom;
         typedef geos::geom::Polygon Poly;
         typedef geos::operation::polygonize::Polygonizer Polygonizer;
@@ -119,7 +119,7 @@ namespace tut
           Polygonizer polygonizer;
           polygonizer.add(&inputGeoms);
 
-          std::auto_ptr< std::vector<Poly*> > retGeoms;
+          std::unique_ptr< std::vector<Poly*> > retGeoms;
           retGeoms.reset( polygonizer.getPolygons() );
 
           delAll(inputGeoms);

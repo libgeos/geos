@@ -59,7 +59,7 @@ class GEOS_DLL GeometrySnapper {
 
 public:
 
-	typedef std::auto_ptr<geom::Geometry> GeomPtr;
+	typedef std::unique_ptr<geom::Geometry> GeomPtr;
 
 	/**
 	 * Snaps two geometries together with a given tolerance.
@@ -67,7 +67,7 @@ public:
 	 * @param g0 a geometry to snap
 	 * @param g1 a geometry to snap
 	 * @param snapTolerance the tolerance to use
-	 * @param ret the snapped geometries as a pair of auto_ptrs
+	 * @param ret the snapped geometries as a pair of smart pointers
 	 *            (output parameter)
 	 */
 	static void snap(const geom::Geometry& g0,
@@ -97,7 +97,7 @@ public:
 	 * @param snapTolerance
 	 * @return a new snapped Geometry
 	 */
-	std::auto_ptr<geom::Geometry> snapTo(const geom::Geometry& g,
+	std::unique_ptr<geom::Geometry> snapTo(const geom::Geometry& g,
 	                                     double snapTolerance);
 
 	/** \brief
@@ -109,7 +109,7 @@ public:
 	 * @param cleanResult clean the result
 	 * @return a new snapped Geometry
 	 */
-	std::auto_ptr<geom::Geometry> snapToSelf(double snapTolerance,
+	std::unique_ptr<geom::Geometry> snapToSelf(double snapTolerance,
 	                                         bool cleanResult);
 
 	/** \brief
@@ -140,7 +140,7 @@ private:
 	const geom::Geometry& srcGeom;
 
 	/// Extract target (unique) coordinates
-	std::auto_ptr<geom::Coordinate::ConstVect> extractTargetCoordinates(
+	std::unique_ptr<geom::Coordinate::ConstVect> extractTargetCoordinates(
 			const geom::Geometry& g);
 
     // Declare type as noncopyable

@@ -25,7 +25,7 @@
 
 #include <geos/export.h>
 #include <vector>
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -65,12 +65,12 @@ public:
 
 	void remove(const geom::LineSegment* seg);
 
-	std::auto_ptr< std::vector<geom::LineSegment*> >
+	std::unique_ptr< std::vector<geom::LineSegment*> >
 			query(const geom::LineSegment* seg) const;
 
 private:
 
-	std::auto_ptr<index::quadtree::Quadtree> index;
+	std::unique_ptr<index::quadtree::Quadtree> index;
 
 	std::vector<geom::Envelope*> newEnvelopes;
 

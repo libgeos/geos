@@ -215,7 +215,7 @@ private:
 
 	// working
 	algorithm::PointLocator ptLocator;
-	// TODO: use auto_ptr
+	// TODO: use unique_ptr
 	std::vector<GeometryLocation*> *minDistanceLocation;
 	double minDistance;
 

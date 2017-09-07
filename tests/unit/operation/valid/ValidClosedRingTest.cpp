@@ -37,11 +37,11 @@ namespace tut
 
     struct test_validclosedring_data
     {
-	typedef std::auto_ptr<Geometry> GeomPtr;
+	typedef std::unique_ptr<Geometry> GeomPtr;
         typedef geos::geom::GeometryFactory GeometryFactory;
 
         geos::geom::PrecisionModel pm_;
-        GeometryFactory::unique_ptr factory_;
+        GeometryFactory::Ptr factory_;
         geos::io::WKTReader rdr;
 
         test_validclosedring_data()

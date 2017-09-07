@@ -27,7 +27,7 @@ namespace tut
 	struct test_wkbwriter_data
 	{
 		geos::geom::PrecisionModel pm;
-		geos::geom::GeometryFactory::unique_ptr gf;
+		geos::geom::GeometryFactory::Ptr gf;
 		geos::io::WKTReader wktreader;
 		geos::io::WKTWriter wktwriter;
 		geos::io::WKBReader wkbreader;

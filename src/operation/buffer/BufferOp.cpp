@@ -254,7 +254,7 @@ BufferOp::bufferFixedPrecision(const PrecisionModel& fixedPM)
 	//
 	const Geometry *workGeom = argGeom;
 	const PrecisionModel& argPM = *(argGeom->getFactory()->getPrecisionModel());
-	std::auto_ptr<Geometry> fixedGeom;
+	std::unique_ptr<Geometry> fixedGeom;
 	if ( argPM.getType() != PrecisionModel::FIXED || argPM.getScale() != fixedPM.getScale() )
 	{
 		using precision::GeometryPrecisionReducer;

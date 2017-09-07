@@ -26,11 +26,11 @@ namespace tut
     struct test_geometryextracter_data
     {
       geos::geom::PrecisionModel pm;
-      geos::geom::GeometryFactory::unique_ptr gf;
+      geos::geom::GeometryFactory::Ptr gf;
       geos::io::WKTReader wktreader;
       geos::io::WKTWriter wktwriter;
 
-		  typedef std::auto_ptr<geos::geom::Geometry> GeomPtr;
+		  typedef std::unique_ptr<geos::geom::Geometry> GeomPtr;
 
       typedef geos::io::WKTReader WKTReader;
       typedef geos::io::WKTWriter WKTWriter;

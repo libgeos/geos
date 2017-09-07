@@ -23,10 +23,10 @@ namespace tut {
 
 struct test_preparedgeometrytouches_data
 {
-    typedef std::auto_ptr<geos::geom::prep::PreparedGeometry> PrepGeomAutoPtr;
+    typedef std::unique_ptr<geos::geom::prep::PreparedGeometry> PrepGeomAutoPtr;
     typedef geos::geom::GeometryFactory GeometryFactory;
 
-    geos::geom::GeometryFactory::unique_ptr factory;
+    geos::geom::GeometryFactory::Ptr factory;
     geos::io::WKTReader reader;
     GeometryPtr g1;
     GeometryPtr g2;

@@ -88,7 +88,7 @@ RelateComputer::computeIM()
             << std::endl;
 #endif
 
-	std::auto_ptr<SegmentIntersector> si1 (
+	std::unique_ptr<SegmentIntersector> si1 (
 		(*arg)[0]->computeSelfNodes(&li,false)
 	);
 
@@ -100,7 +100,7 @@ RelateComputer::computeIM()
             << std::endl;
 #endif
 
-	std::auto_ptr<SegmentIntersector> si2 (
+	std::unique_ptr<SegmentIntersector> si2 (
 		(*arg)[1]->computeSelfNodes(&li,false)
 	);
 
@@ -113,7 +113,7 @@ RelateComputer::computeIM()
 #endif
 
 	// compute intersections between edges of the two input geometries
-	std::auto_ptr< SegmentIntersector> intersector (
+	std::unique_ptr< SegmentIntersector> intersector (
     (*arg)[0]->computeEdgeIntersections((*arg)[1], &li,false)
   );
 
@@ -189,11 +189,11 @@ RelateComputer::computeIM()
 	 */
 	// build EdgeEnds for all intersections
 	EdgeEndBuilder eeBuilder;
-	std::auto_ptr< std::vector<EdgeEnd*> > ee0 (
+	std::unique_ptr< std::vector<EdgeEnd*> > ee0 (
 		eeBuilder.computeEdgeEnds((*arg)[0]->getEdges())
   );
 	insertEdgeEnds(ee0.get());
-	std::auto_ptr< std::vector<EdgeEnd*> > ee1 (
+	std::unique_ptr< std::vector<EdgeEnd*> > ee1 (
 		eeBuilder.computeEdgeEnds((*arg)[1]->getEdges())
   );
 

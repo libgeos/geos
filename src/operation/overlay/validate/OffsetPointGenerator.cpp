@@ -27,7 +27,7 @@
 #include <cassert>
 #include <functional>
 #include <vector>
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 #include <cmath>
 #include <algorithm> // std::for_each
 
@@ -54,7 +54,7 @@ OffsetPointGenerator::OffsetPointGenerator(const geom::Geometry& geom,
 }
 
 /*public*/
-std::auto_ptr< std::vector<geom::Coordinate> >
+std::unique_ptr< std::vector<geom::Coordinate> >
 OffsetPointGenerator::getPoints()
 {
 	assert (offsetPts.get() == NULL);
@@ -65,7 +65,8 @@ OffsetPointGenerator::getPoints()
 	for_each(lines.begin(), lines.end(),
 		bind1st(mem_fun(&OffsetPointGenerator::extractPoints), this));
 
-	return offsetPts;
+	// NOTE: Apparently, this is 'source' method giving up the object resource.
+	return std::move(offsetPts);
 }
 
 /*private*/

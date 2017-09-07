@@ -23,10 +23,10 @@
 
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h> // destructor visibility for vector
-#include <geos/geom/Geometry.h> // destructor visibility for auto_ptr
-#include <geos/geom/CoordinateSequence.h> // destructor visibility for auto_ptr
+#include <geos/geom/Geometry.h> // destructor visibility for unique_ptr
+#include <geos/geom/CoordinateSequence.h> // destructor visibility for unique_ptr
 
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 #include <vector>
 
 // Forward declarations
@@ -97,7 +97,7 @@ public:
 
 	virtual ~GeometryTransformer();
 
-	std::auto_ptr<Geometry> transform(const Geometry* nInputGeom);
+	std::unique_ptr<Geometry> transform(const Geometry* nInputGeom);
 
 	void setSkipTransformedInvalidInteriorRings(bool b);
 
@@ -114,42 +114,42 @@ protected:
 	 *
 	 * [final]
 	 */
-	CoordinateSequence::AutoPtr createCoordinateSequence(
-			std::auto_ptr< std::vector<Coordinate> > coords);
+	CoordinateSequence::Ptr createCoordinateSequence(
+			std::unique_ptr< std::vector<Coordinate> > coords);
 
-	virtual CoordinateSequence::AutoPtr transformCoordinates(
+	virtual CoordinateSequence::Ptr transformCoordinates(
 			const CoordinateSequence* coords,
 			const Geometry* parent);
 
-	virtual Geometry::AutoPtr transformPoint(
+	virtual Geometry::Ptr transformPoint(
 			const Point* geom,
 			const Geometry* parent);
 
-	virtual Geometry::AutoPtr transformMultiPoint(
+	virtual Geometry::Ptr transformMultiPoint(
 			const MultiPoint* geom,
 			const Geometry* parent);
 
-	virtual Geometry::AutoPtr transformLinearRing(
+	virtual Geometry::Ptr transformLinearRing(
 			const LinearRing* geom,
 			const Geometry* parent);
 
-	virtual Geometry::AutoPtr transformLineString(
+	virtual Geometry::Ptr transformLineString(
 			const LineString* geom,
 			const Geometry* parent);
 
-	virtual Geometry::AutoPtr transformMultiLineString(
+	virtual Geometry::Ptr transformMultiLineString(
 			const MultiLineString* geom,
 			const Geometry* parent);
 
-	virtual Geometry::AutoPtr transformPolygon(
+	virtual Geometry::Ptr transformPolygon(
 			const Polygon* geom,
 			const Geometry* parent);
 
-	virtual Geometry::AutoPtr transformMultiPolygon(
+	virtual Geometry::Ptr transformMultiPolygon(
 			const MultiPolygon* geom,
 			const Geometry* parent);
 
-	virtual Geometry::AutoPtr transformGeometryCollection(
+	virtual Geometry::Ptr transformGeometryCollection(
 			const GeometryCollection* geom,
 			const Geometry* parent);
 

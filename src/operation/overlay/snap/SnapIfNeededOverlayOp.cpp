@@ -19,12 +19,12 @@
 #include <geos/operation/overlay/snap/SnapIfNeededOverlayOp.h>
 #include <geos/operation/overlay/snap/SnapOverlayOp.h>
 #include <geos/operation/overlay/OverlayOp.h>
-#include <geos/geom/Geometry.h> // for use in auto_ptr
+#include <geos/geom/Geometry.h> // for use in unique_ptr
 #include <geos/util.h>
 
 #include <cassert>
 #include <limits> // for numeric_limits
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -39,12 +39,12 @@ namespace overlay { // geos.operation.overlay
 namespace snap { // geos.operation.overlay.snap
 
 /* public */
-auto_ptr<Geometry>
+unique_ptr<Geometry>
 SnapIfNeededOverlayOp::getResultGeometry(OverlayOp::OpCode opCode)
 {
 	using geos::util::TopologyException;
 
-	auto_ptr<Geometry> result;
+	unique_ptr<Geometry> result;
 
 	TopologyException origEx;
 

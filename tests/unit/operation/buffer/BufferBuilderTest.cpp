@@ -33,8 +33,8 @@ namespace tut
         geos::io::WKTReader wktreader;
         int const default_quadrant_segments;
 
-        typedef geos::geom::Geometry::AutoPtr GeomPtr;
-        typedef std::auto_ptr<geos::geom::CoordinateSequence> CSPtr;
+        typedef geos::geom::Geometry::Ptr GeomPtr;
+        typedef std::unique_ptr<geos::geom::CoordinateSequence> CSPtr;
 
         test_bufferbuilder_data()
             : gf(*geos::geom::GeometryFactory::getDefaultInstance())

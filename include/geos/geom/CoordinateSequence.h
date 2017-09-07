@@ -23,7 +23,7 @@
 
 #include <vector>
 #include <iosfwd> // ostream
-#include <memory> // for auto_ptr typedef
+#include <memory> // for unique_ptr typedef
 
 // Forward declarations
 namespace geos {
@@ -66,7 +66,7 @@ protected:
 
 public:
 
-	typedef std::auto_ptr<CoordinateSequence> AutoPtr;
+	typedef std::unique_ptr<CoordinateSequence> Ptr;
 
 	virtual ~CoordinateSequence() {}
 

@@ -29,11 +29,11 @@ namespace tut
 	{
 		geos::geom::PrecisionModel pm;
 		typedef geos::geom::GeometryFactory GeometryFactory;
-		GeometryFactory::unique_ptr gf;
+		GeometryFactory::Ptr gf;
 		geos::io::WKTReader wktreader;
 		geos::io::WKTWriter wktwriter;
 
-		typedef geos::geom::Geometry::AutoPtr GeomPtr;
+		typedef geos::geom::Geometry::Ptr GeomPtr;
 
 		test_tpsimp_data()
             : pm(1.0)

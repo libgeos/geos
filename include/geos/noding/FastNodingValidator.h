@@ -98,7 +98,7 @@ private:
 
 	std::vector<noding::SegmentString*>& segStrings;
 
-	std::auto_ptr<SingleInteriorIntersectionFinder> segInt;
+	std::unique_ptr<SingleInteriorIntersectionFinder> segInt;
 
 	bool isValidVar;
 

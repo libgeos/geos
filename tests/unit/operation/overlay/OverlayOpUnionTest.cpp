@@ -24,9 +24,9 @@ namespace tut
 
     struct test_overlayopunion_data
     {
-        typedef geos::geom::Geometry::AutoPtr GeometryPtr;
+        typedef geos::geom::Geometry::Ptr GeometryPtr;
         typedef geos::geom::GeometryFactory GeometryFactory;
-        typedef geos::geom::GeometryFactory::unique_ptr GeometryFactoryPtr;
+        typedef geos::geom::GeometryFactory::Ptr GeometryFactoryPtr;
     };
 
     typedef test_group<test_overlayopunion_data> group;

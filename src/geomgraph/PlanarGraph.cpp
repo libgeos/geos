@@ -212,8 +212,8 @@ PlanarGraph::addEdges(const vector<Edge*>& edgesToAdd)
 		// PlanarGraph destructor will delete all DirectedEdges
 		// in edgeEndList, which is where these are added
 		// by the ::add(EdgeEnd) call
-		std::auto_ptr<DirectedEdge> de1(new DirectedEdge(e, true));
-		std::auto_ptr<DirectedEdge> de2(new DirectedEdge(e, false));
+		std::unique_ptr<DirectedEdge> de1(new DirectedEdge(e, true));
+		std::unique_ptr<DirectedEdge> de2(new DirectedEdge(e, false));
 		de1->setSym(de2.get());
 		de2->setSym(de1.get());
 

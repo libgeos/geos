@@ -100,7 +100,7 @@ private:
 	double edgeCoincidenceTolerance;
 	Vertex frameVertex[3];
 	geom::Envelope frameEnv;
-	std::auto_ptr<QuadEdgeLocator> locator;
+	std::unique_ptr<QuadEdgeLocator> locator;
 
 public:
 	/**
@@ -159,8 +159,8 @@ public:
 	 * @param locator
 	 *          a QuadEdgeLocator
 	 */
-	inline void setLocator(std::auto_ptr<QuadEdgeLocator> locator) {
-		this->locator = locator;
+	inline void setLocator(std::unique_ptr<QuadEdgeLocator> locator) {
+		this->locator = std::move(locator);
 	}
 
 	/**
@@ -331,7 +331,7 @@ public:
 	 * @return a List of QuadEdges. The caller takes ownership of the returned QuadEdgeList but not the
 	 * items it contains.
 	 */
-	std::auto_ptr<QuadEdgeList> getPrimaryEdges(bool includeFrame);
+	std::unique_ptr<QuadEdgeList> getPrimaryEdges(bool includeFrame);
 
 	/*****************************************************************************
 	 * Visitors
@@ -386,7 +386,7 @@ public:
 	 * @param geomFact the GeometryFactory to use
 	 * @return a MultiLineString. The caller takes ownership of the returned object.
 	 */
-	std::auto_ptr<geom::MultiLineString> getEdges(const geom::GeometryFactory& geomFact);
+	std::unique_ptr<geom::MultiLineString> getEdges(const geom::GeometryFactory& geomFact);
 
 	/**
 	 * Gets the geometry for the triangles in a triangulated subdivision as a {@link GeometryCollection}
@@ -395,7 +395,7 @@ public:
 	 * @param geomFact the GeometryFactory to use
 	 * @return a GeometryCollection of triangular Polygons. The caller takes ownership of the returned object.
 	 */
-	std::auto_ptr<geom::GeometryCollection> getTriangles(const geom::GeometryFactory &geomFact);
+	std::unique_ptr<geom::GeometryCollection> getTriangles(const geom::GeometryFactory &geomFact);
 
 	/**
 	 * Gets the cells in the Voronoi diagram for this triangulation.
@@ -407,7 +407,7 @@ public:
 	 * @param geomFact a geometry factory
 	 * @return a GeometryCollection of Polygons
 	 */
-	std::auto_ptr<geom::GeometryCollection> getVoronoiDiagram(const geom::GeometryFactory& geomFact);
+	std::unique_ptr<geom::GeometryCollection> getVoronoiDiagram(const geom::GeometryFactory& geomFact);
 
 	/**
 	 * Gets the cells in the Voronoi diagram for this triangulation.
@@ -419,7 +419,7 @@ public:
 	 * @param geomFact a geometry factory
 	 * @return a MultiLineString
 	 */
-	std::auto_ptr<geom::MultiLineString> getVoronoiDiagramEdges(const geom::GeometryFactory& geomFact);
+	std::unique_ptr<geom::MultiLineString> getVoronoiDiagramEdges(const geom::GeometryFactory& geomFact);
 
 	/**
 	 * Gets a List of {@link Polygon}s for the Voronoi cells
@@ -431,7 +431,7 @@ public:
 	 * @param geomFact a geometry factory
 	 * @return a List of Polygons
 	 */
-	std::auto_ptr< std::vector<geom::Geometry*> > getVoronoiCellPolygons(const geom::GeometryFactory& geomFact);
+	std::unique_ptr< std::vector<geom::Geometry*> > getVoronoiCellPolygons(const geom::GeometryFactory& geomFact);
 
 	/**
 	 * Gets a List of {@link LineString}s for the Voronoi cells
@@ -443,7 +443,7 @@ public:
 	 * @param geomFact a geometry factory
 	 * @return a List of LineString
 	 */
-	std::auto_ptr< std::vector<geom::Geometry*> > getVoronoiCellEdges(const geom::GeometryFactory& geomFact);
+	std::unique_ptr< std::vector<geom::Geometry*> > getVoronoiCellEdges(const geom::GeometryFactory& geomFact);
 
 	/**
 	 * Gets a collection of {@link QuadEdge}s whose origin
@@ -461,7 +461,7 @@ public:
 	 * @param includeFrame true if the frame vertices should be included
 	 * @return a collection of QuadEdge with the vertices of the subdivision as their origins
 	 */
-	std::auto_ptr<QuadEdgeSubdivision::QuadEdgeList> getVertexUniqueEdges(bool includeFrame);
+	std::unique_ptr<QuadEdgeSubdivision::QuadEdgeList> getVertexUniqueEdges(bool includeFrame);
 
 	/**
 	 * Gets the Voronoi cell around a site specified
@@ -474,7 +474,7 @@ public:
 	 * @param geomFact a factory for building the polygon
 	 * @return a polygon indicating the cell extent
 	 */
-	std::auto_ptr<geom::Geometry> getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFactory& geomFact);
+	std::unique_ptr<geom::Geometry> getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFactory& geomFact);
 
 	/**
 	 * Gets the Voronoi cell edge around a site specified
@@ -487,7 +487,7 @@ public:
 	 * @param geomFact a factory for building the polygon
 	 * @return a polygon indicating the cell extent
 	 */
-	std::auto_ptr<geom::Geometry> getVoronoiCellEdge(QuadEdge* qe ,const geom::GeometryFactory& geomFact);
+	std::unique_ptr<geom::Geometry> getVoronoiCellEdge(QuadEdge* qe ,const geom::GeometryFactory& geomFact);
 
 };
 

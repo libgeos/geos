@@ -32,11 +32,11 @@ namespace tut
 
     struct test_isvalidop_data
     {
-	typedef std::auto_ptr<Geometry> GeomPtr;
+	typedef std::unique_ptr<Geometry> GeomPtr;
         typedef geos::geom::GeometryFactory GeometryFactory;
 
         geos::geom::PrecisionModel pm_;
-        GeometryFactory::unique_ptr factory_;
+        GeometryFactory::Ptr factory_;
 
         test_isvalidop_data()
 			: pm_(1), factory_(GeometryFactory::create(&pm_, 0))

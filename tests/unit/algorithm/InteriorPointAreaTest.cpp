@@ -39,7 +39,7 @@ namespace tut
       typedef geos::algorithm::InteriorPointArea InteriorPointArea;
 
       geos::io::WKTReader reader;
-      std::auto_ptr<Geometry> geom;
+      std::unique_ptr<Geometry> geom;
 
       test_interiorpointarea_data()
       {}

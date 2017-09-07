@@ -30,7 +30,7 @@ namespace tut
 		geos::io::WKTReader wktreader;
 		geos::algorithm::PointLocator locator;
 
-		typedef geos::geom::Geometry::AutoPtr GeomPtr;
+		typedef geos::geom::Geometry::Ptr GeomPtr;
 
 		GeomPtr g0, g1, gres;
 

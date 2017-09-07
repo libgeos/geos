@@ -25,7 +25,7 @@
 #include <geos/geom/Envelope.h>
 
 #include <vector>
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 #include <cassert>
 
 #ifndef GEOS_DEBUG
@@ -54,7 +54,7 @@ private:
 
 	const LineSegment* querySeg;
 
-	auto_ptr< vector<LineSegment*> > items;
+	unique_ptr< vector<LineSegment*> > items;
 
 public:
 
@@ -96,9 +96,10 @@ public:
 		}
 	}
 
-	auto_ptr< vector<LineSegment*> > getItems()
+	unique_ptr< vector<LineSegment*> > getItems()
 	{
-		return items;
+		// NOTE: Apparently, this is 'source' method giving up the object resource.
+		return std::move(items);
 	}
 
 
@@ -156,7 +157,7 @@ LineSegmentIndex::remove(const LineSegment* seg)
 }
 
 /*public*/
-auto_ptr< vector<LineSegment*> >
+unique_ptr< vector<LineSegment*> >
 LineSegmentIndex::query(const LineSegment* querySeg) const
 {
 	Envelope env(querySeg->p0, querySeg->p1);
@@ -164,7 +165,7 @@ LineSegmentIndex::query(const LineSegment* querySeg) const
 	LineSegmentVisitor visitor(querySeg);
 	index->query(&env, visitor);
 
-	auto_ptr< vector<LineSegment*> > itemsFound = visitor.getItems();
+	unique_ptr< vector<LineSegment*> > itemsFound = visitor.getItems();
 
 	return itemsFound;
 }

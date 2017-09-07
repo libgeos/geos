@@ -242,10 +242,10 @@ Polygon::getBoundary() const
 	return ret;
 }
 
-Envelope::AutoPtr
+Envelope::Ptr
 Polygon::computeEnvelopeInternal() const
 {
-	return Envelope::AutoPtr(new Envelope(*(shell->getEnvelopeInternal())));
+	return Envelope::Ptr(new Envelope(*(shell->getEnvelopeInternal())));
 }
 
 bool

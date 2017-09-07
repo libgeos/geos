@@ -171,7 +171,7 @@ IsSimpleOp::isSimpleLinearGeometry(const Geometry *geom)
 	if (geom->isEmpty()) return true;
 	GeometryGraph graph(0,geom);
 	LineIntersector li;
-	std::auto_ptr<SegmentIntersector> si (graph.computeSelfNodes(&li,true));
+	std::unique_ptr<SegmentIntersector> si (graph.computeSelfNodes(&li,true));
 
 	// if no self-intersection, must be simple
 	if (!si->hasIntersection()) return true;

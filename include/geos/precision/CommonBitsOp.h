@@ -16,7 +16,7 @@
 #define GEOS_PRECISION_COMMONBITSOP_H
 
 #include <geos/export.h>
-#include <geos/precision/CommonBitsRemover.h> // for auto_ptr composition
+#include <geos/precision/CommonBitsRemover.h> // for unique_ptr composition
 
 #include <vector>
 #include <memory>
@@ -53,7 +53,7 @@ private:
 
 	bool returnToOriginalPrecision;
 
-	std::auto_ptr<CommonBitsRemover> cbr;
+	std::unique_ptr<CommonBitsRemover> cbr;
 
 	/** \brief
 	 * Computes a copy of the input Geometry with the calculated
@@ -71,8 +71,8 @@ private:
 	void removeCommonBits(
 			const geom::Geometry* geom0,
 			const geom::Geometry* geom1,
-			std::auto_ptr<geom::Geometry>& rgeom0,
-			std::auto_ptr<geom::Geometry>& rgeom1);
+			std::unique_ptr<geom::Geometry>& rgeom0,
+			std::unique_ptr<geom::Geometry>& rgeom1);
 
 
 public:

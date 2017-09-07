@@ -19,7 +19,7 @@
  *
  * This file provides a single templated function, taking two
  * const Geometry pointers, applying a binary operator to them
- * and returning a result Geometry in an auto_ptr<>.
+ * and returning a result Geometry in an unique_ptr<>.
  *
  * The binary operator is expected to take two const Geometry pointers
  * and return a newly allocated Geometry pointer, possibly throwing
@@ -69,7 +69,7 @@
 #include <geos/util/TopologyException.h>
 #include <geos/util.h>
 
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 
 //#define GEOS_DEBUG_BINARYOP 1
 #define GEOS_DEBUG_BINARYOP_PRINT_INVALID 1
@@ -219,8 +219,8 @@ check_valid(const Geometry& g, const std::string& label, bool doThrow=false, boo
  *
  * May return the input untouched.
  */
-inline std::auto_ptr<Geometry>
-fix_self_intersections(std::auto_ptr<Geometry> g, const std::string& label)
+inline std::unique_ptr<Geometry>
+fix_self_intersections(std::unique_ptr<Geometry> g, const std::string& label)
 {
   ::geos::ignore_unused_variable_warning(label);
 #ifdef GEOS_DEBUG_BINARYOP
@@ -269,10 +269,10 @@ fix_self_intersections(std::auto_ptr<Geometry> g, const std::string& label)
 /// removal.
 ///
 template <class BinOp>
-std::auto_ptr<Geometry>
+std::unique_ptr<Geometry>
 SnapOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 {
-	typedef std::auto_ptr<Geometry> GeomPtr;
+	typedef std::unique_ptr<Geometry> GeomPtr;
 
 	//using geos::precision::GeometrySnapper;
 	using geos::operation::overlay::snap::GeometrySnapper;
@@ -339,10 +339,10 @@ SnapOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 }
 
 template <class BinOp>
-std::auto_ptr<Geometry>
+std::unique_ptr<Geometry>
 BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 {
-	typedef std::auto_ptr<Geometry> GeomPtr;
+	typedef std::unique_ptr<Geometry> GeomPtr;
 
 	GeomPtr ret;
 	geos::util::TopologyException origException;
@@ -497,7 +497,7 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 		for (double scale=maxScale; scale >= 1; scale /= 10)
 		{
 			PrecisionModel pm(scale);
-			GeometryFactory::unique_ptr gf = GeometryFactory::create(&pm);
+			GeometryFactory::Ptr gf = GeometryFactory::create(&pm);
 #if GEOS_DEBUG_BINARYOP
 			std::cerr << "Trying with scale " << scale << std::endl;
 #endif

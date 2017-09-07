@@ -30,7 +30,7 @@
 
 #include <vector>
 #include <typeinfo>
-#include <memory> // for auto_ptr
+#include <memory> // for unique_ptr
 
 using namespace std;
 using namespace geos::geom;
@@ -167,13 +167,13 @@ InteriorPointArea::addPolygon(const Geometry *geometry)
   Coordinate intPt;
   double width;
 
-  auto_ptr<LineString> bisector ( horizontalBisector(geometry) );
+  unique_ptr<LineString> bisector ( horizontalBisector(geometry) );
   if ( bisector->getLength() == 0.0 ) {
     width = 0;
     intPt = bisector->getCoordinateN(0);
   }
   else {
-    auto_ptr<Geometry> intersections ( bisector->intersection(geometry) );
+    unique_ptr<Geometry> intersections ( bisector->intersection(geometry) );
     const Geometry *widestIntersection = widestGeometry(intersections.get());
     const Envelope *env = widestIntersection->getEnvelopeInternal();
     width=env->getWidth();

@@ -108,7 +108,7 @@ Geometry::GeometryChangedFilter Geometry::geometryChangedFilter;
 
 Geometry::Geometry(const GeometryFactory *newFactory)
 	:
-	envelope(NULL),
+	envelope(nullptr),
 	_factory(newFactory),
 	_userData(NULL)
 {
@@ -288,7 +288,7 @@ Geometry::disjoint(const Geometry *g) const
 	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
 		return true;
 #endif
-	auto_ptr<IntersectionMatrix> im ( relate(g) );
+	unique_ptr<IntersectionMatrix> im ( relate(g) );
 	bool res=im->isDisjoint();
 	return res;
 }
@@ -301,7 +301,7 @@ Geometry::touches(const Geometry *g) const
 	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
 		return false;
 #endif
-	auto_ptr<IntersectionMatrix> im ( relate(g) );
+	unique_ptr<IntersectionMatrix> im ( relate(g) );
 	bool res=im->isTouches(getDimension(), g->getDimension());
 	return res;
 }
@@ -341,7 +341,7 @@ Geometry::intersects(const Geometry *g) const
 		return predicate::RectangleIntersects::intersects(*p, *this);
 	}
 
-	auto_ptr<IntersectionMatrix> im ( relate(g) );
+	unique_ptr<IntersectionMatrix> im ( relate(g) );
 	bool res=im->isIntersects();
 	return res;
 }
@@ -363,7 +363,7 @@ Geometry::covers(const Geometry* g) const
 		return true;
 	}
 
-	auto_ptr<IntersectionMatrix> im(relate(g));
+	unique_ptr<IntersectionMatrix> im(relate(g));
 	return im->isCovers();
 }
 
@@ -376,7 +376,7 @@ Geometry::crosses(const Geometry *g) const
 	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
 		return false;
 #endif
-	auto_ptr<IntersectionMatrix> im ( relate(g) );
+	unique_ptr<IntersectionMatrix> im ( relate(g) );
 	bool res=im->isCrosses(getDimension(), g->getDimension());
 	return res;
 }
@@ -406,7 +406,7 @@ Geometry::contains(const Geometry *g) const
 	//	return predicate::RectangleContains::contains((const Polygon&)*g, *this);
 	//}
 
-	auto_ptr<IntersectionMatrix> im ( relate(g) );
+	unique_ptr<IntersectionMatrix> im ( relate(g) );
 	bool res=im->isContains();
 	return res;
 }
@@ -419,7 +419,7 @@ Geometry::overlaps(const Geometry *g) const
 	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
 		return false;
 #endif
-	auto_ptr<IntersectionMatrix> im ( relate(g) );
+	unique_ptr<IntersectionMatrix> im ( relate(g) );
 	bool res=im->isOverlaps(getDimension(), g->getDimension());
 	return res;
 }
@@ -427,7 +427,7 @@ Geometry::overlaps(const Geometry *g) const
 bool
 Geometry::relate(const Geometry *g, const string &intersectionPattern) const
 {
-	auto_ptr<IntersectionMatrix> im ( relate(g) );
+	unique_ptr<IntersectionMatrix> im ( relate(g) );
 	bool res=im->matches(intersectionPattern);
 	return res;
 }
@@ -444,7 +444,7 @@ Geometry::equals(const Geometry *g) const
 	if (isEmpty()) return g->isEmpty();
 	else if (g->isEmpty()) return isEmpty();
 
-	auto_ptr<IntersectionMatrix> im ( relate(g) );
+	unique_ptr<IntersectionMatrix> im ( relate(g) );
 	bool res=im->isEquals(getDimension(), g->getDimension());
 	return res;
 }
@@ -587,7 +587,7 @@ Geometry::Union(const Geometry *other) const
 }
 
 /* public */
-Geometry::AutoPtr
+Geometry::Ptr
 Geometry::Union() const
 {
   using geos::operation::geounion::UnaryUnionOp;

@@ -51,12 +51,12 @@ private:
 	geom::Geometry *gT;
 
 	bool usePrepared;
-	std::auto_ptr<geom::PrecisionModel> pm;
-	geom::GeometryFactory::unique_ptr factory;
-	std::auto_ptr<io::WKTReader> wktreader;
-	std::auto_ptr<io::WKTWriter> wktwriter;
-	std::auto_ptr<io::WKBReader> wkbreader;
-	std::auto_ptr<io::WKBWriter> wkbwriter;
+	std::unique_ptr<geom::PrecisionModel> pm;
+	geom::GeometryFactory::Ptr factory;
+	std::unique_ptr<io::WKTReader> wktreader;
+	std::unique_ptr<io::WKTWriter> wktwriter;
+	std::unique_ptr<io::WKBReader> wkbreader;
+	std::unique_ptr<io::WKBWriter> wkbwriter;
 	TiXmlDocument xml;
 
 	int verbose;

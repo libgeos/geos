@@ -104,7 +104,7 @@ void BoundablePair::expand(const Boundable* bndComposite, const Boundable* bndOt
 	std::vector<Boundable*> *children = ((AbstractNode*) bndComposite)->getChildBoundables();
 	for(std::vector<Boundable*>::iterator it = children->begin(); it != children->end(); ++it) {
 		Boundable* child = *it;
-		std::auto_ptr<BoundablePair> bp(new BoundablePair(child, bndOther, itemDistance));
+		std::unique_ptr<BoundablePair> bp(new BoundablePair(child, bndOther, itemDistance));
 		if (minDistance == std::numeric_limits<double>::infinity() || bp->getDistance() < minDistance) {
 			priQ.push(bp.release());
 		}
