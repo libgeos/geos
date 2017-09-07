@@ -68,7 +68,6 @@ OBJ = \
 	geom\GeometryCollection.$(EXT) \
 	geom\GeometryComponentFilter.$(EXT) \
 	geom\GeometryFactory.$(EXT) \
-	geom\GeometryList.$(EXT) \
 	geom\IntersectionMatrix.$(EXT) \
 	geom\LinearRing.$(EXT) \
 	geom\LineSegment.$(EXT) \

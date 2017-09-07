@@ -1,5 +1,5 @@
 #
-# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+# This file is part of project GEOS (http://trac.osgeo.org/geos/)
 #
 SUBDIRS=\
     util \
@@ -8,7 +8,7 @@ SUBDIRS=\
 noinst_LTLIBRARIES = \
     libgeom.la
 
-AM_CPPFLAGS = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include
 
 libgeom_la_SOURCES = \
     Coordinate.cpp \
@@ -19,7 +19,6 @@ libgeom_la_SOURCES = \
     Dimension.cpp \
     Envelope.cpp \
     Geometry.cpp \
-    GeometryList.cpp \
     GeometryCollection.cpp \
     GeometryComponentFilter.cpp \
     GeometryFactory.cpp \
