@@ -84,7 +84,7 @@ void wkt_print_geoms(vector<Geometry *> *geoms);
 // but that would be boring because you'd need to specify
 // a PrecisionModel and a SRID everytime: those infos are
 // cached inside a GeometryFactory object.
-GeometryFactory::unique_ptr global_factory;
+GeometryFactory::Ptr global_factory;
 
 //#define DEBUG_STREAM_STATE 1
 
