@@ -133,6 +133,16 @@ dnl --------------------------------------------------------------------
 dnl - Append default C++ and C flags
 dnl --------------------------------------------------------------------
 
+AX_CXX_COMPILE_STDCXX_11([noext],[mandatory])
+
+WARNFLAGS=""
+AC_LANG_PUSH([C++])
+dnl Available in GCC 5.1
+AX_CHECK_COMPILE_FLAG([-Wsuggest-override], [WARNFLAGS="$WARNFLAGS -Wsuggest-override"])
+dnl Available in clang 3.5
+AX_CHECK_COMPILE_FLAG([-Wmissing-override], [WARNFLAGS="$WARNFLAGS -Wmissing-override"])
+AC_LANG_POP([C++])
+
 dnl In order for AC_LIBTOOL_COMPILER_OPTION to use
 dnl the C compiler we need the hack below.
 dnl It is likely a bug in the libtool macro file to
@@ -144,11 +154,10 @@ AC_LIBTOOL_LANG_CXX_CONFIG
 # Set default AM_CXXFLAGS and AM_CFLAGS
 # -pedantic: ISO does not support long long
 # we add -Wno-long-long to avoid those messages
-WARNFLAGS=""
 AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -pedantic], [dummy_cv_pedantic], [-pedantic], [], [WARNFLAGS="$WARNFLAGS -pedantic"], [])
-AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -Wall], [dummy_cv_wall], [-Wall], [], [WARNFLAGS="$WARNFLAGS -Wall"], [])
 AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -ansi], [dummy_cv_ansi], [-ansi], [], [WARNFLAGS="$WARNFLAGS -ansi"], [])
-AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -Wno-long-long], [dummy_cv_no_long_long], [-Wno-long-long], [], [WARNFLAGS="$WARNFLAGS -Wno-long-long"], [])
+AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -Wall], [dummy_cv_wall], [-Wall], [], [WARNFLAGS="$WARNFLAGS -Wall"], [])
+AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -Wno-long-long], [dummy_cv_wno_long_long], [-Wno-long-long], [], [WARNFLAGS="$WARNFLAGS -Wno-long-long"], [])
 
 # To make numerical computation more stable, we use --ffloat-store
 NUMERICFLAGS=""
