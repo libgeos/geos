@@ -48,7 +48,7 @@ public:
   {
     double size = 100;
     Coordinate origin(0, 0);
-    unique_ptr<Geometry> sinePoly (
+    Geometry::Ptr sinePoly (
       createSineStar(origin, size, nPts)->getBoundary()
     );
 
@@ -60,7 +60,7 @@ public:
     using geos::precision::SimpleGeometryPrecisionReducer;
     PrecisionModel pm(size/10);
     SimpleGeometryPrecisionReducer reducer(&pm);
-    unique_ptr<Geometry> sinePolyCrinkly ( reducer.reduce(sinePoly.get()) );
+    Geometry::Ptr sinePolyCrinkly ( reducer.reduce(sinePoly.get()) );
     sinePoly.reset();
 
     Geometry& target = *sinePolyCrinkly;
@@ -78,7 +78,7 @@ private:
   static const int NUM_LINE_PTS = 1000;
 
   PrecisionModel pm;
-  GeometryFactory::unique_ptr fact;
+  GeometryFactory::Ptr fact;
 
   void testRectangles(const Geometry& target, int nRect, double rectSize)
   {
@@ -128,7 +128,7 @@ private:
     }
   }
 
-  unique_ptr<Polygon> createSineStar(const Coordinate& origin,
+  Polygon::Ptr createSineStar(const Coordinate& origin,
                                     double size, int nPts)
   {
       using geos::geom::util::SineStarFactory;
@@ -139,7 +139,7 @@ private:
       gsf.setNumPoints(nPts);
       gsf.setArmLengthRatio(2);
       gsf.setNumArms(20);
-      unique_ptr<Polygon> poly = gsf.createSineStar();
+      Polygon::Ptr poly = gsf.createSineStar();
       return poly;
   }
 

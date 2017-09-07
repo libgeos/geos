@@ -63,7 +63,7 @@ void run(const Geometry* base)
 		     << totalSW << endl; // totalSW.getTimeString() << endl;
 
 		dist += 1;
-		base = b2.get(); tmp = b2;
+		base = b2.get(); tmp = std::move(b2); // move as anti-optimisation?
 
 		if ( ! base->getNumPoints() ) break;
 	}
