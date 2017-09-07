@@ -30,18 +30,20 @@ if(GEOS_ENABLE_TESTS)
     BufferResultMatcher.cpp
     SingleSidedBufferResultMatcher.cpp)
 
-  add_executable(simplewkttester ${simplewkttester_SOURCES})
+  add_executable(test_simplewkttester ${simplewkttester_SOURCES})
+
   if(APPLE AND GEOS_ENABLE_MACOSX_FRAMEWORK)
-    target_link_libraries(simplewkttester GEOS)
+    target_link_libraries(test_simplewkttester GEOS)
  	else()
-    target_link_libraries(simplewkttester geos)
+    target_link_libraries(test_simplewkttester geos)
  	endif()
 
-  add_executable(xmltester ${xmltester_SOURCES})
+  add_executable(test_xmltester ${xmltester_SOURCES})
+
   if(APPLE AND GEOS_ENABLE_MACOSX_FRAMEWORK)
-    target_link_libraries(xmltester GEOS)
+    target_link_libraries(test_xmltester GEOS)
  	else()
-    target_link_libraries(xmltester geos)
+    target_link_libraries(test_xmltester geos)
   endif()
 
   set(XMLTESTS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tests)
@@ -105,7 +107,7 @@ if(GEOS_ENABLE_TESTS)
     ${XMLTESTS_DIR}/safe/16595.xml
     ${XMLTESTS_DIR}/safe/16596.xml)
 
-  add_test(xmltester ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/xmltester ${SAVE_XMLTESTS})
+  add_test(test_xmltester ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/test_xmltester ${SAVE_XMLTESTS})
 
   set(STATUS_RESULT "ON")
 endif()
