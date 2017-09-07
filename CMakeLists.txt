@@ -10,12 +10,27 @@
 # See the COPYING file for more information.
 #
 #################################################################################
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.1.3)
 
 if(NOT CMAKE_VERSION)
     set(CMAKE_VERSION
       "${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}")
 endif()
+
+#################################################################################
+# Set GEOS project
+#################################################################################
+project(GEOS LANGUAGES C CXX)
+
+# Add custom GEOS modules for CMake
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
+
+#################################################################################
+# Set C++ standard
+#################################################################################
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 #################################################################################
 # Setup GEOS version
@@ -46,14 +61,6 @@ if (NOT WIN32)
   set(CAPI_SOVERSION ${CAPI_VERSION_MAJOR})
   message(STATUS "Setting GEOS C API soversion ${CAPI_SOVERSION}")
 endif()
-
-#################################################################################
-# Set GEOS project
-#################################################################################
-project(GEOS LANGUAGES C CXX)
-
-# Add custom GEOS modules for CMake
-list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
 
 #################################################################################
 # Check custom global options
@@ -94,10 +101,6 @@ endif()
 #################################################################################
 # Setup C/C++ compiler options
 #################################################################################
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-#set(CMAKE_CXX_EXTENSIONS OFF)
-
 if(NOT MSVC_IDE)
   if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug CACHE STRING
