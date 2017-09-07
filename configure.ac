@@ -133,7 +133,7 @@ dnl --------------------------------------------------------------------
 dnl - Append default C++ and C flags
 dnl --------------------------------------------------------------------
 
-AX_CXX_COMPILE_STDCXX_11([noext],[mandatory])
+AX_CXX_COMPILE_STDCXX_11([ext],[mandatory])
 
 WARNFLAGS=""
 AC_LANG_PUSH([C++])
