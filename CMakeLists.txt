@@ -32,6 +32,8 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+message(STATUS "Setting C++ requirement to C++${CMAKE_CXX_STANDARD}")
+
 #################################################################################
 # Setup GEOS version
 #################################################################################
