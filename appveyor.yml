@@ -1,16 +1,10 @@
 ﻿version: 1.0.{build}
 
-os: Visual Studio 2015
+image: Visual Studio 2017
 
 platform: x64
 
 configuration: Release
-
-branches:
-  only:
-    - master
-    - svn-3.6
-    - svn-3.5
 
 shallow_clone: true
 clone_depth: 5
@@ -20,21 +14,42 @@ matrix:
 
 environment:
   matrix:
+    - PLATFORM: x64
+      BUILDER: CMake
+      GENERATOR: "Visual Studio 15 2017 Win64"
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
     - PLATFORM: x86
       BUILDER: CMake
-      GENERATOR: "Visual Studio 14 2015"
+      GENERATOR: "Visual Studio 15 2017"
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    - PLATFORM: x64
+      BUILDER: CMake
+      GENERATOR: "NMake Makefiles"
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    - PLATFORM: x86
+      BUILDER: CMake
+      GENERATOR: "NMake Makefiles"
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
     - PLATFORM: x64
       BUILDER: CMake
       GENERATOR: "Visual Studio 14 2015 Win64"
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
     - PLATFORM: x86
       BUILDER: CMake
-      GENERATOR: "NMake Makefiles"
+      GENERATOR: "Visual Studio 14 2015"
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
     - PLATFORM: x64
       BUILDER: CMake
       GENERATOR: "NMake Makefiles"
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+    - PLATFORM: x86
+      BUILDER: CMake
+      GENERATOR: "NMake Makefiles"
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
     - PLATFORM: x86
       BUILDER: NMake
       GENERATOR: "NMake Makefiles"
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
 
 init:
   - ps: 'Write-Host "Building GEOS branch: $env:APPVEYOR_REPO_BRANCH" -ForegroundColor Magenta'
