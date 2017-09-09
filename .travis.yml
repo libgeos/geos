@@ -6,33 +6,105 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 #
+dist: trusty
 sudo: false
 
 language: cpp
 
-compiler:
-    - g++
-    - clang
-
-env:
-    - GEOS_BUILD_TOOL=autotools CFLAGS=-m32 CXXFLAGS=-m32
-    - GEOS_BUILD_TOOL=autotools CFLAGS=-m64 CXXFLAGS=-m64
-    - GEOS_BUILD_TOOL=cmake CFLAGS=-m32 CXXFLAGS=-m32
-    - GEOS_BUILD_TOOL=cmake CFLAGS=-m64 CXXFLAGS=-m64
+ref:
+  sources: &sources
+    - ubuntu-toolchain-r-test
+    - george-edison55-precise-backports
 
 matrix:
   fast_finish: true
+  include:
+    - os: linux
+      addons:
+        apt:
+          sources: *sources
+          packages: ['g++-7','cmake']
+      env:
+        - E="TOOL=cmake && CXX=g++-7 && ARCH=-m64 && CC=gcc-7"
 
-addons:
-  apt:
-    sources:
-      - george-edison55-precise-backports
-    packages:
-      - cmake
-      - cmake-data
-      - g++-multilib
-      - gcc-multilib
-      - make
+    - os: linux
+      addons:
+        apt:
+          sources: *sources
+          packages: ['g++-7']
+      env:
+        - E="TOOL=autotools && CXX=g++-7 && ARCH=-m64 && CC=gcc-7"
+
+    - os: linux
+      addons:
+        apt:
+          sources: *sources
+          packages: ['g++-7-multilib','gcc-7-multilib','g++-multilib','gcc-multilib']
+      env:
+        - E="TOOL=autotools && CXX=g++-7 && ARCH=-m32 && CC=gcc-7"
+
+    - os: linux
+      addons:
+        apt:
+          sources: *sources
+          packages: ['g++-4.8','cmake']
+      env:
+        - E="TOOL=cmake && CXX=g++-4.8 && ARCH=-m64 && CC=gcc-4.8"
+
+    - os: linux
+      addons:
+        apt:
+          sources: *sources
+          packages: ['g++-4.8']
+      env:
+        - E="TOOL=autotools && CXX=g++-4.8 && ARCH=-m64 && CC=gcc-4.8"
+
+    - os: linux
+      addons:
+        apt:
+          sources: *sources
+          packages: ['g++-4.8-multilib','gcc-4.8-multilib','g++-multilib','gcc-multilib']
+      env:
+        - E="TOOL=autotools && CXX=g++-4.8 && ARCH=-m32 && CC=gcc-4.8"
+
+    - os: linux
+      addons:
+        apt:
+          sources: *sources
+          packages: ['clang-3.9','cmake']
+      env:
+        - E="TOOL=cmake && CXX=clang++-3.9 && ARCH=-m64 && CC=clang-3.9"
+
+    - os: linux
+      addons:
+        apt:
+          sources: *sources
+          packages: ['clang-3.9']
+      env:
+        - E="TOOL=autotools && CXX=clang++-3.9 && ARCH=-m64 && CC=clang-3.9"
+
+    - os: linux
+      addons:
+        apt:
+          sources: *sources
+          packages: ['clang']
+      env:
+        - E="TOOL=autotools && CXX=clang++ && ARCH=-m64 && CC=clang"
+
+    - os: linux
+      addons:
+        apt:
+          sources: *sources
+          packages: ['clang','cmake']
+      env:
+        - E="TOOL=cmake && CXX=clang++ && ARCH=-m64 && CC=clang"
+
+before_install:
+  - eval "${E}"
+  - export CXXFLAGS=${ARCH}
+  - export CFLAGS=${ARCH}
+  - export GEOS_BUILD_TOOL=${TOOL}
+  - ${CXX} --version
 
 script: ./tools/ci/script.sh
 
