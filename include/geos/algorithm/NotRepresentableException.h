@@ -36,7 +36,7 @@ class GEOS_DLL NotRepresentableException: public util::GEOSException {
 public:
 	NotRepresentableException();
 	NotRepresentableException(std::string msg);
-	~NotRepresentableException() throw() {}
+	~NotRepresentableException() throw() override {}
 };
 
 } // namespace geos::algorithm

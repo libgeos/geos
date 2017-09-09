@@ -112,7 +112,7 @@ public:
 	         const geom::Geometry *g1,
 	         const algorithm::BoundaryNodeRule& boundaryNodeRule);
 
-	virtual ~RelateOp();
+	~RelateOp() override;
 
 	/** \brief
 	 * Gets the IntersectionMatrix for the spatial relationship

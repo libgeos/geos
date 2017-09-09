@@ -51,8 +51,8 @@ public:
 	/// Creates a new empty EdgeEndBundleStar
 	EdgeEndBundleStar() {}
 
-	virtual ~EdgeEndBundleStar();
-	void insert(geomgraph::EdgeEnd *e);
+	~EdgeEndBundleStar() override;
+	void insert(geomgraph::EdgeEnd *e) override;
 
 	/**
 	 * Update the IM with the contribution for the EdgeStubs around the node.

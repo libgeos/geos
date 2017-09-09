@@ -57,10 +57,10 @@ public:
 		_msg(name+": "+msg)
 	{}
 
-	virtual ~GEOSException() throw()
+	~GEOSException() throw() override
 	{}
 
-	const char* what() const throw()
+	const char* what() const throw() override
 	{
 		return _msg.c_str();
 	}

@@ -45,7 +45,7 @@ private:
 	int level;
 public:
 	AbstractNode(int newLevel, int capacity=10);
-	virtual	~AbstractNode();
+		~AbstractNode() override;
 
 	// TODO: change signature to return by ref,
 	// document ownership of the return
@@ -71,7 +71,7 @@ public:
 	 *
 	 * @see AbstractSTRtree::IntersectsOp
 	 */
-	const void* getBounds() const;
+	const void* getBounds() const override;
 
 	int getLevel();
 

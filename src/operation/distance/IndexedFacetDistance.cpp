@@ -27,7 +27,7 @@ namespace geos {
     namespace operation {
         namespace distance {
             struct Deleter : public index::ItemVisitor {
-                void visitItem(void * item) {
+                void visitItem(void * item) override {
                     delete static_cast<FacetSequence*>(item);
                 }
             } deleter;
@@ -39,7 +39,7 @@ namespace geos {
 
             double IndexedFacetDistance::getDistance(const Geometry * g) const {
                 struct : public ItemDistance {
-                    double distance(const ItemBoundable* item1, const ItemBoundable* item2) {
+                    double distance(const ItemBoundable* item1, const ItemBoundable* item2) override {
                         return static_cast<const FacetSequence*>(item1->getItem())->distance(*static_cast<const FacetSequence*>(item2->getItem()));
                     }
                 } itemDistance;

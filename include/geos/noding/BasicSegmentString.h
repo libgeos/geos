@@ -64,26 +64,26 @@ public:
 		pts(newPts)
 	{}
 
-	virtual ~BasicSegmentString()
+	~BasicSegmentString() override
 	{}
 
 	/// see dox in SegmentString.h
-	virtual unsigned int size() const
+	unsigned int size() const override
 	{
 		return pts->size();
 	}
 
 	/// see dox in SegmentString.h
-	virtual const geom::Coordinate& getCoordinate(unsigned int i) const;
+	const geom::Coordinate& getCoordinate(unsigned int i) const override;
 
 	/// see dox in SegmentString.h
-	virtual geom::CoordinateSequence* getCoordinates() const;
+	geom::CoordinateSequence* getCoordinates() const override;
 
 	/// see dox in SegmentString.h
-	virtual bool isClosed() const;
+	bool isClosed() const override;
 
 	/// see dox in SegmentString.h
-	virtual std::ostream& print(std::ostream& os) const;
+	std::ostream& print(std::ostream& os) const override;
 
 	/** \brief
 	 * Gets the octant of the segment starting at vertex index.

@@ -49,7 +49,7 @@ public:
 
 	RelateNode(const geom::Coordinate& coord, geomgraph::EdgeEndStar *edges);
 
-	virtual ~RelateNode();
+	~RelateNode() override;
 
 	/**
 	 * Update the IM with the contribution for the EdgeEnds incident on this node.
@@ -58,7 +58,7 @@ public:
 
 protected:
 
-	void computeIM(geom::IntersectionMatrix& im);
+	void computeIM(geom::IntersectionMatrix& im) override;
 };
 
 

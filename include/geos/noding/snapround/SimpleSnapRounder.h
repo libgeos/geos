@@ -76,9 +76,9 @@ public:
 
 	SimpleSnapRounder(const geom::PrecisionModel& newPm);
 
-	std::vector<SegmentString*>* getNodedSubstrings() const;
+	std::vector<SegmentString*>* getNodedSubstrings() const override;
 
-	void computeNodes(std::vector<SegmentString*>* inputSegmentStrings);
+	void computeNodes(std::vector<SegmentString*>* inputSegmentStrings) override;
 
 	void add(const SegmentString* segStr);
 

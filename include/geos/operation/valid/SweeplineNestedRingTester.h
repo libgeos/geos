@@ -102,7 +102,7 @@ public:
 		bool isNonNested;
 		OverlapAction(SweeplineNestedRingTester *p);
 		void overlap(index::sweepline::SweepLineInterval *s0,
-				index::sweepline::SweepLineInterval *s1);
+				index::sweepline::SweepLineInterval *s1) override;
 	private:
 		SweeplineNestedRingTester *parent;
 	};

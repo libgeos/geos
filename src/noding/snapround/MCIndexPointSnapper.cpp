@@ -53,7 +53,7 @@ public:
 
 	bool isNodeAdded() const { return isNodeAddedVar; }
 
-	void select(chain::MonotoneChain& mc, unsigned int startIndex)
+	void select(chain::MonotoneChain& mc, unsigned int startIndex) override
 	{
 		// This is casting away 'constness'!
 		NodedSegmentString& ss = *(static_cast<NodedSegmentString*>(mc.getContext()));
@@ -68,7 +68,7 @@ public:
 		isNodeAddedVar = hotPixel.addSnappedNode(ss, startIndex);
 	}
 
-	void select(const LineSegment& ls)
+	void select(const LineSegment& ls) override
 	{
 		::geos::ignore_unused_variable_warning(ls);
 	}
@@ -93,9 +93,9 @@ public:
 		action(nAction)
 	{}
 
-	virtual ~MCIndexPointSnapperVisitor() {}
+	~MCIndexPointSnapperVisitor() override {}
 
-	void visitItem(void* item) {
+	void visitItem(void* item) override {
 		chain::MonotoneChain& testChain =
 			*(static_cast<chain::MonotoneChain*>(item));
 		testChain.select(pixelEnv, action);

@@ -41,22 +41,22 @@ public:
 
 	CoordinateArraySequence(const CoordinateSequence &cl);
 
-	CoordinateSequence *clone() const;
+	CoordinateSequence *clone() const override;
 
 	//const Coordinate& getCoordinate(int pos) const;
-	const Coordinate& getAt(std::size_t pos) const;
+	const Coordinate& getAt(std::size_t pos) const override;
 
 	/// Copy Coordinate at position i to Coordinate c
-	virtual void getAt(std::size_t i, Coordinate& c) const;
+	void getAt(std::size_t i, Coordinate& c) const override;
 
 	//int size() const;
-	size_t getSize() const;
+	size_t getSize() const override;
 
 	// @deprecated
-	const std::vector<Coordinate>* toVector() const;
+	const std::vector<Coordinate>* toVector() const override;
 
 	// See dox in CoordinateSequence.h
-	void toVector(std::vector<Coordinate>&) const;
+	void toVector(std::vector<Coordinate>&) const override;
 
 	/// Construct an empty sequence
 	CoordinateArraySequence();
@@ -68,18 +68,18 @@ public:
 	/// Construct sequence allocating space for n coordinates
 	CoordinateArraySequence(std::size_t n, std::size_t dimension = 0);
 
-	~CoordinateArraySequence();
+	~CoordinateArraySequence() override;
 
-	bool isEmpty() const { return empty(); }
+	bool isEmpty() const override { return empty(); }
 
 	bool empty() const { return vect->empty(); }
 
 	/// Reset this CoordinateArraySequence to the empty state
 	void clear() { vect->clear(); }
 
-	void add(const Coordinate& c);
+	void add(const Coordinate& c) override;
 
-	virtual void add(const Coordinate& c, bool allowRepeated);
+	void add(const Coordinate& c, bool allowRepeated) override;
 
 	/** \brief
 	 * Inserts the specified coordinate at the specified position in
@@ -92,31 +92,31 @@ public:
 	 *
 	 * NOTE: this is a CoordinateList interface in JTS
 	 */
-	virtual void add(std::size_t i, const Coordinate& coord, bool allowRepeated);
+	void add(std::size_t i, const Coordinate& coord, bool allowRepeated) override;
 
-	void setAt(const Coordinate& c, std::size_t pos);
+	void setAt(const Coordinate& c, std::size_t pos) override;
 
-	void deleteAt(std::size_t pos);
+	void deleteAt(std::size_t pos) override;
 
-	std::string toString() const;
+	std::string toString() const override;
 
-	void setPoints(const std::vector<Coordinate> &v);
+	void setPoints(const std::vector<Coordinate> &v) override;
 
 	double getOrdinate(std::size_t index,
-			size_t ordinateIndex) const;
+			size_t ordinateIndex) const override;
 
 	void setOrdinate(std::size_t index, std::size_t ordinateIndex,
-			double value);
+			double value) override;
 
-	void expandEnvelope(Envelope &env) const;
+	void expandEnvelope(Envelope &env) const override;
 
-    std::size_t getDimension() const;
+    std::size_t getDimension() const override;
 
-	void apply_rw(const CoordinateFilter *filter);
+	void apply_rw(const CoordinateFilter *filter) override;
 
-	void apply_ro(CoordinateFilter *filter) const;
+	void apply_ro(CoordinateFilter *filter) const override;
 
-	virtual CoordinateSequence& removeRepeatedPoints();
+	CoordinateSequence& removeRepeatedPoints() override;
 
 private:
 	std::vector<Coordinate> *vect;

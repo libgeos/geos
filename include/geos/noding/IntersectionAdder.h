@@ -158,7 +158,7 @@ public:
 	 */
 	void processIntersections(
 		SegmentString* e0,  int segIndex0,
-		SegmentString* e1,  int segIndex1);
+		SegmentString* e1,  int segIndex1) override;
 
 
 	static bool isAdjacentSegments(int i1, int i2) {
@@ -170,7 +170,7 @@ public:
 	 *
 	 * @return false always
 	 */
-	virtual bool isDone() const {
+	bool isDone() const override {
 		return false;
 	}
 };

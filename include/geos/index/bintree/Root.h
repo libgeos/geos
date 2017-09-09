@@ -53,7 +53,7 @@ public:
 
 	Root() {}
 
-	~Root() {}
+	~Root() override {}
 
 	/// @param itemInterval
 	///     Ownership left to caller, references kept in this class.
@@ -65,7 +65,7 @@ public:
 
 protected:
 
-	bool isSearchMatch(Interval* /*interval*/) { return true; }
+	bool isSearchMatch(Interval* /*interval*/) override { return true; }
 };
 
 } // namespace geos::index::bintree

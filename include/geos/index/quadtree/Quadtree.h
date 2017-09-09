@@ -113,7 +113,7 @@ public:
 		minExtent(1.0)
 	{}
 
-	~Quadtree();
+	~Quadtree() override;
 
 	/// Returns the number of levels in the tree.
 	int depth();
@@ -121,7 +121,7 @@ public:
 	/// Returns the number of items in the tree.
 	int size();
 
-	void insert(const geom::Envelope *itemEnv, void *item);
+	void insert(const geom::Envelope *itemEnv, void *item) override;
 
 	/** \brief
 	 * Queries the tree and returns items which may lie
@@ -140,7 +140,7 @@ public:
 	 * @param ret a vector where items which may intersect the
 	 * 	      search envelope are pushed
 	 */
-	void query(const geom::Envelope *searchEnv, std::vector<void*>& ret);
+	void query(const geom::Envelope *searchEnv, std::vector<void*>& ret) override;
 
 
 	/** \brief
@@ -159,7 +159,7 @@ public:
 	 * @param searchEnv the envelope of the desired query area.
 	 * @param visitor a visitor object which is passed the visited items
 	 */
-	void query(const geom::Envelope *searchEnv, ItemVisitor& visitor)
+	void query(const geom::Envelope *searchEnv, ItemVisitor& visitor) override
 	{
 		/*
 		 * the items that are matched are the items in quads which
@@ -175,7 +175,7 @@ public:
 	 * @param item the item to remove
 	 * @return <code>true</code> if the item was found (and thus removed)
 	 */
-	bool remove(const geom::Envelope* itemEnv, void* item);
+	bool remove(const geom::Envelope* itemEnv, void* item) override;
 
 	/// Return a list of all items in the Quadtree
 	std::vector<void*>* queryAll();

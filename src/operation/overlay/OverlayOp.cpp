@@ -962,7 +962,7 @@ struct PointCoveredByAny: public geom::CoordinateFilter
 		: geoms(nGeoms)
 	{}
 
-	void filter_ro(const Coordinate* coord)
+	void filter_ro(const Coordinate* coord) override
 	{
 		for (size_t i=0, n=geoms.size(); i<n; ++i)
 		{

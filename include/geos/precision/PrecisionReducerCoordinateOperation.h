@@ -59,7 +59,7 @@ public:
   //
   /// virtual function
 	geom::CoordinateSequence* edit(const geom::CoordinateSequence *coordinates,
-	                         const geom::Geometry *geom);
+	                         const geom::Geometry *geom) override;
 };
 
 } // namespace geos.precision

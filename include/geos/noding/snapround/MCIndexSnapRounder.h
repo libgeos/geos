@@ -84,11 +84,11 @@ public:
     li.setPrecisionModel(&pm);
   }
 
-	std::vector<SegmentString*>* getNodedSubstrings() const {
+	std::vector<SegmentString*>* getNodedSubstrings() const override {
 	  return NodedSegmentString::getNodedSubstrings(*nodedSegStrings);
   }
 
-	void computeNodes(std::vector<SegmentString*>* segStrings);
+	void computeNodes(std::vector<SegmentString*>* segStrings) override;
 
 	/**
 	 * Computes nodes introduced as a result of

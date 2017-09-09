@@ -57,7 +57,7 @@ public:
 
 	MCIndexSegmentSetMutualIntersector();
 
-	~MCIndexSegmentSetMutualIntersector();
+	~MCIndexSegmentSetMutualIntersector() override;
 
 	/* Returns a reference to a vector of MonotoneChain objects owned
 	 * by this class and destroyed on next call to ::process.
@@ -73,10 +73,10 @@ public:
 		return index;
 	}
 
-	void setBaseSegments(SegmentString::ConstVect* segStrings);
+	void setBaseSegments(SegmentString::ConstVect* segStrings) override;
 
 	// NOTE: re-populates the MonotoneChain vector with newly created chains
-	void process(SegmentString::ConstVect* segStrings);
+	void process(SegmentString::ConstVect* segStrings) override;
 
     class SegmentOverlapAction : public index::chain::MonotoneChainOverlapAction
     {
@@ -93,7 +93,7 @@ public:
           {}
 
           void overlap(index::chain::MonotoneChain& mc1, std::size_t start1,
-              index::chain::MonotoneChain& mc2, std::size_t start2);
+              index::chain::MonotoneChain& mc2, std::size_t start2) override;
     };
 
 private:

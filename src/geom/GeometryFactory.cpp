@@ -68,7 +68,7 @@ public:
       : _gsf(gsf)
   {}
   CoordinateSequence* edit( const CoordinateSequence *coordSeq,
-                            const Geometry * )
+                            const Geometry * ) override
   {
     return _gsf->create(*coordSeq);
   }

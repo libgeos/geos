@@ -65,7 +65,7 @@ public:
 		items(new vector<LineSegment*>())
 	{}
 
-	virtual ~LineSegmentVisitor()
+	~LineSegmentVisitor() override
 	{
 		// nothing to do, LineSegments are not owned by us
 	}
@@ -86,7 +86,7 @@ public:
 		return *this;
 	}
 
-	void visitItem(void* item)
+	void visitItem(void* item) override
 	{
 		LineSegment* seg = (LineSegment*) item;
 		if ( Envelope::intersects(seg->p0, seg->p1,

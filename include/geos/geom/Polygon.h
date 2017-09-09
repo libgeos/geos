@@ -73,7 +73,7 @@ public:
 	/// A vector of const Polygon pointers
 	typedef std::vector<const Polygon *> ConstVect;
 
-	virtual ~Polygon();
+	~Polygon() override;
 
 	/**
 	 * Creates and returns a full copy of this {@link Polygon} object.
@@ -81,20 +81,20 @@ public:
 	 *
 	 * @return a clone of this instance
 	 */
-	virtual Geometry *clone() const { return new Polygon(*this); }
+	Geometry *clone() const override { return new Polygon(*this); }
 
-	CoordinateSequence* getCoordinates() const;
+	CoordinateSequence* getCoordinates() const override;
 
-	size_t getNumPoints() const;
+	size_t getNumPoints() const override;
 
 	/// Returns surface dimension (2)
-	Dimension::DimensionType getDimension() const;
+	Dimension::DimensionType getDimension() const override;
 
 	/// Returns coordinate dimension.
-	virtual int getCoordinateDimension() const;
+	int getCoordinateDimension() const override;
 
 	/// Returns 1 (Polygon boundary is a MultiLineString)
-	int getBoundaryDimension() const;
+	int getBoundaryDimension() const override;
 
 	/** \brief
 	 * Computes the boundary of this geometry
@@ -102,9 +102,9 @@ public:
 	 * @return a lineal geometry (which may be empty)
 	 * @see Geometry#getBoundary
 	 */
-	Geometry* getBoundary() const;
+	Geometry* getBoundary() const override;
 
-	bool isEmpty() const;
+	bool isEmpty() const override;
 
 	/** \brief
 	 * Tests if a valid polygon is simple.
@@ -112,7 +112,7 @@ public:
 	 *
 	 * @return <code>true</code>
 	 */
-	bool isSimple() const;
+	bool isSimple() const override;
 
 	/// Returns the exterior ring (shell)
 	const LineString* getExteriorRing() const;
@@ -123,34 +123,34 @@ public:
 	/// Get nth interior ring (hole)
 	const LineString* getInteriorRingN(std::size_t n) const;
 
-	std::string getGeometryType() const;
-	virtual GeometryTypeId getGeometryTypeId() const;
-	bool equalsExact(const Geometry *other, double tolerance=0) const;
-	void apply_rw(const CoordinateFilter *filter);
-	void apply_ro(CoordinateFilter *filter) const;
-	void apply_rw(GeometryFilter *filter);
-	void apply_ro(GeometryFilter *filter) const;
-	void apply_rw(CoordinateSequenceFilter& filter);
-	void apply_ro(CoordinateSequenceFilter& filter) const;
+	std::string getGeometryType() const override;
+	GeometryTypeId getGeometryTypeId() const override;
+	bool equalsExact(const Geometry *other, double tolerance=0) const override;
+	void apply_rw(const CoordinateFilter *filter) override;
+	void apply_ro(CoordinateFilter *filter) const override;
+	void apply_rw(GeometryFilter *filter) override;
+	void apply_ro(GeometryFilter *filter) const override;
+	void apply_rw(CoordinateSequenceFilter& filter) override;
+	void apply_ro(CoordinateSequenceFilter& filter) const override;
 
-	Geometry* convexHull() const;
+	Geometry* convexHull() const override;
 
-	void normalize();
+	void normalize() override;
 
-	int compareToSameClass(const Geometry *p) const; //was protected
+	int compareToSameClass(const Geometry *p) const override; //was protected
 
-	const Coordinate* getCoordinate() const;
+	const Coordinate* getCoordinate() const override;
 
-	double getArea() const;
+	double getArea() const override;
 
  	/// Returns the perimeter of this <code>Polygon</code>
-	double getLength() const;
+	double getLength() const override;
 
-	void apply_rw(GeometryComponentFilter *filter);
+	void apply_rw(GeometryComponentFilter *filter) override;
 
-	void apply_ro(GeometryComponentFilter *filter) const;
+	void apply_ro(GeometryComponentFilter *filter) const override;
 
-	bool isRectangle() const;
+	bool isRectangle() const override;
 
 protected:
 
@@ -182,7 +182,7 @@ protected:
 
 	std::vector<Geometry *> *holes; //Actually vector<LinearRing *>
 
-	Envelope::Ptr computeEnvelopeInternal() const;
+	Envelope::Ptr computeEnvelopeInternal() const override;
 
 private:
 

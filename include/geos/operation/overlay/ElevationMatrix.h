@@ -62,9 +62,9 @@ class GEOS_DLL ElevationMatrixFilter: public geom::CoordinateFilter
 {
 public:
 	ElevationMatrixFilter(ElevationMatrix &em);
-	~ElevationMatrixFilter();
-	void filter_rw(geom::Coordinate *c) const;
-	void filter_ro(const geom::Coordinate *c);
+	~ElevationMatrixFilter() override;
+	void filter_rw(geom::Coordinate *c) const override;
+	void filter_ro(const geom::Coordinate *c) override;
 private:
 	ElevationMatrix &em;
 	double avgElevation;

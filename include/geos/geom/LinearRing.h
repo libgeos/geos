@@ -85,9 +85,9 @@ public:
 	LinearRing(CoordinateSequence::Ptr points,
 			const GeometryFactory *newFactory);
 
-	virtual Geometry *clone() const { return new LinearRing(*this); }
+	Geometry *clone() const override { return new LinearRing(*this); }
 
-	virtual ~LinearRing();
+	~LinearRing() override;
 
 	/** \brief
 	 * Returns <code>Dimension.FALSE</code>, since by definition
@@ -95,7 +95,7 @@ public:
 	 *
 	 * @return Dimension::False
 	 */
-	int getBoundaryDimension() const;
+	int getBoundaryDimension() const override;
 
 	/** \brief
 	 * Returns <code>true</code>, since by definition LinearRings
@@ -105,13 +105,13 @@ public:
 	 *
 	 * @see Geometry::isSimple
 	 */
-	bool isSimple() const;
+	bool isSimple() const override;
 
-	bool isClosed() const;
+	bool isClosed() const override;
 
-	std::string getGeometryType() const;
+	std::string getGeometryType() const override;
 
-	virtual GeometryTypeId getGeometryTypeId() const;
+	GeometryTypeId getGeometryTypeId() const override;
 
 	void setPoints(CoordinateSequence* cl);
 

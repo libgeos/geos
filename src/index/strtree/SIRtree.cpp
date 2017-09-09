@@ -91,14 +91,14 @@ public:
 		AbstractNode(level, capacity)
 	{}
 
-	~SIRAbstractNode()
+	~SIRAbstractNode() override
 	{
 		delete (Interval *)bounds;
 	}
 
 protected:
 
-	void* computeBounds() const
+	void* computeBounds() const override
 	{
 		Interval* bounds=nullptr;
 		const BoundableList& b = *getChildBoundables();

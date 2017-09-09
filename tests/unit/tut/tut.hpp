@@ -107,7 +107,7 @@ public:
      */
     bool called_method_was_a_dummy_test_;
 
-    virtual ~test_object()
+    ~test_object() override
     {
     }
 
@@ -338,7 +338,7 @@ public:
     /**
      * Reset test position before first test.
      */
-    void rewind()
+    void rewind() override
     {
         current_test_ = tests_.begin();
     }
@@ -346,7 +346,7 @@ public:
     /**
      * Runs next test.
      */
-    bool run_next(test_result &tr)
+    bool run_next(test_result &tr) override
     {
         if (current_test_ == tests_.end())
         {
@@ -371,7 +371,7 @@ public:
     /**
      * Runs one test by position.
      */
-    bool run_test(int n, test_result &tr)
+    bool run_test(int n, test_result &tr) override
     {
         if (tests_.rbegin() == tests_.rend() ||
             tests_.rbegin()->first < n)

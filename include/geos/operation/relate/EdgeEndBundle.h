@@ -48,11 +48,11 @@ class GEOS_DLL EdgeEndBundle: public geomgraph::EdgeEnd
 {
 public:
 	EdgeEndBundle(geomgraph::EdgeEnd *e);
-	virtual ~EdgeEndBundle();
+	~EdgeEndBundle() override;
 	std::vector<geomgraph::EdgeEnd*>* getEdgeEnds();
 	void insert(geomgraph::EdgeEnd *e);
 
-	void computeLabel(const algorithm::BoundaryNodeRule& bnr);
+	void computeLabel(const algorithm::BoundaryNodeRule& bnr) override;
 
   /**
    * \brief

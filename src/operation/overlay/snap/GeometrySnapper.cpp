@@ -78,7 +78,7 @@ public:
 
 	CoordinateSequence::Ptr transformCoordinates(
 			const CoordinateSequence* coords,
-			const Geometry* parent)
+			const Geometry* parent) override
 	{
         ::geos::ignore_unused_variable_warning(parent);
 		return snapLine(coords);

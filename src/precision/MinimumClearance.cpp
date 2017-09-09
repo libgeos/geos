@@ -72,7 +72,7 @@ void MinimumClearance::compute() {
             return &minPts;
         }
 
-        double distance(const ItemBoundable* b1, const ItemBoundable* b2) {
+        double distance(const ItemBoundable* b1, const ItemBoundable* b2) override {
             FacetSequence* fs1 = static_cast<FacetSequence*>(b1->getItem());
             FacetSequence* fs2 = static_cast<FacetSequence*>(b2->getItem());
 
@@ -142,7 +142,7 @@ void MinimumClearance::compute() {
     };
 
     struct ItemDeleter : public index::ItemVisitor {
-        void visitItem(void * item) {
+        void visitItem(void * item) override {
             delete static_cast<FacetSequence*>(item);
         }
     };

@@ -69,7 +69,7 @@ public:
 		intSegments( nullptr)
 	{ }
 
-	~SegmentIntersectionDetector()
+	~SegmentIntersectionDetector() override
 	{
 		//delete intPt;
 		delete intSegments;
@@ -138,7 +138,7 @@ public:
 		return intSegments;
 	}
 
-	bool isDone() const
+	bool isDone() const override
 	{
 		// If finding all types, we can stop
 		// when both possible types have been found.
@@ -161,7 +161,7 @@ public:
 	 * (e.g. by an disjoint envelope test).
 	 */
 	void processIntersections(	noding::SegmentString * e0, int segIndex0,
-								noding::SegmentString * e1, int segIndex1 );
+								noding::SegmentString * e1, int segIndex1 ) override;
 
 };
 

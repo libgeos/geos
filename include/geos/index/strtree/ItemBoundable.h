@@ -34,9 +34,9 @@ class GEOS_DLL ItemBoundable: public Boundable
 public:
 
     ItemBoundable(const void* newBounds, void* newItem);
-	virtual ~ItemBoundable();
+	~ItemBoundable() override;
 
-    const void* getBounds() const;
+    const void* getBounds() const override;
 	void* getItem() const;
 
 private:

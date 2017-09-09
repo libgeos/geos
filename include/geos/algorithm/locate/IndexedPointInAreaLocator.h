@@ -84,10 +84,10 @@ private:
 		:	counter( counter)
 		{ }
 
-		~SegmentVisitor()
+		~SegmentVisitor() override
 		{ }
 
-		void visitItem( void * item);
+		void visitItem( void * item) override;
 	};
 
 
@@ -107,7 +107,7 @@ public:
 	 */
 	IndexedPointInAreaLocator( const geom::Geometry & g);
 
-	~IndexedPointInAreaLocator();
+	~IndexedPointInAreaLocator() override;
 
 	/**
 	 * Determines the {@link Location} of a point in an areal {@link Geometry}.
@@ -115,7 +115,7 @@ public:
 	 * @param p the point to test
 	 * @return the location of the point in the geometry
 	 */
-	int locate( const geom::Coordinate * /*const*/ p);
+	int locate( const geom::Coordinate * /*const*/ p) override;
 
 };
 

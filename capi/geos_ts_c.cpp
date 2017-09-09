@@ -274,7 +274,7 @@ class CAPI_ItemVisitor : public geos::index::ItemVisitor {
   public:
     CAPI_ItemVisitor (GEOSQueryCallback cb, void *ud)
         : ItemVisitor(), callback(cb), userdata(ud) {}
-    void visitItem (void *item) { callback(item, userdata); }
+    void visitItem (void *item) override { callback(item, userdata); }
 };
 
 
@@ -6199,7 +6199,7 @@ GEOSSTRtree_nearest_generic_r(GEOSContextHandle_t extHandle,
 				GEOSDistanceCallback m_distancefn;
 				void* m_userdata;
 
-				double distance(const ItemBoundable* item1, const ItemBoundable* item2) {
+				double distance(const ItemBoundable* item1, const ItemBoundable* item2) override {
 						const void* a = item1->getItem();
 						const void* b = item2->getItem();
 						double d;

@@ -65,7 +65,7 @@ public:
 
 	Root() {}
 
-	virtual ~Root() {}
+	~Root() override {}
 
 	/**
 	 * Insert an item into the quadtree this is the root of.
@@ -74,7 +74,7 @@ public:
 
 protected:
 
-	bool isSearchMatch(const geom::Envelope& /* searchEnv */) const {
+	bool isSearchMatch(const geom::Envelope& /* searchEnv */) const override {
 		return true;
 	}
 

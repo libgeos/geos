@@ -27,12 +27,12 @@ struct tut_error : public std::exception
         return "tut::tut_error";
     }
 
-    const char* what() const throw()
+    const char* what() const throw() override
     {
         return err_msg.c_str();
     }
 
-    ~tut_error() throw()
+    ~tut_error() throw() override
     {
     }
 
@@ -52,12 +52,12 @@ struct no_such_group : public tut_error
     {
     }
 
-    virtual std::string type() const
+    std::string type() const override
     {
         return "tut::no_such_group";
     }
 
-    ~no_such_group() throw()
+    ~no_such_group() throw() override
     {
     }
 };
@@ -72,12 +72,12 @@ struct no_such_test : public tut_error
     {
     }
 
-    virtual std::string type() const
+    std::string type() const override
     {
         return "tut::no_such_test";
     }
 
-    ~no_such_test() throw()
+    ~no_such_test() throw() override
     {
     }
 };
@@ -93,17 +93,17 @@ struct bad_ctor : public tut_error
     {
     }
 
-    test_result::result_type result() const
+    test_result::result_type result() const override
     {
         return test_result::ex_ctor;
     }
 
-    virtual std::string type() const
+    std::string type() const override
     {
         return "tut::bad_ctor";
     }
 
-    ~bad_ctor() throw()
+    ~bad_ctor() throw() override
     {
     }
 };
@@ -118,17 +118,17 @@ struct failure : public tut_error
     {
     }
 
-    test_result::result_type result() const
+    test_result::result_type result() const override
     {
         return test_result::fail;
     }
 
-    virtual std::string type() const
+    std::string type() const override
     {
         return "tut::failure";
     }
 
-    ~failure() throw()
+    ~failure() throw() override
     {
     }
 };
@@ -143,17 +143,17 @@ struct warning : public tut_error
     {
     }
 
-    test_result::result_type result() const
+    test_result::result_type result() const override
     {
         return test_result::warn;
     }
 
-    virtual std::string type() const
+    std::string type() const override
     {
         return "tut::warning";
     }
 
-    ~warning() throw()
+    ~warning() throw() override
     {
     }
 };
@@ -168,17 +168,17 @@ struct seh : public tut_error
     {
     }
 
-    virtual test_result::result_type result() const
+    test_result::result_type result() const override
     {
         return test_result::term;
     }
 
-    virtual std::string type() const
+    std::string type() const override
     {
         return "tut::seh";
     }
 
-    ~seh() throw()
+    ~seh() throw() override
     {
     }
 };
@@ -193,17 +193,17 @@ struct rethrown : public failure
     {
     }
 
-    virtual test_result::result_type result() const
+    test_result::result_type result() const override
     {
         return test_result::rethrown;
     }
 
-    virtual std::string type() const
+    std::string type() const override
     {
         return "tut::rethrown";
     }
 
-    ~rethrown() throw()
+    ~rethrown() throw() override
     {
     }
 
@@ -217,17 +217,17 @@ struct skipped : public tut_error
     {
     }
 
-    virtual test_result::result_type result() const
+    test_result::result_type result() const override
     {
         return test_result::skipped;
     }
 
-    virtual std::string type() const
+    std::string type() const override
     {
         return "tut::skipped";
     }
 
-    ~skipped() throw()
+    ~skipped() throw() override
     {
     }
 };

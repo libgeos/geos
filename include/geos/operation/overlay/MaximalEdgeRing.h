@@ -71,11 +71,11 @@ public:
 		const geom::GeometryFactory *geometryFactory);
 			// throw(const TopologyException &)
 
-	virtual ~MaximalEdgeRing();
+	~MaximalEdgeRing() override;
 
-	geomgraph::DirectedEdge* getNext(geomgraph::DirectedEdge *de);
+	geomgraph::DirectedEdge* getNext(geomgraph::DirectedEdge *de) override;
 
-	void setEdgeRing(geomgraph::DirectedEdge* de, geomgraph::EdgeRing* er);
+	void setEdgeRing(geomgraph::DirectedEdge* de, geomgraph::EdgeRing* er) override;
 
 	/// \brief
 	/// This function returns a newly allocated vector of

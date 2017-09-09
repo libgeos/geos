@@ -126,7 +126,7 @@ public:
 	///
 	OverlayOp(const geom::Geometry *g0, const geom::Geometry *g1);
 
-	virtual ~OverlayOp(); // FIXME: virtual ?
+	~OverlayOp() override; // FIXME: virtual ?
 
 	/**
 	 * Gets the result of the overlay for a given overlay operation.

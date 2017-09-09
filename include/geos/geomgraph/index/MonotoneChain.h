@@ -53,7 +53,7 @@ public:
 		chainIndex(newChainIndex)
 	{}
 
-	~MonotoneChain() {}
+	~MonotoneChain() override {}
 
 	void computeIntersections(MonotoneChain *mc,SegmentIntersector *si) {
 		mce->computeIntersectsForChain(chainIndex,*(mc->mce),mc->chainIndex,*si);

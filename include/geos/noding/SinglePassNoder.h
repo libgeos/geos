@@ -58,7 +58,7 @@ public:
 
 	SinglePassNoder(SegmentIntersector* nSegInt=nullptr): segInt(nSegInt) {}
 
-	virtual ~SinglePassNoder() {}
+	~SinglePassNoder() override {}
 
 	/**
 	 * Sets the SegmentIntersector to use with this noder.
@@ -78,7 +78,7 @@ public:
 	 *
 	 * @param segStrings a collection of {@link SegmentString}s to node
 	 */
-	virtual void computeNodes(std::vector<SegmentString*>* segStrings)=0;
+	void computeNodes(std::vector<SegmentString*>* segStrings) override =0;
 
 	/**
 	 * Returns a {@link Collection} of fully noded {@link SegmentStrings}.
@@ -86,7 +86,7 @@ public:
 	 *
 	 * @return a Collection of SegmentStrings
 	 */
-	virtual std::vector<SegmentString*>* getNodedSubstrings() const=0;
+	std::vector<SegmentString*>* getNodedSubstrings() const override =0;
 
 };
 

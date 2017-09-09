@@ -45,7 +45,7 @@ public:
 		GEOSException("UnsupportedOperationException", msg)
 	{}
 
-	~UnsupportedOperationException() throw() {}
+	~UnsupportedOperationException() throw() override {}
 };
 
 } // namespace geos::util

@@ -74,7 +74,7 @@ private:
 
     TargetContainer& comps_;
 
-    void filter_ro(const Geometry* geom)
+    void filter_ro(const Geometry* geom) override
     {
       if ( const ComponentType* c = dynamic_cast<const ComponentType*>(geom) ) {
         comps_.push_back(c);

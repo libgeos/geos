@@ -100,9 +100,9 @@ public:
 	 */
 	void processIntersections(
 		SegmentString* e0,  int segIndex0,
-		SegmentString* e1,  int segIndex1);
+		SegmentString* e1,  int segIndex1) override;
 
-	bool isDone() const
+	bool isDone() const override
 	{
 		return !interiorIntersection.isNull();
 	}

@@ -169,7 +169,7 @@ struct test_result : public test_result_posix
     {
     }
 
-    virtual ~test_result()
+    ~test_result() override
     {
     }
 };

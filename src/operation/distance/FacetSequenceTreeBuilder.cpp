@@ -49,7 +49,7 @@ std::vector<FacetSequence*> * FacetSequenceTreeBuilder::computeFacetSequences(co
     public :
         FacetSequenceAdder(std::vector<FacetSequence*> * p_sections) :
             m_sections(p_sections) {}
-        void filter_ro(const Geometry* geom) {
+        void filter_ro(const Geometry* geom) override {
             if (const LineString* ls = dynamic_cast<const LineString*>(geom)) {
                 const CoordinateSequence* seq = ls->getCoordinatesRO();
                 addFacetSequences(seq, *m_sections);

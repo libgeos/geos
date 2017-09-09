@@ -80,7 +80,7 @@ private:
 		Polygonizer *pol;
 		LineStringAdder(Polygonizer *p);
 		//void filter_rw(geom::Geometry *g);
-		void filter_ro(const geom::Geometry * g);
+		void filter_ro(const geom::Geometry * g) override;
 	};
 
 	// default factory

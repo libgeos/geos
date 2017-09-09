@@ -36,7 +36,7 @@ public:
 	 * @return the distance between the geometries
 	 * @throws ClassCastException if either item is not a Geometry
 	 */
-	double distance(const ItemBoundable* item1, const ItemBoundable* item2);
+	double distance(const ItemBoundable* item1, const ItemBoundable* item2) override;
 };
 }
 }

@@ -57,7 +57,7 @@ public:
 	 * The search starts from the last located edge amd proceeds on the general direction of v.
 	 * @return The caller _does not_ take ownership of the returned object.
 	 */
-	virtual QuadEdge* locate(const Vertex &v);
+	QuadEdge* locate(const Vertex &v) override;
 };
 
 } //namespace geos.triangulate.quadedge

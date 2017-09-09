@@ -54,11 +54,11 @@ public:
 		segIntFinder( nullptr)
 	{ }
 
-	~PreparedLineString();
+	~PreparedLineString() override;
 
 	noding::FastSegmentSetIntersectionFinder * getIntersectionFinder();
 
-	bool intersects(const geom::Geometry * g) const;
+	bool intersects(const geom::Geometry * g) const override;
 
 };
 

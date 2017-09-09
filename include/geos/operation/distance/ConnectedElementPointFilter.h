@@ -62,7 +62,7 @@ public:
 		pts(newPts)
 	{}
 
-	void filter_ro(const geom::Geometry *geom);
+	void filter_ro(const geom::Geometry *geom) override;
 
 	//void filter_rw(geom::Geometry * /*geom*/) {};
 };

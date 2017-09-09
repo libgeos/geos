@@ -101,7 +101,7 @@ public:
         , pts(newPts)
     {}
 
-	~NodedSegmentString()
+	~NodedSegmentString() override
 	{
 		delete pts;
 	}
@@ -143,18 +143,18 @@ public:
 
 	const SegmentNodeList& getNodeList() const;
 
-	virtual unsigned int size() const
+	unsigned int size() const override
 	{
 		return static_cast<unsigned int>(pts->size());
 	}
 
-	virtual const geom::Coordinate& getCoordinate(unsigned int i) const;
+	const geom::Coordinate& getCoordinate(unsigned int i) const override;
 
-	virtual geom::CoordinateSequence* getCoordinates() const;
+	geom::CoordinateSequence* getCoordinates() const override;
 
-	virtual bool isClosed() const;
+	bool isClosed() const override;
 
-	virtual std::ostream& print(std::ostream& os) const;
+	std::ostream& print(std::ostream& os) const override;
 
 
 	/** \brief

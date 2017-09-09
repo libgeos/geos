@@ -107,7 +107,7 @@ public:
 	/// Takes ownership of CoordinateSequence
 	Edge(geom::CoordinateSequence* newPts);
 
-	virtual ~Edge();
+	~Edge() override;
 
 	virtual int getNumPoints() const {
 		return static_cast<int>(pts->getSize());
@@ -187,7 +187,7 @@ public:
 		testInvariant();
 	}
 
-	virtual bool isIsolated() const {
+	bool isIsolated() const override {
 		testInvariant();
 		return isIsolatedVar;
 	}
@@ -212,7 +212,7 @@ public:
 	/// A component only contributes if it has a labelling for both
 	/// parent geometries
 	///
-	virtual void computeIM(geom::IntersectionMatrix& im) {
+	void computeIM(geom::IntersectionMatrix& im) override {
 		updateIM(label, im);
 		testInvariant();
 	}

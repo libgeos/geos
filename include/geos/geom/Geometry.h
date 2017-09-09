@@ -835,7 +835,7 @@ private:
 	class GEOS_DLL GeometryChangedFilter : public GeometryComponentFilter
 	{
 	public:
-		void filter_rw(Geometry* geom);
+		void filter_rw(Geometry* geom) override;
 	};
 
 	static GeometryChangedFilter geometryChangedFilter;

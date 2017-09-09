@@ -74,11 +74,11 @@ public:
 		isScaled(nScaleFactor!=1.0)
 	{}
 
-	~ScaledNoder();
+	~ScaledNoder() override;
 
-	std::vector<SegmentString*>* getNodedSubstrings() const;
+	std::vector<SegmentString*>* getNodedSubstrings() const override;
 
-	void computeNodes(std::vector<SegmentString*>* inputSegStr);
+	void computeNodes(std::vector<SegmentString*>* inputSegStr) override;
 
 	//void filter(Coordinate& c);
 

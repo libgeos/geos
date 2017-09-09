@@ -47,11 +47,11 @@ public:
 		item( item)
 	{ }
 
-	~IntervalRTreeLeafNode()
+	~IntervalRTreeLeafNode() override
 	{
 	}
 
-	void query( double queryMin, double queryMax, index::ItemVisitor * visitor) const;
+	void query( double queryMin, double queryMax, index::ItemVisitor * visitor) const override;
 
 };
 

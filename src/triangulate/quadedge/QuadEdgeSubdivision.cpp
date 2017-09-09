@@ -383,7 +383,7 @@ public:
     {
     }
 
-    void visit(QuadEdge* triEdges[3])
+    void visit(QuadEdge* triEdges[3]) override
     {
         geom::CoordinateSequence *coordSeq = coordSeqFact.create(4,0);
         for (int i = 0; i < 3; i++) {
@@ -400,7 +400,7 @@ class
 QuadEdgeSubdivision::TriangleCircumcentreVisitor : public TriangleVisitor
 {
 public:
-	void visit(QuadEdge* triEdges[3])
+	void visit(QuadEdge* triEdges[3]) override
 	{
 		Triangle triangle(triEdges[0]->orig().getCoordinate(),
 				triEdges[1]->orig().getCoordinate(), triEdges[2]->orig().getCoordinate());

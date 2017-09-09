@@ -69,7 +69,7 @@ using AbstractSTRtree::query;
 private:
 	class GEOS_DLL STRIntersectsOp: public AbstractSTRtree::IntersectsOp {
 		public:
-			bool intersects(const void* aBounds, const void* bBounds);
+			bool intersects(const void* aBounds, const void* bBounds) override;
 	};
 
 	/**
@@ -79,13 +79,13 @@ private:
 	 * group them into runs of size M (the node capacity). For each run, creates
 	 * a new (parent) node.
 	 */
-	std::unique_ptr<BoundableList> createParentBoundables(BoundableList* childBoundables, int newLevel);
+	std::unique_ptr<BoundableList> createParentBoundables(BoundableList* childBoundables, int newLevel) override;
 
 	std::unique_ptr<BoundableList> createParentBoundablesFromVerticalSlices(std::vector<BoundableList*>* verticalSlices, int newLevel);
 
 	STRIntersectsOp intersectsOp;
 
-	std::unique_ptr<BoundableList> sortBoundables(const BoundableList* input);
+	std::unique_ptr<BoundableList> sortBoundables(const BoundableList* input) override;
 
 	std::unique_ptr<BoundableList> createParentBoundablesFromVerticalSlice(
 			BoundableList* childBoundables,
@@ -103,15 +103,15 @@ private:
 
 protected:
 
-	AbstractNode* createNode(int level);
+	AbstractNode* createNode(int level) override;
 
-	IntersectsOp* getIntersectsOp() {
+	IntersectsOp* getIntersectsOp() override {
 		return &intersectsOp;
 	}
 
 public:
 
-	~STRtree();
+	~STRtree() override;
 
 	/**
 	 * Constructs an STRtree with the given maximum number of child nodes that
@@ -119,7 +119,7 @@ public:
 	 */
 	STRtree(std::size_t nodeCapacity=10);
 
-	void insert(const geom::Envelope *itemEnv,void* item);
+	void insert(const geom::Envelope *itemEnv,void* item) override;
 
 	//static double centreX(const geom::Envelope *e);
 
@@ -131,11 +131,11 @@ public:
 		return STRtree::avg(e->getMinY(), e->getMaxY());
 	}
 
-	void query(const geom::Envelope *searchEnv, std::vector<void*>& matches) {
+	void query(const geom::Envelope *searchEnv, std::vector<void*>& matches) override {
 		AbstractSTRtree::query(searchEnv, matches);
 	}
 
-	void query(const geom::Envelope *searchEnv, ItemVisitor& visitor) {
+	void query(const geom::Envelope *searchEnv, ItemVisitor& visitor) override {
 		return AbstractSTRtree::query(searchEnv, visitor);
 	}
 
@@ -145,7 +145,7 @@ public:
 	std::pair<const void*, const void*> nearestNeighbour(BoundablePair* initBndPair, double maxDistance);
 	std::pair<const void*, const void*> nearestNeighbour(STRtree *tree, ItemDistance *itemDist);
 
-	bool remove(const geom::Envelope *itemEnv, void* item) {
+	bool remove(const geom::Envelope *itemEnv, void* item) override {
 		return AbstractSTRtree::remove(itemEnv, item);
 	}
 

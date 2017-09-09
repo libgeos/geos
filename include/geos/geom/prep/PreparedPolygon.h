@@ -56,15 +56,15 @@ private:
 protected:
 public:
 	PreparedPolygon( const geom::Geometry * geom);
-	~PreparedPolygon( );
+	~PreparedPolygon( ) override;
 
 	noding::FastSegmentSetIntersectionFinder * getIntersectionFinder() const;
 	algorithm::locate::PointOnGeometryLocator * getPointLocator() const;
 
-	bool contains( const geom::Geometry* g) const;
-	bool containsProperly( const geom::Geometry* g) const;
-	bool covers( const geom::Geometry* g) const;
-	bool intersects( const geom::Geometry* g) const;
+	bool contains( const geom::Geometry* g) const override;
+	bool containsProperly( const geom::Geometry* g) const override;
+	bool covers( const geom::Geometry* g) const override;
+	bool intersects( const geom::Geometry* g) const override;
 
 };
 

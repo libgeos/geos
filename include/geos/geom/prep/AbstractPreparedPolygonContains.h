@@ -125,7 +125,7 @@ public:
 		requireSomePointInInterior(requireSomePointInInterior)
 	{ }
 
-	virtual ~AbstractPreparedPolygonContains()
+	~AbstractPreparedPolygonContains() override
 	{ }
 
 };

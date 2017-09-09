@@ -75,7 +75,7 @@ private:
 
 protected:
 
-	bool isSearchMatch(const geom::Envelope& searchEnv) const {
+	bool isSearchMatch(const geom::Envelope& searchEnv) const override {
 		return env->intersects(searchEnv);
 	}
 
@@ -101,7 +101,7 @@ public:
 	{
 	}
 
-	virtual ~Node() {}
+	~Node() override {}
 
 	/// Return Envelope associated with this node
 	/// ownership retained by this object
@@ -122,7 +122,7 @@ public:
 
 	void insertNode(std::unique_ptr<Node> node);
 
-	std::string toString() const;
+	std::string toString() const override;
 
 };
 

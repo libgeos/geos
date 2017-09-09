@@ -86,7 +86,7 @@ public:
 	 * \brief
 	 * Destroy a polygonization graph.
 	 */
-	~PolygonizeGraph();
+	~PolygonizeGraph() override;
 
 	/**
 	 * \brief

@@ -69,7 +69,7 @@ protected:
 
 	CoordinateSequence::Ptr transformCoordinates(
 			const CoordinateSequence* coords,
-			const Geometry* parent);
+			const Geometry* parent) override;
 
 private:
 
@@ -203,7 +203,7 @@ public:
 	 *
 	 * geom a geometry of any type
 	 */
-	void filter_ro(const Geometry* geom);
+	void filter_ro(const Geometry* geom) override;
 
 
 	/**

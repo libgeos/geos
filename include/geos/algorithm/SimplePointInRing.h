@@ -34,8 +34,8 @@ namespace algorithm { // geos::algorithm
 class GEOS_DLL SimplePointInRing: public PointInRing {
 public:
 	SimplePointInRing(geom::LinearRing *ring);
-	virtual ~SimplePointInRing();
-	bool isInside(const geom::Coordinate& pt);
+	~SimplePointInRing() override;
+	bool isInside(const geom::Coordinate& pt) override;
 private:
 	const geom::CoordinateSequence* pts;
 };

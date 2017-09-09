@@ -76,7 +76,7 @@ public:
 	/// A vector of const LineString pointers
 	typedef std::vector<const LineString *> ConstVect;
 
-	virtual ~LineString();
+	~LineString() override;
 
 	/**
 	 * \brief
@@ -85,9 +85,9 @@ public:
 	 *
 	 * @return A clone of this instance
 	 */
-	virtual Geometry *clone() const;
+	Geometry *clone() const override;
 
-	virtual CoordinateSequence* getCoordinates() const;
+	CoordinateSequence* getCoordinates() const override;
 
 	/// Returns a read-only pointer to internal CoordinateSequence
 	const CoordinateSequence* getCoordinatesRO() const;
@@ -95,28 +95,28 @@ public:
 	virtual const Coordinate& getCoordinateN(int n) const;
 
 	/// Returns line dimension (1)
-	virtual Dimension::DimensionType getDimension() const;
+	Dimension::DimensionType getDimension() const override;
 
 	/**
 	 * \brief
 	 * Returns Dimension::False for a closed LineString,
 	 * 0 otherwise (LineString boundary is a MultiPoint)
 	 */
-	virtual int getBoundaryDimension() const;
+	int getBoundaryDimension() const override;
 
 	/// Returns coordinate dimension.
-	virtual int getCoordinateDimension() const;
+	int getCoordinateDimension() const override;
 
 	/**
 	 * \brief
 	 * Returns a MultiPoint.
 	 * Empty for closed LineString, a Point for each vertex otherwise.
 	 */
-	virtual Geometry* getBoundary() const;
+	Geometry* getBoundary() const override;
 
-	virtual bool isEmpty() const;
+	bool isEmpty() const override;
 
-	virtual std::size_t getNumPoints() const;
+	std::size_t getNumPoints() const override;
 
 	virtual Point* getPointN(std::size_t n) const;
 
@@ -136,30 +136,30 @@ public:
 
 	virtual bool isRing() const;
 
-	virtual std::string getGeometryType() const;
+	std::string getGeometryType() const override;
 
-	virtual GeometryTypeId getGeometryTypeId() const;
+	GeometryTypeId getGeometryTypeId() const override;
 
 	virtual bool isCoordinate(Coordinate& pt) const;
 
-	virtual bool equalsExact(const Geometry *other, double tolerance=0)
-		const;
+	bool equalsExact(const Geometry *other, double tolerance=0)
+		const override;
 
-	virtual void apply_rw(const CoordinateFilter *filter);
+	void apply_rw(const CoordinateFilter *filter) override;
 
-	virtual void apply_ro(CoordinateFilter *filter) const;
+	void apply_ro(CoordinateFilter *filter) const override;
 
-	virtual void apply_rw(GeometryFilter *filter);
+	void apply_rw(GeometryFilter *filter) override;
 
-	virtual void apply_ro(GeometryFilter *filter) const;
+	void apply_ro(GeometryFilter *filter) const override;
 
-	virtual void apply_rw(GeometryComponentFilter *filter);
+	void apply_rw(GeometryComponentFilter *filter) override;
 
-	virtual void apply_ro(GeometryComponentFilter *filter) const;
+	void apply_ro(GeometryComponentFilter *filter) const override;
 
-	void apply_rw(CoordinateSequenceFilter& filter);
+	void apply_rw(CoordinateSequenceFilter& filter) override;
 
-	void apply_ro(CoordinateSequenceFilter& filter) const;
+	void apply_ro(CoordinateSequenceFilter& filter) const override;
 
 	/** \brief
 	 * Normalizes a LineString.
@@ -168,14 +168,14 @@ public:
 	 * has the first point which is not equal to its reflected point
 	 * less than the reflected point.
 	 */
-	virtual void normalize();
+	void normalize() override;
 
 	//was protected
-	virtual int compareToSameClass(const Geometry *ls) const;
+	int compareToSameClass(const Geometry *ls) const override;
 
-	virtual const Coordinate* getCoordinate() const;
+	const Coordinate* getCoordinate() const override;
 
-	virtual double getLength() const;
+	double getLength() const override;
 
 	/**
 	 * Creates a LineString whose coordinates are in the reverse
@@ -198,7 +198,7 @@ protected:
 	LineString(CoordinateSequence::Ptr pts,
 			const GeometryFactory *newFactory);
 
-	Envelope::Ptr computeEnvelopeInternal() const;
+	Envelope::Ptr computeEnvelopeInternal() const override;
 
 	CoordinateSequence::Ptr points;
 

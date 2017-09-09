@@ -54,30 +54,30 @@ public:
 
 	friend class GeometryFactory;
 
-	virtual ~MultiLineString();
+	~MultiLineString() override;
 
 	/// Returns line dimension (1)
-	Dimension::DimensionType getDimension() const;
+	Dimension::DimensionType getDimension() const override;
 
 	/**
 	 * \brief
 	 * Returns Dimension::False if all LineStrings in the collection
 	 * are closed, 0 otherwise.
 	 */
-	int getBoundaryDimension() const;
+	int getBoundaryDimension() const override;
 
 	/// Returns a (possibly empty) MultiPoint
-	Geometry* getBoundary() const;
+	Geometry* getBoundary() const override;
 
-	std::string getGeometryType() const;
+	std::string getGeometryType() const override;
 
-	virtual GeometryTypeId getGeometryTypeId() const;
+	GeometryTypeId getGeometryTypeId() const override;
 
 	bool isClosed() const;
 
-	bool equalsExact(const Geometry *other, double tolerance=0) const;
+	bool equalsExact(const Geometry *other, double tolerance=0) const override;
 
-	Geometry *clone() const;
+	Geometry *clone() const override;
 
 	/**
 	 * Creates a MultiLineString in the reverse

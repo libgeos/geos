@@ -80,7 +80,7 @@ public:
 	 */
 	void addEdge(const geom::LineString *lineString);
 
-	~LineMergeGraph();
+	~LineMergeGraph() override;
 };
 } // namespace geos::operation::linemerge
 } // namespace geos::operation

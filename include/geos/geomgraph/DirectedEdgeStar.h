@@ -63,12 +63,12 @@ public:
 		label()
 	{}
 
-	~DirectedEdgeStar() {
+	~DirectedEdgeStar() override {
 		delete resultAreaEdgeList;
 	}
 
 	/// Insert a directed edge in the list
-	void insert(EdgeEnd *ee);
+	void insert(EdgeEnd *ee) override;
 
 	Label &getLabel() { return label; }
 
@@ -82,7 +82,7 @@ public:
 	 * Compute the labelling for all dirEdges in this star, as well
 	 * as the overall labelling
 	 */
-	void computeLabelling(std::vector<GeometryGraph*> *geom); // throw(TopologyException *);
+	void computeLabelling(std::vector<GeometryGraph*> *geom) override; // throw(TopologyException *);
 
 	/** \brief
 	 * For each dirEdge in the star,
@@ -132,7 +132,7 @@ public:
 	 */
 	void computeDepths(DirectedEdge *de);
 
-	virtual std::string print() const;
+	std::string print() const override;
 
 private:
 

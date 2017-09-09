@@ -68,13 +68,13 @@ public:
 
 	Node(const geom::Coordinate& newCoord, EdgeEndStar* newEdges);
 
-	virtual ~Node();
+	~Node() override;
 
 	virtual const geom::Coordinate& getCoordinate() const;
 
 	virtual EdgeEndStar* getEdges();
 
-	virtual bool isIsolated() const;
+	bool isIsolated() const override;
 
 	/** \brief
 	 * Add the edge to the list of edges at this node
@@ -140,7 +140,7 @@ protected:
 	/** \brief
 	 * Basic nodes do not compute IMs
 	 */
-	virtual void computeIM(geom::IntersectionMatrix& /*im*/) {}
+	void computeIM(geom::IntersectionMatrix& /*im*/) override {}
 
 private:
 

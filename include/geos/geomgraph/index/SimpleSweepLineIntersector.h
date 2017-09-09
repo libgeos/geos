@@ -54,15 +54,15 @@ public:
 
 	SimpleSweepLineIntersector();
 
-	virtual ~SimpleSweepLineIntersector();
+	~SimpleSweepLineIntersector() override;
 
 	void computeIntersections(std::vector<Edge*> *edges,
 			SegmentIntersector *si,
-			bool testAllSegments);
+			bool testAllSegments) override;
 
 	void computeIntersections(std::vector<Edge*> *edges0,
 			std::vector<Edge*> *edges1,
-			SegmentIntersector *si);
+			SegmentIntersector *si) override;
 
 private:
 

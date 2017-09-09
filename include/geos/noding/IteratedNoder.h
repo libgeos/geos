@@ -80,7 +80,7 @@ public:
 	{
 	}
 
-	virtual ~IteratedNoder() {}
+	~IteratedNoder() override {}
 
 	/**
 	 * Sets the maximum number of noding iterations performed before
@@ -93,7 +93,7 @@ public:
 	 */
 	void setMaximumIterations(int n) { maxIter = n; }
 
-	std::vector<SegmentString*>* getNodedSubstrings() const {
+	std::vector<SegmentString*>* getNodedSubstrings() const override {
 		return nodedSegStrings;
 	}
 
@@ -107,7 +107,7 @@ public:
 	 * @param segStrings a collection of SegmentStrings to be noded
 	 * @throws TopologyException if the iterated noding fails to converge.
 	 */
-	void computeNodes(std::vector<SegmentString*>* inputSegmentStrings); // throw(GEOSException);
+	void computeNodes(std::vector<SegmentString*>* inputSegmentStrings) override; // throw(GEOSException);
 };
 
 } // namespace geos::noding

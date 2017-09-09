@@ -63,7 +63,7 @@ protected:
 	 * @return <code>true</code> if an intersection must occur
 	 * <code>false</code> if no conclusion can be made
 	 */
-	void visit(const geom::Geometry &element)
+	void visit(const geom::Geometry &element) override
 	{
 		const geom::Envelope &elementEnv = *(element.getEnvelopeInternal());
 
@@ -101,7 +101,7 @@ protected:
 		}
 	}
 
-	bool isDone() { return intersectsVar==true; }
+	bool isDone() override { return intersectsVar==true; }
 
 public:
 
@@ -137,7 +137,7 @@ private:
 
 protected:
 
-	void visit(const geom::Geometry &geom)
+	void visit(const geom::Geometry &geom) override
 	{
 		using geos::algorithm::locate::SimplePointInAreaLocator;
 
@@ -174,7 +174,7 @@ protected:
 		}
 	}
 
-	bool isDone() { return containsPointVar; }
+	bool isDone() override { return containsPointVar; }
 
 public:
 
@@ -225,7 +225,7 @@ private:
 
 protected:
 
-	void visit(const geom::Geometry &geom)
+	void visit(const geom::Geometry &geom) override
 	{
 		const geom::Envelope &elementEnv = *(geom.getEnvelopeInternal());
 
@@ -235,7 +235,7 @@ protected:
 		computeSegmentIntersection(geom);
 	}
 
-	bool isDone() { return intersectsVar; }
+	bool isDone() override { return intersectsVar; }
 
 public:
 

@@ -175,7 +175,7 @@ public:
 	GeometryGraph(int newArgIndex, const geom::Geometry *newParentGeom,
 	              const algorithm::BoundaryNodeRule& boundaryNodeRule);
 
-	virtual ~GeometryGraph();
+	~GeometryGraph() override;
 
 
 	const geom::Geometry* getGeometry();

@@ -71,7 +71,7 @@ public:
 		pt(newPt)
 		{ deStar=new DirectedEdgeStar(); }
 
-	virtual ~Node() {
+	~Node() override {
 		delete deStar;
 	}
 

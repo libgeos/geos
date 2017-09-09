@@ -282,14 +282,14 @@ public:
 		AbstractNode(level, capacity)
 	{}
 
-	~STRAbstractNode()
+	~STRAbstractNode() override
 	{
 		delete (Envelope *)bounds;
 	}
 
 protected:
 
-	void* computeBounds() const
+	void* computeBounds() const override
 	{
 		Envelope* bounds=nullptr;
 		const BoundableList& b = *getChildBoundables();

@@ -59,13 +59,13 @@ public:
 
 	friend class GeometryFactory;
 
-	virtual ~MultiPoint();
+	~MultiPoint() override;
 
 	/// Returns point dimension (0)
-	Dimension::DimensionType getDimension() const;
+	Dimension::DimensionType getDimension() const override;
 
 	/// Returns Dimension::False (Point has no boundary)
-	int getBoundaryDimension() const;
+	int getBoundaryDimension() const override;
 
 	/** \brief
 	 * Gets the boundary of this geometry.
@@ -76,15 +76,15 @@ public:
 	 * @return an empty GeometryCollection
 	 * @see Geometry#getBoundary
 	 */
-	Geometry* getBoundary() const;
+	Geometry* getBoundary() const override;
 
-	std::string getGeometryType() const;
+	std::string getGeometryType() const override;
 
-	virtual GeometryTypeId getGeometryTypeId() const;
+	GeometryTypeId getGeometryTypeId() const override;
 
-	bool equalsExact(const Geometry *other, double tolerance=0) const;
+	bool equalsExact(const Geometry *other, double tolerance=0) const override;
 
-	Geometry *clone() const { return new MultiPoint(*this); }
+	Geometry *clone() const override { return new MultiPoint(*this); }
 
 protected:
 

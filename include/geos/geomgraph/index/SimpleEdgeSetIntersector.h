@@ -42,10 +42,10 @@ public:
 	SimpleEdgeSetIntersector();
 
 	void computeIntersections(std::vector<Edge*> *edges,
-			SegmentIntersector *si, bool testAllSegments);
+			SegmentIntersector *si, bool testAllSegments) override;
 
 	void computeIntersections(std::vector<Edge*> *edges0,
-			std::vector<Edge*> *edges1, SegmentIntersector *si);
+			std::vector<Edge*> *edges1, SegmentIntersector *si) override;
 
 private:
 

@@ -84,16 +84,16 @@ public:
 		nOverlaps(0)
 	{}
 
-	~MCIndexNoder();
+	~MCIndexNoder() override;
 
 	/// Return a reference to this instance's std::vector of MonotoneChains
 	std::vector<index::chain::MonotoneChain*>& getMonotoneChains() { return monoChains; }
 
 	index::SpatialIndex& getIndex();
 
-	std::vector<SegmentString*>* getNodedSubstrings() const;
+	std::vector<SegmentString*>* getNodedSubstrings() const override;
 
-	void computeNodes(std::vector<SegmentString*>* inputSegmentStrings);
+	void computeNodes(std::vector<SegmentString*>* inputSegmentStrings) override;
 
 	class SegmentOverlapAction : public index::chain::MonotoneChainOverlapAction {
 	public:
@@ -104,7 +104,7 @@ public:
 		{}
 
 		void overlap(index::chain::MonotoneChain& mc1, std::size_t start1,
-            index::chain::MonotoneChain& mc2, std::size_t start2);
+            index::chain::MonotoneChain& mc2, std::size_t start2) override;
     private:
         SegmentIntersector& si;
 

@@ -90,9 +90,9 @@ protected:
 public:
 	BasicPreparedGeometry( const Geometry * geom);
 
-	~BasicPreparedGeometry( );
+	~BasicPreparedGeometry( ) override;
 
-	const geom::Geometry & getGeometry() const
+	const geom::Geometry & getGeometry() const override
 	{
 		return *baseGeom;
 	}
@@ -123,53 +123,53 @@ public:
 	/**
 	 * Default implementation.
 	 */
-	bool contains(const geom::Geometry * g) const;
+	bool contains(const geom::Geometry * g) const override;
 
 	/**
 	 * Default implementation.
 	 */
-	bool containsProperly(const geom::Geometry * g)	const;
+	bool containsProperly(const geom::Geometry * g)	const override;
 
 	/**
 	 * Default implementation.
 	 */
-	bool coveredBy(const geom::Geometry * g) const;
+	bool coveredBy(const geom::Geometry * g) const override;
 
 	/**
 	 * Default implementation.
 	 */
-	bool covers(const geom::Geometry * g) const;
+	bool covers(const geom::Geometry * g) const override;
 
 	/**
 	 * Default implementation.
 	 */
-	bool crosses(const geom::Geometry * g) const;
+	bool crosses(const geom::Geometry * g) const override;
 
 	/**
 	 * Standard implementation for all geometries.
 	 * Supports {@link GeometryCollection}s as input.
 	 */
-	bool disjoint(const geom::Geometry * g)	const;
+	bool disjoint(const geom::Geometry * g)	const override;
 
 	/**
 	 * Default implementation.
 	 */
-	bool intersects(const geom::Geometry * g) const;
+	bool intersects(const geom::Geometry * g) const override;
 
 	/**
 	 * Default implementation.
 	 */
-	bool overlaps(const geom::Geometry * g)	const;
+	bool overlaps(const geom::Geometry * g)	const override;
 
 	/**
 	 * Default implementation.
 	 */
-	bool touches(const geom::Geometry * g) const;
+	bool touches(const geom::Geometry * g) const override;
 
 	/**
 	 * Default implementation.
 	 */
-	bool within(const geom::Geometry * g) const;
+	bool within(const geom::Geometry * g) const override;
 
 	std::string toString();
 

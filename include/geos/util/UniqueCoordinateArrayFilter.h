@@ -57,14 +57,14 @@ public:
 	 * delete a derived-class object via a base-class pointer.
 	 * http://www.parashift.com/c++-faq-lite/virtual-functions.html#faq-20.7
 	 */
-	virtual ~UniqueCoordinateArrayFilter() {}
+	~UniqueCoordinateArrayFilter() override {}
 
 	/**
 	 * Performs a filtering operation with or on coord in "read-only" mode.
 	 * @param coord The "read-only" Coordinate to which
 	 * 				the filter is applied.
 	 */
-	virtual void filter_ro(const geom::Coordinate *coord)
+	void filter_ro(const geom::Coordinate *coord) override
 	{
 		if ( uniqPts.insert(coord).second )
 		{

@@ -53,7 +53,7 @@ public:
     : _to(to)
   {}
 
-  void filter_ro(const geom::Geometry * g) {
+  void filter_ro(const geom::Geometry * g) override {
     const geom::LineString *ls = dynamic_cast<const geom::LineString *>(g);
     if ( ls ) {
       geom::CoordinateSequence* coord = ls->getCoordinates();

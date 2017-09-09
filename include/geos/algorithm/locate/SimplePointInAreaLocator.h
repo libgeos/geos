@@ -59,7 +59,7 @@ public:
 	:	g( g)
 	{ }
 
-	int locate( const geom::Coordinate * p)
+	int locate( const geom::Coordinate * p) override
 	{
 		return locate( *p, g);
 	}

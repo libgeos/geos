@@ -28,7 +28,7 @@ namespace tut
         {
           bool is3d;
           Filter() : is3d(false) {}
-          void filter_rw(geos::geom::Coordinate* c) const {
+          void filter_rw(geos::geom::Coordinate* c) const override {
             if ( is3d ) {
               if ( ISNAN(c->z) ) c->z = 0.0;
             }

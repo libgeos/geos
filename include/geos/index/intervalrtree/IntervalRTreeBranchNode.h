@@ -52,14 +52,14 @@ public:
 		node2( n2)
 	{ }
 
-	~IntervalRTreeBranchNode()
+	~IntervalRTreeBranchNode() override
 	{
 		delete node1;
 		delete node2;
 	}
 
 
-	void query(double queryMin, double queryMax, index::ItemVisitor * visitor) const;
+	void query(double queryMin, double queryMax, index::ItemVisitor * visitor) const override;
 };
 
 } // geos::intervalrtree

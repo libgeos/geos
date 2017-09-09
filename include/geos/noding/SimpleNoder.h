@@ -59,9 +59,9 @@ public:
 		SinglePassNoder(nSegInt)
 	{}
 
-	void computeNodes(std::vector<SegmentString*>* inputSegmentStrings);
+	void computeNodes(std::vector<SegmentString*>* inputSegmentStrings) override;
 
-	std::vector<SegmentString*>* getNodedSubstrings() const {
+	std::vector<SegmentString*>* getNodedSubstrings() const override {
 		return NodedSegmentString::getNodedSubstrings(*nodedSegStrings);
 	}
 };

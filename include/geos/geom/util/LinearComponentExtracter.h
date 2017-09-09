@@ -57,9 +57,9 @@ public:
 	 */
 	LinearComponentExtracter(std::vector<const LineString*> &newComps);
 
-	void filter_rw(Geometry *geom);
+	void filter_rw(Geometry *geom) override;
 
-	void filter_ro(const Geometry *geom);
+	void filter_ro(const Geometry *geom) override;
 
 };
 

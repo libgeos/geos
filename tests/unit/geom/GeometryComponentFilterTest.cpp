@@ -59,14 +59,14 @@ void object::test<1>()
             ensure(lineal.empty());
             ensure(nonlineal.empty());
         }
-        void filter_ro(geos::geom::Geometry const* g)
+        void filter_ro(geos::geom::Geometry const* g) override
         {
             if (dynamic_cast<geos::geom::Lineal const*>(g))
                 lineal.push_back(g);
             else
                 nonlineal.push_back(g);
         }
-        void filter_rw(geos::geom::Geometry*) {}
+        void filter_rw(geos::geom::Geometry*) override {}
     };
 
     GeometryRefArray lineal;

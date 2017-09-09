@@ -61,12 +61,12 @@ public:
 	MinimalEdgeRing(geomgraph::DirectedEdge *start,
 		const geom::GeometryFactory *geometryFactory);
 
-	virtual ~MinimalEdgeRing();
+	~MinimalEdgeRing() override;
 
-	geomgraph::DirectedEdge* getNext(geomgraph::DirectedEdge *de);
+	geomgraph::DirectedEdge* getNext(geomgraph::DirectedEdge *de) override;
 
 	void setEdgeRing(geomgraph::DirectedEdge *de,
-			geomgraph::EdgeRing *er);
+			geomgraph::EdgeRing *er) override;
 };
 
 

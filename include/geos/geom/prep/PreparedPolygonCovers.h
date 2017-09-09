@@ -63,7 +63,7 @@ protected:
 	 * @param geom the test geometry
 	 * @return true if this prepared polygon covers the test geometry
 	 */
-	bool fullTopologicalPredicate( const geom::Geometry * geom);
+	bool fullTopologicalPredicate( const geom::Geometry * geom) override;
 
 public:
 	/**

@@ -43,14 +43,14 @@ namespace geom { // geos::geom
 class GEOS_DLL CoordinateArraySequenceFactory: public CoordinateSequenceFactory {
 
 public:
-	CoordinateSequence *create() const;
+	CoordinateSequence *create() const override;
 
-	CoordinateSequence *create(std::vector<Coordinate> *coords, std::size_t dims=0) const;
+	CoordinateSequence *create(std::vector<Coordinate> *coords, std::size_t dims=0) const override;
 
    	/** @see CoordinateSequenceFactory::create(std::size_t, int) */
-	CoordinateSequence *create(std::size_t size, std::size_t dimension=0) const;
+	CoordinateSequence *create(std::size_t size, std::size_t dimension=0) const override;
 
-	CoordinateSequence *create(const CoordinateSequence &coordSeq) const;
+	CoordinateSequence *create(const CoordinateSequence &coordSeq) const override;
 
 	/** \brief
 	 * Returns the singleton instance of CoordinateArraySequenceFactory

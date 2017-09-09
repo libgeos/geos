@@ -72,11 +72,11 @@ public:
 	 *
 	 * @return a clone of this instance
 	 */
-	virtual Geometry *clone() const {
+	Geometry *clone() const override {
 		return new GeometryCollection(*this);
 	}
 
-	virtual ~GeometryCollection();
+	~GeometryCollection() override;
 
 	/**
 	 * \brief
@@ -91,9 +91,9 @@ public:
 	 * @return the collected coordinates
 	 *
 	 */
-	virtual CoordinateSequence* getCoordinates() const;
+	CoordinateSequence* getCoordinates() const override;
 
-	virtual bool isEmpty() const;
+	bool isEmpty() const override;
 
 	/**
 	 * \brief
@@ -102,60 +102,60 @@ public:
 	 *
 	 * @see Dimension::DimensionType
 	 */
-	virtual Dimension::DimensionType getDimension() const;
+	Dimension::DimensionType getDimension() const override;
 
 	/// Returns coordinate dimension.
-	virtual int getCoordinateDimension() const;
+	int getCoordinateDimension() const override;
 
-	virtual Geometry* getBoundary() const;
+	Geometry* getBoundary() const override;
 
 	/**
 	 * \brief
 	 * Returns the maximum boundary dimension of geometries in
 	 * this collection.
 	 */
-	virtual int getBoundaryDimension() const;
+	int getBoundaryDimension() const override;
 
-	virtual std::size_t getNumPoints() const;
+	std::size_t getNumPoints() const override;
 
-	virtual std::string getGeometryType() const;
+	std::string getGeometryType() const override;
 
-	virtual GeometryTypeId getGeometryTypeId() const;
+	GeometryTypeId getGeometryTypeId() const override;
 
-	virtual bool equalsExact(const Geometry *other,
-			double tolerance=0) const;
+	bool equalsExact(const Geometry *other,
+			double tolerance=0) const override;
 
-	virtual void apply_ro(CoordinateFilter *filter) const;
+	void apply_ro(CoordinateFilter *filter) const override;
 
-	virtual void apply_rw(const CoordinateFilter *filter);
+	void apply_rw(const CoordinateFilter *filter) override;
 
-	virtual void apply_ro(GeometryFilter *filter) const;
+	void apply_ro(GeometryFilter *filter) const override;
 
-	virtual void apply_rw(GeometryFilter *filter);
+	void apply_rw(GeometryFilter *filter) override;
 
-	virtual void apply_ro(GeometryComponentFilter *filter) const;
+	void apply_ro(GeometryComponentFilter *filter) const override;
 
-	virtual void apply_rw(GeometryComponentFilter *filter);
+	void apply_rw(GeometryComponentFilter *filter) override;
 
-	virtual void apply_rw(CoordinateSequenceFilter& filter);
+	void apply_rw(CoordinateSequenceFilter& filter) override;
 
-	virtual void apply_ro(CoordinateSequenceFilter& filter) const;
+	void apply_ro(CoordinateSequenceFilter& filter) const override;
 
-	virtual void normalize();
+	void normalize() override;
 
-	virtual const Coordinate* getCoordinate() const;
+	const Coordinate* getCoordinate() const override;
 
 	/// Returns the total area of this collection
-	virtual double getArea() const;
+	double getArea() const override;
 
 	/// Returns the total length of this collection
-	virtual double getLength() const;
+	double getLength() const override;
 
 	/// Returns the number of geometries in this collection
-	virtual std::size_t getNumGeometries() const;
+	std::size_t getNumGeometries() const override;
 
 	/// Returns a pointer to the nth Geometry int this collection
-	virtual const Geometry* getGeometryN(std::size_t n) const;
+	const Geometry* getGeometryN(std::size_t n) const override;
 
 protected:
 
@@ -190,9 +190,9 @@ protected:
 
 	std::vector<Geometry *>* geometries;
 
-	Envelope::Ptr computeEnvelopeInternal() const;
+	Envelope::Ptr computeEnvelopeInternal() const override;
 
-	int compareToSameClass(const Geometry *gc) const;
+	int compareToSameClass(const Geometry *gc) const override;
 
 };
 

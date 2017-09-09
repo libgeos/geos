@@ -55,7 +55,7 @@ public:
 
 	/// Ownership of returned CoordinateSequence to caller
 	CoordinateSequence* edit(const CoordinateSequence *coordinates,
-	                         const Geometry *geom);
+	                         const Geometry *geom) override;
 };
 
 PrecisionReducerCoordinateOperation::PrecisionReducerCoordinateOperation(

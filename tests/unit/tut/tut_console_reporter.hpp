@@ -108,12 +108,12 @@ public:
         init();
     }
 
-    void run_started()
+    void run_started() override
     {
         init();
     }
 
-    void test_completed(const tut::test_result& tr)
+    void test_completed(const tut::test_result& tr) override
     {
         if (tr.group != current_group)
         {
@@ -156,7 +156,7 @@ public:
         }
     }
 
-    void run_completed()
+    void run_completed() override
     {
         os << std::endl;
 
@@ -256,7 +256,7 @@ public:
         os << std::endl;
     }
 
-    virtual bool all_ok() const
+    bool all_ok() const override
     {
         return not_passed.empty();
     }

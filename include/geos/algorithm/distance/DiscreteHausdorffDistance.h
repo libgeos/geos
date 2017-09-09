@@ -160,7 +160,7 @@ public:
 			geom(geom)
 		{}
 
-		void filter_ro(const geom::Coordinate* pt)
+		void filter_ro(const geom::Coordinate* pt) override
 		{
 			minPtDist.initialize();
 			DistanceToPoint::computeDistance(geom, *pt,
@@ -198,11 +198,11 @@ public:
 		}
 
 		void filter_ro(const geom::CoordinateSequence& seq,
-		               std::size_t index);
+		               std::size_t index) override;
 
-		bool isGeometryChanged() const { return false; }
+		bool isGeometryChanged() const override { return false; }
 
-		bool isDone() const { return false; }
+		bool isDone() const override { return false; }
 
 		const PointPairDistance& getMaxPointDistance() const {
 			return maxPtDist;

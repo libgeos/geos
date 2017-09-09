@@ -142,7 +142,7 @@ public:
 	 */
 	void setEdgeDepths(int position, int newDepth);
 
-	virtual std::string print() const;
+	std::string print() const override;
 
 	std::string printEdge();
 
