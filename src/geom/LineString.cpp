@@ -69,7 +69,7 @@ LineString::reverse() const
 void
 LineString::validateConstruction()
 {
-	if (points.get()==NULL)
+	if (points.get()==nullptr)
 	{
 		points.reset(getFactory()->getCoordinateSequenceFactory()->create());
 		return;
@@ -118,7 +118,7 @@ LineString::getCoordinates() const
 const CoordinateSequence*
 LineString::getCoordinatesRO() const
 {
-	assert(0 != points.get());
+	assert(nullptr != points.get());
 	return points.get();
 }
 
@@ -176,7 +176,7 @@ Point*
 LineString::getStartPoint() const
 {
 	if (isEmpty()) {
-		return NULL;
+		return nullptr;
 		//return new Point(NULL,NULL);
 	}
 	return getPointN(0);
@@ -186,7 +186,7 @@ Point*
 LineString::getEndPoint() const
 {
 	if (isEmpty()) {
-		return NULL;
+		return nullptr;
 		//return new Point(NULL,NULL);
 	}
 	return getPointN(getNumPoints() - 1);
@@ -364,7 +364,7 @@ LineString::compareToSameClass(const Geometry *ls) const
 const Coordinate*
 LineString::getCoordinate() const
 {
-	if (isEmpty()) return NULL;
+	if (isEmpty()) return nullptr;
 	return &(points->getAt(0));
 }
 

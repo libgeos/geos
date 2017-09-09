@@ -33,7 +33,7 @@ namespace strtree { // geos.index.strtree
 
 AbstractSTRtree::~AbstractSTRtree()
 {
-	assert(0 != itemBoundables);
+	assert(nullptr != itemBoundables);
     BoundableList::iterator it = itemBoundables->begin();
     BoundableList::iterator end = itemBoundables->end();
 	while (it != end)
@@ -43,7 +43,7 @@ AbstractSTRtree::~AbstractSTRtree()
 	}
 	delete itemBoundables;
 
-	assert(0 != nodes);
+	assert(nullptr != nodes);
 	for (std::size_t i = 0, nsize = nodes->size(); i < nsize; i++)
     {
 		delete (*nodes)[i];
@@ -125,7 +125,7 @@ AbstractSTRtree::query(const void* searchBounds, vector<void*>& matches)
 {
 	if (!built) build();
 
-	if (itemBoundables->empty()) assert(root->getBounds()==NULL);
+	if (itemBoundables->empty()) assert(root->getBounds()==nullptr);
 
 	if (getIntersectsOp()->intersects(root->getBounds(), searchBounds))
 	{
@@ -139,7 +139,7 @@ AbstractSTRtree::query(const void* searchBounds, ItemVisitor& visitor)
 {
 	if (!built) build();
 
-	if (itemBoundables->empty()) assert(root->getBounds()==NULL);
+	if (itemBoundables->empty()) assert(root->getBounds()==nullptr);
 
 	if (getIntersectsOp()->intersects(root->getBounds(),searchBounds))
 	{
@@ -184,7 +184,7 @@ AbstractSTRtree::remove(const void* searchBounds, void* item)
 {
 	if (!built) build();
 	if (itemBoundables->empty()) {
-		assert(root->getBounds() == NULL);
+		assert(root->getBounds() == nullptr);
 	}
 	if (getIntersectsOp()->intersects(root->getBounds(), searchBounds)) {
 		return remove(searchBounds, *root, item);
@@ -362,7 +362,7 @@ ItemsList* AbstractSTRtree::itemsTree(AbstractNode* node)
             ItemsList* valuesTreeForChild =
                 itemsTree(static_cast<AbstractNode*>(childBoundable));
             // only add if not null (which indicates an item somewhere in this tree
-            if (valuesTreeForChild != NULL)
+            if (valuesTreeForChild != nullptr)
                 valuesTreeForNode->push_back_owned(valuesTreeForChild);
         }
         else if (dynamic_cast<ItemBoundable*>(childBoundable)) {
@@ -374,7 +374,7 @@ ItemsList* AbstractSTRtree::itemsTree(AbstractNode* node)
         }
     }
     if (valuesTreeForNode->empty())
-        return NULL;
+        return nullptr;
 
     return valuesTreeForNode.release();
 }
@@ -386,7 +386,7 @@ ItemsList* AbstractSTRtree::itemsTree()
     }
 
     ItemsList* valuesTree (itemsTree(root));
-    if (valuesTree == NULL)
+    if (valuesTree == nullptr)
         return new ItemsList();
 
     return valuesTree;

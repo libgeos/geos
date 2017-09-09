@@ -32,8 +32,8 @@ CLocalizer::CLocalizer()
     // Avoid multithreading issues caused by setlocale
     _configthreadlocale(_ENABLE_PER_THREAD_LOCALE);
 #endif
-    char* p = std::setlocale(LC_NUMERIC, NULL);
-    if (0 != p)
+    char* p = std::setlocale(LC_NUMERIC, nullptr);
+    if (nullptr != p)
     {
         saved_locale = p;
     }

@@ -38,7 +38,7 @@ namespace tut
         }
 
         test_capigeosfrechetdistance_data()
-            : geom1_(0), geom2_(0), geom3_(0), w_(0)
+            : geom1_(nullptr), geom2_(nullptr), geom3_(nullptr), w_(nullptr)
         {
             initGEOS(notice, notice);
             w_ = GEOSWKTWriter_create();
@@ -51,9 +51,9 @@ namespace tut
             GEOSGeom_destroy(geom2_);
             GEOSGeom_destroy(geom3_);
             GEOSWKTWriter_destroy(w_);
-            geom1_ = 0;
-            geom2_ = 0;
-            geom3_ = 0;
+            geom1_ = nullptr;
+            geom2_ = nullptr;
+            geom3_ = nullptr;
             finishGEOS();
         }
 

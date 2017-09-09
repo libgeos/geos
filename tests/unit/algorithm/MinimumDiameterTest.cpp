@@ -64,14 +64,14 @@ namespace tut
     void object::test<1>()
     {
         GeomPtr geom(reader.read("POLYGON ((0 0, 0 20, 20 20, 20 0, 0 0))"));
-        ensure(0 != geom.get());
+        ensure(nullptr != geom.get());
 
         geos::algorithm::MinimumDiameter m(geom.get());
         GeomPtr minRect( m.getMinimumRectangle() );
-        ensure(0 != minRect.get());
+        ensure(nullptr != minRect.get());
 
         GeomPtr expectedGeom(reader.read("POLYGON ((0 0, 20 0, 20 20, 0 20, 0 0))"));
-        ensure(0 != expectedGeom.get());
+        ensure(nullptr != expectedGeom.get());
 
         ensure( minRect.get()->equalsExact(expectedGeom.get()) );
     }
@@ -82,14 +82,14 @@ namespace tut
     void object::test<2>()
     {
         GeomPtr geom(reader.read("POLYGON ((0 5, 5 10, 10 5, 5 0, 0 5))"));
-        ensure(0 != geom.get());
+        ensure(nullptr != geom.get());
 
         geos::algorithm::MinimumDiameter m(geom.get());
         GeomPtr minRect( m.getMinimumRectangle() );
-        ensure(0 != minRect.get());
+        ensure(nullptr != minRect.get());
 
         GeomPtr expectedGeom(reader.read("POLYGON ((5 0, 10 5, 5 10, 0 5, 5 0))"));
-        ensure(0 != expectedGeom.get());
+        ensure(nullptr != expectedGeom.get());
 
         ensure( minRect.get()->equalsExact(expectedGeom.get()) );
     }
@@ -100,14 +100,14 @@ namespace tut
     void object::test<3>()
     {
         GeomPtr geom(reader.read("POLYGON EMPTY"));
-        ensure(0 != geom.get());
+        ensure(nullptr != geom.get());
 
         geos::algorithm::MinimumDiameter m(geom.get());
         GeomPtr minRect( m.getMinimumRectangle() );
-        ensure(0 != minRect.get());
+        ensure(nullptr != minRect.get());
 
         GeomPtr expectedGeom(reader.read("POLYGON EMPTY"));
-        ensure(0 != expectedGeom.get());
+        ensure(nullptr != expectedGeom.get());
 
         ensure( minRect.get()->equalsExact(expectedGeom.get()) );
     }
@@ -118,14 +118,14 @@ namespace tut
     void object::test<4>()
     {
         GeomPtr geom(reader.read("Point(1 2)"));
-        ensure(0 != geom.get());
+        ensure(nullptr != geom.get());
 
         geos::algorithm::MinimumDiameter m(geom.get());
         GeomPtr minRect( m.getMinimumRectangle() );
-        ensure(0 != minRect.get());
+        ensure(nullptr != minRect.get());
 
         GeomPtr expectedGeom(reader.read("Point(1 2)"));
-        ensure(0 != expectedGeom.get());
+        ensure(nullptr != expectedGeom.get());
 
         ensure( minRect.get()->equalsExact(expectedGeom.get()) );
     }
@@ -136,14 +136,14 @@ namespace tut
     void object::test<5>()
     {
         GeomPtr geom(reader.read("LineString(1 2, 2 4)"));
-        ensure(0 != geom.get());
+        ensure(nullptr != geom.get());
 
         geos::algorithm::MinimumDiameter m(geom.get());
         GeomPtr minRect( m.getMinimumRectangle() );
-        ensure(0 != minRect.get());
+        ensure(nullptr != minRect.get());
 
         GeomPtr expectedGeom(reader.read("LineString(1 2, 2 4)"));
-        ensure(0 != expectedGeom.get());
+        ensure(nullptr != expectedGeom.get());
 
         ensure( minRect.get()->equalsExact(expectedGeom.get()) );
     }
@@ -154,13 +154,13 @@ namespace tut
     void object::test<6>()
     {
         GeomPtr geom(reader.read("POINT (0 240)"));
-        ensure(0 != geom.get());
+        ensure(nullptr != geom.get());
 
         GeomPtr minDiameter( geos::algorithm::MinimumDiameter::getMinimumDiameter( geom.get() ) );
-        ensure(0 != minDiameter.get());
+        ensure(nullptr != minDiameter.get());
 
         GeomPtr expectedGeom(reader.read("LineString (0 240, 0 240)"));
-        ensure(0 != expectedGeom.get());
+        ensure(nullptr != expectedGeom.get());
 
         ensure( minDiameter.get()->equalsExact(expectedGeom.get()) );
     }
@@ -171,13 +171,13 @@ namespace tut
     void object::test<7>()
     {
         GeomPtr geom(reader.read("LINESTRING (0 240, 220 240)"));
-        ensure(0 != geom.get());
+        ensure(nullptr != geom.get());
 
         GeomPtr minDiameter( geos::algorithm::MinimumDiameter::getMinimumDiameter( geom.get() ) );
-        ensure(0 != minDiameter.get());
+        ensure(nullptr != minDiameter.get());
 
         GeomPtr expectedGeom(reader.read("LINESTRING (0 240, 0 240)"));
-        ensure(0 != expectedGeom.get());
+        ensure(nullptr != expectedGeom.get());
 
         ensure( minDiameter.get()->equalsExact(expectedGeom.get()) );
     }
@@ -188,13 +188,13 @@ namespace tut
     void object::test<8>()
     {
         GeomPtr geom(reader.read("POLYGON ((0 240, 220 240, 220 0, 0 0, 0 240))"));
-        ensure(0 != geom.get());
+        ensure(nullptr != geom.get());
 
         GeomPtr minDiameter( geos::algorithm::MinimumDiameter::getMinimumDiameter( geom.get() ) );
-        ensure(0 != minDiameter.get());
+        ensure(nullptr != minDiameter.get());
 
         GeomPtr expectedGeom(reader.read("LINESTRING (0 0, 220 0)"));
-        ensure(0 != expectedGeom.get());
+        ensure(nullptr != expectedGeom.get());
 
         ensure( minDiameter.get()->equalsExact(expectedGeom.get()) );
     }
@@ -205,13 +205,13 @@ namespace tut
     void object::test<9>()
     {
         GeomPtr geom(reader.read("POLYGON ((0 240, 160 140, 220 0, 0 0, 0 240))"));
-        ensure(0 != geom.get());
+        ensure(nullptr != geom.get());
 
         GeomPtr minDiameter( geos::algorithm::MinimumDiameter::getMinimumDiameter( geom.get() ) );
-        ensure(0 != minDiameter.get());
+        ensure(nullptr != minDiameter.get());
 
         GeomPtr expectedGeom(reader.read("LINESTRING (185.86206896551724 79.65517241379311, 0 0)"));
-        ensure(0 != expectedGeom.get());
+        ensure(nullptr != expectedGeom.get());
 
         ensure( minDiameter.get()->equalsExact(expectedGeom.get(), 0.00000000001) );
     }
@@ -222,13 +222,13 @@ namespace tut
     void object::test<10>()
     {
         GeomPtr geom(reader.read("LINESTRING ( 39 119, 162 197, 135 70, 95 35, 33 66, 111 82, 97 131, 48 160, -4 182, 57 195, 94 202, 90 174, 75 134, 47 114, 0 100, 59 81, 123 60, 136 43, 163 75, 145 114, 93 136, 92 159, 105 175 )"));
-        ensure(0 != geom.get());
+        ensure(nullptr != geom.get());
 
         GeomPtr minDiameter( geos::algorithm::MinimumDiameter::getMinimumDiameter( geom.get() ) );
-        ensure(0 != minDiameter.get());
+        ensure(nullptr != minDiameter.get());
 
         GeomPtr expectedGeom(reader.read("LINESTRING (64.46262341325811 196.41184767277855, 95 35)"));
-        ensure(0 != expectedGeom.get());
+        ensure(nullptr != expectedGeom.get());
 
         ensure( minDiameter.get()->equalsExact(expectedGeom.get(), 0.00000000001) );
     }

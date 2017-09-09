@@ -61,7 +61,7 @@ GeometryCollection::GeometryCollection(const GeometryCollection &gc)
 GeometryCollection::GeometryCollection(vector<Geometry *> *newGeoms, const GeometryFactory *factory):
 	Geometry(factory)
 {
-	if (newGeoms==NULL) {
+	if (newGeoms==nullptr) {
 		geometries=new vector<Geometry *>();
 		return;
 	}

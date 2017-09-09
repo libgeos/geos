@@ -49,7 +49,7 @@ namespace tut
       , reader_(factory_.get()), empty_point_(factory_->createPoint())
 	{
 	    // Create non-empty Point
-	    GeometryPtr geo = 0;
+	    GeometryPtr geo = nullptr;
 	    geo = reader_.read("POINT(1.234 5.678)");
 	    point_ = dynamic_cast<PointPtr>(geo);
 	}
@@ -87,7 +87,7 @@ namespace tut
 		using geos::geom::CoordinateArraySequence;
 
 		CoordinateArraySequence* coords = new CoordinateArraySequence();
-		ensure( coords != 0 );
+		ensure( coords != nullptr );
 		coords->add(Coordinate(1.234, 5.678));
 
 		PointAutoPtr point(factory_->createPoint(coords));
@@ -107,11 +107,11 @@ namespace tut
 		using geos::geom::CoordinateArraySequence;
 
 		// TODO - mloskot - temporary solution of Bug #89
-		CoordinateArraySequence* coords = 0;
+		CoordinateArraySequence* coords = nullptr;
 		try
 		{
 			coords = new CoordinateArraySequence();
-			ensure( coords != 0 );
+			ensure( coords != nullptr );
 			coords->add(Coordinate(1.234, 5.678));
 			coords->add(Coordinate(4.321, 8.765));
 
@@ -125,7 +125,7 @@ namespace tut
 			//delete coords;
 
 			const char* msg = e.what(); // ok
-			ensure( msg != 0 );
+			ensure( msg != nullptr );
 		}
     }
 
@@ -168,7 +168,7 @@ namespace tut
 	void object::test<8>()
 	{
 		GeometryPtr envelope = empty_point_->getEnvelope();
-		ensure( envelope != 0 );
+		ensure( envelope != nullptr );
 		ensure( envelope->isEmpty() );
 		factory_->destroyGeometry(envelope);
 	}
@@ -179,7 +179,7 @@ namespace tut
 	void object::test<9>()
 	{
 		GeometryPtr boundary = empty_point_->getBoundary();
-		ensure( boundary != 0 );
+		ensure( boundary != nullptr );
 		ensure( boundary->isEmpty() );
 		factory_->destroyGeometry(boundary);
 	}
@@ -190,7 +190,7 @@ namespace tut
 	void object::test<10>()
 	{
 		GeometryPtr hull = empty_point_->convexHull();
-		ensure( hull != 0 );
+		ensure( hull != nullptr );
 		ensure( hull->isEmpty() );
 		factory_->destroyGeometry(hull);
 	}
@@ -282,7 +282,7 @@ namespace tut
 	void object::test<21>()
 	{
 		GeometryPtr envelope = point_->getEnvelope();
-		ensure( envelope != 0 );
+		ensure( envelope != nullptr );
 		ensure( !envelope->isEmpty() );
 		factory_->destroyGeometry(envelope);
 	}
@@ -293,7 +293,7 @@ namespace tut
 	void object::test<22>()
 	{
 		GeometryPtr boundary = point_->getBoundary();
-		ensure( boundary != 0 );
+		ensure( boundary != nullptr );
 		ensure( boundary->isEmpty() );
 		factory_->destroyGeometry(boundary);
 	}
@@ -304,7 +304,7 @@ namespace tut
 	void object::test<23>()
 	{
 		GeometryPtr hull = point_->convexHull();
-		ensure( hull != 0 );
+		ensure( hull != nullptr );
 		ensure( !hull->isEmpty() );
 		factory_->destroyGeometry(hull);
 	}

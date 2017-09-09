@@ -76,11 +76,11 @@ private:
 
 public:
 
-	MCIndexNoder(SegmentIntersector *nSegInt=NULL)
+	MCIndexNoder(SegmentIntersector *nSegInt=nullptr)
 		:
 		SinglePassNoder(nSegInt),
 		idCounter(0),
-		nodedSegStrings(NULL),
+		nodedSegStrings(nullptr),
 		nOverlaps(0)
 	{}
 

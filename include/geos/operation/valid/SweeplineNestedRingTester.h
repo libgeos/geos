@@ -75,7 +75,7 @@ public:
 		graph(newGraph),
 		rings(),
 		sweepLine(new index::sweepline::SweepLineIndex()),
-		nestedPt(NULL)
+		nestedPt(nullptr)
 	{}
 
 	~SweeplineNestedRingTester()

@@ -83,7 +83,7 @@ SweeplineNestedRingTester::isInside(LinearRing *innerRing,LinearRing *searchRing
 	const Coordinate *innerRingPt=IsValidOp::findPtNotNode(innerRingPts, searchRing, graph);
 
 	// Unable to find a ring point not a node of the search ring
-	assert(innerRingPt!=NULL);
+	assert(innerRingPt!=nullptr);
 
 	bool isInside=CGAlgorithms::isPointInRing(*innerRingPt,searchRingPts);
 	if (isInside) {

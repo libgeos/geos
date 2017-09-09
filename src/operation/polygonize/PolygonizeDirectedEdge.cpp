@@ -45,8 +45,8 @@ PolygonizeDirectedEdge::PolygonizeDirectedEdge(Node *newFrom,
 	DirectedEdge(newFrom, newTo,
 		newDirectionPt, nEdgeDirection)
 {
-	edgeRing=NULL;
-	next=NULL;
+	edgeRing=nullptr;
+	next=nullptr;
 	label=-1;
 }
 
@@ -94,7 +94,7 @@ PolygonizeDirectedEdge::setNext(PolygonizeDirectedEdge *newNext)
 bool
 PolygonizeDirectedEdge::isInRing() const
 {
-	return edgeRing!=NULL;
+	return edgeRing!=nullptr;
 }
 
 /*

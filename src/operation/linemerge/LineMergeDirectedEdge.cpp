@@ -49,7 +49,7 @@ LineMergeDirectedEdge*
 LineMergeDirectedEdge::getNext()
 {
 	if (getToNode()->getDegree()!=2) {
-		return NULL;
+		return nullptr;
 	}
 	if (getToNode()->getOutEdges()->getEdges()[0]==getSym()) {
 		return (LineMergeDirectedEdge*) getToNode()->getOutEdges()->getEdges()[1];

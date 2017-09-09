@@ -62,13 +62,13 @@ Polygonizer::LineStringAdder::filter_ro(const Geometry *g)
  */
 Polygonizer::Polygonizer():
 	lineStringAdder(this),
-	graph(NULL),
+	graph(nullptr),
 	dangles(),
 	cutEdges(),
 	invalidRingLines(),
 	holeList(),
 	shellList(),
-	polyList(NULL)
+	polyList(nullptr)
 {
 }
 
@@ -160,7 +160,7 @@ void
 Polygonizer::add(const LineString *line)
 {
 	// create a new graph using the factory from the input Geometry
-	if (graph==NULL)
+	if (graph==nullptr)
 		graph=new PolygonizeGraph(line->getFactory());
 	graph->addEdge(line);
 }
@@ -174,7 +174,7 @@ Polygonizer::getPolygons()
 {
 	polygonize();
 	vector<Polygon *> *ret = polyList;
-	polyList = NULL;
+	polyList = nullptr;
 	return ret;
 }
 
@@ -207,12 +207,12 @@ void
 Polygonizer::polygonize()
 {
 	// check if already computed
-	if (polyList!=NULL) return;
+	if (polyList!=nullptr) return;
 
 	polyList=new vector<Polygon*>();
 
 	// if no geometries were supplied it's possible graph could be null
-	if (graph==NULL) return;
+	if (graph==nullptr) return;
 
 	graph->deleteDangles(dangles);
 
@@ -307,7 +307,7 @@ Polygonizer::assignHoleToShell(EdgeRing *holeER,
 {
 	EdgeRing *shell = EdgeRing::findEdgeRingContaining(holeER, &shellList);
 
-	if (shell!=NULL)
+	if (shell!=nullptr)
 		shell->addHole(holeER->getRingOwnership());
 }
 

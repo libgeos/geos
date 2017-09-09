@@ -80,7 +80,7 @@ EdgeList::findEqualEdge(Edge *e)
 #endif
 
 	if ( it != ocaMap.end() ) return it->second;
-	return 0;
+	return nullptr;
 }
 
 Edge*

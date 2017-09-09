@@ -90,7 +90,7 @@ DirectedEdge*
 DirectedEdgeStar::getRightmostEdge()
 {
 	EdgeEndStar::iterator it=begin();
-	if ( it==end() ) return NULL;
+	if ( it==end() ) return nullptr;
 
 	assert(*it);
 	assert(dynamic_cast<DirectedEdge*>(*it));
@@ -121,7 +121,7 @@ DirectedEdgeStar::getRightmostEdge()
 			return deLast;
 	}
 	assert(0); // found two horizontal edges incident on node
-	return NULL;
+	return nullptr;
 }
 
 /*public*/
@@ -192,7 +192,7 @@ DirectedEdgeStar::updateLabelling(const Label& nodeLabel)
 std::vector<DirectedEdge*>*
 DirectedEdgeStar::getResultAreaEdges()
 {
-	if (resultAreaEdgeList!=NULL) return resultAreaEdgeList;
+	if (resultAreaEdgeList!=nullptr) return resultAreaEdgeList;
 
 	resultAreaEdgeList=new std::vector<DirectedEdge*>();
 
@@ -216,8 +216,8 @@ DirectedEdgeStar::linkResultDirectedEdges()
 	// make sure edges are copied to resultAreaEdges list
 	getResultAreaEdges();
 	// find first area edge (if any) to start linking at
-	DirectedEdge *firstOut=NULL;
-	DirectedEdge *incoming=NULL;
+	DirectedEdge *firstOut=nullptr;
+	DirectedEdge *incoming=nullptr;
 	int state=SCANNING_FOR_INCOMING;
 	// link edges in CCW order
 	for (std::vector<DirectedEdge*>::iterator
@@ -235,7 +235,7 @@ DirectedEdgeStar::linkResultDirectedEdges()
 		assert(nextIn);
 
 		// record first outgoing edge, in order to link the last incoming edge
-		if (firstOut==NULL && nextOut->isInResult()) firstOut=nextOut;
+		if (firstOut==nullptr && nextOut->isInResult()) firstOut=nextOut;
 
 		switch (state) {
 			case SCANNING_FOR_INCOMING:
@@ -251,7 +251,7 @@ DirectedEdgeStar::linkResultDirectedEdges()
 		}
 	}
 	if (state==LINKING_TO_OUTGOING) {
-		if (firstOut==NULL)
+		if (firstOut==nullptr)
 		{
 			throw util::TopologyException("no outgoing dirEdge found",
 					getCoordinate());
@@ -267,8 +267,8 @@ void
 DirectedEdgeStar::linkMinimalDirectedEdges(EdgeRing *er)
 {
 	// find first area edge (if any) to start linking at
-	DirectedEdge *firstOut=NULL;
-	DirectedEdge *incoming=NULL;
+	DirectedEdge *firstOut=nullptr;
+	DirectedEdge *incoming=nullptr;
 	int state=SCANNING_FOR_INCOMING;
 
 	// link edges in CW order
@@ -285,7 +285,7 @@ DirectedEdgeStar::linkMinimalDirectedEdges(EdgeRing *er)
 		assert(nextIn);
 
 		// record first outgoing edge, in order to link the last incoming edge
-		if (firstOut==NULL && nextOut->getEdgeRing()==er) firstOut=nextOut;
+		if (firstOut==nullptr && nextOut->getEdgeRing()==er) firstOut=nextOut;
 		switch (state) {
 			case SCANNING_FOR_INCOMING:
 				if (nextIn->getEdgeRing()!=er) continue;
@@ -301,7 +301,7 @@ DirectedEdgeStar::linkMinimalDirectedEdges(EdgeRing *er)
 		}
 	}
 	if (state==LINKING_TO_OUTGOING) {
-		assert(firstOut!=NULL); // found null for first outgoing dirEdge
+		assert(firstOut!=nullptr); // found null for first outgoing dirEdge
 		assert(firstOut->getEdgeRing()==er); // unable to link last incoming dirEdge
 		assert(incoming);
 		incoming->setNextMin(firstOut);
@@ -315,8 +315,8 @@ DirectedEdgeStar::linkAllDirectedEdges()
 	//getEdges();
 
 	// find first area edge (if any) to start linking at
-	DirectedEdge *prevOut=NULL;
-	DirectedEdge *firstIn=NULL;
+	DirectedEdge *prevOut=nullptr;
+	DirectedEdge *firstIn=nullptr;
 
 	// link edges in CW order
 	EdgeEndStar::reverse_iterator rbeginIt=rbegin();
@@ -330,8 +330,8 @@ DirectedEdgeStar::linkAllDirectedEdges()
 		DirectedEdge *nextIn=nextOut->getSym();
 		assert(nextIn);
 
-		if (firstIn==NULL) firstIn=nextIn;
-		if (prevOut!=NULL) nextIn->setNext(prevOut);
+		if (firstIn==nullptr) firstIn=nextIn;
+		if (prevOut!=nullptr) nextIn->setNext(prevOut);
 		// record outgoing edge, in order to link the last incoming edge
 		prevOut=nextOut;
 	}

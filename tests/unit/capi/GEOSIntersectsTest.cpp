@@ -35,7 +35,7 @@ namespace tut
         }
 
         test_capigeosintersects_data()
-            : geom1_(0), geom2_(0)
+            : geom1_(nullptr), geom2_(nullptr)
         {
             initGEOS(notice, notice);
         }
@@ -44,8 +44,8 @@ namespace tut
         {
             GEOSGeom_destroy(geom1_);
             GEOSGeom_destroy(geom2_);
-            geom1_ = 0;
-            geom2_ = 0;
+            geom1_ = nullptr;
+            geom2_ = nullptr;
             finishGEOS();
         }
 
@@ -67,8 +67,8 @@ namespace tut
         geom1_ = GEOSGeomFromWKT("POLYGON EMPTY");
         geom2_ = GEOSGeomFromWKT("POLYGON EMPTY");
 
-        ensure( 0 != geom1_ );
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom1_ );
+        ensure( nullptr != geom2_ );
 
         char const r1 = GEOSIntersects(geom1_, geom2_);
 
@@ -86,8 +86,8 @@ namespace tut
         geom1_ = GEOSGeomFromWKT("POLYGON((1 1,1 5,5 5,5 1,1 1))");
         geom2_ = GEOSGeomFromWKT("POINT(2 2)");
 
-        ensure( 0 != geom1_ );
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom1_ );
+        ensure( nullptr != geom2_ );
 
         char const r1 = GEOSIntersects(geom1_, geom2_);
 
@@ -105,8 +105,8 @@ namespace tut
         geom1_ = GEOSGeomFromWKT("MULTIPOLYGON(((0 0,0 10,10 10,10 0,0 0)))");
         geom2_ = GEOSGeomFromWKT("POLYGON((1 1,1 2,2 2,2 1,1 1))");
 
-        ensure( 0 != geom1_ );
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom1_ );
+        ensure( nullptr != geom2_ );
 
         char const r1 = GEOSIntersects(geom1_, geom2_);
 
@@ -133,7 +133,7 @@ namespace tut
         GEOSCoordSeq_setX(cs, 4, 1); GEOSCoordSeq_setY(cs, 4, 1);
 
         geom1_ = GEOSGeom_createPolygon(GEOSGeom_createLinearRing(cs),
-                                        NULL, 0);
+                                        nullptr, 0);
 
         char const r1 = GEOSIntersects(geom1_, geom1_);
 
@@ -150,7 +150,7 @@ namespace tut
 
         geom1_ = GEOSGeomFromHEX_buf((unsigned char*)hex, std::strlen(hex));
 
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         char const r1 = GEOSIntersects(geom1_, geom1_);
 

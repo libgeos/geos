@@ -216,8 +216,8 @@ QuadEdgeSubdivision::locate(const Coordinate &p0, const Coordinate &p1)
 {
     // find an edge containing one of the points
     QuadEdge *e = locator->locate(Vertex(p0));
-    if (e == NULL)
-        return NULL;
+    if (e == nullptr)
+        return nullptr;
 
     // normalize so that p0 is origin of base edge
     QuadEdge *base = e;
@@ -230,7 +230,7 @@ QuadEdgeSubdivision::locate(const Coordinate &p0, const Coordinate &p1)
             return locEdge;
         locEdge = &locEdge->oNext();
     } while (locEdge != base);
-    return NULL;
+    return nullptr;
 }
 
 QuadEdge&
@@ -368,7 +368,7 @@ QuadEdgeSubdivision::fetchTriangleToVisit(QuadEdge *edge,
     } while (curr != edge);
 
     if (isFrame && !includeFrame)
-        return NULL;
+        return nullptr;
     return triEdges;
 }
 
@@ -438,7 +438,7 @@ QuadEdgeSubdivision::visitTriangles(TriangleVisitor *triVisitor, bool includeFra
         if (visitedEdges.find(edge) == visitedEdges.end()) {
             QuadEdge **triEdges = fetchTriangleToVisit(edge, edgeStack,
                     includeFrame, visitedEdges);
-            if (triEdges != NULL)
+            if (triEdges != nullptr)
                 triVisitor->visit(triEdges);
         }
     }
@@ -454,7 +454,7 @@ QuadEdgeSubdivision::getEdges(const geom::GeometryFactory& geomFact)
     for (QuadEdgeSubdivision::QuadEdgeList::iterator it = quadEdges->begin(); it != quadEdges->end(); ++it)
     {
         QuadEdge *qe = *it;
-        CoordinateSequence *coordSeq = coordSeqFact->create((std::vector<geom::Coordinate>*)NULL);;
+        CoordinateSequence *coordSeq = coordSeqFact->create((std::vector<geom::Coordinate>*)nullptr);;
 
         coordSeq->add(qe->orig().getCoordinate());
         coordSeq->add(qe->dest().getCoordinate());
@@ -484,7 +484,7 @@ QuadEdgeSubdivision::getTriangles( const GeometryFactory &geomFact)
     {
         CoordinateSequence *coordSeq = *it;
         Polygon *tri = geomFact.createPolygon(
-                geomFact.createLinearRing(coordSeq), NULL);
+                geomFact.createLinearRing(coordSeq), nullptr);
         tris.push_back(static_cast<Geometry*>(tri));
     }
     GeometryCollection* ret =  geomFact.createGeometryCollection(tris);
@@ -579,7 +579,7 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFac
 
 	std::unique_ptr<Coordinate::Vect> pts = coordList.toCoordinateArray();
 	std::unique_ptr<geom::Geometry> cellPoly(
-		geomFact.createPolygon(geomFact.createLinearRing(new geom::CoordinateArraySequence(pts.release())),NULL));
+		geomFact.createPolygon(geomFact.createLinearRing(new geom::CoordinateArraySequence(pts.release())),nullptr));
 
 	Vertex v = startQE->orig();
 	Coordinate c(0,0);

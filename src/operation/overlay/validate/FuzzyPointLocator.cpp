@@ -68,7 +68,7 @@ FuzzyPointLocator::extractLineWork(const geom::Geometry& geom)
 	for (size_t i=0, n=g.getNumGeometries(); i<n; ++i)
 	{
 		const Geometry* gComp = g.getGeometryN(i);
-		Geometry* lineGeom = NULL;
+		Geometry* lineGeom = nullptr;
 
 		// only get linework for polygonal components
 		if (gComp->getDimension() == 2) {

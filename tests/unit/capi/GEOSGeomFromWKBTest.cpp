@@ -38,7 +38,7 @@ namespace tut
         }
 
         test_capigeosgeomfromwkb_data()
-            : geom1_(0), geom2_(0), reader_(0)
+            : geom1_(nullptr), geom2_(nullptr), reader_(nullptr)
         {
             initGEOS(notice, notice);
             reader_ = GEOSWKTReader_create();
@@ -47,11 +47,11 @@ namespace tut
         ~test_capigeosgeomfromwkb_data()
         {
             GEOSGeom_destroy(geom2_);
-            geom2_ = 0;
+            geom2_ = nullptr;
             GEOSGeom_destroy(geom1_);
-            geom1_ = 0;
+            geom1_ = nullptr;
             GEOSWKTReader_destroy(reader_);
-            reader_ = 0;
+            reader_ = nullptr;
             finishGEOS();
         }
 
@@ -61,7 +61,7 @@ namespace tut
             wkb_hex_decoder::decode(wkbhex, wkb);
 
             geom1_ = GEOSGeomFromWKB_buf(&wkb[0], wkb.size());
-            ensure("GEOSGeomFromWKB_buf failed to create geometry", 0 != geom1_ );
+            ensure("GEOSGeomFromWKB_buf failed to create geometry", nullptr != geom1_ );
 
             // TODO: Update test to compare with WKT-based geometry
             (void)wkt;

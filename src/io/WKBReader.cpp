@@ -355,11 +355,11 @@ WKBReader::readPolygon()
 	cout<<"WKB numRings: "<<numRings<<endl;
 #endif
 
-        LinearRing *shell = NULL;
+        LinearRing *shell = nullptr;
         if( numRings > 0 )
             shell = readLinearRing();
 
-	vector<Geometry *>*holes=NULL;
+	vector<Geometry *>*holes=nullptr;
 	if ( numRings > 1 )
 	{
 		try {

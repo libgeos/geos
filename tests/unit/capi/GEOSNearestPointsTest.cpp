@@ -35,7 +35,7 @@ namespace tut
         }
 
         test_capigeosnearestpoints_data()
-            : geom1_(0), geom2_(0)
+            : geom1_(nullptr), geom2_(nullptr)
         {
             initGEOS(notice, notice);
         }
@@ -44,8 +44,8 @@ namespace tut
         {
             GEOSGeom_destroy(geom1_);
             GEOSGeom_destroy(geom2_);
-            geom1_ = 0;
-            geom2_ = 0;
+            geom1_ = nullptr;
+            geom2_ = nullptr;
             finishGEOS();
         }
 
@@ -67,13 +67,13 @@ namespace tut
         geom1_ = GEOSGeomFromWKT("POLYGON EMPTY");
         geom2_ = GEOSGeomFromWKT("POLYGON EMPTY");
 
-        ensure( 0 != geom1_ );
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom1_ );
+        ensure( nullptr != geom2_ );
 
         GEOSCoordSequence *coords_;
         coords_ = GEOSNearestPoints(geom1_, geom2_);
 
-        ensure( 0 == coords_ );
+        ensure( nullptr == coords_ );
     }
 
     template<>
@@ -84,13 +84,13 @@ namespace tut
         // geom2_ = GEOSGeomFromWKT("POINT(8 8)");
         geom2_ = GEOSGeomFromWKT("POLYGON((8 8, 9 9, 9 10, 8 8))");
 
-        ensure( 0 != geom1_ );
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom1_ );
+        ensure( nullptr != geom2_ );
 
         GEOSCoordSequence *coords_;
         coords_ = GEOSNearestPoints(geom1_, geom2_);
 
-        ensure( 0 != coords_ );
+        ensure( nullptr != coords_ );
 
         unsigned int size;
         GEOSCoordSeq_getSize(coords_, &size);

@@ -38,7 +38,7 @@ namespace tut
         }
 
         test_capioffsetcurve_data()
-            : geom1_(0), geom2_(0), wkt_(0)
+            : geom1_(nullptr), geom2_(nullptr), wkt_(nullptr)
         {
             initGEOS(notice, notice);
             wktw_ = GEOSWKTWriter_create();
@@ -51,9 +51,9 @@ namespace tut
             GEOSGeom_destroy(geom2_);
             GEOSWKTWriter_destroy(wktw_);
             GEOSFree(wkt_);
-            geom1_ = 0;
-            geom2_ = 0;
-            wkt_ = 0;
+            geom1_ = nullptr;
+            geom2_ = nullptr;
+            wkt_ = nullptr;
             finishGEOS();
         }
 
@@ -75,11 +75,11 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0)");
 
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSOffsetCurve(geom1_, 2, 0, GEOSBUF_JOIN_ROUND, 2);
 
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 
@@ -94,11 +94,11 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0)");
 
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSOffsetCurve(geom1_, -2, 0, GEOSBUF_JOIN_ROUND, 2);
 
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 
@@ -114,11 +114,11 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0, 10 10)");
 
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSOffsetCurve(geom1_, -2, 1, GEOSBUF_JOIN_ROUND, 2);
 
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 
@@ -134,11 +134,11 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0, 10 10)");
 
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSOffsetCurve(geom1_, 2, 1, GEOSBUF_JOIN_ROUND, 2);
 
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 
@@ -154,11 +154,11 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("LINESTRING(33282908 6005055,33282900 6005050,33282892 6005042,33282876 6005007,33282863 6004982,33282866 6004971,33282876 6004975,33282967 6005018,33282999 6005031)");
 
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSOffsetCurve(geom1_, 44, 1, GEOSBUF_JOIN_MITRE, 1);
 
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 
@@ -175,11 +175,11 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0)");
 
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSOffsetCurve(geom1_, 0, 0, GEOSBUF_JOIN_ROUND, 2);
 
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 
@@ -202,14 +202,14 @@ namespace tut
             "433.8007202148437500 404.6052856445312500)");
 
         geom1_ = GEOSGeomFromWKT(wkt0.c_str());
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         double width = 57.164000837203;
 
         // left-sided
         {
             geom2_ = GEOSOffsetCurve(geom1_, width, 8, GEOSBUF_JOIN_MITRE, 5.57);
-            ensure( 0 != geom2_ );
+            ensure( nullptr != geom2_ );
             // likely, 5 >= 5
             ensure(GEOSGeomGetNumPoints(geom2_) >= GEOSGeomGetNumPoints(geom1_));
             wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
@@ -222,7 +222,7 @@ namespace tut
         {
             width = -width;
             geom2_ = GEOSOffsetCurve(geom1_, width, 8, GEOSBUF_JOIN_MITRE, 5.57);
-            ensure( 0 != geom2_ );
+            ensure( nullptr != geom2_ );
             // likely, 5 >= 7
             ensure(GEOSGeomGetNumPoints(geom2_) >= GEOSGeomGetNumPoints(geom1_));
             wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
@@ -239,10 +239,10 @@ namespace tut
         double width = -1;
 
         geom1_ = GEOSGeomFromWKT("LINESTRING(0 0,0 10,0 10,10 10)");
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSOffsetCurve(geom1_, width, 8, GEOSBUF_JOIN_ROUND, 0);
-        ensure( "Unexpected exception", 0 != geom2_ );
+        ensure( "Unexpected exception", nullptr != geom2_ );
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
         ensure_equals(std::string(wkt_), "LINESTRING (10 9, 1 9, 1 0)");
     }
@@ -256,10 +256,10 @@ namespace tut
         double width = -1;
 
         geom1_ = GEOSGeomFromWKT("LINESTRING(0 0,0 10,0 10)");
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSOffsetCurve(geom1_, width, 8, GEOSBUF_JOIN_ROUND, 0);
-        ensure( "Unexpected exception", 0 != geom2_ );
+        ensure( "Unexpected exception", nullptr != geom2_ );
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
         ensure_equals(std::string(wkt_), "LINESTRING (1 10, 1 0)");
     }
@@ -273,10 +273,10 @@ namespace tut
         double width = -1;
 
         geom1_ = GEOSGeomFromWKT("LINESTRING(0 10,0 10,0 10)");
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSOffsetCurve(geom1_, width, 8, GEOSBUF_JOIN_ROUND, 0);
-        ensure( "Missing expected exception", 0 == geom2_ );
+        ensure( "Missing expected exception", nullptr == geom2_ );
     }
 
 } // namespace tut

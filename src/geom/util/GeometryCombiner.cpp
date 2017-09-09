@@ -61,7 +61,7 @@ GeometryCombiner::GeometryCombiner(std::vector<Geometry*> const& geoms)
 GeometryFactory const*
 GeometryCombiner::extractFactory(std::vector<Geometry*> const& geoms)
 {
-    return geoms.empty() ? NULL : geoms.front()->getFactory();
+    return geoms.empty() ? nullptr : geoms.front()->getFactory();
 }
 
 Geometry* GeometryCombiner::combine()
@@ -76,10 +76,10 @@ Geometry* GeometryCombiner::combine()
     }
 
     if (elems.empty()) {
-        if (geomFactory != NULL) {
-            return geomFactory->createGeometryCollection(NULL);
+        if (geomFactory != nullptr) {
+            return geomFactory->createGeometryCollection(nullptr);
         }
-        return NULL;
+        return nullptr;
     }
 
     // return the "simplest possible" geometry
@@ -89,7 +89,7 @@ Geometry* GeometryCombiner::combine()
 void
 GeometryCombiner::extractElements(Geometry* geom, std::vector<Geometry*>& elems)
 {
-    if (geom == NULL)
+    if (geom == nullptr)
         return;
 
     for (std::size_t i = 0; i < geom->getNumGeometries(); ++i) {

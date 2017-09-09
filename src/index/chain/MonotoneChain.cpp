@@ -34,7 +34,7 @@ MonotoneChain::MonotoneChain(const geom::CoordinateSequence& newPts,
                              size_t nstart, size_t nend, void* nContext)
 	:
 	pts(newPts),
-	env(0),
+	env(nullptr),
 	context(nContext),
 	start(nstart),
 	end(nend),
@@ -50,7 +50,7 @@ MonotoneChain::~MonotoneChain()
 const Envelope&
 MonotoneChain::getEnvelope() const
 {
-    if (0 == env)
+    if (nullptr == env)
     {
         const Coordinate& p0 = pts[start];
         const Coordinate& p1 = pts[end];

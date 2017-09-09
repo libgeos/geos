@@ -49,7 +49,7 @@ SimpleMCSweepLineIntersector::computeIntersections(vector<Edge*> *edges,
 	SegmentIntersector *si, bool testAllSegments)
 {
 	if (testAllSegments)
-		add(edges,NULL);
+		add(edges,nullptr);
 	else
 		add(edges);
 	computeIntersections(si);
@@ -96,7 +96,7 @@ SimpleMCSweepLineIntersector::add(Edge *edge, void* edgeSet)
 	{
 		GEOS_CHECK_FOR_INTERRUPTS();
 		MonotoneChain *mc=new MonotoneChain(mce,i);
-		SweepLineEvent *insertEvent=new SweepLineEvent(edgeSet,mce->getMinX(i),NULL,mc);
+		SweepLineEvent *insertEvent=new SweepLineEvent(edgeSet,mce->getMinX(i),nullptr,mc);
 		events.push_back(insertEvent);
 		events.push_back(new SweepLineEvent(edgeSet,mce->getMaxX(i),insertEvent,mc));
 	}
@@ -161,7 +161,7 @@ SimpleMCSweepLineIntersector::processOverlaps(int start, int end,
 			MonotoneChain *mc1=(MonotoneChain*) ev1->getObject();
 			// don't compare edges in same group
 			// null group indicates that edges should be compared
-			if (ev0->edgeSet==NULL || (ev0->edgeSet!=ev1->edgeSet))
+			if (ev0->edgeSet==nullptr || (ev0->edgeSet!=ev1->edgeSet))
 			{
 				mc0->computeIntersections(mc1,si);
 				nOverlaps++;

@@ -44,7 +44,7 @@ void
 SweepLineIndex::add(SweepLineInterval *sweepInt)
 {
 	// FIXME: who's going to delete the newly-created events ?
-	SweepLineEvent *insertEvent=new SweepLineEvent(sweepInt->getMin(),NULL,sweepInt);
+	SweepLineEvent *insertEvent=new SweepLineEvent(sweepInt->getMin(),nullptr,sweepInt);
 	events.push_back(insertEvent);
 	events.push_back(new SweepLineEvent(sweepInt->getMax(), insertEvent, sweepInt));
 }

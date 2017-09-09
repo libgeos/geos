@@ -43,8 +43,8 @@ RightmostEdgeFinder::RightmostEdgeFinder()
 	minIndex(-1), // FIXME: don't use -1 as a sentinel, or we won't be
 	              // able to use an unsigned int here
 	minCoord(Coordinate::getNull()),
-	minDe(NULL),
-	orientedDe(NULL)
+	minDe(nullptr),
+	orientedDe(nullptr)
 {
 }
 

@@ -64,9 +64,9 @@ EdgeRing::EdgeRing(DirectedEdge *newStart,
 	edges(),
 	pts(newGeometryFactory->getCoordinateSequenceFactory()->create()),
         label(Location::UNDEF), // new Label(Location::UNDEF)),
-        ring(NULL),
+        ring(nullptr),
         isHoleVar(false),
-        shell(NULL)
+        shell(nullptr)
 {
 	/*
 	 * Commented out to fix different polymorphism in C++ (from Java)
@@ -90,7 +90,7 @@ EdgeRing::~EdgeRing()
 	 * destroyed by `ring' dtor and we must not destroy
 	 * it twice.
 	 */
-	if ( ring == NULL )
+	if ( ring == nullptr )
 	{
 		delete pts;
 	}
@@ -149,7 +149,7 @@ bool
 EdgeRing::isShell()
 {
 	testInvariant();
-	return (shell==NULL);
+	return (shell==nullptr);
 }
 
 EdgeRing*
@@ -163,7 +163,7 @@ void
 EdgeRing::setShell(EdgeRing *newShell)
 {
 	shell=newShell;
-	if (shell!=NULL) shell->addHole(this);
+	if (shell!=nullptr) shell->addHole(this);
 	testInvariant();
 }
 
@@ -202,7 +202,7 @@ EdgeRing::computeRing()
 {
 	testInvariant();
 
-	if (ring!=NULL) return;   // don't compute more than once
+	if (ring!=nullptr) return;   // don't compute more than once
 	ring=geometryFactory->createLinearRing(pts);
 	isHoleVar=CGAlgorithms::isCCW(pts);
 
@@ -230,7 +230,7 @@ EdgeRing::computePoints(DirectedEdge *newStart)
 	do {
 		//util::Assert::isTrue(de!=NULL,"EdgeRing::computePoints: found null Directed Edge");
 		//assert(de!=NULL); // EdgeRing::computePoints: found null Directed Edge
-		if(de==NULL)
+		if(de==nullptr)
 			throw util::TopologyException(
 				"EdgeRing::computePoints: found null Directed Edge");
 
@@ -333,7 +333,7 @@ void
 EdgeRing::addPoints(Edge *edge, bool isForward, bool isFirstEdge)
 {
 	// EdgeRing::addPoints: can't add points after LinearRing construction
-	assert(ring==NULL);
+	assert(ring==nullptr);
 
 	assert(edge);
 	const CoordinateSequence* edgePts=edge->getCoordinates();

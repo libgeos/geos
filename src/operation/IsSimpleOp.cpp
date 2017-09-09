@@ -81,7 +81,7 @@ EndpointInfo::EndpointInfo(const Coordinate& newPt)
 IsSimpleOp::IsSimpleOp()
 	:
 	isClosedEndpointsInInterior(true),
-	geom(0),
+	geom(nullptr),
 	nonSimpleLocation()
 {}
 
@@ -269,11 +269,11 @@ IsSimpleOp::addEndpoint(
 	map<const Coordinate*,EndpointInfo*,CoordinateLessThen>::iterator it=endPoints.find(p);
 	EndpointInfo *eiInfo;
 	if (it==endPoints.end()) {
-		eiInfo=NULL;
+		eiInfo=nullptr;
 	} else {
 		eiInfo=it->second;
 	}
-	if (eiInfo==NULL) {
+	if (eiInfo==nullptr) {
 		eiInfo=new EndpointInfo(*p);
 		endPoints[p]=eiInfo;
 	}

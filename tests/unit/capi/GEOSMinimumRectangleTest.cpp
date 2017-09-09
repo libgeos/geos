@@ -35,7 +35,7 @@ namespace tut
         }
 
         test_capigeosminimumrectangle_data()
-            : input_(0), wkt_(0)
+            : input_(nullptr), wkt_(nullptr)
         {
             initGEOS(notice, notice);
             wktw_ = GEOSWKTWriter_create();
@@ -46,10 +46,10 @@ namespace tut
         ~test_capigeosminimumrectangle_data()
         {
             GEOSGeom_destroy(input_);
-            input_ = 0;
+            input_ = nullptr;
             GEOSWKTWriter_destroy(wktw_);
             GEOSFree(wkt_);
-            wkt_ = 0;
+            wkt_ = nullptr;
             finishGEOS();
         }
 
@@ -69,10 +69,10 @@ namespace tut
     void object::test<1>()
     {
         input_ = GEOSGeomFromWKT("POLYGON ((1 6, 6 11, 11 6, 6 1, 1 6))");
-        ensure( 0 != input_ );
+        ensure( nullptr != input_ );
 
         GEOSGeometry* output = GEOSMinimumRotatedRectangle(input_);
-        ensure( 0 != output );
+        ensure( nullptr != output );
         ensure( 0 == GEOSisEmpty(output) );
 
         wkt_ = GEOSWKTWriter_write(wktw_, output);

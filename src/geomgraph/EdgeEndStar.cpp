@@ -76,7 +76,7 @@ EdgeEnd*
 EdgeEndStar::getNextCW(EdgeEnd *ee)
 {
 	EdgeEndStar::iterator it=find(ee);
-	if ( it==end() ) return NULL;
+	if ( it==end() ) return nullptr;
 	if ( it==begin() ) { it=end(); --it; }
 	else --it;
 	return *it;

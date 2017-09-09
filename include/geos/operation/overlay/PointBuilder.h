@@ -82,7 +82,7 @@ public:
 
 	PointBuilder(OverlayOp *newOp,
 			const geom::GeometryFactory *newGeometryFactory,
-			algorithm::PointLocator *newPtLocator=NULL)
+			algorithm::PointLocator *newPtLocator=nullptr)
 		:
 		op(newOp),
 		geometryFactory(newGeometryFactory),

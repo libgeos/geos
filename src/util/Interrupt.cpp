@@ -19,7 +19,7 @@ namespace {
   /* Could these be portably stored in thread-specific space ? */
   bool requested = false;
 
-  geos::util::Interrupt::Callback *callback = 0;
+  geos::util::Interrupt::Callback *callback = nullptr;
 }
 
 namespace geos {

@@ -177,7 +177,7 @@ void dump_to_stdout( const TiXmlNode * pParent, unsigned int indent = 0 )
 
     const TiXmlNode * pChild;
 
-    for ( pChild = pParent->FirstChild(); pChild != 0; pChild = pChild->NextSibling())
+    for ( pChild = pParent->FirstChild(); pChild != nullptr; pChild = pChild->NextSibling())
     {
         dump_to_stdout( pChild, indent+2 );
     }
@@ -319,7 +319,7 @@ XMLTester::XMLTester()
     testCount(0),
     testFileCount(0),
     totalTestCount(0),
-    curr_file(NULL),
+    curr_file(nullptr),
     testValidOutput(false),
     testValidInput(false),
     sqlOutput(false),
@@ -651,8 +651,8 @@ XMLTester::parseCase(const TiXmlNode* node)
     std::string geomBin;
     std::string thrownException;
 
-    gA=NULL;
-    gB=NULL;
+    gA=nullptr;
+    gB=nullptr;
 
 
     //dump_to_stdout(node);
@@ -673,7 +673,7 @@ XMLTester::parseCase(const TiXmlNode* node)
         geomAin = trimBlanks(geomAin);
         gA = parseGeometry(geomAin, "Geometry A");
 
-        if ( 0 != (el = node->FirstChild("b")) )
+        if ( nullptr != (el = node->FirstChild("b")) )
         {
             geomBin = el->FirstChild()->Value();
             geomBin = trimBlanks(geomBin);

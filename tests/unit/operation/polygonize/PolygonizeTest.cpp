@@ -154,11 +154,11 @@ namespace tut
         static char const* const inp[] = {
             "LINESTRING EMPTY",
             "LINESTRING EMPTY",
-            NULL
+            nullptr
         };
 
         static char const* const exp[] = {
-            NULL
+            nullptr
         };
 
         doTest(inp, exp);
@@ -172,13 +172,13 @@ namespace tut
         static char const* const inp[] = {
             "LINESTRING (100 180, 20 20, 160 20, 100 180)",
             "LINESTRING (100 180, 80 60, 120 60, 100 180)",
-            NULL
+            nullptr
         };
 
         static char const* const exp[] = {
             "POLYGON ((100 180, 120 60, 80 60, 100 180))",
             "POLYGON ((100 180, 160 20, 20 20, 100 180), (100 180, 80 60, 120 60, 100 180))",
-            NULL
+            nullptr
         };
 
         doTest(inp, exp);

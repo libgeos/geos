@@ -89,7 +89,7 @@ DistanceOp::nearestPoints(const Geometry *g0, const Geometry *g1)
 DistanceOp::DistanceOp(const Geometry *g0, const Geometry *g1):
 	geom(2),
 	terminateDistance(0.0),
-	minDistanceLocation(0),
+	minDistanceLocation(nullptr),
 	minDistance(DoubleMax)
 {
 	geom[0] = g0;
@@ -99,7 +99,7 @@ DistanceOp::DistanceOp(const Geometry *g0, const Geometry *g1):
 DistanceOp::DistanceOp(const Geometry& g0, const Geometry& g1):
 	geom(2),
 	terminateDistance(0.0),
-	minDistanceLocation(0),
+	minDistanceLocation(nullptr),
 	minDistance(DoubleMax)
 {
 	geom[0] = &g0;
@@ -110,7 +110,7 @@ DistanceOp::DistanceOp(const Geometry& g0, const Geometry& g1, double tdist)
 	:
 	geom(2),
 	terminateDistance(tdist),
-	minDistanceLocation(0),
+	minDistanceLocation(nullptr),
 	minDistance(DoubleMax)
 {
 	geom[0] = &g0;
@@ -141,7 +141,7 @@ DistanceOp::distance()
 {
 	using geos::util::IllegalArgumentException;
 
-	if ( geom[0] == 0 || geom[1] == 0 )
+	if ( geom[0] == nullptr || geom[1] == nullptr )
 		throw IllegalArgumentException("null geometries are not supported");
 	if ( geom[0]->isEmpty() || geom[1]->isEmpty() ) return 0.0;
 	computeMinDistance();
@@ -163,16 +163,16 @@ DistanceOp::nearestPoints()
 	// lazily creates minDistanceLocation
 	computeMinDistance();
 
-	assert(0 != minDistanceLocation);
+	assert(nullptr != minDistanceLocation);
 	std::vector<GeometryLocation*>& locs = *minDistanceLocation;
 
 	// Empty input geometries result in this behaviour
-	if ( locs[0] == 0 || locs[1] == 0 )
+	if ( locs[0] == nullptr || locs[1] == nullptr )
 	{
 		// either both or none are set..
-		assert(locs[0] == 0 && locs[1] == 0);
+		assert(locs[0] == nullptr && locs[1] == nullptr);
 
-		return 0;
+		return nullptr;
 	}
 
 	GeometryLocation* loc0 = locs[0];
@@ -199,12 +199,12 @@ DistanceOp::updateMinDistance(vector<GeometryLocation*>& locGeom, bool flip)
 	assert(minDistanceLocation);
 
 	// if not set then don't update
-	if (locGeom[0]==NULL)
+	if (locGeom[0]==nullptr)
 	{
 #if GEOS_DEBUG
 std::cerr << "updateMinDistance called with loc[0] == null and loc[1] == " << locGeom[1] << std::endl;
 #endif
-		assert(locGeom[1] == NULL);
+		assert(locGeom[1] == nullptr);
 		return;
 	}
 
@@ -423,8 +423,8 @@ DistanceOp::computeFacetDistance()
 		return;
 	};
 
-	locGeom[0]=NULL;
-	locGeom[1]=NULL;
+	locGeom[0]=nullptr;
+	locGeom[1]=nullptr;
 	computeMinDistanceLinesPoints(lines0, pts1, locGeom);
 	updateMinDistance(locGeom, false);
 	if (minDistance <= terminateDistance) {
@@ -434,8 +434,8 @@ DistanceOp::computeFacetDistance()
 		return;
 	};
 
-	locGeom[0]=NULL;
-	locGeom[1]=NULL;
+	locGeom[0]=nullptr;
+	locGeom[1]=nullptr;
 	computeMinDistanceLinesPoints(lines1, pts0, locGeom);
 	updateMinDistance(locGeom, true);
 	if (minDistance <= terminateDistance){
@@ -445,8 +445,8 @@ DistanceOp::computeFacetDistance()
 		return;
 	};
 
-	locGeom[0]=NULL;
-	locGeom[1]=NULL;
+	locGeom[0]=nullptr;
+	locGeom[1]=nullptr;
 	computeMinDistancePoints(pts0, pts1, locGeom);
 	updateMinDistance(locGeom, false);
 

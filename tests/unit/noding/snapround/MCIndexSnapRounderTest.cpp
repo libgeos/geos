@@ -75,7 +75,7 @@ namespace tut
       void getSegmentStrings(const Geometry& g, SegStrVct& vct)
       {
         CoordSeqPtr s ( g.getCoordinates() );
-        vct.push_back( new NodedSegmentString(s.release(), 0) );
+        vct.push_back( new NodedSegmentString(s.release(), nullptr) );
       }
 
       GeomPtr readGeometry(const std::string& wkt)

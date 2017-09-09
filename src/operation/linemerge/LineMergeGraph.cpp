@@ -105,7 +105,7 @@ planargraph::Node *
 LineMergeGraph::getNode(const Coordinate &coordinate)
 {
 	planargraph::Node *node=findNode(coordinate);
-	if (node==NULL) {
+	if (node==nullptr) {
 		node=new planargraph::Node(coordinate);
 		newNodes.push_back(node);
 		add(node);

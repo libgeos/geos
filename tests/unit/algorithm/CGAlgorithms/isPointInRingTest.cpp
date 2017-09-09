@@ -30,15 +30,15 @@ namespace tut
         geos::io::WKTReader reader_;
 
         test_ispointinring_data()
-            : cs_(0)
+            : cs_(nullptr)
         {
-            assert(0 == cs_);
+            assert(nullptr == cs_);
         }
 
         ~test_ispointinring_data()
         {
             delete cs_;
-            cs_ = 0;
+            cs_ = nullptr;
         }
     };
 

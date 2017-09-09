@@ -34,7 +34,7 @@ namespace tut
             std::fprintf(stdout, "\n");
         }
 
-        test_capiisclosed_data() : geom_(0)
+        test_capiisclosed_data() : geom_(nullptr)
         {
             initGEOS(notice, notice);
         }

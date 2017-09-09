@@ -39,7 +39,7 @@ namespace tut
         }
 
         test_capipointonsurface_data()
-            : geom1_(0), geom2_(0), wkt_(0)
+            : geom1_(nullptr), geom2_(nullptr), wkt_(nullptr)
         {
             initGEOS(notice, notice);
             wktw_ = GEOSWKTWriter_create();
@@ -53,9 +53,9 @@ namespace tut
             GEOSGeom_destroy(geom2_);
             GEOSWKTWriter_destroy(wktw_);
             GEOSFree(wkt_);
-            geom1_ = 0;
-            geom2_ = 0;
-            wkt_ = 0;
+            geom1_ = nullptr;
+            geom2_ = nullptr;
+            wkt_ = nullptr;
             finishGEOS();
         }
 
@@ -77,11 +77,11 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("POINT(10 0)");
 
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSPointOnSurface(geom1_);
 
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 
@@ -96,11 +96,11 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 5 0, 10 0)");
 
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSPointOnSurface(geom1_);
 
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 
@@ -115,11 +115,11 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))");
 
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSPointOnSurface(geom1_);
 
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 
@@ -139,11 +139,11 @@ namespace tut
 56.528833333300 25.2103333333, \
 56.528666666700 25.2101666667))");
 
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSPointOnSurface(geom1_);
 
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 
@@ -158,11 +158,11 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("LINESTRING EMPTY");
 
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSPointOnSurface(geom1_);
 
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 
@@ -176,11 +176,11 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 0 0)");
 
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSPointOnSurface(geom1_);
 
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 
@@ -203,9 +203,9 @@ namespace tut
           "182096.699289843 141744.892410235,182142.107084301 141773.967727472,"
           "182140.268233846 141825.482203511,182123.233970367 141827.369156254,"
           "182111.031940953 141935.935903267))");
-        ensure(0 != geom1_);
+        ensure(nullptr != geom1_);
         geom2_ = GEOSPointOnSurface(geom1_);
-        ensure(0 != geom2_);
+        ensure(nullptr != geom2_);
 
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
         ensure_equals(std::string(wkt_), std::string("POINT (182077.08 141881.65)"));
@@ -219,9 +219,9 @@ namespace tut
           "182496.699289843 141744.892410235,182542.107084301 141773.967727472,"
           "182540.268233846 141825.482203511,182522.034014178 141825.369229273,"
           "182512.231897141 141935.935903267))");
-        ensure(0 != geom1_);
+        ensure(nullptr != geom1_);
         geom2_ = GEOSPointOnSurface(geom1_);
-        ensure(0 != geom2_);
+        ensure(nullptr != geom2_);
 
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
         ensure_equals(std::string(wkt_), std::string("POINT (182476.76 141880.71)"));
@@ -235,9 +235,9 @@ namespace tut
           "182814.953577191 141758.480925126,182766.155358861 141721.682268681,"
           "182742.156235092 141744.881421657,182692.558045971 141716.882443927,"
           "182635.760119718 141846.477712277))");
-        ensure(0 != geom1_);
+        ensure(nullptr != geom1_);
         geom2_ = GEOSPointOnSurface(geom1_);
-        ensure(0 != geom2_);
+        ensure(nullptr != geom2_);
 
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
         ensure_equals(std::string(wkt_), std::string("POINT (182755.89 141812.88)"));

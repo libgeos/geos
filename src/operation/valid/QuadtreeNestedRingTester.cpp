@@ -42,8 +42,8 @@ QuadtreeNestedRingTester::QuadtreeNestedRingTester(GeometryGraph *newGraph):
 	graph(newGraph),
 	rings(),
 	totalEnv(),
-	qt(NULL),
-	nestedPt(NULL)
+	qt(nullptr),
+	nestedPt(nullptr)
 {
 }
 
@@ -95,7 +95,7 @@ QuadtreeNestedRingTester::isNonNested()
 					searchRing, graph);
 
 			// Unable to find a ring point not a node of the search ring
-			assert(innerRingPt!=NULL);
+			assert(innerRingPt!=nullptr);
 
 			bool isInside=CGAlgorithms::isPointInRing(*innerRingPt,searchRingPts);
 			if (isInside) {

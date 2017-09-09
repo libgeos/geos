@@ -73,18 +73,18 @@ Polygon::Polygon(LinearRing *newShell, vector<Geometry *> *newHoles,
 		const GeometryFactory *newFactory):
 	Geometry(newFactory)
 {
-	if (newShell==NULL) {
-		shell=getFactory()->createLinearRing(NULL);
+	if (newShell==nullptr) {
+		shell=getFactory()->createLinearRing(nullptr);
 	}
 	else
 	{
-		if (newHoles != NULL && newShell->isEmpty() && hasNonEmptyElements(newHoles)) {
+		if (newHoles != nullptr && newShell->isEmpty() && hasNonEmptyElements(newHoles)) {
 			throw util::IllegalArgumentException("shell is empty but holes are not");
 		}
 		shell=newShell;
 	}
 
-	if (newHoles==NULL)
+	if (newHoles==nullptr)
 	{
 		holes=new vector<Geometry *>();
 	}
@@ -151,7 +151,7 @@ Polygon::getCoordinateDimension() const
 {
 	int dimension=2;
 
-    if( shell != NULL )
+    if( shell != nullptr )
         dimension = max(dimension,shell->getCoordinateDimension());
 
 	size_t nholes=holes->size();
@@ -476,7 +476,7 @@ bool
 Polygon::isRectangle() const
 {
 	if ( getNumInteriorRing() != 0 ) return false;
-	assert(shell!=NULL);
+	assert(shell!=nullptr);
 	if ( shell->getNumPoints() != 5 ) return false;
 
 	const CoordinateSequence &seq = *(shell->getCoordinatesRO());

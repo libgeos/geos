@@ -41,12 +41,12 @@ PreparedGeometryFactory::create( const geom::Geometry * g) const
 {
     using geos::geom::GeometryTypeId;
 
-    if (0 == g)
+    if (nullptr == g)
     {
         throw util::IllegalArgumentException("PreparedGeometry constructd with null Geometry object");
     }
 
-	PreparedGeometry* pg = 0;
+	PreparedGeometry* pg = nullptr;
 
 	switch ( g->getGeometryTypeId() )
 	{

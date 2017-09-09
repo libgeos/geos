@@ -104,7 +104,7 @@ RectangleIntersection::clip_point(const geom::Point * g,
 				RectangleIntersectionBuilder & parts,
 				const Rectangle & rect)
 {
-  if(g == NULL)
+  if(g == nullptr)
 	return;
 
   double x = g->getX();
@@ -123,7 +123,7 @@ RectangleIntersection::clip_linestring_parts(const geom::LineString * gi,
 
   int n = gi->getNumPoints();
 
-  if(gi == NULL || n<1)
+  if(gi == nullptr || n<1)
 	return false;
 
   // For shorthand code
@@ -376,7 +376,7 @@ RectangleIntersection::clip_polygon_to_linestrings(const geom::Polygon * g,
 								 RectangleIntersectionBuilder & toParts,
 								 const Rectangle & rect)
 {
-  if(g == NULL || g->isEmpty())
+  if(g == nullptr || g->isEmpty())
 	return;
 
   // Clip the exterior first to see what's going on
@@ -425,7 +425,7 @@ RectangleIntersection::clip_polygon_to_linestrings(const geom::Polygon * g,
       // clones
 		  LinearRing *hole = dynamic_cast<LinearRing*>(g->getInteriorRingN(i)->clone());
       // becomes exterior
-		  Polygon *poly = _gf->createPolygon(hole, 0);
+		  Polygon *poly = _gf->createPolygon(hole, nullptr);
 		  toParts.add(poly);
 		}
 	  else if(!parts.empty())
@@ -445,7 +445,7 @@ RectangleIntersection::clip_polygon_to_polygons(const geom::Polygon * g,
 							  RectangleIntersectionBuilder & toParts,
 							  const Rectangle & rect)
 {
-  if(g == NULL || g->isEmpty())
+  if(g == nullptr || g->isEmpty())
 	return;
 
   // Clip the exterior first to see what's going on
@@ -502,7 +502,7 @@ RectangleIntersection::clip_polygon_to_polygons(const geom::Polygon * g,
 		{
       // becomes exterior
 		  LinearRing *cloned = dynamic_cast<LinearRing*>(hole->clone());
-		  Polygon *poly = _gf->createPolygon(cloned, 0);
+		  Polygon *poly = _gf->createPolygon(cloned, nullptr);
 		  parts.add(poly);
 		}
 	  else
@@ -562,7 +562,7 @@ RectangleIntersection::clip_linestring(const geom::LineString * g,
 					 RectangleIntersectionBuilder & parts,
 					 const Rectangle & rect)
 {
-  if(g == NULL || g->isEmpty())
+  if(g == nullptr || g->isEmpty())
 	return;
 
   // If everything was in, just clone the original
@@ -577,7 +577,7 @@ RectangleIntersection::clip_multipoint(const geom::MultiPoint * g,
 					 RectangleIntersectionBuilder & parts,
 					 const Rectangle & rect)
 {
-  if(g == NULL || g->isEmpty())
+  if(g == nullptr || g->isEmpty())
 	return;
   for(int i=0, n=g->getNumGeometries(); i<n; ++i)
 	{
@@ -591,7 +591,7 @@ RectangleIntersection::clip_multilinestring(const geom::MultiLineString * g,
 						  RectangleIntersectionBuilder & parts,
 						  const Rectangle & rect)
 {
-  if(g == NULL || g->isEmpty())
+  if(g == nullptr || g->isEmpty())
 	return;
 
   for(int i=0, n=g->getNumGeometries(); i<n; ++i)
@@ -607,7 +607,7 @@ RectangleIntersection::clip_multipolygon(const geom::MultiPolygon * g,
 					   const Rectangle & rect,
 					   bool keep_polygons)
 {
-  if(g == NULL || g->isEmpty())
+  if(g == nullptr || g->isEmpty())
 	return;
 
   for(int i=0, n=g->getNumGeometries(); i<n; ++i)
@@ -624,7 +624,7 @@ RectangleIntersection::clip_geometrycollection(
 							 const Rectangle & rect,
 							 bool keep_polygons)
 {
-  if(g == NULL || g->isEmpty())
+  if(g == nullptr || g->isEmpty())
 	return;
 
   for(int i=0, n=g->getNumGeometries(); i<n; ++i)

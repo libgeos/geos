@@ -34,7 +34,7 @@ namespace tut
             std::fprintf(stdout, "\n");
         }
 
-        test_capigeoscoordseq_data() : cs_(0)
+        test_capigeoscoordseq_data() : cs_(nullptr)
         {
             initGEOS(notice, notice);
         }
@@ -42,7 +42,7 @@ namespace tut
         ~test_capigeoscoordseq_data()
         {
             GEOSCoordSeq_destroy(cs_);
-            cs_ = 0;
+            cs_ = nullptr;
             finishGEOS();
         }
 

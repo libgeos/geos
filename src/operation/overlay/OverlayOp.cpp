@@ -137,11 +137,11 @@ OverlayOp::OverlayOp(const Geometry *g0, const Geometry *g1)
 	 */
 	geomFact(g0->getFactory()),
 
-	resultGeom(NULL),
+	resultGeom(nullptr),
 	graph(OverlayNodeFactory::instance()),
-	resultPolyList(NULL),
-	resultLineList(NULL),
-	resultPointList(NULL)
+	resultPolyList(nullptr),
+	resultLineList(nullptr),
+	resultPointList(nullptr)
 
 {
 
@@ -677,7 +677,7 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 {
 
 	// Compute the target envelope
-	const Envelope *env = 0;
+	const Envelope *env = nullptr;
 	const Envelope *env0 = getArgGeometry(0)->getEnvelopeInternal();
 	const Envelope *env1 = getArgGeometry(1)->getEnvelopeInternal();
 	Envelope opEnv;

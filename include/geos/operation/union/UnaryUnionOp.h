@@ -118,7 +118,7 @@ public:
   template <class T>
   UnaryUnionOp(const T& geoms)
       :
-      geomFact(0)
+      geomFact(nullptr)
   {
     extractGeoms(geoms);
   }

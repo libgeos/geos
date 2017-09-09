@@ -36,7 +36,7 @@ namespace tut
 		}
 
 		test_capigeosintersection_data()
-			: geom1_(0), geom2_(0), geom3_(0)
+			: geom1_(nullptr), geom2_(nullptr), geom3_(nullptr)
 		{
 			initGEOS(notice, notice);
 			wktw_ = GEOSWKTWriter_create();
@@ -58,9 +58,9 @@ namespace tut
 			GEOSGeom_destroy(geom1_);
 			GEOSGeom_destroy(geom2_);
 			GEOSGeom_destroy(geom3_);
-			geom1_ = 0;
-			geom2_ = 0;
-			geom3_ = 0;
+			geom1_ = nullptr;
+			geom2_ = nullptr;
+			geom3_ = nullptr;
 			finishGEOS();
 		}
 
@@ -82,11 +82,11 @@ namespace tut
 		geom1_ = GEOSGeomFromWKT("POLYGON EMPTY");
 		geom2_ = GEOSGeomFromWKT("POLYGON EMPTY");
 
-		ensure(0 != geom1_);
-		ensure(0 != geom2_);
+		ensure(nullptr != geom1_);
+		ensure(nullptr != geom2_);
 
 		geom3_ = GEOSIntersection(geom1_, geom2_);
-		ensure(0 != geom3_);
+		ensure(nullptr != geom3_);
 		ensure_equals(toWKT(geom3_), std::string("GEOMETRYCOLLECTION EMPTY"));
 	}
 
@@ -97,11 +97,11 @@ namespace tut
 		geom1_ = GEOSGeomFromWKT("POLYGON((1 1,1 5,5 5,5 1,1 1))");
 		geom2_ = GEOSGeomFromWKT("POINT(2 2)");
 
-		ensure(0 != geom1_);
-		ensure(0 != geom2_);
+		ensure(nullptr != geom1_);
+		ensure(nullptr != geom2_);
 
 		geom3_ = GEOSIntersection(geom1_, geom2_);
-		ensure(0 != geom3_);
+		ensure(nullptr != geom3_);
 		ensure_equals(toWKT(geom3_), std::string("POINT (2 2)"));
 	}
 
@@ -112,12 +112,12 @@ namespace tut
 		geom1_ = GEOSGeomFromWKT("MULTIPOLYGON(((0 0,0 10,10 10,10 0,0 0)))");
 		geom2_ = GEOSGeomFromWKT("POLYGON((-1 1,-1 2,2 2,2 1,-1 1))");
 
-		ensure(0 != geom1_);
-		ensure(0 != geom2_);
+		ensure(nullptr != geom1_);
+		ensure(nullptr != geom2_);
 
 		geom3_ = GEOSIntersection(geom1_, geom2_);
 
-		ensure(0 != geom3_);
+		ensure(nullptr != geom3_);
 		ensure_equals(toWKT(geom3_), std::string("POLYGON ((0 1, 0 2, 2 2, 2 1, 0 1))"));
 	}
 
@@ -129,12 +129,12 @@ namespace tut
 		geom1_ = GEOSGeomFromWKT("MULTIPOLYGON(((0 0,5 10,10 0,0 0),(1 1,1 2,2 2,2 1,1 1),(100 100,100 102,102 102,102 100,100 100)))");
 		geom2_ = GEOSGeomFromWKT("POLYGON((0 1,0 2,10 2,10 1,0 1))");
 
-		ensure(0 != geom1_);
-		ensure(0 != geom2_);
+		ensure(nullptr != geom1_);
+		ensure(nullptr != geom2_);
 
 		geom3_ = GEOSIntersection(geom1_, geom2_);
 
-		ensure(0 != geom3_);
+		ensure(nullptr != geom3_);
 		ensure_equals(toWKT(geom3_), std::string("GEOMETRYCOLLECTION (LINESTRING (1 2, 2 2), LINESTRING (2 1, 1 1), POLYGON ((0.5 1, 1 2, 1 1, 0.5 1)), POLYGON ((9 2, 9.5 1, 2 1, 2 2, 9 2)))"));
 	}
 

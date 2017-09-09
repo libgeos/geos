@@ -53,8 +53,8 @@ BufferSubgraph::BufferSubgraph()
 	finder(),
 	dirEdgeList(),
 	nodes(),
-	rightMostCoord(NULL),
-	env(NULL)
+	rightMostCoord(nullptr),
+	env(nullptr)
 {
 }
 
@@ -155,7 +155,7 @@ BufferSubgraph::computeNodeDepth(Node *n)
 	// throw(TopologyException *)
 {
 	// find a visited dirEdge to start at
-	DirectedEdge *startEdge=NULL;
+	DirectedEdge *startEdge=nullptr;
 
 	assert(dynamic_cast<DirectedEdgeStar *>(n->getEdges()));
 	DirectedEdgeStar *ees=static_cast<DirectedEdgeStar *>(n->getEdges());
@@ -176,7 +176,7 @@ BufferSubgraph::computeNodeDepth(Node *n)
 	//if (startEdge==null) return;
 
 	// only compute string append if assertion would fail
-	if (startEdge == NULL)
+	if (startEdge == nullptr)
 	{
 		throw util::TopologyException(
 			"unable to find edge to compute depths at",
@@ -319,7 +319,7 @@ BufferSubgraph::contains(set<Node*>&nodeSet, Node *node)
 Envelope *
 BufferSubgraph::getEnvelope()
 {
-	if (env == NULL) {
+	if (env == nullptr) {
 		env = new Envelope();
 		std::size_t const size = dirEdgeList.size();
 		for(std::size_t i=0; i<size; ++i)

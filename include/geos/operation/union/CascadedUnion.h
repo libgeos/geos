@@ -105,7 +105,7 @@ public:
      */
     CascadedUnion(const std::vector<geom::Geometry*>* geoms)
       : inputGeoms(geoms),
-        geomFactory(NULL)
+        geomFactory(nullptr)
     {}
 
     /**

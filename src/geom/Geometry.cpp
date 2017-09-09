@@ -110,9 +110,9 @@ Geometry::Geometry(const GeometryFactory *newFactory)
 	:
 	envelope(nullptr),
 	_factory(newFactory),
-	_userData(NULL)
+	_userData(nullptr)
 {
-	if ( _factory == NULL ) {
+	if ( _factory == nullptr ) {
 		_factory = GeometryFactory::getDefaultInstance();
 	}
 	SRID=_factory->getSRID();
@@ -123,7 +123,7 @@ Geometry::Geometry(const Geometry &geom)
 	:
 	SRID(geom.getSRID()),
 	_factory(geom._factory),
-	_userData(NULL)
+	_userData(nullptr)
 {
 	if ( geom.envelope.get() )
 	{
@@ -164,7 +164,7 @@ Geometry::hasNullElements(const vector<Geometry *>* lrs)
 {
 	size_t n=lrs->size();
 	for (size_t i=0; i<n; ++i) {
-		if ((*lrs)[i]==NULL) {
+		if ((*lrs)[i]==nullptr) {
 			return true;
 		}
 	}
@@ -198,7 +198,7 @@ Point*
 Geometry::getCentroid() const
 {
 	Coordinate centPt;
-	if ( ! getCentroid(centPt) ) return NULL;
+	if ( ! getCentroid(centPt) ) return nullptr;
 
 	// We don't use createPointFromInternalCoord here
 	// because ::getCentroid() takes care about rounding
@@ -223,13 +223,13 @@ Geometry::getInteriorPoint() const
 	int dim=getDimension();
 	if (dim==0) {
 		InteriorPointPoint intPt(this);
-		if ( ! intPt.getInteriorPoint(interiorPt) ) return NULL;
+		if ( ! intPt.getInteriorPoint(interiorPt) ) return nullptr;
 	} else if (dim==1) {
 		InteriorPointLine intPt(this);
-		if ( ! intPt.getInteriorPoint(interiorPt) ) return NULL;
+		if ( ! intPt.getInteriorPoint(interiorPt) ) return nullptr;
 	} else {
 		InteriorPointArea intPt(this);
-		if ( ! intPt.getInteriorPoint(interiorPt) ) return NULL;
+		if ( ! intPt.getInteriorPoint(interiorPt) ) return nullptr;
 	}
 	Point *p=getFactory()->createPointFromInternalCoord(&interiorPt, this);
 	return p;
@@ -256,7 +256,7 @@ void
 Geometry::geometryChangedAction()
 {
 	//delete envelope;
-	envelope.reset(NULL);
+	envelope.reset(nullptr);
 }
 
 bool
@@ -544,7 +544,7 @@ Geometry::Union(const Geometry *other) const
 	if ( isEmpty() ) return other->clone();
 	if ( other->isEmpty() ) return clone();
 
-	Geometry *out = NULL;
+	Geometry *out = nullptr;
 
 #ifdef SHORTCIRCUIT_PREDICATES
 	// if envelopes are disjoint return a MULTI geom or
@@ -562,7 +562,7 @@ Geometry::Union(const Geometry *other) const
 		v->reserve(ngeomsThis+ngeomsOther);
 
 
-		if ( NULL != (coll = dynamic_cast<const GeometryCollection *>(this)) )
+		if ( nullptr != (coll = dynamic_cast<const GeometryCollection *>(this)) )
 		{
 			for (size_t i=0; i<ngeomsThis; ++i)
 				v->push_back(coll->getGeometryN(i)->clone());
@@ -570,7 +570,7 @@ Geometry::Union(const Geometry *other) const
 			v->push_back(this->clone());
 		}
 
-		if ( NULL != (coll = dynamic_cast<const GeometryCollection *>(other)) )
+		if ( nullptr != (coll = dynamic_cast<const GeometryCollection *>(other)) )
 		{
 			for (size_t i=0; i<ngeomsOther; ++i)
 				v->push_back(coll->getGeometryN(i)->clone());
@@ -626,7 +626,7 @@ Geometry::symDifference(const Geometry *other) const
 		v->reserve(ngeomsThis+ngeomsOther);
 
 
-		if ( NULL != (coll = dynamic_cast<const GeometryCollection *>(this)) )
+		if ( nullptr != (coll = dynamic_cast<const GeometryCollection *>(this)) )
 		{
 			for (size_t i=0; i<ngeomsThis; ++i)
 				v->push_back(coll->getGeometryN(i)->clone());
@@ -634,7 +634,7 @@ Geometry::symDifference(const Geometry *other) const
 			v->push_back(this->clone());
 		}
 
-		if ( NULL != (coll = dynamic_cast<const GeometryCollection *>(other)) )
+		if ( nullptr != (coll = dynamic_cast<const GeometryCollection *>(other)) )
 		{
 			for (size_t i=0; i<ngeomsOther; ++i)
 				v->push_back(coll->getGeometryN(i)->clone());

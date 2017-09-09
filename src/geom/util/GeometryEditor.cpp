@@ -48,7 +48,7 @@ namespace util { // geos.geom.util
  * an edited Geometry with the same GeometryFactory as the input Geometry.
  */
 GeometryEditor::GeometryEditor(){
-	factory=NULL;
+	factory=nullptr;
 }
 
 /**
@@ -74,7 +74,7 @@ Geometry*
 GeometryEditor::edit(const Geometry *geometry, GeometryEditorOperation *operation)
 {
 	// if client did not supply a GeometryFactory, use the one from the input Geometry
-	if (factory == NULL)
+	if (factory == nullptr)
 		factory=geometry->getFactory();
 
   if ( const GeometryCollection *gc =
@@ -100,7 +100,7 @@ GeometryEditor::edit(const Geometry *geometry, GeometryEditorOperation *operatio
 
     // Unsupported Geometry classes should be caught in the GeometryEditorOperation.
     assert(!static_cast<bool>("SHOULD NEVER GET HERE"));
-    return NULL;
+    return nullptr;
 }
 
 Polygon*
@@ -112,7 +112,7 @@ GeometryEditor::editPolygon(const Polygon *polygon,GeometryEditorOperation *oper
 	if (newPolygon->isEmpty()) {
 		//RemoveSelectedPlugIn relies on this behaviour. [Jon Aquino]
 		if ( newPolygon->getFactory() != factory ) {
-		  Polygon *ret = factory->createPolygon(NULL, NULL);
+		  Polygon *ret = factory->createPolygon(nullptr, nullptr);
 		  delete newPolygon;
 		  return ret;
 		} else {
@@ -127,7 +127,7 @@ GeometryEditor::editPolygon(const Polygon *polygon,GeometryEditorOperation *oper
 		//RemoveSelectedPlugIn relies on this behaviour. [Jon Aquino]
 		delete shell;
 		delete newPolygon;
-		return factory->createPolygon(NULL,NULL);
+		return factory->createPolygon(nullptr,nullptr);
 	}
 
 	vector<Geometry*> *holes=new vector<Geometry*>;

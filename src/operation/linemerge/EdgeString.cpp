@@ -43,7 +43,7 @@ namespace linemerge { // geos.operation.linemerge
 EdgeString::EdgeString(const GeometryFactory *newFactory):
 	factory(newFactory),
 	directedEdges(),
-	coordinates(NULL)
+	coordinates(nullptr)
 {
 }
 
@@ -62,7 +62,7 @@ EdgeString::add(LineMergeDirectedEdge *directedEdge)
 CoordinateSequence *
 EdgeString::getCoordinates()
 {
-	if (coordinates==NULL) {
+	if (coordinates==nullptr) {
 		int forwardDirectedEdges = 0;
 		int reverseDirectedEdges = 0;
 		coordinates=factory->getCoordinateSequenceFactory()->create();

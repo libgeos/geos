@@ -64,14 +64,14 @@ namespace tut
             wkbwriter.setOutputDimension( 3 );
             wkbwriter.write( *geom, result_stream );
             delete geom;
-            geom = NULL;
+            geom = nullptr;
 
             ensure( result_stream.str().length() == 21 );
 
             result_stream.seekg( 0 );
             geom = wkbreader.read( result_stream );
 
-            ensure( geom != NULL );
+            ensure( geom != nullptr );
 
             ensure( geom->getCoordinateDimension() == 2 );
             ensure( geom->getCoordinate()->x == -117.0 );
@@ -92,7 +92,7 @@ namespace tut
             wkbwriter.setOutputDimension( 3 );
             wkbwriter.write( *geom, result_stream );
             delete geom;
-            geom = NULL;
+            geom = nullptr;
 
             ensure( result_stream.str().length() == 29 );
 
@@ -118,7 +118,7 @@ namespace tut
             wkbwriter.setOutputDimension( 2 );
             wkbwriter.write( *geom, result_stream );
             delete geom;
-            geom = NULL;
+            geom = nullptr;
 
             ensure( result_stream.str().length() == 21 );
 

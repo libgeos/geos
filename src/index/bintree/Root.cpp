@@ -47,7 +47,7 @@ Root::insert(Interval *itemInterval,void* item)
 	 *  If the subnode doesn't exist or this item is not contained in it,
 	 *  have to expand the tree upward to contain the item.
 	 */
-	if (node==NULL || !node->getInterval()->contains(itemInterval))
+	if (node==nullptr || !node->getInterval()->contains(itemInterval))
 	{
 		Node* largerNode=Node::createExpanded(node,itemInterval);
 //		delete subnode[index];

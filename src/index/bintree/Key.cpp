@@ -35,7 +35,7 @@ Key::computeLevel(Interval *newInterval)
 
 Key::Key(Interval *newInterval)
 {
-	interval=NULL;
+	interval=nullptr;
 	pt=0.0;
 	level=0;
 	computeKey(newInterval);

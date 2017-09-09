@@ -36,7 +36,7 @@ namespace tut
         }
 
         test_capigeosnode_data()
-            : geom1_(0), geom2_(0), w_(0)
+            : geom1_(nullptr), geom2_(nullptr), w_(nullptr)
         {
             initGEOS(notice, notice);
             w_ = GEOSWKTWriter_create();
@@ -48,8 +48,8 @@ namespace tut
             GEOSGeom_destroy(geom1_);
             GEOSGeom_destroy(geom2_);
             GEOSWKTWriter_destroy(w_);
-            geom1_ = 0;
-            geom2_ = 0;
+            geom1_ = nullptr;
+            geom2_ = nullptr;
             finishGEOS();
         }
 
@@ -71,7 +71,7 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 10, 10 0, 0 10)");
         geom2_ = GEOSNode(geom1_);
-        ensure(0 != geom2_);
+        ensure(nullptr != geom2_);
 
         GEOSNormalize(geom2_);
         char* wkt_c = GEOSWKTWriter_write(w_, geom2_);
@@ -90,7 +90,7 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("MULTILINESTRING((0 0, 2 0, 4 0),(5 0, 3 0, 1 0))");
         geom2_ = GEOSNode(geom1_);
-        ensure(0 != geom2_);
+        ensure(nullptr != geom2_);
 
         GEOSNormalize(geom2_);
         char* wkt_c = GEOSWKTWriter_write(w_, geom2_);
@@ -109,7 +109,7 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("MULTILINESTRING((0 0, 2 0, 4 0),(0 0, 2 0, 4 0))");
         geom2_ = GEOSNode(geom1_);
-        ensure(0 != geom2_);
+        ensure(nullptr != geom2_);
 
         GEOSNormalize(geom2_);
         char* wkt_c = GEOSWKTWriter_write(w_, geom2_);

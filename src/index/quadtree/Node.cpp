@@ -101,7 +101,7 @@ Node::find(const Envelope *searchEnv)
 	int subnodeIndex=getSubnodeIndex(searchEnv, centre);
 	if (subnodeIndex==-1)
 		return this;
-	if (subnode[subnodeIndex]!=NULL) {
+	if (subnode[subnodeIndex]!=nullptr) {
 		// query lies in subquad, so search it
 		Node *node=subnode[subnodeIndex];
 		return node->find(searchEnv);
@@ -145,7 +145,7 @@ Node*
 Node::getSubnode(int index)
 {
 	assert(index >=0 && index < 4);
-	if (subnode[index] == NULL)
+	if (subnode[index] == nullptr)
 	{
 		subnode[index] = createSubnode(index).release();
 	}

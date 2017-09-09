@@ -63,7 +63,7 @@ bool BoundablePair::isLeaves() const {
 }
 
 bool BoundablePair::isComposite(const Boundable* item) {
-	return dynamic_cast<const AbstractNode*>(item) != NULL;
+	return dynamic_cast<const AbstractNode*>(item) != nullptr;
 }
 
 double BoundablePair::area(const Boundable* b) {

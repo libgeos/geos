@@ -71,7 +71,7 @@ public:
 			unsigned int vertexIndex);
 
 	bool snap(HotPixel& hotPixel) {
-		return snap(hotPixel, 0, 0);
+		return snap(hotPixel, nullptr, 0);
 	}
 
 

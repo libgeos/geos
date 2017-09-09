@@ -32,7 +32,7 @@ namespace tut
         }
 
         test_capilinestringpoint_data()
-            : geom1_(0)
+            : geom1_(nullptr)
         {
             initGEOS(notice, notice);
         }
@@ -40,7 +40,7 @@ namespace tut
         ~test_capilinestringpoint_data()
         {
             GEOSGeom_destroy(geom1_);
-            geom1_ = 0;
+            geom1_ = nullptr;
             finishGEOS();
         }
 
@@ -62,7 +62,7 @@ namespace tut
         geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 5 5, 10 10)");
         GEOSGeometry *geom2;
         double x, y;
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         char const r1 = GEOSisClosed(geom1_);
 
@@ -102,7 +102,7 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 5 5, 10 10)");
         double length;
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         GEOSGeomGetLength(geom1_, &length);
         ensure(length != 0.0);
@@ -114,7 +114,7 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 5 5, 10 10)");
         int points;
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         points = GEOSGeomGetNumPoints(geom1_);
         ensure_equals(points, 3);

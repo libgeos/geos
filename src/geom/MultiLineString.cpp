@@ -84,7 +84,7 @@ Geometry*
 MultiLineString::getBoundary() const
 {
 	if (isEmpty()) {
-		return getFactory()->createGeometryCollection(NULL);
+		return getFactory()->createGeometryCollection(nullptr);
 	}
 	//Geometry *in = toInternalGeometry(this);
 	GeometryGraph gg(0, this);

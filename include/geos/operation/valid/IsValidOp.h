@@ -225,7 +225,7 @@ public:
 		:
 		parentGeometry(geom),
 		isChecked(false),
-		validErr(NULL),
+		validErr(nullptr),
 		isSelfTouchingRingFormingHoleValid(false)
 	{}
 

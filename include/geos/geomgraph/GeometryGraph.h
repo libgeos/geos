@@ -214,7 +214,7 @@ public:
 	index::SegmentIntersector* computeSelfNodes(
 			algorithm::LineIntersector *li,
 			bool computeRingSelfNodes,
-			const geom::Envelope *env=0)
+			const geom::Envelope *env=nullptr)
 	{
 		return computeSelfNodes(*li, computeRingSelfNodes, env);
 	}
@@ -223,7 +223,7 @@ public:
 			algorithm::LineIntersector *li,
 			bool computeRingSelfNodes,
 			bool isDoneIfProperInt,
-			const geom::Envelope *env=0)
+			const geom::Envelope *env=nullptr)
 	{
 		return computeSelfNodes(*li, computeRingSelfNodes, isDoneIfProperInt, env);
 	}
@@ -232,15 +232,15 @@ public:
 	// be deprecated.
 	index::SegmentIntersector* computeSelfNodes(
 			algorithm::LineIntersector& li,
-			bool computeRingSelfNodes, const geom::Envelope *env=0);
+			bool computeRingSelfNodes, const geom::Envelope *env=nullptr);
 
 	index::SegmentIntersector* computeSelfNodes(
 			algorithm::LineIntersector& li,
-			bool computeRingSelfNodes, bool isDoneIfProperInt, const geom::Envelope *env=0);
+			bool computeRingSelfNodes, bool isDoneIfProperInt, const geom::Envelope *env=nullptr);
 
 	index::SegmentIntersector* computeEdgeIntersections(GeometryGraph *g,
 		algorithm::LineIntersector *li, bool includeProper,
-		const geom::Envelope *env=0);
+		const geom::Envelope *env=nullptr);
 
 	std::vector<Edge*> *getEdges();
 

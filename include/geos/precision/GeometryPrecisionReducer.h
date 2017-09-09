@@ -108,7 +108,7 @@ public:
 
   GeometryPrecisionReducer(const geom::PrecisionModel &pm)
       :
-      newFactory(0),
+      newFactory(nullptr),
       targetPM(pm),
       removeCollapsed(true),
       isPointwise(false)

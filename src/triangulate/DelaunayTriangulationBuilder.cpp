@@ -65,7 +65,7 @@ DelaunayTriangulationBuilder::toVertices(
 }
 
 DelaunayTriangulationBuilder::DelaunayTriangulationBuilder() :
-	siteCoords(NULL), tolerance(0.0), subdiv(NULL)
+	siteCoords(nullptr), tolerance(0.0), subdiv(nullptr)
 {
 }
 
@@ -99,7 +99,7 @@ DelaunayTriangulationBuilder::setSites(const CoordinateSequence& coords)
 void
 DelaunayTriangulationBuilder::create()
 {
-	if(subdiv != NULL || siteCoords == NULL)
+	if(subdiv != nullptr || siteCoords == nullptr)
 		return;
 
 	Envelope siteEnv;

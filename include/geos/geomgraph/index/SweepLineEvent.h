@@ -51,9 +51,9 @@ public:
 
 	virtual ~SweepLineEvent();
 
-	bool isInsert() { return insertEvent==NULL; }
+	bool isInsert() { return insertEvent==nullptr; }
 
-	bool isDelete() { return insertEvent!=NULL; }
+	bool isDelete() { return insertEvent!=nullptr; }
 
 	SweepLineEvent* getInsertEvent() { return insertEvent; }
 

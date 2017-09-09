@@ -62,7 +62,7 @@ NodeMap::addNode(const Coordinate& coord)
         cerr<<"["<<this<<"] NodeMap::addNode("<<coord.toString()<<")";
 #endif
         Node *node=find(coord);
-        if (node==NULL) {
+        if (node==nullptr) {
 #if GEOS_DEBUG
                 cerr<<" is new"<<endl;
 #endif
@@ -94,7 +94,7 @@ NodeMap::addNode(Node *n)
 #endif
 	Coordinate *c=const_cast<Coordinate *>(&n->getCoordinate());
 	Node *node=find(*c);
-	if (node==NULL) {
+	if (node==nullptr) {
 #if GEOS_DEBUG
 		cerr<<" is new"<<endl;
 #endif
@@ -136,7 +136,7 @@ NodeMap::find(const Coordinate& coord) const
 	NodeMap::const_iterator found=nodeMap.find(c);
 
 	if (found==nodeMap.end())
-		return NULL;
+		return nullptr;
 	else
 		return found->second;
 }

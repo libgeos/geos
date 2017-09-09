@@ -773,7 +773,7 @@ LineIntersector::intersection(const Coordinate& p1,
 #endif
 	}
 
-	if (precisionModel!=NULL) {
+	if (precisionModel!=nullptr) {
 		precisionModel->makePrecise(intPtOut);
 	}
 

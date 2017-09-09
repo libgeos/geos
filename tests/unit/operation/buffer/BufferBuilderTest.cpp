@@ -83,7 +83,7 @@ namespace tut
         double const distance = 5;
 
         GeomPtr g0(wktreader.read(wkt0));
-        ensure(0 != g0.get());
+        ensure(nullptr != g0.get());
         ensure_equals(g0->getNumPoints(), std::size_t(5));
 
         BufferParameters params;
@@ -98,7 +98,7 @@ namespace tut
         // left-side
         {
             GeomPtr gB(builder.bufferLineSingleSided(g0.get(), distance, true));
-            ensure(0 != gB.get());
+            ensure(nullptr != gB.get());
             ensure_equals(gB->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
             // Left-side offset curve expected with 5+ vertices
             ensure(gB->getNumPoints() >= g0->getNumPoints());
@@ -113,7 +113,7 @@ namespace tut
         // right-side
         {
             GeomPtr gB(builder.bufferLineSingleSided(g0.get(), distance, false));
-            ensure(0 != gB.get());
+            ensure(nullptr != gB.get());
             ensure_equals(gB->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
             // Right-side offset curve expected with 5+ vertices
             ensure(gB->getNumPoints() >= g0->getNumPoints());

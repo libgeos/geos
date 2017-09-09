@@ -46,7 +46,7 @@ TaggedLineSegment::TaggedLineSegment(const geom::Coordinate& p0,
 			const geom::Coordinate& p1)
 	:
 	LineSegment(p0, p1),
-	parent(NULL),
+	parent(nullptr),
 	index(0)
 {
 }

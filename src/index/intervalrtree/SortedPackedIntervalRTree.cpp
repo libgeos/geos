@@ -34,7 +34,7 @@ namespace intervalrtree {
 void
 SortedPackedIntervalRTree::init()
 {
-	if (root != NULL) return;
+	if (root != nullptr) return;
 
 	root = buildTree();
 }
@@ -104,13 +104,13 @@ SortedPackedIntervalRTree::buildLevel( IntervalRTreeNode::ConstVect * src, Inter
 SortedPackedIntervalRTree::SortedPackedIntervalRTree()
 	:
 	leaves( new IntervalRTreeNode::ConstVect()),
-	root( NULL),
+	root( nullptr),
 	level( 0)
 { }
 
 SortedPackedIntervalRTree::~SortedPackedIntervalRTree()
 {
-	if ( root != NULL )
+	if ( root != nullptr )
 	{
 		// deleting root cascades to all IntervalRTreeNode's
 		delete root;
@@ -128,7 +128,7 @@ SortedPackedIntervalRTree::~SortedPackedIntervalRTree()
 void
 SortedPackedIntervalRTree::insert( double min, double max, void * item)
 {
-	if (root != NULL)
+	if (root != nullptr)
 		throw new util::UnsupportedOperationException( "Index cannot be added to once it has been queried");
 
 	leaves->push_back( new IntervalRTreeLeafNode( min, max, item));

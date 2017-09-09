@@ -89,8 +89,8 @@ Edge::~Edge()
 Edge::Edge(CoordinateSequence* newPts, const Label& newLabel)
 	:
 	GraphComponent(newLabel),
-	mce(NULL),
-	env(NULL),
+	mce(nullptr),
+	env(nullptr),
 	isIsolatedVar(true),
 	depth(),
 	depthDelta(0),
@@ -104,8 +104,8 @@ Edge::Edge(CoordinateSequence* newPts, const Label& newLabel)
 Edge::Edge(CoordinateSequence* newPts)
 	:
 	GraphComponent(),
-	mce(NULL),
-	env(NULL),
+	mce(nullptr),
+	env(nullptr),
 	isIsolatedVar(true),
 	depth(),
 	depthDelta(0),
@@ -120,7 +120,7 @@ MonotoneChainEdge*
 Edge::getMonotoneChainEdge()
 {
 	testInvariant();
-	if (mce==NULL) mce=new MonotoneChainEdge(this);
+	if (mce==nullptr) mce=new MonotoneChainEdge(this);
 	return mce;
 }
 
@@ -288,7 +288,7 @@ Envelope*
 Edge::getEnvelope()
 {
 	// compute envelope lazily
-	if (env==NULL)
+	if (env==nullptr)
 	{
 		env=new Envelope();
 		unsigned int npts=getNumPoints();

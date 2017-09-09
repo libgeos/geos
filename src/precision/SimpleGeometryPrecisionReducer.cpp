@@ -68,7 +68,7 @@ CoordinateSequence*
 PrecisionReducerCoordinateOperation::edit(const CoordinateSequence *cs,
                                           const Geometry *geom)
 {
-	if (cs->getSize()==0) return NULL;
+	if (cs->getSize()==0) return nullptr;
 
 	unsigned int csSize=cs->getSize();
 
@@ -108,8 +108,8 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence *cs,
 	CoordinateSequence *collapsedCoords = reducedCoords;
 	if (sgpr->getRemoveCollapsed())
 	{
-		delete reducedCoords; reducedCoords=0;
-		collapsedCoords=0;
+		delete reducedCoords; reducedCoords=nullptr;
+		collapsedCoords=nullptr;
 	}
 	// return null or orginal length coordinate array
 	if (noRepeatedCoords->getSize()<minLength) {

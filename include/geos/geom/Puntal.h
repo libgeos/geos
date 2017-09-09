@@ -37,7 +37,7 @@ namespace geom { // geos::geom
 class GEOS_DLL Puntal : public virtual Geometry
 {
 protected:
-  Puntal(): Geometry(0) {}
+  Puntal(): Geometry(nullptr) {}
 };
 
 } // namespace geos::geom

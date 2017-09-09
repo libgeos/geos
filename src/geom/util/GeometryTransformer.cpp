@@ -54,8 +54,8 @@ namespace util { // geos.geom.util
 /*public*/
 GeometryTransformer::GeometryTransformer()
 	:
-	factory(NULL),
-	inputGeom(NULL),
+	factory(nullptr),
+	inputGeom(nullptr),
 	pruneEmptyGeometry(true),
 	preserveGeometryCollectionType(true),
 	preserveCollections(false),
@@ -86,21 +86,21 @@ GeometryTransformer::transform(const Geometry* nInputGeom)
 	factory = inputGeom->getFactory();
 
 	if ( const Point* p=dynamic_cast<const Point*>(inputGeom) )
-		return transformPoint(p, NULL);
+		return transformPoint(p, nullptr);
 	if ( const MultiPoint* mp=dynamic_cast<const MultiPoint*>(inputGeom) )
-		return transformMultiPoint(mp, NULL);
+		return transformMultiPoint(mp, nullptr);
 	if ( const LinearRing* lr=dynamic_cast<const LinearRing*>(inputGeom) )
-		return transformLinearRing(lr, NULL);
+		return transformLinearRing(lr, nullptr);
 	if ( const LineString* ls=dynamic_cast<const LineString*>(inputGeom) )
-		return transformLineString(ls, NULL);
+		return transformLineString(ls, nullptr);
 	if ( const MultiLineString* mls=dynamic_cast<const MultiLineString*>(inputGeom) )
-		return transformMultiLineString(mls, NULL);
+		return transformMultiLineString(mls, nullptr);
 	if ( const Polygon* p=dynamic_cast<const Polygon*>(inputGeom) )
-		return transformPolygon(p, NULL);
+		return transformPolygon(p, nullptr);
 	if ( const MultiPolygon* mp=dynamic_cast<const MultiPolygon*>(inputGeom) )
-		return transformMultiPolygon(mp, NULL);
+		return transformMultiPolygon(mp, nullptr);
 	if ( const GeometryCollection* gc=dynamic_cast<const GeometryCollection*>(inputGeom) )
-		return transformGeometryCollection(gc, NULL);
+		return transformGeometryCollection(gc, nullptr);
 
 	throw IllegalArgumentException("Unknown Geometry subtype.");
 }
@@ -165,7 +165,7 @@ GeometryTransformer::transformMultiPoint(
 		assert(p);
 
 		Geometry::Ptr transformGeom = transformPoint(p, geom);
-		if ( transformGeom.get() == NULL ) continue;
+		if ( transformGeom.get() == nullptr ) continue;
 		if ( transformGeom->isEmpty() ) continue;
 
 		// If an exception is thrown we'll leak
@@ -239,7 +239,7 @@ GeometryTransformer::transformMultiLineString(
 		assert(l);
 
 		Geometry::Ptr transformGeom = transformLineString(l, geom);
-		if ( transformGeom.get() == NULL ) continue;
+		if ( transformGeom.get() == nullptr ) continue;
 		if ( transformGeom->isEmpty() ) continue;
 
 		// If an exception is thrown we'll leak
@@ -268,7 +268,7 @@ GeometryTransformer::transformPolygon(
 	assert(lr);
 
 	Geometry::Ptr shell = transformLinearRing(lr, geom);
-	if ( shell.get() == NULL
+	if ( shell.get() == nullptr
 		|| ! dynamic_cast<LinearRing*>(shell.get())
 		|| shell->isEmpty() )
 	{
@@ -284,7 +284,7 @@ GeometryTransformer::transformPolygon(
 
 		Geometry::Ptr hole(transformLinearRing(lr, geom));
 
-		if ( hole.get() == NULL || hole->isEmpty() ) {
+		if ( hole.get() == nullptr || hole->isEmpty() ) {
 			continue;
 		}
 
@@ -309,7 +309,7 @@ GeometryTransformer::transformPolygon(
 	{
 		// would like to use a manager constructor here
 		vector<Geometry*>* components = new vector<Geometry*>();
-		if ( shell.get() != NULL ) {
+		if ( shell.get() != nullptr ) {
 			components->push_back(shell.release());
 		}
 
@@ -343,7 +343,7 @@ GeometryTransformer::transformMultiPolygon(
 		assert(p);
 
 		Geometry::Ptr transformGeom = transformPolygon(p, geom);
-		if ( transformGeom.get() == NULL ) continue;
+		if ( transformGeom.get() == nullptr ) continue;
 		if ( transformGeom->isEmpty() ) continue;
 
 		// If an exception is thrown we'll leak
@@ -371,7 +371,7 @@ GeometryTransformer::transformGeometryCollection(
 	{
 		Geometry::Ptr transformGeom = transform(
 			geom->getGeometryN(i)); // no parent ?
-		if ( transformGeom.get() == NULL ) continue;
+		if ( transformGeom.get() == nullptr ) continue;
 		if ( pruneEmptyGeometry && transformGeom->isEmpty() ) continue;
 
 		// If an exception is thrown we'll leak

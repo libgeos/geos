@@ -54,8 +54,8 @@ public:
 		:
 		graph(newGraph),
 		//totalEnv(0),
-		index(0),
-		nestedPt(0)
+		index(nullptr),
+		nestedPt(nullptr)
 	{
 	}
 

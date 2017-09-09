@@ -111,7 +111,7 @@ PlanarGraph::isBoundaryNode(int geomIndex, const Coordinate& coord)
 	assert(nodes);
 
 	Node *node=nodes->find(coord);
-	if (node==NULL) return false;
+	if (node==nullptr) return false;
 
 	const Label& label = node->getLabel();
 	if (! label.isNull() && label.getLocation(geomIndex)==Location::BOUNDARY)
@@ -290,7 +290,7 @@ PlanarGraph::findEdgeEnd(Edge *e)
 		// should test using values rather then pointers ?
 		if (ee->getEdge()==e) return ee;
 	}
-	return NULL;
+	return nullptr;
 }
 
 /*public*/
@@ -308,7 +308,7 @@ PlanarGraph::findEdge(const Coordinate& p0, const Coordinate& p1)
 		if (p0==eCoord->getAt(0) && p1==eCoord->getAt(1))
 			return e;
 	}
-	return NULL;
+	return nullptr;
 }
 
 /*public*/
@@ -342,7 +342,7 @@ PlanarGraph::findEdgeInSameDirection(const Coordinate& p0,
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 /*private*/

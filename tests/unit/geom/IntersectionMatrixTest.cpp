@@ -489,7 +489,7 @@ namespace tut
 
 		// transpose() returns 'this' pointer to transposed object
 		MatrixCPtr output = transposed.transpose();
-		ensure( output != 0 );
+		ensure( output != nullptr );
 
 		// TODO - mloskot - waiting for equality operators
 		//ensure_equals( (*output), input );

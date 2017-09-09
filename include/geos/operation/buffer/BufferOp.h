@@ -171,7 +171,7 @@ public:
 		:
 		argGeom(g),
 		bufParams(),
-		resultGeometry(NULL)
+		resultGeometry(nullptr)
 	{
 	}
 
@@ -187,7 +187,7 @@ public:
 		:
 		argGeom(g),
 		bufParams(params),
-		resultGeometry(NULL)
+		resultGeometry(nullptr)
 	{
 	}
 

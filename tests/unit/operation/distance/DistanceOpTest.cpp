@@ -220,7 +220,7 @@ namespace tut
 
 		ensure_equals(dist.distance(), 0);
 
-		ensure_equals(dist.closestPoints(), (void*)0);
+		ensure_equals(dist.closestPoints(), (void*)nullptr);
 	}
 
 	template<>
@@ -398,7 +398,7 @@ namespace tut
 
 		ensure_equals(dist.distance(), 0);
 
-        	ensure_equals(dist.closestPoints(), (void*)0);
+        	ensure_equals(dist.closestPoints(), (void*)nullptr);
 
 	}
 

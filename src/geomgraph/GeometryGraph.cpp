@@ -547,7 +547,7 @@ GeometryGraph::GeometryGraph(int newArgIndex,
 	argIndex(newArgIndex),
 	hasTooFewPointsVar(false)
 {
-	if (parentGeom!=NULL) add(parentGeom);
+	if (parentGeom!=nullptr) add(parentGeom);
 }
 
 GeometryGraph::GeometryGraph(int newArgIndex,
@@ -561,13 +561,13 @@ GeometryGraph::GeometryGraph(int newArgIndex,
 	argIndex(newArgIndex),
 	hasTooFewPointsVar(false)
 {
-	if (parentGeom!=NULL) add(parentGeom);
+	if (parentGeom!=nullptr) add(parentGeom);
 }
 
 GeometryGraph::GeometryGraph()
 	:
 	PlanarGraph(),
-	parentGeom(NULL),
+	parentGeom(nullptr),
 	useBoundaryDeterminationRule(true),
     boundaryNodeRule(algorithm::BoundaryNodeRule::getBoundaryOGCSFS()),
 	argIndex(-1),

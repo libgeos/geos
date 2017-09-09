@@ -65,8 +65,8 @@ public:
 		_hasIntersection(false),
 		_hasProperIntersection(false),
 		_hasNonProperIntersection(false),
-		intPt( NULL),
-		intSegments( NULL)
+		intPt( nullptr),
+		intSegments( nullptr)
 	{ }
 
 	~SegmentIntersectionDetector()

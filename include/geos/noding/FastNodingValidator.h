@@ -104,7 +104,7 @@ private:
 
 	void execute()
 	{
-		if (segInt.get() != NULL) return;
+		if (segInt.get() != nullptr) return;
 		checkInteriorIntersections();
 	}
 

@@ -82,7 +82,7 @@ NodeMap::find(const geom::Coordinate& coord)
 {
 	container::iterator found=nodeMap.find(coord);
 	if (found==nodeMap.end())
-		return NULL;
+		return nullptr;
 	else
 		return found->second;
 }

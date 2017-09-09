@@ -188,7 +188,7 @@ class test_group : public group_base, public test_group_posix
 
     public:
         safe_holder()
-            : p_(0),
+            : p_(nullptr),
               permit_throw_in_dtor(false)
         {
         }
@@ -276,7 +276,7 @@ class test_group : public group_base, public test_group_posix
             {
 #endif
                 T* p = p_;
-                p_ = 0;
+                p_ = nullptr;
                 delete p;
 #if defined(TUT_USE_SEH)
             }
@@ -470,7 +470,7 @@ public:
         __try
         {
 #endif
-            if (obj.get() == 0)
+            if (obj.get() == nullptr)
             {
                 reset_holder_(obj);
             }

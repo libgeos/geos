@@ -42,7 +42,7 @@ namespace tut
       , empty_mp_(factory_->createMultiPoint()), mp_size_(5)
 		{
 			// Create non-empty MultiPoint
-			GeometryPtr geo = 0;
+			GeometryPtr geo = nullptr;
 			geo = reader_.read("MULTIPOINT(0 0, 5 5, 10 10, 15 15, 20 20)");
 			mp_ = dynamic_cast<MultiPointPtr>(geo);
 		}
@@ -78,7 +78,7 @@ namespace tut
 		ensure( mp->isEmpty() );
 		ensure( mp->isSimple() );
 		ensure( mp->isValid() );
-		ensure( mp->getCentroid() == 0 );
+		ensure( mp->getCentroid() == nullptr );
 		ensure_equals( mp->getNumPoints(), size0 );
 		ensure_equals( mp->getNumGeometries(), size0 );
 	}
@@ -90,12 +90,12 @@ namespace tut
 	{
 		const size_t size0 = 0;
 		MultiPointAutoPtr copy(dynamic_cast<geos::geom::MultiPoint*>(empty_mp_->clone()));
-		ensure( 0 != copy.get() );
+		ensure( nullptr != copy.get() );
 
 		ensure( copy->isEmpty() );
 		ensure( copy->isSimple() );
 		ensure( copy->isValid() );
-		ensure( copy->getCentroid() == 0 );
+		ensure( copy->getCentroid() == nullptr );
 		ensure_equals( copy->getNumPoints(), size0 );
 		ensure_equals( copy->getNumGeometries(), size0 );
 	}
@@ -112,7 +112,7 @@ namespace tut
 		ensure( mp->isEmpty() );
 		ensure( mp->isSimple() );
 		ensure( mp->isValid() );
-		ensure( mp->getCentroid() == 0 );
+		ensure( mp->getCentroid() == nullptr );
 		ensure_equals( mp->getNumPoints(), size0 );
 		ensure_equals( mp->getNumGeometries(), size0 );
 
@@ -150,7 +150,7 @@ namespace tut
 	void object::test<7>()
 	{
 		GeometryPtr envelope = empty_mp_->getEnvelope();
-		ensure( envelope != 0 );
+		ensure( envelope != nullptr );
 		ensure( envelope->isEmpty() );
 		factory_->destroyGeometry(envelope);
 	}
@@ -161,7 +161,7 @@ namespace tut
 	void object::test<8>()
 	{
 		GeometryPtr boundary = empty_mp_->getBoundary();
-		ensure( boundary != 0 );
+		ensure( boundary != nullptr );
 		ensure( boundary->isEmpty() );
 		factory_->destroyGeometry(boundary);
 	}
@@ -172,7 +172,7 @@ namespace tut
 	void object::test<9>()
 	{
 		GeometryPtr hull = empty_mp_->convexHull();
-		ensure( hull != 0 );
+		ensure( hull != nullptr );
 		ensure( hull->isEmpty() );
 		factory_->destroyGeometry(hull);
 	}
@@ -239,7 +239,7 @@ namespace tut
 	template<>
 	void object::test<17>()
 	{
-		ensure(mp_ != 0);
+		ensure(mp_ != nullptr);
 		ensure( !mp_->isEmpty() );
 	}
 
@@ -248,10 +248,10 @@ namespace tut
 	template<>
 	void object::test<18>()
 	{
-		ensure(mp_ != 0);
+		ensure(mp_ != nullptr);
 
 		GeometryPtr envelope = mp_->getEnvelope();
-		ensure( envelope != 0 );
+		ensure( envelope != nullptr );
 		ensure( !envelope->isEmpty() );
 		ensure_equals( envelope->getDimension(), geos::geom::Dimension::A );
 
@@ -264,10 +264,10 @@ namespace tut
 	template<>
 	void object::test<19>()
 	{
-		ensure(mp_ != 0);
+		ensure(mp_ != nullptr);
 
 		GeometryPtr boundary = mp_->getBoundary();
-		ensure( boundary != 0 );
+		ensure( boundary != nullptr );
 
 		// OGC 05-126, Version: 1.1.0, Chapter 6.1.5 MultiPoint
 		ensure( "[OGC] The boundary of a MultiPoint is the empty set.", boundary->isEmpty() );
@@ -281,10 +281,10 @@ namespace tut
 	template<>
 	void object::test<20>()
 	{
-		ensure(mp_ != 0);
+		ensure(mp_ != nullptr);
 
 		GeometryPtr hull = mp_->convexHull();
-		ensure( hull != 0 );
+		ensure( hull != nullptr );
 		ensure( !hull->isEmpty() );
 		ensure_equals( hull->getGeometryTypeId(), geos::geom::GEOS_LINESTRING );
 		ensure_equals( hull->getDimension(), geos::geom::Dimension::L );
@@ -298,7 +298,7 @@ namespace tut
 	template<>
 	void object::test<21>()
 	{
-		ensure(mp_ != 0);
+		ensure(mp_ != nullptr);
 		ensure_equals( mp_->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT );
 	}
 
@@ -307,7 +307,7 @@ namespace tut
 	template<>
 	void object::test<22>()
 	{
-		ensure( mp_ != 0 );
+		ensure( mp_ != nullptr );
 
 		const std::string type("MultiPoint");
 		ensure_equals( mp_->getGeometryType(), type );
@@ -318,7 +318,7 @@ namespace tut
 	template<>
 	void object::test<23>()
 	{
-		ensure(mp_ != 0);
+		ensure(mp_ != nullptr);
 		ensure_equals( mp_->getDimension(), geos::geom::Dimension::P );
 	}
 
@@ -327,7 +327,7 @@ namespace tut
 	template<>
 	void object::test<24>()
 	{
-		ensure(mp_ != 0);
+		ensure(mp_ != nullptr);
 		ensure_equals( mp_->getBoundaryDimension(), geos::geom::Dimension::False );
 	}
 
@@ -336,7 +336,7 @@ namespace tut
 	template<>
 	void object::test<25>()
 	{
-		ensure(mp_ != 0);
+		ensure(mp_ != nullptr);
 		ensure_equals( mp_->getNumPoints(), mp_size_ );
 	}
 
@@ -345,7 +345,7 @@ namespace tut
 	template<>
 	void object::test<26>()
 	{
-		ensure(mp_ != 0);
+		ensure(mp_ != nullptr);
 		ensure_equals( mp_->getLength(), 0.0 );
 	}
 
@@ -354,7 +354,7 @@ namespace tut
 	template<>
 	void object::test<27>()
 	{
-		ensure(mp_ != 0);
+		ensure(mp_ != nullptr);
 		ensure_equals( mp_->getArea(), 0.0 );
 	}
 
@@ -366,7 +366,7 @@ namespace tut
 		try
 		{
 			GeometryPtr geo = reader_.read("MULTIPOINT(0 0, 5)");
-			ensure(geo != 0);
+			ensure(geo != nullptr);
 
 			// FREE TESTED LINEARRING
 			factory_->destroyGeometry(geo);
@@ -376,7 +376,7 @@ namespace tut
 		catch (geos::io::ParseException const& e)
 		{
 			const char* msg = e.what(); // ok
-			ensure( msg != 0 );
+			ensure( msg != nullptr );
 		}
 	}
 

@@ -123,13 +123,13 @@ namespace tut
 
 		for (size_t i = 0; i < ngeoms; i++) {
 			const GEOSGeometry* nearest = GEOSSTRtree_nearest(tree, queryPoints[i]);
-			const GEOSGeometry* nearestBruteForce = NULL;
+			const GEOSGeometry* nearestBruteForce = nullptr;
 			double nearestBruteForceDistance = std::numeric_limits<double>::max();
 			for (size_t j = 0; j < ngeoms; j++) {
 				double distance;
 				GEOSDistance(queryPoints[i], geoms[j], &distance);
 
-				if (nearestBruteForce == NULL || distance < nearestBruteForceDistance) {
+				if (nearestBruteForce == nullptr || distance < nearestBruteForceDistance) {
 					nearestBruteForce = geoms[j];
 					nearestBruteForceDistance = distance;
 				}
@@ -155,7 +155,7 @@ namespace tut
 		GEOSGeometry* g1 = GEOSGeomFromWKT("POINT (3 3)");
 		const GEOSGeometry* g2 = GEOSSTRtree_nearest(tree, g1);
 
-		ensure(g2 == NULL);
+		ensure(g2 == nullptr);
 
 		GEOSGeom_destroy(g1);
 		GEOSSTRtree_destroy(tree);
@@ -178,7 +178,7 @@ namespace tut
 		GEOSSTRtree_insert(tree, g1, &p1);
 		GEOSSTRtree_insert(tree, g2, &p2);
 
-		const INTPOINT* p4 = (const INTPOINT*) GEOSSTRtree_nearest_generic(tree, &p3, g3, &INTPOINT_dist, NULL);
+		const INTPOINT* p4 = (const INTPOINT*) GEOSSTRtree_nearest_generic(tree, &p3, g3, &INTPOINT_dist, nullptr);
 
 		ensure (p4 == &p2);
 
@@ -199,7 +199,7 @@ namespace tut
 		GEOSSTRtree_insert(tree, g1, g1);
 
 		const GEOSGeometry* g3 = GEOSSTRtree_nearest(tree, g2);
-		ensure(g3 == NULL);
+		ensure(g3 == nullptr);
 
 		GEOSGeom_destroy(g1);
 		GEOSGeom_destroy(g2);

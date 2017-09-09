@@ -89,7 +89,7 @@ reader_(factory_.get())
 		ensure_equals( gf->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FLOATING );
 
 		geos::geom::Geometry* geo = gf->createEmptyGeometry();
-		ensure( "createEmptyGeometry() returned null pointer.", geo != 0 );
+		ensure( "createEmptyGeometry() returned null pointer.", geo != nullptr );
 		ensure_equals( geo->getSRID() , gf->getSRID() );
 		ensure_equals( geo->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FLOATING );
 
@@ -118,7 +118,7 @@ reader_(factory_.get())
 			ensure_equals( &csf, gf->getCoordinateSequenceFactory() );
 
 			GeometryPtr geo = gf->createEmptyGeometry();
-			ensure( "createEmptyGeometry() returned null pointer.", geo != 0 );
+			ensure( "createEmptyGeometry() returned null pointer.", geo != nullptr );
 			ensure_equals( geo->getSRID() , gf->getSRID() );
 			ensure_equals( geo->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FIXED );
 
@@ -146,7 +146,7 @@ reader_(factory_.get())
 			ensure_equals( gf->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FLOATING );
 
 			GeometryPtr geo = gf->createEmptyGeometry();
-			ensure( "createEmptyGeometry() returned null pointer.", geo != 0 );
+			ensure( "createEmptyGeometry() returned null pointer.", geo != nullptr );
 			ensure_equals( geo->getSRID() , gf->getSRID() );
 			ensure_equals( geo->getPrecisionModel()->getType(), geos::geom::PrecisionModel::FLOATING );
 
@@ -171,7 +171,7 @@ reader_(factory_.get())
 		ensure_equals( gf->getPrecisionModel()->getType(), PrecisionModel::FIXED );
 
 		GeometryPtr geo = gf->createEmptyGeometry();
-		ensure( "createEmptyGeometry() returned null pointer.", geo != 0 );
+		ensure( "createEmptyGeometry() returned null pointer.", geo != nullptr );
 		ensure_equals( geo->getSRID() , gf->getSRID() );
 		ensure_equals( geo->getPrecisionModel()->getType(), PrecisionModel::FIXED );
 
@@ -194,7 +194,7 @@ reader_(factory_.get())
 		ensure_equals( gf->getPrecisionModel()->getType(), PrecisionModel::FIXED );
 
 		GeometryPtr geo = gf->createEmptyGeometry();
-		ensure( "createEmptyGeometry() returned null pointer.", geo != 0 );
+		ensure( "createEmptyGeometry() returned null pointer.", geo != nullptr );
 		ensure_equals( geo->getSRID() , gf->getSRID() );
 		ensure_equals( geo->getPrecisionModel()->getType(), PrecisionModel::FIXED );
 
@@ -221,7 +221,7 @@ reader_(factory_.get())
 	{
 		GeometryPtr geo = factory_->createEmptyGeometry();
 
-		ensure( "createEmptyGeometry() returned null pointer.", geo != 0 );
+		ensure( "createEmptyGeometry() returned null pointer.", geo != nullptr );
 		ensure( "createEmptyGeometry() returned non-empty geometry.", geo->isEmpty() );
 
 		// TODO - mloskot
@@ -245,26 +245,26 @@ reader_(factory_.get())
 	{
 		PointPtr pt = factory_->createPoint();
 
-		ensure( "createPoint() returned null pointer.", pt != 0 );
+		ensure( "createPoint() returned null pointer.", pt != nullptr );
 		ensure( "createPoint() returned non-empty point.", pt->isEmpty() );
 		ensure( pt->isSimple() );
 		ensure( pt->isValid() );
-		ensure( pt->getCentroid() == 0 );
-		ensure( pt->getCoordinate() == 0 );
+		ensure( pt->getCentroid() == nullptr );
+		ensure( pt->getCoordinate() == nullptr );
 
-		GeometryPtr geo = 0;
+		GeometryPtr geo = nullptr;
 		geo = pt->getEnvelope();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
 		geo = pt->getBoundary();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
 		geo = pt->convexHull();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
@@ -288,36 +288,36 @@ reader_(factory_.get())
 
 		PointPtr pt = factory_->createPoint(coord);
 
-		ensure( "createPoint() returned null pointer.", pt != 0 );
+		ensure( "createPoint() returned null pointer.", pt != nullptr );
 		ensure( "createPoint() returned empty point.", !pt->isEmpty() );
 		ensure( pt->isSimple() );
 		ensure( pt->isValid() );
-		ensure( pt->getCoordinate() != 0 );
+		ensure( pt->getCoordinate() != nullptr );
 
 		CoordinateCPtr pcoord = pt->getCoordinate();
-		ensure( pcoord != 0 );
+		ensure( pcoord != nullptr );
 		ensure_equals( pcoord->x, x_ );
 		ensure_equals( pcoord->y, y_ );
 		ensure_equals( pcoord->z, z_ );
 
-		GeometryPtr geo = 0;
+		GeometryPtr geo = nullptr;
 		geo = pt->getEnvelope();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( !geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
 		geo = pt->getCentroid();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( !geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
 		geo = pt->getBoundary();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
 		geo = pt->convexHull();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( !geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
@@ -341,41 +341,41 @@ reader_(factory_.get())
 
 		CoordArrayPtr sequence = new geos::geom::CoordinateArraySequence();
 
-		ensure( "sequence is null pointer.", sequence != 0 );
+		ensure( "sequence is null pointer.", sequence != nullptr );
 		sequence->add(coord);
 
 		PointPtr pt = factory_->createPoint(sequence);
 
-		ensure( "createPoint() returned null pointer.", pt != 0 );
+		ensure( "createPoint() returned null pointer.", pt != nullptr );
 		ensure( "createPoint() returned empty point.", !pt->isEmpty() );
 		ensure( pt->isSimple() );
 		ensure( pt->isValid() );
-		ensure( pt->getCoordinate() != 0 );
+		ensure( pt->getCoordinate() != nullptr );
 
 		CoordinateCPtr pcoord = pt->getCoordinate();
-		ensure( pcoord != 0 );
+		ensure( pcoord != nullptr );
 		ensure_equals( pcoord->x, x_ );
 		ensure_equals( pcoord->y, y_ );
 		ensure_equals( pcoord->z, z_ );
 
-		GeometryPtr geo = 0;
+		GeometryPtr geo = nullptr;
 		geo = pt->getEnvelope();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( !geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
 		geo = pt->getCentroid();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( !geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
 		geo = pt->getBoundary();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
 		geo = pt->convexHull();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( !geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
@@ -402,36 +402,36 @@ reader_(factory_.get())
 
 		PointPtr pt = factory_->createPoint(sequence);
 
-		ensure( "createPoint() returned null pointer.", pt != 0 );
+		ensure( "createPoint() returned null pointer.", pt != nullptr );
 		ensure( "createPoint() returned empty point.", !pt->isEmpty() );
 		ensure( pt->isSimple() );
 		ensure( pt->isValid() );
-		ensure( pt->getCoordinate() != 0 );
+		ensure( pt->getCoordinate() != nullptr );
 
 		CoordinateCPtr pcoord = pt->getCoordinate();
-		ensure( pcoord != 0 );
+		ensure( pcoord != nullptr );
 		ensure_equals( pcoord->x, x_ );
 		ensure_equals( pcoord->y, y_ );
 		ensure_equals( pcoord->z, z_ );
 
-		GeometryPtr geo = 0;
+		GeometryPtr geo = nullptr;
 		geo = pt->getEnvelope();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( !geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
 		geo = pt->getCentroid();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( !geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
 		geo = pt->getBoundary();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
 		geo = pt->convexHull();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( !geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
@@ -453,12 +453,12 @@ reader_(factory_.get())
 	{
 		LinearRingPtr lr = factory_->createLinearRing();
 
-		ensure( "createLinearRing() returned null pointer.", lr != 0 );
+		ensure( "createLinearRing() returned null pointer.", lr != nullptr );
 		ensure( "createLinearRing() returned non-empty point.", lr->isEmpty() );
 		ensure( lr->isEmpty() );
 		ensure( lr->isSimple() );
 		ensure( lr->isValid() );
-		ensure( lr->getCoordinate() == 0 );
+		ensure( lr->getCoordinate() == nullptr );
 
 		// TODO - mloskot
 		//http://geos.osgeo.org/pipermail/geos-devel/2006-March/001961.html
@@ -486,14 +486,14 @@ reader_(factory_.get())
 	{
 		const std::size_t size = 5;
 		CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(size);
-		ensure( coords != 0 );
+		ensure( coords != nullptr );
 		ensure_equals( coords->getSize(), size );
 
 		LinearRingPtr lr = factory_->createLinearRing(coords);
-		ensure( "createLinearRing() returned null pointer.", lr != 0 );
+		ensure( "createLinearRing() returned null pointer.", lr != nullptr );
 		ensure( "createLinearRing() returned empty point.", !lr->isEmpty() );
 		ensure( lr->isSimple() );
-		ensure( lr->getCoordinate() != 0 );
+		ensure( lr->getCoordinate() != nullptr );
 
 		// TODO - mloskot - is this correct?
 		//ensure( !lr->isValid() );
@@ -522,7 +522,7 @@ reader_(factory_.get())
 		ensure( "createLinearRing() returned empty point.", !lr->isEmpty() );
 		ensure_equals( lr->getNumPoints(), size );
 		ensure( lr->isSimple() );
-		ensure( lr->getCoordinate() != 0 );
+		ensure( lr->getCoordinate() != nullptr );
 
 		ensure_equals( lr->getGeometryTypeId(), geos::geom::GEOS_LINEARRING );
 		ensure_equals( lr->getDimension(), geos::geom::Dimension::L );
@@ -542,29 +542,29 @@ reader_(factory_.get())
 	{
 		LineStringPtr line = factory_->createLineString();
 
-		ensure( "createLineString() returned null pointer.", line != 0 );
+		ensure( "createLineString() returned null pointer.", line != nullptr );
 		ensure( "createLineString() returned non-empty point.", line->isEmpty() );
 		ensure( line->isSimple() );
 		ensure( line->isValid() );
-		ensure( line->getCentroid() == 0 );
+		ensure( line->getCentroid() == nullptr );
 
 		// TODO - mloskot - waiting for some decision
 		// http://geos.osgeo.org/pipermail/geos-devel/2006-March/002006.html
 		//ensure( line->getCoordinate() == 0 );
 
-		GeometryPtr geo = 0;
+		GeometryPtr geo = nullptr;
 		geo = line->getEnvelope();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
 		geo = line->getBoundary();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
 		geo = line->convexHull();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
@@ -586,14 +586,14 @@ reader_(factory_.get())
 	{
 		const std::size_t size = 5;
 		CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(size);
-		ensure( coords != 0 );
+		ensure( coords != nullptr );
 		ensure_equals( coords->getSize(), size );
 
 		LineStringPtr line = factory_->createLineString(coords);
-		ensure( "createLineString() returned null pointer.", line != 0 );
+		ensure( "createLineString() returned null pointer.", line != nullptr );
 		ensure( "createLineString() returned empty point.", !line->isEmpty() );
 		ensure( line->isSimple() );
-		ensure( line->getCoordinate() != 0 );
+		ensure( line->getCoordinate() != nullptr );
 
 		// TODO - mloskot - is this correct?
 		//ensure( line->isValid() );
@@ -622,7 +622,7 @@ reader_(factory_.get())
 		ensure( "createLineString() returned empty point.", !line->isEmpty() );
 		ensure_equals( line->getNumPoints(), size );
 		ensure( line->isSimple() );
-		ensure( line->getCoordinate() != 0 );
+		ensure( line->getCoordinate() != nullptr );
 
 		ensure_equals( line->getGeometryTypeId(), geos::geom::GEOS_LINESTRING );
 		ensure_equals( line->getDimension(), geos::geom::Dimension::L );
@@ -641,17 +641,17 @@ reader_(factory_.get())
 	{
 		PolygonPtr poly = factory_->createPolygon();
 
-		ensure( "createPolygon() returned null pointer.", poly != 0 );
+		ensure( "createPolygon() returned null pointer.", poly != nullptr );
 		ensure( "createPolygon() returned non-empty point.", poly->isEmpty() );
 		ensure( poly->isSimple() );
 		ensure( poly->isValid() );
-		ensure( poly->getCentroid() == 0 );
+		ensure( poly->getCentroid() == nullptr );
 
 		// TODO - mloskot - waiting for some decision
 		// http://geos.osgeo.org/pipermail/geos-devel/2006-March/002006.html
 		//ensure( poly->getCoordinate() == 0 );
 
-		GeometryPtr geo = 0;
+		GeometryPtr geo = nullptr;
 		// TODO - mloskot - waiting for resolution
 		// http://geos.osgeo.org/pipermail/geos-devel/2006-March/002011.html
 		//geo = poly->getEnvelope();
@@ -660,12 +660,12 @@ reader_(factory_.get())
 		//factory_->destroyGeometry(geo);
 
 		geo = poly->getBoundary();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
 		geo = poly->convexHull();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
@@ -690,7 +690,7 @@ reader_(factory_.get())
 
 		// Create sequence of coordiantes
 		CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(size);
-		ensure( coords != 0 );
+		ensure( coords != nullptr );
 		coords->setAt(Coordinate(0, 10), 0);
 		coords->setAt(Coordinate(5, 5), 1);
 		coords->setAt(Coordinate(10, 5), 2);
@@ -702,7 +702,7 @@ reader_(factory_.get())
 
 		// Create exterior ring
 		LinearRingPtr exterior = factory_->createLinearRing(coords);
-		ensure( "createLinearRing returned null pointer.", exterior != 0 );
+		ensure( "createLinearRing returned null pointer.", exterior != nullptr );
 		ensure( "createLinearRing() returned empty point.", !exterior->isEmpty() );
 		ensure( exterior->isSimple() );
 		ensure_equals( exterior->getGeometryTypeId(), geos::geom::GEOS_LINEARRING );
@@ -713,8 +713,8 @@ reader_(factory_.get())
 		ensure( exterior->getLength() != 0.0 );
 
 		// Create polygon
-		PolygonPtr poly = factory_->createPolygon(exterior, 0);
-		ensure( "createPolygon returned null pointer.", poly != 0 );
+		PolygonPtr poly = factory_->createPolygon(exterior, nullptr);
+		ensure( "createPolygon returned null pointer.", poly != nullptr );
 		ensure( "createPolygon() returned empty point.", !poly->isEmpty() );
 		ensure( poly->isSimple() );
 		ensure_equals( poly->getGeometryTypeId(), geos::geom::GEOS_POLYGON );
@@ -739,7 +739,7 @@ reader_(factory_.get())
 
 		// Create sequence of coordiantes
 		CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(exteriorSize);
-		ensure( coords != 0 );
+		ensure( coords != nullptr );
 		coords->setAt(Coordinate(0, 10), 0);
 		coords->setAt(Coordinate(5, 5), 1);
 		coords->setAt(Coordinate(10, 5), 2);
@@ -751,7 +751,7 @@ reader_(factory_.get())
 
 		// Create exterior ring
 		LinearRingPtr exterior = factory_->createLinearRing(coords);
-		ensure( "createLinearRing returned null pointer.", exterior != 0 );
+		ensure( "createLinearRing returned null pointer.", exterior != nullptr );
 		ensure( "createLinearRing() returned empty point.", !exterior->isEmpty() );
 		ensure( exterior->isSimple() );
 		ensure_equals( exterior->getGeometryTypeId(), geos::geom::GEOS_LINEARRING );
@@ -763,10 +763,10 @@ reader_(factory_.get())
 
 		// Create collection of holes
 		GeometryPtr geo = reader_.read(("LINEARRING(7 7, 12 7, 12 12, 7 12, 7 7)"));
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 
 		LinearRingPtr hole = dynamic_cast<LinearRingPtr>(geo);
-		ensure( hole != 0 );
+		ensure( hole != nullptr );
 		ensure( hole->isRing() );
 		ensure_equals( hole->getNumPoints(), interiorSize );
 
@@ -776,7 +776,7 @@ reader_(factory_.get())
 
 		// Create polygon using copy ctor
 		PolygonPtr poly = factory_->createPolygon((*exterior), holes);
-		ensure( "createPolygon returned null pointer.", poly != 0 );
+		ensure( "createPolygon returned null pointer.", poly != nullptr );
 		ensure( "createPolygon() returned empty point.", !poly->isEmpty() );
 		ensure( poly->isSimple() );
 		ensure_equals( poly->getGeometryTypeId(), geos::geom::GEOS_POLYGON );
@@ -808,7 +808,7 @@ reader_(factory_.get())
 	{
 		GeometryColPtr col = factory_->createGeometryCollection();
 
-		ensure( "createGeometryCollection() returned null pointer.", col != 0 );
+		ensure( "createGeometryCollection() returned null pointer.", col != nullptr );
 		ensure( col->isEmpty() );
 		ensure( col->isValid() );
 
@@ -820,10 +820,10 @@ reader_(factory_.get())
 		catch ( geos::util::IllegalArgumentException const& e )
 		{
 			const char* msg = e.what(); // ok
-			ensure( msg != 0 );
+			ensure( msg != nullptr );
 		}
 
-		ensure( col->getCentroid() == 0 );
+		ensure( col->getCentroid() == nullptr );
 		ensure_equals( col->getGeometryTypeId(), geos::geom::GEOS_GEOMETRYCOLLECTION );
 		ensure_equals( col->getDimension(), geos::geom::Dimension::False );
 		ensure_equals( col->getBoundaryDimension(), geos::geom::Dimension::False );
@@ -848,12 +848,12 @@ reader_(factory_.get())
 		// Add single point
 		Coordinate coord(x_, y_, z_);
 		GeometryPtr point = factory_->createPoint(coord);
-		ensure( point != 0 );
+		ensure( point != nullptr );
 		vec->push_back(point);
 
 		// Add single LineString
 		CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(3);
-		ensure( coords != 0 );
+		ensure( coords != nullptr );
 		coords->setAt(Coordinate(0, 0), 0);
 		coords->setAt(Coordinate(5, 5), 1);
 		coords->setAt(Coordinate(10, 5), 2);
@@ -863,7 +863,7 @@ reader_(factory_.get())
 
 		// Create geometry collection
 		GeometryColPtr col = factory_->createGeometryCollection(vec);
-		ensure( coords != 0 );
+		ensure( coords != nullptr );
 		ensure_equals( col->getGeometryTypeId(), geos::geom::GEOS_GEOMETRYCOLLECTION );
 		ensure_equals( col->getNumGeometries(), 2u );
 
@@ -881,7 +881,7 @@ reader_(factory_.get())
 
 		std::vector<GeometryPtr> vec;
 
-		GeometryPtr geo = 0;
+		GeometryPtr geo = nullptr;
 		geo = factory_->createPoint(coord);
 		vec.push_back(geo);
 
@@ -899,7 +899,7 @@ reader_(factory_.get())
 
 		// Factory creates copy of the vec collection
 		GeometryColPtr col = factory_->createGeometryCollection(vec);
-		ensure( col != 0 );
+		ensure( col != nullptr );
 		ensure_equals( col->getGeometryTypeId() , geos::geom::GEOS_GEOMETRYCOLLECTION );
 		ensure_equals( col->getNumGeometries() , size );
 
@@ -919,13 +919,13 @@ reader_(factory_.get())
 	{
 		MultiPointPtr mp = factory_->createMultiPoint();
 
-		ensure( "createMultiPoint() returned null pointer.", mp != 0 );
+		ensure( "createMultiPoint() returned null pointer.", mp != nullptr );
 		ensure( "createMultiPoint() returned non-empty point.", mp->isEmpty() );
 		ensure( mp->isSimple() );
 		ensure( mp->isValid() );
-		ensure( mp->getCentroid() == 0 );
+		ensure( mp->getCentroid() == nullptr );
 
-		GeometryPtr geo = 0;
+		GeometryPtr geo = nullptr;
 
 		// TODO - mloskot - waiting for resolution
 		// http://geos.osgeo.org/pipermail/geos-devel/2006-March/002011.html
@@ -935,12 +935,12 @@ reader_(factory_.get())
 		//factory_->destroyGeometry(geo);
 
 		geo = mp->getBoundary();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
 		geo = mp->convexHull();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
@@ -965,28 +965,28 @@ reader_(factory_.get())
 
 		std::vector<GeometryPtr>* vec = new std::vector<GeometryPtr>();
 
-		GeometryPtr geo = 0;
+		GeometryPtr geo = nullptr;
 		geo = factory_->createPoint(coord);
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		vec->push_back(geo);
 
 		coord.x *= 2;
 		coord.y *= 2;
 		coord.z *= 2;
 		geo = factory_->createPoint(coord);
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		vec->push_back(geo);
 
 		coord.x *= 3;
 		coord.y *= 3;
 		coord.z *= 3;
 		geo = factory_->createPoint(coord);
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		vec->push_back(geo);
 
 		// Factory creates copy of the vec collection
 		MultiPointPtr mp = factory_->createMultiPoint(vec);
-		ensure( mp != 0 );
+		ensure( mp != nullptr );
 		ensure( mp->isValid() );
 		ensure( mp->isSimple() );
 		ensure_equals( mp->getNumGeometries(), size );
@@ -1006,7 +1006,7 @@ reader_(factory_.get())
 
 		std::vector<GeometryPtr> vec;
 
-		GeometryPtr geo = 0;
+		GeometryPtr geo = nullptr;
 		geo = factory_->createPoint(coord);
 		vec.push_back(geo);
 
@@ -1024,7 +1024,7 @@ reader_(factory_.get())
 
 		// Factory creates copy of the vec collection
 		MultiPointPtr mp = factory_->createMultiPoint(vec);
-		ensure( mp != 0 );
+		ensure( mp != nullptr );
 		ensure( mp->isValid() );
 		ensure( mp->isSimple() );
 		ensure_equals( mp->getNumGeometries(), size );
@@ -1055,7 +1055,7 @@ reader_(factory_.get())
 		ensure_equals( coords.getSize(), size );
 
 		MultiPointPtr mp = factory_->createMultiPoint(coords);
-		ensure( mp != 0 );
+		ensure( mp != nullptr );
 		ensure( mp->isValid() );
 		ensure( mp->isSimple() );
 		ensure_equals( mp->getNumGeometries(), size );
@@ -1072,13 +1072,13 @@ reader_(factory_.get())
 	{
 		MultiLineStringPtr mls = factory_->createMultiLineString();
 
-		ensure( "createMultiLineString() returned null pointer.", mls != 0 );
+		ensure( "createMultiLineString() returned null pointer.", mls != nullptr );
 		ensure( "createMultiLineString() returned non-empty point.", mls->isEmpty() );
 		ensure( mls->isSimple() );
 		ensure( mls->isValid() );
-		ensure( mls->getCentroid() == 0 );
+		ensure( mls->getCentroid() == nullptr );
 
-		GeometryPtr geo = 0;
+		GeometryPtr geo = nullptr;
 
 		// TODO - mloskot - waiting for resolution
 		// http://geos.osgeo.org/pipermail/geos-devel/2006-March/002011.html
@@ -1088,12 +1088,12 @@ reader_(factory_.get())
 		//factory_->destroyGeometry(geo);
 
 		geo = mls->getBoundary();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
 		geo = mls->convexHull();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
@@ -1124,7 +1124,7 @@ reader_(factory_.get())
 		{
 			const std::size_t factor = i * i;
 			CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(lineSize);
-			ensure( coords != 0 );
+			ensure( coords != nullptr );
 			coords->setAt(Coordinate(0. + factor, 0. + factor), 0);
 			coords->setAt(Coordinate(5. + factor, 5. + factor), 1);
 			ensure_equals( coords->getSize(), lineSize );
@@ -1133,14 +1133,14 @@ reader_(factory_.get())
 			ensure( "createLineString() returned empty point.", !line->isEmpty() );
 			ensure_equals( line->getNumPoints(), lineSize );
 			ensure( line->isSimple() );
-			ensure( line->getCoordinate() != 0 );
+			ensure( line->getCoordinate() != nullptr );
 			ensure_equals( line->getGeometryTypeId(), geos::geom::GEOS_LINESTRING );
 
 			lines->push_back(line);
 		}
 
 		MultiLineStringPtr mls = factory_->createMultiLineString(lines);
-		ensure( mls != 0 );
+		ensure( mls != nullptr );
 		// TODO - mloskot - why isValid() returns false?
 		//ensure( mls->isValid() );
 		ensure_equals( mls->getNumGeometries(), size );
@@ -1166,7 +1166,7 @@ reader_(factory_.get())
 		{
 			const std::size_t factor = i * i;
 			CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(lineSize);
-			ensure( coords != 0 );
+			ensure( coords != nullptr );
 			coords->setAt(Coordinate(0. + factor, 0. + factor), 0);
 			coords->setAt(Coordinate(5. + factor, 5. + factor), 1);
 			ensure_equals( coords->getSize(), lineSize );
@@ -1175,14 +1175,14 @@ reader_(factory_.get())
 			ensure( "createLineString() returned empty point.", !line->isEmpty() );
 			ensure_equals( line->getNumPoints(), lineSize );
 			ensure( line->isSimple() );
-			ensure( line->getCoordinate() != 0 );
+			ensure( line->getCoordinate() != nullptr );
 			ensure_equals( line->getGeometryTypeId(), geos::geom::GEOS_LINESTRING );
 
 			lines.push_back(line);
 		}
 
 		MultiLineStringPtr mls = factory_->createMultiLineString(lines);
-		ensure( mls != 0 );
+		ensure( mls != nullptr );
 		// TODO - mloskot - why isValid() returns false?
 		//ensure( mls->isValid() );
 		ensure_equals( mls->getNumGeometries(), size );
@@ -1256,7 +1256,7 @@ reader_(factory_.get())
 
 		PointVect vec;
 
-		PointPtr geo = 0;
+		PointPtr geo = nullptr;
 		geo = factory_->createPoint(coord);
 		vec.push_back(geo);
 
@@ -1274,7 +1274,7 @@ reader_(factory_.get())
 
 		// Factory creates copy of the vec collection
 		GeometryAutoPtr g = factory_->buildGeometry(vec.begin(), vec.end());
-		ensure( g.get() != 0 );
+		ensure( g.get() != nullptr );
 		ensure_equals( g->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT );
 		ensure_equals( g->getNumGeometries(), size );
 

@@ -51,18 +51,18 @@ EdgeRing::findEdgeRingContaining(EdgeRing *testEr,
     vector<EdgeRing*> *shellList)
 {
     const LinearRing *testRing=testEr->getRingInternal();
-    if ( ! testRing ) return NULL;
+    if ( ! testRing ) return nullptr;
     const Envelope *testEnv=testRing->getEnvelopeInternal();
     Coordinate testPt=testRing->getCoordinateN(0);
-    EdgeRing *minShell=NULL;
-    const Envelope *minEnv=NULL;
+    EdgeRing *minShell=nullptr;
+    const Envelope *minEnv=nullptr;
 
     typedef std::vector<EdgeRing*> ERList;
     for(ERList::size_type i=0, e=shellList->size(); i<e; ++i) {
         EdgeRing *tryShell=(*shellList)[i];
         LinearRing *tryRing=tryShell->getRingInternal();
         const Envelope *tryEnv=tryRing->getEnvelopeInternal();
-        if (minShell!=NULL) minEnv=minShell->getRingInternal()->getEnvelopeInternal();
+        if (minShell!=nullptr) minEnv=minShell->getRingInternal()->getEnvelopeInternal();
         bool isContained=false;
 
         // the hole envelope cannot equal the shell envelope
@@ -86,7 +86,7 @@ EdgeRing::findEdgeRingContaining(EdgeRing *testEr,
         // check if this new containing ring is smaller
         // than the current minimum ring
         if (isContained) {
-            if (minShell==NULL || minEnv->contains(tryEnv)) {
+            if (minShell==nullptr || minEnv->contains(tryEnv)) {
                 minShell=tryShell;
             }
         }
@@ -128,9 +128,9 @@ EdgeRing::isInList(const Coordinate& pt,
 EdgeRing::EdgeRing(const GeometryFactory *newFactory)
     :
     factory(newFactory),
-    ring(0),
-    ringPts(0),
-    holes(0)
+    ring(nullptr),
+    ringPts(nullptr),
+    holes(nullptr)
 {
 #ifdef DEBUG_ALLOC
     cerr<<"["<<this<<"] EdgeRing(factory)"<<endl;
@@ -169,7 +169,7 @@ EdgeRing::isHole(){
 void
 EdgeRing::addHole(LinearRing *hole)
 {
-    if (holes==NULL)
+    if (holes==nullptr)
         holes=new vector<Geometry*>();
     holes->push_back(hole);
 }
@@ -179,8 +179,8 @@ Polygon*
 EdgeRing::getPolygon()
 {
     Polygon *poly=factory->createPolygon(ring, holes);
-    ring=NULL;
-    holes=NULL;
+    ring=nullptr;
+    holes=nullptr;
     return poly;
 }
 
@@ -196,7 +196,7 @@ EdgeRing::isValid()
 CoordinateSequence*
 EdgeRing::getCoordinates()
 {
-    if (ringPts==NULL)
+    if (ringPts==nullptr)
     {
         ringPts=factory->getCoordinateSequenceFactory()->create();
         for (DeList::size_type i=0, e=deList.size(); i<e; ++i) {
@@ -222,7 +222,7 @@ EdgeRing::getLineString()
 LinearRing *
 EdgeRing::getRingInternal()
 {
-    if (ring!=NULL) return ring;
+    if (ring!=nullptr) return ring;
 
     getCoordinates();
     try {
@@ -244,7 +244,7 @@ LinearRing *
 EdgeRing::getRingOwnership()
 {
     LinearRing *ret = getRingInternal();
-    ring = NULL;
+    ring = nullptr;
     return ret;
 }
 

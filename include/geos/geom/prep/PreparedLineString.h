@@ -51,7 +51,7 @@ public:
 	PreparedLineString(const Geometry * geom)
 		:
 		BasicPreparedGeometry( geom),
-		segIntFinder( NULL)
+		segIntFinder( nullptr)
 	{ }
 
 	~PreparedLineString();

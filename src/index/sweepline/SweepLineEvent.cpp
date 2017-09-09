@@ -27,20 +27,20 @@ SweepLineEvent::SweepLineEvent(double x, SweepLineEvent *newInsertEvent,
 	insertEvent(newInsertEvent),
 	sweepInt(newSweepInt)
 {
-	if (insertEvent!=0)
+	if (insertEvent!=nullptr)
 		eventType=SweepLineEvent::DELETE_EVENT;
 }
 
 bool
 SweepLineEvent::isInsert()
 {
-	return insertEvent==0;
+	return insertEvent==nullptr;
 }
 
 bool
 SweepLineEvent::isDelete()
 {
-	return insertEvent!=0;
+	return insertEvent!=nullptr;
 }
 
 SweepLineEvent*

@@ -83,7 +83,7 @@ public:
 	OffsetSegmentString()
 		:
 		ptList(new geom::CoordinateArraySequence()),
-		precisionModel(NULL),
+		precisionModel(nullptr),
 		minimumVertexDistance (0.0)
 	{
 	}
@@ -98,7 +98,7 @@ public:
 		if ( ptList ) ptList->clear();
 		else ptList = new geom::CoordinateArraySequence();
 
-		precisionModel = NULL;
+		precisionModel = nullptr;
 		minimumVertexDistance = 0.0;
 	}
 
@@ -167,7 +167,7 @@ public:
 	{
 		closeRing();
 		geom::CoordinateSequence* ret = ptList;
-		ptList = 0;
+		ptList = nullptr;
 		return ret;
 	}
 

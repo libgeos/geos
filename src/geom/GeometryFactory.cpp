@@ -281,7 +281,7 @@ GeometryFactory::toGeometry(const Envelope* envelope) const
 	coord.y = envelope->getMinY();
 	cl->add(coord);
 
-	Polygon *p = createPolygon(createLinearRing(cl), NULL);
+	Polygon *p = createPolygon(createLinearRing(cl), nullptr);
 	return p;
 }
 
@@ -296,7 +296,7 @@ GeometryFactory::getPrecisionModel() const
 Point*
 GeometryFactory::createPoint() const
 {
-	return new Point(NULL, this);
+	return new Point(nullptr, this);
 }
 
 /*public*/
@@ -326,7 +326,7 @@ Point*
 GeometryFactory::createPoint(const CoordinateSequence &fromCoords) const
 {
 	CoordinateSequence *newCoords = fromCoords.clone();
-	Point *g = NULL;
+	Point *g = nullptr;
 	try {
 		g = new Point(newCoords,this);
 	} catch (...) {
@@ -341,7 +341,7 @@ GeometryFactory::createPoint(const CoordinateSequence &fromCoords) const
 MultiLineString*
 GeometryFactory::createMultiLineString() const
 {
-	return new MultiLineString(NULL,this);
+	return new MultiLineString(nullptr,this);
 }
 
 /*public*/
@@ -364,7 +364,7 @@ GeometryFactory::createMultiLineString(const vector<Geometry *> &fromLines)
 		if ( ! line ) throw geos::util::IllegalArgumentException("createMultiLineString called with a vector containing non-LineStrings");
 		(*newGeoms)[i] = new LineString(*line);
 	}
-	MultiLineString *g = NULL;
+	MultiLineString *g = nullptr;
 	try {
 		g = new MultiLineString(newGeoms,this);
 	} catch (...) {
@@ -381,14 +381,14 @@ GeometryFactory::createMultiLineString(const vector<Geometry *> &fromLines)
 GeometryCollection*
 GeometryFactory::createGeometryCollection() const
 {
-	return new GeometryCollection(NULL,this);
+	return new GeometryCollection(nullptr,this);
 }
 
 /*public*/
 Geometry*
 GeometryFactory::createEmptyGeometry() const
 {
-	return new GeometryCollection(NULL,this);
+	return new GeometryCollection(nullptr,this);
 }
 
 /*public*/
@@ -406,7 +406,7 @@ GeometryFactory::createGeometryCollection(const vector<Geometry *> &fromGeoms) c
 	for (size_t i=0; i<fromGeoms.size(); i++) {
 		(*newGeoms)[i] = fromGeoms[i]->clone();
 	}
-	GeometryCollection *g = NULL;
+	GeometryCollection *g = nullptr;
 	try {
 		g = new GeometryCollection(newGeoms,this);
 	} catch (...) {
@@ -423,7 +423,7 @@ GeometryFactory::createGeometryCollection(const vector<Geometry *> &fromGeoms) c
 MultiPolygon*
 GeometryFactory::createMultiPolygon() const
 {
-	return new MultiPolygon(NULL,this);
+	return new MultiPolygon(nullptr,this);
 }
 
 /*public*/
@@ -442,7 +442,7 @@ GeometryFactory::createMultiPolygon(const vector<Geometry *> &fromPolys) const
 	{
 		(*newGeoms)[i] = fromPolys[i]->clone();
 	}
-	MultiPolygon *g = NULL;
+	MultiPolygon *g = nullptr;
 	try {
 		g = new MultiPolygon(newGeoms,this);
 	} catch (...) {
@@ -459,7 +459,7 @@ GeometryFactory::createMultiPolygon(const vector<Geometry *> &fromPolys) const
 LinearRing*
 GeometryFactory::createLinearRing() const
 {
-	return new LinearRing(NULL,this);
+	return new LinearRing(nullptr,this);
 }
 
 /*public*/
@@ -481,7 +481,7 @@ LinearRing*
 GeometryFactory::createLinearRing(const CoordinateSequence& fromCoords) const
 {
 	CoordinateSequence *newCoords = fromCoords.clone();
-	LinearRing *g = NULL;
+	LinearRing *g = nullptr;
 	// construction failure will delete newCoords
 	g = new LinearRing(newCoords, this);
 	return g;
@@ -504,7 +504,7 @@ GeometryFactory::createMultiPoint(const vector<Geometry *> &fromPoints) const
 		(*newGeoms)[i] = fromPoints[i]->clone();
 	}
 
-	MultiPoint *g = NULL;
+	MultiPoint *g = nullptr;
 	try {
 		g = new MultiPoint(newGeoms,this);
 	} catch (...) {
@@ -521,7 +521,7 @@ GeometryFactory::createMultiPoint(const vector<Geometry *> &fromPoints) const
 MultiPoint*
 GeometryFactory::createMultiPoint() const
 {
-	return new MultiPoint(NULL, this);
+	return new MultiPoint(nullptr, this);
 }
 
 /*public*/
@@ -535,7 +535,7 @@ GeometryFactory::createMultiPoint(const CoordinateSequence &fromCoords) const
 		Point *pt=createPoint(fromCoords.getAt(i));
 		pts->push_back(pt);
 	}
-	MultiPoint *mp = NULL;
+	MultiPoint *mp = nullptr;
 	try {
 		mp = createMultiPoint(pts);
 	} catch (...) {
@@ -557,7 +557,7 @@ GeometryFactory::createMultiPoint(const std::vector<Coordinate> &fromCoords) con
 		Point *pt=createPoint(fromCoords[i]);
 		pts->push_back(pt);
 	}
-	MultiPoint *mp = NULL;
+	MultiPoint *mp = nullptr;
 	try {
 		mp = createMultiPoint(pts);
 	} catch (...) {
@@ -572,7 +572,7 @@ GeometryFactory::createMultiPoint(const std::vector<Coordinate> &fromCoords) con
 Polygon*
 GeometryFactory::createPolygon() const
 {
-	return new Polygon(NULL, NULL, this);
+	return new Polygon(nullptr, nullptr, this);
 }
 
 /*public*/
@@ -594,7 +594,7 @@ GeometryFactory::createPolygon(const LinearRing &shell, const vector<Geometry *>
 	{
 		(*newHoles)[i] = holes[i]->clone();
 	}
-	Polygon *g = NULL;
+	Polygon *g = nullptr;
 	try {
 		g = new Polygon(newRing, newHoles, this);
 	} catch (...) {
@@ -611,7 +611,7 @@ GeometryFactory::createPolygon(const LinearRing &shell, const vector<Geometry *>
 LineString *
 GeometryFactory::createLineString() const
 {
-	return new LineString(NULL, this);
+	return new LineString(nullptr, this);
 }
 
 /*public*/
@@ -643,7 +643,7 @@ GeometryFactory::createLineString(const CoordinateSequence &fromCoords)
 	const
 {
 	CoordinateSequence *newCoords = fromCoords.clone();
-	LineString *g = NULL;
+	LineString *g = nullptr;
 	// construction failure will delete newCoords
 	g = new LineString(newCoords, this);
 	return g;

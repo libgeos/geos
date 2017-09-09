@@ -63,10 +63,10 @@ NodeBase::getSubnodeIndex(const Envelope *env, const Coordinate& centre)
 
 NodeBase::NodeBase()
 {
-	subnode[0]=0;
-	subnode[1]=0;
-	subnode[2]=0;
-	subnode[3]=0;
+	subnode[0]=nullptr;
+	subnode[1]=nullptr;
+	subnode[2]=nullptr;
+	subnode[3]=nullptr;
 }
 
 NodeBase::~NodeBase()
@@ -75,10 +75,10 @@ NodeBase::~NodeBase()
 	delete subnode[1];
 	delete subnode[2];
 	delete subnode[3];
-	subnode[0]=NULL;
-	subnode[1]=NULL;
-	subnode[2]=NULL;
-	subnode[3]=NULL;
+	subnode[0]=nullptr;
+	subnode[1]=nullptr;
+	subnode[2]=nullptr;
+	subnode[3]=nullptr;
 }
 
 vector<void*>&
@@ -141,7 +141,7 @@ NodeBase::depth() const
 	unsigned int maxSubDepth=0;
 	for (int i=0; i<4; ++i)
 	{
-		if (subnode[i] != NULL)
+		if (subnode[i] != nullptr)
 		{
 			unsigned int sqd=subnode[i]->depth();
 			if ( sqd > maxSubDepth )
@@ -157,7 +157,7 @@ NodeBase::size() const
 	unsigned int subSize=0;
 	for(int i=0; i<4; i++)
 	{
-		if (subnode[i] != NULL)
+		if (subnode[i] != nullptr)
 		{
 			subSize += subnode[i]->size();
 		}
@@ -171,7 +171,7 @@ NodeBase::getNodeCount() const
 	unsigned int subSize=0;
 	for(int i=0; i<4; ++i)
 	{
-		if (subnode[i] != NULL)
+		if (subnode[i] != nullptr)
 		{
 			subSize += subnode[i]->size();
 		}
@@ -188,7 +188,7 @@ NodeBase::toString() const
 	for (int i=0; i<4; i++)
 	{
 		s<<"subnode["<<i<<"] ";
-		if ( subnode[i] == NULL ) s<<"NULL";
+		if ( subnode[i] == nullptr ) s<<"NULL";
 		else s<<subnode[i]->toString();
 		s<<endl;
 	}
@@ -206,7 +206,7 @@ NodeBase::visit(const Envelope* searchEnv, ItemVisitor& visitor)
 	visitItems(searchEnv, visitor);
 
 	for (int i = 0; i < 4; i++) {
-		if (subnode[i] != NULL) {
+		if (subnode[i] != nullptr) {
 			subnode[i]->visit(searchEnv, visitor);
 		}
 	}
@@ -246,7 +246,7 @@ NodeBase::remove(const Envelope* itemEnv, void* item)
 				if (subnode[i]->isPrunable())
 				{
 					delete subnode[i];
-					subnode[i] = NULL;
+					subnode[i] = nullptr;
 				}
 				break;
 			}

@@ -52,8 +52,8 @@ TaggedLineStringSimplifier::TaggedLineStringSimplifier(
 	inputIndex(nInputIndex),
 	outputIndex(nOutputIndex),
 	li(new algorithm::LineIntersector()),
-	line(NULL),
-	linePts(NULL),
+	line(nullptr),
+	linePts(nullptr),
 	distanceTolerance(0.0)
 {
 }

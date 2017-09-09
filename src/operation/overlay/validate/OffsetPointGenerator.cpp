@@ -57,7 +57,7 @@ OffsetPointGenerator::OffsetPointGenerator(const geom::Geometry& geom,
 std::unique_ptr< std::vector<geom::Coordinate> >
 OffsetPointGenerator::getPoints()
 {
-	assert (offsetPts.get() == NULL);
+	assert (offsetPts.get() == nullptr);
 	offsetPts.reset(new vector<Coordinate>());
 
 	vector<const LineString*> lines;

@@ -188,7 +188,7 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
       CoordinateSequence* seq = lineList[i];
 
       // SegmentString takes ownership of CoordinateSequence
-      SegmentString* ss = new NodedSegmentString(seq, NULL);
+      SegmentString* ss = new NodedSegmentString(seq, nullptr);
       curveList.push_back( ss );
    }
    lineList.clear();
@@ -256,7 +256,7 @@ BufferBuilder::bufferLineSingleSided( const Geometry* g, double distance,
       // Remove end points if they are a part of the original line to be
       // buffered.
       CoordinateSequence::Ptr coords(mergedLines->back()->getCoordinates());
-      if ( NULL != coords.get() )
+      if ( nullptr != coords.get() )
       {
          // Use 98% of the buffer width as the point-distance requirement - this
          // is to ensure that the point that is "distance" +/- epsilon is not
@@ -368,7 +368,7 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 	// throw(GEOSException *)
 {
 	const PrecisionModel *precisionModel=workingPrecisionModel;
-	if (precisionModel==NULL)
+	if (precisionModel==nullptr)
 		precisionModel=g->getPrecisionModel();
 
 	assert(precisionModel);
@@ -410,7 +410,7 @@ BufferBuilder::buffer(const Geometry *g, double distance)
 	std::cerr << std::endl << edgeList << std::endl;
 #endif
 
-	Geometry* resultGeom=NULL;
+	Geometry* resultGeom=nullptr;
 	std::unique_ptr< std::vector<Geometry*> > resultPolyList;
 	std::vector<BufferSubgraph*> subgraphList;
 
@@ -476,14 +476,14 @@ Noder*
 BufferBuilder::getNoder(const PrecisionModel* pm)
 {
 	// this doesn't change workingNoder precisionModel!
-	if (workingNoder != NULL) return workingNoder;
+	if (workingNoder != nullptr) return workingNoder;
 
 	// otherwise use a fast (but non-robust) noder
 
 	if ( li ) // reuse existing IntersectionAdder and LineIntersector
 	{
 		li->setPrecisionModel(pm);
-		assert(intersectionAdder!=NULL);
+		assert(intersectionAdder!=nullptr);
 	}
 	else
 	{
@@ -581,7 +581,7 @@ BufferBuilder::insertUniqueEdge(Edge *e)
 	// fast lookup
 	Edge *existingEdge = edgeList.findEqualEdge(e);
 	// If an identical edge already exists, simply update its label
-	if (existingEdge != NULL) {
+	if (existingEdge != nullptr) {
 		Label& existingLabel = existingEdge->getLabel();
 		Label labelToMerge = e->getLabel();
 
@@ -694,7 +694,7 @@ BufferBuilder::buildSubgraphs(const std::vector<BufferSubgraph*>& subgraphList,
 geom::Geometry*
 BufferBuilder::createEmptyResultGeometry() const
 {
-	geom::Geometry* emptyGeom = geomFact->createPolygon(NULL, NULL);
+	geom::Geometry* emptyGeom = geomFact->createPolygon(nullptr, nullptr);
 	return emptyGeom;
 }
 

@@ -34,7 +34,7 @@ namespace tut
         }
 
         test_capigeouserdata_data()
-            : geom_(0)
+            : geom_(nullptr)
         {
             initGEOS(notice, notice);
         }
@@ -42,7 +42,7 @@ namespace tut
         ~test_capigeouserdata_data()
         {
             GEOSGeom_destroy(geom_);
-            geom_ = 0;
+            geom_ = nullptr;
             finishGEOS();
         }
 

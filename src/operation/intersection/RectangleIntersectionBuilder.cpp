@@ -392,11 +392,11 @@ RectangleIntersectionBuilder::reconnectPolygons(const Rectangle & rect)
 	  // Reconnect all lines into one or more linearrings
 	  // using box boundaries if necessary
 
-    std::vector<Coordinate> *ring = NULL;
+    std::vector<Coordinate> *ring = nullptr;
 
-	  while(!lines.empty() || ring != NULL)
+	  while(!lines.empty() || ring != nullptr)
 		{
-		  if(ring == NULL)
+		  if(ring == nullptr)
 			{
 			  ring = new std::vector<Coordinate>();
 			  LineString *line = lines.front();
@@ -430,7 +430,7 @@ RectangleIntersectionBuilder::reconnectPolygons(const Rectangle & rect)
         geom::CoordinateSequence *shell_cs = _csf.create(ring);
         geom::LinearRing *shell = _gf.createLinearRing(shell_cs);
 	      exterior.push_back(make_pair(shell, new LinearRingVect()));
-			  ring = NULL;
+			  ring = nullptr;
 			}
 		  else
 			{

@@ -147,7 +147,7 @@ public:
      */
     CascadedPolygonUnion(std::vector<geom::Polygon*>* polys)
       : inputPolys(polys),
-        geomFactory(NULL)
+        geomFactory(nullptr)
     {}
 
     /**

@@ -35,7 +35,7 @@ namespace algorithm { // geos.algorithm
 SIRtreePointInRing::SIRtreePointInRing(LinearRing *newRing):
 	PointInRing(),
 	ring(newRing),
-	sirTree(NULL),
+	sirTree(nullptr),
 	crossings(0)
 {
 	buildIndex();

@@ -56,7 +56,7 @@ namespace tut
         const size_t coords_size = 2;
         CoordSeqPtr cs( factory_->create((size_t)0, coords_size) );
 
-        ensure( 0 != cs.get() );
+        ensure( nullptr != cs.get() );
 
         Coordinate c0(0, 0);
         Coordinate c1(3, 3);
@@ -67,7 +67,7 @@ namespace tut
 
         // Create SegmentString instance
 
-        NodedSegmentString segment(cs.release(), 0);
+        NodedSegmentString segment(cs.release(), nullptr);
 
         ensure_equals( segment.size(), coords_size );
 
@@ -104,7 +104,7 @@ namespace tut
         const size_t coords_size = 2;
         CoordSeqPtr cs( factory_->create((size_t)0, coords_size) );
 
-        ensure( 0 != cs.get() );
+        ensure( nullptr != cs.get() );
 
         Coordinate c0(0, 0);
         Coordinate c1(3, 3);
@@ -115,7 +115,7 @@ namespace tut
 
         // Create SegmentString instance
 
-        NodedSegmentString segment(cs.release(), 0);
+        NodedSegmentString segment(cs.release(), nullptr);
 
         ensure_equals( segment.size(), coords_size );
 
@@ -146,7 +146,7 @@ namespace tut
         const size_t coords_size = 2;
         CoordSeqPtr cs( factory_->create((size_t)0, coords_size) );
 
-        ensure( 0 != cs.get() );
+        ensure( nullptr != cs.get() );
 
         Coordinate c0(0, 0);
         Coordinate c1(3, 3);
@@ -157,7 +157,7 @@ namespace tut
 
         // Create SegmentString instance
 
-        NodedSegmentString segment(cs.release(), 0);
+        NodedSegmentString segment(cs.release(), nullptr);
 
         ensure_equals( segment.size(), coords_size );
 
@@ -188,7 +188,7 @@ namespace tut
         const size_t coords_size = 2;
         CoordSeqPtr cs( factory_->create((size_t)0, coords_size) );
 
-        ensure( 0 != cs.get() );
+        ensure( nullptr != cs.get() );
 
         Coordinate c0(0, 0);
         Coordinate c1(3, 3);
@@ -199,7 +199,7 @@ namespace tut
 
         // Create SegmentString instance
 
-        NodedSegmentString segment(cs.release(), 0);
+        NodedSegmentString segment(cs.release(), nullptr);
 
         ensure_equals( segment.size(), coords_size );
 

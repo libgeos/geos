@@ -54,7 +54,7 @@ public:
     geom::Geometry* getGeometry(std::size_t index)
     {
       if (index >= this->base_type::size())
-          return NULL;
+          return nullptr;
       return (*this)[index];
     }
 

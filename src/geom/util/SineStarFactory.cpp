@@ -85,7 +85,7 @@ SineStarFactory::createSineStar() const
     geomFact->getCoordinateSequenceFactory()->create( pts.release() )
   );
   unique_ptr<LinearRing> ring ( geomFact->createLinearRing( cs.release() ) );
-  unique_ptr<Polygon> poly ( geomFact->createPolygon(ring.release(), 0) );
+  unique_ptr<Polygon> poly ( geomFact->createPolygon(ring.release(), nullptr) );
   return poly;
 }
 

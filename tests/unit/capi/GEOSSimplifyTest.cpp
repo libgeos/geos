@@ -35,7 +35,7 @@ namespace tut
         }
 
         test_capigeossimplify_data()
-            : geom1_(0), geom2_(0)
+            : geom1_(nullptr), geom2_(nullptr)
         {
             initGEOS(notice, notice);
         }
@@ -44,8 +44,8 @@ namespace tut
         {
             GEOSGeom_destroy(geom1_);
             GEOSGeom_destroy(geom2_);
-            geom1_ = 0;
-            geom2_ = 0;
+            geom1_ = nullptr;
+            geom2_ = nullptr;
             finishGEOS();
         }
 

@@ -38,7 +38,7 @@ namespace tut
         }
 
         test_capiisvaliddetail_data()
-            : geom_(0), loc_(0), reason_(0)
+            : geom_(nullptr), loc_(nullptr), reason_(nullptr)
         {
             initGEOS(notice, notice);
             wktw_ = GEOSWKTWriter_create();
@@ -102,8 +102,8 @@ namespace tut
       geom_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0, 5 -5, 5 5)");
       int r = GEOSisValidDetail(geom_, 0, &reason_, &loc_);
       ensure_equals(r, 1); // valid
-      ensure_equals(reason_, (void*)0);
-      ensure_equals(loc_, (void*)0);
+      ensure_equals(reason_, (void*)nullptr);
+      ensure_equals(loc_, (void*)nullptr);
     }
 
     // Invalid coordinate
@@ -112,7 +112,7 @@ namespace tut
     void object::test<3>()
     {
       geom_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0, NaN -5)");
-      ensure(0 != geom_);
+      ensure(nullptr != geom_);
       int r = GEOSisValidDetail(geom_, 0, &reason_, &loc_);
       std::string wkt = toWKT(loc_);
       strToUpper(wkt);
@@ -152,8 +152,8 @@ namespace tut
 
       int r = GEOSisValidDetail(geom_, flags, &reason_, &loc_);
       ensure_equals(r, 1); // valid
-      ensure_equals(reason_, (void*)0);
-      ensure_equals(loc_, (void*)0);
+      ensure_equals(reason_, (void*)nullptr);
+      ensure_equals(loc_, (void*)nullptr);
     }
 
     // Check it is possible to not request details
@@ -162,7 +162,7 @@ namespace tut
     void object::test<6>()
     {
       geom_ = GEOSGeomFromWKT("POLYGON((0 1, -10 10, 10 10, 0 1, 4 6, -4 6, 0 1))");
-      int r = GEOSisValidDetail(geom_, 0, 0, 0);
+      int r = GEOSisValidDetail(geom_, 0, nullptr, nullptr);
       ensure_equals(r, 0); // invalid
     }
 

@@ -236,7 +236,7 @@ WKTWriter::appendPointTaggedText(const Coordinate* coordinate, int level,
 		Writer *writer)
 {
 	writer->write("POINT ");
-    if( outputDimension == 3 && !old3D && coordinate != NULL )
+    if( outputDimension == 3 && !old3D && coordinate != nullptr )
         writer->write( "Z " );
 
 	appendPointText(coordinate, level, writer);
@@ -306,7 +306,7 @@ void
 WKTWriter::appendPointText(const Coordinate* coordinate, int /*level*/,
 		Writer *writer)
 {
-	if (coordinate==NULL) {
+	if (coordinate==nullptr) {
 		writer->write("EMPTY");
 	} else {
 		writer->write("(");

@@ -41,13 +41,13 @@ namespace tut
         }
 
         test_capigeosgeom_createcollection_data()
-            : handle_(initGEOS_r(notice, notice)), geom_(0)
+            : handle_(initGEOS_r(notice, notice)), geom_(nullptr)
         {
         }
 
         ~test_capigeosgeom_createcollection_data()
         {
-            GEOSGeom_destroy(geom_); geom_ = 0;
+            GEOSGeom_destroy(geom_); geom_ = nullptr;
             finishGEOS_r(handle_);
         }
     };

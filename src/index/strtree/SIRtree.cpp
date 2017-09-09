@@ -100,12 +100,12 @@ protected:
 
 	void* computeBounds() const
 	{
-		Interval* bounds=NULL;
+		Interval* bounds=nullptr;
 		const BoundableList& b = *getChildBoundables();
 		for(unsigned int i=0; i<b.size(); ++i)
 		{
 			const Boundable* childBoundable=b[i];
-			if (bounds==NULL) {
+			if (bounds==nullptr) {
 				bounds=new Interval(*((Interval*)childBoundable->getBounds()));
 			} else {
 				bounds->expandToInclude((Interval*)childBoundable->getBounds());

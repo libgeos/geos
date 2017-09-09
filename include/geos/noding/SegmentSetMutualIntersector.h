@@ -39,7 +39,7 @@ class SegmentSetMutualIntersector
 public:
 
     SegmentSetMutualIntersector()
-        : segInt(0)
+        : segInt(nullptr)
     {}
 
 	virtual ~SegmentSetMutualIntersector() {}

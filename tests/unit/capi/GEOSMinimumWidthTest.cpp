@@ -34,7 +34,7 @@ namespace tut
         }
 
         test_capigeosminimumwidth_data()
-            : input_(0), wkt_(0)
+            : input_(nullptr), wkt_(nullptr)
         {
             initGEOS(notice, notice);
             wktw_ = GEOSWKTWriter_create();
@@ -45,10 +45,10 @@ namespace tut
         ~test_capigeosminimumwidth_data()
         {
             GEOSGeom_destroy(input_);
-            input_ = 0;
+            input_ = nullptr;
             GEOSWKTWriter_destroy(wktw_);
             GEOSFree(wkt_);
-            wkt_ = 0;
+            wkt_ = nullptr;
             finishGEOS();
         }
 
@@ -68,10 +68,10 @@ namespace tut
     void object::test<1>()
     {
         input_ = GEOSGeomFromWKT("POLYGON ((0 0, 0 15, 5 10, 5 0, 0 0))");
-        ensure( 0 != input_ );
+        ensure( nullptr != input_ );
 
         GEOSGeometry* output = GEOSMinimumWidth(input_);
-        ensure( 0 != output );
+        ensure( nullptr != output );
         ensure( 0 == GEOSisEmpty(output) );
 
         wkt_ = GEOSWKTWriter_write(wktw_, output);
@@ -85,10 +85,10 @@ namespace tut
     void object::test<2>()
     {
         input_ = GEOSGeomFromWKT("LINESTRING (0 0,0 10, 10 10)");
-        ensure( 0 != input_ );
+        ensure( nullptr != input_ );
 
         GEOSGeometry* output = GEOSMinimumWidth(input_);
-        ensure( 0 != output );
+        ensure( nullptr != output );
         ensure( 0 == GEOSisEmpty(output) );
 
         wkt_ = GEOSWKTWriter_write(wktw_, output);

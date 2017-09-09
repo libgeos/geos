@@ -42,9 +42,9 @@ using namespace geos::algorithm;
 /*public*/
 EdgeEnd::EdgeEnd()
 	:
-	edge(NULL),
+	edge(nullptr),
 	label(),
-	node(NULL),
+	node(nullptr),
 	dx(0.0),
 	dy(0.0),
 	quadrant(0)
@@ -56,7 +56,7 @@ EdgeEnd::EdgeEnd(Edge* newEdge)
 	:
 	edge(newEdge),
 	label(),
-	node(NULL),
+	node(nullptr),
 	dx(0.0),
 	dy(0.0),
 	quadrant(0)
@@ -69,7 +69,7 @@ EdgeEnd::EdgeEnd(Edge* newEdge, const Coordinate& newP0,
 	:
 	edge(newEdge),
 	label(newLabel),
-	node(NULL),
+	node(nullptr),
 	dx(0.0),
 	dy(0.0),
 	quadrant(0)
@@ -83,7 +83,7 @@ EdgeEnd::EdgeEnd(Edge* newEdge, const Coordinate& newP0,
 	:
 	edge(newEdge),
 	label(),
-	node(NULL),
+	node(nullptr),
 	dx(0.0),
 	dy(0.0),
 	quadrant(0)

@@ -38,9 +38,9 @@ Node*
 Node::createExpanded(Node *node,Interval *addInterval)
 {
 	Interval *expandInt=new Interval(addInterval);
-	if (node!=NULL) expandInt->expandToInclude(node->interval);
+	if (node!=nullptr) expandInt->expandToInclude(node->interval);
 	Node *largerNode=createNode(expandInt);
-	if (node!=NULL) largerNode->insert(node);
+	if (node!=nullptr) largerNode->insert(node);
 	delete expandInt;
 	return largerNode;
 }
@@ -99,7 +99,7 @@ Node::find(Interval *searchInterval)
 	int subnodeIndex=getSubnodeIndex(searchInterval,centre);
 	if (subnodeIndex==-1)
 		return this;
-	if (subnode[subnodeIndex]!=NULL) {
+	if (subnode[subnodeIndex]!=nullptr) {
 		// query lies in subnode, so search it
 		Node *node=subnode[subnodeIndex];
 		return node->find(searchInterval);
@@ -111,7 +111,7 @@ Node::find(Interval *searchInterval)
 void
 Node::insert(Node *node)
 {
-	assert(interval==NULL || interval->contains(node->interval));
+	assert(interval==nullptr || interval->contains(node->interval));
 	int index=getSubnodeIndex(node->interval,centre);
 	assert(index >= 0);
 	if (node->level==level-1) {
@@ -132,7 +132,7 @@ Node::insert(Node *node)
 Node*
 Node::getSubnode(int index)
 {
-	if (subnode[index]==NULL) {
+	if (subnode[index]==nullptr) {
 		subnode[index]=createSubnode(index);
 	}
 	return subnode[index];

@@ -42,7 +42,7 @@ namespace tut
         }
 
         test_capigeospreparedgeometry_data()
-            : geom1_(0), geom2_(0), prepGeom1_(0), prepGeom2_(0)
+            : geom1_(nullptr), geom2_(nullptr), prepGeom1_(nullptr), prepGeom2_(nullptr)
         {
             initGEOS(notice, notice);
         }
@@ -53,10 +53,10 @@ namespace tut
             GEOSGeom_destroy(geom2_);
         GEOSPreparedGeom_destroy(prepGeom1_);
         GEOSPreparedGeom_destroy(prepGeom2_);
-            geom1_ = 0;
-            geom2_ = 0;
-            prepGeom1_ = 0;
-            prepGeom2_ = 0;
+            geom1_ = nullptr;
+            geom2_ = nullptr;
+            prepGeom1_ = nullptr;
+            prepGeom2_ = nullptr;
             finishGEOS();
         }
 
@@ -79,7 +79,7 @@ namespace tut
             geom1_ = GEOSGeomFromWKT("POLYGON EMPTY");
         prepGeom1_ = GEOSPrepare(geom1_);
 
-        ensure(0 != prepGeom1_);
+        ensure(nullptr != prepGeom1_);
 
     }
 
@@ -95,7 +95,7 @@ namespace tut
     geom2_ = GEOSGeomFromWKT("POLYGON((2 2, 2 3, 3 3, 3 2, 2 2))");
     prepGeom1_ = GEOSPrepare(geom1_);
 
-    ensure(0 != prepGeom1_);
+    ensure(nullptr != prepGeom1_);
 
     int ret = GEOSPreparedContainsProperly(prepGeom1_, geom2_);
     ensure_equals(ret, 1);
@@ -114,7 +114,7 @@ namespace tut
     geom2_ = GEOSGeomFromWKT("POLYGON((0 0, 0 10, 10 10, 10 0, 0 0))");
     prepGeom1_ = GEOSPrepare(geom1_);
 
-    ensure(0 != prepGeom1_);
+    ensure(nullptr != prepGeom1_);
 
     int ret = GEOSPreparedContainsProperly(prepGeom1_, geom2_);
     ensure_equals(ret, 0);
@@ -133,7 +133,7 @@ namespace tut
     geom2_ = GEOSGeomFromWKT("LINESTRING(0 10, 10 0)");
     prepGeom1_ = GEOSPrepare(geom1_);
 
-    ensure(0 != prepGeom1_);
+    ensure(nullptr != prepGeom1_);
 
     int ret = GEOSPreparedIntersects(prepGeom1_, geom2_);
     ensure_equals(ret, 1);
@@ -149,7 +149,7 @@ namespace tut
     geom2_ = GEOSGeomFromWKT("POLYGON((0 0, 2 0, 2 2, 0 2, 0 0))");
     prepGeom1_ = GEOSPrepare(geom1_);
 
-    ensure(0 != prepGeom1_);
+    ensure(nullptr != prepGeom1_);
 
     int ret = GEOSPreparedCovers(prepGeom1_, geom2_);
     ensure_equals(ret, 1);
@@ -165,7 +165,7 @@ namespace tut
     geom2_ = GEOSGeomFromWKT("POLYGON((0 0, 2 0, 2 2, 0 2, 0 0))");
     prepGeom1_ = GEOSPrepare(geom1_);
 
-    ensure(0 != prepGeom1_);
+    ensure(nullptr != prepGeom1_);
 
     int ret = GEOSPreparedContains(prepGeom1_, geom2_);
     ensure_equals(ret, 1);
@@ -197,7 +197,7 @@ namespace tut
         geom2_ = GEOSGeomFromHEX_buf(reinterpret_cast<const unsigned char*>(point.data()), point.size());
 
         prepGeom1_ = GEOSPrepare(geom1_);
-        ensure(0 != prepGeom1_);
+        ensure(nullptr != prepGeom1_);
         int ret = GEOSPreparedIntersects(prepGeom1_, geom2_);
         ensure_equals(ret, 0);
     }
@@ -233,7 +233,7 @@ namespace tut
         geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sLine));
 
         prepGeom1_ = GEOSPrepare(geom1_);
-        ensure(0 != prepGeom1_);
+        ensure(nullptr != prepGeom1_);
         int ret = GEOSPreparedIntersects(prepGeom1_, geom2_);
         ensure_equals(ret, 1);
     }
@@ -251,7 +251,7 @@ namespace tut
         geom1_ = GEOSGeomFromHEX_buf(reinterpret_cast<const unsigned char*>(line.data()), line.size());
         geom2_ = GEOSGeomFromHEX_buf(reinterpret_cast<const unsigned char*>(point.data()), point.size());
         prepGeom1_ = GEOSPrepare(geom1_);
-        ensure(0 != prepGeom1_);
+        ensure(nullptr != prepGeom1_);
 
         int ret = GEOSPreparedIntersects(prepGeom1_, geom2_);
         ensure_equals(ret, 1);
@@ -278,10 +278,10 @@ namespace tut
             geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sOuter));
             std::istringstream sInner(inner);
             geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sInner));
-            ensure(0 != geom1_);
-            ensure(0 != geom2_);
+            ensure(nullptr != geom1_);
+            ensure(nullptr != geom2_);
             prepGeom1_ = GEOSPrepare(geom1_);
-            ensure(0 != prepGeom1_);
+            ensure(nullptr != prepGeom1_);
 
             int ret = GEOSPreparedContains(prepGeom1_, geom2_);
             ensure_equals(ret, 1);
@@ -299,10 +299,10 @@ namespace tut
             geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sOuter));
             std::istringstream sInner(inner);
             geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sInner));
-            ensure(0 != geom1_);
-            ensure(0 != geom2_);
+            ensure(nullptr != geom1_);
+            ensure(nullptr != geom2_);
             prepGeom1_ = GEOSPrepare(geom1_);
-            ensure(0 != prepGeom1_);
+            ensure(nullptr != prepGeom1_);
 
             int ret = GEOSPreparedContains(prepGeom1_, geom2_);
             ensure_equals(ret, 0);
@@ -335,10 +335,10 @@ namespace tut
             geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sOuter));
             std::istringstream sInner(inner);
             geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sInner));
-            ensure(0 != geom1_);
-            ensure(0 != geom2_);
+            ensure(nullptr != geom1_);
+            ensure(nullptr != geom2_);
             prepGeom1_ = GEOSPrepare(geom1_);
-            ensure(0 != prepGeom1_);
+            ensure(nullptr != prepGeom1_);
 
             int ret = GEOSPreparedContains(prepGeom1_, geom2_);
             ensure_equals(ret, 1);
@@ -356,10 +356,10 @@ namespace tut
             geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sOuter));
             std::istringstream sInner(inner);
             geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sInner));
-            ensure(0 != geom1_);
-            ensure(0 != geom2_);
+            ensure(nullptr != geom1_);
+            ensure(nullptr != geom2_);
             prepGeom1_ = GEOSPrepare(geom1_);
-            ensure(0 != prepGeom1_);
+            ensure(nullptr != prepGeom1_);
 
             int ret = GEOSPreparedContains(prepGeom1_, geom2_);
             ensure_equals(ret, 1);

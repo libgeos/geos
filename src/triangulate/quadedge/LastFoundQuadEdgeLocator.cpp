@@ -24,7 +24,7 @@ namespace triangulate { //geos.triangulate
 namespace quadedge { //geos.triangulate.quadedge
 
 LastFoundQuadEdgeLocator::LastFoundQuadEdgeLocator(QuadEdgeSubdivision *subdiv) :
-	subdiv(subdiv), lastEdge(NULL)
+	subdiv(subdiv), lastEdge(nullptr)
 {
 }
 

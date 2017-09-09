@@ -45,7 +45,7 @@ LinearGeometryBuilder::LinearGeometryBuilder(const GeometryFactory* geomFact) :
 		geomFact(geomFact),
 		ignoreInvalidLines(false),
 		fixInvalidLines(false),
-		coordList(0) {}
+		coordList(nullptr) {}
 
 /* public */
 void
@@ -100,7 +100,7 @@ LinearGeometryBuilder::endLine()
 			if (coordList)
 			{
 				delete coordList;
-				coordList = 0;
+				coordList = nullptr;
 			}
 			return;
 		}
@@ -120,7 +120,7 @@ LinearGeometryBuilder::endLine()
 		}
 	}
 
-	LineString* line = 0;
+	LineString* line = nullptr;
 	try
 	{
 		line = geomFact->createLineString(coordList);
@@ -134,7 +134,7 @@ LinearGeometryBuilder::endLine()
 	}
 
 	if (line) lines.push_back(line);
-	coordList = 0;
+	coordList = nullptr;
 }
 
 /* public */

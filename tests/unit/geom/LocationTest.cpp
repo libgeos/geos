@@ -75,7 +75,7 @@ namespace tut
 		catch ( geos::util::IllegalArgumentException const& e )
 		{
 			const char* msg = e.what(); // ok
-			ensure( msg != 0 );
+			ensure( msg != nullptr );
 		}
     }
 

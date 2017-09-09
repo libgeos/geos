@@ -41,7 +41,7 @@ geom::Geometry* CascadedUnion::Union(std::vector<geom::Geometry*>* polys)
 geom::Geometry* CascadedUnion::Union()
 {
     if (inputGeoms->empty())
-        return NULL;
+        return nullptr;
 
     geomFactory = inputGeoms->front()->getFactory();
 
@@ -85,7 +85,7 @@ geom::Geometry* CascadedUnion::binaryUnion(GeometryListHolder* geoms,
     std::size_t start, std::size_t end)
 {
     if (end - start <= 1) {
-        return unionSafe(geoms->getGeometry(start), NULL);
+        return unionSafe(geoms->getGeometry(start), nullptr);
     }
     else if (end - start == 2) {
         return unionSafe(geoms->getGeometry(start), geoms->getGeometry(start + 1));
@@ -126,12 +126,12 @@ CascadedUnion::reduceToGeometries(index::strtree::ItemsList* geomTree)
 geom::Geometry*
 CascadedUnion::unionSafe(geom::Geometry* g0, geom::Geometry* g1)
 {
-    if (g0 == NULL && g1 == NULL)
-        return NULL;
+    if (g0 == nullptr && g1 == nullptr)
+        return nullptr;
 
-    if (g0 == NULL)
+    if (g0 == nullptr)
         return g1->clone();
-    if (g1 == NULL)
+    if (g1 == nullptr)
         return g0->clone();
 
     return unionOptimized(g0, g1);

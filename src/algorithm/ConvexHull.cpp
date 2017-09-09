@@ -481,7 +481,7 @@ ConvexHull::lineOrPolygon(const Coordinate::ConstVect &input)
 	}
 	CoordinateSequence *cl2=toCoordinateSequence(cleaned);
 	LinearRing *linearRing=geomFactory->createLinearRing(cl2);
-	return geomFactory->createPolygon(linearRing,NULL);
+	return geomFactory->createPolygon(linearRing,nullptr);
 }
 
 /*private*/
@@ -497,7 +497,7 @@ ConvexHull::cleanRing(const Coordinate::ConstVect &original,
 	assert(last);
 	assert(original[0]->equals2D(*last));
 
-	const Coordinate *prev = NULL;
+	const Coordinate *prev = nullptr;
 	for (size_t i=0; i<npts-1; ++i)
 	{
 		const Coordinate *curr = original[i];
@@ -506,7 +506,7 @@ ConvexHull::cleanRing(const Coordinate::ConstVect &original,
 		// skip consecutive equal coordinates
 		if (curr->equals2D(*next)) continue;
 
-		if ( prev != NULL &&  isBetween(*prev, *curr, *next) )
+		if ( prev != nullptr &&  isBetween(*prev, *curr, *next) )
 		{
 			continue;
 		}

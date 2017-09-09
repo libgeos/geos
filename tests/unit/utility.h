@@ -79,14 +79,14 @@ typedef geos::geom::prep::PreparedGeometry const* PreparedGeometryPtr;
 template<typename Type, typename InstanceType>
 inline bool isInstanceOf(InstanceType const* instance)
 {
-    assert(0 != instance);
-    return (0 != dynamic_cast<Type const*>(instance) );
+    assert(nullptr != instance);
+    return (nullptr != dynamic_cast<Type const*>(instance) );
 }
 
 template<typename Type, typename InstanceType>
 inline Type const* instanceOf(InstanceType const* instance)
 {
-    assert(0 != instance);
+    assert(nullptr != instance);
     return dynamic_cast<Type const*>(instance);
 }
 
@@ -106,8 +106,8 @@ inline void ensure_equals_geometry(T1 const* lhs, T2 const* rhs)
 template <typename T>
 inline void ensure_equals_geometry(T const* lhs, T const* rhs)
 {
-    assert(0 != lhs);
-    assert(0 != rhs);
+    assert(nullptr != lhs);
+    assert(nullptr != rhs);
 
     using geos::geom::Polygon;
     using geos::geom::GeometryCollection;
@@ -161,8 +161,8 @@ template <>
 inline void ensure_equals_geometry(geos::geom::Polygon const* lhs,
                                    geos::geom::Polygon const* rhs)
 {
-    assert(0 != lhs);
-    assert(0 != rhs);
+    assert(nullptr != lhs);
+    assert(nullptr != rhs);
 
     ensure_equals("number of interior ring do not match",
                   lhs->getNumInteriorRing(), rhs->getNumInteriorRing());
@@ -172,8 +172,8 @@ template <>
 inline void ensure_equals_geometry(geos::geom::GeometryCollection const* lhs,
                                    geos::geom::GeometryCollection const* rhs)
 {
-    assert(0 != lhs);
-    assert(0 != rhs);
+    assert(nullptr != lhs);
+    assert(nullptr != rhs);
 
     using geos::geom::Geometry;
 
@@ -192,8 +192,8 @@ template <>
 inline void ensure_equals_geometry(geos::geom::Geometry const* lhs,
                                    geos::geom::prep::PreparedGeometry const* rhs)
 {
-    assert(0 != lhs);
-    assert(0 != rhs);
+    assert(nullptr != lhs);
+    assert(nullptr != rhs);
 
     geos::geom::Geometry const& pg = rhs->getGeometry();
     ensure_equals_geometry(lhs, &pg);

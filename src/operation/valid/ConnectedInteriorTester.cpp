@@ -215,7 +215,7 @@ ConnectedInteriorTester::buildEdgeRings(std::vector<EdgeEnd*> *dirEdges,
 #endif
 
 		// if this edge has not yet been processed
-		if(de->isInResult() && de->getEdgeRing()==NULL)
+		if(de->isInResult() && de->getEdgeRing()==nullptr)
 		{
 			MaximalEdgeRing* er = new MaximalEdgeRing(de,
 			                                   geometryFactory.get());
@@ -271,13 +271,13 @@ ConnectedInteriorTester::visitInteriorRing(const LineString *ring, PlanarGraph &
     	const Coordinate& pt1=findDifferentPoint(pts, pt0);
 	Edge *e=graph.findEdgeInSameDirection(pt0, pt1);
 	DirectedEdge *de=static_cast<DirectedEdge*>(graph.findEdgeEnd(e));
-	DirectedEdge *intDe=NULL;
+	DirectedEdge *intDe=nullptr;
 	if (de->getLabel().getLocation(0,Position::RIGHT)==Location::INTERIOR) {
 		intDe=de;
 	} else if (de->getSym()->getLabel().getLocation(0,Position::RIGHT)==Location::INTERIOR) {
 		intDe=de->getSym();
 	}
-	assert(intDe!=NULL); // unable to find dirEdge with Interior on RHS
+	assert(intDe!=nullptr); // unable to find dirEdge with Interior on RHS
 	visitLinkedDirectedEdges(intDe);
 }
 
@@ -290,7 +290,7 @@ ConnectedInteriorTester::visitLinkedDirectedEdges(DirectedEdge *start)
 	//Debug.println(de);
 	do {
 		// found null Directed Edge
-		assert(de!=NULL);
+		assert(de!=nullptr);
 
 		de->setVisited(true);
 		de=de->getNext();

@@ -202,7 +202,7 @@ public:
 
 	LineSequencer()
 		:
-		factory(0),
+		factory(nullptr),
 		lineCount(0),
 		isRun(false),
 		sequencedGeometry(nullptr),

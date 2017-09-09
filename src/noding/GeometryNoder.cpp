@@ -58,7 +58,7 @@ public:
     if ( ls ) {
       geom::CoordinateSequence* coord = ls->getCoordinates();
       // coord ownership transferred to SegmentString
-      SegmentString *ss = new NodedSegmentString(coord, 0);
+      SegmentString *ss = new NodedSegmentString(coord, nullptr);
       _to.push_back(ss);
     }
   }
@@ -125,7 +125,7 @@ GeometryNoder::getNoded()
   extractSegmentStrings(argGeom, lineList);
 
   Noder& noder = getNoder();
-  SegmentString::NonConstVect* nodedEdges = 0;
+  SegmentString::NonConstVect* nodedEdges = nullptr;
 
   try {
     noder.computeNodes( &lineList );

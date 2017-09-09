@@ -42,15 +42,15 @@ namespace tut
         geos::io::WKTReader reader_;
 
         test_convexhull_data()
-			: geom_(0), pm_(1), factory_(GeometryFactory::create(&pm_, 0)), reader_(factory_.get())
+			: geom_(nullptr), pm_(1), factory_(GeometryFactory::create(&pm_, 0)), reader_(factory_.get())
         {
-            assert(0 == geom_);
+            assert(nullptr == geom_);
         }
 
         ~test_convexhull_data()
         {
             factory_->destroyGeometry(geom_);
-            geom_ = 0;
+            geom_ = nullptr;
         }
     };
 
@@ -72,11 +72,11 @@ namespace tut
 
         Geometry::Ptr lineGeom(reader_.read("LINESTRING (30 220, 240 220, 240 220)"));
         LineString::Ptr line(dynamic_cast<LineString*>(lineGeom.release()));
-        ensure(0 != line.get());
+        ensure(nullptr != line.get());
 
         Geometry::Ptr hullGeom(reader_.read("LINESTRING (30 220, 240 220)"));
         LineString::Ptr convexHull(dynamic_cast<LineString*>(hullGeom.release()));
-        ensure(0 != convexHull.get());
+        ensure(nullptr != convexHull.get());
 
         geom_ = line->convexHull();
         ensure( convexHull->equalsExact(geom_) );
@@ -90,11 +90,11 @@ namespace tut
         using geos::geom::LineString;
 
         Geometry::Ptr geom(reader_.read("MULTIPOINT (130 240, 130 240, 130 240, 570 240, 570 240, 570 240, 650 240)"));
-        ensure(0 != geom.get());
+        ensure(nullptr != geom.get());
 
         Geometry::Ptr hullGeom(reader_.read("LINESTRING (130 240, 650 240)"));
         LineString::Ptr convexHull(dynamic_cast<LineString*>(hullGeom.release()));
-        ensure(0 != convexHull.get());
+        ensure(nullptr != convexHull.get());
 
         geom_ = geom->convexHull();
         ensure( convexHull->equalsExact(geom_) );
@@ -108,11 +108,11 @@ namespace tut
         using geos::geom::LineString;
 
         Geometry::Ptr geom(reader_.read("MULTIPOINT (0 0, 0 0, 10 0)"));
-        ensure(0 != geom.get());
+        ensure(nullptr != geom.get());
 
         Geometry::Ptr hullGeom(reader_.read("LINESTRING (0 0, 10 0)"));
         LineString::Ptr convexHull(dynamic_cast<LineString*>(hullGeom.release()));
-        ensure(0 != convexHull.get());
+        ensure(nullptr != convexHull.get());
 
         geom_ = geom->convexHull();
         ensure( convexHull->equalsExact(geom_) );
@@ -126,11 +126,11 @@ namespace tut
         using geos::geom::LineString;
 
         Geometry::Ptr geom(reader_.read("MULTIPOINT (0 0, 10 0, 10 0)"));
-        ensure(0 != geom.get());
+        ensure(nullptr != geom.get());
 
         Geometry::Ptr hullGeom(reader_.read("LINESTRING (0 0, 10 0)"));
         LineString::Ptr convexHull(dynamic_cast<LineString*>(hullGeom.release()));
-        ensure(0 != convexHull.get());
+        ensure(nullptr != convexHull.get());
 
         geom_ = geom->convexHull();
         ensure( convexHull->equalsExact(geom_) );
@@ -144,11 +144,11 @@ namespace tut
         using geos::geom::LineString;
 
         Geometry::Ptr geom(reader_.read("MULTIPOINT (0 0, 5 0, 10 0)"));
-        ensure(0 != geom.get());
+        ensure(nullptr != geom.get());
 
         Geometry::Ptr hullGeom(reader_.read("LINESTRING (0 0, 10 0)"));
         LineString::Ptr convexHull(dynamic_cast<LineString*>(hullGeom.release()));
-        ensure(0 != convexHull.get());
+        ensure(nullptr != convexHull.get());
 
         geom_ = geom->convexHull();
         ensure( convexHull->equalsExact(geom_) );
@@ -162,13 +162,13 @@ namespace tut
         using geos::geom::LineString;
 
         Geometry::Ptr geom(reader_.read("MULTIPOINT (0 0, 5 1, 10 0)"));
-        ensure(0 != geom.get());
+        ensure(nullptr != geom.get());
 
         Geometry::Ptr hullGeom(geom->convexHull());
-        ensure(0 != hullGeom.get());
+        ensure(nullptr != hullGeom.get());
 
         Geometry::Ptr expectedHull(reader_.read("POLYGON ((0 0, 5 1, 10 0, 0 0))"));
-        ensure(0 != expectedHull.get());
+        ensure(nullptr != expectedHull.get());
 
         ensure_equals( hullGeom->toString(), expectedHull->toString() );
     }
@@ -181,11 +181,11 @@ namespace tut
         using geos::geom::LineString;
 
         Geometry::Ptr geom(reader_.read("MULTIPOINT (0 0, 0 0, 5 0, 5 0, 10 0, 10 0)"));
-        ensure(0 != geom.get());
+        ensure(nullptr != geom.get());
 
         Geometry::Ptr hullGeom(reader_.read("LINESTRING (0 0, 10 0)"));
         LineString::Ptr convexHull(dynamic_cast<LineString*>(hullGeom.release()));
-        ensure(0 != convexHull.get());
+        ensure(nullptr != convexHull.get());
 
         geom_ = geom->convexHull();
         ensure( convexHull->equalsExact(geom_) );

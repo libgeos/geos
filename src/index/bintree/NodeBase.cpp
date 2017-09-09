@@ -44,8 +44,8 @@ NodeBase::getSubnodeIndex(Interval *interval, double centre)
 NodeBase::NodeBase()
 {
 	items=new vector<void*>();
-	subnode[0]=NULL;
-	subnode[1]=NULL;
+	subnode[0]=nullptr;
+	subnode[1]=nullptr;
 }
 
 NodeBase::~NodeBase() {
@@ -55,8 +55,8 @@ NodeBase::~NodeBase() {
 	delete items;
 	delete subnode[0];
 	delete subnode[1];
-	subnode[0]=NULL;
-	subnode[1]=NULL;
+	subnode[0]=nullptr;
+	subnode[1]=nullptr;
 }
 
 vector<void*>*
@@ -72,7 +72,7 @@ void NodeBase::add(void* item){
 vector<void*>* NodeBase::addAllItems(vector<void*> *newItems) {
 	items->insert(items->end(),newItems->begin(),newItems->end());
 	for(int i=0;i<2;i++) {
-		if (subnode[i]!=NULL) {
+		if (subnode[i]!=nullptr) {
 			subnode[i]->addAllItems(newItems);
 		}
 	}
@@ -86,7 +86,7 @@ NodeBase::addAllItemsFromOverlapping(Interval *interval,vector<void*> *resultIte
 		return items;
 	resultItems->insert(resultItems->end(),items->begin(),items->end());
 	for (int i=0;i<2;i++) {
-		if (subnode[i]!=NULL) {
+		if (subnode[i]!=nullptr) {
 			subnode[i]->addAllItemsFromOverlapping(interval,resultItems);
 		}
 	}
@@ -98,7 +98,7 @@ NodeBase::depth()
 {
 	int maxSubDepth=0;
 	for (int i=0;i<2;i++) {
-		if (subnode[i]!=NULL) {
+		if (subnode[i]!=nullptr) {
 			int sqd=subnode[i]->depth();
 			if (sqd>maxSubDepth)
 				maxSubDepth=sqd;
@@ -112,7 +112,7 @@ NodeBase::size()
 {
 	int subSize=0;
 	for (int i=0;i<2;i++) {
-		if (subnode[i]!=NULL) {
+		if (subnode[i]!=nullptr) {
 			subSize+=subnode[i]->size();
 		}
 	}
@@ -124,7 +124,7 @@ NodeBase::nodeSize()
 {
 	int subSize=0;
 	for (int i=0;i<2;i++) {
-		if (subnode[i]!=NULL) {
+		if (subnode[i]!=nullptr) {
 			subSize+=subnode[i]->nodeSize();
 		}
 	}

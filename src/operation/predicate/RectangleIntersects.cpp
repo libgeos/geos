@@ -144,7 +144,7 @@ protected:
 		const geom::Polygon *poly;
 
 		// if test geometry is not polygonal this check is not needed
-		if ( 0 == (poly=dynamic_cast<const geom::Polygon *>(&geom)) ) {
+		if ( nullptr == (poly=dynamic_cast<const geom::Polygon *>(&geom)) ) {
 			return;
 		}
 

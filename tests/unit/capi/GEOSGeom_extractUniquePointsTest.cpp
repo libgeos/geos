@@ -36,7 +36,7 @@ namespace tut
         }
 
         test_capigeosextractuniquepoints_data()
-                : geom1_(0), geom2_(0), geom3_(0)
+                : geom1_(nullptr), geom2_(nullptr), geom3_(nullptr)
         {
             handle_ = initGEOS_r(notice, notice);
         }
@@ -48,9 +48,9 @@ namespace tut
             if( geom3_ )
                 GEOSGeom_destroy_r(handle_, geom3_);
 
-            geom1_ = 0;
-            geom2_ = 0;
-            geom3_ = 0;
+            geom1_ = nullptr;
+            geom2_ = nullptr;
+            geom3_ = nullptr;
             finishGEOS_r(handle_);
         }
 

@@ -82,10 +82,10 @@ CoordinateSequence::hasRepeatedPoints(const CoordinateSequence *cl)
 const Coordinate*
 CoordinateSequence::minCoordinate() const
 {
-	const Coordinate* minCoord=NULL;
+	const Coordinate* minCoord=nullptr;
 	const std::size_t size=getSize();
 	for(std::size_t i=0; i<size; i++) {
-		if(minCoord==NULL || minCoord->compareTo(getAt(i))>0) {
+		if(minCoord==nullptr || minCoord->compareTo(getAt(i))>0) {
 			minCoord=&getAt(i);
 		}
 	}
@@ -95,10 +95,10 @@ CoordinateSequence::minCoordinate() const
 const Coordinate*
 CoordinateSequence::minCoordinate(CoordinateSequence *cl)
 {
-	const Coordinate* minCoord=NULL;
+	const Coordinate* minCoord=nullptr;
 	const std::size_t size=cl->getSize();
 	for(std::size_t i=0;i<size; i++) {
-		if(minCoord==NULL || minCoord->compareTo(cl->getAt(i))>0) {
+		if(minCoord==nullptr || minCoord->compareTo(cl->getAt(i))>0) {
 			minCoord=&(cl->getAt(i));
 		}
 	}
@@ -177,7 +177,7 @@ CoordinateSequence::equals(const CoordinateSequence *cl1,
 	// FIXME: use std::equals()
 
 	if (cl1==cl2) return true;
-	if (cl1==NULL||cl2==NULL) return false;
+	if (cl1==nullptr||cl2==nullptr) return false;
 	size_t npts1=cl1->getSize();
 	if (npts1!=cl2->getSize()) return false;
 	for (size_t i=0; i<npts1; i++) {

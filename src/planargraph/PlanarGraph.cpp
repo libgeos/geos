@@ -78,7 +78,7 @@ void
 PlanarGraph::remove(DirectedEdge *de)
 {
 	DirectedEdge *sym = de->getSym();
-	if (sym!=NULL) sym->setSym(NULL);
+	if (sym!=nullptr) sym->setSym(nullptr);
 	de->getFromNode()->getOutEdges()->remove(de);
 	for(unsigned int i=0; i<dirEdges.size(); ++i) {
 		if(dirEdges[i]==de) {
@@ -101,7 +101,7 @@ PlanarGraph::remove(Node *node)
 		DirectedEdge *de =outEdges[i];
 		DirectedEdge *sym = de->getSym();
 		// remove the diredge that points to this node
-		if (sym!=NULL) remove(sym);
+		if (sym!=nullptr) remove(sym);
 		// remove this diredge from the graph collection
 		for(unsigned int j=0; j<dirEdges.size(); ++j) {
 			if (dirEdges[j]==de) {
@@ -110,7 +110,7 @@ PlanarGraph::remove(Node *node)
 			}
 		}
 		Edge *edge=de->getEdge();
-		if (edge!=NULL) {
+		if (edge!=nullptr) {
 			for(unsigned int k=0; k<edges.size(); ++k) {
 				if(edges[k]==edge) {
 					edges.erase(edges.begin()+k);

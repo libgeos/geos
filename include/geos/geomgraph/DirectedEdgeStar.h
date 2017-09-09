@@ -59,7 +59,7 @@ public:
 	DirectedEdgeStar()
 		:
 		EdgeEndStar(),
-		resultAreaEdgeList(0),
+		resultAreaEdgeList(nullptr),
 		label()
 	{}
 

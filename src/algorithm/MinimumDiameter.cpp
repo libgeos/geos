@@ -68,12 +68,12 @@ namespace algorithm { // geos.algorithm
 MinimumDiameter::MinimumDiameter(const Geometry* newInputGeom)
 {
 	minBaseSeg=new LineSegment();
-	minWidthPt=NULL;
+	minWidthPt=nullptr;
 	minPtIndex=0;
 	minWidth=0.0;
 	inputGeom=newInputGeom;
 	isConvex=false;
-	convexHullPts=NULL;
+	convexHullPts=nullptr;
 }
 
 /**
@@ -89,11 +89,11 @@ MinimumDiameter::MinimumDiameter(const Geometry* newInputGeom)
 MinimumDiameter::MinimumDiameter(const Geometry* newInputGeom, const bool newIsConvex)
 {
 	minBaseSeg=new LineSegment();
-	minWidthPt=NULL;
+	minWidthPt=nullptr;
 	minWidth=0.0;
 	inputGeom=newInputGeom;
 	isConvex=newIsConvex;
-	convexHullPts=NULL;
+	convexHullPts=nullptr;
 }
 
 MinimumDiameter::~MinimumDiameter()
@@ -152,8 +152,8 @@ MinimumDiameter::getDiameter()
 {
 	computeMinimumDiameter();
 	// return empty linestring if no minimum width calculated
-	if (minWidthPt==NULL)
-		return inputGeom->getFactory()->createLineString(NULL);
+	if (minWidthPt==nullptr)
+		return inputGeom->getFactory()->createLineString(nullptr);
 
 	Coordinate basePt;
 	minBaseSeg->project(*minWidthPt, basePt);
@@ -169,7 +169,7 @@ void
 MinimumDiameter::computeMinimumDiameter()
 {
 	// check if computation is cached
-	if (minWidthPt!=NULL)
+	if (minWidthPt!=nullptr)
 		return;
 	if (isConvex)
 		computeWidthConvex(inputGeom);
@@ -203,9 +203,9 @@ MinimumDiameter::computeWidthConvex(const Geometry *geom)
 		case 0:
 			minWidth=0.0;
 			delete minWidthPt;
-			minWidthPt=NULL;
+			minWidthPt=nullptr;
 			delete minBaseSeg;
-			minBaseSeg=NULL;
+			minBaseSeg=nullptr;
 			break;
 		case 1:
 			minWidth = 0.0;
@@ -351,7 +351,7 @@ Geometry* MinimumDiameter::getMinimumRectangle()
 	seq->setAt(p0, 4); // close
 
 	LinearRing* shell = inputGeom->getFactory()->createLinearRing( seq );
-	return inputGeom->getFactory()->createPolygon( shell, NULL );
+	return inputGeom->getFactory()->createPolygon( shell, nullptr );
 }
 
 double MinimumDiameter::computeC(double a, double b, const Coordinate& p)

@@ -73,13 +73,13 @@ public:
 
 	/** \brief start a new timer */
 	void start() {
-		gettimeofday(&starttime, NULL);
+		gettimeofday(&starttime, nullptr);
 	}
 
 	/** \brief stop current timer */
 	void stop()
 	{
-		gettimeofday(&stoptime, NULL);
+		gettimeofday(&stoptime, nullptr);
 		double elapsed = 1000000*(stoptime.tv_sec-starttime.tv_sec)+
 			(stoptime.tv_usec-starttime.tv_usec);
 

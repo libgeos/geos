@@ -105,11 +105,11 @@ namespace tut
             "POLYGON ((80 260, 200 260, 200 30, 80 30, 80 260))",
             "POLYGON ((30 180, 300 180, 300 110, 30 110, 30 180))",
             "POLYGON ((30 280, 30 150, 140 150, 140 280, 30 280))",
-            NULL
+            nullptr
         };
 
         std::vector<geos::geom::Polygon*> g;
-        for (char const* const* p = polygons; *p != NULL; ++p)
+        for (char const* const* p = polygons; *p != nullptr; ++p)
         {
             std::string wkt(*p);
             geos::geom::Polygon* geom =

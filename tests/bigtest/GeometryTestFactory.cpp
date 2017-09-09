@@ -25,7 +25,7 @@ using namespace geos::geom;
 
 Polygon* GeometryTestFactory::createBox(GeometryFactory *fact,double minx,double miny,int nSide,double segLen) {
 	CoordinateSequence *pts=createBox(minx, miny, nSide, segLen);
-    return fact->createPolygon(fact->createLinearRing(pts),NULL);
+    return fact->createPolygon(fact->createLinearRing(pts),nullptr);
 }
 
 CoordinateSequence* GeometryTestFactory::createBox(double minx, double miny,int nSide,double segLen) {
@@ -81,7 +81,7 @@ CoordinateSequence* GeometryTestFactory::createCircle(double basex,double basey,
 
 Polygon* GeometryTestFactory::createCircle(GeometryFactory *fact,double basex,double basey,double size,int nPts) {
 	CoordinateSequence *pts=createCircle(basex, basey, size, nPts);
-    return fact->createPolygon(fact->createLinearRing(pts),NULL);
+    return fact->createPolygon(fact->createLinearRing(pts),nullptr);
 }
 
 	/**
@@ -128,5 +128,5 @@ CoordinateSequence* GeometryTestFactory::createSineStar(double basex,double base
 
 Polygon* GeometryTestFactory::createSineStar(GeometryFactory *fact,double basex,double basey,double size,double armLen,int nArms,int nPts){
 	CoordinateSequence *pts=createSineStar(basex, basey, size, armLen, nArms, nPts);
-	return fact->createPolygon(fact->createLinearRing(pts),NULL);
+	return fact->createPolygon(fact->createLinearRing(pts),nullptr);
 }

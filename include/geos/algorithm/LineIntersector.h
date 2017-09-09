@@ -77,7 +77,7 @@ public:
 
 	static double nonRobustComputeEdgeDistance(const geom::Coordinate& p,const geom::Coordinate& p1,const geom::Coordinate& p2);
 
-	LineIntersector(const geom::PrecisionModel* initialPrecisionModel=NULL)
+	LineIntersector(const geom::PrecisionModel* initialPrecisionModel=nullptr)
 		:
 		precisionModel(initialPrecisionModel),
 		result(0),

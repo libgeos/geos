@@ -35,7 +35,7 @@ namespace tut
         }
 
         test_capigeosgeomtowkt_data()
-            : geom1_(0)
+            : geom1_(nullptr)
         {
             initGEOS(notice, notice);
         }
@@ -43,14 +43,14 @@ namespace tut
         ~test_capigeosgeomtowkt_data()
         {
             GEOSGeom_destroy(geom1_);
-            geom1_ = 0;
+            geom1_ = nullptr;
             finishGEOS();
         }
 
         void test_wkt(std::string const& wkt)
         {
             geom1_ = GEOSGeomFromWKT(wkt.c_str());
-            ensure ( 0 != geom1_ );
+            ensure ( nullptr != geom1_ );
 
             char* wkt_c = GEOSGeomToWKT(geom1_);
             std::string out(wkt_c);
@@ -62,7 +62,7 @@ namespace tut
         void test_wkt(std::string const& wkt, std::string::size_type n)
         {
             geom1_ = GEOSGeomFromWKT(wkt.c_str());
-            ensure ( 0 != geom1_ );
+            ensure ( nullptr != geom1_ );
 
             char* wkt_c = GEOSGeomToWKT(geom1_);
             std::string out(wkt_c);
@@ -74,7 +74,7 @@ namespace tut
         void test_writer_wkt(GEOSWKTWriter *writer, std::string const& wkt)
         {
             geom1_ = GEOSGeomFromWKT(wkt.c_str());
-            ensure ( 0 != geom1_ );
+            ensure ( nullptr != geom1_ );
 
             char* wkt_c = GEOSWKTWriter_write(writer,geom1_);
             std::string out(wkt_c);

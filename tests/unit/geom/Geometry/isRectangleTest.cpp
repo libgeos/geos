@@ -42,7 +42,7 @@ namespace tut
         geos::geom::Geometry* g = reader.read(wkt);
 
         geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
-        ensure( "Geometry is not a Polygon: " + wkt, poly != 0 );
+        ensure( "Geometry is not a Polygon: " + wkt, poly != nullptr );
         ensure( poly->isRectangle() );
 
         delete g;
@@ -57,7 +57,7 @@ namespace tut
         geos::geom::Geometry* g = reader.read(wkt);
 
         geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
-        ensure( "Geometry is not a Polygon: " + wkt, poly != 0 );
+        ensure( "Geometry is not a Polygon: " + wkt, poly != nullptr );
         ensure( poly->isRectangle() );
 
         delete g;
@@ -73,7 +73,7 @@ namespace tut
         geos::geom::Geometry* g = reader.read(wkt);
 
         geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
-        ensure( "Geometry is not a Polygon: " + wkt, poly != 0 );
+        ensure( "Geometry is not a Polygon: " + wkt, poly != nullptr );
         ensure( !poly->isRectangle() );
 
         delete g;
@@ -88,7 +88,7 @@ namespace tut
         geos::geom::Geometry* g = reader.read(wkt);
 
         geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
-        ensure( "Geometry is not a Polygon: " + wkt, poly != 0 );
+        ensure( "Geometry is not a Polygon: " + wkt, poly != nullptr );
         ensure( !poly->isRectangle() );
 
         delete g;
@@ -103,7 +103,7 @@ namespace tut
         geos::geom::Geometry* g = reader.read(wkt);
 
         geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
-        ensure( "Geometry is not a Polygon: " + wkt, poly != 0 );
+        ensure( "Geometry is not a Polygon: " + wkt, poly != nullptr );
         ensure( !poly->isRectangle() );
 
         delete g;
@@ -118,7 +118,7 @@ namespace tut
         geos::geom::Geometry* g = reader.read(wkt);
 
         geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
-        ensure( "Geometry is not a Polygon: " + wkt, poly != 0 );
+        ensure( "Geometry is not a Polygon: " + wkt, poly != nullptr );
         ensure( !poly->isRectangle() );
 
         delete g;
@@ -133,7 +133,7 @@ namespace tut
         geos::geom::Geometry* g = reader.read(wkt);
 
         geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
-        ensure( "Geometry is not a Polygon: " + wkt, poly != 0 );
+        ensure( "Geometry is not a Polygon: " + wkt, poly != nullptr );
         ensure( !poly->isRectangle() );
 
         delete g;

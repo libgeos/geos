@@ -132,7 +132,7 @@ BufferOp::computeGeometry()
 
 	bufferOriginalPrecision();
 
-	if (resultGeometry!=NULL) return;
+	if (resultGeometry!=nullptr) return;
 
 #if GEOS_DEBUG
 	std::cerr << "bufferOriginalPrecision failed (" << saveException.what() << "), trying with reduced precision"
@@ -167,7 +167,7 @@ BufferOp::bufferReducedPrecision()
 			// don't propagate the exception - it will be detected by fact that resultGeometry is null
 		}
 
-		if (resultGeometry!=NULL) {
+		if (resultGeometry!=nullptr) {
 			// debug
 			//if ( saveException ) std::cerr<<saveException->toString()<<std::endl;
 			return;

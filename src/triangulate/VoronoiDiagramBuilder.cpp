@@ -38,7 +38,7 @@ using namespace geos::geom;
 
 
 VoronoiDiagramBuilder::VoronoiDiagramBuilder() :
-	tolerance(0.0), clipEnv(0)
+	tolerance(0.0), clipEnv(nullptr)
 {
 }
 

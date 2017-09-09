@@ -211,7 +211,7 @@ std::pair<const void*, const void*> STRtree::nearestNeighbour(STRtree* tree, Ite
 
 std::pair<const void*, const void*> STRtree::nearestNeighbour(BoundablePair* initBndPair, double maxDistance) {
 	double distanceLowerBound = maxDistance;
-	BoundablePair* minPair = NULL;
+	BoundablePair* minPair = nullptr;
 
 	BoundablePair::BoundablePairQueue priQ;
 	priQ.push(initBndPair);
@@ -291,10 +291,10 @@ protected:
 
 	void* computeBounds() const
 	{
-		Envelope* bounds=NULL;
+		Envelope* bounds=nullptr;
 		const BoundableList& b = *getChildBoundables();
 
-		if ( b.empty() ) return NULL;
+		if ( b.empty() ) return nullptr;
 
 		BoundableList::const_iterator i=b.begin();
 		BoundableList::const_iterator e=b.end();

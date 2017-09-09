@@ -37,7 +37,7 @@ namespace geom { // geos::geom
 class GEOS_DLL Lineal : public virtual Geometry
 {
 protected:
-  Lineal(): Geometry(0) {}
+  Lineal(): Geometry(nullptr) {}
 };
 
 } // namespace geos::geom

@@ -56,7 +56,7 @@ protected:
 
 public:
 
-	SinglePassNoder(SegmentIntersector* nSegInt=NULL): segInt(nSegInt) {}
+	SinglePassNoder(SegmentIntersector* nSegInt=nullptr): segInt(nSegInt) {}
 
 	virtual ~SinglePassNoder() {}
 

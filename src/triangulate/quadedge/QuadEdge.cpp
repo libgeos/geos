@@ -89,7 +89,7 @@ QuadEdge::swap(QuadEdge &e)
 	e.setDest(b.dest());
 }
 
-QuadEdge::QuadEdge() : _rot(NULL), vertex(), next(NULL), data(NULL), isAlive(true)
+QuadEdge::QuadEdge() : _rot(nullptr), vertex(), next(nullptr), data(nullptr), isAlive(true)
 { }
 
 QuadEdge::~QuadEdge()
@@ -106,13 +106,13 @@ QuadEdge::free()
 			if(_rot->_rot->_rot)
 			{
 				delete _rot->_rot->_rot;
-				_rot->_rot->_rot = NULL;
+				_rot->_rot->_rot = nullptr;
 			}
 			delete _rot->_rot;
-			_rot->_rot = NULL;
+			_rot->_rot = nullptr;
 		}
 		delete _rot;
-		_rot = NULL;
+		_rot = nullptr;
 	}
 }
 

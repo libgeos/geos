@@ -161,7 +161,7 @@ void MinimumClearance::compute() {
     };
 
     // already computed
-    if (minClearancePts.get() != NULL)
+    if (minClearancePts.get() != nullptr)
         return;
 
     // initialize to "No Distance Exists" state

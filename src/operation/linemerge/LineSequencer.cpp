@@ -54,7 +54,7 @@ LineSequencer::isSequenced(const Geometry* geom)
 {
 	const MultiLineString *mls;
 
-	if ( 0 == (mls=dynamic_cast<const MultiLineString *>(geom)) )
+	if ( nullptr == (mls=dynamic_cast<const MultiLineString *>(geom)) )
 	{
 		return true;
 	}
@@ -63,7 +63,7 @@ LineSequencer::isSequenced(const Geometry* geom)
 	Coordinate::ConstSet prevSubgraphNodes;
 	Coordinate::ConstVect currNodes;
 
-	const Coordinate* lastNode = NULL;
+	const Coordinate* lastNode = nullptr;
 
 	for (std::size_t i=0, n=mls->getNumGeometries(); i<n; ++i)
 	{
@@ -89,7 +89,7 @@ LineSequencer::isSequenced(const Geometry* geom)
 			return false;
 		}
 
-		if (lastNode != NULL)
+		if (lastNode != nullptr)
 		{
 			if (! startNode->equals2D(*lastNode))
 			{
@@ -155,7 +155,7 @@ LineSequencer::findSequences()
 			delete subgraph;
 			delAll(*sequences);
 			delete sequences;
-			return NULL;
+			return nullptr;
 		}
 		delete subgraph;
 	}
@@ -166,7 +166,7 @@ LineSequencer::findSequences()
 void
 LineSequencer::addLine(const LineString *lineString)
 {
-	if (factory == NULL) {
+	if (factory == nullptr) {
 		factory = lineString->getFactory();
 	}
 	graph.addEdge(lineString);
@@ -181,7 +181,7 @@ LineSequencer::computeSequence()
 	isRun = true;
 
 	Sequences* sequences = findSequences();
-	if (sequences == NULL) return;
+	if (sequences == nullptr) return;
 
 	sequencedGeometry = unique_ptr<Geometry>(buildSequencedGeometry(*sequences));
 	isSequenceableVar = true;
@@ -233,7 +233,7 @@ LineSequencer::buildSequencedGeometry(const Sequences& sequences)
 	}
 
 	if ( lines->size() == 0 ) {
-		return NULL;
+		return nullptr;
 	} else {
 		Geometry::NonConstVect *l=lines.get();
 		lines.release();
@@ -255,14 +255,14 @@ const planargraph::Node*
 LineSequencer::findLowestDegreeNode(const planargraph::Subgraph& graph)
 {
 	size_t minDegree = numeric_limits<size_t>::max();
-	const planargraph::Node* minDegreeNode = NULL;
+	const planargraph::Node* minDegreeNode = nullptr;
 	for (planargraph::NodeMap::container::const_iterator
 		it = graph.nodeBegin(), itEnd = graph.nodeEnd();
 		it != itEnd;
 		++it )
 	{
 		const planargraph::Node* node = (*it).second;
-		if (minDegreeNode == NULL || node->getDegree() < minDegree)
+		if (minDegreeNode == nullptr || node->getDegree() < minDegree)
 		{
 			minDegree = node->getDegree();
 			minDegreeNode = node;
@@ -278,8 +278,8 @@ LineSequencer::findUnvisitedBestOrientedDE(const planargraph::Node* node)
 	using planargraph::DirectedEdge;
 	using planargraph::DirectedEdgeStar;
 
-	const DirectedEdge* wellOrientedDE = NULL;
-	const DirectedEdge* unvisitedDE = NULL;
+	const DirectedEdge* wellOrientedDE = nullptr;
+	const DirectedEdge* unvisitedDE = nullptr;
 	const DirectedEdgeStar* des=node->getOutEdges();
 	for (DirectedEdge::NonConstVect::const_iterator i=des->begin(),
 		e=des->end();
@@ -292,7 +292,7 @@ LineSequencer::findUnvisitedBestOrientedDE(const planargraph::Node* node)
 			if (de->getEdgeDirection()) wellOrientedDE = de;
 		}
 	}
-	if (wellOrientedDE != NULL)
+	if (wellOrientedDE != nullptr)
 		return wellOrientedDE;
 	return unvisitedDE;
 }
@@ -311,7 +311,7 @@ LineSequencer::addReverseSubpath(const planargraph::DirectedEdge *de,
 	// trace an unvisited path *backwards* from this de
 	Node* endNode = de->getToNode();
 
-	Node* fromNode = NULL;
+	Node* fromNode = nullptr;
 	while (true) {
 		deList.insert(lit, de->getSym());
 		de->getEdge()->setVisited(true);
@@ -319,7 +319,7 @@ LineSequencer::addReverseSubpath(const planargraph::DirectedEdge *de,
 		const DirectedEdge* unvisitedOutDE = findUnvisitedBestOrientedDE(fromNode);
 
 		// this must terminate, since we are continually marking edges as visited
-		if (unvisitedOutDE == NULL) break;
+		if (unvisitedOutDE == nullptr) break;
 		de = unvisitedOutDE->getSym();
 	}
 	if ( expectedClosed ) {
@@ -356,7 +356,7 @@ LineSequencer::findSequence(planargraph::Subgraph& graph)
 	while (lit != seq->begin()) {
 		const DirectedEdge* prev = *(--lit);
 		const DirectedEdge* unvisitedOutDE = findUnvisitedBestOrientedDE(prev->getFromNode());
-		if (unvisitedOutDE != NULL)
+		if (unvisitedOutDE != nullptr)
 			addReverseSubpath(unvisitedOutDE->getSym(), *seq, lit, true);
 	}
 

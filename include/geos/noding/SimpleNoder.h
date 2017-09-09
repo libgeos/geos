@@ -54,7 +54,7 @@ private:
 	virtual void computeIntersects(SegmentString *e0, SegmentString *e1);
 
 public:
-	SimpleNoder(SegmentIntersector* nSegInt=NULL)
+	SimpleNoder(SegmentIntersector* nSegInt=nullptr)
 		:
 		SinglePassNoder(nSegInt)
 	{}

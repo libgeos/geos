@@ -36,7 +36,7 @@ namespace tut
         }
 
         test_capiunaryunion_data()
-            : geom1_(0), geom2_(0)
+            : geom1_(nullptr), geom2_(nullptr)
         {
             initGEOS(notice, notice);
             wktw_ = GEOSWKTWriter_create();
@@ -57,8 +57,8 @@ namespace tut
             GEOSGeom_destroy(geom1_);
             GEOSGeom_destroy(geom2_);
             GEOSWKTWriter_destroy(wktw_);
-            geom1_ = 0;
-            geom2_ = 0;
+            geom1_ = nullptr;
+            geom2_ = nullptr;
             finishGEOS();
         }
 
@@ -80,10 +80,10 @@ namespace tut
     void object::test<1>()
     {
         geom1_ = GEOSGeomFromWKT("POINT EMPTY");
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSUnaryUnion(geom1_);
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         ensure_equals(toWKT(geom2_), std::string("GEOMETRYCOLLECTION EMPTY"));
     }
@@ -94,10 +94,10 @@ namespace tut
     void object::test<2>()
     {
         geom1_ = GEOSGeomFromWKT("POINT (6 3)");
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSUnaryUnion(geom1_);
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         ensure_equals(toWKT(geom2_), std::string("POINT (6 3)"));
     }
@@ -108,10 +108,10 @@ namespace tut
     void object::test<3>()
     {
         geom1_ = GEOSGeomFromWKT("POINT (4 5 6)");
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSUnaryUnion(geom1_);
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         ensure_equals(toWKT(geom2_), std::string("POINT Z (4 5 6)"));
     }
@@ -122,10 +122,10 @@ namespace tut
     void object::test<4>()
     {
         geom1_ = GEOSGeomFromWKT("MULTIPOINT (4 5, 6 7, 4 5, 6 5, 6 7)");
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSUnaryUnion(geom1_);
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         ensure_equals(toWKT(geom2_), std::string("MULTIPOINT (4 5, 6 5, 6 7)"));
     }
@@ -136,10 +136,10 @@ namespace tut
     void object::test<5>()
     {
         geom1_ = GEOSGeomFromWKT("GEOMETRYCOLLECTION (POINT(4 5), MULTIPOINT(6 7, 6 5, 6 7), LINESTRING(0 5, 10 5), LINESTRING(4 -10, 4 10))");
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSUnaryUnion(geom1_);
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         ensure_equals(toWKT(geom2_), std::string("GEOMETRYCOLLECTION (POINT (6 7), LINESTRING (4 -10, 4 5), LINESTRING (4 5, 4 10), LINESTRING (0 5, 4 5), LINESTRING (4 5, 10 5))"));
     }
@@ -150,10 +150,10 @@ namespace tut
     void object::test<6>()
     {
         geom1_ = GEOSGeomFromWKT("GEOMETRYCOLLECTION (POINT(4 5), MULTIPOINT(6 7, 6 5, 6 7), POLYGON((0 0, 10 0, 10 10, 0 10, 0 0),(5 6, 7 6, 7 8, 5 8, 5 6)))");
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSUnaryUnion(geom1_);
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         ensure_equals(toWKT(geom2_), std::string(
 "GEOMETRYCOLLECTION (POINT (6 7), POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (5 6, 7 6, 7 8, 5 8, 5 6)))"
@@ -166,10 +166,10 @@ namespace tut
     void object::test<7>()
     {
         geom1_ = GEOSGeomFromWKT("GEOMETRYCOLLECTION (MULTILINESTRING((5 7, 12 7), (4 5, 6 5), (5.5 7.5, 6.5 7.5)), POLYGON((0 0, 10 0, 10 10, 0 10, 0 0),(5 6, 7 6, 7 8, 5 8, 5 6)))");
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSUnaryUnion(geom1_);
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         ensure_equals(toWKT(geom2_), std::string(
 "GEOMETRYCOLLECTION (LINESTRING (5 7, 7 7), LINESTRING (10 7, 12 7), LINESTRING (5.5 7.5, 6.5 7.5), POLYGON ((10 7, 10 0, 0 0, 0 10, 10 10, 10 7), (5 6, 7 6, 7 7, 7 8, 5 8, 5 7, 5 6)))"
@@ -182,10 +182,10 @@ namespace tut
     void object::test<8>()
     {
         geom1_ = GEOSGeomFromWKT("GEOMETRYCOLLECTION (MULTILINESTRING((5 7, 12 7), (4 5, 6 5), (5.5 7.5, 6.5 7.5)), POLYGON((0 0, 10 0, 10 10, 0 10, 0 0),(5 6, 7 6, 7 8, 5 8, 5 6)), MULTIPOINT(6 6.5, 6 1, 12 2, 6 1))");
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSUnaryUnion(geom1_);
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         ensure_equals(toWKT(geom2_), std::string(
 "GEOMETRYCOLLECTION (POINT (6 6.5), POINT (12 2), LINESTRING (5 7, 7 7), LINESTRING (10 7, 12 7), LINESTRING (5.5 7.5, 6.5 7.5), POLYGON ((10 7, 10 0, 0 0, 0 10, 10 10, 10 7), (5 6, 7 6, 7 7, 7 8, 5 8, 5 7, 5 6)))"
@@ -200,10 +200,10 @@ namespace tut
     {
         const char* hexwkb = "010200000002000000000000000000F8FF000000000000F8FF0000000000000000000000000000F03F";
         geom1_ = GEOSGeomFromHEX_buf((const unsigned char*)hexwkb, std::strlen(hexwkb));
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSUnaryUnion(geom1_);
-        ensure( 0 == geom2_ );
+        ensure( nullptr == geom2_ );
 
     }
 

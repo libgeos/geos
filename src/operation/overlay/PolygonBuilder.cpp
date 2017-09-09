@@ -153,7 +153,7 @@ PolygonBuilder::buildMaximalEdgeRings(const vector<DirectedEdge*> *dirEdges,
 		if (de->isInResult() && de->getLabel().isArea())
 		{
 			// if this edge has not yet been processed
-			if (de->getEdgeRing() == NULL)
+			if (de->getEdgeRing() == nullptr)
 			{
 				MaximalEdgeRing *er;
 	try
@@ -199,7 +199,7 @@ PolygonBuilder::buildMinimalEdgeRings(
 			// at this point we can go ahead and attempt to place
 			// holes, if this EdgeRing is a polygon
 			EdgeRing *shell=findShell(&minEdgeRings);
-			if(shell != NULL)
+			if(shell != nullptr)
 			{
 				placePolygonHoles(shell, &minEdgeRings);
 				newShellList.push_back(shell);
@@ -224,7 +224,7 @@ EdgeRing*
 PolygonBuilder::findShell(vector<MinimalEdgeRing*> *minEdgeRings)
 {
 	int shellCount=0;
-	EdgeRing *shell=NULL;
+	EdgeRing *shell=nullptr;
 
 #if GEOS_DEBUG
 	cerr<<"PolygonBuilder::findShell got "<<minEdgeRings->size()<<" minEdgeRings"<<endl;
@@ -292,9 +292,9 @@ PolygonBuilder::placeFreeHoles(std::vector<EdgeRing*>& newShellList,
 	{
 		EdgeRing *hole=*it;
 		// only place this hole if it doesn't yet have a shell
-		if (hole->getShell()==NULL) {
+		if (hole->getShell()==nullptr) {
 			EdgeRing *shell=findEdgeRingContaining(hole, newShellList);
-			if ( shell == NULL )
+			if ( shell == nullptr )
 			{
 #if GEOS_DEBUG
 				Geometry* geom;
@@ -332,15 +332,15 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
 	LinearRing *testRing=testEr->getLinearRing();
 	const Envelope *testEnv=testRing->getEnvelopeInternal();
 	const Coordinate& testPt=testRing->getCoordinateN(0);
-	EdgeRing *minShell=NULL;
-	const Envelope *minEnv=NULL;
+	EdgeRing *minShell=nullptr;
+	const Envelope *minEnv=nullptr;
 	for(size_t i=0, n=newShellList.size(); i<n; i++)
 	{
-		LinearRing *lr=NULL;
+		LinearRing *lr=nullptr;
 		EdgeRing *tryShell=newShellList[i];
 		LinearRing *tryRing=tryShell->getLinearRing();
 		const Envelope *tryEnv=tryRing->getEnvelopeInternal();
-		if (minShell!=NULL) {
+		if (minShell!=nullptr) {
 			lr=minShell->getLinearRing();
 			minEnv=lr->getEnvelopeInternal();
 		}
@@ -352,7 +352,7 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
 		// check if this new containing ring is smaller than
 		// the current minimum ring
 		if (isContained) {
-			if (minShell==NULL
+			if (minShell==nullptr
 				|| minEnv->contains(tryEnv)) {
 					minShell=tryShell;
 			}

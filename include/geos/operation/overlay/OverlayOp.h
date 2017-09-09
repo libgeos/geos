@@ -201,7 +201,7 @@ private:
 
 	void computeOverlay(OpCode opCode); // throw(TopologyException *);
 
-	void insertUniqueEdges(std::vector<geomgraph::Edge*> *edges, const geom::Envelope *env=0);
+	void insertUniqueEdges(std::vector<geomgraph::Edge*> *edges, const geom::Envelope *env=nullptr);
 
 	/*
 	 * If either of the GeometryLocations for the existing label is
@@ -241,7 +241,7 @@ private:
 	 * but in the original arg Geometry it is actually
 	 * in the interior due to the Boundary Determination Rule)
 	 */
-	void copyPoints(int argIndex, const geom::Envelope *env=0);
+	void copyPoints(int argIndex, const geom::Envelope *env=nullptr);
 
 	/** \brief
 	 * Compute initial labelling for all DirectedEdges at each node.

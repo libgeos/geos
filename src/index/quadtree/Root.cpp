@@ -76,10 +76,10 @@ Root::insert(const Envelope *itemEnv, void* item)
 	 *  If the subquad doesn't exist or this item is not contained in it,
 	 *  have to expand the tree upward to contain the item.
 	 */
-	if (node==NULL || !node->getEnvelope()->contains(itemEnv))
+	if (node==nullptr || !node->getEnvelope()->contains(itemEnv))
 	{
 		std::unique_ptr<Node> snode (node); // may be NULL
-		node = 0; subnode[index] = 0;
+		node = nullptr; subnode[index] = nullptr;
 
 		std::unique_ptr<Node> largerNode =
 			Node::createExpanded(std::move(snode), *itemEnv);

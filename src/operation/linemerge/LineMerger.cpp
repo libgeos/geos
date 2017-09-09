@@ -53,8 +53,8 @@ LineMerger::add(vector<Geometry*> *geometries)
 }
 
 LineMerger::LineMerger():
-	mergedLineStrings(NULL),
-	factory(NULL)
+	mergedLineStrings(nullptr),
+	factory(nullptr)
 {
 }
 
@@ -93,14 +93,14 @@ LineMerger::add(const Geometry *geometry)
 void
 LineMerger::add(const LineString *lineString)
 {
-	if (factory==NULL) factory=lineString->getFactory();
+	if (factory==nullptr) factory=lineString->getFactory();
 	graph.addEdge(lineString);
 }
 
 void
 LineMerger::merge()
 {
-	if (mergedLineStrings!=NULL) return;
+	if (mergedLineStrings!=nullptr) return;
 
 	// reset marks (this allows incremental processing)
 	GraphComponent::setMarkedMap(graph.nodeIterator(), graph.nodeEnd(),
@@ -213,7 +213,7 @@ LineMerger::buildEdgeStringStartingWith(LineMergeDirectedEdge *start)
 		edgeString->add(current);
 		current->getEdge()->setMarked(true);
 		current=current->getNext();
-	} while (current!=NULL && current!=start);
+	} while (current!=nullptr && current!=start);
 	return edgeString;
 }
 
@@ -227,7 +227,7 @@ LineMerger::getMergedLineStrings()
 
 	// Explicitly give ownership to the caller.
 	vector<LineString*>* ret = mergedLineStrings;
-	mergedLineStrings = NULL;
+	mergedLineStrings = nullptr;
 	return ret;
 }
 

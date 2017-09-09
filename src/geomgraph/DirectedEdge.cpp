@@ -76,11 +76,11 @@ DirectedEdge::DirectedEdge(Edge *newEdge, bool newIsForward):
 	isForwardVar(newIsForward),
 	isInResultVar(false),
 	isVisitedVar(false),
-	sym(NULL),
-	next(NULL),
-	nextMin(NULL),
-	edgeRing(NULL),
-	minEdgeRing(NULL)
+	sym(nullptr),
+	next(nullptr),
+	nextMin(nullptr),
+	edgeRing(nullptr),
+	minEdgeRing(nullptr)
 {
 	depth[0]=0;
 	depth[1]=-999;

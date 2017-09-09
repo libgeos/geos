@@ -70,7 +70,7 @@ void LinearIterator::loadCurrentLine()
 {
 	if (componentIndex >= numLines)
 	{
-		currentLine = 0;
+		currentLine = nullptr;
 		return;
 	}
 	currentLine = dynamic_cast<const LineString *> (linear->getGeometryN(componentIndex));

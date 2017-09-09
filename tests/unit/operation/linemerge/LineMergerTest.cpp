@@ -41,7 +41,7 @@ namespace tut
     LineVect* mrgGeoms;
 
     test_linemerger_data()
-      : wktreader(), wktwriter(), mrgGeoms(0)
+      : wktreader(), wktwriter(), mrgGeoms(nullptr)
     {
       wktwriter.setTrim(true);
     }
@@ -152,10 +152,10 @@ namespace tut
     const char* inpWKT[] = {
       "LINESTRING (120 120, 180 140)", "LINESTRING (200 180, 180 140)",
       "LINESTRING (200 180, 240 180)",
-      NULL };
+      nullptr };
     const char* expWKT[] = {
       "LINESTRING (120 120, 180 140, 200 180, 240 180)",
-      NULL };
+      nullptr };
 
     doTest(inpWKT, expWKT);
   }
@@ -172,12 +172,12 @@ namespace tut
       "LINESTRING (40 320, 60 320, 80 340)",
       "LINESTRING (160 320, 180 340, 200 320)",
       "LINESTRING (200 320, 180 300, 160 320)",
-      NULL };
+      nullptr };
     const char* expWKT[] = {
       "LINESTRING (160 320, 180 340, 200 320, 180 300, 160 320)",
       "LINESTRING (40 320, 20 340, 0 320, 20 300, 40 320)",
       "LINESTRING (40 320, 60 320, 80 340, 120 300, 140 320, 160 320)",
-      NULL };
+      nullptr };
 
     doTest(inpWKT, expWKT);
   }
@@ -188,10 +188,10 @@ namespace tut
   {
     const char* inpWKT[] = {
       "LINESTRING (0 0, 100 100)", "LINESTRING (0 100, 100 0)",
-      NULL };
+      nullptr };
     const char* expWKT[] = {
       "LINESTRING (0 0, 100 100)", "LINESTRING (0 100, 100 0)",
-      NULL };
+      nullptr };
 
     doTest(inpWKT, expWKT);
   }
@@ -202,9 +202,9 @@ namespace tut
     const char* inpWKT[] = {
       "LINESTRING EMPTY",
       "LINESTRING EMPTY",
-      NULL };
+      nullptr };
     const char* expWKT[] = {
-      NULL };
+      nullptr };
 
     doTest(inpWKT, expWKT);
   }
@@ -214,9 +214,9 @@ namespace tut
   void object::test<5>()
   {
     const char* inpWKT[] = {
-      NULL };
+      nullptr };
     const char* expWKT[] = {
-      NULL };
+      nullptr };
 
     doTest(inpWKT, expWKT);
   }
@@ -227,9 +227,9 @@ namespace tut
   {
     const char* inpWKT[] = {
       "LINESTRING (10642 31441, 10642 31441)",
-      NULL };
+      nullptr };
     const char* expWKT[] = {
-      NULL };
+      nullptr };
 
     doTest(inpWKT, expWKT);
   }
@@ -243,10 +243,10 @@ namespace tut
         "LINESTRING(0 5, 5 5)",
         "LINESTRING(5 5, 5 0)",
         "LINESTRING(5 0, 0 0)",
-        NULL };
+        nullptr };
       const char* expWKT[] = {
         "LINESTRING(0 0, 0 5, 5 5, 5 0, 0 0)",
-          NULL };
+          nullptr };
 
       doTest(inpWKT, expWKT);
   }

@@ -119,7 +119,7 @@ GeometricShapeFactory::createRectangle()
 	(*vc)[ipt++] = (*vc)[0];
 	CoordinateSequence *cs = geomFact->getCoordinateSequenceFactory()->create(vc);
 	LinearRing* ring=geomFact->createLinearRing(cs);
-	Polygon* poly=geomFact->createPolygon(ring, NULL);
+	Polygon* poly=geomFact->createPolygon(ring, nullptr);
 	return poly;
 }
 
@@ -145,7 +145,7 @@ GeometricShapeFactory::createCircle()
 	(*pts)[iPt++] = (*pts)[0];
 	CoordinateSequence *cs=geomFact->getCoordinateSequenceFactory()->create(pts);
 	LinearRing* ring = geomFact->createLinearRing(cs);
-	Polygon* poly=geomFact->createPolygon(ring,NULL);
+	Polygon* poly=geomFact->createPolygon(ring,nullptr);
 	return poly;
 }
 
@@ -207,7 +207,7 @@ GeometricShapeFactory::createArcPolygon(double startAng, double angExtent)
 
 	CoordinateSequence *cs = geomFact->getCoordinateSequenceFactory()->create(pts);
 	LinearRing* ring = geomFact->createLinearRing(cs);
-	Polygon* geom = geomFact->createPolygon(ring, 0);
+	Polygon* geom = geomFact->createPolygon(ring, nullptr);
 	return geom;
 }
 

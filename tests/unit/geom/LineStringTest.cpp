@@ -44,13 +44,13 @@ namespace tut
       , reader_(factory_.get())
       , empty_line_(factory_->createLineString(new geos::geom::CoordinateArraySequence()))
 		{
-            assert(0 != empty_line_);
+            assert(nullptr != empty_line_);
         }
 
         ~test_linestring_data()
         {
             factory_->destroyGeometry(empty_line_);
-            empty_line_ = 0;
+            empty_line_ = nullptr;
         }
     };
 
@@ -72,7 +72,7 @@ namespace tut
 
 		// Empty sequence of coordiantes
 		CoordArrayPtr pseq = new geos::geom::CoordinateArraySequence();
-		ensure( "sequence is null pointer.", pseq != 0 );
+		ensure( "sequence is null pointer.", pseq != nullptr );
 
 		// Create empty linstring instance
 		LineStringAutoPtr ls(factory_->createLineString(pseq));
@@ -93,7 +93,7 @@ namespace tut
 		const size_t size3 = 3;
 
 		CoordArrayPtr pseq = new geos::geom::CoordinateArraySequence();
-		ensure( "sequence is null pointer.", pseq != 0 );
+		ensure( "sequence is null pointer.", pseq != nullptr );
 
 		pseq->add(Coordinate(0, 0, 0));
 		pseq->add(Coordinate(5, 5, 5));
@@ -111,19 +111,19 @@ namespace tut
 		ensure( !ls->isClosed() );
 		ensure( !ls->isRing() );
 
-		GeometryPtr geo = 0;
+		GeometryPtr geo = nullptr;
 		geo = ls->getEnvelope();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( !geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
 		geo = ls->getBoundary();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( !geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
 		geo = ls->convexHull();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( !geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
@@ -142,11 +142,11 @@ namespace tut
     void object::test<3>()
     {
 		// Single-element sequence of coordiantes
-		CoordArrayPtr pseq = 0;
+		CoordArrayPtr pseq = nullptr;
 		try
 		{
 			pseq = new geos::geom::CoordinateArraySequence();
-			ensure( "sequence is null pointer.", pseq != 0 );
+			ensure( "sequence is null pointer.", pseq != nullptr );
 			pseq->add(geos::geom::Coordinate(0, 0, 0));
 			ensure_equals( pseq->size(), 1u );
 
@@ -161,7 +161,7 @@ namespace tut
 			//delete pseq;
 
 			const char* msg = e.what(); // OK
-			ensure( msg != 0 );
+			ensure( msg != nullptr );
 		}
 	}
 
@@ -176,7 +176,7 @@ namespace tut
 		const size_t size = 3;
 
 		CoordArrayPtr pseq = new geos::geom::CoordinateArraySequence();
-		ensure( "sequence is null pointer.", pseq != 0 );
+		ensure( "sequence is null pointer.", pseq != nullptr );
 
 		pseq->add(Coordinate(0, 0, 0));
 		pseq->add(Coordinate(5, 5, 5));
@@ -190,7 +190,7 @@ namespace tut
 		// Create copy
 		LineStringAutoPtr copy(dynamic_cast<geos::geom::LineString*>(examplar->clone()));
 
-		ensure( 0 != copy.get() );
+		ensure( nullptr != copy.get() );
 
 		ensure( !copy->isEmpty() );
 		ensure( copy->isSimple() );
@@ -199,19 +199,19 @@ namespace tut
 		ensure( !copy->isClosed() );
 		ensure( !copy->isRing() );
 
-		GeometryPtr geo = 0;
+		GeometryPtr geo = nullptr;
 		geo = copy->getEnvelope();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( !geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
 		geo = copy->getBoundary();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( !geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
 		geo = copy->convexHull();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( !geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 
@@ -237,9 +237,9 @@ namespace tut
     template<>
     void object::test<6>()
 	{
-		GeometryPtr geo = 0;
+		GeometryPtr geo = nullptr;
 		geo = empty_line_->getEnvelope();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 	}
@@ -249,9 +249,9 @@ namespace tut
     template<>
     void object::test<7>()
 	{
-		GeometryPtr geo = 0;
+		GeometryPtr geo = nullptr;
 		geo = empty_line_->getBoundary();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 	}
@@ -261,9 +261,9 @@ namespace tut
     template<>
     void object::test<8>()
 	{
-		GeometryPtr geo = 0;
+		GeometryPtr geo = nullptr;
 		geo = empty_line_->convexHull();
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 		ensure( geo->isEmpty() );
 		factory_->destroyGeometry(geo);
 	}
@@ -322,10 +322,10 @@ namespace tut
     void object::test<15>()
 	{
 		GeometryPtr geo = reader_.read("LINESTRING (0 0, 5 5, 10 5, 10 10)");
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 
 		LineStringPtr line = dynamic_cast<LineStringPtr>(geo);
-		ensure(line != 0);
+		ensure(line != nullptr);
 
 		ensure( !line->isEmpty() );
 		ensure( !line->isClosed() );
@@ -342,13 +342,13 @@ namespace tut
     void object::test<16>()
 	{
 		GeometryPtr geo = reader_.read("LINESTRING (0 0, 5 5, 10 5, 10 10)");
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 
 		LineStringPtr line = dynamic_cast<LineStringPtr>(geo);
-		ensure(line != 0);
+		ensure(line != nullptr);
 
 		GeometryPtr envelope = line->getEnvelope();
-		ensure( envelope != 0 );
+		ensure( envelope != nullptr );
 		ensure( !envelope->isEmpty() );
 		ensure_equals( envelope->getDimension(), geos::geom::Dimension::A );
 
@@ -364,13 +364,13 @@ namespace tut
     void object::test<17>()
 	{
 		GeometryPtr geo = reader_.read("LINESTRING (0 0, 5 5, 10 5, 10 10)");
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 
 		LineStringPtr line = dynamic_cast<LineStringPtr>(geo);
-		ensure(line != 0);
+		ensure(line != nullptr);
 
 		GeometryPtr boundary = line->getBoundary();
-		ensure( boundary != 0 );
+		ensure( boundary != nullptr );
 		ensure( !boundary->isEmpty() );
 		ensure_equals( boundary->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT );
 		ensure_equals( boundary->getDimension(), geos::geom::Dimension::P );
@@ -386,13 +386,13 @@ namespace tut
     void object::test<18>()
 	{
 		GeometryPtr geo = reader_.read("LINESTRING (0 0, 5 5, 10 5, 10 10)");
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 
 		LineStringPtr line = dynamic_cast<LineStringPtr>(geo);
-		ensure(line != 0);
+		ensure(line != nullptr);
 
 		GeometryPtr hull = line->convexHull();
-		ensure( hull != 0 );
+		ensure( hull != nullptr );
 		ensure( !hull->isEmpty() );
 		ensure_equals( hull->getGeometryTypeId(), geos::geom::GEOS_POLYGON );
 		ensure_equals( hull->getDimension(), geos::geom::Dimension::A );
@@ -408,7 +408,7 @@ namespace tut
     void object::test<19>()
 	{
 		GeometryPtr geo = reader_.read("LINESTRING (0 0, 5 5, 10 5, 10 10)");
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 
 		ensure_equals( geo->getGeometryTypeId(), geos::geom::GEOS_LINESTRING );
 
@@ -422,7 +422,7 @@ namespace tut
     void object::test<20>()
 	{
 		GeometryPtr geo = reader_.read("LINESTRING (0 0, 5 5, 10 5, 10 10)");
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 
 		ensure_equals( geo->getDimension(), geos::geom::Dimension::L );
 
@@ -436,7 +436,7 @@ namespace tut
     void object::test<21>()
 	{
 		GeometryPtr geo = reader_.read("LINESTRING (0 0, 5 5, 10 5, 10 10)");
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 
 		ensure_equals( geo->getBoundaryDimension(), geos::geom::Dimension::P );
 
@@ -451,7 +451,7 @@ namespace tut
 	{
 		const size_t size = 4;
 		GeometryPtr geo = reader_.read("LINESTRING (0 0, 5 5, 10 5, 10 10)");
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 
 		ensure_equals( geo->getNumPoints(), size );
 
@@ -467,7 +467,7 @@ namespace tut
 		const double tolerance = 0.0001;
 		const double expected = 2 * 14.142135600000000;
 		GeometryPtr geo = reader_.read("LINESTRING (0 0, 10 10, 20 0)");
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 
 		ensure( geo->getLength() != 0.0 );
 
@@ -484,7 +484,7 @@ namespace tut
     void object::test<24>()
 	{
 		GeometryPtr geo = reader_.read("LINESTRING (0 0, 10 10, 20 0)");
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 
 		ensure_equals( geo->getArea(), 0.0 );
 
@@ -498,7 +498,7 @@ namespace tut
     void object::test<25>()
 	{
 		GeometryPtr geo = reader_.read("LINESTRING (0 0, 10 10, 20 0)");
-		ensure( geo != 0 );
+		ensure( geo != nullptr );
 
 		const std::string type("LineString");
 		ensure_equals( geo->getGeometryType(), type );

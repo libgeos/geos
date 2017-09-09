@@ -35,7 +35,7 @@ namespace tut
         }
 
         test_capigeosrelateboundarynoderule_data()
-            : geom1_(0), geom2_(0), pat_(0)
+            : geom1_(nullptr), geom2_(nullptr), pat_(nullptr)
         {
             initGEOS(notice, notice);
         }
@@ -150,7 +150,7 @@ namespace tut
         geom1_ = GEOSGeomFromWKT("MULTILINESTRING((0 0, 10 0),(10 0, 10 10))");
         geom2_ = GEOSGeomFromWKT("LINESTRING(10 0, 10 -10)");
         pat_ = GEOSRelateBoundaryNodeRule(geom1_, geom2_, 5);
-	ensure(0 == pat_);
+	ensure(nullptr == pat_);
     }
 
 

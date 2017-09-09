@@ -39,7 +39,7 @@ namespace tut
         }
 
         test_capicentroid_data()
-            : geom1_(0), geom2_(0), wkt_(0)
+            : geom1_(nullptr), geom2_(nullptr), wkt_(nullptr)
         {
             initGEOS(notice, notice);
             wktw_ = GEOSWKTWriter_create();
@@ -53,9 +53,9 @@ namespace tut
             GEOSGeom_destroy(geom2_);
             GEOSWKTWriter_destroy(wktw_);
             GEOSFree(wkt_);
-            geom1_ = 0;
-            geom2_ = 0;
-            wkt_ = 0;
+            geom1_ = nullptr;
+            geom2_ = nullptr;
+            wkt_ = nullptr;
             finishGEOS();
         }
 
@@ -77,11 +77,11 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("POINT(10 0)");
 
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSGetCentroid(geom1_);
 
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 
@@ -96,11 +96,11 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0)");
 
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSGetCentroid(geom1_);
 
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 
@@ -115,11 +115,11 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))");
 
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSGetCentroid(geom1_);
 
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 
@@ -139,11 +139,11 @@ namespace tut
 56.528833333300 25.2103333333, \
 56.528666666700 25.2101666667))");
 
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSGetCentroid(geom1_);
 
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 
@@ -158,11 +158,11 @@ namespace tut
     {
         geom1_ = GEOSGeomFromWKT("LINESTRING EMPTY");
 
-        ensure( 0 != geom1_ );
+        ensure( nullptr != geom1_ );
 
         geom2_ = GEOSGetCentroid(geom1_);
 
-        ensure( 0 != geom2_ );
+        ensure( nullptr != geom2_ );
 
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 

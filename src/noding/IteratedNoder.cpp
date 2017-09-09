@@ -60,7 +60,7 @@ IteratedNoder::computeNodes(SegmentString::NonConstVect* segStrings)
 	nodedSegStrings = segStrings;
 	int nodingIterationCount = 0;
 	int lastNodesCreated = -1;
-	vector<SegmentString*> *lastStrings = 0;
+	vector<SegmentString*> *lastStrings = nullptr;
 	do {
 
 		// NOTE: will change this.nodedSegStrings

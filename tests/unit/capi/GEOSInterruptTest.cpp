@@ -56,7 +56,7 @@ namespace tut
     };
 
     int test_capiinterrupt_data::numcalls = 0;
-    GEOSInterruptCallback* test_capiinterrupt_data::nextcb = 0;
+    GEOSInterruptCallback* test_capiinterrupt_data::nextcb = nullptr;
 
     typedef test_group<test_capiinterrupt_data> group;
     typedef group::object object;
@@ -82,18 +82,18 @@ namespace tut
 
         GEOSGeometry *geom1 = GEOSGeomFromWKT("LINESTRING(0 0, 1 0)");
 
-        ensure("GEOSGeomFromWKT failed", 0 != geom1);
+        ensure("GEOSGeomFromWKT failed", nullptr != geom1);
 
         GEOSGeometry *geom2 = GEOSBuffer(geom1, 1, 8);
 
-        ensure("GEOSBufferWithStyle failed", 0 != geom2);
+        ensure("GEOSBufferWithStyle failed", nullptr != geom2);
 
         ensure("interrupt callback never called", numcalls > 0);
 
         GEOSGeom_destroy(geom1);
         GEOSGeom_destroy(geom2);
 
-        GEOS_interruptRegisterCallback(0); /* unregister */
+        GEOS_interruptRegisterCallback(nullptr); /* unregister */
 
 
         finishGEOS();
@@ -114,18 +114,18 @@ namespace tut
 
         GEOSGeometry *geom1 = GEOSGeomFromWKT("LINESTRING(0 0, 1 0)");
 
-        ensure("GEOSGeomFromWKT failed", 0 != geom1);
+        ensure("GEOSGeomFromWKT failed", nullptr != geom1);
 
         GEOSGeometry *geom2 = GEOSBuffer(geom1, 1, 8);
 
-        ensure("GEOSBufferWithStyle failed", 0 != geom2);
+        ensure("GEOSBufferWithStyle failed", nullptr != geom2);
 
         ensure("interrupt callback never called", numcalls > 0);
 
         GEOSGeom_destroy(geom1);
         GEOSGeom_destroy(geom2);
 
-        GEOS_interruptRegisterCallback(0);
+        GEOS_interruptRegisterCallback(nullptr);
 
         finishGEOS();
     }
@@ -139,12 +139,12 @@ namespace tut
 
         GEOSGeometry *geom1 = GEOSGeomFromWKT("LINESTRING(0 0, 1 0)");
 
-        ensure("GEOSGeomFromWKT failed", 0 != geom1);
+        ensure("GEOSGeomFromWKT failed", nullptr != geom1);
 
         GEOS_interruptRegisterCallback(interruptNow);
         GEOSGeometry *geom2 = GEOSBuffer(geom1, 1, 8);
-        ensure("GEOSBuffer wasn't interrupted", 0 == geom2);
-        GEOS_interruptRegisterCallback(0);  /* unregister */
+        ensure("GEOSBuffer wasn't interrupted", nullptr == geom2);
+        GEOS_interruptRegisterCallback(nullptr);  /* unregister */
 
         // TODO: check the actual exception ? (sent to notice() callback)
 
@@ -164,15 +164,15 @@ namespace tut
 
         GEOSGeometry *geom1 = GEOSGeomFromWKT("LINESTRING(0 0, 1 0)");
 
-        ensure("GEOSGeomFromWKT failed", 0 != geom1);
+        ensure("GEOSGeomFromWKT failed", nullptr != geom1);
 
         GEOS_interruptRegisterCallback(interruptNow);
         nextcb = GEOS_interruptRegisterCallback(countCalls);
         GEOSGeometry *geom2 = GEOSBuffer(geom1, 1, 8);
-        ensure("GEOSBuffer wasn't interrupted", 0 == geom2);
+        ensure("GEOSBuffer wasn't interrupted", nullptr == geom2);
         ensure_equals(numcalls, 1);
-        GEOS_interruptRegisterCallback(0);  /* unregister */
-        nextcb = 0;
+        GEOS_interruptRegisterCallback(nullptr);  /* unregister */
+        nextcb = nullptr;
 
         GEOSGeom_destroy(geom1);
 

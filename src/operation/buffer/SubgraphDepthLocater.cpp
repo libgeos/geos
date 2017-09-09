@@ -247,7 +247,7 @@ SubgraphDepthLocater::findStabbedSegments(
 #else
 		const Coordinate *low=&(pts->getAt(i));
 		const Coordinate *high=&(pts->getAt(i+1));
-		const Coordinate *swap=NULL;
+		const Coordinate *swap=nullptr;
 
 #endif
 

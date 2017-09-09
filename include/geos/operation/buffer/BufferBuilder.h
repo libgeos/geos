@@ -101,11 +101,11 @@ public:
 	BufferBuilder(const BufferParameters& nBufParams)
 		:
 		bufParams(nBufParams),
-		workingPrecisionModel(NULL),
-		li(NULL),
-		intersectionAdder(NULL),
-		workingNoder(NULL),
-		geomFact(NULL),
+		workingPrecisionModel(nullptr),
+		li(nullptr),
+		intersectionAdder(nullptr),
+		workingNoder(nullptr),
+		geomFact(nullptr),
 		edgeList()
 	{}
 

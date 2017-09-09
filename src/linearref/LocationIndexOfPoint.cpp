@@ -97,7 +97,7 @@ LocationIndexOfPoint::LocationIndexOfPoint(const Geometry *linearGeom) :
 
 LinearLocation LocationIndexOfPoint::indexOf(const Coordinate& inputPt) const
 {
-	return indexOfFromStart(inputPt, 0);
+	return indexOfFromStart(inputPt, nullptr);
 }
 
 LinearLocation

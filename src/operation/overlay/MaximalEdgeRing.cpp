@@ -115,7 +115,7 @@ MaximalEdgeRing::buildMinimalRings(vector<MinimalEdgeRing*>& minEdgeRings)
 {
 	DirectedEdge *de=startDe;
 	do {
-		if(de->getMinEdgeRing()==NULL) {
+		if(de->getMinEdgeRing()==nullptr) {
 			MinimalEdgeRing *minEr=new MinimalEdgeRing(de, geometryFactory);
 			minEdgeRings.push_back(minEr);
 		}
@@ -129,7 +129,7 @@ MaximalEdgeRing::buildMinimalRings(vector<EdgeRing*>& minEdgeRings)
 {
 	DirectedEdge *de=startDe;
 	do {
-		if(de->getMinEdgeRing()==NULL) {
+		if(de->getMinEdgeRing()==nullptr) {
 			MinimalEdgeRing *minEr=new MinimalEdgeRing(de, geometryFactory);
 			minEdgeRings.push_back(minEr);
 		}

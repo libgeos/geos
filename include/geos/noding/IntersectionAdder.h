@@ -103,7 +103,7 @@ public:
 		hasProper(false),
 		hasProperInterior(false),
 		hasInterior(false),
-		properIntersectionPoint(NULL),
+		properIntersectionPoint(nullptr),
 		li(newLi),
 		numIntersections(0),
 		numInteriorIntersections(0),

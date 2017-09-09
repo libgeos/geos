@@ -71,7 +71,7 @@ public:
 
 	static std::vector<MonotoneChain*>* getChains(const geom::CoordinateSequence *pts)
 	{
-		return getChains(pts, NULL);
+		return getChains(pts, nullptr);
 	}
 
 	/** \brief

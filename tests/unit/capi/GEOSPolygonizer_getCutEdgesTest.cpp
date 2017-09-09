@@ -57,14 +57,14 @@ namespace tut
     void object::test<1>()
     {
         const int size = 2;
-        GEOSGeometry* geoms[size] = { 0 };
+        GEOSGeometry* geoms[size] = { nullptr };
 
         geoms[0] = GEOSGeomFromWKT("LINESTRING(1 3, 3 3, 3 1, 1 1, 1 3)");
         geoms[1] = GEOSGeomFromWKT("LINESTRING(1 3, 3 3, 3 1, 1 1, 1 3)");
 
         GEOSGeometry* g = GEOSPolygonizer_getCutEdges(geoms, size);
 
-        ensure(0 != g);
+        ensure(nullptr != g);
         ensure_equals(GEOSGetNumGeometries(g), size);
 
         GEOSGeom_destroy(g);
@@ -77,7 +77,7 @@ namespace tut
     void object::test<2>()
     {
         const int size = 6;
-        GEOSGeometry* geoms[size] = { 0 };
+        GEOSGeometry* geoms[size] = { nullptr };
 
         // Example from JTS Developer's Guide, Chapter 6 - Polygonization
         geoms[0] = GEOSGeomFromWKT("LINESTRING(0 0, 10 10)"); // isolated edge
@@ -89,14 +89,14 @@ namespace tut
 
         GEOSGeometry* g = GEOSPolygonizer_getCutEdges(geoms, size);
 
-        ensure(0 != g);
+        ensure(nullptr != g);
         ensure_equals(GEOSGetNumGeometries(g), 0);
 
         GEOSGeom_destroy(g);
 
         for (int i = 0; i < size; ++i)
         {
-            if (0 != geoms[i])
+            if (nullptr != geoms[i])
                 GEOSGeom_destroy(geoms[i]);
         }
     }

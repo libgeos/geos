@@ -53,8 +53,8 @@ MCPointInRing::MCPointInRing(const LinearRing *newRing)
 	:
 	ring(newRing),
 	interval(),
-	pts(NULL),
-	tree(NULL),
+	pts(nullptr),
+	tree(nullptr),
 	crossings(0)
 {
 	buildIndex();

@@ -61,7 +61,7 @@ public:
 		:
 		graph(newGraph),
 		rings(),
-		nestedPt(NULL)
+		nestedPt(nullptr)
 	{}
 
 	~SimpleNestedRingTester() {

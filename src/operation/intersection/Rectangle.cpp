@@ -44,7 +44,7 @@ namespace intersection { // geos::operation::intersection
   Rectangle::toPolygon(const geom::GeometryFactory &f) const
   {
     geom::LinearRing* ls = toLinearRing(f);
-    return f.createPolygon(ls, 0);
+    return f.createPolygon(ls, nullptr);
   }
 
   geom::LinearRing*

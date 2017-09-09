@@ -39,7 +39,7 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence *cs,
 {
 	unsigned int csSize = cs->getSize();
 
-	if ( csSize == 0 ) return NULL;
+	if ( csSize == 0 ) return nullptr;
 
 	vector<Coordinate> *vc = new vector<Coordinate>(csSize);
 
@@ -77,8 +77,8 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence *cs,
 	CoordinateSequence *collapsedCoords = reducedCoords;
 	if ( removeCollapsed )
 	{
-		delete reducedCoords; reducedCoords=0;
-		collapsedCoords=0;
+		delete reducedCoords; reducedCoords=nullptr;
+		collapsedCoords=nullptr;
 	}
 
 	// return null or orginal length coordinate array

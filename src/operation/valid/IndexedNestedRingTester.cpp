@@ -79,7 +79,7 @@ IndexedNestedRingTester::isNonNested()
 
                         // Unable to find a ring point not a node of
 			// the search ring
-			assert(innerRingPt!=NULL);
+			assert(innerRingPt!=nullptr);
 
 			bool isInside = algorithm::CGAlgorithms::isPointInRing(
 					*innerRingPt, searchRingPts);

@@ -28,7 +28,7 @@ namespace geomgraph { // geos.geomgraph
 Node *
 NodeFactory::createNode(const Coordinate &coord) const
 {
-	return new Node(coord,NULL);
+	return new Node(coord,nullptr);
 }
 
 const NodeFactory &

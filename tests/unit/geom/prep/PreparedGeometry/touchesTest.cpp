@@ -36,10 +36,10 @@ struct test_preparedgeometrytouches_data
     test_preparedgeometrytouches_data()
         : factory(GeometryFactory::create())
         , reader(factory.get())
-        , g1(0)
-        , g2(0)
-        , pg1(0)
-        , pg2(0)
+        , g1(nullptr)
+        , g2(nullptr)
+        , pg1(nullptr)
+        , pg2(nullptr)
     {}
     ~test_preparedgeometrytouches_data()
     {

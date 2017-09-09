@@ -43,7 +43,7 @@ class GEOS_DLL ByteOrderDataInStream {
 
 public:
 
-	ByteOrderDataInStream(std::istream *s=NULL);
+	ByteOrderDataInStream(std::istream *s=nullptr);
 
 	~ByteOrderDataInStream();
 

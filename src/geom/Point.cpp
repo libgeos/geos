@@ -48,7 +48,7 @@ Point::Point(CoordinateSequence *newCoords, const GeometryFactory *factory)
 	Geometry(factory),
 	coordinates(newCoords)
 {
-	if (coordinates.get()==NULL) {
+	if (coordinates.get()==nullptr) {
 		coordinates.reset(factory->getCoordinateSequenceFactory()->create());
 		return;
 	}
@@ -129,7 +129,7 @@ Point::getY() const
 const Coordinate *
 Point::getCoordinate() const
 {
-	return coordinates->getSize()!=0 ? &(coordinates->getAt(0)) : NULL;
+	return coordinates->getSize()!=0 ? &(coordinates->getAt(0)) : nullptr;
 }
 
 string
@@ -141,7 +141,7 @@ Point::getGeometryType() const
 Geometry *
 Point::getBoundary() const
 {
-	return getFactory()->createGeometryCollection(NULL);
+	return getFactory()->createGeometryCollection(nullptr);
 }
 
 Envelope::Ptr
