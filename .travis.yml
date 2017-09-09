@@ -14,12 +14,6 @@ compiler:
     - g++
     - clang
 
-branches:
-  only:
-    - master
-    - svn-3.6
-    - svn-3.5
-
 env:
     - GEOS_BUILD_TOOL=autotools CFLAGS=-m32 CXXFLAGS=-m32
     - GEOS_BUILD_TOOL=autotools CFLAGS=-m64 CXXFLAGS=-m64
