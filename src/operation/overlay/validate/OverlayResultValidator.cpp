@@ -55,18 +55,7 @@ namespace validate { // geos.operation.overlay.validate
 
 namespace { // anonymous namespace
 
-bool
-isArea(const Geometry& g)
-{
-        GeometryTypeId type = g.getGeometryTypeId();
-        if ( type == GEOS_POLYGON ) return true;
-        if ( type == GEOS_MULTIPOLYGON ) return true;
 #if GEOS_DEBUG
-	cerr << "OverlayResultValidator: one of the geoms being checked is not a POLYGON or MULTIPOLYGON, blindly returning a positive answer (is valid)" << endl;
-#endif
-        return false;
-}
-
 unique_ptr<MultiPoint>
 toMultiPoint(vector<Coordinate>& coords)
 {
@@ -81,6 +70,7 @@ toMultiPoint(vector<Coordinate>& coords)
 
 	return mp;
 }
+#endif
 
 } // anonymous namespace
 
@@ -118,13 +108,6 @@ OverlayResultValidator::OverlayResultValidator(
 bool
 OverlayResultValidator::isValid(OverlayOp::OpCode overlayOp)
 {
-	// The check only works for areal geoms
-#if 0 // now that FuzzyPointLocator extracts polygonal geoms,
-      // there should be no problem here
-	if ( ! isArea(g0) ) return true;
-	if ( ! isArea(g1) ) return true;
-	if ( ! isArea(gres) ) return true;
-#endif
 
 	addTestPts(g0);
 	addTestPts(g1);
