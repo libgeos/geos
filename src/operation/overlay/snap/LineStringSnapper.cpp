@@ -26,6 +26,7 @@
 #include <geos/geom/CoordinateList.h>
 #include <geos/util/UniqueCoordinateArrayFilter.h>
 #include <geos/geom/LineSegment.h>
+#include <geos/util/Interrupt.h>
 
 #include <vector>
 #include <memory>
@@ -125,6 +126,7 @@ cerr << "Snapping vertices of: " << srcCoords << endl;
 			it != end;
 			++it)
 	{
+	    GEOS_CHECK_FOR_INTERRUPTS();
 		assert(*it);
 		const Coordinate& snapPt = *(*it);
 
@@ -227,6 +229,8 @@ LineStringSnapper::snapSegments(geom::CoordinateList& srcCoords,
 
   // nothing to do if there are no source coords..
   if ( srcCoords.empty() ) return;
+
+	GEOS_CHECK_FOR_INTERRUPTS();
 
 #if GEOS_DEBUG
 cerr << "Snapping segments of: " << srcCoords << endl;
