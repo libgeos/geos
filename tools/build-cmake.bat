@@ -11,7 +11,6 @@ rem 4. Optionally, run devenv.exe {project}{32|64}.sln from command line
 rem ### CONFIGURATION #####################################
 rem #######################################################
 
-if not defined VS150COMNTOOLS goto :NoVS
 if [%1]==[] goto :Usage
 if [%1]==[32] goto :32
 if [%1]==[64] goto :64
@@ -40,12 +39,6 @@ move geos.sln geos%GEOSP%.sln
 REM msbuild.exe geos%GEOSP%.sln /p:Configuration=Release /p:Platform=%MSBUILDP%
 popd
 goto :EOF
-
-:NoVS
-@echo build.bat
-@echo  Visual Studio 2017 not found
-@echo  "%%VS150COMNTOOLS%%" environment variable not defined
-exit /B 1
 
 :Usage
 @echo build.bat
