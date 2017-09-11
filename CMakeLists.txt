@@ -143,16 +143,8 @@ elseif(MSVC)
   #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
   string(REGEX REPLACE "/W[0-9]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
-  if(NOT (MSVC_VERSION LESS 1400)) # Visual Studio 2005 or later
-
-    # Option is to enable the /MP switch for Visual Studio 2005 or later
-    option(GEOS_MSVC_ENABLE_MP
-      "Set to ON to build GEOS with the /MP option (Visual Studio 2005 and above)." ON)
-    mark_as_advanced(GEOS_MSVC_ENABLE_MP)
-    if(GEOS_MSVC_ENABLE_MP)
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
-    endif()
-    message(STATUS "Setting Visual Studio 2005+ option /MP to ${GEOS_MSVC_ENABLE_MP}")
+  if(MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
 
     add_definitions(-D_SCL_SECURE_NO_WARNINGS)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
