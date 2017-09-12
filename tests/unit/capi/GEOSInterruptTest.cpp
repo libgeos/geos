@@ -102,7 +102,7 @@ namespace tut
     /// Test interrupt callback being called XXX
     template<>
     template<>
-    void object::test<1>()
+    void object::test<2>()
     {
         numcalls = 0;
 
@@ -135,7 +135,7 @@ namespace tut
     /// Test interrupt callback being NOT reset by initGEOS
     template<>
     template<>
-    void object::test<2>()
+    void object::test<3>()
     {
         numcalls = 0;
 
@@ -166,7 +166,7 @@ namespace tut
     /// Test interrupting from callback
     template<>
     template<>
-    void object::test<3>()
+    void object::test<4>()
     {
         initGEOS(notice, notice);
 
@@ -189,7 +189,7 @@ namespace tut
     /// Test chaining interrupt callbacks
     template<>
     template<>
-    void object::test<4>()
+    void object::test<5>()
     {
         numcalls = 0;
 
