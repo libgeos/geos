@@ -131,7 +131,7 @@ namespace tut
 
         finishGEOS();
     }
-	
+
     /// Test interrupt callback being NOT reset by initGEOS
     template<>
     template<>
