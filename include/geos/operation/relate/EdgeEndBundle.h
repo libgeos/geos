@@ -61,7 +61,7 @@ public:
    */
 	void updateIM(geom::IntersectionMatrix& im);
 
-	std::string print() const;
+	std::string print() const override;
 protected:
 	std::vector<geomgraph::EdgeEnd*> *edgeEnds;
 
