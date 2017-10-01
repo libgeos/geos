@@ -24,8 +24,7 @@ lib_LTLIBRARIES = libgeos.la
 
 # libgeos uses -release because it is not feasible to know if the ABI
 # has changed between releases; the project chooses not to expend the
-# effort to determine this because depending programs should not be
-# using the C++ library.
+# effort to determine this because GEOS does not promise ABI stability.
 libgeos_la_LDFLAGS = \
     -release @VERSION_MAJOR@.@VERSION_MINOR@.@VERSION_PATCH@ \
     -no-undefined
