@@ -58,6 +58,12 @@ is required:
 
 ### Using the C interface (recommended)
 
+GEOS promises long term stability of C API
+
+The C library uses the C++ interface, but the C library follows
+normal ABI-change-sensitive versioning, so programs that link only
+against the C library should work without relinking when GEOS is upgraded.
+
 To compile programs against the C lib (recommended):
 
     CFLAGS += `geos-config --cflags`
@@ -68,16 +74,15 @@ Example usage:
 
     capi/geostest.c contains basic usage examples.
 
-### Using the C++ interface (discouraged)
+### Using the C++ interface (no stability promise)
 
-NB: The C++ interface should not be used directly; the GEOS project
-views it as a bug for another program to use the C++ interface or even
-to directly link against the C++ library.  The C++ library name will
-change on every minor release because it is too hard to know if there
-have been ABI changes.  (The C library uses the C++ interface, but the
-C library follows normal ABI-change-sensitive versioning, so programs
-that link only against the C library should work without relinking
-when GEOS is upgraded.)
+Developers who decide to use the C++ interface should be aware GEOS
+does not promise API or ABI stability of C++ API between releases.
+Moreover C++ API/ABI breaking changes may not even be announced
+or include in the NEWS file
+
+The C++ library name will change on every minor release because
+it is too hard to know if there have been ABI changes.
 
 To compile programs against the C++ lib:
 
