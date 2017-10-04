@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSisClosed
 
 #include <tut/tut.hpp>

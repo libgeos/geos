@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSintersection
 
 #include <tut/tut.hpp>

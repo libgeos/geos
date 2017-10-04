@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::operation::buffer::BufferBuilder class.
 
 // tut

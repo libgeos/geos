@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSConvexHull
 
 #include <tut/tut.hpp>
@@ -29,7 +29,7 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
@@ -37,7 +37,7 @@ namespace tut
             : input_(nullptr), expected_(nullptr)
         {
             initGEOS(notice, notice);
-        }       
+        }
 
         ~test_capigeosconvexhull_data()
         {
@@ -66,7 +66,7 @@ namespace tut
         input_ = GEOSGeomFromWKT("MULTIPOINT (130 240, 130 240, 130 240, 570 240, 570 240, 570 240, 650 240)");
         ensure( nullptr != input_ );
 
-        expected_ = GEOSGeomFromWKT("LINESTRING (130 240, 650 240, 130 240)");   
+        expected_ = GEOSGeomFromWKT("LINESTRING (130 240, 650 240, 130 240)");
         ensure( nullptr != expected_ );
 
         GEOSGeometry* output = GEOSConvexHull(input_);
@@ -76,6 +76,6 @@ namespace tut
         //ensure( 0 != GEOSEquals(output, expected_));
         GEOSGeom_destroy(output);
     }
- 
+
 } // namespace tut
 
