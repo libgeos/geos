@@ -39,6 +39,10 @@ AM_MAINTAINER_MODE
 AC_CONFIG_HEADERS([include/config.h] [include/geos/platform.h])
 AC_PROG_CC
 
+
+dnl Hush warnings
+AC_DEFINE(USE_UNSTABLE_GEOS_CPP_API, [1], [We know])
+
 dnl use libtool ----------------------------------------------------------
 AC_LIBTOOL_DLOPEN
 AC_LIBTOOL_WIN32_DLL
@@ -162,7 +166,8 @@ AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -Wno-long-long], [dummy_cv_wno
 NUMERICFLAGS=""
 AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -ffloat-store], [dummy_cv_ffloat_store], [-ffloat-store], [], [NUMERICFLAGS="$NUMERICFLAGS -ffloat-store"], [])
 
-DEFAULTFLAGS="${WARNFLAGS} ${NUMERICFLAGS}"
+HUSHWARNING="-DUSE_UNSTABLE_GEOS_CPP_API"
+DEFAULTFLAGS="${WARNFLAGS} ${NUMERICFLAGS} ${HUSHWARNING}"
 
 AM_CXXFLAGS="${AM_CXXFLAGS} ${DEFAULTFLAGS}"
 AM_CFLAGS="${AM_CFLAGS} ${DEFAULTFLAGS}"

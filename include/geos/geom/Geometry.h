@@ -21,6 +21,11 @@
 #ifndef GEOS_GEOM_GEOMETRY_H
 #define GEOS_GEOM_GEOMETRY_H
 
+#ifndef USE_UNSTABLE_GEOS_CPP_API
+# warning "The GEOS C++ API is unstable, please use the C API instead"
+# warning "HINT: #include geos_c.h"
+#endif
+
 #include <geos/export.h>
 #include <geos/platform.h>
 #include <geos/inline.h>
