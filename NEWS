@@ -3,6 +3,7 @@ YYYY-MM-DD
 
 - Bug fixes / improvements
   - Include all CMake files in release (#753)
+  - Remove BOM from source files, restoring support for GCC-4.9 (#846)
 
 Changes in 3.6.2
 2017-07-25
