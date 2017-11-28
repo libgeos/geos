@@ -335,5 +335,26 @@ namespace tut
         //std::string const simplifiedWkt2 = wktwriter.write(simplified2.get());
 	}
 
+	// 13 - Polygon with inner ring whose extent is less than the simplify distance (#741)
+	template<>
+	template<>
+	void object::test<13>()
+	{
+		std::string wkt_in("POLYGON ((0 0,0 1,1 1,0 0),(0.1 0.1,0.2 0.1,0.2 0.2,0.1 0.1))");
+
+		std::string wkt_ex("POLYGON ((0 0,0 1,1 1,0 0))");
+
+		GeomPtr g(wktreader.read(wkt_in));
+
+		GeomPtr expected(wktreader.read(wkt_ex));
+
+		GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
+			g.get(), 0.5);
+
+		ensure( simplified->isValid() );
+
+		ensure( simplified->equalsExact(expected.get()) );
+	}
+
 } // namespace tut
 
