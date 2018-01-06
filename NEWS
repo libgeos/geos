@@ -6,6 +6,9 @@ YYYY-MM-DD
   - CAPI: GEOSFrechetDistance (#797, Shinichi SUGIYAMA)
 - Improvements
   - Interruptible snap operation (Paul Ramsey)
+- C++ API changes:
+  - Require defining USE_UNSTABLE_GEOS_CPP_API for use without
+    warnings.
 
 Changes in 3.6.1
 2016-12-24
