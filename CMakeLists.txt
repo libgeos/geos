@@ -17,10 +17,13 @@ if(NOT CMAKE_VERSION)
       "${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}")
 endif()
 
+if(POLICY CMP0048)
+    cmake_policy(SET CMP0048 NEW)
+endif()
 #################################################################################
 # Set GEOS project
 #################################################################################
-project(GEOS LANGUAGES C CXX)
+project(GEOS VERSION 3.7.0 LANGUAGES C CXX)
 
 # Add custom GEOS modules for CMake
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
@@ -40,10 +43,9 @@ message(STATUS "Setting C++ requirement to C++${CMAKE_CXX_STANDARD}")
 
 # GEOS release version
 # GEOS C++ library SONAME will use these encoding ABI break at every release
-set(VERSION_MAJOR 3)
-set(VERSION_MINOR 7)
-set(VERSION_PATCH 0dev)
-set(VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
+set(GEOS_VERSION_PATCH "${GEOS_VERSION_PATCH}dev")
+set(GEOS_VERSION "${GEOS_VERSION_MAJOR}.${GEOS_VERSION_MINOR}.${GEOS_VERSION_PATCH}")
+set(VERSION "${GEOS_VERSION}")
 
 # JTS_PORT is the version of JTS this release is bound to
 set(JTS_PORT 1.13.0)
