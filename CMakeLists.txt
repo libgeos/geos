@@ -118,7 +118,7 @@ endif()
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 
   # General options
-  set(CMAKE_CXX_FLAGS "-pedantic -ansi ${CMAKE_CXX_FLAGS}")
+  set(CMAKE_C_FLAGS "-pedantic -ansi ${CMAKE_C_FLAGS}")
 
   # Numerical stability
   if(GEOS_ENABLE_FLOATSTORE)
@@ -132,7 +132,7 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-long-long")
 
   # Turn on Position Independent Code generation for GEOS C shared library
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 
   # Enable glibc ISO C99 features (macros isfinite, isnan)
   set(CMAKE_REQUIRED_DEFINITIONS "${CMAKE_REQUIRED_DEFINITIONS} -D_ISOC99_SOURCE=1")
