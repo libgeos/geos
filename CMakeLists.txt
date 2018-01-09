@@ -129,10 +129,10 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
     "Forcing IEEE 754 using flag -ffloat-store - ${GEOS_ENABLE_FLOATSTORE}")
 
   # Warnings specification
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-long-long")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-long-long -fno-implicit-inline-templates -Wconversion -pedantic -W -Wunused -Wuninitialized -Wextra -Wdouble-promotion")
 
   # Turn on Position Independent Code generation for GEOS C shared library
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -Wall -Wconversion -pedantic -Wmissing-prototypes -W -Wunused -Wuninitialized -Wextra -Wdouble-promotion")
 
   # Enable glibc ISO C99 features (macros isfinite, isnan)
   set(CMAKE_REQUIRED_DEFINITIONS "${CMAKE_REQUIRED_DEFINITIONS} -D_ISOC99_SOURCE=1")
