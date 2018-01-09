@@ -36,7 +36,8 @@
       - VERSION_MAJOR for SUBSTANTIAL additions or C lib ABI break
         [ THIS MUST BE CAREFULLY AVOIDED ]
     - In main CMakeLists.txt main one
-       - VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH
+       - CHANGE the line: project(GEOS VERSION <mayor>.<minor>.<micro> LANGUAGES C CXX)
+       - CHANGE the line: set(GEOS_VERSION_PATCH "${GEOS_VERSION_PATCH}dev")
        - CAPI_INTERFACE_*
 
 12. Update wiki page https://trac.osgeo.org/geos/ at Download section
