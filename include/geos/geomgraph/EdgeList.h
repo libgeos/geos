@@ -103,7 +103,7 @@ public:
 
 	Edge* findEqualEdge(Edge* e);
 
-	Edge* get(int i);
+	Edge* get(size_t i);
 
 	int findEdgeIndex(Edge *e);
 
