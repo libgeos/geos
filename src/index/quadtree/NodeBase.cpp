@@ -171,7 +171,7 @@ NodeBase::getNodeCount() const
 	size_t subSize{0};
 	for (const auto n : subnode)
 	{
-		subSize += n != nullptr ? n->size() : 0;
+		if (n != nullptr) subSize += n->size();
 	}
 
 	return ++subSize;
