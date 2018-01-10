@@ -34,32 +34,6 @@ Profile::~Profile()
 {
 }
 
-#if 0
-void
-Profile::start()
-{
-	gettimeofday(&starttime, NULL);
-}
-
-void
-Profile::stop()
-{
-	gettimeofday(&stoptime, NULL);
-	double elapsed = 1000000*(stoptime.tv_sec-starttime.tv_sec)+
-		(stoptime.tv_usec-starttime.tv_usec);
-
-	timings.push_back(elapsed);
-	totaltime += elapsed;
-	if ( timings.size() == 1 ) max = min = elapsed;
-	else
-	{
-		if ( elapsed > max ) max = elapsed;
-		if ( elapsed < min ) min = elapsed;
-	}
-	avg = totaltime / timings.size();
-}
-#endif
-
 double
 Profile::getMax() const
 {
