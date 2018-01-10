@@ -84,7 +84,7 @@ EdgeList::findEqualEdge(Edge *e)
 }
 
 Edge*
-EdgeList::get(int i)
+EdgeList::get(size_t i)
 {
 	return edges[i];
 }

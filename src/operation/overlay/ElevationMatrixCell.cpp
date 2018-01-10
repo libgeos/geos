@@ -73,8 +73,9 @@ ElevationMatrixCell::getTotal() const
 double
 ElevationMatrixCell::getAvg() const
 {
-	if ( ! zvals.size() ) return DoubleNotANumber;
-	return (ztot/zvals.size());
+	return  zvals.empty() ?
+		DoubleNotANumber :
+		ztot / static_cast<double>(zvals.size()) ;
 }
 
 string
@@ -82,7 +83,7 @@ ElevationMatrixCell::print() const
 {
 	ostringstream ret;
 	//ret<<"["<<ztot<<"/"<<zvals.size()<<"]";
-	ret<<"["<<ztot/zvals.size()<<"]";
+	ret << "[" << getAvg() << "]";
 	return ret.str();
 }
 
