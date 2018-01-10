@@ -1560,7 +1560,7 @@ usage(char *me, int exitcode, std::ostream &os)
 }
 
 void
-request_interrupt(int sig)
+request_interrupt(int)
 {
   geos::util::Interrupt::request();
 }
