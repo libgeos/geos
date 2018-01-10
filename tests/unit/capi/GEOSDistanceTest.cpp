@@ -99,10 +99,10 @@ namespace tut
 
         std::sort(angle.begin(), angle.end());
 
-        GEOSCoordSequence* seq_1 = GEOSCoordSeq_create(num_points, 2);
-        for (size_t i = 0; i < num_points; i++)
+        GEOSCoordSequence* seq_1 = GEOSCoordSeq_create(static_cast<unsigned int>(num_points), 2);
+        for (unsigned int i = 0; i < num_points; i++)
         {
-            size_t idx = i == (num_points - 1) ? 0 : i;
+            auto idx = i == (num_points - 1) ? 0 : i;
 
             GEOSCoordSeq_setX(seq_1, i, x + radius[idx] * cos(angle[idx]));
             GEOSCoordSeq_setY(seq_1, i, y + radius[idx] * sin(angle[idx]));
