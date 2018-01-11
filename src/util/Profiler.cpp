@@ -96,41 +96,40 @@ Profiler::Profiler()
 
 Profiler::~Profiler()
 {
-	map<string, Profile *>::const_iterator it;
-	for ( it=profs.begin(); it != profs.end(); ++it )
+	for (auto &prof : profs)
 	{
-		delete it->second;
+		delete prof.second;
 	}
 }
 
 void
 Profiler::start(string name)
 {
-	Profile *prof = get(name);
+	auto prof = get(name);
 	prof->start();
 }
 
 void
 Profiler::stop(string name)
 {
-	map<string, Profile *>::iterator iter = profs.find(name);
-	if ( iter == profs.end() ) {
+	auto prof = profs.find(name);
+	if ( prof == profs.end() ) {
 		cerr<<name<<": no such Profile started";
 		return;
 	}
-	iter->second->stop();
+	prof->second->stop();
 }
 
 Profile *
 Profiler::get(string name)
 {
-	Profile *prof;
-	map<string, Profile *>::iterator iter = profs.find(name);
-	if ( iter == profs.end() ) {
+	Profile *prof{nullptr};
+	auto has_prof = profs.find(name);
+	if ( has_prof == profs.end() ) {
 		prof = new Profile(name);
 		profs.insert(pair<string, Profile *>(name, prof));
 	} else {
-		prof = iter->second;
+		prof = has_prof->second;
 	}
 	return prof;
 }
@@ -156,10 +155,9 @@ operator<< (ostream &os, const Profile &prof)
 ostream&
 operator<< (ostream &os, const Profiler &prof)
 {
-	map<string, Profile *>::const_iterator it;
-	for ( it=prof.profs.begin(); it != prof.profs.end(); ++it )
+	for (const auto elem : prof.profs)
 	{
-		os<<*(it->second)<<endl;
+		os << elem.second <<endl;
 	}
 	return os;
 }
