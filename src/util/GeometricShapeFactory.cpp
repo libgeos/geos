@@ -96,24 +96,25 @@ GeometricShapeFactory::createRectangle()
 	vector<Coordinate> *vc = new vector<Coordinate>(4*nSide+1);
 	//CoordinateSequence* pts=new CoordinateArraySequence(4*nSide+1);
 
+	double y = env->getMinY();
 	for (i = 0; i < nSide; i++) {
 		double x = env->getMinX() + i * XsegLen;
-		double y = env->getMinY();
 		(*vc)[ipt++] = coord(x, y);
 	}
+	double x = env->getMaxX();
 	for (i = 0; i < nSide; i++) {
-		double x = env->getMaxX();
 		double y = env->getMinY() + i * YsegLen;
 		(*vc)[ipt++] = coord(x, y);
 	}
+	y = env->getMaxY();
 	for (i = 0; i < nSide; i++) {
-		double x = env->getMaxX() - i * XsegLen;
-		double y = env->getMaxY();
+		x = env->getMaxX() - i * XsegLen;
+		y = env->getMaxY();
 		(*vc)[ipt++] = coord(x, y);
 	}
+	x = env->getMinX();
 	for (i = 0; i < nSide; i++) {
-		double x = env->getMinX();
-		double y = env->getMaxY() - i * YsegLen;
+		y = env->getMaxY() - i * YsegLen;
 		(*vc)[ipt++] = coord(x, y);
 	}
 	(*vc)[ipt++] = (*vc)[0];
