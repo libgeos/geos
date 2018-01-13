@@ -152,8 +152,8 @@ private:
 			geom::CoordinateList::iterator too_far);
 
     // Declare type as noncopyable
-    LineStringSnapper(const LineStringSnapper& other);
-    LineStringSnapper& operator=(const LineStringSnapper& rhs);
+    LineStringSnapper(const LineStringSnapper& other) = delete;
+    LineStringSnapper& operator=(const LineStringSnapper& rhs) = delete;
 };
 
 

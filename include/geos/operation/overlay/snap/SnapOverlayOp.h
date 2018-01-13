@@ -125,8 +125,8 @@ private:
 	std::unique_ptr<precision::CommonBitsRemover> cbr;
 
     // Declare type as noncopyable
-    SnapOverlayOp(const SnapOverlayOp& other);
-    SnapOverlayOp& operator=(const SnapOverlayOp& rhs);
+    SnapOverlayOp(const SnapOverlayOp& other) = delete;
+    SnapOverlayOp& operator=(const SnapOverlayOp& rhs) = delete;
 };
 
 } // namespace geos::operation::overlay::snap

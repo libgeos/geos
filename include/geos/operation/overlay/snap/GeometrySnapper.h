@@ -144,8 +144,8 @@ private:
 			const geom::Geometry& g);
 
     // Declare type as noncopyable
-    GeometrySnapper(const GeometrySnapper& other);
-    GeometrySnapper& operator=(const GeometrySnapper& rhs);
+    GeometrySnapper(const GeometrySnapper& other) = delete;
+    GeometrySnapper& operator=(const GeometrySnapper& rhs) = delete;
 };
 
 

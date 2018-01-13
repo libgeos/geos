@@ -83,8 +83,8 @@ private:
 	std::unique_ptr<geom::Geometry> extractLineWork(const geom::Geometry& geom);
 
     // Declare type as noncopyable
-    FuzzyPointLocator(const FuzzyPointLocator& other);
-    FuzzyPointLocator& operator=(const FuzzyPointLocator& rhs);
+    FuzzyPointLocator(const FuzzyPointLocator& other) = delete;
+    FuzzyPointLocator& operator=(const FuzzyPointLocator& rhs) = delete;
 };
 
 } // namespace geos::operation::overlay::validate

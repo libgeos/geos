@@ -70,8 +70,8 @@ private:
 	double avgElevation;
 
     // Declare type as noncopyable
-    ElevationMatrixFilter(const ElevationMatrixFilter& other);
-    ElevationMatrixFilter& operator=(const ElevationMatrixFilter& rhs);
+    ElevationMatrixFilter(const ElevationMatrixFilter& other) = delete;
+    ElevationMatrixFilter& operator=(const ElevationMatrixFilter& rhs) = delete;
 };
 
 

@@ -73,8 +73,8 @@ private:
 			const geom::Coordinate& p1);
 
     // Declare type as noncopyable
-    OffsetPointGenerator(const OffsetPointGenerator& other);
-    OffsetPointGenerator& operator=(const OffsetPointGenerator& rhs);
+    OffsetPointGenerator(const OffsetPointGenerator& other) = delete;
+    OffsetPointGenerator& operator=(const OffsetPointGenerator& rhs) = delete;
 };
 
 } // namespace geos::operation::overlay::validate
