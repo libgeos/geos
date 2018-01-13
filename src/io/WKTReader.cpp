@@ -99,6 +99,7 @@ WKTReader::getCoordinates(StringTokenizer *tokenizer)
 	return coordinates;
 }
 
+
 void
 WKTReader::getPreciseCoordinate(StringTokenizer *tokenizer,
                                 Coordinate& coord,
@@ -200,7 +201,7 @@ WKTReader::getNextWord(StringTokenizer *tokenizer)
 		case StringTokenizer::TT_WORD:
         {
             string word = tokenizer->getSVal();
-            int i = word.size();
+            int i = static_cast<int>(word.size());
 
             while( --i >= 0 )
             {
