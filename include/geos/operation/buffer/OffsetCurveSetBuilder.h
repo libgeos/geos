@@ -170,8 +170,8 @@ private:
 			double bufferDistance);
 
     // Declare type as noncopyable
-    OffsetCurveSetBuilder(const OffsetCurveSetBuilder& other);
-    OffsetCurveSetBuilder& operator=(const OffsetCurveSetBuilder& rhs);
+    OffsetCurveSetBuilder(const OffsetCurveSetBuilder& other) = delete;
+    OffsetCurveSetBuilder& operator=(const OffsetCurveSetBuilder& rhs) = delete;
 
 public:
 

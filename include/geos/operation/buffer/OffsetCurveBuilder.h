@@ -175,8 +175,8 @@ private:
 
 
     // Declare type as noncopyable
-    OffsetCurveBuilder(const OffsetCurveBuilder& other);
-    OffsetCurveBuilder& operator=(const OffsetCurveBuilder& rhs);
+    OffsetCurveBuilder(const OffsetCurveBuilder& other) = delete;
+    OffsetCurveBuilder& operator=(const OffsetCurveBuilder& rhs) = delete;
 };
 
 } // namespace geos::operation::buffer

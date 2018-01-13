@@ -172,8 +172,8 @@ private:
 	int angleOrientation;
 
     // Declare type as noncopyable
-    BufferInputLineSimplifier(const BufferInputLineSimplifier& other);
-    BufferInputLineSimplifier& operator=(const BufferInputLineSimplifier& rhs);
+    BufferInputLineSimplifier(const BufferInputLineSimplifier& other) = delete;
+    BufferInputLineSimplifier& operator=(const BufferInputLineSimplifier& rhs) = delete;
 };
 
 
