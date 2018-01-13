@@ -167,8 +167,8 @@ private:
 	int id;
 
     // Declare type as noncopyable
-    MonotoneChain(const MonotoneChain& other);
-    MonotoneChain& operator=(const MonotoneChain& rhs);
+    MonotoneChain(const MonotoneChain& other) = delete;
+    MonotoneChain& operator=(const MonotoneChain& rhs) = delete;
 };
 
 } // namespace geos::index::chain

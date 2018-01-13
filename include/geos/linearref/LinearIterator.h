@@ -149,8 +149,8 @@ private:
 	void loadCurrentLine();
 
     // Declare type as noncopyable
-    LinearIterator(const LinearIterator& other);
-    LinearIterator& operator=(const LinearIterator& rhs);
+    LinearIterator(const LinearIterator& other) = delete;
+    LinearIterator& operator=(const LinearIterator& rhs) = delete;
 };
 
 }} // namespace geos::linearref

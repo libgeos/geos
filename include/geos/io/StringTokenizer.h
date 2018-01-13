@@ -54,8 +54,8 @@ private:
 	std::string::const_iterator iter;
 
     // Declare type as noncopyable
-    StringTokenizer(const StringTokenizer& other);
-    StringTokenizer& operator=(const StringTokenizer& rhs);
+    StringTokenizer(const StringTokenizer& other) = delete;
+    StringTokenizer& operator=(const StringTokenizer& rhs) = delete;
 };
 
 } // namespace io

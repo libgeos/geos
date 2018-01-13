@@ -84,8 +84,8 @@ private:
 			Subgraph* subgraph);
 
     // Declare type as noncopyable
-    ConnectedSubgraphFinder(const ConnectedSubgraphFinder& other);
-    ConnectedSubgraphFinder& operator=(const ConnectedSubgraphFinder& rhs);
+    ConnectedSubgraphFinder(const ConnectedSubgraphFinder& other) = delete;
+    ConnectedSubgraphFinder& operator=(const ConnectedSubgraphFinder& rhs) = delete;
 };
 
 } // namespace geos::planargraph::algorithm

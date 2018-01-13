@@ -58,8 +58,8 @@ class PreparedPolygonPredicate
 {
 private:
     // Declare type as noncopyable
-    PreparedPolygonPredicate(const PreparedPolygonPredicate& other);
-    PreparedPolygonPredicate& operator=(const PreparedPolygonPredicate& rhs);
+    PreparedPolygonPredicate(const PreparedPolygonPredicate& other) = delete;
+    PreparedPolygonPredicate& operator=(const PreparedPolygonPredicate& rhs) = delete;
 
 protected:
 	const PreparedPolygon * const prepPoly;

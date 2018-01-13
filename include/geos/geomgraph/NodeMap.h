@@ -110,8 +110,8 @@ public:
 private:
 
     // Declare type as noncopyable
-    NodeMap(const NodeMap& other);
-    NodeMap& operator=(const NodeMap& rhs);
+    NodeMap(const NodeMap& other) = delete;
+    NodeMap& operator=(const NodeMap& rhs) = delete;
 };
 
 } // namespace geos.geomgraph
