@@ -186,8 +186,8 @@ private:
 	bool skipTransformedInvalidInteriorRings;
 
 	// Declare type as noncopyable
-	GeometryTransformer(const GeometryTransformer& other);
-	GeometryTransformer& operator=(const GeometryTransformer& rhs);
+	GeometryTransformer(const GeometryTransformer& other) = delete;
+	GeometryTransformer& operator=(const GeometryTransformer& rhs) = delete;
 };
 
 
