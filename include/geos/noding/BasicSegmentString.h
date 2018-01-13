@@ -70,7 +70,7 @@ public:
 	/// see dox in SegmentString.h
 	unsigned int size() const override
 	{
-		return pts->size();
+		return static_cast<unsigned int>(pts->size());
 	}
 
 	/// see dox in SegmentString.h
