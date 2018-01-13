@@ -175,7 +175,7 @@ QuadEdgeSubdivision::locateFromEdge(const Vertex &v,
     ::geos::ignore_unused_variable_warning(startEdge);
 
     int iter = 0;
-    int maxIter = quadEdges.size();
+    int maxIter = static_cast<int>(quadEdges.size());
 
     QuadEdge *e = startingEdges[0];
 
