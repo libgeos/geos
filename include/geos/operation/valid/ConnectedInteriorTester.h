@@ -134,8 +134,8 @@ private:
 	bool hasUnvisitedShellEdge(std::vector<geomgraph::EdgeRing*> *edgeRings);
 
     // Declare type as noncopyable
-    ConnectedInteriorTester(const ConnectedInteriorTester& other);
-    ConnectedInteriorTester& operator=(const ConnectedInteriorTester& rhs);
+    ConnectedInteriorTester(const ConnectedInteriorTester& other) = delete;
+    ConnectedInteriorTester& operator=(const ConnectedInteriorTester& rhs) = delete;
 };
 
 } // namespace geos::operation::valid
