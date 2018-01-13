@@ -84,8 +84,8 @@ public:
         SegmentIntersector & si;
 
         // Declare type as noncopyable
-        SegmentOverlapAction(const SegmentOverlapAction& other);
-        SegmentOverlapAction& operator=(const SegmentOverlapAction& rhs);
+        SegmentOverlapAction(const SegmentOverlapAction& other) = delete;
+        SegmentOverlapAction& operator=(const SegmentOverlapAction& rhs) = delete;
 
     public:
         SegmentOverlapAction(SegmentIntersector & si) :

@@ -100,8 +100,8 @@ private:
 	std::vector<geom::Coordinate>& interiorIntersections;
 
     // Declare type as noncopyable
-    IntersectionFinderAdder(const IntersectionFinderAdder& other);
-    IntersectionFinderAdder& operator=(const IntersectionFinderAdder& rhs);
+    IntersectionFinderAdder(const IntersectionFinderAdder& other) = delete;
+    IntersectionFinderAdder& operator=(const IntersectionFinderAdder& rhs) = delete;
 };
 
 } // namespace geos.noding

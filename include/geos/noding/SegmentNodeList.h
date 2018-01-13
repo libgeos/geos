@@ -109,8 +109,8 @@ private:
 		size_t& collapsedVertexIndex);
 
     // Declare type as noncopyable
-    SegmentNodeList(const SegmentNodeList& other);
-    SegmentNodeList& operator=(const SegmentNodeList& rhs);
+    SegmentNodeList(const SegmentNodeList& other) = delete;
+    SegmentNodeList& operator=(const SegmentNodeList& rhs) = delete;
 
 public:
 
