@@ -43,8 +43,8 @@ namespace tut
         }
     private:
         // noncopyable
-        test_bufferop_data(test_bufferop_data const& other);
-        test_bufferop_data& operator=(test_bufferop_data const& rhs);
+        test_bufferop_data(test_bufferop_data const& other) = delete;
+        test_bufferop_data& operator=(test_bufferop_data const& rhs) = delete;
     };
 
     typedef test_group<test_bufferop_data> group;

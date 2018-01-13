@@ -44,8 +44,8 @@ namespace tut
 
   private:
     // noncopyable
-    test_shpathop_data(test_shpathop_data const& other);
-    test_shpathop_data& operator=(test_shpathop_data const& rhs);
+    test_shpathop_data(test_shpathop_data const& other) = delete;
+    test_shpathop_data& operator=(test_shpathop_data const& rhs) = delete;
   };
 
   typedef test_group<test_shpathop_data> group;
