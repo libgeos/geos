@@ -980,8 +980,8 @@ struct PointCoveredByAny: public geom::CoordinateFilter
 
 private:
     // Declare type as noncopyable
-    PointCoveredByAny(const PointCoveredByAny& other);
-    PointCoveredByAny& operator=(const PointCoveredByAny& rhs);
+    PointCoveredByAny(const PointCoveredByAny& other) = delete;
+    PointCoveredByAny& operator=(const PointCoveredByAny& rhs) = delete;
 };
 
 void

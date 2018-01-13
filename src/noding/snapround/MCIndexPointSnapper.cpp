@@ -80,8 +80,8 @@ private:
 	bool isNodeAddedVar;
 
     // Declare type as noncopyable
-    HotPixelSnapAction(const HotPixelSnapAction& other);
-    HotPixelSnapAction& operator=(const HotPixelSnapAction& rhs);
+    HotPixelSnapAction(const HotPixelSnapAction& other) = delete;
+    HotPixelSnapAction& operator=(const HotPixelSnapAction& rhs) = delete;
 };
 
 class MCIndexPointSnapperVisitor: public ItemVisitor {

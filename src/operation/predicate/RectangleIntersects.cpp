@@ -51,8 +51,8 @@ private:
 	bool intersectsVar;
 
     // Declare type as noncopyable
-    EnvelopeIntersectsVisitor(const EnvelopeIntersectsVisitor& other);
-    EnvelopeIntersectsVisitor& operator=(const EnvelopeIntersectsVisitor& rhs);
+    EnvelopeIntersectsVisitor(const EnvelopeIntersectsVisitor& other) = delete;
+    EnvelopeIntersectsVisitor& operator=(const EnvelopeIntersectsVisitor& rhs) = delete;
 
 protected:
 

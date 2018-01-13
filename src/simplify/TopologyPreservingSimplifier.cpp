@@ -217,8 +217,8 @@ private:
 	LinesMap& linestringMap;
 
     // Declare type as noncopyable
-    LineStringMapBuilderFilter(const LineStringMapBuilderFilter& other);
-    LineStringMapBuilderFilter& operator=(const LineStringMapBuilderFilter& rhs);
+    LineStringMapBuilderFilter(const LineStringMapBuilderFilter& other) = delete;
+    LineStringMapBuilderFilter& operator=(const LineStringMapBuilderFilter& rhs) = delete;
 };
 
 /*public*/
