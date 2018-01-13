@@ -54,8 +54,8 @@ namespace tut
 
     private:
         // Declare type as noncopyable
-        test_multipoint_data(const test_multipoint_data& other);
-        test_multipoint_data& operator=(const test_multipoint_data& rhs);
+        test_multipoint_data(const test_multipoint_data& other) = delete;
+        test_multipoint_data& operator=(const test_multipoint_data& rhs) = delete;
 	};
 
 	typedef test_group<test_multipoint_data> group;

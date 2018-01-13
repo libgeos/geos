@@ -64,8 +64,8 @@ reader_(factory_.get())
         {}
     private:
         // Declare type as noncopyable
-        test_geometryfactory_data(const test_geometryfactory_data& other);
-        test_geometryfactory_data& operator=(const test_geometryfactory_data& rhs);
+        test_geometryfactory_data(const test_geometryfactory_data& other) = delete;
+        test_geometryfactory_data& operator=(const test_geometryfactory_data& rhs) = delete;
     };
 
 	typedef test_group<test_geometryfactory_data> group;
