@@ -62,7 +62,7 @@ void
 NodingValidator::checkCollapses(const SegmentString& ss) const
 {
 	const CoordinateSequence& pts = *(ss.getCoordinates());
-	for (unsigned int i=0, n=pts.getSize()-2; i<n; ++i)
+	for (unsigned int i=0, n = static_cast<unsigned int>(pts.getSize() - 2); i < n; ++i)
 	{
 		checkCollapse(pts[i], pts[i + 1], pts[i + 2]);
 	}
@@ -108,8 +108,8 @@ NodingValidator::checkInteriorIntersections(const SegmentString& ss0,
 {
 	const CoordinateSequence& pts0 = *(ss0.getCoordinates());
 	const CoordinateSequence& pts1 = *(ss1.getCoordinates());
-	for (unsigned int i0=0, n0=pts0.size(); i0<n0-1; i0++) {
-		for (unsigned int i1=0, n1=pts1.size(); i1<n1-1; i1++) {
+	for (unsigned int i0=0, n0 = static_cast<unsigned int>(pts0.size()); i0 < n0 - 1; i0++) {
+		for (unsigned int i1=0, n1 = static_cast<unsigned int>(pts1.size()); i1 < n1 - 1; i1++) {
 			checkInteriorIntersections(ss0, i0, ss1, i1);
 		}
 	}
@@ -171,7 +171,7 @@ NodingValidator::checkEndPtVertexIntersections(const Coordinate& testPt,
 	{
 		const SegmentString* ss0 = *it;
 		const CoordinateSequence& pts = *(ss0->getCoordinates());
-		for (unsigned int j=1, n=pts.size()-1; j<n; ++j)
+		for (unsigned int j=1, n=static_cast<unsigned int>(pts.size()-1); j < n; ++j)
 		{
 			if (pts[j].equals(testPt))
 			{

@@ -68,8 +68,8 @@ IteratedNoder::computeNodes(SegmentString::NonConstVect* segStrings)
 
 		// Delete noded strings from previous iteration
 		if ( lastStrings ) {
-			for ( unsigned int i = 0, n = lastStrings->size(); i < n; ++i )
-				delete (*lastStrings)[i];
+			for (auto &s : *lastStrings)
+				delete s;
 			delete lastStrings;
 		}
 		lastStrings = nodedSegStrings;

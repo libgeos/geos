@@ -60,8 +60,8 @@ SegmentNodeList::~SegmentNodeList()
 SegmentNode*
 SegmentNodeList::add(const Coordinate& intPt, size_t segmentIndex)
 {
-	SegmentNode *eiNew=new SegmentNode(edge, intPt, segmentIndex,
-			edge.getSegmentOctant(segmentIndex));
+	SegmentNode *eiNew=new SegmentNode(edge, intPt, static_cast<unsigned int>(segmentIndex),
+			edge.getSegmentOctant(static_cast<unsigned int>(segmentIndex)));
 
 	std::pair<SegmentNodeList::iterator,bool> p = nodeMap.insert(eiNew);
 	if ( p.second ) { // new SegmentNode inserted
@@ -98,7 +98,7 @@ SegmentNodeList::addCollapsedNodes()
 			e=collapsedVertexIndexes.end();
 		i != e; ++i)
 	{
-		size_t vertexIndex = *i;
+		auto vertexIndex = static_cast<unsigned int>(*i);
 		add(edge.getCoordinate(vertexIndex), vertexIndex);
 	}
 }
@@ -113,8 +113,8 @@ SegmentNodeList::findCollapsesFromExistingVertices(
 
 	for (size_t i=0, n=edge.size()-2; i<n; ++i)
 	{
-		const Coordinate& p0 = edge.getCoordinate(i);
-		const Coordinate& p2 = edge.getCoordinate(i + 2);
+		const Coordinate& p0 = edge.getCoordinate(static_cast<unsigned int>(i));
+		const Coordinate& p2 = edge.getCoordinate(static_cast<unsigned int>(i + 2));
 		if (p0.equals2D(p2)) {
 			// add base of collapse as node
 			collapsedVertexIndexes.push_back(i + 1);
@@ -271,7 +271,7 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 	pts->setAt(ei0->coord, ipt++);
 	for (size_t i=ei0->segmentIndex+1; i<=ei1->segmentIndex; i++)
 	{
-		pts->setAt(edge.getCoordinate(i),ipt++);
+		pts->setAt(edge.getCoordinate(static_cast<unsigned int>(i)),ipt++);
 	}
 	if (useIntPt1) 	pts->setAt(ei1->coord, ipt++);
 

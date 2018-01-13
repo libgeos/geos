@@ -98,10 +98,8 @@ GeometryNoder::toGeometry(SegmentString::NonConstVect& nodedEdges)
   // Create a geometry out of the noded substrings.
   std::vector< geom::Geometry* >* lines = new std::vector< geom::Geometry * >();
   lines->reserve(nodedEdges.size());
-  for ( unsigned int i = 0, n = nodedEdges.size(); i < n; ++i )
+  for (auto &ss :  nodedEdges)
   {
-    SegmentString* ss = nodedEdges [i];
-
     const geom::CoordinateSequence* coords = ss->getCoordinates();
 
     // Check if an equivalent edge is known
@@ -140,12 +138,12 @@ GeometryNoder::getNoded()
 
   std::unique_ptr<geom::Geometry> noded = toGeometry(*nodedEdges);
 
-  for ( unsigned int i = 0, n = nodedEdges->size(); i < n; ++i )
-    delete ( *nodedEdges )[i];
+  for (auto &elem : (*nodedEdges))
+    delete elem;
   delete nodedEdges;
 
-  for (size_t i=0, n=lineList.size(); i<n; ++i)
-    delete lineList[i];
+  for (auto &elem : lineList)
+    delete elem;
 
   return noded;
 }
