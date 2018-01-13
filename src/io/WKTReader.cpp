@@ -156,9 +156,9 @@ WKTReader::getNextEmptyOrOpener(StringTokenizer *tokenizer)
 {
 	string nextWord=getNextWord(tokenizer);
 
-    // Skip the Z, M or ZM of an SF1.2 3/4 dim coordinate.
-    if (nextWord == "Z" || nextWord == "M" || nextWord == "ZM" )
-        nextWord = getNextWord(tokenizer);
+	// Skip the Z, M or ZM of an SF1.2 3/4 dim coordinate.
+	if (nextWord == "Z" || nextWord == "M" || nextWord == "ZM" )
+		nextWord = getNextWord(tokenizer);
 
 	if (nextWord=="EMPTY" || nextWord=="(") {
 		return nextWord;

@@ -151,8 +151,8 @@ Polygon::getCoordinateDimension() const
 {
 	int dimension=2;
 
-    if( shell != nullptr )
-        dimension = max(dimension,shell->getCoordinateDimension());
+	if( shell != nullptr )
+		dimension = max(dimension,shell->getCoordinateDimension());
 
 	size_t nholes=holes->size();
 	for (size_t i=0; i<nholes; ++i)

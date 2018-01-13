@@ -82,9 +82,9 @@ WKBWriter::writeHEX(const Geometry &g, ostream &os)
 void
 WKBWriter::write(const Geometry &g, ostream &os)
 {
-    outputDimension = defaultOutputDimension;
-    if( outputDimension > g.getCoordinateDimension() )
-        outputDimension = g.getCoordinateDimension();
+	outputDimension = defaultOutputDimension;
+	if( outputDimension > g.getCoordinateDimension() )
+		outputDimension = g.getCoordinateDimension();
 
 	outStream = &os;
 
@@ -250,10 +250,10 @@ void
 WKBWriter::writeGeometryType(int typeId, int SRID)
 {
 	int flag3D = (outputDimension == 3) ? 0x80000000 : 0;
-    int typeInt = typeId | flag3D;
+	int typeInt = typeId | flag3D;
 
-    if (includeSRID && SRID != 0)
-        typeInt = typeInt | 0x20000000;
+	if (includeSRID && SRID != 0)
+		typeInt = typeInt | 0x20000000;
 
 	writeInt(typeInt);
 }
