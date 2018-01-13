@@ -234,7 +234,7 @@ SubgraphDepthLocater::findStabbedSegments(
 //
 #define SKIP_LS 1
 
-	int n = pts->getSize()-1;
+	int n = static_cast<int>(pts->getSize())-1;
 	for (int i=0; i<n; ++i) {
 #ifndef SKIP_LS
 		seg.p0=pts->getAt(i);
