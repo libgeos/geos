@@ -261,7 +261,7 @@ Node::addZ(double z)
 	}
 	zvals.push_back(z);
 	ztot+=z;
-	coord.z=ztot/zvals.size();
+	coord.z = ztot / static_cast<double>(zvals.size());
 #if GEOS_DEBUG
 	cerr<<" added "<<z<<": ["<<ztot<<"/"<<zvals.size()<<"="<<coord.z<<"]"<<endl;
 #endif

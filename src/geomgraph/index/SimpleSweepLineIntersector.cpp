@@ -89,7 +89,7 @@ SimpleSweepLineIntersector::add(Edge *edge, void* edgeSet)
 	std::size_t n=pts->getSize()-1;
 	for(std::size_t i=0; i<n; ++i)
 	{
-		SweepLineSegment *ss=new SweepLineSegment(edge, i);
+		SweepLineSegment *ss=new SweepLineSegment(edge, static_cast<int>(i));
 		SweepLineEvent *insertEvent=new SweepLineEvent(edgeSet, ss->getMinX(), nullptr, ss);
 		events.push_back(insertEvent);
 		events.push_back(new SweepLineEvent(edgeSet, ss->getMaxX(), insertEvent, ss));
