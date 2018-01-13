@@ -911,9 +911,8 @@ OverlayOp::insertUniqueEdge(Edge *e)
 void
 OverlayOp::computeLabelsFromDepths()
 {
-	for(size_t j=0, s=edgeList.getEdges().size(); j<s; ++j)
+	for(auto &e : edgeList.getEdges())
 	{
-		Edge *e=edgeList.get(j);
 		Label& lbl = e->getLabel();
 		Depth &depth = e->getDepth();
 
