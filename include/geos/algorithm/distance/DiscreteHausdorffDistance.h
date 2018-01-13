@@ -242,8 +242,8 @@ private:
     double densifyFrac; // = 0.0;
 
     // Declare type as noncopyable
-    DiscreteHausdorffDistance(const DiscreteHausdorffDistance& other);
-    DiscreteHausdorffDistance& operator=(const DiscreteHausdorffDistance& rhs);
+    DiscreteHausdorffDistance(const DiscreteHausdorffDistance& other) = delete;
+    DiscreteHausdorffDistance& operator=(const DiscreteHausdorffDistance& rhs) = delete;
 };
 
 } // geos::algorithm::distance
