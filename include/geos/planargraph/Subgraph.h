@@ -142,8 +142,8 @@ protected:
 	NodeMap nodeMap;
 
     // Declare type as noncopyable
-    Subgraph(const Subgraph& other);
-    Subgraph& operator=(const Subgraph& rhs);
+    Subgraph(const Subgraph& other) = delete;
+    Subgraph& operator=(const Subgraph& rhs) = delete;
 };
 
 } // namespace geos::planargraph

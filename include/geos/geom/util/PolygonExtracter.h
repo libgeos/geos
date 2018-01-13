@@ -58,8 +58,8 @@ private:
     std::vector<const Polygon*>& comps;
 
     // Declare type as noncopyable
-    PolygonExtracter(const PolygonExtracter& other);
-    PolygonExtracter& operator=(const PolygonExtracter& rhs);
+    PolygonExtracter(const PolygonExtracter& other) = delete;
+    PolygonExtracter& operator=(const PolygonExtracter& rhs) = delete;
 };
 
 } // namespace geos.geom.util

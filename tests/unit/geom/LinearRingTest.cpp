@@ -66,8 +66,8 @@ namespace tut
 
     private:
         // Declare type as noncopyable
-        test_linearring_data(const test_linearring_data& other);
-        test_linearring_data& operator=(const test_linearring_data& rhs);
+        test_linearring_data(const test_linearring_data& other) = delete;
+        test_linearring_data& operator=(const test_linearring_data& rhs) = delete;
 	};
 
 	typedef test_group<test_linearring_data> group;

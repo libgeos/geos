@@ -24,8 +24,8 @@ namespace tut
 
     private:
         // noncopyable
-        test_bufferparameters_data(test_bufferparameters_data const& other);
-        test_bufferparameters_data& operator=(test_bufferparameters_data const& rhs);
+        test_bufferparameters_data(test_bufferparameters_data const& other) = delete;
+        test_bufferparameters_data& operator=(test_bufferparameters_data const& rhs) = delete;
     };
 
     typedef test_group<test_bufferparameters_data> group;

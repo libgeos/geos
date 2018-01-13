@@ -63,8 +63,8 @@ namespace tut
 
     private:
         // Declare type as noncopyable
-        test_polygon_data(const test_polygon_data& other);
-        test_polygon_data& operator=(const test_polygon_data& rhs);
+        test_polygon_data(const test_polygon_data& other) = delete;
+        test_polygon_data& operator=(const test_polygon_data& rhs) = delete;
     };
 
     typedef test_group<test_polygon_data> group;

@@ -235,8 +235,8 @@ private:
 	geom::Geometry* createEmptyResultGeometry() const;
 
     // Declare type as noncopyable
-    BufferBuilder(const BufferBuilder& other);
-    BufferBuilder& operator=(const BufferBuilder& rhs);
+    BufferBuilder(const BufferBuilder& other) = delete;
+    BufferBuilder& operator=(const BufferBuilder& rhs) = delete;
 };
 
 } // namespace geos::operation::buffer

@@ -85,8 +85,8 @@ private:
 			const SegmentString* e1, int segIndex1);
 
     // Declare type as noncopyable
-    IntersectionAdder(const IntersectionAdder& other);
-    IntersectionAdder& operator=(const IntersectionAdder& rhs);
+    IntersectionAdder(const IntersectionAdder& other) = delete;
+    IntersectionAdder& operator=(const IntersectionAdder& rhs) = delete;
 
 public:
 

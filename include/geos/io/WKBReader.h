@@ -158,8 +158,8 @@ private:
 	void readCoordinate(); // throws IOException
 
     // Declare type as noncopyable
-    WKBReader(const WKBReader& other);
-    WKBReader& operator=(const WKBReader& rhs);
+    WKBReader(const WKBReader& other) = delete;
+    WKBReader& operator=(const WKBReader& rhs) = delete;
 };
 
 } // namespace io

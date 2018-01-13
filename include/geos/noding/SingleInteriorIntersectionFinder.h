@@ -113,8 +113,8 @@ private:
 	std::vector<geom::Coordinate> intSegments;
 
     // Declare type as noncopyable
-    SingleInteriorIntersectionFinder(const SingleInteriorIntersectionFinder& other);
-    SingleInteriorIntersectionFinder& operator=(const SingleInteriorIntersectionFinder& rhs);
+    SingleInteriorIntersectionFinder(const SingleInteriorIntersectionFinder& other) = delete;
+    SingleInteriorIntersectionFinder& operator=(const SingleInteriorIntersectionFinder& rhs) = delete;
 };
 
 } // namespace geos.noding

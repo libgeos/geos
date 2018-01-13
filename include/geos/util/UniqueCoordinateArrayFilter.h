@@ -77,8 +77,8 @@ private:
 	geom::Coordinate::ConstSet uniqPts; 	// unique points set
 
     // Declare type as noncopyable
-    UniqueCoordinateArrayFilter(const UniqueCoordinateArrayFilter& other);
-    UniqueCoordinateArrayFilter& operator=(const UniqueCoordinateArrayFilter& rhs);
+    UniqueCoordinateArrayFilter(const UniqueCoordinateArrayFilter& other) = delete;
+    UniqueCoordinateArrayFilter& operator=(const UniqueCoordinateArrayFilter& rhs) = delete;
 };
 
 } // namespace geos::util

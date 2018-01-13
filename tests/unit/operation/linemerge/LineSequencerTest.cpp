@@ -102,8 +102,8 @@ namespace tut
 
   private:
     // noncopyable
-    test_linesequencer_data(test_linesequencer_data const& other);
-    test_linesequencer_data& operator=(test_linesequencer_data const& rhs);
+    test_linesequencer_data(test_linesequencer_data const& other) = delete;
+    test_linesequencer_data& operator=(test_linesequencer_data const& rhs) = delete;
   };
 
   typedef test_group<test_linesequencer_data> group;

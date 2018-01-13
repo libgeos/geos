@@ -155,8 +155,8 @@ private:
 		const geom::Coordinate& coord, int loc);
 
     // Declare type as noncopyable
-    GeometryGraph(const GeometryGraph& other);
-    GeometryGraph& operator=(const GeometryGraph& rhs);
+    GeometryGraph(const GeometryGraph& other) = delete;
+    GeometryGraph& operator=(const GeometryGraph& rhs) = delete;
 
 public:
 

@@ -169,8 +169,8 @@ private:
     double densifyFrac; // = 0.0;
 
     // Declare type as noncopyable
-    DiscreteFrechetDistance(const DiscreteFrechetDistance& other);
-    DiscreteFrechetDistance& operator=(const DiscreteFrechetDistance& rhs);
+    DiscreteFrechetDistance(const DiscreteFrechetDistance& other) = delete;
+    DiscreteFrechetDistance& operator=(const DiscreteFrechetDistance& rhs) = delete;
 };
 
 } // geos::algorithm::distance

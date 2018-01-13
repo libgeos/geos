@@ -45,8 +45,8 @@ namespace tut
         }
     private:
         // noncopyable
-        test_bufferbuilder_data(test_bufferbuilder_data const& other);
-        test_bufferbuilder_data& operator=(test_bufferbuilder_data const& rhs);
+        test_bufferbuilder_data(test_bufferbuilder_data const& other) = delete;
+        test_bufferbuilder_data& operator=(test_bufferbuilder_data const& rhs) = delete;
     };
 
     typedef test_group<test_bufferbuilder_data> group;

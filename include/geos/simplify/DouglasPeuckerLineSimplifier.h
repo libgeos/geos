@@ -88,8 +88,8 @@ private:
 	void simplifySection(std::size_t i, std::size_t j);
 
     // Declare type as noncopyable
-    DouglasPeuckerLineSimplifier(const DouglasPeuckerLineSimplifier& other);
-    DouglasPeuckerLineSimplifier& operator=(const DouglasPeuckerLineSimplifier& rhs);
+    DouglasPeuckerLineSimplifier(const DouglasPeuckerLineSimplifier& other) = delete;
+    DouglasPeuckerLineSimplifier& operator=(const DouglasPeuckerLineSimplifier& rhs) = delete;
 };
 
 } // namespace geos::simplify

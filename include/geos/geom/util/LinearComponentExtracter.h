@@ -39,8 +39,8 @@ private:
 	LineString::ConstVect &comps;
 
     // Declare type as noncopyable
-    LinearComponentExtracter(const LinearComponentExtracter& other);
-    LinearComponentExtracter& operator=(const LinearComponentExtracter& rhs);
+    LinearComponentExtracter(const LinearComponentExtracter& other) = delete;
+    LinearComponentExtracter& operator=(const LinearComponentExtracter& rhs) = delete;
 
 public:
 	/**

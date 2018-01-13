@@ -62,8 +62,8 @@ private:
 	Coordinate::ConstVect &comps;
 
     // Declare type as noncopyable
-    ComponentCoordinateExtracter(const ComponentCoordinateExtracter& other);
-    ComponentCoordinateExtracter& operator=(const ComponentCoordinateExtracter& rhs);
+    ComponentCoordinateExtracter(const ComponentCoordinateExtracter& other) = delete;
+    ComponentCoordinateExtracter& operator=(const ComponentCoordinateExtracter& rhs) = delete;
 };
 
 } // namespace geos.geom.util

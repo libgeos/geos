@@ -55,8 +55,8 @@ private:
 	Point::ConstVect& comps;
 
     // Declare type as noncopyable
-    PointExtracter(const PointExtracter& other);
-    PointExtracter& operator=(const PointExtracter& rhs);
+    PointExtracter(const PointExtracter& other) = delete;
+    PointExtracter& operator=(const PointExtracter& rhs) = delete;
 };
 
 } // namespace geos.geom.util

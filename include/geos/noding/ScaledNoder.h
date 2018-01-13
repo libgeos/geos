@@ -117,8 +117,8 @@ private:
     mutable std::vector<geom::CoordinateSequence*> newCoordSeq;
 
     // Declare type as noncopyable
-    ScaledNoder(const ScaledNoder& other);
-    ScaledNoder& operator=(const ScaledNoder& rhs);
+    ScaledNoder(const ScaledNoder& other) = delete;
+    ScaledNoder& operator=(const ScaledNoder& rhs) = delete;
 };
 
 } // namespace geos.noding

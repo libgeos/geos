@@ -88,8 +88,8 @@ protected:
 	bool isAnyTestPointInTarget(const geom::Geometry * testGeom) const;
 
     // Declare type as noncopyable
-    PreparedLineStringIntersects(const PreparedLineStringIntersects& other);
-    PreparedLineStringIntersects& operator=(const PreparedLineStringIntersects& rhs);
+    PreparedLineStringIntersects(const PreparedLineStringIntersects& other) = delete;
+    PreparedLineStringIntersects& operator=(const PreparedLineStringIntersects& rhs) = delete;
 };
 
 } // namespace geos::geom::prep

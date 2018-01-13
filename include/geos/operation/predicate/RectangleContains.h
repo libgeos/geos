@@ -110,8 +110,8 @@ public:
 	bool contains(const geom::Geometry& geom);
 
     // Declare type as noncopyable
-    RectangleContains(const RectangleContains& other);
-    RectangleContains& operator=(const RectangleContains& rhs);
+    RectangleContains(const RectangleContains& other) = delete;
+    RectangleContains& operator=(const RectangleContains& rhs) = delete;
 };
 
 

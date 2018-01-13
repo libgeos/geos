@@ -30,8 +30,8 @@ namespace tut
         {}
     private:
         // Declare type as noncopyable
-        test_intersectionmatrix_data(const test_intersectionmatrix_data& other);
-        test_intersectionmatrix_data& operator=(const test_intersectionmatrix_data& rhs);
+        test_intersectionmatrix_data(const test_intersectionmatrix_data& other) = delete;
+        test_intersectionmatrix_data& operator=(const test_intersectionmatrix_data& rhs) = delete;
     };
 
     typedef test_group<test_intersectionmatrix_data> group;

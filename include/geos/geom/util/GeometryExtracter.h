@@ -87,8 +87,8 @@ private:
   };
 
   // Declare type as noncopyable
-  GeometryExtracter(const GeometryExtracter& other);
-  GeometryExtracter& operator=(const GeometryExtracter& rhs);
+  GeometryExtracter(const GeometryExtracter& other) = delete;
+  GeometryExtracter& operator=(const GeometryExtracter& rhs) = delete;
 };
 
 } // namespace geos.geom.util

@@ -135,8 +135,8 @@ private:
 	void computeVertexSnaps(NodedSegmentString* e0, NodedSegmentString* e1);
 
     // Declare type as noncopyable
-    SimpleSnapRounder(const SimpleSnapRounder& other);
-    SimpleSnapRounder& operator=(const SimpleSnapRounder& rhs);
+    SimpleSnapRounder(const SimpleSnapRounder& other) = delete;
+    SimpleSnapRounder& operator=(const SimpleSnapRounder& rhs) = delete;
 };
 
 } // namespace geos::noding::snapround

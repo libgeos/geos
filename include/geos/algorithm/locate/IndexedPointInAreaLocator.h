@@ -97,8 +97,8 @@ private:
 	void buildIndex( const geom::Geometry & g);
 
     // Declare type as noncopyable
-    IndexedPointInAreaLocator(const IndexedPointInAreaLocator& other);
-    IndexedPointInAreaLocator& operator=(const IndexedPointInAreaLocator& rhs);
+    IndexedPointInAreaLocator(const IndexedPointInAreaLocator& other) = delete;
+    IndexedPointInAreaLocator& operator=(const IndexedPointInAreaLocator& rhs) = delete;
 
 public:
 	/**

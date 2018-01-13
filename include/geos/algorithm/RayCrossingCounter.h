@@ -74,8 +74,8 @@ private:
     bool isPointOnSegment;
 
     // Declare type as noncopyable
-    RayCrossingCounter(const RayCrossingCounter& other);
-    RayCrossingCounter& operator=(const RayCrossingCounter& rhs);
+    RayCrossingCounter(const RayCrossingCounter& other) = delete;
+    RayCrossingCounter& operator=(const RayCrossingCounter& rhs) = delete;
 
 public:
 	/**

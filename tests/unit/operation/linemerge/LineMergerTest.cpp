@@ -133,8 +133,8 @@ namespace tut
 
   private:
     // noncopyable
-    test_linemerger_data(test_linemerger_data const& other);
-    test_linemerger_data& operator=(test_linemerger_data const& rhs);
+    test_linemerger_data(test_linemerger_data const& other) = delete;
+    test_linemerger_data& operator=(test_linemerger_data const& rhs) = delete;
   };
 
   typedef test_group<test_linemerger_data> group;

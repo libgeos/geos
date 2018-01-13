@@ -26,8 +26,8 @@ namespace tut
         {}
     private:
         // Declare type as noncopyable
-        test_coordinate_data(test_coordinate_data const& other);
-        test_coordinate_data& operator=(test_coordinate_data const& rhs);
+        test_coordinate_data(test_coordinate_data const& other) = delete;
+        test_coordinate_data& operator=(test_coordinate_data const& rhs) = delete;
     };
 
     typedef test_group<test_coordinate_data> group;
