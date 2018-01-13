@@ -107,7 +107,7 @@ LineString* ExtractLineByLocation::computeLine(const LinearLocation& start, cons
 	if (lastSegmentIndex >= coordinates->size())
     {
         assert(coordinates->size() > 0);
-        lastSegmentIndex = coordinates->size() - indexStep;
+        lastSegmentIndex = static_cast<unsigned int>(coordinates->size() - indexStep);
     }
 
 	if (! start.isVertex())
