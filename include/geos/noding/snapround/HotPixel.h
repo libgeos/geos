@@ -144,8 +144,8 @@ private:
 			const geom::Coordinate& p1) const;
 
     // Declare type as noncopyable
-    HotPixel(const HotPixel& other);
-    HotPixel& operator=(const HotPixel& rhs);
+    HotPixel(const HotPixel& other) = delete;
+    HotPixel& operator=(const HotPixel& rhs) = delete;
 
 public:
 

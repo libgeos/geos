@@ -80,8 +80,8 @@ private:
 	index::SpatialIndex& index;
 
     // Declare type as noncopyable
-    MCIndexPointSnapper(const MCIndexPointSnapper& other);
-    MCIndexPointSnapper& operator=(const MCIndexPointSnapper& rhs);
+    MCIndexPointSnapper(const MCIndexPointSnapper& other) = delete;
+    MCIndexPointSnapper& operator=(const MCIndexPointSnapper& rhs) = delete;
 };
 
 

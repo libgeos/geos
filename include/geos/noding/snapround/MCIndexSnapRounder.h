@@ -142,8 +142,8 @@ private:
 	void checkCorrectness(std::vector<SegmentString*>& inputSegmentStrings);
 
     // Declare type as noncopyable
-    MCIndexSnapRounder(const MCIndexSnapRounder& other);
-    MCIndexSnapRounder& operator=(const MCIndexSnapRounder& rhs);
+    MCIndexSnapRounder(const MCIndexSnapRounder& other) = delete;
+    MCIndexSnapRounder& operator=(const MCIndexSnapRounder& rhs) = delete;
 };
 
 } // namespace geos::noding::snapround
