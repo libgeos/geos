@@ -23,7 +23,7 @@ static GEOSGeometry* INTPOINT2GEOS(INTPOINT* p) {
 	return GEOSGeom_createPoint(seq);
 }
 
-static int INTPOINT_dist(const void* a, const void* b, double* distance, void* userdata) {
+static int INTPOINT_dist(const void* a, const void* b, double* distance, void*) {
 	INTPOINT* p1 = (INTPOINT*) a;
 	INTPOINT* p2 = (INTPOINT*) b;
 

@@ -48,12 +48,12 @@ DiscreteHausdorffDistance::MaxDensifiedByFractionDistanceFilter::filter_ro(
     const geom::Coordinate& p0 = seq.getAt(index - 1);
     const geom::Coordinate& p1 = seq.getAt(index);
 
-    double delx = (p1.x - p0.x)/numSubSegs;
-    double dely = (p1.y - p0.y)/numSubSegs;
+    double delx = (p1.x - p0.x) / static_cast<double>(numSubSegs);
+    double dely = (p1.y - p0.y) / static_cast<double>(numSubSegs);
 
     for (size_t i = 0; i < numSubSegs; ++i) {
-      double x = p0.x + i*delx;
-      double y = p0.y + i*dely;
+      double x = p0.x + static_cast<double>(i) * delx;
+      double y = p0.y + static_cast<double>(i) * dely;
       Coordinate pt(x, y);
       minPtDist.initialize();
       DistanceToPoint::computeDistance(geom, pt, minPtDist);

@@ -80,8 +80,9 @@ public:
 	void stop()
 	{
 		gettimeofday(&stoptime, nullptr);
-		double elapsed = 1000000*(stoptime.tv_sec-starttime.tv_sec)+
-			(stoptime.tv_usec-starttime.tv_usec);
+		double elapsed = static_cast<double>(
+				1000000 * (stoptime.tv_sec - starttime.tv_sec)
+				+ (stoptime.tv_usec - starttime.tv_usec));
 
 		timings.push_back(elapsed);
 		totaltime += elapsed;
@@ -91,7 +92,7 @@ public:
 			if ( elapsed > max ) max = elapsed;
 			if ( elapsed < min ) min = elapsed;
 		}
-		avg = totaltime / timings.size();
+		avg = totaltime / static_cast<double>(timings.size());
 	}
 
 	/** \brief Return Max stored timing */

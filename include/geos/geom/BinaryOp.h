@@ -490,8 +490,8 @@ BinaryOp(const Geometry* g0, const Geometry *g1, BinOp _Op)
 		double maxScale = 1e16;
 
     // Don't use a scale bigger than the input one
-    if ( g0scale && g0scale < maxScale ) maxScale = g0scale;
-    if ( g1scale && g1scale < maxScale ) maxScale = g1scale;
+    if ( g0scale && g0scale < maxScale ) maxScale = static_cast<double>(g0scale);
+    if ( g1scale && g1scale < maxScale ) maxScale = static_cast<double>(g1scale);
 
 
 		for (double scale=maxScale; scale >= 1; scale /= 10)

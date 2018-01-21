@@ -95,10 +95,10 @@ SimpleMCSweepLineIntersector::add(Edge *edge, void* edgeSet)
 	for(size_t i=0; i<n; ++i)
 	{
 		GEOS_CHECK_FOR_INTERRUPTS();
-		MonotoneChain *mc=new MonotoneChain(mce,i);
-		SweepLineEvent *insertEvent=new SweepLineEvent(edgeSet,mce->getMinX(i),nullptr,mc);
+		MonotoneChain *mc=new MonotoneChain(mce, static_cast<int>(i));
+		SweepLineEvent *insertEvent=new SweepLineEvent(edgeSet,mce->getMinX(static_cast<int>(i)),nullptr,mc);
 		events.push_back(insertEvent);
-		events.push_back(new SweepLineEvent(edgeSet,mce->getMaxX(i),insertEvent,mc));
+		events.push_back(new SweepLineEvent(edgeSet,mce->getMaxX(static_cast<int>(i)),insertEvent,mc));
 	}
 }
 
@@ -117,7 +117,7 @@ SimpleMCSweepLineIntersector::prepareEvents()
 		SweepLineEvent *ev=events[i];
 		if (ev->isDelete())
 		{
-			ev->getInsertEvent()->setDeleteEventIndex(i);
+			ev->getInsertEvent()->setDeleteEventIndex(static_cast<int>(i));
 		}
 	}
 }
@@ -133,7 +133,7 @@ SimpleMCSweepLineIntersector::computeIntersections(SegmentIntersector *si)
 		SweepLineEvent *ev=events[i];
 		if (ev->isInsert())
 		{
-			processOverlaps(i,ev->getDeleteEventIndex(),ev,si);
+			processOverlaps(static_cast<int>(i),ev->getDeleteEventIndex(),ev,si);
 		}
 		if (si->getIsDone())
 		{

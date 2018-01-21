@@ -54,8 +54,8 @@ RectangleIntersectionBuilder::reconnect()
   geom::LineString * line2 = lines.back();
   const geom::CoordinateSequence &cs2 = *line2->getCoordinatesRO();
 
-  const int n1 = cs1.size();
-  const int n2 = cs2.size();
+  const auto n1 = cs1.size();
+  const auto n2 = cs2.size();
 
   // Safety check against bad input to prevent segfaults
   if(n1==0 || n2==0)
@@ -229,7 +229,7 @@ double distance(const Rectangle & rect,
 				const std::vector<Coordinate> &ring,
 				const geom::LineString * line)
 {
-  double nr = ring.size();
+  auto nr = ring.size();
   const Coordinate &c1 = ring[nr-1];
 
   const CoordinateSequence * linecs = line->getCoordinatesRO();
@@ -241,7 +241,7 @@ double distance(const Rectangle & rect,
 double distance(const Rectangle & rect,
 				const std::vector<Coordinate> &ring)
 {
-  double nr = ring.size();
+  auto nr = ring.size();
   const Coordinate& c1 = ring[nr-1]; // TODO: ring.back() ?
   const Coordinate& c2 = ring[0]; // TODO: ring.front() ?
   return distance(rect, c1.x, c1.y, c2.x, c2.y);
@@ -277,7 +277,7 @@ normalize_ring(std::vector<Coordinate> &ring)
   // Find the "smallest" coordinate
 
   int best_pos = 0;
-  int n = ring.size();
+  int n = static_cast<int>(ring.size());
   for(int pos = 0; pos<n; ++pos)
 	{
     // TODO: use CoordinateLessThan ?
@@ -353,7 +353,7 @@ void
 RectangleIntersectionBuilder::close_ring(const Rectangle & rect,
 				std::vector<Coordinate> * ring)
 {
-  double nr = ring->size();
+  auto nr = ring->size();
   Coordinate &c2 = (*ring)[0];
   Coordinate &c1 = (*ring)[nr-1];
   double x2 = c2.x;
@@ -435,7 +435,7 @@ RectangleIntersectionBuilder::reconnectPolygons(const Rectangle & rect)
 		  else
 			{
 			  LineString * line = *best_pos;
-			  int nr = ring->size();
+			  auto nr = ring->size();
         const CoordinateSequence& cs = *line->getCoordinatesRO();
 			  close_boundary(rect, ring,
 							 (*ring)[nr-1].x,

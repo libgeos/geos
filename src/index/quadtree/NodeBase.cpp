@@ -162,7 +162,7 @@ NodeBase::size() const
 			subSize += subnode[i]->size();
 		}
 	}
-	return subSize + items.size();
+	return subSize + static_cast<unsigned int>(items.size());
 }
 
 unsigned int

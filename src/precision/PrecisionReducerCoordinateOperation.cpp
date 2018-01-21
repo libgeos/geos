@@ -37,7 +37,7 @@ CoordinateSequence*
 PrecisionReducerCoordinateOperation::edit(const CoordinateSequence *cs,
                                           const Geometry *geom)
 {
-	unsigned int csSize = cs->getSize();
+	unsigned int csSize = static_cast<unsigned int>(cs->getSize());
 
 	if ( csSize == 0 ) return nullptr;
 

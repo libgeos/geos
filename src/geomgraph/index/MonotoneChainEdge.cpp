@@ -101,7 +101,7 @@ MonotoneChainEdge::computeIntersects(const MonotoneChainEdge &mce,
 	{
 		for(size_t j=0; j<J; ++j)
 		{
-			computeIntersectsForChain(i,mce,j,si);
+			computeIntersectsForChain(static_cast<int>(i),mce,static_cast<int>(j),si);
 		}
 	}
 }

@@ -115,7 +115,7 @@ LineMerger::merge()
 	buildEdgeStringsForObviousStartNodes();
 	buildEdgeStringsForIsolatedLoops();
 
-	unsigned numEdgeStrings = edgeStrings.size();
+	auto numEdgeStrings = edgeStrings.size();
 	mergedLineStrings=new vector<LineString*>(numEdgeStrings);
 	for (size_t i=0; i<numEdgeStrings; ++i)
 	{

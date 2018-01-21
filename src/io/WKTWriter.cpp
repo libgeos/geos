@@ -77,7 +77,7 @@ WKTWriter::toLineString(const CoordinateSequence& seq)
 {
 	stringstream buf(ios_base::in|ios_base::out);
     buf << "LINESTRING ";
-	unsigned int npts = seq.getSize();
+	unsigned int npts = static_cast<unsigned int>(seq.getSize());
 	if ( npts == 0 )
 	{
 		buf << "EMPTY";
@@ -360,7 +360,7 @@ WKTWriter::appendLineStringText(const LineString *lineString, int level,
 				writer->write(", ");
 				if (i%10==0) indent(level + 2, writer);
 			}
-			appendCoordinate(&(lineString->getCoordinateN(i)), writer);
+			appendCoordinate(&(lineString->getCoordinateN(static_cast<int>(i))), writer);
 		}
 		writer->write(")");
 	}
@@ -394,7 +394,7 @@ WKTWriter::appendMultiPointText(const MultiPoint *multiPoint,
 		writer->write("EMPTY");
 	} else {
 		writer->write("(");
-		for (unsigned int i=0, n=multiPoint->getNumGeometries();
+		for (unsigned int i=0, n=static_cast<unsigned int>(multiPoint->getNumGeometries());
 				i<n; i++)
 		{
 			if (i > 0)
@@ -417,7 +417,7 @@ void WKTWriter::appendMultiLineStringText(const MultiLineString *multiLineString
 		int level2=level;
 		bool doIndent=indentFirst;
 		writer->write("(");
-		for (unsigned int i=0, n=multiLineString->getNumGeometries();
+		for (unsigned int i=0, n=static_cast<unsigned int>(multiLineString->getNumGeometries());
 				i<n; i++)
 		{
 			if (i>0) {
@@ -441,7 +441,7 @@ void WKTWriter::appendMultiPolygonText(const MultiPolygon *multiPolygon, int lev
 		int level2=level;
 		bool doIndent=false;
 		writer->write("(");
-		for (unsigned int i=0, n=multiPolygon->getNumGeometries();
+		for (unsigned int i=0, n=static_cast<unsigned int>(multiPolygon->getNumGeometries());
 				i < n; i++)
 		{
 			if (i>0) {
@@ -469,7 +469,7 @@ WKTWriter::appendGeometryCollectionText(
 	} else {
 		int level2=level;
 		writer->write("(");
-		for (unsigned int i=0, n=geometryCollection->getNumGeometries();
+		for (unsigned int i=0, n=static_cast<unsigned int>(geometryCollection->getNumGeometries());
 				i < n ; ++i)
 		{
 			if (i>0) {

@@ -69,11 +69,11 @@ DiscreteFrechetDistance::getSegementAt(const CoordinateSequence& seq, size_t ind
 		const geom::Coordinate& p0 = seq.getAt(i);
 		const geom::Coordinate& p1 = seq.getAt(i+1);
 
-		double delx = (p1.x - p0.x)/numSubSegs;
-		double dely = (p1.y - p0.y)/numSubSegs;
+		double delx = (p1.x - p0.x)/static_cast<double>(numSubSegs);
+		double dely = (p1.y - p0.y)/static_cast<double>(numSubSegs);
 
-		double x = p0.x + j*delx;
-		double y = p0.y + j*dely;
+		double x = p0.x + static_cast<double>(j)*delx;
+		double y = p0.y + static_cast<double>(j)*dely;
 		Coordinate pt(x, y);
 		return pt;
 	}

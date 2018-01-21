@@ -88,7 +88,7 @@ TaggedLineString::init()
 			TaggedLineSegment* seg = new TaggedLineSegment(
 					pts->getAt(i),
 					pts->getAt(i+1),
-					parentLine, i);
+					parentLine, static_cast<unsigned int>(i));
 
 			segs.push_back(seg);
 		}
@@ -180,7 +180,7 @@ TaggedLineString::extractCoordinates(
 std::size_t
 TaggedLineString::getResultSize() const
 {
-	unsigned resultSegsSize = resultSegs.size();
+	auto resultSegsSize = resultSegs.size();
 	return resultSegsSize == 0 ? 0 : resultSegsSize + 1;
 }
 

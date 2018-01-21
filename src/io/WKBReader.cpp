@@ -74,6 +74,7 @@ WKBReader::printHEX(istream &is, ostream &os)
 	return os;
 }
 
+
 Geometry *
 WKBReader::readHEX(istream &is)
 {
@@ -83,10 +84,10 @@ WKBReader::readHEX(istream &is)
 	unsigned char result_high, result_low, value;
 	char high, low;
 
-	while( (high = is.get()) != char_traits<char>::eof() )
+	while( (high = static_cast<char>(is.get())) != char_traits<char>::eof() )
 	{
 		// geth the low part of the byte
-		low = is.get();
+		low = static_cast<char>(is.get());
 		if ( low == char_traits<char>::eof() )
 		  throw ParseException("Premature end of HEX string");
 
@@ -210,7 +211,7 @@ WKBReader::readHEX(istream &is)
 				throw  ParseException("Invalid HEX char");
 		}
 
-		value = (result_high<<4) + result_low;
+		value = static_cast<char>((result_high<<4) + result_low);
 
 #if DEBUG_HEX_READER
 	cout<<"HEX "<<high<<low<<" -> DEC "<<(int)value<<endl;
@@ -480,7 +481,7 @@ CoordinateSequence *
 WKBReader::readCoordinateSequence(int size)
 {
 	CoordinateSequence *seq = factory.getCoordinateSequenceFactory()->create(size, inputDimension);
-	unsigned int targetDim = seq->getDimension();
+	auto targetDim = seq->getDimension();
 	if ( targetDim > inputDimension )
 		targetDim = inputDimension;
 	for (int i=0; i<size; i++) {

@@ -127,7 +127,7 @@ double java_math_round(double val)
 const char * getIndent( unsigned int numIndents )
 {
     static const char * pINDENT = "                                      + ";
-    static const unsigned int LENGTH = strlen( pINDENT );
+    static const unsigned int LENGTH = static_cast<unsigned int>(strlen( pINDENT ));
 
     if ( numIndents > LENGTH ) numIndents = LENGTH;
 
@@ -1560,7 +1560,7 @@ usage(char *me, int exitcode, std::ostream &os)
 }
 
 void
-request_interrupt(int sig)
+request_interrupt(int)
 {
   geos::util::Interrupt::request();
 }

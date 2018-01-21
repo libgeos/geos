@@ -108,7 +108,7 @@ LinearLocation::clamp(const Geometry* linear)
 	if (segmentIndex >= linear->getNumPoints())
 	{
 		const LineString* line = dynamic_cast<const LineString*> (linear->getGeometryN(componentIndex));
-		segmentIndex = line->getNumPoints() - 1;
+		segmentIndex = static_cast<unsigned int>(line->getNumPoints() - 1);
 		segmentFraction = 1.0;
 	}
 }
@@ -141,7 +141,7 @@ LinearLocation::getSegmentLength(const Geometry* linearGeom) const
 	// ensure segment index is valid
 	unsigned int segIndex = segmentIndex;
 	if (segmentIndex >= lineComp->getNumPoints() - 1)
-		segIndex = lineComp->getNumPoints() - 2;
+		segIndex = static_cast<unsigned int>(lineComp->getNumPoints() - 2);
 
 	Coordinate p0 = lineComp->getCoordinateN(segIndex);
 	Coordinate p1 = lineComp->getCoordinateN(segIndex + 1);
@@ -152,9 +152,9 @@ LinearLocation::getSegmentLength(const Geometry* linearGeom) const
 void
 LinearLocation::setToEnd(const Geometry* linear)
 {
-	componentIndex = linear->getNumGeometries() - 1;
+	componentIndex = static_cast<unsigned int>(linear->getNumGeometries() - 1);
 	const LineString* lastLine = dynamic_cast<const LineString*>(linear->getGeometryN(componentIndex));
-	segmentIndex = lastLine->getNumPoints() - 1;
+	segmentIndex = static_cast<unsigned int>(lastLine->getNumPoints() - 1);
 	segmentFraction = 1.0;
 }
 
@@ -210,7 +210,7 @@ LinearLocation::getSegment(const Geometry* linearGeom) const
 	// check for endpoint - return last segment of the line if so
 	if (segmentIndex >= lineComp->getNumPoints() - 1)
 	{
-		Coordinate prev = lineComp->getCoordinateN(lineComp->getNumPoints() - 2);
+		Coordinate prev = lineComp->getCoordinateN(static_cast<int>(lineComp->getNumPoints() - 2));
 		return std::unique_ptr<LineSegment>(new LineSegment(prev, p0));
 	}
 	Coordinate p1 = lineComp->getCoordinateN(segmentIndex + 1);
@@ -315,7 +315,7 @@ LinearLocation::isEndpoint(const Geometry& linearGeom) const
   const LineString& lineComp = dynamic_cast<const LineString&>(
       *(linearGeom.getGeometryN(componentIndex)) );
   // check for endpoint
-  unsigned int nseg = lineComp.getNumPoints() - 1;
+  auto nseg = lineComp.getNumPoints() - 1;
   return segmentIndex >= nseg
         || (segmentIndex == nseg && segmentFraction >= 1.0);
 

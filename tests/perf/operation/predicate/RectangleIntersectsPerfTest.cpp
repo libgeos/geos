@@ -108,7 +108,7 @@ private:
   }
 
   // Push newly created geoms to rectLit
-  void createRectangles(const Envelope& env, int nRect, double rectSize,
+  void createRectangles(const Envelope& env, int nRect, double,
                         vector<const Geometry*>& rectList)
   {
     int nSide =  1 + (int)sqrt((double) nRect);

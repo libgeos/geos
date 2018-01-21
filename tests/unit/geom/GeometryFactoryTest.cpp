@@ -1122,7 +1122,7 @@ reader_(factory_.get())
 
 		for (std::size_t i = 0; i < size; ++i)
 		{
-			const std::size_t factor = i * i;
+			const double factor = static_cast<double>(i * i);
 			CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(lineSize);
 			ensure( coords != nullptr );
 			coords->setAt(Coordinate(0. + factor, 0. + factor), 0);
@@ -1164,7 +1164,7 @@ reader_(factory_.get())
 
 		for (std::size_t i = 0; i < size; ++i)
 		{
-			const std::size_t factor = i * i;
+			const double factor = static_cast<double>(i * i);
 			CoordArrayPtr coords = new geos::geom::CoordinateArraySequence(lineSize);
 			ensure( coords != nullptr );
 			coords->setAt(Coordinate(0. + factor, 0. + factor), 0);
