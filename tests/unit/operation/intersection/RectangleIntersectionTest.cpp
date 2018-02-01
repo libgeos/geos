@@ -1517,7 +1517,7 @@ namespace tut
 
 	
     // PostGIS hanging unit test
-    template<> template<> void object::test<207>()
+    template<> template<> void object::test<208>()
     {
       Rectangle r(0.000000, -20000000.000000, 20000000.000000, -1.000000);
       const char *inp =
