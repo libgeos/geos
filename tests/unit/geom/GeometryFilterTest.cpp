@@ -84,13 +84,13 @@ void object::test<1>()
     //   0: GeometryCollection
     //   1: Point
     //   2: Polygon
-    ensure_equals(lineal.size(), 4);
+    ensure_equals(lineal.size(), 4ul);
     // TODO: shouldn't be 1 for POLYGON?
-    ensure_equals(nonlineal.size(), 3);
+    ensure_equals(nonlineal.size(), 3ul);
     // TODO: is 7, shouldn't be not 4?
     //ensure_equals(lineal.size() + nonlineal.size(), g->getNumGeometries());
-    ensure_equals(g->getNumGeometries(), 4);
-    ensure_equals(lineal.size() + nonlineal.size(), 7);
+    ensure_equals(g->getNumGeometries(), 4ul);
+    ensure_equals(lineal.size() + nonlineal.size(), 7ul);
 }
 
 } // namespace tut

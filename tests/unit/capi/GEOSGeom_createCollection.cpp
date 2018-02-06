@@ -107,7 +107,7 @@ namespace tut
         // takes ownership of individual geometries
         geom_ = GEOSGeom_createCollection_r(handle_, GEOS_MULTIPOINT,
             geoms.data(), static_cast<int>(geoms.size()));
-        ensure_equals(GEOSGetNumGeometries_r(handle_, geom_), geoms.size());
+        ensure_equals(static_cast<size_t>(GEOSGetNumGeometries_r(handle_, geom_)), geoms.size());
     }
 
 } // namespace tut

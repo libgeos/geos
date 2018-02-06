@@ -589,7 +589,7 @@ namespace tut
 
 		sequence.add(0, Coordinate(4,4), false); // don't alow repeated
 		ensure_equals( sequence.size(), std::size_t(4) );
-		ensure_equals( sequence.getAt(0).x, std::size_t(4) );
+		ensure_equals( sequence.getAt(0).x, 4.0 );
 
 		// do not allow repeated
 		sequence.add(0, Coordinate(4,4), false);
