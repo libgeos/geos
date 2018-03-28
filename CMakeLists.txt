@@ -117,6 +117,8 @@ if(CMAKE_BUILD_TYPE STREQUAL Debug)
   add_definitions(-D_DEBUG)
 endif()
 
+add_definitions(-DUSE_UNSTABLE_GEOS_CPP_API)
+
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 
   # General options
