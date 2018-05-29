@@ -130,6 +130,7 @@ geos_unit_SOURCES = \
 	capi/GEOSVoronoiDiagramTest.cpp \
 	capi/GEOSGeomFromWKBTest.cpp \
 	capi/GEOSGeomToWKTTest.cpp \
+	capi/GEOSGeom_extentTest.cpp \
 	capi/GEOSGeom_setPrecisionTest.cpp \
 	capi/GEOSGetCentroidTest.cpp \
 	capi/GEOSContainsTest.cpp \

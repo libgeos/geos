@@ -921,6 +921,26 @@ GEOSGeom_getCoordinateDimension(const Geometry *g)
     return GEOSGeom_getCoordinateDimension_r( handle, g );
 }
 
+int GEOS_DLL GEOSGeom_getXMin(const GEOSGeometry* g, double* value)
+{
+    return GEOSGeom_getXMin_r(handle, g, value);
+}
+
+int GEOS_DLL GEOSGeom_getYMin(const GEOSGeometry* g, double* value)
+{
+    return GEOSGeom_getYMin_r(handle, g, value);
+}
+
+int GEOS_DLL GEOSGeom_getXMax(const GEOSGeometry* g, double* value)
+{
+    return GEOSGeom_getXMax_r(handle, g, value);
+}
+
+int GEOS_DLL GEOSGeom_getYMax(const GEOSGeometry* g, double* value)
+{
+    return GEOSGeom_getYMax_r(handle, g, value);
+}
+
 Geometry *
 GEOSSimplify(const Geometry *g, double tolerance)
 {

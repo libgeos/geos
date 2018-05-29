@@ -1085,6 +1085,13 @@ extern int GEOS_DLL GEOSGeom_getDimensions_r(GEOSContextHandle_t handle,
  */
 extern int GEOS_DLL GEOSGeom_getCoordinateDimension_r(GEOSContextHandle_t handle,
                                                       const GEOSGeometry* g);
+/*
+ * Return 0 on exception
+ */
+extern int GEOS_DLL GEOSGeom_getXMin_r(GEOSContextHandle_t handle, const GEOSGeometry* g, double* value);
+extern int GEOS_DLL GEOSGeom_getYMin_r(GEOSContextHandle_t handle, const GEOSGeometry* g, double* value);
+extern int GEOS_DLL GEOSGeom_getXMax_r(GEOSContextHandle_t handle, const GEOSGeometry* g, double* value);
+extern int GEOS_DLL GEOSGeom_getYMax_r(GEOSContextHandle_t handle, const GEOSGeometry* g, double* value);
 
 /*
  * Return NULL on exception.
@@ -1969,6 +1976,14 @@ extern int GEOS_DLL GEOSGeom_getDimensions(const GEOSGeometry* g);
  * Return 2 or 3.
  */
 extern int GEOS_DLL GEOSGeom_getCoordinateDimension(const GEOSGeometry* g);
+
+/*
+ * Return 0 on exception
+ */
+extern int GEOS_DLL GEOSGeom_getXMin(const GEOSGeometry* g, double* value);
+extern int GEOS_DLL GEOSGeom_getYMin(const GEOSGeometry* g, double* value);
+extern int GEOS_DLL GEOSGeom_getXMax(const GEOSGeometry* g, double* value);
+extern int GEOS_DLL GEOSGeom_getYMax(const GEOSGeometry* g, double* value);
 
 /*
  * Return NULL on exception.
