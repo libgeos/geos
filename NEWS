@@ -3,6 +3,7 @@ YYYY-MM-DD
 
 - New things:
   - CAPI: GEOSDistanceIndexed (#795, Dan Baston)
+  - CAPI: GEOSCoordSeq_isCCW (#870, Dan Baston)
   - CAPI: GEOSFrechetDistance (#797, Shinichi SUGIYAMA)
 - Improvements
   - Interruptible snap operation (Paul Ramsey)

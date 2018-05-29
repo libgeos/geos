@@ -849,6 +849,12 @@ GEOSCoordSeq_getDimensions(const CoordinateSequence *s, unsigned int *dims)
     return GEOSCoordSeq_getDimensions_r( handle, s, dims );
 }
 
+int
+GEOSCoordSeq_isCCW(const CoordinateSequence *s, char *is_ccw)
+{
+    return GEOSCoordSeq_isCCW_r(handle, s, is_ccw);
+}
+
 void
 GEOSCoordSeq_destroy(CoordinateSequence *s)
 {

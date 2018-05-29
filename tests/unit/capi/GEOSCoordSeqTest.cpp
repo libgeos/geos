@@ -257,5 +257,70 @@ namespace tut
 
     }
 
+    template<>
+    template<>
+    void object::test<7>() {
+        // ccw orientation
+        cs_ = GEOSCoordSeq_create(4, 2);
+        char ccw;
+
+        GEOSCoordSeq_setX(cs_, 0, 0);
+        GEOSCoordSeq_setY(cs_, 0, 0);
+
+        GEOSCoordSeq_setX(cs_, 1, 1);
+        GEOSCoordSeq_setY(cs_, 1, 0);
+
+        GEOSCoordSeq_setX(cs_, 2, 1);
+        GEOSCoordSeq_setY(cs_, 2, 1);
+
+        GEOSCoordSeq_setX(cs_, 3, 0);
+        GEOSCoordSeq_setY(cs_, 3, 0);
+
+        ensure_equals(GEOSCoordSeq_isCCW(cs_, &ccw), 1);
+        ensure(ccw);
+    }
+
+    template<>
+    template<>
+    void object::test<8>() {
+        // cw orientation
+        cs_ = GEOSCoordSeq_create(4, 2);
+        char ccw;
+
+        GEOSCoordSeq_setX(cs_, 0, 0);
+        GEOSCoordSeq_setY(cs_, 0, 0);
+
+        GEOSCoordSeq_setX(cs_, 1, 1);
+        GEOSCoordSeq_setY(cs_, 1, 1);
+
+        GEOSCoordSeq_setX(cs_, 2, 1);
+        GEOSCoordSeq_setY(cs_, 2, 0);
+
+        GEOSCoordSeq_setX(cs_, 3, 0);
+        GEOSCoordSeq_setY(cs_, 3, 0);
+
+        ensure_equals(GEOSCoordSeq_isCCW(cs_, &ccw), 1);
+        ensure(!ccw );
+    }
+
+    template<>
+    template<>
+    void object::test<9>() {
+        // no orientation
+        cs_ = GEOSCoordSeq_create(3, 2);
+        char ccw;
+
+        GEOSCoordSeq_setX(cs_, 0, 0);
+        GEOSCoordSeq_setY(cs_, 0, 0);
+
+        GEOSCoordSeq_setX(cs_, 1, 1);
+        GEOSCoordSeq_setY(cs_, 1, 1);
+
+        GEOSCoordSeq_setX(cs_, 2, 1);
+        GEOSCoordSeq_setY(cs_, 2, 0);
+
+        ensure_equals(GEOSCoordSeq_isCCW(cs_, &ccw), 0);
+    }
+
 } // namespace tut
 
