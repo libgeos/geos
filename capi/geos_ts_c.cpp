@@ -124,8 +124,12 @@ using namespace std;
 // import the most frequently used definitions globally
 using geos::geom::Geometry;
 using geos::geom::LineString;
+using geos::geom::LinearRing;
+using geos::geom::MultiLineString;
+using geos::geom::MultiPolygon;
 using geos::geom::Polygon;
 using geos::geom::CoordinateSequence;
+using geos::geom::GeometryCollection;
 using geos::geom::GeometryFactory;
 
 using geos::io::WKTReader;
@@ -3725,6 +3729,121 @@ GEOSLineMerge_r(GEOSContextHandle_t extHandle, const Geometry *g)
     }
 
     return out;
+}
+
+Geometry *
+GEOSReverse_r(GEOSContextHandle_t extHandle, const Geometry *g)
+{
+    assert(0 != g);
+
+    if ( 0 == extHandle )
+    {
+        return nullptr;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return nullptr;
+    }
+
+    try
+    {
+        if (g->isEmpty()) {
+            return g->clone();
+        }
+
+        int type = g->getGeometryTypeId();
+        if (type == GEOS_LINEARRING)
+        {
+            const LinearRing* lr = dynamic_cast<const LinearRing*>(g);
+            if (lr != nullptr)
+            {
+                return lr->reverse();
+            }
+        }
+        else if (type == GEOS_LINESTRING)
+        {
+            const LineString* ls = dynamic_cast<const LineString*>(g);
+            if (ls != nullptr)
+            {
+                return ls->reverse();
+            }
+        }
+        else if (type == GEOS_MULTILINESTRING)
+        {
+            const MultiLineString* mls = dynamic_cast<const MultiLineString*>(g);
+            if (mls != nullptr)
+            {
+                return mls->reverse();
+            }
+        }
+        else if (type == GEOS_POLYGON)
+        {
+            const Polygon* p = dynamic_cast<const Polygon*>(g);
+            if (p != nullptr)
+            {
+                const LinearRing* exteriorRing = dynamic_cast<const LinearRing*>(p->getExteriorRing());
+                LinearRing* exteriorRingReversed = dynamic_cast<LinearRing*>(exteriorRing->reverse());
+
+                auto* interiorRingsReversed = new std::vector<Geometry*>();
+
+                for (size_t i = 0; i < p->getNumInteriorRing(); i++)
+                {
+                    const LinearRing* interiorRing = dynamic_cast<const LinearRing*>(p->getInteriorRingN(i));
+                    LinearRing* interiorRingReversed = dynamic_cast<LinearRing*>(interiorRing->reverse());
+
+                    interiorRingsReversed->push_back(interiorRingReversed);
+                }
+
+                return p->getFactory()->createPolygon(exteriorRingReversed, interiorRingsReversed);
+            }
+        }
+        else if (type == GEOS_MULTIPOLYGON)
+        {
+            const MultiPolygon* mp = dynamic_cast<const MultiPolygon*>(g);
+            if (mp != nullptr)
+            {
+                auto* reversed = new std::vector<Geometry*>();
+                for (size_t i = 0; i < mp->getNumGeometries(); i++)
+                {
+                    reversed->push_back(GEOSReverse_r(extHandle, mp->getGeometryN(i)));
+                }
+
+                return g->getFactory()->createMultiPolygon(reversed);
+            }
+
+        }
+        else if (type == GEOS_POINT || type == GEOS_MULTIPOINT)
+        {
+            return g->clone();
+        }
+        else if (type == GEOS_GEOMETRYCOLLECTION)
+        {
+            const GeometryCollection* gc = dynamic_cast<const GeometryCollection*>(g);
+            if (gc != nullptr)
+            {
+                auto reversed = new std::vector<Geometry*>();
+                for (size_t i = 0; i < gc->getNumGeometries(); i++)
+                {
+                    reversed->push_back(GEOSReverse_r(extHandle, gc->getGeometryN(i)));
+                }
+
+                return g->getFactory()->createGeometryCollection(reversed);
+            }
+        }
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return nullptr;
 }
 
  void*
