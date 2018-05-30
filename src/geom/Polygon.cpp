@@ -505,5 +505,25 @@ Polygon::isRectangle() const
 	return true;
 }
 
+Geometry*
+Polygon::reverse() const
+{
+	if (isEmpty()) {
+		return clone();
+	}
+
+	auto* exteriorRingReversed = dynamic_cast<LinearRing*>(shell->reverse());
+	auto* interiorRingsReversed = new std::vector<Geometry*>{holes->size()};
+
+	std::transform(holes->begin(),
+				   holes->end(),
+				   interiorRingsReversed->begin(),
+				   [](const Geometry * g) {
+		             return g->reverse();
+	});
+
+	return getFactory()->createPolygon(exteriorRingReversed, interiorRingsReversed);
+}
+
 } // namespace geos::geom
 } // namespace geos

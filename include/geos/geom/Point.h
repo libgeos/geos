@@ -132,7 +132,7 @@ public:
 		// a Point is always in normalized form
 	}
 
-  	Geometry* reverse() const
+  	Geometry* reverse() const override
 	{
 		return clone();
 	}

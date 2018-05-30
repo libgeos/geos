@@ -88,7 +88,7 @@ public:
 	 *
 	 * @return a MultiLineString in the reverse order
 	 */
-	MultiLineString* reverse() const;
+	Geometry* reverse() const override;
 
 protected:
 

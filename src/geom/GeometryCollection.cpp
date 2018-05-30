@@ -24,6 +24,7 @@
 #include <geos/geom/CoordinateSequenceFilter.h>
 #include <geos/geom/CoordinateArraySequenceFactory.h>
 #include <geos/geom/Dimension.h>
+#include <geos/geom/GeometryFactory.h>
 #include <geos/geom/GeometryFilter.h>
 #include <geos/geom/GeometryComponentFilter.h>
 #include <geos/geom/Envelope.h>
@@ -365,6 +366,25 @@ GeometryTypeId
 GeometryCollection::getGeometryTypeId() const
 {
 	return GEOS_GEOMETRYCOLLECTION;
+}
+
+Geometry*
+GeometryCollection::reverse() const
+{
+	if (isEmpty()) {
+		return clone();
+	}
+	
+	auto* reversed = new std::vector<Geometry*>{geometries->size()};
+
+	std::transform(geometries->begin(),
+				   geometries->end(),
+				   reversed->begin(),
+				   [](const Geometry* g) {
+					   return g->reverse();
+				   });
+
+	return getFactory()->createGeometryCollection(reversed);
 }
 
 } // namespace geos::geom

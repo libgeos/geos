@@ -115,7 +115,7 @@ public:
 
 	void setPoints(CoordinateSequence* cl);
 
-  	Geometry* reverse() const;
+  	Geometry* reverse() const override;
 
 private:
 

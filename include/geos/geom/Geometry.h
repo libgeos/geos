@@ -584,6 +584,14 @@ public:
 	/// all the points in the Geometry.
 	virtual Geometry* convexHull() const;
 
+	/**
+     * Computes a new geometry which has all component coordinate sequences
+     * in reverse order (opposite orientation) to this one.
+     *
+     * @return a reversed geometry
+     */
+	virtual Geometry* reverse() const=0;
+
 	/** \brief
 	 * Returns a Geometry representing the points shared by
 	 * this Geometry and other.
