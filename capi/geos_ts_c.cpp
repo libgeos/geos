@@ -4165,6 +4165,40 @@ GEOSCoordSeq_getDimensions_r(GEOSContextHandle_t extHandle, const CoordinateSequ
     return 0;
 }
 
+int
+GEOSCoordSeq_isCCW_r(GEOSContextHandle_t extHandle, const CoordinateSequence *cs, char *val)
+{
+    assert(cs != nullptr);
+    assert(val != nullptr);
+
+    if (extHandle == nullptr) {
+        return 0;
+    }
+
+    GEOSContextHandleInternal_t *handle = nullptr;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return 0;
+    }
+    try
+    {
+        *val = geos::algorithm::CGAlgorithms::isCCW(cs);
+        return 1;
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return 0;
+}
+
 void
 GEOSCoordSeq_destroy_r(GEOSContextHandle_t extHandle, CoordinateSequence *s)
 {

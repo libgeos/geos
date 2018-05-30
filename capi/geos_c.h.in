@@ -346,6 +346,14 @@ extern int GEOS_DLL GEOSCoordSeq_getSize_r(GEOSContextHandle_t handle,
 extern int GEOS_DLL GEOSCoordSeq_getDimensions_r(GEOSContextHandle_t handle,
                                                  const GEOSCoordSequence* s,
                                                  unsigned int *dims);
+/*
+ * Check orientation of a CoordinateSequence and set 'is_ccw' to 1
+ * if it has counter-clockwise orientation, 0 otherwise.
+ * Return 0 on exception, 1 on success.
+ */
+extern int GEOS_DLL GEOSCoordSeq_isCCW_r(GEOSContextHandle_t handle,
+                                         const GEOSCoordSequence* s,
+                                         char* is_ccw);
 
 /************************************************************************
  *
@@ -1362,6 +1370,13 @@ extern int GEOS_DLL GEOSCoordSeq_getSize(const GEOSCoordSequence* s,
     unsigned int *size);
 extern int GEOS_DLL GEOSCoordSeq_getDimensions(const GEOSCoordSequence* s,
     unsigned int *dims);
+
+/*
+ * Check orientation of a CoordinateSequence and set 'is_ccw' to 1
+ * if it has counter-clockwise orientation, 0 otherwise.
+ * Return 0 on exception, 1 on success.
+ */
+extern int GEOS_DLL GEOSCoordSeq_isCCW(const GEOSCoordSequence* s, char* is_ccw);
 
 /************************************************************************
  *
