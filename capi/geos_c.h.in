@@ -721,6 +721,30 @@ extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagram_r(
 				double tolerance,
 				int onlyEdges);
 
+/*
+ * Computes the coordinate where two line segments intersect, if any
+ *
+ * @param ax0 x-coordinate of first point in first segment
+ * @param ay0 y-coordinate of first point in first segment
+ * @param ax1 x-coordinate of second point in first segment
+ * @param ay1 y-coordinate of second point in first segment
+ * @param bx0 x-coordinate of first point in second segment
+ * @param by0 y-coordinate of first point in second segment
+ * @param bx1 x-coordinate of second point in second segment
+ * @param by1 y-coordinate of second point in second segment
+ * @param cx x-coordinate of intersection point
+ * @param cy y-coordinate of intersection point
+ *
+ * @return 0 on error, 1 on success, -1 if segments do not intersect
+ */
+
+extern int GEOS_DLL GEOSSegmentIntersection_r(
+       GEOSContextHandle_t extHandle,
+       double ax0, double ay0,
+       double ax1, double ay1,
+       double bx0, double by0,
+       double bx1, double by1,
+       double* cx, double* cy);
 
 /************************************************************************
  *
@@ -1687,6 +1711,29 @@ extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagram(
                 const GEOSGeometry *env,
                 double tolerance,
                 int onlyEdges);
+/*
+ * Computes the coordinate where two line segments intersect, if any
+ *
+ * @param ax0 x-coordinate of first point in first segment
+ * @param ay0 y-coordinate of first point in first segment
+ * @param ax1 x-coordinate of second point in first segment
+ * @param ay1 y-coordinate of second point in first segment
+ * @param bx0 x-coordinate of first point in second segment
+ * @param by0 y-coordinate of first point in second segment
+ * @param bx1 x-coordinate of second point in second segment
+ * @param by1 y-coordinate of second point in second segment
+ * @param cx x-coordinate of intersection point
+ * @param cy y-coordinate of intersection point
+ *
+ * @return 0 on error, 1 on success, -1 if segments do not intersect
+ */
+
+extern int GEOS_DLL GEOSSegmentIntersection(
+       double ax0, double ay0,
+       double ax1, double ay1,
+       double bx0, double by0,
+       double bx1, double by1,
+       double* cx, double* cy);
 
 /************************************************************************
  *
