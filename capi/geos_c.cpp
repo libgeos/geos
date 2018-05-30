@@ -722,6 +722,12 @@ GEOSLineMerge(const Geometry *g)
     return GEOSLineMerge_r( handle, g );
 }
 
+Geometry *
+GEOSReverse(const Geometry *g)
+{
+    return GEOSReverse_r( handle, g );
+}
+
 int
 GEOSGetSRID(const Geometry *g)
 {

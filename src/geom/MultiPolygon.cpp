@@ -28,6 +28,7 @@
 #include <cassert>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 #ifndef GEOS_INLINE
 # include "geos/geom/MultiPolygon.inl"
@@ -106,6 +107,25 @@ MultiPolygon::equalsExact(const Geometry *other, double tolerance) const
 GeometryTypeId
 MultiPolygon::getGeometryTypeId() const {
 	return GEOS_MULTIPOLYGON;
+}
+
+Geometry*
+MultiPolygon::reverse() const
+{
+	if (isEmpty()) {
+		return clone();
+	}
+
+    auto* reversed = new std::vector<Geometry*>{geometries->size()};
+
+    std::transform(geometries->begin(),
+                   geometries->end(),
+                   reversed->begin(),
+                   [](const Geometry* g) {
+                       return g->reverse();
+                   });
+
+    return getFactory()->createMultiPolygon(reversed);
 }
 
 } // namespace geos::geom

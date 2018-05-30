@@ -125,6 +125,10 @@ LinearRing::getGeometryTypeId() const {
 Geometry*
 LinearRing::reverse() const
 {
+	if (isEmpty()) {
+		return clone();
+	}
+
 	assert(points.get());
 	CoordinateSequence* seq = points->clone();
 	CoordinateSequence::reverse(seq);

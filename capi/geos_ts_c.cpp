@@ -124,8 +124,12 @@ using namespace std;
 // import the most frequently used definitions globally
 using geos::geom::Geometry;
 using geos::geom::LineString;
+using geos::geom::LinearRing;
+using geos::geom::MultiLineString;
+using geos::geom::MultiPolygon;
 using geos::geom::Polygon;
 using geos::geom::CoordinateSequence;
+using geos::geom::GeometryCollection;
 using geos::geom::GeometryFactory;
 
 using geos::io::WKTReader;
@@ -3725,6 +3729,39 @@ GEOSLineMerge_r(GEOSContextHandle_t extHandle, const Geometry *g)
     }
 
     return out;
+}
+
+Geometry *
+GEOSReverse_r(GEOSContextHandle_t extHandle, const Geometry *g)
+{
+    assert(0 != g);
+
+    if ( 0 == extHandle )
+    {
+        return nullptr;
+    }
+
+    GEOSContextHandleInternal_t *handle = 0;
+    handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+    if ( 0 == handle->initialized )
+    {
+        return nullptr;
+    }
+
+    try
+    {
+        return g->reverse();
+    }
+    catch (const std::exception &e)
+    {
+        handle->ERROR_MESSAGE("%s", e.what());
+    }
+    catch (...)
+    {
+        handle->ERROR_MESSAGE("Unknown exception thrown");
+    }
+
+    return nullptr;
 }
 
  void*
