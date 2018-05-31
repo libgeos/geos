@@ -6359,7 +6359,7 @@ GEOSSTRtree_nearest_r(GEOSContextHandle_t extHandle,
                       geos::index::strtree::STRtree *tree,
                       const geos::geom::Geometry* geom)
 {
-    return (const GEOSGeometry*) GEOSSTRtree_nearest_generic_r( extHandle, tree, geom, geom->getEnvelope(), NULL, NULL);
+    return (const GEOSGeometry*) GEOSSTRtree_nearest_generic_r( extHandle, tree, geom, geom, nullptr, nullptr);
 }
 
 const void *
