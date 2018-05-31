@@ -164,6 +164,7 @@ geos_unit_SOURCES = \
 	capi/GEOSSTRtreeTest.cpp \
 	capi/GEOSRelateBoundaryNodeRuleTest.cpp \
 	capi/GEOSRelatePatternMatchTest.cpp \
+	capi/GEOSReverseTest.cpp \
 	capi/GEOSUnaryUnionTest.cpp \
 	capi/GEOSisValidDetailTest.cpp \
 	capi/GEOSisClosedTest.cpp

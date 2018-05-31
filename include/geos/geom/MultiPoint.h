@@ -86,6 +86,8 @@ public:
 
 	Geometry *clone() const override { return new MultiPoint(*this); }
 
+	Geometry* reverse() const override { return clone(); }
+
 protected:
 
 	/**

@@ -7,6 +7,7 @@ YYYY-MM-DD
   - CAPI: GEOSGeom_getXMin, GEOSGeom_getXMax,
           GEOSGeom_getYMin, GEOSGeom_getYMax (#871, Dan Baston)
   - CAPI: GEOSFrechetDistance (#797, Shinichi SUGIYAMA)
+  - CAPI: GEOSReverse (#872, Dan Baston)
 - Improvements
   - Interruptible snap operation (Paul Ramsey)
 - C++ API changes:
