@@ -203,7 +203,7 @@ namespace tut
     }
 
     // Test PreparedIntersects: point on segment with FIXED PM
-    // X coordinate of 3rd and 4th vertises of the line are not
+    // X coordinate of 3rd and 4th vertices of the line are not
     // float-point exact with X coordinate of the point.
     // The X values differ after 14th decimal place:
     // POINT (-23.1094689600055080 50.5195368635957180)
@@ -287,6 +287,10 @@ namespace tut
             ensure_equals(ret, 1);
             ret = GEOSPreparedContainsProperly(prepGeom1_, geom2_);
             ensure_equals(ret, 0);
+
+            GEOSGeom_destroy(geom1_);
+            GEOSGeom_destroy(geom2_);
+            GEOSPreparedGeom_destroy(prepGeom1_);
         }
 
         // A does NOT contain B if precision is extended to 1e+11 or beyond
@@ -344,6 +348,10 @@ namespace tut
             ensure_equals(ret, 1);
             ret = GEOSPreparedContainsProperly(prepGeom1_, geom2_);
             ensure_equals(ret, 0);
+
+            GEOSGeom_destroy(geom1_);
+            GEOSGeom_destroy(geom2_);
+            GEOSPreparedGeom_destroy(prepGeom1_);
         }
 
         // A contains B if FLOATING PM is used with extended precision

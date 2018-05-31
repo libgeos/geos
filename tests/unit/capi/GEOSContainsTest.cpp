@@ -146,6 +146,8 @@ namespace tut
             ensure_equals(ret, 1);
             ret = GEOSContains(geom2_, geom1_);
             ensure_equals(ret, 0);
+            GEOSGeom_destroy(geom1_);
+            GEOSGeom_destroy(geom2_);
         }
 
         // A does NOT contain B if precision is extended to 1e+11 or beyond
@@ -176,7 +178,7 @@ namespace tut
     template<>
     void object::test<5>()
     {
-        // Coincident vertext at -753.167968418005 93709.4279185742
+        // Coincident vertex at -753.167968418005 93709.4279185742
         //POLYGON ((-753.167968418005 93754.0955183194,-816.392328351464 93754.0955183194,-816.392328351464 93709.4279185742,-753.167968418005 93709.4279185742,-753.167968418005 93754.0955183194))
         std::string const outer("01030000800100000005000000bd70d3ff578987c09e373e87a1e3f6400000000000000000a9f60b7d238389c09e373e87a1e3f6400000000000000000a9f60b7d238389c09625c1d8d6e0f6400000000000000000bd70d3ff578987c09625c1d8d6e0f6400000000000000000bd70d3ff578987c09e373e87a1e3f6400000000000000000");
         //POLYGON ((-753.167968418005 93747.6909727677,-799.641978447015 93747.6909727677,-799.641978447015 93709.4279185742,-753.167968418005 93709.4279185742,-753.167968418005 93747.6909727677))
@@ -199,6 +201,9 @@ namespace tut
             ensure_equals(ret, 1);
             ret = GEOSContains(geom2_, geom1_);
             ensure_equals(ret, 0);
+
+            GEOSGeom_destroy(geom1_);
+            GEOSGeom_destroy(geom2_);
         }
 
         // A contains B if FLOATING PM is used with extended precision

@@ -10,6 +10,7 @@
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Envelope.h>
+#include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/Point.h>
@@ -571,7 +572,7 @@ namespace tut
     template<>
     void object::test<39>()
 	{
-		GeometryPtr gBuffer(poly_->buffer(0));
+		std::unique_ptr<geos::geom::Geometry> gBuffer(poly_->buffer(0));
         ensure_not(gBuffer->isEmpty());
         ensure(gBuffer->isValid());
         ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);

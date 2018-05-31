@@ -5,7 +5,7 @@ YYYY-MM-DD
   - CAPI: GEOSDistanceIndexed (#795, Dan Baston)
   - CAPI: GEOSCoordSeq_isCCW (#870, Dan Baston)
   - CAPI: GEOSGeom_getXMin, GEOSGeom_getXMax,
-          GEOSGeom_getYMin, GEOSGom_getYMax (#871, Dan Baston)
+          GEOSGeom_getYMin, GEOSGeom_getYMax (#871, Dan Baston)
   - CAPI: GEOSFrechetDistance (#797, Shinichi SUGIYAMA)
 - Improvements
   - Interruptible snap operation (Paul Ramsey)

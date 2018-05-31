@@ -195,7 +195,6 @@ namespace tut
     void object::test<7>()
     {
       // Polygon A
-      {
         geom1_ = GEOSGeomFromWKT("POLYGON(("
           "182111.031940953 141935.935903267,181944.315698016 141813.663222482,"
           "181993.426552077 141735.161360171,182025.215323227 141755.058841504,"
@@ -209,9 +208,12 @@ namespace tut
 
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
         ensure_equals(std::string(wkt_), std::string("POINT (182077.08 141881.65)"));
-      }
-      // Polygon B
-      {
+    }
+
+    template<>
+    template<>
+    void object::test<8>() {
+        // Polygon B from ticket #840
         geom1_ = GEOSGeomFromWKT("POLYGON(("
           "182512.231897141 141935.935903267,182344.315698016 141813.663222482,"
           "182393.426552077 141735.161360171,182425.215323227 141755.058841504,"
@@ -225,9 +227,12 @@ namespace tut
 
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
         ensure_equals(std::string(wkt_), std::string("POINT (182476.76 141880.71)"));
-      }
-      // Polygon C
-      {
+    }
+
+    template<>
+    template<>
+    void object::test<9>() {
+        // Polygon C from ticket #840
         geom1_ = GEOSGeomFromWKT("POLYGON(("
           "182635.760119718 141846.477712277,182826.153168283 141974.473039044,"
           "182834.952846998 141857.67730337,182862.151853936 141851.277537031,"
@@ -241,7 +246,6 @@ namespace tut
 
         wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
         ensure_equals(std::string(wkt_), std::string("POINT (182755.89 141812.88)"));
-      }
     }
 
 } // namespace tut
