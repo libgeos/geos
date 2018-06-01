@@ -89,6 +89,8 @@ public:
 
 	Geometry *clone() const override;
 
+	Geometry *reverse() const override;
+
 protected:
 
 	/**

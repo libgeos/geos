@@ -106,9 +106,13 @@ MultiLineString::getGeometryTypeId() const {
 	return GEOS_MULTILINESTRING;
 }
 
-MultiLineString*
+Geometry*
 MultiLineString::reverse() const
 {
+	if (isEmpty()) {
+		return clone();
+	}
+
 	size_t nLines = geometries->size();
 	Geometry::NonConstVect *revLines = new Geometry::NonConstVect(nLines);
 	for (size_t i=0; i<nLines; ++i)

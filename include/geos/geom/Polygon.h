@@ -137,6 +137,8 @@ public:
 
 	void normalize() override;
 
+	Geometry* reverse() const override;
+
 	int compareToSameClass(const Geometry *p) const override; //was protected
 
 	const Coordinate* getCoordinate() const override;

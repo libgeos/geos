@@ -57,6 +57,10 @@ LineString::LineString(const LineString &ls)
 Geometry*
 LineString::reverse() const
 {
+	if (isEmpty()) {
+		return clone();
+	}
+
 	assert(points.get());
 	CoordinateSequence* seq = points->clone();
 	CoordinateSequence::reverse(seq);

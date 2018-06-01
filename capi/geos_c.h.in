@@ -646,6 +646,8 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonize_full_r(GEOSContextHandle_t handle,
 
 extern GEOSGeometry GEOS_DLL *GEOSLineMerge_r(GEOSContextHandle_t handle,
                                               const GEOSGeometry* g);
+extern GEOSGeometry GEOS_DLL *GEOSReverse_r(GEOSContextHandle_t handle,
+                                            const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSSimplify_r(GEOSContextHandle_t handle,
                                              const GEOSGeometry* g,
                                              double tolerance);
@@ -1618,6 +1620,7 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonize_full(const GEOSGeometry* input,
     GEOSGeometry** cuts, GEOSGeometry** dangles, GEOSGeometry** invalid);
 
 extern GEOSGeometry GEOS_DLL *GEOSLineMerge(const GEOSGeometry* g);
+extern GEOSGeometry GEOS_DLL *GEOSReverse(const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSSimplify(const GEOSGeometry* g, double tolerance);
 extern GEOSGeometry GEOS_DLL *GEOSTopologyPreserveSimplify(const GEOSGeometry* g,
     double tolerance);
