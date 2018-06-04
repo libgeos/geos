@@ -1394,4 +1394,15 @@ GEOSVoronoiDiagram(const Geometry *g, const Geometry *env, double tolerance, int
   return GEOSVoronoiDiagram_r(handle, g, env, tolerance, onlyEdges);
 }
 
+int
+GEOSSegmentIntersection(double ax0, double ay0, double ax1, double ay1,
+                        double bx0, double by0, double bx1, double by1,
+                        double* cx, double* cy)
+{
+    return GEOSSegmentIntersection_r(handle,
+        ax0, ay0, ax1, ay1,
+        bx0, by0, bx1, by1,
+        cx, cy);
+}
+
 } /* extern "C" */
