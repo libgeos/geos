@@ -21,8 +21,8 @@ set(geos_c_SOURCES
 
 file(GLOB geos_capi_HEADERS ${CMAKE_BINARY_DIR}/capi/*.h) # fix source_group issue
 
-if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK) 
-  # if building OS X framework, CAPI built into C++ library 
+if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK AND GEOS_BUILD_SHARED)
+  # if building OS X framework or only building static libs, CAPI built into C++ library
   add_library(geos_c SHARED ${geos_c_SOURCES}) 
 
   target_link_libraries(geos_c geos)
@@ -55,7 +55,7 @@ else()
     DESTINATION include)
 endif()
 
-if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK) 
+if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK AND GEOS_BUILD_SHARED)
   install(TARGETS geos_c
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib

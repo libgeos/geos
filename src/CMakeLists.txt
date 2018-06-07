@@ -14,14 +14,15 @@
 file(GLOB_RECURSE geos_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 file(GLOB_RECURSE geos_ALL_HEADERS ${CMAKE_SOURCE_DIR}/include/*.h) # fix source_group issue
 
+# Include CAPI in OS X framework binary and in static libs
+set(geos_c_SOURCES
+  ${CMAKE_CURRENT_SOURCE_DIR}/../capi/geos_c.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/../capi/geos_ts_c.cpp)
+
 if(GEOS_ENABLE_MACOSX_FRAMEWORK)
   # OS X frameworks don't have static libs
   # also 1 binary, so include CAPI here
   # and, make name all caps
-
-  set(geos_c_SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/../capi/geos_c.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../capi/geos_ts_c.cpp)
 
   add_library(GEOS SHARED ${geos_SOURCES} ${geos_c_SOURCES})
 
@@ -77,7 +78,8 @@ else()
   endif()
 
   if(GEOS_BUILD_STATIC)
-    add_library(geos-static STATIC ${geos_SOURCES} ${geos_ALL_HEADERS})
+    file(GLOB geos_capi_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/../capi/*.h) # fix source_group issue
+    add_library(geos-static STATIC ${geos_SOURCES} ${geos_c_SOURCES} ${geos_ALL_HEADERS} ${geos_capi_HEADERS})
 
     set_target_properties(geos-static
       PROPERTIES
