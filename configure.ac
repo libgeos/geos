@@ -142,9 +142,9 @@ AX_CXX_COMPILE_STDCXX_11([noext],[mandatory])
 WARNFLAGS=""
 AC_LANG_PUSH([C++])
 dnl Available in GCC 5.1
-AX_CHECK_COMPILE_FLAG([-Wsuggest-override], [WARNFLAGS="$WARNFLAGS -Wsuggest-override"])
+AX_CHECK_COMPILE_FLAG([-Wsuggest-override -Werror], [WARNFLAGS="$WARNFLAGS -Wsuggest-override"])
 dnl Available in clang 3.5
-AX_CHECK_COMPILE_FLAG([-Wmissing-override], [WARNFLAGS="$WARNFLAGS -Wmissing-override"])
+AX_CHECK_COMPILE_FLAG([-Wmissing-override -Werror], [WARNFLAGS="$WARNFLAGS -Wmissing-override"])
 AC_LANG_POP([C++])
 
 dnl In order for AC_LIBTOOL_COMPILER_OPTION to use
