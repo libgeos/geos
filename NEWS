@@ -1,5 +1,5 @@
-Changes in 3.7.0
-YYYY-MM-DD
+Changes in 3.7.0alpha
+2018-06-DD
 
 - New things:
   - CAPI: GEOSDistanceIndexed (#795, Dan Baston)
