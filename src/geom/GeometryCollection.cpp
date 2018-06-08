@@ -374,7 +374,7 @@ GeometryCollection::reverse() const
 	if (isEmpty()) {
 		return clone();
 	}
-	
+
 	auto* reversed = new std::vector<Geometry*>{geometries->size()};
 
 	std::transform(geometries->begin(),
