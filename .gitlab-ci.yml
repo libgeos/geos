@@ -1,4 +1,3 @@
-# See https://gitlab.com/help/ci/quick_start/README
 test:
   script:
     - apt-get update -qq
