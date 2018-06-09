@@ -14,9 +14,9 @@ dnl -- JTS_PORT: the version of JTS this release is bound to
 JTS_PORT=1.13.0
 
 dnl -- Version info for the CAPI
-CAPI_INTERFACE_CURRENT=12
+CAPI_INTERFACE_CURRENT=13
 CAPI_INTERFACE_REVISION=0
-CAPI_INTERFACE_AGE=11
+CAPI_INTERFACE_AGE=12
 
 dnl
 dnl -- Release versions / C++ library SONAME will use these
@@ -24,7 +24,7 @@ dnl -- encoding ABI break at every release
 dnl
 VERSION_MAJOR=3
 VERSION_MINOR=7
-VERSION_PATCH=0dev
+VERSION_PATCH=0alpha
 VERSION="$VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH"
 
 dnl CAPI_VERSION_MAJOR=$(($CAPI_INTERFACE_CURRENT-$CAPI_INTERFACE_AGE))
