@@ -304,9 +304,18 @@ message(STATUS "Generating GEOS ${PROJECT_BINARY_DIR}/include/geos/version.h")
 configure_file(${PROJECT_SOURCE_DIR}/include/geos/version.h.in
   ${PROJECT_BINARY_DIR}/include/geos/version.h @ONLY)
 
-message(STATUS "Generating GEOS ${PROJECT_BINARY_DIR}/capi/geos_c.h")
-configure_file(${PROJECT_SOURCE_DIR}/capi/geos_c.h.in
-  ${PROJECT_BINARY_DIR}/capi/geos_c.h @ONLY)
+# Wrap header creation in a function so that the VERSION_ variables don't
+# leak out.
+function(make_capi_header)
+    message(STATUS "Generating GEOS ${PROJECT_BINARY_DIR}/capi/geos_c.h")
+    set(VERSION_MAJOR ${GEOS_VERSION_MAJOR})
+    set(VERSION_MINOR ${GEOS_VERSION_MINOR})
+    set(VERSION_PATCH ${GEOS_VERSION_PATCH})
+    configure_file(${PROJECT_SOURCE_DIR}/capi/geos_c.h.in
+      ${PROJECT_BINARY_DIR}/capi/geos_c.h @ONLY)
+endfunction()
+
+make_capi_header()
 
 #################################################################################
 # Configure tests
