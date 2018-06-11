@@ -1,16 +1,15 @@
 image: docker.kbt.io/postgis/build-test:trisquel
 
 before_script:
-    - lsb_release -a
-    - service postgresql start
+  - lsb-release -a
 
 test:
   script:
+    - lsb_release -a
+    - uname -a
     - ./autogen.sh
     - ./configure
     - make
-    - make check RUNTESTFLAGS=-v
-    - make check RUNTESTFLAGS="-v --dumprestore"
-    - make install
-    - make installcheck RUNTESTFLAGS=-v
-    - make installcheck RUNTESTFLAGS="-v --dumprestore"
+    - make check
+    - install -m 755 /bin/true /usr/local/bin/git2cl
+    - make distcheck
