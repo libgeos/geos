@@ -75,143 +75,83 @@ WKBReader::printHEX(istream &is, ostream &os)
 }
 
 
+namespace {
+
+unsigned char ASCIIHexToUChar(char val)
+{
+	switch ( val )
+	{
+		case '0' :
+			return 0;
+		case '1' :
+			return 1;
+		case '2' :
+			return 2;
+		case '3' :
+			return 3;
+		case '4' :
+			return 4;
+		case '5' :
+			return 5;
+		case '6' :
+			return 6;
+		case '7' :
+			return 7;
+		case '8' :
+			return 8;
+		case '9' :
+			return 9;
+		case 'A' :
+		case 'a' :
+			return 10;
+		case 'B' :
+		case 'b' :
+			return 11;
+		case 'C' :
+		case 'c' :
+			return 12;
+		case 'D' :
+		case 'd' :
+			return 13;
+		case 'E' :
+		case 'e' :
+			return 14;
+		case 'F' :
+		case 'f' :
+			return 15;
+		default:
+			throw ParseException("Invalid HEX char");
+	}
+}
+
+}  // namespace
+
+// Must be an even number of characters in the istream.
+// Throws a ParseException if there are an odd number of characters.
 Geometry *
 WKBReader::readHEX(istream &is)
 {
 	// setup input/output stream
 	stringstream os(ios_base::binary|ios_base::in|ios_base::out);
 
-	unsigned char result_high, result_low, value;
-	char high, low;
-
-	while( (high = static_cast<char>(is.get())) != char_traits<char>::eof() )
+	while( true )
 	{
-		// geth the low part of the byte
-		low = static_cast<char>(is.get());
-		if ( low == char_traits<char>::eof() )
-		  throw ParseException("Premature end of HEX string");
+		const int input_high = is.get();
+		if (input_high == char_traits<char>::eof())
+			break;
 
-		switch (high)
-		{
-			case '0' :
-				result_high = 0;
-				break;
-			case '1' :
-				result_high = 1;
-				break;
-			case '2' :
-				result_high = 2;
-				break;
-			case '3' :
-				result_high = 3;
-				break;
-			case '4' :
-				result_high = 4;
-				break;
-			case '5' :
-				result_high = 5;
-				break;
-			case '6' :
-				result_high = 6;
-				break;
-			case '7' :
-				result_high = 7;
-				break;
-			case '8' :
-				result_high = 8;
-				break;
-			case '9' :
-				result_high = 9;
-				break;
-			case 'A' :
-            case 'a' :
-				result_high = 10;
-				break;
-			case 'B' :
-            case 'b' :
-				result_high = 11;
-				break;
-			case 'C' :
-			case 'c' :
-				result_high = 12;
-				break;
-			case 'D' :
-			case 'd' :
-				result_high = 13;
-				break;
-			case 'E' :
-			case 'e' :
-				result_high = 14;
-				break;
-			case 'F' :
-			case 'f' :
-				result_high = 15;
-				break;
-			default:
-				throw  ParseException("Invalid HEX char");
-		}
+		const int input_low = is.get();
+		if (input_low == char_traits<char>::eof())
+			throw ParseException("Premature end of HEX string");
 
-		switch (low)
-		{
-			case '0' :
-				result_low = 0;
-				break;
-			case '1' :
-				result_low = 1;
-				break;
-			case '2' :
-				result_low = 2;
-				break;
-			case '3' :
-				result_low = 3;
-				break;
-			case '4' :
-				result_low = 4;
-				break;
-			case '5' :
-				result_low = 5;
-				break;
-			case '6' :
-				result_low = 6;
-				break;
-			case '7' :
-				result_low = 7;
-				break;
-			case '8' :
-				result_low = 8;
-				break;
-			case '9' :
-				result_low = 9;
-				break;
-			case 'A' :
-            case 'a' :
-				result_low = 10;
-				break;
-			case 'B' :
-            case 'b' :
-				result_low = 11;
-				break;
-			case 'C' :
-			case 'c' :
-				result_low = 12;
-				break;
-			case 'D' :
-			case 'd' :
-				result_low = 13;
-				break;
-			case 'E' :
-			case 'e' :
-				result_low = 14;
-				break;
-			case 'F' :
-			case 'f' :
-				result_low = 15;
-				break;
-			default:
-				throw  ParseException("Invalid HEX char");
-		}
+		const char high = static_cast<char>(input_high);
+		const char low = static_cast<char>(input_low);
 
-		value = static_cast<char>((result_high<<4) + result_low);
+		const unsigned char result_high = ASCIIHexToUChar(high);
+		const unsigned char result_low = ASCIIHexToUChar(low);
+
+		const unsigned char value =
+			static_cast<char>((result_high<<4) + result_low);
 
 #if DEBUG_HEX_READER
 	cout<<"HEX "<<high<<low<<" -> DEC "<<(int)value<<endl;
