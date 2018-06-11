@@ -1,14 +1,16 @@
-test:
-  before_script:
-  - apt-get update -qq
-  - apt-get install -y build-essential autoconf automake libtool lsb-release
+image: docker.kbt.io/postgis/build-test:trisquel
 
-  script:
+before_script:
     - lsb_release -a
-    - uname -a
+    - service postgresql start
+
+test:
+  script:
     - ./autogen.sh
     - ./configure
     - make
-    - make check
-    - install -m 755 /bin/true /usr/local/bin/git2cl
-    - make distcheck
+    - make check RUNTESTFLAGS=-v
+    - make check RUNTESTFLAGS="-v --dumprestore"
+    - make install
+    - make installcheck RUNTESTFLAGS=-v
+    - make installcheck RUNTESTFLAGS="-v --dumprestore"
