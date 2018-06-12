@@ -133,6 +133,7 @@ geos_unit_SOURCES = \
 	capi/GEOSGeom_extentTest.cpp \
 	capi/GEOSGeom_setPrecisionTest.cpp \
 	capi/GEOSGetCentroidTest.cpp \
+	capi/GEOSCAPIDefinesTest.cpp \
 	capi/GEOSContainsTest.cpp \
 	capi/GEOSConvexHullTest.cpp \
 	capi/GEOSDistanceTest.cpp \
