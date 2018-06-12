@@ -53,7 +53,7 @@ CommonBits::zeroLowerBits(int64 bits, int nBits)
 int
 CommonBits::getBit(int64 bits, int i)
 {
-	int64 mask = (1 << i);
+	int64 mask = (1ull << i);
 	return (bits & mask) != 0 ? 1 : 0;
 }
 
