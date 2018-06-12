@@ -47,6 +47,12 @@ set(GEOS_VERSION_PATCH "${GEOS_VERSION_PATCH}dev")
 set(GEOS_VERSION "${GEOS_VERSION_MAJOR}.${GEOS_VERSION_MINOR}.${GEOS_VERSION_PATCH}")
 set(VERSION "${GEOS_VERSION}")
 
+# Copy version components into different variable names to match those used
+# by autotools for *.h.in files
+set(VERSION_MAJOR ${GEOS_VERSION_MAJOR})
+set(VERSION_MINOR ${GEOS_VERSION_MINOR})
+set(VERSION_PATCH ${GEOS_VERSION_PATCH})
+
 # JTS_PORT is the version of JTS this release is bound to
 set(JTS_PORT 1.13.0)
 message(STATUS "Setting GEOS version ${VERSION} as port of JTS ${JTS_PORT}")
@@ -304,18 +310,9 @@ message(STATUS "Generating GEOS ${PROJECT_BINARY_DIR}/include/geos/version.h")
 configure_file(${PROJECT_SOURCE_DIR}/include/geos/version.h.in
   ${PROJECT_BINARY_DIR}/include/geos/version.h @ONLY)
 
-# Wrap header creation in a function so that the VERSION_ variables don't
-# leak out.
-function(make_capi_header)
-    message(STATUS "Generating GEOS ${PROJECT_BINARY_DIR}/capi/geos_c.h")
-    set(VERSION_MAJOR ${GEOS_VERSION_MAJOR})
-    set(VERSION_MINOR ${GEOS_VERSION_MINOR})
-    set(VERSION_PATCH ${GEOS_VERSION_PATCH})
-    configure_file(${PROJECT_SOURCE_DIR}/capi/geos_c.h.in
-      ${PROJECT_BINARY_DIR}/capi/geos_c.h @ONLY)
-endfunction()
-
-make_capi_header()
+message(STATUS "Generating GEOS ${PROJECT_BINARY_DIR}/capi/geos_c.h")
+configure_file(${PROJECT_SOURCE_DIR}/capi/geos_c.h.in
+  ${PROJECT_BINARY_DIR}/capi/geos_c.h @ONLY)
 
 #################################################################################
 # Configure tests
