@@ -1,7 +1,8 @@
-image: docker.kbt.io/postgis/build-test:trisquel
-
 before_script:
-  - lsb-release -a
+    - apt-get update -qq
+    - apt-get install -y build-essential autoconf automake libtool lsb-release
+    - lsb_release -a
+    - uname -a
 
 test:
   script:
