@@ -7128,7 +7128,7 @@ GEOSVoronoiDiagram_r(GEOSContextHandle_t extHandle, const Geometry *g1, const Ge
 	}
 	catch(...)
 	{
-		handle->ERROR_MESSAGE("Unknow exception thrown");
+		handle->ERROR_MESSAGE("Unknown exception thrown");
 	}
 
 	return NULL;
