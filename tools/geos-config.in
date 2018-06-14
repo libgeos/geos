@@ -43,7 +43,7 @@ case $1 in
     --libs)
       # TODO: make an alias for --clibs
       # see http://trac.osgeo.org/geos/ticket/497
-      echo -L${libdir} -lgeos
+      echo -L${libdir} -lgeos-@VERSION@
       ;;
     --clibs)
       echo -L${libdir} -lgeos_c
