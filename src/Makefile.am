@@ -26,7 +26,7 @@ lib_LTLIBRARIES = libgeos.la
 # has changed between releases; the project chooses not to expend the
 # effort to determine this because GEOS does not promise ABI stability.
 libgeos_la_LDFLAGS = \
-    -release @VERSION_MAJOR@.@VERSION_MINOR@.@VERSION_PATCH@ \
+    -release @VERSION_RELEASE@ \
     -no-undefined
 
 libgeos_la_SOURCES = \
