@@ -26,7 +26,7 @@ VERSION_MAJOR=3
 VERSION_MINOR=7
 VERSION_PATCH=0beta1dev
 VERSION="$VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH"
-VERSION_RELEASE=`echo "$VERSION" | sed -E 's/(alpha|beta|rc)[[0-9]]*$//'`
+VERSION_RELEASE=`echo "$VERSION" | sed -E 's/(alpha|beta|rc)[[0-9]]?(dev)?$//'`
 
 dnl CAPI_VERSION_MAJOR=$(($CAPI_INTERFACE_CURRENT-$CAPI_INTERFACE_AGE))
 dnl the following should be more portable
