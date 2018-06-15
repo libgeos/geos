@@ -38,12 +38,12 @@ case $1 in
     echo @VERSION@
      ;;
     --cflags)
-    echo -I${prefix}/include 
+    echo -I${prefix}/include
       ;;
     --libs)
       # TODO: make an alias for --clibs
       # see http://trac.osgeo.org/geos/ticket/497
-      echo -L${libdir} -lgeos-@VERSION@
+      echo -L${libdir} -lgeos-@VERSION_RELEASE@
       ;;
     --clibs)
       echo -L${libdir} -lgeos_c
@@ -64,7 +64,7 @@ case $1 in
       echo ${prefix}/include
       ;;
     --jtsport)
-    echo @JTS_PORT@ 
+    echo @JTS_PORT@
       ;;
     *)
       usage 1 1>&2
