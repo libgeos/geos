@@ -1,4 +1,4 @@
-Changes in 3.7.0alpha
+Changes in 3.7.0beta1dev
 2018-06-DD
 
 - New things:
@@ -10,9 +10,21 @@ Changes in 3.7.0alpha
   - CAPI: GEOSReverse (#872, Dan Baston)
 - Improvements
   - Interruptible snap operation (Paul Ramsey)
+  - Numerous packaging, doc, and build changes
+    (Debian group: Bas Couwenberg, Francesco Paolo Lovergine)
+
 - C++ API changes:
   - Require defining USE_UNSTABLE_GEOS_CPP_API for use without
     warnings.
+  - Make C++11 required (Mateus Loskot)
+  - C++11 standard delete on noncopyable
+    (#851, Vicky Vergara)
+  - Fix CommonBits::getBit to correctly handle i >= 32
+    (#834, Kurt Schwehr)
+
+Changes in 3.7.0alpha
+2018-06-14
+See 3.7.0 notes
 
 Changes in 3.6.1
 2016-12-24
