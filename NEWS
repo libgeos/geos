@@ -16,7 +16,9 @@ Changes in 3.7.0beta1dev
 - C++ API changes:
   - Require defining USE_UNSTABLE_GEOS_CPP_API for use without
     warnings.
-  - Make C++11 required (Mateus Loskot)
+  - Make C++11 required (Mateusz Loskot)
+  - Use C++11 unique_ptr, nullptr, and override constructs
+    (Mateusz Loskot)
   - C++11 standard delete on noncopyable
     (#851, Vicky Vergara)
   - Fix CommonBits::getBit to correctly handle i >= 32
