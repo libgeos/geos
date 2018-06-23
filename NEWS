@@ -8,6 +8,8 @@ Changes in 3.7.0beta1dev
           GEOSGeom_getYMin, GEOSGeom_getYMax (#871, Dan Baston)
   - CAPI: GEOSFrechetDistance (#797, Shinichi SUGIYAMA)
   - CAPI: GEOSReverse (#872, Dan Baston)
+  - CAPI: GEOSGeomGetZ (#581, J Smith)
+
 - Improvements
   - Interruptible snap operation (Paul Ramsey)
   - Numerous packaging, doc, and build changes
