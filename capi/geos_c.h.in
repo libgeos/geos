@@ -1069,6 +1069,7 @@ extern int GEOS_DLL GEOSGeomGetNumPoints_r(GEOSContextHandle_t handle,
 /* Return -1 on exception, Geometry must be a Point. */
 extern int GEOS_DLL GEOSGeomGetX_r(GEOSContextHandle_t handle, const GEOSGeometry *g, double *x);
 extern int GEOS_DLL GEOSGeomGetY_r(GEOSContextHandle_t handle, const GEOSGeometry *g, double *y);
+extern int GEOS_DLL GEOSGeomGetZ_r(GEOSContextHandle_t handle, const GEOSGeometry *g, double *z);
 
 /*
  * Return NULL on exception, Geometry must be a Polygon.
@@ -1993,6 +1994,7 @@ extern int GEOS_DLL GEOSGeomGetNumPoints(const GEOSGeometry* g);
 /* Return -1 on exception, Geometry must be a Point. */
 extern int GEOS_DLL GEOSGeomGetX(const GEOSGeometry *g, double *x);
 extern int GEOS_DLL GEOSGeomGetY(const GEOSGeometry *g, double *y);
+extern int GEOS_DLL GEOSGeomGetZ(const GEOSGeometry *g, double *z);
 
 /*
  * Return NULL on exception, Geometry must be a Polygon.

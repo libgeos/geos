@@ -126,6 +126,15 @@ Point::getY() const
 	return getCoordinate()->y;
 }
 
+double
+Point::getZ() const
+{
+	if (isEmpty()) {
+		throw util::UnsupportedOperationException("getZ called on empty Point\n");
+	}
+	return getCoordinate()->z;
+}
+
 const Coordinate *
 Point::getCoordinate() const
 {
