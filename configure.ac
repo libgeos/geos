@@ -24,7 +24,7 @@ dnl -- encoding ABI break at every release
 dnl
 VERSION_MAJOR=3
 VERSION_MINOR=7
-VERSION_PATCH=0beta1dev
+VERSION_PATCH=0beta1
 VERSION="$VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH"
 VERSION_RELEASE=`echo "$VERSION" | sed -E 's/^([[0-9]+\.[0-9]+\.[0-9]+]).*?$/\1/'`
 
