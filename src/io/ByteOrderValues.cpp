@@ -23,6 +23,11 @@
 #include <cstring>
 #include <cassert>
 
+#if DEBUG_BYTEORDER_VALUES
+#include <ios>
+#include <iostream>
+#endif
+
 namespace geos {
 namespace io { // geos.io
 
@@ -143,12 +148,12 @@ ByteOrderValues::putDouble(double doubleValue, unsigned char *buf, int byteOrder
 	int64 longValue;
     std::memcpy(&longValue, &doubleValue, sizeof(double));
 #if DEBUG_BYTEORDER_VALUES
-	cout<<"ByteOrderValues::putDouble("<<doubleValue<<
+	std::cout<<"ByteOrderValues::putDouble("<<doubleValue<<
 		", order:"<<byteOrder
-		<<") = "<<hex;
+		<<") = "<<std::hex;
 	for (int i=0; i<8; i++)
-		cout<<"["<<(int)buf[i]<<"]";
-	cout<<dec<<endl;
+		std::cout<<"["<<(int)buf[i]<<"]";
+	std::cout<<std::dec<<std::endl;
 #endif
 	putLong(longValue, buf, byteOrder);
 }
