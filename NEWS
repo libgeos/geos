@@ -241,7 +241,7 @@ Changes in 3.3.1
   - Fix memory leak on invalid geometry in InteriorPointArea (#475)
   - ValidOp abort in presence of 2 touching holes forming an island (#449)
   - Enable prepared intersects operation for points
-  - Fortify suspicious code found by static analisys tools
+  - Fortify suspicious code found by static analysis tools
   - Fix for SOLARIS build (#461)
   - Fix EMPTY result from GEOSOffsetCurve with distance 0 (#454)
   - Fix Geometry::clone to copy SRID (#464)
