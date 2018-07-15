@@ -31,7 +31,7 @@ namespace geos
 namespace linearref   // geos.linearref
 {
 
-unsigned int LinearIterator::segmentEndVertexIndex(const LinearLocation& loc)
+size_t LinearIterator::segmentEndVertexIndex(const LinearLocation& loc)
 {
 	if (loc.getSegmentFraction() > 0.0)
 		return loc.getSegmentIndex() + 1;
@@ -42,7 +42,7 @@ LinearIterator::LinearIterator(const Geometry* linear) :
 		vertexIndex(0),
 		componentIndex(0),
 		linear(linear),
-		numLines(static_cast<unsigned int>(linear->getNumGeometries()))
+		numLines(linear->getNumGeometries())
 {
 	loadCurrentLine();
 }
@@ -52,16 +52,16 @@ LinearIterator::LinearIterator(const Geometry* linear, const LinearLocation& sta
 		vertexIndex(segmentEndVertexIndex(start)),
 		componentIndex(start.getComponentIndex()),
 		linear(linear),
-		numLines(static_cast<unsigned int>(linear->getNumGeometries()))
+		numLines(linear->getNumGeometries())
 {
 	loadCurrentLine();
 }
 
-LinearIterator::LinearIterator(const Geometry* linear, unsigned int componentIndex, unsigned int vertexIndex) :
+LinearIterator::LinearIterator(const Geometry* linear, size_t componentIndex, size_t vertexIndex) :
 		vertexIndex(vertexIndex),
 		componentIndex(componentIndex),
 		linear(linear),
-		numLines(static_cast<unsigned int>(linear->getNumGeometries()))
+		numLines(linear->getNumGeometries())
 {
 	loadCurrentLine();
 }
@@ -112,12 +112,12 @@ bool LinearIterator::isEndOfLine() const
 	return true;
 }
 
-unsigned int LinearIterator::getComponentIndex() const
+size_t LinearIterator::getComponentIndex() const
 {
 	return componentIndex;
 }
 
-unsigned int LinearIterator::getVertexIndex() const
+size_t LinearIterator::getVertexIndex() const
 {
 	return vertexIndex;
 }

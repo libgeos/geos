@@ -56,7 +56,7 @@ LinearLocation::pointAlongSegmentByFraction(const Coordinate& p0, const Coordina
 }
 
 /* public */
-LinearLocation::LinearLocation(unsigned int segmentIndex,
+LinearLocation::LinearLocation(size_t segmentIndex,
 		double segmentFraction)
 	:
 	componentIndex(0),
@@ -66,8 +66,8 @@ LinearLocation::LinearLocation(unsigned int segmentIndex,
 
 
 /* public */
-LinearLocation::LinearLocation(unsigned int componentIndex,
-		unsigned int segmentIndex, double segmentFraction)
+LinearLocation::LinearLocation(size_t componentIndex,
+		size_t segmentIndex, double segmentFraction)
 	:
 	componentIndex(componentIndex),
 	segmentIndex(segmentIndex),
@@ -108,7 +108,7 @@ LinearLocation::clamp(const Geometry* linear)
 	if (segmentIndex >= linear->getNumPoints())
 	{
 		const LineString* line = dynamic_cast<const LineString*> (linear->getGeometryN(componentIndex));
-		segmentIndex = static_cast<unsigned int>(line->getNumPoints() - 1);
+		segmentIndex = line->getNumPoints() - 1;
 		segmentFraction = 1.0;
 	}
 }
@@ -139,9 +139,9 @@ LinearLocation::getSegmentLength(const Geometry* linearGeom) const
 	const LineString* lineComp = dynamic_cast<const LineString*> (linearGeom->getGeometryN(componentIndex));
 
 	// ensure segment index is valid
-	unsigned int segIndex = segmentIndex;
+	size_t segIndex = segmentIndex;
 	if (segmentIndex >= lineComp->getNumPoints() - 1)
-		segIndex = static_cast<unsigned int>(lineComp->getNumPoints() - 2);
+		segIndex = lineComp->getNumPoints() - 2;
 
 	Coordinate p0 = lineComp->getCoordinateN(segIndex);
 	Coordinate p1 = lineComp->getCoordinateN(segIndex + 1);
@@ -152,21 +152,21 @@ LinearLocation::getSegmentLength(const Geometry* linearGeom) const
 void
 LinearLocation::setToEnd(const Geometry* linear)
 {
-	componentIndex = static_cast<unsigned int>(linear->getNumGeometries() - 1);
+	componentIndex = linear->getNumGeometries() - 1;
 	const LineString* lastLine = dynamic_cast<const LineString*>(linear->getGeometryN(componentIndex));
-	segmentIndex = static_cast<unsigned int>(lastLine->getNumPoints() - 1);
+	segmentIndex = lastLine->getNumPoints() - 1;
 	segmentFraction = 1.0;
 }
 
 /* public */
-unsigned int
+size_t
 LinearLocation::getComponentIndex() const
 {
 	return componentIndex;
 }
 
 /* public */
-unsigned int
+size_t
 LinearLocation::getSegmentIndex() const
 {
 	return segmentIndex;
@@ -210,7 +210,7 @@ LinearLocation::getSegment(const Geometry* linearGeom) const
 	// check for endpoint - return last segment of the line if so
 	if (segmentIndex >= lineComp->getNumPoints() - 1)
 	{
-		Coordinate prev = lineComp->getCoordinateN(static_cast<int>(lineComp->getNumPoints() - 2));
+		Coordinate prev = lineComp->getCoordinateN(lineComp->getNumPoints() - 2);
 		return std::unique_ptr<LineSegment>(new LineSegment(prev, p0));
 	}
 	Coordinate p1 = lineComp->getCoordinateN(segmentIndex + 1);
@@ -254,8 +254,8 @@ LinearLocation::compareTo(const LinearLocation& other) const
 
 /* public */
 int
-LinearLocation::compareLocationValues(unsigned int componentIndex1,
-		unsigned int segmentIndex1, double segmentFraction1) const
+LinearLocation::compareLocationValues(size_t componentIndex1,
+		size_t segmentIndex1, double segmentFraction1) const
 {
 	// compare component indices
 	if (componentIndex < componentIndex1) return -1;
@@ -274,9 +274,9 @@ LinearLocation::compareLocationValues(unsigned int componentIndex1,
 /* public static */
 int
 LinearLocation::compareLocationValues(
-	unsigned int componentIndex0, unsigned int segmentIndex0,
+	size_t componentIndex0, size_t segmentIndex0,
 	double segmentFraction0,
-	unsigned int componentIndex1, unsigned int segmentIndex1,
+	size_t componentIndex1, size_t segmentIndex1,
 	double segmentFraction1)
 {
 	// compare component indices

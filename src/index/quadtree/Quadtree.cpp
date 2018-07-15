@@ -80,7 +80,7 @@ Quadtree::depth()
 }
 
 /*public*/
-int
+size_t
 Quadtree::size()
 {
 	return root.size();

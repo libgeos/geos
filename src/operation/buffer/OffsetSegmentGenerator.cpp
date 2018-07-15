@@ -324,7 +324,7 @@ OffsetSegmentGenerator::addCollinear(bool addStartPoint)
    */
 
   li.computeIntersection(s0,s1,s1,s2);
-  int numInt=li.getIntersectionNum();
+  auto numInt = li.getIntersectionNum();
 
   /**
    * if numInt is<2, the lines are parallel and in the same direction.

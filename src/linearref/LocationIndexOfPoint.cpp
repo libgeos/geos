@@ -42,8 +42,8 @@ LocationIndexOfPoint::indexOfFromStart(const Coordinate& inputPt,
   const LinearLocation* minIndex) const
 {
 	double minDistance = numeric_limits<double>::max();
-	int minComponentIndex = 0;
-	int minSegmentIndex = 0;
+	size_t minComponentIndex = 0;
+	size_t minSegmentIndex = 0;
 	double minFrac = -1.0;
 
 	LineSegment seg;
@@ -57,8 +57,8 @@ LocationIndexOfPoint::indexOfFromStart(const Coordinate& inputPt,
 			double segDistance = seg.distance(inputPt);
 			double segFrac = seg.segmentFraction(inputPt);
 
-			int candidateComponentIndex = it.getComponentIndex();
-			int candidateSegmentIndex = it.getVertexIndex();
+			auto candidateComponentIndex = it.getComponentIndex();
+			auto candidateSegmentIndex = it.getVertexIndex();
 			if (segDistance < minDistance)
 			{
 				// ensure after minLocation, if any

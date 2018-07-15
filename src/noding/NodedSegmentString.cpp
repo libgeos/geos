@@ -52,7 +52,7 @@ NodedSegmentString::safeOctant(const Coordinate& p0, const Coordinate& p1)
 
 /*public*/
 int
-NodedSegmentString::getSegmentOctant(unsigned int index) const
+NodedSegmentString::getSegmentOctant(size_t index) const
 {
 	if (index >= size() - 1) return -1;
 	return safeOctant(getCoordinate(index), getCoordinate(index+1));
@@ -61,10 +61,10 @@ NodedSegmentString::getSegmentOctant(unsigned int index) const
 
 /*public*/
 void
-NodedSegmentString::addIntersections(LineIntersector *li, unsigned int
-		segmentIndex, int geomIndex)
+NodedSegmentString::addIntersections(LineIntersector *li,
+	 	size_t segmentIndex, size_t geomIndex)
 {
-	for (int i=0, n=li->getIntersectionNum(); i<n; ++i) {
+	for (size_t i = 0, n = li->getIntersectionNum(); i < n; ++i) {
 		addIntersection(li, segmentIndex, geomIndex, i);
 	}
 }
@@ -72,8 +72,8 @@ NodedSegmentString::addIntersections(LineIntersector *li, unsigned int
 /*public*/
 void
 NodedSegmentString::addIntersection(LineIntersector *li,
-		unsigned int segmentIndex,
-		int geomIndex, int intIndex)
+		size_t segmentIndex,
+		size_t geomIndex, size_t intIndex)
 {
     ::geos::ignore_unused_variable_warning(geomIndex);
 
@@ -84,9 +84,9 @@ NodedSegmentString::addIntersection(LineIntersector *li,
 /*public*/
 void
 NodedSegmentString::addIntersection(const Coordinate& intPt,
-	unsigned int segmentIndex)
+	size_t segmentIndex)
 {
-	unsigned int normalizedSegmentIndex = segmentIndex;
+	size_t normalizedSegmentIndex = segmentIndex;
 
 	if ( segmentIndex > size()-2 )
 	{
@@ -94,7 +94,7 @@ NodedSegmentString::addIntersection(const Coordinate& intPt,
 	}
 
 	// normalize the intersection point location
-	unsigned int nextSegIndex = normalizedSegmentIndex + 1;
+	auto nextSegIndex = normalizedSegmentIndex + 1;
 	if (nextSegIndex < size())
 	{
 		const Coordinate& nextPt = pts->getAt(nextSegIndex);
@@ -147,7 +147,7 @@ NodedSegmentString::getNodedSubstrings(
 
 /* virtual public */
 const geom::Coordinate&
-NodedSegmentString::getCoordinate(unsigned int i) const
+NodedSegmentString::getCoordinate(size_t i) const
 {
 	return pts->getAt(i);
 }

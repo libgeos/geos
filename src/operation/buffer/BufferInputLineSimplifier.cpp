@@ -79,10 +79,10 @@ BufferInputLineSimplifier::deleteShallowConcavities()
 	 * Do not simplify end line segments of the line string.
 	 * This ensures that end caps are generated consistently.
 	 */
-	unsigned int index = 1;
+	size_t index = 1;
 
-	unsigned int midIndex = findNextNonDeletedIndex(index);
-	unsigned int lastIndex = findNextNonDeletedIndex(midIndex);
+	auto midIndex = findNextNonDeletedIndex(index);
+	auto lastIndex = findNextNonDeletedIndex(midIndex);
 
 	bool isChanged = false;
 	while (lastIndex < inputLine.size())
@@ -109,14 +109,14 @@ BufferInputLineSimplifier::deleteShallowConcavities()
 }
 
 /* private */
-unsigned int
-BufferInputLineSimplifier::findNextNonDeletedIndex(unsigned int index) const
+size_t
+BufferInputLineSimplifier::findNextNonDeletedIndex(size_t index) const
 {
 	std::size_t next = index + 1;
 	const std::size_t len = inputLine.size();
 	while (next < len && isDeleted[next] == DELETE)
 		next++;
-	return static_cast<unsigned int>(next);
+	return next;
 }
 
 /* private */
@@ -137,7 +137,7 @@ BufferInputLineSimplifier::collapseLine() const
 
 /* private */
 bool
-BufferInputLineSimplifier::isDeletable(int i0, int i1, int i2,
+BufferInputLineSimplifier::isDeletable(size_t i0, size_t i1, size_t i2,
                                        double distanceTol) const
 {
 	const Coordinate& p0 = inputLine[i0];
@@ -173,14 +173,14 @@ BufferInputLineSimplifier::isShallowConcavity(const geom::Coordinate& p0,
 bool
 BufferInputLineSimplifier::isShallowSampled(const geom::Coordinate& p0,
                                             const geom::Coordinate& p2,
-                                            int i0, int i2,
+                                            size_t i0, size_t i2,
                                             double distanceTol) const
 {
 	// check every n'th point to see if it is within tolerance
-	int inc = (i2 - i0) / NUM_PTS_TO_CHECK;
+	auto inc = (i2 - i0) / NUM_PTS_TO_CHECK;
 	if (inc <= 0) inc = 1;
 
-	for (int i = i0; i < i2; i += inc) {
+	for (size_t i = i0; i < i2; i += inc) {
 		if (! isShallow(p0, p2, inputLine[i], distanceTol))
 			return false;
 	}

@@ -187,7 +187,7 @@ LineIntersector::computeIntLineIndex() {
 bool
 LineIntersector::isIntersection(const Coordinate& pt) const
 {
-	for (int i=0;i<result;i++) {
+	for (size_t i=0; i < result; ++i) {
 		if (intPt[i].equals2D(pt)) {
 			return true;
 		}
@@ -229,7 +229,7 @@ LineIntersector::computeIntLineIndex(int segmentIndex)
 
 /*public*/
 double
-LineIntersector::getEdgeDistance(int segmentIndex,int intIndex) const
+LineIntersector::getEdgeDistance(size_t segmentIndex,size_t intIndex) const
 {
 	double dist=computeEdgeDistance(intPt[intIndex],
 		*inputLines[segmentIndex][0],
@@ -250,7 +250,7 @@ LineIntersector::isInteriorIntersection()
 bool
 LineIntersector::isInteriorIntersection(int inputLineIndex)
 {
-	for (int i=0; i<result; i++)
+	for (size_t i = 0; i < result; ++i)
 	{
 		if (!(intPt[i].equals2D(*inputLines[inputLineIndex][0])
             		|| intPt[i].equals2D(*inputLines[inputLineIndex][1])))

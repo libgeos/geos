@@ -174,13 +174,13 @@ HotPixel::intersectsPixelClosure(const Coordinate& p0,
 bool
 HotPixel::addSnappedNode(NodedSegmentString& segStr, size_t segIndex)
 {
-	const Coordinate& p0 = segStr.getCoordinate(static_cast<unsigned int>(segIndex));
-	const Coordinate& p1 = segStr.getCoordinate(static_cast<unsigned int>(segIndex + 1));
+	const Coordinate& p0 = segStr.getCoordinate(segIndex);
+	const Coordinate& p1 = segStr.getCoordinate(segIndex + 1);
 
 	if (intersects(p0, p1))
 	{
 		//cout << "snapped: " <<  snapPt << endl;
-		segStr.addIntersection(getCoordinate(), static_cast<unsigned int>(segIndex));
+		segStr.addIntersection(getCoordinate(), segIndex);
 		return true;
 	}
 	return false;

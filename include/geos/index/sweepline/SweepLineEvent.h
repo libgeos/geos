@@ -15,6 +15,7 @@
 #ifndef GEOS_INDEX_SWEEPLINE_SWEEPLINEEVENT_H
 #define GEOS_INDEX_SWEEPLINE_SWEEPLINEEVENT_H
 
+#include <cstddef>
 #include <geos/export.h>
 
 // Forward declarations
@@ -48,9 +49,9 @@ public:
 
 	SweepLineEvent* getInsertEvent();
 
-	int getDeleteEventIndex();
+	size_t getDeleteEventIndex();
 
-	void setDeleteEventIndex(int newDeleteEventIndex);
+	void setDeleteEventIndex(size_t newDeleteEventIndex);
 
 	SweepLineInterval* getInterval();
 
@@ -73,7 +74,7 @@ private:
 	/// null if this is an INSERT_EVENT event
 	SweepLineEvent *insertEvent;
 
-	int deleteEventIndex;
+	size_t deleteEventIndex;
 
 	SweepLineInterval *sweepInt;
 

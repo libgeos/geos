@@ -44,11 +44,11 @@ namespace index { // geos::geomgraph::index
 class GEOS_DLL MonotoneChain: public SweepLineEventOBJ {
 private:
 	MonotoneChainEdge *mce;
-	int chainIndex;
+	size_t chainIndex;
 
 public:
 
-	MonotoneChain(MonotoneChainEdge *newMce, int newChainIndex):
+	MonotoneChain(MonotoneChainEdge *newMce, size_t newChainIndex):
 		mce(newMce),
 		chainIndex(newChainIndex)
 	{}

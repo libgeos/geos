@@ -57,9 +57,9 @@ public:
 
 	SweepLineEvent* getInsertEvent() { return insertEvent; }
 
-	int getDeleteEventIndex() { return deleteEventIndex; }
+	size_t getDeleteEventIndex() { return deleteEventIndex; }
 
-	void setDeleteEventIndex(int newDeleteEventIndex) {
+	void setDeleteEventIndex(size_t newDeleteEventIndex) {
 		deleteEventIndex=newDeleteEventIndex;
 	}
 
@@ -83,7 +83,7 @@ private:
 
 	SweepLineEvent *insertEvent; // null if this is an INSERT_EVENT event
 
-	int deleteEventIndex;
+	size_t deleteEventIndex;
 };
 
 class GEOS_DLL SweepLineEventLessThen {

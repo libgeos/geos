@@ -47,15 +47,15 @@ public:
 	~MonotoneChainEdge();
 	MonotoneChainEdge(Edge *newE);
 	const geom::CoordinateSequence* getCoordinates();
-	std::vector<int>& getStartIndexes();
-	double getMinX(int chainIndex);
-	double getMaxX(int chainIndex);
+	std::vector<size_t>& getStartIndexes();
+	double getMinX(size_t chainIndex);
+	double getMaxX(size_t chainIndex);
 
 	void computeIntersects(const MonotoneChainEdge &mce,
 		SegmentIntersector &si);
 
-	void computeIntersectsForChain(int chainIndex0,
-		const MonotoneChainEdge &mce, int chainIndex1,
+	void computeIntersectsForChain(size_t chainIndex0,
+		const MonotoneChainEdge &mce, size_t chainIndex1,
 		SegmentIntersector &si);
 
 protected:
@@ -63,14 +63,14 @@ protected:
 	const geom::CoordinateSequence* pts; // cache a reference to the coord array, for efficiency
 	// the lists of start/end indexes of the monotone chains.
 	// Includes the end point of the edge as a sentinel
-	std::vector<int> startIndex;
+	std::vector<size_t> startIndex;
 	// these envelopes are created once and reused
 	geom::Envelope env1;
 	geom::Envelope env2;
 private:
-	void computeIntersectsForChain(int start0, int end0,
+	void computeIntersectsForChain(size_t start0, size_t end0,
 		const MonotoneChainEdge &mce,
-		int start1, int end1,
+		size_t start1, size_t end1,
 		SegmentIntersector &ei);
 };
 

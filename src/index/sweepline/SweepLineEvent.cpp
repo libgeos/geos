@@ -49,14 +49,14 @@ SweepLineEvent::getInsertEvent()
 	return insertEvent;
 }
 
-int
+size_t
 SweepLineEvent::getDeleteEventIndex()
 {
 	return deleteEventIndex;
 }
 
 void
-SweepLineEvent::setDeleteEventIndex(int newDeleteEventIndex)
+SweepLineEvent::setDeleteEventIndex(size_t newDeleteEventIndex)
 {
 	deleteEventIndex=newDeleteEventIndex;
 }

@@ -63,7 +63,7 @@ EdgeIntersectionList::~EdgeIntersectionList()
 
 EdgeIntersection*
 EdgeIntersectionList::add(const Coordinate& coord,
-	int segmentIndex, double dist)
+	size_t segmentIndex, double dist)
 {
 	EdgeIntersection *eiNew=new EdgeIntersection(coord, segmentIndex, dist);
 
@@ -100,7 +100,7 @@ EdgeIntersectionList::isIntersection(const Coordinate& pt) const
 void
 EdgeIntersectionList::addEndpoints()
 {
-	int maxSegIndex=edge->getNumPoints()-1;
+	auto maxSegIndex = edge->getNumPoints() - 1;
 	add(edge->pts->getAt(0), 0, 0.0);
 	add(edge->pts->getAt(maxSegIndex), maxSegIndex, 0.0);
 }
@@ -134,7 +134,7 @@ EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0,
 #if GEOS_DEBUG
 	cerr<<"["<<this<<"] EdgeIntersectionList::createSplitEdge()"<<endl;
 #endif // GEOS_DEBUG
-	int npts=ei1->segmentIndex-ei0->segmentIndex+2;
+	auto npts = ei1->segmentIndex - ei0->segmentIndex + 2;
 
 	const Coordinate& lastSegStartPt=edge->pts->getAt(ei1->segmentIndex);
 
@@ -155,7 +155,7 @@ EdgeIntersectionList::createSplitEdge(EdgeIntersection *ei0,
 	vc->reserve(npts);
 
 	vc->push_back(ei0->coord);
-	for(int i=ei0->segmentIndex+1; i<=ei1->segmentIndex;i++)
+	for(auto i = ei0->segmentIndex + 1; i <= ei1->segmentIndex; ++i)
 	{
 		if ( ! useIntPt1 && ei1->segmentIndex == i )
 		{

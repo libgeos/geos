@@ -84,7 +84,7 @@ private:
 
 	void computeIntersections(SegmentIntersector *si);
 
-	void processOverlaps(int start, int end,
+	void processOverlaps(size_t start, size_t end,
 			SweepLineEvent *ev0,
 			SegmentIntersector *si);
 };

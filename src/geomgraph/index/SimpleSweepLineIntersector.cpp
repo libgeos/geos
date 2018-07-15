@@ -89,7 +89,7 @@ SimpleSweepLineIntersector::add(Edge *edge, void* edgeSet)
 	std::size_t n=pts->getSize()-1;
 	for(std::size_t i=0; i<n; ++i)
 	{
-		SweepLineSegment *ss=new SweepLineSegment(edge, static_cast<int>(i));
+		SweepLineSegment *ss=new SweepLineSegment(edge, i);
 		SweepLineEvent *insertEvent=new SweepLineEvent(edgeSet, ss->getMinX(), nullptr, ss);
 		events.push_back(insertEvent);
 		events.push_back(new SweepLineEvent(edgeSet, ss->getMaxX(), insertEvent, ss));
@@ -131,7 +131,7 @@ SimpleSweepLineIntersector::computeIntersections(SegmentIntersector *si)
 }
 
 void
-SimpleSweepLineIntersector::processOverlaps(int start,int end,SweepLineEvent *ev0,
+SimpleSweepLineIntersector::processOverlaps(size_t start, size_t end,SweepLineEvent *ev0,
 	SegmentIntersector *si)
 {
 
@@ -142,7 +142,7 @@ SimpleSweepLineIntersector::processOverlaps(int start,int end,SweepLineEvent *ev
 	 * include current insert event object in list of event objects to test.
 	 * Last index can be skipped, because it must be a Delete event.
  	 */
-	for(int i=start; i<end; ++i)
+	for(auto i = start; i < end; ++i)
 	{
 		SweepLineEvent *ev1=events[i];
 		if (ev1->isInsert())

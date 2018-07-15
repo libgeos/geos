@@ -37,14 +37,14 @@ CoordinateSequence*
 PrecisionReducerCoordinateOperation::edit(const CoordinateSequence *cs,
                                           const Geometry *geom)
 {
-	unsigned int csSize = static_cast<unsigned int>(cs->getSize());
+	auto csSize = cs->size();
 
 	if ( csSize == 0 ) return nullptr;
 
 	vector<Coordinate> *vc = new vector<Coordinate>(csSize);
 
 	// copy coordinates and reduce
-	for (unsigned int i=0; i<csSize; ++i) {
+	for (size_t i = 0; i < csSize; ++i) {
 		Coordinate coord=cs->getAt(i);
 		targetPM.makePrecise(&coord);
 		(*vc)[i] = coord;

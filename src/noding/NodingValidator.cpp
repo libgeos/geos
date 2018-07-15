@@ -62,7 +62,7 @@ void
 NodingValidator::checkCollapses(const SegmentString& ss) const
 {
 	const CoordinateSequence& pts = *(ss.getCoordinates());
-	for (unsigned int i=0, n = static_cast<unsigned int>(pts.getSize() - 2); i < n; ++i)
+	for (size_t i = 0, n = pts.size() - 2; i < n; ++i)
 	{
 		checkCollapse(pts[i], pts[i + 1], pts[i + 2]);
 	}
@@ -108,8 +108,8 @@ NodingValidator::checkInteriorIntersections(const SegmentString& ss0,
 {
 	const CoordinateSequence& pts0 = *(ss0.getCoordinates());
 	const CoordinateSequence& pts1 = *(ss1.getCoordinates());
-	for (unsigned int i0=0, n0 = static_cast<unsigned int>(pts0.size()); i0 < n0 - 1; i0++) {
-		for (unsigned int i1=0, n1 = static_cast<unsigned int>(pts1.size()); i1 < n1 - 1; i1++) {
+	for (size_t i0 = 0, n0 = pts0.size(); i0 < n0 - 1; ++i0) {
+		for (size_t i1 = 0, n1 = pts1.size(); i1 < n1 - 1; ++i1) {
 			checkInteriorIntersections(ss0, i0, ss1, i1);
 		}
 	}
@@ -119,8 +119,8 @@ NodingValidator::checkInteriorIntersections(const SegmentString& ss0,
 /* private */
 void
 NodingValidator::checkInteriorIntersections(
-		const SegmentString& e0, unsigned int segIndex0,
-		const SegmentString& e1, unsigned int segIndex1)
+		const SegmentString& e0, size_t segIndex0,
+		const SegmentString& e1, size_t segIndex1)
 {
 	if (&e0 == &e1 && segIndex0 == segIndex1) return;
 	const Coordinate& p00 = e0.getCoordinates()->getAt(segIndex0);
@@ -171,7 +171,7 @@ NodingValidator::checkEndPtVertexIntersections(const Coordinate& testPt,
 	{
 		const SegmentString* ss0 = *it;
 		const CoordinateSequence& pts = *(ss0->getCoordinates());
-		for (unsigned int j=1, n=static_cast<unsigned int>(pts.size()-1); j < n; ++j)
+		for (size_t j = 1, n=pts.size() - 1; j < n; ++j)
 		{
 			if (pts[j].equals(testPt))
 			{
@@ -193,7 +193,7 @@ bool
 NodingValidator::hasInteriorIntersection(const LineIntersector& aLi,
 		const Coordinate& p0, const Coordinate& p1) const
 {
-	for (int i=0, n=aLi.getIntersectionNum(); i<n; i++)
+	for (size_t i=0, n = aLi.getIntersectionNum(); i < n; ++i)
 	{
 		const Coordinate &intPt=aLi.getIntersection(i);
 		if (!(intPt==p0 || intPt==p1))

@@ -16,6 +16,7 @@
 #ifndef GEOS_GEOM_PREP_SEGMENTINTERSECTIONDETECTOR_H
 #define GEOS_GEOM_PREP_SEGMENTINTERSECTIONDETECTOR_H
 
+#include <cstddef>
 #include <geos/noding/SegmentIntersector.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/geom/Coordinate.h>
@@ -160,8 +161,8 @@ public:
 	 * this call for segment pairs which they have determined do not intersect
 	 * (e.g. by an disjoint envelope test).
 	 */
-	void processIntersections(	noding::SegmentString * e0, int segIndex0,
-								noding::SegmentString * e1, int segIndex1 ) override;
+	void processIntersections(	noding::SegmentString * e0, size_t segIndex0,
+								noding::SegmentString * e1, size_t segIndex1 ) override;
 
 };
 

@@ -283,11 +283,11 @@ WKBWriter::writeCoordinateSequence(const CoordinateSequence &cs,
 	if ( outputDimension > 2) is3d = true;
 
 	if (sized) writeInt(static_cast<int>(size));
-	for (std::size_t i=0; i<size; i++) writeCoordinate(cs, static_cast<int>(i), is3d);
+	for (std::size_t i = 0; i < size; i++) writeCoordinate(cs, i, is3d);
 }
 
 void
-WKBWriter::writeCoordinate(const CoordinateSequence &cs, int idx,
+WKBWriter::writeCoordinate(const CoordinateSequence &cs, size_t idx,
 	bool is3d)
 {
 #if DEBUG_WKB_WRITER

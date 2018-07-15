@@ -31,8 +31,8 @@ namespace noding { // geos.noding
 
 void
 IntersectionFinderAdder::processIntersections(
-		SegmentString* e0,  int segIndex0,
-		SegmentString* e1,  int segIndex1)
+		SegmentString* e0,  size_t segIndex0,
+		SegmentString* e1,  size_t segIndex1)
 {
 	// don't bother intersecting a segment with itself
 	if (e0 == e1 && segIndex0 == segIndex1) return;
@@ -49,7 +49,7 @@ IntersectionFinderAdder::processIntersections(
 	{
 		if (li.isInteriorIntersection())
 		{
-			for (int intIndex=0, n=li.getIntersectionNum(); intIndex<n; intIndex++)
+			for (size_t intIndex = 0, n = li.getIntersectionNum(); intIndex < n; ++intIndex)
 			{
 				interiorIntersections.push_back(li.getIntersection(intIndex));
 			}

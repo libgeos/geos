@@ -151,7 +151,7 @@ MCIndexNoder::SegmentOverlapAction::overlap(MonotoneChain& mc1, size_t start1,
 		);
 	assert(ss2);
 
-	si.processIntersections(ss1, static_cast<int>(start1), ss2, static_cast<int>(start2));
+	si.processIntersections(ss1, start1, ss2, start2);
 }
 
 

@@ -50,7 +50,7 @@ LocationIndexOfLine::indicesOf(const Geometry* subLine) const
 {
 	Coordinate startPt = dynamic_cast<const LineString*> (subLine->getGeometryN(0))->getCoordinateN(0);
 	const LineString* lastLine = dynamic_cast<const LineString*> (subLine->getGeometryN(subLine->getNumGeometries() - 1));
-	Coordinate endPt = lastLine->getCoordinateN(static_cast<int>(lastLine->getNumPoints() - 1));
+	Coordinate endPt = lastLine->getCoordinateN(lastLine->getNumPoints() - 1);
 
 	LocationIndexOfPoint locPt(linearGeom);
 	LinearLocation *subLineLoc = new LinearLocation[2];

@@ -19,6 +19,7 @@
 #ifndef GEOS_NODING_SNAPROUND_MCINDEXPOINTSNAPPER_H
 #define GEOS_NODING_SNAPROUND_MCINDEXPOINTSNAPPER_H
 
+#include <cstddef>
 #include <geos/export.h>
 
 #include <geos/inline.h>
@@ -68,7 +69,7 @@ public:
 	 * @return <code>true</code> if a node was added for this pixel
 	 */
 	bool snap(HotPixel& hotPixel, SegmentString* parentEdge,
-			unsigned int vertexIndex);
+			size_t vertexIndex);
 
 	bool snap(HotPixel& hotPixel) {
 		return snap(hotPixel, nullptr, 0);

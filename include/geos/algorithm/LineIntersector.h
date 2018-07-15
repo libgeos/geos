@@ -160,7 +160,7 @@ public:
 	//
 	/// This will be either 0, 1 or 2.
 	///
-	int getIntersectionNum() const { return result; }
+	size_t getIntersectionNum() const { return result; }
 
 
 	/// Returns the intIndex'th intersection point
@@ -169,7 +169,7 @@ public:
 	///
 	/// @return the intIndex'th intersection point
 	///
-	const geom::Coordinate& getIntersection(int intIndex) const {
+	const geom::Coordinate& getIntersection(size_t intIndex) const {
 		return intPt[intIndex];
 	}
 
@@ -241,7 +241,7 @@ public:
 	 *
 	 * @return the edge distance of the intersection point
 	 */
-	double getEdgeDistance(int geomIndex,int intIndex) const;
+	double getEdgeDistance(size_t geomIndex, size_t intIndex) const;
 
 private:
 
@@ -257,7 +257,7 @@ private:
 	 */
 	const geom::PrecisionModel *precisionModel;
 
-	int result;
+	size_t result;
 
 	const geom::Coordinate *inputLines[2][2];
 

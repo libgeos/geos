@@ -60,8 +60,8 @@ SegmentNodeList::~SegmentNodeList()
 SegmentNode*
 SegmentNodeList::add(const Coordinate& intPt, size_t segmentIndex)
 {
-	SegmentNode *eiNew=new SegmentNode(edge, intPt, static_cast<unsigned int>(segmentIndex),
-			edge.getSegmentOctant(static_cast<unsigned int>(segmentIndex)));
+	SegmentNode *eiNew=new SegmentNode(edge, intPt, segmentIndex,
+			edge.getSegmentOctant(segmentIndex));
 
 	std::pair<SegmentNodeList::iterator,bool> p = nodeMap.insert(eiNew);
 	if ( p.second ) { // new SegmentNode inserted
@@ -78,7 +78,7 @@ SegmentNodeList::add(const Coordinate& intPt, size_t segmentIndex)
 
 void SegmentNodeList::addEndpoints()
 {
-	int maxSegIndex = edge.size() - 1;
+	size_t maxSegIndex = edge.size() - 1;
 	add(&(edge.getCoordinate(0)), 0);
 	add(&(edge.getCoordinate(maxSegIndex)), maxSegIndex);
 }
@@ -98,7 +98,7 @@ SegmentNodeList::addCollapsedNodes()
 			e=collapsedVertexIndexes.end();
 		i != e; ++i)
 	{
-		auto vertexIndex = static_cast<unsigned int>(*i);
+		auto vertexIndex = *i;
 		add(edge.getCoordinate(vertexIndex), vertexIndex);
 	}
 }
@@ -113,8 +113,8 @@ SegmentNodeList::findCollapsesFromExistingVertices(
 
 	for (size_t i=0, n=edge.size()-2; i<n; ++i)
 	{
-		const Coordinate& p0 = edge.getCoordinate(static_cast<unsigned int>(i));
-		const Coordinate& p2 = edge.getCoordinate(static_cast<unsigned int>(i + 2));
+		const Coordinate& p0 = edge.getCoordinate(i);
+		const Coordinate& p2 = edge.getCoordinate(i + 2);
 		if (p0.equals2D(p2)) {
 			// add base of collapse as node
 			collapsedVertexIndexes.push_back(i + 1);
@@ -151,10 +151,11 @@ bool
 SegmentNodeList::findCollapseIndex(SegmentNode& ei0, SegmentNode& ei1,
 		size_t& collapsedVertexIndex)
 {
+	assert(ei1.segmentIndex >= ei0.segmentIndex);
 	// only looking for equal nodes
 	if (! ei0.coord.equals2D(ei1.coord)) return false;
 
-	int numVerticesBetween = ei1.segmentIndex - ei0.segmentIndex;
+	auto numVerticesBetween = ei1.segmentIndex - ei0.segmentIndex;
 	if (! ei1.isInterior()) {
 		numVerticesBetween--;
 	}
@@ -271,7 +272,7 @@ SegmentNodeList::createSplitEdge(SegmentNode *ei0, SegmentNode *ei1)
 	pts->setAt(ei0->coord, ipt++);
 	for (size_t i=ei0->segmentIndex+1; i<=ei1->segmentIndex; i++)
 	{
-		pts->setAt(edge.getCoordinate(static_cast<unsigned int>(i)),ipt++);
+		pts->setAt(edge.getCoordinate(i),ipt++);
 	}
 	if (useIntPt1) 	pts->setAt(ei1->coord, ipt++);
 

@@ -16,7 +16,7 @@
 #ifndef GEOS_GEOMGRAPH_INDEX_SWEEPLINESEGMENT_H
 #define GEOS_GEOMGRAPH_INDEX_SWEEPLINESEGMENT_H
 
-
+#include <cstddef>
 #include <geos/export.h>
 #include <geos/geomgraph/index/SweepLineEventObj.h> // for inheritance
 
@@ -39,7 +39,7 @@ namespace index { // geos::geomgraph::index
 
 class GEOS_DLL SweepLineSegment: public SweepLineEventOBJ {
 public:
-	SweepLineSegment(Edge *newEdge, int newPtIndex);
+	SweepLineSegment(Edge *newEdge, size_t newPtIndex);
 	~SweepLineSegment() override;
 	double getMinX();
 	double getMaxX();
@@ -47,7 +47,7 @@ public:
 protected:
 	Edge *edge;
 	const geom::CoordinateSequence* pts;
-	int ptIndex;
+	size_t ptIndex;
 };
 
 

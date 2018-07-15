@@ -50,7 +50,8 @@ namespace distance { // geos::operation::distance
 class GEOS_DLL GeometryLocation {
 private:
 	const geom::Geometry *component;
-	int segIndex;
+	size_t segIndex;
+	bool inside_area;
 	geom::Coordinate pt;
 public:
 	/** \brief
@@ -72,7 +73,7 @@ public:
 	 * @param pt the coordinate of the location
 	 */
 	GeometryLocation(const geom::Geometry *component,
-			int segIndex, const geom::Coordinate &pt);
+			size_t segIndex, const geom::Coordinate &pt);
 
 	/** \brief
 	 * Constructs a GeometryLocation specifying a point inside an
@@ -97,7 +98,7 @@ public:
 	 *
 	 * @return the segment index for the location, or INSIDE_AREA
 	 */
-	int getSegmentIndex();
+	size_t getSegmentIndex();
 
 	/**
 	 * Returns the geom::Coordinate of this location.

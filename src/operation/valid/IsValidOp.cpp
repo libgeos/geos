@@ -70,7 +70,7 @@ IsValidOp::findPtNotNode(const CoordinateSequence *testCoords,
 	// find a point in the testCoords which is not a node of the searchRing
 	EdgeIntersectionList &eiList=searchEdge->getEdgeIntersectionList();
 	// somewhat inefficient - is there a better way? (Use a node map, for instance?)
-	unsigned int npts = static_cast<int>(testCoords->getSize());
+	auto npts = testCoords->getSize();
 	for(unsigned int i=0; i<npts; ++i)
 	{
 		const Coordinate& pt=testCoords->getAt(i);
@@ -231,10 +231,10 @@ IsValidOp::checkValid(const Polygon *g)
 void
 IsValidOp::checkValid(const MultiPolygon *g)
 {
-	unsigned int ngeoms = static_cast<unsigned int>(g->getNumGeometries());
+	auto ngeoms = g->getNumGeometries();
 	vector<const Polygon *>polys(ngeoms);
 
-	for (unsigned int i=0; i<ngeoms; ++i)
+	for (size_t i=0; i < ngeoms; ++i)
 	{
 		const Polygon *p = dynamic_cast<const Polygon *>(g->getGeometryN(i));
 
@@ -284,7 +284,7 @@ IsValidOp::checkValid(const MultiPolygon *g)
 void
 IsValidOp::checkValid(const GeometryCollection *gc)
 {
-	for(unsigned int i=0, ngeoms=static_cast<unsigned int>(gc->getNumGeometries()); i<ngeoms; ++i)
+	for(size_t i = 0, ngeoms=gc->getNumGeometries(); i < ngeoms; ++i)
 	{
 		const Geometry *g=gc->getGeometryN(i);
 		checkValid(g);
@@ -382,11 +382,11 @@ IsValidOp::checkHolesInShell(const Polygon *p, GeometryGraph *graph)
 	const LinearRing *shell=static_cast<const LinearRing*>(
 			p->getExteriorRing());
 
-	int nholes = static_cast<int>(p->getNumInteriorRing());
+	auto nholes = p->getNumInteriorRing();
 
 	if(shell->isEmpty())
 	{
-		for(int i=0; i<nholes; ++i)
+		for(size_t i = 0; i < nholes; ++i)
 		{
 			assert(dynamic_cast<const LinearRing*>(
 				p->getInteriorRingN(i)));
@@ -409,7 +409,7 @@ IsValidOp::checkHolesInShell(const Polygon *p, GeometryGraph *graph)
 	//SIRtreePointInRing pir(shell);
 	MCPointInRing pir(shell);
 
-	for(int i=0; i<nholes; ++i)
+	for(size_t i = 0; i < nholes; ++i)
 	{
 		assert(dynamic_cast<const LinearRing*>(
 				p->getInteriorRingN(i)));
@@ -446,8 +446,8 @@ IsValidOp::checkHolesNotNested(const Polygon *p, GeometryGraph *graph)
 	//QuadtreeNestedRingTester nestedTester(graph);
 	IndexedNestedRingTester nestedTester(graph);
 
-	int nholes = static_cast<int>(p->getNumInteriorRing());
-	for(int i=0; i<nholes; ++i)
+	auto nholes = p->getNumInteriorRing();
+	for(size_t i = 0; i < nholes; ++i)
 	{
 		assert(dynamic_cast<const LinearRing*>(
 				p->getInteriorRingN(i)));
@@ -474,7 +474,7 @@ IsValidOp::checkHolesNotNested(const Polygon *p, GeometryGraph *graph)
 void
 IsValidOp::checkShellsNotNested(const MultiPolygon *mp, GeometryGraph *graph)
 {
-	for(unsigned int i=0, ngeoms = static_cast<int>(mp->getNumGeometries()); i<ngeoms; ++i)
+	for(size_t i = 0, ngeoms = mp->getNumGeometries(); i < ngeoms; ++i)
 	{
 		const Polygon *p=dynamic_cast<const Polygon *>(
 				mp->getGeometryN(i));
@@ -484,7 +484,7 @@ IsValidOp::checkShellsNotNested(const MultiPolygon *mp, GeometryGraph *graph)
 				p->getExteriorRing());
 		assert(shell);
 
-		for(unsigned int j=0; j<ngeoms; ++j)
+		for(size_t j = 0; j < ngeoms; ++j)
 		{
 			if (i==j) continue;
 
@@ -524,7 +524,7 @@ IsValidOp::checkShellNotNested(const LinearRing *shell, const Polygon *p,
 	if (!insidePolyShell) return;
 
 	// if no holes, this is an error!
-	int nholes = static_cast<int>(p->getNumInteriorRing());
+	auto nholes = p->getNumInteriorRing();
 	if (nholes<=0) {
 		validErr=new TopologyValidationError(
 			TopologyValidationError::eNestedShells,
@@ -540,7 +540,7 @@ IsValidOp::checkShellNotNested(const LinearRing *shell, const Polygon *p,
 	 * an error.
 	 */
 	const Coordinate *badNestedPt=nullptr;
-	for(int i=0; i<nholes; ++i) {
+	for(size_t i = 0; i < nholes; ++i) {
 		assert(dynamic_cast<const LinearRing*>(
 				p->getInteriorRingN(i)));
 		const LinearRing *hole=static_cast<const LinearRing*>(
@@ -604,8 +604,8 @@ IsValidOp::checkConnectedInteriors(GeometryGraph &graph)
 void
 IsValidOp::checkInvalidCoordinates(const CoordinateSequence *cs)
 {
-	unsigned int size = static_cast<unsigned int>(cs->getSize());
-	for (unsigned int i=0; i<size; ++i)
+	auto size = cs->size();
+	for (size_t i = 0; i < size; ++i)
 	{
 		if (! isValid(cs->getAt(i)) )
 		{
@@ -625,8 +625,8 @@ IsValidOp::checkInvalidCoordinates(const Polygon *poly)
 	checkInvalidCoordinates(poly->getExteriorRing()->getCoordinatesRO());
 	if (validErr != nullptr) return;
 
-	int nholes = static_cast<int>(poly->getNumInteriorRing());
-	for (int i=0; i<nholes; ++i)
+	auto nholes = poly->getNumInteriorRing();
+	for (size_t i = 0; i < nholes; ++i)
 	{
 		checkInvalidCoordinates(
 			poly->getInteriorRingN(i)->getCoordinatesRO()
@@ -643,8 +643,8 @@ IsValidOp::checkClosedRings(const Polygon *poly)
 	checkClosedRing(lr);
 	if (validErr) return;
 
-	int nholes = static_cast<int>(poly->getNumInteriorRing());
-	for (int i=0; i<nholes; ++i)
+	auto nholes = poly->getNumInteriorRing();
+	for (size_t i = 0; i < nholes; ++i)
 	{
 		lr=(const LinearRing *)poly->getInteriorRingN(i);
 		checkClosedRing(lr);

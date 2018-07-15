@@ -16,8 +16,8 @@
 #ifndef GEOS_GEOMGRAPH_INDEX_MONOTONECHAININDEXER_H
 #define GEOS_GEOMGRAPH_INDEX_MONOTONECHAININDEXER_H
 
-#include <geos/export.h>
 #include <vector>
+#include <geos/export.h>
 
 // Forward declarations
 namespace geos {
@@ -37,11 +37,11 @@ public:
 
 	MonotoneChainIndexer(){}
 
-	void getChainStartIndices(const geom::CoordinateSequence*, std::vector<int>&);
+	void getChainStartIndices(const geom::CoordinateSequence*, std::vector<std::size_t>&);
 
 private:
 
-	int findChainEnd(const geom::CoordinateSequence* pts, int start);
+	std::size_t findChainEnd(const geom::CoordinateSequence* pts, std::size_t start);
 
 };
 

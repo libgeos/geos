@@ -77,9 +77,9 @@ public:
 	void setData(const void* data) { context=data; }
 
 
-	virtual unsigned int size() const=0;
+	virtual size_t size() const=0;
 
-	virtual const geom::Coordinate& getCoordinate(unsigned int i) const=0;
+	virtual const geom::Coordinate& getCoordinate(size_t i) const=0;
 
 	/// \brief
 	/// Return a pointer to the CoordinateSequence associated

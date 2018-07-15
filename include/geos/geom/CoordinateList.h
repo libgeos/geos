@@ -58,7 +58,6 @@ public:
 
 	typedef std::list<Coordinate>::iterator iterator;
 	typedef std::list<Coordinate>::const_iterator const_iterator;
-	typedef std::list<Coordinate>::size_type size_type;
 
 	friend std::ostream& operator<< (std::ostream& os,
 		const CoordinateList& cl);
@@ -84,7 +83,7 @@ public:
 	{
 	}
 
-	size_type size() const
+	size_t size() const
 	{
 		return coords.size();
 	}

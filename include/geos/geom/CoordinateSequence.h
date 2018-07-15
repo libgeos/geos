@@ -262,7 +262,7 @@ public:
 	/// FIXME: return std::size_t, using numeric_limits<std::size_t>::max
 	/// as 'not found' value.
 	///
-	static int indexOf(const Coordinate *coordinate,
+	static size_t indexOf(const Coordinate *coordinate,
 			const CoordinateSequence *cl);
 
 	/**

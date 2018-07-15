@@ -74,7 +74,7 @@ LineSequencer::isSequenced(const Geometry* geom)
 
 
 		const Coordinate* startNode = &(line.getCoordinateN(0));
-		const Coordinate* endNode = &(line.getCoordinateN(static_cast<int>(line.getNumPoints() - 1)));
+		const Coordinate* endNode = &(line.getCoordinateN(line.getNumPoints() - 1));
 
 		/**
 		 * If this linestring is connected to a previous subgraph,

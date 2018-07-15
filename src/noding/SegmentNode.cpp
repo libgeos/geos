@@ -39,7 +39,7 @@ namespace noding { // geos.noding
 
 /*public*/
 SegmentNode::SegmentNode(const NodedSegmentString& ss, const Coordinate& nCoord,
-		unsigned int nSegmentIndex, int nSegmentOctant)
+		size_t nSegmentIndex, int nSegmentOctant)
 	:
 	segString(ss),
 	segmentOctant(nSegmentOctant),

@@ -56,19 +56,19 @@ namespace tut
 	 *              elements
 	 */
 	void checkIntersection(const std::vector<Coordinate>& pt,
-	                         int expectedIntersectionNum,
+	                         size_t expectedIntersectionNum,
 	                         const std::vector<Coordinate>& intPt,
 	                         double distanceTolerance)
 	{
 		geos::algorithm::LineIntersector li;
 		li.computeIntersection(pt[0], pt[1], pt[2], pt[3]);
 
-		int intNum = li.getIntersectionNum();
+		auto intNum = li.getIntersectionNum();
 		ensure_equals(intNum, expectedIntersectionNum);
 
 		if ( intPt.empty() ) return;
 
-		ensure_equals(intPt.size(), static_cast<std::vector<Coordinate>::size_type>(intNum));
+		ensure_equals(intPt.size(), intNum);
 
 		// test that both points are represented here
 		//bool isIntPointsCorrect = true;
