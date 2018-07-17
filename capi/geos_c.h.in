@@ -21,7 +21,7 @@
  *	  functions, and call finishGEOS() when done.
  *
  *	- Currently you have to explicitly GEOSGeom_destroy() all
- *	  GEOSGeom objects to avoid memory leaks, and to GEOSFree()
+ *	  GEOSGeom objects to avoid memory leaks, and GEOSFree()
  *	  all returned char * (unless const).
  *
  *	- Functions ending with _r are thread safe; see details in RFC 3
@@ -146,7 +146,7 @@ enum GEOSGeomTypes {
     GEOS_GEOMETRYCOLLECTION
 };
 
-/* Byte oders exposed via the c api */
+/* Byte orders exposed via the C API */
 enum GEOSByteOrders {
     GEOS_WKB_XDR = 0, /* Big Endian */
     GEOS_WKB_NDR = 1 /* Little Endian */
@@ -706,7 +706,7 @@ extern GEOSGeometry GEOS_DLL * GEOSDelaunayTriangulation_r(
  *
  * @param g the input geometry whose vertex will be used as sites.
  * @param tolerance snapping tolerance to use for improved robustness
- * @param onlyEdges whether to return only edges of the voronoi cells
+ * @param onlyEdges whether to return only edges of the Voronoi cells
  * @param env clipping envelope for the returned diagram, automatically
  *            determined if NULL.
  *            The diagram will be clipped to the larger
