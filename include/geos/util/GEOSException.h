@@ -36,34 +36,24 @@ namespace util { // geos.util
  * Exceptions are thrown as pointers to this type.
  * Use toString() to get a readable message.
  */
-class GEOS_DLL GEOSException: public std::exception {
-
-	std::string _msg;
+class GEOS_DLL GEOSException: public std::runtime_error {
 
 public:
 
 	GEOSException()
 		:
-		_msg("Unknown error")
+		std::runtime_error("Unknown error")
 	{}
 
 	GEOSException(std::string const& msg)
 		:
-		_msg(msg)
+		std::runtime_error(msg)
 	{}
 
 	GEOSException(std::string const& name, std::string const& msg)
 		:
-		_msg(name+": "+msg)
+		std::runtime_error(name + ": "+msg)
 	{}
-
-	~GEOSException() throw() override
-	{}
-
-	const char* what() const throw() override
-	{
-		return _msg.c_str();
-	}
 
 };
 
