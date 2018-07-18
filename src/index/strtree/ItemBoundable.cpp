@@ -24,10 +24,6 @@ ItemBoundable::ItemBoundable(const void* newBounds, void* newItem) :
 {
 }
 
-ItemBoundable::~ItemBoundable()
-{
-}
-
 const void*
 ItemBoundable::getBounds() const {
 	return bounds;
