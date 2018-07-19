@@ -160,7 +160,7 @@ public:
     {
         os << std::endl;
 
-        if (not_passed.size() > 0)
+        if (!not_passed.empty())
         {
             not_passed_list::const_iterator i = not_passed.begin();
             while (i != not_passed.end())

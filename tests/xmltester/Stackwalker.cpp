@@ -1435,7 +1435,7 @@ static bool GetModuleListTH32(ModuleList& modules, DWORD pid, FILE *fLogFile)
   CloseHandle(hSnap);
   FreeLibrary(hToolhelp);
 
-  return modules.size() != 0;
+  return !modules.empty();
 }  // GetModuleListTH32
 
 
@@ -1526,7 +1526,7 @@ cleanup:
   free(tt);
   free(hMods);
 
-  return modules.size() != 0;
+  return !modules.empty();
 }  // GetModuleListPSAPI
 
 
@@ -2067,7 +2067,7 @@ static void ShowStackRM( HANDLE hThread, CONTEXT& c, FILE *fLogFile, PREAD_PROCE
 
 
 
-    if ( symSearchPath.size() > 0 ) // if we added anything, we have a trailing semicolon
+    if ( !symSearchPath.empty() ) // if we added anything, we have a trailing semicolon
       symSearchPath = symSearchPath.substr( 0, symSearchPath.size() - 1 );
 
     // why oh why does SymInitialize() want a writeable string?
