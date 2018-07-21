@@ -231,12 +231,9 @@ PolygonizeGraph::getEdgeRings(std::vector<EdgeRing*>& edgeRingList)
 
 std::vector<PolygonizeDirectedEdge*>
 PolygonizeGraph::findLabeledEdgeRings(
-	std::vector<DirectedEdge*> &dirEdges) const {
+	std::vector<DirectedEdge*> &dirEdges) {
 
-	typedef std::vector<DirectedEdge*> Edges;
 	std::vector<PolygonizeDirectedEdge*> edgeRingStarts;
-
-	Edges edges;
 
 	// label the edge rings formed
 	long currLabel(1);
@@ -251,7 +248,6 @@ PolygonizeGraph::findLabeledEdgeRings(
 		auto edges = findDirEdgesInRing(de);
 
 		label(edges, currLabel);
-		edges.clear();
 
 		++currLabel;
 	}
@@ -310,12 +306,11 @@ PolygonizeGraph::deleteCutEdges(std::vector<const LineString*> &cutLines)
 }
 
 void
-PolygonizeGraph::label(std::vector<DirectedEdge*> &dirEdges, long label)
-{
-	for(unsigned int i=0; i<dirEdges.size(); ++i)
-	{
-		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)dirEdges[i];
-		de->setLabel(label);
+PolygonizeGraph::label(
+		std::vector<DirectedEdge*> &dirEdges,
+	 	long label) {
+	for(auto e : dirEdges) {
+		dynamic_cast<PolygonizeDirectedEdge*>(e)->setLabel(label);
 	}
 }
 

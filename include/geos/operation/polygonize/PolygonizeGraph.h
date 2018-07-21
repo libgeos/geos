@@ -180,14 +180,13 @@ private:
 	 * @param dirEdgesIn  a list of the DirectedEdges in the graph
 	 * @param dirEdgesOut each ring found will be pushed here
 	 */
-
 	std::vector<PolygonizeDirectedEdge*>
 	findLabeledEdgeRings(
-			std::vector<planargraph::DirectedEdge*> &dirEdgesIn) const;
+			std::vector<planargraph::DirectedEdge*> &dirEdgesIn);
 
-	static void label(std::vector<planargraph::DirectedEdge*> &dirEdges, long label);
+	void label(std::vector<planargraph::DirectedEdge*> &dirEdges, long label);
 
-	static void computeNextCWEdges(planargraph::Node *node);
+	void computeNextCWEdges(planargraph::Node *node);
 
 	/**
 	 * \brief
@@ -196,7 +195,7 @@ private:
 	 * This algorithm has the effect of converting maximal edgerings
 	 * into minimal edgerings
 	 */
-	static void computeNextCCWEdges(planargraph::Node *node, long label);
+	void computeNextCCWEdges(planargraph::Node *node, long label);
 
 	/**
 	 * \brief
