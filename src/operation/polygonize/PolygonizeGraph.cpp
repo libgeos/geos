@@ -35,9 +35,6 @@
 using namespace geos::planargraph;
 using namespace geos::geom;
 
-// Define the following to add assertions on downcasts
-//#define GEOS_CAST_PARANOIA 1
-
 namespace geos {
 namespace operation { // geos.operation
 namespace polygonize { // geos.operation.polygonize
@@ -273,20 +270,14 @@ PolygonizeGraph::deleteCutEdges(std::vector<const LineString*> &cutLines)
 	for (DirEdges::size_type i=0, in=dirEdges.size(); i<in; ++i)
 	{
 		DirectedEdge *de_ = dirEdges[i];
-#ifdef GEOS_CAST_PARANOIA
-		assert(dynamic_cast<PolygonizeDirectedEdge*>(de_));
-#endif
 		PolygonizeDirectedEdge *de =
-			static_cast<PolygonizeDirectedEdge*>(de_);
+			dynamic_cast<PolygonizeDirectedEdge*>(de_);
 
 		if (de->isMarked()) continue;
 
 		DirectedEdge *sym_ = de->getSym();
-#ifdef GEOS_CAST_PARANOIA
-		assert(dynamic_cast<PolygonizeDirectedEdge*>(sym_));
-#endif
 		PolygonizeDirectedEdge *sym =
-			static_cast<PolygonizeDirectedEdge*>(sym_);
+			dynamic_cast<PolygonizeDirectedEdge*>(sym_);
 
 		if (de->getLabel()==sym->getLabel())
 		{
@@ -295,10 +286,7 @@ PolygonizeGraph::deleteCutEdges(std::vector<const LineString*> &cutLines)
 
 			// save the line as a cut edge
 			Edge *e_ = de->getEdge();
-#ifdef GEOS_CAST_PARANOIA
-			assert(dynamic_cast<PolygonizeEdge*>(e_));
-#endif
-			PolygonizeEdge *e = static_cast<PolygonizeEdge*>(e_);
+			PolygonizeEdge *e = dynamic_cast<PolygonizeEdge*>(e_);
 
 			cutLines.push_back(e->getLine());
 		}
