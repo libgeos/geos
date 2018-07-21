@@ -31,6 +31,8 @@
 #pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
 #endif
 
+#define CVVC 1
+
 // Forward declarations
 namespace geos {
 	namespace geom {
@@ -74,7 +76,7 @@ public:
 	 * \brief
 	 * Deletes all edges at a node
 	 */
-	static void deleteAllEdges(planargraph::Node *node);
+	void deleteAllEdges(planargraph::Node *node);
 
 	/**
 	 * \brief
@@ -132,9 +134,9 @@ public:
 
 private:
 
-	static int getDegreeNonDeleted(planargraph::Node *node);
+	int getDegreeNonDeleted(planargraph::Node *node) const;
 
-	static int getDegree(planargraph::Node *node, long label);
+	int getDegree(planargraph::Node *node, long label) const;
 
 	const geom::GeometryFactory *factory;
 
@@ -164,9 +166,15 @@ private:
 	 * @param intNodes : intersection nodes found will be pushed here
 	 *                   the vector won't be cleared before pushing.
 	 */
-	static void findIntersectionNodes( PolygonizeDirectedEdge *startDE,
-			long label, std::vector<planargraph::Node*>& intNodes
-);
+#ifdef CVVC
+	std::vector<planargraph::Node*>
+	findIntersectionNodes(
+		 	PolygonizeDirectedEdge *startDE,
+			long label);
+#else
+	void findIntersectionNodes( PolygonizeDirectedEdge *startDE,
+			long label, std::vector<planargraph::Node*>& intNodes);
+#endif
 
 	/**
 	 * Finds and labels all edgerings in the graph.
@@ -177,10 +185,16 @@ private:
 	 * @param dirEdgesIn  a list of the DirectedEdges in the graph
 	 * @param dirEdgesOut each ring found will be pushed here
 	 */
+
+#if CVVC
+	std::vector<PolygonizeDirectedEdge*>
+	findLabeledEdgeRings(
+			std::vector<planargraph::DirectedEdge*> &dirEdgesIn) const;
+#else
 	static void findLabeledEdgeRings(
 			std::vector<planargraph::DirectedEdge*> &dirEdgesIn,
 			std::vector<PolygonizeDirectedEdge*> &dirEdgesOut);
-
+#endif
 	static void label(std::vector<planargraph::DirectedEdge*> &dirEdges, long label);
 
 	static void computeNextCWEdges(planargraph::Node *node);
@@ -204,8 +218,13 @@ private:
 	 * @param edgesInRing : the DirectedEdges that form a ring will
 	 *                      be pushed here.
 	 */
+#ifdef CVVC
+	std::vector<planargraph::DirectedEdge*>
+	findDirEdgesInRing(PolygonizeDirectedEdge *startDE) const;
+#else
 	static void findDirEdgesInRing(PolygonizeDirectedEdge *startDE,
-		std::vector<planargraph::DirectedEdge*>& edgesInRing);
+			std::vector<planargraph::DirectedEdge*>& edgesInRing);
+#endif
 
 	EdgeRing* findEdgeRing(PolygonizeDirectedEdge *startDE);
 
