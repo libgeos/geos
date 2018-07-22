@@ -3,6 +3,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
+ * Copyright (C) 2018 ~    Vicky Vergara
  * Copyright (C) 2005-2006 Refractions Research Inc.
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
  *
@@ -13,6 +14,7 @@
  *
  **********************************************************************
  *
+ * Modernized to c++11: on 2018
  * Last port: operation/polygonize/PolygonizeGraph.java rev. 6/138 (JTS-1.10)
  *
  **********************************************************************/
@@ -31,7 +33,6 @@
 #include <vector>
 #include <set>
 
-//using namespace std;
 using namespace geos::planargraph;
 using namespace geos::geom;
 
