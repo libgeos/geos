@@ -24,42 +24,40 @@
 
 #include <geos/export.h>
 
-#include <geos/planargraph/PlanarGraph.h> // for inheritance
+#include <geos/planargraph/PlanarGraph.h>  // for inheritance
 
 #include <vector>
 
 #ifdef _MSC_VER
 #pragma warning(push)
-#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+// warning C4251: needs to have dll-interface to be used by clients of class
+#pragma warning(disable: 4251)
 #endif
 
-#define CVVC 1
+// Forward declarations
+
+namespace geos {
+namespace geom {
+	class LineString;
+	class GeometryFactory;
+	class Coordinate;
+	class CoordinateSequence;
+}  // namespace geom
+namespace planargraph {
+	class Node;
+	class Edge;
+	class DirectedEdge;
+}  // namespace planargraph
+}  // namespace geos
+
+namespace geos {
+namespace operation {
+namespace polygonize {
+
 
 // Forward declarations
-namespace geos {
-	namespace geom {
-		class LineString;
-		class GeometryFactory;
-		class Coordinate;
-		class CoordinateSequence;
-	}
-	namespace planargraph {
-		class Node;
-		class Edge;
-		class DirectedEdge;
-	}
-	namespace operation {
-		namespace polygonize {
-			class EdgeRing;
-			class PolygonizeDirectedEdge;
-		}
-	}
-}
-
-namespace geos {
-namespace operation { // geos::operation
-namespace polygonize { // geos::operation::polygonize
-
+class EdgeRing;
+class PolygonizeDirectedEdge;
 
 /** \brief
  * Represents a planar graph of edges that can be used to compute a
@@ -71,9 +69,7 @@ namespace polygonize { // geos::operation::polygonize
  *
  */
 class GEOS_DLL PolygonizeGraph: public planargraph::PlanarGraph {
-
-public:
-
+ public:
 	/**
 	 * \brief
 	 * Deletes all edges at a node
@@ -84,7 +80,7 @@ public:
 	 * \brief
 	 * Create a new polygonization graph.
 	 */
-	PolygonizeGraph(const geom::GeometryFactory *newFactory);
+	explicit PolygonizeGraph(const geom::GeometryFactory *newFactory);
 
 	/**
 	 * \brief
@@ -134,8 +130,7 @@ public:
 	 */
 	void deleteDangles(std::vector<const geom::LineString*> &dangleLines);
 
-private:
-
+ private:
 	int getDegreeNonDeleted(planargraph::Node *node) const;
 
 	int getDegree(planargraph::Node *node, long label) const;
@@ -180,7 +175,7 @@ private:
 	 * The labelling allows detecting cut edges.
 	 *
 	 * @param dirEdgesIn  a list of the DirectedEdges in the graph
-	 * @param dirEdgesOut each ring found will be pushed here
+	 * @result vector that contains each ring found
 	 */
 	std::vector<PolygonizeDirectedEdge*>
 	findLabeledEdgeRings(
@@ -206,8 +201,7 @@ private:
 	 * from the graph, so that there is always a next dirEdge.
 	 *
 	 * @param startDE the DirectedEdge to start traversing at
-	 * @param edgesInRing : the DirectedEdges that form a ring will
-	 *                      be pushed here.
+	 * @result a vector of the DirectedEdge that form a ring
 	 */
 	std::vector<planargraph::DirectedEdge*>
 	findDirEdgesInRing(PolygonizeDirectedEdge *startDE) const;
@@ -225,12 +219,12 @@ private:
 	std::vector<geom::CoordinateSequence *> newCoords;
 };
 
-} // namespace geos::operation::polygonize
-} // namespace geos::operation
-} // namespace geos
+}  // namespace polygonize
+}  // namespace operation
+}  // namespace geos
 
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 
-#endif // GEOS_OP_POLYGONIZE_POLYGONIZEGRAPH_H
+#endif  // GEOS_OP_POLYGONIZE_POLYGONIZEGRAPH_H
