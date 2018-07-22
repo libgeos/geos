@@ -154,7 +154,7 @@ private:
 	 *
 	 */
 	void convertMaximalToMinimalEdgeRings(
-			std::vector<PolygonizeDirectedEdge*> &ringEdges);
+			std::vector<PolygonizeDirectedEdge*> ringEdges);
 
 	/**
 	 * \brief
@@ -213,8 +213,10 @@ private:
 	/* not const because has side effect of saving the Edge Ring found */
 	EdgeRing* findEdgeRing(PolygonizeDirectedEdge *startDE);
 
-	/* Tese are for memory management */
+	/* These are for memory management */
+	/* created as PolygonizeEdge but saved as Edge*/
 	std::vector<planargraph::Edge *> newEdges;
+	/* created as PolygonizeDirectedEdge but saved as DirectedEdge*/
 	std::vector<planargraph::DirectedEdge *> newDirEdges;
 	std::vector<planargraph::Node *> newNodes;
 	std::vector<EdgeRing *> newEdgeRings;
