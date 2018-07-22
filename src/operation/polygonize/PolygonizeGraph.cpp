@@ -62,7 +62,7 @@ PolygonizeGraph::getDegree(Node *node, long label) const
 }
 
 /**
- * Deletes all edges at a node
+ * marks them as Deleted
  */
 void
 PolygonizeGraph::deleteAllEdges(Node *node)
@@ -93,13 +93,6 @@ PolygonizeGraph::~PolygonizeGraph()
 	for (auto n : newNodes) delete n;
 	for (auto e : newEdgeRings) delete e;
 	for (auto c : newCoords) delete c;
-
-	/* Removing all pointer values that no longer are valid */
-	newEdges.clear();
-	newDirEdges.clear();
-	newNodes.clear();
-	newEdgeRings.clear();
-	newCoords.clear();
 }
 
 /*
@@ -305,26 +298,23 @@ PolygonizeGraph::label(
 void
 PolygonizeGraph::computeNextCWEdges(Node *node)
 {
-	DirectedEdgeStar *deStar=node->getOutEdges();
-	PolygonizeDirectedEdge *startDE=nullptr;
-	PolygonizeDirectedEdge *prevDE=nullptr;
+	DirectedEdgeStar *deStar = node->getOutEdges();
+	PolygonizeDirectedEdge *startDE = nullptr;
+	PolygonizeDirectedEdge *prevDE = nullptr;
 
 	// the edges are stored in CCW order around the star
 	std::vector<DirectedEdge*> &pde=deStar->getEdges();
-	for(unsigned int i=0; i<pde.size(); ++i) {
-		PolygonizeDirectedEdge *outDE=(PolygonizeDirectedEdge*)pde[i];
+	for(auto e : pde) {
+		auto outDE= dynamic_cast<PolygonizeDirectedEdge*>(e);
 		if (outDE->isMarked()) continue;
-		if (startDE==nullptr)
-			startDE=outDE;
-		if (prevDE!=nullptr) {
-			PolygonizeDirectedEdge *sym=(PolygonizeDirectedEdge*) prevDE->getSym();
-			sym->setNext(outDE);
+		if (startDE == nullptr) startDE = outDE;
+		if (prevDE != nullptr) {
+			dynamic_cast<PolygonizeDirectedEdge*>(prevDE->getSym())->setNext(outDE);
 		}
-		prevDE=outDE;
+		prevDE = outDE;
 	}
-	if (prevDE!=nullptr) {
-		PolygonizeDirectedEdge *sym=(PolygonizeDirectedEdge*) prevDE->getSym();
-		sym->setNext(startDE);
+	if (prevDE != nullptr) {
+		dynamic_cast<PolygonizeDirectedEdge*>(prevDE->getSym())->setNext(startDE);
 	}
 }
 
@@ -337,40 +327,39 @@ PolygonizeGraph::computeNextCWEdges(Node *node)
 void
 PolygonizeGraph::computeNextCCWEdges(Node *node, long label)
 {
-	DirectedEdgeStar *deStar=node->getOutEdges();
-	PolygonizeDirectedEdge *firstOutDE=nullptr;
-	PolygonizeDirectedEdge *prevInDE=nullptr;
+	auto deStar = node->getOutEdges();
+
+	PolygonizeDirectedEdge *firstOutDE = nullptr;
+	PolygonizeDirectedEdge *prevInDE = nullptr;
 
 	// the edges are stored in CCW order around the star
-	std::vector<DirectedEdge*> &edges=deStar->getEdges();
+	auto edges = deStar->getEdges();
 
 	/*
 	 * Must use a SIGNED int here to allow for beak condition
 	 * to be true.
 	 */
-	for(int i=static_cast<int>(edges.size())-1; i>=0; --i)
+	for(auto i = edges.size(); i > 0; --i)
 	{
-		PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)edges[i];
-		PolygonizeDirectedEdge *sym=(PolygonizeDirectedEdge*) de->getSym();
-		PolygonizeDirectedEdge *outDE=nullptr;
-		if (de->getLabel()==label) outDE=de;
-		PolygonizeDirectedEdge *inDE=nullptr;
-		if (sym->getLabel()==label) inDE= sym;
-		if (outDE==nullptr && inDE==nullptr) continue; // this edge is not in edgering
-		if (inDE != nullptr) {
-			prevInDE=inDE;
-		}
-		if (outDE != nullptr) {
-			if (prevInDE != nullptr) {
+		auto de=dynamic_cast<PolygonizeDirectedEdge*>(edges[i - 1]);
+		auto sym=dynamic_cast<PolygonizeDirectedEdge*>(de->getSym());
+
+		auto outDE = (de->getLabel() == label)? de : nullptr;
+		auto inDE = (sym->getLabel() == label)? sym : nullptr;
+
+		if (!outDE && !inDE) continue; // this edge is not in edgering
+
+		if (inDE) prevInDE = inDE;
+		if (outDE) {
+			if (prevInDE) {
 				prevInDE->setNext(outDE);
-				prevInDE=nullptr;
+				prevInDE = nullptr;
 			}
-			if (firstOutDE==nullptr)
-				firstOutDE=outDE;
+			if (!firstOutDE) firstOutDE = outDE;
 		}
 	}
-	if (prevInDE != nullptr) {
-		assert(firstOutDE != nullptr);
+	if (prevInDE) {
+		assert(firstOutDE);
 		prevInDE->setNext(firstOutDE);
 	}
 }
@@ -382,7 +371,7 @@ PolygonizeGraph::findDirEdgesInRing(PolygonizeDirectedEdge *startDE) const {
 	do {
 		edges.push_back(de);
 		de = de->getNext();
-		assert(de != nullptr); // found NULL DE in ring
+		assert(de); // found NULL DE in ring
 		assert(de == startDE || !de->isInRing()); // found DE already in ring
 	} while (de != startDE);
 	return edges;
@@ -391,16 +380,16 @@ PolygonizeGraph::findDirEdgesInRing(PolygonizeDirectedEdge *startDE) const {
 EdgeRing *
 PolygonizeGraph::findEdgeRing(PolygonizeDirectedEdge *startDE)
 {
-	PolygonizeDirectedEdge *de=startDE;
-	EdgeRing *er=new EdgeRing(factory);
+	auto de = startDE;
+	EdgeRing *er = new EdgeRing(factory);
 	// Now, when will we delete those EdgeRings ?
 	newEdgeRings.push_back(er);
 	do {
 		er->add(de);
 		de->setRing(er);
-		de=de->getNext();
-		assert(de != nullptr); // found NULL DE in ring
-		assert(de==startDE || ! de->isInRing()); // found DE already in ring
+		de = de->getNext();
+		assert(de); // found NULL DE in ring
+		assert(de == startDE || !de->isInRing()); // found DE already in ring
 	} while (de != startDE);
 	return er;
 }
@@ -415,31 +404,33 @@ PolygonizeGraph::deleteDangles(std::vector<const LineString*>& dangleLines)
 	std::set<const LineString*> uniqueDangles;
 
 	while (!nodeStack.empty()) {
-		Node *node=nodeStack.back();
+		auto node = nodeStack.back();
 		nodeStack.pop_back();
 		deleteAllEdges(node);
-		std::vector<DirectedEdge*> &nodeOutEdges=node->getOutEdges()->getEdges();
-		for(unsigned int j=0; j<nodeOutEdges.size(); ++j)
+
+		auto nodeOutEdges = node->getOutEdges()->getEdges();
+		for(auto oe : nodeOutEdges)
 		{
-			PolygonizeDirectedEdge *de=(PolygonizeDirectedEdge*)nodeOutEdges[j];
+			auto de = dynamic_cast<PolygonizeDirectedEdge*>(oe);
 			// delete this edge and its sym
 			de->setMarked(true);
-			PolygonizeDirectedEdge *sym=(PolygonizeDirectedEdge*) de->getSym();
-			if (sym != nullptr)
-				sym->setMarked(true);
+			auto sym = dynamic_cast<PolygonizeDirectedEdge*>(de->getSym());
+			if (sym) sym->setMarked(true);
 			// save the line as a dangle
-			PolygonizeEdge *e=(PolygonizeEdge*) de->getEdge();
-			const LineString* ls = e->getLine();
-			if ( uniqueDangles.insert(ls).second )
+			auto e = dynamic_cast<PolygonizeEdge*>(de->getEdge());
+			auto ls = e->getLine();
+			if (uniqueDangles.insert(ls).second) {
 				dangleLines.push_back(ls);
-			Node *toNode=de->getToNode();
+			}
+
+			auto toNode=de->getToNode();
 			// add the toNode to the list to be processed,
 			// if it is now a dangle
-			if (getDegreeNonDeleted(toNode)==1)
+			if (getDegreeNonDeleted(toNode) == 1) {
 				nodeStack.push_back(toNode);
+			}
 		}
 	}
-
 }
 
 } // namespace geos.operation.polygonize

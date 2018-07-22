@@ -210,6 +210,7 @@ private:
 	std::vector<planargraph::DirectedEdge*>
 	findDirEdgesInRing(PolygonizeDirectedEdge *startDE) const;
 
+	/* not const because has side effect of saving the Edge Ring found */
 	EdgeRing* findEdgeRing(PolygonizeDirectedEdge *startDE);
 
 	/* Tese are for memory management */
