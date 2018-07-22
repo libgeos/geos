@@ -297,13 +297,13 @@ PolygonizeGraph::computeNextCWEdges(Node *node)
 	for(auto e : pde) {
 		auto outDE= dynamic_cast<PolygonizeDirectedEdge*>(e);
 		if (outDE->isMarked()) continue;
-		if (startDE == nullptr) startDE = outDE;
-		if (prevDE != nullptr) {
+		if (!startDE) startDE = outDE;
+		if (prevDE) {
 			dynamic_cast<PolygonizeDirectedEdge*>(prevDE->getSym())->setNext(outDE);
 		}
 		prevDE = outDE;
 	}
-	if (prevDE != nullptr) {
+	if (prevDE) {
 		dynamic_cast<PolygonizeDirectedEdge*>(prevDE->getSym())->setNext(startDE);
 	}
 }
