@@ -46,17 +46,13 @@ namespace tut
         template <class T>
         void delAll(T& cnt)
         {
-          for (typename T::iterator i=cnt.begin(), e=cnt.end(); i!=e; ++i) {
-            delete *i;
-          }
+          for (const auto i : cnt) delete i;
         }
 
         template <class T>
         void printAll(std::ostream& os, T& cnt)
         {
-          for (typename T::iterator i=cnt.begin(), e=cnt.end(); i!=e; ++i) {
-            os << **i;
-          }
+          for (const auto i : cnt) os <<  wktwriter.write(i) << "\n";
         }
 
         GeomPtr readWKT(const std::string& inputWKT)
@@ -74,8 +70,7 @@ namespace tut
         template <class T>
         bool contains( T& cnt, const Geom* g)
         {
-          for (typename T::iterator i=cnt.begin(), e=cnt.end(); i!=e; ++i) {
-            const Geom* element = *i;
+          for (auto element : cnt) {
             if (element->equalsExact(g)) {
               return true;
             }
@@ -90,13 +85,13 @@ namespace tut
           using std::endl;
 
           if ( ex.size() != ob.size() ) {
-            cout << "Expected " << ex.size() << " polygons, obtained "
+            cout << "\nExpected " << ex.size() << " polygons, obtained "
                  << ob.size() << endl;
             return false;
           }
-          for (typename T::iterator i=ex.begin(), e=ex.end(); i!=e; ++i) {
-            if ( ! contains(ob, *i) ) {
-              cout << "Expected " << wktwriter.write(*i)
+          for (const auto i : ex ) {
+            if ( !contains(ob, i) ) {
+              cout << "Expected " << wktwriter.write(i)
                    << " not found" << endl;
               return false;
             }
@@ -149,8 +144,7 @@ namespace tut
     // test1() in JTS
     template<>
     template<>
-    void object::test<1>()
-    {
+    void object::test<1>() {
         static char const* const inp[] = {
             "LINESTRING EMPTY",
             "LINESTRING EMPTY",
@@ -167,8 +161,7 @@ namespace tut
     // test2() in JTS
     template<>
     template<>
-    void object::test<2>()
-    {
+    void object::test<2>() {
         static char const* const inp[] = {
             "LINESTRING (100 180, 20 20, 160 20, 100 180)",
             "LINESTRING (100 180, 80 60, 120 60, 100 180)",
@@ -183,6 +176,135 @@ namespace tut
 
         doTest(inp, exp);
     }
+
+    template<>
+    template<>
+    void object::test<3>() {
+        static char const* const inp[] = {
+					"LINESTRING (100 180, 20 20, 160 20, 100 180)",
+					nullptr
+				};
+
+				static char const* const exp[] = {
+					"POLYGON ((100 180, 160 20, 20 20, 100 180))",
+					nullptr
+				};
+
+        doTest(inp, exp);
+    }
+
+    template<>
+    template<>
+    void object::test<4>() {
+        static char const* const inp[] = {
+            "LINESTRING EMPTY",
+						nullptr
+        };
+
+        static char const* const exp[] = {
+						nullptr
+        };
+
+        doTest(inp, exp);
+    }
+
+    template<>
+    template<>
+    void object::test<5>() {
+        static char const* const inp[] = {
+						nullptr
+        };
+
+        static char const* const exp[] = {
+						nullptr
+        };
+
+        doTest(inp, exp);
+    }
+
+    template<>
+    template<>
+    void object::test<6>() {
+        static char const* const inp[] = {
+            "LINESTRING (100 180, 20 20, 160 20, 100 180)",
+            "LINESTRING (100 180, 20 20, 160 20, 100 180)",
+						nullptr
+        };
+
+        static char const* const exp[] = {
+						nullptr
+        };
+
+        doTest(inp, exp);
+    }
+
+    template<>
+    template<>
+    void object::test<7>() {
+        static char const* const inp[] = {
+					"POLYGON ((100 180, 160 20, 20 20, 100 180))",
+					nullptr
+				};
+
+        static char const* const exp[] = {
+					"POLYGON ((100 180, 160 20, 20 20, 100 180))",
+						nullptr
+        };
+
+        doTest(inp, exp);
+    }
+
+    template<>
+    template<>
+    void object::test<8>() {
+        static char const* const inp[] = {
+					"POLYGON EMPTY",
+					nullptr
+				};
+
+        static char const* const exp[] = {
+					nullptr
+				};
+
+        doTest(inp, exp);
+    }
+
+    template<>
+    template<>
+    void object::test<9>() {
+        static char const* const inp[] = {
+					"POLYGON EMPTY",
+					nullptr
+				};
+
+        static char const* const exp[] = {
+					nullptr
+				};
+
+        doTest(inp, exp);
+    }
+
+		template<>
+		template<>
+		void object::test<10>() {
+			static char const* const inp[] = {
+				"LINESTRING (0 0 , 10 10)",   // isolated edge
+				"LINESTRING (185 221, 100 100)",  //dangling edge
+				"LINESTRING (185 221, 88 275, 180 316)",
+				"LINESTRING (185 221, 292 281, 180 316)",
+				"LINESTRING (189 98, 83 187, 185 221)",
+				"LINESTRING (189 98, 325 168, 185 221)",
+				nullptr
+			};
+
+			static char const* const exp[] = {
+				"POLYGON ((185 221, 88 275, 180 316, 292 281, 185 221))",
+				"POLYGON ((189 98, 83 187, 185 221, 325 168, 189 98))",
+				nullptr
+			};
+
+			doTest(inp, exp);
+		}
 
 } // namespace tut
 
