@@ -319,8 +319,7 @@ PolygonizeGraph::computeNextCCWEdges(Node *node, long label) {
 	auto edges = deStar->getEdges();
 
 	/*
-	 * Must use a SIGNED int here to allow for beak condition
-	 * to be true.
+	 * Cycling in reverse order.
 	 */
 	for(auto i = edges.size(); i > 0; --i) {
 		auto de = dynamic_cast<PolygonizeDirectedEdge*>(edges[i - 1]);
