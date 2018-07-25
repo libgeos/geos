@@ -33,8 +33,7 @@ namespace util { // geos.util
  *
  * \brief Base class for all GEOS exceptions.
  *
- * Exceptions are thrown as pointers to this type.
- * Use toString() to get a readable message.
+ * Use what() to get a readable message.
  */
 class GEOS_DLL GEOSException: public std::runtime_error {
 
