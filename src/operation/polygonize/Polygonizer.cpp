@@ -208,8 +208,8 @@ Polygonizer::polygonize()
 
 	graph->deleteCutEdges(cutEdges);
 
-	vector<EdgeRing*> edgeRingList;
-	graph->getEdgeRings(edgeRingList);
+	auto edgeRingList(graph->getEdgeRings());
+
 #if GEOS_DEBUG
 	cerr<<"Polygonizer::polygonize(): "<<edgeRingList.size()<<" edgeRings in graph"<<endl;
 #endif

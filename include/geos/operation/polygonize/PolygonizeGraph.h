@@ -99,11 +99,23 @@ class GEOS_DLL PolygonizeGraph: public planargraph::PlanarGraph {
 	 * \brief
 	 * Computes the EdgeRings formed by the edges in this graph.
 	 *
-	 * @param edgeRingList : the EdgeRing found by the
+	 * Any old values on edgeRingList will be deleted (not destroyed)
+	 *
+	 * @note Marked as deprecated, because its public
+	 *
+	 * @parami[in/out] edgeRingList : the EdgeRings found by the
 	 * 	polygonization process will be pushed here.
 	 *
 	 */
+	// [[deprecated]]
 	void getEdgeRings(std::vector<EdgeRing*>& edgeRingList);
+
+	/**
+	 * \brief
+	 * Computes the EdgeRings formed by the edges in this graph.
+	 *
+	 * @return edgeRingList: the EdgeRings found by the polygonization process.
+	 */
 	std::vector<EdgeRing*> getEdgeRings();
 
 	/**

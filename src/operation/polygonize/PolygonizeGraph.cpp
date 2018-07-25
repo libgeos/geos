@@ -220,6 +220,7 @@ PolygonizeGraph::getEdgeRings() {
 	return edgeRingList;
 }
 
+/* public [[deprecated]] */
 void
 PolygonizeGraph::getEdgeRings(std::vector<EdgeRing*>& edgeRingList) {
 	edgeRingList = getEdgeRings();
