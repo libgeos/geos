@@ -148,7 +148,7 @@ PolygonizeGraph::getNode(const Coordinate& pt) {
 }
 
 void
-PolygonizeGraph::computeNextCWEdges() {
+PolygonizeGraph::computeNextCWEdges() const {
 	typedef std::vector<Node*> Nodes;
 	Nodes pns;
  	getNodes(pns);
@@ -161,7 +161,7 @@ PolygonizeGraph::computeNextCWEdges() {
 /* private */
 void
 PolygonizeGraph::convertMaximalToMinimalEdgeRings(
-		const std::vector<PolygonizeDirectedEdge*> &ringEdges) {
+		const std::vector<PolygonizeDirectedEdge*> ringEdges)  const {
 	for (const auto de : ringEdges) {
 		auto label = de->getLabel();
 		auto intNodes = findIntersectionNodes(de, label);
@@ -193,7 +193,7 @@ PolygonizeGraph::findIntersectionNodes(
 
 /* public */
 std::vector<EdgeRing*>
-PolygonizeGraph::getEdgeRings() {
+PolygonizeGraph::getEdgeRings() const {
 	std::vector<EdgeRing*> edgeRingList;
 	// maybe could optimize this, since most of these pointers should
 	// be set correctly already
@@ -229,12 +229,12 @@ PolygonizeGraph::getEdgeRings(std::vector<EdgeRing*>& edgeRingList) {
 
 std::vector<PolygonizeDirectedEdge*>
 PolygonizeGraph::findLabeledEdgeRings(
-	std::vector<DirectedEdge*> &dirEdges) {
+		const std::vector<DirectedEdge*> dirEdges) const {
 	std::vector<PolygonizeDirectedEdge*> edgeRingStarts;
 
 	// label the edge rings formed
 	long currLabel(1);
-	for (auto e : dirEdges) {
+	for (const auto e : dirEdges) {
 		auto de = dynamic_cast<PolygonizeDirectedEdge*>(e);
 
 		if (de->isMarked()) continue;
@@ -285,15 +285,15 @@ PolygonizeGraph::deleteCutEdges(std::vector<const LineString*> &cutLines) {
 
 void
 PolygonizeGraph::label(
-		std::vector<DirectedEdge*> &dirEdges,
-	 	long label) {
+		const std::vector<DirectedEdge*> &dirEdges,
+	 	long label) const {
 	for(auto e : dirEdges) {
 		dynamic_cast<PolygonizeDirectedEdge*>(e)->setLabel(label);
 	}
 }
 
 void
-PolygonizeGraph::computeNextCWEdges(Node *node) {
+PolygonizeGraph::computeNextCWEdges(Node *node) const {
 	DirectedEdgeStar *deStar = node->getOutEdges();
 	PolygonizeDirectedEdge *startDE = nullptr;
 	PolygonizeDirectedEdge *prevDE = nullptr;
@@ -321,7 +321,7 @@ PolygonizeGraph::computeNextCWEdges(Node *node) {
  * minimal edgerings
  */
 void
-PolygonizeGraph::computeNextCCWEdges(Node *node, long label) {
+PolygonizeGraph::computeNextCCWEdges(Node *node, long label) const {
 	auto deStar = node->getOutEdges();
 
 	PolygonizeDirectedEdge *firstOutDE = nullptr;
@@ -372,7 +372,7 @@ PolygonizeGraph::findDirEdgesInRing(PolygonizeDirectedEdge *startDE) const {
 }
 
 EdgeRing *
-PolygonizeGraph::findEdgeRing(PolygonizeDirectedEdge *startDE) {
+PolygonizeGraph::findEdgeRing(PolygonizeDirectedEdge *startDE) const {
 	auto de = startDE;
 	EdgeRing *er = new EdgeRing(factory);
 	// Now, when will we delete those EdgeRings ?

@@ -113,7 +113,7 @@ public:
 	 *
 	 * @param nodes : the nodes are push_back'ed here
 	 */
-	void getNodes(std::vector<Node*>& nodes);
+	void getNodes(std::vector<Node*>& nodes) const;
 };
 
 

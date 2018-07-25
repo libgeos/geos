@@ -153,7 +153,7 @@ public:
 	 *
 	 * @param nodes : the nodes are push_back'ed here
 	 */
-	void getNodes(std::vector<Node*>& nodes) { nodeMap.getNodes(nodes); }
+	void getNodes(std::vector<Node*>& nodes) const { nodeMap.getNodes(nodes); }
 
 	/**
 	 * \brief

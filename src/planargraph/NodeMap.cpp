@@ -65,9 +65,9 @@ NodeMap::remove(geom::Coordinate& pt)
 
 /* public */
 void
-NodeMap::getNodes(vector<Node*>& values)
+NodeMap::getNodes(vector<Node*>& values) const
 {
-	NodeMap::container::iterator it=nodeMap.begin(), itE=nodeMap.end();
+	NodeMap::container::const_iterator it=nodeMap.begin(), itE=nodeMap.end();
 	while (it != itE) {
 		values.push_back(it->second);
 		++it;

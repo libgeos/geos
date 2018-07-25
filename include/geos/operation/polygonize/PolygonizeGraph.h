@@ -116,7 +116,7 @@ class GEOS_DLL PolygonizeGraph: public planargraph::PlanarGraph {
 	 *
 	 * @return edgeRingList: the EdgeRings found by the polygonization process.
 	 */
-	std::vector<EdgeRing*> getEdgeRings();
+	std::vector<EdgeRing*> getEdgeRings() const;
 
 	/**
 	 * \brief
@@ -151,7 +151,7 @@ class GEOS_DLL PolygonizeGraph: public planargraph::PlanarGraph {
 
 	planargraph::Node* getNode(const geom::Coordinate& pt);
 
-	void computeNextCWEdges();
+	void computeNextCWEdges() const;
 
 	/**
 	 * \brief
@@ -163,7 +163,7 @@ class GEOS_DLL PolygonizeGraph: public planargraph::PlanarGraph {
 	 *
 	 */
 	void convertMaximalToMinimalEdgeRings(
-			const std::vector<PolygonizeDirectedEdge*> &ringEdges);
+			const std::vector<PolygonizeDirectedEdge*> ringEdges) const;
 
 	/**
 	 * \brief
@@ -191,11 +191,11 @@ class GEOS_DLL PolygonizeGraph: public planargraph::PlanarGraph {
 	 */
 	std::vector<PolygonizeDirectedEdge*>
 	findLabeledEdgeRings(
-			std::vector<planargraph::DirectedEdge*> &dirEdgesIn);
+			const std::vector<planargraph::DirectedEdge*> dirEdgesIn) const;
 
-	void label(std::vector<planargraph::DirectedEdge*> &dirEdges, long label);
+	void label(const std::vector<planargraph::DirectedEdge*> &dirEdges, long label) const;
 
-	void computeNextCWEdges(planargraph::Node *node);
+	void computeNextCWEdges(planargraph::Node *node) const;
 
 	/**
 	 * \brief
@@ -204,7 +204,7 @@ class GEOS_DLL PolygonizeGraph: public planargraph::PlanarGraph {
 	 * This algorithm has the effect of converting maximal edgerings
 	 * into minimal edgerings
 	 */
-	void computeNextCCWEdges(planargraph::Node *node, long label);
+	void computeNextCCWEdges(planargraph::Node *node, long label) const;
 
 	/**
 	 * \brief
@@ -218,8 +218,8 @@ class GEOS_DLL PolygonizeGraph: public planargraph::PlanarGraph {
 	std::vector<planargraph::DirectedEdge*>
 	findDirEdgesInRing(PolygonizeDirectedEdge *startDE) const;
 
-	/* not const because has side effect of saving the Edge Ring found */
-	EdgeRing* findEdgeRing(PolygonizeDirectedEdge *startDE);
+	/* has side effect of saving the Edge Ring found */
+	EdgeRing* findEdgeRing(PolygonizeDirectedEdge *startDE) const;
 
 	/*
 	 * Data members
@@ -234,7 +234,7 @@ class GEOS_DLL PolygonizeGraph: public planargraph::PlanarGraph {
 	/* created as PolygonizeDirectedEdge but saved as DirectedEdge*/
 	std::vector<planargraph::DirectedEdge *> newDirEdges;
 	std::vector<planargraph::Node *> newNodes;
-	std::vector<EdgeRing *> newEdgeRings;
+	mutable std::vector<EdgeRing *> newEdgeRings;
 	std::vector<geom::CoordinateSequence *> newCoords;
 };
 
