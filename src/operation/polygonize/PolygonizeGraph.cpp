@@ -48,7 +48,7 @@ namespace polygonize {  // geos.operation.polygonize
 
 int
 PolygonizeGraph::getDegreeNonDeleted(Node *node) const {
-	auto edges = node->getOutEdges()->getEdges();
+	auto edges(node->getOutEdges()->getEdges());
 	int degree = 0;
 	for (auto e : edges) {
 		if (!dynamic_cast<PolygonizeDirectedEdge*>(e)->isMarked()) ++degree;
@@ -58,7 +58,7 @@ PolygonizeGraph::getDegreeNonDeleted(Node *node) const {
 
 int
 PolygonizeGraph::getDegree(Node *node, long label) const {
-	auto edges = node->getOutEdges()->getEdges();
+	auto edges(node->getOutEdges()->getEdges());
 	int degree = 0;
 	for (auto e : edges) {
 		if (dynamic_cast<PolygonizeDirectedEdge*>(e)->getLabel() == label) ++degree;
@@ -71,7 +71,7 @@ PolygonizeGraph::getDegree(Node *node, long label) const {
  */
 void
 PolygonizeGraph::deleteAllEdges(Node *node) {
-	std::vector<DirectedEdge*> &edges = node->getOutEdges()->getEdges();
+	auto edges(node->getOutEdges()->getEdges());
   for (auto e : edges) {
 		auto de = dynamic_cast<PolygonizeDirectedEdge*>(e);
 		de->setMarked(true);
@@ -150,7 +150,8 @@ PolygonizeGraph::getNode(const Coordinate& pt) {
 void
 PolygonizeGraph::computeNextCWEdges() {
 	typedef std::vector<Node*> Nodes;
-	Nodes pns; getNodes(pns);
+	Nodes pns;
+ 	getNodes(pns);
 	// set the next pointers for the edges around each node
 	for(auto n : pns) {
 		computeNextCWEdges(n);
@@ -160,8 +161,8 @@ PolygonizeGraph::computeNextCWEdges() {
 /* private */
 void
 PolygonizeGraph::convertMaximalToMinimalEdgeRings(
-		std::vector<PolygonizeDirectedEdge*> ringEdges) {
-	for (auto de : ringEdges) {
+		const std::vector<PolygonizeDirectedEdge*> &ringEdges) {
+	for (const auto de : ringEdges) {
 		auto label = de->getLabel();
 		auto intNodes = findIntersectionNodes(de, label);
 		for (auto n : intNodes) {
@@ -173,9 +174,10 @@ PolygonizeGraph::convertMaximalToMinimalEdgeRings(
 std::vector<Node*>
 PolygonizeGraph::findIntersectionNodes(
 		PolygonizeDirectedEdge *startDE,
-		long label) {
+		long label) const {
 	std::vector<Node*> intNodes;
 	auto de = startDE;
+
 	do {
 		auto node = de->getFromNode();
 		if (getDegree(node, label) > 1) {
@@ -185,12 +187,14 @@ PolygonizeGraph::findIntersectionNodes(
 		assert(de);  // found NULL DE in ring
 		assert(de == startDE || !de->isInRing());  // found DE already in ring
 	} while (de != startDE);
+
 	return intNodes;
 }
 
 /* public */
-void
-PolygonizeGraph::getEdgeRings(std::vector<EdgeRing*>& edgeRingList) {
+std::vector<EdgeRing*>
+PolygonizeGraph::getEdgeRings() {
+	std::vector<EdgeRing*> edgeRingList;
 	// maybe could optimize this, since most of these pointers should
 	// be set correctly already
 	// by deleteCutEdges()
@@ -213,7 +217,14 @@ PolygonizeGraph::getEdgeRings(std::vector<EdgeRing*>& edgeRingList) {
 		auto er = findEdgeRing(de);
 		edgeRingList.push_back(er);
 	}
+	return edgeRingList;
 }
+
+void
+PolygonizeGraph::getEdgeRings(std::vector<EdgeRing*>& edgeRingList) {
+	edgeRingList = getEdgeRings();
+}
+
 
 std::vector<PolygonizeDirectedEdge*>
 PolygonizeGraph::findLabeledEdgeRings(
@@ -355,6 +366,7 @@ PolygonizeGraph::findDirEdgesInRing(PolygonizeDirectedEdge *startDE) const {
 		assert(de);  // found NULL DE in ring
 		assert(de == startDE || !de->isInRing());  // found DE already in ring
 	} while (de != startDE);
+
 	return edges;
 }
 
@@ -387,16 +399,17 @@ PolygonizeGraph::deleteDangles(std::vector<const LineString*>& dangleLines) {
 		nodeStack.pop_back();
 		deleteAllEdges(node);
 
-		auto nodeOutEdges = node->getOutEdges()->getEdges();
+		auto nodeOutEdges(node->getOutEdges()->getEdges());
+
 		for(auto oe : nodeOutEdges) {
-			auto de = dynamic_cast<PolygonizeDirectedEdge*>(oe);
+			auto de(dynamic_cast<PolygonizeDirectedEdge*>(oe));
 			// delete this edge and its sym
 			de->setMarked(true);
-			auto sym = dynamic_cast<PolygonizeDirectedEdge*>(de->getSym());
+			auto sym(dynamic_cast<PolygonizeDirectedEdge*>(de->getSym()));
 			if (sym) sym->setMarked(true);
 			// save the line as a dangle
-			auto e = dynamic_cast<PolygonizeEdge*>(de->getEdge());
-			auto ls = e->getLine();
+			auto e(dynamic_cast<PolygonizeEdge*>(de->getEdge()));
+			auto ls(e->getLine());
 			if (uniqueDangles.insert(ls).second) {
 				dangleLines.push_back(ls);
 			}

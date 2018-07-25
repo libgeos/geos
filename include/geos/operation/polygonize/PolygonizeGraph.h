@@ -104,6 +104,7 @@ class GEOS_DLL PolygonizeGraph: public planargraph::PlanarGraph {
 	 *
 	 */
 	void getEdgeRings(std::vector<EdgeRing*>& edgeRingList);
+	std::vector<EdgeRing*> getEdgeRings();
 
 	/**
 	 * \brief
@@ -135,7 +136,6 @@ class GEOS_DLL PolygonizeGraph: public planargraph::PlanarGraph {
 
 	int getDegree(planargraph::Node *node, long label) const;
 
-	const geom::GeometryFactory *factory;
 
 	planargraph::Node* getNode(const geom::Coordinate& pt);
 
@@ -151,7 +151,7 @@ class GEOS_DLL PolygonizeGraph: public planargraph::PlanarGraph {
 	 *
 	 */
 	void convertMaximalToMinimalEdgeRings(
-			std::vector<PolygonizeDirectedEdge*> ringEdges);
+			const std::vector<PolygonizeDirectedEdge*> &ringEdges);
 
 	/**
 	 * \brief
@@ -166,7 +166,7 @@ class GEOS_DLL PolygonizeGraph: public planargraph::PlanarGraph {
 	std::vector<planargraph::Node*>
 	findIntersectionNodes(
 		 	PolygonizeDirectedEdge *startDE,
-			long label);
+			long label) const;
 
 	/**
 	 * Finds and labels all edgerings in the graph.
@@ -209,7 +209,14 @@ class GEOS_DLL PolygonizeGraph: public planargraph::PlanarGraph {
 	/* not const because has side effect of saving the Edge Ring found */
 	EdgeRing* findEdgeRing(PolygonizeDirectedEdge *startDE);
 
-	/* These are for memory management */
+	/*
+	 * Data members
+	 */
+	const geom::GeometryFactory *factory;
+
+	/*
+	 *  These are for memory management
+	 */
 	/* created as PolygonizeEdge but saved as Edge*/
 	std::vector<planargraph::Edge *> newEdges;
 	/* created as PolygonizeDirectedEdge but saved as DirectedEdge*/
