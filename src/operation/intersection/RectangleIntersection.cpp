@@ -60,6 +60,11 @@ bool different(double x1, double y1, double x2, double y2)
 inline
 void clip_one_edge(double & x1, double & y1, double x2, double y2, double limit)
 {
+  if (x2 == limit) {
+  	y1 = y2;
+    x1 = x2;
+  }
+
   if(x1 != x2)
 	{
 	  y1 += (y2-y1)*(limit-x1)/(x2-x1);
