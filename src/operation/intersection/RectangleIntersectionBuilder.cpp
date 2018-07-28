@@ -22,6 +22,7 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/algorithm/CGAlgorithms.h>
+#include <geos/util/IllegalArgumentException.h>
 
 #include <cmath> // for fabs()
 
@@ -183,6 +184,13 @@ double distance(const Rectangle & rect,
 
   Rectangle::Position pos = rect.position(x1,y1);
   Rectangle::Position endpos = rect.position(x2,y2);
+
+  if (pos & Rectangle::Position::Outside ||
+      endpos & Rectangle::Position::Outside ||
+	  pos & Rectangle::Position::Inside ||
+	  endpos & Rectangle::Position::Inside) {
+  	throw geos::util::IllegalArgumentException("Can't compute distance to non-boundary position.");
+  }
 
   while(true)
 	{

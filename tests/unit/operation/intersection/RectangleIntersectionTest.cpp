@@ -101,7 +101,6 @@ namespace tut
     typedef group::object object;
 
     group test_rectangleintersectiontest_group("geos::operation::intersection::RectangleIntersection");
-
     // inside
     template<> template<> void object::test<1>()
     {
@@ -1513,5 +1512,20 @@ namespace tut
       const char *exp =
         "POLYGON((0 0,0 10,10 10,10 0,0 0))";
       doClipTest(inp, exp, r);
+    }
+
+    // PostGIS hanging unit test
+    template<> template<> void object::test<208>()
+    {
+      Rectangle r(3.0481343214686657e-14, -20000000.000000, 20000000.000000, -1.000000);
+      const char *clip =
+        "POLYGON((3.0481343214686657e-14 -20000000, 200000000 -20000000, 200000000 -1, 3.0481343214686657e-14 -1, 3.0481343214686657e-14 -20000000))";
+      const char *inp =
+        "POLYGON((3.0481343214686657e-14 -20000000, 3.0481343214686657e-14 -1, 1.570795680861262382313481289e-3 -0.999998766299703523152686557296, 3.141587485909849188081555127e-3 -0.999995065201858102099663483386, 3.0481343214686657e-14 -20000000))";
+
+      GeomPtr isect{readWKT(clip)->intersection(readWKT(inp).get())};
+      std::string exp = wktwriter.write(isect.get());
+
+      doClipTest(inp, exp, r, 1e-20);
     }
 }
