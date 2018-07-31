@@ -1,3 +1,9 @@
+Changes in 3.5.2
+2018-XX-XX
+
+-Bug fixes / improvements
+  - Fix infinite loop in GEOSClipByRect (#865, Dan Baston and Raúl Marín)
+
 Changes in 3.5.1
 2015-10-25
 
