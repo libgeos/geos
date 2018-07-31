@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for geos::operation::intersection::RectangleIntersection class.
 
 // tut
@@ -1523,7 +1523,7 @@ namespace tut
       const char *inp =
         "POLYGON((3.0481343214686657e-14 -20000000, 3.0481343214686657e-14 -1, 1.570795680861262382313481289e-3 -0.999998766299703523152686557296, 3.141587485909849188081555127e-3 -0.999995065201858102099663483386, 3.0481343214686657e-14 -20000000))";
 
-      GeomPtr isect{readWKT(clip)->intersection(readWKT(inp).get())};
+      GeomPtr isect(readWKT(clip)->intersection(readWKT(inp).get()));
       std::string exp = wktwriter.write(isect.get());
 
       doClipTest(inp, exp, r, 1e-20);
