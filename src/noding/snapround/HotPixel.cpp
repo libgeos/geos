@@ -71,13 +71,13 @@ HotPixel::getSafeEnvelope() const
 
 /*private*/
 void
-HotPixel::initCorners(const Coordinate& pt)
+HotPixel::initCorners(const Coordinate& p_pt)
 {
 	double tolerance = 0.5;
-	minx = pt.x - tolerance;
-	maxx = pt.x + tolerance;
-	miny = pt.y - tolerance;
-	maxy = pt.y + tolerance;
+	minx = p_pt.x - tolerance;
+	maxx = p_pt.x + tolerance;
+	miny = p_pt.y - tolerance;
+	maxy = p_pt.y + tolerance;
 
 	corner.resize(4);
 	corner[0] = Coordinate(maxx, maxy);

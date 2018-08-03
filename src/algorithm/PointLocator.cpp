@@ -86,8 +86,8 @@ PointLocator::computeLocation(const Coordinate& p, const Geometry *geom)
 	{
 		for(std::size_t i=0, n=mpo->getNumGeometries(); i<n; ++i)
 		{
-			const Polygon *po=dynamic_cast<const Polygon *>(mpo->getGeometryN(i));
-			updateLocationInfo(locate(p, po));
+			const Polygon *p_po=dynamic_cast<const Polygon *>(mpo->getGeometryN(i));
+			updateLocationInfo(locate(p, p_po));
 		}
 	}
 	else if (const GeometryCollection *col=dynamic_cast<const GeometryCollection *>(geom))

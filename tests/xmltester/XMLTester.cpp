@@ -782,11 +782,11 @@ XMLTester::parseTest(const TiXmlNode* node)
     const TiXmlNode* resnode = opnode->FirstChild();
     if ( ! resnode )
     {
-        std::stringstream tmp;
-        tmp << "op of test " << testCount
+        std::stringstream p_tmp;
+        p_tmp << "op of test " << testCount
             << " of case " << caseCount
             << " has no expected result child";
-        throw(runtime_error(tmp.str()));
+        throw(runtime_error(p_tmp.str()));
     }
     opRes = resnode->Value();
 
@@ -845,12 +845,12 @@ XMLTester::parseTest(const TiXmlNode* node)
 
         else if (opName=="isvalid")
         {
-            geom::Geometry *gT=gA;
+            geom::Geometry *p_gT=gA;
             if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) {
-                gT=gB;
+                p_gT=gB;
             }
 
-            if (gT->isValid()) actual_result="true";
+            if (p_gT->isValid()) actual_result="true";
             else actual_result="false";
 
             if (actual_result==opRes) success=1;
@@ -1030,13 +1030,13 @@ XMLTester::parseTest(const TiXmlNode* node)
 
         else if (opName=="getboundary")
         {
-            geom::Geometry *gT=gA;
-            if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
+            geom::Geometry *p_gT=gA;
+            if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) p_gT=gB;
 
             GeomPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
 
-            GeomPtr gRealRes(gT->getBoundary());
+            GeomPtr gRealRes(p_gT->getBoundary());
             gRealRes->normalize();
 
             if (gRes->compareTo(gRealRes.get())==0) success=1;
@@ -1050,13 +1050,13 @@ XMLTester::parseTest(const TiXmlNode* node)
 
         else if (opName=="getcentroid")
         {
-            geom::Geometry *gT=gA;
-            if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
+            geom::Geometry *p_gT=gA;
+            if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) p_gT=gB;
 
             GeomPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
 
-            GeomPtr gRealRes(gT->getCentroid());
+            GeomPtr gRealRes(p_gT->getCentroid());
 
             if ( gRealRes.get() ) gRealRes->normalize();
             else gRealRes.reset(factory->createPoint());
@@ -1073,10 +1073,10 @@ XMLTester::parseTest(const TiXmlNode* node)
 
         else if (opName=="issimple")
         {
-            geom::Geometry *gT=gA;
-            if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
+            geom::Geometry *p_gT=gA;
+            if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) p_gT=gB;
 
-            if (gT->isSimple()) actual_result="true";
+            if (p_gT->isSimple()) actual_result="true";
             else actual_result="false";
 
             if (actual_result==opRes) success=1;
@@ -1085,13 +1085,13 @@ XMLTester::parseTest(const TiXmlNode* node)
 
         else if (opName=="convexhull")
         {
-            geom::Geometry *gT=gA;
-            if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
+            geom::Geometry *p_gT=gA;
+            if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) p_gT=gB;
 
             GeomPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
 
-            GeomPtr gRealRes(gT->convexHull());
+            GeomPtr gRealRes(p_gT->convexHull());
             gRealRes->normalize();
 
             if (gRes->compareTo(gRealRes.get())==0) success=1;
@@ -1107,8 +1107,8 @@ XMLTester::parseTest(const TiXmlNode* node)
         {
             using namespace operation::buffer;
 
-            geom::Geometry *gT=gA;
-            if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
+            geom::Geometry *p_gT=gA;
+            if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) p_gT=gB;
 
             GeomPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
@@ -1124,7 +1124,7 @@ XMLTester::parseTest(const TiXmlNode* node)
             }
 
 
-            BufferOp op(gT, params);
+            BufferOp op(p_gT, params);
             gRealRes.reset(op.getResultGeometry(dist));
 
             profile.stop();
@@ -1144,8 +1144,8 @@ XMLTester::parseTest(const TiXmlNode* node)
         {
             using namespace operation::buffer;
 
-            geom::Geometry *gT=gA;
-            if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
+            geom::Geometry *p_gT=gA;
+            if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) p_gT=gB;
 
             GeomPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
@@ -1169,7 +1169,7 @@ XMLTester::parseTest(const TiXmlNode* node)
 
             BufferBuilder bufBuilder( params ) ;
             gRealRes.reset( bufBuilder.bufferLineSingleSided(
-                                         gT, dist, leftSide ) ) ;
+                                         p_gT, dist, leftSide ) ) ;
 
             profile.stop();
             gRealRes->normalize();
@@ -1189,8 +1189,8 @@ XMLTester::parseTest(const TiXmlNode* node)
         {
             using namespace operation::buffer;
 
-            geom::Geometry *gT=gA;
-            if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
+            geom::Geometry *p_gT=gA;
+            if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) p_gT=gB;
 
             GeomPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
@@ -1207,7 +1207,7 @@ XMLTester::parseTest(const TiXmlNode* node)
         params.setQuadrantSegments(std::atoi(opArg3.c_str()));
             }
 
-            BufferOp op(gT, params);
+            BufferOp op(p_gT, params);
             gRealRes.reset(op.getResultGeometry(dist));
 
             profile.stop();
@@ -1226,13 +1226,13 @@ XMLTester::parseTest(const TiXmlNode* node)
 
         else if (opName=="getinteriorpoint")
         {
-            geom::Geometry *gT=gA;
-            if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
+            geom::Geometry *p_gT=gA;
+            if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) p_gT=gB;
 
             GeomPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
 
-            GeomPtr gRealRes(gT->getInteriorPoint());
+            GeomPtr gRealRes(p_gT->getInteriorPoint());
             if ( gRealRes.get() ) gRealRes->normalize();
             else gRealRes.reset(factory->createPoint());
 
@@ -1292,12 +1292,12 @@ XMLTester::parseTest(const TiXmlNode* node)
             GeomPtr gRes(wktreader->read(opRes));
             gRes->normalize();
 
-            geom::Geometry *gT=gA;
+            geom::Geometry *p_gT=gA;
 
-            if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) gT=gB;
+            if ( ( opArg1 == "B" || opArg1 == "b" ) && gB ) p_gT=gB;
 
             LineMerger merger;
-            merger.add(gT);
+            merger.add(p_gT);
             std::unique_ptr< std::vector<geom::LineString *> > lines ( merger.getMergedLineStrings() );
             std::vector<geom::Geometry *>*newgeoms = new std::vector<geom::Geometry *>(lines->begin(),
                     lines->end());
@@ -1453,9 +1453,9 @@ XMLTester::parseTest(const TiXmlNode* node)
                 success = 1 && validOut;
             }
 
-            std::stringstream tmp;
-            tmp << maxdiffop << ": " << maxdiff;
-            actual_result=tmp.str();
+            std::stringstream p_tmp;
+            p_tmp << maxdiffop << ": " << maxdiff;
+            actual_result=p_tmp.str();
             expected_result=opRes;
 
         }
@@ -1519,24 +1519,24 @@ XMLTester::parseTest(const TiXmlNode* node)
 }
 
 void
-XMLTester::runPredicates(const geom::Geometry *gA, const geom::Geometry *gB)
+XMLTester::runPredicates(const geom::Geometry *p_gA, const geom::Geometry *p_gB)
 {
-    std::cout << "\t    Equals:\tAB=" << (gA->equals(gB)?"T":"F") << ", BA=" << (gB->equals(gA)?"T":"F") << std::endl;
-    std::cout << "\t  Disjoint:\tAB=" << (gA->disjoint(gB)?"T":"F") << ", BA=" << (gB->disjoint(gA)?"T":"F") << std::endl;
-    std::cout << "\tIntersects:\tAB=" << (gA->intersects(gB)?"T":"F") << ", BA=" << (gB->intersects(gA)?"T":"F") << std::endl;
-    std::cout << "\t   Touches:\tAB=" << (gA->touches(gB)?"T":"F") << ", BA=" << (gB->touches(gA)?"T":"F") << std::endl;
-    std::cout << "\t   Crosses:\tAB=" << (gA->crosses(gB)?"T":"F") << ", BA=" << (gB->crosses(gA)?"T":"F") << std::endl;
-    std::cout << "\t    Within:\tAB=" << (gA->within(gB)?"T":"F") << ", BA=" << (gB->within(gA)?"T":"F") << std::endl;
-    std::cout << "\t  Contains:\tAB=" << (gA->contains(gB)?"T":"F") << ", BA=" << (gB->contains(gA)?"T":"F") << std::endl;
-    std::cout << "\t  Overlaps:\tAB=" << (gA->overlaps(gB)?"T":"F") << ", BA=" << (gB->overlaps(gA)?"T":"F") << std::endl;
+    std::cout << "\t    Equals:\tAB=" << (p_gA->equals(p_gB)?"T":"F") << ", BA=" << (p_gB->equals(p_gA)?"T":"F") << std::endl;
+    std::cout << "\t  Disjoint:\tAB=" << (p_gA->disjoint(p_gB)?"T":"F") << ", BA=" << (p_gB->disjoint(p_gA)?"T":"F") << std::endl;
+    std::cout << "\tIntersects:\tAB=" << (p_gA->intersects(p_gB)?"T":"F") << ", BA=" << (p_gB->intersects(p_gA)?"T":"F") << std::endl;
+    std::cout << "\t   Touches:\tAB=" << (p_gA->touches(p_gB)?"T":"F") << ", BA=" << (p_gB->touches(p_gA)?"T":"F") << std::endl;
+    std::cout << "\t   Crosses:\tAB=" << (p_gA->crosses(p_gB)?"T":"F") << ", BA=" << (p_gB->crosses(p_gA)?"T":"F") << std::endl;
+    std::cout << "\t    Within:\tAB=" << (p_gA->within(p_gB)?"T":"F") << ", BA=" << (p_gB->within(p_gA)?"T":"F") << std::endl;
+    std::cout << "\t  Contains:\tAB=" << (p_gA->contains(p_gB)?"T":"F") << ", BA=" << (p_gB->contains(p_gA)?"T":"F") << std::endl;
+    std::cout << "\t  Overlaps:\tAB=" << (p_gA->overlaps(p_gB)?"T":"F") << ", BA=" << (p_gB->overlaps(p_gA)?"T":"F") << std::endl;
 
-    std::cout << "\t  Prepared Disjoint:\tAB=" << (prepare(gA)->disjoint(gB)?"T":"F") << ", BA=" << (prepare(gB)->disjoint(gA)?"T":"F") << std::endl;
-    std::cout << "\tPrepared Intersects:\tAB=" << (prepare(gA)->intersects(gB)?"T":"F") << ", BA=" << (prepare(gB)->intersects(gA)?"T":"F") << std::endl;
-    std::cout << "\t   Prepared Touches:\tAB=" << (prepare(gA)->touches(gB)?"T":"F") << ", BA=" << (prepare(gB)->touches(gA)?"T":"F") << std::endl;
-    std::cout << "\t   Prepared Crosses:\tAB=" << (prepare(gA)->crosses(gB)?"T":"F") << ", BA=" << (prepare(gB)->crosses(gA)?"T":"F") << std::endl;
-    std::cout << "\t    Prepared Within:\tAB=" << (prepare(gA)->within(gB)?"T":"F") << ", BA=" << (prepare(gB)->within(gA)?"T":"F") << std::endl;
-    std::cout << "\t  Prepared Contains:\tAB=" << (prepare(gA)->contains(gB)?"T":"F") << ", BA=" << (prepare(gB)->contains(gA)?"T":"F") << std::endl;
-    std::cout << "\t Prepared Overlaps:\tAB=" << (prepare(gA)->overlaps(gB)?"T":"F") << ", BA=" << (prepare(gB)->overlaps(gA)?"T":"F") << std::endl;
+    std::cout << "\t  Prepared Disjoint:\tAB=" << (prepare(p_gA)->disjoint(p_gB)?"T":"F") << ", BA=" << (prepare(p_gB)->disjoint(p_gA)?"T":"F") << std::endl;
+    std::cout << "\tPrepared Intersects:\tAB=" << (prepare(p_gA)->intersects(p_gB)?"T":"F") << ", BA=" << (prepare(p_gB)->intersects(p_gA)?"T":"F") << std::endl;
+    std::cout << "\t   Prepared Touches:\tAB=" << (prepare(p_gA)->touches(p_gB)?"T":"F") << ", BA=" << (prepare(p_gB)->touches(p_gA)?"T":"F") << std::endl;
+    std::cout << "\t   Prepared Crosses:\tAB=" << (prepare(p_gA)->crosses(p_gB)?"T":"F") << ", BA=" << (prepare(p_gB)->crosses(p_gA)?"T":"F") << std::endl;
+    std::cout << "\t    Prepared Within:\tAB=" << (prepare(p_gA)->within(p_gB)?"T":"F") << ", BA=" << (prepare(p_gB)->within(p_gA)?"T":"F") << std::endl;
+    std::cout << "\t  Prepared Contains:\tAB=" << (prepare(p_gA)->contains(p_gB)?"T":"F") << ", BA=" << (prepare(p_gB)->contains(p_gA)?"T":"F") << std::endl;
+    std::cout << "\t Prepared Overlaps:\tAB=" << (prepare(p_gA)->overlaps(p_gB)?"T":"F") << ", BA=" << (prepare(p_gB)->overlaps(p_gA)?"T":"F") << std::endl;
 }
 
 XMLTester::~XMLTester()

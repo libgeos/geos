@@ -514,13 +514,13 @@ OverlayOp::mergeZ(Node *n, const LineString *line) const
 {
 	const CoordinateSequence *pts = line->getCoordinatesRO();
 	const Coordinate &p = n->getCoordinate();
-	LineIntersector li;
+	LineIntersector p_li;
 	for(size_t i=1, size=pts->size(); i<size; ++i)
 	{
 		const Coordinate &p0=pts->getAt(i-1);
 		const Coordinate &p1=pts->getAt(i);
-		li.computeIntersection(p, p0, p1);
-		if (li.hasIntersection())
+		p_li.computeIntersection(p, p0, p1);
+		if (p_li.hasIntersection())
 		{
 			if ( p == p0 )
 			{

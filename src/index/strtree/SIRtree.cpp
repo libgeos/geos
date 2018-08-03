@@ -73,8 +73,8 @@ SIRtree::SIRtree():
 }
 
 /*public*/
-SIRtree::SIRtree(size_t nodeCapacity):
-	AbstractSTRtree(nodeCapacity),
+SIRtree::SIRtree(size_t p_nodeCapacity):
+	AbstractSTRtree(p_nodeCapacity),
 	intersectsOp(new SIRIntersectsOp())
 {
 }
@@ -86,9 +86,9 @@ SIRtree::~SIRtree() {
 
 class SIRAbstractNode: public AbstractNode {
 public:
-	SIRAbstractNode(int level, size_t capacity)
+	SIRAbstractNode(int p_level, size_t capacity)
 		:
-		AbstractNode(level, capacity)
+		AbstractNode(p_level, capacity)
 	{}
 
 	~SIRAbstractNode() override
@@ -100,18 +100,18 @@ protected:
 
 	void* computeBounds() const override
 	{
-		Interval* bounds=nullptr;
+		Interval* p_bounds=nullptr;
 		const BoundableList& b = *getChildBoundables();
 		for(unsigned int i=0; i<b.size(); ++i)
 		{
 			const Boundable* childBoundable=b[i];
-			if (bounds==nullptr) {
-				bounds=new Interval(*((Interval*)childBoundable->getBounds()));
+			if (p_bounds==nullptr) {
+				p_bounds=new Interval(*((Interval*)childBoundable->getBounds()));
 			} else {
-				bounds->expandToInclude((Interval*)childBoundable->getBounds());
+				p_bounds->expandToInclude((Interval*)childBoundable->getBounds());
 			}
 		}
-		return bounds;
+		return p_bounds;
 	}
 
 };

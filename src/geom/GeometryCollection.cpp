@@ -253,12 +253,12 @@ GeometryCollection::normalize()
 Envelope::Ptr
 GeometryCollection::computeEnvelopeInternal() const
 {
-	Envelope::Ptr envelope(new Envelope());
+	Envelope::Ptr p_envelope(new Envelope());
 	for (size_t i=0; i<geometries->size(); i++) {
 		const Envelope *env=(*geometries)[i]->getEnvelopeInternal();
-		envelope->expandToInclude(env);
+		p_envelope->expandToInclude(env);
 	}
-	return envelope;
+	return p_envelope;
 }
 
 int

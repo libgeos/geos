@@ -58,7 +58,6 @@ namespace tut
 	template<>
 	void object::test<1>()
 	{
-    LineIntersector i;
     Coordinate p1(10, 10);
     Coordinate p2(20, 20);
     Coordinate q1(20, 10);
@@ -78,7 +77,6 @@ namespace tut
 	template<>
 	void object::test<2>()
 	{
-    LineIntersector i;
     Coordinate p1(10, 10);
     Coordinate p2(20, 10);
     Coordinate q1(22, 10);
@@ -96,7 +94,6 @@ namespace tut
 	template<>
 	void object::test<3>()
 	{
-    LineIntersector i;
     Coordinate p1(10, 10);
     Coordinate p2(20, 10);
     Coordinate q1(20, 10);
@@ -114,7 +111,6 @@ namespace tut
 	template<>
 	void object::test<4>()
 	{
-    LineIntersector i;
     Coordinate p1(10, 10);
     Coordinate p2(20, 10);
     Coordinate q1(15, 10);
@@ -132,7 +128,6 @@ namespace tut
 	template<>
 	void object::test<5>()
 	{
-    LineIntersector i;
     Coordinate p1(10, 10);
     Coordinate p2(20, 10);
     Coordinate q1(10, 10);

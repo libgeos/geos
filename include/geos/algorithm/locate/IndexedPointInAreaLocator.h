@@ -80,8 +80,8 @@ private:
 		algorithm::RayCrossingCounter * counter;
 
 	public:
-		SegmentVisitor( algorithm::RayCrossingCounter * counter)
-		:	counter( counter)
+		SegmentVisitor( algorithm::RayCrossingCounter * p_counter)
+		:	counter( p_counter)
 		{ }
 
 		~SegmentVisitor() override

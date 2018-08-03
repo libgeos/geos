@@ -63,12 +63,12 @@ ElevationMatrixFilter::filter_rw(Coordinate *c) const
 	// already has a Z value, nothing to do
 	if ( ! ISNAN(c->z) ) return;
 
-	double avgElevation = em.getAvgElevation();
+	double p_avgElevation = em.getAvgElevation();
 
 	try {
 		const ElevationMatrixCell &emc = em.getCell(*c);
 		c->z = emc.getAvg();
-		if ( ISNAN(c->z) ) c->z = avgElevation;
+		if ( ISNAN(c->z) ) c->z = p_avgElevation;
 #if GEOS_DEBUG
 		cerr<<"  z set to "<<c->z<<endl;
 #endif

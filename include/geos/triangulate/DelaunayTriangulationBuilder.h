@@ -107,9 +107,9 @@ public:
 	 *
 	 * @param tolerance the tolerance distance to use
 	 */
-	inline void setTolerance(double tolerance)
+	inline void setTolerance(double p_tolerance)
 	{
-		this->tolerance = tolerance;
+		this->tolerance = p_tolerance;
 	}
 
 private:

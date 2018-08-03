@@ -109,8 +109,8 @@ public:
 	         const geom::Coordinate& p2,
 	         const geom::Coordinate& q);
 
-	RayCrossingCounter(const geom::Coordinate& point)
-	:	point( point),
+	RayCrossingCounter(const geom::Coordinate& p_point)
+	:	point( p_point),
 		crossingCount( 0),
 		isPointOnSegment( false)
 	{ }

@@ -71,7 +71,7 @@ namespace tut
         return CascadedPolygonUnion::Union(geoms);
     }
 
-    void test_runner(test_cascadedpolygonuniontest_data& t,
+    void p_test_runner(test_cascadedpolygonuniontest_data& t,
         std::vector<geos::geom::Polygon*>* geoms)
     {
         std::unique_ptr<geos::geom::Geometry> union1(unionIterated(geoms));
@@ -117,7 +117,7 @@ namespace tut
             g.push_back(geom);
         }
 
-        test_runner(*this, &g);
+        p_test_runner(*this, &g);
 
         for_each(g.begin(), g.end(), delete_geometry);
     }

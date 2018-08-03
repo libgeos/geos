@@ -293,16 +293,16 @@ TaggedLineStringSimplifier::isInLineSection(
 
 /*private*/
 void
-TaggedLineStringSimplifier::remove(const TaggedLineString* line,
+TaggedLineStringSimplifier::remove(const TaggedLineString* p_line,
 		std::size_t start,
 		std::size_t end)
 {
-	assert(end <= line->getSegments().size() );
+	assert(end <= p_line->getSegments().size() );
 	assert(start < end); // I'm not sure this should always be true
 
 	for (std::size_t i = start; i < end; i++)
 	{
-		const TaggedLineSegment* seg = line->getSegment(i);
+		const TaggedLineSegment* seg = p_line->getSegment(i);
 		inputIndex->remove(seg);
 	}
 }

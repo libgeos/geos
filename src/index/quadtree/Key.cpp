@@ -115,9 +115,9 @@ Key::computeKey(const Envelope& itemEnv)
 }
 
 void
-Key::computeKey(int level, const Envelope& itemEnv)
+Key::computeKey(int p_level, const Envelope& itemEnv)
 {
-	double quadSize=DoubleBits::powerOf2(level);
+	double quadSize=DoubleBits::powerOf2(p_level);
 	//double quadSize=pow2.power(level);
 	pt.x = std::floor(itemEnv.getMinX()/quadSize)*quadSize;
 	pt.y = std::floor(itemEnv.getMinY()/quadSize)*quadSize;

@@ -113,11 +113,11 @@ public:
 	static double distance(const geom::Geometry& g0,
 			       const geom::Geometry& g1, double densifyFrac);
 
-	DiscreteFrechetDistance(const geom::Geometry& g0,
-				const geom::Geometry& g1)
+	DiscreteFrechetDistance(const geom::Geometry& p_g0,
+				const geom::Geometry& p_g1)
 		:
-		g0(g0),
-		g1(g1),
+		g0(p_g0),
+		g1(p_g1),
 		ptDist(),
 		densifyFrac(0.0)
 	{}

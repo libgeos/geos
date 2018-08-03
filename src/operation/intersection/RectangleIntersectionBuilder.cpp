@@ -475,9 +475,9 @@ RectangleIntersectionBuilder::reconnectPolygons(const Rectangle & rect)
       using geos::algorithm::CGAlgorithms;
 		  geom::Coordinate c;
 		  hole->getCoordinatesRO()->getAt(0, c);
-      for (ShellAndHolesList::iterator i=exterior.begin(), e=exterior.end(); i!=e; ++i)
+      for (ShellAndHolesList::iterator p_i=exterior.begin(), p_e=exterior.end(); p_i!=p_e; ++p_i)
 			{
-        ShellAndHoles &p = *i;
+        ShellAndHoles &p = *p_i;
         const CoordinateSequence *shell_cs = p.first->getCoordinatesRO();
         if( CGAlgorithms::isPointInRing(c, shell_cs) )
         {

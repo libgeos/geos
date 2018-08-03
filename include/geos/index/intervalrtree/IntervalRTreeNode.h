@@ -55,9 +55,9 @@ public:
 		max( DoubleNegInfinity )
 	{ }
 
-	IntervalRTreeNode( double min, double max)
-	:	min( min ),
-		max( max )
+	IntervalRTreeNode( double p_min, double p_max)
+	:	min( p_min ),
+		max( p_max )
 	{ }
 
 	virtual ~IntervalRTreeNode()

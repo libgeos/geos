@@ -162,8 +162,8 @@ PolygonBuilder::buildMaximalEdgeRings(const vector<DirectedEdge*> *dirEdges,
 	}
 	catch (util::GEOSException&)
 	{ // cleanup if that happens (see stmlf-cases-20061020.xml)
-		for(size_t i=oldSize, n=maxEdgeRings.size(); i<n; i++)
-			delete maxEdgeRings[i];
+		for(size_t p_i=oldSize, p_n=maxEdgeRings.size(); p_i<p_n; p_i++)
+			delete maxEdgeRings[p_i];
 		//cerr << "Exception! " << e.what() << endl;
 		throw;
 	}

@@ -104,11 +104,11 @@ OffsetCurveBuilder::computePointCurve(const Coordinate& pt,
 /*public*/
 void
 OffsetCurveBuilder::getSingleSidedLineCurve(const CoordinateSequence* inputPts,
-   double distance, vector<CoordinateSequence*>& lineList, bool leftSide,
+   double p_distance, vector<CoordinateSequence*>& lineList, bool leftSide,
    bool rightSide)
 {
    // A zero or negative width buffer of a line/point is empty.
-   if ( distance <= 0.0 ) return ;
+   if ( p_distance <= 0.0 ) return ;
 
    if ( inputPts->getSize() < 2 )
    {
@@ -116,9 +116,9 @@ OffsetCurveBuilder::getSingleSidedLineCurve(const CoordinateSequence* inputPts,
       return ;
    }
 
-	double distTol = simplifyTolerance(distance);
+	double distTol = simplifyTolerance(p_distance);
 
-  std::unique_ptr<OffsetSegmentGenerator> segGen = getSegGen(distance);
+  std::unique_ptr<OffsetSegmentGenerator> segGen = getSegGen(p_distance);
 
   if ( leftSide ) {
 	  //--------- compute points for left side of line

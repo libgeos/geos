@@ -35,8 +35,8 @@ namespace geos
 namespace linearref   // geos.linearref
 {
 
-LengthIndexedLine::LengthIndexedLine(const Geometry* linearGeom) :
-		linearGeom(linearGeom) {}
+LengthIndexedLine::LengthIndexedLine(const Geometry* p_linearGeom) :
+		linearGeom(p_linearGeom) {}
 
 Coordinate LengthIndexedLine::extractPoint(double index) const
 {

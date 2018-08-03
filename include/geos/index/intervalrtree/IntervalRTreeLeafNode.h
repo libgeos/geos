@@ -42,9 +42,9 @@ protected:
 public:
 
 	/// @param item externally owned
-	IntervalRTreeLeafNode( double min, double max, void * item)
-	:	IntervalRTreeNode( min, max),
-		item( item)
+	IntervalRTreeLeafNode( double p_min, double p_max, void * p_item)
+	:	IntervalRTreeNode( p_min, p_max),
+		item( p_item)
 	{ }
 
 	~IntervalRTreeLeafNode() override

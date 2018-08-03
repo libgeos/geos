@@ -159,8 +159,8 @@ public:
 	 * @param locator
 	 *          a QuadEdgeLocator
 	 */
-	inline void setLocator(std::unique_ptr<QuadEdgeLocator> locator) {
-		this->locator = std::move(locator);
+	inline void setLocator(std::unique_ptr<QuadEdgeLocator> p_locator) {
+		this->locator = std::move(p_locator);
 	}
 
 	/**

@@ -47,8 +47,8 @@ double LengthIndexOfPoint::indexOfAfter(const Geometry *linearGeom, const Coordi
 	return locater.indexOfAfter(inputPt, minIndex);
 }
 
-LengthIndexOfPoint::LengthIndexOfPoint(const Geometry *linearGeom):
-		linearGeom(linearGeom) {}
+LengthIndexOfPoint::LengthIndexOfPoint(const Geometry *p_linearGeom):
+		linearGeom(p_linearGeom) {}
 
 double LengthIndexOfPoint::indexOf(const Coordinate& inputPt) const
 {

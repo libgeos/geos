@@ -118,37 +118,37 @@ ConvexHull::toCoordinateSequence(Coordinate::ConstVect &cv)
 
 /* private */
 void
-ConvexHull::computeOctPts(const Coordinate::ConstVect &inputPts,
+ConvexHull::computeOctPts(const Coordinate::ConstVect &p_inputPts,
 		Coordinate::ConstVect &pts)
 {
 	// Initialize all slots with first input coordinate
-	pts = Coordinate::ConstVect(8, inputPts[0]);
+	pts = Coordinate::ConstVect(8, p_inputPts[0]);
 
-	for (size_t i=1, n=inputPts.size(); i<n; ++i)
+	for (size_t i=1, n=p_inputPts.size(); i<n; ++i)
 	{
-		if (inputPts[i]->x < pts[0]->x) {
-			pts[0] = inputPts[i];
+		if (p_inputPts[i]->x < pts[0]->x) {
+			pts[0] = p_inputPts[i];
 		}
-		if (inputPts[i]->x - inputPts[i]->y < pts[1]->x - pts[1]->y) {
-			pts[1] = inputPts[i];
+		if (p_inputPts[i]->x - p_inputPts[i]->y < pts[1]->x - pts[1]->y) {
+			pts[1] = p_inputPts[i];
 		}
-		if (inputPts[i]->y > pts[2]->y) {
-			pts[2] = inputPts[i];
+		if (p_inputPts[i]->y > pts[2]->y) {
+			pts[2] = p_inputPts[i];
 		}
-		if (inputPts[i]->x + inputPts[i]->y > pts[3]->x + pts[3]->y) {
-			pts[3] = inputPts[i];
+		if (p_inputPts[i]->x + p_inputPts[i]->y > pts[3]->x + pts[3]->y) {
+			pts[3] = p_inputPts[i];
 		}
-		if (inputPts[i]->x > pts[4]->x) {
-			pts[4] = inputPts[i];
+		if (p_inputPts[i]->x > pts[4]->x) {
+			pts[4] = p_inputPts[i];
 		}
-		if (inputPts[i]->x - inputPts[i]->y > pts[5]->x - pts[5]->y) {
-			pts[5] = inputPts[i];
+		if (p_inputPts[i]->x - p_inputPts[i]->y > pts[5]->x - pts[5]->y) {
+			pts[5] = p_inputPts[i];
 		}
-		if (inputPts[i]->y < pts[6]->y) {
-			pts[6] = inputPts[i];
+		if (p_inputPts[i]->y < pts[6]->y) {
+			pts[6] = p_inputPts[i];
 		}
-		if (inputPts[i]->x + inputPts[i]->y < pts[7]->x + pts[7]->y) {
-			pts[7] = inputPts[i];
+		if (p_inputPts[i]->x + p_inputPts[i]->y < pts[7]->x + pts[7]->y) {
+			pts[7] = p_inputPts[i];
 		}
 	}
 
@@ -157,10 +157,10 @@ ConvexHull::computeOctPts(const Coordinate::ConstVect &inputPts,
 
 /* private */
 bool
-ConvexHull::computeOctRing(const Coordinate::ConstVect &inputPts,
+ConvexHull::computeOctRing(const Coordinate::ConstVect &p_inputPts,
 	Coordinate::ConstVect &dest)
 {
-	computeOctPts(inputPts, dest);
+	computeOctPts(p_inputPts, dest);
 
 	// Remove consecutive equal Coordinates
 	// unique() returns an iterator to the end of the resulting

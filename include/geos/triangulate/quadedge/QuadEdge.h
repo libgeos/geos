@@ -171,8 +171,8 @@ public:
 	 *
 	 * @param nextEdge edge
 	 */
-	inline void setNext(QuadEdge *next) {
-		this->next = next;
+	inline void setNext(QuadEdge *p_next) {
+		this->next = p_next;
 	}
 
 	/***************************************************************************

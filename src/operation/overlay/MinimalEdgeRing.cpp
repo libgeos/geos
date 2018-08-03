@@ -37,9 +37,9 @@ namespace operation { // geos.operation
 namespace overlay { // geos.operation.overlay
 
 MinimalEdgeRing::MinimalEdgeRing(geomgraph::DirectedEdge *start,
-		const geom::GeometryFactory *geometryFactory)
+		const geom::GeometryFactory *p_geometryFactory)
 	:
-	geomgraph::EdgeRing(start, geometryFactory)
+	geomgraph::EdgeRing(start, p_geometryFactory)
 {
 	computePoints(start);
 	computeRing();

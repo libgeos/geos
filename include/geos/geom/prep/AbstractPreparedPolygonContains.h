@@ -109,20 +109,20 @@ protected:
 	virtual bool fullTopologicalPredicate( const geom::Geometry * geom) =0;
 
 public:
-	AbstractPreparedPolygonContains( const PreparedPolygon * const prepPoly)
-	:	PreparedPolygonPredicate( prepPoly),
+	AbstractPreparedPolygonContains( const PreparedPolygon * const p_prepPoly)
+	:	PreparedPolygonPredicate( p_prepPoly),
 		hasSegmentIntersection( false),
 		hasProperIntersection( false),
 		hasNonProperIntersection( false),
 		requireSomePointInInterior(true)
 	{ }
 
-	AbstractPreparedPolygonContains( const PreparedPolygon * const prepPoly, bool requireSomePointInInterior)
-	:	PreparedPolygonPredicate( prepPoly),
+	AbstractPreparedPolygonContains( const PreparedPolygon * const p_prepPoly, bool p_requireSomePointInInterior)
+	:	PreparedPolygonPredicate( p_prepPoly),
 		hasSegmentIntersection( false),
 		hasProperIntersection( false),
 		hasNonProperIntersection( false),
-		requireSomePointInInterior(requireSomePointInInterior)
+		requireSomePointInInterior(p_requireSomePointInInterior)
 	{ }
 
 	~AbstractPreparedPolygonContains() override

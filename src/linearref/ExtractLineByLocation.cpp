@@ -47,8 +47,8 @@ Geometry *ExtractLineByLocation::extract(const Geometry *line, const LinearLocat
 	return ls.extract(start, end);
 }
 
-ExtractLineByLocation::ExtractLineByLocation(const Geometry *line) :
-		line(line) {}
+ExtractLineByLocation::ExtractLineByLocation(const Geometry *p_line) :
+		line(p_line) {}
 
 
 Geometry *ExtractLineByLocation::extract(const LinearLocation& start, const LinearLocation& end)

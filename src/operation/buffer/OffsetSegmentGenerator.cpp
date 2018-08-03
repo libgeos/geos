@@ -173,17 +173,17 @@ OffsetSegmentGenerator::addNextSegment(const Coordinate &p, bool addStartPoint)
 
 /*private*/
 void
-OffsetSegmentGenerator::computeOffsetSegment(const LineSegment& seg, int side,
-  double distance, LineSegment& offset)
+OffsetSegmentGenerator::computeOffsetSegment(const LineSegment& seg, int p_side,
+  double p_distance, LineSegment& offset)
 {
-  int sideSign = side == Position::LEFT ? 1 : -1;
+  int sideSign = p_side == Position::LEFT ? 1 : -1;
   double dx = seg.p1.x - seg.p0.x;
   double dy = seg.p1.y - seg.p0.y;
   double len = sqrt(dx * dx + dy * dy);
   // u is the vector that is the length of the offset,
   // in the direction of the segment
-  double ux = sideSign * distance * dx / len;
-  double uy = sideSign * distance * dy / len;
+  double ux = sideSign * p_distance * dx / len;
+  double uy = sideSign * p_distance * dy / len;
   offset.p0.x = seg.p0.x - uy;
   offset.p0.y = seg.p0.y + ux;
   offset.p1.x = seg.p1.x - uy;
@@ -294,23 +294,23 @@ OffsetSegmentGenerator::addFillet(const Coordinate &p, double startAngle,
 
 /*private*/
 void
-OffsetSegmentGenerator::createCircle(const Coordinate &p, double distance)
+OffsetSegmentGenerator::createCircle(const Coordinate &p, double p_distance)
 {
   // add start point
-  Coordinate pt(p.x + distance, p.y);
+  Coordinate pt(p.x + p_distance, p.y);
   segList.addPt(pt);
-  addFillet(p, 0.0, 2.0*PI, -1, distance);
+  addFillet(p, 0.0, 2.0*PI, -1, p_distance);
   segList.closeRing();
 }
 
 /*private*/
 void
-OffsetSegmentGenerator::createSquare(const Coordinate &p, double distance)
+OffsetSegmentGenerator::createSquare(const Coordinate &p, double p_distance)
 {
-  segList.addPt(Coordinate(p.x+distance, p.y+distance));
-  segList.addPt(Coordinate(p.x+distance, p.y-distance));
-  segList.addPt(Coordinate(p.x-distance, p.y-distance));
-  segList.addPt(Coordinate(p.x-distance, p.y+distance));
+  segList.addPt(Coordinate(p.x+p_distance, p.y+p_distance));
+  segList.addPt(Coordinate(p.x+p_distance, p.y-p_distance));
+  segList.addPt(Coordinate(p.x-p_distance, p.y-p_distance));
+  segList.addPt(Coordinate(p.x-p_distance, p.y+p_distance));
   segList.closeRing();
 }
 
@@ -481,9 +481,9 @@ OffsetSegmentGenerator::addInsideTurn(int orientation, bool addStartPoint)
 /* private */
 void
 OffsetSegmentGenerator::addMitreJoin(const geom::Coordinate& p,
-                    const geom::LineSegment& offset0,
-                    const geom::LineSegment& offset1,
-                    double distance)
+                    const geom::LineSegment& p_offset0,
+                    const geom::LineSegment& p_offset1,
+                    double p_distance)
 {
   bool isMitreWithinLimit = true;
   Coordinate intPt;
@@ -497,12 +497,12 @@ OffsetSegmentGenerator::addMitreJoin(const geom::Coordinate& p,
          */
     try
     {
-        HCoordinate::intersection(offset0.p0, offset0.p1,
-            offset1.p0, offset1.p1,
+        HCoordinate::intersection(p_offset0.p0, p_offset0.p1,
+            p_offset1.p0, p_offset1.p1,
             intPt);
 
-        double mitreRatio = distance <= 0.0 ? 1.0
-            : intPt.distance(p) / fabs(distance);
+        double mitreRatio = p_distance <= 0.0 ? 1.0
+            : intPt.distance(p) / fabs(p_distance);
 
         if (mitreRatio > bufParams.getMitreLimit())
             isMitreWithinLimit = false;
@@ -521,7 +521,7 @@ OffsetSegmentGenerator::addMitreJoin(const geom::Coordinate& p,
     }
     else
     {
-        addLimitedMitreJoin(offset0, offset1, distance,
+        addLimitedMitreJoin(p_offset0, p_offset1, p_distance,
             bufParams.getMitreLimit());
         //addBevelJoin(offset0, offset1);
     }
@@ -530,12 +530,12 @@ OffsetSegmentGenerator::addMitreJoin(const geom::Coordinate& p,
 /* private */
 void
 OffsetSegmentGenerator::addLimitedMitreJoin(
-                    const geom::LineSegment& offset0,
-                    const geom::LineSegment& offset1,
-                    double distance, double mitreLimit)
+                    const geom::LineSegment& p_offset0,
+                    const geom::LineSegment& p_offset1,
+                    double p_distance, double p_mitreLimit)
 {
-    ::geos::ignore_unused_variable_warning(offset0);
-    ::geos::ignore_unused_variable_warning(offset1);
+    ::geos::ignore_unused_variable_warning(p_offset0);
+    ::geos::ignore_unused_variable_warning(p_offset1);
 
   const Coordinate& basePt = seg0.p1;
 
@@ -553,11 +553,11 @@ OffsetSegmentGenerator::addLimitedMitreJoin(
   double mitreMidAng = Angle::normalize(midAng + PI);
 
   // the miterLimit determines the distance to the mitre bevel
-  double mitreDist = mitreLimit * distance;
+  double mitreDist = p_mitreLimit * p_distance;
   // the bevel delta is the difference between the buffer distance
   // and half of the length of the bevel segment
   double bevelDelta = mitreDist * fabs(sin(angDiffHalf));
-  double bevelHalfLen = distance - bevelDelta;
+  double bevelHalfLen = p_distance - bevelDelta;
 
   // compute the midpoint of the bevel segment
   double bevelMidX = basePt.x + mitreDist * cos(mitreMidAng);
@@ -588,11 +588,11 @@ OffsetSegmentGenerator::addLimitedMitreJoin(
 
 /* private */
 void
-OffsetSegmentGenerator::addBevelJoin( const geom::LineSegment& offset0,
-                    const geom::LineSegment& offset1)
+OffsetSegmentGenerator::addBevelJoin( const geom::LineSegment& p_offset0,
+                    const geom::LineSegment& p_offset1)
 {
-  segList.addPt(offset0.p1);
-  segList.addPt(offset1.p0);
+  segList.addPt(p_offset0.p1);
+  segList.addPt(p_offset1.p0);
 }
 
 } // namespace geos.operation.buffer

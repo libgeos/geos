@@ -83,12 +83,12 @@ Key::computeKey(Interval *itemInterval)
 }
 
 void
-Key::computeInterval(int level, Interval *itemInterval)
+Key::computeInterval(int p_level, Interval *itemInterval)
 {
 	using geos::index::quadtree::DoubleBits;
 
-	double size=DoubleBits::powerOf2(level);
-	//double size = pow2.power(level);
+	double size=DoubleBits::powerOf2(p_level);
+	//double size = pow2.power(p_level);
 	pt=std::floor(itemInterval->getMin()/size)*size;
 	interval->init(pt,pt+size);
 }

@@ -53,8 +53,8 @@ void object::test<1>()
     {
         GeometryRefArray& lineal;
         GeometryRefArray& nonlineal;
-        GeometrySplitter(GeometryRefArray& lineal, GeometryRefArray& nonlineal)
-            : lineal(lineal), nonlineal(nonlineal)
+        GeometrySplitter(GeometryRefArray& p_lineal, GeometryRefArray& p_nonlineal)
+            : lineal(p_lineal), nonlineal(p_nonlineal)
         {
             ensure(lineal.empty());
             ensure(nonlineal.empty());
