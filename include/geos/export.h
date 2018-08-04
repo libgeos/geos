@@ -29,3 +29,7 @@
 #endif
 
 #endif
+
+#if defined(_MSC_VER)
+#  pragma warning(disable: 4251) // identifier : class type needs to have dll-interface to be used by clients of class type2
+#endif
