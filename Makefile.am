@@ -1,5 +1,5 @@
 #
-# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+# This file is part of project GEOS (http://trac.osgeo.org/geos/)
 #
 # NOTE: Make sure that 'src' appears first.
 # 'capi' and 'doc' surely rely on availability of libgeos
@@ -38,7 +38,7 @@ gen-ChangeLog:
 	cd $(distdir) && owd=`pwd` && \
   cd ../ && cd $(srcdir) && \
 	if test -d .git; then \
-		git2cl > $${owd}/ChangeLog; \
+		git log --pretty --numstat --summary | git2cl > $${owd}/ChangeLog; \
 	elif test -d .svn; then \
 		svn2cl --authors=authors.svn -i -o $${owd}/ChangeLog; \
 	elif test -f ChangeLog; then \
