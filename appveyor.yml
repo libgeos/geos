@@ -1,4 +1,4 @@
-﻿version: 1.0.{build}
+version: 1.0.{build}
 
 image: Visual Studio 2017
 
@@ -74,7 +74,7 @@ build_script:
 
 test_script:
   - ps: 'Write-Host "Running tests:" -ForegroundColor Magenta'
-  - if "%BUILDER%"=="CMake" ctest -V --output-on-failure -C %CONFIGURATION%
+  - if "%BUILDER%"=="CMake" ctest --output-on-failure -C %CONFIGURATION%
   - if "%BUILDER%"=="NMake" echo *** NMake does NOT build tests ***
 
 # If you need to debug AppVeyor session (https://www.appveyor.com/docs/how-to/rdp-to-build-worker), then:
