@@ -38,14 +38,11 @@ gen-ChangeLog:
 	cd $(distdir) && owd=`pwd` && \
   cd ../ && cd $(srcdir) && \
 	if test -d .git; then \
-		git2cl > $${owd}/ChangeLog; \
+		git log --pretty --numstat --summary | git2cl > $${owd}/ChangeLog; \
 	elif test -d .svn; then \
 		svn2cl --authors=authors.svn -i -o $${owd}/ChangeLog; \
 	elif test -f ChangeLog; then \
-		echo "NOTE: distributing ChangeLog found in source dir"; \
 		cp ChangeLog  $${owd}/ChangeLog; \
-	else \
-		echo "WARNING: could not find a ChangeLog" >&2; \
 	fi
 
 apidoc doxygen:
