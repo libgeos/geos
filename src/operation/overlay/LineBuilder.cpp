@@ -225,7 +225,7 @@ LineBuilder::propagateZ(CoordinateSequence *cs)
 	cerr<<"  found "<<v3d.size()<<" 3d vertexes"<<endl;
 #endif
 
-	if ( v3d.size() == 0 )
+	if ( v3d.empty() )
 	{
 #if GEOS_DEBUG
 		cerr<<"  nothing to do"<<endl;
@@ -318,4 +318,3 @@ LineBuilder::labelIsolatedLine(Edge *e, int targetIndex)
 } // namespace geos.operation.overlay
 } // namespace geos.operation
 } // namespace geos
-
