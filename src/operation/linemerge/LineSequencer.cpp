@@ -232,7 +232,7 @@ LineSequencer::buildSequencedGeometry(const Sequences& sequences)
 		}
 	}
 
-	if ( lines->size() == 0 ) {
+	if ( lines->empty() ) {
 		return nullptr;
 	} else {
 		Geometry::NonConstVect *l=lines.get();

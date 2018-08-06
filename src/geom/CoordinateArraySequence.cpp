@@ -95,7 +95,7 @@ CoordinateArraySequence::getDimension() const
     if( dimension != 0 )
         return dimension;
 
-    if( vect->size() == 0 )
+    if( vect->empty() )
         return 3;
 
     if( ISNAN((*vect)[0].z) )

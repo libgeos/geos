@@ -148,7 +148,7 @@ SubgraphDepthLocater::getDepth(const Coordinate& p)
 	findStabbedSegments(p, stabbedSegments);
 
 	// if no segments on stabbing line subgraph must be outside all others
-	if (stabbedSegments.size()==0) return 0;
+	if (stabbedSegments.empty()) return 0;
 
 	sort(stabbedSegments.begin(), stabbedSegments.end(), DepthSegmentLessThen());
 
