@@ -1,6 +1,11 @@
-Changes in 3.7.0beta1
-2018-06-25
+Changes in 3.7.0beta2
+2018-08-06
+Changes since 3.7.0beta1
+  - Fix infinite loop in GEOSClipByRect (#865, Dan Baston)
+  - Make GEOSException inherit from std::runtime_error 
+    to address clang warnings (Dan Baston)
 
+3.7.0 changes
 - New things:
   - CAPI: GEOSDistanceIndexed (#795, Dan Baston)
   - CAPI: GEOSCoordSeq_isCCW (#870, Dan Baston)
@@ -25,6 +30,10 @@ Changes in 3.7.0beta1
     (#851, Vicky Vergara)
   - Fix CommonBits::getBit to correctly handle i >= 32
     (#834, Kurt Schwehr)
+
+Changes in 3.7.0beta1
+2018-06-25
+See 3.7.0 latest notes
 
 Changes in 3.7.0alpha
 2018-06-14
