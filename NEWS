@@ -1,9 +1,10 @@
 Changes in 3.7.0beta2
 2018-08-06
-Changes since 3.7.0beta1
+Fixes since 3.7.0beta1
   - Fix infinite loop in GEOSClipByRect (#865, Dan Baston)
   - Make GEOSException inherit from std::runtime_error 
     to address clang warnings (Dan Baston)
+  - Add missing CMake files to tarball (#895, Regina Obe)
 
 3.7.0 changes
 - New things:

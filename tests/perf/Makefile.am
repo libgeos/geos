@@ -12,3 +12,5 @@ AM_CPPFLAGS = -I$(top_srcdir)/include
 noinst_PROGRAMS = ClassSizes
 
 ClassSizes_SOURCES = ClassSizes.cpp
+
+EXTRA_DIST = CMakeLists.txt
