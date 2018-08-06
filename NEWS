@@ -1,5 +1,5 @@
-Changes in 3.6.3dev
-YYYY-MM-DD
+Changes in 3.6.3
+2018-08-06
 
 - Bug fixes / improvements
   - Include all CMake files in release (#753)
