@@ -133,7 +133,7 @@ GeometryNoder::getNoded()
   {
     for (size_t i=0, n=lineList.size(); i<n; ++i)
       delete lineList[i];
-    throw ex;
+    throw;
   }
 
   std::unique_ptr<geom::Geometry> noded = toGeometry(*nodedEdges);
