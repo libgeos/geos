@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/PointLocator.java r320 (JTS-1.12)
+ * Last port: algorithm/PointLocator.java 95fbe34b (JTS-1.15.2-SNAPSHOT)
  *
  **********************************************************************/
 
@@ -128,6 +128,9 @@ PointLocator::locate(const Coordinate& p, const Point *pt)
 int
 PointLocator::locate(const Coordinate& p, const LineString *l)
 {
+	if (!l->getEnvelopeInternal()->intersects(p))
+		return Location::EXTERIOR;
+
 	const CoordinateSequence* pt=l->getCoordinatesRO();
 	if (! l->isClosed()) {
 		if ((p==pt->getAt(0)) || (p==pt->getAt(pt->getSize()-1))) {
@@ -143,7 +146,9 @@ PointLocator::locate(const Coordinate& p, const LineString *l)
 int
 PointLocator::locateInPolygonRing(const Coordinate& p, const LinearRing *ring)
 {
-	// can this test be folded into isPointInRing ?
+	if (!ring->getEnvelopeInternal()->intersects(p)) {
+		return Location::EXTERIOR;
+	}
 
 	const CoordinateSequence *cl = ring->getCoordinatesRO();
 

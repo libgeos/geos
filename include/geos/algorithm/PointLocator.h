@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: algorithm/PointLocator.java r320 (JTS-1.12)
+ * Last port: algorithm/PointLocator.java 95fbe34b (JTS-1.15.2-SNAPSHOT)
  *
  **********************************************************************/
 
@@ -51,9 +51,8 @@ namespace algorithm { // geos::algorithm
  * Notes:
  *	- instances of this class are not reentrant.
  *	- LinearRing objects do not enclose any area
- *	  points inside the ring are still in the EXTERIOR of the ring.
+ *	  (points inside the ring are still in the EXTERIOR of the ring.)
  *
- * Last port: algorithm/PointLocator.java rev. 1.26 (JTS-1.7+)
  */
 class GEOS_DLL PointLocator {
 public:
@@ -62,11 +61,9 @@ public:
 
 	/**
 	 * Computes the topological relationship (Location) of a single point
-	 * to a Geometry.
-	 * It handles both single-element
-	 * and multi-element Geometries.
-	 * The algorithm for multi-part Geometries
-	 * takes into account the boundaryDetermination rule.
+	 * to a Geometry. It handles both single-element and multi-element Geometries.
+	 * The algorithm for multi-part Geometriestakes into account the SFS
+	 * Boundary Determination rule.
 	 *
 	 * @return the Location of the point relative to the input Geometry
 	 */
