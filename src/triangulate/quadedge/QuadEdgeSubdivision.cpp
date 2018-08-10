@@ -1,4 +1,4 @@
-/**********************************************************************
+﻿/**********************************************************************
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
@@ -582,9 +582,8 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFac
 		geomFact.createPolygon(geomFact.createLinearRing(new geom::CoordinateArraySequence(pts.release())),nullptr));
 
 	Vertex v = startQE->orig();
-	Coordinate c(0,0);
-	c = v.getCoordinate();
-	cellPoly->setUserData(reinterpret_cast<void*>(&c));
+	Coordinate *pC = new Coordinate(v.getCoordinate());
+	cellPoly->setUserData(reinterpret_cast<void*>(pC));
 	return cellPoly;
 }
 
@@ -612,9 +611,8 @@ QuadEdgeSubdivision::getVoronoiCellEdge(QuadEdge* qe ,const geom::GeometryFactor
 		geomFact.createLineString(new geom::CoordinateArraySequence(pts.release())));
 
 	Vertex v = startQE->orig();
-	Coordinate c(0,0);
-	c = v.getCoordinate();
-	cellEdge->setUserData(reinterpret_cast<void*>(&c));
+	Coordinate *pC = new Coordinate(v.getCoordinate());
+	cellEdge->setUserData(reinterpret_cast<void*>(pC));
 	return cellEdge;
 }
 

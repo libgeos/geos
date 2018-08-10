@@ -1,4 +1,4 @@
-/**********************************************************************
+﻿/**********************************************************************
  *
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
@@ -133,6 +133,7 @@ VoronoiDiagramBuilder::clipGeometryCollection(const geom::GeometryCollection& ge
 		{
 			result.reset( g->clone() );
       // TODO: check if userData is correctly cloned here?
+			result->setUserData(((Geometry*)g)->getUserData());
 		}
 		else if(clipEnv.intersects(g->getEnvelopeInternal()))
 		{
