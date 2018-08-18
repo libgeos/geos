@@ -158,5 +158,18 @@ namespace tut
 
     }
 
+    // Test for #782 (collection with empty components)
+    template<>
+    template<>
+    void object::test<6>()
+    {
+        geom1_ = GEOSGeomFromWKT("LINESTRING(10 0, 0 0, 0 10)");
+        geom2_ = GEOSGeomFromWKT("MULTILINESTRING((10 -1,-1 10),EMPTY)");
+
+        char r1 = GEOSIntersects(geom1_, geom2_);
+
+        ensure_equals(r1, 1);
+    }
+
 } // namespace tut
 
