@@ -31,7 +31,9 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
 #################################################################################
 # Set C++ standard
 #################################################################################
-set(CMAKE_CXX_STANDARD 11)
+##remarking out the CMAKE_CXX_STANDARD 11 for now cause mingw64 gcc 8.1 doesn't like it
+## see ticket https://trac.osgeo.org/geos/ticket/914
+#set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -43,7 +45,6 @@ message(STATUS "Setting C++ requirement to C++${CMAKE_CXX_STANDARD}")
 
 # GEOS release version
 # GEOS C++ library SONAME will use these encoding ABI break at every release
-set(GEOS_VERSION_PATCH "${GEOS_VERSION_PATCH}dev")
 set(GEOS_VERSION "${GEOS_VERSION_MAJOR}.${GEOS_VERSION_MINOR}.${GEOS_VERSION_PATCH}")
 set(VERSION "${GEOS_VERSION}")
 
