@@ -125,7 +125,10 @@ AbstractSTRtree::query(const void* searchBounds, vector<void*>& matches)
 {
 	if (!built) build();
 
-	if (itemBoundables->empty()) assert(root->getBounds()==nullptr);
+	if (itemBoundables->empty()) {
+		assert(root->getBounds()==nullptr);
+		return;
+	}
 
 	if (getIntersectsOp()->intersects(root->getBounds(), searchBounds))
 	{
@@ -139,7 +142,10 @@ AbstractSTRtree::query(const void* searchBounds, ItemVisitor& visitor)
 {
 	if (!built) build();
 
-	if (itemBoundables->empty()) assert(root->getBounds()==nullptr);
+	if (itemBoundables->empty()) {
+        assert(root->getBounds()==nullptr);
+        return;
+	}
 
 	if (getIntersectsOp()->intersects(root->getBounds(),searchBounds))
 	{
