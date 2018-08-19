@@ -47,33 +47,8 @@
 
 typedef int64_t int64;
 
-
-#if defined(_MSC_VER) && _MSC_VER >= 1200 // VC++ 6.0 and above
-#  include <float.h>
-#  ifndef FINITE
-#    define FINITE(x) _finite(x)
-#  endif
-#  ifndef ISNAN
-#    define ISNAN(x) _isnan(x)
-#  endif
-#elif !defined(HAVE_IEEEFP_H)
-#  include <cmath>
-#  ifndef FINITE
-#    define FINITE(x) std::isfinite(x)
-#  endif
-#  ifndef ISNAN
-#    define ISNAN(x) std::isnan(x)
-#  endif
-#else
-#  include <ieeefp.h>
-#  ifndef FINITE
-#    define FINITE(x) finite(x)
-#  endif
-#  ifndef ISNAN
-#    define ISNAN(x) isnan(x)
-#  endif
-#endif
-
+#define ISNAN(x) std::isnan(x)
+#define FINITE(x) std::isfinite(x)
 
 // Some handy constants
 constexpr double DoubleNotANumber = std::numeric_limits<double>::quiet_NaN();

@@ -201,35 +201,6 @@ else()
   endif()
 endif()
 
-# check functions and macros
-include(CheckPrototypeExists)
-include(CheckSymbolExists)
-
-check_prototype_exists(isnan cmath HAVE_STD_ISNAN)
-if(NOT HAVE_STD_ISNAN)
-  if(MSVC)
-    check_prototype_exists(_isnan float.h HAVE_ISNAN)
-  elseif(APPLE)
-    check_prototype_exists(__isnand math.h HAVE_ISNAND_XCODE)
-    if(NOT HAVE_ISNAND_XCODE)
-      check_prototype_exists(__inline_isnand math.h HAVE_INLINE_ISNAND_XCODE)
-    endif()
-  else()
-    check_symbol_exists(isnan math.h HAVE_ISNAN)
-  endif()
-endif()
-
-check_prototype_exists(isfinite cmath HAVE_STD_ISFINITE)
-
-if(NOT HAVE_STD_ISFINITE)
-  if(MSVC)
-    check_prototype_exists(_finite float.h HAVE_FINITE)
-  else()
-    #CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-    check_symbol_exists(isfinite math.h HAVE_ISFINITE)
-  endif()
-endif()
-
 ################################################################################
 # Setup build directories
 #################################################################################
