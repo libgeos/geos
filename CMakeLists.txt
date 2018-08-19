@@ -31,9 +31,7 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
 #################################################################################
 # Set C++ standard
 #################################################################################
-##remarking out the CMAKE_CXX_STANDARD 11 for now cause mingw64 gcc 8.1 doesn't like it
-## see ticket https://trac.osgeo.org/geos/ticket/914
-#set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
