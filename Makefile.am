@@ -24,7 +24,7 @@ SUBDIRS =   \
 
 BUILT_SOURCES = geos_revision.h
 
-EXTRA_DIST = acsite.m4 makefile.vc nmake.opt autogen.bat CMakeLists.txt \
+EXTRA_DIST = acsite.m4 .editorconfig makefile.vc nmake.opt autogen.bat CMakeLists.txt \
   cmake/modules/CheckPrototypeExists.cmake \
   cmake/modules/COPYING-CMAKE-SCRIPTS \
   cmake/modules/GenerateSourceGroups.cmake \
