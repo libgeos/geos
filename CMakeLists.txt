@@ -24,6 +24,8 @@ endif()
 # Set GEOS project
 #################################################################################
 project(GEOS VERSION 3.8.0 LANGUAGES C CXX)
+# OPTIONS: "", "dev", "rc1" etc.
+SET(GEOS_PATCH_WORD "dev")
 
 # Add custom GEOS modules for CMake
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
@@ -43,14 +45,14 @@ message(STATUS "Setting C++ requirement to C++${CMAKE_CXX_STANDARD}")
 
 # GEOS release version
 # GEOS C++ library SONAME will use these encoding ABI break at every release
-set(GEOS_VERSION "${GEOS_VERSION_MAJOR}.${GEOS_VERSION_MINOR}.${GEOS_VERSION_PATCH}")
+set(GEOS_VERSION "${GEOS_VERSION_MAJOR}.${GEOS_VERSION_MINOR}.${GEOS_VERSION_PATCH}${GEOS_PATCH_WORD}")
 set(VERSION "${GEOS_VERSION}")
 
 # Copy version components into different variable names to match those used
 # by autotools for *.h.in files
-set(VERSION_MAJOR ${GEOS_VERSION_MAJOR})
-set(VERSION_MINOR ${GEOS_VERSION_MINOR})
-set(VERSION_PATCH ${GEOS_VERSION_PATCH}dev)
+set(VERSION_MAJOR "${GEOS_VERSION_MAJOR}")
+set(VERSION_MINOR "${GEOS_VERSION_MINOR}")
+set(VERSION_PATCH "${GEOS_VERSION_PATCH}${GEOS_PATCH_WORD}")
 
 # JTS_PORT is the version of JTS this release is bound to
 set(JTS_PORT 1.13.0)
