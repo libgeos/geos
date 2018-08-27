@@ -1,3 +1,11 @@
+Changes in 3.7.0rc2
+2018-08-xx
+Fixes / enhancements since 3.7.0rc1
+ - revise configure sed version_release stripper to work on all set
+    (#917, Greg Troxel, Bas Couwenberg)
+ - include .editorconfig in tar ball,
+   fixes Cmake on VS (#920, Jeff Mckenna, Regina Obe)
+
 Changes in 3.7.0rc1
 2018-08-19
 Fixes / enhancements since 3.7.0beta2
