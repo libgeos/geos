@@ -55,7 +55,7 @@ RectangleContains::isContainedInBoundary(const Geometry& geom)
 	if (const LineString *l=dynamic_cast<const LineString *>(&geom))
 		return isLineStringContainedInBoundary(*l);
 
-	for (unsigned i=0, n=static_cast<unsigned>(geom.getNumGeometries()); i<n; ++i)
+	for (size_t i = 0, n = geom.getNumGeometries(); i < n; ++i)
 	{
 		const Geometry &comp = *(geom.getGeometryN(i));
 		if ( !isContainedInBoundary(comp) )
@@ -93,7 +93,7 @@ bool
 RectangleContains::isLineStringContainedInBoundary(const LineString& line)
 {
 	const CoordinateSequence &seq = *(line.getCoordinatesRO());
-	for (unsigned int i=0, n=static_cast<unsigned int>(seq.getSize()-1); i<n; ++i) {
+	for (size_t i = 0, n =seq.size() - 1; i < n; ++i) {
 		const Coordinate& p0=seq.getAt(i);
 		const Coordinate& p1=seq.getAt(i+1);
 		if (! isLineSegmentContainedInBoundary(p0, p1))

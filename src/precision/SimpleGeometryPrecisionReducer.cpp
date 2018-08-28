@@ -70,7 +70,7 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence *cs,
 {
 	if (cs->getSize()==0) return nullptr;
 
-	unsigned int csSize=static_cast<unsigned int>(cs->getSize());
+	auto csSize = cs->size();
 
 	vector<Coordinate> *vc = new vector<Coordinate>(csSize);
 

@@ -81,8 +81,8 @@ private:
 	 * Note that closed edges require a special check for the point
 	 * shared by the beginning and end segments.
 	 */
-	bool isTrivialIntersection(const SegmentString* e0, int segIndex0,
-			const SegmentString* e1, int segIndex1);
+	bool isTrivialIntersection(const SegmentString* e0, size_t segIndex0,
+			const SegmentString* e1, size_t segIndex1);
 
     // Declare type as noncopyable
     IntersectionAdder(const IntersectionAdder& other) = delete;
@@ -157,12 +157,12 @@ public:
 	 * intersect (e.g. by an disjoint envelope test).
 	 */
 	void processIntersections(
-		SegmentString* e0,  int segIndex0,
-		SegmentString* e1,  int segIndex1) override;
+		SegmentString* e0,  size_t segIndex0,
+		SegmentString* e1,  size_t segIndex1) override;
 
 
-	static bool isAdjacentSegments(int i1, int i2) {
-		return std::abs(i1 - i2) == 1;
+	static bool isAdjacentSegments(size_t i1, size_t i2) {
+		return (i1 > i2 ? i1 - i2 : i2 - i1) == 1;
 	}
 
 	/**

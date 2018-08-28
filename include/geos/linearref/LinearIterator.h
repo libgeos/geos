@@ -74,7 +74,7 @@ public:
 	 * @param componentIndex the component to start at
 	 * @param vertexIndex the vertex to start at
 	 */
-	LinearIterator(const geom::Geometry *linear, unsigned int componentIndex, unsigned int vertexIndex);
+	LinearIterator(const geom::Geometry *linear, size_t componentIndex, size_t vertexIndex);
 
 	/**
 	 * Tests whether there are any vertices left to iterator over.
@@ -100,13 +100,13 @@ public:
 	 * The component index of the vertex the iterator is currently at.
 	 * @return the current component index
 	 */
-	unsigned int getComponentIndex() const;
+	size_t getComponentIndex() const;
 
 	/**
 	 * The vertex index of the vertex the iterator is currently at.
 	 * @return the current vertex index
 	 */
-	unsigned int getVertexIndex() const;
+	size_t getVertexIndex() const;
 
 	/**
 	 * Gets the {@link LineString} component the iterator is current at.
@@ -132,13 +132,13 @@ public:
 
 private:
 
-	static unsigned int segmentEndVertexIndex(const LinearLocation& loc);
+	static size_t segmentEndVertexIndex(const LinearLocation& loc);
 
 	const geom::LineString *currentLine;
-	unsigned int vertexIndex;
-	unsigned int componentIndex;
+	size_t vertexIndex;
+	size_t componentIndex;
 	const geom::Geometry *linear;
-	const unsigned int numLines;
+	const size_t numLines;
 
 	/**
 	 * Invariant: currentLine <> null if the iterator is pointing

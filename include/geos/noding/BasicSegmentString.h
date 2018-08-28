@@ -68,13 +68,13 @@ public:
 	{}
 
 	/// see dox in SegmentString.h
-	unsigned int size() const override
+	size_t size() const override
 	{
-		return static_cast<unsigned int>(pts->size());
+		return pts->size();
 	}
 
 	/// see dox in SegmentString.h
-	const geom::Coordinate& getCoordinate(unsigned int i) const override;
+	const geom::Coordinate& getCoordinate(size_t i) const override;
 
 	/// see dox in SegmentString.h
 	geom::CoordinateSequence* getCoordinates() const override;
@@ -92,7 +92,7 @@ public:
 	 *        Must not be the last index in the vertex list
 	 * @return the octant of the segment at the vertex
 	 */
-	int getSegmentOctant(unsigned int index) const;
+	int getSegmentOctant(size_t index) const;
 
 private:
 

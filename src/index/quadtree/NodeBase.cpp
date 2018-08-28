@@ -151,10 +151,10 @@ NodeBase::depth() const
 	return maxSubDepth + 1;
 }
 
-unsigned int
+size_t
 NodeBase::size() const
 {
-	unsigned int subSize=0;
+	size_t subSize = 0;
 	for(int i=0; i<4; i++)
 	{
 		if (subnode[i] != nullptr)
@@ -162,13 +162,13 @@ NodeBase::size() const
 			subSize += subnode[i]->size();
 		}
 	}
-	return subSize + static_cast<unsigned int>(items.size());
+	return subSize + items.size();
 }
 
-unsigned int
+size_t
 NodeBase::getNodeCount() const
 {
-	unsigned int subSize=0;
+	size_t subSize = 0;
 	for(int i=0; i<4; ++i)
 	{
 		if (subnode[i] != nullptr)

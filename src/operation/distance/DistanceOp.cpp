@@ -569,9 +569,9 @@ DistanceOp::computeMinDistance(
 				delete closestPt;
 
 				delete locGeom[0];
-				locGeom[0] = new GeometryLocation(line0, static_cast<int>(i), *c1);
+				locGeom[0] = new GeometryLocation(line0, i, *c1);
 				delete locGeom[1];
-				locGeom[1] = new GeometryLocation(line1, static_cast<int>(j), *c2);
+				locGeom[1] = new GeometryLocation(line1, j, *c2);
 			}
 			if (minDistance<=terminateDistance) return;
 		}
@@ -607,7 +607,7 @@ DistanceOp::computeMinDistance(const LineString *line,
 			seg.closestPoint(*coord, segClosestPoint);
 
 			delete locGeom[0];
-			locGeom[0] = new GeometryLocation(line, static_cast<int>(i), segClosestPoint);
+			locGeom[0] = new GeometryLocation(line, i, segClosestPoint);
 			delete locGeom[1];
 			locGeom[1] = new GeometryLocation(pt, 0, *coord);
         	}

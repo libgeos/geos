@@ -277,7 +277,7 @@ std::pair<const void*, const void*> STRtree::nearestNeighbour(BoundablePair* ini
 class STRAbstractNode: public AbstractNode{
 public:
 
-	STRAbstractNode(int level, int capacity)
+	STRAbstractNode(int level, size_t capacity)
 		:
 		AbstractNode(level, capacity)
 	{}
@@ -314,7 +314,7 @@ protected:
 AbstractNode*
 STRtree::createNode(int level)
 {
-	AbstractNode *an = new STRAbstractNode(level, static_cast<int>(nodeCapacity));
+	AbstractNode *an = new STRAbstractNode(level, nodeCapacity);
 	nodes->push_back(an);
 	return an;
 }

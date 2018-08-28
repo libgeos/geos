@@ -44,9 +44,9 @@ namespace index { // geos.geomgraph.index
 using namespace geos::algorithm;
 
 bool
-SegmentIntersector::isAdjacentSegments(int i1,int i2)
+SegmentIntersector::isAdjacentSegments(size_t i1, size_t i2)
 {
-	return abs(i1-i2)==1;
+	return (i1 > i2 ? i1 - i2 : i2 - i1) == 1;
 }
 
 void
@@ -115,7 +115,9 @@ SegmentIntersector::hasProperInteriorIntersection()
  * shared by the beginning and end segments.
  */
 bool
-SegmentIntersector::isTrivialIntersection(Edge *e0,int segIndex0,Edge *e1,int segIndex1)
+SegmentIntersector::isTrivialIntersection(Edge *e0,
+		size_t segIndex0,Edge *e1,
+		size_t segIndex1)
 {
 //	if (e0->equals(e1))
 	if (e0==e1) {
@@ -123,7 +125,7 @@ SegmentIntersector::isTrivialIntersection(Edge *e0,int segIndex0,Edge *e1,int se
 			if (isAdjacentSegments(segIndex0,segIndex1))
 				return true;
 			if (e0->isClosed()) {
-				int maxSegIndex=e0->getNumPoints()-1;
+				auto maxSegIndex = e0->getNumPoints() - 1;
 				if ((segIndex0==0 && segIndex1==maxSegIndex)
 					|| (segIndex1==0 && segIndex0==maxSegIndex)) {
 					return true;
@@ -141,7 +143,7 @@ SegmentIntersector::isTrivialIntersection(Edge *e0,int segIndex0,Edge *e1,int se
  * certain pairs of segments for efficiency reasons.
  */
 void
-SegmentIntersector::addIntersections(Edge *e0,int segIndex0,Edge *e1,int segIndex1)
+SegmentIntersector::addIntersections(Edge *e0, size_t segIndex0, Edge *e1, size_t segIndex1)
 {
 
 #if GEOS_DEBUG

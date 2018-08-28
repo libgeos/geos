@@ -83,12 +83,12 @@ SimpleEdgeSetIntersector::computeIntersects(Edge *e0, Edge *e1,
 	const CoordinateSequence *pts0=e0->getCoordinates();
 	const CoordinateSequence *pts1=e1->getCoordinates();
 
-	auto npts0 = static_cast<int>(pts0->getSize());
-	auto npts1 = static_cast<int>(pts1->getSize());
+	auto npts0 = pts0->size();
+	auto npts1 = pts1->size();
 
-	for(int i0=0; i0<npts0-1; ++i0)
+	for(size_t i0 = 0; i0 < npts0 - 1; ++i0)
 	{
-		for(int i1=0; i1<npts1-1; ++i1)
+		for(size_t i1 = 0; i1<npts1 - 1; ++i1)
 		{
 			si->addIntersections(e0, i0, e1, i1);
 		}

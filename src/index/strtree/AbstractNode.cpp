@@ -30,7 +30,7 @@ namespace strtree { // geos.index.strtree
  * @param level 0 if this node is a leaf, 1 if a parent of a leaf, and so on;
  * the root node will have the highest level
  */
-AbstractNode::AbstractNode(int newLevel, int capacity) {
+AbstractNode::AbstractNode(int newLevel, size_t capacity) {
 	childBoundables.reserve(capacity);
 	bounds=nullptr;
 	level=newLevel;

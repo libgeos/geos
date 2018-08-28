@@ -92,14 +92,14 @@ MonotoneChain::computeSelect(const Envelope& searchEnv,
     if(end0-start0==1)
     {
         //Debug.println("computeSelect:"+p0+p1);
-        mcs.select(*this, static_cast<unsigned int>(start0));
+        mcs.select(*this, start0);
         return;
     }
     // nothing to do if the envelopes don't overlap
     if (!searchEnv.intersects(mcs.tempEnv1))
         return;
     // the chains overlap,so split each in half and iterate (binary search)
-    unsigned int mid= static_cast<unsigned int>((start0 + end0) / 2);
+    size_t mid = (start0 + end0) / 2;
 
     // Assert: mid != start or end (since we checked above for end-start <= 1)
     // check terminating conditions before recursing

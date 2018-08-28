@@ -25,7 +25,7 @@ namespace geos {
 namespace geomgraph { // geos.geomgraph
 namespace index { // geos.geomgraph.index
 
-SweepLineSegment::SweepLineSegment(Edge *newEdge, int newPtIndex):
+SweepLineSegment::SweepLineSegment(Edge *newEdge, size_t newPtIndex):
 	edge(newEdge),
 	pts(newEdge->getCoordinates()),
 	ptIndex(newPtIndex)

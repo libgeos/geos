@@ -86,7 +86,7 @@ SIRtree::~SIRtree() {
 
 class SIRAbstractNode: public AbstractNode {
 public:
-	SIRAbstractNode(int level, int capacity)
+	SIRAbstractNode(int level, size_t capacity)
 		:
 		AbstractNode(level, capacity)
 	{}
@@ -119,7 +119,7 @@ protected:
 AbstractNode*
 SIRtree::createNode(int level)
 {
-	AbstractNode *an = new SIRAbstractNode(level, static_cast<int>(nodeCapacity));
+	AbstractNode *an = new SIRAbstractNode(level, nodeCapacity);
 	nodes->push_back(an);
 	return an;
 }

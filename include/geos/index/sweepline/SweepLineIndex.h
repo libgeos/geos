@@ -15,9 +15,9 @@
 #ifndef GEOS_INDEX_SWEEPLINE_SWEEPLINEINDEX_H
 #define GEOS_INDEX_SWEEPLINE_SWEEPLINEINDEX_H
 
+#include <vector>
 #include <geos/export.h>
 
-#include <vector>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -73,7 +73,7 @@ private:
 	 */
 	void buildIndex();
 
-	void processOverlaps(int start, int end,
+	void processOverlaps(std::size_t start, std::size_t end,
 			SweepLineInterval *s0,
 			SweepLineOverlapAction *action);
 };

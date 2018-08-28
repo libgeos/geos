@@ -69,14 +69,14 @@ MonotoneChainEdge::getCoordinates()
 	return pts;
 }
 
-vector<int> &
+vector<size_t> &
 MonotoneChainEdge::getStartIndexes()
 {
 	return startIndex;
 }
 
 double
-MonotoneChainEdge::getMinX(int chainIndex)
+MonotoneChainEdge::getMinX(size_t chainIndex)
 {
 	double x1=pts->getAt(startIndex[chainIndex]).x;
 	double x2=pts->getAt(startIndex[chainIndex+1]).x;
@@ -84,7 +84,7 @@ MonotoneChainEdge::getMinX(int chainIndex)
 }
 
 double
-MonotoneChainEdge::getMaxX(int chainIndex)
+MonotoneChainEdge::getMaxX(size_t chainIndex)
 {
 	double x1=pts->getAt(startIndex[chainIndex]).x;
 	double x2=pts->getAt(startIndex[chainIndex+1]).x;
@@ -101,14 +101,14 @@ MonotoneChainEdge::computeIntersects(const MonotoneChainEdge &mce,
 	{
 		for(size_t j=0; j<J; ++j)
 		{
-			computeIntersectsForChain(static_cast<int>(i),mce,static_cast<int>(j),si);
+			computeIntersectsForChain(i, mce, j, si);
 		}
 	}
 }
 
 void
-MonotoneChainEdge::computeIntersectsForChain(int chainIndex0,
-	const MonotoneChainEdge &mce, int chainIndex1,
+MonotoneChainEdge::computeIntersectsForChain(size_t chainIndex0,
+	const MonotoneChainEdge &mce, size_t chainIndex1,
 	SegmentIntersector &si)
 {
 	computeIntersectsForChain(startIndex[chainIndex0],
@@ -119,8 +119,8 @@ MonotoneChainEdge::computeIntersectsForChain(int chainIndex0,
 }
 
 void
-MonotoneChainEdge::computeIntersectsForChain(int start0, int end0,
-	const MonotoneChainEdge &mce, int start1, int end1,
+MonotoneChainEdge::computeIntersectsForChain(size_t start0, size_t end0,
+	const MonotoneChainEdge &mce, size_t start1, size_t end1,
 	SegmentIntersector &ei)
 {
 	// terminating condition for the recursion
@@ -141,8 +141,8 @@ MonotoneChainEdge::computeIntersectsForChain(int start0, int end0,
 	if (!env1.intersects(&env2)) return;
 	// the chains overlap, so split each in half and iterate
 	// (binary search)
-	int mid0=(start0+end0)/2;
-	int mid1=(start1+end1)/2;
+	size_t mid0 = (start0 + end0) / 2;
+	size_t mid1 = (start1 + end1) / 2;
 
 	// Assert: mid != start or end
 	// (since we checked above for end - start <= 1)

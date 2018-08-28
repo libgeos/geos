@@ -42,7 +42,7 @@ public:
 
 	HotPixelSnapAction(HotPixel& nHotPixel,
 			SegmentString* nParentEdge,
-			unsigned int nVertexIndex)
+			size_t nVertexIndex)
 		:
 		MonotoneChainSelectAction(),
 		hotPixel(nHotPixel),
@@ -53,7 +53,7 @@ public:
 
 	bool isNodeAdded() const { return isNodeAddedVar; }
 
-	void select(chain::MonotoneChain& mc, unsigned int startIndex) override
+	void select(chain::MonotoneChain& mc, size_t startIndex) override
 	{
 		// This is casting away 'constness'!
 		NodedSegmentString& ss = *(static_cast<NodedSegmentString*>(mc.getContext()));
@@ -76,7 +76,7 @@ public:
 private:
 	HotPixel& hotPixel;
 	SegmentString* parentEdge;
-	unsigned int vertexIndex;
+	size_t vertexIndex;
 	bool isNodeAddedVar;
 
     // Declare type as noncopyable
@@ -114,7 +114,7 @@ private:
 bool
 MCIndexPointSnapper::snap(HotPixel& hotPixel,
 		SegmentString* parentEdge,
-		unsigned int vertexIndex)
+		size_t vertexIndex)
 {
 	const Envelope& pixelEnv = hotPixel.getSafeEnvelope();
 	HotPixelSnapAction hotPixelSnapAction(hotPixel, parentEdge, vertexIndex);

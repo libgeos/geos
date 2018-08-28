@@ -159,7 +159,7 @@ GeometryTransformer::transformMultiPoint(
 
 	vector<Geometry*>* transGeomList = new vector<Geometry*>();
 
-	for (unsigned int i=0, n=static_cast<unsigned int>(geom->getNumGeometries()); i<n; i++)
+	for (size_t i = 0, n = geom->getNumGeometries(); i < n; i++)
 	{
 		const Point* p = dynamic_cast<const Point*>(geom->getGeometryN(i));
 		assert(p);
@@ -232,7 +232,7 @@ GeometryTransformer::transformMultiLineString(
 
 	vector<Geometry*>* transGeomList = new vector<Geometry*>();
 
-	for (unsigned int i=0, n=static_cast<unsigned int>(geom->getNumGeometries()); i<n; i++)
+	for (size_t i = 0, n = geom->getNumGeometries(); i < n; i++)
 	{
 		const LineString* l = dynamic_cast<const LineString*>(
 				geom->getGeometryN(i));
@@ -276,7 +276,7 @@ GeometryTransformer::transformPolygon(
 	}
 
 	vector<Geometry*>* holes = new vector<Geometry*>();
-	for (unsigned int i=0, n=static_cast<unsigned int>(geom->getNumInteriorRing()); i<n; i++)
+	for (size_t i = 0, n = geom->getNumInteriorRing(); i<n; i++)
 	{
 		const LinearRing* lr = dynamic_cast<const LinearRing*>(
 			geom->getInteriorRingN(i));

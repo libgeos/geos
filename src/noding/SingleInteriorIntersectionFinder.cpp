@@ -29,8 +29,8 @@ namespace noding { // geos.noding
 /*public (override) */
 void
 SingleInteriorIntersectionFinder::processIntersections(
-	SegmentString* e0,  int segIndex0,
-	SegmentString* e1,  int segIndex1)
+	SegmentString* e0,  size_t segIndex0,
+	SegmentString* e1,  size_t segIndex1)
 {
 	using geos::geom::Coordinate;
 

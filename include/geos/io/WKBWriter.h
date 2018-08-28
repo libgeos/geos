@@ -182,7 +182,7 @@ private:
 	void writeCoordinateSequence(const geom::CoordinateSequence &cs, bool sized);
 		// throws IOException
 
-	void writeCoordinate(const geom::CoordinateSequence &cs, int idx, bool is3d);
+	void writeCoordinate(const geom::CoordinateSequence &cs, size_t idx, bool is3d);
 		// throws IOException
 
 	void writeGeometryType(int geometryType, int SRID);

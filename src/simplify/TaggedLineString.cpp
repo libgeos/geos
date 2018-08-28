@@ -88,7 +88,7 @@ TaggedLineString::init()
 			TaggedLineSegment* seg = new TaggedLineSegment(
 					pts->getAt(i),
 					pts->getAt(i+1),
-					parentLine, static_cast<unsigned int>(i));
+					parentLine, i);
 
 			segs.push_back(seg);
 		}

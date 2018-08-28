@@ -200,7 +200,7 @@ IsSimpleOp::hasNonEndpointIntersection(GeometryGraph &graph)
 	vector<Edge*> *edges=graph.getEdges();
 	for (vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
 		Edge *e=*i;
-		int maxSegmentIndex=e->getMaximumSegmentIndex();
+		auto maxSegmentIndex = e->getMaximumSegmentIndex();
 		EdgeIntersectionList &eiL=e->getEdgeIntersectionList();
 		for ( EdgeIntersectionList::iterator eiIt=eiL.begin(),
 			eiEnd=eiL.end(); eiIt!=eiEnd; ++eiIt )

@@ -172,7 +172,7 @@ OffsetCurveSetBuilder::add(const Geometry& g)
 void
 OffsetCurveSetBuilder::addCollection(const GeometryCollection *gc)
 {
-	for (int i=0, n=static_cast<int>(gc->getNumGeometries()); i<n; i++) {
+	for (size_t i = 0, n = gc->getNumGeometries(); i < n; i++) {
 		const Geometry *g=gc->getGeometryN(i);
 		add(*g);
 	}

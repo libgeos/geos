@@ -68,7 +68,7 @@ MultiPoint::equalsExact(const Geometry *other, double tolerance) const
 	return GeometryCollection::equalsExact(other,tolerance);
   }
 
-const Coordinate* MultiPoint::getCoordinateN(int n) const {
+const Coordinate* MultiPoint::getCoordinateN(size_t n) const {
 	return ((*geometries)[n])->getCoordinate();
 }
 GeometryTypeId

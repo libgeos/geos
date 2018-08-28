@@ -70,7 +70,7 @@ public:
 		return pt;
 	}
 
-	const geom::Coordinate& getCoordinate(unsigned int i) const
+	const geom::Coordinate& getCoordinate(size_t i) const
 	{
 		assert(i<pt.size());
 		return pt[i];

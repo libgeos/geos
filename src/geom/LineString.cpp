@@ -127,7 +127,7 @@ LineString::getCoordinatesRO() const
 }
 
 const Coordinate&
-LineString::getCoordinateN(int n) const
+LineString::getCoordinateN(size_t n) const
 {
 	assert(points.get());
 	return points->getAt(n);
@@ -202,7 +202,7 @@ LineString::isClosed() const
 	if (isEmpty()) {
 		return false;
 	}
-	return getCoordinateN(0).equals2D(getCoordinateN(static_cast<int>(getNumPoints()-1)));
+	return getCoordinateN(0).equals2D(getCoordinateN(getNumPoints() - 1));
 }
 
 bool

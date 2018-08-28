@@ -110,28 +110,28 @@ CGAlgorithms::isCCW(const CoordinateSequence* ring)
 
 	// find highest point
 	const Coordinate *hiPt=&ring->getAt(0);
-	int hiIndex=0;
-	for (std::size_t i=1; i<=nPts; ++i)
+	size_t hiIndex = 0;
+	for (std::size_t i = 1; i <= nPts; ++i)
 	{
 		const Coordinate *p=&ring->getAt(i);
 		if (p->y > hiPt->y) {
 			hiPt = p;
-			hiIndex = static_cast<int>(i);
+			hiIndex = i;
 		}
 	}
 
 	// find distinct point before highest point
-	int iPrev = hiIndex;
+	auto iPrev = hiIndex;
 	do {
+		if (iPrev == 0)
+            iPrev = nPts;
 		iPrev = iPrev - 1;
-		if (iPrev < 0)
-            iPrev = static_cast<int>(nPts);
-	} while (ring->getAt(iPrev)==*hiPt && iPrev!=hiIndex);
+	} while (ring->getAt(iPrev) == *hiPt && iPrev != hiIndex);
 
 	// find distinct point after highest point
-	int iNext = hiIndex;
+	auto iNext = hiIndex;
 	do {
-		iNext = (iNext + 1) % static_cast<int>(nPts);
+		iNext = (iNext + 1) % nPts;
 	} while (ring->getAt(iNext)==*hiPt && iNext != hiIndex);
 
 	const Coordinate *prev=&ring->getAt(iPrev);

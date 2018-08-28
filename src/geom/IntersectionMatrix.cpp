@@ -158,22 +158,22 @@ IntersectionMatrix::set(int row, int col, int dimensionValue)
 void
 IntersectionMatrix::set(const string& dimensionSymbols)
 {
-	size_t limit = dimensionSymbols.length();
+	auto limit = dimensionSymbols.length();
 
-	for (int i = 0; i < static_cast<int>(limit); i++)
+	for (size_t i = 0; i < limit; i++)
 	{
-		int row = i / firstDim;
-		int col = i % secondDim;
+		auto row = i / firstDim;
+		auto col = i % secondDim;
 		matrix[row][col] = Dimension::toDimensionValue(dimensionSymbols[i]);
 	}
 }
 
 /*public*/
 void
-IntersectionMatrix::setAtLeast(int row, int col, int minimumDimensionValue)
+IntersectionMatrix::setAtLeast(size_t row, size_t col, int minimumDimensionValue)
 {
-	assert( row >= 0 && row < firstDim );
-	assert( col >= 0 && col < secondDim );
+	assert( row < firstDim );
+	assert( col < secondDim );
 
 	if (matrix[row][col] < minimumDimensionValue)
 	{
@@ -198,12 +198,12 @@ IntersectionMatrix::setAtLeastIfValid(int row, int col, int minimumDimensionValu
 void
 IntersectionMatrix::setAtLeast(string minimumDimensionSymbols)
 {
-	size_t limit = minimumDimensionSymbols.length();
+	auto limit = minimumDimensionSymbols.length();
 
-	for (int i = 0; i < static_cast<int>(limit); i++)
+	for (size_t i = 0; i < limit; i++)
 	{
-		int row = i / firstDim;
-		int col = i % secondDim;
+		auto row = i / firstDim;
+		auto col = i % secondDim;
 		setAtLeast(row, col, Dimension::toDimensionValue(minimumDimensionSymbols[i]));
 	}
 }

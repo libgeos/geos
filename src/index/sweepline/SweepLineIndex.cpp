@@ -62,7 +62,7 @@ SweepLineIndex::buildIndex()
             SweepLineEvent *ev=events[i];
             if (ev->isDelete())
             {
-                ev->getInsertEvent()->setDeleteEventIndex(static_cast<int>(i));
+                ev->getInsertEvent()->setDeleteEventIndex(i);
             }
         }
         indexBuilt = true;
@@ -77,12 +77,12 @@ SweepLineIndex::computeOverlaps(SweepLineOverlapAction *action)
     buildIndex();
 
     const std::vector<SweepLineEvent*>::size_type n=events.size();
-    for(std::vector<SweepLineEvent*>::size_type i=0; i<n; i++)
+    for(size_t i = 0; i < n; i++)
     {
         SweepLineEvent *ev=events[i];
         if (ev->isInsert())
         {
-            processOverlaps(static_cast<int>(i),
+            processOverlaps(i,
                 ev->getDeleteEventIndex(),
                 ev->getInterval(), action);
         }
@@ -90,7 +90,7 @@ SweepLineIndex::computeOverlaps(SweepLineOverlapAction *action)
 }
 
 void
-SweepLineIndex::processOverlaps(int start, int end,
+SweepLineIndex::processOverlaps(size_t start, size_t end,
 		SweepLineInterval *s0, SweepLineOverlapAction *action)
 {
 	/**
@@ -98,7 +98,7 @@ SweepLineIndex::processOverlaps(int start, int end,
 	 * include current insert event object in list of event objects to test.
 	 * Last index can be skipped, because it must be a Delete event.
 	 */
-	for(int i=start; i<end; i++)
+	for(auto i = start; i < end; i++)
 	{
 		SweepLineEvent *ev=events[i];
 		if (ev->isInsert()) {

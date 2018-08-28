@@ -55,7 +55,7 @@ public:
 	virtual ~MonotoneChainSelectAction() {}
 
 	/// This function can be overridden if the original chain is needed
-	virtual void select(MonotoneChain& mc, unsigned int start);
+	virtual void select(MonotoneChain& mc, size_t start);
 
 	/**
 	 * This is a convenience function which can be overridden

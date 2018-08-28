@@ -128,12 +128,12 @@ OffsetCurveBuilder::getSingleSidedLineCurve(const CoordinateSequence* inputPts,
     const CoordinateSequence& simp1 = *simp1_;
 
 
-    int n1 = static_cast<int>(simp1.size()) - 1;
+    auto n1 = simp1.size() - 1;
     if ( ! n1 )
       throw util::IllegalArgumentException("Cannot get offset of single-vertex line");
     segGen->initSideSegments(simp1[0], simp1[1], Position::LEFT);
     segGen->addFirstSegment();
-    for (int i = 2; i <= n1; ++i) {
+    for (size_t i = 2; i <= n1; ++i) {
       segGen->addNextSegment(simp1[i], true);
     }
     segGen->addLastSegment();
@@ -147,13 +147,13 @@ OffsetCurveBuilder::getSingleSidedLineCurve(const CoordinateSequence* inputPts,
       BufferInputLineSimplifier::simplify( *inputPts, -distTol );
     const CoordinateSequence& simp2 = *simp2_;
 
-    int n2 = static_cast<int>(simp2.size()) - 1;
+    auto n2 = simp2.size() - 1;
     if ( ! n2 )
       throw util::IllegalArgumentException("Cannot get offset of single-vertex line");
     segGen->initSideSegments(simp2[n2], simp2[n2-1], Position::LEFT);
     segGen->addFirstSegment();
-    for (int i = n2-2; i >= 0; --i) {
-      segGen->addNextSegment(simp2[i], true);
+    for (size_t i = n2 - 1; i > 0; --i) {
+      segGen->addNextSegment(simp2[i - 1], true);
     }
     segGen->addLastSegment();
   }
@@ -207,9 +207,9 @@ OffsetCurveBuilder::computeLineBufferCurve(const CoordinateSequence& inputPts,
 	const CoordinateSequence& simp1 = *simp1_;
 
 
-	int n1 = static_cast<int>(simp1.size()) - 1;
+	auto n1 = simp1.size() - 1;
 	segGen.initSideSegments(simp1[0], simp1[1], Position::LEFT);
-	for (int i = 2; i <= n1; ++i) {
+	for (size_t i = 2; i <= n1; ++i) {
 		segGen.addNextSegment(simp1[i], true);
 	}
 	segGen.addLastSegment();
@@ -222,10 +222,10 @@ OffsetCurveBuilder::computeLineBufferCurve(const CoordinateSequence& inputPts,
 		BufferInputLineSimplifier::simplify(inputPts, -distTol);
 	const CoordinateSequence& simp2 = *simp2_;
 
-	int n2 = static_cast<int>(simp2.size()) - 1;
+	auto n2 = simp2.size() - 1;
 	segGen.initSideSegments(simp2[n2], simp2[n2-1], Position::LEFT);
-	for (int i = n2-2; i >= 0; --i) {
-		segGen.addNextSegment(simp2[i], true);
+	for (size_t i = n2 - 1; i > 0; --i) {
+		segGen.addNextSegment(simp2[i - 1], true);
 	}
 	segGen.addLastSegment();
 	// add line cap for start of line
@@ -248,9 +248,9 @@ OffsetCurveBuilder::computeRingBufferCurve(const CoordinateSequence& inputPts,
 		BufferInputLineSimplifier::simplify(inputPts, distTol);
 	const CoordinateSequence& simp = *simp_;
 
-	int n = static_cast<int>(simp.size())-1;
+	auto n = simp.size() - 1;
 	segGen.initSideSegments(simp[n-1], simp[0], side);
-	for (int i = 1; i <= n; i++) {
+	for (size_t i = 1; i <= n; i++) {
 		bool addStartPoint = i != 1;
 		segGen.addNextSegment(simp[i], addStartPoint);
 	}
@@ -276,11 +276,11 @@ OffsetCurveBuilder::computeSingleSidedBufferCurve(
       BufferInputLineSimplifier::simplify(inputPts, -distTol);
     const CoordinateSequence& simp2 = *simp2_;
 
-    int n2 = static_cast<int>(simp2.size()) - 1;
+    auto n2 = simp2.size() - 1;
     segGen.initSideSegments(simp2[n2], simp2[n2-1], Position::LEFT);
     segGen.addFirstSegment();
-    for (int i = n2-2; i >= 0; --i) {
-      segGen.addNextSegment(simp2[i], true);
+    for (size_t  i = n2 - 1; i > 0; --i) {
+      segGen.addNextSegment(simp2[i - 1], true);
     }
 
   } else {
@@ -294,10 +294,10 @@ OffsetCurveBuilder::computeSingleSidedBufferCurve(
       BufferInputLineSimplifier::simplify(inputPts, distTol);
     const CoordinateSequence& simp1 = *simp1_;
 
-    int n1 = static_cast<int>(simp1.size()) - 1;
+    auto n1 = simp1.size() - 1;
     segGen.initSideSegments(simp1[0], simp1[1], Position::LEFT);
     segGen.addFirstSegment();
-    for (int i = 2; i <= n1; ++i) {
+    for (size_t i = 2; i <= n1; ++i) {
       segGen.addNextSegment(simp1[i], true);
     }
 

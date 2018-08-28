@@ -43,8 +43,8 @@ namespace linearref { // geos::linearref
 class LinearLocation
 {
 private:
-	unsigned int componentIndex;
-	unsigned int segmentIndex;
+	size_t componentIndex;
+	size_t segmentIndex;
 	double segmentFraction;
 
 	/**
@@ -85,9 +85,9 @@ public:
 	/**
 	 * Creates a location referring to the start of a linear geometry
 	 */
-	LinearLocation(unsigned int segmentIndex = 0, double segmentFraction = 0.0);
+	LinearLocation(size_t segmentIndex = 0, double segmentFraction = 0.0);
 
-	LinearLocation(unsigned int componentIndex, unsigned int segmentIndex, double segmentFraction);
+	LinearLocation(size_t componentIndex, size_t segmentIndex, double segmentFraction);
 
 	/**
 	 * Ensures the indexes are valid for a given linear {@link Geometry}.
@@ -128,14 +128,14 @@ public:
 	 *
 	 * @return the component index
 	 */
-	unsigned int getComponentIndex() const;
+	size_t getComponentIndex() const;
 
 	/**
 	 * Gets the segment index for this location
 	 *
 	 * @return the segment index
 	 */
-	unsigned int getSegmentIndex() const;
+	size_t getSegmentIndex() const;
 
 	/**
 	 * Gets the segment fraction for this location
@@ -198,7 +198,7 @@ public:
 	 * @return    a negative integer, zero, or a positive integer as this <code>LineStringLocation</code>
 	 *      is less than, equal to, or greater than the specified locationValues
 	 */
-	int compareLocationValues(unsigned int componentIndex1, unsigned int segmentIndex1, double segmentFraction1) const;
+	int compareLocationValues(size_t componentIndex1, size_t segmentIndex1, double segmentFraction1) const;
 
 	/**
 	 *  Compares two sets of location values for order.
@@ -214,8 +214,8 @@ public:
 	 *      is less than, equal to, or greater than the second set of locationValues
 	 */
 	static int compareLocationValues(
-		unsigned int componentIndex0, unsigned int segmentIndex0, double segmentFraction0,
-		unsigned int componentIndex1, unsigned int segmentIndex1, double segmentFraction1);
+		size_t componentIndex0, size_t segmentIndex0, double segmentFraction0,
+		size_t componentIndex1, size_t segmentIndex1, double segmentFraction1);
 
 	/**
 	 * Tests whether two locations

@@ -167,7 +167,7 @@ public:
 	 *        to compare the element.  The order of dimension values
 	 *        from least to greatest is {DONTCARE, TRUE, FALSE, 0, 1, 2}.
 	 */
-	void setAtLeast(int row, int column, int minimumDimensionValue);
+	void setAtLeast(size_t row, size_t column, int minimumDimensionValue);
 
 	/** \brief
 	 * If row >= 0 and column >= 0, changes the specified element

@@ -93,7 +93,7 @@ void
 EdgeEndBuilder::createEdgeEndForPrev(Edge *edge, vector<EdgeEnd*> *l,
 		EdgeIntersection *eiCurr, EdgeIntersection *eiPrev)
 {
-	int iPrev=eiCurr->segmentIndex;
+	auto iPrev = eiCurr->segmentIndex;
 	if (eiCurr->dist==0.0) {
 		// if at the start of the edge there is no previous edge
 		if (iPrev==0) return;
@@ -123,7 +123,7 @@ void
 EdgeEndBuilder::createEdgeEndForNext(Edge *edge, vector<EdgeEnd*> *l,
 		EdgeIntersection *eiCurr, EdgeIntersection *eiNext)
 {
-	int iNext=eiCurr->segmentIndex + 1;
+	size_t iNext = eiCurr->segmentIndex + 1;
 	// if there is no next edge there is nothing to do
 	if (iNext>=edge->getNumPoints() && eiNext==nullptr) return;
 	Coordinate pNext(edge->getCoordinate(iNext));

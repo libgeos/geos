@@ -78,7 +78,7 @@ private:
 	/// Elements are externally owned
 	std::vector<std::vector<Node*>*> bdyNodes;
 
-	bool isTrivialIntersection(Edge *e0,int segIndex0,Edge *e1, int segIndex1);
+	bool isTrivialIntersection(Edge *e0, size_t segIndex0,Edge *e1, size_t segIndex1);
 
 	bool isBoundaryPoint(algorithm::LineIntersector *li,
 			std::vector<std::vector<Node*>*>& tstBdyNodes);
@@ -88,7 +88,7 @@ private:
 
 public:
 
-	static bool isAdjacentSegments(int i1,int i2);
+	static bool isAdjacentSegments(size_t i1, size_t i2);
 
 	// testing only
 	int numTests;
@@ -127,7 +127,7 @@ public:
 
 	bool hasProperInteriorIntersection();
 
-	void addIntersections(Edge *e0, int segIndex0, Edge *e1, int segIndex1);
+	void addIntersections(Edge *e0, size_t segIndex0, Edge *e1, size_t segIndex1);
 
 	void setIsDoneIfProperInt(bool isDoneWhenProperInt);
 

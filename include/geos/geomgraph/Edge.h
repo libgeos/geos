@@ -109,8 +109,8 @@ public:
 
 	~Edge() override;
 
-	virtual int getNumPoints() const {
-		return static_cast<int>(pts->getSize());
+	virtual size_t getNumPoints() const {
+		return pts->getSize();
 	}
 
 	virtual void setName(const std::string &newName) {
@@ -122,7 +122,7 @@ public:
 		return pts;
 	}
 
-	virtual const geom::Coordinate& getCoordinate(int i) const {
+	virtual const geom::Coordinate& getCoordinate(size_t i) const {
 		testInvariant();
 		return pts->getAt(i);
 	}
@@ -153,7 +153,7 @@ public:
 		testInvariant();
 	}
 
-	virtual int getMaximumSegmentIndex() const {
+	virtual size_t getMaximumSegmentIndex() const {
 		testInvariant();
 		return getNumPoints()-1;
 	}
@@ -196,16 +196,16 @@ public:
 	 * Adds EdgeIntersections for one or both
 	 * intersections found for a segment of an edge to the edge intersection list.
 	 */
-	virtual void addIntersections(algorithm::LineIntersector *li, int segmentIndex,
-		int geomIndex);
+	virtual void addIntersections(algorithm::LineIntersector *li, size_t segmentIndex,
+		size_t geomIndex);
 
 	/// Add an EdgeIntersection for intersection intIndex.
 	//
 	/// An intersection that falls exactly on a vertex of the edge is normalized
 	/// to use the higher of the two possible segmentIndexes
 	///
-	virtual void addIntersection(algorithm::LineIntersector *li, int segmentIndex,
-		int geomIndex, int intIndex);
+	virtual void addIntersection(algorithm::LineIntersector *li, size_t segmentIndex,
+		size_t geomIndex, size_t intIndex);
 
 	/// Update the IM with the contribution for this component.
 	//

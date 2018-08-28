@@ -52,17 +52,17 @@ public:
 	double dist;
 
 	// the index of the containing line segment in the parent edge
-	int segmentIndex;
+	size_t segmentIndex;
 
 	EdgeIntersection(const geom::Coordinate& newCoord,
-	                 int newSegmentIndex, double newDist)
+	                 size_t newSegmentIndex, double newDist)
 	  :
 	  coord(newCoord),
 	  dist(newDist),
 	  segmentIndex(newSegmentIndex)
 	{}
 
-	bool isEndPoint(int maxSegmentIndex) const {
+	bool isEndPoint(size_t maxSegmentIndex) const {
 	  if (segmentIndex==0 && dist==0.0) return true;
 	  if (segmentIndex==maxSegmentIndex) return true;
 	  return false;
@@ -72,7 +72,7 @@ public:
 		return coord;
 	}
 
-	int getSegmentIndex() const { return segmentIndex; }
+	size_t getSegmentIndex() const { return segmentIndex; }
 
 	double getDistance() const { return dist; }
 

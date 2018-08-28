@@ -167,7 +167,7 @@ MCIndexSegmentSetMutualIntersector::SegmentOverlapAction::overlap(
     SegmentString * ss1 = (SegmentString *)(mc1.getContext());
     SegmentString * ss2 = (SegmentString *)(mc2.getContext());
 
-    si.processIntersections(ss1, static_cast<int>(start1), ss2, static_cast<int>(start2));
+    si.processIntersections(ss1, start1, ss2, start2);
 }
 
 } // geos::noding

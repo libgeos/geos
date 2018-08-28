@@ -15,6 +15,7 @@
 #ifndef GEOS_NODING_SEGMENTINTERSECTOR_H
 #define GEOS_NODING_SEGMENTINTERSECTOR_H
 
+#include <cstddef>
 #include <geos/export.h>
 
 #include <geos/inline.h>
@@ -55,8 +56,8 @@ public:
 	 * being intersected.
 	 */
 	virtual void processIntersections(
-		SegmentString* e0,  int segIndex0,
-		SegmentString* e1,  int segIndex1)=0;
+		SegmentString* e0,  size_t segIndex0,
+		SegmentString* e1,  size_t segIndex1) = 0;
 
 	/**
 	 * \brief
