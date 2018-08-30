@@ -41,8 +41,8 @@ LocationIndexOfLine::indicesOf(const Geometry* linearGeom,
 	return locater.indicesOf(subLine);
 }
 
-LocationIndexOfLine::LocationIndexOfLine(const Geometry* linearGeom) :
-		linearGeom(linearGeom) {}
+LocationIndexOfLine::LocationIndexOfLine(const Geometry* p_linearGeom) :
+		linearGeom(p_linearGeom) {}
 
 /* public */
 LinearLocation*

@@ -184,20 +184,20 @@ GeometryGraph::add(const Geometry *g)
 		useBoundaryDeterminationRule = false;
 
 
-	if ( const Polygon* x = dynamic_cast<const Polygon*>(g) )
-		addPolygon(x);
+	if ( const Polygon* x1 = dynamic_cast<const Polygon*>(g) )
+		addPolygon(x1);
 
 	// LineString also handles LinearRings
-	else if ( const LineString* x = dynamic_cast<const LineString*>(g) )
-		addLineString(x);
+	else if ( const LineString* x2 = dynamic_cast<const LineString*>(g) )
+		addLineString(x2);
 
-	else if ( const Point* x = dynamic_cast<const Point*>(g) )
-		addPoint(x);
+	else if ( const Point* x3 = dynamic_cast<const Point*>(g) )
+		addPoint(x3);
 
-	else if ( const GeometryCollection* x =
+	else if ( const GeometryCollection* x4 =
             dynamic_cast<const GeometryCollection*>(g) )
   {
-		addCollection(x);
+		addCollection(x4);
   }
 
 	else {
@@ -437,7 +437,7 @@ GeometryGraph::computeEdgeIntersections(GeometryGraph *g,
 }
 
 void
-GeometryGraph::insertPoint(int argIndex, const Coordinate& coord,
+GeometryGraph::insertPoint(int p_argIndex, const Coordinate& coord,
 	int onLocation)
 {
 #if GEOS_DEBUG > 1
@@ -447,11 +447,11 @@ GeometryGraph::insertPoint(int argIndex, const Coordinate& coord,
 	Label& lbl = n->getLabel();
 	if ( lbl.isNull() )
 	{
-		n->setLabel(argIndex, onLocation);
+		n->setLabel(p_argIndex, onLocation);
 	}
 	else
 	{
-		lbl.setLocation(argIndex, onLocation);
+		lbl.setLocation(p_argIndex, onLocation);
 	}
 }
 
@@ -462,7 +462,7 @@ GeometryGraph::insertPoint(int argIndex, const Coordinate& coord,
  * iff if it is in the boundaries of an odd number of Geometries
  */
 void
-GeometryGraph::insertBoundaryPoint(int argIndex, const Coordinate& coord)
+GeometryGraph::insertBoundaryPoint(int p_argIndex, const Coordinate& coord)
 {
 	Node *n=nodes->addNode(coord);
 	// nodes always have labels
@@ -472,31 +472,31 @@ GeometryGraph::insertBoundaryPoint(int argIndex, const Coordinate& coord)
 	int boundaryCount=1;
 
 	// determine the current location for the point (if any)
-	int loc = lbl.getLocation(argIndex,Position::ON);
+	int loc = lbl.getLocation(p_argIndex,Position::ON);
 	if (loc==Location::BOUNDARY) boundaryCount++;
 
 	// determine the boundary status of the point according to the
 	// Boundary Determination Rule
 	int newLoc = determineBoundary(boundaryNodeRule, boundaryCount);
-	lbl.setLocation(argIndex,newLoc);
+	lbl.setLocation(p_argIndex,newLoc);
 }
 
 /*private*/
 void
-GeometryGraph::addSelfIntersectionNodes(int argIndex)
+GeometryGraph::addSelfIntersectionNodes(int p_argIndex)
 {
 	for (vector<Edge*>::iterator i=edges->begin(), endIt=edges->end();
 		i!=endIt; ++i)
 	{
 		Edge *e=*i;
-		int eLoc = e->getLabel().getLocation(argIndex);
+		int eLoc = e->getLabel().getLocation(p_argIndex);
 		EdgeIntersectionList &eiL = e->eiList;
 		for (EdgeIntersectionList::iterator
 			eiIt=eiL.begin(), eiEnd=eiL.end();
 			eiIt!=eiEnd; ++eiIt)
 		{
 			EdgeIntersection *ei=*eiIt;
-			addSelfIntersectionNode(argIndex, ei->coord, eLoc);
+			addSelfIntersectionNode(p_argIndex, ei->coord, eLoc);
 			GEOS_CHECK_FOR_INTERRUPTS();
 		}
 	}
@@ -504,18 +504,18 @@ GeometryGraph::addSelfIntersectionNodes(int argIndex)
 
 /*private*/
 void
-GeometryGraph::addSelfIntersectionNode(int argIndex,
+GeometryGraph::addSelfIntersectionNode(int p_argIndex,
 	const Coordinate& coord, int loc)
 {
 	// if this node is already a boundary node, don't change it
-	if (isBoundaryNode(argIndex,coord)) return;
+	if (isBoundaryNode(p_argIndex,coord)) return;
 	if (loc==Location::BOUNDARY && useBoundaryDeterminationRule)
 	{
-		insertBoundaryPoint(argIndex,coord);
+		insertBoundaryPoint(p_argIndex,coord);
 	}
 	else
 	{
-		insertPoint(argIndex,coord,loc);
+		insertPoint(p_argIndex,coord,loc);
 	}
 }
 

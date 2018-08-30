@@ -176,7 +176,7 @@ EdgeRing::addHole(EdgeRing *edgeRing)
 
 /*public*/
 Polygon*
-EdgeRing::toPolygon(const GeometryFactory* geometryFactory)
+EdgeRing::toPolygon(const GeometryFactory* p_geometryFactory)
 {
 	testInvariant();
 
@@ -193,7 +193,7 @@ EdgeRing::toPolygon(const GeometryFactory* geometryFactory)
 	// wants a LinearRing
 	//
 	LinearRing *shellLR=new LinearRing(*(getLinearRing()));
-	return geometryFactory->createPolygon(shellLR, holeLR);
+	return p_geometryFactory->createPolygon(shellLR, holeLR);
 }
 
 /*public*/

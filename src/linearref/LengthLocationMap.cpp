@@ -41,8 +41,8 @@ double LengthLocationMap::getLength(const Geometry* linearGeom, const LinearLoca
 }
 
 
-LengthLocationMap::LengthLocationMap(const Geometry* linearGeom) :
-		linearGeom(linearGeom) {}
+LengthLocationMap::LengthLocationMap(const Geometry* p_linearGeom) :
+		linearGeom(p_linearGeom) {}
 
 LinearLocation
 LengthLocationMap::getLocation(double length) const

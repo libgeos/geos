@@ -55,8 +55,8 @@ public:
 	static bool containsPointInPolygon(const geom::Coordinate& p,
 			const geom::Polygon *poly);
 
-	SimplePointInAreaLocator( const geom::Geometry * g)
-	:	g( g)
+	SimplePointInAreaLocator( const geom::Geometry * p_g)
+	:	g( p_g)
 	{ }
 
 	int locate( const geom::Coordinate * p) override

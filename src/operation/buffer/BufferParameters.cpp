@@ -45,7 +45,7 @@ BufferParameters::BufferParameters()
 {}
 
 // public
-BufferParameters::BufferParameters(int quadrantSegments)
+BufferParameters::BufferParameters(int p_quadrantSegments)
 	:
 	quadrantSegments(DEFAULT_QUADRANT_SEGMENTS),
 	endCapStyle(CAP_ROUND),
@@ -53,12 +53,12 @@ BufferParameters::BufferParameters(int quadrantSegments)
 	mitreLimit(DEFAULT_MITRE_LIMIT),
 	_isSingleSided(false)
 {
-	setQuadrantSegments(quadrantSegments);
+	setQuadrantSegments(p_quadrantSegments);
 }
 
 // public
-BufferParameters::BufferParameters(int quadrantSegments,
-                                   EndCapStyle endCapStyle)
+BufferParameters::BufferParameters(int p_quadrantSegments,
+                                   EndCapStyle p_endCapStyle)
 	:
 	quadrantSegments(DEFAULT_QUADRANT_SEGMENTS),
 	endCapStyle(CAP_ROUND),
@@ -66,15 +66,15 @@ BufferParameters::BufferParameters(int quadrantSegments,
 	mitreLimit(DEFAULT_MITRE_LIMIT),
 	_isSingleSided(false)
 {
-	setQuadrantSegments(quadrantSegments);
-	setEndCapStyle(endCapStyle);
+	setQuadrantSegments(p_quadrantSegments);
+	setEndCapStyle(p_endCapStyle);
 }
 
 // public
-BufferParameters::BufferParameters(int quadrantSegments,
-                                   EndCapStyle endCapStyle,
-                                   JoinStyle joinStyle,
-                                   double mitreLimit)
+BufferParameters::BufferParameters(int p_quadrantSegments,
+                                   EndCapStyle p_endCapStyle,
+                                   JoinStyle p_joinStyle,
+                                   double p_mitreLimit)
 	:
 	quadrantSegments(DEFAULT_QUADRANT_SEGMENTS),
 	endCapStyle(CAP_ROUND),
@@ -82,10 +82,10 @@ BufferParameters::BufferParameters(int quadrantSegments,
 	mitreLimit(DEFAULT_MITRE_LIMIT),
 	_isSingleSided(false)
 {
-	setQuadrantSegments(quadrantSegments);
-	setEndCapStyle(endCapStyle);
-	setJoinStyle(joinStyle);
-	setMitreLimit(mitreLimit);
+	setQuadrantSegments(p_quadrantSegments);
+	setEndCapStyle(p_endCapStyle);
+	setJoinStyle(p_joinStyle);
+	setMitreLimit(p_mitreLimit);
 }
 
 // public

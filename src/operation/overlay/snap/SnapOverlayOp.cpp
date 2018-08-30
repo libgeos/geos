@@ -83,16 +83,16 @@ SnapOverlayOp::snap(geom::GeomPtrPair& snapGeom)
 
 /* private */
 void
-SnapOverlayOp::removeCommonBits(const geom::Geometry& geom0,
-                                const geom::Geometry& geom1,
+SnapOverlayOp::removeCommonBits(const geom::Geometry& p_geom0,
+                                const geom::Geometry& p_geom1,
 				geom::GeomPtrPair& remGeom)
 {
 	cbr.reset(new precision::CommonBitsRemover());
-	cbr->add(&geom0);
-	cbr->add(&geom1);
+	cbr->add(&p_geom0);
+	cbr->add(&p_geom1);
 
-	remGeom.first.reset( cbr->removeCommonBits(geom0.clone()) );
-	remGeom.second.reset( cbr->removeCommonBits(geom1.clone()) );
+	remGeom.first.reset( cbr->removeCommonBits(p_geom0.clone()) );
+	remGeom.second.reset( cbr->removeCommonBits(p_geom1.clone()) );
 }
 
 /*private*/

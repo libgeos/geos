@@ -61,8 +61,8 @@ QuadEdgeSubdivision::getTriangleEdges(const QuadEdge &startQE,
     }
 }
 
-QuadEdgeSubdivision::QuadEdgeSubdivision(const geom::Envelope &env, double tolerance) :
-        tolerance(tolerance),
+QuadEdgeSubdivision::QuadEdgeSubdivision(const geom::Envelope &env, double p_tolerance) :
+        tolerance(p_tolerance),
         locator(new LastFoundQuadEdgeLocator(this))
 {
     edgeCoincidenceTolerance = tolerance / EDGE_COINCIDENCE_TOL_FACTOR;
@@ -379,7 +379,7 @@ private:
     CoordinateArraySequenceFactory coordSeqFact;
 
 public:
-    TriangleCoordinatesVisitor(QuadEdgeSubdivision::TriList *triCoords): triCoords(triCoords)
+    TriangleCoordinatesVisitor(QuadEdgeSubdivision::TriList *p_triCoords): triCoords(p_triCoords)
     {
     }
 
@@ -436,10 +436,10 @@ QuadEdgeSubdivision::visitTriangles(TriangleVisitor *triVisitor, bool includeFra
         QuadEdge *edge = edgeStack.top();
         edgeStack.pop();
         if (visitedEdges.find(edge) == visitedEdges.end()) {
-            QuadEdge **triEdges = fetchTriangleToVisit(edge, edgeStack,
+            QuadEdge **p_triEdges = fetchTriangleToVisit(edge, edgeStack,
                     includeFrame, visitedEdges);
-            if (triEdges != nullptr)
-                triVisitor->visit(triEdges);
+            if (p_triEdges != nullptr)
+                triVisitor->visit(p_triEdges);
         }
     }
 }
@@ -447,11 +447,11 @@ QuadEdgeSubdivision::visitTriangles(TriangleVisitor *triVisitor, bool includeFra
 std::unique_ptr<geom::MultiLineString>
 QuadEdgeSubdivision::getEdges(const geom::GeometryFactory& geomFact)
 {
-    std::unique_ptr<QuadEdgeList> quadEdges(getPrimaryEdges(false));
-    std::vector<Geometry *> edges(quadEdges->size());
+    std::unique_ptr<QuadEdgeList> p_quadEdges(getPrimaryEdges(false));
+    std::vector<Geometry *> edges(p_quadEdges->size());
     const CoordinateSequenceFactory *coordSeqFact = geomFact.getCoordinateSequenceFactory();
     int i = 0;
-    for (QuadEdgeSubdivision::QuadEdgeList::iterator it = quadEdges->begin(); it != quadEdges->end(); ++it)
+    for (QuadEdgeSubdivision::QuadEdgeList::iterator it = p_quadEdges->begin(); it != p_quadEdges->end(); ++it)
     {
         QuadEdge *qe = *it;
         CoordinateSequence *coordSeq = coordSeqFact->create((std::vector<geom::Coordinate>*)nullptr);;

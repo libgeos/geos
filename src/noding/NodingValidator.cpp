@@ -162,10 +162,10 @@ NodingValidator::checkEndPtVertexIntersections() const
 /* private */
 void
 NodingValidator::checkEndPtVertexIntersections(const Coordinate& testPt,
-		const SegmentString::NonConstVect& segStrings) const
+		const SegmentString::NonConstVect& p_segStrings) const
 {
 	for (SegmentString::NonConstVect::const_iterator
-		it = segStrings.begin(), itEnd = segStrings.end();
+		it = p_segStrings.begin(), itEnd = p_segStrings.end();
 		it != itEnd;
 		++it)
 	{

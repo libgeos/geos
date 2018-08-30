@@ -300,7 +300,7 @@ namespace tut
         struct Multiplier : public CoordinateSequenceFilter
         {
             double f;
-            Multiplier(double f) : f(f) {}
+            Multiplier(double p_f) : f(p_f) {}
             void filter_rw(CoordinateSequence& seq, std::size_t i) override
             {
                 seq.setOrdinate(i, CoordinateSequence::X, seq[i].x * f);

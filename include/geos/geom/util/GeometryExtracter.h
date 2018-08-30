@@ -48,15 +48,15 @@ public:
   template <class ComponentType, class TargetContainer>
   static void extract(const Geometry& geom, TargetContainer& lst)
   {
-    if ( const ComponentType* c = dynamic_cast<const ComponentType*>(&geom) )
+    if ( const ComponentType* p_c = dynamic_cast<const ComponentType*>(&geom) )
     {
-      lst.push_back(c);
+      lst.push_back(p_c);
     }
-    else if ( const GeometryCollection* c =
+    else if ( const GeometryCollection* p_c1 =
                    dynamic_cast<const GeometryCollection*>(&geom) )
     {
       GeometryExtracter::Extracter<ComponentType, TargetContainer> extracter(lst);
-      c->apply_ro(&extracter);
+      p_c1->apply_ro(&extracter);
     }
   }
 

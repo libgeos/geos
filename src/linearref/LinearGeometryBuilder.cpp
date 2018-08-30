@@ -41,24 +41,24 @@ namespace linearref   // geos.linearref
 {
 
 /* public */
-LinearGeometryBuilder::LinearGeometryBuilder(const GeometryFactory* geomFact) :
-		geomFact(geomFact),
+LinearGeometryBuilder::LinearGeometryBuilder(const GeometryFactory* p_geomFact) :
+		geomFact(p_geomFact),
 		ignoreInvalidLines(false),
 		fixInvalidLines(false),
 		coordList(nullptr) {}
 
 /* public */
 void
-LinearGeometryBuilder::setIgnoreInvalidLines(bool ignoreInvalidLines)
+LinearGeometryBuilder::setIgnoreInvalidLines(bool p_ignoreInvalidLines)
 {
-	this->ignoreInvalidLines = ignoreInvalidLines;
+	this->ignoreInvalidLines = p_ignoreInvalidLines;
 }
 
 /* public */
 void
-LinearGeometryBuilder::setFixInvalidLines(bool fixInvalidLines)
+LinearGeometryBuilder::setFixInvalidLines(bool p_fixInvalidLines)
 {
-	this->fixInvalidLines = fixInvalidLines;
+	this->fixInvalidLines = p_fixInvalidLines;
 }
 
 /* public */

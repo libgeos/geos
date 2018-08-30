@@ -53,10 +53,10 @@ public:
 	 *
 	 * @param pts the coordinates to orient
 	 */
-	OrientedCoordinateArray(const geom::CoordinateSequence& pts)
+	OrientedCoordinateArray(const geom::CoordinateSequence& p_pts)
 		:
-		pts(&pts),
-		orientationVar(orientation(pts))
+		pts(&p_pts),
+		orientationVar(orientation(p_pts))
 	{
 	}
 

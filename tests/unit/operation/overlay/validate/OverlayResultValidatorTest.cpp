@@ -58,15 +58,15 @@ namespace tut
 	{
 
 		std::string wkt0("POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))");
-		GeomPtr g0(wktreader.read(wkt0));
+		GeomPtr p_g0(wktreader.read(wkt0));
 
 		std::string wkt1("POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))");
-		GeomPtr g1(wktreader.read(wkt1));
+		GeomPtr p_g1(wktreader.read(wkt1));
 
 		std::string wktres("POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))");
-		GeomPtr gres(wktreader.read(wkt1));
+		GeomPtr p_gres(wktreader.read(wkt1));
 
-		OverlayResultValidator validator(*g0, *g1, *gres);
+		OverlayResultValidator validator(*p_g0, *p_g1, *p_gres);
 
 		ensure( validator.isValid(OverlayOp::opUNION) );
 	}
@@ -77,15 +77,15 @@ namespace tut
 	{
 
 		std::string wkt0("POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))");
-		GeomPtr g0(wktreader.read(wkt0));
+		GeomPtr p_g0(wktreader.read(wkt0));
 
 		std::string wkt1("POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))");
-		GeomPtr g1(wktreader.read(wkt1));
+		GeomPtr p_g1(wktreader.read(wkt1));
 
 		std::string wktres("POLYGON((0 0, 10.001 0, 10 10, 0 10, 0 0))");
-		GeomPtr gres(wktreader.read(wktres));
+		GeomPtr p_gres(wktreader.read(wktres));
 
-		OverlayResultValidator validator(*g0, *g1, *gres);
+		OverlayResultValidator validator(*p_g0, *p_g1, *p_gres);
 
 		ensure (! validator.isValid(OverlayOp::opUNION) );
 	}
@@ -96,15 +96,15 @@ namespace tut
 	{
 
 		std::string wkt0("POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))");
-		GeomPtr g0(wktreader.read(wkt0));
+		GeomPtr p_g0(wktreader.read(wkt0));
 
 		std::string wkt1("POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))");
-		GeomPtr g1(wktreader.read(wkt1));
+		GeomPtr p_g1(wktreader.read(wkt1));
 
 		std::string wktres("POLYGON((0 0, 9.999 0, 10 10, 0 10, 0 0))");
-		GeomPtr gres(wktreader.read(wktres));
+		GeomPtr p_gres(wktreader.read(wktres));
 
-		OverlayResultValidator validator(*g0, *g1, *gres);
+		OverlayResultValidator validator(*p_g0, *p_g1, *p_gres);
 
 		ensure (! validator.isValid(OverlayOp::opUNION) );
 	}
@@ -116,15 +116,15 @@ namespace tut
 	{
 
 		std::string wkt0("POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))");
-		GeomPtr g0(wktreader.read(wkt0));
+		GeomPtr p_g0(wktreader.read(wkt0));
 
 		std::string wkt1("POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))");
-		GeomPtr g1(wktreader.read(wkt1));
+		GeomPtr p_g1(wktreader.read(wkt1));
 
 		std::string wktres("POLYGON((0 0, 10 0, 10 10, 0 10, 0 0),(5 5, 5 6, 6 6, 5 5))");
-		GeomPtr gres(wktreader.read(wktres));
+		GeomPtr p_gres(wktreader.read(wktres));
 
-		OverlayResultValidator validator(*g0, *g1, *gres);
+		OverlayResultValidator validator(*p_g0, *p_g1, *p_gres);
 
 		ensure (! validator.isValid(OverlayOp::opUNION) );
 	}
@@ -136,16 +136,16 @@ namespace tut
 	{
 
 		std::string wkt0("POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))");
-		GeomPtr g0(wktreader.read(wkt0));
+		GeomPtr p_g0(wktreader.read(wkt0));
 
 		std::string wkt1("POLYGON((5 0, 1500 0, 1500 10, 5 10, 5 0))");
-		GeomPtr g1(wktreader.read(wkt1));
+		GeomPtr p_g1(wktreader.read(wkt1));
 
 		// small shift
 		std::string wktres("POLYGON((0 0, 750 0.0001, 150 0, 150 10, 0 10, 0 0))");
-		GeomPtr gres(wktreader.read(wktres));
+		GeomPtr p_gres(wktreader.read(wktres));
 
-		OverlayResultValidator validator(*g0, *g1, *gres);
+		OverlayResultValidator validator(*p_g0, *p_g1, *p_gres);
 
 		ensure (! validator.isValid(OverlayOp::opUNION) );
 	}
@@ -156,15 +156,15 @@ namespace tut
 	{
 
 		std::string wkt0("POLYGON ((20.0 40.0, 20.0 200.0, 180.0 200.0, 180.0 120.0, 140.0 120.0, 180.0 119.0, 180.0 40.0, 20.0 40.0), (140.0 160.0, 80.0 120.0, 140.0 80.0, 140.0 160.0))");
-		GeomPtr g0(wktreader.read(wkt0));
+		GeomPtr p_g0(wktreader.read(wkt0));
 
 		std::string wkt1("POLYGON ((200.0 160.0, 150.0 160.0, 150.0 80.0, 200.0 80.0, 200.0 160.0))");
-		GeomPtr g1(wktreader.read(wkt1));
+		GeomPtr p_g1(wktreader.read(wkt1));
 
 		std::string wktres("MULTIPOLYGON (((20.0 40.0, 20.0 200.0, 180.0 200.0, 180.0 160.0, 150.0 160.0, 150.0 120.0, 150.0 80.0, 180.0 80.0, 180.0 40.0, 20.0 40.0), (80.0 120.0, 140.0 80.0, 140.0 120.0, 140.0 160.0, 80.0 120.0)), ((150.0 120.0, 180.0 120.0, 180.0 160.0, 200.0 160.0, 200.0 80.0, 180.0 80.0, 180.0 119.0, 150.0 120.0)))");
-		GeomPtr gres(wktreader.read(wktres));
+		GeomPtr p_gres(wktreader.read(wktres));
 
-		OverlayResultValidator validator(*g0, *g1, *gres);
+		OverlayResultValidator validator(*p_g0, *p_g1, *p_gres);
 
 		ensure ( ! validator.isValid(OverlayOp::opSYMDIFFERENCE) );
 	}

@@ -144,13 +144,13 @@ struct test_result : public test_result_posix
      */
     test_result(const std::string& grp,int pos,
                 const std::string& test_name, result_type res,
-                const std::exception& ex)
+                const std::exception& p_ex)
         : group(grp),
           test(pos),
           name(test_name),
           result(res),
-          message(ex.what()),
-          exception_typeid(type_name(ex))
+          message(p_ex.what()),
+          exception_typeid(type_name(p_ex))
     {
     }
 

@@ -108,11 +108,11 @@ LineSequencer::isSequenced(const Geometry* geom)
 
 /* private */
 bool
-LineSequencer::hasSequence(planargraph::Subgraph& graph)
+LineSequencer::hasSequence(planargraph::Subgraph& p_graph)
 {
 	int oddDegreeCount = 0;
 	for (planargraph::NodeMap::container::const_iterator
-		it=graph.nodeBegin(), endIt=graph.nodeEnd();
+		it=p_graph.nodeBegin(), endIt=p_graph.nodeEnd();
 		it!=endIt;
 		++it)
 	{
@@ -333,16 +333,16 @@ LineSequencer::addReverseSubpath(const planargraph::DirectedEdge *de,
 
 /*private*/
 planargraph::DirectedEdge::NonConstList*
-LineSequencer::findSequence(planargraph::Subgraph& graph)
+LineSequencer::findSequence(planargraph::Subgraph& p_graph)
 {
 	using planargraph::DirectedEdge;
 	using planargraph::Node;
 	using planargraph::GraphComponent;
 
-	GraphComponent::setVisited(graph.edgeBegin(),
-			graph.edgeEnd(), false);
+	GraphComponent::setVisited(p_graph.edgeBegin(),
+			p_graph.edgeEnd(), false);
 
-	const Node* startNode = findLowestDegreeNode(graph);
+	const Node* startNode = findLowestDegreeNode(p_graph);
 
 	const DirectedEdge *startDE = *(startNode->getOutEdges()->begin());
 	const DirectedEdge *startDESym = startDE->getSym();

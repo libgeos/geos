@@ -28,8 +28,8 @@ namespace prep { // geos.geom.prep
 //
 // public:
 //
-PreparedPolygonContains::PreparedPolygonContains(const PreparedPolygon * const prepPoly)
-    : AbstractPreparedPolygonContains( prepPoly)
+PreparedPolygonContains::PreparedPolygonContains(const PreparedPolygon * const p_prepPoly)
+    : AbstractPreparedPolygonContains( p_prepPoly)
 {
 }
 

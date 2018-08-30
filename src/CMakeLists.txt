@@ -6,7 +6,7 @@
 #
 # This is free software; you can redistribute and/or modify it under
 # the terms of the GNU Lesser General Public Licence as published
-# by the Free Software Foundation. 
+# by the Free Software Foundation.
 # See the COPYING file for more information.
 #
 #################################################################################
@@ -26,14 +26,14 @@ if(GEOS_ENABLE_MACOSX_FRAMEWORK)
 
   add_library(GEOS SHARED ${geos_SOURCES} ${geos_c_SOURCES})
 
-  math(EXPR CVERSION "${VERSION_MAJOR} + 1") 
- 	# VERSION = current version, SOVERSION = compatibility version 
+  math(EXPR CVERSION "${VERSION_MAJOR} + 1")
+ 	# VERSION = current version, SOVERSION = compatibility version
   set_target_properties(GEOS
     PROPERTIES
     CLEAN_DIRECT_OUTPUT 1
     FRAMEWORK 1
-    VERSION "${CVERSION}.${VERSION_MINOR}.${VERSION_PATCH}" 
- 	  SOVERSION ${CVERSION} 
+    VERSION "${CVERSION}.${VERSION_MINOR}.${VERSION_PATCH}"
+ 	  SOVERSION ${CVERSION}
     FRAMEWORK_VERSION ${VERSION_MAJOR}
     BUILD_WITH_INSTALL_RPATH TRUE
     INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}"

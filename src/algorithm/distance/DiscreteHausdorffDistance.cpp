@@ -87,11 +87,11 @@ void
 DiscreteHausdorffDistance::computeOrientedDistance(
 		const geom::Geometry& discreteGeom,
 		const geom::Geometry& geom,
-		PointPairDistance& ptDist)
+		PointPairDistance& p_ptDist)
 {
 	MaxPointDistanceFilter distFilter(geom);
 	discreteGeom.apply_ro(&distFilter);
-	ptDist.setMaximum(distFilter.getMaxPointDistance());
+	p_ptDist.setMaximum(distFilter.getMaxPointDistance());
 
 	if (densifyFrac > 0)
 	{

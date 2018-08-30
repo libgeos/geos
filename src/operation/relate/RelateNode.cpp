@@ -32,8 +32,8 @@ namespace geos {
 namespace operation { // geos.operation
 namespace relate { // geos.operation.relate
 
-RelateNode::RelateNode(const Coordinate& coord, EdgeEndStar *edges):
-	Node(coord,edges)
+RelateNode::RelateNode(const Coordinate& p_coord, EdgeEndStar *p_edges):
+	Node(p_coord,p_edges)
 {}
 
 RelateNode::~RelateNode()

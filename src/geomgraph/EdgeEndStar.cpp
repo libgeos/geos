@@ -269,7 +269,7 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
 	EdgeEndStar::iterator it;
 
 	// initialize loc to location of last L side (if any)
-	for (EdgeEndStar::iterator it=beginIt; it!=endIt; ++it)
+	for (it=beginIt; it!=endIt; ++it)
 	{
 		EdgeEnd *e=*it;
 		assert(e);

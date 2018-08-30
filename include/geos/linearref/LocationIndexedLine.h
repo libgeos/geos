@@ -57,8 +57,8 @@ public:
    *
    * @param linearGeom the linear geometry to reference along
    */
-  LocationIndexedLine(const geom::Geometry *linearGeom)
-    : linearGeom(linearGeom)
+  LocationIndexedLine(const geom::Geometry *p_linearGeom)
+    : linearGeom(p_linearGeom)
   {
     checkGeometryType();
   }

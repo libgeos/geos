@@ -88,8 +88,8 @@ public:
         SegmentOverlapAction& operator=(const SegmentOverlapAction& rhs) = delete;
 
     public:
-        SegmentOverlapAction(SegmentIntersector & si) :
-          index::chain::MonotoneChainOverlapAction(), si(si)
+        SegmentOverlapAction(SegmentIntersector & p_si) :
+          index::chain::MonotoneChainOverlapAction(), si(p_si)
           {}
 
           void overlap(index::chain::MonotoneChain& mc1, std::size_t start1,

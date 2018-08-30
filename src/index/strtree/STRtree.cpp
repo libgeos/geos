@@ -90,7 +90,7 @@ static bool yComparator(Boundable *a, Boundable *b)
 }
 
 /*public*/
-STRtree::STRtree(size_t nodeCapacity): AbstractSTRtree(nodeCapacity)
+STRtree::STRtree(size_t p_nodeCapacity): AbstractSTRtree(p_nodeCapacity)
 {
 }
 
@@ -277,9 +277,9 @@ std::pair<const void*, const void*> STRtree::nearestNeighbour(BoundablePair* ini
 class STRAbstractNode: public AbstractNode{
 public:
 
-	STRAbstractNode(int level, size_t capacity)
+	STRAbstractNode(int p_level, size_t capacity)
 		:
-		AbstractNode(level, capacity)
+		AbstractNode(p_level, capacity)
 	{}
 
 	~STRAbstractNode() override
@@ -291,7 +291,7 @@ protected:
 
 	void* computeBounds() const override
 	{
-		Envelope* bounds=nullptr;
+		Envelope* p_bounds=nullptr;
 		const BoundableList& b = *getChildBoundables();
 
 		if ( b.empty() ) return nullptr;
@@ -299,13 +299,13 @@ protected:
 		BoundableList::const_iterator i=b.begin();
 		BoundableList::const_iterator e=b.end();
 
-		bounds=new Envelope(* static_cast<const Envelope*>((*i)->getBounds()) );
+		p_bounds=new Envelope(* static_cast<const Envelope*>((*i)->getBounds()) );
 		for(; i!=e; ++i)
 		{
 			const Boundable* childBoundable=*i;
-			bounds->expandToInclude((Envelope*)childBoundable->getBounds());
+			p_bounds->expandToInclude((Envelope*)childBoundable->getBounds());
 		}
-		return bounds;
+		return p_bounds;
 	}
 
 };

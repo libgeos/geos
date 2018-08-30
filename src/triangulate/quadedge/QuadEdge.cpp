@@ -126,9 +126,9 @@ QuadEdge::getPrimary() const
 }
 
 void
-QuadEdge::setData(void* data)
+QuadEdge::setData(void* p_data)
 {
-	this->data = data;
+	this->data = p_data;
 }
 
 void*

@@ -124,16 +124,16 @@ IsSimpleOp::isSimple()
 
 /*public*/
 bool
-IsSimpleOp::isSimple(const LineString *geom)
+IsSimpleOp::isSimple(const LineString *p_geom)
 {
-	return isSimpleLinearGeometry(geom);
+	return isSimpleLinearGeometry(p_geom);
 }
 
 /*public*/
 bool
-IsSimpleOp::isSimple(const MultiLineString *geom)
+IsSimpleOp::isSimple(const MultiLineString *p_geom)
 {
-	return isSimpleLinearGeometry(geom);
+	return isSimpleLinearGeometry(p_geom);
 }
 
 /*public*/
@@ -166,10 +166,10 @@ IsSimpleOp::isSimpleMultiPoint(const MultiPoint& mp)
 }
 
 bool
-IsSimpleOp::isSimpleLinearGeometry(const Geometry *geom)
+IsSimpleOp::isSimpleLinearGeometry(const Geometry *p_geom)
 {
-	if (geom->isEmpty()) return true;
-	GeometryGraph graph(0,geom);
+	if (p_geom->isEmpty()) return true;
+	GeometryGraph graph(0,p_geom);
 	LineIntersector li;
 	std::unique_ptr<SegmentIntersector> si (graph.computeSelfNodes(&li,true));
 

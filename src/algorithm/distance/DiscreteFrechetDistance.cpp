@@ -86,12 +86,12 @@ DiscreteFrechetDistance::getSegementAt(const CoordinateSequence& seq, size_t ind
 PointPairDistance&
 DiscreteFrechetDistance::getFrecheDistance(std::vector< std::vector<PointPairDistance> >& ca, size_t i, size_t j, const CoordinateSequence& p, const CoordinateSequence& q)
 {
-	PointPairDistance ptDist;
+	PointPairDistance p_ptDist;
 	if (! ca[i][j].getIsNull())
 	{
 		return ca[i][j];
 	}
-	ptDist.initialize(getSegementAt(p, i), getSegementAt(q, j));
+	p_ptDist.initialize(getSegementAt(p, i), getSegementAt(q, j));
 	if (i == 0 && j == 0)
 	{
 		ca[i][j] = ptDist;
@@ -99,12 +99,12 @@ DiscreteFrechetDistance::getFrecheDistance(std::vector< std::vector<PointPairDis
 	else if (i > 0 && j == 0)
 	{
 		PointPairDistance nextDist = getFrecheDistance(ca,i-1,0,p,q);
-		ca[i][j] =  (nextDist.getDistance() > ptDist.getDistance()) ? nextDist : ptDist;
+		ca[i][j] =  (nextDist.getDistance() > p_ptDist.getDistance()) ? nextDist : p_ptDist;
 	}
 	else if (i == 0 && j > 0)
 	{
 		PointPairDistance nextDist = getFrecheDistance(ca,0,j-1,p,q);
-		ca[i][j] =  (nextDist.getDistance() > ptDist.getDistance()) ? nextDist : ptDist;
+		ca[i][j] =  (nextDist.getDistance() > p_ptDist.getDistance()) ? nextDist : p_ptDist;
 	}
 	else
 	{
@@ -113,7 +113,7 @@ DiscreteFrechetDistance::getFrecheDistance(std::vector< std::vector<PointPairDis
 				  d3 = getFrecheDistance(ca,i,j-1,p,q);
 		PointPairDistance& minDist = (d1.getDistance() < d2.getDistance()) ? d1 : d2;
 		if (d3.getDistance() < minDist.getDistance()) minDist = d3;
-		ca[i][j] =  (minDist.getDistance() > ptDist.getDistance()) ? minDist : ptDist;
+		ca[i][j] =  (minDist.getDistance() > p_ptDist.getDistance()) ? minDist : p_ptDist;
 	}
 
 	return ca[i][j];

@@ -91,8 +91,8 @@ LinearLocation LocationIndexOfPoint::indexOfAfter(const Geometry *linearGeom, co
 	return locater.indexOfAfter(inputPt, minIndex);
 }
 
-LocationIndexOfPoint::LocationIndexOfPoint(const Geometry *linearGeom) :
-		linearGeom(linearGeom)
+LocationIndexOfPoint::LocationIndexOfPoint(const Geometry *p_linearGeom) :
+		linearGeom(p_linearGeom)
 {}
 
 LinearLocation LocationIndexOfPoint::indexOf(const Coordinate& inputPt) const

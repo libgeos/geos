@@ -132,12 +132,12 @@ GeometryFactory::Ptr
 GeometryPrecisionReducer::createFactory( const GeometryFactory& oldGF,
                                          const PrecisionModel& newPM )
 {
-  GeometryFactory::Ptr newFactory(
+  GeometryFactory::Ptr p_newFactory(
     GeometryFactory::create(&newPM,
                         oldGF.getSRID(),
                         const_cast<CoordinateSequenceFactory*>(oldGF.getCoordinateSequenceFactory()))
   );
-  return newFactory;
+  return p_newFactory;
 }
 
 } // namespace geos.precision

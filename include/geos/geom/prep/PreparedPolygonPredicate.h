@@ -128,8 +128,8 @@ public:
 	 *
 	 * @param prepPoly the PreparedPolygon to evaluate
 	 */
-	PreparedPolygonPredicate( const PreparedPolygon * const prepPoly)
-	:	prepPoly( prepPoly)
+	PreparedPolygonPredicate( const PreparedPolygon * const p_prepPoly)
+	:	prepPoly( p_prepPoly)
 	{ }
 
 	virtual ~PreparedPolygonPredicate()

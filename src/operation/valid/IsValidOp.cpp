@@ -132,21 +132,21 @@ IsValidOp::checkValid(const Geometry *g)
 	// empty geometries are always valid!
 	if (g->isEmpty()) return;
 
-	if ( const Point* x = dynamic_cast<const Point*>(g) )
-    checkValid(x);
+	if ( const Point* x1 = dynamic_cast<const Point*>(g) )
+    checkValid(x1);
   // LineString also handles LinearRings, so we check LinearRing first
-	else if ( const LinearRing* x = dynamic_cast<const LinearRing*>(g) )
-    checkValid(x);
-	else if ( const LineString* x = dynamic_cast<const LineString*>(g) )
-    checkValid(x);
-	else if ( const Polygon* x = dynamic_cast<const Polygon*>(g) )
-    checkValid(x);
-	else if ( const MultiPolygon* x = dynamic_cast<const MultiPolygon*>(g) )
-    checkValid(x);
-	else if ( const GeometryCollection* x =
+	else if ( const LinearRing* x2 = dynamic_cast<const LinearRing*>(g) )
+    checkValid(x2);
+	else if ( const LineString* x3 = dynamic_cast<const LineString*>(g) )
+    checkValid(x3);
+	else if ( const Polygon* x4 = dynamic_cast<const Polygon*>(g) )
+    checkValid(x4);
+	else if ( const MultiPolygon* x5 = dynamic_cast<const MultiPolygon*>(g) )
+    checkValid(x5);
+	else if ( const GeometryCollection* x6 =
         dynamic_cast<const GeometryCollection*>(g) )
   {
-		checkValid(x);
+		checkValid(x6);
   }
 	else throw util::UnsupportedOperationException();
 }

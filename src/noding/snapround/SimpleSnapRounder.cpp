@@ -196,12 +196,12 @@ SimpleSnapRounder::computeVertexSnaps(const SegmentString::NonConstVect& edges)
 /*private*/
 void
 SimpleSnapRounder::snapRound(SegmentString::NonConstVect* segStrings,
-		LineIntersector& li)
+		LineIntersector& p_li)
 {
 	assert(segStrings);
 
 	vector<Coordinate> intersections;
-	findInteriorIntersections(*segStrings, li, intersections);
+	findInteriorIntersections(*segStrings, p_li, intersections);
 	computeSnaps(*segStrings, intersections);
 	computeVertexSnaps(*segStrings);
 }
@@ -210,9 +210,9 @@ SimpleSnapRounder::snapRound(SegmentString::NonConstVect* segStrings,
 void
 SimpleSnapRounder::findInteriorIntersections(
 	SegmentString::NonConstVect& segStrings,
-	LineIntersector& li, vector<Coordinate>& ret)
+	LineIntersector& p_li, vector<Coordinate>& ret)
 {
-	IntersectionFinderAdder intFinderAdder(li, ret);
+	IntersectionFinderAdder intFinderAdder(p_li, ret);
 	MCIndexNoder noder;
 	noder.setSegmentIntersector(&intFinderAdder);
 	noder.computeNodes(&segStrings);

@@ -23,10 +23,10 @@ using namespace geos::geom;
 using namespace geos::operation::distance;
 using namespace geos::algorithm;
 
-FacetSequence::FacetSequence(const CoordinateSequence* pts, size_t start, size_t end) :
-        pts(pts),
-        start(start),
-        end(end) {
+FacetSequence::FacetSequence(const CoordinateSequence* p_pts, size_t p_start, size_t p_end) :
+        pts(p_pts),
+        start(p_start),
+        end(p_end) {
     computeEnvelope();
 }
 

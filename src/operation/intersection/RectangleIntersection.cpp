@@ -644,20 +644,20 @@ RectangleIntersection::clip_geom(const geom::Geometry * g,
 			   const Rectangle & rect,
 			   bool keep_polygons)
 {
-	if ( const Point* p = dynamic_cast<const geom::Point *>(g) )
-	  return clip_point(p, parts, rect);
-	else if ( const MultiPoint* p = dynamic_cast<const geom::MultiPoint *>(g) )
-	  return clip_multipoint(p, parts, rect);
-	else if ( const LineString* p = dynamic_cast<const geom::LineString *>(g) )
-	  return clip_linestring(p, parts, rect);
-	else if ( const MultiLineString* p = dynamic_cast<const geom::MultiLineString *>(g) )
-	  return clip_multilinestring(p, parts, rect);
-	else if ( const Polygon* p = dynamic_cast<const geom::Polygon *>(g) )
-	  return clip_polygon(p, parts, rect, keep_polygons);
-	else if ( const MultiPolygon* p = dynamic_cast<const geom::MultiPolygon *>(g) )
-	  return clip_multipolygon(p, parts, rect, keep_polygons);
-	else if ( const GeometryCollection* p = dynamic_cast<const geom::GeometryCollection *>(g) )
-	  return clip_geometrycollection(p, parts, rect, keep_polygons);
+	if ( const Point* p1 = dynamic_cast<const geom::Point *>(g) )
+	  return clip_point(p1, parts, rect);
+	else if ( const MultiPoint* p2 = dynamic_cast<const geom::MultiPoint *>(g) )
+	  return clip_multipoint(p2, parts, rect);
+	else if ( const LineString* p3 = dynamic_cast<const geom::LineString *>(g) )
+	  return clip_linestring(p3, parts, rect);
+	else if ( const MultiLineString* p4 = dynamic_cast<const geom::MultiLineString *>(g) )
+	  return clip_multilinestring(p4, parts, rect);
+	else if ( const Polygon* p5 = dynamic_cast<const geom::Polygon *>(g) )
+	  return clip_polygon(p5, parts, rect, keep_polygons);
+	else if ( const MultiPolygon* p6 = dynamic_cast<const geom::MultiPolygon *>(g) )
+	  return clip_multipolygon(p6, parts, rect, keep_polygons);
+	else if ( const GeometryCollection* p7 = dynamic_cast<const geom::GeometryCollection *>(g) )
+	  return clip_geometrycollection(p7, parts, rect, keep_polygons);
   else {
     throw util::UnsupportedOperationException("Encountered an unknown geometry component when clipping polygons");
   }

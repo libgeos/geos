@@ -149,9 +149,9 @@ namespace tut
             // use FLOATING model
             namespace ggm = geos::geom;
             namespace gio = geos::io;
-            ggm::PrecisionModel pm(ggm::PrecisionModel::FLOATING);
-            ggm::GeometryFactory::Ptr gf = ggm::GeometryFactory::create(&pm);
-            gio::WKTReader wktReader(gf.get());
+            ggm::PrecisionModel p_pm(ggm::PrecisionModel::FLOATING);
+            ggm::GeometryFactory::Ptr p_gf = ggm::GeometryFactory::create(&p_pm);
+            gio::WKTReader wktReader(p_gf.get());
             const std::string str = " POINT (0 0) ";
             geom.reset(wktReader.read(str)); //HERE IT FAILS
 

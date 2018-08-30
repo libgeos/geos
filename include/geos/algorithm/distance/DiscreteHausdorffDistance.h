@@ -107,11 +107,11 @@ public:
 	static double distance(const geom::Geometry& g0,
 	                       const geom::Geometry& g1, double densifyFrac);
 
-	DiscreteHausdorffDistance(const geom::Geometry& g0,
-	                          const geom::Geometry& g1)
+	DiscreteHausdorffDistance(const geom::Geometry& p_g0,
+	                          const geom::Geometry& p_g1)
 		:
-		g0(g0),
-		g1(g1),
+		g0(p_g0),
+		g1(p_g1),
 		ptDist(),
 		densifyFrac(0.0)
 	{}
@@ -155,9 +155,9 @@ public:
 	class MaxPointDistanceFilter : public geom::CoordinateFilter
 	{
 	public:
-		MaxPointDistanceFilter(const geom::Geometry& geom)
+		MaxPointDistanceFilter(const geom::Geometry& p_geom)
 			:
-			geom(geom)
+			geom(p_geom)
 		{}
 
 		void filter_ro(const geom::Coordinate* pt) override
@@ -190,9 +190,9 @@ public:
 	public:
 
 		MaxDensifiedByFractionDistanceFilter(
-				const geom::Geometry& geom, double fraction)
+				const geom::Geometry& p_geom, double fraction)
 			:
-			geom(geom),
+			geom(p_geom),
                 numSubSegs( std::size_t(util::round(1.0/fraction)) )
 		{
 		}
@@ -221,11 +221,11 @@ public:
 
 private:
 
-	void compute(const geom::Geometry& g0,
-	             const geom::Geometry& g1)
+	void compute(const geom::Geometry& p_g0,
+	             const geom::Geometry& p_g1)
 	{
-		computeOrientedDistance(g0, g1, ptDist);
-		computeOrientedDistance(g1, g0, ptDist);
+		computeOrientedDistance(p_g0, p_g1, ptDist);
+		computeOrientedDistance(p_g1, p_g0, ptDist);
 	}
 
 	void computeOrientedDistance(const geom::Geometry& discreteGeom,

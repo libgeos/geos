@@ -58,8 +58,8 @@ public:
      * algorithm, and provides a more realistic test.
      */
     using geos::precision::SimpleGeometryPrecisionReducer;
-    PrecisionModel pm(size/10);
-    SimpleGeometryPrecisionReducer reducer(&pm);
+    PrecisionModel p_pm(size/10);
+    SimpleGeometryPrecisionReducer reducer(&p_pm);
     Geometry::Ptr sinePolyCrinkly ( reducer.reduce(sinePoly.get()) );
     sinePoly.reset();
 
