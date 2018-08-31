@@ -106,7 +106,7 @@ LineString* ExtractLineByLocation::computeLine(const LinearLocation& start, cons
 
 	if (lastSegmentIndex >= coordinates->size())
     {
-        assert(coordinates->size() > 0);
+        assert(!coordinates->isEmpty());
         lastSegmentIndex = coordinates->size() - indexStep;
     }
 
@@ -126,7 +126,7 @@ LineString* ExtractLineByLocation::computeLine(const LinearLocation& start, cons
     }
 
 	// ensure there is at least one coordinate in the result
-	if (newCoordinateArray.size() == 0)
+	if (newCoordinateArray.isEmpty())
     {
 		newCoordinateArray.add(start.getCoordinate(line));
     }

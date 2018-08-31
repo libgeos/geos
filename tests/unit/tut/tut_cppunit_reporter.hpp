@@ -84,7 +84,7 @@ public:
         *stream_ << "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?>" << std::endl
                  << "<TestRun>" << std::endl;
 
-        if (failed_tests_.size() > 0)
+        if (!failed_tests_.empty())
         {
             *stream_ << "  <FailedTests>" << std::endl;
 
@@ -145,7 +145,7 @@ public:
         }
 
         /* *********************** passed tests ***************************** */
-        if (passed_tests_.size() > 0) {
+        if (!passed_tests_.empty()) {
             *stream_ << "  <SuccessfulTests>" << std::endl;
 
             for (unsigned int i=0; i<passed_tests_.size(); i++)
