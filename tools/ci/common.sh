@@ -6,7 +6,7 @@
 #
 # This is free software; you can redistribute and/or modify it under
 # the terms of the GNU Lesser General Public Licence as published
-# by the Free Software Foundation. 
+# by the Free Software Foundation.
 # See the COPYING file for more information.
 #
 if [[ "$TRAVIS" != "true" ]] ; then
@@ -31,12 +31,12 @@ tmstamp()
 
 run_make()
 {
-    [ $TCI_NUMTHREADS -gt 0 ] && make -j $TCI_NUMTHREADS || make 
+    [ $TCI_NUMTHREADS -gt 0 ] && make -j $TCI_NUMTHREADS || make
 }
 
 run_test()
 {
     [ -f CMakeCache.txt ] && \
-        ctest -V --output-on-failure . || \
+        ctest --output-on-failure . || \
         make check
 }
