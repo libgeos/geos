@@ -42,22 +42,30 @@ TrianglePredicate::isInCircleNormalized(
 		const Coordinate &a, const Coordinate &b, const Coordinate &c,
 		const Coordinate &p)
 {
-	double adx = a.x - p.x;
-	double ady = a.y - p.y;
-	double bdx = b.x - p.x;
-	double bdy = b.y - p.y;
-	double cdx = c.x - p.x;
-	double cdy = c.y - p.y;
+	// Unfortunately this implementation is not robust either. For robust one see:
+	// https://www.cs.cmu.edu/~quake/robust.html
+	// https://www.cs.cmu.edu/afs/cs/project/quake/public/code/predicates.c
 
-	double abdet = adx * bdy - bdx * ady;
-	double bcdet = bdx * cdy - cdx * bdy;
-	double cadet = cdx * ady - adx * cdy;
-	double alift = adx * adx + ady * ady;
-	double blift = bdx * bdx + bdy * bdy;
-	double clift = cdx * cdx + cdy * cdy;
+	long double adx = a.x - p.x;
+	long double ady = a.y - p.y;
+	long double bdx = b.x - p.x;
+	long double bdy = b.y - p.y;
+	long double cdx = c.x - p.x;
+	long double cdy = c.y - p.y;
 
-	double disc = alift * bcdet + blift * cadet + clift * abdet;
-	return disc > 0;
+	long double bdxcdy = bdx * cdy;
+	long double cdxbdy = cdx * bdy;
+	long double alift = adx * adx + ady * ady;
+
+	long double cdxady = cdx * ady;
+	long double adxcdy = adx * cdy;
+	long double blift = bdx * bdx + bdy * bdy;
+
+	long double adxbdy = adx * bdy;
+	long double bdxady = bdx * ady;
+	long double clift = cdx * cdx + cdy * cdy;
+	return (alift * bdxcdy + blift * cdxady + clift * adxbdy) >
+		(alift * cdxbdy + blift * adxcdy + clift * bdxady);
 }
 
 double
@@ -73,11 +81,9 @@ TrianglePredicate::isInCircleRobust(
 		const Coordinate &a, const Coordinate &b, const Coordinate &c,
 		const Coordinate &p)
 {
-	//checkRobustInCircle(a, b, c, p);
-	//	return isInCircleNonRobust(a, b, c, p);
+	// This implementation is not robust, name is ported from JTS.
 	return isInCircleNormalized(a, b, c, p);
 }
 
 } // namespace geos.geom
 } // namespace geos
-
