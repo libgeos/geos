@@ -1,11 +1,13 @@
 Changes in 3.7.0rc2
-2018-08-xx
+2018-09-02
 Fixes / enhancements since 3.7.0rc1
- - Drop ? from extended regular expression,
-   so that the expression strictly conforms to the POSIX ERE rules.
-   (#917, Greg Troxel, Bas Couwenberg)
- - include .editorconfig in tar ball,
-   fixes Cmake on VS (#920, Jeff Mckenna, Regina Obe)
+  - Drop ? from extended regular expression,
+    so that the expression strictly conforms to the POSIX ERE rules.
+    (#917, Greg Troxel, Bas Couwenberg)
+  - include .editorconfig in tar ball,
+    fixes Cmake on VS (#920, Jeff Mckenna, Regina Obe)
+  - Take out geos capi wkb test
+    failing on FreeBSD/macOS Clang (#894)
 
 Changes in 3.7.0rc1
 2018-08-19
