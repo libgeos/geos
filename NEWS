@@ -6,7 +6,7 @@ Fixes / enhancements since 3.7.0rc1
     (#917, Greg Troxel, Bas Couwenberg)
   - include .editorconfig in tar ball,
     fixes Cmake on VS (#920, Jeff Mckenna, Regina Obe)
-  - Take out geos capi wkb test
+  - Take out part geos util::UniqueCoordinateArrayFilterTest
     failing on FreeBSD/macOS Clang (#894)
 
 Changes in 3.7.0rc1

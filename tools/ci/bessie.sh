@@ -10,11 +10,6 @@
 # See the COPYING file for more information.
 #
 sh autogen.sh
-rm -rf build
-mkdir -p build
-# ./configure
-# make
-# make check
-cmake build
-run_make
-run_test
+./configure
+make
+make check
