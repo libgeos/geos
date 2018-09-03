@@ -1,5 +1,5 @@
 Changes in 3.7.0rc2
-2018-09-02
+2018-09-03
 Fixes / enhancements since 3.7.0rc1
   - Drop ? from extended regular expression,
     so that the expression strictly conforms to the POSIX ERE rules.
