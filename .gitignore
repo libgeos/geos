@@ -36,6 +36,7 @@ include/geos/platform.h
 include/geos/stamp-h2
 include/geos/version.h
 include/stamp-h1
+include/geos/platform.h.disabled
 install-sh
 compile
 libtool
