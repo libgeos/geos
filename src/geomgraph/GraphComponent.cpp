@@ -52,9 +52,9 @@ GraphComponent::~GraphComponent()
 }
 
 void
-GraphComponent::setCovered(bool isCovered)
+GraphComponent::setCovered(bool p_isCovered)
 {
-	isCoveredVar = isCovered;
+	isCoveredVar = p_isCovered;
 	isCoveredSetVar = true;
 }
 

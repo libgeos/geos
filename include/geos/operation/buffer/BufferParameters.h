@@ -259,9 +259,9 @@ public:
 	 *
 	 * @param isSingleSided true if a single-sided buffer should be constructed
 	 */
-	void setSingleSided(bool isSingleSided)
+	void setSingleSided(bool p_isSingleSided)
 	{
-	  _isSingleSided = isSingleSided;
+	  _isSingleSided = p_isSingleSided;
 	}
 
 	/**

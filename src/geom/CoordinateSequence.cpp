@@ -38,8 +38,8 @@ static Profiler *profiler = Profiler::instance();
 bool
 CoordinateSequence::hasRepeatedPoints() const
 {
-    const std::size_t size=getSize();
-	for(std::size_t i=1; i<size; i++) {
+    const std::size_t p_size=getSize();
+	for(std::size_t i=1; i<p_size; i++) {
 		if (getAt(i-1)==getAt(i)) {
 			return true;
 		}
@@ -83,8 +83,8 @@ const Coordinate*
 CoordinateSequence::minCoordinate() const
 {
 	const Coordinate* minCoord=nullptr;
-	const std::size_t size=getSize();
-	for(std::size_t i=0; i<size; i++) {
+	const std::size_t p_size=getSize();
+	for(std::size_t i=0; i<p_size; i++) {
 		if(minCoord==nullptr || minCoord->compareTo(getAt(i))>0) {
 			minCoord=&getAt(i);
 		}
@@ -96,8 +96,8 @@ const Coordinate*
 CoordinateSequence::minCoordinate(CoordinateSequence *cl)
 {
 	const Coordinate* minCoord=nullptr;
-	const std::size_t size=cl->getSize();
-	for(std::size_t i=0;i<size; i++) {
+	const std::size_t p_size=cl->getSize();
+	for(std::size_t i=0;i<p_size; i++) {
 		if(minCoord==nullptr || minCoord->compareTo(cl->getAt(i))>0) {
 			minCoord=&(cl->getAt(i));
 		}
@@ -109,8 +109,8 @@ size_t
 CoordinateSequence::indexOf(const Coordinate *coordinate,
 		const CoordinateSequence *cl)
 {
-	size_t size = cl->size();
-	for (size_t i=0; i < size; ++i)
+	size_t p_size = cl->size();
+	for (size_t i=0; i < p_size; ++i)
 	{
 		if ((*coordinate)==cl->getAt(i))
 		{
@@ -264,8 +264,8 @@ CoordinateSequence::removeRepeatedPoints(const CoordinateSequence *cl)
 void
 CoordinateSequence::expandEnvelope(Envelope &env) const
 {
-	const std::size_t size = getSize();
-	for (std::size_t i=0; i<size; i++)
+	const std::size_t p_size = getSize();
+	for (std::size_t i=0; i<p_size; i++)
         env.expandToInclude(getAt(i));
 }
 

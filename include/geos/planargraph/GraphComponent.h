@@ -75,7 +75,7 @@ public:
 	 * Sets the visited flag for this component.
 	 * @param isVisited the desired value of the visited flag
 	 */
-	virtual void setVisited(bool isVisited) { isVisitedVar=isVisited; }
+	virtual void setVisited(bool p_isVisited) { isVisitedVar=p_isVisited; }
 
 	/** \brief
 	 * Sets the Visited state for the elements of a container,
@@ -149,7 +149,7 @@ public:
 	 * Sets the marked flag for this component.
 	 * @param isMarked the desired value of the marked flag
 	 */
-	virtual void setMarked(bool isMarked) { isMarkedVar=isMarked; }
+	virtual void setMarked(bool p_isMarked) { isMarkedVar=p_isMarked; }
 
 };
 

@@ -144,15 +144,15 @@ DirectedEdge::isLineEdge()
 bool
 DirectedEdge::isInteriorAreaEdge()
 {
-	bool isInteriorAreaEdge=true;
+	bool p_isInteriorAreaEdge=true;
 	for (int i=0; i<2; i++) {
 		if (!(label.isArea(i)
 			&& label.getLocation(i,Position::LEFT )==Location::INTERIOR
 			&& label.getLocation(i,Position::RIGHT)==Location::INTERIOR)) {
-				isInteriorAreaEdge=false;
+				p_isInteriorAreaEdge=false;
 		}
 	}
-	return isInteriorAreaEdge;
+	return p_isInteriorAreaEdge;
 }
 
 /*private*/

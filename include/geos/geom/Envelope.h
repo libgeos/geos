@@ -284,7 +284,7 @@ public:
 	 * @param distance the distance to expand the envelope
 	 * @return this envelope
 	 */
-	void expandBy(double distance) { expandBy(distance, distance); }
+	void expandBy(double p_distance) { expandBy(p_distance, p_distance); }
 
 
 	/** \brief

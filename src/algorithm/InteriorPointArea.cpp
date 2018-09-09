@@ -204,18 +204,18 @@ InteriorPointArea::widestGeometry(const GeometryCollection* gc) {
 	if (gc->isEmpty()) {
 		return gc;
 	}
-	const Geometry* widestGeometry=gc->getGeometryN(0);
+	const Geometry* p_widestGeometry=gc->getGeometryN(0);
 
 	// scan remaining geom components to see if any are wider
 	for(std::size_t i=1, n=gc->getNumGeometries(); i<n; i++) // start at 1
 	{
 		const Envelope *env1(gc->getGeometryN(i)->getEnvelopeInternal());
-		const Envelope *env2(widestGeometry->getEnvelopeInternal());
+		const Envelope *env2(p_widestGeometry->getEnvelopeInternal());
 		if (env1->getWidth()>env2->getWidth()) {
-				widestGeometry=gc->getGeometryN(i);
+				p_widestGeometry=gc->getGeometryN(i);
 		}
 	}
-	return widestGeometry;
+	return p_widestGeometry;
 }
 
 /* private */

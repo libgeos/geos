@@ -188,8 +188,8 @@ struct seh : public tut_error
  */
 struct rethrown : public failure
 {
-    explicit rethrown(const test_result &result)
-        : failure(result.message), tr(result)
+    explicit rethrown(const test_result &p_result)
+        : failure(p_result.message), tr(p_result)
     {
     }
 

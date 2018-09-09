@@ -423,11 +423,11 @@ Envelope::split(const string &str, const string &delimiters)
 
 /*public*/
 bool
-Envelope::centre(Coordinate& centre) const
+Envelope::centre(Coordinate& p_centre) const
 {
 	if (isNull()) return false;
-	centre.x=(getMinX() + getMaxX()) / 2.0;
-	centre.y=(getMinY() + getMaxY()) / 2.0;
+	p_centre.x=(getMinX() + getMaxX()) / 2.0;
+	p_centre.y=(getMinY() + getMaxY()) / 2.0;
 	return true;
 }
 

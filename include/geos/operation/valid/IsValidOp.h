@@ -264,9 +264,9 @@ public:
 	 *
 	 * @param isValid states whether geometry with this condition is valid
 	 */
-	void setSelfTouchingRingFormingHoleValid(bool isValid)
+	void setSelfTouchingRingFormingHoleValid(bool p_isValid)
 	{
-		isSelfTouchingRingFormingHoleValid = isValid;
+		isSelfTouchingRingFormingHoleValid = p_isValid;
 	}
 
 };
