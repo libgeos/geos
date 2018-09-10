@@ -478,21 +478,21 @@ Geometry::toText() const
 }
 
 Geometry*
-Geometry::buffer(double distance) const
+Geometry::buffer(double p_distance) const
 {
-	return BufferOp::bufferOp(this, distance);
+	return BufferOp::bufferOp(this, p_distance);
 }
 
 Geometry*
-Geometry::buffer(double distance,int quadrantSegments) const
+Geometry::buffer(double p_distance,int quadrantSegments) const
 {
-	return BufferOp::bufferOp(this, distance, quadrantSegments);
+	return BufferOp::bufferOp(this, p_distance, quadrantSegments);
 }
 
 Geometry*
-Geometry::buffer(double distance, int quadrantSegments, int endCapStyle) const
+Geometry::buffer(double p_distance, int quadrantSegments, int endCapStyle) const
 {
-	return BufferOp::bufferOp(this, distance, quadrantSegments, endCapStyle);
+	return BufferOp::bufferOp(this, p_distance, quadrantSegments, endCapStyle);
 }
 
 Geometry*

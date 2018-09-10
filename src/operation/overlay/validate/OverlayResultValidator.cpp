@@ -209,9 +209,9 @@ OverlayResultValidator::isValidResult(OverlayOp::OpCode overlayOp,
 
 	bool resultInInterior = (location[2] == Location::INTERIOR);
 
-	bool isValid = ! (expectedInterior ^ resultInInterior);
+	bool p_isValid = ! (expectedInterior ^ resultInInterior);
 
-	return isValid;
+	return p_isValid;
 }
 
 /*private static*/

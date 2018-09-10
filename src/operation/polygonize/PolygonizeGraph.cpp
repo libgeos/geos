@@ -184,15 +184,15 @@ PolygonizeGraph::convertMaximalToMinimalEdgeRings(
 			i<in; ++i)
 	{
 		PolygonizeDirectedEdge *de = ringEdges[i];
-		long label=de->getLabel();
-		findIntersectionNodes(de, label, intNodes);
+		long p_label=de->getLabel();
+		findIntersectionNodes(de, p_label, intNodes);
 
 		// set the next pointers for the edges around each node
 		for(IntersectionNodes::size_type j=0, jn=intNodes.size();
 				j<jn; ++j)
 		{
 			Node *node=intNodes[j];
-			computeNextCCWEdges(node, label);
+			computeNextCCWEdges(node, p_label);
 		}
 
 		intNodes.clear();

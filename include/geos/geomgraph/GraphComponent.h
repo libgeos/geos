@@ -58,13 +58,13 @@ public:
 	const Label& getLabel() const { return label; }
 	void setLabel(const Label& newLabel) { label = newLabel; }
 
-	virtual void setInResult(bool isInResult) { isInResultVar=isInResult; }
+	virtual void setInResult(bool p_isInResult) { isInResultVar=p_isInResult; }
 	virtual bool isInResult() const { return isInResultVar; }
 	virtual void setCovered(bool isCovered);
 	virtual bool isCovered() const { return isCoveredVar; }
 	virtual bool isCoveredSet() const { return isCoveredSetVar; }
 	virtual bool isVisited() const { return isVisitedVar; }
-	virtual void setVisited(bool isVisited) { isVisitedVar = isVisited; }
+	virtual void setVisited(bool p_isVisited) { isVisitedVar = p_isVisited; }
 	virtual bool isIsolated() const=0;
 	virtual void updateIM(geom::IntersectionMatrix& im);
 protected:

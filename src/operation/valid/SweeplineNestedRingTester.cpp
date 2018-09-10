@@ -85,8 +85,8 @@ SweeplineNestedRingTester::isInside(LinearRing *innerRing,LinearRing *searchRing
 	// Unable to find a ring point not a node of the search ring
 	assert(innerRingPt!=nullptr);
 
-	bool isInside=CGAlgorithms::isPointInRing(*innerRingPt,searchRingPts);
-	if (isInside) {
+	bool p_isInside=CGAlgorithms::isPointInRing(*innerRingPt,searchRingPts);
+	if (p_isInside) {
 		/*
 		 * innerRingPt is const just because the input
 		 * CoordinateSequence is const. If the input

@@ -205,8 +205,8 @@ BufferInputLineSimplifier::isConcave(const geom::Coordinate& p0,
                                      const geom::Coordinate& p2) const
 {
 	int orientation = CGAlgorithms::computeOrientation(p0, p1, p2);
-	bool isConcave = (orientation == angleOrientation);
-	return isConcave;
+	bool p_isConcave = (orientation == angleOrientation);
+	return p_isConcave;
 }
 
 } // namespace geos.operation.buffer

@@ -132,16 +132,16 @@ STRtree::createParentBoundables(BoundableList* childBoundables, int newLevel)
 
 /*private*/
 std::unique_ptr<BoundableList>
-STRtree::createParentBoundablesFromVerticalSlices(std::vector<BoundableList*>* verticalSlices, int newLevel)
+STRtree::createParentBoundablesFromVerticalSlices(std::vector<BoundableList*>* p_verticalSlices, int newLevel)
 {
-	assert(!verticalSlices->empty());
+	assert(!p_verticalSlices->empty());
 	std::unique_ptr<BoundableList> parentBoundables( new BoundableList() );
 
-	for (size_t i=0, vssize=verticalSlices->size(); i<vssize; ++i)
+	for (size_t i=0, vssize=p_verticalSlices->size(); i<vssize; ++i)
 	{
 		std::unique_ptr<BoundableList> toAdd (
 			createParentBoundablesFromVerticalSlice(
-				(*verticalSlices)[i], newLevel)
+				(*p_verticalSlices)[i], newLevel)
 			);
 		assert(!toAdd->empty());
 

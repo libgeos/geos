@@ -48,11 +48,11 @@ namespace geos {
 
                 std::pair<const void*, const void*> obj = cachedTree->nearestNeighbour(tree2.get(), dynamic_cast<ItemDistance*>(&itemDistance));
 
-                double distance = static_cast<const FacetSequence*>(obj.first)->distance(*static_cast<const FacetSequence*>(obj.second));
+                double p_distance = static_cast<const FacetSequence*>(obj.first)->distance(*static_cast<const FacetSequence*>(obj.second));
 
                 tree2->iterate(deleter);
 
-                return distance;
+                return p_distance;
             }
 
             IndexedFacetDistance::~IndexedFacetDistance() {

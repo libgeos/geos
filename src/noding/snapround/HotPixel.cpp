@@ -116,12 +116,12 @@ HotPixel::intersectsScaled(const Coordinate& p0,
 
 	if (isOutsidePixelEnv) return false;
 
-	bool intersects = intersectsToleranceSquare(p0, p1);
+	bool p_intersects = intersectsToleranceSquare(p0, p1);
 
 	// Found bad envelope test
-	assert(!(isOutsidePixelEnv && intersects));
+	assert(!(isOutsidePixelEnv && p_intersects));
 
-	return intersects;
+	return p_intersects;
 }
 
 /*private*/
