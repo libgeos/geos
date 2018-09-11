@@ -1,3 +1,33 @@
+3.7.0 changes
+2018-09-10
+- New things:
+  - CAPI: GEOSDistanceIndexed (#795, Dan Baston)
+  - CAPI: GEOSCoordSeq_isCCW (#870, Dan Baston)
+  - CAPI: GEOSGeom_getXMin, GEOSGeom_getXMax,
+          GEOSGeom_getYMin, GEOSGeom_getYMax (#871, Dan Baston)
+  - CAPI: GEOSFrechetDistance (#797, Shinichi SUGIYAMA)
+  - CAPI: GEOSReverse (#872, Dan Baston)
+  - CAPI: GEOSGeomGetZ (#581, J Smith)
+
+- Improvements
+  - Interruptible snap operation (Paul Ramsey)
+  - Numerous packaging, doc, and build changes
+    (Debian group: Bas Couwenberg, Francesco Paolo Lovergine)
+    (NetBSD: Greg Troxel)
+  - Allow static library with C API for CMake builds (#878, Dakota Hawkins)
+
+- C++ API changes:
+  - Require defining USE_UNSTABLE_GEOS_CPP_API for use without
+    warnings.
+  - Make C++11 required (Mateusz Loskot)
+  - Use C++11 unique_ptr, nullptr, and override constructs
+    (Mateusz Loskot)
+  - C++11 standard delete on noncopyable
+    (#851, Vicky Vergara)
+  - Fix CommonBits::getBit to correctly handle i >= 32
+    (#834, Kurt Schwehr)
+
+
 Changes in 3.7.0rc2
 2018-09-03
 Fixes / enhancements since 3.7.0rc1
@@ -24,32 +54,6 @@ Fixes since 3.7.0beta1
   - Make GEOSException inherit from std::runtime_error
     to address clang warnings (Dan Baston)
   - Add missing CMake files to tarball (#895, Regina Obe)
-
-3.7.0 changes
-- New things:
-  - CAPI: GEOSDistanceIndexed (#795, Dan Baston)
-  - CAPI: GEOSCoordSeq_isCCW (#870, Dan Baston)
-  - CAPI: GEOSGeom_getXMin, GEOSGeom_getXMax,
-          GEOSGeom_getYMin, GEOSGeom_getYMax (#871, Dan Baston)
-  - CAPI: GEOSFrechetDistance (#797, Shinichi SUGIYAMA)
-  - CAPI: GEOSReverse (#872, Dan Baston)
-  - CAPI: GEOSGeomGetZ (#581, J Smith)
-
-- Improvements
-  - Interruptible snap operation (Paul Ramsey)
-  - Numerous packaging, doc, and build changes
-    (Debian group: Bas Couwenberg, Francesco Paolo Lovergine)
-
-- C++ API changes:
-  - Require defining USE_UNSTABLE_GEOS_CPP_API for use without
-    warnings.
-  - Make C++11 required (Mateusz Loskot)
-  - Use C++11 unique_ptr, nullptr, and override constructs
-    (Mateusz Loskot)
-  - C++11 standard delete on noncopyable
-    (#851, Vicky Vergara)
-  - Fix CommonBits::getBit to correctly handle i >= 32
-    (#834, Kurt Schwehr)
 
 Changes in 3.7.0beta1
 2018-06-25
