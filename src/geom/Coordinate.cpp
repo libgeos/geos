@@ -13,11 +13,12 @@
  **********************************************************************/
 
 #include <geos/geom/Coordinate.h>
-#include <geos/platform.h> // for ISNAN
+#include <geos/constants.h> // for std::isnan
 
 #include <sstream>
 #include <string>
 #include <iomanip>
+#include <cmath>
 
 #ifndef GEOS_INLINE
 # include <geos/geom/Coordinate.inl>
@@ -46,7 +47,7 @@ Coordinate::toString() const
 
 std::ostream& operator<< (std::ostream& os, const Coordinate& c)
 {
-	if ( ISNAN(c.z) )
+	if ( std::isnan(c.z) )
 	{
 		os << c.x << " " << c.y;
 	} else {

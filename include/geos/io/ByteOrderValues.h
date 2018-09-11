@@ -21,7 +21,7 @@
 #define GEOS_IO_BYTEORDERVALUES_H
 
 #include <geos/export.h>
-#include <geos/platform.h>
+#include <geos/constants.h>
 
 namespace geos {
 namespace io {

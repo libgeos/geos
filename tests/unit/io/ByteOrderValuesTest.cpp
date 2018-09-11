@@ -5,7 +5,7 @@
 #include <tut/tut.hpp>
 // geos
 #include <geos/io/ByteOrderValues.h>
-#include <geos/platform.h> // for int64
+#include <geos/constants.h> // for int64
 // std
 #include <sstream>
 #include <memory>

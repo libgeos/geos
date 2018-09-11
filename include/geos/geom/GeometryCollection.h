@@ -22,7 +22,6 @@
 
 #include <geos/export.h>
 #include <geos/geom/Geometry.h> // for inheritance
-//#include <geos/platform.h>
 #include <geos/geom/Envelope.h> // for proper use of unique_ptr<>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
 

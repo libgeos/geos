@@ -18,6 +18,7 @@
  *
  **********************************************************************/
 
+#include <geos/constants.h>
 #include <geos/geom/LineSegment.h>
 #include <geos/geom/LineString.h> // for toGeometry
 #include <geos/geom/Coordinate.h>

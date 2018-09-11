@@ -38,7 +38,6 @@
 
 #include <cmath>
 
-#include <geos/platform.h> // for ISNAN, FINITE
 
 #ifdef _MSC_VER
 #pragma warning(disable : 4127)
@@ -59,7 +58,7 @@ int RobustDeterminant::signOfDet2x2(double x1,double y1,double x2,double y2) {
 	double k;
 
   // Protect against non-finite numbers
-  if ( !FINITE(x1) || !FINITE(y1) || !FINITE(x2) || !FINITE(y2) )
+  if ( !std::isfinite(x1) || !std::isfinite(y1) || !std::isfinite(x2) || !std::isfinite(y2) )
   {
     throw util::IllegalArgumentException("RobustDeterminant encountered non-finite numbers ");
   }

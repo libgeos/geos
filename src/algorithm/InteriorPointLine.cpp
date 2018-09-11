@@ -17,6 +17,7 @@
  *
  **********************************************************************/
 
+#include <geos/constants.h>
 #include <geos/algorithm/InteriorPointLine.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Geometry.h>

@@ -16,7 +16,7 @@
 #define GEOS_PRECISION_COMMONBITS_H
 
 #include <geos/export.h>
-#include <geos/platform.h> // for int64
+#include <geos/constants.h> // for int64
 
 namespace geos {
 namespace precision { // geos.precision

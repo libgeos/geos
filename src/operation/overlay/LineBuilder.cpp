@@ -17,7 +17,6 @@
  *
  **********************************************************************/
 
-#include <geos/platform.h>
 #include <geos/operation/overlay/LineBuilder.h>
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/algorithm/PointLocator.h>
@@ -218,7 +217,7 @@ LineBuilder::propagateZ(CoordinateSequence *cs)
 	size_t cssize = cs->getSize();
 	for (size_t i = 0; i < cssize; ++i)
 	{
-		if ( !ISNAN(cs->getAt(i).z) ) v3d.push_back(i);
+		if ( !std::isnan(cs->getAt(i).z) ) v3d.push_back(i);
 	}
 
 #if GEOS_DEBUG

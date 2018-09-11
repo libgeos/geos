@@ -18,7 +18,7 @@
  *
  **********************************************************************/
 
-#include <geos/platform.h>
+#include <geos/constants.h>
 #include <geos/algorithm/Distance.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/MinimumDiameter.h>

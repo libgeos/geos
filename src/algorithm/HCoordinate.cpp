@@ -21,7 +21,6 @@
 #include <geos/algorithm/HCoordinate.h>
 #include <geos/algorithm/NotRepresentableException.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/platform.h>
 
 #include <memory>
 #include <cmath>
@@ -71,7 +70,7 @@ HCoordinate::intersection(const Coordinate &p1, const Coordinate &p2,
 	double xInt = x/w;
 	double yInt = y/w;
 
-	if ( (!FINITE(xInt)) || (!FINITE(yInt)) )
+	if ( (!std::isfinite(xInt)) || (!std::isfinite(yInt)) )
 	{
 		throw NotRepresentableException();
 	}
@@ -148,7 +147,7 @@ double
 HCoordinate::getX() const
 {
 	double a = x/w;
-	if ( !FINITE(a) ) {
+	if ( !std::isfinite(a) ) {
 		throw NotRepresentableException();
 	}
 	return a;
@@ -159,7 +158,7 @@ double
 HCoordinate::getY() const
 {
 	double a = y/w;
-	if ( !FINITE(a) ) {
+	if ( !std::isfinite(a) ) {
 		throw  NotRepresentableException();
 	}
 	return a;

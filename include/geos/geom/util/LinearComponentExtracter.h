@@ -23,7 +23,6 @@
 #include <geos/geom/GeometryComponentFilter.h>
 #include <geos/geom/Geometry.h> // to be removed when we have the .inl
 #include <geos/geom/LineString.h> // to be removed when we have the .inl
-//#include <geos/platform.h>
 
 namespace geos {
 namespace geom { // geos.geom

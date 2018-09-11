@@ -4,7 +4,7 @@
 
 #include <tut/tut.hpp>
 // geos
-#include <geos/platform.h>
+#include <geos/constants.h>
 #include <geos/io/WKTReader.h>
 #include <geos/algorithm/distance/DiscreteFrechetDistance.h>
 #include <geos/geom/PrecisionModel.h>

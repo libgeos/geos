@@ -22,6 +22,7 @@
  *
  **********************************************************************/
 
+#include <geos/constants.h>
 #include <geos/algorithm/MinimumDiameter.h>
 #include <geos/algorithm/ConvexHull.h>
 #include <geos/geom/Geometry.h>

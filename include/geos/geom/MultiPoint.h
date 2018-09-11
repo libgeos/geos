@@ -22,7 +22,6 @@
 #define GEOS_GEOS_MULTIPOINT_H
 
 #include <geos/export.h>
-#include <geos/platform.h>
 #include <geos/geom/GeometryCollection.h> // for inheritance
 #include <geos/geom/Puntal.h> // for inheritance
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType

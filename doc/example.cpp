@@ -48,14 +48,11 @@
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/opLinemerge.h>
 #include <geos/opPolygonize.h>
+#include <geos/constants.h>
 #include <vector>
 #include <sstream>
 #include <iomanip>
 #include <cstdlib> // exit()
-
-#ifndef M_PI
-#define M_PI       3.14159265358979323846
-#endif
 
 // Set to 0 to skip section
 #define GEOMETRIC_SHAPES 1

@@ -16,7 +16,7 @@
  *
  **********************************************************************/
 
-#include <geos/platform.h>
+#include <geos/constants.h>
 #include <geos/operation/overlay/ElevationMatrix.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/geom/Geometry.h>
@@ -61,14 +61,14 @@ ElevationMatrixFilter::filter_rw(Coordinate *c) const
 #endif
 
 	// already has a Z value, nothing to do
-	if ( ! ISNAN(c->z) ) return;
+	if ( ! std::isnan(c->z) ) return;
 
 	double p_avgElevation = em.getAvgElevation();
 
 	try {
 		const ElevationMatrixCell &emc = em.getCell(*c);
 		c->z = emc.getAvg();
-		if ( ISNAN(c->z) ) c->z = p_avgElevation;
+		if ( std::isnan(c->z) ) c->z = p_avgElevation;
 #if GEOS_DEBUG
 		cerr<<"  z set to "<<c->z<<endl;
 #endif
@@ -137,7 +137,7 @@ ElevationMatrix::add(const CoordinateSequence *cs)
 void
 ElevationMatrix::add(const Coordinate &c)
 {
-	if ( ISNAN(c.z) ) return;
+	if ( std::isnan(c.z) ) return;
 	try {
 		ElevationMatrixCell &emc = getCell(c);
 		emc.add(c);
@@ -200,7 +200,7 @@ ElevationMatrix::getAvgElevation() const
 		{
 			const ElevationMatrixCell &cell = cells[(r*cols)+c];
 			double e = cell.getAvg();
-			if ( !ISNAN(e) )
+			if ( !std::isnan(e) )
 			{
 				zvals++;
 				ztot+=e;
@@ -236,7 +236,7 @@ ElevationMatrix::elevate(Geometry *g) const
 {
 
 	// Nothing to do if no elevation info in matrix
-	if ( ISNAN(getAvgElevation()) ) return;
+	if ( std::isnan(getAvgElevation()) ) return;
 
 	g->apply_rw(&filter);
 }

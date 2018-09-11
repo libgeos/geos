@@ -4,7 +4,7 @@
 // tut
 #include <tut/tut.hpp>
 // geos
-#include <geos/platform.h>
+#include <geos/constants.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Point.h>

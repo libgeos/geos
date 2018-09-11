@@ -4,7 +4,6 @@
 // tut
 #include <tut/tut.hpp>
 // geos
-#include <geos/platform.h>
 #include <geos/geom/Triangle.h>
 #include <geos/geom/Coordinate.h>
 // std
@@ -115,7 +114,7 @@ namespace tut
 		ensure( std::fabs(center.x - 6.0) < 1e-15 );
 		ensure( center.y > 4.2 );
 		ensure( center.y < 4.3 );
-		ensure( 0 != ISNAN( center.z ) );
+		ensure( 0 != std::isnan( center.z ) );
     }
     // Test circumcentre()
         template<>
@@ -148,14 +147,14 @@ namespace tut
 		t1.circumcentre(c1);
 		ensure_equals(c1.x ,2 );
 		ensure_equals(c1.y ,3 );
-		ensure( 0 != ISNAN( c1.z ) );
+		ensure( 0 != std::isnan( c1.z ) );
 
 		//For t2:
 		Coordinate c2(0,0);
 		t2.circumcentre(c2);
 		ensure_equals(c2.x ,30.5 );
 		ensure_equals(c2.y ,- 14.5 );
-		ensure( 0 != ISNAN( c2.z ) );
+		ensure( 0 != std::isnan( c2.z ) );
 
 
 		//For t3:
@@ -164,7 +163,7 @@ namespace tut
 		ensure( std::fabs(c3.x - 13.0) < 1 );
 		ensure( c3.y > 13.7 );
 		ensure( c3.y < 13.8 );
-		ensure( 0 != ISNAN( c3.z ) );
+		ensure( 0 != std::isnan( c3.z ) );
 		// cout << "CicumCenter of triangle ABC:: " << c1.x << " " << c1.y << endl;
 
 		//  std::cout << "CicumCenter of triangle DEF:: " << c2.x << " " << c2.y << std::endl;

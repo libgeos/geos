@@ -13,7 +13,7 @@
  *
  **********************************************************************/
 
-#include <geos/platform.h> // for int64
+#include <geos/constants.h> // for int64
 #include <geos/precision/CommonBits.h>
 
 namespace geos {

@@ -19,7 +19,7 @@
 #ifndef GEOS_ALGORITHM_DISTANCE_POINTPAIRDISTANCE_H
 #define GEOS_ALGORITHM_DISTANCE_POINTPAIRDISTANCE_H
 
-#include <geos/platform.h> // for DoubleNotANumber
+#include <geos/constants.h> // for DoubleNotANumber
 #include <geos/geom/Coordinate.h> // for inlines
 
 #include <vector> // for composition

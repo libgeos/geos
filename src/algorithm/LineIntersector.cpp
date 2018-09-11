@@ -17,7 +17,7 @@
  *
  **********************************************************************/
 
-#include <geos/platform.h>
+#include <geos/constants.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/Distance.h>
 #include <geos/algorithm/Orientation.h>
@@ -267,7 +267,7 @@ LineIntersector::interpolateZ(const Coordinate &p,
 	cerr<<"LineIntersector::interpolateZ("<<p.toString()<<", "<<p1.toString()<<", "<<p2.toString()<<")"<<endl;
 #endif
 
-	if ( ISNAN(p1.z) )
+	if ( std::isnan(p1.z) )
 	{
 #if GEOS_DEBUG
 		cerr<<" p1 do not have a Z"<<endl;
@@ -275,7 +275,7 @@ LineIntersector::interpolateZ(const Coordinate &p,
 		return p2.z; // might be DoubleNotANumber again
 	}
 
-	if ( ISNAN(p2.z) )
+	if ( std::isnan(p2.z) )
 	{
 #if GEOS_DEBUG
 		cerr<<" p2 do not have a Z"<<endl;
@@ -347,9 +347,9 @@ LineIntersector::computeIntersection(const Coordinate& p,const Coordinate& p1,co
 			cerr<<"RobustIntersector::computeIntersection(Coordinate,Coordinate,Coordinate) calling interpolateZ"<<endl;
 #endif
 			double z = interpolateZ(p, p1, p2);
-			if ( !ISNAN(z) )
+			if ( !std::isnan(z) )
 			{
-				if ( ISNAN(intPt[0].z) )
+				if ( std::isnan(intPt[0].z) )
 					intPt[0].z = z;
 				else
 					intPt[0].z = (intPt[0].z+z)/2;
@@ -469,7 +469,7 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 		if ( p1.equals2D(q1) || p1.equals2D(q2) ) {
 			intPt[0]=p1;
 #if COMPUTE_Z
-			if ( !ISNAN(p1.z) )
+			if ( !std::isnan(p1.z) )
 			{
 				z += p1.z;
 				hits++;
@@ -479,7 +479,7 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 		else if ( p2.equals2D(q1) || p2.equals2D(q2) ) {
 			intPt[0]=p2;
 #if COMPUTE_Z
-			if ( !ISNAN(p2.z) )
+			if ( !std::isnan(p2.z) )
 			{
 				z += p2.z;
 				hits++;
@@ -493,7 +493,7 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 		else if (Pq1==0) {
 			intPt[0]=q1;
 #if COMPUTE_Z
-			if ( !ISNAN(q1.z) )
+			if ( !std::isnan(q1.z) )
 			{
 				z += q1.z;
 				hits++;
@@ -503,7 +503,7 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 		else if (Pq2==0) {
 			intPt[0]=q2;
 #if COMPUTE_Z
-			if ( !ISNAN(q2.z) )
+			if ( !std::isnan(q2.z) )
 			{
 				z += q2.z;
 				hits++;
@@ -513,7 +513,7 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 		else if (Qp1==0) {
 			intPt[0]=p1;
 #if COMPUTE_Z
-			if ( !ISNAN(p1.z) )
+			if ( !std::isnan(p1.z) )
 			{
 				z += p1.z;
 				hits++;
@@ -523,7 +523,7 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 		else if (Qp2==0) {
 			intPt[0]=p2;
 #if COMPUTE_Z
-			if ( !ISNAN(p2.z) )
+			if ( !std::isnan(p2.z) )
 			{
 				z += p2.z;
 				hits++;
@@ -578,8 +578,8 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		ztot=0;
 		hits=0;
 		q1z = interpolateZ(q1, p1, p2);
-		if (!ISNAN(q1z)) { ztot+=q1z; hits++; }
-		if (!ISNAN(q1.z)) { ztot+=q1.z; hits++; }
+		if (!std::isnan(q1z)) { ztot+=q1z; hits++; }
+		if (!std::isnan(q1.z)) { ztot+=q1.z; hits++; }
 		if ( hits ) intPt[0].z = ztot/hits;
 #endif
 		intPt[1]=q2;
@@ -587,8 +587,8 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		ztot=0;
 		hits=0;
 		q2z = interpolateZ(q2, p1, p2);
-		if (!ISNAN(q2z)) { ztot+=q2z; hits++; }
-		if (!ISNAN(q2.z)) { ztot+=q2.z; hits++; }
+		if (!std::isnan(q2z)) { ztot+=q2z; hits++; }
+		if (!std::isnan(q2.z)) { ztot+=q2.z; hits++; }
 		if ( hits ) intPt[1].z = ztot/hits;
 #endif
 #if GEOS_DEBUG
@@ -606,8 +606,8 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		ztot=0;
 		hits=0;
 		p1z = interpolateZ(p1, q1, q2);
-		if (!ISNAN(p1z)) { ztot+=p1z; hits++; }
-		if (!ISNAN(p1.z)) { ztot+=p1.z; hits++; }
+		if (!std::isnan(p1z)) { ztot+=p1z; hits++; }
+		if (!std::isnan(p1.z)) { ztot+=p1.z; hits++; }
 		if ( hits ) intPt[0].z = ztot/hits;
 #endif
 		intPt[1]=p2;
@@ -615,8 +615,8 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		ztot=0;
 		hits=0;
 		p2z = interpolateZ(p2, q1, q2);
-		if (!ISNAN(p2z)) { ztot+=p2z; hits++; }
-		if (!ISNAN(p2.z)) { ztot+=p2.z; hits++; }
+		if (!std::isnan(p2z)) { ztot+=p2z; hits++; }
+		if (!std::isnan(p2.z)) { ztot+=p2.z; hits++; }
 		if ( hits ) intPt[1].z = ztot/hits;
 #endif
 		return COLLINEAR_INTERSECTION;
@@ -630,8 +630,8 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		ztot=0;
 		hits=0;
 		q1z = interpolateZ(q1, p1, p2);
-		if (!ISNAN(q1z)) { ztot+=q1z; hits++; }
-		if (!ISNAN(q1.z)) { ztot+=q1.z; hits++; }
+		if (!std::isnan(q1z)) { ztot+=q1z; hits++; }
+		if (!std::isnan(q1.z)) { ztot+=q1.z; hits++; }
 		if ( hits ) intPt[0].z = ztot/hits;
 #endif
 		intPt[1]=p1;
@@ -639,8 +639,8 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		ztot=0;
 		hits=0;
 		p1z = interpolateZ(p1, q1, q2);
-		if (!ISNAN(p1z)) { ztot+=p1z; hits++; }
-		if (!ISNAN(p1.z)) { ztot+=p1.z; hits++; }
+		if (!std::isnan(p1z)) { ztot+=p1z; hits++; }
+		if (!std::isnan(p1.z)) { ztot+=p1.z; hits++; }
 		if ( hits ) intPt[1].z = ztot/hits;
 #endif
 #if GEOS_DEBUG
@@ -658,8 +658,8 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		ztot=0;
 		hits=0;
 		q1z = interpolateZ(q1, p1, p2);
-		if (!ISNAN(q1z)) { ztot+=q1z; hits++; }
-		if (!ISNAN(q1.z)) { ztot+=q1.z; hits++; }
+		if (!std::isnan(q1z)) { ztot+=q1z; hits++; }
+		if (!std::isnan(q1.z)) { ztot+=q1.z; hits++; }
 		if ( hits ) intPt[0].z = ztot/hits;
 #endif
 		intPt[1]=p2;
@@ -667,8 +667,8 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		ztot=0;
 		hits=0;
 		p2z = interpolateZ(p2, q1, q2);
-		if (!ISNAN(p2z)) { ztot+=p2z; hits++; }
-		if (!ISNAN(p2.z)) { ztot+=p2.z; hits++; }
+		if (!std::isnan(p2z)) { ztot+=p2z; hits++; }
+		if (!std::isnan(p2.z)) { ztot+=p2.z; hits++; }
 		if ( hits ) intPt[1].z = ztot/hits;
 #endif
 #if GEOS_DEBUG
@@ -686,8 +686,8 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		ztot=0;
 		hits=0;
 		q2z = interpolateZ(q2, p1, p2);
-		if (!ISNAN(q2z)) { ztot+=q2z; hits++; }
-		if (!ISNAN(q2.z)) { ztot+=q2.z; hits++; }
+		if (!std::isnan(q2z)) { ztot+=q2z; hits++; }
+		if (!std::isnan(q2.z)) { ztot+=q2.z; hits++; }
 		if ( hits ) intPt[0].z = ztot/hits;
 #endif
 		intPt[1]=p1;
@@ -695,8 +695,8 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		ztot=0;
 		hits=0;
 		p1z = interpolateZ(p1, q1, q2);
-		if (!ISNAN(p1z)) { ztot+=p1z; hits++; }
-		if (!ISNAN(p1.z)) { ztot+=p1.z; hits++; }
+		if (!std::isnan(p1z)) { ztot+=p1z; hits++; }
+		if (!std::isnan(p1.z)) { ztot+=p1.z; hits++; }
 		if ( hits ) intPt[1].z = ztot/hits;
 #endif
 #if GEOS_DEBUG
@@ -714,8 +714,8 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		ztot=0;
 		hits=0;
 		q2z = interpolateZ(q2, p1, p2);
-		if (!ISNAN(q2z)) { ztot+=q2z; hits++; }
-		if (!ISNAN(q2.z)) { ztot+=q2.z; hits++; }
+		if (!std::isnan(q2z)) { ztot+=q2z; hits++; }
+		if (!std::isnan(q2.z)) { ztot+=q2.z; hits++; }
 		if ( hits ) intPt[0].z = ztot/hits;
 #endif
 		intPt[1]=p2;
@@ -723,8 +723,8 @@ LineIntersector::computeCollinearIntersection(const Coordinate& p1,const Coordin
 		ztot=0;
 		hits=0;
 		p2z = interpolateZ(p2, q1, q2);
-		if (!ISNAN(p2z)) { ztot+=p2z; hits++; }
-		if (!ISNAN(p2.z)) { ztot+=p2.z; hits++; }
+		if (!std::isnan(p2z)) { ztot+=p2z; hits++; }
+		if (!std::isnan(p2.z)) { ztot+=p2.z; hits++; }
 		if ( hits ) intPt[1].z = ztot/hits;
 #endif
 #if GEOS_DEBUG
@@ -780,8 +780,8 @@ LineIntersector::intersection(const Coordinate& p1,
 	double zvals = 0;
 	double zp = interpolateZ(intPtOut, p1, p2);
 	double zq = interpolateZ(intPtOut, q1, q2);
-	if ( !ISNAN(zp)) { ztot += zp; zvals++; }
-	if ( !ISNAN(zq)) { ztot += zq; zvals++; }
+	if ( !std::isnan(zp)) { ztot += zp; zvals++; }
+	if ( !std::isnan(zq)) { ztot += zq; zvals++; }
 	if ( zvals ) intPtOut.z = ztot/zvals;
 #endif // COMPUTE_Z
 
@@ -871,7 +871,7 @@ LineIntersector::normalizeToEnvCentre(Coordinate &n00, Coordinate &n01,
 
 	// Only do this if input does have Z
 	// See https://trac.osgeo.org/geos/ticket/811
-	if( ISNAN(n00.z) ) return;
+	if( std::isnan(n00.z) ) return;
 
 	double minZ0 = n00.z < n01.z ? n00.z : n01.z;
 	double minZ1 = n10.z < n11.z ? n10.z : n11.z;

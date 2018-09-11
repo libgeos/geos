@@ -18,7 +18,6 @@
  *
  **********************************************************************/
 
-#include <geos/platform.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/io/Writer.h>
 #include <geos/io/CLocalizer.h>
@@ -326,7 +325,7 @@ WKTWriter::appendCoordinate(const Coordinate* coordinate,
 	if( outputDimension == 3 )
 	{
 		writer->write(" ");
-		if( ISNAN(coordinate->z) )
+		if( std::isnan(coordinate->z) )
 			writer->write(writeNumber(0.0));
 		else
 			writer->write(writeNumber(coordinate->z));

@@ -16,7 +16,7 @@
 #define GEOS_GEOM_COORDINATE_H
 
 #include <geos/export.h>
-#include <geos/platform.h> // for DoubleNotANumber
+#include <geos/constants.h> // for DoubleNotANumber
 #include <geos/inline.h>
 #include <set>
 #include <stack>

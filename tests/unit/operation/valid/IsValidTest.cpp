@@ -4,7 +4,7 @@
 
 #include <tut/tut.hpp>
 // geos
-#include <geos/platform.h>
+#include <geos/constants.h>
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateArraySequence.h>
@@ -14,7 +14,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/operation/valid/TopologyValidationError.h>
-#include <geos/platform.h> // for ISNAN
+#include <geos/constants.h> // for std::isnan
 // std
 #include <cmath>
 #include <string>
@@ -59,7 +59,7 @@ namespace tut
     {
 	CoordinateSequence* cs = new CoordinateArraySequence();
 	cs->add(Coordinate(0.0, 0.0));
-	cs->add(Coordinate(1.0, DoubleNotANumber));
+	cs->add(Coordinate(1.0, geos::DoubleNotANumber));
 	GeomPtr line ( factory_->createLineString(cs) );
 
 
@@ -73,7 +73,7 @@ namespace tut
 	ensure_equals( err->getErrorType(),
 	               TopologyValidationError::eInvalidCoordinate );
 
-	ensure(0 != ISNAN(errCoord.y));
+	ensure(0 != std::isnan(errCoord.y));
 	ensure_equals(valid, false);
     }
 

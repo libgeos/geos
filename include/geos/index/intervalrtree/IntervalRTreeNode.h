@@ -16,7 +16,7 @@
 #ifndef GEOS_INDEX_INTERVALRTREE_INTERVALRTREENODE_H
 #define GEOS_INDEX_INTERVALRTREE_INTERVALRTREENODE_H
 
-#include <geos/platform.h>
+#include <geos/constants.h>
 #include <vector>
 #include <limits>
 

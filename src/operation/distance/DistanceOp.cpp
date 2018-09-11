@@ -18,6 +18,7 @@
  *
  **********************************************************************/
 
+#include <geos/constants.h>
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/distance/GeometryLocation.h>
 #include <geos/operation/distance/ConnectedElementLocationFilter.h>

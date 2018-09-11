@@ -3,7 +3,7 @@
 // tut
 #include <tut/tut.hpp>
 // geos
-#include <geos/platform.h>
+#include <geos/constants.h>
 #include <geos/precision/CommonBits.h>
 // std
 

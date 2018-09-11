@@ -5,7 +5,7 @@
 #include <tut/tut.hpp>
 // geos
 #include <geos/operation/buffer/BufferParameters.h>
-#include <geos/platform.h>
+#include <geos/constants.h>
 // std
 #include <memory>
 

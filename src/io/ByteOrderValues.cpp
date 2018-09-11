@@ -17,7 +17,7 @@
  **********************************************************************/
 
 #include <geos/io/ByteOrderValues.h>
-#include <geos/platform.h>
+#include <geos/constants.h>
 #include <geos/util.h>
 
 #include <cstring>

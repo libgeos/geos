@@ -4,15 +4,13 @@
 #include <tut/tut.hpp>
 // geos
 #include <geos_c.h>
+#include <geos/constants.h>
 // std
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
 #include <memory>
 #include <math.h>
-#ifndef M_PI
-#define M_PI       3.14159265358979323846
-#endif
 
 namespace tut
 {
@@ -93,7 +91,7 @@ namespace tut
 
 
         for (size_t i = 0; i < num_points; i++) {
-            angle[i] = 2 * M_PI * std::rand() / RAND_MAX;
+            angle[i] = 2 * geos::M_PI * std::rand() / RAND_MAX;
             radius[i] = r*std::rand() / RAND_MAX;
         }
 

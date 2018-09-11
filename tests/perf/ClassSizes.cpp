@@ -25,7 +25,7 @@
 #include <geos/geomgraph/PlanarGraph.h>
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/profiler.h>
-#include <geos/platform.h>
+#include <geos/constants.h>
 #include <iostream>
 
 using namespace std;

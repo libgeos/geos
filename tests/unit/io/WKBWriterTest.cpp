@@ -76,7 +76,7 @@ namespace tut
             ensure( geom->getCoordinateDimension() == 2 );
             ensure( geom->getCoordinate()->x == -117.0 );
             ensure( geom->getCoordinate()->y == 33.0 );
-            ensure( ISNAN(geom->getCoordinate()->z) != 0 );
+            ensure( std::isnan(geom->getCoordinate()->z) != 0 );
 
             delete geom;
     }
@@ -128,7 +128,7 @@ namespace tut
             ensure( geom->getCoordinateDimension() == 2 );
             ensure( geom->getCoordinate()->x == -117.0 );
             ensure( geom->getCoordinate()->y == 33.0 );
-            ensure( ISNAN(geom->getCoordinate()->z) != 0);
+            ensure( std::isnan(geom->getCoordinate()->z) != 0);
 
             delete geom;
     }

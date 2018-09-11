@@ -17,8 +17,8 @@
 #include <geos/util/GEOSException.h>
 #include <geos/io/WKTReader.h>
 #include <geos/operation/valid/TopologyValidationError.h>
-#include <geos/platform.h> // for ISNAN
 // std
+#include <cmath>
 #include <string>
 #include <memory>
 #include <iostream>

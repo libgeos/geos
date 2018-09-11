@@ -22,7 +22,6 @@
 #define GEOS_GEOS_POINT_H
 
 #include <geos/export.h>
-#include <geos/platform.h>
 #include <geos/geom/Geometry.h> // for inheritance
 #include <geos/geom/Puntal.h> // for inheritance
 #include <geos/geom/CoordinateSequence.h> // for proper use of unique_ptr<>

@@ -19,16 +19,13 @@
  *
  **********************************************************************/
 
-#include "IndexedNestedRingTester.h" // TODO: private header>? --mloskot
-
 #include <geos/export.h>
-#include <geos/platform.h>
+#include <geos/constants.h>
+#include <geos/algorithm/CGAlgorithms.h>
 #include <geos/algorithm/LineIntersector.h>
+#include <geos/algorithm/MCPointInRing.h>
 #include <geos/algorithm/PointLocation.h>
 #include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
-#include <geos/operation/valid/ConnectedInteriorTester.h>
-#include <geos/operation/valid/ConsistentAreaTester.h>
-#include <geos/operation/valid/IsValidOp.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/LineString.h>
@@ -41,6 +38,10 @@
 #include <geos/geomgraph/Edge.h>
 #include <geos/geomgraph/index/SegmentIntersector.h>
 #include <geos/index/chain/MonotoneChainSelectAction.h>
+#include <geos/operation/valid/ConnectedInteriorTester.h>
+#include <geos/operation/valid/ConsistentAreaTester.h>
+#include <geos/operation/valid/IndexedNestedRingTester.h>
+#include <geos/operation/valid/IsValidOp.h>
 #include <geos/util/UnsupportedOperationException.h>
 
 
@@ -95,9 +96,15 @@ IsValidOp::isValid()
 bool
 IsValidOp::isValid(const Coordinate &coord)
 {
+<<<<<<< HEAD
     if (! FINITE(coord.x) ) return false;
     if (! FINITE(coord.y) ) return false;
     return true;
+=======
+	if (! std::isfinite(coord.x) ) return false;
+	if (! std::isfinite(coord.y) ) return false;
+	return true;
+>>>>>>> Using constants.h and stop using platform.h (closes #925)
 }
 
 /* static public */

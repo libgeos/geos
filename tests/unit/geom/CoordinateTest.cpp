@@ -3,7 +3,6 @@
 
 #include <tut/tut.hpp>
 // geos
-#include <geos/platform.h>
 #include <geos/geom/Coordinate.h>
 // std
 #include <cmath>
@@ -56,7 +55,7 @@ namespace tut
         geos::geom::Coordinate coord;
         ensure_equals( coord.x, 0.0 );
         ensure_equals( coord.y, 0.0 );
-        ensure(0 != ISNAN( coord.z ) );
+        ensure(0 != std::isnan( coord.z ) );
     }
 
     // Test of copy constructor and assignment operator
@@ -178,16 +177,16 @@ namespace tut
 
         // Make it null and check
         not_null_coord.setNull();
-        ensure( 0 != ISNAN( not_null_coord.x ) );
-        ensure( 0 != ISNAN( not_null_coord.y ) );
-        ensure( 0 != ISNAN( not_null_coord.z ) );
+        ensure( 0 != std::isnan( not_null_coord.x ) );
+        ensure( 0 != std::isnan( not_null_coord.y ) );
+        ensure( 0 != std::isnan( not_null_coord.z ) );
 
         // Build in static null instance
         geos::geom::Coordinate null_coord;
         null_coord = geos::geom::Coordinate::getNull();
-        ensure( 0 != ISNAN( null_coord.x ) );
-        ensure( 0 != ISNAN( null_coord.y ) );
-        ensure( 0 != ISNAN( null_coord.z ) );
+        ensure( 0 != std::isnan( null_coord.x ) );
+        ensure( 0 != std::isnan( null_coord.y ) );
+        ensure( 0 != std::isnan( null_coord.z ) );
     }
 
 } // namespace tut

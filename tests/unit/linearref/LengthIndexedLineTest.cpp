@@ -5,7 +5,6 @@
 #include <tut/tut.hpp>
 #include <utility.h>
 // geos
-#include <geos/platform.h>
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/geom/PrecisionModel.h>
@@ -399,7 +398,7 @@ void object::test<25>()
     LengthIndexedLine indexedLine(linearGeom.get());
     double projIndex = indexedLine.project(Coordinate(5, 5));
     Coordinate projPt = indexedLine.extractPoint(projIndex);
-    ensure(0 != ISNAN(projPt.z));
+    ensure(0 != std::isnan(projPt.z));
 }
 
 /**

@@ -5,7 +5,7 @@
 #include <tut/tut.hpp>
 // geos
 #include <geos/operation/linemerge/LineMerger.h>
-#include <geos/platform.h>
+#include <geos/constants.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/LineString.h>

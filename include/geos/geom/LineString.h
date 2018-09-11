@@ -22,7 +22,6 @@
 #define GEOS_GEOS_LINESTRING_H
 
 #include <geos/export.h>
-#include <geos/platform.h> // do we need this ?
 #include <geos/geom/Geometry.h> // for inheritance
 #include <geos/geom/Lineal.h> // for inheritance
 #include <geos/geom/CoordinateSequence.h> // for proper use of unique_ptr<>

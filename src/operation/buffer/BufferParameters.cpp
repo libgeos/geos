@@ -19,13 +19,9 @@
 #include <cstdlib> // for std::abs()
 #include <cmath> // for cos
 
-#include <geos/platform.h>
+#include <geos/constants.h>
 #include <geos/operation/buffer/BufferParameters.h>
 
-
-#ifndef M_PI
-#define M_PI        3.14159265358979323846
-#endif
 
 namespace geos {
 namespace operation { // geos.operation

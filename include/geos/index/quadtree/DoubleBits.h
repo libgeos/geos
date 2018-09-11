@@ -20,7 +20,7 @@
 #define GEOS_IDX_QUADTREE_DOUBLEBITS_H
 
 #include <geos/export.h>
-#include <geos/platform.h> // for int64
+#include <geos/constants.h> // for int64
 
 #include <string>
 
