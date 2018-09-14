@@ -14,7 +14,7 @@
 #include <geos/io/WKTReader.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/GeometryFactory.h>
-
+#include<geos/geom/Point.h>
 #include <geos/geom/CoordinateArraySequence.h>
 //#include <stdio.h>
 #include <iostream>
@@ -71,6 +71,44 @@ namespace tut
 			cout << " Obtained: " << writer.write(results.get()) << endl;
 		}
 		ensure(eq);
+		//should be One-to-one correspondence?
+		const size_t nOne = 1;
+		size_t numResults = results->getNumGeometries(),
+			numSites = sites->getNumGeometries(),i,j,nCount;
+		if (numSites < 2 || fabs(tolerance)>1e-7) return;
+		ensure_equals(numSites, numResults);
+		for (i = 0; i < numResults; i++)
+		{
+			Coordinate *poPt= static_cast<Coordinate*>(results->getGeometryN(i)->getUserData());
+			Point *poPoint= geomFact.createPoint(*poPt);
+			nCount = 0;
+			for (j=0;j<numSites;j++)
+			{
+				const Point *poExpPt = dynamic_cast<const Point*>(sites->getGeometryN(j));
+				if (poExpPt->equalsExact(poPoint))
+				{
+					nCount++;
+				}
+			}
+			geomFact.destroyGeometry(poPoint);
+			ensure_equals(nOne, nCount);
+		}
+		for (i = 0; i < numSites; i++)
+		{
+			const Point *poExpPt = dynamic_cast<const Point*>(sites->getGeometryN(i));
+			nCount = 0;
+			for (j = 0; j<numResults; j++)
+			{
+				Coordinate *poPt = static_cast<Coordinate*>(results->getGeometryN(j)->getUserData());
+				Point *poPoint = geomFact.createPoint(*poPt);
+				if (poPoint->equalsExact(poExpPt))
+				{
+					nCount++;
+				}
+				geomFact.destroyGeometry(poPoint);
+			}
+			ensure_equals(nOne, nCount);
+		}
 
 	}
 

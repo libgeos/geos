@@ -137,11 +137,11 @@ VoronoiDiagramBuilder::clipGeometryCollection(const geom::GeometryCollection& ge
 		else if(clipEnv.intersects(g->getEnvelopeInternal()))
 		{
 			result.reset( clipPoly->intersection(g) );
-			result->setUserData(((Geometry*)g)->getUserData()); // TODO: needed ?
 		}
 
 		if(result.get() && !result->isEmpty() )
-		{
+		{			result->setUserData(((Geometry*)g)->getUserData()); // TODO: needed ?
+
 			clipped->push_back(result.release());
 		}
 	}

@@ -47,7 +47,7 @@ using namespace std;
 namespace geos {
 namespace triangulate { //geos.triangulate
 namespace quadedge { //geos.triangulate.quadedge
-
+		stack<Coordinate> coords;
 void
 QuadEdgeSubdivision::getTriangleEdges(const QuadEdge &startQE,
         const QuadEdge* triEdge[3])
@@ -582,9 +582,12 @@ QuadEdgeSubdivision::getVoronoiCellPolygon(QuadEdge* qe ,const geom::GeometryFac
 		geomFact.createPolygon(geomFact.createLinearRing(new geom::CoordinateArraySequence(pts.release())),nullptr));
 
 	Vertex v = startQE->orig();
-	Coordinate c(0,0);
+	Coordinate c(0,0),*pc;
 	c = v.getCoordinate();
-	cellPoly->setUserData(reinterpret_cast<void*>(&c));
+
+	coords.push(c);
+	pc = &coords.top();
+	cellPoly->setUserData(reinterpret_cast<void*>(pc));
 	return cellPoly;
 }
 
@@ -614,7 +617,8 @@ QuadEdgeSubdivision::getVoronoiCellEdge(QuadEdge* qe ,const geom::GeometryFactor
 	Vertex v = startQE->orig();
 	Coordinate c(0,0);
 	c = v.getCoordinate();
-	cellEdge->setUserData(reinterpret_cast<void*>(&c));
+	coords.push(c);
+	cellEdge->setUserData(reinterpret_cast<void*>(&coords.top()));
 	return cellEdge;
 }
 
