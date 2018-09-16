@@ -78,6 +78,8 @@ public:
 
 	~GeometryCollection() override;
 
+	void setSRID(int) override;
+
 	/**
 	 * \brief
 	 * Collects all coordinates of all subgeometries into a
