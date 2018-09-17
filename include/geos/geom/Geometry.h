@@ -286,7 +286,7 @@ public:
 	/// (or 1 if this is not a collection)
 	virtual std::size_t getNumGeometries() const { return 1; }
 
-	/// Returns a pointer to the nth Geometry int this collection
+	/// Returns a pointer to the nth Geometry in this collection
 	/// (or self if this is not a collection)
 	virtual const Geometry* getGeometryN(std::size_t /*n*/) const { return this; }
 
