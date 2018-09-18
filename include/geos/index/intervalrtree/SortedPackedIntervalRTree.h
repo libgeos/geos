@@ -17,6 +17,8 @@
 #define GEOS_INDEX_INTERVALRTREE_SORTEDPACKEDINTERVALRTREE_H
 
 #include <geos/index/intervalrtree/IntervalRTreeNode.h>
+#include <geos/index/intervalrtree/IntervalRTreeBranchNode.h>
+#include <geos/index/intervalrtree/IntervalRTreeLeafNode.h>
 
 // forward declarations
 namespace geos {
@@ -49,19 +51,20 @@ namespace intervalrtree {
 class SortedPackedIntervalRTree
 {
 private:
-	IntervalRTreeNode::ConstVect * leaves;
-	const IntervalRTreeNode * root;
-	int level;
+	std::vector<IntervalRTreeLeafNode> leaves;
+	std::vector<IntervalRTreeBranchNode> branches;
+	const IntervalRTreeNode * root = nullptr;
+	int level = 0;
 
 	void init();
-	void buildLevel( IntervalRTreeNode::ConstVect * src, IntervalRTreeNode::ConstVect * dest);
+	void buildLevel( IntervalRTreeNode::ConstVect & src, IntervalRTreeNode::ConstVect & dest);
 	const IntervalRTreeNode * buildTree();
 
 protected:
 public:
-	SortedPackedIntervalRTree();
+	SortedPackedIntervalRTree() {}
 
-	~SortedPackedIntervalRTree();
+	SortedPackedIntervalRTree(std::size_t initialCapacity) { leaves.reserve(initialCapacity); }
 
 	/**
 	 * Adds an item to the index which is associated with the given interval
