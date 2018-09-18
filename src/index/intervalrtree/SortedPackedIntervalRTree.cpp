@@ -101,7 +101,7 @@ void
 SortedPackedIntervalRTree::insert( double min, double max, void * item)
 {
 	if (root != nullptr)
-		throw new util::UnsupportedOperationException( "Index cannot be added to once it has been queried");
+		throw util::UnsupportedOperationException( "Index cannot be added to once it has been queried");
 
 	leaves.emplace_back(min, max, item);
 }

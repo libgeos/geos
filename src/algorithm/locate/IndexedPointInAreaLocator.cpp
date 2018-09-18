@@ -4,6 +4,7 @@
  * http://geos.osgeo.org
  *
  * Copyright (C) 2001-2002 Vivid Solutions Inc.
+ * Copyright (C) 2018 Daniel Baston <dbaston@gmail.com>
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -35,20 +36,10 @@ namespace locate {
 //
 // private:
 //
-IndexedPointInAreaLocator::IntervalIndexedGeometry::IntervalIndexedGeometry( const geom::Geometry & g)
+IndexedPointInAreaLocator::IntervalIndexedGeometry::IntervalIndexedGeometry( const geom::Geometry & g) :
+index{index::intervalrtree::SortedPackedIntervalRTree()}
 {
-	index = new index::intervalrtree::SortedPackedIntervalRTree();
 	init( g);
-}
-
-IndexedPointInAreaLocator::IntervalIndexedGeometry::~IntervalIndexedGeometry( )
-{
-	delete index;
-
-	for ( size_t i = 0, ni = allocatedSegments.size(); i < ni; ++i )
-	{
-		delete allocatedSegments[i];
-	}
 }
 
 void
@@ -57,29 +48,23 @@ IndexedPointInAreaLocator::IntervalIndexedGeometry::init( const geom::Geometry &
 	geom::LineString::ConstVect lines;
 	geom::util::LinearComponentExtracter::getLines( g, lines);
 
-	for ( size_t i = 0, ni = lines.size(); i < ni; i++ )
-	{
-		const geom::LineString * line = lines[ i ];
-		geom::CoordinateSequence * pts = line->getCoordinates();
+	for (const geom::LineString* line : lines) {
+		addLine(line->getCoordinatesRO());
+	}
 
-		addLine( pts);
-
-		delete pts;
+	for (geom::LineSegment & seg : segments) {
+		index.insert(
+			std::min( seg.p0.y, seg.p1.y),
+			std::max( seg.p0.y, seg.p1.y),
+            &seg);
 	}
 }
 
 void
-IndexedPointInAreaLocator::IntervalIndexedGeometry::addLine( geom::CoordinateSequence * pts)
+IndexedPointInAreaLocator::IntervalIndexedGeometry::addLine(const geom::CoordinateSequence * pts)
 {
-	for ( size_t i = 1, ni = pts->size(); i < ni; i++ )
-	{
-		geom::LineSegment * seg = new geom::LineSegment( (*pts)[ i - 1 ], (*pts)[ i ]);
-		double const min = std::min( seg->p0.y, seg->p1.y);
-		double const max = std::max( seg->p0.y, seg->p1.y);
-
-		// NOTE: seg ownership still ours
-		allocatedSegments.push_back(seg);
-		index->insert( min, max, seg);
+	for (size_t i = 1, ni = pts->size(); i < ni; i++) {
+		segments.emplace_back((*pts)[i - 1], (*pts)[i]);
 	}
 }
 
@@ -87,7 +72,7 @@ IndexedPointInAreaLocator::IntervalIndexedGeometry::addLine( geom::CoordinateSeq
 void
 IndexedPointInAreaLocator::buildIndex( const geom::Geometry & g)
 {
-	index = new IndexedPointInAreaLocator::IntervalIndexedGeometry( g);
+	index = std::unique_ptr<IntervalIndexedGeometry>(new IntervalIndexedGeometry(g));
 }
 
 
@@ -103,16 +88,9 @@ IndexedPointInAreaLocator::IndexedPointInAreaLocator( const geom::Geometry & g)
 {
 	if (	typeid( areaGeom) != typeid( geom::Polygon)
 		&&	typeid( areaGeom) != typeid( geom::MultiPolygon) )
-		throw new util::IllegalArgumentException("Argument must be Polygonal");
-
-	//areaGeom = g;
+		throw util::IllegalArgumentException("Argument must be Polygonal");
 
 	buildIndex( areaGeom);
-}
-
-IndexedPointInAreaLocator::~IndexedPointInAreaLocator()
-{
-	delete index;
 }
 
 int
@@ -130,15 +108,15 @@ IndexedPointInAreaLocator::locate( const geom::Coordinate * /*const*/ p)
 void
 IndexedPointInAreaLocator::SegmentVisitor::visitItem( void * item)
 {
-	geom::LineSegment * seg = (geom::LineSegment *)item;
+	geom::LineSegment* seg = static_cast<geom::LineSegment*>(item);
 
-	counter->countSegment( (*seg)[ 0 ], (*seg)[ 1 ]);
+	counter->countSegment(seg->p0, seg->p1);
 }
 
 void
 IndexedPointInAreaLocator::IntervalIndexedGeometry::query( double min, double max, index::ItemVisitor * visitor)
 {
-	index->query( min, max, visitor);
+	index.query( min, max, visitor);
 }
 
 

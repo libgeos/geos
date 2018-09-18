@@ -4,6 +4,7 @@
  * http://geos.osgeo.org
  *
  * Copyright (C) 2006 Refractions Research Inc.
+ * Copyright (C) 2018 Daniel Baston <dbaston@gmail.com>
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -18,7 +19,9 @@
 
 #include <geos/algorithm/locate/PointOnGeometryLocator.h> // inherited
 #include <geos/index/ItemVisitor.h> // inherited
+#include <geos/index/intervalrtree/SortedPackedIntervalRTree.h> // inherited
 
+#include <memory>
 #include <vector> // composition
 
 namespace geos {
@@ -30,11 +33,6 @@ namespace geos {
 		class Coordinate;
 		class CoordinateSequence;
 		class LineSegment;
-	}
-	namespace index {
-		namespace intervalrtree {
-			class SortedPackedIntervalRTree;
-		}
 	}
 }
 
@@ -58,17 +56,16 @@ private:
 	class IntervalIndexedGeometry
 	{
 	private:
-		index::intervalrtree::SortedPackedIntervalRTree * index;
+		index::intervalrtree::SortedPackedIntervalRTree index;
 
 		void init( const geom::Geometry & g);
-		void addLine( geom::CoordinateSequence * pts);
+		void addLine(const geom::CoordinateSequence * pts);
 
-		// To keep track of allocated LineSegments
-		std::vector< geom::LineSegment* > allocatedSegments;
+		// To keep track of LineSegments
+		std::vector< geom::LineSegment > segments;
 
 	public:
 		IntervalIndexedGeometry( const geom::Geometry & g);
-		~IntervalIndexedGeometry();
 
 		void query(double min, double max, index::ItemVisitor * visitor);
 	};
@@ -92,7 +89,7 @@ private:
 
 
 	const geom::Geometry & areaGeom;
-	IntervalIndexedGeometry * index;
+	std::unique_ptr<IntervalIndexedGeometry> index;
 
 	void buildIndex( const geom::Geometry & g);
 
@@ -106,8 +103,6 @@ public:
 	 * @param g the Geometry to locate in
 	 */
 	IndexedPointInAreaLocator( const geom::Geometry & g);
-
-	~IndexedPointInAreaLocator() override;
 
 	/**
 	 * Determines the {@link Location} of a point in an areal {@link Geometry}.

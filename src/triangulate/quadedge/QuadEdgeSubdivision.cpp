@@ -56,8 +56,7 @@ QuadEdgeSubdivision::getTriangleEdges(const QuadEdge &startQE,
     triEdge[1] = &triEdge[0]->lNext();
     triEdge[2] = &triEdge[1]->lNext();
     if (&triEdge[2]->lNext() != triEdge[0]) {
-        throw new
-            util::IllegalArgumentException("Edges do not form a triangle");
+        throw util::IllegalArgumentException("Edges do not form a triangle");
     }
 }
 
