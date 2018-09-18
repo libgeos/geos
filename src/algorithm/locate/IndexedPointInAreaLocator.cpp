@@ -103,7 +103,7 @@ IndexedPointInAreaLocator::IndexedPointInAreaLocator( const geom::Geometry & g)
 {
 	if (	typeid( areaGeom) != typeid( geom::Polygon)
 		&&	typeid( areaGeom) != typeid( geom::MultiPolygon) )
-		throw new util::IllegalArgumentException("Argument must be Polygonal");
+		throw util::IllegalArgumentException("Argument must be Polygonal");
 
 	//areaGeom = g;
 
