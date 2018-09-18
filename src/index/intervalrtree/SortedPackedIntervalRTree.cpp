@@ -42,14 +42,15 @@ SortedPackedIntervalRTree::init()
 const IntervalRTreeNode *
 SortedPackedIntervalRTree::buildTree()
 {
-	// sort the leaf nodes
-	std::sort( leaves.begin(), leaves.end(), IntervalRTreeNode::compare );
 	branches.reserve(leaves.size() - 1);
-
+	
 	// now group nodes into blocks of two and build tree up recursively
 	std::vector<const IntervalRTreeNode*> src{leaves.size()};
 	std::vector<const IntervalRTreeNode*> dest;
 	std::transform(leaves.begin(), leaves.end(), src.begin(), [](const IntervalRTreeLeafNode & n) { return &n; });
+	
+	// sort the leaf nodes
+	std::sort( src.begin(), src.end(), IntervalRTreeNode::compare );
 
 	while (true)
 	{

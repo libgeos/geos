@@ -84,10 +84,10 @@ public:
 	//class NodeComparator
 	//{
 	//public:
-		static bool compare( const IntervalRTreeNode & n1, const IntervalRTreeNode & n2)
+		static bool compare( const IntervalRTreeNode * n1, const IntervalRTreeNode * n2)
 		{
-			double mid1 = n1.getMin() + n1.getMax();
-			double mid2 = n2.getMin() + n2.getMax();
+			double mid1 = n1->getMin() + n1->getMax();
+			double mid2 = n2->getMin() + n2->getMax();
 
 			return mid1 > mid2;
 		}
