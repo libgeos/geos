@@ -97,7 +97,7 @@ void BoundablePair::expandToQueue(BoundablePairQueue & priQ, double minDistance)
 		return;
 	}
 
-	throw new geos::util::IllegalArgumentException("neither boundable is composite");
+	throw geos::util::IllegalArgumentException("neither boundable is composite");
 }
 
 void BoundablePair::expand(const Boundable* bndComposite, const Boundable* bndOther, BoundablePairQueue & priQ, double minDistance) {
