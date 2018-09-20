@@ -142,7 +142,7 @@ GeometryNoder::getNoded()
     delete elem;
   delete nodedEdges;
 
-  for (auto &elem : lineList)
+  for (auto &elem : p_lineList)
     delete elem;
 
   return noded;
