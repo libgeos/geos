@@ -36,8 +36,7 @@ namespace locate {
 //
 // private:
 //
-IndexedPointInAreaLocator::IntervalIndexedGeometry::IntervalIndexedGeometry( const geom::Geometry & g) :
-index{index::intervalrtree::SortedPackedIntervalRTree()}
+IndexedPointInAreaLocator::IntervalIndexedGeometry::IntervalIndexedGeometry( const geom::Geometry & g)
 {
 	init( g);
 }
