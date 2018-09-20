@@ -4,6 +4,8 @@ Changes in 3.7.1
 - Bug fixes / improvements
   - Fix crash in GEOSCoordSeq_isCCW with empty coordseq
     (#927, Sergey Fedoseev)
+  - Fix crash in GEOSInterpolate with empty LineString
+    (#926, Sergey Fedoseev)
 
 
 3.7.0 changes

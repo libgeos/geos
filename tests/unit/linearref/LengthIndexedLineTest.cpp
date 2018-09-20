@@ -470,5 +470,15 @@ void object::test<28>()
 }
 #endif
 
+template<>
+template<>
+void object::test<29>()
+{
+    GeomPtr linearGeom(reader.read("LINESTRING EMPTY"));
+    LengthIndexedLine indexedLine(linearGeom.get());
+    Coordinate pt = indexedLine.extractPoint(100);
+    ensure(pt.isNull());
+}
+
 } // namespace tut
 
