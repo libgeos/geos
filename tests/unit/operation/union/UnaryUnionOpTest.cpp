@@ -179,5 +179,17 @@ namespace tut
         doTest(geoms, "MULTILINESTRING ((0 0, 5 0), (5 0, 10 0, 5 -5, 5 0), (5 0, 5 5))");
     }
 
+    template<>
+    template<>
+    void object::test<7>()
+    {
+        static char const* const geoms[] =
+        {
+            "LINESTRING EMPTY",
+            nullptr
+        };
+        doTest(geoms, "GEOMETRYCOLLECTION EMPTY");
+    }
+
 } // namespace tut
 

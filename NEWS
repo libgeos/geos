@@ -1,3 +1,11 @@
+Changes in 3.6.4
+2018-XX-XX
+
+- Bug fixes / improvements
+  - Fix crash in GEOSUnaryUnion with empty LineString
+    (#928, Sergey Fedoseev)
+
+
 Changes in 3.6.3
 2018-08-06
 
