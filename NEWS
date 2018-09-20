@@ -1,3 +1,11 @@
+Changes in 3.7.1
+2018-XX-XX
+
+- Bug fixes / improvements
+  - Fix crash in GEOSCoordSeq_isCCW with empty coordseq
+    (#927, Sergey Fedoseev)
+
+
 3.7.0 changes
 2018-09-10
 - New things:

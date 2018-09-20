@@ -99,14 +99,14 @@ CGAlgorithms::isOnLine(const Coordinate& p, const CoordinateSequence* pt)
 bool
 CGAlgorithms::isCCW(const CoordinateSequence* ring)
 {
-	// # of points without closing endpoint
-	const std::size_t nPts=ring->getSize()-1;
-
 	// sanity check
-	if (nPts < 3)
+	if (ring->getSize() < 4)
 	{
 		throw util::IllegalArgumentException("Ring has fewer than 3 points, so orientation cannot be determined");
 	}
+
+	// # of points without closing endpoint
+	const std::size_t nPts=ring->getSize()-1;
 
 	// find highest point
 	const Coordinate *hiPt=&ring->getAt(0);

@@ -322,5 +322,15 @@ namespace tut
         ensure_equals(GEOSCoordSeq_isCCW(cs_, &ccw), 0);
     }
 
+    template<>
+    template<>
+    void object::test<10>() {
+        // no orientation
+        cs_ = GEOSCoordSeq_create(0, 0);
+        char ccw;
+
+        ensure_equals(GEOSCoordSeq_isCCW(cs_, &ccw), 0);
+    }
+
 } // namespace tut
 
