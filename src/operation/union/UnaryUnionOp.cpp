@@ -93,7 +93,9 @@ UnaryUnionOp::Union()
        */
       unionLines.reset( CascadedUnion::Union( lines.begin(),
                                               lines.end()   ) );
-      unionLines = unionNoOpt(*unionLines);
+      if (unionLines.get()) {
+          unionLines = unionNoOpt(*unionLines);
+      }
   }
 
   GeomPtr unionPolygons;

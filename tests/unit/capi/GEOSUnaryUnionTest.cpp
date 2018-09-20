@@ -207,5 +207,18 @@ namespace tut
 
     }
 
+    // Self-union an empty linestring
+    template<>
+    template<>
+    void object::test<10>()
+    {
+        geom1_ = GEOSGeomFromWKT("LINESTRING EMPTY");
+        ensure( nullptr != geom1_ );
+
+        geom2_ = GEOSUnaryUnion(geom1_);
+        ensure( nullptr != geom2_ );
+
+        ensure_equals(toWKT(geom2_), std::string("GEOMETRYCOLLECTION EMPTY"));
+    }
 } // namespace tut
 
