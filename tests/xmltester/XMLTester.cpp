@@ -136,38 +136,45 @@ const char * getIndent( unsigned int numIndents )
 
 
 
-void dump_to_stdout( const TiXmlNode * pParent, unsigned int indent = 0 )
+void dump_to_stdout( const tinyxml2::XMLNode * pParent, unsigned int indent = 0 )
 {
     if ( !pParent ) return;
 
-    const TiXmlText *pText;
+    const tinyxml2::XMLText *pText;
+#if 0
     int t = pParent->Type();
+#endif
     printf( "%s", getIndent( indent));
+
+    tinyxml2::XMLPrinter printer;
+    pParent->Accept(&printer);
+
+#if 0
 
     switch ( t )
     {
-    case TiXmlNode::DOCUMENT:
+    case tinyxml2::XMLNode::DOCUMENT:
         printf( "Document" );
         break;
 
-    case TiXmlNode::ELEMENT:
+    case tinyxml2::XMLNode::ELEMENT:
         printf( "Element \"%s\"", pParent->Value() );
         break;
 
-    case TiXmlNode::COMMENT:
+    case tinyxml2::XMLNode::COMMENT:
         printf( "Comment: \"%s\"", pParent->Value());
         break;
 
-    case TiXmlNode::UNKNOWN:
+    case tinyxml2::XMLNode::UNKNOWN:
         printf( "Unknown" );
         break;
 
-    case TiXmlNode::TEXT:
+    case tinyxml2::XMLNode::TEXT:
         pText = pParent->ToText();
         printf( "Text: [%s]", pText->Value() );
         break;
 
-    case TiXmlNode::DECLARATION:
+    case tinyxml2::XMLNode::DECLARATION:
         printf( "Declaration" );
         break;
     default:
@@ -175,12 +182,13 @@ void dump_to_stdout( const TiXmlNode * pParent, unsigned int indent = 0 )
     }
     printf( "\n" );
 
-    const TiXmlNode * pChild;
+    const tinyxml2::XMLNode * pChild;
 
     for ( pChild = pParent->FirstChild(); pChild != nullptr; pChild = pChild->NextSibling())
     {
         dump_to_stdout( pChild, indent+2 );
     }
+#endif
 }
 
 }
@@ -429,16 +437,17 @@ XMLTester::run(const std::string &source)
 
     caseCount=0;
 
-    if ( ! xml.LoadFile(source.c_str()) )
+    tinyxml2::XMLError e = xml.LoadFile(source.c_str());
+    if ( e )
     {
         std::stringstream err;
-        err << "Could not load " << source << ": " << xml.ErrorDesc();
+        err << "Could not load " << source << ": " << e << std::endl;
         throw runtime_error(err.str());
     }
 
     //dump_to_stdout(&xml);
 
-    const TiXmlNode* node = xml.FirstChild("run");
+    const tinyxml2::XMLNode* node = xml.FirstChildElement("run");
 
     if ( ! node )
       throw(runtime_error("Document has no childs"));
@@ -463,7 +472,7 @@ XMLTester::resetCounters()
 }
 
 void
-XMLTester::parseRun(const TiXmlNode* node)
+XMLTester::parseRun(const tinyxml2::XMLNode* node)
 {
     using geos::geom::PrecisionModel;
 
@@ -472,7 +481,7 @@ XMLTester::parseRun(const TiXmlNode* node)
     //dump_to_stdout(node);
 
     // Look for precisionModel element
-    const TiXmlElement* el = node->FirstChildElement("precisionModel");
+    const tinyxml2::XMLElement* el = node->FirstChildElement("precisionModel");
     if ( el ) parsePrecisionModel(el);
     else pm.reset(new PrecisionModel());
 
@@ -480,7 +489,7 @@ XMLTester::parseRun(const TiXmlNode* node)
     usePrepared = false;
     el = node->FirstChildElement("geometryOperation");
     if ( el ) {
-        const TiXmlNode* txt = el->FirstChild();
+        const tinyxml2::XMLNode* txt = el->FirstChild();
         if ( txt ) {
             std::string op = trimBlanks(txt->Value());
             if ( op.find("PreparedGeometryOperation") ) {
@@ -507,10 +516,10 @@ XMLTester::parseRun(const TiXmlNode* node)
     wkbreader.reset(new io::WKBReader(*factory));
     wkbwriter.reset(new io::WKBWriter());
 
-    const TiXmlNode* casenode;
-    for ( casenode = node->FirstChild("case");
+    const tinyxml2::XMLNode* casenode;
+    for ( casenode = node->FirstChildElement("case");
           casenode;
-          casenode = casenode->NextSibling("case") )
+          casenode = casenode->NextSiblingElement("case") )
     {
         try {
             parseCase(casenode);
@@ -522,7 +531,7 @@ XMLTester::parseRun(const TiXmlNode* node)
 }
 
 void
-XMLTester::parsePrecisionModel(const TiXmlElement* el)
+XMLTester::parsePrecisionModel(const tinyxml2::XMLElement* el)
 {
     using geos::geom::PrecisionModel;
 
@@ -643,7 +652,7 @@ XMLTester::trimBlanks(const std::string &in)
 }
 
 void
-XMLTester::parseCase(const TiXmlNode* node)
+XMLTester::parseCase(const tinyxml2::XMLNode* node)
 {
     assert(node);
 
@@ -658,7 +667,7 @@ XMLTester::parseCase(const TiXmlNode* node)
     //dump_to_stdout(node);
 
     curr_case_desc.clear();
-    const TiXmlNode* txt = node->FirstChild("desc");
+    const tinyxml2::XMLNode* txt = node->FirstChildElement("desc");
     if ( txt ) {
         txt = txt->FirstChild();
         if ( txt ) curr_case_desc = trimBlanks(txt->Value());
@@ -668,12 +677,12 @@ XMLTester::parseCase(const TiXmlNode* node)
 
 
     try {
-        const TiXmlNode *el = node->FirstChild("a");
+        const tinyxml2::XMLNode *el = node->FirstChildElement("a");
         geomAin = el->FirstChild()->Value();
         geomAin = trimBlanks(geomAin);
         gA = parseGeometry(geomAin, "Geometry A");
 
-        if ( nullptr != (el = node->FirstChild("b")) )
+        if ( nullptr != (el = node->FirstChildElement("b")) )
         {
             geomBin = el->FirstChild()->Value();
             geomBin = trimBlanks(geomBin);
@@ -702,10 +711,10 @@ XMLTester::parseCase(const TiXmlNode* node)
     ++caseCount;
     testCount=0;
 
-    const TiXmlNode* testnode;
-    for ( testnode = node->FirstChild("test");
+    const tinyxml2::XMLNode* testnode;
+    for ( testnode = node->FirstChildElement("test");
           testnode;
-          testnode = testnode->NextSibling("test") )
+          testnode = testnode->NextSiblingElement("test") )
     {
         parseTest(testnode);
     }
@@ -741,7 +750,7 @@ XMLTester::printGeom(const geom::Geometry *g)
 }
 
 void
-XMLTester::parseTest(const TiXmlNode* node)
+XMLTester::parseTest(const tinyxml2::XMLNode* node)
 {
     using namespace operation::overlay;
 
@@ -757,12 +766,12 @@ XMLTester::parseTest(const TiXmlNode* node)
 
     ++testCount;
 
-    const TiXmlNode* opnode = node->FirstChild("op");
+    const tinyxml2::XMLNode* opnode = node->FirstChildElement("op");
     if ( ! opnode ) throw(runtime_error("case has no op"));
 
     //dump_to_stdout(opnode);
 
-    const TiXmlElement* opel = opnode->ToElement();
+    const tinyxml2::XMLElement* opel = opnode->ToElement();
 
     const char* tmp = opel->Attribute("name");
     if ( tmp ) opName = tmp;
@@ -779,7 +788,7 @@ XMLTester::parseTest(const TiXmlNode* node)
     tmp = opel->Attribute("arg4");
     if ( tmp ) opArg4 = tmp;
 
-    const TiXmlNode* resnode = opnode->FirstChild();
+    const tinyxml2::XMLNode* resnode = opnode->FirstChild();
     if ( ! resnode )
     {
         std::stringstream p_tmp;
