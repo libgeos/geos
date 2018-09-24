@@ -168,7 +168,8 @@ geos_unit_SOURCES = \
 	capi/GEOSReverseTest.cpp \
 	capi/GEOSUnaryUnionTest.cpp \
 	capi/GEOSisValidDetailTest.cpp \
-	capi/GEOSisClosedTest.cpp
+	capi/GEOSisClosedTest.cpp \
+	capi/GEOSInterpolateTest.cpp
 
 noinst_HEADERS = \
 	utility.h
