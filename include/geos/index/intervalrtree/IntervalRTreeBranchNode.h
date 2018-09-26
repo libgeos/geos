@@ -38,12 +38,6 @@ private:
 	const IntervalRTreeNode * node1;
 	const IntervalRTreeNode * node2;
 
-	//void buildExtent( IntervalRTreeNode * n1, IntervalRTreeNode * n2)
-	//{
-	//	min = std::min( n1->min, n2->min);
-	//	max = std::max( n1->max, n2->max);
-	//}
-
 protected:
 public:
 	IntervalRTreeBranchNode( const IntervalRTreeNode * n1, const IntervalRTreeNode * n2)
@@ -51,13 +45,6 @@ public:
 		node1( n1),
 		node2( n2)
 	{ }
-
-	~IntervalRTreeBranchNode() override
-	{
-		delete node1;
-		delete node2;
-	}
-
 
 	void query(double queryMin, double queryMax, index::ItemVisitor * visitor) const override;
 };
