@@ -143,7 +143,6 @@ OBJ = \
 	index\chain\MonotoneChainSelectAction.$(EXT) \
 	index\intervalrtree\IntervalRTreeBranchNode.$(EXT) \
 	index\intervalrtree\IntervalRTreeLeafNode.$(EXT) \
-	index\intervalrtree\IntervalRTreeNode.$(EXT) \
 	index\intervalrtree\SortedPackedIntervalRTree.$(EXT) \
 	index\quadtree\DoubleBits.$(EXT) \
 	index\quadtree\IntervalSize.$(EXT) \
