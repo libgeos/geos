@@ -19,7 +19,6 @@
 #include <geos/index/intervalrtree/IntervalRTreeNode.h> // inherited
 
 #include <algorithm>
-#include <typeinfo>
 
 // forward declarations
 namespace geos {
