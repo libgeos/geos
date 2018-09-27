@@ -653,7 +653,7 @@ GeometryFactory::createLineString(const CoordinateSequence &fromCoords)
 Geometry*
 GeometryFactory::buildGeometry(vector<Geometry *> *newGeoms) const
 {
-	string geomClass("NULL");
+	string geomClass;
 	bool isHeterogeneous=false;
 	bool hasGeometryCollection=false;
 
@@ -661,7 +661,7 @@ GeometryFactory::buildGeometry(vector<Geometry *> *newGeoms) const
 	{
 		Geometry* geom = (*newGeoms)[i];
 		string partClass(typeid(*geom).name());
-		if (geomClass=="NULL")
+		if (geomClass.empty())
 		{
 			geomClass=partClass;
 		}
@@ -676,7 +676,7 @@ GeometryFactory::buildGeometry(vector<Geometry *> *newGeoms) const
 	}
 
 	// for the empty geometry, return an empty GeometryCollection
-	if (geomClass=="NULL")
+	if (geomClass.empty())
 	{
 		// we do not need the vector anymore
 		delete newGeoms;
@@ -717,7 +717,7 @@ GeometryFactory::buildGeometry(vector<Geometry *> *newGeoms) const
 Geometry*
 GeometryFactory::buildGeometry(const vector<Geometry *> &fromGeoms) const
 {
-	string geomClass("NULL");
+	string geomClass;
 	bool isHeterogeneous=false;
 	bool isCollection=fromGeoms.size()>1;
 	size_t i;
@@ -725,7 +725,7 @@ GeometryFactory::buildGeometry(const vector<Geometry *> &fromGeoms) const
 	for (i=0; i<fromGeoms.size(); i++) {
 		Geometry *geom = fromGeoms[i];
 		string partClass(typeid(*geom).name());
-		if (geomClass=="NULL") {
+		if (geomClass.empty()) {
 			geomClass=partClass;
 		} else if (geomClass!=partClass) {
 			isHeterogeneous = true;
@@ -733,7 +733,7 @@ GeometryFactory::buildGeometry(const vector<Geometry *> &fromGeoms) const
 	}
 
 	// for the empty geometry, return an empty GeometryCollection
-	if (geomClass=="NULL") {
+	if (geomClass.empty()) {
 		return createGeometryCollection();
 	}
 	if (isHeterogeneous) {
