@@ -2,7 +2,7 @@ dnl
 dnl configure.in - autoconf input template to produce ./configure script
 dnl
 dnl version 2.52 is required for Cygwin libtool support
-AC_PREREQ([2.52])
+AC_PREREQ([2.63])
 
 dnl local vars to hold user's preferences --------------------------------
 AC_INIT([include/geos.h])
