@@ -17,22 +17,27 @@ More on: https://trac.osgeo.org/geos#BuildandInstall
 
 ### Unix
 
-Using Autotools:
+#### Prerequisites
+
+geos requires a C++11 compiler
+
+#### Using Autotools:
 
     ./autogen.sh  # in ${srcdir}, if obtained from SVN or GIT
-    ${srcdir}/configure # in build dir
+    (mkdir obj && cd obj && ../configure)
 
-Using CMake:
+#### Using CMake:
 
-    cmake ${srcdir} # in build dir
+    (mkdir build && cd build && cmake ..)
 
-Now, all versions:
+#### Either Autotools or CMake
 
     make
     make check
-    make install # as root
-    ldconfig # as root
+    make install # (as root, assuming PREFIX is not writable by the build user)
 
+    On a GNU/Linux system, if installed in a system prefix:
+      ldconfig # as root
 
 ### Microsoft Windows
 
