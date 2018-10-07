@@ -15,11 +15,11 @@ More on: https://trac.osgeo.org/geos#BuildandInstall
 
 ## Building, testing, installing
 
+### Prerequisites
+
+Building GEOS requires a C++11 compiler
+
 ### Unix
-
-#### Prerequisites
-
-geos requires a C++11 compiler
 
 #### Using Autotools:
 
