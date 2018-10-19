@@ -57,6 +57,6 @@ geos_la_CPPFLAGS = $(AM_CPPFLAGS) \
 
 install: all
 	$(INSTALL) -d "$(DESTDIR)"/`$(PHP_CONFIG) --extension-dir`
-	$(INSTALL) -m 755 .libs/geos.so "$(DESTDIR)"/`php-config --extension-dir`
+	$(INSTALL) -m 755 .libs/geos.so "$(DESTDIR)"/`$(PHP_CONFIG) --extension-dir`
 
 endif
