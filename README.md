@@ -104,12 +104,12 @@ Basic usage examples can be found in `doc/example.cpp`.
 Ruby bindings are fully supported. To build, use the `--enable-ruby` option
 when configuring:
 
-    ./configure ... --enable-ruby
+    ./configure .. --enable-ruby
 
 Since version 3.6.0 PHP bindings are not included in the core
 library anymore but available as a separate project:
 
-    https://git.osgeo.org/gogs/geos/php-geos
+* https://git.osgeo.org/gitea/geos/php-geos
 
 Since version 3.0, the Python bindings are unsupported. Recommended options:
 
