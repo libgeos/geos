@@ -40,9 +40,10 @@ if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK AND GEOS_BUILD_SHARED)
       CLEAN_DIRECT_OUTPUT 1)
   endif()
 
+  add_dependencies(geos_c geos_revision)
+
 endif()
 
-add_dependencies(geos_c geos_revision)
 
 #################################################################################
 # Installation
