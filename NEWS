@@ -8,6 +8,8 @@ Changes in 3.7.1
     (#926, Sergey Fedoseev)
   - Fix crash in GEOSUnaryUnion with empty LineString
     (#928, Sergey Fedoseev)
+  - Reduce required autoconf to 2.63
+    (#56, John Harvey)
 
 
 3.7.0 changes
