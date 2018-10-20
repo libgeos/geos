@@ -1,72 +1,62 @@
-#################################################################################
+################################################################################
+# Part of CMake configuration for GEOS
 #
-# GEOS C library build configuration for CMake build system
-#
-# Copyright (C) 2009 Mateusz Loskot <mateusz@loskot.net>
+# Copyright (C) 2018 Mateusz Loskot <mateusz@loskot.net>
 #
 # This is free software; you can redistribute and/or modify it under
 # the terms of the GNU Lesser General Public Licence as published
 # by the Free Software Foundation.
 # See the COPYING file for more information.
-#
-#################################################################################
+################################################################################
+find_package(Git REQUIRED)
 
-if(WIN32)
-    add_definitions("-DGEOS_DLL_EXPORT=1")
-endif()
+file(WRITE ${CMAKE_BINARY_DIR}/geos_revision.h.in
+"\#define GEOS_REVISION \"@GEOS_REVISION@\"\n")
 
-set(geos_c_SOURCES
-  geos_c.cpp
-  geos_ts_c.cpp)
+file(WRITE ${CMAKE_BINARY_DIR}/geos_revision.cmake
+"
+execute_process(COMMAND \${GIT} describe --tags --always
+  WORKING_DIRECTORY \${CWD}
+  OUTPUT_VARIABLE GEOS_REVISION
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+configure_file(\${SRC} \${DST} @ONLY)
+")
 
-file(GLOB geos_capi_HEADERS ${CMAKE_BINARY_DIR}/capi/*.h) # fix source_group issue
+add_custom_target(geos_revision
+  COMMAND ${CMAKE_COMMAND}
+    -D CWD=${CMAKE_CURRENT_SOURCE_DIR}
+    -D GIT=${GIT_EXECUTABLE}
+    -D SRC=${PROJECT_BINARY_DIR}/geos_revision.h.in
+    -D DST=${PROJECT_BINARY_DIR}/geos_revision.h
+    -P ${PROJECT_BINARY_DIR}/geos_revision.cmake)
 
-if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK AND GEOS_BUILD_SHARED)
-  # if building OS X framework or only building static libs, CAPI built into C++ library
-  add_library(geos_c SHARED ${geos_c_SOURCES})
+add_dependencies(geos_c geos_revision)
 
-  target_link_libraries(geos_c geos)
+file(GLOB_RECURSE _headers ${CMAKE_CURRENT_LIST_DIR}/*.cpp  CONFIGURE_DEPEND)
+target_sources(geos_c PRIVATE ${_headers})
+unset(_headers)
 
-  if (WIN32)
-    set_target_properties(geos_c
-      PROPERTIES
-      VERSION ${CAPI_VERSION}
-      CLEAN_DIRECT_OUTPUT 1)
-  else()
-    set_target_properties(geos_c
-      PROPERTIES
-      VERSION ${CAPI_VERSION}
-      SOVERSION ${CAPI_SOVERSION}
-      CLEAN_DIRECT_OUTPUT 1)
-  endif()
+target_include_directories(geos_c
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+    $<INSTALL_INTERFACE:include/geos>)
 
-  add_dependencies(geos_c geos_revision)
+set(VERSION ${GEOS_VERSION})
+set(VERSION_MAJOR ${GEOS_VERSION_MAJOR})
+set(VERSION_MINOR ${GEOS_VERSION_MINOR})
+set(VERSION_PATCH ${GEOS_VERSION_PATCH})
 
-endif()
+math(EXPR CAPI_VERSION_MAJOR "${CAPI_INTERFACE_CURRENT} - ${CAPI_INTERFACE_AGE}")
+set(CAPI_VERSION_MINOR ${CAPI_INTERFACE_AGE})
+set(CAPI_VERSION_PATCH ${CAPI_INTERFACE_REVISION})
+set(CAPI_VERSION "${CAPI_VERSION_MAJOR}.${CAPI_VERSION_MINOR}.${CAPI_VERSION_PATCH}")
 
+geos_configure_file(
+  ${CMAKE_CURRENT_LIST_DIR}/geos_c.h.in
+  ${CMAKE_CURRENT_BINARY_DIR}/geos_c.h
+  @ONLY)
 
-#################################################################################
-# Installation
-#################################################################################
-
-if(APPLE AND GEOS_ENABLE_MACOSX_FRAMEWORK)
-  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/geos_c.h
-    DESTINATION GEOS.framework/Versions/${VERSION_MAJOR}/Headers)
-  install(CODE "execute_process(COMMAND sed -E -i \"\" \"s,# *include[[:space:]]+<geos/,#include <GEOS/,g\" \"$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/GEOS.framework/Versions/${VERSION_MAJOR}/Headers/geos_c.h\")")
-else()
-  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/geos_c.h
-    DESTINATION include)
-endif()
-
-if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK AND GEOS_BUILD_SHARED)
-  install(TARGETS geos_c
-    RUNTIME DESTINATION bin
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib)
-endif()
-
-#################################################################################
-# Group source files for IDE source explorers (e.g. Visual Studio)
-#################################################################################
-
-source_group("Header Files" FILES ${geos_capi_HEADERS})
+unset(VERSION)
+unset(VERSION_MAJOR)
+unset(VERSION_MINOR)
+unset(VERSION_PATCH)

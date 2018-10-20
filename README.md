@@ -17,111 +17,50 @@ More on: https://trac.osgeo.org/geos#BuildandInstall
 
 ### Prerequisites
 
-Building GEOS requires a C++11 compiler
+Building GEOS requires a C++11 compiler and
+[CMake 3.12](https://cmake.org/files/v3.12/) or later.
 
-### Unix
+### Building GEOS
 
-#### Using Autotools:
+```shell
+git clone https://github.com/libgeos/geos.git
+mkdir geos/_build
+cd geos/_build
+cmake -DCMAKE_INSTALL_PREFIX=/usr/local ..
+cmake --build . --config Release
+```
 
-    ./autogen.sh  # in ${srcdir}, if obtained from SVN or GIT
-    (mkdir obj && cd obj && ../configure)
+### Testing GEOS
 
-#### Using CMake:
+```shell
+cd geos/_build
+ctest --build-config Release
+```
 
-    (mkdir build && cd build && cmake ..)
+List all available test targets:
 
-#### Either Autotools or CMake
+```shell
+cmake --build . --target help | grep test
+```
 
-    make
-    make check
-    make install # (as root, assuming PREFIX is not writable by the build user)
+Run selected test target:
 
-    On a GNU/Linux system, if installed in a system prefix:
-      ldconfig # as root
+```shell
+ctest --build-config Release -R test_xmltester
+```
 
-### Microsoft Windows
+### Installing GEOS
 
-If you use Microsoft Visual C++ (7.1 or later) compiler, you can build
-GEOS using NMAKE program and provided `makefile.vc` files.
+```shell
+cd geos/_build
+cmake --build . --config Release --target install
+```
 
-If you are building from SVN or GIT checkout, first run: `autogen.bat`
-Then:
+### Building GEOS client
 
-    nmake /f makefile.vc MSVC_VER=1400
-
-where 1400 is version number of Visual C++ compiler, here Visual C++ 8.0
-from Visual Studio 2005 (supported versions are 1300, 1310, 1400, 1500,
-1600, 1700, 1800 and 1900).
-The bootstrap.bat step is required to generate a couple of header files.
-
-In order to build debug configuration of GEOS, additional flag `DEBUG=1`
-is required:
-
-    nmake /f makefile.vc MSVC_VER=1400 DEBUG=1
-
-
-## Client applications
-
-### Using the C interface (recommended)
-
-GEOS promises long term stability of C API
-
-The C library uses the C++ interface, but the C library follows
-normal ABI-change-sensitive versioning, so programs that link only
-against the C library should work without relinking when GEOS is upgraded.
-
-To compile programs against the C lib (recommended):
-
-    CFLAGS += `geos-config --cflags`
-    LDFLAGS += `geos-config --ldflags` -lgeos_c
-    #include <geos_c.h>
-
-Example usage:
-
-    capi/geostest.c contains basic usage examples.
-
-### Using the C++ interface (no stability promise)
-
-Developers who decide to use the C++ interface should be aware GEOS
-does not promise API or ABI stability of C++ API between releases.
-Moreover C++ API/ABI breaking changes may not even be announced
-or include in the NEWS file
-
-The C++ library name will change on every minor release because
-it is too hard to know if there have been ABI changes.
-
-To compile programs against the C++ lib:
-
-    CFLAGS += `geos-config --cflags`
-    LDFLAGS += `geos-config --ldflags` -lgeos
-    #include <geos.h>
-
-Basic usage examples can be found in `doc/example.cpp`.
-
-
-### Scripting language bindings
-
-Ruby bindings are fully supported. To build, use the `--enable-ruby` option
-when configuring:
-
-    ./configure .. --enable-ruby
-
-Since version 3.6.0 PHP bindings are not included in the core
-library anymore but available as a separate project:
-
-* https://git.osgeo.org/gitea/geos/php-geos
-
-Since version 3.0, the Python bindings are unsupported. Recommended options:
-
- 1. Become or recruit a new maintainer.
- 2. Use [Shapely](http://pypi.python.org/pypi/Shapely) with Python
-    versions 2.4 or greater.
- 3. Simply call functions from `libgeos_c` via Python ctypes.
-
-## Documentation
-
-To build Doxygen documentation:
-
-    cd doc
-    make doxygen-html
-
+```shell
+mkdir geos/_build_client
+cd geos/_build_client
+cmake -DCMAKE_PREFIX_PATH=/usr/local ../examples/client
+cmake --build . --config Release
+```

@@ -61,3 +61,5 @@ authors.git
 !/docker/**/README
 !/docker/**/Makefile
 /.vs*
+/.idea
+/CMakeSettings.json

@@ -1,6 +1,5 @@
 # .travis.yml - Travis CI service configuration for GEOS
 #
-#
 # This is free software; you can redistribute and/or modify it under
 # the terms of the GNU Lesser General Public Licence as published
 # by the Free Software Foundation.
@@ -14,7 +13,6 @@ language: cpp
 ref:
   sources: &sources
     - ubuntu-toolchain-r-test
-    - george-edison55-precise-backports
 
 matrix:
   fast_finish: true
@@ -23,33 +21,9 @@ matrix:
       addons:
         apt:
           sources: *sources
-          packages: ['g++-7','cmake']
-      env:
-        - E="TOOL=cmake && CXX=g++-7 && ARCH=-m64 && CC=gcc-7"
-
-    - os: linux
-      addons:
-        apt:
-          sources: *sources
           packages: ['g++-7']
       env:
-        - E="TOOL=autotools && CXX=g++-7 && ARCH=-m64 && CC=gcc-7"
-
-    - os: linux
-      addons:
-        apt:
-          sources: *sources
-          packages: ['g++-7-multilib','gcc-7-multilib','g++-multilib','gcc-multilib']
-      env:
-        - E="TOOL=autotools && CXX=g++-7 && ARCH=-m32 && CC=gcc-7"
-
-    - os: linux
-      addons:
-        apt:
-          sources: *sources
-          packages: ['g++-4.8','cmake']
-      env:
-        - E="TOOL=cmake && CXX=g++-4.8 && ARCH=-m64 && CC=gcc-4.8"
+        - E="CXX=g++-7 && ARCH=-m64 && CC=gcc-7"
 
     - os: linux
       addons:
@@ -57,23 +31,7 @@ matrix:
           sources: *sources
           packages: ['g++-4.8']
       env:
-        - E="TOOL=autotools && CXX=g++-4.8 && ARCH=-m64 && CC=gcc-4.8"
-
-    - os: linux
-      addons:
-        apt:
-          sources: *sources
-          packages: ['g++-4.8-multilib','gcc-4.8-multilib','g++-multilib','gcc-multilib']
-      env:
-        - E="TOOL=autotools && CXX=g++-4.8 && ARCH=-m32 && CC=gcc-4.8"
-
-    - os: linux
-      addons:
-        apt:
-          sources: *sources
-          packages: ['clang-3.9','cmake']
-      env:
-        - E="TOOL=cmake && CXX=clang++-3.9 && ARCH=-m64 && CC=clang-3.9"
+        - E="CXX=g++-4.8 && ARCH=-m64 && CC=gcc-4.8"
 
     - os: linux
       addons:
@@ -81,7 +39,7 @@ matrix:
           sources: *sources
           packages: ['clang-3.9']
       env:
-        - E="TOOL=autotools && CXX=clang++-3.9 && ARCH=-m64 && CC=clang-3.9"
+        - E="CXX=clang++-3.9 && ARCH=-m64 && CC=clang-3.9"
 
     - os: linux
       addons:
@@ -89,24 +47,36 @@ matrix:
           sources: *sources
           packages: ['clang']
       env:
-        - E="TOOL=autotools && CXX=clang++ && ARCH=-m64 && CC=clang"
-
-    - os: linux
-      addons:
-        apt:
-          sources: *sources
-          packages: ['clang','cmake']
-      env:
-        - E="TOOL=cmake && CXX=clang++ && ARCH=-m64 && CC=clang"
+        - E="CXX=clang++ && ARCH=-m64 && CC=clang"
 
 before_install:
   - eval "${E}"
   - export CXXFLAGS=${ARCH}
   - export CFLAGS=${ARCH}
-  - export GEOS_BUILD_TOOL=${TOOL}
+  - export GEOS_BUILD_TOOL=cmake
   - ${CXX} --version
 
-script: ./tools/ci/script.sh
+install:
+  - which cmake
+  - cmake --version
+  - wget -O cmake-linux.sh https://cmake.org/files/v3.12/cmake-3.12.3-Linux-x86_64.sh
+  - sudo sh cmake-linux.sh -- --skip-license --prefix=/usr/local
+  - export PATH=/usr/local/bin:$PATH
+  - which cmake
+  - cmake --version
+
+script:
+  - mkdir -p ${TRAVIS_BUILD_DIR}/_build
+  - mkdir -p ${TRAVIS_BUILD_DIR}/_install
+  - cd ${TRAVIS_BUILD_DIR}/_build
+  - cmake -DCMAKE_INSTALL_PREFIX=${TRAVIS_BUILD_DIR}/_install ${TRAVIS_BUILD_DIR}
+  - cmake --build .
+  - ctest --output-on-failure
+  - cmake --build . --target install
+  - mkdir -p ${TRAVIS_BUILD_DIR}/_build_client
+  - cd ${TRAVIS_BUILD_DIR}/_build_client
+  - cmake -DCMAKE_PREFIX_PATH=${TRAVIS_BUILD_DIR}/_install -DCMAKE_VERBOSE_MAKEFILE=ON ${TRAVIS_BUILD_DIR}/examples/client
+  - cmake --build .
 
 notifications:
     irc:
