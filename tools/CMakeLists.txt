@@ -11,31 +11,43 @@
 #
 #################################################################################
 
-if(UNIX OR MINGW)
 
-  if(APPLE AND GEOS_ENABLE_MACOSX_FRAMEWORK AND GEOS_ENABLE_MACOSX_FRAMEWORK_UNIXCOMPAT)
-    set(installdest GEOS.framework/Versions/${VERSION_MAJOR}/unix/bin)
-    set(prefix ${CMAKE_INSTALL_PREFIX}/GEOS.framework/Versions/${VERSION_MAJOR}/unix)
-  elseif(APPLE AND GEOS_ENABLE_MACOSX_FRAMEWORK)
-    # just a dummy so installdest not set
-    # want geos-config only for Mac unix build or framework+unixcompat
-  else()
-    set(installdest bin)
-    set(prefix ${CMAKE_INSTALL_PREFIX})
-  endif()
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/geos-config.in
+               ${CMAKE_CURRENT_BINARY_DIR}/geos-config)
 
-  set(exec_prefix ${prefix}/bin)
-  set(libdir ${prefix}/lib)
 
-  if(installdest)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/geos-config.in
-                   ${CMAKE_CURRENT_BINARY_DIR}/geos-config @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/geos-config
+        DESTINATION bin
+        PERMISSIONS
+        OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/geos-config
-      DESTINATION ${installdest}
-      PERMISSIONS
-      OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-endif()
-
-endif()
 add_subdirectory(astyle)
+
+# if(UNIX OR MINGW)
+
+#   if(APPLE AND GEOS_ENABLE_MACOSX_FRAMEWORK AND GEOS_ENABLE_MACOSX_FRAMEWORK_UNIXCOMPAT)
+#     set(installdest GEOS.framework/Versions/${VERSION_MAJOR}/unix/bin)
+#     set(prefix ${CMAKE_INSTALL_PREFIX}/GEOS.framework/Versions/${VERSION_MAJOR}/unix)
+#   elseif(APPLE AND GEOS_ENABLE_MACOSX_FRAMEWORK)
+#     # just a dummy so installdest not set
+#     # want geos-config only for Mac unix build or framework+unixcompat
+#   else()
+#     set(installdest bin)
+#     set(prefix ${CMAKE_INSTALL_PREFIX})
+#   endif()
+
+#   set(exec_prefix ${prefix}/bin)
+#   set(libdir ${prefix}/lib)
+
+#   if(installdest)
+#     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/geos-config.in
+#                    ${CMAKE_CURRENT_BINARY_DIR}/geos-config @ONLY)
+
+#     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/geos-config
+#       DESTINATION ${installdest}
+#       PERMISSIONS
+#       OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+# endif()
+
+# endif()
+

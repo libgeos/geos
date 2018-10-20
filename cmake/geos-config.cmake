@@ -8,5 +8,4 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 ################################################################################
-add_subdirectory(buffer)
-add_subdirectory(predicate)
+include("${CMAKE_CURRENT_LIST_DIR}/geos-targets.cmake")
