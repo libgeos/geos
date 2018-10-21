@@ -9,7 +9,23 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 #
-sh autogen.sh
-./configure
-make
-make check
+# auto tools
+if false; then
+    sh autogen.sh
+    ./configure
+    make
+    make check
+fi
+
+
+# cmake
+if true; then
+    rm -rf build
+    mkdir -p build
+    cd build
+    cmake ../
+    make
+    [ -f CMakeCache.txt ] && \
+        ctest --output-on-failure . || \
+        make check
+fi
