@@ -409,7 +409,7 @@ GEOSFree_r (GEOSContextHandle_t extHandle, void* buffer)
 
 //-----------------------------------------------------------
 // relate()-related functions
-//  return 0 = false, 1 = true, 2 = error occured
+//  return 0 = false, 1 = true, 2 = error occurred
 //-----------------------------------------------------------
 
 char
@@ -1006,14 +1006,14 @@ GEOSisValidDetail_r(GEOSContextHandle_t extHandle, const Geometry *g,
 {
     if ( 0 == extHandle )
     {
-        return 0;
+        return 2;
     }
 
     GEOSContextHandleInternal_t *handle = 0;
     handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
     if ( 0 == handle->initialized )
     {
-        return 0;
+        return 2;
     }
 
     try
@@ -1266,7 +1266,7 @@ GEOSLength_r(GEOSContextHandle_t extHandle, const Geometry *g, double *length)
 
     if ( 0 == extHandle )
     {
-        return 2;
+        return 0;
     }
 
     GEOSContextHandleInternal_t *handle = 0;
