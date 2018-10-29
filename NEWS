@@ -4,6 +4,8 @@ Changes in 3.6.4
 - Bug fixes / improvements
   - Fix crash in GEOSUnaryUnion with empty LineString
     (#928, Sergey Fedoseev)
+  - Fix incorrect error return values in GEOSLength and
+    GEOSisValidDetail (#941, Dan Baston)
 
 
 Changes in 3.6.3
