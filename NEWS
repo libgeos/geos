@@ -10,6 +10,8 @@ Changes in 3.7.1
     (#928, Sergey Fedoseev)
   - Reduce required autoconf to 2.63
     (#56, John Harvey)
+  - Fix incorrect return values on error from GEOSLength
+    GEOSisValidDetail (#941, Dan Baston)
 
 
 3.7.0 changes
