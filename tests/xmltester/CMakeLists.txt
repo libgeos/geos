@@ -17,16 +17,14 @@ set(STATUS_RESULT "OFF")
 if(GEOS_ENABLE_TESTS)
 
   include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/tinyxml)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/tinyxml2)
 
   set(simplewkttester_SOURCES SimpleWKTTester.cpp)
 
   set(xmltester_SOURCES
     XMLTester.cpp
-    tinyxml/tinyxml.cpp
-    tinyxml/tinystr.cpp
-    tinyxml/tinyxmlerror.cpp
-    tinyxml/tinyxmlparser.cpp
+    tinyxml2/tinyxml2.h
+    tinyxml2/tinyxml2.cpp
     BufferResultMatcher.cpp
     SingleSidedBufferResultMatcher.cpp)
 

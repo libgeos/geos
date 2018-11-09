@@ -140,55 +140,12 @@ void dump_to_stdout( const tinyxml2::XMLNode * pParent, unsigned int indent = 0 
 {
     if ( !pParent ) return;
 
-    const tinyxml2::XMLText *pText;
-#if 0
-    int t = pParent->Type();
-#endif
     printf( "%s", getIndent( indent));
 
     tinyxml2::XMLPrinter printer;
     pParent->Accept(&printer);
 
-#if 0
 
-    switch ( t )
-    {
-    case tinyxml2::XMLNode::DOCUMENT:
-        printf( "Document" );
-        break;
-
-    case tinyxml2::XMLNode::ELEMENT:
-        printf( "Element \"%s\"", pParent->Value() );
-        break;
-
-    case tinyxml2::XMLNode::COMMENT:
-        printf( "Comment: \"%s\"", pParent->Value());
-        break;
-
-    case tinyxml2::XMLNode::UNKNOWN:
-        printf( "Unknown" );
-        break;
-
-    case tinyxml2::XMLNode::TEXT:
-        pText = pParent->ToText();
-        printf( "Text: [%s]", pText->Value() );
-        break;
-
-    case tinyxml2::XMLNode::DECLARATION:
-        printf( "Declaration" );
-        break;
-    default:
-        break;
-    }
-    printf( "\n" );
-
-    const tinyxml2::XMLNode * pChild;
-
-    for ( pChild = pParent->FirstChild(); pChild != nullptr; pChild = pChild->NextSibling())
-    {
-        dump_to_stdout( pChild, indent+2 );
-    }
-#endif
 }
 
 }
@@ -313,7 +270,6 @@ XMLTester::XMLTester()
     :
     gA(nullptr),
     gB(nullptr),
-    gT(nullptr),
     pm(nullptr),
     factory(nullptr),
     wktreader(nullptr),
