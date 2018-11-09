@@ -48,7 +48,6 @@ private:
 
 	geom::Geometry *gA;
 	geom::Geometry *gB;
-	geom::Geometry *gT;
 
 	bool usePrepared;
 	std::unique_ptr<geom::PrecisionModel> pm;
