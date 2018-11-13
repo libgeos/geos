@@ -1,5 +1,5 @@
 <run>
-<precisionModel scale=1.0 offsetx=0.0 offsety=0.0/>
+<precisionModel scale="1.0" offsetx="0.0" offsety="0.0" />
 <case><desc>Case #</desc>
 <a>
 MULTILINESTRING((0 0, 10 0), (10 0, 20 0))
