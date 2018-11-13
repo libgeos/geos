@@ -398,6 +398,7 @@ XMLTester::run(const std::string &source)
     {
         std::stringstream err;
         err << "Could not load " << source << ": " << e << std::endl;
+        xml.~XMLDocument(); // Deallocates various internal pools
         throw runtime_error(err.str());
     }
 
