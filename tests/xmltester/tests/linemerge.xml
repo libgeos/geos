@@ -1,5 +1,5 @@
 <run>
-<precisionModel scale='1.0' offsetx='0.0' offsety='0.0' />
+<precisionModel scale="1.0" offsetx="0.0" offsety="0.0" />
 <case>
 <desc>Case</desc>
 <a>
