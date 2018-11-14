@@ -113,7 +113,7 @@ private:
    */
   void add(const geom::Geometry& geom);
 
-  void setBasePoint(const geom::Coordinate& basePt);
+  void setAreaBasePoint(const geom::Coordinate& basePt);
 
   void add(const geom::Polygon& poly);
 

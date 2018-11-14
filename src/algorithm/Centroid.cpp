@@ -88,10 +88,9 @@ Centroid::add(const Geometry& geom)
 
 /* private */
 void
-Centroid::setBasePoint(const Coordinate& basePt)
+Centroid::setAreaBasePoint(const Coordinate& basePt)
 {
-  if ( ! areaBasePt.get() )
-      areaBasePt.reset( new Coordinate(basePt) );
+  areaBasePt.reset( new Coordinate(basePt) );
 }
 
 /* private */
@@ -110,7 +109,7 @@ Centroid::addShell(const CoordinateSequence& pts)
 {
   size_t len = pts.size();
   if (len > 0)
-    setBasePoint(pts[0]);
+    setAreaBasePoint(pts[0]);
   bool isPositiveArea = ! CGAlgorithms::isCCW(&pts);
   for (size_t i = 0; i < len - 1; ++i) {
     addTriangle(*areaBasePt, pts[i], pts[i+1], isPositiveArea);
