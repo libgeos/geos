@@ -101,7 +101,9 @@ INVALID_OUTPUT_XMLTESTS =
 
 FAILING_XMLTESTS = \
 	$(srcdir)/tests/failure/TestOverlay.xml \
-	$(srcdir)/tests/ticket/bug488.xml
+	$(srcdir)/tests/ticket/bug488.xml \
+	$(srcdir)/tests/ticket/bug344.xml \
+	$(srcdir)/tests/TestBigNastyBuffer.xml
 
 XMLTESTS=$(SAFE_XMLTESTS) $(INVALID_OUTPUT_XMLTESTS) $(FAILING_XMLTESTS)
 

@@ -21,10 +21,11 @@
 
 #include <geos/export.h>
 
-#include <geos/operation/GeometryGraphOperation.h> // for inheritance
-#include <geos/geomgraph/EdgeList.h> // for composition
 #include <geos/algorithm/PointLocator.h> // for composition
+#include <geos/geom/Dimension.h> // for Dimension::DimensionType
+#include <geos/geomgraph/EdgeList.h> // for composition
 #include <geos/geomgraph/PlanarGraph.h> // for inline (GeometryGraph->PlanarGraph)
+#include <geos/operation/GeometryGraphOperation.h> // for inheritance
 
 #include <vector>
 
@@ -327,6 +328,29 @@ private:
 	 */
 	bool isCovered(const geom::Coordinate& coord,
 			std::vector<geom::LineString*> *geomList);
+	/**
+	* For empty result, what is the correct geometry type to apply to 
+	* the empty?
+	*/
+	geom::Dimension::DimensionType resultDimension(OverlayOp::OpCode overlayOpCode, 
+		const geom::Geometry *g0, const geom::Geometry *g1);
+
+	/**
+	* Creates an empty result geometry of the appropriate dimension,
+	* based on the given overlay operation and the dimensions of the inputs.
+	* The created geometry is always an atomic geometry, 
+	* not a collection.
+	*  
+	* The empty result is constructed using the following rules:
+	*  
+	* * #opINTERSECTION  result has the dimension of the lowest input dimension
+	* * #opUNION - result has the dimension of the highest input dimension
+	* * #opDIFFERENCE - result has the dimension of the left-hand input
+	* * #opSYMDIFFERENCE - result has the dimension of the highest input dimension
+	*/
+	geom::Geometry* createEmptyResult(
+		OverlayOp::OpCode overlayOpCode, const geom::Geometry *a, 
+		const geom::Geometry *b, const geom::GeometryFactory *geomFact);
 
 	/**
 	 * Build a Geometry containing all Geometries in the given vectors.
@@ -335,7 +359,8 @@ private:
 	geom::Geometry* computeGeometry(
 			std::vector<geom::Point*> *nResultPointList,
 			std::vector<geom::LineString*> *nResultLineList,
-			std::vector<geom::Polygon*> *nResultPolyList);
+			std::vector<geom::Polygon*> *nResultPolyList,
+			OverlayOp::OpCode opCode);
 
 	/// Caches for memory management
 	std::vector<geomgraph::Edge *>dupEdges;

@@ -639,11 +639,62 @@ OverlayOp::isCovered(const Coordinate& coord,vector<Polygon*> *geomList)
 	return false;
 }
 
+Dimension::DimensionType
+OverlayOp::resultDimension(OverlayOp::OpCode overlayOpCode, 
+                const Geometry *g0, const Geometry *g1)
+{
+	Dimension::DimensionType dim0 = g0->getDimension();
+	Dimension::DimensionType dim1 = g1->getDimension();
+
+	Dimension::DimensionType resultDimension = Dimension::False;
+	switch (overlayOpCode) 
+	{
+		case OverlayOp::opINTERSECTION: 
+			resultDimension = min(dim0, dim1);
+			break;
+		case OverlayOp::opUNION: 
+			resultDimension = max(dim0, dim1);
+			break;
+		case OverlayOp::opDIFFERENCE: 
+			resultDimension = dim0;
+			break;
+		case OverlayOp::opSYMDIFFERENCE: 
+			resultDimension = max(dim0, dim1);
+			break;
+	}
+	return resultDimension;
+}
+
+geom::Geometry*
+OverlayOp::createEmptyResult(OverlayOp::OpCode overlayOpCode, 
+                             const geom::Geometry *a, const geom::Geometry *b, 
+                             const GeometryFactory *geomFact)
+{
+	geom::Geometry *result = nullptr;
+	switch (resultDimension(overlayOpCode, a, b)) 
+	{
+		case Dimension::P:
+			result = geomFact->createPoint();
+			break;
+		case Dimension::L:
+			result = geomFact->createLineString();
+			break;
+		case Dimension::A:
+			result = geomFact->createPolygon();
+			break;
+		default:
+			result = geomFact->createGeometryCollection();
+			break;
+	}
+	return result;
+}
+
 /*private*/
 Geometry*
 OverlayOp::computeGeometry(vector<Point*> *nResultPointList,
-                              vector<LineString*> *nResultLineList,
-                              vector<Polygon*> *nResultPolyList)
+                           vector<LineString*> *nResultLineList,
+                           vector<Polygon*> *nResultPolyList,
+                           OverlayOp::OpCode opCode)
 {
 	size_t nPoints=nResultPointList->size();
 	size_t nLines=nResultLineList->size();
@@ -665,6 +716,12 @@ OverlayOp::computeGeometry(vector<Point*> *nResultPointList,
 			nResultPolyList->begin(),
 			nResultPolyList->end());
 
+
+	if (geomList->empty())
+	{
+		return createEmptyResult(opCode, arg[0]->getGeometry(), 
+		                         arg[1]->getGeometry(), geomFact);
+	}
 	// build the most specific geometry possible
 	Geometry *g=geomFact->buildGeometry(geomList);
 	return g;
@@ -836,7 +893,7 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 
 	// gather the results from all calculations into a single
 	// Geometry for the result set
-	resultGeom=computeGeometry(resultPointList,resultLineList,resultPolyList);
+	resultGeom=computeGeometry(resultPointList,resultLineList,resultPolyList,opCode);
 
 	checkObviouslyWrongResult(opCode);
 
