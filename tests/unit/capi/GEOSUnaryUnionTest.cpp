@@ -85,7 +85,7 @@ namespace tut
         geom2_ = GEOSUnaryUnion(geom1_);
         ensure( nullptr != geom2_ );
 
-        ensure_equals(toWKT(geom2_), std::string("GEOMETRYCOLLECTION EMPTY"));
+        ensure_equals(toWKT(geom2_), std::string("POINT EMPTY"));
     }
 
     // Self-union a 2d point

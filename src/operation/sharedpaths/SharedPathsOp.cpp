@@ -118,7 +118,7 @@ SharedPathsOp::findLinearIntersections(PathList& to)
   {
     const Geometry* sub = full->getGeometryN(i);
     const LineString* path = dynamic_cast<const LineString*>(sub);
-    if ( path ) {
+    if ( path && ! path->isEmpty() ) {
       // NOTE: we're making a copy here, wouldn't be needed
       //       for a simple predicate
       to.push_back(_gf.createLineString(*path).release());
