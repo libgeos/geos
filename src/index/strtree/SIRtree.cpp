@@ -127,8 +127,10 @@ SIRtree::createNode(int level)
 /**
 * Inserts an item having the given bounds into the tree.
 */
-void SIRtree::insert(double x1, double x2,void* item) {
-	AbstractSTRtree::insert(new Interval(min(x1,x2),max(x1, x2)),item);
+void SIRtree::insert(double x1, double x2, void* item) {
+	std::unique_ptr<Interval> i{new Interval(std::min(x1,x2), std::max(x1, x2))};
+	AbstractSTRtree::insert(i.get(), item);
+	intervals.push_back(std::move(i));
 }
 
 std::unique_ptr<BoundableList>
