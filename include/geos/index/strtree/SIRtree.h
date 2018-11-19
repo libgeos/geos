@@ -76,6 +76,12 @@ public:
 	 */
 	std::vector<void*>* query(double x) { return query(x,x); }
 
+	/**
+	 * Disable copy construction and assignment. Apparently needed to make this
+	 * class compile under MSVC. (See https://stackoverflow.com/q/29565299)
+	 */
+	 SIRtree(const SIRtree&) = delete;
+	 SIRtree& operator=(const SIRtree&) = delete;
 
 protected:
 
@@ -98,8 +104,8 @@ protected:
 	std::unique_ptr<BoundableList> sortBoundables(const BoundableList* input) override;
 
 private:
-
 	IntersectsOp* intersectsOp;
+	std::vector<std::unique_ptr<Interval>> intervals;
 };
 
 
