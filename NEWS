@@ -8,6 +8,7 @@ Changes in 3.7.1
     (#926, Sergey Fedoseev)
   - Fix crash in GEOSUnaryUnion with empty LineString
     (#928, Sergey Fedoseev)
+  - Fix memory leak in SIRtree::insert (#919, Dan Baston)
   - Reduce required autoconf to 2.63
     (#56, John Harvey)
   - Fix incorrect return values on error from GEOSLength
