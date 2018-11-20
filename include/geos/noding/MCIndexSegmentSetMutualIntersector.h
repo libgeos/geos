@@ -59,15 +59,6 @@ public:
 
 	~MCIndexSegmentSetMutualIntersector() override;
 
-	/* Returns a reference to a vector of MonotoneChain objects owned
-	 * by this class and destroyed on next call to ::process.
-	 * Copy them if you need them alive for longer.
-	 */
-	std::vector<index::chain::MonotoneChain *>& getMonotoneChains()
-	{
-		return monoChains;
-	}
-
 	index::SpatialIndex* getIndex()
 	{
 		return index;
@@ -98,7 +89,7 @@ public:
 
 private:
 
-	typedef std::vector<index::chain::MonotoneChain *> MonoChains;
+	typedef std::vector<std::unique_ptr<index::chain::MonotoneChain>> MonoChains;
 	MonoChains monoChains;
 
 	/*

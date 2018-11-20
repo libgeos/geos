@@ -20,6 +20,7 @@
 #define GEOS_IDX_CHAIN_MONOTONECHAINBUILDER_H
 
 #include <geos/export.h>
+#include <memory>
 #include <vector>
 #include <cstddef>
 
@@ -56,7 +57,7 @@ public:
 	 * MonotoneChain objects for the given CoordinateSequence.
 	 * Remember to deep-delete the result.
 	 */
-	static std::vector<MonotoneChain*>* getChains(
+	static std::unique_ptr<std::vector<std::unique_ptr<MonotoneChain>>> getChains(
 			const geom::CoordinateSequence *pts,
 			void* context);
 
@@ -67,9 +68,9 @@ public:
 	 */
 	static void getChains(const geom::CoordinateSequence *pts,
 			void* context,
-			std::vector<MonotoneChain*>& mcList);
+			std::vector<std::unique_ptr<MonotoneChain>> & mcList);
 
-	static std::vector<MonotoneChain*>* getChains(const geom::CoordinateSequence *pts)
+	static std::unique_ptr<std::vector<std::unique_ptr<MonotoneChain>>> getChains(const geom::CoordinateSequence *pts)
 	{
 		return getChains(pts, nullptr);
 	}

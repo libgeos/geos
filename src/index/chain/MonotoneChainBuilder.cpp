@@ -42,10 +42,11 @@ namespace index { // geos.index
 namespace chain { // geos.index.chain
 
 /* static public */
-vector<MonotoneChain*>*
+std::unique_ptr<std::vector<std::unique_ptr<MonotoneChain>>>
 MonotoneChainBuilder::getChains(const CoordinateSequence* pts, void* context)
 {
-	vector<MonotoneChain*>* mcList = new vector<MonotoneChain*>();
+   	// TODO clean this up with std::make_unique (C++14)
+	std::unique_ptr<std::vector<std::unique_ptr<MonotoneChain>>> mcList{new vector<std::unique_ptr<MonotoneChain>>()};
 	getChains(pts, context, *mcList);
 	return mcList;
 }
@@ -53,7 +54,7 @@ MonotoneChainBuilder::getChains(const CoordinateSequence* pts, void* context)
 /* static public */
 void
 MonotoneChainBuilder::getChains(const CoordinateSequence* pts, void* context,
-                                vector<MonotoneChain*>& mcList)
+                                vector<std::unique_ptr<MonotoneChain>>& mcList)
 {
 	vector<std::size_t> startIndex;
 	getChainStartIndices(*pts, startIndex);
@@ -63,8 +64,7 @@ MonotoneChainBuilder::getChains(const CoordinateSequence* pts, void* context,
 		std::size_t n = nindexes - 1;
 		for(std::size_t i = 0; i < n; i++)
 		{
-			MonotoneChain* mc = new MonotoneChain(*pts, startIndex[i], startIndex[i+1], context);
-			mcList.push_back(mc);
+			mcList.emplace_back(new MonotoneChain(*pts, startIndex[i], startIndex[i+1], context));
 		}
 	}
 }

@@ -22,6 +22,7 @@
 #include <geos/geom/Coordinate.h> // for composition
 #include <geos/index/bintree/Interval.h> // for composition
 
+#include <memory>
 #include <vector>
 
 // Forward declarations
@@ -37,9 +38,6 @@ namespace geos {
 		namespace bintree {
 			class Bintree;
 			class Interval;
-		}
-		namespace chain {
-			class MonotoneChain;
 		}
 	}
 }
@@ -69,8 +67,9 @@ public:
 private:
 	const geom::LinearRing *ring;
 	index::bintree::Interval interval;
-	geom::CoordinateSequence *pts;
-	index::bintree::Bintree *tree;
+	std::unique_ptr<geom::CoordinateSequence> pts;
+	std::unique_ptr<index::bintree::Bintree> tree;
+	std::unique_ptr<std::vector<std::unique_ptr<index::chain::MonotoneChain>>> chains;
 	int crossings;  // number of segment/ray crossings
 	void buildIndex();
 	void testMonotoneChain(geom::Envelope *rayEnv,
