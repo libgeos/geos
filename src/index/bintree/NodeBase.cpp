@@ -16,13 +16,10 @@
 #include <geos/index/bintree/NodeBase.h>
 #include <geos/index/bintree/Interval.h>
 #include <geos/index/bintree/Node.h>
-#include <geos/index/chain/MonotoneChain.h> // FIXME: split
 
 #include <vector>
 
 using namespace std;
-
-using namespace geos::index::chain;
 
 namespace geos {
 namespace index { // geos.index
@@ -49,9 +46,6 @@ NodeBase::NodeBase()
 }
 
 NodeBase::~NodeBase() {
-	for(int i=0;i<(int)items->size();i++) {
-		delete (MonotoneChain*)(*items)[i];
-	}
 	delete items;
 	delete subnode[0];
 	delete subnode[1];

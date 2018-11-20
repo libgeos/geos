@@ -43,12 +43,11 @@ MCIndexSegmentSetMutualIntersector::addToIndex(SegmentString* segStr)
 
     MonoChains::size_type n = segChains.size();
     chainStore.reserve(chainStore.size() + n);
-    for (MonoChains::size_type i = 0; i < n; i++)
+    for (auto& mc : segChains)
     {
-        MonotoneChain * mc = segChains[i];
         mc->setId(indexCounter++);
-        index->insert(&(mc->getEnvelope()), mc);
-        chainStore.push_back(mc);
+        index->insert(&(mc->getEnvelope()), mc.get());
+        chainStore.push_back(std::move(mc));
     }
 }
 
@@ -59,10 +58,8 @@ MCIndexSegmentSetMutualIntersector::intersectChains()
 {
     MCIndexSegmentSetMutualIntersector::SegmentOverlapAction overlapAction( *segInt);
 
-    for (MonoChains::size_type i = 0, ni = monoChains.size(); i < ni; ++i)
+    for (const auto& queryChain : monoChains)
     {
-        MonotoneChain * queryChain = (MonotoneChain *)monoChains[i];
-
         std::vector<void*> overlapChains;
         index->query( &(queryChain->getEnvelope()), overlapChains);
 
@@ -88,11 +85,10 @@ MCIndexSegmentSetMutualIntersector::addToMonoChains(SegmentString* segStr)
 
     MonoChains::size_type n = segChains.size();
     monoChains.reserve(monoChains.size() + n);
-    for (MonoChains::size_type i = 0; i < n; i++)
+    for (auto& mc : segChains)
     {
-        MonotoneChain* mc = segChains[i];
         mc->setId( processCounter++ );
-        monoChains.push_back(mc);
+        monoChains.push_back(std::move(mc));
     }
 }
 
@@ -112,14 +108,6 @@ MCIndexSegmentSetMutualIntersector::~MCIndexSegmentSetMutualIntersector()
     delete index;
 
     MonoChains::iterator i, e;
-
-    for (i = chainStore.begin(), e = chainStore.end(); i != e; ++i) {
-        delete *i;
-    }
-
-    for (i = monoChains.begin(), e = monoChains.end(); i != e; i++) {
-      delete *i;
-    }
 }
 
 /* public */
@@ -143,11 +131,6 @@ MCIndexSegmentSetMutualIntersector::process(SegmentString::ConstVect * segString
     processCounter = indexCounter + 1;
     nOverlaps = 0;
 
-    for (MonoChains::iterator i = monoChains.begin(), e = monoChains.end();
-         i != e; i++)
-    {
-      delete *i;
-    }
     monoChains.clear();
 
     for (SegmentString::ConstVect::size_type i = 0, n = segStrings->size(); i < n; i++)
