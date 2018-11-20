@@ -700,7 +700,7 @@ OverlayOp::computeGeometry(vector<Point*> *nResultPointList,
 	size_t nLines=nResultLineList->size();
 	size_t nPolys=nResultPolyList->size();
 
-	vector<Geometry*> *geomList=new vector<Geometry*>();
+	std::unique_ptr<vector<Geometry*>> geomList{new vector<Geometry*>()};
 	geomList->reserve(nPoints+nLines+nPolys);
 
 	// element geometries of the result are always in the order P,L,A
@@ -723,7 +723,7 @@ OverlayOp::computeGeometry(vector<Point*> *nResultPointList,
 		                         arg[1]->getGeometry(), geomFact);
 	}
 	// build the most specific geometry possible
-	Geometry *g=geomFact->buildGeometry(geomList);
+	Geometry *g=geomFact->buildGeometry(geomList.release());
 	return g;
 }
 
