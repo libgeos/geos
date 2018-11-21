@@ -84,29 +84,21 @@ MCPointInRing::isInside(const Coordinate& pt)
 {
 	crossings=0;
 	// test all segments intersected by ray from pt in positive x direction
-	Envelope *rayEnv=new Envelope(DoubleNegInfinity,DoubleInfinity,pt.y,pt.y);
+	Envelope rayEnv(DoubleNegInfinity,DoubleInfinity,pt.y,pt.y);
 	interval.min=pt.y;
 	interval.max=pt.y;
-	vector<void*> *segs=tree->query(&interval);
-	//System.out.println("query size=" + segs.size());
-	MCSelecter *mcSelecter=new MCSelecter(pt,this);
-	for(int i=0;i<(int)segs->size();i++) {
-		chain::MonotoneChain *mc=(chain::MonotoneChain*) (*segs)[i];
-		testMonotoneChain(rayEnv,mcSelecter,mc);
+	std::unique_ptr<vector<void*>> segs{tree->query(&interval)};
+
+	MCSelecter mcSelecter(pt,this);
+	for(auto& seg : *segs) {
+		chain::MonotoneChain *mc= reinterpret_cast<chain::MonotoneChain*>(seg);
+		testMonotoneChain(&rayEnv,&mcSelecter,mc);
 	}
+
 	/*
-	*  p is inside if number of crossings is odd.
-	*/
-//	for(int i=0;i<(int)segs->size();i++) {
-//		delete (chain::MonotoneChain*) (*segs)[i];
-//	}
-	delete segs;
-	delete rayEnv;
-	delete mcSelecter;
-	if((crossings%2)==1) {
-		return true;
-	}
-	return false;
+	 *  p is inside if number of crossings is odd.
+	 */
+	return crossings % 2 == 1;
 }
 
 
