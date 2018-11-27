@@ -175,12 +175,6 @@ Polygon::isEmpty() const
 	return shell->isEmpty();
 }
 
-bool
-Polygon::isSimple() const
-{
-	return true;
-}
-
 const LineString*
 Polygon::getExteriorRing() const
 {

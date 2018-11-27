@@ -39,9 +39,12 @@ namespace geos {
 	}
 	namespace geom {
 		class LineString;
+		class LinearRing;
 		class MultiLineString;
 		class MultiPoint;
 		class Geometry;
+		class Polygon;
+		class GeometryCollection;
 		struct CoordinateLessThen;
 	}
 	namespace geomgraph {
@@ -192,6 +195,10 @@ private:
 	 * must be exactly 2.
 	 */
 	bool hasClosedEndpointIntersection(geomgraph::GeometryGraph &graph);
+
+	bool computeSimple(const geom::Geometry *geom);
+  bool isSimplePolygonal(const geom::Geometry *geom);
+	bool isSimpleGeometryCollection(const geom::GeometryCollection *col);
 
 	/**
 	 * Add an endpoint to the map, creating an entry for it if none exists

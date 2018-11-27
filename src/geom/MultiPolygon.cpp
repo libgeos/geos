@@ -60,10 +60,6 @@ string MultiPolygon::getGeometryType() const {
 	return "MultiPolygon";
 }
 
-bool MultiPolygon::isSimple() const {
-	return true;
-}
-
 Geometry* MultiPolygon::getBoundary() const {
 	if (isEmpty()) {
 		return getFactory()->createMultiLineString();

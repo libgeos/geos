@@ -83,8 +83,6 @@ public:
 
 	GeometryTypeId getGeometryTypeId() const override;
 
-	bool isSimple() const override;
-
 	bool equalsExact(const Geometry *other, double tolerance=0) const override;
 
 	Geometry *clone() const override;

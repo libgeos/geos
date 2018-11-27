@@ -811,18 +811,6 @@ reader_(factory_.get())
 		ensure( "createGeometryCollection() returned null pointer.", col != nullptr );
 		ensure( col->isEmpty() );
 		ensure( col->isValid() );
-
-		try
-		{
-			ensure( !col->isSimple() );
-			fail("IllegalArgumentException expected");
-		}
-		catch ( geos::util::IllegalArgumentException const& e )
-		{
-			const char* msg = e.what(); // ok
-			ensure( msg != nullptr );
-		}
-
 		ensure( col->getCentroid() == nullptr );
 		ensure_equals( col->getGeometryTypeId(), geos::geom::GEOS_GEOMETRYCOLLECTION );
 		ensure_equals( col->getDimension(), geos::geom::Dimension::False );

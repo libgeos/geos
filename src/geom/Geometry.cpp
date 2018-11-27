@@ -861,7 +861,6 @@ Geometry::apply_rw(GeometryComponentFilter *filter)
 bool
 Geometry::isSimple() const
 {
-	checkNotGeometryCollection(this);
 	operation::IsSimpleOp op(*this);
 	return op.isSimple();
 }

@@ -29,8 +29,12 @@
 #include <geos/geom/Geometry.h>
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/MultiLineString.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/LinearRing.h>
 #include <geos/geom/Point.h>
+#include <geos/geom/GeometryCollection.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/util/LinearComponentExtracter.h>
 
 #include <set>
 #include <cassert>
@@ -40,6 +44,7 @@ using namespace geos::algorithm;
 using namespace geos::geomgraph;
 using namespace geos::geomgraph::index;
 using namespace geos::geom;
+using namespace geos::geom::util;
 
 namespace geos {
 namespace operation { // geos.operation
@@ -107,18 +112,7 @@ bool
 IsSimpleOp::isSimple()
 {
 	nonSimpleLocation.reset();
-
-	if ( dynamic_cast<const LineString*>(geom) )
-		return isSimpleLinearGeometry(geom);
-
-	if ( dynamic_cast<const MultiLineString*>(geom) )
-		return isSimpleLinearGeometry(geom);
-
-	const MultiPoint* mp = dynamic_cast<const MultiPoint*>(geom);
-	if ( mp ) return isSimpleMultiPoint(*mp);
-
-	// all other geometry types are simple by definition
-	return true;
+	return computeSimple(geom);
 }
 
 
@@ -171,7 +165,7 @@ IsSimpleOp::isSimpleLinearGeometry(const Geometry *p_geom)
 	if (p_geom->isEmpty()) return true;
 	GeometryGraph graph(0,p_geom);
 	LineIntersector li;
-	std::unique_ptr<SegmentIntersector> si (graph.computeSelfNodes(&li,true));
+	std::unique_ptr<SegmentIntersector> si(graph.computeSelfNodes(&li,true));
 
 	// if no self-intersection, must be simple
 	if (!si->hasIntersection()) return true;
@@ -216,6 +210,65 @@ IsSimpleOp::hasNonEndpointIntersection(GeometryGraph &graph)
 		}
 	}
 	return false;
+}
+
+/*private*/
+bool
+IsSimpleOp::computeSimple(const geom::Geometry *geom)
+{
+	nonSimpleLocation.reset();
+
+	if (dynamic_cast<const LineString*>(geom))
+		return isSimpleLinearGeometry(geom);
+
+	if (dynamic_cast<const LinearRing*>(geom))
+		return isSimpleLinearGeometry(geom);
+
+	if (dynamic_cast<const MultiLineString*>(geom))
+		return isSimpleLinearGeometry(geom);
+
+	if (dynamic_cast<const Polygon*>(geom))
+		return isSimplePolygonal(geom);
+
+	const MultiPoint* mp = dynamic_cast<const MultiPoint*>(geom);
+	if (mp) return isSimpleMultiPoint(*mp);
+
+	// This must be after MultiPoint test, as MultiPoint can
+	// cast cleanly into GeometryCollection
+	const GeometryCollection* gc = dynamic_cast<const GeometryCollection*>(geom);
+	if (gc)
+		return isSimpleGeometryCollection(gc);
+
+	// all other geometry types are simple by definition
+	return true;
+}
+
+/*private*/
+bool
+IsSimpleOp::isSimpleGeometryCollection(const geom::GeometryCollection *col)
+{
+	GeometryCollection::const_iterator it;
+	for (it = col->begin(); it < col->end(); ++it)
+	{
+		const geom::Geometry *geom = *it;
+		if (!computeSimple(geom)) return false;
+	}
+	return true;
+}
+
+/*private*/
+bool
+IsSimpleOp::isSimplePolygonal(const geom::Geometry *geom)
+{
+
+	LineString::ConstVect rings;
+	LinearComponentExtracter::getLines(*geom, rings);
+	for (const geom::LineString *ring : rings)
+	{
+			if(!isSimpleLinearGeometry(ring))
+				return false;
+	}
+	return true;
 }
 
 /*private*/

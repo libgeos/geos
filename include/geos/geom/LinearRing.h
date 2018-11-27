@@ -97,16 +97,6 @@ public:
 	 */
 	int getBoundaryDimension() const override;
 
-	/** \brief
-	 * Returns <code>true</code>, since by definition LinearRings
-	 * are always simple.
-	 *
-	 * @return <code>true</code>
-	 *
-	 * @see Geometry::isSimple
-	 */
-	bool isSimple() const override;
-
 	bool isClosed() const override;
 
 	std::string getGeometryType() const override;

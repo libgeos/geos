@@ -92,12 +92,6 @@ LinearRing::getBoundaryDimension() const
 }
 
 bool
-LinearRing::isSimple() const
-{
-	return true;
-}
-
-bool
 LinearRing::isClosed() const
 {
 	if ( points->isEmpty() ) {

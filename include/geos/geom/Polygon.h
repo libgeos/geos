@@ -106,14 +106,6 @@ public:
 
 	bool isEmpty() const override;
 
-	/** \brief
-	 * Tests if a valid polygon is simple.
-	 * This method always returns true, since a valid polygon is always simple
-	 *
-	 * @return <code>true</code>
-	 */
-	bool isSimple() const override;
-
 	/// Returns the exterior ring (shell)
 	const LineString* getExteriorRing() const;
 
@@ -132,6 +124,8 @@ public:
 	void apply_ro(GeometryFilter *filter) const override;
 	void apply_rw(CoordinateSequenceFilter& filter) override;
 	void apply_ro(CoordinateSequenceFilter& filter) const override;
+	void apply_rw(GeometryComponentFilter *filter) override;
+	void apply_ro(GeometryComponentFilter *filter) const override;
 
 	Geometry* convexHull() const override;
 
@@ -147,10 +141,6 @@ public:
 
  	/// Returns the perimeter of this <code>Polygon</code>
 	double getLength() const override;
-
-	void apply_rw(GeometryComponentFilter *filter) override;
-
-	void apply_ro(GeometryComponentFilter *filter) const override;
 
 	bool isRectangle() const override;
 
