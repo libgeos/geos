@@ -21,6 +21,7 @@
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/overlay/MaximalEdgeRing.h>
 #include <geos/operation/overlay/MinimalEdgeRing.h>
+#include <geos/operation/polygonize/EdgeRing.h>
 #include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/NodeMap.h>
 #include <geos/geomgraph/DirectedEdgeStar.h>
@@ -43,7 +44,6 @@ using namespace std;
 using namespace geos::geomgraph;
 using namespace geos::algorithm;
 using namespace geos::geom;
-
 
 namespace geos {
 namespace operation { // geos.operation
@@ -331,30 +331,34 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
 {
 	LinearRing *testRing=testEr->getLinearRing();
 	const Envelope *testEnv=testRing->getEnvelopeInternal();
-	const Coordinate& testPt=testRing->getCoordinateN(0);
+	Coordinate testPt=testRing->getCoordinateN(0);
 	EdgeRing *minShell=nullptr;
-	const Envelope *minEnv=nullptr;
+	const Envelope *minShellEnv=nullptr;
 	for(size_t i=0, n=newShellList.size(); i<n; i++)
 	{
-		LinearRing *lr=nullptr;
 		EdgeRing *tryShell=newShellList[i];
-		LinearRing *tryRing=tryShell->getLinearRing();
-		const Envelope *tryEnv=tryRing->getEnvelopeInternal();
-		if (minShell!=nullptr) {
-			lr=minShell->getLinearRing();
-			minEnv=lr->getEnvelopeInternal();
-		}
+		LinearRing *tryShellRing=tryShell->getLinearRing();
+		const Envelope *tryShellEnv=tryShellRing->getEnvelopeInternal();
+		// the hole envelope cannot equal the shell envelope
+		// (also guards against testing rings against themselves)
+		if (tryShellEnv->equals(testEnv)) continue;
+		// hole must be contained in shell
+		if (!tryShellEnv->contains(testEnv)) continue;
+
+		const CoordinateSequence *tsrcs = tryShellRing->getCoordinatesRO();
+		testPt = operation::polygonize::EdgeRing::ptNotInList(testRing->getCoordinatesRO(), tsrcs);
 		bool isContained=false;
-		const CoordinateSequence *rcl = tryRing->getCoordinatesRO();
-		if (tryEnv->contains(testEnv)
-			&& CGAlgorithms::isPointInRing(testPt,rcl))
-				isContained=true;
+
+		if(CGAlgorithms::isPointInRing(testPt, tsrcs))
+			isContained=true;
+
 		// check if this new containing ring is smaller than
 		// the current minimum ring
 		if (isContained) {
 			if (minShell==nullptr
-				|| minEnv->contains(tryEnv)) {
+				|| minShellEnv->contains(tryShellEnv)) {
 					minShell=tryShell;
+					minShellEnv=minShell->getLinearRing()->getEnvelopeInternal();
 			}
 		}
 	}
