@@ -335,7 +335,7 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
 	EdgeRing *minShell=nullptr;
 	const Envelope *minShellEnv=nullptr;
 
-	for(auto tryShell: newShellList)
+	for(auto const& tryShell: newShellList)
 	{
 		LinearRing *tryShellRing=tryShell->getLinearRing();
 		const Envelope *tryShellEnv=tryShellRing->getEnvelopeInternal();
