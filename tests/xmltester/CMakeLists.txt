@@ -105,7 +105,7 @@ if(GEOS_ENABLE_TESTS)
     ${XMLTESTS_DIR}/safe/16595.xml
     ${XMLTESTS_DIR}/safe/16596.xml)
 
-  add_test(test_xmltester ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/test_xmltester ${SAVE_XMLTESTS})
+  add_test(test_xmltester ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/test_xmltester --test-valid-output ${SAVE_XMLTESTS})
 
   set(STATUS_RESULT "ON")
 endif()
