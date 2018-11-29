@@ -331,7 +331,6 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
 {
 	LinearRing *testRing=testEr->getLinearRing();
 	const Envelope *testEnv=testRing->getEnvelopeInternal();
-	Coordinate testPt=testRing->getCoordinateN(0);
 	EdgeRing *minShell=nullptr;
 	const Envelope *minShellEnv=nullptr;
 
@@ -346,7 +345,7 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
 		if (!tryShellEnv->contains(testEnv)) continue;
 
 		const CoordinateSequence *tsrcs = tryShellRing->getCoordinatesRO();
-		testPt = operation::polygonize::EdgeRing::ptNotInList(testRing->getCoordinatesRO(), tsrcs);
+		Coordinate testPt = operation::polygonize::EdgeRing::ptNotInList(testRing->getCoordinatesRO(), tsrcs);
 		bool isContained=false;
 
 		if(CGAlgorithms::isPointInRing(testPt, tsrcs))
