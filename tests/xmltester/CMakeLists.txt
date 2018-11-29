@@ -128,6 +128,15 @@ if(GEOS_ENABLE_TESTS)
     ${XMLTESTS_DIR}/ticket/bug615.xml
     ${XMLTESTS_DIR}/ticket/bug716.xml
     ${XMLTESTS_DIR}/ticket/bug837.xml
+    ${XMLTESTS_DIR}/validate/TestRelateAA-big.xml
+    ${XMLTESTS_DIR}/validate/TestRelateAA.xml
+    ${XMLTESTS_DIR}/validate/TestRelateAC.xml
+    ${XMLTESTS_DIR}/validate/TestRelateLA.xml
+    ${XMLTESTS_DIR}/validate/TestRelateLC.xml
+    ${XMLTESTS_DIR}/validate/TestRelateLL.xml
+    ${XMLTESTS_DIR}/validate/TestRelatePA.xml
+    ${XMLTESTS_DIR}/validate/TestRelatePL.xml
+    ${XMLTESTS_DIR}/validate/TestRelatePP.xml
     )
 
   set(FAILING_XMLTESTS

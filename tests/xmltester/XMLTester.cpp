@@ -949,6 +949,21 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             if (actual_result==opRes) success=1;
         }
 
+        else if (opName=="overlaps")
+        {
+            geom::Geometry *g1 = opArg1 == "B" ? gB : gA;
+            geom::Geometry *g2 = opArg2 == "B" ? gB : gA;
+
+            actual_result="false";
+            if ( usePrepared )
+            {
+                if ( prepare(g1)->overlaps(g2) ) actual_result="true";
+            }
+            else if (g1->overlaps(g2)) actual_result="true";
+
+            if (actual_result==opRes) success=1;
+        }
+
         else if (opName=="within")
         {
             geom::Geometry *g1 = opArg1 == "B" ? gB : gA;
@@ -964,6 +979,51 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             if (actual_result==opRes) success=1;
         }
 
+        else if (opName=="touches")
+        {
+            geom::Geometry *g1 = opArg1 == "B" ? gB : gA;
+            geom::Geometry *g2 = opArg2 == "B" ? gB : gA;
+
+            actual_result="false";
+            if ( usePrepared )
+            {
+                if ( prepare(g1)->touches(g2) ) actual_result="true";
+            }
+            else if (g1->touches(g2)) actual_result="true";
+
+            if (actual_result==opRes) success=1;
+        }
+
+        else if (opName=="crosses")
+        {
+            geom::Geometry *g1 = opArg1 == "B" ? gB : gA;
+            geom::Geometry *g2 = opArg2 == "B" ? gB : gA;
+
+            actual_result="false";
+            if ( usePrepared )
+            {
+                if ( prepare(g1)->crosses(g2) ) actual_result="true";
+            }
+            else if (g1->crosses(g2)) actual_result="true";
+
+            if (actual_result==opRes) success=1;
+        }
+
+        else if (opName=="disjoint")
+        {
+            geom::Geometry *g1 = opArg1 == "B" ? gB : gA;
+            geom::Geometry *g2 = opArg2 == "B" ? gB : gA;
+
+            actual_result="false";
+            if ( usePrepared )
+            {
+                if ( prepare(g1)->disjoint(g2) ) actual_result="true";
+            }
+            else if (g1->disjoint(g2)) actual_result="true";
+
+            if (actual_result==opRes) success=1;
+        }
+
         else if (opName=="covers")
         {
             geom::Geometry *g1 = opArg1 == "B" ? gB : gA;
@@ -975,6 +1035,18 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
                 if ( prepare(g1)->covers(g2) ) actual_result="true";
             }
             else if (g1->covers(g2)) actual_result="true";
+
+            if (actual_result==opRes) success=1;
+        }
+
+        // equalsTopo() is synomym for equals() in JTS
+        else if (opName=="equalstopo")
+        {
+            geom::Geometry *g1 = opArg1 == "B" ? gB : gA;
+            geom::Geometry *g2 = opArg2 == "B" ? gB : gA;
+
+            actual_result="false";
+            if (g1->equals(g2)) actual_result="true";
 
             if (actual_result==opRes) success=1;
         }

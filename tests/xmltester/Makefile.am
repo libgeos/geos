@@ -13,15 +13,68 @@ CLEANFILES = testrunner
 
 EXTRA_DIST = testrunner.sh CMakeLists.txt
 
-SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
-	$(srcdir)/tests/split.xml \
-	$(srcdir)/tests/hexwkb.xml \
-	$(srcdir)/tests/test.xml \
-	$(srcdir)/tests/linemerge.xml \
+SAFE_XMLTESTS= \
+	$(srcdir)/tests/TestBufferExternal.xml \
+	$(srcdir)/tests/TestBufferExternal2.xml \
 	$(srcdir)/tests/TestIsValid.xml \
-	$(srcdir)/tests/robustness.xml \
+	$(srcdir)/tests/badguy3.xml \
 	$(srcdir)/tests/buffer.xml \
+	$(srcdir)/tests/fme.xml \
+	$(srcdir)/tests/heisenbugs.xml \
+	$(srcdir)/tests/hexwkb.xml \
+	$(srcdir)/tests/hole_from_shell.xml \
+	$(srcdir)/tests/hole_red.xml \
+	$(srcdir)/tests/linemerge.xml \
+	$(srcdir)/tests/robustness.xml \
 	$(srcdir)/tests/singlesidedbuffer.xml \
+	$(srcdir)/tests/split.xml \
+	$(srcdir)/tests/test.xml \
+	$(srcdir)/tests/testLeaksBig.xml \
+	$(srcdir)/tests/general/TestBoundary.xml \
+	$(srcdir)/tests/general/TestBuffer.xml \
+	$(srcdir)/tests/general/TestBufferMitredJoin.xml \
+	$(srcdir)/tests/general/TestCentroid.xml \
+	$(srcdir)/tests/general/TestConvexHull-big.xml \
+	$(srcdir)/tests/general/TestConvexHull.xml \
+	$(srcdir)/tests/general/TestDistance.xml \
+	$(srcdir)/tests/general/TestFunctionAA.xml \
+	$(srcdir)/tests/general/TestFunctionAAPrec.xml \
+	$(srcdir)/tests/general/TestFunctionLA.xml \
+	$(srcdir)/tests/general/TestFunctionLAPrec.xml \
+	$(srcdir)/tests/general/TestFunctionLL.xml \
+	$(srcdir)/tests/general/TestFunctionLLPrec.xml \
+	$(srcdir)/tests/general/TestFunctionPA.xml \
+	$(srcdir)/tests/general/TestFunctionPL.xml \
+	$(srcdir)/tests/general/TestFunctionPLPrec.xml \
+	$(srcdir)/tests/general/TestFunctionPP.xml \
+	$(srcdir)/tests/general/TestInteriorPoint.xml \
+  $(srcdir)/tests/general/TestPreparedPointPredicate.xml \
+  $(srcdir)/tests/general/TestPreparedPolygonPredicate.xml \
+  $(srcdir)/tests/general/TestPreparedPredicatesWithGeometryCollection.xml \
+	$(srcdir)/tests/general/TestRectanglePredicate.xml \
+	$(srcdir)/tests/general/TestRelateAA.xml \
+	$(srcdir)/tests/general/TestRelateAC.xml \
+	$(srcdir)/tests/general/TestRelateLA.xml \
+	$(srcdir)/tests/general/TestRelateLC.xml \
+	$(srcdir)/tests/general/TestRelateLL.xml \
+	$(srcdir)/tests/general/TestRelatePA.xml \
+	$(srcdir)/tests/general/TestRelatePL.xml \
+	$(srcdir)/tests/general/TestRelatePP.xml \
+	$(srcdir)/tests/general/TestSimple.xml \
+	$(srcdir)/tests/general/TestUnaryUnion.xml \
+	$(srcdir)/tests/general/TestUnaryUnionFloating.xml \
+	$(srcdir)/tests/general/TestValid.xml \
+	$(srcdir)/tests/general/TestValid2-big.xml \
+	$(srcdir)/tests/general/TestValid2.xml \
+	$(srcdir)/tests/general/TestWithinDistance.xml \
+	$(srcdir)/tests/robust/TestRobustOverlayFixed.xml \
+	$(srcdir)/tests/robust/TestRobustRelate.xml \
+	$(srcdir)/tests/safe/16595.xml \
+	$(srcdir)/tests/safe/16596.xml \
+	$(srcdir)/tests/safe/TestBufferJagged.xml \
+	$(srcdir)/tests/stmlf/stmlf-cases-20061020-invalid-output.xml \
+	$(srcdir)/tests/stmlf/stmlf-cases-20061020.xml \
+	$(srcdir)/tests/stmlf/stmlf-cases-20070119.xml \
 	$(srcdir)/tests/ticket/bug176.xml \
 	$(srcdir)/tests/ticket/bug188.xml \
 	$(srcdir)/tests/ticket/bug244.xml \
@@ -44,58 +97,15 @@ SAFE_XMLTESTS=$(srcdir)/tests/testLeaksBig.xml \
 	$(srcdir)/tests/ticket/bug615.xml \
 	$(srcdir)/tests/ticket/bug716.xml \
 	$(srcdir)/tests/ticket/bug837.xml \
-	$(srcdir)/tests/general/TestBoundary.xml \
-	$(srcdir)/tests/general/TestBuffer.xml \
-	$(srcdir)/tests/general/TestBufferMitredJoin.xml \
-	$(srcdir)/tests/general/TestCentroid.xml \
-	$(srcdir)/tests/general/TestConvexHull.xml \
-	$(srcdir)/tests/general/TestConvexHull-big.xml \
-	$(srcdir)/tests/general/TestDistance.xml \
-	$(srcdir)/tests/general/TestFunctionAAPrec.xml \
-	$(srcdir)/tests/general/TestFunctionAA.xml \
-	$(srcdir)/tests/general/TestFunctionLAPrec.xml \
-	$(srcdir)/tests/general/TestFunctionLA.xml \
-	$(srcdir)/tests/general/TestFunctionLLPrec.xml \
-	$(srcdir)/tests/general/TestFunctionLL.xml \
-	$(srcdir)/tests/general/TestFunctionPA.xml \
-	$(srcdir)/tests/general/TestFunctionPLPrec.xml \
-	$(srcdir)/tests/general/TestFunctionPL.xml \
-	$(srcdir)/tests/general/TestFunctionPP.xml \
-	$(srcdir)/tests/general/TestInteriorPoint.xml \
-  $(srcdir)/tests/general/TestPreparedPointPredicate.xml \
-  $(srcdir)/tests/general/TestPreparedPolygonPredicate.xml \
-  $(srcdir)/tests/general/TestPreparedPredicatesWithGeometryCollection.xml \
-	$(srcdir)/tests/general/TestRectanglePredicate.xml \
-	$(srcdir)/tests/general/TestRelateAA.xml \
-	$(srcdir)/tests/general/TestRelateLA.xml \
-	$(srcdir)/tests/general/TestRelateLL.xml \
-	$(srcdir)/tests/general/TestRelatePL.xml \
-	$(srcdir)/tests/general/TestRelateAC.xml \
-	$(srcdir)/tests/general/TestRelateLC.xml \
-	$(srcdir)/tests/general/TestRelatePA.xml \
-	$(srcdir)/tests/general/TestRelatePP.xml \
-	$(srcdir)/tests/general/TestSimple.xml \
-	$(srcdir)/tests/general/TestUnaryUnion.xml \
-	$(srcdir)/tests/general/TestUnaryUnionFloating.xml \
-	$(srcdir)/tests/general/TestValid.xml \
-	$(srcdir)/tests/general/TestValid2.xml \
-	$(srcdir)/tests/general/TestValid2-big.xml \
-	$(srcdir)/tests/general/TestWithinDistance.xml \
-	$(srcdir)/tests/stmlf/stmlf-cases-20061020.xml \
-	$(srcdir)/tests/stmlf/stmlf-cases-20061020-invalid-output.xml \
-	$(srcdir)/tests/stmlf/stmlf-cases-20070119.xml \
-	$(srcdir)/tests/robust/TestRobustOverlayFixed.xml \
-	$(srcdir)/tests/robust/TestRobustRelate.xml \
-	$(srcdir)/tests/fme.xml \
-	$(srcdir)/tests/TestBufferExternal.xml \
-	$(srcdir)/tests/TestBufferExternal2.xml \
-	$(srcdir)/tests/heisenbugs.xml \
-	$(srcdir)/tests/badguy3.xml \
-	$(srcdir)/tests/hole_from_shell.xml \
-	$(srcdir)/tests/hole_red.xml \
-	$(srcdir)/tests/safe/16595.xml \
-	$(srcdir)/tests/safe/16596.xml \
-	$(srcdir)/tests/safe/TestBufferJagged.xml
+	$(srcdir)/tests/validate/TestRelateAA-big.xml \
+	$(srcdir)/tests/validate/TestRelateAA.xml \
+	$(srcdir)/tests/validate/TestRelateAC.xml \
+	$(srcdir)/tests/validate/TestRelateLA.xml \
+	$(srcdir)/tests/validate/TestRelateLC.xml \
+	$(srcdir)/tests/validate/TestRelateLL.xml \
+	$(srcdir)/tests/validate/TestRelatePA.xml \
+	$(srcdir)/tests/validate/TestRelatePL.xml \
+	$(srcdir)/tests/validate/TestRelatePP.xml
 
 INVALID_OUTPUT_XMLTESTS =
 
