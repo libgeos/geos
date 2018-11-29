@@ -1,5 +1,5 @@
 Changes in 3.7.1
-2018-XX-XX
+2018-11-29
 
 - Bug fixes / improvements
   - Fix crash in GEOSCoordSeq_isCCW with empty coordseq
@@ -15,8 +15,9 @@ Changes in 3.7.1
     GEOSisValidDetail (#941, Dan Baston)
 
 
-3.7.0 changes
+Changes in 3.7.0
 2018-09-10
+
 - New things:
   - CAPI: GEOSDistanceIndexed (#795, Dan Baston)
   - CAPI: GEOSCoordSeq_isCCW (#870, Dan Baston)
