@@ -69,6 +69,7 @@ if(GEOS_ENABLE_TESTS)
     ${XMLTESTS_DIR}/general/TestConvexHull-big.xml
     ${XMLTESTS_DIR}/general/TestConvexHull.xml
     ${XMLTESTS_DIR}/general/TestDistance.xml
+    ${XMLTESTS_DIR}/general/TestEqualsExact.xml
     ${XMLTESTS_DIR}/general/TestFunctionAA.xml
     ${XMLTESTS_DIR}/general/TestFunctionAAPrec.xml
     ${XMLTESTS_DIR}/general/TestFunctionLA.xml

@@ -1051,6 +1051,34 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             if (actual_result==opRes) success=1;
         }
 
+        else if (opName=="equalsexact")
+        {
+            geom::Geometry *g1 = opArg1 == "B" ? gB : gA;
+            geom::Geometry *g2 = opArg2 == "B" ? gB : gA;
+
+            actual_result="false";
+            if (g1->equalsExact(g2)) actual_result="true";
+
+            if (actual_result==opRes) success=1;
+        }
+
+        // rather than implementing equalsnorm in the library,
+        // we just do it in this one test case for now
+        else if (opName=="equalsnorm")
+        {
+            geom::Geometry *g1 = opArg1 == "B" ? gB : gA;
+            geom::Geometry *g2 = opArg2 == "B" ? gB : gA;
+
+            g1->normalize();
+            g2->normalize();
+
+            actual_result="false";
+            if (g1->equalsExact(g2)) actual_result="true";
+
+            if (actual_result==opRes) success=1;
+        }
+
+
         else if (opName=="coveredby")
         {
             geom::Geometry *g1 = opArg1 == "B" ? gB : gA;
