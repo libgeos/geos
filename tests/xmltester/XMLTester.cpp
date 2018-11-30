@@ -40,6 +40,7 @@
 #include <geos/operation/buffer/BufferBuilder.h>
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/operation/buffer/BufferOp.h>
+#include <geos/precision/MinimumClearance.h>
 #include <geos/util.h>
 #include <geos/util/Interrupt.h>
 //#include <geos/geomgraph.h>
@@ -1543,6 +1544,49 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
 
             // TODO: Use a tolerance ?
             success = ( distO == distE ) ? 1 : 0;
+        }
+        else if (opName=="minclearance")
+        {
+            char* rest;
+            double minclearanceE = std::strtod(opRes.c_str(), &rest);
+            if ( rest == opRes.c_str() )
+            {
+                throw std::runtime_error("malformed testcase: missing expected result in 'minclearance' op");
+            }
+
+            geom::Geometry *g1 = opArg1 == "B" ? gB : gA;
+            precision::MinimumClearance mc(g1);
+
+            double minclearanceO = mc.getDistance();
+            std::stringstream ss;
+            ss << minclearanceO;
+            actual_result = ss.str();
+
+            // Hack for Inf/1.7976931348623157E308 comparison
+            if (minclearanceO > 1.7976931348623157E308)
+                minclearanceO = 1.7976931348623157E308;
+
+            // TODO: Use a tolerance ?
+            success = ( minclearanceO == minclearanceE ) ? 1 : 0;
+        }
+        else if (opName=="minclearanceline")
+        {
+
+            double tol = 0.0000001;
+            GeomPtr lineE(parseGeometry(opRes, "expected"));
+            if (!lineE)
+            {
+                throw std::runtime_error("malformed testcase: missing expected result in 'minclearanceline' op");
+            }
+
+            geom::Geometry *g1 = opArg1 == "B" ? gB : gA;
+            precision::MinimumClearance mc(g1);
+            std::unique_ptr<geom::Geometry> lineO = mc.getLine();
+            lineO.get()->normalize();
+            lineE.get()->normalize();
+
+            actual_result=printGeom(lineO.get());
+            success = lineE.get()->equalsExact(lineO.get(), tol) ? 1 : 0;
         }
 
         else

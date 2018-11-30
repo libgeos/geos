@@ -81,6 +81,7 @@ if(GEOS_ENABLE_TESTS)
     ${XMLTESTS_DIR}/general/TestFunctionPLPrec.xml
     ${XMLTESTS_DIR}/general/TestFunctionPP.xml
     ${XMLTESTS_DIR}/general/TestInteriorPoint.xml
+    ${XMLTESTS_DIR}/general/TestMinimumClearance.xml
     ${XMLTESTS_DIR}/general/TestPreparedPointPredicate.xml
     ${XMLTESTS_DIR}/general/TestPreparedPolygonPredicate.xml
     ${XMLTESTS_DIR}/general/TestPreparedPredicatesWithGeometryCollection.xml
