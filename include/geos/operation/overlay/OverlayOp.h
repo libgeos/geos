@@ -332,7 +332,7 @@ private:
 	* For empty result, what is the correct geometry type to apply to
 	* the empty?
 	*/
-	geom::Dimension::DimensionType resultDimension(OverlayOp::OpCode overlayOpCode,
+	static geom::Dimension::DimensionType resultDimension(OverlayOp::OpCode overlayOpCode,
 		const geom::Geometry *g0, const geom::Geometry *g1);
 
 	/**
@@ -348,7 +348,7 @@ private:
 	* * #opDIFFERENCE - result has the dimension of the left-hand input
 	* * #opSYMDIFFERENCE - result has the dimension of the highest input dimension
 	*/
-	geom::Geometry* createEmptyResult(
+	static geom::Geometry* createEmptyResult(
 		OverlayOp::OpCode overlayOpCode, const geom::Geometry *a,
 		const geom::Geometry *b, const geom::GeometryFactory *geomFact);
 
