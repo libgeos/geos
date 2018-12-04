@@ -35,30 +35,23 @@ namespace algorithm { // geos.algorithm
 SIRtreePointInRing::SIRtreePointInRing(LinearRing *newRing):
 	PointInRing(),
 	ring(newRing),
-	sirTree(nullptr),
 	crossings(0)
 {
 	buildIndex();
 }
 
-SIRtreePointInRing::~SIRtreePointInRing()
-{
-	delete sirTree;
-}
-
 void
 SIRtreePointInRing::buildIndex()
 {
-	//Envelope *env=ring->getEnvelopeInternal();
-	sirTree=new SIRtree();
-	const CoordinateSequence *pts=ring->getCoordinatesRO();
+	const CoordinateSequence *pts = ring->getCoordinatesRO();
 
 	const std::size_t npts=pts->getSize();
 	for(std::size_t i=1; i<npts; ++i)
 	{
 		if(pts->getAt(i-1)==pts->getAt(i)) continue; // Optimization suggested by MD. [Jon Aquino]
-		LineSegment *seg=new LineSegment(pts->getAt(i-1), pts->getAt(i));
-		sirTree->insert(seg->p0.y, seg->p1.y, seg);
+		std::unique_ptr<LineSegment> seg{new LineSegment(pts->getAt(i-1), pts->getAt(i))};
+		sirTree.insert(seg->p0.y, seg->p1.y, seg.get());
+		segments.push_back(std::move(seg));
 	}
 }
 
@@ -67,20 +60,17 @@ SIRtreePointInRing::isInside(const Coordinate& pt)
 {
 	crossings=0;
 	// test all segments intersected by vertical ray at pt
-	vector<void*> *segs=sirTree->query(pt.y);
-	//System.out.println("query size=" + segs.size());
-	for(int i=0;i<(int)segs->size();i++) {
-		LineSegment *seg=(LineSegment*) (*segs)[i];
+	std::unique_ptr<vector<void*>> segs{sirTree.query(pt.y)};
+
+	for(const auto& hit : *segs) {
+		LineSegment *seg = static_cast<LineSegment*>(hit);
 		testLineSegment(pt,seg);
 	}
 
 	/*
 	*  p is inside if number of crossings is odd.
 	*/
-	if ((crossings%2)==1) {
-		return true;
-	}
-	return false;
+	return (crossings % 2) == 1;
 }
 
 void
@@ -108,7 +98,6 @@ SIRtreePointInRing::testLineSegment(const Coordinate& p,LineSegment *seg)
 		*  segment straddles x axis,so compute intersection.
 		*/
 		xInt=RobustDeterminant::signOfDet2x2(x1,y1,x2,y2)/(y2-y1);
-		//xsave=xInt;
 		/*
 		*  crosses ray if strictly positive intersection.
 		*/

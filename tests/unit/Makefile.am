@@ -52,6 +52,7 @@ geos_unit_SOURCES = \
 	algorithm/PointLocatorTest.cpp \
 	algorithm/RobustLineIntersectionTest.cpp \
 	algorithm/RobustLineIntersectorTest.cpp \
+	algorithm/SIRtreePointInRingTest.cpp \
 	geom/CoordinateArraySequenceFactoryTest.cpp \
 	geom/CoordinateArraySequenceTest.cpp \
 	geom/CoordinateListTest.cpp \
