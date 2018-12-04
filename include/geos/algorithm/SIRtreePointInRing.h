@@ -18,7 +18,10 @@
 
 #include <geos/export.h>
 #include <geos/algorithm/PointInRing.h> // for inheritance
+#include <geos/index/strtree/SIRtree.h>
+#include <geos/geom/LineSegment.h>
 
+#include <memory>
 #include <vector>
 
 // Forward declarations
@@ -27,11 +30,6 @@ namespace geos {
 		class Coordinate;
 		class LineSegment;
 		class LinearRing;
-	}
-	namespace index {
-		namespace strtree {
-			class SIRtree;
-		}
 	}
 }
 
@@ -42,14 +40,15 @@ namespace algorithm { // geos::algorithm
 class GEOS_DLL SIRtreePointInRing: public PointInRing {
 private:
 	geom::LinearRing *ring;
-	index::strtree::SIRtree *sirTree;
+	index::strtree::SIRtree sirTree;
+	std::vector<std::unique_ptr<geom::LineSegment>> segments;
 	int crossings;  // number of segment/ray crossings
 	void buildIndex();
 	void testLineSegment(const geom::Coordinate& p,
 			geom::LineSegment *seg);
 public:
 	SIRtreePointInRing(geom::LinearRing *newRing);
-	~SIRtreePointInRing() override;
+	~SIRtreePointInRing() override = default;
 	bool isInside(const geom::Coordinate& pt) override;
 };
 
