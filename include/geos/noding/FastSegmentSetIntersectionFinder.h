@@ -23,6 +23,7 @@
 #include <geos/noding/SegmentString.h>
 #include <geos/noding/MCIndexSegmentSetMutualIntersector.h>
 
+#include <memory>
 
 //forward declarations
 namespace geos {
@@ -49,14 +50,14 @@ namespace noding { // geos::noding
 class FastSegmentSetIntersectionFinder
 {
 private:
-	MCIndexSegmentSetMutualIntersector * segSetMutInt;
-	geos::algorithm::LineIntersector * lineIntersector;
+	std::unique_ptr<MCIndexSegmentSetMutualIntersector> segSetMutInt;
+	std::unique_ptr<geos::algorithm::LineIntersector> lineIntersector;
 
 protected:
 public:
 	FastSegmentSetIntersectionFinder( SegmentString::ConstVect * baseSegStrings);
 
-	~FastSegmentSetIntersectionFinder();
+	~FastSegmentSetIntersectionFinder() = default;
 
 	/**
 	 * Gets the segment set intersector used by this class.
@@ -64,9 +65,9 @@ public:
 	 *
 	 * @return the segment set intersector used
 	 */
-	SegmentSetMutualIntersector * getSegmentSetIntersector()
+	const SegmentSetMutualIntersector * getSegmentSetIntersector() const
 	{
-		return segSetMutInt;
+		return segSetMutInt.get();
 	}
 
 	bool intersects( SegmentString::ConstVect * segStrings);

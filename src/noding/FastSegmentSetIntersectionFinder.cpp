@@ -45,19 +45,11 @@ FastSegmentSetIntersectionFinder( noding::SegmentString::ConstVect * baseSegStri
 	segSetMutInt->setBaseSegments( baseSegStrings);
 }
 
-FastSegmentSetIntersectionFinder::
-~FastSegmentSetIntersectionFinder()
-{
-	delete lineIntersector;
-	delete segSetMutInt;
-}
-
-
 bool
 FastSegmentSetIntersectionFinder::
 intersects( noding::SegmentString::ConstVect * segStrings)
 {
-	SegmentIntersectionDetector intFinder( lineIntersector);
+	SegmentIntersectionDetector intFinder(lineIntersector.get());
 
 	return this->intersects( segStrings, &intFinder);
 }
