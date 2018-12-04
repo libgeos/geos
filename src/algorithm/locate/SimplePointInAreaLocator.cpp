@@ -53,6 +53,7 @@ SimplePointInAreaLocator::containsPoint(const Coordinate& p,const Geometry *geom
 		return containsPointInPolygon(p, poly);
 	}
 
+	if (!geom->getEnvelopeInternal()->contains(p)) return false;
 	if (const GeometryCollection *col = dynamic_cast<const GeometryCollection*>(geom))
 	{
 		for (GeometryCollection::const_iterator
@@ -71,6 +72,7 @@ SimplePointInAreaLocator::containsPoint(const Coordinate& p,const Geometry *geom
 bool
 SimplePointInAreaLocator::containsPointInPolygon(const Coordinate& p, const Polygon *poly)
 {
+	if (!poly->getEnvelopeInternal()->contains(p)) return false;
 	if (poly->isEmpty()) return false;
 	const LineString *shell=poly->getExteriorRing();
 	const CoordinateSequence *cl;
@@ -83,9 +85,12 @@ SimplePointInAreaLocator::containsPointInPolygon(const Coordinate& p, const Poly
 	for(size_t i=0, n=poly->getNumInteriorRing(); i<n; i++)
 	{
 		const LineString *hole = poly->getInteriorRingN(i);
-		cl = hole->getCoordinatesRO();
-		if (CGAlgorithms::isPointInRing(p,cl)) {
-			return false;
+		if (hole->getEnvelopeInternal()->contains(p))
+		{
+			cl = hole->getCoordinatesRO();
+			if (CGAlgorithms::isPointInRing(p, cl)) {
+				return false;
+			}
 		}
 	}
 	return true;
