@@ -11,6 +11,7 @@
 
 add_executable(test_simplewkttester SimpleWKTTester.cpp)
 target_link_libraries(test_simplewkttester PRIVATE geos)
+target_compile_definitions(test_simplewkttester PRIVATE "USE_UNSTABLE_GEOS_CPP_API")
 
 add_executable(test_xmltester)
 target_sources(test_xmltester
@@ -24,6 +25,7 @@ target_link_libraries(test_xmltester PRIVATE geos)
 target_include_directories(test_xmltester
   PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>/tinyxml)
+target_compile_definitions(test_xmltester PRIVATE "USE_UNSTABLE_GEOS_CPP_API")
 
 file(GLOB_RECURSE _tests ${CMAKE_CURRENT_LIST_DIR}/tests/*.xml CONFIGURE_DEPEND)
 list(FILTER _tests EXCLUDE REGEX failure)

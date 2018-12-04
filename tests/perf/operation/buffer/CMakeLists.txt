@@ -11,3 +11,4 @@
 add_executable(test_perf_iterated_buffer IteratedBufferStressTest.cpp)
 target_link_libraries(test_perf_iterated_buffer PRIVATE geos)
 add_test(NAME test_perf_iterated_buffer COMMAND test_perf_iterated_buffer)
+target_compile_definitions(test_perf_iterated_buffer PRIVATE "USE_UNSTABLE_GEOS_CPP_API")

@@ -17,3 +17,4 @@ target_include_directories(test_perf_memleak_mp_prep
     $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>)
 target_link_libraries(test_perf_memleak_mp_prep PRIVATE geos_c)
 add_test(NAME test_perf_memleak_mp_prep COMMAND test_perf_memleak_mp_prep)
+target_compile_definitions(test_perf_memleak_mp_prep PRIVATE "USE_UNSTABLE_GEOS_CPP_API")
