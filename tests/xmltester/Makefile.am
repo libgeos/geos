@@ -37,6 +37,7 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/general/TestConvexHull-big.xml \
 	$(srcdir)/tests/general/TestConvexHull.xml \
 	$(srcdir)/tests/general/TestDistance.xml \
+	$(srcdir)/tests/general/TestDensify.xml \
 	$(srcdir)/tests/general/TestEqualsExact.xml \
 	$(srcdir)/tests/general/TestFunctionAA.xml \
 	$(srcdir)/tests/general/TestFunctionAAPrec.xml \

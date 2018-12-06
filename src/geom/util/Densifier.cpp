@@ -111,7 +111,7 @@ Densifier::densifyPoints(const Coordinate::Vect pts, double distanceTolerance, c
 	{
 		seg.p0 = pts[i];
 		seg.p1 = pts[i+1];
-		coordList.insert(it++, seg.p0, false);
+		coordList.insert(coordList.end(), seg.p0, false);
 		double len = seg.getLength();
 		int densifiedSegCount = (int) (len / distanceTolerance) + 1;
 		if (densifiedSegCount > 1)
@@ -123,11 +123,11 @@ Densifier::densifyPoints(const Coordinate::Vect pts, double distanceTolerance, c
 				Coordinate p;
 				seg.pointAlong(segFract, p);
 				precModel->makePrecise(p);
-				coordList.insert(it++, p, false);
+				coordList.insert(coordList.end(), p, false);
 			}
 		}
 	}
-	coordList.insert(it++, pts[pts.size()-1], false);
+	coordList.insert(coordList.end(), pts[pts.size()-1], false);
 	return coordList.toCoordinateArray();
 }
 
