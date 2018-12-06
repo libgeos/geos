@@ -323,9 +323,9 @@ public:
       ++count;
       const Geometry* g = *i;
       if ( geomClass < 0 ) {
-        geomClass = g->getClassSortIndex();
+        geomClass = g->getSortIndex();
       }
-      else if ( geomClass != g->getClassSortIndex() ) {
+      else if ( geomClass != g->getSortIndex() ) {
         isHeterogeneous = true;
       }
     }

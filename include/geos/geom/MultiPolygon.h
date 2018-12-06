@@ -115,6 +115,9 @@ protected:
 	MultiPolygon(std::vector<Geometry *> *newPolys, const GeometryFactory *newFactory);
 
 	MultiPolygon(const MultiPolygon &mp);
+
+	int getSortIndex() const override { return SORTINDEX_MULTIPOLYGON; };
+
 };
 
 #ifdef _MSC_VER

@@ -91,6 +91,17 @@ enum GeometryTypeId {
 	GEOS_GEOMETRYCOLLECTION
 };
 
+enum GeometrySortIndex {
+	SORTINDEX_POINT = 0,
+	SORTINDEX_MULTIPOINT = 1,
+	SORTINDEX_LINESTRING = 2,
+	SORTINDEX_LINEARRING = 3,
+	SORTINDEX_MULTILINESTRING = 4,
+	SORTINDEX_POLYGON = 5,
+	SORTINDEX_MULTIPOLYGON = 6,
+	SORTINDEX_GEOMETRYCOLLECTION = 7
+};
+
 /**
  * \class Geometry geom.h geos.h
  *
@@ -846,9 +857,13 @@ protected:
 	 */
 	Geometry(const GeometryFactory *factory);
 
-private:
 
-	int getClassSortIndex() const;
+protected:
+
+		virtual int getSortIndex() const = 0;
+
+
+private:
 
 	class GEOS_DLL GeometryChangedFilter : public GeometryComponentFilter
 	{
