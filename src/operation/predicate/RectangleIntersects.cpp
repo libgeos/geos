@@ -28,6 +28,7 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/IntersectionMatrix.h>
+#include <geos/geom/Location.h>
 
 #include <geos/algorithm/locate/SimplePointInAreaLocator.h>
 
@@ -166,7 +167,7 @@ protected:
 
 			// check rect point in poly (rect is known not to
 			// touch polygon at this point)
-			if ( SimplePointInAreaLocator::containsPointInPolygon(rectPt, poly) )
+			if (SimplePointInAreaLocator::locatePointInPolygon(rectPt, poly) != geom::Location::EXTERIOR)
 			{
 				containsPointVar=true;
 				return;

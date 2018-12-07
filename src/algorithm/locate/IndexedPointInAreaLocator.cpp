@@ -20,6 +20,7 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/LineSegment.h>
+#include <geos/geom/LinearRing.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/util/LinearComponentExtracter.h>
 #include <geos/index/intervalrtree/SortedPackedIntervalRTree.h>
@@ -85,9 +86,11 @@ IndexedPointInAreaLocator::buildIndex( const geom::Geometry & g)
 IndexedPointInAreaLocator::IndexedPointInAreaLocator( const geom::Geometry & g)
 :	areaGeom( g)
 {
-	if (	typeid( areaGeom) != typeid( geom::Polygon)
-		&&	typeid( areaGeom) != typeid( geom::MultiPolygon) )
-		throw util::IllegalArgumentException("Argument must be Polygonal");
+	const std::type_info& areaGeomId = typeid(areaGeom);
+	if (	areaGeomId != typeid( geom::Polygon)
+		&&	areaGeomId != typeid( geom::MultiPolygon)
+		&&	areaGeomId != typeid( geom::LinearRing) )
+		throw util::IllegalArgumentException("Argument must be Polygonal or LinearRing");
 
 	buildIndex( areaGeom);
 }
