@@ -50,7 +50,7 @@ set(VERSION "${GEOS_VERSION}")
 # by autotools for *.h.in files
 set(VERSION_MAJOR ${GEOS_VERSION_MAJOR})
 set(VERSION_MINOR ${GEOS_VERSION_MINOR})
-set(VERSION_PATCH ${GEOS_VERSION_PATCH})
+set(VERSION_PATCH ${GEOS_VERSION_PATCH}dev)
 
 # JTS_PORT is the version of JTS this release is bound to
 set(JTS_PORT 1.13.0)
