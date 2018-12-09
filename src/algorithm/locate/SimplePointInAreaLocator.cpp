@@ -53,6 +53,7 @@ SimplePointInAreaLocator::locateInGeometry(const Coordinate& p,const Geometry *g
         return locatePointInPolygon(p, poly);
     }
 
+    if (!geom->getEnvelopeInternal()->contains(p)) return Location::EXTERIOR;
     if (const GeometryCollection *col = dynamic_cast<const GeometryCollection*>(geom))
     {
         for (auto g2: *col)
@@ -70,6 +71,7 @@ int
 SimplePointInAreaLocator::locatePointInPolygon(const Coordinate& p, const Polygon *poly)
 {
     if (poly->isEmpty()) return Location::EXTERIOR;
+    if (!poly->getEnvelopeInternal()->contains(p)) return Location::EXTERIOR;
     const LineString *shell=poly->getExteriorRing();
     const CoordinateSequence *cl;
     cl = shell->getCoordinatesRO();
@@ -81,13 +83,16 @@ SimplePointInAreaLocator::locatePointInPolygon(const Coordinate& p, const Polygo
     for(size_t i=0, n=poly->getNumInteriorRing(); i<n; i++)
     {
         const LineString *hole = poly->getInteriorRingN(i);
-        cl = hole->getCoordinatesRO();
-        int holeLoc = CGAlgorithms::locatePointInRing(p,*cl);
-        if (holeLoc == Location::BOUNDARY)
-            return Location::BOUNDARY;
-        if (holeLoc == Location::INTERIOR)
-            return Location::EXTERIOR;
-        // if in EXTERIOR of this hole, keep checking other holes
+        if (hole->getEnvelopeInternal()->contains(p))
+        {
+          cl = hole->getCoordinatesRO();
+          int holeLoc = CGAlgorithms::locatePointInRing(p,*cl);
+          if (holeLoc == Location::BOUNDARY)
+              return Location::BOUNDARY;
+          if (holeLoc == Location::INTERIOR)
+              return Location::EXTERIOR;
+          // if in EXTERIOR of this hole, keep checking other holes
+        }
     }
     return Location::INTERIOR;
 }
