@@ -35,6 +35,7 @@
 #include <geos/geom/prep/PreparedGeometry.h>
 #include <geos/geom/prep/PreparedGeometryFactory.h>
 #include <geos/geom/BinaryOp.h>
+#include <geos/geom/util/Densifier.h>
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
 #include <geos/operation/buffer/BufferBuilder.h>
@@ -850,6 +851,29 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             if ( testValidOutput )
                 success &= int(testValid(gRealRes.get(), "result"));
         }
+
+        else if (opName=="densify")
+        {
+            geom::Geometry *p_gT = gA;
+
+            GeomPtr gRes(parseGeometry(opRes, "expected"));
+            // gRes->normalize();
+
+            geom::util::Densifier den(p_gT);
+            double distanceTolerance = std::atof(opArg2.c_str());
+            den.setDistanceTolerance(distanceTolerance);
+            GeomPtr gRealRes = den.getResultGeometry();
+
+            // gRealRes->normalize();
+
+            if (gRes->compareTo(gRealRes.get())==0)
+                success=1;
+
+            actual_result=printGeom(gRealRes.get());
+            expected_result=printGeom(gRes.get());
+
+        }
+
 
         else if (opName=="union")
         {

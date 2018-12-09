@@ -113,6 +113,9 @@ protected:
 	MultiPoint(const MultiPoint &mp): Geometry(mp), GeometryCollection(mp) {}
 
 	const Coordinate* getCoordinateN(size_t n) const;
+
+	int getSortIndex() const override { return SORTINDEX_MULTIPOINT; };
+
 };
 
 #ifdef _MSC_VER

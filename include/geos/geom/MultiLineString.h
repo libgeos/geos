@@ -115,6 +115,9 @@ protected:
 			const GeometryFactory *newFactory);
 
 	MultiLineString(const MultiLineString &mp);
+
+	int getSortIndex() const override { return SORTINDEX_MULTILINESTRING; };
+
 };
 
 #ifdef _MSC_VER

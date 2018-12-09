@@ -1,9 +1,9 @@
 #
-# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+# This file is part of project GEOS (http://trac.osgeo.org/geos/)
 #
-#SUBDIRS = 
+#SUBDIRS =
 
-#EXTRA_DIST = 
+#EXTRA_DIST =
 
 geosdir = $(includedir)/geos/geom/util
 
@@ -19,4 +19,5 @@ geos_HEADERS = \
     PointExtracter.h \
     PolygonExtracter.h \
     ShortCircuitedGeometryVisitor.h \
-    SineStarFactory.h
+    SineStarFactory.h \
+    Densifier.h

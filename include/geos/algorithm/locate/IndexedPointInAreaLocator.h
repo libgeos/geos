@@ -25,15 +25,15 @@
 #include <vector> // composition
 
 namespace geos {
-	namespace algorithm {
-		class RayCrossingCounter;
-	}
-	namespace geom {
-		class Geometry;
-		class Coordinate;
-		class CoordinateSequence;
-		class LineSegment;
-	}
+namespace algorithm {
+class RayCrossingCounter;
+}
+namespace geom {
+class Geometry;
+class Coordinate;
+class CoordinateSequence;
+class LineSegment;
+}
 }
 
 namespace geos {
@@ -42,75 +42,79 @@ namespace locate { // geos::algorithm::locate
 
 /** \brief
  * Determines the location of {@link Coordinate}s relative to
- * a {@link Polygon} or {@link MultiPolygon} geometry, using indexing for efficiency.
+ * an areal geometry, using indexing for efficiency.
  *
- * This algorithm is suitable for use in cases where
- * many points will be tested against a given area.
+ * The Location is computed precisely, in that points
+ * located on the geometry boundary or segments will
+ * return {@link Location.BOUNDARY}.
  *
- * @author Martin Davis
- *
+ * {@link Polygonal} and {@link LinearRing} geometries
+ * are supported.
  */
 class IndexedPointInAreaLocator : public PointOnGeometryLocator
 {
 private:
-	class IntervalIndexedGeometry
-	{
-	private:
-		index::intervalrtree::SortedPackedIntervalRTree index;
+    class IntervalIndexedGeometry
+    {
+    private:
+        index::intervalrtree::SortedPackedIntervalRTree index;
 
-		void init( const geom::Geometry & g);
-		void addLine(const geom::CoordinateSequence * pts);
+        void init(const geom::Geometry & g);
+        void addLine(const geom::CoordinateSequence * pts);
 
-		// To keep track of LineSegments
-		std::vector< geom::LineSegment > segments;
+        // To keep track of LineSegments
+        std::vector< geom::LineSegment > segments;
 
-	public:
-		IntervalIndexedGeometry( const geom::Geometry & g);
+    public:
+        IntervalIndexedGeometry(const geom::Geometry & g);
 
-		void query(double min, double max, index::ItemVisitor * visitor);
-	};
-
-
-	class SegmentVisitor : public index::ItemVisitor
-	{
-	private:
-		algorithm::RayCrossingCounter * counter;
-
-	public:
-		SegmentVisitor( algorithm::RayCrossingCounter * p_counter)
-		:	counter( p_counter)
-		{ }
-
-		~SegmentVisitor() override
-		{ }
-
-		void visitItem( void * item) override;
-	};
+        void query(double min, double max, index::ItemVisitor * visitor);
+    };
 
 
-	const geom::Geometry & areaGeom;
-	std::unique_ptr<IntervalIndexedGeometry> index;
+    class SegmentVisitor : public index::ItemVisitor
+    {
+    private:
+        algorithm::RayCrossingCounter * counter;
 
-	void buildIndex( const geom::Geometry & g);
+    public:
+        SegmentVisitor(algorithm::RayCrossingCounter * p_counter)
+            :	counter(p_counter)
+        { }
+
+        ~SegmentVisitor() override
+        { }
+
+        void visitItem(void * item) override;
+    };
+
+
+    const geom::Geometry & areaGeom;
+    std::unique_ptr<IntervalIndexedGeometry> index;
+
+    void buildIndex(const geom::Geometry & g);
 
     // Declare type as noncopyable
     IndexedPointInAreaLocator(const IndexedPointInAreaLocator& other) = delete;
     IndexedPointInAreaLocator& operator=(const IndexedPointInAreaLocator& rhs) = delete;
 
 public:
-	/**
-	 * Creates a new locator for a given {@link Geometry}
-	 * @param g the Geometry to locate in
-	 */
-	IndexedPointInAreaLocator( const geom::Geometry & g);
+    /**
+     * Creates a new locator for a given {@link Geometry}
+     * {@link Polygonal} and {@link LinearRing} geometries
+    * are supported.
+    *
+     * @param g the Geometry to locate in
+     */
+    IndexedPointInAreaLocator(const geom::Geometry & g);
 
-	/**
-	 * Determines the {@link Location} of a point in an areal {@link Geometry}.
-	 *
-	 * @param p the point to test
-	 * @return the location of the point in the geometry
-	 */
-	int locate( const geom::Coordinate * /*const*/ p) override;
+    /**
+     * Determines the {@link Location} of a point in an areal {@link Geometry}.
+     *
+     * @param p the point to test
+     * @return the location of the point in the geometry
+     */
+    int locate(const geom::Coordinate * /*const*/ p) override;
 
 };
 

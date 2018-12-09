@@ -160,6 +160,8 @@ protected:
 
 	int compareToSameClass(const Geometry *p) const override;
 
+	int getSortIndex() const override { return SORTINDEX_POINT; };
+
 private:
 
 	/**

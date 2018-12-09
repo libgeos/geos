@@ -20,11 +20,11 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Geometry;
-		class Coordinate;
-		class Polygon;
-	}
+namespace geom {
+class Geometry;
+class Coordinate;
+class Polygon;
+}
 }
 
 namespace geos {
@@ -49,27 +49,36 @@ class SimplePointInAreaLocator : public PointOnGeometryLocator
 
 public:
 
-	static int locate(const geom::Coordinate& p,
-			const geom::Geometry *geom);
+    static int locate(const geom::Coordinate& p,
+                      const geom::Geometry *geom);
 
-	static bool containsPointInPolygon(const geom::Coordinate& p,
-			const geom::Polygon *poly);
+    /**
+    * Determines the {@link Location} of a point in a {@link Polygon}.
+    * Computes {@link Location::BOUNDARY} if the point lies exactly
+    * on the polygon boundary.
+    *
+    * @param p the point to test
+    * @param poly the geometry to test
+    * @return the Location of the point in the polygon
+    */
+    static int locatePointInPolygon(const geom::Coordinate& p,
+                                    const geom::Polygon *poly);
 
-	SimplePointInAreaLocator( const geom::Geometry * p_g)
-	:	g( p_g)
-	{ }
+    SimplePointInAreaLocator(const geom::Geometry * p_g)
+        :	g(p_g)
+    { }
 
-	int locate( const geom::Coordinate * p) override
-	{
-		return locate( *p, g);
-	}
+    int locate(const geom::Coordinate * p) override
+    {
+        return locate(*p, g);
+    }
 
 private:
 
-	static bool containsPoint(const geom::Coordinate& p,
-			const geom::Geometry *geom);
+    static int locateInGeometry(const geom::Coordinate& p,
+                                const geom::Geometry *geom);
 
-	const geom::Geometry * g;
+    const geom::Geometry * g;
 
 };
 

@@ -176,6 +176,9 @@ protected:
 
 	Envelope::Ptr computeEnvelopeInternal() const override;
 
+	int getSortIndex() const override { return SORTINDEX_POLYGON; };
+
+
 private:
 
 	void normalize(LinearRing *ring, bool clockwise);

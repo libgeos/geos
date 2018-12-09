@@ -188,13 +188,21 @@ WKBReader::readGeometry()
                 dis.setOrder(ByteOrderValues::ENDIAN_BIG);
 
 	int typeInt = dis.readInt();
-	int geometryType = typeInt & 0xff;
+	/* Pick up both ISO and SFSQL geometry type */
+	int geometryType = (typeInt & 0xffff) % 1000;
+	/* ISO type range 1000 is Z, 2000 is M, 3000 is ZM */
+	int isoTypeRange = (typeInt & 0xffff) / 1000;
+	int isoHasZ = (isoTypeRange == 1) || (isoTypeRange == 3);
+	//int isoHasM = (isoTypeRange == 2) || (isoTypeRange == 3);
+	/* SFSQL high bit flag for Z, next bit for M */
+	int sfsqlHasZ = (typeInt & 0x80000000) != 0;
+	//int sfsqlHasM = (typeInt & 0x40000000) != 0;
 
 #if DEBUG_WKB_READER
 	cout<<"WKB geometryType: "<<geometryType<<endl;
 #endif
 
-	bool hasZ = ((typeInt & 0x80000000) != 0);
+	bool hasZ = sfsqlHasZ || isoHasZ;
 	if (hasZ) inputDimension = 3;
 	else inputDimension = 2; // doesn't handle M currently
 

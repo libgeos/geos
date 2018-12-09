@@ -196,6 +196,7 @@ protected:
 	 */
 	GeometryCollection(std::vector<Geometry *> *newGeoms, const GeometryFactory *newFactory);
 
+	int getSortIndex() const override { return SORTINDEX_GEOMETRYCOLLECTION; };
 
 	std::vector<Geometry *>* geometries;
 

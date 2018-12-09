@@ -202,6 +202,8 @@ protected:
 
 	CoordinateSequence::Ptr points;
 
+	int getSortIndex() const override { return SORTINDEX_LINESTRING; };
+
 private:
 
 	void validateConstruction();

@@ -652,10 +652,11 @@ int
 Geometry::compareTo(const Geometry *geom) const
 {
 	// compare to self
-	if ( this == geom ) return 0;
+	if (this == geom) return 0;
 
-	if (getClassSortIndex()!=geom->getClassSortIndex()) {
-		return getClassSortIndex()-geom->getClassSortIndex();
+	if (getSortIndex() != geom->getSortIndex()) {
+		int diff = getSortIndex() - geom->getSortIndex();
+		return (diff > 0) - (diff < 0); // signum()
 	}
 	if (isEmpty() && geom->isEmpty()) {
 		return 0;
@@ -687,32 +688,6 @@ Geometry::checkNotGeometryCollection(const Geometry *g)
 	}
 }
 
-int
-Geometry::getClassSortIndex() const
-{
-	//const type_info &t=typeid(*this);
-
-	     if ( typeid(*this) == typeid(Point)              ) return 0;
-	else if ( typeid(*this) == typeid(MultiPoint)         ) return 1;
-	else if ( typeid(*this) == typeid(LineString)         ) return 2;
-	else if ( typeid(*this) == typeid(LinearRing)         ) return 3;
-	else if ( typeid(*this) == typeid(MultiLineString)    ) return 4;
-	else if ( typeid(*this) == typeid(Polygon)            ) return 5;
-	else if ( typeid(*this) == typeid(MultiPolygon)       ) return 6;
-	else
-	{
-		assert(typeid(*this) == typeid(GeometryCollection)); // unsupported class
-		return 7;
-	}
-
-#if 0
-	string str="Class not supported: ";
-	str.append(typeid(*this).name());
-	str.append("");
-	Assert::shouldNeverReachHere(str);
-	return -1;
-#endif
-}
 
 void Geometry::GeometryChangedFilter::filter_rw(Geometry* geom)
 {

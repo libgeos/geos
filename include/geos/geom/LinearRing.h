@@ -107,6 +107,11 @@ public:
 
   	Geometry* reverse() const override;
 
+protected:
+
+		int getSortIndex() const override { return SORTINDEX_LINEARRING; };
+
+
 private:
 
 	void validateConstruction();
