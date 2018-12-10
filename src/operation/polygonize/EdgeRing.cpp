@@ -103,8 +103,7 @@ EdgeRing::ptNotInList(const CoordinateSequence *testPts,
     for (std::size_t i = 0; i < npts; ++i)
     {
         const Coordinate& testPt = testPts->getAt(i);
-        // TODO: shouldn't this be ! isInList ?
-        if (isInList(testPt, pts))
+        if (!isInList(testPt, pts))
             return testPt;
     }
     return Coordinate::getNull();
@@ -119,9 +118,9 @@ EdgeRing::isInList(const Coordinate& pt,
     for (std::size_t i = 0; i < npts; ++i)
     {
         if (pt == pts->getAt(i))
-            return false;
+            return true;
     }
-    return true;
+    return false;
 }
 
 /*public*/
