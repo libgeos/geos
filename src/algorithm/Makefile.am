@@ -17,6 +17,7 @@ libalgorithm_la_SOURCES = \
     CentroidLine.cpp \
     CentroidPoint.cpp \
     CGAlgorithms.cpp \
+    CGAlgorithmsDD.cpp \
     ConvexHull.cpp \
     HCoordinate.cpp \
     InteriorPointArea.cpp \
