@@ -45,6 +45,18 @@ class GEOS_DLL CGAlgorithmsDD {
 
 public:
 
+	enum {
+		CLOCKWISE=-1,
+		COLLINEAR=0,
+		COUNTERCLOCKWISE=1
+	};
+
+	enum {
+		RIGHT=-1,
+		LEFT=1,
+		STRAIGHT=0
+	};
+
     /**
      * Returns the index of the direction of the point <code>q</code> relative to
      * a vector specified by <code>p1-p2</code>.

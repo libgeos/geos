@@ -24,25 +24,25 @@
 using namespace geos::geom;
 
 namespace {
-double const DP_SAFE_EPSILON =  1e-15;
 
+	double const DP_SAFE_EPSILON =  1e-15;
 
-inline int SigNumDD(DD const& dd)
-{
-    static DD const zero(0.0);
-    if (dd < zero) {
-        return -1;
-    }
-    if (dd > zero) {
-        return 1;
-    }
-    return 0;
-}
+	inline int SigNumDD(DD const& dd)
+	{
+	    static DD const zero(0.0);
+	    if (dd < zero)
+	        return -1;
 
-inline std::string ToStringDD(DD const& dd)
-{
-    return dd.ToString();
-}
+	    if (dd > zero)
+	        return 1;
+
+	    return 0;
+	}
+
+	inline std::string ToStringDD(DD const& dd)
+	{
+	    return dd.ToString();
+	}
 }
 
 namespace geos {
@@ -52,11 +52,6 @@ int CGAlgorithmsDD::orientationIndex(const Coordinate& p1,
                                      const Coordinate& p2,
                                      const Coordinate& q)
 {
-    // fast filter for orientation index
-    // avoids use of slow extended-precision arithmetic in many cases
-    //int index = orientationIndexFilter(p1, p2, q);
-    //if (index <= 1) return index;
-    // normalize coordinates
     DD dx1 = DD(p2.x) + DD(-p1.x);
     DD dy1 = DD(p2.y) + DD(-p1.y);
     DD dx2 = DD(q.x) + DD(-p2.x);
@@ -64,8 +59,6 @@ int CGAlgorithmsDD::orientationIndex(const Coordinate& p1,
     DD mx1y2(dx1 * dy2);
     DD my1x2(dy1 * dx2);
     DD d = mx1y2 - my1x2;
-    // sign of determinant - unrolled for performance
-    //std::cout << ToStringDD(d) << std::endl;
     return SigNumDD(d);
 }
 
@@ -154,48 +147,6 @@ void CGAlgorithmsDD::intersection(const Coordinate& p1, const Coordinate& p2,
     rv.y = y.ToDouble();
     return;
 }
-
-#if 0
-public static Coordinate intersection(
-    Coordinate p1, Coordinate p2,
-    Coordinate q1, Coordinate q2)
-{
-    DD denom1 = DD.valueOf(q2.y).selfSubtract(q1.y)
-                .selfMultiply(DD.valueOf(p2.x).selfSubtract(p1.x));
-    DD denom2 = DD.valueOf(q2.x).selfSubtract(q1.x)
-                .selfMultiply(DD.valueOf(p2.y).selfSubtract(p1.y));
-    DD denom = denom1.subtract(denom2);
-
-    /**
-     * Cases:
-     * - denom is 0 if lines are parallel
-     * - intersection point lies within line segment p if fracP is between 0 and 1
-     * - intersection point lies within line segment q if fracQ is between 0 and 1
-     */
-
-    DD numx1 = DD.valueOf(q2.x).selfSubtract(q1.x)
-               .selfMultiply(DD.valueOf(p1.y).selfSubtract(q1.y));
-    DD numx2 = DD.valueOf(q2.y).selfSubtract(q1.y)
-               .selfMultiply(DD.valueOf(p1.x).selfSubtract(q1.x));
-    DD numx = numx1.subtract(numx2);
-    double fracP = numx.selfDivide(denom).doubleValue();
-
-    double x = DD.valueOf(p1.x).selfAdd(DD.valueOf(p2.x).selfSubtract(p1.x).selfMultiply(fracP)).doubleValue();
-
-    DD numy1 = DD.valueOf(p2.x).selfSubtract(p1.x)
-               .selfMultiply(DD.valueOf(p1.y).selfSubtract(q1.y));
-    DD numy2 = DD.valueOf(p2.y).selfSubtract(p1.y)
-               .selfMultiply(DD.valueOf(p1.x).selfSubtract(q1.x));
-    DD numy = numy1.subtract(numy2);
-    double fracQ = numy.selfDivide(denom).doubleValue();
-
-    double y = DD.valueOf(q1.y).selfAdd(DD.valueOf(q2.y).selfSubtract(q1.y).selfMultiply(fracQ)).doubleValue();
-
-    return new Coordinate(x,y);
-}
-}
-
-#endif
 
 
 } // namespace geos::algorithm
