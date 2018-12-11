@@ -20,22 +20,6 @@ namespace tut
 	//
 	// Test Group
 	//
-
-	// dummy data, not used
-	// struct test_angle_data {
- //    typedef geos::geom::Coordinate Coordinate;
- //    typedef geos::algorithm::Angle Angle;
-
- //    double TOL;
-	//   double PI;
-
-	//   test_angle_data()
- //      :
- //      TOL (1e-5),
-	//     PI  ( 3.14159265358979323846 )
- //    {}
-
-	// };
 	struct test_orientation_data {
 		Coordinate c1;
 		Coordinate c2;
