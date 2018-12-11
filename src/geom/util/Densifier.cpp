@@ -107,10 +107,11 @@ Densifier::densifyPoints(const Coordinate::Vect pts, double distanceTolerance, c
 	geom::LineSegment seg;
 	geom::CoordinateList coordList;
 	geom::CoordinateList::iterator it = coordList.begin();
-	for (int i = 0; i < pts.size()-1; i++)
+
+	for (Coordinate::Vect::const_iterator it=pts.begin(), itEnd=pts.end()-1; it < itEnd; ++it)
 	{
-		seg.p0 = pts[i];
-		seg.p1 = pts[i+1];
+		seg.p0 = *it;
+		seg.p1 = *(it+1);
 		coordList.insert(coordList.end(), seg.p0, false);
 		double len = seg.getLength();
 		int densifiedSegCount = (int) (len / distanceTolerance) + 1;
