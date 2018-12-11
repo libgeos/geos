@@ -125,3 +125,14 @@ To build Doxygen documentation:
     cd doc
     make doxygen-html
 
+## Style
+
+To format your code into the desired style, use astyle 3.1:
+
+    astyle --style=stroustrup \
+           --pad-comma \
+           --indent=spaces=4 \
+           --max-code-length=120 \
+           --lineend=linux \
+           yourfile.cpp
+
