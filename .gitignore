@@ -35,6 +35,7 @@ tests/perf/operation/predicate/RectangleIntersectsPerfTest
 tests/perf/capi/memleak_mp_prep
 tests/perf/ClassSizes
 include/geos/platform.h
+include/geos/platform.h.disabled
 include/geos/stamp-h2
 include/geos/version.h
 include/stamp-h1

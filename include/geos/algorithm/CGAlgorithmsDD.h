@@ -54,7 +54,8 @@ public:
     enum {
         RIGHT=-1,
         LEFT=1,
-        STRAIGHT=0
+        STRAIGHT=0,
+        FAILURE=2
     };
 
     /**
@@ -96,11 +97,11 @@ public:
                                       const geom::Coordinate& pb,
                                       const geom::Coordinate& pc);
 
-    static int signum(double x)
+    static int orientation(double x)
     {
-        if (x > 0) return 1;
-        if (x < 0) return -1;
-        return 0;
+        if (x < 0) return CGAlgorithmsDD::RIGHT;
+        if (x > 0) return CGAlgorithmsDD::LEFT;
+        return CGAlgorithmsDD::STRAIGHT;
     }
 
     static void intersection(const geom::Coordinate& p1, const geom::Coordinate& p2,

@@ -106,7 +106,6 @@ Densifier::densifyPoints(const Coordinate::Vect pts, double distanceTolerance, c
 {
 	geom::LineSegment seg;
 	geom::CoordinateList coordList;
-	geom::CoordinateList::iterator it = coordList.begin();
 
 	for (Coordinate::Vect::const_iterator it=pts.begin(), itEnd=pts.end()-1; it < itEnd; ++it)
 	{

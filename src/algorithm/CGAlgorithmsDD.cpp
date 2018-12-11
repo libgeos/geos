@@ -22,27 +22,28 @@
 #include <sstream>
 
 using namespace geos::geom;
+using namespace geos::algorithm;
 
 namespace {
 
 double const DP_SAFE_EPSILON =  1e-15;
 
-inline int SigNumDD(DD const& dd)
+inline int OrientationDD(DD const& dd)
 {
     static DD const zero(0.0);
     if (dd < zero)
-        return -1;
+        return CGAlgorithmsDD::RIGHT;
 
     if (dd > zero)
-        return 1;
+        return CGAlgorithmsDD::LEFT;
 
-    return 0;
+    return CGAlgorithmsDD::STRAIGHT;
 }
 
-inline std::string ToStringDD(DD const& dd)
-{
-    return dd.ToString();
-}
+// inline std::string ToStringDD(DD const& dd)
+// {
+//     return dd.ToString();
+// }
 }
 
 namespace geos {
@@ -52,6 +53,7 @@ int CGAlgorithmsDD::orientationIndex(const Coordinate& p1,
                                      const Coordinate& p2,
                                      const Coordinate& q)
 {
+    static DD const zero(0.0);
     DD dx1 = DD(p2.x) + DD(-p1.x);
     DD dy1 = DD(p2.y) + DD(-p1.y);
     DD dx2 = DD(q.x) + DD(-p2.x);
@@ -59,7 +61,7 @@ int CGAlgorithmsDD::orientationIndex(const Coordinate& p1,
     DD mx1y2(dx1 * dy2);
     DD my1x2(dy1 * dx2);
     DD d = mx1y2 - my1x2;
-    return SigNumDD(d);
+    return OrientationDD(d);
 }
 
 int CGAlgorithmsDD::signOfDet2x2(DD &x1, DD &y1, DD &x2, DD &y2)
@@ -67,7 +69,7 @@ int CGAlgorithmsDD::signOfDet2x2(DD &x1, DD &y1, DD &x2, DD &y2)
     DD mx1y2(x1 * y2);
     DD my1x2(y1 * x2);
     DD d = mx1y2 - my1x2;
-    return SigNumDD(d);
+    return OrientationDD(d);
 }
 
 int CGAlgorithmsDD::orientationIndexFilter(const Coordinate& pa,
@@ -81,7 +83,7 @@ int CGAlgorithmsDD::orientationIndexFilter(const Coordinate& pa,
 
     if (detleft > 0.0) {
         if (detright <= 0.0) {
-            return signum(det);
+            return orientation(det);
         }
         else {
             detsum = detleft + detright;
@@ -89,21 +91,21 @@ int CGAlgorithmsDD::orientationIndexFilter(const Coordinate& pa,
     }
     else if (detleft < 0.0) {
         if (detright >= 0.0) {
-            return signum(det);
+            return orientation(det);
         }
         else {
             detsum = -detleft - detright;
         }
     }
     else {
-        return signum(det);
+        return orientation(det);
     }
 
     double const errbound = DP_SAFE_EPSILON * detsum;
     if ((det >= errbound) || (-det >= errbound)) {
-        return signum(det);
+        return orientation(det);
     }
-    return 2;
+    return CGAlgorithmsDD::FAILURE;
 }
 
 void CGAlgorithmsDD::intersection(const Coordinate& p1, const Coordinate& p2,
