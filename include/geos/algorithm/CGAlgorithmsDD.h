@@ -29,10 +29,10 @@ typedef ttmath::Big<TTMATH_BITS(32), TTMATH_BITS(128)> DD;
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-	class Coordinate;
-	class CoordinateSequence;
-	}
+namespace geom {
+class Coordinate;
+class CoordinateSequence;
+}
 }
 
 namespace geos {
@@ -45,17 +45,17 @@ class GEOS_DLL CGAlgorithmsDD {
 
 public:
 
-	enum {
-		CLOCKWISE=-1,
-		COLLINEAR=0,
-		COUNTERCLOCKWISE=1
-	};
+    enum {
+        CLOCKWISE=-1,
+        COLLINEAR=0,
+        COUNTERCLOCKWISE=1
+    };
 
-	enum {
-		RIGHT=-1,
-		LEFT=1,
-		STRAIGHT=0
-	};
+    enum {
+        RIGHT=-1,
+        LEFT=1,
+        STRAIGHT=0
+    };
 
     /**
      * Returns the index of the direction of the point <code>q</code> relative to
@@ -96,20 +96,21 @@ public:
                                       const geom::Coordinate& pb,
                                       const geom::Coordinate& pc);
 
-    static int signum(double x) {
+    static int signum(double x)
+    {
         if (x > 0) return 1;
         if (x < 0) return -1;
         return 0;
     }
 
     static void intersection(const geom::Coordinate& p1, const geom::Coordinate& p2,
-                   					 const geom::Coordinate& q1, const geom::Coordinate& q2,
-         		       					 geom::Coordinate &rv);
+                             const geom::Coordinate& q1, const geom::Coordinate& q2,
+                             geom::Coordinate &rv);
 
 
 protected:
 
-		static int signOfDet2x2(DD &x1, DD &y1, DD &x2, DD &y2);
+    static int signOfDet2x2(DD &x1, DD &y1, DD &x2, DD &y2);
 
 };
 

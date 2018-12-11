@@ -25,24 +25,24 @@ using namespace geos::geom;
 
 namespace {
 
-	double const DP_SAFE_EPSILON =  1e-15;
+double const DP_SAFE_EPSILON =  1e-15;
 
-	inline int SigNumDD(DD const& dd)
-	{
-	    static DD const zero(0.0);
-	    if (dd < zero)
-	        return -1;
+inline int SigNumDD(DD const& dd)
+{
+    static DD const zero(0.0);
+    if (dd < zero)
+        return -1;
 
-	    if (dd > zero)
-	        return 1;
+    if (dd > zero)
+        return 1;
 
-	    return 0;
-	}
+    return 0;
+}
 
-	inline std::string ToStringDD(DD const& dd)
-	{
-	    return dd.ToString();
-	}
+inline std::string ToStringDD(DD const& dd)
+{
+    return dd.ToString();
+}
 }
 
 namespace geos {
@@ -82,16 +82,20 @@ int CGAlgorithmsDD::orientationIndexFilter(const Coordinate& pa,
     if (detleft > 0.0) {
         if (detright <= 0.0) {
             return signum(det);
-        } else {
+        }
+        else {
             detsum = detleft + detright;
         }
-    } else if (detleft < 0.0) {
+    }
+    else if (detleft < 0.0) {
         if (detright >= 0.0) {
             return signum(det);
-        } else {
+        }
+        else {
             detsum = -detleft - detright;
         }
-    } else {
+    }
+    else {
         return signum(det);
     }
 
