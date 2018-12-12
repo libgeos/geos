@@ -36,7 +36,6 @@
 //#include <geos/algorithm/InteriorPointLine.h>
 //#include <geos/algorithm/InteriorPointPoint.h>
 #include <geos/algorithm/LineIntersector.h>
-//#include <geos/algorithm/MCPointInRing.h>
 //#include <geos/algorithm/MinimumDiameter.h>
 //#include <geos/algorithm/NotRepresentableException.h>
 //#include <geos/algorithm/PointInRing.h>

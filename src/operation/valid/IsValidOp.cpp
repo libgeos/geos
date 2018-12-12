@@ -21,10 +21,10 @@
 
 #include "IndexedNestedRingTester.h" // TODO: private header>? --mloskot
 
+#include <geos/export.h>
 #include <geos/platform.h>
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/algorithm/LineIntersector.h>
-#include <geos/algorithm/MCPointInRing.h>
 #include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
 #include <geos/operation/valid/ConnectedInteriorTester.h>
 #include <geos/operation/valid/ConsistentAreaTester.h>
@@ -40,7 +40,9 @@
 #include <geos/geomgraph/GeometryGraph.h>
 #include <geos/geomgraph/Edge.h>
 #include <geos/geomgraph/index/SegmentIntersector.h>
+#include <geos/index/chain/MonotoneChainSelectAction.h>
 #include <geos/util/UnsupportedOperationException.h>
+
 
 #include <cassert>
 #include <cmath>
@@ -396,9 +398,6 @@ IsValidOp::checkHolesInShell(const Polygon *p, GeometryGraph *graph)
         return;
     }
 
-    //SimplePointInRing pir(shell);
-    //SIRtreePointInRing pir(shell);
-    // MCPointInRing pir(shell);
     locate::IndexedPointInAreaLocator ipial(*shellgeom);
 
     for(size_t i = 0; i < nholes; ++i) {

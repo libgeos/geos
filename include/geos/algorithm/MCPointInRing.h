@@ -22,6 +22,7 @@
 #include <geos/geom/Coordinate.h> // for composition
 #include <geos/index/bintree/Interval.h> // for composition
 
+
 #include <memory>
 #include <vector>
 
