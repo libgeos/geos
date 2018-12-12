@@ -50,8 +50,6 @@ namespace tut
 	static GeometryFactory::Ptr gf = GeometryFactory::create(&pm);
 	static geos::io::WKTReader reader(gf.get());
 
-	typedef std::unique_ptr<Geometry> GeomPtr;
-
 	static void runPtLocator(int expected, const Coordinate& pt,
 			const std::string& wkt)
 	{
