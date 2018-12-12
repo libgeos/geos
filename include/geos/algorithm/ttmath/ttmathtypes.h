@@ -4,20 +4,20 @@
  * Author: Tomasz Sowa <t.sowa@ttmath.org>
  */
 
-/* 
+/*
  * Copyright (c) 2006-2017, Tomasz Sowa
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  *  * Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
- *    
+ *
  *  * Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- *    
+ *
  *  * Neither the name Tomasz Sowa nor the names of contributors to this
  *    project may be used to endorse or promote products derived
  *    from this software without specific prior written permission.
@@ -42,7 +42,7 @@
 /*!
 	\file ttmathtypes.h
     \brief constants used in the library
-    
+
     As our library is written in header files (templates) we cannot use
 	constants like 'const int' etc. because we should have some source files
 	*.cpp to define this variables. Only what we can have are constants
@@ -165,6 +165,12 @@
 		#define TTMATH_NOASM
 	#endif
 
+    /* 32-bit gcc < 5 doesn't like to build the ASM with PIC enabled as */
+    /* we do for GEOS */
+    #if defined __GNUC__ && __GNUC__ < 5 && !defined __x86_64__  && !defined _M_X64
+        #define TTMATH_NOASM
+    #endif
+
 #endif
 
 
@@ -219,7 +225,7 @@ namespace ttmath
 	#define TTMATH_BUILTIN_VARIABLES_SIZE 256u
 
 	/*!
-		this macro returns the number of machine words 
+		this macro returns the number of machine words
 		capable to hold min_bits bits
 		e.g. TTMATH_BITS(128) returns 4
 	*/
@@ -241,7 +247,7 @@ namespace ttmath
 			on 64bit platforms one word (uint, sint) will be equal 64bits
 		*/
 		typedef signed   long sint;
-	#endif 
+	#endif
 
 	/*!
 		on 64bit platforms we do not define ulint and slint
@@ -271,7 +277,7 @@ namespace ttmath
 	#define TTMATH_BUILTIN_VARIABLES_SIZE 128ul
 
 	/*!
-		this macro returns the number of machine words 
+		this macro returns the number of machine words
 		capable to hold min_bits bits
 		e.g. TTMATH_BITS(128) returns 2
 	*/
@@ -454,7 +460,7 @@ namespace ttmath
 
 			for example when the value is:
 				12.345678 and 'round' is 4
-			then the result will be 
+			then the result will be
 				12.3457   (the last digit was rounded)
 		*/
 		sint round;
@@ -477,7 +483,7 @@ namespace ttmath
 
 
 		/*!
-			additional comma operator (used only when reading) 
+			additional comma operator (used only when reading)
 			if you don't want it just set it to zero
 			default is a comma ','
 
@@ -533,9 +539,9 @@ namespace ttmath
 		this simple class can be used in multithreading model
 		(you can write your own class derived from this one)
 
-		for example: in some functions like Factorial() 
-		/at the moment only Factorial/ you can give a pointer to 
-		the 'stop object', if the method WasStopSignal() of this 
+		for example: in some functions like Factorial()
+		/at the moment only Factorial/ you can give a pointer to
+		the 'stop object', if the method WasStopSignal() of this
 		object returns true that means we should break the calculating
 		and return
 	*/
@@ -584,7 +590,7 @@ namespace ttmath
 		** from version 0.9.2 this macro is removed from all methods
 		   in public interface so you don't have to worry about it **
 
-		If you compile with gcc you can get a small benefit 
+		If you compile with gcc you can get a small benefit
 		from using method Where() (it returns std::string) with
 		the name and the line of a file where the macro TTMATH_REFERENCE_ASSERT
 		was used)
@@ -616,7 +622,7 @@ namespace ttmath
 		(if the condition in it is false) throw an exception
 		of this type
 
-		if you compile with gcc you can get a small benefit 
+		if you compile with gcc you can get a small benefit
 		from using method Where() (it returns std::string) with
 		the name and the line of a file where the macro TTMATH_ASSERT
 		was used)
