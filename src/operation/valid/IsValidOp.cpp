@@ -22,24 +22,25 @@
 #include "IndexedNestedRingTester.h" // TODO: private header>? --mloskot
 
 #include <geos/platform.h>
-#include <geos/operation/valid/IsValidOp.h>
-#include <geos/operation/valid/ConsistentAreaTester.h>
-#include <geos/operation/valid/ConnectedInteriorTester.h>
-#include <geos/operation/valid/ConnectedInteriorTester.h>
-#include <geos/util/UnsupportedOperationException.h>
-#include <geos/geomgraph/index/SegmentIntersector.h>
-#include <geos/geomgraph/GeometryGraph.h>
-#include <geos/geomgraph/Edge.h>
-#include <geos/algorithm/MCPointInRing.h>
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/algorithm/LineIntersector.h>
+#include <geos/algorithm/MCPointInRing.h>
+#include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
+#include <geos/operation/valid/ConnectedInteriorTester.h>
+#include <geos/operation/valid/ConsistentAreaTester.h>
+#include <geos/operation/valid/IsValidOp.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/GeometryCollection.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/LinearRing.h>
+#include <geos/geom/Location.h>
+#include <geos/geom/MultiPolygon.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/Polygon.h>
-#include <geos/geom/MultiPolygon.h>
-#include <geos/geom/GeometryCollection.h>
+#include <geos/geomgraph/GeometryGraph.h>
+#include <geos/geomgraph/Edge.h>
+#include <geos/geomgraph/index/SegmentIntersector.h>
+#include <geos/util/UnsupportedOperationException.h>
 
 #include <cassert>
 #include <cmath>
@@ -379,8 +380,10 @@ IsValidOp::checkHolesInShell(const Polygon *p, GeometryGraph *graph)
 {
 	assert(dynamic_cast<const LinearRing*>(p->getExteriorRing()));
 
-	const LinearRing *shell=static_cast<const LinearRing*>(
+	const LinearRing *shell = static_cast<const LinearRing*>(
 			p->getExteriorRing());
+
+    const Geometry *shellgeom = static_cast<const Geometry*>(shell);
 
 	auto nholes = p->getNumInteriorRing();
 
@@ -407,7 +410,8 @@ IsValidOp::checkHolesInShell(const Polygon *p, GeometryGraph *graph)
 
 	//SimplePointInRing pir(shell);
 	//SIRtreePointInRing pir(shell);
-	MCPointInRing pir(shell);
+	// MCPointInRing pir(shell);
+    locate::IndexedPointInAreaLocator ipial(*shellgeom);
 
 	for(size_t i = 0; i < nholes; ++i)
 	{
@@ -425,9 +429,9 @@ IsValidOp::checkHolesInShell(const Polygon *p, GeometryGraph *graph)
 		 * split the polygon into disconnected interiors.
 		 * This will be caught by a subsequent check.
 		 */
-		if (holePt==nullptr) return;
+		if (holePt == nullptr) return;
 
-		bool outside = !pir.isInside(*holePt);
+		bool outside = (geom::Location::EXTERIOR == ipial.locate(holePt));
 		if (outside) {
 			validErr=new TopologyValidationError(
 				TopologyValidationError::eHoleOutsideShell,
