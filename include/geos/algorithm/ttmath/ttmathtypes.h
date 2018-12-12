@@ -1,11 +1,11 @@
 /*
  * This file is a part of TTMath Bignum Library
- * and is distributed under the (new) BSD licence.
+ * and is distributed under the 3-Clause BSD Licence.
  * Author: Tomasz Sowa <t.sowa@ttmath.org>
  */
 
 /* 
- * Copyright (c) 2006-2012, Tomasz Sowa
+ * Copyright (c) 2006-2017, Tomasz Sowa
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -64,17 +64,42 @@
 
 
 /*!
-	the version of the library
+	the major version of the library
 
+	the version present to the end user is constructed in this way:
+
+		TTMATH_MAJOR_VER.TTMATH_MINOR_VER.TTMATH_REVISION_VER.[prerelease if TTMATH_PRERELEASE_VER==1]
+*/
+#define TTMATH_MAJOR_VER		0
+
+/*!
+	the minor version of the library
+
+	the version present to the end user is constructed in this way:
+
+		TTMATH_MAJOR_VER.TTMATH_MINOR_VER.TTMATH_REVISION_VER.[prerelease if TTMATH_PRERELEASE_VER==1]
+*/
+#define TTMATH_MINOR_VER		9
+
+/*!
+	the revision version of the library
+
+	the version present to the end user is constructed in this way:
+
+		TTMATH_MAJOR_VER.TTMATH_MINOR_VER.TTMATH_REVISION_VER.[prerelease if TTMATH_PRERELEASE_VER==1]
+*/
+#define TTMATH_REVISION_VER		4
+
+/*!
 	TTMATH_PRERELEASE_VER is either zero or one
 	zero means that this is the release version of the library
 	(one means something like beta)
-*/
-#define TTMATH_MAJOR_VER		0
-#define TTMATH_MINOR_VER		9
-#define TTMATH_REVISION_VER		3
 
-#define TTMATH_PRERELEASE_VER	0
+	the version present to the end user is constructed in this way:
+
+		TTMATH_MAJOR_VER.TTMATH_MINOR_VER.TTMATH_REVISION_VER.[prerelease if TTMATH_PRERELEASE_VER==1]
+*/
+#define TTMATH_PRERELEASE_VER	1
 
 
 
@@ -202,15 +227,19 @@ namespace ttmath
 
 #else
 
-	/*!
-		on 64bit platforms one word (uint, sint) will be equal 64bits
-	*/
 	#ifdef _MSC_VER
 		/* in VC 'long' type has 32 bits, __int64 is VC extension */
 		typedef unsigned __int64 uint;
 		typedef signed   __int64 sint;
 	#else
+		/*!
+			on 64bit platforms one word (uint, sint) will be equal 64bits
+		*/
 		typedef unsigned long uint;
+
+		/*!
+			on 64bit platforms one word (uint, sint) will be equal 64bits
+		*/
 		typedef signed   long sint;
 	#endif 
 
@@ -317,12 +346,12 @@ namespace ttmath
 
 	/*!
 		lib type codes:
-		  asm_vc_32   - with asm code designed for Microsoft Visual C++ (32 bits)
-		  asm_gcc_32  - with asm code designed for GCC (32 bits)
-		  asm_vc_64   - with asm for VC (64 bit)
-		  asm_gcc_64  - with asm for GCC (64 bit)
-		  no_asm_32   - pure C++ version (32 bit) - without any asm code
-		  no_asm_64   - pure C++ version (64 bit) - without any asm code
+		-  asm_vc_32   - with asm code designed for Microsoft Visual C++ (32 bits)
+		-  asm_gcc_32  - with asm code designed for GCC (32 bits)
+		-  asm_vc_64   - with asm for VC (64 bit)
+		-  asm_gcc_64  - with asm for GCC (64 bit)
+		-  no_asm_32   - pure C++ version (32 bit) - without any asm code
+		-  no_asm_64   - pure C++ version (64 bit) - without any asm code
 	*/
 	enum LibTypeCode
 	{
@@ -407,10 +436,11 @@ namespace ttmath
 			default: true
 
 			e.g.
-			Conv c;
-			c.base_round = false;
-			Big<1, 1> a = "0.1";                       // decimal input
-			std::cout << a.ToString(c) << std::endl;   // the result is: 0.099999999
+
+				Conv c;
+				c.base_round = false;
+				Big<1, 1> a = "0.1";                       // decimal input
+				std::cout << a.ToString(c) << std::endl;   // the result is: 0.099999999
 		*/
 		bool base_round;
 

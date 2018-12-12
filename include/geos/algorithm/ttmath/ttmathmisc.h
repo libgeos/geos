@@ -1,6 +1,6 @@
 /*
  * This file is a part of TTMath Bignum Library
- * and is distributed under the (new) BSD licence.
+ * and is distributed under the 3-Clause BSD Licence.
  * Author: Tomasz Sowa <t.sowa@ttmath.org>
  */
 
@@ -171,10 +171,10 @@ static void SkipWhiteCharacters(const char_type * & c)
 	this static method converts one character into its value
 
 	for example:
-		1 -> 1
-		8 -> 8
-		A -> 10
-		f -> 15
+	-  1 -> 1
+	-  8 -> 8
+	-  A -> 10
+	-  f -> 15
 
 	this method don't check whether c is correct or not
 */
@@ -195,9 +195,9 @@ return c-'A'+10;
 	(if there can't be a correct value it returns -1)
 
 	for example:
-	c=2, base=10 -> function returns 2
-	c=A, base=10 -> function returns -1
-	c=A, base=16 -> function returns 10
+	-  c=2, base=10 -> function returns 2
+	-  c=A, base=10 -> function returns -1
+	-  c=A, base=16 -> function returns 10
 */
 static sint CharToDigit(uint c, uint base)
 {
@@ -228,10 +228,10 @@ return sint(c);
 	(we don't have to get a base)
 	
 	for example:
-		1  -> 1
-		8  -> 8
-		10 -> A
-		15 -> F
+	-  1  -> 1
+	-  8  -> 8
+	-  10 -> A
+	-  15 -> F
 */
 static uint DigitToChar(uint digit)
 {

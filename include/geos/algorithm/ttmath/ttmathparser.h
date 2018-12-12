@@ -1,11 +1,11 @@
 /*
  * This file is a part of TTMath Bignum Library
- * and is distributed under the (new) BSD licence.
+ * and is distributed under the 3-Clause BSD Licence.
  * Author: Tomasz Sowa <t.sowa@ttmath.org>
  */
 
 /* 
- * Copyright (c) 2006-2010, Tomasz Sowa
+ * Copyright (c) 2006-2017, Tomasz Sowa
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -1781,7 +1781,7 @@ Conv conv;
 /*!
 	this method returns true if 'character' is a proper first digit for the value (or a comma -- can be first too)
 */
-bool ValueStarts(int character, int base)
+bool ValueStarts(int character, int character_base)
 {
 	if( character == comma )
 		return true;
@@ -1789,7 +1789,7 @@ bool ValueStarts(int character, int base)
 	if( comma2!=0 && character==comma2 )
 		return true;
 
-	if( Misc::CharToDigit(character, base) != -1 )
+	if( Misc::CharToDigit(character, character_base) != -1 )
 		return true;
 
 return false;
@@ -1975,7 +1975,7 @@ typename OperatorsTable::iterator iter_old, iter_new;
 		
 		if( iter_new == operators_table.end() || !IsSubstring(iter_new->first, oper) )
 		{
-			oper.erase( --oper.end() ); // we've got mininum one element
+			oper.erase(oper.begin() + oper.size() - 1); // we've got mininum one element
 
 			if( iter_old != operators_table.end() && iter_old->first == oper )
 			{
@@ -2604,7 +2604,7 @@ void SetBase(int b)
 */
 void SetDegRadGrad(int angle)
 {
-	if( angle >= 0 || angle <= 2 )
+	if( angle >= 0 && angle <= 2 )
 		deg_rad_grad = angle;
 }
 

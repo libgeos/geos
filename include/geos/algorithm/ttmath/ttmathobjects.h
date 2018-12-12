@@ -1,11 +1,11 @@
 /*
  * This file is a part of TTMath Mathematical Library
- * and is distributed under the (new) BSD licence.
+ * and is distributed under the 3-Clause BSD Licence.
  * Author: Tomasz Sowa <t.sowa@ttmath.org>
  */
 
 /* 
- * Copyright (c) 2006-2010, Tomasz Sowa
+ * Copyright (c) 2006-2017, Tomasz Sowa
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -81,7 +81,7 @@ public:
 		// (if there's a variable this 'param' is ignored)
 		int param;
 
-		Item() {}
+		Item() { param = 0; }
 		Item(const std::string & v, int p) : value(v), param(p) {}
 	};
 
@@ -484,7 +484,7 @@ public:
 
 		if( i == table.end() )
 		{
-			value.empty();
+			value.clear();
 			*param = 0;
 			return err_unknown_object;
 		}
@@ -723,14 +723,17 @@ public:
 
 	in multithreaded environment you can provide an object of this class to
 	the Gamma() or Factorial() function, e.g;
+
 		typedef Big<1, 3> MyBig;
 		MyBig x = 123456;
 		CGamma<MyBig> cgamma;
 		std::cout << Gamma(x, cgamma);
+
 	each thread should have its own CGamma<> object
 
 	in a single-thread environment a CGamma<> object is a static variable
-	in a second version of Gamma() and you don't have to explicitly use it, e.g.
+	and you don't have to explicitly use it, e.g.
+
 		typedef Big<1, 3> MyBig;
 		MyBig x = 123456;
 		std::cout << Gamma(x);

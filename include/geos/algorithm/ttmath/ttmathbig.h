@@ -1,11 +1,11 @@
 /*
  * This file is a part of TTMath Bignum Library
- * and is distributed under the (new) BSD licence.
+ * and is distributed under the 3-Clause BSD Licence.
  * Author: Tomasz Sowa <t.sowa@ttmath.org>
  */
 
 /* 
- * Copyright (c) 2006-2012, Tomasz Sowa
+ * Copyright (c) 2006-2017, Tomasz Sowa
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -66,19 +66,19 @@ class Big
 /*
 	value = mantissa * 2^exponent	
 
-	exponent - an integer value with a sign
-	mantissa - an integer value without a sing
+	-  exponent - an integer value with a sign
+	-  mantissa - an integer value without a sing
 
 	mantissa must be pushed into the left side that is the highest bit from 
 	mantissa must be one (of course if there's another value than zero) -- this job
-	(pushing bits into the left side) making Standardizing() method
+	(pushing bits into the left side) is doing by Standardizing() method
 
 	for example:
 	if we want to store value one (1) into our Big object we must:
-		set mantissa to 1
-		set exponent to 0
-		set info to 0
-		and call method Standardizing()
+	-  	set mantissa to 1
+	-  	set exponent to 0
+	-  	set info to 0
+	-  	and call method Standardizing()
 */
 
 
@@ -135,12 +135,12 @@ public:
 	/*!
 		returning the string represents the currect type of the library
 		we have following types:
-		  asm_vc_32   - with asm code designed for Microsoft Visual C++ (32 bits)
-		  asm_gcc_32  - with asm code designed for GCC (32 bits)
-		  asm_vc_64   - with asm for VC (64 bit)
-		  asm_gcc_64  - with asm for GCC (64 bit)
-		  no_asm_32   - pure C++ version (32 bit) - without any asm code
-		  no_asm_64   - pure C++ version (64 bit) - without any asm code
+		-  asm_vc_32   - with asm code designed for Microsoft Visual C++ (32 bits)
+		-  asm_gcc_32  - with asm code designed for GCC (32 bits)
+		-  asm_vc_64   - with asm for VC (64 bit)
+		-  asm_gcc_64  - with asm for GCC (64 bit)
+		-  no_asm_32   - pure C++ version (32 bit) - without any asm code
+		-  no_asm_64   - pure C++ version (64 bit) - without any asm code
 	*/
 	static const char * LibTypeStr()
 	{
@@ -392,6 +392,8 @@ public:
 	*/
 	void SetPi()
 	{
+		// IMPROVE ME
+		// give some compiler-time warning when the size of mantissa is greater than the builtin size of the mantissa pi
 		SetMantissaPi();
 		info = 0;
 		exponent = -sint(man)*sint(TTMATH_BITS_PER_UINT) + 2;
@@ -403,6 +405,8 @@ public:
 	*/
 	void Set05Pi()
 	{
+		// IMPROVE ME
+		// give some compiler-time warning when the size of mantissa is greater than the builtin size of the mantissa pi
 		SetMantissaPi();
 		info = 0;
 		exponent = -sint(man)*sint(TTMATH_BITS_PER_UINT) + 1;
@@ -414,6 +418,8 @@ public:
 	*/
 	void Set2Pi()
 	{
+		// IMPROVE ME
+		// give some compiler-time warning when the size of mantissa is greater than the builtin size of the mantissa pi
 		SetMantissaPi();
 		info = 0;
 		exponent = -sint(man)*sint(TTMATH_BITS_PER_UINT) + 3;
@@ -669,9 +675,9 @@ public:
 		this method clears the sign
 		(there'll be an absolute value)
 
-			e.g.
-			-1 -> 1
-			2  -> 2
+		samples
+		-  	-1 -> 1
+		-  	2  -> 2
 	*/
 	void Abs()
 	{
@@ -681,9 +687,11 @@ public:
 
 	/*!
 		this method remains the 'sign' of the value
-		e.g.  -2 = -1 
-		       0 = 0
-		      10 = 1
+
+		samples
+		-    -2 = -1
+		-     0 = 0
+		-    10 = 1
 	*/
 	void Sgn()
 	{
@@ -708,9 +716,9 @@ public:
 	/*!
 		this method sets the sign
 
-			e.g.
-			-1 -> -1
-			2  -> -2
+		samples
+		-  	-1 -> -1
+		-  	2  -> -2
 
 		we do not check whether there is a zero or not, if you're using this method
 		you must be sure that the value is (or will be afterwards) different from zero
@@ -725,9 +733,9 @@ public:
 		this method changes the sign
 		when there is a value of zero then the sign is not changed
 
-			e.g.
-			-1 -> 1
-			2  -> -2
+		samples
+		-  	-1 -> 1
+		-  	2  -> -2
 	*/
 	void ChangeSign()
 	{
@@ -750,8 +758,8 @@ private:
 		this method does the half-to-even rounding (banker's rounding)
 
 		if is_half is:
-		  true  - that means the rest was equal the half (0.5 decimal)
-		  false - that means the rest was greater than a half (greater than 0.5 decimal)
+		-  true  - that means the rest was equal the half (0.5 decimal)
+		-  false - that means the rest was greater than a half (greater than 0.5 decimal)
 
 	    if the rest was less than a half then don't call this method
 		(the rounding should does nothing then)
@@ -977,10 +985,11 @@ public:
 		bitwise AND
 
 		this and ss2 must be >= 0
+
 		return values:
-			0 - ok
-			1 - carry
-			2 - this or ss2 was negative
+		-  	0 - ok
+		-  	1 - carry
+		-  	2 - this or ss2 was negative
 	*/
 	uint BitAnd(Big<exp, man> ss2)
 	{
@@ -1036,9 +1045,10 @@ public:
 
 		this and ss2 must be >= 0
 		return values:
-			0 - ok
-			1 - carry
-			2 - this or ss2 was negative
+
+		-  	0 - ok
+		-  	1 - carry
+		-  	2 - this or ss2 was negative
 	*/
 	uint BitOr(Big<exp, man> ss2)
 	{
@@ -1091,9 +1101,10 @@ public:
 
 		this and ss2 must be >= 0
 		return values:
-			0 - ok
-			1 - carry
-			2 - this or ss2 was negative
+
+		-  	0 - ok
+		-  	1 - carry
+		-  	2 - this or ss2 was negative
 	*/
 	uint BitXor(Big<exp, man> ss2)
 	{
@@ -1244,8 +1255,8 @@ private:
 		call this method only if the highest bit is set - you have to test it beforehand
 
 		return:
-		  true  - tab was equal the half (0.5 decimal)
-		  false - tab was greater than a half (greater than 0.5 decimal)
+		-  true  - tab was equal the half (0.5 decimal)
+		-  false - tab was greater than a half (greater than 0.5 decimal)
 
 	*/
 	bool CheckGreaterOrEqualHalf(uint * tab, uint len)
@@ -1361,9 +1372,9 @@ private:
 		division this = this / ss2
 
 		return value:
-		0 - ok
-		1 - carry (in a division carry can be as well)
-		2 - improper argument (ss2 is zero)
+		-  0 - ok
+		-  1 - carry (in a division carry can be as well)
+		-  2 - improper argument (ss2 is zero)
 	*/
 	uint DivRef(const Big<exp, man> & ss2, bool round = true)
 	{
@@ -1434,9 +1445,9 @@ public:
 		division this = this / ss2
 
 		return value:
-		0 - ok
-		1 - carry (in a division carry can be as well)
-		2 - improper argument (ss2 is zero)
+		-  0 - ok
+		-  1 - carry (in a division carry can be as well)
+		-  2 - improper argument (ss2 is zero)
 	*/
 	uint Div(const Big<exp, man> & ss2, bool round = true)
 	{
@@ -1492,21 +1503,20 @@ private:
 public:
 
 	/*!
-		the remainder from a division
+		caltulate the remainder from a division
 
-		e.g.
-		 12.6 mod  3 =  0.6   because  12.6 = 3*4 + 0.6
-		-12.6 mod  3 = -0.6   bacause -12.6 = 3*(-4) + (-0.6)
-		 12.6 mod -3 =  0.6
-		-12.6 mod -3 = -0.6
+		samples
+		-   12.6 mod  3 =  0.6   because  12.6 = 3*4 + 0.6
+		-  -12.6 mod  3 = -0.6   bacause -12.6 = 3*(-4) + (-0.6)
+		-   12.6 mod -3 =  0.6
+		-  -12.6 mod -3 = -0.6
 
-		it means:
 		in other words: this(old) = ss2 * q + this(new)
 
 		return value:
-		0 - ok
-		1 - carry
-		2 - improper argument (ss2 is zero)
+		-  0 - ok
+		-  1 - carry
+		-  2 - improper argument (ss2 is zero)
 	*/
 	uint Mod(const Big<exp, man> & ss2)
 	{
@@ -1548,9 +1558,9 @@ public:
 		binary algorithm (r-to-l)
 
 		return values:
-		0 - ok
-		1 - carry
-		2 - incorrect arguments (0^0)
+		-  0 - ok
+		-  1 - carry
+		-  2 - incorrect arguments (0^0)
 	*/
 	template<uint pow_size>
 	uint Pow(UInt<pow_size> pow)
@@ -1600,9 +1610,9 @@ public:
 		p can be negative
 
 		return values:
-		0 - ok
-		1 - carry
-		2 - incorrect arguments 0^0 or 0^(-something)
+		-  0 - ok
+		-  1 - carry
+		-  2 - incorrect arguments 0^0 or 0^(-something)
 	*/
 	template<uint pow_size>
 	uint Pow(Int<pow_size> pow)
@@ -1640,9 +1650,9 @@ public:
 		 if pow has a fraction the fraction is skipped (not used in calculation)
 
 		return values:
-		0 - ok
-		1 - carry
-		2 - incorrect arguments (0^0)
+		-  0 - ok
+		-  1 - carry
+		-  2 - incorrect arguments (0^0)
 	*/
 	uint PowUInt(Big<exp, man> pow)
 	{
@@ -1696,9 +1706,9 @@ public:
 		pow can be negative
 
 		return values:
-		0 - ok
-		1 - carry
-		2 - incorrect arguments 0^0 or 0^(-something)
+		-  0 - ok
+		-  1 - carry
+		-  2 - incorrect arguments 0^0 or 0^(-something)
 	*/
 	uint PowInt(const Big<exp, man> & pow)
 	{
@@ -1732,9 +1742,9 @@ public:
 		pow can be negative and with fraction
 
 		return values:
-		0 - ok
-		1 - carry
-		2 - incorrect argument ('this' <= 0)
+		-  0 - ok
+		-  1 - carry
+		-  2 - incorrect argument ('this' <= 0)
 	*/
 	uint PowFrac(const Big<exp, man> & pow)
 	{
@@ -1762,9 +1772,9 @@ public:
 		pow can be negative and with fraction
 
 		return values:
-		0 - ok
-		1 - carry
-		2 - incorrect argument ('this' or 'pow')
+		-  0 - ok
+		-  1 - carry
+		-  2 - incorrect argument ('this' or 'pow')
 	*/
 	uint Pow(const Big<exp, man> & pow)
 	{
@@ -1799,9 +1809,10 @@ public:
 		this function calculates the square root
 		e.g. let this=9 then this.Sqrt() gives 3
 
-		return: 0 - ok
-				1 - carry
-		        2 - improper argument (this<0 or NaN)
+		return:
+		-  0 - ok
+		-  1 - carry
+		-  2 - improper argument (this<0 or NaN)
 	*/
 	uint Sqrt()
 	{
@@ -1924,8 +1935,11 @@ public:
 		Exponent this = exp(x) = e^x
 
 		we're using the fact that our value is stored in form of:
+
 			x = mantissa * 2^exponent
+
 		then
+
 			e^x = e^(mantissa* 2^exponent) or
 			e^x = (e^mantissa)^(2^exponent)
 
@@ -2094,17 +2108,20 @@ public:
 		(a logarithm with the base equal 'e')
 
 		we're using the fact that our value is stored in form of:
+
 			x = mantissa * 2^exponent
+
 		then
+
 			ln(x) = ln (mantissa * 2^exponent) = ln (mantissa) + (exponent * ln (2))
 
 		the mantissa we'll show as a value from range <1,2) because the logarithm
 		is decreasing too fast when 'x' is going to 0
 
 		return values:
-			0 - ok
-			1 - overflow (carry)
-			2 - incorrect argument (x<=0)
+		-  	0 - ok
+		-  	1 - overflow (carry)
+		-  	2 - incorrect argument (x<=0)
 	*/
 	uint Ln(const Big<exp,man> & x)
 	{
@@ -2142,13 +2159,14 @@ public:
 		Logarithm from 'x' with a 'base'
 
 		we're using the formula:
+
 			Log(x) with 'base' = ln(x) / ln(base)
 
 		return values:
-			0 - ok
-			1 - overflow
-			2 - incorrect argument (x<=0)
-			3 - incorrect base (a<=0 lub a=1)
+		-  	0 - ok
+		-  	1 - overflow
+		-  	2 - incorrect argument (x<=0)
+		-  	3 - incorrect base (a<=0 or a=1)
 	*/
 	uint Log(const Big<exp,man> & x, const Big<exp,man> & base)
 	{
@@ -2565,21 +2583,21 @@ public:
 		right. The first bit is the sign bit, S, the next eleven bits are the
 		exponent bits, 'E', and the final 52 bits are the fraction 'F':
 
-		S EEEEEEEEEEE FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-		0 1        11 12                                                63
+			S EEEEEEEEEEE FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+			0 1        11 12                                                63
 
 		The value V represented by the word may be determined as follows:
 
-		* If E=2047 and F is nonzero, then V=NaN ("Not a number")
-		* If E=2047 and F is zero and S is 1, then V=-Infinity
-		* If E=2047 and F is zero and S is 0, then V=Infinity
-		* If 0<E<2047 then V=(-1)**S * 2 ** (E-1023) * (1.F) where "1.F" is intended
+		- If E=2047 and F is nonzero, then V=NaN ("Not a number")
+		- If E=2047 and F is zero and S is 1, then V=-Infinity
+		- If E=2047 and F is zero and S is 0, then V=Infinity
+		- If 0<E<2047 then V=(-1)**S * 2 ** (E-1023) * (1.F) where "1.F" is intended
 		  to represent the binary number created by prefixing F with an implicit
 		  leading 1 and a binary point.
-		* If E=0 and F is nonzero, then V=(-1)**S * 2 ** (-1022) * (0.F) These are
+		- If E=0 and F is nonzero, then V=(-1)**S * 2 ** (-1022) * (0.F) These are
 		  "unnormalized" values.
-		* If E=0 and F is zero and S is 1, then V=-0
-		* If E=0 and F is zero and S is 0, then V=0 
+		- If E=0 and F is zero and S is 1, then V=-0
+		- If E=0 and F is zero and S is 0, then V=0
 	*/
 
 #ifdef TTMATH_PLATFORM32
@@ -2805,6 +2823,7 @@ public:
 
 		if the value is too big:
 			'result' will be +/-infinity (depending on the sign)
+
 		if the value is too small:
 			'result' will be 0
 	*/
@@ -2832,22 +2851,23 @@ private:
 		The first bit is the sign bit, S, the next eight bits are the exponent bits, 'E',
 		and the final 23 bits are the fraction 'F':
 
-		S EEEEEEEE FFFFFFFFFFFFFFFFFFFFFFF
-		0 1      8 9                    31
+			S EEEEEEEE FFFFFFFFFFFFFFFFFFFFFFF
+			0 1      8 9                    31
 
 		The value V represented by the word may be determined as follows:
 
-			* If E=255 and F is nonzero, then V=NaN ("Not a number")
-			* If E=255 and F is zero and S is 1, then V=-Infinity
-			* If E=255 and F is zero and S is 0, then V=Infinity
-			* If 0<E<255 then V=(-1)**S * 2 ** (E-127) * (1.F) where "1.F" is intended to represent
-			  the binary number created by prefixing F with an implicit leading 1 and a binary point.
-			* If E=0 and F is nonzero, then V=(-1)**S * 2 ** (-126) * (0.F) These are "unnormalized" values.
-			* If E=0 and F is zero and S is 1, then V=-0
-			* If E=0 and F is zero and S is 0, then V=0 		
+		- If E=255 and F is nonzero, then V=NaN ("Not a number")
+		- If E=255 and F is zero and S is 1, then V=-Infinity
+		- If E=255 and F is zero and S is 0, then V=Infinity
+		- If 0<E<255 then V=(-1)**S * 2 ** (E-127) * (1.F) where "1.F" is intended to represent
+		  the binary number created by prefixing F with an implicit leading 1 and a binary point.
+		- If E=0 and F is nonzero, then V=(-1)**S * 2 ** (-126) * (0.F) These are "unnormalized" values.
+		- If E=0 and F is zero and S is 1, then V=-0
+		- If E=0 and F is zero and S is 0, then V=0
 	*/
 	bool IsInf(float value) const
 	{
+		// CHECK ME
 		// need testing on a 64 bit machine
 
 		union 
@@ -2875,6 +2895,7 @@ public:
 
 		if the value is too big:
 			'result' will be +/-infinity (depending on the sign)
+
 		if the value is too small:
 			'result' will be 0
 	*/
@@ -2892,11 +2913,12 @@ public:
 		this method converts from this class into the 'float'
 
 		if the value is too big:
-			'result' will be +/-infinity (depending on the sign)
-			and the method returns 1
+		-  	'result' will be +/-infinity (depending on the sign)
+		-	and the method returns 1
+
 		if the value is too small:
-			'result' will be 0
-			and the method returns 1
+		-	'result' will be 0
+		-	and the method returns 1
 	*/
 	uint ToFloat(float & result) const
 	{
@@ -2929,11 +2951,12 @@ public:
 		this method converts from this class into the 'double'
 
 		if the value is too big:
-			'result' will be +/-infinity (depending on the sign)
-			and the method returns 1
+		-	'result' will be +/-infinity (depending on the sign)
+		-	and the method returns 1
+
 		if the value is too small:
-			'result' will be 0
-			and the method returns 1
+		-	'result' will be 0
+		-	and the method returns 1
 	*/
 	uint ToDouble(double & result) const
 	{
@@ -3666,11 +3689,10 @@ public:
 		a method for converting into a string
 		struct Conv is defined in ttmathtypes.h, look there for more information about parameters
 
-		output:
-			return value:
-			0 - ok and 'result' will be an object of type std::string (or std::wstring) which holds the value
-			1 - if there is a carry (it shoudn't be in a normal situation - if it is that means there
-			    is somewhere an error in the library)
+		return value:
+		-  0 - ok and 'result' will be an object of type std::string (or std::wstring) which holds the value
+		-  1 - if there is a carry (it shoudn't be in a normal situation - if it is that means there
+			   is somewhere an error in the library)
 	*/
 	uint ToString(	std::string & result,
 					uint base         = 10,
@@ -4215,10 +4237,12 @@ private:
 
 
 		if( exponent <= -sint(man*TTMATH_BITS_PER_UINT) )
+		{
 			// if 'exponent' is <= than '-sint(man*TTMATH_BITS_PER_UINT)'
 			// it means that we must cut the whole mantissa
 			// (there'll not be any of the valid bits)
 			return 1;
+		}
 
 		// e will be from (-man*TTMATH_BITS_PER_UINT, 0>
 		sint e = -( exponent.ToInt() );
@@ -4265,9 +4289,9 @@ private:
 		a special method used to calculate the new mantissa and exponent
 		when the 'base' is equal 4, 8 or 16
 
-		when base is 4 then bits is 2
-		when base is 8 then bits is 3
-		when base is 16 then bits is 4
+		-  when base is 4 then bits is 2
+		-  when base is 8 then bits is 3
+		-  when base is 16 then bits is 4
 		(and the algorithm can be used with a base greater than 16)
 	*/
 	template<class string_type>
@@ -5151,7 +5175,10 @@ private:
 		// we could break the parsing somewhere in the middle of the string,
 		// but the result (value) still can be good
 		// we should set a correct value of 'source' now
-		for( ; Misc::CharToDigit(*source, conv.base) != -1 ; ++source );
+		while( Misc::CharToDigit(*source, conv.base) != -1 )
+		{
+			++source;
+		}
 
 		power_ = power;
 		c += base_.Pow(power_);
@@ -5384,8 +5411,10 @@ public:
 		}
 
 		if( ss2.IsZero() )
+		{
 			// this!=0 and ss2==0
 			return false;
+		}
 
 		// we're using the fact that all bits in mantissa are pushed
 		// into the left side -- Standardizing()
@@ -5408,16 +5437,22 @@ public:
 		if( IsZero() )
 		{
 			if( ss2.IsZero() )
+			{
 				// we've got two zeroes
 				return false;
+			}
 			else
+			{
 				// this==0 and ss2!=0
 				return false;
+			}
 		}
 
 		if( ss2.IsZero() )
+		{
 			// this!=0 and ss2==0
 			return true;
+		}
 
 		// we're using the fact that all bits in mantissa are pushed
 		// into the left side -- Standardizing()
@@ -5440,16 +5475,22 @@ public:
 		if( IsZero() )
 		{
 			if( ss2.IsZero() )
+			{
 				// we've got two zeroes
 				return true;
+			}
 			else
+			{
 				// this==0 and ss2!=0
 				return false;
+			}
 		}
 
 		if( ss2.IsZero() )
+		{
 			// this!=0 and ss2==0
 			return false;
+		}
 
 		if( exponent==ss2.exponent && mantissa==ss2.mantissa )
 			return true;
@@ -5461,12 +5502,16 @@ public:
 	bool operator<(const Big<exp,man> & ss2) const
 	{
 		if( IsSign() && !ss2.IsSign() )
+		{
 			// this<0 and ss2>=0
 			return true;
+		}
 
 		if( !IsSign() && ss2.IsSign() )
+		{
 			// this>=0 and ss2<0
 			return false;
+		}
 
 		// both signs are the same
 
@@ -5489,12 +5534,16 @@ public:
 	bool operator>(const Big<exp,man> & ss2) const
 	{
 		if( IsSign() && !ss2.IsSign() )
+		{
 			// this<0 and ss2>=0
 			return false;
+		}
 
 		if( !IsSign() && ss2.IsSign() )
+		{
 			// this>=0 and ss2<0
 			return true;
+		}
 
 		// both signs are the same
 
@@ -5730,13 +5779,13 @@ public:
 	/*!
 		this method makes an integer value by skipping any fractions
 
-		for example:
-			10.7 will be 10
-			12.1  -- 12
-			-20.2 -- 20
-			-20.9 -- 20
-			-0.7  -- 0
-			0.8   -- 0
+		samples:
+		-	10.7 will be 10
+		-	12.1  -- 12
+		-	-20.2 -- 20
+		-	-20.9 -- 20
+		-	-0.7  -- 0
+		-	0.8   -- 0
 	*/
 	void SkipFraction()
 	{
@@ -5768,9 +5817,9 @@ public:
 	/*!
 		this method remains only a fraction from the value
 
-		for example:
-			30.56 will be 0.56
-			-12.67 -- -0.67
+		samples:
+		-	30.56 will be 0.56
+		-	-12.67 will be -0.67
 	*/
 	void RemainFraction()
 	{
@@ -5811,7 +5860,7 @@ public:
 		this method returns true if the value is integer
 		(there is no a fraction)
 
-		(we don't check nan)
+		(we don't check NaN)
 	*/
 	bool IsInteger() const
 	{
@@ -5853,12 +5902,11 @@ public:
 		this method rounds to the nearest integer value
 		(it returns a carry if it was)
 
-		for example:
-			2.3 = 2
-			2.8 = 3
-
-			-2.3 = -2
-			-2.8 = 3
+		samples:
+		-	2.3 = 2
+		-	2.8 = 3
+		-	-2.3 = -2
+		-	-2.8 = 3
 	*/
 	uint Round()
 	{

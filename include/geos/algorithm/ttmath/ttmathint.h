@@ -1,11 +1,11 @@
 /*
  * This file is a part of TTMath Bignum Library
- * and is distributed under the (new) BSD licence.
+ * and is distributed under the 3-Clause BSD Licence.
  * Author: Tomasz Sowa <t.sowa@ttmath.org>
  */
 
 /* 
- * Copyright (c) 2006-2011, Tomasz Sowa
+ * Copyright (c) 2006-2017, Tomasz Sowa
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -55,8 +55,8 @@ namespace ttmath
 	\brief Int implements a big integer value with a sign
 
 	value_size - how many bytes specify our value
-		on 32bit platforms: value_size=1 -> 4 bytes -> 32 bits
-		on 64bit platforms: value_size=1 -> 8 bytes -> 64 bits
+	-  on 32bit platforms: value_size=1 -> 4 bytes -> 32 bits
+	-  on 64bit platforms: value_size=1 -> 8 bytes -> 64 bits
 	value_size = 1,2,3,4,5,6....
 */
 template<uint value_size>
@@ -131,8 +131,9 @@ public:
 	/*!	
 		this method sets the sign
 
-		e.g. 1  -> -1
-		     -2 -> -2
+		samples
+		-  1  -> -1
+		-  -2 -> -2
 		
 		from a positive value we make a negative value,
 		if the value is negative we do nothing
@@ -290,10 +291,10 @@ public:
 
 		this = p1(=this) - p2
 
-		when p1>=0 i p2>=0 carry will never be set
-		when p1<0  i p2<0  carry will never be set
-		when p1>=0 i p2<0  carry is set when the highest bit of value is set
-		when p1<0  i p2>=0 carry is set when the highest bit of value is clear
+		-  when p1>=0 i p2>=0 carry will never be set
+		-  when p1<0  i p2<0  carry will never be set
+		-  when p1>=0 i p2<0  carry is set when the highest bit of value is set
+		-  when p1<0  i p2>=0 carry is set when the highest bit of value is clear
 	*/
 	uint Sub(const Int<value_size> & ss2)
 	{
@@ -465,14 +466,14 @@ public:
 	/*!
 		division this = this / ss2
 		returned values:
-			0 - ok
-			1 - division by zero
+		-  0 - ok
+		-  1 - division by zero
 
 		for example: (result means 'this')
-			 20 /  3 --> result:  6   remainder:  2
-			-20 /  3 --> result: -6   remainder: -2
-			 20 / -3 --> result: -6   remainder:  2
-			-20 / -3 --> result:  6   remainder: -2
+		-  	 20 /  3 --> result:  6   remainder:  2
+		-  	-20 /  3 --> result: -6   remainder: -2
+		-  	 20 / -3 --> result: -6   remainder:  2
+		-  	-20 / -3 --> result:  6   remainder: -2
 
 		in other words: this(old) = ss2 * this(new)(result) + remainder
 	*/
@@ -509,14 +510,14 @@ public:
 	/*!
 		division this = this / ss2  (ss2 is int)
 		returned values:
-			0 - ok
-			1 - division by zero
+		-  	0 - ok
+		-  	1 - division by zero
 
 		for example: (result means 'this')
-			 20 /  3 --> result:  6   remainder:  2
-			-20 /  3 --> result: -6   remainder: -2
-			 20 / -3 --> result: -6   remainder:  2
-			-20 / -3 --> result:  6   remainder: -2
+		-  	 20 /  3 --> result:  6   remainder:  2
+		-  	-20 /  3 --> result: -6   remainder: -2
+		-  	 20 / -3 --> result: -6   remainder:  2
+		-  	-20 / -3 --> result:  6   remainder: -2
 
 		in other words: this(old) = ss2 * this(new)(result) + remainder
 	*/
@@ -600,9 +601,9 @@ public:
 		power this = this ^ pow
 
 		return values:
-		0 - ok
-		1 - carry
-		2 - incorrect arguments 0^0 or 0^(-something)
+		-  0 - ok
+		-  1 - carry
+		-  2 - incorrect arguments 0^0 or 0^(-something)
 	*/
 	uint Pow(Int<value_size> pow)
 	{
@@ -812,7 +813,7 @@ public:
 	/*!
 		a copy constructor
 	*/
-	Int(const Int<value_size> & u)
+	Int(const Int<value_size> & u) : UInt<value_size>()
 	{
 		FromInt(u);
 	}

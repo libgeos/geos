@@ -1,6 +1,6 @@
 /*
  * This file is a part of TTMath Bignum Library
- * and is distributed under the (new) BSD licence.
+ * and is distributed under the 3-Clause BSD Licence.
  * Author: Tomasz Sowa <t.sowa@ttmath.org>
  */
 
@@ -50,6 +50,21 @@
 
 	this file is included at the end of ttmathuint.h
 */
+
+
+/*!
+	\file ttmathuint_x86_64_msvc.asm
+	\brief some asm routines for x86_64 when using Microsoft compiler
+
+	this file should be first compiled:
+	- compile with debug info:    ml64.exe /c /Zd /Zi ttmathuint_x86_64_msvc.asm
+	- compile without debug info: ml64.exe /c ttmathuint_x86_64_msvc.asm
+
+	this creates ttmathuint_x86_64_msvc.obj file which can be linked with your program
+
+	(you can use win64_assemble.bat file from ttmath subdirectory)
+*/
+
 
 #ifndef __GNUC__
 #include <intrin.h>
@@ -195,12 +210,17 @@ namespace ttmath
 
 
 		if we've got (value_size=3):
+
 			table[0] = 10;
 			table[1] = 30;
-			table[2] = 5;	
+			table[2] = 5;
+
 		and we call:
+
 			AddInt(2,1)
+
 		then it'll be:
+
 			table[0] = 10;
 			table[1] = 30 + 2;
 			table[2] = 5;
@@ -265,17 +285,23 @@ namespace ttmath
 		x1 - lower word, x2 - higher word
 
 		for example if we've got value_size equal 4 and:
+
 			table[0] = 3
 			table[1] = 4
 			table[2] = 5
 			table[3] = 6
+
 		then let
+
 			x1 = 10
 			x2 = 20
+
 		and
+
 			index = 1
 
 		the result of this method will be:
+
 			table[0] = 3
 			table[1] = 4 + x1 = 14
 			table[2] = 5 + x2 = 25
@@ -341,19 +367,19 @@ namespace ttmath
 		this static method addes one vector to the other
 		'ss1' is larger in size or equal to 'ss2'
 
-		ss1 points to the first (larger) vector
-		ss2 points to the second vector
-		ss1_size - size of the ss1 (and size of the result too)
-		ss2_size - size of the ss2
-		result - is the result vector (which has size the same as ss1: ss1_size)
+		-  ss1 points to the first (larger) vector
+		-  ss2 points to the second vector
+		-  ss1_size - size of the ss1 (and size of the result too)
+		-  ss2_size - size of the ss2
+		-  result - is the result vector (which has size the same as ss1: ss1_size)
 
-		Example:  ss1_size is 5, ss2_size is 3
-		ss1:      ss2:   result (output):
-		  5        1         5+1
-		  4        3         4+3
-		  2        7         2+7
-		  6                  6
-		  9                  9
+			Example:  ss1_size is 5, ss2_size is 3
+			ss1:      ss2:   result (output):
+		  	  5        1         5+1
+			  4        3         4+3
+			  2        7         2+7
+			  6                  6
+			  9                  9
 	  of course the carry is propagated and will be returned from the last item
 	  (this method is used by the Karatsuba multiplication algorithm)
 	*/
@@ -483,12 +509,17 @@ namespace ttmath
 		***this method is created only on a 64bit platform***
 
 		if we've got (value_size=3):
+
 			table[0] = 10;
 			table[1] = 30;
 			table[2] = 5;	
+
 		and we call:
+
 			SubInt(2,1)
+
 		then it'll be:
+
 			table[0] = 10;
 			table[1] = 30 - 2;
 			table[2] = 5;
@@ -545,19 +576,19 @@ namespace ttmath
 		this static method subtractes one vector from the other
 		'ss1' is larger in size or equal to 'ss2'
 
-		ss1 points to the first (larger) vector
-		ss2 points to the second vector
-		ss1_size - size of the ss1 (and size of the result too)
-		ss2_size - size of the ss2
-		result - is the result vector (which has size the same as ss1: ss1_size)
+		-  ss1 points to the first (larger) vector
+		-  ss2 points to the second vector
+		-  ss1_size - size of the ss1 (and size of the result too)
+		-  ss2_size - size of the ss2
+		-  result - is the result vector (which has size the same as ss1: ss1_size)
 
-		Example:  ss1_size is 5, ss2_size is 3
-		ss1:      ss2:   result (output):
-		  5        1         5-1
-		  4        3         4-3
-		  2        7         2-7
-		  6                  6-1  (the borrow from previous item)
-		  9                  9
+			Example:  ss1_size is 5, ss2_size is 3
+			ss1:      ss2:   result (output):
+			  5        1         5-1
+			  4        3         4-3
+			  2        7         2-7
+			  6                  6-1  (the borrow from previous item)
+			  9                  9
 		               return (carry): 0
 	  of course the carry (borrow) is propagated and will be returned from the last item
 	  (this method is used by the Karatsuba multiplication algorithm)
@@ -1029,8 +1060,8 @@ namespace ttmath
 
 	/*!
 		multiplication: result_high:result_low = a * b
-		result_high - higher word of the result
-		result_low  - lower word of the result
+		-  result_high - higher word of the result
+		-  result_low  - lower word of the result
 	
 		this methos never returns a carry
 		this method is used in the second version of the multiplication algorithms

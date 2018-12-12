@@ -1,11 +1,11 @@
 /*
  * This file is a part of TTMath Bignum Library
- * and is distributed under the (new) BSD licence.
+ * and is distributed under the 3-Clause BSD Licence.
  * Author: Tomasz Sowa <t.sowa@ttmath.org>
  */
 
 /* 
- * Copyright (c) 2006-2012, Tomasz Sowa
+ * Copyright (c) 2006-2017, Tomasz Sowa
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -79,10 +79,12 @@ namespace ttmath
 
 	/*!
 		this function skips the fraction from x
-		e.g  2.2  = 2
-		     2.7  = 2
-			 -2.2 = 2
-			 -2.7 = 2
+
+		samples
+		-  2.2  = 2
+		-  2.7  = 2
+		-  -2.2 = 2
+		-  -2.7 = 2
 	*/
 	template<class ValueType>
 	ValueType SkipFraction(const ValueType & x)
@@ -96,10 +98,12 @@ namespace ttmath
 
 	/*!
 		this function rounds to the nearest integer value
-		e.g  2.2  = 2
-		     2.7  = 3
-			 -2.2 = -2
-			 -2.7 = -3
+
+		samples
+		-  2.2  = 2
+		-  2.7  = 3
+		-  -2.2 = -2
+		-  -2.7 = -3
 	*/
 	template<class ValueType>
 	ValueType Round(const ValueType & x, ErrorCode * err = 0)
@@ -127,12 +131,12 @@ namespace ttmath
 		this function returns a value representing the smallest integer
 		that is greater than or equal to x
 
-		Ceil(-3.7) = -3
-		Ceil(-3.1) = -3
-		Ceil(-3.0) = -3
-		Ceil(4.0)  = 4
-		Ceil(4.2)  = 5
-		Ceil(4.8)  = 5
+		-  Ceil(-3.7) = -3
+		-  Ceil(-3.1) = -3
+		-  Ceil(-3.0) = -3
+		-  Ceil(4.0)  = 4
+		-  Ceil(4.2)  = 5
+		-  Ceil(4.8)  = 5
 	*/
 	template<class ValueType>
 	ValueType Ceil(const ValueType & x, ErrorCode * err = 0)
@@ -174,12 +178,12 @@ namespace ttmath
 		this function returns a value representing the largest integer
 		that is less than or equal to x
 
-		Floor(-3.6) = -4
-		Floor(-3.1) = -4
-		Floor(-3)   = -3
-		Floor(2)    = 2
-		Floor(2.3)  = 2
-		Floor(2.8)  = 2
+		-  Floor(-3.6) = -4
+		-  Floor(-3.1) = -4
+		-  Floor(-3)   = -3
+		-  Floor(2)    = 2
+		-  Floor(2.3)  = 2
+		-  Floor(2.8)  = 2
 	*/
 	template<class ValueType>
 	ValueType Floor(const ValueType & x, ErrorCode * err = 0)
@@ -346,6 +350,9 @@ namespace ttmath
 	/*
 		this namespace consists of auxiliary functions
 		(something like 'private' in a class)
+
+		this is excluded from doxygen documentation
+		(option EXCLUDE_SYMBOLS in doxygen.cfg)
 	*/
 	namespace auxiliaryfunctions
 	{
@@ -1611,15 +1618,16 @@ namespace ttmath
 		minutes and seconds must be greater than or equal zero
 
 		result: 
-		if d>=0 : result= d + ((s/60)+m)/60
-		if d<0  : result= d - ((s/60)+m)/60
+		-  if d>=0 : result= d + ((s/60)+m)/60
+		-  if d<0  : result= d - ((s/60)+m)/60
 
 		((s/60)+m)/60 = (s+60*m)/3600 (second version is faster because 
 		there's only one division)
 
-		for example:
-		DegToDeg(10, 30, 0) = 10.5
-		DegToDeg(10, 24, 35.6)=10.4098(8)
+		samples:
+
+		-  DegToDeg(10, 30, 0) = 10.5
+		-  DegToDeg(10, 24, 35.6)=10.4098(8)
 	*/
 	template<class ValueType>
 	ValueType DegToDeg(	const ValueType & d, const ValueType & m, const ValueType & s,
@@ -2050,18 +2058,19 @@ namespace ttmath
 
 
 	/*!
-		indexth Root of x
+		caltulate the index'th Root of x
+
 		index must be integer and not negative <0;1;2;3....)
 
-		if index==0 the result is one
-		if x==0 the result is zero and we assume root(0;0) is not defined
+		-  if index==0 the result is one
+		-  if x==0 the result is zero and we assume root(0;0) is not defined
 
-		if index is even (2;4;6...) the result is x^(1/index) and x>0
-		if index is odd (1;2;3;...) the result is either 
-			-(abs(x)^(1/index)) if x<0    or
-			       x^(1/index)) if x>0
+		-  if index is even (2;4;6...) the result is x^(1/index) and x>0
+		-  if index is odd (1;2;3;...) the result is either
+		  -	   -(abs(x)^(1/index)) if x<0, or
+		  -	   x^(1/index)) if x>0
 
-		(for index==1 the result is equal x)
+		-  for index==1 the result is equal x
 	*/
 	template<class ValueType>
 	ValueType Root(ValueType x, const ValueType & index, ErrorCode * err = 0)
@@ -2119,8 +2128,10 @@ namespace ttmath
 
 	/*!
 		absolute value of x
-		e.g.  -2 = 2 
-		       2 = 2
+
+		samples:
+		-  -2 = 2
+		-  2 = 2
 	*/
 	template<class ValueType>
 	ValueType Abs(const ValueType & x)
@@ -2134,9 +2145,11 @@ namespace ttmath
 
 	/*!
 		it returns the sign of the value
-		e.g.  -2 = -1 
-		       0 = 0
-		      10 = 1
+
+		samples:
+		-  -2 = -1
+		-  0 = 0
+		-  10 = 1
 	*/
 	template<class ValueType>
 	ValueType Sgn(ValueType x)
@@ -2150,11 +2163,11 @@ namespace ttmath
 	/*!
 		the remainder from a division
 
-		e.g.
-		mod( 12.6 ;  3) =  0.6   because 12.6  = 3*4 + 0.6
-		mod(-12.6 ;  3) = -0.6   bacause -12.6 = 3*(-4) + (-0.6)
-		mod( 12.6 ; -3) =  0.6
-		mod(-12.6 ; -3) = -0.6
+		samples:
+		-  mod( 12.6 ;  3) =  0.6   because 12.6  = 3*4 + 0.6
+		-  mod(-12.6 ;  3) = -0.6   bacause -12.6 = 3*(-4) + (-0.6)
+		-  mod( 12.6 ; -3) =  0.6
+		-  mod(-12.6 ; -3) = -0.6
 	*/
 	template<class ValueType>
 	ValueType Mod(ValueType a, const ValueType & b, ErrorCode * err = 0)
@@ -2186,7 +2199,8 @@ namespace ttmath
 		this function is used to store factorials in a given container
 		'more' means how many values should be added at the end
 
-			e.g.
+		sample:
+
 			std::vector<ValueType> fact;
 			SetFactorialSequence(fact, 3);
 			// now the container has three values: 1  1  2
@@ -2221,7 +2235,8 @@ namespace ttmath
 		an auxiliary function used to calculate Bernoulli numbers
 
 		this function returns a sum:
-		sum(m) = sum_{k=0}^{m-1} {2^k * (m k) * B(k)}    k in [0, m-1]   (m k) means binomial coefficient = (m! / (k! * (m-k)!))
+
+			sum(m) = sum_{k=0}^{m-1} {2^k * (m k) * B(k)}    k in [0, m-1]   (m k) means binomial coefficient = (m! / (k! * (m-k)!))
 
 		you should have sufficient factorials in cgamma.fact
 		(cgamma.fact should have at least m items)
@@ -2275,9 +2290,10 @@ namespace ttmath
 		an auxiliary function used to calculate Bernoulli numbers
 		start is >= 2
 
-		we use the recurrence formula: 
-		   B(m) = 1 / (2*(1 - 2^m)) * sum(m)
-		   where sum(m) is calculated by SetBernoulliNumbersSum()
+		we use the recurrence formula:
+
+			B(m) = 1 / (2*(1 - 2^m)) * sum(m)
+			where sum(m) is calculated by SetBernoulliNumbersSum()
 	*/
 	template<class ValueType>
 	bool SetBernoulliNumbersMore(CGamma<ValueType> & cgamma, uint start, const volatile StopCalculating * stop = 0)
@@ -2330,7 +2346,8 @@ namespace ttmath
 		returns false if there was a stop signal,
 		'more' means how many values should be added at the end
 
-			e.g.
+		sample:
+
 			typedef Big<1,2> MyBig;
 			CGamma<MyBig> cgamma;
 			SetBernoulliNumbers(cgamma, 3);
@@ -2377,9 +2394,11 @@ namespace ttmath
 		an auxiliary function used to calculate the Gamma() function
 
 		we calculate a sum:
+
 		   sum(n) = sum_{m=2} { B(m) / ( (m^2 - m) * n^(m-1) )  } = 1/(12*n) - 1/(360*n^3) + 1/(1260*n^5) + ...
-	       B(m) means a mth Bernoulli number
-		   the sum starts from m=2, we calculate as long as the value will not change after adding a next part
+
+	    B(m) means a mth Bernoulli number
+		the sum starts from m=2, we calculate as long as the value will not change after adding a next part
 	*/
 	template<class ValueType>
 	ValueType GammaFactorialHighSum(const ValueType & n, CGamma<ValueType> & cgamma, ErrorCode & err,
@@ -2440,9 +2459,11 @@ namespace ttmath
 		an auxiliary function used to calculate the Gamma() function
 
 		we calculate a helper function GammaFactorialHigh() by using Stirling's series:
-		   n! = (n/e)^n * sqrt(2*pi*n) * exp( sum(n) )
-		   where n is a real number (not only an integer) and is sufficient large (greater than TTMATH_GAMMA_BOUNDARY)
-		   and sum(n) is calculated by GammaFactorialHighSum()
+
+			n! = (n/e)^n * sqrt(2*pi*n) * exp( sum(n) )
+
+		where n is a real number (not only an integer) and is sufficient large (greater than TTMATH_GAMMA_BOUNDARY)
+		and sum(n) is calculated by GammaFactorialHighSum()
 	*/
 	template<class ValueType>
 	ValueType GammaFactorialHigh(const ValueType & n, CGamma<ValueType> & cgamma, ErrorCode & err,
@@ -2494,7 +2515,8 @@ namespace ttmath
 	
 		we use this function when n is integer and a small value (from 0 to TTMATH_GAMMA_BOUNDARY]
 		we use the formula:
-		   gamma(n) = (n-1)! = 1 * 2 * 3 * ... * (n-1) 
+
+			gamma(n) = (n-1)! = 1 * 2 * 3 * ... * (n-1)
 	*/
 	template<class ValueType>
 	ValueType GammaPlusLowIntegerInt(uint n, CGamma<ValueType> & cgamma)
@@ -2545,11 +2567,12 @@ namespace ttmath
 
 		we use this function when n is a small value (from 0 to TTMATH_GAMMA_BOUNDARY]
 		we use a recurrence formula:
+
 		   gamma(z+1) = z * gamma(z)
 		   then: gamma(z) = gamma(z+1) / z
 
-		   e.g.
-		   gamma(3.89) = gamma(2001.89) / ( 3.89 * 4.89 * 5.89 * ... * 1999.89 * 2000.89 )
+		samples:
+		-  gamma(3.89) = gamma(2001.89) / ( 3.89 * 4.89 * 5.89 * ... * 1999.89 * 2000.89 )
 	*/
 	template<class ValueType>
 	ValueType GammaPlusLow(ValueType n, CGamma<ValueType> & cgamma, ErrorCode & err, const volatile StopCalculating * stop)
@@ -2640,11 +2663,13 @@ namespace ttmath
 
 		it's multithread safe, you should create a CGamma<> object and use it whenever you call the Gamma()
 		e.g.
+
 			typedef Big<1,2> MyBig;
 			MyBig x=234, y=345.53;
 			CGamma<MyBig> cgamma;
 			std::cout << Gamma(x, cgamma) << std::endl;
 			std::cout << Gamma(y, cgamma) << std::endl;
+
 		in the CGamma<> object the function stores some coefficients (factorials, Bernoulli numbers),
 		and they will be reused in next calls to the function
 
@@ -2768,11 +2793,13 @@ namespace ttmath
 
 		it's multithread safe, you should create a CGamma<> object and use it whenever you call the Factorial()
 		e.g.
+
 			typedef Big<1,2> MyBig;
 			MyBig x=234, y=54345;
 			CGamma<MyBig> cgamma;
 			std::cout << Factorial(x, cgamma) << std::endl;
 			std::cout << Factorial(y, cgamma) << std::endl;
+
 		in the CGamma<> object the function stores some coefficients (factorials, Bernoulli numbers),
 		and they will be reused in next calls to the function
 

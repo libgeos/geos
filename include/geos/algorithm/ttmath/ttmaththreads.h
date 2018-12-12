@@ -1,6 +1,6 @@
 /*
  * This file is a part of TTMath Bignum Library
- * and is distributed under the (new) BSD licence.
+ * and is distributed under the 3-Clause BSD Licence.
  * Author: Tomasz Sowa <t.sowa@ttmath.org>
  */
 
@@ -56,24 +56,6 @@
 /*!
 	\file ttmaththreads.h
     \brief Some objects used in multithreads environment
-*/
-
-
-/*
-	this is a simple skeleton of a program in multithreads environment:
-
-	#define TTMATH_MULTITHREADS
-	#include<ttmath/ttmath.h>
-	
-	TTMATH_MULTITHREADS_HELPER
-
-	int main()
-	{
-	[...]
-	}
-
-	make sure that macro TTMATH_MULTITHREADS is defined and (somewhere in *.cpp file)
-	use TTMATH_MULTITHREADS_HELPER macro (outside of any classes/functions/namespaces scope)
 */
 
 
@@ -186,12 +168,32 @@ namespace ttmath
 
 
 	/*!
-		objects of this class are used to synchronize
+		\brief objects of this class are used to synchronize
+
+		this is a simple skeleton of a program in multithreads environment:
+
+			#define TTMATH_MULTITHREADS
+			#include<ttmath/ttmath.h>
+
+			TTMATH_MULTITHREADS_HELPER
+
+			int main()
+			{
+			[...]
+			}
+
+		make sure that macro TTMATH_MULTITHREADS is defined and (somewhere in *.cpp file)
+		use TTMATH_MULTITHREADS_HELPER macro (outside of any classes/functions/namespaces scope)
 	*/
 	class ThreadLock
 	{
 	public:
 
+		/*!
+ 	 		lock the current thread
+
+ 	 		it uses a global mutex created by TTMATH_MULTITHREADS_HELPER macro
+		*/
 		bool Lock()
 		{
 			if( pthread_mutex_lock(&ttmath_mutex) != 0 )

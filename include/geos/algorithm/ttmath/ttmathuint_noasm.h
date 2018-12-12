@@ -1,6 +1,6 @@
 /*
  * This file is a part of TTMath Bignum Library
- * and is distributed under the (new) BSD licence.
+ * and is distributed under the 3-Clause BSD Licence.
  * Author: Tomasz Sowa <t.sowa@ttmath.org>
  */
 
@@ -39,14 +39,15 @@
 #define headerfilettmathuint_noasm
 
 
-#ifdef TTMATH_NOASM
-
 /*!
 	\file ttmathuint_noasm.h
-    \brief template class UInt<uint> with methods without any assembler code
+    \brief template class UInt<uint> with methods without any assembler code (used for no-asm version of ttmath)
 
 	this file is included at the end of ttmathuint.h
 */
+
+#ifdef TTMATH_NOASM
+
 
 
 namespace ttmath
@@ -55,12 +56,12 @@ namespace ttmath
 	/*!
 		returning the string represents the currect type of the library
 		we have following types:
-		  asm_vc_32   - with asm code designed for Microsoft Visual C++ (32 bits)
-		  asm_gcc_32  - with asm code designed for GCC (32 bits)
-		  asm_vc_64   - with asm for VC (64 bit)
-		  asm_gcc_64  - with asm for GCC (64 bit)
-		  no_asm_32   - pure C++ version (32 bit) - without any asm code
-		  no_asm_64   - pure C++ version (64 bit) - without any asm code
+		-  asm_vc_32   - with asm code designed for Microsoft Visual C++ (32 bits)
+		-  asm_gcc_32  - with asm code designed for GCC (32 bits)
+		-  asm_vc_64   - with asm for VC (64 bit)
+		-  asm_gcc_64  - with asm for GCC (64 bit)
+		-  no_asm_32   - pure C++ version (32 bit) - without any asm code
+		-  no_asm_64   - pure C++ version (64 bit) - without any asm code
 	*/
 	template<uint value_size>
 	const char * UInt<value_size>::LibTypeStr()
@@ -156,12 +157,17 @@ namespace ttmath
 		and returns a carry (if it was)
 
 		if we've got (value_size=3):
+
 			table[0] = 10;
 			table[1] = 30;
-			table[2] = 5;	
+			table[2] = 5;
+
 		and we call:
+
 			AddInt(2,1)
+
 		then it'll be:
+
 			table[0] = 10;
 			table[1] = 30 + 2;
 			table[2] = 5;
@@ -199,17 +205,23 @@ namespace ttmath
 		x1 - lower word, x2 - higher word
 
 		for example if we've got value_size equal 4 and:
+
 			table[0] = 3
 			table[1] = 4
 			table[2] = 5
 			table[3] = 6
+
 		then let
+
 			x1 = 10
 			x2 = 20
+
 		and
+
 			index = 1
 
 		the result of this method will be:
+
 			table[0] = 3
 			table[1] = 4 + x1 = 14
 			table[2] = 5 + x2 = 25
@@ -245,19 +257,20 @@ namespace ttmath
 		this static method addes one vector to the other
 		'ss1' is larger in size or equal to 'ss2'
 
-		ss1 points to the first (larger) vector
-		ss2 points to the second vector
-		ss1_size - size of the ss1 (and size of the result too)
-		ss2_size - size of the ss2
-		result - is the result vector (which has size the same as ss1: ss1_size)
+		-  ss1 points to the first (larger) vector
+		-  ss2 points to the second vector
+		-  ss1_size - size of the ss1 (and size of the result too)
+		-  ss2_size - size of the ss2
+		-  result - is the result vector (which has size the same as ss1: ss1_size)
 
-		Example:  ss1_size is 5, ss2_size is 3
-		ss1:      ss2:   result (output):
-		  5        1         5+1
-		  4        3         4+3
-		  2        7         2+7
-		  6                  6
-		  9                  9
+			Example:  ss1_size is 5, ss2_size is 3
+			ss1:      ss2:   result (output):
+			  5        1         5+1
+			  4        3         4+3
+			  2        7         2+7
+			  6                  6
+			  9                  9
+
 	  of course the carry is propagated and will be returned from the last item
 	  (this method is used by the Karatsuba multiplication algorithm)
 	*/
@@ -342,12 +355,17 @@ namespace ttmath
 		and returns a carry (if it was)
 
 		if we've got (value_size=3):
+
 			table[0] = 10;
 			table[1] = 30;
 			table[2] = 5;	
+
 		and we call:
+
 			SubInt(2,1)
+
 		then it'll be:
+
 			table[0] = 10;
 			table[1] = 30 - 2;
 			table[2] = 5;
@@ -377,19 +395,19 @@ namespace ttmath
 		this static method subtractes one vector from the other
 		'ss1' is larger in size or equal to 'ss2'
 
-		ss1 points to the first (larger) vector
-		ss2 points to the second vector
-		ss1_size - size of the ss1 (and size of the result too)
-		ss2_size - size of the ss2
-		result - is the result vector (which has size the same as ss1: ss1_size)
+		-  ss1 points to the first (larger) vector
+		-  ss2 points to the second vector
+		-  ss1_size - size of the ss1 (and size of the result too)
+		-  ss2_size - size of the ss2
+		-  result - is the result vector (which has size the same as ss1: ss1_size)
 
-		Example:  ss1_size is 5, ss2_size is 3
-		ss1:      ss2:   result (output):
-		  5        1         5-1
-		  4        3         4-3
-		  2        7         2-7
-		  6                  6-1  (the borrow from previous item)
-		  9                  9
+			Example:  ss1_size is 5, ss2_size is 3
+			ss1:      ss2:   result (output):
+			  5        1         5-1
+			  4        3         4-3
+			  2        7         2-7
+			  6                  6-1  (the borrow from previous item)
+			  9                  9
 		                 return (carry): 0
 	  of course the carry (borrow) is propagated and will be returned from the last item
 	  (this method is used by the Karatsuba multiplication algorithm)
@@ -622,9 +640,11 @@ namespace ttmath
 		bit is from <0,TTMATH_BITS_PER_UINT-1>
 
 		e.g.
-		 uint x = 100;
-		 uint bit = SetBitInWord(x, 3);
-		 now: x = 108 and bit = 0
+
+			uint x = 100;
+			uint bit = SetBitInWord(x, 3);
+
+		now: x = 108 and bit = 0
 	*/
 	template<uint value_size>
 	uint UInt<value_size>::SetBitInWord(uint & value, uint bit)
@@ -657,10 +677,11 @@ namespace ttmath
 
 	/*!
 		multiplication: result_high:result_low = a * b
-		result_high - higher word of the result
-		result_low  - lower word of the result
+		-  result_high - higher word of the result
+		-  result_low  - lower word of the result
 	
 		this methos never returns a carry
+
 		this method is used in the second version of the multiplication algorithms
 	*/
 	template<uint value_size>
