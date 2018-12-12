@@ -43,7 +43,6 @@ OBJ = \
 	algorithm\InteriorPointLine.$(EXT) \
 	algorithm\InteriorPointPoint.$(EXT) \
 	algorithm\LineIntersector.$(EXT) \
-	algorithm\MCPointInRing.$(EXT) \
 	algorithm\MinimumDiameter.$(EXT) \
 	algorithm\NotRepresentableException.$(EXT) \
 	algorithm\PointLocator.$(EXT) \

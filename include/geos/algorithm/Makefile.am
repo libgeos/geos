@@ -26,7 +26,6 @@ geos_HEADERS = \
 	InteriorPointLine.h \
 	InteriorPointPoint.h \
 	LineIntersector.h \
-	MCPointInRing.h \
 	MinimumDiameter.h \
 	NotRepresentableException.h \
 	PointInRing.h \
