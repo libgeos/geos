@@ -48,6 +48,7 @@ geos_unit_SOURCES = \
 	algorithm/distance/DiscreteFrechetDistanceTest.cpp \
 	algorithm/distance/DiscreteHausdorffDistanceTest.cpp \
 	algorithm/InteriorPointAreaTest.cpp \
+	algorithm/LocatePointInRingTest.cpp \
 	algorithm/MinimumDiameterTest.cpp \
 	algorithm/OrientationIndexFailureTest.cpp \
 	algorithm/PointLocatorTest.cpp \
