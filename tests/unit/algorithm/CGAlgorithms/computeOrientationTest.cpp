@@ -98,4 +98,15 @@ namespace tut
         ensure( orient != orientInv );
     }
 
+    // 4 - make sure CGAlgorithmsDD::checkSignOfDet2x2 isn't
+    // busted
+    template<>
+    template<>
+    void object::test<4>()
+    {
+        ensure( 0 == CGAlgorithmsDD::signOfDet2x2(1, 1, 2, 2));
+        ensure( 1 == CGAlgorithmsDD::signOfDet2x2(1, 1, 2, 3));
+        ensure( -1 == CGAlgorithmsDD::signOfDet2x2(1, 1, 3, 2));
+    }
+
 } // namespace tut
