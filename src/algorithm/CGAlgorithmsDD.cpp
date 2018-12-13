@@ -72,6 +72,15 @@ int CGAlgorithmsDD::signOfDet2x2(DD &x1, DD &y1, DD &x2, DD &y2)
     return OrientationDD(d);
 }
 
+int CGAlgorithmsDD::signOfDet2x2(double dx1, double dy1, double dx2, double dy2)
+{
+    DD x1(dx1);
+    DD y1(dy1);
+    DD x2(dx2);
+    DD y2(dy2);
+    return CGAlgorithmsDD::signOfDet2x2(x1, y1, x2, y2);
+}
+
 int CGAlgorithmsDD::orientationIndexFilter(const Coordinate& pa,
         const Coordinate& pb,
         const Coordinate& pc)

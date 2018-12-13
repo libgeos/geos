@@ -108,6 +108,8 @@ public:
                              const geom::Coordinate& q1, const geom::Coordinate& q2,
                              geom::Coordinate &rv);
 
+    static int signOfDet2x2(double dx1, double dy1, double dx2, double dy2);
+
 
 protected:
 
