@@ -13,9 +13,6 @@ libalgorithm_la_SOURCES = \
 	Angle.cpp \
 	BoundaryNodeRule.cpp \
 	Centroid.cpp \
-	CentroidArea.cpp \
-	CentroidLine.cpp \
-	CentroidPoint.cpp \
 	CGAlgorithms.cpp \
 	CGAlgorithmsDD.cpp \
 	ConvexHull.cpp \
