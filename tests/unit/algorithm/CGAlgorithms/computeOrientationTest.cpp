@@ -104,9 +104,9 @@ namespace tut
     template<>
     void object::test<4>()
     {
-        ensure( 0 == CGAlgorithmsDD::signOfDet2x2(1, 1, 2, 2));
-        ensure( 1 == CGAlgorithmsDD::signOfDet2x2(1, 1, 2, 3));
-        ensure( -1 == CGAlgorithmsDD::signOfDet2x2(1, 1, 3, 2));
+        ensure( 0 == CGAlgorithmsDD::signOfDet2x2(1.0, 1.0, 2.0, 2.0));
+        ensure( 1 == CGAlgorithmsDD::signOfDet2x2(1.0, 1.0, 2.0, 3.0));
+        ensure( -1 == CGAlgorithmsDD::signOfDet2x2(1.0, 1.0, 3.0, 2.0));
     }
 
 } // namespace tut
