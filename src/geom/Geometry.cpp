@@ -350,7 +350,14 @@ Geometry::intersects(const Geometry *g) const
 bool
 Geometry::covers(const Geometry* g) const
 {
-    if (getDimension() == 1 && g->getDimension() == 2) {
+    // optimization - lower dimension cannot cover areas
+    if (g->getDimension() == 2 && getDimension() < 2) {
+        return false;
+    }
+
+    // optimization - P cannot cover a non-zero-length L
+    // Note that a point can cover a zero-length lineal geometry
+    if (g->getDimension() == 1 && getDimension() < 1 && g->getLength() > 0.0) {
         return false;
     }
 
@@ -394,7 +401,15 @@ Geometry::within(const Geometry *g) const
 bool
 Geometry::contains(const Geometry *g) const
 {
-    if (getDimension() == 1 && g->getDimension() == 2) {
+    // optimization - lower dimension cannot contain areas
+    if (g->getDimension() == 2 && getDimension() < 2) {
+        return false;
+    }
+
+    // optimization - P cannot contain a non-zero-length L
+    // Note that a point can contain a zero-length lineal geometry,
+    // since the line has no boundary due to Mod-2 Boundary Rule
+    if (g->getDimension() == 1 && getDimension() < 1 && g->getLength() > 0.0) {
         return false;
     }
 
