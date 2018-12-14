@@ -26,9 +26,7 @@ libalgorithm_la_SOURCES = \
 	PointLocator.cpp \
 	RayCrossingCounter.cpp \
 	RayCrossingCounterDD.cpp \
-	RobustDeterminant.cpp \
-	SimplePointInRing.cpp \
-	SIRtreePointInRing.cpp
+	RobustDeterminant.cpp
 
 
 libalgorithm_la_LIBADD = \

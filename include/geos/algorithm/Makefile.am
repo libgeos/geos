@@ -25,10 +25,7 @@ geos_HEADERS = \
 	LineIntersector.h \
 	MinimumDiameter.h \
 	NotRepresentableException.h \
-	PointInRing.h \
 	PointLocator.h \
 	RayCrossingCounter.h \
 	RayCrossingCounterDD.h \
-	RobustDeterminant.h \
-	SimplePointInRing.h \
-	SIRtreePointInRing.h
+	RobustDeterminant.h

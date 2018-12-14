@@ -45,8 +45,6 @@ OBJ = \
 	algorithm\PointLocator.$(EXT) \
 	algorithm\RayCrossingCounter.$(EXT) \
 	algorithm\RobustDeterminant.$(EXT) \
-	algorithm\SimplePointInRing.$(EXT) \
-	algorithm\SIRtreePointInRing.$(EXT) \
 	algorithm\distance\DiscreteHausdorffDistance.$(EXT) \
 	algorithm\distance\DiscreteFrechetDistance.$(EXT) \
 	algorithm\distance\DistanceToPoint.$(EXT) \

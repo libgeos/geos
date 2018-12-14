@@ -35,12 +35,9 @@
 #include <geos/algorithm/LineIntersector.h>
 //#include <geos/algorithm/MinimumDiameter.h>
 //#include <geos/algorithm/NotRepresentableException.h>
-//#include <geos/algorithm/PointInRing.h>
 #include <geos/algorithm/PointLocator.h>
 //#include <geos/algorithm/RobustDeterminant.h>
-//#include <geos/algorithm/SIRtreePointInRing.h>
 //#include <geos/algorithm/SimplePointInAreaLocator.h>
-//#include <geos/algorithm/SimplePointInRing.h>
 
 namespace geos {
 
