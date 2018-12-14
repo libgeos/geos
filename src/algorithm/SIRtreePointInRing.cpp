@@ -15,6 +15,7 @@
  *
  **********************************************************************/
 
+#include <geos/algorithm/CGAlgorithmsDD.h>
 #include <geos/algorithm/SIRtreePointInRing.h>
 #include <geos/algorithm/RobustDeterminant.h>
 #include <geos/index/strtree/SIRtree.h>
@@ -97,7 +98,7 @@ SIRtreePointInRing::testLineSegment(const Coordinate& p,LineSegment *seg)
 		/*
 		*  segment straddles x axis,so compute intersection.
 		*/
-		xInt=RobustDeterminant::signOfDet2x2(x1,y1,x2,y2)/(y2-y1);
+		xInt = CGAlgorithmsDD::signOfDet2x2(x1,y1,x2,y2)/(y2-y1);
 		/*
 		*  crosses ray if strictly positive intersection.
 		*/

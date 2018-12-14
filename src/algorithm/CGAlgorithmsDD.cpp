@@ -19,6 +19,7 @@
 
 #include <geos/algorithm/CGAlgorithmsDD.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/util/IllegalArgumentException.h>
 #include <sstream>
 
 using namespace geos::geom;
@@ -74,6 +75,10 @@ int CGAlgorithmsDD::signOfDet2x2(DD &x1, DD &y1, DD &x2, DD &y2)
 
 int CGAlgorithmsDD::signOfDet2x2(double dx1, double dy1, double dx2, double dy2)
 {
+    if (ISNAN(dx1)   || ISNAN(dy1)   || ISNAN(dx2)   || ISNAN(dy2) ||
+        !FINITE(dx1) || !FINITE(dy1) || !FINITE(dx2) || !FINITE(dy2)) {
+        throw util::IllegalArgumentException("CGAlgorithmsDD::signOfDet2x2 encountered NaN/Inf numbers");
+    }
     DD x1(dx1);
     DD y1(dy1);
     DD x2(dx2);
