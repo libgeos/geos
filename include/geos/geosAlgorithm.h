@@ -36,7 +36,6 @@
 //#include <geos/algorithm/MinimumDiameter.h>
 //#include <geos/algorithm/NotRepresentableException.h>
 #include <geos/algorithm/PointLocator.h>
-//#include <geos/algorithm/RobustDeterminant.h>
 //#include <geos/algorithm/SimplePointInAreaLocator.h>
 
 namespace geos {

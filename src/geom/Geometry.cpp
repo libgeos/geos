@@ -350,6 +350,10 @@ Geometry::intersects(const Geometry *g) const
 bool
 Geometry::covers(const Geometry* g) const
 {
+    if (getDimension() == 1 && g->getDimension() == 2) {
+        return false;
+    }
+
 #ifdef SHORTCIRCUIT_PREDICATES
 	// short-circuit test
 	if (! getEnvelopeInternal()->covers(g->getEnvelopeInternal()))
@@ -390,6 +394,10 @@ Geometry::within(const Geometry *g) const
 bool
 Geometry::contains(const Geometry *g) const
 {
+    if (getDimension() == 1 && g->getDimension() == 2) {
+        return false;
+    }
+
 #ifdef SHORTCIRCUIT_PREDICATES
 	// short-circuit test
 	if (! getEnvelopeInternal()->contains(g->getEnvelopeInternal()))

@@ -18,7 +18,6 @@
 
 #include <geos/algorithm/CGAlgorithmsDD.h>
 #include <geos/algorithm/RayCrossingCounter.h>
-#include <geos/algorithm/RobustDeterminant.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Location.h>
 #include <geos/geom/Coordinate.h>
