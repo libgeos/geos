@@ -22,6 +22,7 @@ libalgorithm_la_SOURCES = \
 	InteriorPointLine.cpp \
 	InteriorPointPoint.cpp \
 	LineIntersector.cpp \
+	Length.cpp \
 	MinimumDiameter.cpp \
 	NotRepresentableException.cpp \
 	PointLocator.cpp \

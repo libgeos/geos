@@ -80,23 +80,6 @@ namespace tut
         }
     };
 
-        // using geos::geom::LineString;
-
-        // Geometry::Ptr lineGeom(reader_.read("LINESTRING (30 220, 240 220, 240 220)"));
-        // LineString::Ptr line(dynamic_cast<LineString*>(lineGeom.release()));
-        // ensure(nullptr != line.get());
-
-        // Geometry::Ptr hullGeom(reader_.read("LINESTRING (30 220, 240 220)"));
-        // LineString::Ptr convexHull(dynamic_cast<LineString*>(hullGeom.release()));
-        // ensure(nullptr != convexHull.get());
-
-        // geom_ = line->convexHull();
-        // ensure( convexHull->equalsExact(geom_) );
-
-
-
-
-
     typedef test_group<test_area_data> group;
     typedef group::object object;
 
