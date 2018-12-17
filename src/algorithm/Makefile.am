@@ -11,6 +11,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/include
 
 libalgorithm_la_SOURCES = \
 	Angle.cpp \
+	Area.cpp \
 	BoundaryNodeRule.cpp \
 	Centroid.cpp \
 	CGAlgorithms.cpp \

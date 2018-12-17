@@ -18,6 +18,7 @@
  *
  **********************************************************************/
 
+#include <geos/algorithm/Area.h>
 #include <geos/algorithm/CGAlgorithms.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/geom/Coordinate.h>
@@ -366,13 +367,13 @@ Polygon::getCoordinate() const
 double
 Polygon::getArea() const
 {
-	double area=0.0;
-	area+=fabs(algorithm::CGAlgorithms::signedArea(shell->getCoordinatesRO()));
+	double area = 0.0;
+	area += fabs(algorithm::Area::ofRing(shell->getCoordinatesRO()));
 	for(size_t i=0, n=holes->size(); i<n; ++i)
 	{
 		const LinearRing *lr = dynamic_cast<const LinearRing *>((*holes)[i]);
-		const CoordinateSequence *h=lr->getCoordinatesRO();
-        	area-=fabs(algorithm::CGAlgorithms::signedArea(h));
+		const CoordinateSequence *h = lr->getCoordinatesRO();
+    	area -= fabs(algorithm::Area::ofRing(h));
 	}
 	return area;
 }

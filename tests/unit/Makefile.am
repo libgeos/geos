@@ -40,6 +40,7 @@ geos_unit_LDADD = \
 geos_unit_SOURCES = \
 	geos_unit.cpp \
 	algorithm/AngleTest.cpp \
+	algorithm/AreaTest.cpp \
 	algorithm/CGAlgorithms/computeOrientationTest.cpp \
 	algorithm/CGAlgorithms/isCCWTest.cpp \
 	algorithm/CGAlgorithms/isPointInRingTest.cpp \

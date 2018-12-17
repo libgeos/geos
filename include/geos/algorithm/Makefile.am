@@ -12,6 +12,7 @@ geosdir = $(includedir)/geos/algorithm
 
 geos_HEADERS = \
 	Angle.h \
+	Area.h \
 	BoundaryNodeRule.h \
 	CentralEndpointIntersector.h \
 	Centroid.h \
