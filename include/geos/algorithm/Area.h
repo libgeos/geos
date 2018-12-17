@@ -26,10 +26,7 @@
 namespace geos {
 namespace algorithm { // geos::algorithm
 
-/// Utility functions for working with angles.
-//
-/// Unless otherwise noted, methods in this class express angles in radians.
-///
+
 class GEOS_DLL Area {
 public:
 

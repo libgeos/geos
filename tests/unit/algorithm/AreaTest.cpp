@@ -127,27 +127,6 @@ namespace tut
         checkAreaOfRingSigned("LINESTRING (100 200, 100 100, 200 100, 200 200, 100 200)", -10000.0);
     }
 
-    // // testIsAcute()
-    // template<>
-    // template<>
-    // void object::test<2>()
-    // {
-    // ensure_equals("7", Angle::angle(Coordinate(-10,-10)), -0.75*PI, TOL);
-    //     ensure(Area::isAcute(
-    //       Coordinate(10,0), Coordinate(0,0), Coordinate(5,10)));
-    //     ensure(Area::isAcute(
-    //       Coordinate(10,0), Coordinate(0,0), Coordinate(5,-10)));
-    //     // angle of 0
-    //     ensure(Area::isAcute(
-    //       Coordinate(10,0), Coordinate(0,0), Coordinate(10,0)));
-    //     ensure_not(Area::isAcute(
-    //       Coordinate(10,0), Coordinate(0,0), Coordinate(-5,10)));
-    //     ensure_not(Area::isAcute(
-    //       Coordinate(10,0), Coordinate(0,0), Coordinate(-5,-10)));
-    // }
-
-
-
 
 } // namespace tut
 
