@@ -146,9 +146,8 @@ void dump_to_stdout( const tinyxml2::XMLNode * pParent, unsigned int indent = 0 
 
     tinyxml2::XMLPrinter printer;
     pParent->Accept(&printer);
-
-
 }
+
 
 }
 

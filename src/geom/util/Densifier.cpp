@@ -48,8 +48,8 @@ namespace geom { // geos.geom
 namespace util { // geos.geom.util
 
 /* geom::util::Densifier::DensifyTransformer */
-Densifier::DensifyTransformer::DensifyTransformer(double distanceTolerance):
-	distanceTolerance(distanceTolerance)
+Densifier::DensifyTransformer::DensifyTransformer(double distTol):
+	distanceTolerance(distTol)
 {}
 
 CoordinateSequence::Ptr
@@ -73,7 +73,7 @@ Densifier::DensifyTransformer::transformPolygon(const Polygon *geom, const Geome
 {
 	Geometry::Ptr roughGeom = GeometryTransformer::transformPolygon(geom, parent);
 	// don't try and correct if the parent is going to do this
-	if (const MultiPolygon* mp=dynamic_cast<const MultiPolygon*>(parent) )
+	if (parent && parent->getGeometryTypeId() == GEOS_MULTIPOLYGON)
 	{
 		return roughGeom;
 	}
@@ -140,10 +140,10 @@ Densifier::densifyPoints(const Coordinate::Vect pts, double distanceTolerance, c
  * @return the densified geometry
  */
 Geometry::Ptr
-Densifier::densify(const Geometry *geom, double distanceTolerance)
+Densifier::densify(const Geometry *geom, double distTol)
 {
 	util::Densifier densifier(geom);
-	densifier.setDistanceTolerance(distanceTolerance);
+	densifier.setDistanceTolerance(distTol);
 	return densifier.getResultGeometry();
 }
 
