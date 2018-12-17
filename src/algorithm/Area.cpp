@@ -28,14 +28,14 @@ namespace algorithm { // geos.algorithm
 double
 Area::ofRing(const std::vector<geom::Coordinate> &ring)
 {
-    return abs(ofRingSigned(ring));
+    return fabs(ofRingSigned(ring));
 }
 
 /* public static */
 double
 Area::ofRing(const geom::CoordinateSequence *ring)
 {
-    return abs(ofRingSigned(ring));
+    return fabs(ofRingSigned(ring));
 }
 
 /* public static */
