@@ -21,6 +21,7 @@
 #include <geos/util/Assert.h>
 #include <geos/util/TopologyException.h>
 #include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/geomgraph/EdgeRing.h>
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geomgraph/DirectedEdgeStar.h>
@@ -204,7 +205,7 @@ EdgeRing::computeRing()
 
 	if (ring!=nullptr) return;   // don't compute more than once
 	ring=geometryFactory->createLinearRing(pts);
-	isHoleVar=CGAlgorithms::isCCW(pts);
+	isHoleVar=Orientation::isCCW(pts);
 
 	testInvariant();
 

@@ -31,7 +31,7 @@
 #include <geos/geomgraph/NodeMap.h>
 #include <geos/geomgraph/Quadrant.h>
 
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Orientation.h>
 
 #include <vector>
 #include <sstream>
@@ -353,7 +353,7 @@ PlanarGraph::matchInSameDirection(const Coordinate& p0, const Coordinate& p1,
 	if (!(p0==ep0))
 		return false;
 
-	if (CGAlgorithms::computeOrientation(p0,p1,ep1)==CGAlgorithms::COLLINEAR
+	if (Orientation::index(p0,p1,ep1)==Orientation::COLLINEAR
 		&& Quadrant::quadrant(p0,p1)==Quadrant::quadrant(ep0,ep1))
 			return true;
 	return false;

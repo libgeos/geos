@@ -20,7 +20,7 @@
 #include <cmath>
 #include <vector>
 
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/Angle.h>
 #include <geos/operation/buffer/OffsetSegmentGenerator.h>
 #include <geos/operation/buffer/OffsetSegmentString.h>
@@ -147,12 +147,12 @@ OffsetSegmentGenerator::addNextSegment(const Coordinate &p, bool addStartPoint)
   seg1.setCoordinates(s1, s2);
   computeOffsetSegment(seg1, side, distance, offset1);
 
-  int orientation=CGAlgorithms::computeOrientation(s0, s1, s2);
+  int orientation=Orientation::index(s0, s1, s2);
   bool outsideTurn =
-    (orientation==CGAlgorithms::CLOCKWISE
+    (orientation==Orientation::CLOCKWISE
      && side==Position::LEFT)
     ||
-    (orientation==CGAlgorithms::COUNTERCLOCKWISE
+    (orientation==Orientation::COUNTERCLOCKWISE
      && side==Position::RIGHT);
 
   if (orientation==0)
@@ -210,7 +210,7 @@ OffsetSegmentGenerator::addLineEndCap(const Coordinate &p0, const Coordinate &p1
       // add offset seg points with a fillet between them
       segList.addPt(offsetL.p1);
       addFillet(p1, angle+PI/2.0, angle-PI/2.0,
-                CGAlgorithms::CLOCKWISE, distance);
+                Orientation::CLOCKWISE, distance);
       segList.addPt(offsetR.p1);
       break;
     case BufferParameters::CAP_FLAT:
@@ -249,7 +249,7 @@ OffsetSegmentGenerator::addFillet(const Coordinate &p, const Coordinate &p0,
   double dy1 = p1.y - p.y;
   double endAngle = atan2(dy1, dx1);
 
-  if (direction == CGAlgorithms::CLOCKWISE) {
+  if (direction == Orientation::CLOCKWISE) {
     if (startAngle <= endAngle) startAngle += 2.0 * PI;
   }
   else {    // direction==COUNTERCLOCKWISE
@@ -266,7 +266,7 @@ void
 OffsetSegmentGenerator::addFillet(const Coordinate &p, double startAngle,
   double endAngle, int direction, double radius)
 {
-  int directionFactor = direction == CGAlgorithms::CLOCKWISE ? -1 : 1;
+  int directionFactor = direction == Orientation::CLOCKWISE ? -1 : 1;
 
   double totalAngle = fabs(startAngle - endAngle);
   int nSegs = (int) (totalAngle / filletAngleQuantum + 0.5);
@@ -352,7 +352,7 @@ OffsetSegmentGenerator::addCollinear(bool addStartPoint)
     else
     {
       addFillet(s1, offset0.p1, offset1.p0,
-          CGAlgorithms::CLOCKWISE, distance);
+          Orientation::CLOCKWISE, distance);
     }
   }
 }

@@ -4,8 +4,8 @@
 
 #include <tut/tut.hpp>
 // geos
-#include <geos/algorithm/CGAlgorithms.h>
 #include <geos/algorithm/CGAlgorithmsDD.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateArraySequence.h>
@@ -35,7 +35,7 @@ namespace tut
     typedef test_group<test_computeorientation_data> group;
     typedef group::object object;
 
-    group test_computeorientation_group("geos::algorithm::CGAlgorithms::computeOrientation");
+    group test_computeorientation_group("geos::algorithm::Orientation::index");
 
     //
     // Test Cases
@@ -51,9 +51,9 @@ namespace tut
 
         CoordinateSequence::Ptr pts(geom->getCoordinates());
 
-        int const a = CGAlgorithms::computeOrientation(pts->getAt(0), pts->getAt(1), pts->getAt(2));
-        int const b = CGAlgorithms::computeOrientation(pts->getAt(0), pts->getAt(1), pts->getAt(2));
-        int const c = CGAlgorithms::computeOrientation(pts->getAt(0), pts->getAt(1), pts->getAt(2));
+        int const a = Orientation::index(pts->getAt(0), pts->getAt(1), pts->getAt(2));
+        int const b = Orientation::index(pts->getAt(0), pts->getAt(1), pts->getAt(2));
+        int const c = Orientation::index(pts->getAt(0), pts->getAt(1), pts->getAt(2));
 
         ensure_equals( a, b );
         ensure_equals( a, c );
@@ -73,9 +73,9 @@ namespace tut
         pts.add(c2);
         pts.add(c3);
 
-        int const a = CGAlgorithms::computeOrientation(pts[0], pts[1], pts[2]);
-        int const b = CGAlgorithms::computeOrientation(pts[0], pts[1], pts[2]);
-        int const c = CGAlgorithms::computeOrientation(pts[0], pts[1], pts[2]);
+        int const a = Orientation::index(pts[0], pts[1], pts[2]);
+        int const b = Orientation::index(pts[0], pts[1], pts[2]);
+        int const c = Orientation::index(pts[0], pts[1], pts[2]);
 
         ensure_equals( a, b );
         ensure_equals( a, c );
@@ -93,8 +93,8 @@ namespace tut
         Coordinate p(186.80814046338352, 46.28973405831556);
         // CGAlgorithms::orientationIndex gives both the same!!!
         // First case of doubledouble robustness improvement
-        int orient = CGAlgorithmsDD::orientationIndex(p0, p1, p);
-        int orientInv = CGAlgorithmsDD::orientationIndex(p1, p0, p);
+        int orient = Orientation::index(p0, p1, p);
+        int orientInv = Orientation::index(p1, p0, p);
         ensure( orient != orientInv );
     }
 

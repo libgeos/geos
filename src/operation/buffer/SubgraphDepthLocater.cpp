@@ -24,7 +24,7 @@
 #include <geos/operation/buffer/BufferSubgraph.h>
 #include <geos/operation/buffer/SubgraphDepthLocater.h>
 
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Orientation.h>
 
 #include <geos/geom/Envelope.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -315,11 +315,11 @@ SubgraphDepthLocater::findStabbedSegments(
 
 		// skip if stabbing ray is right of the segment
 #ifndef SKIP_LS
-		if (CGAlgorithms::computeOrientation(seg.p0, seg.p1,
+		if (Orientation::index(seg.p0, seg.p1,
 #else
-		if (CGAlgorithms::computeOrientation(*low, *high,
+		if (Orientation::index(*low, *high,
 #endif
-				stabbingRayLeftPt)==CGAlgorithms::RIGHT)
+				stabbingRayLeftPt)==Orientation::RIGHT)
 		{
 #if GEOS_DEBUG
 			cerr<<" stabbing ray right of segment, skipping"<<endl;

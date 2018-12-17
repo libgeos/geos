@@ -13,6 +13,7 @@
  **********************************************************************/
 
 #include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/operation/intersection/RectangleIntersection.h>
 #include <geos/operation/intersection/Rectangle.h>
 #include <geos/operation/intersection/RectangleIntersectionBuilder.h>
@@ -470,6 +471,7 @@ RectangleIntersection::clip_polygon_to_polygons(const geom::Polygon * g,
   // completely outside.
 
   using geos::algorithm::CGAlgorithms;
+  using geos::algorithm::Orientation;
   if( parts.empty() )
   {
     Coordinate rectCenter(rect.xmin(), rect.ymin());
@@ -485,7 +487,7 @@ RectangleIntersection::clip_polygon_to_polygons(const geom::Polygon * g,
   else
   {
     // TODO: make CCW checking part of clip_linestring_parts ?
-    if ( CGAlgorithms::isCCW(shell->getCoordinatesRO()) ) {
+    if ( Orientation::isCCW(shell->getCoordinatesRO()) ) {
       parts.reverseLines();
     }
   }
@@ -515,7 +517,7 @@ RectangleIntersection::clip_polygon_to_polygons(const geom::Polygon * g,
 		  if(!holeparts.empty())
 			{
         // TODO: make CCW checking part of clip_linestring_parts ?
-        if ( ! CGAlgorithms::isCCW(hole->getCoordinatesRO()) ) {
+        if ( ! Orientation::isCCW(hole->getCoordinatesRO()) ) {
           holeparts.reverseLines();
         }
 			  holeparts.reconnect();

@@ -572,7 +572,7 @@ void XMLUtil::ToStr( bool v, char* buffer, int bufferSize )
 */
 void XMLUtil::ToStr( float v, char* buffer, int bufferSize )
 {
-    TIXML_SNPRINTF( buffer, bufferSize, "%.8f", v );
+    TIXML_SNPRINTF( buffer, bufferSize, "%.8g", (double)v );
 }
 
 

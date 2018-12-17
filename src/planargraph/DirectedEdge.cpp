@@ -15,7 +15,7 @@
 #include <geos/planargraph/DirectedEdge.h>
 #include <geos/planargraph/Node.h>
 #include <geos/geomgraph/Quadrant.h>
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Orientation.h>
 
 #include <cmath>
 #include <sstream>
@@ -159,7 +159,7 @@ DirectedEdge::compareDirection(const DirectedEdge *e) const
 	if (quadrant < e->quadrant) return -1;
 	// vectors are in the same quadrant - check relative orientation of direction vectors
 	// this is > e if it is CCW of e
-	return algorithm::CGAlgorithms::computeOrientation(e->p0,e->p1,p1);
+	return algorithm::Orientation::index(e->p0,e->p1,p1);
 }
 
 /*public*/

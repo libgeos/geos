@@ -27,6 +27,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util.h> // TODO: drop this, includes too much
 
@@ -161,7 +162,7 @@ EdgeRing::add(const DirectedEdge *de){
 bool
 EdgeRing::isHole(){
     getRingInternal();
-    return CGAlgorithms::isCCW(ring->getCoordinatesRO());
+    return Orientation::isCCW(ring->getCoordinatesRO());
 }
 
 /*public*/

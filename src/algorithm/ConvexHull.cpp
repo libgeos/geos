@@ -20,6 +20,7 @@
 
 #include <geos/algorithm/ConvexHull.h>
 #include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Point.h>
@@ -62,11 +63,11 @@ private:
 		double dxq=q->x-o->x;
 		double dyq=q->y-o->y;
 
-		int orient = CGAlgorithms::computeOrientation(*o, *p, *q);
+		int orient = Orientation::index(*o, *p, *q);
 
 
-		if (orient == CGAlgorithms::COUNTERCLOCKWISE) return 1;
-		if (orient == CGAlgorithms::CLOCKWISE) return -1;
+		if (orient == Orientation::COUNTERCLOCKWISE) return 1;
+		if (orient == Orientation::CLOCKWISE) return -1;
 
 		// points are collinear - check distance
 		double op = dxp * dxp + dyp * dyp;
@@ -302,7 +303,7 @@ ConvexHull::grahamScan(const Coordinate::ConstVect &c,
 	{
 		const Coordinate *p = ps.back(); ps.pop_back();
 		while (!ps.empty() &&
-			CGAlgorithms::computeOrientation(
+			Orientation::index(
 		    *(ps.back()), *p, *(c[i])) > 0)
 		{
 			p = ps.back(); ps.pop_back();
@@ -418,7 +419,7 @@ ConvexHull::grahamScan(const Coordinate::ConstVect &c,
 bool
 ConvexHull::isBetween(const Coordinate &c1, const Coordinate &c2, const Coordinate &c3)
 {
-	if (CGAlgorithms::computeOrientation(c1, c2, c3)!=0) {
+	if (Orientation::index(c1, c2, c3)!=0) {
 		return false;
 	}
 	if (c1.x!=c3.x) {

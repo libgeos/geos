@@ -20,7 +20,7 @@
 
 #include <geos/geomgraph/EdgeEnd.h>
 #include <geos/geomgraph/Node.h> // for assertions
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/Quadrant.h>
 #include <geos/geom/Coordinate.h>
@@ -178,7 +178,7 @@ EdgeEnd::compareDirection(const EdgeEnd* e) const
 	// vectors are in the same quadrant - check relative
 	// orientation of direction vectors
 	// this is > e if it is CCW of e
-	return CGAlgorithms::computeOrientation(e->p0, e->p1, p1);
+	return Orientation::index(e->p0, e->p1, p1);
 }
 
 /*public*/

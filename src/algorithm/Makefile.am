@@ -25,6 +25,7 @@ libalgorithm_la_SOURCES = \
 	Length.cpp \
 	MinimumDiameter.cpp \
 	NotRepresentableException.cpp \
+	Orientation.cpp \
 	PointLocator.cpp \
 	RayCrossingCounter.cpp \
 	RayCrossingCounterDD.cpp \
