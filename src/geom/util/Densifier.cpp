@@ -27,7 +27,6 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/Point.h>

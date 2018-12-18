@@ -40,14 +40,6 @@
 #include <cassert>
 #include <iostream> // for operator<<
 
-#ifndef GEOS_DEBUG
-#define GEOS_DEBUG 0
-#endif
-
-#if GEOS_DEBUG
-#include <iostream>
-#endif
-
 using namespace std;
 using namespace geos::algorithm;
 using namespace geos::geom;
@@ -75,7 +67,7 @@ EdgeRing::EdgeRing(DirectedEdge *newStart,
 	 */
 	//computePoints(start);
 	//computeRing();
-#if GEOS_DEBUG
+#ifdef GEOS_DEBUG
 	cerr << "EdgeRing[" << this << "] ctor" << endl;
 #endif
 	testInvariant();
@@ -105,7 +97,7 @@ EdgeRing::~EdgeRing()
 		delete holes[i];
 	}
 
-#if GEOS_DEBUG
+#ifdef GEOS_DEBUG
 	cerr << "EdgeRing[" << this << "] dtor" << endl;
 #endif
 }
