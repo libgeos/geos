@@ -27,7 +27,15 @@ namespace geos {
 namespace algorithm { // geos::algorithm
 
 /**
-* Functions to compute the orientation of points, lines and rings.
+* Functions to compute the orientation of basic geometric structures
+* including point triplets (triangles) and rings.
+* Orientation is a fundamental property of planar geometries
+* (and more generally geometry on two-dimensional manifolds).
+*
+* Orientation is notoriously subject to numerical precision errors
+* in the case of collinear or nearly collinear points.
+* JTS uses extended-precision arithmetic to increase
+* the robustness of the computation.
 *
 * @author Martin Davis
 *
@@ -46,16 +54,15 @@ public:
     };
 
     /*
-    * Returns the index of the direction of the point <code>q</code>
-    * relative to a vector specified by <code>p1-p2</code>.
-    *
-    * @param p1 the origin point of the vector
-    * @param p2 the final point of the vector
-    * @param q the point to compute the direction to
-    *
-    * @return 1 if q is counter-clockwise (left) from p1-p2
-    * @return -1 if q is clockwise (right) from p1-p2
-    * @return 0 if q is collinear with p1-p2
+    * Returns the orientation index of the direction of the point q relative to
+    * a directed infinite line specified by p1-p2.
+    * The index indicates whether the point lies to the
+    * {@link #Orientation::LEFT} or {@link #Orientation::RIGHT}
+    * of the line, or lies on it {@link #Orientation::COLLINEAR}.
+    * The index also indicates the orientation of the triangle formed
+    * by the three points
+    * ( {@link #Orientation::COUNTERCLOCKWISE},
+    * {@link #Orientation::CLOCKWISE}, or {@link #Orientation::STRAIGHT} )
     */
     static int index(const geom::Coordinate &p1,
                      const geom::Coordinate &p2, const geom::Coordinate &q);
@@ -63,11 +70,11 @@ public:
     /**
     * Computes whether a ring defined by an array of {@link Coordinate}s is
     * oriented counter-clockwise.
-    * <ul>
-    * <li>The list of points is assumed to have the first and last points equal.
-    * <li>This will handle coordinate lists which contain repeated points.
-    * </ul>
-    * This algorithm is <b>only</b> guaranteed to work with valid rings. If the
+    *
+    * - The list of points is assumed to have the first and last points equal.
+    * - This will handle coordinate lists which contain repeated points.
+    *
+    * This algorithm is *only<* guaranteed to work with valid rings. If the
     * ring is invalid (e.g. self-crosses or touches), the computed result may not
     * be correct.
     *
