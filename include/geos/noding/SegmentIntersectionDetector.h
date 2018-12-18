@@ -23,8 +23,6 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/noding/SegmentString.h>
 
-using namespace geos::algorithm;
-
 namespace geos {
 namespace noding { // geos::noding
 
@@ -44,7 +42,7 @@ namespace noding { // geos::noding
 class SegmentIntersectionDetector : public SegmentIntersector
 {
 private:
-	LineIntersector * li;
+	algorithm::LineIntersector * li;
 
 	bool findProper;
 	bool findAllTypes;
@@ -58,7 +56,7 @@ private:
 
 protected:
 public:
-	SegmentIntersectionDetector( LineIntersector * p_li)
+	SegmentIntersectionDetector( algorithm::LineIntersector * p_li)
 		:
 		li( p_li),
 		findProper(false),
