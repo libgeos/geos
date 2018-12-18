@@ -85,7 +85,6 @@ MonotoneChain::computeSelect(const Envelope& searchEnv,
 {
     const Coordinate& p0=pts[start0];
     const Coordinate& p1=pts[end0];
-    mcs.tempEnv1.init(p0,p1);
 
     //Debug.println("trying:"+p0+p1+" [ "+start0+","+end0+" ]");
     // terminating condition for the recursion
@@ -96,7 +95,7 @@ MonotoneChain::computeSelect(const Envelope& searchEnv,
         return;
     }
     // nothing to do if the envelopes don't overlap
-    if (!searchEnv.intersects(mcs.tempEnv1))
+    if (!searchEnv.intersects(p0, p1))
         return;
     // the chains overlap,so split each in half and iterate (binary search)
     size_t mid = (start0 + end0) / 2;
@@ -142,10 +141,8 @@ MonotoneChain::computeOverlaps(size_t start0, size_t end0,
     const Coordinate& p10 = mc.pts[start1];
     const Coordinate& p11 = mc.pts[end1];
 
-    // nothing to do if the envelopes of these chains don't overlap
-    mco.tempEnv1.init(p00, p01);
-    mco.tempEnv2.init(p10, p11);
-    if (!mco.tempEnv1.intersects(mco.tempEnv2)) return;
+    // nothing to do if the envelopes of these subchains don't overlap
+    if (!Envelope::intersects(p00, p01, p10, p11)) return;
 
     // the chains overlap,so split each in half and iterate (binary search)
     size_t mid0=(start0+end0)/2;

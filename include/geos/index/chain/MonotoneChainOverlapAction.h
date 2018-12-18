@@ -21,7 +21,6 @@
 
 #include <geos/export.h>
 #include <geos/geom/LineSegment.h>
-#include <geos/geom/Envelope.h>
 
 
 // Forward declarations
@@ -76,9 +75,6 @@ public:
 	                     const geom::LineSegment& /*seg2*/)
 	{}
 
-	// these envelopes are used during the MonotoneChain search process
-	geom::Envelope tempEnv1;
-	geom::Envelope tempEnv2;
 };
 
 } // namespace geos::index::chain

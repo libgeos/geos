@@ -65,9 +65,6 @@ public:
 	 */
 	virtual void select(const geom::LineSegment& seg) = 0;
 
-	// these envelopes are used during the MonotoneChain search process
-	// should only be visible by classes in this package
-	geom::Envelope tempEnv1;
 };
 
 
