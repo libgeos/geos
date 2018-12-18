@@ -18,7 +18,6 @@
  *
  **********************************************************************/
 
-#include <geos/algorithm/CGAlgorithms.h>
 #include <geos/geomgraph/GeometryGraph.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/LineString.h>

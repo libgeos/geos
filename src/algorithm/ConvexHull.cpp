@@ -19,7 +19,7 @@
  **********************************************************************/
 
 #include <geos/algorithm/ConvexHull.h>
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/PointLocation.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Coordinate.h>
@@ -203,7 +203,7 @@ ConvexHull::reduce(Coordinate::ConstVect &pts)
 	 */
 	for (size_t i=0, n=pts.size(); i<n; ++i)
 	{
-		if ( !CGAlgorithms::isPointInRing(*(pts[i]), polyPts) )
+		if ( !PointLocation::isInRing(*(pts[i]), polyPts) )
 		{
 			reducedSet.insert(pts[i]);
 		}

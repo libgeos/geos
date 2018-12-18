@@ -28,7 +28,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/Polygon.h>
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/PointLocation.h>
 #include <geos/util/TopologyException.h>
 #include <geos/util/GEOSException.h>
 #include <geos/util.h>
@@ -348,7 +348,7 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
 		Coordinate testPt = operation::polygonize::EdgeRing::ptNotInList(testRing->getCoordinatesRO(), tsrcs);
 		bool isContained=false;
 
-		if(CGAlgorithms::isPointInRing(testPt, tsrcs))
+		if(PointLocation::isInRing(testPt, tsrcs))
 			isContained=true;
 
 		// check if this new containing ring is smaller than

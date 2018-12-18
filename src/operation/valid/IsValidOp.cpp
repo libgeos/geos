@@ -23,8 +23,8 @@
 
 #include <geos/export.h>
 #include <geos/platform.h>
-#include <geos/algorithm/CGAlgorithms.h>
 #include <geos/algorithm/LineIntersector.h>
+#include <geos/algorithm/PointLocation.h>
 #include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
 #include <geos/operation/valid/ConnectedInteriorTester.h>
 #include <geos/operation/valid/ConsistentAreaTester.h>
@@ -506,7 +506,7 @@ IsValidOp::checkShellNotNested(const LinearRing *shell, const Polygon *p,
     // is outside the polygon
     if (shellPt==nullptr) return;
 
-    bool insidePolyShell=CGAlgorithms::isPointInRing(*shellPt, polyPts);
+    bool insidePolyShell=PointLocation::isInRing(*shellPt, polyPts);
     if (!insidePolyShell) return;
 
     // if no holes, this is an error!
@@ -555,7 +555,7 @@ IsValidOp::checkShellInsideHole(const LinearRing *shell,
     // if point is on shell but not hole, check that the shell is
     // inside the hole
     if (shellPt) {
-        bool insideHole=CGAlgorithms::isPointInRing(*shellPt, holePts);
+        bool insideHole=PointLocation::isInRing(*shellPt, holePts);
         if (!insideHole) return shellPt;
     }
 
@@ -564,7 +564,7 @@ IsValidOp::checkShellInsideHole(const LinearRing *shell,
     // if point is on hole but not shell, check that the hole is
     // outside the shell
     if (holePt) {
-        bool insideShell=CGAlgorithms::isPointInRing(*holePt, shellPts);
+        bool insideShell=PointLocation::isInRing(*holePt, shellPts);
         if (insideShell) return holePt;
         return nullptr;
     }

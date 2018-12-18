@@ -19,7 +19,6 @@
 #include <cmath>
 
 #include <geos/algorithm/Angle.h>
-#include <geos/algorithm/CGAlgorithms.h>
 #include <geos/geom/Coordinate.h>
 
 namespace geos {

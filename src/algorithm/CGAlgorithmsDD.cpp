@@ -54,6 +54,9 @@ int CGAlgorithmsDD::orientationIndex(const Coordinate& p1,
                                      const Coordinate& p2,
                                      const Coordinate& q)
 {
+    if (ISNAN(q.x) || ISNAN(q.y) || !FINITE(q.x) || !FINITE(q.y)) {
+        throw util::IllegalArgumentException("CGAlgorithmsDD::orientationIndex encountered NaN/Inf numbers");
+    }
     static DD const zero(0.0);
     DD dx1 = DD(p2.x) + DD(-p1.x);
     DD dy1 = DD(p2.y) + DD(-p1.y);

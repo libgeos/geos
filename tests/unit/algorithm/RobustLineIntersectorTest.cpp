@@ -6,7 +6,7 @@
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKTReader.h>
 #include <geos/algorithm/LineIntersector.h>
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/PointLocation.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
@@ -24,7 +24,7 @@
 
 using namespace geos::geom; //
 using geos::algorithm::LineIntersector;
-using geos::algorithm::CGAlgorithms;
+using geos::algorithm::PointLocation;
 using geos::algorithm::Orientation;
 
 
@@ -244,7 +244,7 @@ namespace tut
     GeomPtr p ( factory->createPoint(q) );
     ensure(!l->intersects(p.get()));
 
-    ensure(!CGAlgorithms::isOnLine(q, cs));
+    ensure(!PointLocation::isOnLine(q, cs));
     ensure_equals(Orientation::index(p1, p2, q), -1);
 
 	}

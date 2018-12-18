@@ -6,7 +6,7 @@
 // geos
 #include <geos/io/WKTReader.h>
 #include <geos/algorithm/PointLocator.h>
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/PointLocation.h>
 #include <geos/algorithm/RayCrossingCounterDD.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
@@ -56,7 +56,7 @@ namespace tut
         std::unique_ptr<Geometry> geom(reader.read(wkt));
         const Polygon *poly = dynamic_cast<Polygon*>(geom.get());
         const CoordinateSequence* cs = poly->getExteriorRing()->getCoordinatesRO();
-		int loc = CGAlgorithms::locatePointInRing(pt, *cs);
+		int loc = PointLocation::locateInRing(pt, *cs);
 		ensure_equals(loc, expected);
 	}
 

@@ -20,6 +20,7 @@
 #include <geos/platform.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/HCoordinate.h>
 #include <geos/algorithm/NotRepresentableException.h>
 //#include <geos/algorithm/CentralEndpointIntersector.h>
@@ -337,8 +338,8 @@ LineIntersector::computeIntersection(const Coordinate& p,const Coordinate& p1,co
 
 	// do between check first, since it is faster than the orientation test
 	if(Envelope::intersects(p1,p2,p)) {
-		if ((CGAlgorithms::orientationIndex(p1,p2,p)==0)&&
-			(CGAlgorithms::orientationIndex(p2,p1,p)==0)) {
+		if ((Orientation::index(p1,p2,p)==0)&&
+			(Orientation::index(p2,p1,p)==0)) {
 			isProperVar=true;
 			if ((p==p1)||(p==p2)) // 2d only test
 			{
@@ -370,8 +371,8 @@ bool
 LineIntersector::hasIntersection(const Coordinate& p, const Coordinate& p1, const Coordinate& p2)
 {
 	if(Envelope::intersects(p1,p2,p)) {
-		if ((CGAlgorithms::orientationIndex(p1,p2,p)==0)&&
-			(CGAlgorithms::orientationIndex(p2,p1,p)==0)) {
+		if ((Orientation::index(p1,p2,p)==0)&&
+			(Orientation::index(p2,p1,p)==0)) {
 			return true;
 		}
 	}
@@ -401,8 +402,8 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 	// for each endpoint, compute which side of the other segment it lies
 	// if both endpoints lie on the same side of the other segment,
 	// the segments do not intersect
-	int Pq1=CGAlgorithms::orientationIndex(p1,p2,q1);
-	int Pq2=CGAlgorithms::orientationIndex(p1,p2,q2);
+	int Pq1=Orientation::index(p1,p2,q1);
+	int Pq2=Orientation::index(p1,p2,q2);
 
 	if ((Pq1>0 && Pq2>0) || (Pq1<0 && Pq2<0))
 	{
@@ -412,8 +413,8 @@ LineIntersector::computeIntersect(const Coordinate& p1,const Coordinate& p2,cons
 		return NO_INTERSECTION;
 	}
 
-	int Qp1=CGAlgorithms::orientationIndex(q1,q2,p1);
-	int Qp2=CGAlgorithms::orientationIndex(q1,q2,p2);
+	int Qp1=Orientation::index(q1,q2,p1);
+	int Qp2=Orientation::index(q1,q2,p2);
 
 	if ((Qp1>0 && Qp2>0)||(Qp1<0 && Qp2<0)) {
 #if GEOS_DEBUG

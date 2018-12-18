@@ -20,7 +20,6 @@
 #include <vector>
 
 #include <geos/algorithm/Orientation.h>
-#include <geos/algorithm/CGAlgorithms.h>
 #include <geos/algorithm/CGAlgorithmsDD.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Coordinate.h>

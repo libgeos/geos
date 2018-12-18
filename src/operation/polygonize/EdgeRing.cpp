@@ -26,7 +26,7 @@
 #include <geos/geom/Envelope.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/PointLocation.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util.h> // TODO: drop this, includes too much
@@ -78,7 +78,7 @@ EdgeRing::findEdgeRingContaining(EdgeRing *testEr,
             // TODO: don't copy testPt !
             testPt = ptNotInList(testRing->getCoordinatesRO(), tryCoords);
 
-            if ( CGAlgorithms::isPointInRing(testPt, tryCoords) ) {
+            if ( PointLocation::isInRing(testPt, tryCoords) ) {
                 isContained=true;
             }
 

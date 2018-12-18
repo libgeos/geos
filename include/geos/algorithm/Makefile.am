@@ -28,6 +28,7 @@ geos_HEADERS = \
 	MinimumDiameter.h \
 	NotRepresentableException.h \
 	Orientation.h \
+	PointLocation.h \
 	PointLocator.h \
 	RayCrossingCounter.h \
 	RayCrossingCounterDD.h \

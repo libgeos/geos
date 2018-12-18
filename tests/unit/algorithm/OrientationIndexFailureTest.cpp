@@ -1,12 +1,11 @@
 //
-// Test Suite for geos::algorithm::CGAlgorithmsDD
+// Test Suite for geos::algorithm::Orientation
 // Ported from JTS junit/algorithm/OrientationIndexFailureTest.java
 
 #include <tut/tut.hpp>
 // geos
 #include <geos/geom/Coordinate.h>
-#include <geos/algorithm/CGAlgorithms.h>
-#include <geos/algorithm/CGAlgorithmsDD.h>
+#include <geos/algorithm/Orientation.h>
 // std
 #include <sstream>
 #include <string>
@@ -31,10 +30,10 @@ namespace tut
 
 	static int checkOrientation(Coordinate &c1, Coordinate &c2, Coordinate &c3)
 	{
-		int orient0 = CGAlgorithmsDD::orientationIndex(c1, c2, c3);
-    int orient1 = CGAlgorithmsDD::orientationIndex(c2, c3, c1);
-    int orient2 = CGAlgorithmsDD::orientationIndex(c3, c1, c2);
-    return (orient0 == orient1) && (orient0 == orient2);
+        int orient0 = Orientation::index(c1, c2, c3);
+        int orient1 = Orientation::index(c2, c3, c1);
+        int orient2 = Orientation::index(c3, c1, c2);
+        return (orient0 == orient1) && (orient0 == orient2);
 	}
 
 

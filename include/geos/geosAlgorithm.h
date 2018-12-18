@@ -26,7 +26,6 @@
 #ifndef GEOS_ALGORITHM_H
 #define GEOS_ALGORITHM_H
 
-//#include <geos/algorithm/CGAlgorithms.h>
 //#include <geos/algorithm/ConvexHull.h>
 //#include <geos/algorithm/HCoordinate.h>
 //#include <geos/algorithm/InteriorPointArea.h>

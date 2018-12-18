@@ -44,7 +44,7 @@
 #include <geos/io/WKTWriter.h>
 #include <geos/io/WKBWriter.h>
 #include <geos/algorithm/BoundaryNodeRule.h>
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/MinimumDiameter.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
@@ -6776,7 +6776,7 @@ int GEOSOrientationIndex_r(GEOSContextHandle_t extHandle,
     GEOSContextHandleInternal_t *handle = 0;
 
     using geos::geom::Coordinate;
-    using geos::algorithm::CGAlgorithms;
+    using geos::algorithm::Orientation;
 
     if ( 0 == extHandle )
     {
@@ -6794,7 +6794,7 @@ int GEOSOrientationIndex_r(GEOSContextHandle_t extHandle,
         Coordinate A(Ax, Ay);
         Coordinate B(Bx, By);
         Coordinate P(Px, Py);
-        return CGAlgorithms::orientationIndex(A, B, P);
+        return Orientation::index(A, B, P);
     }
     catch (const std::exception &e)
     {

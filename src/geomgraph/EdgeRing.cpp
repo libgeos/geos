@@ -20,7 +20,7 @@
 
 #include <geos/util/Assert.h>
 #include <geos/util/TopologyException.h>
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/PointLocation.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/geomgraph/EdgeRing.h>
 #include <geos/geomgraph/DirectedEdge.h>
@@ -380,7 +380,7 @@ EdgeRing::containsPoint(const Coordinate& p)
 	assert(env);
 	if ( ! env->contains(p) ) return false;
 
-	if ( ! CGAlgorithms::isPointInRing(p, ring->getCoordinatesRO()) )
+	if ( ! PointLocation::isInRing(p, ring->getCoordinatesRO()) )
 		return false;
 
 	for (vector<EdgeRing*>::iterator i=holes.begin(); i<holes.end(); ++i)

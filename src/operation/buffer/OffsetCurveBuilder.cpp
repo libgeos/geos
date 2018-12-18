@@ -22,7 +22,6 @@
 #include <cmath>
 #include <vector>
 
-#include <geos/algorithm/CGAlgorithms.h>
 #include <geos/algorithm/Angle.h>
 #include <geos/operation/buffer/OffsetCurveBuilder.h>
 #include <geos/operation/buffer/BufferInputLineSimplifier.h>
