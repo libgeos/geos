@@ -65,8 +65,6 @@ protected:
 	// Includes the end point of the edge as a sentinel
 	std::vector<size_t> startIndex;
 	// these envelopes are created once and reused
-	geom::Envelope env1;
-	geom::Envelope env2;
 private:
 	void computeIntersectsForChain(size_t start0, size_t end0,
 		const MonotoneChainEdge &mce,

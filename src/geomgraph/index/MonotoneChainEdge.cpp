@@ -134,11 +134,7 @@ MonotoneChainEdge::computeIntersectsForChain(size_t start0, size_t end0,
 	const Coordinate& p10=mce.pts->getAt(start1);
 	const Coordinate& p11=mce.pts->getAt(end1);
 
-	// nothing to do if the envelopes of these chains don't overlap
-	env1.init(p00,p01);
-	env2.init(p10,p11);
-
-	if (!env1.intersects(&env2)) return;
+	if (!Envelope::intersects(p00, p01, p10, p11)) return;
 	// the chains overlap, so split each in half and iterate
 	// (binary search)
 	size_t mid0 = (start0 + end0) / 2;
