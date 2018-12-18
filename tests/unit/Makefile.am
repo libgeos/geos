@@ -67,6 +67,7 @@ geos_unit_SOURCES = \
 	geom/Geometry/equalsTest.cpp \
 	geom/Geometry/isRectangleTest.cpp \
 	geom/Geometry/normalize.cpp \
+	geom/GeometryCollectionTest.cpp \
 	geom/GeometryFactoryTest.cpp \
 	geom/IntersectionMatrixTest.cpp \
 	geom/LinearRingTest.cpp \

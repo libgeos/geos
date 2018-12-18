@@ -273,8 +273,13 @@ GeometryCollection::getCoordinate() const
 {
 	// should use unique_ptr here or return NULL or throw an exception !
 	// 	--strk;
-	if (isEmpty()) return new Coordinate();
-    	return (*geometries)[0]->getCoordinate();
+    for (size_t i = 0; i < geometries->size(); ++i)
+    {
+        if (!(*geometries)[i]->isEmpty()) {
+            return (*geometries)[i]->getCoordinate();
+        }
+    }
+    return new Coordinate();
 }
 
 /**
