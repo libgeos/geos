@@ -19,17 +19,13 @@
 
 #include <geos/platform.h>
 #include <geos/algorithm/LineIntersector.h>
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Distance.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/HCoordinate.h>
 #include <geos/algorithm/NotRepresentableException.h>
-//#include <geos/algorithm/CentralEndpointIntersector.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/Envelope.h>
-
-//#include <geos/util/Assert.h> // changed to TopologyException
-//#include <geos/util/TopologyException.h> // we don't throw anymore
 
 #include <algorithm> // for max()
 #include <string>
@@ -81,19 +77,19 @@ Coordinate nearestEndpoint(const Coordinate& p1, const Coordinate& p2,
     const Coordinate& q1, const Coordinate& q2)
 {
   Coordinate nearestPt = p1;
-  double minDist = CGAlgorithms::distancePointLine(p1, q1, q2);
+  double minDist = Distance::pointToSegment(p1, q1, q2);
 
-  double dist = CGAlgorithms::distancePointLine(p2, q1, q2);
+  double dist = Distance::pointToSegment(p2, q1, q2);
   if (dist < minDist) {
     minDist = dist;
     nearestPt = p2;
   }
-  dist = CGAlgorithms::distancePointLine(q1, p1, p2);
+  dist = Distance::pointToSegment(q1, p1, p2);
   if (dist < minDist) {
     minDist = dist;
     nearestPt = q1;
   }
-  dist = CGAlgorithms::distancePointLine(q2, p1, p2);
+  dist = Distance::pointToSegment(q2, p1, p2);
   if (dist < minDist) {
     minDist = dist;
     nearestPt = q2;

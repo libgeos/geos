@@ -19,6 +19,7 @@ geos_HEADERS = \
 	CGAlgorithms.h \
 	ConvexHull.h \
 	ConvexHull.inl \
+	Distance.h \
 	HCoordinate.h \
 	InteriorPointArea.h \
 	InteriorPointLine.h \

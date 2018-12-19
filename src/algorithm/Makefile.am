@@ -17,6 +17,7 @@ libalgorithm_la_SOURCES = \
 	CGAlgorithms.cpp \
 	CGAlgorithmsDD.cpp \
 	ConvexHull.cpp \
+	Distance.cpp \
 	HCoordinate.cpp \
 	InteriorPointArea.cpp \
 	InteriorPointLine.cpp \

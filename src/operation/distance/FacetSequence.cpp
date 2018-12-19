@@ -16,7 +16,7 @@
  *
  **********************************************************************/
 
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Distance.h>
 #include <geos/operation/distance/FacetSequence.h>
 
 using namespace geos::geom;
@@ -67,7 +67,7 @@ double FacetSequence::computePointLineDistance(const Coordinate & pt, const Face
     for (size_t i = facetSeq.start; i < facetSeq.end - 1; i++) {
         facetSeq.pts->getAt(i, q0);
         facetSeq.pts->getAt(i + 1, q1);
-        dist = CGAlgorithms::distancePointLine(pt, q0, q1);
+        dist = Distance::pointToSegment(pt, q0, q1);
         if (dist == 0.0)
             return dist;
         if (dist < minDistance)
@@ -90,7 +90,7 @@ double FacetSequence::computeLineLineDistance(const FacetSequence & facetSeq) co
             facetSeq.pts->getAt(j, q0);
             facetSeq.pts->getAt(j + 1, q1);
 
-            dist = CGAlgorithms::distanceLineLine(p0, p1, q0, q1);
+            dist = Distance::segmentToSegment(p0, p1, q0, q1);
             if (dist == 0.0)
                 return dist;
             if (dist < minDistance)

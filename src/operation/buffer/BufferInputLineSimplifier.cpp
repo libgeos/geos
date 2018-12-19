@@ -19,7 +19,7 @@
 #include <geos/operation/buffer/BufferInputLineSimplifier.h>
 #include <geos/geom/CoordinateSequence.h> // for inlines
 #include <geos/geom/CoordinateArraySequence.h> // for constructing the return
-#include <geos/algorithm/CGAlgorithms.h> // for use
+#include <geos/algorithm/Distance.h> // for use
 #include <geos/algorithm/Orientation.h> // for use
 
 #include <memory>
@@ -166,7 +166,7 @@ BufferInputLineSimplifier::isShallowConcavity(const geom::Coordinate& p0,
 	if (! isAngleToSimplify)
 		return false;
 
-	double dist = CGAlgorithms::distancePointLine(p1, p0, p2);
+	double dist = Distance::pointToSegment(p1, p0, p2);
 	return dist < p_distanceTol;
 }
 
@@ -195,7 +195,7 @@ BufferInputLineSimplifier::isShallow(const geom::Coordinate& p0,
                                      const geom::Coordinate& p2,
                                      double p_distanceTol) const
 {
-	double dist = CGAlgorithms::distancePointLine(p1, p0, p2);
+	double dist = Distance::pointToSegment(p1, p0, p2);
 	return dist < p_distanceTol;
 }
 

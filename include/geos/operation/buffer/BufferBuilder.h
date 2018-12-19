@@ -42,7 +42,6 @@ namespace geos {
 		class GeometryFactory;
 	}
 	namespace algorithm {
-		class CGAlgorithms;
 		class LineIntersector;
 	}
 	namespace noding {

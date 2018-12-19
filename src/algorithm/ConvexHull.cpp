@@ -65,7 +65,6 @@ private:
 
 		int orient = Orientation::index(*o, *p, *q);
 
-
 		if (orient == Orientation::COUNTERCLOCKWISE) return 1;
 		if (orient == Orientation::CLOCKWISE) return -1;
 
@@ -315,106 +314,6 @@ ConvexHull::grahamScan(const Coordinate::ConstVect &c,
 }
 
 
-///*
-// * Returns a pointer to input, modifying input
-// */
-//CoordinateSequence*
-//ConvexHull::preSort(CoordinateSequence *pts)
-//{
-//	Coordinate t;
-//
-//	// find the lowest point in the set. If two or more points have
-//	// the same minimum y coordinate choose the one with the minimu x.
-//	// This focal point is put in array location pts[0].
-//	size_t npts=pts->getSize();
-//	for(size_t i=1; i<npts; ++i)
-//	{
-//		const Coordinate &p0=pts->getAt(0); // this will change
-//		const Coordinate &pi=pts->getAt(i);
-//		if ( (pi.y<p0.y) || ((pi.y==p0.y) && (pi.x<p0.x)) )
-//		{
-//			t=p0;
-//			pts->setAt(pi, 0);
-//			pts->setAt( t, i);
-//		}
-//	}
-//	// sort the points radially around the focal point.
-//	radialSort(pts);
-//	return pts;
-//}
-
-///*
-// * Returns a newly allocated CoordinateSequence object
-// */
-//CoordinateSequence*
-//ConvexHull::grahamScan(const CoordinateSequence *c)
-//{
-//	const Coordinate *p;
-//
-//	vector<Coordinate> *ps=new vector<Coordinate>();
-//	ps->push_back(c->getAt(0));
-//	ps->push_back(c->getAt(1));
-//	ps->push_back(c->getAt(2));
-//
-//	p=&(c->getAt(2));
-//	size_t npts=c->getSize();
-//	for(size_t i=3; i<npts; ++i)
-//	{
-//		p=&(ps->back());
-//		ps->pop_back();
-//		while (CGAlgorithms::computeOrientation(ps->back(), *p, c->getAt(i)) > 0)
-//		{
-//			p=&(ps->back());
-//			ps->pop_back();
-//		}
-//		ps->push_back(*p);
-//		ps->push_back(c->getAt(i));
-//	}
-//	ps->push_back(c->getAt(0));
-//
-//	return geomFactory->getCoordinateSequenceFactory()->create(ps);
-//}
-
-//void
-//ConvexHull::radialSort(CoordinateSequence *p)
-//{
-//	// A selection sort routine, assumes the pivot point is
-//	// the first point (i.e., p[0]).
-//
-//	const Coordinate &p0=p->getAt(0); // the pivot point
-//
-//	Coordinate t;
-//	size_t npts=p->getSize();
-//	for(size_t i=1; i<npts-1; ++i)
-//	{
-//		size_t min=i;
-//
-//		for(size_t j=i+1; j<npts; ++j)
-//		{
-//			const Coordinate &pj=p->getAt(j);
-//
-//			if ( polarCompare(p0, pj, p->getAt(min)) < 0 )
-//			{
-//				min=j;
-//			}
-//		}
-//
-//		/*
-//		 * Swap point[i] and point[min]
-//		 * We can skip this if they have
-//		 * the same value
-//		 */
-//		if ( i != min )
-//		{
-//			t=p->getAt(i);
-//			p->setAt(p->getAt(min), i);
-//			p->setAt(t, min);
-//		}
-//	}
-//}
-
-
-
 /*private*/
 bool
 ConvexHull::isBetween(const Coordinate &c1, const Coordinate &c2, const Coordinate &c3)
@@ -441,30 +340,6 @@ ConvexHull::isBetween(const Coordinate &c1, const Coordinate &c2, const Coordina
 	return false;
 }
 
-//void
-//ConvexHull::makeBigQuad(const CoordinateSequence *pts, BigQuad &bigQuad)
-//{
-//	bigQuad.northmost=bigQuad.southmost=
-//		bigQuad.westmost=bigQuad.eastmost=pts->getAt(0);
-//
-//	size_t npts=pts->getSize();
-//	for (size_t i=1; i<npts; ++i)
-//	{
-//		const Coordinate &pi=pts->getAt(i);
-//
-//		if (pi.x<bigQuad.westmost.x)
-//			bigQuad.westmost=pi;
-//
-//		if (pi.x>bigQuad.eastmost.x)
-//			bigQuad.eastmost=pi;
-//
-//		if (pi.y<bigQuad.southmost.y)
-//			bigQuad.southmost=pi;
-//
-//		if (pi.y>bigQuad.northmost.y)
-//			bigQuad.northmost=pi;
-//	}
-//}
 
 /* private */
 Geometry*

@@ -19,7 +19,7 @@
  **********************************************************************/
 
 #include <geos/platform.h>
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Distance.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/MinimumDiameter.h>
 #include <geos/util/UnsupportedOperationException.h>
@@ -373,7 +373,7 @@ OffsetCurveSetBuilder::isTriangleErodedCompletely(
 
 	Coordinate inCentre;
 	tri.inCentre(inCentre);
-	double distToCentre=CGAlgorithms::distancePointLine(inCentre, tri.p0, tri.p1);
+	double distToCentre = Distance::pointToSegment(inCentre, tri.p0, tri.p1);
 	bool ret = distToCentre < std::fabs(bufferDistance);
 	return ret;
 }

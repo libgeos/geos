@@ -1,5 +1,5 @@
 //
-// Test Suite for CGAlgorithms::computeOrientation() function
+// Test Suite for Oriengation::index() function
 // Ported from JTS junit/algorithm/ComputeOrientationTest.java
 
 #include <tut/tut.hpp>

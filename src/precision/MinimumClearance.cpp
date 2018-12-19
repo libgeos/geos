@@ -16,7 +16,7 @@
  *
  **********************************************************************/
 
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Distance.h>
 #include <geos/precision/MinimumClearance.h>
 #include <geos/index/strtree/STRtree.h>
 #include <geos/geom/GeometryFactory.h>
@@ -127,7 +127,7 @@ void MinimumClearance::compute() {
                     const Coordinate* seg1 = fs2->getCoordinate(i2);
 
                     if (! (p->equals2D(*seg0) || p->equals2D(*seg1))) {
-                        double d = geos::algorithm::CGAlgorithms::distancePointLine(*p, *seg0, *seg1);
+                        double d = geos::algorithm::Distance::pointToSegment(*p, *seg0, *seg1);
                         if (d < minDist) {
                             minDist = d;
                             updatePts(*p, *seg0, *seg1);

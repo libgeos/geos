@@ -422,8 +422,7 @@ OverlayOp::labelIncompleteNode(Node *n, int targetIndex)
 	 * or BOUNDARY of a polygon we must merge
 	 * Z values of the intersected segment.
 	 * The intersection point has been already computed
-	 * by LineIntersector invoked by CGAlgorithms::isOnLine
-	 * invoked by PointLocator.
+	 * by LineIntersector invoked by PointLocator.
 	 */
 
 	// Only do this if input does have Z
