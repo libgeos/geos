@@ -36,7 +36,6 @@
 #include <geos/geom/Location.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/MultiPolygon.h>
-#include <geos/geom/MultiPolygon.h>
 #include <geos/geom/LineString.h>
 #include <geos/geomgraph/GeometryGraph.h>
 #include <geos/geomgraph/PlanarGraph.h>

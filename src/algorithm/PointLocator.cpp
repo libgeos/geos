@@ -18,7 +18,7 @@
  **********************************************************************/
 
 #include <geos/algorithm/PointLocator.h>
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/PointLocation.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/LineString.h>
@@ -131,14 +131,15 @@ PointLocator::locate(const Coordinate& p, const LineString *l)
 	if (!l->getEnvelopeInternal()->intersects(p))
 		return Location::EXTERIOR;
 
-	const CoordinateSequence* pt=l->getCoordinatesRO();
+	const CoordinateSequence* seq = l->getCoordinatesRO();
 	if (! l->isClosed()) {
-		if ((p==pt->getAt(0)) || (p==pt->getAt(pt->getSize()-1))) {
+		if ((p == seq->getAt(0)) || (p == seq->getAt(seq->getSize()-1))) {
 			return Location::BOUNDARY;
 		}
 	}
-	if (CGAlgorithms::isOnLine(p,pt))
+	if (PointLocation::isOnLine(p, seq)) {
 		return Location::INTERIOR;
+    }
 	return Location::EXTERIOR;
 }
 
@@ -152,10 +153,12 @@ PointLocator::locateInPolygonRing(const Coordinate& p, const LinearRing *ring)
 
 	const CoordinateSequence *cl = ring->getCoordinatesRO();
 
-	if (CGAlgorithms::isOnLine(p,cl))
+	if (PointLocation::isOnLine(p,cl)) {
 		return Location::BOUNDARY;
-	if (CGAlgorithms::isPointInRing(p,cl))
+    }
+	if (PointLocation::isInRing(p,cl)) {
 		return Location::INTERIOR;
+    }
 	return Location::EXTERIOR;
 }
 

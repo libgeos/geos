@@ -81,7 +81,7 @@ extern "C"
 # elif defined(__hpux__) && defined(__ia64__)
 #  define FINITE(x) (_Isfinite(x))
 # else
-#  define FINITE(x) (isfinite(x))
+#  define FINITE(x) (std::isfinite(x))
 # endif
 #endif
 

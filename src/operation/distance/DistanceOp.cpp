@@ -22,7 +22,7 @@
 #include <geos/operation/distance/GeometryLocation.h>
 #include <geos/operation/distance/ConnectedElementLocationFilter.h>
 #include <geos/algorithm/PointLocator.h>
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Distance.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateArraySequence.h>
@@ -537,7 +537,7 @@ DistanceOp::computeMinDistance(
 		const LineString *line1,
 		vector<GeometryLocation*>& locGeom)
 {
-	using geos::algorithm::CGAlgorithms;
+	using geos::algorithm::Distance;
 
 	const Envelope *env0=line0->getEnvelopeInternal();
 	const Envelope *env1=line1->getEnvelopeInternal();
@@ -555,7 +555,7 @@ DistanceOp::computeMinDistance(
 	{
 		for(size_t j=0; j<npts1-1; ++j)
 		{
-			double dist=CGAlgorithms::distanceLineLine(coord0->getAt(i),coord0->getAt(i+1),
+			double dist = Distance::segmentToSegment(coord0->getAt(i),coord0->getAt(i+1),
 				coord1->getAt(j),coord1->getAt(j+1));
 			if (dist < minDistance) {
 				minDistance = dist;
@@ -584,7 +584,7 @@ DistanceOp::computeMinDistance(const LineString *line,
 		const Point *pt,
 		vector<GeometryLocation*>& locGeom)
 {
-	using geos::algorithm::CGAlgorithms;
+	using geos::algorithm::Distance;
 
 	const Envelope *env0=line->getEnvelopeInternal();
 	const Envelope *env1=pt->getEnvelopeInternal();
@@ -599,7 +599,7 @@ DistanceOp::computeMinDistance(const LineString *line,
 	size_t npts0=coord0->getSize();
 	for(size_t i=0; i<npts0-1; ++i)
 	{
-		double dist=CGAlgorithms::distancePointLine(*coord,coord0->getAt(i),coord0->getAt(i+1));
+		double dist = Distance::pointToSegment(*coord, coord0->getAt(i), coord0->getAt(i+1));
         	if (dist < minDistance) {
           		minDistance = dist;
 			LineSegment seg(coord0->getAt(i), coord0->getAt(i + 1));

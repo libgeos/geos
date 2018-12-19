@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -21,8 +21,9 @@
 #ifndef GEOS_LINESEGMENT_INL
 #define GEOS_LINESEGMENT_INL
 
-#include <geos/geom/LineSegment.h> 
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/geom/LineSegment.h>
+#include <geos/algorithm/Distance.h>
+#include <geos/algorithm/Orientation.h>
 
 #include <cassert>
 #include <cmath> // for atan2
@@ -67,7 +68,7 @@ LineSegment::~LineSegment()
 INLINE double
 LineSegment::distancePerpendicular(const Coordinate& p) const
 {
-	return algorithm::CGAlgorithms::distancePointLinePerpendicular(p, p0, p1);
+	return algorithm::Distance::pointToLinePerpendicular(p, p0, p1);
 }
 
 INLINE void
@@ -81,14 +82,14 @@ LineSegment::pointAlong(double segmentLengthFraction, Coordinate& ret) const
 INLINE double
 LineSegment::distance(const LineSegment& ls) const
 {
-	return algorithm::CGAlgorithms::distanceLineLine(p0, p1, ls.p0, ls.p1);
+	return algorithm::Distance::segmentToSegment(p0, p1, ls.p0, ls.p1);
 }
 
 /*public*/
 INLINE double
 LineSegment::distance(const Coordinate& p) const
 {
-	return algorithm::CGAlgorithms::distancePointLine(p, p0, p1);
+	return algorithm::Distance::pointToSegment(p, p0, p1);
 }
 
 INLINE void
@@ -113,7 +114,7 @@ LineSegment::operator[](std::size_t i) const
 }
 
 INLINE Coordinate&
-LineSegment::operator[](std::size_t i) 
+LineSegment::operator[](std::size_t i)
 {
 	if (i==0) return p0;
 	assert(i==1);
@@ -154,7 +155,7 @@ LineSegment::orientationIndex(const LineSegment* seg) const
 INLINE int
 LineSegment::orientationIndex(const Coordinate& p) const
 {
-	return algorithm::CGAlgorithms::orientationIndex(p0, p1, p);
+	return algorithm::Orientation::index(p0, p1, p);
 }
 
 INLINE CoordinateSequence*

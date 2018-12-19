@@ -19,13 +19,6 @@
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
 #include <geos/geom/CoordinateSequence.h>
 
-//#include <geos/algorithm/CGAlgorithms.h>
-//#include <geos/geom/Geometry.h>
-//#include <geos/geom/Polygon.h>
-//#include <geos/geom/GeometryCollection.h>
-//#include <geos/geom/Location.h>
-//#include <geos/geom/LineString.h>
-
 #include <typeinfo>
 #include <cassert>
 

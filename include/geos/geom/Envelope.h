@@ -136,6 +136,16 @@ public:
 	static bool intersects(const Coordinate& p1, const Coordinate& p2,
 			const Coordinate& q1, const Coordinate& q2);
 
+    /**
+    *  Check if the extent defined by two extremal points
+    *  intersects the extent of this <code>Envelope</code>.
+    *
+    * @param a a point
+    * @param b another point
+    * @return <code>true</code> if the extents intersect
+    */
+    bool intersects(const Coordinate& a, const Coordinate& b) const;
+
 	/** \brief
 	 *  Initialize to a null <code>Envelope</code>.
 	 */

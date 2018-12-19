@@ -1,10 +1,10 @@
 //
-// Test Suite for CGAlgorithms::isPointInRing() function
+// Test Suite for PointLocation::isInRing() function
 
 // tut
 #include <tut/tut.hpp>
 // geos
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/PointLocation.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -45,7 +45,7 @@ namespace tut
     typedef test_group<test_ispointinring_data> group;
     typedef group::object object;
 
-    group test_ispointintring_group("geos::algorithm::CGAlgorithms::isPointInRing");
+    group test_ispointintring_group("geos::algorithm::PointLocation::isInRing");
 
     //
     // Test Cases
@@ -62,7 +62,7 @@ namespace tut
         geos::geom::Coordinate pt(10, 10);
 
         cs_ = geom->getCoordinates();
-        bool isInRing = CGAlgorithms::isPointInRing(pt, cs_);
+        bool isInRing = PointLocation::isInRing(pt, cs_);
 
         ensure_equals( true, isInRing );
     }
@@ -80,7 +80,7 @@ namespace tut
         geos::geom::Coordinate pt(0, 0);
 
         cs_ = geom->getCoordinates();
-        bool isInRing = CGAlgorithms::isPointInRing(pt, cs_);
+        bool isInRing = PointLocation::isInRing(pt, cs_);
 
         ensure_equals( true, isInRing );
     }

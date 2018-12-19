@@ -19,7 +19,6 @@
  **********************************************************************/
 
 #include <geos/algorithm/CGAlgorithms.h>
-#include <geos/algorithm/RobustDeterminant.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/RayCrossingCounter.h>
 #include <geos/geom/CoordinateSequence.h>

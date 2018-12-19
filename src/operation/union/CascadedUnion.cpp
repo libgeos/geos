@@ -19,7 +19,6 @@
 #include <geos/operation/union/CascadedUnion.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/Geometry.h>
 #include <geos/geom/util/GeometryCombiner.h>
 #include <geos/index/strtree/STRtree.h>
 // std

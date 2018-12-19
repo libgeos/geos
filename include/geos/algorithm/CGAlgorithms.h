@@ -50,14 +50,14 @@ public:
 
 	enum {
 		CLOCKWISE=-1,
-		COLLINEAR,
-		COUNTERCLOCKWISE
+		COLLINEAR=0,
+		COUNTERCLOCKWISE=1
 	};
 
 	enum {
 		RIGHT=-1,
-		LEFT,
-		STRAIGHT
+		LEFT=1,
+		STRAIGHT=0
 	};
 
 	CGAlgorithms(){}

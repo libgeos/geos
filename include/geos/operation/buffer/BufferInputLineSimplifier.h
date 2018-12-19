@@ -20,7 +20,6 @@
 #define GEOS_OP_BUFFER_BUFFERINPUTLINESIMPLIFIER_H
 
 #include <geos/geom/CoordinateSequence.h> // complete type required
-#include <geos/algorithm/CGAlgorithms.h> // for enum
 
 #include <memory>
 #include <vector> // for composition

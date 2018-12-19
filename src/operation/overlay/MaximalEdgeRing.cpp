@@ -45,7 +45,6 @@ namespace operation { // geos.operation
 namespace overlay { // geos.operation.overlay
 
 /*public*/
-// CGAlgorithms obsoleted
 MaximalEdgeRing::MaximalEdgeRing(DirectedEdge *start,
 		const GeometryFactory *p_geometryFactory)
 	// throw(const TopologyException &)

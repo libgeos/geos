@@ -18,7 +18,7 @@
  *
  **********************************************************************/
 
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/BoundaryNodeRule.h>
 
 #include <geos/util/UnsupportedOperationException.h>
@@ -258,7 +258,7 @@ GeometryGraph::addPolygonRing(const LinearRing *lr, int cwLeft, int cwRight)
 	 */
 	try
 	{
-		if (CGAlgorithms::isCCW(coord)) {
+		if (Orientation::isCCW(coord)) {
 			left=cwRight;
 			right=cwLeft;
 		}

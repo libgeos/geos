@@ -21,7 +21,7 @@
 #include <geos/geom/Point.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/LinearRing.h>
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/PointLocation.h>
 #include <geos/util/IllegalArgumentException.h>
 
 #include <cmath> // for fabs()
@@ -472,14 +472,14 @@ RectangleIntersectionBuilder::reconnectPolygons(const Rectangle & rect)
     }
 	  else
 		{
-      using geos::algorithm::CGAlgorithms;
+      using geos::algorithm::PointLocation;
 		  geom::Coordinate c;
 		  hole->getCoordinatesRO()->getAt(0, c);
       for (ShellAndHolesList::iterator p_i=exterior.begin(), p_e=exterior.end(); p_i!=p_e; ++p_i)
 			{
         ShellAndHoles &p = *p_i;
         const CoordinateSequence *shell_cs = p.first->getCoordinatesRO();
-        if( CGAlgorithms::isPointInRing(c, shell_cs) )
+        if( PointLocation::isInRing(c, shell_cs) )
         {
           // add hole to shell
           p.second->push_back(hole->clone());

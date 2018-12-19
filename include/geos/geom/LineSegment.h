@@ -130,7 +130,7 @@ public:
 	 * relative to this segment.
 	 *
 	 * The orientation index is as defined in
-	 * CGAlgorithms::computeOrientation.
+	 * Orientation::index.
 	 *
 	 * @param seg the LineSegment to compare
 	 *
@@ -138,7 +138,7 @@ public:
 	 * @return -1 if <code>p</code> is to the right of this segment
 	 * @return 0 if <code>p</code> is collinear with this segment
 	 *
-	 * @see CGAlgorithms::computeOrientation(Coordinate, Coordinate,
+	 * @see Orientation::index(Coordinate, Coordinate,
 	 *                                       Coordinate)
 	 */
 	int orientationIndex(const Coordinate& p) const;

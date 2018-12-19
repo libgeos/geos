@@ -1,10 +1,10 @@
 //
-// Test Suite for CGAlgorithms::signedArea() function
+// Test Suite for Area::ofRingSigned() function
 
 // tut
 #include <tut/tut.hpp>
 // geos
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Area.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -49,7 +49,7 @@ namespace tut
     typedef test_group<test_signedarea_data> group;
     typedef group::object object;
 
-    group test_signedarea_group("geos::algorithm::CGAlgorithms::signedArea");
+    group test_signedarea_group("geos::algorithm::Area::ofRingSigned");
 
     //
     // Test Cases
@@ -64,7 +64,7 @@ namespace tut
         GeometryPtr geom(reader_.read(wkt));
 
         cs_ = geom->getCoordinates();
-        double area = CGAlgorithms::signedArea(cs_);
+        double area = Area::ofRingSigned(cs_);
 
         ensure_equals( area, 8400 );
     }
@@ -78,7 +78,7 @@ namespace tut
         GeometryPtr geom(reader_.read(wkt));
 
         cs_ = geom->getCoordinates();
-        double area = CGAlgorithms::signedArea(cs_);
+        double area = Area::ofRingSigned(cs_);
 
         ensure_equals( area, -2400 );
     }
@@ -92,7 +92,7 @@ namespace tut
 		GeometryPtr geom(reader_.read(wkt));
 
         cs_ = geom->getCoordinates();
-        double area = CGAlgorithms::signedArea(cs_);
+        double area = Area::ofRingSigned(cs_);
 
         ensure_equals( area, -2400 );
     }

@@ -19,7 +19,7 @@
 #include "IndexedNestedRingTester.h"
 
 #include <geos/geom/LinearRing.h> // for use
-#include <geos/algorithm/CGAlgorithms.h> // for use
+#include <geos/algorithm/PointLocation.h> // for use
 #include <geos/operation/valid/IsValidOp.h> // for use (findPtNotNode)
 #include <geos/index/strtree/STRtree.h> // for use
 
@@ -81,7 +81,7 @@ IndexedNestedRingTester::isNonNested()
 			// the search ring
 			assert(innerRingPt!=nullptr);
 
-			bool isInside = algorithm::CGAlgorithms::isPointInRing(
+			bool isInside = algorithm::PointLocation::isInRing(
 					*innerRingPt, searchRingPts);
 
 			if (isInside) {

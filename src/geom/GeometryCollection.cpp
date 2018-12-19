@@ -18,7 +18,6 @@
  **********************************************************************/
 
 #include <geos/geom/GeometryCollection.h>
-#include <geos/algorithm/CGAlgorithms.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateSequenceFilter.h>

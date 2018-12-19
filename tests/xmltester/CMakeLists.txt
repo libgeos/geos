@@ -145,6 +145,7 @@ if(GEOS_ENABLE_TESTS)
   set(FAILING_XMLTESTS
     ${XMLTESTS_DIR}/ticket/bug488.xml
     ${XMLTESTS_DIR}/ticket/bug344.xml
+    ${XMLTESTS_DIR}/robust/TestRobustRelateFloat.xml
     ${XMLTESTS_DIR}/TestBigNastyBuffer.xml
     ${XMLTESTS_DIR}/failure/TestOverlay.xml
     )

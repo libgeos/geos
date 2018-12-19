@@ -26,7 +26,8 @@
 #include <geos/geom/Envelope.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/PointLocation.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util.h> // TODO: drop this, includes too much
 
@@ -77,7 +78,7 @@ EdgeRing::findEdgeRingContaining(EdgeRing *testEr,
             // TODO: don't copy testPt !
             testPt = ptNotInList(testRing->getCoordinatesRO(), tryCoords);
 
-            if ( CGAlgorithms::isPointInRing(testPt, tryCoords) ) {
+            if ( PointLocation::isInRing(testPt, tryCoords) ) {
                 isContained=true;
             }
 
@@ -103,8 +104,7 @@ EdgeRing::ptNotInList(const CoordinateSequence *testPts,
     for (std::size_t i = 0; i < npts; ++i)
     {
         const Coordinate& testPt = testPts->getAt(i);
-        // TODO: shouldn't this be ! isInList ?
-        if (isInList(testPt, pts))
+        if (!isInList(testPt, pts))
             return testPt;
     }
     return Coordinate::getNull();
@@ -119,9 +119,9 @@ EdgeRing::isInList(const Coordinate& pt,
     for (std::size_t i = 0; i < npts; ++i)
     {
         if (pt == pts->getAt(i))
-            return false;
+            return true;
     }
-    return true;
+    return false;
 }
 
 /*public*/
@@ -162,7 +162,7 @@ EdgeRing::add(const DirectedEdge *de){
 bool
 EdgeRing::isHole(){
     getRingInternal();
-    return CGAlgorithms::isCCW(ring->getCoordinatesRO());
+    return Orientation::isCCW(ring->getCoordinatesRO());
 }
 
 /*public*/

@@ -12,7 +12,7 @@
 #include <geos/geom/Geometry.h>
 #include <geos/geom/LineString.h>
 #include <geos/algorithm/PointLocator.h>
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/io/WKTReader.h>
 #include <geos/geom/CoordinateSequence.h>
 // std
@@ -66,7 +66,7 @@ namespace tut
     {
         using geos::operation::buffer::BufferBuilder;
         using geos::operation::buffer::BufferParameters;
-        using geos::algorithm::CGAlgorithms;
+        using geos::algorithm::Orientation;
         using geos::geom::LineString;
 
         // Original input from test in ticket #633
@@ -106,8 +106,8 @@ namespace tut
             // For left-side offset curve, the offset will be at the left side of the input line
             // and retain the same direction.
             ensure_equals(
-                CGAlgorithms::isCCW(dynamic_cast<LineString*>(g0.get())->getCoordinatesRO()),
-                CGAlgorithms::isCCW(dynamic_cast<LineString*>(gB.get())->getCoordinatesRO()));
+                Orientation::isCCW(dynamic_cast<LineString*>(g0.get())->getCoordinatesRO()),
+                Orientation::isCCW(dynamic_cast<LineString*>(gB.get())->getCoordinatesRO()));
         }
 
         // right-side
@@ -121,8 +121,8 @@ namespace tut
             // For right-side offset curve, it'll be at the right side
             // and in the opposite direction.
             ensure_equals(
-                CGAlgorithms::isCCW(dynamic_cast<LineString*>(g0.get())->getCoordinatesRO()),
-                !CGAlgorithms::isCCW(dynamic_cast<LineString*>(gB.get())->getCoordinatesRO()));
+                Orientation::isCCW(dynamic_cast<LineString*>(g0.get())->getCoordinatesRO()),
+                !Orientation::isCCW(dynamic_cast<LineString*>(gB.get())->getCoordinatesRO()));
         }
     }
 

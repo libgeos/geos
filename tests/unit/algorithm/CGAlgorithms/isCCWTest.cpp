@@ -1,11 +1,11 @@
 //
-// Test Suite for CGAlgorithms::isCCW() function
+// Test Suite for Orientation::isCCW() function
 // Ported from JTS junit/algorithm/IsCCWTest.java
 
 // tut
 #include <tut/tut.hpp>
 // geos
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -50,7 +50,7 @@ namespace tut
     typedef test_group<test_isccw_data> group;
     typedef group::object object;
 
-    group test_isccw_group("geos::algorithm::CGAlgorithms::isCCW");
+    group test_isccw_group("geos::algorithm::Orientation::isCCW");
 
     //
     // Test Cases
@@ -65,7 +65,7 @@ namespace tut
 		GeometryPtr geom(reader_.read(wkt));
 
         cs_ = geom->getCoordinates();
-        bool isCCW = CGAlgorithms::isCCW(cs_);
+        bool isCCW = Orientation::isCCW(cs_);
 
         ensure_equals( false, isCCW );
     }
@@ -79,7 +79,7 @@ namespace tut
 		GeometryPtr geom(reader_.read(wkt));
 
         cs_ = geom->getCoordinates();
-        bool isCCW = CGAlgorithms::isCCW(cs_);
+        bool isCCW = Orientation::isCCW(cs_);
 
         ensure_equals( true, isCCW );
     }
@@ -93,7 +93,7 @@ namespace tut
 		GeometryPtr geom(reader_.read(wkt));
 
         cs_ = geom->getCoordinates();
-        bool isCCW = CGAlgorithms::isCCW(cs_);
+        bool isCCW = Orientation::isCCW(cs_);
 
         ensure_equals( true, isCCW );
     }
@@ -108,8 +108,8 @@ namespace tut
         std::istringstream wkt("0102000000040000000000000000000000841D588465963540F56BFB214F0341408F26B714B2971B40F66BFB214F0341408C26B714B2971B400000000000000000841D588465963540");
         GeometryPtr geom(breader_.readHEX(wkt));
         cs_ = geom->getCoordinates();
-        bool isCCW = CGAlgorithms::isCCW(cs_);
-        ensure_equals( isCCW, false );
+        bool isCCW = Orientation::isCCW(cs_);
+        ensure_equals( isCCW, true );
     }
 
     // 5 - Test orientation the narrow (almost collapsed) ring
@@ -122,7 +122,7 @@ namespace tut
         std::istringstream wkt("0102000000040000000000000000000000841D588465963540F56BFB214F0341408F26B714B2971B40F66BFB214F0341408E26B714B2971B400000000000000000841D588465963540");
         GeometryPtr geom(breader_.readHEX(wkt));
         cs_ = geom->getCoordinates();
-        bool isCCW = CGAlgorithms::isCCW(cs_);
+        bool isCCW = Orientation::isCCW(cs_);
         ensure_equals( isCCW, true );
     }
 

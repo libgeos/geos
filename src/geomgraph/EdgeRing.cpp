@@ -20,7 +20,8 @@
 
 #include <geos/util/Assert.h>
 #include <geos/util/TopologyException.h>
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/PointLocation.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/geomgraph/EdgeRing.h>
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geomgraph/DirectedEdgeStar.h>
@@ -38,14 +39,6 @@
 #include <vector>
 #include <cassert>
 #include <iostream> // for operator<<
-
-#ifndef GEOS_DEBUG
-#define GEOS_DEBUG 0
-#endif
-
-#if GEOS_DEBUG
-#include <iostream>
-#endif
 
 using namespace std;
 using namespace geos::algorithm;
@@ -74,7 +67,7 @@ EdgeRing::EdgeRing(DirectedEdge *newStart,
 	 */
 	//computePoints(start);
 	//computeRing();
-#if GEOS_DEBUG
+#ifdef GEOS_DEBUG
 	cerr << "EdgeRing[" << this << "] ctor" << endl;
 #endif
 	testInvariant();
@@ -104,7 +97,7 @@ EdgeRing::~EdgeRing()
 		delete holes[i];
 	}
 
-#if GEOS_DEBUG
+#ifdef GEOS_DEBUG
 	cerr << "EdgeRing[" << this << "] dtor" << endl;
 #endif
 }
@@ -204,7 +197,7 @@ EdgeRing::computeRing()
 
 	if (ring!=nullptr) return;   // don't compute more than once
 	ring=geometryFactory->createLinearRing(pts);
-	isHoleVar=CGAlgorithms::isCCW(pts);
+	isHoleVar=Orientation::isCCW(pts);
 
 	testInvariant();
 
@@ -379,7 +372,7 @@ EdgeRing::containsPoint(const Coordinate& p)
 	assert(env);
 	if ( ! env->contains(p) ) return false;
 
-	if ( ! CGAlgorithms::isPointInRing(p, ring->getCoordinatesRO()) )
+	if ( ! PointLocation::isInRing(p, ring->getCoordinatesRO()) )
 		return false;
 
 	for (vector<EdgeRing*>::iterator i=holes.begin(); i<holes.end(); ++i)

@@ -138,17 +138,16 @@ const char * getIndent( unsigned int numIndents )
 
 
 
-void dump_to_stdout( const tinyxml2::XMLNode * pParent, unsigned int indent = 0 )
-{
-    if ( !pParent ) return;
+// void dump_to_stdout( const tinyxml2::XMLNode * pParent, unsigned int indent = 0 )
+// {
+//     if ( !pParent ) return;
 
-    printf( "%s", getIndent( indent));
+//     printf( "%s", getIndent( indent));
 
-    tinyxml2::XMLPrinter printer;
-    pParent->Accept(&printer);
+//     tinyxml2::XMLPrinter printer;
+//     pParent->Accept(&printer);
+// }
 
-
-}
 
 }
 

@@ -20,7 +20,7 @@
 #define GEOS_ALGORITHM_ANGLE_H
 
 #include <geos/export.h>
-#include <geos/algorithm/CGAlgorithms.h> // for constants
+#include <geos/algorithm/Orientation.h> // for constants
 
 // Forward declarations
 namespace geos {
@@ -45,13 +45,13 @@ public:
 	static const double PI_OVER_4; // PI / 4.0;
 
 	/// Constant representing counterclockwise orientation
-	static const int COUNTERCLOCKWISE = CGAlgorithms::COUNTERCLOCKWISE;
+	static const int COUNTERCLOCKWISE = Orientation::COUNTERCLOCKWISE;
 
 	/// Constant representing clockwise orientation
-	static const int CLOCKWISE = CGAlgorithms::CLOCKWISE;
+	static const int CLOCKWISE = Orientation::CLOCKWISE;
 
 	/// Constant representing no orientation
-	static const int NONE = CGAlgorithms::COLLINEAR;
+	static const int NONE = Orientation::COLLINEAR;
 
 	/// Converts from radians to degrees.
 	//

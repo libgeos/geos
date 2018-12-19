@@ -116,9 +116,6 @@ BufferBuilder::depthDelta(const Label& label)
 	return 0;
 }
 
-//static CGAlgorithms rCGA;
-//CGAlgorithms *BufferBuilder::cga=&rCGA;
-
 BufferBuilder::~BufferBuilder()
 {
 	delete li; // could be NULL

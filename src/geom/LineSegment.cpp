@@ -24,7 +24,7 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateArraySequence.h> // should we really be using this?
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/HCoordinate.h>
 #include <geos/algorithm/NotRepresentableException.h>
@@ -165,8 +165,8 @@ LineSegment::equalsTopo(const LineSegment& other) const
 int
 LineSegment::orientationIndex(const LineSegment& seg) const
 {
-	int orient0 = algorithm::CGAlgorithms::orientationIndex(p0, p1, seg.p0);
-	int orient1 = algorithm::CGAlgorithms::orientationIndex(p0, p1, seg.p1);
+	int orient0 = algorithm::Orientation::index(p0, p1, seg.p0);
+	int orient1 = algorithm::Orientation::index(p0, p1, seg.p1);
 	// this handles the case where the points are L or collinear
 	if (orient0 >= 0 && orient1 >= 0)
 		return std::max(orient0, orient1);

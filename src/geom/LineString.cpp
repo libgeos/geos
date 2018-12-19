@@ -19,7 +19,7 @@
  **********************************************************************/
 
 #include <geos/util/IllegalArgumentException.h>
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Length.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -375,7 +375,7 @@ LineString::getCoordinate() const
 double
 LineString::getLength() const
 {
-	return CGAlgorithms::length(points.get());
+	return Length::ofLine(points.get());
 }
 
 void

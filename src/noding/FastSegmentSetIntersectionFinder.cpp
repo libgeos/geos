@@ -40,7 +40,7 @@ namespace noding { // geos::noding
 FastSegmentSetIntersectionFinder::
 FastSegmentSetIntersectionFinder( noding::SegmentString::ConstVect * baseSegStrings)
 :	segSetMutInt( new MCIndexSegmentSetMutualIntersector()),
-	lineIntersector( new LineIntersector())
+	lineIntersector( new algorithm::LineIntersector())
 {
 	segSetMutInt->setBaseSegments( baseSegStrings);
 }

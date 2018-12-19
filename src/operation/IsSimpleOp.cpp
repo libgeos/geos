@@ -214,28 +214,28 @@ IsSimpleOp::hasNonEndpointIntersection(GeometryGraph &graph)
 
 /*private*/
 bool
-IsSimpleOp::computeSimple(const geom::Geometry *geom)
+IsSimpleOp::computeSimple(const geom::Geometry *g)
 {
 	nonSimpleLocation.reset();
 
-	if (dynamic_cast<const LineString*>(geom))
-		return isSimpleLinearGeometry(geom);
+	if (dynamic_cast<const LineString*>(g))
+		return isSimpleLinearGeometry(g);
 
-	if (dynamic_cast<const LinearRing*>(geom))
-		return isSimpleLinearGeometry(geom);
+	if (dynamic_cast<const LinearRing*>(g))
+		return isSimpleLinearGeometry(g);
 
-	if (dynamic_cast<const MultiLineString*>(geom))
-		return isSimpleLinearGeometry(geom);
+	if (dynamic_cast<const MultiLineString*>(g))
+		return isSimpleLinearGeometry(g);
 
-	if (dynamic_cast<const Polygon*>(geom))
-		return isSimplePolygonal(geom);
+	if (dynamic_cast<const Polygon*>(g))
+		return isSimplePolygonal(g);
 
-	const MultiPoint* mp = dynamic_cast<const MultiPoint*>(geom);
+	const MultiPoint* mp = dynamic_cast<const MultiPoint*>(g);
 	if (mp) return isSimpleMultiPoint(*mp);
 
 	// This must be after MultiPoint test, as MultiPoint can
 	// cast cleanly into GeometryCollection
-	const GeometryCollection* gc = dynamic_cast<const GeometryCollection*>(geom);
+	const GeometryCollection* gc = dynamic_cast<const GeometryCollection*>(g);
 	if (gc)
 		return isSimpleGeometryCollection(gc);
 
@@ -250,19 +250,19 @@ IsSimpleOp::isSimpleGeometryCollection(const geom::GeometryCollection *col)
 	GeometryCollection::const_iterator it;
 	for (it = col->begin(); it < col->end(); ++it)
 	{
-		const geom::Geometry *geom = *it;
-		if (!computeSimple(geom)) return false;
+		const geom::Geometry *g = *it;
+		if (!computeSimple(g)) return false;
 	}
 	return true;
 }
 
 /*private*/
 bool
-IsSimpleOp::isSimplePolygonal(const geom::Geometry *geom)
+IsSimpleOp::isSimplePolygonal(const geom::Geometry *g)
 {
 
 	LineString::ConstVect rings;
-	LinearComponentExtracter::getLines(*geom, rings);
+	LinearComponentExtracter::getLines(*g, rings);
 	for (const geom::LineString *ring : rings)
 	{
 			if(!isSimpleLinearGeometry(ring))

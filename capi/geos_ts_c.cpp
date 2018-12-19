@@ -43,11 +43,12 @@
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/io/WKBWriter.h>
+#include <geos/algorithm/BoundaryNodeRule.h>
+#include <geos/algorithm/Orientation.h>
+#include <geos/algorithm/MinimumDiameter.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
 #include <geos/algorithm/distance/DiscreteFrechetDistance.h>
-#include <geos/algorithm/CGAlgorithms.h>
-#include <geos/algorithm/BoundaryNodeRule.h>
-#include <geos/algorithm/MinimumDiameter.h>
 #include <geos/simplify/DouglasPeuckerSimplifier.h>
 #include <geos/simplify/TopologyPreservingSimplifier.h>
 #include <geos/noding/GeometryNoder.h>
@@ -4265,7 +4266,7 @@ GEOSCoordSeq_isCCW_r(GEOSContextHandle_t extHandle, const CoordinateSequence *cs
     }
     try
     {
-        *val = geos::algorithm::CGAlgorithms::isCCW(cs);
+        *val = geos::algorithm::Orientation::isCCW(cs);
         return 1;
     }
     catch (const std::exception &e)
@@ -6775,7 +6776,7 @@ int GEOSOrientationIndex_r(GEOSContextHandle_t extHandle,
     GEOSContextHandleInternal_t *handle = 0;
 
     using geos::geom::Coordinate;
-    using geos::algorithm::CGAlgorithms;
+    using geos::algorithm::Orientation;
 
     if ( 0 == extHandle )
     {
@@ -6793,7 +6794,7 @@ int GEOSOrientationIndex_r(GEOSContextHandle_t extHandle,
         Coordinate A(Ax, Ay);
         Coordinate B(Bx, By);
         Coordinate P(Px, Py);
-        return CGAlgorithms::orientationIndex(A, B, P);
+        return Orientation::index(A, B, P);
     }
     catch (const std::exception &e)
     {

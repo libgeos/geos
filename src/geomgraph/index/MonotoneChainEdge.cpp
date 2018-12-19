@@ -129,16 +129,7 @@ MonotoneChainEdge::computeIntersectsForChain(size_t start0, size_t end0,
 		return;
 	}
 
-	const Coordinate& p00=pts->getAt(start0);
-	const Coordinate& p01=pts->getAt(end0);
-	const Coordinate& p10=mce.pts->getAt(start1);
-	const Coordinate& p11=mce.pts->getAt(end1);
-
-	// nothing to do if the envelopes of these chains don't overlap
-	env1.init(p00,p01);
-	env2.init(p10,p11);
-
-	if (!env1.intersects(&env2)) return;
+	if (!overlaps(start0, end0, mce, start1, end1)) return;
 	// the chains overlap, so split each in half and iterate
 	// (binary search)
 	size_t mid0 = (start0 + end0) / 2;
@@ -164,6 +155,15 @@ MonotoneChainEdge::computeIntersectsForChain(size_t start0, size_t end0,
 				mid1, end1, ei);
 	}
 }
+
+bool
+MonotoneChainEdge::overlaps(size_t start0, size_t end0, const MonotoneChainEdge& mce, size_t start1, size_t end1)
+{
+    return Envelope::intersects(pts->getAt(start0), pts->getAt(end0),
+        mce.pts->getAt(start1), mce.pts->getAt(end1));
+}
+
+
 
 } // namespace geos.geomgraph.index
 } // namespace geos.geomgraph

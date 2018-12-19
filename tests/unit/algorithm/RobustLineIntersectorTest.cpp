@@ -6,7 +6,8 @@
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKTReader.h>
 #include <geos/algorithm/LineIntersector.h>
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/PointLocation.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h> // required for use in unique_ptr
@@ -23,7 +24,8 @@
 
 using namespace geos::geom; //
 using geos::algorithm::LineIntersector;
-using geos::algorithm::CGAlgorithms;
+using geos::algorithm::PointLocation;
+using geos::algorithm::Orientation;
 
 
 namespace tut
@@ -203,7 +205,7 @@ namespace tut
 	template<>
 	void object::test<11>()
 	{
-	    ensure_equals(CGAlgorithms::computeOrientation(
+	    ensure_equals(Orientation::index(
 		Coordinate(-123456789, -40),
 		Coordinate(0, 0),
 		Coordinate(381039468754763.0, 123456789)), 1);
@@ -214,7 +216,7 @@ namespace tut
 	template<>
 	void object::test<12>()
 	{
-	    ensure_equals(CGAlgorithms::computeOrientation(
+	    ensure_equals(Orientation::index(
 		Coordinate(10, 10),
 		Coordinate(20, 20),
 		Coordinate(0, 0)), 0);
@@ -242,8 +244,8 @@ namespace tut
     GeomPtr p ( factory->createPoint(q) );
     ensure(!l->intersects(p.get()));
 
-    ensure(!CGAlgorithms::isOnLine(q, cs));
-    ensure_equals(CGAlgorithms::computeOrientation(p1, p2, q), -1);
+    ensure(!PointLocation::isOnLine(q, cs));
+    ensure_equals(Orientation::index(p1, p2, q), -1);
 
 	}
 

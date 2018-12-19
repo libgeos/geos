@@ -13,7 +13,7 @@
  *
  **********************************************************************/
 
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/PointLocation.h>
 #include <geos/algorithm/locate/SimplePointInAreaLocator.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Polygon.h>
@@ -75,7 +75,7 @@ SimplePointInAreaLocator::locatePointInPolygon(const Coordinate& p, const Polygo
     const LineString *shell=poly->getExteriorRing();
     const CoordinateSequence *cl;
     cl = shell->getCoordinatesRO();
-    int shellLoc = CGAlgorithms::locatePointInRing(p,*cl);
+    int shellLoc = PointLocation::locateInRing(p,*cl);
     if (shellLoc != Location::INTERIOR)
         return shellLoc;
 

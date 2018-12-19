@@ -57,7 +57,6 @@ class GEOS_DLL MinimalEdgeRing: public geomgraph::EdgeRing {
 
 public:
 
-	// CGAlgorithms argument obsoleted
 	MinimalEdgeRing(geomgraph::DirectedEdge *start,
 		const geom::GeometryFactory *geometryFactory);
 

@@ -18,7 +18,8 @@
  *
  **********************************************************************/
 
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Area.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Polygon.h>
@@ -345,7 +346,7 @@ Polygon::normalize(LinearRing *ring, bool clockwise)
 	const Coordinate* minCoordinate=CoordinateSequence::minCoordinate(uniqueCoordinates);
 	CoordinateSequence::scroll(uniqueCoordinates, minCoordinate);
 	uniqueCoordinates->add(uniqueCoordinates->getAt(0));
-	if (algorithm::CGAlgorithms::isCCW(uniqueCoordinates)==clockwise) {
+	if (algorithm::Orientation::isCCW(uniqueCoordinates)==clockwise) {
 		CoordinateSequence::reverse(uniqueCoordinates);
 	}
 	ring->setPoints(uniqueCoordinates);
@@ -366,13 +367,13 @@ Polygon::getCoordinate() const
 double
 Polygon::getArea() const
 {
-	double area=0.0;
-	area+=fabs(algorithm::CGAlgorithms::signedArea(shell->getCoordinatesRO()));
+	double area = 0.0;
+	area += fabs(algorithm::Area::ofRing(shell->getCoordinatesRO()));
 	for(size_t i=0, n=holes->size(); i<n; ++i)
 	{
 		const LinearRing *lr = dynamic_cast<const LinearRing *>((*holes)[i]);
-		const CoordinateSequence *h=lr->getCoordinatesRO();
-        	area-=fabs(algorithm::CGAlgorithms::signedArea(h));
+		const CoordinateSequence *h = lr->getCoordinatesRO();
+    	area -= fabs(algorithm::Area::ofRing(h));
 	}
 	return area;
 }

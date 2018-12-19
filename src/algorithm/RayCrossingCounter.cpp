@@ -16,8 +16,8 @@
  *
  **********************************************************************/
 
+#include <geos/algorithm/CGAlgorithmsDD.h>
 #include <geos/algorithm/RayCrossingCounter.h>
-#include <geos/algorithm/RobustDeterminant.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Location.h>
 #include <geos/geom/Coordinate.h>
@@ -87,7 +87,7 @@ RayCrossingCounter::orientationIndex(const geom::Coordinate& p1,
 	double dy1=p2.y-p1.y;
 	double dx2=q.x-p2.x;
 	double dy2=q.y-p2.y;
-	return RobustDeterminant::signOfDet2x2(dx1,dy1,dx2,dy2);
+	return CGAlgorithmsDD::signOfDet2x2(dx1,dy1,dx2,dy2);
 }
 
 void

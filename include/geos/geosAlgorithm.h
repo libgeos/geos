@@ -26,25 +26,16 @@
 #ifndef GEOS_ALGORITHM_H
 #define GEOS_ALGORITHM_H
 
-//#include <geos/algorithm/CGAlgorithms.h>
-//#include <geos/algorithm/CentroidArea.h>
-//#include <geos/algorithm/CentroidLine.h>
-//#include <geos/algorithm/CentroidPoint.h>
 //#include <geos/algorithm/ConvexHull.h>
 //#include <geos/algorithm/HCoordinate.h>
 //#include <geos/algorithm/InteriorPointArea.h>
 //#include <geos/algorithm/InteriorPointLine.h>
 //#include <geos/algorithm/InteriorPointPoint.h>
 #include <geos/algorithm/LineIntersector.h>
-//#include <geos/algorithm/MCPointInRing.h>
 //#include <geos/algorithm/MinimumDiameter.h>
 //#include <geos/algorithm/NotRepresentableException.h>
-//#include <geos/algorithm/PointInRing.h>
 #include <geos/algorithm/PointLocator.h>
-//#include <geos/algorithm/RobustDeterminant.h>
-//#include <geos/algorithm/SIRtreePointInRing.h>
 //#include <geos/algorithm/SimplePointInAreaLocator.h>
-//#include <geos/algorithm/SimplePointInRing.h>
 
 namespace geos {
 

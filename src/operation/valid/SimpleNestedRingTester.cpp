@@ -19,7 +19,7 @@
 
 #include <geos/operation/valid/SimpleNestedRingTester.h>
 #include <geos/operation/valid/IsValidOp.h>
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/PointLocation.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/Envelope.h>
 
@@ -49,7 +49,7 @@ SimpleNestedRingTester::isNonNested()
 			// Unable to find a ring point not a node of the search ring
 			assert(innerRingPt!=nullptr);
 
-			bool isInside=CGAlgorithms::isPointInRing(*innerRingPt,searchRingPts);
+			bool isInside=PointLocation::isInRing(*innerRingPt,searchRingPts);
 			if (isInside) {
 				/*
 				 * innerRingPt is const just because the input

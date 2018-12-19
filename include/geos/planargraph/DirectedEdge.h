@@ -187,7 +187,7 @@ public:
 	 *   If the quadrants are different, it it
 	 *   trivial to determine which std::vector is "greater".
 	 * - if the vectors lie in the same quadrant, the robust
-	 *   RobustCGAlgorithms::computeOrientation(Coordinate, Coordinate, Coordinate)
+	 *   Orientation::index(Coordinate, Coordinate, Coordinate)
 	 *   function can be used to decide the relative orientation of
 	 *   the vectors.
 	 *
@@ -208,7 +208,7 @@ public:
 	 *   If the quadrants are different, it it trivial to determine
 	 *   which std::vector is "greater".
 	 * - if the vectors lie in the same quadrant, the robust
-	 *   RobustCGAlgorithms::computeOrientation(Coordinate, Coordinate, Coordinate)
+	 *   Orientation::index(Coordinate, Coordinate, Coordinate)
 	 *   function can be used to decide the relative orientation of
 	 *   the vectors.
 	 *

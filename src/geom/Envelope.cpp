@@ -80,6 +80,24 @@ Envelope::intersects(const Coordinate& p1, const Coordinate& p2,
 }
 
 /*public*/
+bool Envelope::intersects(const Coordinate& a, const Coordinate& b) const {
+
+    double envminx = (a.x < b.x) ? a.x : b.x;
+    if (envminx > maxx) return false;
+
+    double envmaxx = (a.x > b.x) ? a.x : b.x;
+    if (envmaxx < minx) return false;
+
+    double envminy = (a.y < b.y) ? a.y : b.y;
+    if (envminy > maxy) return false;
+
+    double envmaxy = (a.y > b.y) ? a.y : b.y;
+    if (envmaxy < miny) return false;
+
+    return true;
+}
+
+/*public*/
 double
 Envelope::distance(double x0,double y0,double x1,double y1)
 {

@@ -17,7 +17,7 @@
  **********************************************************************/
 
 #include <geos/algorithm/Centroid.h>
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Point.h>
@@ -110,7 +110,7 @@ Centroid::addShell(const CoordinateSequence& pts)
   size_t len = pts.size();
   if (len > 0)
     setAreaBasePoint(pts[0]);
-  bool isPositiveArea = ! CGAlgorithms::isCCW(&pts);
+  bool isPositiveArea = ! Orientation::isCCW(&pts);
   for (size_t i = 0; i < len - 1; ++i) {
     addTriangle(*areaBasePt, pts[i], pts[i+1], isPositiveArea);
   }
@@ -121,7 +121,7 @@ Centroid::addShell(const CoordinateSequence& pts)
 void
 Centroid::addHole(const CoordinateSequence& pts)
 {
-  bool isPositiveArea = CGAlgorithms::isCCW(&pts);
+  bool isPositiveArea = Orientation::isCCW(&pts);
   for (size_t i = 0, e = pts.size() - 1; i < e; ++i) {
     addTriangle(*areaBasePt, pts[i], pts[i+1], isPositiveArea);
   }

@@ -19,7 +19,8 @@
  **********************************************************************/
 
 #include <geos/platform.h>
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Distance.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/MinimumDiameter.h>
 #include <geos/util/UnsupportedOperationException.h>
 #include <geos/operation/buffer/OffsetCurveSetBuilder.h>
@@ -53,7 +54,7 @@
 using namespace geos::geom;
 using namespace geos::noding; // SegmentString
 using namespace geos::geomgraph; // Label, Position
-using namespace geos::algorithm; // CGAlgorithms
+using namespace geos::algorithm; // Orientation
 
 namespace geos {
 namespace operation { // geos.operation
@@ -301,10 +302,10 @@ OffsetCurveSetBuilder::addPolygonRing(const CoordinateSequence *coord,
 	int leftLoc=cwLeftLoc;
 	int rightLoc=cwRightLoc;
 #if GEOS_DEBUG
-	std::cerr<<"OffsetCurveSetBuilder::addPolygonRing: CCW: "<<CGAlgorithms::isCCW(coord)<<std::endl;
+	std::cerr<<"OffsetCurveSetBuilder::addPolygonRing: CCW: "<<Orientation::isCCW(coord)<<std::endl;
 #endif
 	if (coord->size() >= LinearRing::MINIMUM_VALID_SIZE
-			&& CGAlgorithms::isCCW(coord))
+			&& Orientation::isCCW(coord))
 	{
 		leftLoc=cwRightLoc;
 		rightLoc=cwLeftLoc;
@@ -372,7 +373,7 @@ OffsetCurveSetBuilder::isTriangleErodedCompletely(
 
 	Coordinate inCentre;
 	tri.inCentre(inCentre);
-	double distToCentre=CGAlgorithms::distancePointLine(inCentre, tri.p0, tri.p1);
+	double distToCentre = Distance::pointToSegment(inCentre, tri.p0, tri.p1);
 	bool ret = distToCentre < std::fabs(bufferDistance);
 	return ret;
 }

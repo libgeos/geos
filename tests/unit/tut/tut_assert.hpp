@@ -230,7 +230,7 @@ void ensure_equals(const LhsType *lhs_begin, const LhsType *lhs_end,
  * TODO: domains are wrong, T - T might not yield T, but Q
  */
 template <typename M, class T>
-void ensure_distance(const M& msg, const T& actual, const T& expected, const T& distance)
+void ensure_measurement(const M& msg, const T& actual, const T& expected, const T& distance)
 {
     if (expected-distance >= actual || expected+distance <= actual)
     {
@@ -250,7 +250,13 @@ void ensure_distance(const M& msg, const T& actual, const T& expected, const T& 
 template <class T>
 void ensure_distance(const T& actual, const T& expected, const T& distance)
 {
-    ensure_distance<>("Distance is wrong", actual, expected, distance);
+    ensure_measurement<>("Distance is wrong", actual, expected, distance);
+}
+
+template <class T>
+void ensure_area(const T& actual, const T& expected, const T& distance)
+{
+    ensure_measurement<>("Area is wrong", actual, expected, distance);
 }
 
 template<typename M>

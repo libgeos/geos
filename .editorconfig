@@ -10,10 +10,10 @@ end_of_line = lf
 trim_trailing_whitespace = true
 insert_final_newline = true
 
-# C++ files want tab indentation
-[*.{h,cpp}]
-indent_style = tab
-indent_size = 2
+# C/C++ files want 4-space indentation
+[*.{h,cpp,inl,h.in,c}]
+indent_style = space
+indent_size = 4
 
 # Makefiles want tab indentation
 [Makefile.am]
@@ -43,20 +43,3 @@ indent_size = 2
 indent_style = space
 indent_size = 2
 
-# operation/union directories were found to be using spaces
-[src/operation/union/*.cpp]
-indent_style = space
-indent_size = 2
-[include/geos/operation/union/*.{h,inl}]
-indent_style = space
-indent_size = 2
-
-# XMLTester.cpp wants 2-space indent
-[tests/xmltester/XMLTester.cpp]
-indent_style = space
-indent_size = 4
-
-# Stackwalker.cpp wants 4-space indent
-[tests/xmltester/Stackwalker.cpp]
-indent_style = space
-indent_size = 2

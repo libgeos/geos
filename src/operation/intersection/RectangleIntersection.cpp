@@ -12,7 +12,8 @@
  *
  **********************************************************************/
 
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/PointLocation.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/operation/intersection/RectangleIntersection.h>
 #include <geos/operation/intersection/Rectangle.h>
 #include <geos/operation/intersection/RectangleIntersectionBuilder.h>
@@ -34,6 +35,7 @@
 using geos::operation::intersection::Rectangle;
 using geos::operation::intersection::RectangleIntersectionBuilder;
 using namespace geos::geom;
+using namespace geos::algorithm;
 namespace geos {
 namespace operation { // geos::operation
 namespace intersection { // geos::operation::intersection
@@ -124,8 +126,6 @@ RectangleIntersection::clip_linestring_parts(const geom::LineString * gi,
 						   RectangleIntersectionBuilder & parts,
 						   const Rectangle & rect)
 {
-  using namespace geos::geom;
-
   auto n = gi->getNumPoints();
 
   if(gi == nullptr || n<1)
@@ -469,13 +469,13 @@ RectangleIntersection::clip_polygon_to_polygons(const geom::Polygon * g,
   // If there were no intersections, the outer ring might be
   // completely outside.
 
-  using geos::algorithm::CGAlgorithms;
+  using geos::algorithm::Orientation;
   if( parts.empty() )
   {
     Coordinate rectCenter(rect.xmin(), rect.ymin());
     rectCenter.x += (rect.xmax()-rect.xmin())/2;
     rectCenter.y += (rect.ymax()-rect.ymin())/2;
-    if ( CGAlgorithms::locatePointInRing(rectCenter,
+    if ( PointLocation::locateInRing(rectCenter,
                           *g->getExteriorRing()->getCoordinatesRO())
          != Location::INTERIOR )
     {
@@ -485,7 +485,7 @@ RectangleIntersection::clip_polygon_to_polygons(const geom::Polygon * g,
   else
   {
     // TODO: make CCW checking part of clip_linestring_parts ?
-    if ( CGAlgorithms::isCCW(shell->getCoordinatesRO()) ) {
+    if ( Orientation::isCCW(shell->getCoordinatesRO()) ) {
       parts.reverseLines();
     }
   }
@@ -515,7 +515,7 @@ RectangleIntersection::clip_polygon_to_polygons(const geom::Polygon * g,
 		  if(!holeparts.empty())
 			{
         // TODO: make CCW checking part of clip_linestring_parts ?
-        if ( ! CGAlgorithms::isCCW(hole->getCoordinatesRO()) ) {
+        if ( ! Orientation::isCCW(hole->getCoordinatesRO()) ) {
           holeparts.reverseLines();
         }
 			  holeparts.reconnect();
@@ -523,11 +523,11 @@ RectangleIntersection::clip_polygon_to_polygons(const geom::Polygon * g,
 			}
 		  else
 			{
-        using geos::algorithm::CGAlgorithms;
+
         Coordinate rectCenter(rect.xmin(), rect.ymin());
         rectCenter.x += (rect.xmax()-rect.xmin())/2;
         rectCenter.y += (rect.ymax()-rect.ymin())/2;
-			  if( CGAlgorithms::isPointInRing(rectCenter,
+			  if( PointLocation::isInRing(rectCenter,
             g->getInteriorRingN(i)->getCoordinatesRO()) )
 				{
 				  // Completely inside the hole

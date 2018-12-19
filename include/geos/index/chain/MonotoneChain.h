@@ -148,6 +148,8 @@ private:
 			     std::size_t start1, std::size_t end1,
 	                     MonotoneChainOverlapAction& mco);
 
+    bool overlaps(size_t start0, size_t end0, const MonotoneChain& mc, int start1, size_t end1);
+
 	/// Externally owned
 	const geom::CoordinateSequence& pts;
 

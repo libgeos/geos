@@ -17,7 +17,7 @@
  *
  **********************************************************************/
 
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/operation/buffer/RightmostEdgeFinder.h>
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geomgraph/DirectedEdgeStar.h>
@@ -29,7 +29,7 @@
 #include <vector>
 #include <cassert>
 
-using namespace geos::algorithm; // CGAlgorithms
+using namespace geos::algorithm; // Orientation
 using namespace geos::geom;
 using namespace geos::geomgraph; // DirectedEdge, Position
 
@@ -166,7 +166,7 @@ RightmostEdgeFinder::findRightmostEdgeAtVertex()
 
 	const Coordinate& pPrev=pts->getAt(minIndex-1);
 	const Coordinate& pNext=pts->getAt(minIndex+1);
-	int orientation=CGAlgorithms::computeOrientation(
+	int orientation=Orientation::index(
 			minCoord,
 			pNext,
 			pPrev);
@@ -174,12 +174,12 @@ RightmostEdgeFinder::findRightmostEdgeAtVertex()
 
 	// both segments are below min point
 	if ( pPrev.y < minCoord.y && pNext.y < minCoord.y
-		&& orientation == CGAlgorithms::COUNTERCLOCKWISE)
+		&& orientation == Orientation::COUNTERCLOCKWISE)
 	{
 			usePrev=true;
 	}
 	else if ( pPrev.y > minCoord.y && pNext.y > minCoord.y
-		&& orientation == CGAlgorithms::CLOCKWISE)
+		&& orientation == Orientation::CLOCKWISE)
 	{
 			usePrev=true;
 	}

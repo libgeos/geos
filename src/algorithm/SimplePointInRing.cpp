@@ -14,7 +14,7 @@
  **********************************************************************/
 
 #include <geos/algorithm/SimplePointInRing.h>
-#include <geos/algorithm/CGAlgorithms.h>
+#include <geos/algorithm/PointLocation.h>
 #include <geos/geom/LinearRing.h>
 
 // Forward declarations
@@ -35,7 +35,7 @@ SimplePointInRing::~SimplePointInRing(){
 }
 
 bool SimplePointInRing::isInside(const geom::Coordinate& pt){
-	return CGAlgorithms::isPointInRing(pt,pts);
+	return PointLocation::isInRing(pt,pts);
 }
 
 } // namespace geos.algorithm

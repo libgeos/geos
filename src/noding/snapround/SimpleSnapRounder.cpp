@@ -26,7 +26,6 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/algorithm/LineIntersector.h>
-#include <geos/algorithm/LineIntersector.h>
 
 #include <vector>
 #include <exception>

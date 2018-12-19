@@ -409,6 +409,7 @@ AC_OUTPUT([
 	include/geos/algorithm/Makefile
 	include/geos/algorithm/locate/Makefile
 	include/geos/algorithm/distance/Makefile
+	include/geos/algorithm/ttmath/Makefile
 	include/geos/geom/Makefile
 	include/geos/geom/prep/Makefile
 	include/geos/geom/util/Makefile
