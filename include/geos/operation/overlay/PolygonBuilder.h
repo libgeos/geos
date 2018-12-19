@@ -152,6 +152,8 @@ private:
 		std::vector<geomgraph::EdgeRing*> &newShellList,
 		std::vector<geomgraph::EdgeRing*> &freeHoleList);
 
+    using FastPIPRing = tuple<EdgeRing*, algorithm::locate::IndexedPointInAreaLocator*>;
+
 	/** \brief
 	 * This method determines finds a containing shell for all holes
 	 * which have not yet been assigned to a shell.
@@ -166,7 +168,7 @@ private:
 	 *
 	 * @throws TopologyException if a hole cannot be assigned to a shell
 	 */
-	void placeFreeHoles(std::vector<geomgraph::EdgeRing*>& newShellList,
+	void placeFreeHoles(vector<FastPIPRing>& newShellList,
 		std::vector<geomgraph::EdgeRing*>& freeHoleList);
 		// throw(const TopologyException&)
 
@@ -189,7 +191,7 @@ private:
 	 * @return NULL if no containing geomgraph::EdgeRing is found
 	 */
 	geomgraph::EdgeRing* findEdgeRingContaining(geomgraph::EdgeRing *testEr,
-		std::vector<geomgraph::EdgeRing*>& newShellList);
+        vector<FastPIPRing>& newShellList);
 
 	std::vector<geom::Geometry*>* computePolygons(
 			std::vector<geomgraph::EdgeRing*>& newShellList);
