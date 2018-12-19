@@ -24,6 +24,7 @@
 #include <geos/export.h>
 #include <geos/geomgraph/index/SweepLineEventObj.h> // for inheritance
 #include <geos/geomgraph/index/MonotoneChainEdge.h> // for inline
+#include <geos/geomgraph/index/MonotoneChain.h>
 
 // Forward declarations
 namespace geos {
@@ -59,8 +60,6 @@ public:
 		mce->computeIntersectsForChain(chainIndex,*(mc->mce),mc->chainIndex,*si);
 	}
 };
-
-
 
 
 } // namespace geos.geomgraph.index

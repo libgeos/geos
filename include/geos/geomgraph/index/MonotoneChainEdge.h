@@ -70,6 +70,9 @@ private:
 		const MonotoneChainEdge &mce,
 		size_t start1, size_t end1,
 		SegmentIntersector &ei);
+
+    bool overlaps(size_t start0, size_t end0, const MonotoneChainEdge& mce, size_t start1, size_t end1);
+
 };
 
 } // namespace geos.geomgraph.index

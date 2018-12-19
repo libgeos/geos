@@ -86,11 +86,9 @@ MonotoneChain::computeSelect(const Envelope& searchEnv,
     const Coordinate& p0=pts[start0];
     const Coordinate& p1=pts[end0];
 
-    //Debug.println("trying:"+p0+p1+" [ "+start0+","+end0+" ]");
     // terminating condition for the recursion
     if(end0-start0==1)
     {
-        //Debug.println("computeSelect:"+p0+p1);
         mcs.select(*this, start0);
         return;
     }
@@ -128,7 +126,6 @@ MonotoneChain::computeOverlaps(size_t start0, size_t end0,
                                size_t start1, size_t end1,
                                MonotoneChainOverlapAction& mco)
 {
-    //Debug.println("computeIntersectsForChain:"+p00+p01+p10+p11);
     // terminating condition for the recursion
     if (end0-start0==1 && end1-start1==1)
     {
@@ -136,13 +133,8 @@ MonotoneChain::computeOverlaps(size_t start0, size_t end0,
         return;
     }
 
-    const Coordinate& p00 = pts[start0];
-    const Coordinate& p01 = pts[end0];
-    const Coordinate& p10 = mc.pts[start1];
-    const Coordinate& p11 = mc.pts[end1];
-
     // nothing to do if the envelopes of these subchains don't overlap
-    if (!Envelope::intersects(p00, p01, p10, p11)) return;
+    if (!overlaps(start0, end0, mc, start1, end1)) return;
 
     // the chains overlap,so split each in half and iterate (binary search)
     size_t mid0=(start0+end0)/2;
@@ -166,6 +158,14 @@ MonotoneChain::computeOverlaps(size_t start0, size_t end0,
         if (mid1<end1)
             computeOverlaps(mid0, end0, mc, mid1, end1, mco);
     }
+}
+
+/*private*/
+bool
+MonotoneChain::overlaps(size_t start0, size_t end0, const MonotoneChain& mc, int start1, size_t end1)
+{
+    return Envelope::intersects(pts.getAt(start0), pts.getAt(end0),
+        mc.pts.getAt(start1), mc.pts.getAt(end1));
 }
 
 } // namespace geos.index.chain
