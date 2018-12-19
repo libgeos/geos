@@ -14,7 +14,6 @@ libalgorithm_la_SOURCES = \
 	Area.cpp \
 	BoundaryNodeRule.cpp \
 	Centroid.cpp \
-	CGAlgorithms.cpp \
 	CGAlgorithmsDD.cpp \
 	ConvexHull.cpp \
 	Distance.cpp \

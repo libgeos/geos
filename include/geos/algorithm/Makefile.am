@@ -16,7 +16,6 @@ geos_HEADERS = \
 	BoundaryNodeRule.h \
 	CentralEndpointIntersector.h \
 	Centroid.h \
-	CGAlgorithms.h \
 	ConvexHull.h \
 	ConvexHull.inl \
 	Distance.h \
