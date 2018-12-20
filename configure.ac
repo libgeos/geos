@@ -10,26 +10,26 @@ AC_CANONICAL_SYSTEM
 
 AC_CONFIG_MACRO_DIR([macros])
 
-dnl -- JTS_PORT: the version of JTS this release is bound to
-dnl JTS_PORT=1.13.0
-JTS_PORT=`cat Version.txt | grep ^JTS_PORT | sed 's/[[^=]]*=\([[0-9a-zA-Z\.]]\)/\1/g'`
-
 dnl
 dnl -- Release versions / C++ library SONAME will use these
 dnl -- encoding ABI break at every release
 dnl
-VERSION_MAJOR=`cat Version.txt | awk -F= '/^GEOS_VERSION_MAJOR/ {print $2}'`
-VERSION_MINOR=`cat Version.txt | awk -F= '/^GEOS_VERSION_MINOR/ {print $2}'`
-VERSION_PATCH=`cat Version.txt | awk -F= '/^GEOS_VERSION_PATCH/ {print $2}'`
-PATCH_WORD=`cat Version.txt    | awk -F= '/^GEOS_PATCH_WORD/ {print $2}'`
+VERTXT=${srcdir}/Version.txt
+VERSION_MAJOR=`cat $VERTXT | awk -F= '/^GEOS_VERSION_MAJOR/ {print $2}'`
+VERSION_MINOR=`cat $VERTXT | awk -F= '/^GEOS_VERSION_MINOR/ {print $2}'`
+VERSION_PATCH=`cat $VERTXT | awk -F= '/^GEOS_VERSION_PATCH/ {print $2}'`
+PATCH_WORD=`cat $VERTXT    | awk -F= '/^GEOS_PATCH_WORD/ {print $2}'`
 
 VERSION_PATCH=${VERSION_PATCH}${PATCH_WORD}
 VERSION="$VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH"
 VERSION_RELEASE=`echo "$VERSION" | sed -E 's/^([[0-9]+\.[0-9]+\.[0-9]+]).*$/\1/'`
 
-CAPI_INTERFACE_CURRENT=`cat Version.txt  | awk -F= '/^CAPI_INTERFACE_CURRENT/ {print $2}'`
-CAPI_INTERFACE_REVISION=`cat Version.txt | awk -F= '/^CAPI_INTERFACE_REVISION/ {print $2}'`
-CAPI_INTERFACE_AGE=`cat Version.txt      | awk -F= '/^CAPI_INTERFACE_AGE/ {print $2}'`
+AC_MSG_CHECKING([for GEOS version])
+AC_MSG_RESULT(["$VERSION"])
+
+CAPI_INTERFACE_CURRENT=`cat $VERTXT  | awk -F= '/^CAPI_INTERFACE_CURRENT/ {print $2}'`
+CAPI_INTERFACE_REVISION=`cat $VERTXT | awk -F= '/^CAPI_INTERFACE_REVISION/ {print $2}'`
+CAPI_INTERFACE_AGE=`cat $VERTXT      | awk -F= '/^CAPI_INTERFACE_AGE/ {print $2}'`
 
 dnl CAPI_VERSION_MAJOR=$(($CAPI_INTERFACE_CURRENT-$CAPI_INTERFACE_AGE))
 dnl the following should be more portable
@@ -38,10 +38,17 @@ CAPI_VERSION_MINOR=$CAPI_INTERFACE_AGE
 CAPI_VERSION_PATCH=$CAPI_INTERFACE_REVISION
 CAPI_VERSION="$CAPI_VERSION_MAJOR.$CAPI_VERSION_MINOR.$CAPI_VERSION_PATCH"
 
+AC_MSG_CHECKING([for GEOS CAPI version])
+AC_MSG_RESULT(["$CAPI_VERSION"])
+
 AM_INIT_AUTOMAKE([geos], [$VERSION], [no-define])
 AM_MAINTAINER_MODE
 AC_CONFIG_HEADERS([include/config.h] [include/geos/platform.h])
 AC_PROG_CC
+
+dnl -- JTS_PORT: the version of JTS this release is bound to
+dnl JTS_PORT=1.13.0
+JTS_PORT=`cat $VERTXT | awk -F= '/^JTS_PORT/ {print $2}'`
 
 
 dnl Hush warnings
