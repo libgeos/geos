@@ -702,11 +702,12 @@ Geometry::isEquivalentClass(const Geometry *other) const
 		return false;
 }
 
+/*public static*/
 void
 Geometry::checkNotGeometryCollection(const Geometry *g)
 	//throw(IllegalArgumentException *)
 {
-	if ((typeid(*g)==typeid(GeometryCollection))) {
+	if (g->getSortIndex() == SORTINDEX_GEOMETRYCOLLECTION) {
 		throw  geos::util::IllegalArgumentException("This method does not support GeometryCollection arguments\n");
 	}
 }
