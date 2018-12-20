@@ -18,6 +18,7 @@
 
 #include <cmath>
 #include <vector>
+#include <algorithm>
 
 #include <geos/algorithm/Distance.h>
 #include <geos/util/IllegalArgumentException.h>
