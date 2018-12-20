@@ -23,9 +23,7 @@ endif()
 #################################################################################
 # Set GEOS project
 #################################################################################
-project(GEOS VERSION 3.8.0 LANGUAGES C CXX)
-# OPTIONS: "", "dev", "rc1" etc.
-SET(GEOS_PATCH_WORD "dev")
+project(GEOS LANGUAGES C CXX)
 
 # Add custom GEOS modules for CMake
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
@@ -43,6 +41,31 @@ message(STATUS "Setting C++ requirement to C++${CMAKE_CXX_STANDARD}")
 # Setup GEOS version
 #################################################################################
 
+# READ GEOS VERSIONS FROM FILE
+file(READ "Version.txt" VERSION_TXT)
+
+string(REGEX MATCH "GEOS_VERSION_MAJOR=([0-9]+)" _ ${VERSION_TXT})
+set(GEOS_VERSION_MAJOR ${CMAKE_MATCH_1})
+
+string(REGEX MATCH "GEOS_VERSION_MINOR=([0-9]+)" _ ${VERSION_TXT})
+set(GEOS_VERSION_MINOR ${CMAKE_MATCH_1})
+
+string(REGEX MATCH "GEOS_VERSION_PATCH=([0-9]+)" _ ${VERSION_TXT})
+set(GEOS_VERSION_PATCH ${CMAKE_MATCH_1})
+
+# OPTIONS: "", "dev", "rc1" etc.
+string(REGEX MATCH "GEOS_PATCH_WORD=([a-zA-Z0-9]+)" _ ${VERSION_TXT})
+set(GEOS_PATCH_WORD ${CMAKE_MATCH_1})
+
+string(REGEX MATCH "CAPI_INTERFACE_CURRENT=([0-9]+)" _ ${VERSION_TXT})
+set(CAPI_INTERFACE_CURRENT ${CMAKE_MATCH_1})
+
+string(REGEX MATCH "CAPI_INTERFACE_REVISION=([0-9]+)" _ ${VERSION_TXT})
+set(CAPI_INTERFACE_REVISION ${CMAKE_MATCH_1})
+
+string(REGEX MATCH "CAPI_INTERFACE_AGE=([0-9]+)" _ ${VERSION_TXT})
+set(CAPI_INTERFACE_AGE ${CMAKE_MATCH_1})
+
 # GEOS release version
 # GEOS C++ library SONAME will use these encoding ABI break at every release
 set(GEOS_VERSION "${GEOS_VERSION_MAJOR}.${GEOS_VERSION_MINOR}.${GEOS_VERSION_PATCH}${GEOS_PATCH_WORD}")
@@ -55,13 +78,10 @@ set(VERSION_MINOR "${GEOS_VERSION_MINOR}")
 set(VERSION_PATCH "${GEOS_VERSION_PATCH}${GEOS_PATCH_WORD}")
 
 # JTS_PORT is the version of JTS this release is bound to
-set(JTS_PORT 1.13.0)
+string(REGEX MATCH "JTS_PORT=([0-9a-zA-Z\.]+)" _ ${VERSION_TXT})
+set(JTS_PORT ${CMAKE_MATCH_1})
 message(STATUS "Setting GEOS version ${VERSION} as port of JTS ${JTS_PORT}")
 
-# GEOS C API version
-set(CAPI_INTERFACE_CURRENT 12)
-set(CAPI_INTERFACE_REVISION 0)
-set(CAPI_INTERFACE_AGE 11)
 
 math(EXPR CAPI_VERSION_MAJOR "${CAPI_INTERFACE_CURRENT} - ${CAPI_INTERFACE_AGE}")
 set(CAPI_VERSION_MINOR ${CAPI_INTERFACE_AGE})
