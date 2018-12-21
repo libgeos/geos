@@ -12,24 +12,25 @@
 # (we'll still take care of adding it ourselves)
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS =   \
-    include \
-    src     \
-    capi    \
-    doc     \
-    macros  \
-    swig    \
-    tests   \
-    tools
+SUBDIRS = \
+	include \
+	src     \
+	capi    \
+	doc     \
+	macros  \
+	swig    \
+	tests   \
+	tools
 
 BUILT_SOURCES = geos_revision.h
 
-EXTRA_DIST = acsite.m4 .editorconfig makefile.vc nmake.opt autogen.bat CMakeLists.txt \
-  cmake/modules/CheckPrototypeExists.cmake \
-  cmake/modules/COPYING-CMAKE-SCRIPTS \
-  cmake/modules/GenerateSourceGroups.cmake \
-  cmake/cmake_uninstall.cmake.in geos_revision.h \
-  README.md
+EXTRA_DIST = acsite.m4 .editorconfig makefile.vc \
+	Version.txt nmake.opt autogen.bat CMakeLists.txt \
+	cmake/modules/CheckPrototypeExists.cmake \
+	cmake/modules/COPYING-CMAKE-SCRIPTS \
+	cmake/modules/GenerateSourceGroups.cmake \
+	cmake/cmake_uninstall.cmake.in geos_revision.h \
+	README.md
 
 ACLOCAL_AMFLAGS = -I macros
 
