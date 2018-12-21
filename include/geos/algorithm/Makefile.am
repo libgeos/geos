@@ -14,6 +14,7 @@ geos_HEADERS = \
 	Angle.h \
 	Area.h \
 	BoundaryNodeRule.h \
+	CGAlgorithmsDD.h \
 	CentralEndpointIntersector.h \
 	Centroid.h \
 	ConvexHull.h \
@@ -23,8 +24,8 @@ geos_HEADERS = \
 	InteriorPointArea.h \
 	InteriorPointLine.h \
 	InteriorPointPoint.h \
-	LineIntersector.h \
 	Length.h \
+	LineIntersector.h \
 	MinimumDiameter.h \
 	NotRepresentableException.h \
 	Orientation.h \
@@ -33,3 +34,4 @@ geos_HEADERS = \
 	RayCrossingCounter.h \
 	RayCrossingCounterDD.h \
 	RobustDeterminant.h
+
