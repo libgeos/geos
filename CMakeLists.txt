@@ -168,6 +168,11 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
   # Enable glibc ISO C99 features (macros isfinite, isnan)
   set(CMAKE_REQUIRED_DEFINITIONS "${CMAKE_REQUIRED_DEFINITIONS} -D_ISOC99_SOURCE=1")
 
+  # For now, punt on ASM on Windows/MinGW
+  if(MINGW)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DTTMATH_NOASM")
+  endif()
+
 elseif(MSVC)
 
   # Set pedantic mode by default
