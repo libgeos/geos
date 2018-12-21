@@ -1,6 +1,6 @@
 before_script:
     - apt-get update -qq
-    - apt-get install -y build-essential autoconf automake libtool lsb-release
+    - apt-get install -y --allow-unauthenticated build-essential autoconf automake libtool lsb-release
     - lsb_release -a
     - uname -a
 
