@@ -168,8 +168,8 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
   # Enable glibc ISO C99 features (macros isfinite, isnan)
   set(CMAKE_REQUIRED_DEFINITIONS "${CMAKE_REQUIRED_DEFINITIONS} -D_ISOC99_SOURCE=1")
 
-  # For now, punt on ASM on Windows/MinGW/GCC
-  if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+  # For now, punt on ASM on MinGW (Windows+GCC)
+  if(WIN32)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DTTMATH_NOASM")
     message(STATUS "Setting TTMATH_NOASM")
   endif()
