@@ -171,6 +171,7 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
   # For now, punt on ASM on Windows/MinGW
   if(MINGW)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DTTMATH_NOASM")
+    message(STATUS "Setting TTMATH_NOASM")
   endif()
 
 elseif(MSVC)
