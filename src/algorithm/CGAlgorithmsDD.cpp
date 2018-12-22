@@ -27,7 +27,11 @@ using namespace geos::algorithm;
 
 namespace {
 
-double const DP_SAFE_EPSILON =  1e-15;
+/**
+ * A value which is safely greater than the relative round-off
+ * error in double-precision numbers
+ */
+double constexpr DP_SAFE_EPSILON =  1e-15;
 
 inline int OrientationDD(DD const& dd)
 {
@@ -57,11 +61,20 @@ int CGAlgorithmsDD::orientationIndex(const Coordinate& p1,
     if (ISNAN(q.x) || ISNAN(q.y) || !FINITE(q.x) || !FINITE(q.y)) {
         throw util::IllegalArgumentException("CGAlgorithmsDD::orientationIndex encountered NaN/Inf numbers");
     }
-    static DD const zero(0.0);
+
+    // fast filter for orientation index
+    // avoids use of slow extended-precision arithmetic in many cases
+    int index = orientationIndexFilter(p1, p2, q);
+    if (index <= 1)
+        return index;
+
+    // normalize coordinates
     DD dx1 = DD(p2.x) + DD(-p1.x);
     DD dy1 = DD(p2.y) + DD(-p1.y);
     DD dx2 = DD(q.x) + DD(-p2.x);
     DD dy2 = DD(q.y) + DD(-p2.y);
+
+    // sign of determinant - inlined for performance
     DD mx1y2(dx1 * dy2);
     DD my1x2(dy1 * dx2);
     DD d = mx1y2 - my1x2;
@@ -168,7 +181,6 @@ void CGAlgorithmsDD::intersection(const Coordinate& p1, const Coordinate& p2,
 
     rv.x = x.ToDouble();
     rv.y = y.ToDouble();
-    return;
 }
 
 
