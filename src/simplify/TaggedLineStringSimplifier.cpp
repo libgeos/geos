@@ -27,6 +27,7 @@
 //#include <geos/geom/GeometryFactory.h>
 //#include <geos/geom/CoordinateSequenceFactory.h>
 
+#include <algorithm>
 #include <cassert>
 #include <memory>
 
@@ -211,13 +212,8 @@ TaggedLineStringSimplifier::hasBadOutputIntersection(
 	unique_ptr< vector<LineSegment*> > querySegs =
 		outputIndex->query(&candidateSeg);
 
-	for (vector<LineSegment*>::iterator
-			it = querySegs->begin(), iEnd = querySegs->end();
-			it != iEnd;
-			++it)
+	for (const LineSegment* querySeg : *querySegs)
 	{
-		LineSegment* querySeg = *it;
-		assert(querySeg);
 		if (hasInteriorIntersection(*querySeg, candidateSeg))
 		{
 			return true;
@@ -247,15 +243,9 @@ TaggedLineStringSimplifier::hasBadInputIntersection(
 	unique_ptr< vector<LineSegment*> > querySegs =
 		inputIndex->query(&candidateSeg);
 
-	for (vector<LineSegment*>::iterator
-			it = querySegs->begin(), iEnd = querySegs->end();
-			it != iEnd;
-			++it)
+	for (const LineSegment* ls : *querySegs)
 	{
-		assert(*it);
-		assert(dynamic_cast<TaggedLineSegment*>(*it));
-		TaggedLineSegment* querySeg =
-			static_cast<TaggedLineSegment*>(*it);
+		const TaggedLineSegment* querySeg = static_cast<const TaggedLineSegment*>(ls);
 
 		if (hasInteriorIntersection(*querySeg, candidateSeg))
 		{
