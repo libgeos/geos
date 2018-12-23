@@ -105,12 +105,6 @@ public:
 
 };
 
-/*public*/
-LineSegmentIndex::LineSegmentIndex()
-	:
-	index(new Quadtree())
-{
-}
 
 /*public*/
 void
@@ -129,7 +123,7 @@ LineSegmentIndex::add(const LineSegment* seg)
 
 	// We need a cast because index wants a non-const,
 	// although it won't change the argument
-	index->insert(env.get(), const_cast<LineSegment*>(seg));
+	index.insert(env.get(), const_cast<LineSegment*>(seg));
 
 	newEnvelopes.push_back(std::move(env));
 }
@@ -142,17 +136,17 @@ LineSegmentIndex::remove(const LineSegment* seg)
 
 	// We need a cast because index wants a non-const
 	// although it won't change the argument
-	index->remove(&env, const_cast<LineSegment*>(seg));
+	index.remove(&env, const_cast<LineSegment*>(seg));
 }
 
 /*public*/
 unique_ptr< vector<LineSegment*> >
-LineSegmentIndex::query(const LineSegment* querySeg) const
+LineSegmentIndex::query(const LineSegment* querySeg)
 {
 	Envelope env(querySeg->p0, querySeg->p1);
 
 	LineSegmentVisitor visitor(querySeg);
-	index->query(&env, visitor);
+	index.query(&env, visitor);
 
 	unique_ptr< vector<LineSegment*> > itemsFound = visitor.getItems();
 

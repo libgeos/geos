@@ -51,7 +51,7 @@ class GEOS_DLL LineSegmentIndex {
 
 public:
 
-	LineSegmentIndex();
+	LineSegmentIndex() = default;
 
 	~LineSegmentIndex() = default;
 
@@ -62,11 +62,11 @@ public:
 	void remove(const geom::LineSegment* seg);
 
 	std::unique_ptr< std::vector<geom::LineSegment*> >
-			query(const geom::LineSegment* seg) const;
+			query(const geom::LineSegment* seg);
 
 private:
 
-	std::unique_ptr<index::quadtree::Quadtree> index;
+	index::quadtree::Quadtree index;
 
 	std::vector<std::unique_ptr<geom::Envelope>> newEnvelopes;
 
