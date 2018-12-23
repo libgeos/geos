@@ -32,7 +32,7 @@
 #include <geos/util/IllegalArgumentException.h>
 
 #include <memory> // for unique_ptr
-#include <map>
+#include <unordered_map>
 #include <cassert>
 #include <iostream>
 
@@ -41,7 +41,7 @@ using namespace geos::geom;
 namespace geos {
 namespace simplify { // geos::simplify
 
-typedef std::map<const geom::Geometry*, TaggedLineString* > LinesMap;
+using LinesMap = std::unordered_map<const geom::Geometry*, TaggedLineString*>;
 
 
 namespace { // module-statics
