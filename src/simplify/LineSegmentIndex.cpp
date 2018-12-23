@@ -116,10 +116,7 @@ LineSegmentIndex::LineSegmentIndex()
 void
 LineSegmentIndex::add(const TaggedLineString& line)
 {
-	const vector<TaggedLineSegment*>& segs = line.getSegments();
-	for (size_t i=0, n=segs.size(); i<n; ++i)
-	{
-		const LineSegment* seg = segs[i];
+	for (const LineSegment* seg : line.getSegments()) {
 		add(seg);
 	}
 }
