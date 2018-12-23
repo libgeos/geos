@@ -254,8 +254,7 @@ NodeBase::remove(const Envelope* itemEnv, void* item)
 
 	// otherwise, try and remove the item from the list of items
 	// in this node
-	vector<void*>::iterator foundIter =
-		find(items.begin(), items.end(), item);
+	auto foundIter = find(items.begin(), items.end(), item);
 	if ( foundIter != items.end() ) {
 		items.erase(foundIter);
 		return true;
