@@ -113,15 +113,6 @@ LineSegmentIndex::LineSegmentIndex()
 }
 
 /*public*/
-LineSegmentIndex::~LineSegmentIndex()
-{
-	for (size_t i=0, n=newEnvelopes.size(); i<n; ++i)
-	{
-		delete newEnvelopes[i];
-	}
-}
-
-/*public*/
 void
 LineSegmentIndex::add(const TaggedLineString& line)
 {
@@ -137,12 +128,13 @@ LineSegmentIndex::add(const TaggedLineString& line)
 void
 LineSegmentIndex::add(const LineSegment* seg)
 {
-	Envelope* env = new Envelope(seg->p0, seg->p1);
-	newEnvelopes.push_back(env);
+	std::unique_ptr<Envelope> env{new Envelope(seg->p0, seg->p1)};
 
 	// We need a cast because index wants a non-const,
 	// although it won't change the argument
-	index->insert(env, (LineSegment*)seg);
+	index->insert(env.get(), (LineSegment*)seg);
+
+	newEnvelopes.push_back(std::move(env));
 }
 
 /*public*/

@@ -24,6 +24,8 @@
 #define GEOS_SIMPLIFY_LINESEGMENTINDEX_H
 
 #include <geos/export.h>
+#include <geos/geom/Envelope.h>
+#include <geos/index/quadtree/Quadtree.h>
 #include <vector>
 #include <memory> // for unique_ptr
 
@@ -35,16 +37,10 @@
 // Forward declarations
 namespace geos {
 	namespace geom {
-		class Envelope;
 		class LineSegment;
 	}
 	namespace simplify {
 		class TaggedLineString;
-	}
-	namespace index {
-		namespace quadtree {
-			class Quadtree;
-		}
 	}
 }
 
@@ -57,7 +53,7 @@ public:
 
 	LineSegmentIndex();
 
-	~LineSegmentIndex();
+	~LineSegmentIndex() = default;
 
 	void add(const TaggedLineString& line);
 
@@ -72,7 +68,7 @@ private:
 
 	std::unique_ptr<index::quadtree::Quadtree> index;
 
-	std::vector<geom::Envelope*> newEnvelopes;
+	std::vector<std::unique_ptr<geom::Envelope>> newEnvelopes;
 
 	// Copying is turned off
 	LineSegmentIndex(const LineSegmentIndex&);
