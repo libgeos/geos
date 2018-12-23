@@ -20,9 +20,11 @@
 #define GEOS_IDX_QUADTREE_QUADTREE_H
 
 #include <geos/export.h>
+#include <geos/geom/Envelope.h>
 #include <geos/index/SpatialIndex.h> // for inheritance
 #include <geos/index/quadtree/Root.h> // for composition
 
+#include <memory>
 #include <vector>
 #include <string>
 
@@ -33,9 +35,6 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Envelope;
-	}
 	namespace index {
 		namespace quadtree {
 			// class Root;
@@ -73,7 +72,7 @@ class GEOS_DLL Quadtree: public SpatialIndex {
 
 private:
 
-	std::vector<geom::Envelope *> newEnvelopes;
+	std::vector<std::unique_ptr<geom::Envelope>> newEnvelopes;
 
 	void collectStats(const geom::Envelope& itemEnv);
 
@@ -113,7 +112,7 @@ public:
 		minExtent(1.0)
 	{}
 
-	~Quadtree() override;
+	~Quadtree() override = default;
 
 	/// Returns the number of levels in the tree.
 	int depth();
