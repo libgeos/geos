@@ -242,14 +242,8 @@ TaggedLineStringSimplifier::hasBadInputIntersection(
 	{
 		const TaggedLineSegment* querySeg = static_cast<const TaggedLineSegment*>(ls);
 
-		if (hasInteriorIntersection(*querySeg, candidateSeg))
+		if (!isInLineSection(parentLine, sectionIndex, querySeg) && hasInteriorIntersection(*querySeg, candidateSeg))
 		{
-
-			if ( isInLineSection(parentLine,
-					sectionIndex, querySeg) )
-			{
-				continue;
-			}
 
 			return true;
 		}
