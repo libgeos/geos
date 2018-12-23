@@ -66,7 +66,7 @@ Root::insert(const Envelope *itemEnv, void* item)
 	 * the item must be contained in one quadrant, so insert it into the
 	 * tree for that quadrant (which may not yet exist)
 	 */
-	Node *node = subnode[index];
+	Node *node = subnodes[index];
 
 #if GEOS_DEBUG
 	std::cerr<<"("<<this<<") subnode["<<index<<"] @ "<<node<<std::endl;
@@ -79,7 +79,7 @@ Root::insert(const Envelope *itemEnv, void* item)
 	if (node==nullptr || !node->getEnvelope()->contains(itemEnv))
 	{
 		std::unique_ptr<Node> snode (node); // may be NULL
-		node = nullptr; subnode[index] = nullptr;
+		node = nullptr; subnodes[index] = nullptr;
 
 		std::unique_ptr<Node> largerNode =
 			Node::createExpanded(std::move(snode), *itemEnv);
@@ -89,8 +89,8 @@ Root::insert(const Envelope *itemEnv, void* item)
 #endif
 
 		// Previous subnode was passed as a child of the larger one
-		assert(!subnode[index]);
-		subnode[index] = largerNode.release();
+		assert(!subnodes[index]);
+		subnodes[index] = largerNode.release();
 	}
 
 #if GEOS_DEBUG
@@ -100,7 +100,7 @@ Root::insert(const Envelope *itemEnv, void* item)
 	 * At this point we have a subquad which exists and must contain
 	 * contains the env for the item.  Insert the item into the tree.
 	 */
-	insertContained(subnode[index], itemEnv, item);
+	insertContained(subnodes[index], itemEnv, item);
 
 #if GEOS_DEBUG
 	std::cerr<<"("<<this<<") done calling insertContained with subnode " << subnode[index] << std::endl;

@@ -63,22 +63,22 @@ NodeBase::getSubnodeIndex(const Envelope *env, const Coordinate& centre)
 
 NodeBase::NodeBase()
 {
-	subnode[0]=nullptr;
-	subnode[1]=nullptr;
-	subnode[2]=nullptr;
-	subnode[3]=nullptr;
+	subnodes[0]=nullptr;
+	subnodes[1]=nullptr;
+	subnodes[2]=nullptr;
+	subnodes[3]=nullptr;
 }
 
 NodeBase::~NodeBase()
 {
-	delete subnode[0];
-	delete subnode[1];
-	delete subnode[2];
-	delete subnode[3];
-	subnode[0]=nullptr;
-	subnode[1]=nullptr;
-	subnode[2]=nullptr;
-	subnode[3]=nullptr;
+	delete subnodes[0];
+	delete subnodes[1];
+	delete subnodes[2];
+	delete subnodes[3];
+	subnodes[0]=nullptr;
+	subnodes[1]=nullptr;
+	subnodes[2]=nullptr;
+	subnodes[3]=nullptr;
 }
 
 vector<void*>&
@@ -102,11 +102,11 @@ NodeBase::addAllItems(vector<void*>& resultItems) const
 	// be wholly contained in any single subnode
 	resultItems.insert(resultItems.end(), items.begin(), items.end());
 
-	for(int i=0; i<4; ++i)
+	for(const auto& subnode : subnodes)
 	{
-		if ( subnode[i] )
+		if (subnode != nullptr)
 		{
-			subnode[i]->addAllItems(resultItems);
+			subnode->addAllItems(resultItems);
 		}
 	}
 	return resultItems;
@@ -123,11 +123,11 @@ NodeBase::addAllItemsFromOverlapping(const Envelope& searchEnv,
 	// be wholly contained in any single subnode
 	resultItems.insert(resultItems.end(), items.begin(), items.end());
 
-	for(int i=0; i<4; ++i)
+	for(const auto& subnode : subnodes)
 	{
-		if ( subnode[i] )
+		if (subnode != nullptr)
 		{
-			subnode[i]->addAllItemsFromOverlapping(searchEnv,
+			subnode->addAllItemsFromOverlapping(searchEnv,
 			                                       resultItems);
 		}
 	}
@@ -139,11 +139,12 @@ unsigned int
 NodeBase::depth() const
 {
 	unsigned int maxSubDepth=0;
-	for (int i=0; i<4; ++i)
+
+	for (const auto& subnode : subnodes)
 	{
-		if (subnode[i] != nullptr)
+		if (subnode != nullptr)
 		{
-			unsigned int sqd=subnode[i]->depth();
+			unsigned int sqd=subnode->depth();
 			if ( sqd > maxSubDepth )
 				maxSubDepth=sqd;
 		}
@@ -155,11 +156,11 @@ size_t
 NodeBase::size() const
 {
 	size_t subSize = 0;
-	for(int i=0; i<4; i++)
+	for(const auto& subnode : subnodes)
 	{
-		if (subnode[i] != nullptr)
+		if (subnode != nullptr)
 		{
-			subSize += subnode[i]->size();
+			subSize += subnode->size();
 		}
 	}
 	return subSize + items.size();
@@ -169,11 +170,9 @@ size_t
 NodeBase::getNodeCount() const
 {
 	size_t subSize = 0;
-	for(int i=0; i<4; ++i)
-	{
-		if (subnode[i] != nullptr)
-		{
-			subSize += subnode[i]->size();
+	for (const auto& subnode : subnodes) {
+		if (subnode != nullptr) {
+			subSize += subnode->size();
 		}
 	}
 
@@ -185,11 +184,11 @@ NodeBase::toString() const
 {
 	ostringstream s;
 	s<<"ITEMS:"<<items.size()<<endl;
-	for (int i=0; i<4; i++)
+	for (size_t i=0; i < subnodes.size(); i++)
 	{
 		s<<"subnode["<<i<<"] ";
-		if ( subnode[i] == nullptr ) s<<"NULL";
-		else s<<subnode[i]->toString();
+		if ( subnodes[i] == nullptr ) s<<"NULL";
+		else s<<subnodes[i]->toString();
 		s<<endl;
 	}
 	return s.str();
@@ -205,9 +204,9 @@ NodeBase::visit(const Envelope* searchEnv, ItemVisitor& visitor)
 	// be wholly contained in any single subnode
 	visitItems(searchEnv, visitor);
 
-	for (int i = 0; i < 4; i++) {
-		if (subnode[i] != nullptr) {
-			subnode[i]->visit(searchEnv, visitor);
+	for (const auto& subnode : subnodes) {
+		if (subnode != nullptr) {
+			subnode->visit(searchEnv, visitor);
 		}
 	}
 }
@@ -235,18 +234,18 @@ NodeBase::remove(const Envelope* itemEnv, void* item)
 	if (! isSearchMatch(*itemEnv)) return false;
 
 	bool found = false;
-	for (int i = 0; i < 4; ++i)
+	for (auto& subnode : subnodes)
 	{
-		if ( subnode[i] )
+		if (subnode != nullptr)
 		{
-			found = subnode[i]->remove(itemEnv, item);
+			found = subnode->remove(itemEnv, item);
 			if (found)
 			{
 				// trim subtree if empty
-				if (subnode[i]->isPrunable())
+				if (subnode->isPrunable())
 				{
-					delete subnode[i];
-					subnode[i] = nullptr;
+					delete subnode;
+					subnode = nullptr;
 				}
 				break;
 			}
