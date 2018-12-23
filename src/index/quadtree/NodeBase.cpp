@@ -99,7 +99,7 @@ vector<void*>&
 NodeBase::addAllItems(vector<void*>& resultItems) const
 {
 	// this node may have items as well as subnodes (since items may not
-	// be wholely contained in any single subnode
+	// be wholly contained in any single subnode
 	resultItems.insert(resultItems.end(), items.begin(), items.end());
 
 	for(int i=0; i<4; ++i)
@@ -120,7 +120,7 @@ NodeBase::addAllItemsFromOverlapping(const Envelope& searchEnv,
 		return;
 
 	// this node may have items as well as subnodes (since items may not
-	// be wholely contained in any single subnode
+	// be wholly contained in any single subnode
 	resultItems.insert(resultItems.end(), items.begin(), items.end());
 
 	for(int i=0; i<4; ++i)
@@ -202,7 +202,7 @@ NodeBase::visit(const Envelope* searchEnv, ItemVisitor& visitor)
 	if (! isSearchMatch(*searchEnv)) return;
 
 	// this node may have items as well as subnodes (since items may not
-	// be wholely contained in any single subnode
+	// be wholly contained in any single subnode
 	visitItems(searchEnv, visitor);
 
 	for (int i = 0; i < 4; i++) {

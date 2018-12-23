@@ -141,7 +141,7 @@ LineSegmentIndex::add(const LineSegment* seg)
 	newEnvelopes.push_back(env);
 
 	// We need a cast because index wants a non-const,
-	// altought it won't change the argument
+	// although it won't change the argument
 	index->insert(env, (LineSegment*)seg);
 }
 
@@ -152,7 +152,7 @@ LineSegmentIndex::remove(const LineSegment* seg)
 	Envelope env(seg->p0, seg->p1);
 
 	// We need a cast because index wants a non-const
-	// altought it won't change the argument
+	// although it won't change the argument
 	index->remove(&env, (LineSegment*)seg);
 }
 
