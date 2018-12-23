@@ -132,7 +132,7 @@ LineSegmentIndex::add(const LineSegment* seg)
 
 	// We need a cast because index wants a non-const,
 	// although it won't change the argument
-	index->insert(env.get(), (LineSegment*)seg);
+	index->insert(env.get(), const_cast<LineSegment*>(seg));
 
 	newEnvelopes.push_back(std::move(env));
 }
@@ -145,7 +145,7 @@ LineSegmentIndex::remove(const LineSegment* seg)
 
 	// We need a cast because index wants a non-const
 	// although it won't change the argument
-	index->remove(&env, (LineSegment*)seg);
+	index->remove(&env, const_cast<LineSegment*>(seg));
 }
 
 /*public*/
