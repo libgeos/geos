@@ -219,10 +219,8 @@ NodeBase::visitItems(const Envelope* searchEnv, ItemVisitor& visitor)
 
 	// would be nice to filter items based on search envelope, but can't
 	// until they contain an envelope
-	for (vector<void*>::iterator i=items.begin(), e=items.end();
-			i!=e; i++)
-	{
-		visitor.visitItem(*i);
+	for (auto& item : items) {
+		visitor.visitItem(item);
 	}
 }
 
