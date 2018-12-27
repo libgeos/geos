@@ -103,21 +103,27 @@ PolygonBuilder::add(PlanarGraph *graph)
 void
 PolygonBuilder::add(const vector<DirectedEdge*> *dirEdges,
 		const vector<Node*> *nodes)
-		//throw(TopologyException *)
+    //throw(TopologyException *)
 {
 	PlanarGraph::linkResultDirectedEdges(nodes->begin(), nodes->end());
 
-	vector<MaximalEdgeRing*> maxEdgeRings;
-	buildMaximalEdgeRings(dirEdges, maxEdgeRings);
+    vector<MaximalEdgeRing*> maxEdgeRings;
+    buildMaximalEdgeRings(dirEdges, maxEdgeRings);
 
-	vector<EdgeRing*> freeHoleList;
-	vector<MaximalEdgeRing*> edgeRings;
-	buildMinimalEdgeRings(maxEdgeRings, shellList, freeHoleList, edgeRings);
+    vector<EdgeRing*> freeHoleList;
+    vector<MaximalEdgeRing*> edgeRings;
+    buildMinimalEdgeRings(maxEdgeRings, shellList, freeHoleList, edgeRings);
 
-	sortShellsAndHoles(edgeRings, shellList, freeHoleList);
+    sortShellsAndHoles(edgeRings, shellList, freeHoleList);
 
-	placeFreeHoles(shellList, freeHoleList);
+    vector<FastPIPRing> indexedshellist;
+    for (auto const& shell : shellList)
+        indexedshellist.push_back(FastPIPRing(shell, new geos::algorithm::locate::IndexedPointInAreaLocator(*shell->getLinearRing())));
+	placeFreeHoles(indexedshellist, freeHoleList);
 	//Assert: every hole on freeHoleList has a shell assigned to it
+
+    for (auto const& shell : indexedshellist)
+        delete get<1>(shell);
 }
 
 /*public*/
@@ -282,7 +288,7 @@ PolygonBuilder::sortShellsAndHoles(vector<MaximalEdgeRing*> &edgeRings,
 
 /*private*/
 void
-PolygonBuilder::placeFreeHoles(std::vector<EdgeRing*>& newShellList,
+PolygonBuilder::placeFreeHoles(vector<FastPIPRing>& newShellList,
 	std::vector<EdgeRing*>& freeHoleList)
 {
 	for(std::vector<EdgeRing*>::iterator
@@ -327,7 +333,7 @@ PolygonBuilder::placeFreeHoles(std::vector<EdgeRing*>& newShellList,
 /*private*/
 EdgeRing*
 PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
-	vector<EdgeRing*>& newShellList)
+    vector<FastPIPRing>& newShellList)
 {
 	LinearRing *testRing=testEr->getLinearRing();
 	const Envelope *testEnv=testRing->getEnvelopeInternal();
@@ -336,7 +342,8 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
 
 	for(auto const& tryShell: newShellList)
 	{
-		LinearRing *tryShellRing=tryShell->getLinearRing();
+        ;
+		LinearRing *tryShellRing= get<0>(tryShell)->getLinearRing();
 		const Envelope *tryShellEnv=tryShellRing->getEnvelopeInternal();
 		// the hole envelope cannot equal the shell envelope
 		// (also guards against testing rings against themselves)
@@ -348,7 +355,7 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
 		Coordinate testPt = operation::polygonize::EdgeRing::ptNotInList(testRing->getCoordinatesRO(), tsrcs);
 		bool isContained=false;
 
-		if(PointLocation::isInRing(testPt, tsrcs))
+    if (get<1>(tryShell)->locate(&testPt) != Location::EXTERIOR)
 			isContained=true;
 
 		// check if this new containing ring is smaller than
@@ -356,7 +363,7 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
 		if (isContained) {
 			if (minShell==nullptr
 				|| minShellEnv->contains(tryShellEnv)) {
-					minShell=tryShell;
+					minShell= get<0>(tryShell);
 					minShellEnv=minShell->getLinearRing()->getEnvelopeInternal();
 			}
 		}
