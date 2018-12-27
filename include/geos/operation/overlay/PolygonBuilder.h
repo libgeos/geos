@@ -20,6 +20,7 @@
 #define GEOS_OP_OVERLAY_POLYGONBUILDER_H
 
 #include <geos/export.h>
+#include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
 
 #include <vector>
 
@@ -152,7 +153,7 @@ private:
 		std::vector<geomgraph::EdgeRing*> &newShellList,
 		std::vector<geomgraph::EdgeRing*> &freeHoleList);
 
-    using FastPIPRing = tuple<EdgeRing*, algorithm::locate::IndexedPointInAreaLocator*>;
+    using FastPIPRing = std::tuple<geomgraph::EdgeRing*, algorithm::locate::IndexedPointInAreaLocator*>;
 
 	/** \brief
 	 * This method determines finds a containing shell for all holes
@@ -168,7 +169,7 @@ private:
 	 *
 	 * @throws TopologyException if a hole cannot be assigned to a shell
 	 */
-	void placeFreeHoles(vector<FastPIPRing>& newShellList,
+	void placeFreeHoles(std::vector<FastPIPRing>& newShellList,
 		std::vector<geomgraph::EdgeRing*>& freeHoleList);
 		// throw(const TopologyException&)
 
@@ -191,7 +192,7 @@ private:
 	 * @return NULL if no containing geomgraph::EdgeRing is found
 	 */
 	geomgraph::EdgeRing* findEdgeRingContaining(geomgraph::EdgeRing *testEr,
-        vector<FastPIPRing>& newShellList);
+        std::vector<FastPIPRing>& newShellList);
 
 	std::vector<geom::Geometry*>* computePolygons(
 			std::vector<geomgraph::EdgeRing*>& newShellList);

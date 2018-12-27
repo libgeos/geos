@@ -14,6 +14,7 @@
  **********************************************************************/
 
 #include <geos/algorithm/PointLocation.h>
+#include <geos/algorithm/RayCrossingCounter.h>
 #include <geos/algorithm/locate/SimplePointInAreaLocator.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Polygon.h>
@@ -86,7 +87,7 @@ SimplePointInAreaLocator::locatePointInPolygon(const Coordinate& p, const Polygo
         if (hole->getEnvelopeInternal()->contains(p))
         {
           cl = hole->getCoordinatesRO();
-          int holeLoc = CGAlgorithms::locatePointInRing(p,*cl);
+          int holeLoc = RayCrossingCounter::locatePointInRing(p,*cl);
           if (holeLoc == Location::BOUNDARY)
               return Location::BOUNDARY;
           if (holeLoc == Location::INTERIOR)

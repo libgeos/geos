@@ -17,6 +17,7 @@
 #ifndef GEOS_ALGORITHM_LOCATE_INDEXEDPOINTINAREALOCATOR_H
 #define GEOS_ALGORITHM_LOCATE_INDEXEDPOINTINAREALOCATOR_H
 
+#include <geos/geom/LineSegment.h>
 #include <geos/algorithm/locate/PointOnGeometryLocator.h> // inherited
 #include <geos/index/ItemVisitor.h> // inherited
 #include <geos/index/intervalrtree/SortedPackedIntervalRTree.h> // inherited
@@ -32,7 +33,6 @@ namespace geom {
 class Geometry;
 class Coordinate;
 class CoordinateSequence;
-class LineSegment;
 }
 }
 
