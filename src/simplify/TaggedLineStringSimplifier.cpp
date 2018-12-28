@@ -27,6 +27,7 @@
 //#include <geos/geom/GeometryFactory.h>
 //#include <geos/geom/CoordinateSequenceFactory.h>
 
+#include <algorithm>
 #include <cassert>
 #include <memory>
 
@@ -94,8 +95,6 @@ TaggedLineStringSimplifier::simplifySection(std::size_t i,
 	          << std::endl;
 #endif
 
-	vector<std::size_t> sectionIndex(2);
-
 	if((i+1) == j)
 	{
 
@@ -145,10 +144,7 @@ TaggedLineStringSimplifier::simplifySection(std::size_t i,
 	// test if flattened section would cause intersection
 	LineSegment candidateSeg(linePts->getAt(i), linePts->getAt(j));
 
-	sectionIndex[0] = i;
-	sectionIndex[1] = j;
-
-	if (hasBadIntersection(line, sectionIndex, candidateSeg))
+	if (hasBadIntersection(line, std::make_pair(i, j), candidateSeg))
 			isValidToSimplify = false;
 
 	if (isValidToSimplify)
@@ -191,7 +187,7 @@ TaggedLineStringSimplifier::flatten(std::size_t start, std::size_t end)
 bool
 TaggedLineStringSimplifier::hasBadIntersection(
 		const TaggedLineString* parentLine,
-		const vector<std::size_t>& sectionIndex,
+		const pair<size_t, size_t>& sectionIndex,
 		const LineSegment& candidateSeg)
 {
 	if (hasBadOutputIntersection(candidateSeg))
@@ -211,13 +207,8 @@ TaggedLineStringSimplifier::hasBadOutputIntersection(
 	unique_ptr< vector<LineSegment*> > querySegs =
 		outputIndex->query(&candidateSeg);
 
-	for (vector<LineSegment*>::iterator
-			it = querySegs->begin(), iEnd = querySegs->end();
-			it != iEnd;
-			++it)
+	for (const LineSegment* querySeg : *querySegs)
 	{
-		LineSegment* querySeg = *it;
-		assert(querySeg);
 		if (hasInteriorIntersection(*querySeg, candidateSeg))
 		{
 			return true;
@@ -241,30 +232,18 @@ TaggedLineStringSimplifier::hasInteriorIntersection(
 bool
 TaggedLineStringSimplifier::hasBadInputIntersection(
 		const TaggedLineString* parentLine,
-		const vector<std::size_t>& sectionIndex,
+		const pair<std::size_t, std::size_t>& sectionIndex,
 		const LineSegment& candidateSeg)
 {
 	unique_ptr< vector<LineSegment*> > querySegs =
 		inputIndex->query(&candidateSeg);
 
-	for (vector<LineSegment*>::iterator
-			it = querySegs->begin(), iEnd = querySegs->end();
-			it != iEnd;
-			++it)
+	for (const LineSegment* ls : *querySegs)
 	{
-		assert(*it);
-		assert(dynamic_cast<TaggedLineSegment*>(*it));
-		TaggedLineSegment* querySeg =
-			static_cast<TaggedLineSegment*>(*it);
+		const TaggedLineSegment* querySeg = static_cast<const TaggedLineSegment*>(ls);
 
-		if (hasInteriorIntersection(*querySeg, candidateSeg))
+		if (!isInLineSection(parentLine, sectionIndex, querySeg) && hasInteriorIntersection(*querySeg, candidateSeg))
 		{
-
-			if ( isInLineSection(parentLine,
-					sectionIndex, querySeg) )
-			{
-				continue;
-			}
 
 			return true;
 		}
@@ -277,7 +256,7 @@ TaggedLineStringSimplifier::hasBadInputIntersection(
 bool
 TaggedLineStringSimplifier::isInLineSection(
 		const TaggedLineString* line,
-		const vector<std::size_t>& sectionIndex,
+		const pair<size_t, size_t>& sectionIndex,
 		const TaggedLineSegment* seg)
 {
 	// not in this line
@@ -285,7 +264,7 @@ TaggedLineStringSimplifier::isInLineSection(
 		return false;
 
 	std::size_t segIndex = seg->getIndex();
-	if (segIndex >= sectionIndex[0] && segIndex < sectionIndex[1])
+	if (segIndex >= sectionIndex.first && segIndex < sectionIndex.second)
 		return true;
 
 	return false;

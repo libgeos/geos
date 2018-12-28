@@ -20,6 +20,7 @@
 #define GEOS_IDX_QUADTREE_NODEBASE_H
 
 #include <geos/export.h>
+#include <array>
 #include <vector>
 #include <string>
 
@@ -119,7 +120,7 @@ protected:
 	 *
 	 * Nodes are owned by this class
 	 */
-	Node* subnode[4];
+	std::array<Node*, 4> subnodes;
 
 	virtual bool isSearchMatch(const geom::Envelope& searchEnv) const=0;
 };
@@ -130,8 +131,11 @@ protected:
 inline bool
 NodeBase::hasChildren() const
 {
-	for (int i = 0; i < 4; i++)
-		if (subnode[i]) return true;
+	for (const auto& subnode : subnodes) {
+		if (subnode != nullptr)
+			return true;
+	}
+
 	return false;
 }
 

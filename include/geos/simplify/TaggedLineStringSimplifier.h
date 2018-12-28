@@ -112,11 +112,11 @@ private:
 			double& maxDistance);
 
 	bool hasBadIntersection(const TaggedLineString* parentLine,
-                       const std::vector<std::size_t>& sectionIndex,
+                       const std::pair<std::size_t, std::size_t>& sectionIndex,
                        const geom::LineSegment& candidateSeg);
 
 	bool hasBadInputIntersection(const TaggedLineString* parentLine,
-                       const std::vector<std::size_t>& sectionIndex,
+                       const std::pair<std::size_t, std::size_t>& sectionIndex,
                        const geom::LineSegment& candidateSeg);
 
 	bool hasBadOutputIntersection(const geom::LineSegment& candidateSeg);
@@ -137,7 +137,7 @@ private:
 	 */
 	static bool isInLineSection(
 		const TaggedLineString* parentLine,
-		const std::vector<std::size_t>& sectionIndex,
+		const std::pair<std::size_t, std::size_t>& sectionIndex,
 		const TaggedLineSegment* seg);
 
 	/** \brief
