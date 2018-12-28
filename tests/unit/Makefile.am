@@ -62,12 +62,12 @@ geos_unit_SOURCES = \
 	geom/CoordinateTest.cpp \
 	geom/DimensionTest.cpp \
 	geom/EnvelopeTest.cpp \
+	geom/GeometryCollectionTest.cpp \
 	geom/Geometry/clone.cpp \
 	geom/Geometry/coversTest.cpp \
 	geom/Geometry/equalsTest.cpp \
 	geom/Geometry/isRectangleTest.cpp \
 	geom/Geometry/normalize.cpp \
-	geom/GeometryCollectionTest.cpp \
 	geom/GeometryFactoryTest.cpp \
 	geom/IntersectionMatrixTest.cpp \
 	geom/LinearRingTest.cpp \
