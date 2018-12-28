@@ -103,30 +103,30 @@ PolygonBuilder::add(PlanarGraph *graph)
 void
 PolygonBuilder::add(const vector<DirectedEdge*> *dirEdges,
 		const vector<Node*> *nodes)
-    //throw(TopologyException *)
+	//throw(TopologyException *)
 {
 	PlanarGraph::linkResultDirectedEdges(nodes->begin(), nodes->end());
 
-    vector<MaximalEdgeRing*> maxEdgeRings;
-    buildMaximalEdgeRings(dirEdges, maxEdgeRings);
+	vector<MaximalEdgeRing*> maxEdgeRings;
+	buildMaximalEdgeRings(dirEdges, maxEdgeRings);
 
-    vector<EdgeRing*> freeHoleList;
-    vector<MaximalEdgeRing*> edgeRings;
-    buildMinimalEdgeRings(maxEdgeRings, shellList, freeHoleList, edgeRings);
+	vector<EdgeRing*> freeHoleList;
+	vector<MaximalEdgeRing*> edgeRings;
+	buildMinimalEdgeRings(maxEdgeRings, shellList, freeHoleList, edgeRings);
 
-    sortShellsAndHoles(edgeRings, shellList, freeHoleList);
+	sortShellsAndHoles(edgeRings, shellList, freeHoleList);
 
-    vector<FastPIPRing> indexedshellist;
-    for (auto const& shell : shellList)
-    {
-        FastPIPRing pipRing { shell,new geos::algorithm::locate::IndexedPointInAreaLocator(*shell->getLinearRing()) };
-        indexedshellist.push_back(pipRing);
-    }
-    placeFreeHoles(indexedshellist, freeHoleList);
+	vector<FastPIPRing> indexedshellist;
+	for (auto const& shell : shellList)
+	{
+		FastPIPRing pipRing { shell,new geos::algorithm::locate::IndexedPointInAreaLocator(*shell->getLinearRing()) };
+		indexedshellist.push_back(pipRing);
+	}
+	placeFreeHoles(indexedshellist, freeHoleList);
 	//Assert: every hole on freeHoleList has a shell assigned to it
 
-    for (auto const& shell : indexedshellist)
-        delete shell.pipLocator;
+	for (auto const& shell : indexedshellist)
+		delete shell.pipLocator;
 }
 
 /*public*/
@@ -155,9 +155,9 @@ PolygonBuilder::buildMaximalEdgeRings(const vector<DirectedEdge*> *dirEdges,
 		DirectedEdge *de=(*dirEdges)[i];
 #if GEOS_DEBUG
 	cerr << "  dirEdge " << i << endl
-	     << de->printEdge() << endl
-	     << " inResult:" << de->isInResult() << endl
-	     << " isArea:" << de->getLabel().isArea() << endl;
+		 << de->printEdge() << endl
+		 << " inResult:" << de->isInResult() << endl
+		 << " isArea:" << de->getLabel().isArea() << endl;
 #endif
 		if (de->isInResult() && de->getLabel().isArea())
 		{
@@ -314,14 +314,14 @@ PolygonBuilder::placeFreeHoles(vector<FastPIPRing>& newShellList,
 				{
 					geom = (*rIt)->toPolygon(geometryFactory);
 					std::cerr << "INSERT INTO shells VALUES ('"
-					          << *geom
-					          << "');" << std::endl;
+							  << *geom
+							  << "');" << std::endl;
 					delete geom;
 				}
 				geom = hole->toPolygon(geometryFactory);
 				std::cerr << "INSERT INTO hole VALUES ('"
-				          << *geom
-				          << "');" << std::endl;
+						  << *geom
+						  << "');" << std::endl;
 				delete geom;
 #endif
 				//assert(shell!=NULL); // unable to assign hole to a shell
@@ -336,7 +336,7 @@ PolygonBuilder::placeFreeHoles(vector<FastPIPRing>& newShellList,
 /*private*/
 EdgeRing*
 PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
-    vector<FastPIPRing>& newShellList)
+	vector<FastPIPRing>& newShellList)
 {
 	LinearRing *testRing=testEr->getLinearRing();
 	const Envelope *testEnv=testRing->getEnvelopeInternal();
@@ -357,7 +357,7 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
 		Coordinate testPt = operation::polygonize::EdgeRing::ptNotInList(testRing->getCoordinatesRO(), tsrcs);
 		bool isContained=false;
 
-    if (tryShell.pipLocator->locate(&testPt) != Location::EXTERIOR)
+	if (tryShell.pipLocator->locate(&testPt) != Location::EXTERIOR)
 			isContained=true;
 
 		// check if this new containing ring is smaller than
