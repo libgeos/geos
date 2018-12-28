@@ -345,7 +345,7 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
 
 	for(auto const& tryShell: newShellList)
 	{
-		LinearRing *tryShellRing= get<0>(tryShell)->getLinearRing();
+		LinearRing *tryShellRing = tryShell.edgeRing->getLinearRing();
 		const Envelope *tryShellEnv=tryShellRing->getEnvelopeInternal();
 		// the hole envelope cannot equal the shell envelope
 		// (also guards against testing rings against themselves)
