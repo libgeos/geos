@@ -342,7 +342,6 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
 
 	for(auto const& tryShell: newShellList)
 	{
-        ;
 		LinearRing *tryShellRing= get<0>(tryShell)->getLinearRing();
 		const Envelope *tryShellEnv=tryShellRing->getEnvelopeInternal();
 		// the hole envelope cannot equal the shell envelope
@@ -355,8 +354,9 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
 		Coordinate testPt = operation::polygonize::EdgeRing::ptNotInList(testRing->getCoordinatesRO(), tsrcs);
 		bool isContained=false;
 
-    if (get<1>(tryShell)->locate(&testPt) != Location::EXTERIOR)
-			isContained=true;
+		if (get<1>(tryShell)->locate(&testPt) != Location::EXTERIOR) {
+			isContained = true;
+		}
 
 		// check if this new containing ring is smaller than
 		// the current minimum ring
