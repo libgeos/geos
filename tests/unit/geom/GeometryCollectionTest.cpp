@@ -32,8 +32,6 @@ namespace tut {
 	// Test Cases
 	//
 
-#if 0
-
 	// Test of user's constructor to build empty Point
 	template<>
     template<>
@@ -79,5 +77,4 @@ namespace tut {
 		gf->destroyGeometry(geom_col);
 		gf->destroyGeometry(clone);
 	}
-#endif
 } // namespace tut
