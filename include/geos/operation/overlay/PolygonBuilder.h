@@ -153,7 +153,10 @@ private:
 		std::vector<geomgraph::EdgeRing*> &newShellList,
 		std::vector<geomgraph::EdgeRing*> &freeHoleList);
 
-    using FastPIPRing = std::tuple<geomgraph::EdgeRing*, algorithm::locate::IndexedPointInAreaLocator*>;
+	struct FastPIPRing {
+		geomgraph::EdgeRing* edgeRing;
+		algorithm::locate::IndexedPointInAreaLocator* pipLocator;
+	};
 
 	/** \brief
 	 * This method determines finds a containing shell for all holes
