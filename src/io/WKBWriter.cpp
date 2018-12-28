@@ -203,6 +203,8 @@ WKBWriter::writeGeometryCollection(const GeometryCollection &g,
 
 	auto ngeoms = g.getNumGeometries();
 	writeInt(static_cast<int>(ngeoms));
+	auto orig_includeSRID = includeSRID;
+	includeSRID = false;
 
 	assert(outStream);
 	for (std::size_t i=0; i<ngeoms; i++)
@@ -212,6 +214,7 @@ WKBWriter::writeGeometryCollection(const GeometryCollection &g,
 
 		write(*elem, *outStream);
 	}
+	includeSRID = orig_includeSRID;
 }
 
 void

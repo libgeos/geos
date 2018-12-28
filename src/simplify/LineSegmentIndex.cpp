@@ -105,30 +105,12 @@ public:
 
 };
 
-/*public*/
-LineSegmentIndex::LineSegmentIndex()
-	:
-	index(new Quadtree())
-{
-}
-
-/*public*/
-LineSegmentIndex::~LineSegmentIndex()
-{
-	for (size_t i=0, n=newEnvelopes.size(); i<n; ++i)
-	{
-		delete newEnvelopes[i];
-	}
-}
 
 /*public*/
 void
 LineSegmentIndex::add(const TaggedLineString& line)
 {
-	const vector<TaggedLineSegment*>& segs = line.getSegments();
-	for (size_t i=0, n=segs.size(); i<n; ++i)
-	{
-		const LineSegment* seg = segs[i];
+	for (const LineSegment* seg : line.getSegments()) {
 		add(seg);
 	}
 }
@@ -137,12 +119,13 @@ LineSegmentIndex::add(const TaggedLineString& line)
 void
 LineSegmentIndex::add(const LineSegment* seg)
 {
-	Envelope* env = new Envelope(seg->p0, seg->p1);
-	newEnvelopes.push_back(env);
+	std::unique_ptr<Envelope> env{new Envelope(seg->p0, seg->p1)};
 
 	// We need a cast because index wants a non-const,
-	// altought it won't change the argument
-	index->insert(env, (LineSegment*)seg);
+	// although it won't change the argument
+	index.insert(env.get(), const_cast<LineSegment*>(seg));
+
+	newEnvelopes.push_back(std::move(env));
 }
 
 /*public*/
@@ -152,18 +135,18 @@ LineSegmentIndex::remove(const LineSegment* seg)
 	Envelope env(seg->p0, seg->p1);
 
 	// We need a cast because index wants a non-const
-	// altought it won't change the argument
-	index->remove(&env, (LineSegment*)seg);
+	// although it won't change the argument
+	index.remove(&env, const_cast<LineSegment*>(seg));
 }
 
 /*public*/
 unique_ptr< vector<LineSegment*> >
-LineSegmentIndex::query(const LineSegment* querySeg) const
+LineSegmentIndex::query(const LineSegment* querySeg)
 {
 	Envelope env(querySeg->p0, querySeg->p1);
 
 	LineSegmentVisitor visitor(querySeg);
-	index->query(&env, visitor);
+	index.query(&env, visitor);
 
 	unique_ptr< vector<LineSegment*> > itemsFound = visitor.getItems();
 

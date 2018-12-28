@@ -66,13 +66,6 @@ Quadtree::ensureExtent(const Envelope *itemEnv, double minExtent)
 }
 
 /*public*/
-Quadtree::~Quadtree()
-{
-	for (unsigned int i=0; i<newEnvelopes.size(); i++)
-		delete newEnvelopes[i];
-}
-
-/*public*/
 int
 Quadtree::depth()
 {
@@ -93,7 +86,7 @@ Quadtree::insert(const Envelope *itemEnv, void* item)
 	collectStats(*itemEnv);
 
 	Envelope *insertEnv=ensureExtent(itemEnv,minExtent);
-	if ( insertEnv != itemEnv ) newEnvelopes.push_back(insertEnv);
+	if ( insertEnv != itemEnv ) newEnvelopes.emplace_back(insertEnv);
 	root.insert(insertEnv,item);
 #if GEOS_DEBUG
 	cerr<<"Quadtree::insert("<<itemEnv->toString()<<", "<<item<<")"<<endl;
