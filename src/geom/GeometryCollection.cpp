@@ -400,11 +400,11 @@ GeometryCollection::reverse() const
 }
 
 bool
-GeometryCollection::intersectsWithEnvelope(const Envelope &envelope) const
+GeometryCollection::intersectsWithEnvelope(const Envelope &env) const
 {
 	for (size_t i = 0; i < geometries->size(); ++i)
 	{
-		if ((*geometries)[i]->getEnvelopeInternal()->intersects(envelope))
+		if ((*geometries)[i]->getEnvelopeInternal()->intersects(env))
 			return true;
 	}
 	return false;
