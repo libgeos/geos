@@ -74,10 +74,46 @@ RelateComputer::computeIM()
 {
 	// since Geometries are finite and embedded in a 2-D space, the EE element must always be 2
 	im->set(Location::EXTERIOR,Location::EXTERIOR,2);
+	const Geometry* geom1 = (*arg)[0]->getGeometry();
+	const Geometry* geom2 = (*arg)[1]->getGeometry();
+
 	// if the Geometries don't overlap there is nothing to do
-	const Envelope *e1=(*arg)[0]->getGeometry()->getEnvelopeInternal();
-	const Envelope *e2=(*arg)[1]->getGeometry()->getEnvelopeInternal();
-	if (!e1->intersects(e2)) {
+	const Envelope *e1=geom1->getEnvelopeInternal();
+	const Envelope *e2=geom2->getEnvelopeInternal();
+	bool isDisjoint = !e1->intersects(e2);
+
+	const GeometryCollection *collection1 = dynamic_cast<const GeometryCollection *>(geom1);
+	const GeometryCollection *collection2 = dynamic_cast<const GeometryCollection *>(geom2);
+	if (!isDisjoint && (collection1 || collection2))
+	{
+		//test if multigeometries are disjoint (don't have overlapping parts)
+		if (collection1 && collection2)
+		{
+			bool intersectionsFound = false;
+			for (GeometryCollection::const_iterator it = collection1->begin(), e = collection1->end(); it < e; ++it)
+			{
+				const Envelope* partEnv = (*it)->getEnvelopeInternal();
+				if (e2->intersects(partEnv) && collection2->intersectsWithEnvelope(*partEnv))
+				{
+					intersectionsFound = true;
+					break;
+				}
+			}
+			isDisjoint = !intersectionsFound;
+		}
+		else
+			if (collection1)
+			{
+				isDisjoint = !collection1->intersectsWithEnvelope(*e2);
+			}
+			else
+				if (collection2)
+				{
+					isDisjoint = !collection2->intersectsWithEnvelope(*e1);
+				}
+	}
+
+	if (isDisjoint) {
 		computeDisjointIM(im.get());
 		return im.release();
 	}

@@ -168,6 +168,8 @@ public:
      */
 	Geometry* reverse() const override;
 
+	bool intersectsWithEnvelope(const Envelope &envelope) const;
+
 protected:
 
 	GeometryCollection(const GeometryCollection &gc);

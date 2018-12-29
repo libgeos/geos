@@ -399,5 +399,16 @@ GeometryCollection::reverse() const
 	return getFactory()->createGeometryCollection(reversed);
 }
 
+bool
+GeometryCollection::intersectsWithEnvelope(const Envelope &envelope) const
+{
+	for (size_t i = 0; i < geometries->size(); ++i)
+	{
+		if ((*geometries)[i]->getEnvelopeInternal()->intersects(envelope))
+			return true;
+	}
+	return false;
+}
+
 } // namespace geos::geom
 } // namespace geos
