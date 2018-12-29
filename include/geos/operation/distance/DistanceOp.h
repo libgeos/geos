@@ -24,6 +24,7 @@
 
 #include <geos/algorithm/PointLocator.h> // for composition
 
+#include <array>
 #include <vector>
 
 #ifdef _MSC_VER
@@ -209,8 +210,8 @@ private:
 	 */
 	std::vector<GeometryLocation*>* nearestLocations();
 
-	// input (TODO: use two references instead..)
-	std::vector<geom::Geometry const*> geom;
+	// input
+	std::array<geom::Geometry const*, 2> geom;
 	double terminateDistance;
 
 	// working
