@@ -168,7 +168,7 @@ public:
      */
 	Geometry* reverse() const override;
 
-	bool intersectsWithEnvelope(const Envelope &env) const;
+	static bool envelopeIntersects(const Geometry *geom1, const Geometry *geom2);
 
 protected:
 
@@ -207,6 +207,9 @@ protected:
 	Envelope::Ptr computeEnvelopeInternal() const override;
 
 	int compareToSameClass(const Geometry *gc) const override;
+
+private:
+	bool intersectsWithEnvelope(const Envelope &env) const;
 
 };
 

@@ -41,43 +41,7 @@ BasicPreparedGeometry::setGeometry( const geom::Geometry * geom )
 bool
 BasicPreparedGeometry::envelopesIntersect( const geom::Geometry* g) const
 {
-	const Envelope *ebase = baseGeom->getEnvelopeInternal();
-	const Envelope *eg = g->getEnvelopeInternal();
-
-	bool intersect = ebase->intersects(eg);
-	if (!intersect)
-		return false;
-
-	const GeometryCollection *collectionbase = dynamic_cast<const GeometryCollection *>(baseGeom);
-	const GeometryCollection *collectiong = dynamic_cast<const GeometryCollection *>(g);
-	if (collectionbase || collectiong)
-	{
-		//test if multigeometries are disjoint (don't have overlapping parts)
-		if (collectionbase && collectiong)
-		{
-			for (GeometryCollection::const_iterator it = collectionbase->begin(), e = collectionbase->end(); it < e; ++it)
-			{
-				const Envelope* partEnv = (*it)->getEnvelopeInternal();
-				if (eg->intersects(partEnv) && collectiong->intersectsWithEnvelope(*partEnv))
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-		else
-			if (collectionbase)
-			{
-				return collectionbase->intersectsWithEnvelope(*eg);
-			}
-			else
-				//implied by containig if: if (collectiong)
-				{
-					return collectiong->intersectsWithEnvelope(*ebase);
-				}
-	}
-	else
-		return true;
+	return GeometryCollection::envelopeIntersects(baseGeom, g);
 }
 
 bool
