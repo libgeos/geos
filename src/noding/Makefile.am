@@ -28,6 +28,6 @@ libnoding_la_SOURCES = \
 	SegmentString.cpp \
 	SegmentStringUtil.cpp \
 	SimpleNoder.cpp \
-	SingleInteriorIntersectionFinder.cpp
+	NodingIntersectionFinder.cpp
 
 libnoding_la_LIBADD = snapround/libsnapround.la

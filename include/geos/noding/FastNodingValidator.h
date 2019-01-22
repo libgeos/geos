@@ -19,7 +19,7 @@
 #ifndef GEOS_NODING_FASTNODINGVALIDATOR_H
 #define GEOS_NODING_FASTNODINGVALIDATOR_H
 
-#include <geos/noding/SingleInteriorIntersectionFinder.h> // for composition
+#include <geos/noding/NodingIntersectionFinder.h> // for composition
 #include <geos/algorithm/LineIntersector.h> // for composition
 
 #include <memory>
@@ -39,16 +39,23 @@ namespace noding { // geos.noding
 /** \brief
  * Validates that a collection of {@link SegmentString}s is correctly noded.
  *
- * Uses indexes to improve performance.
- * Does NOT check a-b-a collapse situations.
- * Also does not check for endpt-interior vertex intersections.
- * This should not be a problem, since the noders should be
- * able to compute intersections between vertices correctly.
- * User may either test the valid condition, or request that a
- * {@link TopologyException}
- * be thrown.
+ * Indexing is used to improve performance.
+ * By default validation stops after a single
+ * non-noded intersection is detected.
+ * Alternatively, it can be requested to detect all intersections
+ * by using {@link #setFindAllIntersections(boolean)}.
  *
- * @version 1.7
+* The validator does not check for topology collapse situations
+ * (e.g. where two segment strings are fully co-incident).
+ *
+ * The validator checks for the following situations which indicated incorrect noding:
+ *
+ * - Proper intersections between segments (i.e. the intersection is interior to both segments)
+ * - Intersections at an interior vertex (i.e. with an endpoint or another interior vertex)
+ *
+ * The client may either test the {@link #isValid()} condition,
+ * or request that a suitable {@link TopologyException} be thrown.
+ *
  */
 class FastNodingValidator
 {
@@ -98,7 +105,7 @@ private:
 
 	std::vector<noding::SegmentString*>& segStrings;
 
-	std::unique_ptr<SingleInteriorIntersectionFinder> segInt;
+	std::unique_ptr<NodingIntersectionFinder> segInt;
 
 	bool isValidVar;
 
