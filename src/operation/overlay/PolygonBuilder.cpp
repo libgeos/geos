@@ -355,18 +355,18 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
 
 		const CoordinateSequence *tsrcs = tryShellRing->getCoordinatesRO();
 		Coordinate testPt = operation::polygonize::EdgeRing::ptNotInList(testRing->getCoordinatesRO(), tsrcs);
-		bool isContained=false;
 
-	if (tryShell.pipLocator->locate(&testPt) != Location::EXTERIOR)
-			isContained=true;
+		bool isContained = false;
+        if (tryShell.pipLocator->locate(&testPt) != Location::EXTERIOR)
+			isContained = true;
 
 		// check if this new containing ring is smaller than
 		// the current minimum ring
 		if (isContained) {
 			if (minShell==nullptr
 				|| minShellEnv->contains(tryShellEnv)) {
-					minShell= tryShell.edgeRing;
-					minShellEnv=minShell->getLinearRing()->getEnvelopeInternal();
+					minShell = tryShell.edgeRing;
+					minShellEnv = minShell->getLinearRing()->getEnvelopeInternal();
 			}
 		}
 	}
@@ -392,20 +392,6 @@ PolygonBuilder::computePolygons(vector<EdgeRing*>& newShellList)
 	return resultPolyList;
 }
 
-/*public*/
-bool
-PolygonBuilder::containsPoint(const Coordinate& p)
-{
-	for(size_t i=0, size=shellList.size(); i<size; ++i)
-	{
-		EdgeRing *er=shellList[i];
-		if ( er->containsPoint(p) )
-		{
-			return true;
-		}
-	}
-	return false;
-}
 
 } // namespace geos.operation.overlay
 } // namespace geos.operation

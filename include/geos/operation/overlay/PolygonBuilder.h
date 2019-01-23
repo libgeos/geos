@@ -85,12 +85,6 @@ public:
 
   	std::vector<geom::Geometry*>* getPolygons();
 
-	/** \brief
-	 * Checks the current set of shells (with their associated holes) to
-	 * see if any of them contain the point.
-	 */
-	bool containsPoint(const geom::Coordinate& p);
-
 private:
 
 	const geom::GeometryFactory *geometryFactory;
