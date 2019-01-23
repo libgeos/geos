@@ -341,12 +341,12 @@ Polygon::normalize(LinearRing *ring, bool clockwise)
 	if (ring->isEmpty()) {
 		return;
 	}
-	CoordinateSequence* uniqueCoordinates=ring->getCoordinates();
+	CoordinateSequence* uniqueCoordinates = ring->getCoordinates();
 	uniqueCoordinates->deleteAt(uniqueCoordinates->getSize()-1);
-	const Coordinate* minCoordinate=CoordinateSequence::minCoordinate(uniqueCoordinates);
+	const Coordinate* minCoordinate = CoordinateSequence::minCoordinate(uniqueCoordinates);
 	CoordinateSequence::scroll(uniqueCoordinates, minCoordinate);
 	uniqueCoordinates->add(uniqueCoordinates->getAt(0));
-	if (algorithm::Orientation::isCCW(uniqueCoordinates)==clockwise) {
+	if (algorithm::Orientation::isCCW(uniqueCoordinates) == clockwise) {
 		CoordinateSequence::reverse(uniqueCoordinates);
 	}
 	ring->setPoints(uniqueCoordinates);

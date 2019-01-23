@@ -64,8 +64,8 @@ public:
     * ( {@link #Orientation::COUNTERCLOCKWISE},
     * {@link #Orientation::CLOCKWISE}, or {@link #Orientation::STRAIGHT} )
     */
-    static int index(const geom::Coordinate &p1,
-                     const geom::Coordinate &p2, const geom::Coordinate &q);
+    static int index(const geom::Coordinate &p1, const geom::Coordinate &p2,
+                     const geom::Coordinate &q);
 
     /**
     * Computes whether a ring defined by an array of {@link Coordinate}s is
@@ -85,8 +85,6 @@ public:
     *           if there are too few points to determine orientation (&lt; 4)
     */
     static bool isCCW(const geom::CoordinateSequence* ring);
-
-
 
 };
 
