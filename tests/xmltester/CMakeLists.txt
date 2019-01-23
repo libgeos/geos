@@ -107,6 +107,7 @@ if(GEOS_ENABLE_TESTS)
     ${XMLTESTS_DIR}/safe/16595.xml
     ${XMLTESTS_DIR}/safe/16596.xml
     ${XMLTESTS_DIR}/safe/TestBufferJagged.xml
+    ${XMLTESTS_DIR}/stmlf/stmlf-cases-20061020-invalid-output.xml
     ${XMLTESTS_DIR}/stmlf/stmlf-cases-20061020.xml
     ${XMLTESTS_DIR}/stmlf/stmlf-cases-20070119.xml
     ${XMLTESTS_DIR}/ticket/bug176.xml
