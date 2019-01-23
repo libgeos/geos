@@ -131,6 +131,7 @@ if(GEOS_ENABLE_TESTS)
     ${XMLTESTS_DIR}/ticket/bug615.xml
     ${XMLTESTS_DIR}/ticket/bug716.xml
     ${XMLTESTS_DIR}/ticket/bug837.xml
+    ${XMLTESTS_DIR}/ticket/bug838.xml
     ${XMLTESTS_DIR}/validate/TestRelateAA-big.xml
     ${XMLTESTS_DIR}/validate/TestRelateAA.xml
     ${XMLTESTS_DIR}/validate/TestRelateAC.xml

@@ -121,14 +121,13 @@ NodingIntersectionFinder::processIntersections(
     if (isInteriorInt || isInteriorVertexInt)
     {
         // found an intersection!
-        // TODO: record endpoint intersection(s)
-        // Coordinate intSegments[4];
-        // intSegments[0] = p00;
-        // intSegments[1] = p01;
-        // intSegments[2] = p10;
-        // intSegments[3] = p11;
+        intSegments.push_back(p00);
+        intSegments.push_back(p01);
+        intSegments.push_back(p10);
+        intSegments.push_back(p11);
 
         interiorIntersection = li.getIntersection(0);
+        // TODO: record endpoint intersection(s)
         // if (keepIntersections) intersections.add(interiorIntersection);
         intersectionCount++;
     }

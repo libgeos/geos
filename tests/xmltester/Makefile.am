@@ -100,6 +100,7 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/ticket/bug615.xml \
 	$(srcdir)/tests/ticket/bug716.xml \
 	$(srcdir)/tests/ticket/bug837.xml \
+	$(srcdir)/tests/ticket/bug838.xml \
 	$(srcdir)/tests/validate/TestRelateAA-big.xml \
 	$(srcdir)/tests/validate/TestRelateAA.xml \
 	$(srcdir)/tests/validate/TestRelateAC.xml \
