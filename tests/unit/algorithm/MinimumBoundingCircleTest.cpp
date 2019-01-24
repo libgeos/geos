@@ -61,16 +61,18 @@ namespace tut
             std::unique_ptr<Geometry> actual(geomFact->createMultiPoint(exPts));
             double actualRadius = mbc.getRadius();
             geos::geom::Coordinate actualCentre = mbc.getCentre();
-            //cout << "Centre = " << actualCentre << " Radius = " << actualRadius;
 
             geomOut.reset(reader.read(wktOut));
-            bool isEqual = geomOut->equals(geom.get());
+            bool isEqual = actual->equals(geomOut.get());
+
             // need this hack because apparently equals does not work for MULTIPOINT EMPTY
             if (geomOut->isEmpty() && geom->isEmpty())
                 isEqual = true;
-            // if (!isEqual) {
-            //   System.out.println("Actual = " + actual + ", Expected = " + expected);
-            // }
+            if (!isEqual) {
+                std::cout << "Centre = " << actualCentre << " Radius = " << actualRadius << " isEqual = " << isEqual << std::endl;
+                std::cout << "Actual:"   << std::endl << actual->toString() << std::endl;
+                std::cout << "Expected:" << std::endl << geomOut->toString() << std::endl;
+            }
             ensure(isEqual);
 
             if (centreOut.isNull()) {
@@ -117,6 +119,80 @@ namespace tut
             0);
 
     }
+
+    template<>
+    template<>
+    void object::test<2>()
+    {
+        Coordinate c(15, 15);
+        doMinimumBoundingCircleTest(
+            "MULTIPOINT ((10 10), (20 20))",
+            "MULTIPOINT ((10 10), (20 20))",
+            c,
+            7.0710678118654755);
+    }
+
+    template<>
+    template<>
+    void object::test<3>()
+    {
+        Coordinate c(20, 20);
+        doMinimumBoundingCircleTest(
+            "MULTIPOINT ((10 10), (20 20), (30 30))",
+            "MULTIPOINT ((10 10), (30 30))",
+            c,
+            14.142135623730951);
+    }
+
+    template<>
+    template<>
+    void object::test<4>()
+    {
+        Coordinate c(15, 15);
+        doMinimumBoundingCircleTest(
+            "MULTIPOINT ((10 10), (20 20), (10 20))",
+            "MULTIPOINT ((10 10), (20 20), (10 20))",
+            c,
+            7.0710678118654755);
+    }
+
+    template<>
+    template<>
+    void object::test<5>()
+    {
+        Coordinate c(150, 100);
+        doMinimumBoundingCircleTest(
+            "POLYGON ((100 100, 200 100, 150 90, 100 100))",
+            "MULTIPOINT ((100 100), (200 100))",
+            c,
+            50);
+    }
+
+    template<>
+    template<>
+    void object::test<6>()
+    {
+        Coordinate c(15, 15);
+        doMinimumBoundingCircleTest(
+            "MULTIPOINT ((10 10), (20 20), (10 20), (15 19))",
+            "MULTIPOINT ((10 10), (20 20), (10 20))",
+            c,
+            7.0710678118654755);
+    }
+
+    template<>
+    template<>
+    void object::test<7>()
+    {
+        Coordinate c(26284.84180271327, 65267.114509082545);
+        doMinimumBoundingCircleTest(
+            "POLYGON ((26426 65078, 26531 65242, 26096 65427, 26075 65136, 26426 65078))",
+            "MULTIPOINT ((26531 65242), (26075 65136), (26096 65427))",
+            c,
+            247.4360455914027);
+    }
+
+
 
 } // namespace tut
 
