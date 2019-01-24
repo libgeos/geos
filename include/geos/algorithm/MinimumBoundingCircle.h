@@ -68,7 +68,7 @@ public:
         centre.setNull();
     }
 
-	~MinimumBoundingCircle();
+	~MinimumBoundingCircle() {};
 
     /**
     * Gets a geometry which represents the Minimum Bounding Circle.

@@ -156,7 +156,7 @@ MinimumBoundingCircle::computeCentre()
 void
 MinimumBoundingCircle::compute()
 {
-    if (extremalPts.size() > 0) return;
+    if (!extremalPts.empty()) return;
 
     computeCirclePoints();
     computeCentre();
