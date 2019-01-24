@@ -66,6 +66,8 @@ public:
 	 */
 	void circumcentre(Coordinate& resultPoint);
 
+    static const Coordinate circumcentre(const Coordinate& p0, const Coordinate& p1, const Coordinate& p2);
+
 private:
 
 	/**

@@ -52,6 +52,17 @@ void Triangle::circumcentre(Coordinate& result)
 	result = Coordinate(ccx,ccy);
 }
 
+/* public static */
+const Coordinate
+Triangle::circumcentre(const Coordinate& p0, const Coordinate& p1, const Coordinate& p2)
+{
+    Triangle t(p0, p1, p2);
+    Coordinate c;
+    t.circumcentre(c);
+    return c;
+}
+
+
 double Triangle::det(double m00 , double m01 , double m10 , double m11) const
 {
 	return m00 * m11 - m01 * m10;
