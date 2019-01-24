@@ -3,6 +3,9 @@
 
 #include <string>
 
+namespace tut
+{
+
 #if defined(TUT_USE_POSIX)
 
 #include <sys/types.h>
