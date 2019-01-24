@@ -2,12 +2,12 @@
 #define TUT_RESULT_H_GUARD
 
 #include <string>
-#include <unistd.h>
-
-namespace tut
-{
 
 #if defined(TUT_USE_POSIX)
+
+#include <sys/types.h>
+#include <unistd.h>
+
 struct test_result_posix
 {
     test_result_posix()
