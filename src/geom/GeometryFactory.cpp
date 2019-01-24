@@ -34,6 +34,7 @@
 #include <geos/geom/Envelope.h>
 #include <geos/geom/util/CoordinateOperation.h>
 #include <geos/geom/util/GeometryEditor.h>
+#include <geos/util/GEOSException.h>
 #include <geos/util/IllegalArgumentException.h>
 
 #include <cassert>
@@ -746,7 +747,8 @@ GeometryFactory::buildGeometry(const vector<Geometry *> &fromGeoms) const
 	} else if (type == GEOS_POINT) {
 		return createMultiPoint(fromGeoms);
 	}
-	assert(0); // buildGeomtry encountered an unkwnon geometry type
+    geos::util::GEOSException("GeometryFactory::buildGeometry encountered an unknown geometry type!");
+    return fromGeoms[0]->clone();
 }
 
 /*public*/
