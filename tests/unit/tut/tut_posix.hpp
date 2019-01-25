@@ -13,6 +13,7 @@
 #include <cstdlib>
 #include <map>
 #include <iterator>
+#include <iostream>
 #include <functional>
 
 #include "tut_result.hpp"
