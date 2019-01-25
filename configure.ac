@@ -130,7 +130,7 @@ else
 fi
 
 dnl --------------------------------------------------------------------
-dnl - Append default C++ and C flags 
+dnl - Append default C++ and C flags
 dnl --------------------------------------------------------------------
 
 dnl In order for AC_LIBTOOL_COMPILER_OPTION to use
@@ -138,17 +138,20 @@ dnl the C compiler we need the hack below.
 dnl It is likely a bug in the libtool macro file to
 dnl require AC_LIBTOOL_LANG_CXX_CONFIG in *addition*
 dnl to AC_LANG(CXX) or AC_LANG_PUSH(CXX)/AC_LANG_POP()
-dnl 
+dnl
 AC_LIBTOOL_LANG_CXX_CONFIG
 
-# Set default AM_CXXFLAGS and AM_CFLAGS 
+# Set default AM_CXXFLAGS and AM_CFLAGS
 # -pedantic: ISO does not support long long
 # we add -Wno-long-long to avoid those messages
 WARNFLAGS=""
 AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -pedantic], [dummy_cv_pedantic], [-pedantic], [], [WARNFLAGS="$WARNFLAGS -pedantic"], [])
 AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -Wall], [dummy_cv_wall], [-Wall], [], [WARNFLAGS="$WARNFLAGS -Wall"], [])
-AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -ansi], [dummy_cv_ansi], [-ansi], [], [WARNFLAGS="$WARNFLAGS -ansi"], [])
 AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -Wno-long-long], [dummy_cv_no_long_long], [-Wno-long-long], [], [WARNFLAGS="$WARNFLAGS -Wno-long-long"], [])
+
+AC_LANG_PUSH([C++])
+AC_LIBTOOL_COMPILER_OPTION([if $compiler supports -ansi], [dummy_cv_ansi], [-ansi], [], [WARNFLAGS="$WARNFLAGS -ansi"], [])
+AC_LANG_POP([C++])
 
 # To make numerical computation more stable, we use --ffloat-store
 NUMERICFLAGS=""
@@ -278,9 +281,9 @@ if test x"$use_python" = xtrue ||
    test x"$use_ruby" = xtrue; then
   AC_PROG_SWIG(1.3.28)
   if test x"$SWIG" != "x"; then
-    SWIG_ENABLE_CXX	
-    AC_SUBST(SWIG)           
-    use_swig=true 
+    SWIG_ENABLE_CXX
+    AC_SUBST(SWIG)
+    use_swig=true
   else
     use_python=false
     use_ruby=false
@@ -294,14 +297,14 @@ dnl - check for python if enabled
 dnl --------------------------------------------------------------------
 
 if test x"$use_python" = xtrue; then
-	dnl Check for Python 
-  AM_PATH_PYTHON	
+	dnl Check for Python
+  AM_PATH_PYTHON
   SWIG_PYTHON
 
 	if test x"$PYTHON" = "x"; then
 		use_python=false
 	fi
-	
+
 	AC_SUBST(PYTHON)
 	AC_SUBST(SWIG_PYTHON_CPPFLAGS)
 	AC_SUBST(SWIG_PYTHON_OPT)
@@ -314,7 +317,7 @@ dnl - check for ruby if enabled
 dnl --------------------------------------------------------------------
 
 if test x"$use_ruby" = xtrue; then
-	dnl Check for Ruby 
+	dnl Check for Ruby
 	AC_RUBY_DEVEL
 
 	if test x"$RUBY" = x; then
@@ -329,7 +332,7 @@ dnl - check for php if enabled
 dnl --------------------------------------------------------------------
 
 if test x"$use_php" = xtrue; then
-	dnl Check for PHP 
+	dnl Check for PHP
 	AC_PATH_PROG(PHP_CONFIG, php-config)
 
 	if test x"$PHP_CONFIG" = x; then
@@ -383,7 +386,7 @@ dnl				AM_CXXFLAGS="$AM_CXXFLAGS -Wnon-virtual-dtor -Woverloaded-virtual"
 esac
 
 dnl --------------------------------------------------------------------
-dnl - check for boost 
+dnl - check for boost
 dnl --------------------------------------------------------------------
 
 dnl -- AX_BOOST(1.32)
@@ -414,13 +417,13 @@ AC_SUBST(CAPI_INTERFACE_AGE)
 dnl output stuff ----------------------------------------------------------
 
 AC_OUTPUT([
-	Makefile 
+	Makefile
 	capi/Makefile
 	capi/geos_c.h
 	doc/Doxyfile
 	doc/Makefile
 	macros/Makefile
-	src/Makefile 
+	src/Makefile
 	src/algorithm/Makefile
 	src/algorithm/locate/Makefile
 	src/algorithm/distance/Makefile
