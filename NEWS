@@ -2,6 +2,7 @@ Changes in 3.7.2
 2018-XX-XX
 
 - Bug fixes / improvements
+  - Envelope constructor using strtod (#875 Paul Ramsey)
 
 
 
