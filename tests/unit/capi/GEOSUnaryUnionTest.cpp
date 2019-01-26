@@ -1,4 +1,4 @@
-// 
+//
 // Test Suite for C-API GEOSUnaryUnion
 
 #include <tut.hpp>
@@ -31,7 +31,7 @@ namespace tut
             va_start(ap, fmt);
             std::vfprintf(stdout, fmt, ap);
             va_end(ap);
-        
+
             std::fprintf(stdout, "\n");
         }
 
@@ -42,7 +42,7 @@ namespace tut
             wktw_ = GEOSWKTWriter_create();
             GEOSWKTWriter_setTrim(wktw_, 1);
             GEOSWKTWriter_setOutputDimension(wktw_, 3);
-        }       
+        }
 
         std::string toWKT(GEOSGeometry* g)
         {
@@ -207,5 +207,18 @@ namespace tut
 
     }
 
+    // Self-union an empty linestring
+    template<>
+    template<>
+    void object::test<10>()
+    {
+        geom1_ = GEOSGeomFromWKT("LINESTRING EMPTY");
+        ensure( 0 != geom1_ );
+
+        geom2_ = GEOSUnaryUnion(geom1_);
+        ensure( 0 != geom2_ );
+
+        ensure_equals(toWKT(geom2_), std::string("GEOMETRYCOLLECTION EMPTY"));
+    }
 } // namespace tut
 

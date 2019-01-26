@@ -1,9 +1,21 @@
-Changes in 3.6.3dev
-YYYY-MM-DD
+Changes in 3.6.4
+2018-XX-XX
+
+- Bug fixes / improvements
+  - Fix crash in GEOSUnaryUnion with empty LineString
+    (#928, Sergey Fedoseev)
+  - Fix incorrect error return values in GEOSLength and
+    GEOSisValidDetail (#941, Dan Baston)
+  - Envelope constructor use strtod (#875)
+
+
+Changes in 3.6.3
+2018-08-06
 
 - Bug fixes / improvements
   - Include all CMake files in release (#753)
-  - Envelope constructor use strtod (#875)
+  - Remove BOM from source files, restoring support for GCC-4.9 (#846)
+  - Fix memory leak in GEOSSTRtree_nearest_r (#874, Dan Baston)
 
 Changes in 3.6.2
 2017-07-25

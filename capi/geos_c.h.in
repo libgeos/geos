@@ -60,8 +60,8 @@ extern "C" {
 #include <geos/version.h>
 #define GEOS_CAPI_VERSION_MAJOR 1
 #define GEOS_CAPI_VERSION_MINOR 10
-#define GEOS_CAPI_VERSION_PATCH 3
-#define GEOS_CAPI_VERSION "3.6.3-CAPI-1.10.3"
+#define GEOS_CAPI_VERSION_PATCH 4
+#define GEOS_CAPI_VERSION "3.6.4-CAPI-1.10.4"
 #else
 #ifndef GEOS_VERSION_MAJOR
 #define GEOS_VERSION_MAJOR @VERSION_MAJOR@
@@ -1032,7 +1032,7 @@ extern int GEOS_DLL GEOSGetNumInteriorRings_r(GEOSContextHandle_t handle,
 extern int GEOS_DLL GEOSGeomGetNumPoints_r(GEOSContextHandle_t handle,
                                        const GEOSGeometry* g);
 
-/* Return -1 on exception, Geometry must be a Point. */
+/* Return 0 on exception, otherwise 1, Geometry must be a Point. */
 extern int GEOS_DLL GEOSGeomGetX_r(GEOSContextHandle_t handle, const GEOSGeometry *g, double *x);
 extern int GEOS_DLL GEOSGeomGetY_r(GEOSContextHandle_t handle, const GEOSGeometry *g, double *y);
 
@@ -1666,9 +1666,18 @@ extern char GEOS_DLL GEOSWithin(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSContains(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSOverlaps(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSEquals(const GEOSGeometry* g1, const GEOSGeometry* g2);
-extern char GEOS_DLL GEOSEqualsExact(const GEOSGeometry* g1, const GEOSGeometry* g2, double tolerance);
 extern char GEOS_DLL GEOSCovers(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSCoveredBy(const GEOSGeometry* g1, const GEOSGeometry* g2);
+
+/**
+ * Determine pointwise equivalence of two geometries, by checking if each vertex of g2 is
+ * within tolerance of the corresponding vertex in g1.
+ * Unlike GEOSEquals, geometries that are topologically equivalent but have different
+ * representations (e.g., LINESTRING (0 0, 1 1) and MULTILINESTRING ((0 0, 1 1)) ) are not
+ * considered equivalent by GEOSEqualsExact.
+ * returns 2 on exception, 1 on true, 0 on false
+ */
+extern char GEOS_DLL GEOSEqualsExact(const GEOSGeometry* g1, const GEOSGeometry* g2, double tolerance);
 
 /************************************************************************
  *
@@ -1907,7 +1916,7 @@ extern int GEOS_DLL GEOSGetNumInteriorRings(const GEOSGeometry* g);
 /* Return -1 on exception, Geometry must be a LineString. */
 extern int GEOS_DLL GEOSGeomGetNumPoints(const GEOSGeometry* g);
 
-/* Return -1 on exception, Geometry must be a Point. */
+/* Return 0 on exception, otherwise 1, Geometry must be a Point. */
 extern int GEOS_DLL GEOSGeomGetX(const GEOSGeometry *g, double *x);
 extern int GEOS_DLL GEOSGeomGetY(const GEOSGeometry *g, double *y);
 
