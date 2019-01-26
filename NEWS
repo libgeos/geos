@@ -3,6 +3,7 @@ YYYY-MM-DD
 
 - Bug fixes / improvements
   - Include all CMake files in release (#753)
+  - Envelope constructor use strtod (#875)
 
 Changes in 3.6.2
 2017-07-25
