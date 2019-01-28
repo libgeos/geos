@@ -8,6 +8,7 @@ Changes in 3.6.4
     GEOSisValidDetail (#941, Dan Baston)
   - Envelope constructor use strtod (#875)
   - Polygon build failure in Overlay difference (#789 Paul Ramsey)
+  - Invalid union result from valid polygon inputs (#838)
 
 
 Changes in 3.6.3
