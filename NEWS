@@ -7,6 +7,7 @@ Changes in 3.6.4
   - Fix incorrect error return values in GEOSLength and
     GEOSisValidDetail (#941, Dan Baston)
   - Envelope constructor use strtod (#875)
+  - Polygon build failure in Overlay difference (#789 Paul Ramsey)
 
 
 Changes in 3.6.3
