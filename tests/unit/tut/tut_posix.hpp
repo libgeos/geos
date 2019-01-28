@@ -180,9 +180,9 @@ private:
     {
         // create pipe
         int fds[2];
-        ensure_errno("pipe() failed", ::pipe(fds) == 0);
+        ensure_errno("pipe() failed", pipe(fds) == 0);
 
-        pid_t pid = ::fork();
+        pid_t pid = fork();
 
         ensure_errno("fork() failed", pid >= 0);
 
