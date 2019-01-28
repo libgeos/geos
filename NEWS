@@ -5,6 +5,7 @@ Changes in 3.7.2
   - Envelope constructor using strtod (#875 Paul Ramsey)
   - Failure in CMake for OSX Framework (#936 Paul Ramsey)
   - Polygon build failure in Overlay difference (#789 Paul Ramsey)
+  - Invalid union result from valid polygon inputs (#838)
 
 
 
