@@ -6,7 +6,7 @@
 #
 # This is free software; you can redistribute and/or modify it under
 # the terms of the GNU Lesser General Public Licence as published
-# by the Free Software Foundation. 
+# by the Free Software Foundation.
 # See the COPYING file for more information.
 #
 #################################################################################
@@ -14,25 +14,26 @@
 file(GLOB_RECURSE geos_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 file(GLOB_RECURSE geos_ALL_HEADERS ${CMAKE_SOURCE_DIR}/include/*.h) # fix source_group issue
 
+# Include CAPI in OS X framework binary and in static libs
+set(geos_c_SOURCES
+  ${CMAKE_CURRENT_SOURCE_DIR}/../capi/geos_c.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/../capi/geos_ts_c.cpp)
+
 if(GEOS_ENABLE_MACOSX_FRAMEWORK)
   # OS X frameworks don't have static libs
   # also 1 binary, so include CAPI here
   # and, make name all caps
 
-  set(geos_c_SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/../capi/geos_c.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../capi/geos_ts_c.cpp)
-
   add_library(GEOS SHARED ${geos_SOURCES} ${geos_c_SOURCES})
 
-  math(EXPR CVERSION "${VERSION_MAJOR} + 1") 
- 	# VERSION = current version, SOVERSION = compatibility version 
+  math(EXPR CVERSION "${VERSION_MAJOR} + 1")
+ 	# VERSION = current version, SOVERSION = compatibility version
   set_target_properties(GEOS
     PROPERTIES
     CLEAN_DIRECT_OUTPUT 1
     FRAMEWORK 1
-    VERSION "${CVERSION}.${VERSION_MINOR}.${VERSION_PATCH}" 
- 	  SOVERSION ${CVERSION} 
+    VERSION "${CVERSION}.${VERSION_MINOR}.${VERSION_PATCH}"
+ 	  SOVERSION ${CVERSION}
     FRAMEWORK_VERSION ${VERSION_MAJOR}
     BUILD_WITH_INSTALL_RPATH TRUE
     INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}"
@@ -77,7 +78,8 @@ else()
   endif()
 
   if(GEOS_BUILD_STATIC)
-    add_library(geos-static STATIC ${geos_SOURCES} ${geos_ALL_HEADERS})
+    file(GLOB geos_capi_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/../capi/*.h) # fix source_group issue
+    add_library(geos-static STATIC ${geos_SOURCES} ${geos_c_SOURCES} ${geos_ALL_HEADERS} ${geos_capi_HEADERS})
 
     set_target_properties(geos-static
       PROPERTIES
