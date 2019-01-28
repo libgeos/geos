@@ -332,7 +332,7 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
 	LinearRing *testRing = testEr->getLinearRing();
 	const Envelope *testEnv = testRing->getEnvelopeInternal();
 	EdgeRing *minShell = NULL;
-	const Envelope *minShellEnv = nullptr;
+	const Envelope *minShellEnv = NULL;
 
 	for(size_t i = 0, n = newShellList.size(); i<n; i++) {
 		EdgeRing *tryShell = newShellList[i];
@@ -354,11 +354,11 @@ PolygonBuilder::findEdgeRingContaining(EdgeRing *testEr,
 		// check if this new containing ring is smaller than
 		// the current minimum ring
 		if (isContained) {
-			if (minShell==nullptr ||
-			    minShellEnv->contains(tryShellEnv)) {
+			if (minShell==NULL ||
+				minShellEnv->contains(tryShellEnv)) {
 				minShell = tryShell;
 				minShellEnv = minShell->getLinearRing()->getEnvelopeInternal();
-            }
+			}
 		}
 	}
 	return minShell;
