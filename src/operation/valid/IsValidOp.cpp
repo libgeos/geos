@@ -23,7 +23,6 @@
 
 #include <geos/export.h>
 #include <geos/constants.h>
-#include <geos/algorithm/CGAlgorithms.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/MCPointInRing.h>
 #include <geos/algorithm/PointLocation.h>
