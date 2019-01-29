@@ -213,7 +213,8 @@ MinimumBoundingCircle::computeCirclePoints()
     * at most <tt>pts.length</tt> iterations are required to terminate
     * with a correct result.
     */
-    for (auto p: pts) {
+    size_t i = 0, n = pts.size();
+    while (i++ < n) {
         Coordinate R = pointWithMinAngleWithSegment(pts, P, Q);
 
         // if PRQ is obtuse, then MBC is determined by P and Q

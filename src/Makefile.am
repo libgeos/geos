@@ -16,7 +16,7 @@ SUBDIRS = \
     triangulate \
     util
 
-EXTRA_DIST = Makefile.vc dirlist.mk CMakeLists.txt info.plist.in
+EXTRA_DIST = dirlist.mk CMakeLists.txt info.plist.in
 
 AM_CPPFLAGS = -I$(top_srcdir)/include
 

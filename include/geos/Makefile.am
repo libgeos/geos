@@ -16,7 +16,7 @@ SUBDIRS = \
     triangulate \
     util
 
-EXTRA_DIST = version.h.vc
+EXTRA_DIST = 
 
 geosdir = $(includedir)/geos
 

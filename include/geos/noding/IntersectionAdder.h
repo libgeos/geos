@@ -72,8 +72,8 @@ private:
 	const geom::Coordinate* properIntersectionPoint;
 
 	algorithm::LineIntersector& li;
-	bool isSelfIntersection;
-	//bool intersectionFound;
+	// bool isSelfIntersection;
+	// bool intersectionFound;
 
 	/**
 	 * A trivial intersection is an apparent self-intersection which
