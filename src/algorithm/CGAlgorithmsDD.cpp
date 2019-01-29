@@ -58,7 +58,7 @@ int CGAlgorithmsDD::orientationIndex(const Coordinate& p1,
                                      const Coordinate& p2,
                                      const Coordinate& q)
 {
-    if (ISNAN(q.x) || ISNAN(q.y) || !FINITE(q.x) || !FINITE(q.y)) {
+    if (std::isnan(q.x) || std::isnan(q.y) || !std::isfinite(q.x) || !std::isfinite(q.y)) {
         throw util::IllegalArgumentException("CGAlgorithmsDD::orientationIndex encountered NaN/Inf numbers");
     }
 
@@ -91,8 +91,8 @@ int CGAlgorithmsDD::signOfDet2x2(DD &x1, DD &y1, DD &x2, DD &y2)
 
 int CGAlgorithmsDD::signOfDet2x2(double dx1, double dy1, double dx2, double dy2)
 {
-    if (ISNAN(dx1)   || ISNAN(dy1)   || ISNAN(dx2)   || ISNAN(dy2) ||
-        !FINITE(dx1) || !FINITE(dy1) || !FINITE(dx2) || !FINITE(dy2)) {
+    if (std::isnan(dx1)    ||  std::isnan(dy1)    ||  std::isnan(dx2)    ||  std::isnan(dy2) ||
+       !std::isfinite(dx1) || !std::isfinite(dy1) || !std::isfinite(dx2) || !std::isfinite(dy2)) {
         throw util::IllegalArgumentException("CGAlgorithmsDD::signOfDet2x2 encountered NaN/Inf numbers");
     }
     DD x1(dx1);

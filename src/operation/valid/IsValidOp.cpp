@@ -19,6 +19,8 @@
  *
  **********************************************************************/
 
+#include "IndexedNestedRingTester.h"
+
 #include <geos/export.h>
 #include <geos/constants.h>
 #include <geos/algorithm/CGAlgorithms.h>
@@ -40,7 +42,6 @@
 #include <geos/index/chain/MonotoneChainSelectAction.h>
 #include <geos/operation/valid/ConnectedInteriorTester.h>
 #include <geos/operation/valid/ConsistentAreaTester.h>
-#include <geos/operation/valid/IndexedNestedRingTester.h>
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/util/UnsupportedOperationException.h>
 
@@ -96,15 +97,9 @@ IsValidOp::isValid()
 bool
 IsValidOp::isValid(const Coordinate &coord)
 {
-<<<<<<< HEAD
-    if (! FINITE(coord.x) ) return false;
-    if (! FINITE(coord.y) ) return false;
+    if (! std::isfinite(coord.x) ) return false;
+    if (! std::isfinite(coord.y) ) return false;
     return true;
-=======
-	if (! std::isfinite(coord.x) ) return false;
-	if (! std::isfinite(coord.y) ) return false;
-	return true;
->>>>>>> Using constants.h and stop using platform.h (closes #925)
 }
 
 /* static public */
