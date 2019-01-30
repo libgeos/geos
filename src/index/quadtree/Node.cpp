@@ -24,6 +24,7 @@
 #include <string>
 #include <sstream>
 #include <cassert>
+#include <memory>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -47,9 +48,9 @@ Node::createNode(const Envelope& env)
 	Key key(env);
 	std::unique_ptr<Envelope> envelope(new Envelope(key.getEnvelope()));
 	std::unique_ptr<Node> node (
-		new Node(std::move(envelope), key.getLevel())
+	  new Node(std::move(envelope), key.getLevel())
 	);
-	return std::move(node);
+	return node;
 }
 
 /* static public */

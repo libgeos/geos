@@ -173,7 +173,7 @@ private:
 	/**
 	 * <code>true</code> if the output from a collection argument should still be a collection
 	 */
-	bool preserveCollections;
+	// bool preserveCollections;
 
 	/**
 	 * <code>true</code> if the type of the input should be preserved

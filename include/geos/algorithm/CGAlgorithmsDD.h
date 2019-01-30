@@ -22,6 +22,7 @@
 #include <geos/algorithm/ttmath/ttmath.h>
 
 // Close to DoubleDouble equivalent used by JTS
+// Usage: ttmath::Big<exponent, mantissa>
 typedef ttmath::Big<TTMATH_BITS(32), TTMATH_BITS(128)> DD;
 //typedef ttmath::Big<TTMATH_BITS(64), TTMATH_BITS(128)> DD;
 //typedef ttmath::Big<TTMATH_BITS(32), TTMATH_BITS(256)> DD;

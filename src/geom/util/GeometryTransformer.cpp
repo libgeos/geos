@@ -58,7 +58,7 @@ GeometryTransformer::GeometryTransformer()
 	inputGeom(nullptr),
 	pruneEmptyGeometry(true),
 	preserveGeometryCollectionType(true),
-	preserveCollections(false),
+	// preserveCollections(false),
 	preserveType(false),
 	skipTransformedInvalidInteriorRings(false)
 {}
