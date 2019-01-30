@@ -87,6 +87,13 @@ public:
               index::chain::MonotoneChain& mc2, std::size_t start2) override;
     };
 
+    /**
+     * Disable copy construction and assignment. Apparently needed to make this
+     * class compile under MSVC. (See https://stackoverflow.com/q/29565299)
+     */
+     MCIndexSegmentSetMutualIntersector(const MCIndexSegmentSetMutualIntersector&) = delete;
+     MCIndexSegmentSetMutualIntersector& operator=(const MCIndexSegmentSetMutualIntersector&) = delete;
+
 private:
 
 	typedef std::vector<std::unique_ptr<index::chain::MonotoneChain>> MonoChains;

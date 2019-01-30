@@ -181,6 +181,13 @@ public:
 
 	std::string toString() const;
 
+    /**
+     * Disable copy construction and assignment. Apparently needed to make this
+     * class compile under MSVC. (See https://stackoverflow.com/q/29565299)
+     */
+     Quadtree(const Quadtree&) = delete;
+     Quadtree& operator=(const Quadtree&) = delete;
+
 };
 
 } // namespace geos::index::quadtree

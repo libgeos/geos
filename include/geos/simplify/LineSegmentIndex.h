@@ -64,15 +64,19 @@ public:
 	std::unique_ptr< std::vector<geom::LineSegment*> >
 			query(const geom::LineSegment* seg);
 
+
 private:
 
 	index::quadtree::Quadtree index;
 
 	std::vector<std::unique_ptr<geom::Envelope>> newEnvelopes;
 
-	// Copying is turned off
-	LineSegmentIndex(const LineSegmentIndex&);
-	LineSegmentIndex& operator=(const LineSegmentIndex&);
+    /**
+     * Disable copy construction and assignment. Apparently needed to make this
+     * class compile under MSVC. (See https://stackoverflow.com/q/29565299)
+     */
+	LineSegmentIndex(const LineSegmentIndex&) = delete;
+	LineSegmentIndex& operator=(const LineSegmentIndex&) = delete;
 };
 
 } // namespace geos::simplify

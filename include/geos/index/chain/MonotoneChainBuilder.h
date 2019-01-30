@@ -85,6 +85,14 @@ public:
 	static void getChainStartIndices(const geom::CoordinateSequence& pts,
 			std::vector<std::size_t>& startIndexList);
 
+    /**
+     * Disable copy construction and assignment. Apparently needed to make this
+     * class compile under MSVC. (See https://stackoverflow.com/q/29565299)
+     */
+     MonotoneChainBuilder(const MonotoneChainBuilder&) = delete;
+     MonotoneChainBuilder& operator=(const MonotoneChainBuilder&) = delete;
+
+
 private:
 
 	/**
