@@ -16,6 +16,8 @@ file(GLOB_RECURSE geos_ALL_HEADERS ${CMAKE_SOURCE_DIR}/include/*.h) # fix source
 
 # Building with Visual C++ x86_64 needs to compile the asm utilities first
 message(STATUS, 'CMAKE_VS_PLATFORM_NAME = ${CMAKE_VS_PLATFORM_NAME}')
+message(STATUS, 'MSVC = ${MSVC}')
+message(STATUS, 'CMAKE_SIZEOF_VOID_P = ${CMAKE_SIZEOF_VOID_P}')
 if (MSVC AND ("x${CMAKE_VS_PLATFORM_NAME}" STREQUAL "xx64"))
   set(TTMATH_MSVC64_ASM ttmathuint_x86_64_msvc.asm)
   enable_language(ASM_MASM)
