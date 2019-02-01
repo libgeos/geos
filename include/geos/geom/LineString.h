@@ -40,11 +40,11 @@
 #endif
 
 namespace geos {
-	namespace geom {
-		class Coordinate;
-		class CoordinateArraySequence;
-		class CoordinateSequenceFilter;
-	}
+namespace geom {
+class Coordinate;
+class CoordinateArraySequence;
+class CoordinateSequenceFilter;
+}
 }
 
 namespace geos {
@@ -70,155 +70,162 @@ class GEOS_DLL LineString: public virtual Geometry, public Lineal {
 
 public:
 
-	friend class GeometryFactory;
+    friend class GeometryFactory;
 
-	/// A vector of const LineString pointers
-	typedef std::vector<const LineString *> ConstVect;
+    /// A vector of const LineString pointers
+    typedef std::vector<const LineString*> ConstVect;
 
-	~LineString() override;
+    ~LineString() override;
 
-	/**
-	 * \brief
-	 * Creates and returns a full copy of this {@link LineString} object
-	 * (including all coordinates contained by it)
-	 *
-	 * @return A clone of this instance
-	 */
-	Geometry *clone() const override;
+    /**
+     * \brief
+     * Creates and returns a full copy of this {@link LineString} object
+     * (including all coordinates contained by it)
+     *
+     * @return A clone of this instance
+     */
+    Geometry* clone() const override;
 
-	CoordinateSequence* getCoordinates() const override;
+    CoordinateSequence* getCoordinates() const override;
 
-	/// Returns a read-only pointer to internal CoordinateSequence
-	const CoordinateSequence* getCoordinatesRO() const;
+    /// Returns a read-only pointer to internal CoordinateSequence
+    const CoordinateSequence* getCoordinatesRO() const;
 
-	virtual const Coordinate& getCoordinateN(size_t n) const;
+    virtual const Coordinate& getCoordinateN(size_t n) const;
 
-	/// Returns line dimension (1)
-	Dimension::DimensionType getDimension() const override;
+    /// Returns line dimension (1)
+    Dimension::DimensionType getDimension() const override;
 
-	/**
-	 * \brief
-	 * Returns Dimension::False for a closed LineString,
-	 * 0 otherwise (LineString boundary is a MultiPoint)
-	 */
-	int getBoundaryDimension() const override;
+    /**
+     * \brief
+     * Returns Dimension::False for a closed LineString,
+     * 0 otherwise (LineString boundary is a MultiPoint)
+     */
+    int getBoundaryDimension() const override;
 
-	/// Returns coordinate dimension.
-	int getCoordinateDimension() const override;
+    /// Returns coordinate dimension.
+    int getCoordinateDimension() const override;
 
-	/**
-	 * \brief
-	 * Returns a MultiPoint.
-	 * Empty for closed LineString, a Point for each vertex otherwise.
-	 */
-	Geometry* getBoundary() const override;
+    /**
+     * \brief
+     * Returns a MultiPoint.
+     * Empty for closed LineString, a Point for each vertex otherwise.
+     */
+    Geometry* getBoundary() const override;
 
-	bool isEmpty() const override;
+    bool isEmpty() const override;
 
-	std::size_t getNumPoints() const override;
+    std::size_t getNumPoints() const override;
 
-	virtual Point* getPointN(std::size_t n) const;
+    virtual Point* getPointN(std::size_t n) const;
 
-	/// \brief
-	/// Return the start point of the LineString
-	/// or NULL if this is an EMPTY LineString.
-	///
-	virtual Point* getStartPoint() const;
+    /// \brief
+    /// Return the start point of the LineString
+    /// or NULL if this is an EMPTY LineString.
+    ///
+    virtual Point* getStartPoint() const;
 
-	/// \brief
-	/// Return the end point of the LineString
-	/// or NULL if this is an EMPTY LineString.
-	///
-	virtual Point* getEndPoint() const;
+    /// \brief
+    /// Return the end point of the LineString
+    /// or NULL if this is an EMPTY LineString.
+    ///
+    virtual Point* getEndPoint() const;
 
-	virtual bool isClosed() const;
+    virtual bool isClosed() const;
 
-	virtual bool isRing() const;
+    virtual bool isRing() const;
 
-	std::string getGeometryType() const override;
+    std::string getGeometryType() const override;
 
-	GeometryTypeId getGeometryTypeId() const override;
+    GeometryTypeId getGeometryTypeId() const override;
 
-	virtual bool isCoordinate(Coordinate& pt) const;
+    virtual bool isCoordinate(Coordinate& pt) const;
 
-	bool equalsExact(const Geometry *other, double tolerance=0)
-		const override;
+    bool equalsExact(const Geometry* other, double tolerance = 0)
+    const override;
 
-	void apply_rw(const CoordinateFilter *filter) override;
+    void apply_rw(const CoordinateFilter* filter) override;
 
-	void apply_ro(CoordinateFilter *filter) const override;
+    void apply_ro(CoordinateFilter* filter) const override;
 
-	void apply_rw(GeometryFilter *filter) override;
+    void apply_rw(GeometryFilter* filter) override;
 
-	void apply_ro(GeometryFilter *filter) const override;
+    void apply_ro(GeometryFilter* filter) const override;
 
-	void apply_rw(GeometryComponentFilter *filter) override;
+    void apply_rw(GeometryComponentFilter* filter) override;
 
-	void apply_ro(GeometryComponentFilter *filter) const override;
+    void apply_ro(GeometryComponentFilter* filter) const override;
 
-	void apply_rw(CoordinateSequenceFilter& filter) override;
+    void apply_rw(CoordinateSequenceFilter& filter) override;
 
-	void apply_ro(CoordinateSequenceFilter& filter) const override;
+    void apply_ro(CoordinateSequenceFilter& filter) const override;
 
-	/** \brief
-	 * Normalizes a LineString.
-	 *
-	 * A normalized linestring
-	 * has the first point which is not equal to its reflected point
-	 * less than the reflected point.
-	 */
-	void normalize() override;
+    /** \brief
+     * Normalizes a LineString.
+     *
+     * A normalized linestring
+     * has the first point which is not equal to its reflected point
+     * less than the reflected point.
+     */
+    void normalize() override;
 
-	//was protected
-	int compareToSameClass(const Geometry *ls) const override;
+    //was protected
+    int compareToSameClass(const Geometry* ls) const override;
 
-	const Coordinate* getCoordinate() const override;
+    const Coordinate* getCoordinate() const override;
 
-	double getLength() const override;
+    double getLength() const override;
 
-	/**
-	 * Creates a LineString whose coordinates are in the reverse
-	 * order of this object's
-	 *
-	 * @return a LineString with coordinates in the reverse order
-	 */
-  	Geometry* reverse() const override;
+    /**
+     * Creates a LineString whose coordinates are in the reverse
+     * order of this object's
+     *
+     * @return a LineString with coordinates in the reverse order
+     */
+    Geometry* reverse() const override;
 
 protected:
 
-	LineString(const LineString &ls);
+    LineString(const LineString& ls);
 
-	/// \brief
-	/// Constructs a LineString taking ownership the
-	/// given CoordinateSequence.
-	LineString(CoordinateSequence *pts, const GeometryFactory *newFactory);
+    /// \brief
+    /// Constructs a LineString taking ownership the
+    /// given CoordinateSequence.
+    LineString(CoordinateSequence* pts, const GeometryFactory* newFactory);
 
-	/// Hopefully cleaner version of the above
-	LineString(CoordinateSequence::Ptr pts,
-			const GeometryFactory *newFactory);
+    /// Hopefully cleaner version of the above
+    LineString(CoordinateSequence::Ptr pts,
+               const GeometryFactory* newFactory);
 
-	Envelope::Ptr computeEnvelopeInternal() const override;
+    Envelope::Ptr computeEnvelopeInternal() const override;
 
-	CoordinateSequence::Ptr points;
+    CoordinateSequence::Ptr points;
 
-	int getSortIndex() const override { return SORTINDEX_LINESTRING; };
+    int
+    getSortIndex() const override
+    {
+        return SORTINDEX_LINESTRING;
+    };
 
 private:
 
-	void validateConstruction();
+    void validateConstruction();
 
 };
 
 struct GEOS_DLL  LineStringLT {
-	bool operator()(const LineString *ls1, const LineString *ls2) const {
-		return ls1->compareTo(ls2)<0;
-	}
+    bool
+    operator()(const LineString* ls1, const LineString* ls2) const
+    {
+        return ls1->compareTo(ls2) < 0;
+    }
 };
 
 
 inline Geometry*
-LineString::clone() const {
-	return new LineString(*this);
+LineString::clone() const
+{
+    return new LineString(*this);
 }
 
 } // namespace geos::geom

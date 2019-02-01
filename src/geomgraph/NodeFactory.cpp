@@ -25,17 +25,17 @@ using namespace geos::geom;
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-Node *
-NodeFactory::createNode(const Coordinate &coord) const
+Node*
+NodeFactory::createNode(const Coordinate& coord) const
 {
-	return new Node(coord,nullptr);
+    return new Node(coord, nullptr);
 }
 
-const NodeFactory &
+const NodeFactory&
 NodeFactory::instance()
 {
-	static const NodeFactory nf;
-	return nf;
+    static const NodeFactory nf;
+    return nf;
 }
 
 

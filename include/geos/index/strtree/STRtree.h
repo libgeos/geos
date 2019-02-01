@@ -35,11 +35,11 @@
 
 // Forward declarations
 namespace geos {
-	namespace index {
-		namespace strtree {
-			class Boundable;
-		}
-	}
+namespace index {
+namespace strtree {
+class Boundable;
+}
+}
 }
 
 namespace geos {
@@ -61,93 +61,105 @@ namespace strtree { // geos::index::strtree
  * Databases With Application To GIS. Morgan Kaufmann, San Francisco, 2002.
  *
  */
-class GEOS_DLL STRtree: public AbstractSTRtree, public SpatialIndex
-{
-using AbstractSTRtree::insert;
-using AbstractSTRtree::query;
+class GEOS_DLL STRtree: public AbstractSTRtree, public SpatialIndex {
+    using AbstractSTRtree::insert;
+    using AbstractSTRtree::query;
 
 private:
-	class GEOS_DLL STRIntersectsOp: public AbstractSTRtree::IntersectsOp {
-		public:
-			bool intersects(const void* aBounds, const void* bBounds) override;
-	};
+    class GEOS_DLL STRIntersectsOp: public AbstractSTRtree::IntersectsOp {
+    public:
+        bool intersects(const void* aBounds, const void* bBounds) override;
+    };
 
-	/**
-	 * Creates the parent level for the given child level. First, orders the items
-	 * by the x-values of the midpoints, and groups them into vertical slices.
-	 * For each slice, orders the items by the y-values of the midpoints, and
-	 * group them into runs of size M (the node capacity). For each run, creates
-	 * a new (parent) node.
-	 */
-	std::unique_ptr<BoundableList> createParentBoundables(BoundableList* childBoundables, int newLevel) override;
+    /**
+     * Creates the parent level for the given child level. First, orders the items
+     * by the x-values of the midpoints, and groups them into vertical slices.
+     * For each slice, orders the items by the y-values of the midpoints, and
+     * group them into runs of size M (the node capacity). For each run, creates
+     * a new (parent) node.
+     */
+    std::unique_ptr<BoundableList> createParentBoundables(BoundableList* childBoundables, int newLevel) override;
 
-	std::unique_ptr<BoundableList> createParentBoundablesFromVerticalSlices(std::vector<BoundableList*>* verticalSlices, int newLevel);
+    std::unique_ptr<BoundableList> createParentBoundablesFromVerticalSlices(std::vector<BoundableList*>* verticalSlices,
+            int newLevel);
 
-	STRIntersectsOp intersectsOp;
+    STRIntersectsOp intersectsOp;
 
-	std::unique_ptr<BoundableList> sortBoundables(const BoundableList* input) override;
+    std::unique_ptr<BoundableList> sortBoundables(const BoundableList* input) override;
 
-	std::unique_ptr<BoundableList> createParentBoundablesFromVerticalSlice(
-			BoundableList* childBoundables,
-			int newLevel);
+    std::unique_ptr<BoundableList> createParentBoundablesFromVerticalSlice(
+        BoundableList* childBoundables,
+        int newLevel);
 
-	/**
-	 * @param childBoundables Must be sorted by the x-value of
-	 *        the envelope midpoints
-	 * @return
-	 */
-	std::vector<BoundableList*>* verticalSlices(
-			BoundableList* childBoundables,
-			size_t sliceCount);
+    /**
+     * @param childBoundables Must be sorted by the x-value of
+     *        the envelope midpoints
+     * @return
+     */
+    std::vector<BoundableList*>* verticalSlices(
+        BoundableList* childBoundables,
+        size_t sliceCount);
 
 
 protected:
 
-	AbstractNode* createNode(int level) override;
+    AbstractNode* createNode(int level) override;
 
-	IntersectsOp* getIntersectsOp() override {
-		return &intersectsOp;
-	}
+    IntersectsOp*
+    getIntersectsOp() override
+    {
+        return &intersectsOp;
+    }
 
 public:
 
-	~STRtree() override;
+    ~STRtree() override;
 
-	/**
-	 * Constructs an STRtree with the given maximum number of child nodes that
-	 * a node may have
-	 */
-	STRtree(std::size_t nodeCapacity=10);
+    /**
+     * Constructs an STRtree with the given maximum number of child nodes that
+     * a node may have
+     */
+    STRtree(std::size_t nodeCapacity = 10);
 
-	void insert(const geom::Envelope *itemEnv,void* item) override;
+    void insert(const geom::Envelope* itemEnv, void* item) override;
 
-	//static double centreX(const geom::Envelope *e);
+    //static double centreX(const geom::Envelope *e);
 
-	static double avg(double a, double b) {
-		return (a + b) / 2.0;
-	}
+    static double
+    avg(double a, double b)
+    {
+        return (a + b) / 2.0;
+    }
 
-	static double centreY(const geom::Envelope *e) {
-		return STRtree::avg(e->getMinY(), e->getMaxY());
-	}
+    static double
+    centreY(const geom::Envelope* e)
+    {
+        return STRtree::avg(e->getMinY(), e->getMaxY());
+    }
 
-	void query(const geom::Envelope *searchEnv, std::vector<void*>& matches) override {
-		AbstractSTRtree::query(searchEnv, matches);
-	}
+    void
+    query(const geom::Envelope* searchEnv, std::vector<void*>& matches) override
+    {
+        AbstractSTRtree::query(searchEnv, matches);
+    }
 
-	void query(const geom::Envelope *searchEnv, ItemVisitor& visitor) override {
-		return AbstractSTRtree::query(searchEnv, visitor);
-	}
+    void
+    query(const geom::Envelope* searchEnv, ItemVisitor& visitor) override
+    {
+        return AbstractSTRtree::query(searchEnv, visitor);
+    }
 
-	const void* nearestNeighbour(const geom::Envelope *env, const void* item, ItemDistance* itemDist);
-	std::pair<const void*, const void*> nearestNeighbour(BoundablePair* initBndPair);
-	std::pair<const void*, const void*> nearestNeighbour(ItemDistance* itemDist);
-	std::pair<const void*, const void*> nearestNeighbour(BoundablePair* initBndPair, double maxDistance);
-	std::pair<const void*, const void*> nearestNeighbour(STRtree *tree, ItemDistance *itemDist);
+    const void* nearestNeighbour(const geom::Envelope* env, const void* item, ItemDistance* itemDist);
+    std::pair<const void*, const void*> nearestNeighbour(BoundablePair* initBndPair);
+    std::pair<const void*, const void*> nearestNeighbour(ItemDistance* itemDist);
+    std::pair<const void*, const void*> nearestNeighbour(BoundablePair* initBndPair, double maxDistance);
+    std::pair<const void*, const void*> nearestNeighbour(STRtree* tree, ItemDistance* itemDist);
 
-	bool remove(const geom::Envelope *itemEnv, void* item) override {
-		return AbstractSTRtree::remove(itemEnv, item);
-	}
+    bool
+    remove(const geom::Envelope* itemEnv, void* item) override
+    {
+        return AbstractSTRtree::remove(itemEnv, item);
+    }
 
 };
 

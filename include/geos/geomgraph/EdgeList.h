@@ -38,12 +38,12 @@
 
 // Forward declarations
 namespace geos {
-	namespace index {
-		class SpatialIndex;
-	}
-	namespace geomgraph {
-		class Edge;
-	}
+namespace index {
+class SpatialIndex;
+}
+namespace geomgraph {
+class Edge;
+}
 }
 
 namespace geos {
@@ -59,57 +59,62 @@ class GEOS_DLL EdgeList {
 
 private:
 
-	std::vector<Edge*> edges;
+    std::vector<Edge*> edges;
 
-	struct OcaCmp {
-		bool operator()(
-			const noding::OrientedCoordinateArray *oca1,
-			const noding::OrientedCoordinateArray *oca2) const
-		{
-			return *oca1 < *oca2;
-		}
-	};
+    struct OcaCmp {
+        bool
+        operator()(
+            const noding::OrientedCoordinateArray* oca1,
+            const noding::OrientedCoordinateArray* oca2) const
+        {
+            return *oca1 < *oca2;
+        }
+    };
 
-	/**
-	 * An index of the edges, for fast lookup.
-	 *
-	 * OrientedCoordinateArray objects are owned by us.
-	 * TODO: optimize by dropping the OrientedCoordinateArray
-	 *       construction as a whole, and use CoordinateSequence
-	 *       directly instead..
-	 */
-	typedef std::map<noding::OrientedCoordinateArray*, Edge*, OcaCmp> EdgeMap;
-	EdgeMap ocaMap;
+    /**
+     * An index of the edges, for fast lookup.
+     *
+     * OrientedCoordinateArray objects are owned by us.
+     * TODO: optimize by dropping the OrientedCoordinateArray
+     *       construction as a whole, and use CoordinateSequence
+     *       directly instead..
+     */
+    typedef std::map<noding::OrientedCoordinateArray*, Edge*, OcaCmp> EdgeMap;
+    EdgeMap ocaMap;
 
 public:
-	friend std::ostream& operator<< (std::ostream& os, const EdgeList& el);
+    friend std::ostream& operator<< (std::ostream& os, const EdgeList& el);
 
-	EdgeList()
-		:
-		edges(),
-		ocaMap()
-	{}
+    EdgeList()
+        :
+        edges(),
+        ocaMap()
+    {}
 
-	virtual ~EdgeList();
+    virtual ~EdgeList();
 
-	/**
-	 * Insert an edge unless it is already in the list
-	 */
-	void add(Edge *e);
+    /**
+     * Insert an edge unless it is already in the list
+     */
+    void add(Edge* e);
 
-	void addAll(const std::vector<Edge*> &edgeColl);
+    void addAll(const std::vector<Edge*>& edgeColl);
 
-	std::vector<Edge*> &getEdges() { return edges; }
+    std::vector<Edge*>&
+    getEdges()
+    {
+        return edges;
+    }
 
-	Edge* findEqualEdge(Edge* e);
+    Edge* findEqualEdge(Edge* e);
 
-	Edge* get(int i);
+    Edge* get(int i);
 
-	int findEdgeIndex(Edge *e);
+    int findEdgeIndex(Edge* e);
 
-	std::string print();
+    std::string print();
 
-        void clearList();
+    void clearList();
 
 };
 

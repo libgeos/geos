@@ -38,19 +38,22 @@ namespace distance { // geos.operation.distance
 * not a GeometryCollection, an empty list will be returned.
 */
 vector<const Coordinate*>*
-ConnectedElementPointFilter::getCoordinates(const Geometry *geom)
+ConnectedElementPointFilter::getCoordinates(const Geometry* geom)
 {
-	vector<const Coordinate*> *points=new vector<const Coordinate*>();
-	ConnectedElementPointFilter c(points);
-	geom->apply_ro(&c);
-	return points;
+    vector<const Coordinate*>* points = new vector<const Coordinate*>();
+    ConnectedElementPointFilter c(points);
+    geom->apply_ro(&c);
+    return points;
 }
 
-void ConnectedElementPointFilter::filter_ro(const Geometry *geom) {
-	if ((typeid(*geom)==typeid(Point)) ||
-		(typeid(*geom)==typeid(LineString)) ||
-		(typeid(*geom)==typeid(Polygon)))
-			pts->push_back(geom->getCoordinate());
+void
+ConnectedElementPointFilter::filter_ro(const Geometry* geom)
+{
+    if((typeid(*geom) == typeid(Point)) ||
+            (typeid(*geom) == typeid(LineString)) ||
+            (typeid(*geom) == typeid(Polygon))) {
+        pts->push_back(geom->getCoordinate());
+    }
 }
 
 } // namespace geos.operation.distance

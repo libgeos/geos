@@ -38,7 +38,7 @@ FastNodingValidator::checkInteriorIntersections()
     MCIndexNoder noder;
     noder.setSegmentIntersector(segInt.get());
     noder.computeNodes(&segStrings);
-    if (segInt->hasIntersection()) {
+    if(segInt->hasIntersection()) {
         isValidVar = false;
         return;
     }
@@ -51,24 +51,25 @@ FastNodingValidator::getErrorMessage() const
     using geos::io::WKTWriter;
     using geos::geom::Coordinate;
 
-    if (isValidVar) return std::string("no intersections found");
+    if(isValidVar) {
+        return std::string("no intersections found");
+    }
 
     //return std::string("found non-noded intersection etc etc");
 
     const std::vector<Coordinate>& intSegs = segInt->getIntersectionSegments();
     assert(intSegs.size() == 4);
     return "found non-noded intersection between "
-        + WKTWriter::toLineString(intSegs[0], intSegs[1])
-        + " and "
-        + WKTWriter::toLineString(intSegs[2], intSegs[3]);
+           + WKTWriter::toLineString(intSegs[0], intSegs[1])
+           + " and "
+           + WKTWriter::toLineString(intSegs[2], intSegs[3]);
 }
 
 void
 FastNodingValidator::checkValid()
 {
     execute();
-    if (! isValidVar)
-    {
+    if(! isValidVar) {
         //std::cerr << "Not valid: " << getErrorMessage() << " interior intersection: " << segInt->getInteriorIntersection() << std::endl;
         throw util::TopologyException(getErrorMessage(), segInt->getInteriorIntersection());
     }

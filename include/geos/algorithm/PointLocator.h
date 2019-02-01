@@ -25,14 +25,14 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Coordinate;
-		class Geometry;
-		class LinearRing;
-		class LineString;
-		class Polygon;
-		class Point;
-	}
+namespace geom {
+class Coordinate;
+class Geometry;
+class LinearRing;
+class LineString;
+class Polygon;
+class Point;
+}
 }
 
 namespace geos {
@@ -56,48 +56,50 @@ namespace algorithm { // geos::algorithm
  */
 class GEOS_DLL PointLocator {
 public:
-	PointLocator() {}
-	~PointLocator() {}
+    PointLocator() {}
+    ~PointLocator() {}
 
-	/**
-	 * Computes the topological relationship (Location) of a single point
-	 * to a Geometry. It handles both single-element and multi-element Geometries.
-	 * The algorithm for multi-part Geometriestakes into account the SFS
-	 * Boundary Determination rule.
-	 *
-	 * @return the Location of the point relative to the input Geometry
-	 */
-	int locate(const geom::Coordinate& p, const geom::Geometry *geom);
+    /**
+     * Computes the topological relationship (Location) of a single point
+     * to a Geometry. It handles both single-element and multi-element Geometries.
+     * The algorithm for multi-part Geometriestakes into account the SFS
+     * Boundary Determination rule.
+     *
+     * @return the Location of the point relative to the input Geometry
+     */
+    int locate(const geom::Coordinate& p, const geom::Geometry* geom);
 
-	/**
-	 * Convenience method to test a point for intersection with
-	 * a Geometry
-	 *
-	 * @param p the coordinate to test
-	 * @param geom the Geometry to test
-	 * @return <code>true</code> if the point is in the interior or boundary of the Geometry
-	 */
-	bool intersects(const geom::Coordinate& p, const geom::Geometry *geom) {
-		return locate(p, geom) != geom::Location::EXTERIOR;
-	}
+    /**
+     * Convenience method to test a point for intersection with
+     * a Geometry
+     *
+     * @param p the coordinate to test
+     * @param geom the Geometry to test
+     * @return <code>true</code> if the point is in the interior or boundary of the Geometry
+     */
+    bool
+    intersects(const geom::Coordinate& p, const geom::Geometry* geom)
+    {
+        return locate(p, geom) != geom::Location::EXTERIOR;
+    }
 
 private:
 
-	bool isIn;         // true if the point lies in or on any Geometry element
+    bool isIn;         // true if the point lies in or on any Geometry element
 
-	int numBoundaries;    // the number of sub-elements whose boundaries the point lies in
+    int numBoundaries;    // the number of sub-elements whose boundaries the point lies in
 
-	void computeLocation(const geom::Coordinate& p, const geom::Geometry *geom);
+    void computeLocation(const geom::Coordinate& p, const geom::Geometry* geom);
 
-	void updateLocationInfo(int loc);
+    void updateLocationInfo(int loc);
 
-	int locate(const geom::Coordinate& p, const geom::Point *pt);
+    int locate(const geom::Coordinate& p, const geom::Point* pt);
 
-	int locate(const geom::Coordinate& p, const geom::LineString *l);
+    int locate(const geom::Coordinate& p, const geom::LineString* l);
 
-	int locateInPolygonRing(const geom::Coordinate& p, const geom::LinearRing *ring);
+    int locateInPolygonRing(const geom::Coordinate& p, const geom::LinearRing* ring);
 
-	int locate(const geom::Coordinate& p, const geom::Polygon *poly);
+    int locate(const geom::Coordinate& p, const geom::Polygon* poly);
 
 };
 

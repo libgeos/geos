@@ -32,7 +32,7 @@ Writer::Writer()
 void
 Writer::reserve(std::size_t capacity)
 {
-  str.reserve(capacity);
+    str.reserve(capacity);
 }
 
 Writer::~Writer()
@@ -42,13 +42,13 @@ Writer::~Writer()
 void
 Writer::write(const std::string& txt)
 {
-	str.append(txt);
+    str.append(txt);
 }
 
 const std::string&
 Writer::toString()
 {
-	return str;
+    return str;
 }
 
 } // namespace geos.io

@@ -28,10 +28,10 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class CoordinateSequence;
-		class Coordinate;
-	}
+namespace geom {
+class CoordinateSequence;
+class Coordinate;
+}
 }
 
 namespace geos {
@@ -47,54 +47,54 @@ namespace geom { // geos::geom
 class GEOS_DLL CoordinateSequenceFactory {
 public:
 
-	/** \brief
-	 * Returns an empty CoordinateSequence, the dimensions will be autodetected
-	 * when it is populated.
-	 */
-	virtual CoordinateSequence *create() const=0;
+    /** \brief
+     * Returns an empty CoordinateSequence, the dimensions will be autodetected
+     * when it is populated.
+     */
+    virtual CoordinateSequence* create() const = 0;
 
-	/** \brief
-	 * Returns a CoordinateSequence based on the given array.
-	 *
-	 * Whether the array is copied or simply referenced
-	 * is implementation-dependent.
-	 * For this reason caller does give up ownership of it.
-	 * Implementations that will not copy it will need take care
-	 * of deleting it.
-	 *
-	 * This method must handle null arguments by creating
-	 * an empty sequence.
-	 *
-	 * @param coordinates the coordinates
+    /** \brief
+     * Returns a CoordinateSequence based on the given array.
+     *
+     * Whether the array is copied or simply referenced
+     * is implementation-dependent.
+     * For this reason caller does give up ownership of it.
+     * Implementations that will not copy it will need take care
+     * of deleting it.
+     *
+     * This method must handle null arguments by creating
+     * an empty sequence.
+     *
+     * @param coordinates the coordinates
      * @param dimension 0, 2 or 3 with 0 indicating unknown at this time.
-	 */
-	virtual CoordinateSequence *create(
-            std::vector<Coordinate> *coordinates,
-            std::size_t dimension=0 ) const=0;
+     */
+    virtual CoordinateSequence* create(
+        std::vector<Coordinate>* coordinates,
+        std::size_t dimension = 0) const = 0;
 
-	/** \brief
-	 * Creates a CoordinateSequence of the specified size and dimension.
-	 *
-	 * For this to be useful, the CoordinateSequence implementation must
-	 * be mutable.
-	 *
-	 * @param size the number of coordinates in the sequence
-	 * @param dimension the dimension of the coordinates in the sequence
-	 * 	(0=unknown, 2, or 3 - ignored if not user specifiable)
-	 */
-	virtual CoordinateSequence *create(std::size_t size,
-                                           std::size_t dimension=0) const=0;
+    /** \brief
+     * Creates a CoordinateSequence of the specified size and dimension.
+     *
+     * For this to be useful, the CoordinateSequence implementation must
+     * be mutable.
+     *
+     * @param size the number of coordinates in the sequence
+     * @param dimension the dimension of the coordinates in the sequence
+     * 	(0=unknown, 2, or 3 - ignored if not user specifiable)
+     */
+    virtual CoordinateSequence* create(std::size_t size,
+                                       std::size_t dimension = 0) const = 0;
 
-	/** \brief
-	 * Creates a CoordinateSequence which is a copy of the given one.
-	 *
-	 * This method must handle null arguments by creating an empty sequence.
-	 *
-	 * @param coordSeq the coordinate sequence to copy
-	 */
-	virtual CoordinateSequence *create(const CoordinateSequence &coordSeq) const=0;
+    /** \brief
+     * Creates a CoordinateSequence which is a copy of the given one.
+     *
+     * This method must handle null arguments by creating an empty sequence.
+     *
+     * @param coordSeq the coordinate sequence to copy
+     */
+    virtual CoordinateSequence* create(const CoordinateSequence& coordSeq) const = 0;
 
-	virtual ~CoordinateSequenceFactory();
+    virtual ~CoordinateSequenceFactory();
 };
 
 } // namespace geos::geom

@@ -21,9 +21,9 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class CoordinateSequence;
-	}
+namespace geom {
+class CoordinateSequence;
+}
 }
 
 namespace geos {
@@ -31,17 +31,17 @@ namespace geomgraph { // geos::geomgraph
 namespace index { // geos::geomgraph::index
 
 
-class GEOS_DLL MonotoneChainIndexer{
+class GEOS_DLL MonotoneChainIndexer {
 
 public:
 
-	MonotoneChainIndexer(){}
+    MonotoneChainIndexer() {}
 
-	void getChainStartIndices(const geom::CoordinateSequence*, std::vector<std::size_t>&);
+    void getChainStartIndices(const geom::CoordinateSequence*, std::vector<std::size_t>&);
 
 private:
 
-	std::size_t findChainEnd(const geom::CoordinateSequence* pts, std::size_t start);
+    std::size_t findChainEnd(const geom::CoordinateSequence* pts, std::size_t start);
 
 };
 

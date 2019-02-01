@@ -41,11 +41,11 @@ namespace simplify { // geos::simplify
 
 /*public*/
 TaggedLinesSimplifier::TaggedLinesSimplifier()
-	:
-	inputIndex(new LineSegmentIndex()),
-	outputIndex(new LineSegmentIndex()),
-	taggedlineSimplifier(new TaggedLineStringSimplifier(inputIndex.get(),
-		outputIndex.get()))
+    :
+    inputIndex(new LineSegmentIndex()),
+    outputIndex(new LineSegmentIndex()),
+    taggedlineSimplifier(new TaggedLineStringSimplifier(inputIndex.get(),
+                         outputIndex.get()))
 {
 }
 
@@ -53,14 +53,14 @@ TaggedLinesSimplifier::TaggedLinesSimplifier()
 void
 TaggedLinesSimplifier::setDistanceTolerance(double d)
 {
-	taggedlineSimplifier->setDistanceTolerance(d);
+    taggedlineSimplifier->setDistanceTolerance(d);
 }
 
 /*private*/
 void
 TaggedLinesSimplifier::simplify(TaggedLineString& tls)
 {
-	taggedlineSimplifier->simplify(&tls);
+    taggedlineSimplifier->simplify(&tls);
 }
 
 } // namespace geos::simplify

@@ -19,10 +19,10 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class PrecisionModel;
-		class Geometry;
-	}
+namespace geom {
+class PrecisionModel;
+class Geometry;
+}
 }
 
 namespace geos {
@@ -45,42 +45,42 @@ class GEOS_DLL SimpleGeometryPrecisionReducer {
 
 private:
 
-	const geom::PrecisionModel *newPrecisionModel;
+    const geom::PrecisionModel* newPrecisionModel;
 
-	bool removeCollapsed;
+    bool removeCollapsed;
 
-	//bool changePrecisionModel;
+    //bool changePrecisionModel;
 
 public:
 
-	SimpleGeometryPrecisionReducer(const geom::PrecisionModel *pm);
+    SimpleGeometryPrecisionReducer(const geom::PrecisionModel* pm);
 
-	/**
-	 * Sets whether the reduction will result in collapsed components
-	 * being removed completely, or simply being collapsed to an (invalid)
-	 * Geometry of the same type.
-	 *
-	 * @param removeCollapsed if <code>true</code> collapsed
-	 * components will be removed
-	 */
-	void setRemoveCollapsedComponents(bool nRemoveCollapsed);
+    /**
+     * Sets whether the reduction will result in collapsed components
+     * being removed completely, or simply being collapsed to an (invalid)
+     * Geometry of the same type.
+     *
+     * @param removeCollapsed if <code>true</code> collapsed
+     * components will be removed
+     */
+    void setRemoveCollapsedComponents(bool nRemoveCollapsed);
 
-	/*
-	 * Sets whether the {@link PrecisionModel} of the new reduced Geometry
-	 * will be changed to be the {@link PrecisionModel} supplied to
-	 * specify the reduction.  The default is to not change the
-	 * precision model
-	 *
-	 * @param changePrecisionModel if <code>true</code> the precision
-	 * model of the created Geometry will be the
-	 * the precisionModel supplied in the constructor.
-	 */
-	//void setChangePrecisionModel(bool nChangePrecisionModel);
+    /*
+     * Sets whether the {@link PrecisionModel} of the new reduced Geometry
+     * will be changed to be the {@link PrecisionModel} supplied to
+     * specify the reduction.  The default is to not change the
+     * precision model
+     *
+     * @param changePrecisionModel if <code>true</code> the precision
+     * model of the created Geometry will be the
+     * the precisionModel supplied in the constructor.
+     */
+    //void setChangePrecisionModel(bool nChangePrecisionModel);
 
-	const geom::PrecisionModel* getPrecisionModel();
+    const geom::PrecisionModel* getPrecisionModel();
 
-	bool getRemoveCollapsed();
-	geom::Geometry* reduce(const geom::Geometry *geom);
+    bool getRemoveCollapsed();
+    geom::Geometry* reduce(const geom::Geometry* geom);
 };
 
 } // namespace geos.precision

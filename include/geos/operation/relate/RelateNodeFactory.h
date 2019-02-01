@@ -25,12 +25,12 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Coordinate;
-	}
-	namespace geomgraph {
-		class Node;
-	}
+namespace geom {
+class Coordinate;
+}
+namespace geomgraph {
+class Node;
+}
 }
 
 
@@ -43,10 +43,10 @@ namespace relate { // geos::operation::relate
  */
 class GEOS_DLL RelateNodeFactory: public geomgraph::NodeFactory {
 public:
-	geomgraph::Node* createNode(const geom::Coordinate &coord) const override;
-	static const geomgraph::NodeFactory &instance();
+    geomgraph::Node* createNode(const geom::Coordinate& coord) const override;
+    static const geomgraph::NodeFactory& instance();
 private:
-	RelateNodeFactory() {}
+    RelateNodeFactory() {}
 };
 
 

@@ -42,49 +42,46 @@ namespace geos {
 namespace geom { // geos::geom
 
 /*protected*/
-GeometryCollection::GeometryCollection(const GeometryCollection &gc)
-	:
-	Geometry(gc)
+GeometryCollection::GeometryCollection(const GeometryCollection& gc)
+    :
+    Geometry(gc)
 {
-	size_t ngeoms=gc.geometries->size();
+    size_t ngeoms = gc.geometries->size();
 
-	geometries=new vector<Geometry *>(ngeoms);
-	for(size_t i=0; i<ngeoms; ++i)
-	{
-		(*geometries)[i]=(*gc.geometries)[i]->clone();
-	}
+    geometries = new vector<Geometry*>(ngeoms);
+    for(size_t i = 0; i < ngeoms; ++i) {
+        (*geometries)[i] = (*gc.geometries)[i]->clone();
+    }
 }
 
 /*protected*/
-GeometryCollection::GeometryCollection(vector<Geometry *> *newGeoms, const GeometryFactory *factory):
-	Geometry(factory)
+GeometryCollection::GeometryCollection(vector<Geometry*>* newGeoms, const GeometryFactory* factory):
+    Geometry(factory)
 {
-	if (newGeoms==nullptr) {
-		geometries=new vector<Geometry *>();
-		return;
-	}
-	if (hasNullElements(newGeoms)) {
-		throw  util::IllegalArgumentException("geometries must not contain null elements\n");
-		return;
-	}
-	geometries=newGeoms;
+    if(newGeoms == nullptr) {
+        geometries = new vector<Geometry*>();
+        return;
+    }
+    if(hasNullElements(newGeoms)) {
+        throw  util::IllegalArgumentException("geometries must not contain null elements\n");
+        return;
+    }
+    geometries = newGeoms;
 
-	// Set SRID for inner geoms
-	size_t ngeoms=geometries->size();
-	for(size_t i=0; i<ngeoms; ++i)
-	{
-		(*geometries)[i]->setSRID(getSRID());
-	}
+    // Set SRID for inner geoms
+    size_t ngeoms = geometries->size();
+    for(size_t i = 0; i < ngeoms; ++i) {
+        (*geometries)[i]->setSRID(getSRID());
+    }
 }
 
 void
 GeometryCollection::setSRID(int newSRID)
 {
-	Geometry::setSRID(newSRID);
-	for (size_t i = 0; i < geometries->size(); i++)
-	{
-		(*geometries)[i]->setSRID(newSRID);
-	}
+    Geometry::setSRID(newSRID);
+    for(size_t i = 0; i < geometries->size(); i++) {
+        (*geometries)[i]->setSRID(newSRID);
+    }
 }
 
 /*
@@ -93,196 +90,191 @@ GeometryCollection::setSRID(int newSRID)
  * Returns a newly the collected coordinates
  *
  */
-CoordinateSequence *
+CoordinateSequence*
 GeometryCollection::getCoordinates() const
 {
-	vector<Coordinate> *coordinates = new vector<Coordinate>(getNumPoints());
+    vector<Coordinate>* coordinates = new vector<Coordinate>(getNumPoints());
 
-	int k = -1;
-	for (size_t i=0; i<geometries->size(); ++i) {
-		CoordinateSequence* childCoordinates=(*geometries)[i]->getCoordinates();
-		size_t npts=childCoordinates->getSize();
-		for (size_t j=0; j<npts; ++j) {
-			k++;
-			(*coordinates)[k] = childCoordinates->getAt(j);
-		}
-		delete childCoordinates;
-	}
-	return CoordinateArraySequenceFactory::instance()->create(coordinates);
+    int k = -1;
+    for(size_t i = 0; i < geometries->size(); ++i) {
+        CoordinateSequence* childCoordinates = (*geometries)[i]->getCoordinates();
+        size_t npts = childCoordinates->getSize();
+        for(size_t j = 0; j < npts; ++j) {
+            k++;
+            (*coordinates)[k] = childCoordinates->getAt(j);
+        }
+        delete childCoordinates;
+    }
+    return CoordinateArraySequenceFactory::instance()->create(coordinates);
 }
 
 bool
 GeometryCollection::isEmpty() const
 {
-	for (size_t i=0; i<geometries->size(); ++i) {
-		if (!(*geometries)[i]->isEmpty()) {
-			return false;
-		}
-	}
-	return true;
+    for(size_t i = 0; i < geometries->size(); ++i) {
+        if(!(*geometries)[i]->isEmpty()) {
+            return false;
+        }
+    }
+    return true;
 }
 
 Dimension::DimensionType
 GeometryCollection::getDimension() const
 {
-	Dimension::DimensionType dimension=Dimension::False;
-	for (size_t i=0, n=geometries->size(); i<n; ++i)
-	{
-		dimension=max(dimension,(*geometries)[i]->getDimension());
-	}
-	return dimension;
+    Dimension::DimensionType dimension = Dimension::False;
+    for(size_t i = 0, n = geometries->size(); i < n; ++i) {
+        dimension = max(dimension, (*geometries)[i]->getDimension());
+    }
+    return dimension;
 }
 
 int
 GeometryCollection::getBoundaryDimension() const
 {
-	int dimension=Dimension::False;
-	for(size_t i=0; i<geometries->size(); ++i) {
-		dimension=max(dimension,(*geometries)[i]->getBoundaryDimension());
-	}
-	return dimension;
+    int dimension = Dimension::False;
+    for(size_t i = 0; i < geometries->size(); ++i) {
+        dimension = max(dimension, (*geometries)[i]->getBoundaryDimension());
+    }
+    return dimension;
 }
 
 int
 GeometryCollection::getCoordinateDimension() const
 {
-	int dimension=2;
+    int dimension = 2;
 
-	for (size_t i=0, n=geometries->size(); i<n; ++i)
-	{
-		dimension=max(dimension,(*geometries)[i]->getCoordinateDimension());
-	}
-	return dimension;
+    for(size_t i = 0, n = geometries->size(); i < n; ++i) {
+        dimension = max(dimension, (*geometries)[i]->getCoordinateDimension());
+    }
+    return dimension;
 }
 
 size_t
 GeometryCollection::getNumGeometries() const
 {
-	return geometries->size();
+    return geometries->size();
 }
 
 const Geometry*
 GeometryCollection::getGeometryN(size_t n) const
 {
-	return (*geometries)[n];
+    return (*geometries)[n];
 }
 
 size_t
 GeometryCollection::getNumPoints() const
 {
-	size_t numPoints = 0;
-	for (size_t i=0, n=geometries->size(); i<n; ++i)
-	{
-		numPoints +=(*geometries)[i]->getNumPoints();
-	}
-	return numPoints;
+    size_t numPoints = 0;
+    for(size_t i = 0, n = geometries->size(); i < n; ++i) {
+        numPoints += (*geometries)[i]->getNumPoints();
+    }
+    return numPoints;
 }
 
 string
 GeometryCollection::getGeometryType() const
 {
-	return "GeometryCollection";
+    return "GeometryCollection";
 }
 
 Geometry*
 GeometryCollection::getBoundary() const
 {
-	throw util::IllegalArgumentException("Operation not supported by GeometryCollection\n");
+    throw util::IllegalArgumentException("Operation not supported by GeometryCollection\n");
 }
 
 bool
-GeometryCollection::equalsExact(const Geometry *other, double tolerance) const
+GeometryCollection::equalsExact(const Geometry* other, double tolerance) const
 {
-	if (!isEquivalentClass(other)) return false;
+    if(!isEquivalentClass(other)) {
+        return false;
+    }
 
-	const GeometryCollection* otherCollection=dynamic_cast<const GeometryCollection *>(other);
-	if ( ! otherCollection ) return false;
+    const GeometryCollection* otherCollection = dynamic_cast<const GeometryCollection*>(other);
+    if(! otherCollection) {
+        return false;
+    }
 
-	if (geometries->size()!=otherCollection->geometries->size()) {
-		return false;
-	}
-	for (size_t i=0; i<geometries->size(); ++i) {
-		if (!((*geometries)[i]->equalsExact((*(otherCollection->geometries))[i],tolerance)))
-		{
-			return false;
-		}
-	}
-	return true;
+    if(geometries->size() != otherCollection->geometries->size()) {
+        return false;
+    }
+    for(size_t i = 0; i < geometries->size(); ++i) {
+        if(!((*geometries)[i]->equalsExact((*(otherCollection->geometries))[i], tolerance))) {
+            return false;
+        }
+    }
+    return true;
 }
 
 void
-GeometryCollection::apply_rw(const CoordinateFilter *filter)
+GeometryCollection::apply_rw(const CoordinateFilter* filter)
 {
-	for (size_t i=0; i<geometries->size(); ++i)
-	{
-		(*geometries)[i]->apply_rw(filter);
-	}
+    for(size_t i = 0; i < geometries->size(); ++i) {
+        (*geometries)[i]->apply_rw(filter);
+    }
 }
 
 void
-GeometryCollection::apply_ro(CoordinateFilter *filter) const
+GeometryCollection::apply_ro(CoordinateFilter* filter) const
 {
-	for (size_t i=0; i<geometries->size(); ++i)
-	{
-		(*geometries)[i]->apply_ro(filter);
-	}
+    for(size_t i = 0; i < geometries->size(); ++i) {
+        (*geometries)[i]->apply_ro(filter);
+    }
 }
 
 void
-GeometryCollection::apply_ro(GeometryFilter *filter) const
+GeometryCollection::apply_ro(GeometryFilter* filter) const
 {
-	filter->filter_ro(this);
-	for(size_t i=0; i<geometries->size(); ++i)
-	{
-		(*geometries)[i]->apply_ro(filter);
-	}
+    filter->filter_ro(this);
+    for(size_t i = 0; i < geometries->size(); ++i) {
+        (*geometries)[i]->apply_ro(filter);
+    }
 }
 
 void
-GeometryCollection::apply_rw(GeometryFilter *filter)
+GeometryCollection::apply_rw(GeometryFilter* filter)
 {
-	filter->filter_rw(this);
-	for(size_t i=0; i<geometries->size(); ++i)
-	{
-		(*geometries)[i]->apply_rw(filter);
-	}
+    filter->filter_rw(this);
+    for(size_t i = 0; i < geometries->size(); ++i) {
+        (*geometries)[i]->apply_rw(filter);
+    }
 }
 
 void
 GeometryCollection::normalize()
 {
-	for (size_t i=0; i<geometries->size(); ++i) {
-		(*geometries)[i]->normalize();
-	}
-	sort(geometries->begin(), geometries->end(), GeometryGreaterThen());
+    for(size_t i = 0; i < geometries->size(); ++i) {
+        (*geometries)[i]->normalize();
+    }
+    sort(geometries->begin(), geometries->end(), GeometryGreaterThen());
 }
 
 Envelope::Ptr
 GeometryCollection::computeEnvelopeInternal() const
 {
-	Envelope::Ptr p_envelope(new Envelope());
-	for (size_t i=0; i<geometries->size(); i++) {
-		const Envelope *env=(*geometries)[i]->getEnvelopeInternal();
-		p_envelope->expandToInclude(env);
-	}
-	return p_envelope;
+    Envelope::Ptr p_envelope(new Envelope());
+    for(size_t i = 0; i < geometries->size(); i++) {
+        const Envelope* env = (*geometries)[i]->getEnvelopeInternal();
+        p_envelope->expandToInclude(env);
+    }
+    return p_envelope;
 }
 
 int
-GeometryCollection::compareToSameClass(const Geometry *g) const
+GeometryCollection::compareToSameClass(const Geometry* g) const
 {
-  const GeometryCollection* gc = dynamic_cast<const GeometryCollection*>(g);
-	return compare(*geometries, *(gc->geometries));
+    const GeometryCollection* gc = dynamic_cast<const GeometryCollection*>(g);
+    return compare(*geometries, *(gc->geometries));
 }
 
 const Coordinate*
 GeometryCollection::getCoordinate() const
 {
-	// should use unique_ptr here or return NULL or throw an exception !
-	// 	--strk;
-    for (size_t i = 0; i < geometries->size(); ++i)
-    {
-        if (!(*geometries)[i]->isEmpty()) {
+    // should use unique_ptr here or return NULL or throw an exception !
+    // 	--strk;
+    for(size_t i = 0; i < geometries->size(); ++i) {
+        if(!(*geometries)[i]->isEmpty()) {
             return (*geometries)[i]->getCoordinate();
         }
     }
@@ -295,12 +287,11 @@ GeometryCollection::getCoordinate() const
 double
 GeometryCollection::getArea() const
 {
-	double area=0.0;
-	for(size_t i=0; i<geometries->size(); ++i)
-	{
-        	area+=(*geometries)[i]->getArea();
-	}
-	return area;
+    double area = 0.0;
+    for(size_t i = 0; i < geometries->size(); ++i) {
+        area += (*geometries)[i]->getArea();
+    }
+    return area;
 }
 
 /**
@@ -309,94 +300,98 @@ GeometryCollection::getArea() const
 double
 GeometryCollection::getLength() const
 {
-	double sum=0.0;
-	for(size_t i=0; i<geometries->size(); ++i)
-	{
-        	sum+=(*geometries)[i]->getLength();
-	}
-	return sum;
+    double sum = 0.0;
+    for(size_t i = 0; i < geometries->size(); ++i) {
+        sum += (*geometries)[i]->getLength();
+    }
+    return sum;
 }
 
 void
-GeometryCollection::apply_rw(GeometryComponentFilter *filter)
+GeometryCollection::apply_rw(GeometryComponentFilter* filter)
 {
-	filter->filter_rw(this);
-	for(size_t i=0; i<geometries->size(); ++i)
-	{
-        	(*geometries)[i]->apply_rw(filter);
-	}
+    filter->filter_rw(this);
+    for(size_t i = 0; i < geometries->size(); ++i) {
+        (*geometries)[i]->apply_rw(filter);
+    }
 }
 
 void
-GeometryCollection::apply_ro(GeometryComponentFilter *filter) const
+GeometryCollection::apply_ro(GeometryComponentFilter* filter) const
 {
-	filter->filter_ro(this);
-	for(size_t i=0; i<geometries->size(); ++i)
-	{
-		(*geometries)[i]->apply_ro(filter);
-	}
+    filter->filter_ro(this);
+    for(size_t i = 0; i < geometries->size(); ++i) {
+        (*geometries)[i]->apply_ro(filter);
+    }
 }
 
 void
 GeometryCollection::apply_rw(CoordinateSequenceFilter& filter)
 {
-	size_t ngeoms = geometries->size();
-	if (ngeoms == 0 ) return;
-	for (size_t i = 0; i < ngeoms; ++i)
-	{
-		(*geometries)[i]->apply_rw(filter);
-		if (filter.isDone()) break;
-	}
-	if (filter.isGeometryChanged()) geometryChanged();
+    size_t ngeoms = geometries->size();
+    if(ngeoms == 0) {
+        return;
+    }
+    for(size_t i = 0; i < ngeoms; ++i) {
+        (*geometries)[i]->apply_rw(filter);
+        if(filter.isDone()) {
+            break;
+        }
+    }
+    if(filter.isGeometryChanged()) {
+        geometryChanged();
+    }
 }
 
 void
 GeometryCollection::apply_ro(CoordinateSequenceFilter& filter) const
 {
-	size_t ngeoms = geometries->size();
-	if (ngeoms == 0 ) return;
-	for (size_t i = 0; i < ngeoms; ++i)
-	{
-		(*geometries)[i]->apply_ro(filter);
-		if (filter.isDone()) break;
-	}
+    size_t ngeoms = geometries->size();
+    if(ngeoms == 0) {
+        return;
+    }
+    for(size_t i = 0; i < ngeoms; ++i) {
+        (*geometries)[i]->apply_ro(filter);
+        if(filter.isDone()) {
+            break;
+        }
+    }
 
-	assert(!filter.isGeometryChanged()); // read-only filter...
-	//if (filter.isGeometryChanged()) geometryChanged();
+    assert(!filter.isGeometryChanged()); // read-only filter...
+    //if (filter.isGeometryChanged()) geometryChanged();
 }
 
 GeometryCollection::~GeometryCollection()
 {
-	for(size_t i=0; i<geometries->size(); ++i)
-	{
-		delete (*geometries)[i];
-	}
-	delete geometries;
+    for(size_t i = 0; i < geometries->size(); ++i) {
+        delete(*geometries)[i];
+    }
+    delete geometries;
 }
 
 GeometryTypeId
 GeometryCollection::getGeometryTypeId() const
 {
-	return GEOS_GEOMETRYCOLLECTION;
+    return GEOS_GEOMETRYCOLLECTION;
 }
 
 Geometry*
 GeometryCollection::reverse() const
 {
-	if (isEmpty()) {
-		return clone();
-	}
+    if(isEmpty()) {
+        return clone();
+    }
 
-	auto* reversed = new std::vector<Geometry*>{geometries->size()};
+    auto* reversed = new std::vector<Geometry*> {geometries->size()};
 
-	std::transform(geometries->begin(),
-				   geometries->end(),
-				   reversed->begin(),
-				   [](const Geometry* g) {
-					   return g->reverse();
-				   });
+    std::transform(geometries->begin(),
+                   geometries->end(),
+                   reversed->begin(),
+    [](const Geometry * g) {
+        return g->reverse();
+    });
 
-	return getFactory()->createGeometryCollection(reversed);
+    return getFactory()->createGeometryCollection(reversed);
 }
 
 } // namespace geos::geom

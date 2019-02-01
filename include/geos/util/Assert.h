@@ -21,9 +21,9 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Coordinate;
-	}
+namespace geom {
+class Coordinate;
+}
 }
 
 namespace geos {
@@ -32,27 +32,34 @@ namespace util { // geos.util
 class GEOS_DLL Assert {
 public:
 
-	static void isTrue(bool assertion, const std::string& message);
+    static void isTrue(bool assertion, const std::string& message);
 
-	static void isTrue(bool assertion) {
-		isTrue(assertion, std::string());
-	}
-
-
-	static void equals(const geom::Coordinate& expectedValue,
-			const geom::Coordinate& actualValue,
-			const std::string& message);
-
-	static void equals(const geom::Coordinate& expectedValue,
-			const geom::Coordinate& actualValue)
-	{
-		equals(expectedValue, actualValue, std::string());
-	}
+    static void
+    isTrue(bool assertion)
+    {
+        isTrue(assertion, std::string());
+    }
 
 
-	static void shouldNeverReachHere(const std::string& message);
+    static void equals(const geom::Coordinate& expectedValue,
+                       const geom::Coordinate& actualValue,
+                       const std::string& message);
 
-	static void shouldNeverReachHere() { shouldNeverReachHere(std::string()); }
+    static void
+    equals(const geom::Coordinate& expectedValue,
+           const geom::Coordinate& actualValue)
+    {
+        equals(expectedValue, actualValue, std::string());
+    }
+
+
+    static void shouldNeverReachHere(const std::string& message);
+
+    static void
+    shouldNeverReachHere()
+    {
+        shouldNeverReachHere(std::string());
+    }
 };
 
 } // namespace geos.util

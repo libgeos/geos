@@ -44,7 +44,7 @@ class GEOS_DLL MinimumBoundingCircle {
 private:
 
     // member variables
-    const geom::Geometry *input;
+    const geom::Geometry* input;
     std::vector<geom::Coordinate> extremalPts;
     geom::Coordinate centre;
     double radius;
@@ -55,12 +55,12 @@ private:
     geom::Coordinate lowestPoint(std::vector<geom::Coordinate>& pts);
     geom::Coordinate pointWitMinAngleWithX(std::vector<geom::Coordinate>& pts, geom::Coordinate& P);
     geom::Coordinate pointWithMinAngleWithSegment(std::vector<geom::Coordinate>& pts,
-        geom::Coordinate& P, geom::Coordinate& Q);
+            geom::Coordinate& P, geom::Coordinate& Q);
 
 
 public:
 
-    MinimumBoundingCircle(const geom::Geometry *geom):
+    MinimumBoundingCircle(const geom::Geometry* geom):
         input(nullptr),
         radius(0.0)
     {
@@ -68,7 +68,7 @@ public:
         centre.setNull();
     }
 
-	~MinimumBoundingCircle() {};
+    ~MinimumBoundingCircle() {};
 
     /**
     * Gets a geometry which represents the Minimum Bounding Circle.

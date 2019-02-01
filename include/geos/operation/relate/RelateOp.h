@@ -26,13 +26,13 @@
 
 // Forward declarations
 namespace geos {
-	namespace algorithm {
-		class BoundaryNodeRule;
-	}
-	namespace geom {
-		class IntersectionMatrix;
-		class Geometry;
-	}
+namespace algorithm {
+class BoundaryNodeRule;
+}
+namespace geom {
+class IntersectionMatrix;
+class Geometry;
+}
 }
 
 
@@ -58,75 +58,75 @@ class GEOS_DLL RelateOp: public GeometryGraphOperation {
 
 public:
 
-	/** \brief
-	 * Computes the geom::IntersectionMatrix for the spatial relationship
-	 * between two geom::Geometry objects, using the default (OGC SFS)
-	 * Boundary Node Rule
-	 *
-	 * @param a a Geometry to test. Ownership left to caller.
-	 * @param b a Geometry to test. Ownership left to caller.
-	 *
-	 * @return the IntersectonMatrix for the spatial relationship
-	 *         between the geometries. Ownership transferred.
-	 */
-	static geom::IntersectionMatrix* relate(
-			const geom::Geometry *a,
-			const geom::Geometry *b);
+    /** \brief
+     * Computes the geom::IntersectionMatrix for the spatial relationship
+     * between two geom::Geometry objects, using the default (OGC SFS)
+     * Boundary Node Rule
+     *
+     * @param a a Geometry to test. Ownership left to caller.
+     * @param b a Geometry to test. Ownership left to caller.
+     *
+     * @return the IntersectonMatrix for the spatial relationship
+     *         between the geometries. Ownership transferred.
+     */
+    static geom::IntersectionMatrix* relate(
+        const geom::Geometry* a,
+        const geom::Geometry* b);
 
-	/** \brief
-	 * Computes the geom::IntersectionMatrix for the spatial relationship
-	 * between two geom::Geometry objects, using a specified
-	 * Boundary Node Rule
-	 *
-	 * @param a a Geometry to test. Ownership left to caller.
-	 * @param b a Geometry to test. Ownership left to caller.
-	 * @param boundaryNodeRule the Boundary Node Rule to use.
-	 *
-	 * @return the IntersectonMatrix for the spatial relationship
-	 *         between the geometries. Ownership transferred.
-	 */
-	static geom::IntersectionMatrix* relate(
-			const geom::Geometry *a,
-			const geom::Geometry *b,
-			const algorithm::BoundaryNodeRule& boundaryNodeRule);
+    /** \brief
+     * Computes the geom::IntersectionMatrix for the spatial relationship
+     * between two geom::Geometry objects, using a specified
+     * Boundary Node Rule
+     *
+     * @param a a Geometry to test. Ownership left to caller.
+     * @param b a Geometry to test. Ownership left to caller.
+     * @param boundaryNodeRule the Boundary Node Rule to use.
+     *
+     * @return the IntersectonMatrix for the spatial relationship
+     *         between the geometries. Ownership transferred.
+     */
+    static geom::IntersectionMatrix* relate(
+        const geom::Geometry* a,
+        const geom::Geometry* b,
+        const algorithm::BoundaryNodeRule& boundaryNodeRule);
 
-	/** \brief
-	 * Creates a new Relate operation, using the default (OGC SFS)
-	 * Boundary Node Rule.
-	 *
-	 * @param g0 a Geometry to relate. Ownership left to caller.
-	 * @param g1 another Geometry to relate. Ownership to caller.
-	 */
-	RelateOp(const geom::Geometry *g0,
-			const geom::Geometry *g1);
+    /** \brief
+     * Creates a new Relate operation, using the default (OGC SFS)
+     * Boundary Node Rule.
+     *
+     * @param g0 a Geometry to relate. Ownership left to caller.
+     * @param g1 another Geometry to relate. Ownership to caller.
+     */
+    RelateOp(const geom::Geometry* g0,
+             const geom::Geometry* g1);
 
-	/** \brief
-	 * Creates a new Relate operation with a specified
-	 * Boundary Node Rule.
-	 *
-	 * @param g0 a Geometry to relate. Ownership left to caller.
-	 * @param g1 another Geometry to relate. Ownership to caller.
-	 * @param boundaryNodeRule the Boundary Node Rule to use
-	 */
-	RelateOp(const geom::Geometry *g0,
-	         const geom::Geometry *g1,
-	         const algorithm::BoundaryNodeRule& boundaryNodeRule);
+    /** \brief
+     * Creates a new Relate operation with a specified
+     * Boundary Node Rule.
+     *
+     * @param g0 a Geometry to relate. Ownership left to caller.
+     * @param g1 another Geometry to relate. Ownership to caller.
+     * @param boundaryNodeRule the Boundary Node Rule to use
+     */
+    RelateOp(const geom::Geometry* g0,
+             const geom::Geometry* g1,
+             const algorithm::BoundaryNodeRule& boundaryNodeRule);
 
-	~RelateOp() override;
+    ~RelateOp() override;
 
-	/** \brief
-	 * Gets the IntersectionMatrix for the spatial relationship
-	 * between the input geometries.
-	 *
-	 * @return the geom::IntersectionMatrix for the spatial
-	 *         relationship between the input geometries.
-	 *         Ownership transferred.
-	 */
-	geom::IntersectionMatrix* getIntersectionMatrix();
+    /** \brief
+     * Gets the IntersectionMatrix for the spatial relationship
+     * between the input geometries.
+     *
+     * @return the geom::IntersectionMatrix for the spatial
+     *         relationship between the input geometries.
+     *         Ownership transferred.
+     */
+    geom::IntersectionMatrix* getIntersectionMatrix();
 
 private:
 
-	RelateComputer relateComp;
+    RelateComputer relateComp;
 };
 
 

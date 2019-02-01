@@ -25,12 +25,12 @@
 
 // Forward declarations
 namespace geos {
-	namespace index {
-		namespace bintree {
-			class Interval;
-			class Root;
-		}
-	}
+namespace index {
+namespace bintree {
+class Interval;
+class Root;
+}
+}
 }
 
 namespace geos {
@@ -57,65 +57,65 @@ class GEOS_DLL Bintree {
 
 public:
 
-	/**
-	 * Ensure that the Interval for the inserted item has non-zero extents.
-	 * Use the current minExtent to pad it, if necessary
-	 *
-	 * NOTE: in GEOS this function always return a newly allocated object
-	 *       with ownership transferred to caller. TODO: change this ?
-	 *
-	 * @param itemInterval
-	 *      Source interval, ownership left to caller, no references hold.
-	 */
-	static Interval* ensureExtent(const Interval *itemInterval,
-	                                                 double minExtent);
+    /**
+     * Ensure that the Interval for the inserted item has non-zero extents.
+     * Use the current minExtent to pad it, if necessary
+     *
+     * NOTE: in GEOS this function always return a newly allocated object
+     *       with ownership transferred to caller. TODO: change this ?
+     *
+     * @param itemInterval
+     *      Source interval, ownership left to caller, no references hold.
+     */
+    static Interval* ensureExtent(const Interval* itemInterval,
+                                  double minExtent);
 
-	Bintree();
+    Bintree();
 
-	~Bintree();
+    ~Bintree();
 
-	int depth();
+    int depth();
 
-	int size();
+    int size();
 
-	int nodeSize();
+    int nodeSize();
 
-	/// @param itemInterval
-	///     Ownership left to caller, NO reference hold by this class.
-	///
-	/// @param item
-	///     Ownership left to caller, reference kept by this class.
-	///
-	void insert(Interval *itemInterval, void* item);
+    /// @param itemInterval
+    ///     Ownership left to caller, NO reference hold by this class.
+    ///
+    /// @param item
+    ///     Ownership left to caller, reference kept by this class.
+    ///
+    void insert(Interval* itemInterval, void* item);
 
-	std::vector<void*>* iterator();
+    std::vector<void*>* iterator();
 
-	std::vector<void*>* query(double x);
+    std::vector<void*>* query(double x);
 
-	std::vector<void*>* query(Interval *interval);
+    std::vector<void*>* query(Interval* interval);
 
-	void query(Interval *interval,
-			std::vector<void*> *foundItems);
+    void query(Interval* interval,
+               std::vector<void*>* foundItems);
 
 private:
 
-	std::vector<Interval *>newIntervals;
+    std::vector<Interval*>newIntervals;
 
-	Root *root;
+    Root* root;
 
-	/**
-	 *  Statistics
-	 *
-	 * minExtent is the minimum extent of all items
-	 * inserted into the tree so far. It is used as a heuristic value
-	 * to construct non-zero extents for features with zero extent.
-	 * Start with a non-zero extent, in case the first feature inserted has
-	 * a zero extent in both directions.  This value may be non-optimal, but
-	 * only one feature will be inserted with this value.
-	 */
-	double minExtent;
+    /**
+     *  Statistics
+     *
+     * minExtent is the minimum extent of all items
+     * inserted into the tree so far. It is used as a heuristic value
+     * to construct non-zero extents for features with zero extent.
+     * Start with a non-zero extent, in case the first feature inserted has
+     * a zero extent in both directions.  This value may be non-optimal, but
+     * only one feature will be inserted with this value.
+     */
+    double minExtent;
 
-	void collectStats(Interval *interval);
+    void collectStats(Interval* interval);
 };
 
 } // namespace geos::index::bintree

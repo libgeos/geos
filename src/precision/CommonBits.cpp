@@ -23,75 +23,77 @@ namespace precision { // geos.precision
 int64
 CommonBits::signExpBits(int64 num)
 {
-	return num >> 52;
+    return num >> 52;
 }
 
 /*static public*/
 int
 CommonBits::numCommonMostSigMantissaBits(int64 num1, int64 num2)
 {
-	int count = 0;
-	for (int i = 52; i >= 0; i--){
-		if (getBit(num1, i) != getBit(num2, i))
-			return count;
-		count++;
-	}
-	return 52;
+    int count = 0;
+    for(int i = 52; i >= 0; i--) {
+        if(getBit(num1, i) != getBit(num2, i)) {
+            return count;
+        }
+        count++;
+    }
+    return 52;
 }
 
 /*static public*/
 int64
 CommonBits::zeroLowerBits(int64 bits, int nBits)
 {
-	int64 invMask = (1<< nBits)-1;
-	int64 mask = ~ invMask;
-	int64 zeroed = bits & mask;
-	return zeroed;
+    int64 invMask = (1 << nBits) - 1;
+    int64 mask = ~ invMask;
+    int64 zeroed = bits & mask;
+    return zeroed;
 }
 
 /*static public*/
 int
 CommonBits::getBit(int64 bits, int i)
 {
-	int64 mask = (1ull << i);
-	return (bits & mask) != 0 ? 1 : 0;
+    int64 mask = (1ull << i);
+    return (bits & mask) != 0 ? 1 : 0;
 }
 
 /*public*/
-CommonBits::CommonBits() {
-	isFirst = true;
-	commonMantissaBitsCount = 53;
-	commonBits = 0;
+CommonBits::CommonBits()
+{
+    isFirst = true;
+    commonMantissaBitsCount = 53;
+    commonBits = 0;
 }
 
 /*public*/
 void
 CommonBits::add(double num)
 {
-	int64 numBits=(int64)num;
-	if (isFirst) {
-		commonBits = numBits;
-		commonSignExp = signExpBits(commonBits);
-		isFirst = false;
-		return;
-	}
-	int64 numSignExp = signExpBits(numBits);
-	if (numSignExp != commonSignExp) {
-		commonBits = 0;
-		return;
-	}
-	//    System.out.println(toString(commonBits));
-	//    System.out.println(toString(numBits));
-	commonMantissaBitsCount = numCommonMostSigMantissaBits(commonBits, numBits);
-	commonBits = zeroLowerBits(commonBits, 64 - (12 + commonMantissaBitsCount));
-	//    System.out.println(toString(commonBits));
+    int64 numBits = (int64)num;
+    if(isFirst) {
+        commonBits = numBits;
+        commonSignExp = signExpBits(commonBits);
+        isFirst = false;
+        return;
+    }
+    int64 numSignExp = signExpBits(numBits);
+    if(numSignExp != commonSignExp) {
+        commonBits = 0;
+        return;
+    }
+    //    System.out.println(toString(commonBits));
+    //    System.out.println(toString(numBits));
+    commonMantissaBitsCount = numCommonMostSigMantissaBits(commonBits, numBits);
+    commonBits = zeroLowerBits(commonBits, 64 - (12 + commonMantissaBitsCount));
+    //    System.out.println(toString(commonBits));
 }
 
 /*public*/
 double
 CommonBits::getCommon()
 {
-	return (double)commonBits;
+    return (double)commonBits;
 }
 
 } // namespace geos.precision

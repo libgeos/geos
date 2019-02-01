@@ -26,17 +26,17 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Coordinate;
-		struct CoordinateLessThen;
-	}
-	namespace geomgraph {
-		//class EdgeEndStar;
-		class Node;
-		class GeometryGraph;
-		class EdgeEnd;
-		class NodeMap;
-	}
+namespace geom {
+class Coordinate;
+struct CoordinateLessThen;
+}
+namespace geomgraph {
+//class EdgeEndStar;
+class Node;
+class GeometryGraph;
+class EdgeEnd;
+class NodeMap;
+}
 }
 
 
@@ -69,25 +69,25 @@ class GEOS_DLL RelateNodeGraph {
 
 public:
 
-	RelateNodeGraph();
+    RelateNodeGraph();
 
-	virtual ~RelateNodeGraph();
+    virtual ~RelateNodeGraph();
 
-	std::map<geom::Coordinate*, geomgraph::Node*,
-			geom::CoordinateLessThen> &getNodeMap();
+    std::map<geom::Coordinate*, geomgraph::Node*,
+        geom::CoordinateLessThen>& getNodeMap();
 
-	void build(geomgraph::GeometryGraph *geomGraph);
+    void build(geomgraph::GeometryGraph* geomGraph);
 
-	void computeIntersectionNodes(geomgraph::GeometryGraph *geomGraph,
-			int argIndex);
+    void computeIntersectionNodes(geomgraph::GeometryGraph* geomGraph,
+                                  int argIndex);
 
-	void copyNodesAndLabels(geomgraph::GeometryGraph *geomGraph,int argIndex);
+    void copyNodesAndLabels(geomgraph::GeometryGraph* geomGraph, int argIndex);
 
-	void insertEdgeEnds(std::vector<geomgraph::EdgeEnd*> *ee);
+    void insertEdgeEnds(std::vector<geomgraph::EdgeEnd*>* ee);
 
 private:
 
-	geomgraph::NodeMap *nodes;
+    geomgraph::NodeMap* nodes;
 };
 
 

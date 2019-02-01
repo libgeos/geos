@@ -13,12 +13,12 @@
 cmake_minimum_required(VERSION 3.1.3)
 
 if(NOT CMAKE_VERSION)
-    set(CMAKE_VERSION
-      "${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}")
+  set(CMAKE_VERSION
+    "${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}")
 endif()
 
 if(POLICY CMP0048)
-    cmake_policy(SET CMP0048 NEW)
+  cmake_policy(SET CMP0048 NEW)
 endif()
 #################################################################################
 # Set GEOS project

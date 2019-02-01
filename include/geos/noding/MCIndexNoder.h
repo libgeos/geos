@@ -38,13 +38,13 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class LineSegment;
-	}
-	namespace noding {
-		class SegmentString;
-		class SegmentIntersector;
-	}
+namespace geom {
+class LineSegment;
+}
+namespace noding {
+class SegmentString;
+class SegmentIntersector;
+}
 }
 
 namespace geos {
@@ -63,55 +63,59 @@ namespace noding { // geos.noding
 class GEOS_DLL MCIndexNoder : public SinglePassNoder {
 
 private:
-	std::vector<index::chain::MonotoneChain*> monoChains;
-	index::strtree::STRtree index;
-	int idCounter;
-	std::vector<SegmentString*>* nodedSegStrings;
-	// statistics
-	int nOverlaps;
+    std::vector<index::chain::MonotoneChain*> monoChains;
+    index::strtree::STRtree index;
+    int idCounter;
+    std::vector<SegmentString*>* nodedSegStrings;
+    // statistics
+    int nOverlaps;
 
-	void intersectChains();
+    void intersectChains();
 
-	void add(SegmentString* segStr);
+    void add(SegmentString* segStr);
 
 public:
 
-	MCIndexNoder(SegmentIntersector *nSegInt=nullptr)
-		:
-		SinglePassNoder(nSegInt),
-		idCounter(0),
-		nodedSegStrings(nullptr),
-		nOverlaps(0)
-	{}
+    MCIndexNoder(SegmentIntersector* nSegInt = nullptr)
+        :
+        SinglePassNoder(nSegInt),
+        idCounter(0),
+        nodedSegStrings(nullptr),
+        nOverlaps(0)
+    {}
 
-	~MCIndexNoder() override;
+    ~MCIndexNoder() override;
 
-	/// Return a reference to this instance's std::vector of MonotoneChains
-	std::vector<index::chain::MonotoneChain*>& getMonotoneChains() { return monoChains; }
+    /// Return a reference to this instance's std::vector of MonotoneChains
+    std::vector<index::chain::MonotoneChain*>&
+    getMonotoneChains()
+    {
+        return monoChains;
+    }
 
-	index::SpatialIndex& getIndex();
+    index::SpatialIndex& getIndex();
 
-	std::vector<SegmentString*>* getNodedSubstrings() const override;
+    std::vector<SegmentString*>* getNodedSubstrings() const override;
 
-	void computeNodes(std::vector<SegmentString*>* inputSegmentStrings) override;
+    void computeNodes(std::vector<SegmentString*>* inputSegmentStrings) override;
 
-	class SegmentOverlapAction : public index::chain::MonotoneChainOverlapAction {
-	public:
-		SegmentOverlapAction(SegmentIntersector& newSi)
-			:
-			index::chain::MonotoneChainOverlapAction(),
-			si(newSi)
-		{}
+    class SegmentOverlapAction : public index::chain::MonotoneChainOverlapAction {
+    public:
+        SegmentOverlapAction(SegmentIntersector& newSi)
+            :
+            index::chain::MonotoneChainOverlapAction(),
+            si(newSi)
+        {}
 
-		void overlap(index::chain::MonotoneChain& mc1, std::size_t start1,
-            index::chain::MonotoneChain& mc2, std::size_t start2) override;
+        void overlap(index::chain::MonotoneChain& mc1, std::size_t start1,
+                     index::chain::MonotoneChain& mc2, std::size_t start2) override;
     private:
         SegmentIntersector& si;
 
         // Declare type as noncopyable
         SegmentOverlapAction(const SegmentOverlapAction& other) = delete;
         SegmentOverlapAction& operator=(const SegmentOverlapAction& rhs) = delete;
-	};
+    };
 
 };
 

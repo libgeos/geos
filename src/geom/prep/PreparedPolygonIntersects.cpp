@@ -44,46 +44,47 @@ namespace prep { // geos::geom::prep
 // public:
 //
 bool
-PreparedPolygonIntersects::intersects( const geom::Geometry * geom)
+PreparedPolygonIntersects::intersects(const geom::Geometry* geom)
 {
-	// Do point-in-poly tests first, since they are cheaper and may result
-	// in a quick positive result.
-	// If a point of any test components lie in target, result is true
-	bool isInPrepGeomArea = isAnyTestComponentInTarget( geom);
-	if ( isInPrepGeomArea )
-		return true;
+    // Do point-in-poly tests first, since they are cheaper and may result
+    // in a quick positive result.
+    // If a point of any test components lie in target, result is true
+    bool isInPrepGeomArea = isAnyTestComponentInTarget(geom);
+    if(isInPrepGeomArea) {
+        return true;
+    }
 
-	if ( dynamic_cast<const geom::Puntal *>(geom) ) {
-		// point-in-poly failed, no way there can be an intersection
-		// (NOTE: isAnyTestComponentInTarget also checks for boundary)
-		return false;
-	}
+    if(dynamic_cast<const geom::Puntal*>(geom)) {
+        // point-in-poly failed, no way there can be an intersection
+        // (NOTE: isAnyTestComponentInTarget also checks for boundary)
+        return false;
+    }
 
-	// If any segments intersect, result is true
-	noding::SegmentString::ConstVect lineSegStr;
-	noding::SegmentStringUtil::extractSegmentStrings( geom, lineSegStr );
-	bool segsIntersect = prepPoly->getIntersectionFinder()->intersects( &lineSegStr);
+    // If any segments intersect, result is true
+    noding::SegmentString::ConstVect lineSegStr;
+    noding::SegmentStringUtil::extractSegmentStrings(geom, lineSegStr);
+    bool segsIntersect = prepPoly->getIntersectionFinder()->intersects(&lineSegStr);
 
-	for ( size_t i = 0, ni = lineSegStr.size(); i < ni; i++ )
-	{
-		delete lineSegStr[ i ];
-	}
+    for(size_t i = 0, ni = lineSegStr.size(); i < ni; i++) {
+        delete lineSegStr[ i ];
+    }
 
-	if (segsIntersect)
-		return true;
+    if(segsIntersect) {
+        return true;
+    }
 
-	// If the test has dimension = 2 as well, it is necessary to
-	// test for proper inclusion of the target.
-	// Since no segments intersect, it is sufficient to test representative points.
-	if ( geom->getDimension() == 2)
-	{
-		// TODO: generalize this to handle GeometryCollections
-		bool isPrepGeomInArea = isAnyTargetComponentInAreaTest( geom, prepPoly->getRepresentativePoints());
-		if ( isPrepGeomInArea )
-			return true;
-	}
+    // If the test has dimension = 2 as well, it is necessary to
+    // test for proper inclusion of the target.
+    // Since no segments intersect, it is sufficient to test representative points.
+    if(geom->getDimension() == 2) {
+        // TODO: generalize this to handle GeometryCollections
+        bool isPrepGeomInArea = isAnyTargetComponentInAreaTest(geom, prepPoly->getRepresentativePoints());
+        if(isPrepGeomInArea) {
+            return true;
+        }
+    }
 
-	return false;
+    return false;
 }
 
 } // geos::geom::prep

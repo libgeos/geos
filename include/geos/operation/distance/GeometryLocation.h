@@ -25,9 +25,9 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Geometry;
-	}
+namespace geom {
+class Geometry;
+}
 }
 
 
@@ -49,67 +49,67 @@ namespace distance { // geos::operation::distance
  */
 class GEOS_DLL GeometryLocation {
 private:
-	const geom::Geometry *component;
-	size_t segIndex;
-	bool inside_area;
-	geom::Coordinate pt;
+    const geom::Geometry* component;
+    size_t segIndex;
+    bool inside_area;
+    geom::Coordinate pt;
 public:
-	/** \brief
-	 * A Special value of segmentIndex used for locations
-	 * inside area geometries.
-	 *
-	 * These locations are not located on a segment,
-	 * and thus do not have an associated segment index.
-	 */
-	static const int INSIDE_AREA = -1;
+    /** \brief
+     * A Special value of segmentIndex used for locations
+     * inside area geometries.
+     *
+     * These locations are not located on a segment,
+     * and thus do not have an associated segment index.
+     */
+    static const int INSIDE_AREA = -1;
 
-	/** \brief
-	 * Constructs a GeometryLocation specifying a point on a geometry,
-	 * as well as the segment that the point is on (or INSIDE_AREA if
-	 * the point is not on a segment).
-	 *
-	 * @param component the component of the geometry containing the point
-	 * @param segIndex the segment index of the location, or INSIDE_AREA
-	 * @param pt the coordinate of the location
-	 */
-	GeometryLocation(const geom::Geometry *component,
-			size_t segIndex, const geom::Coordinate &pt);
+    /** \brief
+     * Constructs a GeometryLocation specifying a point on a geometry,
+     * as well as the segment that the point is on (or INSIDE_AREA if
+     * the point is not on a segment).
+     *
+     * @param component the component of the geometry containing the point
+     * @param segIndex the segment index of the location, or INSIDE_AREA
+     * @param pt the coordinate of the location
+     */
+    GeometryLocation(const geom::Geometry* component,
+                     size_t segIndex, const geom::Coordinate& pt);
 
-	/** \brief
-	 * Constructs a GeometryLocation specifying a point inside an
-	 * area geometry.
-	 *
-	 * @param component the component of the geometry containing the point
-	 * @param pt the coordinate of the location
-	 */
-	GeometryLocation(const geom::Geometry *component,
-	                      const geom::Coordinate &pt);
+    /** \brief
+     * Constructs a GeometryLocation specifying a point inside an
+     * area geometry.
+     *
+     * @param component the component of the geometry containing the point
+     * @param pt the coordinate of the location
+     */
+    GeometryLocation(const geom::Geometry* component,
+                     const geom::Coordinate& pt);
 
-	/**
-	 * Returns the geometry component on (or in) which this location occurs.
-	 */
-	const geom::Geometry* getGeometryComponent();
+    /**
+     * Returns the geometry component on (or in) which this location occurs.
+     */
+    const geom::Geometry* getGeometryComponent();
 
-	/**
-	 * Returns the segment index for this location.
-	 *
-	 * If the location is inside an
-	 * area, the index will have the value INSIDE_AREA;
-	 *
-	 * @return the segment index for the location, or INSIDE_AREA
-	 */
-	size_t getSegmentIndex();
+    /**
+     * Returns the segment index for this location.
+     *
+     * If the location is inside an
+     * area, the index will have the value INSIDE_AREA;
+     *
+     * @return the segment index for the location, or INSIDE_AREA
+     */
+    size_t getSegmentIndex();
 
-	/**
-	 * Returns the geom::Coordinate of this location.
-	 */
-	geom::Coordinate& getCoordinate();
+    /**
+     * Returns the geom::Coordinate of this location.
+     */
+    geom::Coordinate& getCoordinate();
 
-	/** \brief
-	 * Tests whether this location represents a point
-	 * inside an area geometry.
-	 */
-	bool isInsideArea();
+    /** \brief
+     * Tests whether this location represents a point
+     * inside an area geometry.
+     */
+    bool isInsideArea();
 };
 
 } // namespace geos::operation::distance

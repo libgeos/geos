@@ -47,159 +47,159 @@ using namespace geos::geom;
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-EdgeRing::EdgeRing(DirectedEdge *newStart,
-		const GeometryFactory *newGeometryFactory)
-	:
-        startDe(newStart),
-        geometryFactory(newGeometryFactory),
-	holes(),
-        maxNodeDegree(-1),
-	edges(),
-	pts(newGeometryFactory->getCoordinateSequenceFactory()->create()),
-        label(Location::UNDEF), // new Label(Location::UNDEF)),
-        ring(nullptr),
-        isHoleVar(false),
-        shell(nullptr)
+EdgeRing::EdgeRing(DirectedEdge* newStart,
+                   const GeometryFactory* newGeometryFactory)
+    :
+    startDe(newStart),
+    geometryFactory(newGeometryFactory),
+    holes(),
+    maxNodeDegree(-1),
+    edges(),
+    pts(newGeometryFactory->getCoordinateSequenceFactory()->create()),
+    label(Location::UNDEF), // new Label(Location::UNDEF)),
+    ring(nullptr),
+    isHoleVar(false),
+    shell(nullptr)
 {
-	/*
-	 * Commented out to fix different polymorphism in C++ (from Java)
-	 * Make sure these calls are made by derived classes !
-	 */
-	//computePoints(start);
-	//computeRing();
+    /*
+     * Commented out to fix different polymorphism in C++ (from Java)
+     * Make sure these calls are made by derived classes !
+     */
+    //computePoints(start);
+    //computeRing();
 #ifdef GEOS_DEBUG
-	cerr << "EdgeRing[" << this << "] ctor" << endl;
+    cerr << "EdgeRing[" << this << "] ctor" << endl;
 #endif
-	testInvariant();
+    testInvariant();
 }
 
 EdgeRing::~EdgeRing()
 {
-	testInvariant();
+    testInvariant();
 
-	/*
-	 * If we constructed a ring, we did by transferring
-	 * ownership of the CoordinateSequence, so it will be
-	 * destroyed by `ring' dtor and we must not destroy
-	 * it twice.
-	 */
-	if ( ring == nullptr )
-	{
-		delete pts;
-	}
-	else
-	{
-		delete ring;
-	}
+    /*
+     * If we constructed a ring, we did by transferring
+     * ownership of the CoordinateSequence, so it will be
+     * destroyed by `ring' dtor and we must not destroy
+     * it twice.
+     */
+    if(ring == nullptr) {
+        delete pts;
+    }
+    else {
+        delete ring;
+    }
 
-	for(size_t i=0, n=holes.size(); i<n; ++i)
-	{
-		delete holes[i];
-	}
+    for(size_t i = 0, n = holes.size(); i < n; ++i) {
+        delete holes[i];
+    }
 
 #ifdef GEOS_DEBUG
-	cerr << "EdgeRing[" << this << "] dtor" << endl;
+    cerr << "EdgeRing[" << this << "] dtor" << endl;
 #endif
 }
 
 bool
 EdgeRing::isIsolated()
 {
-	testInvariant();
-	return (label.getGeometryCount()==1);
+    testInvariant();
+    return (label.getGeometryCount() == 1);
 }
 
 bool
 EdgeRing::isHole()
 {
-	testInvariant();
+    testInvariant();
 
-	// We can't tell if this is an hole
-	// unless we computed the ring
-	// see computeRing()
-	assert(ring);
+    // We can't tell if this is an hole
+    // unless we computed the ring
+    // see computeRing()
+    assert(ring);
 
-	return isHoleVar;
+    return isHoleVar;
 }
 
 
 LinearRing*
 EdgeRing::getLinearRing()
 {
-	testInvariant();
+    testInvariant();
 //	return new LinearRing(*ring);
-	return ring;
+    return ring;
 }
 
 Label&
 EdgeRing::getLabel()
 {
-	testInvariant();
-	return label;
+    testInvariant();
+    return label;
 }
 
 bool
 EdgeRing::isShell()
 {
-	testInvariant();
-	return (shell==nullptr);
+    testInvariant();
+    return (shell == nullptr);
 }
 
 EdgeRing*
 EdgeRing::getShell()
 {
-	testInvariant();
-	return shell;
+    testInvariant();
+    return shell;
 }
 
 void
-EdgeRing::setShell(EdgeRing *newShell)
+EdgeRing::setShell(EdgeRing* newShell)
 {
-	shell=newShell;
-	if (shell!=nullptr) shell->addHole(this);
-	testInvariant();
+    shell = newShell;
+    if(shell != nullptr) {
+        shell->addHole(this);
+    }
+    testInvariant();
 }
 
 void
-EdgeRing::addHole(EdgeRing *edgeRing)
+EdgeRing::addHole(EdgeRing* edgeRing)
 {
-	holes.push_back(edgeRing);
-	testInvariant();
+    holes.push_back(edgeRing);
+    testInvariant();
 }
 
 /*public*/
 Polygon*
 EdgeRing::toPolygon(const GeometryFactory* p_geometryFactory)
 {
-	testInvariant();
+    testInvariant();
 
-	size_t nholes=holes.size();
-	vector<Geometry *> *holeLR=new vector<Geometry *>(nholes);
-	for (size_t i=0; i<nholes; ++i)
-	{
-		Geometry *hole=holes[i]->getLinearRing()->clone();
-        	(*holeLR)[i]=hole;
-	}
+    size_t nholes = holes.size();
+    vector<Geometry*>* holeLR = new vector<Geometry*>(nholes);
+    for(size_t i = 0; i < nholes; ++i) {
+        Geometry* hole = holes[i]->getLinearRing()->clone();
+        (*holeLR)[i] = hole;
+    }
 
-	// We don't use "clone" here because
-	// GeometryFactory::createPolygon really
-	// wants a LinearRing
-	//
-	LinearRing *shellLR=new LinearRing(*(getLinearRing()));
-	return p_geometryFactory->createPolygon(shellLR, holeLR);
+    // We don't use "clone" here because
+    // GeometryFactory::createPolygon really
+    // wants a LinearRing
+    //
+    LinearRing* shellLR = new LinearRing(*(getLinearRing()));
+    return p_geometryFactory->createPolygon(shellLR, holeLR);
 }
 
 /*public*/
 void
 EdgeRing::computeRing()
 {
-	testInvariant();
+    testInvariant();
 
-	if (ring!=nullptr) return;   // don't compute more than once
-	ring=geometryFactory->createLinearRing(pts);
-	isHoleVar=Orientation::isCCW(pts);
+    if(ring != nullptr) {
+        return;    // don't compute more than once
+    }
+    ring = geometryFactory->createLinearRing(pts);
+    isHoleVar = Orientation::isCCW(pts);
 
-	testInvariant();
+    testInvariant();
 
 }
 
@@ -207,42 +207,43 @@ EdgeRing::computeRing()
 vector<DirectedEdge*>&
 EdgeRing::getEdges()
 {
-	testInvariant();
+    testInvariant();
 
-	return edges;
+    return edges;
 }
 
 /*protected*/
 void
-EdgeRing::computePoints(DirectedEdge *newStart)
-	// throw(const TopologyException &)
+EdgeRing::computePoints(DirectedEdge* newStart)
+// throw(const TopologyException &)
 {
-	startDe=newStart;
-	DirectedEdge *de=newStart;
-	bool isFirstEdge=true;
-	do {
-		//util::Assert::isTrue(de!=NULL,"EdgeRing::computePoints: found null Directed Edge");
-		//assert(de!=NULL); // EdgeRing::computePoints: found null Directed Edge
-		if(de==nullptr)
-			throw util::TopologyException(
-				"EdgeRing::computePoints: found null Directed Edge");
+    startDe = newStart;
+    DirectedEdge* de = newStart;
+    bool isFirstEdge = true;
+    do {
+        //util::Assert::isTrue(de!=NULL,"EdgeRing::computePoints: found null Directed Edge");
+        //assert(de!=NULL); // EdgeRing::computePoints: found null Directed Edge
+        if(de == nullptr)
+            throw util::TopologyException(
+                "EdgeRing::computePoints: found null Directed Edge");
 
-		if (de->getEdgeRing()==this)
-			throw util::TopologyException(
-				"Directed Edge visited twice during ring-building",
-				de->getCoordinate());
+        if(de->getEdgeRing() == this)
+            throw util::TopologyException(
+                "Directed Edge visited twice during ring-building",
+                de->getCoordinate());
 
-		edges.push_back(de);
-		const Label& deLabel = de->getLabel();
-		assert(deLabel.isArea());
-		mergeLabel(deLabel);
-		addPoints(de->getEdge(),de->isForward(),isFirstEdge);
-		isFirstEdge=false;
-		setEdgeRing(de,this);
-		de=getNext(de);
-	} while (de!=startDe);
+        edges.push_back(de);
+        const Label& deLabel = de->getLabel();
+        assert(deLabel.isArea());
+        mergeLabel(deLabel);
+        addPoints(de->getEdge(), de->isForward(), isFirstEdge);
+        isFirstEdge = false;
+        setEdgeRing(de, this);
+        de = getNext(de);
+    }
+    while(de != startDe);
 
-	testInvariant();
+    testInvariant();
 
 }
 
@@ -251,30 +252,35 @@ int
 EdgeRing::getMaxNodeDegree()
 {
 
-	testInvariant();
+    testInvariant();
 
-	if (maxNodeDegree<0) computeMaxNodeDegree();
-	return maxNodeDegree;
+    if(maxNodeDegree < 0) {
+        computeMaxNodeDegree();
+    }
+    return maxNodeDegree;
 }
 
 /*private*/
 void
 EdgeRing::computeMaxNodeDegree()
 {
-	maxNodeDegree=0;
-	DirectedEdge *de=startDe;
-	do {
-		Node *node=de->getNode();
-		EdgeEndStar* ees = node->getEdges();
-		assert(dynamic_cast<DirectedEdgeStar*>(ees));
-		DirectedEdgeStar* des = static_cast<DirectedEdgeStar*>(ees);
-		int degree=des->getOutgoingDegree(this);
-		if (degree>maxNodeDegree) maxNodeDegree=degree;
-		de=getNext(de);
-	} while (de!=startDe);
-	maxNodeDegree *= 2;
+    maxNodeDegree = 0;
+    DirectedEdge* de = startDe;
+    do {
+        Node* node = de->getNode();
+        EdgeEndStar* ees = node->getEdges();
+        assert(dynamic_cast<DirectedEdgeStar*>(ees));
+        DirectedEdgeStar* des = static_cast<DirectedEdgeStar*>(ees);
+        int degree = des->getOutgoingDegree(this);
+        if(degree > maxNodeDegree) {
+            maxNodeDegree = degree;
+        }
+        de = getNext(de);
+    }
+    while(de != startDe);
+    maxNodeDegree *= 2;
 
-	testInvariant();
+    testInvariant();
 
 }
 
@@ -282,13 +288,14 @@ EdgeRing::computeMaxNodeDegree()
 void
 EdgeRing::setInResult()
 {
-	DirectedEdge *de=startDe;
-	do {
-		de->getEdge()->setInResult(true);
-		de=de->getNext();
-	} while (de!=startDe);
+    DirectedEdge* de = startDe;
+    do {
+        de->getEdge()->setInResult(true);
+        de = de->getNext();
+    }
+    while(de != startDe);
 
-	testInvariant();
+    testInvariant();
 
 }
 
@@ -296,10 +303,10 @@ EdgeRing::setInResult()
 void
 EdgeRing::mergeLabel(const Label& deLabel)
 {
-	mergeLabel(deLabel, 0);
-	mergeLabel(deLabel, 1);
+    mergeLabel(deLabel, 0);
+    mergeLabel(deLabel, 1);
 
-	testInvariant();
+    testInvariant();
 
 }
 
@@ -308,54 +315,58 @@ void
 EdgeRing::mergeLabel(const Label& deLabel, int geomIndex)
 {
 
-	testInvariant();
+    testInvariant();
 
-	int loc=deLabel.getLocation(geomIndex, Position::RIGHT);
-	// no information to be had from this label
-	if (loc==Location::UNDEF) return;
+    int loc = deLabel.getLocation(geomIndex, Position::RIGHT);
+    // no information to be had from this label
+    if(loc == Location::UNDEF) {
+        return;
+    }
 
-	// if there is no current RHS value, set it
-	if (label.getLocation(geomIndex)==Location::UNDEF) {
-		label.setLocation(geomIndex,loc);
-		return;
-	}
+    // if there is no current RHS value, set it
+    if(label.getLocation(geomIndex) == Location::UNDEF) {
+        label.setLocation(geomIndex, loc);
+        return;
+    }
 }
 
 /*protected*/
 void
-EdgeRing::addPoints(Edge *edge, bool isForward, bool isFirstEdge)
+EdgeRing::addPoints(Edge* edge, bool isForward, bool isFirstEdge)
 {
-	// EdgeRing::addPoints: can't add points after LinearRing construction
-	assert(ring==nullptr);
+    // EdgeRing::addPoints: can't add points after LinearRing construction
+    assert(ring == nullptr);
 
-	assert(edge);
-	const CoordinateSequence* edgePts=edge->getCoordinates();
+    assert(edge);
+    const CoordinateSequence* edgePts = edge->getCoordinates();
 
-	assert(edgePts);
-	size_t numEdgePts=edgePts->getSize();
+    assert(edgePts);
+    size_t numEdgePts = edgePts->getSize();
 
-	assert(pts);
+    assert(pts);
 
-	if (isForward) {
-		size_t startIndex=1;
-		if (isFirstEdge) startIndex=0;
-		for (size_t i=startIndex; i<numEdgePts; ++i)
-		{
-			pts->add(edgePts->getAt(i));
-		}
-	}
+    if(isForward) {
+        size_t startIndex = 1;
+        if(isFirstEdge) {
+            startIndex = 0;
+        }
+        for(size_t i = startIndex; i < numEdgePts; ++i) {
+            pts->add(edgePts->getAt(i));
+        }
+    }
 
-	else { // is backward
-		size_t startIndex=numEdgePts-1;
-		if (isFirstEdge) startIndex=numEdgePts;
-		//for (int i=startIndex;i>=0;i--)
-		for (size_t i=startIndex; i>0; --i)
-		{
-			pts->add(edgePts->getAt(i-1));
-		}
-	}
+    else { // is backward
+        size_t startIndex = numEdgePts - 1;
+        if(isFirstEdge) {
+            startIndex = numEdgePts;
+        }
+        //for (int i=startIndex;i>=0;i--)
+        for(size_t i = startIndex; i > 0; --i) {
+            pts->add(edgePts->getAt(i - 1));
+        }
+    }
 
-	testInvariant();
+    testInvariant();
 
 }
 
@@ -364,36 +375,38 @@ bool
 EdgeRing::containsPoint(const Coordinate& p)
 {
 
-	testInvariant();
+    testInvariant();
 
-	assert(ring);
+    assert(ring);
 
-	const Envelope* env=ring->getEnvelopeInternal();
-	assert(env);
-	if ( ! env->contains(p) ) return false;
+    const Envelope* env = ring->getEnvelopeInternal();
+    assert(env);
+    if(! env->contains(p)) {
+        return false;
+    }
 
-	if ( ! PointLocation::isInRing(p, ring->getCoordinatesRO()) )
-		return false;
+    if(! PointLocation::isInRing(p, ring->getCoordinatesRO())) {
+        return false;
+    }
 
-	for (vector<EdgeRing*>::iterator i=holes.begin(); i<holes.end(); ++i)
-	{
-		EdgeRing *hole=*i;
-		assert(hole);
-		if (hole->containsPoint(p))
-		{
-			return false;
-		}
-	}
-	return true;
+    for(vector<EdgeRing*>::iterator i = holes.begin(); i < holes.end(); ++i) {
+        EdgeRing* hole = *i;
+        assert(hole);
+        if(hole->containsPoint(p)) {
+            return false;
+        }
+    }
+    return true;
 }
 
-std::ostream& operator<< (std::ostream& os, const EdgeRing& er)
+std::ostream&
+operator<< (std::ostream& os, const EdgeRing& er)
 {
-	os << "EdgeRing[" << &er << "]: "
-	   << std::endl
-	   << "Points: " << er.pts
-	   << std::endl;
-	return os;
+    os << "EdgeRing[" << &er << "]: "
+       << std::endl
+       << "Points: " << er.pts
+       << std::endl;
+    return os;
 }
 
 } // namespace geos.geomgraph

@@ -29,9 +29,9 @@
 
 // Forward declarations
 namespace geos {
-	namespace algorithm {
-		//class LineIntersector;
-	}
+namespace algorithm {
+//class LineIntersector;
+}
 }
 
 namespace geos {
@@ -51,52 +51,53 @@ class GEOS_DLL BasicSegmentString : public SegmentString {
 
 public:
 
-	/// Construct a BasicSegmentString.
-	//
-	/// @param newPts CoordinateSequence representing the string,
-	///                externally owned
-	/// @param newContext the context associated to this SegmentString
-	///
-	BasicSegmentString(geom::CoordinateSequence *newPts,
-			const void* newContext)
-		:
-		SegmentString(newContext),
-		pts(newPts)
-	{}
+    /// Construct a BasicSegmentString.
+    //
+    /// @param newPts CoordinateSequence representing the string,
+    ///                externally owned
+    /// @param newContext the context associated to this SegmentString
+    ///
+    BasicSegmentString(geom::CoordinateSequence* newPts,
+                       const void* newContext)
+        :
+        SegmentString(newContext),
+        pts(newPts)
+    {}
 
-	~BasicSegmentString() override
-	{}
+    ~BasicSegmentString() override
+    {}
 
-	/// see dox in SegmentString.h
-	size_t size() const override
-	{
-		return pts->size();
-	}
+    /// see dox in SegmentString.h
+    size_t
+    size() const override
+    {
+        return pts->size();
+    }
 
-	/// see dox in SegmentString.h
-	const geom::Coordinate& getCoordinate(size_t i) const override;
+    /// see dox in SegmentString.h
+    const geom::Coordinate& getCoordinate(size_t i) const override;
 
-	/// see dox in SegmentString.h
-	geom::CoordinateSequence* getCoordinates() const override;
+    /// see dox in SegmentString.h
+    geom::CoordinateSequence* getCoordinates() const override;
 
-	/// see dox in SegmentString.h
-	bool isClosed() const override;
+    /// see dox in SegmentString.h
+    bool isClosed() const override;
 
-	/// see dox in SegmentString.h
-	std::ostream& print(std::ostream& os) const override;
+    /// see dox in SegmentString.h
+    std::ostream& print(std::ostream& os) const override;
 
-	/** \brief
-	 * Gets the octant of the segment starting at vertex index.
-	 *
-	 * @param index the index of the vertex starting the segment.
-	 *        Must not be the last index in the vertex list
-	 * @return the octant of the segment at the vertex
-	 */
-	int getSegmentOctant(size_t index) const;
+    /** \brief
+     * Gets the octant of the segment starting at vertex index.
+     *
+     * @param index the index of the vertex starting the segment.
+     *        Must not be the last index in the vertex list
+     * @return the octant of the segment at the vertex
+     */
+    int getSegmentOctant(size_t index) const;
 
 private:
 
-	geom::CoordinateSequence *pts;
+    geom::CoordinateSequence* pts;
 
 };
 

@@ -39,128 +39,137 @@ namespace noding { // geos::noding
  *
  * @version 1.7
  */
-class SegmentIntersectionDetector : public SegmentIntersector
-{
+class SegmentIntersectionDetector : public SegmentIntersector {
 private:
-	algorithm::LineIntersector * li;
+    algorithm::LineIntersector* li;
 
-	bool findProper;
-	bool findAllTypes;
+    bool findProper;
+    bool findAllTypes;
 
-	bool _hasIntersection;
-	bool _hasProperIntersection;
-	bool _hasNonProperIntersection;
+    bool _hasIntersection;
+    bool _hasProperIntersection;
+    bool _hasNonProperIntersection;
 
-	const geom::Coordinate * intPt;
-	geom::CoordinateSequence * intSegments;
+    const geom::Coordinate* intPt;
+    geom::CoordinateSequence* intSegments;
 
 protected:
 public:
-	SegmentIntersectionDetector( algorithm::LineIntersector * p_li)
-		:
-		li( p_li),
-		findProper(false),
-		findAllTypes(false),
-		_hasIntersection(false),
-		_hasProperIntersection(false),
-		_hasNonProperIntersection(false),
-		intPt( nullptr),
-		intSegments( nullptr)
-	{ }
+    SegmentIntersectionDetector(algorithm::LineIntersector* p_li)
+        :
+        li(p_li),
+        findProper(false),
+        findAllTypes(false),
+        _hasIntersection(false),
+        _hasProperIntersection(false),
+        _hasNonProperIntersection(false),
+        intPt(nullptr),
+        intSegments(nullptr)
+    { }
 
-	~SegmentIntersectionDetector() override
-	{
-		//delete intPt;
-		delete intSegments;
-	}
-
-
-	void setFindProper( bool p_findProper)
-	{
-		this->findProper = p_findProper;
-	}
-
-	void setFindAllIntersectionTypes( bool p_findAllTypes)
-	{
-		this->findAllTypes = p_findAllTypes;
-	}
-
-	/**
-	 * Tests whether an intersection was found.
-	 *
-	 * @return true if an intersection was found
-	 */
-	bool hasIntersection() const
-	{
-		return _hasIntersection;
-	}
-
-	/**
-	 * Tests whether a proper intersection was found.
-	 *
-	 * @return true if a proper intersection was found
-	 */
-	bool hasProperIntersection() const
-	{
-		return _hasProperIntersection;
-	}
-
-	/**
-	 * Tests whether a non-proper intersection was found.
-	 *
-	 * @return true if a non-proper intersection was found
-	 */
-	bool hasNonProperIntersection() const
-	{
-		return _hasNonProperIntersection;
-	}
-
-	/**
-	* Gets the computed location of the intersection.
-	* Due to round-off, the location may not be exact.
-	*
-	* @return the coordinate for the intersection location
-	*/
-	const geom::Coordinate * getIntersection()  const
-	{
-		return intPt;
-	}
+    ~SegmentIntersectionDetector() override
+    {
+        //delete intPt;
+        delete intSegments;
+    }
 
 
-	/**
-	 * Gets the endpoints of the intersecting segments.
-	 *
-	 * @return an array of the segment endpoints (p00, p01, p10, p11)
-	 */
-	const geom::CoordinateSequence * getIntersectionSegments() const
-	{
-		return intSegments;
-	}
+    void
+    setFindProper(bool p_findProper)
+    {
+        this->findProper = p_findProper;
+    }
 
-	bool isDone() const override
-	{
-		// If finding all types, we can stop
-		// when both possible types have been found.
-		if (findAllTypes)
-			return _hasProperIntersection && _hasNonProperIntersection;
+    void
+    setFindAllIntersectionTypes(bool p_findAllTypes)
+    {
+        this->findAllTypes = p_findAllTypes;
+    }
 
-		// If searching for a proper intersection, only stop if one is found
-		if (findProper)
-			return _hasProperIntersection;
+    /**
+     * Tests whether an intersection was found.
+     *
+     * @return true if an intersection was found
+     */
+    bool
+    hasIntersection() const
+    {
+        return _hasIntersection;
+    }
 
-		return _hasIntersection;
-	}
+    /**
+     * Tests whether a proper intersection was found.
+     *
+     * @return true if a proper intersection was found
+     */
+    bool
+    hasProperIntersection() const
+    {
+        return _hasProperIntersection;
+    }
 
-	/**
-	 * This method is called by clients
-	 * of the {@link SegmentIntersector} class to process
-	 * intersections for two segments of the {@link SegmentStrings} being intersected.
-	 * Note that some clients (such as {@link MonotoneChain}s) may optimize away
-	 * this call for segment pairs which they have determined do not intersect
-	 * (e.g. by an disjoint envelope test).
-	 */
-	void processIntersections(	noding::SegmentString * e0, size_t segIndex0,
-								noding::SegmentString * e1, size_t segIndex1 ) override;
+    /**
+     * Tests whether a non-proper intersection was found.
+     *
+     * @return true if a non-proper intersection was found
+     */
+    bool
+    hasNonProperIntersection() const
+    {
+        return _hasNonProperIntersection;
+    }
+
+    /**
+    * Gets the computed location of the intersection.
+    * Due to round-off, the location may not be exact.
+    *
+    * @return the coordinate for the intersection location
+    */
+    const geom::Coordinate*
+    getIntersection()  const
+    {
+        return intPt;
+    }
+
+
+    /**
+     * Gets the endpoints of the intersecting segments.
+     *
+     * @return an array of the segment endpoints (p00, p01, p10, p11)
+     */
+    const geom::CoordinateSequence*
+    getIntersectionSegments() const
+    {
+        return intSegments;
+    }
+
+    bool
+    isDone() const override
+    {
+        // If finding all types, we can stop
+        // when both possible types have been found.
+        if(findAllTypes) {
+            return _hasProperIntersection && _hasNonProperIntersection;
+        }
+
+        // If searching for a proper intersection, only stop if one is found
+        if(findProper) {
+            return _hasProperIntersection;
+        }
+
+        return _hasIntersection;
+    }
+
+    /**
+     * This method is called by clients
+     * of the {@link SegmentIntersector} class to process
+     * intersections for two segments of the {@link SegmentStrings} being intersected.
+     * Note that some clients (such as {@link MonotoneChain}s) may optimize away
+     * this call for segment pairs which they have determined do not intersect
+     * (e.g. by an disjoint envelope test).
+     */
+    void processIntersections(noding::SegmentString* e0, size_t segIndex0,
+                              noding::SegmentString* e1, size_t segIndex1) override;
 
 };
 

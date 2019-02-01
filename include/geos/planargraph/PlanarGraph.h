@@ -31,14 +31,14 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Coordinate;
-	}
-	namespace planargraph {
-		class DirectedEdge;
-		class Edge;
-		class Node;
-	}
+namespace geom {
+class Coordinate;
+}
+namespace planargraph {
+class DirectedEdge;
+class Edge;
+class Node;
+}
 }
 
 namespace geos {
@@ -61,187 +61,218 @@ class GEOS_DLL PlanarGraph {
 
 protected:
 
-	std::vector<Edge*> edges;
-	std::vector<DirectedEdge*> dirEdges;
-	NodeMap nodeMap;
+    std::vector<Edge*> edges;
+    std::vector<DirectedEdge*> dirEdges;
+    NodeMap nodeMap;
 
-	/**
-	 * \brief
-	 * Adds a node to the std::map, replacing any that is already at that
-	 * location.
-	 *
-	 * Only subclasses can add Nodes, to ensure Nodes are
-	 * of the right type.
-	 * @return the added node
-	 */
-	void add(Node *node) {
-		nodeMap.add(node);
-	}
+    /**
+     * \brief
+     * Adds a node to the std::map, replacing any that is already at that
+     * location.
+     *
+     * Only subclasses can add Nodes, to ensure Nodes are
+     * of the right type.
+     * @return the added node
+     */
+    void
+    add(Node* node)
+    {
+        nodeMap.add(node);
+    }
 
-	/**
-	 * \brief
-	 * Adds the Edge and its DirectedEdges with this PlanarGraph.
-	 *
-	 * Assumes that the Edge has already been created with its associated
-	 * DirectEdges.
-	 * Only subclasses can add Edges, to ensure the edges added are of
-	 * the right class.
-	 */
-	void add(Edge *edge);
+    /**
+     * \brief
+     * Adds the Edge and its DirectedEdges with this PlanarGraph.
+     *
+     * Assumes that the Edge has already been created with its associated
+     * DirectEdges.
+     * Only subclasses can add Edges, to ensure the edges added are of
+     * the right class.
+     */
+    void add(Edge* edge);
 
-	/**
-	 * \brief
-	 * Adds the Edge to this PlanarGraph.
-	 *
-	 * Only subclasses can add DirectedEdges,
-	 * to ensure the edges added are of the right class.
-	 */
-	void add(DirectedEdge *dirEdge) {
-		dirEdges.push_back(dirEdge);
-	}
+    /**
+     * \brief
+     * Adds the Edge to this PlanarGraph.
+     *
+     * Only subclasses can add DirectedEdges,
+     * to ensure the edges added are of the right class.
+     */
+    void
+    add(DirectedEdge* dirEdge)
+    {
+        dirEdges.push_back(dirEdge);
+    }
 
 public:
 
-	typedef std::vector<Edge *> EdgeContainer;
-	typedef EdgeContainer::iterator EdgeIterator;
+    typedef std::vector<Edge*> EdgeContainer;
+    typedef EdgeContainer::iterator EdgeIterator;
 
 
-	/**
-	 * \brief
-	 * Constructs a PlanarGraph without any Edges, DirectedEdges, or Nodes.
-	 */
-	PlanarGraph() {}
+    /**
+     * \brief
+     * Constructs a PlanarGraph without any Edges, DirectedEdges, or Nodes.
+     */
+    PlanarGraph() {}
 
-	virtual ~PlanarGraph() {}
+    virtual
+    ~PlanarGraph() {}
 
-	/**
-	 * \brief
-	 * Returns the Node at the given location,
-	 * or null if no Node was there.
-	 */
-	Node* findNode(const geom::Coordinate& pt) {
-		return nodeMap.find(pt);
-	}
+    /**
+     * \brief
+     * Returns the Node at the given location,
+     * or null if no Node was there.
+     */
+    Node*
+    findNode(const geom::Coordinate& pt)
+    {
+        return nodeMap.find(pt);
+    }
 
-	/**
-	 * \brief
-	 * Returns an Iterator over the Nodes in this PlanarGraph.
-	 */
-	NodeMap::container::iterator nodeIterator() {
-		return nodeMap.begin();
-	}
+    /**
+     * \brief
+     * Returns an Iterator over the Nodes in this PlanarGraph.
+     */
+    NodeMap::container::iterator
+    nodeIterator()
+    {
+        return nodeMap.begin();
+    }
 
-	NodeMap::container::iterator nodeBegin() {
-		return nodeMap.begin();
-	}
+    NodeMap::container::iterator
+    nodeBegin()
+    {
+        return nodeMap.begin();
+    }
 
-	NodeMap::container::const_iterator nodeBegin() const {
-		return nodeMap.begin();
-	}
+    NodeMap::container::const_iterator
+    nodeBegin() const
+    {
+        return nodeMap.begin();
+    }
 
-	NodeMap::container::iterator nodeEnd() {
-		return nodeMap.end();
-	}
+    NodeMap::container::iterator
+    nodeEnd()
+    {
+        return nodeMap.end();
+    }
 
-	NodeMap::container::const_iterator nodeEnd() const {
-		return nodeMap.end();
-	}
+    NodeMap::container::const_iterator
+    nodeEnd() const
+    {
+        return nodeMap.end();
+    }
 
-	/**
-	 * \brief
-	 * Returns the Nodes in this PlanarGraph.
-	 *
-	 * @param nodes : the nodes are push_back'ed here
-	 */
-	void getNodes(std::vector<Node*>& nodes) { nodeMap.getNodes(nodes); }
+    /**
+     * \brief
+     * Returns the Nodes in this PlanarGraph.
+     *
+     * @param nodes : the nodes are push_back'ed here
+     */
+    void
+    getNodes(std::vector<Node*>& nodes)
+    {
+        nodeMap.getNodes(nodes);
+    }
 
-	/**
-	 * \brief
-	 * Returns an Iterator over the DirectedEdges in this PlanarGraph,
-	 * in the order in which they were added.
-	 *
-	 * @see add(Edge)
-	 * @see add(DirectedEdge)
-	 */
-	std::vector<DirectedEdge*>::iterator dirEdgeIterator() {
-		return dirEdges.begin();
-	}
+    /**
+     * \brief
+     * Returns an Iterator over the DirectedEdges in this PlanarGraph,
+     * in the order in which they were added.
+     *
+     * @see add(Edge)
+     * @see add(DirectedEdge)
+     */
+    std::vector<DirectedEdge*>::iterator
+    dirEdgeIterator()
+    {
+        return dirEdges.begin();
+    }
 
-	/// Alias for edgeBegin()
-	std::vector<Edge*>::iterator edgeIterator() {
-		return edges.begin();
-	}
+    /// Alias for edgeBegin()
+    std::vector<Edge*>::iterator
+    edgeIterator()
+    {
+        return edges.begin();
+    }
 
-	/// Returns an iterator to first Edge in this graph.
-	//
-	/// Edges are stored in the order they were added.
-	/// @see add(Edge)
-	///
-	std::vector<Edge*>::iterator edgeBegin() {
-		return edges.begin();
-	}
+    /// Returns an iterator to first Edge in this graph.
+    //
+    /// Edges are stored in the order they were added.
+    /// @see add(Edge)
+    ///
+    std::vector<Edge*>::iterator
+    edgeBegin()
+    {
+        return edges.begin();
+    }
 
-	/// Returns an iterator to one-past last Edge in this graph.
-	//
-	/// Edges are stored in the order they were added.
-	/// @see add(Edge)
-	///
-	std::vector<Edge*>::iterator edgeEnd() {
-		return edges.end();
-	}
+    /// Returns an iterator to one-past last Edge in this graph.
+    //
+    /// Edges are stored in the order they were added.
+    /// @see add(Edge)
+    ///
+    std::vector<Edge*>::iterator
+    edgeEnd()
+    {
+        return edges.end();
+    }
 
-	/**
-	 * \brief
-	 * Returns the Edges that have been added to this PlanarGraph
-	 * @see #add(Edge)
-	 */
-	std::vector<Edge*>* getEdges() {
-		return &edges;
-	}
+    /**
+     * \brief
+     * Returns the Edges that have been added to this PlanarGraph
+     * @see #add(Edge)
+     */
+    std::vector<Edge*>*
+    getEdges()
+    {
+        return &edges;
+    }
 
-	/**
-	 * \brief
-	 * Removes an Edge and its associated DirectedEdges from their
-	 * from-Nodes and from this PlanarGraph.
-	 *
-	 * Note: This method does not remove the Nodes associated
-	 * with the Edge, even if the removal of the Edge reduces the
-	 * degree of a Node to zero.
-	 */
-	void remove(Edge *edge);
+    /**
+     * \brief
+     * Removes an Edge and its associated DirectedEdges from their
+     * from-Nodes and from this PlanarGraph.
+     *
+     * Note: This method does not remove the Nodes associated
+     * with the Edge, even if the removal of the Edge reduces the
+     * degree of a Node to zero.
+     */
+    void remove(Edge* edge);
 
-	/**
-	 * \brief
-	 * Removes DirectedEdge from its from-Node and from this PlanarGraph.
-	 *
-	 * Note:
-	 * This method does not remove the Nodes associated with the
-	 * DirectedEdge, even if the removal of the DirectedEdge reduces
-	 * the degree of a Node to zero.
-	 */
-	void remove(DirectedEdge *de);
+    /**
+     * \brief
+     * Removes DirectedEdge from its from-Node and from this PlanarGraph.
+     *
+     * Note:
+     * This method does not remove the Nodes associated with the
+     * DirectedEdge, even if the removal of the DirectedEdge reduces
+     * the degree of a Node to zero.
+     */
+    void remove(DirectedEdge* de);
 
-	/**
-	 * \brief
-	 * Removes a node from the graph, along with any associated
-	 * DirectedEdges and Edges.
-	 */
-	void remove(Node *node);
+    /**
+     * \brief
+     * Removes a node from the graph, along with any associated
+     * DirectedEdges and Edges.
+     */
+    void remove(Node* node);
 
-	/**
-	 * \brief
-	 * Returns all Nodes with the given number of Edges around it.
- 	 * The return value is a newly allocated vector of existing nodes
-	 */
-	std::vector<Node*>* findNodesOfDegree(std::size_t degree);
+    /**
+     * \brief
+     * Returns all Nodes with the given number of Edges around it.
+     * The return value is a newly allocated vector of existing nodes
+     */
+    std::vector<Node*>* findNodesOfDegree(std::size_t degree);
 
-	/**
-	 * \brief
-	 * Get all Nodes with the given number of Edges around it.
-	 *
- 	 * Found nodes are pushed to the given vector
-	 */
-	void findNodesOfDegree(std::size_t degree, std::vector<Node*>& to);
+    /**
+     * \brief
+     * Get all Nodes with the given number of Edges around it.
+     *
+     * Found nodes are pushed to the given vector
+     */
+    void findNodesOfDegree(std::size_t degree, std::vector<Node*>& to);
 };
 
 } // namespace geos::planargraph

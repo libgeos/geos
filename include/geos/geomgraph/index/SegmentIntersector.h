@@ -28,13 +28,13 @@
 
 // Forward declarations
 namespace geos {
-	namespace algorithm {
-		class LineIntersector;
-	}
-	namespace geomgraph {
-		class Node;
-		class Edge;
-	}
+namespace algorithm {
+class LineIntersector;
+}
+namespace geomgraph {
+class Node;
+class Edge;
+}
 }
 
 namespace geos {
@@ -42,96 +42,97 @@ namespace geomgraph { // geos::geomgraph
 namespace index { // geos::geomgraph::index
 
 
-class GEOS_DLL SegmentIntersector{
+class GEOS_DLL SegmentIntersector {
 
 private:
 
-	/**
-	 * These variables keep track of what types of intersections were
-	 * found during ALL edges that have been intersected.
-	 */
-	bool hasIntersectionVar;
+    /**
+     * These variables keep track of what types of intersections were
+     * found during ALL edges that have been intersected.
+     */
+    bool hasIntersectionVar;
 
-	bool hasProper;
+    bool hasProper;
 
-	bool hasProperInterior;
+    bool hasProperInterior;
 
-	bool isDone;
+    bool isDone;
 
-	bool isDoneWhenProperInt;
+    bool isDoneWhenProperInt;
 
-	// the proper intersection point found
-	geom::Coordinate properIntersectionPoint;
+    // the proper intersection point found
+    geom::Coordinate properIntersectionPoint;
 
-	algorithm::LineIntersector *li;
+    algorithm::LineIntersector* li;
 
-	bool includeProper;
+    bool includeProper;
 
-	bool recordIsolated;
+    bool recordIsolated;
 
-	//bool isSelfIntersection;
+    //bool isSelfIntersection;
 
-	//bool intersectionFound;
+    //bool intersectionFound;
 
-	int numIntersections;
+    int numIntersections;
 
-	/// Elements are externally owned
-	std::vector<std::vector<Node*>*> bdyNodes;
+    /// Elements are externally owned
+    std::vector<std::vector<Node*>*> bdyNodes;
 
-	bool isTrivialIntersection(Edge *e0, size_t segIndex0,Edge *e1, size_t segIndex1);
+    bool isTrivialIntersection(Edge* e0, size_t segIndex0, Edge* e1, size_t segIndex1);
 
-	bool isBoundaryPoint(algorithm::LineIntersector *li,
-			std::vector<std::vector<Node*>*>& tstBdyNodes);
+    bool isBoundaryPoint(algorithm::LineIntersector* li,
+                         std::vector<std::vector<Node*>*>& tstBdyNodes);
 
-	bool isBoundaryPoint(algorithm::LineIntersector *li,
-			std::vector<Node*> *tstBdyNodes);
+    bool isBoundaryPoint(algorithm::LineIntersector* li,
+                         std::vector<Node*>* tstBdyNodes);
 
 public:
 
-	static bool isAdjacentSegments(size_t i1, size_t i2);
+    static bool isAdjacentSegments(size_t i1, size_t i2);
 
-	// testing only
-	int numTests;
+    // testing only
+    int numTests;
 
-	//SegmentIntersector();
+    //SegmentIntersector();
 
-	virtual ~SegmentIntersector() {}
+    virtual
+    ~SegmentIntersector() {}
 
-	SegmentIntersector(algorithm::LineIntersector *newLi,
-			bool newIncludeProper, bool newRecordIsolated)
-		:
-		hasIntersectionVar(false),
-		hasProper(false),
-		hasProperInterior(false),
-		isDone(false),
-		isDoneWhenProperInt(false),
-		li(newLi),
-		includeProper(newIncludeProper),
-		recordIsolated(newRecordIsolated),
-		numIntersections(0),
-		bdyNodes(2),
-		numTests(0)
-	{}
+    SegmentIntersector(algorithm::LineIntersector* newLi,
+                       bool newIncludeProper, bool newRecordIsolated)
+        :
+        hasIntersectionVar(false),
+        hasProper(false),
+        hasProperInterior(false),
+        isDone(false),
+        isDoneWhenProperInt(false),
+        li(newLi),
+        includeProper(newIncludeProper),
+        recordIsolated(newRecordIsolated),
+        numIntersections(0),
+        bdyNodes(2),
+        numTests(0)
+    {}
 
-	/// \brief
-	/// Parameters are externally owned.
-	/// Make sure they live for the whole lifetime of this object
-	void setBoundaryNodes(std::vector<Node*> *bdyNodes0,
-			std::vector<Node*> *bdyNodes1);
+    /// \brief
+    /// Parameters are externally owned.
+    /// Make sure they live for the whole lifetime of this object
+    void setBoundaryNodes(std::vector<Node*>* bdyNodes0,
+                          std::vector<Node*>* bdyNodes1);
 
-	geom::Coordinate& getProperIntersectionPoint();
+    geom::Coordinate& getProperIntersectionPoint();
 
-	bool hasIntersection();
+    bool hasIntersection();
 
-	bool hasProperIntersection();
+    bool hasProperIntersection();
 
-	bool hasProperInteriorIntersection();
+    bool hasProperInteriorIntersection();
 
-	void addIntersections(Edge *e0, size_t segIndex0, Edge *e1, size_t segIndex1);
+    void addIntersections(Edge* e0, size_t segIndex0, Edge* e1, size_t segIndex1);
 
-	void setIsDoneIfProperInt(bool isDoneWhenProperInt);
+    void setIsDoneIfProperInt(bool isDoneWhenProperInt);
 
-	bool getIsDone();
+    bool getIsDone();
 
 };
 

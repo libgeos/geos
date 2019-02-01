@@ -36,68 +36,68 @@ namespace prep { // geos::geom::prep
 // private:
 //
 bool
-AbstractPreparedPolygonContains::isProperIntersectionImpliesNotContainedSituation( const geom::Geometry * testGeom)
+AbstractPreparedPolygonContains::isProperIntersectionImpliesNotContainedSituation(const geom::Geometry* testGeom)
 {
-	// If the test geometry is polygonal we have the A/A situation.
-	// In this case, a proper intersection indicates that
-	// the Epsilon-Neighbourhood Exterior Intersection condition exists.
-	// This condition means that in some small
-	// area around the intersection point, there must exist a situation
-	// where the interior of the test intersects the exterior of the target.
-	// This implies the test is NOT contained in the target.
-	if (	testGeom->getGeometryTypeId() == geos::geom::GEOS_MULTIPOLYGON
-		||	testGeom->getGeometryTypeId() == geos::geom::GEOS_POLYGON )
-		return true;
+    // If the test geometry is polygonal we have the A/A situation.
+    // In this case, a proper intersection indicates that
+    // the Epsilon-Neighbourhood Exterior Intersection condition exists.
+    // This condition means that in some small
+    // area around the intersection point, there must exist a situation
+    // where the interior of the test intersects the exterior of the target.
+    // This implies the test is NOT contained in the target.
+    if(testGeom->getGeometryTypeId() == geos::geom::GEOS_MULTIPOLYGON
+            ||	testGeom->getGeometryTypeId() == geos::geom::GEOS_POLYGON) {
+        return true;
+    }
 
-	// A single shell with no holes allows concluding that
-	// a proper intersection implies not contained
-	// (due to the Epsilon-Neighbourhood Exterior Intersection condition)
-	if ( isSingleShell( prepPoly->getGeometry()) )
-		return true;
+    // A single shell with no holes allows concluding that
+    // a proper intersection implies not contained
+    // (due to the Epsilon-Neighbourhood Exterior Intersection condition)
+    if(isSingleShell(prepPoly->getGeometry())) {
+        return true;
+    }
 
-	return false;
+    return false;
 }
 
 
 bool
 AbstractPreparedPolygonContains::isSingleShell(const geom::Geometry& geom)
 {
-	// handles single-element MultiPolygons, as well as Polygons
-	if (geom.getNumGeometries() != 1)
-    {
-		return false;
+    // handles single-element MultiPolygons, as well as Polygons
+    if(geom.getNumGeometries() != 1) {
+        return false;
     }
 
-  const geom::Geometry* g = geom.getGeometryN(0);
-  const geom::Polygon* poly = dynamic_cast<const Polygon*>(g);
-  assert(poly);
+    const geom::Geometry* g = geom.getGeometryN(0);
+    const geom::Polygon* poly = dynamic_cast<const Polygon*>(g);
+    assert(poly);
 
-  std::size_t numHoles = poly->getNumInteriorRing();
-  return (0 == numHoles);
+    std::size_t numHoles = poly->getNumInteriorRing();
+    return (0 == numHoles);
 }
 
 
 void
 AbstractPreparedPolygonContains::findAndClassifyIntersections(const geom::Geometry* geom)
 {
-	noding::SegmentString::ConstVect lineSegStr;
-	noding::SegmentStringUtil::extractSegmentStrings(geom, lineSegStr);
+    noding::SegmentString::ConstVect lineSegStr;
+    noding::SegmentStringUtil::extractSegmentStrings(geom, lineSegStr);
 
-	algorithm::LineIntersector li;
+    algorithm::LineIntersector li;
 
-	noding::SegmentIntersectionDetector intDetector(&li);
+    noding::SegmentIntersectionDetector intDetector(&li);
 
-	intDetector.setFindAllIntersectionTypes(true);
-	prepPoly->getIntersectionFinder()->intersects(&lineSegStr, &intDetector);
+    intDetector.setFindAllIntersectionTypes(true);
+    prepPoly->getIntersectionFinder()->intersects(&lineSegStr, &intDetector);
 
-	hasSegmentIntersection = intDetector.hasIntersection();
-	hasProperIntersection = intDetector.hasProperIntersection();
-	hasNonProperIntersection = intDetector.hasNonProperIntersection();
+    hasSegmentIntersection = intDetector.hasIntersection();
+    hasProperIntersection = intDetector.hasProperIntersection();
+    hasNonProperIntersection = intDetector.hasNonProperIntersection();
 
-	for (std::size_t i = 0, ni = lineSegStr.size(); i < ni; i++ )
-	{
-		delete lineSegStr[i];
-	}
+    for(std::size_t i = 0, ni = lineSegStr.size(); i < ni; i++) {
+        delete lineSegStr[i];
+    }
 }
 
 
@@ -105,83 +105,86 @@ AbstractPreparedPolygonContains::findAndClassifyIntersections(const geom::Geomet
 // protected:
 //
 bool
-AbstractPreparedPolygonContains::eval( const geom::Geometry * geom)
+AbstractPreparedPolygonContains::eval(const geom::Geometry* geom)
 {
-	// Do point-in-poly tests first, since they are cheaper and may result
-	// in a quick negative result.
-	//
-	// If a point of any test components does not lie in target,
-	// result is false
-	bool isAllInTargetArea = isAllTestComponentsInTarget( geom);
-	if ( !isAllInTargetArea )
-		return false;
+    // Do point-in-poly tests first, since they are cheaper and may result
+    // in a quick negative result.
+    //
+    // If a point of any test components does not lie in target,
+    // result is false
+    bool isAllInTargetArea = isAllTestComponentsInTarget(geom);
+    if(!isAllInTargetArea) {
+        return false;
+    }
 
-	// If the test geometry consists of only Points,
-	// then it is now sufficient to test if any of those
-	// points lie in the interior of the target geometry.
-	// If so, the test is contained.
-	// If not, all points are on the boundary of the area,
-	// which implies not contained.
-	if ( requireSomePointInInterior && geom->getDimension() == 0 )
-	{
-		bool isAnyInTargetInterior = isAnyTestComponentInTargetInterior( geom);
-		return isAnyInTargetInterior;
-	}
+    // If the test geometry consists of only Points,
+    // then it is now sufficient to test if any of those
+    // points lie in the interior of the target geometry.
+    // If so, the test is contained.
+    // If not, all points are on the boundary of the area,
+    // which implies not contained.
+    if(requireSomePointInInterior && geom->getDimension() == 0) {
+        bool isAnyInTargetInterior = isAnyTestComponentInTargetInterior(geom);
+        return isAnyInTargetInterior;
+    }
 
-	// Check if there is any intersection between the line segments
-	// in target and test.
-	// In some important cases, finding a proper interesection implies that the
-	// test geometry is NOT contained.
-	// These cases are:
-	// - If the test geometry is polygonal
-	// - If the target geometry is a single polygon with no holes
-	// In both of these cases, a proper intersection implies that there
-	// is some portion of the interior of the test geometry lying outside
-	// the target, which means that the test is not contained.
-	bool properIntersectionImpliesNotContained = isProperIntersectionImpliesNotContainedSituation( geom);
+    // Check if there is any intersection between the line segments
+    // in target and test.
+    // In some important cases, finding a proper interesection implies that the
+    // test geometry is NOT contained.
+    // These cases are:
+    // - If the test geometry is polygonal
+    // - If the target geometry is a single polygon with no holes
+    // In both of these cases, a proper intersection implies that there
+    // is some portion of the interior of the test geometry lying outside
+    // the target, which means that the test is not contained.
+    bool properIntersectionImpliesNotContained = isProperIntersectionImpliesNotContainedSituation(geom);
 
     // find all intersection types which exist
-    findAndClassifyIntersections( geom);
+    findAndClassifyIntersections(geom);
 
-	if ( properIntersectionImpliesNotContained && hasProperIntersection )
-		return false;
+    if(properIntersectionImpliesNotContained && hasProperIntersection) {
+        return false;
+    }
 
-	// If all intersections are proper
-	// (i.e. no non-proper intersections occur)
-	// we can conclude that the test geometry is not contained in the target area,
-	// by the Epsilon-Neighbourhood Exterior Intersection condition.
-	// In real-world data this is likely to be by far the most common situation,
-	// since natural data is unlikely to have many exact vertex segment intersections.
-	// Thus this check is very worthwhile, since it avoid having to perform
-	// a full topological check.
-	//
-	// (If non-proper (vertex) intersections ARE found, this may indicate
-	// a situation where two shells touch at a single vertex, which admits
-	// the case where a line could cross between the shells and still be wholely contained in them.
-	if ( hasSegmentIntersection && !hasNonProperIntersection )
-		return false;
+    // If all intersections are proper
+    // (i.e. no non-proper intersections occur)
+    // we can conclude that the test geometry is not contained in the target area,
+    // by the Epsilon-Neighbourhood Exterior Intersection condition.
+    // In real-world data this is likely to be by far the most common situation,
+    // since natural data is unlikely to have many exact vertex segment intersections.
+    // Thus this check is very worthwhile, since it avoid having to perform
+    // a full topological check.
+    //
+    // (If non-proper (vertex) intersections ARE found, this may indicate
+    // a situation where two shells touch at a single vertex, which admits
+    // the case where a line could cross between the shells and still be wholely contained in them.
+    if(hasSegmentIntersection && !hasNonProperIntersection) {
+        return false;
+    }
 
-	// If there is a segment intersection and the situation is not one
-	// of the ones above, the only choice is to compute the full topological
-	// relationship.  This is because contains/covers is very sensitive
-	// to the situation along the boundary of the target.
-	if ( hasSegmentIntersection )
-		return fullTopologicalPredicate( geom);
+    // If there is a segment intersection and the situation is not one
+    // of the ones above, the only choice is to compute the full topological
+    // relationship.  This is because contains/covers is very sensitive
+    // to the situation along the boundary of the target.
+    if(hasSegmentIntersection) {
+        return fullTopologicalPredicate(geom);
+    }
 
-	// This tests for the case where a ring of the target lies inside
-	// a test polygon - which implies the exterior of the Target
-	// intersects the interior of the Test, and hence the result is false
-	if (	geom->getGeometryTypeId() == geos::geom::GEOS_MULTIPOLYGON
-		||	geom->getGeometryTypeId() == geos::geom::GEOS_POLYGON )
-	{
-		// TODO: generalize this to handle GeometryCollections
-		bool isTargetInTestArea = isAnyTargetComponentInAreaTest( geom, prepPoly->getRepresentativePoints());
+    // This tests for the case where a ring of the target lies inside
+    // a test polygon - which implies the exterior of the Target
+    // intersects the interior of the Test, and hence the result is false
+    if(geom->getGeometryTypeId() == geos::geom::GEOS_MULTIPOLYGON
+            ||	geom->getGeometryTypeId() == geos::geom::GEOS_POLYGON) {
+        // TODO: generalize this to handle GeometryCollections
+        bool isTargetInTestArea = isAnyTargetComponentInAreaTest(geom, prepPoly->getRepresentativePoints());
 
-		if ( isTargetInTestArea )
-			return false;
-	}
+        if(isTargetInTestArea) {
+            return false;
+        }
+    }
 
-	return true;
+    return true;
 }
 
 //

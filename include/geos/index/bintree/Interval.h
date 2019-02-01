@@ -26,36 +26,36 @@ class GEOS_DLL Interval {
 
 public:
 
-	double min, max;
+    double min, max;
 
-	Interval();
+    Interval();
 
-	~Interval();
+    ~Interval();
 
-	Interval(double nmin, double nmax);
+    Interval(double nmin, double nmax);
 
-	/// TODO: drop this, rely on copy ctor
-	Interval(const Interval *interval);
+    /// TODO: drop this, rely on copy ctor
+    Interval(const Interval* interval);
 
-	void init(double nmin, double nmax);
+    void init(double nmin, double nmax);
 
-	double getMin() const;
+    double getMin() const;
 
-	double getMax() const;
+    double getMax() const;
 
-	double getWidth() const;
+    double getWidth() const;
 
-	void expandToInclude(Interval *interval);
+    void expandToInclude(Interval* interval);
 
-	bool overlaps(const Interval *interval) const;
+    bool overlaps(const Interval* interval) const;
 
-	bool overlaps(double nmin, double nmax) const;
+    bool overlaps(double nmin, double nmax) const;
 
-	bool contains(const Interval *interval) const;
+    bool contains(const Interval* interval) const;
 
-	bool contains(double nmin, double nmax) const;
+    bool contains(double nmin, double nmax) const;
 
-	bool contains(double p) const;
+    bool contains(double p) const;
 };
 
 } // namespace geos::index::bintree

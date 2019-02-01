@@ -29,21 +29,21 @@ namespace geos {
 namespace geomgraph { // geos.geomgraph
 
 GraphComponent::GraphComponent()
-  :
-  label(),
-	isInResultVar(false),
-	isCoveredVar(false),
-	isCoveredSetVar(false),
-	isVisitedVar(false)
+    :
+    label(),
+    isInResultVar(false),
+    isCoveredVar(false),
+    isCoveredSetVar(false),
+    isVisitedVar(false)
 {
 }
 
 GraphComponent::GraphComponent(const Label& newLabel):
-	label(newLabel),
-	isInResultVar(false),
-	isCoveredVar(false),
-	isCoveredSetVar(false),
-	isVisitedVar(false)
+    label(newLabel),
+    isInResultVar(false),
+    isCoveredVar(false),
+    isCoveredSetVar(false),
+    isVisitedVar(false)
 {
 }
 
@@ -54,15 +54,15 @@ GraphComponent::~GraphComponent()
 void
 GraphComponent::setCovered(bool p_isCovered)
 {
-	isCoveredVar = p_isCovered;
-	isCoveredSetVar = true;
+    isCoveredVar = p_isCovered;
+    isCoveredSetVar = true;
 }
 
 void
 GraphComponent::updateIM(IntersectionMatrix& im)
 {
-	assert(label.getGeometryCount() >= 2); // found partial label
-	computeIM(im);
+    assert(label.getGeometryCount() >= 2); // found partial label
+    computeIM(im);
 }
 
 } // namespace geos.geomgraph

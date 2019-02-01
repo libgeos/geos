@@ -27,11 +27,11 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-	}
-	namespace geomgraph {
-		class DirectedEdge;
-	}
+namespace geom {
+}
+namespace geomgraph {
+class DirectedEdge;
+}
 }
 
 namespace geos {
@@ -48,55 +48,55 @@ class GEOS_DLL RightmostEdgeFinder {
 
 private:
 
-	int minIndex;
+    int minIndex;
 
-	geom::Coordinate minCoord;
+    geom::Coordinate minCoord;
 
-	geomgraph::DirectedEdge *minDe;
+    geomgraph::DirectedEdge* minDe;
 
-	geomgraph::DirectedEdge *orientedDe;
+    geomgraph::DirectedEdge* orientedDe;
 
-	void findRightmostEdgeAtNode();
+    void findRightmostEdgeAtNode();
 
-	void findRightmostEdgeAtVertex();
+    void findRightmostEdgeAtVertex();
 
-	void checkForRightmostCoordinate(geomgraph::DirectedEdge *de);
+    void checkForRightmostCoordinate(geomgraph::DirectedEdge* de);
 
-	int getRightmostSide(geomgraph::DirectedEdge *de, int index);
+    int getRightmostSide(geomgraph::DirectedEdge* de, int index);
 
-	int getRightmostSideOfSegment(geomgraph::DirectedEdge *de, int i);
+    int getRightmostSideOfSegment(geomgraph::DirectedEdge* de, int i);
 
 public:
 
-	/** \brief
-	 * A RightmostEdgeFinder finds the geomgraph::DirectedEdge with the
-	 * rightmost coordinate.
-	 *
-	 * The geomgraph::DirectedEdge returned is guaranteed to have the R of
-	 * the world on its RHS.
-	 */
-	RightmostEdgeFinder();
+    /** \brief
+     * A RightmostEdgeFinder finds the geomgraph::DirectedEdge with the
+     * rightmost coordinate.
+     *
+     * The geomgraph::DirectedEdge returned is guaranteed to have the R of
+     * the world on its RHS.
+     */
+    RightmostEdgeFinder();
 
-	geomgraph::DirectedEdge* getEdge();
+    geomgraph::DirectedEdge* getEdge();
 
-	geom::Coordinate& getCoordinate();
+    geom::Coordinate& getCoordinate();
 
-	/// Note that only Forward DirectedEdges will be checked
-	void findEdge(std::vector<geomgraph::DirectedEdge*>* dirEdgeList);
+    /// Note that only Forward DirectedEdges will be checked
+    void findEdge(std::vector<geomgraph::DirectedEdge*>* dirEdgeList);
 };
 
 /*public*/
 inline geomgraph::DirectedEdge*
 RightmostEdgeFinder::getEdge()
 {
-	return orientedDe;
+    return orientedDe;
 }
 
 /*public*/
 inline geom::Coordinate&
 RightmostEdgeFinder::getCoordinate()
 {
-	return minCoord;
+    return minCoord;
 }
 
 

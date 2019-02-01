@@ -35,17 +35,17 @@ namespace util { // geos::util
  */
 class GEOS_DLL UnsupportedOperationException: public GEOSException {
 public:
-	UnsupportedOperationException()
-		:
-		GEOSException("UnsupportedOperationException", "")
-	{}
+    UnsupportedOperationException()
+        :
+        GEOSException("UnsupportedOperationException", "")
+    {}
 
-	UnsupportedOperationException(const std::string& msg)
-		:
-		GEOSException("UnsupportedOperationException", msg)
-	{}
+    UnsupportedOperationException(const std::string& msg)
+        :
+        GEOSException("UnsupportedOperationException", msg)
+    {}
 
-	~UnsupportedOperationException() throw() override {}
+    ~UnsupportedOperationException() throw() override {}
 };
 
 } // namespace geos::util

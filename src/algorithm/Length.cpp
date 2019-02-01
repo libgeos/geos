@@ -26,21 +26,22 @@ namespace algorithm { // geos.algorithm
 
 /* public static */
 double
-Length::ofLine(const geom::CoordinateSequence *pts)
+Length::ofLine(const geom::CoordinateSequence* pts)
 {
     // optimized for processing CoordinateSequences
     size_t n = pts->size();
-    if (n <= 1)
+    if(n <= 1) {
         return 0.0;
+    }
 
     double len = 0.0;
 
-    const geom::Coordinate &p = pts->getAt(0);
+    const geom::Coordinate& p = pts->getAt(0);
     double x0 = p.x;
     double y0 = p.y;
 
-    for (size_t i = 1; i < n; i++) {
-        const geom::Coordinate &pi = pts->getAt(i);
+    for(size_t i = 1; i < n; i++) {
+        const geom::Coordinate& pi = pts->getAt(i);
         double x1 = pi.x;
         double y1 = pi.y;
         double dx = x1 - x0;

@@ -24,41 +24,41 @@
 #include <geos/geom/Coordinate.h>
 
 namespace geos {
-    namespace operation {
-        namespace distance {
-            class FacetSequence {
-            private:
-                const geom::CoordinateSequence *pts;
-                const size_t start;
-                const size_t end;
+namespace operation {
+namespace distance {
+class FacetSequence {
+private:
+    const geom::CoordinateSequence* pts;
+    const size_t start;
+    const size_t end;
 
-                /* Unlike JTS, we store the envelope in the FacetSequence so that it has a clear owner.  This is
-                 * helpful when making a tree of FacetSequence objects (FacetSequenceTreeBuilder)
-                 * */
-                geom::Envelope env;
+    /* Unlike JTS, we store the envelope in the FacetSequence so that it has a clear owner.  This is
+     * helpful when making a tree of FacetSequence objects (FacetSequenceTreeBuilder)
+     * */
+    geom::Envelope env;
 
-                double computeLineLineDistance(const FacetSequence & facetSeq) const;
+    double computeLineLineDistance(const FacetSequence& facetSeq) const;
 
-                double computePointLineDistance(const geom::Coordinate & pt, const FacetSequence & facetSeq) const;
+    double computePointLineDistance(const geom::Coordinate& pt, const FacetSequence& facetSeq) const;
 
-                void computeEnvelope();
+    void computeEnvelope();
 
-            public:
-                const geom::Envelope * getEnvelope() const;
+public:
+    const geom::Envelope* getEnvelope() const;
 
-                const geom::Coordinate * getCoordinate(size_t index) const;
+    const geom::Coordinate* getCoordinate(size_t index) const;
 
-                size_t size() const;
+    size_t size() const;
 
-                bool isPoint() const;
+    bool isPoint() const;
 
-                double distance(const FacetSequence & facetSeq) const;
+    double distance(const FacetSequence& facetSeq) const;
 
-                FacetSequence(const geom::CoordinateSequence *pts, size_t start, size_t end);
-            };
+    FacetSequence(const geom::CoordinateSequence* pts, size_t start, size_t end);
+};
 
-        }
-    }
+}
+}
 }
 
 #endif //GEOS_OPERATION_DISTANCE_FACETSEQUENCE_H

@@ -25,13 +25,13 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class IntersectionMatrix;
-		class Coordinate;
-	}
-	namespace geomgraph {
-		class EdgeEndStar;
-	}
+namespace geom {
+class IntersectionMatrix;
+class Coordinate;
+}
+namespace geomgraph {
+class EdgeEndStar;
+}
 }
 
 
@@ -47,18 +47,18 @@ class GEOS_DLL RelateNode: public geomgraph::Node {
 
 public:
 
-	RelateNode(const geom::Coordinate& coord, geomgraph::EdgeEndStar *edges);
+    RelateNode(const geom::Coordinate& coord, geomgraph::EdgeEndStar* edges);
 
-	~RelateNode() override;
+    ~RelateNode() override;
 
-	/**
-	 * Update the IM with the contribution for the EdgeEnds incident on this node.
-	 */
-	void updateIMFromEdges(geom::IntersectionMatrix& im);
+    /**
+     * Update the IM with the contribution for the EdgeEnds incident on this node.
+     */
+    void updateIMFromEdges(geom::IntersectionMatrix& im);
 
 protected:
 
-	void computeIM(geom::IntersectionMatrix& im) override;
+    void computeIM(geom::IntersectionMatrix& im) override;
 };
 
 

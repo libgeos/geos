@@ -24,58 +24,57 @@ using namespace geos::geom;
 //using namespace geos::operation;
 using namespace geos::operation::valid;
 
-namespace tut
+namespace tut {
+//
+// Test Group
+//
+
+struct test_isvalidop_data {
+    typedef std::unique_ptr<Geometry> GeomPtr;
+    typedef geos::geom::GeometryFactory GeometryFactory;
+
+    geos::geom::PrecisionModel pm_;
+    GeometryFactory::Ptr factory_;
+
+    test_isvalidop_data()
+        : pm_(1), factory_(GeometryFactory::create(&pm_, 0))
+    {}
+};
+
+typedef test_group<test_isvalidop_data> group;
+typedef group::object object;
+
+group test_isvalidop_group("geos::operation::valid::IsValidOp");
+
+//
+// Test Cases
+//
+
+// 1 - testInvalidCoordinate
+template<>
+template<>
+void object::test<1>
+()
 {
-    //
-    // Test Group
-    //
-
-    struct test_isvalidop_data
-    {
-	typedef std::unique_ptr<Geometry> GeomPtr;
-        typedef geos::geom::GeometryFactory GeometryFactory;
-
-        geos::geom::PrecisionModel pm_;
-        GeometryFactory::Ptr factory_;
-
-        test_isvalidop_data()
-			: pm_(1), factory_(GeometryFactory::create(&pm_, 0))
-        {}
-    };
-
-    typedef test_group<test_isvalidop_data> group;
-    typedef group::object object;
-
-    group test_isvalidop_group("geos::operation::valid::IsValidOp");
-
-    //
-    // Test Cases
-    //
-
-    // 1 - testInvalidCoordinate
-    template<>
-    template<>
-    void object::test<1>()
-    {
-	CoordinateSequence* cs = new CoordinateArraySequence();
-	cs->add(Coordinate(0.0, 0.0));
-	cs->add(Coordinate(1.0, geos::DoubleNotANumber));
-	GeomPtr line ( factory_->createLineString(cs) );
+    CoordinateSequence* cs = new CoordinateArraySequence();
+    cs->add(Coordinate(0.0, 0.0));
+    cs->add(Coordinate(1.0, geos::DoubleNotANumber));
+    GeomPtr line(factory_->createLineString(cs));
 
 
-	IsValidOp isValidOp(line.get());
-	bool valid = isValidOp.isValid();
+    IsValidOp isValidOp(line.get());
+    bool valid = isValidOp.isValid();
 
-	TopologyValidationError* err = isValidOp.getValidationError();
+    TopologyValidationError* err = isValidOp.getValidationError();
     ensure(nullptr != err);
     const Coordinate& errCoord = err->getCoordinate();
 
-	ensure_equals( err->getErrorType(),
-	               TopologyValidationError::eInvalidCoordinate );
+    ensure_equals(err->getErrorType(),
+                  TopologyValidationError::eInvalidCoordinate);
 
-	ensure(0 != std::isnan(errCoord.y));
-	ensure_equals(valid, false);
-    }
+    ensure(0 != std::isnan(errCoord.y));
+    ensure_equals(valid, false);
+}
 
 
 } // namespace tut

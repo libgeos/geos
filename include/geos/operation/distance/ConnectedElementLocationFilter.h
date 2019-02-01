@@ -27,14 +27,14 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Geometry;
-	}
-	namespace operation {
-		namespace distance {
-			class GeometryLocation;
-		}
-	}
+namespace geom {
+class Geometry;
+}
+namespace operation {
+namespace distance {
+class GeometryLocation;
+}
+}
 }
 
 
@@ -52,24 +52,24 @@ namespace distance { // geos::operation::distance
 class GEOS_DLL ConnectedElementLocationFilter: public geom::GeometryFilter {
 private:
 
-	std::vector<GeometryLocation*> *locations;
+    std::vector<GeometryLocation*>* locations;
 
 public:
-	/**
-	 * Returns a list containing a point from each Polygon, LineString, and Point
-	 * found inside the specified geometry. Thus, if the specified geometry is
-	 * not a GeometryCollection, an empty list will be returned. The elements of the list
-	 * are {@link com.vividsolutions.jts.operation.distance.GeometryLocation}s.
-	 */
-	static std::vector<GeometryLocation*>* getLocations(const geom::Geometry *geom);
+    /**
+     * Returns a list containing a point from each Polygon, LineString, and Point
+     * found inside the specified geometry. Thus, if the specified geometry is
+     * not a GeometryCollection, an empty list will be returned. The elements of the list
+     * are {@link com.vividsolutions.jts.operation.distance.GeometryLocation}s.
+     */
+    static std::vector<GeometryLocation*>* getLocations(const geom::Geometry* geom);
 
-	ConnectedElementLocationFilter(std::vector<GeometryLocation*> *newLocations)
-		:
-		locations(newLocations)
-	{}
+    ConnectedElementLocationFilter(std::vector<GeometryLocation*>* newLocations)
+        :
+        locations(newLocations)
+    {}
 
-	void filter_ro(const geom::Geometry *geom) override;
-	void filter_rw(geom::Geometry *geom) override;
+    void filter_ro(const geom::Geometry* geom) override;
+    void filter_rw(geom::Geometry* geom) override;
 };
 
 

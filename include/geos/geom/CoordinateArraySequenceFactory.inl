@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************/
@@ -22,32 +22,32 @@
 namespace geos {
 namespace geom { // geos::geom
 
-INLINE CoordinateSequence *
+INLINE CoordinateSequence*
 CoordinateArraySequenceFactory::create() const
 {
     return new CoordinateArraySequence(
-                reinterpret_cast<std::vector<Coordinate>*>(0), 0);
+               reinterpret_cast<std::vector<Coordinate>*>(0), 0);
 }
 
-INLINE CoordinateSequence *
-CoordinateArraySequenceFactory::create(std::vector<Coordinate> *coords,
-		size_t dimension ) const
+INLINE CoordinateSequence*
+CoordinateArraySequenceFactory::create(std::vector<Coordinate>* coords,
+                                       size_t dimension) const
 {
-	return new CoordinateArraySequence(coords,dimension);
+    return new CoordinateArraySequence(coords, dimension);
 }
 
-INLINE CoordinateSequence *
+INLINE CoordinateSequence*
 CoordinateArraySequenceFactory::create(std::size_t size, std::size_t dimension)
-		const
+const
 {
-	return new CoordinateArraySequence(size,dimension);
+    return new CoordinateArraySequence(size, dimension);
 }
 
-INLINE CoordinateSequence *
+INLINE CoordinateSequence*
 CoordinateArraySequenceFactory::create(const CoordinateSequence& seq)
-		const
+const
 {
-	return new CoordinateArraySequence(seq);
+    return new CoordinateArraySequence(seq);
 }
 
 

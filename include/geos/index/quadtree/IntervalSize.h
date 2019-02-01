@@ -40,21 +40,21 @@ namespace quadtree { // geos::index::quadtree
  */
 class GEOS_DLL IntervalSize {
 public:
-	/**
-	 * This value is chosen to be a few powers of 2 less than the
-	 * number of bits available in the double representation (i.e. 53).
-	 * This should allow enough extra precision for simple computations
-	 * to be correct, at least for comparison purposes.
-	 */
-	static const int MIN_BINARY_EXPONENT = -50;
+    /**
+     * This value is chosen to be a few powers of 2 less than the
+     * number of bits available in the double representation (i.e. 53).
+     * This should allow enough extra precision for simple computations
+     * to be correct, at least for comparison purposes.
+     */
+    static const int MIN_BINARY_EXPONENT = -50;
 
-	/**
-	 * Computes whether the interval [min, max] is effectively zero width.
-	 * I.e. the width of the interval is so much less than the
-	 * location of the interval that the midpoint of the interval
-	 * cannot be represented precisely.
-	 */
-	static bool isZeroWidth(double min, double max);
+    /**
+     * Computes whether the interval [min, max] is effectively zero width.
+     * I.e. the width of the interval is so much less than the
+     * location of the interval that the midpoint of the interval
+     * cannot be represented precisely.
+     */
+    static bool isZeroWidth(double min, double max);
 };
 
 } // namespace geos::index::quadtree

@@ -29,36 +29,41 @@ namespace index { // geos.geomgraph.index
 
 void
 MonotoneChainIndexer::getChainStartIndices(const CoordinateSequence* pts,
-	vector<size_t> &startIndexList)
+        vector<size_t>& startIndexList)
 {
-	// find the startpoint (and endpoints) of all monotone chains
-	// in this edge
-	size_t start=0;
-	//vector<int>* startIndexList=new vector<int>();
-	startIndexList.push_back(start);
-	do {
-		auto last = findChainEnd(pts, start);
-		startIndexList.push_back(last);
-		start = last;
-	} while(start < pts->size() - 1);
-	// copy list to an array of ints, for efficiency
-	//return startIndexList;
+    // find the startpoint (and endpoints) of all monotone chains
+    // in this edge
+    size_t start = 0;
+    //vector<int>* startIndexList=new vector<int>();
+    startIndexList.push_back(start);
+    do {
+        auto last = findChainEnd(pts, start);
+        startIndexList.push_back(last);
+        start = last;
+    }
+    while(start < pts->size() - 1);
+    // copy list to an array of ints, for efficiency
+    //return startIndexList;
 }
 
 /**
 * @return the index of the last point in the monotone chain
 */
-size_t MonotoneChainIndexer::findChainEnd(const CoordinateSequence* pts, size_t start){
-	// determine quadrant for chain
-	auto chainQuad = Quadrant::quadrant(pts->getAt(start), pts->getAt(start + 1));
-	auto last = start + 1;
-	while(last < pts->size()) {
-		// compute quadrant for next possible segment in chain
-		auto quad=Quadrant::quadrant(pts->getAt(last - 1),pts->getAt(last));
-		if (quad!=chainQuad) break;
-		++last;
-	}
-	return last - 1;
+size_t
+MonotoneChainIndexer::findChainEnd(const CoordinateSequence* pts, size_t start)
+{
+    // determine quadrant for chain
+    auto chainQuad = Quadrant::quadrant(pts->getAt(start), pts->getAt(start + 1));
+    auto last = start + 1;
+    while(last < pts->size()) {
+        // compute quadrant for next possible segment in chain
+        auto quad = Quadrant::quadrant(pts->getAt(last - 1), pts->getAt(last));
+        if(quad != chainQuad) {
+            break;
+        }
+        ++last;
+    }
+    return last - 1;
 }
 
 } // namespace geos.geomgraph.index

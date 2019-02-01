@@ -40,33 +40,33 @@ namespace valid { // geos::operation::valid
 class GEOS_DLL TopologyValidationError {
 public:
 
-	enum errorEnum {
-		eError,
-		eRepeatedPoint,
-		eHoleOutsideShell,
-		eNestedHoles,
-		eDisconnectedInterior,
-		eSelfIntersection,
-		eRingSelfIntersection,
-		eNestedShells,
-		eDuplicatedRings,
-		eTooFewPoints,
-		eInvalidCoordinate,
-		eRingNotClosed
-	};
+    enum errorEnum {
+        eError,
+        eRepeatedPoint,
+        eHoleOutsideShell,
+        eNestedHoles,
+        eDisconnectedInterior,
+        eSelfIntersection,
+        eRingSelfIntersection,
+        eNestedShells,
+        eDuplicatedRings,
+        eTooFewPoints,
+        eInvalidCoordinate,
+        eRingNotClosed
+    };
 
-	TopologyValidationError(int newErrorType, const geom::Coordinate& newPt);
-	TopologyValidationError(int newErrorType);
-	geom::Coordinate& getCoordinate();
-	std::string getMessage();
-	int getErrorType();
-	std::string toString();
+    TopologyValidationError(int newErrorType, const geom::Coordinate& newPt);
+    TopologyValidationError(int newErrorType);
+    geom::Coordinate& getCoordinate();
+    std::string getMessage();
+    int getErrorType();
+    std::string toString();
 
 private:
-	// Used const char* to reduce dynamic allocations
-	static const char* errMsg[];
-	int errorType;
-	geom::Coordinate pt;
+    // Used const char* to reduce dynamic allocations
+    static const char* errMsg[];
+    int errorType;
+    geom::Coordinate pt;
 };
 
 

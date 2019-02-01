@@ -34,62 +34,68 @@ namespace geos {
 namespace precision { // geos.precision
 
 CoordinateSequence*
-PrecisionReducerCoordinateOperation::edit(const CoordinateSequence *cs,
-                                          const Geometry *geom)
+PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
+        const Geometry* geom)
 {
-	auto csSize = cs->size();
+    auto csSize = cs->size();
 
-	if ( csSize == 0 ) return nullptr;
+    if(csSize == 0) {
+        return nullptr;
+    }
 
-	vector<Coordinate> *vc = new vector<Coordinate>(csSize);
+    vector<Coordinate>* vc = new vector<Coordinate>(csSize);
 
-	// copy coordinates and reduce
-	for (size_t i = 0; i < csSize; ++i) {
-		Coordinate coord=cs->getAt(i);
-		targetPM.makePrecise(&coord);
-		(*vc)[i] = coord;
-	}
+    // copy coordinates and reduce
+    for(size_t i = 0; i < csSize; ++i) {
+        Coordinate coord = cs->getAt(i);
+        targetPM.makePrecise(&coord);
+        (*vc)[i] = coord;
+    }
 
-	// reducedCoords take ownership of 'vc'
-	CoordinateSequence *reducedCoords =
-		geom->getFactory()->getCoordinateSequenceFactory()->create(vc);
+    // reducedCoords take ownership of 'vc'
+    CoordinateSequence* reducedCoords =
+        geom->getFactory()->getCoordinateSequenceFactory()->create(vc);
 
-	// remove repeated points, to simplify returned geometry as
-	// much as possible.
-	//
-	CoordinateSequence *noRepeatedCoords=CoordinateSequence::removeRepeatedPoints(reducedCoords);
+    // remove repeated points, to simplify returned geometry as
+    // much as possible.
+    //
+    CoordinateSequence* noRepeatedCoords = CoordinateSequence::removeRepeatedPoints(reducedCoords);
 
-	/**
-	 * Check to see if the removal of repeated points
-	 * collapsed the coordinate List to an invalid length
-	 * for the type of the parent geometry.
-	 * It is not necessary to check for Point collapses,
-	 * since the coordinate list can
-	 * never collapse to less than one point.
-	 * If the length is invalid, return the full-length coordinate array
-	 * first computed, or null if collapses are being removed.
-	 * (This may create an invalid geometry - the client must handle this.)
-	 */
-	unsigned int minLength = 0;
-	if ( dynamic_cast<const LineString*>(geom) ) minLength = 2;
-	if ( dynamic_cast<const LinearRing*>(geom) ) minLength = 4;
+    /**
+     * Check to see if the removal of repeated points
+     * collapsed the coordinate List to an invalid length
+     * for the type of the parent geometry.
+     * It is not necessary to check for Point collapses,
+     * since the coordinate list can
+     * never collapse to less than one point.
+     * If the length is invalid, return the full-length coordinate array
+     * first computed, or null if collapses are being removed.
+     * (This may create an invalid geometry - the client must handle this.)
+     */
+    unsigned int minLength = 0;
+    if(dynamic_cast<const LineString*>(geom)) {
+        minLength = 2;
+    }
+    if(dynamic_cast<const LinearRing*>(geom)) {
+        minLength = 4;
+    }
 
-	CoordinateSequence *collapsedCoords = reducedCoords;
-	if ( removeCollapsed )
-	{
-		delete reducedCoords; reducedCoords=nullptr;
-		collapsedCoords=nullptr;
-	}
+    CoordinateSequence* collapsedCoords = reducedCoords;
+    if(removeCollapsed) {
+        delete reducedCoords;
+        reducedCoords = nullptr;
+        collapsedCoords = nullptr;
+    }
 
-	// return null or orginal length coordinate array
-	if ( noRepeatedCoords->getSize() < minLength ) {
-		delete noRepeatedCoords;
-		return collapsedCoords;
-	}
+    // return null or orginal length coordinate array
+    if(noRepeatedCoords->getSize() < minLength) {
+        delete noRepeatedCoords;
+        return collapsedCoords;
+    }
 
-	// ok to return shorter coordinate array
-	delete reducedCoords;
-	return noRepeatedCoords;
+    // ok to return shorter coordinate array
+    delete reducedCoords;
+    return noRepeatedCoords;
 }
 
 

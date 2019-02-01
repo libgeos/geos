@@ -40,211 +40,245 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Envelope;
-		class IntersectionMatrix;
-		class Coordinate;
-	}
-	namespace algorithm {
-		class LineIntersector;
-	}
-	namespace geomgraph {
-		class Node;
-		class EdgeEndStar;
-		class Label;
-		class NodeFactory;
-		namespace index {
-			class MonotoneChainEdge;
-		}
-	}
+namespace geom {
+class Envelope;
+class IntersectionMatrix;
+class Coordinate;
+}
+namespace algorithm {
+class LineIntersector;
+}
+namespace geomgraph {
+class Node;
+class EdgeEndStar;
+class Label;
+class NodeFactory;
+namespace index {
+class MonotoneChainEdge;
+}
+}
 }
 
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
 /** The edge component of a geometry graph */
-class GEOS_DLL Edge: public GraphComponent{
-using GraphComponent::updateIM;
+class GEOS_DLL Edge: public GraphComponent {
+    using GraphComponent::updateIM;
 
 private:
 
-	std::string name;
+    std::string name;
 
-	/// Lazily-created, owned by Edge.
-	index::MonotoneChainEdge *mce;
+    /// Lazily-created, owned by Edge.
+    index::MonotoneChainEdge* mce;
 
-	/// Lazily-created, owned by Edge.
-	geom::Envelope *env;
+    /// Lazily-created, owned by Edge.
+    geom::Envelope* env;
 
-	bool isIsolatedVar;
+    bool isIsolatedVar;
 
-	Depth depth;
+    Depth depth;
 
-	int depthDelta;   // the change in area depth from the R to L side of this edge
+    int depthDelta;   // the change in area depth from the R to L side of this edge
 
 public:
 
-	void testInvariant() const {
-		assert(pts);
-		assert(pts->size() > 1);
-	}
+    void
+    testInvariant() const
+    {
+        assert(pts);
+        assert(pts->size() > 1);
+    }
 
 
-	friend std::ostream& operator<< (std::ostream& os, const Edge& el);
+    friend std::ostream& operator<< (std::ostream& os, const Edge& el);
 
-	static void updateIM(const Label& lbl, geom::IntersectionMatrix& im);
+    static void updateIM(const Label& lbl, geom::IntersectionMatrix& im);
 
-	/// Externally-set, owned by Edge. FIXME: refuse ownership
-	geom::CoordinateSequence* pts;
+    /// Externally-set, owned by Edge. FIXME: refuse ownership
+    geom::CoordinateSequence* pts;
 
-	EdgeIntersectionList eiList;
+    EdgeIntersectionList eiList;
 
-	//Edge();
+    //Edge();
 
-	/// Takes ownership of CoordinateSequence
-	Edge(geom::CoordinateSequence* newPts, const Label& newLabel);
+    /// Takes ownership of CoordinateSequence
+    Edge(geom::CoordinateSequence* newPts, const Label& newLabel);
 
-	/// Takes ownership of CoordinateSequence
-	Edge(geom::CoordinateSequence* newPts);
+    /// Takes ownership of CoordinateSequence
+    Edge(geom::CoordinateSequence* newPts);
 
-	~Edge() override;
+    ~Edge() override;
 
-	virtual size_t getNumPoints() const {
-		return pts->getSize();
-	}
+    virtual size_t
+    getNumPoints() const
+    {
+        return pts->getSize();
+    }
 
-	virtual void setName(const std::string &newName) {
-		name=newName;
-	}
+    virtual void
+    setName(const std::string& newName)
+    {
+        name = newName;
+    }
 
-	virtual const geom::CoordinateSequence* getCoordinates() const {
-		testInvariant();
-		return pts;
-	}
+    virtual const geom::CoordinateSequence*
+    getCoordinates() const
+    {
+        testInvariant();
+        return pts;
+    }
 
-	virtual const geom::Coordinate& getCoordinate(size_t i) const {
-		testInvariant();
-		return pts->getAt(i);
-	}
+    virtual const geom::Coordinate&
+    getCoordinate(size_t i) const
+    {
+        testInvariant();
+        return pts->getAt(i);
+    }
 
-	virtual const geom::Coordinate& getCoordinate() const {
-		testInvariant();
-		return pts->getAt(0);
-	}
+    virtual const geom::Coordinate&
+    getCoordinate() const
+    {
+        testInvariant();
+        return pts->getAt(0);
+    }
 
 
-	virtual Depth &getDepth() {
-		testInvariant();
-		return depth;
-	}
+    virtual Depth&
+    getDepth()
+    {
+        testInvariant();
+        return depth;
+    }
 
-	/** \brief
-	 * The depthDelta is the change in depth as an edge is crossed from R to L
-	 *
-	 * @return the change in depth as the edge is crossed from R to L
-	 */
-	virtual int getDepthDelta() const {
-		testInvariant();
-		return depthDelta;
-	}
+    /** \brief
+     * The depthDelta is the change in depth as an edge is crossed from R to L
+     *
+     * @return the change in depth as the edge is crossed from R to L
+     */
+    virtual int
+    getDepthDelta() const
+    {
+        testInvariant();
+        return depthDelta;
+    }
 
-	virtual void setDepthDelta(int newDepthDelta) {
-		depthDelta=newDepthDelta;
-		testInvariant();
-	}
+    virtual void
+    setDepthDelta(int newDepthDelta)
+    {
+        depthDelta = newDepthDelta;
+        testInvariant();
+    }
 
-	virtual size_t getMaximumSegmentIndex() const {
-		testInvariant();
-		return getNumPoints()-1;
-	}
+    virtual size_t
+    getMaximumSegmentIndex() const
+    {
+        testInvariant();
+        return getNumPoints() - 1;
+    }
 
-	virtual EdgeIntersectionList& getEdgeIntersectionList() {
-		testInvariant();
-		return eiList;
-	}
+    virtual EdgeIntersectionList&
+    getEdgeIntersectionList()
+    {
+        testInvariant();
+        return eiList;
+    }
 
-	/// \brief
-	/// Return this Edge's index::MonotoneChainEdge,
-	/// ownership is retained by this object.
-	///
-	virtual index::MonotoneChainEdge* getMonotoneChainEdge();
+    /// \brief
+    /// Return this Edge's index::MonotoneChainEdge,
+    /// ownership is retained by this object.
+    ///
+    virtual index::MonotoneChainEdge* getMonotoneChainEdge();
 
-	virtual bool isClosed() const {
-		testInvariant();
-		return pts->getAt(0)==pts->getAt(getNumPoints()-1);
-	}
+    virtual bool
+    isClosed() const
+    {
+        testInvariant();
+        return pts->getAt(0) == pts->getAt(getNumPoints() - 1);
+    }
 
-	/** \brief
-	 * An Edge is collapsed if it is an Area edge and it consists of
-	 * two segments which are equal and opposite (eg a zero-width V).
-	 */
-	virtual bool isCollapsed() const;
+    /** \brief
+     * An Edge is collapsed if it is an Area edge and it consists of
+     * two segments which are equal and opposite (eg a zero-width V).
+     */
+    virtual bool isCollapsed() const;
 
-	virtual Edge* getCollapsedEdge();
+    virtual Edge* getCollapsedEdge();
 
-	virtual void setIsolated(bool newIsIsolated) {
-		isIsolatedVar=newIsIsolated;
-		testInvariant();
-	}
+    virtual void
+    setIsolated(bool newIsIsolated)
+    {
+        isIsolatedVar = newIsIsolated;
+        testInvariant();
+    }
 
-	bool isIsolated() const override {
-		testInvariant();
-		return isIsolatedVar;
-	}
+    bool
+    isIsolated() const override
+    {
+        testInvariant();
+        return isIsolatedVar;
+    }
 
-	/** \brief
-	 * Adds EdgeIntersections for one or both
-	 * intersections found for a segment of an edge to the edge intersection list.
-	 */
-	virtual void addIntersections(algorithm::LineIntersector *li, size_t segmentIndex,
-		size_t geomIndex);
+    /** \brief
+     * Adds EdgeIntersections for one or both
+     * intersections found for a segment of an edge to the edge intersection list.
+     */
+    virtual void addIntersections(algorithm::LineIntersector* li, size_t segmentIndex,
+                                  size_t geomIndex);
 
-	/// Add an EdgeIntersection for intersection intIndex.
-	//
-	/// An intersection that falls exactly on a vertex of the edge is normalized
-	/// to use the higher of the two possible segmentIndexes
-	///
-	virtual void addIntersection(algorithm::LineIntersector *li, size_t segmentIndex,
-		size_t geomIndex, size_t intIndex);
+    /// Add an EdgeIntersection for intersection intIndex.
+    //
+    /// An intersection that falls exactly on a vertex of the edge is normalized
+    /// to use the higher of the two possible segmentIndexes
+    ///
+    virtual void addIntersection(algorithm::LineIntersector* li, size_t segmentIndex,
+                                 size_t geomIndex, size_t intIndex);
 
-	/// Update the IM with the contribution for this component.
-	//
-	/// A component only contributes if it has a labelling for both
-	/// parent geometries
-	///
-	void computeIM(geom::IntersectionMatrix& im) override {
-		updateIM(label, im);
-		testInvariant();
-	}
+    /// Update the IM with the contribution for this component.
+    //
+    /// A component only contributes if it has a labelling for both
+    /// parent geometries
+    ///
+    void
+    computeIM(geom::IntersectionMatrix& im) override
+    {
+        updateIM(label, im);
+        testInvariant();
+    }
 
-	/// return true if the coordinate sequences of the Edges are identical
-	virtual bool isPointwiseEqual(const Edge *e) const;
+    /// return true if the coordinate sequences of the Edges are identical
+    virtual bool isPointwiseEqual(const Edge* e) const;
 
-	virtual std::string print() const;
+    virtual std::string print() const;
 
-	virtual std::string printReverse() const;
+    virtual std::string printReverse() const;
 
-	/**
-	 * equals is defined to be:
-	 *
-	 * e1 equals e2
-	 * <b>iff</b>
-	 * the coordinates of e1 are the same or the reverse of the coordinates in e2
-	 */
-	virtual bool equals(const Edge& e) const;
+    /**
+     * equals is defined to be:
+     *
+     * e1 equals e2
+     * <b>iff</b>
+     * the coordinates of e1 are the same or the reverse of the coordinates in e2
+     */
+    virtual bool equals(const Edge& e) const;
 
-	virtual bool equals(const Edge* e) const {
-		assert(e);
-		return equals(*e);
-	}
+    virtual bool
+    equals(const Edge* e) const
+    {
+        assert(e);
+        return equals(*e);
+    }
 
-	virtual geom::Envelope* getEnvelope();
+    virtual geom::Envelope* getEnvelope();
 };
 
 
 //Operators
-inline bool operator==(const Edge &a, const Edge &b) {
-	return a.equals(b);
+inline bool
+operator==(const Edge& a, const Edge& b)
+{
+    return a.equals(b);
 }
 
 std::ostream& operator<< (std::ostream& os, const Edge& el);

@@ -26,14 +26,14 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class CoordinateSequence;
-	}
-	namespace index {
-		namespace chain {
-			class MonotoneChain;
-		}
-	}
+namespace geom {
+class CoordinateSequence;
+}
+namespace index {
+namespace chain {
+class MonotoneChain;
+}
+}
 }
 
 namespace geos {
@@ -50,64 +50,65 @@ class GEOS_DLL MonotoneChainBuilder {
 
 public:
 
-	MonotoneChainBuilder(){}
+    MonotoneChainBuilder() {}
 
-	/** \brief
-	 * Return a newly-allocated vector of newly-allocated
-	 * MonotoneChain objects for the given CoordinateSequence.
-	 * Remember to deep-delete the result.
-	 */
-	static std::unique_ptr<std::vector<std::unique_ptr<MonotoneChain>>> getChains(
-			const geom::CoordinateSequence *pts,
-			void* context);
+    /** \brief
+     * Return a newly-allocated vector of newly-allocated
+     * MonotoneChain objects for the given CoordinateSequence.
+     * Remember to deep-delete the result.
+     */
+    static std::unique_ptr<std::vector<std::unique_ptr<MonotoneChain>>> getChains(
+        const geom::CoordinateSequence* pts,
+        void* context);
 
-	/** \brief
-	 * Fill the provided vector with newly-allocated MonotoneChain objects
-	 * for the given CoordinateSequence.
-	 * Remember to delete vector elements!
-	 */
-	static void getChains(const geom::CoordinateSequence *pts,
-			void* context,
-			std::vector<std::unique_ptr<MonotoneChain>> & mcList);
+    /** \brief
+     * Fill the provided vector with newly-allocated MonotoneChain objects
+     * for the given CoordinateSequence.
+     * Remember to delete vector elements!
+     */
+    static void getChains(const geom::CoordinateSequence* pts,
+                          void* context,
+                          std::vector<std::unique_ptr<MonotoneChain>>& mcList);
 
-	static std::unique_ptr<std::vector<std::unique_ptr<MonotoneChain>>> getChains(const geom::CoordinateSequence *pts)
-	{
-		return getChains(pts, nullptr);
-	}
+    static std::unique_ptr<std::vector<std::unique_ptr<MonotoneChain>>>
+    getChains(const geom::CoordinateSequence* pts)
+    {
+        return getChains(pts, nullptr);
+    }
 
-	/** \brief
-	 * Fill the given vector with start/end indexes of the monotone chains
-	 * for the given CoordinateSequence.
-	 * The last entry in the array points to the end point of the point
-	 * array,
-	 * for use as a sentinel.
-	 */
-	static void getChainStartIndices(const geom::CoordinateSequence& pts,
-			std::vector<std::size_t>& startIndexList);
+    /** \brief
+     * Fill the given vector with start/end indexes of the monotone chains
+     * for the given CoordinateSequence.
+     * The last entry in the array points to the end point of the point
+     * array,
+     * for use as a sentinel.
+     */
+    static void getChainStartIndices(const geom::CoordinateSequence& pts,
+                                     std::vector<std::size_t>& startIndexList);
 
     /**
      * Disable copy construction and assignment. Apparently needed to make this
      * class compile under MSVC. (See https://stackoverflow.com/q/29565299)
      */
-     MonotoneChainBuilder(const MonotoneChainBuilder&) = delete;
-     MonotoneChainBuilder& operator=(const MonotoneChainBuilder&) = delete;
+    MonotoneChainBuilder(const MonotoneChainBuilder&) = delete;
+    MonotoneChainBuilder& operator=(const MonotoneChainBuilder&) = delete;
 
 
 private:
 
-	/**
-	 * Finds the index of the last point in a monotone chain
-	 * starting at a given point.
-	 * Any repeated points (0-length segments) will be included
-	 * in the monotone chain returned.
-	 *
-	 * @return the index of the last point in the monotone chain
-	 *         starting at <code>start</code>.
-	 *
-	 * NOTE: aborts if 'start' is >= pts.getSize()
-	 */
-	static std::size_t findChainEnd(const geom::CoordinateSequence& pts,
-	                                                   std::size_t start);
+    /**
+     * Finds the index of the last point in a monotone chain
+     * starting at a given point.
+     * Any repeated points (0-length segments) will be included
+     * in the monotone chain returned.
+     *
+     * @return the index of the last point in the monotone chain
+     *         starting at <code>start</code>.
+     *
+     * NOTE: aborts if 'start' is >= pts.getSize()
+     */
+    static std::size_t findChainEnd(const geom::CoordinateSequence& pts,
+                                    std::size_t start);
 };
 
 } // namespace geos::index::chain

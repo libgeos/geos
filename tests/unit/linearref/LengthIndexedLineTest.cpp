@@ -32,30 +32,32 @@ namespace tut {
 typedef unique_ptr<Geometry> GeomPtr;
 static const double TOLERANCE_DIST = 0.001;
 
-struct test_lengthindexedline_data
-{
+struct test_lengthindexedline_data {
     test_lengthindexedline_data()
         : reader(), writer()
     {
-      writer.setTrim(true);
+        writer.setTrim(true);
     }
 
     geos::io::WKTReader reader;
     geos::io::WKTWriter writer;
 
-    void checkExpected(Geometry* result, string const& expected)
+    void
+    checkExpected(Geometry* result, string const& expected)
     {
         GeomPtr subLine(reader.read(expected));
         checkExpected(result, subLine.get());
     }
 
-    void checkExpected(Geometry* result, const Geometry* expected)
+    void
+    checkExpected(Geometry* result, const Geometry* expected)
     {
-      bool isEqual = result->equalsExact(expected, 1.0e-5);
-      ensure_equals("Expect: "+writer.write(expected)+" Obtained: "+writer.write(result), isEqual, true);
+        bool isEqual = result->equalsExact(expected, 1.0e-5);
+        ensure_equals("Expect: " + writer.write(expected) + " Obtained: " + writer.write(result), isEqual, true);
     }
 
-    void runIndicesOfThenExtract(string const& inputStr, string const& subLineStr)
+    void
+    runIndicesOfThenExtract(string const& inputStr, string const& subLineStr)
     {
         GeomPtr input(reader.read(inputStr));
         GeomPtr subLine(reader.read(subLineStr));
@@ -64,25 +66,33 @@ struct test_lengthindexedline_data
         checkExpected(result.get(), subLine.get());
     }
 
-    bool indexOfAfterCheck(Geometry* linearGeom, Coordinate testPt)
+    bool
+    indexOfAfterCheck(Geometry* linearGeom, Coordinate testPt)
     {
         LengthIndexedLine indexedLine(linearGeom);
 
         // check locations are consecutive
         double loc1 = indexedLine.indexOf(testPt);
         double loc2 = indexedLine.indexOfAfter(testPt, loc1);
-        if (loc2 <= loc1) return false;
+        if(loc2 <= loc1) {
+            return false;
+        }
 
         // check extracted points are the same as the input
         Coordinate pt1 = indexedLine.extractPoint(loc1);
         Coordinate pt2 = indexedLine.extractPoint(loc2);
-        if (! pt1.equals2D(testPt)) return false;
-        if (! pt2.equals2D(testPt)) return false;
+        if(! pt1.equals2D(testPt)) {
+            return false;
+        }
+        if(! pt2.equals2D(testPt)) {
+            return false;
+        }
 
         return true;
     }
 
-    void runIndexOfAfterTest(string const& inputStr, string const& testPtWKT)
+    void
+    runIndexOfAfterTest(string const& inputStr, string const& testPtWKT)
     {
         GeomPtr input(reader.read(inputStr));
         GeomPtr testPoint(reader.read(testPtWKT));
@@ -91,8 +101,9 @@ struct test_lengthindexedline_data
         ensure(resultOK);
     }
 
-    void runOffsetTest(string const& inputWKT, string const& testPtWKT,
-                       double offsetDistance, string const& expectedPtWKT)
+    void
+    runOffsetTest(string const& inputWKT, string const& testPtWKT,
+                  double offsetDistance, string const& expectedPtWKT)
     {
         GeomPtr input(reader.read(inputWKT));
         GeomPtr testPoint(reader.read(testPtWKT));
@@ -102,19 +113,22 @@ struct test_lengthindexedline_data
         Coordinate offsetPt = extractOffsetAt(input.get(), *testPt, offsetDistance);
 
         bool isOk = offsetPt.distance(*expectedPt) < TOLERANCE_DIST;
-        if (! isOk)
+        if(! isOk) {
             cout << "Expected = " << *expectedPoint << "  Actual = " << offsetPt << endl;
+        }
         ensure(isOk);
     }
 
-    Coordinate extractOffsetAt(Geometry* linearGeom, Coordinate testPt, double offsetDistance)
+    Coordinate
+    extractOffsetAt(Geometry* linearGeom, Coordinate testPt, double offsetDistance)
     {
         LengthIndexedLine indexedLine(linearGeom);
         double index = indexedLine.indexOf(testPt);
         return indexedLine.extractPoint(index, offsetDistance);
     }
 
-    void checkExtractLine(const char* wkt, double start, double end, const char* expected)
+    void
+    checkExtractLine(const char* wkt, double start, double end, const char* expected)
     {
         string wktstr(wkt);
         GeomPtr linearGeom(reader.read(wktstr));
@@ -124,7 +138,8 @@ struct test_lengthindexedline_data
     }
 
 
-    Geometry* indicesOfThenExtract(Geometry* linearGeom, Geometry* subLine)
+    Geometry*
+    indicesOfThenExtract(Geometry* linearGeom, Geometry* subLine)
     {
         LengthIndexedLine indexedLine(linearGeom);
         double* loc = indexedLine.indicesOf(subLine);
@@ -143,7 +158,8 @@ group test_lengthindexedline_group("geos::linearref::LocationIndexedLine");
 // testML
 template<>
 template<>
-void object::test<1>()
+void object::test<1>
+()
 {
     runIndicesOfThenExtract("MULTILINESTRING ((0 0, 10 10), (20 20, 30 30))",
                             "MULTILINESTRING ((1 1, 10 10), (20 20, 25 25))");
@@ -152,7 +168,8 @@ void object::test<1>()
 // testPartOfSegmentNoVertex
 template<>
 template<>
-void object::test<2>()
+void object::test<2>
+()
 {
     runIndicesOfThenExtract("LINESTRING (0 0, 10 10, 20 20)",
                             "LINESTRING (1 1, 9 9)");
@@ -161,7 +178,8 @@ void object::test<2>()
 // testPartOfSegmentContainingVertex()
 template<>
 template<>
-void object::test<3>()
+void object::test<3>
+()
 {
     runIndicesOfThenExtract("LINESTRING (0 0, 10 10, 20 20)",
                             "LINESTRING (5 5, 10 10, 15 15)");
@@ -175,7 +193,8 @@ void object::test<3>()
 // testPartOfSegmentContainingDuplicateCoords
 template<>
 template<>
-void object::test<4>()
+void object::test<4>
+()
 {
     runIndicesOfThenExtract("LINESTRING (0 0, 10 10, 10 10, 20 20)",
                             "LINESTRING (5 5, 10 10, 10 10, 15 15)");
@@ -189,7 +208,8 @@ void object::test<4>()
 // testLoopWithStartSubLine
 template<>
 template<>
-void object::test<5>()
+void object::test<5>
+()
 {
     runIndicesOfThenExtract("LINESTRING (0 0, 0 10, 10 10, 10 0, 0 0)",
                             "LINESTRING (0 0, 0 10, 10 10)");
@@ -198,7 +218,8 @@ void object::test<5>()
 // testLoopWithEndingSubLine()
 template<>
 template<>
-void object::test<6>()
+void object::test<6>
+()
 {
     runIndicesOfThenExtract("LINESTRING (0 0, 0 10, 10 10, 10 0, 0 0)",
                             "LINESTRING (10 10, 10 0, 0 0)");
@@ -208,7 +229,8 @@ void object::test<6>()
 // testLoopWithIdenticalSubLine()
 template<>
 template<>
-void object::test<7>()
+void object::test<7>
+()
 {
     runIndicesOfThenExtract("LINESTRING (0 0, 0 10, 10 10, 10 0, 0 0)",
                             "LINESTRING (0 0, 0 10, 10 10, 10 0, 0 0)");
@@ -218,7 +240,8 @@ void object::test<7>()
 // testZeroLenSubLineAtStart()
 template<>
 template<>
-void object::test<8>()
+void object::test<8>
+()
 {
     runIndicesOfThenExtract("LINESTRING (0 0, 0 10, 10 10, 10 0, 0 0)",
                             "LINESTRING (0 0, 0 0)");
@@ -228,7 +251,8 @@ void object::test<8>()
 // testZeroLenSubLineAtMidVertex()
 template<>
 template<>
-void object::test<9>()
+void object::test<9>
+()
 {
     runIndicesOfThenExtract("LINESTRING (0 0, 0 10, 10 10, 10 0, 0 0)",
                             "LINESTRING (10 10, 10 10)");
@@ -237,7 +261,8 @@ void object::test<9>()
 // testIndexOfAfterSquare()
 template<>
 template<>
-void object::test<10>()
+void object::test<10>
+()
 {
     runIndexOfAfterTest("LINESTRING (0 0, 0 10, 10 10, 10 0, 0 0)",
                         "POINT (0 0)");
@@ -246,7 +271,8 @@ void object::test<10>()
 // testIndexOfAfterRibbon()
 template<>
 template<>
-void object::test<11>()
+void object::test<11>
+()
 {
     runIndexOfAfterTest("LINESTRING (0 0, 0 60, 50 60, 50 20, -20 20)",
                         "POINT (0 20)");
@@ -255,29 +281,36 @@ void object::test<11>()
 // testOffsetStartPoint()
 template<>
 template<>
-void object::test<12>()
+void object::test<12>
+()
 {
-    runOffsetTest("LINESTRING (0 0, 10 10, 10 10, 20 20)", "POINT(0 0)", 1.0, "POINT (-0.7071067811865475 0.7071067811865475)");
-    runOffsetTest("LINESTRING (0 0, 10 10, 10 10, 20 20)", "POINT(0 0)", -1.0, "POINT (0.7071067811865475 -0.7071067811865475)");
-    runOffsetTest("LINESTRING (0 0, 10 10, 10 10, 20 20)", "POINT(10 10)", 5.0, "POINT (6.464466094067262 13.535533905932738)");
-    runOffsetTest("LINESTRING (0 0, 10 10, 10 10, 20 20)", "POINT(10 10)", -5.0, "POINT (13.535533905932738 6.464466094067262)");
+    runOffsetTest("LINESTRING (0 0, 10 10, 10 10, 20 20)", "POINT(0 0)", 1.0,
+                  "POINT (-0.7071067811865475 0.7071067811865475)");
+    runOffsetTest("LINESTRING (0 0, 10 10, 10 10, 20 20)", "POINT(0 0)", -1.0,
+                  "POINT (0.7071067811865475 -0.7071067811865475)");
+    runOffsetTest("LINESTRING (0 0, 10 10, 10 10, 20 20)", "POINT(10 10)", 5.0,
+                  "POINT (6.464466094067262 13.535533905932738)");
+    runOffsetTest("LINESTRING (0 0, 10 10, 10 10, 20 20)", "POINT(10 10)", -5.0,
+                  "POINT (13.535533905932738 6.464466094067262)");
 }
 
 // testExtractLineBothIndicesAtEndpointXXX()
 template<>
 template<>
-void object::test<13>()
+void object::test<13>
+()
 {
-  checkExtractLine(
-    "MULTILINESTRING ((0 0, 10 0), (20 0, 25 0, 30 0))",
-    -10, 10, "LINESTRING (10 0, 10 0)"
-  );
+    checkExtractLine(
+        "MULTILINESTRING ((0 0, 10 0), (20 0, 25 0, 30 0))",
+        -10, 10, "LINESTRING (10 0, 10 0)"
+    );
 }
 
 
 // testExtractLineBeyondRange()
 template<> template<>
-void object::test<14>()
+void object::test<14>
+()
 {
     checkExtractLine("LINESTRING (0 0, 10 10)", -100, 100, "LINESTRING (0 0, 10 10)");
 }
@@ -285,7 +318,8 @@ void object::test<14>()
 // testExtractLineReverse()
 template<>
 template<>
-void object::test<15>()
+void object::test<15>
+()
 {
     checkExtractLine("LINESTRING (0 0, 10 0)", 9, 1, "LINESTRING (9 0, 1 0)");
 }
@@ -293,7 +327,8 @@ void object::test<15>()
 // testExtractLineReverseMulti()
 template<>
 template<>
-void object::test<16>()
+void object::test<16>
+()
 {
     checkExtractLine("MULTILINESTRING ((0 0, 10 0), (20 0, 25 0, 30 0))",
                      19, 1, "MULTILINESTRING ((29 0, 25 0, 20 0), (10 0, 1 0))");
@@ -302,7 +337,8 @@ void object::test<16>()
 // testExtractLineNegative()
 template<>
 template<>
-void object::test<17>()
+void object::test<17>
+()
 {
     checkExtractLine("LINESTRING (0 0, 10 0)", -9, -1, "LINESTRING (1 0, 9 0)");
 }
@@ -310,7 +346,8 @@ void object::test<17>()
 // testExtractLineNegativeReverse()
 template<>
 template<>
-void object::test<18>()
+void object::test<18>
+()
 {
     checkExtractLine("LINESTRING (0 0, 10 0)", -1, -9, "LINESTRING (9 0, 1 0)");
 }
@@ -318,7 +355,8 @@ void object::test<18>()
 // testExtractLineIndexAtEndpoint()
 template<>
 template<>
-void object::test<19>()
+void object::test<19>
+()
 {
     checkExtractLine("MULTILINESTRING ((0 0, 10 0), (20 0, 25 0, 30 0))",
                      10, -1, "LINESTRING (20 0, 25 0, 29 0)");
@@ -327,7 +365,8 @@ void object::test<19>()
 // testExtractLineBothIndicesAtEndpoint()
 template<>
 template<>
-void object::test<20>()
+void object::test<20>
+()
 {
     checkExtractLine("MULTILINESTRING ((0 0, 10 0), (20 0, 25 0, 30 0))",
                      10, 10, "LINESTRING (10 0, 10 0)");
@@ -336,7 +375,8 @@ void object::test<20>()
 // testExtractLineBothIndicesAtEndpointNegative()
 template<>
 template<>
-void object::test<21>()
+void object::test<21>
+()
 {
     checkExtractLine("MULTILINESTRING ((0 0, 10 0), (20 0, 25 0, 30 0))",
                      -10, 10, "LINESTRING (10 0, 10 0)");
@@ -345,7 +385,8 @@ void object::test<21>()
 // testExtractPointBeyondRange()
 template<>
 template<>
-void object::test<22>()
+void object::test<22>
+()
 {
     GeomPtr linearGeom(reader.read("LINESTRING (0 0, 10 10)"));
     LengthIndexedLine indexedLine(linearGeom.get());
@@ -359,7 +400,8 @@ void object::test<22>()
 // testProjectPointWithDuplicateCoords()
 template<>
 template<>
-void object::test<23>()
+void object::test<23>
+()
 {
     GeomPtr linearGeom(reader.read("LINESTRING (0 0, 10 0, 10 0, 20 0)"));
     LengthIndexedLine indexedLine(linearGeom.get());
@@ -374,7 +416,8 @@ void object::test<23>()
 // testComputeZ()
 template<>
 template<>
-void object::test<24>()
+void object::test<24>
+()
 {
     GeomPtr linearGeom(reader.read("LINESTRING (0 0 0, 10 10 10)"));
     LengthIndexedLine indexedLine(linearGeom.get());
@@ -391,7 +434,8 @@ void object::test<24>()
 // testComputeZNaN()
 template<>
 template<>
-void object::test<25>()
+void object::test<25>
+()
 {
 
     GeomPtr linearGeom(reader.read("LINESTRING (0 0, 10 10 10)"));
@@ -407,13 +451,14 @@ void object::test<25>()
 // testProjectExtractPoint()
 template<>
 template<>
-void object::test<26>()
+void object::test<26>
+()
 {
-  GeomPtr linearGeom(reader.read("MULTILINESTRING ((0 2, 0 0), (-1 1, 1 1))"));
-  LengthIndexedLine indexedLine(linearGeom.get());
-  double index = indexedLine.project(Coordinate(1, 0));
-  Coordinate pt = indexedLine.extractPoint(index);
-  ensure_equals(pt, Coordinate(0, 0));
+    GeomPtr linearGeom(reader.read("MULTILINESTRING ((0 2, 0 0), (-1 1, 1 1))"));
+    LengthIndexedLine indexedLine(linearGeom.get());
+    double index = indexedLine.project(Coordinate(1, 0));
+    Coordinate pt = indexedLine.extractPoint(index);
+    ensure_equals(pt, Coordinate(0, 0));
 }
 
 /**
@@ -423,23 +468,24 @@ void object::test<26>()
  */
 // testExtractLineIndexAtEndpointWithZeroLenComponents()
 template<> template<>
-void object::test<27>()
+void object::test<27>
+()
 {
-  checkExtractLine(
-    "MULTILINESTRING ((0 0, 10 0), (10 0, 10 0), (20 0, 25 0, 30 0))",
-    10, -1, "LINESTRING (20 0, 25 0, 29 0)");
+    checkExtractLine(
+        "MULTILINESTRING ((0 0, 10 0), (10 0, 10 0), (20 0, 25 0, 30 0))",
+        10, -1, "LINESTRING (20 0, 25 0, 29 0)");
 
-  checkExtractLine(
-    "MULTILINESTRING ((0 0, 10 0), (10 0, 10 0), (20 0, 25 0, 30 0))",
-    5, 10, "LINESTRING (5 0, 10 0)");
+    checkExtractLine(
+        "MULTILINESTRING ((0 0, 10 0), (10 0, 10 0), (20 0, 25 0, 30 0))",
+        5, 10, "LINESTRING (5 0, 10 0)");
 
-  checkExtractLine(
-    "MULTILINESTRING ((0 0,10 0),(10 0,10 0),(10 0,10 0),(20 0,25 0,30 0))",
-    10, 10, "LINESTRING (10 0, 10 0)");
+    checkExtractLine(
+        "MULTILINESTRING ((0 0,10 0),(10 0,10 0),(10 0,10 0),(20 0,25 0,30 0))",
+        10, 10, "LINESTRING (10 0, 10 0)");
 
-  checkExtractLine(
-    "MULTILINESTRING((0 0,10 0),(10 0,10 0),(10 0,10 0),(10 0,10 0),(20 0,25 0,30 0))",
-    10, -10, "LINESTRING (10 0, 10 0)");
+    checkExtractLine(
+        "MULTILINESTRING((0 0,10 0),(10 0,10 0),(10 0,10 0),(10 0,10 0),(20 0,25 0,30 0))",
+        10, -10, "LINESTRING (10 0, 10 0)");
 }
 
 
@@ -449,29 +495,31 @@ void object::test<27>()
 #if 0
 template<>
 template<>
-void object::test<28>()
+void object::test<28>
+()
 {
 
-  GeomPtr linearGeom(reader.read(
-"MULTILINESTRING ((0 -2, 0 2),(-2 0, 2 0))"
-));
-  LengthIndexedLine indexedLine(linearGeom.get());
+    GeomPtr linearGeom(reader.read(
+                           "MULTILINESTRING ((0 -2, 0 2),(-2 0, 2 0))"
+                       ));
+    LengthIndexedLine indexedLine(linearGeom.get());
 
-  double projIndex = indexedLine.project(Coordinate(2, 1.9));
-  ensure_equals(projIndex, 8);
-  Coordinate projPt = indexedLine.extractPoint(projIndex);
-  ensure_equals(projPt, Coordinate(2, 0));
+    double projIndex = indexedLine.project(Coordinate(2, 1.9));
+    ensure_equals(projIndex, 8);
+    Coordinate projPt = indexedLine.extractPoint(projIndex);
+    ensure_equals(projPt, Coordinate(2, 0));
 
-  projIndex = indexedLine.project(Coordinate(2, 2.1));
-  ensure_equals(projIndex, 4);
-  projPt = indexedLine.extractPoint(projIndex);
-  ensure_equals(projPt, Coordinate(0, 2));
+    projIndex = indexedLine.project(Coordinate(2, 2.1));
+    ensure_equals(projIndex, 4);
+    projPt = indexedLine.extractPoint(projIndex);
+    ensure_equals(projPt, Coordinate(0, 2));
 }
 #endif
 
 template<>
 template<>
-void object::test<29>()
+void object::test<29>
+()
 {
     GeomPtr linearGeom(reader.read("LINESTRING EMPTY"));
     LengthIndexedLine indexedLine(linearGeom.get());

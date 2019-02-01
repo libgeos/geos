@@ -14,137 +14,140 @@
 #include <string>
 #include <memory>
 
-namespace tut
+namespace tut {
+//
+// Test Group
+//
+
+// dummy data, not used
+struct test_wktwriter_data {
+    typedef geos::geom::PrecisionModel PrecisionModel;
+    typedef geos::geom::GeometryFactory GeometryFactory;
+    typedef geos::io::WKTReader WKTReader;
+    typedef geos::io::WKTWriter WKTWriter;
+    typedef std::unique_ptr<geos::geom::Geometry> GeomPtr;
+
+    PrecisionModel pm;
+    GeometryFactory::Ptr gf;
+    WKTReader wktreader;
+    WKTWriter wktwriter;
+
+    test_wktwriter_data()
+        :
+        pm(1000.0),
+        gf(GeometryFactory::create(&pm)),
+        wktreader(gf.get())
+    {}
+
+};
+
+typedef test_group<test_wktwriter_data> group;
+typedef group::object object;
+
+group test_wktwriter_group("geos::io::WKTWriter");
+
+
+//
+// Test Cases
+//
+
+// 1 - Test the trim capability.
+template<>
+template<>
+void object::test<1>
+()
 {
-	//
-	// Test Group
-	//
+    GeomPtr geom(wktreader.read("POINT(-117 33)"));
+    std::string  result;
 
-	// dummy data, not used
-	struct test_wktwriter_data
-	{
-		typedef geos::geom::PrecisionModel PrecisionModel;
-		typedef geos::geom::GeometryFactory GeometryFactory;
-		typedef geos::io::WKTReader WKTReader;
-		typedef geos::io::WKTWriter WKTWriter;
-		typedef std::unique_ptr<geos::geom::Geometry> GeomPtr;
+    wktwriter.setTrim(false);
+    result = wktwriter.write(geom.get());
 
-		PrecisionModel pm;
-		GeometryFactory::Ptr gf;
-		WKTReader wktreader;
-		WKTWriter wktwriter;
+    ensure_equals(result, "POINT (-117.000 33.000)");
 
-		test_wktwriter_data()
-                :
-                pm(1000.0),
-                gf(GeometryFactory::create(&pm)),
-                wktreader(gf.get())
-            {}
+    wktwriter.setTrim(true);
+    result = wktwriter.write(geom.get());
 
-	};
+    ensure_equals(result, "POINT (-117 33)");
+}
 
-	typedef test_group<test_wktwriter_data> group;
-	typedef group::object object;
+// 2 - Test the output precision capability
+template<>
+template<>
+void object::test<2>
+()
+{
+    GeomPtr geom(wktreader.read("POINT(-117.1234567 33.1234567)"));
+    std::string  result;
 
-	group test_wktwriter_group("geos::io::WKTWriter");
+    wktwriter.setTrim(false);
+    result = wktwriter.write(geom.get());
 
+    ensure_equals(result, "POINT (-117.123 33.123)");
 
-	//
-	// Test Cases
-	//
+    wktwriter.setRoundingPrecision(2);
+    result = wktwriter.write(geom.get());
 
-	// 1 - Test the trim capability.
-	template<>
-	template<>
-	void object::test<1>()
-	{
-        GeomPtr geom ( wktreader.read("POINT(-117 33)") );
-        std::string  result;
+    ensure_equals(result, "POINT (-117.12 33.12)");
 
-        wktwriter.setTrim(false);
-        result = wktwriter.write( geom.get() );
+}
 
-        ensure_equals( result , "POINT (-117.000 33.000)" );
+// 3 - Test 3D generation from a 3D geometry.
+template<>
+template<>
+void object::test<3>
+()
+{
+    GeomPtr geom(wktreader.read("POINT Z (-117 33 120)"));
+    std::string  result;
 
-        wktwriter.setTrim(true);
-        result = wktwriter.write( geom.get() );
+    wktwriter.setOutputDimension(3);
+    wktwriter.setTrim(true);
+    wktwriter.setOld3D(false);
 
-        ensure_equals( result , "POINT (-117 33)" );
-    }
+    result = wktwriter.write(geom.get());
 
-	// 2 - Test the output precision capability
-	template<>
-	template<>
-	void object::test<2>()
-	{
-        GeomPtr geom ( wktreader.read("POINT(-117.1234567 33.1234567)") );
-        std::string  result;
+    ensure_equals(result, std::string("POINT Z (-117 33 120)"));
 
-        wktwriter.setTrim(false);
-        result = wktwriter.write( geom.get() );
+    wktwriter.setOld3D(true);
+    result = wktwriter.write(geom.get());
 
-        ensure_equals( result , "POINT (-117.123 33.123)" );
+    ensure_equals(result, std::string("POINT (-117 33 120)"));
 
-        wktwriter.setRoundingPrecision(2);
-        result = wktwriter.write( geom.get() );
+}
 
-        ensure_equals( result , "POINT (-117.12 33.12)" );
+// 4 - Test 2D generation from a 3D geometry.
+template<>
+template<>
+void object::test<4>
+()
+{
+    GeomPtr geom(wktreader.read("POINT(-117 33 120)"));
+    std::string  result;
 
-    }
+    wktwriter.setOutputDimension(2);
+    wktwriter.setTrim(true);
+    wktwriter.setOld3D(false);
 
-	// 3 - Test 3D generation from a 3D geometry.
-	template<>
-	template<>
-	void object::test<3>()
-	{
-        GeomPtr geom ( wktreader.read("POINT Z (-117 33 120)") );
-        std::string  result;
+    result = wktwriter.write(geom.get());
 
-        wktwriter.setOutputDimension(3);
-        wktwriter.setTrim( true );
-        wktwriter.setOld3D( false );
+    ensure_equals(result, std::string("POINT (-117 33)"));
+}
 
-        result = wktwriter.write( geom.get() );
-
-        ensure_equals( result, std::string("POINT Z (-117 33 120)") );
-
-        wktwriter.setOld3D( true );
-        result = wktwriter.write( geom.get() );
-
-        ensure_equals( result, std::string("POINT (-117 33 120)") );
-
-    }
-
-	// 4 - Test 2D generation from a 3D geometry.
-	template<>
-	template<>
-	void object::test<4>()
-	{
-        GeomPtr geom ( wktreader.read("POINT(-117 33 120)") );
-        std::string  result;
-
-        wktwriter.setOutputDimension(2);
-        wktwriter.setTrim( true );
-        wktwriter.setOld3D( false );
-
-        result = wktwriter.write( geom.get() );
-
-        ensure_equals( result, std::string("POINT (-117 33)") );
-    }
-
-  // 5 - Test negative number of digits in precision model
-  template<>
-  template<>
-  void object::test<5>()
-  {
+// 5 - Test negative number of digits in precision model
+template<>
+template<>
+void object::test<5>
+()
+{
     PrecisionModel pm3(0.001);
     GeometryFactory::Ptr gf3(GeometryFactory::create(&pm3));
     WKTReader wktreader3(gf3.get());
-    GeomPtr geom ( wktreader3.read("POINT(123456 654321)") );
+    GeomPtr geom(wktreader3.read("POINT(123456 654321)"));
 
-    std::string  result = wktwriter.write( geom.get() );
-    ensure_equals( result, std::string("POINT (123000 654000)") );
-  }
+    std::string  result = wktwriter.write(geom.get());
+    ensure_equals(result, std::string("POINT (123000 654000)"));
+}
 
 } // namespace tut
 

@@ -40,65 +40,70 @@ class Translater: public geom::CoordinateFilter {
 
 private:
 
-	geom::Coordinate trans;
+    geom::Coordinate trans;
 
 public:
 
-	Translater(geom::Coordinate &newTrans)
-		:
-		trans(newTrans)
-	{}
+    Translater(geom::Coordinate& newTrans)
+        :
+        trans(newTrans)
+    {}
 
-	void filter_ro(const geom::Coordinate *coord) override  //Not used
+    void
+    filter_ro(const geom::Coordinate* coord) override  //Not used
     {
         ::geos::ignore_unused_variable_warning(coord);
         assert(0);
     }
 
-	void filter_rw(geom::Coordinate *coord) const override
-	{
-		coord->x += trans.x;
-		coord->y += trans.y;
-	}
+    void
+    filter_rw(geom::Coordinate* coord) const override
+    {
+        coord->x += trans.x;
+        coord->y += trans.y;
+    }
 };
 
 
 class CommonCoordinateFilter: public geom::CoordinateFilter {
 private:
-	CommonBits commonBitsX;
-	CommonBits commonBitsY;
+    CommonBits commonBitsX;
+    CommonBits commonBitsY;
 public:
 
-	void filter_rw(geom::Coordinate *coord) const override
-	{
+    void
+    filter_rw(geom::Coordinate* coord) const override
+    {
         // CommonCoordinateFilter is a read-only filter
         ::geos::ignore_unused_variable_warning(coord);
-		assert(0);
-	}
+        assert(0);
+    }
 
-	void filter_ro(const geom::Coordinate *coord) override
-	{
-		commonBitsX.add(coord->x);
-		commonBitsY.add(coord->y);
-	}
+    void
+    filter_ro(const geom::Coordinate* coord) override
+    {
+        commonBitsX.add(coord->x);
+        commonBitsY.add(coord->y);
+    }
 
-	void getCommonCoordinate(geom::Coordinate& c)
-	{
-		c=Coordinate(commonBitsX.getCommon(),
-			commonBitsY.getCommon());
-	}
+    void
+    getCommonCoordinate(geom::Coordinate& c)
+    {
+        c = Coordinate(commonBitsX.getCommon(),
+                       commonBitsY.getCommon());
+    }
 
 };
 
 
 CommonBitsRemover::CommonBitsRemover()
 {
-	ccFilter=new CommonCoordinateFilter();
+    ccFilter = new CommonCoordinateFilter();
 }
 
 CommonBitsRemover::~CommonBitsRemover()
 {
-	delete ccFilter;
+    delete ccFilter;
 }
 
 /**
@@ -110,10 +115,10 @@ CommonBitsRemover::~CommonBitsRemover()
  * @param geom a Geometry to test for common bits
  */
 void
-CommonBitsRemover::add(const Geometry *geom)
+CommonBitsRemover::add(const Geometry* geom)
 {
-	geom->apply_ro(ccFilter);
-	ccFilter->getCommonCoordinate(commonCoord);
+    geom->apply_ro(ccFilter);
+    ccFilter->getCommonCoordinate(commonCoord);
 }
 
 /**
@@ -122,7 +127,7 @@ CommonBitsRemover::add(const Geometry *geom)
 Coordinate&
 CommonBitsRemover::getCommonCoordinate()
 {
-	return commonCoord;
+    return commonCoord;
 }
 
 /**
@@ -133,24 +138,25 @@ CommonBitsRemover::getCommonCoordinate()
  * @return the shifted Geometry
  */
 Geometry*
-CommonBitsRemover::removeCommonBits(Geometry *geom)
+CommonBitsRemover::removeCommonBits(Geometry* geom)
 {
-	if (commonCoord.x == 0.0 && commonCoord.y == 0.0)
-		return geom;
+    if(commonCoord.x == 0.0 && commonCoord.y == 0.0) {
+        return geom;
+    }
 
-	Coordinate invCoord(commonCoord);
-	invCoord.x = -invCoord.x;
-	invCoord.y = -invCoord.y;
+    Coordinate invCoord(commonCoord);
+    invCoord.x = -invCoord.x;
+    invCoord.y = -invCoord.y;
 
-	Translater trans(invCoord);
-	geom->apply_rw(&trans);
-	geom->geometryChanged();
+    Translater trans(invCoord);
+    geom->apply_rw(&trans);
+    geom->geometryChanged();
 
 #if GEOS_DEBUG
-	std::cerr << "CommonBits removed: " << *geom << std::endl;
+    std::cerr << "CommonBits removed: " << *geom << std::endl;
 #endif
 
-	return geom;
+    return geom;
 }
 
 /**
@@ -161,22 +167,22 @@ CommonBitsRemover::removeCommonBits(Geometry *geom)
  * @return the shifted Geometry
  */
 Geometry*
-CommonBitsRemover::addCommonBits(Geometry *geom)
+CommonBitsRemover::addCommonBits(Geometry* geom)
 {
 #if GEOS_DEBUG
-	std::cerr << "CommonBits before add: " << *geom << std::endl;
+    std::cerr << "CommonBits before add: " << *geom << std::endl;
 #endif
 
-	Translater trans(commonCoord);
+    Translater trans(commonCoord);
 
-	geom->apply_rw(&trans);
-	geom->geometryChanged();
+    geom->apply_rw(&trans);
+    geom->geometryChanged();
 
 #if GEOS_DEBUG
-	std::cerr << "CommonBits added: " << *geom << std::endl;
+    std::cerr << "CommonBits added: " << *geom << std::endl;
 #endif
 
-	return geom;
+    return geom;
 }
 
 } // namespace geos.precision

@@ -30,13 +30,12 @@ namespace relate { // geos.operation.relate
 
 EdgeEndBundleStar::~EdgeEndBundleStar()
 {
-	EdgeEndStar::iterator it=begin();
-	EdgeEndStar::iterator endIt=end();
-	for (; it!=endIt; ++it)
-	{
-		EdgeEndBundle *eeb=static_cast<EdgeEndBundle*>(*it);
-		delete eeb;
-	}
+    EdgeEndStar::iterator it = begin();
+    EdgeEndStar::iterator endIt = end();
+    for(; it != endIt; ++it) {
+        EdgeEndBundle* eeb = static_cast<EdgeEndBundle*>(*it);
+        delete eeb;
+    }
 }
 
 /**
@@ -46,34 +45,31 @@ EdgeEndBundleStar::~EdgeEndBundleStar()
  * to contain the EdgeEnd.
  */
 void
-EdgeEndBundleStar::insert(EdgeEnd *e)
+EdgeEndBundleStar::insert(EdgeEnd* e)
 {
-	EdgeEndBundle *eb;
-	//set<EdgeEnd*,EdgeEndLT>::iterator i=edgeMap->find(e);
-	EdgeEndStar::iterator it=find(e);
-	if (it==end())
-	{
-		eb=new EdgeEndBundle(e);
-		insertEdgeEnd(eb);
-	}
-	else
-	{
-		eb=static_cast<EdgeEndBundle*>(*it);
-		eb->insert(e);
-	}
+    EdgeEndBundle* eb;
+    //set<EdgeEnd*,EdgeEndLT>::iterator i=edgeMap->find(e);
+    EdgeEndStar::iterator it = find(e);
+    if(it == end()) {
+        eb = new EdgeEndBundle(e);
+        insertEdgeEnd(eb);
+    }
+    else {
+        eb = static_cast<EdgeEndBundle*>(*it);
+        eb->insert(e);
+    }
 }
 
 void
 EdgeEndBundleStar::updateIM(IntersectionMatrix& im)
 {
-	//vector<EdgeEnd*> *edges=getEdges();
-	EdgeEndStar::iterator it=begin();
-	EdgeEndStar::iterator endIt=end();
-	for (; it!=endIt; ++it)
-	{
-		EdgeEndBundle *esb=static_cast<EdgeEndBundle*>(*it);
-		esb->updateIM(im);
-	}
+    //vector<EdgeEnd*> *edges=getEdges();
+    EdgeEndStar::iterator it = begin();
+    EdgeEndStar::iterator endIt = end();
+    for(; it != endIt; ++it) {
+        EdgeEndBundle* esb = static_cast<EdgeEndBundle*>(*it);
+        esb->updateIM(im);
+    }
 }
 
 } // namespace geos.operation.relate

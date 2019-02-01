@@ -34,36 +34,36 @@ namespace geom { // geos::geom
  */
 class GEOS_DLL Location {
 public:
-	enum Value {
+    enum Value {
 
-		/**
-		 *  Used for uninitialized location values.
-		 */
-		UNDEF=-1,   // Instead of NULL
+        /**
+         *  Used for uninitialized location values.
+         */
+        UNDEF = -1, // Instead of NULL
 
-		/**
-		 * DE-9IM row index of the interior of the first geometry and
-		 * column index of the interior of the second geometry.
-		 * Location value for the interior of a geometry.
-		 */
-		INTERIOR = 0,
+        /**
+         * DE-9IM row index of the interior of the first geometry and
+         * column index of the interior of the second geometry.
+         * Location value for the interior of a geometry.
+         */
+        INTERIOR = 0,
 
-		/**
-		 * DE-9IM row index of the boundary of the first geometry and
-		 * column index of the boundary of the second geometry.
-		 * Location value for the boundary of a geometry.
-		 */
-		BOUNDARY = 1,
+        /**
+         * DE-9IM row index of the boundary of the first geometry and
+         * column index of the boundary of the second geometry.
+         * Location value for the boundary of a geometry.
+         */
+        BOUNDARY = 1,
 
-		/**
-		 * DE-9IM row index of the exterior of the first geometry and
-		 * column index of the exterior of the second geometry.
-		 * Location value for the exterior of a geometry.
-		 */
-		EXTERIOR = 2
-	};
+        /**
+         * DE-9IM row index of the exterior of the first geometry and
+         * column index of the exterior of the second geometry.
+         * Location value for the exterior of a geometry.
+         */
+        EXTERIOR = 2
+    };
 
-	static char toLocationSymbol(int locationValue);
+    static char toLocationSymbol(int locationValue);
 };
 
 } // namespace geos::geom

@@ -28,17 +28,17 @@
 
 // Forward declarations
 namespace geos {
-    namespace geom {
-        class GeometryFactory;
-        class Geometry;
-        class Geometry;
-        class Envelope;
-    }
-    namespace index {
-        namespace strtree {
-            class ItemsList;
-        }
-    }
+namespace geom {
+class GeometryFactory;
+class Geometry;
+class Geometry;
+class Envelope;
+}
+namespace index {
+namespace strtree {
+class ItemsList;
+}
+}
 }
 
 namespace geos {
@@ -52,8 +52,7 @@ namespace geounion {  // geos::operation::geounion
  * This algorithm is more robust than the simple iterated approach
  * of repeatedly unioning each geometry to a result geometry.
  */
-class GEOS_DLL CascadedUnion
-{
+class GEOS_DLL CascadedUnion {
 private:
     const std::vector<geom::Geometry*>* inputGeoms;
     geom::GeometryFactory const* geomFactory;
@@ -86,14 +85,15 @@ public:
      * @param end end iterator
      */
     template <class T>
-    static geom::Geometry* Union(T start, T end)
+    static geom::Geometry*
+    Union(T start, T end)
     {
-      std::vector<geom::Geometry*> polys;
-      for (T i=start; i!=end; ++i) {
-        const geom::Geometry* p = dynamic_cast<const geom::Geometry*>(*i);
-        polys.push_back(const_cast<geom::Geometry*>(p));
-      }
-      return Union(&polys);
+        std::vector<geom::Geometry*> polys;
+        for(T i = start; i != end; ++i) {
+            const geom::Geometry* p = dynamic_cast<const geom::Geometry*>(*i);
+            polys.push_back(const_cast<geom::Geometry*>(p));
+        }
+        return Union(&polys);
     }
 
     /**
@@ -104,8 +104,8 @@ public:
      *        ownership of elements _and_ vector are left to caller.
      */
     CascadedUnion(const std::vector<geom::Geometry*>* geoms)
-      : inputGeoms(geoms),
-        geomFactory(nullptr)
+        : inputGeoms(geoms),
+          geomFactory(nullptr)
     {}
 
     /**
@@ -136,7 +136,7 @@ private:
      * @return the union of the list section
      */
     geom::Geometry* binaryUnion(GeometryListHolder* geoms, std::size_t start,
-        std::size_t end);
+                                std::size_t end);
 
     /**
      * Reduces a tree of geometries to a list of geometries
@@ -177,10 +177,10 @@ private:
      * @return the union of the inputs
      */
     geom::Geometry* unionUsingEnvelopeIntersection(geom::Geometry* g0,
-        geom::Geometry* g1, geom::Envelope const& common);
+            geom::Geometry* g1, geom::Envelope const& common);
 
     geom::Geometry* extractByEnvelope(geom::Envelope const& env,
-        geom::Geometry* geom, std::vector<geom::Geometry*>& disjointGeoms);
+                                      geom::Geometry* geom, std::vector<geom::Geometry*>& disjointGeoms);
 
     /**
      * Encapsulates the actual unioning of two polygonal geometries.

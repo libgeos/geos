@@ -47,12 +47,12 @@ namespace overlay { // geos.operation.overlay
 namespace validate { // geos.operation.overlay.validate
 
 FuzzyPointLocator::FuzzyPointLocator(const geom::Geometry& geom,
-		double nTolerance)
-	:
-	g(geom),
-	tolerance(nTolerance),
-	ptLocator(),
-	linework(extractLineWork(g))
+                                     double nTolerance)
+    :
+    g(geom),
+    tolerance(nTolerance),
+    ptLocator(),
+    linework(extractLineWork(g))
 {
 }
 
@@ -62,30 +62,29 @@ FuzzyPointLocator::extractLineWork(const geom::Geometry& geom)
 {
     ::geos::ignore_unused_variable_warning(geom);
 
-	vector<Geometry*>* lineGeoms = new vector<Geometry*>();
-	try { // geoms array will leak if an exception is thrown
+    vector<Geometry*>* lineGeoms = new vector<Geometry*>();
+    try { // geoms array will leak if an exception is thrown
 
-	for (size_t i=0, n=g.getNumGeometries(); i<n; ++i)
-	{
-		const Geometry* gComp = g.getGeometryN(i);
-		Geometry* lineGeom = nullptr;
+        for(size_t i = 0, n = g.getNumGeometries(); i < n; ++i) {
+            const Geometry* gComp = g.getGeometryN(i);
+            Geometry* lineGeom = nullptr;
 
-		// only get linework for polygonal components
-		if (gComp->getDimension() == 2) {
-			lineGeom = gComp->getBoundary();
-			lineGeoms->push_back(lineGeom);
-		}
-	}
-	return std::unique_ptr<Geometry>(g.getFactory()->buildGeometry(lineGeoms));
+            // only get linework for polygonal components
+            if(gComp->getDimension() == 2) {
+                lineGeom = gComp->getBoundary();
+                lineGeoms->push_back(lineGeom);
+            }
+        }
+        return std::unique_ptr<Geometry>(g.getFactory()->buildGeometry(lineGeoms));
 
-	} catch (...) { // avoid leaks
-		for (size_t i=0, n=lineGeoms->size(); i<n; ++i)
-		{
-			delete (*lineGeoms)[i];
-		}
-		delete lineGeoms;
-		throw;
-	}
+    }
+    catch(...) {    // avoid leaks
+        for(size_t i = 0, n = lineGeoms->size(); i < n; ++i) {
+            delete(*lineGeoms)[i];
+        }
+        delete lineGeoms;
+        throw;
+    }
 
 }
 
@@ -95,32 +94,31 @@ FuzzyPointLocator::getLineWork(const geom::Geometry& geom)
 {
     ::geos::ignore_unused_variable_warning(geom);
 
-	vector<Geometry*>* lineGeoms = new vector<Geometry*>();
-	try { // geoms array will leak if an exception is thrown
+    vector<Geometry*>* lineGeoms = new vector<Geometry*>();
+    try { // geoms array will leak if an exception is thrown
 
-	for (size_t i=0, n=g.getNumGeometries(); i<n; ++i)
-	{
-		const Geometry* gComp = g.getGeometryN(i);
-		Geometry* lineGeom;
-		if (gComp->getDimension() == 2) {
-			lineGeom = gComp->getBoundary();
-		}
-		else {
-			lineGeom = gComp->clone();
-		}
-		lineGeoms->push_back(lineGeom);
-	}
-	return std::unique_ptr<Geometry>(g.getFactory()->buildGeometry(lineGeoms));
+        for(size_t i = 0, n = g.getNumGeometries(); i < n; ++i) {
+            const Geometry* gComp = g.getGeometryN(i);
+            Geometry* lineGeom;
+            if(gComp->getDimension() == 2) {
+                lineGeom = gComp->getBoundary();
+            }
+            else {
+                lineGeom = gComp->clone();
+            }
+            lineGeoms->push_back(lineGeom);
+        }
+        return std::unique_ptr<Geometry>(g.getFactory()->buildGeometry(lineGeoms));
 
-	} catch (...) { // avoid leaks
-		for (size_t i=0, n=lineGeoms->size(); i<n; ++i)
-		{
+    }
+    catch(...) {    // avoid leaks
+        for(size_t i = 0, n = lineGeoms->size(); i < n; ++i) {
 
-			delete (*lineGeoms)[i];
-		}
-		delete lineGeoms;
-		throw;
-	}
+            delete(*lineGeoms)[i];
+        }
+        delete lineGeoms;
+        throw;
+    }
 
 }
 
@@ -128,21 +126,22 @@ FuzzyPointLocator::getLineWork(const geom::Geometry& geom)
 Location::Value
 FuzzyPointLocator::getLocation(const Coordinate& pt)
 {
-	unique_ptr<Geometry> point(g.getFactory()->createPoint(pt));
+    unique_ptr<Geometry> point(g.getFactory()->createPoint(pt));
 
-	double dist = linework->distance(point.get());
+    double dist = linework->distance(point.get());
 
-	// if point is close to boundary, it is considered
-	// to be on the boundary
-	if (dist < tolerance)
-		return Location::BOUNDARY;
+    // if point is close to boundary, it is considered
+    // to be on the boundary
+    if(dist < tolerance) {
+        return Location::BOUNDARY;
+    }
 
-	// now we know point must be clearly inside or outside geometry,
-	// so return actual location value
+    // now we know point must be clearly inside or outside geometry,
+    // so return actual location value
 
-	// (the static_cast is needed because PointLocator doesn't cleanly
-	// return a Location::Value - it should !!)
-	return static_cast<Location::Value>(ptLocator.locate(pt, &g));
+    // (the static_cast is needed because PointLocator doesn't cleanly
+    // return a Location::Value - it should !!)
+    return static_cast<Location::Value>(ptLocator.locate(pt, &g));
 }
 
 } // namespace geos.operation.overlay.validate

@@ -27,14 +27,14 @@ namespace strtree { // geos::index::strtree
 ///
 class GEOS_DLL Interval {
 public:
-	Interval(double newMin, double newMax);
-	double getCentre();
-	Interval* expandToInclude(const Interval *other);
-	bool intersects(const Interval *other) const;
-	bool equals(const Interval *o) const;
+    Interval(double newMin, double newMax);
+    double getCentre();
+    Interval* expandToInclude(const Interval* other);
+    bool intersects(const Interval* other) const;
+    bool equals(const Interval* o) const;
 private:
-	double imin;
-	double imax;
+    double imin;
+    double imax;
 };
 
 

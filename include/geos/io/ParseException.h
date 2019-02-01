@@ -31,23 +31,22 @@ namespace io {
  * \class ParseException io.h geos.h
  * \brief Notifies a parsing error
  */
-class GEOS_DLL ParseException : public util::GEOSException
-{
+class GEOS_DLL ParseException : public util::GEOSException {
 
 public:
 
-	ParseException();
+    ParseException();
 
-	ParseException(const std::string& msg);
+    ParseException(const std::string& msg);
 
-	ParseException(const std::string& msg, const std::string& var);
+    ParseException(const std::string& msg, const std::string& var);
 
-	ParseException(const std::string& msg, double num);
+    ParseException(const std::string& msg, double num);
 
-	~ParseException() throw() override {}
+    ~ParseException() throw() override {}
 
 private:
-	static std::string stringify(double num);
+    static std::string stringify(double num);
 };
 
 } // namespace io

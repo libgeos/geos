@@ -32,11 +32,11 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom { // geos::geom
-		class Coordinate;
-		class CoordinateArraySequence;
-		class MultiPoint;
-	}
+namespace geom { // geos::geom
+class Coordinate;
+class CoordinateArraySequence;
+class MultiPoint;
+}
 }
 
 
@@ -56,66 +56,69 @@ namespace geom { // geos::geom
 /// This allows the topological point-set semantics
 /// to be well-defined.
 ///
-class GEOS_DLL MultiPolygon: public GeometryCollection, public Polygonal
-{
+class GEOS_DLL MultiPolygon: public GeometryCollection, public Polygonal {
 public:
 
-	friend class GeometryFactory;
+    friend class GeometryFactory;
 
-	~MultiPolygon() override;
+    ~MultiPolygon() override;
 
-	/// Returns surface dimension (2)
-	Dimension::DimensionType getDimension() const override;
+    /// Returns surface dimension (2)
+    Dimension::DimensionType getDimension() const override;
 
-	/// Returns 1 (MultiPolygon boundary is MultiLineString)
-	int getBoundaryDimension() const override;
+    /// Returns 1 (MultiPolygon boundary is MultiLineString)
+    int getBoundaryDimension() const override;
 
-	/** \brief
-	 * Computes the boundary of this geometry
-	 *
-	 * @return a lineal geometry (which may be empty)
-	 * @see Geometry#getBoundary
-	 */
-	Geometry* getBoundary() const override;
+    /** \brief
+     * Computes the boundary of this geometry
+     *
+     * @return a lineal geometry (which may be empty)
+     * @see Geometry#getBoundary
+     */
+    Geometry* getBoundary() const override;
 
-	std::string getGeometryType() const override;
+    std::string getGeometryType() const override;
 
-	GeometryTypeId getGeometryTypeId() const override;
+    GeometryTypeId getGeometryTypeId() const override;
 
-	bool equalsExact(const Geometry *other, double tolerance=0) const override;
+    bool equalsExact(const Geometry* other, double tolerance = 0) const override;
 
-	Geometry *clone() const override;
+    Geometry* clone() const override;
 
-	Geometry *reverse() const override;
+    Geometry* reverse() const override;
 
 protected:
 
-	/**
-	 * \brief Construct a MultiPolygon
-	 *
-	 * @param newPolys
-	 *	the <code>Polygon</code>s for this <code>MultiPolygon</code>,
-	 *	or <code>null</code> or an empty array to create the empty
-	 *	geometry. Elements may be empty <code>Polygon</code>s, but
-	 *	not <code>null</code>s.
-	 *	The polygons must conform to the assertions specified in the
-	 *	<A HREF="http://www.opengis.org/techno/specs.htm">
-	 *	OpenGIS Simple Features Specification for SQL
-	 *	</A>.
-	 *
-	 *	Constructed object will take ownership of
-	 *	the vector and its elements.
-	 *
-	 * @param newFactory
-	 * 	The GeometryFactory used to create this geometry
-	 *	Caller must keep the factory alive for the life-time
-	 *	of the constructed MultiPolygon.
-	 */
-	MultiPolygon(std::vector<Geometry *> *newPolys, const GeometryFactory *newFactory);
+    /**
+     * \brief Construct a MultiPolygon
+     *
+     * @param newPolys
+     *	the <code>Polygon</code>s for this <code>MultiPolygon</code>,
+     *	or <code>null</code> or an empty array to create the empty
+     *	geometry. Elements may be empty <code>Polygon</code>s, but
+     *	not <code>null</code>s.
+     *	The polygons must conform to the assertions specified in the
+     *	<A HREF="http://www.opengis.org/techno/specs.htm">
+     *	OpenGIS Simple Features Specification for SQL
+     *	</A>.
+     *
+     *	Constructed object will take ownership of
+     *	the vector and its elements.
+     *
+     * @param newFactory
+     * 	The GeometryFactory used to create this geometry
+     *	Caller must keep the factory alive for the life-time
+     *	of the constructed MultiPolygon.
+     */
+    MultiPolygon(std::vector<Geometry*>* newPolys, const GeometryFactory* newFactory);
 
-	MultiPolygon(const MultiPolygon &mp);
+    MultiPolygon(const MultiPolygon& mp);
 
-	int getSortIndex() const override { return SORTINDEX_MULTIPOLYGON; };
+    int
+    getSortIndex() const override
+    {
+        return SORTINDEX_MULTIPOLYGON;
+    };
 
 };
 

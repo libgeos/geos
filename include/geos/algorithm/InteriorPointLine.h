@@ -25,10 +25,10 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Geometry;
-		class CoordinateSequence;
-	}
+namespace geom {
+class Geometry;
+class CoordinateSequence;
+}
 }
 
 
@@ -48,33 +48,33 @@ namespace algorithm { // geos::algorithm
 class GEOS_DLL InteriorPointLine {
 public:
 
-	InteriorPointLine(const geom::Geometry *g);
+    InteriorPointLine(const geom::Geometry* g);
 
-	~InteriorPointLine();
+    ~InteriorPointLine();
 
-	//Coordinate* getInteriorPoint() const;
+    //Coordinate* getInteriorPoint() const;
 
-	bool getInteriorPoint(geom::Coordinate& ret) const;
+    bool getInteriorPoint(geom::Coordinate& ret) const;
 
 private:
 
-	bool hasInterior;
+    bool hasInterior;
 
-	geom::Coordinate centroid;
+    geom::Coordinate centroid;
 
-	double minDistance;
+    double minDistance;
 
-	geom::Coordinate interiorPoint;
+    geom::Coordinate interiorPoint;
 
-	void addInterior(const geom::Geometry *geom);
+    void addInterior(const geom::Geometry* geom);
 
-	void addInterior(const geom::CoordinateSequence *pts);
+    void addInterior(const geom::CoordinateSequence* pts);
 
-	void addEndpoints(const geom::Geometry *geom);
+    void addEndpoints(const geom::Geometry* geom);
 
-	void addEndpoints(const geom::CoordinateSequence *pts);
+    void addEndpoints(const geom::CoordinateSequence* pts);
 
-	void add(const geom::Coordinate& point);
+    void add(const geom::Coordinate& point);
 
 };
 

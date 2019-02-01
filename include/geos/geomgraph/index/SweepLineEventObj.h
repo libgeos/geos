@@ -28,7 +28,8 @@ namespace index { // geos::geomgraph::index
 // inherit from it.
 class GEOS_DLL SweepLineEventOBJ {
 public:
-	virtual ~SweepLineEventOBJ(){}
+    virtual
+    ~SweepLineEventOBJ() {}
 };
 
 

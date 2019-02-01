@@ -15,78 +15,77 @@
 #include <memory>
 #include <string>
 
-namespace tut
+namespace tut {
+//
+// Test Group
+//
+
+// Common data used in test cases.
+struct test_uniquecoordinatearrayfilter_data {
+    typedef std::unique_ptr<geos::geom::Geometry> GeometryPtr;
+    typedef geos::geom::GeometryFactory GeometryFactory;
+
+    geos::geom::PrecisionModel pm_;
+    GeometryFactory::Ptr factory_;
+    geos::io::WKTReader reader_;
+
+    test_uniquecoordinatearrayfilter_data()
+        : pm_(1)
+        , factory_(GeometryFactory::create(&pm_, 0))
+        , reader_(factory_.get())
+    {}
+};
+
+typedef test_group<test_uniquecoordinatearrayfilter_data> group;
+typedef group::object object;
+
+group test_uniquecoordinatearrayfilter_group("geos::util::UniqueCoordinateArrayFilter");
+
+//
+// Test Cases
+//
+
+// Test of apply_ro() on MULTIPOINT
+template<>
+template<>
+void object::test<1>
+()
 {
-    //
-    // Test Group
-    //
+    using geos::geom::Coordinate;
 
-    // Common data used in test cases.
-    struct test_uniquecoordinatearrayfilter_data
-	{
-		typedef std::unique_ptr<geos::geom::Geometry> GeometryPtr;
-		typedef geos::geom::GeometryFactory GeometryFactory;
+    // Create geometry from WKT
+    const Coordinate::ConstVect::size_type size5 = 5;
+    const std::string wkt("MULTIPOINT(10 10, 20 20, 30 30, 20 20, 10 10)");
+    GeometryPtr geo(reader_.read(wkt));
 
-		geos::geom::PrecisionModel pm_;
-		GeometryFactory::Ptr factory_;
-		geos::io::WKTReader reader_;
+    ensure_equals(geo->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT);
+    std::unique_ptr<geos::geom::CoordinateSequence> cs;
+    cs.reset(geo->getCoordinates());
+    ensure_equals(cs->getSize(), size5);
 
-		test_uniquecoordinatearrayfilter_data()
-			: pm_(1)
-      , factory_(GeometryFactory::create(&pm_, 0))
-      , reader_(factory_.get())
-		{}
-	};
+    // Create collection buffer for filtered coordinates
+    const Coordinate::ConstVect::size_type size0 = 0;
+    Coordinate::ConstVect coords;
 
-	typedef test_group<test_uniquecoordinatearrayfilter_data> group;
-    typedef group::object object;
+    // Create filtering object
+    geos::util::UniqueCoordinateArrayFilter filter(coords);
 
-	group test_uniquecoordinatearrayfilter_group("geos::util::UniqueCoordinateArrayFilter");
+    ensure_equals(coords.size(), size0);
 
-    //
-    // Test Cases
-    //
+    // Apply filter
+    const Coordinate::ConstVect::size_type size3 = 3;
+    geo->apply_ro(&filter);
 
-    // Test of apply_ro() on MULTIPOINT
-    template<>
-    template<>
-    void object::test<1>()
-    {
-		using geos::geom::Coordinate;
-
-		// Create geometry from WKT
-		const Coordinate::ConstVect::size_type size5 = 5;
-		const std::string wkt("MULTIPOINT(10 10, 20 20, 30 30, 20 20, 10 10)");
-		GeometryPtr geo(reader_.read(wkt));
-
-		ensure_equals( geo->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT );
-		std::unique_ptr<geos::geom::CoordinateSequence> cs;
-		cs.reset(geo->getCoordinates());
-		ensure_equals(cs->getSize(), size5 );
-
-		// Create collection buffer for filtered coordinates
-		const Coordinate::ConstVect::size_type size0 = 0;
-		Coordinate::ConstVect coords;
-
-		// Create filtering object
-		geos::util::UniqueCoordinateArrayFilter filter(coords);
-
-		ensure_equals( coords.size(), size0 );
-
-		// Apply filter
-		const Coordinate::ConstVect::size_type size3 = 3;
-		geo->apply_ro(&filter);
-
-		cs.reset(geo->getCoordinates());
-		ensure_equals( cs->getSize(), size5 );
-		ensure_equals( coords.size(), size3 );
-		ensure_equals( coords.at(0)->x, 10 );
-		ensure_equals( coords.at(0)->y, 10 );
-		ensure_equals( coords.at(1)->x, 20 );
-		ensure_equals( coords.at(1)->y, 20 );
-		ensure_equals( coords.at(2)->x, 30 );
-		ensure_equals( coords.at(2)->y, 30 );
-    }
+    cs.reset(geo->getCoordinates());
+    ensure_equals(cs->getSize(), size5);
+    ensure_equals(coords.size(), size3);
+    ensure_equals(coords.at(0)->x, 10);
+    ensure_equals(coords.at(0)->y, 10);
+    ensure_equals(coords.at(1)->x, 20);
+    ensure_equals(coords.at(1)->y, 20);
+    ensure_equals(coords.at(2)->x, 30);
+    ensure_equals(coords.at(2)->y, 30);
+}
 
 } // namespace tut
 

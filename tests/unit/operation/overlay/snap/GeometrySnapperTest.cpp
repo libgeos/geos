@@ -13,85 +13,85 @@
 #include <string>
 #include <vector>
 
-namespace tut
+namespace tut {
+//
+// Test Group
+//
+
+// Common data used by tests
+struct test_geometrysnapper_data {
+    typedef std::unique_ptr<geos::geom::Geometry> GeomPtr;
+
+    geos::io::WKTReader reader;
+
+    typedef geos::operation::overlay::snap::GeometrySnapper GeometrySnapper;
+
+    test_geometrysnapper_data()
+        :
+        reader()
+    {
+    }
+};
+
+typedef test_group<test_geometrysnapper_data> group;
+typedef group::object object;
+
+group test_geometrysnapper_group("geos::operation::overlay::snap::GeometrySnapper");
+
+//
+// Test Cases
+//
+
+// Test vertices snapping
+template<>
+template<>
+void object::test<1>
+()
 {
-    //
-    // Test Group
-    //
+    GeomPtr src(reader.read(
+                    "POLYGON ((0 0, 0 100, 100 100, 100 0, 0 0))"
+                ));
 
-    // Common data used by tests
-    struct test_geometrysnapper_data
-    {
-        typedef std::unique_ptr<geos::geom::Geometry> GeomPtr;
+    GeometrySnapper snapper(*(src.get()));
 
-        geos::io::WKTReader reader;
+    GeomPtr snap(reader.read(
+                     "MULTIPOINT ((0 0), (0 100.0000001), (100 100), (100 0))"
+                 ));
 
-        typedef geos::operation::overlay::snap::GeometrySnapper GeometrySnapper;
+    GeomPtr expected(reader.read(
+                         "POLYGON ((0 0, 0 100.0000001, 100 100, 100 0, 0 0))"
+                     ));
 
-        test_geometrysnapper_data()
-                :
-                reader()
-        {
-        }
-    };
+    GeomPtr ret(snapper.snapTo(*(snap.get()), 0.000001));
 
-    typedef test_group<test_geometrysnapper_data> group;
-    typedef group::object object;
+    ensure(ret->equalsExact(expected.get(), 0));
 
-    group test_geometrysnapper_group("geos::operation::overlay::snap::GeometrySnapper");
+}
 
-    //
-    // Test Cases
-    //
+// Test vertices snapping
+template<>
+template<>
+void object::test<2>
+()
+{
+    GeomPtr src(reader.read(
+                    "POLYGON ((0 0, 0 100, 100 100, 100 0, 0 0))"
+                ));
 
-    // Test vertices snapping
-    template<>
-    template<>
-    void object::test<1>()
-    {
-        GeomPtr src(reader.read(
-                "POLYGON ((0 0, 0 100, 100 100, 100 0, 0 0))"
-        ));
+    GeometrySnapper snapper(*(src.get()));
 
-        GeometrySnapper snapper( *(src.get()) );
+    GeomPtr snap(reader.read(
+                     "MULTIPOINT ((0.0000001 50))"
+                 ));
 
-        GeomPtr snap(reader.read(
-                "MULTIPOINT ((0 0), (0 100.0000001), (100 100), (100 0))"
-        ));
+    GeomPtr expected(reader.read(
+                         "POLYGON ((0 0, 0.0000001 50, 0 100, 100 100, 100 0, 0 0))"
+                     ));
 
-        GeomPtr expected(reader.read(
-                "POLYGON ((0 0, 0 100.0000001, 100 100, 100 0, 0 0))"
-        ));
+    GeomPtr ret(snapper.snapTo(*(snap.get()), 0.000001));
 
-        GeomPtr ret(snapper.snapTo( *(snap.get()), 0.000001 ));
-
-        ensure( ret->equalsExact(expected.get(),0) );
-
-    }
-
-    // Test vertices snapping
-    template<>
-    template<>
-    void object::test<2>()
-    {
-        GeomPtr src(reader.read(
-                "POLYGON ((0 0, 0 100, 100 100, 100 0, 0 0))"
-        ));
-
-        GeometrySnapper snapper( *(src.get()) );
-
-        GeomPtr snap(reader.read(
-                "MULTIPOINT ((0.0000001 50))"
-        ));
-
-        GeomPtr expected(reader.read(
-                "POLYGON ((0 0, 0.0000001 50, 0 100, 100 100, 100 0, 0 0))"
-        ));
-
-        GeomPtr ret(snapper.snapTo( *(snap.get()), 0.000001 ));
-
-        ensure( ret->equalsExact(expected.get(),0) );
-    }
+    ensure(ret->equalsExact(expected.get(), 0));
+}
 
 
 

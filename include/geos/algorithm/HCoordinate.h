@@ -26,9 +26,9 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Coordinate;
-	}
+namespace geom {
+class Coordinate;
+}
 }
 
 namespace geos {
@@ -45,52 +45,52 @@ class GEOS_DLL HCoordinate {
 
 public:
 
-	friend std::ostream& operator<< (std::ostream& o, const HCoordinate& c);
+    friend std::ostream& operator<< (std::ostream& o, const HCoordinate& c);
 
-	/** \brief
-	 * Computes the (approximate) intersection point between two line
-	 * segments using homogeneous coordinates.
-	 *
-	 * Note that this algorithm is
-	 * not numerically stable; i.e. it can produce intersection points which
-	 * lie outside the envelope of the line segments themselves.  In order
-	 * to increase the precision of the calculation input points should be
-	 * normalized before passing them to this routine.
-	 */
-	static void intersection(const geom::Coordinate &p1,
-				 const geom::Coordinate &p2,
-				 const geom::Coordinate &q1,
-				 const geom::Coordinate &q2,
-				 geom::Coordinate &ret);
+    /** \brief
+     * Computes the (approximate) intersection point between two line
+     * segments using homogeneous coordinates.
+     *
+     * Note that this algorithm is
+     * not numerically stable; i.e. it can produce intersection points which
+     * lie outside the envelope of the line segments themselves.  In order
+     * to increase the precision of the calculation input points should be
+     * normalized before passing them to this routine.
+     */
+    static void intersection(const geom::Coordinate& p1,
+                             const geom::Coordinate& p2,
+                             const geom::Coordinate& q1,
+                             const geom::Coordinate& q2,
+                             geom::Coordinate& ret);
 
-	double x,y,w;
+    double x, y, w;
 
-	HCoordinate();
+    HCoordinate();
 
-	HCoordinate(double _x, double _y, double _w);
+    HCoordinate(double _x, double _y, double _w);
 
-	HCoordinate(const geom::Coordinate& p);
+    HCoordinate(const geom::Coordinate& p);
 
-	/** \brief
-	 * Constructs a homogeneous coordinate which is the intersection
-	 * of the lines define by the homogenous coordinates represented
-	 * by two {@link Coordinate}s.
-	 *
-	 * @param p1
-	 * @param p2
-	 */
-	HCoordinate(const geom::Coordinate& p1, const geom::Coordinate& p2);
+    /** \brief
+     * Constructs a homogeneous coordinate which is the intersection
+     * of the lines define by the homogenous coordinates represented
+     * by two {@link Coordinate}s.
+     *
+     * @param p1
+     * @param p2
+     */
+    HCoordinate(const geom::Coordinate& p1, const geom::Coordinate& p2);
 
-	HCoordinate(const geom::Coordinate& p1, const geom::Coordinate& p2,
-		    const geom::Coordinate& q1, const geom::Coordinate& q2);
+    HCoordinate(const geom::Coordinate& p1, const geom::Coordinate& p2,
+                const geom::Coordinate& q1, const geom::Coordinate& q2);
 
-	HCoordinate(const HCoordinate &p1, const HCoordinate &p2);
+    HCoordinate(const HCoordinate& p1, const HCoordinate& p2);
 
-	double getX() const;
+    double getX() const;
 
-	double getY() const;
+    double getY() const;
 
-	void getCoordinate(geom::Coordinate &ret) const;
+    void getCoordinate(geom::Coordinate& ret) const;
 
 };
 

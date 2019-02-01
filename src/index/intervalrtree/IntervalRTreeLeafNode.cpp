@@ -31,12 +31,13 @@ namespace intervalrtree {
 // public:
 //
 void
-IntervalRTreeLeafNode::query( double queryMin, double queryMax, index::ItemVisitor * visitor) const
+IntervalRTreeLeafNode::query(double queryMin, double queryMax, index::ItemVisitor* visitor) const
 {
-	if (! intersects( queryMin, queryMax))
-		return;
+    if(! intersects(queryMin, queryMax)) {
+        return;
+    }
 
-	visitor->visitItem( item);
+    visitor->visitItem(item);
 }
 
 } // geos::intervalrtree

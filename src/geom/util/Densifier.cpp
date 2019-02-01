@@ -48,86 +48,83 @@ namespace util { // geos.geom.util
 
 /* geom::util::Densifier::DensifyTransformer */
 Densifier::DensifyTransformer::DensifyTransformer(double distTol):
-	distanceTolerance(distTol)
+    distanceTolerance(distTol)
 {}
 
 CoordinateSequence::Ptr
-Densifier::DensifyTransformer::transformCoordinates(const CoordinateSequence *coords, const Geometry *parent)
+Densifier::DensifyTransformer::transformCoordinates(const CoordinateSequence* coords, const Geometry* parent)
 {
-	Coordinate::Vect emptyPts;
-	Coordinate::Vect inputPts;
-	coords->toVector(inputPts);
-	std::unique_ptr<Coordinate::Vect> newPts = Densifier::densifyPoints(inputPts, distanceTolerance, parent->getPrecisionModel());
-	if (const LineString* ls=dynamic_cast<const LineString*>(parent))
-	{
-		if (ls->getNumPoints() <= 1)
-			newPts->clear();
-	}
-	CoordinateSequence::Ptr csp(factory->getCoordinateSequenceFactory()->create(newPts.release()));
-	return csp;
+    Coordinate::Vect emptyPts;
+    Coordinate::Vect inputPts;
+    coords->toVector(inputPts);
+    std::unique_ptr<Coordinate::Vect> newPts = Densifier::densifyPoints(inputPts, distanceTolerance,
+            parent->getPrecisionModel());
+    if(const LineString* ls = dynamic_cast<const LineString*>(parent)) {
+        if(ls->getNumPoints() <= 1) {
+            newPts->clear();
+        }
+    }
+    CoordinateSequence::Ptr csp(factory->getCoordinateSequenceFactory()->create(newPts.release()));
+    return csp;
 }
 
 Geometry::Ptr
-Densifier::DensifyTransformer::transformPolygon(const Polygon *geom, const Geometry *parent)
+Densifier::DensifyTransformer::transformPolygon(const Polygon* geom, const Geometry* parent)
 {
-	Geometry::Ptr roughGeom = GeometryTransformer::transformPolygon(geom, parent);
-	// don't try and correct if the parent is going to do this
-	if (parent && parent->getGeometryTypeId() == GEOS_MULTIPOLYGON)
-	{
-		return roughGeom;
-	}
-	Geometry::Ptr validGeom(createValidArea(roughGeom.get()));
-	return validGeom;
+    Geometry::Ptr roughGeom = GeometryTransformer::transformPolygon(geom, parent);
+    // don't try and correct if the parent is going to do this
+    if(parent && parent->getGeometryTypeId() == GEOS_MULTIPOLYGON) {
+        return roughGeom;
+    }
+    Geometry::Ptr validGeom(createValidArea(roughGeom.get()));
+    return validGeom;
 }
 
 Geometry::Ptr
-Densifier::DensifyTransformer::transformMultiPolygon(const MultiPolygon *geom, const Geometry *parent)
+Densifier::DensifyTransformer::transformMultiPolygon(const MultiPolygon* geom, const Geometry* parent)
 {
-	Geometry::Ptr roughGeom = GeometryTransformer::transformMultiPolygon(geom, parent);
-	Geometry::Ptr validGeom(createValidArea(roughGeom.get()));
-	return validGeom;
+    Geometry::Ptr roughGeom = GeometryTransformer::transformMultiPolygon(geom, parent);
+    Geometry::Ptr validGeom(createValidArea(roughGeom.get()));
+    return validGeom;
 }
 
-Geometry *
-Densifier::DensifyTransformer::createValidArea(const Geometry *roughAreaGeom)
+Geometry*
+Densifier::DensifyTransformer::createValidArea(const Geometry* roughAreaGeom)
 {
-	return roughAreaGeom->buffer(0.0);
+    return roughAreaGeom->buffer(0.0);
 }
 
 /* util::Densifier */
 
-Densifier::Densifier(const Geometry *geom):
-	inputGeom(geom)
+Densifier::Densifier(const Geometry* geom):
+    inputGeom(geom)
 {}
 
 std::unique_ptr<Coordinate::Vect>
-Densifier::densifyPoints(const Coordinate::Vect pts, double distanceTolerance, const PrecisionModel *precModel)
+Densifier::densifyPoints(const Coordinate::Vect pts, double distanceTolerance, const PrecisionModel* precModel)
 {
-	geom::LineSegment seg;
-	geom::CoordinateList coordList;
+    geom::LineSegment seg;
+    geom::CoordinateList coordList;
 
-	for (Coordinate::Vect::const_iterator it=pts.begin(), itEnd=pts.end()-1; it < itEnd; ++it)
-	{
-		seg.p0 = *it;
-		seg.p1 = *(it+1);
-		coordList.insert(coordList.end(), seg.p0, false);
-		double len = seg.getLength();
-		int densifiedSegCount = (int) (len / distanceTolerance) + 1;
-		if (densifiedSegCount > 1)
-		{
-			double densifiedSegLen = len / densifiedSegCount;
-			for (int j = 1; j < densifiedSegCount; j++)
-			{
-				double segFract = (j * densifiedSegLen) / len;
-				Coordinate p;
-				seg.pointAlong(segFract, p);
-				precModel->makePrecise(p);
-				coordList.insert(coordList.end(), p, false);
-			}
-		}
-	}
-	coordList.insert(coordList.end(), pts[pts.size()-1], false);
-	return coordList.toCoordinateArray();
+    for(Coordinate::Vect::const_iterator it = pts.begin(), itEnd = pts.end() - 1; it < itEnd; ++it) {
+        seg.p0 = *it;
+        seg.p1 = *(it + 1);
+        coordList.insert(coordList.end(), seg.p0, false);
+        double len = seg.getLength();
+        int densifiedSegCount = (int)(len / distanceTolerance) + 1;
+        if(densifiedSegCount > 1) {
+            double densifiedSegLen = len / densifiedSegCount;
+            for(int j = 1; j < densifiedSegCount; j++) {
+                double segFract = (j * densifiedSegLen) / len;
+                Coordinate p;
+                seg.pointAlong(segFract, p);
+                precModel->makePrecise(p);
+                coordList.insert(coordList.end(), p, false);
+            }
+        }
+    }
+    coordList.insert(coordList.end(), pts[pts.size() - 1], false);
+    return coordList.toCoordinateArray();
 }
 
 /**
@@ -139,26 +136,27 @@ Densifier::densifyPoints(const Coordinate::Vect pts, double distanceTolerance, c
  * @return the densified geometry
  */
 Geometry::Ptr
-Densifier::densify(const Geometry *geom, double distTol)
+Densifier::densify(const Geometry* geom, double distTol)
 {
-	util::Densifier densifier(geom);
-	densifier.setDistanceTolerance(distTol);
-	return densifier.getResultGeometry();
+    util::Densifier densifier(geom);
+    densifier.setDistanceTolerance(distTol);
+    return densifier.getResultGeometry();
 }
 
 void
 Densifier::setDistanceTolerance(double tol)
 {
-	if (tol <= 0.0)
-		throw geos::util::IllegalArgumentException("Tolerance must be positive");
-	distanceTolerance = tol;
+    if(tol <= 0.0) {
+        throw geos::util::IllegalArgumentException("Tolerance must be positive");
+    }
+    distanceTolerance = tol;
 }
 
 Geometry::Ptr
 Densifier::getResultGeometry() const
 {
-	DensifyTransformer dt(distanceTolerance);
-	return dt.transform(inputGeom);
+    DensifyTransformer dt(distanceTolerance);
+    return dt.transform(inputGeom);
 }
 
 

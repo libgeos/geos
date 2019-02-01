@@ -31,10 +31,10 @@
 
 // Forward declarations
 namespace geos {
-	namespace geomgraph {
-		class Edge;
-		class EdgeRing;
-	}
+namespace geomgraph {
+class Edge;
+class EdgeRing;
+}
 }
 
 namespace geos {
@@ -45,140 +45,140 @@ class GEOS_DLL DirectedEdge: public EdgeEnd {
 
 public:
 
-	/** \brief
-	 * Computes the factor for the change in depth when moving from
-	 * one location to another.
-	 * E.g. if crossing from the INTERIOR to the EXTERIOR the depth
-	 * decreases, so the factor is -1
-	 */
-	static int depthFactor(int currLocation, int nextLocation);
+    /** \brief
+     * Computes the factor for the change in depth when moving from
+     * one location to another.
+     * E.g. if crossing from the INTERIOR to the EXTERIOR the depth
+     * decreases, so the factor is -1
+     */
+    static int depthFactor(int currLocation, int nextLocation);
 
-	//DirectedEdge();
-	//virtual ~DirectedEdge();
+    //DirectedEdge();
+    //virtual ~DirectedEdge();
 
-	DirectedEdge(Edge *newEdge, bool newIsForward);
+    DirectedEdge(Edge* newEdge, bool newIsForward);
 
-	// this is no different from Base class, no need to override
-	//Edge* getEdge();
+    // this is no different from Base class, no need to override
+    //Edge* getEdge();
 
-	void setInResult(bool newIsInResult);
+    void setInResult(bool newIsInResult);
 
-	bool isInResult();
+    bool isInResult();
 
-	bool isVisited();
+    bool isVisited();
 
-	void setVisited(bool newIsVisited);
+    void setVisited(bool newIsVisited);
 
-	void setEdgeRing(EdgeRing *newEdgeRing);
+    void setEdgeRing(EdgeRing* newEdgeRing);
 
-	EdgeRing* getEdgeRing();
+    EdgeRing* getEdgeRing();
 
-	void setMinEdgeRing(EdgeRing *newMinEdgeRing);
+    void setMinEdgeRing(EdgeRing* newMinEdgeRing);
 
-	EdgeRing* getMinEdgeRing();
+    EdgeRing* getMinEdgeRing();
 
-	int getDepth(int position);
+    int getDepth(int position);
 
-	void setDepth(int position, int newDepth);
+    void setDepth(int position, int newDepth);
 
-	int getDepthDelta() const;
+    int getDepthDelta() const;
 
-	/// Marks both DirectedEdges attached to a given Edge.
-	//
-	/// This is used for edges corresponding to lines, which will only
-	/// appear oriented in a single direction in the result.
-	///
-	void setVisitedEdge(bool newIsVisited);
+    /// Marks both DirectedEdges attached to a given Edge.
+    //
+    /// This is used for edges corresponding to lines, which will only
+    /// appear oriented in a single direction in the result.
+    ///
+    void setVisitedEdge(bool newIsVisited);
 
 
-	/** \brief
-	 * Each Edge gives rise to a pair of symmetric DirectedEdges,
-	 * in opposite directions.
-	 *
-	 * @return the DirectedEdge for the same Edge but in the
-	 *         opposite direction
-	 */
-	DirectedEdge* getSym();
+    /** \brief
+     * Each Edge gives rise to a pair of symmetric DirectedEdges,
+     * in opposite directions.
+     *
+     * @return the DirectedEdge for the same Edge but in the
+     *         opposite direction
+     */
+    DirectedEdge* getSym();
 
-	bool isForward();
+    bool isForward();
 
-	void setSym(DirectedEdge *de);
+    void setSym(DirectedEdge* de);
 
-	DirectedEdge* getNext();
+    DirectedEdge* getNext();
 
-	void setNext(DirectedEdge *newNext);
+    void setNext(DirectedEdge* newNext);
 
-	DirectedEdge* getNextMin();
+    DirectedEdge* getNextMin();
 
-	void setNextMin(DirectedEdge *newNextMin);
+    void setNextMin(DirectedEdge* newNextMin);
 
-	/** \brief
-	 * Tells wheter this edge is a Line
-	 *
-	 * This edge is a line edge if
-	 * - at least one of the labels is a line label
-	 * - any labels which are not line labels have all Locations = EXTERIOR
-	 *
-	 */
-	bool isLineEdge();
+    /** \brief
+     * Tells wheter this edge is a Line
+     *
+     * This edge is a line edge if
+     * - at least one of the labels is a line label
+     * - any labels which are not line labels have all Locations = EXTERIOR
+     *
+     */
+    bool isLineEdge();
 
-	/** \brief
-	 * Tells wheter this edge is an Area
-	 *
-	 * This is an interior Area edge if
-	 * - its label is an Area label for both Geometries
-	 * - and for each Geometry both sides are in the interior.
-	 *
-	 * @return true if this is an interior Area edge
-	 */
-	bool isInteriorAreaEdge();
+    /** \brief
+     * Tells wheter this edge is an Area
+     *
+     * This is an interior Area edge if
+     * - its label is an Area label for both Geometries
+     * - and for each Geometry both sides are in the interior.
+     *
+     * @return true if this is an interior Area edge
+     */
+    bool isInteriorAreaEdge();
 
-	/** \brief
-	 * Set both edge depths.
-	 *
-	 * One depth for a given side is provided.
-	 * The other is computed depending on the Location transition and the
-	 * depthDelta of the edge.
-	 */
-	void setEdgeDepths(int position, int newDepth);
+    /** \brief
+     * Set both edge depths.
+     *
+     * One depth for a given side is provided.
+     * The other is computed depending on the Location transition and the
+     * depthDelta of the edge.
+     */
+    void setEdgeDepths(int position, int newDepth);
 
-	std::string print() const override;
+    std::string print() const override;
 
-	std::string printEdge();
+    std::string printEdge();
 
 protected:
 
-	bool isForwardVar;
+    bool isForwardVar;
 
 private:
 
-	bool isInResultVar;
+    bool isInResultVar;
 
-	bool isVisitedVar;
+    bool isVisitedVar;
 
-	/// the symmetric edge
-	DirectedEdge *sym;
+    /// the symmetric edge
+    DirectedEdge* sym;
 
-	/// the next edge in the edge ring for the polygon containing this edge
-	DirectedEdge *next;
+    /// the next edge in the edge ring for the polygon containing this edge
+    DirectedEdge* next;
 
-	/// the next edge in the MinimalEdgeRing that contains this edge
-	DirectedEdge *nextMin;
+    /// the next edge in the MinimalEdgeRing that contains this edge
+    DirectedEdge* nextMin;
 
-	/// the EdgeRing that this edge is part of
-	EdgeRing *edgeRing;
+    /// the EdgeRing that this edge is part of
+    EdgeRing* edgeRing;
 
-	/// the MinimalEdgeRing that this edge is part of
-	EdgeRing *minEdgeRing;
+    /// the MinimalEdgeRing that this edge is part of
+    EdgeRing* minEdgeRing;
 
-	/** \brief
-	 * The depth of each side (position) of this edge.
-	 * The 0 element of the array is never used.
-	 */
-	int depth[3];
+    /** \brief
+     * The depth of each side (position) of this edge.
+     * The 0 element of the array is never used.
+     */
+    int depth[3];
 
-	/// Compute the label in the appropriate orientation for this DirEdge
-	void computeDirectedLabel();
+    /// Compute the label in the appropriate orientation for this DirEdge
+    void computeDirectedLabel();
 };
 
 } // namespace geos.geomgraph

@@ -46,82 +46,89 @@ namespace operation { // geos.operation
 namespace linemerge { // geos.operation.linemerge
 
 void
-LineMergeGraph::addEdge(const LineString *lineString)
+LineMergeGraph::addEdge(const LineString* lineString)
 {
-	if (lineString->isEmpty()) return;
+    if(lineString->isEmpty()) {
+        return;
+    }
 
 #if GEOS_DEBUG
-	cerr<<"Adding LineString "<<lineString->toString()<<endl;
+    cerr << "Adding LineString " << lineString->toString() << endl;
 #endif
 
-	std::unique_ptr<CoordinateSequence> coordinates (
-		CoordinateSequence::removeRepeatedPoints(lineString->getCoordinatesRO())
-	);
+    std::unique_ptr<CoordinateSequence> coordinates(
+        CoordinateSequence::removeRepeatedPoints(lineString->getCoordinatesRO())
+    );
 
-	std::size_t nCoords = coordinates->size(); // virtual call..
+    std::size_t nCoords = coordinates->size(); // virtual call..
 
-	// don't add lines with all coordinates equal
-	if ( nCoords <= 1 ) return;
+    // don't add lines with all coordinates equal
+    if(nCoords <= 1) {
+        return;
+    }
 
-	const Coordinate& startCoordinate = coordinates->getAt(0);
-	const Coordinate& endCoordinate = coordinates->getAt(nCoords-1);
+    const Coordinate& startCoordinate = coordinates->getAt(0);
+    const Coordinate& endCoordinate = coordinates->getAt(nCoords - 1);
 
-	planargraph::Node* startNode=getNode(startCoordinate);
-	planargraph::Node* endNode=getNode(endCoordinate);
+    planargraph::Node* startNode = getNode(startCoordinate);
+    planargraph::Node* endNode = getNode(endCoordinate);
 #if GEOS_DEBUG
-	cerr<<" startNode: "<<*startNode<<endl;
-	cerr<<" endNode: "<<*endNode<<endl;
+    cerr << " startNode: " << *startNode << endl;
+    cerr << " endNode: " << *endNode << endl;
 #endif
 
-	planargraph::DirectedEdge *directedEdge0=new LineMergeDirectedEdge(startNode,
-			endNode,coordinates->getAt(1),
-			true);
-	newDirEdges.push_back(directedEdge0);
+    planargraph::DirectedEdge* directedEdge0 = new LineMergeDirectedEdge(startNode,
+            endNode, coordinates->getAt(1),
+            true);
+    newDirEdges.push_back(directedEdge0);
 
-	planargraph::DirectedEdge *directedEdge1=new LineMergeDirectedEdge(endNode,
-			startNode,coordinates->getAt(nCoords - 2),
-			false);
-	newDirEdges.push_back(directedEdge1);
+    planargraph::DirectedEdge* directedEdge1 = new LineMergeDirectedEdge(endNode,
+            startNode, coordinates->getAt(nCoords - 2),
+            false);
+    newDirEdges.push_back(directedEdge1);
 
-	planargraph::Edge *edge=new LineMergeEdge(lineString);
-	newEdges.push_back(edge);
-	edge->setDirectedEdges(directedEdge0, directedEdge1);
+    planargraph::Edge* edge = new LineMergeEdge(lineString);
+    newEdges.push_back(edge);
+    edge->setDirectedEdges(directedEdge0, directedEdge1);
 
 #if GEOS_DEBUG
-	cerr<<" planargraph::Edge: "<<*edge<<endl;
+    cerr << " planargraph::Edge: " << *edge << endl;
 #endif
 
-	add(edge);
+    add(edge);
 
 #if GEOS_DEBUG
-	cerr<<" After addition to the graph:"<<endl;
-	cerr<<"  startNode: "<<*startNode<<endl;
-	cerr<<"  endNode: "<<*endNode<<endl;
+    cerr << " After addition to the graph:" << endl;
+    cerr << "  startNode: " << *startNode << endl;
+    cerr << "  endNode: " << *endNode << endl;
 #endif
 
 }
 
-planargraph::Node *
-LineMergeGraph::getNode(const Coordinate &coordinate)
+planargraph::Node*
+LineMergeGraph::getNode(const Coordinate& coordinate)
 {
-	planargraph::Node *node=findNode(coordinate);
-	if (node==nullptr) {
-		node=new planargraph::Node(coordinate);
-		newNodes.push_back(node);
-		add(node);
-	}
-	return node;
+    planargraph::Node* node = findNode(coordinate);
+    if(node == nullptr) {
+        node = new planargraph::Node(coordinate);
+        newNodes.push_back(node);
+        add(node);
+    }
+    return node;
 }
 
 LineMergeGraph::~LineMergeGraph()
 {
-	unsigned int i;
-	for (i=0; i<newNodes.size(); i++)
-		delete newNodes[i];
-	for (i=0; i<newEdges.size(); i++)
-		delete newEdges[i];
-	for (i=0; i<newDirEdges.size(); i++)
-		delete newDirEdges[i];
+    unsigned int i;
+    for(i = 0; i < newNodes.size(); i++) {
+        delete newNodes[i];
+    }
+    for(i = 0; i < newEdges.size(); i++) {
+        delete newEdges[i];
+    }
+    for(i = 0; i < newDirEdges.size(); i++) {
+        delete newDirEdges[i];
+    }
 }
 
 } // namespace geos.operation.linemerge

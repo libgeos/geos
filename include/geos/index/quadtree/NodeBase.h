@@ -31,16 +31,16 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Coordinate;
-		class Envelope;
-	}
-	namespace index {
-		class ItemVisitor;
-		namespace quadtree {
-			class Node;
-		}
-	}
+namespace geom {
+class Coordinate;
+class Envelope;
+}
+namespace index {
+class ItemVisitor;
+namespace quadtree {
+class Node;
+}
+}
 }
 
 namespace geos {
@@ -56,73 +56,73 @@ class GEOS_DLL NodeBase {
 
 private:
 
-	void visitItems(const geom::Envelope* searchEnv,
-			ItemVisitor& visitor);
+    void visitItems(const geom::Envelope* searchEnv,
+                    ItemVisitor& visitor);
 
 public:
 
-	static int getSubnodeIndex(const geom::Envelope *env,
-			const geom::Coordinate& centre);
+    static int getSubnodeIndex(const geom::Envelope* env,
+                               const geom::Coordinate& centre);
 
-	NodeBase();
+    NodeBase();
 
-	virtual ~NodeBase();
+    virtual ~NodeBase();
 
-	std::vector<void*>& getItems();
+    std::vector<void*>& getItems();
 
-	/// Add an item to this node.
-	/// Ownership of the item is left to caller.
-	void add(void* item);
+    /// Add an item to this node.
+    /// Ownership of the item is left to caller.
+    void add(void* item);
 
-	/// Push all node items to the given vector, return the argument
-	std::vector<void*>& addAllItems(std::vector<void*>& resultItems) const;
+    /// Push all node items to the given vector, return the argument
+    std::vector<void*>& addAllItems(std::vector<void*>& resultItems) const;
 
-	virtual void addAllItemsFromOverlapping(const geom::Envelope& searchEnv,
-			std::vector<void*>& resultItems) const;
+    virtual void addAllItemsFromOverlapping(const geom::Envelope& searchEnv,
+                                            std::vector<void*>& resultItems) const;
 
-	unsigned int depth() const;
+    unsigned int depth() const;
 
-	size_t size() const;
+    size_t size() const;
 
-	size_t getNodeCount() const;
+    size_t getNodeCount() const;
 
-	virtual std::string toString() const;
+    virtual std::string toString() const;
 
-	virtual void visit(const geom::Envelope* searchEnv, ItemVisitor& visitor);
+    virtual void visit(const geom::Envelope* searchEnv, ItemVisitor& visitor);
 
-	/**
-	 * Removes a single item from this subtree.
-	 *
-	 * @param searchEnv the envelope containing the item
-	 * @param item the item to remove
-	 * @return <code>true</code> if the item was found and removed
-	 */
-	bool remove(const geom::Envelope* itemEnv, void* item);
+    /**
+     * Removes a single item from this subtree.
+     *
+     * @param searchEnv the envelope containing the item
+     * @param item the item to remove
+     * @return <code>true</code> if the item was found and removed
+     */
+    bool remove(const geom::Envelope* itemEnv, void* item);
 
-	bool hasItems() const;
+    bool hasItems() const;
 
-	bool hasChildren() const;
+    bool hasChildren() const;
 
-	bool isPrunable() const;
+    bool isPrunable() const;
 
 protected:
 
-	/// Actual items are NOT owned by this class
-	std::vector<void*> items;
+    /// Actual items are NOT owned by this class
+    std::vector<void*> items;
 
-	/**
-	 * subquads are numbered as follows:
-	 * <pre>
-	 *  2 | 3
-	 *  --+--
-	 *  0 | 1
-	 * </pre>
-	 *
-	 * Nodes are owned by this class
-	 */
-	std::array<Node*, 4> subnodes;
+    /**
+     * subquads are numbered as follows:
+     * <pre>
+     *  2 | 3
+     *  --+--
+     *  0 | 1
+     * </pre>
+     *
+     * Nodes are owned by this class
+     */
+    std::array<Node*, 4> subnodes;
 
-	virtual bool isSearchMatch(const geom::Envelope& searchEnv) const=0;
+    virtual bool isSearchMatch(const geom::Envelope& searchEnv) const = 0;
 };
 
 
@@ -131,24 +131,25 @@ protected:
 inline bool
 NodeBase::hasChildren() const
 {
-	for (const auto& subnode : subnodes) {
-		if (subnode != nullptr)
-			return true;
-	}
+    for(const auto& subnode : subnodes) {
+        if(subnode != nullptr) {
+            return true;
+        }
+    }
 
-	return false;
+    return false;
 }
 
 inline bool
 NodeBase::isPrunable() const
 {
-	return ! (hasChildren() || hasItems());
+    return !(hasChildren() || hasItems());
 }
 
 inline bool
 NodeBase::hasItems() const
 {
-	return ! items.empty();
+    return ! items.empty();
 }
 
 } // namespace geos::index::quadtree

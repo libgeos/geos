@@ -35,15 +35,15 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Coordinate;
-	}
-	namespace geomgraph {
-		class Edge;
-		class Node;
-		class EdgeEnd;
-		class NodeFactory;
-	}
+namespace geom {
+class Coordinate;
+}
+namespace geomgraph {
+class Edge;
+class Node;
+class EdgeEnd;
+class NodeFactory;
+}
 }
 
 namespace geos {
@@ -75,125 +75,125 @@ namespace geomgraph { // geos.geomgraph
 class GEOS_DLL PlanarGraph {
 public:
 
-	/** \brief
-	 * For nodes in the collection (first..last),
-	 * link the DirectedEdges at the node that are in the result.
-	 *
-	 * This allows clients to link only a subset of nodes in the graph,
-	 * for efficiency (because they know that only a subset is of
-	 * interest).
-	 */
-  template <typename It>
-  static void linkResultDirectedEdges(It first, It last)
+    /** \brief
+     * For nodes in the collection (first..last),
+     * link the DirectedEdges at the node that are in the result.
+     *
+     * This allows clients to link only a subset of nodes in the graph,
+     * for efficiency (because they know that only a subset is of
+     * interest).
+     */
+    template <typename It>
+    static void
+    linkResultDirectedEdges(It first, It last)
     // throw(TopologyException);
-  {
-    for ( ; first!=last; ++first )
     {
-      Node *node=*first;
-      assert(node);
+        for(; first != last; ++first) {
+            Node* node = *first;
+            assert(node);
 
-      EdgeEndStar* ees = node->getEdges();
-      assert(ees);
-      DirectedEdgeStar* des = dynamic_cast<DirectedEdgeStar*>(ees);
-      assert(des);
+            EdgeEndStar* ees = node->getEdges();
+            assert(ees);
+            DirectedEdgeStar* des = dynamic_cast<DirectedEdgeStar*>(ees);
+            assert(des);
 
-      // this might throw an exception
-      des->linkResultDirectedEdges();
+            // this might throw an exception
+            des->linkResultDirectedEdges();
+        }
     }
-  }
 
-	PlanarGraph(const NodeFactory &nodeFact);
+    PlanarGraph(const NodeFactory& nodeFact);
 
-	PlanarGraph();
+    PlanarGraph();
 
-	virtual ~PlanarGraph();
+    virtual ~PlanarGraph();
 
-	virtual std::vector<Edge*>::iterator getEdgeIterator();
+    virtual std::vector<Edge*>::iterator getEdgeIterator();
 
-	virtual std::vector<EdgeEnd*>* getEdgeEnds();
+    virtual std::vector<EdgeEnd*>* getEdgeEnds();
 
-	virtual bool isBoundaryNode(int geomIndex, const geom::Coordinate& coord);
+    virtual bool isBoundaryNode(int geomIndex, const geom::Coordinate& coord);
 
-	virtual void add(EdgeEnd *e);
+    virtual void add(EdgeEnd* e);
 
-	virtual NodeMap::iterator getNodeIterator();
+    virtual NodeMap::iterator getNodeIterator();
 
-	virtual void getNodes(std::vector<Node*>&);
+    virtual void getNodes(std::vector<Node*>&);
 
-	virtual Node* addNode(Node *node);
+    virtual Node* addNode(Node* node);
 
-	virtual Node* addNode(const geom::Coordinate& coord);
+    virtual Node* addNode(const geom::Coordinate& coord);
 
-	/** \brief
-	 * @return the node if found; null otherwise
-	 */
-	virtual Node* find(geom::Coordinate& coord);
+    /** \brief
+     * @return the node if found; null otherwise
+     */
+    virtual Node* find(geom::Coordinate& coord);
 
-	/** \brief
-	 * Add a set of edges to the graph.  For each edge two DirectedEdges
-	 * will be created.  DirectedEdges are NOT linked by this method.
-	 */
-	virtual void addEdges(const std::vector<Edge*> &edgesToAdd);
+    /** \brief
+     * Add a set of edges to the graph.  For each edge two DirectedEdges
+     * will be created.  DirectedEdges are NOT linked by this method.
+     */
+    virtual void addEdges(const std::vector<Edge*>& edgesToAdd);
 
-	virtual void linkResultDirectedEdges();
+    virtual void linkResultDirectedEdges();
 
-	virtual void linkAllDirectedEdges();
+    virtual void linkAllDirectedEdges();
 
-	/** \brief
-	 * Returns the EdgeEnd which has edge e as its base edge
-	 * (MD 18 Feb 2002 - this should return a pair of edges)
-	 *
-	 * @return the edge, if found
-	 *    <code>null</code> if the edge was not found
-	 */
-	virtual EdgeEnd* findEdgeEnd(Edge *e);
+    /** \brief
+     * Returns the EdgeEnd which has edge e as its base edge
+     * (MD 18 Feb 2002 - this should return a pair of edges)
+     *
+     * @return the edge, if found
+     *    <code>null</code> if the edge was not found
+     */
+    virtual EdgeEnd* findEdgeEnd(Edge* e);
 
-	/** \brief
-	 * Returns the edge whose first two coordinates are p0 and p1
-	 *
-	 * @return the edge, if found
-	 *    <code>null</code> if the edge was not found
-	 */
-	virtual Edge* findEdge(const geom::Coordinate& p0,
-			const geom::Coordinate& p1);
+    /** \brief
+     * Returns the edge whose first two coordinates are p0 and p1
+     *
+     * @return the edge, if found
+     *    <code>null</code> if the edge was not found
+     */
+    virtual Edge* findEdge(const geom::Coordinate& p0,
+                           const geom::Coordinate& p1);
 
-	/** \brief
-	 * Returns the edge which starts at p0 and whose first segment is
-	 * parallel to p1
-	 *
-	 * @return the edge, if found
-	 *    <code>null</code> if the edge was not found
-	 */
-	virtual Edge* findEdgeInSameDirection(const geom::Coordinate& p0,
-			const geom::Coordinate& p1);
+    /** \brief
+     * Returns the edge which starts at p0 and whose first segment is
+     * parallel to p1
+     *
+     * @return the edge, if found
+     *    <code>null</code> if the edge was not found
+     */
+    virtual Edge* findEdgeInSameDirection(const geom::Coordinate& p0,
+                                          const geom::Coordinate& p1);
 
-	virtual std::string printEdges();
+    virtual std::string printEdges();
 
-	virtual NodeMap* getNodeMap();
+    virtual NodeMap* getNodeMap();
 
 protected:
 
-	std::vector<Edge*> *edges;
+    std::vector<Edge*>* edges;
 
-	NodeMap *nodes;
+    NodeMap* nodes;
 
-	std::vector<EdgeEnd*> *edgeEndList;
+    std::vector<EdgeEnd*>* edgeEndList;
 
-	virtual void insertEdge(Edge *e);
+    virtual void insertEdge(Edge* e);
 
 private:
 
-	/** \brief
-	 * The coordinate pairs match if they define line segments
-	 * lying in the same direction.
-	 *
-	 * E.g. the segments are parallel and in the same quadrant
-	 * (as opposed to parallel and opposite!).
-	 */
-	bool matchInSameDirection(const geom::Coordinate& p0,
-			const geom::Coordinate& p1,
-			const geom::Coordinate& ep0,
-			const geom::Coordinate& ep1);
+    /** \brief
+     * The coordinate pairs match if they define line segments
+     * lying in the same direction.
+     *
+     * E.g. the segments are parallel and in the same quadrant
+     * (as opposed to parallel and opposite!).
+     */
+    bool matchInSameDirection(const geom::Coordinate& p0,
+                              const geom::Coordinate& p1,
+                              const geom::Coordinate& ep0,
+                              const geom::Coordinate& ep1);
 };
 
 

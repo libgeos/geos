@@ -34,10 +34,10 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Geometry;
-		class Coordinate;
-	}
+namespace geom {
+class Geometry;
+class Coordinate;
+}
 }
 
 namespace geos {
@@ -59,28 +59,28 @@ class GEOS_DLL FuzzyPointLocator {
 
 public:
 
-	FuzzyPointLocator(const geom::Geometry& geom, double nTolerance);
+    FuzzyPointLocator(const geom::Geometry& geom, double nTolerance);
 
-	geom::Location::Value getLocation(const geom::Coordinate& pt);
+    geom::Location::Value getLocation(const geom::Coordinate& pt);
 
 private:
 
-	const geom::Geometry& g;
+    const geom::Geometry& g;
 
-	double tolerance;
+    double tolerance;
 
-	algorithm::PointLocator ptLocator;
+    algorithm::PointLocator ptLocator;
 
-	std::unique_ptr<geom::Geometry> linework;
+    std::unique_ptr<geom::Geometry> linework;
 
-	// this function has been obsoleted
-	std::unique_ptr<geom::Geometry> getLineWork(const geom::Geometry& geom);
+    // this function has been obsoleted
+    std::unique_ptr<geom::Geometry> getLineWork(const geom::Geometry& geom);
 
-	/// Extracts linework for polygonal components.
-	//
-	/// @param g the geometry from which to extract
-	/// @return a lineal geometry containing the extracted linework
-	std::unique_ptr<geom::Geometry> extractLineWork(const geom::Geometry& geom);
+    /// Extracts linework for polygonal components.
+    //
+    /// @param g the geometry from which to extract
+    /// @return a lineal geometry containing the extracted linework
+    std::unique_ptr<geom::Geometry> extractLineWork(const geom::Geometry& geom);
 
     // Declare type as noncopyable
     FuzzyPointLocator(const FuzzyPointLocator& other) = delete;

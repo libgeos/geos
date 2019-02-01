@@ -22,9 +22,9 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Coordinate;
-	}
+namespace geom {
+class Coordinate;
+}
 }
 
 namespace geos {
@@ -48,25 +48,26 @@ namespace noding { // geos.noding
  */
 class GEOS_DLL Octant {
 private:
-	Octant() {} // Can't instanciate it
+    Octant() {} // Can't instanciate it
 public:
 
-	/**
-	 * Returns the octant of a directed line segment (specified
-	 * as x and y displacements, which cannot both be 0).
-	 */
-	static int octant(double dx, double dy);
+    /**
+     * Returns the octant of a directed line segment (specified
+     * as x and y displacements, which cannot both be 0).
+     */
+    static int octant(double dx, double dy);
 
-	/**
-	 * Returns the octant of a directed line segment from p0 to p1.
-	 */
-	static int octant(const geom::Coordinate& p0, const geom::Coordinate& p1);
+    /**
+     * Returns the octant of a directed line segment from p0 to p1.
+     */
+    static int octant(const geom::Coordinate& p0, const geom::Coordinate& p1);
 
-    static int octant(const geom::Coordinate* p0, const geom::Coordinate* p1)
+    static int
+    octant(const geom::Coordinate* p0, const geom::Coordinate* p1)
     {
         ::geos::ignore_unused_variable_warning(p0);
-		return octant(*p0, *p1);
-	}
+        return octant(*p0, *p1);
+    }
 };
 
 

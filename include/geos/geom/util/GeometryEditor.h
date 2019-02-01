@@ -25,15 +25,15 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Geometry;
-		class GeometryFactory;
-		class GeometryCollection;
-		class Polygon;
-		namespace util {
-			class GeometryEditorOperation;
-		}
-	}
+namespace geom {
+class Geometry;
+class GeometryFactory;
+class GeometryCollection;
+class Polygon;
+namespace util {
+class GeometryEditorOperation;
+}
+}
 }
 
 
@@ -77,48 +77,48 @@ namespace util { // geos.geom.util
  */
 class GEOS_DLL GeometryEditor {
 private:
-	/**
-	 * The factory used to create the modified Geometry
-	 */
-	const GeometryFactory* factory;
+    /**
+     * The factory used to create the modified Geometry
+     */
+    const GeometryFactory* factory;
 
-	Polygon* editPolygon(const Polygon *polygon,
-			GeometryEditorOperation *operation);
+    Polygon* editPolygon(const Polygon* polygon,
+                         GeometryEditorOperation* operation);
 
-	GeometryCollection* editGeometryCollection(
-			const GeometryCollection *collection,
-			GeometryEditorOperation *operation);
+    GeometryCollection* editGeometryCollection(
+        const GeometryCollection* collection,
+        GeometryEditorOperation* operation);
 
 public:
 
-	/**
-	 * Creates a new GeometryEditor object which will create
-	 * an edited Geometry with the same GeometryFactory as the
-	 * input Geometry.
-	 */
-	GeometryEditor();
+    /**
+     * Creates a new GeometryEditor object which will create
+     * an edited Geometry with the same GeometryFactory as the
+     * input Geometry.
+     */
+    GeometryEditor();
 
-	/**
-	 * Creates a new GeometryEditor object which will create
-	 * the edited Geometry with the given GeometryFactory
-	 *
-	 * @param newFactory the GeometryFactory to create the edited
-	 *                   Geometry with
-	 */
-	GeometryEditor(const GeometryFactory *newFactory);
+    /**
+     * Creates a new GeometryEditor object which will create
+     * the edited Geometry with the given GeometryFactory
+     *
+     * @param newFactory the GeometryFactory to create the edited
+     *                   Geometry with
+     */
+    GeometryEditor(const GeometryFactory* newFactory);
 
-	/**
-	 * Edit the input Geometry with the given edit operation.
-	 * Clients will create subclasses of GeometryEditorOperation or
-	 * CoordinateOperation to perform required modifications.
-	 *
-	 * @param geometry the Geometry to edit
-	 * @param operation the edit operation to carry out
-	 * @return a new Geometry which is the result of the editing
-	 *
-	 */
-	Geometry* edit(const Geometry *geometry,
-			GeometryEditorOperation *operation); // final
+    /**
+     * Edit the input Geometry with the given edit operation.
+     * Clients will create subclasses of GeometryEditorOperation or
+     * CoordinateOperation to perform required modifications.
+     *
+     * @param geometry the Geometry to edit
+     * @param operation the edit operation to carry out
+     * @return a new Geometry which is the result of the editing
+     *
+     */
+    Geometry* edit(const Geometry* geometry,
+                   GeometryEditorOperation* operation); // final
 };
 
 } // namespace geos.geom.util

@@ -28,35 +28,35 @@ namespace geom { // geos::geom
 ///
 class GEOS_DLL Dimension {
 public:
-	enum DimensionType {
-		/// Dimension value for any dimension (= {FALSE, TRUE}).
-		DONTCARE=-3,
+    enum DimensionType {
+        /// Dimension value for any dimension (= {FALSE, TRUE}).
+        DONTCARE = -3,
 
-		/// Dimension value of non-empty geometries (= {P, L, A}).
-		True=-2,
+        /// Dimension value of non-empty geometries (= {P, L, A}).
+        True = -2,
 
-		/// Dimension value of the empty geometry (-1).
-		False=-1,
+        /// Dimension value of the empty geometry (-1).
+        False = -1,
 
-		/// Dimension value of a point (0).
-		P=0,
+        /// Dimension value of a point (0).
+        P = 0,
 
-		/// Dimension value of a curve (1).
-		L=1,
+        /// Dimension value of a curve (1).
+        L = 1,
 
-		/// Dimension value of a surface (2).
-		A=2
-	};
+        /// Dimension value of a surface (2).
+        A = 2
+    };
 
-	//static const int P = 0;			/// Dimension value of a point (0).
-	//static const int L = 1;			/// Dimension value of a curve (1).
-	//static const int A = 2;			/// Dimension value of a surface (2).
-	//static const int False = -1;	/// Dimension value of the empty geometry (-1).
-	//static const int True = -2;		/// Dimension value of non-empty geometries (= {P, L, A}).
-	//static const int DONTCARE = -3;	/// Dimension value for any dimension (= {FALSE, TRUE}).
-	static char toDimensionSymbol(int dimensionValue);
+    //static const int P = 0;			/// Dimension value of a point (0).
+    //static const int L = 1;			/// Dimension value of a curve (1).
+    //static const int A = 2;			/// Dimension value of a surface (2).
+    //static const int False = -1;	/// Dimension value of the empty geometry (-1).
+    //static const int True = -2;		/// Dimension value of non-empty geometries (= {P, L, A}).
+    //static const int DONTCARE = -3;	/// Dimension value for any dimension (= {FALSE, TRUE}).
+    static char toDimensionSymbol(int dimensionValue);
 
-	static int toDimensionValue(char dimensionSymbol);
+    static int toDimensionValue(char dimensionSymbol);
 
 };
 

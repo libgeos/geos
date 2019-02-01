@@ -18,8 +18,7 @@ namespace tut {
 // Test Group
 //
 
-struct test_touches_data
-{
+struct test_touches_data {
     typedef std::unique_ptr<geos::geom::Geometry> GeomPtr;
     typedef geos::geom::GeometryFactory GeometryFactory;
 
@@ -46,15 +45,16 @@ group test_touches_data("geos::geom::Geometry::touches");
 // 1 - Point/Point do not touch
 template<>
 template<>
-void object::test<1>()
+void object::test<1>
+()
 {
     GeomPtr g1(reader.read(
-        "POINT (0 0)"
-        ));
+                   "POINT (0 0)"
+               ));
 
     GeomPtr g2(reader.read(
-        "POINT (0 0)"
-        ));
+                   "POINT (0 0)"
+               ));
 
     ensure(!g1->touches(g2.get()));
     ensure(!g2->touches(g1.get()));
@@ -63,15 +63,16 @@ void object::test<1>()
 // 2 - Line/Point do not touch if point is not on boundary
 template<>
 template<>
-void object::test<2>()
+void object::test<2>
+()
 {
     GeomPtr g1(reader.read(
-        "LINESTRING(0 0, 1 1, 0 2)"
-        ));
+                   "LINESTRING(0 0, 1 1, 0 2)"
+               ));
 
     GeomPtr g2(reader.read(
-        "POINT (1 1)"
-        ));
+                   "POINT (1 1)"
+               ));
 
     ensure(!g1->touches(g2.get()));
     ensure(!g2->touches(g1.get()));
@@ -80,15 +81,16 @@ void object::test<2>()
 // 3 - Line/Point touch
 template<>
 template<>
-void object::test<3>()
+void object::test<3>
+()
 {
     GeomPtr g1(reader.read(
-        "LINESTRING(0 0, 1 1, 0 2)"
-        ));
+                   "LINESTRING(0 0, 1 1, 0 2)"
+               ));
 
     GeomPtr g2(reader.read(
-        "POINT (0 2)"
-        ));
+                   "POINT (0 2)"
+               ));
 
     ensure(g1->touches(g2.get()));
     ensure(g2->touches(g1.get()));
@@ -97,15 +99,16 @@ void object::test<3>()
 // 4 - Line/Point touch (FP coordinates)
 template<>
 template<>
-void object::test<4>()
+void object::test<4>
+()
 {
     GeomPtr g1(reader.read(
-        "LINESTRING (-612844.96290006 279079.117329031,-257704.820935236 574364.179187424)"
-        ));
+                   "LINESTRING (-612844.96290006 279079.117329031,-257704.820935236 574364.179187424)"
+               ));
 
     GeomPtr g2(reader.read(
-        "POINT (-257704.820935236 574364.179187424)"
-        ));
+                   "POINT (-257704.820935236 574364.179187424)"
+               ));
 
     ensure(g1->touches(g2.get()));
     ensure(g2->touches(g1.get()));
@@ -113,7 +116,8 @@ void object::test<4>()
 
 template<>
 template<>
-void object::test<5>()
+void object::test<5>
+()
 {
     // Two T-like segments, A (horizontal), B (vertical)
     // A: LINESTRING(-3511.75501903694 4257.47493284327,-877.546556856658 4257.47493284327)
@@ -130,12 +134,14 @@ void object::test<5>()
 
 template<>
 template<>
-void object::test<6>()
+void object::test<6>
+()
 {
     // Two Y-like segments, A (V-part), B (|-part)
     // A: LINESTRING(-428.533750803201 4467.01424233489,1098.10978977856 4137.73818456235,1621.95806350759 5544.64497686319)
     // B: LINESTRING(1098.10978977856 4137.73818456235,1921.2999342099 2177.04893146225)
-    std::stringstream wkbA("010200000003000000603f483e8ac87ac092ba62a50373b1405851bb6c70289140b6d9a9f9bc29b04060a2990ed55799401226341da5a8b540");
+    std::stringstream
+    wkbA("010200000003000000603f483e8ac87ac092ba62a50373b1405851bb6c70289140b6d9a9f9bc29b04060a2990ed55799401226341da5a8b540");
     std::stringstream wkbB("0102000000020000005851bb6c70289140b6d9a9f9bc29b040d019f42133059e40406c8b0d1902a140");
     GeomPtr a(breader.readHEX(wkbA));
     GeomPtr b(breader.readHEX(wkbB));
@@ -147,7 +153,8 @@ void object::test<6>()
 
 template<>
 template<>
-void object::test<7>()
+void object::test<7>
+()
 {
     // Two T-like two segments rotated ~55 degrees counter-clockwise; A (horizontal), B (vertical)
     // A: LINESTRING(3343.17382004585 2521.2920827699,4959.61992183829 5125.56635787996)

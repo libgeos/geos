@@ -21,12 +21,12 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Envelope;
-	}
-	namespace index {
-		class ItemVisitor;
-	}
+namespace geom {
+class Envelope;
+}
+namespace index {
+class ItemVisitor;
+}
 }
 
 namespace geos {
@@ -47,54 +47,55 @@ namespace index {
 class GEOS_DLL SpatialIndex {
 public:
 
-    virtual ~SpatialIndex() {}
+    virtual
+    ~SpatialIndex() {}
 
-	/** \brief
-	 * Adds a spatial item with an extent specified by the given Envelope
-	 * to the index
-	 *
-	 * @param itemEnv
-	 *    Envelope of the item, ownership left to caller.
-	 *    TODO: Reference hold by this class ?
-	 *
-	 * @param item
-	 *    Opaque item, ownership left to caller.
-	 *    Reference hold by this class.
-	 */
-	virtual void insert(const geom::Envelope *itemEnv, void *item) = 0;
+    /** \brief
+     * Adds a spatial item with an extent specified by the given Envelope
+     * to the index
+     *
+     * @param itemEnv
+     *    Envelope of the item, ownership left to caller.
+     *    TODO: Reference hold by this class ?
+     *
+     * @param item
+     *    Opaque item, ownership left to caller.
+     *    Reference hold by this class.
+     */
+    virtual void insert(const geom::Envelope* itemEnv, void* item) = 0;
 
-	/** \brief
-	 * Queries the index for all items whose extents intersect the given search Envelope
-	 *
-	 * Note that some kinds of indexes may also return objects which do not in fact
-	 * intersect the query envelope.
-	 *
-	 * @param searchEnv the envelope to query for
-	 * @return a list of the items found by the query in a newly allocated vector
-	 */
-	//virtual std::vector<void*>* query(const geom::Envelope *searchEnv)=0;
-	virtual void query(const geom::Envelope* searchEnv, std::vector<void*>&) = 0;
+    /** \brief
+     * Queries the index for all items whose extents intersect the given search Envelope
+     *
+     * Note that some kinds of indexes may also return objects which do not in fact
+     * intersect the query envelope.
+     *
+     * @param searchEnv the envelope to query for
+     * @return a list of the items found by the query in a newly allocated vector
+     */
+    //virtual std::vector<void*>* query(const geom::Envelope *searchEnv)=0;
+    virtual void query(const geom::Envelope* searchEnv, std::vector<void*>&) = 0;
 
-	/** \brief
-	 * Queries the index for all items whose extents intersect the given search Envelope
-	 * and applies an ItemVisitor to them.
-	 *
-	 * Note that some kinds of indexes may also return objects which do not in fact
-	 * intersect the query envelope.
-	 *
-	 * @param searchEnv the envelope to query for
-	 * @param visitor a visitor object to apply to the items found
-	 */
-	virtual void query(const geom::Envelope *searchEnv, ItemVisitor& visitor) = 0;
+    /** \brief
+     * Queries the index for all items whose extents intersect the given search Envelope
+     * and applies an ItemVisitor to them.
+     *
+     * Note that some kinds of indexes may also return objects which do not in fact
+     * intersect the query envelope.
+     *
+     * @param searchEnv the envelope to query for
+     * @param visitor a visitor object to apply to the items found
+     */
+    virtual void query(const geom::Envelope* searchEnv, ItemVisitor& visitor) = 0;
 
-	/** \brief
-	 * Removes a single item from the tree.
-	 *
-	 * @param itemEnv the Envelope of the item to remove
-	 * @param item the item to remove
-	 * @return <code>true</code> if the item was found
-	 */
-	virtual bool remove(const geom::Envelope* itemEnv, void* item) = 0;
+    /** \brief
+     * Removes a single item from the tree.
+     *
+     * @param itemEnv the Envelope of the item to remove
+     * @param item the item to remove
+     * @return <code>true</code> if the item was found
+     */
+    virtual bool remove(const geom::Envelope* itemEnv, void* item) = 0;
 
 };
 

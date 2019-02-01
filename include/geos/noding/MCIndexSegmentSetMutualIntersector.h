@@ -24,20 +24,20 @@
 #include <geos/index/chain/MonotoneChainOverlapAction.h> // inherited
 
 namespace geos {
-	namespace index {
-		class SpatialIndex;
+namespace index {
+class SpatialIndex;
 
-		namespace chain {
-			class MonotoneChain;
-		}
-		namespace strtree {
-			//class STRtree;
-		}
-	}
-	namespace noding {
-		class SegmentString;
-		class SegmentIntersector;
-	}
+namespace chain {
+class MonotoneChain;
+}
+namespace strtree {
+//class STRtree;
+}
+}
+namespace noding {
+class SegmentString;
+class SegmentIntersector;
+}
 }
 
 //using namespace geos::index::strtree;
@@ -51,75 +51,74 @@ namespace noding { // geos::noding
  *
  * @version 1.7
  */
-class MCIndexSegmentSetMutualIntersector : public SegmentSetMutualIntersector
-{
+class MCIndexSegmentSetMutualIntersector : public SegmentSetMutualIntersector {
 public:
 
-	MCIndexSegmentSetMutualIntersector();
+    MCIndexSegmentSetMutualIntersector();
 
-	~MCIndexSegmentSetMutualIntersector() override;
+    ~MCIndexSegmentSetMutualIntersector() override;
 
-	index::SpatialIndex* getIndex()
-	{
-		return index;
-	}
-
-	void setBaseSegments(SegmentString::ConstVect* segStrings) override;
-
-	// NOTE: re-populates the MonotoneChain vector with newly created chains
-	void process(SegmentString::ConstVect* segStrings) override;
-
-    class SegmentOverlapAction : public index::chain::MonotoneChainOverlapAction
+    index::SpatialIndex*
+    getIndex()
     {
+        return index;
+    }
+
+    void setBaseSegments(SegmentString::ConstVect* segStrings) override;
+
+    // NOTE: re-populates the MonotoneChain vector with newly created chains
+    void process(SegmentString::ConstVect* segStrings) override;
+
+    class SegmentOverlapAction : public index::chain::MonotoneChainOverlapAction {
     private:
-        SegmentIntersector & si;
+        SegmentIntersector& si;
 
         // Declare type as noncopyable
         SegmentOverlapAction(const SegmentOverlapAction& other) = delete;
         SegmentOverlapAction& operator=(const SegmentOverlapAction& rhs) = delete;
 
     public:
-        SegmentOverlapAction(SegmentIntersector & p_si) :
-          index::chain::MonotoneChainOverlapAction(), si(p_si)
-          {}
+        SegmentOverlapAction(SegmentIntersector& p_si) :
+            index::chain::MonotoneChainOverlapAction(), si(p_si)
+        {}
 
-          void overlap(index::chain::MonotoneChain& mc1, std::size_t start1,
-              index::chain::MonotoneChain& mc2, std::size_t start2) override;
+        void overlap(index::chain::MonotoneChain& mc1, std::size_t start1,
+                     index::chain::MonotoneChain& mc2, std::size_t start2) override;
     };
 
     /**
      * Disable copy construction and assignment. Apparently needed to make this
      * class compile under MSVC. (See https://stackoverflow.com/q/29565299)
      */
-     MCIndexSegmentSetMutualIntersector(const MCIndexSegmentSetMutualIntersector&) = delete;
-     MCIndexSegmentSetMutualIntersector& operator=(const MCIndexSegmentSetMutualIntersector&) = delete;
+    MCIndexSegmentSetMutualIntersector(const MCIndexSegmentSetMutualIntersector&) = delete;
+    MCIndexSegmentSetMutualIntersector& operator=(const MCIndexSegmentSetMutualIntersector&) = delete;
 
 private:
 
-	typedef std::vector<std::unique_ptr<index::chain::MonotoneChain>> MonoChains;
-	MonoChains monoChains;
+    typedef std::vector<std::unique_ptr<index::chain::MonotoneChain>> MonoChains;
+    MonoChains monoChains;
 
-	/*
-	 * The {@link SpatialIndex} used should be something that supports
-	 * envelope (range) queries efficiently (such as a {@link Quadtree}
-	 * or {@link STRtree}.
-	 */
-	index::SpatialIndex * index;
-	int indexCounter;
-	int processCounter;
-	// statistics
-	int nOverlaps;
+    /*
+     * The {@link SpatialIndex} used should be something that supports
+     * envelope (range) queries efficiently (such as a {@link Quadtree}
+     * or {@link STRtree}.
+     */
+    index::SpatialIndex* index;
+    int indexCounter;
+    int processCounter;
+    // statistics
+    int nOverlaps;
 
-	/* memory management helper, holds MonotoneChain objects used
-	 * in the SpatialIndex. It's cleared when the SpatialIndex is
-	 */
-	MonoChains chainStore;
+    /* memory management helper, holds MonotoneChain objects used
+     * in the SpatialIndex. It's cleared when the SpatialIndex is
+     */
+    MonoChains chainStore;
 
-	void addToIndex( SegmentString * segStr);
+    void addToIndex(SegmentString* segStr);
 
-	void intersectChains();
+    void intersectChains();
 
-	void addToMonoChains( SegmentString * segStr);
+    void addToMonoChains(SegmentString* segStr);
 
 };
 

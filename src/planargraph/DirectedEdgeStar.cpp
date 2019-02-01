@@ -30,50 +30,52 @@ namespace planargraph {
  * Adds a new member to this DirectedEdgeStar.
  */
 void
-DirectedEdgeStar::add(DirectedEdge *de)
+DirectedEdgeStar::add(DirectedEdge* de)
 {
-	outEdges.push_back(de);
-	sorted=false;
+    outEdges.push_back(de);
+    sorted = false;
 }
 
 /*
  * Drops a member of this DirectedEdgeStar.
  */
 void
-DirectedEdgeStar::remove(DirectedEdge *de)
+DirectedEdgeStar::remove(DirectedEdge* de)
 {
-	for(unsigned int i=0; i<outEdges.size(); ++i)
-	{
-		if(outEdges[i]==de)
-		{
-			outEdges.erase(outEdges.begin()+i);
-			--i;
-		}
-	}
+    for(unsigned int i = 0; i < outEdges.size(); ++i) {
+        if(outEdges[i] == de) {
+            outEdges.erase(outEdges.begin() + i);
+            --i;
+        }
+    }
 }
 
 vector<DirectedEdge*>::iterator
-DirectedEdgeStar::begin() {
-	sortEdges();
-	return outEdges.begin();
+DirectedEdgeStar::begin()
+{
+    sortEdges();
+    return outEdges.begin();
 }
 
 vector<DirectedEdge*>::iterator
-DirectedEdgeStar::end() {
-	sortEdges();
-	return outEdges.end();
+DirectedEdgeStar::end()
+{
+    sortEdges();
+    return outEdges.end();
 }
 
 vector<DirectedEdge*>::const_iterator
-DirectedEdgeStar::begin() const {
-	sortEdges();
-	return outEdges.begin();
+DirectedEdgeStar::begin() const
+{
+    sortEdges();
+    return outEdges.begin();
 }
 
 vector<DirectedEdge*>::const_iterator
-DirectedEdgeStar::end() const {
-	sortEdges();
-	return outEdges.end();
+DirectedEdgeStar::end() const
+{
+    sortEdges();
+    return outEdges.end();
 }
 
 /*
@@ -82,10 +84,11 @@ DirectedEdgeStar::end() const {
 Coordinate&
 DirectedEdgeStar::getCoordinate() const
 {
-	if (outEdges.empty())
-		return Coordinate::getNull();
-	DirectedEdge *e=outEdges[0];
-	return e->getCoordinate();
+    if(outEdges.empty()) {
+        return Coordinate::getNull();
+    }
+    DirectedEdge* e = outEdges[0];
+    return e->getCoordinate();
 }
 
 /*
@@ -95,27 +98,29 @@ DirectedEdgeStar::getCoordinate() const
 vector<DirectedEdge*>&
 DirectedEdgeStar::getEdges()
 {
-	sortEdges();
-	return outEdges;
+    sortEdges();
+    return outEdges;
 }
 
 bool
-pdeLessThan(DirectedEdge *first, DirectedEdge * second)
+pdeLessThan(DirectedEdge* first, DirectedEdge* second)
 {
-	if (first->compareTo(second)<0)
-		return true;
-	else
-		return false;
+    if(first->compareTo(second) < 0) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 /*private*/
 void
 DirectedEdgeStar::sortEdges() const
 {
-	if (!sorted) {
-		sort(outEdges.begin(), outEdges.end(), pdeLessThan);
-		sorted=true;
-	}
+    if(!sorted) {
+        sort(outEdges.begin(), outEdges.end(), pdeLessThan);
+        sorted = true;
+    }
 }
 
 /*
@@ -123,16 +128,16 @@ DirectedEdgeStar::sortEdges() const
  * ascending order by angle with the positive x-axis.
  */
 int
-DirectedEdgeStar::getIndex(const Edge *edge)
+DirectedEdgeStar::getIndex(const Edge* edge)
 {
-	sortEdges();
-	for (unsigned int i = 0; i<outEdges.size(); ++i)
-	{
-		DirectedEdge *de =outEdges[i];
-		if (de->getEdge() == edge)
-		return i;
-	}
-	return -1;
+    sortEdges();
+    for(unsigned int i = 0; i < outEdges.size(); ++i) {
+        DirectedEdge* de = outEdges[i];
+        if(de->getEdge() == edge) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 /*
@@ -140,16 +145,16 @@ DirectedEdgeStar::getIndex(const Edge *edge)
  * in ascending order by angle with the positive x-axis.
  */
 int
-DirectedEdgeStar::getIndex(const DirectedEdge *dirEdge)
+DirectedEdgeStar::getIndex(const DirectedEdge* dirEdge)
 {
-	sortEdges();
-	for (unsigned int i = 0; i <outEdges.size(); ++i)
-	{
-		DirectedEdge *de =outEdges[i];
-		if (de == dirEdge)
-		return i;
-	}
-	return -1;
+    sortEdges();
+    for(unsigned int i = 0; i < outEdges.size(); ++i) {
+        DirectedEdge* de = outEdges[i];
+        if(de == dirEdge) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 /*
@@ -159,10 +164,12 @@ DirectedEdgeStar::getIndex(const DirectedEdge *dirEdge)
 int
 DirectedEdgeStar::getIndex(int i) const
 {
-	int modi = i % (int)outEdges.size();
-	//I don't think modi can be 0 (assuming i is positive) [Jon Aquino 10/28/2003]
-	if (modi < 0) modi += (int)outEdges.size();
-	return modi;
+    int modi = i % (int)outEdges.size();
+    //I don't think modi can be 0 (assuming i is positive) [Jon Aquino 10/28/2003]
+    if(modi < 0) {
+        modi += (int)outEdges.size();
+    }
+    return modi;
 }
 
 /*
@@ -170,10 +177,10 @@ DirectedEdgeStar::getIndex(int i) const
  * DirectedEdge (which must be a member of this DirectedEdgeStar).
  */
 DirectedEdge*
-DirectedEdgeStar::getNextEdge(DirectedEdge *dirEdge)
+DirectedEdgeStar::getNextEdge(DirectedEdge* dirEdge)
 {
-	int i = getIndex(dirEdge);
-	return outEdges[getIndex(i + 1)];
+    int i = getIndex(dirEdge);
+    return outEdges[getIndex(i + 1)];
 }
 
 } // namespace planargraph

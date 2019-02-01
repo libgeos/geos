@@ -25,11 +25,11 @@
 
 // Forward declarations
 namespace geos {
-    namespace geom {
-        class Geometry;
-        class Polygon;
-        class CoordinateSequence;
-    }
+namespace geom {
+class Geometry;
+class Polygon;
+class CoordinateSequence;
+}
 }
 
 
@@ -62,93 +62,95 @@ class GEOS_DLL Centroid {
 
 public:
 
-  /**
-   * Computes the centroid point of a geometry.
-   *
-   * @param geom the geometry to use
-   * @param cent will be set to the centroid point, if any
-   *
-   * @return true if a centroid could be computed,
-   *         false otherwise (empty geom)
-   */
-  static bool getCentroid(const geom::Geometry& geom, geom::Coordinate& cent);
+    /**
+     * Computes the centroid point of a geometry.
+     *
+     * @param geom the geometry to use
+     * @param cent will be set to the centroid point, if any
+     *
+     * @return true if a centroid could be computed,
+     *         false otherwise (empty geom)
+     */
+    static bool getCentroid(const geom::Geometry& geom, geom::Coordinate& cent);
 
-  /**
-   * Creates a new instance for computing the centroid of a geometry
-   */
-  Centroid(const geom::Geometry& geom)
-    :
-    areasum2(0.0),
-    totalLength(0.0),
-    ptCount(0)
-  {
-    add(geom);
-  }
+    /**
+     * Creates a new instance for computing the centroid of a geometry
+     */
+    Centroid(const geom::Geometry& geom)
+        :
+        areasum2(0.0),
+        totalLength(0.0),
+        ptCount(0)
+    {
+        add(geom);
+    }
 
-  /**
-   * Gets the computed centroid.
-   *
-   * @param cent will be set to the centroid point, if any
-   *
-   * @return true if a centroid could be computed,
-   *         false otherwise (empty geom)
-   */
-  bool getCentroid(geom::Coordinate& cent) const;
+    /**
+     * Gets the computed centroid.
+     *
+     * @param cent will be set to the centroid point, if any
+     *
+     * @return true if a centroid could be computed,
+     *         false otherwise (empty geom)
+     */
+    bool getCentroid(geom::Coordinate& cent) const;
 
 private:
 
-  std::unique_ptr<geom::Coordinate> areaBasePt;
-  geom::Coordinate triangleCent3;
-  geom::Coordinate cg3;
-  geom::Coordinate lineCentSum;
-  geom::Coordinate ptCentSum;
-  double areasum2;
-  double totalLength;
-  int ptCount;
+    std::unique_ptr<geom::Coordinate> areaBasePt;
+    geom::Coordinate triangleCent3;
+    geom::Coordinate cg3;
+    geom::Coordinate lineCentSum;
+    geom::Coordinate ptCentSum;
+    double areasum2;
+    double totalLength;
+    int ptCount;
 
-  /**
-   * Adds a Geometry to the centroid total.
-   *
-   * @param geom the geometry to add
-   */
-  void add(const geom::Geometry& geom);
+    /**
+     * Adds a Geometry to the centroid total.
+     *
+     * @param geom the geometry to add
+     */
+    void add(const geom::Geometry& geom);
 
-  void setAreaBasePoint(const geom::Coordinate& basePt);
+    void setAreaBasePoint(const geom::Coordinate& basePt);
 
-  void add(const geom::Polygon& poly);
+    void add(const geom::Polygon& poly);
 
-  void addShell(const geom::CoordinateSequence& pts);
+    void addShell(const geom::CoordinateSequence& pts);
 
-  void addHole(const geom::CoordinateSequence& pts);
+    void addHole(const geom::CoordinateSequence& pts);
 
-  void addTriangle(const geom::Coordinate& p0, const geom::Coordinate& p1, const geom::Coordinate& p2, bool isPositiveArea);
+    void addTriangle(const geom::Coordinate& p0, const geom::Coordinate& p1, const geom::Coordinate& p2,
+                     bool isPositiveArea);
 
-  /**
-   * Computes three times the centroid of the triangle p1-p2-p3.
-   * The factor of 3 is
-   * left in to permit division to be avoided until later.
-   */
-  static void centroid3(const geom::Coordinate& p1, const geom::Coordinate& p2, const geom::Coordinate& p3, geom::Coordinate& c );
+    /**
+     * Computes three times the centroid of the triangle p1-p2-p3.
+     * The factor of 3 is
+     * left in to permit division to be avoided until later.
+     */
+    static void centroid3(const geom::Coordinate& p1, const geom::Coordinate& p2, const geom::Coordinate& p3,
+                          geom::Coordinate& c);
 
-  /**
-   * Returns twice the signed area of the triangle p1-p2-p3.
-   * The area is positive if the triangle is oriented CCW, and negative if CW.
-   */
-  static double area2(const geom::Coordinate& p1, const geom::Coordinate& p2, const geom::Coordinate& p3 );
+    /**
+     * Returns twice the signed area of the triangle p1-p2-p3.
+     * The area is positive if the triangle is oriented CCW, and negative if CW.
+     */
+    static double area2(const geom::Coordinate& p1, const geom::Coordinate& p2, const geom::Coordinate& p3);
 
-  /**
-   * Adds the line segments defined by an array of coordinates
-   * to the linear centroid accumulators.
-   *
-   * @param pts an array of {@link Coordinate}s
-   */
-  void addLineSegments(const geom::CoordinateSequence& pts);
+    /**
+     * Adds the line segments defined by an array of coordinates
+     * to the linear centroid accumulators.
+     *
+     * @param pts an array of {@link Coordinate}s
+     */
+    void addLineSegments(const geom::CoordinateSequence& pts);
 
-  /**
-   * Adds a point to the point centroid accumulator.
-   * @param pt a {@link Coordinate}
-   */
-  void addPoint(const geom::Coordinate& pt);
+    /**
+     * Adds a point to the point centroid accumulator.
+     * @param pt a {@link Coordinate}
+     */
+    void addPoint(const geom::Coordinate& pt);
 };
 
 } // namespace geos::algorithm

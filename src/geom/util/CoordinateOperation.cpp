@@ -27,30 +27,30 @@ namespace geom { // geos.geom
 namespace util { // geos.geom.util
 
 Geometry*
-CoordinateOperation::edit(const Geometry *geometry,
-		const GeometryFactory *factory)
+CoordinateOperation::edit(const Geometry* geometry,
+                          const GeometryFactory* factory)
 {
-		const LinearRing *ring = dynamic_cast<const LinearRing *>(geometry);
-		if (ring) {
-			const CoordinateSequence *coords = ring->getCoordinatesRO();
-			CoordinateSequence *newCoords = edit(coords,geometry);
-            // LinearRing instance takes over ownership of newCoords instance
-			return factory->createLinearRing(newCoords);
-		}
-		const LineString *line = dynamic_cast<const LineString *>(geometry);
-		if (line) {
-			const CoordinateSequence *coords = line->getCoordinatesRO();
-			CoordinateSequence *newCoords = edit(coords,geometry);
-			return factory->createLineString(newCoords);
-		}
-		if (typeid(*geometry)==typeid(Point)) {
-			CoordinateSequence *coords = geometry->getCoordinates();
-			CoordinateSequence *newCoords = edit(coords,geometry);
-			delete coords;
-			return factory->createPoint(newCoords);
-		}
+    const LinearRing* ring = dynamic_cast<const LinearRing*>(geometry);
+    if(ring) {
+        const CoordinateSequence* coords = ring->getCoordinatesRO();
+        CoordinateSequence* newCoords = edit(coords, geometry);
+        // LinearRing instance takes over ownership of newCoords instance
+        return factory->createLinearRing(newCoords);
+    }
+    const LineString* line = dynamic_cast<const LineString*>(geometry);
+    if(line) {
+        const CoordinateSequence* coords = line->getCoordinatesRO();
+        CoordinateSequence* newCoords = edit(coords, geometry);
+        return factory->createLineString(newCoords);
+    }
+    if(typeid(*geometry) == typeid(Point)) {
+        CoordinateSequence* coords = geometry->getCoordinates();
+        CoordinateSequence* newCoords = edit(coords, geometry);
+        delete coords;
+        return factory->createPoint(newCoords);
+    }
 
-		return geometry->clone();
+    return geometry->clone();
 }
 
 

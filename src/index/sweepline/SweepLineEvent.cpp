@@ -19,84 +19,103 @@ namespace geos {
 namespace index { // geos.index
 namespace sweepline { // geos.index.sweepline
 
-SweepLineEvent::SweepLineEvent(double x, SweepLineEvent *newInsertEvent,
-		SweepLineInterval *newSweepInt)
-	:
-	xValue(x),
-	eventType(SweepLineEvent::INSERT_EVENT),
-	insertEvent(newInsertEvent),
-	sweepInt(newSweepInt)
+SweepLineEvent::SweepLineEvent(double x, SweepLineEvent* newInsertEvent,
+                               SweepLineInterval* newSweepInt)
+    :
+    xValue(x),
+    eventType(SweepLineEvent::INSERT_EVENT),
+    insertEvent(newInsertEvent),
+    sweepInt(newSweepInt)
 {
-	if (insertEvent!=nullptr)
-		eventType=SweepLineEvent::DELETE_EVENT;
+    if(insertEvent != nullptr) {
+        eventType = SweepLineEvent::DELETE_EVENT;
+    }
 }
 
 bool
 SweepLineEvent::isInsert()
 {
-	return insertEvent==nullptr;
+    return insertEvent == nullptr;
 }
 
 bool
 SweepLineEvent::isDelete()
 {
-	return insertEvent!=nullptr;
+    return insertEvent != nullptr;
 }
 
 SweepLineEvent*
 SweepLineEvent::getInsertEvent()
 {
-	return insertEvent;
+    return insertEvent;
 }
 
 size_t
 SweepLineEvent::getDeleteEventIndex()
 {
-	return deleteEventIndex;
+    return deleteEventIndex;
 }
 
 void
 SweepLineEvent::setDeleteEventIndex(size_t newDeleteEventIndex)
 {
-	deleteEventIndex=newDeleteEventIndex;
+    deleteEventIndex = newDeleteEventIndex;
 }
 
 SweepLineInterval*
 SweepLineEvent::getInterval()
 {
-	return sweepInt;
+    return sweepInt;
 }
 
 int
-SweepLineEvent::compareTo(const SweepLineEvent *pe) const
+SweepLineEvent::compareTo(const SweepLineEvent* pe) const
 {
-	if (xValue<pe->xValue) return -1;
-	if (xValue>pe->xValue) return 1;
-	if (eventType<pe->eventType) return -1;
-	if (eventType>pe->eventType) return 1;
-	return 0;
+    if(xValue < pe->xValue) {
+        return -1;
+    }
+    if(xValue > pe->xValue) {
+        return 1;
+    }
+    if(eventType < pe->eventType) {
+        return -1;
+    }
+    if(eventType > pe->eventType) {
+        return 1;
+    }
+    return 0;
 }
 
 #if 0
 int
-SweepLineEvent::compareTo(void *o) const
+SweepLineEvent::compareTo(void* o) const
 {
-	SweepLineEvent *pe=(SweepLineEvent*) o;
-	if (xValue<pe->xValue) return -1;
-	if (xValue>pe->xValue) return 1;
-	if (eventType<pe->eventType) return -1;
-	if (eventType>pe->eventType) return 1;
-	return 0;
+    SweepLineEvent* pe = (SweepLineEvent*) o;
+    if(xValue < pe->xValue) {
+        return -1;
+    }
+    if(xValue > pe->xValue) {
+        return 1;
+    }
+    if(eventType < pe->eventType) {
+        return -1;
+    }
+    if(eventType > pe->eventType) {
+        return 1;
+    }
+    return 0;
 }
 #endif // 0
 
 bool
-SweepLineEventLessThen::operator() (const SweepLineEvent *first, const SweepLineEvent *second) const
+SweepLineEventLessThen::operator()(const SweepLineEvent* first, const SweepLineEvent* second) const
 {
-	if (first->compareTo(second)<0)
-		return true;
-	else
-		return false;
+    if(first->compareTo(second) < 0) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 

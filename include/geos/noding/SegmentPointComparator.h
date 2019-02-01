@@ -40,53 +40,78 @@ class GEOS_DLL SegmentPointComparator {
 
 public:
 
-	/**
-	 * Compares two Coordinates for their relative position along a
-	 * segment lying in the specified Octant.
-	 *
-	 * @return -1 node0 occurs first
-	 * @return 0 the two nodes are equal
-	 * @return 1 node1 occurs first
-	 */
-	static int compare(int octant, const geom::Coordinate& p0,
-			const geom::Coordinate& p1)
-	{
-		// nodes can only be equal if their coordinates are equal
-		if (p0.equals2D(p1)) return 0;
+    /**
+     * Compares two Coordinates for their relative position along a
+     * segment lying in the specified Octant.
+     *
+     * @return -1 node0 occurs first
+     * @return 0 the two nodes are equal
+     * @return 1 node1 occurs first
+     */
+    static int
+    compare(int octant, const geom::Coordinate& p0,
+            const geom::Coordinate& p1)
+    {
+        // nodes can only be equal if their coordinates are equal
+        if(p0.equals2D(p1)) {
+            return 0;
+        }
 
-		int xSign = relativeSign(p0.x, p1.x);
-		int ySign = relativeSign(p0.y, p1.y);
+        int xSign = relativeSign(p0.x, p1.x);
+        int ySign = relativeSign(p0.y, p1.y);
 
-		switch (octant) {
-			case 0: return compareValue(xSign, ySign);
-			case 1: return compareValue(ySign, xSign);
-			case 2: return compareValue(ySign, -xSign);
-			case 3: return compareValue(-xSign, ySign);
-			case 4: return compareValue(-xSign, -ySign);
-			case 5: return compareValue(-ySign, -xSign);
-			case 6: return compareValue(-ySign, xSign);
-			case 7: return compareValue(xSign, -ySign);
-		}
-		assert(0); // invalid octant value
-		return 0;
+        switch(octant) {
+        case 0:
+            return compareValue(xSign, ySign);
+        case 1:
+            return compareValue(ySign, xSign);
+        case 2:
+            return compareValue(ySign, -xSign);
+        case 3:
+            return compareValue(-xSign, ySign);
+        case 4:
+            return compareValue(-xSign, -ySign);
+        case 5:
+            return compareValue(-ySign, -xSign);
+        case 6:
+            return compareValue(-ySign, xSign);
+        case 7:
+            return compareValue(xSign, -ySign);
+        }
+        assert(0); // invalid octant value
+        return 0;
 
-	}
+    }
 
-	static int relativeSign(double x0, double x1)
-	{
-		if (x0 < x1) return -1;
-		if (x0 > x1) return 1;
-		return 0;
-	}
+    static int
+    relativeSign(double x0, double x1)
+    {
+        if(x0 < x1) {
+            return -1;
+        }
+        if(x0 > x1) {
+            return 1;
+        }
+        return 0;
+    }
 
-	static int compareValue(int compareSign0, int compareSign1)
-	{
-		if (compareSign0 < 0) return -1;
-		if (compareSign0 > 0) return 1;
-		if (compareSign1 < 0) return -1;
-		if (compareSign1 > 0) return 1;
-		return 0;
-	}
+    static int
+    compareValue(int compareSign0, int compareSign1)
+    {
+        if(compareSign0 < 0) {
+            return -1;
+        }
+        if(compareSign0 > 0) {
+            return 1;
+        }
+        if(compareSign1 < 0) {
+            return -1;
+        }
+        if(compareSign1 > 0) {
+            return 1;
+        }
+        return 0;
+    }
 
 };
 

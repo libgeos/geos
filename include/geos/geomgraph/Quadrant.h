@@ -28,9 +28,9 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Coordinate;
-	}
+namespace geom {
+class Coordinate;
+}
 }
 
 namespace geos {
@@ -49,50 +49,50 @@ class GEOS_DLL Quadrant {
 
 public:
 
-        static const int NE = 0;
-        static const int NW = 1;
-        static const int SW = 2;
-        static const int SE = 3;
+    static const int NE = 0;
+    static const int NW = 1;
+    static const int SW = 2;
+    static const int SE = 3;
 
-	/**
-	 * Returns the quadrant of a directed line segment
-	 * (specified as x and y displacements, which cannot both be 0).
-	 *
-	 * @throws IllegalArgumentException if the displacements are both 0
-	 */
-	static int quadrant(double dx, double dy);
+    /**
+     * Returns the quadrant of a directed line segment
+     * (specified as x and y displacements, which cannot both be 0).
+     *
+     * @throws IllegalArgumentException if the displacements are both 0
+     */
+    static int quadrant(double dx, double dy);
 
-	/**
-	 * Returns the quadrant of a directed line segment from p0 to p1.
-	 *
-	 * @throws IllegalArgumentException if the points are equal
-	 */
-	static int quadrant(const geom::Coordinate& p0,
-	                    const geom::Coordinate& p1);
+    /**
+     * Returns the quadrant of a directed line segment from p0 to p1.
+     *
+     * @throws IllegalArgumentException if the points are equal
+     */
+    static int quadrant(const geom::Coordinate& p0,
+                        const geom::Coordinate& p1);
 
-	/**
-	 * Returns true if the quadrants are 1 and 3, or 2 and 4
-	 */
-	static bool isOpposite(int quad1, int quad2);
+    /**
+     * Returns true if the quadrants are 1 and 3, or 2 and 4
+     */
+    static bool isOpposite(int quad1, int quad2);
 
-	/*
-	 * Returns the right-hand quadrant of the halfplane defined by
-	 * the two quadrants,
-	 * or -1 if the quadrants are opposite, or the quadrant if they
-	 * are identical.
-	 */
-	static int commonHalfPlane(int quad1, int quad2);
+    /*
+     * Returns the right-hand quadrant of the halfplane defined by
+     * the two quadrants,
+     * or -1 if the quadrants are opposite, or the quadrant if they
+     * are identical.
+     */
+    static int commonHalfPlane(int quad1, int quad2);
 
-	/**
-	 * Returns whether the given quadrant lies within the given halfplane
-	 * (specified by its right-hand quadrant).
-	 */
-	static bool isInHalfPlane(int quad, int halfPlane);
+    /**
+     * Returns whether the given quadrant lies within the given halfplane
+     * (specified by its right-hand quadrant).
+     */
+    static bool isInHalfPlane(int quad, int halfPlane);
 
-	/**
-	 * Returns true if the given quadrant is 0 or 1.
-	 */
-	static bool isNorthern(int quad);
+    /**
+     * Returns true if the given quadrant is 0 or 1.
+     */
+    static bool isNorthern(int quad);
 };
 
 

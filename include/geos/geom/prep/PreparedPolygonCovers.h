@@ -25,13 +25,13 @@
 
 // forward declarations
 namespace geos {
-	namespace geom {
-		class Geometry;
+namespace geom {
+class Geometry;
 
-		namespace prep {
-			class PreparedPolygon;
-		}
-	}
+namespace prep {
+class PreparedPolygon;
+}
+}
 }
 
 namespace geos {
@@ -52,53 +52,54 @@ namespace prep { // geos::geom::prep
  * @author Martin Davis
  *
  */
-class PreparedPolygonCovers : public AbstractPreparedPolygonContains
-{
+class PreparedPolygonCovers : public AbstractPreparedPolygonContains {
 private:
 protected:
-	/**
-	 * Computes the full topological <tt>covers</tt> predicate.
-	 * Used when short-circuit tests are not conclusive.
-	 *
-	 * @param geom the test geometry
-	 * @return true if this prepared polygon covers the test geometry
-	 */
-	bool fullTopologicalPredicate( const geom::Geometry * geom) override;
+    /**
+     * Computes the full topological <tt>covers</tt> predicate.
+     * Used when short-circuit tests are not conclusive.
+     *
+     * @param geom the test geometry
+     * @return true if this prepared polygon covers the test geometry
+     */
+    bool fullTopologicalPredicate(const geom::Geometry* geom) override;
 
 public:
-	/**
-	 * Computes the </tt>covers</tt> predicate between a {@link PreparedPolygon}
-	 * and a {@link Geometry}.
-	 *
-	 * @param prep the prepared polygon
-	 * @param geom a test geometry
-	 * @return true if the polygon covers the geometry
-	 */
-	static bool covers(const PreparedPolygon * const prep, const geom::Geometry * geom)
-	{
-	    PreparedPolygonCovers polyInt(prep);
-		return polyInt.covers(geom);
-	}
+    /**
+     * Computes the </tt>covers</tt> predicate between a {@link PreparedPolygon}
+     * and a {@link Geometry}.
+     *
+     * @param prep the prepared polygon
+     * @param geom a test geometry
+     * @return true if the polygon covers the geometry
+     */
+    static bool
+    covers(const PreparedPolygon* const prep, const geom::Geometry* geom)
+    {
+        PreparedPolygonCovers polyInt(prep);
+        return polyInt.covers(geom);
+    }
 
-	/**
-	 * Creates an instance of this operation.
-	 *
-	 * @param prepPoly the PreparedPolygon to evaluate
-	 */
-	PreparedPolygonCovers(const PreparedPolygon * const prep)
-	:	AbstractPreparedPolygonContains( prep, false)
-	{ }
+    /**
+     * Creates an instance of this operation.
+     *
+     * @param prepPoly the PreparedPolygon to evaluate
+     */
+    PreparedPolygonCovers(const PreparedPolygon* const prep)
+        :	AbstractPreparedPolygonContains(prep, false)
+    { }
 
-	/**
-	 * Tests whether this PreparedPolygon <tt>covers</tt> a given geometry.
-	 *
-	 * @param geom the test geometry
-	 * @return true if the test geometry is covered
-	 */
-	bool covers( const Geometry * geom)
-	{
-		return eval( geom);
-	}
+    /**
+     * Tests whether this PreparedPolygon <tt>covers</tt> a given geometry.
+     *
+     * @param geom the test geometry
+     * @return true if the test geometry is covered
+     */
+    bool
+    covers(const Geometry* geom)
+    {
+        return eval(geom);
+    }
 
 };
 

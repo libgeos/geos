@@ -40,109 +40,109 @@ namespace valid { // geos.operation.valid
 Coordinate&
 RepeatedPointTester::getCoordinate()
 {
-	return repeatedCoord;
+    return repeatedCoord;
 }
 
 bool
-RepeatedPointTester::hasRepeatedPoint(const Geometry *g)
+RepeatedPointTester::hasRepeatedPoint(const Geometry* g)
 {
-	if (g->isEmpty()) return false;
+    if(g->isEmpty()) {
+        return false;
+    }
 
-	if ( dynamic_cast<const Point*>(g) ) return false;
-	if ( dynamic_cast<const MultiPoint*>(g) ) return false;
+    if(dynamic_cast<const Point*>(g)) {
+        return false;
+    }
+    if(dynamic_cast<const MultiPoint*>(g)) {
+        return false;
+    }
 
-	// LineString also handles LinearRings
-	if ( const LineString* x = dynamic_cast<const LineString*>(g) )
-  {
-    return hasRepeatedPoint(x->getCoordinatesRO());
-  }
+    // LineString also handles LinearRings
+    if(const LineString* x = dynamic_cast<const LineString*>(g)) {
+        return hasRepeatedPoint(x->getCoordinatesRO());
+    }
 
-	if ( const Polygon* x = dynamic_cast<const Polygon*>(g) )
-  {
-    return hasRepeatedPoint(x);
-  }
+    if(const Polygon* x = dynamic_cast<const Polygon*>(g)) {
+        return hasRepeatedPoint(x);
+    }
 
-	if ( const MultiPolygon* x = dynamic_cast<const MultiPolygon*>(g) )
-  {
-    return hasRepeatedPoint(x);
-  }
+    if(const MultiPolygon* x = dynamic_cast<const MultiPolygon*>(g)) {
+        return hasRepeatedPoint(x);
+    }
 
-	if ( const MultiLineString* x = dynamic_cast<const MultiLineString*>(g) )
-  {
-    return hasRepeatedPoint(x);
-  }
+    if(const MultiLineString* x = dynamic_cast<const MultiLineString*>(g)) {
+        return hasRepeatedPoint(x);
+    }
 
-	if ( const GeometryCollection* x = dynamic_cast<const GeometryCollection*>(g) )
-  {
-    return hasRepeatedPoint(x);
-  }
+    if(const GeometryCollection* x = dynamic_cast<const GeometryCollection*>(g)) {
+        return hasRepeatedPoint(x);
+    }
 
-	throw util::UnsupportedOperationException(typeid(*g).name());
+    throw util::UnsupportedOperationException(typeid(*g).name());
 }
 
 bool
-RepeatedPointTester::hasRepeatedPoint(const CoordinateSequence *coord)
+RepeatedPointTester::hasRepeatedPoint(const CoordinateSequence* coord)
 {
-	auto npts=coord->getSize();
-	for(size_t i=1; i<npts; ++i)
-	{
-		if (coord->getAt(i - 1)==coord->getAt(i)) {
-			repeatedCoord=coord->getAt(i);
-			return true;
-		}
-	}
-	return false;
+    auto npts = coord->getSize();
+    for(size_t i = 1; i < npts; ++i) {
+        if(coord->getAt(i - 1) == coord->getAt(i)) {
+            repeatedCoord = coord->getAt(i);
+            return true;
+        }
+    }
+    return false;
 }
 
 bool
-RepeatedPointTester::hasRepeatedPoint(const Polygon *p)
+RepeatedPointTester::hasRepeatedPoint(const Polygon* p)
 {
-	if (hasRepeatedPoint(p->getExteriorRing()->getCoordinates()))
-	{
-		return true;
-	}
+    if(hasRepeatedPoint(p->getExteriorRing()->getCoordinates())) {
+        return true;
+    }
 
-	for(size_t i=0, n=p->getNumInteriorRing(); i<n; ++i)
-	{
-		if (hasRepeatedPoint(p->getInteriorRingN(i)->getCoordinates()))
-		{
-			return true;
-		}
-	}
-	return false;
+    for(size_t i = 0, n = p->getNumInteriorRing(); i < n; ++i) {
+        if(hasRepeatedPoint(p->getInteriorRingN(i)->getCoordinates())) {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool
-RepeatedPointTester::hasRepeatedPoint(const GeometryCollection *gc)
+RepeatedPointTester::hasRepeatedPoint(const GeometryCollection* gc)
 {
-	for(size_t i=0, n=gc->getNumGeometries(); i<n; ++i)
-	{
-		const Geometry *g=gc->getGeometryN(i);
-		if (hasRepeatedPoint(g)) return true;
-	}
-	return false;
+    for(size_t i = 0, n = gc->getNumGeometries(); i < n; ++i) {
+        const Geometry* g = gc->getGeometryN(i);
+        if(hasRepeatedPoint(g)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool
-RepeatedPointTester::hasRepeatedPoint(const MultiPolygon *gc)
+RepeatedPointTester::hasRepeatedPoint(const MultiPolygon* gc)
 {
-	for(size_t i=0, n=gc->getNumGeometries(); i<n; ++i)
-	{
-		const Geometry *g=gc->getGeometryN(i);
-		if (hasRepeatedPoint(g)) return true;
-	}
-	return false;
+    for(size_t i = 0, n = gc->getNumGeometries(); i < n; ++i) {
+        const Geometry* g = gc->getGeometryN(i);
+        if(hasRepeatedPoint(g)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool
-RepeatedPointTester::hasRepeatedPoint(const MultiLineString *gc)
+RepeatedPointTester::hasRepeatedPoint(const MultiLineString* gc)
 {
-	for(size_t i=0, n=gc->getNumGeometries(); i<n; ++i)
-	{
-		const Geometry *g=gc->getGeometryN(i);
-		if (hasRepeatedPoint(g)) return true;
-	}
-	return false;
+    for(size_t i = 0, n = gc->getNumGeometries(); i < n; ++i) {
+        const Geometry* g = gc->getGeometryN(i);
+        if(hasRepeatedPoint(g)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 } // namespace geos.operation.valid

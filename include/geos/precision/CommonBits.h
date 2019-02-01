@@ -34,61 +34,61 @@ class GEOS_DLL CommonBits {
 
 private:
 
-	bool isFirst;
+    bool isFirst;
 
-	int commonMantissaBitsCount;
+    int commonMantissaBitsCount;
 
-	int64 commonBits;
+    int64 commonBits;
 
-	int64 commonSignExp;
+    int64 commonSignExp;
 
 public:
 
-	/** \brief
-	 * Computes the bit pattern for the sign and exponent of a
-	 * double-precision number.
-	 *
-	 * @param num
-	 * @return the bit pattern for the sign and exponent
-	 */
-	static int64 signExpBits(int64 num);
+    /** \brief
+     * Computes the bit pattern for the sign and exponent of a
+     * double-precision number.
+     *
+     * @param num
+     * @return the bit pattern for the sign and exponent
+     */
+    static int64 signExpBits(int64 num);
 
-	/** \brief
-	 * This computes the number of common most-significant
-	 * bits in the mantissas of two double-precision numbers.
-	 *
-	 * It does not count the hidden bit, which is always 1.
-	 * It does not determine whether the numbers have the same
-	 * exponent - if they do not, the value computed by this
-	 * function is meaningless.
-	 * @param db
-	 * @return the number of common most-significant mantissa bits
-	 */
-	static int numCommonMostSigMantissaBits(int64 num1, int64 num2);
+    /** \brief
+     * This computes the number of common most-significant
+     * bits in the mantissas of two double-precision numbers.
+     *
+     * It does not count the hidden bit, which is always 1.
+     * It does not determine whether the numbers have the same
+     * exponent - if they do not, the value computed by this
+     * function is meaningless.
+     * @param db
+     * @return the number of common most-significant mantissa bits
+     */
+    static int numCommonMostSigMantissaBits(int64 num1, int64 num2);
 
-	/** \brief
-	 * Zeroes the lower n bits of a bitstring.
-	 *
-	 * @param bits the bitstring to alter
-	 * @param i the number of bits to zero
-	 * @return the zeroed bitstring
-	 */
-	static int64 zeroLowerBits(int64 bits, int nBits);
+    /** \brief
+     * Zeroes the lower n bits of a bitstring.
+     *
+     * @param bits the bitstring to alter
+     * @param i the number of bits to zero
+     * @return the zeroed bitstring
+     */
+    static int64 zeroLowerBits(int64 bits, int nBits);
 
-	/** \brief
-	 * Extracts the i'th bit of a bitstring.
-	 *
-	 * @param bits the bitstring to extract from
-	 * @param i the bit to extract
-	 * @return the value of the extracted bit
-	 */
-	static int getBit(int64 bits, int i);
+    /** \brief
+     * Extracts the i'th bit of a bitstring.
+     *
+     * @param bits the bitstring to extract from
+     * @param i the bit to extract
+     * @return the value of the extracted bit
+     */
+    static int getBit(int64 bits, int i);
 
-	CommonBits();
+    CommonBits();
 
-	void add(double num);
+    void add(double num);
 
-	double getCommon();
+    double getCommon();
 
 };
 

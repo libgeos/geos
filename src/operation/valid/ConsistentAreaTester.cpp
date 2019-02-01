@@ -41,12 +41,12 @@ namespace geos {
 namespace operation { // geos.operation
 namespace valid { // geos.operation.valid
 
-ConsistentAreaTester::ConsistentAreaTester(GeometryGraph *newGeomGraph)
-	:
-	li(),
-	geomGraph(newGeomGraph),
-	nodeGraph(),
-	invalidPoint()
+ConsistentAreaTester::ConsistentAreaTester(GeometryGraph* newGeomGraph)
+    :
+    li(),
+    geomGraph(newGeomGraph),
+    nodeGraph(),
+    invalidPoint()
 {
 }
 
@@ -57,71 +57,69 @@ ConsistentAreaTester::~ConsistentAreaTester()
 Coordinate&
 ConsistentAreaTester::getInvalidPoint()
 {
-	return invalidPoint;
+    return invalidPoint;
 }
 
 bool
 ConsistentAreaTester::isNodeConsistentArea()
 {
-	using geomgraph::index::SegmentIntersector;
+    using geomgraph::index::SegmentIntersector;
 
-	/**
-	 * To fully check validity, it is necessary to
-	 * compute ALL intersections, including self-intersections within a single edge.
-	 */
-	unique_ptr<SegmentIntersector> intersector(geomGraph->computeSelfNodes(&li, true, true));
-	/**
-	* A proper intersection means that the area is not consistent.
-	*/
-	if (intersector->hasProperIntersection()) {
-		invalidPoint=intersector->getProperIntersectionPoint();
-		return false;
-	}
-	nodeGraph.build(geomGraph);
-	return isNodeEdgeAreaLabelsConsistent();
+    /**
+     * To fully check validity, it is necessary to
+     * compute ALL intersections, including self-intersections within a single edge.
+     */
+    unique_ptr<SegmentIntersector> intersector(geomGraph->computeSelfNodes(&li, true, true));
+    /**
+    * A proper intersection means that the area is not consistent.
+    */
+    if(intersector->hasProperIntersection()) {
+        invalidPoint = intersector->getProperIntersectionPoint();
+        return false;
+    }
+    nodeGraph.build(geomGraph);
+    return isNodeEdgeAreaLabelsConsistent();
 }
 
 /*private*/
 bool
 ConsistentAreaTester::isNodeEdgeAreaLabelsConsistent()
 {
-	assert(geomGraph);
+    assert(geomGraph);
 
-	map<Coordinate*,Node*,CoordinateLessThen>& nMap=nodeGraph.getNodeMap();
-	map<Coordinate*,Node*,CoordinateLessThen>::iterator nodeIt;
-	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
-		relate::RelateNode *node=static_cast<relate::RelateNode*>(nodeIt->second);
-		if (!node->getEdges()->isAreaLabelsConsistent(*geomGraph)) {
-			invalidPoint=node->getCoordinate();
-			return false;
-		}
-	}
-	return true;
+    map<Coordinate*, Node*, CoordinateLessThen>& nMap = nodeGraph.getNodeMap();
+    map<Coordinate*, Node*, CoordinateLessThen>::iterator nodeIt;
+    for(nodeIt = nMap.begin(); nodeIt != nMap.end(); nodeIt++) {
+        relate::RelateNode* node = static_cast<relate::RelateNode*>(nodeIt->second);
+        if(!node->getEdges()->isAreaLabelsConsistent(*geomGraph)) {
+            invalidPoint = node->getCoordinate();
+            return false;
+        }
+    }
+    return true;
 }
 
 /*public*/
 bool
 ConsistentAreaTester::hasDuplicateRings()
 {
-	map<Coordinate*,Node*,CoordinateLessThen>& nMap=nodeGraph.getNodeMap();
-	map<Coordinate*,Node*,CoordinateLessThen>::iterator nodeIt;
-	for(nodeIt=nMap.begin(); nodeIt!=nMap.end(); ++nodeIt)
-	{
-		assert(dynamic_cast<relate::RelateNode*>(nodeIt->second));
-		relate::RelateNode *node=static_cast<relate::RelateNode*>(nodeIt->second);
-		EdgeEndStar *ees=node->getEdges();
-		EdgeEndStar::iterator endIt=ees->end();
-		for(EdgeEndStar::iterator it=ees->begin(); it!=endIt; ++it)
-		{
-			assert(dynamic_cast<relate::EdgeEndBundle*>(*it));
-			relate::EdgeEndBundle *eeb=static_cast<relate::EdgeEndBundle*>(*it);
-			if (eeb->getEdgeEnds()->size()>1) {
-				invalidPoint=eeb->getEdge()->getCoordinate(0);
-				return true;
-			}
-		}
-	}
-	return false;
+    map<Coordinate*, Node*, CoordinateLessThen>& nMap = nodeGraph.getNodeMap();
+    map<Coordinate*, Node*, CoordinateLessThen>::iterator nodeIt;
+    for(nodeIt = nMap.begin(); nodeIt != nMap.end(); ++nodeIt) {
+        assert(dynamic_cast<relate::RelateNode*>(nodeIt->second));
+        relate::RelateNode* node = static_cast<relate::RelateNode*>(nodeIt->second);
+        EdgeEndStar* ees = node->getEdges();
+        EdgeEndStar::iterator endIt = ees->end();
+        for(EdgeEndStar::iterator it = ees->begin(); it != endIt; ++it) {
+            assert(dynamic_cast<relate::EdgeEndBundle*>(*it));
+            relate::EdgeEndBundle* eeb = static_cast<relate::EdgeEndBundle*>(*it);
+            if(eeb->getEdgeEnds()->size() > 1) {
+                invalidPoint = eeb->getEdge()->getCoordinate(0);
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 } // namespace geos.operation.valid

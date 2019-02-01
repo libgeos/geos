@@ -31,16 +31,16 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class GeometryFactory;
-		class CoordinateSequence;
-		class LineString;
-	}
-	namespace operation {
-		namespace linemerge {
-			class LineMergeDirectedEdge;
-		}
-	}
+namespace geom {
+class GeometryFactory;
+class CoordinateSequence;
+class LineString;
+}
+namespace operation {
+namespace linemerge {
+class LineMergeDirectedEdge;
+}
+}
 }
 
 namespace geos {
@@ -54,29 +54,29 @@ namespace linemerge { // geos::operation::linemerge
  */
 class GEOS_DLL EdgeString {
 private:
-	const geom::GeometryFactory *factory;
-	std::vector<LineMergeDirectedEdge*> directedEdges;
-	geom::CoordinateSequence *coordinates;
-	geom::CoordinateSequence* getCoordinates();
+    const geom::GeometryFactory* factory;
+    std::vector<LineMergeDirectedEdge*> directedEdges;
+    geom::CoordinateSequence* coordinates;
+    geom::CoordinateSequence* getCoordinates();
 public:
-	/*
-	 * \brief
-	 * Constructs an EdgeString with the given factory used to
-	 * convert this EdgeString to a LineString
-	 */
-	EdgeString(const geom::GeometryFactory *newFactory);
+    /*
+     * \brief
+     * Constructs an EdgeString with the given factory used to
+     * convert this EdgeString to a LineString
+     */
+    EdgeString(const geom::GeometryFactory* newFactory);
 
-	~EdgeString();
+    ~EdgeString();
 
-	/**
-	* Adds a directed edge which is known to form part of this line.
-	*/
-	void add(LineMergeDirectedEdge *directedEdge);
+    /**
+    * Adds a directed edge which is known to form part of this line.
+    */
+    void add(LineMergeDirectedEdge* directedEdge);
 
-	/*
-	 * Converts this EdgeString into a LineString.
-	 */
-	geom::LineString* toLineString();
+    /*
+     * Converts this EdgeString into a LineString.
+     */
+    geom::LineString* toLineString();
 };
 
 } // namespace geos::operation::linemerge

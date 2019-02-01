@@ -29,10 +29,10 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom { // geos::geom
-		class Coordinate;
-		class CoordinateArraySequence;
-	}
+namespace geom { // geos::geom
+class Coordinate;
+class CoordinateArraySequence;
+}
 }
 
 namespace geos {
@@ -57,63 +57,71 @@ class GEOS_DLL LinearRing : public LineString {
 
 public:
 
-	/**
-	 * The minimum number of vertices allowed in a valid non-empty ring (= 4).
-	 * Empty rings with 0 vertices are also valid.
-	 */
-	static const unsigned int MINIMUM_VALID_SIZE = 4;
+    /**
+     * The minimum number of vertices allowed in a valid non-empty ring (= 4).
+     * Empty rings with 0 vertices are also valid.
+     */
+    static const unsigned int MINIMUM_VALID_SIZE = 4;
 
-	LinearRing(const LinearRing &lr);
+    LinearRing(const LinearRing& lr);
 
-	/**
-	 * \brief Constructs a <code>LinearRing</code> with the given points.
-	 *
-	 * @param  points  points forming a closed and simple linestring, or
-	 *      <code>null</code> or an empty array to create the empty
-	 *      geometry.
-	 *      This array must not contain <code>null</code> elements.
-	 *	If not null LinearRing will take ownership of points.
-	 *
-	 * @param newFactory the GeometryFactory used to create this geometry
-	 *
-	 */
-	LinearRing(CoordinateSequence* points,
-			const GeometryFactory *newFactory);
+    /**
+     * \brief Constructs a <code>LinearRing</code> with the given points.
+     *
+     * @param  points  points forming a closed and simple linestring, or
+     *      <code>null</code> or an empty array to create the empty
+     *      geometry.
+     *      This array must not contain <code>null</code> elements.
+     *	If not null LinearRing will take ownership of points.
+     *
+     * @param newFactory the GeometryFactory used to create this geometry
+     *
+     */
+    LinearRing(CoordinateSequence* points,
+               const GeometryFactory* newFactory);
 
-	/// Hopefully cleaner version of the above
-	LinearRing(CoordinateSequence::Ptr points,
-			const GeometryFactory *newFactory);
+    /// Hopefully cleaner version of the above
+    LinearRing(CoordinateSequence::Ptr points,
+               const GeometryFactory* newFactory);
 
-	Geometry *clone() const override { return new LinearRing(*this); }
+    Geometry*
+    clone() const override
+    {
+        return new LinearRing(*this);
+    }
 
-	~LinearRing() override;
+    ~LinearRing() override;
 
-	/** \brief
-	 * Returns <code>Dimension.FALSE</code>, since by definition
-	 * LinearRings do not have a boundary.
-	 *
-	 * @return Dimension::False
-	 */
-	int getBoundaryDimension() const override;
+    /** \brief
+     * Returns <code>Dimension.FALSE</code>, since by definition
+     * LinearRings do not have a boundary.
+     *
+     * @return Dimension::False
+     */
+    int getBoundaryDimension() const override;
 
-	bool isClosed() const override;
+    bool isClosed() const override;
 
-	std::string getGeometryType() const override;
+    std::string getGeometryType() const override;
 
-	GeometryTypeId getGeometryTypeId() const override;
+    GeometryTypeId getGeometryTypeId() const override;
 
-	void setPoints(CoordinateSequence* cl);
+    void setPoints(CoordinateSequence* cl);
 
-  	Geometry* reverse() const override;
+    Geometry* reverse() const override;
 
 protected:
 
-		int getSortIndex() const override { return SORTINDEX_LINEARRING; };
+    int
+    getSortIndex() const override
+    {
+        return SORTINDEX_LINEARRING;
+    };
 
 
 private:
 
-	void validateConstruction();
+    void validateConstruction();
 };
 
 

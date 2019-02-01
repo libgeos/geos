@@ -24,10 +24,10 @@
 
 // Forward declarations
 namespace geos {
-	namespace planargraph {
-		//class DirectedEdgeStar;
-		class DirectedEdge;
-	}
+namespace planargraph {
+//class DirectedEdgeStar;
+class DirectedEdge;
+}
 }
 
 namespace geos {
@@ -45,84 +45,103 @@ namespace planargraph { // geos.planargraph
 class GEOS_DLL Node: public GraphComponent {
 protected:
 
-	/// The location of this Node
-	geom::Coordinate pt;
+    /// The location of this Node
+    geom::Coordinate pt;
 
-	/// The collection of DirectedEdges that leave this Node
-	DirectedEdgeStar *deStar;
+    /// The collection of DirectedEdges that leave this Node
+    DirectedEdgeStar* deStar;
 
 public:
 
-	friend std::ostream& operator << (std::ostream& os, const Node&);
+    friend std::ostream& operator << (std::ostream& os, const Node&);
 
-	/** \brief
-	 * Returns all Edges that connect the two nodes (which are
-	 * assumed to be different).
-	 *
-	 * Note: returned vector is newly allocated, ownership to
-	 * the caller.
-	 */
-	static std::vector<Edge*>* getEdgesBetween(Node *node0,
-			Node *node1);
+    /** \brief
+     * Returns all Edges that connect the two nodes (which are
+     * assumed to be different).
+     *
+     * Note: returned vector is newly allocated, ownership to
+     * the caller.
+     */
+    static std::vector<Edge*>* getEdgesBetween(Node* node0,
+            Node* node1);
 
-	/// Constructs a Node with the given location.
-	Node(const geom::Coordinate& newPt)
-		:
-		pt(newPt)
-		{ deStar=new DirectedEdgeStar(); }
+    /// Constructs a Node with the given location.
+    Node(const geom::Coordinate& newPt)
+        :
+        pt(newPt)
+    {
+        deStar = new DirectedEdgeStar();
+    }
 
-	~Node() override {
-		delete deStar;
-	}
+    ~Node() override
+    {
+        delete deStar;
+    }
 
-	/**
-	 * \brief
-	 * Constructs a Node with the given location and
-	 * collection of outgoing DirectedEdges.
-	 * Takes ownership of the given DirectedEdgeStar!!
-	 */
-	Node(geom::Coordinate& newPt, DirectedEdgeStar *newDeStar)
-		:
-		pt(newPt),
-		deStar(newDeStar)
-		{}
+    /**
+     * \brief
+     * Constructs a Node with the given location and
+     * collection of outgoing DirectedEdges.
+     * Takes ownership of the given DirectedEdgeStar!!
+     */
+    Node(geom::Coordinate& newPt, DirectedEdgeStar* newDeStar)
+        :
+        pt(newPt),
+        deStar(newDeStar)
+    {}
 
-	/**
-	 * \brief Returns the location of this Node.
-	 */
-	geom::Coordinate& getCoordinate() {
-		return pt;
-	}
+    /**
+     * \brief Returns the location of this Node.
+     */
+    geom::Coordinate&
+    getCoordinate()
+    {
+        return pt;
+    }
 
-	/**
-	 * \brief Adds an outgoing DirectedEdge to this Node.
-	 */
-	void addOutEdge(DirectedEdge *de) {
-		deStar->add(de);
-	}
+    /**
+     * \brief Adds an outgoing DirectedEdge to this Node.
+     */
+    void
+    addOutEdge(DirectedEdge* de)
+    {
+        deStar->add(de);
+    }
 
-	/**
-	 * \brief Returns the collection of DirectedEdges that
-	 * leave this Node.
-	 */
-	DirectedEdgeStar* getOutEdges() { return deStar; }
-	const DirectedEdgeStar* getOutEdges() const { return deStar; }
+    /**
+     * \brief Returns the collection of DirectedEdges that
+     * leave this Node.
+     */
+    DirectedEdgeStar*
+    getOutEdges()
+    {
+        return deStar;
+    }
+    const DirectedEdgeStar*
+    getOutEdges() const
+    {
+        return deStar;
+    }
 
-	/**
-	 * \brief Returns the number of edges around this Node.
-	 */
-	size_t getDegree() const {
-		return deStar->getDegree();
-	}
+    /**
+     * \brief Returns the number of edges around this Node.
+     */
+    size_t
+    getDegree() const
+    {
+        return deStar->getDegree();
+    }
 
-	/**
-	 * \brief Returns the zero-based index of the given Edge,
-	 * after sorting in ascending order by angle with
-	 * the positive x-axis.
-	 */
-	int getIndex(Edge *edge) {
-		return deStar->getIndex(edge);
-	}
+    /**
+     * \brief Returns the zero-based index of the given Edge,
+     * after sorting in ascending order by angle with
+     * the positive x-axis.
+     */
+    int
+    getIndex(Edge* edge)
+    {
+        return deStar->getIndex(edge);
+    }
 
 };
 

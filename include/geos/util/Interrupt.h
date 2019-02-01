@@ -27,42 +27,42 @@ class GEOS_DLL Interrupt {
 
 public:
 
-  typedef void (Callback)(void);
+    typedef void (Callback)(void);
 
-  /**
-   * Request interruption of operations
-   *
-   * Operations will be terminated by a GEOSInterrupt
-   * exception at first occasion.
-   */
-  static void request();
+    /**
+     * Request interruption of operations
+     *
+     * Operations will be terminated by a GEOSInterrupt
+     * exception at first occasion.
+     */
+    static void request();
 
-  /** Cancel a pending interruption request */
-  static void cancel();
+    /** Cancel a pending interruption request */
+    static void cancel();
 
-  /** Check if an interruption request is pending */
-  static bool check();
+    /** Check if an interruption request is pending */
+    static bool check();
 
-  /** \brief
-   * Register a callback that will be invoked
-   * before checking for interruption requests.
-   *
-   * NOTE that interruption request checking may happen
-   * frequently so any callback would better be quick.
-   *
-   * The callback can be used to call Interrupt::request()
-   *
-   */
-  static Callback* registerCallback(Callback *cb);
+    /** \brief
+     * Register a callback that will be invoked
+     * before checking for interruption requests.
+     *
+     * NOTE that interruption request checking may happen
+     * frequently so any callback would better be quick.
+     *
+     * The callback can be used to call Interrupt::request()
+     *
+     */
+    static Callback* registerCallback(Callback* cb);
 
-  /**
-   * Invoke the callback, if any. Process pending interruption, if any.
-   *
-   */
-  static void process();
+    /**
+     * Invoke the callback, if any. Process pending interruption, if any.
+     *
+     */
+    static void process();
 
-  /* Perform the actual interruption (simply throw an exception) */
-  static void interrupt();
+    /* Perform the actual interruption (simply throw an exception) */
+    static void interrupt();
 
 };
 

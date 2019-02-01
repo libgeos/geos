@@ -21,69 +21,71 @@
 using namespace geos;
 using namespace geos::geom;
 
-namespace tut
-{
-	//
-	// Test Group
-	//
+namespace tut {
+//
+// Test Group
+//
 
-	// dummy data, not used
-	struct test_length_data {
-        geos::geom::Geometry *geom_;
-        geos::geom::PrecisionModel pm_;
-        geos::geom::GeometryFactory::Ptr factory_;
-        geos::io::WKTReader reader_;
-        test_length_data():
-            geom_(nullptr),
-            pm_(1),
-            factory_(GeometryFactory::create(&pm_, 0)), reader_(factory_.get())
-        {
-            assert(nullptr == geom_);
-        }
-
-        ~test_length_data()
-        {
-            factory_->destroyGeometry(geom_);
-            geom_ = nullptr;
-        }
-
-        void checkLengthOfLine(std::string wkt, double expectedLength) {
-            std::unique_ptr<Geometry> lineGeom(reader_.read(wkt));
-            std::unique_ptr<LineString> line(dynamic_cast<LineString*>(lineGeom.release()));
-            ensure(nullptr != line.get());
-            const CoordinateSequence *lineSeq = line->getCoordinatesRO();
-            double actual = algorithm::Length::ofLine(lineSeq);
-            ensure_equals(actual, expectedLength);
-        }
-
-    };
-
- // void checkLengthOfLine(String wkt, double expectedLen) {
- //    LineString ring = (LineString) read(wkt);
-
- //    CoordinateSequence pts = ring.getCoordinateSequence();
- //    double actual = Length.ofLine(pts);
- //    assertEquals(actual, expectedLen);
- //  }
-
-
-
-
-    typedef test_group<test_length_data> group;
-    typedef group::object object;
-
-    group test_length_group("geos::algorithm::Length");
-
-
-    //
-    // Test Cases
-    //
-    template<>
-    template<>
-    void object::test<1>()
+// dummy data, not used
+struct test_length_data {
+    geos::geom::Geometry* geom_;
+    geos::geom::PrecisionModel pm_;
+    geos::geom::GeometryFactory::Ptr factory_;
+    geos::io::WKTReader reader_;
+    test_length_data():
+        geom_(nullptr),
+        pm_(1),
+        factory_(GeometryFactory::create(&pm_, 0)), reader_(factory_.get())
     {
-        checkLengthOfLine("LINESTRING (100 200, 200 200, 200 100, 100 100, 100 200)", 400.0);
+        assert(nullptr == geom_);
     }
+
+    ~test_length_data()
+    {
+        factory_->destroyGeometry(geom_);
+        geom_ = nullptr;
+    }
+
+    void
+    checkLengthOfLine(std::string wkt, double expectedLength)
+    {
+        std::unique_ptr<Geometry> lineGeom(reader_.read(wkt));
+        std::unique_ptr<LineString> line(dynamic_cast<LineString*>(lineGeom.release()));
+        ensure(nullptr != line.get());
+        const CoordinateSequence* lineSeq = line->getCoordinatesRO();
+        double actual = algorithm::Length::ofLine(lineSeq);
+        ensure_equals(actual, expectedLength);
+    }
+
+};
+
+// void checkLengthOfLine(String wkt, double expectedLen) {
+//    LineString ring = (LineString) read(wkt);
+
+//    CoordinateSequence pts = ring.getCoordinateSequence();
+//    double actual = Length.ofLine(pts);
+//    assertEquals(actual, expectedLen);
+//  }
+
+
+
+
+typedef test_group<test_length_data> group;
+typedef group::object object;
+
+group test_length_group("geos::algorithm::Length");
+
+
+//
+// Test Cases
+//
+template<>
+template<>
+void object::test<1>
+()
+{
+    checkLengthOfLine("LINESTRING (100 200, 200 200, 200 100, 100 100, 100 200)", 400.0);
+}
 
 
 

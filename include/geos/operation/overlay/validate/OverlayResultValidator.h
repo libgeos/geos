@@ -33,10 +33,10 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Geometry;
-		class Coordinate;
-	}
+namespace geom {
+class Geometry;
+class Coordinate;
+}
 }
 
 namespace geos {
@@ -65,56 +65,58 @@ class GEOS_DLL OverlayResultValidator {
 
 public:
 
-	static bool isValid(
-			const geom::Geometry& geom0,
-			const geom::Geometry& geom1,
-			OverlayOp::OpCode opCode,
-			const geom::Geometry& result);
+    static bool isValid(
+        const geom::Geometry& geom0,
+        const geom::Geometry& geom1,
+        OverlayOp::OpCode opCode,
+        const geom::Geometry& result);
 
-	OverlayResultValidator(
-			const geom::Geometry& geom0,
-			const geom::Geometry& geom1,
-			const geom::Geometry& result);
+    OverlayResultValidator(
+        const geom::Geometry& geom0,
+        const geom::Geometry& geom1,
+        const geom::Geometry& result);
 
-	bool isValid(OverlayOp::OpCode opCode);
+    bool isValid(OverlayOp::OpCode opCode);
 
-	geom::Coordinate& getInvalidLocation() {
-		return invalidLocation;
-	}
+    geom::Coordinate&
+    getInvalidLocation()
+    {
+        return invalidLocation;
+    }
 
 private:
 
-	double boundaryDistanceTolerance;
+    double boundaryDistanceTolerance;
 
-	const geom::Geometry& g0;
+    const geom::Geometry& g0;
 
-	const geom::Geometry& g1;
+    const geom::Geometry& g1;
 
-	const geom::Geometry& gres;
+    const geom::Geometry& gres;
 
-	FuzzyPointLocator fpl0;
+    FuzzyPointLocator fpl0;
 
-	FuzzyPointLocator fpl1;
+    FuzzyPointLocator fpl1;
 
-	FuzzyPointLocator fplres;
+    FuzzyPointLocator fplres;
 
-	geom::Coordinate invalidLocation;
+    geom::Coordinate invalidLocation;
 
-	std::vector<geom::Coordinate> testCoords;
+    std::vector<geom::Coordinate> testCoords;
 
-	void addTestPts(const geom::Geometry& g);
+    void addTestPts(const geom::Geometry& g);
 
-	void addVertices(const geom::Geometry& g);
+    void addVertices(const geom::Geometry& g);
 
-	bool testValid(OverlayOp::OpCode overlayOp);
+    bool testValid(OverlayOp::OpCode overlayOp);
 
-	bool testValid(OverlayOp::OpCode overlayOp, const geom::Coordinate& pt);
+    bool testValid(OverlayOp::OpCode overlayOp, const geom::Coordinate& pt);
 
-	bool isValidResult(OverlayOp::OpCode overlayOp,
-			std::vector<geom::Location::Value>& location);
+    bool isValidResult(OverlayOp::OpCode overlayOp,
+                       std::vector<geom::Location::Value>& location);
 
-	static double computeBoundaryDistanceTolerance(
-		const geom::Geometry& g0, const geom::Geometry& g1);
+    static double computeBoundaryDistanceTolerance(
+        const geom::Geometry& g0, const geom::Geometry& g1);
 
     // Declare type as noncopyable
     OverlayResultValidator(const OverlayResultValidator& other) = delete;

@@ -22,11 +22,11 @@
 
 // Forward declarations
 namespace geos {
-	namespace geomgraph {
-		namespace index {
-			class SweepLineEventOBJ;
-		}
-	}
+namespace geomgraph {
+namespace index {
+class SweepLineEventOBJ;
+}
+}
 }
 
 namespace geos {
@@ -35,66 +35,95 @@ namespace index { // geos::geomgraph::index
 
 //class SweepLineEventLessThen; // needed ??
 
-class GEOS_DLL SweepLineEvent{
-friend class SweepLineEventLessThen;
+class GEOS_DLL SweepLineEvent {
+    friend class SweepLineEventLessThen;
 
 public:
 
-	enum {
-		INSERT_EVENT = 1,
-		DELETE_EVENT
-	};
+    enum {
+        INSERT_EVENT = 1,
+        DELETE_EVENT
+    };
 
-	SweepLineEvent(void* newEdgeSet, double x,
-			SweepLineEvent *newInsertEvent,
-			SweepLineEventOBJ *newObj);
+    SweepLineEvent(void* newEdgeSet, double x,
+                   SweepLineEvent* newInsertEvent,
+                   SweepLineEventOBJ* newObj);
 
-	virtual ~SweepLineEvent();
+    virtual ~SweepLineEvent();
 
-	bool isInsert() { return insertEvent==nullptr; }
+    bool
+    isInsert()
+    {
+        return insertEvent == nullptr;
+    }
 
-	bool isDelete() { return insertEvent!=nullptr; }
+    bool
+    isDelete()
+    {
+        return insertEvent != nullptr;
+    }
 
-	SweepLineEvent* getInsertEvent() { return insertEvent; }
+    SweepLineEvent*
+    getInsertEvent()
+    {
+        return insertEvent;
+    }
 
-	size_t getDeleteEventIndex() { return deleteEventIndex; }
+    size_t
+    getDeleteEventIndex()
+    {
+        return deleteEventIndex;
+    }
 
-	void setDeleteEventIndex(size_t newDeleteEventIndex) {
-		deleteEventIndex=newDeleteEventIndex;
-	}
+    void
+    setDeleteEventIndex(size_t newDeleteEventIndex)
+    {
+        deleteEventIndex = newDeleteEventIndex;
+    }
 
-	SweepLineEventOBJ* getObject() const { return obj; }
+    SweepLineEventOBJ*
+    getObject() const
+    {
+        return obj;
+    }
 
-	int compareTo(SweepLineEvent *sle);
+    int compareTo(SweepLineEvent* sle);
 
-	std::string print();
+    std::string print();
 
-	void* edgeSet;    // used for red-blue intersection detection
+    void* edgeSet;    // used for red-blue intersection detection
 
 protected:
 
-	SweepLineEventOBJ* obj;
+    SweepLineEventOBJ* obj;
 
 private:
 
-	double xValue;
+    double xValue;
 
-	int eventType;
+    int eventType;
 
-	SweepLineEvent *insertEvent; // null if this is an INSERT_EVENT event
+    SweepLineEvent* insertEvent; // null if this is an INSERT_EVENT event
 
-	size_t deleteEventIndex;
+    size_t deleteEventIndex;
 };
 
 class GEOS_DLL SweepLineEventLessThen {
 public:
-	bool operator()(const SweepLineEvent *f, const SweepLineEvent *s) const
-	{
-		if (f->xValue<s->xValue) return true;
-		if (f->xValue>s->xValue) return false;
-		if (f->eventType<s->eventType) return true;
-		return false;
-	}
+    bool
+    operator()(const SweepLineEvent* f, const SweepLineEvent* s) const
+    {
+        if(f->xValue < s->xValue) {
+            return true;
+        }
+        if(f->xValue > s->xValue) {
+            return false;
+        }
+        if(f->eventType < s->eventType) {
+            return true;
+        }
+        return false;
+    }
 };
 
 

@@ -39,20 +39,20 @@ class GEOS_DLL GEOSException: public std::runtime_error {
 
 public:
 
-	GEOSException()
-		:
-		std::runtime_error("Unknown error")
-	{}
+    GEOSException()
+        :
+        std::runtime_error("Unknown error")
+    {}
 
-	GEOSException(std::string const& msg)
-		:
-		std::runtime_error(msg)
-	{}
+    GEOSException(std::string const& msg)
+        :
+        std::runtime_error(msg)
+    {}
 
-	GEOSException(std::string const& name, std::string const& msg)
-		:
-		std::runtime_error(name + ": "+msg)
-	{}
+    GEOSException(std::string const& name, std::string const& msg)
+        :
+        std::runtime_error(name + ": " + msg)
+    {}
 
 };
 

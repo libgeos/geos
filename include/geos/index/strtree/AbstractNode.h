@@ -42,47 +42,51 @@ namespace strtree { // geos::index::strtree
  */
 class GEOS_DLL AbstractNode: public Boundable {
 private:
-	std::vector<Boundable*> childBoundables;
-	int level;
+    std::vector<Boundable*> childBoundables;
+    int level;
 public:
-	AbstractNode(int newLevel, size_t capacity = 10);
-		~AbstractNode() override;
+    AbstractNode(int newLevel, size_t capacity = 10);
+    ~AbstractNode() override;
 
-	// TODO: change signature to return by ref,
-	// document ownership of the return
-	inline std::vector<Boundable*>* getChildBoundables() {
-		return &childBoundables;
-	}
+    // TODO: change signature to return by ref,
+    // document ownership of the return
+    inline std::vector<Boundable*>*
+    getChildBoundables()
+    {
+        return &childBoundables;
+    }
 
-	// TODO: change signature to return by ref,
-	// document ownership of the return
-	inline const std::vector<Boundable*>* getChildBoundables() const {
-		return &childBoundables;
-	}
+    // TODO: change signature to return by ref,
+    // document ownership of the return
+    inline const std::vector<Boundable*>*
+    getChildBoundables() const
+    {
+        return &childBoundables;
+    }
 
-	/**
-	 * Returns a representation of space that encloses this Boundable,
-	 * preferably not much bigger than this Boundable's boundary yet fast to
-	 * test for intersection with the bounds of other Boundables.
-	 * The class of object returned depends on the subclass of
-	 * AbstractSTRtree.
-	 *
-	 * @return an Envelope (for STRtrees), an Interval (for SIRtrees),
-	 *	or other object (for other subclasses of AbstractSTRtree)
-	 *
-	 * @see AbstractSTRtree::IntersectsOp
-	 */
-	const void* getBounds() const override;
+    /**
+     * Returns a representation of space that encloses this Boundable,
+     * preferably not much bigger than this Boundable's boundary yet fast to
+     * test for intersection with the bounds of other Boundables.
+     * The class of object returned depends on the subclass of
+     * AbstractSTRtree.
+     *
+     * @return an Envelope (for STRtrees), an Interval (for SIRtrees),
+     *	or other object (for other subclasses of AbstractSTRtree)
+     *
+     * @see AbstractSTRtree::IntersectsOp
+     */
+    const void* getBounds() const override;
 
-	int getLevel();
+    int getLevel();
 
-	void addChildBoundable(Boundable *childBoundable);
+    void addChildBoundable(Boundable* childBoundable);
 
 protected:
 
-	virtual void* computeBounds() const=0;
+    virtual void* computeBounds() const = 0;
 
-	mutable void* bounds;
+    mutable void* bounds;
 };
 
 

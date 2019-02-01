@@ -29,30 +29,32 @@ namespace distance { // geos.operation.distance
 * Constructs a GeometryLocation specifying a point on a geometry, as well as the
 * segment that the point is on (or INSIDE_AREA if the point is not on a segment).
 */
-GeometryLocation::GeometryLocation(const Geometry *newComponent, size_t newSegIndex, const Coordinate &newPt)
+GeometryLocation::GeometryLocation(const Geometry* newComponent, size_t newSegIndex, const Coordinate& newPt)
 {
-	component = newComponent;
-	segIndex = newSegIndex;
-	inside_area = false;
-	pt = newPt;
+    component = newComponent;
+    segIndex = newSegIndex;
+    inside_area = false;
+    pt = newPt;
 }
 
 /**
 * Constructs a GeometryLocation specifying a point inside an area geometry.
 */
-GeometryLocation::GeometryLocation(const Geometry *newComponent, const Coordinate &newPt)
+GeometryLocation::GeometryLocation(const Geometry* newComponent, const Coordinate& newPt)
 {
-	component = newComponent;
-	inside_area = true;
-	segIndex = INSIDE_AREA;
-	pt = newPt;
+    component = newComponent;
+    inside_area = true;
+    segIndex = INSIDE_AREA;
+    pt = newPt;
 }
 
 /**
 * Returns the geometry associated with this location.
 */
-const Geometry* GeometryLocation::getGeometryComponent() {
-	return component;
+const Geometry*
+GeometryLocation::getGeometryComponent()
+{
+    return component;
 }
 /**
 * Returns the segment index for this location. If the location is inside an
@@ -63,7 +65,7 @@ const Geometry* GeometryLocation::getGeometryComponent() {
 size_t
 GeometryLocation::getSegmentIndex()
 {
-	return segIndex;
+    return segIndex;
 }
 /**
 * Returns the location.
@@ -71,11 +73,13 @@ GeometryLocation::getSegmentIndex()
 Coordinate&
 GeometryLocation::getCoordinate()
 {
-	return pt;
+    return pt;
 }
 
-bool GeometryLocation::isInsideArea() {
-	return inside_area;
+bool
+GeometryLocation::isInsideArea()
+{
+    return inside_area;
 }
 
 } // namespace geos.operation.distance

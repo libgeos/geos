@@ -30,39 +30,45 @@ namespace strtree { // geos.index.strtree
  * @param level 0 if this node is a leaf, 1 if a parent of a leaf, and so on;
  * the root node will have the highest level
  */
-AbstractNode::AbstractNode(int newLevel, size_t capacity) {
-	childBoundables.reserve(capacity);
-	bounds=nullptr;
-	level=newLevel;
+AbstractNode::AbstractNode(int newLevel, size_t capacity)
+{
+    childBoundables.reserve(capacity);
+    bounds = nullptr;
+    level = newLevel;
 }
 
-AbstractNode::~AbstractNode() {
+AbstractNode::~AbstractNode()
+{
 }
 
-const void *
+const void*
 AbstractNode::getBounds() const
 {
-	if (bounds==nullptr) {
-		bounds = computeBounds();
-	}
-	return bounds;
+    if(bounds == nullptr) {
+        bounds = computeBounds();
+    }
+    return bounds;
 }
 
 /**
 * Returns 0 if this node is a leaf, 1 if a parent of a leaf, and so on; the
 * root node will have the highest level
 */
-int AbstractNode::getLevel() {
-	return level;
+int
+AbstractNode::getLevel()
+{
+    return level;
 }
 
 /**
  * Adds either an AbstractNode, or if this is a leaf node, a data object
  * (wrapped in an ItemBoundable)
  */
-void AbstractNode::addChildBoundable(Boundable *childBoundable) {
-	assert(bounds==nullptr);
-	childBoundables.push_back(childBoundable);
+void
+AbstractNode::addChildBoundable(Boundable* childBoundable)
+{
+    assert(bounds == nullptr);
+    childBoundables.push_back(childBoundable);
 }
 
 } // namespace geos.index.strtree

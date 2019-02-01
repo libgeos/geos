@@ -34,20 +34,20 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		//class Coordinate;
-		class Geometry;
-		class CoordinateSequence;
-		class GeometryFactory;
-		class LineString;
-	}
-	namespace geomgraph {
-		class GeometryGraph;
-		class PlanarGraph;
-		class EdgeRing;
-		class DirectedEdge;
-		class EdgeEnd;
-	}
+namespace geom {
+//class Coordinate;
+class Geometry;
+class CoordinateSequence;
+class GeometryFactory;
+class LineString;
+}
+namespace geomgraph {
+class GeometryGraph;
+class PlanarGraph;
+class EdgeRing;
+class DirectedEdge;
+class EdgeEnd;
+}
 }
 
 namespace geos {
@@ -70,68 +70,68 @@ namespace valid { // geos::operation::valid
  */
 class GEOS_DLL ConnectedInteriorTester {
 public:
-	ConnectedInteriorTester(geomgraph::GeometryGraph &newGeomGraph);
-	~ConnectedInteriorTester();
-	geom::Coordinate& getCoordinate();
-	bool isInteriorsConnected();
-	static const geom::Coordinate& findDifferentPoint(
-			const geom::CoordinateSequence *coord,
-			const geom::Coordinate& pt);
+    ConnectedInteriorTester(geomgraph::GeometryGraph& newGeomGraph);
+    ~ConnectedInteriorTester();
+    geom::Coordinate& getCoordinate();
+    bool isInteriorsConnected();
+    static const geom::Coordinate& findDifferentPoint(
+        const geom::CoordinateSequence* coord,
+        const geom::Coordinate& pt);
 
 protected:
 
-	void visitLinkedDirectedEdges(geomgraph::DirectedEdge *start);
+    void visitLinkedDirectedEdges(geomgraph::DirectedEdge* start);
 
 private:
 
-	geom::GeometryFactory::Ptr geometryFactory;
+    geom::GeometryFactory::Ptr geometryFactory;
 
-	geomgraph::GeometryGraph &geomGraph;
+    geomgraph::GeometryGraph& geomGraph;
 
-	/// Save a coordinate for any disconnected interior found
-	/// the coordinate will be somewhere on the ring surrounding
-	/// the disconnected interior
-	geom::Coordinate disconnectedRingcoord;
+    /// Save a coordinate for any disconnected interior found
+    /// the coordinate will be somewhere on the ring surrounding
+    /// the disconnected interior
+    geom::Coordinate disconnectedRingcoord;
 
-	/// Used to track MaximalEdgeRings allocations
-	std::vector<geomgraph::EdgeRing*> maximalEdgeRings;
+    /// Used to track MaximalEdgeRings allocations
+    std::vector<geomgraph::EdgeRing*> maximalEdgeRings;
 
-	void setInteriorEdgesInResult(geomgraph::PlanarGraph &graph);
+    void setInteriorEdgesInResult(geomgraph::PlanarGraph& graph);
 
 
-	/**
-	 * \brief
-	 * Form DirectedEdges in graph into Minimal EdgeRings.
-	 *
-	 * Minimal Edgerings must be used, because only they are
-	 * guaranteed to provide a correct isHole computation.
-	 *
-	 * @param minEdgeRings : newly allocated minimal edge rings will
-	 *                       be push_back'ed here.
-	 *                       deletion responsibility is left to caller.
-	 */
-	void buildEdgeRings(std::vector<geomgraph::EdgeEnd*> *dirEdges,
-	                    std::vector<geomgraph::EdgeRing*>& minEdgeRings);
+    /**
+     * \brief
+     * Form DirectedEdges in graph into Minimal EdgeRings.
+     *
+     * Minimal Edgerings must be used, because only they are
+     * guaranteed to provide a correct isHole computation.
+     *
+     * @param minEdgeRings : newly allocated minimal edge rings will
+     *                       be push_back'ed here.
+     *                       deletion responsibility is left to caller.
+     */
+    void buildEdgeRings(std::vector<geomgraph::EdgeEnd*>* dirEdges,
+                        std::vector<geomgraph::EdgeRing*>& minEdgeRings);
 
-	/**
-	 * Mark all the edges for the edgeRings corresponding to the shells
-	 * of the input polygons.  Note only ONE ring gets marked for each shell.
-	 */
-	void visitShellInteriors(const geom::Geometry *g, geomgraph::PlanarGraph &graph);
+    /**
+     * Mark all the edges for the edgeRings corresponding to the shells
+     * of the input polygons.  Note only ONE ring gets marked for each shell.
+     */
+    void visitShellInteriors(const geom::Geometry* g, geomgraph::PlanarGraph& graph);
 
-	void visitInteriorRing(const geom::LineString *ring, geomgraph::PlanarGraph &graph);
+    void visitInteriorRing(const geom::LineString* ring, geomgraph::PlanarGraph& graph);
 
-	/**
-	 * Check if any shell ring has an unvisited edge.
-	 * A shell ring is a ring which is not a hole and which has the interior
-	 * of the parent area on the RHS.
-	 * (Note that there may be non-hole rings with the interior on the LHS,
-	 * since the interior of holes will also be polygonized into CW rings
-	 * by the linkAllDirectedEdges() step)
-	 *
-	 * @return true if there is an unvisited edge in a non-hole ring
-	 */
-	bool hasUnvisitedShellEdge(std::vector<geomgraph::EdgeRing*> *edgeRings);
+    /**
+     * Check if any shell ring has an unvisited edge.
+     * A shell ring is a ring which is not a hole and which has the interior
+     * of the parent area on the RHS.
+     * (Note that there may be non-hole rings with the interior on the LHS,
+     * since the interior of holes will also be polygonized into CW rings
+     * by the linkAllDirectedEdges() step)
+     *
+     * @return true if there is an unvisited edge in a non-hole ring
+     */
+    bool hasUnvisitedShellEdge(std::vector<geomgraph::EdgeRing*>* edgeRings);
 
     // Declare type as noncopyable
     ConnectedInteriorTester(const ConnectedInteriorTester& other) = delete;

@@ -34,60 +34,59 @@ namespace intervalrtree {
 void
 SortedPackedIntervalRTree::init()
 {
-	if (root != nullptr) return;
+    if(root != nullptr) {
+        return;
+    }
 
-	root = buildTree();
+    root = buildTree();
 }
 
-const IntervalRTreeNode *
+const IntervalRTreeNode*
 SortedPackedIntervalRTree::buildTree()
 {
-	branches.reserve(leaves.size() - 1);
+    branches.reserve(leaves.size() - 1);
 
-	// now group nodes into blocks of two and build tree up recursively
-	std::vector<const IntervalRTreeNode*> src{leaves.size()};
-	std::vector<const IntervalRTreeNode*> dest;
-	std::transform(leaves.begin(), leaves.end(), src.begin(), [](const IntervalRTreeLeafNode & n) { return &n; });
+    // now group nodes into blocks of two and build tree up recursively
+    std::vector<const IntervalRTreeNode*> src{leaves.size()};
+    std::vector<const IntervalRTreeNode*> dest;
+    std::transform(leaves.begin(), leaves.end(), src.begin(), [](const IntervalRTreeLeafNode & n) {
+        return &n;
+    });
 
-	// sort the leaf nodes
-	std::sort( src.begin(), src.end(), IntervalRTreeNode::compare );
+    // sort the leaf nodes
+    std::sort(src.begin(), src.end(), IntervalRTreeNode::compare);
 
-	while (true)
-	{
-		buildLevel(src, dest);
+    while(true) {
+        buildLevel(src, dest);
 
-		if (dest.size() == 1)
-		{
-		    return dest[0];
-		}
+        if(dest.size() == 1) {
+            return dest[0];
+        }
 
-		std::swap(src, dest);
-	}
+        std::swap(src, dest);
+    }
 }
 
 void
-SortedPackedIntervalRTree::buildLevel(IntervalRTreeNode::ConstVect & src, IntervalRTreeNode::ConstVect & dest)
+SortedPackedIntervalRTree::buildLevel(IntervalRTreeNode::ConstVect& src, IntervalRTreeNode::ConstVect& dest)
 {
-	level++;
+    level++;
 
-	dest.clear();
+    dest.clear();
 
-	for (size_t i = 0, ni = src.size(); i < ni; i += 2)
-	{
-		const IntervalRTreeNode * n1 = src[i];
+    for(size_t i = 0, ni = src.size(); i < ni; i += 2) {
+        const IntervalRTreeNode* n1 = src[i];
 
-		if ( i + 1 < ni )
-		{
-			const IntervalRTreeNode * n2 = src[i + 1];
+        if(i + 1 < ni) {
+            const IntervalRTreeNode* n2 = src[i + 1];
 
-			branches.emplace_back(n1, n2);
-			dest.push_back(&branches.back());
-		}
-		else
-		{
-			dest.push_back( n1);
-		}
-	}
+            branches.emplace_back(n1, n2);
+            dest.push_back(&branches.back());
+        }
+        else {
+            dest.push_back(n1);
+        }
+    }
 }
 
 //
@@ -99,20 +98,21 @@ SortedPackedIntervalRTree::buildLevel(IntervalRTreeNode::ConstVect & src, Interv
 //
 
 void
-SortedPackedIntervalRTree::insert( double min, double max, void * item)
+SortedPackedIntervalRTree::insert(double min, double max, void* item)
 {
-	if (root != nullptr)
-		throw util::UnsupportedOperationException( "Index cannot be added to once it has been queried");
+    if(root != nullptr) {
+        throw util::UnsupportedOperationException("Index cannot be added to once it has been queried");
+    }
 
-	leaves.emplace_back(min, max, item);
+    leaves.emplace_back(min, max, item);
 }
 
 void
-SortedPackedIntervalRTree::query( double min, double max, index::ItemVisitor * visitor)
+SortedPackedIntervalRTree::query(double min, double max, index::ItemVisitor* visitor)
 {
-	init();
+    init();
 
-	root->query( min, max, visitor);
+    root->query(min, max, visitor);
 }
 
 } // geos::intervalrtree

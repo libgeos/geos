@@ -35,113 +35,119 @@ using namespace geos::geom;
 using namespace geos::io;
 using namespace std;
 
-class RectangleIntersectsPerfTest
-{
+class RectangleIntersectsPerfTest {
 public:
-  RectangleIntersectsPerfTest()
-    :
-    pm(),
-    fact(GeometryFactory::create(&pm, 0))
-  {}
+    RectangleIntersectsPerfTest()
+        :
+        pm(),
+        fact(GeometryFactory::create(&pm, 0))
+    {}
 
-  void test(int nPts)
-  {
-    double size = 100;
-    Coordinate origin(0, 0);
-    Geometry::Ptr sinePoly (
-      createSineStar(origin, size, nPts)->getBoundary()
-    );
+    void
+    test(int nPts)
+    {
+        double size = 100;
+        Coordinate origin(0, 0);
+        Geometry::Ptr sinePoly(
+            createSineStar(origin, size, nPts)->getBoundary()
+        );
 
-    /**
-     * Make the geometry "crinkly" by rounding off the points.
-     * This defeats the  MonotoneChain optimization in the full relate
-     * algorithm, and provides a more realistic test.
-     */
-    using geos::precision::SimpleGeometryPrecisionReducer;
-    PrecisionModel p_pm(size/10);
-    SimpleGeometryPrecisionReducer reducer(&p_pm);
-    Geometry::Ptr sinePolyCrinkly ( reducer.reduce(sinePoly.get()) );
-    sinePoly.reset();
+        /**
+         * Make the geometry "crinkly" by rounding off the points.
+         * This defeats the  MonotoneChain optimization in the full relate
+         * algorithm, and provides a more realistic test.
+         */
+        using geos::precision::SimpleGeometryPrecisionReducer;
+        PrecisionModel p_pm(size / 10);
+        SimpleGeometryPrecisionReducer reducer(&p_pm);
+        Geometry::Ptr sinePolyCrinkly(reducer.reduce(sinePoly.get()));
+        sinePoly.reset();
 
-    Geometry& target = *sinePolyCrinkly;
+        Geometry& target = *sinePolyCrinkly;
 
-    testRectangles(target, 30, 5);
-  }
+        testRectangles(target, 30, 5);
+    }
 
 
 private:
 
-  static const int MAX_ITER = 10;
+    static const int MAX_ITER = 10;
 
-  static const int NUM_AOI_PTS = 2000;
-  static const int NUM_LINES = 5000;
-  static const int NUM_LINE_PTS = 1000;
+    static const int NUM_AOI_PTS = 2000;
+    static const int NUM_LINES = 5000;
+    static const int NUM_LINE_PTS = 1000;
 
-  PrecisionModel pm;
-  GeometryFactory::Ptr fact;
+    PrecisionModel pm;
+    GeometryFactory::Ptr fact;
 
-  void testRectangles(const Geometry& target, int nRect, double rectSize)
-  {
-    vector<const Geometry*> rects;
-    createRectangles(*target.getEnvelopeInternal(), nRect, rectSize, rects);
-    test(rects, target);
-    for (vector<const Geometry*>::iterator i=rects.begin(), n=rects.end();
-      i!=n; ++i) delete *i;
-  }
-
-  void test(vector<const Geometry*>& rect, const Geometry& g)
-  {
-    typedef vector<const Geometry*>::size_type size_type;
-
-    geos::util::Profile sw("");
-		sw.start();
-
-    for (int i = 0; i < MAX_ITER; i++) {
-      for (size_type j = 0; j < rect.size(); j++) {
-        rect[j]->intersects(&g);
-      }
+    void
+    testRectangles(const Geometry& target, int nRect, double rectSize)
+    {
+        vector<const Geometry*> rects;
+        createRectangles(*target.getEnvelopeInternal(), nRect, rectSize, rects);
+        test(rects, target);
+        for(vector<const Geometry*>::iterator i = rects.begin(), n = rects.end();
+                i != n; ++i) {
+            delete *i;
+        }
     }
 
-		sw.stop();
-		cout << g.getNumPoints() << " points: " << sw.getTot() << " usecs" << endl;
+    void
+    test(vector<const Geometry*>& rect, const Geometry& g)
+    {
+        typedef vector<const Geometry*>::size_type size_type;
 
-  }
+        geos::util::Profile sw("");
+        sw.start();
 
-  // Push newly created geoms to rectLit
-  void createRectangles(const Envelope& env, int nRect, double,
-                        vector<const Geometry*>& rectList)
-  {
-    int nSide =  1 + (int)sqrt((double) nRect);
-    double dx = env.getWidth() / nSide;
-    double dy = env.getHeight() / nSide;
+        for(int i = 0; i < MAX_ITER; i++) {
+            for(size_type j = 0; j < rect.size(); j++) {
+                rect[j]->intersects(&g);
+            }
+        }
 
-    for (int i = 0; i < nSide; i++) {
-      for (int j = 0; j < nSide; j++) {
-        double baseX = env.getMinX() + i * dx;
-        double baseY = env.getMinY() + j * dy;
-        Envelope envRect(
-            baseX, baseX + dx,
-            baseY, baseY + dy);
-        Geometry* rect = fact->toGeometry(&envRect);
-        rectList.push_back(rect);
-      }
+        sw.stop();
+        cout << g.getNumPoints() << " points: " << sw.getTot() << " usecs" << endl;
+
     }
-  }
 
-  Polygon::Ptr createSineStar(const Coordinate& origin,
-                                    double size, int nPts)
-  {
-      using geos::geom::util::SineStarFactory;
+    // Push newly created geoms to rectLit
+    void
+    createRectangles(const Envelope& env, int nRect, double,
+                     vector<const Geometry*>& rectList)
+    {
+        int nSide =  1 + (int)sqrt((double) nRect);
+        double dx = env.getWidth() / nSide;
+        double dy = env.getHeight() / nSide;
 
-      SineStarFactory gsf(fact.get());
-      gsf.setCentre(origin);
-      gsf.setSize(size);
-      gsf.setNumPoints(nPts);
-      gsf.setArmLengthRatio(2);
-      gsf.setNumArms(20);
-      Polygon::Ptr poly = gsf.createSineStar();
-      return poly;
-  }
+        for(int i = 0; i < nSide; i++) {
+            for(int j = 0; j < nSide; j++) {
+                double baseX = env.getMinX() + i * dx;
+                double baseY = env.getMinY() + j * dy;
+                Envelope envRect(
+                    baseX, baseX + dx,
+                    baseY, baseY + dy);
+                Geometry* rect = fact->toGeometry(&envRect);
+                rectList.push_back(rect);
+            }
+        }
+    }
+
+    Polygon::Ptr
+    createSineStar(const Coordinate& origin,
+                   double size, int nPts)
+    {
+        using geos::geom::util::SineStarFactory;
+
+        SineStarFactory gsf(fact.get());
+        gsf.setCentre(origin);
+        gsf.setSize(size);
+        gsf.setNumPoints(nPts);
+        gsf.setArmLengthRatio(2);
+        gsf.setNumArms(20);
+        Polygon::Ptr poly = gsf.createSineStar();
+        return poly;
+    }
 
 
 };
@@ -150,9 +156,9 @@ int
 main()
 {
 
-  RectangleIntersectsPerfTest tester;
+    RectangleIntersectsPerfTest tester;
 
-  tester.test(500);
-  tester.test(100000);
+    tester.test(500);
+    tester.test(100000);
 }
 

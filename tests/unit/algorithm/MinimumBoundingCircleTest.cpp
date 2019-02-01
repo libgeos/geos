@@ -29,168 +29,177 @@
 #include <string>
 #include <memory>
 
-namespace tut
+namespace tut {
+//
+// Test Group
+//
+
+// dummy data, not used
+struct test_minimumboundingcircle_data {
+    typedef geos::geom::Geometry Geometry;
+    typedef geos::geom::Coordinate Coordinate;
+    typedef geos::geom::PrecisionModel PrecisionModel;
+    typedef geos::geom::GeometryFactory GeometryFactory;
+    typedef geos::algorithm::MinimumBoundingCircle MinimumBoundingCircle;
+
+    geos::io::WKTReader reader;
+    std::unique_ptr<Geometry> geom;
+    std::unique_ptr<Geometry> geomOut;
+    GeometryFactory::Ptr geomFact = GeometryFactory::create();
+
+    test_minimumboundingcircle_data()
+    {}
+
+    void
+    doMinimumBoundingCircleTest(std::string wktIn, std::string wktOut,
+                                geos::geom::Coordinate& centreOut, double radiusOut)
+    {
+
+        geom.reset(reader.read(wktIn));
+        MinimumBoundingCircle mbc(geom.get());
+        std::vector<Coordinate> exPts = mbc.getExtremalPoints();
+        std::unique_ptr<Geometry> actual(geomFact->createMultiPoint(exPts));
+        double actualRadius = mbc.getRadius();
+        geos::geom::Coordinate actualCentre = mbc.getCentre();
+
+        geomOut.reset(reader.read(wktOut));
+        bool isEqual = actual->equals(geomOut.get());
+
+        // need this hack because apparently equals does not work for MULTIPOINT EMPTY
+        if(geomOut->isEmpty() && geom->isEmpty()) {
+            isEqual = true;
+        }
+        if(!isEqual) {
+            std::cout << "Centre = " << actualCentre << " Radius = " << actualRadius << " isEqual = " << isEqual << std::endl;
+            std::cout << "Actual:"   << std::endl << actual->toString() << std::endl;
+            std::cout << "Expected:" << std::endl << geomOut->toString() << std::endl;
+        }
+        ensure(isEqual);
+
+        if(centreOut.isNull()) {
+            ensure(centreOut.distance(actualCentre) < 0.0001);
+        }
+        if(radiusOut >= 0) {
+            ensure(fabs(radiusOut - actualRadius) < 0.0001);
+        }
+    }
+
+    void
+    doMinimumBoundingCircleTest(std::string wktIn, std::string wktOut)
+    {
+        geos::geom::Coordinate c;
+        c.setNull();
+        doMinimumBoundingCircleTest(wktIn, wktOut, c, -1.0);
+    }
+
+};
+
+typedef test_group<test_minimumboundingcircle_data> group;
+typedef group::object object;
+
+group test_minimumboundingcircle_group("geos::algorithm::MinimumBoundingCircle");
+
+
+
+
+
+
+//
+// Test Cases
+//
+
+
+template<>
+template<>
+void object::test<1>
+()
 {
-    //
-    // Test Group
-    //
+    Coordinate c(10, 10);
+    doMinimumBoundingCircleTest(
+        "POINT (10 10)",
+        "POINT (10 10)",
+        c,
+        0);
 
-    // dummy data, not used
-    struct test_minimumboundingcircle_data {
-        typedef geos::geom::Geometry Geometry;
-        typedef geos::geom::Coordinate Coordinate;
-        typedef geos::geom::PrecisionModel PrecisionModel;
-        typedef geos::geom::GeometryFactory GeometryFactory;
-        typedef geos::algorithm::MinimumBoundingCircle MinimumBoundingCircle;
+}
 
-        geos::io::WKTReader reader;
-        std::unique_ptr<Geometry> geom;
-        std::unique_ptr<Geometry> geomOut;
-        GeometryFactory::Ptr geomFact = GeometryFactory::create();
+template<>
+template<>
+void object::test<2>
+()
+{
+    Coordinate c(15, 15);
+    doMinimumBoundingCircleTest(
+        "MULTIPOINT ((10 10), (20 20))",
+        "MULTIPOINT ((10 10), (20 20))",
+        c,
+        7.0710678118654755);
+}
 
-        test_minimumboundingcircle_data()
-        {}
+template<>
+template<>
+void object::test<3>
+()
+{
+    Coordinate c(20, 20);
+    doMinimumBoundingCircleTest(
+        "MULTIPOINT ((10 10), (20 20), (30 30))",
+        "MULTIPOINT ((10 10), (30 30))",
+        c,
+        14.142135623730951);
+}
 
-        void doMinimumBoundingCircleTest(std::string wktIn, std::string wktOut,
-            geos::geom::Coordinate &centreOut, double radiusOut)
-        {
+template<>
+template<>
+void object::test<4>
+()
+{
+    Coordinate c(15, 15);
+    doMinimumBoundingCircleTest(
+        "MULTIPOINT ((10 10), (20 20), (10 20))",
+        "MULTIPOINT ((10 10), (20 20), (10 20))",
+        c,
+        7.0710678118654755);
+}
 
-            geom.reset(reader.read(wktIn));
-            MinimumBoundingCircle mbc(geom.get());
-            std::vector<Coordinate> exPts = mbc.getExtremalPoints();
-            std::unique_ptr<Geometry> actual(geomFact->createMultiPoint(exPts));
-            double actualRadius = mbc.getRadius();
-            geos::geom::Coordinate actualCentre = mbc.getCentre();
+template<>
+template<>
+void object::test<5>
+()
+{
+    Coordinate c(150, 100);
+    doMinimumBoundingCircleTest(
+        "POLYGON ((100 100, 200 100, 150 90, 100 100))",
+        "MULTIPOINT ((100 100), (200 100))",
+        c,
+        50);
+}
 
-            geomOut.reset(reader.read(wktOut));
-            bool isEqual = actual->equals(geomOut.get());
+template<>
+template<>
+void object::test<6>
+()
+{
+    Coordinate c(15, 15);
+    doMinimumBoundingCircleTest(
+        "MULTIPOINT ((10 10), (20 20), (10 20), (15 19))",
+        "MULTIPOINT ((10 10), (20 20), (10 20))",
+        c,
+        7.0710678118654755);
+}
 
-            // need this hack because apparently equals does not work for MULTIPOINT EMPTY
-            if (geomOut->isEmpty() && geom->isEmpty())
-                isEqual = true;
-            if (!isEqual) {
-                std::cout << "Centre = " << actualCentre << " Radius = " << actualRadius << " isEqual = " << isEqual << std::endl;
-                std::cout << "Actual:"   << std::endl << actual->toString() << std::endl;
-                std::cout << "Expected:" << std::endl << geomOut->toString() << std::endl;
-            }
-            ensure(isEqual);
-
-            if (centreOut.isNull()) {
-                ensure(centreOut.distance(actualCentre) < 0.0001);
-            }
-            if (radiusOut >= 0) {
-                ensure(fabs(radiusOut - actualRadius) < 0.0001);
-            }
-        }
-
-        void doMinimumBoundingCircleTest(std::string wktIn, std::string wktOut)
-        {
-            geos::geom::Coordinate c;
-            c.setNull();
-            doMinimumBoundingCircleTest(wktIn, wktOut, c, -1.0);
-        }
-
-    };
-
-    typedef test_group<test_minimumboundingcircle_data> group;
-    typedef group::object object;
-
-    group test_minimumboundingcircle_group("geos::algorithm::MinimumBoundingCircle");
-
-
-
-
-
-
-    //
-    // Test Cases
-    //
-
-
-    template<>
-    template<>
-    void object::test<1>()
-    {
-        Coordinate c(10, 10);
-        doMinimumBoundingCircleTest(
-            "POINT (10 10)",
-            "POINT (10 10)",
-            c,
-            0);
-
-    }
-
-    template<>
-    template<>
-    void object::test<2>()
-    {
-        Coordinate c(15, 15);
-        doMinimumBoundingCircleTest(
-            "MULTIPOINT ((10 10), (20 20))",
-            "MULTIPOINT ((10 10), (20 20))",
-            c,
-            7.0710678118654755);
-    }
-
-    template<>
-    template<>
-    void object::test<3>()
-    {
-        Coordinate c(20, 20);
-        doMinimumBoundingCircleTest(
-            "MULTIPOINT ((10 10), (20 20), (30 30))",
-            "MULTIPOINT ((10 10), (30 30))",
-            c,
-            14.142135623730951);
-    }
-
-    template<>
-    template<>
-    void object::test<4>()
-    {
-        Coordinate c(15, 15);
-        doMinimumBoundingCircleTest(
-            "MULTIPOINT ((10 10), (20 20), (10 20))",
-            "MULTIPOINT ((10 10), (20 20), (10 20))",
-            c,
-            7.0710678118654755);
-    }
-
-    template<>
-    template<>
-    void object::test<5>()
-    {
-        Coordinate c(150, 100);
-        doMinimumBoundingCircleTest(
-            "POLYGON ((100 100, 200 100, 150 90, 100 100))",
-            "MULTIPOINT ((100 100), (200 100))",
-            c,
-            50);
-    }
-
-    template<>
-    template<>
-    void object::test<6>()
-    {
-        Coordinate c(15, 15);
-        doMinimumBoundingCircleTest(
-            "MULTIPOINT ((10 10), (20 20), (10 20), (15 19))",
-            "MULTIPOINT ((10 10), (20 20), (10 20))",
-            c,
-            7.0710678118654755);
-    }
-
-    template<>
-    template<>
-    void object::test<7>()
-    {
-        Coordinate c(26284.84180271327, 65267.114509082545);
-        doMinimumBoundingCircleTest(
-            "POLYGON ((26426 65078, 26531 65242, 26096 65427, 26075 65136, 26426 65078))",
-            "MULTIPOINT ((26531 65242), (26075 65136), (26096 65427))",
-            c,
-            247.4360455914027);
-    }
+template<>
+template<>
+void object::test<7>
+()
+{
+    Coordinate c(26284.84180271327, 65267.114509082545);
+    doMinimumBoundingCircleTest(
+        "POLYGON ((26426 65078, 26531 65242, 26096 65427, 26075 65136, 26426 65078))",
+        "MULTIPOINT ((26531 65242), (26075 65136), (26096 65427))",
+        c,
+        247.4360455914027);
+}
 
 
 

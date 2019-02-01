@@ -20,32 +20,37 @@
 #include <geos/geom/util/LinearComponentExtracter.h>
 
 namespace geos {
-   namespace geom { // geos.geom
-      namespace util { // geos.geom.util
+namespace geom { // geos.geom
+namespace util { // geos.geom.util
 
-         LinearComponentExtracter::LinearComponentExtracter(std::vector<const LineString*> &newComps)
-            :
-         comps(newComps)
-         {}
+LinearComponentExtracter::LinearComponentExtracter(std::vector<const LineString*>& newComps)
+    :
+    comps(newComps)
+{}
 
-         void LinearComponentExtracter::getLines(const Geometry &geom, std::vector<const LineString*> &ret)
-         {
-            LinearComponentExtracter lce(ret);
-            geom.apply_ro(&lce);
-         }
+void
+LinearComponentExtracter::getLines(const Geometry& geom, std::vector<const LineString*>& ret)
+{
+    LinearComponentExtracter lce(ret);
+    geom.apply_ro(&lce);
+}
 
-         void LinearComponentExtracter::filter_rw(Geometry *geom)
-         {
-            if ( const LineString *ls=dynamic_cast<const LineString *>(geom) )
-               comps.push_back(ls);
-         }
+void
+LinearComponentExtracter::filter_rw(Geometry* geom)
+{
+    if(const LineString* ls = dynamic_cast<const LineString*>(geom)) {
+        comps.push_back(ls);
+    }
+}
 
-         void LinearComponentExtracter::filter_ro(const Geometry *geom)
-         {
-            if ( const LineString *ls=dynamic_cast<const LineString *>(geom) )
-               comps.push_back(ls);
-         }
+void
+LinearComponentExtracter::filter_ro(const Geometry* geom)
+{
+    if(const LineString* ls = dynamic_cast<const LineString*>(geom)) {
+        comps.push_back(ls);
+    }
+}
 
-      }
-   }
+}
+}
 }

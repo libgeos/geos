@@ -28,18 +28,19 @@ namespace linemerge { // geos.operation.linemerge
 /**
 * Constructs a LineMergeEdge with vertices given by the specified LineString.
 */
-LineMergeEdge::LineMergeEdge(const LineString *newLine):
-	line(newLine)
+LineMergeEdge::LineMergeEdge(const LineString* newLine):
+    line(newLine)
 {
-	//line=newLine;
+    //line=newLine;
 }
 
 /**
  * Returns the LineString specifying the vertices of this edge.
  */
-const LineString *
-LineMergeEdge::getLine() const {
-	return line;
+const LineString*
+LineMergeEdge::getLine() const
+{
+    return line;
 }
 
 } // namespace geos.operation.linemerge

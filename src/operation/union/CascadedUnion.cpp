@@ -31,16 +31,19 @@ namespace geos {
 namespace operation { // geos.operation
 namespace geounion {  // geos.operation.geounion
 
-geom::Geometry* CascadedUnion::Union(std::vector<geom::Geometry*>* polys)
+geom::Geometry*
+CascadedUnion::Union(std::vector<geom::Geometry*>* polys)
 {
-    CascadedUnion op (polys);
+    CascadedUnion op(polys);
     return op.Union();
 }
 
-geom::Geometry* CascadedUnion::Union()
+geom::Geometry*
+CascadedUnion::Union()
 {
-    if (inputGeoms->empty())
+    if(inputGeoms->empty()) {
         return nullptr;
+    }
 
     geomFactory = inputGeoms->front()->getFactory();
 
@@ -54,17 +57,18 @@ geom::Geometry* CascadedUnion::Union()
 
     typedef std::vector<geom::Geometry*>::const_iterator iterator_type;
     iterator_type end = inputGeoms->end();
-    for (iterator_type i = inputGeoms->begin(); i != end; ++i) {
+    for(iterator_type i = inputGeoms->begin(); i != end; ++i) {
         geom::Geometry* g = *i;
         index.insert(g->getEnvelopeInternal(), g);
     }
 
-    std::unique_ptr<index::strtree::ItemsList> itemTree (index.itemsTree());
+    std::unique_ptr<index::strtree::ItemsList> itemTree(index.itemsTree());
 
     return unionTree(itemTree.get());
 }
 
-geom::Geometry* CascadedUnion::unionTree(
+geom::Geometry*
+CascadedUnion::unionTree(
     index::strtree::ItemsList* geomTree)
 {
     /**
@@ -75,25 +79,27 @@ geom::Geometry* CascadedUnion::unionTree(
     return binaryUnion(geoms.get());
 }
 
-geom::Geometry* CascadedUnion::binaryUnion(GeometryListHolder* geoms)
+geom::Geometry*
+CascadedUnion::binaryUnion(GeometryListHolder* geoms)
 {
     return binaryUnion(geoms, 0, geoms->size());
 }
 
-geom::Geometry* CascadedUnion::binaryUnion(GeometryListHolder* geoms,
-    std::size_t start, std::size_t end)
+geom::Geometry*
+CascadedUnion::binaryUnion(GeometryListHolder* geoms,
+                           std::size_t start, std::size_t end)
 {
-    if (end - start <= 1) {
+    if(end - start <= 1) {
         return unionSafe(geoms->getGeometry(start), nullptr);
     }
-    else if (end - start == 2) {
+    else if(end - start == 2) {
         return unionSafe(geoms->getGeometry(start), geoms->getGeometry(start + 1));
     }
     else {
         // recurse on both halves of the list
         std::size_t mid = (end + start) / 2;
-        std::unique_ptr<geom::Geometry> g0 (binaryUnion(geoms, start, mid));
-        std::unique_ptr<geom::Geometry> g1 (binaryUnion(geoms, mid, end));
+        std::unique_ptr<geom::Geometry> g0(binaryUnion(geoms, start, mid));
+        std::unique_ptr<geom::Geometry> g1(binaryUnion(geoms, mid, end));
         return unionSafe(g0.get(), g1.get());
     }
 }
@@ -101,17 +107,17 @@ geom::Geometry* CascadedUnion::binaryUnion(GeometryListHolder* geoms,
 GeometryListHolder*
 CascadedUnion::reduceToGeometries(index::strtree::ItemsList* geomTree)
 {
-    std::unique_ptr<GeometryListHolder> geoms (new GeometryListHolder());
+    std::unique_ptr<GeometryListHolder> geoms(new GeometryListHolder());
 
     typedef index::strtree::ItemsList::iterator iterator_type;
     iterator_type end = geomTree->end();
-    for (iterator_type i = geomTree->begin(); i != end; ++i) {
-        if ((*i).get_type() == index::strtree::ItemsListItem::item_is_list) {
-            std::unique_ptr<geom::Geometry> geom (unionTree((*i).get_itemslist()));
+    for(iterator_type i = geomTree->begin(); i != end; ++i) {
+        if((*i).get_type() == index::strtree::ItemsListItem::item_is_list) {
+            std::unique_ptr<geom::Geometry> geom(unionTree((*i).get_itemslist()));
             geoms->push_back_owned(geom.get());
             geom.release();
         }
-        else if ((*i).get_type() == index::strtree::ItemsListItem::item_is_geometry) {
+        else if((*i).get_type() == index::strtree::ItemsListItem::item_is_geometry) {
             geoms->push_back(reinterpret_cast<geom::Geometry*>((*i).get_geometry()));
         }
         else {
@@ -125,13 +131,16 @@ CascadedUnion::reduceToGeometries(index::strtree::ItemsList* geomTree)
 geom::Geometry*
 CascadedUnion::unionSafe(geom::Geometry* g0, geom::Geometry* g1)
 {
-    if (g0 == nullptr && g1 == nullptr)
+    if(g0 == nullptr && g1 == nullptr) {
         return nullptr;
+    }
 
-    if (g0 == nullptr)
+    if(g0 == nullptr) {
         return g1->clone();
-    if (g1 == nullptr)
+    }
+    if(g1 == nullptr) {
         return g0->clone();
+    }
 
     return unionOptimized(g0, g1);
 }
@@ -142,11 +151,13 @@ CascadedUnion::unionOptimized(geom::Geometry* g0, geom::Geometry* g1)
     geom::Envelope const* g0Env = g0->getEnvelopeInternal();
     geom::Envelope const* g1Env = g1->getEnvelopeInternal();
 
-    if (!g0Env->intersects(g1Env))
+    if(!g0Env->intersects(g1Env)) {
         return geom::util::GeometryCombiner::combine(g0, g1);
+    }
 
-    if (g0->getNumGeometries() <= 1 && g1->getNumGeometries() <= 1)
+    if(g0->getNumGeometries() <= 1 && g1->getNumGeometries() <= 1) {
         return unionActual(g0, g1);
+    }
 
     geom::Envelope commonEnv;
     g0Env->intersection(*g1Env, commonEnv);
@@ -155,7 +166,7 @@ CascadedUnion::unionOptimized(geom::Geometry* g0, geom::Geometry* g1)
 
 geom::Geometry*
 CascadedUnion::unionUsingEnvelopeIntersection(geom::Geometry* g0,
-    geom::Geometry* g1, geom::Envelope const& common)
+        geom::Geometry* g1, geom::Envelope const& common)
 {
     std::vector<geom::Geometry*> disjointPolys;
 
@@ -170,16 +181,18 @@ CascadedUnion::unionUsingEnvelopeIntersection(geom::Geometry* g0,
 
 geom::Geometry*
 CascadedUnion::extractByEnvelope(geom::Envelope const& env,
-    geom::Geometry* geom, std::vector<geom::Geometry*>& disjointGeoms)
+                                 geom::Geometry* geom, std::vector<geom::Geometry*>& disjointGeoms)
 {
     std::vector<geom::Geometry*> intersectingGeoms;
 
-    for (std::size_t i = 0; i < geom->getNumGeometries(); i++) {
+    for(std::size_t i = 0; i < geom->getNumGeometries(); i++) {
         geom::Geometry* elem = const_cast<geom::Geometry*>(geom->getGeometryN(i));
-        if (elem->getEnvelopeInternal()->intersects(env))
+        if(elem->getEnvelopeInternal()->intersects(env)) {
             intersectingGeoms.push_back(elem);
-        else
+        }
+        else {
             disjointGeoms.push_back(elem);
+        }
     }
 
     return geomFactory->buildGeometry(intersectingGeoms);

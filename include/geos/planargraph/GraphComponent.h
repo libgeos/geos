@@ -47,109 +47,134 @@ class GEOS_DLL GraphComponent {
 
 protected:
 
-	/// Variable holding ''marked'' status
-	bool isMarkedVar;
+    /// Variable holding ''marked'' status
+    bool isMarkedVar;
 
-	/// Variable holding ''visited'' status
-	bool isVisitedVar;
+    /// Variable holding ''visited'' status
+    bool isVisitedVar;
 
 public:
 
-	GraphComponent()
-		:
-		isMarkedVar(false),
-		isVisitedVar(false)
-		{}
+    GraphComponent()
+        :
+        isMarkedVar(false),
+        isVisitedVar(false)
+    {}
 
-	virtual ~GraphComponent() {}
+    virtual
+    ~GraphComponent() {}
 
-	/** \brief
-	 * Tests if a component has been visited during the course
-	 * of a graph algorithm.
-	 *
-	 * @return <code>true</code> if the component has been visited
-	 */
-	virtual bool isVisited() const { return isVisitedVar; }
+    /** \brief
+     * Tests if a component has been visited during the course
+     * of a graph algorithm.
+     *
+     * @return <code>true</code> if the component has been visited
+     */
+    virtual bool
+    isVisited() const
+    {
+        return isVisitedVar;
+    }
 
-	/** \brief
-	 * Sets the visited flag for this component.
-	 * @param isVisited the desired value of the visited flag
-	 */
-	virtual void setVisited(bool p_isVisited) { isVisitedVar=p_isVisited; }
+    /** \brief
+     * Sets the visited flag for this component.
+     * @param isVisited the desired value of the visited flag
+     */
+    virtual void
+    setVisited(bool p_isVisited)
+    {
+        isVisitedVar = p_isVisited;
+    }
 
-	/** \brief
-	 * Sets the Visited state for the elements of a container,
-	 * from start to end iterator.
-	 *
-	 * @param start the start element
-	 * @param end one past the last element
-	 * @param visited the state to set the visited flag to
-	 */
-	template <typename T>
-	static void setVisited(T start, T end, bool visited) {
-		for(T i=start; i!=end; ++i) {
-			(*i)->setVisited(visited);
-		}
-	}
+    /** \brief
+     * Sets the Visited state for the elements of a container,
+     * from start to end iterator.
+     *
+     * @param start the start element
+     * @param end one past the last element
+     * @param visited the state to set the visited flag to
+     */
+    template <typename T>
+    static void
+    setVisited(T start, T end, bool visited)
+    {
+        for(T i = start; i != end; ++i) {
+            (*i)->setVisited(visited);
+        }
+    }
 
-	/** \brief
-	 * Sets the Visited state for the values of each map
-	 * container element, from start to end iterator.
-	 *
-	 * @param start the start element
-	 * @param end one past the last element
-	 * @param visited the state to set the visited flag to
-	 */
-	template <typename T>
-	static void setVisitedMap(T start, T end, bool visited) {
-		for(T i=start; i!=end; ++i) {
-			i->second->setVisited(visited);
-		}
-	}
+    /** \brief
+     * Sets the Visited state for the values of each map
+     * container element, from start to end iterator.
+     *
+     * @param start the start element
+     * @param end one past the last element
+     * @param visited the state to set the visited flag to
+     */
+    template <typename T>
+    static void
+    setVisitedMap(T start, T end, bool visited)
+    {
+        for(T i = start; i != end; ++i) {
+            i->second->setVisited(visited);
+        }
+    }
 
-	/** \brief
-	 * Sets the Marked state for the elements of a container,
-	 * from start to end iterator.
-	 *
-	 * @param start the start element
-	 * @param end one past the last element
-	 * @param marked the state to set the marked flag to
-	 */
-	template <typename T>
-	static void setMarked(T start, T end, bool marked) {
-		for(T i=start; i!=end; ++i) {
-			(*i)->setMarked(marked);
-		}
-	}
+    /** \brief
+     * Sets the Marked state for the elements of a container,
+     * from start to end iterator.
+     *
+     * @param start the start element
+     * @param end one past the last element
+     * @param marked the state to set the marked flag to
+     */
+    template <typename T>
+    static void
+    setMarked(T start, T end, bool marked)
+    {
+        for(T i = start; i != end; ++i) {
+            (*i)->setMarked(marked);
+        }
+    }
 
 
-	/** \brief
-	 * Sets the Marked state for the values of each map
-	 * container element, from start to end iterator.
-	 *
-	 * @param start the start element
-	 * @param end one past the last element
-	 * @param marked the state to set the visited flag to
-	 */
-	template <typename T>
-	static void setMarkedMap(T start, T end, bool marked) {
-		for(T i=start; i!=end; ++i) {
-			i->second->setMarked(marked);
-		}
-	}
+    /** \brief
+     * Sets the Marked state for the values of each map
+     * container element, from start to end iterator.
+     *
+     * @param start the start element
+     * @param end one past the last element
+     * @param marked the state to set the visited flag to
+     */
+    template <typename T>
+    static void
+    setMarkedMap(T start, T end, bool marked)
+    {
+        for(T i = start; i != end; ++i) {
+            i->second->setMarked(marked);
+        }
+    }
 
-	/** \brief
-	 * Tests if a component has been marked at some point
-	 * during the processing involving this graph.
-	 * @return <code>true</code> if the component has been marked
-	 */
-	virtual bool isMarked() const { return isMarkedVar; }
+    /** \brief
+     * Tests if a component has been marked at some point
+     * during the processing involving this graph.
+     * @return <code>true</code> if the component has been marked
+     */
+    virtual bool
+    isMarked() const
+    {
+        return isMarkedVar;
+    }
 
-	/** \brief
-	 * Sets the marked flag for this component.
-	 * @param isMarked the desired value of the marked flag
-	 */
-	virtual void setMarked(bool p_isMarked) { isMarkedVar=p_isMarked; }
+    /** \brief
+     * Sets the marked flag for this component.
+     * @param isMarked the desired value of the marked flag
+     */
+    virtual void
+    setMarked(bool p_isMarked)
+    {
+        isMarkedVar = p_isMarked;
+    }
 
 };
 

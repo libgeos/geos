@@ -39,12 +39,12 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Coordinate;
-	}
-	namespace geomgraph {
-		class Edge;
-	}
+namespace geom {
+class Coordinate;
+}
+namespace geomgraph {
+class Edge;
+}
 }
 
 namespace geos {
@@ -56,54 +56,70 @@ namespace geomgraph { // geos.geomgraph
  * Implements splitting an edge with intersections
  * into multiple resultant edges.
  */
-class GEOS_DLL EdgeIntersectionList{
+class GEOS_DLL EdgeIntersectionList {
 public:
-	typedef std::set<EdgeIntersection *, EdgeIntersectionLessThen> container;
-	typedef container::iterator iterator;
-	typedef container::const_iterator const_iterator;
+    typedef std::set<EdgeIntersection*, EdgeIntersectionLessThen> container;
+    typedef container::iterator iterator;
+    typedef container::const_iterator const_iterator;
 
 private:
-	container nodeMap;
+    container nodeMap;
 
 public:
 
-	Edge *edge;
-	EdgeIntersectionList(Edge *edge);
-	~EdgeIntersectionList();
+    Edge* edge;
+    EdgeIntersectionList(Edge* edge);
+    ~EdgeIntersectionList();
 
-	/*
-	 * Adds an intersection into the list, if it isn't already there.
-	 * The input segmentIndex and dist are expected to be normalized.
-	 * @return the EdgeIntersection found or added
-	 */
-	EdgeIntersection* add(const geom::Coordinate& coord,
-		size_t segmentIndex, double dist);
+    /*
+     * Adds an intersection into the list, if it isn't already there.
+     * The input segmentIndex and dist are expected to be normalized.
+     * @return the EdgeIntersection found or added
+     */
+    EdgeIntersection* add(const geom::Coordinate& coord,
+                          size_t segmentIndex, double dist);
 
-	iterator begin() { return nodeMap.begin(); }
-	iterator end() { return nodeMap.end(); }
-	const_iterator begin() const { return nodeMap.begin(); }
-	const_iterator end() const { return nodeMap.end(); }
+    iterator
+    begin()
+    {
+        return nodeMap.begin();
+    }
+    iterator
+    end()
+    {
+        return nodeMap.end();
+    }
+    const_iterator
+    begin() const
+    {
+        return nodeMap.begin();
+    }
+    const_iterator
+    end() const
+    {
+        return nodeMap.end();
+    }
 
-	bool isEmpty() const;
-	bool isIntersection(const geom::Coordinate& pt) const;
+    bool isEmpty() const;
+    bool isIntersection(const geom::Coordinate& pt) const;
 
-	/*
-	 * Adds entries for the first and last points of the edge to the list
-	 */
-	void addEndpoints();
+    /*
+     * Adds entries for the first and last points of the edge to the list
+     */
+    void addEndpoints();
 
-	/**
-	 * Creates new edges for all the edges that the intersections in this
-	 * list split the parent edge into.
-	 * Adds the edges to the input list (this is so a single list
-	 * can be used to accumulate all split edges for a Geometry).
-	 *
-	 * @param edgeList a list of EdgeIntersections
-	 */
-	void addSplitEdges(std::vector<Edge*> *edgeList);
+    /**
+     * Creates new edges for all the edges that the intersections in this
+     * list split the parent edge into.
+     * Adds the edges to the input list (this is so a single list
+     * can be used to accumulate all split edges for a Geometry).
+     *
+     * @param edgeList a list of EdgeIntersections
+     */
+    void addSplitEdges(std::vector<Edge*>* edgeList);
 
-	Edge *createSplitEdge(EdgeIntersection *ei0, EdgeIntersection *ei1);
-	std::string print() const;
+    Edge* createSplitEdge(EdgeIntersection* ei0, EdgeIntersection* ei1);
+    std::string print() const;
 
 };
 

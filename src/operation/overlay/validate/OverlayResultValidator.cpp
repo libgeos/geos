@@ -59,16 +59,16 @@ namespace { // anonymous namespace
 unique_ptr<MultiPoint>
 toMultiPoint(vector<Coordinate>& coords)
 {
-	const GeometryFactory& gf = *(GeometryFactory::getDefaultInstance());
-	const CoordinateSequenceFactory& csf =
-			*(gf.getCoordinateSequenceFactory());
+    const GeometryFactory& gf = *(GeometryFactory::getDefaultInstance());
+    const CoordinateSequenceFactory& csf =
+        *(gf.getCoordinateSequenceFactory());
 
-	unique_ptr< vector<Coordinate> > nc ( new vector<Coordinate>(coords) );
-	unique_ptr<CoordinateSequence> cs(csf.create(nc.release()));
+    unique_ptr< vector<Coordinate> > nc(new vector<Coordinate>(coords));
+    unique_ptr<CoordinateSequence> cs(csf.create(nc.release()));
 
-	unique_ptr<MultiPoint> mp ( gf.createMultiPoint(*cs) );
+    unique_ptr<MultiPoint> mp(gf.createMultiPoint(*cs));
 
-	return mp;
+    return mp;
 }
 #endif
 
@@ -78,29 +78,29 @@ toMultiPoint(vector<Coordinate>& coords)
 /* static public */
 bool
 OverlayResultValidator::isValid(const Geometry& geom0, const Geometry& geom1,
-		OverlayOp::OpCode opCode,
-		const Geometry& result)
+                                OverlayOp::OpCode opCode,
+                                const Geometry& result)
 {
-	OverlayResultValidator validator(geom0, geom1, result);
-	return validator.isValid(opCode);
+    OverlayResultValidator validator(geom0, geom1, result);
+    return validator.isValid(opCode);
 }
 
 /*public*/
 OverlayResultValidator::OverlayResultValidator(
-		const Geometry& geom0,
-		const Geometry& geom1,
-		const Geometry& result)
-	:
-	boundaryDistanceTolerance(
-		computeBoundaryDistanceTolerance(geom0, geom1)
-	),
-	g0(geom0),
-	g1(geom1),
-	gres(result),
-	fpl0(g0, boundaryDistanceTolerance),
-	fpl1(g1, boundaryDistanceTolerance),
-	fplres(gres, boundaryDistanceTolerance),
-	invalidLocation()
+    const Geometry& geom0,
+    const Geometry& geom1,
+    const Geometry& result)
+    :
+    boundaryDistanceTolerance(
+        computeBoundaryDistanceTolerance(geom0, geom1)
+    ),
+    g0(geom0),
+    g1(geom1),
+    gres(result),
+    fpl0(g0, boundaryDistanceTolerance),
+    fpl1(g1, boundaryDistanceTolerance),
+    fplres(gres, boundaryDistanceTolerance),
+    invalidLocation()
 {
 }
 
@@ -109,109 +109,107 @@ bool
 OverlayResultValidator::isValid(OverlayOp::OpCode overlayOp)
 {
 
-	addTestPts(g0);
-	addTestPts(g1);
-	addTestPts(gres);
+    addTestPts(g0);
+    addTestPts(g1);
+    addTestPts(gres);
 
-	if (! testValid(overlayOp) )
-	{
+    if(! testValid(overlayOp)) {
 #if GEOS_DEBUG
-	cerr << "OverlayResultValidator:" << endl
-		<< "Points:" << *toMultiPoint(testCoords) << endl
-		<< "Geom0: " << g0 << endl
-		<< "Geom1: " << g1 << endl
-		<< "Reslt: " << gres << endl
-		<< "Locat: " << getInvalidLocation()
-		<< endl;
+        cerr << "OverlayResultValidator:" << endl
+             << "Points:" << *toMultiPoint(testCoords) << endl
+             << "Geom0: " << g0 << endl
+             << "Geom1: " << g1 << endl
+             << "Reslt: " << gres << endl
+             << "Locat: " << getInvalidLocation()
+             << endl;
 #endif
-		return false;
-	}
+        return false;
+    }
 
 
-	return true;
+    return true;
 }
 
 /*private*/
 void
 OverlayResultValidator::addTestPts(const Geometry& g)
 {
-	OffsetPointGenerator ptGen(g, 5 * boundaryDistanceTolerance);
-	unique_ptr< vector<geom::Coordinate> > pts = ptGen.getPoints();
-	testCoords.insert(testCoords.end(), pts->begin(), pts->end());
+    OffsetPointGenerator ptGen(g, 5 * boundaryDistanceTolerance);
+    unique_ptr< vector<geom::Coordinate> > pts = ptGen.getPoints();
+    testCoords.insert(testCoords.end(), pts->begin(), pts->end());
 }
 
 /*private*/
 void
 OverlayResultValidator::addVertices(const Geometry& g)
 {
-	// TODO: optimize this by not copying coordinates
-	//       and pre-allocating memory
-	unique_ptr<CoordinateSequence> cs ( g.getCoordinates() );
-	const vector<Coordinate>* coords = cs->toVector();
-	testCoords.insert(testCoords.end(), coords->begin(), coords->end());
+    // TODO: optimize this by not copying coordinates
+    //       and pre-allocating memory
+    unique_ptr<CoordinateSequence> cs(g.getCoordinates());
+    const vector<Coordinate>* coords = cs->toVector();
+    testCoords.insert(testCoords.end(), coords->begin(), coords->end());
 }
 
 /*private*/
 bool
 OverlayResultValidator::testValid(OverlayOp::OpCode overlayOp)
 {
-	for (size_t i=0, n=testCoords.size(); i<n; ++i)
-	{
-		Coordinate& pt = testCoords[i];
-		if (! testValid(overlayOp, pt)) {
-			invalidLocation = pt;
-			return false;
-		}
-	}
-	return true;
+    for(size_t i = 0, n = testCoords.size(); i < n; ++i) {
+        Coordinate& pt = testCoords[i];
+        if(! testValid(overlayOp, pt)) {
+            invalidLocation = pt;
+            return false;
+        }
+    }
+    return true;
 }
 
 /*private*/
 bool
 OverlayResultValidator::testValid(OverlayOp::OpCode overlayOp,
-		const Coordinate& pt)
+                                  const Coordinate& pt)
 {
-	std::vector<geom::Location::Value> location(3);
+    std::vector<geom::Location::Value> location(3);
 
-	location[0] = fpl0.getLocation(pt);
-	location[1] = fpl1.getLocation(pt);
-	location[2] = fplres.getLocation(pt);
+    location[0] = fpl0.getLocation(pt);
+    location[1] = fpl1.getLocation(pt);
+    location[2] = fplres.getLocation(pt);
 
 #if GEOS_DEBUG
-	cerr << setprecision(10) << "Point " << pt << endl
-		<< "Loc0: " << location[0] << endl
-		<< "Loc1: " << location[1] << endl
-		<< "Locr: " << location[2] << endl;
+    cerr << setprecision(10) << "Point " << pt << endl
+         << "Loc0: " << location[0] << endl
+         << "Loc1: " << location[1] << endl
+         << "Locr: " << location[2] << endl;
 #endif
 
-	/*
-	 * If any location is on the Boundary, can't deduce anything,
-	 * so just return true
-	 */
-	if ( find(location.begin(), location.end(), Location::BOUNDARY) != location.end() )
-	{
+    /*
+     * If any location is on the Boundary, can't deduce anything,
+     * so just return true
+     */
+    if(find(location.begin(), location.end(), Location::BOUNDARY) != location.end()) {
 #if GEOS_DEBUG
-		cerr << "OverlayResultValidator: testpoint " << pt << " is on the boundary, blindly returning a positive answer (is valid)" << endl;
+        cerr << "OverlayResultValidator: testpoint " << pt <<
+             " is on the boundary, blindly returning a positive answer (is valid)" << endl;
 #endif
-		return true;
-	}
+        return true;
+    }
 
-	return isValidResult(overlayOp, location);
+    return isValidResult(overlayOp, location);
 }
 
 /* private */
 bool
 OverlayResultValidator::isValidResult(OverlayOp::OpCode overlayOp,
-	std::vector<geom::Location::Value>& location)
+                                      std::vector<geom::Location::Value>& location)
 {
-	bool expectedInterior = OverlayOp::isResultOfOp(location[0],
-			location[1], overlayOp);
+    bool expectedInterior = OverlayOp::isResultOfOp(location[0],
+                            location[1], overlayOp);
 
-	bool resultInInterior = (location[2] == Location::INTERIOR);
+    bool resultInInterior = (location[2] == Location::INTERIOR);
 
-	bool p_isValid = ! (expectedInterior ^ resultInInterior);
+    bool p_isValid = !(expectedInterior ^ resultInInterior);
 
-	return p_isValid;
+    return p_isValid;
 }
 
 /*private static*/
@@ -222,7 +220,7 @@ OverlayResultValidator::computeBoundaryDistanceTolerance(
     using geos::operation::overlay::snap::GeometrySnapper;
 
     return std::min(GeometrySnapper::computeSizeBasedSnapTolerance(g0),
-                      GeometrySnapper::computeSizeBasedSnapTolerance(g1));
+                    GeometrySnapper::computeSizeBasedSnapTolerance(g1));
 }
 
 } // namespace geos.operation.overlay.validate

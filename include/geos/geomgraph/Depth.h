@@ -28,9 +28,9 @@
 
 // Forward declarations
 namespace geos {
-	namespace geomgraph {
-		class Label;
-	}
+namespace geomgraph {
+class Label;
+}
 }
 
 namespace geos {
@@ -38,25 +38,25 @@ namespace geomgraph { // geos.geomgraph
 
 class GEOS_DLL Depth {
 public:
-	static int depthAtLocation(int location);
-	Depth();
-	virtual ~Depth(); // FIXME: shoudn't be virtual!
-	int getDepth(int geomIndex,int posIndex) const;
-	void setDepth(int geomIndex,int posIndex,int depthValue);
-	int getLocation(int geomIndex,int posIndex) const;
-	void add(int geomIndex,int posIndex,int location);
-	bool isNull() const;
-	bool isNull(int geomIndex) const;
-	bool isNull(int geomIndex, int posIndex) const;
-	int getDelta(int geomIndex) const;
-	void normalize();
-	void add(const Label& lbl);
-	std::string toString() const;
+    static int depthAtLocation(int location);
+    Depth();
+    virtual ~Depth(); // FIXME: shoudn't be virtual!
+    int getDepth(int geomIndex, int posIndex) const;
+    void setDepth(int geomIndex, int posIndex, int depthValue);
+    int getLocation(int geomIndex, int posIndex) const;
+    void add(int geomIndex, int posIndex, int location);
+    bool isNull() const;
+    bool isNull(int geomIndex) const;
+    bool isNull(int geomIndex, int posIndex) const;
+    int getDelta(int geomIndex) const;
+    void normalize();
+    void add(const Label& lbl);
+    std::string toString() const;
 private:
-	enum {
-		NULL_VALUE=-1 //Replaces NULL
-	};
-	int depth[2][3];
+    enum {
+        NULL_VALUE = -1 //Replaces NULL
+    };
+    int depth[2][3];
 };
 
 } // namespace geos.geomgraph

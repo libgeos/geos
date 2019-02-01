@@ -41,50 +41,46 @@ ElevationMatrixCell::~ElevationMatrixCell()
 }
 
 void
-ElevationMatrixCell::add(const Coordinate &c)
+ElevationMatrixCell::add(const Coordinate& c)
 {
-	if ( !std::isnan(c.z) )
-	{
-		if ( zvals.insert(c.z).second )
-		{
-			ztot+=c.z;
-		}
-	}
+    if(!std::isnan(c.z)) {
+        if(zvals.insert(c.z).second) {
+            ztot += c.z;
+        }
+    }
 }
 
 void
 ElevationMatrixCell::add(double z)
 {
-	if ( !std::isnan(z) )
-	{
-		if ( zvals.insert(z).second )
-		{
-			ztot+=z;
-		}
-	}
+    if(!std::isnan(z)) {
+        if(zvals.insert(z).second) {
+            ztot += z;
+        }
+    }
 }
 
 double
 ElevationMatrixCell::getTotal() const
 {
-	return ztot;
+    return ztot;
 }
 
 double
 ElevationMatrixCell::getAvg() const
 {
-	return  zvals.size() ?
-		ztot / static_cast<double>(zvals.size()) :
-		DoubleNotANumber;
+    return  zvals.size() ?
+            ztot / static_cast<double>(zvals.size()) :
+            DoubleNotANumber;
 }
 
 string
 ElevationMatrixCell::print() const
 {
-	ostringstream ret;
-	//ret<<"["<<ztot<<"/"<<zvals.size()<<"]";
-	ret << "[" << getAvg() << "]";
-	return ret.str();
+    ostringstream ret;
+    //ret<<"["<<ztot<<"/"<<zvals.size()<<"]";
+    ret << "[" << getAvg() << "]";
+    return ret.str();
 }
 
 } // namespace geos.operation.overlay

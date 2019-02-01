@@ -29,31 +29,32 @@ using namespace std;
 namespace geos {
 namespace geom { // geos::geom
 
-Coordinate Coordinate::_nullCoord=Coordinate(DoubleNotANumber,DoubleNotANumber,DoubleNotANumber);
+Coordinate Coordinate::_nullCoord = Coordinate(DoubleNotANumber, DoubleNotANumber, DoubleNotANumber);
 
 Coordinate&
 Coordinate::getNull()
 {
-	return _nullCoord;
+    return _nullCoord;
 }
 
 string
 Coordinate::toString() const
 {
-	ostringstream s;
-	s << std::setprecision(17) << *this;
-	return s.str();
+    ostringstream s;
+    s << std::setprecision(17) << *this;
+    return s.str();
 }
 
-std::ostream& operator<< (std::ostream& os, const Coordinate& c)
+std::ostream&
+operator<< (std::ostream& os, const Coordinate& c)
 {
-	if ( std::isnan(c.z) )
-	{
-		os << c.x << " " << c.y;
-	} else {
-		os << c.x << " " << c.y << " " << c.z;
-	}
-	return os;
+    if(std::isnan(c.z)) {
+        os << c.x << " " << c.y;
+    }
+    else {
+        os << c.x << " " << c.y << " " << c.z;
+    }
+    return os;
 }
 
 } // namespace geos::geom

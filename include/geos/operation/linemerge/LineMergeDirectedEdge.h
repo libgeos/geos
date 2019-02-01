@@ -25,13 +25,13 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Coordinate;
-		//class LineString;
-	}
-	namespace planargraph {
-		class Node;
-	}
+namespace geom {
+class Coordinate;
+//class LineString;
+}
+namespace planargraph {
+class Node;
+}
 }
 
 
@@ -46,30 +46,30 @@ namespace linemerge { // geos::operation::linemerge
  */
 class GEOS_DLL LineMergeDirectedEdge: public planargraph::DirectedEdge {
 public:
-	/**
-	 * Constructs a LineMergeDirectedEdge connecting the <code>from</code>
-	 * node to the <code>to</code> node.
-	 *
-	 * @param directionPt
-	 *        specifies this DirectedEdge's direction (given by an
-	 *	  imaginary line from the <code>from</code> node to
-	 *	  <code>directionPt</code>)
-	 *
-	 * @param edgeDirection
-	 *        whether this DirectedEdge's direction is the same as or
-	 *        opposite to that of the parent Edge (if any)
-	 */
-	LineMergeDirectedEdge(planargraph::Node *from,
-			planargraph::Node *to,
-			const geom::Coordinate& directionPt,
-			bool edgeDirection);
+    /**
+     * Constructs a LineMergeDirectedEdge connecting the <code>from</code>
+     * node to the <code>to</code> node.
+     *
+     * @param directionPt
+     *        specifies this DirectedEdge's direction (given by an
+     *	  imaginary line from the <code>from</code> node to
+     *	  <code>directionPt</code>)
+     *
+     * @param edgeDirection
+     *        whether this DirectedEdge's direction is the same as or
+     *        opposite to that of the parent Edge (if any)
+     */
+    LineMergeDirectedEdge(planargraph::Node* from,
+                          planargraph::Node* to,
+                          const geom::Coordinate& directionPt,
+                          bool edgeDirection);
 
-	/**
-	* Returns the directed edge that starts at this directed edge's end point, or null
-	* if there are zero or multiple directed edges starting there.
-	* @return
-	*/
-	LineMergeDirectedEdge* getNext();
+    /**
+    * Returns the directed edge that starts at this directed edge's end point, or null
+    * if there are zero or multiple directed edges starting there.
+    * @return
+    */
+    LineMergeDirectedEdge* getNext();
 };
 
 } // namespace geos::operation::linemerge

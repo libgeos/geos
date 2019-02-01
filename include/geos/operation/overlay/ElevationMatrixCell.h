@@ -30,9 +30,9 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Coordinate;
-	}
+namespace geom {
+class Coordinate;
+}
 }
 
 namespace geos {
@@ -42,16 +42,16 @@ namespace overlay { // geos::operation::overlay
 
 class GEOS_DLL ElevationMatrixCell {
 public:
-	ElevationMatrixCell();
-	~ElevationMatrixCell();
-	void add(const geom::Coordinate &c);
-	void add(double z);
-	double getAvg(void) const;
-	double getTotal(void) const;
-	std::string print() const;
+    ElevationMatrixCell();
+    ~ElevationMatrixCell();
+    void add(const geom::Coordinate& c);
+    void add(double z);
+    double getAvg(void) const;
+    double getTotal(void) const;
+    std::string print() const;
 private:
-	std::set<double>zvals;
-	double ztot;
+    std::set<double>zvals;
+    double ztot;
 };
 
 } // namespace geos::operation::overlay

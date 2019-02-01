@@ -34,13 +34,20 @@ namespace geomgraph { // geos.geomgraph
 * Returns LEFT if the position is RIGHT, RIGHT if the position is LEFT, or the position
 * otherwise.
 */
-int Position::opposite(int position){
-	if (position==LEFT) return RIGHT;
-	if (position==RIGHT) return LEFT;
+int
+Position::opposite(int position)
+{
+    if(position == LEFT) {
+        return RIGHT;
+    }
+    if(position == RIGHT) {
+        return LEFT;
+    }
 #if GEOS_DEBUG
-	std::cerr<<"Position::opposite: position is neither LEFT ("<<LEFT<<") nor RIGHT ("<<RIGHT<<") but "<<position<<std::endl;
+    std::cerr << "Position::opposite: position is neither LEFT (" << LEFT << ") nor RIGHT (" << RIGHT << ") but " <<
+              position << std::endl;
 #endif
-	return position;
+    return position;
 }
 
 } // namespace geos.geomgraph

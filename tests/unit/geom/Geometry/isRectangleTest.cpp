@@ -10,134 +10,139 @@
 // std
 #include <string>
 
-namespace tut
+namespace tut {
+//
+// Test Group
+//
+
+struct test_isrectangle_data {
+    geos::io::WKTReader reader;
+
+    test_isrectangle_data()
+    {}
+};
+
+typedef test_group<test_isrectangle_data> group;
+typedef group::object object;
+
+group test_isrectangle_group("geos::geom::Geometry::isRectangle");
+
+//
+// Test Cases
+//
+
+// 1 - Test of valid rectangle
+template<>
+template<>
+void object::test<1>
+()
 {
-    //
-    // Test Group
-    //
+    const std::string wkt("POLYGON ((0 0, 0 100, 100 100, 100 0, 0 0))");
+    geos::geom::Geometry* g = reader.read(wkt);
 
-    struct test_isrectangle_data
-    {
-        geos::io::WKTReader reader;
+    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
+    ensure("Geometry is not a Polygon: " + wkt, poly != nullptr);
+    ensure(poly->isRectangle());
 
-        test_isrectangle_data()
-        {}
-    };
+    delete g;
+}
 
-    typedef test_group<test_isrectangle_data> group;
-    typedef group::object object;
+// 2 - Test of another valid rectangle
+template<>
+template<>
+void object::test<2>
+()
+{
+    const std::string wkt("POLYGON ((0 0, 0 200, 100 200, 100 0, 0 0))");
+    geos::geom::Geometry* g = reader.read(wkt);
 
-    group test_isrectangle_group("geos::geom::Geometry::isRectangle");
+    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
+    ensure("Geometry is not a Polygon: " + wkt, poly != nullptr);
+    ensure(poly->isRectangle());
 
-    //
-    // Test Cases
-    //
+    delete g;
+}
 
-    // 1 - Test of valid rectangle
-    template<>
-    template<>
-    void object::test<1>()
-    {
-        const std::string wkt("POLYGON ((0 0, 0 100, 100 100, 100 0, 0 0))");
-        geos::geom::Geometry* g = reader.read(wkt);
-
-        geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
-        ensure( "Geometry is not a Polygon: " + wkt, poly != nullptr );
-        ensure( poly->isRectangle() );
-
-        delete g;
-    }
-
-    // 2 - Test of another valid rectangle
-    template<>
-    template<>
-    void object::test<2>()
-    {
-        const std::string wkt("POLYGON ((0 0, 0 200, 100 200, 100 0, 0 0))");
-        geos::geom::Geometry* g = reader.read(wkt);
-
-        geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
-        ensure( "Geometry is not a Polygon: " + wkt, poly != nullptr );
-        ensure( poly->isRectangle() );
-
-        delete g;
-    }
-
-    // 3 - Test of rectangle with hole
-    template<>
-    template<>
-    void object::test<3>()
-    {
-        const std::string wkt("POLYGON ((0 0, 0 100, 100 100, 100 0, 0 0), \
+// 3 - Test of rectangle with hole
+template<>
+template<>
+void object::test<3>
+()
+{
+    const std::string wkt("POLYGON ((0 0, 0 100, 100 100, 100 0, 0 0), \
                               (10 10, 10 90, 90 90, 90 10, 10 10) ))");
-        geos::geom::Geometry* g = reader.read(wkt);
+    geos::geom::Geometry* g = reader.read(wkt);
 
-        geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
-        ensure( "Geometry is not a Polygon: " + wkt, poly != nullptr );
-        ensure( !poly->isRectangle() );
+    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
+    ensure("Geometry is not a Polygon: " + wkt, poly != nullptr);
+    ensure(!poly->isRectangle());
 
-        delete g;
-    }
+    delete g;
+}
 
-    // 4 - Test of non-rectilinear rectangle
-    template<>
-    template<>
-    void object::test<4>()
-    {
-        const std::string wkt("POLYGON ((0 0, 0 100, 99 100, 100 0, 0 0))");
-        geos::geom::Geometry* g = reader.read(wkt);
+// 4 - Test of non-rectilinear rectangle
+template<>
+template<>
+void object::test<4>
+()
+{
+    const std::string wkt("POLYGON ((0 0, 0 100, 99 100, 100 0, 0 0))");
+    geos::geom::Geometry* g = reader.read(wkt);
 
-        geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
-        ensure( "Geometry is not a Polygon: " + wkt, poly != nullptr );
-        ensure( !poly->isRectangle() );
+    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
+    ensure("Geometry is not a Polygon: " + wkt, poly != nullptr);
+    ensure(!poly->isRectangle());
 
-        delete g;
-    }
+    delete g;
+}
 
-    // 5 - Test of rectangle with too many points
-    template<>
-    template<>
-    void object::test<5>()
-    {
-        const std::string wkt("POLYGON ((0 0, 0 100, 100 50, 100 100, 100 0, 0 0))");
-        geos::geom::Geometry* g = reader.read(wkt);
+// 5 - Test of rectangle with too many points
+template<>
+template<>
+void object::test<5>
+()
+{
+    const std::string wkt("POLYGON ((0 0, 0 100, 100 50, 100 100, 100 0, 0 0))");
+    geos::geom::Geometry* g = reader.read(wkt);
 
-        geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
-        ensure( "Geometry is not a Polygon: " + wkt, poly != nullptr );
-        ensure( !poly->isRectangle() );
+    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
+    ensure("Geometry is not a Polygon: " + wkt, poly != nullptr);
+    ensure(!poly->isRectangle());
 
-        delete g;
-    }
+    delete g;
+}
 
-    // 6 - Test of rectangle with too few points
-    template<>
-    template<>
-    void object::test<6>()
-    {
-        const std::string wkt("POLYGON ((0 0, 0 100, 100 0, 0 0))");
-        geos::geom::Geometry* g = reader.read(wkt);
+// 6 - Test of rectangle with too few points
+template<>
+template<>
+void object::test<6>
+()
+{
+    const std::string wkt("POLYGON ((0 0, 0 100, 100 0, 0 0))");
+    geos::geom::Geometry* g = reader.read(wkt);
 
-        geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
-        ensure( "Geometry is not a Polygon: " + wkt, poly != nullptr );
-        ensure( !poly->isRectangle() );
+    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
+    ensure("Geometry is not a Polygon: " + wkt, poly != nullptr);
+    ensure(!poly->isRectangle());
 
-        delete g;
-    }
+    delete g;
+}
 
-    // 7 - Test of rectangle with points in wrong order
-    template<>
-    template<>
-    void object::test<7>()
-    {
-        const std::string wkt("POLYGON ((0 0, 0 100, 100 0, 100 100, 0 0))");
-        geos::geom::Geometry* g = reader.read(wkt);
+// 7 - Test of rectangle with points in wrong order
+template<>
+template<>
+void object::test<7>
+()
+{
+    const std::string wkt("POLYGON ((0 0, 0 100, 100 0, 100 100, 0 0))");
+    geos::geom::Geometry* g = reader.read(wkt);
 
-        geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
-        ensure( "Geometry is not a Polygon: " + wkt, poly != nullptr );
-        ensure( !poly->isRectangle() );
+    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
+    ensure("Geometry is not a Polygon: " + wkt, poly != nullptr);
+    ensure(!poly->isRectangle());
 
-        delete g;
-    }
+    delete g;
+}
 
 } // namespace tut
 

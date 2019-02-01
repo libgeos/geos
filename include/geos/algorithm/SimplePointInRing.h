@@ -21,11 +21,11 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Coordinate;
-		class LinearRing;
-		class CoordinateSequence;
-	}
+namespace geom {
+class Coordinate;
+class LinearRing;
+class CoordinateSequence;
+}
 }
 
 namespace geos {
@@ -33,11 +33,11 @@ namespace algorithm { // geos::algorithm
 
 class GEOS_DLL SimplePointInRing: public PointInRing {
 public:
-	SimplePointInRing(geom::LinearRing *ring);
-	~SimplePointInRing() override;
-	bool isInside(const geom::Coordinate& pt) override;
+    SimplePointInRing(geom::LinearRing* ring);
+    ~SimplePointInRing() override;
+    bool isInside(const geom::Coordinate& pt) override;
 private:
-	const geom::CoordinateSequence* pts;
+    const geom::CoordinateSequence* pts;
 };
 
 } // namespace geos::algorithm

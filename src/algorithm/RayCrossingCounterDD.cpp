@@ -44,14 +44,15 @@ RayCrossingCounterDD::locatePointInRing(const geom::Coordinate& point,
 {
     RayCrossingCounterDD rcc(point);
 
-    for (std::size_t i = 1, ni = ring.size(); i < ni; i++) {
-        const geom::Coordinate & p1 = ring[ i - 1 ];
-        const geom::Coordinate & p2 = ring[ i ];
+    for(std::size_t i = 1, ni = ring.size(); i < ni; i++) {
+        const geom::Coordinate& p1 = ring[ i - 1 ];
+        const geom::Coordinate& p2 = ring[ i ];
 
         rcc.countSegment(p1, p2);
 
-        if (rcc.isOnSegment())
+        if(rcc.isOnSegment()) {
             return rcc.getLocation();
+        }
     }
     return rcc.getLocation();
 }
@@ -63,14 +64,15 @@ RayCrossingCounterDD::locatePointInRing(const geom::Coordinate& point,
 {
     RayCrossingCounterDD rcc(point);
 
-    for (std::size_t i = 1, ni = ring.size(); i < ni; i++) {
-        const geom::Coordinate & p1 = *ring[ i - 1 ];
-        const geom::Coordinate & p2 = *ring[ i ];
+    for(std::size_t i = 1, ni = ring.size(); i < ni; i++) {
+        const geom::Coordinate& p1 = *ring[ i - 1 ];
+        const geom::Coordinate& p2 = *ring[ i ];
 
         rcc.countSegment(p1, p2);
 
-        if (rcc.isOnSegment())
+        if(rcc.isOnSegment()) {
             return rcc.getLocation();
+        }
     }
     return rcc.getLocation();
 }
@@ -92,28 +94,30 @@ RayCrossingCounterDD::countSegment(const geom::Coordinate& p1,
     // the positive x direction.
 
     // check if the segment is strictly to the left of the test point
-    if (p1.x < point.x && p2.x < point.x)
+    if(p1.x < point.x && p2.x < point.x) {
         return;
+    }
 
     // check if the point is equal to the current ring vertex
-    if (point.x == p2.x && point.y == p2.y) {
+    if(point.x == p2.x && point.y == p2.y) {
         isPointOnSegment = true;
         return;
     }
 
     // For horizontal segments, check if the point is on the segment.
     // Otherwise, horizontal segments are not counted.
-    if (p1.y == point.y && p2.y == point.y) {
+    if(p1.y == point.y && p2.y == point.y) {
         double minx = p1.x;
         double maxx = p2.x;
 
-        if (minx > maxx) {
+        if(minx > maxx) {
             minx = p2.x;
             maxx = p1.x;
         }
 
-        if (point.x >= minx && point.x <= maxx)
+        if(point.x >= minx && point.x <= maxx) {
             isPointOnSegment = true;
+        }
 
         return;
     }
@@ -125,22 +129,24 @@ RayCrossingCounterDD::countSegment(const geom::Coordinate& p1,
     //   final endpoint
     // - a downward edge excludes its starting endpoint, and includes its
     //   final endpoint
-    if (((p1.y > point.y) && (p2.y <= point.y)) ||
+    if(((p1.y > point.y) && (p2.y <= point.y)) ||
             ((p2.y > point.y) && (p1.y <= point.y))) {
         // For an upward edge, orientationIndex will be positive when p1->p2
         // crosses ray. Conversely, downward edges should have negative sign.
         int sign = CGAlgorithmsDD::orientationIndex(p1, p2, point);
-        if (sign == CGAlgorithmsDD::STRAIGHT) {
+        if(sign == CGAlgorithmsDD::STRAIGHT) {
             isPointOnSegment = true;
             return;
         }
 
-        if (p2.y < p1.y)
+        if(p2.y < p1.y) {
             sign = -sign;
+        }
 
         // The segment crosses the ray if the sign is strictly positive.
-        if (sign == CGAlgorithmsDD::LEFT)
+        if(sign == CGAlgorithmsDD::LEFT) {
             crossingCount++;
+        }
     }
 }
 
@@ -148,13 +154,15 @@ RayCrossingCounterDD::countSegment(const geom::Coordinate& p1,
 int
 RayCrossingCounterDD::getLocation()
 {
-    if (isPointOnSegment)
+    if(isPointOnSegment) {
         return geom::Location::BOUNDARY;
+    }
 
     // The point is in the interior of the ring if the number
     // of X-crossings is odd.
-    if ((crossingCount % 2) == 1)
+    if((crossingCount % 2) == 1) {
         return geom::Location::INTERIOR;
+    }
 
     return geom::Location::EXTERIOR;
 }

@@ -34,11 +34,11 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Geometry;
-		class GeometryFactory;
-		class CoordinateSequence;
-	}
+namespace geom {
+class Geometry;
+class GeometryFactory;
+class CoordinateSequence;
+}
 }
 
 namespace geos {
@@ -57,125 +57,125 @@ namespace algorithm { // geos::algorithm
  */
 class GEOS_DLL ConvexHull {
 private:
-	const geom::GeometryFactory *geomFactory;
-	geom::Coordinate::ConstVect inputPts;
+    const geom::GeometryFactory* geomFactory;
+    geom::Coordinate::ConstVect inputPts;
 
-	void extractCoordinates(const geom::Geometry *geom);
+    void extractCoordinates(const geom::Geometry* geom);
 
-	/// Create a CoordinateSequence from the Coordinate::ConstVect
-	/// This is needed to construct the geometries.
-	/// Here coordinate copies happen
-	/// The returned object is newly allocated !NO EXCEPTION SAFE!
-	geom::CoordinateSequence *toCoordinateSequence(geom::Coordinate::ConstVect &cv);
+    /// Create a CoordinateSequence from the Coordinate::ConstVect
+    /// This is needed to construct the geometries.
+    /// Here coordinate copies happen
+    /// The returned object is newly allocated !NO EXCEPTION SAFE!
+    geom::CoordinateSequence* toCoordinateSequence(geom::Coordinate::ConstVect& cv);
 
-	void computeOctPts(const geom::Coordinate::ConstVect &src,
-			geom::Coordinate::ConstVect &tgt);
+    void computeOctPts(const geom::Coordinate::ConstVect& src,
+                       geom::Coordinate::ConstVect& tgt);
 
-	bool computeOctRing(const geom::Coordinate::ConstVect &src,
-			geom::Coordinate::ConstVect &tgt);
+    bool computeOctRing(const geom::Coordinate::ConstVect& src,
+                        geom::Coordinate::ConstVect& tgt);
 
-	/**
-	 * Uses a heuristic to reduce the number of points scanned
-	 * to compute the hull.
-	 * The heuristic is to find a polygon guaranteed to
-	 * be in (or on) the hull, and eliminate all points inside it.
-	 * A quadrilateral defined by the extremal points
-	 * in the four orthogonal directions
-	 * can be used, but even more inclusive is
-	 * to use an octilateral defined by the points in the
-	 * 8 cardinal directions.
-	 *
-	 * Note that even if the method used to determine the polygon
-	 * vertices is not 100% robust, this does not affect the
-	 * robustness of the convex hull.
-	 *
-	 * To satisfy the requirements of the Graham Scan algorithm,
-	 * the resulting array has at least 3 entries.
-	 *
-	 * @param pts The vector of const Coordinate pointers
-	 *            to be reduced (to at least 3 elements)
-	 *
-	 * WARNING: the parameter will be modified
-	 *
-	 */
-	void reduce(geom::Coordinate::ConstVect &pts);
+    /**
+     * Uses a heuristic to reduce the number of points scanned
+     * to compute the hull.
+     * The heuristic is to find a polygon guaranteed to
+     * be in (or on) the hull, and eliminate all points inside it.
+     * A quadrilateral defined by the extremal points
+     * in the four orthogonal directions
+     * can be used, but even more inclusive is
+     * to use an octilateral defined by the points in the
+     * 8 cardinal directions.
+     *
+     * Note that even if the method used to determine the polygon
+     * vertices is not 100% robust, this does not affect the
+     * robustness of the convex hull.
+     *
+     * To satisfy the requirements of the Graham Scan algorithm,
+     * the resulting array has at least 3 entries.
+     *
+     * @param pts The vector of const Coordinate pointers
+     *            to be reduced (to at least 3 elements)
+     *
+     * WARNING: the parameter will be modified
+     *
+     */
+    void reduce(geom::Coordinate::ConstVect& pts);
 
-	/// parameter will be modified
-	void padArray3(geom::Coordinate::ConstVect &pts);
+    /// parameter will be modified
+    void padArray3(geom::Coordinate::ConstVect& pts);
 
-	/// parameter will be modified
-	void preSort(geom::Coordinate::ConstVect &pts);
+    /// parameter will be modified
+    void preSort(geom::Coordinate::ConstVect& pts);
 
-	/**
-	 * Given two points p and q compare them with respect to their radial
-	 * ordering about point o.  First checks radial ordering.
-	 * If points are collinear, the comparison is based
-	 * on their distance to the origin.
-	 *
-	 * p < q iff
-	 *
-	 * - ang(o-p) < ang(o-q) (e.g. o-p-q is CCW)
-	 * - or ang(o-p) == ang(o-q) && dist(o,p) < dist(o,q)
-	 *
-	 * @param o the origin
-	 * @param p a point
-	 * @param q another point
-	 * @return -1, 0 or 1 depending on whether p is less than,
-	 * equal to or greater than q
-	 */
-	int polarCompare(const geom::Coordinate &o,
-			const geom::Coordinate &p, const geom::Coordinate &q);
+    /**
+     * Given two points p and q compare them with respect to their radial
+     * ordering about point o.  First checks radial ordering.
+     * If points are collinear, the comparison is based
+     * on their distance to the origin.
+     *
+     * p < q iff
+     *
+     * - ang(o-p) < ang(o-q) (e.g. o-p-q is CCW)
+     * - or ang(o-p) == ang(o-q) && dist(o,p) < dist(o,q)
+     *
+     * @param o the origin
+     * @param p a point
+     * @param q another point
+     * @return -1, 0 or 1 depending on whether p is less than,
+     * equal to or greater than q
+     */
+    int polarCompare(const geom::Coordinate& o,
+                     const geom::Coordinate& p, const geom::Coordinate& q);
 
-	void grahamScan(const geom::Coordinate::ConstVect &c,
-			geom::Coordinate::ConstVect &ps);
+    void grahamScan(const geom::Coordinate::ConstVect& c,
+                    geom::Coordinate::ConstVect& ps);
 
-	/**
-	 * @param  vertices  the vertices of a linear ring,
-	 *                   which may or may not be
-	 *                   flattened (i.e. vertices collinear)
-	 *
-	 * @return           a 2-vertex LineString if the vertices are
-	 *                   collinear; otherwise, a Polygon with unnecessary
-	 *                   (collinear) vertices removed
-	 */
-	geom::Geometry* lineOrPolygon(const geom::Coordinate::ConstVect &vertices);
+    /**
+     * @param  vertices  the vertices of a linear ring,
+     *                   which may or may not be
+     *                   flattened (i.e. vertices collinear)
+     *
+     * @return           a 2-vertex LineString if the vertices are
+     *                   collinear; otherwise, a Polygon with unnecessary
+     *                   (collinear) vertices removed
+     */
+    geom::Geometry* lineOrPolygon(const geom::Coordinate::ConstVect& vertices);
 
-	/**
-	 * Write in 'cleaned' a version of 'input' with collinear
-	 * vertexes removed.
-   	 */
-	void cleanRing(const geom::Coordinate::ConstVect &input,
-			geom::Coordinate::ConstVect &cleaned);
+    /**
+     * Write in 'cleaned' a version of 'input' with collinear
+     * vertexes removed.
+     */
+    void cleanRing(const geom::Coordinate::ConstVect& input,
+                   geom::Coordinate::ConstVect& cleaned);
 
-	/**
-	 * @return  whether the three coordinates are collinear
-	 *          and c2 lies between c1 and c3 inclusive
-	 */
-	bool isBetween(const geom::Coordinate& c1, const geom::Coordinate& c2, const geom::Coordinate& c3);
+    /**
+     * @return  whether the three coordinates are collinear
+     *          and c2 lies between c1 and c3 inclusive
+     */
+    bool isBetween(const geom::Coordinate& c1, const geom::Coordinate& c2, const geom::Coordinate& c3);
 
 public:
 
-	/**
-	 * Create a new convex hull construction for the input Geometry.
-	 */
-	ConvexHull(const geom::Geometry *newGeometry);
+    /**
+     * Create a new convex hull construction for the input Geometry.
+     */
+    ConvexHull(const geom::Geometry* newGeometry);
 
 
-	~ConvexHull();
+    ~ConvexHull();
 
-	/**
-	 * Returns a Geometry that represents the convex hull of
-	 * the input geometry.
-	 * The returned geometry contains the minimal number of points
-	 * needed to represent the convex hull.
-	 * In particular, no more than two consecutive points
-	 * will be collinear.
-	 *
-	 * @return if the convex hull contains 3 or more points,
-	 *         a Polygon; 2 points, a LineString;
-	 *         1 point, a Point; 0 points, an empty GeometryCollection.
-	 */
-	geom::Geometry* getConvexHull();
+    /**
+     * Returns a Geometry that represents the convex hull of
+     * the input geometry.
+     * The returned geometry contains the minimal number of points
+     * needed to represent the convex hull.
+     * In particular, no more than two consecutive points
+     * will be collinear.
+     *
+     * @return if the convex hull contains 3 or more points,
+     *         a Polygon; 2 points, a LineString;
+     *         1 point, a Point; 0 points, an empty GeometryCollection.
+     */
+    geom::Geometry* getConvexHull();
 };
 
 } // namespace geos::algorithm

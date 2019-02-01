@@ -37,81 +37,76 @@ namespace distance { // geos.algorithm.distance
 /* public static */
 void
 DistanceToPoint::computeDistance(const geom::Geometry& geom,
-                                          const geom::Coordinate& pt,
-                                          PointPairDistance& ptDist)
+                                 const geom::Coordinate& pt,
+                                 PointPairDistance& ptDist)
 {
-	if ( const LineString* ls = dynamic_cast<const LineString*>(&geom) )
-	{
-		computeDistance(*ls, pt, ptDist);
-	}
-	else if ( const Polygon* pl = dynamic_cast<const Polygon*>(&geom) )
-	{
-		computeDistance(*pl, pt, ptDist);
-	}
-	else if ( const GeometryCollection* gc = dynamic_cast<const GeometryCollection*>(&geom) )
-	{
-		for (size_t i = 0; i < gc->getNumGeometries(); i++)
-		{
-			const Geometry* g = gc->getGeometryN(i);
-			computeDistance(*g, pt, ptDist);
-		}
-	}
-	else
-	{
-		// assume geom is Point
-		ptDist.setMinimum(*(geom.getCoordinate()), pt);
-	}
+    if(const LineString* ls = dynamic_cast<const LineString*>(&geom)) {
+        computeDistance(*ls, pt, ptDist);
+    }
+    else if(const Polygon* pl = dynamic_cast<const Polygon*>(&geom)) {
+        computeDistance(*pl, pt, ptDist);
+    }
+    else if(const GeometryCollection* gc = dynamic_cast<const GeometryCollection*>(&geom)) {
+        for(size_t i = 0; i < gc->getNumGeometries(); i++) {
+            const Geometry* g = gc->getGeometryN(i);
+            computeDistance(*g, pt, ptDist);
+        }
+    }
+    else {
+        // assume geom is Point
+        ptDist.setMinimum(*(geom.getCoordinate()), pt);
+    }
 }
 
 /* public static */
 void
 DistanceToPoint::computeDistance(const geom::LineString& line,
-                                          const geom::Coordinate& pt,
-                                          PointPairDistance& ptDist)
+                                 const geom::Coordinate& pt,
+                                 PointPairDistance& ptDist)
 {
-	const CoordinateSequence* coordsRO = line.getCoordinatesRO();
-	const CoordinateSequence& coords = *coordsRO;
+    const CoordinateSequence* coordsRO = line.getCoordinatesRO();
+    const CoordinateSequence& coords = *coordsRO;
 
-	size_t npts = coords.size();
-	if ( ! npts ) return; // can this ever be ?
+    size_t npts = coords.size();
+    if(! npts) {
+        return;    // can this ever be ?
+    }
 
-	LineSegment tempSegment;
-	Coordinate closestPt;
+    LineSegment tempSegment;
+    Coordinate closestPt;
 
-	Coordinate* segPts[2] = { &(tempSegment.p0), &(tempSegment.p1) };
-	tempSegment.p0 = coords.getAt(0);
-	for (size_t i=1; i<npts; ++i)
-	{
-		*(segPts[i%2]) = coords.getAt(i);
+    Coordinate* segPts[2] = { &(tempSegment.p0), &(tempSegment.p1) };
+    tempSegment.p0 = coords.getAt(0);
+    for(size_t i = 1; i < npts; ++i) {
+        *(segPts[i % 2]) = coords.getAt(i);
 
-		// this is somewhat inefficient - could do better
-		tempSegment.closestPoint(pt, closestPt);
-		ptDist.setMinimum(closestPt, pt);
-	}
+        // this is somewhat inefficient - could do better
+        tempSegment.closestPoint(pt, closestPt);
+        ptDist.setMinimum(closestPt, pt);
+    }
 }
 
 /* public static */
 void
 DistanceToPoint::computeDistance(const geom::LineSegment& segment,
-                                          const geom::Coordinate& pt,
-                                          PointPairDistance& ptDist)
+                                 const geom::Coordinate& pt,
+                                 PointPairDistance& ptDist)
 {
-	Coordinate closestPt;
-	segment.closestPoint(pt, closestPt);
-	ptDist.setMinimum(closestPt, pt);
+    Coordinate closestPt;
+    segment.closestPoint(pt, closestPt);
+    ptDist.setMinimum(closestPt, pt);
 }
 
 /* public static */
 void
 DistanceToPoint::computeDistance(const geom::Polygon& poly,
-                                          const geom::Coordinate& pt,
-                                          PointPairDistance& ptDist)
+                                 const geom::Coordinate& pt,
+                                 PointPairDistance& ptDist)
 {
-	computeDistance(*(poly.getExteriorRing()), pt, ptDist);
-	for (size_t i=0, n=poly.getNumInteriorRing(); i<n; ++i)
-	{
-		computeDistance(*(poly.getInteriorRingN(i)), pt, ptDist);
-	}
+    computeDistance(*(poly.getExteriorRing()), pt, ptDist);
+    for(size_t i = 0, n = poly.getNumInteriorRing(); i < n; ++i) {
+        computeDistance(*(poly.getInteriorRingN(i)), pt, ptDist);
+    }
 }
 
 

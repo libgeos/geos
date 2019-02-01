@@ -35,15 +35,16 @@ bool
 PointLocation::isOnLine(const geom::Coordinate& p, const geom::CoordinateSequence* pt)
 {
     size_t ptsize = pt->getSize();
-    if (ptsize == 0)
+    if(ptsize == 0) {
         return false;
+    }
 
-    const geom::Coordinate *pp = &(pt->getAt(0));
-    for(size_t i = 1; i < ptsize; ++i)
-    {
-        const geom::Coordinate &p1 = pt->getAt(i);
-        if (LineIntersector::hasIntersection(p, *pp, p1))
+    const geom::Coordinate* pp = &(pt->getAt(0));
+    for(size_t i = 1; i < ptsize; ++i) {
+        const geom::Coordinate& p1 = pt->getAt(i);
+        if(LineIntersector::hasIntersection(p, *pp, p1)) {
             return true;
+        }
         pp = &p1;
     }
     return false;
@@ -51,32 +52,32 @@ PointLocation::isOnLine(const geom::Coordinate& p, const geom::CoordinateSequenc
 
 /* public static */
 bool
-PointLocation::isInRing(const geom::Coordinate &p,
-                        const std::vector<const geom::Coordinate*> &ring)
+PointLocation::isInRing(const geom::Coordinate& p,
+                        const std::vector<const geom::Coordinate*>& ring)
 {
     return PointLocation::locateInRing(p, ring) != geom::Location::EXTERIOR;
 }
 
 /* public static */
 bool
-PointLocation::isInRing(const geom::Coordinate &p,
-                        const geom::CoordinateSequence *ring)
+PointLocation::isInRing(const geom::Coordinate& p,
+                        const geom::CoordinateSequence* ring)
 {
     return PointLocation::locateInRing(p, *ring) != geom::Location::EXTERIOR;
 }
 
 /* public static */
 int
-PointLocation::locateInRing(const geom::Coordinate &p,
-                            const std::vector<const geom::Coordinate*> &ring)
+PointLocation::locateInRing(const geom::Coordinate& p,
+                            const std::vector<const geom::Coordinate*>& ring)
 {
     return RayCrossingCounter::locatePointInRing(p, ring);
 }
 
 /* public static */
 int
-PointLocation::locateInRing(const geom::Coordinate &p,
-                            const geom::CoordinateSequence &ring)
+PointLocation::locateInRing(const geom::Coordinate& p,
+                            const geom::CoordinateSequence& ring)
 {
     return RayCrossingCounter::locatePointInRing(p, ring);
 }

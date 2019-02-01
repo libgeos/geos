@@ -25,12 +25,12 @@
 
 // Forward declarations
 namespace geos {
-	namespace geomgraph {
-		class Edge;
-	}
-	namespace algorithm {
-		class LineIntersector;
-	}
+namespace geomgraph {
+class Edge;
+}
+namespace algorithm {
+class LineIntersector;
+}
 }
 
 namespace geos {
@@ -46,21 +46,22 @@ namespace overlay { // geos::operation::overlay
  */
 class GEOS_DLL EdgeSetNoder {
 private:
-	algorithm::LineIntersector *li;
-	std::vector<geomgraph::Edge*>* inputEdges;
+    algorithm::LineIntersector* li;
+    std::vector<geomgraph::Edge*>* inputEdges;
 public:
-	EdgeSetNoder(algorithm::LineIntersector *newLi)
-		:
-		li(newLi),
-		inputEdges(new std::vector<geomgraph::Edge*>())
-	{}
+    EdgeSetNoder(algorithm::LineIntersector* newLi)
+        :
+        li(newLi),
+        inputEdges(new std::vector<geomgraph::Edge*>())
+    {}
 
-	~EdgeSetNoder() {
-		delete inputEdges; // TODO: avoid heap allocation
-	}
+    ~EdgeSetNoder()
+    {
+        delete inputEdges; // TODO: avoid heap allocation
+    }
 
-	void addEdges(std::vector<geomgraph::Edge*> *edges);
-	std::vector<geomgraph::Edge*>* getNodedEdges();
+    void addEdges(std::vector<geomgraph::Edge*>* edges);
+    std::vector<geomgraph::Edge*>* getNodedEdges();
 };
 
 

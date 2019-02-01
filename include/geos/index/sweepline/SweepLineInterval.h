@@ -23,13 +23,13 @@ namespace sweepline { // geos:index:sweepline
 
 class GEOS_DLL SweepLineInterval {
 public:
-	SweepLineInterval(double newMin, double newMax, void* newItem=nullptr);
-	double getMin();
-	double getMax();
-	void* getItem();
+    SweepLineInterval(double newMin, double newMax, void* newItem = nullptr);
+    double getMin();
+    double getMax();
+    void* getItem();
 private:
-	double min, max;
-	void* item;
+    double min, max;
+    void* item;
 };
 
 } // namespace geos:index:sweepline

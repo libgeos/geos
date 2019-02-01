@@ -62,7 +62,7 @@ class GEOS_DLL IsValidOp {
     friend class Unload;
 private:
     /// the base Geometry to be validated
-    const geom::Geometry *parentGeometry;
+    const geom::Geometry* parentGeometry;
 
     bool isChecked;
 
@@ -72,14 +72,14 @@ private:
     // This is the version using 'isChecked' flag
     void checkValid();
 
-    void checkValid(const geom::Geometry *g);
-    void checkValid(const geom::Point *g);
-    void checkValid(const geom::LinearRing *g);
-    void checkValid(const geom::LineString *g);
-    void checkValid(const geom::Polygon *g);
-    void checkValid(const geom::MultiPolygon *g);
-    void checkValid(const geom::GeometryCollection *gc);
-    void checkConsistentArea(geomgraph::GeometryGraph *graph);
+    void checkValid(const geom::Geometry* g);
+    void checkValid(const geom::Point* g);
+    void checkValid(const geom::LinearRing* g);
+    void checkValid(const geom::LineString* g);
+    void checkValid(const geom::Polygon* g);
+    void checkValid(const geom::MultiPolygon* g);
+    void checkValid(const geom::GeometryCollection* gc);
+    void checkConsistentArea(geomgraph::GeometryGraph* graph);
 
 
     /**
@@ -90,7 +90,7 @@ private:
      *
      * @param graph the topology graph of the geometry
      */
-    void checkNoSelfIntersectingRings(geomgraph::GeometryGraph *graph);
+    void checkNoSelfIntersectingRings(geomgraph::GeometryGraph* graph);
 
     /**
      * check that a ring does not self-intersect, except at its endpoints.
@@ -99,9 +99,9 @@ private:
      * If any occur more than once, that must be a self-intersection.
      */
     void checkNoSelfIntersectingRing(
-        geomgraph::EdgeIntersectionList &eiList);
+        geomgraph::EdgeIntersectionList& eiList);
 
-    void checkTooFewPoints(geomgraph::GeometryGraph *graph);
+    void checkTooFewPoints(geomgraph::GeometryGraph* graph);
 
     /**
      * Test that each hole is inside the polygon shell.
@@ -114,8 +114,8 @@ private:
      * @param p the polygon to be tested for hole inclusion
      * @param graph a geomgraph::GeometryGraph incorporating the polygon
      */
-    void checkHolesInShell(const geom::Polygon *p,
-                           geomgraph::GeometryGraph *graph);
+    void checkHolesInShell(const geom::Polygon* p,
+                           geomgraph::GeometryGraph* graph);
 
     /**
      * Tests that no hole is nested inside another hole.
@@ -129,8 +129,8 @@ private:
      *    (checked by <code>checkRelateConsistency</code>)
      *
      */
-    void checkHolesNotNested(const geom::Polygon *p,
-                             geomgraph::GeometryGraph *graph);
+    void checkHolesNotNested(const geom::Polygon* p,
+                             geomgraph::GeometryGraph* graph);
 
     /**
      * Tests that no element polygon is wholly in the interior of another
@@ -146,8 +146,8 @@ private:
      * may touch at one or more vertices, they cannot touch at
      * ALL vertices.
      */
-    void checkShellsNotNested(const geom::MultiPolygon *mp,
-                              geomgraph::GeometryGraph *graph);
+    void checkShellsNotNested(const geom::MultiPolygon* mp,
+                              geomgraph::GeometryGraph* graph);
 
     /**
      * Check if a shell is incorrectly nested within a polygon.
@@ -160,9 +160,9 @@ private:
      * E.g. they cannot partially overlap (this has been previously
      * checked by <code>checkRelateConsistency</code>
      */
-    void checkShellNotNested(const geom::LinearRing *shell,
-                             const geom::Polygon *p,
-                             geomgraph::GeometryGraph *graph);
+    void checkShellNotNested(const geom::LinearRing* shell,
+                             const geom::Polygon* p,
+                             geomgraph::GeometryGraph* graph);
 
     /**
      * This routine checks to see if a shell is properly contained
@@ -174,20 +174,20 @@ private:
      *   a Coordinate which is not inside the hole if it is not
      *
      */
-    const geom::Coordinate *checkShellInsideHole(
-        const geom::LinearRing *shell,
-        const geom::LinearRing *hole,
-        geomgraph::GeometryGraph *graph);
+    const geom::Coordinate* checkShellInsideHole(
+        const geom::LinearRing* shell,
+        const geom::LinearRing* hole,
+        geomgraph::GeometryGraph* graph);
 
-    void checkConnectedInteriors(geomgraph::GeometryGraph &graph);
+    void checkConnectedInteriors(geomgraph::GeometryGraph& graph);
 
-    void checkInvalidCoordinates(const geom::CoordinateSequence *cs);
+    void checkInvalidCoordinates(const geom::CoordinateSequence* cs);
 
-    void checkInvalidCoordinates(const geom::Polygon *poly);
+    void checkInvalidCoordinates(const geom::Polygon* poly);
 
-    void checkClosedRings(const geom::Polygon *poly);
+    void checkClosedRings(const geom::Polygon* poly);
 
-    void checkClosedRing(const geom::LinearRing *ring);
+    void checkClosedRing(const geom::LinearRing* ring);
 
     bool isSelfTouchingRingFormingHoleValid;
 
@@ -198,10 +198,10 @@ public:
      *
      * @return the point found, or NULL if none found
      */
-    static const geom::Coordinate *findPtNotNode(
-        const geom::CoordinateSequence *testCoords,
-        const geom::LinearRing *searchRing,
-        geomgraph::GeometryGraph *graph);
+    static const geom::Coordinate* findPtNotNode(
+        const geom::CoordinateSequence* testCoords,
+        const geom::LinearRing* searchRing,
+        geomgraph::GeometryGraph* graph);
 
     /**
      * Checks whether a coordinate is valid for processing.
@@ -211,7 +211,7 @@ public:
      * @param coord the coordinate to validate
      * @return <code>true</code> if the coordinate is valid
      */
-    static bool isValid(const geom::Coordinate &coord);
+    static bool isValid(const geom::Coordinate& coord);
 
     /**
      * Tests whether a {@link Geometry} is valid.
@@ -219,9 +219,9 @@ public:
      * @param geom the Geometry to test
      * @return true if the geometry is valid
      */
-    static bool isValid(const geom::Geometry &geom);
+    static bool isValid(const geom::Geometry& geom);
 
-    IsValidOp(const geom::Geometry *geom)
+    IsValidOp(const geom::Geometry* geom)
         :
         parentGeometry(geom),
         isChecked(false),
@@ -230,7 +230,8 @@ public:
     {}
 
     /// TODO: validErr can't be a pointer!
-    virtual ~IsValidOp()
+    virtual
+    ~IsValidOp()
     {
         delete validErr;
     }
@@ -265,7 +266,8 @@ public:
      *
      * @param isValid states whether geometry with this condition is valid
      */
-    void setSelfTouchingRingFormingHoleValid(bool p_isValid)
+    void
+    setSelfTouchingRingFormingHoleValid(bool p_isValid)
     {
         isSelfTouchingRingFormingHoleValid = p_isValid;
     }

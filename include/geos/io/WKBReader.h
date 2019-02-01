@@ -38,22 +38,22 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
+namespace geom {
 
-		//class GeometryFactory;
-		class Coordinate;
-		class Geometry;
-		class GeometryCollection;
-		class Point;
-		class LineString;
-		class LinearRing;
-		class Polygon;
-		class MultiPoint;
-		class MultiLineString;
-		class MultiPolygon;
-		class PrecisionModel;
+//class GeometryFactory;
+class Coordinate;
+class Geometry;
+class GeometryCollection;
+class Point;
+class LineString;
+class LinearRing;
+class Polygon;
+class MultiPoint;
+class MultiLineString;
+class MultiPolygon;
+class PrecisionModel;
 
-	} // namespace geom
+} // namespace geom
 } // namespace geos
 
 
@@ -80,82 +80,82 @@ class GEOS_DLL WKBReader {
 
 public:
 
-	WKBReader(geom::GeometryFactory const& f): factory(f) {}
+    WKBReader(geom::GeometryFactory const& f): factory(f) {}
 
-	/// Inizialize parser with default GeometryFactory.
-	WKBReader();
+    /// Inizialize parser with default GeometryFactory.
+    WKBReader();
 
-	/**
-	 * \brief Reads a Geometry from an istream.
-	 *
-	 * @param is the stream to read from
-	 * @return the Geometry read
-	 * @throws IOException
-	 * @throws ParseException
-	 */
-	geom::Geometry* read(std::istream &is);
-		// throws IOException, ParseException
+    /**
+     * \brief Reads a Geometry from an istream.
+     *
+     * @param is the stream to read from
+     * @return the Geometry read
+     * @throws IOException
+     * @throws ParseException
+     */
+    geom::Geometry* read(std::istream& is);
+    // throws IOException, ParseException
 
-	/**
-	 * \brief Reads a Geometry from an istream in hex format.
-	 *
-	 * @param is the stream to read from
-	 * @return the Geometry read
-	 * @throws IOException
-	 * @throws ParseException
-	 */
-	geom::Geometry *readHEX(std::istream &is);
-		// throws IOException, ParseException
+    /**
+     * \brief Reads a Geometry from an istream in hex format.
+     *
+     * @param is the stream to read from
+     * @return the Geometry read
+     * @throws IOException
+     * @throws ParseException
+     */
+    geom::Geometry* readHEX(std::istream& is);
+    // throws IOException, ParseException
 
-	/**
-	 * \brief Print WKB in HEX form to out stream
-	 *
-	 * @param is is the stream to read from
-	 * @param os is the stream to write to
-	 */
-	static std::ostream &printHEX(std::istream &is, std::ostream &os);
+    /**
+     * \brief Print WKB in HEX form to out stream
+     *
+     * @param is is the stream to read from
+     * @param os is the stream to write to
+     */
+    static std::ostream& printHEX(std::istream& is, std::ostream& os);
 
 private:
 
-	const geom::GeometryFactory &factory;
+    const geom::GeometryFactory& factory;
 
-	// for now support the WKB standard only - may be generalized later
-	unsigned int inputDimension;
+    // for now support the WKB standard only - may be generalized later
+    unsigned int inputDimension;
 
-	ByteOrderDataInStream dis;
+    ByteOrderDataInStream dis;
 
-	std::vector<double> ordValues;
+    std::vector<double> ordValues;
 
-	geom::Geometry *readGeometry();
-		// throws IOException, ParseException
+    geom::Geometry* readGeometry();
+    // throws IOException, ParseException
 
-	geom::Point *readPoint();
-		// throws IOException
+    geom::Point* readPoint();
+    // throws IOException
 
-	geom::LineString *readLineString();
-		// throws IOException
+    geom::LineString* readLineString();
+    // throws IOException
 
-	geom::LinearRing *readLinearRing();
-		// throws IOException
+    geom::LinearRing* readLinearRing();
+    // throws IOException
 
-	geom::Polygon *readPolygon();
-		// throws IOException
+    geom::Polygon* readPolygon();
+    // throws IOException
 
-	geom::MultiPoint *readMultiPoint();
-		// throws IOException, ParseException
+    geom::MultiPoint* readMultiPoint();
+    // throws IOException, ParseException
 
-	geom::MultiLineString *readMultiLineString();
-		// throws IOException, ParseException
+    geom::MultiLineString* readMultiLineString();
+    // throws IOException, ParseException
 
-	geom::MultiPolygon *readMultiPolygon();
-		// throws IOException, ParseException
+    geom::MultiPolygon* readMultiPolygon();
+    // throws IOException, ParseException
 
-	geom::GeometryCollection *readGeometryCollection();
-		// throws IOException, ParseException
+    geom::GeometryCollection* readGeometryCollection();
+    // throws IOException, ParseException
 
-	geom::CoordinateSequence *readCoordinateSequence(int); // throws IOException
+    geom::CoordinateSequence* readCoordinateSequence(int); // throws IOException
 
-	void readCoordinate(); // throws IOException
+    void readCoordinate(); // throws IOException
 
     // Declare type as noncopyable
     WKBReader(const WKBReader& other) = delete;

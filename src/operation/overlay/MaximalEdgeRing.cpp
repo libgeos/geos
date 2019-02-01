@@ -45,16 +45,16 @@ namespace operation { // geos.operation
 namespace overlay { // geos.operation.overlay
 
 /*public*/
-MaximalEdgeRing::MaximalEdgeRing(DirectedEdge *start,
-		const GeometryFactory *p_geometryFactory)
-	// throw(const TopologyException &)
-	:
-	EdgeRing(start, p_geometryFactory)
+MaximalEdgeRing::MaximalEdgeRing(DirectedEdge* start,
+                                 const GeometryFactory* p_geometryFactory)
+// throw(const TopologyException &)
+    :
+    EdgeRing(start, p_geometryFactory)
 {
-	computePoints(start);
-	computeRing();
+    computePoints(start);
+    computeRing();
 #if GEOS_DEBUG
-	cerr << "MaximalEdgeRing[" << this << "] ctor" << endl;
+    cerr << "MaximalEdgeRing[" << this << "] ctor" << endl;
 #endif
 }
 
@@ -62,78 +62,81 @@ MaximalEdgeRing::MaximalEdgeRing(DirectedEdge *start,
 MaximalEdgeRing::~MaximalEdgeRing()
 {
 #if GEOS_DEBUG
-	cerr << "MaximalEdgeRing[" << this << "] dtor" << endl;
+    cerr << "MaximalEdgeRing[" << this << "] dtor" << endl;
 #endif
 }
 
 /*public*/
 DirectedEdge*
-MaximalEdgeRing::getNext(DirectedEdge *de)
+MaximalEdgeRing::getNext(DirectedEdge* de)
 {
-	return de->getNext();
+    return de->getNext();
 }
 
 /*public*/
 void
-MaximalEdgeRing::setEdgeRing(DirectedEdge *de,EdgeRing *er)
+MaximalEdgeRing::setEdgeRing(DirectedEdge* de, EdgeRing* er)
 {
-	de->setEdgeRing(er);
+    de->setEdgeRing(er);
 }
 
 /*public*/
 void
 MaximalEdgeRing::linkDirectedEdgesForMinimalEdgeRings()
 {
-	DirectedEdge* de=startDe;
-	do {
-		Node* node=de->getNode();
-		EdgeEndStar* ees = node->getEdges();
+    DirectedEdge* de = startDe;
+    do {
+        Node* node = de->getNode();
+        EdgeEndStar* ees = node->getEdges();
 
-		assert(dynamic_cast<DirectedEdgeStar*>(ees));
-		DirectedEdgeStar* des = static_cast<DirectedEdgeStar*>(ees);
+        assert(dynamic_cast<DirectedEdgeStar*>(ees));
+        DirectedEdgeStar* des = static_cast<DirectedEdgeStar*>(ees);
 
-		des->linkMinimalDirectedEdges(this);
+        des->linkMinimalDirectedEdges(this);
 
-		de=de->getNext();
+        de = de->getNext();
 
-	} while (de!=startDe);
+    }
+    while(de != startDe);
 }
 
 /*public*/
 vector<MinimalEdgeRing*>*
 MaximalEdgeRing::buildMinimalRings()
 {
-	vector<MinimalEdgeRing*> *minEdgeRings=new vector<MinimalEdgeRing*>;
-	buildMinimalRings(*minEdgeRings);
-	return minEdgeRings;
+    vector<MinimalEdgeRing*>* minEdgeRings = new vector<MinimalEdgeRing*>;
+    buildMinimalRings(*minEdgeRings);
+    return minEdgeRings;
 }
 
 /*public*/
 void
 MaximalEdgeRing::buildMinimalRings(vector<MinimalEdgeRing*>& minEdgeRings)
 {
-	DirectedEdge *de=startDe;
-	do {
-		if(de->getMinEdgeRing()==nullptr) {
-			MinimalEdgeRing *minEr=new MinimalEdgeRing(de, geometryFactory);
-			minEdgeRings.push_back(minEr);
-		}
-		de=de->getNext();
-	} while(de!=startDe);
+    DirectedEdge* de = startDe;
+    do {
+        if(de->getMinEdgeRing() == nullptr) {
+            MinimalEdgeRing* minEr = new MinimalEdgeRing(de, geometryFactory);
+            minEdgeRings.push_back(minEr);
+        }
+        de = de->getNext();
+    }
+    while(de != startDe);
 }
 
 /*public*/
 void
 MaximalEdgeRing::buildMinimalRings(vector<EdgeRing*>& minEdgeRings)
 {
-	DirectedEdge *de=startDe;
-	do {
-		if(de->getMinEdgeRing()==nullptr) {
-			MinimalEdgeRing *minEr=new MinimalEdgeRing(de, geometryFactory);
-			minEdgeRings.push_back(minEr);
-		}
-		de=de->getNext();
-	} while(de!=startDe);
+    DirectedEdge* de = startDe;
+    do {
+        if(de->getMinEdgeRing() == nullptr) {
+            MinimalEdgeRing* minEr = new MinimalEdgeRing(de, geometryFactory);
+            minEdgeRings.push_back(minEr);
+        }
+        de = de->getNext();
+    }
+    while(de != startDe);
 }
 
 } // namespace geos.operation.overlay

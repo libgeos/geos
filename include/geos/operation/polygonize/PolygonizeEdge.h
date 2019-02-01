@@ -27,9 +27,9 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class LineString;
-	}
+namespace geom {
+class LineString;
+}
 }
 
 namespace geos {
@@ -43,15 +43,15 @@ namespace polygonize { // geos::operation::polygonize
  */
 class GEOS_DLL PolygonizeEdge: public planargraph::Edge {
 private:
-	// Externally owned
-	const geom::LineString *line;
+    // Externally owned
+    const geom::LineString* line;
 public:
 
-	// Keep the given pointer (won't do anything to it)
-	PolygonizeEdge(const geom::LineString *newLine);
+    // Keep the given pointer (won't do anything to it)
+    PolygonizeEdge(const geom::LineString* newLine);
 
-	// Just return what it was given initially
-	const geom::LineString* getLine();
+    // Just return what it was given initially
+    const geom::LineString* getLine();
 };
 
 } // namespace geos::operation::polygonize

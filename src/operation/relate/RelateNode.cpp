@@ -32,8 +32,8 @@ namespace geos {
 namespace operation { // geos.operation
 namespace relate { // geos.operation.relate
 
-RelateNode::RelateNode(const Coordinate& p_coord, EdgeEndStar *p_edges):
-	Node(p_coord,p_edges)
+RelateNode::RelateNode(const Coordinate& p_coord, EdgeEndStar* p_edges):
+    Node(p_coord, p_edges)
 {}
 
 RelateNode::~RelateNode()
@@ -47,16 +47,16 @@ RelateNode::~RelateNode()
 void
 RelateNode::computeIM(IntersectionMatrix& im)
 {
-	im.setAtLeastIfValid(label.getLocation(0), label.getLocation(1),0);
+    im.setAtLeastIfValid(label.getLocation(0), label.getLocation(1), 0);
 }
 
 void
 RelateNode::updateIMFromEdges(IntersectionMatrix& im)
 {
-	assert(dynamic_cast<EdgeEndBundleStar*>(edges));
-	EdgeEndBundleStar* eebs=static_cast<EdgeEndBundleStar*>(edges);
+    assert(dynamic_cast<EdgeEndBundleStar*>(edges));
+    EdgeEndBundleStar* eebs = static_cast<EdgeEndBundleStar*>(edges);
 
-	eebs->updateIM(im);
+    eebs->updateIM(im);
 }
 
 } // namespace geos.operation.relate

@@ -33,15 +33,15 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class LineString;
-		class Coordinate;
-	}
-	namespace planargraph {
-		class Node;
-		class Edge;
-		class DirectedEdge;
-	}
+namespace geom {
+class LineString;
+class Coordinate;
+}
+namespace planargraph {
+class Node;
+class Edge;
+class DirectedEdge;
+}
 }
 
 
@@ -60,27 +60,27 @@ class GEOS_DLL LineMergeGraph: public planargraph::PlanarGraph {
 
 private:
 
-	planargraph::Node* getNode(const geom::Coordinate &coordinate);
+    planargraph::Node* getNode(const geom::Coordinate& coordinate);
 
-	std::vector<planargraph::Node*> newNodes;
+    std::vector<planargraph::Node*> newNodes;
 
-	std::vector<planargraph::Edge*> newEdges;
+    std::vector<planargraph::Edge*> newEdges;
 
-	std::vector<planargraph::DirectedEdge*> newDirEdges;
+    std::vector<planargraph::DirectedEdge*> newDirEdges;
 
 public:
 
-	/** \brief
-	 * Adds an Edge, DirectedEdges, and Nodes for the given
-	 * LineString representation of an edge.
-	 *
-	 * Empty lines or lines with all coordinates equal are not added.
-	 *
-	 * @param lineString the linestring to add to the graph
-	 */
-	void addEdge(const geom::LineString *lineString);
+    /** \brief
+     * Adds an Edge, DirectedEdges, and Nodes for the given
+     * LineString representation of an edge.
+     *
+     * Empty lines or lines with all coordinates equal are not added.
+     *
+     * @param lineString the linestring to add to the graph
+     */
+    void addEdge(const geom::LineString* lineString);
 
-	~LineMergeGraph() override;
+    ~LineMergeGraph() override;
 };
 } // namespace geos::operation::linemerge
 } // namespace geos::operation

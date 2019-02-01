@@ -31,30 +31,30 @@ namespace algorithm { // geos.algorithm
 
 /* public static */
 int
-Orientation::index(const geom::Coordinate &p1, const geom::Coordinate &p2,
-                   const geom::Coordinate &q)
+Orientation::index(const geom::Coordinate& p1, const geom::Coordinate& p2,
+                   const geom::Coordinate& q)
 {
     return CGAlgorithmsDD::orientationIndex(p1, p2, q);
 }
 
 /* public static */
 bool
-Orientation::isCCW(const geom::CoordinateSequence *ring)
+Orientation::isCCW(const geom::CoordinateSequence* ring)
 {
     // sanity check
-    if (ring->getSize() < 4) {
+    if(ring->getSize() < 4) {
         throw util::IllegalArgumentException("Ring has fewer than 4 points, so orientation cannot be determined");
     }
 
     // # of points without closing endpoint
-    const std::size_t nPts = ring->getSize()-1;
+    const std::size_t nPts = ring->getSize() - 1;
 
     // find highest point
-    const geom::Coordinate *hiPt = &ring->getAt(0);
+    const geom::Coordinate* hiPt = &ring->getAt(0);
     size_t hiIndex = 0;
-    for (std::size_t i = 1; i <= nPts; ++i) {
-        const geom::Coordinate *p = &ring->getAt(i);
-        if (p->y > hiPt->y) {
+    for(std::size_t i = 1; i <= nPts; ++i) {
+        const geom::Coordinate* p = &ring->getAt(i);
+        if(p->y > hiPt->y) {
             hiPt = p;
             hiIndex = i;
         }
@@ -63,21 +63,22 @@ Orientation::isCCW(const geom::CoordinateSequence *ring)
     // find distinct point before highest point
     auto iPrev = hiIndex;
     do {
-        if (iPrev == 0)
+        if(iPrev == 0) {
             iPrev = nPts;
+        }
         iPrev = iPrev - 1;
     }
-    while (ring->getAt(iPrev) == *hiPt && iPrev != hiIndex);
+    while(ring->getAt(iPrev) == *hiPt && iPrev != hiIndex);
 
     // find distinct point after highest point
     auto iNext = hiIndex;
     do {
         iNext = (iNext + 1) % nPts;
     }
-    while (ring->getAt(iNext)==*hiPt && iNext != hiIndex);
+    while(ring->getAt(iNext) == *hiPt && iNext != hiIndex);
 
-    const geom::Coordinate *prev=&ring->getAt(iPrev);
-    const geom::Coordinate *next=&ring->getAt(iNext);
+    const geom::Coordinate* prev = &ring->getAt(iPrev);
+    const geom::Coordinate* next = &ring->getAt(iNext);
 
     /*
      * This check catches cases where the ring contains an A-B-A
@@ -86,8 +87,8 @@ Orientation::isCCW(const geom::CoordinateSequence *ring)
      * (including the case where the input array has fewer than 4 elements),
      * or it contains coincident line segments.
      */
-    if (prev->equals2D(*hiPt) || next->equals2D(*hiPt) ||
-        prev->equals2D(*next)) {
+    if(prev->equals2D(*hiPt) || next->equals2D(*hiPt) ||
+            prev->equals2D(*next)) {
         return false;
         // MD - don't bother throwing exception,
         // since this isn't a complete check for ring validity
@@ -108,7 +109,7 @@ Orientation::isCCW(const geom::CoordinateSequence *ring)
      */
     bool isCCW = false;
 
-    if (disc == 0) {
+    if(disc == 0) {
         // poly is CCW if prev x is right of next x
         isCCW = (prev->x > next->x);
     }

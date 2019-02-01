@@ -37,10 +37,10 @@ using namespace geos;
 int
 main()
 {
-	check(geomgraph::PlanarGraph);
-	check(geomgraph::EdgeEnd);
-	check(geomgraph::DirectedEdge);
-	check(noding::NodedSegmentString);
-	check(int64);
+    check(geomgraph::PlanarGraph);
+    check(geomgraph::EdgeEnd);
+    check(geomgraph::DirectedEdge);
+    check(noding::NodedSegmentString);
+    check(int64);
 }
 

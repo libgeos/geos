@@ -31,17 +31,17 @@ class GEOS_DLL AssertionFailedException: public GEOSException {
 
 public:
 
-	AssertionFailedException()
-		:
-		GEOSException("AssertionFailedException", "")
-	{}
+    AssertionFailedException()
+        :
+        GEOSException("AssertionFailedException", "")
+    {}
 
-	AssertionFailedException(const std::string& msg)
-		:
-		GEOSException("AssertionFailedException", msg)
-	{}
+    AssertionFailedException(const std::string& msg)
+        :
+        GEOSException("AssertionFailedException", msg)
+    {}
 
-	~AssertionFailedException() throw() override {}
+    ~AssertionFailedException() throw() override {}
 };
 
 } // namespace geos.util

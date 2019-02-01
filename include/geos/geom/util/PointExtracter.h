@@ -31,27 +31,27 @@ namespace util { // geos.geom.util
 class GEOS_DLL PointExtracter: public GeometryFilter {
 
 public:
-	/**
-	 * Returns the Point components from a single geometry.
-	 * If more than one geometry is to be processed, it is more
-	 * efficient to create a single PointExtracter filter instance
-	 * and pass it to multiple geometries.
-	 */
-	static void getPoints(const Geometry &geom, Point::ConstVect &ret);
+    /**
+     * Returns the Point components from a single geometry.
+     * If more than one geometry is to be processed, it is more
+     * efficient to create a single PointExtracter filter instance
+     * and pass it to multiple geometries.
+     */
+    static void getPoints(const Geometry& geom, Point::ConstVect& ret);
 
-	/**
-	 * Constructs a PointExtracterFilter with a list in which
-	 * to store Points found.
-	 */
-	PointExtracter(Point::ConstVect& newComps);
+    /**
+     * Constructs a PointExtracterFilter with a list in which
+     * to store Points found.
+     */
+    PointExtracter(Point::ConstVect& newComps);
 
-	void filter_rw(Geometry *geom) override;
+    void filter_rw(Geometry* geom) override;
 
-	void filter_ro(const Geometry *geom) override;
+    void filter_ro(const Geometry* geom) override;
 
 private:
 
-	Point::ConstVect& comps;
+    Point::ConstVect& comps;
 
     // Declare type as noncopyable
     PointExtracter(const PointExtracter& other) = delete;

@@ -27,35 +27,35 @@ namespace geos {
 namespace io { // geos.io
 
 ParseException::ParseException()
-	:
-	GEOSException("ParseException", "")
+    :
+    GEOSException("ParseException", "")
 {
 }
 
 ParseException::ParseException(const string& msg)
-	:
-	GEOSException("ParseException", msg)
+    :
+    GEOSException("ParseException", msg)
 {
 }
 
 ParseException::ParseException(const string& msg, const string& var)
-	:
-	GEOSException("ParseException", msg+": '"+var+"'")
+    :
+    GEOSException("ParseException", msg + ": '" + var + "'")
 {
 }
 
 ParseException::ParseException(const string& msg, double num)
-	:
-	GEOSException("ParseException", msg+": '"+stringify(num)+"'")
+    :
+    GEOSException("ParseException", msg + ": '" + stringify(num) + "'")
 {
 }
 
 string
 ParseException::stringify(double num)
 {
-	stringstream ss;
-	ss<<num;
-	return ss.str();
+    stringstream ss;
+    ss << num;
+    return ss.str();
 }
 
 } // namespace geos.io

@@ -28,11 +28,11 @@
 
 // Forward declarations
 namespace geos {
-	namespace geomgraph {
-		namespace index {
-			class SegmentIntersector;
-		}
-	}
+namespace geomgraph {
+namespace index {
+class SegmentIntersector;
+}
+}
 }
 
 namespace geos {
@@ -44,21 +44,23 @@ namespace index { // geos::geomgraph::index
  */
 class GEOS_DLL MonotoneChain: public SweepLineEventOBJ {
 private:
-	MonotoneChainEdge *mce;
-	size_t chainIndex;
+    MonotoneChainEdge* mce;
+    size_t chainIndex;
 
 public:
 
-	MonotoneChain(MonotoneChainEdge *newMce, size_t newChainIndex):
-		mce(newMce),
-		chainIndex(newChainIndex)
-	{}
+    MonotoneChain(MonotoneChainEdge* newMce, size_t newChainIndex):
+        mce(newMce),
+        chainIndex(newChainIndex)
+    {}
 
-	~MonotoneChain() override {}
+    ~MonotoneChain() override {}
 
-	void computeIntersections(MonotoneChain *mc,SegmentIntersector *si) {
-		mce->computeIntersectsForChain(chainIndex,*(mc->mce),mc->chainIndex,*si);
-	}
+    void
+    computeIntersections(MonotoneChain* mc, SegmentIntersector* si)
+    {
+        mce->computeIntersectsForChain(chainIndex, *(mc->mce), mc->chainIndex, *si);
+    }
 };
 
 

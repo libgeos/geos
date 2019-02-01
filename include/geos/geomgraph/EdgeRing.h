@@ -38,18 +38,18 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class GeometryFactory;
-		class LinearRing;
-		class Polygon;
-		class Coordinate;
-		class CoordinateSequence;
-	}
-	namespace geomgraph {
-		class DirectedEdge;
-		//class Label;
-		class Edge;
-	}
+namespace geom {
+class GeometryFactory;
+class LinearRing;
+class Polygon;
+class Coordinate;
+class CoordinateSequence;
+}
+namespace geomgraph {
+class DirectedEdge;
+//class Label;
+class Edge;
+}
 }
 
 namespace geos {
@@ -59,142 +59,141 @@ namespace geomgraph { // geos.geomgraph
 class GEOS_DLL EdgeRing {
 
 public:
-	friend std::ostream& operator<< (std::ostream& os, const EdgeRing& er);
+    friend std::ostream& operator<< (std::ostream& os, const EdgeRing& er);
 
-	EdgeRing(DirectedEdge *newStart,
-			const geom::GeometryFactory *newGeometryFactory);
+    EdgeRing(DirectedEdge* newStart,
+             const geom::GeometryFactory* newGeometryFactory);
 
-	virtual ~EdgeRing();
+    virtual ~EdgeRing();
 
-	bool isIsolated();
+    bool isIsolated();
 
-	bool isHole();
+    bool isHole();
 
-	/*
-	 * Return a pointer to the LinearRing owned by
-	 * this object. Make a copy if you need it beyond
-	 * this objects's lifetime.
-	 */
-	geom::LinearRing* getLinearRing();
+    /*
+     * Return a pointer to the LinearRing owned by
+     * this object. Make a copy if you need it beyond
+     * this objects's lifetime.
+     */
+    geom::LinearRing* getLinearRing();
 
-	Label& getLabel();
+    Label& getLabel();
 
-	bool isShell();
+    bool isShell();
 
-	EdgeRing *getShell();
+    EdgeRing* getShell();
 
-	void setShell(EdgeRing *newShell);
+    void setShell(EdgeRing* newShell);
 
-	void addHole(EdgeRing *edgeRing);
+    void addHole(EdgeRing* edgeRing);
 
-	/**
-	 * Return a Polygon copying coordinates from this
-	 * EdgeRing and its holes. Caller must remember
-	 * to delete the result
-	 */
-	geom::Polygon* toPolygon(const geom::GeometryFactory* geometryFactory);
+    /**
+     * Return a Polygon copying coordinates from this
+     * EdgeRing and its holes. Caller must remember
+     * to delete the result
+     */
+    geom::Polygon* toPolygon(const geom::GeometryFactory* geometryFactory);
 
-	/**
-	 * Compute a LinearRing from the point list previously collected.
-	 * Test if the ring is a hole (i.e. if it is CCW) and set the hole
-	 * flag accordingly.
-	 */
-	void computeRing();
+    /**
+     * Compute a LinearRing from the point list previously collected.
+     * Test if the ring is a hole (i.e. if it is CCW) and set the hole
+     * flag accordingly.
+     */
+    void computeRing();
 
-	virtual DirectedEdge* getNext(DirectedEdge *de)=0;
+    virtual DirectedEdge* getNext(DirectedEdge* de) = 0;
 
-	virtual void setEdgeRing(DirectedEdge *de, EdgeRing *er)=0;
+    virtual void setEdgeRing(DirectedEdge* de, EdgeRing* er) = 0;
 
-	/**
-	 * Returns the list of DirectedEdges that make up this EdgeRing
-	 */
-	std::vector<DirectedEdge*>& getEdges();
+    /**
+     * Returns the list of DirectedEdges that make up this EdgeRing
+     */
+    std::vector<DirectedEdge*>& getEdges();
 
-	int getMaxNodeDegree();
+    int getMaxNodeDegree();
 
-	void setInResult();
+    void setInResult();
 
-	/**
-	 * This method will use the computed ring.
-	 * It will also check any holes, if they have been assigned.
-	 */
-	bool containsPoint(const geom::Coordinate& p);
+    /**
+     * This method will use the computed ring.
+     * It will also check any holes, if they have been assigned.
+     */
+    bool containsPoint(const geom::Coordinate& p);
 
-	void testInvariant()
-	{
-		// pts are never NULL
-		assert(pts);
+    void
+    testInvariant()
+    {
+        // pts are never NULL
+        assert(pts);
 
 #ifndef NDEBUG
-		// If this is not an hole, check that
-		// each hole is not null and
-		// has 'this' as it's shell
-		if ( ! shell )
-		{
-			for (std::vector<EdgeRing*>::const_iterator
-				it=holes.begin(), itEnd=holes.end();
-				it != itEnd;
-				++it)
-			{
-				EdgeRing* hole=*it;
-				assert(hole);
-				assert(hole->getShell()==this);
-			}
-		}
+        // If this is not an hole, check that
+        // each hole is not null and
+        // has 'this' as it's shell
+        if(! shell) {
+            for(std::vector<EdgeRing*>::const_iterator
+                    it = holes.begin(), itEnd = holes.end();
+                    it != itEnd;
+                    ++it) {
+                EdgeRing* hole = *it;
+                assert(hole);
+                assert(hole->getShell() == this);
+            }
+        }
 #endif // ndef NDEBUG
-	}
+    }
 
 protected:
 
-	DirectedEdge *startDe; // the directed edge which starts the list of edges for this EdgeRing
+    DirectedEdge* startDe; // the directed edge which starts the list of edges for this EdgeRing
 
-	const geom::GeometryFactory *geometryFactory;
+    const geom::GeometryFactory* geometryFactory;
 
-	/// throw(const TopologyException &)
-	void computePoints(DirectedEdge *newStart);
+    /// throw(const TopologyException &)
+    void computePoints(DirectedEdge* newStart);
 
-	void mergeLabel(const Label& deLabel);
+    void mergeLabel(const Label& deLabel);
 
-	/** \brief
-	 * Merge the RHS label from a DirectedEdge into the label for
-	 * this EdgeRing.
-	 *
-	 * The DirectedEdge label may be null.
-	 * This is acceptable - it results from a node which is NOT
-	 * an intersection node between the Geometries
-	 * (e.g. the end node of a LinearRing).
-	 * In this case the DirectedEdge label does not contribute any
-	 * information to the overall labelling, and is
-	 * simply skipped.
-	 */
-	void mergeLabel(const Label& deLabel, int geomIndex);
+    /** \brief
+     * Merge the RHS label from a DirectedEdge into the label for
+     * this EdgeRing.
+     *
+     * The DirectedEdge label may be null.
+     * This is acceptable - it results from a node which is NOT
+     * an intersection node between the Geometries
+     * (e.g. the end node of a LinearRing).
+     * In this case the DirectedEdge label does not contribute any
+     * information to the overall labelling, and is
+     * simply skipped.
+     */
+    void mergeLabel(const Label& deLabel, int geomIndex);
 
-	void addPoints(Edge *edge, bool isForward, bool isFirstEdge);
+    void addPoints(Edge* edge, bool isForward, bool isFirstEdge);
 
-	/// a list of EdgeRings which are holes in this EdgeRing
-	std::vector<EdgeRing*> holes;
+    /// a list of EdgeRings which are holes in this EdgeRing
+    std::vector<EdgeRing*> holes;
 
 private:
 
-	int maxNodeDegree;
+    int maxNodeDegree;
 
-	/// the DirectedEdges making up this EdgeRing
-	std::vector<DirectedEdge*> edges;
+    /// the DirectedEdges making up this EdgeRing
+    std::vector<DirectedEdge*> edges;
 
-	geom::CoordinateSequence* pts;
+    geom::CoordinateSequence* pts;
 
-	// label stores the locations of each geometry on the
-	// face surrounded by this ring
-	Label label;
+    // label stores the locations of each geometry on the
+    // face surrounded by this ring
+    Label label;
 
-	geom::LinearRing *ring;  // the ring created for this EdgeRing
+    geom::LinearRing* ring;  // the ring created for this EdgeRing
 
-	bool isHoleVar;
+    bool isHoleVar;
 
-	/// if non-null, the ring is a hole and this EdgeRing is its containing shell
-	EdgeRing *shell;
+    /// if non-null, the ring is a hole and this EdgeRing is its containing shell
+    EdgeRing* shell;
 
-	void computeMaxNodeDegree();
+    void computeMaxNodeDegree();
 
 };
 

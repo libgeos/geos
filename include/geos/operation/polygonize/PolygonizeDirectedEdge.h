@@ -27,17 +27,17 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		//class LineString;
-	}
-	namespace planargraph {
-		class Node;
-	}
-	namespace operation {
-		namespace polygonize {
-			class EdgeRing;
-		}
-	}
+namespace geom {
+//class LineString;
+}
+namespace planargraph {
+class Node;
+}
+namespace operation {
+namespace polygonize {
+class EdgeRing;
+}
+}
 }
 
 namespace geos {
@@ -55,66 +55,66 @@ class GEOS_DLL PolygonizeDirectedEdge: public planargraph::DirectedEdge {
 
 private:
 
-	EdgeRing *edgeRing;
+    EdgeRing* edgeRing;
 
-	PolygonizeDirectedEdge *next;
+    PolygonizeDirectedEdge* next;
 
-	long label;
+    long label;
 
 public:
 
-	/*
-	 * \brief
-	 * Constructs a directed edge connecting the <code>from</code> node
-	 * to the <code>to</code> node.
-	 *
-	 * @param directionPt
-	 *    specifies this DirectedEdge's direction (given by an imaginary
-	 *    line from the <code>from</code> node to <code>directionPt</code>)
-	 *
-	 * @param edgeDirection
-	 *    whether this DirectedEdge's direction is the same as or
-	 *    opposite to that of the parent Edge (if any)
-	 */
-	PolygonizeDirectedEdge(planargraph::Node *newFrom,
-			planargraph::Node *newTo,
-			const geom::Coordinate& newDirectionPt,
-			bool nEdgeDirection);
+    /*
+     * \brief
+     * Constructs a directed edge connecting the <code>from</code> node
+     * to the <code>to</code> node.
+     *
+     * @param directionPt
+     *    specifies this DirectedEdge's direction (given by an imaginary
+     *    line from the <code>from</code> node to <code>directionPt</code>)
+     *
+     * @param edgeDirection
+     *    whether this DirectedEdge's direction is the same as or
+     *    opposite to that of the parent Edge (if any)
+     */
+    PolygonizeDirectedEdge(planargraph::Node* newFrom,
+                           planargraph::Node* newTo,
+                           const geom::Coordinate& newDirectionPt,
+                           bool nEdgeDirection);
 
-	/*
-	 * Returns the identifier attached to this directed edge.
-	 */
-	long getLabel() const;
+    /*
+     * Returns the identifier attached to this directed edge.
+     */
+    long getLabel() const;
 
-	/*
-	 * Attaches an identifier to this directed edge.
-	 */
-	void setLabel(long newLabel);
+    /*
+     * Attaches an identifier to this directed edge.
+     */
+    void setLabel(long newLabel);
 
-	/*
-	 * Returns the next directed edge in the EdgeRing that this
-	 * directed edge is a member of.
-	 */
-	PolygonizeDirectedEdge* getNext() const;
+    /*
+     * Returns the next directed edge in the EdgeRing that this
+     * directed edge is a member of.
+     */
+    PolygonizeDirectedEdge* getNext() const;
 
-	/*
-	 * Sets the next directed edge in the EdgeRing that this
-	 * directed edge is a member of.
-	 */
-	void setNext(PolygonizeDirectedEdge *newNext);
+    /*
+     * Sets the next directed edge in the EdgeRing that this
+     * directed edge is a member of.
+     */
+    void setNext(PolygonizeDirectedEdge* newNext);
 
-	/*
-	 * Returns the ring of directed edges that this directed edge is
-	 * a member of, or null if the ring has not been set.
-	 * @see #setRing(EdgeRing)
-	 */
-	bool isInRing() const;
+    /*
+     * Returns the ring of directed edges that this directed edge is
+     * a member of, or null if the ring has not been set.
+     * @see #setRing(EdgeRing)
+     */
+    bool isInRing() const;
 
-	/*
-	 * Sets the ring of directed edges that this directed edge is
-	 * a member of.
-	 */
-	void setRing(EdgeRing *newEdgeRing);
+    /*
+     * Sets the ring of directed edges that this directed edge is
+     * a member of.
+     */
+    void setRing(EdgeRing* newEdgeRing);
 };
 } // namespace geos::operation::polygonize
 } // namespace geos::operation

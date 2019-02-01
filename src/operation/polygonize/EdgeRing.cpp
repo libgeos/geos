@@ -47,48 +47,54 @@ namespace operation { // geos.operation
 namespace polygonize { // geos.operation.polygonize
 
 /*public*/
-EdgeRing *
-EdgeRing::findEdgeRingContaining(EdgeRing *testEr,
-    vector<EdgeRing*> *shellList)
+EdgeRing*
+EdgeRing::findEdgeRingContaining(EdgeRing* testEr,
+                                 vector<EdgeRing*>* shellList)
 {
-    const LinearRing *testRing=testEr->getRingInternal();
-    if ( ! testRing ) return nullptr;
-    const Envelope *testEnv=testRing->getEnvelopeInternal();
-    Coordinate testPt=testRing->getCoordinateN(0);
-    EdgeRing *minShell=nullptr;
-    const Envelope *minEnv=nullptr;
+    const LinearRing* testRing = testEr->getRingInternal();
+    if(! testRing) {
+        return nullptr;
+    }
+    const Envelope* testEnv = testRing->getEnvelopeInternal();
+    Coordinate testPt = testRing->getCoordinateN(0);
+    EdgeRing* minShell = nullptr;
+    const Envelope* minEnv = nullptr;
 
     typedef std::vector<EdgeRing*> ERList;
-    for(ERList::size_type i=0, e=shellList->size(); i<e; ++i) {
-        EdgeRing *tryShell=(*shellList)[i];
-        LinearRing *tryRing=tryShell->getRingInternal();
-        const Envelope *tryEnv=tryRing->getEnvelopeInternal();
-        if (minShell!=nullptr) minEnv=minShell->getRingInternal()->getEnvelopeInternal();
-        bool isContained=false;
+    for(ERList::size_type i = 0, e = shellList->size(); i < e; ++i) {
+        EdgeRing* tryShell = (*shellList)[i];
+        LinearRing* tryRing = tryShell->getRingInternal();
+        const Envelope* tryEnv = tryRing->getEnvelopeInternal();
+        if(minShell != nullptr) {
+            minEnv = minShell->getRingInternal()->getEnvelopeInternal();
+        }
+        bool isContained = false;
 
         // the hole envelope cannot equal the shell envelope
 
-        if (tryEnv->equals(testEnv)) continue;
+        if(tryEnv->equals(testEnv)) {
+            continue;
+        }
 
-        const CoordinateSequence *tryCoords =
+        const CoordinateSequence* tryCoords =
             tryRing->getCoordinatesRO();
 
-        if ( tryEnv->contains(testEnv) ) {
+        if(tryEnv->contains(testEnv)) {
 
             // TODO: don't copy testPt !
             testPt = ptNotInList(testRing->getCoordinatesRO(), tryCoords);
 
-            if ( PointLocation::isInRing(testPt, tryCoords) ) {
-                isContained=true;
+            if(PointLocation::isInRing(testPt, tryCoords)) {
+                isContained = true;
             }
 
-    }
+        }
 
         // check if this new containing ring is smaller
         // than the current minimum ring
-        if (isContained) {
-            if (minShell==nullptr || minEnv->contains(tryEnv)) {
-                minShell=tryShell;
+        if(isContained) {
+            if(minShell == nullptr || minEnv->contains(tryEnv)) {
+                minShell = tryShell;
             }
         }
     }
@@ -97,15 +103,15 @@ EdgeRing::findEdgeRingContaining(EdgeRing *testEr,
 
 /*public static*/
 const Coordinate&
-EdgeRing::ptNotInList(const CoordinateSequence *testPts,
-                      const CoordinateSequence *pts)
+EdgeRing::ptNotInList(const CoordinateSequence* testPts,
+                      const CoordinateSequence* pts)
 {
     const std::size_t npts = testPts->getSize();
-    for (std::size_t i = 0; i < npts; ++i)
-    {
+    for(std::size_t i = 0; i < npts; ++i) {
         const Coordinate& testPt = testPts->getAt(i);
-        if (!isInList(testPt, pts))
+        if(!isInList(testPt, pts)) {
             return testPt;
+        }
     }
     return Coordinate::getNull();
 }
@@ -113,19 +119,19 @@ EdgeRing::ptNotInList(const CoordinateSequence *testPts,
 /*public static*/
 bool
 EdgeRing::isInList(const Coordinate& pt,
-                   const CoordinateSequence *pts)
+                   const CoordinateSequence* pts)
 {
     const std::size_t npts = pts->getSize();
-    for (std::size_t i = 0; i < npts; ++i)
-    {
-        if (pt == pts->getAt(i))
+    for(std::size_t i = 0; i < npts; ++i) {
+        if(pt == pts->getAt(i)) {
             return true;
+        }
     }
     return false;
 }
 
 /*public*/
-EdgeRing::EdgeRing(const GeometryFactory *newFactory)
+EdgeRing::EdgeRing(const GeometryFactory* newFactory)
     :
     factory(newFactory),
     ring(nullptr),
@@ -133,19 +139,19 @@ EdgeRing::EdgeRing(const GeometryFactory *newFactory)
     holes(nullptr)
 {
 #ifdef DEBUG_ALLOC
-    cerr<<"["<<this<<"] EdgeRing(factory)"<<endl;
+    cerr << "[" << this << "] EdgeRing(factory)" << endl;
 #endif // DEBUG_ALLOC
 }
 
 EdgeRing::~EdgeRing()
 {
 #ifdef DEBUG_ALLOC
-    cerr<<"["<<this<<"] ~EdgeRing()"<<endl;
+    cerr << "[" << this << "] ~EdgeRing()" << endl;
 #endif // DEBUG_ALLOC
-    if ( holes )
-    {
-        for (GeomVect::size_type i=0, e=holes->size(); i<e; ++i)
-            delete (*holes)[i];
+    if(holes) {
+        for(GeomVect::size_type i = 0, e = holes->size(); i < e; ++i) {
+            delete(*holes)[i];
+        }
         delete holes;
     }
     delete ring;
@@ -154,23 +160,26 @@ EdgeRing::~EdgeRing()
 
 /*public*/
 void
-EdgeRing::add(const DirectedEdge *de){
+EdgeRing::add(const DirectedEdge* de)
+{
     deList.push_back(de);
 }
 
 /*public*/
 bool
-EdgeRing::isHole(){
+EdgeRing::isHole()
+{
     getRingInternal();
     return Orientation::isCCW(ring->getCoordinatesRO());
 }
 
 /*public*/
 void
-EdgeRing::addHole(LinearRing *hole)
+EdgeRing::addHole(LinearRing* hole)
 {
-    if (holes==nullptr)
-        holes=new vector<Geometry*>();
+    if(holes == nullptr) {
+        holes = new vector<Geometry*>();
+    }
     holes->push_back(hole);
 }
 
@@ -178,9 +187,9 @@ EdgeRing::addHole(LinearRing *hole)
 Polygon*
 EdgeRing::getPolygon()
 {
-    Polygon *poly=factory->createPolygon(ring, holes);
-    ring=nullptr;
-    holes=nullptr;
+    Polygon* poly = factory->createPolygon(ring, holes);
+    ring = nullptr;
+    holes = nullptr;
     return poly;
 }
 
@@ -188,7 +197,9 @@ EdgeRing::getPolygon()
 bool
 EdgeRing::isValid()
 {
-    if ( ! getRingInternal() ) return false; // computes cached ring
+    if(! getRingInternal()) {
+        return false;    // computes cached ring
+    }
     return ring->isValid();
 }
 
@@ -196,15 +207,14 @@ EdgeRing::isValid()
 CoordinateSequence*
 EdgeRing::getCoordinates()
 {
-    if (ringPts==nullptr)
-    {
-        ringPts=factory->getCoordinateSequenceFactory()->create();
-        for (DeList::size_type i=0, e=deList.size(); i<e; ++i) {
-            const DirectedEdge *de=deList[i];
+    if(ringPts == nullptr) {
+        ringPts = factory->getCoordinateSequenceFactory()->create();
+        for(DeList::size_type i = 0, e = deList.size(); i < e; ++i) {
+            const DirectedEdge* de = deList[i];
             assert(dynamic_cast<PolygonizeEdge*>(de->getEdge()));
-            PolygonizeEdge *edge=static_cast<PolygonizeEdge*>(de->getEdge());
+            PolygonizeEdge* edge = static_cast<PolygonizeEdge*>(de->getEdge());
             addEdge(edge->getLine()->getCoordinatesRO(),
-                de->getEdgeDirection(), ringPts);
+                    de->getEdgeDirection(), ringPts);
         }
     }
     return ringPts;
@@ -219,15 +229,18 @@ EdgeRing::getLineString()
 }
 
 /*public*/
-LinearRing *
+LinearRing*
 EdgeRing::getRingInternal()
 {
-    if (ring!=nullptr) return ring;
+    if(ring != nullptr) {
+        return ring;
+    }
 
     getCoordinates();
     try {
-        ring=factory->createLinearRing(*ringPts);
-    } catch (const geos::util::IllegalArgumentException& e) {
+        ring = factory->createLinearRing(*ringPts);
+    }
+    catch(const geos::util::IllegalArgumentException& e) {
 #if GEOS_DEBUG
         // FIXME: print also ringPts
         std::cerr << "EdgeRing::getRingInternal: "
@@ -240,32 +253,28 @@ EdgeRing::getRingInternal()
 }
 
 /*public*/
-LinearRing *
+LinearRing*
 EdgeRing::getRingOwnership()
 {
-    LinearRing *ret = getRingInternal();
+    LinearRing* ret = getRingInternal();
     ring = nullptr;
     return ret;
 }
 
 /*private*/
 void
-EdgeRing::addEdge(const CoordinateSequence *coords, bool isForward,
-                  CoordinateSequence *coordList)
+EdgeRing::addEdge(const CoordinateSequence* coords, bool isForward,
+                  CoordinateSequence* coordList)
 {
-    const std::size_t npts=coords->getSize();
-    if (isForward)
-    {
-        for (std::size_t i = 0; i < npts; ++i)
-        {
+    const std::size_t npts = coords->getSize();
+    if(isForward) {
+        for(std::size_t i = 0; i < npts; ++i) {
             coordList->add(coords->getAt(i), false);
         }
     }
-    else
-    {
-        for (std::size_t i = npts; i > 0; --i)
-        {
-            coordList->add(coords->getAt(i-1), false);
+    else {
+        for(std::size_t i = npts; i > 0; --i) {
+            coordList->add(coords->getAt(i - 1), false);
         }
     }
 }

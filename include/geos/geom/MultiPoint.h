@@ -32,10 +32,10 @@
 #include <vector>
 
 namespace geos {
-	namespace geom { // geos::geom
-		class Coordinate;
-		class CoordinateArraySequence;
-	}
+namespace geom { // geos::geom
+class Coordinate;
+class CoordinateArraySequence;
+}
 }
 
 namespace geos {
@@ -51,69 +51,80 @@ namespace geom { // geos::geom
  *
  * Any collection of Points is a valid MultiPoint.
  */
-class GEOS_DLL MultiPoint: public GeometryCollection, public Puntal
-{
+class GEOS_DLL MultiPoint: public GeometryCollection, public Puntal {
 
 public:
 
-	friend class GeometryFactory;
+    friend class GeometryFactory;
 
-	~MultiPoint() override;
+    ~MultiPoint() override;
 
-	/// Returns point dimension (0)
-	Dimension::DimensionType getDimension() const override;
+    /// Returns point dimension (0)
+    Dimension::DimensionType getDimension() const override;
 
-	/// Returns Dimension::False (Point has no boundary)
-	int getBoundaryDimension() const override;
+    /// Returns Dimension::False (Point has no boundary)
+    int getBoundaryDimension() const override;
 
-	/** \brief
-	 * Gets the boundary of this geometry.
-	 *
-	 * Zero-dimensional geometries have no boundary by definition,
-	 * so an empty GeometryCollection is returned.
-	 *
-	 * @return an empty GeometryCollection
-	 * @see Geometry#getBoundary
-	 */
-	Geometry* getBoundary() const override;
+    /** \brief
+     * Gets the boundary of this geometry.
+     *
+     * Zero-dimensional geometries have no boundary by definition,
+     * so an empty GeometryCollection is returned.
+     *
+     * @return an empty GeometryCollection
+     * @see Geometry#getBoundary
+     */
+    Geometry* getBoundary() const override;
 
-	std::string getGeometryType() const override;
+    std::string getGeometryType() const override;
 
-	GeometryTypeId getGeometryTypeId() const override;
+    GeometryTypeId getGeometryTypeId() const override;
 
-	bool equalsExact(const Geometry *other, double tolerance=0) const override;
+    bool equalsExact(const Geometry* other, double tolerance = 0) const override;
 
-	Geometry *clone() const override { return new MultiPoint(*this); }
+    Geometry*
+    clone() const override
+    {
+        return new MultiPoint(*this);
+    }
 
-	Geometry* reverse() const override { return clone(); }
+    Geometry*
+    reverse() const override
+    {
+        return clone();
+    }
 
 protected:
 
-	/**
-	 * \brief Constructs a <code>MultiPoint</code>.
-	 *
-	 * @param  newPoints
-	 *	the <code>Point</code>s for this <code>MultiPoint</code>,
-	 *	or <code>null</code> or an empty array to create the empty
-	 * 	geometry.
-	 *	Elements may be empty <code>Point</code>s,
-	 *	but not <code>null</code>s.
-	 *
-	 *	Constructed object will take ownership of
-	 *	the vector and its elements.
-	 *
-	 * @param newFactory
-	 * 	The GeometryFactory used to create this geometry
-	 *	Caller must keep the factory alive for the life-time
-	 *	of the constructed MultiPoint.
-	 */
-	MultiPoint(std::vector<Geometry *> *newPoints, const GeometryFactory *newFactory);
+    /**
+     * \brief Constructs a <code>MultiPoint</code>.
+     *
+     * @param  newPoints
+     *	the <code>Point</code>s for this <code>MultiPoint</code>,
+     *	or <code>null</code> or an empty array to create the empty
+     * 	geometry.
+     *	Elements may be empty <code>Point</code>s,
+     *	but not <code>null</code>s.
+     *
+     *	Constructed object will take ownership of
+     *	the vector and its elements.
+     *
+     * @param newFactory
+     * 	The GeometryFactory used to create this geometry
+     *	Caller must keep the factory alive for the life-time
+     *	of the constructed MultiPoint.
+     */
+    MultiPoint(std::vector<Geometry*>* newPoints, const GeometryFactory* newFactory);
 
-	MultiPoint(const MultiPoint &mp): Geometry(mp), GeometryCollection(mp) {}
+    MultiPoint(const MultiPoint& mp): Geometry(mp), GeometryCollection(mp) {}
 
-	const Coordinate* getCoordinateN(size_t n) const;
+    const Coordinate* getCoordinateN(size_t n) const;
 
-	int getSortIndex() const override { return SORTINDEX_MULTIPOINT; };
+    int
+    getSortIndex() const override
+    {
+        return SORTINDEX_MULTIPOINT;
+    };
 
 };
 

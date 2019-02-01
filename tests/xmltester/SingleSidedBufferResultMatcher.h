@@ -21,36 +21,35 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Geometry;
-	}
+namespace geom {
+class Geometry;
+}
 }
 
 namespace geos {
 namespace xmltester {
 
-class SingleSidedBufferResultMatcher
-{
+class SingleSidedBufferResultMatcher {
 public:
-	bool isBufferResultMatch(const geom::Geometry& actualBuffer,
-	                         const geom::Geometry& expectedBuffer,
-	                         double distance);
+    bool isBufferResultMatch(const geom::Geometry& actualBuffer,
+                             const geom::Geometry& expectedBuffer,
+                             double distance);
 
 private:
 
-	static double MAX_HAUSDORFF_DISTANCE_FACTOR;
+    static double MAX_HAUSDORFF_DISTANCE_FACTOR;
 
-	/*
-	 * The minimum distance tolerance which will be used.
-	 * This is required because densified vertices do no lie
-	 * precisely on their parent segment.
-	 */
-	static double MIN_DISTANCE_TOLERANCE;
+    /*
+     * The minimum distance tolerance which will be used.
+     * This is required because densified vertices do no lie
+     * precisely on their parent segment.
+     */
+    static double MIN_DISTANCE_TOLERANCE;
 
-	bool isBoundaryHausdorffDistanceInTolerance(
-                        const geom::Geometry& actualBuffer,
-	                const geom::Geometry& expectedBuffer,
-	                double distance);
+    bool isBoundaryHausdorffDistanceInTolerance(
+        const geom::Geometry& actualBuffer,
+        const geom::Geometry& expectedBuffer,
+        double distance);
 };
 
 } // namespace geos::xmltester

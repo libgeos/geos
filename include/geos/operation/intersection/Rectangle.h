@@ -24,12 +24,12 @@
 
 // Forward declarations
 namespace geos {
-  namespace geom {
-	class GeometryFactory;
-	class Geometry;
-	class Polygon;
-	class LinearRing;
-  }
+namespace geom {
+class GeometryFactory;
+class Geometry;
+class Polygon;
+class LinearRing;
+}
 }
 
 namespace geos {
@@ -48,157 +48,185 @@ namespace intersection { // geos::operation::intersection
  *
  */
 
-class GEOS_DLL Rectangle
-{
- public:
+class GEOS_DLL Rectangle {
+public:
 
-  /**
-   * \brief Construct a clipping rectangle
-   *
-   * @param x1 x-coordinate of the left edge
-   * @param y1 y-coordinate of the bottom edge
-   * @param x2 x-coordinate of the right edge
-   * @param y2 y-coordinate of the right edge
-   * @throws IllegalArgumentException if the rectangle is empty
-   */
+    /**
+     * \brief Construct a clipping rectangle
+     *
+     * @param x1 x-coordinate of the left edge
+     * @param y1 y-coordinate of the bottom edge
+     * @param x2 x-coordinate of the right edge
+     * @param y2 y-coordinate of the right edge
+     * @throws IllegalArgumentException if the rectangle is empty
+     */
 
-  Rectangle(double x1, double y1, double x2, double y2);
+    Rectangle(double x1, double y1, double x2, double y2);
 
-  /**
-   * \@return the minimum x-coordinate of the rectangle
-   */
-  double xmin() const { return xMin; }
+    /**
+     * \@return the minimum x-coordinate of the rectangle
+     */
+    double
+    xmin() const
+    {
+        return xMin;
+    }
 
-  /**
-   * \@return the minimum y-coordinate of the rectangle
-   */
+    /**
+     * \@return the minimum y-coordinate of the rectangle
+     */
 
-  double ymin() const { return yMin; }
-
-
-  /**
-   * \@return the maximum x-coordinate of the rectangle
-   */
-
-  double xmax() const { return xMax; }
+    double
+    ymin() const
+    {
+        return yMin;
+    }
 
 
-  /**
-   * \@return the maximum y-coordinate of the rectangle
-   */
+    /**
+     * \@return the maximum x-coordinate of the rectangle
+     */
 
-  double ymax() const { return yMax; }
+    double
+    xmax() const
+    {
+        return xMax;
+    }
 
-  /**
-   * \@return the rectangle as a polygon geometry
-   *
-   * Ownership transferred to caller
-   */
-	geom::Polygon* toPolygon(const geom::GeometryFactory &f) const;
 
-	geom::LinearRing* toLinearRing(const geom::GeometryFactory &f) const;
+    /**
+     * \@return the maximum y-coordinate of the rectangle
+     */
 
-  /**
-   * @brief Position with respect to a clipping rectangle
-   */
+    double
+    ymax() const
+    {
+        return yMax;
+    }
 
-  enum Position
-  {
-	Inside    = 1,
-	Outside   = 2,
+    /**
+     * \@return the rectangle as a polygon geometry
+     *
+     * Ownership transferred to caller
+     */
+    geom::Polygon* toPolygon(const geom::GeometryFactory& f) const;
 
-	Left        = 4,
-	Top         = 8,
-	Right       = 16,
-	Bottom      = 32,
+    geom::LinearRing* toLinearRing(const geom::GeometryFactory& f) const;
 
-	TopLeft     = Top|Left,                 // 12
-	TopRight    = Top|Right,                // 24
-	BottomLeft  = Bottom|Left,              // 36
-	BottomRight = Bottom|Right              // 48
-  };
+    /**
+     * @brief Position with respect to a clipping rectangle
+     */
 
-  /**
-   * @brief Test if the given position is on a {@link Rectangle] edge
-   * @param pos {@link Rectangle} {@link Position}
-   * @return true, if the position is on an edge
-   */
+    enum Position {
+        Inside    = 1,
+        Outside   = 2,
 
-  static bool onEdge(Position pos)
-  {
-	return (pos > Outside);
-  }
+        Left        = 4,
+        Top         = 8,
+        Right       = 16,
+        Bottom      = 32,
 
-  /**
-   * @brief Test if the given positions are on the same {@link Rectangle} edge
-   * @param pos1 {@link Rectangle} {@link Position} of first coordinate
-   * @param pos2 {@link Rectangle} {@link Position} of second coordinate
-   * @return true, if the positions are on the same edge
-   */
+        TopLeft     = Top | Left,               // 12
+        TopRight    = Top | Right,              // 24
+        BottomLeft  = Bottom | Left,            // 36
+        BottomRight = Bottom | Right            // 48
+    };
 
-  static bool onSameEdge(Position pos1, Position pos2)
-  {
-	return onEdge(Position(pos1 & pos2));
-  }
+    /**
+     * @brief Test if the given position is on a {@link Rectangle] edge
+     * @param pos {@link Rectangle} {@link Position}
+     * @return true, if the position is on an edge
+     */
 
-  /**
-   * @brief Establish position of coordinate with respect to a {@link Rectangle}
-   * @param x x-coordinate
-   * @param y y-coordinate
-   * @return {@link Position} of the coordinate
-   */
+    static bool
+    onEdge(Position pos)
+    {
+        return (pos > Outside);
+    }
 
-  Position position(double x, double y) const
-  {
-	// We assume the point to be inside and test it first
-	if(x>xMin && x<xMax && y>yMin && y<yMax)
-	  return Inside;
-	// Next we assume the point to be outside and test it next
-	if(x<xMin || x>xMax || y<yMin || y>yMax)
-	  return Outside;
-	// Slower cases
-	unsigned int pos = 0;
-	if(x==xMin)
-	  pos |= Left;
-	else if(x==xMax)
-	  pos |= Right;
-	if(y==yMin)
-	  pos |= Bottom;
-	else if(y==yMax)
-	  pos |= Top;
-	return Position(pos);
-  }
+    /**
+     * @brief Test if the given positions are on the same {@link Rectangle} edge
+     * @param pos1 {@link Rectangle} {@link Position} of first coordinate
+     * @param pos2 {@link Rectangle} {@link Position} of second coordinate
+     * @return true, if the positions are on the same edge
+     */
 
-  /**
-   * @brief Next edge in clock-wise direction
-   * @param pos {@link Rectangle} {@link Position}
-   * @return next {@Rectangle} {@link Position} in clock-wise direction
-   */
+    static bool
+    onSameEdge(Position pos1, Position pos2)
+    {
+        return onEdge(Position(pos1 & pos2));
+    }
 
-  static Position nextEdge(Position pos)
-  {
-	switch(pos)
-	  {
-	  case BottomLeft:
-	  case Left:       return Top;
-	  case TopLeft:
-	  case Top:        return Right;
-	  case TopRight:
-	  case Right:      return Bottom;
-	  case BottomRight:
-	  case Bottom:     return Left;
-	  /* silences compiler warnings, Inside & Outside are not handled explicitly */
-	  default:         return pos;
-	  }
-  }
+    /**
+     * @brief Establish position of coordinate with respect to a {@link Rectangle}
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @return {@link Position} of the coordinate
+     */
 
- private:
+    Position
+    position(double x, double y) const
+    {
+        // We assume the point to be inside and test it first
+        if(x > xMin && x < xMax && y > yMin && y < yMax) {
+            return Inside;
+        }
+        // Next we assume the point to be outside and test it next
+        if(x < xMin || x > xMax || y < yMin || y > yMax) {
+            return Outside;
+        }
+        // Slower cases
+        unsigned int pos = 0;
+        if(x == xMin) {
+            pos |= Left;
+        }
+        else if(x == xMax) {
+            pos |= Right;
+        }
+        if(y == yMin) {
+            pos |= Bottom;
+        }
+        else if(y == yMax) {
+            pos |= Top;
+        }
+        return Position(pos);
+    }
 
-  Rectangle();
-  double xMin;
-  double yMin;
-  double xMax;
-  double yMax;
+    /**
+     * @brief Next edge in clock-wise direction
+     * @param pos {@link Rectangle} {@link Position}
+     * @return next {@Rectangle} {@link Position} in clock-wise direction
+     */
+
+    static Position
+    nextEdge(Position pos)
+    {
+        switch(pos) {
+        case BottomLeft:
+        case Left:
+            return Top;
+        case TopLeft:
+        case Top:
+            return Right;
+        case TopRight:
+        case Right:
+            return Bottom;
+        case BottomRight:
+        case Bottom:
+            return Left;
+        /* silences compiler warnings, Inside & Outside are not handled explicitly */
+        default:
+            return pos;
+        }
+    }
+
+private:
+
+    Rectangle();
+    double xMin;
+    double yMin;
+    double xMax;
+    double yMax;
 
 }; // class RectangleIntersection
 

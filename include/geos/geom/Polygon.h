@@ -35,13 +35,13 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom { // geos::geom
-		class Coordinate;
-		class CoordinateArraySequence;
-		class CoordinateSequenceFilter;
-		class LinearRing;
-		class LineString;
-	}
+namespace geom { // geos::geom
+class Coordinate;
+class CoordinateArraySequence;
+class CoordinateSequenceFilter;
+class LinearRing;
+class LineString;
+}
 }
 
 namespace geos {
@@ -62,125 +62,132 @@ namespace geom { // geos::geom
  *  Specification for SQL</A> .
  *
  */
-class GEOS_DLL Polygon: public virtual Geometry, public Polygonal
-{
+class GEOS_DLL Polygon: public virtual Geometry, public Polygonal {
 
 public:
 
-	friend class GeometryFactory;
+    friend class GeometryFactory;
 
-	/// A vector of const Polygon pointers
-	typedef std::vector<const Polygon *> ConstVect;
+    /// A vector of const Polygon pointers
+    typedef std::vector<const Polygon*> ConstVect;
 
-	~Polygon() override;
+    ~Polygon() override;
 
-	/**
-	 * Creates and returns a full copy of this {@link Polygon} object.
-	 * (including all coordinates contained by it).
-	 *
-	 * @return a clone of this instance
-	 */
-	Geometry *clone() const override { return new Polygon(*this); }
+    /**
+     * Creates and returns a full copy of this {@link Polygon} object.
+     * (including all coordinates contained by it).
+     *
+     * @return a clone of this instance
+     */
+    Geometry*
+    clone() const override
+    {
+        return new Polygon(*this);
+    }
 
-	CoordinateSequence* getCoordinates() const override;
+    CoordinateSequence* getCoordinates() const override;
 
-	size_t getNumPoints() const override;
+    size_t getNumPoints() const override;
 
-	/// Returns surface dimension (2)
-	Dimension::DimensionType getDimension() const override;
+    /// Returns surface dimension (2)
+    Dimension::DimensionType getDimension() const override;
 
-	/// Returns coordinate dimension.
-	int getCoordinateDimension() const override;
+    /// Returns coordinate dimension.
+    int getCoordinateDimension() const override;
 
-	/// Returns 1 (Polygon boundary is a MultiLineString)
-	int getBoundaryDimension() const override;
+    /// Returns 1 (Polygon boundary is a MultiLineString)
+    int getBoundaryDimension() const override;
 
-	/** \brief
-	 * Computes the boundary of this geometry
-	 *
-	 * @return a lineal geometry (which may be empty)
-	 * @see Geometry#getBoundary
-	 */
-	Geometry* getBoundary() const override;
+    /** \brief
+     * Computes the boundary of this geometry
+     *
+     * @return a lineal geometry (which may be empty)
+     * @see Geometry#getBoundary
+     */
+    Geometry* getBoundary() const override;
 
-	bool isEmpty() const override;
+    bool isEmpty() const override;
 
-	/// Returns the exterior ring (shell)
-	const LineString* getExteriorRing() const;
+    /// Returns the exterior ring (shell)
+    const LineString* getExteriorRing() const;
 
-	/// Returns number of interior rings (hole)
-	size_t getNumInteriorRing() const;
+    /// Returns number of interior rings (hole)
+    size_t getNumInteriorRing() const;
 
-	/// Get nth interior ring (hole)
-	const LineString* getInteriorRingN(std::size_t n) const;
+    /// Get nth interior ring (hole)
+    const LineString* getInteriorRingN(std::size_t n) const;
 
-	std::string getGeometryType() const override;
-	GeometryTypeId getGeometryTypeId() const override;
-	bool equalsExact(const Geometry *other, double tolerance=0) const override;
-	void apply_rw(const CoordinateFilter *filter) override;
-	void apply_ro(CoordinateFilter *filter) const override;
-	void apply_rw(GeometryFilter *filter) override;
-	void apply_ro(GeometryFilter *filter) const override;
-	void apply_rw(CoordinateSequenceFilter& filter) override;
-	void apply_ro(CoordinateSequenceFilter& filter) const override;
-	void apply_rw(GeometryComponentFilter *filter) override;
-	void apply_ro(GeometryComponentFilter *filter) const override;
+    std::string getGeometryType() const override;
+    GeometryTypeId getGeometryTypeId() const override;
+    bool equalsExact(const Geometry* other, double tolerance = 0) const override;
+    void apply_rw(const CoordinateFilter* filter) override;
+    void apply_ro(CoordinateFilter* filter) const override;
+    void apply_rw(GeometryFilter* filter) override;
+    void apply_ro(GeometryFilter* filter) const override;
+    void apply_rw(CoordinateSequenceFilter& filter) override;
+    void apply_ro(CoordinateSequenceFilter& filter) const override;
+    void apply_rw(GeometryComponentFilter* filter) override;
+    void apply_ro(GeometryComponentFilter* filter) const override;
 
-	Geometry* convexHull() const override;
+    Geometry* convexHull() const override;
 
-	void normalize() override;
+    void normalize() override;
 
-	Geometry* reverse() const override;
+    Geometry* reverse() const override;
 
-	int compareToSameClass(const Geometry *p) const override; //was protected
+    int compareToSameClass(const Geometry* p) const override; //was protected
 
-	const Coordinate* getCoordinate() const override;
+    const Coordinate* getCoordinate() const override;
 
-	double getArea() const override;
+    double getArea() const override;
 
- 	/// Returns the perimeter of this <code>Polygon</code>
-	double getLength() const override;
+    /// Returns the perimeter of this <code>Polygon</code>
+    double getLength() const override;
 
-	bool isRectangle() const override;
+    bool isRectangle() const override;
 
 protected:
 
 
-	Polygon(const Polygon &p);
+    Polygon(const Polygon& p);
 
-	/**
-	 * Constructs a <code>Polygon</code> with the given exterior
-	 * and interior boundaries.
-	 *
-	 * @param  newShell  the outer boundary of the new Polygon,
-	 *                   or <code>null</code> or an empty
-	 *		     LinearRing if the empty geometry
-	 *                   is to be created.
-	 *
-	 * @param  newHoles  the LinearRings defining the inner
-	 *                   boundaries of the new Polygon, or
-	 *                   null or empty LinearRing
-	 *                   if the empty  geometry is to be created.
-	 *
-	 * @param newFactory the GeometryFactory used to create this geometry
-	 *
-	 * Polygon will take ownership of Shell and Holes LinearRings
-	 */
-	Polygon(LinearRing *newShell, std::vector<Geometry *> *newHoles,
-		const GeometryFactory *newFactory);
+    /**
+     * Constructs a <code>Polygon</code> with the given exterior
+     * and interior boundaries.
+     *
+     * @param  newShell  the outer boundary of the new Polygon,
+     *                   or <code>null</code> or an empty
+     *		     LinearRing if the empty geometry
+     *                   is to be created.
+     *
+     * @param  newHoles  the LinearRings defining the inner
+     *                   boundaries of the new Polygon, or
+     *                   null or empty LinearRing
+     *                   if the empty  geometry is to be created.
+     *
+     * @param newFactory the GeometryFactory used to create this geometry
+     *
+     * Polygon will take ownership of Shell and Holes LinearRings
+     */
+    Polygon(LinearRing* newShell, std::vector<Geometry*>* newHoles,
+            const GeometryFactory* newFactory);
 
-	LinearRing *shell;
+    LinearRing* shell;
 
-	std::vector<Geometry *> *holes; //Actually vector<LinearRing *>
+    std::vector<Geometry*>* holes;  //Actually vector<LinearRing *>
 
-	Envelope::Ptr computeEnvelopeInternal() const override;
+    Envelope::Ptr computeEnvelopeInternal() const override;
 
-	int getSortIndex() const override { return SORTINDEX_POLYGON; };
+    int
+    getSortIndex() const override
+    {
+        return SORTINDEX_POLYGON;
+    };
 
 
 private:
 
-	void normalize(LinearRing *ring, bool clockwise);
+    void normalize(LinearRing* ring, bool clockwise);
 };
 
 } // namespace geos::geom

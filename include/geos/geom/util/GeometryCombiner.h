@@ -23,10 +23,10 @@
 
 // Forward declarations
 namespace geos {
-    namespace geom {
-        class Geometry;
-        class GeometryFactory;
-    }
+namespace geom {
+class Geometry;
+class GeometryFactory;
+}
 }
 
 namespace geos {
@@ -44,8 +44,7 @@ namespace util { // geos.geom.util
  *
  * @see GeometryFactory#buildGeometry
  */
-class GeometryCombiner
-{
+class GeometryCombiner {
 public:
     /**
      * Combines a collection of geometries.

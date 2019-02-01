@@ -28,9 +28,10 @@ namespace index {
  */
 class GEOS_DLL ItemVisitor {
 public:
-	virtual void visitItem(void *)=0;
+    virtual void visitItem(void*) = 0;
 
-	virtual ~ItemVisitor() {}
+    virtual
+    ~ItemVisitor() {}
 };
 
 } // namespace geos.index

@@ -33,10 +33,10 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class PrecisionModel;
-		class Geometry;
-	}
+namespace geom {
+class PrecisionModel;
+class Geometry;
+}
 }
 
 namespace geos {
@@ -80,166 +80,166 @@ class GEOS_DLL BufferOp {
 
 private:
 
-	/**
-	 *  A number of digits of precision which leaves some computational "headroom"
-	 *  for floating point operations.
-	 *
-	 *  This value should be less than the decimal precision of double-precision values (16).
-	 */
-	static const int MAX_PRECISION_DIGITS = 12;
+    /**
+     *  A number of digits of precision which leaves some computational "headroom"
+     *  for floating point operations.
+     *
+     *  This value should be less than the decimal precision of double-precision values (16).
+     */
+    static const int MAX_PRECISION_DIGITS = 12;
 
-	/**
-	 * Compute a reasonable scale factor to limit the precision of
-	 * a given combination of Geometry and buffer distance.
-	 * The scale factor is based on a heuristic.
-	 *
-	 * @param g the Geometry being buffered
-	 *
-	 * @param distance the buffer distance
-	 *
-	 * @param maxPrecisionDigits the mzx # of digits that should be
-	 *        allowed by the precision determined by the
-	 *        computed scale factor
-	 *
-	 * @return a scale factor that allows a reasonable amount of
-	 *         precision for the buffer computation
-	 */
-	static double precisionScaleFactor(const geom::Geometry *g,
-			double distance, int maxPrecisionDigits);
+    /**
+     * Compute a reasonable scale factor to limit the precision of
+     * a given combination of Geometry and buffer distance.
+     * The scale factor is based on a heuristic.
+     *
+     * @param g the Geometry being buffered
+     *
+     * @param distance the buffer distance
+     *
+     * @param maxPrecisionDigits the mzx # of digits that should be
+     *        allowed by the precision determined by the
+     *        computed scale factor
+     *
+     * @return a scale factor that allows a reasonable amount of
+     *         precision for the buffer computation
+     */
+    static double precisionScaleFactor(const geom::Geometry* g,
+                                       double distance, int maxPrecisionDigits);
 
-	const geom::Geometry *argGeom;
+    const geom::Geometry* argGeom;
 
-	util::TopologyException saveException;
+    util::TopologyException saveException;
 
-	double distance;
+    double distance;
 
-	//int quadrantSegments;
-	//int endCapStyle;
-	BufferParameters bufParams;
+    //int quadrantSegments;
+    //int endCapStyle;
+    BufferParameters bufParams;
 
-	geom::Geometry* resultGeometry;
+    geom::Geometry* resultGeometry;
 
-	void computeGeometry();
+    void computeGeometry();
 
-	void bufferOriginalPrecision();
+    void bufferOriginalPrecision();
 
-	void bufferReducedPrecision(int precisionDigits);
+    void bufferReducedPrecision(int precisionDigits);
 
-	void bufferReducedPrecision();
+    void bufferReducedPrecision();
 
-	void bufferFixedPrecision(const geom::PrecisionModel& fixedPM);
+    void bufferFixedPrecision(const geom::PrecisionModel& fixedPM);
 
 public:
 
-	enum {
-		/// Specifies a round line buffer end cap style.
-		/// @deprecated use BufferParameters
-		CAP_ROUND = BufferParameters::CAP_ROUND,
+    enum {
+        /// Specifies a round line buffer end cap style.
+        /// @deprecated use BufferParameters
+        CAP_ROUND = BufferParameters::CAP_ROUND,
 
-		/// Specifies a butt (or flat) line buffer end cap style.
-		/// @deprecated use BufferParameters
-		CAP_BUTT = BufferParameters::CAP_FLAT,
+        /// Specifies a butt (or flat) line buffer end cap style.
+        /// @deprecated use BufferParameters
+        CAP_BUTT = BufferParameters::CAP_FLAT,
 
-		/// Specifies a square line buffer end cap style.
-		/// @deprecated use BufferParameters
-		CAP_SQUARE = BufferParameters::CAP_SQUARE
-	};
+        /// Specifies a square line buffer end cap style.
+        /// @deprecated use BufferParameters
+        CAP_SQUARE = BufferParameters::CAP_SQUARE
+    };
 
-	/**
-	 * Computes the buffer for a geometry for a given buffer distance
-	 * and accuracy of approximation.
-	 *
-	 * @param g the geometry to buffer
-	 * @param distance the buffer distance
-	 * @param quadrantSegments the number of segments used to
-	 *        approximate a quarter circle
-	 * @return the buffer of the input geometry
-	 *
-	 */
-	static geom::Geometry* bufferOp(const geom::Geometry *g,
-		double distance,
-		int quadrantSegments=
-			BufferParameters::DEFAULT_QUADRANT_SEGMENTS,
-		int endCapStyle=BufferParameters::CAP_ROUND);
+    /**
+     * Computes the buffer for a geometry for a given buffer distance
+     * and accuracy of approximation.
+     *
+     * @param g the geometry to buffer
+     * @param distance the buffer distance
+     * @param quadrantSegments the number of segments used to
+     *        approximate a quarter circle
+     * @return the buffer of the input geometry
+     *
+     */
+    static geom::Geometry* bufferOp(const geom::Geometry* g,
+                                    double distance,
+                                    int quadrantSegments =
+                                        BufferParameters::DEFAULT_QUADRANT_SEGMENTS,
+                                    int endCapStyle = BufferParameters::CAP_ROUND);
 
-	/**
-	 * Initializes a buffer computation for the given geometry
-	 *
-	 * @param g the geometry to buffer
-	 */
-	BufferOp(const geom::Geometry *g)
-		:
-		argGeom(g),
-		bufParams(),
-		resultGeometry(nullptr)
-	{
-	}
+    /**
+     * Initializes a buffer computation for the given geometry
+     *
+     * @param g the geometry to buffer
+     */
+    BufferOp(const geom::Geometry* g)
+        :
+        argGeom(g),
+        bufParams(),
+        resultGeometry(nullptr)
+    {
+    }
 
-	/**
-	 * Initializes a buffer computation for the given geometry
-	 * with the given set of parameters
-	 *
-	 * @param g the geometry to buffer
-	 * @param params the buffer parameters to use. This class will
-	 *               copy it to private memory.
-	 */
-	BufferOp(const geom::Geometry* g, const BufferParameters& params)
-		:
-		argGeom(g),
-		bufParams(params),
-		resultGeometry(nullptr)
-	{
-	}
+    /**
+     * Initializes a buffer computation for the given geometry
+     * with the given set of parameters
+     *
+     * @param g the geometry to buffer
+     * @param params the buffer parameters to use. This class will
+     *               copy it to private memory.
+     */
+    BufferOp(const geom::Geometry* g, const BufferParameters& params)
+        :
+        argGeom(g),
+        bufParams(params),
+        resultGeometry(nullptr)
+    {
+    }
 
-	/**
-	 * Specifies the end cap style of the generated buffer.
-	 * The styles supported are CAP_ROUND, CAP_BUTT, and CAP_SQUARE.
-	 * The default is CAP_ROUND.
-	 *
-	 * @param endCapStyle the end cap style to specify
-	 */
-	inline void setEndCapStyle(int nEndCapStyle);
+    /**
+     * Specifies the end cap style of the generated buffer.
+     * The styles supported are CAP_ROUND, CAP_BUTT, and CAP_SQUARE.
+     * The default is CAP_ROUND.
+     *
+     * @param endCapStyle the end cap style to specify
+     */
+    inline void setEndCapStyle(int nEndCapStyle);
 
-	/**
-	 * Specifies the end cap style of the generated buffer.
-	 * The styles supported are CAP_ROUND, CAP_BUTT, and CAP_SQUARE.
-	 * The default is CAP_ROUND.
-	 *
-	 * @param endCapStyle the end cap style to specify
-	 */
-	inline void setQuadrantSegments(int nQuadrantSegments);
+    /**
+     * Specifies the end cap style of the generated buffer.
+     * The styles supported are CAP_ROUND, CAP_BUTT, and CAP_SQUARE.
+     * The default is CAP_ROUND.
+     *
+     * @param endCapStyle the end cap style to specify
+     */
+    inline void setQuadrantSegments(int nQuadrantSegments);
 
-	/**
-	 * Sets whether the computed buffer should be single-sided.
-	 *
-	 * A single-sided buffer is constructed on only one side
-	 * of each input line.
-	 *
-	 * The side used is determined by the sign of the buffer distance:
-	 * - a positive distance indicates the left-hand side
-	 * - a negative distance indicates the right-hand side
-	 *
-	 * The single-sided buffer of point geometries is
-	 * the same as the regular buffer.
-	 *
-	 * The End Cap Style for single-sided buffers is
-	 * always ignored,
-	 * and forced to the equivalent of <tt>CAP_FLAT</tt>.
-	 *
-	 * @param isSingleSided true if a single-sided buffer
-	 *                      should be constructed
-	 */
-	inline void setSingleSided(bool isSingleSided);
+    /**
+     * Sets whether the computed buffer should be single-sided.
+     *
+     * A single-sided buffer is constructed on only one side
+     * of each input line.
+     *
+     * The side used is determined by the sign of the buffer distance:
+     * - a positive distance indicates the left-hand side
+     * - a negative distance indicates the right-hand side
+     *
+     * The single-sided buffer of point geometries is
+     * the same as the regular buffer.
+     *
+     * The End Cap Style for single-sided buffers is
+     * always ignored,
+     * and forced to the equivalent of <tt>CAP_FLAT</tt>.
+     *
+     * @param isSingleSided true if a single-sided buffer
+     *                      should be constructed
+     */
+    inline void setSingleSided(bool isSingleSided);
 
-	/**
-	 * Returns the buffer computed for a geometry for a given buffer
-	 * distance.
-	 *
-	 * @param g the geometry to buffer
-	 * @param distance the buffer distance
-	 * @return the buffer of the input geometry
-	 */
-	geom::Geometry* getResultGeometry(double nDistance);
+    /**
+     * Returns the buffer computed for a geometry for a given buffer
+     * distance.
+     *
+     * @param g the geometry to buffer
+     * @param distance the buffer distance
+     * @return the buffer of the input geometry
+     */
+    geom::Geometry* getResultGeometry(double nDistance);
 
 };
 
@@ -247,19 +247,19 @@ public:
 void
 BufferOp::setQuadrantSegments(int q)
 {
-	bufParams.setQuadrantSegments(q);
+    bufParams.setQuadrantSegments(q);
 }
 
 void
 BufferOp::setEndCapStyle(int s)
 {
-	bufParams.setEndCapStyle((BufferParameters::EndCapStyle)s);
+    bufParams.setEndCapStyle((BufferParameters::EndCapStyle)s);
 }
 
 void
 BufferOp::setSingleSided(bool isSingleSided)
 {
-   bufParams.setSingleSided(isSingleSided);
+    bufParams.setSingleSided(isSingleSided);
 }
 
 } // namespace geos::operation::buffer

@@ -45,12 +45,12 @@ public:
 
     /* A value that indicates an orientation or turn */
     enum {
-        CLOCKWISE=-1,
-        COLLINEAR=0,
-        COUNTERCLOCKWISE=1,
-        RIGHT=-1,
-        LEFT=1,
-        STRAIGHT=0
+        CLOCKWISE = -1,
+        COLLINEAR = 0,
+        COUNTERCLOCKWISE = 1,
+        RIGHT = -1,
+        LEFT = 1,
+        STRAIGHT = 0
     };
 
     /*
@@ -64,8 +64,8 @@ public:
     * ( {@link #Orientation::COUNTERCLOCKWISE},
     * {@link #Orientation::CLOCKWISE}, or {@link #Orientation::STRAIGHT} )
     */
-    static int index(const geom::Coordinate &p1, const geom::Coordinate &p2,
-                     const geom::Coordinate &q);
+    static int index(const geom::Coordinate& p1, const geom::Coordinate& p2,
+                     const geom::Coordinate& q);
 
     /**
     * Computes whether a ring defined by an array of {@link Coordinate}s is

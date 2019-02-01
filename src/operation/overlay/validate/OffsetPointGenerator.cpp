@@ -46,10 +46,10 @@ namespace validate { // geos.operation.overlay.validate
 
 /*public*/
 OffsetPointGenerator::OffsetPointGenerator(const geom::Geometry& geom,
-		double offset)
-	:
-	g(geom),
-	offsetDistance(offset)
+        double offset)
+    :
+    g(geom),
+    offsetDistance(offset)
 {
 }
 
@@ -57,53 +57,52 @@ OffsetPointGenerator::OffsetPointGenerator(const geom::Geometry& geom,
 std::unique_ptr< std::vector<geom::Coordinate> >
 OffsetPointGenerator::getPoints()
 {
-	assert (offsetPts.get() == nullptr);
-	offsetPts.reset(new vector<Coordinate>());
+    assert(offsetPts.get() == nullptr);
+    offsetPts.reset(new vector<Coordinate>());
 
-	vector<const LineString*> lines;
-	geos::geom::util::LinearComponentExtracter::getLines(g, lines);
-	for_each(lines.begin(), lines.end(),
-		bind1st(mem_fun(&OffsetPointGenerator::extractPoints), this));
+    vector<const LineString*> lines;
+    geos::geom::util::LinearComponentExtracter::getLines(g, lines);
+    for_each(lines.begin(), lines.end(),
+             bind1st(mem_fun(&OffsetPointGenerator::extractPoints), this));
 
-	// NOTE: Apparently, this is 'source' method giving up the object resource.
-	return std::move(offsetPts);
+    // NOTE: Apparently, this is 'source' method giving up the object resource.
+    return std::move(offsetPts);
 }
 
 /*private*/
 void
 OffsetPointGenerator::extractPoints(const LineString* line)
 {
-	const CoordinateSequence& pts = *(line->getCoordinatesRO());
-	assert(pts.size() > 1 );
+    const CoordinateSequence& pts = *(line->getCoordinatesRO());
+    assert(pts.size() > 1);
 
-	for (size_t i=0, n=pts.size()-1; i<n; ++i)
-	{
-		computeOffsets(pts[i], pts[i + 1]);
-	}
+    for(size_t i = 0, n = pts.size() - 1; i < n; ++i) {
+        computeOffsets(pts[i], pts[i + 1]);
+    }
 }
 
 /*private*/
 void
 OffsetPointGenerator::computeOffsets(const Coordinate& p0,
-		const Coordinate& p1)
+                                     const Coordinate& p1)
 {
-	double dx = p1.x - p0.x;
-	double dy = p1.y - p0.y;
-	double len = sqrt(dx * dx + dy * dy);
+    double dx = p1.x - p0.x;
+    double dy = p1.y - p0.y;
+    double len = sqrt(dx * dx + dy * dy);
 
-	// u is the vector that is the length of the offset,
-	// in the direction of the segment
-	double ux = offsetDistance * dx / len;
-	double uy = offsetDistance * dy / len;
+    // u is the vector that is the length of the offset,
+    // in the direction of the segment
+    double ux = offsetDistance * dx / len;
+    double uy = offsetDistance * dy / len;
 
-	double midX = (p1.x + p0.x) / 2;
-	double midY = (p1.y + p0.y) / 2;
+    double midX = (p1.x + p0.x) / 2;
+    double midY = (p1.y + p0.y) / 2;
 
-	Coordinate offsetLeft(midX - uy, midY + ux);
-	Coordinate offsetRight(midX + uy, midY - ux);
+    Coordinate offsetLeft(midX - uy, midY + ux);
+    Coordinate offsetRight(midX + uy, midY - ux);
 
-	offsetPts->push_back(offsetLeft);
-	offsetPts->push_back(offsetRight);
+    offsetPts->push_back(offsetLeft);
+    offsetPts->push_back(offsetRight);
 }
 
 } // namespace geos.operation.overlay.validate

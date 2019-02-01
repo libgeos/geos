@@ -31,15 +31,15 @@ namespace noding { // geos.noding
 void
 SimpleNoder::computeIntersects(SegmentString* e0, SegmentString* e1)
 {
-	assert(segInt); // must provide a segment intersector!
+    assert(segInt); // must provide a segment intersector!
 
-	const CoordinateSequence* pts0 = e0->getCoordinates();
-	const CoordinateSequence* pts1 = e1->getCoordinates();
-	for (size_t i0=0, n0 = pts0->getSize() - 1; i0 < n0; i0++) {
-		for (size_t i1=0, n1 = pts1->getSize() - 1; i1 < n1; i1++) {
-			segInt->processIntersections(e0, i0, e1, i1);
-		}
-	}
+    const CoordinateSequence* pts0 = e0->getCoordinates();
+    const CoordinateSequence* pts1 = e1->getCoordinates();
+    for(size_t i0 = 0, n0 = pts0->getSize() - 1; i0 < n0; i0++) {
+        for(size_t i1 = 0, n1 = pts1->getSize() - 1; i1 < n1; i1++) {
+            segInt->processIntersections(e0, i0, e1, i1);
+        }
+    }
 
 }
 
@@ -47,21 +47,19 @@ SimpleNoder::computeIntersects(SegmentString* e0, SegmentString* e1)
 void
 SimpleNoder::computeNodes(SegmentString::NonConstVect* inputSegmentStrings)
 {
-	nodedSegStrings=inputSegmentStrings;
+    nodedSegStrings = inputSegmentStrings;
 
-	for (SegmentString::NonConstVect::const_iterator
-			i0=inputSegmentStrings->begin(), i0End=inputSegmentStrings->end();
-			i0!=i0End; ++i0)
-	{
-		SegmentString* edge0 = *i0;
-		for (SegmentString::NonConstVect::iterator
-			i1=inputSegmentStrings->begin(), i1End=inputSegmentStrings->end();
-			i1!=i1End; ++i1)
-		{
-		        SegmentString* edge1 = *i1;
-			computeIntersects(edge0, edge1);
-		}
-	}
+    for(SegmentString::NonConstVect::const_iterator
+            i0 = inputSegmentStrings->begin(), i0End = inputSegmentStrings->end();
+            i0 != i0End; ++i0) {
+        SegmentString* edge0 = *i0;
+        for(SegmentString::NonConstVect::iterator
+                i1 = inputSegmentStrings->begin(), i1End = inputSegmentStrings->end();
+                i1 != i1End; ++i1) {
+            SegmentString* edge1 = *i1;
+            computeIntersects(edge0, edge1);
+        }
+    }
 }
 
 

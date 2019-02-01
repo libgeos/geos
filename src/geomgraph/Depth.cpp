@@ -36,19 +36,23 @@ namespace geomgraph { // geos.geomgraph
 int
 Depth::depthAtLocation(int location)
 {
-	if (location == Location::EXTERIOR) return 0;
-	if (location == Location::INTERIOR) return 1;
-	return NULL_VALUE;
+    if(location == Location::EXTERIOR) {
+        return 0;
+    }
+    if(location == Location::INTERIOR) {
+        return 1;
+    }
+    return NULL_VALUE;
 }
 
 Depth::Depth()
 {
-	// initialize depth array to a sentinel value
-	for (int i=0; i<2; i++) {
-		for (int j=0; j<3;j++) {
-			depth[i][j]=NULL_VALUE;
-		}
-	}
+    // initialize depth array to a sentinel value
+    for(int i = 0; i < 2; i++) {
+        for(int j = 0; j < 3; j++) {
+            depth[i][j] = NULL_VALUE;
+        }
+    }
 }
 
 Depth::~Depth()
@@ -57,29 +61,32 @@ Depth::~Depth()
 }
 
 int
-Depth::getDepth(int geomIndex,int posIndex) const
+Depth::getDepth(int geomIndex, int posIndex) const
 {
-	return depth[geomIndex][posIndex];
+    return depth[geomIndex][posIndex];
 }
 
 void
-Depth::setDepth(int geomIndex,int posIndex,int depthValue)
+Depth::setDepth(int geomIndex, int posIndex, int depthValue)
 {
-	depth[geomIndex][posIndex] = depthValue;
+    depth[geomIndex][posIndex] = depthValue;
 }
 
 int
-Depth::getLocation(int geomIndex,int posIndex) const
+Depth::getLocation(int geomIndex, int posIndex) const
 {
-	if (depth[geomIndex][posIndex] <= 0) return Location::EXTERIOR;
-	return Location::INTERIOR;
+    if(depth[geomIndex][posIndex] <= 0) {
+        return Location::EXTERIOR;
+    }
+    return Location::INTERIOR;
 }
 
 void
-Depth::add(int geomIndex,int posIndex,int location)
+Depth::add(int geomIndex, int posIndex, int location)
 {
-	if (location == Location::INTERIOR)
-		depth[geomIndex][posIndex]++;
+    if(location == Location::INTERIOR) {
+        depth[geomIndex][posIndex]++;
+    }
 }
 
 /**
@@ -88,31 +95,32 @@ Depth::add(int geomIndex,int posIndex,int location)
 bool
 Depth::isNull() const
 {
-	for (int i=0; i<2; i++) {
-		for (int j=0; j<3; j++) {
-			if (depth[i][j] != NULL_VALUE)
-				return false;
-		}
-	}
-	return true;
+    for(int i = 0; i < 2; i++) {
+        for(int j = 0; j < 3; j++) {
+            if(depth[i][j] != NULL_VALUE) {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 bool
 Depth::isNull(int geomIndex) const
 {
-	return depth[geomIndex][1] == NULL_VALUE;
+    return depth[geomIndex][1] == NULL_VALUE;
 }
 
 bool
 Depth::isNull(int geomIndex, int posIndex) const
 {
-	return depth[geomIndex][posIndex] == NULL_VALUE;
+    return depth[geomIndex][posIndex] == NULL_VALUE;
 }
 
 int
 Depth::getDelta(int geomIndex) const
 {
-	return depth[geomIndex][Position::RIGHT]-depth[geomIndex][Position::LEFT];
+    return depth[geomIndex][Position::RIGHT] - depth[geomIndex][Position::LEFT];
 }
 
 /**
@@ -126,48 +134,53 @@ Depth::getDelta(int geomIndex) const
 void
 Depth::normalize()
 {
-	for (int i=0; i<2; i++) {
-		if (!isNull(i)) {
-			int minDepth=depth[i][1];
-			if (depth[i][2]<minDepth)
-				minDepth=depth[i][2];
-			if (minDepth<0) minDepth = 0;
-			for (int j=1; j<3; j++) {
-				int newValue=0;
-				if (depth[i][j]>minDepth)
-					newValue = 1;
-				depth[i][j] = newValue;
-			}
-		}
-	}
+    for(int i = 0; i < 2; i++) {
+        if(!isNull(i)) {
+            int minDepth = depth[i][1];
+            if(depth[i][2] < minDepth) {
+                minDepth = depth[i][2];
+            }
+            if(minDepth < 0) {
+                minDepth = 0;
+            }
+            for(int j = 1; j < 3; j++) {
+                int newValue = 0;
+                if(depth[i][j] > minDepth) {
+                    newValue = 1;
+                }
+                depth[i][j] = newValue;
+            }
+        }
+    }
 }
 
 void
 Depth::add(const Label& lbl)
 {
-	for (int i=0; i<2; i++) {
-		for (int j=1; j<3; j++) {
-			int loc=lbl.getLocation(i,j);
-			if (loc==Location::EXTERIOR || loc==Location::INTERIOR)
-			{
-				// initialize depth if it is null, otherwise
-				// add this location value
-				if (isNull(i,j)) {
-					depth[i][j]=depthAtLocation(loc);
-				} else
-					depth[i][j]+=depthAtLocation(loc);
-			}
-		}
-	}
+    for(int i = 0; i < 2; i++) {
+        for(int j = 1; j < 3; j++) {
+            int loc = lbl.getLocation(i, j);
+            if(loc == Location::EXTERIOR || loc == Location::INTERIOR) {
+                // initialize depth if it is null, otherwise
+                // add this location value
+                if(isNull(i, j)) {
+                    depth[i][j] = depthAtLocation(loc);
+                }
+                else {
+                    depth[i][j] += depthAtLocation(loc);
+                }
+            }
+        }
+    }
 }
 
 string
 Depth::toString() const
 {
-	ostringstream s;
-	s<<"A:"<<depth[0][1]<<","<<depth[0][2]<<" ";
-	s<<"B:"<<depth[1][1]<<","<<depth[1][2]<<"]";
-	return s.str();
+    ostringstream s;
+    s << "A:" << depth[0][1] << "," << depth[0][2] << " ";
+    s << "B:" << depth[1][1] << "," << depth[1][2] << "]";
+    return s.str();
 }
 
 

@@ -30,70 +30,70 @@ namespace geomgraph { // geos.geomgraph
 namespace index { // geos.geomgraph.index
 
 SimpleSweepLineIntersector::SimpleSweepLineIntersector():
-	//events(new vector<SweepLineEvent*>()),
-	nOverlaps(0)
+    //events(new vector<SweepLineEvent*>()),
+    nOverlaps(0)
 {
 }
 
 SimpleSweepLineIntersector::~SimpleSweepLineIntersector()
 {
-	for(unsigned int i=0; i<events.size(); ++i)
-		delete events[i];
-	//delete events;
+    for(unsigned int i = 0; i < events.size(); ++i) {
+        delete events[i];
+    }
+    //delete events;
 }
 
 void
-SimpleSweepLineIntersector::computeIntersections(vector<Edge*> *edges,
-	SegmentIntersector *si, bool testAllSegments)
+SimpleSweepLineIntersector::computeIntersections(vector<Edge*>* edges,
+        SegmentIntersector* si, bool testAllSegments)
 {
-	if (testAllSegments)
-		add(edges,nullptr);
-	else
-		add(edges);
-	computeIntersections(si);
+    if(testAllSegments) {
+        add(edges, nullptr);
+    }
+    else {
+        add(edges);
+    }
+    computeIntersections(si);
 }
 
 void
-SimpleSweepLineIntersector::computeIntersections(vector<Edge*> *edges0,vector<Edge*> *edges1,SegmentIntersector *si)
+SimpleSweepLineIntersector::computeIntersections(vector<Edge*>* edges0, vector<Edge*>* edges1, SegmentIntersector* si)
 {
-	add(edges0,edges0);
-	add(edges1,edges1);
-	computeIntersections(si);
+    add(edges0, edges0);
+    add(edges1, edges1);
+    computeIntersections(si);
 }
 
 void
-SimpleSweepLineIntersector::add(vector<Edge*> *edges)
+SimpleSweepLineIntersector::add(vector<Edge*>* edges)
 {
-	for (unsigned int i=0; i<edges->size(); ++i)
-	{
-		Edge *edge=(*edges)[i];
-		// edge is its own group
-		add(edge,edge);
-	}
+    for(unsigned int i = 0; i < edges->size(); ++i) {
+        Edge* edge = (*edges)[i];
+        // edge is its own group
+        add(edge, edge);
+    }
 }
 
 void
-SimpleSweepLineIntersector::add(vector<Edge*> *edges, void* edgeSet)
+SimpleSweepLineIntersector::add(vector<Edge*>* edges, void* edgeSet)
 {
-	for (unsigned int i=0; i<edges->size(); ++i)
-	{
-		Edge *edge=(*edges)[i];
-		add(edge,edgeSet);
-	}
+    for(unsigned int i = 0; i < edges->size(); ++i) {
+        Edge* edge = (*edges)[i];
+        add(edge, edgeSet);
+    }
 }
 
 void
-SimpleSweepLineIntersector::add(Edge *edge, void* edgeSet)
+SimpleSweepLineIntersector::add(Edge* edge, void* edgeSet)
 {
-	const CoordinateSequence *pts=edge->getCoordinates();
-	std::size_t n=pts->getSize()-1;
-	for(std::size_t i=0; i<n; ++i)
-	{
-		SweepLineSegment *ss=new SweepLineSegment(edge, i);
-		SweepLineEvent *insertEvent=new SweepLineEvent(edgeSet, ss->getMinX(), nullptr, ss);
-		events.push_back(insertEvent);
-		events.push_back(new SweepLineEvent(edgeSet, ss->getMaxX(), insertEvent, ss));
-	}
+    const CoordinateSequence* pts = edge->getCoordinates();
+    std::size_t n = pts->getSize() - 1;
+    for(std::size_t i = 0; i < n; ++i) {
+        SweepLineSegment* ss = new SweepLineSegment(edge, i);
+        SweepLineEvent* insertEvent = new SweepLineEvent(edgeSet, ss->getMinX(), nullptr, ss);
+        events.push_back(insertEvent);
+        events.push_back(new SweepLineEvent(edgeSet, ss->getMaxX(), insertEvent, ss));
+    }
 }
 
 /**
@@ -104,57 +104,50 @@ SimpleSweepLineIntersector::add(Edge *edge, void* edgeSet)
 void
 SimpleSweepLineIntersector::prepareEvents()
 {
-	sort(events.begin(), events.end(), SweepLineEventLessThen());
-	for(unsigned int i=0; i<events.size(); ++i )
-	{
-		SweepLineEvent *ev=events[i];
-		if (ev->isDelete())
-		{
-			ev->getInsertEvent()->setDeleteEventIndex(i);
-		}
-	}
+    sort(events.begin(), events.end(), SweepLineEventLessThen());
+    for(unsigned int i = 0; i < events.size(); ++i) {
+        SweepLineEvent* ev = events[i];
+        if(ev->isDelete()) {
+            ev->getInsertEvent()->setDeleteEventIndex(i);
+        }
+    }
 }
 
 void
-SimpleSweepLineIntersector::computeIntersections(SegmentIntersector *si)
+SimpleSweepLineIntersector::computeIntersections(SegmentIntersector* si)
 {
-	nOverlaps=0;
-	prepareEvents();
-	for(unsigned int i=0; i<events.size(); ++i)
-	{
-		SweepLineEvent *ev=events[i];
-		if (ev->isInsert())
-		{
-			processOverlaps(i,ev->getDeleteEventIndex(),ev,si);
-		}
-	}
+    nOverlaps = 0;
+    prepareEvents();
+    for(unsigned int i = 0; i < events.size(); ++i) {
+        SweepLineEvent* ev = events[i];
+        if(ev->isInsert()) {
+            processOverlaps(i, ev->getDeleteEventIndex(), ev, si);
+        }
+    }
 }
 
 void
-SimpleSweepLineIntersector::processOverlaps(size_t start, size_t end,SweepLineEvent *ev0,
-	SegmentIntersector *si)
+SimpleSweepLineIntersector::processOverlaps(size_t start, size_t end, SweepLineEvent* ev0,
+        SegmentIntersector* si)
 {
 
-	SweepLineSegment *ss0=(SweepLineSegment*) ev0->getObject();
+    SweepLineSegment* ss0 = (SweepLineSegment*) ev0->getObject();
 
-	/**
-	 * Since we might need to test for self-intersections,
-	 * include current insert event object in list of event objects to test.
-	 * Last index can be skipped, because it must be a Delete event.
- 	 */
-	for(auto i = start; i < end; ++i)
-	{
-		SweepLineEvent *ev1=events[i];
-		if (ev1->isInsert())
-		{
-			SweepLineSegment *ss1=(SweepLineSegment*) ev1->getObject();
-			if (ev0->edgeSet==nullptr || (ev0->edgeSet!=ev1->edgeSet))
-			{
-				ss0->computeIntersections(ss1,si);
-				nOverlaps++;
-			}
-		}
-	}
+    /**
+     * Since we might need to test for self-intersections,
+     * include current insert event object in list of event objects to test.
+     * Last index can be skipped, because it must be a Delete event.
+     */
+    for(auto i = start; i < end; ++i) {
+        SweepLineEvent* ev1 = events[i];
+        if(ev1->isInsert()) {
+            SweepLineSegment* ss1 = (SweepLineSegment*) ev1->getObject();
+            if(ev0->edgeSet == nullptr || (ev0->edgeSet != ev1->edgeSet)) {
+                ss0->computeIntersections(ss1, si);
+                nOverlaps++;
+            }
+        }
+    }
 }
 
 } // namespace geos.geomgraph.index

@@ -25,84 +25,105 @@ using namespace geos;
 class XMLTester {
 
 private:
-	enum {
-		SHOW_RUN_INFO=1,
-		SHOW_CASE,
-		SHOW_TEST,
-		SHOW_RESULT,
-		SHOW_GEOMS,
-		SHOW_GEOMS_FULL,
-		PRED
-	};
+    enum {
+        SHOW_RUN_INFO = 1,
+        SHOW_CASE,
+        SHOW_TEST,
+        SHOW_RESULT,
+        SHOW_GEOMS,
+        SHOW_GEOMS_FULL,
+        PRED
+    };
 
-	void parsePrecisionModel(const tinyxml2::XMLElement* el);
-	void parseRun(const tinyxml2::XMLNode* node);
-	void parseCase(const tinyxml2::XMLNode* node);
-	void parseTest(const tinyxml2::XMLNode* node);
-	void runPredicates(const geom::Geometry *a, const geom::Geometry *b);
-	geom::Geometry *parseGeometry(const std::string &in, const char* label="parsed");
-	static std::string trimBlanks(const std::string &in);
-	void printGeom(std::ostream& os, const geom::Geometry *g);
-	std::string printGeom(const geom::Geometry *g);
-	void printTest(bool success, const std::string& expected_result, const std::string& actual_result, const util::Profile&);
+    void parsePrecisionModel(const tinyxml2::XMLElement* el);
+    void parseRun(const tinyxml2::XMLNode* node);
+    void parseCase(const tinyxml2::XMLNode* node);
+    void parseTest(const tinyxml2::XMLNode* node);
+    void runPredicates(const geom::Geometry* a, const geom::Geometry* b);
+    geom::Geometry* parseGeometry(const std::string& in, const char* label = "parsed");
+    static std::string trimBlanks(const std::string& in);
+    void printGeom(std::ostream& os, const geom::Geometry* g);
+    std::string printGeom(const geom::Geometry* g);
+    void printTest(bool success, const std::string& expected_result, const std::string& actual_result,
+                   const util::Profile&);
 
-	geom::Geometry *gA;
-	geom::Geometry *gB;
+    geom::Geometry* gA;
+    geom::Geometry* gB;
 
-	bool usePrepared;
-	std::unique_ptr<geom::PrecisionModel> pm;
-	geom::GeometryFactory::Ptr factory;
-	std::unique_ptr<io::WKTReader> wktreader;
-	std::unique_ptr<io::WKTWriter> wktwriter;
-	std::unique_ptr<io::WKBReader> wkbreader;
-	std::unique_ptr<io::WKBWriter> wkbwriter;
-	tinyxml2::XMLDocument xml;
+    bool usePrepared;
+    std::unique_ptr<geom::PrecisionModel> pm;
+    geom::GeometryFactory::Ptr factory;
+    std::unique_ptr<io::WKTReader> wktreader;
+    std::unique_ptr<io::WKTWriter> wktwriter;
+    std::unique_ptr<io::WKBReader> wkbreader;
+    std::unique_ptr<io::WKBWriter> wkbwriter;
+    tinyxml2::XMLDocument xml;
 
-	int verbose;
-	int test_predicates;
+    int verbose;
+    int test_predicates;
 
-	int failed;
-	int succeeded;
-	int caseCount;
-	int testCount;
-	std::string opSignature;
+    int failed;
+    int succeeded;
+    int caseCount;
+    int testCount;
+    std::string opSignature;
 
-	int testFileCount;
-	int totalTestCount;
+    int testFileCount;
+    int totalTestCount;
 
-	const std::string *curr_file;
-	std::string curr_case_desc;
+    const std::string* curr_file;
+    std::string curr_case_desc;
 
-	bool testValidOutput;
-	bool testValidInput;
-	bool sqlOutput;
-	bool HEXWKB_output;
+    bool testValidOutput;
+    bool testValidInput;
+    bool sqlOutput;
+    bool HEXWKB_output;
 
-	bool testValid(const geom::Geometry* g, const std::string& label);
+    bool testValid(const geom::Geometry* g, const std::string& label);
 
 public:
-	XMLTester();
-	~XMLTester();
-	void run(const std::string &testFile);
-	void resultSummary(std::ostream &os) const;
-	void resetCounters();
+    XMLTester();
+    ~XMLTester();
+    void run(const std::string& testFile);
+    void resultSummary(std::ostream& os) const;
+    void resetCounters();
 
-	/*
-	 * Values:
-	 *	0: Show case description, run tests, show result
-	 *	1: Show parsed geometry values
-	 *	2: Run predicates
-	 *
-	 * Return previously set verbosity level
-	 */
-	int setVerbosityLevel(int val);
+    /*
+     * Values:
+     *	0: Show case description, run tests, show result
+     *	1: Show parsed geometry values
+     *	2: Run predicates
+     *
+     * Return previously set verbosity level
+     */
+    int setVerbosityLevel(int val);
 
-	int getFailuresCount() { return failed; }
+    int
+    getFailuresCount()
+    {
+        return failed;
+    }
 
-	void testOutputValidity(bool val) { testValidOutput=val; }
-	void testInputValidity(bool val) { testValidInput=val; }
-	void setSQLOutput(bool val) { sqlOutput=val; }
-	void setHEXWKBOutput(bool val) { HEXWKB_output=val; }
+    void
+    testOutputValidity(bool val)
+    {
+        testValidOutput = val;
+    }
+    void
+    testInputValidity(bool val)
+    {
+        testValidInput = val;
+    }
+    void
+    setSQLOutput(bool val)
+    {
+        sqlOutput = val;
+    }
+    void
+    setHEXWKBOutput(bool val)
+    {
+        HEXWKB_output = val;
+    }
 
 };
 

@@ -38,61 +38,67 @@ namespace locate { // geos.algorithm
  * is more complex, since it has to take into account the boundaryDetermination rule
  */
 int
-SimplePointInAreaLocator::locate(const Coordinate& p, const Geometry *geom)
+SimplePointInAreaLocator::locate(const Coordinate& p, const Geometry* geom)
 {
-    if (geom->isEmpty())
+    if(geom->isEmpty()) {
         return Location::EXTERIOR;
+    }
 
     return locateInGeometry(p, geom);
 }
 
 int
-SimplePointInAreaLocator::locateInGeometry(const Coordinate& p,const Geometry *geom)
+SimplePointInAreaLocator::locateInGeometry(const Coordinate& p, const Geometry* geom)
 {
-    if (const Polygon *poly = dynamic_cast<const Polygon*>(geom))
-    {
+    if(const Polygon* poly = dynamic_cast<const Polygon*>(geom)) {
         return locatePointInPolygon(p, poly);
     }
 
-    if (!geom->getEnvelopeInternal()->contains(p)) return Location::EXTERIOR;
-    if (const GeometryCollection *col = dynamic_cast<const GeometryCollection*>(geom))
-    {
-        for (auto g2: *col)
-        {
-            assert (g2!=geom);
+    if(!geom->getEnvelopeInternal()->contains(p)) {
+        return Location::EXTERIOR;
+    }
+    if(const GeometryCollection* col = dynamic_cast<const GeometryCollection*>(geom)) {
+        for(auto g2 : *col) {
+            assert(g2 != geom);
             int loc = locateInGeometry(p, g2);
-            if (loc != Location::EXTERIOR)
+            if(loc != Location::EXTERIOR) {
                 return loc;
+            }
         }
     }
     return Location::EXTERIOR;
 }
 
 int
-SimplePointInAreaLocator::locatePointInPolygon(const Coordinate& p, const Polygon *poly)
+SimplePointInAreaLocator::locatePointInPolygon(const Coordinate& p, const Polygon* poly)
 {
-    if (poly->isEmpty()) return Location::EXTERIOR;
-    if (!poly->getEnvelopeInternal()->contains(p)) return Location::EXTERIOR;
-    const LineString *shell=poly->getExteriorRing();
-    const CoordinateSequence *cl;
+    if(poly->isEmpty()) {
+        return Location::EXTERIOR;
+    }
+    if(!poly->getEnvelopeInternal()->contains(p)) {
+        return Location::EXTERIOR;
+    }
+    const LineString* shell = poly->getExteriorRing();
+    const CoordinateSequence* cl;
     cl = shell->getCoordinatesRO();
-    int shellLoc = PointLocation::locateInRing(p,*cl);
-    if (shellLoc != Location::INTERIOR)
+    int shellLoc = PointLocation::locateInRing(p, *cl);
+    if(shellLoc != Location::INTERIOR) {
         return shellLoc;
+    }
 
     // now test if the point lies in or on the holes
-    for(size_t i=0, n=poly->getNumInteriorRing(); i<n; i++)
-    {
-        const LineString *hole = poly->getInteriorRingN(i);
-        if (hole->getEnvelopeInternal()->contains(p))
-        {
-          cl = hole->getCoordinatesRO();
-          int holeLoc = RayCrossingCounter::locatePointInRing(p,*cl);
-          if (holeLoc == Location::BOUNDARY)
-              return Location::BOUNDARY;
-          if (holeLoc == Location::INTERIOR)
-              return Location::EXTERIOR;
-          // if in EXTERIOR of this hole, keep checking other holes
+    for(size_t i = 0, n = poly->getNumInteriorRing(); i < n; i++) {
+        const LineString* hole = poly->getInteriorRingN(i);
+        if(hole->getEnvelopeInternal()->contains(p)) {
+            cl = hole->getCoordinatesRO();
+            int holeLoc = RayCrossingCounter::locatePointInRing(p, *cl);
+            if(holeLoc == Location::BOUNDARY) {
+                return Location::BOUNDARY;
+            }
+            if(holeLoc == Location::INTERIOR) {
+                return Location::EXTERIOR;
+            }
+            // if in EXTERIOR of this hole, keep checking other holes
         }
     }
     return Location::INTERIOR;

@@ -26,15 +26,15 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class CoordinateSequence;
-	}
-	namespace geomgraph {
-		class Edge;
-		namespace index {
-			class SegmentIntersector;
-		}
-	}
+namespace geom {
+class CoordinateSequence;
+}
+namespace geomgraph {
+class Edge;
+namespace index {
+class SegmentIntersector;
+}
+}
 }
 
 namespace geos {
@@ -43,33 +43,33 @@ namespace index { // geos::geomgraph::index
 
 class GEOS_DLL MonotoneChainEdge {
 public:
-	//MonotoneChainEdge();
-	~MonotoneChainEdge();
-	MonotoneChainEdge(Edge *newE);
-	const geom::CoordinateSequence* getCoordinates();
-	std::vector<size_t>& getStartIndexes();
-	double getMinX(size_t chainIndex);
-	double getMaxX(size_t chainIndex);
+    //MonotoneChainEdge();
+    ~MonotoneChainEdge();
+    MonotoneChainEdge(Edge* newE);
+    const geom::CoordinateSequence* getCoordinates();
+    std::vector<size_t>& getStartIndexes();
+    double getMinX(size_t chainIndex);
+    double getMaxX(size_t chainIndex);
 
-	void computeIntersects(const MonotoneChainEdge &mce,
-		SegmentIntersector &si);
+    void computeIntersects(const MonotoneChainEdge& mce,
+                           SegmentIntersector& si);
 
-	void computeIntersectsForChain(size_t chainIndex0,
-		const MonotoneChainEdge &mce, size_t chainIndex1,
-		SegmentIntersector &si);
+    void computeIntersectsForChain(size_t chainIndex0,
+                                   const MonotoneChainEdge& mce, size_t chainIndex1,
+                                   SegmentIntersector& si);
 
 protected:
-	Edge *e;
-	const geom::CoordinateSequence* pts; // cache a reference to the coord array, for efficiency
-	// the lists of start/end indexes of the monotone chains.
-	// Includes the end point of the edge as a sentinel
-	std::vector<size_t> startIndex;
-	// these envelopes are created once and reused
+    Edge* e;
+    const geom::CoordinateSequence* pts; // cache a reference to the coord array, for efficiency
+    // the lists of start/end indexes of the monotone chains.
+    // Includes the end point of the edge as a sentinel
+    std::vector<size_t> startIndex;
+    // these envelopes are created once and reused
 private:
-	void computeIntersectsForChain(size_t start0, size_t end0,
-		const MonotoneChainEdge &mce,
-		size_t start1, size_t end1,
-		SegmentIntersector &ei);
+    void computeIntersectsForChain(size_t start0, size_t end0,
+                                   const MonotoneChainEdge& mce,
+                                   size_t start1, size_t end1,
+                                   SegmentIntersector& ei);
 
     bool overlaps(size_t start0, size_t end0, const MonotoneChainEdge& mce, size_t start1, size_t end1);
 

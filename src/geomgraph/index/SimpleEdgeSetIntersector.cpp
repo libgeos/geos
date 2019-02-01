@@ -28,47 +28,44 @@ namespace geomgraph { // geos.geomgraph
 namespace index { // geos.geomgraph.index
 
 SimpleEdgeSetIntersector::SimpleEdgeSetIntersector():
-	nOverlaps(0)
+    nOverlaps(0)
 {
 }
 
 void
-SimpleEdgeSetIntersector::computeIntersections(vector<Edge*> *edges,
-		SegmentIntersector *si, bool testAllSegments)
+SimpleEdgeSetIntersector::computeIntersections(vector<Edge*>* edges,
+        SegmentIntersector* si, bool testAllSegments)
 {
-	nOverlaps = 0;
-	size_t nedges=edges->size();
-	for(size_t i0=0; i0<nedges; ++i0)
-	{
-		Edge *edge0=(*edges)[i0];
-		for(size_t i1=0; i1<nedges; ++i1)
-		{
-			Edge *edge1=(*edges)[i1];
-			if (testAllSegments || edge0!=edge1)
-				computeIntersects(edge0,edge1,si);
-		}
-	}
+    nOverlaps = 0;
+    size_t nedges = edges->size();
+    for(size_t i0 = 0; i0 < nedges; ++i0) {
+        Edge* edge0 = (*edges)[i0];
+        for(size_t i1 = 0; i1 < nedges; ++i1) {
+            Edge* edge1 = (*edges)[i1];
+            if(testAllSegments || edge0 != edge1) {
+                computeIntersects(edge0, edge1, si);
+            }
+        }
+    }
 }
 
 
 void
-SimpleEdgeSetIntersector::computeIntersections(vector<Edge*> *edges0,
-		vector<Edge*> *edges1, SegmentIntersector *si)
+SimpleEdgeSetIntersector::computeIntersections(vector<Edge*>* edges0,
+        vector<Edge*>* edges1, SegmentIntersector* si)
 {
-	nOverlaps = 0;
+    nOverlaps = 0;
 
-	size_t nedges0=edges0->size();
-	size_t nedges1=edges1->size();
+    size_t nedges0 = edges0->size();
+    size_t nedges1 = edges1->size();
 
-	for(size_t i0=0;i0<nedges0; ++i0)
-	{
-		Edge *edge0=(*edges0)[i0];
-		for(size_t i1=0; i1<nedges1; ++i1)
-		{
-			Edge *edge1=(*edges1)[i1];
-			computeIntersects(edge0,edge1,si);
-		}
-	}
+    for(size_t i0 = 0; i0 < nedges0; ++i0) {
+        Edge* edge0 = (*edges0)[i0];
+        for(size_t i1 = 0; i1 < nedges1; ++i1) {
+            Edge* edge1 = (*edges1)[i1];
+            computeIntersects(edge0, edge1, si);
+        }
+    }
 }
 
 /**
@@ -77,22 +74,20 @@ SimpleEdgeSetIntersector::computeIntersections(vector<Edge*> *edges0,
  * monotone chains.
  */
 void
-SimpleEdgeSetIntersector::computeIntersects(Edge *e0, Edge *e1,
-		SegmentIntersector *si)
+SimpleEdgeSetIntersector::computeIntersects(Edge* e0, Edge* e1,
+        SegmentIntersector* si)
 {
-	const CoordinateSequence *pts0=e0->getCoordinates();
-	const CoordinateSequence *pts1=e1->getCoordinates();
+    const CoordinateSequence* pts0 = e0->getCoordinates();
+    const CoordinateSequence* pts1 = e1->getCoordinates();
 
-	auto npts0 = pts0->size();
-	auto npts1 = pts1->size();
+    auto npts0 = pts0->size();
+    auto npts1 = pts1->size();
 
-	for(size_t i0 = 0; i0 < npts0 - 1; ++i0)
-	{
-		for(size_t i1 = 0; i1<npts1 - 1; ++i1)
-		{
-			si->addIntersections(e0, i0, e1, i1);
-		}
-	}
+    for(size_t i0 = 0; i0 < npts0 - 1; ++i0) {
+        for(size_t i1 = 0; i1 < npts1 - 1; ++i1) {
+            si->addIntersections(e0, i0, e1, i1);
+        }
+    }
 }
 
 } // namespace geos.geomgraph.index

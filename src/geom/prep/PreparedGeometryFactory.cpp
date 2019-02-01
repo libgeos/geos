@@ -36,40 +36,38 @@ namespace geos {
 namespace geom { // geos.geom
 namespace prep { // geos.geom.prep
 
-const PreparedGeometry *
-PreparedGeometryFactory::create( const geom::Geometry * g) const
+const PreparedGeometry*
+PreparedGeometryFactory::create(const geom::Geometry* g) const
 {
     using geos::geom::GeometryTypeId;
 
-    if (nullptr == g)
-    {
+    if(nullptr == g) {
         throw util::IllegalArgumentException("PreparedGeometry constructed with null Geometry object");
     }
 
-	PreparedGeometry* pg = nullptr;
+    PreparedGeometry* pg = nullptr;
 
-	switch ( g->getGeometryTypeId() )
-	{
-		case GEOS_MULTIPOINT:
-		case GEOS_POINT:
-			pg = new PreparedPoint( g);
-			break;
+    switch(g->getGeometryTypeId()) {
+    case GEOS_MULTIPOINT:
+    case GEOS_POINT:
+        pg = new PreparedPoint(g);
+        break;
 
-		case GEOS_LINEARRING:
-		case GEOS_LINESTRING:
-		case GEOS_MULTILINESTRING:
-			pg = new PreparedLineString( g);
-			break;
+    case GEOS_LINEARRING:
+    case GEOS_LINESTRING:
+    case GEOS_MULTILINESTRING:
+        pg = new PreparedLineString(g);
+        break;
 
-		case GEOS_POLYGON:
-		case GEOS_MULTIPOLYGON:
-			pg = new PreparedPolygon( g);
-			break;
+    case GEOS_POLYGON:
+    case GEOS_MULTIPOLYGON:
+        pg = new PreparedPolygon(g);
+        break;
 
-		default:
-			pg = new BasicPreparedGeometry( g);
-	}
-	return pg;
+    default:
+        pg = new BasicPreparedGeometry(g);
+    }
+    return pg;
 }
 
 } // namespace geos.geom.prep

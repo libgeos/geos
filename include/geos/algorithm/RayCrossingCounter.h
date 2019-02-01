@@ -26,10 +26,10 @@
 
 // forward declarations
 namespace geos {
-	namespace geom {
-		class Coordinate;
-		class CoordinateSequence;
-	}
+namespace geom {
+class Coordinate;
+class CoordinateSequence;
+}
 }
 
 
@@ -63,14 +63,13 @@ namespace algorithm {
  * @author Martin Davis
  *
  */
-class GEOS_DLL RayCrossingCounter
-{
+class GEOS_DLL RayCrossingCounter {
 private:
-	const geom::Coordinate& point;
+    const geom::Coordinate& point;
 
-	int crossingCount;
+    int crossingCount;
 
-	// true if the test point lies on an input segment
+    // true if the test point lies on an input segment
     bool isPointOnSegment;
 
     // Declare type as noncopyable
@@ -78,89 +77,90 @@ private:
     RayCrossingCounter& operator=(const RayCrossingCounter& rhs) = delete;
 
 public:
-	/**
-	 * Determines the {@link Location} of a point in a ring.
-	 * This method is an exemplar of how to use this class.
-	 *
-	 * @param p the point to test
-	 * @param ring an array of Coordinates forming a ring
-	 * @return the location of the point in the ring
-	 */
-	static int locatePointInRing(const geom::Coordinate& p,
-	                             const geom::CoordinateSequence& ring);
+    /**
+     * Determines the {@link Location} of a point in a ring.
+     * This method is an exemplar of how to use this class.
+     *
+     * @param p the point to test
+     * @param ring an array of Coordinates forming a ring
+     * @return the location of the point in the ring
+     */
+    static int locatePointInRing(const geom::Coordinate& p,
+                                 const geom::CoordinateSequence& ring);
 
-	/// Semantically equal to the above, just different args encoding
-	static int locatePointInRing(const geom::Coordinate& p,
-	         const std::vector<const geom::Coordinate*>& ring);
+    /// Semantically equal to the above, just different args encoding
+    static int locatePointInRing(const geom::Coordinate& p,
+                                 const std::vector<const geom::Coordinate*>& ring);
 
-	/** \brief
-	 * Returns the index of the direction of the point <code>q</code>
-	 * relative to a vector specified by <code>p1-p2</code>.
-	 *
-	 * @param p1 the origin point of the vector
-	 * @param p2 the final point of the vector
-	 * @param q the point to compute the direction to
-	 *
-	 * @return 1 if q is counter-clockwise (left) from p1-p2
-	 * @return -1 if q is clockwise (right) from p1-p2
-	 * @return 0 if q is collinear with p1-p2
-	 */
-	static int orientationIndex(const geom::Coordinate& p1,
-	         const geom::Coordinate& p2,
-	         const geom::Coordinate& q);
+    /** \brief
+     * Returns the index of the direction of the point <code>q</code>
+     * relative to a vector specified by <code>p1-p2</code>.
+     *
+     * @param p1 the origin point of the vector
+     * @param p2 the final point of the vector
+     * @param q the point to compute the direction to
+     *
+     * @return 1 if q is counter-clockwise (left) from p1-p2
+     * @return -1 if q is clockwise (right) from p1-p2
+     * @return 0 if q is collinear with p1-p2
+     */
+    static int orientationIndex(const geom::Coordinate& p1,
+                                const geom::Coordinate& p2,
+                                const geom::Coordinate& q);
 
-	RayCrossingCounter(const geom::Coordinate& p_point)
-	:	point( p_point),
-		crossingCount( 0),
-		isPointOnSegment( false)
-	{ }
+    RayCrossingCounter(const geom::Coordinate& p_point)
+        :	point(p_point),
+          crossingCount(0),
+          isPointOnSegment(false)
+    { }
 
-	/**
-	 * Counts a segment
-	 *
-	 * @param p1 an endpoint of the segment
-	 * @param p2 another endpoint of the segment
-	 */
-	void countSegment(const geom::Coordinate& p1,
-	                  const geom::Coordinate& p2);
+    /**
+     * Counts a segment
+     *
+     * @param p1 an endpoint of the segment
+     * @param p2 another endpoint of the segment
+     */
+    void countSegment(const geom::Coordinate& p1,
+                      const geom::Coordinate& p2);
 
-	/**
-	 * Reports whether the point lies exactly on one of the supplied segments.
-	 * This method may be called at any time as segments are processed.
-	 * If the result of this method is <tt>true</tt>,
-	 * no further segments need be supplied, since the result
-	 * will never change again.
-	 *
-	 * @return true if the point lies exactly on a segment
-	 */
-	bool isOnSegment()
-	{
-		return isPointOnSegment;
-	}
+    /**
+     * Reports whether the point lies exactly on one of the supplied segments.
+     * This method may be called at any time as segments are processed.
+     * If the result of this method is <tt>true</tt>,
+     * no further segments need be supplied, since the result
+     * will never change again.
+     *
+     * @return true if the point lies exactly on a segment
+     */
+    bool
+    isOnSegment()
+    {
+        return isPointOnSegment;
+    }
 
-	/**
-	 * Gets the {@link Location} of the point relative to
-	 * the ring, polygon
-	 * or multipolygon from which the processed segments were provided.
-	 * <p>
-	 * This method only determines the correct location
-	 * if <b>all</b> relevant segments must have been processed.
-	 *
-	 * @return the Location of the point
- 	 */
-	int getLocation();
+    /**
+     * Gets the {@link Location} of the point relative to
+     * the ring, polygon
+     * or multipolygon from which the processed segments were provided.
+     * <p>
+     * This method only determines the correct location
+     * if <b>all</b> relevant segments must have been processed.
+     *
+     * @return the Location of the point
+     */
+    int getLocation();
 
-	/**
-	 * Tests whether the point lies in or on
-	 * the ring, polygon
-	 * or multipolygon from which the processed segments were provided.
-	 * <p>
-	 * This method only determines the correct location
-	 * if <b>all</b> relevant segments must have been processed.
-	 *
-	 * @return true if the point lies in or on the supplied polygon
-	 */
-	bool isPointInPolygon();
+    /**
+     * Tests whether the point lies in or on
+     * the ring, polygon
+     * or multipolygon from which the processed segments were provided.
+     * <p>
+     * This method only determines the correct location
+     * if <b>all</b> relevant segments must have been processed.
+     *
+     * @return true if the point lies in or on the supplied polygon
+     */
+    bool isPointInPolygon();
 
 };
 

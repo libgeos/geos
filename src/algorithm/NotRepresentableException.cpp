@@ -20,18 +20,18 @@ namespace geos {
 namespace algorithm { // geos.algorithm
 
 NotRepresentableException::NotRepresentableException()
-	:
-	GEOSException(
-		"NotRepresentableException",
-		"Projective point not representable on the Cartesian plane.")
+    :
+    GEOSException(
+        "NotRepresentableException",
+        "Projective point not representable on the Cartesian plane.")
 
 {
 }
 
 NotRepresentableException::NotRepresentableException(std::string msg)
-	:
-	GEOSException(
-		"NotRepresentableException", msg)
+    :
+    GEOSException(
+        "NotRepresentableException", msg)
 {
 }
 

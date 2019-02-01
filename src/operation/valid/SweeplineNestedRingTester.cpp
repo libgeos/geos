@@ -34,69 +34,73 @@ namespace geos {
 namespace operation { // geos.operation
 namespace valid { // geos.operation.valid
 
-SweeplineNestedRingTester::OverlapAction::OverlapAction(SweeplineNestedRingTester *p)
+SweeplineNestedRingTester::OverlapAction::OverlapAction(SweeplineNestedRingTester* p)
 {
-	isNonNested=true;
-	parent=p;
+    isNonNested = true;
+    parent = p;
 }
 
 void
-SweeplineNestedRingTester::OverlapAction::overlap(SweepLineInterval *s0, SweepLineInterval *s1)
+SweeplineNestedRingTester::OverlapAction::overlap(SweepLineInterval* s0, SweepLineInterval* s1)
 {
-	LinearRing *innerRing=(LinearRing*) s0->getItem();
-	LinearRing *searchRing=(LinearRing*) s1->getItem();
-	if (innerRing==searchRing) return;
-	if (parent->isInside(innerRing, searchRing))
-		isNonNested=false;
+    LinearRing* innerRing = (LinearRing*) s0->getItem();
+    LinearRing* searchRing = (LinearRing*) s1->getItem();
+    if(innerRing == searchRing) {
+        return;
+    }
+    if(parent->isInside(innerRing, searchRing)) {
+        isNonNested = false;
+    }
 }
 
 
 bool
 SweeplineNestedRingTester::isNonNested()
 {
-	buildIndex();
-	OverlapAction *action=new OverlapAction(this);
-	sweepLine->computeOverlaps(action);
-	return action->isNonNested;
+    buildIndex();
+    OverlapAction* action = new OverlapAction(this);
+    sweepLine->computeOverlaps(action);
+    return action->isNonNested;
 }
 
 void
 SweeplineNestedRingTester::buildIndex()
 {
-	sweepLine=new SweepLineIndex();
-	for(size_t i=0, n=rings.size(); i<n; i++) {
-		LinearRing *ring=rings[i];
-		const Envelope *env=ring->getEnvelopeInternal();
-		SweepLineInterval *sweepInt=new SweepLineInterval(env->getMinX(),env->getMaxX(),ring);
-		sweepLine->add(sweepInt);
-	}
+    sweepLine = new SweepLineIndex();
+    for(size_t i = 0, n = rings.size(); i < n; i++) {
+        LinearRing* ring = rings[i];
+        const Envelope* env = ring->getEnvelopeInternal();
+        SweepLineInterval* sweepInt = new SweepLineInterval(env->getMinX(), env->getMaxX(), ring);
+        sweepLine->add(sweepInt);
+    }
 }
 
 bool
-SweeplineNestedRingTester::isInside(LinearRing *innerRing,LinearRing *searchRing)
+SweeplineNestedRingTester::isInside(LinearRing* innerRing, LinearRing* searchRing)
 {
-	CoordinateSequence *innerRingPts=innerRing->getCoordinates();
-	CoordinateSequence *searchRingPts=searchRing->getCoordinates();
+    CoordinateSequence* innerRingPts = innerRing->getCoordinates();
+    CoordinateSequence* searchRingPts = searchRing->getCoordinates();
 
-	if (!innerRing->getEnvelopeInternal()->intersects(searchRing->getEnvelopeInternal()))
-		return false;
-	const Coordinate *innerRingPt=IsValidOp::findPtNotNode(innerRingPts, searchRing, graph);
+    if(!innerRing->getEnvelopeInternal()->intersects(searchRing->getEnvelopeInternal())) {
+        return false;
+    }
+    const Coordinate* innerRingPt = IsValidOp::findPtNotNode(innerRingPts, searchRing, graph);
 
-	// Unable to find a ring point not a node of the search ring
-	assert(innerRingPt!=nullptr);
+    // Unable to find a ring point not a node of the search ring
+    assert(innerRingPt != nullptr);
 
-	bool p_isInside = PointLocation::isInRing(*innerRingPt,searchRingPts);
-	if (p_isInside) {
-		/*
-		 * innerRingPt is const just because the input
-		 * CoordinateSequence is const. If the input
-		 * Polygon survives lifetime of this object
-		 * we are safe.
-		 */
-		nestedPt=const_cast<Coordinate *>(innerRingPt);
-		return true;
-	}
-	return false;
+    bool p_isInside = PointLocation::isInRing(*innerRingPt, searchRingPts);
+    if(p_isInside) {
+        /*
+         * innerRingPt is const just because the input
+         * CoordinateSequence is const. If the input
+         * Polygon survives lifetime of this object
+         * we are safe.
+         */
+        nestedPt = const_cast<Coordinate*>(innerRingPt);
+        return true;
+    }
+    return false;
 }
 
 } // namespace geos.operation.valid

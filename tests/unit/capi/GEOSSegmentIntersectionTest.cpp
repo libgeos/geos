@@ -8,76 +8,77 @@
 #include <cstdio>
 #include <cstdlib>
 
-namespace tut
+namespace tut {
+//
+// Test Group
+//
+
+// Common data used in test cases.
+struct test_capigeossegmentintersection {
+    static void
+    notice(const char* fmt, ...)
+    {
+        std::fprintf(stdout, "NOTICE: ");
+
+        va_list ap;
+        va_start(ap, fmt);
+        std::vfprintf(stdout, fmt, ap);
+        va_end(ap);
+
+        std::fprintf(stdout, "\n");
+    }
+
+    test_capigeossegmentintersection()
+    {
+        initGEOS(notice, notice);
+    }
+
+    ~test_capigeossegmentintersection()
+    {
+        finishGEOS();
+    }
+};
+
+typedef test_group<test_capigeossegmentintersection> group;
+typedef group::object object;
+
+group test_capigeossegmentintersection_group("capi::GEOSSegmentIntersection");
+
+//
+// Test Cases
+//
+template<>
+template<>
+void object::test<1>
+()
 {
-    //
-    // Test Group
-    //
+    // plain old intersection
+    int result;
+    double x, y;
 
-    // Common data used in test cases.
-    struct test_capigeossegmentintersection
-    {
-        static void notice(const char *fmt, ...)
-        {
-            std::fprintf( stdout, "NOTICE: ");
+    result = GEOSSegmentIntersection(0, 0, 10, 10,
+                                     8, 0, 8, 10,
+                                     &x, &y);
 
-            va_list ap;
-            va_start(ap, fmt);
-            std::vfprintf(stdout, fmt, ap);
-            va_end(ap);
+    ensure_equals(result, 1);
+    ensure_equals(x, 8);
+    ensure_equals(y, 8);
+}
 
-            std::fprintf(stdout, "\n");
-        }
+template<>
+template<>
+void object::test<2>
+()
+{
+    // no intersection
+    int result;
+    double x, y;
 
-        test_capigeossegmentintersection()
-        {
-            initGEOS(notice, notice);
-        }
+    result = GEOSSegmentIntersection(0, 0, 10, 10,
+                                     8, 0, 8,  2,
+                                     &x, &y);
 
-        ~test_capigeossegmentintersection()
-        {
-            finishGEOS();
-        }
-    };
-
-    typedef test_group<test_capigeossegmentintersection> group;
-    typedef group::object object;
-
-    group test_capigeossegmentintersection_group("capi::GEOSSegmentIntersection");
-
-    //
-    // Test Cases
-    //
-    template<>
-    template<>
-    void object::test<1>()
-    {
-        // plain old intersection
-        int result;
-        double x,y;
-
-        result = GEOSSegmentIntersection(0, 0, 10, 10,
-                                         8, 0, 8, 10,
-                                         &x, &y);
-
-        ensure_equals(result, 1);
-        ensure_equals(x, 8);
-        ensure_equals(y, 8);
-    }
-
-    template<>
-    template<>
-    void object::test<2>()
-    {
-        // no intersection
-        int result;
-        double x,y;
-
-        result = GEOSSegmentIntersection(0, 0, 10, 10,
-                                         8, 0, 8,  2,
-                                         &x, &y);
-
-        ensure_equals(result, -1);
-    }
+    ensure_equals(result, -1);
+}
 
 } // namespace tut

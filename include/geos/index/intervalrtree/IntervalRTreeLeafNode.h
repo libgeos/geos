@@ -22,9 +22,9 @@
 
 // forward declarations
 namespace geos {
-	namespace index {
-		class ItemVisitor;
-	}
+namespace index {
+class ItemVisitor;
+}
 }
 
 
@@ -32,26 +32,25 @@ namespace geos {
 namespace index {
 namespace intervalrtree {
 
-class IntervalRTreeLeafNode : public IntervalRTreeNode
-{
+class IntervalRTreeLeafNode : public IntervalRTreeNode {
 private:
-	/// externally owned
-	void * item;
+    /// externally owned
+    void* item;
 
 protected:
 public:
 
-	/// @param item externally owned
-	IntervalRTreeLeafNode( double p_min, double p_max, void * p_item)
-	:	IntervalRTreeNode( p_min, p_max),
-		item( p_item)
-	{ }
+    /// @param item externally owned
+    IntervalRTreeLeafNode(double p_min, double p_max, void* p_item)
+        :	IntervalRTreeNode(p_min, p_max),
+          item(p_item)
+    { }
 
-	~IntervalRTreeLeafNode() override
-	{
-	}
+    ~IntervalRTreeLeafNode() override
+    {
+    }
 
-	void query( double queryMin, double queryMax, index::ItemVisitor * visitor) const override;
+    void query(double queryMin, double queryMax, index::ItemVisitor* visitor) const override;
 
 };
 

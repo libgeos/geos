@@ -35,19 +35,19 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class LinearRing;
-		class Envelope;
-		class Coordinate;
-	}
-	namespace index {
-		namespace sweepline {
-			class SweepLineIndex;
-		}
-	}
-	namespace geomgraph {
-		class GeometryGraph;
-	}
+namespace geom {
+class LinearRing;
+class Envelope;
+class Coordinate;
+}
+namespace index {
+namespace sweepline {
+class SweepLineIndex;
+}
+}
+namespace geomgraph {
+class GeometryGraph;
+}
 }
 
 namespace geos {
@@ -62,50 +62,56 @@ namespace valid { // geos::operation::valid
 class GEOS_DLL SweeplineNestedRingTester {
 
 private:
-	geomgraph::GeometryGraph *graph;  // used to find non-node vertices
-	std::vector<geom::LinearRing*> rings;
-	index::sweepline::SweepLineIndex *sweepLine;
-	geom::Coordinate *nestedPt;
-	void buildIndex();
+    geomgraph::GeometryGraph* graph;  // used to find non-node vertices
+    std::vector<geom::LinearRing*> rings;
+    index::sweepline::SweepLineIndex* sweepLine;
+    geom::Coordinate* nestedPt;
+    void buildIndex();
 
 public:
 
-	SweeplineNestedRingTester(geomgraph::GeometryGraph *newGraph)
-		:
-		graph(newGraph),
-		rings(),
-		sweepLine(new index::sweepline::SweepLineIndex()),
-		nestedPt(nullptr)
-	{}
+    SweeplineNestedRingTester(geomgraph::GeometryGraph* newGraph)
+        :
+        graph(newGraph),
+        rings(),
+        sweepLine(new index::sweepline::SweepLineIndex()),
+        nestedPt(nullptr)
+    {}
 
-	~SweeplineNestedRingTester()
-	{
-		delete sweepLine;
-	}
+    ~SweeplineNestedRingTester()
+    {
+        delete sweepLine;
+    }
 
-	/*
-	 * Be aware that the returned Coordinate (if != NULL)
-	 * will point to storage owned by one of the LinearRing
-	 * previously added. If you destroy them, this
-	 * will point to an invalid memory address.
-	 */
-	geom::Coordinate *getNestedPoint() { return nestedPt; }
+    /*
+     * Be aware that the returned Coordinate (if != NULL)
+     * will point to storage owned by one of the LinearRing
+     * previously added. If you destroy them, this
+     * will point to an invalid memory address.
+     */
+    geom::Coordinate*
+    getNestedPoint()
+    {
+        return nestedPt;
+    }
 
-	void add(geom::LinearRing* ring) {
-		rings.push_back(ring);
-	}
+    void
+    add(geom::LinearRing* ring)
+    {
+        rings.push_back(ring);
+    }
 
-	bool isNonNested();
-	bool isInside(geom::LinearRing *innerRing, geom::LinearRing *searchRing);
-	class OverlapAction: public index::sweepline::SweepLineOverlapAction {
-	public:
-		bool isNonNested;
-		OverlapAction(SweeplineNestedRingTester *p);
-		void overlap(index::sweepline::SweepLineInterval *s0,
-				index::sweepline::SweepLineInterval *s1) override;
-	private:
-		SweeplineNestedRingTester *parent;
-	};
+    bool isNonNested();
+    bool isInside(geom::LinearRing* innerRing, geom::LinearRing* searchRing);
+    class OverlapAction: public index::sweepline::SweepLineOverlapAction {
+    public:
+        bool isNonNested;
+        OverlapAction(SweeplineNestedRingTester* p);
+        void overlap(index::sweepline::SweepLineInterval* s0,
+                     index::sweepline::SweepLineInterval* s1) override;
+    private:
+        SweeplineNestedRingTester* parent;
+    };
 };
 
 } // namespace geos::operation::valid

@@ -36,7 +36,7 @@ public:
     * @param ring the coordinates forming the ring
     * @return the area of the ring
     */
-    static double ofRing(const std::vector<geom::Coordinate> &ring);
+    static double ofRing(const std::vector<geom::Coordinate>& ring);
 
     /**
     * Computes the area for a ring.
@@ -44,7 +44,7 @@ public:
     * @param ring the coordinates forming the ring
     * @return the area of the ring
     */
-    static double ofRing(const geom::CoordinateSequence *ring);
+    static double ofRing(const geom::CoordinateSequence* ring);
 
     /**
     * Computes the signed area for a ring. The signed area is positive if the
@@ -55,7 +55,7 @@ public:
     *          the coordinates forming the ring
     * @return the signed area of the ring
     */
-    static double ofRingSigned(const std::vector<geom::Coordinate> &ring);
+    static double ofRingSigned(const std::vector<geom::Coordinate>& ring);
 
     /**
     * Computes the signed area for a ring. The signed area is positive if the
@@ -66,7 +66,7 @@ public:
     *          the coordinates forming the ring
     * @return the signed area of the ring
     */
-    static double ofRingSigned(const geom::CoordinateSequence *ring);
+    static double ofRingSigned(const geom::CoordinateSequence* ring);
 
 };
 

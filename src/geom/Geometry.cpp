@@ -91,7 +91,7 @@ namespace geom { // geos::geom
 string
 geosversion()
 {
-	return GEOS_VERSION;
+    return GEOS_VERSION;
 }
 
 /*
@@ -101,138 +101,149 @@ geosversion()
 string
 jtsport()
 {
-	return GEOS_JTS_PORT;
+    return GEOS_JTS_PORT;
 }
 
 Geometry::GeometryChangedFilter Geometry::geometryChangedFilter;
 
-Geometry::Geometry(const GeometryFactory *newFactory)
-	:
-	envelope(nullptr),
-	_factory(newFactory),
-	_userData(nullptr)
+Geometry::Geometry(const GeometryFactory* newFactory)
+    :
+    envelope(nullptr),
+    _factory(newFactory),
+    _userData(nullptr)
 {
-	if ( _factory == nullptr ) {
-		_factory = GeometryFactory::getDefaultInstance();
-	}
-	SRID=_factory->getSRID();
-	_factory->addRef();
+    if(_factory == nullptr) {
+        _factory = GeometryFactory::getDefaultInstance();
+    }
+    SRID = _factory->getSRID();
+    _factory->addRef();
 }
 
-Geometry::Geometry(const Geometry &geom)
-	:
-	SRID(geom.getSRID()),
-	_factory(geom._factory),
-	_userData(nullptr)
+Geometry::Geometry(const Geometry& geom)
+    :
+    SRID(geom.getSRID()),
+    _factory(geom._factory),
+    _userData(nullptr)
 {
-	if ( geom.envelope.get() )
-	{
-		envelope.reset(new Envelope(*(geom.envelope)));
-	}
-	//factory=geom.factory;
-	//envelope(new Envelope(*(geom.envelope.get())));
-	//SRID=geom.getSRID();
-	//_userData=NULL;
-	_factory->addRef();
+    if(geom.envelope.get()) {
+        envelope.reset(new Envelope(*(geom.envelope)));
+    }
+    //factory=geom.factory;
+    //envelope(new Envelope(*(geom.envelope.get())));
+    //SRID=geom.getSRID();
+    //_userData=NULL;
+    _factory->addRef();
 }
 
 bool
-Geometry::hasNonEmptyElements(const vector<Geometry *>* geometries)
+Geometry::hasNonEmptyElements(const vector<Geometry*>* geometries)
 {
-	for (size_t i=0; i<geometries->size(); i++) {
-		if (!(*geometries)[i]->isEmpty()) {
-			return true;
-		}
-	}
-	return false;
+    for(size_t i = 0; i < geometries->size(); i++) {
+        if(!(*geometries)[i]->isEmpty()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool
 Geometry::hasNullElements(const CoordinateSequence* list)
 {
-	size_t npts=list->getSize();
-	for (size_t i=0; i<npts; ++i) {
-		if (list->getAt(i).isNull()) {
-			return true;
-		}
-	}
-	return false;
+    size_t npts = list->getSize();
+    for(size_t i = 0; i < npts; ++i) {
+        if(list->getAt(i).isNull()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool
-Geometry::hasNullElements(const vector<Geometry *>* lrs)
+Geometry::hasNullElements(const vector<Geometry*>* lrs)
 {
-	size_t n=lrs->size();
-	for (size_t i=0; i<n; ++i) {
-		if ((*lrs)[i]==nullptr) {
-			return true;
-		}
-	}
-	return false;
+    size_t n = lrs->size();
+    for(size_t i = 0; i < n; ++i) {
+        if((*lrs)[i] == nullptr) {
+            return true;
+        }
+    }
+    return false;
 }
 
 /* public */
 bool
-Geometry::isWithinDistance(const Geometry *geom,double cDistance) const
+Geometry::isWithinDistance(const Geometry* geom, double cDistance) const
 {
-	const Envelope *env0=getEnvelopeInternal();
-	const Envelope *env1=geom->getEnvelopeInternal();
-	double envDist=env0->distance(env1);
-	//delete env0;
-	//delete env1;
-	if (envDist>cDistance)
-	{
-		return false;
-	}
-	// NOTE: this could be implemented more efficiently
-	double geomDist=distance(geom);
-	if (geomDist>cDistance)
-	{
-		return false;
-	}
-	return true;
+    const Envelope* env0 = getEnvelopeInternal();
+    const Envelope* env1 = geom->getEnvelopeInternal();
+    double envDist = env0->distance(env1);
+    //delete env0;
+    //delete env1;
+    if(envDist > cDistance) {
+        return false;
+    }
+    // NOTE: this could be implemented more efficiently
+    double geomDist = distance(geom);
+    if(geomDist > cDistance) {
+        return false;
+    }
+    return true;
 }
 
 /*public*/
 Point*
 Geometry::getCentroid() const
 {
-	Coordinate centPt;
-	if ( ! getCentroid(centPt) ) return nullptr;
+    Coordinate centPt;
+    if(! getCentroid(centPt)) {
+        return nullptr;
+    }
 
-	// We don't use createPointFromInternalCoord here
-	// because ::getCentroid() takes care about rounding
-	Point *pt=getFactory()->createPoint(centPt);
-	return pt;
+    // We don't use createPointFromInternalCoord here
+    // because ::getCentroid() takes care about rounding
+    Point* pt = getFactory()->createPoint(centPt);
+    return pt;
 }
 
 /*public*/
 bool
 Geometry::getCentroid(Coordinate& ret) const
 {
-	if ( isEmpty() ) { return false; }
-	if ( ! Centroid::getCentroid(*this, ret) ) return false;
-	getPrecisionModel()->makePrecise(ret); // not in JTS
-	return true;
+    if(isEmpty()) {
+        return false;
+    }
+    if(! Centroid::getCentroid(*this, ret)) {
+        return false;
+    }
+    getPrecisionModel()->makePrecise(ret); // not in JTS
+    return true;
 }
 
 Point*
 Geometry::getInteriorPoint() const
 {
-	Coordinate interiorPt;
-	int dim=getDimension();
-	if (dim==0) {
-		InteriorPointPoint intPt(this);
-		if ( ! intPt.getInteriorPoint(interiorPt) ) return nullptr;
-	} else if (dim==1) {
-		InteriorPointLine intPt(this);
-		if ( ! intPt.getInteriorPoint(interiorPt) ) return nullptr;
-	} else {
-		InteriorPointArea intPt(this);
-		if ( ! intPt.getInteriorPoint(interiorPt) ) return nullptr;
-	}
-	Point *p=getFactory()->createPointFromInternalCoord(&interiorPt, this);
-	return p;
+    Coordinate interiorPt;
+    int dim = getDimension();
+    if(dim == 0) {
+        InteriorPointPoint intPt(this);
+        if(! intPt.getInteriorPoint(interiorPt)) {
+            return nullptr;
+        }
+    }
+    else if(dim == 1) {
+        InteriorPointLine intPt(this);
+        if(! intPt.getInteriorPoint(interiorPt)) {
+            return nullptr;
+        }
+    }
+    else {
+        InteriorPointArea intPt(this);
+        if(! intPt.getInteriorPoint(interiorPt)) {
+            return nullptr;
+        }
+    }
+    Point* p = getFactory()->createPointFromInternalCoord(&interiorPt, this);
+    return p;
 }
 
 /**
@@ -243,7 +254,7 @@ Geometry::getInteriorPoint() const
 void
 Geometry::geometryChanged()
 {
-	apply_rw(&geometryChangedFilter);
+    apply_rw(&geometryChangedFilter);
 }
 
 /**
@@ -255,95 +266,98 @@ Geometry::geometryChanged()
 void
 Geometry::geometryChangedAction()
 {
-	//delete envelope;
-	envelope.reset(nullptr);
+    //delete envelope;
+    envelope.reset(nullptr);
 }
 
 bool
 Geometry::isValid() const
 {
-	return IsValidOp(this).isValid();
+    return IsValidOp(this).isValid();
 }
 
 Geometry*
 Geometry::getEnvelope() const
 {
-	return getFactory()->toGeometry(getEnvelopeInternal());
+    return getFactory()->toGeometry(getEnvelopeInternal());
 }
 
-const Envelope *
+const Envelope*
 Geometry::getEnvelopeInternal() const
 {
-	if (!envelope.get()) {
-		envelope = computeEnvelopeInternal();
-	}
-	return envelope.get();
+    if(!envelope.get()) {
+        envelope = computeEnvelopeInternal();
+    }
+    return envelope.get();
 }
 
 bool
-Geometry::disjoint(const Geometry *g) const
+Geometry::disjoint(const Geometry* g) const
 {
 #ifdef SHORTCIRCUIT_PREDICATES
-	// short-circuit test
-	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
-		return true;
+    // short-circuit test
+    if(! getEnvelopeInternal()->intersects(g->getEnvelopeInternal())) {
+        return true;
+    }
 #endif
-	unique_ptr<IntersectionMatrix> im ( relate(g) );
-	bool res=im->isDisjoint();
-	return res;
+    unique_ptr<IntersectionMatrix> im(relate(g));
+    bool res = im->isDisjoint();
+    return res;
 }
 
 bool
-Geometry::touches(const Geometry *g) const
+Geometry::touches(const Geometry* g) const
 {
 #ifdef SHORTCIRCUIT_PREDICATES
-	// short-circuit test
-	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
-		return false;
+    // short-circuit test
+    if(! getEnvelopeInternal()->intersects(g->getEnvelopeInternal())) {
+        return false;
+    }
 #endif
-	unique_ptr<IntersectionMatrix> im ( relate(g) );
-	bool res=im->isTouches(getDimension(), g->getDimension());
-	return res;
+    unique_ptr<IntersectionMatrix> im(relate(g));
+    bool res = im->isTouches(getDimension(), g->getDimension());
+    return res;
 }
 
 bool
-Geometry::intersects(const Geometry *g) const
+Geometry::intersects(const Geometry* g) const
 {
 #ifdef SHORTCIRCUIT_PREDICATES
-	// short-circuit test
-	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
-		return false;
+    // short-circuit test
+    if(! getEnvelopeInternal()->intersects(g->getEnvelopeInternal())) {
+        return false;
+    }
 #endif
 
-	/**
-	 * TODO: (MD) Add optimizations:
-	 *
-	 * - for P-A case:
-	 * If P is in env(A), test for point-in-poly
-	 *
-	 * - for A-A case:
-	 * If env(A1).overlaps(env(A2))
-	 * test for overlaps via point-in-poly first (both ways)
-	 * Possibly optimize selection of point to test by finding point of A1
-	 * closest to centre of env(A2).
-	 * (Is there a test where we shouldn't bother - e.g. if env A
-	 * is much smaller than env B, maybe there's no point in testing
-	 * pt(B) in env(A)?
-	 */
+    /**
+     * TODO: (MD) Add optimizations:
+     *
+     * - for P-A case:
+     * If P is in env(A), test for point-in-poly
+     *
+     * - for A-A case:
+     * If env(A1).overlaps(env(A2))
+     * test for overlaps via point-in-poly first (both ways)
+     * Possibly optimize selection of point to test by finding point of A1
+     * closest to centre of env(A2).
+     * (Is there a test where we shouldn't bother - e.g. if env A
+     * is much smaller than env B, maybe there's no point in testing
+     * pt(B) in env(A)?
+     */
 
-	// optimization for rectangle arguments
-	if (isRectangle()) {
-		const Polygon* p = dynamic_cast<const Polygon*>(this);
-		return predicate::RectangleIntersects::intersects(*p, *g);
-	}
-	if (g->isRectangle()) {
-		const Polygon* p = dynamic_cast<const Polygon*>(g);
-		return predicate::RectangleIntersects::intersects(*p, *this);
-	}
+    // optimization for rectangle arguments
+    if(isRectangle()) {
+        const Polygon* p = dynamic_cast<const Polygon*>(this);
+        return predicate::RectangleIntersects::intersects(*p, *g);
+    }
+    if(g->isRectangle()) {
+        const Polygon* p = dynamic_cast<const Polygon*>(g);
+        return predicate::RectangleIntersects::intersects(*p, *this);
+    }
 
-	unique_ptr<IntersectionMatrix> im ( relate(g) );
-	bool res=im->isIntersects();
-	return res;
+    unique_ptr<IntersectionMatrix> im(relate(g));
+    bool res = im->isIntersects();
+    return res;
 }
 
 /*public*/
@@ -351,419 +365,446 @@ bool
 Geometry::covers(const Geometry* g) const
 {
     // optimization - lower dimension cannot cover areas
-    if (g->getDimension() == 2 && getDimension() < 2) {
+    if(g->getDimension() == 2 && getDimension() < 2) {
         return false;
     }
 
     // optimization - P cannot cover a non-zero-length L
     // Note that a point can cover a zero-length lineal geometry
-    if (g->getDimension() == 1 && getDimension() < 1 && g->getLength() > 0.0) {
+    if(g->getDimension() == 1 && getDimension() < 1 && g->getLength() > 0.0) {
         return false;
     }
 
 #ifdef SHORTCIRCUIT_PREDICATES
-	// short-circuit test
-	if (! getEnvelopeInternal()->covers(g->getEnvelopeInternal()))
-		return false;
+    // short-circuit test
+    if(! getEnvelopeInternal()->covers(g->getEnvelopeInternal())) {
+        return false;
+    }
 #endif
 
-	// optimization for rectangle arguments
-	if (isRectangle()) {
-		// since we have already tested that the test envelope
-		// is covered
-		return true;
-	}
+    // optimization for rectangle arguments
+    if(isRectangle()) {
+        // since we have already tested that the test envelope
+        // is covered
+        return true;
+    }
 
-	unique_ptr<IntersectionMatrix> im(relate(g));
-	return im->isCovers();
+    unique_ptr<IntersectionMatrix> im(relate(g));
+    return im->isCovers();
 }
 
 
 bool
-Geometry::crosses(const Geometry *g) const
+Geometry::crosses(const Geometry* g) const
 {
 #ifdef SHORTCIRCUIT_PREDICATES
-	// short-circuit test
-	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
-		return false;
+    // short-circuit test
+    if(! getEnvelopeInternal()->intersects(g->getEnvelopeInternal())) {
+        return false;
+    }
 #endif
-	unique_ptr<IntersectionMatrix> im ( relate(g) );
-	bool res=im->isCrosses(getDimension(), g->getDimension());
-	return res;
+    unique_ptr<IntersectionMatrix> im(relate(g));
+    bool res = im->isCrosses(getDimension(), g->getDimension());
+    return res;
 }
 
 bool
-Geometry::within(const Geometry *g) const
+Geometry::within(const Geometry* g) const
 {
-	return g->contains(this);
+    return g->contains(this);
 }
 
 bool
-Geometry::contains(const Geometry *g) const
+Geometry::contains(const Geometry* g) const
 {
     // optimization - lower dimension cannot contain areas
-    if (g->getDimension() == 2 && getDimension() < 2) {
+    if(g->getDimension() == 2 && getDimension() < 2) {
         return false;
     }
 
     // optimization - P cannot contain a non-zero-length L
     // Note that a point can contain a zero-length lineal geometry,
     // since the line has no boundary due to Mod-2 Boundary Rule
-    if (g->getDimension() == 1 && getDimension() < 1 && g->getLength() > 0.0) {
+    if(g->getDimension() == 1 && getDimension() < 1 && g->getLength() > 0.0) {
         return false;
     }
 
 #ifdef SHORTCIRCUIT_PREDICATES
-	// short-circuit test
-	if (! getEnvelopeInternal()->contains(g->getEnvelopeInternal()))
-		return false;
+    // short-circuit test
+    if(! getEnvelopeInternal()->contains(g->getEnvelopeInternal())) {
+        return false;
+    }
 #endif
 
-	// optimization for rectangle arguments
-	if (isRectangle()) {
-		const Polygon* p = dynamic_cast<const Polygon*>(this);
-		return predicate::RectangleContains::contains(*p, *g);
-	}
-	// Incorrect: contains is not commutative
-	//if (g->isRectangle()) {
-	//	return predicate::RectangleContains::contains((const Polygon&)*g, *this);
-	//}
+    // optimization for rectangle arguments
+    if(isRectangle()) {
+        const Polygon* p = dynamic_cast<const Polygon*>(this);
+        return predicate::RectangleContains::contains(*p, *g);
+    }
+    // Incorrect: contains is not commutative
+    //if (g->isRectangle()) {
+    //	return predicate::RectangleContains::contains((const Polygon&)*g, *this);
+    //}
 
-	unique_ptr<IntersectionMatrix> im ( relate(g) );
-	bool res=im->isContains();
-	return res;
+    unique_ptr<IntersectionMatrix> im(relate(g));
+    bool res = im->isContains();
+    return res;
 }
 
 bool
-Geometry::overlaps(const Geometry *g) const
+Geometry::overlaps(const Geometry* g) const
 {
 #ifdef SHORTCIRCUIT_PREDICATES
-	// short-circuit test
-	if (! getEnvelopeInternal()->intersects(g->getEnvelopeInternal()))
-		return false;
+    // short-circuit test
+    if(! getEnvelopeInternal()->intersects(g->getEnvelopeInternal())) {
+        return false;
+    }
 #endif
-	unique_ptr<IntersectionMatrix> im ( relate(g) );
-	bool res=im->isOverlaps(getDimension(), g->getDimension());
-	return res;
+    unique_ptr<IntersectionMatrix> im(relate(g));
+    bool res = im->isOverlaps(getDimension(), g->getDimension());
+    return res;
 }
 
 bool
-Geometry::relate(const Geometry *g, const string &intersectionPattern) const
+Geometry::relate(const Geometry* g, const string& intersectionPattern) const
 {
-	unique_ptr<IntersectionMatrix> im ( relate(g) );
-	bool res=im->matches(intersectionPattern);
-	return res;
+    unique_ptr<IntersectionMatrix> im(relate(g));
+    bool res = im->matches(intersectionPattern);
+    return res;
 }
 
 bool
-Geometry::equals(const Geometry *g) const
+Geometry::equals(const Geometry* g) const
 {
 #ifdef SHORTCIRCUIT_PREDICATES
-	// short-circuit test
-	if (! getEnvelopeInternal()->equals(g->getEnvelopeInternal()))
-		return false;
+    // short-circuit test
+    if(! getEnvelopeInternal()->equals(g->getEnvelopeInternal())) {
+        return false;
+    }
 #endif
 
-	if (isEmpty()) return g->isEmpty();
-	else if (g->isEmpty()) return isEmpty();
+    if(isEmpty()) {
+        return g->isEmpty();
+    }
+    else if(g->isEmpty()) {
+        return isEmpty();
+    }
 
-	unique_ptr<IntersectionMatrix> im ( relate(g) );
-	bool res=im->isEquals(getDimension(), g->getDimension());
-	return res;
+    unique_ptr<IntersectionMatrix> im(relate(g));
+    bool res = im->isEquals(getDimension(), g->getDimension());
+    return res;
 }
 
 IntersectionMatrix*
-Geometry::relate(const Geometry *other) const
-	//throw(IllegalArgumentException *)
+Geometry::relate(const Geometry* other) const
+//throw(IllegalArgumentException *)
 {
-	return RelateOp::relate(this, other);
+    return RelateOp::relate(this, other);
 }
 
 string
 Geometry::toString() const
 {
-	return toText();
+    return toText();
 }
 
 std::ostream&
 operator<< (std::ostream& os, const Geometry& geom)
 {
-	io::WKBWriter writer;
-	writer.writeHEX(geom, os);
-	return os;
+    io::WKBWriter writer;
+    writer.writeHEX(geom, os);
+    return os;
 }
 
 string
 Geometry::toText() const
 {
-	io::WKTWriter writer;
-	return writer.write(this);
+    io::WKTWriter writer;
+    return writer.write(this);
 }
 
 Geometry*
 Geometry::buffer(double p_distance) const
 {
-	return BufferOp::bufferOp(this, p_distance);
+    return BufferOp::bufferOp(this, p_distance);
 }
 
 Geometry*
-Geometry::buffer(double p_distance,int quadrantSegments) const
+Geometry::buffer(double p_distance, int quadrantSegments) const
 {
-	return BufferOp::bufferOp(this, p_distance, quadrantSegments);
+    return BufferOp::bufferOp(this, p_distance, quadrantSegments);
 }
 
 Geometry*
 Geometry::buffer(double p_distance, int quadrantSegments, int endCapStyle) const
 {
-	return BufferOp::bufferOp(this, p_distance, quadrantSegments, endCapStyle);
+    return BufferOp::bufferOp(this, p_distance, quadrantSegments, endCapStyle);
 }
 
 Geometry*
 Geometry::convexHull() const
 {
-	return ConvexHull(this).getConvexHull();
+    return ConvexHull(this).getConvexHull();
 }
 
 Geometry*
-Geometry::intersection(const Geometry *other) const
+Geometry::intersection(const Geometry* other) const
 {
-	/**
-   * TODO: MD - add optimization for P-A case using Point-In-Polygon
-   */
+    /**
+    * TODO: MD - add optimization for P-A case using Point-In-Polygon
+    */
 
-	// special case: if one input is empty ==> empty
-	if (isEmpty() || other->isEmpty() )
-	{
-		return getFactory()->createGeometryCollection();
-	}
+    // special case: if one input is empty ==> empty
+    if(isEmpty() || other->isEmpty()) {
+        return getFactory()->createGeometryCollection();
+    }
 
 #ifdef USE_RECTANGLE_INTERSECTION
-	// optimization for rectangle arguments
-  using operation::intersection::Rectangle;
-  using operation::intersection::RectangleIntersection;
-	if ( isRectangle() ) {
-    const Envelope* env = getEnvelopeInternal();
-    Rectangle rect(env->getMinX(), env->getMinY(),
-                   env->getMaxX(), env->getMaxY());
-    return RectangleIntersection::clip(*other, rect).release();
-  }
-	if (other->isRectangle()) {
-    const Envelope* env = other->getEnvelopeInternal();
-    Rectangle rect(env->getMinX(), env->getMinY(),
-                   env->getMaxX(), env->getMaxY());
-    return RectangleIntersection::clip(*this, rect).release();
-  }
+    // optimization for rectangle arguments
+    using operation::intersection::Rectangle;
+    using operation::intersection::RectangleIntersection;
+    if(isRectangle()) {
+        const Envelope* env = getEnvelopeInternal();
+        Rectangle rect(env->getMinX(), env->getMinY(),
+                       env->getMaxX(), env->getMaxY());
+        return RectangleIntersection::clip(*other, rect).release();
+    }
+    if(other->isRectangle()) {
+        const Envelope* env = other->getEnvelopeInternal();
+        Rectangle rect(env->getMinX(), env->getMinY(),
+                       env->getMaxX(), env->getMaxY());
+        return RectangleIntersection::clip(*this, rect).release();
+    }
 #endif
 
-	return BinaryOp(this, other, overlayOp(OverlayOp::opINTERSECTION)).release();
+    return BinaryOp(this, other, overlayOp(OverlayOp::opINTERSECTION)).release();
 }
 
 Geometry*
-Geometry::Union(const Geometry *other) const
-	//throw(TopologyException *, IllegalArgumentException *)
+Geometry::Union(const Geometry* other) const
+//throw(TopologyException *, IllegalArgumentException *)
 {
 
-	// special case: if one input is empty ==> other input
-	if ( isEmpty() ) return other->clone();
-	if ( other->isEmpty() ) return clone();
+    // special case: if one input is empty ==> other input
+    if(isEmpty()) {
+        return other->clone();
+    }
+    if(other->isEmpty()) {
+        return clone();
+    }
 
-	Geometry *out = nullptr;
+    Geometry* out = nullptr;
 
 #ifdef SHORTCIRCUIT_PREDICATES
-	// if envelopes are disjoint return a MULTI geom or
-	// a geometrycollection
-	if ( ! getEnvelopeInternal()->intersects(other->getEnvelopeInternal()) )
-	{
+    // if envelopes are disjoint return a MULTI geom or
+    // a geometrycollection
+    if(! getEnvelopeInternal()->intersects(other->getEnvelopeInternal())) {
 //cerr<<"SHORTCIRCUITED-UNION engaged"<<endl;
-		const GeometryCollection *coll;
+        const GeometryCollection* coll;
 
-		size_t ngeomsThis = getNumGeometries();
-		size_t ngeomsOther = other->getNumGeometries();
+        size_t ngeomsThis = getNumGeometries();
+        size_t ngeomsOther = other->getNumGeometries();
 
-		// Allocated for ownership transfer
-		vector<Geometry *> *v = new vector<Geometry *>();
-		v->reserve(ngeomsThis+ngeomsOther);
+        // Allocated for ownership transfer
+        vector<Geometry*>* v = new vector<Geometry*>();
+        v->reserve(ngeomsThis + ngeomsOther);
 
 
-		if ( nullptr != (coll = dynamic_cast<const GeometryCollection *>(this)) )
-		{
-			for (size_t i=0; i<ngeomsThis; ++i)
-				v->push_back(coll->getGeometryN(i)->clone());
-		} else {
-			v->push_back(this->clone());
-		}
+        if(nullptr != (coll = dynamic_cast<const GeometryCollection*>(this))) {
+            for(size_t i = 0; i < ngeomsThis; ++i) {
+                v->push_back(coll->getGeometryN(i)->clone());
+            }
+        }
+        else {
+            v->push_back(this->clone());
+        }
 
-		if ( nullptr != (coll = dynamic_cast<const GeometryCollection *>(other)) )
-		{
-			for (size_t i=0; i<ngeomsOther; ++i)
-				v->push_back(coll->getGeometryN(i)->clone());
-		} else {
-			v->push_back(other->clone());
-		}
+        if(nullptr != (coll = dynamic_cast<const GeometryCollection*>(other))) {
+            for(size_t i = 0; i < ngeomsOther; ++i) {
+                v->push_back(coll->getGeometryN(i)->clone());
+            }
+        }
+        else {
+            v->push_back(other->clone());
+        }
 
-		out = _factory->buildGeometry(v);
-		return out;
-	}
+        out = _factory->buildGeometry(v);
+        return out;
+    }
 #endif
 
-	return BinaryOp(this, other, overlayOp(OverlayOp::opUNION)).release();
+    return BinaryOp(this, other, overlayOp(OverlayOp::opUNION)).release();
 }
 
 /* public */
 Geometry::Ptr
 Geometry::Union() const
 {
-  using geos::operation::geounion::UnaryUnionOp;
-  return UnaryUnionOp::Union(*this);
+    using geos::operation::geounion::UnaryUnionOp;
+    return UnaryUnionOp::Union(*this);
 }
 
 Geometry*
-Geometry::difference(const Geometry *other) const
-	//throw(IllegalArgumentException *)
+Geometry::difference(const Geometry* other) const
+//throw(IllegalArgumentException *)
 {
-	// special case: if A.isEmpty ==> empty; if B.isEmpty ==> A
-	if (isEmpty()) return getFactory()->createGeometryCollection();
-	if (other->isEmpty()) return clone();
+    // special case: if A.isEmpty ==> empty; if B.isEmpty ==> A
+    if(isEmpty()) {
+        return getFactory()->createGeometryCollection();
+    }
+    if(other->isEmpty()) {
+        return clone();
+    }
 
-	return BinaryOp(this, other, overlayOp(OverlayOp::opDIFFERENCE)).release();
+    return BinaryOp(this, other, overlayOp(OverlayOp::opDIFFERENCE)).release();
 }
 
 Geometry*
-Geometry::symDifference(const Geometry *other) const
+Geometry::symDifference(const Geometry* other) const
 {
-	// special case: if either input is empty ==> other input
-	if ( isEmpty() ) return other->clone();
-	if ( other->isEmpty() ) return clone();
+    // special case: if either input is empty ==> other input
+    if(isEmpty()) {
+        return other->clone();
+    }
+    if(other->isEmpty()) {
+        return clone();
+    }
 
-	// if envelopes are disjoint return a MULTI geom or
-	// a geometrycollection
-	if ( ! getEnvelopeInternal()->intersects(other->getEnvelopeInternal()) )
-	{
-		const GeometryCollection *coll;
+    // if envelopes are disjoint return a MULTI geom or
+    // a geometrycollection
+    if(! getEnvelopeInternal()->intersects(other->getEnvelopeInternal())) {
+        const GeometryCollection* coll;
 
-		size_t ngeomsThis = getNumGeometries();
-		size_t ngeomsOther = other->getNumGeometries();
+        size_t ngeomsThis = getNumGeometries();
+        size_t ngeomsOther = other->getNumGeometries();
 
-		// Allocated for ownership transfer
-		vector<Geometry *> *v = new vector<Geometry *>();
-		v->reserve(ngeomsThis+ngeomsOther);
+        // Allocated for ownership transfer
+        vector<Geometry*>* v = new vector<Geometry*>();
+        v->reserve(ngeomsThis + ngeomsOther);
 
 
-		if ( nullptr != (coll = dynamic_cast<const GeometryCollection *>(this)) )
-		{
-			for (size_t i=0; i<ngeomsThis; ++i)
-				v->push_back(coll->getGeometryN(i)->clone());
-		} else {
-			v->push_back(this->clone());
-		}
+        if(nullptr != (coll = dynamic_cast<const GeometryCollection*>(this))) {
+            for(size_t i = 0; i < ngeomsThis; ++i) {
+                v->push_back(coll->getGeometryN(i)->clone());
+            }
+        }
+        else {
+            v->push_back(this->clone());
+        }
 
-		if ( nullptr != (coll = dynamic_cast<const GeometryCollection *>(other)) )
-		{
-			for (size_t i=0; i<ngeomsOther; ++i)
-				v->push_back(coll->getGeometryN(i)->clone());
-		} else {
-			v->push_back(other->clone());
-		}
+        if(nullptr != (coll = dynamic_cast<const GeometryCollection*>(other))) {
+            for(size_t i = 0; i < ngeomsOther; ++i) {
+                v->push_back(coll->getGeometryN(i)->clone());
+            }
+        }
+        else {
+            v->push_back(other->clone());
+        }
 
-		return _factory->buildGeometry(v);
-	}
+        return _factory->buildGeometry(v);
+    }
 
-	return BinaryOp(this, other, overlayOp(OverlayOp::opSYMDIFFERENCE)).release();
+    return BinaryOp(this, other, overlayOp(OverlayOp::opSYMDIFFERENCE)).release();
 }
 
 int
-Geometry::compareTo(const Geometry *geom) const
+Geometry::compareTo(const Geometry* geom) const
 {
-	// compare to self
-	if (this == geom) return 0;
+    // compare to self
+    if(this == geom) {
+        return 0;
+    }
 
-	if (getSortIndex() != geom->getSortIndex()) {
-		int diff = getSortIndex() - geom->getSortIndex();
-		return (diff > 0) - (diff < 0); // signum()
-	}
-	if (isEmpty() && geom->isEmpty()) {
-		return 0;
-	}
-	if (isEmpty()) {
-		return -1;
-	}
-	if (geom->isEmpty()) {
-		return 1;
-	}
-	return compareToSameClass(geom);
+    if(getSortIndex() != geom->getSortIndex()) {
+        int diff = getSortIndex() - geom->getSortIndex();
+        return (diff > 0) - (diff < 0); // signum()
+    }
+    if(isEmpty() && geom->isEmpty()) {
+        return 0;
+    }
+    if(isEmpty()) {
+        return -1;
+    }
+    if(geom->isEmpty()) {
+        return 1;
+    }
+    return compareToSameClass(geom);
 }
 
 bool
-Geometry::isEquivalentClass(const Geometry *other) const
+Geometry::isEquivalentClass(const Geometry* other) const
 {
-	if (typeid(*this)==typeid(*other))
-		return true;
-	else
-		return false;
+    if(typeid(*this) == typeid(*other)) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 /*public static*/
 void
-Geometry::checkNotGeometryCollection(const Geometry *g)
-	//throw(IllegalArgumentException *)
+Geometry::checkNotGeometryCollection(const Geometry* g)
+//throw(IllegalArgumentException *)
 {
-	if (g->getSortIndex() == SORTINDEX_GEOMETRYCOLLECTION) {
-		throw  geos::util::IllegalArgumentException("This method does not support GeometryCollection arguments\n");
-	}
+    if(g->getSortIndex() == SORTINDEX_GEOMETRYCOLLECTION) {
+        throw  geos::util::IllegalArgumentException("This method does not support GeometryCollection arguments\n");
+    }
 }
 
 
-void Geometry::GeometryChangedFilter::filter_rw(Geometry* geom)
+void
+Geometry::GeometryChangedFilter::filter_rw(Geometry* geom)
 {
-   geom->geometryChangedAction();
+    geom->geometryChangedAction();
 }
 
 int
 Geometry::compare(vector<Coordinate> a, vector<Coordinate> b) const
 {
-	size_t i=0;
-	size_t j=0;
-	while (i<a.size() && j<b.size()) {
-		Coordinate& aCoord=a[i];
-		Coordinate& bCoord=b[j];
-		int comparison=aCoord.compareTo(bCoord);
-		if (comparison!=0) {
-			return comparison;
-		}
-		i++;
-		j++;
-	}
-	if (i<a.size()) {
-		return 1;
-	}
-	if (j<b.size()) {
-		return -1;
-	}
-	return 0;
+    size_t i = 0;
+    size_t j = 0;
+    while(i < a.size() && j < b.size()) {
+        Coordinate& aCoord = a[i];
+        Coordinate& bCoord = b[j];
+        int comparison = aCoord.compareTo(bCoord);
+        if(comparison != 0) {
+            return comparison;
+        }
+        i++;
+        j++;
+    }
+    if(i < a.size()) {
+        return 1;
+    }
+    if(j < b.size()) {
+        return -1;
+    }
+    return 0;
 }
 
 int
-Geometry::compare(vector<Geometry *> a, vector<Geometry *> b) const
+Geometry::compare(vector<Geometry*> a, vector<Geometry*> b) const
 {
-	size_t i=0;
-	size_t j=0;
-	while (i<a.size() && j<b.size()) {
-		Geometry *aGeom=a[i];
-		Geometry *bGeom=b[j];
-		int comparison=aGeom->compareTo(bGeom);
-		if (comparison!=0) {
-			return comparison;
-		}
-		i++;
-		j++;
-	}
-	if (i<a.size()) {
-		return 1;
-	}
-	if (j<b.size()) {
-		return -1;
-	}
-	return 0;
+    size_t i = 0;
+    size_t j = 0;
+    while(i < a.size() && j < b.size()) {
+        Geometry* aGeom = a[i];
+        Geometry* bGeom = b[j];
+        int comparison = aGeom->compareTo(bGeom);
+        if(comparison != 0) {
+            return comparison;
+        }
+        i++;
+        j++;
+    }
+    if(i < a.size()) {
+        return 1;
+    }
+    if(j < b.size()) {
+        return -1;
+    }
+    return 0;
 }
 
 /**
@@ -773,9 +814,9 @@ Geometry::compare(vector<Geometry *> a, vector<Geometry *> b) const
  * @param  other  the Geometry from which to compute the distance
  */
 double
-Geometry::distance(const Geometry *other) const
+Geometry::distance(const Geometry* other) const
 {
-	return DistanceOp::distance(this, other);
+    return DistanceOp::distance(this, other);
 }
 
 /**
@@ -789,7 +830,7 @@ Geometry::distance(const Geometry *other) const
 double
 Geometry::getArea() const
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -804,71 +845,72 @@ Geometry::getArea() const
 double
 Geometry::getLength() const
 {
-	return 0.0;
+    return 0.0;
 }
 
 Geometry::~Geometry()
 {
-	_factory->dropRef();
+    _factory->dropRef();
 }
 
 bool
-GeometryGreaterThen::operator()(const Geometry *first, const Geometry *second)
+GeometryGreaterThen::operator()(const Geometry* first, const Geometry* second)
 {
-	if (first->compareTo(second)>0)
-		return true;
-	else
-		return false;
+    if(first->compareTo(second) > 0) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 bool
 Geometry::equal(const Coordinate& a, const Coordinate& b,
-	double tolerance) const
+                double tolerance) const
 {
-	if (tolerance==0)
-	{
-		return a == b; // 2D only !!!
-	}
-	//double dist=a.distance(b);
-	return a.distance(b)<=tolerance;
+    if(tolerance == 0) {
+        return a == b; // 2D only !!!
+    }
+    //double dist=a.distance(b);
+    return a.distance(b) <= tolerance;
 }
 
 void
-Geometry::apply_ro(GeometryFilter *filter) const
+Geometry::apply_ro(GeometryFilter* filter) const
 {
-	filter->filter_ro(this);
+    filter->filter_ro(this);
 }
 
 void
-Geometry::apply_rw(GeometryFilter *filter)
+Geometry::apply_rw(GeometryFilter* filter)
 {
-	filter->filter_rw(this);
+    filter->filter_rw(this);
 }
 
 void
-Geometry::apply_ro(GeometryComponentFilter *filter) const
+Geometry::apply_ro(GeometryComponentFilter* filter) const
 {
-	filter->filter_ro(this);
+    filter->filter_ro(this);
 }
 
 void
-Geometry::apply_rw(GeometryComponentFilter *filter)
+Geometry::apply_rw(GeometryComponentFilter* filter)
 {
-	filter->filter_rw(this);
+    filter->filter_rw(this);
 }
 
 bool
 Geometry::isSimple() const
 {
-	operation::IsSimpleOp op(*this);
-	return op.isSimple();
+    operation::IsSimpleOp op(*this);
+    return op.isSimple();
 }
 
 /* public */
 const PrecisionModel*
 Geometry::getPrecisionModel() const
 {
-	return _factory->getPrecisionModel();
+    return _factory->getPrecisionModel();
 }
 
 } // namespace geos::geom
