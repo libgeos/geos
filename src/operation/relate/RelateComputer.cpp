@@ -28,6 +28,7 @@
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/GeometryCollection.h>
+#include <geos/geom/Puntal.h>
 #include <geos/geomgraph/index/SegmentIntersector.h>
 #include <geos/geomgraph/GeometryGraph.h>
 #include <geos/geomgraph/Label.h>
