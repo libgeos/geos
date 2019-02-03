@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -32,13 +32,13 @@ namespace geom { // geos::geom
 INLINE int
 GeometryFactory::getSRID() const
 {
-	return SRID;
+    return SRID;
 }
 
 INLINE const CoordinateSequenceFactory*
 GeometryFactory::getCoordinateSequenceFactory() const
 {
-	return coordinateListFactory;
+    return coordinateListFactory;
 }
 
 } // namespace geos::geom

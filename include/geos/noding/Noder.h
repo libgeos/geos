@@ -24,9 +24,9 @@
 
 // Forward declarations
 namespace geos {
-	namespace noding {
-		class SegmentString;
-	}
+namespace noding {
+class SegmentString;
+}
 }
 
 namespace geos {
@@ -48,29 +48,30 @@ namespace noding { // geos.noding
  */
 class GEOS_DLL Noder {
 public:
-	/** \brief
-	 * Computes the noding for a collection of {@link SegmentString}s.
-	 *
-	 * Some Noders may add all these nodes to the input SegmentStrings;
-	 * others may only add some or none at all.
-	 *
-	 * @param segStrings a collection of {@link SegmentString}s to node
-	 */
-	virtual void computeNodes(std::vector<SegmentString*>* segStrings)=0;
+    /** \brief
+     * Computes the noding for a collection of {@link SegmentString}s.
+     *
+     * Some Noders may add all these nodes to the input SegmentStrings;
+     * others may only add some or none at all.
+     *
+     * @param segStrings a collection of {@link SegmentString}s to node
+     */
+    virtual void computeNodes(std::vector<SegmentString*>* segStrings) = 0;
 
-	/** \brief
-	 * Returns a {@link Collection} of fully noded {@link SegmentStrings}.
-	 * The SegmentStrings have the same context as their parent.
-	 *
-	 * @return a newly allocated std::vector of const SegmentStrings.
-	 *         Caller is responsible to delete container and elements.
-	 */
-	virtual std::vector<SegmentString*>* getNodedSubstrings() const=0;
+    /** \brief
+     * Returns a {@link Collection} of fully noded {@link SegmentStrings}.
+     * The SegmentStrings have the same context as their parent.
+     *
+     * @return a newly allocated std::vector of const SegmentStrings.
+     *         Caller is responsible to delete container and elements.
+     */
+    virtual std::vector<SegmentString*>* getNodedSubstrings() const = 0;
 
-	virtual ~Noder() {}
+    virtual
+    ~Noder() {}
 
 protected:
-	Noder(){}
+    Noder() {}
 };
 
 } // namespace geos.noding

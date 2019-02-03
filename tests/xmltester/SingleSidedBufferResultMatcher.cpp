@@ -33,72 +33,69 @@ double SingleSidedBufferResultMatcher::MAX_HAUSDORFF_DISTANCE_FACTOR = 100;
 
 bool
 SingleSidedBufferResultMatcher::isBufferResultMatch(const geom::Geometry& actualBuffer,
-	                         const geom::Geometry& expectedBuffer,
-	                         double distance)
+        const geom::Geometry& expectedBuffer,
+        double distance)
 {
-	bool aEmpty = actualBuffer.isEmpty();
-	bool eEmpty = expectedBuffer.isEmpty();
+    bool aEmpty = actualBuffer.isEmpty();
+    bool eEmpty = expectedBuffer.isEmpty();
 
-	// Both empty succeeds
-	if (aEmpty && eEmpty) return true;
+    // Both empty succeeds
+    if(aEmpty && eEmpty) {
+        return true;
+    }
 
-	// One empty and not the other is a failure
-	if (aEmpty || eEmpty)
-	{
-std::cerr << "isBufferResultMatch failed (one empty and one not)" << std::endl;
-		return false;
-	}
+    // One empty and not the other is a failure
+    if(aEmpty || eEmpty) {
+        std::cerr << "isBufferResultMatch failed (one empty and one not)" << std::endl;
+        return false;
+    }
 
 
-   // NOTE: we need to test hausdorff distance in both directions
+    // NOTE: we need to test hausdorff distance in both directions
 
-	if (! isBoundaryHausdorffDistanceInTolerance(actualBuffer,
-	           expectedBuffer, distance))
-	{
-std::cerr << "isBoundaryHasudorffDistanceInTolerance failed (actual,expected)" << std::endl;
-		return false;
-	}
+    if(! isBoundaryHausdorffDistanceInTolerance(actualBuffer,
+            expectedBuffer, distance)) {
+        std::cerr << "isBoundaryHasudorffDistanceInTolerance failed (actual,expected)" << std::endl;
+        return false;
+    }
 
-	if (! isBoundaryHausdorffDistanceInTolerance(expectedBuffer,
-	           actualBuffer, distance))
-	{
-std::cerr << "isBoundaryHasudorffDistanceInTolerance failed (expected,actual)" << std::endl;
-		return false;
-	}
+    if(! isBoundaryHausdorffDistanceInTolerance(expectedBuffer,
+            actualBuffer, distance)) {
+        std::cerr << "isBoundaryHasudorffDistanceInTolerance failed (expected,actual)" << std::endl;
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 bool
 SingleSidedBufferResultMatcher::isBoundaryHausdorffDistanceInTolerance(
-	const geom::Geometry& actualBuffer,
-	const geom::Geometry& expectedBuffer, double distance)
+    const geom::Geometry& actualBuffer,
+    const geom::Geometry& expectedBuffer, double distance)
 {
-	typedef std::unique_ptr<geom::Geometry> GeomPtr;
+    typedef std::unique_ptr<geom::Geometry> GeomPtr;
 
-	using geos::algorithm::distance::DiscreteHausdorffDistance;
+    using geos::algorithm::distance::DiscreteHausdorffDistance;
 
-	GeomPtr actualBdy ( actualBuffer.clone() );
-	GeomPtr expectedBdy ( expectedBuffer.clone() );
+    GeomPtr actualBdy(actualBuffer.clone());
+    GeomPtr expectedBdy(expectedBuffer.clone());
 
-	DiscreteHausdorffDistance haus(*actualBdy, *expectedBdy);
-	haus.setDensifyFraction(0.25);
+    DiscreteHausdorffDistance haus(*actualBdy, *expectedBdy);
+    haus.setDensifyFraction(0.25);
 
-	double maxDistanceFound = haus.orientedDistance();
+    double maxDistanceFound = haus.orientedDistance();
 
-	double expectedDistanceTol = fabs(distance) / MAX_HAUSDORFF_DISTANCE_FACTOR;
-	if (expectedDistanceTol < MIN_DISTANCE_TOLERANCE)
-	{
-		expectedDistanceTol = MIN_DISTANCE_TOLERANCE;
-	}
+    double expectedDistanceTol = fabs(distance) / MAX_HAUSDORFF_DISTANCE_FACTOR;
+    if(expectedDistanceTol < MIN_DISTANCE_TOLERANCE) {
+        expectedDistanceTol = MIN_DISTANCE_TOLERANCE;
+    }
 
-	if (maxDistanceFound > expectedDistanceTol)
-	{
-std::cerr << "maxDistanceFound: " << maxDistanceFound << " tolerated " << expectedDistanceTol << std::endl;
-		return false;
-	}
+    if(maxDistanceFound > expectedDistanceTol) {
+        std::cerr << "maxDistanceFound: " << maxDistanceFound << " tolerated " << expectedDistanceTol << std::endl;
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 } // namespace geos::xmltester

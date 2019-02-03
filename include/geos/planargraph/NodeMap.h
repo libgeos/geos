@@ -29,12 +29,12 @@
 
 // Forward declarations
 namespace geos {
-	namespace planargraph {
-		class DirectedEdgeStar;
-		class DirectedEdge;
-		class Edge;
-		class Node;
-	}
+namespace planargraph {
+class DirectedEdgeStar;
+class DirectedEdge;
+class Edge;
+class Node;
+}
 }
 
 namespace geos {
@@ -47,73 +47,83 @@ namespace planargraph { // geos.planargraph
  */
 class GEOS_DLL NodeMap {
 public:
-	typedef std::map<geom::Coordinate, Node*, geom::CoordinateLessThen> container;
+    typedef std::map<geom::Coordinate, Node*, geom::CoordinateLessThen> container;
 private:
-	container nodeMap;
+    container nodeMap;
 public:
-	/**
-	 * \brief Constructs a NodeMap without any Nodes.
-	 */
-	NodeMap();
+    /**
+     * \brief Constructs a NodeMap without any Nodes.
+     */
+    NodeMap();
 
-	container& getNodeMap();
+    container& getNodeMap();
 
-	virtual ~NodeMap();
+    virtual ~NodeMap();
 
-	/**
-	 * \brief
-	 * Adds a node to the std::map, replacing any that is already
-	 * at that location.
-	 * @return the added node
-	 */
-	Node* add(Node *n);
+    /**
+     * \brief
+     * Adds a node to the std::map, replacing any that is already
+     * at that location.
+     * @return the added node
+     */
+    Node* add(Node* n);
 
-	/**
-	 * \brief
-	 * Removes the Node at the given location, and returns it
-	 * (or null if no Node was there).
-	 */
-	Node* remove(geom::Coordinate& pt);
+    /**
+     * \brief
+     * Removes the Node at the given location, and returns it
+     * (or null if no Node was there).
+     */
+    Node* remove(geom::Coordinate& pt);
 
-	/**
-	 * \brief
-	 * Returns the Node at the given location,
-	 * or null if no Node was there.
-	 */
-	Node* find(const geom::Coordinate& coord);
+    /**
+     * \brief
+     * Returns the Node at the given location,
+     * or null if no Node was there.
+     */
+    Node* find(const geom::Coordinate& coord);
 
-	/**
-	 * \brief
-	 * Returns an Iterator over the Nodes in this NodeMap,
-	 * sorted in ascending order
-	 * by angle with the positive x-axis.
-	 */
-	container::iterator iterator() {
-		return nodeMap.begin();
-	}
+    /**
+     * \brief
+     * Returns an Iterator over the Nodes in this NodeMap,
+     * sorted in ascending order
+     * by angle with the positive x-axis.
+     */
+    container::iterator
+    iterator()
+    {
+        return nodeMap.begin();
+    }
 
-	container::iterator begin() {
-		return nodeMap.begin();
-	}
-	container::const_iterator begin() const {
-		return nodeMap.begin();
-	}
+    container::iterator
+    begin()
+    {
+        return nodeMap.begin();
+    }
+    container::const_iterator
+    begin() const
+    {
+        return nodeMap.begin();
+    }
 
-	container::iterator end() {
-		return nodeMap.end();
-	}
-	container::const_iterator end() const {
-		return nodeMap.end();
-	}
+    container::iterator
+    end()
+    {
+        return nodeMap.end();
+    }
+    container::const_iterator
+    end() const
+    {
+        return nodeMap.end();
+    }
 
-	/**
-	 * \brief
-	 * Returns the Nodes in this NodeMap, sorted in ascending order
-	 * by angle with the positive x-axis.
-	 *
-	 * @param nodes : the nodes are push_back'ed here
-	 */
-	void getNodes(std::vector<Node*>& nodes);
+    /**
+     * \brief
+     * Returns the Nodes in this NodeMap, sorted in ascending order
+     * by angle with the positive x-axis.
+     *
+     * @param nodes : the nodes are push_back'ed here
+     */
+    void getNodes(std::vector<Node*>& nodes);
 };
 
 

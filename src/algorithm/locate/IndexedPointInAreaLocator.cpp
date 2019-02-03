@@ -37,40 +37,40 @@ namespace locate {
 //
 // private:
 //
-IndexedPointInAreaLocator::IntervalIndexedGeometry::IntervalIndexedGeometry( const geom::Geometry & g)
+IndexedPointInAreaLocator::IntervalIndexedGeometry::IntervalIndexedGeometry(const geom::Geometry& g)
 {
-    init( g);
+    init(g);
 }
 
 void
-IndexedPointInAreaLocator::IntervalIndexedGeometry::init( const geom::Geometry & g)
+IndexedPointInAreaLocator::IntervalIndexedGeometry::init(const geom::Geometry& g)
 {
     geom::LineString::ConstVect lines;
-    geom::util::LinearComponentExtracter::getLines( g, lines);
+    geom::util::LinearComponentExtracter::getLines(g, lines);
 
-    for (const geom::LineString* line : lines) {
+    for(const geom::LineString* line : lines) {
         addLine(line->getCoordinatesRO());
     }
 
-    for (geom::LineSegment & seg : segments) {
+    for(geom::LineSegment& seg : segments) {
         index.insert(
-            std::min( seg.p0.y, seg.p1.y),
-            std::max( seg.p0.y, seg.p1.y),
+            std::min(seg.p0.y, seg.p1.y),
+            std::max(seg.p0.y, seg.p1.y),
             &seg);
     }
 }
 
 void
-IndexedPointInAreaLocator::IntervalIndexedGeometry::addLine(const geom::CoordinateSequence * pts)
+IndexedPointInAreaLocator::IntervalIndexedGeometry::addLine(const geom::CoordinateSequence* pts)
 {
-    for (size_t i = 1, ni = pts->size(); i < ni; i++) {
+    for(size_t i = 1, ni = pts->size(); i < ni; i++) {
         segments.emplace_back((*pts)[i - 1], (*pts)[i]);
     }
 }
 
 
 void
-IndexedPointInAreaLocator::buildIndex( const geom::Geometry & g)
+IndexedPointInAreaLocator::buildIndex(const geom::Geometry& g)
 {
     index = std::unique_ptr<IntervalIndexedGeometry>(new IntervalIndexedGeometry(g));
 }
@@ -83,32 +83,33 @@ IndexedPointInAreaLocator::buildIndex( const geom::Geometry & g)
 //
 // public:
 //
-IndexedPointInAreaLocator::IndexedPointInAreaLocator( const geom::Geometry & g)
-    :	areaGeom( g)
+IndexedPointInAreaLocator::IndexedPointInAreaLocator(const geom::Geometry& g)
+    :	areaGeom(g)
 {
     const std::type_info& areaGeomId = typeid(areaGeom);
-    if (	areaGeomId != typeid( geom::Polygon)
-            &&	areaGeomId != typeid( geom::MultiPolygon)
-            &&	areaGeomId != typeid( geom::LinearRing) )
+    if(areaGeomId != typeid(geom::Polygon)
+            &&	areaGeomId != typeid(geom::MultiPolygon)
+            &&	areaGeomId != typeid(geom::LinearRing)) {
         throw util::IllegalArgumentException("Argument must be Polygonal or LinearRing");
+    }
 
-    buildIndex( areaGeom);
+    buildIndex(areaGeom);
 }
 
 int
-IndexedPointInAreaLocator::locate( const geom::Coordinate * /*const*/ p)
+IndexedPointInAreaLocator::locate(const geom::Coordinate* /*const*/ p)
 {
     algorithm::RayCrossingCounter rcc(*p);
 
-    IndexedPointInAreaLocator::SegmentVisitor visitor( &rcc);
+    IndexedPointInAreaLocator::SegmentVisitor visitor(&rcc);
 
-    index->query( p->y, p->y, &visitor);
+    index->query(p->y, p->y, &visitor);
 
     return rcc.getLocation();
 }
 
 void
-IndexedPointInAreaLocator::SegmentVisitor::visitItem( void * item)
+IndexedPointInAreaLocator::SegmentVisitor::visitItem(void* item)
 {
     geom::LineSegment* seg = static_cast<geom::LineSegment*>(item);
 
@@ -116,9 +117,9 @@ IndexedPointInAreaLocator::SegmentVisitor::visitItem( void * item)
 }
 
 void
-IndexedPointInAreaLocator::IntervalIndexedGeometry::query( double min, double max, index::ItemVisitor * visitor)
+IndexedPointInAreaLocator::IntervalIndexedGeometry::query(double min, double max, index::ItemVisitor* visitor)
 {
-    index.query( min, max, visitor);
+    index.query(min, max, visitor);
 }
 
 

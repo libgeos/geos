@@ -29,11 +29,11 @@ namespace algorithm { // geos.algorithm
 /*public static*/
 double
 Distance::pointToSegment(const geom::Coordinate& p,
-    const geom::Coordinate& A,
-    const geom::Coordinate& B)
+                         const geom::Coordinate& A,
+                         const geom::Coordinate& B)
 {
     /* if start==end, then use pt distance */
-    if (A == B) {
+    if(A == B) {
         return p.distance(A);
     }
 
@@ -52,11 +52,15 @@ Distance::pointToSegment(const geom::Coordinate& p,
         0<r<1 P is interior to AB
     */
 
-    double r = ((p.x-A.x)*(B.x-A.x)+(p.y-A.y)*(B.y-A.y))/
-               ((B.x-A.x)*(B.x-A.x)+(B.y-A.y)*(B.y-A.y));
+    double r = ((p.x - A.x) * (B.x - A.x) + (p.y - A.y) * (B.y - A.y)) /
+               ((B.x - A.x) * (B.x - A.x) + (B.y - A.y) * (B.y - A.y));
 
-    if (r <= 0.0) return p.distance(A);
-    if (r >= 1.0) return p.distance(B);
+    if(r <= 0.0) {
+        return p.distance(A);
+    }
+    if(r >= 1.0) {
+        return p.distance(B);
+    }
 
     /*
         (2)
@@ -67,16 +71,16 @@ Distance::pointToSegment(const geom::Coordinate& p,
         Then the distance from C to P = |s|*L.
     */
 
-    double s=((A.y-p.y)*(B.x-A.x)-(A.x-p.x)*(B.y-A.y))/
-             ((B.x-A.x)*(B.x-A.x)+(B.y-A.y)*(B.y-A.y));
+    double s = ((A.y - p.y) * (B.x - A.x) - (A.x - p.x) * (B.y - A.y)) /
+               ((B.x - A.x) * (B.x - A.x) + (B.y - A.y) * (B.y - A.y));
 
-    return fabs(s)*sqrt(((B.x-A.x)*(B.x-A.x)+(B.y-A.y)*(B.y-A.y)));
+    return fabs(s) * sqrt(((B.x - A.x) * (B.x - A.x) + (B.y - A.y) * (B.y - A.y)));
 }
 
 /*public static*/
 double
 Distance::pointToLinePerpendicular(const geom::Coordinate& p,
-    const geom::Coordinate& A, const geom::Coordinate& B)
+                                   const geom::Coordinate& A, const geom::Coordinate& B)
 {
     /*
         use comp.graphics.algorithms method
@@ -89,21 +93,25 @@ Distance::pointToLinePerpendicular(const geom::Coordinate& p,
             Then the distance from C to P = |s|*L.
     */
 
-    double s = ((A.y - p.y) *(B.x - A.x) - (A.x - p.x)*(B.y - A.y))
-              /
+    double s = ((A.y - p.y) * (B.x - A.x) - (A.x - p.x) * (B.y - A.y))
+               /
                ((B.x - A.x) * (B.x - A.x) + (B.y - A.y) * (B.y - A.y));
-    return fabs(s)*sqrt(((B.x - A.x) * (B.x - A.x) + (B.y - A.y) * (B.y - A.y)));
+    return fabs(s) * sqrt(((B.x - A.x) * (B.x - A.x) + (B.y - A.y) * (B.y - A.y)));
 }
 
 /*public static*/
 double
 Distance::segmentToSegment(const geom::Coordinate& A,
-    const geom::Coordinate& B, const geom::Coordinate& C,
-    const geom::Coordinate& D)
+                           const geom::Coordinate& B, const geom::Coordinate& C,
+                           const geom::Coordinate& D)
 {
     /* Check for zero-length segments */
-    if (A == B) return pointToSegment(A,C,D);
-    if (C == D) return pointToSegment(D,A,B);
+    if(A == B) {
+        return pointToSegment(A, C, D);
+    }
+    if(C == D) {
+        return pointToSegment(D, A, B);
+    }
 
     /* AB and CD are line segments */
     /*
@@ -134,25 +142,25 @@ Distance::segmentToSegment(const geom::Coordinate& A,
         If the numerator in eqn 1 is also zero, AB & CD are collinear.
     */
 
-    double r_top=(A.y-C.y)*(D.x-C.x)-(A.x-C.x)*(D.y-C.y);
-    double r_bot=(B.x-A.x)*(D.y-C.y)-(B.y-A.y)*(D.x-C.x);
-    double s_top=(A.y-C.y)*(B.x-A.x)-(A.x-C.x)*(B.y-A.y);
-    double s_bot=(B.x-A.x)*(D.y-C.y)-(B.y-A.y)*(D.x-C.x);
+    double r_top = (A.y - C.y) * (D.x - C.x) - (A.x - C.x) * (D.y - C.y);
+    double r_bot = (B.x - A.x) * (D.y - C.y) - (B.y - A.y) * (D.x - C.x);
+    double s_top = (A.y - C.y) * (B.x - A.x) - (A.x - C.x) * (B.y - A.y);
+    double s_bot = (B.x - A.x) * (D.y - C.y) - (B.y - A.y) * (D.x - C.x);
 
-    if ((r_bot==0) || (s_bot==0)) {
-        return std::min(pointToSegment(A,C,D),
-               std::min(pointToSegment(B,C,D),
-               std::min(pointToSegment(C,A,B), pointToSegment(D,A,B))));
+    if((r_bot == 0) || (s_bot == 0)) {
+        return std::min(pointToSegment(A, C, D),
+                        std::min(pointToSegment(B, C, D),
+                                 std::min(pointToSegment(C, A, B), pointToSegment(D, A, B))));
     }
 
-    double s=s_top/s_bot;
-    double r=r_top/r_bot;
+    double s = s_top / s_bot;
+    double r = r_top / r_bot;
 
-    if ((r<0) || (r>1) || (s<0) || (s>1)) {
+    if((r < 0) || (r > 1) || (s < 0) || (s > 1)) {
         /* no intersection */
-        return std::min(pointToSegment(A,C,D),
-               std::min(pointToSegment(B,C,D),
-               std::min(pointToSegment(C,A,B), pointToSegment(D,A,B))));
+        return std::min(pointToSegment(A, C, D),
+                        std::min(pointToSegment(B, C, D),
+                                 std::min(pointToSegment(C, A, B), pointToSegment(D, A, B))));
     }
 
     return 0.0; /* intersection exists */
@@ -161,21 +169,21 @@ Distance::segmentToSegment(const geom::Coordinate& A,
 /*public static*/
 double
 Distance::pointToSegmentString(const geom::Coordinate& p,
-    const geom::CoordinateSequence *seq)
+                               const geom::CoordinateSequence* seq)
 {
-    if (seq->size() == 0) {
+    if(seq->size() == 0) {
         throw util::IllegalArgumentException(
             "Line array must contain at least one vertex");
     }
 
     /* this handles the case of length = 1 */
     double minDistance = p.distance(seq->getAt(0));
-    for (std::size_t i = 0; i < seq->size()-1; i++) {
+    for(std::size_t i = 0; i < seq->size() - 1; i++) {
         const geom::Coordinate& si = seq->getAt(i);
-        const geom::Coordinate& si1 = seq->getAt(i+1);
+        const geom::Coordinate& si1 = seq->getAt(i + 1);
         double dist = pointToSegment(p, si, si1);
 
-        if (dist < minDistance) {
+        if(dist < minDistance) {
             minDistance = dist;
         }
     }

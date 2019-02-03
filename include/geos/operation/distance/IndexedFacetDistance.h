@@ -22,26 +22,26 @@
 #include <geos/operation/distance/FacetSequenceTreeBuilder.h>
 
 namespace geos {
-    namespace operation {
-        namespace distance {
-            class GEOS_DLL IndexedFacetDistance {
-            public:
-                IndexedFacetDistance(const geom::Geometry * g) :
-                        cachedTree(FacetSequenceTreeBuilder::build(g))
-                        {}
+namespace operation {
+namespace distance {
+class GEOS_DLL IndexedFacetDistance {
+public:
+    IndexedFacetDistance(const geom::Geometry* g) :
+        cachedTree(FacetSequenceTreeBuilder::build(g))
+    {}
 
-                static double distance(const geom::Geometry * g1, const geom::Geometry * g2);
+    static double distance(const geom::Geometry* g1, const geom::Geometry* g2);
 
-                double getDistance(const geom::Geometry * g) const;
+    double getDistance(const geom::Geometry* g) const;
 
-                ~IndexedFacetDistance();
+    ~IndexedFacetDistance();
 
-            private:
-                std::unique_ptr<geos::index::strtree::STRtree> cachedTree;
+private:
+    std::unique_ptr<geos::index::strtree::STRtree> cachedTree;
 
-            };
-        }
-    }
+};
+}
+}
 }
 
 #endif //GEOS_INDEXEDFACETDISTANCE_H

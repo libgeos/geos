@@ -27,13 +27,13 @@
 
 // Forward declarations
 namespace geos {
-	namespace index {
-		class ItemVisitor;
-		namespace strtree {
-			class Boundable;
-			class AbstractNode;
-		}
-	}
+namespace index {
+class ItemVisitor;
+namespace strtree {
+class Boundable;
+class AbstractNode;
+}
+}
 }
 
 namespace geos {
@@ -48,33 +48,38 @@ typedef std::vector<Boundable*> BoundableList;
 /// this class, the plain boundables are held by reference only.
 class ItemsList;
 
-class ItemsListItem
-{
+class ItemsListItem {
 public:
     enum type {
         item_is_geometry,
         item_is_list
     };
 
-    ItemsListItem(void *item_)
-      : t(item_is_geometry)
+    ItemsListItem(void* item_)
+        : t(item_is_geometry)
     {
         item.g = item_;
     }
     ItemsListItem(ItemsList* item_)
-      : t(item_is_list)
+        : t(item_is_list)
     {
         item.l = item_;
     }
 
-    type get_type() const { return t; }
+    type
+    get_type() const
+    {
+        return t;
+    }
 
-    void* get_geometry() const
+    void*
+    get_geometry() const
     {
         assert(t == item_is_geometry);
         return item.g;
     }
-    ItemsList* get_itemslist() const
+    ItemsList*
+    get_itemslist() const
     {
         assert(t == item_is_list);
         return item.l;
@@ -87,15 +92,16 @@ public:
     } item;
 };
 
-class ItemsList : public std::vector<ItemsListItem>
-{
+class ItemsList : public std::vector<ItemsListItem> {
 private:
     typedef std::vector<ItemsListItem> base_type;
 
-    static void delete_item(ItemsListItem& item)
+    static void
+    delete_item(ItemsListItem& item)
     {
-        if (ItemsListItem::item_is_list == item.t)
+        if(ItemsListItem::item_is_list == item.t) {
             delete item.item.l;
+        }
     }
 
 public:
@@ -105,13 +111,15 @@ public:
     }
 
     // lists of items need to be deleted in the end
-    void push_back(void* item)
+    void
+    push_back(void* item)
     {
         this->base_type::push_back(ItemsListItem(item));
     }
 
     // lists of items need to be deleted in the end
-    void push_back_owned(ItemsList* itemList)
+    void
+    push_back_owned(ItemsList* itemList)
     {
         this->base_type::push_back(ItemsListItem(itemList));
     }
@@ -132,168 +140,180 @@ public:
 class GEOS_DLL AbstractSTRtree {
 
 private:
-	bool built;
-	BoundableList* itemBoundables;
+    bool built;
+    BoundableList* itemBoundables;
 
-	/**
-	 * Creates the levels higher than the given level
-	 *
-	 * @param boundablesOfALevel
-	 *            the level to build on
-	 * @param level
-	 *            the level of the Boundables, or -1 if the boundables are item
-	 *            boundables (that is, below level 0)
-	 * @return the root, which may be a ParentNode or a LeafNode
-	 */
-	virtual AbstractNode* createHigherLevels(
-			BoundableList* boundablesOfALevel,
-			int level);
+    /**
+     * Creates the levels higher than the given level
+     *
+     * @param boundablesOfALevel
+     *            the level to build on
+     * @param level
+     *            the level of the Boundables, or -1 if the boundables are item
+     *            boundables (that is, below level 0)
+     * @return the root, which may be a ParentNode or a LeafNode
+     */
+    virtual AbstractNode* createHigherLevels(
+        BoundableList* boundablesOfALevel,
+        int level);
 
-	virtual std::unique_ptr<BoundableList> sortBoundables(const BoundableList* input)=0;
+    virtual std::unique_ptr<BoundableList> sortBoundables(const BoundableList* input) = 0;
 
-	bool remove(const void* searchBounds, AbstractNode& node, void* item);
-	bool removeItem(AbstractNode& node, void* item);
+    bool remove(const void* searchBounds, AbstractNode& node, void* item);
+    bool removeItem(AbstractNode& node, void* item);
 
     ItemsList* itemsTree(AbstractNode* node);
 
 protected:
 
-	/** \brief
-	 * A test for intersection between two bounds, necessary because
-	 * subclasses of AbstractSTRtree have different implementations of
-	 * bounds.
-	 */
-	class GEOS_DLL IntersectsOp {
-		public:
-			/**
-			 * For STRtrees, the bounds will be Envelopes; for
-			 * SIRtrees, Intervals; for other subclasses of
-			 * AbstractSTRtree, some other class.
-			 * @param aBounds the bounds of one spatial object
-			 * @param bBounds the bounds of another spatial object
-			 * @return whether the two bounds intersect
-			 */
-			virtual bool intersects(const void* aBounds,
-					const void* bBounds)=0;
+    /** \brief
+     * A test for intersection between two bounds, necessary because
+     * subclasses of AbstractSTRtree have different implementations of
+     * bounds.
+     */
+    class GEOS_DLL IntersectsOp {
+    public:
+        /**
+         * For STRtrees, the bounds will be Envelopes; for
+         * SIRtrees, Intervals; for other subclasses of
+         * AbstractSTRtree, some other class.
+         * @param aBounds the bounds of one spatial object
+         * @param bBounds the bounds of another spatial object
+         * @return whether the two bounds intersect
+         */
+        virtual bool intersects(const void* aBounds,
+                                const void* bBounds) = 0;
 
-			virtual ~IntersectsOp() {}
-	};
+        virtual
+        ~IntersectsOp() {}
+    };
 
-	AbstractNode *root;
+    AbstractNode* root;
 
-	std::vector <AbstractNode *> *nodes;
+    std::vector <AbstractNode*>* nodes;
 
-	// Ownership to caller (TODO: return by unique_ptr)
-	virtual AbstractNode* createNode(int level)=0;
+    // Ownership to caller (TODO: return by unique_ptr)
+    virtual AbstractNode* createNode(int level) = 0;
 
-	/**
-	 * Sorts the childBoundables then divides them into groups of size M, where
-	 * M is the node capacity.
-	 */
-	virtual std::unique_ptr<BoundableList> createParentBoundables(
-			BoundableList* childBoundables, int newLevel);
+    /**
+     * Sorts the childBoundables then divides them into groups of size M, where
+     * M is the node capacity.
+     */
+    virtual std::unique_ptr<BoundableList> createParentBoundables(
+        BoundableList* childBoundables, int newLevel);
 
-	virtual AbstractNode* lastNode(BoundableList* nodeList)
-	{
-		assert(!nodeList->empty());
-		// Cast from Boundable to AbstractNode
-		return static_cast<AbstractNode*>(nodeList->back() );
-	}
+    virtual AbstractNode*
+    lastNode(BoundableList* nodeList)
+    {
+        assert(!nodeList->empty());
+        // Cast from Boundable to AbstractNode
+        return static_cast<AbstractNode*>(nodeList->back());
+    }
 
-	virtual AbstractNode* getRoot() {
-                assert(built);
-		return root;
-	}
+    virtual AbstractNode*
+    getRoot()
+    {
+        assert(built);
+        return root;
+    }
 
-	///  Also builds the tree, if necessary.
-	virtual void insert(const void* bounds,void* item);
+    ///  Also builds the tree, if necessary.
+    virtual void insert(const void* bounds, void* item);
 
-	///  Also builds the tree, if necessary.
-	void query(const void* searchBounds, std::vector<void*>& foundItems);
+    ///  Also builds the tree, if necessary.
+    void query(const void* searchBounds, std::vector<void*>& foundItems);
 
 #if 0
-	///  Also builds the tree, if necessary.
-	std::vector<void*>* query(const void* searchBounds) {
-		vector<void*>* matches = new vector<void*>();
-		query(searchBounds, *matches);
-		return matches;
-	}
+    ///  Also builds the tree, if necessary.
+    std::vector<void*>*
+    query(const void* searchBounds)
+    {
+        vector<void*>* matches = new vector<void*>();
+        query(searchBounds, *matches);
+        return matches;
+    }
 #endif
-	///  Also builds the tree, if necessary.
-	void query(const void* searchBounds, ItemVisitor& visitor);
+    ///  Also builds the tree, if necessary.
+    void query(const void* searchBounds, ItemVisitor& visitor);
 
-	void query(const void* searchBounds, const AbstractNode& node, ItemVisitor& visitor);
+    void query(const void* searchBounds, const AbstractNode& node, ItemVisitor& visitor);
 
-	///  Also builds the tree, if necessary.
-	bool remove(const void* itemEnv, void* item);
+    ///  Also builds the tree, if necessary.
+    bool remove(const void* itemEnv, void* item);
 
-	std::unique_ptr<BoundableList> boundablesAtLevel(int level);
+    std::unique_ptr<BoundableList> boundablesAtLevel(int level);
 
-	// @@ should be size_t, probably
-	std::size_t nodeCapacity;
+    // @@ should be size_t, probably
+    std::size_t nodeCapacity;
 
-	/**
-	 * @return a test for intersection between two bounds,
-	 * necessary because subclasses
-	 * of AbstractSTRtree have different implementations of bounds.
-	 * @see IntersectsOp
-	 */
-	virtual IntersectsOp *getIntersectsOp()=0;
+    /**
+     * @return a test for intersection between two bounds,
+     * necessary because subclasses
+     * of AbstractSTRtree have different implementations of bounds.
+     * @see IntersectsOp
+     */
+    virtual IntersectsOp* getIntersectsOp() = 0;
 
 
 public:
 
-	/**
-	 * Constructs an AbstractSTRtree with the specified maximum number of child
-	 * nodes that a node may have
-	 */
-	AbstractSTRtree(std::size_t newNodeCapacity)
-		:
-		built(false),
-		itemBoundables(new BoundableList()),
-		nodes(new std::vector<AbstractNode *>()),
-		nodeCapacity(newNodeCapacity)
-	{
-		assert(newNodeCapacity>1);
-	}
+    /**
+     * Constructs an AbstractSTRtree with the specified maximum number of child
+     * nodes that a node may have
+     */
+    AbstractSTRtree(std::size_t newNodeCapacity)
+        :
+        built(false),
+        itemBoundables(new BoundableList()),
+        nodes(new std::vector<AbstractNode *>()),
+        nodeCapacity(newNodeCapacity)
+    {
+        assert(newNodeCapacity > 1);
+    }
 
-	static bool compareDoubles(double a, double b) {
-		// NOTE - strk:
-		// Ternary operation is a workaround for
-		// a probable MingW bug, see
-		// http://trac.osgeo.org/geos/ticket/293
-		return ( a < b ) ? true : false;
-	}
+    static bool
+    compareDoubles(double a, double b)
+    {
+        // NOTE - strk:
+        // Ternary operation is a workaround for
+        // a probable MingW bug, see
+        // http://trac.osgeo.org/geos/ticket/293
+        return (a < b) ? true : false;
+    }
 
-	virtual ~AbstractSTRtree();
+    virtual ~AbstractSTRtree();
 
-	/**
-	 * Creates parent nodes, grandparent nodes, and so forth up to the root
-	 * node, for the data that has been inserted into the tree. Can only be
-	 * called once, and thus can be called only after all of the data has been
-	 * inserted into the tree.
-	 */
-	virtual void build();
+    /**
+     * Creates parent nodes, grandparent nodes, and so forth up to the root
+     * node, for the data that has been inserted into the tree. Can only be
+     * called once, and thus can be called only after all of the data has been
+     * inserted into the tree.
+     */
+    virtual void build();
 
-	/**
-	 * Returns the maximum number of child nodes that a node may have
-	 */
-	virtual std::size_t getNodeCapacity() { return nodeCapacity; }
+    /**
+     * Returns the maximum number of child nodes that a node may have
+     */
+    virtual std::size_t
+    getNodeCapacity()
+    {
+        return nodeCapacity;
+    }
 
-	virtual void query(const void* searchBounds, const AbstractNode* node, std::vector<void*>* matches);
+    virtual void query(const void* searchBounds, const AbstractNode* node, std::vector<void*>* matches);
 
-	/**
+    /**
          * Iterate over all items added thus far.  Explicitly does not build
          * the tree.
          */
-	void iterate(ItemVisitor& visitor);
+    void iterate(ItemVisitor& visitor);
 
 
-	/**
-	 * @param level -1 to get items
-	 */
-	virtual void boundablesAtLevel(int level, AbstractNode* top,
-			BoundableList* boundables);
+    /**
+     * @param level -1 to get items
+     */
+    virtual void boundablesAtLevel(int level, AbstractNode* top,
+                                   BoundableList* boundables);
 
     /**
      * Gets a tree structure (as a nested list)

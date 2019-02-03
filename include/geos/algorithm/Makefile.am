@@ -26,6 +26,7 @@ geos_HEADERS = \
 	InteriorPointPoint.h \
 	Length.h \
 	LineIntersector.h \
+	MinimumBoundingCircle.h \
 	MinimumDiameter.h \
 	NotRepresentableException.h \
 	Orientation.h \

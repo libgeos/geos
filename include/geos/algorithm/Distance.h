@@ -65,7 +65,7 @@ public:
     * @return the minimum distance between the point and the line segments
     */
     static double pointToSegmentString(const geom::Coordinate& p,
-        const geom::CoordinateSequence *seq);
+                                       const geom::CoordinateSequence* seq);
 
     /**
     * Computes the distance from a point p to a line segment AB

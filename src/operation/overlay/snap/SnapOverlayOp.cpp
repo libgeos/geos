@@ -41,33 +41,33 @@ namespace snap { // geos.operation.overlay.snap
 void
 SnapOverlayOp::computeSnapTolerance()
 {
-	snapTolerance = GeometrySnapper::computeOverlaySnapTolerance(geom0,
-	                                                             geom1);
+    snapTolerance = GeometrySnapper::computeOverlaySnapTolerance(geom0,
+                    geom1);
 
-	// cout << "Snap tol = " <<  snapTolerance << endl;
+    // cout << "Snap tol = " <<  snapTolerance << endl;
 }
 
 /* public */
 unique_ptr<Geometry>
 SnapOverlayOp::getResultGeometry(OverlayOp::OpCode opCode)
 {
-	geom::GeomPtrPair prepGeom;
-	snap(prepGeom);
-	GeomPtr result ( OverlayOp::overlayOp(prepGeom.first.get(),
-	                                      prepGeom.second.get(), opCode) );
-	prepareResult(*result);
-	return result;
+    geom::GeomPtrPair prepGeom;
+    snap(prepGeom);
+    GeomPtr result(OverlayOp::overlayOp(prepGeom.first.get(),
+                                        prepGeom.second.get(), opCode));
+    prepareResult(*result);
+    return result;
 }
 
 /* private */
 void
 SnapOverlayOp::snap(geom::GeomPtrPair& snapGeom)
 {
-	geom::GeomPtrPair remGeom;
-	removeCommonBits(geom0, geom1, remGeom);
+    geom::GeomPtrPair remGeom;
+    removeCommonBits(geom0, geom1, remGeom);
 
-	GeometrySnapper::snap(*remGeom.first, *remGeom.second,
-	                      snapTolerance, snapGeom);
+    GeometrySnapper::snap(*remGeom.first, *remGeom.second,
+                          snapTolerance, snapGeom);
 
     // MD - may want to do this at some point, but it adds cycles
 //    checkValid(snapGeom[0]);
@@ -85,14 +85,14 @@ SnapOverlayOp::snap(geom::GeomPtrPair& snapGeom)
 void
 SnapOverlayOp::removeCommonBits(const geom::Geometry& p_geom0,
                                 const geom::Geometry& p_geom1,
-				geom::GeomPtrPair& remGeom)
+                                geom::GeomPtrPair& remGeom)
 {
-	cbr.reset(new precision::CommonBitsRemover());
-	cbr->add(&p_geom0);
-	cbr->add(&p_geom1);
+    cbr.reset(new precision::CommonBitsRemover());
+    cbr->add(&p_geom0);
+    cbr->add(&p_geom1);
 
-	remGeom.first.reset( cbr->removeCommonBits(p_geom0.clone()) );
-	remGeom.second.reset( cbr->removeCommonBits(p_geom1.clone()) );
+    remGeom.first.reset(cbr->removeCommonBits(p_geom0.clone()));
+    remGeom.second.reset(cbr->removeCommonBits(p_geom1.clone()));
 }
 
 /*private*/

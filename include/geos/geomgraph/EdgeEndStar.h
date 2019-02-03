@@ -40,12 +40,12 @@
 
 // Forward declarations
 namespace geos {
-	namespace algorithm {
-		class BoundaryNodeRule;
-	}
-	namespace geomgraph {
-		class GeometryGraph;
-	}
+namespace algorithm {
+class BoundaryNodeRule;
+}
+namespace geomgraph {
+class GeometryGraph;
+}
 }
 
 namespace geos {
@@ -63,134 +63,147 @@ namespace geomgraph { // geos.geomgraph
 class GEOS_DLL EdgeEndStar {
 public:
 
-	typedef std::set<EdgeEnd *, EdgeEndLT> container;
+    typedef std::set<EdgeEnd*, EdgeEndLT> container;
 
-	typedef container::iterator iterator;
-	typedef container::const_iterator const_iterator;
-	typedef container::reverse_iterator reverse_iterator;
+    typedef container::iterator iterator;
+    typedef container::const_iterator const_iterator;
+    typedef container::reverse_iterator reverse_iterator;
 
-	EdgeEndStar();
+    EdgeEndStar();
 
-	virtual ~EdgeEndStar() {}
+    virtual
+    ~EdgeEndStar() {}
 
-	/** \brief
-	 * Insert a EdgeEnd into this EdgeEndStar
-	 */
-	virtual void insert(EdgeEnd *e)=0;
+    /** \brief
+     * Insert a EdgeEnd into this EdgeEndStar
+     */
+    virtual void insert(EdgeEnd* e) = 0;
 
-	/** \brief
-	 * @return the coordinate for the node this star is based at
-	 *         or NULL if this is still an unbound star.
-	 * Be aware that the returned pointer will point to
-	 * a Coordinate owned by the specific EdgeEnd happening
-	 * to be the first in the star (ordered CCW)
-	 */
-	virtual geom::Coordinate& getCoordinate();
+    /** \brief
+     * @return the coordinate for the node this star is based at
+     *         or NULL if this is still an unbound star.
+     * Be aware that the returned pointer will point to
+     * a Coordinate owned by the specific EdgeEnd happening
+     * to be the first in the star (ordered CCW)
+     */
+    virtual geom::Coordinate& getCoordinate();
 
-	const geom::Coordinate& getCoordinate() const;
+    const geom::Coordinate& getCoordinate() const;
 
-	virtual std::size_t getDegree();
+    virtual std::size_t getDegree();
 
-	virtual iterator begin();
+    virtual iterator begin();
 
-	virtual iterator end();
+    virtual iterator end();
 
-	virtual reverse_iterator rbegin();
+    virtual reverse_iterator rbegin();
 
-	virtual reverse_iterator rend();
+    virtual reverse_iterator rend();
 
-	virtual const_iterator begin() const { return edgeMap.begin(); }
+    virtual const_iterator
+    begin() const
+    {
+        return edgeMap.begin();
+    }
 
-	virtual const_iterator end() const { return edgeMap.end(); }
+    virtual const_iterator
+    end() const
+    {
+        return edgeMap.end();
+    }
 
-	virtual container &getEdges();
+    virtual container& getEdges();
 
-	virtual EdgeEnd* getNextCW(EdgeEnd *ee);
+    virtual EdgeEnd* getNextCW(EdgeEnd* ee);
 
-	virtual void computeLabelling(std::vector<GeometryGraph*> *geomGraph);
-		// throw(TopologyException *);
+    virtual void computeLabelling(std::vector<GeometryGraph*>* geomGraph);
+    // throw(TopologyException *);
 
-	virtual bool isAreaLabelsConsistent(const GeometryGraph& geomGraph);
+    virtual bool isAreaLabelsConsistent(const GeometryGraph& geomGraph);
 
-	virtual void propagateSideLabels(int geomIndex);
-		// throw(TopologyException *);
+    virtual void propagateSideLabels(int geomIndex);
+    // throw(TopologyException *);
 
-	//virtual int findIndex(EdgeEnd *eSearch);
-	virtual iterator find(EdgeEnd *eSearch);
+    //virtual int findIndex(EdgeEnd *eSearch);
+    virtual iterator find(EdgeEnd* eSearch);
 
-	virtual std::string print() const;
+    virtual std::string print() const;
 
 protected:
 
-	/** \brief
-	 * A map which maintains the edges in sorted order
-	 * around the node
-	 */
-	EdgeEndStar::container edgeMap;
+    /** \brief
+     * A map which maintains the edges in sorted order
+     * around the node
+     */
+    EdgeEndStar::container edgeMap;
 
-	/** \brief
-	 * Insert an EdgeEnd into the map.
-	 */
-	virtual void insertEdgeEnd(EdgeEnd *e) { edgeMap.insert(e); }
+    /** \brief
+     * Insert an EdgeEnd into the map.
+     */
+    virtual void
+    insertEdgeEnd(EdgeEnd* e)
+    {
+        edgeMap.insert(e);
+    }
 
 private:
 
-	virtual int getLocation(int geomIndex,
-		const geom::Coordinate& p,
-		std::vector<GeometryGraph*> *geom);
+    virtual int getLocation(int geomIndex,
+                            const geom::Coordinate& p,
+                            std::vector<GeometryGraph*>* geom);
 
-	/** \brief
-	 * The location of the point for this star in
-	 * Geometry i Areas
-	 */
-	int ptInAreaLocation[2];
+    /** \brief
+     * The location of the point for this star in
+     * Geometry i Areas
+     */
+    int ptInAreaLocation[2];
 
-	virtual void computeEdgeEndLabels(const algorithm::BoundaryNodeRule&);
+    virtual void computeEdgeEndLabels(const algorithm::BoundaryNodeRule&);
 
-	virtual bool checkAreaLabelsConsistent(int geomIndex);
+    virtual bool checkAreaLabelsConsistent(int geomIndex);
 
 };
 
 inline std::size_t
 EdgeEndStar::getDegree()
 {
-	return edgeMap.size();
+    return edgeMap.size();
 }
 
 inline EdgeEndStar::iterator
 EdgeEndStar::begin()
 {
-	return edgeMap.begin();
+    return edgeMap.begin();
 }
 
 inline EdgeEndStar::container&
 EdgeEndStar::getEdges()
 {
-	return edgeMap;
+    return edgeMap;
 }
 
 inline EdgeEndStar::reverse_iterator
 EdgeEndStar::rend()
 {
-	return edgeMap.rend();
+    return edgeMap.rend();
 }
 
 inline EdgeEndStar::iterator
 EdgeEndStar::end()
 {
-	return edgeMap.end();
+    return edgeMap.end();
 }
 
 inline EdgeEndStar::reverse_iterator
 EdgeEndStar::rbegin()
 {
-	return edgeMap.rbegin();
+    return edgeMap.rbegin();
 }
 
 inline EdgeEndStar::iterator
-EdgeEndStar::find(EdgeEnd *eSearch)
+EdgeEndStar::find(EdgeEnd* eSearch)
 {
-	return edgeMap.find(eSearch);
+    return edgeMap.find(eSearch);
 }
 
 std::ostream& operator<< (std::ostream&, const EdgeEndStar&);

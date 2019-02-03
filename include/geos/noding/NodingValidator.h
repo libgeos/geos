@@ -27,12 +27,12 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Coordinate;
-	}
-	namespace noding {
-		class SegmentString;
-	}
+namespace geom {
+class Coordinate;
+}
+namespace noding {
+class SegmentString;
+}
 }
 
 namespace geos {
@@ -47,48 +47,48 @@ namespace noding { // geos.noding
  */
 class GEOS_DLL NodingValidator {
 private:
-	algorithm::LineIntersector li;
-	const std::vector<SegmentString*>& segStrings;
+    algorithm::LineIntersector li;
+    const std::vector<SegmentString*>& segStrings;
 
-	/**
-	 * Checks if a segment string contains a segment
-	 * pattern a-b-a (which implies a self-intersection)
-	 */
-	void checkCollapses() const;
+    /**
+     * Checks if a segment string contains a segment
+     * pattern a-b-a (which implies a self-intersection)
+     */
+    void checkCollapses() const;
 
-	void checkCollapses(const SegmentString& ss) const;
+    void checkCollapses(const SegmentString& ss) const;
 
-	void checkCollapse(const geom::Coordinate& p0, const geom::Coordinate& p1,
-			const geom::Coordinate& p2) const;
+    void checkCollapse(const geom::Coordinate& p0, const geom::Coordinate& p1,
+                       const geom::Coordinate& p2) const;
 
-	/**
-	 * Checks all pairs of segments for intersections at an
-	 * interior point of a segment
-	 */
-	void checkInteriorIntersections();
+    /**
+     * Checks all pairs of segments for intersections at an
+     * interior point of a segment
+     */
+    void checkInteriorIntersections();
 
-	void checkInteriorIntersections(const SegmentString& ss0,
-			const SegmentString& ss1);
+    void checkInteriorIntersections(const SegmentString& ss0,
+                                    const SegmentString& ss1);
 
-	void checkInteriorIntersections(
-			const SegmentString& e0, size_t segIndex0,
-			const SegmentString& e1, size_t segIndex1);
+    void checkInteriorIntersections(
+        const SegmentString& e0, size_t segIndex0,
+        const SegmentString& e1, size_t segIndex1);
 
-	/**
-	 * Checks for intersections between an endpoint of a segment string
-	 * and an interior vertex of another segment string
-	 */
-	void checkEndPtVertexIntersections() const;
+    /**
+     * Checks for intersections between an endpoint of a segment string
+     * and an interior vertex of another segment string
+     */
+    void checkEndPtVertexIntersections() const;
 
-	void checkEndPtVertexIntersections(const geom::Coordinate& testPt,
-			const std::vector<SegmentString*>& segStrings) const;
+    void checkEndPtVertexIntersections(const geom::Coordinate& testPt,
+                                       const std::vector<SegmentString*>& segStrings) const;
 
-	/**
-	 * @return true if there is an intersection point which is not an
-	 *         endpoint of the segment p0-p1
-	 */
-	bool hasInteriorIntersection(const algorithm::LineIntersector& aLi,
-			const geom::Coordinate& p0, const geom::Coordinate& p1) const;
+    /**
+     * @return true if there is an intersection point which is not an
+     *         endpoint of the segment p0-p1
+     */
+    bool hasInteriorIntersection(const algorithm::LineIntersector& aLi,
+                                 const geom::Coordinate& p0, const geom::Coordinate& p1) const;
 
     // Declare type as noncopyable
     NodingValidator(const NodingValidator& other) = delete;
@@ -96,13 +96,13 @@ private:
 
 public:
 
-	NodingValidator(const std::vector<SegmentString*>& newSegStrings):
-		segStrings(newSegStrings)
-	{}
+    NodingValidator(const std::vector<SegmentString*>& newSegStrings):
+        segStrings(newSegStrings)
+    {}
 
-	~NodingValidator() {}
+    ~NodingValidator() {}
 
-	void checkValid();
+    void checkValid();
 
 };
 

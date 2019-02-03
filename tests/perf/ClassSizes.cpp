@@ -25,7 +25,7 @@
 #include <geos/geomgraph/PlanarGraph.h>
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/profiler.h>
-#include <geos/platform.h>
+#include <geos/constants.h>
 #include <iostream>
 
 using namespace std;
@@ -37,10 +37,10 @@ using namespace geos;
 int
 main()
 {
-	check(geomgraph::PlanarGraph);
-	check(geomgraph::EdgeEnd);
-	check(geomgraph::DirectedEdge);
-	check(noding::NodedSegmentString);
-	check(int64);
+    check(geomgraph::PlanarGraph);
+    check(geomgraph::EdgeEnd);
+    check(geomgraph::DirectedEdge);
+    check(noding::NodedSegmentString);
+    check(int64);
 }
 

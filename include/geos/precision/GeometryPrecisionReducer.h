@@ -25,11 +25,11 @@
 
 // Forward declarations
 namespace geos {
-  namespace geom {
-    class PrecisionModel;
-    class GeometryFactory;
-    class Geometry;
-  }
+namespace geom {
+class PrecisionModel;
+class GeometryFactory;
+class Geometry;
+}
 }
 
 namespace geos {
@@ -44,116 +44,121 @@ class GEOS_DLL GeometryPrecisionReducer {
 
 private:
 
-  // Externally owned
-  const geom::GeometryFactory *newFactory;
+    // Externally owned
+    const geom::GeometryFactory* newFactory;
 
-  const geom::PrecisionModel &targetPM;
+    const geom::PrecisionModel& targetPM;
 
-  bool removeCollapsed;
+    bool removeCollapsed;
 
-  bool isPointwise;
+    bool isPointwise;
 
-  std::unique_ptr<geom::Geometry> reducePointwise( const geom::Geometry& geom );
+    std::unique_ptr<geom::Geometry> reducePointwise(const geom::Geometry& geom);
 
-  std::unique_ptr<geom::Geometry> fixPolygonalTopology(
-                                                 const geom::Geometry& geom );
+    std::unique_ptr<geom::Geometry> fixPolygonalTopology(
+        const geom::Geometry& geom);
 
-  geom::GeometryFactory::Ptr createFactory(
-                                          const geom::GeometryFactory& oldGF,
-                                          const geom::PrecisionModel& newPM );
+    geom::GeometryFactory::Ptr createFactory(
+        const geom::GeometryFactory& oldGF,
+        const geom::PrecisionModel& newPM);
 
-  GeometryPrecisionReducer(GeometryPrecisionReducer const&); /*= delete*/
-  GeometryPrecisionReducer& operator=(GeometryPrecisionReducer const&); /*= delete*/
+    GeometryPrecisionReducer(GeometryPrecisionReducer const&); /*= delete*/
+    GeometryPrecisionReducer& operator=(GeometryPrecisionReducer const&); /*= delete*/
 
 public:
 
-  /**
-   * Convenience method for doing precision reduction
-   * on a single geometry,
-   * with collapses removed
-   * and keeping the geometry precision model the same,
-   * and preserving polygonal topology.
-   *
-   * @param g the geometry to reduce
-   * @param precModel the precision model to use
-   * @return the reduced geometry
-   */
-  static std::unique_ptr<geom::Geometry> reduce(
-                                const geom::Geometry &g,
-                                const geom::PrecisionModel &precModel )
-  {
-    GeometryPrecisionReducer reducer(precModel);
-    return reducer.reduce(g);
-  }
+    /**
+     * Convenience method for doing precision reduction
+     * on a single geometry,
+     * with collapses removed
+     * and keeping the geometry precision model the same,
+     * and preserving polygonal topology.
+     *
+     * @param g the geometry to reduce
+     * @param precModel the precision model to use
+     * @return the reduced geometry
+     */
+    static std::unique_ptr<geom::Geometry>
+    reduce(
+        const geom::Geometry& g,
+        const geom::PrecisionModel& precModel)
+    {
+        GeometryPrecisionReducer reducer(precModel);
+        return reducer.reduce(g);
+    }
 
-  /**
-   * Convenience method for doing precision reduction
-   * on a single geometry,
-   * with collapses removed
-   * and keeping the geometry precision model the same,
-   * but NOT preserving valid polygonal topology.
-   *
-   * @param g the geometry to reduce
-   * @param precModel the precision model to use
-   * @return the reduced geometry
-   */
-  static std::unique_ptr<geom::Geometry> reducePointwise(
-                                const geom::Geometry &g,
-                                const geom::PrecisionModel &precModel )
-  {
-    GeometryPrecisionReducer reducer(precModel);
-    reducer.setPointwise(true);
-    return reducer.reduce(g);
-  }
+    /**
+     * Convenience method for doing precision reduction
+     * on a single geometry,
+     * with collapses removed
+     * and keeping the geometry precision model the same,
+     * but NOT preserving valid polygonal topology.
+     *
+     * @param g the geometry to reduce
+     * @param precModel the precision model to use
+     * @return the reduced geometry
+     */
+    static std::unique_ptr<geom::Geometry>
+    reducePointwise(
+        const geom::Geometry& g,
+        const geom::PrecisionModel& precModel)
+    {
+        GeometryPrecisionReducer reducer(precModel);
+        reducer.setPointwise(true);
+        return reducer.reduce(g);
+    }
 
-  GeometryPrecisionReducer(const geom::PrecisionModel &pm)
-      :
-      newFactory(nullptr),
-      targetPM(pm),
-      removeCollapsed(true),
-      isPointwise(false)
-  {}
+    GeometryPrecisionReducer(const geom::PrecisionModel& pm)
+        :
+        newFactory(nullptr),
+        targetPM(pm),
+        removeCollapsed(true),
+        isPointwise(false)
+    {}
 
-  /**
-   * \brief
-   * Create a reducer that will change the precision model of the
-   * new reduced Geometry
-   *
-   * @param gf the factory for the created Geometry.
-   *           Its PrecisionModel will be used for the reduction.
-   *           NOTE: ownership left to caller must be kept alive for
-   *           the whole lifetime of the returned Geometry.
-   */
-  GeometryPrecisionReducer(const geom::GeometryFactory &gf);
+    /**
+     * \brief
+     * Create a reducer that will change the precision model of the
+     * new reduced Geometry
+     *
+     * @param gf the factory for the created Geometry.
+     *           Its PrecisionModel will be used for the reduction.
+     *           NOTE: ownership left to caller must be kept alive for
+     *           the whole lifetime of the returned Geometry.
+     */
+    GeometryPrecisionReducer(const geom::GeometryFactory& gf);
 
-  /**
-   * Sets whether the reduction will result in collapsed components
-   * being removed completely, or simply being collapsed to an (invalid)
-   * Geometry of the same type.
-   *
-   * @param remove if <code>true</code> collapsed components will be removed
-   */
-  void setRemoveCollapsedComponents(bool remove) {
-    removeCollapsed = remove;
-  }
+    /**
+     * Sets whether the reduction will result in collapsed components
+     * being removed completely, or simply being collapsed to an (invalid)
+     * Geometry of the same type.
+     *
+     * @param remove if <code>true</code> collapsed components will be removed
+     */
+    void
+    setRemoveCollapsedComponents(bool remove)
+    {
+        removeCollapsed = remove;
+    }
 
-  /** \brief
-   * Sets whether the precision reduction will be done
-   * in pointwise fashion only.
-   *
-   * Pointwise precision reduction reduces the precision
-   * of the individual coordinates only, but does
-   * not attempt to recreate valid topology.
-   * This is only relevant for geometries containing polygonal components.
-   *
-   * @param pointwise if reduction should be done pointwise only
-   */
-  void setPointwise(bool pointwise)
-  {
-    isPointwise = pointwise;
-  }
+    /** \brief
+     * Sets whether the precision reduction will be done
+     * in pointwise fashion only.
+     *
+     * Pointwise precision reduction reduces the precision
+     * of the individual coordinates only, but does
+     * not attempt to recreate valid topology.
+     * This is only relevant for geometries containing polygonal components.
+     *
+     * @param pointwise if reduction should be done pointwise only
+     */
+    void
+    setPointwise(bool pointwise)
+    {
+        isPointwise = pointwise;
+    }
 
-  std::unique_ptr<geom::Geometry> reduce(const geom::Geometry& geom);
+    std::unique_ptr<geom::Geometry> reduce(const geom::Geometry& geom);
 
 };
 

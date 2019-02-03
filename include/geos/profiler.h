@@ -26,10 +26,10 @@
 
 #include <sys/time.h>
 extern "C" {
-  extern _CRTIMP void __cdecl	_tzset (void);
-  __MINGW_IMPORT int	_daylight;
-  __MINGW_IMPORT long	_timezone;
-  __MINGW_IMPORT char 	*_tzname[2];
+    extern _CRTIMP void __cdecl	_tzset(void);
+    __MINGW_IMPORT int	_daylight;
+    __MINGW_IMPORT long	_timezone;
+    __MINGW_IMPORT char* 	_tzname[2];
 }
 #endif
 
@@ -65,74 +65,82 @@ namespace util {
  */
 class GEOS_DLL Profile {
 public:
-	/** \brief Create a named profile */
-	Profile(std::string name);
+    /** \brief Create a named profile */
+    Profile(std::string name);
 
-	/** \brief Destructor */
-	~Profile();
+    /** \brief Destructor */
+    ~Profile();
 
-	/** \brief start a new timer */
-	void start() {
-		gettimeofday(&starttime, nullptr);
-	}
+    /** \brief start a new timer */
+    void
+    start()
+    {
+        gettimeofday(&starttime, nullptr);
+    }
 
-	/** \brief stop current timer */
-	void stop()
-	{
-		gettimeofday(&stoptime, nullptr);
-		double elapsed = static_cast<double>(
-				1000000 * (stoptime.tv_sec - starttime.tv_sec)
-				+ (stoptime.tv_usec - starttime.tv_usec));
+    /** \brief stop current timer */
+    void
+    stop()
+    {
+        gettimeofday(&stoptime, nullptr);
+        double elapsed = static_cast<double>(
+                             1000000 * (stoptime.tv_sec - starttime.tv_sec)
+                             + (stoptime.tv_usec - starttime.tv_usec));
 
-		timings.push_back(elapsed);
-		totaltime += elapsed;
-		if ( timings.size() == 1 ) max = min = elapsed;
-		else
-		{
-			if ( elapsed > max ) max = elapsed;
-			if ( elapsed < min ) min = elapsed;
-		}
-		avg = totaltime / static_cast<double>(timings.size());
-	}
+        timings.push_back(elapsed);
+        totaltime += elapsed;
+        if(timings.size() == 1) {
+            max = min = elapsed;
+        }
+        else {
+            if(elapsed > max) {
+                max = elapsed;
+            }
+            if(elapsed < min) {
+                min = elapsed;
+            }
+        }
+        avg = totaltime / static_cast<double>(timings.size());
+    }
 
-	/** \brief Return Max stored timing */
-	double getMax() const;
+    /** \brief Return Max stored timing */
+    double getMax() const;
 
-	/** \brief Return Min stored timing */
-	double getMin() const;
+    /** \brief Return Min stored timing */
+    double getMin() const;
 
-	/** \brief Return total timing */
-	double getTot() const;
+    /** \brief Return total timing */
+    double getTot() const;
 
-	/** \brief Return average timing */
-	double getAvg() const;
+    /** \brief Return average timing */
+    double getAvg() const;
 
-	/** \brief Return number of timings */
-	size_t getNumTimings() const;
+    /** \brief Return number of timings */
+    size_t getNumTimings() const;
 
-	/** \brief Profile name */
-	std::string name;
+    /** \brief Profile name */
+    std::string name;
 
 
 private:
 
-	/* \brief current start and stop times */
-	struct timeval starttime, stoptime;
+    /* \brief current start and stop times */
+    struct timeval starttime, stoptime;
 
-	/* \brief actual times */
-	std::vector<double> timings;
+    /* \brief actual times */
+    std::vector<double> timings;
 
-	/* \brief total time */
-	double totaltime;
+    /* \brief total time */
+    double totaltime;
 
-	/* \brief max time */
-	double max;
+    /* \brief max time */
+    double max;
 
-	/* \brief max time */
-	double min;
+    /* \brief max time */
+    double min;
 
-	/* \brief max time */
-	double avg;
+    /* \brief max time */
+    double avg;
 
 };
 
@@ -146,34 +154,34 @@ class GEOS_DLL Profiler {
 
 public:
 
-	Profiler();
-	~Profiler();
+    Profiler();
+    ~Profiler();
 
-	/**
-	 * \brief
-	 * Return the singleton instance of the
-	 * profiler.
-	 */
-	static Profiler *instance(void);
+    /**
+     * \brief
+     * Return the singleton instance of the
+     * profiler.
+     */
+    static Profiler* instance(void);
 
-	/**
-	 * \brief
-	 * Start timer for named task. The task is
-	 * created if does not exist.
-	 */
-	void start(std::string name);
+    /**
+     * \brief
+     * Start timer for named task. The task is
+     * created if does not exist.
+     */
+    void start(std::string name);
 
-	/**
-	 * \brief
-	 * Stop timer for named task.
-	 * Elapsed time is registered in the given task.
-	 */
-	void stop(std::string name);
+    /**
+     * \brief
+     * Stop timer for named task.
+     * Elapsed time is registered in the given task.
+     */
+    void stop(std::string name);
 
-	/** \brief get Profile of named task */
-	Profile *get(std::string name);
+    /** \brief get Profile of named task */
+    Profile* get(std::string name);
 
-	std::map<std::string, Profile *> profs;
+    std::map<std::string, Profile*> profs;
 };
 
 

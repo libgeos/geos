@@ -19,11 +19,11 @@
 
 // Forward declarations
 namespace geos {
-	namespace index {
-		namespace bintree {
-			class Interval;
-		}
-	}
+namespace index {
+namespace bintree {
+class Interval;
+}
+}
 }
 
 namespace geos {
@@ -40,30 +40,30 @@ class GEOS_DLL Key {
 
 public:
 
-	static int computeLevel(Interval *newInterval);
+    static int computeLevel(Interval* newInterval);
 
-	Key(Interval *newInterval);
+    Key(Interval* newInterval);
 
-	~Key();
+    ~Key();
 
-	double getPoint();
+    double getPoint();
 
-	int getLevel();
+    int getLevel();
 
-	Interval* getInterval();
+    Interval* getInterval();
 
-	void computeKey(Interval *itemInterval);
+    void computeKey(Interval* itemInterval);
 
 private:
 
-	// the fields which make up the key
-	double pt;
-	int level;
+    // the fields which make up the key
+    double pt;
+    int level;
 
-	// auxiliary data which is derived from the key for use in computation
-	Interval *interval;
+    // auxiliary data which is derived from the key for use in computation
+    Interval* interval;
 
-	void computeInterval(int level, Interval *itemInterval);
+    void computeInterval(int level, Interval* itemInterval);
 };
 
 } // namespace geos::index::bintree

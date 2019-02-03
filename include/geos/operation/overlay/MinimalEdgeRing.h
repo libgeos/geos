@@ -30,13 +30,13 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class GeometryFactory;
-	}
-	namespace geomgraph {
-		class DirectedEdge;
-		class EdgeRing;
-	}
+namespace geom {
+class GeometryFactory;
+}
+namespace geomgraph {
+class DirectedEdge;
+class EdgeRing;
+}
 }
 
 namespace geos {
@@ -57,15 +57,15 @@ class GEOS_DLL MinimalEdgeRing: public geomgraph::EdgeRing {
 
 public:
 
-	MinimalEdgeRing(geomgraph::DirectedEdge *start,
-		const geom::GeometryFactory *geometryFactory);
+    MinimalEdgeRing(geomgraph::DirectedEdge* start,
+                    const geom::GeometryFactory* geometryFactory);
 
-	~MinimalEdgeRing() override;
+    ~MinimalEdgeRing() override;
 
-	geomgraph::DirectedEdge* getNext(geomgraph::DirectedEdge *de) override;
+    geomgraph::DirectedEdge* getNext(geomgraph::DirectedEdge* de) override;
 
-	void setEdgeRing(geomgraph::DirectedEdge *de,
-			geomgraph::EdgeRing *er) override;
+    void setEdgeRing(geomgraph::DirectedEdge* de,
+                     geomgraph::EdgeRing* er) override;
 };
 
 

@@ -32,13 +32,13 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Coordinate;
-		class LinearRing;
-	}
-	namespace geomgraph {
-		class GeometryGraph;
-	}
+namespace geom {
+class Coordinate;
+class LinearRing;
+}
+namespace geomgraph {
+class GeometryGraph;
+}
 }
 
 namespace geos {
@@ -53,35 +53,40 @@ namespace valid { // geos::operation::valid
  */
 class GEOS_DLL SimpleNestedRingTester {
 private:
-	geomgraph::GeometryGraph *graph;  // used to find non-node vertices
-	std::vector<geom::LinearRing*> rings;
-	geom::Coordinate *nestedPt;
+    geomgraph::GeometryGraph* graph;  // used to find non-node vertices
+    std::vector<geom::LinearRing*> rings;
+    geom::Coordinate* nestedPt;
 public:
-	SimpleNestedRingTester(geomgraph::GeometryGraph *newGraph)
-		:
-		graph(newGraph),
-		rings(),
-		nestedPt(nullptr)
-	{}
+    SimpleNestedRingTester(geomgraph::GeometryGraph* newGraph)
+        :
+        graph(newGraph),
+        rings(),
+        nestedPt(nullptr)
+    {}
 
-	~SimpleNestedRingTester() {
-	}
+    ~SimpleNestedRingTester()
+    {
+    }
 
-	void add(geom::LinearRing *ring) {
-		rings.push_back(ring);
-	}
+    void
+    add(geom::LinearRing* ring)
+    {
+        rings.push_back(ring);
+    }
 
-	/*
-	 * Be aware that the returned Coordinate (if != NULL)
-	 * will point to storage owned by one of the LinearRing
-	 * previously added. If you destroy them, this
-	 * will point to an invalid memory address.
-	 */
-	geom::Coordinate *getNestedPoint() {
-		return nestedPt;
-	}
+    /*
+     * Be aware that the returned Coordinate (if != NULL)
+     * will point to storage owned by one of the LinearRing
+     * previously added. If you destroy them, this
+     * will point to an invalid memory address.
+     */
+    geom::Coordinate*
+    getNestedPoint()
+    {
+        return nestedPt;
+    }
 
-	bool isNonNested();
+    bool isNonNested();
 };
 
 } // namespace geos.operation.valid

@@ -32,14 +32,14 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Coordinate;
-		class Envelope;
-		class Polygon;
-		class GeometryFactory;
-		class PrecisionModel;
-		class LineString;
-	}
+namespace geom {
+class Coordinate;
+class Envelope;
+class Polygon;
+class GeometryFactory;
+class PrecisionModel;
+class LineString;
+}
 }
 
 namespace geos {
@@ -59,54 +59,56 @@ class GEOS_DLL SineStarFactory : public geos::util::GeometricShapeFactory  {
 
 protected:
 
-  int numArms;
-  double armLengthRatio;
+    int numArms;
+    double armLengthRatio;
 
 public:
 
-  /**
-   * Creates a factory which will create sine stars using the given
-   * {@link GeometryFactory}.
-   *
-	 * @param fact the factory to use. You need to keep the
-	 *	factory alive for the whole SineStarFactory
-	 *	life time.
-   */
-	SineStarFactory(const geom::GeometryFactory* fact)
-    :
-    geos::util::GeometricShapeFactory(fact),
-    numArms(8),
-    armLengthRatio(0.5)
-  {}
+    /**
+     * Creates a factory which will create sine stars using the given
+     * {@link GeometryFactory}.
+     *
+     * @param fact the factory to use. You need to keep the
+     *	factory alive for the whole SineStarFactory
+     *	life time.
+     */
+    SineStarFactory(const geom::GeometryFactory* fact)
+        :
+        geos::util::GeometricShapeFactory(fact),
+        numArms(8),
+        armLengthRatio(0.5)
+    {}
 
-  /**
-   * Sets the number of arms in the star
-   *
-   * @param nArms the number of arms to generate
-   */
-  void setNumArms(int nArms)
-  {
-    numArms = nArms;
-  }
+    /**
+     * Sets the number of arms in the star
+     *
+     * @param nArms the number of arms to generate
+     */
+    void
+    setNumArms(int nArms)
+    {
+        numArms = nArms;
+    }
 
-  /**
-   * Sets the ration of the length of each arm to the distance from the tip
-   * of the arm to the centre of the star.
-   * Value should be between 0.0 and 1.0
-   *
-   * @param armLenRatio
-   */
-  void setArmLengthRatio(double armLenRatio)
-  {
+    /**
+     * Sets the ration of the length of each arm to the distance from the tip
+     * of the arm to the centre of the star.
+     * Value should be between 0.0 and 1.0
+     *
+     * @param armLenRatio
+     */
+    void
+    setArmLengthRatio(double armLenRatio)
+    {
         armLengthRatio = armLenRatio;
-  }
+    }
 
-  /**
-   * Generates the geometry for the sine star
-   *
-   * @return the geometry representing the sine star
-   */
-  std::unique_ptr<Polygon> createSineStar() const;
+    /**
+     * Generates the geometry for the sine star
+     *
+     * @return the geometry representing the sine star
+     */
+    std::unique_ptr<Polygon> createSineStar() const;
 
 
 };

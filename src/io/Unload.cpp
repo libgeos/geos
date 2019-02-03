@@ -21,9 +21,10 @@ namespace geos {
 namespace io { // geos.io
 
 /*public static*/
-void Unload::Release()
+void
+Unload::Release()
 {
-	//delete geom::Geometry::INTERNAL_GEOMETRY_FACTORY;
+    //delete geom::Geometry::INTERNAL_GEOMETRY_FACTORY;
 }
 
 } // namespace geos.io

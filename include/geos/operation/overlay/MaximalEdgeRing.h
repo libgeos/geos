@@ -27,18 +27,18 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class GeometryFactory;
-	}
-	namespace geomgraph {
-		class DirectedEdge;
-		//class EdgeRing;
-	}
-	namespace operation {
-		namespace overlay {
-			class MinimalEdgeRing;
-		}
-	}
+namespace geom {
+class GeometryFactory;
+}
+namespace geomgraph {
+class DirectedEdge;
+//class EdgeRing;
+}
+namespace operation {
+namespace overlay {
+class MinimalEdgeRing;
+}
+}
 }
 
 namespace geos {
@@ -67,36 +67,36 @@ class GEOS_DLL MaximalEdgeRing: public geomgraph::EdgeRing {
 
 public:
 
-	MaximalEdgeRing(geomgraph::DirectedEdge *start,
-		const geom::GeometryFactory *geometryFactory);
-			// throw(const TopologyException &)
+    MaximalEdgeRing(geomgraph::DirectedEdge* start,
+                    const geom::GeometryFactory* geometryFactory);
+    // throw(const TopologyException &)
 
-	~MaximalEdgeRing() override;
+    ~MaximalEdgeRing() override;
 
-	geomgraph::DirectedEdge* getNext(geomgraph::DirectedEdge *de) override;
+    geomgraph::DirectedEdge* getNext(geomgraph::DirectedEdge* de) override;
 
-	void setEdgeRing(geomgraph::DirectedEdge* de, geomgraph::EdgeRing* er) override;
+    void setEdgeRing(geomgraph::DirectedEdge* de, geomgraph::EdgeRing* er) override;
 
-	/// \brief
-	/// This function returns a newly allocated vector of
-	/// pointers to newly allocated MinimalEdgeRing objects.
-	///
-	/// @deprecated pass the vector yourself instead
-	///
-	std::vector<MinimalEdgeRing*>* buildMinimalRings();
+    /// \brief
+    /// This function returns a newly allocated vector of
+    /// pointers to newly allocated MinimalEdgeRing objects.
+    ///
+    /// @deprecated pass the vector yourself instead
+    ///
+    std::vector<MinimalEdgeRing*>* buildMinimalRings();
 
-	/// \brief
-	/// This function pushes pointers to newly allocated  MinimalEdgeRing
-	/// objects to the provided vector.
-	///
-	void buildMinimalRings(std::vector<MinimalEdgeRing*>& minEdgeRings);
-	void buildMinimalRings(std::vector<EdgeRing*>& minEdgeRings);
+    /// \brief
+    /// This function pushes pointers to newly allocated  MinimalEdgeRing
+    /// objects to the provided vector.
+    ///
+    void buildMinimalRings(std::vector<MinimalEdgeRing*>& minEdgeRings);
+    void buildMinimalRings(std::vector<EdgeRing*>& minEdgeRings);
 
-	/// \brief
-	/// For all nodes in this EdgeRing,
-	/// link the DirectedEdges at the node to form minimalEdgeRings
-	///
-	void linkDirectedEdgesForMinimalEdgeRings();
+    /// \brief
+    /// For all nodes in this EdgeRing,
+    /// link the DirectedEdges at the node to form minimalEdgeRings
+    ///
+    void linkDirectedEdgesForMinimalEdgeRings();
 };
 
 

@@ -11,160 +11,168 @@
 #include <cstdlib>
 #include <cstring>
 
-namespace tut
+namespace tut {
+//
+// Test Group
+//
+
+// Common data used in test cases.
+struct test_capiisvaliddetail_data {
+    GEOSWKTWriter* wktw_;
+    GEOSGeometry* geom_;
+    GEOSGeometry* loc_;
+    char* reason_;
+
+    static void
+    notice(const char* fmt, ...)
+    {
+        std::fprintf(stdout, "NOTICE: ");
+
+        va_list ap;
+        va_start(ap, fmt);
+        std::vfprintf(stdout, fmt, ap);
+        va_end(ap);
+
+        std::fprintf(stdout, "\n");
+    }
+
+    test_capiisvaliddetail_data()
+        : geom_(nullptr), loc_(nullptr), reason_(nullptr)
+    {
+        initGEOS(notice, notice);
+        wktw_ = GEOSWKTWriter_create();
+        GEOSWKTWriter_setTrim(wktw_, 1);
+        GEOSWKTWriter_setOutputDimension(wktw_, 3);
+    }
+
+    std::string
+    toWKT(GEOSGeometry* g)
+    {
+        char* wkt = GEOSWKTWriter_write(wktw_, g);
+        std::string ret(wkt);
+        GEOSFree(wkt);
+        return ret;
+    }
+
+    void
+    strToUpper(std::string& str)
+    {
+        using std::toupper;
+        using std::string;
+
+        for(string::size_type i = 0, len = str.size(); i < len; ++i) {
+            str[i] = static_cast<string::value_type>(toupper(str[i]));
+        }
+    }
+
+    ~test_capiisvaliddetail_data()
+    {
+        GEOSGeom_destroy(geom_);
+        GEOSGeom_destroy(loc_);
+        GEOSFree(reason_);
+        GEOSWKTWriter_destroy(wktw_);
+        finishGEOS();
+    }
+
+};
+
+typedef test_group<test_capiisvaliddetail_data> group;
+typedef group::object object;
+
+group test_capiisvaliddetail_group("capi::GEOSisValidDetail");
+
+//
+// Test Cases
+//
+
+
+// Flag values
+template<>
+template<>
+void object::test<1>
+()
 {
-    //
-    // Test Group
-    //
+    ensure_equals(GEOSVALID_ALLOW_SELFTOUCHING_RING_FORMING_HOLE, 1);
+}
 
-    // Common data used in test cases.
-    struct test_capiisvaliddetail_data
-    {
-        GEOSWKTWriter* wktw_;
-        GEOSGeometry* geom_;
-        GEOSGeometry* loc_;
-        char* reason_;
+// Valid case
+template<>
+template<>
+void object::test<2>
+()
+{
+    // Looks invalid (self-intersecting) but isn't
+    // (is non-simple though)
+    geom_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0, 5 -5, 5 5)");
+    int r = GEOSisValidDetail(geom_, 0, &reason_, &loc_);
+    ensure_equals(r, 1); // valid
+    ensure_equals(reason_, (void*)nullptr);
+    ensure_equals(loc_, (void*)nullptr);
+}
 
-        static void notice(const char *fmt, ...)
-        {
-            std::fprintf( stdout, "NOTICE: ");
+// Invalid coordinate
+template<>
+template<>
+void object::test<3>
+()
+{
+    geom_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0, NaN -5)");
+    ensure(nullptr != geom_);
+    int r = GEOSisValidDetail(geom_, 0, &reason_, &loc_);
+    std::string wkt = toWKT(loc_);
+    strToUpper(wkt);
+    ensure_equals(r, 0); // invalid
+    ensure_equals(std::string(reason_), std::string("Invalid Coordinate"));
+    std::string exp1 = "POINT (NAN -5)";
+    std::string exp2 = "POINT (-1#IND -5)";
+    // http://trac.osgeo.org/geos/ticket/656
+    std::string exp3 = "POINT (1.#QNAN -5)";
+    std::stringstream ss;
+    ss << "Expected '" << exp1 << "' or '" << exp2 << "' or '" << exp3 << "', Obtained '" << wkt;
+    ensure(ss.str(),
+           wkt == exp1 ||
+           wkt == exp2 ||
+           wkt == exp3);
+}
 
-            va_list ap;
-            va_start(ap, fmt);
-            std::vfprintf(stdout, fmt, ap);
-            va_end(ap);
+// Self intersecting ring forming hole
+template<>
+template<>
+void object::test<4>
+()
+{
+    geom_ = GEOSGeomFromWKT("POLYGON((0 1, -10 10, 10 10, 0 1, 4 6, -4 6, 0 1))");
+    int r = GEOSisValidDetail(geom_, 0, &reason_, &loc_);
+    ensure_equals(r, 0); // invalid
+    ensure_equals(std::string(reason_), std::string("Ring Self-intersection"));
+    ensure_equals(toWKT(loc_), "POINT (0 1)");
+}
 
-            std::fprintf(stdout, "\n");
-        }
+// Self intersecting ring forming hole (with ESRI flag)
+template<>
+template<>
+void object::test<5>
+()
+{
+    geom_ = GEOSGeomFromWKT("POLYGON((0 1, -10 10, 10 10, 0 1, 4 6, -4 6, 0 1))");
+    int flags = GEOSVALID_ALLOW_SELFTOUCHING_RING_FORMING_HOLE;
 
-        test_capiisvaliddetail_data()
-            : geom_(nullptr), loc_(nullptr), reason_(nullptr)
-        {
-            initGEOS(notice, notice);
-            wktw_ = GEOSWKTWriter_create();
-            GEOSWKTWriter_setTrim(wktw_, 1);
-            GEOSWKTWriter_setOutputDimension(wktw_, 3);
-        }
+    int r = GEOSisValidDetail(geom_, flags, &reason_, &loc_);
+    ensure_equals(r, 1); // valid
+    ensure_equals(reason_, (void*)nullptr);
+    ensure_equals(loc_, (void*)nullptr);
+}
 
-        std::string toWKT(GEOSGeometry* g)
-        {
-          char* wkt = GEOSWKTWriter_write(wktw_, g);
-          std::string ret (wkt);
-          GEOSFree(wkt);
-          return ret;
-        }
-
-        void strToUpper(std::string &str)
-        {
-            using std::toupper;
-            using std::string;
-
-            for(string::size_type i = 0, len = str.size(); i < len; ++i)
-                str[i] = static_cast<string::value_type>(toupper(str[i]));
-        }
-
-        ~test_capiisvaliddetail_data()
-        {
-            GEOSGeom_destroy(geom_);
-            GEOSGeom_destroy(loc_);
-            GEOSFree(reason_);
-            GEOSWKTWriter_destroy(wktw_);
-            finishGEOS();
-        }
-
-    };
-
-    typedef test_group<test_capiisvaliddetail_data> group;
-    typedef group::object object;
-
-    group test_capiisvaliddetail_group("capi::GEOSisValidDetail");
-
-    //
-    // Test Cases
-    //
-
-
-    // Flag values
-    template<>
-    template<>
-    void object::test<1>()
-    {
-      ensure_equals(GEOSVALID_ALLOW_SELFTOUCHING_RING_FORMING_HOLE, 1);
-    }
-
-    // Valid case
-    template<>
-    template<>
-    void object::test<2>()
-    {
-      // Looks invalid (self-intersecting) but isn't
-      // (is non-simple though)
-      geom_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0, 5 -5, 5 5)");
-      int r = GEOSisValidDetail(geom_, 0, &reason_, &loc_);
-      ensure_equals(r, 1); // valid
-      ensure_equals(reason_, (void*)nullptr);
-      ensure_equals(loc_, (void*)nullptr);
-    }
-
-    // Invalid coordinate
-    template<>
-    template<>
-    void object::test<3>()
-    {
-      geom_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0, NaN -5)");
-      ensure(nullptr != geom_);
-      int r = GEOSisValidDetail(geom_, 0, &reason_, &loc_);
-      std::string wkt = toWKT(loc_);
-      strToUpper(wkt);
-      ensure_equals(r, 0); // invalid
-      ensure_equals(std::string(reason_), std::string("Invalid Coordinate"));
-      std::string exp1 = "POINT (NAN -5)";
-      std::string exp2 = "POINT (-1#IND -5)";
-      // http://trac.osgeo.org/geos/ticket/656
-      std::string exp3 = "POINT (1.#QNAN -5)";
-      std::stringstream ss;
-      ss << "Expected '" << exp1 << "' or '" << exp2 << "' or '" << exp3 << "', Obtained '" << wkt;
-      ensure(ss.str(),
-        wkt == exp1 ||
-        wkt == exp2 ||
-        wkt == exp3);
-    }
-
-    // Self intersecting ring forming hole
-    template<>
-    template<>
-    void object::test<4>()
-    {
-      geom_ = GEOSGeomFromWKT("POLYGON((0 1, -10 10, 10 10, 0 1, 4 6, -4 6, 0 1))");
-      int r = GEOSisValidDetail(geom_, 0, &reason_, &loc_);
-      ensure_equals(r, 0); // invalid
-      ensure_equals(std::string(reason_), std::string("Ring Self-intersection"));
-      ensure_equals(toWKT(loc_), "POINT (0 1)");
-    }
-
-    // Self intersecting ring forming hole (with ESRI flag)
-    template<>
-    template<>
-    void object::test<5>()
-    {
-      geom_ = GEOSGeomFromWKT("POLYGON((0 1, -10 10, 10 10, 0 1, 4 6, -4 6, 0 1))");
-      int flags = GEOSVALID_ALLOW_SELFTOUCHING_RING_FORMING_HOLE;
-
-      int r = GEOSisValidDetail(geom_, flags, &reason_, &loc_);
-      ensure_equals(r, 1); // valid
-      ensure_equals(reason_, (void*)nullptr);
-      ensure_equals(loc_, (void*)nullptr);
-    }
-
-    // Check it is possible to not request details
-    template<>
-    template<>
-    void object::test<6>()
-    {
-      geom_ = GEOSGeomFromWKT("POLYGON((0 1, -10 10, 10 10, 0 1, 4 6, -4 6, 0 1))");
-      int r = GEOSisValidDetail(geom_, 0, nullptr, nullptr);
-      ensure_equals(r, 0); // invalid
-    }
+// Check it is possible to not request details
+template<>
+template<>
+void object::test<6>
+()
+{
+    geom_ = GEOSGeomFromWKT("POLYGON((0 1, -10 10, 10 10, 0 1, 4 6, -4 6, 0 1))");
+    int r = GEOSisValidDetail(geom_, 0, nullptr, nullptr);
+    ensure_equals(r, 0); // invalid
+}
 
 } // namespace tut
 

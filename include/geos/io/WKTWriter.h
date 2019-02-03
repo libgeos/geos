@@ -32,23 +32,23 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Coordinate;
-		class CoordinateSequence;
-		class Geometry;
-		class GeometryCollection;
-		class Point;
-		class LineString;
-		class LinearRing;
-		class Polygon;
-		class MultiPoint;
-		class MultiLineString;
-		class MultiPolygon;
-		class PrecisionModel;
-	}
-	namespace io {
-		class Writer;
-	}
+namespace geom {
+class Coordinate;
+class CoordinateSequence;
+class Geometry;
+class GeometryCollection;
+class Point;
+class LineString;
+class LinearRing;
+class Polygon;
+class MultiPoint;
+class MultiLineString;
+class MultiPolygon;
+class PrecisionModel;
+}
+namespace io {
+class Writer;
+}
 }
 
 
@@ -78,190 +78,198 @@ namespace io {
  */
 class GEOS_DLL WKTWriter {
 public:
-	WKTWriter();
-	~WKTWriter();
+    WKTWriter();
+    ~WKTWriter();
 
-	//string(count, ch) can be used for this
-	//static string stringOfChar(char ch, int count);
+    //string(count, ch) can be used for this
+    //static string stringOfChar(char ch, int count);
 
-	/// Returns WKT string for the given Geometry
-	std::string write(const geom::Geometry *geometry);
+    /// Returns WKT string for the given Geometry
+    std::string write(const geom::Geometry* geometry);
 
-	// Send Geometry's WKT to the given Writer
-	void write(const geom::Geometry *geometry, Writer *writer);
+    // Send Geometry's WKT to the given Writer
+    void write(const geom::Geometry* geometry, Writer* writer);
 
-	std::string writeFormatted(const geom::Geometry *geometry);
+    std::string writeFormatted(const geom::Geometry* geometry);
 
-	void writeFormatted(const geom::Geometry *geometry, Writer *writer);
+    void writeFormatted(const geom::Geometry* geometry, Writer* writer);
 
-	/**
-	 * Generates the WKT for a N-point <code>LineString</code>.
-	 *
-	 * @param seq the sequence to outpout
-	 *
-	 * @return the WKT
-	 */
-	static std::string toLineString(const geom::CoordinateSequence& seq);
+    /**
+     * Generates the WKT for a N-point <code>LineString</code>.
+     *
+     * @param seq the sequence to outpout
+     *
+     * @return the WKT
+     */
+    static std::string toLineString(const geom::CoordinateSequence& seq);
 
-	/**
-	 * Generates the WKT for a 2-point <code>LineString</code>.
-	 *
-	 * @param p0 the first coordinate
-	 * @param p1 the second coordinate
-	 *
-	 * @return the WKT
-	 */
-	static std::string toLineString(const geom::Coordinate& p0, const geom::Coordinate& p1);
+    /**
+     * Generates the WKT for a 2-point <code>LineString</code>.
+     *
+     * @param p0 the first coordinate
+     * @param p1 the second coordinate
+     *
+     * @return the WKT
+     */
+    static std::string toLineString(const geom::Coordinate& p0, const geom::Coordinate& p1);
 
-	/**
-	 * Generates the WKT for a <code>Point</code>.
-	 *
-	 * @param p0 the point coordinate
-	 *
-	 * @return the WKT
-	 */
-	static std::string toPoint(const geom::Coordinate& p0);
+    /**
+     * Generates the WKT for a <code>Point</code>.
+     *
+     * @param p0 the point coordinate
+     *
+     * @return the WKT
+     */
+    static std::string toPoint(const geom::Coordinate& p0);
 
-	/**
-	 * Sets the rounding precision when writing the WKT
-	 * a precision of -1 disables it
-	 *
-	 * @param p0 the new precision to use
-	 *
-	 */
-	void setRoundingPrecision(int p0);
+    /**
+     * Sets the rounding precision when writing the WKT
+     * a precision of -1 disables it
+     *
+     * @param p0 the new precision to use
+     *
+     */
+    void setRoundingPrecision(int p0);
 
-	/**
-	 * Enables/disables trimming of unnecessary decimals
-	 *
-	 * @param p0 the trim boolean
-	 *
-	 */
-	void setTrim(bool p0);
+    /**
+     * Enables/disables trimming of unnecessary decimals
+     *
+     * @param p0 the trim boolean
+     *
+     */
+    void setTrim(bool p0);
 
-	/**
-	 * Enable old style 3D/4D WKT generation.
-	 *
-	 * By default the WKBWriter produces new style 3D/4D WKT
-	 * (ie. "POINT Z (10 20 30)") but if this method is used
-	 * to turn on old style WKT production then the WKT will
-	 * be formatted in the style "POINT (10 20 30)".
-	 *
-	 * @param useOld3D true or false
-	 */
-	void setOld3D(bool useOld3D ) { old3D = useOld3D; }
+    /**
+     * Enable old style 3D/4D WKT generation.
+     *
+     * By default the WKBWriter produces new style 3D/4D WKT
+     * (ie. "POINT Z (10 20 30)") but if this method is used
+     * to turn on old style WKT production then the WKT will
+     * be formatted in the style "POINT (10 20 30)".
+     *
+     * @param useOld3D true or false
+     */
+    void
+    setOld3D(bool useOld3D)
+    {
+        old3D = useOld3D;
+    }
 
-	/*
-	 * \brief
-	 * Returns the output dimension used by the
-	 * <code>WKBWriter</code>.
-	 */
-	int getOutputDimension() const { return defaultOutputDimension; }
+    /*
+     * \brief
+     * Returns the output dimension used by the
+     * <code>WKBWriter</code>.
+     */
+    int
+    getOutputDimension() const
+    {
+        return defaultOutputDimension;
+    }
 
-	/*
-	 * Sets the output dimension used by the <code>WKBWriter</code>.
-	 *
-	 * @param newOutputDimension Supported values are 2 or 3.
-	 *        Note that 3 indicates up to 3 dimensions will be
-	 *        written but 2D WKB is still produced for 2D geometries.
-	 */
-	void setOutputDimension(int newOutputDimension);
+    /*
+     * Sets the output dimension used by the <code>WKBWriter</code>.
+     *
+     * @param newOutputDimension Supported values are 2 or 3.
+     *        Note that 3 indicates up to 3 dimensions will be
+     *        written but 2D WKB is still produced for 2D geometries.
+     */
+    void setOutputDimension(int newOutputDimension);
 
 protected:
 
-  int decimalPlaces;
+    int decimalPlaces;
 
-	void appendGeometryTaggedText(const geom::Geometry *geometry, int level, Writer *writer);
+    void appendGeometryTaggedText(const geom::Geometry* geometry, int level, Writer* writer);
 
-	void appendPointTaggedText(
-			const geom::Coordinate* coordinate,
-			int level, Writer *writer);
+    void appendPointTaggedText(
+        const geom::Coordinate* coordinate,
+        int level, Writer* writer);
 
-	void appendLineStringTaggedText(
-			const geom::LineString *lineString,
-			int level, Writer *writer);
+    void appendLineStringTaggedText(
+        const geom::LineString* lineString,
+        int level, Writer* writer);
 
-	void appendLinearRingTaggedText(
-			const geom::LinearRing *lineString,
-			int level, Writer *writer);
+    void appendLinearRingTaggedText(
+        const geom::LinearRing* lineString,
+        int level, Writer* writer);
 
-	void appendPolygonTaggedText(
-			const geom::Polygon *polygon,
-			int level, Writer *writer);
+    void appendPolygonTaggedText(
+        const geom::Polygon* polygon,
+        int level, Writer* writer);
 
-	void appendMultiPointTaggedText(
-			const geom::MultiPoint *multipoint,
-			int level, Writer *writer);
+    void appendMultiPointTaggedText(
+        const geom::MultiPoint* multipoint,
+        int level, Writer* writer);
 
-	void appendMultiLineStringTaggedText(
-			const geom::MultiLineString *multiLineString,
-			int level,Writer *writer);
+    void appendMultiLineStringTaggedText(
+        const geom::MultiLineString* multiLineString,
+        int level, Writer* writer);
 
-	void appendMultiPolygonTaggedText(
-			const geom::MultiPolygon *multiPolygon,
-			int level, Writer *writer);
+    void appendMultiPolygonTaggedText(
+        const geom::MultiPolygon* multiPolygon,
+        int level, Writer* writer);
 
-	void appendGeometryCollectionTaggedText(
-			const geom::GeometryCollection *geometryCollection,
-			int level,Writer *writer);
+    void appendGeometryCollectionTaggedText(
+        const geom::GeometryCollection* geometryCollection,
+        int level, Writer* writer);
 
-	void appendPointText(const geom::Coordinate* coordinate, int level,
-			Writer *writer);
+    void appendPointText(const geom::Coordinate* coordinate, int level,
+                         Writer* writer);
 
-	void appendCoordinate(const geom::Coordinate* coordinate,
-			Writer *writer);
+    void appendCoordinate(const geom::Coordinate* coordinate,
+                          Writer* writer);
 
-	std::string writeNumber(double d);
+    std::string writeNumber(double d);
 
-	void appendLineStringText(
-			const geom::LineString *lineString,
-			int level, bool doIndent, Writer *writer);
+    void appendLineStringText(
+        const geom::LineString* lineString,
+        int level, bool doIndent, Writer* writer);
 
-	void appendPolygonText(
-			const geom::Polygon *polygon,
-			int level, bool indentFirst, Writer *writer);
+    void appendPolygonText(
+        const geom::Polygon* polygon,
+        int level, bool indentFirst, Writer* writer);
 
-	void appendMultiPointText(
-			const geom::MultiPoint *multiPoint,
-			int level, Writer *writer);
+    void appendMultiPointText(
+        const geom::MultiPoint* multiPoint,
+        int level, Writer* writer);
 
-	void appendMultiLineStringText(
-			const geom::MultiLineString *multiLineString,
-			int level, bool indentFirst,Writer *writer);
+    void appendMultiLineStringText(
+        const geom::MultiLineString* multiLineString,
+        int level, bool indentFirst, Writer* writer);
 
-	void appendMultiPolygonText(
-			const geom::MultiPolygon *multiPolygon,
-			int level, Writer *writer);
+    void appendMultiPolygonText(
+        const geom::MultiPolygon* multiPolygon,
+        int level, Writer* writer);
 
-	void appendGeometryCollectionText(
-			const geom::GeometryCollection *geometryCollection,
-			int level,Writer *writer);
+    void appendGeometryCollectionText(
+        const geom::GeometryCollection* geometryCollection,
+        int level, Writer* writer);
 
 private:
 
-	enum {
-		INDENT = 2
-	};
+    enum {
+        INDENT = 2
+    };
 
 //	static const int INDENT = 2;
 
-	bool isFormatted;
+    bool isFormatted;
 
-	int roundingPrecision;
+    int roundingPrecision;
 
-	bool trim;
+    bool trim;
 
-	int level;
+    int level;
 
-	int defaultOutputDimension;
+    int defaultOutputDimension;
     int outputDimension;
     bool old3D;
 
-	void writeFormatted(
-			const geom::Geometry *geometry,
-			bool isFormatted, Writer *writer);
+    void writeFormatted(
+        const geom::Geometry* geometry,
+        bool isFormatted, Writer* writer);
 
-	void indent(int level, Writer *writer);
+    void indent(int level, Writer* writer);
 };
 
 } // namespace geos::io

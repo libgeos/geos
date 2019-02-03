@@ -36,13 +36,13 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Coordinate;
-		class CoordinateSequence;
-	}
-	namespace noding {
-		class SegmentString;
-	}
+namespace geom {
+class Coordinate;
+class CoordinateSequence;
+}
+namespace noding {
+class SegmentString;
+}
 }
 
 namespace geos {
@@ -62,57 +62,62 @@ class GEOS_DLL ScaledNoder : public Noder { // , public geom::CoordinateFilter {
 
 public:
 
-	bool isIntegerPrecision() { return (scaleFactor == 1.0); }
+    bool
+    isIntegerPrecision()
+    {
+        return (scaleFactor == 1.0);
+    }
 
-	ScaledNoder(Noder& n, double nScaleFactor,
-			double nOffsetX=0.0, double nOffsetY=0.0)
-		:
-		noder(n),
-		scaleFactor(nScaleFactor),
-		offsetX(nOffsetX),
-		offsetY(nOffsetY),
-		isScaled(nScaleFactor!=1.0)
-	{}
+    ScaledNoder(Noder& n, double nScaleFactor,
+                double nOffsetX = 0.0, double nOffsetY = 0.0)
+        :
+        noder(n),
+        scaleFactor(nScaleFactor),
+        offsetX(nOffsetX),
+        offsetY(nOffsetY),
+        isScaled(nScaleFactor != 1.0)
+    {}
 
-	~ScaledNoder() override;
+    ~ScaledNoder() override;
 
-	std::vector<SegmentString*>* getNodedSubstrings() const override;
+    std::vector<SegmentString*>* getNodedSubstrings() const override;
 
-	void computeNodes(std::vector<SegmentString*>* inputSegStr) override;
+    void computeNodes(std::vector<SegmentString*>* inputSegStr) override;
 
-	//void filter(Coordinate& c);
+    //void filter(Coordinate& c);
 
-	void filter_ro(const geom::Coordinate* c)
+    void
+    filter_ro(const geom::Coordinate* c)
     {
         ::geos::ignore_unused_variable_warning(c);
         assert(0);
     }
 
-	void filter_rw(geom::Coordinate* c) const;
+    void filter_rw(geom::Coordinate* c) const;
 
 private:
 
-	Noder& noder;
+    Noder& noder;
 
-	double scaleFactor;
+    double scaleFactor;
 
-	double offsetX;
+    double offsetX;
 
-	double offsetY;
+    double offsetY;
 
-	bool isScaled;
+    bool isScaled;
 
-	void rescale(std::vector<SegmentString*>& segStrings) const;
+    void rescale(std::vector<SegmentString*>& segStrings) const;
 
-	void scale(std::vector<SegmentString*>& segStrings) const;
+    void scale(std::vector<SegmentString*>& segStrings) const;
 
-	class Scaler;
+    class Scaler;
 
-	class ReScaler;
+    class ReScaler;
 
-	friend class ScaledNoder::Scaler;
+    friend class ScaledNoder::Scaler;
 
-	friend class ScaledNoder::ReScaler;
+    friend class ScaledNoder::ReScaler;
 
     mutable std::vector<geom::CoordinateSequence*> newCoordSeq;
 

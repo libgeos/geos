@@ -34,26 +34,30 @@ namespace util { // geos.util
  */
 class GEOS_DLL TopologyException: public GEOSException {
 public:
-	TopologyException()
-		:
-		GEOSException("TopologyException", "")
-	{}
+    TopologyException()
+        :
+        GEOSException("TopologyException", "")
+    {}
 
-	TopologyException(const std::string& msg)
-		:
-		GEOSException("TopologyException", msg)
-	{}
+    TopologyException(const std::string& msg)
+        :
+        GEOSException("TopologyException", msg)
+    {}
 
-	TopologyException(const std::string& msg, const geom::Coordinate& newPt)
-		:
-		GEOSException("TopologyException", msg + " at " + newPt.toString()),
-		pt(newPt)
-	{}
+    TopologyException(const std::string& msg, const geom::Coordinate& newPt)
+        :
+        GEOSException("TopologyException", msg + " at " + newPt.toString()),
+        pt(newPt)
+    {}
 
-	~TopologyException() throw() override {}
-	geom::Coordinate& getCoordinate() { return pt; }
+    ~TopologyException() throw() override {}
+    geom::Coordinate&
+    getCoordinate()
+    {
+        return pt;
+    }
 private:
-	geom::Coordinate pt;
+    geom::Coordinate pt;
 };
 
 } // namespace geos::util

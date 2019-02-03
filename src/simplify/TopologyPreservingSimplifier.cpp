@@ -46,26 +46,25 @@ using LinesMap = std::unordered_map<const geom::Geometry*, TaggedLineString*>;
 
 namespace { // module-statics
 
-class LineStringTransformer: public geom::util::GeometryTransformer
-{
+class LineStringTransformer: public geom::util::GeometryTransformer {
 
 public:
 
-	/**
-	 * User's constructor.
-	 * @param nMap - reference to LinesMap instance.
-	 */
-	LineStringTransformer(LinesMap& simp);
+    /**
+     * User's constructor.
+     * @param nMap - reference to LinesMap instance.
+     */
+    LineStringTransformer(LinesMap& simp);
 
 protected:
 
-	CoordinateSequence::Ptr transformCoordinates(
-			const CoordinateSequence* coords,
-			const Geometry* parent) override;
+    CoordinateSequence::Ptr transformCoordinates(
+        const CoordinateSequence* coords,
+        const Geometry* parent) override;
 
 private:
 
-	LinesMap& linestringMap;
+    LinesMap& linestringMap;
 
 };
 
@@ -77,93 +76,97 @@ private:
  */
 class LinesMapValueIterator {
 
-	LinesMap::iterator _iter;
+    LinesMap::iterator _iter;
 
 public:
 
-	LinesMapValueIterator(LinesMap::iterator iter)
-		:
-		_iter(iter)
-	{
-	}
+    LinesMapValueIterator(LinesMap::iterator iter)
+        :
+        _iter(iter)
+    {
+    }
 
-	// copy ctor
-	LinesMapValueIterator(const LinesMapValueIterator& o)
-		:
-		_iter(o._iter)
-	{
-	}
+    // copy ctor
+    LinesMapValueIterator(const LinesMapValueIterator& o)
+        :
+        _iter(o._iter)
+    {
+    }
 
-	// assignment
-	LinesMapValueIterator& operator=(const LinesMapValueIterator& o)
-	{
-		_iter=o._iter;
-		return *this;
-	}
+    // assignment
+    LinesMapValueIterator&
+    operator=(const LinesMapValueIterator& o)
+    {
+        _iter = o._iter;
+        return *this;
+    }
 
-	// postfix++
-	void operator++(int)
-	{
-		_iter++;
-	}
+    // postfix++
+    void
+    operator++(int)
+    {
+        _iter++;
+    }
 
-	// ++suffix
-	void operator++()
-	{
-		++_iter;
-	}
+    // ++suffix
+    void
+    operator++()
+    {
+        ++_iter;
+    }
 
-	// inequality operator
-	bool operator!=(const LinesMapValueIterator& other) const
-	{
-		return _iter != other._iter;
-	}
+    // inequality operator
+    bool
+    operator!=(const LinesMapValueIterator& other) const
+    {
+        return _iter != other._iter;
+    }
 
-	TaggedLineString* operator*()
-	{
-		return _iter->second;
-	}
+    TaggedLineString*
+    operator*()
+    {
+        return _iter->second;
+    }
 };
 
 
 /*public*/
 LineStringTransformer::LineStringTransformer(LinesMap& nMap)
-	:
-	linestringMap(nMap)
+    :
+    linestringMap(nMap)
 {
 }
 
 /*protected*/
 CoordinateSequence::Ptr
 LineStringTransformer::transformCoordinates(
-		const CoordinateSequence* coords,
-		const Geometry* parent)
+    const CoordinateSequence* coords,
+    const Geometry* parent)
 {
 #ifdef GEOS_DEBUG
-	std::cerr << __FUNCTION__ << ": parent: " << parent
-	          << std::endl;
+    std::cerr << __FUNCTION__ << ": parent: " << parent
+              << std::endl;
 #endif
-	if ( dynamic_cast<const LineString*>(parent) )
-	{
-		LinesMap::iterator it = linestringMap.find(parent);
-		assert( it != linestringMap.end() );
+    if(dynamic_cast<const LineString*>(parent)) {
+        LinesMap::iterator it = linestringMap.find(parent);
+        assert(it != linestringMap.end());
 
-		TaggedLineString* taggedLine = it->second;
+        TaggedLineString* taggedLine = it->second;
 #ifdef GEOS_DEBUG
-		std::cerr << "LineStringTransformer[" << this << "] "
-		     << " getting result Coordinates from "
-		     << " TaggedLineString[" << taggedLine << "]"
-		     << std::endl;
+        std::cerr << "LineStringTransformer[" << this << "] "
+                  << " getting result Coordinates from "
+                  << " TaggedLineString[" << taggedLine << "]"
+                  << std::endl;
 #endif
 
-		assert(taggedLine);
-		assert(taggedLine->getParent() == parent);
+        assert(taggedLine);
+        assert(taggedLine->getParent() == parent);
 
-		return taggedLine->getResultCoordinates();
-	}
+        return taggedLine->getResultCoordinates();
+    }
 
-	// for anything else (e.g. points) just copy the coordinates
-	return GeometryTransformer::transformCoordinates(coords, parent);
+    // for anything else (e.g. points) just copy the coordinates
+    return GeometryTransformer::transformCoordinates(coords, parent);
 }
 
 //----------------------------------------------------------------------
@@ -182,31 +185,30 @@ LineStringTransformer::transformCoordinates(
  * TODO: Consider container of unique_ptr
  *
  */
-class LineStringMapBuilderFilter: public geom::GeometryComponentFilter
-{
+class LineStringMapBuilderFilter: public geom::GeometryComponentFilter {
 
 public:
 
-	// no more needed
-	//friend class TopologyPreservingSimplifier;
+    // no more needed
+    //friend class TopologyPreservingSimplifier;
 
-	/**
-	 * Filters linear geometries.
-	 *
-	 * geom a geometry of any type
-	 */
-	void filter_ro(const Geometry* geom) override;
+    /**
+     * Filters linear geometries.
+     *
+     * geom a geometry of any type
+     */
+    void filter_ro(const Geometry* geom) override;
 
 
-	/**
-	 * User's constructor.
-	 * @param nMap - reference to LinesMap instance.
-	 */
-	LineStringMapBuilderFilter(LinesMap& nMap);
+    /**
+     * User's constructor.
+     * @param nMap - reference to LinesMap instance.
+     */
+    LineStringMapBuilderFilter(LinesMap& nMap);
 
 private:
 
-	LinesMap& linestringMap;
+    LinesMap& linestringMap;
 
     // Declare type as noncopyable
     LineStringMapBuilderFilter(const LineStringMapBuilderFilter& other) = delete;
@@ -215,8 +217,8 @@ private:
 
 /*public*/
 LineStringMapBuilderFilter::LineStringMapBuilderFilter(LinesMap& nMap)
-	:
-	linestringMap(nMap)
+    :
+    linestringMap(nMap)
 {
 }
 
@@ -224,28 +226,25 @@ LineStringMapBuilderFilter::LineStringMapBuilderFilter(LinesMap& nMap)
 void
 LineStringMapBuilderFilter::filter_ro(const Geometry* geom)
 {
-	TaggedLineString* taggedLine;
+    TaggedLineString* taggedLine;
 
-	if ( const LineString* ls =
-			dynamic_cast<const LineString*>(geom) )
-	{
-    int minSize = ls->isClosed() ? 4 : 2;
-		taggedLine = new TaggedLineString(ls, minSize);
-	}
-	else
-	{
-		return;
-	}
+    if(const LineString* ls =
+                dynamic_cast<const LineString*>(geom)) {
+        int minSize = ls->isClosed() ? 4 : 2;
+        taggedLine = new TaggedLineString(ls, minSize);
+    }
+    else {
+        return;
+    }
 
-	// Duplicated Geometry pointers shouldn't happen
-	if ( ! linestringMap.insert(std::make_pair(geom, taggedLine)).second )
-	{
-		std::cerr << __FILE__ << ":" << __LINE__
-		     << "Duplicated Geometry components detected"
-		     << std::endl;
+    // Duplicated Geometry pointers shouldn't happen
+    if(! linestringMap.insert(std::make_pair(geom, taggedLine)).second) {
+        std::cerr << __FILE__ << ":" << __LINE__
+                  << "Duplicated Geometry components detected"
+                  << std::endl;
 
-		delete taggedLine;
-	}
+        delete taggedLine;
+    }
 }
 
 
@@ -254,19 +253,19 @@ LineStringMapBuilderFilter::filter_ro(const Geometry* geom)
 /*public static*/
 std::unique_ptr<geom::Geometry>
 TopologyPreservingSimplifier::simplify(
-		const geom::Geometry* geom,
-		double tolerance)
+    const geom::Geometry* geom,
+    double tolerance)
 {
-	TopologyPreservingSimplifier tss(geom);
-        tss.setDistanceTolerance(tolerance);
-	return tss.getResultGeometry();
+    TopologyPreservingSimplifier tss(geom);
+    tss.setDistanceTolerance(tolerance);
+    return tss.getResultGeometry();
 }
 
 /*public*/
 TopologyPreservingSimplifier::TopologyPreservingSimplifier(const Geometry* geom)
-	:
-	inputGeom(geom),
-	lineSimplifier(new TaggedLinesSimplifier())
+    :
+    inputGeom(geom),
+    lineSimplifier(new TaggedLinesSimplifier())
 {
 }
 
@@ -274,12 +273,13 @@ TopologyPreservingSimplifier::TopologyPreservingSimplifier(const Geometry* geom)
 void
 TopologyPreservingSimplifier::setDistanceTolerance(double d)
 {
-	using geos::util::IllegalArgumentException;
+    using geos::util::IllegalArgumentException;
 
-	if ( d < 0.0 )
-		throw IllegalArgumentException("Tolerance must be non-negative");
+    if(d < 0.0) {
+        throw IllegalArgumentException("Tolerance must be non-negative");
+    }
 
-	lineSimplifier->setDistanceTolerance(d);
+    lineSimplifier->setDistanceTolerance(d);
 }
 
 
@@ -288,66 +288,67 @@ std::unique_ptr<geom::Geometry>
 TopologyPreservingSimplifier::getResultGeometry()
 {
 
-	// empty input produces an empty result
-	if (inputGeom->isEmpty()) return std::unique_ptr<Geometry>(inputGeom->clone());
+    // empty input produces an empty result
+    if(inputGeom->isEmpty()) {
+        return std::unique_ptr<Geometry>(inputGeom->clone());
+    }
 
-	LinesMap linestringMap;
+    LinesMap linestringMap;
 
-	std::unique_ptr<geom::Geometry> result;
+    std::unique_ptr<geom::Geometry> result;
 
-	try {
-		LineStringMapBuilderFilter lsmbf(linestringMap);
-		inputGeom->apply_ro(&lsmbf);
-
-#ifdef GEOS_DEBUG
-	std::cerr << "LineStringMapBuilderFilter applied, "
-	          << " lineStringMap contains "
-	          << linestringMap.size() << " elements\n";
-#endif
-
-		LinesMapValueIterator begin(linestringMap.begin());
-		LinesMapValueIterator end(linestringMap.end());
-		lineSimplifier->simplify(begin, end);
-
+    try {
+        LineStringMapBuilderFilter lsmbf(linestringMap);
+        inputGeom->apply_ro(&lsmbf);
 
 #ifdef GEOS_DEBUG
-	std::cerr << "all TaggedLineString simplified\n";
+        std::cerr << "LineStringMapBuilderFilter applied, "
+                  << " lineStringMap contains "
+                  << linestringMap.size() << " elements\n";
 #endif
 
-		LineStringTransformer trans(linestringMap);
-		result = trans.transform(inputGeom);
+        LinesMapValueIterator begin(linestringMap.begin());
+        LinesMapValueIterator end(linestringMap.end());
+        lineSimplifier->simplify(begin, end);
+
 
 #ifdef GEOS_DEBUG
-	std::cerr << "inputGeom transformed\n";
+        std::cerr << "all TaggedLineString simplified\n";
 #endif
 
-	} catch (...) {
-		for (LinesMap::iterator
-				it = linestringMap.begin(),
-				itEnd = linestringMap.end();
-				it != itEnd;
-				++it)
-		{
-			delete it->second;
-		}
-
-		throw;
-	}
-
-	for (LinesMap::iterator
-			it = linestringMap.begin(),
-			itEnd = linestringMap.end();
-			it != itEnd;
-			++it)
-	{
-		delete it->second;
-	}
+        LineStringTransformer trans(linestringMap);
+        result = trans.transform(inputGeom);
 
 #ifdef GEOS_DEBUG
-	std::cerr << "returning result\n";
+        std::cerr << "inputGeom transformed\n";
 #endif
 
-	return result;
+    }
+    catch(...) {
+        for(LinesMap::iterator
+                it = linestringMap.begin(),
+                itEnd = linestringMap.end();
+                it != itEnd;
+                ++it) {
+            delete it->second;
+        }
+
+        throw;
+    }
+
+    for(LinesMap::iterator
+            it = linestringMap.begin(),
+            itEnd = linestringMap.end();
+            it != itEnd;
+            ++it) {
+        delete it->second;
+    }
+
+#ifdef GEOS_DEBUG
+    std::cerr << "returning result\n";
+#endif
+
+    return result;
 }
 
 } // namespace geos::simplify

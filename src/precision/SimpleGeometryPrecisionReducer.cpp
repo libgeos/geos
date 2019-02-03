@@ -41,84 +41,89 @@ namespace precision { // geos.precision
 namespace {
 
 class PrecisionReducerCoordinateOperation :
-		public geom::util::CoordinateOperation
-{
-using CoordinateOperation::edit;
+    public geom::util::CoordinateOperation {
+    using CoordinateOperation::edit;
 private:
 
-	SimpleGeometryPrecisionReducer *sgpr;
+    SimpleGeometryPrecisionReducer* sgpr;
 
 public:
 
-	PrecisionReducerCoordinateOperation(
-		SimpleGeometryPrecisionReducer *newSgpr);
+    PrecisionReducerCoordinateOperation(
+        SimpleGeometryPrecisionReducer* newSgpr);
 
-	/// Ownership of returned CoordinateSequence to caller
-	CoordinateSequence* edit(const CoordinateSequence *coordinates,
-	                         const Geometry *geom) override;
+    /// Ownership of returned CoordinateSequence to caller
+    CoordinateSequence* edit(const CoordinateSequence* coordinates,
+                             const Geometry* geom) override;
 };
 
 PrecisionReducerCoordinateOperation::PrecisionReducerCoordinateOperation(
-		SimpleGeometryPrecisionReducer *newSgpr)
+    SimpleGeometryPrecisionReducer* newSgpr)
 {
-	sgpr=newSgpr;
+    sgpr = newSgpr;
 }
 
 CoordinateSequence*
-PrecisionReducerCoordinateOperation::edit(const CoordinateSequence *cs,
-                                          const Geometry *geom)
+PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
+        const Geometry* geom)
 {
-	if (cs->getSize()==0) return nullptr;
+    if(cs->getSize() == 0) {
+        return nullptr;
+    }
 
-	auto csSize = cs->size();
+    auto csSize = cs->size();
 
-	vector<Coordinate> *vc = new vector<Coordinate>(csSize);
+    vector<Coordinate>* vc = new vector<Coordinate>(csSize);
 
-	// copy coordinates and reduce
-	for (unsigned int i=0; i<csSize; ++i) {
-		Coordinate coord=cs->getAt(i);
-		sgpr->getPrecisionModel()->makePrecise(&coord);
-		//reducedCoords->setAt(*coord,i);
-		(*vc)[i] = coord;
-	}
+    // copy coordinates and reduce
+    for(unsigned int i = 0; i < csSize; ++i) {
+        Coordinate coord = cs->getAt(i);
+        sgpr->getPrecisionModel()->makePrecise(&coord);
+        //reducedCoords->setAt(*coord,i);
+        (*vc)[i] = coord;
+    }
 
-	// reducedCoords take ownership of 'vc'
-	CoordinateSequence *reducedCoords =
-		geom->getFactory()->getCoordinateSequenceFactory()->create(vc);
+    // reducedCoords take ownership of 'vc'
+    CoordinateSequence* reducedCoords =
+        geom->getFactory()->getCoordinateSequenceFactory()->create(vc);
 
-	// remove repeated points, to simplify returned geometry as
-	// much as possible.
-	//
-	CoordinateSequence *noRepeatedCoords=CoordinateSequence::removeRepeatedPoints(reducedCoords);
+    // remove repeated points, to simplify returned geometry as
+    // much as possible.
+    //
+    CoordinateSequence* noRepeatedCoords = CoordinateSequence::removeRepeatedPoints(reducedCoords);
 
-	/**
-	 * Check to see if the removal of repeated points
-	 * collapsed the coordinate List to an invalid length
-	 * for the type of the parent geometry.
-	 * It is not necessary to check for Point collapses,
-	 * since the coordinate list can
-	 * never collapse to less than one point.
-	 * If the length is invalid, return the full-length coordinate array
-	 * first computed, or null if collapses are being removed.
-	 * (This may create an invalid geometry - the client must handle this.)
-	 */
-	unsigned int minLength = 0;
-	if (typeid(*geom)==typeid(LineString)) minLength = 2;
-	if (typeid(*geom)==typeid(LinearRing)) minLength = 4;
-	CoordinateSequence *collapsedCoords = reducedCoords;
-	if (sgpr->getRemoveCollapsed())
-	{
-		delete reducedCoords; reducedCoords=nullptr;
-		collapsedCoords=nullptr;
-	}
-	// return null or orginal length coordinate array
-	if (noRepeatedCoords->getSize()<minLength) {
-		delete noRepeatedCoords;
-		return collapsedCoords;
-	}
-	// ok to return shorter coordinate array
-	delete reducedCoords;
-	return noRepeatedCoords;
+    /**
+     * Check to see if the removal of repeated points
+     * collapsed the coordinate List to an invalid length
+     * for the type of the parent geometry.
+     * It is not necessary to check for Point collapses,
+     * since the coordinate list can
+     * never collapse to less than one point.
+     * If the length is invalid, return the full-length coordinate array
+     * first computed, or null if collapses are being removed.
+     * (This may create an invalid geometry - the client must handle this.)
+     */
+    unsigned int minLength = 0;
+    if(typeid(*geom) == typeid(LineString)) {
+        minLength = 2;
+    }
+    if(typeid(*geom) == typeid(LinearRing)) {
+        minLength = 4;
+    }
+    CoordinateSequence* collapsedCoords = reducedCoords;
+    if(sgpr->getRemoveCollapsed()) {
+        delete reducedCoords;
+        reducedCoords = nullptr;
+        collapsedCoords = nullptr;
+    }
+    // return null or orginal length coordinate array
+    if(noRepeatedCoords->getSize() < minLength) {
+        delete noRepeatedCoords;
+        return collapsedCoords;
+    }
+    // ok to return shorter coordinate array
+    delete reducedCoords;
+    return noRepeatedCoords;
 }
 
 } // anonymous namespace
@@ -127,14 +132,14 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence *cs,
 
 
 SimpleGeometryPrecisionReducer::SimpleGeometryPrecisionReducer(
-		const PrecisionModel *pm)
-	:
-	newPrecisionModel(pm),
-	removeCollapsed(true)
+    const PrecisionModel* pm)
+    :
+    newPrecisionModel(pm),
+    removeCollapsed(true)
 {
-	//removeCollapsed = true;
-	//changePrecisionModel = false;
-	//newPrecisionModel = pm;
+    //removeCollapsed = true;
+    //changePrecisionModel = false;
+    //newPrecisionModel = pm;
 }
 
 /**
@@ -147,28 +152,28 @@ SimpleGeometryPrecisionReducer::SimpleGeometryPrecisionReducer(
 void
 SimpleGeometryPrecisionReducer::setRemoveCollapsedComponents(bool nRemoveCollapsed)
 {
-	removeCollapsed=nRemoveCollapsed;
+    removeCollapsed = nRemoveCollapsed;
 }
 
 const PrecisionModel*
 SimpleGeometryPrecisionReducer::getPrecisionModel()
 {
-	return newPrecisionModel;
+    return newPrecisionModel;
 }
 
 bool
 SimpleGeometryPrecisionReducer::getRemoveCollapsed()
 {
-	return removeCollapsed;
+    return removeCollapsed;
 }
 
 Geometry*
-SimpleGeometryPrecisionReducer::reduce(const Geometry *geom)
+SimpleGeometryPrecisionReducer::reduce(const Geometry* geom)
 {
-	GeometryEditor geomEdit;
-	PrecisionReducerCoordinateOperation prco(this);
-	Geometry *g=geomEdit.edit(geom, &prco);
-	return g;
+    GeometryEditor geomEdit;
+    PrecisionReducerCoordinateOperation prco(this);
+    Geometry* g = geomEdit.edit(geom, &prco);
+    return g;
 }
 
 } // namespace geos.precision

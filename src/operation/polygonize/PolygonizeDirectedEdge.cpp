@@ -38,16 +38,16 @@ namespace polygonize { // geos.operation.polygonize
  *        whether this DirectedEdge's direction is the same as or
  *        opposite to that of the parent Edge (if any)
  */
-PolygonizeDirectedEdge::PolygonizeDirectedEdge(Node *newFrom,
-		Node *newTo, const Coordinate& newDirectionPt,
-		bool nEdgeDirection)
-	:
-	DirectedEdge(newFrom, newTo,
-		newDirectionPt, nEdgeDirection)
+PolygonizeDirectedEdge::PolygonizeDirectedEdge(Node* newFrom,
+        Node* newTo, const Coordinate& newDirectionPt,
+        bool nEdgeDirection)
+    :
+    DirectedEdge(newFrom, newTo,
+                 newDirectionPt, nEdgeDirection)
 {
-	edgeRing=nullptr;
-	next=nullptr;
-	label=-1;
+    edgeRing = nullptr;
+    next = nullptr;
+    label = -1;
 }
 
 /*
@@ -56,24 +56,26 @@ PolygonizeDirectedEdge::PolygonizeDirectedEdge(Node *newFrom,
 long
 PolygonizeDirectedEdge::getLabel() const
 {
-	return label;
+    return label;
 }
 
 /*
  * Attaches an identifier to this directed edge.
  */
-void PolygonizeDirectedEdge::setLabel(long newLabel) {
-	label=newLabel;
+void
+PolygonizeDirectedEdge::setLabel(long newLabel)
+{
+    label = newLabel;
 }
 
 /*
  * Returns the next directed edge in the EdgeRing that this directed
  * edge is a member of.
  */
-PolygonizeDirectedEdge *
+PolygonizeDirectedEdge*
 PolygonizeDirectedEdge::getNext() const
 {
-	return next;
+    return next;
 }
 
 /*
@@ -81,9 +83,9 @@ PolygonizeDirectedEdge::getNext() const
  * edge is a member of.
  */
 void
-PolygonizeDirectedEdge::setNext(PolygonizeDirectedEdge *newNext)
+PolygonizeDirectedEdge::setNext(PolygonizeDirectedEdge* newNext)
 {
-	next=newNext;
+    next = newNext;
 }
 
 /*
@@ -94,7 +96,7 @@ PolygonizeDirectedEdge::setNext(PolygonizeDirectedEdge *newNext)
 bool
 PolygonizeDirectedEdge::isInRing() const
 {
-	return edgeRing!=nullptr;
+    return edgeRing != nullptr;
 }
 
 /*
@@ -102,9 +104,9 @@ PolygonizeDirectedEdge::isInRing() const
  * a member of.
  */
 void
-PolygonizeDirectedEdge::setRing(EdgeRing *newEdgeRing)
+PolygonizeDirectedEdge::setRing(EdgeRing* newEdgeRing)
 {
-	edgeRing=newEdgeRing;
+    edgeRing = newEdgeRing;
 }
 
 } // namespace geos.operation.polygonize

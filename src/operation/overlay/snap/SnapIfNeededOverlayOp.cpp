@@ -42,36 +42,36 @@ namespace snap { // geos.operation.overlay.snap
 unique_ptr<Geometry>
 SnapIfNeededOverlayOp::getResultGeometry(OverlayOp::OpCode opCode)
 {
-	using geos::util::TopologyException;
+    using geos::util::TopologyException;
 
-	unique_ptr<Geometry> result;
+    unique_ptr<Geometry> result;
 
-	TopologyException origEx;
+    TopologyException origEx;
 
-	// Try with original input
-	try {
-		result.reset( OverlayOp::overlayOp(&geom0, &geom1, opCode) );
-		return result;
-	}
-	catch (const TopologyException& ex) {
-		origEx = ex; // save original exception
+    // Try with original input
+    try {
+        result.reset(OverlayOp::overlayOp(&geom0, &geom1, opCode));
+        return result;
+    }
+    catch(const TopologyException& ex) {
+        origEx = ex; // save original exception
 #if GEOS_DEBUG
-		std::cerr << "Overlay op threw " << ex.what() << ". Will try snapping now" << std::endl;
+        std::cerr << "Overlay op threw " << ex.what() << ". Will try snapping now" << std::endl;
 #endif
-	}
+    }
 
-	// Try snapping
-	try {
-		result = SnapOverlayOp::overlayOp(geom0, geom1, opCode);
-		return result;
-	}
-	catch (const TopologyException& ex) {
-		::geos::ignore_unused_variable_warning(ex);
+    // Try snapping
+    try {
+        result = SnapOverlayOp::overlayOp(geom0, geom1, opCode);
+        return result;
+    }
+    catch(const TopologyException& ex) {
+        ::geos::ignore_unused_variable_warning(ex);
 #if GEOS_DEBUG
-		std::cerr << "Overlay op on snapped geoms threw " << ex.what() << ". Will try snapping now" << std::endl;
+        std::cerr << "Overlay op on snapped geoms threw " << ex.what() << ". Will try snapping now" << std::endl;
 #endif
-	 	throw origEx;
-	}
+        throw origEx;
+    }
 }
 
 

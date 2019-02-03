@@ -42,39 +42,41 @@ namespace noding { // geos.noding
 int
 BasicSegmentString::getSegmentOctant(size_t index) const
 {
-	if (index >= size() - 1) return -1;
-	return Octant::octant(getCoordinate(index), getCoordinate(index+1));
+    if(index >= size() - 1) {
+        return -1;
+    }
+    return Octant::octant(getCoordinate(index), getCoordinate(index + 1));
 }
 
 /* virtual public */
 const geom::Coordinate&
 BasicSegmentString::getCoordinate(size_t i) const
 {
-	return pts->getAt(i);
+    return pts->getAt(i);
 }
 
 /* virtual public */
 geom::CoordinateSequence*
 BasicSegmentString::getCoordinates() const
 {
-	return pts;
+    return pts;
 }
 
 /* virtual public */
 bool
 BasicSegmentString::isClosed() const
 {
-	return pts->getAt(0)==pts->getAt(size()-1);
+    return pts->getAt(0) == pts->getAt(size() - 1);
 }
 
 /* public virtual */
 std::ostream&
 BasicSegmentString::print(std::ostream& os) const
 {
-	os << "BasicSegmentString: " << std::endl;
-	os << " LINESTRING" << *(pts) << ";" << std::endl;
+    os << "BasicSegmentString: " << std::endl;
+    os << " LINESTRING" << *(pts) << ";" << std::endl;
 
-	return os;
+    return os;
 }
 
 

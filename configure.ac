@@ -43,7 +43,7 @@ AC_MSG_RESULT(["$CAPI_VERSION"])
 
 AM_INIT_AUTOMAKE([geos], [$VERSION], [no-define])
 AM_MAINTAINER_MODE
-AC_CONFIG_HEADERS([include/config.h] [include/geos/platform.h])
+AC_CONFIG_HEADERS([include/config.h])
 AC_PROG_CC
 
 dnl -- JTS_PORT: the version of JTS this release is bound to

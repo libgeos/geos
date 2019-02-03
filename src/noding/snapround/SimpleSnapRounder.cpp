@@ -42,10 +42,10 @@ namespace snapround { // geos.noding.snapround
 
 /*public*/
 SimpleSnapRounder::SimpleSnapRounder(const geom::PrecisionModel& newPm)
-	:
-	pm(newPm),
-	li(&newPm),
-	scaleFactor(newPm.getScale())
+    :
+    pm(newPm),
+    li(&newPm),
+    scaleFactor(newPm.getScale())
 {
 }
 
@@ -53,120 +53,114 @@ SimpleSnapRounder::SimpleSnapRounder(const geom::PrecisionModel& newPm)
 std::vector<SegmentString*>*
 SimpleSnapRounder::getNodedSubstrings() const
 {
-	std::vector<SegmentString*> *ret = new std::vector<SegmentString*>();
-	NodedSegmentString::getNodedSubstrings(nodedSegStrings->begin(), nodedSegStrings->end(), ret);
-	return ret;
+    std::vector<SegmentString*>* ret = new std::vector<SegmentString*>();
+    NodedSegmentString::getNodedSubstrings(nodedSegStrings->begin(), nodedSegStrings->end(), ret);
+    return ret;
 }
 
 /*public*/
 void
 SimpleSnapRounder::computeNodes(
-		std::vector<SegmentString*>* inputSegmentStrings)
+    std::vector<SegmentString*>* inputSegmentStrings)
 {
-	nodedSegStrings = inputSegmentStrings;
-	snapRound(inputSegmentStrings, li);
+    nodedSegStrings = inputSegmentStrings;
+    snapRound(inputSegmentStrings, li);
 
-	// testing purposes only - remove in final version
-	assert(nodedSegStrings == inputSegmentStrings);
-	checkCorrectness(*inputSegmentStrings);
+    // testing purposes only - remove in final version
+    assert(nodedSegStrings == inputSegmentStrings);
+    checkCorrectness(*inputSegmentStrings);
 }
 
 
 /*private*/
 void
 SimpleSnapRounder::checkCorrectness(
-		SegmentString::NonConstVect& inputSegmentStrings)
+    SegmentString::NonConstVect& inputSegmentStrings)
 {
-  SegmentString::NonConstVect resultSegStrings;
-  NodedSegmentString::getNodedSubstrings(
-    inputSegmentStrings.begin(), inputSegmentStrings.end(), &resultSegStrings
-  );
+    SegmentString::NonConstVect resultSegStrings;
+    NodedSegmentString::getNodedSubstrings(
+        inputSegmentStrings.begin(), inputSegmentStrings.end(), &resultSegStrings
+    );
 
-  NodingValidator nv(resultSegStrings);
+    NodingValidator nv(resultSegStrings);
 
-  try {
-    nv.checkValid();
-  }
-
-  catch (const std::exception &ex) {
-
-    for ( SegmentString::NonConstVect::iterator i=resultSegStrings.begin(),
-                                                e=resultSegStrings.end();
-          i!=e; ++i )
-    {
-      delete *i;
+    try {
+        nv.checkValid();
     }
 
-    std::cerr << ex.what() << std::endl;
-    throw;
-  }
+    catch(const std::exception& ex) {
 
-  for ( SegmentString::NonConstVect::iterator i=resultSegStrings.begin(),
-                                              e=resultSegStrings.end();
-        i!=e; ++i )
-  {
-    delete *i;
-  }
+        for(SegmentString::NonConstVect::iterator i = resultSegStrings.begin(),
+                e = resultSegStrings.end();
+                i != e; ++i) {
+            delete *i;
+        }
+
+        std::cerr << ex.what() << std::endl;
+        throw;
+    }
+
+    for(SegmentString::NonConstVect::iterator i = resultSegStrings.begin(),
+            e = resultSegStrings.end();
+            i != e; ++i) {
+        delete *i;
+    }
 
 }
 
 /*private*/
 void
 SimpleSnapRounder::computeSnaps(const SegmentString::NonConstVect& segStrings,
-		vector<Coordinate>& snapPts)
+                                vector<Coordinate>& snapPts)
 {
-	for (SegmentString::NonConstVect::const_iterator
-			i=segStrings.begin(), iEnd=segStrings.end();
-			i!=iEnd; ++i)
-	{
-		NodedSegmentString* ss = dynamic_cast<NodedSegmentString*>(*i);
+    for(SegmentString::NonConstVect::const_iterator
+            i = segStrings.begin(), iEnd = segStrings.end();
+            i != iEnd; ++i) {
+        NodedSegmentString* ss = dynamic_cast<NodedSegmentString*>(*i);
 
-		computeSnaps(ss, snapPts);
-	}
+        computeSnaps(ss, snapPts);
+    }
 }
 
 /*private*/
 void
 SimpleSnapRounder::computeSnaps(NodedSegmentString* ss, vector<Coordinate>& snapPts)
 {
-	for (vector<Coordinate>::iterator
-		it=snapPts.begin(), itEnd=snapPts.end();
-		it!=itEnd; ++it)
-	{
-		const Coordinate& snapPt = *it;
-		HotPixel hotPixel(snapPt, scaleFactor, li);
-		for (size_t i = 0, n = ss->size() - 1; i < n; ++i) {
-			hotPixel.addSnappedNode(*ss, i);
-		}
-	}
+    for(vector<Coordinate>::iterator
+            it = snapPts.begin(), itEnd = snapPts.end();
+            it != itEnd; ++it) {
+        const Coordinate& snapPt = *it;
+        HotPixel hotPixel(snapPt, scaleFactor, li);
+        for(size_t i = 0, n = ss->size() - 1; i < n; ++i) {
+            hotPixel.addSnappedNode(*ss, i);
+        }
+    }
 }
 
 /*private*/
 void
 SimpleSnapRounder::computeVertexSnaps(NodedSegmentString* e0, NodedSegmentString* e1)
 {
-	const CoordinateSequence* pts0 = e0->getCoordinates();
-	const CoordinateSequence* pts1 = e1->getCoordinates();
+    const CoordinateSequence* pts0 = e0->getCoordinates();
+    const CoordinateSequence* pts1 = e1->getCoordinates();
 
-	for (size_t i0 = 0, n0 = pts0->getSize() - 1; i0 < n0; ++i0)
-	{
-		const Coordinate& p0 = pts0->getAt(i0);
+    for(size_t i0 = 0, n0 = pts0->getSize() - 1; i0 < n0; ++i0) {
+        const Coordinate& p0 = pts0->getAt(i0);
 
-		HotPixel hotPixel(p0, scaleFactor, li);
-		for (size_t i1 = 1, n1 = pts1->getSize()-1; i1 < n1; ++i1)
-		{
-        		// don't snap a vertex to itself
-			if (i0 == i1 && e0 == e1) {
-				continue;
-			}
+        HotPixel hotPixel(p0, scaleFactor, li);
+        for(size_t i1 = 1, n1 = pts1->getSize() - 1; i1 < n1; ++i1) {
+            // don't snap a vertex to itself
+            if(i0 == i1 && e0 == e1) {
+                continue;
+            }
 //cerr<<"trying "<<p0<<" against "<<pts1->getAt(i1)<<" "<<pts1->getAt(i1 + 1)<<endl;
-			bool isNodeAdded = hotPixel.addSnappedNode(*e1, i1);
-			// if a node is created for a vertex, that vertex must be noded too
-			if (isNodeAdded) {
-				e0->addIntersection(p0, i0);
-			}
-		}
-	}
+            bool isNodeAdded = hotPixel.addSnappedNode(*e1, i1);
+            // if a node is created for a vertex, that vertex must be noded too
+            if(isNodeAdded) {
+                e0->addIntersection(p0, i0);
+            }
+        }
+    }
 
 }
 
@@ -174,48 +168,46 @@ SimpleSnapRounder::computeVertexSnaps(NodedSegmentString* e0, NodedSegmentString
 void
 SimpleSnapRounder::computeVertexSnaps(const SegmentString::NonConstVect& edges)
 {
-	for (SegmentString::NonConstVect::const_iterator
-			i0=edges.begin(), i0End=edges.end();
-			i0!=i0End; ++i0)
-	{
-		NodedSegmentString* edge0 = dynamic_cast<NodedSegmentString*>(*i0);
-		assert(edge0);
-		for (SegmentString::NonConstVect::const_iterator
-				i1=edges.begin(), i1End=edges.end();
-				i1!=i1End; ++i1)
-		{
-			NodedSegmentString* edge1 = dynamic_cast<NodedSegmentString*>(*i1);
-			assert(edge1);
-			computeVertexSnaps(edge0, edge1);
-		}
-	}
+    for(SegmentString::NonConstVect::const_iterator
+            i0 = edges.begin(), i0End = edges.end();
+            i0 != i0End; ++i0) {
+        NodedSegmentString* edge0 = dynamic_cast<NodedSegmentString*>(*i0);
+        assert(edge0);
+        for(SegmentString::NonConstVect::const_iterator
+                i1 = edges.begin(), i1End = edges.end();
+                i1 != i1End; ++i1) {
+            NodedSegmentString* edge1 = dynamic_cast<NodedSegmentString*>(*i1);
+            assert(edge1);
+            computeVertexSnaps(edge0, edge1);
+        }
+    }
 }
 
 
 /*private*/
 void
 SimpleSnapRounder::snapRound(SegmentString::NonConstVect* segStrings,
-		LineIntersector& p_li)
+                             LineIntersector& p_li)
 {
-	assert(segStrings);
+    assert(segStrings);
 
-	vector<Coordinate> intersections;
-	findInteriorIntersections(*segStrings, p_li, intersections);
-	computeSnaps(*segStrings, intersections);
-	computeVertexSnaps(*segStrings);
+    vector<Coordinate> intersections;
+    findInteriorIntersections(*segStrings, p_li, intersections);
+    computeSnaps(*segStrings, intersections);
+    computeVertexSnaps(*segStrings);
 }
 
 /*private*/
 void
 SimpleSnapRounder::findInteriorIntersections(
-	SegmentString::NonConstVect& segStrings,
-	LineIntersector& p_li, vector<Coordinate>& ret)
+    SegmentString::NonConstVect& segStrings,
+    LineIntersector& p_li, vector<Coordinate>& ret)
 {
-	IntersectionFinderAdder intFinderAdder(p_li, ret);
-	MCIndexNoder noder;
-	noder.setSegmentIntersector(&intFinderAdder);
-	noder.computeNodes(&segStrings);
-	//intFinderAdder.getInteriorIntersections();
+    IntersectionFinderAdder intFinderAdder(p_li, ret);
+    MCIndexNoder noder;
+    noder.setSegmentIntersector(&intFinderAdder);
+    noder.computeNodes(&segStrings);
+    //intFinderAdder.getInteriorIntersections();
 }
 
 

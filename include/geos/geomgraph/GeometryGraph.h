@@ -41,27 +41,27 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class LineString;
-		class LinearRing;
-		class Polygon;
-		class Geometry;
-		class GeometryCollection;
-		class Point;
-		class Envelope;
-	}
-	namespace algorithm {
-		class LineIntersector;
-		class BoundaryNodeRule;
-	}
-	namespace geomgraph {
-		class Edge;
-		class Node;
-		namespace index {
-			class SegmentIntersector;
-			class EdgeSetIntersector;
-		}
-	}
+namespace geom {
+class LineString;
+class LinearRing;
+class Polygon;
+class Geometry;
+class GeometryCollection;
+class Point;
+class Envelope;
+}
+namespace algorithm {
+class LineIntersector;
+class BoundaryNodeRule;
+}
+namespace geomgraph {
+class Edge;
+class Node;
+namespace index {
+class SegmentIntersector;
+class EdgeSetIntersector;
+}
+}
 }
 
 namespace geos {
@@ -70,89 +70,88 @@ namespace geomgraph { // geos.geomgraph
 /**
  * A GeometryGraph is a graph that models a given Geometry
  */
-class GEOS_DLL GeometryGraph: public PlanarGraph
-{
-using PlanarGraph::add;
-using PlanarGraph::findEdge;
+class GEOS_DLL GeometryGraph: public PlanarGraph {
+    using PlanarGraph::add;
+    using PlanarGraph::findEdge;
 
 private:
 
-	const geom::Geometry* parentGeom;
+    const geom::Geometry* parentGeom;
 
-	/**
-	 * The lineEdgeMap is a map of the linestring components of the
-	 * parentGeometry to the edges which are derived from them.
-	 * This is used to efficiently perform findEdge queries
-	 *
-	 * Following the above description there's no need to
-	 * compare LineStrings other then by pointer value.
-	 */
+    /**
+     * The lineEdgeMap is a map of the linestring components of the
+     * parentGeometry to the edges which are derived from them.
+     * This is used to efficiently perform findEdge queries
+     *
+     * Following the above description there's no need to
+     * compare LineStrings other then by pointer value.
+     */
 //std::map<const geom::LineString*,Edge*,geom::LineStringLT> lineEdgeMap;
-	std::map<const geom::LineString*, Edge*> lineEdgeMap;
+    std::map<const geom::LineString*, Edge*> lineEdgeMap;
 
-	/**
-	 * If this flag is true, the Boundary Determination Rule will
-	 * used when deciding whether nodes are in the boundary or not
-	 */
-	bool useBoundaryDeterminationRule;
+    /**
+     * If this flag is true, the Boundary Determination Rule will
+     * used when deciding whether nodes are in the boundary or not
+     */
+    bool useBoundaryDeterminationRule;
 
-	const algorithm::BoundaryNodeRule& boundaryNodeRule;
+    const algorithm::BoundaryNodeRule& boundaryNodeRule;
 
-	/**
-	 * the index of this geometry as an argument to a spatial function
-	 * (used for labelling)
-	 */
-	int argIndex;
+    /**
+     * the index of this geometry as an argument to a spatial function
+     * (used for labelling)
+     */
+    int argIndex;
 
-	/// Cache for fast responses to getBoundaryPoints
-	std::unique_ptr< geom::CoordinateSequence > boundaryPoints;
+    /// Cache for fast responses to getBoundaryPoints
+    std::unique_ptr< geom::CoordinateSequence > boundaryPoints;
 
-	std::unique_ptr< std::vector<Node*> > boundaryNodes;
+    std::unique_ptr< std::vector<Node*> > boundaryNodes;
 
-	bool hasTooFewPointsVar;
+    bool hasTooFewPointsVar;
 
-	geom::Coordinate invalidPoint;
+    geom::Coordinate invalidPoint;
 
-	/// Allocates a new EdgeSetIntersector. Remember to delete it!
-	index::EdgeSetIntersector* createEdgeSetIntersector();
+    /// Allocates a new EdgeSetIntersector. Remember to delete it!
+    index::EdgeSetIntersector* createEdgeSetIntersector();
 
-	void add(const geom::Geometry *g);
-		// throw(UnsupportedOperationException);
+    void add(const geom::Geometry* g);
+    // throw(UnsupportedOperationException);
 
-	void addCollection(const geom::GeometryCollection *gc);
+    void addCollection(const geom::GeometryCollection* gc);
 
-	void addPoint(const geom::Point *p);
+    void addPoint(const geom::Point* p);
 
-	void addPolygonRing(const geom::LinearRing *lr,
-			int cwLeft, int cwRight);
+    void addPolygonRing(const geom::LinearRing* lr,
+                        int cwLeft, int cwRight);
 
-	void addPolygon(const geom::Polygon *p);
+    void addPolygon(const geom::Polygon* p);
 
-	void addLineString(const geom::LineString *line);
+    void addLineString(const geom::LineString* line);
 
-	void insertPoint(int argIndex, const geom::Coordinate& coord,
-			int onLocation);
+    void insertPoint(int argIndex, const geom::Coordinate& coord,
+                     int onLocation);
 
-	/** \brief
-	 * Adds candidate boundary points using the current
-	 * algorithm::BoundaryNodeRule.
-	 *
-	 * This is used to add the boundary
-	 * points of dim-1 geometries (Curves/MultiCurves).
-	 */
-	void insertBoundaryPoint(int argIndex, const geom::Coordinate& coord);
+    /** \brief
+     * Adds candidate boundary points using the current
+     * algorithm::BoundaryNodeRule.
+     *
+     * This is used to add the boundary
+     * points of dim-1 geometries (Curves/MultiCurves).
+     */
+    void insertBoundaryPoint(int argIndex, const geom::Coordinate& coord);
 
-	void addSelfIntersectionNodes(int argIndex);
+    void addSelfIntersectionNodes(int argIndex);
 
-	/** \brief
-	 * Add a node for a self-intersection.
-	 *
-	 * If the node is a potential boundary node (e.g. came from an edge
-	 * which is a boundary) then insert it as a potential boundary node.
-	 * Otherwise, just add it as a regular node.
-	 */
-	void addSelfIntersectionNode(int argIndex,
-		const geom::Coordinate& coord, int loc);
+    /** \brief
+     * Add a node for a self-intersection.
+     *
+     * If the node is a potential boundary node (e.g. came from an edge
+     * which is a boundary) then insert it as a potential boundary node.
+     * Otherwise, just add it as a regular node.
+     */
+    void addSelfIntersectionNode(int argIndex,
+                                 const geom::Coordinate& coord, int loc);
 
     // Declare type as noncopyable
     GeometryGraph(const GeometryGraph& other) = delete;
@@ -160,96 +159,101 @@ private:
 
 public:
 
-	static bool isInBoundary(int boundaryCount);
+    static bool isInBoundary(int boundaryCount);
 
-	static int determineBoundary(int boundaryCount);
+    static int determineBoundary(int boundaryCount);
 
-	static int determineBoundary(
-	             const algorithm::BoundaryNodeRule& boundaryNodeRule,
-	                                            int boundaryCount);
+    static int determineBoundary(
+        const algorithm::BoundaryNodeRule& boundaryNodeRule,
+        int boundaryCount);
 
-	GeometryGraph();
+    GeometryGraph();
 
-	GeometryGraph(int newArgIndex, const geom::Geometry *newParentGeom);
+    GeometryGraph(int newArgIndex, const geom::Geometry* newParentGeom);
 
-	GeometryGraph(int newArgIndex, const geom::Geometry *newParentGeom,
-	              const algorithm::BoundaryNodeRule& boundaryNodeRule);
+    GeometryGraph(int newArgIndex, const geom::Geometry* newParentGeom,
+                  const algorithm::BoundaryNodeRule& boundaryNodeRule);
 
-	~GeometryGraph() override;
+    ~GeometryGraph() override;
 
 
-	const geom::Geometry* getGeometry();
+    const geom::Geometry* getGeometry();
 
-	/// Returned object is owned by this GeometryGraph
-	std::vector<Node*>* getBoundaryNodes();
+    /// Returned object is owned by this GeometryGraph
+    std::vector<Node*>* getBoundaryNodes();
 
-	void getBoundaryNodes(std::vector<Node*>&bdyNodes);
+    void getBoundaryNodes(std::vector<Node*>& bdyNodes);
 
-	/// Returned object is owned by this GeometryGraph
-	geom::CoordinateSequence* getBoundaryPoints();
+    /// Returned object is owned by this GeometryGraph
+    geom::CoordinateSequence* getBoundaryPoints();
 
-	Edge* findEdge(const geom::LineString *line);
+    Edge* findEdge(const geom::LineString* line);
 
-	void computeSplitEdges(std::vector<Edge*> *edgelist);
+    void computeSplitEdges(std::vector<Edge*>* edgelist);
 
-	void addEdge(Edge *e);
+    void addEdge(Edge* e);
 
-	void addPoint(geom::Coordinate& pt);
+    void addPoint(geom::Coordinate& pt);
 
-	/**
-	 * \brief
-	 * Compute self-nodes, taking advantage of the Geometry type to
-	 * minimize the number of intersection tests.  (E.g. rings are
-	 * not tested for self-intersection, since
-	 * they are assumed to be valid).
-	 *
-	 * @param li the LineIntersector to use
-	 *
-	 * @param computeRingSelfNodes if <false>, intersection checks are
-	 *	optimized to not test rings for self-intersection
-	 *
-	 * @return the SegmentIntersector used, containing information about
-	 *	the intersections found
-	 */
-	index::SegmentIntersector* computeSelfNodes(
-			algorithm::LineIntersector *li,
-			bool computeRingSelfNodes,
-			const geom::Envelope *env=nullptr)
-	{
-		return computeSelfNodes(*li, computeRingSelfNodes, env);
-	}
+    /**
+     * \brief
+     * Compute self-nodes, taking advantage of the Geometry type to
+     * minimize the number of intersection tests.  (E.g. rings are
+     * not tested for self-intersection, since
+     * they are assumed to be valid).
+     *
+     * @param li the LineIntersector to use
+     *
+     * @param computeRingSelfNodes if <false>, intersection checks are
+     *	optimized to not test rings for self-intersection
+     *
+     * @return the SegmentIntersector used, containing information about
+     *	the intersections found
+     */
+    index::SegmentIntersector*
+    computeSelfNodes(
+        algorithm::LineIntersector* li,
+        bool computeRingSelfNodes,
+        const geom::Envelope* env = nullptr)
+    {
+        return computeSelfNodes(*li, computeRingSelfNodes, env);
+    }
 
-	index::SegmentIntersector* computeSelfNodes(
-			algorithm::LineIntersector *li,
-			bool computeRingSelfNodes,
-			bool isDoneIfProperInt,
-			const geom::Envelope *env=nullptr)
-	{
-		return computeSelfNodes(*li, computeRingSelfNodes, isDoneIfProperInt, env);
-	}
+    index::SegmentIntersector*
+    computeSelfNodes(
+        algorithm::LineIntersector* li,
+        bool computeRingSelfNodes,
+        bool isDoneIfProperInt,
+        const geom::Envelope* env = nullptr)
+    {
+        return computeSelfNodes(*li, computeRingSelfNodes, isDoneIfProperInt, env);
+    }
 
-	// Quick inline calling the function above, the above should probably
-	// be deprecated.
-	index::SegmentIntersector* computeSelfNodes(
-			algorithm::LineIntersector& li,
-			bool computeRingSelfNodes, const geom::Envelope *env=nullptr);
+    // Quick inline calling the function above, the above should probably
+    // be deprecated.
+    index::SegmentIntersector* computeSelfNodes(
+        algorithm::LineIntersector& li,
+        bool computeRingSelfNodes, const geom::Envelope* env = nullptr);
 
-	index::SegmentIntersector* computeSelfNodes(
-			algorithm::LineIntersector& li,
-			bool computeRingSelfNodes, bool isDoneIfProperInt, const geom::Envelope *env=nullptr);
+    index::SegmentIntersector* computeSelfNodes(
+        algorithm::LineIntersector& li,
+        bool computeRingSelfNodes, bool isDoneIfProperInt, const geom::Envelope* env = nullptr);
 
-	index::SegmentIntersector* computeEdgeIntersections(GeometryGraph *g,
-		algorithm::LineIntersector *li, bool includeProper,
-		const geom::Envelope *env=nullptr);
+    index::SegmentIntersector* computeEdgeIntersections(GeometryGraph* g,
+            algorithm::LineIntersector* li, bool includeProper,
+            const geom::Envelope* env = nullptr);
 
-	std::vector<Edge*> *getEdges();
+    std::vector<Edge*>* getEdges();
 
-	bool hasTooFewPoints();
+    bool hasTooFewPoints();
 
-	const geom::Coordinate& getInvalidPoint();
+    const geom::Coordinate& getInvalidPoint();
 
-	const algorithm::BoundaryNodeRule& getBoundaryNodeRule() const
-	{ return boundaryNodeRule; }
+    const algorithm::BoundaryNodeRule&
+    getBoundaryNodeRule() const
+    {
+        return boundaryNodeRule;
+    }
 
 };
 

@@ -59,79 +59,79 @@ class GEOS_DLL TopologyLocation {
 
 public:
 
-	friend std::ostream& operator<< (std::ostream&, const TopologyLocation&);
+    friend std::ostream& operator<< (std::ostream&, const TopologyLocation&);
 
-	TopologyLocation();
+    TopologyLocation();
 
-	~TopologyLocation();
+    ~TopologyLocation();
 
-	TopologyLocation(const std::vector<int> &newLocation);
+    TopologyLocation(const std::vector<int>& newLocation);
 
-	/** \brief
-	 * Constructs a TopologyLocation specifying how points on, to the
-	 * left of, and to the right of some GraphComponent relate to some
-	 * Geometry.
-	 *
-	 * Possible values for the
-	 * parameters are Location::UNDEF, Location::EXTERIOR, Location::BOUNDARY,
-	 * and Location::INTERIOR.
-	 *
-	 * @see Location
-	 */
-	TopologyLocation(int on, int left, int right);
+    /** \brief
+     * Constructs a TopologyLocation specifying how points on, to the
+     * left of, and to the right of some GraphComponent relate to some
+     * Geometry.
+     *
+     * Possible values for the
+     * parameters are Location::UNDEF, Location::EXTERIOR, Location::BOUNDARY,
+     * and Location::INTERIOR.
+     *
+     * @see Location
+     */
+    TopologyLocation(int on, int left, int right);
 
-	TopologyLocation(int on);
+    TopologyLocation(int on);
 
-	TopologyLocation(const TopologyLocation &gl);
+    TopologyLocation(const TopologyLocation& gl);
 
-	TopologyLocation& operator= (const TopologyLocation &gl);
+    TopologyLocation& operator= (const TopologyLocation& gl);
 
-	int get(std::size_t posIndex) const;
+    int get(std::size_t posIndex) const;
 
-	/**
-	 * @return true if all locations are Location::UNDEF
-	 */
-	bool isNull() const;
+    /**
+     * @return true if all locations are Location::UNDEF
+     */
+    bool isNull() const;
 
-	/**
-	 * @return true if any locations is Location::UNDEF
-	 */
-	bool isAnyNull() const;
+    /**
+     * @return true if any locations is Location::UNDEF
+     */
+    bool isAnyNull() const;
 
-	bool isEqualOnSide(const TopologyLocation &le, int locIndex) const;
+    bool isEqualOnSide(const TopologyLocation& le, int locIndex) const;
 
-	bool isArea() const;
+    bool isArea() const;
 
-	bool isLine() const;
+    bool isLine() const;
 
-	void flip();
+    void flip();
 
-	void setAllLocations(int locValue);
+    void setAllLocations(int locValue);
 
-	void setAllLocationsIfNull(int locValue);
+    void setAllLocationsIfNull(int locValue);
 
-	void setLocation(std::size_t locIndex, int locValue);
+    void setLocation(std::size_t locIndex, int locValue);
 
-	void setLocation(int locValue);
+    void setLocation(int locValue);
 
-	/// Warning: returns reference to owned memory
-	const std::vector<int> &getLocations() const;
+    /// Warning: returns reference to owned memory
+    const std::vector<int>& getLocations() const;
 
-	void setLocations(int on, int left, int right);
+    void setLocations(int on, int left, int right);
 
-	bool allPositionsEqual(int loc) const;
+    bool allPositionsEqual(int loc) const;
 
-	/** \brief
-	 * merge updates only the UNDEF attributes of this object
-	 * with the attributes of another.
-	 */
-	void merge(const TopologyLocation &gl);
+    /** \brief
+     * merge updates only the UNDEF attributes of this object
+     * with the attributes of another.
+     */
+    void merge(const TopologyLocation& gl);
 
-	std::string toString() const;
+    std::string toString() const;
 
 private:
 
-	std::vector<int> location;
+    std::vector<int> location;
 };
 
 std::ostream& operator<< (std::ostream&, const TopologyLocation&);

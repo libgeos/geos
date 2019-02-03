@@ -20,11 +20,11 @@
 
 // Forward declarations
 namespace geos {
-	namespace index {
-		namespace bintree {
-			class Interval;
-		}
-	}
+namespace index {
+namespace bintree {
+class Interval;
+}
+}
 }
 
 namespace geos {
@@ -36,37 +36,37 @@ class GEOS_DLL Node: public NodeBase {
 
 public:
 
-	static Node* createNode(Interval *itemInterval);
+    static Node* createNode(Interval* itemInterval);
 
-	static Node* createExpanded(Node *node,Interval *addInterval);
+    static Node* createExpanded(Node* node, Interval* addInterval);
 
-	Node(Interval *newInterval,int newLevel);
+    Node(Interval* newInterval, int newLevel);
 
-	~Node() override;
+    ~Node() override;
 
-	Interval* getInterval();
+    Interval* getInterval();
 
-	Node* getNode(Interval *searchInterval);
+    Node* getNode(Interval* searchInterval);
 
-	NodeBase* find(Interval *searchInterval);
+    NodeBase* find(Interval* searchInterval);
 
-	void insert(Node *node);
+    void insert(Node* node);
 
 private:
 
-	Interval *interval;
+    Interval* interval;
 
-	double centre;
+    double centre;
 
-	int level;
+    int level;
 
-	Node* getSubnode(int index);
+    Node* getSubnode(int index);
 
-	Node* createSubnode(int index);
+    Node* createSubnode(int index);
 
 protected:
 
-	bool isSearchMatch(Interval *itemInterval) override;
+    bool isSearchMatch(Interval* itemInterval) override;
 };
 
 } // namespace geos::index::bintree

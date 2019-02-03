@@ -18,7 +18,6 @@
  *
  **********************************************************************/
 
-#include <geos/platform.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/Edge.h>
@@ -49,193 +48,206 @@ namespace geomgraph { // geos.geomgraph
 
 /*public*/
 Node::Node(const Coordinate& newCoord, EdgeEndStar* newEdges)
-	:
-	GraphComponent(Label(0,Location::UNDEF)),
-	coord(newCoord),
-	edges(newEdges)
+    :
+    GraphComponent(Label(0, Location::UNDEF)),
+    coord(newCoord),
+    edges(newEdges)
 
 {
 #if GEOS_DEBUG
-	cerr<<"["<<this<<"] Node::Node("<<newCoord.toString()<<")"<<endl;
+    cerr << "[" << this << "] Node::Node(" << newCoord.toString() << ")" << endl;
 #endif
 
 #if COMPUTE_Z
-	ztot = 0;
-	addZ(newCoord.z);
-	if ( edges )
-	{
-		EdgeEndStar::iterator endIt = edges->end();
-		for (EdgeEndStar::iterator it=edges->begin(); it!=endIt; ++it)
-		{
-			EdgeEnd *ee = *it;
-			addZ(ee->getCoordinate().z);
-		}
-	}
+    ztot = 0;
+    addZ(newCoord.z);
+    if(edges) {
+        EdgeEndStar::iterator endIt = edges->end();
+        for(EdgeEndStar::iterator it = edges->begin(); it != endIt; ++it) {
+            EdgeEnd* ee = *it;
+            addZ(ee->getCoordinate().z);
+        }
+    }
 #endif // COMPUTE_Z
 
-	testInvariant();
+    testInvariant();
 }
 
 /*public*/
 Node::~Node()
 {
-	testInvariant();
+    testInvariant();
 #if GEOS_DEBUG
-	cerr<<"["<<this<<"] Node::~Node()"<<endl;
+    cerr << "[" << this << "] Node::~Node()" << endl;
 #endif
-	delete edges;
+    delete edges;
 }
 
 /*public*/
 const Coordinate&
 Node::getCoordinate() const
 {
-	testInvariant();
-	return coord;
+    testInvariant();
+    return coord;
 }
 
 /*public*/
-EdgeEndStar *
+EdgeEndStar*
 Node::getEdges()
 {
-	testInvariant();
+    testInvariant();
 
-	return edges;
+    return edges;
 }
 
 /*public*/
 bool
 Node::isIsolated() const
 {
-	testInvariant();
+    testInvariant();
 
-	return (label.getGeometryCount()==1);
+    return (label.getGeometryCount() == 1);
 }
 
 /*public*/
 bool
 Node::isIncidentEdgeInResult() const
 {
-	testInvariant();
+    testInvariant();
 
-	if (!edges) return false;
+    if(!edges) {
+        return false;
+    }
 
-	EdgeEndStar::iterator it=edges->begin();
-	EdgeEndStar::iterator endIt=edges->end();
-	for ( ; it!=endIt; ++it)
-	{
-		assert(*it);
-		assert(dynamic_cast<DirectedEdge *>(*it));
-		DirectedEdge *de = static_cast<DirectedEdge *>(*it);
-		if ( de->getEdge()->isInResult() ) return true;
-	}
-	return false;
+    EdgeEndStar::iterator it = edges->begin();
+    EdgeEndStar::iterator endIt = edges->end();
+    for(; it != endIt; ++it) {
+        assert(*it);
+        assert(dynamic_cast<DirectedEdge*>(*it));
+        DirectedEdge* de = static_cast<DirectedEdge*>(*it);
+        if(de->getEdge()->isInResult()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 void
-Node::add(EdgeEnd *e)
+Node::add(EdgeEnd* e)
 {
-	assert(e);
+    assert(e);
 #if GEOS_DEBUG
-	cerr<<"["<<this<<"] Node::add("<<e->print()<<")"<<endl;
+    cerr << "[" << this << "] Node::add(" << e->print() << ")" << endl;
 #endif
-	// Assert: start pt of e is equal to node point
-	if ( ! e->getCoordinate().equals2D(coord) ) {
-		std::stringstream ss;
-		ss << "EdgeEnd with coordinate " << e->getCoordinate()
-		   << " invalid for node " << coord;
-		throw util::IllegalArgumentException(ss.str());
-  }
+    // Assert: start pt of e is equal to node point
+    if(! e->getCoordinate().equals2D(coord)) {
+        std::stringstream ss;
+        ss << "EdgeEnd with coordinate " << e->getCoordinate()
+           << " invalid for node " << coord;
+        throw util::IllegalArgumentException(ss.str());
+    }
 
-	// It seems it's legal for edges to be NULL
-	// we'd not be honouring the promise of adding
-	// an EdgeEnd in this case, though ...
-	assert(edges);
-	//if (edges==NULL) return;
+    // It seems it's legal for edges to be NULL
+    // we'd not be honouring the promise of adding
+    // an EdgeEnd in this case, though ...
+    assert(edges);
+    //if (edges==NULL) return;
 
-	edges->insert(e);
-	e->setNode(this);
+    edges->insert(e);
+    e->setNode(this);
 #if COMPUTE_Z
-	addZ(e->getCoordinate().z);
+    addZ(e->getCoordinate().z);
 #endif
-	testInvariant();
+    testInvariant();
 }
 
 /*public*/
 void
 Node::mergeLabel(const Node& n)
 {
-	assert(!n.label.isNull());
-	mergeLabel(n.label);
-	testInvariant();
+    assert(!n.label.isNull());
+    mergeLabel(n.label);
+    testInvariant();
 }
 
 /*public*/
 void
 Node::mergeLabel(const Label& label2)
 {
-	for (int i=0; i<2; i++) {
-		int loc=computeMergedLocation(label2, i);
-		int thisLoc=label.getLocation(i);
-		if (thisLoc==Location::UNDEF) label.setLocation(i,loc);
-	}
-	testInvariant();
+    for(int i = 0; i < 2; i++) {
+        int loc = computeMergedLocation(label2, i);
+        int thisLoc = label.getLocation(i);
+        if(thisLoc == Location::UNDEF) {
+            label.setLocation(i, loc);
+        }
+    }
+    testInvariant();
 }
 
 /*public*/
 void
 Node::setLabel(int argIndex, int onLocation)
 {
-	if ( label.isNull() ) {
-		label = Label(argIndex, onLocation);
-	} else
-		label.setLocation(argIndex, onLocation);
+    if(label.isNull()) {
+        label = Label(argIndex, onLocation);
+    }
+    else {
+        label.setLocation(argIndex, onLocation);
+    }
 
-	testInvariant();
+    testInvariant();
 }
 
 /*public*/
 void
 Node::setLabelBoundary(int argIndex)
 {
-	int loc = label.getLocation(argIndex);
-	// flip the loc
-	int newLoc;
-	switch (loc){
-		case Location::BOUNDARY: newLoc=Location::INTERIOR; break;
-		case Location::INTERIOR: newLoc=Location::BOUNDARY; break;
-		default: newLoc=Location::BOUNDARY;  break;
-	}
-	label.setLocation(argIndex, newLoc);
+    int loc = label.getLocation(argIndex);
+    // flip the loc
+    int newLoc;
+    switch(loc) {
+    case Location::BOUNDARY:
+        newLoc = Location::INTERIOR;
+        break;
+    case Location::INTERIOR:
+        newLoc = Location::BOUNDARY;
+        break;
+    default:
+        newLoc = Location::BOUNDARY;
+        break;
+    }
+    label.setLocation(argIndex, newLoc);
 
-	testInvariant();
+    testInvariant();
 }
 
 /*public*/
 int
 Node::computeMergedLocation(const Label& label2, int eltIndex)
 {
-	int loc=Location::UNDEF;
-	loc=label.getLocation(eltIndex);
-	if (!label2.isNull(eltIndex)) {
-		int nLoc=label2.getLocation(eltIndex);
-		if (loc!=Location::BOUNDARY) loc=nLoc;
-	}
+    int loc = Location::UNDEF;
+    loc = label.getLocation(eltIndex);
+    if(!label2.isNull(eltIndex)) {
+        int nLoc = label2.getLocation(eltIndex);
+        if(loc != Location::BOUNDARY) {
+            loc = nLoc;
+        }
+    }
 
-	testInvariant();
+    testInvariant();
 
-	return loc;
+    return loc;
 }
 
 /*public*/
 string
 Node::print()
 {
-	testInvariant();
+    testInvariant();
 
-	ostringstream ss;
-	ss<<*this;
-	return ss.str();
+    ostringstream ss;
+    ss << *this;
+    return ss.str();
 }
 
 /*public*/
@@ -243,27 +255,25 @@ void
 Node::addZ(double z)
 {
 #if GEOS_DEBUG
-	cerr<<"["<<this<<"] Node::addZ("<<z<<")";
+    cerr << "[" << this << "] Node::addZ(" << z << ")";
 #endif
-	if ( ISNAN(z) )
-	{
+    if(std::isnan(z)) {
 #if GEOS_DEBUG
-		cerr<<" skipped"<<endl;
+        cerr << " skipped" << endl;
 #endif
-		return;
-	}
-	if ( find(zvals.begin(), zvals.end(), z) != zvals.end() )
-	{
+        return;
+    }
+    if(find(zvals.begin(), zvals.end(), z) != zvals.end()) {
 #if GEOS_DEBUG
-		cerr<<" already stored"<<endl;
+        cerr << " already stored" << endl;
 #endif
-		return;
-	}
-	zvals.push_back(z);
-	ztot+=z;
-	coord.z = ztot / static_cast<double>(zvals.size());
+        return;
+    }
+    zvals.push_back(z);
+    ztot += z;
+    coord.z = ztot / static_cast<double>(zvals.size());
 #if GEOS_DEBUG
-	cerr<<" added "<<z<<": ["<<ztot<<"/"<<zvals.size()<<"="<<coord.z<<"]"<<endl;
+    cerr << " added " << z << ": [" << ztot << "/" << zvals.size() << "=" << coord.z << "]" << endl;
 #endif
 }
 
@@ -271,15 +281,16 @@ Node::addZ(double z)
 const vector<double>&
 Node::getZ() const
 {
-	return zvals;
+    return zvals;
 }
 
-std::ostream& operator<< (std::ostream& os, const Node& node)
+std::ostream&
+operator<< (std::ostream& os, const Node& node)
 {
-	os << "Node["<<&node<<"]" << std::endl
-	   << "  POINT(" << node.coord << ")" << std::endl
-	   << "  lbl: " << node.label;
-	return os;
+    os << "Node[" << &node << "]" << std::endl
+       << "  POINT(" << node.coord << ")" << std::endl
+       << "  lbl: " << node.label;
+    return os;
 }
 
 } // namespace geos.geomgraph

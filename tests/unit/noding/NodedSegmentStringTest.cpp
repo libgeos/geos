@@ -11,30 +11,28 @@
 // std
 #include <memory>
 
-namespace tut
-{
-    //
-    // Test Group
-    //
+namespace tut {
+//
+// Test Group
+//
 
-    // Common data used by tests
-    struct test_nodedsegmentstring_data
-    {
+// Common data used by tests
+struct test_nodedsegmentstring_data {
 
-        typedef std::unique_ptr<geos::geom::CoordinateSequence> \
-        CoordinateSequenceAutoPtr;
+    typedef std::unique_ptr<geos::geom::CoordinateSequence> \
+    CoordinateSequenceAutoPtr;
 
-        typedef std::unique_ptr<geos::noding::NodedSegmentString> \
-        SegmentStringAutoPtr;
+    typedef std::unique_ptr<geos::noding::NodedSegmentString> \
+    SegmentStringAutoPtr;
 
     const geos::geom::CoordinateSequenceFactory* csFactory;
 
     SegmentStringAutoPtr
-    makeSegmentString(geos::geom::CoordinateSequence* cs, void *d = nullptr)
+    makeSegmentString(geos::geom::CoordinateSequence* cs, void* d = nullptr)
     {
         return SegmentStringAutoPtr(
-            new geos::noding::NodedSegmentString(cs, d)
-            );
+                   new geos::noding::NodedSegmentString(cs, d)
+               );
     }
 
     test_nodedsegmentstring_data()
@@ -47,58 +45,60 @@ namespace tut
     {
     }
 
-    };
+};
 
-    typedef test_group<test_nodedsegmentstring_data> group;
-    typedef group::object object;
+typedef test_group<test_nodedsegmentstring_data> group;
+typedef group::object object;
 
-    group test_nodedsegmentstring_group("geos::noding::NodedSegmentString");
+group test_nodedsegmentstring_group("geos::noding::NodedSegmentString");
 
-    //
-    // Test Cases
-    //
+//
+// Test Cases
+//
 
-    // test constructor with 2 equal points
-    template<>
-    template<>
-    void object::test<1>()
-    {
-        CoordinateSequenceAutoPtr cs(csFactory->create((size_t)0, 2));
+// test constructor with 2 equal points
+template<>
+template<>
+void object::test<1>
+()
+{
+    CoordinateSequenceAutoPtr cs(csFactory->create((size_t)0, 2));
 
-        ensure(nullptr != cs.get());
+    ensure(nullptr != cs.get());
 
-        geos::geom::Coordinate c0(0, 0);
-        geos::geom::Coordinate c1(0, 0);
+    geos::geom::Coordinate c0(0, 0);
+    geos::geom::Coordinate c1(0, 0);
 
-        cs->add(c0);
-        cs->add(c1);
+    cs->add(c0);
+    cs->add(c1);
 
-        ensure_equals(cs->size(), 2u);
+    ensure_equals(cs->size(), 2u);
 
-        SegmentStringAutoPtr ss(makeSegmentString(cs.release()));
-        ensure(nullptr != ss.get());
+    SegmentStringAutoPtr ss(makeSegmentString(cs.release()));
+    ensure(nullptr != ss.get());
 
-        ensure_equals(ss->size(), 2u);
+    ensure_equals(ss->size(), 2u);
 
-        ensure_equals(ss->getData(), (void*)nullptr);
+    ensure_equals(ss->getData(), (void*)nullptr);
 
-        ensure_equals(ss->getCoordinate(0), c0);
+    ensure_equals(ss->getCoordinate(0), c0);
 
-        ensure_equals(ss->getCoordinate(1), c1);
+    ensure_equals(ss->getCoordinate(1), c1);
 
-        ensure_equals(ss->isClosed(), true);
+    ensure_equals(ss->isClosed(), true);
 
-        ensure_equals(ss->getNodeList().size(), 0u);
+    ensure_equals(ss->getNodeList().size(), 0u);
 
-        ensure_equals(ss->getSegmentOctant(0), 0);
-    }
+    ensure_equals(ss->getSegmentOctant(0), 0);
+}
 
-    // test constructor with 2 different points
-    template<>
-    template<>
-    void object::test<2>()
-    {
-        CoordinateSequenceAutoPtr cs(csFactory->create((size_t)0, 2));
+// test constructor with 2 different points
+template<>
+template<>
+void object::test<2>
+()
+{
+    CoordinateSequenceAutoPtr cs(csFactory->create((size_t)0, 2));
 
     ensure(nullptr != cs.get());
 
@@ -126,14 +126,15 @@ namespace tut
     ensure_equals(ss->getSegmentOctant(0), 0);
 
     ensure_equals(ss->getNodeList().size(), 0u);
-    }
+}
 
-    // test constructor with 4 different points forming a ring
-    template<>
-    template<>
-    void object::test<3>()
-    {
-        CoordinateSequenceAutoPtr cs(csFactory->create((size_t)0, 2));
+// test constructor with 4 different points forming a ring
+template<>
+template<>
+void object::test<3>
+()
+{
+    CoordinateSequenceAutoPtr cs(csFactory->create((size_t)0, 2));
 
     ensure(nullptr != cs.get());
 
@@ -172,67 +173,69 @@ namespace tut
     ensure_equals(ss->getSegmentOctant(0), 0);
 
     ensure_equals(ss->getNodeList().size(), 0u);
+}
+
+// test Octant class
+template<>
+template<>
+void object::test<4>
+()
+{
+    geos::geom::Coordinate p0(0, 0);
+    geos::geom::Coordinate p1(5, -5);
+    int octant_rc1 = 0;
+    int octant_rc2 = 0;
+    int testPassed = true;
+    try {
+        octant_rc1 = geos::noding::Octant::octant(p0, p1);
+        octant_rc2 = geos::noding::Octant::octant(&p0, &p1);
+        testPassed = (octant_rc1 == octant_rc2);
     }
-
-    // test Octant class
-    template<>
-    template<>
-    void object::test<4>()
-    {
-        geos::geom::Coordinate p0(0, 0);
-        geos::geom::Coordinate p1(5,-5);
-        int octant_rc1 = 0;
-        int octant_rc2 = 0;
-        int testPassed = true;
-        try {
-            octant_rc1 = geos::noding::Octant::octant(p0,p1);
-            octant_rc2 = geos::noding::Octant::octant(&p0,&p1);
-            testPassed = (octant_rc1 == octant_rc2);
-        }
-        catch (...) {
-            testPassed = false;
-        }
-        ensure( 0 != testPassed);
+    catch(...) {
+        testPassed = false;
     }
+    ensure(0 != testPassed);
+}
 
-    // test adding intersections
-    template<>
-    template<>
-    void object::test<5>()
-    {
-        geos::geom::Coordinate p0(0, 0);
-        geos::geom::Coordinate p1(10, 0);
+// test adding intersections
+template<>
+template<>
+void object::test<5>
+()
+{
+    geos::geom::Coordinate p0(0, 0);
+    geos::geom::Coordinate p1(10, 0);
 
 
-        CoordinateSequenceAutoPtr cs(csFactory->create((size_t)0, 2));
-        cs->add(p0);
-        cs->add(p1);
+    CoordinateSequenceAutoPtr cs(csFactory->create((size_t)0, 2));
+    cs->add(p0);
+    cs->add(p1);
 
-        SegmentStringAutoPtr ss(makeSegmentString(cs.release()));
+    SegmentStringAutoPtr ss(makeSegmentString(cs.release()));
 
-        ensure_equals(ss->getNodeList().size(), 0u);
+    ensure_equals(ss->getNodeList().size(), 0u);
 
-        // the intersection is invalid, but SegmentString trusts us
-        ss->addIntersection(p0, 0);
-        ensure_equals(ss->getNodeList().size(), 1u);
+    // the intersection is invalid, but SegmentString trusts us
+    ss->addIntersection(p0, 0);
+    ensure_equals(ss->getNodeList().size(), 1u);
 
-        // This node is already present, so shouldn't be
-        // accepted as a new one
-        ss->addIntersection(p0, 0);
-        ensure_equals(ss->getNodeList().size(), 1u);
+    // This node is already present, so shouldn't be
+    // accepted as a new one
+    ss->addIntersection(p0, 0);
+    ensure_equals(ss->getNodeList().size(), 1u);
 
-        ss->addIntersection(p1, 0);
-        ensure_equals(ss->getNodeList().size(), 2u);
+    ss->addIntersection(p1, 0);
+    ensure_equals(ss->getNodeList().size(), 2u);
 
-        ss->addIntersection(p1, 0);
-        ensure_equals(ss->getNodeList().size(), 2u);
+    ss->addIntersection(p1, 0);
+    ensure_equals(ss->getNodeList().size(), 2u);
 
-        ss->addIntersection(p0, 0);
-        ensure_equals(ss->getNodeList().size(), 2u);
+    ss->addIntersection(p0, 0);
+    ensure_equals(ss->getNodeList().size(), 2u);
 
-    }
+}
 
-    // TODO: test getting noded substrings
+// TODO: test getting noded substrings
 //  template<>
 //  template<>
 //  void object::test<6>()

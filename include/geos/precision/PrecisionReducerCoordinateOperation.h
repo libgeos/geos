@@ -23,43 +23,42 @@
 
 // Forward declarations
 namespace geos {
-  namespace geom {
-    class PrecisionModel;
-    class CoordinateSequence;
-    class Geometry;
-  }
+namespace geom {
+class PrecisionModel;
+class CoordinateSequence;
+class Geometry;
+}
 }
 
 namespace geos {
 namespace precision { // geos.precision
 
 class PrecisionReducerCoordinateOperation :
-		public geom::util::CoordinateOperation
-{
-using CoordinateOperation::edit;
+    public geom::util::CoordinateOperation {
+    using CoordinateOperation::edit;
 private:
 
-	const geom::PrecisionModel& targetPM;
+    const geom::PrecisionModel& targetPM;
 
-	bool removeCollapsed;
+    bool removeCollapsed;
 
     PrecisionReducerCoordinateOperation(PrecisionReducerCoordinateOperation const&); /*= delete*/
     PrecisionReducerCoordinateOperation& operator=(PrecisionReducerCoordinateOperation const&); /*= delete*/
 
 public:
 
-	PrecisionReducerCoordinateOperation( const geom::PrecisionModel& pm,
-                                       bool doRemoveCollapsed )
-      :
-      targetPM(pm),
-      removeCollapsed(doRemoveCollapsed)
-  {}
+    PrecisionReducerCoordinateOperation(const geom::PrecisionModel& pm,
+                                        bool doRemoveCollapsed)
+        :
+        targetPM(pm),
+        removeCollapsed(doRemoveCollapsed)
+    {}
 
-	/// Ownership of returned CoordinateSequence to caller
-  //
-  /// virtual function
-	geom::CoordinateSequence* edit(const geom::CoordinateSequence *coordinates,
-	                         const geom::Geometry *geom) override;
+    /// Ownership of returned CoordinateSequence to caller
+    //
+    /// virtual function
+    geom::CoordinateSequence* edit(const geom::CoordinateSequence* coordinates,
+                                   const geom::Geometry* geom) override;
 };
 
 } // namespace geos.precision

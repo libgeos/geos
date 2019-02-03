@@ -35,10 +35,10 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class CoordinateSequence;
-		class PrecisionModel;
-	}
+namespace geom {
+class CoordinateSequence;
+class PrecisionModel;
+}
 }
 
 namespace geos {
@@ -62,116 +62,117 @@ namespace buffer { // geos.operation.buffer
 class GEOS_DLL OffsetCurveBuilder {
 public:
 
-	/*
-	 * @param nBufParams buffer parameters, this object will
-	 *                   keep a reference to the passed parameters
-	 *                   so caller must make sure the object is
-	 *                   kept alive for the whole lifetime of
-	 *                   the buffer builder.
-	 */
-	OffsetCurveBuilder(const geom::PrecisionModel *newPrecisionModel,
-			const BufferParameters& nBufParams)
-		:
-		distance(0.0),
-		precisionModel(newPrecisionModel),
-		bufParams(nBufParams)
-  {}
+    /*
+     * @param nBufParams buffer parameters, this object will
+     *                   keep a reference to the passed parameters
+     *                   so caller must make sure the object is
+     *                   kept alive for the whole lifetime of
+     *                   the buffer builder.
+     */
+    OffsetCurveBuilder(const geom::PrecisionModel* newPrecisionModel,
+                       const BufferParameters& nBufParams)
+        :
+        distance(0.0),
+        precisionModel(newPrecisionModel),
+        bufParams(nBufParams)
+    {}
 
-  /**
-   * Gets the buffer parameters being used to generate the curve.
-   *
-   * @return the buffer parameters being used
-   */
-  const BufferParameters& getBufferParameters() const
-  {
-    return bufParams;
-  }
+    /**
+     * Gets the buffer parameters being used to generate the curve.
+     *
+     * @return the buffer parameters being used
+     */
+    const BufferParameters&
+    getBufferParameters() const
+    {
+        return bufParams;
+    }
 
-	/**
-	 * This method handles single points as well as lines.
-	 * Lines are assumed to <b>not</b> be closed (the function will not
-	 * fail for closed lines, but will generate superfluous line caps).
-	 *
-	 * @param lineList the std::vector to which the newly created
-	 *                 CoordinateSequences will be pushed_back.
-	 *                 Caller is responsible to delete these new elements.
-	 */
-	void getLineCurve(const geom::CoordinateSequence* inputPts,
-	                  double distance,
-	                  std::vector<geom::CoordinateSequence*>& lineList);
+    /**
+     * This method handles single points as well as lines.
+     * Lines are assumed to <b>not</b> be closed (the function will not
+     * fail for closed lines, but will generate superfluous line caps).
+     *
+     * @param lineList the std::vector to which the newly created
+     *                 CoordinateSequences will be pushed_back.
+     *                 Caller is responsible to delete these new elements.
+     */
+    void getLineCurve(const geom::CoordinateSequence* inputPts,
+                      double distance,
+                      std::vector<geom::CoordinateSequence*>& lineList);
 
-	/**
-	 * This method handles single points as well as lines.
-	 *
-	 * Lines are assumed to <b>not</b> be closed (the function will not
-	 * fail for closed lines, but will generate superfluous line caps).
-	 *
-	 * @param lineList the std::vector to which newly created
-	 *                 CoordinateSequences will be pushed_back.
-	 *                 Caller will be responsible to delete them.
-	 * @param leftSide indicates that the left side buffer will be
-	 *                 obtained/skipped
-	 * @param rightSide indicates that the right side buffer will
-	 *                  be obtained/skipped
-	 *
-	 * NOTE: this is a GEOS extension
-	 */
-	void getSingleSidedLineCurve(const geom::CoordinateSequence* inputPts,
-	     double distance, std::vector<geom::CoordinateSequence*>& lineList,
-	     bool leftSide, bool rightSide ) ;
+    /**
+     * This method handles single points as well as lines.
+     *
+     * Lines are assumed to <b>not</b> be closed (the function will not
+     * fail for closed lines, but will generate superfluous line caps).
+     *
+     * @param lineList the std::vector to which newly created
+     *                 CoordinateSequences will be pushed_back.
+     *                 Caller will be responsible to delete them.
+     * @param leftSide indicates that the left side buffer will be
+     *                 obtained/skipped
+     * @param rightSide indicates that the right side buffer will
+     *                  be obtained/skipped
+     *
+     * NOTE: this is a GEOS extension
+     */
+    void getSingleSidedLineCurve(const geom::CoordinateSequence* inputPts,
+                                 double distance, std::vector<geom::CoordinateSequence*>& lineList,
+                                 bool leftSide, bool rightSide) ;
 
-	/**
-	 * This method handles the degenerate cases of single points and lines,
-	 * as well as rings.
-	 *
-	 * @param lineList the std::vector to which CoordinateSequences will
-	 *                 be pushed_back
-	 */
-	void getRingCurve(const geom::CoordinateSequence *inputPts, int side,
-	                  double distance,
-	                  std::vector<geom::CoordinateSequence*>& lineList);
+    /**
+     * This method handles the degenerate cases of single points and lines,
+     * as well as rings.
+     *
+     * @param lineList the std::vector to which CoordinateSequences will
+     *                 be pushed_back
+     */
+    void getRingCurve(const geom::CoordinateSequence* inputPts, int side,
+                      double distance,
+                      std::vector<geom::CoordinateSequence*>& lineList);
 
 
 private:
 
-	double distance;
+    double distance;
 
-	const geom::PrecisionModel* precisionModel;
+    const geom::PrecisionModel* precisionModel;
 
-	const BufferParameters& bufParams;
+    const BufferParameters& bufParams;
 
-	/**
-	 * Use a value which results in a potential distance error which is
-	 * significantly less than the error due to
-	 * the quadrant segment discretization.
-	 * For QS = 8 a value of 100 is reasonable.
-	 * This should produce a maximum of 1% distance error.
-	 */
-	static const double SIMPLIFY_FACTOR; // 100.0;
+    /**
+     * Use a value which results in a potential distance error which is
+     * significantly less than the error due to
+     * the quadrant segment discretization.
+     * For QS = 8 a value of 100 is reasonable.
+     * This should produce a maximum of 1% distance error.
+     */
+    static const double SIMPLIFY_FACTOR; // 100.0;
 
-	/** \brief
-	 * Computes the distance tolerance to use during input
-	 * line simplification.
-	 *
-	 * @param distance the buffer distance
-	 * @return the simplification tolerance
-	 */
-	double simplifyTolerance(double bufDistance);
+    /** \brief
+     * Computes the distance tolerance to use during input
+     * line simplification.
+     *
+     * @param distance the buffer distance
+     * @return the simplification tolerance
+     */
+    double simplifyTolerance(double bufDistance);
 
-	void computeLineBufferCurve(const geom::CoordinateSequence& inputPts,
-                              OffsetSegmentGenerator& segGen);
+    void computeLineBufferCurve(const geom::CoordinateSequence& inputPts,
+                                OffsetSegmentGenerator& segGen);
 
-  void computeSingleSidedBufferCurve(const geom::CoordinateSequence& inputPts,
-                                     bool isRightSide,
-                                     OffsetSegmentGenerator& segGen);
+    void computeSingleSidedBufferCurve(const geom::CoordinateSequence& inputPts,
+                                       bool isRightSide,
+                                       OffsetSegmentGenerator& segGen);
 
-	void computeRingBufferCurve(const geom::CoordinateSequence& inputPts,
-	                            int side, OffsetSegmentGenerator& segGen);
+    void computeRingBufferCurve(const geom::CoordinateSequence& inputPts,
+                                int side, OffsetSegmentGenerator& segGen);
 
-  std::unique_ptr<OffsetSegmentGenerator> getSegGen(double dist);
+    std::unique_ptr<OffsetSegmentGenerator> getSegGen(double dist);
 
-  void computePointCurve(const geom::Coordinate& pt,
-                         OffsetSegmentGenerator& segGen);
+    void computePointCurve(const geom::Coordinate& pt,
+                           OffsetSegmentGenerator& segGen);
 
 
     // Declare type as noncopyable

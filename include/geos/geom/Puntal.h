@@ -34,10 +34,9 @@ namespace geom { // geos::geom
  * Identifies {@link Geometry} subclasses which
  * are 0-dimensional and with components which are {@link Point}s.
  */
-class GEOS_DLL Puntal : public virtual Geometry
-{
+class GEOS_DLL Puntal : public virtual Geometry {
 protected:
-  Puntal(): Geometry(nullptr) {}
+    Puntal(): Geometry(nullptr) {}
 };
 
 } // namespace geos::geom

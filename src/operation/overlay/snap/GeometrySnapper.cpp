@@ -48,41 +48,43 @@ class SnapTransformer: public geos::geom::util::GeometryTransformer {
 
 private:
 
-	double snapTol;
+    double snapTol;
 
-	const Coordinate::ConstVect& snapPts;
+    const Coordinate::ConstVect& snapPts;
 
-	CoordinateSequence::Ptr snapLine(
-			const CoordinateSequence* srcPts)
-	{
-		using std::unique_ptr;
+    CoordinateSequence::Ptr
+    snapLine(
+        const CoordinateSequence* srcPts)
+    {
+        using std::unique_ptr;
 
-		assert(srcPts);
-		assert(srcPts->toVector());
-		LineStringSnapper snapper(*(srcPts->toVector()), snapTol);
-		unique_ptr<Coordinate::Vect> newPts = snapper.snapTo(snapPts);
+        assert(srcPts);
+        assert(srcPts->toVector());
+        LineStringSnapper snapper(*(srcPts->toVector()), snapTol);
+        unique_ptr<Coordinate::Vect> newPts = snapper.snapTo(snapPts);
 
-		const CoordinateSequenceFactory* cfact = factory->getCoordinateSequenceFactory();
-		return unique_ptr<CoordinateSequence>(cfact->create(newPts.release()));
-	}
+        const CoordinateSequenceFactory* cfact = factory->getCoordinateSequenceFactory();
+        return unique_ptr<CoordinateSequence>(cfact->create(newPts.release()));
+    }
 
 public:
 
-	SnapTransformer(double nSnapTol,
-			const Coordinate::ConstVect& nSnapPts)
-		:
-		snapTol(nSnapTol),
-		snapPts(nSnapPts)
-	{
-	}
+    SnapTransformer(double nSnapTol,
+                    const Coordinate::ConstVect& nSnapPts)
+        :
+        snapTol(nSnapTol),
+        snapPts(nSnapPts)
+    {
+    }
 
-	CoordinateSequence::Ptr transformCoordinates(
-			const CoordinateSequence* coords,
-			const Geometry* parent) override
-	{
+    CoordinateSequence::Ptr
+    transformCoordinates(
+        const CoordinateSequence* coords,
+        const Geometry* parent) override
+    {
         ::geos::ignore_unused_variable_warning(parent);
-		return snapLine(coords);
-	}
+        return snapLine(coords);
+    }
 
 
 };
@@ -91,12 +93,12 @@ public:
 std::unique_ptr<Coordinate::ConstVect>
 GeometrySnapper::extractTargetCoordinates(const Geometry& g)
 {
-	std::unique_ptr<Coordinate::ConstVect> snapPts(new Coordinate::ConstVect());
-	util::UniqueCoordinateArrayFilter filter(*snapPts);
-	g.apply_ro(&filter);
-	// integrity check
-	assert( snapPts->size() <= g.getNumPoints() );
-	return snapPts;
+    std::unique_ptr<Coordinate::ConstVect> snapPts(new Coordinate::ConstVect());
+    util::UniqueCoordinateArrayFilter filter(*snapPts);
+    g.apply_ro(&filter);
+    // integrity check
+    assert(snapPts->size() <= g.getNumPoints());
+    return snapPts;
 }
 
 /*public*/
@@ -104,16 +106,16 @@ std::unique_ptr<geom::Geometry>
 GeometrySnapper::snapTo(const geom::Geometry& g, double snapTolerance)
 {
 
-	using std::unique_ptr;
-	using geom::util::GeometryTransformer;
+    using std::unique_ptr;
+    using geom::util::GeometryTransformer;
 
-	// Get snap points
-	unique_ptr<Coordinate::ConstVect> snapPts=extractTargetCoordinates(g);
+    // Get snap points
+    unique_ptr<Coordinate::ConstVect> snapPts = extractTargetCoordinates(g);
 
-	// Apply a SnapTransformer to source geometry
-	// (we need a pointer for dynamic polymorphism)
-	unique_ptr<GeometryTransformer> snapTrans(new SnapTransformer(snapTolerance, *snapPts));
-	return snapTrans->transform(&srcGeom);
+    // Apply a SnapTransformer to source geometry
+    // (we need a pointer for dynamic polymorphism)
+    unique_ptr<GeometryTransformer> snapTrans(new SnapTransformer(snapTolerance, *snapPts));
+    return snapTrans->transform(&srcGeom);
 }
 
 /*public*/
@@ -121,70 +123,69 @@ std::unique_ptr<geom::Geometry>
 GeometrySnapper::snapToSelf(double snapTolerance, bool cleanResult)
 {
 
-	using std::unique_ptr;
-	using geom::util::GeometryTransformer;
+    using std::unique_ptr;
+    using geom::util::GeometryTransformer;
 
-	// Get snap points
-	unique_ptr<Coordinate::ConstVect> snapPts=extractTargetCoordinates(srcGeom);
+    // Get snap points
+    unique_ptr<Coordinate::ConstVect> snapPts = extractTargetCoordinates(srcGeom);
 
-	// Apply a SnapTransformer to source geometry
-	// (we need a pointer for dynamic polymorphism)
-	unique_ptr<GeometryTransformer> snapTrans(new SnapTransformer(snapTolerance, *snapPts));
+    // Apply a SnapTransformer to source geometry
+    // (we need a pointer for dynamic polymorphism)
+    unique_ptr<GeometryTransformer> snapTrans(new SnapTransformer(snapTolerance, *snapPts));
 
-	GeomPtr result = snapTrans->transform(&srcGeom);
+    GeomPtr result = snapTrans->transform(&srcGeom);
 
-	if (cleanResult && ( dynamic_cast<const Polygon*>(result.get()) ||
-	                     dynamic_cast<const MultiPolygon*>(result.get()) ) )
-	{
-		// TODO: use better cleaning approach
-		result.reset(result->buffer(0));
-	}
+    if(cleanResult && (dynamic_cast<const Polygon*>(result.get()) ||
+                       dynamic_cast<const MultiPolygon*>(result.get()))) {
+        // TODO: use better cleaning approach
+        result.reset(result->buffer(0));
+    }
 
-	return result;
+    return result;
 }
 
 /*public static*/
 double
 GeometrySnapper::computeSizeBasedSnapTolerance(const geom::Geometry& g)
 {
-	const Envelope* env = g.getEnvelopeInternal();
-	double minDimension = std::min(env->getHeight(), env->getWidth());
-	double snapTol = minDimension * snapPrecisionFactor;
-	return snapTol;
+    const Envelope* env = g.getEnvelopeInternal();
+    double minDimension = std::min(env->getHeight(), env->getWidth());
+    double snapTol = minDimension * snapPrecisionFactor;
+    return snapTol;
 }
 
 /*public static*/
 double
 GeometrySnapper::computeOverlaySnapTolerance(const geom::Geometry& g)
 {
-	double snapTolerance = computeSizeBasedSnapTolerance(g);
+    double snapTolerance = computeSizeBasedSnapTolerance(g);
 
-	/**
-	 * Overlay is carried out in the precision model
-	 * of the two inputs.
-	 * If this precision model is of type FIXED, then the snap tolerance
-	 * must reflect the precision grid size.
-	 * Specifically, the snap tolerance should be at least
-	 * the distance from a corner of a precision grid cell
-	 * to the centre point of the cell.
-	 */
-	assert(g.getPrecisionModel());
-	const PrecisionModel& pm = *(g.getPrecisionModel());
-	if (pm.getType() == PrecisionModel::FIXED)
-	{
-		double fixedSnapTol = (1 / pm.getScale()) * 2 / 1.415;
-		if ( fixedSnapTol > snapTolerance )
-			snapTolerance = fixedSnapTol;
-	}
-	return snapTolerance;
+    /**
+     * Overlay is carried out in the precision model
+     * of the two inputs.
+     * If this precision model is of type FIXED, then the snap tolerance
+     * must reflect the precision grid size.
+     * Specifically, the snap tolerance should be at least
+     * the distance from a corner of a precision grid cell
+     * to the centre point of the cell.
+     */
+    assert(g.getPrecisionModel());
+    const PrecisionModel& pm = *(g.getPrecisionModel());
+    if(pm.getType() == PrecisionModel::FIXED) {
+        double fixedSnapTol = (1 / pm.getScale()) * 2 / 1.415;
+        if(fixedSnapTol > snapTolerance) {
+            snapTolerance = fixedSnapTol;
+        }
+    }
+    return snapTolerance;
 }
 
 /*public static*/
 double
 GeometrySnapper::computeOverlaySnapTolerance(const geom::Geometry& g1,
-		const geom::Geometry& g2)
+        const geom::Geometry& g2)
 {
-        return std::min(computeOverlaySnapTolerance(g1), computeOverlaySnapTolerance(g2));
+    return std::min(computeOverlaySnapTolerance(g1), computeOverlaySnapTolerance(g2));
 }
 
 /* public static */
@@ -194,16 +195,16 @@ GeometrySnapper::snap(const geom::Geometry& g0,
                       double snapTolerance,
                       geom::GeomPtrPair& snapGeom)
 {
-	GeometrySnapper snapper0(g0);
-	snapGeom.first = snapper0.snapTo(g1, snapTolerance);
+    GeometrySnapper snapper0(g0);
+    snapGeom.first = snapper0.snapTo(g1, snapTolerance);
 
-	/**
-	 * Snap the second geometry to the snapped first geometry
-	 * (this strategy minimizes the number of possible different
-	 * points in the result)
-	 */
-	GeometrySnapper snapper1(g1);
-	snapGeom.second = snapper1.snapTo(*snapGeom.first, snapTolerance);
+    /**
+     * Snap the second geometry to the snapped first geometry
+     * (this strategy minimizes the number of possible different
+     * points in the result)
+     */
+    GeometrySnapper snapper1(g1);
+    snapGeom.second = snapper1.snapTo(*snapGeom.first, snapTolerance);
 
 //	cout << *snapGeom.first << endl;
 //	cout << *snapGeom.second << endl;
@@ -213,11 +214,11 @@ GeometrySnapper::snap(const geom::Geometry& g0,
 /* public static */
 GeometrySnapper::GeomPtr
 GeometrySnapper::snapToSelf(const geom::Geometry& g,
-                      double snapTolerance,
-                      bool cleanResult)
+                            double snapTolerance,
+                            bool cleanResult)
 {
-	GeometrySnapper snapper0(g);
-	return snapper0.snapToSelf(snapTolerance, cleanResult);
+    GeometrySnapper snapper0(g);
+    return snapper0.snapToSelf(snapTolerance, cleanResult);
 }
 
 } // namespace geos.operation.snap

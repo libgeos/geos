@@ -25,12 +25,12 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class IntersectionMatrix;
-	}
-	namespace geomgraph {
-		class EdgeEnd;
-	}
+namespace geom {
+class IntersectionMatrix;
+}
+namespace geomgraph {
+class EdgeEnd;
+}
 }
 
 
@@ -48,16 +48,16 @@ namespace relate { // geos::operation::relate
 class GEOS_DLL EdgeEndBundleStar: public geomgraph::EdgeEndStar {
 public:
 
-	/// Creates a new empty EdgeEndBundleStar
-	EdgeEndBundleStar() {}
+    /// Creates a new empty EdgeEndBundleStar
+    EdgeEndBundleStar() {}
 
-	~EdgeEndBundleStar() override;
-	void insert(geomgraph::EdgeEnd *e) override;
+    ~EdgeEndBundleStar() override;
+    void insert(geomgraph::EdgeEnd* e) override;
 
-	/**
-	 * Update the IM with the contribution for the EdgeStubs around the node.
-	 */
-	void updateIM(geom::IntersectionMatrix& im);
+    /**
+     * Update the IM with the contribution for the EdgeStubs around the node.
+     */
+    void updateIM(geom::IntersectionMatrix& im);
 };
 
 

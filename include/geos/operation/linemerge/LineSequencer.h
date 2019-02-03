@@ -37,16 +37,16 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class GeometryFactory;
-		class Geometry;
-		class LineString;
-	}
-	namespace planargraph {
-		class DirectedEdge;
-		class Subgraph;
-		class Node;
-	}
+namespace geom {
+class GeometryFactory;
+class Geometry;
+class LineString;
+}
+namespace planargraph {
+class DirectedEdge;
+class Subgraph;
+class Node;
+}
 }
 
 
@@ -99,189 +99,199 @@ namespace linemerge { // geos::operation::linemerge
 class GEOS_DLL LineSequencer {
 
 private:
-	typedef std::list<planargraph::DirectedEdge*> DirEdgeList;
-	typedef std::vector< DirEdgeList* > Sequences;
+    typedef std::list<planargraph::DirectedEdge*> DirEdgeList;
+    typedef std::vector< DirEdgeList* > Sequences;
 
-	LineMergeGraph graph;
-	const geom::GeometryFactory *factory;
-	unsigned int lineCount;
-	bool isRun;
-	std::unique_ptr<geom::Geometry> sequencedGeometry;
-	bool isSequenceableVar;
+    LineMergeGraph graph;
+    const geom::GeometryFactory* factory;
+    unsigned int lineCount;
+    bool isRun;
+    std::unique_ptr<geom::Geometry> sequencedGeometry;
+    bool isSequenceableVar;
 
-	void addLine(const geom::LineString *lineString);
-	void computeSequence();
-	Sequences* findSequences();
-	DirEdgeList* findSequence(planargraph::Subgraph& graph);
+    void addLine(const geom::LineString* lineString);
+    void computeSequence();
+    Sequences* findSequences();
+    DirEdgeList* findSequence(planargraph::Subgraph& graph);
 
-	void delAll( Sequences& );
+    void delAll(Sequences&);
 
-	/// return a newly allocated LineString
-	static geom::LineString* reverse(const geom::LineString *line);
+    /// return a newly allocated LineString
+    static geom::LineString* reverse(const geom::LineString* line);
 
-	/**
-	 * Builds a geometry ({@link LineString} or {@link MultiLineString} )
-	 * representing the sequence.
-	 *
-	 * @param sequences
-	 *    a vector of vectors of const planarDirectedEdges
-	 *    with LineMergeEdges as their parent edges.
-	 *    Ownership of container _and_ contents retained by caller.
-	 *
-	 * @return the sequenced geometry, possibly NULL
-	 *         if no sequence exists
-	 */
-	geom::Geometry* buildSequencedGeometry(const Sequences& sequences);
+    /**
+     * Builds a geometry ({@link LineString} or {@link MultiLineString} )
+     * representing the sequence.
+     *
+     * @param sequences
+     *    a vector of vectors of const planarDirectedEdges
+     *    with LineMergeEdges as their parent edges.
+     *    Ownership of container _and_ contents retained by caller.
+     *
+     * @return the sequenced geometry, possibly NULL
+     *         if no sequence exists
+     */
+    geom::Geometry* buildSequencedGeometry(const Sequences& sequences);
 
-	static const planargraph::Node* findLowestDegreeNode(
-			const planargraph::Subgraph& graph);
+    static const planargraph::Node* findLowestDegreeNode(
+        const planargraph::Subgraph& graph);
 
-	void addReverseSubpath(const planargraph::DirectedEdge *de,
-		DirEdgeList& deList,
-		DirEdgeList::iterator lit,
-		bool expectedClosed);
+    void addReverseSubpath(const planargraph::DirectedEdge* de,
+                           DirEdgeList& deList,
+                           DirEdgeList::iterator lit,
+                           bool expectedClosed);
 
-	/**
-	 * Finds an {@link DirectedEdge} for an unvisited edge (if any),
-	 * choosing the dirEdge which preserves orientation, if possible.
-	 *
-	 * @param node the node to examine
-	 * @return the dirEdge found, or <code>null</code>
-	 *         if none were unvisited
-	 */
-	static const planargraph::DirectedEdge* findUnvisitedBestOrientedDE(
-			const planargraph::Node* node);
+    /**
+     * Finds an {@link DirectedEdge} for an unvisited edge (if any),
+     * choosing the dirEdge which preserves orientation, if possible.
+     *
+     * @param node the node to examine
+     * @return the dirEdge found, or <code>null</code>
+     *         if none were unvisited
+     */
+    static const planargraph::DirectedEdge* findUnvisitedBestOrientedDE(
+        const planargraph::Node* node);
 
-	/**
-	 * Computes a version of the sequence which is optimally
-	 * oriented relative to the underlying geometry.
-	 *
-	 * Heuristics used are:
-	 *
-	 * - If the path has a degree-1 node which is the start
-	 *   node of an linestring, use that node as the start of the sequence
-	 * - If the path has a degree-1 node which is the end
-	 *   node of an linestring, use that node as the end of the sequence
-	 * - If the sequence has no degree-1 nodes, use any node as the start
-	 *   (NOTE: in this case could orient the sequence according to the
-	 *   majority of the linestring orientations)
-	 *
-	 * @param seq a List of planarDirectedEdges
-	 * @return the oriented sequence, possibly same as input if already
-	 *         oriented
-	 */
-	DirEdgeList* orient(DirEdgeList* seq);
+    /**
+     * Computes a version of the sequence which is optimally
+     * oriented relative to the underlying geometry.
+     *
+     * Heuristics used are:
+     *
+     * - If the path has a degree-1 node which is the start
+     *   node of an linestring, use that node as the start of the sequence
+     * - If the path has a degree-1 node which is the end
+     *   node of an linestring, use that node as the end of the sequence
+     * - If the sequence has no degree-1 nodes, use any node as the start
+     *   (NOTE: in this case could orient the sequence according to the
+     *   majority of the linestring orientations)
+     *
+     * @param seq a List of planarDirectedEdges
+     * @return the oriented sequence, possibly same as input if already
+     *         oriented
+     */
+    DirEdgeList* orient(DirEdgeList* seq);
 
-	/**
-	 * Reverse the sequence.
-	 * This requires reversing the order of the dirEdges, and flipping
-	 * each dirEdge as well
-	 *
-	 * @param seq a List of DirectedEdges, in sequential order
-	 * @return the reversed sequence
-	 */
-	DirEdgeList* reverse(DirEdgeList& seq);
+    /**
+     * Reverse the sequence.
+     * This requires reversing the order of the dirEdges, and flipping
+     * each dirEdge as well
+     *
+     * @param seq a List of DirectedEdges, in sequential order
+     * @return the reversed sequence
+     */
+    DirEdgeList* reverse(DirEdgeList& seq);
 
-	/**
-	 * Tests whether a complete unique path exists in a graph
-	 * using Euler's Theorem.
-	 *
-	 * @param graph the subgraph containing the edges
-	 * @return <code>true</code> if a sequence exists
-	 */
-	bool hasSequence(planargraph::Subgraph& graph);
+    /**
+     * Tests whether a complete unique path exists in a graph
+     * using Euler's Theorem.
+     *
+     * @param graph the subgraph containing the edges
+     * @return <code>true</code> if a sequence exists
+     */
+    bool hasSequence(planargraph::Subgraph& graph);
 
 public:
 
-	static geom::Geometry* sequence(const geom::Geometry& geom)
-	{
-		LineSequencer sequencer;
-		sequencer.add(geom);
-		return sequencer.getSequencedLineStrings();
-	}
-
-	LineSequencer()
-		:
-		factory(nullptr),
-		lineCount(0),
-		isRun(false),
-		sequencedGeometry(nullptr),
-		isSequenceableVar(false)
-		{}
-
-	/**
-	 * Tests whether a {@link Geometry} is sequenced correctly.
-	 * {@llink LineString}s are trivially sequenced.
-	 * {@link MultiLineString}s are checked for correct sequencing.
-	 * Otherwise, <code>isSequenced</code> is defined
-	 * to be <code>true</code> for geometries that are not lineal.
-	 *
-	 * @param geom the geometry to test
-	 * @return true if the geometry is sequenced or is not lineal
-	 */
-	static bool isSequenced(const geom::Geometry* geom);
-
-	/**
-	 * Tests whether the arrangement of linestrings has a valid
-	 * sequence.
-	 *
-	 * @return <code>true</code> if a valid sequence exists.
-	 */
-	bool isSequenceable() {
-		computeSequence();
-		return isSequenceableVar;
-	}
-
-	/**
-	 * Adds a {@link Geometry} to be sequenced.
-	 * May be called multiple times.
-	 * Any dimension of Geometry may be added; the constituent
-	 * linework will be extracted.
-	 *
-	 * @param geometry the geometry to add
-	 */
-	void add(const geom::Geometry& geometry) {
-		geometry.applyComponentFilter(*this);
-	}
-
-  template <class TargetContainer>
-  void add(TargetContainer& geoms)
-  {
-    for (typename TargetContainer::const_iterator i = geoms.begin(),
-         e = geoms.end(); i != e; ++i)
+    static geom::Geometry*
+    sequence(const geom::Geometry& geom)
     {
-      const geom::Geometry* g = *i;
-      add(*g);
+        LineSequencer sequencer;
+        sequencer.add(geom);
+        return sequencer.getSequencedLineStrings();
     }
-  }
 
-	/**
-	 * Act as a GeometryComponentFilter so to extract
-	 * the linearworks
-	 */
-	void filter(const geom::Geometry* g)
-	{
-		if (const geom::LineString *ls=dynamic_cast<const geom::LineString *>(g))
-		{
-			addLine(ls);
-		}
-	}
+    LineSequencer()
+        :
+        factory(nullptr),
+        lineCount(0),
+        isRun(false),
+        sequencedGeometry(nullptr),
+        isSequenceableVar(false)
+    {}
 
-	/**
-	 * Returns the LineString or MultiLineString
-	 * built by the sequencing process, if one exists.
-	 *
-	 * @param release release ownership of computed Geometry
-	 * @return the sequenced linestrings,
-	 *         or <code>null</code> if a valid sequence
-	 *         does not exist.
-	 */
-	geom::Geometry*
-	getSequencedLineStrings(bool release=1) {
-		computeSequence();
-		if (release) return sequencedGeometry.release();
-		else return sequencedGeometry.get();
-	}
+    /**
+     * Tests whether a {@link Geometry} is sequenced correctly.
+     * {@llink LineString}s are trivially sequenced.
+     * {@link MultiLineString}s are checked for correct sequencing.
+     * Otherwise, <code>isSequenced</code> is defined
+     * to be <code>true</code> for geometries that are not lineal.
+     *
+     * @param geom the geometry to test
+     * @return true if the geometry is sequenced or is not lineal
+     */
+    static bool isSequenced(const geom::Geometry* geom);
+
+    /**
+     * Tests whether the arrangement of linestrings has a valid
+     * sequence.
+     *
+     * @return <code>true</code> if a valid sequence exists.
+     */
+    bool
+    isSequenceable()
+    {
+        computeSequence();
+        return isSequenceableVar;
+    }
+
+    /**
+     * Adds a {@link Geometry} to be sequenced.
+     * May be called multiple times.
+     * Any dimension of Geometry may be added; the constituent
+     * linework will be extracted.
+     *
+     * @param geometry the geometry to add
+     */
+    void
+    add(const geom::Geometry& geometry)
+    {
+        geometry.applyComponentFilter(*this);
+    }
+
+    template <class TargetContainer>
+    void
+    add(TargetContainer& geoms)
+    {
+        for(typename TargetContainer::const_iterator i = geoms.begin(),
+                e = geoms.end(); i != e; ++i) {
+            const geom::Geometry* g = *i;
+            add(*g);
+        }
+    }
+
+    /**
+     * Act as a GeometryComponentFilter so to extract
+     * the linearworks
+     */
+    void
+    filter(const geom::Geometry* g)
+    {
+        if(const geom::LineString* ls = dynamic_cast<const geom::LineString*>(g)) {
+            addLine(ls);
+        }
+    }
+
+    /**
+     * Returns the LineString or MultiLineString
+     * built by the sequencing process, if one exists.
+     *
+     * @param release release ownership of computed Geometry
+     * @return the sequenced linestrings,
+     *         or <code>null</code> if a valid sequence
+     *         does not exist.
+     */
+    geom::Geometry*
+    getSequencedLineStrings(bool release = 1)
+    {
+        computeSequence();
+        if(release) {
+            return sequencedGeometry.release();
+        }
+        else {
+            return sequencedGeometry.get();
+        }
+    }
 };
 
 } // namespace geos::operation::linemerge

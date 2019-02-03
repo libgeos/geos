@@ -23,12 +23,12 @@
 
 // Forward declarations
 namespace geos {
-	namespace geomgraph {
-		class Edge;
-		namespace index {
-			class SegmentIntersector;
-		}
-	}
+namespace geomgraph {
+class Edge;
+namespace index {
+class SegmentIntersector;
+}
+}
 }
 
 namespace geos {
@@ -39,19 +39,19 @@ class GEOS_DLL SimpleEdgeSetIntersector: public EdgeSetIntersector {
 
 public:
 
-	SimpleEdgeSetIntersector();
+    SimpleEdgeSetIntersector();
 
-	void computeIntersections(std::vector<Edge*> *edges,
-			SegmentIntersector *si, bool testAllSegments) override;
+    void computeIntersections(std::vector<Edge*>* edges,
+                              SegmentIntersector* si, bool testAllSegments) override;
 
-	void computeIntersections(std::vector<Edge*> *edges0,
-			std::vector<Edge*> *edges1, SegmentIntersector *si) override;
+    void computeIntersections(std::vector<Edge*>* edges0,
+                              std::vector<Edge*>* edges1, SegmentIntersector* si) override;
 
 private:
 
-	int nOverlaps;
+    int nOverlaps;
 
-	void computeIntersects(Edge *e0, Edge *e1, SegmentIntersector *si);
+    void computeIntersects(Edge* e0, Edge* e1, SegmentIntersector* si);
 };
 
 } // namespace geos.geomgraph.index

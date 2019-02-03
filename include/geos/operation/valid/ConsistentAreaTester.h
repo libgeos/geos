@@ -28,17 +28,17 @@
 
 // Forward declarations
 namespace geos {
-	namespace algorithm {
-		class LineIntersector;
-	}
-	namespace geomgraph {
-		class GeometryGraph;
-	}
-	namespace operation {
-		namespace relate {
-			class RelateNodeGraph;
-		}
-	}
+namespace algorithm {
+class LineIntersector;
+}
+namespace geomgraph {
+class GeometryGraph;
+}
+namespace operation {
+namespace relate {
+class RelateNodeGraph;
+}
+}
 }
 
 namespace geos {
@@ -83,65 +83,65 @@ namespace valid { // geos::operation::valid
 class GEOS_DLL ConsistentAreaTester {
 private:
 
-	algorithm::LineIntersector li;
+    algorithm::LineIntersector li;
 
-	/// Not owned
-	geomgraph::GeometryGraph *geomGraph;
+    /// Not owned
+    geomgraph::GeometryGraph* geomGraph;
 
-	relate::RelateNodeGraph nodeGraph;
+    relate::RelateNodeGraph nodeGraph;
 
-	/// the intersection point found (if any)
-	geom::Coordinate invalidPoint;
+    /// the intersection point found (if any)
+    geom::Coordinate invalidPoint;
 
-	/**
-	 * Check all nodes to see if their labels are consistent.
-	 * If any are not, return false
-	 */
-	bool isNodeEdgeAreaLabelsConsistent();
+    /**
+     * Check all nodes to see if their labels are consistent.
+     * If any are not, return false
+     */
+    bool isNodeEdgeAreaLabelsConsistent();
 
 public:
 
-	/**
-	 * Creates a new tester for consistent areas.
-	 *
-	 * @param geomGraph the topology graph of the area geometry.
-	 *                  Caller keeps responsibility for its deletion
-	 */
-	ConsistentAreaTester(geomgraph::GeometryGraph *newGeomGraph);
+    /**
+     * Creates a new tester for consistent areas.
+     *
+     * @param geomGraph the topology graph of the area geometry.
+     *                  Caller keeps responsibility for its deletion
+     */
+    ConsistentAreaTester(geomgraph::GeometryGraph* newGeomGraph);
 
-	~ConsistentAreaTester();
+    ~ConsistentAreaTester();
 
-	/**
-	 * @return the intersection point, or <code>null</code>
-	 *         if none was found
-	 */
-	geom::Coordinate& getInvalidPoint();
+    /**
+     * @return the intersection point, or <code>null</code>
+     *         if none was found
+     */
+    geom::Coordinate& getInvalidPoint();
 
-	/** \brief
-	 * Check all nodes to see if their labels are consistent with
-	 * area topology.
-	 *
-	 * @return <code>true</code> if this area has a consistent node
-	 *         labelling
-	 */
-	bool isNodeConsistentArea();
+    /** \brief
+     * Check all nodes to see if their labels are consistent with
+     * area topology.
+     *
+     * @return <code>true</code> if this area has a consistent node
+     *         labelling
+     */
+    bool isNodeConsistentArea();
 
-	/**
-	 * Checks for two duplicate rings in an area.
-	 * Duplicate rings are rings that are topologically equal
-	 * (that is, which have the same sequence of points up to point order).
-	 * If the area is topologically consistent (determined by calling the
-	 * <code>isNodeConsistentArea</code>,
-	 * duplicate rings can be found by checking for EdgeBundles which contain
-	 * more than one geomgraph::EdgeEnd.
-	 * (This is because topologically consistent areas cannot have two rings sharing
-	 * the same line segment, unless the rings are equal).
-	 * The start point of one of the equal rings will be placed in
-	 * invalidPoint.
-	 *
-	 * @return true if this area Geometry is topologically consistent but has two duplicate rings
-	 */
-	bool hasDuplicateRings();
+    /**
+     * Checks for two duplicate rings in an area.
+     * Duplicate rings are rings that are topologically equal
+     * (that is, which have the same sequence of points up to point order).
+     * If the area is topologically consistent (determined by calling the
+     * <code>isNodeConsistentArea</code>,
+     * duplicate rings can be found by checking for EdgeBundles which contain
+     * more than one geomgraph::EdgeEnd.
+     * (This is because topologically consistent areas cannot have two rings sharing
+     * the same line segment, unless the rings are equal).
+     * The start point of one of the equal rings will be placed in
+     * invalidPoint.
+     *
+     * @return true if this area Geometry is topologically consistent but has two duplicate rings
+     */
+    bool hasDuplicateRings();
 };
 
 

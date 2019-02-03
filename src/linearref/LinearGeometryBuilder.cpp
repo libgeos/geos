@@ -34,128 +34,122 @@ using namespace std;
 
 using namespace geos::geom;
 
-namespace geos
-{
+namespace geos {
 
-namespace linearref   // geos.linearref
-{
+namespace linearref { // geos.linearref
 
 /* public */
 LinearGeometryBuilder::LinearGeometryBuilder(const GeometryFactory* p_geomFact) :
-		geomFact(p_geomFact),
-		ignoreInvalidLines(false),
-		fixInvalidLines(false),
-		coordList(nullptr) {}
+    geomFact(p_geomFact),
+    ignoreInvalidLines(false),
+    fixInvalidLines(false),
+    coordList(nullptr) {}
 
 /* public */
 void
 LinearGeometryBuilder::setIgnoreInvalidLines(bool p_ignoreInvalidLines)
 {
-	this->ignoreInvalidLines = p_ignoreInvalidLines;
+    this->ignoreInvalidLines = p_ignoreInvalidLines;
 }
 
 /* public */
 void
 LinearGeometryBuilder::setFixInvalidLines(bool p_fixInvalidLines)
 {
-	this->fixInvalidLines = p_fixInvalidLines;
+    this->fixInvalidLines = p_fixInvalidLines;
 }
 
 /* public */
 void
 LinearGeometryBuilder::add(const Coordinate& pt)
 {
-	add(pt, true);
+    add(pt, true);
 }
 
 /* public */
 void
 LinearGeometryBuilder::add(const Coordinate& pt, bool allowRepeatedPoints)
 {
-	if (!coordList)
-		coordList = new CoordinateArraySequence();
-	coordList->add(pt, allowRepeatedPoints);
-	lastPt = pt;
+    if(!coordList) {
+        coordList = new CoordinateArraySequence();
+    }
+    coordList->add(pt, allowRepeatedPoints);
+    lastPt = pt;
 }
 
 /* public */
 Coordinate
 LinearGeometryBuilder::getLastCoordinate() const
 {
-	return lastPt;
+    return lastPt;
 }
 
 /* public */
 void
 LinearGeometryBuilder::endLine()
 {
-	if (!coordList)
-	{
-		return;
-	}
-	if (coordList->size() < 2)
-	{
-		if (ignoreInvalidLines)
-		{
-			if (coordList)
-			{
-				delete coordList;
-				coordList = nullptr;
-			}
-			return;
-		}
-		else if (fixInvalidLines)
-		{
-			assert(!coordList->isEmpty()); // just to be sure
+    if(!coordList) {
+        return;
+    }
+    if(coordList->size() < 2) {
+        if(ignoreInvalidLines) {
+            if(coordList) {
+                delete coordList;
+                coordList = nullptr;
+            }
+            return;
+        }
+        else if(fixInvalidLines) {
+            assert(!coordList->isEmpty()); // just to be sure
 
-			// NOTE: we copy the point cause reallocation of
-			//       vector memory will invalidate the reference
-			//       to one of its elements.
-			//
-			//       We wouldn't have such problems with a vector
-			//       of pointers (as used in JTS)...
-			//
-			Coordinate firstPoint = (*coordList)[0];
-			add(firstPoint);
-		}
-	}
+            // NOTE: we copy the point cause reallocation of
+            //       vector memory will invalidate the reference
+            //       to one of its elements.
+            //
+            //       We wouldn't have such problems with a vector
+            //       of pointers (as used in JTS)...
+            //
+            Coordinate firstPoint = (*coordList)[0];
+            add(firstPoint);
+        }
+    }
 
-	LineString* line = nullptr;
-	try
-	{
-		line = geomFact->createLineString(coordList);
-	}
-	catch (util::IllegalArgumentException ex)
-	{
-		// exception is due to too few points in line.
-		// only propagate if not ignoring short lines
-		if (! ignoreInvalidLines)
-			throw ex;
-	}
+    LineString* line = nullptr;
+    try {
+        line = geomFact->createLineString(coordList);
+    }
+    catch(util::IllegalArgumentException ex) {
+        // exception is due to too few points in line.
+        // only propagate if not ignoring short lines
+        if(! ignoreInvalidLines) {
+            throw ex;
+        }
+    }
 
-	if (line) lines.push_back(line);
-	coordList = nullptr;
+    if(line) {
+        lines.push_back(line);
+    }
+    coordList = nullptr;
 }
 
 /* public */
 Geometry*
 LinearGeometryBuilder::getGeometry()
 {
-	// end last line in case it was not done by user
-	endLine();
+    // end last line in case it was not done by user
+    endLine();
 
-	// NOTE: lines elements are cloned
-	return geomFact->buildGeometry(lines);
+    // NOTE: lines elements are cloned
+    return geomFact->buildGeometry(lines);
 }
 
 /* public */
 LinearGeometryBuilder::~LinearGeometryBuilder()
 {
-	for (GeomPtrVect::const_iterator i=lines.begin(), e=lines.end();
-		i != e; ++i)
-	{
-		delete *i;
-	}
+    for(GeomPtrVect::const_iterator i = lines.begin(), e = lines.end();
+            i != e; ++i) {
+        delete *i;
+    }
 }
 
 } // namespace geos.linearref

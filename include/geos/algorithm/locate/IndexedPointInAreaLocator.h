@@ -51,48 +51,45 @@ namespace locate { // geos::algorithm::locate
  * {@link Polygonal} and {@link LinearRing} geometries
  * are supported.
  */
-class IndexedPointInAreaLocator : public PointOnGeometryLocator
-{
+class IndexedPointInAreaLocator : public PointOnGeometryLocator {
 private:
-    class IntervalIndexedGeometry
-    {
+    class IntervalIndexedGeometry {
     private:
         index::intervalrtree::SortedPackedIntervalRTree index;
 
-        void init(const geom::Geometry & g);
-        void addLine(const geom::CoordinateSequence * pts);
+        void init(const geom::Geometry& g);
+        void addLine(const geom::CoordinateSequence* pts);
 
         // To keep track of LineSegments
         std::vector< geom::LineSegment > segments;
 
     public:
-        IntervalIndexedGeometry(const geom::Geometry & g);
+        IntervalIndexedGeometry(const geom::Geometry& g);
 
-        void query(double min, double max, index::ItemVisitor * visitor);
+        void query(double min, double max, index::ItemVisitor* visitor);
     };
 
 
-    class SegmentVisitor : public index::ItemVisitor
-    {
+    class SegmentVisitor : public index::ItemVisitor {
     private:
-        algorithm::RayCrossingCounter * counter;
+        algorithm::RayCrossingCounter* counter;
 
     public:
-        SegmentVisitor(algorithm::RayCrossingCounter * p_counter)
+        SegmentVisitor(algorithm::RayCrossingCounter* p_counter)
             :	counter(p_counter)
         { }
 
         ~SegmentVisitor() override
         { }
 
-        void visitItem(void * item) override;
+        void visitItem(void* item) override;
     };
 
 
-    const geom::Geometry & areaGeom;
+    const geom::Geometry& areaGeom;
     std::unique_ptr<IntervalIndexedGeometry> index;
 
-    void buildIndex(const geom::Geometry & g);
+    void buildIndex(const geom::Geometry& g);
 
     // Declare type as noncopyable
     IndexedPointInAreaLocator(const IndexedPointInAreaLocator& other) = delete;
@@ -106,7 +103,7 @@ public:
     *
      * @param g the Geometry to locate in
      */
-    IndexedPointInAreaLocator(const geom::Geometry & g);
+    IndexedPointInAreaLocator(const geom::Geometry& g);
 
     /**
      * Determines the {@link Location} of a point in an areal {@link Geometry}.
@@ -114,7 +111,7 @@ public:
      * @param p the point to test
      * @return the location of the point in the geometry
      */
-    int locate(const geom::Coordinate * /*const*/ p) override;
+    int locate(const geom::Coordinate* /*const*/ p) override;
 
 };
 

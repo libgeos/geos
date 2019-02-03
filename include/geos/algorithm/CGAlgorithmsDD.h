@@ -22,6 +22,7 @@
 #include <geos/algorithm/ttmath/ttmath.h>
 
 // Close to DoubleDouble equivalent used by JTS
+// Usage: ttmath::Big<exponent, mantissa>
 typedef ttmath::Big<TTMATH_BITS(32), TTMATH_BITS(128)> DD;
 //typedef ttmath::Big<TTMATH_BITS(64), TTMATH_BITS(128)> DD;
 //typedef ttmath::Big<TTMATH_BITS(32), TTMATH_BITS(256)> DD;
@@ -46,16 +47,16 @@ class GEOS_DLL CGAlgorithmsDD {
 public:
 
     enum {
-        CLOCKWISE=-1,
-        COLLINEAR=0,
-        COUNTERCLOCKWISE=1
+        CLOCKWISE = -1,
+        COLLINEAR = 0,
+        COUNTERCLOCKWISE = 1
     };
 
     enum {
-        RIGHT=-1,
-        LEFT=1,
-        STRAIGHT=0,
-        FAILURE=2
+        RIGHT = -1,
+        LEFT = 1,
+        STRAIGHT = 0,
+        FAILURE = 2
     };
 
     /**
@@ -97,23 +98,28 @@ public:
                                       const geom::Coordinate& pb,
                                       const geom::Coordinate& pc);
 
-    static int orientation(double x)
+    static int
+    orientation(double x)
     {
-        if (x < 0) return CGAlgorithmsDD::RIGHT;
-        if (x > 0) return CGAlgorithmsDD::LEFT;
+        if(x < 0) {
+            return CGAlgorithmsDD::RIGHT;
+        }
+        if(x > 0) {
+            return CGAlgorithmsDD::LEFT;
+        }
         return CGAlgorithmsDD::STRAIGHT;
     }
 
     static void intersection(const geom::Coordinate& p1, const geom::Coordinate& p2,
                              const geom::Coordinate& q1, const geom::Coordinate& q2,
-                             geom::Coordinate &rv);
+                             geom::Coordinate& rv);
 
     static int signOfDet2x2(double dx1, double dy1, double dx2, double dy2);
 
 
 protected:
 
-    static int signOfDet2x2(DD &x1, DD &y1, DD &x2, DD &y2);
+    static int signOfDet2x2(DD& x1, DD& y1, DD& x2, DD& y2);
 
 };
 

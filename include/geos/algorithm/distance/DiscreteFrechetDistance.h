@@ -40,19 +40,19 @@
 #endif
 
 namespace geos {
-	namespace algorithm {
-		//class RayCrossingCounter;
-	}
-	namespace geom {
-		class Geometry;
-		class Coordinate;
-		//class CoordinateSequence;
-	}
-	namespace index {
-		namespace intervalrtree {
-			//class SortedPackedIntervalRTree;
-		}
-	}
+namespace algorithm {
+//class RayCrossingCounter;
+}
+namespace geom {
+class Geometry;
+class Coordinate;
+//class CoordinateSequence;
+}
+namespace index {
+namespace intervalrtree {
+//class SortedPackedIntervalRTree;
+}
+}
 }
 
 namespace geos {
@@ -103,69 +103,71 @@ namespace distance { // geos::algorithm::distance
  *   DFD(A, B') = 282.842712474619
  * </pre>
  */
-class GEOS_DLL DiscreteFrechetDistance
-{
+class GEOS_DLL DiscreteFrechetDistance {
 public:
 
-	static double distance(const geom::Geometry& g0,
-			       const geom::Geometry& g1);
+    static double distance(const geom::Geometry& g0,
+                           const geom::Geometry& g1);
 
-	static double distance(const geom::Geometry& g0,
-			       const geom::Geometry& g1, double densifyFrac);
+    static double distance(const geom::Geometry& g0,
+                           const geom::Geometry& g1, double densifyFrac);
 
-	DiscreteFrechetDistance(const geom::Geometry& p_g0,
-				const geom::Geometry& p_g1)
-		:
-		g0(p_g0),
-		g1(p_g1),
-		ptDist(),
-		densifyFrac(0.0)
-	{}
+    DiscreteFrechetDistance(const geom::Geometry& p_g0,
+                            const geom::Geometry& p_g1)
+        :
+        g0(p_g0),
+        g1(p_g1),
+        ptDist(),
+        densifyFrac(0.0)
+    {}
 
-	/**
-	 * Sets the fraction by which to densify each segment.
-	 * Each segment will be (virtually) split into a number of equal-length
-	 * subsegments, whose fraction of the total length is closest
-	 * to the given fraction.
-	 *
-	 * @param dFrac
-	 */
-	void setDensifyFraction(double dFrac)
-	{
-		if ( dFrac > 1.0 || dFrac <= 0.0 )
-		{
-			throw util::IllegalArgumentException(
-				"Fraction is not in range (0.0 - 1.0]");
-		}
+    /**
+     * Sets the fraction by which to densify each segment.
+     * Each segment will be (virtually) split into a number of equal-length
+     * subsegments, whose fraction of the total length is closest
+     * to the given fraction.
+     *
+     * @param dFrac
+     */
+    void
+    setDensifyFraction(double dFrac)
+    {
+        if(dFrac > 1.0 || dFrac <= 0.0) {
+            throw util::IllegalArgumentException(
+                "Fraction is not in range (0.0 - 1.0]");
+        }
 
-		densifyFrac = dFrac;
-	}
+        densifyFrac = dFrac;
+    }
 
-	double distance()
-	{
-		compute(g0, g1);
-		return ptDist.getDistance();
-	}
+    double
+    distance()
+    {
+        compute(g0, g1);
+        return ptDist.getDistance();
+    }
 
-	const std::vector<geom::Coordinate> getCoordinates() const
-	{
-		return ptDist.getCoordinates();
-	}
+    const std::vector<geom::Coordinate>
+    getCoordinates() const
+    {
+        return ptDist.getCoordinates();
+    }
 
 private:
-	geom::Coordinate getSegementAt(const geom::CoordinateSequence& seq, size_t index);
+    geom::Coordinate getSegementAt(const geom::CoordinateSequence& seq, size_t index);
 
-	PointPairDistance& getFrecheDistance(std::vector< std::vector<PointPairDistance> >& ca, size_t i, size_t j, const geom::CoordinateSequence& p, const geom::CoordinateSequence& q);
+    PointPairDistance& getFrecheDistance(std::vector< std::vector<PointPairDistance> >& ca, size_t i, size_t j,
+                                         const geom::CoordinateSequence& p, const geom::CoordinateSequence& q);
 
-	void compute(const geom::Geometry& discreteGeom, const geom::Geometry& geom);
+    void compute(const geom::Geometry& discreteGeom, const geom::Geometry& geom);
 
-	const geom::Geometry& g0;
+    const geom::Geometry& g0;
 
-	const geom::Geometry& g1;
+    const geom::Geometry& g1;
 
-	PointPairDistance ptDist;
+    PointPairDistance ptDist;
 
-	/// Value of 0.0 indicates that no densification should take place
+    /// Value of 0.0 indicates that no densification should take place
     double densifyFrac; // = 0.0;
 
     // Declare type as noncopyable

@@ -25,9 +25,9 @@ namespace util { // geos.util
 
 Profile::Profile(string newname)
 {
-	name = newname;
-	totaltime = 0;
-	min = max = avg = 0;
+    name = newname;
+    totaltime = 0;
+    min = max = avg = 0;
 }
 
 Profile::~Profile()
@@ -37,31 +37,31 @@ Profile::~Profile()
 double
 Profile::getMax() const
 {
-	return max;
+    return max;
 }
 
 double
 Profile::getMin() const
 {
-	return min;
+    return min;
 }
 
 double
 Profile::getAvg() const
 {
-	return avg;
+    return avg;
 }
 
 double
 Profile::getTot() const
 {
-	return totaltime;
+    return totaltime;
 }
 
 size_t
 Profile::getNumTimings() const
 {
-	return timings.size();
+    return timings.size();
 }
 
 Profiler::Profiler()
@@ -70,72 +70,71 @@ Profiler::Profiler()
 
 Profiler::~Profiler()
 {
-	map<string, Profile *>::const_iterator it;
-	for ( it=profs.begin(); it != profs.end(); ++it )
-	{
-		delete it->second;
-	}
+    map<string, Profile*>::const_iterator it;
+    for(it = profs.begin(); it != profs.end(); ++it) {
+        delete it->second;
+    }
 }
 
 void
 Profiler::start(string name)
 {
-	Profile *prof = get(name);
-	prof->start();
+    Profile* prof = get(name);
+    prof->start();
 }
 
 void
 Profiler::stop(string name)
 {
-	map<string, Profile *>::iterator iter = profs.find(name);
-	if ( iter == profs.end() ) {
-		cerr<<name<<": no such Profile started";
-		return;
-	}
-	iter->second->stop();
+    map<string, Profile*>::iterator iter = profs.find(name);
+    if(iter == profs.end()) {
+        cerr << name << ": no such Profile started";
+        return;
+    }
+    iter->second->stop();
 }
 
-Profile *
+Profile*
 Profiler::get(string name)
 {
-	Profile *prof;
-	map<string, Profile *>::iterator iter = profs.find(name);
-	if ( iter == profs.end() ) {
-		prof = new Profile(name);
-		profs.insert(pair<string, Profile *>(name, prof));
-	} else {
-		prof = iter->second;
-	}
-	return prof;
+    Profile* prof;
+    map<string, Profile*>::iterator iter = profs.find(name);
+    if(iter == profs.end()) {
+        prof = new Profile(name);
+        profs.insert(pair<string, Profile*>(name, prof));
+    }
+    else {
+        prof = iter->second;
+    }
+    return prof;
 }
 
-Profiler *
+Profiler*
 Profiler::instance()
 {
-	static Profiler internal_profiler;
-	return &internal_profiler;
+    static Profiler internal_profiler;
+    return &internal_profiler;
 }
 
 
 ostream&
-operator<< (ostream &os, const Profile &prof)
+operator<< (ostream& os, const Profile& prof)
 {
-	os << " num:"<<prof.getNumTimings()<<" min:"<<
-		prof.getMin()<<" max:"<<prof.getMax()<<
-		" avg:"<<prof.getAvg()<<" tot:"<<prof.getTot()<<
-		" ["<<prof.name<<"]";
-	return os;
+    os << " num:" << prof.getNumTimings() << " min:" <<
+       prof.getMin() << " max:" << prof.getMax() <<
+       " avg:" << prof.getAvg() << " tot:" << prof.getTot() <<
+       " [" << prof.name << "]";
+    return os;
 }
 
 ostream&
-operator<< (ostream &os, const Profiler &prof)
+operator<< (ostream& os, const Profiler& prof)
 {
-	map<string, Profile *>::const_iterator it;
-	for ( it=prof.profs.begin(); it != prof.profs.end(); ++it )
-	{
-		os<<*(it->second)<<endl;
-	}
-	return os;
+    map<string, Profile*>::const_iterator it;
+    for(it = prof.profs.begin(); it != prof.profs.end(); ++it) {
+        os << *(it->second) << endl;
+    }
+    return os;
 }
 
 

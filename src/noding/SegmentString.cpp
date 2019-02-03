@@ -40,16 +40,17 @@ using namespace geos::geom;
 namespace geos {
 namespace noding { // geos.noding
 
-std::ostream& operator<< (std::ostream& os, const SegmentString& ss)
+std::ostream&
+operator<< (std::ostream& os, const SegmentString& ss)
 {
-	return ss.print(os);
+    return ss.print(os);
 }
 
 std::ostream&
 SegmentString::print(std::ostream& os) const
 {
-	os << "SegmentString" << std::endl;
-	return os;
+    os << "SegmentString" << std::endl;
+    return os;
 }
 
 } // namespace geos.noding

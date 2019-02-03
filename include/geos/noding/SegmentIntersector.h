@@ -22,9 +22,9 @@
 
 // Forward declarations
 namespace geos {
-	namespace noding {
-		class SegmentString;
-	}
+namespace noding {
+class SegmentString;
+}
 }
 
 namespace geos {
@@ -49,35 +49,38 @@ class GEOS_DLL SegmentIntersector {
 
 public:
 
-	/**
-	 * This method is called by clients
-	 * of the SegmentIntersector interface to process
-	 * intersections for two segments of the SegmentStrings
-	 * being intersected.
-	 */
-	virtual void processIntersections(
-		SegmentString* e0,  size_t segIndex0,
-		SegmentString* e1,  size_t segIndex1) = 0;
+    /**
+     * This method is called by clients
+     * of the SegmentIntersector interface to process
+     * intersections for two segments of the SegmentStrings
+     * being intersected.
+     */
+    virtual void processIntersections(
+        SegmentString* e0,  size_t segIndex0,
+        SegmentString* e1,  size_t segIndex1) = 0;
 
-	/**
-	 * \brief
-	 * Reports whether the client of this class
-	 * needs to continue testing all intersections in an arrangement.
-	 *
-	 * @return true if there is not need to continue testing segments
-	 *
-	 * The default implementation always return false (process all intersections).
-	 */
-	virtual bool isDone() const {
-		return false;
-	}
+    /**
+     * \brief
+     * Reports whether the client of this class
+     * needs to continue testing all intersections in an arrangement.
+     *
+     * @return true if there is not need to continue testing segments
+     *
+     * The default implementation always return false (process all intersections).
+     */
+    virtual bool
+    isDone() const
+    {
+        return false;
+    }
 
-	virtual ~SegmentIntersector()
-	{ }
+    virtual
+    ~SegmentIntersector()
+    { }
 
 protected:
 
-	SegmentIntersector() {}
+    SegmentIntersector() {}
 
 };
 

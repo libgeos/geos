@@ -28,11 +28,11 @@
 
 // Forward declarations
 namespace geos {
-	namespace planargraph {
-		class PlanarGraph;
-		class DirectedEdge;
-		class Edge;
-	}
+namespace planargraph {
+class PlanarGraph;
+class DirectedEdge;
+class Edge;
+}
 }
 
 namespace geos {
@@ -50,96 +50,121 @@ namespace planargraph { // geos.planargraph
 /// @@ Actually we'll be copying Coordinates in NodeMap.
 /// I guess that'll need to be changed soon.
 ///
-class GEOS_DLL Subgraph
-{
+class GEOS_DLL Subgraph {
 public:
-	/**
-	 * Creates a new subgraph of the given PlanarGraph
-	 *
-	 * @param parent the parent graph
-	 */
-	Subgraph(PlanarGraph &parent)
-		:
-		parentGraph(parent)
-		{}
+    /**
+     * Creates a new subgraph of the given PlanarGraph
+     *
+     * @param parent the parent graph
+     */
+    Subgraph(PlanarGraph& parent)
+        :
+        parentGraph(parent)
+    {}
 
-	/**
-	 * Gets the {@link PlanarGraph} which this subgraph
-	 * is part of.
-	 *
-	 * @return the parent PlanarGraph
-	 */
-	PlanarGraph& getParent() const { return parentGraph; }
+    /**
+     * Gets the {@link PlanarGraph} which this subgraph
+     * is part of.
+     *
+     * @return the parent PlanarGraph
+     */
+    PlanarGraph&
+    getParent() const
+    {
+        return parentGraph;
+    }
 
-	/**
-	 * Adds an {@link Edge} to the subgraph.
-	 * The associated {@link DirectedEdge}s and {@link planarNode}s
-	 * are also added.
-	 *
-	 * @param e the edge to add
-	 *
-	 * @return a pair with first element being an iterator
-	 *         to the Edge in set and second element
-	 *	   being a boolean value indicating wheter
-	 *	   the Edge has been inserted now or was
-	 *	   already in the set.
-	 */
-	std::pair<std::set<Edge*>::iterator, bool> add(Edge *e);
+    /**
+     * Adds an {@link Edge} to the subgraph.
+     * The associated {@link DirectedEdge}s and {@link planarNode}s
+     * are also added.
+     *
+     * @param e the edge to add
+     *
+     * @return a pair with first element being an iterator
+     *         to the Edge in set and second element
+     *	   being a boolean value indicating wheter
+     *	   the Edge has been inserted now or was
+     *	   already in the set.
+     */
+    std::pair<std::set<Edge*>::iterator, bool> add(Edge* e);
 
-	/**
-	 * Returns an iterator over the DirectedEdge in this graph,
-	 * in the order in which they were added.
-	 *
-	 * @return an iterator over the directed edges
-	 *
-	 * @see add(Edge)
-	 */
-	std::vector<const DirectedEdge*>::iterator getDirEdgeBegin() {
-		return dirEdges.begin();
-	}
+    /**
+     * Returns an iterator over the DirectedEdge in this graph,
+     * in the order in which they were added.
+     *
+     * @return an iterator over the directed edges
+     *
+     * @see add(Edge)
+     */
+    std::vector<const DirectedEdge*>::iterator
+    getDirEdgeBegin()
+    {
+        return dirEdges.begin();
+    }
 
 
-	/**
-	 * Returns an {@link Iterator} over the {@link Edge}s in this
-	 * graph, in the order in which they were added.
-	 *
-	 * @return an iterator over the edges
-	 *
-	 * @see add(Edge)
-	 */
-	std::set<Edge*>::iterator edgeBegin() { return edges.begin(); }
-	std::set<Edge*>::iterator edgeEnd() { return edges.end(); }
+    /**
+     * Returns an {@link Iterator} over the {@link Edge}s in this
+     * graph, in the order in which they were added.
+     *
+     * @return an iterator over the edges
+     *
+     * @see add(Edge)
+     */
+    std::set<Edge*>::iterator
+    edgeBegin()
+    {
+        return edges.begin();
+    }
+    std::set<Edge*>::iterator
+    edgeEnd()
+    {
+        return edges.end();
+    }
 
-	/**
-	 * Returns a iterators over the planarNodesMap::container
-	 * in this graph.
-	 */
-	NodeMap::container::iterator nodeBegin() {
-		return nodeMap.begin();
-	}
-	NodeMap::container::const_iterator nodeEnd() const {
-		return nodeMap.end();
-	}
-	NodeMap::container::iterator nodeEnd() {
-		return nodeMap.end();
-	}
-	NodeMap::container::const_iterator nodeBegin() const {
-		return nodeMap.begin();
-	}
+    /**
+     * Returns a iterators over the planarNodesMap::container
+     * in this graph.
+     */
+    NodeMap::container::iterator
+    nodeBegin()
+    {
+        return nodeMap.begin();
+    }
+    NodeMap::container::const_iterator
+    nodeEnd() const
+    {
+        return nodeMap.end();
+    }
+    NodeMap::container::iterator
+    nodeEnd()
+    {
+        return nodeMap.end();
+    }
+    NodeMap::container::const_iterator
+    nodeBegin() const
+    {
+        return nodeMap.begin();
+    }
 
-	/**
-	 * Tests whether an {@link Edge} is contained in this subgraph
-	 * @param e the edge to test
-	 * @return <code>true</code> if the edge is contained in this subgraph
-	 */
-	bool contains(Edge *e) { return (edges.find(e) != edges.end()); }
+    /**
+     * Tests whether an {@link Edge} is contained in this subgraph
+     * @param e the edge to test
+     * @return <code>true</code> if the edge is contained in this subgraph
+     */
+    bool
+    contains(Edge* e)
+    {
+        return (edges.find(e) != edges.end());
+    }
 
 protected:
 
-	PlanarGraph &parentGraph;
-	std::set<Edge*> edges;
-	std::vector<const DirectedEdge*> dirEdges;
-	NodeMap nodeMap;
+    PlanarGraph& parentGraph;
+    std::set<Edge*> edges;
+    std::vector<const DirectedEdge*> dirEdges;
+    NodeMap nodeMap;
 
     // Declare type as noncopyable
     Subgraph(const Subgraph& other) = delete;

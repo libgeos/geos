@@ -25,10 +25,10 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class CoordinateSequence;
-		class Envelope;
-	}
+namespace geom {
+class CoordinateSequence;
+class Envelope;
+}
 }
 
 namespace geos {
@@ -38,81 +38,80 @@ namespace valid { // geos.operation.valid
 bool
 IndexedNestedRingTester::isNonNested()
 {
-	buildIndex();
+    buildIndex();
 
-	for (size_t i=0, n=rings.size(); i<n; ++i)
-	{
-		const geom::LinearRing* innerRing = rings[i];
-		const geom::CoordinateSequence *innerRingPts=innerRing->getCoordinatesRO();
-		std::vector<void*> results;
-		index->query(innerRing->getEnvelopeInternal(), results);
-		for (size_t j=0, jn=results.size(); j<jn; ++j)
-		{
-			const geom::LinearRing* searchRing = static_cast<const geom::LinearRing*>(results[j]);
-			const geom::CoordinateSequence *searchRingPts=searchRing->getCoordinatesRO();
+    for(size_t i = 0, n = rings.size(); i < n; ++i) {
+        const geom::LinearRing* innerRing = rings[i];
+        const geom::CoordinateSequence* innerRingPts = innerRing->getCoordinatesRO();
+        std::vector<void*> results;
+        index->query(innerRing->getEnvelopeInternal(), results);
+        for(size_t j = 0, jn = results.size(); j < jn; ++j) {
+            const geom::LinearRing* searchRing = static_cast<const geom::LinearRing*>(results[j]);
+            const geom::CoordinateSequence* searchRingPts = searchRing->getCoordinatesRO();
 
-			if (innerRing==searchRing)
-				continue;
+            if(innerRing == searchRing) {
+                continue;
+            }
 
-			if (!innerRing->getEnvelopeInternal()->intersects(
-				searchRing->getEnvelopeInternal()))
-			{
-				continue;
-			}
+            if(!innerRing->getEnvelopeInternal()->intersects(
+                        searchRing->getEnvelopeInternal())) {
+                continue;
+            }
 
-                        const geom::Coordinate *innerRingPt =
-				IsValidOp::findPtNotNode(innerRingPts,
-							 searchRing,
-							 graph);
+            const geom::Coordinate* innerRingPt =
+                IsValidOp::findPtNotNode(innerRingPts,
+                                         searchRing,
+                                         graph);
 
-        /**
-         * If no non-node pts can be found, this means
-         * that the searchRing touches ALL of the innerRing vertices.
-         * This indicates an invalid polygon, since either
-         * the two holes create a disconnected interior,
-         * or they touch in an infinite number of points
-         * (i.e. along a line segment).
-         * Both of these cases are caught by other tests,
-         * so it is safe to simply skip this situation here.
-         */
-        if ( ! innerRingPt ) continue;
+            /**
+             * If no non-node pts can be found, this means
+             * that the searchRing touches ALL of the innerRing vertices.
+             * This indicates an invalid polygon, since either
+             * the two holes create a disconnected interior,
+             * or they touch in an infinite number of points
+             * (i.e. along a line segment).
+             * Both of these cases are caught by other tests,
+             * so it is safe to simply skip this situation here.
+             */
+            if(! innerRingPt) {
+                continue;
+            }
 
-                        // Unable to find a ring point not a node of
-			// the search ring
-			assert(innerRingPt!=nullptr);
+            // Unable to find a ring point not a node of
+            // the search ring
+            assert(innerRingPt != nullptr);
 
-			bool isInside = algorithm::PointLocation::isInRing(
-					*innerRingPt, searchRingPts);
+            bool isInside = algorithm::PointLocation::isInRing(
+                                *innerRingPt, searchRingPts);
 
-			if (isInside) {
-				nestedPt = innerRingPt;
-				return false;
-			}
+            if(isInside) {
+                nestedPt = innerRingPt;
+                return false;
+            }
 
-		}
-	}
+        }
+    }
 
-	return true;
+    return true;
 }
 
 IndexedNestedRingTester::~IndexedNestedRingTester()
 {
-	delete index;
-	//delete totalEnv;
+    delete index;
+    //delete totalEnv;
 }
 
 void
 IndexedNestedRingTester::buildIndex()
 {
-	delete index;
+    delete index;
 
-	index = new index::strtree::STRtree();
-	for (size_t i=0, n=rings.size(); i<n; ++i)
-	{
-		const geom::LinearRing* ring = rings[i];
-		const geom::Envelope* env = ring->getEnvelopeInternal();
-		index->insert(env, (void*)ring);
-	}
+    index = new index::strtree::STRtree();
+    for(size_t i = 0, n = rings.size(); i < n; ++i) {
+        const geom::LinearRing* ring = rings[i];
+        const geom::Envelope* env = ring->getEnvelopeInternal();
+        index->insert(env, (void*)ring);
+    }
 }
 
 } // namespace geos.operation.valid

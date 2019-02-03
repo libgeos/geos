@@ -55,31 +55,36 @@ const double OffsetCurveBuilder::SIMPLIFY_FACTOR = 100.0;
 
 /*public*/
 void
-OffsetCurveBuilder::getLineCurve(const CoordinateSequence *inputPts,
-		double nDistance, vector<CoordinateSequence*>& lineList)
+OffsetCurveBuilder::getLineCurve(const CoordinateSequence* inputPts,
+                                 double nDistance, vector<CoordinateSequence*>& lineList)
 {
-  distance = nDistance;
+    distance = nDistance;
 
-	// a zero or (non-singlesided) negative width buffer of a line/point is empty
-	if (distance == 0.0) return;
-  if (distance < 0.0 && ! bufParams.isSingleSided()) return;
+    // a zero or (non-singlesided) negative width buffer of a line/point is empty
+    if(distance == 0.0) {
+        return;
+    }
+    if(distance < 0.0 && ! bufParams.isSingleSided()) {
+        return;
+    }
 
-  double posDistance = std::abs(distance);
+    double posDistance = std::abs(distance);
 
-  std::unique_ptr<OffsetSegmentGenerator> segGen = getSegGen(posDistance);
-  if (inputPts->getSize() <= 1) {
-    computePointCurve(inputPts->getAt(0), *segGen);
-  } else {
-    if (bufParams.isSingleSided()) {
-      bool isRightSide = distance < 0.0;
-      computeSingleSidedBufferCurve(*inputPts, isRightSide, *segGen);
+    std::unique_ptr<OffsetSegmentGenerator> segGen = getSegGen(posDistance);
+    if(inputPts->getSize() <= 1) {
+        computePointCurve(inputPts->getAt(0), *segGen);
     }
     else {
-      computeLineBufferCurve(*inputPts, *segGen);
+        if(bufParams.isSingleSided()) {
+            bool isRightSide = distance < 0.0;
+            computeSingleSidedBufferCurve(*inputPts, isRightSide, *segGen);
+        }
+        else {
+            computeLineBufferCurve(*inputPts, *segGen);
+        }
     }
-  }
 
-  segGen->getCoordinates(lineList);
+    segGen->getCoordinates(lineList);
 }
 
 /* private */
@@ -87,173 +92,176 @@ void
 OffsetCurveBuilder::computePointCurve(const Coordinate& pt,
                                       OffsetSegmentGenerator& segGen)
 {
-  switch (bufParams.getEndCapStyle()) {
+    switch(bufParams.getEndCapStyle()) {
     case BufferParameters::CAP_ROUND:
-      segGen.createCircle(pt, distance);
-      break;
+        segGen.createCircle(pt, distance);
+        break;
     case BufferParameters::CAP_SQUARE:
-      segGen.createSquare(pt, distance);
-      break;
+        segGen.createSquare(pt, distance);
+        break;
     default:
-      // otherwise curve is empty (e.g. for a butt cap);
-      break;
-  }
+        // otherwise curve is empty (e.g. for a butt cap);
+        break;
+    }
 }
 
 /*public*/
 void
 OffsetCurveBuilder::getSingleSidedLineCurve(const CoordinateSequence* inputPts,
-   double p_distance, vector<CoordinateSequence*>& lineList, bool leftSide,
-   bool rightSide)
+        double p_distance, vector<CoordinateSequence*>& lineList, bool leftSide,
+        bool rightSide)
 {
-   // A zero or negative width buffer of a line/point is empty.
-   if ( p_distance <= 0.0 ) return ;
-
-   if ( inputPts->getSize() < 2 )
-   {
-      // No cap, so just return.
-      return ;
-   }
-
-	double distTol = simplifyTolerance(p_distance);
-
-  std::unique_ptr<OffsetSegmentGenerator> segGen = getSegGen(p_distance);
-
-  if ( leftSide ) {
-	  //--------- compute points for left side of line
-    // Simplify the appropriate side of the line before generating
-    std::unique_ptr<CoordinateSequence> simp1_ =
-      BufferInputLineSimplifier::simplify( *inputPts, distTol );
-    const CoordinateSequence& simp1 = *simp1_;
-
-
-    auto n1 = simp1.size() - 1;
-    if ( ! n1 )
-      throw util::IllegalArgumentException("Cannot get offset of single-vertex line");
-    segGen->initSideSegments(simp1[0], simp1[1], Position::LEFT);
-    segGen->addFirstSegment();
-    for (size_t i = 2; i <= n1; ++i) {
-      segGen->addNextSegment(simp1[i], true);
+    // A zero or negative width buffer of a line/point is empty.
+    if(p_distance <= 0.0) {
+        return ;
     }
-    segGen->addLastSegment();
-  }
 
-  if ( rightSide ) {
-
-    //---------- compute points for right side of line
-    // Simplify the appropriate side of the line before generating
-    std::unique_ptr<CoordinateSequence> simp2_ =
-      BufferInputLineSimplifier::simplify( *inputPts, -distTol );
-    const CoordinateSequence& simp2 = *simp2_;
-
-    auto n2 = simp2.size() - 1;
-    if ( ! n2 )
-      throw util::IllegalArgumentException("Cannot get offset of single-vertex line");
-    segGen->initSideSegments(simp2[n2], simp2[n2-1], Position::LEFT);
-    segGen->addFirstSegment();
-    for (size_t i = n2 - 1; i > 0; --i) {
-      segGen->addNextSegment(simp2[i - 1], true);
+    if(inputPts->getSize() < 2) {
+        // No cap, so just return.
+        return ;
     }
-    segGen->addLastSegment();
-  }
 
-  segGen->getCoordinates(lineList);
+    double distTol = simplifyTolerance(p_distance);
+
+    std::unique_ptr<OffsetSegmentGenerator> segGen = getSegGen(p_distance);
+
+    if(leftSide) {
+        //--------- compute points for left side of line
+        // Simplify the appropriate side of the line before generating
+        std::unique_ptr<CoordinateSequence> simp1_ =
+            BufferInputLineSimplifier::simplify(*inputPts, distTol);
+        const CoordinateSequence& simp1 = *simp1_;
+
+
+        auto n1 = simp1.size() - 1;
+        if(! n1) {
+            throw util::IllegalArgumentException("Cannot get offset of single-vertex line");
+        }
+        segGen->initSideSegments(simp1[0], simp1[1], Position::LEFT);
+        segGen->addFirstSegment();
+        for(size_t i = 2; i <= n1; ++i) {
+            segGen->addNextSegment(simp1[i], true);
+        }
+        segGen->addLastSegment();
+    }
+
+    if(rightSide) {
+
+        //---------- compute points for right side of line
+        // Simplify the appropriate side of the line before generating
+        std::unique_ptr<CoordinateSequence> simp2_ =
+            BufferInputLineSimplifier::simplify(*inputPts, -distTol);
+        const CoordinateSequence& simp2 = *simp2_;
+
+        auto n2 = simp2.size() - 1;
+        if(! n2) {
+            throw util::IllegalArgumentException("Cannot get offset of single-vertex line");
+        }
+        segGen->initSideSegments(simp2[n2], simp2[n2 - 1], Position::LEFT);
+        segGen->addFirstSegment();
+        for(size_t i = n2 - 1; i > 0; --i) {
+            segGen->addNextSegment(simp2[i - 1], true);
+        }
+        segGen->addLastSegment();
+    }
+
+    segGen->getCoordinates(lineList);
 }
 
 /*public*/
 void
-OffsetCurveBuilder::getRingCurve(const CoordinateSequence *inputPts,
-		int side, double nDistance,
-		vector<CoordinateSequence*>& lineList)
+OffsetCurveBuilder::getRingCurve(const CoordinateSequence* inputPts,
+                                 int side, double nDistance,
+                                 vector<CoordinateSequence*>& lineList)
 {
-  distance = nDistance;
+    distance = nDistance;
 
-	// optimize creating ring for zero distance
-	if (distance == 0.0) {
-		lineList.push_back(inputPts->clone());
-		return;
-	}
+    // optimize creating ring for zero distance
+    if(distance == 0.0) {
+        lineList.push_back(inputPts->clone());
+        return;
+    }
 
-	if (inputPts->getSize() <= 2)
-	{
-		getLineCurve(inputPts, distance, lineList);
-		return;
-	}
+    if(inputPts->getSize() <= 2) {
+        getLineCurve(inputPts, distance, lineList);
+        return;
+    }
 
-  std::unique_ptr<OffsetSegmentGenerator> segGen = getSegGen(std::abs(distance));
-	computeRingBufferCurve(*inputPts, side, *segGen);
-  segGen->getCoordinates(lineList);
+    std::unique_ptr<OffsetSegmentGenerator> segGen = getSegGen(std::abs(distance));
+    computeRingBufferCurve(*inputPts, side, *segGen);
+    segGen->getCoordinates(lineList);
 }
 
 /* private */
 double
 OffsetCurveBuilder::simplifyTolerance(double bufDistance)
 {
-	return bufDistance / SIMPLIFY_FACTOR;
+    return bufDistance / SIMPLIFY_FACTOR;
 }
 
 /*private*/
 void
 OffsetCurveBuilder::computeLineBufferCurve(const CoordinateSequence& inputPts,
-    OffsetSegmentGenerator& segGen)
+        OffsetSegmentGenerator& segGen)
 {
-	double distTol = simplifyTolerance(distance);
+    double distTol = simplifyTolerance(distance);
 
-	//--------- compute points for left side of line
-	// Simplify the appropriate side of the line before generating
-	std::unique_ptr<CoordinateSequence> simp1_ =
-		BufferInputLineSimplifier::simplify(inputPts, distTol);
-	const CoordinateSequence& simp1 = *simp1_;
+    //--------- compute points for left side of line
+    // Simplify the appropriate side of the line before generating
+    std::unique_ptr<CoordinateSequence> simp1_ =
+        BufferInputLineSimplifier::simplify(inputPts, distTol);
+    const CoordinateSequence& simp1 = *simp1_;
 
 
-	auto n1 = simp1.size() - 1;
-	segGen.initSideSegments(simp1[0], simp1[1], Position::LEFT);
-	for (size_t i = 2; i <= n1; ++i) {
-		segGen.addNextSegment(simp1[i], true);
-	}
-	segGen.addLastSegment();
-	// add line cap for end of line
-	segGen.addLineEndCap(simp1[n1-1], simp1[n1]);
+    auto n1 = simp1.size() - 1;
+    segGen.initSideSegments(simp1[0], simp1[1], Position::LEFT);
+    for(size_t i = 2; i <= n1; ++i) {
+        segGen.addNextSegment(simp1[i], true);
+    }
+    segGen.addLastSegment();
+    // add line cap for end of line
+    segGen.addLineEndCap(simp1[n1 - 1], simp1[n1]);
 
-	//---------- compute points for right side of line
-	// Simplify the appropriate side of the line before generating
-	std::unique_ptr<CoordinateSequence> simp2_ =
-		BufferInputLineSimplifier::simplify(inputPts, -distTol);
-	const CoordinateSequence& simp2 = *simp2_;
+    //---------- compute points for right side of line
+    // Simplify the appropriate side of the line before generating
+    std::unique_ptr<CoordinateSequence> simp2_ =
+        BufferInputLineSimplifier::simplify(inputPts, -distTol);
+    const CoordinateSequence& simp2 = *simp2_;
 
-	auto n2 = simp2.size() - 1;
-	segGen.initSideSegments(simp2[n2], simp2[n2-1], Position::LEFT);
-	for (size_t i = n2 - 1; i > 0; --i) {
-		segGen.addNextSegment(simp2[i - 1], true);
-	}
-	segGen.addLastSegment();
-	// add line cap for start of line
-	segGen.addLineEndCap(simp2[1], simp2[0]);
+    auto n2 = simp2.size() - 1;
+    segGen.initSideSegments(simp2[n2], simp2[n2 - 1], Position::LEFT);
+    for(size_t i = n2 - 1; i > 0; --i) {
+        segGen.addNextSegment(simp2[i - 1], true);
+    }
+    segGen.addLastSegment();
+    // add line cap for start of line
+    segGen.addLineEndCap(simp2[1], simp2[0]);
 
-	segGen.closeRing();
+    segGen.closeRing();
 }
 
 /*private*/
 void
 OffsetCurveBuilder::computeRingBufferCurve(const CoordinateSequence& inputPts,
-    int side, OffsetSegmentGenerator& segGen)
+        int side, OffsetSegmentGenerator& segGen)
 {
-  // simplify input line to improve performance
-  double distTol = simplifyTolerance(distance);
-	// ensure that correct side is simplified
-	if (side == Position::RIGHT)
-		distTol = -distTol;
-	std::unique_ptr<CoordinateSequence> simp_ =
-		BufferInputLineSimplifier::simplify(inputPts, distTol);
-	const CoordinateSequence& simp = *simp_;
+    // simplify input line to improve performance
+    double distTol = simplifyTolerance(distance);
+    // ensure that correct side is simplified
+    if(side == Position::RIGHT) {
+        distTol = -distTol;
+    }
+    std::unique_ptr<CoordinateSequence> simp_ =
+        BufferInputLineSimplifier::simplify(inputPts, distTol);
+    const CoordinateSequence& simp = *simp_;
 
-	auto n = simp.size() - 1;
-	segGen.initSideSegments(simp[n-1], simp[0], side);
-	for (size_t i = 1; i <= n; i++) {
-		bool addStartPoint = i != 1;
-		segGen.addNextSegment(simp[i], addStartPoint);
-	}
-	segGen.closeRing();
+    auto n = simp.size() - 1;
+    segGen.initSideSegments(simp[n - 1], simp[0], side);
+    for(size_t i = 1; i <= n; i++) {
+        bool addStartPoint = i != 1;
+        segGen.addNextSegment(simp[i], addStartPoint);
+    }
+    segGen.closeRing();
 }
 
 /*private*/
@@ -262,57 +270,58 @@ OffsetCurveBuilder::computeSingleSidedBufferCurve(
     const CoordinateSequence& inputPts, bool isRightSide,
     OffsetSegmentGenerator& segGen)
 {
-	double distTol = simplifyTolerance(distance);
+    double distTol = simplifyTolerance(distance);
 
-  if ( isRightSide ) {
+    if(isRightSide) {
 
-    // add original line
-    segGen.addSegments(inputPts, true);
+        // add original line
+        segGen.addSegments(inputPts, true);
 
-    //---------- compute points for right side of line
-    // Simplify the appropriate side of the line before generating
-    std::unique_ptr<CoordinateSequence> simp2_ =
-      BufferInputLineSimplifier::simplify(inputPts, -distTol);
-    const CoordinateSequence& simp2 = *simp2_;
+        //---------- compute points for right side of line
+        // Simplify the appropriate side of the line before generating
+        std::unique_ptr<CoordinateSequence> simp2_ =
+            BufferInputLineSimplifier::simplify(inputPts, -distTol);
+        const CoordinateSequence& simp2 = *simp2_;
 
-    auto n2 = simp2.size() - 1;
-    segGen.initSideSegments(simp2[n2], simp2[n2-1], Position::LEFT);
-    segGen.addFirstSegment();
-    for (size_t  i = n2 - 1; i > 0; --i) {
-      segGen.addNextSegment(simp2[i - 1], true);
+        auto n2 = simp2.size() - 1;
+        segGen.initSideSegments(simp2[n2], simp2[n2 - 1], Position::LEFT);
+        segGen.addFirstSegment();
+        for(size_t  i = n2 - 1; i > 0; --i) {
+            segGen.addNextSegment(simp2[i - 1], true);
+        }
+
     }
+    else {
 
-  } else {
+        // add original line
+        segGen.addSegments(inputPts, false);
 
-    // add original line
-    segGen.addSegments(inputPts, false);
+        //--------- compute points for left side of line
+        // Simplify the appropriate side of the line before generating
+        std::unique_ptr<CoordinateSequence> simp1_ =
+            BufferInputLineSimplifier::simplify(inputPts, distTol);
+        const CoordinateSequence& simp1 = *simp1_;
 
-    //--------- compute points for left side of line
-    // Simplify the appropriate side of the line before generating
-    std::unique_ptr<CoordinateSequence> simp1_ =
-      BufferInputLineSimplifier::simplify(inputPts, distTol);
-    const CoordinateSequence& simp1 = *simp1_;
+        auto n1 = simp1.size() - 1;
+        segGen.initSideSegments(simp1[0], simp1[1], Position::LEFT);
+        segGen.addFirstSegment();
+        for(size_t i = 2; i <= n1; ++i) {
+            segGen.addNextSegment(simp1[i], true);
+        }
 
-    auto n1 = simp1.size() - 1;
-    segGen.initSideSegments(simp1[0], simp1[1], Position::LEFT);
-    segGen.addFirstSegment();
-    for (size_t i = 2; i <= n1; ++i) {
-      segGen.addNextSegment(simp1[i], true);
     }
-
-  }
-	segGen.addLastSegment();
-	segGen.closeRing();
+    segGen.addLastSegment();
+    segGen.closeRing();
 }
 
 /*private*/
 std::unique_ptr<OffsetSegmentGenerator>
 OffsetCurveBuilder::getSegGen(double dist)
 {
-  std::unique_ptr<OffsetSegmentGenerator> osg(
-    new OffsetSegmentGenerator(precisionModel, bufParams, dist)
-  );
-  return osg;
+    std::unique_ptr<OffsetSegmentGenerator> osg(
+        new OffsetSegmentGenerator(precisionModel, bufParams, dist)
+    );
+    return osg;
 }
 
 } // namespace geos.operation.buffer

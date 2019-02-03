@@ -9,7 +9,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -30,52 +30,100 @@ namespace geomgraph { // geos::geomgraph
 //DirectedEdge::getEdge() { return edge; }
 
 INLINE void
-DirectedEdge::setInResult(bool v) { isInResultVar=v; }
+DirectedEdge::setInResult(bool v)
+{
+    isInResultVar = v;
+}
 
 INLINE bool
-DirectedEdge::isInResult() { return isInResultVar; }
+DirectedEdge::isInResult()
+{
+    return isInResultVar;
+}
 
 INLINE bool
-DirectedEdge::isVisited() { return isVisitedVar; }
+DirectedEdge::isVisited()
+{
+    return isVisitedVar;
+}
 
 INLINE void
-DirectedEdge::setVisited(bool v) { isVisitedVar=v; }
+DirectedEdge::setVisited(bool v)
+{
+    isVisitedVar = v;
+}
 
 INLINE void
-DirectedEdge::setEdgeRing(EdgeRing *er) { edgeRing=er; }
+DirectedEdge::setEdgeRing(EdgeRing* er)
+{
+    edgeRing = er;
+}
 
 INLINE EdgeRing*
-DirectedEdge::getEdgeRing() { return edgeRing; }
+DirectedEdge::getEdgeRing()
+{
+    return edgeRing;
+}
 
 INLINE void
-DirectedEdge::setMinEdgeRing(EdgeRing *mer) { minEdgeRing=mer; }
+DirectedEdge::setMinEdgeRing(EdgeRing* mer)
+{
+    minEdgeRing = mer;
+}
 
 INLINE EdgeRing*
-DirectedEdge::getMinEdgeRing() { return minEdgeRing; }
+DirectedEdge::getMinEdgeRing()
+{
+    return minEdgeRing;
+}
 
 INLINE int
-DirectedEdge::getDepth(int position){ return depth[position]; }
+DirectedEdge::getDepth(int position)
+{
+    return depth[position];
+}
 
 INLINE DirectedEdge*
-DirectedEdge::getSym() { return sym; }
+DirectedEdge::getSym()
+{
+    return sym;
+}
 
 INLINE bool
-DirectedEdge::isForward() { return isForwardVar; }
+DirectedEdge::isForward()
+{
+    return isForwardVar;
+}
 
 INLINE void
-DirectedEdge::setSym(DirectedEdge *de) { sym=de; }
+DirectedEdge::setSym(DirectedEdge* de)
+{
+    sym = de;
+}
 
 INLINE DirectedEdge*
-DirectedEdge::getNext() { return next; }
+DirectedEdge::getNext()
+{
+    return next;
+}
 
 INLINE void
-DirectedEdge::setNext(DirectedEdge *newNext) { next=newNext; }
+DirectedEdge::setNext(DirectedEdge* newNext)
+{
+    next = newNext;
+}
 
 INLINE DirectedEdge*
-DirectedEdge::getNextMin() { return nextMin; }
+DirectedEdge::getNextMin()
+{
+    return nextMin;
+}
 
 INLINE void
-DirectedEdge::setNextMin(DirectedEdge *nm) { nextMin=nm; }
+DirectedEdge::setNextMin(DirectedEdge* nm)
+{
+    nextMin = nm;
+}
 
 
 } // namespace geos::geomgraph

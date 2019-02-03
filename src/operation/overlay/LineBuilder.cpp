@@ -17,7 +17,6 @@
  *
  **********************************************************************/
 
-#include <geos/platform.h>
 #include <geos/operation/overlay/LineBuilder.h>
 #include <geos/operation/overlay/OverlayOp.h>
 #include <geos/algorithm/PointLocator.h>
@@ -46,14 +45,14 @@ namespace geos {
 namespace operation { // geos.operation
 namespace overlay { // geos.operation.overlay
 
-LineBuilder::LineBuilder(OverlayOp *newOp,
-		const GeometryFactory *newGeometryFactory,
-		PointLocator *newPtLocator):
-	op(newOp),
-	geometryFactory(newGeometryFactory),
-	ptLocator(newPtLocator),
-	//lineEdgesList(new vector<Edge *>()),
-	resultLineList(new vector<LineString *>())
+LineBuilder::LineBuilder(OverlayOp* newOp,
+                         const GeometryFactory* newGeometryFactory,
+                         PointLocator* newPtLocator):
+    op(newOp),
+    geometryFactory(newGeometryFactory),
+    ptLocator(newPtLocator),
+    //lineEdgesList(new vector<Edge *>()),
+    resultLineList(new vector<LineString *>())
 {
 }
 
@@ -68,11 +67,11 @@ LineBuilder::~LineBuilder()
 vector<LineString*>*
 LineBuilder::build(OverlayOp::OpCode opCode)
 {
-	findCoveredLineEdges();
-	collectLines(opCode);
-	//labelIsolatedLines(&lineEdgesList);
-	buildLines(opCode);
-	return resultLineList;
+    findCoveredLineEdges();
+    collectLines(opCode);
+    //labelIsolatedLines(&lineEdgesList);
+    buildLines(opCode);
+    return resultLineList;
 }
 
 /*
@@ -86,119 +85,121 @@ void
 LineBuilder::findCoveredLineEdges()
 {
 // first set covered for all L edges at nodes which have A edges too
-	map<Coordinate*,Node*,CoordinateLessThen> &nodeMap=op->getGraph().getNodeMap()->nodeMap;
-	map<Coordinate*,Node*,CoordinateLessThen>::iterator it=nodeMap.begin();
-	map<Coordinate*,Node*,CoordinateLessThen>::iterator endIt=nodeMap.end();
-	for ( ; it!=endIt; ++it)
-	{
-		Node *node=it->second;
-		//node.print(System.out);
-		assert(dynamic_cast<DirectedEdgeStar*>(node->getEdges()));
-		DirectedEdgeStar* des=static_cast<DirectedEdgeStar*>(node->getEdges());
-		des->findCoveredLineEdges();
-		//((DirectedEdgeStar*)node->getEdges())->findCoveredLineEdges();
-	}
+    map<Coordinate*, Node*, CoordinateLessThen>& nodeMap = op->getGraph().getNodeMap()->nodeMap;
+    map<Coordinate*, Node*, CoordinateLessThen>::iterator it = nodeMap.begin();
+    map<Coordinate*, Node*, CoordinateLessThen>::iterator endIt = nodeMap.end();
+    for(; it != endIt; ++it) {
+        Node* node = it->second;
+        //node.print(System.out);
+        assert(dynamic_cast<DirectedEdgeStar*>(node->getEdges()));
+        DirectedEdgeStar* des = static_cast<DirectedEdgeStar*>(node->getEdges());
+        des->findCoveredLineEdges();
+        //((DirectedEdgeStar*)node->getEdges())->findCoveredLineEdges();
+    }
 
-	/*
-	 * For all L edges which weren't handled by the above,
-	 * use a point-in-poly test to determine whether they are covered
-	 */
-	vector<EdgeEnd*> *ee=op->getGraph().getEdgeEnds();
-	for(size_t i=0, s=ee->size(); i<s; ++i)
-	{
-		assert(dynamic_cast<DirectedEdge*>((*ee)[i]));
-		DirectedEdge *de=static_cast<DirectedEdge*>((*ee)[i]);
-		Edge *e=de->getEdge();
-		if (de->isLineEdge() && !e->isCoveredSet()) {
-			bool isCovered=op->isCoveredByA(de->getCoordinate());
-			e->setCovered(isCovered);
-		}
-	}
+    /*
+     * For all L edges which weren't handled by the above,
+     * use a point-in-poly test to determine whether they are covered
+     */
+    vector<EdgeEnd*>* ee = op->getGraph().getEdgeEnds();
+    for(size_t i = 0, s = ee->size(); i < s; ++i) {
+        assert(dynamic_cast<DirectedEdge*>((*ee)[i]));
+        DirectedEdge* de = static_cast<DirectedEdge*>((*ee)[i]);
+        Edge* e = de->getEdge();
+        if(de->isLineEdge() && !e->isCoveredSet()) {
+            bool isCovered = op->isCoveredByA(de->getCoordinate());
+            e->setCovered(isCovered);
+        }
+    }
 }
 
 void
 LineBuilder::collectLines(OverlayOp::OpCode opCode)
 {
-	vector<EdgeEnd*> *ee=op->getGraph().getEdgeEnds();
-	for(size_t i=0, s=ee->size(); i<s; ++i)
-	{
-		assert(dynamic_cast<DirectedEdge*>((*ee)[i]));
-		DirectedEdge *de=static_cast<DirectedEdge*>((*ee)[i]);
-		collectLineEdge(de, opCode, &lineEdgesList);
-		collectBoundaryTouchEdge(de, opCode, &lineEdgesList);
-	}
+    vector<EdgeEnd*>* ee = op->getGraph().getEdgeEnds();
+    for(size_t i = 0, s = ee->size(); i < s; ++i) {
+        assert(dynamic_cast<DirectedEdge*>((*ee)[i]));
+        DirectedEdge* de = static_cast<DirectedEdge*>((*ee)[i]);
+        collectLineEdge(de, opCode, &lineEdgesList);
+        collectBoundaryTouchEdge(de, opCode, &lineEdgesList);
+    }
 }
 
 void
-LineBuilder::collectLineEdge(DirectedEdge *de, OverlayOp::OpCode opCode,
-		vector<Edge*> *edges)
+LineBuilder::collectLineEdge(DirectedEdge* de, OverlayOp::OpCode opCode,
+                             vector<Edge*>* edges)
 {
 
-  // include L edges which are in the result
-  if (de->isLineEdge()) {
+    // include L edges which are in the result
+    if(de->isLineEdge()) {
 
-    const Label& label = de->getLabel();
+        const Label& label = de->getLabel();
 
-    Edge *e = de->getEdge();
+        Edge* e = de->getEdge();
 
-    if (!de->isVisited()
-          && OverlayOp::isResultOfOp(label, opCode)
-          && !e->isCovered() )
-		{
-			//Debug.println("de: "+de.getLabel());
-			//Debug.println("edge: "+e.getLabel());
-			edges->push_back(e);
-			de->setVisitedEdge(true);
-		}
+        if(!de->isVisited()
+                && OverlayOp::isResultOfOp(label, opCode)
+                && !e->isCovered()) {
+            //Debug.println("de: "+de.getLabel());
+            //Debug.println("edge: "+e.getLabel());
+            edges->push_back(e);
+            de->setVisitedEdge(true);
+        }
 
-	}
+    }
 
 }
 
 /*private*/
 void
-LineBuilder::collectBoundaryTouchEdge(DirectedEdge *de,
-		OverlayOp::OpCode opCode, vector<Edge*> *edges)
+LineBuilder::collectBoundaryTouchEdge(DirectedEdge* de,
+                                      OverlayOp::OpCode opCode, vector<Edge*>* edges)
 {
-	if (de->isLineEdge()) return;  // only interested in area edges
-	if (de->isVisited()) return;  // already processed
+    if(de->isLineEdge()) {
+        return;    // only interested in area edges
+    }
+    if(de->isVisited()) {
+        return;    // already processed
+    }
 
-	// added to handle dimensional collapses
-	if (de->isInteriorAreaEdge()) return;
+    // added to handle dimensional collapses
+    if(de->isInteriorAreaEdge()) {
+        return;
+    }
 
-	// if the edge linework is already included, don't include it again
-	if (de->getEdge()->isInResult()) return;
+    // if the edge linework is already included, don't include it again
+    if(de->getEdge()->isInResult()) {
+        return;
+    }
 
-	// sanity check for labelling of result edgerings
-	assert( ! ( de->isInResult() || de->getSym()->isInResult() )
-		||
-	        ! de->getEdge()->isInResult() );
+    // sanity check for labelling of result edgerings
+    assert(!(de->isInResult() || de->getSym()->isInResult())
+           ||
+           ! de->getEdge()->isInResult());
 
 
-	// include the linework if it's in the result of the operation
-	const Label& label = de->getLabel();
-	if ( OverlayOp::isResultOfOp(label, opCode)
-		&& opCode == OverlayOp::opINTERSECTION )
-	{
-		edges->push_back(de->getEdge());
-		de->setVisitedEdge(true);
-	}
+    // include the linework if it's in the result of the operation
+    const Label& label = de->getLabel();
+    if(OverlayOp::isResultOfOp(label, opCode)
+            && opCode == OverlayOp::opINTERSECTION) {
+        edges->push_back(de->getEdge());
+        de->setVisitedEdge(true);
+    }
 }
 
 void
 LineBuilder::buildLines(OverlayOp::OpCode /* opCode */)
 {
-	for(size_t i=0, s=lineEdgesList.size(); i<s; ++i)
-	{
-		Edge *e=lineEdgesList[i];
-		CoordinateSequence *cs = e->getCoordinates()->clone();
+    for(size_t i = 0, s = lineEdgesList.size(); i < s; ++i) {
+        Edge* e = lineEdgesList[i];
+        CoordinateSequence* cs = e->getCoordinates()->clone();
 #if COMPUTE_Z
-		propagateZ(cs);
+        propagateZ(cs);
 #endif
-		LineString *line=geometryFactory->createLineString(cs);
-		resultLineList->push_back(line);
-		e->setInResult(true);
-	}
+        LineString* line = geometryFactory->createLineString(cs);
+        resultLineList->push_back(line);
+        e->setInResult(true);
+    }
 }
 
 /*
@@ -208,111 +209,105 @@ LineBuilder::buildLines(OverlayOp::OpCode /* opCode */)
  * from a 3d vertex to the end.
  */
 void
-LineBuilder::propagateZ(CoordinateSequence *cs)
+LineBuilder::propagateZ(CoordinateSequence* cs)
 {
 #if GEOS_DEBUG
-	cerr<<"LineBuilder::propagateZ() called"<<endl;
+    cerr << "LineBuilder::propagateZ() called" << endl;
 #endif
 
-	vector<size_t> v3d; // vertex 3d
-	size_t cssize = cs->getSize();
-	for (size_t i = 0; i < cssize; ++i)
-	{
-		if ( !ISNAN(cs->getAt(i).z) ) v3d.push_back(i);
-	}
+    vector<size_t> v3d; // vertex 3d
+    size_t cssize = cs->getSize();
+    for(size_t i = 0; i < cssize; ++i) {
+        if(!std::isnan(cs->getAt(i).z)) {
+            v3d.push_back(i);
+        }
+    }
 
 #if GEOS_DEBUG
-	cerr<<"  found "<<v3d.size()<<" 3d vertexes"<<endl;
+    cerr << "  found " << v3d.size() << " 3d vertexes" << endl;
 #endif
 
-	if ( v3d.empty() )
-	{
+    if(v3d.empty()) {
 #if GEOS_DEBUG
-		cerr<<"  nothing to do"<<endl;
+        cerr << "  nothing to do" << endl;
 #endif
-		return;
-	}
+        return;
+    }
 
-	Coordinate buf;
+    Coordinate buf;
 
-	// fill initial part
-	if ( v3d[0] != 0 )
-	{
-		double z = cs->getAt(v3d[0]).z;
-		for (size_t j = 0; j < v3d[0]; ++j)
-		{
-			buf = cs->getAt(j);
-			buf.z = z;
-			cs->setAt(buf, j);
-		}
-	}
+    // fill initial part
+    if(v3d[0] != 0) {
+        double z = cs->getAt(v3d[0]).z;
+        for(size_t j = 0; j < v3d[0]; ++j) {
+            buf = cs->getAt(j);
+            buf.z = z;
+            cs->setAt(buf, j);
+        }
+    }
 
-	// interpolate inbetweens
-	size_t prev=v3d[0];
-	for (size_t i = 1; i < v3d.size(); ++i)
-	{
-		auto curr = v3d[i];
-		auto dist = curr - prev;
-		if (dist > 1)
-		{
-			const Coordinate &cto = cs->getAt(curr);
-			const Coordinate &cfrom = cs->getAt(prev);
-			double gap = cto.z - cfrom.z;
-			double zstep = gap / static_cast<double>(dist);
-			double z = cfrom.z;
-			for (size_t j = prev+1; j < curr; ++j)
-			{
-				buf = cs->getAt(j);
-				z+=zstep;
-				buf.z = z;
-				cs->setAt(buf, j);
-			}
-		}
-		prev = curr;
-	}
+    // interpolate inbetweens
+    size_t prev = v3d[0];
+    for(size_t i = 1; i < v3d.size(); ++i) {
+        auto curr = v3d[i];
+        auto dist = curr - prev;
+        if(dist > 1) {
+            const Coordinate& cto = cs->getAt(curr);
+            const Coordinate& cfrom = cs->getAt(prev);
+            double gap = cto.z - cfrom.z;
+            double zstep = gap / static_cast<double>(dist);
+            double z = cfrom.z;
+            for(size_t j = prev + 1; j < curr; ++j) {
+                buf = cs->getAt(j);
+                z += zstep;
+                buf.z = z;
+                cs->setAt(buf, j);
+            }
+        }
+        prev = curr;
+    }
 
-	// fill final part
-	if ( prev < cssize-1 )
-	{
-		double z = cs->getAt(prev).z;
-		for (size_t j=prev+1; j<cssize; j++)
-		{
-			buf = cs->getAt(j);
-			buf.z = z;
-			cs->setAt(buf, j);
-		}
-	}
+    // fill final part
+    if(prev < cssize - 1) {
+        double z = cs->getAt(prev).z;
+        for(size_t j = prev + 1; j < cssize; j++) {
+            buf = cs->getAt(j);
+            buf.z = z;
+            cs->setAt(buf, j);
+        }
+    }
 
 }
 
 
 
 void
-LineBuilder::labelIsolatedLines(vector<Edge*> *edgesList)
+LineBuilder::labelIsolatedLines(vector<Edge*>* edgesList)
 {
-	for(size_t i=0, s=edgesList->size(); i<s; ++i)
-	{
-		Edge *e=(*edgesList)[i];
-		const Label& label = e->getLabel();
-		//n.print(System.out);
-		if (e->isIsolated()) {
-			if (label.isNull(0))
-				labelIsolatedLine(e, 0);
-			else
-				labelIsolatedLine(e, 1);
-		}
-	}
+    for(size_t i = 0, s = edgesList->size(); i < s; ++i) {
+        Edge* e = (*edgesList)[i];
+        const Label& label = e->getLabel();
+        //n.print(System.out);
+        if(e->isIsolated()) {
+            if(label.isNull(0)) {
+                labelIsolatedLine(e, 0);
+            }
+            else {
+                labelIsolatedLine(e, 1);
+            }
+        }
+    }
 }
 
 /*
  * Label an isolated node with its relationship to the target geometry.
  */
 void
-LineBuilder::labelIsolatedLine(Edge *e, int targetIndex)
+LineBuilder::labelIsolatedLine(Edge* e, int targetIndex)
 {
-  int loc = ptLocator->locate( e->getCoordinate(),
-                               op->getArgGeometry(targetIndex) );
-	e->getLabel().setLocation(targetIndex,loc);
+    int loc = ptLocator->locate(e->getCoordinate(),
+                                op->getArgGeometry(targetIndex));
+    e->getLabel().setLocation(targetIndex, loc);
 }
 
 } // namespace geos.operation.overlay

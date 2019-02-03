@@ -39,7 +39,7 @@ public:
      * @param triEdges an array of the 3 quad edges in a triangle (in CCW order)
      */
     virtual void visit(QuadEdge* triEdges[3]) = 0;
-	virtual ~TriangleVisitor() = 0 ;
+    virtual ~TriangleVisitor() = 0 ;
 private:
 } ;
 

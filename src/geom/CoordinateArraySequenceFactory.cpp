@@ -25,10 +25,10 @@ namespace geom { // geos::geom
 
 static CoordinateArraySequenceFactory defaultCoordinateSequenceFactory;
 
-const CoordinateSequenceFactory *
+const CoordinateSequenceFactory*
 CoordinateArraySequenceFactory::instance()
 {
-	return &defaultCoordinateSequenceFactory;
+    return &defaultCoordinateSequenceFactory;
 }
 
 } // namespace geos::geom

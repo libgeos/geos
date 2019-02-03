@@ -26,11 +26,11 @@
 
 // Forward declarations
 namespace geos {
-	namespace index {
-		namespace chain {
-			class MonotoneChain;
-		}
-	}
+namespace index {
+namespace chain {
+class MonotoneChain;
+}
+}
 }
 
 namespace geos {
@@ -46,24 +46,25 @@ class GEOS_DLL MonotoneChainSelectAction {
 
 protected:
 
-	geom::LineSegment selectedSegment;
+    geom::LineSegment selectedSegment;
 
 public:
 
-	MonotoneChainSelectAction() {}
+    MonotoneChainSelectAction() {}
 
-	virtual ~MonotoneChainSelectAction() {}
+    virtual
+    ~MonotoneChainSelectAction() {}
 
-	/// This function can be overridden if the original chain is needed
-	virtual void select(MonotoneChain& mc, size_t start);
+    /// This function can be overridden if the original chain is needed
+    virtual void select(MonotoneChain& mc, size_t start);
 
-	/**
-	 * This is a convenience function which can be overridden
-	 * to obtain the actual line segment which is selected
-	 *
-	 * @param seg
-	 */
-	virtual void select(const geom::LineSegment& seg) = 0;
+    /**
+     * This is a convenience function which can be overridden
+     * to obtain the actual line segment which is selected
+     *
+     * @param seg
+     */
+    virtual void select(const geom::LineSegment& seg) = 0;
 
 };
 

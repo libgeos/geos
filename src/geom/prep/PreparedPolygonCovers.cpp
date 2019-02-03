@@ -33,10 +33,10 @@ namespace prep { // geos.geom.prep
 // protected:
 //
 bool
-PreparedPolygonCovers::fullTopologicalPredicate( const geom::Geometry * geom)
+PreparedPolygonCovers::fullTopologicalPredicate(const geom::Geometry* geom)
 {
-	bool result = prepPoly->getGeometry().covers( geom);
-	return result;
+    bool result = prepPoly->getGeometry().covers(geom);
+    return result;
 }
 
 //

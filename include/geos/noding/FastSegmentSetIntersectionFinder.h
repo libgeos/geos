@@ -27,11 +27,11 @@
 
 //forward declarations
 namespace geos {
-	namespace noding {
-		class SegmentIntersectionDetector;
-		class SegmentSetMutualIntersector;
-		//class MCIndexSegmentSetMutualIntersector : public SegmentSetMutualIntersector;
-	}
+namespace noding {
+class SegmentIntersectionDetector;
+class SegmentSetMutualIntersector;
+//class MCIndexSegmentSetMutualIntersector : public SegmentSetMutualIntersector;
+}
 }
 
 
@@ -47,31 +47,31 @@ namespace noding { // geos::noding
  *
  * @version 1.7
  */
-class FastSegmentSetIntersectionFinder
-{
+class FastSegmentSetIntersectionFinder {
 private:
-	std::unique_ptr<MCIndexSegmentSetMutualIntersector> segSetMutInt;
-	std::unique_ptr<geos::algorithm::LineIntersector> lineIntersector;
+    std::unique_ptr<MCIndexSegmentSetMutualIntersector> segSetMutInt;
+    std::unique_ptr<geos::algorithm::LineIntersector> lineIntersector;
 
 protected:
 public:
-	FastSegmentSetIntersectionFinder( SegmentString::ConstVect * baseSegStrings);
+    FastSegmentSetIntersectionFinder(SegmentString::ConstVect* baseSegStrings);
 
-	~FastSegmentSetIntersectionFinder() = default;
+    ~FastSegmentSetIntersectionFinder() = default;
 
-	/**
-	 * Gets the segment set intersector used by this class.
-	 * This allows other uses of the same underlying indexed structure.
-	 *
-	 * @return the segment set intersector used
-	 */
-	const SegmentSetMutualIntersector * getSegmentSetIntersector() const
-	{
-		return segSetMutInt.get();
-	}
+    /**
+     * Gets the segment set intersector used by this class.
+     * This allows other uses of the same underlying indexed structure.
+     *
+     * @return the segment set intersector used
+     */
+    const SegmentSetMutualIntersector*
+    getSegmentSetIntersector() const
+    {
+        return segSetMutInt.get();
+    }
 
-	bool intersects( SegmentString::ConstVect * segStrings);
-	bool intersects( SegmentString::ConstVect * segStrings, SegmentIntersectionDetector * intDetector);
+    bool intersects(SegmentString::ConstVect* segStrings);
+    bool intersects(SegmentString::ConstVect* segStrings, SegmentIntersectionDetector* intDetector);
 
 };
 

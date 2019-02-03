@@ -19,11 +19,11 @@
 
 // Forward declarations
 namespace geos {
-	namespace index {
-		namespace sweepline {
-			class SweepLineInterval;
-		}
-	}
+namespace index {
+namespace sweepline {
+class SweepLineInterval;
+}
+}
 }
 
 namespace geos {
@@ -32,9 +32,10 @@ namespace sweepline { // geos:index:sweepline
 
 class GEOS_DLL SweepLineOverlapAction {
 public:
-	virtual void overlap(SweepLineInterval *s0,SweepLineInterval *s1)=0;
+    virtual void overlap(SweepLineInterval* s0, SweepLineInterval* s1) = 0;
 
-	virtual ~SweepLineOverlapAction() {}
+    virtual
+    ~SweepLineOverlapAction() {}
 };
 
 

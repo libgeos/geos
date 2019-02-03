@@ -36,12 +36,12 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class LineSegment;
-	}
-	namespace simplify {
-		class TaggedLineString;
-	}
+namespace geom {
+class LineSegment;
+}
+namespace simplify {
+class TaggedLineString;
+}
 }
 
 namespace geos {
@@ -51,28 +51,32 @@ class GEOS_DLL LineSegmentIndex {
 
 public:
 
-	LineSegmentIndex() = default;
+    LineSegmentIndex() = default;
 
-	~LineSegmentIndex() = default;
+    ~LineSegmentIndex() = default;
 
-	void add(const TaggedLineString& line);
+    void add(const TaggedLineString& line);
 
-	void add(const geom::LineSegment* seg);
+    void add(const geom::LineSegment* seg);
 
-	void remove(const geom::LineSegment* seg);
+    void remove(const geom::LineSegment* seg);
 
-	std::unique_ptr< std::vector<geom::LineSegment*> >
-			query(const geom::LineSegment* seg);
+    std::unique_ptr< std::vector<geom::LineSegment*> >
+    query(const geom::LineSegment* seg);
+
 
 private:
 
-	index::quadtree::Quadtree index;
+    index::quadtree::Quadtree index;
 
-	std::vector<std::unique_ptr<geom::Envelope>> newEnvelopes;
+    std::vector<std::unique_ptr<geom::Envelope>> newEnvelopes;
 
-	// Copying is turned off
-	LineSegmentIndex(const LineSegmentIndex&);
-	LineSegmentIndex& operator=(const LineSegmentIndex&);
+    /**
+     * Disable copy construction and assignment. Apparently needed to make this
+     * class compile under MSVC. (See https://stackoverflow.com/q/29565299)
+     */
+    LineSegmentIndex(const LineSegmentIndex&) = delete;
+    LineSegmentIndex& operator=(const LineSegmentIndex&) = delete;
 };
 
 } // namespace geos::simplify

@@ -43,12 +43,10 @@ PreparedPolygonPredicate::isAllTestComponentsInTarget(const geom::Geometry* test
     geom::Coordinate::ConstVect pts;
     geom::util::ComponentCoordinateExtracter::getCoordinates(*testGeom, pts);
 
-    for (std::size_t i = 0, ni = pts.size(); i < ni; i++)
-    {
+    for(std::size_t i = 0, ni = pts.size(); i < ni; i++) {
         const geom::Coordinate* pt = pts[i];
         const int loc = prepPoly->getPointLocator()->locate(pt);
-        if (geom::Location::EXTERIOR == loc)
-        {
+        if(geom::Location::EXTERIOR == loc) {
             return false;
         }
     }
@@ -57,17 +55,15 @@ PreparedPolygonPredicate::isAllTestComponentsInTarget(const geom::Geometry* test
 
 bool
 PreparedPolygonPredicate::isAllTestComponentsInTargetInterior(
-		const geom::Geometry* testGeom) const
+    const geom::Geometry* testGeom) const
 {
     geom::Coordinate::ConstVect pts;
     geom::util::ComponentCoordinateExtracter::getCoordinates(*testGeom, pts);
 
-    for (std::size_t i = 0, ni = pts.size(); i < ni; i++)
-    {
-        const geom::Coordinate * pt = pts[i];
+    for(std::size_t i = 0, ni = pts.size(); i < ni; i++) {
+        const geom::Coordinate* pt = pts[i];
         const int loc = prepPoly->getPointLocator()->locate(pt);
-        if (geom::Location::INTERIOR != loc)
-        {
+        if(geom::Location::INTERIOR != loc) {
             return false;
         }
     }
@@ -76,17 +72,15 @@ PreparedPolygonPredicate::isAllTestComponentsInTargetInterior(
 
 bool
 PreparedPolygonPredicate::isAnyTestComponentInTarget(
-		const geom::Geometry* testGeom) const
+    const geom::Geometry* testGeom) const
 {
     geom::Coordinate::ConstVect pts;
     geom::util::ComponentCoordinateExtracter::getCoordinates(*testGeom, pts);
 
-    for (std::size_t i = 0, ni = pts.size(); i < ni; i++)
-    {
+    for(std::size_t i = 0, ni = pts.size(); i < ni; i++) {
         const Coordinate* pt = pts[i];
         const int loc = prepPoly->getPointLocator()->locate(pt);
-        if (geom::Location::EXTERIOR != loc)
-        {
+        if(geom::Location::EXTERIOR != loc) {
             return true;
         }
     }
@@ -95,17 +89,15 @@ PreparedPolygonPredicate::isAnyTestComponentInTarget(
 
 bool
 PreparedPolygonPredicate::isAnyTestComponentInTargetInterior(
-	const geom::Geometry * testGeom) const
+    const geom::Geometry* testGeom) const
 {
     geom::Coordinate::ConstVect pts;
     geom::util::ComponentCoordinateExtracter::getCoordinates(*testGeom, pts);
 
-    for (std::size_t i = 0, ni = pts.size(); i < ni; i++)
-    {
-        const Coordinate * pt = pts[i];
+    for(std::size_t i = 0, ni = pts.size(); i < ni; i++) {
+        const Coordinate* pt = pts[i];
         const int loc = prepPoly->getPointLocator()->locate(pt);
-        if (geom::Location::INTERIOR == loc)
-        {
+        if(geom::Location::INTERIOR == loc) {
             return true;
         }
     }
@@ -114,17 +106,15 @@ PreparedPolygonPredicate::isAnyTestComponentInTargetInterior(
 
 bool
 PreparedPolygonPredicate::isAnyTargetComponentInAreaTest(
-	const geom::Geometry* testGeom,
-	const geom::Coordinate::ConstVect* targetRepPts) const
+    const geom::Geometry* testGeom,
+    const geom::Coordinate::ConstVect* targetRepPts) const
 {
     algorithm::locate::SimplePointInAreaLocator piaLoc(testGeom);
 
-    for (std::size_t i = 0, ni = targetRepPts->size(); i < ni; i++)
-    {
-        const geom::Coordinate * pt = (*targetRepPts)[i];
+    for(std::size_t i = 0, ni = targetRepPts->size(); i < ni; i++) {
+        const geom::Coordinate* pt = (*targetRepPts)[i];
         const int loc = piaLoc.locate(pt);
-        if (geom::Location::EXTERIOR != loc)
-        {
+        if(geom::Location::EXTERIOR != loc) {
             return true;
         }
     }

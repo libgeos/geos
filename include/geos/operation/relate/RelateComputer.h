@@ -38,19 +38,19 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class IntersectionMatrix;
-		class Geometry;
-	}
-	namespace geomgraph {
-		class GeometryGraph;
-		class Edge;
-		class EdgeEnd;
-		class Node;
-		namespace index {
-			class SegmentIntersector;
-		}
-	}
+namespace geom {
+class IntersectionMatrix;
+class Geometry;
+}
+namespace geomgraph {
+class GeometryGraph;
+class Edge;
+class EdgeEnd;
+class Node;
+namespace index {
+class SegmentIntersector;
+}
+}
 }
 
 
@@ -74,87 +74,87 @@ namespace relate { // geos::operation::relate
  */
 class GEOS_DLL RelateComputer {
 public:
-	RelateComputer(std::vector<geomgraph::GeometryGraph*> *newArg);
-	~RelateComputer();
+    RelateComputer(std::vector<geomgraph::GeometryGraph*>* newArg);
+    ~RelateComputer();
 
-	geom::IntersectionMatrix* computeIM();
+    geom::IntersectionMatrix* computeIM();
 private:
 
-	algorithm::LineIntersector li;
+    algorithm::LineIntersector li;
 
-	algorithm::PointLocator ptLocator;
+    algorithm::PointLocator ptLocator;
 
-	/// the arg(s) of the operation
-	std::vector<geomgraph::GeometryGraph*> *arg;
+    /// the arg(s) of the operation
+    std::vector<geomgraph::GeometryGraph*>* arg;
 
-	geomgraph::NodeMap nodes;
+    geomgraph::NodeMap nodes;
 
-	/// this intersection matrix will hold the results compute for the relate
-	std::unique_ptr<geom::IntersectionMatrix> im;
+    /// this intersection matrix will hold the results compute for the relate
+    std::unique_ptr<geom::IntersectionMatrix> im;
 
-	std::vector<geomgraph::Edge*> isolatedEdges;
+    std::vector<geomgraph::Edge*> isolatedEdges;
 
-	/// the intersection point found (if any)
-	geom::Coordinate invalidPoint;
+    /// the intersection point found (if any)
+    geom::Coordinate invalidPoint;
 
-	void insertEdgeEnds(std::vector<geomgraph::EdgeEnd*> *ee);
+    void insertEdgeEnds(std::vector<geomgraph::EdgeEnd*>* ee);
 
-	void computeProperIntersectionIM(
-	    geomgraph::index::SegmentIntersector *intersector,
-	    geom::IntersectionMatrix *imX);
+    void computeProperIntersectionIM(
+        geomgraph::index::SegmentIntersector* intersector,
+        geom::IntersectionMatrix* imX);
 
-	void copyNodesAndLabels(int argIndex);
-	void computeIntersectionNodes(int argIndex);
-	void labelIntersectionNodes(int argIndex);
+    void copyNodesAndLabels(int argIndex);
+    void computeIntersectionNodes(int argIndex);
+    void labelIntersectionNodes(int argIndex);
 
-	/**
-	 * If the Geometries are disjoint, we need to enter their dimension and
-	 * boundary dimension in the Ext rows in the IM
-	 */
-	void computeDisjointIM(geom::IntersectionMatrix *imX);
+    /**
+     * If the Geometries are disjoint, we need to enter their dimension and
+     * boundary dimension in the Ext rows in the IM
+     */
+    void computeDisjointIM(geom::IntersectionMatrix* imX);
 
-	void labelNodeEdges();
+    void labelNodeEdges();
 
-	/**
-	 * update the IM with the sum of the IMs for each component
-	 */
-	void updateIM(geom::IntersectionMatrix& imX);
+    /**
+     * update the IM with the sum of the IMs for each component
+     */
+    void updateIM(geom::IntersectionMatrix& imX);
 
-	/**
-	 * Processes isolated edges by computing their labelling and adding them
-	 * to the isolated edges list.
-	 * Isolated edges are guaranteed not to touch the boundary of the target
-	 * (since if they
-	 * did, they would have caused an intersection to be computed and hence would
-	 * not be isolated)
-	 */
-	void labelIsolatedEdges(int thisIndex,int targetIndex);
+    /**
+     * Processes isolated edges by computing their labelling and adding them
+     * to the isolated edges list.
+     * Isolated edges are guaranteed not to touch the boundary of the target
+     * (since if they
+     * did, they would have caused an intersection to be computed and hence would
+     * not be isolated)
+     */
+    void labelIsolatedEdges(int thisIndex, int targetIndex);
 
-	/**
-	 * Label an isolated edge of a graph with its relationship to the target
-	 * geometry.
-	 * If the target has dim 2 or 1, the edge can either be in the interior
-	 * or the exterior.
-	 * If the target has dim 0, the edge must be in the exterior
-	 */
-	void labelIsolatedEdge(geomgraph::Edge *e,int targetIndex,
-	                       const geom::Geometry *target);
+    /**
+     * Label an isolated edge of a graph with its relationship to the target
+     * geometry.
+     * If the target has dim 2 or 1, the edge can either be in the interior
+     * or the exterior.
+     * If the target has dim 0, the edge must be in the exterior
+     */
+    void labelIsolatedEdge(geomgraph::Edge* e, int targetIndex,
+                           const geom::Geometry* target);
 
-	/**
-	 * Isolated nodes are nodes whose labels are incomplete
-	 * (e.g. the location for one Geometry is null).
-	 * This is the case because nodes in one graph which don't intersect
-	 * nodes in the other are not completely labelled by the initial process
-	 * of adding nodes to the nodeList.
-	 * To complete the labelling we need to check for nodes that lie in the
-	 * interior of edges, and in the interior of areas.
-	 */
-	void labelIsolatedNodes();
+    /**
+     * Isolated nodes are nodes whose labels are incomplete
+     * (e.g. the location for one Geometry is null).
+     * This is the case because nodes in one graph which don't intersect
+     * nodes in the other are not completely labelled by the initial process
+     * of adding nodes to the nodeList.
+     * To complete the labelling we need to check for nodes that lie in the
+     * interior of edges, and in the interior of areas.
+     */
+    void labelIsolatedNodes();
 
-	/**
-	 * Label an isolated node with its relationship to the target geometry.
-	 */
-	void labelIsolatedNode(geomgraph::Node *n,int targetIndex);
+    /**
+     * Label an isolated node with its relationship to the target geometry.
+     */
+    void labelIsolatedNode(geomgraph::Node* n, int targetIndex);
 };
 
 

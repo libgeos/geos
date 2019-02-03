@@ -24,7 +24,6 @@
 #include <geos/export.h>
 #include <geos/geom/GeometryFilter.h>
 #include <geos/geom/GeometryCollection.h>
-#include <geos/platform.h>
 #include <vector>
 
 namespace geos {
@@ -38,57 +37,57 @@ class GEOS_DLL GeometryExtracter {
 
 public:
 
-  /**
-   * Extracts the components of type <tt>clz</tt> from a {@link Geometry}
-   * and adds them to the provided container.
-   *
-   * @param geom the geometry from which to extract
-   * @param list the list to add the extracted elements to
-   */
-  template <class ComponentType, class TargetContainer>
-  static void extract(const Geometry& geom, TargetContainer& lst)
-  {
-    if ( const ComponentType* p_c = dynamic_cast<const ComponentType*>(&geom) )
+    /**
+     * Extracts the components of type <tt>clz</tt> from a {@link Geometry}
+     * and adds them to the provided container.
+     *
+     * @param geom the geometry from which to extract
+     * @param list the list to add the extracted elements to
+     */
+    template <class ComponentType, class TargetContainer>
+    static void
+    extract(const Geometry& geom, TargetContainer& lst)
     {
-      lst.push_back(p_c);
+        if(const ComponentType* p_c = dynamic_cast<const ComponentType*>(&geom)) {
+            lst.push_back(p_c);
+        }
+        else if(const GeometryCollection* p_c1 =
+                    dynamic_cast<const GeometryCollection*>(&geom)) {
+            GeometryExtracter::Extracter<ComponentType, TargetContainer> extracter(lst);
+            p_c1->apply_ro(&extracter);
+        }
     }
-    else if ( const GeometryCollection* p_c1 =
-                   dynamic_cast<const GeometryCollection*>(&geom) )
-    {
-      GeometryExtracter::Extracter<ComponentType, TargetContainer> extracter(lst);
-      p_c1->apply_ro(&extracter);
-    }
-  }
 
 private:
 
-  template <class ComponentType, class TargetContainer>
-  struct Extracter: public GeometryFilter {
+    template <class ComponentType, class TargetContainer>
+    struct Extracter: public GeometryFilter {
 
-    /**
-     * Constructs a filter with a list in which to store the elements found.
-     *
-     * @param comps the container to extract into (will push_back to it)
-     */
-    Extracter(TargetContainer& comps) : comps_(comps) {}
+        /**
+         * Constructs a filter with a list in which to store the elements found.
+         *
+         * @param comps the container to extract into (will push_back to it)
+         */
+        Extracter(TargetContainer& comps) : comps_(comps) {}
 
-    TargetContainer& comps_;
+        TargetContainer& comps_;
 
-    void filter_ro(const Geometry* geom) override
-    {
-      if ( const ComponentType* c = dynamic_cast<const ComponentType*>(geom) ) {
-        comps_.push_back(c);
-      }
-    }
+        void
+        filter_ro(const Geometry* geom) override
+        {
+            if(const ComponentType* c = dynamic_cast<const ComponentType*>(geom)) {
+                comps_.push_back(c);
+            }
+        }
+
+        // Declare type as noncopyable
+        Extracter(const Extracter& other);
+        Extracter& operator=(const Extracter& rhs);
+    };
 
     // Declare type as noncopyable
-    Extracter(const Extracter& other);
-    Extracter& operator=(const Extracter& rhs);
-  };
-
-  // Declare type as noncopyable
-  GeometryExtracter(const GeometryExtracter& other) = delete;
-  GeometryExtracter& operator=(const GeometryExtracter& rhs) = delete;
+    GeometryExtracter(const GeometryExtracter& other) = delete;
+    GeometryExtracter& operator=(const GeometryExtracter& rhs) = delete;
 };
 
 } // namespace geos.geom.util

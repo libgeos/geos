@@ -26,19 +26,19 @@ namespace io {
 /// Constant values used by the WKB format
 namespace WKBConstants {
 
-	/// Big Endian
-	const int wkbXDR = 0;
+/// Big Endian
+const int wkbXDR = 0;
 
-	/// Little Endian
-	const int wkbNDR = 1;
+/// Little Endian
+const int wkbNDR = 1;
 
-	const int wkbPoint = 1;
-	const int wkbLineString = 2;
-	const int wkbPolygon = 3;
-	const int wkbMultiPoint = 4;
-	const int wkbMultiLineString = 5;
-	const int wkbMultiPolygon = 6;
-	const int wkbGeometryCollection = 7;
+const int wkbPoint = 1;
+const int wkbLineString = 2;
+const int wkbPolygon = 3;
+const int wkbMultiPoint = 4;
+const int wkbMultiLineString = 5;
+const int wkbMultiPolygon = 6;
+const int wkbGeometryCollection = 7;
 }
 
 } // namespace geos::io

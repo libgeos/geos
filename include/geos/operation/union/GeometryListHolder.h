@@ -18,9 +18,9 @@
 
 // Forward declarations
 namespace geos {
-  namespace geom {
-    class Geometry;
-  }
+namespace geom {
+class Geometry;
+}
 }
 
 namespace geos {
@@ -31,8 +31,7 @@ namespace geounion {  // geos::operation::geounion
  * \brief Helper class holding Geometries, part of which are held by reference
  *        others are held exclusively.
  */
-class GeometryListHolder : public std::vector<geom::Geometry*>
-{
+class GeometryListHolder : public std::vector<geom::Geometry*> {
 private:
     typedef std::vector<geom::Geometry*> base_type;
 
@@ -41,21 +40,24 @@ public:
     ~GeometryListHolder()
     {
         std::for_each(ownedItems.begin(), ownedItems.end(),
-            &GeometryListHolder::deleteItem);
+                      &GeometryListHolder::deleteItem);
     }
 
     // items need to be deleted in the end
-    void push_back_owned(geom::Geometry* item)
+    void
+    push_back_owned(geom::Geometry* item)
     {
         this->base_type::push_back(item);
         ownedItems.push_back(item);
     }
 
-    geom::Geometry* getGeometry(std::size_t index)
+    geom::Geometry*
+    getGeometry(std::size_t index)
     {
-      if (index >= this->base_type::size())
-          return nullptr;
-      return (*this)[index];
+        if(index >= this->base_type::size()) {
+            return nullptr;
+        }
+        return (*this)[index];
     }
 
 private:

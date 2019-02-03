@@ -26,24 +26,24 @@
 
 // Forward declarations
 namespace geos {
-  namespace geom {
-	  class Point;
-	  class MultiPoint;
-	  class Polygon;
-	  class MultiPolygon;
-	  class LineString;
-	  class MultiLineString;
-	  class Geometry;
-	  class GeometryCollection;
-	  class GeometryFactory;
-	  class CoordinateSequenceFactory;
-  }
-  namespace operation {
-	namespace intersection {
-	  class Rectangle;
-	  class RectangleIntersectionBuilder;
-	}
-  }
+namespace geom {
+class Point;
+class MultiPoint;
+class Polygon;
+class MultiPolygon;
+class LineString;
+class MultiLineString;
+class Geometry;
+class GeometryCollection;
+class GeometryFactory;
+class CoordinateSequenceFactory;
+}
+namespace operation {
+namespace intersection {
+class Rectangle;
+class RectangleIntersectionBuilder;
+}
+}
 }
 
 namespace geos {
@@ -71,104 +71,103 @@ namespace intersection { // geos::operation::intersection
  * be properly closed, or the algorithm may not terminate.
  *
  */
-class GEOS_DLL RectangleIntersection
-{
- public:
+class GEOS_DLL RectangleIntersection {
+public:
 
-  /**
-   * \brief Clip geometry with a rectangle
-   *
-   * @param geom a {@link Geometry}
-   * @param rect a {@link Rectangle}
-   * @return the clipped geometry
-   * @return NULL if the geometry is outside the {@link Rectangle}
-   */
-  static std::unique_ptr<geom::Geometry> clip(const geom::Geometry & geom,
-							   const Rectangle & rect);
+    /**
+     * \brief Clip geometry with a rectangle
+     *
+     * @param geom a {@link Geometry}
+     * @param rect a {@link Rectangle}
+     * @return the clipped geometry
+     * @return NULL if the geometry is outside the {@link Rectangle}
+     */
+    static std::unique_ptr<geom::Geometry> clip(const geom::Geometry& geom,
+            const Rectangle& rect);
 
-  /**
-   * \brief Clip boundary of a geometry with a rectangle
-   *
-   *
-   * Any polygon which intersects the rectangle will be converted to
-   * a polyline or a multipolyline - including the holes.
-   *
-   * @param geom a {@link Geometry}
-   * @param rect a {@link Rectangle}
-   * @return the clipped geometry
-   * @return NULL if the geometry is outside the {@link Rectangle}
-   */
-  static std::unique_ptr<geom::Geometry> clipBoundary(const geom::Geometry & geom,
-									   const Rectangle & rect);
+    /**
+     * \brief Clip boundary of a geometry with a rectangle
+     *
+     *
+     * Any polygon which intersects the rectangle will be converted to
+     * a polyline or a multipolyline - including the holes.
+     *
+     * @param geom a {@link Geometry}
+     * @param rect a {@link Rectangle}
+     * @return the clipped geometry
+     * @return NULL if the geometry is outside the {@link Rectangle}
+     */
+    static std::unique_ptr<geom::Geometry> clipBoundary(const geom::Geometry& geom,
+            const Rectangle& rect);
 
 private:
 
-  RectangleIntersection(const geom::Geometry& geom, const Rectangle& rect);
+    RectangleIntersection(const geom::Geometry& geom, const Rectangle& rect);
 
-  std::unique_ptr<geom::Geometry> clipBoundary();
+    std::unique_ptr<geom::Geometry> clipBoundary();
 
-  std::unique_ptr<geom::Geometry> clip();
+    std::unique_ptr<geom::Geometry> clip();
 
-  const geom::Geometry &_geom;
-  const Rectangle &_rect;
-  const geom::GeometryFactory *_gf;
-  const geom::CoordinateSequenceFactory *_csf;
+    const geom::Geometry& _geom;
+    const Rectangle& _rect;
+    const geom::GeometryFactory* _gf;
+    const geom::CoordinateSequenceFactory* _csf;
 
-  void clip_geom(const geom::Geometry * g,
-           RectangleIntersectionBuilder & parts,
-           const Rectangle & rect,
-           bool keep_polygons);
+    void clip_geom(const geom::Geometry* g,
+                   RectangleIntersectionBuilder& parts,
+                   const Rectangle& rect,
+                   bool keep_polygons);
 
-  void clip_point(const geom::Point * g,
-				RectangleIntersectionBuilder & parts,
-				const Rectangle & rect);
+    void clip_point(const geom::Point* g,
+                    RectangleIntersectionBuilder& parts,
+                    const Rectangle& rect);
 
-  void clip_multipoint(const geom::MultiPoint * g,
-					 RectangleIntersectionBuilder & parts,
-					 const Rectangle & rect);
+    void clip_multipoint(const geom::MultiPoint* g,
+                         RectangleIntersectionBuilder& parts,
+                         const Rectangle& rect);
 
-  void clip_linestring(const geom::LineString * g,
-					 RectangleIntersectionBuilder & parts,
-					 const Rectangle & rect);
+    void clip_linestring(const geom::LineString* g,
+                         RectangleIntersectionBuilder& parts,
+                         const Rectangle& rect);
 
-  void clip_multilinestring(const geom::MultiLineString * g,
-						  RectangleIntersectionBuilder & parts,
-						  const Rectangle & rect);
+    void clip_multilinestring(const geom::MultiLineString* g,
+                              RectangleIntersectionBuilder& parts,
+                              const Rectangle& rect);
 
-  void clip_polygon(const geom::Polygon * g,
-				  RectangleIntersectionBuilder & parts,
-				  const Rectangle & rect,
-				  bool keep_polygons);
+    void clip_polygon(const geom::Polygon* g,
+                      RectangleIntersectionBuilder& parts,
+                      const Rectangle& rect,
+                      bool keep_polygons);
 
-  void clip_multipolygon(const geom::MultiPolygon * g,
-					   RectangleIntersectionBuilder & parts,
-					   const Rectangle & rect,
-					   bool keep_polygons);
+    void clip_multipolygon(const geom::MultiPolygon* g,
+                           RectangleIntersectionBuilder& parts,
+                           const Rectangle& rect,
+                           bool keep_polygons);
 
-  void clip_geometrycollection(
-               const geom::GeometryCollection * g,
-							 RectangleIntersectionBuilder & parts,
-							 const Rectangle & rect,
-							 bool keep_polygons);
+    void clip_geometrycollection(
+        const geom::GeometryCollection* g,
+        RectangleIntersectionBuilder& parts,
+        const Rectangle& rect,
+        bool keep_polygons);
 
-  void clip_polygon_to_linestrings(const geom::Polygon * g,
-								 RectangleIntersectionBuilder & parts,
-								 const Rectangle & rect);
+    void clip_polygon_to_linestrings(const geom::Polygon* g,
+                                     RectangleIntersectionBuilder& parts,
+                                     const Rectangle& rect);
 
-  void clip_polygon_to_polygons(const geom::Polygon * g,
-							  RectangleIntersectionBuilder & parts,
-							  const Rectangle & rect);
+    void clip_polygon_to_polygons(const geom::Polygon* g,
+                                  RectangleIntersectionBuilder& parts,
+                                  const Rectangle& rect);
 
 
-  /**
-   * \brief Clip geometry.
-   *
-   * Returns true if the geometry was fully inside, and does not output
-   * anything to RectangleIntersectionBuilder.
-   */
-  bool clip_linestring_parts(const geom::LineString * gi,
-               RectangleIntersectionBuilder & parts,
-               const Rectangle & rect);
+    /**
+     * \brief Clip geometry.
+     *
+     * Returns true if the geometry was fully inside, and does not output
+     * anything to RectangleIntersectionBuilder.
+     */
+    bool clip_linestring_parts(const geom::LineString* gi,
+                               RectangleIntersectionBuilder& parts,
+                               const Rectangle& rect);
 
 }; // class RectangleIntersection
 

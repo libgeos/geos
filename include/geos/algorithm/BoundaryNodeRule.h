@@ -51,61 +51,62 @@ class GEOS_DLL BoundaryNodeRule {
 
 public:
 
-	// virtual classes should always have a virtual destructor..
-	virtual ~BoundaryNodeRule() {}
+    // virtual classes should always have a virtual destructor..
+    virtual
+    ~BoundaryNodeRule() {}
 
-	/**
-	 * Tests whether a point that lies in <tt>boundaryCount</tt>
-	 * geometry component boundaries is considered to form part of
-	 * the boundary of the parent geometry.
-	 *
- 	 * @param boundaryCount the number of component boundaries that
-	 *                      this point occurs in
-	 * @return true if points in this number of boundaries lie in
-	 *              the parent boundary
-	 */
-	virtual bool isInBoundary(int boundaryCount) const=0;
+    /**
+     * Tests whether a point that lies in <tt>boundaryCount</tt>
+     * geometry component boundaries is considered to form part of
+     * the boundary of the parent geometry.
+     *
+     * @param boundaryCount the number of component boundaries that
+     *                      this point occurs in
+     * @return true if points in this number of boundaries lie in
+     *              the parent boundary
+     */
+    virtual bool isInBoundary(int boundaryCount) const = 0;
 
-	/** \brief
-	 * The Mod-2 Boundary Node Rule (which is the rule specified
-	 * in the OGC SFS).
-	 *
-	 * @see Mod2BoundaryNodeRule
-	 */
-	//static const BoundaryNodeRule& MOD2_BOUNDARY_RULE;
+    /** \brief
+     * The Mod-2 Boundary Node Rule (which is the rule specified
+     * in the OGC SFS).
+     *
+     * @see Mod2BoundaryNodeRule
+     */
+    //static const BoundaryNodeRule& MOD2_BOUNDARY_RULE;
     static const BoundaryNodeRule& getBoundaryRuleMod2();
 
-	/** \brief
-	 * The Endpoint Boundary Node Rule.
-	 *
-	 * @see EndPointBoundaryNodeRule
-	 */
-	//static const BoundaryNodeRule& ENDPOINT_BOUNDARY_RULE;
+    /** \brief
+     * The Endpoint Boundary Node Rule.
+     *
+     * @see EndPointBoundaryNodeRule
+     */
+    //static const BoundaryNodeRule& ENDPOINT_BOUNDARY_RULE;
     static const BoundaryNodeRule& getBoundaryEndPoint();
 
-	/** \brief
-	 * The MultiValent Endpoint Boundary Node Rule.
-	 *
-	 * @see MultiValentEndPointBoundaryNodeRule
-	 */
-	//static const BoundaryNodeRule& MULTIVALENT_ENDPOINT_BOUNDARY_RULE;
+    /** \brief
+     * The MultiValent Endpoint Boundary Node Rule.
+     *
+     * @see MultiValentEndPointBoundaryNodeRule
+     */
+    //static const BoundaryNodeRule& MULTIVALENT_ENDPOINT_BOUNDARY_RULE;
     static const BoundaryNodeRule& getBoundaryMultivalentEndPoint();
 
-	/** \brief
-	 * The Monovalent Endpoint Boundary Node Rule.
-	 *
-	 * @see MonoValentEndPointBoundaryNodeRule
-	 */
-	//static const BoundaryNodeRule& MONOVALENT_ENDPOINT_BOUNDARY_RULE;
+    /** \brief
+     * The Monovalent Endpoint Boundary Node Rule.
+     *
+     * @see MonoValentEndPointBoundaryNodeRule
+     */
+    //static const BoundaryNodeRule& MONOVALENT_ENDPOINT_BOUNDARY_RULE;
     static const BoundaryNodeRule& getBoundaryMonovalentEndPoint();
 
-	/** \brief
-	 * The Boundary Node Rule specified by the OGC Simple Features
-	 * Specification, which is the same as the Mod-2 rule.
-	 *
-	 * @see Mod2BoundaryNodeRule
-	 */
-	//static const BoundaryNodeRule& OGC_SFS_BOUNDARY_RULE;
+    /** \brief
+     * The Boundary Node Rule specified by the OGC Simple Features
+     * Specification, which is the same as the Mod-2 rule.
+     *
+     * @see Mod2BoundaryNodeRule
+     */
+    //static const BoundaryNodeRule& OGC_SFS_BOUNDARY_RULE;
     static const BoundaryNodeRule& getBoundaryOGCSFS();
 };
 

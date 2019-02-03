@@ -44,37 +44,41 @@ namespace operation { // geos.operation
 namespace linemerge { // geos.operation.linemerge
 
 void
-LineMerger::add(vector<Geometry*> *geometries)
+LineMerger::add(vector<Geometry*>* geometries)
 {
-	for(size_t i=0, n=geometries->size(); i<n; i++) {
-		Geometry *geometry=(*geometries)[i];
-		add(geometry);
-	}
+    for(size_t i = 0, n = geometries->size(); i < n; i++) {
+        Geometry* geometry = (*geometries)[i];
+        add(geometry);
+    }
 }
 
 LineMerger::LineMerger():
-	mergedLineStrings(nullptr),
-	factory(nullptr)
+    mergedLineStrings(nullptr),
+    factory(nullptr)
 {
 }
 
 LineMerger::~LineMerger()
 {
-	for (size_t i=0, n=edgeStrings.size(); i<n; ++i) {
-		delete edgeStrings[i];
-	}
+    for(size_t i = 0, n = edgeStrings.size(); i < n; ++i) {
+        delete edgeStrings[i];
+    }
 }
 
 
 struct LMGeometryComponentFilter: public GeometryComponentFilter {
-	LineMerger *lm;
+    LineMerger* lm;
 
-	LMGeometryComponentFilter(LineMerger *newLm): lm(newLm) {}
+    LMGeometryComponentFilter(LineMerger* newLm): lm(newLm) {}
 
-	void filter(const Geometry *geom) {
-		const LineString *ls = dynamic_cast<const LineString *>(geom);
-		if ( ls ) lm->add(ls);
-	}
+    void
+    filter(const Geometry* geom)
+    {
+        const LineString* ls = dynamic_cast<const LineString*>(geom);
+        if(ls) {
+            lm->add(ls);
+        }
+    }
 };
 
 
@@ -84,137 +88,141 @@ struct LMGeometryComponentFilter: public GeometryComponentFilter {
  * extracted.
  */
 void
-LineMerger::add(const Geometry *geometry)
+LineMerger::add(const Geometry* geometry)
 {
-	LMGeometryComponentFilter lmgcf(this);
-	geometry->applyComponentFilter(lmgcf);
+    LMGeometryComponentFilter lmgcf(this);
+    geometry->applyComponentFilter(lmgcf);
 }
 
 void
-LineMerger::add(const LineString *lineString)
+LineMerger::add(const LineString* lineString)
 {
-	if (factory==nullptr) factory=lineString->getFactory();
-	graph.addEdge(lineString);
+    if(factory == nullptr) {
+        factory = lineString->getFactory();
+    }
+    graph.addEdge(lineString);
 }
 
 void
 LineMerger::merge()
 {
-	if (mergedLineStrings!=nullptr) return;
+    if(mergedLineStrings != nullptr) {
+        return;
+    }
 
-	// reset marks (this allows incremental processing)
-	GraphComponent::setMarkedMap(graph.nodeIterator(), graph.nodeEnd(),
-	                                                              false);
-	GraphComponent::setMarked(graph.edgeIterator(), graph.edgeEnd(),
-	                                                              false);
+    // reset marks (this allows incremental processing)
+    GraphComponent::setMarkedMap(graph.nodeIterator(), graph.nodeEnd(),
+                                 false);
+    GraphComponent::setMarked(graph.edgeIterator(), graph.edgeEnd(),
+                              false);
 
-	for (size_t i=0, n=edgeStrings.size(); i<n; ++i)
-		delete edgeStrings[i];
-	edgeStrings.clear();
+    for(size_t i = 0, n = edgeStrings.size(); i < n; ++i) {
+        delete edgeStrings[i];
+    }
+    edgeStrings.clear();
 
-	buildEdgeStringsForObviousStartNodes();
-	buildEdgeStringsForIsolatedLoops();
+    buildEdgeStringsForObviousStartNodes();
+    buildEdgeStringsForIsolatedLoops();
 
-	auto numEdgeStrings = edgeStrings.size();
-	mergedLineStrings=new vector<LineString*>(numEdgeStrings);
-	for (size_t i=0; i<numEdgeStrings; ++i)
-	{
-		EdgeString *edgeString=edgeStrings[i];
-		(*mergedLineStrings)[i]=edgeString->toLineString();
-	}
+    auto numEdgeStrings = edgeStrings.size();
+    mergedLineStrings = new vector<LineString*>(numEdgeStrings);
+    for(size_t i = 0; i < numEdgeStrings; ++i) {
+        EdgeString* edgeString = edgeStrings[i];
+        (*mergedLineStrings)[i] = edgeString->toLineString();
+    }
 }
 
 void
 LineMerger::buildEdgeStringsForObviousStartNodes()
 {
-	buildEdgeStringsForNonDegree2Nodes();
+    buildEdgeStringsForNonDegree2Nodes();
 }
 
 void
 LineMerger::buildEdgeStringsForIsolatedLoops()
 {
-	buildEdgeStringsForUnprocessedNodes();
+    buildEdgeStringsForUnprocessedNodes();
 }
 
 void
 LineMerger::buildEdgeStringsForUnprocessedNodes()
 {
 #if GEOS_DEBUG
-	cerr<<__FUNCTION__<<endl;
+    cerr << __FUNCTION__ << endl;
 #endif
-	typedef std::vector<Node*> Nodes;
+    typedef std::vector<Node*> Nodes;
 
-	Nodes nodes;
-	graph.getNodes(nodes);
-	for (Nodes::size_type i=0, in=nodes.size(); i<in; ++i) {
-		Node *node=nodes[i];
+    Nodes nodes;
+    graph.getNodes(nodes);
+    for(Nodes::size_type i = 0, in = nodes.size(); i < in; ++i) {
+        Node* node = nodes[i];
 #if GEOS_DEBUG
-		cerr<<"Node "<<i<<": "<<*node<<endl;
+        cerr << "Node " << i << ": " << *node << endl;
 #endif
-		if (!node->isMarked()) {
-			assert(node->getDegree()==2);
-			buildEdgeStringsStartingAt(node);
-			node->setMarked(true);
+        if(!node->isMarked()) {
+            assert(node->getDegree() == 2);
+            buildEdgeStringsStartingAt(node);
+            node->setMarked(true);
 #if GEOS_DEBUG
-			cerr<<" setMarked(true) : "<<*node<<endl;
+            cerr << " setMarked(true) : " << *node << endl;
 #endif
-		}
-	}
+        }
+    }
 }
 
 void
 LineMerger::buildEdgeStringsForNonDegree2Nodes()
 {
 #if GEOS_DEBUG
-	cerr<<__FUNCTION__<<endl;
+    cerr << __FUNCTION__ << endl;
 #endif
-	typedef std::vector<Node*> Nodes;
+    typedef std::vector<Node*> Nodes;
 
-	Nodes nodes;
-	graph.getNodes(nodes);
-	for (Nodes::size_type i=0, in=nodes.size(); i<in; ++i) {
-		Node *node=nodes[i];
+    Nodes nodes;
+    graph.getNodes(nodes);
+    for(Nodes::size_type i = 0, in = nodes.size(); i < in; ++i) {
+        Node* node = nodes[i];
 #if GEOS_DEBUG
-		cerr<<"Node "<<i<<": "<<*node<<endl;
+        cerr << "Node " << i << ": " << *node << endl;
 #endif
-		if (node->getDegree()!=2) {
-			buildEdgeStringsStartingAt(node);
-			node->setMarked(true);
+        if(node->getDegree() != 2) {
+            buildEdgeStringsStartingAt(node);
+            node->setMarked(true);
 #if GEOS_DEBUG
-			cerr<<" setMarked(true) : "<<*node<<endl;
+            cerr << " setMarked(true) : " << *node << endl;
 #endif
-		}
-	}
+        }
+    }
 }
 
 void
-LineMerger::buildEdgeStringsStartingAt(Node *node)
+LineMerger::buildEdgeStringsStartingAt(Node* node)
 {
-	vector<planargraph::DirectedEdge*> &edges=node->getOutEdges()->getEdges();
-	size_t size = edges.size();
-	for (size_t i=0; i<size; i++)
-	{
-		assert(dynamic_cast<LineMergeDirectedEdge*>(edges[i]));
-		LineMergeDirectedEdge *directedEdge=\
-			static_cast<LineMergeDirectedEdge*> (edges[i]);
-		if (directedEdge->getEdge()->isMarked()) {
-			continue;
-		}
-		edgeStrings.push_back(buildEdgeStringStartingWith(directedEdge));
-	}
+    vector<planargraph::DirectedEdge*>& edges = node->getOutEdges()->getEdges();
+    size_t size = edges.size();
+    for(size_t i = 0; i < size; i++) {
+        assert(dynamic_cast<LineMergeDirectedEdge*>(edges[i]));
+        LineMergeDirectedEdge* directedEdge = \
+                                              static_cast<LineMergeDirectedEdge*>(edges[i]);
+        if(directedEdge->getEdge()->isMarked()) {
+            continue;
+        }
+        edgeStrings.push_back(buildEdgeStringStartingWith(directedEdge));
+    }
 }
 
 EdgeString*
-LineMerger::buildEdgeStringStartingWith(LineMergeDirectedEdge *start)
+LineMerger::buildEdgeStringStartingWith(LineMergeDirectedEdge* start)
 {
-	EdgeString *edgeString = new EdgeString(factory);
-	LineMergeDirectedEdge *current=start;
-	do {
-		edgeString->add(current);
-		current->getEdge()->setMarked(true);
-		current=current->getNext();
-	} while (current!=nullptr && current!=start);
-	return edgeString;
+    EdgeString* edgeString = new EdgeString(factory);
+    LineMergeDirectedEdge* current = start;
+    do {
+        edgeString->add(current);
+        current->getEdge()->setMarked(true);
+        current = current->getNext();
+    }
+    while(current != nullptr && current != start);
+    return edgeString;
 }
 
 /**
@@ -223,12 +231,12 @@ LineMerger::buildEdgeStringStartingWith(LineMergeDirectedEdge *start)
 vector<LineString*>*
 LineMerger::getMergedLineStrings()
 {
-	merge();
+    merge();
 
-	// Explicitly give ownership to the caller.
-	vector<LineString*>* ret = mergedLineStrings;
-	mergedLineStrings = nullptr;
-	return ret;
+    // Explicitly give ownership to the caller.
+    vector<LineString*>* ret = mergedLineStrings;
+    mergedLineStrings = nullptr;
+    return ret;
 }
 
 } // namespace geos.operation.linemerge

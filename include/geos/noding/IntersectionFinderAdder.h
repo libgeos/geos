@@ -31,15 +31,15 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Coordinate;
-	}
-	namespace noding {
-		class SegmentString;
-	}
-	namespace algorithm {
-		class LineIntersector;
-	}
+namespace geom {
+class Coordinate;
+}
+namespace noding {
+class SegmentString;
+}
+namespace algorithm {
+class LineIntersector;
+}
 }
 
 namespace geos {
@@ -54,50 +54,54 @@ class GEOS_DLL IntersectionFinderAdder: public SegmentIntersector {
 
 public:
 
-	/**
-	 * Creates an intersection finder which finds all proper intersections
-	 * and stores them in the provided Coordinate array
-	 *
-	 * @param li the LineIntersector to use
-	 * @param v  the Vector to push interior intersections to
-	 */
-	IntersectionFinderAdder(algorithm::LineIntersector& newLi,
-			std::vector<geom::Coordinate>& v)
-		:
-		li(newLi),
-		interiorIntersections(v)
-	{}
+    /**
+     * Creates an intersection finder which finds all proper intersections
+     * and stores them in the provided Coordinate array
+     *
+     * @param li the LineIntersector to use
+     * @param v  the Vector to push interior intersections to
+     */
+    IntersectionFinderAdder(algorithm::LineIntersector& newLi,
+                            std::vector<geom::Coordinate>& v)
+        :
+        li(newLi),
+        interiorIntersections(v)
+    {}
 
-	/**
-	 * This method is called by clients
-	 * of the {@link SegmentIntersector} class to process
-	 * intersections for two segments of the {@link SegmentStrings}
-	 * being intersected.
-	 * Note that some clients (such as {@link MonotoneChain}s) may
-	 * optimize away this call for segment pairs which they have
-	 * determined do not intersect
-	 * (e.g. by an disjoint envelope test).
-	 */
-	void processIntersections(
-		SegmentString* e0,  size_t segIndex0,
-		SegmentString* e1,  size_t segIndex1) override;
+    /**
+     * This method is called by clients
+     * of the {@link SegmentIntersector} class to process
+     * intersections for two segments of the {@link SegmentStrings}
+     * being intersected.
+     * Note that some clients (such as {@link MonotoneChain}s) may
+     * optimize away this call for segment pairs which they have
+     * determined do not intersect
+     * (e.g. by an disjoint envelope test).
+     */
+    void processIntersections(
+        SegmentString* e0,  size_t segIndex0,
+        SegmentString* e1,  size_t segIndex1) override;
 
-	std::vector<geom::Coordinate>& getInteriorIntersections() {
-		return interiorIntersections;
-	}
+    std::vector<geom::Coordinate>&
+    getInteriorIntersections()
+    {
+        return interiorIntersections;
+    }
 
-	/**
-	 * Always process all intersections
-	 *
-	 * @return false always
-	 */
-	bool isDone() const override {
-		return false;
-	}
+    /**
+     * Always process all intersections
+     *
+     * @return false always
+     */
+    bool
+    isDone() const override
+    {
+        return false;
+    }
 
 private:
-	algorithm::LineIntersector& li;
-	std::vector<geom::Coordinate>& interiorIntersections;
+    algorithm::LineIntersector& li;
+    std::vector<geom::Coordinate>& interiorIntersections;
 
     // Declare type as noncopyable
     IntersectionFinderAdder(const IntersectionFinderAdder& other) = delete;

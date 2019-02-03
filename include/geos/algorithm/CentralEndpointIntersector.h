@@ -32,9 +32,9 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		//class PrecisionModel;
-	}
+namespace geom {
+//class PrecisionModel;
+}
 }
 
 namespace geos {
@@ -63,88 +63,94 @@ class GEOS_DLL CentralEndpointIntersector {
 
 public:
 
-	static const geom::Coordinate& getIntersection(const geom::Coordinate& p00,
-			const geom::Coordinate& p01, const geom::Coordinate& p10,
-			const geom::Coordinate& p11)
-	{
-		CentralEndpointIntersector intor(p00, p01, p10, p11);
-		return intor.getIntersection();
-	}
+    static const geom::Coordinate&
+    getIntersection(const geom::Coordinate& p00,
+                    const geom::Coordinate& p01, const geom::Coordinate& p10,
+                    const geom::Coordinate& p11)
+    {
+        CentralEndpointIntersector intor(p00, p01, p10, p11);
+        return intor.getIntersection();
+    }
 
-	CentralEndpointIntersector(const geom::Coordinate& p00,
-			const geom::Coordinate& p01,
-			const geom::Coordinate& p10,
-			const geom::Coordinate& p11)
-		:
-		_pts(4)
-	{
-		_pts[0]=p00;
-		_pts[1]=p01;
-		_pts[2]=p10;
-		_pts[3]=p11;
-		compute();
-	}
+    CentralEndpointIntersector(const geom::Coordinate& p00,
+                               const geom::Coordinate& p01,
+                               const geom::Coordinate& p10,
+                               const geom::Coordinate& p11)
+        :
+        _pts(4)
+    {
+        _pts[0] = p00;
+        _pts[1] = p01;
+        _pts[2] = p10;
+        _pts[3] = p11;
+        compute();
+    }
 
-	const geom::Coordinate& getIntersection() const
-	{
-		return _intPt;
-	}
+    const geom::Coordinate&
+    getIntersection() const
+    {
+        return _intPt;
+    }
 
 
 private:
 
-	// This is likely overkill.. we'll be allocating heap
-	// memory at every call !
-	std::vector<geom::Coordinate> _pts;
+    // This is likely overkill.. we'll be allocating heap
+    // memory at every call !
+    std::vector<geom::Coordinate> _pts;
 
-	geom::Coordinate _intPt;
+    geom::Coordinate _intPt;
 
-	void compute()
-	{
-		geom::Coordinate centroid = average(_pts);
-		_intPt = findNearestPoint(centroid, _pts);
-	}
+    void
+    compute()
+    {
+        geom::Coordinate centroid = average(_pts);
+        _intPt = findNearestPoint(centroid, _pts);
+    }
 
-	static geom::Coordinate average(
-			const std::vector<geom::Coordinate>& pts)
-	{
-		geom::Coordinate avg(0, 0);
-		size_t n = pts.size();
-		if ( ! n ) return avg;
-		for (std::size_t i=0; i<n; ++i)
-		{
-			avg.x += pts[i].x;
-			avg.y += pts[i].y;
-		}
-		avg.x /= n;
-		avg.y /= n;
-		return avg;
-	}
+    static geom::Coordinate
+    average(
+        const std::vector<geom::Coordinate>& pts)
+    {
+        geom::Coordinate avg(0, 0);
+        size_t n = pts.size();
+        if(! n) {
+            return avg;
+        }
+        for(std::size_t i = 0; i < n; ++i) {
+            avg.x += pts[i].x;
+            avg.y += pts[i].y;
+        }
+        avg.x /= n;
+        avg.y /= n;
+        return avg;
+    }
 
-	/**
-	 * Determines a point closest to the given point.
-	 *
-	 * @param p the point to compare against
-	 * @param p1 a potential result point
-	 * @param p2 a potential result point
-	 * @param q1 a potential result point
-	 * @param q2 a potential result point
-	 * @return the point closest to the input point p
-	 */
-	geom::Coordinate findNearestPoint(const geom::Coordinate& p,
-			const std::vector<geom::Coordinate>& pts) const
-	{
-		double minDist = std::numeric_limits<double>::max();
-		geom::Coordinate result = geom::Coordinate::getNull();
-		for (std::size_t i = 0, n=pts.size(); i < n; ++i) {
-			double dist = p.distance(pts[i]);
-			if (dist < minDist) {
-				minDist = dist;
-				result = pts[i];
-			}
-		}
-		return result;
-	}
+    /**
+     * Determines a point closest to the given point.
+     *
+     * @param p the point to compare against
+     * @param p1 a potential result point
+     * @param p2 a potential result point
+     * @param q1 a potential result point
+     * @param q2 a potential result point
+     * @return the point closest to the input point p
+     */
+    geom::Coordinate
+    findNearestPoint(const geom::Coordinate& p,
+                     const std::vector<geom::Coordinate>& pts) const
+    {
+        double minDist = std::numeric_limits<double>::max();
+        geom::Coordinate result = geom::Coordinate::getNull();
+        for(std::size_t i = 0, n = pts.size(); i < n; ++i) {
+            double dist = p.distance(pts[i]);
+            if(dist < minDist) {
+                minDist = dist;
+                result = pts[i];
+            }
+        }
+        return result;
+    }
 };
 
 } // namespace geos::algorithm

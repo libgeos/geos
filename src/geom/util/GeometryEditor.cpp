@@ -47,8 +47,9 @@ namespace util { // geos.geom.util
  * Creates a new GeometryEditor object which will create
  * an edited Geometry with the same GeometryFactory as the input Geometry.
  */
-GeometryEditor::GeometryEditor(){
-	factory=nullptr;
+GeometryEditor::GeometryEditor()
+{
+    factory = nullptr;
 }
 
 /**
@@ -57,8 +58,9 @@ GeometryEditor::GeometryEditor(){
  *
  * @param factory the GeometryFactory to create the edited Geometry with
  */
-GeometryEditor::GeometryEditor(const GeometryFactory *newFactory){
-	factory=newFactory;
+GeometryEditor::GeometryEditor(const GeometryFactory* newFactory)
+{
+    factory = newFactory;
 }
 
 /**
@@ -71,32 +73,29 @@ GeometryEditor::GeometryEditor(const GeometryFactory *newFactory){
  * @return a new {@link Geometry} which is the result of the editing
  */
 Geometry*
-GeometryEditor::edit(const Geometry *geometry, GeometryEditorOperation *operation)
+GeometryEditor::edit(const Geometry* geometry, GeometryEditorOperation* operation)
 {
-	// if client did not supply a GeometryFactory, use the one from the input Geometry
-	if (factory == nullptr)
-		factory=geometry->getFactory();
+    // if client did not supply a GeometryFactory, use the one from the input Geometry
+    if(factory == nullptr) {
+        factory = geometry->getFactory();
+    }
 
-  if ( const GeometryCollection *gc =
-            dynamic_cast<const GeometryCollection*>(geometry) )
-  {
-		return editGeometryCollection(gc, operation);
-  }
+    if(const GeometryCollection* gc =
+                dynamic_cast<const GeometryCollection*>(geometry)) {
+        return editGeometryCollection(gc, operation);
+    }
 
-  if ( const Polygon *p = dynamic_cast<const Polygon*>(geometry) )
-  {
-		return editPolygon(p, operation);
-  }
+    if(const Polygon* p = dynamic_cast<const Polygon*>(geometry)) {
+        return editPolygon(p, operation);
+    }
 
-  if ( dynamic_cast<const Point*>(geometry) )
-  {
-		return operation->edit(geometry, factory);
-  }
+    if(dynamic_cast<const Point*>(geometry)) {
+        return operation->edit(geometry, factory);
+    }
 
-  if ( dynamic_cast<const LineString*>(geometry) )
-  {
-		return operation->edit(geometry, factory);
-  }
+    if(dynamic_cast<const LineString*>(geometry)) {
+        return operation->edit(geometry, factory);
+    }
 
     // Unsupported Geometry classes should be caught in the GeometryEditorOperation.
     assert(!static_cast<bool>("SHOULD NEVER GET HERE"));
@@ -104,84 +103,82 @@ GeometryEditor::edit(const Geometry *geometry, GeometryEditorOperation *operatio
 }
 
 Polygon*
-GeometryEditor::editPolygon(const Polygon *polygon,GeometryEditorOperation *operation)
+GeometryEditor::editPolygon(const Polygon* polygon, GeometryEditorOperation* operation)
 {
-	Polygon* newPolygon= dynamic_cast<Polygon*>(
-    operation->edit(polygon, factory)
-  );
-	if (newPolygon->isEmpty()) {
-		//RemoveSelectedPlugIn relies on this behaviour. [Jon Aquino]
-		if ( newPolygon->getFactory() != factory ) {
-		  Polygon *ret = factory->createPolygon(nullptr, nullptr);
-		  delete newPolygon;
-		  return ret;
-		} else {
-		  return newPolygon;
-		}
-	}
+    Polygon* newPolygon = dynamic_cast<Polygon*>(
+                              operation->edit(polygon, factory)
+                          );
+    if(newPolygon->isEmpty()) {
+        //RemoveSelectedPlugIn relies on this behaviour. [Jon Aquino]
+        if(newPolygon->getFactory() != factory) {
+            Polygon* ret = factory->createPolygon(nullptr, nullptr);
+            delete newPolygon;
+            return ret;
+        }
+        else {
+            return newPolygon;
+        }
+    }
 
-	Geometry* editResult = edit(newPolygon->getExteriorRing(),operation);
+    Geometry* editResult = edit(newPolygon->getExteriorRing(), operation);
 
-	LinearRing* shell = dynamic_cast<LinearRing*>(editResult);
-	if (shell->isEmpty()) {
-		//RemoveSelectedPlugIn relies on this behaviour. [Jon Aquino]
-		delete shell;
-		delete newPolygon;
-		return factory->createPolygon(nullptr,nullptr);
-	}
+    LinearRing* shell = dynamic_cast<LinearRing*>(editResult);
+    if(shell->isEmpty()) {
+        //RemoveSelectedPlugIn relies on this behaviour. [Jon Aquino]
+        delete shell;
+        delete newPolygon;
+        return factory->createPolygon(nullptr, nullptr);
+    }
 
-	vector<Geometry*> *holes=new vector<Geometry*>;
-	for (size_t i=0, n=newPolygon->getNumInteriorRing(); i<n; ++i)
-	{
+    vector<Geometry*>* holes = new vector<Geometry*>;
+    for(size_t i = 0, n = newPolygon->getNumInteriorRing(); i < n; ++i) {
 
-		Geometry *hole_geom = edit(newPolygon->getInteriorRingN(i),
-			operation);
+        Geometry* hole_geom = edit(newPolygon->getInteriorRingN(i),
+                                   operation);
 
-		LinearRing *hole = dynamic_cast<LinearRing*>(hole_geom);
-		assert(hole);
+        LinearRing* hole = dynamic_cast<LinearRing*>(hole_geom);
+        assert(hole);
 
-		if (hole->isEmpty())
-		{
-			continue;
-		}
-		holes->push_back(hole);
-	}
-	delete newPolygon;
-	return factory->createPolygon(shell,holes);
+        if(hole->isEmpty()) {
+            continue;
+        }
+        holes->push_back(hole);
+    }
+    delete newPolygon;
+    return factory->createPolygon(shell, holes);
 }
 
 GeometryCollection*
-GeometryEditor::editGeometryCollection(const GeometryCollection *collection, GeometryEditorOperation *operation)
+GeometryEditor::editGeometryCollection(const GeometryCollection* collection, GeometryEditorOperation* operation)
 {
-	GeometryCollection *newCollection = dynamic_cast<GeometryCollection*>( operation->edit(collection,factory) );
-	vector<Geometry*> *geometries = new vector<Geometry*>();
-	for (std::size_t i=0, n=newCollection->getNumGeometries(); i<n; i++)
-	{
-		Geometry *geometry = edit(newCollection->getGeometryN(i),
-			operation);
-		if (geometry->isEmpty()) {
-			delete geometry;
-			continue;
-		}
-		geometries->push_back(geometry);
-	}
+    GeometryCollection* newCollection = dynamic_cast<GeometryCollection*>(operation->edit(collection, factory));
+    vector<Geometry*>* geometries = new vector<Geometry*>();
+    for(std::size_t i = 0, n = newCollection->getNumGeometries(); i < n; i++) {
+        Geometry* geometry = edit(newCollection->getGeometryN(i),
+                                  operation);
+        if(geometry->isEmpty()) {
+            delete geometry;
+            continue;
+        }
+        geometries->push_back(geometry);
+    }
 
-	if (typeid(*newCollection)==typeid(MultiPoint)) {
-		delete newCollection;
-		return factory->createMultiPoint(geometries);
-	}
-	else if (typeid(*newCollection)==typeid(MultiLineString)) {
-		delete newCollection;
-		return factory->createMultiLineString(geometries);
-	}
-	else if (typeid(*newCollection)==typeid(MultiPolygon)) {
-		delete newCollection;
-		return factory->createMultiPolygon(geometries);
-	}
-	else {
-		delete newCollection;
-		return factory->createGeometryCollection(geometries);
-	}
+    if(typeid(*newCollection) == typeid(MultiPoint)) {
+        delete newCollection;
+        return factory->createMultiPoint(geometries);
+    }
+    else if(typeid(*newCollection) == typeid(MultiLineString)) {
+        delete newCollection;
+        return factory->createMultiLineString(geometries);
+    }
+    else if(typeid(*newCollection) == typeid(MultiPolygon)) {
+        delete newCollection;
+        return factory->createMultiPolygon(geometries);
+    }
+    else {
+        delete newCollection;
+        return factory->createGeometryCollection(geometries);
+    }
 }
 
 } // namespace geos.geom.util

@@ -34,15 +34,15 @@ namespace geos {
 namespace operation { // geos.operation
 namespace relate { // geos.operation.relate
 
-vector<EdgeEnd*> *
-EdgeEndBuilder::computeEdgeEnds(vector<Edge*> *edges)
+vector<EdgeEnd*>*
+EdgeEndBuilder::computeEdgeEnds(vector<Edge*>* edges)
 {
-	vector<EdgeEnd*> *l=new vector<EdgeEnd*>();
-	for(vector<Edge*>::iterator i=edges->begin();i<edges->end();i++) {
-		Edge *e=*i;
-		computeEdgeEnds(e,l);
-	}
-	return l;
+    vector<EdgeEnd*>* l = new vector<EdgeEnd*>();
+    for(vector<Edge*>::iterator i = edges->begin(); i < edges->end(); i++) {
+        Edge* e = *i;
+        computeEdgeEnds(e, l);
+    }
+    return l;
 }
 
 /**
@@ -50,35 +50,38 @@ EdgeEndBuilder::computeEdgeEnds(vector<Edge*> *edges)
  * Edge (if any) and inserts them into the graph.
  */
 void
-EdgeEndBuilder::computeEdgeEnds(Edge *edge, vector<EdgeEnd*> *l)
+EdgeEndBuilder::computeEdgeEnds(Edge* edge, vector<EdgeEnd*>* l)
 {
-	EdgeIntersectionList &eiList=edge->getEdgeIntersectionList();
-	//Debug.print(eiList);
-	// ensure that the list has entries for the first and last point of the edge
-	eiList.addEndpoints();
+    EdgeIntersectionList& eiList = edge->getEdgeIntersectionList();
+    //Debug.print(eiList);
+    // ensure that the list has entries for the first and last point of the edge
+    eiList.addEndpoints();
 
-	EdgeIntersectionList::iterator it=eiList.begin();
-	// no intersections, so there is nothing to do
-	if (it==eiList.end()) return;
+    EdgeIntersectionList::iterator it = eiList.begin();
+    // no intersections, so there is nothing to do
+    if(it == eiList.end()) {
+        return;
+    }
 
-	EdgeIntersection *eiPrev=nullptr;
-	EdgeIntersection *eiCurr=nullptr;
+    EdgeIntersection* eiPrev = nullptr;
+    EdgeIntersection* eiCurr = nullptr;
 
-	EdgeIntersection *eiNext=*it;
-	it++;
-	do {
-		eiPrev=eiCurr;
-		eiCurr=eiNext;
-		eiNext=nullptr;
-		if (it!=eiList.end()) {
-			eiNext=*it;
-			it++;
-		}
-		if (eiCurr!=nullptr) {
-			createEdgeEndForPrev(edge,l,eiCurr,eiPrev);
-			createEdgeEndForNext(edge,l,eiCurr,eiNext);
-		}
-	} while (eiCurr!=nullptr);
+    EdgeIntersection* eiNext = *it;
+    it++;
+    do {
+        eiPrev = eiCurr;
+        eiCurr = eiNext;
+        eiNext = nullptr;
+        if(it != eiList.end()) {
+            eiNext = *it;
+            it++;
+        }
+        if(eiCurr != nullptr) {
+            createEdgeEndForPrev(edge, l, eiCurr, eiPrev);
+            createEdgeEndForNext(edge, l, eiCurr, eiNext);
+        }
+    }
+    while(eiCurr != nullptr);
 }
 
 /**
@@ -90,25 +93,28 @@ EdgeEndBuilder::computeEdgeEnds(Edge *edge, vector<EdgeEnd*> *l)
  * eiCurr will always be an EdgeIntersection, but eiPrev may be null.
  */
 void
-EdgeEndBuilder::createEdgeEndForPrev(Edge *edge, vector<EdgeEnd*> *l,
-		EdgeIntersection *eiCurr, EdgeIntersection *eiPrev)
+EdgeEndBuilder::createEdgeEndForPrev(Edge* edge, vector<EdgeEnd*>* l,
+                                     EdgeIntersection* eiCurr, EdgeIntersection* eiPrev)
 {
-	auto iPrev = eiCurr->segmentIndex;
-	if (eiCurr->dist==0.0) {
-		// if at the start of the edge there is no previous edge
-		if (iPrev==0) return;
-		iPrev--;
-	}
-	Coordinate pPrev(edge->getCoordinate(iPrev));
-	// if prev intersection is past the previous vertex, use it instead
-	if (eiPrev!=nullptr && eiPrev->segmentIndex>=iPrev)
-		pPrev=eiPrev->coord;
-	Label label( edge->getLabel() );
-	// since edgeStub is oriented opposite to it's parent edge, have to flip sides for edge label
-	label.flip();
-	EdgeEnd *e=new EdgeEnd(edge,eiCurr->coord,pPrev,label);
-	//e.print(System.out);  System.out.println();
-	l->push_back(e);
+    auto iPrev = eiCurr->segmentIndex;
+    if(eiCurr->dist == 0.0) {
+        // if at the start of the edge there is no previous edge
+        if(iPrev == 0) {
+            return;
+        }
+        iPrev--;
+    }
+    Coordinate pPrev(edge->getCoordinate(iPrev));
+    // if prev intersection is past the previous vertex, use it instead
+    if(eiPrev != nullptr && eiPrev->segmentIndex >= iPrev) {
+        pPrev = eiPrev->coord;
+    }
+    Label label(edge->getLabel());
+    // since edgeStub is oriented opposite to it's parent edge, have to flip sides for edge label
+    label.flip();
+    EdgeEnd* e = new EdgeEnd(edge, eiCurr->coord, pPrev, label);
+    //e.print(System.out);  System.out.println();
+    l->push_back(e);
 }
 
 /**
@@ -120,19 +126,22 @@ EdgeEndBuilder::createEdgeEndForPrev(Edge *edge, vector<EdgeEnd*> *l,
  * eiCurr will always be an EdgeIntersection, but eiNext may be null.
  */
 void
-EdgeEndBuilder::createEdgeEndForNext(Edge *edge, vector<EdgeEnd*> *l,
-		EdgeIntersection *eiCurr, EdgeIntersection *eiNext)
+EdgeEndBuilder::createEdgeEndForNext(Edge* edge, vector<EdgeEnd*>* l,
+                                     EdgeIntersection* eiCurr, EdgeIntersection* eiNext)
 {
-	size_t iNext = eiCurr->segmentIndex + 1;
-	// if there is no next edge there is nothing to do
-	if (iNext>=edge->getNumPoints() && eiNext==nullptr) return;
-	Coordinate pNext(edge->getCoordinate(iNext));
-	// if the next intersection is in the same segment as the current, use it as the endpoint
-	if (eiNext!=nullptr && eiNext->segmentIndex==eiCurr->segmentIndex)
-		pNext=eiNext->coord;
-	EdgeEnd *e = new EdgeEnd(edge, eiCurr->coord, pNext, edge->getLabel());
-	//Debug.println(e);
-	l->push_back(e);
+    size_t iNext = eiCurr->segmentIndex + 1;
+    // if there is no next edge there is nothing to do
+    if(iNext >= edge->getNumPoints() && eiNext == nullptr) {
+        return;
+    }
+    Coordinate pNext(edge->getCoordinate(iNext));
+    // if the next intersection is in the same segment as the current, use it as the endpoint
+    if(eiNext != nullptr && eiNext->segmentIndex == eiCurr->segmentIndex) {
+        pNext = eiNext->coord;
+    }
+    EdgeEnd* e = new EdgeEnd(edge, eiCurr->coord, pNext, edge->getLabel());
+    //Debug.println(e);
+    l->push_back(e);
 }
 
 } // namespace geos.operation.relate

@@ -41,51 +41,51 @@ namespace prep { // geos::geom::prep
  * @author Martin Davis
  *
  */
-class PreparedLineStringIntersects
-{
+class PreparedLineStringIntersects {
 public:
 
-	/**
-	 * Computes the intersects predicate between a {@link PreparedLineString}
-	 * and a {@link Geometry}.
-	 *
-	 * @param prep the prepared linestring
-	 * @param geom a test geometry
-	 * @return true if the linestring intersects the geometry
-	 */
-	static bool intersects(  PreparedLineString & prep, const geom::Geometry * geom )
-	{
-		PreparedLineStringIntersects op( prep);
-		return op.intersects( geom);
-	}
+    /**
+     * Computes the intersects predicate between a {@link PreparedLineString}
+     * and a {@link Geometry}.
+     *
+     * @param prep the prepared linestring
+     * @param geom a test geometry
+     * @return true if the linestring intersects the geometry
+     */
+    static bool
+    intersects(PreparedLineString& prep, const geom::Geometry* geom)
+    {
+        PreparedLineStringIntersects op(prep);
+        return op.intersects(geom);
+    }
 
     /**
      * \todo FIXME - mloskot: Why not taking linestring through const reference?
      */
-	PreparedLineStringIntersects(PreparedLineString & prep)
-		: prepLine( prep)
-	{ }
+    PreparedLineStringIntersects(PreparedLineString& prep)
+        : prepLine(prep)
+    { }
 
-	/**
-	 * Tests whether this geometry intersects a given geometry.
-	 *
-	 * @param geom the test geometry
-	 * @return true if the test geometry intersects
-	 */
-	bool intersects(const geom::Geometry * g) const;
+    /**
+     * Tests whether this geometry intersects a given geometry.
+     *
+     * @param geom the test geometry
+     * @return true if the test geometry intersects
+     */
+    bool intersects(const geom::Geometry* g) const;
 
 protected:
-	PreparedLineString & prepLine;
+    PreparedLineString& prepLine;
 
-	/**
-	 * Tests whether any representative point of the test Geometry intersects
-	 * the target geometry.
-	 * Only handles test geometries which are Puntal (dimension 0)
-	 *
-	 * @param geom a Puntal geometry to test
-	 * @return true if any point of the argument intersects the prepared geometry
-	 */
-	bool isAnyTestPointInTarget(const geom::Geometry * testGeom) const;
+    /**
+     * Tests whether any representative point of the test Geometry intersects
+     * the target geometry.
+     * Only handles test geometries which are Puntal (dimension 0)
+     *
+     * @param geom a Puntal geometry to test
+     * @return true if any point of the argument intersects the prepared geometry
+     */
+    bool isAnyTestPointInTarget(const geom::Geometry* testGeom) const;
 
     // Declare type as noncopyable
     PreparedLineStringIntersects(const PreparedLineStringIntersects& other) = delete;

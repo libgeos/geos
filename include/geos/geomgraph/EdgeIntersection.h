@@ -45,70 +45,92 @@ namespace geomgraph { // geos.geomgraph
 class GEOS_DLL EdgeIntersection {
 public:
 
-	// the point of intersection
-	geom::Coordinate coord;
+    // the point of intersection
+    geom::Coordinate coord;
 
-	// the edge distance of this point along the containing line segment
-	double dist;
+    // the edge distance of this point along the containing line segment
+    double dist;
 
-	// the index of the containing line segment in the parent edge
-	size_t segmentIndex;
+    // the index of the containing line segment in the parent edge
+    size_t segmentIndex;
 
-	EdgeIntersection(const geom::Coordinate& newCoord,
-	                 size_t newSegmentIndex, double newDist)
-	  :
-	  coord(newCoord),
-	  dist(newDist),
-	  segmentIndex(newSegmentIndex)
-	{}
+    EdgeIntersection(const geom::Coordinate& newCoord,
+                     size_t newSegmentIndex, double newDist)
+        :
+        coord(newCoord),
+        dist(newDist),
+        segmentIndex(newSegmentIndex)
+    {}
 
-	bool isEndPoint(size_t maxSegmentIndex) const {
-	  if (segmentIndex==0 && dist==0.0) return true;
-	  if (segmentIndex==maxSegmentIndex) return true;
-	  return false;
-	}
+    bool
+    isEndPoint(size_t maxSegmentIndex) const
+    {
+        if(segmentIndex == 0 && dist == 0.0) {
+            return true;
+        }
+        if(segmentIndex == maxSegmentIndex) {
+            return true;
+        }
+        return false;
+    }
 
-	const geom::Coordinate& getCoordinate() const {
-		return coord;
-	}
+    const geom::Coordinate&
+    getCoordinate() const
+    {
+        return coord;
+    }
 
-	size_t getSegmentIndex() const { return segmentIndex; }
+    size_t
+    getSegmentIndex() const
+    {
+        return segmentIndex;
+    }
 
-	double getDistance() const { return dist; }
+    double
+    getDistance() const
+    {
+        return dist;
+    }
 
 };
 
 /// Strict weak ordering operator for EdgeIntersection
 //
 /// This is the C++ equivalent of JTS's compareTo
-inline bool operator< (const EdgeIntersection& ei1, const EdgeIntersection& ei2)
+inline bool
+operator< (const EdgeIntersection& ei1, const EdgeIntersection& ei2)
 {
-		if ( ei1.segmentIndex < ei2.segmentIndex ) return true;
-		if ( ei1.segmentIndex == ei2.segmentIndex )
-    {
-      if ( ei1.dist < ei2.dist ) return true;
-
-      // TODO: check if the Coordinate matches, or this will
-      //       be a robustness issue in computin distance
-      //       See http://trac.osgeo.org/geos/ticket/350
+    if(ei1.segmentIndex < ei2.segmentIndex) {
+        return true;
     }
-		return false;
+    if(ei1.segmentIndex == ei2.segmentIndex) {
+        if(ei1.dist < ei2.dist) {
+            return true;
+        }
+
+        // TODO: check if the Coordinate matches, or this will
+        //       be a robustness issue in computin distance
+        //       See http://trac.osgeo.org/geos/ticket/350
+    }
+    return false;
 }
 
 // @deprecated, use strict weak ordering operator
 struct GEOS_DLL  EdgeIntersectionLessThen {
-	bool operator()(const EdgeIntersection *ei1,
-		const EdgeIntersection *ei2) const
-	{
-    return *ei1 < *ei2;
-	}
+    bool
+    operator()(const EdgeIntersection* ei1,
+               const EdgeIntersection* ei2) const
+    {
+        return *ei1 < *ei2;
+    }
 };
 
 /// Output operator
-inline std::ostream& operator<< (std::ostream& os, const EdgeIntersection& e)
+inline std::ostream&
+operator<< (std::ostream& os, const EdgeIntersection& e)
 {
-  os << e.coord << " seg # = " << e.segmentIndex << " dist = " << e.dist;
-	return os;
+    os << e.coord << " seg # = " << e.segmentIndex << " dist = " << e.dist;
+    return os;
 }
 
 } // namespace geos.geomgraph

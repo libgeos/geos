@@ -46,10 +46,6 @@ environment:
       BUILDER: CMake
       GENERATOR: "NMake Makefiles"
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-    - PLATFORM: x86
-      BUILDER: NMake
-      GENERATOR: "NMake Makefiles"
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
 
 init:
   - ps: 'Write-Host "Building GEOS branch: $env:APPVEYOR_REPO_BRANCH" -ForegroundColor Magenta'

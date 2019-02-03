@@ -10,542 +10,561 @@
 #include <cstdlib>
 #include <cstring>
 
-namespace tut
+namespace tut {
+//
+// Test Group
+//
+
+// Common data used in test cases.
+struct test_capigeosbuffer_data {
+    GEOSGeometry* geom1_;
+    GEOSGeometry* geom2_;
+    char* wkt_;
+    GEOSBufferParams* bp_;
+    GEOSWKTWriter* wktw_;
+    double area_;
+
+    static void
+    notice(const char* fmt, ...)
+    {
+        std::fprintf(stdout, "NOTICE: ");
+
+        va_list ap;
+        va_start(ap, fmt);
+        std::vfprintf(stdout, fmt, ap);
+        va_end(ap);
+
+        std::fprintf(stdout, "\n");
+    }
+
+    test_capigeosbuffer_data()
+        : geom1_(nullptr), geom2_(nullptr), wkt_(nullptr), bp_(nullptr)
+    {
+        initGEOS(notice, notice);
+        wktw_ = GEOSWKTWriter_create();
+        GEOSWKTWriter_setTrim(wktw_, 1);
+    }
+
+    ~test_capigeosbuffer_data()
+    {
+        GEOSGeom_destroy(geom1_);
+        GEOSGeom_destroy(geom2_);
+        GEOSWKTWriter_destroy(wktw_);
+        GEOSBufferParams_destroy(bp_);
+        GEOSFree(wkt_);
+        geom1_ = nullptr;
+        geom2_ = nullptr;
+        wkt_ = nullptr;
+        finishGEOS();
+    }
+
+};
+
+typedef test_group<test_capigeosbuffer_data> group;
+typedef group::object object;
+
+group test_capigeosbuffer_group("capi::GEOSBuffer");
+
+//
+// Test Cases
+//
+
+
+// Buffer against empty point
+template<>
+template<>
+void object::test<1>
+()
 {
-    //
-    // Test Group
-    //
-
-    // Common data used in test cases.
-    struct test_capigeosbuffer_data
-    {
-        GEOSGeometry* geom1_;
-        GEOSGeometry* geom2_;
-        char* wkt_;
-        GEOSBufferParams* bp_;
-        GEOSWKTWriter* wktw_;
-        double area_;
-
-        static void notice(const char *fmt, ...)
-        {
-            std::fprintf( stdout, "NOTICE: ");
-
-            va_list ap;
-            va_start(ap, fmt);
-            std::vfprintf(stdout, fmt, ap);
-            va_end(ap);
-
-            std::fprintf(stdout, "\n");
-        }
-
-        test_capigeosbuffer_data()
-            : geom1_(nullptr), geom2_(nullptr), wkt_(nullptr), bp_(nullptr)
-        {
-            initGEOS(notice, notice);
-            wktw_ = GEOSWKTWriter_create();
-            GEOSWKTWriter_setTrim(wktw_, 1);
-        }
-
-        ~test_capigeosbuffer_data()
-        {
-            GEOSGeom_destroy(geom1_);
-            GEOSGeom_destroy(geom2_);
-            GEOSWKTWriter_destroy(wktw_);
-            GEOSBufferParams_destroy(bp_);
-            GEOSFree(wkt_);
-            geom1_ = nullptr;
-            geom2_ = nullptr;
-            wkt_ = nullptr;
-            finishGEOS();
-        }
+    geom1_ = GEOSGeomFromWKT("POINT EMPTY");
 
-    };
+    ensure(nullptr != geom1_);
 
-    typedef test_group<test_capigeosbuffer_data> group;
-    typedef group::object object;
+    geom2_ = GEOSBufferWithStyle(geom1_, 1, 8,
+                                 GEOSBUF_CAP_ROUND,
+                                 GEOSBUF_JOIN_BEVEL,
+                                 5.0);
 
-    group test_capigeosbuffer_group("capi::GEOSBuffer");
+    ensure(nullptr != geom2_);
 
-    //
-    // Test Cases
-    //
+    wkt_ = GEOSGeomToWKT(geom2_);
 
+    ensure_equals(std::string(wkt_), std::string("POLYGON EMPTY"));
+}
 
-    // Buffer against empty point
-    template<>
-    template<>
-    void object::test<1>()
-    {
-        geom1_ = GEOSGeomFromWKT("POINT EMPTY");
+// Buffer against empty linestring
+template<>
+template<>
+void object::test<2>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING EMPTY");
 
-        ensure( nullptr != geom1_ );
+    ensure(nullptr != geom1_);
 
-        geom2_ = GEOSBufferWithStyle(geom1_, 1, 8,
-                                     GEOSBUF_CAP_ROUND,
-                                     GEOSBUF_JOIN_BEVEL,
-                                     5.0);
+    geom2_ = GEOSBufferWithStyle(geom1_, 1, 8,
+                                 GEOSBUF_CAP_ROUND,
+                                 GEOSBUF_JOIN_BEVEL,
+                                 5.0);
 
-        ensure( nullptr != geom2_ );
+    ensure(nullptr != geom2_);
 
-        wkt_ = GEOSGeomToWKT(geom2_);
+    wkt_ = GEOSGeomToWKT(geom2_);
 
-        ensure_equals(std::string(wkt_), std::string("POLYGON EMPTY"));
-    }
+    ensure_equals(std::string(wkt_), std::string("POLYGON EMPTY"));
+}
 
-    // Buffer against empty linestring
-    template<>
-    template<>
-    void object::test<2>()
-    {
-        geom1_ = GEOSGeomFromWKT("LINESTRING EMPTY");
+// Buffer against empty polygon
+template<>
+template<>
+void object::test<3>
+()
+{
+    geom1_ = GEOSGeomFromWKT("POLYGON EMPTY");
 
-        ensure( nullptr != geom1_ );
+    ensure(nullptr != geom1_);
 
-        geom2_ = GEOSBufferWithStyle(geom1_, 1, 8,
-                                     GEOSBUF_CAP_ROUND,
-                                     GEOSBUF_JOIN_BEVEL,
-                                     5.0);
+    geom2_ = GEOSBufferWithStyle(geom1_, 1, 8,
+                                 GEOSBUF_CAP_ROUND,
+                                 GEOSBUF_JOIN_BEVEL,
+                                 5.0);
 
-        ensure( nullptr != geom2_ );
+    ensure(nullptr != geom2_);
 
-        wkt_ = GEOSGeomToWKT(geom2_);
+    wkt_ = GEOSGeomToWKT(geom2_);
 
-        ensure_equals(std::string(wkt_), std::string("POLYGON EMPTY"));
-    }
+    ensure_equals(std::string(wkt_), std::string("POLYGON EMPTY"));
+}
 
-    // Buffer against empty polygon
-    template<>
-    template<>
-    void object::test<3>()
-    {
-        geom1_ = GEOSGeomFromWKT("POLYGON EMPTY");
+// Simple Buffer on a 2-vertices line (quadSegs: 1)
+template<>
+template<>
+void object::test<4>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 20)");
 
-        ensure( nullptr != geom1_ );
+    ensure(nullptr != geom1_);
 
-        geom2_ = GEOSBufferWithStyle(geom1_, 1, 8,
-                                     GEOSBUF_CAP_ROUND,
-                                     GEOSBUF_JOIN_BEVEL,
-                                     5.0);
+    geom2_ = GEOSBuffer(geom1_, 5, 1);
 
-        ensure( nullptr != geom2_ );
+    ensure(nullptr != geom2_);
 
-        wkt_ = GEOSGeomToWKT(geom2_);
+    wkt_ = GEOSGeomToWKT(geom2_);
 
-        ensure_equals(std::string(wkt_), std::string("POLYGON EMPTY"));
-    }
+    ensure_equals(GEOSGetNumCoordinates(geom2_), 7);
 
-    // Simple Buffer on a 2-vertices line (quadSegs: 1)
-    template<>
-    template<>
-    void object::test<4>()
-    {
-        geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 20)");
+    ensure(0 != GEOSArea(geom2_, &area_));
+    ensure_area(area_, 161.803, 0.001);
 
-        ensure( nullptr != geom1_ );
+}
 
-        geom2_ = GEOSBuffer(geom1_, 5, 1);
+// Simple Buffer on a 2-vertices line (quadSegs: 2)
+template<>
+template<>
+void object::test<5>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 20)");
 
-        ensure( nullptr != geom2_ );
+    ensure(nullptr != geom1_);
 
-        wkt_ = GEOSGeomToWKT(geom2_);
+    geom2_ = GEOSBuffer(geom1_, 5, 2);
 
-        ensure_equals(GEOSGetNumCoordinates(geom2_), 7);
+    ensure(nullptr != geom2_);
 
-        ensure(0 != GEOSArea(geom2_, &area_));
-        ensure_area(area_, 161.803, 0.001);
+    wkt_ = GEOSGeomToWKT(geom2_);
 
-    }
+    ensure_equals(GEOSGetNumCoordinates(geom2_), 11);
 
-    // Simple Buffer on a 2-vertices line (quadSegs: 2)
-    template<>
-    template<>
-    void object::test<5>()
-    {
-        geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 20)");
+    ensure(0 != GEOSArea(geom2_, &area_));
+    ensure_area(area_, 182.514, 0.001);
+}
 
-        ensure( nullptr != geom1_ );
+// Buffer with square end caps on a 2-vertices line (no matter quadSegs)
+template<>
+template<>
+void object::test<6>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 20)");
 
-        geom2_ = GEOSBuffer(geom1_, 5, 2);
+    ensure(nullptr != geom1_);
 
-        ensure( nullptr != geom2_ );
+    geom2_ = GEOSBufferWithStyle(geom1_, 5, 20, GEOSBUF_CAP_SQUARE,
+                                 GEOSBUF_JOIN_ROUND, 5.0);
 
-        wkt_ = GEOSGeomToWKT(geom2_);
+    ensure(nullptr != geom2_);
 
-        ensure_equals(GEOSGetNumCoordinates(geom2_), 11);
+    wkt_ = GEOSGeomToWKT(geom2_);
 
-        ensure(0 != GEOSArea(geom2_, &area_));
-        ensure_area(area_, 182.514, 0.001);
-    }
+    ensure_equals(GEOSGetNumCoordinates(geom2_), 7);
 
-    // Buffer with square end caps on a 2-vertices line (no matter quadSegs)
-    template<>
-    template<>
-    void object::test<6>()
-    {
-        geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 20)");
+    ensure(0 != GEOSArea(geom2_, &area_));
+    ensure_area(area_, 211.803, 0.001);
 
-        ensure( nullptr != geom1_ );
+}
 
-        geom2_ = GEOSBufferWithStyle(geom1_, 5, 20, GEOSBUF_CAP_SQUARE,
-                                     GEOSBUF_JOIN_ROUND, 5.0);
+// Buffer with flat end caps on a 2-vertices line (no matter quadSegs)
+template<>
+template<>
+void object::test<7>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 20)");
 
-        ensure( nullptr != geom2_ );
+    ensure(nullptr != geom1_);
 
-        wkt_ = GEOSGeomToWKT(geom2_);
+    geom2_ = GEOSBufferWithStyle(geom1_, 5, 20, GEOSBUF_CAP_FLAT,
+                                 GEOSBUF_JOIN_ROUND, 5.0);
 
-        ensure_equals(GEOSGetNumCoordinates(geom2_), 7);
+    ensure(nullptr != geom2_);
 
-        ensure(0 != GEOSArea(geom2_, &area_));
-        ensure_area(area_, 211.803, 0.001);
+    wkt_ = GEOSGeomToWKT(geom2_);
 
-    }
+    ensure_equals(GEOSGetNumCoordinates(geom2_), 5);
 
-    // Buffer with flat end caps on a 2-vertices line (no matter quadSegs)
-    template<>
-    template<>
-    void object::test<7>()
-    {
-        geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 20)");
+    ensure(0 != GEOSArea(geom2_, &area_));
+    ensure_area(area_, 111.803, 0.001);
+}
 
-        ensure( nullptr != geom1_ );
+// Buffer with flat end cap on a 2-vertices horizontal line
+template<>
+template<>
+void object::test<8>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 10)");
 
-        geom2_ = GEOSBufferWithStyle(geom1_, 5, 20, GEOSBUF_CAP_FLAT,
-                                     GEOSBUF_JOIN_ROUND, 5.0);
+    ensure(nullptr != geom1_);
 
-        ensure( nullptr != geom2_ );
+    geom2_ = GEOSBufferWithStyle(geom1_, 5, 20, GEOSBUF_CAP_FLAT,
+                                 GEOSBUF_JOIN_ROUND, 5.0);
 
-        wkt_ = GEOSGeomToWKT(geom2_);
+    ensure(nullptr != geom2_);
 
-        ensure_equals(GEOSGetNumCoordinates(geom2_), 5);
+    wkt_ = GEOSGeomToWKT(geom2_);
 
-        ensure(0 != GEOSArea(geom2_, &area_));
-        ensure_area(area_, 111.803, 0.001);
-    }
+    ensure_equals(GEOSGetNumCoordinates(geom2_), 5);
 
-    // Buffer with flat end cap on a 2-vertices horizontal line
-    template<>
-    template<>
-    void object::test<8>()
-    {
-        geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 10)");
+    ensure(0 != GEOSArea(geom2_, &area_));
+    ensure_area(area_, 50.0, 0.001);
 
-        ensure( nullptr != geom1_ );
+    ensure_equals(std::string(wkt_), std::string(
+                      "POLYGON ((10.0000000000000000 15.0000000000000000, 10.0000000000000000 5.0000000000000000, 5.0000000000000000 5.0000000000000000, 5.0000000000000000 15.0000000000000000, 10.0000000000000000 15.0000000000000000))"
+                  ));
+}
 
-        geom2_ = GEOSBufferWithStyle(geom1_, 5, 20, GEOSBUF_CAP_FLAT,
-                                     GEOSBUF_JOIN_ROUND, 5.0);
+// Buffer with square end cap on a 2-vertices horizontal line
+template<>
+template<>
+void object::test<9>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 10)");
 
-        ensure( nullptr != geom2_ );
+    ensure(nullptr != geom1_);
 
-        wkt_ = GEOSGeomToWKT(geom2_);
+    geom2_ = GEOSBufferWithStyle(geom1_, 5, 20, GEOSBUF_CAP_SQUARE,
+                                 GEOSBUF_JOIN_ROUND, 5.0);
 
-        ensure_equals(GEOSGetNumCoordinates(geom2_), 5);
+    ensure(nullptr != geom2_);
 
-        ensure(0 != GEOSArea(geom2_, &area_));
-        ensure_area(area_, 50.0, 0.001);
+    wkt_ = GEOSGeomToWKT(geom2_);
 
-        ensure_equals(std::string(wkt_), std::string(
-"POLYGON ((10.0000000000000000 15.0000000000000000, 10.0000000000000000 5.0000000000000000, 5.0000000000000000 5.0000000000000000, 5.0000000000000000 15.0000000000000000, 10.0000000000000000 15.0000000000000000))"
-        ));
-    }
+    ensure_equals(GEOSGetNumCoordinates(geom2_), 7);
 
-    // Buffer with square end cap on a 2-vertices horizontal line
-    template<>
-    template<>
-    void object::test<9>()
-    {
-        geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 10)");
+    ensure(0 != GEOSArea(geom2_, &area_));
+    ensure_area(area_, 150.0, 0.001);
 
-        ensure( nullptr != geom1_ );
+    ensure_equals(std::string(wkt_), std::string(
+                      "POLYGON ((10.0000000000000000 15.0000000000000000, 15.0000000000000000 15.0000000000000000, 15.0000000000000000 5.0000000000000000, 5.0000000000000000 5.0000000000000000, 0.0000000000000000 5.0000000000000009, 0.0000000000000000 15.0000000000000000, 10.0000000000000000 15.0000000000000000))"
+                  ));
+}
 
-        geom2_ = GEOSBufferWithStyle(geom1_, 5, 20, GEOSBUF_CAP_SQUARE,
-                                     GEOSBUF_JOIN_ROUND, 5.0);
+// Buffer with flat end cap and round join style
+// on an L-shaped simple line
+template<>
+template<>
+void object::test<10>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 10, 10 20)");
 
-        ensure( nullptr != geom2_ );
+    ensure(nullptr != geom1_);
 
-        wkt_ = GEOSGeomToWKT(geom2_);
+    geom2_ = GEOSBufferWithStyle(geom1_, 5, 20, GEOSBUF_CAP_SQUARE,
+                                 GEOSBUF_JOIN_ROUND, 5.0);
 
-        ensure_equals(GEOSGetNumCoordinates(geom2_), 7);
+    ensure(nullptr != geom2_);
 
-        ensure(0 != GEOSArea(geom2_, &area_));
-        ensure_area(area_, 150.0, 0.001);
+    wkt_ = GEOSGeomToWKT(geom2_);
 
-        ensure_equals(std::string(wkt_), std::string(
-"POLYGON ((10.0000000000000000 15.0000000000000000, 15.0000000000000000 15.0000000000000000, 15.0000000000000000 5.0000000000000000, 5.0000000000000000 5.0000000000000000, 0.0000000000000000 5.0000000000000009, 0.0000000000000000 15.0000000000000000, 10.0000000000000000 15.0000000000000000))"
-        ));
-    }
+    ensure_equals(GEOSGetNumCoordinates(geom2_), 29);
 
-    // Buffer with flat end cap and round join style
-    // on an L-shaped simple line
-    template<>
-    template<>
-    void object::test<10>()
-    {
-        geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 10, 10 20)");
+    ensure(0 != GEOSArea(geom2_, &area_));
+    ensure_area(area_, 244.615, 0.001);
 
-        ensure( nullptr != geom1_ );
+}
 
-        geom2_ = GEOSBufferWithStyle(geom1_, 5, 20, GEOSBUF_CAP_SQUARE,
-                                     GEOSBUF_JOIN_ROUND, 5.0);
+// Buffer with flat end cap and mitre join style
+// on an L-shaped simple line
+template<>
+template<>
+void object::test<11>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 10, 10 20)");
 
-        ensure( nullptr != geom2_ );
+    ensure(nullptr != geom1_);
 
-        wkt_ = GEOSGeomToWKT(geom2_);
+    geom2_ = GEOSBufferWithStyle(geom1_, 5, 20, GEOSBUF_CAP_SQUARE,
+                                 GEOSBUF_JOIN_MITRE, 5.0);
 
-        ensure_equals(GEOSGetNumCoordinates(geom2_), 29);
+    ensure(nullptr != geom2_);
 
-        ensure(0 != GEOSArea(geom2_, &area_));
-        ensure_area(area_, 244.615, 0.001);
+    wkt_ = GEOSGeomToWKT(geom2_);
 
-    }
+    ensure_equals(GEOSGetNumCoordinates(geom2_), 9);
 
-    // Buffer with flat end cap and mitre join style
-    // on an L-shaped simple line
-    template<>
-    template<>
-    void object::test<11>()
-    {
-        geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 10, 10 20)");
+    ensure(0 != GEOSArea(geom2_, &area_));
+    ensure_area(area_, 250.0, 0.001);
 
-        ensure( nullptr != geom1_ );
+    ensure_equals(std::string(wkt_), std::string(
+                      "POLYGON ((5.0000000000000000 15.0000000000000000, 5.0000000000000000 20.0000000000000000, 5.0000000000000000 25.0000000000000000, 15.0000000000000000 25.0000000000000000, 15.0000000000000000 5.0000000000000000, 5.0000000000000000 5.0000000000000000, 0.0000000000000000 5.0000000000000009, 0.0000000000000000 15.0000000000000000, 5.0000000000000000 15.0000000000000000))"
+                  ));
+}
 
-        geom2_ = GEOSBufferWithStyle(geom1_, 5, 20, GEOSBUF_CAP_SQUARE,
-                                     GEOSBUF_JOIN_MITRE, 5.0);
+// Buffer with flat end cap and bevel join style
+// on an L-shaped simple line
+template<>
+template<>
+void object::test<12>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 10, 10 20)");
 
-        ensure( nullptr != geom2_ );
+    ensure(nullptr != geom1_);
 
-        wkt_ = GEOSGeomToWKT(geom2_);
+    geom2_ = GEOSBufferWithStyle(geom1_, 5, 20, GEOSBUF_CAP_SQUARE,
+                                 GEOSBUF_JOIN_BEVEL, 5.0);
 
-        ensure_equals(GEOSGetNumCoordinates(geom2_), 9);
+    ensure(nullptr != geom2_);
 
-        ensure(0 != GEOSArea(geom2_, &area_));
-        ensure_area(area_, 250.0, 0.001);
+    wkt_ = GEOSGeomToWKT(geom2_);
 
-        ensure_equals(std::string(wkt_), std::string(
-"POLYGON ((5.0000000000000000 15.0000000000000000, 5.0000000000000000 20.0000000000000000, 5.0000000000000000 25.0000000000000000, 15.0000000000000000 25.0000000000000000, 15.0000000000000000 5.0000000000000000, 5.0000000000000000 5.0000000000000000, 0.0000000000000000 5.0000000000000009, 0.0000000000000000 15.0000000000000000, 5.0000000000000000 15.0000000000000000))"
-        ));
-    }
+    ensure_equals(GEOSGetNumCoordinates(geom2_), 10);
 
-    // Buffer with flat end cap and bevel join style
-    // on an L-shaped simple line
-    template<>
-    template<>
-    void object::test<12>()
-    {
-        geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 10, 10 20)");
+    ensure(0 != GEOSArea(geom2_, &area_));
+    ensure_area(area_, 237.5, 0.001);
 
-        ensure( nullptr != geom1_ );
+    ensure_equals(std::string(wkt_), std::string(
+                      "POLYGON ((5.0000000000000000 15.0000000000000000, 5.0000000000000000 20.0000000000000000, 5.0000000000000000 25.0000000000000000, 15.0000000000000000 25.0000000000000000, 15.0000000000000000 10.0000000000000000, 10.0000000000000000 5.0000000000000000, 5.0000000000000000 5.0000000000000000, 0.0000000000000000 5.0000000000000009, 0.0000000000000000 15.0000000000000000, 5.0000000000000000 15.0000000000000000))"
+                  ));
+}
 
-        geom2_ = GEOSBufferWithStyle(geom1_, 5, 20, GEOSBUF_CAP_SQUARE,
-                                     GEOSBUF_JOIN_BEVEL, 5.0);
+// Buffer with flat end cap and bevel join style
+// on an L-shaped simple line with different quadSegs and mitreLimit
+// (result unaffected)
+template<>
+template<>
+void object::test<13>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 10, 10 20)");
 
-        ensure( nullptr != geom2_ );
+    ensure(nullptr != geom1_);
 
-        wkt_ = GEOSGeomToWKT(geom2_);
+    geom2_ = GEOSBufferWithStyle(geom1_, 5, 200, GEOSBUF_CAP_SQUARE,
+                                 GEOSBUF_JOIN_BEVEL, 10.0);
 
-        ensure_equals(GEOSGetNumCoordinates(geom2_), 10);
+    ensure(nullptr != geom2_);
 
-        ensure(0 != GEOSArea(geom2_, &area_));
-        ensure_area(area_, 237.5, 0.001);
+    wkt_ = GEOSGeomToWKT(geom2_);
 
-        ensure_equals(std::string(wkt_), std::string(
-"POLYGON ((5.0000000000000000 15.0000000000000000, 5.0000000000000000 20.0000000000000000, 5.0000000000000000 25.0000000000000000, 15.0000000000000000 25.0000000000000000, 15.0000000000000000 10.0000000000000000, 10.0000000000000000 5.0000000000000000, 5.0000000000000000 5.0000000000000000, 0.0000000000000000 5.0000000000000009, 0.0000000000000000 15.0000000000000000, 5.0000000000000000 15.0000000000000000))"
-        ));
-    }
+    ensure_equals(GEOSGetNumCoordinates(geom2_), 10);
 
-    // Buffer with flat end cap and bevel join style
-    // on an L-shaped simple line with different quadSegs and mitreLimit
-    // (result unaffected)
-    template<>
-    template<>
-    void object::test<13>()
-    {
-        geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 10, 10 20)");
+    ensure(0 != GEOSArea(geom2_, &area_));
+    ensure_area(area_, 237.5, 0.001);
 
-        ensure( nullptr != geom1_ );
+    ensure_equals(std::string(wkt_), std::string(
+                      "POLYGON ((5.0000000000000000 15.0000000000000000, 5.0000000000000000 20.0000000000000000, 5.0000000000000000 25.0000000000000000, 15.0000000000000000 25.0000000000000000, 15.0000000000000000 10.0000000000000000, 10.0000000000000000 5.0000000000000000, 5.0000000000000000 5.0000000000000000, 0.0000000000000000 5.0000000000000009, 0.0000000000000000 15.0000000000000000, 5.0000000000000000 15.0000000000000000))"
+                  ));
+}
 
-        geom2_ = GEOSBufferWithStyle(geom1_, 5, 200, GEOSBUF_CAP_SQUARE,
-                                     GEOSBUF_JOIN_BEVEL, 10.0);
+// Buffer with limited mitre  (1)
+template<>
+template<>
+void object::test<14>
+()
+{
+    geom1_ = GEOSGeomFromWKT("POLYGON((0 0, 10 0, 10 10, 0 0))");
 
-        ensure( nullptr != geom2_ );
+    ensure(nullptr != geom1_);
 
-        wkt_ = GEOSGeomToWKT(geom2_);
+    geom2_ = GEOSBufferWithStyle(geom1_, 2, 200, GEOSBUF_CAP_FLAT,
+                                 GEOSBUF_JOIN_MITRE, 1);
 
-        ensure_equals(GEOSGetNumCoordinates(geom2_), 10);
+    ensure(nullptr != geom2_);
 
-        ensure(0 != GEOSArea(geom2_, &area_));
-        ensure_area(area_, 237.5, 0.001);
+    wkt_ = GEOSGeomToWKT(geom2_);
 
-        ensure_equals(std::string(wkt_), std::string(
-"POLYGON ((5.0000000000000000 15.0000000000000000, 5.0000000000000000 20.0000000000000000, 5.0000000000000000 25.0000000000000000, 15.0000000000000000 25.0000000000000000, 15.0000000000000000 10.0000000000000000, 10.0000000000000000 5.0000000000000000, 5.0000000000000000 5.0000000000000000, 0.0000000000000000 5.0000000000000009, 0.0000000000000000 15.0000000000000000, 5.0000000000000000 15.0000000000000000))"
-        ));
-    }
+    ensure_equals(GEOSGetNumCoordinates(geom2_), 7);
 
-    // Buffer with limited mitre  (1)
-    template<>
-    template<>
-    void object::test<14>()
-    {
-        geom1_ = GEOSGeomFromWKT("POLYGON((0 0, 10 0, 10 10, 0 0))");
+    ensure(0 != GEOSArea(geom2_, &area_));
+    ensure_area(area_, 127.452, 0.001);
 
-        ensure( nullptr != geom1_ );
+}
 
-        geom2_ = GEOSBufferWithStyle(geom1_, 2, 200, GEOSBUF_CAP_FLAT,
-                                     GEOSBUF_JOIN_MITRE, 1);
+// Buffer with limited mitre  (2)
+template<>
+template<>
+void object::test<15>
+()
+{
+    geom1_ = GEOSGeomFromWKT("POLYGON((0 0, 10 0, 10 10, 0 0))");
 
-        ensure( nullptr != geom2_ );
+    ensure(nullptr != geom1_);
 
-        wkt_ = GEOSGeomToWKT(geom2_);
+    geom2_ = GEOSBufferWithStyle(geom1_, 2, 200, GEOSBUF_CAP_FLAT,
+                                 GEOSBUF_JOIN_MITRE, 2);
 
-        ensure_equals(GEOSGetNumCoordinates(geom2_), 7);
+    ensure(nullptr != geom2_);
 
-        ensure(0 != GEOSArea(geom2_, &area_));
-        ensure_area(area_, 127.452, 0.001);
+    wkt_ = GEOSGeomToWKT(geom2_);
 
-    }
+    ensure_equals(GEOSGetNumCoordinates(geom2_), 6);
 
-    // Buffer with limited mitre  (2)
-    template<>
-    template<>
-    void object::test<15>()
-    {
-        geom1_ = GEOSGeomFromWKT("POLYGON((0 0, 10 0, 10 10, 0 0))");
+    ensure(0 != GEOSArea(geom2_, &area_));
+    ensure_area(area_, 139.043, 0.001);
 
-        ensure( nullptr != geom1_ );
+}
 
-        geom2_ = GEOSBufferWithStyle(geom1_, 2, 200, GEOSBUF_CAP_FLAT,
-                                     GEOSBUF_JOIN_MITRE, 2);
+// Buffer with limited mitre  (3)
+template<>
+template<>
+void object::test<16>
+()
+{
+    geom1_ = GEOSGeomFromWKT("POLYGON((0 0, 10 0, 10 10, 0 0))");
 
-        ensure( nullptr != geom2_ );
+    ensure(nullptr != geom1_);
 
-        wkt_ = GEOSGeomToWKT(geom2_);
+    geom2_ = GEOSBufferWithStyle(geom1_, 2, 200, GEOSBUF_CAP_FLAT,
+                                 GEOSBUF_JOIN_MITRE, 3);
 
-        ensure_equals(GEOSGetNumCoordinates(geom2_), 6);
+    ensure(nullptr != geom2_);
 
-        ensure(0 != GEOSArea(geom2_, &area_));
-        ensure_area(area_, 139.043, 0.001);
+    wkt_ = GEOSGeomToWKT(geom2_);
 
-    }
+    ensure_equals(GEOSGetNumCoordinates(geom2_), 4);
 
-    // Buffer with limited mitre  (3)
-    template<>
-    template<>
-    void object::test<16>()
-    {
-        geom1_ = GEOSGeomFromWKT("POLYGON((0 0, 10 0, 10 10, 0 0))");
+    ensure(0 != GEOSArea(geom2_, &area_));
+    ensure_area(area_, 141.598, 0.001);
 
-        ensure( nullptr != geom1_ );
+}
 
-        geom2_ = GEOSBufferWithStyle(geom1_, 2, 200, GEOSBUF_CAP_FLAT,
-                                     GEOSBUF_JOIN_MITRE, 3);
+// Buffer with params:
+// flat end cap on a straight line
+template<>
+template<>
+void object::test<17>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 10)");
 
-        ensure( nullptr != geom2_ );
+    ensure(nullptr != geom1_);
 
-        wkt_ = GEOSGeomToWKT(geom2_);
+    bp_ = GEOSBufferParams_create();
 
-        ensure_equals(GEOSGetNumCoordinates(geom2_), 4);
+    GEOSBufferParams_setEndCapStyle(bp_, GEOSBUF_CAP_SQUARE);
+    geom2_ = GEOSBufferWithParams(geom1_, bp_, 2);
 
-        ensure(0 != GEOSArea(geom2_, &area_));
-        ensure_area(area_, 141.598, 0.001);
+    ensure(nullptr != geom2_);
 
-    }
+    wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 
-    // Buffer with params:
-    // flat end cap on a straight line
-    template<>
-    template<>
-    void object::test<17>()
-    {
-        geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 10)");
+    ensure_equals(std::string(wkt_), std::string(
+                      "POLYGON ((10 12, 12 12, 12 8, 5 8, 3 8, 3 12, 10 12))"
+                  ));
+}
 
-        ensure( nullptr != geom1_ );
+// Buffer with params:
+// flat end cap on a straight line
+// Single sided (left)
+template<>
+template<>
+void object::test<18>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 10)");
 
-        bp_ = GEOSBufferParams_create();
+    ensure(nullptr != geom1_);
 
-        GEOSBufferParams_setEndCapStyle(bp_, GEOSBUF_CAP_SQUARE);
-        geom2_ = GEOSBufferWithParams(geom1_, bp_, 2);
+    bp_ = GEOSBufferParams_create();
 
-        ensure( nullptr != geom2_ );
+    GEOSBufferParams_setEndCapStyle(bp_, GEOSBUF_CAP_SQUARE);
+    GEOSBufferParams_setSingleSided(bp_, 1);
+    geom2_ = GEOSBufferWithParams(geom1_, bp_, 2);
 
-        wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+    ensure(nullptr != geom2_);
 
-        ensure_equals(std::string(wkt_), std::string(
-"POLYGON ((10 12, 12 12, 12 8, 5 8, 3 8, 3 12, 10 12))"
-));
-    }
+    wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 
-    // Buffer with params:
-    // flat end cap on a straight line
-    // Single sided (left)
-    template<>
-    template<>
-    void object::test<18>()
-    {
-        geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 10)");
+    ensure_equals(std::string(wkt_), std::string(
+                      "POLYGON ((10 10, 5 10, 5 12, 10 12, 10 10))"
+                  ));
+}
 
-        ensure( nullptr != geom1_ );
+// Buffer with params:
+// flat end cap on a straight line
+// Single sided (right)
+template<>
+template<>
+void object::test<19>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 10)");
 
-        bp_ = GEOSBufferParams_create();
+    ensure(nullptr != geom1_);
 
-        GEOSBufferParams_setEndCapStyle(bp_, GEOSBUF_CAP_SQUARE);
-        GEOSBufferParams_setSingleSided(bp_, 1);
-        geom2_ = GEOSBufferWithParams(geom1_, bp_, 2);
+    bp_ = GEOSBufferParams_create();
 
-        ensure( nullptr != geom2_ );
+    GEOSBufferParams_setEndCapStyle(bp_, GEOSBUF_CAP_SQUARE);
+    GEOSBufferParams_setSingleSided(bp_, 1);
+    geom2_ = GEOSBufferWithParams(geom1_, bp_, -2);
 
-        wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+    ensure(nullptr != geom2_);
 
-        ensure_equals(std::string(wkt_), std::string(
-"POLYGON ((10 10, 5 10, 5 12, 10 12, 10 10))"
-));
-    }
+    wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 
-    // Buffer with params:
-    // flat end cap on a straight line
-    // Single sided (right)
-    template<>
-    template<>
-    void object::test<19>()
-    {
-        geom1_ = GEOSGeomFromWKT("LINESTRING(5 10, 10 10)");
+    ensure_equals(std::string(wkt_), std::string(
+                      "POLYGON ((5 10, 10 10, 10 8, 5 8, 5 10))"
+                  ));
+}
 
-        ensure( nullptr != geom1_ );
+// Single-sided buffer  (3)
+// http://trac.osgeo.org/geos/ticket/455
+template<>
+template<>
+void object::test<20>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0, 10 10)', -10)");
 
-        bp_ = GEOSBufferParams_create();
+    ensure(nullptr != geom1_);
 
-        GEOSBufferParams_setEndCapStyle(bp_, GEOSBUF_CAP_SQUARE);
-        GEOSBufferParams_setSingleSided(bp_, 1);
-        geom2_ = GEOSBufferWithParams(geom1_, bp_, -2);
+    geom2_ = GEOSSingleSidedBuffer(geom1_, 10, 8, GEOSBUF_JOIN_BEVEL, 0, 0);
 
-        ensure( nullptr != geom2_ );
+    ensure(nullptr != geom2_);
 
-        wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+    wkt_ = GEOSGeomToWKT(geom2_);
 
-        ensure_equals(std::string(wkt_), std::string(
-"POLYGON ((5 10, 10 10, 10 8, 5 8, 5 10))"
-));
-    }
+    ensure_equals(std::string(wkt_), std::string(
+                      "LINESTRING (20.0000000000000000 10.0000000000000000, 20.0000000000000000 0.0000000000000000, 10.0000000000000000 -10.0000000000000000, 0.0000000000000000 -10.0000000000000000)"
+                  ));
 
-    // Single-sided buffer  (3)
-    // http://trac.osgeo.org/geos/ticket/455
-    template<>
-    template<>
-    void object::test<20>()
-    {
-        geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 10 0, 10 10)', -10)");
-
-        ensure( nullptr != geom1_ );
-
-        geom2_ = GEOSSingleSidedBuffer(geom1_, 10, 8, GEOSBUF_JOIN_BEVEL, 0, 0);
-
-        ensure( nullptr != geom2_ );
-
-        wkt_ = GEOSGeomToWKT(geom2_);
-
-        ensure_equals(std::string(wkt_), std::string(
-"LINESTRING (20.0000000000000000 10.0000000000000000, 20.0000000000000000 0.0000000000000000, 10.0000000000000000 -10.0000000000000000, 0.0000000000000000 -10.0000000000000000)"
-        ));
-
-    }
+}
 
 } // namespace tut
 

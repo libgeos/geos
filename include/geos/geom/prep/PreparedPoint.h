@@ -33,22 +33,21 @@ namespace prep { // geos::geom::prep
  * @author Martin Davis
  *
  */
-class PreparedPoint: public BasicPreparedGeometry
-{
+class PreparedPoint: public BasicPreparedGeometry {
 private:
 protected:
 public:
-	PreparedPoint(const Geometry * geom)
-		: BasicPreparedGeometry( geom)
-	{ }
+    PreparedPoint(const Geometry* geom)
+        : BasicPreparedGeometry(geom)
+    { }
 
-	/**
-	 * Tests whether this point intersects a {@link Geometry}.
-	 *
-	 * The optimization here is that computing topology for the test
-	 * geometry is avoided. This can be significant for large geometries.
-	 */
-	bool intersects(const geom::Geometry* g) const override;
+    /**
+     * Tests whether this point intersects a {@link Geometry}.
+     *
+     * The optimization here is that computing topology for the test
+     * geometry is avoided. This can be significant for large geometries.
+     */
+    bool intersects(const geom::Geometry* g) const override;
 
 };
 

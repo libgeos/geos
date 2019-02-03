@@ -34,24 +34,24 @@ namespace io {
 
 class GEOS_DLL StringTokenizer {
 public:
-	enum {
-		TT_EOF,
-		TT_EOL,
-		TT_NUMBER,
-		TT_WORD
-	};
-	//StringTokenizer();
-	explicit StringTokenizer(const std::string& txt);
-	~StringTokenizer() {}
-	int nextToken();
-	int peekNextToken();
-	double getNVal();
-	std::string getSVal();
+    enum {
+        TT_EOF,
+        TT_EOL,
+        TT_NUMBER,
+        TT_WORD
+    };
+    //StringTokenizer();
+    explicit StringTokenizer(const std::string& txt);
+    ~StringTokenizer() {}
+    int nextToken();
+    int peekNextToken();
+    double getNVal();
+    std::string getSVal();
 private:
-	const std::string &str;
-	std::string stok;
-	double ntok;
-	std::string::const_iterator iter;
+    const std::string& str;
+    std::string stok;
+    double ntok;
+    std::string::const_iterator iter;
 
     // Declare type as noncopyable
     StringTokenizer(const StringTokenizer& other) = delete;

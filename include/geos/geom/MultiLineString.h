@@ -33,10 +33,10 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom { // geos::geom
-		class Coordinate;
-		class CoordinateArraySequence;
-	}
+namespace geom { // geos::geom
+class Coordinate;
+class CoordinateArraySequence;
+}
 }
 
 namespace geos {
@@ -52,71 +52,75 @@ class GEOS_DLL MultiLineString: public GeometryCollection, public Lineal {
 
 public:
 
-	friend class GeometryFactory;
+    friend class GeometryFactory;
 
-	~MultiLineString() override;
+    ~MultiLineString() override;
 
-	/// Returns line dimension (1)
-	Dimension::DimensionType getDimension() const override;
+    /// Returns line dimension (1)
+    Dimension::DimensionType getDimension() const override;
 
-	/**
-	 * \brief
-	 * Returns Dimension::False if all LineStrings in the collection
-	 * are closed, 0 otherwise.
-	 */
-	int getBoundaryDimension() const override;
+    /**
+     * \brief
+     * Returns Dimension::False if all LineStrings in the collection
+     * are closed, 0 otherwise.
+     */
+    int getBoundaryDimension() const override;
 
-	/// Returns a (possibly empty) MultiPoint
-	Geometry* getBoundary() const override;
+    /// Returns a (possibly empty) MultiPoint
+    Geometry* getBoundary() const override;
 
-	std::string getGeometryType() const override;
+    std::string getGeometryType() const override;
 
-	GeometryTypeId getGeometryTypeId() const override;
+    GeometryTypeId getGeometryTypeId() const override;
 
-	bool isClosed() const;
+    bool isClosed() const;
 
-	bool equalsExact(const Geometry *other, double tolerance=0) const override;
+    bool equalsExact(const Geometry* other, double tolerance = 0) const override;
 
-	Geometry *clone() const override;
+    Geometry* clone() const override;
 
-	/**
-	 * Creates a MultiLineString in the reverse
-	 * order to this object.
-	 * Both the order of the component LineStrings
-	 * and the order of their coordinate sequences
-	 * are reversed.
-	 *
-	 * @return a MultiLineString in the reverse order
-	 */
-	Geometry* reverse() const override;
+    /**
+     * Creates a MultiLineString in the reverse
+     * order to this object.
+     * Both the order of the component LineStrings
+     * and the order of their coordinate sequences
+     * are reversed.
+     *
+     * @return a MultiLineString in the reverse order
+     */
+    Geometry* reverse() const override;
 
 protected:
 
-	/**
-	 * \brief Constructs a <code>MultiLineString</code>.
-	 *
-	 * @param  newLines
-	 *	The <code>LineStrings</code>s for this
-	 *	<code>MultiLineString</code>, or <code>null</code>
-	 *	or an empty array to create the empty geometry.
-	 *	Elements may be empty <code>LineString</code>s,
-	 *	but not <code>null</code>s.
-	 *
-	 *	Constructed object will take ownership of
-	 *	the vector and its elements.
-	 *
-	 * @param newFactory
-	 * 	The GeometryFactory used to create this geometry.
-	 *	Caller must keep the factory alive for the life-time
-	 *	of the constructed MultiLineString.
-	 *
-	 */
-	MultiLineString(std::vector<Geometry *> *newLines,
-			const GeometryFactory *newFactory);
+    /**
+     * \brief Constructs a <code>MultiLineString</code>.
+     *
+     * @param  newLines
+     *	The <code>LineStrings</code>s for this
+     *	<code>MultiLineString</code>, or <code>null</code>
+     *	or an empty array to create the empty geometry.
+     *	Elements may be empty <code>LineString</code>s,
+     *	but not <code>null</code>s.
+     *
+     *	Constructed object will take ownership of
+     *	the vector and its elements.
+     *
+     * @param newFactory
+     * 	The GeometryFactory used to create this geometry.
+     *	Caller must keep the factory alive for the life-time
+     *	of the constructed MultiLineString.
+     *
+     */
+    MultiLineString(std::vector<Geometry*>* newLines,
+                    const GeometryFactory* newFactory);
 
-	MultiLineString(const MultiLineString &mp);
+    MultiLineString(const MultiLineString& mp);
 
-	int getSortIndex() const override { return SORTINDEX_MULTILINESTRING; };
+    int
+    getSortIndex() const override
+    {
+        return SORTINDEX_MULTILINESTRING;
+    };
 
 };
 

@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -31,14 +31,14 @@ namespace noding { // geos::noding
 INLINE index::SpatialIndex&
 MCIndexNoder::getIndex()
 {
-	return index;
+    return index;
 }
 
 INLINE std::vector<SegmentString*>*
 MCIndexNoder::getNodedSubstrings() const
 {
-	assert(nodedSegStrings); // must have colled computeNodes before!
-	return NodedSegmentString::getNodedSubstrings(*nodedSegStrings);
+    assert(nodedSegStrings); // must have colled computeNodes before!
+    return NodedSegmentString::getNodedSubstrings(*nodedSegStrings);
 }
 
 } // namespace geos::noding

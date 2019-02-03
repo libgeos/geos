@@ -11,11 +11,9 @@
 #include <memory>
 #include <vector>
 
-namespace tut
-{
+namespace tut {
 
-struct test_geometryfilter_data
-{
+struct test_geometryfilter_data {
     typedef geos::geom::Geometry::Ptr GeometryPtr; // owner
     typedef std::vector<geos::geom::Geometry const*> GeometryRefArray; // observer
 
@@ -40,17 +38,17 @@ group test_geometryfilter_group("geos::geom::GeometryFilter");
 // Split geometries into two categories: Lineal and all other types
 template<>
 template<>
-void object::test<1>()
+void object::test<1>
+()
 {
     // collection of 4 geometries
     GeometryPtr g(reader.read("GEOMETRYCOLLECTION("
-        "POINT(0 0),"
-        "LINESTRING(0 0,1 1,1 2),"
-        "POLYGON((0 0,4 0,4 4,0 4,0 0)),"
-        "MULTILINESTRING((0 0,1 1,1 2),(2 3,3 2,5 4)))"));
+                              "POINT(0 0),"
+                              "LINESTRING(0 0,1 1,1 2),"
+                              "POLYGON((0 0,4 0,4 4,0 4,0 0)),"
+                              "MULTILINESTRING((0 0,1 1,1 2),(2 3,3 2,5 4)))"));
 
-    struct GeometrySplitter : public geos::geom::GeometryFilter
-    {
+    struct GeometrySplitter : public geos::geom::GeometryFilter {
         GeometryRefArray& lineal;
         GeometryRefArray& nonlineal;
         GeometrySplitter(GeometryRefArray& p_lineal, GeometryRefArray& p_nonlineal)
@@ -59,14 +57,18 @@ void object::test<1>()
             ensure(lineal.empty());
             ensure(nonlineal.empty());
         }
-        void filter_ro(geos::geom::Geometry const* g) override
+        void
+        filter_ro(geos::geom::Geometry const* g) override
         {
-            if (dynamic_cast<geos::geom::Lineal const*>(g))
+            if(dynamic_cast<geos::geom::Lineal const*>(g)) {
                 lineal.push_back(g);
-            else
+            }
+            else {
                 nonlineal.push_back(g);
+            }
         }
-        void filter_rw(geos::geom::Geometry*) override {}
+        void
+        filter_rw(geos::geom::Geometry*) override {}
     };
 
     GeometryRefArray lineal;

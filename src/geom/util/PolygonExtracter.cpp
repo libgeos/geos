@@ -24,31 +24,33 @@ namespace geos {
 namespace geom { // geos.geom
 namespace util { // geos.geom.util
 
-         void PolygonExtracter::getPolygons(const Geometry &geom, std::vector<const Polygon*>& ret)
-         {
-            PolygonExtracter pe(ret);
-            geom.apply_ro(&pe);
-         }
+void
+PolygonExtracter::getPolygons(const Geometry& geom, std::vector<const Polygon*>& ret)
+{
+    PolygonExtracter pe(ret);
+    geom.apply_ro(&pe);
+}
 
-         PolygonExtracter::PolygonExtracter(std::vector<const Polygon*>& newComps)
-         :
-         comps(newComps)
-         {}
+PolygonExtracter::PolygonExtracter(std::vector<const Polygon*>& newComps)
+    :
+    comps(newComps)
+{}
 
-         void PolygonExtracter::filter_rw(Geometry *geom) {
-            if ( const Polygon *p=dynamic_cast<const Polygon *>(geom) )
-            {
-               comps.push_back(p);
-            }
-         }
+void
+PolygonExtracter::filter_rw(Geometry* geom)
+{
+    if(const Polygon* p = dynamic_cast<const Polygon*>(geom)) {
+        comps.push_back(p);
+    }
+}
 
-         void PolygonExtracter::filter_ro(const Geometry *geom)
-         {
-            if ( const Polygon *p=dynamic_cast<const Polygon *>(geom) )
-            {
-               comps.push_back(p);
-            }
-         }
+void
+PolygonExtracter::filter_ro(const Geometry* geom)
+{
+    if(const Polygon* p = dynamic_cast<const Polygon*>(geom)) {
+        comps.push_back(p);
+    }
+}
 }
 }
 }

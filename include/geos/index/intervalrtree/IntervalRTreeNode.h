@@ -16,15 +16,15 @@
 #ifndef GEOS_INDEX_INTERVALRTREE_INTERVALRTREENODE_H
 #define GEOS_INDEX_INTERVALRTREE_INTERVALRTREENODE_H
 
-#include <geos/platform.h>
+#include <geos/constants.h>
 #include <vector>
 #include <limits>
 
 // forward declarations
 namespace geos {
-	namespace index {
-		class ItemVisitor;
-	}
+namespace index {
+class ItemVisitor;
+}
 }
 
 
@@ -32,66 +32,71 @@ namespace geos {
 namespace index {
 namespace intervalrtree {
 
-class IntervalRTreeNode
-{
+class IntervalRTreeNode {
 private:
 protected:
-	double min;
-	double max;
+    double min;
+    double max;
 
-	bool intersects( double queryMin, double queryMax) const
-	{
-		if (min > queryMax || max < queryMin)
-			return false;
+    bool
+    intersects(double queryMin, double queryMax) const
+    {
+        if(min > queryMax || max < queryMin) {
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
 public:
-	typedef std::vector<const IntervalRTreeNode *> ConstVect;
+    typedef std::vector<const IntervalRTreeNode*> ConstVect;
 
-	IntervalRTreeNode()
-	:	min( DoubleInfinity ),
-		max( DoubleNegInfinity )
-	{ }
+    IntervalRTreeNode()
+        :	min(DoubleInfinity),
+          max(DoubleNegInfinity)
+    { }
 
-	IntervalRTreeNode( double p_min, double p_max)
-	:	min( p_min ),
-		max( p_max )
-	{ }
+    IntervalRTreeNode(double p_min, double p_max)
+        :	min(p_min),
+          max(p_max)
+    { }
 
-	virtual ~IntervalRTreeNode()
-	{ }
+    virtual
+    ~IntervalRTreeNode()
+    { }
 
-	double getMin() const
-	{
-		return min;
-	}
+    double
+    getMin() const
+    {
+        return min;
+    }
 
-	double getMax() const
-	{
-		return max;
-	}
+    double
+    getMax() const
+    {
+        return max;
+    }
 
-	virtual void query( double queryMin, double queryMax, ItemVisitor * visitor) const =0;
+    virtual void query(double queryMin, double queryMax, ItemVisitor* visitor) const = 0;
 
-	//std::string toString()
-	//{
-	//	return WKTWriter.toLineString(new Coordinate(min, 0), new Coordinate(max, 0));
-	//}
+    //std::string toString()
+    //{
+    //	return WKTWriter.toLineString(new Coordinate(min, 0), new Coordinate(max, 0));
+    //}
 
 
-	//class NodeComparator
-	//{
-	//public:
-		static bool compare( const IntervalRTreeNode * n1, const IntervalRTreeNode * n2)
-		{
-			double mid1 = n1->getMin() + n1->getMax();
-			double mid2 = n2->getMin() + n2->getMax();
+    //class NodeComparator
+    //{
+    //public:
+    static bool
+    compare(const IntervalRTreeNode* n1, const IntervalRTreeNode* n2)
+    {
+        double mid1 = n1->getMin() + n1->getMax();
+        double mid2 = n2->getMin() + n2->getMax();
 
-			return mid1 > mid2;
-		}
-	//};
+        return mid1 > mid2;
+    }
+    //};
 
 };
 

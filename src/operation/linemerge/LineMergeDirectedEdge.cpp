@@ -31,13 +31,13 @@ namespace operation { // geos.operation
 namespace linemerge { // geos.operation.linemerge
 
 LineMergeDirectedEdge::LineMergeDirectedEdge(
-		planargraph::Node *newFrom,
-		planargraph::Node *newTo,
-		const Coordinate& newDirectionPt,
-		bool nEdgeDirection)
-	:
-	planargraph::DirectedEdge(newFrom, newTo,
-			newDirectionPt, nEdgeDirection)
+    planargraph::Node* newFrom,
+    planargraph::Node* newTo,
+    const Coordinate& newDirectionPt,
+    bool nEdgeDirection)
+    :
+    planargraph::DirectedEdge(newFrom, newTo,
+                              newDirectionPt, nEdgeDirection)
 {}
 
 /**
@@ -48,18 +48,18 @@ LineMergeDirectedEdge::LineMergeDirectedEdge(
 LineMergeDirectedEdge*
 LineMergeDirectedEdge::getNext()
 {
-	if (getToNode()->getDegree()!=2) {
-		return nullptr;
-	}
-	if (getToNode()->getOutEdges()->getEdges()[0]==getSym()) {
-		return (LineMergeDirectedEdge*) getToNode()->getOutEdges()->getEdges()[1];
-	}
-	assert(getToNode()->getOutEdges()->getEdges()[1]==getSym());
+    if(getToNode()->getDegree() != 2) {
+        return nullptr;
+    }
+    if(getToNode()->getOutEdges()->getEdges()[0] == getSym()) {
+        return (LineMergeDirectedEdge*) getToNode()->getOutEdges()->getEdges()[1];
+    }
+    assert(getToNode()->getOutEdges()->getEdges()[1] == getSym());
 
-	LineMergeDirectedEdge* nextedge = dynamic_cast<LineMergeDirectedEdge*>(getToNode()->getOutEdges()->getEdges()[0]);
-	assert(nextedge);
+    LineMergeDirectedEdge* nextedge = dynamic_cast<LineMergeDirectedEdge*>(getToNode()->getOutEdges()->getEdges()[0]);
+    assert(nextedge);
 
-	return nextedge;
+    return nextedge;
 }
 
 } // namespace geos.operation.linemerge

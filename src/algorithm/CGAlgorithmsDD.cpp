@@ -33,14 +33,17 @@ namespace {
  */
 double constexpr DP_SAFE_EPSILON =  1e-15;
 
-inline int OrientationDD(DD const& dd)
+inline int
+OrientationDD(DD const& dd)
 {
     static DD const zero(0.0);
-    if (dd < zero)
+    if(dd < zero) {
         return CGAlgorithmsDD::RIGHT;
+    }
 
-    if (dd > zero)
+    if(dd > zero) {
         return CGAlgorithmsDD::LEFT;
+    }
 
     return CGAlgorithmsDD::STRAIGHT;
 }
@@ -54,19 +57,21 @@ inline int OrientationDD(DD const& dd)
 namespace geos {
 namespace algorithm { // geos::algorithm
 
-int CGAlgorithmsDD::orientationIndex(const Coordinate& p1,
-                                     const Coordinate& p2,
-                                     const Coordinate& q)
+int
+CGAlgorithmsDD::orientationIndex(const Coordinate& p1,
+                                 const Coordinate& p2,
+                                 const Coordinate& q)
 {
-    if (ISNAN(q.x) || ISNAN(q.y) || !FINITE(q.x) || !FINITE(q.y)) {
+    if(std::isnan(q.x) || std::isnan(q.y) || !std::isfinite(q.x) || !std::isfinite(q.y)) {
         throw util::IllegalArgumentException("CGAlgorithmsDD::orientationIndex encountered NaN/Inf numbers");
     }
 
     // fast filter for orientation index
     // avoids use of slow extended-precision arithmetic in many cases
     int index = orientationIndexFilter(p1, p2, q);
-    if (index <= 1)
+    if(index <= 1) {
         return index;
+    }
 
     // normalize coordinates
     DD dx1 = DD(p2.x) + DD(-p1.x);
@@ -81,7 +86,8 @@ int CGAlgorithmsDD::orientationIndex(const Coordinate& p1,
     return OrientationDD(d);
 }
 
-int CGAlgorithmsDD::signOfDet2x2(DD &x1, DD &y1, DD &x2, DD &y2)
+int
+CGAlgorithmsDD::signOfDet2x2(DD& x1, DD& y1, DD& x2, DD& y2)
 {
     DD mx1y2(x1 * y2);
     DD my1x2(y1 * x2);
@@ -89,10 +95,11 @@ int CGAlgorithmsDD::signOfDet2x2(DD &x1, DD &y1, DD &x2, DD &y2)
     return OrientationDD(d);
 }
 
-int CGAlgorithmsDD::signOfDet2x2(double dx1, double dy1, double dx2, double dy2)
+int
+CGAlgorithmsDD::signOfDet2x2(double dx1, double dy1, double dx2, double dy2)
 {
-    if (ISNAN(dx1)   || ISNAN(dy1)   || ISNAN(dx2)   || ISNAN(dy2) ||
-        !FINITE(dx1) || !FINITE(dy1) || !FINITE(dx2) || !FINITE(dy2)) {
+    if(std::isnan(dx1)    ||  std::isnan(dy1)    ||  std::isnan(dx2)    ||  std::isnan(dy2) ||
+            !std::isfinite(dx1) || !std::isfinite(dy1) || !std::isfinite(dx2) || !std::isfinite(dy2)) {
         throw util::IllegalArgumentException("CGAlgorithmsDD::signOfDet2x2 encountered NaN/Inf numbers");
     }
     DD x1(dx1);
@@ -102,25 +109,26 @@ int CGAlgorithmsDD::signOfDet2x2(double dx1, double dy1, double dx2, double dy2)
     return CGAlgorithmsDD::signOfDet2x2(x1, y1, x2, y2);
 }
 
-int CGAlgorithmsDD::orientationIndexFilter(const Coordinate& pa,
-        const Coordinate& pb,
-        const Coordinate& pc)
+int
+CGAlgorithmsDD::orientationIndexFilter(const Coordinate& pa,
+                                       const Coordinate& pb,
+                                       const Coordinate& pc)
 {
     double detsum;
     double const detleft = (pa.x - pc.x) * (pb.y - pc.y);
     double const detright = (pa.y - pc.y) * (pb.x - pc.x);
     double const det = detleft - detright;
 
-    if (detleft > 0.0) {
-        if (detright <= 0.0) {
+    if(detleft > 0.0) {
+        if(detright <= 0.0) {
             return orientation(det);
         }
         else {
             detsum = detleft + detright;
         }
     }
-    else if (detleft < 0.0) {
-        if (detright >= 0.0) {
+    else if(detleft < 0.0) {
+        if(detright >= 0.0) {
             return orientation(det);
         }
         else {
@@ -132,15 +140,16 @@ int CGAlgorithmsDD::orientationIndexFilter(const Coordinate& pa,
     }
 
     double const errbound = DP_SAFE_EPSILON * detsum;
-    if ((det >= errbound) || (-det >= errbound)) {
+    if((det >= errbound) || (-det >= errbound)) {
         return orientation(det);
     }
     return CGAlgorithmsDD::FAILURE;
 }
 
-void CGAlgorithmsDD::intersection(const Coordinate& p1, const Coordinate& p2,
-                                  const Coordinate& q1, const Coordinate& q2,
-                                  Coordinate &rv)
+void
+CGAlgorithmsDD::intersection(const Coordinate& p1, const Coordinate& p2,
+                             const Coordinate& q1, const Coordinate& q2,
+                             Coordinate& rv)
 {
     DD q1x(q1.x);
     DD q1y(q1.y);

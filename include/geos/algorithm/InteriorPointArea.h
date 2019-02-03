@@ -26,12 +26,12 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Geometry;
-		class LineString;
-		class GeometryFactory;
-		class GeometryCollection;
-	}
+namespace geom {
+class Geometry;
+class LineString;
+class GeometryFactory;
+class GeometryCollection;
+}
 }
 
 
@@ -64,51 +64,51 @@ class GEOS_DLL InteriorPointArea {
 
 private:
 
-	bool foundInterior;
+    bool foundInterior;
 
-	const geom::GeometryFactory *factory;
+    const geom::GeometryFactory* factory;
 
-	geom::Coordinate interiorPoint;
+    geom::Coordinate interiorPoint;
 
-	double maxWidth;
+    double maxWidth;
 
-	void add(const geom::Geometry *geom);
+    void add(const geom::Geometry* geom);
 
-	const geom::Geometry *widestGeometry(const geom::Geometry *geometry);
+    const geom::Geometry* widestGeometry(const geom::Geometry* geometry);
 
-	const geom::Geometry *widestGeometry(const geom::GeometryCollection *gc);
+    const geom::Geometry* widestGeometry(const geom::GeometryCollection* gc);
 
-	geom::LineString *horizontalBisector(const geom::Geometry *geometry);
+    geom::LineString* horizontalBisector(const geom::Geometry* geometry);
 
 public:
 
-	/**
-	 * Creates a new interior point finder
-	 * for an areal geometry.
-	 *
-	 * @param g an areal geometry
-	 */
-	InteriorPointArea(const geom::Geometry *g);
+    /**
+     * Creates a new interior point finder
+     * for an areal geometry.
+     *
+     * @param g an areal geometry
+     */
+    InteriorPointArea(const geom::Geometry* g);
 
-	~InteriorPointArea();
+    ~InteriorPointArea();
 
-	/**
-	 * Gets the computed interior point.
-	 *
-	 * @return the coordinate of an interior point
-	 */
-	bool getInteriorPoint(geom::Coordinate& ret) const;
+    /**
+     * Gets the computed interior point.
+     *
+     * @return the coordinate of an interior point
+     */
+    bool getInteriorPoint(geom::Coordinate& ret) const;
 
 private:
 
-	/** \brief
-	 * Finds an interior point of a Polygon
-	 *
-	 * @param geometry the geometry to analyze
-	 * @return the midpoint of the largest intersection between the geometry and
-	 * a line halfway down its envelope
-	 */
-	void addPolygon(const geom::Geometry *geometry);
+    /** \brief
+     * Finds an interior point of a Polygon
+     *
+     * @param geometry the geometry to analyze
+     * @return the midpoint of the largest intersection between the geometry and
+     * a line halfway down its envelope
+     */
+    void addPolygon(const geom::Geometry* geometry);
 
 };
 

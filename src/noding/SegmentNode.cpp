@@ -39,18 +39,18 @@ namespace noding { // geos.noding
 
 /*public*/
 SegmentNode::SegmentNode(const NodedSegmentString& ss, const Coordinate& nCoord,
-		size_t nSegmentIndex, int nSegmentOctant)
-	:
-	segString(ss),
-	segmentOctant(nSegmentOctant),
-	coord(nCoord),
-	segmentIndex(nSegmentIndex)
+                         size_t nSegmentIndex, int nSegmentOctant)
+    :
+    segString(ss),
+    segmentOctant(nSegmentOctant),
+    coord(nCoord),
+    segmentIndex(nSegmentIndex)
 {
-	// Number of points in NodedSegmentString is one-more number of segments
-	assert(segmentIndex < segString.size() );
+    // Number of points in NodedSegmentString is one-more number of segments
+    assert(segmentIndex < segString.size());
 
-	isInteriorVar = \
-		!coord.equals2D(segString.getCoordinate(segmentIndex));
+    isInteriorVar = \
+                    !coord.equals2D(segString.getCoordinate(segmentIndex));
 
 }
 
@@ -58,9 +58,13 @@ SegmentNode::SegmentNode(const NodedSegmentString& ss, const Coordinate& nCoord,
 bool
 SegmentNode::isEndPoint(unsigned int maxSegmentIndex) const
 {
-	if (segmentIndex == 0 && ! isInteriorVar) return true;
-	if (segmentIndex == maxSegmentIndex) return true;
-	return false;
+    if(segmentIndex == 0 && ! isInteriorVar) {
+        return true;
+    }
+    if(segmentIndex == maxSegmentIndex) {
+        return true;
+    }
+    return false;
 }
 
 /**
@@ -71,33 +75,38 @@ SegmentNode::isEndPoint(unsigned int maxSegmentIndex) const
 int
 SegmentNode::compareTo(const SegmentNode& other)
 {
-	if (segmentIndex < other.segmentIndex) return -1;
-	if (segmentIndex > other.segmentIndex) return 1;
+    if(segmentIndex < other.segmentIndex) {
+        return -1;
+    }
+    if(segmentIndex > other.segmentIndex) {
+        return 1;
+    }
 
 #if GEOS_DEBUG
-	cerr << setprecision(17) << "compareTo: " << *this << ", " << other <<endl;
+    cerr << setprecision(17) << "compareTo: " << *this << ", " << other << endl;
 #endif
 
-	if (coord.equals2D(other.coord)) {
+    if(coord.equals2D(other.coord)) {
 
 #if GEOS_DEBUG
-		cerr << " Coordinates equal!"<<endl;
+        cerr << " Coordinates equal!" << endl;
 #endif
 
-		return 0;
-	}
+        return 0;
+    }
 
 #if GEOS_DEBUG
-	cerr << " Coordinates do not equal!"<<endl;
+    cerr << " Coordinates do not equal!" << endl;
 #endif
 
-	return SegmentPointComparator::compare(segmentOctant, coord,
-			other.coord);
+    return SegmentPointComparator::compare(segmentOctant, coord,
+                                           other.coord);
 }
 
-ostream& operator<< (ostream& os, const SegmentNode& n)
+ostream&
+operator<< (ostream& os, const SegmentNode& n)
 {
-	return os<<n.coord<<" seg#="<<n.segmentIndex<<" octant#="<<n.segmentOctant<<endl;
+    return os << n.coord << " seg#=" << n.segmentIndex << " octant#=" << n.segmentOctant << endl;
 }
 
 } // namespace geos.noding

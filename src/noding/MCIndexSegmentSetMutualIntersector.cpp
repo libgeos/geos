@@ -39,12 +39,11 @@ MCIndexSegmentSetMutualIntersector::addToIndex(SegmentString* segStr)
 {
     MonoChains segChains;
     MonotoneChainBuilder::getChains(segStr->getCoordinates(),
-      segStr, segChains);
+                                    segStr, segChains);
 
     MonoChains::size_type n = segChains.size();
     chainStore.reserve(chainStore.size() + n);
-    for (auto& mc : segChains)
-    {
+    for(auto& mc : segChains) {
         mc->setId(indexCounter++);
         index->insert(&(mc->getEnvelope()), mc.get());
         chainStore.push_back(std::move(mc));
@@ -56,21 +55,20 @@ MCIndexSegmentSetMutualIntersector::addToIndex(SegmentString* segStr)
 void
 MCIndexSegmentSetMutualIntersector::intersectChains()
 {
-    MCIndexSegmentSetMutualIntersector::SegmentOverlapAction overlapAction( *segInt);
+    MCIndexSegmentSetMutualIntersector::SegmentOverlapAction overlapAction(*segInt);
 
-    for (const auto& queryChain : monoChains)
-    {
+    for(const auto& queryChain : monoChains) {
         std::vector<void*> overlapChains;
-        index->query( &(queryChain->getEnvelope()), overlapChains);
+        index->query(&(queryChain->getEnvelope()), overlapChains);
 
-        for (std::size_t j = 0, nj = overlapChains.size(); j < nj; j++)
-        {
-            MonotoneChain * testChain = (MonotoneChain *)(overlapChains[j]);
+        for(std::size_t j = 0, nj = overlapChains.size(); j < nj; j++) {
+            MonotoneChain* testChain = (MonotoneChain*)(overlapChains[j]);
 
-            queryChain->computeOverlaps( testChain, &overlapAction);
+            queryChain->computeOverlaps(testChain, &overlapAction);
             nOverlaps++;
-            if (segInt->isDone())
+            if(segInt->isDone()) {
                 return;
+            }
         }
     }
 }
@@ -85,20 +83,19 @@ MCIndexSegmentSetMutualIntersector::addToMonoChains(SegmentString* segStr)
 
     MonoChains::size_type n = segChains.size();
     monoChains.reserve(monoChains.size() + n);
-    for (auto& mc : segChains)
-    {
-        mc->setId( processCounter++ );
+    for(auto& mc : segChains) {
+        mc->setId(processCounter++);
         monoChains.push_back(std::move(mc));
     }
 }
 
 /* public */
 MCIndexSegmentSetMutualIntersector::MCIndexSegmentSetMutualIntersector()
-:	monoChains(),
-index(new geos::index::strtree::STRtree()),
-indexCounter(0),
-processCounter(0),
-nOverlaps(0)
+    :	monoChains(),
+      index(new geos::index::strtree::STRtree()),
+      indexCounter(0),
+      processCounter(0),
+      nOverlaps(0)
 {
 }
 
@@ -116,8 +113,7 @@ MCIndexSegmentSetMutualIntersector::setBaseSegments(SegmentString::ConstVect* se
 {
     // NOTE - mloskot: const qualifier is removed silently, dirty.
 
-    for (std::size_t i = 0, n = segStrings->size(); i < n; i++)
-    {
+    for(std::size_t i = 0, n = segStrings->size(); i < n; i++) {
         const SegmentString* css = (*segStrings)[i];
         SegmentString* ss = const_cast<SegmentString*>(css);
         addToIndex(ss);
@@ -126,17 +122,16 @@ MCIndexSegmentSetMutualIntersector::setBaseSegments(SegmentString::ConstVect* se
 
 /*public*/
 void
-MCIndexSegmentSetMutualIntersector::process(SegmentString::ConstVect * segStrings)
+MCIndexSegmentSetMutualIntersector::process(SegmentString::ConstVect* segStrings)
 {
     processCounter = indexCounter + 1;
     nOverlaps = 0;
 
     monoChains.clear();
 
-    for (SegmentString::ConstVect::size_type i = 0, n = segStrings->size(); i < n; i++)
-    {
-        SegmentString * seg = (SegmentString *)((*segStrings)[i]);
-        addToMonoChains( seg);
+    for(SegmentString::ConstVect::size_type i = 0, n = segStrings->size(); i < n; i++) {
+        SegmentString* seg = (SegmentString*)((*segStrings)[i]);
+        addToMonoChains(seg);
     }
     intersectChains();
 }
@@ -145,10 +140,10 @@ MCIndexSegmentSetMutualIntersector::process(SegmentString::ConstVect * segString
 /* public */
 void
 MCIndexSegmentSetMutualIntersector::SegmentOverlapAction::overlap(
-	MonotoneChain& mc1, size_t start1, MonotoneChain& mc2, size_t start2)
+    MonotoneChain& mc1, size_t start1, MonotoneChain& mc2, size_t start2)
 {
-    SegmentString * ss1 = (SegmentString *)(mc1.getContext());
-    SegmentString * ss2 = (SegmentString *)(mc2.getContext());
+    SegmentString* ss1 = (SegmentString*)(mc1.getContext());
+    SegmentString* ss2 = (SegmentString*)(mc2.getContext());
 
     si.processIntersections(ss1, start1, ss2, start2);
 }

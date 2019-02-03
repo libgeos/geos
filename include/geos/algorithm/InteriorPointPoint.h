@@ -21,9 +21,9 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Geometry;
-	}
+namespace geom {
+class Geometry;
+}
 }
 
 namespace geos {
@@ -41,30 +41,30 @@ namespace algorithm { // geos::algorithm
 class GEOS_DLL InteriorPointPoint {
 private:
 
-	bool hasInterior;
+    bool hasInterior;
 
-	geom::Coordinate centroid;
+    geom::Coordinate centroid;
 
-	double minDistance;
+    double minDistance;
 
-	geom::Coordinate interiorPoint;
+    geom::Coordinate interiorPoint;
 
-	/**
-	 * Tests the point(s) defined by a Geometry for the best inside point.
-	 * If a Geometry is not of dimension 0 it is not tested.
-	 * @param geom the geometry to add
-	 */
-	void add(const geom::Geometry *geom);
+    /**
+     * Tests the point(s) defined by a Geometry for the best inside point.
+     * If a Geometry is not of dimension 0 it is not tested.
+     * @param geom the geometry to add
+     */
+    void add(const geom::Geometry* geom);
 
-	void add(const geom::Coordinate *point);
+    void add(const geom::Coordinate* point);
 
 public:
 
-	InteriorPointPoint(const geom::Geometry *g);
+    InteriorPointPoint(const geom::Geometry* g);
 
-	~InteriorPointPoint() {}
+    ~InteriorPointPoint() {}
 
-	bool getInteriorPoint(geom::Coordinate& ret) const;
+    bool getInteriorPoint(geom::Coordinate& ret) const;
 
 };
 

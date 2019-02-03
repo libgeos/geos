@@ -42,44 +42,44 @@ namespace quadtree { // geos::index::quadtree
 class GEOS_DLL Key {
 public:
 
-	// Doesn't touch the Envelope, might as well be const
-	static int computeQuadLevel(const geom::Envelope& env);
+    // Doesn't touch the Envelope, might as well be const
+    static int computeQuadLevel(const geom::Envelope& env);
 
-	// Reference to argument won't be used after construction
-	Key(const geom::Envelope& itemEnv);
+    // Reference to argument won't be used after construction
+    Key(const geom::Envelope& itemEnv);
 
-	// used to be virtual, but I don't see subclasses...
-	~Key();
+    // used to be virtual, but I don't see subclasses...
+    ~Key();
 
-	/// Returned object ownership retained by this class
-	const geom::Coordinate& getPoint() const;
+    /// Returned object ownership retained by this class
+    const geom::Coordinate& getPoint() const;
 
-	int getLevel() const;
+    int getLevel() const;
 
-	/// Returned object ownership retained by this class
-	const geom::Envelope& getEnvelope() const;
+    /// Returned object ownership retained by this class
+    const geom::Envelope& getEnvelope() const;
 
-	/// Returns newly allocated object (ownership transferred)
-	geom::Coordinate* getCentre() const;
+    /// Returns newly allocated object (ownership transferred)
+    geom::Coordinate* getCentre() const;
 
-	/**
-	 * return a square envelope containing the argument envelope,
-	 * whose extent is a power of two and which is based at a power of 2
-	 */
-	void computeKey(const geom::Envelope& itemEnv);
+    /**
+     * return a square envelope containing the argument envelope,
+     * whose extent is a power of two and which is based at a power of 2
+     */
+    void computeKey(const geom::Envelope& itemEnv);
 
 private:
-	// the fields which make up the key
+    // the fields which make up the key
 
-	// Owned by this class
-	geom::Coordinate pt;
+    // Owned by this class
+    geom::Coordinate pt;
 
-	int level;
+    int level;
 
-	// auxiliary data which is derived from the key for use in computation
-	geom::Envelope env;
+    // auxiliary data which is derived from the key for use in computation
+    geom::Envelope env;
 
-	void computeKey(int level, const geom::Envelope& itemEnv);
+    void computeKey(int level, const geom::Envelope& itemEnv);
 };
 
 } // namespace geos::index::quadtree

@@ -35,24 +35,26 @@ namespace util { // geos::util
  */
 class GEOS_DLL CoordinateArrayFilter: public geom::CoordinateFilter {
 private:
-	geom::Coordinate::ConstVect &pts; // target vector reference
+    geom::Coordinate::ConstVect& pts; // target vector reference
 public:
-	/**
-	 * Constructs a CoordinateArrayFilter.
-	 *
-	 * @param  target   The destination vector.
-	 */
-	CoordinateArrayFilter(geom::Coordinate::ConstVect& target)
-		:
-		pts(target)
-		{}
+    /**
+     * Constructs a CoordinateArrayFilter.
+     *
+     * @param  target   The destination vector.
+     */
+    CoordinateArrayFilter(geom::Coordinate::ConstVect& target)
+        :
+        pts(target)
+    {}
 
-	virtual ~CoordinateArrayFilter() {}
+    virtual
+    ~CoordinateArrayFilter() {}
 
-	virtual void filter_ro(const geom::Coordinate *coord)
-	{
-		pts.push_back(coord);
-	}
+    virtual void
+    filter_ro(const geom::Coordinate* coord)
+    {
+        pts.push_back(coord);
+    }
 };
 
 

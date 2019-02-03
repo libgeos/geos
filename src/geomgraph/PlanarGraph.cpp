@@ -51,20 +51,20 @@ namespace geos {
 namespace geomgraph { // geos.geomgraph
 
 /*public*/
-PlanarGraph::PlanarGraph(const NodeFactory &nodeFact)
-	:
-	edges(new vector<Edge*>()),
-	nodes(new NodeMap(nodeFact)),
-	edgeEndList(new vector<EdgeEnd*>())
+PlanarGraph::PlanarGraph(const NodeFactory& nodeFact)
+    :
+    edges(new vector<Edge*>()),
+    nodes(new NodeMap(nodeFact)),
+    edgeEndList(new vector<EdgeEnd*>())
 {
 }
 
 /*public*/
 PlanarGraph::PlanarGraph()
-	:
-	edges(new vector<Edge*>()),
-	nodes(new NodeMap(NodeFactory::instance())),
-	edgeEndList(new vector<EdgeEnd*>())
+    :
+    edges(new vector<Edge*>()),
+    nodes(new NodeMap(NodeFactory::instance())),
+    edgeEndList(new vector<EdgeEnd*>())
 {
 }
 
@@ -72,110 +72,113 @@ PlanarGraph::PlanarGraph()
 PlanarGraph::~PlanarGraph()
 {
 #if GEOS_DEBUG
-	std::cerr << "~PlanarGraph" << std::endl;
+    std::cerr << "~PlanarGraph" << std::endl;
 #endif
 
-	delete nodes;
+    delete nodes;
 #if 1 // FIXME: PlanarGraph should *not* own edges!
-	for(size_t i=0, n=edges->size(); i<n; i++) {
-		delete (*edges)[i];
-	}
+    for(size_t i = 0, n = edges->size(); i < n; i++) {
+        delete(*edges)[i];
+    }
 #endif
-	delete edges;
+    delete edges;
 
-	for(size_t i=0, n=edgeEndList->size(); i<n; i++) {
-		delete (*edgeEndList)[i];
-	}
-	delete edgeEndList;
+    for(size_t i = 0, n = edgeEndList->size(); i < n; i++) {
+        delete(*edgeEndList)[i];
+    }
+    delete edgeEndList;
 }
 
 /*public*/
 vector<Edge*>::iterator
 PlanarGraph::getEdgeIterator()
 {
-	assert(edges);
-	return edges->begin();
+    assert(edges);
+    return edges->begin();
 }
 
 /*public*/
-vector<EdgeEnd*> *
+vector<EdgeEnd*>*
 PlanarGraph::getEdgeEnds()
 {
-	return edgeEndList;
+    return edgeEndList;
 }
 
 /*public*/
 bool
 PlanarGraph::isBoundaryNode(int geomIndex, const Coordinate& coord)
 {
-	assert(nodes);
+    assert(nodes);
 
-	Node *node=nodes->find(coord);
-	if (node==nullptr) return false;
+    Node* node = nodes->find(coord);
+    if(node == nullptr) {
+        return false;
+    }
 
-	const Label& label = node->getLabel();
-	if (! label.isNull() && label.getLocation(geomIndex)==Location::BOUNDARY)
-			return true;
+    const Label& label = node->getLabel();
+    if(! label.isNull() && label.getLocation(geomIndex) == Location::BOUNDARY) {
+        return true;
+    }
 
-	return false;
+    return false;
 }
 
 /*protected*/
 void
-PlanarGraph::insertEdge(Edge *e)
+PlanarGraph::insertEdge(Edge* e)
 {
-	assert(e);
-	assert(edges);
-	edges->push_back(e);
+    assert(e);
+    assert(edges);
+    edges->push_back(e);
 }
 
 /*public*/
 void
 PlanarGraph::add(EdgeEnd* e)
 {
-	// It is critical to add the edge to the edgeEndList first,
-	// then it is safe to follow with any potentially throwing operations.
-	assert(edgeEndList);
-	edgeEndList->push_back(e);
+    // It is critical to add the edge to the edgeEndList first,
+    // then it is safe to follow with any potentially throwing operations.
+    assert(edgeEndList);
+    edgeEndList->push_back(e);
 
-	assert(e);
-	assert(nodes);
-	nodes->add(e);
+    assert(e);
+    assert(nodes);
+    nodes->add(e);
 }
 
 /*public*/
 NodeMap::iterator
 PlanarGraph::getNodeIterator()
 {
-	assert(nodes);
-	return nodes->begin();
+    assert(nodes);
+    return nodes->begin();
 }
 
 /*public*/
 void
 PlanarGraph::getNodes(vector<Node*>& values)
 {
-	assert(nodes);
-	NodeMap::iterator it=nodes->nodeMap.begin();
-	while(it!=nodes->nodeMap.end()) {
-		assert(it->second);
-		values.push_back(it->second);
-		it++;
-	}
+    assert(nodes);
+    NodeMap::iterator it = nodes->nodeMap.begin();
+    while(it != nodes->nodeMap.end()) {
+        assert(it->second);
+        values.push_back(it->second);
+        it++;
+    }
 }
 
 // arg cannot be const, NodeMap::addNode will
 // occasionally label-merge first arg.
 /*public*/
 Node*
-PlanarGraph::addNode(Node *node)
+PlanarGraph::addNode(Node* node)
 {
-	assert(nodes);
+    assert(nodes);
 #if GEOS_DEBUG > 1
-	cerr << "PlanarGraph::addNode(Node * " << *node
-		<< ")" << endl;
+    cerr << "PlanarGraph::addNode(Node * " << *node
+         << ")" << endl;
 #endif
-	return nodes->addNode(node);
+    return nodes->addNode(node);
 }
 
 /*public*/
@@ -183,44 +186,43 @@ Node*
 PlanarGraph::addNode(const Coordinate& coord)
 {
 #if GEOS_DEBUG > 1
-	cerr << "PlanarGraph::addNode(Coordinate& "
-		<< coord << ")" << endl;
+    cerr << "PlanarGraph::addNode(Coordinate& "
+         << coord << ")" << endl;
 #endif
-	return nodes->addNode(coord);
+    return nodes->addNode(coord);
 }
 
 /*public*/
 Node*
 PlanarGraph::find(Coordinate& coord)
 {
-	assert(nodes);
-	return nodes->find(coord);
+    assert(nodes);
+    return nodes->find(coord);
 }
 
 /*public*/
 void
 PlanarGraph::addEdges(const vector<Edge*>& edgesToAdd)
 {
-	// create all the nodes for the edges
-	for (vector<Edge*>::const_iterator it=edgesToAdd.begin(),
-		endIt=edgesToAdd.end(); it!=endIt; ++it)
-	{
-		Edge *e=*it;
-		assert(e);
-		edges->push_back(e);
+    // create all the nodes for the edges
+    for(vector<Edge*>::const_iterator it = edgesToAdd.begin(),
+            endIt = edgesToAdd.end(); it != endIt; ++it) {
+        Edge* e = *it;
+        assert(e);
+        edges->push_back(e);
 
-		// PlanarGraph destructor will delete all DirectedEdges
-		// in edgeEndList, which is where these are added
-		// by the ::add(EdgeEnd) call
-		std::unique_ptr<DirectedEdge> de1(new DirectedEdge(e, true));
-		std::unique_ptr<DirectedEdge> de2(new DirectedEdge(e, false));
-		de1->setSym(de2.get());
-		de2->setSym(de1.get());
+        // PlanarGraph destructor will delete all DirectedEdges
+        // in edgeEndList, which is where these are added
+        // by the ::add(EdgeEnd) call
+        std::unique_ptr<DirectedEdge> de1(new DirectedEdge(e, true));
+        std::unique_ptr<DirectedEdge> de2(new DirectedEdge(e, false));
+        de1->setSym(de2.get());
+        de2->setSym(de1.get());
 
-		// First, ::add takes the ownership, then follows with operations that may throw.
-		add(de1.release());
-		add(de2.release());
-	}
+        // First, ::add takes the ownership, then follows with operations that may throw.
+        add(de1.release());
+        add(de2.release());
+    }
 }
 
 /*public static*/
@@ -228,21 +230,21 @@ void
 PlanarGraph::linkResultDirectedEdges()
 {
 #if GEOS_DEBUG
-	cerr<<"PlanarGraph::linkResultDirectedEdges called"<<endl;
+    cerr << "PlanarGraph::linkResultDirectedEdges called" << endl;
 #endif
-	NodeMap::iterator nodeit=nodes->nodeMap.begin();
-	for (;nodeit!=nodes->nodeMap.end();nodeit++) {
-		Node *node=nodeit->second;
-		assert(node);
+    NodeMap::iterator nodeit = nodes->nodeMap.begin();
+    for(; nodeit != nodes->nodeMap.end(); nodeit++) {
+        Node* node = nodeit->second;
+        assert(node);
 
-		EdgeEndStar* ees=node->getEdges();
-		assert(ees);
-		assert(dynamic_cast<DirectedEdgeStar*>(ees));
-		DirectedEdgeStar* des = static_cast<DirectedEdgeStar*>(ees);
+        EdgeEndStar* ees = node->getEdges();
+        assert(ees);
+        assert(dynamic_cast<DirectedEdgeStar*>(ees));
+        DirectedEdgeStar* des = static_cast<DirectedEdgeStar*>(ees);
 
-		// this might throw an exception
-		des->linkResultDirectedEdges();
-	}
+        // this might throw an exception
+        des->linkResultDirectedEdges();
+    }
 }
 
 /*
@@ -254,109 +256,108 @@ void
 PlanarGraph::linkAllDirectedEdges()
 {
 #if GEOS_DEBUG
-	cerr<<"PlanarGraph::linkAllDirectedEdges called"<<endl;
+    cerr << "PlanarGraph::linkAllDirectedEdges called" << endl;
 #endif
-	NodeMap::iterator nodeit=nodes->nodeMap.begin();
-	for (;nodeit!=nodes->nodeMap.end();nodeit++)
-	{
-		Node *node=nodeit->second;
-		assert(node);
+    NodeMap::iterator nodeit = nodes->nodeMap.begin();
+    for(; nodeit != nodes->nodeMap.end(); nodeit++) {
+        Node* node = nodeit->second;
+        assert(node);
 
-		EdgeEndStar *ees=node->getEdges();
-		assert(ees);
+        EdgeEndStar* ees = node->getEdges();
+        assert(ees);
 
-		// Unespected non-DirectedEdgeStar in node
-		assert(dynamic_cast<DirectedEdgeStar *>(ees));
-		DirectedEdgeStar *des=static_cast<DirectedEdgeStar *>(ees);
+        // Unespected non-DirectedEdgeStar in node
+        assert(dynamic_cast<DirectedEdgeStar*>(ees));
+        DirectedEdgeStar* des = static_cast<DirectedEdgeStar*>(ees);
 
-		des->linkAllDirectedEdges();
-	}
+        des->linkAllDirectedEdges();
+    }
 }
 
 /*public*/
 EdgeEnd*
-PlanarGraph::findEdgeEnd(Edge *e)
+PlanarGraph::findEdgeEnd(Edge* e)
 {
-	vector<EdgeEnd*>* eev=getEdgeEnds();
-	assert(eev);
+    vector<EdgeEnd*>* eev = getEdgeEnds();
+    assert(eev);
 
-	for (vector<EdgeEnd*>::iterator i=eev->begin(), iEnd=eev->end();
-			i != iEnd;
-			++i)
-	{
-		EdgeEnd *ee=*i;
-		assert(ee);
+    for(vector<EdgeEnd*>::iterator i = eev->begin(), iEnd = eev->end();
+            i != iEnd;
+            ++i) {
+        EdgeEnd* ee = *i;
+        assert(ee);
 
-		// should test using values rather then pointers ?
-		if (ee->getEdge()==e) return ee;
-	}
-	return nullptr;
+        // should test using values rather then pointers ?
+        if(ee->getEdge() == e) {
+            return ee;
+        }
+    }
+    return nullptr;
 }
 
 /*public*/
 Edge*
 PlanarGraph::findEdge(const Coordinate& p0, const Coordinate& p1)
 {
-	for (size_t i=0, n=edges->size(); i<n; ++i)
-	{
-		Edge *e=(*edges)[i];
-		assert(e);
+    for(size_t i = 0, n = edges->size(); i < n; ++i) {
+        Edge* e = (*edges)[i];
+        assert(e);
 
-		const CoordinateSequence* eCoord=e->getCoordinates();
-		assert(eCoord);
+        const CoordinateSequence* eCoord = e->getCoordinates();
+        assert(eCoord);
 
-		if (p0==eCoord->getAt(0) && p1==eCoord->getAt(1))
-			return e;
-	}
-	return nullptr;
+        if(p0 == eCoord->getAt(0) && p1 == eCoord->getAt(1)) {
+            return e;
+        }
+    }
+    return nullptr;
 }
 
 /*public*/
 Edge*
 PlanarGraph::findEdgeInSameDirection(const Coordinate& p0,
-		const Coordinate& p1)
+                                     const Coordinate& p1)
 {
-	for(size_t i=0, n=edges->size(); i<n; i++)
-	{
-		Edge *e=(*edges)[i];
-		assert(e);
+    for(size_t i = 0, n = edges->size(); i < n; i++) {
+        Edge* e = (*edges)[i];
+        assert(e);
 
-		const CoordinateSequence* eCoord=e->getCoordinates();
-		assert(eCoord);
+        const CoordinateSequence* eCoord = e->getCoordinates();
+        assert(eCoord);
 
-		size_t nCoords=eCoord->size();
-		assert(nCoords>1);
+        size_t nCoords = eCoord->size();
+        assert(nCoords > 1);
 
-		if (matchInSameDirection(p0, p1,
-				eCoord->getAt(0),
-				eCoord->getAt(1)))
-		{
-			return e;
-		}
+        if(matchInSameDirection(p0, p1,
+                                eCoord->getAt(0),
+                                eCoord->getAt(1))) {
+            return e;
+        }
 
-		if (matchInSameDirection(p0, p1,
-				eCoord->getAt(nCoords-1),
-				eCoord->getAt(nCoords-2)))
-		{
-			return e;
-		}
-	}
+        if(matchInSameDirection(p0, p1,
+                                eCoord->getAt(nCoords - 1),
+                                eCoord->getAt(nCoords - 2))) {
+            return e;
+        }
+    }
 
-	return nullptr;
+    return nullptr;
 }
 
 /*private*/
 bool
 PlanarGraph::matchInSameDirection(const Coordinate& p0, const Coordinate& p1,
-		const Coordinate& ep0, const Coordinate& ep1)
+                                  const Coordinate& ep0, const Coordinate& ep1)
 {
-	if (!(p0==ep0))
-		return false;
+    if(!(p0 == ep0)) {
+        return false;
+    }
 
-	if (Orientation::index(p0,p1,ep1)==Orientation::COLLINEAR
-		&& Quadrant::quadrant(p0,p1)==Quadrant::quadrant(ep0,ep1))
-			return true;
-	return false;
+    if(Orientation::index(p0, p1, ep1) == Orientation::COLLINEAR
+            && Quadrant::quadrant(p0, p1) == Quadrant::quadrant(ep0, ep1)) {
+        return true;
+    }
+    return false;
 }
 
 string
@@ -365,18 +366,17 @@ PlanarGraph::printEdges()
 
     std::ostringstream oss;
     oss << "Edges: ";
-	for(size_t i=0, n=edges->size(); i<n; ++i)
-	{
-        Edge *e=(*edges)[i];
-		oss << "edge " << i << ":\n" << e->print() << e->eiList.print();
-	}
+    for(size_t i = 0, n = edges->size(); i < n; ++i) {
+        Edge* e = (*edges)[i];
+        oss << "edge " << i << ":\n" << e->print() << e->eiList.print();
+    }
     return oss.str();
 }
 
 NodeMap*
 PlanarGraph::getNodeMap()
 {
-	return nodes;
+    return nodes;
 }
 
 } // namespace geos.geomgraph

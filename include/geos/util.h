@@ -35,10 +35,10 @@
 // Private macros definition
 //
 
-namespace geos
-{
-    template<class T>
-    void ignore_unused_variable_warning(T const& ) {}
+namespace geos {
+template<class T>
+void
+ignore_unused_variable_warning(T const&) {}
 }
 
 

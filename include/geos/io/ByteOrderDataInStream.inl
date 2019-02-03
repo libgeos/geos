@@ -8,7 +8,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -31,10 +31,10 @@ namespace geos {
 namespace io {
 
 INLINE
-ByteOrderDataInStream::ByteOrderDataInStream(std::istream *s)
-	:
-	byteOrder(getMachineByteOrder()),
-	stream(s)
+ByteOrderDataInStream::ByteOrderDataInStream(std::istream* s)
+    :
+    byteOrder(getMachineByteOrder()),
+    stream(s)
 {
 }
 
@@ -43,52 +43,56 @@ ByteOrderDataInStream::~ByteOrderDataInStream()
 {
 }
 
-INLINE void 
-ByteOrderDataInStream::setInStream(std::istream *s)
+INLINE void
+ByteOrderDataInStream::setInStream(std::istream* s)
 {
-	stream=s;
+    stream = s;
 }
 
 INLINE void
 ByteOrderDataInStream::setOrder(int order)
 {
-	byteOrder=order;
+    byteOrder = order;
 }
 
 INLINE unsigned char
 ByteOrderDataInStream::readByte() // throws ParseException
 {
-	stream->read(reinterpret_cast<char *>(buf), 1);
-	if ( stream->eof() )
-		throw  ParseException("Unexpected EOF parsing WKB");
-	return buf[0];
+    stream->read(reinterpret_cast<char*>(buf), 1);
+    if(stream->eof()) {
+        throw  ParseException("Unexpected EOF parsing WKB");
+    }
+    return buf[0];
 }
 
 INLINE int
-ByteOrderDataInStream::readInt() 
+ByteOrderDataInStream::readInt()
 {
-	stream->read(reinterpret_cast<char *>(buf), 4);
-	if ( stream->eof() )
-		throw  ParseException("Unexpected EOF parsing WKB");
-	return ByteOrderValues::getInt(buf, byteOrder);
+    stream->read(reinterpret_cast<char*>(buf), 4);
+    if(stream->eof()) {
+        throw  ParseException("Unexpected EOF parsing WKB");
+    }
+    return ByteOrderValues::getInt(buf, byteOrder);
 }
 
 INLINE long
-ByteOrderDataInStream::readLong() 
+ByteOrderDataInStream::readLong()
 {
-	stream->read(reinterpret_cast<char *>(buf), 8);
-	if ( stream->eof() )
-		throw  ParseException("Unexpected EOF parsing WKB");
-	return static_cast<long>(ByteOrderValues::getLong(buf, byteOrder));
+    stream->read(reinterpret_cast<char*>(buf), 8);
+    if(stream->eof()) {
+        throw  ParseException("Unexpected EOF parsing WKB");
+    }
+    return static_cast<long>(ByteOrderValues::getLong(buf, byteOrder));
 }
 
 INLINE double
-ByteOrderDataInStream::readDouble() 
+ByteOrderDataInStream::readDouble()
 {
-	stream->read(reinterpret_cast<char *>(buf), 8);
-	if ( stream->eof() )
-		throw  ParseException("Unexpected EOF parsing WKB");
-	return ByteOrderValues::getDouble(buf, byteOrder);
+    stream->read(reinterpret_cast<char*>(buf), 8);
+    if(stream->eof()) {
+        throw  ParseException("Unexpected EOF parsing WKB");
+    }
+    return ByteOrderValues::getDouble(buf, byteOrder);
 }
 
 } // namespace io

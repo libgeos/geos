@@ -52,282 +52,280 @@ namespace linemerge { // geos.operation.linemerge
 bool
 LineSequencer::isSequenced(const Geometry* geom)
 {
-	const MultiLineString *mls;
+    const MultiLineString* mls;
 
-	if ( nullptr == (mls=dynamic_cast<const MultiLineString *>(geom)) )
-	{
-		return true;
-	}
+    if(nullptr == (mls = dynamic_cast<const MultiLineString*>(geom))) {
+        return true;
+    }
 
-	// the nodes in all subgraphs which have been completely scanned
-	Coordinate::ConstSet prevSubgraphNodes;
-	Coordinate::ConstVect currNodes;
+    // the nodes in all subgraphs which have been completely scanned
+    Coordinate::ConstSet prevSubgraphNodes;
+    Coordinate::ConstVect currNodes;
 
-	const Coordinate* lastNode = nullptr;
+    const Coordinate* lastNode = nullptr;
 
-	for (std::size_t i=0, n=mls->getNumGeometries(); i<n; ++i)
-	{
-		const LineString* lineptr = \
-			dynamic_cast<const LineString*>(mls->getGeometryN(i));
-		assert(lineptr);
-		const LineString& line = *lineptr;
+    for(std::size_t i = 0, n = mls->getNumGeometries(); i < n; ++i) {
+        const LineString* lineptr = \
+                                    dynamic_cast<const LineString*>(mls->getGeometryN(i));
+        assert(lineptr);
+        const LineString& line = *lineptr;
 
 
-		const Coordinate* startNode = &(line.getCoordinateN(0));
-		const Coordinate* endNode = &(line.getCoordinateN(line.getNumPoints() - 1));
+        const Coordinate* startNode = &(line.getCoordinateN(0));
+        const Coordinate* endNode = &(line.getCoordinateN(line.getNumPoints() - 1));
 
-		/**
-		 * If this linestring is connected to a previous subgraph,
-		 * geom is not sequenced
-		 */
-		if (prevSubgraphNodes.find(startNode) != prevSubgraphNodes.end())
-		{
-			return false;
-		}
-		if (prevSubgraphNodes.find(endNode) != prevSubgraphNodes.end())
-		{
-			return false;
-		}
+        /**
+         * If this linestring is connected to a previous subgraph,
+         * geom is not sequenced
+         */
+        if(prevSubgraphNodes.find(startNode) != prevSubgraphNodes.end()) {
+            return false;
+        }
+        if(prevSubgraphNodes.find(endNode) != prevSubgraphNodes.end()) {
+            return false;
+        }
 
-		if (lastNode != nullptr)
-		{
-			if (! startNode->equals2D(*lastNode))
-			{
-				// start new connected sequence
-				prevSubgraphNodes.insert(currNodes.begin(),
-						currNodes.end());
-				currNodes.clear();
-			}
-		}
-		currNodes.push_back(startNode);
-		currNodes.push_back(endNode);
-		lastNode = endNode;
-	}
-	return true;
+        if(lastNode != nullptr) {
+            if(! startNode->equals2D(*lastNode)) {
+                // start new connected sequence
+                prevSubgraphNodes.insert(currNodes.begin(),
+                                         currNodes.end());
+                currNodes.clear();
+            }
+        }
+        currNodes.push_back(startNode);
+        currNodes.push_back(endNode);
+        lastNode = endNode;
+    }
+    return true;
 }
 
 /* private */
 bool
 LineSequencer::hasSequence(planargraph::Subgraph& p_graph)
 {
-	int oddDegreeCount = 0;
-	for (planargraph::NodeMap::container::const_iterator
-		it=p_graph.nodeBegin(), endIt=p_graph.nodeEnd();
-		it!=endIt;
-		++it)
-	{
-		planargraph::Node* node = it->second;
-		if (node->getDegree() % 2 == 1)
-		oddDegreeCount++;
-	}
-	return oddDegreeCount <= 2;
+    int oddDegreeCount = 0;
+    for(planargraph::NodeMap::container::const_iterator
+            it = p_graph.nodeBegin(), endIt = p_graph.nodeEnd();
+            it != endIt;
+            ++it) {
+        planargraph::Node* node = it->second;
+        if(node->getDegree() % 2 == 1) {
+            oddDegreeCount++;
+        }
+    }
+    return oddDegreeCount <= 2;
 }
 
 void
-LineSequencer::delAll( LineSequencer::Sequences& s)
+LineSequencer::delAll(LineSequencer::Sequences& s)
 {
-  for ( Sequences::iterator i=s.begin(), e=s.end(); i!=e; ++i )
-  {
-    delete *i;
-  }
+    for(Sequences::iterator i = s.begin(), e = s.end(); i != e; ++i) {
+        delete *i;
+    }
 }
 
 /*private*/
 LineSequencer::Sequences*
 LineSequencer::findSequences()
 {
-	Sequences *sequences = new Sequences();
-	planargraph::algorithm::ConnectedSubgraphFinder csFinder(graph);
-	vector<planargraph::Subgraph*> subgraphs;
-	csFinder.getConnectedSubgraphs(subgraphs);
-	for (vector<planargraph::Subgraph*>::const_iterator
-		it=subgraphs.begin(), endIt=subgraphs.end();
-		it!=endIt;
-		++it )
-	{
-		planargraph::Subgraph* subgraph = *it;
-		if (hasSequence(*subgraph)) {
-			planargraph::DirectedEdge::NonConstList* seq=findSequence(*subgraph);
-			sequences->push_back(seq);
-		}
-		else {
-			// if any subgraph cannot be sequenced, abort
-			delete subgraph;
-			delAll(*sequences);
-			delete sequences;
-			return nullptr;
-		}
-		delete subgraph;
-	}
-	return sequences;
+    Sequences* sequences = new Sequences();
+    planargraph::algorithm::ConnectedSubgraphFinder csFinder(graph);
+    vector<planargraph::Subgraph*> subgraphs;
+    csFinder.getConnectedSubgraphs(subgraphs);
+    for(vector<planargraph::Subgraph*>::const_iterator
+            it = subgraphs.begin(), endIt = subgraphs.end();
+            it != endIt;
+            ++it) {
+        planargraph::Subgraph* subgraph = *it;
+        if(hasSequence(*subgraph)) {
+            planargraph::DirectedEdge::NonConstList* seq = findSequence(*subgraph);
+            sequences->push_back(seq);
+        }
+        else {
+            // if any subgraph cannot be sequenced, abort
+            delete subgraph;
+            delAll(*sequences);
+            delete sequences;
+            return nullptr;
+        }
+        delete subgraph;
+    }
+    return sequences;
 }
 
 /*private*/
 void
-LineSequencer::addLine(const LineString *lineString)
+LineSequencer::addLine(const LineString* lineString)
 {
-	if (factory == nullptr) {
-		factory = lineString->getFactory();
-	}
-	graph.addEdge(lineString);
-	++lineCount;
+    if(factory == nullptr) {
+        factory = lineString->getFactory();
+    }
+    graph.addEdge(lineString);
+    ++lineCount;
 }
 
 /* private */
 void
 LineSequencer::computeSequence()
 {
-	if (isRun) return;
-	isRun = true;
+    if(isRun) {
+        return;
+    }
+    isRun = true;
 
-	Sequences* sequences = findSequences();
-	if (sequences == nullptr) return;
+    Sequences* sequences = findSequences();
+    if(sequences == nullptr) {
+        return;
+    }
 
-	sequencedGeometry = unique_ptr<Geometry>(buildSequencedGeometry(*sequences));
-	isSequenceableVar = true;
+    sequencedGeometry = unique_ptr<Geometry>(buildSequencedGeometry(*sequences));
+    isSequenceableVar = true;
 
-	delAll(*sequences);
-	delete sequences;
+    delAll(*sequences);
+    delete sequences;
 
-	// Lines were missing from result
-	assert(lineCount == sequencedGeometry->getNumGeometries());
+    // Lines were missing from result
+    assert(lineCount == sequencedGeometry->getNumGeometries());
 
-	// Result is not linear
-	assert(dynamic_cast<LineString *>(sequencedGeometry.get())
-		|| dynamic_cast<MultiLineString *>(sequencedGeometry.get()));
+    // Result is not linear
+    assert(dynamic_cast<LineString*>(sequencedGeometry.get())
+           || dynamic_cast<MultiLineString*>(sequencedGeometry.get()));
 }
 
 /*private*/
 Geometry*
 LineSequencer::buildSequencedGeometry(const Sequences& sequences)
 {
-	unique_ptr<Geometry::NonConstVect> lines(new Geometry::NonConstVect);
+    unique_ptr<Geometry::NonConstVect> lines(new Geometry::NonConstVect);
 
-	for (Sequences::const_iterator
-		i1=sequences.begin(), i1End=sequences.end();
-		i1 != i1End;
-		++i1)
-	{
-		planargraph::DirectedEdge::NonConstList& seq = *(*i1);
-		for(planargraph::DirectedEdge::NonConstList::iterator i2=seq.begin(),
-			i2End=seq.end(); i2 != i2End; ++i2)
-		{
-			const planargraph::DirectedEdge* de = *i2;
-			assert(dynamic_cast<LineMergeEdge* >(de->getEdge()));
-			LineMergeEdge* e = static_cast<LineMergeEdge* >(de->getEdge());
-			const LineString* line = e->getLine();
+    for(Sequences::const_iterator
+            i1 = sequences.begin(), i1End = sequences.end();
+            i1 != i1End;
+            ++i1) {
+        planargraph::DirectedEdge::NonConstList& seq = *(*i1);
+        for(planargraph::DirectedEdge::NonConstList::iterator i2 = seq.begin(),
+                i2End = seq.end(); i2 != i2End; ++i2) {
+            const planargraph::DirectedEdge* de = *i2;
+            assert(dynamic_cast<LineMergeEdge* >(de->getEdge()));
+            LineMergeEdge* e = static_cast<LineMergeEdge* >(de->getEdge());
+            const LineString* line = e->getLine();
 
-			// lineToAdd will be a *copy* of input things
-			LineString* lineToAdd;
+            // lineToAdd will be a *copy* of input things
+            LineString* lineToAdd;
 
-			if ( ! de->getEdgeDirection() && ! line->isClosed() ) {
-				lineToAdd = reverse(line);
-			} else {
-				Geometry* lineClone = line->clone();
-				lineToAdd = dynamic_cast<LineString *>(lineClone);
-				assert(lineToAdd);
-			}
+            if(! de->getEdgeDirection() && ! line->isClosed()) {
+                lineToAdd = reverse(line);
+            }
+            else {
+                Geometry* lineClone = line->clone();
+                lineToAdd = dynamic_cast<LineString*>(lineClone);
+                assert(lineToAdd);
+            }
 
-			lines->push_back(lineToAdd);
-		}
-	}
+            lines->push_back(lineToAdd);
+        }
+    }
 
-	if ( lines->empty() ) {
-		return nullptr;
-	} else {
-		Geometry::NonConstVect *l=lines.get();
-		lines.release();
-		return factory->buildGeometry(l);
-	}
+    if(lines->empty()) {
+        return nullptr;
+    }
+    else {
+        Geometry::NonConstVect* l = lines.get();
+        lines.release();
+        return factory->buildGeometry(l);
+    }
 }
 
 /*static private*/
-LineString *
-LineSequencer::reverse(const LineString *line)
+LineString*
+LineSequencer::reverse(const LineString* line)
 {
-	CoordinateSequence* cs=line->getCoordinates();
-	CoordinateSequence::reverse(cs);
-	return line->getFactory()->createLineString(cs);
+    CoordinateSequence* cs = line->getCoordinates();
+    CoordinateSequence::reverse(cs);
+    return line->getFactory()->createLineString(cs);
 }
 
 /*private static*/
 const planargraph::Node*
 LineSequencer::findLowestDegreeNode(const planargraph::Subgraph& graph)
 {
-	size_t minDegree = numeric_limits<size_t>::max();
-	const planargraph::Node* minDegreeNode = nullptr;
-	for (planargraph::NodeMap::container::const_iterator
-		it = graph.nodeBegin(), itEnd = graph.nodeEnd();
-		it != itEnd;
-		++it )
-	{
-		const planargraph::Node* node = (*it).second;
-		if (minDegreeNode == nullptr || node->getDegree() < minDegree)
-		{
-			minDegree = node->getDegree();
-			minDegreeNode = node;
-		}
-	}
-	return minDegreeNode;
+    size_t minDegree = numeric_limits<size_t>::max();
+    const planargraph::Node* minDegreeNode = nullptr;
+    for(planargraph::NodeMap::container::const_iterator
+            it = graph.nodeBegin(), itEnd = graph.nodeEnd();
+            it != itEnd;
+            ++it) {
+        const planargraph::Node* node = (*it).second;
+        if(minDegreeNode == nullptr || node->getDegree() < minDegree) {
+            minDegree = node->getDegree();
+            minDegreeNode = node;
+        }
+    }
+    return minDegreeNode;
 }
 
 /*private static*/
 const planargraph::DirectedEdge*
 LineSequencer::findUnvisitedBestOrientedDE(const planargraph::Node* node)
 {
-	using planargraph::DirectedEdge;
-	using planargraph::DirectedEdgeStar;
+    using planargraph::DirectedEdge;
+    using planargraph::DirectedEdgeStar;
 
-	const DirectedEdge* wellOrientedDE = nullptr;
-	const DirectedEdge* unvisitedDE = nullptr;
-	const DirectedEdgeStar* des=node->getOutEdges();
-	for (DirectedEdge::NonConstVect::const_iterator i=des->begin(),
-		e=des->end();
-		i!=e;
-		++i)
-	{
-		planargraph::DirectedEdge* de = *i;
-		if (! de->getEdge()->isVisited()) {
-			unvisitedDE = de;
-			if (de->getEdgeDirection()) wellOrientedDE = de;
-		}
-	}
-	if (wellOrientedDE != nullptr)
-		return wellOrientedDE;
-	return unvisitedDE;
+    const DirectedEdge* wellOrientedDE = nullptr;
+    const DirectedEdge* unvisitedDE = nullptr;
+    const DirectedEdgeStar* des = node->getOutEdges();
+    for(DirectedEdge::NonConstVect::const_iterator i = des->begin(),
+            e = des->end();
+            i != e;
+            ++i) {
+        planargraph::DirectedEdge* de = *i;
+        if(! de->getEdge()->isVisited()) {
+            unvisitedDE = de;
+            if(de->getEdgeDirection()) {
+                wellOrientedDE = de;
+            }
+        }
+    }
+    if(wellOrientedDE != nullptr) {
+        return wellOrientedDE;
+    }
+    return unvisitedDE;
 }
 
 
 /*private*/
 void
-LineSequencer::addReverseSubpath(const planargraph::DirectedEdge *de,
-		planargraph::DirectedEdge::NonConstList& deList,
-		planargraph::DirectedEdge::NonConstList::iterator lit,
-		bool expectedClosed)
+LineSequencer::addReverseSubpath(const planargraph::DirectedEdge* de,
+                                 planargraph::DirectedEdge::NonConstList& deList,
+                                 planargraph::DirectedEdge::NonConstList::iterator lit,
+                                 bool expectedClosed)
 {
-	using planargraph::Node;
-	using planargraph::DirectedEdge;
+    using planargraph::Node;
+    using planargraph::DirectedEdge;
 
-	// trace an unvisited path *backwards* from this de
-	Node* endNode = de->getToNode();
+    // trace an unvisited path *backwards* from this de
+    Node* endNode = de->getToNode();
 
-	Node* fromNode = nullptr;
-	while (true) {
-		deList.insert(lit, de->getSym());
-		de->getEdge()->setVisited(true);
-		fromNode = de->getFromNode();
-		const DirectedEdge* unvisitedOutDE = findUnvisitedBestOrientedDE(fromNode);
+    Node* fromNode = nullptr;
+    while(true) {
+        deList.insert(lit, de->getSym());
+        de->getEdge()->setVisited(true);
+        fromNode = de->getFromNode();
+        const DirectedEdge* unvisitedOutDE = findUnvisitedBestOrientedDE(fromNode);
 
-		// this must terminate, since we are continually marking edges as visited
-		if (unvisitedOutDE == nullptr) break;
-		de = unvisitedOutDE->getSym();
-	}
-	if ( expectedClosed ) {
-		// the path should end at the toNode of this de,
-		// otherwise we have an error
-		util::Assert::isTrue(fromNode == endNode, "path not contiguos");
-		//assert(fromNode == endNode);
-	}
+        // this must terminate, since we are continually marking edges as visited
+        if(unvisitedOutDE == nullptr) {
+            break;
+        }
+        de = unvisitedOutDE->getSym();
+    }
+    if(expectedClosed) {
+        // the path should end at the toNode of this de,
+        // otherwise we have an error
+        util::Assert::isTrue(fromNode == endNode, "path not contiguos");
+        //assert(fromNode == endNode);
+    }
 
 }
 
@@ -335,114 +333,113 @@ LineSequencer::addReverseSubpath(const planargraph::DirectedEdge *de,
 planargraph::DirectedEdge::NonConstList*
 LineSequencer::findSequence(planargraph::Subgraph& p_graph)
 {
-	using planargraph::DirectedEdge;
-	using planargraph::Node;
-	using planargraph::GraphComponent;
+    using planargraph::DirectedEdge;
+    using planargraph::Node;
+    using planargraph::GraphComponent;
 
-	GraphComponent::setVisited(p_graph.edgeBegin(),
-			p_graph.edgeEnd(), false);
+    GraphComponent::setVisited(p_graph.edgeBegin(),
+                               p_graph.edgeEnd(), false);
 
-	const Node* startNode = findLowestDegreeNode(p_graph);
+    const Node* startNode = findLowestDegreeNode(p_graph);
 
-	const DirectedEdge *startDE = *(startNode->getOutEdges()->begin());
-	const DirectedEdge *startDESym = startDE->getSym();
+    const DirectedEdge* startDE = *(startNode->getOutEdges()->begin());
+    const DirectedEdge* startDESym = startDE->getSym();
 
-	DirectedEdge::NonConstList *seq = new DirectedEdge::NonConstList();
+    DirectedEdge::NonConstList* seq = new DirectedEdge::NonConstList();
 
-	DirectedEdge::NonConstList::iterator lit=seq->begin();
-	addReverseSubpath(startDESym, *seq, lit, false);
+    DirectedEdge::NonConstList::iterator lit = seq->begin();
+    addReverseSubpath(startDESym, *seq, lit, false);
 
-	lit=seq->end();
-	while (lit != seq->begin()) {
-		const DirectedEdge* prev = *(--lit);
-		const DirectedEdge* unvisitedOutDE = findUnvisitedBestOrientedDE(prev->getFromNode());
-		if (unvisitedOutDE != nullptr)
-			addReverseSubpath(unvisitedOutDE->getSym(), *seq, lit, true);
-	}
+    lit = seq->end();
+    while(lit != seq->begin()) {
+        const DirectedEdge* prev = *(--lit);
+        const DirectedEdge* unvisitedOutDE = findUnvisitedBestOrientedDE(prev->getFromNode());
+        if(unvisitedOutDE != nullptr) {
+            addReverseSubpath(unvisitedOutDE->getSym(), *seq, lit, true);
+        }
+    }
 
-	// At this point, we have a valid sequence of graph DirectedEdges,
-	// but it is not necessarily appropriately oriented relative to
-	// the underlying geometry.
-	DirectedEdge::NonConstList* orientedSeq = orient(seq);
+    // At this point, we have a valid sequence of graph DirectedEdges,
+    // but it is not necessarily appropriately oriented relative to
+    // the underlying geometry.
+    DirectedEdge::NonConstList* orientedSeq = orient(seq);
 
-	if (orientedSeq != seq) delete seq;
+    if(orientedSeq != seq) {
+        delete seq;
+    }
 
-	return orientedSeq;
+    return orientedSeq;
 }
 
 /* private */
 planargraph::DirectedEdge::NonConstList*
 LineSequencer::orient(planargraph::DirectedEdge::NonConstList* seq)
 {
-	using namespace geos::planargraph;
+    using namespace geos::planargraph;
 
-	const DirectedEdge* startEdge = seq->front();
-	const DirectedEdge* endEdge = seq->back();
-	Node* startNode = startEdge->getFromNode();
-	Node* endNode = endEdge->getToNode();
+    const DirectedEdge* startEdge = seq->front();
+    const DirectedEdge* endEdge = seq->back();
+    Node* startNode = startEdge->getFromNode();
+    Node* endNode = endEdge->getToNode();
 
-	bool flipSeq = false;
-	bool hasDegree1Node = \
-		startNode->getDegree() == 1 || endNode->getDegree() == 1;
+    bool flipSeq = false;
+    bool hasDegree1Node = \
+                          startNode->getDegree() == 1 || endNode->getDegree() == 1;
 
-	if (hasDegree1Node)
-	{
-		bool hasObviousStartNode = false;
+    if(hasDegree1Node) {
+        bool hasObviousStartNode = false;
 
-		// test end edge before start edge, to make result stable
-		// (ie. if both are good starts, pick the actual start
-		if (endEdge->getToNode()->getDegree() == 1 &&
-				endEdge->getEdgeDirection() == false)
-		{
-			hasObviousStartNode = true;
-			flipSeq = true;
-		}
-		if (startEdge->getFromNode()->getDegree() == 1 &&
-				startEdge->getEdgeDirection() == true)
-		{
-			hasObviousStartNode = true;
-			flipSeq = false;
-		}
+        // test end edge before start edge, to make result stable
+        // (ie. if both are good starts, pick the actual start
+        if(endEdge->getToNode()->getDegree() == 1 &&
+                endEdge->getEdgeDirection() == false) {
+            hasObviousStartNode = true;
+            flipSeq = true;
+        }
+        if(startEdge->getFromNode()->getDegree() == 1 &&
+                startEdge->getEdgeDirection() == true) {
+            hasObviousStartNode = true;
+            flipSeq = false;
+        }
 
-		// since there is no obvious start node,
-		// use any node of degree 1
-		if (! hasObviousStartNode)
-		{
-			// check if the start node should actually
-			// be the end node
-			if (startEdge->getFromNode()->getDegree() == 1)
-				flipSeq = true;
-			// if the end node is of degree 1, it is
-			// properly the end node
-		}
+        // since there is no obvious start node,
+        // use any node of degree 1
+        if(! hasObviousStartNode) {
+            // check if the start node should actually
+            // be the end node
+            if(startEdge->getFromNode()->getDegree() == 1) {
+                flipSeq = true;
+            }
+            // if the end node is of degree 1, it is
+            // properly the end node
+        }
 
-	}
+    }
 
 
-	// if there is no degree 1 node, just use the sequence as is
-	// (Could insert heuristic of taking direction of majority of
-	// lines as overall direction)
+    // if there is no degree 1 node, just use the sequence as is
+    // (Could insert heuristic of taking direction of majority of
+    // lines as overall direction)
 
-	if (flipSeq)
-	{
-		return reverse(*seq);
-	}
-	return seq;
+    if(flipSeq) {
+        return reverse(*seq);
+    }
+    return seq;
 }
 
 /* private */
 planargraph::DirectedEdge::NonConstList*
 LineSequencer::reverse(planargraph::DirectedEdge::NonConstList& seq)
 {
-	using namespace geos::planargraph;
+    using namespace geos::planargraph;
 
-	DirectedEdge::NonConstList* newSeq = new DirectedEdge::NonConstList();
-	DirectedEdge::NonConstList::iterator it=seq.begin(), itEnd=seq.end();
-	for (; it!=itEnd; ++it) {
-		const DirectedEdge *de = *it;
-		newSeq->push_front(de->getSym());
-	}
-	return newSeq;
+    DirectedEdge::NonConstList* newSeq = new DirectedEdge::NonConstList();
+    DirectedEdge::NonConstList::iterator it = seq.begin(), itEnd = seq.end();
+    for(; it != itEnd; ++it) {
+        const DirectedEdge* de = *it;
+        newSeq->push_front(de->getSym());
+    }
+    return newSeq;
 }
 
 

@@ -21,13 +21,13 @@ namespace bintree { // geos.index.bintree
 
 Interval::Interval()
 {
-	min=0.0;
-	max=0.0;
+    min = 0.0;
+    max = 0.0;
 }
 
 Interval::Interval(double nmin, double nmax)
 {
-	init(nmin, nmax);
+    init(nmin, nmax);
 }
 
 Interval::~Interval()
@@ -36,74 +36,80 @@ Interval::~Interval()
 
 Interval::Interval(const Interval* interval)
 {
-	init(interval->min, interval->max);
+    init(interval->min, interval->max);
 }
 
 void
 Interval::init(double nmin, double nmax)
 {
-	min=nmin;
-	max=nmax;
-	if (min>max) {
-		min=nmax;
-		max=nmin;
-	}
+    min = nmin;
+    max = nmax;
+    if(min > max) {
+        min = nmax;
+        max = nmin;
+    }
 }
 
 double
 Interval::getMin() const
 {
-	return min;
+    return min;
 }
 
 double
 Interval::getMax() const
 {
-	return max;
+    return max;
 }
 
 double
 Interval::getWidth() const
 {
-	return max-min;
+    return max - min;
 }
 
 void
-Interval::expandToInclude(Interval *interval)
+Interval::expandToInclude(Interval* interval)
 {
-	if (interval->max>max) max=interval->max;
-	if (interval->min<min) min=interval->min;
+    if(interval->max > max) {
+        max = interval->max;
+    }
+    if(interval->min < min) {
+        min = interval->min;
+    }
 }
 
 bool
-Interval::overlaps(const Interval *interval) const
+Interval::overlaps(const Interval* interval) const
 {
-	return overlaps(interval->min,interval->max);
+    return overlaps(interval->min, interval->max);
 }
 
 bool
 Interval::overlaps(double nmin, double nmax) const
 {
-	if (min>nmax || max<nmin) return false;
-	return true;
+    if(min > nmax || max < nmin) {
+        return false;
+    }
+    return true;
 }
 
 bool
-Interval::contains(const Interval *interval) const
+Interval::contains(const Interval* interval) const
 {
-	return contains(interval->min,interval->max);
+    return contains(interval->min, interval->max);
 }
 
 bool
 Interval::contains(double nmin, double nmax) const
 {
-	return (nmin>=min && nmax<=max);
+    return (nmin >= min && nmax <= max);
 }
 
 bool
 Interval::contains(double p) const
 {
-	return (p>=min && p<=max);
+    return (p >= min && p <= max);
 }
 
 } // namespace geos.index.bintree

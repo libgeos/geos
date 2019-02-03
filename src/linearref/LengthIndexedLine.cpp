@@ -30,122 +30,136 @@ using namespace std;
 
 using namespace geos::geom;
 
-namespace geos
-{
-namespace linearref   // geos.linearref
-{
+namespace geos {
+namespace linearref { // geos.linearref
 
 LengthIndexedLine::LengthIndexedLine(const Geometry* p_linearGeom) :
-		linearGeom(p_linearGeom) {}
+    linearGeom(p_linearGeom) {}
 
-Coordinate LengthIndexedLine::extractPoint(double index) const
+Coordinate
+LengthIndexedLine::extractPoint(double index) const
 {
-	LinearLocation loc = LengthLocationMap::getLocation(linearGeom, index);
-	Coordinate coord = loc.getCoordinate(linearGeom);
-	return coord;
+    LinearLocation loc = LengthLocationMap::getLocation(linearGeom, index);
+    Coordinate coord = loc.getCoordinate(linearGeom);
+    return coord;
 }
 
-Coordinate LengthIndexedLine::extractPoint(double index, double offsetDistance) const
+Coordinate
+LengthIndexedLine::extractPoint(double index, double offsetDistance) const
 {
-	LinearLocation loc = LengthLocationMap::getLocation(linearGeom, index);
-	Coordinate ret;
-	loc.getSegment(linearGeom)->pointAlongOffset(loc.getSegmentFraction(), offsetDistance, ret);
-	return ret;
+    LinearLocation loc = LengthLocationMap::getLocation(linearGeom, index);
+    Coordinate ret;
+    loc.getSegment(linearGeom)->pointAlongOffset(loc.getSegmentFraction(), offsetDistance, ret);
+    return ret;
 }
 
 
-Geometry *
+Geometry*
 LengthIndexedLine::extractLine(double startIndex, double endIndex) const
 {
-  const LocationIndexedLine lil(linearGeom);
-  const double startIndex2 = clampIndex(startIndex);
-  const double endIndex2 = clampIndex(endIndex);
-  // if extracted line is zero-length, resolve start lower as well to
-  // ensure they are equal
-  const bool resolveStartLower = ( startIndex2 == endIndex2 );
-  const LinearLocation startLoc = locationOf(startIndex2, resolveStartLower);
-  const LinearLocation endLoc = locationOf(endIndex2);
+    const LocationIndexedLine lil(linearGeom);
+    const double startIndex2 = clampIndex(startIndex);
+    const double endIndex2 = clampIndex(endIndex);
+    // if extracted line is zero-length, resolve start lower as well to
+    // ensure they are equal
+    const bool resolveStartLower = (startIndex2 == endIndex2);
+    const LinearLocation startLoc = locationOf(startIndex2, resolveStartLower);
+    const LinearLocation endLoc = locationOf(endIndex2);
 //    LinearLocation endLoc = locationOf(endIndex2, true);
 //    LinearLocation startLoc = locationOf(startIndex2);
-  return ExtractLineByLocation::extract(linearGeom, startLoc, endLoc);
+    return ExtractLineByLocation::extract(linearGeom, startLoc, endLoc);
 }
 
-LinearLocation LengthIndexedLine::locationOf(double index) const
+LinearLocation
+LengthIndexedLine::locationOf(double index) const
 {
-	return LengthLocationMap::getLocation(linearGeom, index);
+    return LengthLocationMap::getLocation(linearGeom, index);
 }
 
 LinearLocation
 LengthIndexedLine::locationOf(double index, bool resolveLower) const
 {
-	return LengthLocationMap::getLocation(linearGeom, index, resolveLower);
+    return LengthLocationMap::getLocation(linearGeom, index, resolveLower);
 }
 
 
-double LengthIndexedLine::indexOf(const Coordinate& pt) const
+double
+LengthIndexedLine::indexOf(const Coordinate& pt) const
 {
-	return LengthIndexOfPoint::indexOf(linearGeom, pt);
+    return LengthIndexOfPoint::indexOf(linearGeom, pt);
 }
 
 
-double LengthIndexedLine::indexOfAfter(const Coordinate& pt, double minIndex) const
+double
+LengthIndexedLine::indexOfAfter(const Coordinate& pt, double minIndex) const
 {
-	return LengthIndexOfPoint::indexOfAfter(linearGeom, pt, minIndex);
+    return LengthIndexOfPoint::indexOfAfter(linearGeom, pt, minIndex);
 }
 
 
-double* LengthIndexedLine::indicesOf(const Geometry* subLine) const
+double*
+LengthIndexedLine::indicesOf(const Geometry* subLine) const
 {
-	LinearLocation* locIndex = LocationIndexOfLine::indicesOf(linearGeom, subLine);
-	double* index = new double[2];
-	index[0] = LengthLocationMap::getLength(linearGeom, locIndex[0]);
-	index[1] = LengthLocationMap::getLength(linearGeom, locIndex[1]);
-	delete [] locIndex;
-	return index;
+    LinearLocation* locIndex = LocationIndexOfLine::indicesOf(linearGeom, subLine);
+    double* index = new double[2];
+    index[0] = LengthLocationMap::getLength(linearGeom, locIndex[0]);
+    index[1] = LengthLocationMap::getLength(linearGeom, locIndex[1]);
+    delete [] locIndex;
+    return index;
 }
 
 
-double LengthIndexedLine::project(const Coordinate& pt) const
+double
+LengthIndexedLine::project(const Coordinate& pt) const
 {
-	return LengthIndexOfPoint::indexOf(linearGeom, pt);
+    return LengthIndexOfPoint::indexOf(linearGeom, pt);
 }
 
-double LengthIndexedLine::getStartIndex() const
+double
+LengthIndexedLine::getStartIndex() const
 {
-	return 0.0;
+    return 0.0;
 }
 
-double LengthIndexedLine::getEndIndex() const
+double
+LengthIndexedLine::getEndIndex() const
 {
-	return linearGeom->getLength();
+    return linearGeom->getLength();
 }
 
-bool LengthIndexedLine::isValidIndex(double index) const
+bool
+LengthIndexedLine::isValidIndex(double index) const
 {
-	return (index >= getStartIndex()
-		&& index <= getEndIndex());
+    return (index >= getStartIndex()
+            && index <= getEndIndex());
 }
 
 /* public */
 double
 LengthIndexedLine::clampIndex(double index) const
 {
-  double posIndex = positiveIndex(index);
-	double startIndex = getStartIndex();
-  if (posIndex < startIndex) return startIndex;
+    double posIndex = positiveIndex(index);
+    double startIndex = getStartIndex();
+    if(posIndex < startIndex) {
+        return startIndex;
+    }
 
-	double endIndex = getEndIndex();
-	if (posIndex > endIndex) return endIndex;
+    double endIndex = getEndIndex();
+    if(posIndex > endIndex) {
+        return endIndex;
+    }
 
-	return posIndex;
+    return posIndex;
 }
 
 /* private */
 double
 LengthIndexedLine::positiveIndex(double index) const
 {
-  if (index >= 0.0) return index;
-  return linearGeom->getLength() + index;
+    if(index >= 0.0) {
+        return index;
+    }
+    return linearGeom->getLength() + index;
 }
 
 } // geos.linearref

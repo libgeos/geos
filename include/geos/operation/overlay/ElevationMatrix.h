@@ -35,16 +35,16 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Coordinate;
-		class Geometry;
-	}
-	namespace operation {
-		namespace overlay {
-			class ElevationMatrixFilter;
-			class ElevationMatrix;
-		}
-	}
+namespace geom {
+class Coordinate;
+class Geometry;
+}
+namespace operation {
+namespace overlay {
+class ElevationMatrixFilter;
+class ElevationMatrix;
+}
+}
 }
 
 namespace geos {
@@ -58,16 +58,15 @@ namespace overlay { // geos::operation::overlay
  * values to the matrix.
  * filter_rw is used to actually elevate Geometries.
  */
-class GEOS_DLL ElevationMatrixFilter: public geom::CoordinateFilter
-{
+class GEOS_DLL ElevationMatrixFilter: public geom::CoordinateFilter {
 public:
-	ElevationMatrixFilter(ElevationMatrix &em);
-	~ElevationMatrixFilter() override;
-	void filter_rw(geom::Coordinate *c) const override;
-	void filter_ro(const geom::Coordinate *c) override;
+    ElevationMatrixFilter(ElevationMatrix& em);
+    ~ElevationMatrixFilter() override;
+    void filter_rw(geom::Coordinate* c) const override;
+    void filter_ro(const geom::Coordinate* c) override;
 private:
-	ElevationMatrix &em;
-	double avgElevation;
+    ElevationMatrix& em;
+    double avgElevation;
 
     // Declare type as noncopyable
     ElevationMatrixFilter(const ElevationMatrixFilter& other) = delete;
@@ -78,29 +77,29 @@ private:
 /*
  */
 class GEOS_DLL ElevationMatrix {
-friend class ElevationMatrixFilter;
+    friend class ElevationMatrixFilter;
 public:
-	ElevationMatrix(const geom::Envelope &extent, unsigned int rows,
-		unsigned int cols);
-	~ElevationMatrix();
-	void add(const geom::Geometry *geom);
-	void elevate(geom::Geometry *geom) const;
-	// set Z value for each cell w/out one
-	double getAvgElevation() const;
-	ElevationMatrixCell &getCell(const geom::Coordinate &c);
-	const ElevationMatrixCell &getCell(const geom::Coordinate &c) const;
-	std::string print() const;
+    ElevationMatrix(const geom::Envelope& extent, unsigned int rows,
+                    unsigned int cols);
+    ~ElevationMatrix();
+    void add(const geom::Geometry* geom);
+    void elevate(geom::Geometry* geom) const;
+    // set Z value for each cell w/out one
+    double getAvgElevation() const;
+    ElevationMatrixCell& getCell(const geom::Coordinate& c);
+    const ElevationMatrixCell& getCell(const geom::Coordinate& c) const;
+    std::string print() const;
 private:
-	ElevationMatrixFilter filter;
-	void add(const geom::Coordinate &c);
-	geom::Envelope env;
-	unsigned int cols;
-	unsigned int rows;
-	double cellwidth;
-	double cellheight;
-	mutable bool avgElevationComputed;
-	mutable double avgElevation;
-	std::vector<ElevationMatrixCell>cells;
+    ElevationMatrixFilter filter;
+    void add(const geom::Coordinate& c);
+    geom::Envelope env;
+    unsigned int cols;
+    unsigned int rows;
+    double cellwidth;
+    double cellheight;
+    mutable bool avgElevationComputed;
+    mutable double avgElevation;
+    std::vector<ElevationMatrixCell>cells;
 };
 
 } // namespace geos::operation::overlay

@@ -35,12 +35,12 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		//class Geometry;
-		//class MultiPoint;
-		class LineString;
-		//class Coordinate;
-	}
+namespace geom {
+//class Geometry;
+//class MultiPoint;
+class LineString;
+//class Coordinate;
+}
 }
 
 namespace geos {
@@ -54,23 +54,23 @@ class GEOS_DLL OffsetPointGenerator {
 
 public:
 
-	OffsetPointGenerator(const geom::Geometry& geom, double offset);
+    OffsetPointGenerator(const geom::Geometry& geom, double offset);
 
-	/// Gets the computed offset points.
-	std::unique_ptr< std::vector<geom::Coordinate> > getPoints();
+    /// Gets the computed offset points.
+    std::unique_ptr< std::vector<geom::Coordinate> > getPoints();
 
 private:
 
-	const geom::Geometry& g;
+    const geom::Geometry& g;
 
-	double offsetDistance;
+    double offsetDistance;
 
-	std::unique_ptr< std::vector<geom::Coordinate> > offsetPts;
+    std::unique_ptr< std::vector<geom::Coordinate> > offsetPts;
 
-	void extractPoints(const geom::LineString* line);
+    void extractPoints(const geom::LineString* line);
 
-	void computeOffsets(const geom::Coordinate& p0,
-			const geom::Coordinate& p1);
+    void computeOffsets(const geom::Coordinate& p0,
+                        const geom::Coordinate& p1);
 
     // Declare type as noncopyable
     OffsetPointGenerator(const OffsetPointGenerator& other) = delete;

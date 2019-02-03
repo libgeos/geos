@@ -41,14 +41,14 @@ namespace {
  * @author Martin Davis
  * @version 1.7
  */
-class Mod2BoundaryNodeRule : public BoundaryNodeRule
-{
+class Mod2BoundaryNodeRule : public BoundaryNodeRule {
 public:
-	bool isInBoundary(int boundaryCount) const override
-	{
-		// the "Mod-2 Rule"
-		return boundaryCount % 2 == 1;
-	}
+    bool
+    isInBoundary(int boundaryCount) const override
+    {
+        // the "Mod-2 Rule"
+        return boundaryCount % 2 == 1;
+    }
 };
 
 
@@ -79,12 +79,12 @@ public:
  * @author Martin Davis
  * @version 1.7
  */
-class EndPointBoundaryNodeRule : public BoundaryNodeRule
-{
-	bool isInBoundary(int boundaryCount) const override
-	{
-		return boundaryCount > 0;
-	}
+class EndPointBoundaryNodeRule : public BoundaryNodeRule {
+    bool
+    isInBoundary(int boundaryCount) const override
+    {
+        return boundaryCount > 0;
+    }
 };
 
 /**
@@ -97,12 +97,12 @@ class EndPointBoundaryNodeRule : public BoundaryNodeRule
  * @author Martin Davis
  * @version 1.7
  */
-class MultiValentEndPointBoundaryNodeRule : public BoundaryNodeRule
-{
-	bool isInBoundary(int boundaryCount) const override
-	{
-		return boundaryCount > 1;
-	}
+class MultiValentEndPointBoundaryNodeRule : public BoundaryNodeRule {
+    bool
+    isInBoundary(int boundaryCount) const override
+    {
+        return boundaryCount > 1;
+    }
 };
 
 /**
@@ -114,12 +114,12 @@ class MultiValentEndPointBoundaryNodeRule : public BoundaryNodeRule
  * @author Martin Davis
  * @version 1.7
  */
-class MonoValentEndPointBoundaryNodeRule : public BoundaryNodeRule
-{
-	bool isInBoundary(int boundaryCount) const override
-	{
-		return boundaryCount == 1;
-	}
+class MonoValentEndPointBoundaryNodeRule : public BoundaryNodeRule {
+    bool
+    isInBoundary(int boundaryCount) const override
+    {
+        return boundaryCount == 1;
+    }
 };
 
 Mod2BoundaryNodeRule mod2Rule;
@@ -130,31 +130,36 @@ MonoValentEndPointBoundaryNodeRule monoValentRule;
 } // anonymous namespace
 
 //const BoundaryNodeRule& BoundaryNodeRule::MOD2_BOUNDARY_RULE = mod2Rule;
-const BoundaryNodeRule& BoundaryNodeRule::getBoundaryRuleMod2()
+const BoundaryNodeRule&
+BoundaryNodeRule::getBoundaryRuleMod2()
 {
     return mod2Rule;
 }
 
 //const BoundaryNodeRule& BoundaryNodeRule::ENDPOINT_BOUNDARY_RULE = endPointRule;
-const BoundaryNodeRule& BoundaryNodeRule::getBoundaryEndPoint()
+const BoundaryNodeRule&
+BoundaryNodeRule::getBoundaryEndPoint()
 {
     return endPointRule;
 }
 
 //const BoundaryNodeRule& BoundaryNodeRule::MULTIVALENT_ENDPOINT_BOUNDARY_RULE = multiValentRule;
-const BoundaryNodeRule& BoundaryNodeRule::getBoundaryMultivalentEndPoint()
+const BoundaryNodeRule&
+BoundaryNodeRule::getBoundaryMultivalentEndPoint()
 {
     return multiValentRule;
 }
 
 //const BoundaryNodeRule& BoundaryNodeRule::MONOVALENT_ENDPOINT_BOUNDARY_RULE = monoValentRule;
-const BoundaryNodeRule& BoundaryNodeRule::getBoundaryMonovalentEndPoint()
+const BoundaryNodeRule&
+BoundaryNodeRule::getBoundaryMonovalentEndPoint()
 {
     return monoValentRule;
 }
 
 //const BoundaryNodeRule& BoundaryNodeRule::OGC_SFS_BOUNDARY_RULE = BoundaryNodeRule::MOD2_BOUNDARY_RULE;
-const BoundaryNodeRule& BoundaryNodeRule::getBoundaryOGCSFS()
+const BoundaryNodeRule&
+BoundaryNodeRule::getBoundaryOGCSFS()
 {
     return getBoundaryRuleMod2();
 }

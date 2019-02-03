@@ -40,77 +40,81 @@ namespace quadtree { // geos.index.quadtree
 
 /*public static*/
 Envelope*
-Quadtree::ensureExtent(const Envelope *itemEnv, double minExtent)
+Quadtree::ensureExtent(const Envelope* itemEnv, double minExtent)
 {
-	//The names "ensureExtent" and "minExtent" are misleading -- sounds like
-	//this method ensures that the extents are greater than minExtent.
-	//Perhaps we should rename them to "ensurePositiveExtent" and "defaultExtent".
-	//[Jon Aquino]
-	double minx=itemEnv->getMinX();
-	double maxx=itemEnv->getMaxX();
-	double miny=itemEnv->getMinY();
-	double maxy=itemEnv->getMaxY();
-	// has a non-zero extent
-	if (minx!=maxx && miny!=maxy) return (Envelope *)itemEnv;
-	// pad one or both extents
-	if (minx==maxx) {
-		minx=minx-minExtent/2.0;
-		maxx=minx+minExtent/2.0;
-	}
-	if (miny==maxy) {
-		miny=miny-minExtent/2.0;
-		maxy=miny+minExtent/2.0;
-	}
-	Envelope *newEnv = new Envelope(minx, maxx, miny, maxy);
-	return newEnv;
+    //The names "ensureExtent" and "minExtent" are misleading -- sounds like
+    //this method ensures that the extents are greater than minExtent.
+    //Perhaps we should rename them to "ensurePositiveExtent" and "defaultExtent".
+    //[Jon Aquino]
+    double minx = itemEnv->getMinX();
+    double maxx = itemEnv->getMaxX();
+    double miny = itemEnv->getMinY();
+    double maxy = itemEnv->getMaxY();
+    // has a non-zero extent
+    if(minx != maxx && miny != maxy) {
+        return (Envelope*)itemEnv;
+    }
+    // pad one or both extents
+    if(minx == maxx) {
+        minx = minx - minExtent / 2.0;
+        maxx = minx + minExtent / 2.0;
+    }
+    if(miny == maxy) {
+        miny = miny - minExtent / 2.0;
+        maxy = miny + minExtent / 2.0;
+    }
+    Envelope* newEnv = new Envelope(minx, maxx, miny, maxy);
+    return newEnv;
 }
 
 /*public*/
 int
 Quadtree::depth()
 {
-	return root.depth();
+    return root.depth();
 }
 
 /*public*/
 size_t
 Quadtree::size()
 {
-	return root.size();
+    return root.size();
 }
 
 /*public*/
 void
-Quadtree::insert(const Envelope *itemEnv, void* item)
+Quadtree::insert(const Envelope* itemEnv, void* item)
 {
-	collectStats(*itemEnv);
+    collectStats(*itemEnv);
 
-	Envelope *insertEnv=ensureExtent(itemEnv,minExtent);
-	if ( insertEnv != itemEnv ) newEnvelopes.emplace_back(insertEnv);
-	root.insert(insertEnv,item);
+    Envelope* insertEnv = ensureExtent(itemEnv, minExtent);
+    if(insertEnv != itemEnv) {
+        newEnvelopes.emplace_back(insertEnv);
+    }
+    root.insert(insertEnv, item);
 #if GEOS_DEBUG
-	cerr<<"Quadtree::insert("<<itemEnv->toString()<<", "<<item<<")"<<endl;
-	cerr<<"       insertEnv:"<<insertEnv->toString()<<endl;
-	cerr<<"       tree:"<<endl<<root.toString()<<endl;
+    cerr << "Quadtree::insert(" << itemEnv->toString() << ", " << item << ")" << endl;
+    cerr << "       insertEnv:" << insertEnv->toString() << endl;
+    cerr << "       tree:" << endl << root.toString() << endl;
 #endif
 }
 
 
 /*public*/
 void
-Quadtree::query(const Envelope *searchEnv,
-	vector<void*>& foundItems)
+Quadtree::query(const Envelope* searchEnv,
+                vector<void*>& foundItems)
 {
-	/*
-	 * the items that are matched are the items in quads which
-	 * overlap the search envelope
-	 */
-	root.addAllItemsFromOverlapping(*searchEnv, foundItems);
+    /*
+     * the items that are matched are the items in quads which
+     * overlap the search envelope
+     */
+    root.addAllItemsFromOverlapping(*searchEnv, foundItems);
 #if GEOS_DEBUG
-	cerr<<"Quadtree::query returning "<<foundItems.size()
-		<<" items over "<<size()
-		<<" items in index (of depth: "<<depth()<<")"<<endl;
-	cerr<<" Root:\n"<<root.toString()<<endl;
+    cerr << "Quadtree::query returning " << foundItems.size()
+         << " items over " << size()
+         << " items in index (of depth: " << depth() << ")" << endl;
+    cerr << " Root:\n" << root.toString() << endl;
 #endif
 }
 
@@ -118,40 +122,44 @@ Quadtree::query(const Envelope *searchEnv,
 vector<void*>*
 Quadtree::queryAll()
 {
-	vector<void*> *foundItems=new vector<void*>();
-	root.addAllItems(*foundItems);
-	return foundItems;
+    vector<void*>* foundItems = new vector<void*>();
+    root.addAllItems(*foundItems);
+    return foundItems;
 }
 
 /*public*/
 bool
 Quadtree::remove(const Envelope* itemEnv, void* item)
 {
-	Envelope* posEnv = ensureExtent(itemEnv, minExtent);
-	bool ret = root.remove(posEnv, item);
-	if ( posEnv != itemEnv ) delete posEnv;
-	return ret;
+    Envelope* posEnv = ensureExtent(itemEnv, minExtent);
+    bool ret = root.remove(posEnv, item);
+    if(posEnv != itemEnv) {
+        delete posEnv;
+    }
+    return ret;
 }
 
 /*private*/
 void
 Quadtree::collectStats(const Envelope& itemEnv)
 {
-	double delX = itemEnv.getWidth();
-	if (delX < minExtent && delX > 0.0)
-		minExtent = delX;
+    double delX = itemEnv.getWidth();
+    if(delX < minExtent && delX > 0.0) {
+        minExtent = delX;
+    }
 
-	double delY = itemEnv.getHeight();
-	if (delY < minExtent && delY > 0.0)
-		minExtent = delY;
+    double delY = itemEnv.getHeight();
+    if(delY < minExtent && delY > 0.0) {
+        minExtent = delY;
+    }
 }
 
 /*public*/
 string
 Quadtree::toString() const
 {
-	string ret = root.toString();
-	return ret;
+    string ret = root.toString();
+    return ret;
 }
 
 } // namespace geos.index.quadtree

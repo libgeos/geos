@@ -23,7 +23,6 @@
 #include <geos/geom/GeometryComponentFilter.h>
 #include <geos/geom/Geometry.h> // to be removed when we have the .inl
 #include <geos/geom/LineString.h> // to be removed when we have the .inl
-//#include <geos/platform.h>
 
 namespace geos {
 namespace geom { // geos.geom
@@ -36,30 +35,30 @@ class GEOS_DLL LinearComponentExtracter: public GeometryComponentFilter {
 
 private:
 
-	LineString::ConstVect &comps;
+    LineString::ConstVect& comps;
 
     // Declare type as noncopyable
     LinearComponentExtracter(const LinearComponentExtracter& other) = delete;
     LinearComponentExtracter& operator=(const LinearComponentExtracter& rhs) = delete;
 
 public:
-	/**
-	 * Push the linear components from a single geometry into
-	 * the provided vector.
-	 * If more than one geometry is to be processed, it is more
-	 * efficient to create a single LinearComponentExtracterFilter instance
-	 * and pass it to multiple geometries.
-	 */
-	static void getLines(const Geometry &geom, std::vector<const LineString*> &ret);
-	/**
-	 * Constructs a LinearComponentExtracterFilter with a list in which
-	 * to store LineStrings found.
-	 */
-	LinearComponentExtracter(std::vector<const LineString*> &newComps);
+    /**
+     * Push the linear components from a single geometry into
+     * the provided vector.
+     * If more than one geometry is to be processed, it is more
+     * efficient to create a single LinearComponentExtracterFilter instance
+     * and pass it to multiple geometries.
+     */
+    static void getLines(const Geometry& geom, std::vector<const LineString*>& ret);
+    /**
+     * Constructs a LinearComponentExtracterFilter with a list in which
+     * to store LineStrings found.
+     */
+    LinearComponentExtracter(std::vector<const LineString*>& newComps);
 
-	void filter_rw(Geometry *geom) override;
+    void filter_rw(Geometry* geom) override;
 
-	void filter_ro(const Geometry *geom) override;
+    void filter_ro(const Geometry* geom) override;
 
 };
 

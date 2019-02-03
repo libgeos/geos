@@ -33,18 +33,18 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class LinearRing;
-		class Coordinate;
-	}
-	namespace index {
-		namespace quadtree {
-			class Quadtree;
-		}
-	}
-	namespace geomgraph {
-		class GeometryGraph;
-	}
+namespace geom {
+class LinearRing;
+class Coordinate;
+}
+namespace index {
+namespace quadtree {
+class Quadtree;
+}
+}
+namespace geomgraph {
+class GeometryGraph;
+}
 }
 
 namespace geos {
@@ -60,36 +60,36 @@ namespace valid { // geos::operation::valid
 class GEOS_DLL QuadtreeNestedRingTester {
 public:
 
-	/// Caller retains ownership of GeometryGraph
-	QuadtreeNestedRingTester(geomgraph::GeometryGraph* newGraph);
+    /// Caller retains ownership of GeometryGraph
+    QuadtreeNestedRingTester(geomgraph::GeometryGraph* newGraph);
 
-	~QuadtreeNestedRingTester();
+    ~QuadtreeNestedRingTester();
 
-	/*
-	 * Be aware that the returned Coordinate (if != NULL)
-	 * will point to storage owned by one of the LinearRing
-	 * previously added. If you destroy them, this
-	 * will point to an invalid memory address.
-	 */
-	geom::Coordinate* getNestedPoint();
+    /*
+     * Be aware that the returned Coordinate (if != NULL)
+     * will point to storage owned by one of the LinearRing
+     * previously added. If you destroy them, this
+     * will point to an invalid memory address.
+     */
+    geom::Coordinate* getNestedPoint();
 
-	void add(const geom::LinearRing* ring);
+    void add(const geom::LinearRing* ring);
 
-	bool isNonNested();
+    bool isNonNested();
 
 private:
 
-	geomgraph::GeometryGraph* graph;  // used to find non-node vertices
+    geomgraph::GeometryGraph* graph;  // used to find non-node vertices
 
-	std::vector<const geom::LinearRing*> rings;
+    std::vector<const geom::LinearRing*> rings;
 
-	geom::Envelope totalEnv;
+    geom::Envelope totalEnv;
 
-	index::quadtree::Quadtree* qt;
+    index::quadtree::Quadtree* qt;
 
-	geom::Coordinate* nestedPt;
+    geom::Coordinate* nestedPt;
 
-	void buildQuadtree();
+    void buildQuadtree();
 };
 
 } // namespace geos::operation::valid

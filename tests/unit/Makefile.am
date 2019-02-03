@@ -51,6 +51,7 @@ geos_unit_SOURCES = \
 	algorithm/InteriorPointAreaTest.cpp \
 	algorithm/LengthTest.cpp \
 	algorithm/LocatePointInRingTest.cpp \
+	algorithm/MinimumBoundingCircleTest.cpp \
 	algorithm/MinimumDiameterTest.cpp \
 	algorithm/OrientationIndexFailureTest.cpp \
 	algorithm/PointLocatorTest.cpp \

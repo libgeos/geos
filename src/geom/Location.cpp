@@ -28,21 +28,23 @@ namespace geom { // geos::geom
  *@param  locationValue  either EXTERIOR, BOUNDARY, INTERIOR or NULL
  *@return                either 'e', 'b', 'i' or '-'
  */
-char Location::toLocationSymbol(int locationValue) {
-	switch (locationValue) {
-		case EXTERIOR:
-			return 'e';
-		case BOUNDARY:
-			return 'b';
-		case INTERIOR:
-			return 'i';
-		case UNDEF: //NULL
-			return '-';
-		default:
-			ostringstream s;
-			s<<"Unknown location value: "<<locationValue;
-			throw util::IllegalArgumentException(s.str());
-	}
+char
+Location::toLocationSymbol(int locationValue)
+{
+    switch(locationValue) {
+    case EXTERIOR:
+        return 'e';
+    case BOUNDARY:
+        return 'b';
+    case INTERIOR:
+        return 'i';
+    case UNDEF: //NULL
+        return '-';
+    default:
+        ostringstream s;
+        s << "Unknown location value: " << locationValue;
+        throw util::IllegalArgumentException(s.str());
+    }
 }
 
 } // namespace geos::geom

@@ -41,7 +41,7 @@ public:
     * @param pts the points specifying the linestring
     * @return the length of the linestring
     */
-    static double ofLine(const geom::CoordinateSequence *ring);
+    static double ofLine(const geom::CoordinateSequence* ring);
 
 };
 

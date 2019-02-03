@@ -20,111 +20,116 @@
 
 using namespace geos::algorithm;
 
-namespace tut
+namespace tut {
+//
+// Test Group
+//
+
+struct test_isccw_data {
+    typedef std::unique_ptr<geos::geom::Geometry> GeometryPtr;
+
+    geos::geom::CoordinateSequence* cs_;
+    geos::io::WKTReader reader_;
+    geos::io::WKBReader breader_;
+
+    test_isccw_data()
+        : cs_(nullptr)
+    {
+        assert(nullptr == cs_);
+    }
+
+    ~test_isccw_data()
+    {
+        delete cs_;
+        cs_ = nullptr;
+    }
+};
+
+typedef test_group<test_isccw_data> group;
+typedef group::object object;
+
+group test_isccw_group("geos::algorithm::Orientation::isCCW");
+
+//
+// Test Cases
+//
+
+// 1 - Test if coordinates of polygon are counter-clockwise oriented
+template<>
+template<>
+void object::test<1>
+()
 {
-    //
-    // Test Group
-    //
+    const std::string wkt("POLYGON ((60 180, 140 240, 140 240, 140 240, 200 180, 120 120, 60 180))");
+    GeometryPtr geom(reader_.read(wkt));
 
-    struct test_isccw_data
-    {
-	    typedef std::unique_ptr<geos::geom::Geometry> GeometryPtr;
+    cs_ = geom->getCoordinates();
+    bool isCCW = Orientation::isCCW(cs_);
 
-        geos::geom::CoordinateSequence* cs_;
-        geos::io::WKTReader reader_;
-        geos::io::WKBReader breader_;
+    ensure_equals(false, isCCW);
+}
 
-        test_isccw_data()
-            : cs_(nullptr)
-        {
-            assert(nullptr == cs_);
-        }
+// 2 - Test if coordinates of polygon are counter-clockwise oriented
+template<>
+template<>
+void object::test<2>
+()
+{
+    const std::string wkt("POLYGON ((60 180, 140 120, 100 180, 140 240, 60 180))");
+    GeometryPtr geom(reader_.read(wkt));
 
-        ~test_isccw_data()
-        {
-            delete cs_;
-            cs_ = nullptr;
-        }
-    };
+    cs_ = geom->getCoordinates();
+    bool isCCW = Orientation::isCCW(cs_);
 
-    typedef test_group<test_isccw_data> group;
-    typedef group::object object;
+    ensure_equals(true, isCCW);
+}
 
-    group test_isccw_group("geos::algorithm::Orientation::isCCW");
+// 3 - Test the same polygon as in test No 2 but with duplicated top point
+template<>
+template<>
+void object::test<3>
+()
+{
+    const std::string wkt("POLYGON ((60 180, 140 120, 100 180, 140 240, 140 240, 60 180))");
+    GeometryPtr geom(reader_.read(wkt));
 
-    //
-    // Test Cases
-    //
+    cs_ = geom->getCoordinates();
+    bool isCCW = Orientation::isCCW(cs_);
 
-    // 1 - Test if coordinates of polygon are counter-clockwise oriented
-    template<>
-    template<>
-    void object::test<1>()
-    {
-        const std::string wkt("POLYGON ((60 180, 140 240, 140 240, 140 240, 200 180, 120 120, 60 180))");
-		GeometryPtr geom(reader_.read(wkt));
+    ensure_equals(true, isCCW);
+}
 
-        cs_ = geom->getCoordinates();
-        bool isCCW = Orientation::isCCW(cs_);
+// 4 - Test orientation the narrow (almost collapsed) ring
+//     resulting in GEOS during execution of the union described
+//     in http://trac.osgeo.org/geos/ticket/398
+template<>
+template<>
+void object::test<4>
+()
+{
+    std::istringstream
+    wkt("0102000000040000000000000000000000841D588465963540F56BFB214F0341408F26B714B2971B40F66BFB214F0341408C26B714B2971B400000000000000000841D588465963540");
+    GeometryPtr geom(breader_.readHEX(wkt));
+    cs_ = geom->getCoordinates();
+    bool isCCW = Orientation::isCCW(cs_);
+    ensure_equals(isCCW, true);
+}
 
-        ensure_equals( false, isCCW );
-    }
-
-    // 2 - Test if coordinates of polygon are counter-clockwise oriented
-    template<>
-    template<>
-    void object::test<2>()
-    {
-        const std::string wkt("POLYGON ((60 180, 140 120, 100 180, 140 240, 60 180))");
-		GeometryPtr geom(reader_.read(wkt));
-
-        cs_ = geom->getCoordinates();
-        bool isCCW = Orientation::isCCW(cs_);
-
-        ensure_equals( true, isCCW );
-    }
-
-    // 3 - Test the same polygon as in test No 2 but with duplicated top point
-    template<>
-    template<>
-    void object::test<3>()
-    {
-        const std::string wkt("POLYGON ((60 180, 140 120, 100 180, 140 240, 140 240, 60 180))");
-		GeometryPtr geom(reader_.read(wkt));
-
-        cs_ = geom->getCoordinates();
-        bool isCCW = Orientation::isCCW(cs_);
-
-        ensure_equals( true, isCCW );
-    }
-
-    // 4 - Test orientation the narrow (almost collapsed) ring
-    //     resulting in GEOS during execution of the union described
-    //     in http://trac.osgeo.org/geos/ticket/398
-    template<>
-    template<>
-    void object::test<4>()
-    {
-        std::istringstream wkt("0102000000040000000000000000000000841D588465963540F56BFB214F0341408F26B714B2971B40F66BFB214F0341408C26B714B2971B400000000000000000841D588465963540");
-        GeometryPtr geom(breader_.readHEX(wkt));
-        cs_ = geom->getCoordinates();
-        bool isCCW = Orientation::isCCW(cs_);
-        ensure_equals( isCCW, true );
-    }
-
-    // 5 - Test orientation the narrow (almost collapsed) ring
-    //     resulting in JTS during execution of the union described
-    //     in http://trac.osgeo.org/geos/ticket/398
-    template<>
-    template<>
-    void object::test<5>()
-    {
-        std::istringstream wkt("0102000000040000000000000000000000841D588465963540F56BFB214F0341408F26B714B2971B40F66BFB214F0341408E26B714B2971B400000000000000000841D588465963540");
-        GeometryPtr geom(breader_.readHEX(wkt));
-        cs_ = geom->getCoordinates();
-        bool isCCW = Orientation::isCCW(cs_);
-        ensure_equals( isCCW, true );
-    }
+// 5 - Test orientation the narrow (almost collapsed) ring
+//     resulting in JTS during execution of the union described
+//     in http://trac.osgeo.org/geos/ticket/398
+template<>
+template<>
+void object::test<5>
+()
+{
+    std::istringstream
+    wkt("0102000000040000000000000000000000841D588465963540F56BFB214F0341408F26B714B2971B40F66BFB214F0341408E26B714B2971B400000000000000000841D588465963540");
+    GeometryPtr geom(breader_.readHEX(wkt));
+    cs_ = geom->getCoordinates();
+    bool isCCW = Orientation::isCCW(cs_);
+    ensure_equals(isCCW, true);
+}
 
 } // namespace tut
 

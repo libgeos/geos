@@ -27,36 +27,42 @@ namespace planargraph {
 /* static public */
 /* UNUSED */
 vector<Edge*>*
-Node::getEdgesBetween(Node *node0, Node *node1)
+Node::getEdgesBetween(Node* node0, Node* node1)
 {
-	std::vector<Edge*> edges0;
-	DirectedEdge::toEdges(node0->getOutEdges()->getEdges(), edges0);
+    std::vector<Edge*> edges0;
+    DirectedEdge::toEdges(node0->getOutEdges()->getEdges(), edges0);
 
-	std::vector<Edge*> edges1;
-	DirectedEdge::toEdges(node1->getOutEdges()->getEdges(), edges1);
+    std::vector<Edge*> edges1;
+    DirectedEdge::toEdges(node1->getOutEdges()->getEdges(), edges1);
 
-	// Sort edge lists (needed for set_intersection below
-	std::sort( edges0.begin(), edges0.end() );
-	std::sort( edges1.begin(), edges1.end() );
+    // Sort edge lists (needed for set_intersection below
+    std::sort(edges0.begin(), edges0.end());
+    std::sort(edges1.begin(), edges1.end());
 
-	std::vector<Edge*>* commonEdges = new std::vector<Edge*>();
+    std::vector<Edge*>* commonEdges = new std::vector<Edge*>();
 
-	// Intersect the two sets
-	std::set_intersection(
-		edges0.begin(), edges0.end(),
-		edges1.begin(), edges1.end(),
-		commonEdges->end()
-		);
+    // Intersect the two sets
+    std::set_intersection(
+        edges0.begin(), edges0.end(),
+        edges1.begin(), edges1.end(),
+        commonEdges->end()
+    );
 
-	return commonEdges;
+    return commonEdges;
 
 }
 
-std::ostream& operator<<(std::ostream& os, const Node& n) {
-	os << "Node " << n.pt << " with degree " << n.getDegree();
-	if ( n.isMarked() ) os << " Marked ";
-	if ( n.isVisited() ) os << " Visited ";
-	return os;
+std::ostream&
+operator<<(std::ostream& os, const Node& n)
+{
+    os << "Node " << n.pt << " with degree " << n.getDegree();
+    if(n.isMarked()) {
+        os << " Marked ";
+    }
+    if(n.isVisited()) {
+        os << " Visited ";
+    }
+    return os;
 }
 
 } // namespace planargraph

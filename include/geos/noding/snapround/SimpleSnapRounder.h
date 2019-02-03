@@ -32,19 +32,19 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		//class PrecisionModel;
-	}
-	namespace algorithm {
-		class LineIntersector;
-	}
-	namespace noding {
-		class SegmentString;
-		class NodedSegmentString;
-		namespace snapround {
-			class HotPixel;
-		}
-	}
+namespace geom {
+//class PrecisionModel;
+}
+namespace algorithm {
+class LineIntersector;
+}
+namespace noding {
+class SegmentString;
+class NodedSegmentString;
+namespace snapround {
+class HotPixel;
+}
+}
 }
 
 namespace geos {
@@ -74,65 +74,65 @@ class GEOS_DLL SimpleSnapRounder: public Noder { // implements NoderIface
 
 public:
 
-	SimpleSnapRounder(const geom::PrecisionModel& newPm);
+    SimpleSnapRounder(const geom::PrecisionModel& newPm);
 
-	std::vector<SegmentString*>* getNodedSubstrings() const override;
+    std::vector<SegmentString*>* getNodedSubstrings() const override;
 
-	void computeNodes(std::vector<SegmentString*>* inputSegmentStrings) override;
+    void computeNodes(std::vector<SegmentString*>* inputSegmentStrings) override;
 
-	void add(const SegmentString* segStr);
+    void add(const SegmentString* segStr);
 
-	/**
-	 * Computes nodes introduced as a result of
-	 * snapping segments to vertices of other segments
-	 *
-	 * @param edges the list of segment strings to snap together.
-	 *        Must be NodedSegmentString or an assertion will fail.
-	 */
-	void computeVertexSnaps(const std::vector<SegmentString*>& edges);
+    /**
+     * Computes nodes introduced as a result of
+     * snapping segments to vertices of other segments
+     *
+     * @param edges the list of segment strings to snap together.
+     *        Must be NodedSegmentString or an assertion will fail.
+     */
+    void computeVertexSnaps(const std::vector<SegmentString*>& edges);
 
 private:
 
-	const geom::PrecisionModel& pm;
-	algorithm::LineIntersector li;
-	double scaleFactor;
-	std::vector<SegmentString*>* nodedSegStrings;
+    const geom::PrecisionModel& pm;
+    algorithm::LineIntersector li;
+    double scaleFactor;
+    std::vector<SegmentString*>* nodedSegStrings;
 
-	void checkCorrectness(std::vector<SegmentString*>& inputSegmentStrings);
+    void checkCorrectness(std::vector<SegmentString*>& inputSegmentStrings);
 
-	void snapRound(std::vector<SegmentString*>* segStrings,
-			algorithm::LineIntersector& li);
+    void snapRound(std::vector<SegmentString*>* segStrings,
+                   algorithm::LineIntersector& li);
 
-	/**
-	 * Computes all interior intersections in the vector
-	 * of SegmentString, and fill the given vector
-	 * with their Coordinates.
-	 *
-	 * Does NOT node the segStrings.
-	 *
-	 * @param segStrings a vector of const Coordinates for the intersections
-	 * @param li the algorithm::LineIntersector to use
-	 * @param ret the vector to push intersection Coordinates to
-	 */
-	void findInteriorIntersections(std::vector<SegmentString*>& segStrings,
-			algorithm::LineIntersector& li, std::vector<geom::Coordinate>& ret);
+    /**
+     * Computes all interior intersections in the vector
+     * of SegmentString, and fill the given vector
+     * with their Coordinates.
+     *
+     * Does NOT node the segStrings.
+     *
+     * @param segStrings a vector of const Coordinates for the intersections
+     * @param li the algorithm::LineIntersector to use
+     * @param ret the vector to push intersection Coordinates to
+     */
+    void findInteriorIntersections(std::vector<SegmentString*>& segStrings,
+                                   algorithm::LineIntersector& li, std::vector<geom::Coordinate>& ret);
 
-	/** \brief
-	 * Computes nodes introduced as a result of snapping segments to
-	 * snap points (hot pixels)
-	 * @param li
-	 */
-	void computeSnaps(const std::vector<SegmentString*>& segStrings,
-		std::vector<geom::Coordinate>& snapPts);
+    /** \brief
+     * Computes nodes introduced as a result of snapping segments to
+     * snap points (hot pixels)
+     * @param li
+     */
+    void computeSnaps(const std::vector<SegmentString*>& segStrings,
+                      std::vector<geom::Coordinate>& snapPts);
 
-	void computeSnaps(NodedSegmentString* ss, std::vector<geom::Coordinate>& snapPts);
+    void computeSnaps(NodedSegmentString* ss, std::vector<geom::Coordinate>& snapPts);
 
-	/** \brief
-	 * Performs a brute-force comparison of every segment in each
-	 * {@link SegmentString}.
-	 * This has n^2 performance.
-	 */
-	void computeVertexSnaps(NodedSegmentString* e0, NodedSegmentString* e1);
+    /** \brief
+     * Performs a brute-force comparison of every segment in each
+     * {@link SegmentString}.
+     * This has n^2 performance.
+     */
+    void computeVertexSnaps(NodedSegmentString* e0, NodedSegmentString* e1);
 
     // Declare type as noncopyable
     SimpleSnapRounder(const SimpleSnapRounder& other) = delete;

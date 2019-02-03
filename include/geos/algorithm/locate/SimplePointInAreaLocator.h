@@ -44,13 +44,12 @@ namespace locate { // geos::algorithm::locate
  *
  * @version 1.7
  */
-class SimplePointInAreaLocator : public PointOnGeometryLocator
-{
+class SimplePointInAreaLocator : public PointOnGeometryLocator {
 
 public:
 
     static int locate(const geom::Coordinate& p,
-                      const geom::Geometry *geom);
+                      const geom::Geometry* geom);
 
     /**
     * Determines the {@link Location} of a point in a {@link Polygon}.
@@ -62,13 +61,14 @@ public:
     * @return the Location of the point in the polygon
     */
     static int locatePointInPolygon(const geom::Coordinate& p,
-                                    const geom::Polygon *poly);
+                                    const geom::Polygon* poly);
 
-    SimplePointInAreaLocator(const geom::Geometry * p_g)
+    SimplePointInAreaLocator(const geom::Geometry* p_g)
         :	g(p_g)
     { }
 
-    int locate(const geom::Coordinate * p) override
+    int
+    locate(const geom::Coordinate* p) override
     {
         return locate(*p, g);
     }
@@ -76,9 +76,9 @@ public:
 private:
 
     static int locateInGeometry(const geom::Coordinate& p,
-                                const geom::Geometry *geom);
+                                const geom::Geometry* geom);
 
-    const geom::Geometry * g;
+    const geom::Geometry* g;
 
 };
 

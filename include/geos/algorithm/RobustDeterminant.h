@@ -51,15 +51,15 @@ namespace algorithm { // geos::algorithm
 class GEOS_DLL RobustDeterminant {
 public:
 
-	/** \brief
-	 * Computes the sign of the determinant of the 2x2 matrix
-	 * with the given entries, in a robust way.
-	 *
-	 * @return -1 if the determinant is negative,
-	 * @return  1 if the determinant is positive,
-	 * @return  0 if the determinant is 0.
-	 */
-	static int signOfDet2x2(double x1,double y1,double x2,double y2);
+    /** \brief
+     * Computes the sign of the determinant of the 2x2 matrix
+     * with the given entries, in a robust way.
+     *
+     * @return -1 if the determinant is negative,
+     * @return  1 if the determinant is positive,
+     * @return  0 if the determinant is 0.
+     */
+    static int signOfDet2x2(double x1, double y1, double x2, double y2);
 };
 
 } // namespace geos::algorithm

@@ -28,23 +28,23 @@
 
 // Forward declarations
 namespace geos {
-	namespace io {
-		class StringTokenizer;
-	}
-	namespace geom {
+namespace io {
+class StringTokenizer;
+}
+namespace geom {
 
-		class Coordinate;
-		class Geometry;
-		class GeometryCollection;
-		class Point;
-		class LineString;
-		class LinearRing;
-		class Polygon;
-		class MultiPoint;
-		class MultiLineString;
-		class MultiPolygon;
-		class PrecisionModel;
-	}
+class Coordinate;
+class Geometry;
+class GeometryCollection;
+class Point;
+class LineString;
+class LinearRing;
+class Polygon;
+class MultiPoint;
+class MultiLineString;
+class MultiPolygon;
+class PrecisionModel;
+}
 }
 
 
@@ -57,57 +57,57 @@ namespace io {
  */
 class GEOS_DLL WKTReader {
 public:
-	//WKTReader();
+    //WKTReader();
 
-	/**
-	 * \brief Inizialize parser with given GeometryFactory.
-	 *
-	 * Note that all Geometry objects created by the
-	 * parser will contain a pointer to the given factory
-	 * so be sure you'll keep the factory alive for the
-	 * whole WKTReader and created Geometry life.
-	 */
-	WKTReader(const geom::GeometryFactory &gf);
+    /**
+     * \brief Inizialize parser with given GeometryFactory.
+     *
+     * Note that all Geometry objects created by the
+     * parser will contain a pointer to the given factory
+     * so be sure you'll keep the factory alive for the
+     * whole WKTReader and created Geometry life.
+     */
+    WKTReader(const geom::GeometryFactory& gf);
 
-	/** @deprecated in 3.4.0 */
-	WKTReader(const geom::GeometryFactory *gf);
+    /** @deprecated in 3.4.0 */
+    WKTReader(const geom::GeometryFactory* gf);
 
-	/**
-	 * \brief Inizialize parser with default GeometryFactory.
-	 *
-	 */
-	WKTReader();
+    /**
+     * \brief Inizialize parser with default GeometryFactory.
+     *
+     */
+    WKTReader();
 
-	~WKTReader();
+    ~WKTReader();
 
-	/// Parse a WKT string returning a Geometry
-	geom::Geometry* read(const std::string &wellKnownText);
+    /// Parse a WKT string returning a Geometry
+    geom::Geometry* read(const std::string& wellKnownText);
 
 //	Geometry* read(Reader& reader);	//Not implemented yet
 
 protected:
-	geom::CoordinateSequence* getCoordinates(io::StringTokenizer *tokenizer);
-	double getNextNumber(io::StringTokenizer *tokenizer);
-	std::string getNextEmptyOrOpener(io::StringTokenizer *tokenizer);
-	std::string getNextCloserOrComma(io::StringTokenizer *tokenizer);
-	std::string getNextCloser(io::StringTokenizer *tokenizer);
-	std::string getNextWord(io::StringTokenizer *tokenizer);
-	geom::Geometry* readGeometryTaggedText(io::StringTokenizer *tokenizer);
-	geom::Point* readPointText(io::StringTokenizer *tokenizer);
-	geom::LineString* readLineStringText(io::StringTokenizer *tokenizer);
-	geom::LinearRing* readLinearRingText(io::StringTokenizer *tokenizer);
-	geom::MultiPoint* readMultiPointText(io::StringTokenizer *tokenizer);
-	geom::Polygon* readPolygonText(io::StringTokenizer *tokenizer);
-	geom::MultiLineString* readMultiLineStringText(io::StringTokenizer *tokenizer);
-	geom::MultiPolygon* readMultiPolygonText(io::StringTokenizer *tokenizer);
-	geom::GeometryCollection* readGeometryCollectionText(io::StringTokenizer *tokenizer);
+    geom::CoordinateSequence* getCoordinates(io::StringTokenizer* tokenizer);
+    double getNextNumber(io::StringTokenizer* tokenizer);
+    std::string getNextEmptyOrOpener(io::StringTokenizer* tokenizer);
+    std::string getNextCloserOrComma(io::StringTokenizer* tokenizer);
+    std::string getNextCloser(io::StringTokenizer* tokenizer);
+    std::string getNextWord(io::StringTokenizer* tokenizer);
+    geom::Geometry* readGeometryTaggedText(io::StringTokenizer* tokenizer);
+    geom::Point* readPointText(io::StringTokenizer* tokenizer);
+    geom::LineString* readLineStringText(io::StringTokenizer* tokenizer);
+    geom::LinearRing* readLinearRingText(io::StringTokenizer* tokenizer);
+    geom::MultiPoint* readMultiPointText(io::StringTokenizer* tokenizer);
+    geom::Polygon* readPolygonText(io::StringTokenizer* tokenizer);
+    geom::MultiLineString* readMultiLineStringText(io::StringTokenizer* tokenizer);
+    geom::MultiPolygon* readMultiPolygonText(io::StringTokenizer* tokenizer);
+    geom::GeometryCollection* readGeometryCollectionText(io::StringTokenizer* tokenizer);
 private:
-	const geom::GeometryFactory *geometryFactory;
-	const geom::PrecisionModel *precisionModel;
+    const geom::GeometryFactory* geometryFactory;
+    const geom::PrecisionModel* precisionModel;
 
-	void getPreciseCoordinate(io::StringTokenizer *tokenizer, geom::Coordinate&, std::size_t &dim );
+    void getPreciseCoordinate(io::StringTokenizer* tokenizer, geom::Coordinate&, std::size_t& dim);
 
-	bool isNumberNext(io::StringTokenizer *tokenizer);
+    bool isNumberNext(io::StringTokenizer* tokenizer);
 };
 
 } // namespace io

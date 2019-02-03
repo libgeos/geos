@@ -32,9 +32,9 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class PrecisionModel;
-	}
+namespace geom {
+class PrecisionModel;
+}
 }
 
 namespace geos {
@@ -55,59 +55,65 @@ namespace noding { // geos::noding
 class GEOS_DLL IteratedNoder : public Noder { // implements Noder
 
 private:
-	static const int MAX_ITER = 5;
+    static const int MAX_ITER = 5;
 
 
-	const geom::PrecisionModel *pm;
-	algorithm::LineIntersector li;
-	std::vector<SegmentString*>* nodedSegStrings;
-	int maxIter;
+    const geom::PrecisionModel* pm;
+    algorithm::LineIntersector li;
+    std::vector<SegmentString*>* nodedSegStrings;
+    int maxIter;
 
-	/**
-	 * Node the input segment strings once
-	 * and create the split edges between the nodes
-	 */
-	void node(std::vector<SegmentString*>* segStrings,
-			int *numInteriorIntersections);
+    /**
+     * Node the input segment strings once
+     * and create the split edges between the nodes
+     */
+    void node(std::vector<SegmentString*>* segStrings,
+              int* numInteriorIntersections);
 
 public:
 
-	IteratedNoder(const geom::PrecisionModel *newPm)
-		:
-		pm(newPm),
-		li(pm),
-		maxIter(MAX_ITER)
-	{
-	}
+    IteratedNoder(const geom::PrecisionModel* newPm)
+        :
+        pm(newPm),
+        li(pm),
+        maxIter(MAX_ITER)
+    {
+    }
 
-	~IteratedNoder() override {}
+    ~IteratedNoder() override {}
 
-	/**
-	 * Sets the maximum number of noding iterations performed before
-	 * the noding is aborted.
-	 * Experience suggests that this should rarely need to be changed
-	 * from the default.
-	 * The default is MAX_ITER.
-	 *
-	 * @param n the maximum number of iterations to perform
-	 */
-	void setMaximumIterations(int n) { maxIter = n; }
+    /**
+     * Sets the maximum number of noding iterations performed before
+     * the noding is aborted.
+     * Experience suggests that this should rarely need to be changed
+     * from the default.
+     * The default is MAX_ITER.
+     *
+     * @param n the maximum number of iterations to perform
+     */
+    void
+    setMaximumIterations(int n)
+    {
+        maxIter = n;
+    }
 
-	std::vector<SegmentString*>* getNodedSubstrings() const override {
-		return nodedSegStrings;
-	}
+    std::vector<SegmentString*>*
+    getNodedSubstrings() const override
+    {
+        return nodedSegStrings;
+    }
 
 
-	/**
-	 * Fully nodes a list of {@link SegmentStrings}, i.e. peforms noding iteratively
-	 * until no intersections are found between segments.
-	 * Maintains labelling of edges correctly through
-	 * the noding.
-	 *
-	 * @param segStrings a collection of SegmentStrings to be noded
-	 * @throws TopologyException if the iterated noding fails to converge.
-	 */
-	void computeNodes(std::vector<SegmentString*>* inputSegmentStrings) override; // throw(GEOSException);
+    /**
+     * Fully nodes a list of {@link SegmentStrings}, i.e. peforms noding iteratively
+     * until no intersections are found between segments.
+     * Maintains labelling of edges correctly through
+     * the noding.
+     *
+     * @param segStrings a collection of SegmentStrings to be noded
+     * @throws TopologyException if the iterated noding fails to converge.
+     */
+    void computeNodes(std::vector<SegmentString*>* inputSegmentStrings) override; // throw(GEOSException);
 };
 
 } // namespace geos::noding

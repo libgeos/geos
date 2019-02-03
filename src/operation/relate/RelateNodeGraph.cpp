@@ -41,41 +41,42 @@ namespace relate { // geos.operation.relate
 
 RelateNodeGraph::RelateNodeGraph()
 {
-	nodes=new NodeMap(RelateNodeFactory::instance());
+    nodes = new NodeMap(RelateNodeFactory::instance());
 }
 
-RelateNodeGraph::~RelateNodeGraph() {
-	delete nodes;
+RelateNodeGraph::~RelateNodeGraph()
+{
+    delete nodes;
 }
 
-map<Coordinate*,Node*,CoordinateLessThen>&
+map<Coordinate*, Node*, CoordinateLessThen>&
 RelateNodeGraph::getNodeMap()
 {
-	return nodes->nodeMap;
+    return nodes->nodeMap;
 }
 
 void
-RelateNodeGraph::build(GeometryGraph *geomGraph)
+RelateNodeGraph::build(GeometryGraph* geomGraph)
 {
-	// compute nodes for intersections between previously noded edges
-	computeIntersectionNodes(geomGraph,0);
+    // compute nodes for intersections between previously noded edges
+    computeIntersectionNodes(geomGraph, 0);
 
-	/**
-	 * Copy the labelling for the nodes in the parent Geometry.  These override
-	 * any labels determined by intersections.
-	 */
-	copyNodesAndLabels(geomGraph,0);
+    /**
+     * Copy the labelling for the nodes in the parent Geometry.  These override
+     * any labels determined by intersections.
+     */
+    copyNodesAndLabels(geomGraph, 0);
 
-	/**
-	 * Build EdgeEnds for all intersections.
-	 */
-	EdgeEndBuilder *eeBuilder=new EdgeEndBuilder();
-	vector<EdgeEnd*> *eeList=eeBuilder->computeEdgeEnds(geomGraph->getEdges());
-	insertEdgeEnds(eeList);
-	delete eeBuilder;
-	delete eeList;
-	//Debug.println("==== NodeList ===");
-	//Debug.print(nodes);
+    /**
+     * Build EdgeEnds for all intersections.
+     */
+    EdgeEndBuilder* eeBuilder = new EdgeEndBuilder();
+    vector<EdgeEnd*>* eeList = eeBuilder->computeEdgeEnds(geomGraph->getEdges());
+    insertEdgeEnds(eeList);
+    delete eeBuilder;
+    delete eeList;
+    //Debug.println("==== NodeList ===");
+    //Debug.print(nodes);
 }
 
 /**
@@ -89,29 +90,30 @@ RelateNodeGraph::build(GeometryGraph *geomGraph)
  * Precondition: edge intersections have been computed.
  */
 void
-RelateNodeGraph::computeIntersectionNodes(GeometryGraph *geomGraph,
-	int argIndex)
+RelateNodeGraph::computeIntersectionNodes(GeometryGraph* geomGraph,
+        int argIndex)
 {
-	vector<Edge*> *edges=geomGraph->getEdges();
-	vector<Edge*>::iterator edgeIt=edges->begin();
-	for( ; edgeIt<edges->end(); ++edgeIt)
-	{
-		Edge *e=*edgeIt;
-		int eLoc=e->getLabel().getLocation(argIndex);
-		EdgeIntersectionList &eiL=e->getEdgeIntersectionList();
-		EdgeIntersectionList::iterator eiIt=eiL.begin();
-		EdgeIntersectionList::iterator eiEnd=eiL.end();
-		for( ; eiIt!=eiEnd; ++eiIt) {
-			EdgeIntersection *ei=*eiIt;
-			RelateNode *n=(RelateNode*) nodes->addNode(ei->coord);
-			if (eLoc==Location::BOUNDARY)
-				n->setLabelBoundary(argIndex);
-			else {
-				if (n->getLabel().isNull(argIndex))
-				  n->setLabel(argIndex,Location::INTERIOR);
-			}
-		}
-	}
+    vector<Edge*>* edges = geomGraph->getEdges();
+    vector<Edge*>::iterator edgeIt = edges->begin();
+    for(; edgeIt < edges->end(); ++edgeIt) {
+        Edge* e = *edgeIt;
+        int eLoc = e->getLabel().getLocation(argIndex);
+        EdgeIntersectionList& eiL = e->getEdgeIntersectionList();
+        EdgeIntersectionList::iterator eiIt = eiL.begin();
+        EdgeIntersectionList::iterator eiEnd = eiL.end();
+        for(; eiIt != eiEnd; ++eiIt) {
+            EdgeIntersection* ei = *eiIt;
+            RelateNode* n = (RelateNode*) nodes->addNode(ei->coord);
+            if(eLoc == Location::BOUNDARY) {
+                n->setLabelBoundary(argIndex);
+            }
+            else {
+                if(n->getLabel().isNull(argIndex)) {
+                    n->setLabel(argIndex, Location::INTERIOR);
+                }
+            }
+        }
+    }
 }
 
 /**
@@ -124,25 +126,25 @@ RelateNodeGraph::computeIntersectionNodes(GeometryGraph *geomGraph,
  * in the interior due to the Boundary Determination Rule)
  */
 void
-RelateNodeGraph::copyNodesAndLabels(GeometryGraph *geomGraph,int argIndex)
+RelateNodeGraph::copyNodesAndLabels(GeometryGraph* geomGraph, int argIndex)
 {
-	map<Coordinate*,Node*,CoordinateLessThen> &nMap=geomGraph->getNodeMap()->nodeMap;
-	map<Coordinate*,Node*,CoordinateLessThen>::iterator nodeIt;
-	for(nodeIt=nMap.begin();nodeIt!=nMap.end();nodeIt++) {
-		Node *graphNode=nodeIt->second;
-		Node *newNode=nodes->addNode(graphNode->getCoordinate());
-		newNode->setLabel(argIndex,graphNode->getLabel().getLocation(argIndex));
-		//node.print(System.out);
-	}
+    map<Coordinate*, Node*, CoordinateLessThen>& nMap = geomGraph->getNodeMap()->nodeMap;
+    map<Coordinate*, Node*, CoordinateLessThen>::iterator nodeIt;
+    for(nodeIt = nMap.begin(); nodeIt != nMap.end(); nodeIt++) {
+        Node* graphNode = nodeIt->second;
+        Node* newNode = nodes->addNode(graphNode->getCoordinate());
+        newNode->setLabel(argIndex, graphNode->getLabel().getLocation(argIndex));
+        //node.print(System.out);
+    }
 }
 
 void
-RelateNodeGraph::insertEdgeEnds(vector<EdgeEnd*> *ee)
+RelateNodeGraph::insertEdgeEnds(vector<EdgeEnd*>* ee)
 {
-	for(vector<EdgeEnd*>::iterator i=ee->begin();i<ee->end();i++) {
-		EdgeEnd *e=*i;
-		nodes->add(e);
-	}
+    for(vector<EdgeEnd*>::iterator i = ee->begin(); i < ee->end(); i++) {
+        EdgeEnd* e = *i;
+        nodes->add(e);
+    }
 }
 
 } // namespace geos.operation.relate

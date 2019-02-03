@@ -21,36 +21,41 @@
 #include <geos/geom/util/PointExtracter.h>
 
 namespace geos {
-   namespace geom { // geos.geom
-      namespace util { // geos.geom.util
+namespace geom { // geos.geom
+namespace util { // geos.geom.util
 
 
-          void PointExtracter::getPoints(const Geometry &geom, Point::ConstVect &ret)
-         {
-            PointExtracter pe(ret);
-            geom.apply_ro(&pe);
-         }
+void
+PointExtracter::getPoints(const Geometry& geom, Point::ConstVect& ret)
+{
+    PointExtracter pe(ret);
+    geom.apply_ro(&pe);
+}
 
-         /**
-         * Constructs a PointExtracterFilter with a list in which
-         * to store Points found.
-         */
-         PointExtracter::PointExtracter(Point::ConstVect& newComps)
-            :
-         comps(newComps)
-         {}
+/**
+* Constructs a PointExtracterFilter with a list in which
+* to store Points found.
+*/
+PointExtracter::PointExtracter(Point::ConstVect& newComps)
+    :
+    comps(newComps)
+{}
 
-         void PointExtracter::filter_rw(Geometry *geom)
-         {
-            if ( const Point *p=dynamic_cast<const Point *>(geom) )
-               comps.push_back(p);
-         }
+void
+PointExtracter::filter_rw(Geometry* geom)
+{
+    if(const Point* p = dynamic_cast<const Point*>(geom)) {
+        comps.push_back(p);
+    }
+}
 
-         void PointExtracter::filter_ro(const Geometry *geom)
-         {
-            if ( const Point *p=dynamic_cast<const Point *>(geom) )
-               comps.push_back(p);
-         }
-      }
-   }
+void
+PointExtracter::filter_ro(const Geometry* geom)
+{
+    if(const Point* p = dynamic_cast<const Point*>(geom)) {
+        comps.push_back(p);
+    }
+}
+}
+}
 }

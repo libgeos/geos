@@ -29,13 +29,13 @@
 
 // Forward declarations
 namespace geos {
-	namespace geomgraph {
-		class Edge;
-		namespace index {
-			// class SegmentIntersector;
-			class SweepLineEvent;
-		}
-	}
+namespace geomgraph {
+class Edge;
+namespace index {
+// class SegmentIntersector;
+class SweepLineEvent;
+}
+}
 }
 
 namespace geos {
@@ -55,38 +55,38 @@ class GEOS_DLL SimpleMCSweepLineIntersector: public EdgeSetIntersector {
 
 public:
 
-	SimpleMCSweepLineIntersector();
+    SimpleMCSweepLineIntersector();
 
-	~SimpleMCSweepLineIntersector() override;
+    ~SimpleMCSweepLineIntersector() override;
 
-	void computeIntersections(std::vector<Edge*> *edges,
-			SegmentIntersector *si, bool testAllSegments) override;
+    void computeIntersections(std::vector<Edge*>* edges,
+                              SegmentIntersector* si, bool testAllSegments) override;
 
-	void computeIntersections(std::vector<Edge*> *edges0,
-			std::vector<Edge*> *edges1,
-			SegmentIntersector *si) override;
+    void computeIntersections(std::vector<Edge*>* edges0,
+                              std::vector<Edge*>* edges1,
+                              SegmentIntersector* si) override;
 
 protected:
 
-	std::vector<SweepLineEvent*> events;
+    std::vector<SweepLineEvent*> events;
 
-	// statistics information
-	int nOverlaps;
+    // statistics information
+    int nOverlaps;
 
 private:
-	void add(std::vector<Edge*> *edges);
+    void add(std::vector<Edge*>* edges);
 
-	void add(std::vector<Edge*> *edges,void* edgeSet);
+    void add(std::vector<Edge*>* edges, void* edgeSet);
 
-	void add(Edge *edge,void* edgeSet);
+    void add(Edge* edge, void* edgeSet);
 
-	void prepareEvents();
+    void prepareEvents();
 
-	void computeIntersections(SegmentIntersector *si);
+    void computeIntersections(SegmentIntersector* si);
 
-	void processOverlaps(size_t start, size_t end,
-			SweepLineEvent *ev0,
-			SegmentIntersector *si);
+    void processOverlaps(size_t start, size_t end,
+                         SweepLineEvent* ev0,
+                         SegmentIntersector* si);
 };
 
 } // namespace geos.geomgraph.index

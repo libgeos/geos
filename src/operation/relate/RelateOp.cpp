@@ -23,10 +23,10 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class IntersectionMatrix;
-		class Geometry;
-	}
+namespace geom {
+class IntersectionMatrix;
+class Geometry;
+}
 }
 
 using namespace geos::geom;
@@ -36,31 +36,31 @@ namespace operation { // geos.operation
 namespace relate { // geos.operation.relate
 
 IntersectionMatrix*
-RelateOp::relate(const Geometry *a, const Geometry *b)
+RelateOp::relate(const Geometry* a, const Geometry* b)
 {
-	RelateOp relOp(a,b);
-	return relOp.getIntersectionMatrix();
+    RelateOp relOp(a, b);
+    return relOp.getIntersectionMatrix();
 }
 
 IntersectionMatrix*
-RelateOp::relate(const Geometry *a, const Geometry *b,
-		const algorithm::BoundaryNodeRule& boundaryNodeRule)
+RelateOp::relate(const Geometry* a, const Geometry* b,
+                 const algorithm::BoundaryNodeRule& boundaryNodeRule)
 {
-	RelateOp relOp(a, b, boundaryNodeRule);
-	return relOp.getIntersectionMatrix();
+    RelateOp relOp(a, b, boundaryNodeRule);
+    return relOp.getIntersectionMatrix();
 }
 
-RelateOp::RelateOp(const Geometry *g0, const Geometry *g1):
-	GeometryGraphOperation(g0, g1),
-	relateComp(&arg)
+RelateOp::RelateOp(const Geometry* g0, const Geometry* g1):
+    GeometryGraphOperation(g0, g1),
+    relateComp(&arg)
 {
 }
 
-RelateOp::RelateOp(const Geometry *g0, const Geometry *g1,
-		const algorithm::BoundaryNodeRule& boundaryNodeRule)
-	:
-	GeometryGraphOperation(g0, g1, boundaryNodeRule),
-	relateComp(&arg)
+RelateOp::RelateOp(const Geometry* g0, const Geometry* g1,
+                   const algorithm::BoundaryNodeRule& boundaryNodeRule)
+    :
+    GeometryGraphOperation(g0, g1, boundaryNodeRule),
+    relateComp(&arg)
 {
 }
 
@@ -71,7 +71,7 @@ RelateOp::~RelateOp()
 IntersectionMatrix*
 RelateOp::getIntersectionMatrix()
 {
-	return relateComp.computeIM();
+    return relateComp.computeIM();
 }
 
 } // namespace geos.operation.relate

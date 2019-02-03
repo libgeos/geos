@@ -20,13 +20,12 @@
 namespace geos {
 namespace io {
 
-class GEOS_DLL Unload
-{
+class GEOS_DLL Unload {
 private:
-	Unload(void) {}
-	~Unload(void) {}
+    Unload(void) {}
+    ~Unload(void) {}
 public:
-	static void Release();
+    static void Release();
 };
 
 }

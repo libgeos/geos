@@ -50,23 +50,22 @@ namespace {
 void
 sqlPrint(const std::string& table, std::vector<SegmentString*>& ssv)
 {
-	std::cerr << "CREATE TABLE \"" << table
-		<< "\" (id integer, geom geometry);" << std::endl;
+    std::cerr << "CREATE TABLE \"" << table
+              << "\" (id integer, geom geometry);" << std::endl;
 
-	std::cerr << "COPY \"" << table
-		<< "\" FROM stdin;" << std::endl;
+    std::cerr << "COPY \"" << table
+              << "\" FROM stdin;" << std::endl;
 
-	for (size_t i=0, n=ssv.size(); i<n; i++)
-	{
-		SegmentString* ss=ssv[i];
-		geom::CoordinateSequence* cs = ss->getCoordinates();
-		assert(cs);
+    for(size_t i = 0, n = ssv.size(); i < n; i++) {
+        SegmentString* ss = ssv[i];
+        geom::CoordinateSequence* cs = ss->getCoordinates();
+        assert(cs);
 
-		std::cerr << i << '\t' << "LINESTRING"
-			<< *cs
-			<< std::endl;
-	}
-	std::cerr << "\\." << std::endl;
+        std::cerr << i << '\t' << "LINESTRING"
+                  << *cs
+                  << std::endl;
+    }
+    std::cerr << "\\." << std::endl;
 }
 #endif // GEOS_DEBUG > 1
 
@@ -74,22 +73,24 @@ sqlPrint(const std::string& table, std::vector<SegmentString*>& ssv)
 
 class ScaledNoder::Scaler : public geom::CoordinateFilter {
 public:
-	const ScaledNoder& sn;
-	Scaler(const ScaledNoder&n): sn(n)
-	{
+    const ScaledNoder& sn;
+    Scaler(const ScaledNoder& n): sn(n)
+    {
 #if GEOS_DEBUG
-		std::cerr << "Scaler: offsetX,Y: " << sn.offsetX << ","
-			<< sn.offsetY << " scaleFactor: " << sn.scaleFactor
-			<< std::endl;
+        std::cerr << "Scaler: offsetX,Y: " << sn.offsetX << ","
+                  << sn.offsetY << " scaleFactor: " << sn.scaleFactor
+                  << std::endl;
 #endif
-	}
+    }
 
-	//void filter_ro(const geom::Coordinate* c) { assert(0); }
+    //void filter_ro(const geom::Coordinate* c) { assert(0); }
 
-	void filter_rw(geom::Coordinate* c) const override {
-		c->x = util::round( ( c->x - sn.offsetX ) * sn.scaleFactor );
-		c->y = util::round( ( c->y - sn.offsetY ) * sn.scaleFactor );
-	}
+    void
+    filter_rw(geom::Coordinate* c) const override
+    {
+        c->x = util::round((c->x - sn.offsetX) * sn.scaleFactor);
+        c->y = util::round((c->y - sn.offsetY) * sn.scaleFactor);
+    }
 
 private:
     // Declare type as noncopyable
@@ -99,26 +100,29 @@ private:
 
 class ScaledNoder::ReScaler: public geom::CoordinateFilter {
 public:
-	const ScaledNoder& sn;
-	ReScaler(const ScaledNoder&n): sn(n)
-	{
+    const ScaledNoder& sn;
+    ReScaler(const ScaledNoder& n): sn(n)
+    {
 #if GEOS_DEBUG
-		std::cerr << "ReScaler: offsetX,Y: " << sn.offsetX << ","
-			<< sn.offsetY << " scaleFactor: " << sn.scaleFactor
-			<< std::endl;
+        std::cerr << "ReScaler: offsetX,Y: " << sn.offsetX << ","
+                  << sn.offsetY << " scaleFactor: " << sn.scaleFactor
+                  << std::endl;
 #endif
-	}
+    }
 
-	void filter_ro(const geom::Coordinate* c) override
+    void
+    filter_ro(const geom::Coordinate* c) override
     {
         ::geos::ignore_unused_variable_warning(c);
         assert(0);
     }
 
-	void filter_rw(geom::Coordinate* c) const override {
-		c->x = c->x / sn.scaleFactor + sn.offsetX;
-		c->y = c->y / sn.scaleFactor + sn.offsetY;
-	}
+    void
+    filter_rw(geom::Coordinate* c) const override
+    {
+        c->x = c->x / sn.scaleFactor + sn.offsetX;
+        c->y = c->y / sn.scaleFactor + sn.offsetY;
+    }
 
 private:
     // Declare type as noncopyable
@@ -130,17 +134,16 @@ private:
 void
 ScaledNoder::rescale(SegmentString::NonConstVect& segStrings) const
 {
-	ReScaler rescaler(*this);
-	for (SegmentString::NonConstVect::const_iterator
-		i0=segStrings.begin(), i0End=segStrings.end();
-			i0!=i0End; ++i0)
-	{
+    ReScaler rescaler(*this);
+    for(SegmentString::NonConstVect::const_iterator
+            i0 = segStrings.begin(), i0End = segStrings.end();
+            i0 != i0End; ++i0) {
 
-		SegmentString* ss=*i0;
+        SegmentString* ss = *i0;
 
-		ss->getCoordinates()->apply_rw(&rescaler);
+        ss->getCoordinates()->apply_rw(&rescaler);
 
-	}
+    }
 }
 
 
@@ -148,39 +151,37 @@ ScaledNoder::rescale(SegmentString::NonConstVect& segStrings) const
 void
 ScaledNoder::scale(SegmentString::NonConstVect& segStrings) const
 {
-	Scaler scaler(*this);
-	for (SegmentString::NonConstVect::const_iterator
-		i0=segStrings.begin(), i0End=segStrings.end();
-			i0!=i0End; ++i0)
-	{
-		SegmentString* ss=*i0;
+    Scaler scaler(*this);
+    for(SegmentString::NonConstVect::const_iterator
+            i0 = segStrings.begin(), i0End = segStrings.end();
+            i0 != i0End; ++i0) {
+        SegmentString* ss = *i0;
 
-		CoordinateSequence* cs=ss->getCoordinates();
+        CoordinateSequence* cs = ss->getCoordinates();
 
 #ifndef NDEBUG
-		size_t npts = cs->size();
+        size_t npts = cs->size();
 #endif
-		cs->apply_rw(&scaler);
-		assert(cs->size() == npts);
+        cs->apply_rw(&scaler);
+        assert(cs->size() == npts);
 
-		// Actually, we should be creating *new*
-		// SegmentStrings here, but who's going
-		// to delete them then ? And is it worth
-		// the memory cost ?
-		cs->removeRepeatedPoints();
+        // Actually, we should be creating *new*
+        // SegmentStrings here, but who's going
+        // to delete them then ? And is it worth
+        // the memory cost ?
+        cs->removeRepeatedPoints();
 
-	}
+    }
 }
 
 ScaledNoder::~ScaledNoder()
 {
-	for (std::vector<geom::CoordinateSequence*>::const_iterator
-		it=newCoordSeq.begin(), end=newCoordSeq.end();
-		it != end;
-		++it)
-	{
-		delete *it;
-	}
+    for(std::vector<geom::CoordinateSequence*>::const_iterator
+            it = newCoordSeq.begin(), end = newCoordSeq.end();
+            it != end;
+            ++it) {
+        delete *it;
+    }
 }
 
 
@@ -188,19 +189,21 @@ ScaledNoder::~ScaledNoder()
 SegmentString::NonConstVect*
 ScaledNoder::getNodedSubstrings() const
 {
-	SegmentString::NonConstVect* splitSS = noder.getNodedSubstrings();
+    SegmentString::NonConstVect* splitSS = noder.getNodedSubstrings();
 
 #if GEOS_DEBUG > 1
-	sqlPrint("nodedSegStr", *splitSS);
+    sqlPrint("nodedSegStr", *splitSS);
 #endif
 
-	if ( isScaled ) rescale(*splitSS);
+    if(isScaled) {
+        rescale(*splitSS);
+    }
 
 #if GEOS_DEBUG > 1
-	sqlPrint("scaledNodedSegStr", *splitSS);
+    sqlPrint("scaledNodedSegStr", *splitSS);
 #endif
 
-	return splitSS;
+    return splitSS;
 
 }
 
@@ -210,16 +213,18 @@ ScaledNoder::computeNodes(SegmentString::NonConstVect* inputSegStr)
 {
 
 #if GEOS_DEBUG > 1
-	sqlPrint("inputSegStr", *inputSegStr);
+    sqlPrint("inputSegStr", *inputSegStr);
 #endif
 
-	if (isScaled) scale(*inputSegStr);
+    if(isScaled) {
+        scale(*inputSegStr);
+    }
 
 #if GEOS_DEBUG > 1
-	sqlPrint("scaledInputSegStr", *inputSegStr);
+    sqlPrint("scaledInputSegStr", *inputSegStr);
 #endif
 
-	noder.computeNodes(inputSegStr);
+    noder.computeNodes(inputSegStr);
 }
 
 

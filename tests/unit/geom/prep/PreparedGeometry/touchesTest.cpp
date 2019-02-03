@@ -21,8 +21,7 @@ namespace tut {
 // Test Group
 //
 
-struct test_preparedgeometrytouches_data
-{
+struct test_preparedgeometrytouches_data {
     typedef std::unique_ptr<geos::geom::prep::PreparedGeometry> PrepGeomAutoPtr;
     typedef geos::geom::GeometryFactory GeometryFactory;
 
@@ -62,14 +61,15 @@ group test_preparedgeometrytouches_data("geos::geom::prep::PreparedGeometry::tou
 // 1 - Point/Point do not touch
 template<>
 template<>
-void object::test<1>()
+void object::test<1>
+()
 {
     g1 = reader.read(
-        "POINT (0 0)"
-        );
+             "POINT (0 0)"
+         );
     g2 = reader.read(
-        "POINT (0 0)"
-        );
+             "POINT (0 0)"
+         );
     pg1 = prep::PreparedGeometryFactory::prepare(g1);
     pg2 = prep::PreparedGeometryFactory::prepare(g2);
 
@@ -80,14 +80,15 @@ void object::test<1>()
 // 2 - Line/Point do not touch if point is not on boundary
 template<>
 template<>
-void object::test<2>()
+void object::test<2>
+()
 {
     g1 = reader.read(
-        "LINESTRING(0 0, 1 1, 0 2)"
-        );
+             "LINESTRING(0 0, 1 1, 0 2)"
+         );
     g2 = reader.read(
-        "POINT (1 1)"
-        );
+             "POINT (1 1)"
+         );
     pg1 = prep::PreparedGeometryFactory::prepare(g1);
     pg2 = prep::PreparedGeometryFactory::prepare(g2);
 
@@ -98,14 +99,15 @@ void object::test<2>()
 // 3 - Line/Point touch
 template<>
 template<>
-void object::test<3>()
+void object::test<3>
+()
 {
     g1 = reader.read(
-        "LINESTRING(0 0, 1 1, 0 2)"
-        );
+             "LINESTRING(0 0, 1 1, 0 2)"
+         );
     g2 = reader.read(
-        "POINT (0 2)"
-        );
+             "POINT (0 2)"
+         );
     pg1 = prep::PreparedGeometryFactory::prepare(g1);
     pg2 = prep::PreparedGeometryFactory::prepare(g2);
 
@@ -116,14 +118,15 @@ void object::test<3>()
 // 4 - Line/Point touch (FP coordinates)
 template<>
 template<>
-void object::test<4>()
+void object::test<4>
+()
 {
     g1 = reader.read(
-        "LINESTRING (-612844.96290006 279079.117329031,-257704.820935236 574364.179187424)"
-        );
+             "LINESTRING (-612844.96290006 279079.117329031,-257704.820935236 574364.179187424)"
+         );
     g2 = reader.read(
-        "POINT (-257704.820935236 574364.179187424)"
-        );
+             "POINT (-257704.820935236 574364.179187424)"
+         );
     pg1 = prep::PreparedGeometryFactory::prepare(g1);
     pg2 = prep::PreparedGeometryFactory::prepare(g2);
 

@@ -24,11 +24,11 @@
 #include <geos/geom/prep/PreparedGeometry.h>
 
 namespace geos {
-	namespace geom {
-        namespace prep {
-            class PreparedGeometry;
-		}
-	}
+namespace geom {
+namespace prep {
+class PreparedGeometry;
+}
+}
 }
 
 
@@ -49,39 +49,40 @@ namespace prep { // geos::geom::prep
  * @author Martin Davis
  *
  */
-class GEOS_DLL PreparedGeometryFactory
-{
+class GEOS_DLL PreparedGeometryFactory {
 public:
 
-	/**
-	* Creates a new {@link PreparedGeometry} appropriate for the argument {@link Geometry}.
-	*
-	* @param geom the geometry to prepare
-	* @return the prepared geometry
-	*/
-	static const PreparedGeometry * prepare(const geom::Geometry * geom)
-	{
-		PreparedGeometryFactory pf;
-		return pf.create(geom);
-	}
+    /**
+    * Creates a new {@link PreparedGeometry} appropriate for the argument {@link Geometry}.
+    *
+    * @param geom the geometry to prepare
+    * @return the prepared geometry
+    */
+    static const PreparedGeometry*
+    prepare(const geom::Geometry* geom)
+    {
+        PreparedGeometryFactory pf;
+        return pf.create(geom);
+    }
 
     /**
- 	* Destroys {@link PreparedGeometry} allocated with the factory.
- 	*
-	* @param geom to be deallocated
-	*/
-    static void destroy(const PreparedGeometry* geom)
+    * Destroys {@link PreparedGeometry} allocated with the factory.
+    *
+    * @param geom to be deallocated
+    */
+    static void
+    destroy(const PreparedGeometry* geom)
     {
         delete geom;
     }
 
-	/**
- 	* Creates a new {@link PreparedGeometry} appropriate for the argument {@link Geometry}.
- 	*
-	* @param geom the geometry to prepare
-	* @return the prepared geometry
-	*/
-	const PreparedGeometry* create(const geom::Geometry* geom) const;
+    /**
+    * Creates a new {@link PreparedGeometry} appropriate for the argument {@link Geometry}.
+    *
+    * @param geom the geometry to prepare
+    * @return the prepared geometry
+    */
+    const PreparedGeometry* create(const geom::Geometry* geom) const;
 
 };
 

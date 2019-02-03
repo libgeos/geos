@@ -13,12 +13,12 @@
 cmake_minimum_required(VERSION 3.1.3)
 
 if(NOT CMAKE_VERSION)
-    set(CMAKE_VERSION
-      "${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}")
+  set(CMAKE_VERSION
+    "${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}")
 endif()
 
 if(POLICY CMP0048)
-    cmake_policy(SET CMP0048 NEW)
+  cmake_policy(SET CMP0048 NEW)
 endif()
 #################################################################################
 # Set GEOS project
@@ -208,7 +208,7 @@ endif()
 #################################################################################
 # Setup C/C++ library features
 #################################################################################
-
+if (false)
 # check header files
 include(CheckIncludeFiles)
 
@@ -227,6 +227,7 @@ else()
   else()
     check_type_size("long long int" HAVE_LONG_LONG_INT_64)
   endif()
+endif()
 endif()
 
 ################################################################################
@@ -251,7 +252,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 # for including build-specific GEOS C API headers
 include_directories(${PROJECT_BINARY_DIR}/capi)
 
-# for including build-specific version.h, platform.h and geos_c.h
+# for including build-specific version.h and geos_c.h
 include_directories(${PROJECT_BINARY_DIR}/include)
 
 # for geos_ts.cpp which does #include "../geos_revision.h" whereas
@@ -283,26 +284,6 @@ add_custom_target(geos_revision
     -D SRC=${PROJECT_BINARY_DIR}/geos_revision.h.in
     -D DST=${PROJECT_BINARY_DIR}/geos_revision.h
     -P ${PROJECT_BINARY_DIR}/geos_revision.cmake)
-
-if(EXISTS ${PROJECT_SOURCE_DIR}/include/geos/platform.h)
-  message(STATUS "Disabling existing ${PROJECT_SOURCE_DIR}/include/geos/platform.h")
-
-  if(${CMAKE_MAJOR_VERSION} EQUAL 2 AND ${CMAKE_MINOR_VERSION} EQUAL 6)
-    file(REMOVE ${PROJECT_SOURCE_DIR}/include/geos/platform.h)
-    set(PH_RESULT "removed")
-  else()
-    file(RENAME
-      ${PROJECT_SOURCE_DIR}/include/geos/platform.h
-      ${PROJECT_SOURCE_DIR}/include/geos/platform.h.disabled)
-      set(PH_RESULT "renamed")
-  endif()
-
-  message(STATUS "Disabling existing ${PROJECT_SOURCE_DIR}/include/geos/platform.h - ${PH_RESULT}")
-endif()
-
-message(STATUS "Generating GEOS ${PROJECT_BINARY_DIR}/include/geos/platform.h")
-configure_file(${PROJECT_SOURCE_DIR}/include/geos/platform.h.cmake
-  ${PROJECT_BINARY_DIR}/include/geos/platform.h)
 
 message(STATUS "Generating GEOS ${PROJECT_BINARY_DIR}/include/geos/version.h")
 configure_file(${PROJECT_SOURCE_DIR}/include/geos/version.h.in

@@ -28,53 +28,56 @@ using namespace std;
 Interval*
 Bintree::ensureExtent(const Interval* itemInterval, double minExtent)
 {
-	double min = itemInterval->getMin();
-	double max = itemInterval->getMax();
-	// has a non-zero extent
-	if (min != max)
-	{
-		// GEOS forces a copy here to be predictable wrt
-		// memory management. May change in the future.
-		return new Interval(*itemInterval);
-	}
+    double min = itemInterval->getMin();
+    double max = itemInterval->getMax();
+    // has a non-zero extent
+    if(min != max) {
+        // GEOS forces a copy here to be predictable wrt
+        // memory management. May change in the future.
+        return new Interval(*itemInterval);
+    }
 
-	// pad extent
-	if (min==max)
-	{
-		min = min-minExtent/2.0;
-		max = min+minExtent/2.0;
-	}
+    // pad extent
+    if(min == max) {
+        min = min - minExtent / 2.0;
+        max = min + minExtent / 2.0;
+    }
 
-	return new Interval(min, max);
+    return new Interval(min, max);
 }
 
 
 
 Bintree::Bintree()
 {
-	minExtent=1.0;
-	root=new Root();
+    minExtent = 1.0;
+    root = new Root();
 }
 
 Bintree::~Bintree()
 {
-	for (unsigned int i=0; i<newIntervals.size(); i++)
-		delete newIntervals[i];
-	delete root;
+    for(unsigned int i = 0; i < newIntervals.size(); i++) {
+        delete newIntervals[i];
+    }
+    delete root;
 }
 
 int
 Bintree::depth()
 {
-	if (root!=nullptr) return root->depth();
-	return 0;
+    if(root != nullptr) {
+        return root->depth();
+    }
+    return 0;
 }
 
 int
 Bintree::size()
 {
-	if (root!=nullptr) return root->size();
-	return 0;
+    if(root != nullptr) {
+        return root->size();
+    }
+    return 0;
 }
 
 /**
@@ -85,66 +88,76 @@ Bintree::size()
 int
 Bintree::nodeSize()
 {
-	if (root!=nullptr) return root->nodeSize();
-	return 0;
+    if(root != nullptr) {
+        return root->nodeSize();
+    }
+    return 0;
 }
 
 void
-Bintree::insert(Interval *itemInterval,void* item)
+Bintree::insert(Interval* itemInterval, void* item)
 {
-	collectStats(itemInterval);
-	Interval *insertInterval=ensureExtent(itemInterval,minExtent);
-	if ( insertInterval != itemInterval )
-		newIntervals.push_back(insertInterval);
-	//int oldSize=size();
-	root->insert(insertInterval,item);
+    collectStats(itemInterval);
+    Interval* insertInterval = ensureExtent(itemInterval, minExtent);
+    if(insertInterval != itemInterval) {
+        newIntervals.push_back(insertInterval);
+    }
+    //int oldSize=size();
+    root->insert(insertInterval, item);
 
-	/* GEOS_DEBUG
-	int newSize=size();
-	System.out.println("BinTree: size="+newSize+"   node size="+nodeSize());
-	if (newSize <= oldSize) {
-	System.out.println("Lost item!");
-	root.insert(insertInterval, item);
-	System.out.println("reinsertion size="+size());
-	}
-	*/
+    /* GEOS_DEBUG
+    int newSize=size();
+    System.out.println("BinTree: size="+newSize+"   node size="+nodeSize());
+    if (newSize <= oldSize) {
+    System.out.println("Lost item!");
+    root.insert(insertInterval, item);
+    System.out.println("reinsertion size="+size());
+    }
+    */
 }
 
-vector<void*>* Bintree::iterator() {
-	vector<void*>* foundItems=new vector<void*>();
-	root->addAllItems(foundItems);
-	return foundItems;
+vector<void*>*
+Bintree::iterator()
+{
+    vector<void*>* foundItems = new vector<void*>();
+    root->addAllItems(foundItems);
+    return foundItems;
 }
 
-vector<void*>* Bintree::query(double x) {
-	return query(new Interval(x, x));
+vector<void*>*
+Bintree::query(double x)
+{
+    return query(new Interval(x, x));
 }
 
 /**
 * min and max may be the same value
 */
-vector<void*>* Bintree::query(Interval *interval) {
-	/**
-	* the items that are matched are all items in intervals
-	* which overlap the query interval
-	*/
-	vector<void*>* foundItems=new vector<void*>();
-	query(interval,foundItems);
-	return foundItems;
+vector<void*>*
+Bintree::query(Interval* interval)
+{
+    /**
+    * the items that are matched are all items in intervals
+    * which overlap the query interval
+    */
+    vector<void*>* foundItems = new vector<void*>();
+    query(interval, foundItems);
+    return foundItems;
 }
 
 void
-Bintree::query(Interval *interval,vector<void*> *foundItems)
+Bintree::query(Interval* interval, vector<void*>* foundItems)
 {
-	root->addAllItemsFromOverlapping(interval,foundItems);
+    root->addAllItemsFromOverlapping(interval, foundItems);
 }
 
 void
-Bintree::collectStats(Interval *interval)
+Bintree::collectStats(Interval* interval)
 {
-	double del=interval->getWidth();
-	if (del<minExtent && del>0.0)
-		minExtent=del;
+    double del = interval->getWidth();
+    if(del < minExtent && del > 0.0) {
+        minExtent = del;
+    }
 }
 
 } // namespace geos.index.bintree

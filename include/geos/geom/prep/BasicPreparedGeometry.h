@@ -30,10 +30,10 @@
 #include <string>
 
 namespace geos {
-	namespace geom {
-		class Geometry;
-		class Coordinate;
-	}
+namespace geom {
+class Geometry;
+class Coordinate;
+}
 }
 
 
@@ -56,122 +56,123 @@ namespace prep { // geos::geom::prep
  * @author Martin Davis
  *
  */
-class BasicPreparedGeometry: public PreparedGeometry
-{
+class BasicPreparedGeometry: public PreparedGeometry {
 private:
-	const geom::Geometry * baseGeom;
-	Coordinate::ConstVect representativePts;
+    const geom::Geometry* baseGeom;
+    Coordinate::ConstVect representativePts;
 
 protected:
-	/**
-	 * Sets the original {@link Geometry} which will be prepared.
-	 */
-	void setGeometry( const geom::Geometry * geom );
+    /**
+     * Sets the original {@link Geometry} which will be prepared.
+     */
+    void setGeometry(const geom::Geometry* geom);
 
-	/**
-	 * Determines whether a Geometry g interacts with
-	 * this geometry by testing the geometry envelopes.
-	 *
-	 * @param g a Geometry
-	 * @return true if the envelopes intersect
-	 */
-	bool envelopesIntersect(const geom::Geometry* g) const;
+    /**
+     * Determines whether a Geometry g interacts with
+     * this geometry by testing the geometry envelopes.
+     *
+     * @param g a Geometry
+     * @return true if the envelopes intersect
+     */
+    bool envelopesIntersect(const geom::Geometry* g) const;
 
-	/**
-	 * Determines whether the envelope of
-	 * this geometry covers the Geometry g.
-	 *
-	 *
-	 * @param g a Geometry
-	 * @return true if g is contained in this envelope
-	 */
-	bool envelopeCovers(const geom::Geometry* g) const;
+    /**
+     * Determines whether the envelope of
+     * this geometry covers the Geometry g.
+     *
+     *
+     * @param g a Geometry
+     * @return true if g is contained in this envelope
+     */
+    bool envelopeCovers(const geom::Geometry* g) const;
 
 public:
-	BasicPreparedGeometry( const Geometry * geom);
+    BasicPreparedGeometry(const Geometry* geom);
 
-	~BasicPreparedGeometry( ) override;
+    ~BasicPreparedGeometry() override;
 
-	const geom::Geometry & getGeometry() const override
-	{
-		return *baseGeom;
-	}
+    const geom::Geometry&
+    getGeometry() const override
+    {
+        return *baseGeom;
+    }
 
-	/**
-	 * Gets the list of representative points for this geometry.
-	 * One vertex is included for every component of the geometry
-	 * (i.e. including one for every ring of polygonal geometries)
-	 *
-	 * @return a List of Coordinate
-	 */
-	const Coordinate::ConstVect * getRepresentativePoints()  const
-	{
-		return &representativePts;
-	}
+    /**
+     * Gets the list of representative points for this geometry.
+     * One vertex is included for every component of the geometry
+     * (i.e. including one for every ring of polygonal geometries)
+     *
+     * @return a List of Coordinate
+     */
+    const Coordinate::ConstVect*
+    getRepresentativePoints()  const
+    {
+        return &representativePts;
+    }
 
-	/**
-	 * Tests whether any representative of the target geometry
-	 * intersects the test geometry.
-	 * This is useful in A/A, A/L, A/P, L/P, and P/P cases.
-	 *
-	 * @param geom the test geometry
-	 * @param repPts the representative points of the target geometry
-	 * @return true if any component intersects the areal test geometry
-	 */
-	bool isAnyTargetComponentInTest(const geom::Geometry * testGeom) const;
+    /**
+     * Tests whether any representative of the target geometry
+     * intersects the test geometry.
+     * This is useful in A/A, A/L, A/P, L/P, and P/P cases.
+     *
+     * @param geom the test geometry
+     * @param repPts the representative points of the target geometry
+     * @return true if any component intersects the areal test geometry
+     */
+    bool isAnyTargetComponentInTest(const geom::Geometry* testGeom) const;
 
-	/**
-	 * Default implementation.
-	 */
-	bool contains(const geom::Geometry * g) const override;
+    /**
+     * Default implementation.
+     */
+    bool contains(const geom::Geometry* g) const override;
 
-	/**
-	 * Default implementation.
-	 */
-	bool containsProperly(const geom::Geometry * g)	const override;
+    /**
+     * Default implementation.
+     */
+    bool containsProperly(const geom::Geometry* g)	const override;
 
-	/**
-	 * Default implementation.
-	 */
-	bool coveredBy(const geom::Geometry * g) const override;
+    /**
+     * Default implementation.
+     */
+    bool coveredBy(const geom::Geometry* g) const override;
 
-	/**
-	 * Default implementation.
-	 */
-	bool covers(const geom::Geometry * g) const override;
+    /**
+     * Default implementation.
+     */
+    bool covers(const geom::Geometry* g) const override;
 
-	/**
-	 * Default implementation.
-	 */
-	bool crosses(const geom::Geometry * g) const override;
+    /**
+     * Default implementation.
+     */
+    bool crosses(const geom::Geometry* g) const override;
 
-	/**
-	 * Standard implementation for all geometries.
-	 * Supports {@link GeometryCollection}s as input.
-	 */
-	bool disjoint(const geom::Geometry * g)	const override;
+    /**
+     * Standard implementation for all geometries.
+     * Supports {@link GeometryCollection}s as input.
+     */
+    bool disjoint(const geom::Geometry* g)	const override;
 
-	/**
-	 * Default implementation.
-	 */
-	bool intersects(const geom::Geometry * g) const override;
+    /**
+     * Default implementation.
+     */
+    bool intersects(const geom::Geometry* g) const override;
 
-	/**
-	 * Default implementation.
-	 */
-	bool overlaps(const geom::Geometry * g)	const override;
+    /**
+     * Default implementation.
+     */
+    bool overlaps(const geom::Geometry* g)	const override;
 
-	/**
-	 * Default implementation.
-	 */
-	bool touches(const geom::Geometry * g) const override;
+    /**
+     * Default implementation.
+     */
+    bool touches(const geom::Geometry* g) const override;
 
-	/**
-	 * Default implementation.
-	 */
-	bool within(const geom::Geometry * g) const override;
+    /**
+     * Default implementation.
+     */
+    bool within(const geom::Geometry* g) const override;
 
-	std::string toString();
+    std::string toString();
 
 };
 

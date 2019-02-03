@@ -33,23 +33,23 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class LineString;
-		class GeometryFactory;
-		class Coordinate;
-		class CoordinateSequence;
-	}
-	namespace planargraph {
-		class Node;
-		class Edge;
-		class DirectedEdge;
-	}
-	namespace operation {
-		namespace polygonize {
-			class EdgeRing;
-			class PolygonizeDirectedEdge;
-		}
-	}
+namespace geom {
+class LineString;
+class GeometryFactory;
+class Coordinate;
+class CoordinateSequence;
+}
+namespace planargraph {
+class Node;
+class Edge;
+class DirectedEdge;
+}
+namespace operation {
+namespace polygonize {
+class EdgeRing;
+class PolygonizeDirectedEdge;
+}
+}
 }
 
 namespace geos {
@@ -70,151 +70,151 @@ class GEOS_DLL PolygonizeGraph: public planargraph::PlanarGraph {
 
 public:
 
-	/**
-	 * \brief
-	 * Deletes all edges at a node
-	 */
-	static void deleteAllEdges(planargraph::Node *node);
+    /**
+     * \brief
+     * Deletes all edges at a node
+     */
+    static void deleteAllEdges(planargraph::Node* node);
 
-	/**
-	 * \brief
-	 * Create a new polygonization graph.
-	 */
-	PolygonizeGraph(const geom::GeometryFactory *newFactory);
+    /**
+     * \brief
+     * Create a new polygonization graph.
+     */
+    PolygonizeGraph(const geom::GeometryFactory* newFactory);
 
-	/**
-	 * \brief
-	 * Destroy a polygonization graph.
-	 */
-	~PolygonizeGraph() override;
+    /**
+     * \brief
+     * Destroy a polygonization graph.
+     */
+    ~PolygonizeGraph() override;
 
-	/**
-	 * \brief
-	 * Add a LineString forming an edge of the polygon graph.
-	 * @param line the line to add
-	 */
-	void addEdge(const geom::LineString *line);
+    /**
+     * \brief
+     * Add a LineString forming an edge of the polygon graph.
+     * @param line the line to add
+     */
+    void addEdge(const geom::LineString* line);
 
-	/**
-	 * \brief
-	 * Computes the EdgeRings formed by the edges in this graph.
-	 *
-	 * @param edgeRingList : the EdgeRing found by the
-	 * 	polygonization process will be pushed here.
-	 *
-	 */
-	void getEdgeRings(std::vector<EdgeRing*>& edgeRingList);
+    /**
+     * \brief
+     * Computes the EdgeRings formed by the edges in this graph.
+     *
+     * @param edgeRingList : the EdgeRing found by the
+     * 	polygonization process will be pushed here.
+     *
+     */
+    void getEdgeRings(std::vector<EdgeRing*>& edgeRingList);
 
-	/**
-	 * \brief
-	 * Finds and removes all cut edges from the graph.
-	 *
-	 * @param cutLines : the list of the LineString forming the removed
-	 *                   cut edges will be pushed here.
-	 *
-	 * TODO: document ownership of the returned LineStrings
-	 */
-	void deleteCutEdges(std::vector<const geom::LineString*> &cutLines);
+    /**
+     * \brief
+     * Finds and removes all cut edges from the graph.
+     *
+     * @param cutLines : the list of the LineString forming the removed
+     *                   cut edges will be pushed here.
+     *
+     * TODO: document ownership of the returned LineStrings
+     */
+    void deleteCutEdges(std::vector<const geom::LineString*>& cutLines);
 
-	/** \brief
-	 * Marks all edges from the graph which are "dangles".
-	 *
-	 * Dangles are which are incident on a node with degree 1.
-	 * This process is recursive, since removing a dangling edge
-	 * may result in another edge becoming a dangle.
-	 * In order to handle large recursion depths efficiently,
-	 * an explicit recursion stack is used
-	 *
-	 * @param dangleLines : the LineStrings that formed dangles will
-	 *                      be push_back'ed here
-	 */
-	void deleteDangles(std::vector<const geom::LineString*> &dangleLines);
+    /** \brief
+     * Marks all edges from the graph which are "dangles".
+     *
+     * Dangles are which are incident on a node with degree 1.
+     * This process is recursive, since removing a dangling edge
+     * may result in another edge becoming a dangle.
+     * In order to handle large recursion depths efficiently,
+     * an explicit recursion stack is used
+     *
+     * @param dangleLines : the LineStrings that formed dangles will
+     *                      be push_back'ed here
+     */
+    void deleteDangles(std::vector<const geom::LineString*>& dangleLines);
 
 private:
 
-	static int getDegreeNonDeleted(planargraph::Node *node);
+    static int getDegreeNonDeleted(planargraph::Node* node);
 
-	static int getDegree(planargraph::Node *node, long label);
+    static int getDegree(planargraph::Node* node, long label);
 
-	const geom::GeometryFactory *factory;
+    const geom::GeometryFactory* factory;
 
-	planargraph::Node* getNode(const geom::Coordinate& pt);
+    planargraph::Node* getNode(const geom::Coordinate& pt);
 
-	void computeNextCWEdges();
+    void computeNextCWEdges();
 
-	/**
-	 * \brief
-	 * Convert the maximal edge rings found by the initial graph traversal
-	 * into the minimal edge rings required by JTS polygon topology rules.
-	 *
-	 * @param ringEdges
-	 * 	the list of start edges for the edgeRings to convert.
-	 *
-	 */
-	void convertMaximalToMinimalEdgeRings(
-			std::vector<PolygonizeDirectedEdge*> &ringEdges);
+    /**
+     * \brief
+     * Convert the maximal edge rings found by the initial graph traversal
+     * into the minimal edge rings required by JTS polygon topology rules.
+     *
+     * @param ringEdges
+     * 	the list of start edges for the edgeRings to convert.
+     *
+     */
+    void convertMaximalToMinimalEdgeRings(
+        std::vector<PolygonizeDirectedEdge*>& ringEdges);
 
-	/**
-	 * \brief
-	 * Finds all nodes in a maximal edgering
-	 * which are self-intersection nodes
-	 *
-	 * @param startDE
-	 * @param label
-	 * @param intNodes : intersection nodes found will be pushed here
-	 *                   the vector won't be cleared before pushing.
-	 */
-	static void findIntersectionNodes( PolygonizeDirectedEdge *startDE,
-			long label, std::vector<planargraph::Node*>& intNodes
-);
+    /**
+     * \brief
+     * Finds all nodes in a maximal edgering
+     * which are self-intersection nodes
+     *
+     * @param startDE
+     * @param label
+     * @param intNodes : intersection nodes found will be pushed here
+     *                   the vector won't be cleared before pushing.
+     */
+    static void findIntersectionNodes(PolygonizeDirectedEdge* startDE,
+                                      long label, std::vector<planargraph::Node*>& intNodes
+                                     );
 
-	/**
-	 * Finds and labels all edgerings in the graph.
-	 *
-	 * The edge rings are labelling with unique integers.
-	 * The labelling allows detecting cut edges.
-	 *
-	 * @param dirEdgesIn  a list of the DirectedEdges in the graph
-	 * @param dirEdgesOut each ring found will be pushed here
-	 */
-	static void findLabeledEdgeRings(
-			std::vector<planargraph::DirectedEdge*> &dirEdgesIn,
-			std::vector<PolygonizeDirectedEdge*> &dirEdgesOut);
+    /**
+     * Finds and labels all edgerings in the graph.
+     *
+     * The edge rings are labelling with unique integers.
+     * The labelling allows detecting cut edges.
+     *
+     * @param dirEdgesIn  a list of the DirectedEdges in the graph
+     * @param dirEdgesOut each ring found will be pushed here
+     */
+    static void findLabeledEdgeRings(
+        std::vector<planargraph::DirectedEdge*>& dirEdgesIn,
+        std::vector<PolygonizeDirectedEdge*>& dirEdgesOut);
 
-	static void label(std::vector<planargraph::DirectedEdge*> &dirEdges, long label);
+    static void label(std::vector<planargraph::DirectedEdge*>& dirEdges, long label);
 
-	static void computeNextCWEdges(planargraph::Node *node);
+    static void computeNextCWEdges(planargraph::Node* node);
 
-	/**
-	 * \brief
-	 * Computes the next edge pointers going CCW around the given node,
-	 * for the given edgering label.
-	 * This algorithm has the effect of converting maximal edgerings
-	 * into minimal edgerings
-	 */
-	static void computeNextCCWEdges(planargraph::Node *node, long label);
+    /**
+     * \brief
+     * Computes the next edge pointers going CCW around the given node,
+     * for the given edgering label.
+     * This algorithm has the effect of converting maximal edgerings
+     * into minimal edgerings
+     */
+    static void computeNextCCWEdges(planargraph::Node* node, long label);
 
-	/**
-	 * \brief
-	 * Traverse a ring of DirectedEdges, accumulating them into a list.
-	 * This assumes that all dangling directed edges have been removed
-	 * from the graph, so that there is always a next dirEdge.
-	 *
-	 * @param startDE the DirectedEdge to start traversing at
-	 * @param edgesInRing : the DirectedEdges that form a ring will
-	 *                      be pushed here.
-	 */
-	static void findDirEdgesInRing(PolygonizeDirectedEdge *startDE,
-		std::vector<planargraph::DirectedEdge*>& edgesInRing);
+    /**
+     * \brief
+     * Traverse a ring of DirectedEdges, accumulating them into a list.
+     * This assumes that all dangling directed edges have been removed
+     * from the graph, so that there is always a next dirEdge.
+     *
+     * @param startDE the DirectedEdge to start traversing at
+     * @param edgesInRing : the DirectedEdges that form a ring will
+     *                      be pushed here.
+     */
+    static void findDirEdgesInRing(PolygonizeDirectedEdge* startDE,
+                                   std::vector<planargraph::DirectedEdge*>& edgesInRing);
 
-	EdgeRing* findEdgeRing(PolygonizeDirectedEdge *startDE);
+    EdgeRing* findEdgeRing(PolygonizeDirectedEdge* startDE);
 
-	/* Tese are for memory management */
-	std::vector<planargraph::Edge *> newEdges;
-	std::vector<planargraph::DirectedEdge *> newDirEdges;
-	std::vector<planargraph::Node *> newNodes;
-	std::vector<EdgeRing *> newEdgeRings;
-	std::vector<geom::CoordinateSequence *> newCoords;
+    /* Tese are for memory management */
+    std::vector<planargraph::Edge*> newEdges;
+    std::vector<planargraph::DirectedEdge*> newDirEdges;
+    std::vector<planargraph::Node*> newNodes;
+    std::vector<EdgeRing*> newEdgeRings;
+    std::vector<geom::CoordinateSequence*> newCoords;
 };
 
 } // namespace geos::operation::polygonize

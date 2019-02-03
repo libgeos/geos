@@ -32,23 +32,23 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class GeometryFactory;
-		class CoordinateSequence;
-		class LineString;
-	}
-	namespace geomgraph {
-		class DirectedEdge;
-		class Edge;
-	}
-	namespace algorithm {
-		class PointLocator;
-	}
-	namespace operation {
-		namespace overlay {
-			class OverlayOp;
-		}
-	}
+namespace geom {
+class GeometryFactory;
+class CoordinateSequence;
+class LineString;
+}
+namespace geomgraph {
+class DirectedEdge;
+class Edge;
+}
+namespace algorithm {
+class PointLocator;
+}
+namespace operation {
+namespace overlay {
+class OverlayOp;
+}
+}
 }
 
 namespace geos {
@@ -64,69 +64,69 @@ class GEOS_DLL LineBuilder {
 
 public:
 
-	LineBuilder(OverlayOp *newOp,
-			const geom::GeometryFactory *newGeometryFactory,
-			algorithm::PointLocator *newPtLocator);
+    LineBuilder(OverlayOp* newOp,
+                const geom::GeometryFactory* newGeometryFactory,
+                algorithm::PointLocator* newPtLocator);
 
-	~LineBuilder();
+    ~LineBuilder();
 
-	/**
-	 * @return a list of the LineStrings in the result of the specified overlay operation
-	 */
-	std::vector<geom::LineString*>* build(OverlayOp::OpCode opCode);
+    /**
+     * @return a list of the LineStrings in the result of the specified overlay operation
+     */
+    std::vector<geom::LineString*>* build(OverlayOp::OpCode opCode);
 
-	/**
-	 * Collect line edges which are in the result.
-	 *
-	 * Line edges are in the result if they are not part of
-	 * an area boundary, if they are in the result of the overlay operation,
-	 * and if they are not covered by a result area.
-	 *
-	 * @param de the directed edge to test.
-	 * @param opCode the overlap operation
-	 * @param edges the list of included line edges.
-	 */
-	void collectLineEdge(geomgraph::DirectedEdge *de,
-			OverlayOp::OpCode opCode,
-			std::vector<geomgraph::Edge*>* edges);
+    /**
+     * Collect line edges which are in the result.
+     *
+     * Line edges are in the result if they are not part of
+     * an area boundary, if they are in the result of the overlay operation,
+     * and if they are not covered by a result area.
+     *
+     * @param de the directed edge to test.
+     * @param opCode the overlap operation
+     * @param edges the list of included line edges.
+     */
+    void collectLineEdge(geomgraph::DirectedEdge* de,
+                         OverlayOp::OpCode opCode,
+                         std::vector<geomgraph::Edge*>* edges);
 
 private:
-	OverlayOp *op;
-	const geom::GeometryFactory *geometryFactory;
-	algorithm::PointLocator *ptLocator;
-	std::vector<geomgraph::Edge*> lineEdgesList;
-	std::vector<geom::LineString*>* resultLineList;
-	void findCoveredLineEdges();
-	void collectLines(OverlayOp::OpCode opCode);
-	void buildLines(OverlayOp::OpCode opCode);
-	void labelIsolatedLines(std::vector<geomgraph::Edge*> *edgesList);
+    OverlayOp* op;
+    const geom::GeometryFactory* geometryFactory;
+    algorithm::PointLocator* ptLocator;
+    std::vector<geomgraph::Edge*> lineEdgesList;
+    std::vector<geom::LineString*>* resultLineList;
+    void findCoveredLineEdges();
+    void collectLines(OverlayOp::OpCode opCode);
+    void buildLines(OverlayOp::OpCode opCode);
+    void labelIsolatedLines(std::vector<geomgraph::Edge*>* edgesList);
 
-	/**
-	 * Collect edges from Area inputs which should be in the result but
-	 * which have not been included in a result area.
-	 * This happens ONLY:
-	 *
-	 *  -  during an intersection when the boundaries of two
-	 *     areas touch in a line segment
-	 *  -   OR as a result of a dimensional collapse.
-	 *
-	 */
-	void collectBoundaryTouchEdge(geomgraph::DirectedEdge *de,
-			OverlayOp::OpCode opCode,
-			std::vector<geomgraph::Edge*>* edges);
+    /**
+     * Collect edges from Area inputs which should be in the result but
+     * which have not been included in a result area.
+     * This happens ONLY:
+     *
+     *  -  during an intersection when the boundaries of two
+     *     areas touch in a line segment
+     *  -   OR as a result of a dimensional collapse.
+     *
+     */
+    void collectBoundaryTouchEdge(geomgraph::DirectedEdge* de,
+                                  OverlayOp::OpCode opCode,
+                                  std::vector<geomgraph::Edge*>* edges);
 
-	/**
-	 * Label an isolated node with its relationship to the target geometry.
-	 */
-	void labelIsolatedLine(geomgraph::Edge *e, int targetIndex);
+    /**
+     * Label an isolated node with its relationship to the target geometry.
+     */
+    void labelIsolatedLine(geomgraph::Edge* e, int targetIndex);
 
-	/*
-	 * If the given CoordinateSequence has mixed 3d/2d vertexes
-	 * set Z for all vertexes missing it.
-	 * The Z value is interpolated between 3d vertexes and copied
-	 * from a 3d vertex to the end.
-	 */
-	void propagateZ(geom::CoordinateSequence *cs);
+    /*
+     * If the given CoordinateSequence has mixed 3d/2d vertexes
+     * set Z for all vertexes missing it.
+     * The Z value is interpolated between 3d vertexes and copied
+     * from a 3d vertex to the end.
+     */
+    void propagateZ(geom::CoordinateSequence* cs);
 };
 
 } // namespace geos::operation::overlay

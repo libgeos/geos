@@ -33,17 +33,17 @@ namespace util { // geos::util
  */
 class GEOS_DLL IllegalArgumentException: public GEOSException {
 public:
-	IllegalArgumentException()
-		:
-		GEOSException("IllegalArgumentException", "")
-	{}
+    IllegalArgumentException()
+        :
+        GEOSException("IllegalArgumentException", "")
+    {}
 
-	IllegalArgumentException(const std::string& msg)
-		:
-		GEOSException("IllegalArgumentException", msg)
-	{}
+    IllegalArgumentException(const std::string& msg)
+        :
+        GEOSException("IllegalArgumentException", msg)
+    {}
 
-	~IllegalArgumentException() throw() override {}
+    ~IllegalArgumentException() throw() override {}
 };
 
 } // namespace geos::util

@@ -31,21 +31,21 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Geometry;
-		class GeometryFactory;
-		class Point;
-		class LinearRing;
-		class LineString;
-		class Polygon;
-		class MultiPoint;
-		class MultiPolygon;
-		class MultiLineString;
-		class GeometryCollection;
-		namespace util {
-			//class GeometryEditorOperation;
-		}
-	}
+namespace geom {
+class Geometry;
+class GeometryFactory;
+class Point;
+class LinearRing;
+class LineString;
+class Polygon;
+class MultiPoint;
+class MultiPolygon;
+class MultiLineString;
+class GeometryCollection;
+namespace util {
+//class GeometryEditorOperation;
+}
+}
 }
 
 
@@ -93,101 +93,101 @@ class GEOS_DLL GeometryTransformer {
 
 public:
 
-	GeometryTransformer();
+    GeometryTransformer();
 
-	virtual ~GeometryTransformer();
+    virtual ~GeometryTransformer();
 
-	std::unique_ptr<Geometry> transform(const Geometry* nInputGeom);
+    std::unique_ptr<Geometry> transform(const Geometry* nInputGeom);
 
-	void setSkipTransformedInvalidInteriorRings(bool b);
+    void setSkipTransformedInvalidInteriorRings(bool b);
 
 protected:
 
-	const GeometryFactory* factory;
+    const GeometryFactory* factory;
 
-	/**
-	 * Convenience method which provides standard way of
-	 * creating a {@link CoordinateSequence}
-	 *
-	 * @param coords the coordinate array to copy
-	 * @return a coordinate sequence for the array
-	 *
-	 * [final]
-	 */
-	CoordinateSequence::Ptr createCoordinateSequence(
-			std::unique_ptr< std::vector<Coordinate> > coords);
+    /**
+     * Convenience method which provides standard way of
+     * creating a {@link CoordinateSequence}
+     *
+     * @param coords the coordinate array to copy
+     * @return a coordinate sequence for the array
+     *
+     * [final]
+     */
+    CoordinateSequence::Ptr createCoordinateSequence(
+        std::unique_ptr< std::vector<Coordinate> > coords);
 
-	virtual CoordinateSequence::Ptr transformCoordinates(
-			const CoordinateSequence* coords,
-			const Geometry* parent);
+    virtual CoordinateSequence::Ptr transformCoordinates(
+        const CoordinateSequence* coords,
+        const Geometry* parent);
 
-	virtual Geometry::Ptr transformPoint(
-			const Point* geom,
-			const Geometry* parent);
+    virtual Geometry::Ptr transformPoint(
+        const Point* geom,
+        const Geometry* parent);
 
-	virtual Geometry::Ptr transformMultiPoint(
-			const MultiPoint* geom,
-			const Geometry* parent);
+    virtual Geometry::Ptr transformMultiPoint(
+        const MultiPoint* geom,
+        const Geometry* parent);
 
-	virtual Geometry::Ptr transformLinearRing(
-			const LinearRing* geom,
-			const Geometry* parent);
+    virtual Geometry::Ptr transformLinearRing(
+        const LinearRing* geom,
+        const Geometry* parent);
 
-	virtual Geometry::Ptr transformLineString(
-			const LineString* geom,
-			const Geometry* parent);
+    virtual Geometry::Ptr transformLineString(
+        const LineString* geom,
+        const Geometry* parent);
 
-	virtual Geometry::Ptr transformMultiLineString(
-			const MultiLineString* geom,
-			const Geometry* parent);
+    virtual Geometry::Ptr transformMultiLineString(
+        const MultiLineString* geom,
+        const Geometry* parent);
 
-	virtual Geometry::Ptr transformPolygon(
-			const Polygon* geom,
-			const Geometry* parent);
+    virtual Geometry::Ptr transformPolygon(
+        const Polygon* geom,
+        const Geometry* parent);
 
-	virtual Geometry::Ptr transformMultiPolygon(
-			const MultiPolygon* geom,
-			const Geometry* parent);
+    virtual Geometry::Ptr transformMultiPolygon(
+        const MultiPolygon* geom,
+        const Geometry* parent);
 
-	virtual Geometry::Ptr transformGeometryCollection(
-			const GeometryCollection* geom,
-			const Geometry* parent);
+    virtual Geometry::Ptr transformGeometryCollection(
+        const GeometryCollection* geom,
+        const Geometry* parent);
 
 private:
 
-	const Geometry* inputGeom;
+    const Geometry* inputGeom;
 
-	// these could eventually be exposed to clients
-	/**
-	 * <code>true</code> if empty geometries should not be included in the result
-	 */
-	bool pruneEmptyGeometry;
+    // these could eventually be exposed to clients
+    /**
+     * <code>true</code> if empty geometries should not be included in the result
+     */
+    bool pruneEmptyGeometry;
 
-	/**
-	 * <code>true</code> if a homogenous collection result
-	 * from a {@link GeometryCollection} should still
-	 * be a general GeometryCollection
-	 */
-	bool preserveGeometryCollectionType;
+    /**
+     * <code>true</code> if a homogenous collection result
+     * from a {@link GeometryCollection} should still
+     * be a general GeometryCollection
+     */
+    bool preserveGeometryCollectionType;
 
-	/**
-	 * <code>true</code> if the output from a collection argument should still be a collection
-	 */
-	bool preserveCollections;
+    /**
+     * <code>true</code> if the output from a collection argument should still be a collection
+     */
+    // bool preserveCollections;
 
-	/**
-	 * <code>true</code> if the type of the input should be preserved
-	 */
-	bool preserveType;
+    /**
+     * <code>true</code> if the type of the input should be preserved
+     */
+    bool preserveType;
 
-	/**
-	 * <code>true</code> if transformed invalid interior rings should be skipped
-	 */
-	bool skipTransformedInvalidInteriorRings;
+    /**
+     * <code>true</code> if transformed invalid interior rings should be skipped
+     */
+    bool skipTransformedInvalidInteriorRings;
 
-	// Declare type as noncopyable
-	GeometryTransformer(const GeometryTransformer& other) = delete;
-	GeometryTransformer& operator=(const GeometryTransformer& rhs) = delete;
+    // Declare type as noncopyable
+    GeometryTransformer(const GeometryTransformer& other) = delete;
+    GeometryTransformer& operator=(const GeometryTransformer& rhs) = delete;
 };
 
 

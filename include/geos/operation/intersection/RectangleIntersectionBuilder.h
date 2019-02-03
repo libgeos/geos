@@ -29,19 +29,19 @@
 
 // Forward declarations
 namespace geos {
-  namespace geom {
-	class Coordinate;
-	class Geometry;
-	class GeometryFactory;
-	class Polygon;
-	class LineString;
-	class Point;
-  }
-  namespace operation {
-	namespace intersection {
-	  class Rectangle;
-	}
-  }
+namespace geom {
+class Coordinate;
+class Geometry;
+class GeometryFactory;
+class Polygon;
+class LineString;
+class Point;
+}
+namespace operation {
+namespace intersection {
+class Rectangle;
+}
+}
 }
 
 namespace geos {
@@ -60,97 +60,96 @@ namespace intersection { // geos::operation::intersection
  * intended for public use.
  */
 
-class GEOS_DLL RectangleIntersectionBuilder
-{
-  // Regular users are not supposed to use this utility class.
-  friend class RectangleIntersection;
+class GEOS_DLL RectangleIntersectionBuilder {
+    // Regular users are not supposed to use this utility class.
+    friend class RectangleIntersection;
 
 public:
 
-  ~RectangleIntersectionBuilder();
+    ~RectangleIntersectionBuilder();
 
 private:
 
-  /**
-   * \brief Build the result geometry from partial results and clean up
-   */
-  std::unique_ptr<geom::Geometry> build();
+    /**
+     * \brief Build the result geometry from partial results and clean up
+     */
+    std::unique_ptr<geom::Geometry> build();
 
-  /**
-   * \brief Build polygons from parts left by clipping one
-   *
-   * 1. Build exterior ring(s) from lines
-   * 2. Attach polygons as holes to the exterior ring(s)
-   */
-  void reconnectPolygons(const Rectangle & rect);
+    /**
+     * \brief Build polygons from parts left by clipping one
+     *
+     * 1. Build exterior ring(s) from lines
+     * 2. Attach polygons as holes to the exterior ring(s)
+     */
+    void reconnectPolygons(const Rectangle& rect);
 
-  /**
-   * Reconnect disjointed parts
-   *
-   * When we clip a LinearRing we may get multiple linestrings.
-   * Often the first and last ones can be reconnected to simplify
-   * output.
-   *
-   * Sample clip with a rectangle 0,0 --> 10,10 without reconnecting:
-   *
-   *   Input:   POLYGON ((5 10,0 0,10 0,5 10))
-   *   Output:  MULTILINESTRING ((5 10,0 0),(10 0,5 10))
-   *   Desired: LINESTRING (10 0,5 10,0 0)
-   *
-   * TODO: If there is a very sharp spike from inside the rectangle
-   *       outside, and then back in, it is possible that the
-   *       intersection points at the edge are equal. In this
-   *       case we could reconnect the linestrings. The task is
-   *       the same we're already doing for the 1st/last linestrings,
-   *       we'd just do it for any adjacent pair as well.
-   */
-  void reconnect();
+    /**
+     * Reconnect disjointed parts
+     *
+     * When we clip a LinearRing we may get multiple linestrings.
+     * Often the first and last ones can be reconnected to simplify
+     * output.
+     *
+     * Sample clip with a rectangle 0,0 --> 10,10 without reconnecting:
+     *
+     *   Input:   POLYGON ((5 10,0 0,10 0,5 10))
+     *   Output:  MULTILINESTRING ((5 10,0 0),(10 0,5 10))
+     *   Desired: LINESTRING (10 0,5 10,0 0)
+     *
+     * TODO: If there is a very sharp spike from inside the rectangle
+     *       outside, and then back in, it is possible that the
+     *       intersection points at the edge are equal. In this
+     *       case we could reconnect the linestrings. The task is
+     *       the same we're already doing for the 1st/last linestrings,
+     *       we'd just do it for any adjacent pair as well.
+     */
+    void reconnect();
 
-  void reverseLines();
+    void reverseLines();
 
-  /**
-   * Export parts to another container
-   */
-  void release(RectangleIntersectionBuilder & parts);
+    /**
+     * Export parts to another container
+     */
+    void release(RectangleIntersectionBuilder& parts);
 
-  // Adding Geometry components
-  void add(geom::Polygon * g);
-  void add(geom::LineString * g);
-  void add(geom::Point * g);
+    // Adding Geometry components
+    void add(geom::Polygon* g);
+    void add(geom::LineString* g);
+    void add(geom::Point* g);
 
-  // Trivial methods
-  bool empty() const;
-  void clear();
+    // Trivial methods
+    bool empty() const;
+    void clear();
 
-  // Added components
-  std::list<geom::Polygon *> polygons;
-  std::list<geom::LineString *> lines;
-  std::list<geom::Point *> points;
+    // Added components
+    std::list<geom::Polygon*> polygons;
+    std::list<geom::LineString*> lines;
+    std::list<geom::Point*> points;
 
-  /**
-   * \brief Close a ring clockwise along rectangle edges
-   *
-   * Only the 4 corners and x1,y1 need to be considered. The possible
-   * cases are:
-   *
-   *    x1,y1
-   *    corner1 x1,y1
-   *    corner1 corner2 x1,y1
-   *    corner1 corner2 corner3 x1,y1
-   *    corner1 corner2 corner3 corner4 x1,y1
-   */
-  void close_boundary(
-          const Rectangle & rect,
-          std::vector<geom::Coordinate> * ring,
-          double x1, double y1,
-          double x2, double y2);
+    /**
+     * \brief Close a ring clockwise along rectangle edges
+     *
+     * Only the 4 corners and x1,y1 need to be considered. The possible
+     * cases are:
+     *
+     *    x1,y1
+     *    corner1 x1,y1
+     *    corner1 corner2 x1,y1
+     *    corner1 corner2 corner3 x1,y1
+     *    corner1 corner2 corner3 corner4 x1,y1
+     */
+    void close_boundary(
+        const Rectangle& rect,
+        std::vector<geom::Coordinate>* ring,
+        double x1, double y1,
+        double x2, double y2);
 
-  void close_ring(const Rectangle & rect, std::vector<geom::Coordinate> * ring);
+    void close_ring(const Rectangle& rect, std::vector<geom::Coordinate>* ring);
 
-  RectangleIntersectionBuilder(const geom::GeometryFactory& f)
-    : _gf(f) {}
+    RectangleIntersectionBuilder(const geom::GeometryFactory& f)
+        : _gf(f) {}
 
-  const geom::GeometryFactory &_gf;
+    const geom::GeometryFactory& _gf;
 
 }; // class RectangleIntersectionBuilder
 

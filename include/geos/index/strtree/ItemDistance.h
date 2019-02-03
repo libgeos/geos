@@ -26,16 +26,16 @@ namespace index {
 namespace strtree {
 class GEOS_DLL ItemDistance {
 public:
-	/**
-	 * Computes the distance between two items.
-	 *
-	 * @param item1
-	 * @param item2
-	 * @return the distance between the items
-	 *
-	 * @throws IllegalArgumentException if the metric is not applicable to the arguments
-	 */
-	virtual double distance(const ItemBoundable* item1, const ItemBoundable* item2) = 0;
+    /**
+     * Computes the distance between two items.
+     *
+     * @param item1
+     * @param item2
+     * @return the distance between the items
+     *
+     * @throws IllegalArgumentException if the metric is not applicable to the arguments
+     */
+    virtual double distance(const ItemBoundable* item1, const ItemBoundable* item2) = 0;
 };
 }
 }

@@ -51,15 +51,15 @@ struct timezone {
 
 #if !defined(_WIN32_WCE)
 
-__inline int gettimeofday(struct timeval *tv, struct timezone *tz)
+__inline int
+gettimeofday(struct timeval* tv, struct timezone* tz)
 {
     FILETIME        ft;
     LARGE_INTEGER   li;
     __int64         t;
     static int      tzflag;
 
-    if (tv)
-    {
+    if(tv) {
         GetSystemTimeAsFileTime(&ft);
         li.LowPart  = ft.dwLowDateTime;
         li.HighPart = ft.dwHighDateTime;
@@ -70,10 +70,8 @@ __inline int gettimeofday(struct timeval *tv, struct timezone *tz)
         tv->tv_usec = (long)(t % 1000000);
     }
 
-    if (tz)
-    {
-        if (!tzflag)
-        {
+    if(tz) {
+        if(!tzflag) {
             _tzset();
             tzflag++;
         }
@@ -86,19 +84,19 @@ __inline int gettimeofday(struct timeval *tv, struct timezone *tz)
 
 #else
 
-__inline int gettimeofday(struct timeval *tv, struct timezone *tz)
+__inline int
+gettimeofday(struct timeval* tv, struct timezone* tz)
 {
-	SYSTEMTIME      st;
+    SYSTEMTIME      st;
     FILETIME        ft;
     LARGE_INTEGER   li;
     TIME_ZONE_INFORMATION tzi;
     __int64         t;
     static int      tzflag;
 
-    if (tv)
-    {
-		GetSystemTime(&st);
-		SystemTimeToFileTime(&st, &ft);
+    if(tv) {
+        GetSystemTime(&st);
+        SystemTimeToFileTime(&st, &ft);
         li.LowPart  = ft.dwLowDateTime;
         li.HighPart = ft.dwHighDateTime;
         t  = li.QuadPart;       /* In 100-nanosecond intervals */
@@ -108,22 +106,18 @@ __inline int gettimeofday(struct timeval *tv, struct timezone *tz)
         tv->tv_usec = (long)(t % 1000000);
     }
 
-    if (tz)
-    {
+    if(tz) {
         GetTimeZoneInformation(&tzi);
 
         tz->tz_minuteswest = tzi.Bias;
-		if (tzi.StandardDate.wMonth != 0)
-        {
-			tz->tz_minuteswest += tzi.StandardBias * 60;
+        if(tzi.StandardDate.wMonth != 0) {
+            tz->tz_minuteswest += tzi.StandardBias * 60;
         }
 
-        if (tzi.DaylightDate.wMonth != 0)
-        {
+        if(tzi.DaylightDate.wMonth != 0) {
             tz->tz_dsttime = 1;
         }
-        else
-        {
+        else {
             tz->tz_dsttime = 0;
         }
     }

@@ -19,7 +19,7 @@
 #ifndef GEOS_NODING_FASTNODINGVALIDATOR_H
 #define GEOS_NODING_FASTNODINGVALIDATOR_H
 
-#include <geos/noding/SingleInteriorIntersectionFinder.h> // for composition
+#include <geos/noding/NodingIntersectionFinder.h> // for composition
 #include <geos/algorithm/LineIntersector.h> // for composition
 
 #include <memory>
@@ -28,9 +28,9 @@
 
 // Forward declarations
 namespace geos {
-	namespace noding {
-		class SegmentString;
-	}
+namespace noding {
+class SegmentString;
+}
 }
 
 namespace geos {
@@ -39,76 +39,86 @@ namespace noding { // geos.noding
 /** \brief
  * Validates that a collection of {@link SegmentString}s is correctly noded.
  *
- * Uses indexes to improve performance.
- * Does NOT check a-b-a collapse situations.
- * Also does not check for endpt-interior vertex intersections.
- * This should not be a problem, since the noders should be
- * able to compute intersections between vertices correctly.
- * User may either test the valid condition, or request that a
- * {@link TopologyException}
- * be thrown.
+ * Indexing is used to improve performance.
+ * By default validation stops after a single
+ * non-noded intersection is detected.
+ * Alternatively, it can be requested to detect all intersections
+ * by using {@link #setFindAllIntersections(boolean)}.
  *
- * @version 1.7
+* The validator does not check for topology collapse situations
+ * (e.g. where two segment strings are fully co-incident).
+ *
+ * The validator checks for the following situations which indicated incorrect noding:
+ *
+ * - Proper intersections between segments (i.e. the intersection is interior to both segments)
+ * - Intersections at an interior vertex (i.e. with an endpoint or another interior vertex)
+ *
+ * The client may either test the {@link #isValid()} condition,
+ * or request that a suitable {@link TopologyException} be thrown.
+ *
  */
-class FastNodingValidator
-{
+class FastNodingValidator {
 
 public:
 
-	FastNodingValidator(std::vector<noding::SegmentString*>& newSegStrings)
-		:
-		li(), // robust...
-		segStrings(newSegStrings),
-		segInt(),
-		isValidVar(true)
-	{
-	}
+    FastNodingValidator(std::vector<noding::SegmentString*>& newSegStrings)
+        :
+        li(), // robust...
+        segStrings(newSegStrings),
+        segInt(),
+        isValidVar(true)
+    {
+    }
 
-	/**
-	 * Checks for an intersection and
-	 * reports if one is found.
-	 *
-	 * @return true if the arrangement contains an interior intersection
-	 */
-	bool isValid()
-	{
-		execute();
-		return isValidVar;
-	}
+    /**
+     * Checks for an intersection and
+     * reports if one is found.
+     *
+     * @return true if the arrangement contains an interior intersection
+     */
+    bool
+    isValid()
+    {
+        execute();
+        return isValidVar;
+    }
 
-	/**
-	 * Returns an error message indicating the segments containing
-	 * the intersection.
-	 *
-	 * @return an error message documenting the intersection location
-	 */
-	std::string getErrorMessage() const;
+    /**
+     * Returns an error message indicating the segments containing
+     * the intersection.
+     *
+     * @return an error message documenting the intersection location
+     */
+    std::string getErrorMessage() const;
 
-	/**
-	 * Checks for an intersection and throws
-	 * a TopologyException if one is found.
-	 *
-	 * @throws TopologyException if an intersection is found
-	 */
-	void checkValid();
+    /**
+     * Checks for an intersection and throws
+     * a TopologyException if one is found.
+     *
+     * @throws TopologyException if an intersection is found
+     */
+    void checkValid();
 
 private:
 
-	geos::algorithm::LineIntersector li;
+    geos::algorithm::LineIntersector li;
 
-	std::vector<noding::SegmentString*>& segStrings;
+    std::vector<noding::SegmentString*>& segStrings;
 
-	std::unique_ptr<SingleInteriorIntersectionFinder> segInt;
+    std::unique_ptr<NodingIntersectionFinder> segInt;
 
-	bool isValidVar;
+    bool isValidVar;
 
-	void execute()
-	{
-		if (segInt.get() != nullptr) return;
-		checkInteriorIntersections();
-	}
+    void
+    execute()
+    {
+        if(segInt.get() != nullptr) {
+            return;
+        }
+        checkInteriorIntersections();
+    }
 
-	void checkInteriorIntersections();
+    void checkInteriorIntersections();
 
     // Declare type as noncopyable
     FastNodingValidator(const FastNodingValidator& other) = delete;

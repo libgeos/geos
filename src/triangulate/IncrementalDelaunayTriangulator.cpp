@@ -28,20 +28,22 @@ namespace triangulate { //geos.triangulate
 using namespace quadedge;
 
 IncrementalDelaunayTriangulator::IncrementalDelaunayTriangulator(
-        QuadEdgeSubdivision *p_subdiv) :
+    QuadEdgeSubdivision* p_subdiv) :
     subdiv(p_subdiv), isUsingTolerance(p_subdiv->getTolerance() > 0.0)
 {
 }
 
-void IncrementalDelaunayTriangulator::insertSites(const VertexList& vertices)
+void
+IncrementalDelaunayTriangulator::insertSites(const VertexList& vertices)
 {
-    for (VertexList::const_iterator x=vertices.begin();
+    for(VertexList::const_iterator x = vertices.begin();
             x != vertices.end(); ++x) {
         insertSite(*x);
     }
 }
 
-QuadEdge& IncrementalDelaunayTriangulator::insertSite(const Vertex &v)
+QuadEdge&
+IncrementalDelaunayTriangulator::insertSite(const Vertex& v)
 {
     /**
      * This code is based on Guibas and Stolfi (1985), with minor modifications
@@ -50,17 +52,17 @@ QuadEdge& IncrementalDelaunayTriangulator::insertSite(const Vertex &v)
      * existing edge. Without this test zero-width triangles have been observed
      * to be created)
      */
-    QuadEdge *e = subdiv->locate(v);
+    QuadEdge* e = subdiv->locate(v);
 
     if(!e) {
         throw LocateFailureException("");
     }
 
-    if (subdiv->isVertexOfEdge(*e, v)) {
+    if(subdiv->isVertexOfEdge(*e, v)) {
         // point is already in subdivision.
         return *e;
     }
-    else if (subdiv->isOnEdge(*e, v.getCoordinate())) {
+    else if(subdiv->isOnEdge(*e, v.getCoordinate())) {
         // the point lies exactly on an edge, so delete the edge
         // (it will be replaced by a pair of edges which have the point as a vertex)
         e = &e->oPrev();
@@ -74,25 +76,27 @@ QuadEdge& IncrementalDelaunayTriangulator::insertSite(const Vertex &v)
     QuadEdge* base = &subdiv->makeEdge(e->orig(), v);
 
     QuadEdge::splice(*base, *e);
-    QuadEdge *startEdge = base;
+    QuadEdge* startEdge = base;
     do {
         base = &subdiv->connect(*e, base->sym());
         e = &base->oPrev();
-    } while (&e->lNext() != startEdge);
+    }
+    while(&e->lNext() != startEdge);
 
 
     // Examine suspect edges to ensure that the Delaunay condition
     // is satisfied.
-    for (;;)
-    {
+    for(;;) {
         QuadEdge* t = &e->oPrev();
-        if (t->dest().rightOf(*e) &&
+        if(t->dest().rightOf(*e) &&
                 v.isInCircle(e->orig(), t->dest(), e->dest())) {
             QuadEdge::swap(*e);
             e = &e->oPrev();
-        } else if (&e->oNext() == startEdge) {
+        }
+        else if(&e->oNext() == startEdge) {
             return *base; // no more suspect edges.
-        } else {
+        }
+        else {
             e = &e->oNext().lPrev();
         }
     }

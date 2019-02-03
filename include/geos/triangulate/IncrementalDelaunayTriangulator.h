@@ -28,8 +28,8 @@ namespace geos {
 namespace triangulate { //geos.triangulate
 
 namespace quadedge {
-	class QuadEdge;
-	class QuadEdgeSubdivision;
+class QuadEdge;
+class QuadEdgeSubdivision;
 }
 
 /**
@@ -39,46 +39,45 @@ namespace quadedge {
  * @author JTS: Martin Davis
  * @author Benjamin Campbell
  */
-class GEOS_DLL IncrementalDelaunayTriangulator
-{
+class GEOS_DLL IncrementalDelaunayTriangulator {
 private:
-	quadedge::QuadEdgeSubdivision *subdiv;
-	bool isUsingTolerance;
+    quadedge::QuadEdgeSubdivision* subdiv;
+    bool isUsingTolerance;
 
 public:
-	/**
-	 * Creates a new triangulator using the given {@link QuadEdgeSubdivision}.
-	 * The triangulator uses the tolerance of the supplied subdivision.
-	 *
-	 * @param subdiv
-	 *          a subdivision in which to build the TIN
-	 */
-	IncrementalDelaunayTriangulator(quadedge::QuadEdgeSubdivision *subdiv);
+    /**
+     * Creates a new triangulator using the given {@link QuadEdgeSubdivision}.
+     * The triangulator uses the tolerance of the supplied subdivision.
+     *
+     * @param subdiv
+     *          a subdivision in which to build the TIN
+     */
+    IncrementalDelaunayTriangulator(quadedge::QuadEdgeSubdivision* subdiv);
 
-	typedef std::list<quadedge::Vertex> VertexList;
+    typedef std::list<quadedge::Vertex> VertexList;
 
-	/**
-	 * Inserts all sites in a collection. The inserted vertices <b>MUST</b> be
-	 * unique up to the provided tolerance value. (i.e. no two vertices should be
-	 * closer than the provided tolerance value). They do not have to be rounded
-	 * to the tolerance grid, however.
-	 *
-	 * @param vertices a Collection of Vertex
-	 *
-	 * @throws LocateFailureException if the location algorithm
-	 *         fails to converge in a reasonable number of iterations
-	 */
-	void insertSites(const VertexList& vertices);
+    /**
+     * Inserts all sites in a collection. The inserted vertices <b>MUST</b> be
+     * unique up to the provided tolerance value. (i.e. no two vertices should be
+     * closer than the provided tolerance value). They do not have to be rounded
+     * to the tolerance grid, however.
+     *
+     * @param vertices a Collection of Vertex
+     *
+     * @throws LocateFailureException if the location algorithm
+     *         fails to converge in a reasonable number of iterations
+     */
+    void insertSites(const VertexList& vertices);
 
-	/**
-	 * Inserts a new point into a subdivision representing a Delaunay
-	 * triangulation, and fixes the affected edges so that the result
-	 * is still a Delaunay triangulation.
-	 * <p>
-	 *
-	 * @return a quadedge containing the inserted vertex
-	 */
-	quadedge::QuadEdge& insertSite(const quadedge::Vertex &v);
+    /**
+     * Inserts a new point into a subdivision representing a Delaunay
+     * triangulation, and fixes the affected edges so that the result
+     * is still a Delaunay triangulation.
+     * <p>
+     *
+     * @return a quadedge containing the inserted vertex
+     */
+    quadedge::QuadEdge& insertSite(const quadedge::Vertex& v);
 };
 
 } //namespace geos.triangulate

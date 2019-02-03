@@ -47,108 +47,108 @@ class DPTransformer: public geom::util::GeometryTransformer {
 
 public:
 
-	DPTransformer(double tolerance);
+    DPTransformer(double tolerance);
 
 protected:
 
-	CoordinateSequence::Ptr transformCoordinates(
-			const CoordinateSequence* coords,
-			const Geometry* parent) override;
+    CoordinateSequence::Ptr transformCoordinates(
+        const CoordinateSequence* coords,
+        const Geometry* parent) override;
 
-	Geometry::Ptr transformPolygon(
-			const Polygon* geom,
-			const Geometry* parent) override;
+    Geometry::Ptr transformPolygon(
+        const Polygon* geom,
+        const Geometry* parent) override;
 
-	Geometry::Ptr transformMultiPolygon(
-			const MultiPolygon* geom,
-			const Geometry* parent) override;
+    Geometry::Ptr transformMultiPolygon(
+        const MultiPolygon* geom,
+        const Geometry* parent) override;
 
 private:
 
-	/*
-	 * Creates a valid area geometry from one that possibly has
-	 * bad topology (i.e. self-intersections).
-	 * Since buffer can handle invalid topology, but always returns
-	 * valid geometry, constructing a 0-width buffer "corrects" the
-	 * topology.
-	 * Note this only works for area geometries, since buffer always returns
-	 * areas.  This also may return empty geometries, if the input
-	 * has no actual area.
-	 *
-	 * @param roughAreaGeom an area geometry possibly containing
-	 *        self-intersections
-	 * @return a valid area geometry
-	 */
-	Geometry::Ptr createValidArea(const Geometry* roughAreaGeom);
+    /*
+     * Creates a valid area geometry from one that possibly has
+     * bad topology (i.e. self-intersections).
+     * Since buffer can handle invalid topology, but always returns
+     * valid geometry, constructing a 0-width buffer "corrects" the
+     * topology.
+     * Note this only works for area geometries, since buffer always returns
+     * areas.  This also may return empty geometries, if the input
+     * has no actual area.
+     *
+     * @param roughAreaGeom an area geometry possibly containing
+     *        self-intersections
+     * @return a valid area geometry
+     */
+    Geometry::Ptr createValidArea(const Geometry* roughAreaGeom);
 
-	double distanceTolerance;
+    double distanceTolerance;
 
 };
 
 DPTransformer::DPTransformer(double t)
-	:
-	distanceTolerance(t)
+    :
+    distanceTolerance(t)
 {
-	setSkipTransformedInvalidInteriorRings(true);
+    setSkipTransformedInvalidInteriorRings(true);
 }
 
 Geometry::Ptr
 DPTransformer::createValidArea(const Geometry* roughAreaGeom)
 {
-	return Geometry::Ptr(roughAreaGeom->buffer(0.0));
+    return Geometry::Ptr(roughAreaGeom->buffer(0.0));
 }
 
 CoordinateSequence::Ptr
 DPTransformer::transformCoordinates(
-		const CoordinateSequence* coords,
-		const Geometry* parent)
+    const CoordinateSequence* coords,
+    const Geometry* parent)
 {
     ::geos::ignore_unused_variable_warning(parent);
 
-	const Coordinate::Vect* inputPts = coords->toVector();
-	assert(inputPts);
+    const Coordinate::Vect* inputPts = coords->toVector();
+    assert(inputPts);
 
-	std::unique_ptr<Coordinate::Vect> newPts =
-			DouglasPeuckerLineSimplifier::simplify(*inputPts,
-				distanceTolerance);
+    std::unique_ptr<Coordinate::Vect> newPts =
+        DouglasPeuckerLineSimplifier::simplify(*inputPts,
+                distanceTolerance);
 
-	return CoordinateSequence::Ptr(
-		factory->getCoordinateSequenceFactory()->create(
-			newPts.release()
-		));
+    return CoordinateSequence::Ptr(
+               factory->getCoordinateSequenceFactory()->create(
+                   newPts.release()
+               ));
 }
 
 Geometry::Ptr
 DPTransformer::transformPolygon(
-		const Polygon* geom,
-		const Geometry* parent)
+    const Polygon* geom,
+    const Geometry* parent)
 {
 
 #if GEOS_DEBUG
-	std::cerr << "DPTransformer::transformPolygon(Polygon " << geom << ", Geometry " << parent << ");" << std::endl;
+    std::cerr << "DPTransformer::transformPolygon(Polygon " << geom << ", Geometry " << parent << ");" << std::endl;
 #endif
 
-	Geometry::Ptr roughGeom(GeometryTransformer::transformPolygon(geom, parent));
+    Geometry::Ptr roughGeom(GeometryTransformer::transformPolygon(geom, parent));
 
-        // don't try and correct if the parent is going to do this
-	if ( dynamic_cast<const MultiPolygon*>(parent) )
-	{
-		return roughGeom;
-	}
+    // don't try and correct if the parent is going to do this
+    if(dynamic_cast<const MultiPolygon*>(parent)) {
+        return roughGeom;
+    }
 
-	return createValidArea(roughGeom.get());
+    return createValidArea(roughGeom.get());
 }
 
 Geometry::Ptr
 DPTransformer::transformMultiPolygon(
-		const MultiPolygon* geom,
-		const Geometry* parent)
+    const MultiPolygon* geom,
+    const Geometry* parent)
 {
 #if GEOS_DEBUG
-	std::cerr << "DPTransformer::transformMultiPolygon(MultiPolygon " << geom << ", Geometry " << parent << ");" << std::endl;
+    std::cerr << "DPTransformer::transformMultiPolygon(MultiPolygon " << geom << ", Geometry " << parent << ");" <<
+              std::endl;
 #endif
-	Geometry::Ptr roughGeom(GeometryTransformer::transformMultiPolygon(geom, parent));
-        return createValidArea(roughGeom.get());
+    Geometry::Ptr roughGeom(GeometryTransformer::transformMultiPolygon(geom, parent));
+    return createValidArea(roughGeom.get());
 }
 
 /************************************************************************/
@@ -160,17 +160,17 @@ DPTransformer::transformMultiPolygon(
 /*public static*/
 Geometry::Ptr
 DouglasPeuckerSimplifier::simplify(const Geometry* geom,
-		double tolerance)
+                                   double tolerance)
 {
-	DouglasPeuckerSimplifier tss(geom);
-	tss.setDistanceTolerance(tolerance);
-	return tss.getResultGeometry();
+    DouglasPeuckerSimplifier tss(geom);
+    tss.setDistanceTolerance(tolerance);
+    return tss.getResultGeometry();
 }
 
 /*public*/
 DouglasPeuckerSimplifier::DouglasPeuckerSimplifier(const Geometry* geom)
-	:
-	inputGeom(geom)
+    :
+    inputGeom(geom)
 {
 }
 
@@ -178,16 +178,17 @@ DouglasPeuckerSimplifier::DouglasPeuckerSimplifier(const Geometry* geom)
 void
 DouglasPeuckerSimplifier::setDistanceTolerance(double tol)
 {
-	if (tol < 0.0)
-		throw util::IllegalArgumentException("Tolerance must be non-negative");
-	distanceTolerance = tol;
+    if(tol < 0.0) {
+        throw util::IllegalArgumentException("Tolerance must be non-negative");
+    }
+    distanceTolerance = tol;
 }
 
 Geometry::Ptr
 DouglasPeuckerSimplifier::getResultGeometry()
 {
-	DPTransformer t(distanceTolerance);
-	return t.transform(inputGeom);
+    DPTransformer t(distanceTolerance);
+    return t.transform(inputGeom);
 
 }
 

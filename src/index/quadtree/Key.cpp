@@ -43,23 +43,23 @@ namespace quadtree { // geos.index.quadtree
 int
 Key::computeQuadLevel(const Envelope& env)
 {
-	double dx = env.getWidth();
-	double dy = env.getHeight();
-	double dMax = dx > dy ? dx : dy;
-	int level=DoubleBits::exponent(dMax)+1;
+    double dx = env.getWidth();
+    double dy = env.getHeight();
+    double dMax = dx > dy ? dx : dy;
+    int level = DoubleBits::exponent(dMax) + 1;
 #if GEOS_DEBUG
-	std::cerr<<"Maxdelta:"<<dMax<<" exponent:"<<(level-1)<<std::endl;
+    std::cerr << "Maxdelta:" << dMax << " exponent:" << (level - 1) << std::endl;
 #endif
-	return level;
+    return level;
 }
 
 Key::Key(const Envelope& itemEnv)
-	:
-	pt(),
-	level(0),
-	env()
+    :
+    pt(),
+    level(0),
+    env()
 {
-	computeKey(itemEnv);
+    computeKey(itemEnv);
 }
 
 Key::~Key()
@@ -69,47 +69,47 @@ Key::~Key()
 const Coordinate&
 Key::getPoint() const
 {
-	return pt;
+    return pt;
 }
 
 int
 Key::getLevel() const
 {
-	return level;
+    return level;
 }
 
 const Envelope&
 Key::getEnvelope() const
 {
-	return env;
+    return env;
 }
 
 Coordinate*
 Key::getCentre() const
 {
-	return new Coordinate(
-			( env.getMinX() + env.getMaxX() ) / 2,
-			( env.getMinY() + env.getMaxY() ) / 2
-		);
+    return new Coordinate(
+               (env.getMinX() + env.getMaxX()) / 2,
+               (env.getMinY() + env.getMaxY()) / 2
+           );
 }
 
 /*public*/
 void
 Key::computeKey(const Envelope& itemEnv)
 {
-	level=computeQuadLevel(itemEnv);
-	env.init(); // reset to null
-	computeKey(level, itemEnv);
-	// MD - would be nice to have a non-iterative form of this algorithm
-	while (!env.contains(itemEnv)) {
-		level+=1;
-		computeKey(level, itemEnv);
-	}
+    level = computeQuadLevel(itemEnv);
+    env.init(); // reset to null
+    computeKey(level, itemEnv);
+    // MD - would be nice to have a non-iterative form of this algorithm
+    while(!env.contains(itemEnv)) {
+        level += 1;
+        computeKey(level, itemEnv);
+    }
 #if GEOS_DEBUG
-	std::cerr<<"Key::computeKey:"<<std::endl;
-	std::cerr<<" itemEnv: "<<itemEnv.toString()<<std::endl;
-	std::cerr<<"  keyEnv: "<<env.toString()<<std::endl;
-	std::cerr<<"  keyLvl: "<<level<<std::endl;
+    std::cerr << "Key::computeKey:" << std::endl;
+    std::cerr << " itemEnv: " << itemEnv.toString() << std::endl;
+    std::cerr << "  keyEnv: " << env.toString() << std::endl;
+    std::cerr << "  keyLvl: " << level << std::endl;
 
 #endif
 }
@@ -117,11 +117,11 @@ Key::computeKey(const Envelope& itemEnv)
 void
 Key::computeKey(int p_level, const Envelope& itemEnv)
 {
-	double quadSize=DoubleBits::powerOf2(p_level);
-	//double quadSize=pow2.power(level);
-	pt.x = std::floor(itemEnv.getMinX()/quadSize)*quadSize;
-	pt.y = std::floor(itemEnv.getMinY()/quadSize)*quadSize;
-	env.init(pt.x, pt.x + quadSize, pt.y, pt.y + quadSize);
+    double quadSize = DoubleBits::powerOf2(p_level);
+    //double quadSize=pow2.power(level);
+    pt.x = std::floor(itemEnv.getMinX() / quadSize) * quadSize;
+    pt.y = std::floor(itemEnv.getMinY() / quadSize) * quadSize;
+    env.init(pt.x, pt.x + quadSize, pt.y, pt.y + quadSize);
 }
 
 } // namespace geos.index.quadtree

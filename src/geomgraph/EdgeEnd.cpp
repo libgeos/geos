@@ -41,177 +41,182 @@ using namespace geos::algorithm;
 
 /*public*/
 EdgeEnd::EdgeEnd()
-	:
-	edge(nullptr),
-	label(),
-	node(nullptr),
-	dx(0.0),
-	dy(0.0),
-	quadrant(0)
+    :
+    edge(nullptr),
+    label(),
+    node(nullptr),
+    dx(0.0),
+    dy(0.0),
+    quadrant(0)
 {
 }
 
 /*protected*/
 EdgeEnd::EdgeEnd(Edge* newEdge)
-	:
-	edge(newEdge),
-	label(),
-	node(nullptr),
-	dx(0.0),
-	dy(0.0),
-	quadrant(0)
+    :
+    edge(newEdge),
+    label(),
+    node(nullptr),
+    dx(0.0),
+    dy(0.0),
+    quadrant(0)
 {
 }
 
 /*public*/
 EdgeEnd::EdgeEnd(Edge* newEdge, const Coordinate& newP0,
-		const Coordinate& newP1, const Label& newLabel)
-	:
-	edge(newEdge),
-	label(newLabel),
-	node(nullptr),
-	dx(0.0),
-	dy(0.0),
-	quadrant(0)
+                 const Coordinate& newP1, const Label& newLabel)
+    :
+    edge(newEdge),
+    label(newLabel),
+    node(nullptr),
+    dx(0.0),
+    dy(0.0),
+    quadrant(0)
 {
-	init(newP0, newP1);
+    init(newP0, newP1);
 }
 
 /*public*/
 EdgeEnd::EdgeEnd(Edge* newEdge, const Coordinate& newP0,
-		const Coordinate& newP1)
-	:
-	edge(newEdge),
-	label(),
-	node(nullptr),
-	dx(0.0),
-	dy(0.0),
-	quadrant(0)
+                 const Coordinate& newP1)
+    :
+    edge(newEdge),
+    label(),
+    node(nullptr),
+    dx(0.0),
+    dy(0.0),
+    quadrant(0)
 {
-	init(newP0, newP1);
+    init(newP0, newP1);
 }
 
 /*public*/
 void
 EdgeEnd::init(const Coordinate& newP0, const Coordinate& newP1)
 {
-	p0=newP0;
-	p1=newP1;
-	dx=p1.x-p0.x;
-	dy=p1.y-p0.y;
-	quadrant=Quadrant::quadrant(dx,dy);
+    p0 = newP0;
+    p1 = newP1;
+    dx = p1.x - p0.x;
+    dy = p1.y - p0.y;
+    quadrant = Quadrant::quadrant(dx, dy);
 
-	// "EdgeEnd with identical endpoints found");
-	assert(!(dx == 0 && dy == 0));
+    // "EdgeEnd with identical endpoints found");
+    assert(!(dx == 0 && dy == 0));
 }
 
 /*public*/
 Coordinate&
 EdgeEnd::getCoordinate()
 {
-	return p0;
+    return p0;
 }
 
 /*public*/
 Coordinate&
 EdgeEnd::getDirectedCoordinate()
 {
-	return p1;
+    return p1;
 }
 
 /*public*/
 int
 EdgeEnd::getQuadrant()
 {
-	return quadrant;
+    return quadrant;
 }
 
 /*public*/
 double
 EdgeEnd::getDx()
 {
-	return dx;
+    return dx;
 }
 
 /*public*/
 double
 EdgeEnd::getDy()
 {
-	return dy;
+    return dy;
 }
 
 /*public*/
 void
 EdgeEnd::setNode(Node* newNode)
 {
-	node=newNode;
-	assert(node->getCoordinate().equals2D(p0));
+    node = newNode;
+    assert(node->getCoordinate().equals2D(p0));
 }
 
 /*public*/
 Node*
 EdgeEnd::getNode()
 {
-	return node;
+    return node;
 }
 
 /*public*/
 int
 EdgeEnd::compareTo(const EdgeEnd* e) const
 {
-	return compareDirection(e);
+    return compareDirection(e);
 }
 
 /*public*/
 int
 EdgeEnd::compareDirection(const EdgeEnd* e) const
 {
-	assert(e);
-	if (dx == e->dx && dy == e->dy)
-		return 0;
+    assert(e);
+    if(dx == e->dx && dy == e->dy) {
+        return 0;
+    }
 
-	// if the rays are in different quadrants,
-	// determining the ordering is trivial
-	if (quadrant>e->quadrant) return 1;
-	if (quadrant<e->quadrant) return -1;
+    // if the rays are in different quadrants,
+    // determining the ordering is trivial
+    if(quadrant > e->quadrant) {
+        return 1;
+    }
+    if(quadrant < e->quadrant) {
+        return -1;
+    }
 
-	// vectors are in the same quadrant - check relative
-	// orientation of direction vectors
-	// this is > e if it is CCW of e
-	return Orientation::index(e->p0, e->p1, p1);
+    // vectors are in the same quadrant - check relative
+    // orientation of direction vectors
+    // this is > e if it is CCW of e
+    return Orientation::index(e->p0, e->p1, p1);
 }
 
 /*public*/
 void
 EdgeEnd::computeLabel(const algorithm::BoundaryNodeRule& /*boundaryNodeRule*/)
 {
-	// subclasses should override this if they are using labels
+    // subclasses should override this if they are using labels
 }
 
 /*public*/
 std::string
 EdgeEnd::print() const
 {
-	std::ostringstream s;
+    std::ostringstream s;
 
-	s<<*this;
+    s << *this;
 
-	return s.str();
+    return s.str();
 }
 
 std::ostream&
 operator<< (std::ostream& os, const EdgeEnd& ee)
 {
-	os << "EdgeEnd: ";
-	os << ee.p0;
-	os << " - ";
-	os << ee.p1;
-	os << " ";
-	os << ee.quadrant << ":" << std::atan2(ee.dy, ee.dx);
-	os << "  ";
-	os << ee.label;
+    os << "EdgeEnd: ";
+    os << ee.p0;
+    os << " - ";
+    os << ee.p1;
+    os << " ";
+    os << ee.quadrant << ":" << std::atan2(ee.dy, ee.dx);
+    os << "  ";
+    os << ee.label;
 
-	return os;
+    return os;
 }
 
 

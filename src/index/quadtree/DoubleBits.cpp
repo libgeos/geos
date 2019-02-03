@@ -42,75 +42,82 @@ using namespace std;
 double
 DoubleBits::powerOf2(int exp)
 {
-	if (exp>1023 || exp<-1022)
-		throw util::IllegalArgumentException("Exponent out of bounds");
+    if(exp > 1023 || exp < -1022) {
+        throw util::IllegalArgumentException("Exponent out of bounds");
+    }
 #if ASSUME_IEEE_DOUBLE
-	int64 expBias=exp+EXPONENT_BIAS;
-	int64 bits=expBias << 52;
-	double ret;
-	memcpy(&ret, &bits, sizeof(int64));
-	return ret;
+    int64 expBias = exp + EXPONENT_BIAS;
+    int64 bits = expBias << 52;
+    double ret;
+    memcpy(&ret, &bits, sizeof(int64));
+    return ret;
 #else
-	return pow(2.0, exp);
+    return pow(2.0, exp);
 #endif
 }
 
 int
 DoubleBits::exponent(double d)
 {
-	DoubleBits db(d);
-	return db.getExponent();
+    DoubleBits db(d);
+    return db.getExponent();
 }
 
 double
 DoubleBits::truncateToPowerOfTwo(double d)
 {
-	DoubleBits db(d);
-	db.zeroLowerBits(52);
-	return db.getDouble();
+    DoubleBits db(d);
+    db.zeroLowerBits(52);
+    return db.getDouble();
 }
 
-string DoubleBits::toBinaryString(double d) {
-	DoubleBits db(d);
-	return db.toString();
+string
+DoubleBits::toBinaryString(double d)
+{
+    DoubleBits db(d);
+    return db.toString();
 }
 
 double
 DoubleBits::maximumCommonMantissa(double d1, double d2)
 {
-	if (d1==0.0 || d2==0.0) return 0.0;
-	DoubleBits db1(d1);
-	DoubleBits db2(d2);
-	if (db1.getExponent() != db2.getExponent()) return 0.0;
-	int maxCommon=db1.numCommonMantissaBits(db2);
-	db1.zeroLowerBits(64-(12+maxCommon));
-	return db1.getDouble();
+    if(d1 == 0.0 || d2 == 0.0) {
+        return 0.0;
+    }
+    DoubleBits db1(d1);
+    DoubleBits db2(d2);
+    if(db1.getExponent() != db2.getExponent()) {
+        return 0.0;
+    }
+    int maxCommon = db1.numCommonMantissaBits(db2);
+    db1.zeroLowerBits(64 - (12 + maxCommon));
+    return db1.getDouble();
 }
 
 /*public*/
 DoubleBits::DoubleBits(double nx)
 {
 #if ASSUME_IEEE_DOUBLE
-	memcpy(&xBits,&nx,sizeof(double));
+    memcpy(&xBits, &nx, sizeof(double));
 #endif
-	x = nx;
+    x = nx;
 }
 
 /*public*/
 double
 DoubleBits::getDouble() const
 {
-	return x;
+    return x;
 }
 
 /*public*/
 int64
 DoubleBits::biasedExponent() const
 {
-	int64 signExp=xBits>>52;
-	int64 exp=signExp&0x07ff;
-	//cerr<<"xBits:"<<xBits<<" signExp:"<<signExp<<" exp:"<<exp<<endl;
-	return exp;
+    int64 signExp = xBits >> 52;
+    int64 exp = signExp & 0x07ff;
+    //cerr<<"xBits:"<<xBits<<" signExp:"<<signExp<<" exp:"<<exp<<endl;
+    return exp;
 }
 
 /*public*/
@@ -118,10 +125,12 @@ int
 DoubleBits::getExponent() const
 {
 #if ASSUME_IEEE_DOUBLE
-	return static_cast<int>(biasedExponent() - EXPONENT_BIAS);
+    return static_cast<int>(biasedExponent() - EXPONENT_BIAS);
 #else
-	if ( x <= 0 ) return 0; // EDOM || ERANGE
-	return (int)((log(x)/log(2.0))+(x<1?-0.9:0.00000000001));
+    if(x <= 0) {
+        return 0;    // EDOM || ERANGE
+    }
+    return (int)((log(x) / log(2.0)) + (x < 1 ? -0.9 : 0.00000000001));
 #endif
 }
 
@@ -129,29 +138,30 @@ DoubleBits::getExponent() const
 void
 DoubleBits::zeroLowerBits(int nBits)
 {
-	long invMask=(1L<<nBits)-1L;
-	long mask=~invMask;
-	xBits&=mask;
+    long invMask = (1L << nBits) - 1L;
+    long mask = ~invMask;
+    xBits &= mask;
 }
 
 /*public*/
 int
 DoubleBits::getBit(int i) const
 {
-	long mask=(1L<<i);
-	return (xBits&mask)!=0?1:0;
+    long mask = (1L << i);
+    return (xBits & mask) != 0 ? 1 : 0;
 }
 
 /*public*/
 int
 DoubleBits::numCommonMantissaBits(const DoubleBits& db) const
 {
-	for (int i=0;i<52;i++) {
-		//int bitIndex=i+12;
-		if (getBit(i)!=db.getBit(i))
-			return i;
-	}
-	return 52;
+    for(int i = 0; i < 52; i++) {
+        //int bitIndex=i+12;
+        if(getBit(i) != db.getBit(i)) {
+            return i;
+        }
+    }
+    return 52;
 }
 
 /*public*/

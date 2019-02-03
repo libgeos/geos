@@ -36,18 +36,18 @@
 
 // Forward declarations
 namespace geos {
-	namespace algorithm {
-		class LineIntersector;
-	}
-	namespace geom {
-		class CoordinateSequence;
-		class LineSegment;
-	}
-	namespace simplify {
-		class TaggedLineSegment;
-		class TaggedLineString;
-		class LineSegmentIndex;
-	}
+namespace algorithm {
+class LineIntersector;
+}
+namespace geom {
+class CoordinateSequence;
+class LineSegment;
+}
+namespace simplify {
+class TaggedLineSegment;
+class TaggedLineString;
+class LineSegmentIndex;
+}
 }
 
 namespace geos {
@@ -64,100 +64,100 @@ class GEOS_DLL TaggedLineStringSimplifier {
 
 public:
 
-	TaggedLineStringSimplifier(LineSegmentIndex* inputIndex,
-		LineSegmentIndex* outputIndex);
+    TaggedLineStringSimplifier(LineSegmentIndex* inputIndex,
+                               LineSegmentIndex* outputIndex);
 
-	/** \brief
-	 * Sets the distance tolerance for the simplification.
-	 *
-	 * All vertices in the simplified geometry will be within this
-	 * distance of the original geometry.
-	 *
-	 * @param d the approximation tolerance to use
-	 */
-	void setDistanceTolerance(double d);
+    /** \brief
+     * Sets the distance tolerance for the simplification.
+     *
+     * All vertices in the simplified geometry will be within this
+     * distance of the original geometry.
+     *
+     * @param d the approximation tolerance to use
+     */
+    void setDistanceTolerance(double d);
 
-	/**
-	 * Simplifies the given {@link TaggedLineString}
-	 * using the distance tolerance specified.
-	 *
-	 * @param line the linestring to simplify
-	 */
-	void simplify(TaggedLineString* line);
+    /**
+     * Simplifies the given {@link TaggedLineString}
+     * using the distance tolerance specified.
+     *
+     * @param line the linestring to simplify
+     */
+    void simplify(TaggedLineString* line);
 
 
 private:
 
-	// externally owned
-	LineSegmentIndex* inputIndex;
+    // externally owned
+    LineSegmentIndex* inputIndex;
 
-	// externally owned
-	LineSegmentIndex* outputIndex;
+    // externally owned
+    LineSegmentIndex* outputIndex;
 
-	std::unique_ptr<algorithm::LineIntersector> li;
+    std::unique_ptr<algorithm::LineIntersector> li;
 
-	/// non-const as segments are possibly added to it
-	TaggedLineString* line;
+    /// non-const as segments are possibly added to it
+    TaggedLineString* line;
 
-	const geom::CoordinateSequence* linePts;
+    const geom::CoordinateSequence* linePts;
 
-	double distanceTolerance;
+    double distanceTolerance;
 
-	void simplifySection(std::size_t i, std::size_t j,
-			std::size_t depth);
+    void simplifySection(std::size_t i, std::size_t j,
+                         std::size_t depth);
 
-	static std::size_t findFurthestPoint(
-			const geom::CoordinateSequence* pts,
-			std::size_t i, std::size_t j,
-			double& maxDistance);
+    static std::size_t findFurthestPoint(
+        const geom::CoordinateSequence* pts,
+        std::size_t i, std::size_t j,
+        double& maxDistance);
 
-	bool hasBadIntersection(const TaggedLineString* parentLine,
-                       const std::pair<std::size_t, std::size_t>& sectionIndex,
-                       const geom::LineSegment& candidateSeg);
+    bool hasBadIntersection(const TaggedLineString* parentLine,
+                            const std::pair<std::size_t, std::size_t>& sectionIndex,
+                            const geom::LineSegment& candidateSeg);
 
-	bool hasBadInputIntersection(const TaggedLineString* parentLine,
-                       const std::pair<std::size_t, std::size_t>& sectionIndex,
-                       const geom::LineSegment& candidateSeg);
+    bool hasBadInputIntersection(const TaggedLineString* parentLine,
+                                 const std::pair<std::size_t, std::size_t>& sectionIndex,
+                                 const geom::LineSegment& candidateSeg);
 
-	bool hasBadOutputIntersection(const geom::LineSegment& candidateSeg);
+    bool hasBadOutputIntersection(const geom::LineSegment& candidateSeg);
 
-	bool hasInteriorIntersection(const geom::LineSegment& seg0,
-			const geom::LineSegment& seg1) const;
+    bool hasInteriorIntersection(const geom::LineSegment& seg0,
+                                 const geom::LineSegment& seg1) const;
 
-	std::unique_ptr<TaggedLineSegment> flatten(
-			std::size_t start, std::size_t end);
+    std::unique_ptr<TaggedLineSegment> flatten(
+        std::size_t start, std::size_t end);
 
-	/** \brief
-	 * Tests whether a segment is in a section of a TaggedLineString
-	 *
-	 * @param line
-	 * @param sectionIndex
-	 * @param seg
-	 * @return
-	 */
-	static bool isInLineSection(
-		const TaggedLineString* parentLine,
-		const std::pair<std::size_t, std::size_t>& sectionIndex,
-		const TaggedLineSegment* seg);
+    /** \brief
+     * Tests whether a segment is in a section of a TaggedLineString
+     *
+     * @param line
+     * @param sectionIndex
+     * @param seg
+     * @return
+     */
+    static bool isInLineSection(
+        const TaggedLineString* parentLine,
+        const std::pair<std::size_t, std::size_t>& sectionIndex,
+        const TaggedLineSegment* seg);
 
-	/** \brief
-	 * Remove the segs in the section of the line
-	 *
-	 * @param line
-	 * @param pts
-	 * @param sectionStartIndex
-	 * @param sectionEndIndex
-	 */
-	void remove(const TaggedLineString* line,
-			std::size_t start,
-			std::size_t end);
+    /** \brief
+     * Remove the segs in the section of the line
+     *
+     * @param line
+     * @param pts
+     * @param sectionStartIndex
+     * @param sectionEndIndex
+     */
+    void remove(const TaggedLineString* line,
+                std::size_t start,
+                std::size_t end);
 
 };
 
 inline void
 TaggedLineStringSimplifier::setDistanceTolerance(double d)
 {
-	distanceTolerance = d;
+    distanceTolerance = d;
 }
 
 } // namespace geos::simplify

@@ -42,13 +42,14 @@ using namespace std;
 using namespace geos::geom;
 
 namespace geos {
-	namespace io { // geos.io
+namespace io { // geos.io
 
 WKBWriter::WKBWriter(int dims, int bo, bool srid):
-		defaultOutputDimension(dims), byteOrder(bo), includeSRID(srid), outStream(nullptr)
+    defaultOutputDimension(dims), byteOrder(bo), includeSRID(srid), outStream(nullptr)
 {
-	if ( dims < 2 || dims > 3 )
-		throw util::IllegalArgumentException("WKB output dimension must be 2 or 3");
+    if(dims < 2 || dims > 3) {
+        throw util::IllegalArgumentException("WKB output dimension must be 2 or 3");
+    }
     outputDimension = defaultOutputDimension;
 }
 
@@ -57,8 +58,9 @@ WKBWriter::WKBWriter(int dims, int bo, bool srid):
 void
 WKBWriter::setOutputDimension(int dims)
 {
-	if ( dims < 2 || dims > 3 )
-		throw util::IllegalArgumentException("WKB output dimension must be 2 or 3");
+    if(dims < 2 || dims > 3) {
+        throw util::IllegalArgumentException("WKB output dimension must be 2 or 3");
+    }
 
     defaultOutputDimension = dims;
 }
@@ -68,247 +70,243 @@ WKBWriter::~WKBWriter()
 }
 
 void
-WKBWriter::writeHEX(const Geometry &g, ostream &os)
+WKBWriter::writeHEX(const Geometry& g, ostream& os)
 {
-	// setup input/output stream
-	stringstream stream;
+    // setup input/output stream
+    stringstream stream;
 
-	// write the geometry in wkb format
-	this->write(g, stream);
+    // write the geometry in wkb format
+    this->write(g, stream);
 
-	// convert to HEX
-	WKBReader::printHEX(stream, os);
+    // convert to HEX
+    WKBReader::printHEX(stream, os);
 }
 
 void
-WKBWriter::write(const Geometry &g, ostream &os)
+WKBWriter::write(const Geometry& g, ostream& os)
 {
-	outputDimension = defaultOutputDimension;
-	if( outputDimension > g.getCoordinateDimension() )
-		outputDimension = g.getCoordinateDimension();
+    outputDimension = defaultOutputDimension;
+    if(outputDimension > g.getCoordinateDimension()) {
+        outputDimension = g.getCoordinateDimension();
+    }
 
-	outStream = &os;
+    outStream = &os;
 
-  if ( const Point* x = dynamic_cast<const Point*>(&g) )
-  {
-    return writePoint(*x);
-  }
+    if(const Point* x = dynamic_cast<const Point*>(&g)) {
+        return writePoint(*x);
+    }
 
-  if ( const LineString* x = dynamic_cast<const LineString*>(&g) )
-  {
-    return writeLineString(*x);
-  }
+    if(const LineString* x = dynamic_cast<const LineString*>(&g)) {
+        return writeLineString(*x);
+    }
 
-  if ( const Polygon* x = dynamic_cast<const Polygon*>(&g) )
-  {
-    return writePolygon(*x);
-  }
+    if(const Polygon* x = dynamic_cast<const Polygon*>(&g)) {
+        return writePolygon(*x);
+    }
 
-  if ( const MultiPoint* x = dynamic_cast<const MultiPoint*>(&g) )
-  {
-    return writeGeometryCollection(*x, WKBConstants::wkbMultiPoint);
-  }
+    if(const MultiPoint* x = dynamic_cast<const MultiPoint*>(&g)) {
+        return writeGeometryCollection(*x, WKBConstants::wkbMultiPoint);
+    }
 
-  if ( const MultiLineString* x = dynamic_cast<const MultiLineString*>(&g) )
-  {
-    return writeGeometryCollection(*x, WKBConstants::wkbMultiLineString);
-  }
+    if(const MultiLineString* x = dynamic_cast<const MultiLineString*>(&g)) {
+        return writeGeometryCollection(*x, WKBConstants::wkbMultiLineString);
+    }
 
-  if ( const MultiPolygon* x = dynamic_cast<const MultiPolygon*>(&g) )
-  {
-    return writeGeometryCollection(*x, WKBConstants::wkbMultiPolygon);
-  }
+    if(const MultiPolygon* x = dynamic_cast<const MultiPolygon*>(&g)) {
+        return writeGeometryCollection(*x, WKBConstants::wkbMultiPolygon);
+    }
 
-  if ( const GeometryCollection* x =
-       dynamic_cast<const GeometryCollection*>(&g) )
-  {
-    return writeGeometryCollection(*x, WKBConstants::wkbGeometryCollection);
-  }
+    if(const GeometryCollection* x =
+                dynamic_cast<const GeometryCollection*>(&g)) {
+        return writeGeometryCollection(*x, WKBConstants::wkbGeometryCollection);
+    }
 
-  assert(0); // Unknown Geometry type
+    assert(0); // Unknown Geometry type
 }
 
 void
-WKBWriter::writePoint(const Point &g)
+WKBWriter::writePoint(const Point& g)
 {
-	if (g.isEmpty()) throw
-		util::IllegalArgumentException("Empty Points cannot be represented in WKB");
+    if(g.isEmpty()) throw
+        util::IllegalArgumentException("Empty Points cannot be represented in WKB");
 
-	writeByteOrder();
+    writeByteOrder();
 
-	writeGeometryType(WKBConstants::wkbPoint, g.getSRID());
-	writeSRID(g.getSRID());
+    writeGeometryType(WKBConstants::wkbPoint, g.getSRID());
+    writeSRID(g.getSRID());
 
-	const CoordinateSequence* cs=g.getCoordinatesRO();
-	assert(cs);
-	writeCoordinateSequence(*cs, false);
+    const CoordinateSequence* cs = g.getCoordinatesRO();
+    assert(cs);
+    writeCoordinateSequence(*cs, false);
 }
 
 void
-WKBWriter::writeLineString(const LineString &g)
+WKBWriter::writeLineString(const LineString& g)
 {
-	writeByteOrder();
+    writeByteOrder();
 
-	writeGeometryType(WKBConstants::wkbLineString, g.getSRID());
-	writeSRID(g.getSRID());
+    writeGeometryType(WKBConstants::wkbLineString, g.getSRID());
+    writeSRID(g.getSRID());
 
-	const CoordinateSequence* cs=g.getCoordinatesRO();
-	assert(cs);
-	writeCoordinateSequence(*cs, true);
+    const CoordinateSequence* cs = g.getCoordinatesRO();
+    assert(cs);
+    writeCoordinateSequence(*cs, true);
 }
 
 void
-WKBWriter::writePolygon(const Polygon &g)
+WKBWriter::writePolygon(const Polygon& g)
 {
-	writeByteOrder();
+    writeByteOrder();
 
-	writeGeometryType(WKBConstants::wkbPolygon, g.getSRID());
-	writeSRID(g.getSRID());
+    writeGeometryType(WKBConstants::wkbPolygon, g.getSRID());
+    writeSRID(g.getSRID());
 
-	if (g.isEmpty()) {
-		writeInt(0);
-		return;
-	}
+    if(g.isEmpty()) {
+        writeInt(0);
+        return;
+    }
 
-	std::size_t nholes = g.getNumInteriorRing();
-	writeInt(static_cast<int>(nholes + 1));
+    std::size_t nholes = g.getNumInteriorRing();
+    writeInt(static_cast<int>(nholes + 1));
 
-	const LineString* ls = g.getExteriorRing();
-	assert(ls);
+    const LineString* ls = g.getExteriorRing();
+    assert(ls);
 
-	const CoordinateSequence* cs=ls->getCoordinatesRO();
-	assert(cs);
+    const CoordinateSequence* cs = ls->getCoordinatesRO();
+    assert(cs);
 
-	writeCoordinateSequence(*cs, true);
-	for (std::size_t i=0; i<nholes; i++)
-	{
-		ls = g.getInteriorRingN(i);
-		assert(ls);
+    writeCoordinateSequence(*cs, true);
+    for(std::size_t i = 0; i < nholes; i++) {
+        ls = g.getInteriorRingN(i);
+        assert(ls);
 
-		cs = ls->getCoordinatesRO();
-		assert(cs);
+        cs = ls->getCoordinatesRO();
+        assert(cs);
 
-		writeCoordinateSequence(*cs, true);
-	}
+        writeCoordinateSequence(*cs, true);
+    }
 }
 
 void
-WKBWriter::writeGeometryCollection(const GeometryCollection &g,
-	int wkbtype)
+WKBWriter::writeGeometryCollection(const GeometryCollection& g,
+                                   int wkbtype)
 {
-	writeByteOrder();
+    writeByteOrder();
 
-	writeGeometryType(wkbtype, g.getSRID());
-	writeSRID(g.getSRID());
+    writeGeometryType(wkbtype, g.getSRID());
+    writeSRID(g.getSRID());
 
-	auto ngeoms = g.getNumGeometries();
-	writeInt(static_cast<int>(ngeoms));
-	auto orig_includeSRID = includeSRID;
-	includeSRID = false;
+    auto ngeoms = g.getNumGeometries();
+    writeInt(static_cast<int>(ngeoms));
+    auto orig_includeSRID = includeSRID;
+    includeSRID = false;
 
-	assert(outStream);
-	for (std::size_t i=0; i<ngeoms; i++)
-	{
-		const Geometry* elem = g.getGeometryN(i);
-		assert(elem);
+    assert(outStream);
+    for(std::size_t i = 0; i < ngeoms; i++) {
+        const Geometry* elem = g.getGeometryN(i);
+        assert(elem);
 
-		write(*elem, *outStream);
-	}
-	includeSRID = orig_includeSRID;
+        write(*elem, *outStream);
+    }
+    includeSRID = orig_includeSRID;
 }
 
 void
 WKBWriter::writeByteOrder()
 {
-	if (byteOrder == ByteOrderValues::ENDIAN_LITTLE)
-	{
-		buf[0] = WKBConstants::wkbNDR;
-	}
-	else
-	{
-		buf[0] = WKBConstants::wkbXDR;
-	}
+    if(byteOrder == ByteOrderValues::ENDIAN_LITTLE) {
+        buf[0] = WKBConstants::wkbNDR;
+    }
+    else {
+        buf[0] = WKBConstants::wkbXDR;
+    }
 
-	assert(outStream);
-	outStream->write(reinterpret_cast<char*>(buf), 1);
+    assert(outStream);
+    outStream->write(reinterpret_cast<char*>(buf), 1);
 }
 
 /* public */
 void
 WKBWriter::setByteOrder(int bo)
 {
-	if (bo != ByteOrderValues::ENDIAN_LITTLE &&
-	    bo != ByteOrderValues::ENDIAN_BIG )
-	{
-	    std::ostringstream os;
-		os << "WKB output dimension must be LITTLE ("
-		   << ByteOrderValues::ENDIAN_LITTLE
-		   << ") or BIG (" << ByteOrderValues::ENDIAN_BIG << ")";
-		throw util::IllegalArgumentException(os.str());
-	}
+    if(bo != ByteOrderValues::ENDIAN_LITTLE &&
+            bo != ByteOrderValues::ENDIAN_BIG) {
+        std::ostringstream os;
+        os << "WKB output dimension must be LITTLE ("
+           << ByteOrderValues::ENDIAN_LITTLE
+           << ") or BIG (" << ByteOrderValues::ENDIAN_BIG << ")";
+        throw util::IllegalArgumentException(os.str());
+    }
 
-	byteOrder = bo;
+    byteOrder = bo;
 }
 
 void
 WKBWriter::writeGeometryType(int typeId, int SRID)
 {
-	int flag3D = (outputDimension == 3) ? 0x80000000 : 0;
-	int typeInt = typeId | flag3D;
+    int flag3D = (outputDimension == 3) ? 0x80000000 : 0;
+    int typeInt = typeId | flag3D;
 
-	if (includeSRID && SRID != 0)
-		typeInt = typeInt | 0x20000000;
+    if(includeSRID && SRID != 0) {
+        typeInt = typeInt | 0x20000000;
+    }
 
-	writeInt(typeInt);
+    writeInt(typeInt);
 }
 
 void
 WKBWriter::writeSRID(int SRID)
 {
-    if (includeSRID && SRID != 0)
+    if(includeSRID && SRID != 0) {
         writeInt(SRID);
+    }
 }
 
 void
 WKBWriter::writeInt(int val)
 {
-	ByteOrderValues::putInt(val, buf, byteOrder);
-	outStream->write(reinterpret_cast<char *>(buf), 4);
-	//outStream->write(reinterpret_cast<char *>(&val), 4);
+    ByteOrderValues::putInt(val, buf, byteOrder);
+    outStream->write(reinterpret_cast<char*>(buf), 4);
+    //outStream->write(reinterpret_cast<char *>(&val), 4);
 }
 
 void
-WKBWriter::writeCoordinateSequence(const CoordinateSequence &cs,
-	bool sized)
+WKBWriter::writeCoordinateSequence(const CoordinateSequence& cs,
+                                   bool sized)
 {
-	std::size_t size = cs.getSize();
-	bool is3d=false;
-	if ( outputDimension > 2) is3d = true;
+    std::size_t size = cs.getSize();
+    bool is3d = false;
+    if(outputDimension > 2) {
+        is3d = true;
+    }
 
-	if (sized) writeInt(static_cast<int>(size));
-	for (std::size_t i = 0; i < size; i++) writeCoordinate(cs, i, is3d);
+    if(sized) {
+        writeInt(static_cast<int>(size));
+    }
+    for(std::size_t i = 0; i < size; i++) {
+        writeCoordinate(cs, i, is3d);
+    }
 }
 
 void
-WKBWriter::writeCoordinate(const CoordinateSequence &cs, size_t idx,
-	bool is3d)
+WKBWriter::writeCoordinate(const CoordinateSequence& cs, size_t idx,
+                           bool is3d)
 {
 #if DEBUG_WKB_WRITER
-	cout<<"writeCoordinate: X:"<<cs.getX(idx)<<" Y:"<<cs.getY(idx)<<endl;
+    cout << "writeCoordinate: X:" << cs.getX(idx) << " Y:" << cs.getY(idx) << endl;
 #endif
-	assert(outStream);
+    assert(outStream);
 
-	ByteOrderValues::putDouble(cs.getX(idx), buf, byteOrder);
-	outStream->write(reinterpret_cast<char *>(buf), 8);
-	ByteOrderValues::putDouble(cs.getY(idx), buf, byteOrder);
-	outStream->write(reinterpret_cast<char *>(buf), 8);
-	if ( is3d )
-	{
-		ByteOrderValues::putDouble(
-			cs.getOrdinate(idx, CoordinateSequence::Z),
-			buf, byteOrder);
-		outStream->write(reinterpret_cast<char *>(buf), 8);
-	}
+    ByteOrderValues::putDouble(cs.getX(idx), buf, byteOrder);
+    outStream->write(reinterpret_cast<char*>(buf), 8);
+    ByteOrderValues::putDouble(cs.getY(idx), buf, byteOrder);
+    outStream->write(reinterpret_cast<char*>(buf), 8);
+    if(is3d) {
+        ByteOrderValues::putDouble(
+            cs.getOrdinate(idx, CoordinateSequence::Z),
+            buf, byteOrder);
+        outStream->write(reinterpret_cast<char*>(buf), 8);
+    }
 }
 
 

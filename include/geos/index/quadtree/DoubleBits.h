@@ -20,7 +20,7 @@
 #define GEOS_IDX_QUADTREE_DOUBLEBITS_H
 
 #include <geos/export.h>
-#include <geos/platform.h> // for int64
+#include <geos/constants.h> // for int64
 
 #include <string>
 
@@ -45,54 +45,54 @@ class GEOS_DLL DoubleBits {
 
 public:
 
-	static const int EXPONENT_BIAS=1023;
+    static const int EXPONENT_BIAS = 1023;
 
-	static double powerOf2(int exp);
+    static double powerOf2(int exp);
 
-	static int exponent(double d);
+    static int exponent(double d);
 
-	static double truncateToPowerOfTwo(double d);
+    static double truncateToPowerOfTwo(double d);
 
-	static std::string toBinaryString(double d);
+    static std::string toBinaryString(double d);
 
-	static double maximumCommonMantissa(double d1, double d2);
+    static double maximumCommonMantissa(double d1, double d2);
 
-	DoubleBits(double nx);
+    DoubleBits(double nx);
 
-	double getDouble() const;
+    double getDouble() const;
 
-	/// Determines the exponent for the number
-	int64 biasedExponent() const;
+    /// Determines the exponent for the number
+    int64 biasedExponent() const;
 
-	/// Determines the exponent for the number
-	int getExponent() const;
+    /// Determines the exponent for the number
+    int getExponent() const;
 
-	void zeroLowerBits(int nBits);
+    void zeroLowerBits(int nBits);
 
-	int getBit(int i) const;
+    int getBit(int i) const;
 
-	/** \brief
-	 * This computes the number of common most-significant bits in
-	 * the mantissa.
-	 *
-	 * It does not count the hidden bit, which is always 1.
-	 * It does not determine whether the numbers have the same exponent;
-	 * if they do not, the value computed by this function is meaningless.
-	 *
-	 * @param db
-	 *
-	 * @return the number of common most-significant mantissa bits
-	 */
-	int numCommonMantissaBits(const DoubleBits& db) const;
+    /** \brief
+     * This computes the number of common most-significant bits in
+     * the mantissa.
+     *
+     * It does not count the hidden bit, which is always 1.
+     * It does not determine whether the numbers have the same exponent;
+     * if they do not, the value computed by this function is meaningless.
+     *
+     * @param db
+     *
+     * @return the number of common most-significant mantissa bits
+     */
+    int numCommonMantissaBits(const DoubleBits& db) const;
 
-	/// A representation of the Double bits formatted for easy readability
-	std::string toString() const;
+    /// A representation of the Double bits formatted for easy readability
+    std::string toString() const;
 
 private:
 
-	double x;
+    double x;
 
-	int64 xBits;
+    int64 xBits;
 };
 
 } // namespace geos::index::quadtree

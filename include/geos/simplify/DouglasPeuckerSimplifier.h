@@ -24,9 +24,9 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Geometry;
-	}
+namespace geom {
+class Geometry;
+}
 }
 
 namespace geos {
@@ -51,32 +51,32 @@ class GEOS_DLL DouglasPeuckerSimplifier {
 
 public:
 
-	static std::unique_ptr<geom::Geometry> simplify(
-			const geom::Geometry* geom,
-			double tolerance);
+    static std::unique_ptr<geom::Geometry> simplify(
+        const geom::Geometry* geom,
+        double tolerance);
 
-	DouglasPeuckerSimplifier(const geom::Geometry* geom);
+    DouglasPeuckerSimplifier(const geom::Geometry* geom);
 
-	/** \brief
-	 * Sets the distance tolerance for the simplification.
-	 *
-	 * All vertices in the simplified geometry will be within this
-	 * distance of the original geometry.
-	 * The tolerance value must be non-negative.  A tolerance value
-	 * of zero is effectively a no-op.
-	 *
-	 * @param distanceTolerance the approximation tolerance to use
-	 */
-	void setDistanceTolerance(double tolerance);
+    /** \brief
+     * Sets the distance tolerance for the simplification.
+     *
+     * All vertices in the simplified geometry will be within this
+     * distance of the original geometry.
+     * The tolerance value must be non-negative.  A tolerance value
+     * of zero is effectively a no-op.
+     *
+     * @param distanceTolerance the approximation tolerance to use
+     */
+    void setDistanceTolerance(double tolerance);
 
-	std::unique_ptr<geom::Geometry> getResultGeometry();
+    std::unique_ptr<geom::Geometry> getResultGeometry();
 
 
 private:
 
-	const geom::Geometry* inputGeom;
+    const geom::Geometry* inputGeom;
 
-	double distanceTolerance;
+    double distanceTolerance;
 };
 
 

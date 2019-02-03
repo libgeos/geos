@@ -26,17 +26,17 @@ namespace util { // geos::util
 /// Indicates an illegal state
 class GEOS_DLL IllegalStateException: public GEOSException {
 public:
-	IllegalStateException()
-		:
-		GEOSException("IllegalStateException", "")
-	{}
+    IllegalStateException()
+        :
+        GEOSException("IllegalStateException", "")
+    {}
 
-	IllegalStateException(const std::string& msg)
-		:
-		GEOSException("IllegalStateException", msg)
-	{}
+    IllegalStateException(const std::string& msg)
+        :
+        GEOSException("IllegalStateException", msg)
+    {}
 
-	~IllegalStateException() throw() override {}
+    ~IllegalStateException() throw() override {}
 };
 
 } // namespace geos::util

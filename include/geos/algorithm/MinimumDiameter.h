@@ -24,13 +24,13 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Geometry;
-		class LineSegment;
-		class LineString;
-		class Coordinate;
-		class CoordinateSequence;
-	}
+namespace geom {
+class Geometry;
+class LineSegment;
+class LineString;
+class Coordinate;
+class CoordinateSequence;
+}
 }
 
 
@@ -64,112 +64,112 @@ namespace algorithm { // geos::algorithm
  */
 class GEOS_DLL MinimumDiameter {
 private:
-	const geom::Geometry* inputGeom;
-	bool isConvex;
+    const geom::Geometry* inputGeom;
+    bool isConvex;
 
-	geom::CoordinateSequence* convexHullPts;
+    geom::CoordinateSequence* convexHullPts;
 
-	geom::LineSegment* minBaseSeg;
-	geom::Coordinate* minWidthPt;
-	int minPtIndex;
-	double minWidth;
-	void computeMinimumDiameter();
-	void computeWidthConvex(const geom::Geometry* geom);
+    geom::LineSegment* minBaseSeg;
+    geom::Coordinate* minWidthPt;
+    int minPtIndex;
+    double minWidth;
+    void computeMinimumDiameter();
+    void computeWidthConvex(const geom::Geometry* geom);
 
-	/**
-	 * Compute the width information for a ring of {@link geom::Coordinate}s.
-	 * Leaves the width information in the instance variables.
-	 *
-	 * @param pts
-	 * @return
-	 */
-	void computeConvexRingMinDiameter(const geom::CoordinateSequence *pts);
+    /**
+     * Compute the width information for a ring of {@link geom::Coordinate}s.
+     * Leaves the width information in the instance variables.
+     *
+     * @param pts
+     * @return
+     */
+    void computeConvexRingMinDiameter(const geom::CoordinateSequence* pts);
 
-	unsigned int findMaxPerpDistance(const geom::CoordinateSequence* pts,
-		geom::LineSegment* seg, unsigned int startIndex);
+    unsigned int findMaxPerpDistance(const geom::CoordinateSequence* pts,
+                                     geom::LineSegment* seg, unsigned int startIndex);
 
-	static unsigned int getNextIndex(const geom::CoordinateSequence* pts,
-		unsigned int index);
+    static unsigned int getNextIndex(const geom::CoordinateSequence* pts,
+                                     unsigned int index);
 
-	static double computeC(double a, double b, const geom::Coordinate &p);
+    static double computeC(double a, double b, const geom::Coordinate& p);
 
-	static geom::LineSegment computeSegmentForLine(double a, double b, double c);
+    static geom::LineSegment computeSegmentForLine(double a, double b, double c);
 
 public:
-	~MinimumDiameter();
+    ~MinimumDiameter();
 
-	/** \brief
-	 * Compute a minimum diameter for a giver {@link Geometry}.
-	 *
-	 * @param geom a Geometry
-	 */
-	MinimumDiameter(const geom::Geometry* newInputGeom);
+    /** \brief
+     * Compute a minimum diameter for a giver {@link Geometry}.
+     *
+     * @param geom a Geometry
+     */
+    MinimumDiameter(const geom::Geometry* newInputGeom);
 
-	/** \brief
-	 * Compute a minimum diameter for a given Geometry,
-	 * with a hint if the Geometry is convex
-	 * (e.g. a convex Polygon or LinearRing,
-	 * or a two-point LineString, or a Point).
-	 *
-	 * @param geom a Geometry which is convex
-	 * @param isConvex <code>true</code> if the input geometry is convex
-	 */
-	MinimumDiameter(const geom::Geometry* newInputGeom,
-			const bool newIsConvex);
+    /** \brief
+     * Compute a minimum diameter for a given Geometry,
+     * with a hint if the Geometry is convex
+     * (e.g. a convex Polygon or LinearRing,
+     * or a two-point LineString, or a Point).
+     *
+     * @param geom a Geometry which is convex
+     * @param isConvex <code>true</code> if the input geometry is convex
+     */
+    MinimumDiameter(const geom::Geometry* newInputGeom,
+                    const bool newIsConvex);
 
-	/** \brief
-	 * Gets the length of the minimum diameter of the input Geometry
-	 *
-	 * @return the length of the minimum diameter
-	 */
-	double getLength();
+    /** \brief
+     * Gets the length of the minimum diameter of the input Geometry
+     *
+     * @return the length of the minimum diameter
+     */
+    double getLength();
 
-	/** \brief
-	 * Gets the {@link geom::Coordinate} forming one end of the minimum diameter
-	 *
-	 * @return a coordinate forming one end of the minimum diameter
-	 */
-	geom::Coordinate* getWidthCoordinate();
+    /** \brief
+     * Gets the {@link geom::Coordinate} forming one end of the minimum diameter
+     *
+     * @return a coordinate forming one end of the minimum diameter
+     */
+    geom::Coordinate* getWidthCoordinate();
 
-	/** \brief
-	 * Gets the segment forming the base of the minimum diameter
-	 *
-	 * @return the segment forming the base of the minimum diameter
-	 */
-	geom::LineString* getSupportingSegment();
+    /** \brief
+     * Gets the segment forming the base of the minimum diameter
+     *
+     * @return the segment forming the base of the minimum diameter
+     */
+    geom::LineString* getSupportingSegment();
 
-	/** \brief
-	 * Gets a LineString which is a minimum diameter
-	 *
-	 * @return a LineString which is a minimum diameter
-	 */
-	geom::LineString* getDiameter();
+    /** \brief
+     * Gets a LineString which is a minimum diameter
+     *
+     * @return a LineString which is a minimum diameter
+     */
+    geom::LineString* getDiameter();
 
-	/**
-	 * Gets the minimum rectangular Polygon which encloses the input geometry. The rectangle has width
-	 * equal to the minimum diameter, and a longer length. If the convex hill of the input is degenerate
-	 * (a line or point) a LineString or Point is returned.
-	 * The minimum rectangle can be used as an extremely generalized representation for the given
-	 * geometry.
-	 *
-	 * @return the minimum rectangle enclosing the input (or a line or point if degenerate)
-	 */
-	geom::Geometry* getMinimumRectangle();
+    /**
+     * Gets the minimum rectangular Polygon which encloses the input geometry. The rectangle has width
+     * equal to the minimum diameter, and a longer length. If the convex hill of the input is degenerate
+     * (a line or point) a LineString or Point is returned.
+     * The minimum rectangle can be used as an extremely generalized representation for the given
+     * geometry.
+     *
+     * @return the minimum rectangle enclosing the input (or a line or point if degenerate)
+     */
+    geom::Geometry* getMinimumRectangle();
 
-	/**
-	 * Gets the minimum rectangle enclosing a geometry.
-	 *
-	 * @param geom the geometry
-	 * @return the minimum rectangle enclosing the geometry
-	*/
-	static geom::Geometry* getMinimumRectangle(geom::Geometry* geom);
+    /**
+     * Gets the minimum rectangle enclosing a geometry.
+     *
+     * @param geom the geometry
+     * @return the minimum rectangle enclosing the geometry
+    */
+    static geom::Geometry* getMinimumRectangle(geom::Geometry* geom);
 
-	/**
-	 * Gets the length of the minimum diameter enclosing a geometry
-	 * @param geom the geometry
-	 * @return the length of the minimum diameter of the geometry
-	 */
-	static geom::Geometry* getMinimumDiameter(geom::Geometry* geom);
+    /**
+     * Gets the length of the minimum diameter enclosing a geometry
+     * @param geom the geometry
+     * @return the length of the minimum diameter of the geometry
+     */
+    static geom::Geometry* getMinimumDiameter(geom::Geometry* geom);
 
 };
 

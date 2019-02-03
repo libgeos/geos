@@ -34,28 +34,37 @@ namespace precision {
 
 MinimumClearance::MinimumClearance(const Geometry* g) : inputGeom(g) {}
 
-double MinimumClearance::getDistance() {
+double
+MinimumClearance::getDistance()
+{
     compute();
     return minClearance;
 }
 
-std::unique_ptr<LineString> MinimumClearance::getLine() {
+std::unique_ptr<LineString>
+MinimumClearance::getLine()
+{
     compute();
 
     // return empty line string if no min pts were found
-    if (minClearance == std::numeric_limits<double>::infinity())
+    if(minClearance == std::numeric_limits<double>::infinity()) {
         return std::unique_ptr<LineString>(inputGeom->getFactory()->createLineString());
+    }
 
     return std::unique_ptr<LineString>(inputGeom->getFactory()->createLineString(minClearancePts->clone()));
 }
 
-void MinimumClearance::compute() {
+void
+MinimumClearance::compute()
+{
     class MinClearanceDistance : public ItemDistance {
     private:
         double minDist;
         std::vector<Coordinate> minPts;
 
-        void updatePts(const Coordinate & p, const Coordinate & seg0, const Coordinate & seg1) {
+        void
+        updatePts(const Coordinate& p, const Coordinate& seg0, const Coordinate& seg1)
+        {
             LineSegment seg(seg0, seg1);
 
             minPts[0] = p;
@@ -64,15 +73,19 @@ void MinimumClearance::compute() {
 
     public:
         MinClearanceDistance() :
-                minDist(std::numeric_limits<double>::infinity()),
-                minPts(std::vector<Coordinate>(2))
+            minDist(std::numeric_limits<double>::infinity()),
+            minPts(std::vector<Coordinate>(2))
         {}
 
-        const std::vector<Coordinate> * getCoordinates() {
+        const std::vector<Coordinate>*
+        getCoordinates()
+        {
             return &minPts;
         }
 
-        double distance(const ItemBoundable* b1, const ItemBoundable* b2) override {
+        double
+        distance(const ItemBoundable* b1, const ItemBoundable* b2) override
+        {
             FacetSequence* fs1 = static_cast<FacetSequence*>(b1->getItem());
             FacetSequence* fs2 = static_cast<FacetSequence*>(b2->getItem());
 
@@ -81,36 +94,44 @@ void MinimumClearance::compute() {
             return distance(fs1, fs2);
         }
 
-        double distance(const FacetSequence* fs1, const FacetSequence* fs2) {
+        double
+        distance(const FacetSequence* fs1, const FacetSequence* fs2)
+        {
             // Compute MinClearance distance metric
 
             vertexDistance(fs1, fs2);
-            if (fs1->size() == 1 && fs2->size() == 1)
+            if(fs1->size() == 1 && fs2->size() == 1) {
                 return minDist;
-            if (minDist <= 0.0)
+            }
+            if(minDist <= 0.0) {
                 return minDist;
+            }
 
             segmentDistance(fs1, fs2);
-            if (minDist <= 0.0)
+            if(minDist <= 0.0) {
                 return minDist;
+            }
 
             segmentDistance(fs2, fs1);
             return minDist;
         }
 
-        double vertexDistance(const FacetSequence* fs1, const FacetSequence* fs2) {
-            for (size_t i1 = 0; i1 < fs1->size(); i1++) {
-                for (size_t i2 = 0; i2 < fs2->size(); i2++) {
+        double
+        vertexDistance(const FacetSequence* fs1, const FacetSequence* fs2)
+        {
+            for(size_t i1 = 0; i1 < fs1->size(); i1++) {
+                for(size_t i2 = 0; i2 < fs2->size(); i2++) {
                     const Coordinate* p1 = fs1->getCoordinate(i1);
                     const Coordinate* p2 = fs2->getCoordinate(i2);
-                    if (!p1->equals2D(*p2)) {
+                    if(!p1->equals2D(*p2)) {
                         double d = p1->distance(*p2);
-                        if (d < minDist) {
+                        if(d < minDist) {
                             minDist = d;
                             minPts[0] = *p1;
                             minPts[1] = *p2;
-                            if (d == 0.0)
+                            if(d == 0.0) {
                                 return d;
+                            }
                         }
                     }
                 }
@@ -118,21 +139,24 @@ void MinimumClearance::compute() {
             return minDist;
         }
 
-        double segmentDistance(const FacetSequence* fs1, const FacetSequence* fs2) {
-            for (size_t i1 = 0; i1 < fs1->size(); i1++) {
-                for (size_t i2 = 1; i2 < fs2->size(); i2++) {
+        double
+        segmentDistance(const FacetSequence* fs1, const FacetSequence* fs2)
+        {
+            for(size_t i1 = 0; i1 < fs1->size(); i1++) {
+                for(size_t i2 = 1; i2 < fs2->size(); i2++) {
                     const Coordinate* p = fs1->getCoordinate(i1);
 
                     const Coordinate* seg0 = fs2->getCoordinate(i2 - 1);
                     const Coordinate* seg1 = fs2->getCoordinate(i2);
 
-                    if (! (p->equals2D(*seg0) || p->equals2D(*seg1))) {
+                    if(!(p->equals2D(*seg0) || p->equals2D(*seg1))) {
                         double d = geos::algorithm::Distance::pointToSegment(*p, *seg0, *seg1);
-                        if (d < minDist) {
+                        if(d < minDist) {
                             minDist = d;
                             updatePts(*p, *seg0, *seg1);
-                            if (d == 0.0)
+                            if(d == 0.0) {
                                 return d;
+                            }
                         }
                     }
                 }
@@ -142,7 +166,9 @@ void MinimumClearance::compute() {
     };
 
     struct ItemDeleter : public index::ItemVisitor {
-        void visitItem(void * item) override {
+        void
+        visitItem(void* item) override
+        {
             delete static_cast<FacetSequence*>(item);
         }
     };
@@ -150,9 +176,10 @@ void MinimumClearance::compute() {
     struct ManagedResourceSTRtree {
         STRtree* m_tree;
 
-        ManagedResourceSTRtree(STRtree * p_tree) : m_tree(p_tree) {}
+        ManagedResourceSTRtree(STRtree* p_tree) : m_tree(p_tree) {}
 
-        ~ManagedResourceSTRtree() {
+        ~ManagedResourceSTRtree()
+        {
             ItemDeleter id;
             m_tree->iterate(id);
 
@@ -161,24 +188,27 @@ void MinimumClearance::compute() {
     };
 
     // already computed
-    if (minClearancePts.get() != nullptr)
+    if(minClearancePts.get() != nullptr) {
         return;
+    }
 
     // initialize to "No Distance Exists" state
-    minClearancePts = std::unique_ptr<CoordinateSequence>(inputGeom->getFactory()->getCoordinateSequenceFactory()->create(2, 2));
+    minClearancePts = std::unique_ptr<CoordinateSequence>(inputGeom->getFactory()->getCoordinateSequenceFactory()->create(2,
+                      2));
     minClearance = std::numeric_limits<double>::infinity();
 
     // handle empty geometries
-    if (inputGeom->isEmpty())
+    if(inputGeom->isEmpty()) {
         return;
+    }
 
     ManagedResourceSTRtree tree(FacetSequenceTreeBuilder::build(inputGeom));
     MinClearanceDistance mcd;
-    std::pair<const void *, const void *> nearest = tree.m_tree->nearestNeighbour(&mcd);
+    std::pair<const void*, const void*> nearest = tree.m_tree->nearestNeighbour(&mcd);
 
     minClearance = mcd.distance(
-            static_cast<const FacetSequence *>(nearest.first),
-            static_cast<const FacetSequence *>(nearest.second));
+                       static_cast<const FacetSequence*>(nearest.first),
+                       static_cast<const FacetSequence*>(nearest.second));
 
     const std::vector<Coordinate>* minClearancePtsVec = mcd.getCoordinates();
     minClearancePts->setAt((*minClearancePtsVec)[0], 0);

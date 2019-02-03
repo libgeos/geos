@@ -29,58 +29,58 @@ namespace geos {
 namespace operation { // geos.operation
 namespace valid { // geos.operation.valid
 
-const char* TopologyValidationError::errMsg[]={
-	"Topology Validation Error",
-	"Repeated Point",
-	"Hole lies outside shell",
-	"Holes are nested",
-	"Interior is disconnected",
-	"Self-intersection",
-	"Ring Self-intersection",
-	"Nested shells",
-	"Duplicate Rings",
-	"Too few points in geometry component",
-	"Invalid Coordinate",
-	"Ring is not closed"
+const char* TopologyValidationError::errMsg[] = {
+    "Topology Validation Error",
+    "Repeated Point",
+    "Hole lies outside shell",
+    "Holes are nested",
+    "Interior is disconnected",
+    "Self-intersection",
+    "Ring Self-intersection",
+    "Nested shells",
+    "Duplicate Rings",
+    "Too few points in geometry component",
+    "Invalid Coordinate",
+    "Ring is not closed"
 };
 
 TopologyValidationError::TopologyValidationError(int newErrorType,
-		const Coordinate& newPt)
-	:
-	errorType(newErrorType),
-	pt(newPt)
+        const Coordinate& newPt)
+    :
+    errorType(newErrorType),
+    pt(newPt)
 {
 }
 
 TopologyValidationError::TopologyValidationError(int newErrorType)
-	:
-	errorType(newErrorType),
-	pt(Coordinate::getNull())
+    :
+    errorType(newErrorType),
+    pt(Coordinate::getNull())
 {
 }
 
 int
 TopologyValidationError::getErrorType()
 {
-	return errorType;
+    return errorType;
 }
 
 Coordinate&
 TopologyValidationError::getCoordinate()
 {
-	return pt;
+    return pt;
 }
 
 string
 TopologyValidationError::getMessage()
 {
-	return string(errMsg[errorType]);
+    return string(errMsg[errorType]);
 }
 
 string
 TopologyValidationError::toString()
 {
-	return getMessage().append(" at or near point ").append(pt.toString());
+    return getMessage().append(" at or near point ").append(pt.toString());
 }
 
 } // namespace geos.operation.valid

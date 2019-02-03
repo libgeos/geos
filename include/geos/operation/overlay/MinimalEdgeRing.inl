@@ -7,7 +7,7 @@
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
- * by the Free Software Foundation. 
+ * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
  **********************************************************************
@@ -30,22 +30,22 @@ namespace operation { // geos::operation
 namespace overlay { // geos::operation::overlay
 
 INLINE void
-MinimalEdgeRing::setEdgeRing(geomgraph::DirectedEdge *de, geomgraph::EdgeRing *er)
+MinimalEdgeRing::setEdgeRing(geomgraph::DirectedEdge* de, geomgraph::EdgeRing* er)
 {
-	de->setMinEdgeRing(er);
+    de->setMinEdgeRing(er);
 }
 
 INLINE geomgraph::DirectedEdge*
-MinimalEdgeRing::getNext(geomgraph::DirectedEdge *de)
+MinimalEdgeRing::getNext(geomgraph::DirectedEdge* de)
 {
-	return de->getNextMin();
+    return de->getNextMin();
 }
 
 INLINE
 MinimalEdgeRing::~MinimalEdgeRing()
 {
 #if GEOS_DEBUG
-	std::cerr << "MinimalEdgeRing[" << this << "] dtor" << std::endl;
+    std::cerr << "MinimalEdgeRing[" << this << "] dtor" << std::endl;
 #endif
 }
 

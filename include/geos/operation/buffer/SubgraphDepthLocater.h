@@ -27,18 +27,18 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Coordinate;
-	}
-	namespace geomgraph {
-		class DirectedEdge;
-	}
-	namespace operation {
-		namespace buffer {
-			class BufferSubgraph;
-			class DepthSegment;
-		}
-	}
+namespace geom {
+class Coordinate;
+}
+namespace geomgraph {
+class DirectedEdge;
+}
+namespace operation {
+namespace buffer {
+class BufferSubgraph;
+class DepthSegment;
+}
+}
 }
 
 namespace geos {
@@ -60,57 +60,57 @@ class GEOS_DLL SubgraphDepthLocater {
 
 public:
 
-	SubgraphDepthLocater(std::vector<BufferSubgraph*> *newSubgraphs)
-		:
-		subgraphs(newSubgraphs)
-	{}
+    SubgraphDepthLocater(std::vector<BufferSubgraph*>* newSubgraphs)
+        :
+        subgraphs(newSubgraphs)
+    {}
 
-	~SubgraphDepthLocater() {}
+    ~SubgraphDepthLocater() {}
 
-	int getDepth(const geom::Coordinate &p);
+    int getDepth(const geom::Coordinate& p);
 
 private:
 
-	std::vector<BufferSubgraph*> *subgraphs;
+    std::vector<BufferSubgraph*>* subgraphs;
 
-	geom::LineSegment seg;
+    geom::LineSegment seg;
 
-	/**
-	 * Finds all non-horizontal segments intersecting the stabbing line.
-	 * The stabbing line is the ray to the right of stabbingRayLeftPt.
-	 *
-	 * @param stabbingRayLeftPt the left-hand origin of the stabbing line
-	 * @param stabbedSegments a vector to which DepthSegments intersecting
-	 *        the stabbing line will be added.
-	 */
-	void findStabbedSegments(const geom::Coordinate &stabbingRayLeftPt,
-			std::vector<DepthSegment*>& stabbedSegments);
+    /**
+     * Finds all non-horizontal segments intersecting the stabbing line.
+     * The stabbing line is the ray to the right of stabbingRayLeftPt.
+     *
+     * @param stabbingRayLeftPt the left-hand origin of the stabbing line
+     * @param stabbedSegments a vector to which DepthSegments intersecting
+     *        the stabbing line will be added.
+     */
+    void findStabbedSegments(const geom::Coordinate& stabbingRayLeftPt,
+                             std::vector<DepthSegment*>& stabbedSegments);
 
-	/**
-	 * Finds all non-horizontal segments intersecting the stabbing line
-	 * in the list of dirEdges.
-	 * The stabbing line is the ray to the right of stabbingRayLeftPt.
-	 *
-	 * @param stabbingRayLeftPt the left-hand origin of the stabbing line
-	 * @param stabbedSegments the current vector of DepthSegments
-	 *        intersecting the stabbing line will be added.
-	 */
-	void findStabbedSegments(const geom::Coordinate &stabbingRayLeftPt,
-			std::vector<geomgraph::DirectedEdge*> *dirEdges,
-			std::vector<DepthSegment*>& stabbedSegments);
+    /**
+     * Finds all non-horizontal segments intersecting the stabbing line
+     * in the list of dirEdges.
+     * The stabbing line is the ray to the right of stabbingRayLeftPt.
+     *
+     * @param stabbingRayLeftPt the left-hand origin of the stabbing line
+     * @param stabbedSegments the current vector of DepthSegments
+     *        intersecting the stabbing line will be added.
+     */
+    void findStabbedSegments(const geom::Coordinate& stabbingRayLeftPt,
+                             std::vector<geomgraph::DirectedEdge*>* dirEdges,
+                             std::vector<DepthSegment*>& stabbedSegments);
 
-	/**
-	 * Finds all non-horizontal segments intersecting the stabbing line
-	 * in the input dirEdge.
-	 * The stabbing line is the ray to the right of stabbingRayLeftPt.
-	 *
-	 * @param stabbingRayLeftPt the left-hand origin of the stabbing line
-	 * @param stabbedSegments the current list of DepthSegments intersecting
-	 *        the stabbing line
-	 */
-	void findStabbedSegments(const geom::Coordinate &stabbingRayLeftPt,
-			geomgraph::DirectedEdge *dirEdge,
-			std::vector<DepthSegment*>& stabbedSegments);
+    /**
+     * Finds all non-horizontal segments intersecting the stabbing line
+     * in the input dirEdge.
+     * The stabbing line is the ray to the right of stabbingRayLeftPt.
+     *
+     * @param stabbingRayLeftPt the left-hand origin of the stabbing line
+     * @param stabbedSegments the current list of DepthSegments intersecting
+     *        the stabbing line
+     */
+    void findStabbedSegments(const geom::Coordinate& stabbingRayLeftPt,
+                             geomgraph::DirectedEdge* dirEdge,
+                             std::vector<DepthSegment*>& stabbedSegments);
 
 };
 

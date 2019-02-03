@@ -21,11 +21,11 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Geometry;
-		class CoordinateSequence;
-		class GeometryFactory;
-	}
+namespace geom {
+class Geometry;
+class CoordinateSequence;
+class GeometryFactory;
+}
 }
 
 
@@ -42,25 +42,25 @@ class GEOS_DLL CoordinateOperation: public GeometryEditorOperation {
 
 public:
 
-	/**
-	 * Return a newly created geometry, ownership to caller
-	 */
-	Geometry* edit(const Geometry *geometry,
-			const GeometryFactory *factory) override;
+    /**
+     * Return a newly created geometry, ownership to caller
+     */
+    Geometry* edit(const Geometry* geometry,
+                   const GeometryFactory* factory) override;
 
-	/**
-	 * Edits the array of Coordinate from a Geometry.
-	 *
-	 * @param coordinates the coordinate array to operate on
-	 * @param geometry the geometry containing the coordinate list
-	 * @return an edited coordinate array (which may be the same as
-	 *         the input)
-	 */
-	virtual CoordinateSequence* edit(const CoordinateSequence* coordinates,
-			const Geometry *geometry)=0;
+    /**
+     * Edits the array of Coordinate from a Geometry.
+     *
+     * @param coordinates the coordinate array to operate on
+     * @param geometry the geometry containing the coordinate list
+     * @return an edited coordinate array (which may be the same as
+     *         the input)
+     */
+    virtual CoordinateSequence* edit(const CoordinateSequence* coordinates,
+                                     const Geometry* geometry) = 0;
 
 
-	~CoordinateOperation() override {}
+    ~CoordinateOperation() override {}
 };
 
 

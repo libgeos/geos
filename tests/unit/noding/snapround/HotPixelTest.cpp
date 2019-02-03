@@ -11,15 +11,13 @@
 // std
 #include <memory>
 
-namespace tut
-{
-  //
-  // Test Group
-  //
+namespace tut {
+//
+// Test Group
+//
 
-  // Common data used by all tests
-  struct test_hotpixel_data
-  {
+// Common data used by all tests
+struct test_hotpixel_data {
 
     typedef geos::geom::Coordinate Coordinate;
     typedef geos::geom::Envelope Envelope;
@@ -28,22 +26,23 @@ namespace tut
     typedef geos::noding::snapround::HotPixel HotPixel;
 
     test_hotpixel_data() {}
-  };
+};
 
-  typedef test_group<test_hotpixel_data> group;
-  typedef group::object object;
+typedef test_group<test_hotpixel_data> group;
+typedef group::object object;
 
-  group test_hotpixel_group("geos::noding::snapround::HotPixel");
+group test_hotpixel_group("geos::noding::snapround::HotPixel");
 
-  //
-  // Test Cases
-  //
+//
+// Test Cases
+//
 
-  // Test with scaleFactor=1
-  template<>
-  template<>
-  void object::test<1>()
-  {
+// Test with scaleFactor=1
+template<>
+template<>
+void object::test<1>
+()
+{
 
     LineIntersector li;
     Coordinate pt(10, 10);
@@ -56,22 +55,23 @@ namespace tut
 
     Coordinate p0(0, 10);
     Coordinate p1(20, 10);
-    ensure( "hp.intersects 0 10, 20 10", hp.intersects(p0, p1) );
+    ensure("hp.intersects 0 10, 20 10", hp.intersects(p0, p1));
 
     p1.y = 11; // intersection point within 0.75 distance
-    ensure( "hp.intersects(0 10, 20 11)", hp.intersects(p0, p1));
+    ensure("hp.intersects(0 10, 20 11)", hp.intersects(p0, p1));
 
     p1.y = 20;
-    ensure_not( "!hp.intersects(0 10, 20 20)", hp.intersects(p0, p1));
+    ensure_not("!hp.intersects(0 10, 20 20)", hp.intersects(p0, p1));
 
-  }
+}
 
-  // Test with scaleFactor=10
-  // See http://trac.osgeo.org/geos/ticket/498
-  template<>
-  template<>
-  void object::test<2>()
-  {
+// Test with scaleFactor=10
+// See http://trac.osgeo.org/geos/ticket/498
+template<>
+template<>
+void object::test<2>
+()
+{
 
     LineIntersector li;
     Coordinate pt(10, 10);
@@ -84,34 +84,35 @@ namespace tut
 
     Coordinate p0(0, 10);
     Coordinate p1(20, 10);
-    ensure( "hp.intersects 0 10, 20 10", hp.intersects(p0, p1) );
+    ensure("hp.intersects 0 10, 20 10", hp.intersects(p0, p1));
 
     p1.y = 11; // intersection point not within 0.075 distance
-    ensure_not( "hp.intersects(0 10, 20 11)", hp.intersects(p0, p1));
+    ensure_not("hp.intersects(0 10, 20 11)", hp.intersects(p0, p1));
 
-  }
+}
 
-  // Test intersects
-  // See http://trac.osgeo.org/geos/ticket/635
-  template<>
-  template<>
-  void object::test<3>()
-  {
+// Test intersects
+// See http://trac.osgeo.org/geos/ticket/635
+template<>
+template<>
+void object::test<3>
+()
+{
 
     double scale = 1.0;
-    Coordinate p1(0,0);
-    Coordinate p2(3,2);
-    Coordinate p3(1,1);
+    Coordinate p1(0, 0);
+    Coordinate p2(3, 2);
+    Coordinate p3(1, 1);
 
     PrecisionModel pm(scale);
     LineIntersector li(&pm);
     HotPixel hp(p3, scale, li);
 
-    ensure(hp.intersects(p1,p2));
+    ensure(hp.intersects(p1, p2));
 
-  }
+}
 
-  // TODO: test addSnappedNode !
+// TODO: test addSnappedNode !
 
 
 } // namespace tut

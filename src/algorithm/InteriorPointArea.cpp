@@ -41,87 +41,97 @@ namespace algorithm { // geos.algorithm
 // file-statics
 namespace {
 
-  double avg(double a, double b){return (a+b)/2.0;}
+double
+avg(double a, double b)
+{
+    return (a + b) / 2.0;
+}
 
-  /**
-   * Finds a safe bisector Y ordinate
-   * by projecting to the Y axis
-   * and finding the Y-ordinate interval
-   * which contains the centre of the Y extent.
-   * The centre of this interval is returned as the bisector Y-ordinate.
-   *
-   * @author mdavis
-   *
-   */
-  class SafeBisectorFinder
-  {
-  public:
-	  static double getBisectorY(const Polygon& poly)
-	  {
-		  SafeBisectorFinder finder(poly);
-		  return finder.getBisectorY();
-	  }
-	  SafeBisectorFinder(const Polygon& nPoly)
-      : poly(nPoly)
+/**
+ * Finds a safe bisector Y ordinate
+ * by projecting to the Y axis
+ * and finding the Y-ordinate interval
+ * which contains the centre of the Y extent.
+ * The centre of this interval is returned as the bisector Y-ordinate.
+ *
+ * @author mdavis
+ *
+ */
+class SafeBisectorFinder {
+public:
+    static double
+    getBisectorY(const Polygon& poly)
     {
-		  // initialize using extremal values
-		  hiY = poly.getEnvelopeInternal()->getMaxY();
-		  loY = poly.getEnvelopeInternal()->getMinY();
-		  centreY = avg(loY, hiY);
-	  }
-
-	  double getBisectorY()
-	  {
-		  process(*poly.getExteriorRing());
-		  for (size_t i = 0; i < poly.getNumInteriorRing(); i++) {
-			  process(*poly.getInteriorRingN(i));
-		  }
-		  double bisectY = avg(hiY, loY);
-		  return bisectY;
-	  }
-
-
-	private:
-	  const Polygon& poly;
-
-	  double centreY;
-	  double hiY;
-	  double loY;
-
-	  void process(const LineString& line) {
-      const CoordinateSequence* seq = line.getCoordinatesRO();
-      for (std::size_t i = 0, s = seq->size(); i < s; i++) {
-        double y = seq->getY(i);
-        updateInterval(y);
-      }
+        SafeBisectorFinder finder(poly);
+        return finder.getBisectorY();
+    }
+    SafeBisectorFinder(const Polygon& nPoly)
+        : poly(nPoly)
+    {
+        // initialize using extremal values
+        hiY = poly.getEnvelopeInternal()->getMaxY();
+        loY = poly.getEnvelopeInternal()->getMinY();
+        centreY = avg(loY, hiY);
     }
 
-    void updateInterval(double y) {
-      if (y <= centreY) {
-        if (y > loY)
-          loY = y;
-      }
-      else if (y > centreY) {
-        if (y < hiY) {
-          hiY = y;
+    double
+    getBisectorY()
+    {
+        process(*poly.getExteriorRing());
+        for(size_t i = 0; i < poly.getNumInteriorRing(); i++) {
+            process(*poly.getInteriorRingN(i));
         }
-      }
+        double bisectY = avg(hiY, loY);
+        return bisectY;
+    }
+
+
+private:
+    const Polygon& poly;
+
+    double centreY;
+    double hiY;
+    double loY;
+
+    void
+    process(const LineString& line)
+    {
+        const CoordinateSequence* seq = line.getCoordinatesRO();
+        for(std::size_t i = 0, s = seq->size(); i < s; i++) {
+            double y = seq->getY(i);
+            updateInterval(y);
+        }
+    }
+
+    void
+    updateInterval(double y)
+    {
+        if(y <= centreY) {
+            if(y > loY) {
+                loY = y;
+            }
+        }
+        else if(y > centreY) {
+            if(y < hiY) {
+                hiY = y;
+            }
+        }
     }
 
     SafeBisectorFinder(SafeBisectorFinder const&); /*= delete*/
     SafeBisectorFinder& operator=(SafeBisectorFinder const&); /*= delete*/
-  };
+};
 
 } // anonymous namespace
 
 
 /*public*/
-InteriorPointArea::InteriorPointArea(const Geometry *g)
+InteriorPointArea::InteriorPointArea(const Geometry* g)
 {
-	foundInterior=false;
-	maxWidth=0.0;
-	factory=g->getFactory();
-	add(g);
+    foundInterior = false;
+    maxWidth = 0.0;
+    factory = g->getFactory();
+    add(g);
 }
 
 /*public*/
@@ -133,115 +143,119 @@ InteriorPointArea::~InteriorPointArea()
 bool
 InteriorPointArea::getInteriorPoint(Coordinate& ret) const
 {
-	if ( ! foundInterior ) return false;
+    if(! foundInterior) {
+        return false;
+    }
 
-	ret=interiorPoint;
-	return true;
+    ret = interiorPoint;
+    return true;
 }
 
 /*public*/
 void
-InteriorPointArea::add(const Geometry *geom)
+InteriorPointArea::add(const Geometry* geom)
 {
-	const Polygon *poly = dynamic_cast<const Polygon*>(geom);
-	if ( poly ) {
-		addPolygon(geom);
-		return;
-	}
+    const Polygon* poly = dynamic_cast<const Polygon*>(geom);
+    if(poly) {
+        addPolygon(geom);
+        return;
+    }
 
-	const GeometryCollection *gc = dynamic_cast<const GeometryCollection*>(geom);
-	if ( gc )
-	{
-        for(std::size_t i=0, n=gc->getNumGeometries(); i<n; i++) {
-			add(gc->getGeometryN(i));
-		}
-	}
+    const GeometryCollection* gc = dynamic_cast<const GeometryCollection*>(geom);
+    if(gc) {
+        for(std::size_t i = 0, n = gc->getNumGeometries(); i < n; i++) {
+            add(gc->getGeometryN(i));
+        }
+    }
 }
 
 /*private*/
 void
-InteriorPointArea::addPolygon(const Geometry *geometry)
+InteriorPointArea::addPolygon(const Geometry* geometry)
 {
-  if (geometry->isEmpty()) return;
+    if(geometry->isEmpty()) {
+        return;
+    }
 
-  Coordinate intPt;
-  double width;
+    Coordinate intPt;
+    double width;
 
-  unique_ptr<LineString> bisector ( horizontalBisector(geometry) );
-  if ( bisector->getLength() == 0.0 ) {
-    width = 0;
-    intPt = bisector->getCoordinateN(0);
-  }
-  else {
-    unique_ptr<Geometry> intersections ( bisector->intersection(geometry) );
-    const Geometry *widestIntersection = widestGeometry(intersections.get());
-    const Envelope *env = widestIntersection->getEnvelopeInternal();
-    width=env->getWidth();
-    env->centre(intPt);
-  }
-  if (!foundInterior || width>maxWidth) {
-    interiorPoint = intPt;
-    maxWidth = width;
-    foundInterior=true;
-  }
+    unique_ptr<LineString> bisector(horizontalBisector(geometry));
+    if(bisector->getLength() == 0.0) {
+        width = 0;
+        intPt = bisector->getCoordinateN(0);
+    }
+    else {
+        unique_ptr<Geometry> intersections(bisector->intersection(geometry));
+        const Geometry* widestIntersection = widestGeometry(intersections.get());
+        const Envelope* env = widestIntersection->getEnvelopeInternal();
+        width = env->getWidth();
+        env->centre(intPt);
+    }
+    if(!foundInterior || width > maxWidth) {
+        interiorPoint = intPt;
+        maxWidth = width;
+        foundInterior = true;
+    }
 }
 
 //@return if geometry is a collection, the widest sub-geometry; otherwise,
 //the geometry itself
 const Geometry*
-InteriorPointArea::widestGeometry(const Geometry *geometry)
+InteriorPointArea::widestGeometry(const Geometry* geometry)
 {
-	const GeometryCollection *gc = dynamic_cast<const GeometryCollection*>(geometry);
-	if ( gc ) {
-		return widestGeometry(gc);
-	} else {
-		return geometry;
-	}
+    const GeometryCollection* gc = dynamic_cast<const GeometryCollection*>(geometry);
+    if(gc) {
+        return widestGeometry(gc);
+    }
+    else {
+        return geometry;
+    }
 }
 
 const Geometry*
-InteriorPointArea::widestGeometry(const GeometryCollection* gc) {
-	if (gc->isEmpty()) {
-		return gc;
-	}
-	const Geometry* p_widestGeometry=gc->getGeometryN(0);
+InteriorPointArea::widestGeometry(const GeometryCollection* gc)
+{
+    if(gc->isEmpty()) {
+        return gc;
+    }
+    const Geometry* p_widestGeometry = gc->getGeometryN(0);
 
-	// scan remaining geom components to see if any are wider
-	for(std::size_t i=1, n=gc->getNumGeometries(); i<n; i++) // start at 1
-	{
-		const Envelope *env1(gc->getGeometryN(i)->getEnvelopeInternal());
-		const Envelope *env2(p_widestGeometry->getEnvelopeInternal());
-		if (env1->getWidth()>env2->getWidth()) {
-				p_widestGeometry=gc->getGeometryN(i);
-		}
-	}
-	return p_widestGeometry;
+    // scan remaining geom components to see if any are wider
+    for(std::size_t i = 1, n = gc->getNumGeometries(); i < n; i++) { // start at 1
+        const Envelope* env1(gc->getGeometryN(i)->getEnvelopeInternal());
+        const Envelope* env2(p_widestGeometry->getEnvelopeInternal());
+        if(env1->getWidth() > env2->getWidth()) {
+            p_widestGeometry = gc->getGeometryN(i);
+        }
+    }
+    return p_widestGeometry;
 }
 
 /* private */
 LineString*
-InteriorPointArea::horizontalBisector(const Geometry *geometry)
+InteriorPointArea::horizontalBisector(const Geometry* geometry)
 {
-	const Envelope *envelope=geometry->getEnvelopeInternal();
+    const Envelope* envelope = geometry->getEnvelopeInternal();
 
-	/**
-	 * Original algorithm.  Fails when geometry contains a horizontal
-	 * segment at the Y midpoint.
-	 */
-	// Assert: for areas, minx <> maxx
-	//double avgY=avg(envelope->getMinY(),envelope->getMaxY());
+    /**
+     * Original algorithm.  Fails when geometry contains a horizontal
+     * segment at the Y midpoint.
+     */
+    // Assert: for areas, minx <> maxx
+    //double avgY=avg(envelope->getMinY(),envelope->getMaxY());
 
-	double bisectY = SafeBisectorFinder::getBisectorY(*dynamic_cast<const Polygon *>(geometry));
-	vector<Coordinate>*cv=new vector<Coordinate>(2);
-	(*cv)[0].x = envelope->getMinX();
-	(*cv)[0].y = bisectY;
-	(*cv)[1].x = envelope->getMaxX();
-	(*cv)[1].y = bisectY;
+    double bisectY = SafeBisectorFinder::getBisectorY(*dynamic_cast<const Polygon*>(geometry));
+    vector<Coordinate>* cv = new vector<Coordinate>(2);
+    (*cv)[0].x = envelope->getMinX();
+    (*cv)[0].y = bisectY;
+    (*cv)[1].x = envelope->getMaxX();
+    (*cv)[1].y = bisectY;
 
-	CoordinateSequence *cl = factory->getCoordinateSequenceFactory()->create(cv);
+    CoordinateSequence* cl = factory->getCoordinateSequenceFactory()->create(cv);
 
-	LineString *ret = factory->createLineString(cl);
-	return ret;
+    LineString* ret = factory->createLineString(cl);
+    return ret;
 }
 
 } // namespace geos.algorithm

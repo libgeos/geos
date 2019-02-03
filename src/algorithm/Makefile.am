@@ -23,6 +23,7 @@ libalgorithm_la_SOURCES = \
 	InteriorPointPoint.cpp \
 	LineIntersector.cpp \
 	Length.cpp \
+	MinimumBoundingCircle.cpp \
 	MinimumDiameter.cpp \
 	NotRepresentableException.cpp \
 	Orientation.cpp \

@@ -34,9 +34,9 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		//class Coordinate;
-	}
+namespace geom {
+//class Coordinate;
+}
 }
 
 
@@ -56,137 +56,153 @@ class GEOS_DLL CoordinateList {
 
 public:
 
-	typedef std::list<Coordinate>::iterator iterator;
-	typedef std::list<Coordinate>::const_iterator const_iterator;
+    typedef std::list<Coordinate>::iterator iterator;
+    typedef std::list<Coordinate>::const_iterator const_iterator;
 
-	friend std::ostream& operator<< (std::ostream& os,
-		const CoordinateList& cl);
+    friend std::ostream& operator<< (std::ostream& os,
+                                     const CoordinateList& cl);
 
-	/** \brief
-	 * Constructs a new list from an array of Coordinates, allowing
-	 * repeated points.
-	 *
-	 * (I.e. this constructor produces a {@link CoordinateList} with
-	 * exactly the same set of points as the input array.)
-	 *
-	 * @param v the initial coordinates
-	 */
-	CoordinateList(const std::vector<Coordinate>& v)
-		:
-		coords(v.begin(), v.end())
-	{
-	}
+    /** \brief
+     * Constructs a new list from an array of Coordinates, allowing
+     * repeated points.
+     *
+     * (I.e. this constructor produces a {@link CoordinateList} with
+     * exactly the same set of points as the input array.)
+     *
+     * @param v the initial coordinates
+     */
+    CoordinateList(const std::vector<Coordinate>& v)
+        :
+        coords(v.begin(), v.end())
+    {
+    }
 
-	CoordinateList()
-		:
-		coords()
-	{
-	}
+    CoordinateList()
+        :
+        coords()
+    {
+    }
 
-	size_t size() const
-	{
-		return coords.size();
-	}
+    size_t
+    size() const
+    {
+        return coords.size();
+    }
 
-	bool empty() const
-	{
-		return coords.empty();
-	}
+    bool
+    empty() const
+    {
+        return coords.empty();
+    }
 
-	iterator begin()
-	{
-		return coords.begin();
-	}
+    iterator
+    begin()
+    {
+        return coords.begin();
+    }
 
-	iterator end()
-	{
-		return coords.end();
-	}
+    iterator
+    end()
+    {
+        return coords.end();
+    }
 
-	const_iterator begin() const
-	{
-		return coords.begin();
-	}
+    const_iterator
+    begin() const
+    {
+        return coords.begin();
+    }
 
-	const_iterator end() const
-	{
-		return coords.end();
-	}
+    const_iterator
+    end() const
+    {
+        return coords.end();
+    }
 
-	/** \brief
-	 * Inserts the specified coordinate at the specified position in this list.
-	 *
-	 * @param pos the position at which to insert
-	 * @param coord the coordinate to insert
-	 * @param allowRepeated if set to false, repeated coordinates are collapsed
-	 *
-	 * @return an iterator to the newly installed coordinate
-	 *         (or previous, if equal and repeated are not allowed)
-	 *
-	 * NOTE: when allowRepeated is false _next_ point is not checked
-	 *       this matches JTS behavior
-	 */
-	iterator insert(iterator pos, const Coordinate& c, bool allowRepeated)
-	{
-		if ( !allowRepeated && pos != coords.begin() ) {
-			iterator prev = pos; --prev;
-			if ( c.equals2D(*prev) ) return prev;
-		}
-		return coords.insert(pos, c);
-	}
+    /** \brief
+     * Inserts the specified coordinate at the specified position in this list.
+     *
+     * @param pos the position at which to insert
+     * @param coord the coordinate to insert
+     * @param allowRepeated if set to false, repeated coordinates are collapsed
+     *
+     * @return an iterator to the newly installed coordinate
+     *         (or previous, if equal and repeated are not allowed)
+     *
+     * NOTE: when allowRepeated is false _next_ point is not checked
+     *       this matches JTS behavior
+     */
+    iterator
+    insert(iterator pos, const Coordinate& c, bool allowRepeated)
+    {
+        if(!allowRepeated && pos != coords.begin()) {
+            iterator prev = pos;
+            --prev;
+            if(c.equals2D(*prev)) {
+                return prev;
+            }
+        }
+        return coords.insert(pos, c);
+    }
 
-	iterator insert(iterator pos, const Coordinate& c)
-	{
-		return coords.insert(pos, c);
-	}
+    iterator
+    insert(iterator pos, const Coordinate& c)
+    {
+        return coords.insert(pos, c);
+    }
 
-	iterator erase(iterator pos)
-	{
-		return coords.erase(pos);
-	}
+    iterator
+    erase(iterator pos)
+    {
+        return coords.erase(pos);
+    }
 
-	iterator erase(iterator first, iterator last)
-	{
-		return coords.erase(first, last);
-	}
+    iterator
+    erase(iterator first, iterator last)
+    {
+        return coords.erase(first, last);
+    }
 
-	std::unique_ptr<Coordinate::Vect> toCoordinateArray() const
-	{
-		std::unique_ptr<Coordinate::Vect> ret(new Coordinate::Vect);
-		ret->assign(coords.begin(), coords.end());
-		return ret;
-	}
-	void closeRing()
-	{
-		if(!coords.empty() && ! (*(coords.begin())).equals(*(coords.rbegin())))
-		{
-			const Coordinate &c = *(coords.begin());
-			coords.insert(coords.end(),c);
-		}
-	}
+    std::unique_ptr<Coordinate::Vect>
+    toCoordinateArray() const
+    {
+        std::unique_ptr<Coordinate::Vect> ret(new Coordinate::Vect);
+        ret->assign(coords.begin(), coords.end());
+        return ret;
+    }
+    void
+    closeRing()
+    {
+        if(!coords.empty() && !(*(coords.begin())).equals(*(coords.rbegin()))) {
+            const Coordinate& c = *(coords.begin());
+            coords.insert(coords.end(), c);
+        }
+    }
 
 
 private:
 
-	std::list<Coordinate> coords;
+    std::list<Coordinate> coords;
 };
 
 inline
-std::ostream& operator<< (std::ostream& os, const CoordinateList& cl)
+std::ostream&
+operator<< (std::ostream& os, const CoordinateList& cl)
 {
-	os << "(";
-	for (CoordinateList::const_iterator
-		it=cl.begin(), end=cl.end();
-		it != end;
-		++it)
-	{
-		const Coordinate& c = *it;
-		if ( it != cl.begin() ) os << ", ";
-		os << c;
-	}
-	os << ")";
+    os << "(";
+    for(CoordinateList::const_iterator
+            it = cl.begin(), end = cl.end();
+            it != end;
+            ++it) {
+        const Coordinate& c = *it;
+        if(it != cl.begin()) {
+            os << ", ";
+        }
+        os << c;
+    }
+    os << ")";
 
-	return os;
+    return os;
 }
 
 } // namespace geos::geom

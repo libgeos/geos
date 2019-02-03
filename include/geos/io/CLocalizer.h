@@ -34,8 +34,7 @@ namespace io {
 /**
  * \class CLocalizer io.h geos.h
  */
-class GEOS_DLL CLocalizer
-{
+class GEOS_DLL CLocalizer {
 public:
 
     CLocalizer();

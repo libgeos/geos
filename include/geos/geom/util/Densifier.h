@@ -57,26 +57,27 @@ namespace util {
  */
 class GEOS_DLL Densifier {
 public:
-	Densifier(const Geometry *inputGeom);
+    Densifier(const Geometry* inputGeom);
 
-	Geometry::Ptr densify(const Geometry *geom, double distanceTolerance);
-	void setDistanceTolerance(double distanceTolerance);
-	Geometry::Ptr getResultGeometry() const;
+    Geometry::Ptr densify(const Geometry* geom, double distanceTolerance);
+    void setDistanceTolerance(double distanceTolerance);
+    Geometry::Ptr getResultGeometry() const;
 
 private:
-	double distanceTolerance;
-	const Geometry *inputGeom;
-	static std::unique_ptr<Coordinate::Vect> densifyPoints(const Coordinate::Vect pts, double distanceTolerance, const PrecisionModel *precModel);
+    double distanceTolerance;
+    const Geometry* inputGeom;
+    static std::unique_ptr<Coordinate::Vect> densifyPoints(const Coordinate::Vect pts, double distanceTolerance,
+            const PrecisionModel* precModel);
 
-	class GEOS_DLL DensifyTransformer: public GeometryTransformer {
-	public:
-		DensifyTransformer(double distanceTolerance);
-		double distanceTolerance;
-		CoordinateSequence::Ptr transformCoordinates(const CoordinateSequence *coords, const Geometry *parent);
-		Geometry::Ptr transformPolygon(const Polygon *geom, const Geometry *parent);
-		Geometry::Ptr transformMultiPolygon(const MultiPolygon *geom, const Geometry *parent);
-		Geometry *createValidArea(const Geometry *roughAreaGeom);
-	};
+    class GEOS_DLL DensifyTransformer: public GeometryTransformer {
+    public:
+        DensifyTransformer(double distanceTolerance);
+        double distanceTolerance;
+        CoordinateSequence::Ptr transformCoordinates(const CoordinateSequence* coords, const Geometry* parent);
+        Geometry::Ptr transformPolygon(const Polygon* geom, const Geometry* parent);
+        Geometry::Ptr transformMultiPolygon(const MultiPolygon* geom, const Geometry* parent);
+        Geometry* createValidArea(const Geometry* roughAreaGeom);
+    };
 
 }; // Densifier
 

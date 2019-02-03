@@ -19,7 +19,6 @@
 #include <geos/export.h>
 #include <geos/geom/GeometryFilter.h>
 #include <geos/geom/Polygon.h>
-#include <geos/platform.h>
 #include <vector>
 
 namespace geos {
@@ -33,24 +32,24 @@ class GEOS_DLL PolygonExtracter: public GeometryFilter {
 
 public:
 
-	/**
-	 * Pushes the Polygon components from a single geometry into
-	 * the provided vector.
-	 * If more than one geometry is to be processed, it is more
-	 * efficient to create a single PolygonExtracterFilter instance
-	 * and pass it to multiple geometries.
-	 */
-	static void getPolygons(const Geometry &geom, std::vector<const Polygon*>& ret);
+    /**
+     * Pushes the Polygon components from a single geometry into
+     * the provided vector.
+     * If more than one geometry is to be processed, it is more
+     * efficient to create a single PolygonExtracterFilter instance
+     * and pass it to multiple geometries.
+     */
+    static void getPolygons(const Geometry& geom, std::vector<const Polygon*>& ret);
 
-	/**
-	 * Constructs a PolygonExtracterFilter with a list in which
-	 * to store Polygons found.
-	 */
-	PolygonExtracter(std::vector<const Polygon*>& newComps);
+    /**
+     * Constructs a PolygonExtracterFilter with a list in which
+     * to store Polygons found.
+     */
+    PolygonExtracter(std::vector<const Polygon*>& newComps);
 
-	void filter_rw(Geometry *geom) override;
+    void filter_rw(Geometry* geom) override;
 
-	void filter_ro(const Geometry *geom) override;
+    void filter_ro(const Geometry* geom) override;
 
 private:
 

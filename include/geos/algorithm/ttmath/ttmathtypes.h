@@ -238,15 +238,21 @@ namespace ttmath
 		typedef unsigned __int64 uint;
 		typedef signed   __int64 sint;
 	#else
-		/*!
-			on 64bit platforms one word (uint, sint) will be equal 64bits
-		*/
-		typedef unsigned long uint;
+        #ifdef __MINGW64__
+            //Mingw64 64-bit patch from https://www.ttmath.org/forum/patch_for_building_64_bit_using_windows_mingw64_gcc
+            typedef uint64_t uint;
+            typedef int64_t sint;
+        #else
+            /*!
+            on 64bit platforms one word (uint, sint) will be equal 64bits
+            */
+            typedef unsigned long uint;
+            /*!
+                on 64bit platforms one word (uint, sint) will be equal 64bits
+            */
+            typedef signed long sint;
+        #endif
 
-		/*!
-			on 64bit platforms one word (uint, sint) will be equal 64bits
-		*/
-		typedef signed   long sint;
 	#endif
 
 	/*!

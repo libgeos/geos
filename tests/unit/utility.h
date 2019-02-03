@@ -32,8 +32,7 @@
 #include <string>
 #include <vector>
 
-namespace tut
-{
+namespace tut {
 
 //
 // Helper typedefs
@@ -77,14 +76,16 @@ typedef geos::geom::prep::PreparedGeometry const* PreparedGeometryPtr;
 //
 
 template<typename Type, typename InstanceType>
-inline bool isInstanceOf(InstanceType const* instance)
+inline bool
+isInstanceOf(InstanceType const* instance)
 {
     assert(nullptr != instance);
-    return (nullptr != dynamic_cast<Type const*>(instance) );
+    return (nullptr != dynamic_cast<Type const*>(instance));
 }
 
 template<typename Type, typename InstanceType>
-inline Type const* instanceOf(InstanceType const* instance)
+inline Type const*
+instanceOf(InstanceType const* instance)
 {
     assert(nullptr != instance);
     return dynamic_cast<Type const*>(instance);
@@ -95,7 +96,8 @@ inline Type const* instanceOf(InstanceType const* instance)
 //
 
 template <typename T1, typename T2>
-inline void ensure_equals_geometry(T1 const* lhs, T2 const* rhs)
+inline void
+ensure_equals_geometry(T1 const* lhs, T2 const* rhs)
 {
     assert(0 != lhs);
     assert(0 != rhs);
@@ -104,7 +106,8 @@ inline void ensure_equals_geometry(T1 const* lhs, T2 const* rhs)
 }
 
 template <typename T>
-inline void ensure_equals_geometry(T const* lhs, T const* rhs)
+inline void
+ensure_equals_geometry(T const* lhs, T const* rhs)
 {
     assert(nullptr != lhs);
     assert(nullptr != rhs);
@@ -118,9 +121,8 @@ inline void ensure_equals_geometry(T const* lhs, T const* rhs)
     ensure_equals("is-empty do not match",
                   lhs->isEmpty(), rhs->isEmpty());
 
-    if (!isInstanceOf<GeometryCollection>(lhs)
-         && !isInstanceOf<GeometryCollection>(rhs))
-    {
+    if(!isInstanceOf<GeometryCollection>(lhs)
+            && !isInstanceOf<GeometryCollection>(rhs)) {
         ensure_equals("is-simple do not match",
                       lhs->isSimple(), rhs->isSimple());
     }
@@ -143,23 +145,22 @@ inline void ensure_equals_geometry(T const* lhs, T const* rhs)
     //              lhs->getNumPoints(), rhs->getNumPoints());
 
     // Dispatch to run more specific testes
-    if (isInstanceOf<Polygon>(lhs)
-        && isInstanceOf<Polygon>(rhs))
-    {
+    if(isInstanceOf<Polygon>(lhs)
+            && isInstanceOf<Polygon>(rhs)) {
         ensure_equals_geometry(instanceOf<Polygon>(lhs),
-                        instanceOf<Polygon>(rhs));
+                               instanceOf<Polygon>(rhs));
     }
-    else if (isInstanceOf<GeometryCollection>(lhs)
-             && isInstanceOf<GeometryCollection>(rhs))
-    {
+    else if(isInstanceOf<GeometryCollection>(lhs)
+            && isInstanceOf<GeometryCollection>(rhs)) {
         ensure_equals_geometry(instanceOf<GeometryCollection>(lhs),
-                        instanceOf<GeometryCollection>(rhs));
+                               instanceOf<GeometryCollection>(rhs));
     }
 }
 
 template <>
-inline void ensure_equals_geometry(geos::geom::Polygon const* lhs,
-                                   geos::geom::Polygon const* rhs)
+inline void
+ensure_equals_geometry(geos::geom::Polygon const* lhs,
+                       geos::geom::Polygon const* rhs)
 {
     assert(nullptr != lhs);
     assert(nullptr != rhs);
@@ -169,8 +170,9 @@ inline void ensure_equals_geometry(geos::geom::Polygon const* lhs,
 }
 
 template <>
-inline void ensure_equals_geometry(geos::geom::GeometryCollection const* lhs,
-                                   geos::geom::GeometryCollection const* rhs)
+inline void
+ensure_equals_geometry(geos::geom::GeometryCollection const* lhs,
+                       geos::geom::GeometryCollection const* rhs)
 {
     assert(nullptr != lhs);
     assert(nullptr != rhs);
@@ -180,8 +182,7 @@ inline void ensure_equals_geometry(geos::geom::GeometryCollection const* lhs,
     ensure_equals("number of geometries do not match",
                   lhs->getNumGeometries(), rhs->getNumGeometries());
 
-    for (std::size_t i = 0, n = lhs->getNumGeometries(); i < n; ++i)
-    {
+    for(std::size_t i = 0, n = lhs->getNumGeometries(); i < n; ++i) {
         Geometry const* g1 = lhs->getGeometryN(i);
         Geometry const* g2 = rhs->getGeometryN(i);
         ensure_equals_geometry(g1, g2); // breaks on failure
@@ -189,8 +190,9 @@ inline void ensure_equals_geometry(geos::geom::GeometryCollection const* lhs,
 }
 
 template <>
-inline void ensure_equals_geometry(geos::geom::Geometry const* lhs,
-                                   geos::geom::prep::PreparedGeometry const* rhs)
+inline void
+ensure_equals_geometry(geos::geom::Geometry const* lhs,
+                       geos::geom::prep::PreparedGeometry const* rhs)
 {
     assert(nullptr != lhs);
     assert(nullptr != rhs);
@@ -204,16 +206,15 @@ inline void ensure_equals_geometry(geos::geom::Geometry const* lhs,
 //
 
 // Decodes hex-encoded WKB/EWKB to raw binary.
-struct wkb_hex_decoder
-{
+struct wkb_hex_decoder {
     typedef std::vector<unsigned char> binary_type;
 
     // bytes [out] - buffer for binary output
-    static void decode(std::string const& hexstr, binary_type& bytes)
+    static void
+    decode(std::string const& hexstr, binary_type& bytes)
     {
         bytes.clear();
-        for(std::string::size_type i = 0; i < hexstr.size() / 2; ++i)
-        {
+        for(std::string::size_type i = 0; i < hexstr.size() / 2; ++i) {
             std::istringstream iss(hexstr.substr(i * 2, 2));
             unsigned int n;
             iss >> std::hex >> n;

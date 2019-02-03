@@ -44,93 +44,98 @@ namespace index { // geos.index
 namespace quadtree { // geos.index.quadtree
 
 int
-NodeBase::getSubnodeIndex(const Envelope *env, const Coordinate& centre)
+NodeBase::getSubnodeIndex(const Envelope* env, const Coordinate& centre)
 {
-	int subnodeIndex=-1;
-	if (env->getMinX()>=centre.x) {
-		if (env->getMinY()>=centre.y) subnodeIndex=3;
-		if (env->getMaxY()<=centre.y) subnodeIndex=1;
-	}
-	if (env->getMaxX()<=centre.x) {
-		if (env->getMinY()>=centre.y) subnodeIndex=2;
-		if (env->getMaxY()<=centre.y) subnodeIndex=0;
-	}
+    int subnodeIndex = -1;
+    if(env->getMinX() >= centre.x) {
+        if(env->getMinY() >= centre.y) {
+            subnodeIndex = 3;
+        }
+        if(env->getMaxY() <= centre.y) {
+            subnodeIndex = 1;
+        }
+    }
+    if(env->getMaxX() <= centre.x) {
+        if(env->getMinY() >= centre.y) {
+            subnodeIndex = 2;
+        }
+        if(env->getMaxY() <= centre.y) {
+            subnodeIndex = 0;
+        }
+    }
 #if GEOS_DEBUG
-	cerr<<"getSubNodeIndex("<<env->toString()<<", "<<centre.toString()<<") returning "<<subnodeIndex<<endl;
+    cerr << "getSubNodeIndex(" << env->toString() << ", " << centre.toString() << ") returning " << subnodeIndex << endl;
 #endif
-	return subnodeIndex;
+    return subnodeIndex;
 }
 
 NodeBase::NodeBase()
 {
-	subnodes[0]=nullptr;
-	subnodes[1]=nullptr;
-	subnodes[2]=nullptr;
-	subnodes[3]=nullptr;
+    subnodes[0] = nullptr;
+    subnodes[1] = nullptr;
+    subnodes[2] = nullptr;
+    subnodes[3] = nullptr;
 }
 
 NodeBase::~NodeBase()
 {
-	delete subnodes[0];
-	delete subnodes[1];
-	delete subnodes[2];
-	delete subnodes[3];
-	subnodes[0]=nullptr;
-	subnodes[1]=nullptr;
-	subnodes[2]=nullptr;
-	subnodes[3]=nullptr;
+    delete subnodes[0];
+    delete subnodes[1];
+    delete subnodes[2];
+    delete subnodes[3];
+    subnodes[0] = nullptr;
+    subnodes[1] = nullptr;
+    subnodes[2] = nullptr;
+    subnodes[3] = nullptr;
 }
 
 vector<void*>&
 NodeBase::getItems()
 {
-	return items;
+    return items;
 }
 
 void
 NodeBase::add(void* item)
 {
-	items.push_back(item);
-	//GEOS_DEBUG itemCount++;
-	//GEOS_DEBUG System.out.print(itemCount);
+    items.push_back(item);
+    //GEOS_DEBUG itemCount++;
+    //GEOS_DEBUG System.out.print(itemCount);
 }
 
 vector<void*>&
 NodeBase::addAllItems(vector<void*>& resultItems) const
 {
-	// this node may have items as well as subnodes (since items may not
-	// be wholly contained in any single subnode
-	resultItems.insert(resultItems.end(), items.begin(), items.end());
+    // this node may have items as well as subnodes (since items may not
+    // be wholly contained in any single subnode
+    resultItems.insert(resultItems.end(), items.begin(), items.end());
 
-	for(const auto& subnode : subnodes)
-	{
-		if (subnode != nullptr)
-		{
-			subnode->addAllItems(resultItems);
-		}
-	}
-	return resultItems;
+    for(const auto& subnode : subnodes) {
+        if(subnode != nullptr) {
+            subnode->addAllItems(resultItems);
+        }
+    }
+    return resultItems;
 }
 
 void
 NodeBase::addAllItemsFromOverlapping(const Envelope& searchEnv,
                                      vector<void*>& resultItems) const
 {
-	if (!isSearchMatch(searchEnv))
-		return;
+    if(!isSearchMatch(searchEnv)) {
+        return;
+    }
 
-	// this node may have items as well as subnodes (since items may not
-	// be wholly contained in any single subnode
-	resultItems.insert(resultItems.end(), items.begin(), items.end());
+    // this node may have items as well as subnodes (since items may not
+    // be wholly contained in any single subnode
+    resultItems.insert(resultItems.end(), items.begin(), items.end());
 
-	for(const auto& subnode : subnodes)
-	{
-		if (subnode != nullptr)
-		{
-			subnode->addAllItemsFromOverlapping(searchEnv,
-			                                       resultItems);
-		}
-	}
+    for(const auto& subnode : subnodes) {
+        if(subnode != nullptr) {
+            subnode->addAllItemsFromOverlapping(searchEnv,
+                                                resultItems);
+        }
+    }
 }
 
 //<<TODO:RENAME?>> In Samet's terminology, I think what we're returning here is
@@ -138,77 +143,79 @@ NodeBase::addAllItemsFromOverlapping(const Envelope& searchEnv,
 unsigned int
 NodeBase::depth() const
 {
-	unsigned int maxSubDepth=0;
+    unsigned int maxSubDepth = 0;
 
-	for (const auto& subnode : subnodes)
-	{
-		if (subnode != nullptr)
-		{
-			unsigned int sqd=subnode->depth();
-			if ( sqd > maxSubDepth )
-				maxSubDepth=sqd;
-		}
-	}
-	return maxSubDepth + 1;
+    for(const auto& subnode : subnodes) {
+        if(subnode != nullptr) {
+            unsigned int sqd = subnode->depth();
+            if(sqd > maxSubDepth) {
+                maxSubDepth = sqd;
+            }
+        }
+    }
+    return maxSubDepth + 1;
 }
 
 size_t
 NodeBase::size() const
 {
-	size_t subSize = 0;
-	for(const auto& subnode : subnodes)
-	{
-		if (subnode != nullptr)
-		{
-			subSize += subnode->size();
-		}
-	}
-	return subSize + items.size();
+    size_t subSize = 0;
+    for(const auto& subnode : subnodes) {
+        if(subnode != nullptr) {
+            subSize += subnode->size();
+        }
+    }
+    return subSize + items.size();
 }
 
 size_t
 NodeBase::getNodeCount() const
 {
-	size_t subSize = 0;
-	for (const auto& subnode : subnodes) {
-		if (subnode != nullptr) {
-			subSize += subnode->size();
-		}
-	}
+    size_t subSize = 0;
+    for(const auto& subnode : subnodes) {
+        if(subnode != nullptr) {
+            subSize += subnode->size();
+        }
+    }
 
-	return subSize + 1;
+    return subSize + 1;
 }
 
 string
 NodeBase::toString() const
 {
-	ostringstream s;
-	s<<"ITEMS:"<<items.size()<<endl;
-	for (size_t i=0; i < subnodes.size(); i++)
-	{
-		s<<"subnode["<<i<<"] ";
-		if ( subnodes[i] == nullptr ) s<<"NULL";
-		else s<<subnodes[i]->toString();
-		s<<endl;
-	}
-	return s.str();
+    ostringstream s;
+    s << "ITEMS:" << items.size() << endl;
+    for(size_t i = 0; i < subnodes.size(); i++) {
+        s << "subnode[" << i << "] ";
+        if(subnodes[i] == nullptr) {
+            s << "NULL";
+        }
+        else {
+            s << subnodes[i]->toString();
+        }
+        s << endl;
+    }
+    return s.str();
 }
 
 /*public*/
 void
 NodeBase::visit(const Envelope* searchEnv, ItemVisitor& visitor)
 {
-	if (! isSearchMatch(*searchEnv)) return;
+    if(! isSearchMatch(*searchEnv)) {
+        return;
+    }
 
-	// this node may have items as well as subnodes (since items may not
-	// be wholly contained in any single subnode
-	visitItems(searchEnv, visitor);
+    // this node may have items as well as subnodes (since items may not
+    // be wholly contained in any single subnode
+    visitItems(searchEnv, visitor);
 
-	for (const auto& subnode : subnodes) {
-		if (subnode != nullptr) {
-			subnode->visit(searchEnv, visitor);
-		}
-	}
+    for(const auto& subnode : subnodes) {
+        if(subnode != nullptr) {
+            subnode->visit(searchEnv, visitor);
+        }
+    }
 }
 
 /*private*/
@@ -217,50 +224,51 @@ NodeBase::visitItems(const Envelope* searchEnv, ItemVisitor& visitor)
 {
     ::geos::ignore_unused_variable_warning(searchEnv);
 
-	// would be nice to filter items based on search envelope, but can't
-	// until they contain an envelope
-	for (auto& item : items) {
-		visitor.visitItem(item);
-	}
+    // would be nice to filter items based on search envelope, but can't
+    // until they contain an envelope
+    for(auto& item : items) {
+        visitor.visitItem(item);
+    }
 }
 
 /*public*/
 bool
 NodeBase::remove(const Envelope* itemEnv, void* item)
 {
-	// use envelope to restrict nodes scanned
-	if (! isSearchMatch(*itemEnv)) return false;
+    // use envelope to restrict nodes scanned
+    if(! isSearchMatch(*itemEnv)) {
+        return false;
+    }
 
-	bool found = false;
-	for (auto& subnode : subnodes)
-	{
-		if (subnode != nullptr)
-		{
-			found = subnode->remove(itemEnv, item);
-			if (found)
-			{
-				// trim subtree if empty
-				if (subnode->isPrunable())
-				{
-					delete subnode;
-					subnode = nullptr;
-				}
-				break;
-			}
-		}
-	}
-	// if item was found lower down, don't need to search for it here
-	if (found) return found;
+    bool found = false;
+    for(auto& subnode : subnodes) {
+        if(subnode != nullptr) {
+            found = subnode->remove(itemEnv, item);
+            if(found) {
+                // trim subtree if empty
+                if(subnode->isPrunable()) {
+                    delete subnode;
+                    subnode = nullptr;
+                }
+                break;
+            }
+        }
+    }
+    // if item was found lower down, don't need to search for it here
+    if(found) {
+        return found;
+    }
 
-	// otherwise, try and remove the item from the list of items
-	// in this node
-	auto foundIter = find(items.begin(), items.end(), item);
-	if ( foundIter != items.end() ) {
-		items.erase(foundIter);
-		return true;
-	} else {
-		return false;
-	}
+    // otherwise, try and remove the item from the list of items
+    // in this node
+    auto foundIter = find(items.begin(), items.end(), item);
+    if(foundIter != items.end()) {
+        items.erase(foundIter);
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 

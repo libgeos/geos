@@ -38,31 +38,31 @@ namespace noding { // geos::noding
  * public:
  */
 FastSegmentSetIntersectionFinder::
-FastSegmentSetIntersectionFinder( noding::SegmentString::ConstVect * baseSegStrings)
-:	segSetMutInt( new MCIndexSegmentSetMutualIntersector()),
-	lineIntersector( new algorithm::LineIntersector())
+FastSegmentSetIntersectionFinder(noding::SegmentString::ConstVect* baseSegStrings)
+    :	segSetMutInt(new MCIndexSegmentSetMutualIntersector()),
+      lineIntersector(new algorithm::LineIntersector())
 {
-	segSetMutInt->setBaseSegments( baseSegStrings);
+    segSetMutInt->setBaseSegments(baseSegStrings);
 }
 
 bool
 FastSegmentSetIntersectionFinder::
-intersects( noding::SegmentString::ConstVect * segStrings)
+intersects(noding::SegmentString::ConstVect* segStrings)
 {
-	SegmentIntersectionDetector intFinder(lineIntersector.get());
+    SegmentIntersectionDetector intFinder(lineIntersector.get());
 
-	return this->intersects( segStrings, &intFinder);
+    return this->intersects(segStrings, &intFinder);
 }
 
 bool
 FastSegmentSetIntersectionFinder::
-intersects( noding::SegmentString::ConstVect * segStrings,
-			SegmentIntersectionDetector * intDetector)
+intersects(noding::SegmentString::ConstVect* segStrings,
+           SegmentIntersectionDetector* intDetector)
 {
-	segSetMutInt->setSegmentIntersector( intDetector);
-	segSetMutInt->process( segStrings);
+    segSetMutInt->setSegmentIntersector(intDetector);
+    segSetMutInt->process(segStrings);
 
-	return intDetector->hasIntersection();
+    return intDetector->hasIntersection();
 }
 
 } // geos::noding

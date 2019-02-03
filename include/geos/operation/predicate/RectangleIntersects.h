@@ -26,10 +26,10 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class Envelope;
-		//class Polygon;
-	}
+namespace geom {
+class Envelope;
+//class Polygon;
+}
 }
 
 namespace geos {
@@ -53,9 +53,9 @@ class GEOS_DLL RectangleIntersects {
 
 private:
 
-	const geom::Polygon &rectangle;
+    const geom::Polygon& rectangle;
 
- 	const geom::Envelope &rectEnv;
+    const geom::Envelope& rectEnv;
 
     // Declare type as noncopyable
     RectangleIntersects(const RectangleIntersects& other) = delete;
@@ -63,32 +63,33 @@ private:
 
 public:
 
-	/** \brief
-	 * Create a new intersects computer for a rectangle.
-	 *
-	 * @param newRect a rectangular geometry
-	 */
-	RectangleIntersects(const geom::Polygon &newRect)
-		:
-		rectangle(newRect),
-		rectEnv(*(newRect.getEnvelopeInternal()))
-	{}
+    /** \brief
+     * Create a new intersects computer for a rectangle.
+     *
+     * @param newRect a rectangular geometry
+     */
+    RectangleIntersects(const geom::Polygon& newRect)
+        :
+        rectangle(newRect),
+        rectEnv(*(newRect.getEnvelopeInternal()))
+    {}
 
-	bool intersects(const geom::Geometry& geom);
+    bool intersects(const geom::Geometry& geom);
 
-	/** \brief
-	 * Tests whether a rectangle intersects a given geometry.
-	 *
-	 * @param rectangle a rectangular Polygon
-	 * @param b a Geometry of any type
-	 * @return true if the geometries intersect
-	 */
-	static bool intersects(const geom::Polygon &rectangle,
-			const geom::Geometry &b)
-	{
-		RectangleIntersects rp(rectangle);
-		return rp.intersects(b);
-	}
+    /** \brief
+     * Tests whether a rectangle intersects a given geometry.
+     *
+     * @param rectangle a rectangular Polygon
+     * @param b a Geometry of any type
+     * @return true if the geometries intersect
+     */
+    static bool
+    intersects(const geom::Polygon& rectangle,
+               const geom::Geometry& b)
+    {
+        RectangleIntersects rp(rectangle);
+        return rp.intersects(b);
+    }
 
 };
 

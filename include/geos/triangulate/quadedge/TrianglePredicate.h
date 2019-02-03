@@ -38,73 +38,72 @@ class Coordinate;
  * @author Benjamin Campbell
  *
  */
-class TrianglePredicate
-{
+class TrianglePredicate {
 public:
-  /**
-   * Tests if a point is inside the circle defined by
-   * the triangle with vertices a, b, c (oriented counter-clockwise).
-   * This test uses simple
-   * double-precision arithmetic, and thus may not be robust.
-   *
-   * @param a a vertex of the triangle
-   * @param b a vertex of the triangle
-   * @param c a vertex of the triangle
-   * @param P the point to test
-   * @return true if this point is inside the circle defined by the points a, b, c
-   */
-  static bool isInCircleNonRobust(
-	  const Coordinate &a, const Coordinate &b, const Coordinate &c,
-	  const Coordinate &p);
+    /**
+     * Tests if a point is inside the circle defined by
+     * the triangle with vertices a, b, c (oriented counter-clockwise).
+     * This test uses simple
+     * double-precision arithmetic, and thus may not be robust.
+     *
+     * @param a a vertex of the triangle
+     * @param b a vertex of the triangle
+     * @param c a vertex of the triangle
+     * @param P the point to test
+     * @return true if this point is inside the circle defined by the points a, b, c
+     */
+    static bool isInCircleNonRobust(
+        const Coordinate& a, const Coordinate& b, const Coordinate& c,
+        const Coordinate& p);
 
-  /**
-   * Tests if a point is inside the circle defined by
-   * the triangle with vertices a, b, c (oriented counter-clockwise).
-   * This test uses simple
-   * double-precision arithmetic, and thus is not 10% robust.
-   * However, by using normalization to the origin
-   * it provides improved robustness and increased performance.
-   * <p>
-   * Based on code by J.R.Shewchuk.
-   *
-   *
-   * @param a a vertex of the triangle
-   * @param b a vertex of the triangle
-   * @param c a vertex of the triangle
-   * @param P the point to test
-   * @return true if this point is inside the circle defined by the points a, b, c
-   */
-  static bool isInCircleNormalized(
-	  const Coordinate &a, const Coordinate &b, const Coordinate &c,
-	  const Coordinate &p);
+    /**
+     * Tests if a point is inside the circle defined by
+     * the triangle with vertices a, b, c (oriented counter-clockwise).
+     * This test uses simple
+     * double-precision arithmetic, and thus is not 10% robust.
+     * However, by using normalization to the origin
+     * it provides improved robustness and increased performance.
+     * <p>
+     * Based on code by J.R.Shewchuk.
+     *
+     *
+     * @param a a vertex of the triangle
+     * @param b a vertex of the triangle
+     * @param c a vertex of the triangle
+     * @param P the point to test
+     * @return true if this point is inside the circle defined by the points a, b, c
+     */
+    static bool isInCircleNormalized(
+        const Coordinate& a, const Coordinate& b, const Coordinate& c,
+        const Coordinate& p);
 
 private:
-  /**
-   * Computes twice the area of the oriented triangle (a, b, c), i.e., the area is positive if the
-   * triangle is oriented counterclockwise.
-   *
-   * @param a a vertex of the triangle
-   * @param b a vertex of the triangle
-   * @param c a vertex of the triangle
-   */
-  static double triArea(const Coordinate &a,
-		  const Coordinate &b, const Coordinate &c);
+    /**
+     * Computes twice the area of the oriented triangle (a, b, c), i.e., the area is positive if the
+     * triangle is oriented counterclockwise.
+     *
+     * @param a a vertex of the triangle
+     * @param b a vertex of the triangle
+     * @param c a vertex of the triangle
+     */
+    static double triArea(const Coordinate& a,
+                          const Coordinate& b, const Coordinate& c);
 
 public:
-  /**
-   * Tests if a point is inside the circle defined by
-   * the triangle with vertices a, b, c (oriented counter-clockwise).
-   * This method uses more robust computation.
-   *
-   * @param a a vertex of the triangle
-   * @param b a vertex of the triangle
-   * @param c a vertex of the triangle
-   * @param P the point to test
-   * @return true if this point is inside the circle defined by the points a, b, c
-   */
-  static bool isInCircleRobust(
-	  const Coordinate &a, const Coordinate &b, const Coordinate &c,
-	  const Coordinate &p);
+    /**
+     * Tests if a point is inside the circle defined by
+     * the triangle with vertices a, b, c (oriented counter-clockwise).
+     * This method uses more robust computation.
+     *
+     * @param a a vertex of the triangle
+     * @param b a vertex of the triangle
+     * @param c a vertex of the triangle
+     * @param P the point to test
+     * @return true if this point is inside the circle defined by the points a, b, c
+     */
+    static bool isInCircleRobust(
+        const Coordinate& a, const Coordinate& b, const Coordinate& c,
+        const Coordinate& p);
 } ;
 
 } // namespace geos.geom

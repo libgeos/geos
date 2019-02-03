@@ -28,8 +28,8 @@ namespace prep { // geos.geom.prep
 //
 // public:
 //
-PreparedPolygonContains::PreparedPolygonContains(const PreparedPolygon * const p_prepPoly)
-    : AbstractPreparedPolygonContains( p_prepPoly)
+PreparedPolygonContains::PreparedPolygonContains(const PreparedPolygon* const p_prepPoly)
+    : AbstractPreparedPolygonContains(p_prepPoly)
 {
 }
 
@@ -37,10 +37,10 @@ PreparedPolygonContains::PreparedPolygonContains(const PreparedPolygon * const p
 // protected:
 //
 bool
-PreparedPolygonContains::fullTopologicalPredicate( const geom::Geometry * geom)
+PreparedPolygonContains::fullTopologicalPredicate(const geom::Geometry* geom)
 {
-	bool isContained = prepPoly->getGeometry().contains( geom);
-	return isContained;
+    bool isContained = prepPoly->getGeometry().contains(geom);
+    return isContained;
 }
 
 //

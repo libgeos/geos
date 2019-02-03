@@ -130,7 +130,8 @@ public:
      *
      * @return true if the point lies exactly on a segment
      */
-    bool isOnSegment()
+    bool
+    isOnSegment()
     {
         return isPointOnSegment;
     }

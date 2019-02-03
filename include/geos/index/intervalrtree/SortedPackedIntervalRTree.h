@@ -22,9 +22,9 @@
 
 // forward declarations
 namespace geos {
-	namespace index {
-		class ItemVisitor;
-	}
+namespace index {
+class ItemVisitor;
+}
 }
 
 namespace geos {
@@ -48,44 +48,46 @@ namespace intervalrtree {
  * @author Martin Davis
  *
  */
-class SortedPackedIntervalRTree
-{
+class SortedPackedIntervalRTree {
 private:
-	std::vector<IntervalRTreeLeafNode> leaves;
-	std::vector<IntervalRTreeBranchNode> branches;
-	const IntervalRTreeNode * root = nullptr;
-	int level = 0;
+    std::vector<IntervalRTreeLeafNode> leaves;
+    std::vector<IntervalRTreeBranchNode> branches;
+    const IntervalRTreeNode* root = nullptr;
+    int level = 0;
 
-	void init();
-	void buildLevel( IntervalRTreeNode::ConstVect & src, IntervalRTreeNode::ConstVect & dest);
-	const IntervalRTreeNode * buildTree();
+    void init();
+    void buildLevel(IntervalRTreeNode::ConstVect& src, IntervalRTreeNode::ConstVect& dest);
+    const IntervalRTreeNode* buildTree();
 
 protected:
 public:
-	SortedPackedIntervalRTree() {}
+    SortedPackedIntervalRTree() {}
 
-	SortedPackedIntervalRTree(std::size_t initialCapacity) { leaves.reserve(initialCapacity); }
+    SortedPackedIntervalRTree(std::size_t initialCapacity)
+    {
+        leaves.reserve(initialCapacity);
+    }
 
-	/**
-	 * Adds an item to the index which is associated with the given interval
-	 *
-	 * @param min the lower bound of the item interval
-	 * @param max the upper bound of the item interval
-	 * @param item the item to insert, ownership left to caller
-	 *
-	 * @throw IllegalStateException if the index has already been queried
-	 */
-	void insert( double min, double max, void * item);
+    /**
+     * Adds an item to the index which is associated with the given interval
+     *
+     * @param min the lower bound of the item interval
+     * @param max the upper bound of the item interval
+     * @param item the item to insert, ownership left to caller
+     *
+     * @throw IllegalStateException if the index has already been queried
+     */
+    void insert(double min, double max, void* item);
 
-	/**
-	 * Search for intervals in the index which intersect the given closed interval
-	 * and apply the visitor to them.
-	 *
-	 * @param min the lower bound of the query interval
-	 * @param max the upper bound of the query interval
-	 * @param visitor the visitor to pass any matched items to
-	 */
-	void query( double min, double max, index::ItemVisitor * visitor);
+    /**
+     * Search for intervals in the index which intersect the given closed interval
+     * and apply the visitor to them.
+     *
+     * @param min the lower bound of the query interval
+     * @param max the upper bound of the query interval
+     * @param visitor the visitor to pass any matched items to
+     */
+    void query(double min, double max, index::ItemVisitor* visitor);
 
 };
 

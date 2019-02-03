@@ -41,9 +41,9 @@
 
 // Forward declarations
 namespace geos {
-	namespace simplify {
-		class TaggedLineString;
-	}
+namespace simplify {
+class TaggedLineString;
+}
 }
 
 namespace geos {
@@ -57,59 +57,60 @@ class GEOS_DLL TaggedLinesSimplifier {
 
 public:
 
-	TaggedLinesSimplifier();
+    TaggedLinesSimplifier();
 
-	/** \brief
-	 * Sets the distance tolerance for the simplification.
-	 *
-	 * All vertices in the simplified geometry will be within this
-	 * distance of the original geometry.
-	 *
-	 * @param tolerance the approximation tolerance to use
-	 */
-	void setDistanceTolerance(double tolerance);
+    /** \brief
+     * Sets the distance tolerance for the simplification.
+     *
+     * All vertices in the simplified geometry will be within this
+     * distance of the original geometry.
+     *
+     * @param tolerance the approximation tolerance to use
+     */
+    void setDistanceTolerance(double tolerance);
 
-	/**
-	 * Simplify a set of {@link TaggedLineString}s
-	 *
-	 * @param iterator_type
-	 * 	an iterator, must support assignment, increment,
-	 *      inequality and dereference operators.
-	 *	Dereference operator must return a TaggedLineString*
-	 *
-	 * @param begin iterator to the first element
-	 *              to be simplified.
-	 * @param end an iterator to one-past-last element
-	 *            to be simplified.
-	 */
-	template <class iterator_type>
-	void simplify(
-		iterator_type begin,
-		iterator_type end)
-	{
-		// add lines to the index
-		for (iterator_type it=begin; it != end; ++it) {
-			assert(*it);
-			inputIndex->add(*(*it));
-		}
+    /**
+     * Simplify a set of {@link TaggedLineString}s
+     *
+     * @param iterator_type
+     * 	an iterator, must support assignment, increment,
+     *      inequality and dereference operators.
+     *	Dereference operator must return a TaggedLineString*
+     *
+     * @param begin iterator to the first element
+     *              to be simplified.
+     * @param end an iterator to one-past-last element
+     *            to be simplified.
+     */
+    template <class iterator_type>
+    void
+    simplify(
+        iterator_type begin,
+        iterator_type end)
+    {
+        // add lines to the index
+        for(iterator_type it = begin; it != end; ++it) {
+            assert(*it);
+            inputIndex->add(*(*it));
+        }
 
-		// Simplify lines
-		for (iterator_type it=begin; it != end; ++it) {
-			assert(*it);
-			simplify(*(*it));
-		}
-	}
+        // Simplify lines
+        for(iterator_type it = begin; it != end; ++it) {
+            assert(*it);
+            simplify(*(*it));
+        }
+    }
 
 
 private:
 
-	void simplify(TaggedLineString& line);
+    void simplify(TaggedLineString& line);
 
-	std::unique_ptr<LineSegmentIndex> inputIndex;
+    std::unique_ptr<LineSegmentIndex> inputIndex;
 
-	std::unique_ptr<LineSegmentIndex> outputIndex;
+    std::unique_ptr<LineSegmentIndex> outputIndex;
 
-	std::unique_ptr<TaggedLineStringSimplifier> taggedlineSimplifier;
+    std::unique_ptr<TaggedLineStringSimplifier> taggedlineSimplifier;
 };
 
 } // namespace geos::simplify

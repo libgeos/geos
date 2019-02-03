@@ -43,16 +43,16 @@
 
 // Forward declarations
 namespace geos {
-	namespace geom {
-		class IntersectionMatrix;
-	}
-	namespace geomgraph {
-		class Node;
-		class EdgeEndStar;
-		class EdgeEnd;
-		class Label;
-		class NodeFactory;
-	}
+namespace geom {
+class IntersectionMatrix;
+}
+namespace geomgraph {
+class Node;
+class EdgeEndStar;
+class EdgeEnd;
+class Label;
+class NodeFactory;
+}
 }
 
 namespace geos {
@@ -60,93 +60,94 @@ namespace geomgraph { // geos.geomgraph
 
 /** The node component of a geometry graph */
 class GEOS_DLL Node: public GraphComponent {
-using GraphComponent::setLabel;
+    using GraphComponent::setLabel;
 
 public:
 
-	friend std::ostream& operator<< (std::ostream& os, const Node& node);
+    friend std::ostream& operator<< (std::ostream& os, const Node& node);
 
-	Node(const geom::Coordinate& newCoord, EdgeEndStar* newEdges);
+    Node(const geom::Coordinate& newCoord, EdgeEndStar* newEdges);
 
-	~Node() override;
+    ~Node() override;
 
-	virtual const geom::Coordinate& getCoordinate() const;
+    virtual const geom::Coordinate& getCoordinate() const;
 
-	virtual EdgeEndStar* getEdges();
+    virtual EdgeEndStar* getEdges();
 
-	bool isIsolated() const override;
+    bool isIsolated() const override;
 
-	/** \brief
-	 * Add the edge to the list of edges at this node
-	 */
-	virtual void add(EdgeEnd *e);
+    /** \brief
+     * Add the edge to the list of edges at this node
+     */
+    virtual void add(EdgeEnd* e);
 
-	virtual void mergeLabel(const Node& n);
+    virtual void mergeLabel(const Node& n);
 
-	/** \brief
-	 * To merge labels for two nodes,
-	 * the merged location for each LabelElement is computed.
-	 *
-	 * The location for the corresponding node LabelElement is set
-	 * to the result, as long as the location is non-null.
-	 */
-	virtual void mergeLabel(const Label& label2);
+    /** \brief
+     * To merge labels for two nodes,
+     * the merged location for each LabelElement is computed.
+     *
+     * The location for the corresponding node LabelElement is set
+     * to the result, as long as the location is non-null.
+     */
+    virtual void mergeLabel(const Label& label2);
 
-	virtual void setLabel(int argIndex, int onLocation);
+    virtual void setLabel(int argIndex, int onLocation);
 
-	/** \brief
-	 * Updates the label of a node to BOUNDARY,
-	 * obeying the mod-2 boundaryDetermination rule.
-	 */
-	virtual void setLabelBoundary(int argIndex);
+    /** \brief
+     * Updates the label of a node to BOUNDARY,
+     * obeying the mod-2 boundaryDetermination rule.
+     */
+    virtual void setLabelBoundary(int argIndex);
 
-	/**
-	 * The location for a given eltIndex for a node will be one
-	 * of { null, INTERIOR, BOUNDARY }.
-	 * A node may be on both the boundary and the interior of a geometry;
-	 * in this case, the rule is that the node is considered to be
-	 * in the boundary.
-	 * The merged location is the maximum of the two input values.
-	 */
-	virtual int computeMergedLocation(const Label& label2, int eltIndex);
+    /**
+     * The location for a given eltIndex for a node will be one
+     * of { null, INTERIOR, BOUNDARY }.
+     * A node may be on both the boundary and the interior of a geometry;
+     * in this case, the rule is that the node is considered to be
+     * in the boundary.
+     * The merged location is the maximum of the two input values.
+     */
+    virtual int computeMergedLocation(const Label& label2, int eltIndex);
 
-	virtual std::string print();
+    virtual std::string print();
 
-	virtual const std::vector<double> &getZ() const;
+    virtual const std::vector<double>& getZ() const;
 
-	virtual void addZ(double);
+    virtual void addZ(double);
 
-	/** \brief
-	 * Tests whether any incident edge is flagged as
-	 * being in the result.
-	 *
-	 * This test can be used to determine if the node is in the result,
-	 * since if any incident edge is in the result, the node must be in
-	 * the result as well.
-	 *
-	 * @return <code>true</code> if any indicident edge in the in
-	 *         the result
-	 */
-	virtual bool isIncidentEdgeInResult() const;
+    /** \brief
+     * Tests whether any incident edge is flagged as
+     * being in the result.
+     *
+     * This test can be used to determine if the node is in the result,
+     * since if any incident edge is in the result, the node must be in
+     * the result as well.
+     *
+     * @return <code>true</code> if any indicident edge in the in
+     *         the result
+     */
+    virtual bool isIncidentEdgeInResult() const;
 
 protected:
 
-	void testInvariant() const;
+    void testInvariant() const;
 
-	geom::Coordinate coord;
+    geom::Coordinate coord;
 
-	EdgeEndStar* edges;
+    EdgeEndStar* edges;
 
-	/** \brief
-	 * Basic nodes do not compute IMs
-	 */
-	void computeIM(geom::IntersectionMatrix& /*im*/) override {}
+    /** \brief
+     * Basic nodes do not compute IMs
+     */
+    void
+    computeIM(geom::IntersectionMatrix& /*im*/) override {}
 
 private:
 
-	std::vector<double> zvals;
+    std::vector<double> zvals;
 
-	double ztot;
+    double ztot;
 
 };
 
@@ -156,31 +157,28 @@ inline void
 Node::testInvariant() const
 {
 #ifndef NDEBUG
-	if (edges)
-	{
-		// Each EdgeEnd in the star has this Node's
-		// coordinate as first coordinate
-		for (EdgeEndStar::iterator
-				it=edges->begin(), itEnd=edges->end();
-				it != itEnd; it++)
-		{
-			EdgeEnd* e=*it;
-			assert(e);
-			assert(e->getCoordinate().equals2D(coord));
-		}
-	}
+    if(edges) {
+        // Each EdgeEnd in the star has this Node's
+        // coordinate as first coordinate
+        for(EdgeEndStar::iterator
+                it = edges->begin(), itEnd = edges->end();
+                it != itEnd; it++) {
+            EdgeEnd* e = *it;
+            assert(e);
+            assert(e->getCoordinate().equals2D(coord));
+        }
+    }
 
 #if 0 // We can't rely on numerical stability with FP computations
-	// ztot is the sum of doubnle sin zvals vector
-	double ztot_check=0.0;
-	for (std::vector<double>::const_iterator
-			i = zvals.begin(), e = zvals.end();
-			i != e;
-			i++)
-	{
-		ztot_check += *i;
-	}
-	assert(ztot_check == ztot);
+    // ztot is the sum of doubnle sin zvals vector
+    double ztot_check = 0.0;
+    for(std::vector<double>::const_iterator
+            i = zvals.begin(), e = zvals.end();
+            i != e;
+            i++) {
+        ztot_check += *i;
+    }
+    assert(ztot_check == ztot);
 #endif // 0
 
 #endif

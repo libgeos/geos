@@ -19,83 +19,84 @@
 
 using namespace geos::algorithm;
 
-namespace tut
+namespace tut {
+//
+// Test Group
+//
+
+struct test_signedarea_data {
+    typedef std::unique_ptr<geos::geom::Geometry> GeometryPtr;
+
+    geos::geom::CoordinateSequence* cs_;
+    geos::io::WKTReader reader_;
+    geos::io::WKBReader breader_;
+
+    test_signedarea_data()
+        : cs_(nullptr)
+    {
+        assert(nullptr == cs_);
+    }
+
+    ~test_signedarea_data()
+    {
+        delete cs_;
+        cs_ = nullptr;
+    }
+};
+
+typedef test_group<test_signedarea_data> group;
+typedef group::object object;
+
+group test_signedarea_group("geos::algorithm::Area::ofRingSigned");
+
+//
+// Test Cases
+//
+
+// 1 - clockwise oriented
+template<>
+template<>
+void object::test<1>
+()
 {
-    //
-    // Test Group
-    //
+    const std::string wkt("POLYGON ((60 180, 140 240, 140 240, 140 240, 200 180, 120 120, 60 180))");
+    GeometryPtr geom(reader_.read(wkt));
 
-    struct test_signedarea_data
-    {
-	    typedef std::unique_ptr<geos::geom::Geometry> GeometryPtr;
+    cs_ = geom->getCoordinates();
+    double area = Area::ofRingSigned(cs_);
 
-        geos::geom::CoordinateSequence* cs_;
-        geos::io::WKTReader reader_;
-        geos::io::WKBReader breader_;
+    ensure_equals(area, 8400);
+}
 
-        test_signedarea_data()
-            : cs_(nullptr)
-        {
-            assert(nullptr == cs_);
-        }
+// 2 - counter-clockwise oriented
+template<>
+template<>
+void object::test<2>
+()
+{
+    const std::string wkt("POLYGON ((60 180, 140 120, 100 180, 140 240, 60 180))");
+    GeometryPtr geom(reader_.read(wkt));
 
-        ~test_signedarea_data()
-        {
-            delete cs_;
-            cs_ = nullptr;
-        }
-    };
+    cs_ = geom->getCoordinates();
+    double area = Area::ofRingSigned(cs_);
 
-    typedef test_group<test_signedarea_data> group;
-    typedef group::object object;
+    ensure_equals(area, -2400);
+}
 
-    group test_signedarea_group("geos::algorithm::Area::ofRingSigned");
+// 3 - Test the same polygon as in test No 2 but with duplicated top point
+template<>
+template<>
+void object::test<3>
+()
+{
+    const std::string wkt("POLYGON ((60 180, 140 120, 100 180, 140 240, 140 240, 60 180))");
+    GeometryPtr geom(reader_.read(wkt));
 
-    //
-    // Test Cases
-    //
+    cs_ = geom->getCoordinates();
+    double area = Area::ofRingSigned(cs_);
 
-    // 1 - clockwise oriented
-    template<>
-    template<>
-    void object::test<1>()
-    {
-        const std::string wkt("POLYGON ((60 180, 140 240, 140 240, 140 240, 200 180, 120 120, 60 180))");
-        GeometryPtr geom(reader_.read(wkt));
-
-        cs_ = geom->getCoordinates();
-        double area = Area::ofRingSigned(cs_);
-
-        ensure_equals( area, 8400 );
-    }
-
-    // 2 - counter-clockwise oriented
-    template<>
-    template<>
-    void object::test<2>()
-    {
-        const std::string wkt("POLYGON ((60 180, 140 120, 100 180, 140 240, 60 180))");
-        GeometryPtr geom(reader_.read(wkt));
-
-        cs_ = geom->getCoordinates();
-        double area = Area::ofRingSigned(cs_);
-
-        ensure_equals( area, -2400 );
-    }
-
-    // 3 - Test the same polygon as in test No 2 but with duplicated top point
-    template<>
-    template<>
-    void object::test<3>()
-    {
-        const std::string wkt("POLYGON ((60 180, 140 120, 100 180, 140 240, 140 240, 60 180))");
-		GeometryPtr geom(reader_.read(wkt));
-
-        cs_ = geom->getCoordinates();
-        double area = Area::ofRingSigned(cs_);
-
-        ensure_equals( area, -2400 );
-    }
+    ensure_equals(area, -2400);
+}
 
 
 } // namespace tut

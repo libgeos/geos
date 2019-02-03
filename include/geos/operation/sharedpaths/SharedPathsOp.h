@@ -32,11 +32,11 @@
 
 // Forward declarations
 namespace geos {
-  namespace geom {
-    class LineString;
-    class Geometry;
-    class GeometryFactory;
-  }
+namespace geom {
+class LineString;
+class Geometry;
+class GeometryFactory;
+}
 }
 
 
@@ -61,96 +61,97 @@ namespace sharedpaths { // geos.operation.sharedpaths
  * e Postgis (CIG 0494241492)"
  *
  */
-class GEOS_DLL SharedPathsOp
-{
+class GEOS_DLL SharedPathsOp {
 public:
 
-  /// LineString vector (list of edges)
-  typedef std::vector<geom::LineString*> PathList;
+    /// LineString vector (list of edges)
+    typedef std::vector<geom::LineString*> PathList;
 
-  /// Find paths shared between two linear geometries
-  //
-  /// @param g1
-  ///   First geometry. Must be linear.
-  ///
-  /// @param g2
-  ///   Second geometry. Must be linear.
-  ///
-  /// @param sameDir
-  ///   Shared edges having the same direction are pushed
-  ///   onto this vector. They'll be of type LineString.
-  ///   Ownership of the edges is tranferred.
-  ///
-  /// @param oppositeDir
-  ///   Shared edges having the opposite direction are pushed
-  ///   onto this vector. They'll be of type geom::LineString.
-  ///   Ownership of the edges is tranferred.
-  ///
-  static void sharedPathsOp(const geom::Geometry& g1,
-                            const geom::Geometry& g2,
-                            PathList& sameDirection,
-                            PathList& oppositeDirection);
+    /// Find paths shared between two linear geometries
+    //
+    /// @param g1
+    ///   First geometry. Must be linear.
+    ///
+    /// @param g2
+    ///   Second geometry. Must be linear.
+    ///
+    /// @param sameDir
+    ///   Shared edges having the same direction are pushed
+    ///   onto this vector. They'll be of type LineString.
+    ///   Ownership of the edges is tranferred.
+    ///
+    /// @param oppositeDir
+    ///   Shared edges having the opposite direction are pushed
+    ///   onto this vector. They'll be of type geom::LineString.
+    ///   Ownership of the edges is tranferred.
+    ///
+    static void sharedPathsOp(const geom::Geometry& g1,
+                              const geom::Geometry& g2,
+                              PathList& sameDirection,
+                              PathList& oppositeDirection);
 
-  /// Constructor
-  //
-  /// @param g1
-  ///   First geometry. Must be linear.
-  ///
-  /// @param g2
-  ///   Second geometry. Must be linear.
-  ///
-  SharedPathsOp(const geom::Geometry& g1, const geom::Geometry& g2);
+    /// Constructor
+    //
+    /// @param g1
+    ///   First geometry. Must be linear.
+    ///
+    /// @param g2
+    ///   Second geometry. Must be linear.
+    ///
+    SharedPathsOp(const geom::Geometry& g1, const geom::Geometry& g2);
 
-  /// Get shared paths
-  //
-  /// @param sameDir
-  ///   Shared edges having the same direction are pushed
-  ///   onto this vector. They'll be of type geom::LineString.
-  ///   Ownership of the edges is tranferred.
-  ///
-  /// @param oppositeDir
-  ///   Shared edges having the opposite direction are pushed
-  ///   onto this vector. They'll be of type geom::LineString.
-  ///   Ownership of the edges is tranferred.
-  ///
-  void getSharedPaths(PathList& sameDirection, PathList& oppositeDirection);
+    /// Get shared paths
+    //
+    /// @param sameDir
+    ///   Shared edges having the same direction are pushed
+    ///   onto this vector. They'll be of type geom::LineString.
+    ///   Ownership of the edges is tranferred.
+    ///
+    /// @param oppositeDir
+    ///   Shared edges having the opposite direction are pushed
+    ///   onto this vector. They'll be of type geom::LineString.
+    ///   Ownership of the edges is tranferred.
+    ///
+    void getSharedPaths(PathList& sameDirection, PathList& oppositeDirection);
 
-  /// Delete all edges in the list
-  static void clearEdges(PathList& from);
+    /// Delete all edges in the list
+    static void clearEdges(PathList& from);
 
 private:
 
-  /// Get all the linear intersections
-  //
-  /// Ownership of linestring pushed to the given container
-  /// is transferred to caller. See clearEdges for a deep
-  /// release if you need one.
-  ///
-  void findLinearIntersections(PathList& to);
+    /// Get all the linear intersections
+    //
+    /// Ownership of linestring pushed to the given container
+    /// is transferred to caller. See clearEdges for a deep
+    /// release if you need one.
+    ///
+    void findLinearIntersections(PathList& to);
 
-  /// Check if the given edge goes forward or backward on the given line.
-  //
-  /// PRECONDITION: It is assumed the edge fully lays on the geometry
-  ///
-  bool isForward(const geom::LineString& edge,
-                 const geom::Geometry& geom);
+    /// Check if the given edge goes forward or backward on the given line.
+    //
+    /// PRECONDITION: It is assumed the edge fully lays on the geometry
+    ///
+    bool isForward(const geom::LineString& edge,
+                   const geom::Geometry& geom);
 
-  /// Check if the given edge goes in the same direction over
-  /// the two geometries.
-  bool isSameDirection(const geom::LineString& edge) {
-    return (isForward(edge, _g1) == isForward(edge, _g2));
-  }
+    /// Check if the given edge goes in the same direction over
+    /// the two geometries.
+    bool
+    isSameDirection(const geom::LineString& edge)
+    {
+        return (isForward(edge, _g1) == isForward(edge, _g2));
+    }
 
-  /// Throw an IllegalArgumentException if the geom is not linear
-  void checkLinealInput(const geom::Geometry& g);
+    /// Throw an IllegalArgumentException if the geom is not linear
+    void checkLinealInput(const geom::Geometry& g);
 
-  const geom::Geometry& _g1;
-  const geom::Geometry& _g2;
-  const geom::GeometryFactory& _gf;
+    const geom::Geometry& _g1;
+    const geom::Geometry& _g2;
+    const geom::GeometryFactory& _gf;
 
-  // Declare type as noncopyable
-  SharedPathsOp(const SharedPathsOp& other) = delete;
-  SharedPathsOp& operator=(const SharedPathsOp& rhs) = delete;
+    // Declare type as noncopyable
+    SharedPathsOp(const SharedPathsOp& other) = delete;
+    SharedPathsOp& operator=(const SharedPathsOp& rhs) = delete;
 
 };
 
