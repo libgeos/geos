@@ -73,13 +73,30 @@ RelateComputer::~RelateComputer()
 IntersectionMatrix*
 RelateComputer::computeIM()
 {
-	// since Geometries are finite and embedded in a 2-D space, the EE element must always be 2
-	im->set(Location::EXTERIOR,Location::EXTERIOR,2);
-	// if the Geometries don't overlap there is nothing to do
-	if (!GeometryCollection::envelopeIntersects((*arg)[0]->getGeometry(), (*arg)[1]->getGeometry())) {
-		computeDisjointIM(im.get());
-		return im.release();
-	}
+    // since Geometries are finite and embedded in a 2-D space, the EE element must always be 2
+    im->set(Location::EXTERIOR, Location::EXTERIOR, 2);
+    // if the Geometries don't overlap there is nothing to do
+    const Geometry* geom1 = (*arg)[0]->getGeometry();
+    const Geometry* geom2 = (*arg)[1]->getGeometry();
+    if (dynamic_cast<const geom::Puntal *>(geom1) && dynamic_cast<const geom::Puntal *>(geom2))
+    {
+        //Puntal is already handled efficiently so no need to individually check the parts of it
+        const Envelope *e1 = geom1->getEnvelopeInternal();
+        const Envelope *e2 = geom2->getEnvelopeInternal();
+        if (!e1->intersects(e2))
+        {
+            computeDisjointIM(im.get());
+            return im.release();
+        }
+    }
+    else
+    {
+        if (!GeometryCollection::envelopeIntersects(geom1, geom2))
+        {
+            computeDisjointIM(im.get());
+            return im.release();
+        }
+    }
 
 #if GEOS_DEBUG
 	std::cerr << "RelateComputer::computeIM: "

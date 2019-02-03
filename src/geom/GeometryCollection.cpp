@@ -402,51 +402,47 @@ GeometryCollection::reverse() const
 bool
 GeometryCollection::intersectsWithEnvelope(const Envelope &env) const
 {
-	for (size_t i = 0; i < geometries->size(); ++i)
-	{
-		if ((*geometries)[i]->getEnvelopeInternal()->intersects(env))
-			return true;
-	}
-	return false;
+    for (size_t i = 0; i < geometries->size(); ++i)
+    {
+        if ((*geometries)[i]->getEnvelopeInternal()->intersects(env))
+            return true;
+    }
+    return false;
 }
 
 bool
 GeometryCollection::envelopeIntersects(const Geometry *geom1, const Geometry *geom2)
 {
-	const Envelope *e1 = geom1->getEnvelopeInternal();
-	const Envelope *e2 = geom2->getEnvelopeInternal();
+    const Envelope *e1 = geom1->getEnvelopeInternal();
+    const Envelope *e2 = geom2->getEnvelopeInternal();
 
-	if (!e1->intersects(e2)) return false;
+    if (!e1->intersects(e2)) return false;
 
-	const GeometryCollection *collection1 = dynamic_cast<const GeometryCollection *>(geom1);
-	const GeometryCollection *collection2 = dynamic_cast<const GeometryCollection *>(geom2);
+    const GeometryCollection *collection1 = dynamic_cast<const GeometryCollection *>(geom1);
+    const GeometryCollection *collection2 = dynamic_cast<const GeometryCollection *>(geom2);
 
-	if (!collection1 && !collection2) return true; //no further tests needed, e1->intersects(e2) is true so return true
+    if (!collection1 && !collection2) return true; //no further tests needed, e1->intersects(e2) is true so return true
 
-	//test if multigeometries have intersecting envelopes
-	if (collection1 && collection2)
-	{
-		bool intersectionsFound = false;
-		for (size_t i = 0; i < collection1->geometries->size(); ++i)
-		{
-			const Envelope* partEnv = (*collection1->geometries)[i]->getEnvelopeInternal();
-			if (e2->intersects(partEnv) && collection2->intersectsWithEnvelope(*partEnv))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	else
-		if (collection1)
-		{
-			return collection1->intersectsWithEnvelope(*e2);
-		}
-		else
-			//implied by containig if: if (collection2)
-			{
-				return collection2->intersectsWithEnvelope(*e1);
-			}
+    //test if multigeometries have intersecting envelopes
+    if (collection1 && collection2)
+    {
+        Envelope intersection;
+        if (e1->intersection(*e2, intersection))
+        {
+            return collection1->intersectsWithEnvelope(intersection) || collection2->intersectsWithEnvelope(intersection);
+        }
+        return false;
+    }
+    else
+        if (collection1)
+        {
+            return collection1->intersectsWithEnvelope(*e2);
+        }
+        else
+            //implied by containig if: if (collection2)
+            {
+                return collection2->intersectsWithEnvelope(*e1);
+            }
 }
 
 } // namespace geos::geom

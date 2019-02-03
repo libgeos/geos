@@ -41,7 +41,15 @@ BasicPreparedGeometry::setGeometry( const geom::Geometry * geom )
 bool
 BasicPreparedGeometry::envelopesIntersect( const geom::Geometry* g) const
 {
-	return GeometryCollection::envelopeIntersects(baseGeom, g);
+    if (dynamic_cast<const geom::Puntal *>(g))
+    {
+        //Puntal is already handled efficiently so no need to individually check the parts of it
+        return baseGeom->getEnvelopeInternal()->intersects(g->getEnvelopeInternal());
+    }
+    else
+    {
+        return GeometryCollection::envelopeIntersects(baseGeom, g);
+    }
 }
 
 bool
