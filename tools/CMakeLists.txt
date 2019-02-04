@@ -6,7 +6,7 @@
 #
 # This is free software; you can redistribute and/or modify it under
 # the terms of the GNU Lesser General Public Licence as published
-# by the Free Software Foundation. 
+# by the Free Software Foundation.
 # See the COPYING file for more information.
 #
 #################################################################################
@@ -26,11 +26,11 @@ if(UNIX OR MINGW)
 
   set(exec_prefix ${prefix}/bin)
   set(libdir ${prefix}/lib)
-  
+
   if(installdest)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/geos-config.in
                    ${CMAKE_CURRENT_BINARY_DIR}/geos-config @ONLY)
-  
+
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/geos-config
       DESTINATION ${installdest}
       PERMISSIONS
@@ -38,3 +38,4 @@ if(UNIX OR MINGW)
 endif()
 
 endif()
+add_subdirectory(astyle)

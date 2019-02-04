@@ -3,3 +3,5 @@
 bin_SCRIPTS = geos-config
 
 EXTRA_DIST = CMakeLists.txt repo_revision.sh
+
+SUBDIRS = astyle

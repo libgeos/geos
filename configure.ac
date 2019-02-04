@@ -502,6 +502,7 @@ AC_OUTPUT([
 	tests/thread/Makefile
 	tools/Makefile
 	tools/geos-config
+	tools/astyle/Makefile
 	])
 
 dnl -- echo "---------------------------------------"
