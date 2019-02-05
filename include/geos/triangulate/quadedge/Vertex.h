@@ -78,6 +78,7 @@ public:
     Vertex(const geom::Coordinate& _p);
 
     Vertex();
+    virtual ~Vertex() {};
 
     inline double
     getX() const
