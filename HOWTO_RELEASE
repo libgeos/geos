@@ -40,6 +40,8 @@
        - CHANGE the line: set(GEOS_VERSION_PATCH "${GEOS_VERSION_PATCH}dev")
        - CAPI_INTERFACE_*
 
+    - In README.md make sure all links are pointing at new bot branches
+
 12. Update wiki page https://trac.osgeo.org/geos/ at Download section
     - Add latest release
     - Remove previos patch level release (if any)
