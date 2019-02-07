@@ -21,16 +21,18 @@ Building GEOS requires a C++11 compiler
 
 ### Unix
 
-#### Using Autotools:
+#### Gen Buildchain
+
+##### Using Autotools:
 
     ./autogen.sh  # in ${srcdir}, if obtained from SVN or GIT
     (mkdir obj && cd obj && ../configure)
 
-#### Using CMake:
+##### Using CMake:
 
     (mkdir build && cd build && cmake ..)
 
-#### Either Autotools or CMake
+#### Build (both Autotools and CMake)
 
     make
     make check
@@ -101,22 +103,25 @@ Basic usage examples can be found in `doc/example.cpp`.
 
 ### Scripting language bindings
 
+#### Ruby
 Ruby bindings are fully supported. To build, use the `--enable-ruby` option
 when configuring:
 
     ./configure .. --enable-ruby
 
+#### PHP
 Since version 3.6.0 PHP bindings are not included in the core
 library anymore but available as a separate project:
 
 * https://git.osgeo.org/gitea/geos/php-geos
 
+#### Python
 Since version 3.0, the Python bindings are unsupported. Recommended options:
 
  1. Become or recruit a new maintainer.
  2. Use [Shapely](http://pypi.python.org/pypi/Shapely) with Python
     versions 2.4 or greater.
- 3. Simply call functions from `libgeos_c` via Python ctypes.
+ 3. Call functions from `libgeos_c` via Python ctypes.
 
 ## Documentation
 
