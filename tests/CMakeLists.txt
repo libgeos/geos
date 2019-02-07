@@ -14,4 +14,6 @@
 add_subdirectory(unit)
 add_subdirectory(xmltester)
 add_subdirectory(bigtest)
-add_subdirectory(perf)
+
+# don't run perf tests by default
+#add_subdirectory(perf)
