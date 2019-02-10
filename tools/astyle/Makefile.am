@@ -15,10 +15,6 @@ noinst_PROGRAMS = astyle
 #check_PROGRAMS =
 #bin_PROGRAMS = astyle
 
-geos_unit_LDADD = \
-	$(NULL)
-
-
 astyle_SOURCES = \
 	ASBeautifier.cpp \
 	ASEnhancer.cpp \
