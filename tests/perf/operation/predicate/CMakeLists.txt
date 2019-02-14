@@ -11,7 +11,6 @@
 #
 #################################################################################
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/io/markup)
 
 add_executable(perf_rectangle_intersects RectangleIntersectsPerfTest.cpp)
 

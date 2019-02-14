@@ -13,6 +13,5 @@ IteratedBufferStressTest_SOURCES = IteratedBufferStressTest.cpp
 IteratedBufferStressTest_LDADD = $(LIBS)
 
 AM_CPPFLAGS = -I$(top_srcdir)/include
-AM_CPPFLAGS += -I$(top_srcdir)/src/io/markup
 
 EXTRA_DIST = CMakeLists.txt

@@ -11,8 +11,6 @@
 #
 #################################################################################
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/io/markup)
-
 add_executable(perf_iterated_buffer IteratedBufferStressTest.cpp)
 
 target_link_libraries(perf_iterated_buffer geos)

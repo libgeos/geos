@@ -17,7 +17,6 @@ set(STATUS_RESULT "OFF")
 if(GEOS_ENABLE_TESTS)
 
   include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/io/markup)
 
   add_executable(test_bug234 bug234.cpp)
 
