@@ -162,7 +162,7 @@ MonotoneChain::computeOverlaps(size_t start0, size_t end0,
 
 /*private*/
 bool
-MonotoneChain::overlaps(size_t start0, size_t end0, const MonotoneChain& mc, int start1, size_t end1)
+MonotoneChain::overlaps(size_t start0, size_t end0, const MonotoneChain& mc, size_t start1, size_t end1)
 {
     return Envelope::intersects(pts.getAt(start0), pts.getAt(end0),
                                 mc.pts.getAt(start1), mc.pts.getAt(end1));
