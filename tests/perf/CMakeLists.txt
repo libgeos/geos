@@ -22,8 +22,7 @@ if(GEOS_ENABLE_TESTS)
 
   target_link_libraries(perf_class_sizes geos)
 
-  add_test(perf_class_sizes
-    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/perf_class_sizes)
+#  add_test(perf_class_sizes ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/perf_class_sizes)
 
   add_subdirectory(operation)
   add_subdirectory(capi)
