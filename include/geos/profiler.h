@@ -112,6 +112,9 @@ public:
     /** \brief Return total timing */
     double getTot() const;
 
+    /** \brief Return total timing */
+    std::string getTotFormatted() const;
+
     /** \brief Return average timing */
     double getAvg() const;
 
