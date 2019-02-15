@@ -58,6 +58,19 @@ Profile::getTot() const
     return totaltime;
 }
 
+std::string
+Profile::getTotFormatted() const
+{
+    long usec = (long) totaltime;
+    std::string fmt = to_string(usec);
+    int insertPosition = fmt.length() - 3;
+    while (insertPosition > 0) {
+        fmt.insert(insertPosition, ",");
+        insertPosition-=3;
+    }
+    return fmt + " usec";
+}
+
 size_t
 Profile::getNumTimings() const
 {
