@@ -50,7 +50,7 @@ public:
     test(int nPts)
     {
         Coordinate origin(ORG_X, ORG_Y);
-        std::unique_ptr<Polygon> sinePoly = 
+        std::unique_ptr<Polygon> sinePoly =
             createSineStar(origin, SIZE, nPts);
 
         /**
@@ -80,7 +80,7 @@ private:
     PrecisionModel pm;
     GeometryFactory::Ptr fact;
 
-    void 
+    void
     showHeader() {
         cout << "Interior Point Area perf test" << endl;
         cout << "# Iterations: " << N_ITER << endl;
@@ -88,7 +88,7 @@ private:
                 << ORG_X << ", " << ORG_Y
                 << ")  size: " << SIZE
                 << "  # arms: " << N_ARMS
-                << "  arm ratio: " << ARM_RATIO 
+                << "  arm ratio: " << ARM_RATIO
                 << endl;
     }
 
