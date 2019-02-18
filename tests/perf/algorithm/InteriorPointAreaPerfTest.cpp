@@ -84,10 +84,10 @@ private:
     showHeader() {
         cout << "Interior Point Area perf test" << endl;
         cout << "# Iterations: " << N_ITER << endl;
-        cout << "SineStar: origin: (" 
-                << ORG_X << ", " << ORG_Y 
+        cout << "SineStar: origin: ("
+                << ORG_X << ", " << ORG_Y
                 << ")  size: " << SIZE
-                << "  # arms: " << N_ARMS 
+                << "  # arms: " << N_ARMS
                 << "  arm ratio: " << ARM_RATIO 
                 << endl;
     }
