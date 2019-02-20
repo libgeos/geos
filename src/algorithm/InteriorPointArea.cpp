@@ -29,6 +29,7 @@
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/util/Interrupt.h>
 
+#include <algorithm>
 #include <vector>
 #include <typeinfo>
 #include <memory> // for unique_ptr
