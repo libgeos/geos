@@ -59,7 +59,8 @@ public:
          * algorithm, and provides a more realistic test.
          */
         using geos::precision::SimpleGeometryPrecisionReducer;
-        PrecisionModel p_pm(SIZE);
+        double scale = nPts / SIZE;
+        PrecisionModel p_pm(scale);
         SimpleGeometryPrecisionReducer reducer(&p_pm);
         std::unique_ptr<Geometry> sinePolyCrinkly(reducer.reduce(sinePoly.get()));
         sinePoly.reset();
@@ -106,7 +107,6 @@ private:
 
         sw.stop();
         cout << poly.getNumPoints() << " points: " << sw.getTotFormatted() << endl;
-
     }
 
     std::unique_ptr<Polygon>
@@ -131,6 +131,7 @@ main()
 {
     InteriorPointAreaPerfTest tester;
 
+    tester.test(100);
     tester.test(1000);
     tester.test(10000);
     tester.test(100000);

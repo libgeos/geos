@@ -3,6 +3,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
+ * Copyright (C) 2019 Martin Davis <mtnclimb@gmail.com>
  * Copyright (C) 2011      Sandro Santilli <strk@kbt.io>
  *
  * This is free software; you can redistribute and/or modify it under
@@ -55,29 +56,24 @@ group test_interiorpointarea_group("geos::algorithm::InteriorPointArea");
 //
 
 // http://trac.osgeo.org/geos/ticket/475
-// This is a test for a memory leak more than anything else
+// This test no longer throws, since invalid inputs are now handled
 template<>
 template<>
 void object::test<1>
 ()
 {
-    Coordinate centroid;
+    Coordinate result;
 
-    // this polygon is a typical hourglass-shape with a self intersection
+    // invalid polygon - classic hourglass-shape with a self intersection
     // without a node
     geom.reset(reader.read("POLYGON((6 54, 15 54, 6 47, 15 47, 6 54))"));
 
-    bool threw = false;
+    InteriorPointArea interiorPointArea(geom.get());
+    interiorPointArea.getInteriorPoint(result);
 
-    try {
-        InteriorPointArea interior_builder(geom.get());
-        interior_builder.getInteriorPoint(centroid);
-    }
-    catch(...) {
-        threw = true;
-    }
+    geos::geom::Coordinate expected(6, 54);
 
-    ensure(threw);
+    ensure_equals(result, expected);
 }
 
 } // namespace tut

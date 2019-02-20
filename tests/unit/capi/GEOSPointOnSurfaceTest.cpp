@@ -150,7 +150,7 @@ void object::test<4>
 
     wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
 
-    ensure_equals(std::string(wkt_), std::string("POINT (56.528917 25.210417)"));
+    ensure_equals(std::string(wkt_), std::string("POINT (56.528667 25.210167)"));
 
 }
 
