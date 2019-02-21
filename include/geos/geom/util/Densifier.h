@@ -73,9 +73,9 @@ private:
     public:
         DensifyTransformer(double distanceTolerance);
         double distanceTolerance;
-        CoordinateSequence::Ptr transformCoordinates(const CoordinateSequence* coords, const Geometry* parent);
-        Geometry::Ptr transformPolygon(const Polygon* geom, const Geometry* parent);
-        Geometry::Ptr transformMultiPolygon(const MultiPolygon* geom, const Geometry* parent);
+        CoordinateSequence::Ptr transformCoordinates(const CoordinateSequence* coords, const Geometry* parent) override;
+        Geometry::Ptr transformPolygon(const Polygon* geom, const Geometry* parent) override;
+        Geometry::Ptr transformMultiPolygon(const MultiPolygon* geom, const Geometry* parent) override;
         Geometry* createValidArea(const Geometry* roughAreaGeom);
     };
 
