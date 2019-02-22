@@ -20,82 +20,122 @@ matrix:
   fast_finish: true
   include:
     - os: linux
+      cache:
+        apt: true
+        directories:
+          - $HOME/.ccache
       addons:
         apt:
           sources: *sources
-          packages: ['g++-7','cmake']
+          packages: ['g++-7','cmake','ccache']
       env:
         - E="TOOL=cmake && CXX=g++-7 && ARCH=-m64 && CC=gcc-7"
 
     - os: linux
+      cache:
+        apt: true
+        directories:
+          - $HOME/.ccache
       addons:
         apt:
           sources: *sources
-          packages: ['g++-7']
+          packages: ['g++-7','ccache']
       env:
         - E="TOOL=autotools && CXX=g++-7 && ARCH=-m64 && CC=gcc-7"
 
     - os: linux
+      cache:
+        apt: true
+        directories:
+          - $HOME/.ccache
       addons:
         apt:
           sources: *sources
-          packages: ['g++-7-multilib','gcc-7-multilib','g++-multilib','gcc-multilib']
+          packages: ['g++-7-multilib','gcc-7-multilib','g++-multilib','gcc-multilib','ccache']
       env:
         - E="TOOL=autotools && CXX=g++-7 && ARCH=-m32 && CC=gcc-7"
 
     - os: linux
+      cache:
+        apt: true
+        directories:
+          - $HOME/.ccache
       addons:
         apt:
           sources: *sources
-          packages: ['g++-4.8','cmake']
+          packages: ['g++-4.8','cmake','ccache']
       env:
         - E="TOOL=cmake && CXX=g++-4.8 && ARCH=-m64 && CC=gcc-4.8"
 
     - os: linux
+      cache:
+        apt: true
+        directories:
+          - $HOME/.ccache
       addons:
         apt:
           sources: *sources
-          packages: ['g++-4.8']
+          packages: ['g++-4.8','ccache']
       env:
         - E="TOOL=autotools && CXX=g++-4.8 && ARCH=-m64 && CC=gcc-4.8"
 
     - os: linux
+      cache:
+        apt: true
+        directories:
+          - $HOME/.ccache
       addons:
         apt:
           sources: *sources
-          packages: ['g++-4.8-multilib','gcc-4.8-multilib','g++-multilib','gcc-multilib']
+          packages: ['g++-4.8-multilib','gcc-4.8-multilib','g++-multilib','gcc-multilib','ccache']
       env:
         - E="TOOL=autotools && CXX=g++-4.8 && ARCH=-m32 && CC=gcc-4.8"
 
     - os: linux
+      cache:
+        apt: true
+        directories:
+          - $HOME/.ccache
       addons:
         apt:
           sources: *sources
-          packages: ['clang-3.9','cmake']
+          packages: ['clang-3.9','cmake','ccache']
       env:
         - E="TOOL=cmake && CXX=clang++-3.9 && ARCH=-m64 && CC=clang-3.9"
 
     - os: linux
+      cache:
+        apt: true
+        directories:
+          - $HOME/.ccache
       addons:
         apt:
           sources: *sources
-          packages: ['clang-3.9']
+          packages: ['clang-3.9','ccache']
       env:
         - E="TOOL=autotools && CXX=clang++-3.9 && ARCH=-m64 && CC=clang-3.9"
 
     - os: linux
+      cache:
+        apt: true
+        directories:
+          - $HOME/.ccache
       addons:
         apt:
           sources: *sources
-          packages: ['clang']
+          packages: ['clang','ccache']
       env:
         - E="TOOL=autotools && CXX=clang++ && ARCH=-m64 && CC=clang"
 
     - os: linux
+      cache:
+        apt: true
+        directories:
+          - $HOME/.ccache
       addons:
         apt:
           sources: *sources
-          packages: ['clang','cmake']
+          packages: ['clang','cmake','ccache']
       env:
         - E="TOOL=cmake && CXX=clang++ && ARCH=-m64 && CC=clang"
 
@@ -104,6 +144,7 @@ before_install:
   - export CXXFLAGS=${ARCH}
   - export CFLAGS=${ARCH}
   - export GEOS_BUILD_TOOL=${TOOL}
+  - export CXX="ccache ${CXX}"
   - ${CXX} --version
 
 script: ./tools/ci/script.sh
