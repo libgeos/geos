@@ -493,6 +493,7 @@ AC_OUTPUT([
 	tests/bigtest/Makefile
 	tests/unit/Makefile
 	tests/perf/Makefile
+	tests/perf/algorithm/Makefile
 	tests/perf/operation/Makefile
 	tests/perf/operation/buffer/Makefile
 	tests/perf/operation/predicate/Makefile

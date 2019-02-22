@@ -7,9 +7,7 @@ AUTOMAKE_OPTIONS = subdir-objects
 AM_CPPFLAGS =
 
 EXTRA_DIST = \
-	ASLocalizer.h \
-	astyle.h \
-	astyle_main.h
+	CMakeLists.txt
 
 noinst_PROGRAMS = astyle
 #check_PROGRAMS =
@@ -24,4 +22,7 @@ astyle_SOURCES = \
 	astyle_main.cpp
 
 
-noinst_HEADERS =
+noinst_HEADERS = \
+	ASLocalizer.h \
+	astyle.h \
+	astyle_main.h
