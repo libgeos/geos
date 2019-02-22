@@ -50,7 +50,7 @@ public:
     test(int nPts)
     {
         Coordinate origin(ORG_X, ORG_Y);
-        std::unique_ptr<Polygon> sinePoly =
+        std::unique_ptr<geos::geom::Polygon> sinePoly =
             createSineStar(origin, SIZE, nPts);
 
         /**
@@ -96,8 +96,6 @@ private:
     void
     test(geos::geom::Geometry& poly)
     {
-        typedef vector<const Geometry*>::size_type size_type;
-
         geos::util::Profile sw("");
         sw.start();
 
@@ -109,7 +107,7 @@ private:
         cout << poly.getNumPoints() << " points: " << sw.getTotFormatted() << endl;
     }
 
-    std::unique_ptr<Polygon>
+    std::unique_ptr<geos::geom::Polygon>
     createSineStar(const Coordinate& origin,
                    double size, int nPts)
     {
@@ -121,7 +119,7 @@ private:
         gsf.setNumPoints(nPts);
         gsf.setArmLengthRatio( ARM_RATIO );
         gsf.setNumArms( N_ARMS );
-        std::unique_ptr<Polygon> poly = gsf.createSineStar();
+        std::unique_ptr<geos::geom::Polygon> poly = gsf.createSineStar();
         return poly;
     }
 };
