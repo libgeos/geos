@@ -132,6 +132,7 @@ java_math_round(double val)
 } // java_math_round
 
 
+#ifdef not_used
 // a utility function defining a very simple method to indent a line of text
 const char*
 getIndent(unsigned int numIndents)
@@ -145,7 +146,7 @@ getIndent(unsigned int numIndents)
 
     return &pINDENT[ LENGTH - numIndents ];
 }
-
+#endif
 
 
 // void dump_to_stdout( const tinyxml2::XMLNode * pParent, unsigned int indent = 0 )

@@ -130,12 +130,12 @@ public:
 	explicit ASStreamIterator(T* in);
 	virtual ~ASStreamIterator();
 	bool getLineEndChange(int lineEndFormat) const;
-	int  getStreamLength() const;
-	string nextLine(bool emptyLineWasDeleted);
-	string peekNextLine();
-	void peekReset();
+	int  getStreamLength() const override;
+	string nextLine(bool emptyLineWasDeleted) override;
+	string peekNextLine() override;
+	void peekReset() override;
 	void saveLastInputLine();
-	streamoff tellg();
+	streamoff tellg() override;
 
 private:
 	ASStreamIterator(const ASStreamIterator& copy);       // copy constructor not to be implemented
@@ -155,8 +155,8 @@ public:	// inline functions
 	bool compareToInputBuffer(const string& nextLine_) const
 	{ return (nextLine_ == prevBuffer); }
 	const string& getOutputEOL() const { return outputEOL; }
-	streamoff getPeekStart() const { return peekStart; }
-	bool hasMoreLines() const { return !inStream->eof(); }
+	streamoff getPeekStart() const override { return peekStart; }
+	bool hasMoreLines() const override { return !inStream->eof(); }
 };
 
 //----------------------------------------------------------------------------
