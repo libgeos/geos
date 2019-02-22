@@ -149,6 +149,8 @@ public:
     void
     process()
     {
+        vector<double> crossings;
+
         /**
          * This results in returning a null Coordinate
          */
@@ -159,10 +161,10 @@ public:
         interiorPoint = *polygon.getCoordinate();
 
         const LinearRing* shell = dynamic_cast<const LinearRing*>(polygon.getExteriorRing());
-        scanRing( *shell );
+        scanRing( *shell, crossings );
         for (size_t i = 0; i < polygon.getNumInteriorRing(); i++) {
             const LinearRing* hole = dynamic_cast<const LinearRing*>(polygon.getInteriorRingN(i));
-            scanRing( *hole );
+            scanRing( *hole, crossings );
         }
         findBestMidpoint(crossings);
     }
@@ -171,10 +173,9 @@ private:
     const Polygon& polygon;
     double interiorPointY;
     double interiorSectionWidth = 0.0;
-    vector<double> crossings;
     Coordinate interiorPoint;
 
-    void scanRing(const LinearRing& ring)
+    void scanRing(const LinearRing& ring, vector<double>& crossings)
     {
         // skip rings which don't cross scan line
         if ( ! intersectsHorizontalLine( ring.getEnvelopeInternal(), interiorPointY) )
