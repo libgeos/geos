@@ -731,6 +731,12 @@ extern "C" {
     }
 
     Geometry*
+    GEOSMakeValid(const Geometry* g)
+    {
+        return GEOSMakeValid_r(handle, g);
+    }
+
+    Geometry*
     GEOSLineMerge(const Geometry* g)
     {
         return GEOSLineMerge_r(handle, g);

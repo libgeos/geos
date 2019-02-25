@@ -959,6 +959,9 @@ extern char GEOS_DLL GEOSisValidDetail_r(GEOSContextHandle_t handle,
                                          char** reason,
                                          GEOSGeometry** location);
 
+extern GEOSGeometry GEOS_DLL *GEOSMakeValid_r(GEOSContextHandle_t handle,
+                                              const GEOSGeometry* g);
+
 /************************************************************************
  *
  *  Geometry info
@@ -1936,6 +1939,8 @@ extern char GEOS_DLL *GEOSisValidReason(const GEOSGeometry *g);
 extern char GEOS_DLL GEOSisValidDetail(const GEOSGeometry* g,
                                        int flags,
                                        char** reason, GEOSGeometry** location);
+
+extern GEOSGeometry GEOS_DLL *GEOSMakeValid(const GEOSGeometry* g);
 
 /************************************************************************
  *
