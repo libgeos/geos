@@ -63,6 +63,7 @@
 #include <geos/operation/intersection/Rectangle.h>
 #include <geos/operation/intersection/RectangleIntersection.h>
 #include <geos/operation/polygonize/Polygonizer.h>
+#include <geos/operation/polygonize/BuildArea.h>
 #include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/sharedpaths/SharedPathsOp.h>
 #include <geos/operation/union/CascadedPolygonUnion.h>
@@ -3144,6 +3145,36 @@ extern "C" {
             // The below takes ownership of the passed vector,
             // so we must *not* delete it
             out = gf->createGeometryCollection(polyvec);
+        }
+        catch(const std::exception& e) {
+            handle->ERROR_MESSAGE("%s", e.what());
+        }
+        catch(...) {
+            handle->ERROR_MESSAGE("Unknown exception thrown");
+        }
+
+        return out;
+    }
+
+    Geometry*
+    GEOSBuildArea_r(GEOSContextHandle_t extHandle, const Geometry* g)
+    {
+        if(nullptr == extHandle) {
+            return nullptr;
+        }
+
+        GEOSContextHandleInternal_t* handle = nullptr;
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if(0 == handle->initialized) {
+            return nullptr;
+        }
+
+        Geometry* out = nullptr;
+
+        try {
+            using geos::operation::polygonize::BuildArea;
+            BuildArea builder;
+            out = builder.build(g).release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());

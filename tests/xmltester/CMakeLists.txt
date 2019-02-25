@@ -62,6 +62,7 @@ if(GEOS_ENABLE_TESTS)
     ${XMLTESTS_DIR}/split.xml
     ${XMLTESTS_DIR}/test.xml
     ${XMLTESTS_DIR}/testLeaksBig.xml
+    ${XMLTESTS_DIR}/buildarea.xml
     ${XMLTESTS_DIR}/general/TestBoundary.xml
     ${XMLTESTS_DIR}/general/TestBuffer.xml
     ${XMLTESTS_DIR}/general/TestBufferMitredJoin.xml
