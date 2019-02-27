@@ -63,7 +63,7 @@ Profile::getTotFormatted() const
 {
     long usec = (long) totaltime;
     std::string fmt = to_string(usec);
-    int insertPosition = fmt.length() - 3;
+    int insertPosition = static_cast<int>(fmt.length()) - 3;
     while (insertPosition > 0) {
         fmt.insert(insertPosition, ",");
         insertPosition-=3;
