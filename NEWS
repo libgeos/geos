@@ -3,6 +3,9 @@
   - CAPI: GEOSBuildArea (#952, Even Rouault)
   - CAPI: GEOSMakeValid (#952, Even Rouault)
 
+- Improvements:
+  - Improve performance and robustness of GEOSPointOnSurface (Martin Davis)
+
 Changes in 3.7.0rc1
 2018-08-19
 Fixes / enhancements since 3.7.0beta2
