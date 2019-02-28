@@ -631,6 +631,10 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonize_full_r(GEOSContextHandle_t handle,
                               const GEOSGeometry* input, GEOSGeometry** cuts,
                               GEOSGeometry** dangles, GEOSGeometry** invalidRings);
 
+extern GEOSGeometry GEOS_DLL *GEOSBuildArea_r(
+                                              GEOSContextHandle_t handle,
+                                              const GEOSGeometry* g);
+
 extern GEOSGeometry GEOS_DLL *GEOSLineMerge_r(GEOSContextHandle_t handle,
                                               const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSReverse_r(GEOSContextHandle_t handle,
@@ -954,6 +958,9 @@ extern char GEOS_DLL GEOSisValidDetail_r(GEOSContextHandle_t handle,
                                          int flags,
                                          char** reason,
                                          GEOSGeometry** location);
+
+extern GEOSGeometry GEOS_DLL *GEOSMakeValid_r(GEOSContextHandle_t handle,
+                                              const GEOSGeometry* g);
 
 /************************************************************************
  *
@@ -1631,6 +1638,8 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonizer_getCutEdges(const GEOSGeometry * c
 extern GEOSGeometry GEOS_DLL *GEOSPolygonize_full(const GEOSGeometry* input,
     GEOSGeometry** cuts, GEOSGeometry** dangles, GEOSGeometry** invalid);
 
+extern GEOSGeometry GEOS_DLL *GEOSBuildArea(const GEOSGeometry* g);
+
 extern GEOSGeometry GEOS_DLL *GEOSLineMerge(const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSReverse(const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSSimplify(const GEOSGeometry* g, double tolerance);
@@ -1930,6 +1939,8 @@ extern char GEOS_DLL *GEOSisValidReason(const GEOSGeometry *g);
 extern char GEOS_DLL GEOSisValidDetail(const GEOSGeometry* g,
                                        int flags,
                                        char** reason, GEOSGeometry** location);
+
+extern GEOSGeometry GEOS_DLL *GEOSMakeValid(const GEOSGeometry* g);
 
 /************************************************************************
  *

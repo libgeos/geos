@@ -21,6 +21,7 @@ libopvalid_la_SOURCES = \
     SweeplineNestedRingTester.cpp \
     TopologyValidationError.cpp \
     IndexedNestedRingTester.cpp \
-    IndexedNestedRingTester.h
+    IndexedNestedRingTester.h \
+    MakeValid.cpp
 
 libopvalid_la_LIBADD =
