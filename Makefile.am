@@ -67,7 +67,7 @@ valgrindcheck:
 .PHONY: geos_revision.h
 
 check-local:
-	! find . -name '*.cpp' -o -name '*.h' | \
+	! find $(srcdir) -name '*.cpp' -o -name '*.h' | \
 		grep -v tests/xmltester/tinyxml | \
 		grep -v include/geos/algorithm/ttmath | \
 		xargs grep -n '[[:space:]]$$'
