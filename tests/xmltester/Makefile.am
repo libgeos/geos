@@ -72,37 +72,37 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/general/TestValid2-big.xml \
 	$(srcdir)/tests/general/TestValid2.xml \
 	$(srcdir)/tests/general/TestWithinDistance.xml \
+	$(srcdir)/tests/misc/safe-16595.xml \
+	$(srcdir)/tests/misc/safe-16596.xml \
+	$(srcdir)/tests/misc/safe-TestBufferJagged.xml \
+	$(srcdir)/tests/misc/stmlf-cases-20061020-invalid-output.xml \
+	$(srcdir)/tests/misc/stmlf-cases-20061020.xml \
+	$(srcdir)/tests/misc/stmlf-cases-20070119.xml \
 	$(srcdir)/tests/robust/TestRobustOverlayFixed.xml \
 	$(srcdir)/tests/robust/TestRobustRelate.xml \
-	$(srcdir)/tests/safe/16595.xml \
-	$(srcdir)/tests/safe/16596.xml \
-	$(srcdir)/tests/safe/TestBufferJagged.xml \
-	$(srcdir)/tests/stmlf/stmlf-cases-20061020-invalid-output.xml \
-	$(srcdir)/tests/stmlf/stmlf-cases-20061020.xml \
-	$(srcdir)/tests/stmlf/stmlf-cases-20070119.xml \
-	$(srcdir)/tests/ticket/bug176.xml \
-	$(srcdir)/tests/ticket/bug188.xml \
-	$(srcdir)/tests/ticket/bug244.xml \
-	$(srcdir)/tests/ticket/bug275.xml \
-	$(srcdir)/tests/ticket/bug350.xml \
-	$(srcdir)/tests/ticket/bug356.xml \
-	$(srcdir)/tests/ticket/bug358.xml \
-	$(srcdir)/tests/ticket/bug360.xml \
-	$(srcdir)/tests/ticket/bug366.xml \
-	$(srcdir)/tests/ticket/bug392.xml \
-	$(srcdir)/tests/ticket/bug398.xml \
-	$(srcdir)/tests/ticket/bug434.xml \
-	$(srcdir)/tests/ticket/bug459.xml \
-	$(srcdir)/tests/ticket/bug527.xml \
-	$(srcdir)/tests/ticket/bug569.xml \
-	$(srcdir)/tests/ticket/bug582.xml \
-	$(srcdir)/tests/ticket/bug586.xml \
-	$(srcdir)/tests/ticket/bug599.xml \
-	$(srcdir)/tests/ticket/bug605.xml \
-	$(srcdir)/tests/ticket/bug615.xml \
-	$(srcdir)/tests/ticket/bug716.xml \
-	$(srcdir)/tests/ticket/bug837.xml \
-	$(srcdir)/tests/ticket/bug838.xml \
+	$(srcdir)/tests/ticket/ticket-geos-176.xml \
+	$(srcdir)/tests/ticket/ticket-geos-188.xml \
+	$(srcdir)/tests/ticket/ticket-geos-244.xml \
+	$(srcdir)/tests/ticket/ticket-geos-275.xml \
+	$(srcdir)/tests/ticket/ticket-geos-350.xml \
+	$(srcdir)/tests/ticket/ticket-geos-356.xml \
+	$(srcdir)/tests/ticket/ticket-geos-358.xml \
+	$(srcdir)/tests/ticket/ticket-geos-360.xml \
+	$(srcdir)/tests/ticket/ticket-geos-366.xml \
+	$(srcdir)/tests/ticket/ticket-geos-392.xml \
+	$(srcdir)/tests/ticket/ticket-geos-398.xml \
+	$(srcdir)/tests/ticket/ticket-geos-434.xml \
+	$(srcdir)/tests/ticket/ticket-geos-459.xml \
+	$(srcdir)/tests/ticket/ticket-geos-527.xml \
+	$(srcdir)/tests/ticket/ticket-geos-569.xml \
+	$(srcdir)/tests/ticket/ticket-geos-582.xml \
+	$(srcdir)/tests/ticket/ticket-geos-586.xml \
+	$(srcdir)/tests/ticket/ticket-geos-599.xml \
+	$(srcdir)/tests/ticket/ticket-geos-605.xml \
+	$(srcdir)/tests/ticket/ticket-geos-615.xml \
+	$(srcdir)/tests/ticket/ticket-geos-716.xml \
+	$(srcdir)/tests/ticket/ticket-geos-837.xml \
+	$(srcdir)/tests/ticket/ticket-geos-838.xml \
 	$(srcdir)/tests/validate/TestRelateAA-big.xml \
 	$(srcdir)/tests/validate/TestRelateAA.xml \
 	$(srcdir)/tests/validate/TestRelateAC.xml \

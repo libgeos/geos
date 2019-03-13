@@ -104,37 +104,37 @@ if(GEOS_ENABLE_TESTS)
     ${XMLTESTS_DIR}/general/TestValid2-big.xml
     ${XMLTESTS_DIR}/general/TestValid2.xml
     ${XMLTESTS_DIR}/general/TestWithinDistance.xml
+    ${XMLTESTS_DIR}/misc/safe-16595.xml
+    ${XMLTESTS_DIR}/misc/safe-16596.xml
+    ${XMLTESTS_DIR}/misc/safe-TestBufferJagged.xml
+    ${XMLTESTS_DIR}/misc/stmlf-cases-20061020-invalid-output.xml
+    ${XMLTESTS_DIR}/misc/stmlf-cases-20061020.xml
+    ${XMLTESTS_DIR}/misc/stmlf-cases-20070119.xml
     ${XMLTESTS_DIR}/robust/TestRobustOverlayFixed.xml
     ${XMLTESTS_DIR}/robust/TestRobustRelate.xml
-    ${XMLTESTS_DIR}/safe/16595.xml
-    ${XMLTESTS_DIR}/safe/16596.xml
-    ${XMLTESTS_DIR}/safe/TestBufferJagged.xml
-    ${XMLTESTS_DIR}/stmlf/stmlf-cases-20061020-invalid-output.xml
-    ${XMLTESTS_DIR}/stmlf/stmlf-cases-20061020.xml
-    ${XMLTESTS_DIR}/stmlf/stmlf-cases-20070119.xml
-    ${XMLTESTS_DIR}/ticket/bug176.xml
-    ${XMLTESTS_DIR}/ticket/bug188.xml
-    ${XMLTESTS_DIR}/ticket/bug244.xml
-    ${XMLTESTS_DIR}/ticket/bug275.xml
-    ${XMLTESTS_DIR}/ticket/bug350.xml
-    ${XMLTESTS_DIR}/ticket/bug356.xml
-    ${XMLTESTS_DIR}/ticket/bug358.xml
-    ${XMLTESTS_DIR}/ticket/bug360.xml
-    ${XMLTESTS_DIR}/ticket/bug366.xml
-    ${XMLTESTS_DIR}/ticket/bug392.xml
-    ${XMLTESTS_DIR}/ticket/bug398.xml
-    ${XMLTESTS_DIR}/ticket/bug434.xml
-    ${XMLTESTS_DIR}/ticket/bug459.xml
-    ${XMLTESTS_DIR}/ticket/bug527.xml
-    ${XMLTESTS_DIR}/ticket/bug569.xml
-    ${XMLTESTS_DIR}/ticket/bug582.xml
-    ${XMLTESTS_DIR}/ticket/bug586.xml
-    ${XMLTESTS_DIR}/ticket/bug599.xml
-    ${XMLTESTS_DIR}/ticket/bug605.xml
-    ${XMLTESTS_DIR}/ticket/bug615.xml
-    ${XMLTESTS_DIR}/ticket/bug716.xml
-    ${XMLTESTS_DIR}/ticket/bug837.xml
-    ${XMLTESTS_DIR}/ticket/bug838.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-176.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-188.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-244.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-275.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-350.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-356.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-358.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-360.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-366.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-392.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-398.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-434.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-459.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-527.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-569.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-582.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-586.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-599.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-605.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-615.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-716.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-837.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-838.xml
     ${XMLTESTS_DIR}/validate/TestRelateAA-big.xml
     ${XMLTESTS_DIR}/validate/TestRelateAA.xml
     ${XMLTESTS_DIR}/validate/TestRelateAC.xml
