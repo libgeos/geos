@@ -14,24 +14,6 @@ CLEANFILES = testrunner
 EXTRA_DIST = testrunner.sh CMakeLists.txt
 
 SAFE_XMLTESTS= \
-	$(srcdir)/tests/TestBufferExternal.xml \
-	$(srcdir)/tests/TestBufferExternal2.xml \
-	$(srcdir)/tests/TestIsValid.xml \
-	$(srcdir)/tests/badguy3.xml \
-	$(srcdir)/tests/buffer.xml \
-	$(srcdir)/tests/fme.xml \
-	$(srcdir)/tests/heisenbugs.xml \
-	$(srcdir)/tests/hexwkb.xml \
-	$(srcdir)/tests/hole_from_shell.xml \
-	$(srcdir)/tests/hole_red.xml \
-	$(srcdir)/tests/linemerge.xml \
-	$(srcdir)/tests/robustness.xml \
-	$(srcdir)/tests/singlesidedbuffer.xml \
-	$(srcdir)/tests/split.xml \
-	$(srcdir)/tests/test.xml \
-	$(srcdir)/tests/testLeaksBig.xml \
-	$(srcdir)/tests/buildarea.xml \
-	$(srcdir)/tests/makevalid.xml \
 	$(srcdir)/tests/general/TestBoundary.xml \
 	$(srcdir)/tests/general/TestBuffer.xml \
 	$(srcdir)/tests/general/TestBufferMitredJoin.xml \
@@ -72,12 +54,30 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/general/TestValid2-big.xml \
 	$(srcdir)/tests/general/TestValid2.xml \
 	$(srcdir)/tests/general/TestWithinDistance.xml \
+	$(srcdir)/tests/misc/TestBufferExternal.xml \
+	$(srcdir)/tests/misc/TestBufferExternal2.xml \
+	$(srcdir)/tests/misc/TestIsValid.xml \
+	$(srcdir)/tests/misc/badguy3.xml \
+	$(srcdir)/tests/misc/buffer.xml \
+	$(srcdir)/tests/misc/buildarea.xml \
+	$(srcdir)/tests/misc/fme.xml \
+	$(srcdir)/tests/misc/heisenbugs.xml \
+	$(srcdir)/tests/misc/hexwkb.xml \
+	$(srcdir)/tests/misc/hole_from_shell.xml \
+	$(srcdir)/tests/misc/hole_red.xml \
+	$(srcdir)/tests/misc/linemerge.xml \
+	$(srcdir)/tests/misc/makevalid.xml \
+	$(srcdir)/tests/misc/robustness.xml \
 	$(srcdir)/tests/misc/safe-16595.xml \
 	$(srcdir)/tests/misc/safe-16596.xml \
 	$(srcdir)/tests/misc/safe-TestBufferJagged.xml \
+	$(srcdir)/tests/misc/singlesidedbuffer.xml \
 	$(srcdir)/tests/misc/stmlf-cases-20061020-invalid-output.xml \
 	$(srcdir)/tests/misc/stmlf-cases-20061020.xml \
 	$(srcdir)/tests/misc/stmlf-cases-20070119.xml \
+	$(srcdir)/tests/misc/split.xml \
+	$(srcdir)/tests/misc/test.xml \
+	$(srcdir)/tests/misc/testLeaksBig.xml \
 	$(srcdir)/tests/robust/TestRobustOverlayFixed.xml \
 	$(srcdir)/tests/robust/TestRobustRelate.xml \
 	$(srcdir)/tests/ticket/ticket-geos-176.xml \
@@ -117,10 +117,13 @@ INVALID_OUTPUT_XMLTESTS =
 
 FAILING_XMLTESTS = \
 	$(srcdir)/tests/failure/TestOverlay.xml \
-	$(srcdir)/tests/ticket/bug488.xml \
-	$(srcdir)/tests/ticket/bug344.xml \
+	$(srcdir)/tests/ticket/ticket-geos-488.xml \
+	$(srcdir)/tests/ticket/ticket-geos-344.xml \
 	$(srcdir)/tests/robust/TestRobustRelateFloat.xml \
-	$(srcdir)/tests/TestBigNastyBuffer.xml
+	$(srcdir)/misc/TestBigNastyBuffer.xml \
+	$(srcdir)/misc/TestSameDirection.xml
+
+
 
 XMLTESTS=$(SAFE_XMLTESTS) $(INVALID_OUTPUT_XMLTESTS) $(FAILING_XMLTESTS)
 

@@ -46,24 +46,6 @@ if(GEOS_ENABLE_TESTS)
 
   set(XMLTESTS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tests)
   set(SAVE_XMLTESTS
-    ${XMLTESTS_DIR}/TestBufferExternal.xml
-    ${XMLTESTS_DIR}/TestBufferExternal2.xml
-    ${XMLTESTS_DIR}/TestIsValid.xml
-    ${XMLTESTS_DIR}/badguy3.xml
-    ${XMLTESTS_DIR}/buffer.xml
-    ${XMLTESTS_DIR}/fme.xml
-    ${XMLTESTS_DIR}/heisenbugs.xml
-    ${XMLTESTS_DIR}/hexwkb.xml
-    ${XMLTESTS_DIR}/hole_from_shell.xml
-    ${XMLTESTS_DIR}/hole_red.xml
-    ${XMLTESTS_DIR}/linemerge.xml
-    ${XMLTESTS_DIR}/robustness.xml
-    ${XMLTESTS_DIR}/singlesidedbuffer.xml
-    ${XMLTESTS_DIR}/split.xml
-    ${XMLTESTS_DIR}/test.xml
-    ${XMLTESTS_DIR}/testLeaksBig.xml
-    ${XMLTESTS_DIR}/buildarea.xml
-    ${XMLTESTS_DIR}/makevalid.xml
     ${XMLTESTS_DIR}/general/TestBoundary.xml
     ${XMLTESTS_DIR}/general/TestBuffer.xml
     ${XMLTESTS_DIR}/general/TestBufferMitredJoin.xml
@@ -104,12 +86,30 @@ if(GEOS_ENABLE_TESTS)
     ${XMLTESTS_DIR}/general/TestValid2-big.xml
     ${XMLTESTS_DIR}/general/TestValid2.xml
     ${XMLTESTS_DIR}/general/TestWithinDistance.xml
+    ${XMLTESTS_DIR}/misc/TestBufferExternal.xml
+    ${XMLTESTS_DIR}/misc/TestBufferExternal2.xml
+    ${XMLTESTS_DIR}/misc/TestIsValid.xml
+    ${XMLTESTS_DIR}/misc/badguy3.xml
+    ${XMLTESTS_DIR}/misc/buildarea.xml
+    ${XMLTESTS_DIR}/misc/buffer.xml
+    ${XMLTESTS_DIR}/misc/fme.xml
+    ${XMLTESTS_DIR}/misc/heisenbugs.xml
+    ${XMLTESTS_DIR}/misc/hexwkb.xml
+    ${XMLTESTS_DIR}/misc/hole_from_shell.xml
+    ${XMLTESTS_DIR}/misc/hole_red.xml
+    ${XMLTESTS_DIR}/misc/linemerge.xml
+    ${XMLTESTS_DIR}/misc/makevalid.xml
+    ${XMLTESTS_DIR}/misc/robustness.xml
     ${XMLTESTS_DIR}/misc/safe-16595.xml
     ${XMLTESTS_DIR}/misc/safe-16596.xml
     ${XMLTESTS_DIR}/misc/safe-TestBufferJagged.xml
+    ${XMLTESTS_DIR}/misc/singlesidedbuffer.xml
     ${XMLTESTS_DIR}/misc/stmlf-cases-20061020-invalid-output.xml
     ${XMLTESTS_DIR}/misc/stmlf-cases-20061020.xml
     ${XMLTESTS_DIR}/misc/stmlf-cases-20070119.xml
+    ${XMLTESTS_DIR}/misc/split.xml
+    ${XMLTESTS_DIR}/misc/test.xml
+    ${XMLTESTS_DIR}/misc/testLeaksBig.xml
     ${XMLTESTS_DIR}/robust/TestRobustOverlayFixed.xml
     ${XMLTESTS_DIR}/robust/TestRobustRelate.xml
     ${XMLTESTS_DIR}/ticket/ticket-geos-176.xml
@@ -147,11 +147,12 @@ if(GEOS_ENABLE_TESTS)
     )
 
   set(FAILING_XMLTESTS
-    ${XMLTESTS_DIR}/ticket/bug488.xml
-    ${XMLTESTS_DIR}/ticket/bug344.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-488.xml
+    ${XMLTESTS_DIR}/ticket/ticket-geos-344.xml
     ${XMLTESTS_DIR}/robust/TestRobustRelateFloat.xml
-    ${XMLTESTS_DIR}/TestBigNastyBuffer.xml
     ${XMLTESTS_DIR}/failure/TestOverlay.xml
+    ${XMLTESTS_DIR}/misc/TestBigNastyBuffer.xml
+    ${XMLTESTS_DIR}/misc/TestSameDirection.xml
     )
 
   add_test(test_xmltester ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/test_xmltester -v --test-valid-output ${SAVE_XMLTESTS})
