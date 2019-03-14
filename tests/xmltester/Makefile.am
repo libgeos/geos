@@ -35,9 +35,9 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/general/TestFunctionPP.xml \
 	$(srcdir)/tests/general/TestInteriorPoint.xml \
 	$(srcdir)/tests/general/TestMinimumClearance.xml \
-  $(srcdir)/tests/general/TestPreparedPointPredicate.xml \
-  $(srcdir)/tests/general/TestPreparedPolygonPredicate.xml \
-  $(srcdir)/tests/general/TestPreparedPredicatesWithGeometryCollection.xml \
+	$(srcdir)/tests/general/TestPreparedPointPredicate.xml \
+	$(srcdir)/tests/general/TestPreparedPolygonPredicate.xml \
+	$(srcdir)/tests/general/TestPreparedPredicatesWithGeometryCollection.xml \
 	$(srcdir)/tests/general/TestRectanglePredicate.xml \
 	$(srcdir)/tests/general/TestRelateAA.xml \
 	$(srcdir)/tests/general/TestRelateAC.xml \
@@ -56,7 +56,7 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/general/TestWithinDistance.xml \
 	$(srcdir)/tests/misc/Buffer-1.xml \
 	$(srcdir)/tests/misc/Buffer-2.xml \
-	$(srcdir)/tests/misc/InvalidRelates \
+	$(srcdir)/tests/misc/InvalidRelates.xml \
 	$(srcdir)/tests/misc/Segfaults.xml \
 	$(srcdir)/tests/misc/TestBufferExternal-1.xml \
 	$(srcdir)/tests/misc/TestBufferExternal-2.xml \
