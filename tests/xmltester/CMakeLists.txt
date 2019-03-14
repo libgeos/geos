@@ -86,12 +86,14 @@ if(GEOS_ENABLE_TESTS)
     ${XMLTESTS_DIR}/general/TestValid2-big.xml
     ${XMLTESTS_DIR}/general/TestValid2.xml
     ${XMLTESTS_DIR}/general/TestWithinDistance.xml
-    ${XMLTESTS_DIR}/misc/TestBufferExternal.xml
-    ${XMLTESTS_DIR}/misc/TestBufferExternal2.xml
+    ${XMLTESTS_DIR}/misc/Buffer-1.xml
+    ${XMLTESTS_DIR}/misc/Buffer-2.xml
+    ${XMLTESTS_DIR}/misc/InvalidRelates.xml
+    ${XMLTESTS_DIR}/misc/Segfaults.xml
+    ${XMLTESTS_DIR}/misc/TestBufferExternal-1.xml
+    ${XMLTESTS_DIR}/misc/TestBufferExternal-2.xml
     ${XMLTESTS_DIR}/misc/TestIsValid.xml
-    ${XMLTESTS_DIR}/misc/badguy3.xml
     ${XMLTESTS_DIR}/misc/buildarea.xml
-    ${XMLTESTS_DIR}/misc/buffer.xml
     ${XMLTESTS_DIR}/misc/fme.xml
     ${XMLTESTS_DIR}/misc/heisenbugs.xml
     ${XMLTESTS_DIR}/misc/hexwkb.xml
@@ -104,12 +106,10 @@ if(GEOS_ENABLE_TESTS)
     ${XMLTESTS_DIR}/misc/safe-16596.xml
     ${XMLTESTS_DIR}/misc/safe-TestBufferJagged.xml
     ${XMLTESTS_DIR}/misc/singlesidedbuffer.xml
-    ${XMLTESTS_DIR}/misc/stmlf-cases-20061020-invalid-output.xml
-    ${XMLTESTS_DIR}/misc/stmlf-cases-20061020.xml
-    ${XMLTESTS_DIR}/misc/stmlf-cases-20070119.xml
+    ${XMLTESTS_DIR}/misc/stmlf-20061020-invalid-output.xml
+    ${XMLTESTS_DIR}/misc/stmlf-20061020.xml
+    ${XMLTESTS_DIR}/misc/stmlf-20070119.xml
     ${XMLTESTS_DIR}/misc/split.xml
-    ${XMLTESTS_DIR}/misc/InvalidRelates.xml
-    ${XMLTESTS_DIR}/misc/Segfaults.xml
     ${XMLTESTS_DIR}/robust/TestRobustOverlayFixed.xml
     ${XMLTESTS_DIR}/robust/TestRobustRelate.xml
     ${XMLTESTS_DIR}/issue/issue-geos-176.xml

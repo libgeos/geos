@@ -54,11 +54,13 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/general/TestValid2-big.xml \
 	$(srcdir)/tests/general/TestValid2.xml \
 	$(srcdir)/tests/general/TestWithinDistance.xml \
-	$(srcdir)/tests/misc/TestBufferExternal.xml \
-	$(srcdir)/tests/misc/TestBufferExternal2.xml \
+	$(srcdir)/tests/misc/Buffer-1.xml \
+	$(srcdir)/tests/misc/Buffer-2.xml \
+	$(srcdir)/tests/misc/InvalidRelates \
+	$(srcdir)/tests/misc/Segfaults.xml \
+	$(srcdir)/tests/misc/TestBufferExternal-1.xml \
+	$(srcdir)/tests/misc/TestBufferExternal-2.xml \
 	$(srcdir)/tests/misc/TestIsValid.xml \
-	$(srcdir)/tests/misc/badguy3.xml \
-	$(srcdir)/tests/misc/buffer.xml \
 	$(srcdir)/tests/misc/buildarea.xml \
 	$(srcdir)/tests/misc/fme.xml \
 	$(srcdir)/tests/misc/heisenbugs.xml \
@@ -72,12 +74,10 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/misc/safe-16596.xml \
 	$(srcdir)/tests/misc/safe-TestBufferJagged.xml \
 	$(srcdir)/tests/misc/singlesidedbuffer.xml \
-	$(srcdir)/tests/misc/stmlf-cases-20061020-invalid-output.xml \
-	$(srcdir)/tests/misc/stmlf-cases-20061020.xml \
-	$(srcdir)/tests/misc/stmlf-cases-20070119.xml \
+	$(srcdir)/tests/misc/stmlf-20061020-invalid-output.xml \
+	$(srcdir)/tests/misc/stmlf-20061020.xml \
+	$(srcdir)/tests/misc/stmlf-20070119.xml \
 	$(srcdir)/tests/misc/split.xml \
-	$(srcdir)/tests/misc/InvalidRelates \
-	$(srcdir)/tests/misc/Segfaults.xml \
 	$(srcdir)/tests/robust/TestRobustOverlayFixed.xml \
 	$(srcdir)/tests/robust/TestRobustRelate.xml \
 	$(srcdir)/tests/issue/issue-geos-176.xml \
