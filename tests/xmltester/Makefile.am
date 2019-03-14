@@ -80,29 +80,29 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/misc/testLeaksBig.xml \
 	$(srcdir)/tests/robust/TestRobustOverlayFixed.xml \
 	$(srcdir)/tests/robust/TestRobustRelate.xml \
-	$(srcdir)/tests/ticket/ticket-geos-176.xml \
-	$(srcdir)/tests/ticket/ticket-geos-188.xml \
-	$(srcdir)/tests/ticket/ticket-geos-244.xml \
-	$(srcdir)/tests/ticket/ticket-geos-275.xml \
-	$(srcdir)/tests/ticket/ticket-geos-350.xml \
-	$(srcdir)/tests/ticket/ticket-geos-356.xml \
-	$(srcdir)/tests/ticket/ticket-geos-358.xml \
-	$(srcdir)/tests/ticket/ticket-geos-360.xml \
-	$(srcdir)/tests/ticket/ticket-geos-366.xml \
-	$(srcdir)/tests/ticket/ticket-geos-392.xml \
-	$(srcdir)/tests/ticket/ticket-geos-398.xml \
-	$(srcdir)/tests/ticket/ticket-geos-434.xml \
-	$(srcdir)/tests/ticket/ticket-geos-459.xml \
-	$(srcdir)/tests/ticket/ticket-geos-527.xml \
-	$(srcdir)/tests/ticket/ticket-geos-569.xml \
-	$(srcdir)/tests/ticket/ticket-geos-582.xml \
-	$(srcdir)/tests/ticket/ticket-geos-586.xml \
-	$(srcdir)/tests/ticket/ticket-geos-599.xml \
-	$(srcdir)/tests/ticket/ticket-geos-605.xml \
-	$(srcdir)/tests/ticket/ticket-geos-615.xml \
-	$(srcdir)/tests/ticket/ticket-geos-716.xml \
-	$(srcdir)/tests/ticket/ticket-geos-837.xml \
-	$(srcdir)/tests/ticket/ticket-geos-838.xml \
+	$(srcdir)/tests/issue/issue-geos-176.xml \
+	$(srcdir)/tests/issue/issue-geos-188.xml \
+	$(srcdir)/tests/issue/issue-geos-244.xml \
+	$(srcdir)/tests/issue/issue-geos-275.xml \
+	$(srcdir)/tests/issue/issue-geos-350.xml \
+	$(srcdir)/tests/issue/issue-geos-356.xml \
+	$(srcdir)/tests/issue/issue-geos-358.xml \
+	$(srcdir)/tests/issue/issue-geos-360.xml \
+	$(srcdir)/tests/issue/issue-geos-366.xml \
+	$(srcdir)/tests/issue/issue-geos-392.xml \
+	$(srcdir)/tests/issue/issue-geos-398.xml \
+	$(srcdir)/tests/issue/issue-geos-434.xml \
+	$(srcdir)/tests/issue/issue-geos-459.xml \
+	$(srcdir)/tests/issue/issue-geos-527.xml \
+	$(srcdir)/tests/issue/issue-geos-569.xml \
+	$(srcdir)/tests/issue/issue-geos-582.xml \
+	$(srcdir)/tests/issue/issue-geos-586.xml \
+	$(srcdir)/tests/issue/issue-geos-599.xml \
+	$(srcdir)/tests/issue/issue-geos-605.xml \
+	$(srcdir)/tests/issue/issue-geos-615.xml \
+	$(srcdir)/tests/issue/issue-geos-716.xml \
+	$(srcdir)/tests/issue/issue-geos-837.xml \
+	$(srcdir)/tests/issue/issue-geos-838.xml \
 	$(srcdir)/tests/validate/TestRelateAA-big.xml \
 	$(srcdir)/tests/validate/TestRelateAA.xml \
 	$(srcdir)/tests/validate/TestRelateAC.xml \
@@ -117,8 +117,8 @@ INVALID_OUTPUT_XMLTESTS =
 
 FAILING_XMLTESTS = \
 	$(srcdir)/tests/failure/TestOverlay.xml \
-	$(srcdir)/tests/ticket/ticket-geos-488.xml \
-	$(srcdir)/tests/ticket/ticket-geos-344.xml \
+	$(srcdir)/tests/issue/issue-geos-488.xml \
+	$(srcdir)/tests/issue/issue-geos-344.xml \
 	$(srcdir)/tests/robust/TestRobustRelateFloat.xml \
 	$(srcdir)/misc/TestBigNastyBuffer.xml \
 	$(srcdir)/misc/TestSameDirection.xml

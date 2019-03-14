@@ -112,29 +112,29 @@ if(GEOS_ENABLE_TESTS)
     ${XMLTESTS_DIR}/misc/testLeaksBig.xml
     ${XMLTESTS_DIR}/robust/TestRobustOverlayFixed.xml
     ${XMLTESTS_DIR}/robust/TestRobustRelate.xml
-    ${XMLTESTS_DIR}/ticket/ticket-geos-176.xml
-    ${XMLTESTS_DIR}/ticket/ticket-geos-188.xml
-    ${XMLTESTS_DIR}/ticket/ticket-geos-244.xml
-    ${XMLTESTS_DIR}/ticket/ticket-geos-275.xml
-    ${XMLTESTS_DIR}/ticket/ticket-geos-350.xml
-    ${XMLTESTS_DIR}/ticket/ticket-geos-356.xml
-    ${XMLTESTS_DIR}/ticket/ticket-geos-358.xml
-    ${XMLTESTS_DIR}/ticket/ticket-geos-360.xml
-    ${XMLTESTS_DIR}/ticket/ticket-geos-366.xml
-    ${XMLTESTS_DIR}/ticket/ticket-geos-392.xml
-    ${XMLTESTS_DIR}/ticket/ticket-geos-398.xml
-    ${XMLTESTS_DIR}/ticket/ticket-geos-434.xml
-    ${XMLTESTS_DIR}/ticket/ticket-geos-459.xml
-    ${XMLTESTS_DIR}/ticket/ticket-geos-527.xml
-    ${XMLTESTS_DIR}/ticket/ticket-geos-569.xml
-    ${XMLTESTS_DIR}/ticket/ticket-geos-582.xml
-    ${XMLTESTS_DIR}/ticket/ticket-geos-586.xml
-    ${XMLTESTS_DIR}/ticket/ticket-geos-599.xml
-    ${XMLTESTS_DIR}/ticket/ticket-geos-605.xml
-    ${XMLTESTS_DIR}/ticket/ticket-geos-615.xml
-    ${XMLTESTS_DIR}/ticket/ticket-geos-716.xml
-    ${XMLTESTS_DIR}/ticket/ticket-geos-837.xml
-    ${XMLTESTS_DIR}/ticket/ticket-geos-838.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-176.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-188.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-244.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-275.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-350.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-356.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-358.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-360.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-366.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-392.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-398.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-434.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-459.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-527.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-569.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-582.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-586.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-599.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-605.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-615.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-716.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-837.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-838.xml
     ${XMLTESTS_DIR}/validate/TestRelateAA-big.xml
     ${XMLTESTS_DIR}/validate/TestRelateAA.xml
     ${XMLTESTS_DIR}/validate/TestRelateAC.xml
@@ -147,8 +147,8 @@ if(GEOS_ENABLE_TESTS)
     )
 
   set(FAILING_XMLTESTS
-    ${XMLTESTS_DIR}/ticket/ticket-geos-488.xml
-    ${XMLTESTS_DIR}/ticket/ticket-geos-344.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-488.xml
+    ${XMLTESTS_DIR}/issue/issue-geos-344.xml
     ${XMLTESTS_DIR}/robust/TestRobustRelateFloat.xml
     ${XMLTESTS_DIR}/failure/TestOverlay.xml
     ${XMLTESTS_DIR}/misc/TestBigNastyBuffer.xml
