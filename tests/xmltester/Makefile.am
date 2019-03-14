@@ -76,8 +76,8 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/misc/stmlf-cases-20061020.xml \
 	$(srcdir)/tests/misc/stmlf-cases-20070119.xml \
 	$(srcdir)/tests/misc/split.xml \
-	$(srcdir)/tests/misc/test.xml \
-	$(srcdir)/tests/misc/testLeaksBig.xml \
+	$(srcdir)/tests/misc/InvalidRelates \
+	$(srcdir)/tests/misc/Segfaults.xml \
 	$(srcdir)/tests/robust/TestRobustOverlayFixed.xml \
 	$(srcdir)/tests/robust/TestRobustRelate.xml \
 	$(srcdir)/tests/issue/issue-geos-176.xml \

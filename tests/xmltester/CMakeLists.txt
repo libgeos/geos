@@ -108,8 +108,8 @@ if(GEOS_ENABLE_TESTS)
     ${XMLTESTS_DIR}/misc/stmlf-cases-20061020.xml
     ${XMLTESTS_DIR}/misc/stmlf-cases-20070119.xml
     ${XMLTESTS_DIR}/misc/split.xml
-    ${XMLTESTS_DIR}/misc/test.xml
-    ${XMLTESTS_DIR}/misc/testLeaksBig.xml
+    ${XMLTESTS_DIR}/misc/InvalidRelates.xml
+    ${XMLTESTS_DIR}/misc/Segfaults.xml
     ${XMLTESTS_DIR}/robust/TestRobustOverlayFixed.xml
     ${XMLTESTS_DIR}/robust/TestRobustRelate.xml
     ${XMLTESTS_DIR}/issue/issue-geos-176.xml
