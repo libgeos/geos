@@ -9,11 +9,14 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
+#include <geos/geom/LineSegment.h>
+#include <geos/geom/LineString.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/algorithm/PointLocator.h>
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKBReader.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateArraySequence.h>
 // std
 #include <memory>
 #include <string>
@@ -497,6 +500,59 @@ void object::test<19>
     ensure(g2->isValid());
 
     ensure_equals(g1->distance(g2.get()), 0);
+}
+
+// Test case reported in Shapely
+// https://github.com/Toblerity/Shapely/issues/560
+template<>
+template<>
+void object::test<20>()
+{
+    using geos::operation::distance::DistanceOp;
+    using geos::geom::Coordinate;
+    using geos::geom::LineSegment;
+    using geos::geom::Geometry;
+    using geos::geom::LineString;
+    using geos::geom::GeometryFactory;
+    using geos::geom::CoordinateArraySequence;
+
+    auto gfact = GeometryFactory::create();
+
+    CSPtr seq0(new CoordinateArraySequence(2));
+    CSPtr seq1(new CoordinateArraySequence(2));
+
+    Coordinate a0{1, 5.0/3.0};
+    Coordinate a1{2, 10.0/3.0};
+
+    Coordinate b0{3, 5};
+    Coordinate b1{0, 0};
+
+    seq0->setAt(a0, 0);
+    seq0->setAt(a1, 1);
+
+    seq1->setAt(b0, 0);
+    seq1->setAt(b1, 1);
+
+    GeomPtr g0(gfact->createLineString(seq0.release()));
+    GeomPtr g1(gfact->createLineString(seq1.release()));
+
+    DistanceOp dist(g0.get(), g1.get());
+    CSPtr seq(dist.closestPoints());
+
+    // input lines overlap, so generated point should intersect both geometries
+    ensure(geos::geom::LineSegment(a0, a1).distance(seq->getAt(0)) < 1e-8);
+    ensure(geos::geom::LineSegment(a0, a1).distance(seq->getAt(1)) < 1e-8);
+    ensure(geos::geom::LineSegment(b0, b1).distance(seq->getAt(0)) < 1e-8);
+    ensure(geos::geom::LineSegment(b0, b1).distance(seq->getAt(1)) < 1e-8);
+
+    // reverse argument order and check again
+    dist = DistanceOp(g1.get(), g0.get());
+    seq.reset(dist.closestPoints());
+
+    ensure(geos::geom::LineSegment(a0, a1).distance(seq->getAt(0)) < 1e-8);
+    ensure(geos::geom::LineSegment(a0, a1).distance(seq->getAt(1)) < 1e-8);
+    ensure(geos::geom::LineSegment(b0, b1).distance(seq->getAt(0)) < 1e-8);
+    ensure(geos::geom::LineSegment(b0, b1).distance(seq->getAt(1)) < 1e-8);
 }
 
 // TODO: finish the tests by adding:
