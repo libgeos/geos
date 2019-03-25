@@ -120,8 +120,8 @@ FAILING_XMLTESTS = \
 	$(srcdir)/tests/issue/issue-geos-488.xml \
 	$(srcdir)/tests/issue/issue-geos-344.xml \
 	$(srcdir)/tests/robust/TestRobustRelateFloat.xml \
-	$(srcdir)/misc/TestBigNastyBuffer.xml \
-	$(srcdir)/misc/TestSameDirection.xml
+	$(srcdir)/tests/misc/TestBigNastyBuffer.xml \
+	$(srcdir)/tests/misc/TestSameDirection.xml
 
 
 

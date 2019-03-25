@@ -1,16 +1,16 @@
 #
-# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+# This file is part of project GEOS (http://trac.osgeo.org/geos/)
 #
-#SUBDIRS = 
+#SUBDIRS =
 
-#EXTRA_DIST = 
+#EXTRA_DIST =
 
 geosdir = $(includedir)/geos/operation/polygonize
 
 geos_HEADERS = \
+    BuildArea.h \
     EdgeRing.h \
     PolygonizeDirectedEdge.h \
     PolygonizeEdge.h \
     PolygonizeGraph.h \
-    Polygonizer.h \
-    BuildArea.h
+    Polygonizer.h
