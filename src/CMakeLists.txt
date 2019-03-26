@@ -104,6 +104,11 @@ else()
 
   endif()
 
+  if(NOT GEOS_BUILD_SHARED)
+    add_library(geos INTERFACE)
+    target_link_libraries(geos INTERFACE geos-static)
+  endif()
+
 endif() # (GEOS_ENABLE_MACOSX_FRAMEWORK)
 
 # if(APPLE)

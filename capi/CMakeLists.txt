@@ -42,6 +42,9 @@ if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK AND GEOS_BUILD_SHARED)
 
   add_dependencies(geos_c geos_revision)
 
+else()
+  add_library(geos_c INTERFACE)
+  target_link_libraries(geos_c INTERFACE geos-static)
 endif()
 
 
