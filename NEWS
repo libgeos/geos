@@ -6,22 +6,6 @@
 - Improvements:
   - Improve performance and robustness of GEOSPointOnSurface (Martin Davis)
 
-Changes in 3.7.0rc1
-2018-08-19
-Fixes / enhancements since 3.7.0beta2
-  - Avoid segfault when querying empty tree (#730, framm)
-  - Collection with Empty components crashes overlay (#782, Dan Baston)
-  - Allow static library with C API for CMake builds (#878, Dakota Hawkins)
-
-
-Changes in 3.7.0beta2
-2018-08-06
-Fixes since 3.7.0beta1
-  - Fix infinite loop in GEOSClipByRect (#865, Dan Baston)
-  - Make GEOSException inherit from std::runtime_error
-    to address clang warnings (Dan Baston)
-  - Add missing CMake files to tarball (#895, Regina Obe)
-
 Changes in 3.7.0
 2018-09-10
 
@@ -49,6 +33,22 @@ Changes in 3.7.0
     (#851, Vicky Vergara)
   - Fix CommonBits::getBit to correctly handle i >= 32
     (#834, Kurt Schwehr)
+
+Changes in 3.7.0rc1
+2018-08-19
+Fixes / enhancements since 3.7.0beta2
+  - Avoid segfault when querying empty tree (#730, framm)
+  - Collection with Empty components crashes overlay (#782, Dan Baston)
+  - Allow static library with C API for CMake builds (#878, Dakota Hawkins)
+
+Changes in 3.7.0beta2
+2018-08-06
+Fixes since 3.7.0beta1
+  - Fix infinite loop in GEOSClipByRect (#865, Dan Baston)
+  - Make GEOSException inherit from std::runtime_error
+    to address clang warnings (Dan Baston)
+  - Add missing CMake files to tarball (#895, Regina Obe)
+
 
 Changes in 3.7.0beta1
 2018-06-25
