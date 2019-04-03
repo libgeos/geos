@@ -1,4 +1,4 @@
-#################################################################################
+################################################################################
 #
 # CMake configuration for GEOS perf/operation/predicate tests
 #
@@ -9,11 +9,12 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 #
-#################################################################################
+################################################################################
 
 
 add_executable(perf_rectangle_intersects RectangleIntersectsPerfTest.cpp)
 
 target_link_libraries(perf_rectangle_intersects geos)
 
-#add_test(perf_rectangle_intersects ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/perf_rectangle_intersects)
+#add_test(perf_rectangle_intersects
+#  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/perf_rectangle_intersects)

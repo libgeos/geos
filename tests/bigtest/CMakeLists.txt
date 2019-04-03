@@ -1,4 +1,4 @@
-#################################################################################
+################################################################################
 #
 # CMake configuration for GEOS big test
 #
@@ -9,7 +9,7 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 #
-#################################################################################
+################################################################################
 
 set(STATUS_MESSAGE "Enable GEOS large geometry tests build")
 set(STATUS_RESULT "OFF")
@@ -27,9 +27,9 @@ if(GEOS_ENABLE_TESTS)
   endif()
 
   add_executable(test_sweep_line_speed
-	TestSweepLineSpeed.cpp
-	GeometryTestFactory.cpp
-	bigtest.h)
+    TestSweepLineSpeed.cpp
+    GeometryTestFactory.cpp
+    bigtest.h)
   if(APPLE AND GEOS_ENABLE_MACOSX_FRAMEWORK)
     target_link_libraries(test_sweep_line_speed GEOS)
   else()
@@ -37,7 +37,8 @@ if(GEOS_ENABLE_TESTS)
   endif()
 
   add_test(test_bug234 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/test_bug234)
-  add_test(test_sweep_line_speed ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/test_sweep_line_speed)
+  add_test(test_sweep_line_speed
+    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/test_sweep_line_speed)
 
   set(STATUS_RESULT "ON")
 endif()

@@ -1,4 +1,4 @@
-#################################################################################
+################################################################################
 #
 # CMake configuration for GEOS perf/operation/predicate tests
 #
@@ -9,7 +9,7 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 #
-#################################################################################
+################################################################################
 
 add_executable(perf_interiorpoint_area InteriorPointAreaPerfTest.cpp)
 

@@ -1,4 +1,4 @@
-#################################################################################
+################################################################################
 #
 # Main GEOS build configuration file for CMake build system
 #
@@ -9,7 +9,7 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 #
-#################################################################################
+################################################################################
 cmake_minimum_required(VERSION 3.1.3)
 
 if(NOT CMAKE_VERSION)
@@ -20,26 +20,26 @@ endif()
 if(POLICY CMP0048)
   cmake_policy(SET CMP0048 NEW)
 endif()
-#################################################################################
+################################################################################
 # Set GEOS project
-#################################################################################
+################################################################################
 project(GEOS LANGUAGES C CXX)
 
 # Add custom GEOS modules for CMake
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
 
-#################################################################################
+################################################################################
 # Set C++ standard
-#################################################################################
+################################################################################
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 message(STATUS "Setting C++ requirement to C++${CMAKE_CXX_STANDARD}")
 
-#################################################################################
+################################################################################
 # Setup GEOS version
-#################################################################################
+################################################################################
 
 # READ GEOS VERSIONS FROM FILE
 file(READ "Version.txt" VERSION_TXT)
@@ -68,7 +68,10 @@ set(CAPI_INTERFACE_AGE ${CMAKE_MATCH_1})
 
 # GEOS release version
 # GEOS C++ library SONAME will use these encoding ABI break at every release
-set(GEOS_VERSION "${GEOS_VERSION_MAJOR}.${GEOS_VERSION_MINOR}.${GEOS_VERSION_PATCH}${GEOS_PATCH_WORD}")
+string(CONCAT GEOS_VERSION
+  "${GEOS_VERSION_MAJOR}."
+  "${GEOS_VERSION_MINOR}."
+  "${GEOS_VERSION_PATCH}${GEOS_PATCH_WORD}")
 set(VERSION "${GEOS_VERSION}")
 
 # Copy version components into different variable names to match those used
@@ -83,22 +86,25 @@ set(JTS_PORT ${CMAKE_MATCH_1})
 message(STATUS "Setting GEOS version ${VERSION} as port of JTS ${JTS_PORT}")
 
 
-math(EXPR CAPI_VERSION_MAJOR "${CAPI_INTERFACE_CURRENT} - ${CAPI_INTERFACE_AGE}")
+math(EXPR CAPI_VERSION_MAJOR
+  "${CAPI_INTERFACE_CURRENT} - ${CAPI_INTERFACE_AGE}")
 set(CAPI_VERSION_MINOR ${CAPI_INTERFACE_AGE})
 set(CAPI_VERSION_PATCH ${CAPI_INTERFACE_REVISION})
-set(CAPI_VERSION "${CAPI_VERSION_MAJOR}.${CAPI_VERSION_MINOR}.${CAPI_VERSION_PATCH}")
+set(CAPI_VERSION
+  "${CAPI_VERSION_MAJOR}.${CAPI_VERSION_MINOR}.${CAPI_VERSION_PATCH}")
 message(STATUS "Setting GEOS C API version ${CAPI_VERSION}")
-if (NOT WIN32)
+if(NOT WIN32)
   set(CAPI_SOVERSION ${CAPI_VERSION_MAJOR})
   message(STATUS "Setting GEOS C API soversion ${CAPI_SOVERSION}")
 endif()
 
-#################################################################################
+################################################################################
 # Check custom global options
-#################################################################################
+################################################################################
 
 option(GEOS_ENABLE_INLINE
-  "Set to OFF|ON (default) to control GEOS compilation with small functions inlining" ON)
+  "Set to OFF|ON (default) to control GEOS compilation with \
+small functions inlining" ON)
 
 if(NOT MSVC)
   option(GEOS_ENABLE_ASSERT
@@ -109,7 +115,8 @@ option(GEOS_ENABLE_TESTS
   "Set to OFF|ON (default) to control build of GEOS tests package" ON)
 
 option(GEOS_ENABLE_TESTS_UNIT2_ONLY
-  "Set to ON|OFF (default) to enable only new tests based on Catch (WIP: experimental)." OFF)
+  "Set to ON|OFF (default) to enable only new tests based on Catch \
+(WIP: experimental)." OFF)
 
 option(GEOS_BUILD_STATIC
   "Set to OFF|ON (default) to build GEOS static libraries" ON)
@@ -119,19 +126,21 @@ option(GEOS_BUILD_SHARED
 
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
   option(GEOS_ENABLE_FLOATSTORE
-    "Set to OFF|ON (default) to control IEEE754 conformance and remove extra precision" ON)
+    "Set to OFF|ON (default) to control IEEE754 conformance and \
+remove extra precision" ON)
 endif()
 
 if(APPLE)
   option(GEOS_ENABLE_MACOSX_FRAMEWORK
     "Set to ON|OFF (default) to build GEOS as a Mac OS X framework" OFF)
   option(GEOS_ENABLE_MACOSX_FRAMEWORK_UNIXCOMPAT
-    "Set to ON|OFF (default) to add Unix compatibility to the Mac OS X framework" OFF)
+    "Set to ON|OFF (default) to add Unix compatibility to the \
+Mac OS X framework" OFF)
 endif()
 
-#################################################################################
+################################################################################
 # Setup C/C++ compiler options
-#################################################################################
+################################################################################
 if(NOT MSVC_IDE)
   if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug CACHE STRING
@@ -153,20 +162,25 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 
   # Numerical stability
   if(GEOS_ENABLE_FLOATSTORE)
-    # Remove extra precision by forcing conformance to IEEE 754 rather than IEEE 854
+    # Remove extra precision by forcing conformance to IEEE 754
+    # rather than IEEE 854
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ffloat-store")
   endif()
   message(STATUS
     "Forcing IEEE 754 using flag -ffloat-store - ${GEOS_ENABLE_FLOATSTORE}")
 
   # Warnings specification
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-long-long -fno-implicit-inline-templates -Wconversion -pedantic -W -Wunused -Wuninitialized -Wextra -Wdouble-promotion -Wshadow")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-long-long \
+-fno-implicit-inline-templates -Wconversion -pedantic -W -Wunused \
+-Wuninitialized -Wextra -Wdouble-promotion -Wshadow")
 
   # Turn on Position Independent Code generation for GEOS C shared library
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -Wall -Wconversion -pedantic -Wmissing-prototypes -W -Wunused -Wuninitialized -Wextra -Wdouble-promotion")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -Wall -Wconversion -pedantic \
+-Wmissing-prototypes -W -Wunused -Wuninitialized -Wextra -Wdouble-promotion")
 
   # Enable glibc ISO C99 features (macros isfinite, isnan)
-  set(CMAKE_REQUIRED_DEFINITIONS "${CMAKE_REQUIRED_DEFINITIONS} -D_ISOC99_SOURCE=1")
+  set(CMAKE_REQUIRED_DEFINITIONS
+    "${CMAKE_REQUIRED_DEFINITIONS} -D_ISOC99_SOURCE=1")
 
   # For now, punt on ASM on MinGW (Windows+GCC)
   if(WIN32)
@@ -194,7 +208,8 @@ if(GEOS_ENABLE_INLINE)
   add_definitions(-DGEOS_INLINE)
 endif()
 message(STATUS
-  "Setting GEOS compilation with small functions inlining - ${GEOS_ENABLE_INLINE}")
+  "Setting GEOS compilation with small functions inlining - "
+  "${GEOS_ENABLE_INLINE}")
 
 if(NOT MSVC)
   if(GEOS_ENABLE_ASSERT)
@@ -202,37 +217,38 @@ if(NOT MSVC)
       CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
   endif()
   message(STATUS
-    "Setting GEOS compilation with assert() macro enabled - ${GEOS_ENABLE_ASSERT}")
+    "Setting GEOS compilation with assert() macro enabled - "
+    "${GEOS_ENABLE_ASSERT}")
 endif()
 
-#################################################################################
+################################################################################
 # Setup C/C++ library features
-#################################################################################
-if (false)
-# check header files
-include(CheckIncludeFiles)
+################################################################################
+if(false)
+  # check header files
+  include(CheckIncludeFiles)
 
-check_include_files(stdint.h HAVE_STDINT_H)
-check_include_files(inttypes.h HAVE_INTTYPES_H)
-check_include_files(ieeefp.h HAVE_IEEEFP_H)
+  check_include_files(stdint.h HAVE_STDINT_H)
+  check_include_files(inttypes.h HAVE_INTTYPES_H)
+  check_include_files(ieeefp.h HAVE_IEEEFP_H)
 
-# check types and sizes
-include(CheckTypeSize)
+  # check types and sizes
+  include(CheckTypeSize)
 
-if(MSVC)
-  check_type_size("__int64" HAVE_INT64_T_64)
-else()
-  if(HAVE_STDINT_H OR HAVE_INTTYPES_H)
-    check_type_size("int64_t" HAVE_INT64_T_64)
+  if(MSVC)
+    check_type_size("__int64" HAVE_INT64_T_64)
   else()
-    check_type_size("long long int" HAVE_LONG_LONG_INT_64)
+    if(HAVE_STDINT_H OR HAVE_INTTYPES_H)
+      check_type_size("int64_t" HAVE_INT64_T_64)
+    else()
+      check_type_size("long long int" HAVE_LONG_LONG_INT_64)
+    endif()
   endif()
-endif()
 endif()
 
 ################################################################################
 # Setup build directories
-#################################################################################
+################################################################################
 
 # Put the libaries and binaries that get built into directories at the
 # top of the build tree rather than in hard-to-find leaf
@@ -244,7 +260,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 ################################################################################
 # Setup include directories
-#################################################################################
+################################################################################
 
 # for including GEOS C++ API headers
 include_directories(${PROJECT_SOURCE_DIR}/include)
@@ -260,13 +276,14 @@ include_directories(${PROJECT_BINARY_DIR}/include)
 # to not to pollute source tree.
 include_directories(${PROJECT_BINARY_DIR})
 
-#################################################################################
+################################################################################
 # Setup checks and generate config headers
-#################################################################################
+################################################################################
 find_package(Git)
 
 message(STATUS "Generating GEOS ${PROJECT_BINARY_DIR}/geos_revision.h")
-file(WRITE ${CMAKE_BINARY_DIR}/geos_revision.h.in "\#define GEOS_REVISION \"@GEOS_REVISION@\"\n")
+file(WRITE ${CMAKE_BINARY_DIR}/geos_revision.h.in
+  "\#define GEOS_REVISION \"@GEOS_REVISION@\"\n")
 
 file(WRITE ${CMAKE_BINARY_DIR}/geos_revision.cmake
 "
@@ -293,9 +310,9 @@ message(STATUS "Generating GEOS ${PROJECT_BINARY_DIR}/capi/geos_c.h")
 configure_file(${PROJECT_SOURCE_DIR}/capi/geos_c.h.in
   ${PROJECT_BINARY_DIR}/capi/geos_c.h @ONLY)
 
-#################################################################################
+################################################################################
 # Configure tests
-#################################################################################
+################################################################################
 
 if(GEOS_ENABLE_TESTS OR GEOS_ENABLE_TESTS_UNIT2_ONLY)
   enable_testing()
@@ -303,10 +320,10 @@ if(GEOS_ENABLE_TESTS OR GEOS_ENABLE_TESTS_UNIT2_ONLY)
   add_custom_target(check COMMAND ctest)
 endif()
 
-#################################################################################
+################################################################################
 # IDE specifics
-#################################################################################
-if (MSVC_IDE)
+################################################################################
+if(MSVC_IDE)
   # Visual Studio 2017 supports .editorconfig, copy it next to generated .sln
   message(STATUS "Copying .editorconfig file to ${PROJECT_BINARY_DIR}")
   file(COPY "${PROJECT_SOURCE_DIR}/.editorconfig"
@@ -319,18 +336,18 @@ include(GenerateSourceGroups)
 # https://github.com/vector-of-bool/vscode-cmake-tools
 include(CMakeToolsHelpers OPTIONAL)
 
-#################################################################################
+################################################################################
 # Configure subdirectories
-#################################################################################
+################################################################################
 add_subdirectory(include)
 add_subdirectory(src)
 add_subdirectory(capi)
 add_subdirectory(tests)
 add_subdirectory(tools)
 
-#################################################################################
+################################################################################
 # Install/Uninstall
-#################################################################################
+################################################################################
 
 configure_file("${PROJECT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
   "${PROJECT_BINARY_DIR}/cmake/cmake_uninstall.cmake"
@@ -339,10 +356,11 @@ configure_file("${PROJECT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
 add_custom_target(uninstall
   "${CMAKE_COMMAND}" -P "${PROJECT_BINARY_DIR}/cmake/cmake_uninstall.cmake")
 
-#################################################################################
+################################################################################
 # DEBUG settings - TODO: make a summary
 
-message(STATUS "CMake ${CMAKE_VERSION} successfully configured ${PROJECT_NAME} using ${CMAKE_GENERATOR} generator")
+message(STATUS "CMake ${CMAKE_VERSION} successfully configured ${PROJECT_NAME} "
+  "using ${CMAKE_GENERATOR} generator")
 
 #message(STATUS "XXX: CMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}")
 #message(STATUS "XXX: CMAKE_CXX_FLAGS_DEBUG=${CMAKE_CXX_FLAGS_DEBUG}")

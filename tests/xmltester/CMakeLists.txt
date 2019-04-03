@@ -1,4 +1,4 @@
-#################################################################################
+################################################################################
 #
 # GEOS XML tests runner build configuration for CMake build system
 #
@@ -9,7 +9,7 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 #
-#################################################################################
+################################################################################
 
 set(STATUS_MESSAGE "Enable GEOS XML tests build")
 set(STATUS_RESULT "OFF")
@@ -32,15 +32,15 @@ if(GEOS_ENABLE_TESTS)
 
   if(APPLE AND GEOS_ENABLE_MACOSX_FRAMEWORK)
     target_link_libraries(test_simplewkttester GEOS)
- 	else()
+  else()
     target_link_libraries(test_simplewkttester geos)
- 	endif()
+  endif()
 
   add_executable(test_xmltester ${xmltester_SOURCES})
 
   if(APPLE AND GEOS_ENABLE_MACOSX_FRAMEWORK)
     target_link_libraries(test_xmltester GEOS)
- 	else()
+  else()
     target_link_libraries(test_xmltester geos)
   endif()
 
@@ -155,7 +155,9 @@ if(GEOS_ENABLE_TESTS)
     ${XMLTESTS_DIR}/misc/TestSameDirection.xml
     )
 
-  add_test(test_xmltester ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/test_xmltester -v --test-valid-output ${SAVE_XMLTESTS})
+  add_test(test_xmltester
+    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/test_xmltester -v
+    --test-valid-output ${SAVE_XMLTESTS})
 
   set(STATUS_RESULT "ON")
 endif()

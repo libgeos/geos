@@ -1,4 +1,4 @@
-#################################################################################
+################################################################################
 #
 # CMake configuration for GEOS perf tests
 #
@@ -9,7 +9,7 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 #
-#################################################################################
+################################################################################
 
 set(STATUS_MESSAGE "Enable GEOS performance tests build")
 set(STATUS_RESULT "OFF")

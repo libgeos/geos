@@ -1,15 +1,15 @@
-#################################################################################
+################################################################################
 #
 # This file is a part of CMake build configuration of GEOS library
 #
 # Defines commands used by make uninstall target of CMake build configuration.
 #
-# Author: Credit to the CMake mailing list archives for providing this solution. 
+# Author: Credit to the CMake mailing list archives for providing this solution.
 # Modifications: Mateusz Loskot <mateusz@loskot.net>
 #
-#################################################################################
+################################################################################
 if(NOT EXISTS "@CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt")
-  message(FATAL_ERROR 
+  message(FATAL_ERROR
     "Cannot find install manifest:
     @CMAKE_CURRENT_BINARY_DIR@/install_manifest.txt")
 endif()
@@ -39,7 +39,7 @@ foreach(file ${files})
 endforeach()
 
 message(STATUS "Deleting ${GEOS_INCLUDE_DIR} directory")
-exec_program("@CMAKE_COMMAND@" 
+exec_program("@CMAKE_COMMAND@"
   ARGS "-E remove_directory \"${GEOS_INCLUDE_DIR}\""
   OUTPUT_VARIABLE rm_out
   RETURN_VALUE rm_retval)

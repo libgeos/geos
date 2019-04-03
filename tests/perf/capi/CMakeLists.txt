@@ -1,4 +1,4 @@
-#################################################################################
+################################################################################
 #
 # CMake configuration for GEOS perf/capi tests
 #
@@ -9,10 +9,11 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 #
-#################################################################################
+################################################################################
 
 add_executable(perf_memleak_mp_prep memleak_mp_prep.c)
 
 target_link_libraries(perf_memleak_mp_prep geos_c)
 
-#add_test(perf_memleak_mp_prep ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/perf_memleak_mp_prep)
+#add_test(perf_memleak_mp_prep
+#  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/perf_memleak_mp_prep)

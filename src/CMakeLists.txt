@@ -1,4 +1,4 @@
-#################################################################################
+################################################################################
 #
 # GEOS C++ library build configuration for CMake build system
 #
@@ -9,17 +9,19 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 #
-#################################################################################
+################################################################################
 
 file(GLOB_RECURSE geos_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
-file(GLOB_RECURSE geos_ALL_HEADERS ${CMAKE_SOURCE_DIR}/include/*.h) # fix source_group issue
+# fix source_group issue
+file(GLOB_RECURSE geos_ALL_HEADERS ${CMAKE_SOURCE_DIR}/include/*.h)
 
 # Building with Visual C++ x86_64 needs to compile the asm utilities first
-if (MSVC AND (${CMAKE_SIZEOF_VOID_P} EQUAL 8))
+if(MSVC AND (${CMAKE_SIZEOF_VOID_P} EQUAL 8))
   set(TTMATH_MSVC64_ASM ttmathuint_x86_64_msvc.asm)
   enable_language(ASM_MASM)
   message(STATUS "Enabled MASM to compile '${TTMATH_MSVC64_ASM}'")
-  list(INSERT geos_SOURCES 0 ${CMAKE_SOURCE_DIR}/include/geos/algorithm/ttmath/${TTMATH_MSVC64_ASM})
+  list(INSERT geos_SOURCES 0
+    ${CMAKE_SOURCE_DIR}/include/geos/algorithm/ttmath/${TTMATH_MSVC64_ASM})
 endif()
 
 # Include CAPI in OS X framework binary and in static libs
@@ -35,13 +37,13 @@ if(GEOS_ENABLE_MACOSX_FRAMEWORK)
   add_library(GEOS SHARED ${geos_SOURCES} ${geos_c_SOURCES})
 
   math(EXPR CVERSION "${VERSION_MAJOR} + 1")
- 	# VERSION = current version, SOVERSION = compatibility version
+  # VERSION = current version, SOVERSION = compatibility version
   set_target_properties(GEOS
     PROPERTIES
     CLEAN_DIRECT_OUTPUT 1
     FRAMEWORK 1
     VERSION "${CVERSION}.${VERSION_MINOR}.${VERSION_PATCH}"
- 	  SOVERSION ${CVERSION}
+    SOVERSION ${CVERSION}
     FRAMEWORK_VERSION ${VERSION_MAJOR}
     BUILD_WITH_INSTALL_RPATH TRUE
     INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}"
@@ -86,8 +88,11 @@ else()
   endif()
 
   if(GEOS_BUILD_STATIC)
-    file(GLOB geos_capi_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/../capi/*.h) # fix source_group issue
-    add_library(geos-static STATIC ${geos_SOURCES} ${geos_c_SOURCES} ${geos_ALL_HEADERS} ${geos_capi_HEADERS})
+    # fix source_group issue
+    file(GLOB geos_capi_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/../capi/*.h)
+    add_library(geos-static
+      STATIC ${geos_SOURCES} ${geos_c_SOURCES}
+        ${geos_ALL_HEADERS} ${geos_capi_HEADERS})
 
     set_target_properties(geos-static
       PROPERTIES
@@ -119,7 +124,7 @@ endif() # (GEOS_ENABLE_MACOSX_FRAMEWORK)
 # endif()
 
 
-#################################################################################
+################################################################################
 # Group source files for IDE source explorers (e.g. Visual Studio)
-#################################################################################
+################################################################################
 GenerateSourceGroups(src)

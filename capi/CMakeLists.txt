@@ -1,4 +1,4 @@
-#################################################################################
+################################################################################
 #
 # GEOS C library build configuration for CMake build system
 #
@@ -9,7 +9,7 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 #
-#################################################################################
+################################################################################
 
 if(WIN32)
     add_definitions("-DGEOS_DLL_EXPORT=1")
@@ -19,15 +19,17 @@ set(geos_c_SOURCES
   geos_c.cpp
   geos_ts_c.cpp)
 
-file(GLOB geos_capi_HEADERS ${CMAKE_BINARY_DIR}/capi/*.h) # fix source_group issue
+# fix source_group issue
+file(GLOB geos_capi_HEADERS ${CMAKE_BINARY_DIR}/capi/*.h)
 
 if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK AND GEOS_BUILD_SHARED)
-  # if building OS X framework or only building static libs, CAPI built into C++ library
+  # if building OS X framework or only building static libs, CAPI built into
+  # C++ library
   add_library(geos_c SHARED ${geos_c_SOURCES})
 
   target_link_libraries(geos_c geos)
 
-  if (WIN32)
+  if(WIN32)
     set_target_properties(geos_c
       PROPERTIES
       VERSION ${CAPI_VERSION}
@@ -48,9 +50,9 @@ else()
 endif()
 
 
-#################################################################################
+################################################################################
 # Installation
-#################################################################################
+################################################################################
 
 if(APPLE AND GEOS_ENABLE_MACOSX_FRAMEWORK)
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/geos_c.h
@@ -68,8 +70,8 @@ if(NOT GEOS_ENABLE_MACOSX_FRAMEWORK AND GEOS_BUILD_SHARED)
     ARCHIVE DESTINATION lib)
 endif()
 
-#################################################################################
+################################################################################
 # Group source files for IDE source explorers (e.g. Visual Studio)
-#################################################################################
+################################################################################
 
 source_group("Header Files" FILES ${geos_capi_HEADERS})

@@ -1,4 +1,4 @@
-#################################################################################
+################################################################################
 #
 # CMake configuration for GEOS perf/operation/buffer tests
 #
@@ -9,10 +9,11 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 #
-#################################################################################
+################################################################################
 
 add_executable(perf_iterated_buffer IteratedBufferStressTest.cpp)
 
 target_link_libraries(perf_iterated_buffer geos)
 
-#add_test(perf_iterated_buffer ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/perf_iterated_buffer)
+#add_test(perf_iterated_buffer
+#  ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/perf_iterated_buffer)
