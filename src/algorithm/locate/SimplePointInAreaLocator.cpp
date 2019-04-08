@@ -44,7 +44,19 @@ SimplePointInAreaLocator::locate(const Coordinate& p, const Geometry* geom)
         return Location::EXTERIOR;
     }
 
+    /**
+     * Do a fast check against the geometry envelope first
+     */
+    if (! geom->getEnvelopeInternal()->intersects(p))
+        return Location::EXTERIOR;
+
     return locateInGeometry(p, geom);
+}
+
+bool
+SimplePointInAreaLocator::isContained(const Coordinate& p, const Geometry* geom)
+{
+    return Location::EXTERIOR != locate(p, geom);
 }
 
 int
