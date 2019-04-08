@@ -433,58 +433,38 @@ IsValidOp::checkHolesInShell(const Polygon* p, GeometryGraph* graph)
 
     const LinearRing* shell = static_cast<const LinearRing*>(
                                   p->getExteriorRing());
-
     const Geometry* shellgeom = static_cast<const Geometry*>(shell);
 
-    auto nholes = p->getNumInteriorRing();
-
-    if(shell->isEmpty()) {
-        for(size_t i = 0; i < nholes; ++i) {
-            assert(dynamic_cast<const LinearRing*>(
-                       p->getInteriorRingN(i)));
-
-            const LinearRing* hole = static_cast<const LinearRing*>(
-                                         p->getInteriorRingN(i));
-
-            if(!hole->isEmpty()) {
-                validErr = new TopologyValidationError(
-                    TopologyValidationError::eHoleOutsideShell);
-                return;
-            }
-        }
-        // all interiors also empty or none exist
-        return;
-    }
+    bool isShellEmpty = shell->isEmpty();
 
     locate::IndexedPointInAreaLocator ipial(*shellgeom);
+    auto nholes = p->getNumInteriorRing();
 
     for(size_t i = 0; i < nholes; ++i) {
+
         assert(dynamic_cast<const LinearRing*>(
                    p->getInteriorRingN(i)));
 
         const LinearRing* hole = static_cast<const LinearRing*>(
                                      p->getInteriorRingN(i));
 
-        const Coordinate* holePt = findPtNotNode(
-                                       hole->getCoordinatesRO(), shell, graph);
+        if (hole->isEmpty()) continue;
 
+        const Coordinate* holePt = findPtNotNode(hole->getCoordinatesRO(), shell, graph);
         /**
-         * If no non-node hole vertex can be found, the hole must
-         * split the polygon into disconnected interiors.
-         * This will be caught by a subsequent check.
-         */
-        if(holePt == nullptr) {
-            return;
-        }
-
-        bool outside = (geom::Location::EXTERIOR == ipial.locate(holePt));
-        if(outside) {
+        * If no non-node hole vertex can be found, the hole must
+        * split the polygon into disconnected interiors.
+        * This will be caught by a subsequent check.
+        */
+        if (holePt == nullptr) return;
+        bool outside = isShellEmpty || (Location::EXTERIOR == ipial.locate(holePt));
+        if (outside) {
             validErr = new TopologyValidationError(
-                TopologyValidationError::eHoleOutsideShell,
-                *holePt);
+                TopologyValidationError::eHoleOutsideShell);
             return;
         }
     }
+
 }
 
 /*private*/
@@ -497,7 +477,7 @@ IsValidOp::checkHolesNotNested(const Polygon* p, GeometryGraph* graph)
     IndexedNestedRingTester nestedTester(graph);
 
     auto nholes = p->getNumInteriorRing();
-    for(size_t i = 0; i < nholes; ++i) {
+    for (size_t i = 0; i < nholes; ++i) {
         assert(dynamic_cast<const LinearRing*>(
                    p->getInteriorRingN(i)));
 
@@ -505,7 +485,7 @@ IsValidOp::checkHolesNotNested(const Polygon* p, GeometryGraph* graph)
                                           p->getInteriorRingN(i));
 
         //empty holes always pass
-        if(innerHole->isEmpty()) {
+        if (innerHole->isEmpty()) {
             continue;
         }
 
@@ -513,7 +493,7 @@ IsValidOp::checkHolesNotNested(const Polygon* p, GeometryGraph* graph)
     }
 
     bool isNonNested = nestedTester.isNonNested();
-    if(!isNonNested) {
+    if (!isNonNested) {
         validErr = new TopologyValidationError(
             TopologyValidationError::eNestedHoles,
             *(nestedTester.getNestedPoint()));
@@ -524,31 +504,30 @@ IsValidOp::checkHolesNotNested(const Polygon* p, GeometryGraph* graph)
 void
 IsValidOp::checkShellsNotNested(const MultiPolygon* mp, GeometryGraph* graph)
 {
-    for(size_t i = 0, ngeoms = mp->getNumGeometries(); i < ngeoms; ++i) {
+    for (size_t i = 0, ngeoms = mp->getNumGeometries(); i < ngeoms; ++i) {
         const Polygon* p = dynamic_cast<const Polygon*>(
                                mp->getGeometryN(i));
-        assert(p);
 
         const LinearRing* shell = dynamic_cast<const LinearRing*>(
                                       p->getExteriorRing());
-        assert(shell);
 
-        for(size_t j = 0; j < ngeoms; ++j) {
-            if(i == j) {
+        if (shell->isEmpty()) return;
+
+        for (size_t j = 0; j < ngeoms; ++j) {
+            if (i == j) {
                 continue;
             }
 
             const Polygon* p2 = dynamic_cast<const Polygon*>(
                                     mp->getGeometryN(j));
-            assert(p2);
 
-            if(shell->isEmpty() || p2->isEmpty()) {
+            if (p2->isEmpty()) {
                 continue;
             }
 
             checkShellNotNested(shell, p2, graph);
 
-            if(validErr != nullptr) {
+            if (validErr != nullptr) {
                 return;
             }
         }
