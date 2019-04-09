@@ -58,11 +58,11 @@ FacetSequenceTreeBuilder::computeFacetSequences(const Geometry* g)
         {
             if(const LineString* ls = dynamic_cast<const LineString*>(geom)) {
                 const CoordinateSequence* seq = ls->getCoordinatesRO();
-                addFacetSequences(seq, *m_sections);
+                addFacetSequences(geom, seq, *m_sections);
             }
             else if(const Point* pt = dynamic_cast<const Point*>(geom)) {
                 const CoordinateSequence* seq = pt->getCoordinatesRO();
-                addFacetSequences(seq, *m_sections);
+                addFacetSequences(geom, seq, *m_sections);
             }
         }
     };
@@ -74,7 +74,8 @@ FacetSequenceTreeBuilder::computeFacetSequences(const Geometry* g)
 }
 
 void
-FacetSequenceTreeBuilder::addFacetSequences(const CoordinateSequence* pts, std::vector<FacetSequence*>& sections)
+FacetSequenceTreeBuilder::addFacetSequences(const Geometry* geom, const CoordinateSequence* pts,
+        std::vector<FacetSequence*>& sections)
 {
     size_t i = 0;
     size_t size = pts->size();
@@ -86,7 +87,7 @@ FacetSequenceTreeBuilder::addFacetSequences(const CoordinateSequence* pts, std::
         if(end >= size - 1) {
             end = size;
         }
-        FacetSequence* sect = new FacetSequence(pts, i, end);
+        FacetSequence* sect = new FacetSequence(geom, pts, i, end);
         sections.push_back(sect);
         i += FACET_SEQUENCE_SIZE;
     }

@@ -23,7 +23,17 @@ using namespace geos::geom;
 using namespace geos::operation::distance;
 using namespace geos::algorithm;
 
+FacetSequence::FacetSequence(const Geometry *p_geom, const CoordinateSequence* p_pts, size_t p_start, size_t p_end) :
+    geom(p_geom),
+    pts(p_pts),
+    start(p_start),
+    end(p_end)
+{
+    computeEnvelope();
+}
+
 FacetSequence::FacetSequence(const CoordinateSequence* p_pts, size_t p_start, size_t p_end) :
+    geom(nullptr),
     pts(p_pts),
     start(p_start),
     end(p_end)
@@ -48,27 +58,68 @@ FacetSequence::distance(const FacetSequence& facetSeq) const
 {
     bool isPointThis = isPoint();
     bool isPointOther = facetSeq.isPoint();
+    double distance;
 
     if(isPointThis && isPointOther) {
         Coordinate pt = pts->getAt(start);
         Coordinate seqPt = facetSeq.pts->getAt(facetSeq.start);
-        return pt.distance(seqPt);
-
+        distance = pt.distance(seqPt);
     }
     else if(isPointThis) {
         Coordinate pt = pts->getAt(start);
-        return computePointLineDistance(pt, facetSeq);
+        distance = computeDistancePointLine(pt, facetSeq, nullptr);
     }
     else if(isPointOther) {
         Coordinate seqPt = facetSeq.pts->getAt(facetSeq.start);
-        return computePointLineDistance(seqPt, *this);
+        distance = computeDistancePointLine(seqPt, *this, nullptr);
+    }
+    else {
+        distance = computeDistanceLineLine(facetSeq, nullptr);
     }
 
-    return computeLineLineDistance(facetSeq);
+    return distance;
+}
+
+/*
+* Rather than get bent out of shape about returning a pointer
+* just return the whole mess, since it only ends up holding two
+* locations.
+*/
+std::vector<GeometryLocation>
+FacetSequence::nearestLocations(const FacetSequence& facetSeq)  const
+{
+    Coordinate pt, seqPt;
+    bool isPointThis = isPoint();
+    bool isPointOther = facetSeq.isPoint();
+    std::vector<GeometryLocation> locs;
+    if (isPointThis && isPointOther) {
+        pts->getAt(start, pt);
+        facetSeq.pts->getAt(facetSeq.start, seqPt);
+        GeometryLocation gl1(geom, start, pt);
+        GeometryLocation gl2(facetSeq.geom, facetSeq.start, seqPt);
+    }
+    else if (isPointThis) {
+        pts->getAt(start, pt);
+        computeDistancePointLine(pt, facetSeq, &locs);
+    }
+    else if (isPointOther) {
+        facetSeq.pts->getAt(facetSeq.start, seqPt);
+        computeDistancePointLine(seqPt, *this, &locs);
+        // unflip the locations
+        GeometryLocation tmp = locs[0];
+        locs[0] = locs[1];
+        locs[1] = tmp;
+    }
+    else {
+        computeDistanceLineLine(facetSeq, &locs);
+    }
+    return locs;
 }
 
 double
-FacetSequence::computePointLineDistance(const Coordinate& pt, const FacetSequence& facetSeq) const
+FacetSequence::computeDistancePointLine(const Coordinate& pt,
+                                        const FacetSequence& facetSeq,
+                                        std::vector<GeometryLocation> *locs) const
 {
     double minDistance = std::numeric_limits<double>::infinity();
     double dist;
@@ -84,14 +135,37 @@ FacetSequence::computePointLineDistance(const Coordinate& pt, const FacetSequenc
         }
         if(dist < minDistance) {
             minDistance = dist;
+            if (locs != nullptr) {
+                updateNearestLocationsPointLine(pt, facetSeq, i, q0, q1, locs);
+            }
+            if(minDistance <= 0.0) {
+                return minDistance;
+            }
         }
     }
 
     return minDistance;
 }
 
+void
+FacetSequence::updateNearestLocationsPointLine(const Coordinate& pt,
+        const FacetSequence& facetSeq, int i,
+        const Coordinate& q0, const Coordinate &q1,
+        std::vector<GeometryLocation> *locs) const
+{
+    geom::LineSegment seg(q0, q1);
+    Coordinate segClosestPoint;
+    seg.closestPoint(pt, segClosestPoint);
+    GeometryLocation gl0(geom, start, pt);
+    GeometryLocation gl1(facetSeq.geom, i, segClosestPoint);
+    locs->clear();
+    locs->push_back(gl0);
+    locs->push_back(gl1);
+    return;
+}
+
 double
-FacetSequence::computeLineLineDistance(const FacetSequence& facetSeq) const
+FacetSequence::computeDistanceLineLine(const FacetSequence& facetSeq, std::vector<GeometryLocation> *locs) const
 {
     double minDistance = std::numeric_limits<double>::infinity();
     double dist;
@@ -106,16 +180,37 @@ FacetSequence::computeLineLineDistance(const FacetSequence& facetSeq) const
             facetSeq.pts->getAt(j + 1, q1);
 
             dist = Distance::segmentToSegment(p0, p1, q0, q1);
-            if(dist == 0.0) {
-                return dist;
-            }
-            if(dist < minDistance) {
+            if(dist <= minDistance) {
                 minDistance = dist;
+                if(locs != nullptr) {
+                    updateNearestLocationsLineLine(i, p0, p1, facetSeq, j, q0, q1, locs);
+                }
+                if(minDistance <= 0.0) return minDistance;
             }
         }
     }
 
     return minDistance;
+}
+
+void
+FacetSequence::updateNearestLocationsLineLine(int i, const Coordinate& p0, const Coordinate& p1,
+        const FacetSequence& facetSeq,
+        int j, const Coordinate& q0, const Coordinate &q1,
+        std::vector<GeometryLocation> *locs) const
+{
+    LineSegment seg0(p0, p1);
+    LineSegment seg1(q0, q1);
+    CoordinateSequence* closestPts = seg0.closestPoints(seg1);
+    Coordinate c0, c1;
+    closestPts->getAt(0, c0);
+    closestPts->getAt(1, c1);
+    GeometryLocation gl0(geom, i, c0);
+    GeometryLocation gl1(facetSeq.geom, j, c1);
+    locs->clear();
+    locs->push_back(gl0);
+    locs->push_back(gl1);
+    return;
 }
 
 void

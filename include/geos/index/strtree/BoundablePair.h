@@ -103,7 +103,8 @@ public:
     static double area(const Boundable* b);
 
     void expandToQueue(BoundablePairQueue&, double minDistance);
-    void expand(const Boundable* bndComposite, const Boundable* bndOther, BoundablePairQueue& priQ, double minDistance);
+    void expand(const Boundable* bndComposite, const Boundable* bndOther, bool isFlipped, BoundablePairQueue& priQ,
+                double minDistance);
 };
 }
 }

@@ -104,11 +104,12 @@ geos_unit_SOURCES = \
 	operation/buffer/BufferOpTest.cpp \
 	operation/buffer/BufferParametersTest.cpp \
 	operation/distance/DistanceOpTest.cpp \
+	operation/distance/IndexedFacetDistanceTest.cpp \
 	operation/intersection/RectangleIntersectionTest.cpp \
 	operation/IsSimpleOpTest.cpp \
 	operation/linemerge/LineMergerTest.cpp \
 	operation/linemerge/LineSequencerTest.cpp \
-    operation/overlay/OverlayOpUnionTest.cpp \
+	operation/overlay/OverlayOpUnionTest.cpp \
 	operation/overlay/validate/FuzzyPointLocatorTest.cpp \
 	operation/overlay/validate/OffsetPointGeneratorTest.cpp \
 	operation/overlay/validate/OverlayResultValidatorTest.cpp \

@@ -32,7 +32,12 @@ public:
 
     static double distance(const geom::Geometry* g1, const geom::Geometry* g2);
 
-    double getDistance(const geom::Geometry* g) const;
+    static std::vector<geom::Coordinate> nearestPoints(const geom::Geometry* g1, const geom::Geometry* g2);
+
+    double distance(const geom::Geometry* g) const;
+
+    std::vector<GeometryLocation> nearestLocations(const geom::Geometry* g) const;
+    std::vector<geom::Coordinate> nearestPoints(const geom::Geometry* g) const;
 
     ~IndexedFacetDistance();
 

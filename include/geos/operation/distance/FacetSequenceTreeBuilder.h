@@ -35,7 +35,9 @@ private:
     // Seems to be better to use a minimum node capacity
     static const int STR_TREE_NODE_CAPACITY = 4;
 
-    static void addFacetSequences(const geom::CoordinateSequence* pts, std::vector<FacetSequence*>& sections);
+    static void addFacetSequences(const geom::Geometry* geom,
+                                  const geom::CoordinateSequence* pts,
+                                  std::vector<FacetSequence*>& sections);
     static std::vector<FacetSequence*>* computeFacetSequences(const geom::Geometry* g);
 
 public:
