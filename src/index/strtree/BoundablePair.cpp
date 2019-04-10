@@ -37,7 +37,7 @@ BoundablePair::BoundablePair(const Boundable* p_boundable1, const Boundable* p_b
 const Boundable*
 BoundablePair::getBoundable(int i) const
 {
-    if(i == 0) {
+    if (i == 0) {
         return boundable1;
     }
     return boundable2;
@@ -47,7 +47,7 @@ double
 BoundablePair::distance() const
 {
     // if items, compute exact distance
-    if(isLeaves()) {
+    if (isLeaves()) {
         return itemDistance->distance((ItemBoundable*) boundable1, (ItemBoundable*) boundable2);
     }
 
@@ -55,7 +55,7 @@ BoundablePair::distance() const
     const geom::Envelope* e1 = (const geom::Envelope*) boundable1->getBounds();
     const geom::Envelope* e2 = (const geom::Envelope*) boundable2->getBounds();
 
-    if(!e1 || !e2) {
+    if (!e1 || !e2) {
         throw util::GEOSException("Can't compute envelope of item in BoundablePair");
     }
     return e1->distance(e2);
@@ -97,7 +97,7 @@ BoundablePair::expandToQueue(BoundablePairQueue& priQ, double minDistance)
      * Otherwise, simply expand whichever is composite.
      */
     if (isComp1 && isComp2) {
-        if(area(boundable1) > area(boundable2)) {
+        if (area(boundable1) > area(boundable2)) {
             expand(boundable1, boundable2, false, priQ, minDistance);
             return;
         }
@@ -118,28 +118,13 @@ BoundablePair::expandToQueue(BoundablePairQueue& priQ, double minDistance)
     throw geos::util::IllegalArgumentException("neither boundable is composite");
 }
 
-// void
-// BoundablePair::expand(const Boundable* bndComposite, const Boundable* bndOther,
-//                       bool isFlipped, BoundablePairQueue& priQ,
-//                       double minDistance)
-// {
-//     std::vector<Boundable*> children = ((AbstractNode*) bndComposite)->getChildBoundables();
-//     for(std::vector<Boundable*>::iterator it = children.begin(); it != children.end(); ++it) {
-//         Boundable* child = *it;
-//         std::unique_ptr<BoundablePair> bp(new BoundablePair(child, bndOther, itemDistance));
-//         if(minDistance == std::numeric_limits<double>::infinity() || bp->getDistance() < minDistance) {
-//             priQ.push(bp.release());
-//         }
-//     }
-// }
-
 void
 BoundablePair::expand(const Boundable* bndComposite, const Boundable* bndOther,
                       bool isFlipped, BoundablePairQueue& priQ,
                       double minDistance)
 {
     std::vector<Boundable*>* children = ((AbstractNode*) bndComposite)->getChildBoundables();
-    for(std::vector<Boundable*>::iterator it = children->begin(); it != children->end(); ++it) {
+    for (std::vector<Boundable*>::iterator it = children->begin(); it != children->end(); ++it) {
         Boundable* child = *it;
         std::unique_ptr<BoundablePair> bp;
         if (isFlipped) {
@@ -149,7 +134,7 @@ BoundablePair::expand(const Boundable* bndComposite, const Boundable* bndOther,
             bp.reset(new BoundablePair(child, bndOther, itemDistance));
         }
 
-        if(minDistance == std::numeric_limits<double>::infinity() || bp->getDistance() < minDistance) {
+        if (minDistance == std::numeric_limits<double>::infinity() || bp->getDistance() < minDistance) {
             priQ.push(bp.release());
         }
     }

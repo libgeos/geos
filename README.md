@@ -136,6 +136,7 @@ To format your code into the desired style, use astyle 3.1:
 
     astyle --style=stroustrup \
            --unpad-paren \
+           --pad-header \
            --pad-comma \
            --indent=spaces=4 \
            --align-pointer=type \
