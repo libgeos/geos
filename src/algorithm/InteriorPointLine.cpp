@@ -42,13 +42,13 @@ InteriorPointLine::InteriorPointLine(const Geometry* g)
 {
     minDistance = DoubleMax;
     hasInterior = false;
-    if(g->getCentroid(centroid)) {
+    if (g->getCentroid(centroid)) {
 #if GEOS_DEBUG
         std::cerr << "Centroid: " << centroid << std::endl;
 #endif
         addInterior(g);
     }
-    if(!hasInterior) {
+    if (!hasInterior) {
         addEndpoints(g);
     }
 }
@@ -68,14 +68,14 @@ void
 InteriorPointLine::addInterior(const Geometry* geom)
 {
     const LineString* ls = dynamic_cast<const LineString*>(geom);
-    if(ls) {
+    if (ls) {
         addInterior(ls->getCoordinatesRO());
         return;
     }
 
     const GeometryCollection* gc = dynamic_cast<const GeometryCollection*>(geom);
-    if(gc) {
-        for(std::size_t i = 0, n = gc->getNumGeometries(); i < n; i++) {
+    if (gc) {
+        for (std::size_t i = 0, n = gc->getNumGeometries(); i < n; i++) {
             addInterior(gc->getGeometryN(i));
         }
     }
@@ -85,7 +85,7 @@ void
 InteriorPointLine::addInterior(const CoordinateSequence* pts)
 {
     const std::size_t n = pts->getSize() - 1;
-    for(std::size_t i = 1; i < n; ++i) {
+    for (std::size_t i = 1; i < n; ++i) {
         add(pts->getAt(i));
     }
 }
@@ -101,14 +101,14 @@ void
 InteriorPointLine::addEndpoints(const Geometry* geom)
 {
     const LineString* ls = dynamic_cast<const LineString*>(geom);
-    if(ls) {
+    if (ls) {
         addEndpoints(ls->getCoordinatesRO());
         return;
     }
 
     const GeometryCollection* gc = dynamic_cast<const GeometryCollection*>(geom);
-    if(gc) {
-        for(std::size_t i = 0, n = gc->getNumGeometries(); i < n; i++) {
+    if (gc) {
+        for (std::size_t i = 0, n = gc->getNumGeometries(); i < n; i++) {
             addEndpoints(gc->getGeometryN(i));
         }
     }
@@ -118,9 +118,9 @@ void
 InteriorPointLine::addEndpoints(const CoordinateSequence* pts)
 {
     size_t npts = pts->size();
-    if(npts) {
+    if (npts) {
         add(pts->getAt(0));
-        if(npts > 1) {
+        if (npts > 1) {
             add(pts->getAt(npts - 1));
         }
     }
@@ -135,7 +135,7 @@ InteriorPointLine::add(const Coordinate& point)
 #if GEOS_DEBUG
     std::cerr << "point " << point << " dist " << dist << ", minDistance " << minDistance << std::endl;
 #endif
-    if(!hasInterior || dist < minDistance) {
+    if (!hasInterior || dist < minDistance) {
         interiorPoint = point;
 #if GEOS_DEBUG
         std::cerr << " is new InteriorPoint" << std::endl;
@@ -148,7 +148,7 @@ InteriorPointLine::add(const Coordinate& point)
 bool
 InteriorPointLine::getInteriorPoint(Coordinate& ret) const
 {
-    if(! hasInterior) {
+    if (! hasInterior) {
         return false;
     }
     ret = interiorPoint;

@@ -34,7 +34,7 @@ namespace algorithm { // geos.algorithm
 InteriorPointPoint::InteriorPointPoint(const Geometry* g)
 {
     minDistance = DoubleMax;
-    if(! g->getCentroid(centroid)) {
+    if (! g->getCentroid(centroid)) {
         hasInterior = false;
     }
     else {
@@ -48,14 +48,14 @@ void
 InteriorPointPoint::add(const Geometry* geom)
 {
     const Point* po = dynamic_cast<const Point*>(geom);
-    if(po) {
+    if (po) {
         add(po->getCoordinate());
         return;
     }
 
     const GeometryCollection* gc = dynamic_cast<const GeometryCollection*>(geom);
-    if(gc) {
-        for(std::size_t i = 0, n = gc->getNumGeometries(); i < n; i++) {
+    if (gc) {
+        for (std::size_t i = 0, n = gc->getNumGeometries(); i < n; i++) {
             add(gc->getGeometryN(i));
         }
     }
@@ -67,7 +67,7 @@ InteriorPointPoint::add(const Coordinate* point)
 {
     assert(point);    // we wouldn't been called if this was an empty geom
     double dist = point->distance(centroid);
-    if(dist < minDistance) {
+    if (dist < minDistance) {
         interiorPoint = *point;
         minDistance = dist;
     }
@@ -77,7 +77,7 @@ InteriorPointPoint::add(const Coordinate* point)
 bool
 InteriorPointPoint::getInteriorPoint(Coordinate& ret) const
 {
-    if(! hasInterior) {
+    if (! hasInterior) {
         return false;
     }
     ret = interiorPoint;

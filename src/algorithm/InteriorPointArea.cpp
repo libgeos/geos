@@ -86,7 +86,7 @@ public:
     getScanLineY()
     {
         process(*poly.getExteriorRing());
-        for(size_t i = 0; i < poly.getNumInteriorRing(); i++) {
+        for (size_t i = 0; i < poly.getNumInteriorRing(); i++) {
             process(*poly.getInteriorRingN(i));
         }
         double bisectY = avg(hiY, loY);
@@ -104,7 +104,7 @@ private:
     process(const LineString& line)
     {
         const CoordinateSequence* seq = line.getCoordinatesRO();
-        for(std::size_t i = 0, s = seq->size(); i < s; i++) {
+        for (std::size_t i = 0, s = seq->size(); i < s; i++) {
             double y = seq->getY(i);
             updateInterval(y);
         }
@@ -113,13 +113,13 @@ private:
     void
     updateInterval(double y)
     {
-        if(y <= centreY) {
-            if(y > loY) {
+        if (y <= centreY) {
+            if (y > loY) {
                 loY = y;
             }
         }
-        else if(y > centreY) {
-            if(y < hiY) {
+        else if (y > centreY) {
+            if (y < hiY) {
                 hiY = y;
             }
         }
@@ -161,10 +161,10 @@ public:
         interiorPoint = *polygon.getCoordinate();
 
         const LinearRing* shell = dynamic_cast<const LinearRing*>(polygon.getExteriorRing());
-        scanRing( *shell, crossings );
+        scanRing(*shell, crossings);
         for (size_t i = 0; i < polygon.getNumInteriorRing(); i++) {
             const LinearRing* hole = dynamic_cast<const LinearRing*>(polygon.getInteriorRingN(i));
-            scanRing( *hole, crossings );
+            scanRing(*hole, crossings);
         }
         findBestMidpoint(crossings);
     }
@@ -178,7 +178,7 @@ private:
     void scanRing(const LinearRing& ring, vector<double>& crossings)
     {
         // skip rings which don't cross scan line
-        if ( ! intersectsHorizontalLine( ring.getEnvelopeInternal(), interiorPointY) )
+        if (! intersectsHorizontalLine(ring.getEnvelopeInternal(), interiorPointY))
             return;
 
         const CoordinateSequence* seq = ring.getCoordinatesRO();
@@ -189,17 +189,18 @@ private:
         }
     }
 
-    void addEdgeCrossing(Coordinate& p0, Coordinate& p1, double scanY, vector<double>& crossings) {
-      // skip non-crossing segments
-      if ( !intersectsHorizontalLine(p0, p1, scanY) )
-        return;
-      if (! isEdgeCrossingCounted(p0, p1, scanY) )
-        return;
+    void addEdgeCrossing(Coordinate& p0, Coordinate& p1, double scanY, vector<double>& crossings)
+    {
+        // skip non-crossing segments
+        if (!intersectsHorizontalLine(p0, p1, scanY))
+            return;
+        if (! isEdgeCrossingCounted(p0, p1, scanY))
+            return;
 
-      // edge intersects scan line, so add a crossing
-      double xInt = intersection(p0, p1, scanY);
-      crossings.push_back(xInt);
-      //checkIntersectionDD(p0, p1, scanY, xInt);
+        // edge intersects scan line, so add a crossing
+        double xInt = intersection(p0, p1, scanY);
+        crossings.push_back(xInt);
+        //checkIntersectionDD(p0, p1, scanY, xInt);
     }
 
     void findBestMidpoint(vector<double>& crossings)
@@ -220,7 +221,7 @@ private:
             double x2 = crossings[i + 1];
 
             double width = x2 - x1;
-            if ( width > interiorSectionWidth ) {
+            if (width > interiorSectionWidth) {
                 interiorSectionWidth = width;
                 double interiorPointX = avg(x1, x2);
                 interiorPoint = Coordinate(interiorPointX, interiorPointY);
@@ -229,18 +230,19 @@ private:
     }
 
     static bool
-    isEdgeCrossingCounted(Coordinate& p0, Coordinate& p1, double scanY) {
-      // skip horizontal lines
-      if ( p0.y == p1.y )
-        return false;
-      // handle cases where vertices lie on scan-line
-      // downward segment does not include start point
-      if ( p0.y == scanY && p1.y < scanY )
-        return false;
-      // upward segment does not include endpoint
-      if ( p1.y == scanY && p0.y < scanY )
-        return false;
-      return true;
+    isEdgeCrossingCounted(Coordinate& p0, Coordinate& p1, double scanY)
+    {
+        // skip horizontal lines
+        if (p0.y == p1.y)
+            return false;
+        // handle cases where vertices lie on scan-line
+        // downward segment does not include start point
+        if (p0.y == scanY && p1.y < scanY)
+            return false;
+        // upward segment does not include endpoint
+        if (p1.y == scanY && p0.y < scanY)
+            return false;
+        return true;
     }
 
     static double
@@ -249,8 +251,8 @@ private:
         double x0 = p0.x;
         double x1 = p1.x;
 
-        if ( x0 == x1 )
-        return x0;
+        if (x0 == x1)
+            return x0;
 
         // Assert: segDX is non-zero, due to previous equality test
         double segDX = x1 - x0;
@@ -263,23 +265,24 @@ private:
     static bool
     intersectsHorizontalLine(const Envelope* env, double y)
     {
-        if ( y < env->getMinY() )
+        if (y < env->getMinY())
             return false;
-        if ( y > env->getMaxY() )
+        if (y > env->getMaxY())
             return false;
         return true;
     }
 
     static bool
-    intersectsHorizontalLine(const Coordinate& p0, const Coordinate& p1, double y) {
-      // both ends above?
-      if ( p0.y > y && p1.y > y )
-        return false;
-      // both ends below?
-      if ( p0.y < y && p1.y < y )
-        return false;
-      // segment must intersect line
-      return true;
+    intersectsHorizontalLine(const Coordinate& p0, const Coordinate& p1, double y)
+    {
+        // both ends above?
+        if (p0.y > y && p1.y > y)
+            return false;
+        // both ends below?
+        if (p0.y < y && p1.y < y)
+            return false;
+        // segment must intersect line
+        return true;
     }
 };
 
@@ -314,14 +317,14 @@ InteriorPointArea::process(const Geometry* geom)
         return;
 
     const Polygon* poly = dynamic_cast<const Polygon*>(geom);
-    if(poly) {
+    if (poly) {
         processPolygon(poly);
         return;
     }
 
     const GeometryCollection* gc = dynamic_cast<const GeometryCollection*>(geom);
-    if(gc) {
-        for(std::size_t i = 0, n = gc->getNumGeometries(); i < n; i++) {
+    if (gc) {
+        for (std::size_t i = 0, n = gc->getNumGeometries(); i < n; i++) {
             process(gc->getGeometryN(i));
             GEOS_CHECK_FOR_INTERRUPTS();
         }
@@ -335,9 +338,9 @@ InteriorPointArea::processPolygon(const Polygon* polygon)
     InteriorPointPolygon intPtPoly(*polygon);
     intPtPoly.process();
     double width = intPtPoly.getWidth();
-    if ( width > maxWidth ) {
-      maxWidth = width;
-      intPtPoly.getInteriorPoint(interiorPoint);
+    if (width > maxWidth) {
+        maxWidth = width;
+        intPtPoly.getInteriorPoint(interiorPoint);
     }
 }
 
