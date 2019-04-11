@@ -98,6 +98,14 @@ public:
      */
     bool isLeaves() const;
 
+    /**
+     * Computes the maximum distance between any
+     * two items in the pair of nodes.
+     *
+     * @return the maximum distance between items in the pair
+     */
+    double maximumDistance();
+
     static bool isComposite(const Boundable* item);
 
     static double area(const Boundable* b);

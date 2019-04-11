@@ -17,6 +17,7 @@
  **********************************************************************/
 
 #include <geos/index/strtree/BoundablePair.h>
+#include <geos/index/strtree/EnvelopeUtil.h>
 #include <geos/geom/Envelope.h>
 #include <geos/index/strtree/AbstractNode.h>
 #include <geos/util/IllegalArgumentException.h>
@@ -139,6 +140,16 @@ BoundablePair::expand(const Boundable* bndComposite, const Boundable* bndOther,
         }
     }
 }
+
+double
+BoundablePair::maximumDistance()
+{
+    return EnvelopeUtil::maximumDistance(
+        (const geom::Envelope*) boundable1->getBounds(),
+        (const geom::Envelope*) boundable2->getBounds());
+}
+
+
 
 }
 }

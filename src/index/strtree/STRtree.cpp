@@ -183,6 +183,14 @@ STRtree::verticalSlices(BoundableList* childBoundables, size_t sliceCount)
 }
 
 /*public*/
+std::pair<const void*, const void*>
+STRtree::nearestNeighbour(ItemDistance* itemDist)
+{
+    BoundablePair bp(this->getRoot(), this->getRoot(), itemDist);
+    return nearestNeighbour(&bp);
+}
+
+/*public*/
 const void*
 STRtree::nearestNeighbour(const Envelope* env, const void* item, ItemDistance* itemDist)
 {
@@ -194,19 +202,7 @@ STRtree::nearestNeighbour(const Envelope* env, const void* item, ItemDistance* i
     return nearestNeighbour(&bp).first;
 }
 
-std::pair<const void*, const void*>
-STRtree::nearestNeighbour(BoundablePair* initBndPair)
-{
-    return nearestNeighbour(initBndPair, std::numeric_limits<double>::infinity());
-}
-
-std::pair<const void*, const void*>
-STRtree::nearestNeighbour(ItemDistance* itemDist)
-{
-    BoundablePair bp(this->getRoot(), this->getRoot(), itemDist);
-    return nearestNeighbour(&bp);
-}
-
+/*public*/
 std::pair<const void*, const void*>
 STRtree::nearestNeighbour(STRtree* tree, ItemDistance* itemDist)
 {
@@ -214,6 +210,14 @@ STRtree::nearestNeighbour(STRtree* tree, ItemDistance* itemDist)
     return nearestNeighbour(&bp);
 }
 
+/*public*/
+std::pair<const void*, const void*>
+STRtree::nearestNeighbour(BoundablePair* initBndPair)
+{
+    return nearestNeighbour(initBndPair, std::numeric_limits<double>::infinity());
+}
+
+/*public*/
 std::pair<const void*, const void*>
 STRtree::nearestNeighbour(BoundablePair* initBndPair, double maxDistance)
 {
@@ -286,6 +290,74 @@ STRtree::nearestNeighbour(BoundablePair* initBndPair, double maxDistance)
 
     return std::pair<const void*, const void*>(item0, item1);
 }
+
+/*public*/
+bool
+STRtree::isWithinDistance(STRtree* tree, ItemDistance* itemDist, double maxDistance)
+{
+    BoundablePair bp(getRoot(), tree->getRoot(), itemDist);
+    return isWithinDistance(&bp, maxDistance);
+}
+
+/*private*/
+bool STRtree::isWithinDistance(BoundablePair* initBndPair, double maxDistance)
+{
+    double distanceUpperBound = std::numeric_limits<double>::infinity();
+
+    // initialize search queue
+    BoundablePair::BoundablePairQueue priQ;
+    priQ.push(initBndPair);
+
+    while(!priQ.empty()) {
+        BoundablePair* bndPair = priQ.top();
+        double currentDistance = bndPair->getDistance();
+
+        /**
+        * If the distance for the first pair in the queue
+        * is >= maxDistance, other pairs
+        * in the queue must also have a greater distance.
+        * So can conclude no items are within the distance
+        * and terminate with false
+        */
+        if (currentDistance > maxDistance)
+            return false;
+
+        /**
+        * There must be some pair of items in the nodes which
+        * are closer than the max distance,
+        * so can terminate with true.
+        *
+        * NOTE: using the Envelope MinMaxDistance would provide a tighter bound,
+        * but not sure how to compute this!
+        */
+        if (bndPair->maximumDistance() <= maxDistance)
+            return true;
+
+        /**
+        * If the pair members are leaves
+        * then their distance is an upper bound.
+        * Update the distanceUpperBound to reflect this
+        */
+        if (bndPair->isLeaves()) {
+            distanceUpperBound = currentDistance;
+
+            // Current pair is closer than maxDistance
+            // so can terminate with true
+            if (distanceUpperBound <= maxDistance)
+                return true;
+        }
+        else {
+            /**
+            * Otherwise, expand one side of the pair,
+            * and insert the expanded pairs into the queue.
+            * The choice of which side to expand is determined heuristically.
+            */
+            bndPair->expandToQueue(priQ, distanceUpperBound);
+        }
+    }
+    return false;
+}
+
 
 class STRAbstractNode: public AbstractNode {
 public:
