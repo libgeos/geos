@@ -14,6 +14,7 @@
 
 #include <geos/index/strtree/EnvelopeUtil.h>
 #include <geos/geom/Envelope.h>
+#include <algorithm>
 
 namespace geos {
 namespace index { // geos.index
