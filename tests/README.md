@@ -38,6 +38,11 @@ Run test witin unit test class
 
     xmltester [options] test-file ...
 
+### Options
+
+* `-v` - show test case summary with time
+* `-v -v` - show test case info including dump of geometry
+
 CMake - Run test file
 
     bin/test_xmltester ../geos/tests/xmltester/tests/general/TestBoundary.xml
