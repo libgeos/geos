@@ -367,24 +367,26 @@ XMLTester::printTest(bool success, const std::string& expected_result, const std
         std::cout << ": " << (success ? "ok." : "failed.");
         std::cout << " (" << std::setprecision(15) << java_math_round(prof.getTot() / 1000) << " ms)" << std::endl;
 
-        std::cout << "\tDescription: " << curr_case_desc << std::endl;
+        // print geometry etc for -v -v and above
+        if (verbose > 1) {
+            std::cout << "\tDescription: " << curr_case_desc << std::endl;
 
+            if(gA) {
+                std::cout << "\tGeometry A: ";
+                printGeom(std::cout, gA);
+                std::cout << std::endl;
+            }
 
-        if(gA) {
-            std::cout << "\tGeometry A: ";
-            printGeom(std::cout, gA);
+            if(gB) {
+                std::cout << "\tGeometry B: ";
+                printGeom(std::cout, gB);
+                std::cout << std::endl;
+            }
+
+            std::cout << "\tExpected result: " << expected_result << std::endl;
+            std::cout << "\tObtained result: " << actual_result << std::endl;
             std::cout << std::endl;
         }
-
-        if(gB) {
-            std::cout << "\tGeometry B: ";
-            printGeom(std::cout, gB);
-            std::cout << std::endl;
-        }
-
-        std::cout << "\tExpected result: " << expected_result << std::endl;
-        std::cout << "\tObtained result: " << actual_result << std::endl;
-        std::cout << std::endl;
     }
 }
 
@@ -936,6 +938,8 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
         else if(opName == "union") {
             GeomPtr gRes(parseGeometry(opRes, "expected"));
 
+            profile.start();
+
             GeomPtr gRealRes;
             if(gB) {
 #ifndef USE_BINARYOP
@@ -947,6 +951,8 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             else {
                 gRealRes = gA->Union();
             }
+
+            profile.stop();
 
             success = checkOverlaySuccess(*gRes, *gRealRes);
 
@@ -1831,7 +1837,7 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
         ++failed;
     }
 
-    if((!success && verbose) || verbose > 1) {
+    if((!success && verbose) || verbose > 0) {
         printTest(!!success, expected_result, actual_result, profile);
     }
 
