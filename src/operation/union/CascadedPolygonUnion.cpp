@@ -273,7 +273,7 @@ CascadedPolygonUnion::unionUsingEnvelopeIntersection(geom::Geometry* g0,
     check_valid(*g1Int, "unionUsingEnvelopeIntersection g1Int");
 #endif
 
-    std::unique_ptr<geom::Geometry> u(unionActual(g0Int.get(), g1Int.get()));
+    std::unique_ptr<geom::Geometry> unionCommon(unionActual(g0Int.get(), g1Int.get()));
 
 #if GEOS_DEBUG_CASCADED_UNION
     if(! check_valid(*u, "unionUsingEnvelopeIntersection unionActual return")) {
@@ -291,7 +291,7 @@ CascadedPolygonUnion::unionUsingEnvelopeIntersection(geom::Geometry* g0,
 #endif
 
     if(disjointPolys.empty()) {
-        return u.release();
+        return unionCommon.release();
     }
 
 #if GEOS_DEBUG_CASCADED_UNION
@@ -302,30 +302,39 @@ CascadedPolygonUnion::unionUsingEnvelopeIntersection(geom::Geometry* g0,
     }
 #endif
 
-    // TODO: find, in disjointPolys, those which now have their
-    // environment intersect the environment of the union "u"
-    // and collect them in another vector to be unioned
+    geom::Envelope const* unionCommonEnv = unionCommon->getEnvelopeInternal(); // TODO: check for EMPTY ?
 
     std::vector<geom::Geometry*> polysOn;
     std::vector<geom::Geometry*> polysOff;
-    geom::Envelope const* uEnv = u->getEnvelopeInternal(); // TODO: check for EMPTY ?
-    extractByEnvelope(*uEnv, disjointPolys, polysOn, polysOff);
+    extractByEnvelope(*unionCommonEnv, disjointPolys, polysOn, polysOff);
 #if GEOS_DEBUG_CASCADED_UNION
     std::cerr << "unionUsingEnvelopeIntersection: " << polysOn.size() << "/" << disjointPolys.size() <<
               " polys intersect union of final thing" << std::endl;
 #endif
 
+    // If the union of the interacting geometries
+    // is contained in the envelope of the inputs
+    // (and this is highly likely unless overlay robustness failure occurs)
+    // it is safe to combine with the disjoint polygons
+    geom::Envelope beforeUnionEnv( *(g0Int->getEnvelopeInternal()) );
+    beforeUnionEnv.expandToInclude( g1Int->getEnvelopeInternal() );
+    bool isUnionSafe = beforeUnionEnv.contains(unionCommonEnv);
+    //if (! isUnionSafe) std::cerr << "Found unsafe union" << std::endl;
+
     std::unique_ptr<geom::Geometry> ret;
-    if(polysOn.empty()) {
-        disjointPolys.push_back(u.get());
+    if(polysOn.empty() || isUnionSafe) {
+        disjointPolys.push_back(unionCommon.get());
         ret.reset(geom::util::GeometryCombiner::combine(disjointPolys));
     }
     else {
+        // The union envelope changed (e.g. due to snapping heuristics)
+        // so to be safe must union everything (which is slow, but infrequent)
+
         // TODO: could be further tweaked to only union with polysOn
         //       and combine with polysOff, but then it'll need again to
         //       recurse in the check for disjoint/intersecting
-        ret.reset(geom::util::GeometryCombiner::combine(disjointPolys));
-        ret.reset(unionActual(ret.get(), u.get()));
+        std::unique_ptr<geom::Geometry> disjointCombined( geom::util::GeometryCombiner::combine(disjointPolys) );
+        ret.reset( unionActual( disjointCombined.get(), unionCommon.get() ) );
     }
 
 #if GEOS_DEBUG_CASCADED_UNION
