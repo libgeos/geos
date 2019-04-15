@@ -19,6 +19,8 @@
 #include <geos/algorithm/Distance.h>
 #include <geos/operation/distance/FacetSequence.h>
 
+#include <memory>
+
 using namespace geos::geom;
 using namespace geos::operation::distance;
 using namespace geos::algorithm;
@@ -201,7 +203,7 @@ FacetSequence::updateNearestLocationsLineLine(int i, const Coordinate& p0, const
 {
     LineSegment seg0(p0, p1);
     LineSegment seg1(q0, q1);
-    CoordinateSequence* closestPts = seg0.closestPoints(seg1);
+    std::unique_ptr<CoordinateSequence> closestPts(seg0.closestPoints(seg1));
     Coordinate c0, c1;
     closestPts->getAt(0, c0);
     closestPts->getAt(1, c1);
