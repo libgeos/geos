@@ -4,6 +4,8 @@
 #include <tut/tut.hpp>
 #include <utility.h>
 
+#include <memory>
+
 
 namespace tut {
 //
@@ -38,15 +40,17 @@ template<>
 void object::test<1>
 ()
 {
-    GeometryPtr empty_point = factory_->createPoint();
+    using geos::geom::Geometry;
+
+    std::unique_ptr<Geometry> empty_point(factory_->createPoint());
     ensure(empty_point != nullptr);
 
     geos::geom::Coordinate coord(1, 2);
-    GeometryPtr point = factory_->createPoint(coord);
+    std::unique_ptr<Geometry> point(factory_->createPoint(coord));
     ensure(point != nullptr);
 
-    std::vector<GeometryPtr> geoms{empty_point, point};
-    GeometryColPtr col = factory_->createGeometryCollection(geoms);
+    std::vector<Geometry*> geoms{empty_point.get(), point.get()};
+    std::unique_ptr<Geometry> col(factory_->createGeometryCollection(geoms));
     ensure(col != nullptr);
 
     ensure(col->getCoordinate() != nullptr);
@@ -60,23 +64,21 @@ template<>
 void object::test<2>
 ()
 {
+    using geos::geom::Geometry;
+
     geos::geom::PrecisionModel pm;
     auto gf = GeometryFactory::create(&pm, 1);
-    auto g = gf->createEmptyGeometry();
+    std::unique_ptr<Geometry> g(gf->createEmptyGeometry());
 
     g->setSRID(0);
-    std::vector<decltype(g)> v = {g};
-    auto geom_col = gf->createGeometryCollection(v);
+    std::vector<Geometry*> v = {g.get()};
+    std::unique_ptr<Geometry> geom_col(gf->createGeometryCollection(v));
     ensure_equals(geom_col->getGeometryN(0)->getSRID(), 1);
 
     geom_col->setSRID(2);
     ensure_equals(geom_col->getGeometryN(0)->getSRID(), 2);
 
-    auto clone = geom_col->clone();
+    std::unique_ptr<Geometry> clone(geom_col->clone());
     ensure_equals(clone->getGeometryN(0)->getSRID(), 2);
-
-    // FREE MEMORY
-    gf->destroyGeometry(geom_col);
-    gf->destroyGeometry(clone);
 }
 } // namespace tut
