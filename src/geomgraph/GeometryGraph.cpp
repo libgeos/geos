@@ -409,7 +409,7 @@ GeometryGraph::computeEdgeIntersections(GeometryGraph* g,
 #if GEOS_DEBUG
     cerr << "GeometryGraph::computeEdgeIntersections call" << endl;
 #endif
-    SegmentIntersector* si = new SegmentIntersector(li, includeProper, true);
+    unique_ptr<SegmentIntersector> si(new SegmentIntersector(li, includeProper, true));
 
     si->setBoundaryNodes(getBoundaryNodes(), g->getBoundaryNodes());
     unique_ptr<EdgeSetIntersector> esi(createEdgeSetIntersector());
@@ -431,11 +431,11 @@ GeometryGraph::computeEdgeIntersections(GeometryGraph* g,
         //cerr << "Other edges reduced from " << oe->size() << " to " << other_edges_copy.size() << endl;
         oe = &other_edges_copy;
     }
-    esi->computeIntersections(se, oe, si);
+    esi->computeIntersections(se, oe, si.get());
 #if GEOS_DEBUG
     cerr << "GeometryGraph::computeEdgeIntersections returns" << endl;
 #endif
-    return si;
+    return si.release();
 }
 
 void
