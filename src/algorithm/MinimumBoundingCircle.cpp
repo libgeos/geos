@@ -187,9 +187,9 @@ MinimumBoundingCircle::computeCirclePoints()
     * The problem is simplified by reducing to the convex hull.
     * Computing the convex hull also has the useful effect of eliminating duplicate points
     */
-    Geometry* convexHull = input->convexHull();
+    std::unique_ptr<Geometry> convexHull(input->convexHull());
 
-    CoordinateSequence* cs = convexHull->getCoordinates();
+    std::unique_ptr<CoordinateSequence> cs(convexHull->getCoordinates());
     std::vector<Coordinate> pts;
     cs->toVector(pts);
 
