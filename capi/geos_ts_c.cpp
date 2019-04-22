@@ -2131,7 +2131,7 @@ extern "C" {
         catch(const std::exception& e) {
 #if VERBOSE_EXCEPTIONS
             std::ostringstream s;
-            s << "Exception on GEOSUnion with following inputs:" << std::endl;
+            s << "Exception on GEOSUnion_r with following inputs:" << std::endl;
             s << "A: " << g1->toString() << std::endl;
             s << "B: " << g2->toString() << std::endl;
             handle->NOTICE_MESSAGE("%s", s.str().c_str());
@@ -2165,7 +2165,7 @@ extern "C" {
         catch(const std::exception& e) {
 #if VERBOSE_EXCEPTIONS
             std::ostringstream s;
-            s << "Exception on GEOSUnaryUnion with following inputs:" << std::endl;
+            s << "Exception on GEOSUnaryUnion_r with following inputs:" << std::endl;
             s << "A: " << g1->toString() << std::endl;
             s << "B: " << g2->toString() << std::endl;
             handle->NOTICE_MESSAGE("%s", s.str().c_str());
@@ -2199,7 +2199,7 @@ extern "C" {
         catch(const std::exception& e) {
 #if VERBOSE_EXCEPTIONS
             std::ostringstream s;
-            s << "Exception on GEOSUnaryUnion with following inputs:" << std::endl;
+            s << "Exception on GEOSNode_r with following inputs:" << std::endl;
             s << "A: " << g1->toString() << std::endl;
             s << "B: " << g2->toString() << std::endl;
             handle->NOTICE_MESSAGE("%s", s.str().c_str());
@@ -2301,7 +2301,7 @@ extern "C" {
         catch(const std::exception& e) {
 #if VERBOSE_EXCEPTIONS
             std::ostringstream s;
-            s << "Exception on GEOSClipByRect with following inputs:" << std::endl;
+            s << "Exception on GEOSClipByRect_r with following inputs:" << std::endl;
             s << "A: " << g1->toString() << std::endl;
             s << "B: " << g2->toString() << std::endl;
             handle->NOTICE_MESSAGE("%s", s.str().c_str());
