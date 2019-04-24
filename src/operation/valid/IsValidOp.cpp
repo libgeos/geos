@@ -460,7 +460,7 @@ IsValidOp::checkHolesInShell(const Polygon* p, GeometryGraph* graph)
         bool outside = isShellEmpty || (Location::EXTERIOR == ipial.locate(holePt));
         if (outside) {
             validErr = new TopologyValidationError(
-                TopologyValidationError::eHoleOutsideShell);
+                TopologyValidationError::eHoleOutsideShell, *holePt);
             return;
         }
     }

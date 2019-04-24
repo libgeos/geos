@@ -4,7 +4,7 @@
 
 #include <tut/tut.hpp>
 // geos
-#include <geos/constants.h>
+#include <geos/constants.h> // for std::isnan
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateArraySequence.h>
@@ -13,15 +13,14 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/PrecisionModel.h>
+#include <geos/io/WKTReader.h>
 #include <geos/operation/valid/TopologyValidationError.h>
-#include <geos/constants.h> // for std::isnan
 // std
 #include <cmath>
 #include <string>
 #include <memory>
 
 using namespace geos::geom;
-//using namespace geos::operation;
 using namespace geos::operation::valid;
 
 namespace tut {
@@ -30,6 +29,7 @@ namespace tut {
 //
 
 struct test_isvalidop_data {
+    geos::io::WKTReader wktreader;
     typedef std::unique_ptr<Geometry> GeomPtr;
     typedef geos::geom::GeometryFactory GeometryFactory;
 
@@ -73,6 +73,29 @@ void object::test<1>
                   TopologyValidationError::eInvalidCoordinate);
 
     ensure(0 != std::isnan(errCoord.y));
+    ensure_equals(valid, false);
+}
+
+template<>
+template<>
+void object::test<2>
+()
+{
+    std::string wkt0("POLYGON((25495445.625 6671632.625,25495445.625 6671711.375,25495555.375 6671711.375,25495555.375 6671632.625,25495445.625 6671632.625),(25495368.0441 6671726.9312,25495368.3959388 6671726.93601515,25495368.7478 6671726.9333,25495368.0441 6671726.9312))");
+    GeomPtr g0(wktreader.read(wkt0));
+
+    IsValidOp isValidOp(g0.get());
+    bool valid = isValidOp.isValid();
+
+    TopologyValidationError* err = isValidOp.getValidationError();
+    ensure(nullptr != err);
+    const Coordinate& errCoord = err->getCoordinate();
+
+    ensure_equals(err->getErrorType(),
+                  TopologyValidationError::eHoleOutsideShell);
+
+    ensure(fabs(errCoord.y - 6671726.9) < 1.0);
+    ensure(fabs(errCoord.x - 25495368.0) < 1.0);
     ensure_equals(valid, false);
 }
 
