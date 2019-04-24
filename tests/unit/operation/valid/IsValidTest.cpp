@@ -94,6 +94,8 @@ void object::test<2>
     ensure_equals(err->getErrorType(),
                   TopologyValidationError::eHoleOutsideShell);
 
+    ensure(0 == std::isnan(errCoord.y));
+    ensure(0 == std::isnan(errCoord.x));
     ensure(fabs(errCoord.y - 6671726.9) < 1.0);
     ensure(fabs(errCoord.x - 25495368.0) < 1.0);
     ensure_equals(valid, false);
