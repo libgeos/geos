@@ -1,4 +1,6 @@
-3.8.0 changes
+Changes in 3.8.0
+2019-MM-DD
+
 - New things:
   - CAPI: GEOSBuildArea (#952, Even Rouault)
   - CAPI: GEOSMakeValid (#952, Even Rouault)
