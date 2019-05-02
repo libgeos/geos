@@ -12,7 +12,7 @@
    $ git tag MAJOR.MINOR.PATCH
 
 6. Run 'make dist-bzip2'.
-   $ ./autogen.sh && ./configure && make dist-bzip2
+   $ make distclean && ./autogen.sh && ./configure && make dist-bzip2
 
 7. Verify that you can unpack and build the tarball
 
