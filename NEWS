@@ -8,6 +8,24 @@ Changes in 3.8.0
 - Improvements:
   - Improve performance and robustness of GEOSPointOnSurface (Martin Davis)
 
+
+Changes in 3.7.1
+2018-11-29
+
+- Bug fixes / improvements
+  - Fix crash in GEOSCoordSeq_isCCW with empty coordseq
+    (#927, Sergey Fedoseev)
+  - Fix crash in GEOSInterpolate with empty LineString
+    (#926, Sergey Fedoseev)
+  - Fix crash in GEOSUnaryUnion with empty LineString
+    (#928, Sergey Fedoseev)
+  - Fix memory leak in SIRtree::insert (#919, Dan Baston)
+  - Reduce required autoconf to 2.63
+    (#56, John Harvey)
+  - Fix incorrect return values on error from GEOSLength
+    GEOSisValidDetail (#941, Dan Baston)
+
+
 Changes in 3.7.0
 2018-09-10
 
