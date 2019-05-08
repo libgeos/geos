@@ -1,15 +1,16 @@
 #
-# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+# This file is part of project GEOS (http://trac.osgeo.org/geos/)
 #
-#SUBDIRS = 
+#SUBDIRS =
 
-#EXTRA_DIST = 
+#EXTRA_DIST =
 
 geosdir = $(includedir)/geos/operation/union
 
 geos_HEADERS = \
     CascadedPolygonUnion.h \
     CascadedUnion.h \
+    CoverageUnion.h \
     GeometryListHolder.h \
     PointGeometryUnion.h \
     UnaryUnionOp.h
