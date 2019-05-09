@@ -712,6 +712,12 @@ extern "C" {
     }
 
     Geometry*
+    GEOSPolygonize_valid(const Geometry* const* g, unsigned int ngeoms)
+    {
+        return GEOSPolygonize_valid_r(handle, g, ngeoms);
+    }
+
+    Geometry*
     GEOSPolygonizer_getCutEdges(const Geometry* const* g, unsigned int ngeoms)
     {
         return GEOSPolygonizer_getCutEdges_r(handle, g, ngeoms);

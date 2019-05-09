@@ -3157,6 +3157,54 @@ extern "C" {
     }
 
     Geometry*
+    GEOSPolygonize_valid_r(GEOSContextHandle_t extHandle, const Geometry* const* g, unsigned int ngeoms)
+    {
+        if(0 == extHandle) {
+            return 0;
+        }
+
+        GEOSContextHandleInternal_t* handle = 0;
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if(0 == handle->initialized) {
+            return 0;
+        }
+
+        Geometry* out = 0;
+
+        try {
+            // Polygonize
+            using geos::operation::polygonize::Polygonizer;
+            Polygonizer plgnzr(true);
+            for(std::size_t i = 0; i < ngeoms; ++i) {
+                plgnzr.add(g[i]);
+            }
+
+            auto polys = plgnzr.getPolygons();
+            if (polys->empty()) {
+                out = handle->geomFactory->createGeometryCollection();
+            } else if (polys->size() == 1) {
+                out = (*polys)[0].release();
+            } else {
+                auto geoms = new std::vector<Geometry *>(polys->size());
+                for (size_t i = 0; i < polys->size(); i++) {
+                    (*geoms)[i] = (*polys)[i].release();
+                }
+
+                out = handle->geomFactory->createMultiPolygon(geoms);
+            }
+        }
+        catch(const std::exception& e) {
+            handle->ERROR_MESSAGE("%s", e.what());
+        }
+        catch(...) {
+            handle->ERROR_MESSAGE("Unknown exception thrown");
+        }
+
+        return out;
+    }
+
+
+    Geometry*
     GEOSBuildArea_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
         if(nullptr == extHandle) {

@@ -4,9 +4,12 @@ Changes in 3.8.0
 - New things:
   - CAPI: GEOSBuildArea (#952, Even Rouault)
   - CAPI: GEOSMakeValid (#952, Even Rouault)
+  - CAPI: GEOSPolygonize_valid (#727, Dan Baston)
 
 - Improvements:
   - Improve performance and robustness of GEOSPointOnSurface (Martin Davis)
+  - Improve performance of GEOSPolygonize for cases with many potential
+    holes (#748, Dan Baston)
 
 
 Changes in 3.7.2

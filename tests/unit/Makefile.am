@@ -160,7 +160,7 @@ geos_unit_SOURCES = \
 	capi/GEOSUserDataTest.cpp \
 	capi/GEOSPreparedGeometryTest.cpp \
 	capi/GEOSPointOnSurfaceTest.cpp \
-	capi/GEOSPolygonizer_getCutEdgesTest.cpp \
+	capi/GEOSPolygonizeTest.cpp \
 	capi/GEOSBufferTest.cpp \
 	capi/GEOSOffsetCurveTest.cpp \
 	capi/GEOSGeom_create.cpp \
