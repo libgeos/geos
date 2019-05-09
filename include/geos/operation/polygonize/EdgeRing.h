@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/polygonize/EdgeRing.java rev. 109/138 (JTS-1.10)
+ * Last port: operation/polygonize/EdgeRing.java rev. 974
  *
  **********************************************************************/
 
@@ -22,7 +22,10 @@
 #define GEOS_OP_POLYGONIZE_EDGERING_H
 
 #include <geos/export.h>
+#include <geos/operation/polygonize/PolygonizeDirectedEdge.h>
+#include <geos/geom/Polygon.h>
 
+#include <memory>
 #include <vector>
 
 #ifdef _MSC_VER
@@ -35,7 +38,6 @@ namespace geos {
 namespace geom {
 class LineString;
 class LinearRing;
-class Polygon;
 class CoordinateSequence;
 class Geometry;
 class GeometryFactory;
@@ -58,7 +60,7 @@ class GEOS_DLL EdgeRing {
 private:
     const geom::GeometryFactory* factory;
 
-    typedef std::vector<const planargraph::DirectedEdge*> DeList;
+    typedef std::vector<const PolygonizeDirectedEdge*> DeList;
     DeList deList;
 
     // cache the following data for efficiency
@@ -67,6 +69,12 @@ private:
 
     typedef std::vector<geom::Geometry*> GeomVect;
     GeomVect* holes;
+
+    const EdgeRing* shell = nullptr;
+    bool is_hole;
+    bool is_processed = false;
+    bool is_included_set = false;
+    bool is_included = false;
 
     /** \brief
      * Computes the list of coordinates which are contained in this ring.
@@ -81,6 +89,13 @@ private:
                         geom::CoordinateSequence* coordList);
 
 public:
+    /** \brief
+     * Adds a DirectedEdge which is known to form part of this ring.
+     *
+     * @param de the DirectedEdge to add. Ownership to the caller.
+     */
+    void add(const PolygonizeDirectedEdge* de);
+
     /**
      * \brief
      * Find the innermost enclosing shell EdgeRing
@@ -102,6 +117,18 @@ public:
     static EdgeRing* findEdgeRingContaining(
         EdgeRing* testEr,
         std::vector<EdgeRing*>* shellList);
+
+    /**
+     * \brief
+     * Traverses a ring of DirectedEdges, accumulating them into a list.
+     *
+     * This assumes that all dangling directed edges have been removed from
+     * the graph, so that there is always a next dirEdge.
+     *
+     * @param startDE the DirectedEdge to start traversing at
+     * @return a vector of DirectedEdges that form a ring
+     */
+    static std::vector<PolygonizeDirectedEdge*> findDirEdgesInRing(PolygonizeDirectedEdge* startDE);
 
     /**
      * \brief
@@ -128,16 +155,12 @@ public:
     static bool isInList(const geom::Coordinate& pt,
                          const geom::CoordinateSequence* pts);
 
-    EdgeRing(const geom::GeometryFactory* newFactory);
+    explicit EdgeRing(const geom::GeometryFactory* newFactory);
 
     ~EdgeRing();
 
-    /** \brief
-     * Adds a DirectedEdge which is known to form part of this ring.
-     *
-     * @param de the DirectedEdge to add. Ownership to the caller.
-     */
-    void add(const planargraph::DirectedEdge* de);
+
+    void build(PolygonizeDirectedEdge* startDE);
 
     /** \brief
      * Tests whether this ring is a hole.
@@ -146,7 +169,121 @@ public:
      * a ring is a hole if it is oriented counter-clockwise.
      * @return <code>true</code> if this ring is a hole
      */
-    bool isHole();
+    void computeHole();
+
+    bool isHole() const {
+        return is_hole;
+    }
+
+    bool isIncludedSet() const {
+        return is_included_set;
+    }
+
+    bool isIncluded() const {
+        return is_included;
+    }
+
+    void setIncluded(bool included) {
+        is_included = included;
+        is_included_set = true;
+    }
+
+    bool isProcessed() const {
+        return is_processed;
+    }
+
+    void setProcessed(bool processed) {
+        is_processed = processed;
+    }
+
+    /** \brief
+     *  Sets the containing shell ring of a ring that has been determined to be a hole.
+     *
+     *  @param shell the shell ring
+     */
+     void setShell(const EdgeRing* shellRing) {
+        shell = shellRing;
+     }
+
+     /** \brief
+      * Tests whether this ring has a shell assigned to it.
+      *
+      * @return true if the ring has a shell
+      */
+     bool hasShell() const {
+         return shell != nullptr;
+     }
+
+     /** \brief
+      * Gets the shell for this ring. The shell is the ring itself if it is
+      * not a hole, otherwise it is the parent shell.
+      *
+      * @return the shell for the ring
+      */
+     const EdgeRing* getShell() const {
+         return isHole() ? shell : this;
+     }
+
+     /** \brief
+      * Tests whether this ring is an outer hole.
+      * A hole is an outer hole if it is not contained by any shell.
+      *
+      * @return true if the ring is an outer hole.
+      */
+      bool isOuterHole() const {
+          if (!isHole()) {
+              return false;
+          }
+
+          return !hasShell();
+      }
+
+      /** \brief
+       * Tests whether this ring is an outer shell.
+       *
+       * @return true if the ring is an outer shell.
+       */
+       bool isOuterShell() const {
+           return getOuterHole() != nullptr;
+       }
+
+        EdgeRing* getOuterHole() const {
+           if (isHole()) {
+               return nullptr;
+           }
+
+           // A shell is an outer shell if any edge is also in an outer hole.
+           // A hole is an outer shell if it is not contained by a shell.
+           for (auto& de : deList) {
+               auto adjRing = (dynamic_cast<PolygonizeDirectedEdge*>(de->getSym()))->getRing();
+               if (adjRing->isOuterHole()) {
+                   return adjRing;
+               }
+           }
+
+           return nullptr;
+       }
+
+       /** \brief
+        * Updates the included status for currently non-included shells
+        * based on whether they are adjacent to an included shell.
+        */
+        void updateIncluded() {
+            if (isHole()) {
+                return;
+            }
+
+            for (const auto& de : deList) {
+                auto adjShell = (dynamic_cast<const PolygonizeDirectedEdge*>(de->getSym()))->getRing()->getShell();
+
+                if (adjShell != nullptr && adjShell->isIncludedSet()) {
+                    // adjacent ring has been processed, so set included to inverse of adjacent included
+                    setIncluded(!adjShell->isIncluded());
+                    return;
+                }
+
+            }
+        }
 
     /** \brief
      * Adds a hole to the polygon formed by this ring.
@@ -154,6 +291,8 @@ public:
      * @param hole the LinearRing forming the hole.
      */
     void addHole(geom::LinearRing* hole);
+
+    void addHole(EdgeRing* holeER);
 
     /** \brief
      * Computes the Polygon formed by this ring and any contained holes.
@@ -163,7 +302,7 @@ public:
      *
      * @return the Polygon formed by this ring and its holes.
      */
-    geom::Polygon* getPolygon();
+    std::unique_ptr<geom::Polygon> getPolygon();
 
     /** \brief
      * Tests if the LinearRing ring formed by this edge ring

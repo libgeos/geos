@@ -1510,12 +1510,11 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             plgnzr.add(gA);
 
 
-            std::vector<geos::geom::Polygon*>* polys = plgnzr.getPolygons();
+            auto polys = plgnzr.getPolygons();
             std::vector<geom::Geometry*>* newgeoms = new std::vector<geom::Geometry*>;
             for(unsigned int i = 0; i < polys->size(); i++) {
-                newgeoms->push_back((*polys)[i]);
+                newgeoms->push_back((*polys)[i].release());
             }
-            delete polys;
 
             GeomPtr gRealRes(factory->createGeometryCollection(newgeoms));
             gRealRes->normalize();

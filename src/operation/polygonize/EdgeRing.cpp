@@ -101,6 +101,19 @@ EdgeRing::findEdgeRingContaining(EdgeRing* testEr,
     return minShell;
 }
 
+std::vector<PolygonizeDirectedEdge*>
+EdgeRing::findDirEdgesInRing(PolygonizeDirectedEdge* startDE) {
+    auto de = startDE;
+    std::vector<decltype(de)> edges;
+
+    do {
+        edges.push_back(de);
+        de = de->getNext();
+    } while (de != startDE);
+
+    return edges;
+}
+
 /*public static*/
 const Coordinate&
 EdgeRing::ptNotInList(const CoordinateSequence* testPts,
@@ -136,7 +149,8 @@ EdgeRing::EdgeRing(const GeometryFactory* newFactory)
     factory(newFactory),
     ring(nullptr),
     ringPts(nullptr),
-    holes(nullptr)
+    holes(nullptr),
+    is_hole(false)
 {
 #ifdef DEBUG_ALLOC
     cerr << "[" << this << "] EdgeRing(factory)" << endl;
@@ -158,19 +172,29 @@ EdgeRing::~EdgeRing()
     delete ringPts;
 }
 
+void
+EdgeRing::build(PolygonizeDirectedEdge* startDE) {
+    auto de = startDE;
+    do {
+        add(de);
+        de->setRing(this);
+        de = de->getNext();
+    } while (de != startDE);
+}
+
 /*public*/
 void
-EdgeRing::add(const DirectedEdge* de)
+EdgeRing::add(const PolygonizeDirectedEdge* de)
 {
     deList.push_back(de);
 }
 
 /*public*/
-bool
-EdgeRing::isHole()
+void
+EdgeRing::computeHole()
 {
     getRingInternal();
-    return Orientation::isCCW(ring->getCoordinatesRO());
+    is_hole = Orientation::isCCW(ring->getCoordinatesRO());
 }
 
 /*public*/
@@ -183,11 +207,18 @@ EdgeRing::addHole(LinearRing* hole)
     holes->push_back(hole);
 }
 
+void
+EdgeRing::addHole(EdgeRing* holeER) {
+    holeER->setShell(this);
+    auto hole = holeER->getRingOwnership(); // TODO is this right method?
+    addHole(hole);
+}
+
 /*public*/
-Polygon*
+std::unique_ptr<Polygon>
 EdgeRing::getPolygon()
 {
-    Polygon* poly = factory->createPolygon(ring, holes);
+    std::unique_ptr<Polygon> poly(factory->createPolygon(ring, holes));
     ring = nullptr;
     holes = nullptr;
     return poly;

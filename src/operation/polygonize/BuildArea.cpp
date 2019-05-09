@@ -141,24 +141,20 @@ static void dumpGeometry(const geom::Geometry* geom)
 unique_ptr<geom::Geometry> BuildArea::build(const geom::Geometry* geom) {
     Polygonizer polygonizer;
     polygonizer.add(geom);
-    std::vector<geom::Polygon*>* polys = polygonizer.getPolygons();
-    if( !polys )
-        return nullptr;
+    auto polys = polygonizer.getPolygons();
 
     // No geometries in collection, early out
     if( polys->empty() ) {
         auto emptyGeomCollection = unique_ptr<geom::Geometry>(
             GeometryFactory::create()->createGeometryCollection());
         emptyGeomCollection->setSRID(geom->getSRID());
-        delete polys;
         return emptyGeomCollection;
     }
 
     // Return first geometry if we only have one in collection
     if( polys->size() == 1 ) {
-        auto ret = unique_ptr<geom::Geometry>((*polys)[0]);
+        auto ret = std::unique_ptr<geom::Geometry>((*polys)[0].release());
         ret->setSRID(geom->getSRID());
-        delete polys;
         return ret;
     }
 
@@ -190,54 +186,37 @@ unique_ptr<geom::Geometry> BuildArea::build(const geom::Geometry* geom) {
     *
     */
 
-    try {
-        /* Prepare face structures for later analysis */
-        std::vector<std::unique_ptr<Face>> faces;
-        for(auto poly: *polys) {
-            faces.emplace_back(newFace(poly));
-        }
+    /* Prepare face structures for later analysis */
+    std::vector<std::unique_ptr<Face>> faces;
+    for(auto& poly: *polys) {
+        faces.emplace_back(newFace(poly.get()));
+    }
 
-        /* Find faces representing other faces holes */
-        findFaceHoles(faces);
+    /* Find faces representing other faces holes */
+    findFaceHoles(faces);
 
-        /* Build a MultiPolygon composed only by faces with an
-        * even number of ancestors */
-        auto tmp = collectFacesWithEvenAncestors(faces);
-
-        for(auto poly: *polys) {
-            delete poly;
-        }
-        delete polys;
-        polys = nullptr;
+    /* Build a MultiPolygon composed only by faces with an
+    * even number of ancestors */
+    auto tmp = collectFacesWithEvenAncestors(faces);
 
 #ifdef DUMP_GEOM
-        std::cerr << "after collectFacesWithEvenAncestors:" << std::endl;
-        dumpGeometry(tmp.get());
+    std::cerr << "after collectFacesWithEvenAncestors:" << std::endl;
+    dumpGeometry(tmp.get());
 #endif
 
-        /* Run a single overlay operation to dissolve shared edges */
-        auto shp = std::unique_ptr<geom::Geometry>(
-            geos::operation::geounion::CascadedPolygonUnion::CascadedPolygonUnion::Union(tmp.get()));
-        if( shp ) {
-            shp->setSRID(geom->getSRID());
-        }
+    /* Run a single overlay operation to dissolve shared edges */
+    auto shp = std::unique_ptr<geom::Geometry>(
+        geos::operation::geounion::CascadedPolygonUnion::CascadedPolygonUnion::Union(tmp.get()));
+    if( shp ) {
+        shp->setSRID(geom->getSRID());
+    }
 
 #ifdef DUMP_GEOM
-        std::cerr << "after CascadedPolygonUnion:" << std::endl;
-        dumpGeometry(shp.get());
+    std::cerr << "after CascadedPolygonUnion:" << std::endl;
+    dumpGeometry(shp.get());
 #endif
 
-        return shp;
-    }
-    catch( ... ) {
-        if( polys ) {
-            for(auto poly: *polys) {
-                delete poly;
-            }
-            delete polys;
-        }
-        throw;
-    }
+    return shp;
 }
 
 } // namespace geos.operation.polygonize

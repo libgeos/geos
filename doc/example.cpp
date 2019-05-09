@@ -1101,12 +1101,11 @@ do_all()
     /////////////////////////////////////////////
     Polygonizer plgnzr;
     plgnzr.add(geoms);
-    vector<Polygon*>* polys = plgnzr.getPolygons();
+    auto polys = plgnzr.getPolygons();
     newgeoms = new vector<Geometry*>;
     for(unsigned int i = 0; i < polys->size(); i++) {
-        newgeoms->push_back((*polys)[i]);
+        newgeoms->push_back((*polys)[i].release());
     }
-    delete polys;
 
     cout << endl << "----- HERE IS POLYGONIZE OUTPUT ------" << endl;
     wkt_print_geoms(newgeoms);

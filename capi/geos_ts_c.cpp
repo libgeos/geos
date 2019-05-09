@@ -3117,7 +3117,7 @@ extern "C" {
             handle->NOTICE_MESSAGE("geometry vector added to polygonizer");
 #endif
 
-            std::vector<Polygon*>* polys = plgnzr.getPolygons();
+            auto polys = plgnzr.getPolygons();
             assert(0 != polys);
 
 #if GEOS_DEBUG
@@ -3136,9 +3136,8 @@ extern "C" {
             std::vector<Geometry*>* polyvec = new std::vector<Geometry*>(polys->size());
 
             for(std::size_t i = 0; i < polys->size(); ++i) {
-                (*polyvec)[i] = (*polys)[i];
+                (*polyvec)[i] = (*polys)[i].release();
             }
-            delete polys;
             polys = 0;
 
             const GeometryFactory* gf = handle->geomFactory;
@@ -3344,12 +3343,11 @@ extern "C" {
                 *invalid = gf->createGeometryCollection(linevec);
             }
 
-            std::vector<Polygon*>* polys = plgnzr.getPolygons();
+            auto polys = plgnzr.getPolygons();
             std::vector<Geometry*>* polyvec = new std::vector<Geometry*>(polys->size());
             for(std::size_t i = 0; i < polys->size(); ++i) {
-                (*polyvec)[i] = (*polys)[i];
+                (*polyvec)[i] = (*polys)[i].release();
             }
-            delete polys;
 
             return gf->createGeometryCollection(polyvec);
 

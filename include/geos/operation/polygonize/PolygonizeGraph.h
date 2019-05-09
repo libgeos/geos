@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/polygonize/PolygonizeGraph.java rev. 6/138 (JTS-1.10)
+ * Last port: operation/polygonize/PolygonizeGraph.java rev. 974
  *
  **********************************************************************/
 
@@ -80,7 +80,7 @@ public:
      * \brief
      * Create a new polygonization graph.
      */
-    PolygonizeGraph(const geom::GeometryFactory* newFactory);
+    explicit PolygonizeGraph(const geom::GeometryFactory* newFactory);
 
     /**
      * \brief
@@ -171,8 +171,8 @@ private:
     /**
      * Finds and labels all edgerings in the graph.
      *
-     * The edge rings are labelling with unique integers.
-     * The labelling allows detecting cut edges.
+     * The edge rings are labeling with unique integers.
+     * The labeling allows detecting cut edges.
      *
      * @param dirEdgesIn  a list of the DirectedEdges in the graph
      * @param dirEdgesOut each ring found will be pushed here
@@ -181,6 +181,7 @@ private:
         std::vector<planargraph::DirectedEdge*>& dirEdgesIn,
         std::vector<PolygonizeDirectedEdge*>& dirEdgesOut);
 
+    static void label(std::vector<PolygonizeDirectedEdge*>& dirEdges, long label);
     static void label(std::vector<planargraph::DirectedEdge*>& dirEdges, long label);
 
     static void computeNextCWEdges(planargraph::Node* node);
@@ -193,19 +194,6 @@ private:
      * into minimal edgerings
      */
     static void computeNextCCWEdges(planargraph::Node* node, long label);
-
-    /**
-     * \brief
-     * Traverse a ring of DirectedEdges, accumulating them into a list.
-     * This assumes that all dangling directed edges have been removed
-     * from the graph, so that there is always a next dirEdge.
-     *
-     * @param startDE the DirectedEdge to start traversing at
-     * @param edgesInRing : the DirectedEdges that form a ring will
-     *                      be pushed here.
-     */
-    static void findDirEdgesInRing(PolygonizeDirectedEdge* startDE,
-                                   std::vector<planargraph::DirectedEdge*>& edgesInRing);
 
     EdgeRing* findEdgeRing(PolygonizeDirectedEdge* startDE);
 

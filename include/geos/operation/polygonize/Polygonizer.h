@@ -22,8 +22,10 @@
 #define GEOS_OP_POLYGONIZE_POLYGONIZER_H
 
 #include <geos/export.h>
+#include <geos/geom/Polygon.h>
 #include <geos/geom/GeometryComponentFilter.h> // for LineStringAdder inheritance
 
+#include <memory>
 #include <vector>
 
 #ifdef _MSC_VER
@@ -54,20 +56,26 @@ namespace polygonize { // geos::operation::polygonize
  * Polygonizes a set of Geometrys which contain linework that
  * represents the edges of a planar graph.
  *
- * Any dimension of Geometry is handled - the constituent linework is extracted
- * to form the edges.
+ * All types of Geometry are accepted as input; the constituent linework is extracted
+ * as the edges to be polygonized.
  * The edges must be correctly noded; that is, they must only meet
- * at their endpoints.  The Polygonizer will still run on incorrectly noded input
- * but will not form polygons from incorrected noded edges.
+ * at their endpoints. Polygonization will accept incorrectly noded input but will
+ * not form polygons from non-noded edges, and reports them as errors.
  *
  * The Polygonizer reports the follow kinds of errors:
  *
  * - <b>Dangles</b> - edges which have one or both ends which are
  *   not incident on another edge endpoint
  * - <b>Cut Edges</b> - edges which are connected at both ends but
- *   which do not form part of polygon
+ *   which do not form part of a polygon
  * - <b>Invalid Ring Lines</b> - edges which form rings which are invalid
  *   (e.g. the component lines contain a self-intersection)
+ *
+ *   The Polygonizer constructor allows extracting only polygons which form a
+ *   valid polygonal result.
+ *   The set of extracted polygons is guaranteed to be edge-disjoint.
+ *   This is useful when it is known that the input lines form a valid
+ *   polygonal geometry (which may include holes or nested polygons).
  *
  */
 class GEOS_DLL Polygonizer {
@@ -78,7 +86,7 @@ private:
     class GEOS_DLL LineStringAdder: public geom::GeometryComponentFilter {
     public:
         Polygonizer* pol;
-        LineStringAdder(Polygonizer* p);
+        explicit LineStringAdder(Polygonizer* p);
         //void filter_rw(geom::Geometry *g);
         void filter_ro(const geom::Geometry* g) override;
     };
@@ -110,6 +118,14 @@ private:
     static void assignHoleToShell(EdgeRing* holeER,
                                   std::vector<EdgeRing*>& shellList);
 
+    static void findDisjointShells(std::vector<EdgeRing*>& shellList);
+
+    static void findOuterShells(std::vector<EdgeRing*>& shellList);
+
+    static std::unique_ptr<std::vector<std::unique_ptr<geom::Polygon>>> extractPolygons(std::vector<EdgeRing*> & shellList, bool includeAll);
+
+    bool extractOnlyPolygonal;
+
 protected:
 
     PolygonizeGraph* graph;
@@ -121,15 +137,17 @@ protected:
 
     std::vector<EdgeRing*> holeList;
     std::vector<EdgeRing*> shellList;
-    std::vector<geom::Polygon*>* polyList;
+    std::unique_ptr<std::vector<std::unique_ptr<geom::Polygon>>> polyList;
 
 public:
 
     /** \brief
-     * Create a polygonizer with the same GeometryFactory
-     * as the input Geometry
+     * Create a Polygonizer with the same GeometryFactory
+     * as the input Geometrys.
+     *
+     * @param onlyPolygonal true if only polygons which form a valid polygonal geometry should be extracted
      */
-    Polygonizer();
+    explicit Polygonizer(bool onlyPolygonal = false);
 
     ~Polygonizer();
 
@@ -180,7 +198,7 @@ public:
      * calls will return NULL.
      * @return a collection of Polygons
      */
-    std::vector<geom::Polygon*>* getPolygons();
+    std::unique_ptr<std::vector<std::unique_ptr<geom::Polygon>>> getPolygons();
 
     /** \brief
      * Get the list of dangling lines found during polygonization.
@@ -190,7 +208,6 @@ public:
      *
      */
     const std::vector<const geom::LineString*>& getDangles();
-
 
     /** \brief
      * Get the list of cut edges found during polygonization.

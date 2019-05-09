@@ -262,28 +262,20 @@ void
 PolygonizeGraph::findLabeledEdgeRings(std::vector<DirectedEdge*>& dirEdges,
                                       std::vector<PolygonizeDirectedEdge*>& edgeRingStarts)
 {
-    typedef std::vector<DirectedEdge*> Edges;
-
-    Edges edges;
-
     // label the edge rings formed
     long currLabel = 1;
-    for(Edges::size_type i = 0, n = dirEdges.size(); i < n; ++i) {
-#ifdef GEOS_CAST_PARANOIA
-        assert(dynamic_cast<PolygonizeDirectedEdge*>(dirEdges[i]));
-#endif
-        PolygonizeDirectedEdge* de =
-            static_cast<PolygonizeDirectedEdge*>(dirEdges[i]);
+    for(const auto& de : dirEdges) {
+        auto pde = dynamic_cast<PolygonizeDirectedEdge*>(de);
 
-        if(de->isMarked()) {
+        if(pde->isMarked()) {
             continue;
         }
-        if(de->getLabel() >= 0) {
+        if(pde->getLabel() >= 0) {
             continue;
         }
-        edgeRingStarts.push_back(de);
+        edgeRingStarts.push_back(pde);
 
-        findDirEdgesInRing(de, edges);
+        auto edges = EdgeRing::findDirEdgesInRing(pde);
         label(edges, currLabel);
         edges.clear();
 
@@ -344,11 +336,19 @@ PolygonizeGraph::deleteCutEdges(std::vector<const LineString*>& cutLines)
 }
 
 void
+PolygonizeGraph::label(std::vector<PolygonizeDirectedEdge*>& dirEdges, long label)
+{
+    for (auto & pde: dirEdges) {
+        pde->setLabel(label);
+    }
+}
+
+void
 PolygonizeGraph::label(std::vector<DirectedEdge*>& dirEdges, long label)
 {
-    for(unsigned int i = 0; i < dirEdges.size(); ++i) {
-        PolygonizeDirectedEdge* de = (PolygonizeDirectedEdge*)dirEdges[i];
-        de->setLabel(label);
+    for(auto& de : dirEdges) {
+        auto pde = dynamic_cast<PolygonizeDirectedEdge*>(de);
+        pde->setLabel(label);
     }
 }
 
@@ -432,21 +432,6 @@ PolygonizeGraph::computeNextCCWEdges(Node* node, long label)
         assert(firstOutDE != nullptr);
         prevInDE->setNext(firstOutDE);
     }
-}
-
-/* static private */
-void
-PolygonizeGraph::findDirEdgesInRing(PolygonizeDirectedEdge* startDE,
-                                    std::vector<DirectedEdge*>& edges)
-{
-    PolygonizeDirectedEdge* de = startDE;
-    do {
-        edges.push_back(de);
-        de = de->getNext();
-        assert(de != nullptr); // found NULL DE in ring
-        assert(de == startDE || !de->isInRing()); // found DE already in ring
-    }
-    while(de != startDE);
 }
 
 EdgeRing*
