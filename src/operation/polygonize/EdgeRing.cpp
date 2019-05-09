@@ -57,40 +57,31 @@ EdgeRing::findEdgeRingContaining(EdgeRing* testEr,
     }
     const Envelope* testEnv = testRing->getEnvelopeInternal();
     EdgeRing* minShell = nullptr;
-    const Envelope* minEnv = nullptr;
+    const Envelope* minShellEnv = nullptr;
 
     for(EdgeRing* tryShell : *shellList) {
-        LinearRing* tryRing = tryShell->getRingInternal();
-        const Envelope* tryEnv = tryRing->getEnvelopeInternal();
-        if(minShell != nullptr) {
-            minEnv = minShell->getRingInternal()->getEnvelopeInternal();
-        }
-        bool isContained = false;
-
+        auto tryShellRing = tryShell->getRingInternal();
+        auto tryShellEnv = tryShellRing->getEnvelopeInternal();
         // the hole envelope cannot equal the shell envelope
-
-        if(tryEnv->equals(testEnv)) {
+        // (also guards against testing rings against themselves)
+        if (tryShellEnv->equals(testEnv)) {
+            continue;
+        }
+        // hole must be contained in shell
+        if (!tryShellEnv->contains(testEnv)) {
             continue;
         }
 
-        const CoordinateSequence* tryCoords =
-            tryRing->getCoordinatesRO();
+        auto tryCoords = tryShellRing->getCoordinatesRO();
+        Coordinate testPt = ptNotInList(testRing->getCoordinatesRO(), tryCoords); // TODO: don't copy testPt !
 
-        if(tryEnv->contains(testEnv)) {
-            // TODO: don't copy testPt !
-            Coordinate testPt = ptNotInList(testRing->getCoordinatesRO(), tryCoords);
+        bool isContained = PointLocation::isInRing(testPt, tryCoords);
 
-            if(PointLocation::isInRing(testPt, tryCoords)) {
-                isContained = true;
-            }
-
-        }
-
-        // check if this new containing ring is smaller
-        // than the current minimum ring
+        // check if this new containing ring is smaller than the current minimum ring
         if(isContained) {
-            if(minShell == nullptr || minEnv->contains(tryEnv)) {
+            if(minShell == nullptr || minShellEnv->contains(tryShellEnv)) {
                 minShell = tryShell;
+                minShellEnv = minShell->getRingInternal()->getEnvelopeInternal();
             }
         }
     }
