@@ -106,9 +106,9 @@ private:
      */
     void polygonize();
 
-    void findValidRings(const std::vector<EdgeRing*>& edgeRingList,
-                        std::vector<EdgeRing*>& validEdgeRingList,
-                        std::vector<geom::LineString*>& invalidRingList);
+    static void findValidRings(const std::vector<EdgeRing*>& edgeRingList,
+                               std::vector<EdgeRing*>& validEdgeRingList,
+                               std::vector<geom::LineString*>& invalidRingList);
 
     void findShellsAndHoles(const std::vector<EdgeRing*>& edgeRingList);
 
