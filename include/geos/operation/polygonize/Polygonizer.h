@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/polygonize/Polygonizer.java rev. 1.6 (JTS-1.10)
+ * Last port: operation/polygonize/Polygonizer.java rev. 974
  *
  **********************************************************************/
 
@@ -24,6 +24,7 @@
 #include <geos/export.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/GeometryComponentFilter.h> // for LineStringAdder inheritance
+#include <geos/operation/polygonize/PolygonizeGraph.h>
 
 #include <memory>
 #include <vector>
@@ -43,7 +44,6 @@ class Polygon;
 namespace operation {
 namespace polygonize {
 class EdgeRing;
-class PolygonizeGraph;
 }
 }
 }
@@ -128,7 +128,7 @@ private:
 
 protected:
 
-    PolygonizeGraph* graph;
+    std::unique_ptr<PolygonizeGraph> graph;
 
     // initialize with empty collections, in case nothing is computed
     std::vector<const geom::LineString*> dangles;

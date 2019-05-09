@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/polygonize/EdgeRing.java rev. 109/138 (JTS-1.10)
+ * Last port: operation/polygonize/EdgeRing.java rev. 974
  *
  **********************************************************************/
 
@@ -56,13 +56,10 @@ EdgeRing::findEdgeRingContaining(EdgeRing* testEr,
         return nullptr;
     }
     const Envelope* testEnv = testRing->getEnvelopeInternal();
-    Coordinate testPt = testRing->getCoordinateN(0);
     EdgeRing* minShell = nullptr;
     const Envelope* minEnv = nullptr;
 
-    typedef std::vector<EdgeRing*> ERList;
-    for(ERList::size_type i = 0, e = shellList->size(); i < e; ++i) {
-        EdgeRing* tryShell = (*shellList)[i];
+    for(EdgeRing* tryShell : *shellList) {
         LinearRing* tryRing = tryShell->getRingInternal();
         const Envelope* tryEnv = tryRing->getEnvelopeInternal();
         if(minShell != nullptr) {
@@ -80,9 +77,8 @@ EdgeRing::findEdgeRingContaining(EdgeRing* testEr,
             tryRing->getCoordinatesRO();
 
         if(tryEnv->contains(testEnv)) {
-
             // TODO: don't copy testPt !
-            testPt = ptNotInList(testRing->getCoordinatesRO(), tryCoords);
+            Coordinate testPt = ptNotInList(testRing->getCoordinatesRO(), tryCoords);
 
             if(PointLocation::isInRing(testPt, tryCoords)) {
                 isContained = true;
@@ -163,13 +159,10 @@ EdgeRing::~EdgeRing()
     cerr << "[" << this << "] ~EdgeRing()" << endl;
 #endif // DEBUG_ALLOC
     if(holes) {
-        for(GeomVect::size_type i = 0, e = holes->size(); i < e; ++i) {
-            delete(*holes)[i];
+        for(auto& hole : *holes) {
+            delete hole;
         }
-        delete holes;
     }
-    delete ring;
-    delete ringPts;
 }
 
 void
@@ -202,7 +195,7 @@ void
 EdgeRing::addHole(LinearRing* hole)
 {
     if(holes == nullptr) {
-        holes = new vector<Geometry*>();
+        holes.reset(new vector<Geometry*>());
     }
     holes->push_back(hole);
 }
@@ -211,16 +204,14 @@ void
 EdgeRing::addHole(EdgeRing* holeER) {
     holeER->setShell(this);
     auto hole = holeER->getRingOwnership(); // TODO is this right method?
-    addHole(hole);
+    addHole(hole.release());
 }
 
 /*public*/
 std::unique_ptr<Polygon>
 EdgeRing::getPolygon()
 {
-    std::unique_ptr<Polygon> poly(factory->createPolygon(ring, holes));
-    ring = nullptr;
-    holes = nullptr;
+    std::unique_ptr<Polygon> poly(factory->createPolygon(ring.release(), holes.release()));
     return poly;
 }
 
@@ -235,28 +226,26 @@ EdgeRing::isValid()
 }
 
 /*private*/
-CoordinateSequence*
+const CoordinateSequence*
 EdgeRing::getCoordinates()
 {
     if(ringPts == nullptr) {
-        ringPts = factory->getCoordinateSequenceFactory()->create();
-        for(DeList::size_type i = 0, e = deList.size(); i < e; ++i) {
-            const DirectedEdge* de = deList[i];
-            assert(dynamic_cast<PolygonizeEdge*>(de->getEdge()));
-            PolygonizeEdge* edge = static_cast<PolygonizeEdge*>(de->getEdge());
+        ringPts.reset(factory->getCoordinateSequenceFactory()->create());
+        for(const auto& de : deList) {
+            auto edge = dynamic_cast<PolygonizeEdge*>(de->getEdge());
             addEdge(edge->getLine()->getCoordinatesRO(),
-                    de->getEdgeDirection(), ringPts);
+                    de->getEdgeDirection(), ringPts.get());
         }
     }
-    return ringPts;
+    return ringPts.get();
 }
 
 /*public*/
-LineString*
+std::unique_ptr<LineString>
 EdgeRing::getLineString()
 {
     getCoordinates();
-    return factory->createLineString(*ringPts);
+    return std::unique_ptr<LineString>(factory->createLineString(*ringPts));
 }
 
 /*public*/
@@ -264,12 +253,12 @@ LinearRing*
 EdgeRing::getRingInternal()
 {
     if(ring != nullptr) {
-        return ring;
+        return ring.get();
     }
 
     getCoordinates();
     try {
-        ring = factory->createLinearRing(*ringPts);
+        ring.reset(factory->createLinearRing(*ringPts));
     }
     catch(const geos::util::IllegalArgumentException& e) {
 #if GEOS_DEBUG
@@ -280,16 +269,15 @@ EdgeRing::getRingInternal()
 #endif
         ::geos::ignore_unused_variable_warning(e);
     }
-    return ring;
+    return ring.get();
 }
 
 /*public*/
-LinearRing*
+std::unique_ptr<LinearRing>
 EdgeRing::getRingOwnership()
 {
-    LinearRing* ret = getRingInternal();
-    ring = nullptr;
-    return ret;
+    getRingInternal(); // active lazy generation
+    return std::move(ring);
 }
 
 /*private*/

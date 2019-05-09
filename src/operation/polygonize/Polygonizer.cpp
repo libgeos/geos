@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/polygonize/Polygonizer.java rev. 1.6 (JTS-1.10)
+ * Last port: operation/polygonize/Polygonizer.java rev. 974
  *
  **********************************************************************/
 
@@ -51,7 +51,7 @@ Polygonizer::LineStringAdder::LineStringAdder(Polygonizer* p):
 void
 Polygonizer::LineStringAdder::filter_ro(const Geometry* g)
 {
-    const LineString* ls = dynamic_cast<const LineString*>(g);
+    auto ls = dynamic_cast<const LineString*>(g);
     if(ls) {
         pol->add(ls);
     }
@@ -72,8 +72,6 @@ Polygonizer::Polygonizer(bool onlyPolygonal):
 
 Polygonizer::~Polygonizer()
 {
-    delete graph;
-
     for(auto& r : invalidRingLines) {
         delete r;
     }
@@ -149,7 +147,7 @@ Polygonizer::add(const LineString* line)
 {
     // create a new graph using the factory from the input Geometry
     if(graph == nullptr) {
-        graph = new PolygonizeGraph(line->getFactory());
+        graph.reset(new PolygonizeGraph(line->getFactory()));
     }
     graph->addEdge(line);
 }
@@ -248,9 +246,7 @@ Polygonizer::findValidRings(const vector<EdgeRing*>& edgeRingList,
             validEdgeRingList.push_back(er);
         }
         else {
-            // NOTE: polygonize::EdgeRing::getLineString
-            // returned LineString ownership is transferred.
-            invalidRingList.push_back(er->getLineString());
+            invalidRingList.push_back(er->getLineString().release());
         }
         GEOS_CHECK_FOR_INTERRUPTS();
     }

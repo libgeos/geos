@@ -23,6 +23,8 @@
 
 #include <geos/export.h>
 #include <geos/operation/polygonize/PolygonizeDirectedEdge.h>
+#include <geos/geom/Geometry.h>
+#include <geos/geom/LinearRing.h>
 #include <geos/geom/Polygon.h>
 
 #include <memory>
@@ -37,9 +39,7 @@
 namespace geos {
 namespace geom {
 class LineString;
-class LinearRing;
 class CoordinateSequence;
-class Geometry;
 class GeometryFactory;
 class Coordinate;
 }
@@ -64,11 +64,10 @@ private:
     DeList deList;
 
     // cache the following data for efficiency
-    geom::LinearRing* ring;
-    geom::CoordinateSequence* ringPts;
+    std::unique_ptr<geom::LinearRing> ring;
+    std::unique_ptr<geom::CoordinateSequence> ringPts;
 
-    typedef std::vector<geom::Geometry*> GeomVect;
-    GeomVect* holes;
+    std::unique_ptr<std::vector<geom::Geometry*>> holes;
 
     const EdgeRing* shell = nullptr;
     bool is_hole;
@@ -78,11 +77,11 @@ private:
 
     /** \brief
      * Computes the list of coordinates which are contained in this ring.
-     * The coordinatea are computed once only and cached.
+     * The coordinates are computed once only and cached.
      *
      * @return an array of the Coordinate in this ring
      */
-    geom::CoordinateSequence* getCoordinates();
+    const geom::CoordinateSequence* getCoordinates();
 
     static void addEdge(const geom::CoordinateSequence* coords,
                         bool isForward,
@@ -318,7 +317,7 @@ public:
      * is topologically invalid.
      * @return a LineString containing the coordinates in this ring
      */
-    geom::LineString* getLineString();
+    std::unique_ptr<geom::LineString> getLineString();
 
     /** \brief
      * Returns this ring as a LinearRing, or null if an Exception
@@ -336,7 +335,7 @@ public:
      * Details of problems are written to standard output.
      * Caller gets ownership of ring.
      */
-    geom::LinearRing* getRingOwnership();
+    std::unique_ptr<geom::LinearRing> getRingOwnership();
 };
 
 } // namespace geos::operation::polygonize
