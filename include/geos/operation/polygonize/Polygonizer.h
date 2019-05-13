@@ -209,6 +209,8 @@ public:
      */
     const std::vector<const geom::LineString*>& getDangles();
 
+    bool hasDangles();
+
     /** \brief
      * Get the list of cut edges found during polygonization.
      *
@@ -217,6 +219,8 @@ public:
      *
      */
     const std::vector<const geom::LineString*>& getCutEdges();
+
+    bool hasCutEdges();
 
     /** \brief
      * Get the list of lines forming invalid rings found during
@@ -227,6 +231,10 @@ public:
      *
      */
     const std::vector<geom::LineString*>& getInvalidRingLines();
+
+    bool hasInvalidRingLines();
+
+    bool allInputsFormPolygons();
 
 // This seems to be needed by    GCC 2.95.4
     friend class Polygonizer::LineStringAdder;

@@ -20,6 +20,7 @@
 #include <geos/geom/Polygon.h>
 #include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/util/TopologyException.h>
 
 namespace geos {
 namespace operation {
@@ -91,6 +92,10 @@ std::unique_ptr<Geometry> CoverageUnion::polygonize(const GeometryFactory* gf) {
         segment_geoms->emplace_back(std::move(seg_geom));
     }
 
+    if (!p.allInputsFormPolygons()) {
+        throw geos::util::TopologyException("CoverageUnion cannot process incorrectly noded inputs.");
+    }
+
     auto polygons{p.getPolygons()};
     segment_geoms.reset();
 
@@ -109,7 +114,18 @@ std::unique_ptr<Geometry> CoverageUnion::polygonize(const GeometryFactory* gf) {
 std::unique_ptr<geom::Geometry> CoverageUnion::Union(const geom::Geometry* geom) {
     CoverageUnion cu;
     cu.extractSegments(geom);
-    return cu.polygonize(geom->getFactory());
+
+    double area_in = geom->getArea();
+
+    auto ret = cu.polygonize(geom->getFactory());
+
+    double area_out = ret->getArea();
+
+    if (std::abs((area_out - area_in)/area_in) > AREA_PCT_DIFF_TOL) {
+        throw geos::util::TopologyException("CoverageUnion cannot process overlapping inputs.");
+    }
+
+    return ret;
 }
 
 }

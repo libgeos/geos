@@ -171,6 +171,12 @@ Polygonizer::getDangles()
     return dangles;
 }
 
+bool
+Polygonizer::hasDangles() {
+    polygonize();
+    return !dangles.empty();
+}
+
 /* public */
 const vector<const LineString*>&
 Polygonizer::getCutEdges()
@@ -179,12 +185,33 @@ Polygonizer::getCutEdges()
     return cutEdges;
 }
 
+bool
+Polygonizer::hasCutEdges()
+{
+    polygonize();
+    return !cutEdges.empty();
+}
+
 /* public */
 const vector<LineString*>&
 Polygonizer::getInvalidRingLines()
 {
     polygonize();
     return invalidRingLines;
+}
+
+bool
+Polygonizer::hasInvalidRingLines()
+{
+    polygonize();
+    return !invalidRingLines.empty();
+}
+
+bool
+Polygonizer::allInputsFormPolygons()
+{
+    polygonize();
+    return !hasCutEdges() && !hasDangles() &&!hasInvalidRingLines();
 }
 
 /* public */

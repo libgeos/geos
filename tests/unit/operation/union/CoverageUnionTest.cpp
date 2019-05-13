@@ -33,7 +33,7 @@ namespace tut {
 
     group test_coverageuniontest_group("geos::operation::geounion::CoverageUnion");
 
-    void doTest(const std::vector<std::string> & wkt_geoms) {
+    void checkCoverageUnionEquivalentToUnaryUnion(const std::vector<std::string> &wkt_geoms) {
         using geos::io::WKTReader;
         using geos::geom::Geometry;
         using geos::geom::GeometryFactory;
@@ -61,6 +61,32 @@ namespace tut {
         ensure( u1->equals(u2.get()) );
     }
 
+    void checkCoverageUnionFails(const std::vector<std::string> & wkt_geoms) {
+        using geos::io::WKTReader;
+        using geos::geom::Geometry;
+        using geos::geom::GeometryFactory;
+        using geos::operation::geounion::CoverageUnion;
+        auto gfact = GeometryFactory::create();
+
+        WKTReader reader(gfact.get());
+
+        std::vector<Geometry*> geoms;
+
+        for (const auto& wkt : wkt_geoms) {
+            geoms.push_back(reader.read(wkt));
+        }
+
+        std::unique_ptr<Geometry> coll(gfact->createGeometryCollection(geoms));
+        for (auto& g : geoms) {
+            delete g;
+        }
+
+        try {
+            auto u1 = CoverageUnion::Union(coll.get());
+            fail();
+        } catch(const geos::util::TopologyException e) {}
+    }
+
     template<>
     template<>
     void object::test<1>
@@ -72,7 +98,7 @@ namespace tut {
             "POLYGON ((1 0, 1 1, 2 1, 2 0, 1 0))"
         };
 
-        doTest(geoms);
+        checkCoverageUnionEquivalentToUnaryUnion(geoms);
     }
 
     template<>
@@ -85,7 +111,7 @@ namespace tut {
                 "POLYGON ((-0.675 0.918, -0.78 0.918, -0.78 1.02, -0.675 1.02, -0.675 0.918))"
         };
 
-        doTest(geoms);
+        checkCoverageUnionEquivalentToUnaryUnion(geoms);
     }
 
     template<>
@@ -98,7 +124,7 @@ namespace tut {
                 "POLYGON ((-1.016 1.184, -0.89 1.184, -0.89 1.11, -1.016 1.11, -1.016 1.184))"
         };
 
-        doTest(geoms);
+        checkCoverageUnionEquivalentToUnaryUnion(geoms);
     }
 
     template<>
@@ -111,7 +137,7 @@ namespace tut {
                 "POLYGON ((-0.865 1.123, -0.935 1.167, -0.863 1.186, -0.865 1.123))"
         };
 
-        doTest(geoms);
+        checkCoverageUnionEquivalentToUnaryUnion(geoms);
     }
 
     template<>
@@ -124,7 +150,7 @@ namespace tut {
               "POLYGON ((20 10, 20 12, 30 12, 29 10, 20 10))"
         };
 
-        doTest(geoms);
+        checkCoverageUnionEquivalentToUnaryUnion(geoms);
     }
 
     template<>
@@ -137,7 +163,7 @@ namespace tut {
                "POLYGON ((20 10, 20 12, 30 12, 30 10, 20 10))"
         };
 
-        doTest(geoms);
+        checkCoverageUnionEquivalentToUnaryUnion(geoms);
     }
 
     template<>
@@ -155,7 +181,46 @@ namespace tut {
                 "  ((40 40, 40 50, 50 50, 50 40, 40 40)))"
         };
 
-        doTest(geoms);
+        checkCoverageUnionEquivalentToUnaryUnion(geoms);
+    }
+
+    template<>
+    template<>
+    void object::test<8>()
+    {
+        // Incorrectly noded input
+        std::vector<std::string> geoms {
+            "POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))",
+            "POLYGON ((1 0, 1 0.5, 1 1, 2 1, 2 0, 1 0))"
+        };
+
+        checkCoverageUnionFails(geoms);
+    }
+
+    template<>
+    template<>
+    void object::test<9>()
+    {
+        // Adjacent polygons with sliver
+        std::vector<std::string> geoms {
+                "POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))",
+                "POLYGON ((1 0, 1.00000008 0.5, 1 1, 2 1, 2 0, 1 0))"
+        };
+
+        checkCoverageUnionEquivalentToUnaryUnion(geoms);
+    }
+
+    template<>
+    template<>
+    void object::test<10>()
+    {
+        // Adjacent polygons with overlap
+        std::vector<std::string> geoms {
+                "POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))",
+                "POLYGON ((1 0, 0.99 0.5, 1 1, 2 1, 2 0, 1 0))"
+        };
+
+        checkCoverageUnionFails(geoms);
     }
 
 } // namespace tut

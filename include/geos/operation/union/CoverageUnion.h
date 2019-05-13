@@ -54,6 +54,7 @@ namespace geounion {
         };
 
         std::unordered_set<geos::geom::LineSegment, SegmentHash> segments;
+        static constexpr double AREA_PCT_DIFF_TOL = 1e-6;
     };
 
 }
