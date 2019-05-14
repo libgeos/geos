@@ -67,6 +67,7 @@
 #include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/sharedpaths/SharedPathsOp.h>
 #include <geos/operation/union/CascadedPolygonUnion.h>
+#include <geos/operation/union/CoverageUnion.h>
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/valid/MakeValid.h>
 #include <geos/precision/GeometryPrecisionReducer.h>
@@ -2136,6 +2137,32 @@ extern "C" {
             s << "B: " << g2->toString() << std::endl;
             handle->NOTICE_MESSAGE("%s", s.str().c_str());
 #endif // VERBOSE_EXCEPTIONS
+            handle->ERROR_MESSAGE("%s", e.what());
+        }
+        catch(...) {
+            handle->ERROR_MESSAGE("Unknown exception thrown");
+        }
+
+        return NULL;
+    }
+
+    Geometry*
+    GEOSCoverageUnion_r(GEOSContextHandle_t extHandle, const Geometry* g)
+    {
+        if(0 == extHandle) {
+            return NULL;
+        }
+
+        GEOSContextHandleInternal_t* handle = 0;
+        handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+        if(0 == handle->initialized) {
+            return NULL;
+        }
+
+        try {
+            return geos::operation::geounion::CoverageUnion::Union(g).release();
+        }
+        catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
         }
         catch(...) {

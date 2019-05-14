@@ -94,7 +94,7 @@ namespace tut {
     {
         // Adjacent squares
         std::vector<std::string> geoms{
-            "POLYGON ((0 0, 0 1, 1 1, 1 0, 0 0))"
+            "POLYGON ((0 0, 0 1, 1 1, 1 0, 0 0))",
             "POLYGON ((1 0, 1 1, 2 1, 2 0, 1 0))"
         };
 

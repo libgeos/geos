@@ -134,6 +134,7 @@ geos_unit_SOURCES = \
 	util/UniqueCoordinateArrayFilterTest.cpp \
 	capi/GEOSClipByRectTest.cpp \
 	capi/GEOSCoordSeqTest.cpp \
+	capi/GEOSCoverageUnionTest.cpp \
 	capi/GEOSDelaunayTriangulationTest.cpp \
 	capi/GEOSVoronoiDiagramTest.cpp \
 	capi/GEOSGeomFromWKBTest.cpp \
