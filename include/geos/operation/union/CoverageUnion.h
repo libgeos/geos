@@ -45,15 +45,7 @@ namespace geounion {
         void extractSegments(const geom::LineString* geom);
 
         std::unique_ptr<geom::Geometry> polygonize(const geom::GeometryFactory* gf);
-
-        struct SegmentHash {
-            size_t operator()(const geom::LineSegment & s) const {
-                // FIXME define a real hash function, and probably move this class elsewhere.
-                return 1;
-            }
-        };
-
-        std::unordered_set<geos::geom::LineSegment, SegmentHash> segments;
+        std::unordered_set<geos::geom::LineSegment, geos::geom::LineSegment::HashCode> segments;
         static constexpr double AREA_PCT_DIFF_TOL = 1e-6;
     };
 
