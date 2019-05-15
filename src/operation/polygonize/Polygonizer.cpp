@@ -25,6 +25,7 @@
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Polygon.h>
 #include <geos/util/Interrupt.h>
+#include <geos/index/strtree/STRtree.h>
 // std
 #include <vector>
 
@@ -256,7 +257,7 @@ Polygonizer::polygonize()
 
     bool includeAll = true;
     if (extractOnlyPolygonal) {
-        findDisjointShells(shellList);
+        findDisjointShells();
         includeAll = false;
     }
     polyList = extractPolygons(shellList, includeAll);
@@ -302,18 +303,22 @@ Polygonizer::findShellsAndHoles(const vector<EdgeRing*>& edgeRingList)
 void
 Polygonizer::assignHolesToShells(const vector<EdgeRing*>& holeList, vector<EdgeRing*>& shellList)
 {
+    geos::index::strtree::STRtree shellIndex;
+    for (const auto& shell : shellList) {
+        shellIndex.insert(shell->getRingInternal()->getEnvelopeInternal(), shell);
+    }
+
     for(const auto& holeER : holeList) {
-        assignHoleToShell(holeER, shellList);
+        assignHoleToShell(holeER, &shellIndex);
         GEOS_CHECK_FOR_INTERRUPTS();
     }
 }
 
 /* private */
 void
-Polygonizer::assignHoleToShell(EdgeRing* holeER,
-                               vector<EdgeRing*>& shellList)
+Polygonizer::assignHoleToShell(EdgeRing* holeER, geos::index::strtree::STRtree* shellIndex)
 {
-    EdgeRing* shell = EdgeRing::findEdgeRingContaining(holeER, &shellList);
+    EdgeRing* shell = EdgeRing::findEdgeRingContaining(holeER, shellIndex);
 
     if(shell != nullptr) {
         shell->addHole(holeER);
@@ -321,23 +326,16 @@ Polygonizer::assignHoleToShell(EdgeRing* holeER,
 }
 
 void
-Polygonizer::findDisjointShells(vector<EdgeRing*> & shells)
-{
-    findOuterShells(shells);
+Polygonizer::findDisjointShells() {
+    findOuterShells(shellList);
 
-    bool isMoreToScan;
-    do {
-        isMoreToScan = false;
-        for (EdgeRing* er : shells) {
-            if (er->isIncludedSet()) {
-                continue;
-            }
-            er->updateIncluded();
-            if (!er->isIncludedSet()) {
-                isMoreToScan = true;
-            }
+    for (EdgeRing *er : shellList) {
+        if (!er->isIncludedSet()) {
+            er->updateIncludedRecursive();
         }
-    } while (isMoreToScan);
+    }
+
+    return;
 }
 
 void

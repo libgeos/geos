@@ -57,8 +57,6 @@ void CoverageUnion::extractSegments(const Polygon* p) {
     for (size_t i = 0; i < p->getNumInteriorRing(); i++) {
         extractSegments(p->getInteriorRingN(i));
     }
-
-
 }
 
 void CoverageUnion::extractSegments(const LineString* ls) {

@@ -46,6 +46,11 @@ namespace polygonize {
 class EdgeRing;
 }
 }
+namespace index {
+namespace strtree {
+    class STRtree;
+}
+}
 }
 
 namespace geos {
@@ -115,10 +120,9 @@ private:
     static void assignHolesToShells(const std::vector<EdgeRing*>& holeList,
                                     std::vector<EdgeRing*>& shellList);
 
-    static void assignHoleToShell(EdgeRing* holeER,
-                                  std::vector<EdgeRing*>& shellList);
+    static void assignHoleToShell(EdgeRing* holeER, geos::index::strtree::STRtree* shellIndex);
 
-    static void findDisjointShells(std::vector<EdgeRing*>& shellList);
+    void findDisjointShells();
 
     static void findOuterShells(std::vector<EdgeRing*>& shellList);
 

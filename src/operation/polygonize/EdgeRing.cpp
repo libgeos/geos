@@ -30,6 +30,9 @@
 #include <geos/algorithm/Orientation.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util.h> // TODO: drop this, includes too much
+#include <geos/index/strtree/STRtree.h>
+#include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
+#include <geos/geom/Location.h>
 
 #include <vector>
 #include <cassert>
@@ -49,7 +52,7 @@ namespace polygonize { // geos.operation.polygonize
 /*public*/
 EdgeRing*
 EdgeRing::findEdgeRingContaining(EdgeRing* testEr,
-                                 vector<EdgeRing*>* shellList)
+                                 geos::index::strtree::STRtree* shellIndex)
 {
     const LinearRing* testRing = testEr->getRingInternal();
     if(! testRing) {
@@ -59,7 +62,12 @@ EdgeRing::findEdgeRingContaining(EdgeRing* testEr,
     EdgeRing* minShell = nullptr;
     const Envelope* minShellEnv = nullptr;
 
-    for(EdgeRing* tryShell : *shellList) {
+    std::vector<void*> shellList;
+    shellIndex->query(testEnv, shellList);
+
+    for(void* hit : shellList) {
+        EdgeRing* tryShell = static_cast<EdgeRing*>(hit);
+
         auto tryShellRing = tryShell->getRingInternal();
         auto tryShellEnv = tryShellRing->getEnvelopeInternal();
         // the hole envelope cannot equal the shell envelope
@@ -75,7 +83,7 @@ EdgeRing::findEdgeRingContaining(EdgeRing* testEr,
         auto tryCoords = tryShellRing->getCoordinatesRO();
         Coordinate testPt = ptNotInList(testRing->getCoordinatesRO(), tryCoords); // TODO: don't copy testPt !
 
-        bool isContained = PointLocation::isInRing(testPt, tryCoords);
+        bool isContained = tryShell->getLocator()->locate(&testPt) == geom::Location::INTERIOR;
 
         // check if this new containing ring is smaller than the current minimum ring
         if(isContained) {

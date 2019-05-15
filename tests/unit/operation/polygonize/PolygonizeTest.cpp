@@ -55,7 +55,7 @@ struct test_polygonizetest_data {
     printAll(std::ostream& os, T& cnt)
     {
         for(typename T::iterator i = cnt.begin(), e = cnt.end(); i != e; ++i) {
-            os << **i;
+            os << **i << std::endl;
         }
     }
 
@@ -127,7 +127,9 @@ struct test_polygonizetest_data {
 
         bool ok = compare(expectGeoms, *retGeoms);
         if(! ok) {
-            cout << "OBTAINED(" << retGeoms->size() << "): ";
+            cout << "EXPECTED(" << expectGeoms.size() << "): " << std::endl;
+            printAll(cout, expectGeoms);
+            cout << "OBTAINED(" << retGeoms->size() << "): " << std::endl;
             printAll(cout, *retGeoms);
             cout << endl;
 
@@ -249,6 +251,8 @@ template<>
 template<>
 void object::test<6>()
 {
+    // Two adjacent squares, but since we only get polygonal output
+    // we only get one of the squares back.
     std::vector<std::string> inp{
             "LINESTRING (10 10, 10 20, 20 20)",
             "LINESTRING (20 20, 20 10)",
