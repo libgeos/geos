@@ -98,8 +98,6 @@ project(GEOS VERSION "${_version_major}.${_version_minor}.${_version_patch}"
   LANGUAGES C CXX
   ${_project_info})
 
-set(GEOS_VERSION_MAJOR, ${_version_major})
-
 if("${_version_patch_word}" STREQUAL "")
   set(GEOS_VERSION_FULL "${GEOS_VERSION}")
 else()
