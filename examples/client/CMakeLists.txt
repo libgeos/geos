@@ -11,7 +11,7 @@
 cmake_minimum_required(VERSION 3.12)
 
 project(GEOS VERSION 1.0.0 LANGUAGES C CXX)
-find_package(GEOS 3.9 REQUIRED)
+find_package(GEOS 3.8 REQUIRED)
 
 add_executable(geos_client geos_client.cpp)
 target_link_libraries(geos_client PRIVATE GEOS::geos)
