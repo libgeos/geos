@@ -32,7 +32,7 @@ endif()
 include(CMakeDependentOption)
 
 ## CMake global variables
-option(BUILD_SHARED_LIBS "Build GEOS with shared libraries" OFF)
+option(BUILD_SHARED_LIBS "Build GEOS with shared libraries" ON)
 set(CMAKE_CXX_STANDARD 11 CACHE STRING "C++ standard version to use (default is 11)")
 
 ## GEOS custom variables
