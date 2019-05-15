@@ -8,6 +8,8 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 ################################################################################
+add_custom_target(check COMMAND ctest)
+
 add_subdirectory(unit)
 add_subdirectory(xmltester)
 add_subdirectory(bigtest)
