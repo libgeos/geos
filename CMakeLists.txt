@@ -98,6 +98,8 @@ project(GEOS VERSION "${_version_major}.${_version_minor}.${_version_patch}"
   LANGUAGES C CXX
   ${_project_info})
 
+set(GEOS_VERSION_MAJOR, ${_version_major})
+
 if("${_version_patch_word}" STREQUAL "")
   set(GEOS_VERSION_FULL "${GEOS_VERSION}")
 else()
@@ -237,3 +239,7 @@ install(DIRECTORY
   FILES_MATCHING PATTERN "*.h")
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/capi/geos_c.h"
   DESTINATION include)
+
+add_subdirectory(tools)
+
+
