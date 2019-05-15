@@ -26,5 +26,6 @@ target_include_directories(test_xmltester
     $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>/tinyxml)
 
 file(GLOB_RECURSE _tests ${CMAKE_CURRENT_LIST_DIR}/tests/*.xml CONFIGURE_DEPEND)
+list(FILTER _tests EXCLUDE REGEX failure)
 add_test(NAME test_xmltester COMMAND test_xmltester --test-valid-output ${_tests})
 unset(_tests)
