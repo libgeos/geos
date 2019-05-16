@@ -26,10 +26,10 @@ BUILT_SOURCES = geos_revision.h
 
 EXTRA_DIST = acsite.m4 .editorconfig \
 	Version.txt CMakeLists.txt \
-	cmake/modules/CheckPrototypeExists.cmake \
-	cmake/modules/COPYING-CMAKE-SCRIPTS \
-	cmake/modules/GenerateSourceGroups.cmake \
-	cmake/cmake_uninstall.cmake.in geos_revision.h \
+	cmake/GenerateRevisionHeader.cmake \
+	cmake/GetGitRevision.cmake \
+	cmake/cmake_uninstall.cmake.in \
+	cmake/geos-config.cmake \
 	README.md
 
 ACLOCAL_AMFLAGS = -I macros
