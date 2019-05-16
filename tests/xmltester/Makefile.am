@@ -117,11 +117,11 @@ INVALID_OUTPUT_XMLTESTS =
 
 FAILING_XMLTESTS = \
 	$(srcdir)/tests/failure/TestOverlay.xml \
-	$(srcdir)/tests/issue/issue-geos-488.xml \
-	$(srcdir)/tests/issue/issue-geos-344.xml \
-	$(srcdir)/tests/robust/TestRobustRelateFloat.xml \
-	$(srcdir)/tests/misc/TestBigNastyBuffer.xml \
-	$(srcdir)/tests/misc/TestSameDirection.xml
+	$(srcdir)/tests/failure/issue-geos-488.xml \
+	$(srcdir)/tests/failure/issue-geos-344.xml \
+	$(srcdir)/tests/failure/robust-TestRobustRelateFloat.xml \
+	$(srcdir)/tests/failure/misc-TestBigNastyBuffer.xml \
+	$(srcdir)/tests/failure/misc-TestSameDirection.xml
 
 
 

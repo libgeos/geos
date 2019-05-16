@@ -44,7 +44,7 @@ mark_as_advanced(GEOS_BUILD_DEVELOPER)
 #-----------------------------------------------------------------------------
 # Version
 #-----------------------------------------------------------------------------
-file(READ version.txt _version_txt)
+file(READ Version.txt _version_txt)
 
 string(REGEX MATCH "GEOS_VERSION_MAJOR=([0-9]+)" _ ${_version_txt})
 set(_version_major ${CMAKE_MATCH_1})
