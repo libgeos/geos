@@ -30,6 +30,7 @@ EXTRA_DIST = acsite.m4 .editorconfig \
 	cmake/GetGitRevision.cmake \
 	cmake/cmake_uninstall.cmake.in \
 	cmake/geos-config.cmake \
+	geos_revision.h \
 	README.md
 
 ACLOCAL_AMFLAGS = -I macros
