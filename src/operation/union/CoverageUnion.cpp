@@ -94,7 +94,7 @@ std::unique_ptr<Geometry> CoverageUnion::polygonize(const GeometryFactory* gf) {
         throw geos::util::TopologyException("CoverageUnion cannot process incorrectly noded inputs.");
     }
 
-    auto polygons{p.getPolygons()};
+    auto polygons = p.getPolygons();
     segment_geoms.reset();
 
     if (polygons->size() == 1) {
