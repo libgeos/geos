@@ -127,6 +127,14 @@ add_library(geos_cxx_flags INTERFACE)
 target_compile_features(geos_cxx_flags INTERFACE cxx_std_11)
 
 #-----------------------------------------------------------------------------
+# Target geos_cxx_flags: common compilation flags
+#-----------------------------------------------------------------------------
+option(DISABLE_GEOS_INLINE "Disable inlining" OFF)
+if(NOT DISABLE_GEOS_INLINE)
+  target_compile_definitions(geos_cxx_flags INTERFACE GEOS_INLINE)
+endif()
+
+#-----------------------------------------------------------------------------
 # Target geos_developer_cxx_flags: developer mode compilation flags
 #-----------------------------------------------------------------------------
 # Do NOT install this target for end-users!
