@@ -1,41 +1,20 @@
-#################################################################################
+################################################################################
+# Part of CMake configuration for GEOS
 #
-# GEOS unit tests build configuration for CMake build system
-#
-# Copyright (C) 2009 Mateusz Loskot <mateusz@loskot.net>
+# Copyright (C) 2018 Mateusz Loskot <mateusz@loskot.net>
 #
 # This is free software; you can redistribute and/or modify it under
 # the terms of the GNU Lesser General Public Licence as published
 # by the Free Software Foundation.
 # See the COPYING file for more information.
-#
-#################################################################################
+################################################################################
+file(GLOB_RECURSE _sources ${CMAKE_CURRENT_LIST_DIR}/*.cpp CONFIGURE_DEPEND)
+add_executable(test_geos_unit ${_sources})
+unset(_sources)
 
-set(STATUS_MESSAGE "Enable GEOS unit tests build")
-set(STATUS_RESULT "OFF")
+target_link_libraries(test_geos_unit PRIVATE geos geos_c)
+target_include_directories(test_geos_unit
+  PRIVATE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>)
 
-if(GEOS_ENABLE_TESTS)
-  include_directories(${CMAKE_SOURCE_DIR}/capi)
-  include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
-  file(GLOB_RECURSE geos_unit_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
-
-  add_executable(test_geos_unit ${geos_unit_SOURCES})
-
-  if(APPLE AND GEOS_ENABLE_MACOSX_FRAMEWORK)
-    target_link_libraries(test_geos_unit GEOS)
- 	else()
-    target_link_libraries(test_geos_unit geos geos_c)
- 	endif()
-
-  add_test(test_geos_unit ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/test_geos_unit)
-
-  set(STATUS_RESULT "ON")
-endif()
-
-message(STATUS "${STATUS_MESSAGE} - ${STATUS_RESULT}")
-
-#################################################################################
-# Group source files for IDE source explorers (e.g. Visual Studio)
-#################################################################################
-GenerateSourceGroups(tests/unit)
+add_test(NAME test_geos_unit COMMAND test_geos_unit)
