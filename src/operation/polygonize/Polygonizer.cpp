@@ -14,13 +14,14 @@
  *
  **********************************************************************
  *
- * Last port: operation/polygonize/Polygonizer.java rev. 974
+ * Last port: operation/polygonize/Polygonizer.java 0b3c7e3eb0d3e
  *
  **********************************************************************/
 
 #include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/operation/polygonize/PolygonizeGraph.h>
 #include <geos/operation/polygonize/EdgeRing.h>
+#include <geos/operation/polygonize/HoleAssigner.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Polygon.h>
@@ -253,7 +254,7 @@ Polygonizer::polygonize()
     cerr << "                           " << shellList.size() << " shells" << endl;
 #endif
 
-    assignHolesToShells(holeList, shellList);
+    HoleAssigner::assignHolesToShells(holeList, shellList);
 
     bool includeAll = true;
     if (extractOnlyPolygonal) {
@@ -299,31 +300,6 @@ Polygonizer::findShellsAndHoles(const vector<EdgeRing*>& edgeRingList)
     }
 }
 
-/* private */
-void
-Polygonizer::assignHolesToShells(const vector<EdgeRing*>& holeList, vector<EdgeRing*>& shellList)
-{
-    geos::index::strtree::STRtree shellIndex;
-    for (const auto& shell : shellList) {
-        shellIndex.insert(shell->getRingInternal()->getEnvelopeInternal(), shell);
-    }
-
-    for(const auto& holeER : holeList) {
-        assignHoleToShell(holeER, &shellIndex);
-        GEOS_CHECK_FOR_INTERRUPTS();
-    }
-}
-
-/* private */
-void
-Polygonizer::assignHoleToShell(EdgeRing* holeER, geos::index::strtree::STRtree* shellIndex)
-{
-    EdgeRing* shell = EdgeRing::findEdgeRingContaining(holeER, shellIndex);
-
-    if(shell != nullptr) {
-        shell->addHole(holeER);
-    }
-}
 
 void
 Polygonizer::findDisjointShells() {

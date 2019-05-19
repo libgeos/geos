@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/polygonize/Polygonizer.java rev. 974
+ * Last port: operation/polygonize/Polygonizer.java 0b3c7e3eb0d3e
  *
  **********************************************************************/
 
@@ -38,17 +38,14 @@
 namespace geos {
 namespace geom {
 class Geometry;
+
 class LineString;
+
 class Polygon;
 }
 namespace operation {
 namespace polygonize {
 class EdgeRing;
-}
-}
-namespace index {
-namespace strtree {
-    class STRtree;
 }
 }
 }
@@ -116,11 +113,6 @@ private:
                                std::vector<geom::LineString*>& invalidRingList);
 
     void findShellsAndHoles(const std::vector<EdgeRing*>& edgeRingList);
-
-    static void assignHolesToShells(const std::vector<EdgeRing*>& holeList,
-                                    std::vector<EdgeRing*>& shellList);
-
-    static void assignHoleToShell(EdgeRing* holeER, geos::index::strtree::STRtree* shellIndex);
 
     void findDisjointShells();
 
