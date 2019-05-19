@@ -13,9 +13,10 @@
 # modes for specific C/C++ language standard levels.
 cmake_minimum_required(VERSION 3.8)
 
-# Require CMake 3.14+ with VS generator for complete support of VS versions.
+# Require CMake 3.13+ with VS generator for complete support of VS versions
+# and support by AppVeyor.
 if(${CMAKE_GENERATOR} MATCHES "Visual Studio")
-  cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
+  cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 endif()
 
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
