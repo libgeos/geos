@@ -44,7 +44,7 @@ public:
     static void assignHolesToShells(std::vector<EdgeRing*> & holes, std::vector<EdgeRing*> & shells);
 
 private:
-    explicit HoleAssigner(std::vector<EdgeRing*> & shells) : m_shells{shells} {
+    explicit HoleAssigner(std::vector<EdgeRing*> & shells) : m_shells(shells) {
         buildIndex();
     }
 
