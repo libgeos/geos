@@ -10,6 +10,7 @@ geosdir = $(includedir)/geos/operation/polygonize
 geos_HEADERS = \
     BuildArea.h \
     EdgeRing.h \
+    HoleAssigner.h \
     PolygonizeDirectedEdge.h \
     PolygonizeEdge.h \
     PolygonizeGraph.h \
