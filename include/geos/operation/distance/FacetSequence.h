@@ -49,13 +49,13 @@ private:
                                     std::vector<GeometryLocation> *locs) const;
 
     void updateNearestLocationsPointLine(const geom::Coordinate& pt,
-                                         const FacetSequence& facetSeq, int i,
+                                         const FacetSequence& facetSeq, size_t i,
                                          const geom::Coordinate& q0, const geom::Coordinate &q1,
                                          std::vector<GeometryLocation> *locs) const;
 
-    void updateNearestLocationsLineLine(int i, const geom::Coordinate& p0, const geom::Coordinate& p1,
+    void updateNearestLocationsLineLine(size_t i, const geom::Coordinate& p0, const geom::Coordinate& p1,
                                         const FacetSequence& facetSeq,
-                                        int j, const geom::Coordinate& q0, const geom::Coordinate &q1,
+                                        size_t j, const geom::Coordinate& q0, const geom::Coordinate &q1,
                                         std::vector<GeometryLocation> *locs) const;
 
     void computeEnvelope();
