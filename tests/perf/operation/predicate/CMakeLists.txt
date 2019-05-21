@@ -11,4 +11,3 @@
 add_executable(test_perf_rectangle_intersects RectangleIntersectsPerfTest.cpp)
 target_link_libraries(test_perf_rectangle_intersects PRIVATE geos)
 add_test(NAME test_perf_rectangle_intersects COMMAND test_perf_rectangle_intersects)
-target_compile_definitions(test_perf_rectangle_intersects PRIVATE "USE_UNSTABLE_GEOS_CPP_API")
