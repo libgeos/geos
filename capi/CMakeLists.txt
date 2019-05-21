@@ -29,7 +29,9 @@ unset(_headers)
 target_include_directories(geos_c
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-    $<INSTALL_INTERFACE:include/geos>)
+    $<INSTALL_INTERFACE:include/geos>
+  PRIVATE
+    $<$<BOOL:GEOS_BUILD_FROM_GIT>:${PROJECT_BINARY_DIR}>) # for geos_ts.cpp which does #include "../geos_revision.h"
 
 set(VERSION ${GEOS_VERSION})
 set(VERSION_MAJOR ${GEOS_VERSION_MAJOR})
