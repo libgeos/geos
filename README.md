@@ -62,24 +62,8 @@ check`.
 
 ### Microsoft Windows
 
-If you use Microsoft Visual C++ (7.1 or later) compiler, you can build
-GEOS using NMAKE program and provided `makefile.vc` files.
-
-If you are building from SVN or GIT checkout, first run: `autogen.bat`
-Then:
-
-    nmake /f makefile.vc MSVC_VER=1400
-
-where 1400 is version number of Visual C++ compiler, here Visual C++ 8.0
-from Visual Studio 2005 (supported versions are 1300, 1310, 1400, 1500,
-1600, 1700, 1800 and 1900).
-The bootstrap.bat step is required to generate a couple of header files.
-
-In order to build debug configuration of GEOS, additional flag `DEBUG=1`
-is required:
-
-    nmake /f makefile.vc MSVC_VER=1400 DEBUG=1
-
+GEOS can be built with Microsoft Visual C++ by opening the `CMakeLists.txt` in
+the project root using `File > Open > CMake`.
 
 ## Client applications
 
