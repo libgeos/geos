@@ -38,7 +38,7 @@ typedef group::object object;
 
 group test_incdelaunaytri_group("geos::triangulate::Delaunay");
 
-//helper function for funning triangulation
+//helper function for running triangulation
 void
 runDelaunay(const char* sitesWkt, bool computeTriangles, const char* expectedWkt, double tolerance = 0.0)
 {

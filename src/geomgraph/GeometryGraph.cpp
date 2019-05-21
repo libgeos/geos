@@ -47,6 +47,8 @@
 #include <geos/geom/GeometryCollection.h>
 #include <geos/util/Interrupt.h>
 
+#include <geos/operation/valid/RepeatedPointRemover.h>
+
 #include <geos/inline.h>
 
 #include <vector>
@@ -244,11 +246,10 @@ GeometryGraph::addPolygonRing(const LinearRing* lr, int cwLeft, int cwRight)
 
     const CoordinateSequence* lrcl = lr->getCoordinatesRO();
 
-    CoordinateSequence* coord = CoordinateSequence::removeRepeatedPoints(lrcl);
+    auto coord = geos::operation::valid::RepeatedPointRemover::removeRepeatedPoints(lrcl);
     if(coord->getSize() < 4) {
         hasTooFewPointsVar = true;
         invalidPoint = coord->getAt(0); // its now a Coordinate
-        delete coord;
         return;
     }
     int left = cwLeft;
@@ -259,21 +260,16 @@ GeometryGraph::addPolygonRing(const LinearRing* lr, int cwLeft, int cwRight)
      * IllegalArgumentException if degenerate ring does
      * not contain 3 distinct points.
      */
-    try {
-        if(Orientation::isCCW(coord)) {
-            left = cwRight;
-            right = cwLeft;
-        }
-    }
-    catch(...) {
-        delete coord;
-        throw;
+    if(Orientation::isCCW(coord.get())) {
+        left = cwRight;
+        right = cwLeft;
     }
 
-    Edge* e = new Edge(coord, Label(argIndex, Location::BOUNDARY, left, right));
+    auto coordRaw = coord.release();
+    Edge* e = new Edge(coordRaw, Label(argIndex, Location::BOUNDARY, left, right));
     lineEdgeMap[lr] = e;
     insertEdge(e);
-    insertPoint(argIndex, coord->getAt(0), Location::BOUNDARY);
+    insertPoint(argIndex, coordRaw->getAt(0), Location::BOUNDARY);
 }
 
 void
@@ -300,15 +296,15 @@ GeometryGraph::addPolygon(const Polygon* p)
 void
 GeometryGraph::addLineString(const LineString* line)
 {
-    CoordinateSequence* coord = CoordinateSequence::removeRepeatedPoints(line->getCoordinatesRO());
+    auto coord = operation::valid::RepeatedPointRemover::removeRepeatedPoints(line->getCoordinatesRO());
     if(coord->getSize() < 2) {
         hasTooFewPointsVar = true;
         invalidPoint = coord->getAt(0);
-        delete coord;
         return;
     }
 
-    Edge* e = new Edge(coord, Label(argIndex, Location::INTERIOR));
+    auto coordRaw = coord.release();
+    Edge* e = new Edge(coordRaw, Label(argIndex, Location::INTERIOR));
     lineEdgeMap[line] = e;
     insertEdge(e);
 
@@ -319,9 +315,9 @@ GeometryGraph::addLineString(const LineString* line)
      * This allows for the case that the node already exists and is
      * a boundary point.
      */
-    assert(coord->size() >= 2); // found LineString with single point
-    insertBoundaryPoint(argIndex, coord->getAt(0));
-    insertBoundaryPoint(argIndex, coord->getAt(coord->getSize() - 1));
+    assert(coordRaw->size() >= 2); // found LineString with single point
+    insertBoundaryPoint(argIndex, coordRaw->getAt(0));
+    insertBoundaryPoint(argIndex, coordRaw->getAt(coordRaw->getSize() - 1));
 }
 
 /*

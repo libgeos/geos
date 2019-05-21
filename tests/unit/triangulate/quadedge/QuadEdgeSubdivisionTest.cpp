@@ -19,6 +19,7 @@
 #include <geos/io/WKTReader.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
 // std
 #include <stdio.h>
 #include <iostream>
@@ -87,7 +88,7 @@ void object::test<2>
     Geometry* sites;
     QuadEdgeSubdivision* subdiv;
     sites = reader.read("MULTIPOINT ((150 200), (180 270), (275 163))");
-    CoordinateSequence* siteCoords = DelaunayTriangulationBuilder::extractUniqueCoordinates(*sites);
+    auto siteCoords = DelaunayTriangulationBuilder::extractUniqueCoordinates(*sites);
     Envelope Env = DelaunayTriangulationBuilder::envelope(*siteCoords);
 
     double expandBy = std::max(Env.getWidth(), Env.getHeight());
@@ -109,7 +110,6 @@ void object::test<2>
     polys->normalize();
     expected->normalize();
     ensure(polys->equalsExact(expected, 1e-7));
-    delete siteCoords;
     delete sites;
     delete subdiv;
     delete vertices;
@@ -158,7 +158,7 @@ template<> template<> void object::test<3>
             p->getExteriorRing()->getCoordinates()
         );
         size_t from = cs->size();
-        cs->removeRepeatedPoints();
+        cs = geos::operation::valid::RepeatedPointRemover::removeRepeatedPoints(cs.get());
         ensure_equals(from, cs->size());
     }
 }

@@ -20,11 +20,12 @@
 #define GEOS_TRIANGULATE_DELAUNAYTRIANGULATIONBUILDER_H
 
 #include <geos/triangulate/IncrementalDelaunayTriangulator.h>
+#include <geos/geom/CoordinateSequence.h>
 
+#include <memory>
 
 namespace geos {
 namespace geom {
-class CoordinateSequence;
 class Geometry;
 class MultiLineString;
 class GeometryCollection;
@@ -58,9 +59,7 @@ public:
      * @param geom the geometry to extract from
      * @return a List of the unique Coordinates. Caller takes ownership of the returned object.
      */
-    static geom::CoordinateSequence* extractUniqueCoordinates(const geom::Geometry& geom);
-
-    static void unique(geom::CoordinateSequence& coords);
+    static std::unique_ptr<geom::CoordinateSequence> extractUniqueCoordinates(const geom::Geometry& geom);
 
     /**
      * Converts all {@link Coordinate}s in a collection to {@link Vertex}es.
@@ -69,8 +68,15 @@ public:
      */
     static IncrementalDelaunayTriangulator::VertexList* toVertices(const geom::CoordinateSequence& coords);
 
+    /**
+     * Returns a CoordinateSequence containing only the unique coordinates of its input.
+     * @param seq a coordinateSequence
+     * @return a sorted CoordinateSequence with the unique points of seq.
+     */
+    static std::unique_ptr<geom::CoordinateSequence> unique(const geom::CoordinateSequence* seq);
+
 private:
-    geom::CoordinateSequence* siteCoords;
+    std::unique_ptr<geom::CoordinateSequence> siteCoords;
     double tolerance;
     quadedge::QuadEdgeSubdivision* subdiv;
 
