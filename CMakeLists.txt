@@ -156,7 +156,7 @@ if(GEOS_BUILD_DEVELOPER)
       $<BUILD_INTERFACE:geos_developer_cxx_flags>)
 endif()
 
-target_compile_definitions(geos_developer_cxx_flags
+target_compile_definitions(geos_cxx_flags
   INTERFACE
     USE_UNSTABLE_GEOS_CPP_API)
 
@@ -266,4 +266,40 @@ configure_file("${PROJECT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
 
 add_custom_target(uninstall
   "${CMAKE_COMMAND}" -P "${PROJECT_BINARY_DIR}/cmake/cmake_uninstall.cmake")
+
+#-----------------------------------------------------------------------------
+# Make Dist
+#-----------------------------------------------------------------------------
+
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "GEOS Computational Geometry Library")
+set(CPACK_PACKAGE_VENDOR "OSGeo")
+set(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
+set(CPACK_SOURCE_GENERATOR "TBZ2")
+set(CPACK_PACKAGE_VERSION_MAJOR ${GEOS_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${GEOS_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${GEOS_VERSION_PATCH})
+set(CPACK_SOURCE_PACKAGE_FILE_NAME
+  "geos-${GEOS_VERSION}")
+
+#  ".*\.yml"
+set(CPACK_SOURCE_IGNORE_FILES
+  "/\.git/"
+  "autogen.sh"
+  "HOWTO_RELEASE"
+  "autom4te.cache"
+  "/.*\.yml/"
+  "/\/debian\//"
+  "/\/php\//"
+  )
+# set(CPACK_SOURCE_IGNORE_FILES
+#   ".git"
+#   "autogen.sh"
+#   "HOWTO_RELEASE"
+#   "autom4te.cache"
+#   "debian"
+#   "php"
+#   )
+message(STATUS "GEOS: CPACK_SOURCE_IGNORE_FILES: ${CPACK_SOURCE_IGNORE_FILES}")
+include(CPack)
+add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
 
