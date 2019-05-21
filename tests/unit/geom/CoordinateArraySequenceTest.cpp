@@ -408,34 +408,6 @@ void object::test<10>
     ensure_equals(sequence.getAt(2).z, 27);
 }
 
-// Test of removeRepeatedPoints
-template<>
-template<>
-void object::test<11>
-()
-{
-    using geos::geom::Coordinate;
-
-    geos::geom::CoordinateArraySequence sequence;
-
-    // Add new 3 equal coordinates
-    Coordinate c(1, 2, 3);
-    sequence.add(c);
-    sequence.add(c);
-    sequence.add(c);
-
-    Coordinate c2(5, 10, 15);
-    sequence.add(c2);
-    sequence.add(c2);
-
-    sequence.add(c);
-
-    ensure_equals(sequence.size(), 6u);
-    sequence.removeRepeatedPoints();
-
-    ensure_equals(sequence.size(), 3u);
-}
-
 // Test of equality and inequality operators
 template<>
 template<>

@@ -21,6 +21,8 @@
 #include <geos/geom/CoordinateFilter.h> // for inheritance
 #include <geos/noding/ScaledNoder.h>
 #include <geos/noding/SegmentString.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
+#include <geos/operation/valid/RepeatedPointTester.h>
 #include <geos/util/math.h>
 #include <geos/util.h>
 
@@ -169,8 +171,13 @@ ScaledNoder::scale(SegmentString::NonConstVect& segStrings) const
         // SegmentStrings here, but who's going
         // to delete them then ? And is it worth
         // the memory cost ?
-        cs->removeRepeatedPoints();
-
+        operation::valid::RepeatedPointTester rpt;
+        if (rpt.hasRepeatedPoint(cs)) {
+            auto cs2 = operation::valid::RepeatedPointRemover::removeRepeatedPoints(cs);
+            delete cs;
+            cs = cs2.release();
+            // FIXME
+        }
     }
 }
 

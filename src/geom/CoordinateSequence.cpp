@@ -248,25 +248,25 @@ CoordinateSequence::add(const CoordinateSequence* cl,
 
 
 /*public static*/
-CoordinateSequence*
-CoordinateSequence::removeRepeatedPoints(const CoordinateSequence* cl)
-{
-#if PROFILE
-    static Profile* prof = profiler->get("CoordinateSequence::removeRepeatedPoints()");
-    prof->start();
-#endif
-    const vector<Coordinate>* v = cl->toVector();
-
-    vector<Coordinate>* nv = new vector<Coordinate>;
-    nv->reserve(v->size());
-    unique_copy(v->begin(), v->end(), back_inserter(*nv));
-    CoordinateSequence* ret = CoordinateArraySequenceFactory::instance()->create(nv);
-
-#if PROFILE
-    prof->stop();
-#endif
-    return ret;
-}
+//CoordinateSequence*
+//CoordinateSequence::removeRepeatedPoints(const CoordinateSequence* cl)
+//{
+//#if PROFILE
+//    static Profile* prof = profiler->get("CoordinateSequence::removeRepeatedPoints()");
+//    prof->start();
+//#endif
+//    const vector<Coordinate>* v = cl->toVector();
+//
+//    vector<Coordinate>* nv = new vector<Coordinate>;
+//    nv->reserve(v->size());
+//    unique_copy(v->begin(), v->end(), back_inserter(*nv));
+//    CoordinateSequence* ret = CoordinateArraySequenceFactory::instance()->create(nv);
+//
+//#if PROFILE
+//    prof->stop();
+//#endif
+//    return ret;
+//}
 
 void
 CoordinateSequence::expandEnvelope(Envelope& env) const

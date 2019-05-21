@@ -25,6 +25,7 @@
 #include <geos/util/UnsupportedOperationException.h>
 #include <geos/operation/buffer/OffsetCurveSetBuilder.h>
 #include <geos/operation/buffer/OffsetCurveBuilder.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
@@ -204,7 +205,7 @@ OffsetCurveSetBuilder::addLineString(const LineString* line)
 #if GEOS_DEBUG
     std::cerr << __FUNCTION__ << ": " << line->toString() << std::endl;
 #endif
-    std::unique_ptr<CoordinateSequence> coord(CoordinateSequence::removeRepeatedPoints(line->getCoordinatesRO()));
+    auto coord = operation::valid::RepeatedPointRemover::removeRepeatedPoints(line->getCoordinatesRO());
 #if GEOS_DEBUG
     std::cerr << " After coordinate removal: " << coord->toString() << std::endl;
 #endif
@@ -237,23 +238,21 @@ OffsetCurveSetBuilder::addPolygon(const Polygon* p)
         return;
     }
 
+    auto shellCoord =
+            operation::valid::RepeatedPointRemover::removeRepeatedPoints(shell->getCoordinatesRO());
+
     // don't attempt to buffer a polygon
     // with too few distinct vertices
-    CoordinateSequence* shellCoord =
-        CoordinateSequence::removeRepeatedPoints(shell->getCoordinatesRO());
     if(distance <= 0.0 && shellCoord->size() < 3) {
-        delete shellCoord;
         return;
     }
 
     addPolygonRing(
-        shellCoord,
+        shellCoord.get(),
         offsetDistance,
         offsetSide,
         Location::EXTERIOR,
         Location::INTERIOR);
-
-    delete shellCoord;
 
     for(size_t i = 0, n = p->getNumInteriorRing(); i < n; ++i) {
         const LineString* hls = p->getInteriorRingN(i);
@@ -266,20 +265,17 @@ OffsetCurveSetBuilder::addPolygon(const Polygon* p)
             continue;
         }
 
-        CoordinateSequence* holeCoord =
-            CoordinateSequence::removeRepeatedPoints(hole->getCoordinatesRO());
+        auto holeCoord = valid::RepeatedPointRemover::removeRepeatedPoints(hole->getCoordinatesRO());
 
         // Holes are topologically labelled opposite to the shell,
         // since the interior of the polygon lies on their opposite
         // side (on the left, if the hole is oriented CCW)
         addPolygonRing(
-            holeCoord,
+            holeCoord.get(),
             offsetDistance,
             Position::opposite(offsetSide),
             Location::INTERIOR,
             Location::EXTERIOR);
-
-        delete holeCoord;
     }
 }
 

@@ -81,7 +81,6 @@ public:
      * Whether or not the Coordinate returned is the actual underlying
      * Coordinate or merely a copy depends on the implementation.
      */
-    //virtual const Coordinate& getCoordinate(int i) const=0;
     virtual const Coordinate& getAt(std::size_t i) const = 0;
 
     /// Return last Coordinate in the sequence
@@ -113,7 +112,6 @@ public:
      * Returns the number of Coordinates (actual or otherwise, as
      * this implementation may not store its data in Coordinate objects).
      */
-    //virtual int size() const=0;
     virtual std::size_t getSize() const = 0;
 
     size_t
@@ -133,9 +131,9 @@ public:
      *
      * This method is a port of the toCoordinateArray() method of JTS.
      * It is not much used as memory management requires us to
-     * know wheter we should or not delete the returned object
+     * know whether we should or not delete the returned object
      * in a consistent way. Our options are: use shared_ptr<Coordinate>
-     * or always keep ownerhips of an eventual newly created vector.
+     * or always keep ownership of an eventual newly created vector.
      * We opted for the second, so the returned object is a const, to
      * also ensure that returning an internal pointer doesn't make
      * the object mutable.
@@ -158,9 +156,6 @@ public:
      * @return true (as by general collection contract)
      */
     void add(const std::vector<Coordinate>* vc, bool allowRepeated);
-
-    /* This is here for backward compatibility.. */
-    //void add(CoordinateSequence *cl,bool allowRepeated,bool direction);
 
     /** \brief
      *  Add an array of coordinates
@@ -205,12 +200,6 @@ public:
     /// Add a Coordinate to the list
     virtual	void add(const Coordinate& c) = 0;
 
-    // Get number of coordinates
-    //virtual int getSize() const=0;
-
-    /// Get a reference to Coordinate at position pos
-    //virtual	const Coordinate& getAt(std::size_t pos) const=0;
-
     /// Copy Coordinate c to position pos
     virtual	void setAt(const Coordinate& c, std::size_t pos) = 0;
 
@@ -228,24 +217,6 @@ public:
 
     /// Returns lower-left Coordinate in list
     const Coordinate* minCoordinate() const;
-
-
-    /// \brief
-    /// Returns a new CoordinateSequence being a copy of the input
-    /// with any consecutive equal Coordinate removed.
-    ///
-    /// Equality test is 2D based
-    ///
-    /// Ownership of returned object goes to the caller.
-    ///
-    static CoordinateSequence* removeRepeatedPoints(
-        const CoordinateSequence* cl);
-
-    /// Remove consecutive equal Coordinates from the sequence
-    //
-    /// Equality test is 2D based. Returns a reference to self.
-    ///
-    virtual CoordinateSequence& removeRepeatedPoints() = 0;
 
     /** \brief
      *  Returns true if given CoordinateSequence contains

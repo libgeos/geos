@@ -120,6 +120,7 @@ geos_unit_SOURCES = \
 	operation/union/CascadedPolygonUnionTest.cpp \
 	operation/union/UnaryUnionOpTest.cpp \
 	operation/valid/IsValidTest.cpp \
+	operation/valid/RepeatedPointRemoverTest.cpp \
 	operation/valid/ValidClosedRingTest.cpp \
 	operation/valid/ValidSelfTouchingRingFormingHoleTest.cpp \
 	precision/SimpleGeometryPrecisionReducerTest.cpp \

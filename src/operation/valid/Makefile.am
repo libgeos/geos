@@ -16,6 +16,7 @@ libopvalid_la_SOURCES = \
     ConsistentAreaTester.cpp \
     IsValidOp.cpp \
     QuadtreeNestedRingTester.cpp \
+    RepeatedPointRemover.cpp \
     RepeatedPointTester.cpp \
     SimpleNestedRingTester.cpp \
     SweeplineNestedRingTester.cpp \

@@ -128,8 +128,6 @@ public:
 
     void apply_ro(CoordinateFilter* filter) const override;
 
-    CoordinateSequence& removeRepeatedPoints() override;
-
 private:
     std::vector<Coordinate>* vect;
     mutable std::size_t dimension;

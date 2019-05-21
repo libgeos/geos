@@ -21,6 +21,7 @@
 #include <geos/operation/polygonize/PolygonizeDirectedEdge.h>
 #include <geos/operation/polygonize/PolygonizeEdge.h>
 #include <geos/operation/polygonize/EdgeRing.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
 #include <geos/planargraph/Node.h>
 #include <geos/planargraph/DirectedEdgeStar.h>
 #include <geos/planargraph/DirectedEdge.h>
@@ -127,14 +128,13 @@ PolygonizeGraph::addEdge(const LineString* line)
         return;
     }
 
-    CoordinateSequence* linePts = CoordinateSequence::removeRepeatedPoints(line->getCoordinatesRO());
+    auto linePts = valid::RepeatedPointRemover::removeRepeatedPoints(line->getCoordinatesRO());
 
     /*
      * This would catch invalid linestrings
      * (containing duplicated points only)
      */
     if(linePts->getSize() < 2) {
-        delete linePts;
         return;
     }
 
@@ -152,7 +152,7 @@ PolygonizeGraph::addEdge(const LineString* line)
     edge->setDirectedEdges(de0, de1);
     add(edge);
 
-    newCoords.push_back(linePts);
+    newCoords.push_back(linePts.release());
 }
 
 Node*

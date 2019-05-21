@@ -27,6 +27,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/LinearRing.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
 
 #include <vector>
 #include <typeinfo>
@@ -89,8 +90,7 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
 
     // remove repeated points, to simplify returned geometry as
     // much as possible.
-    //
-    CoordinateSequence* noRepeatedCoords = CoordinateSequence::removeRepeatedPoints(reducedCoords);
+    auto noRepeatedCoords = operation::valid::RepeatedPointRemover::removeRepeatedPoints(reducedCoords);
 
     /**
      * Check to see if the removal of repeated points
@@ -118,12 +118,11 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
     }
     // return null or orginal length coordinate array
     if(noRepeatedCoords->getSize() < minLength) {
-        delete noRepeatedCoords;
         return collapsedCoords;
     }
     // ok to return shorter coordinate array
     delete reducedCoords;
-    return noRepeatedCoords;
+    return noRepeatedCoords.release();
 }
 
 } // anonymous namespace
