@@ -19,7 +19,7 @@ if(${CMAKE_GENERATOR} MATCHES "Visual Studio")
   cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 endif()
 
-list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 # TODO: Follow CMake detection of git and version tagging
 #       https://gitlab.kitware.com/cmake/cmake/blob/master/Source/CMakeVersionSource.cmake
@@ -102,7 +102,7 @@ project(GEOS VERSION "${_version_major}.${_version_minor}.${_version_patch}"
 if("${_version_patch_word}" STREQUAL "")
   set(GEOS_VERSION_FULL "${GEOS_VERSION}")
 else()
-  set(GEOS_VERSION_FULL "${GEOS_VERSION}-${_version_patch_word}")
+  set(GEOS_VERSION_FULL "${GEOS_VERSION}${_version_patch_word}")
 endif()
 
 unset(_version_major)
@@ -267,7 +267,7 @@ add_custom_target(uninstall
   "${CMAKE_COMMAND}" -P "${PROJECT_BINARY_DIR}/cmake/cmake_uninstall.cmake")
 
 #-----------------------------------------------------------------------------
-# Make Dist
+# "make dist" workalike
 #-----------------------------------------------------------------------------
 
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "GEOS Computational Geometry Library")
@@ -277,30 +277,31 @@ set(CPACK_SOURCE_GENERATOR "TBZ2")
 set(CPACK_PACKAGE_VERSION_MAJOR ${GEOS_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${GEOS_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${GEOS_VERSION_PATCH})
-set(CPACK_SOURCE_PACKAGE_FILE_NAME
-  "geos-${GEOS_VERSION}")
+set(CPACK_SOURCE_PACKAGE_FILE_NAME "geos-${GEOS_VERSION_FULL}")
 
-#  ".*\.yml"
 set(CPACK_SOURCE_IGNORE_FILES
   "/\\\\.git"
   "/autogen\\\\.sh"
   "/tools/ci"
   "/HOWTO_RELEASE"
   "/autom4te\\\\.cache"
-  ".yml\$"
-  ".deps"
+  "\\\\.yml\$"
+  "\\\\.deps"
   "/debian/"
   "/php/"
   )
-# set(CPACK_SOURCE_IGNORE_FILES
-#   ".git"
-#   "autogen.sh"
-#   "HOWTO_RELEASE"
-#   "autom4te.cache"
-#   "debian"
-#   "php"
-#   )
+
+message(STATUS "GEOS: CPACK_SOURCE_PACKAGE_FILE_NAME: ${CPACK_SOURCE_PACKAGE_FILE_NAME}")
 message(STATUS "GEOS: CPACK_SOURCE_IGNORE_FILES: ${CPACK_SOURCE_IGNORE_FILES}")
+message(STATUS "GEOS: CMAKE_MODULE_PATH: ${CMAKE_MODULE_PATH}")
 include(CPack)
 add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
+
+#-----------------------------------------------------------------------------
+# "make distcheck" workalike
+#-----------------------------------------------------------------------------
+
+find_package(MakeDistCheck)
+AddMakeDistCheck()
+
 
