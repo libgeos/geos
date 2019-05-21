@@ -283,13 +283,15 @@ set(CPACK_SOURCE_PACKAGE_FILE_NAME
 
 #  ".*\.yml"
 set(CPACK_SOURCE_IGNORE_FILES
-  "/\.git/"
-  "autogen.sh"
-  "HOWTO_RELEASE"
-  "autom4te.cache"
-  "/.*\.yml/"
-  "/\/debian\//"
-  "/\/php\//"
+  "/\\\\.git"
+  "/autogen\\\\.sh"
+  "/tools/ci"
+  "/HOWTO_RELEASE"
+  "/autom4te\\\\.cache"
+  ".yml\$"
+  ".deps"
+  "/debian/"
+  "/php/"
   )
 # set(CPACK_SOURCE_IGNORE_FILES
 #   ".git"
