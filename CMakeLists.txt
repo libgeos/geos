@@ -173,9 +173,8 @@ target_compile_options(geos_developer_cxx_flags
     $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:-pedantic -Wall -Wextra -Wno-long-long -Wcast-align -Wconversion -Wchar-subscripts -Wdouble-promotion -Wpointer-arith -Wformat -Wformat-security -Wshadow -Wuninitialized -Wunused-parameter -fno-common>
     $<$<CXX_COMPILER_ID:GNU>:-fno-implicit-inline-templates>)
 
-# Disable TTMath ASM support on MinGW (Windows+GCC)
-# due to build issues
-if(MINGW)
+# Disable TTMath ASM support on Windows due to build issues
+if(WIN32)
   target_compile_definitions(geos_cxx_flags
     INTERFACE TTMATH_NOASM)
 endif()
