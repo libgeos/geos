@@ -17,6 +17,4 @@ target_include_directories(test_geos_unit
   PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>)
 
-target_compile_definitions(test_geos_unit PRIVATE "USE_UNSTABLE_GEOS_CPP_API")
-
 add_test(NAME test_geos_unit COMMAND test_geos_unit)
