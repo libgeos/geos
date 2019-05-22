@@ -12,9 +12,7 @@
 add_executable(test_simplewkttester SimpleWKTTester.cpp)
 target_link_libraries(test_simplewkttester PRIVATE geos)
 
-add_executable(test_xmltester)
-target_sources(test_xmltester
-  PRIVATE
+add_executable(test_xmltester
     XMLTester.cpp
     BufferResultMatcher.cpp
     SingleSidedBufferResultMatcher.cpp

@@ -11,6 +11,8 @@
 #
 source ${TRAVIS_BUILD_DIR}/tools/ci/common.sh
 
+cmake --version
+
 cmake ${TRAVIS_BUILD_DIR}
 run_make
 ctest --output-on-failure .
