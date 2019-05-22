@@ -1,3 +1,5 @@
 This commit is the result of a collaborative work between
 Mateusz Łoskot and Paul Ramsey. It ended up being squashed
 into a single commit so detailed attribution was lost.
+
+One of the changes introduced bug #971
