@@ -149,7 +149,8 @@ To build Doxygen documentation:
 
 ## Style
 
-To format your code into the desired style, use astyle 3.1:
+To format your code into the desired style, use astyle 3.1
+(included in source tree, see tools/astyle)
 
     astyle --style=stroustrup \
            --unpad-paren \
