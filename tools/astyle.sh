@@ -1,7 +1,7 @@
 #!/bin/sh
 
-cd `dirname $0`
-astyle/astyle \
+DIR=`dirname $0`
+${DIR}/astyle/astyle \
   --style=stroustrup \
   --unpad-paren \
   --pad-header \
@@ -10,4 +10,4 @@ astyle/astyle \
   --align-pointer=type \
   --max-code-length=120 \
   --lineend=linux \
-  @$
+  $@

@@ -46,6 +46,8 @@ AM_MAINTAINER_MODE
 AC_CONFIG_HEADERS([include/config.h])
 AC_PROG_CC
 
+AC_CONFIG_LINKS([tools/astyle.sh:tools/astyle.sh])
+
 dnl -- JTS_PORT: the version of JTS this release is bound to
 dnl JTS_PORT=1.13.0
 JTS_PORT=`cat $VERTXT | awk -F= '/^JTS_PORT/ {print $2}'`
