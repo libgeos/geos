@@ -10,9 +10,12 @@ geos_revision.h
 .dirstamp
 .tm_properties
 *.o
+*.orig
 *.lo
 *.la
 *.log
+*.swo
+*.swp
 *.trs
 *.exe
 macros/libtool.m4
@@ -20,6 +23,7 @@ macros/ltoptions.m4
 macros/ltsugar.m4
 macros/ltversion.m4
 macros/lt~obsolete.m4
+tags
 test-driver
 tests/thread/badthreadtest
 tests/thread/threadtest
@@ -28,6 +32,7 @@ tests/xmltester/SimpleWKTTester
 tests/xmltester/XMLTester
 tests/xmltester/testrunner
 tools/geos-config
+tools/astyle/astyle
 tests/bigtest/TestSweepLineSpeed
 tests/bigtest/bug234
 tests/geostest/geostest
@@ -63,3 +68,4 @@ authors.git
 !/docker/**/README
 !/docker/**/Makefile
 /.vs*
+.idea/
