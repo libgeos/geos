@@ -22,7 +22,7 @@ SUBDIRS = \
 	tests   \
 	tools
 
-BUILT_SOURCES = geos_revision.h
+BUILT_SOURCES =
 
 EXTRA_DIST = acsite.m4 .editorconfig \
 	Version.txt CMakeLists.txt \
@@ -30,7 +30,6 @@ EXTRA_DIST = acsite.m4 .editorconfig \
 	cmake/GetGitRevision.cmake \
 	cmake/cmake_uninstall.cmake.in \
 	cmake/geos-config.cmake \
-	geos_revision.h \
 	README.md
 
 ACLOCAL_AMFLAGS = -I macros
@@ -57,15 +56,10 @@ authors.git: authors.svn
 svnrebase: authors.git
 	cd $(srcdir) && git svn rebase --authors-file authors.git
 
-geos_revision.h:
-	top_srcdir=$(srcdir) sh $(srcdir)/tools/repo_revision.sh
-
 VALGRIND = $(LIBTOOL) --mode=execute valgrind --leak-check=full --error-exitcode=1
 
 valgrindcheck:
 	$(VALGRIND) tests/unit/geos_unit
-
-.PHONY: geos_revision.h
 
 check-local:
 	! find $(srcdir) -name '*.cpp' -o -name '*.h' | \

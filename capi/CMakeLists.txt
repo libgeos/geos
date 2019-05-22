@@ -9,18 +9,20 @@
 # See the COPYING file for more information.
 ################################################################################
 
-if(GEOS_BUILD_FROM_GIT)
-  add_custom_target(geos_revision_header
-    COMMAND ${CMAKE_COMMAND}
-    -D DST=${CMAKE_BINARY_DIR}/geos_revision.h
-    -D CMAKE_MODULE_PATH="${PROJECT_SOURCE_DIR}/cmake"
-    -P ${CMAKE_SOURCE_DIR}/cmake/GenerateRevisionHeader.cmake
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
-else()
-  add_library(geos_revision_header INTERFACE)
+include(GetGitRevision)
+
+get_git_revision(
+  HASH_LENGTH 7
+  HASH  GIT_COMMIT_HASH
+  DIRTY GEOS_GIT_IS_DIRTY)
+
+if (${GEOS_GIT_IS_DIRTY})
+  set(GIT_COMMIT_HASH "${GIT_COMMIT_HASH} (dirty)")
 endif()
 
-add_dependencies(geos_c geos_revision_header)
+message(STATUS "GEOS: GEOS_REVISION=${GIT_COMMIT_HASH}")
+
+################################################################################
 
 file(GLOB_RECURSE _headers ${CMAKE_CURRENT_LIST_DIR}/*.cpp  CONFIGURE_DEPEND)
 target_sources(geos_c PRIVATE ${_headers})

@@ -3,7 +3,6 @@
 aclocal.m4
 Makefile.in
 Makefile
-geos_revision.h
 .libs
 .deps
 .vimrc
