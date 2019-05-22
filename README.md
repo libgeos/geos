@@ -149,16 +149,7 @@ To build Doxygen documentation:
 
 ## Style
 
-To format your code into the desired style, use astyle 3.1
-(included in source tree, see tools/astyle)
+To format your code into the desired style, use the astyle
+version included in source tree:
 
-    astyle --style=stroustrup \
-           --unpad-paren \
-           --pad-header \
-           --pad-comma \
-           --indent=spaces=4 \
-           --align-pointer=type \
-           --max-code-length=120 \
-           --lineend=linux \
-           yourfile.cpp
-
+    tools/astyle.sh <yourfile.cpp>
