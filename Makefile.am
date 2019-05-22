@@ -26,7 +26,6 @@ BUILT_SOURCES =
 
 EXTRA_DIST = acsite.m4 .editorconfig \
 	Version.txt CMakeLists.txt \
-	cmake/GenerateRevisionHeader.cmake \
 	cmake/GetGitRevision.cmake \
 	cmake/cmake_uninstall.cmake.in \
 	cmake/geos-config.cmake \
