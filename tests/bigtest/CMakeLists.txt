@@ -8,9 +8,6 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 ################################################################################
-add_executable(test_bug234 bug234.cpp)
-target_link_libraries(test_bug234 PRIVATE geos)
-add_test(NAME test_bug234 COMMAND test_bug234)
 
 add_executable(test_sweep_line_speed
     TestSweepLineSpeed.cpp

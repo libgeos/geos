@@ -82,6 +82,7 @@ SAFE_XMLTESTS= \
 	$(srcdir)/tests/robust/TestRobustRelate.xml \
 	$(srcdir)/tests/issue/issue-geos-176.xml \
 	$(srcdir)/tests/issue/issue-geos-188.xml \
+	$(srcdir)/tests/issue/issue-geos-234.xml \
 	$(srcdir)/tests/issue/issue-geos-244.xml \
 	$(srcdir)/tests/issue/issue-geos-275.xml \
 	$(srcdir)/tests/issue/issue-geos-350.xml \
