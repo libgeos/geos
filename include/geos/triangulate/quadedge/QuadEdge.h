@@ -53,12 +53,10 @@ public:
     /**
      * Creates a new QuadEdge quartet from {@link Vertex} o to {@link Vertex} d.
      *
-     * @param o
-     *		  the origin Vertex
-     * @param d
-     *		  the destination Vertex
+     * @param o the origin Vertex
+     * @param d the destination Vertex
      * @return the new QuadEdge* The caller is reponsible for
-     * freeing the returned pointer
+     *         freeing the returned pointer
      */
     static std::unique_ptr<QuadEdge> makeEdge(const Vertex& o, const Vertex& d);
 
@@ -171,7 +169,7 @@ public:
     /**
      * Sets the connected edge
      *
-     * @param nextEdge edge
+     * @param p_next edge
      */
     inline void
     setNext(QuadEdge* p_next)

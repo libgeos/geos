@@ -112,8 +112,8 @@ public:
      * (e.g. a convex Polygon or LinearRing,
      * or a two-point LineString, or a Point).
      *
-     * @param geom a Geometry which is convex
-     * @param isConvex <code>true</code> if the input geometry is convex
+     * @param newInputGeom a Geometry which is convex
+     * @param newIsConvex <code>true</code> if the input geometry is convex
      */
     MinimumDiameter(const geom::Geometry* newInputGeom,
                     const bool newIsConvex);

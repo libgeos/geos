@@ -30,11 +30,11 @@ namespace polygonize { // geos.operation.polygonize
  * Constructs a directed edge connecting the <code>from</code> node to the
  * <code>to</code> node.
  *
- * @param directionPt
+ * @param newDirectionPt
  *        specifies this DirectedEdge's direction (given by an imaginary
  *        line from the <code>from</code> node to <code>directionPt</code>)
  *
- * @param edgeDirection
+ * @param nEdgeDirection
  *        whether this DirectedEdge's direction is the same as or
  *        opposite to that of the parent Edge (if any)
  */

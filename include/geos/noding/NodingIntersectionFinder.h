@@ -52,7 +52,7 @@ public:
      * Creates an intersection finder which finds an interior intersection
      * if one exists
      *
-     * @param li the LineIntersector to use
+     * @param newLi the LineIntersector to use
      */
     NodingIntersectionFinder(algorithm::LineIntersector& newLi)
         :
@@ -106,7 +106,7 @@ public:
     * It may be known that any potential noding failures will occur only in
     * end segments.
     *
-    * @param isCheckEndSegmentsOnly whether to test only end segments
+     * @param isCESO whether to test only end segments
     */
     void
     setCheckEndSegmentsOnly(bool isCESO)

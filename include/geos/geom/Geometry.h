@@ -396,7 +396,7 @@ public:
      *  - <code>! g.intersects(this)</code>
      *    (<code>disjoint</code> is the inverse of <code>intersects</code>)
      *
-     * @param  g  the Geometry with which to compare this Geometry
+     * @param  other  the Geometry with which to compare this Geometry
      * @return true if the two <code>Geometry</code>s are disjoint
      *
      * @see Geometry::intersects

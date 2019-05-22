@@ -78,7 +78,7 @@ public:
 
     /** \brief
      * Sets the visited flag for this component.
-     * @param isVisited the desired value of the visited flag
+     * @param p_isVisited the desired value of the visited flag
      */
     virtual void
     setVisited(bool p_isVisited)
@@ -168,7 +168,7 @@ public:
 
     /** \brief
      * Sets the marked flag for this component.
-     * @param isMarked the desired value of the marked flag
+     * @param p_isMarked the desired value of the marked flag
      */
     virtual void
     setMarked(bool p_isMarked)

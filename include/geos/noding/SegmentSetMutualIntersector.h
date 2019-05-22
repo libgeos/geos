@@ -59,7 +59,7 @@ public:
 
     /**
      *
-     * @param segStrings0 a collection of {@link SegmentString}s to node
+     * @param segStrings a collection of {@link SegmentString}s to node
      */
     virtual void setBaseSegments(SegmentString::ConstVect* segStrings) = 0;
 

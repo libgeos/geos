@@ -61,8 +61,8 @@ public:
      * Allows invalid lines to be ignored rather than causing Exceptions.
      * An invalid line is one which has only one unique point.
      *
-     * @param ignoreShortLines <code>true</code> if short lines are
-     *                         to be ignored
+     * @param ignoreInvalidLines <code>true</code> if short lines are
+     *                           to be ignored
      */
     void setIgnoreInvalidLines(bool ignoreInvalidLines);
 
@@ -70,8 +70,8 @@ public:
      * Allows invalid lines to be ignored rather than causing Exceptions.
      * An invalid line is one which has only one unique point.
      *
-     * @param ignoreShortLines <code>true</code> if short lines are
-     *                         to be ignored
+     * @param fixInvalidLines <code>true</code> if short lines are
+     *                        to be ignored
      */
     void setFixInvalidLines(bool fixInvalidLines);
 

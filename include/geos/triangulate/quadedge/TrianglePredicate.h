@@ -49,7 +49,7 @@ public:
      * @param a a vertex of the triangle
      * @param b a vertex of the triangle
      * @param c a vertex of the triangle
-     * @param P the point to test
+     * @param p the point to test
      * @return true if this point is inside the circle defined by the points a, b, c
      */
     static bool isInCircleNonRobust(
@@ -70,7 +70,7 @@ public:
      * @param a a vertex of the triangle
      * @param b a vertex of the triangle
      * @param c a vertex of the triangle
-     * @param P the point to test
+     * @param p the point to test
      * @return true if this point is inside the circle defined by the points a, b, c
      */
     static bool isInCircleNormalized(
@@ -98,7 +98,7 @@ public:
      * @param a a vertex of the triangle
      * @param b a vertex of the triangle
      * @param c a vertex of the triangle
-     * @param P the point to test
+     * @param p the point to test
      * @return true if this point is inside the circle defined by the points a, b, c
      */
     static bool isInCircleRobust(

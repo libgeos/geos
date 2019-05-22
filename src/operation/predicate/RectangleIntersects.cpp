@@ -56,13 +56,6 @@ private:
 
 protected:
 
-    /**
-     * Reports whether it can be concluded that an intersection occurs,
-     * or whether further testing is required.
-     *
-     * @return <code>true</code> if an intersection must occur
-     * <code>false</code> if no conclusion can be made
-     */
     void
     visit(const geom::Geometry& element) override
     {

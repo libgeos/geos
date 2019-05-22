@@ -46,20 +46,6 @@ namespace operation { // geos::operation
 namespace valid { // geos::operation::valid
 
 /** \brief
- * Checks that a {@link geomgraph::GeometryGraph} representing an area
- * (a {@link Polygon} or {@link MultiPolygon} )
- * is consistent with the OGC-SFS semantics for area geometries.
- *
- * Checks include:
- *
- * - testing for rings which self-intersect (both properly
- *   and at nodes)
- * - testing for duplicate rings
- *
- * If an inconsistency if found the location of the problem
- * is recorded.
- */
-/** \brief
  * Checks that a geomgraph::GeometryGraph representing an area
  * (a geom::Polygon or geom::MultiPolygon)
  * has consistent semantics for area geometries.

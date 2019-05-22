@@ -58,7 +58,7 @@ public:
      * Creates an intersection finder which finds all proper intersections
      * and stores them in the provided Coordinate array
      *
-     * @param li the LineIntersector to use
+     * @param newLi the LineIntersector to use
      * @param v  the Vector to push interior intersections to
      */
     IntersectionFinderAdder(algorithm::LineIntersector& newLi,

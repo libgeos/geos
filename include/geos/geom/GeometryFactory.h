@@ -293,14 +293,13 @@ public:
      * and hence if any MultiGeometries are contained in the input a
      * GeometryCollection containing them will be returned.
      *
-     * @param  newGeoms  the <code>Geometry</code>s to combine
+     * @param  geoms  the <code>Geometry</code>s to combine
      *
-     * @return
-     *	A <code>Geometry</code> of the "smallest", "most type-specific"
-     *	class that can contain the elements of <code>geomList</code>.
+     * @return A <code>Geometry</code> of the "smallest", "most type-specific"
+     *         class that can contain the elements of <code>geomList</code>.
      *
      * NOTE: the returned Geometry will take ownership of the
-     * 	given vector AND its elements
+     *       given vector AND its elements
      */
     Geometry* buildGeometry(std::vector<Geometry*>* geoms) const;
 

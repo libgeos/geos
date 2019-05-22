@@ -109,7 +109,7 @@ public:
     //
     /// No getter is provided, because the precision model is not required
     /// to be specified.
-    /// @param precisionModel the PrecisionModel to use for rounding
+    /// @param newPM the PrecisionModel to use for rounding
     ///
     void
     setPrecisionModel(const geom::PrecisionModel* newPM)
@@ -251,7 +251,7 @@ public:
      * Computes the "edge distance" of an intersection point along the specified
      * input line segment.
      *
-     * @param segmentIndex is 0 or 1
+     * @param geomIndex is 0 or 1
      * @param intIndex is 0 or 1
      *
      * @return the edge distance of the intersection point

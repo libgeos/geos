@@ -65,7 +65,7 @@ public:
      * The tolerance value must be non-negative.  A tolerance value
      * of zero is effectively a no-op.
      *
-     * @param distanceTolerance the approximation tolerance to use
+     * @param tolerance the approximation tolerance to use
      */
     void setDistanceTolerance(double tolerance);
 

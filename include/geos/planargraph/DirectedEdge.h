@@ -96,11 +96,11 @@ public:
      *
      * @param directionPt specifies this DirectedEdge's direction
      *                    (given by an imaginary line from the
-     *		      <code>from</code> node to
-     *		      <code>directionPt</code>)
-     * @param edgeDirection whether this DirectedEdge's direction
-     *		       is the same as or opposite to that of the
-     *		       parent Edge (if any)
+     *                    <code>from</code> node to
+     *                    <code>directionPt</code>)
+     * @param newEdgeDirection whether this DirectedEdge's direction
+     *                         is the same as or opposite to that of the
+     *                         parent Edge (if any)
      */
     DirectedEdge(Node* newFrom, Node* newTo,
                  const geom::Coordinate& directionPt,

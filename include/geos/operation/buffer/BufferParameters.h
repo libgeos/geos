@@ -166,8 +166,8 @@ public:
     /// (in other words, the computed buffer curve is always inside
     ///  the true curve).
     ///
-    /// @param quadrantSegments the number of segments in a
-    ///                         fillet for a quadrant
+    /// @param quadSegs the number of segments in a
+    ///               fillet for a quadrant
     ////
     void setQuadrantSegments(int quadSegs);
 
@@ -275,7 +275,7 @@ public:
      * always ignored,
      * and forced to the equivalent of <tt>CAP_FLAT</tt>.
      *
-     * @param isSingleSided true if a single-sided buffer should be constructed
+     * @param p_isSingleSided true if a single-sided buffer should be constructed
      */
     void
     setSingleSided(bool p_isSingleSided)

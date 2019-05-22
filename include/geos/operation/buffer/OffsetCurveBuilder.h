@@ -154,7 +154,7 @@ private:
      * Computes the distance tolerance to use during input
      * line simplification.
      *
-     * @param distance the buffer distance
+     * @param bufDistance the buffer distance
      * @return the simplification tolerance
      */
     double simplifyTolerance(double bufDistance);

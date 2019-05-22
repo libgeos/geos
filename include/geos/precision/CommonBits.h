@@ -61,7 +61,8 @@ public:
      * It does not determine whether the numbers have the same
      * exponent - if they do not, the value computed by this
      * function is meaningless.
-     * @param db
+     * @param num1
+     * @param num2
      * @return the number of common most-significant mantissa bits
      */
     static int numCommonMostSigMantissaBits(int64 num1, int64 num2);
@@ -70,7 +71,7 @@ public:
      * Zeroes the lower n bits of a bitstring.
      *
      * @param bits the bitstring to alter
-     * @param i the number of bits to zero
+     * @param nBits the number of bits to zero
      * @return the zeroed bitstring
      */
     static int64 zeroLowerBits(int64 bits, int nBits);

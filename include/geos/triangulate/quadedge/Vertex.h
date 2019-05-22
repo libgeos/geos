@@ -145,7 +145,7 @@ public:
     /**
      * Computes the inner or dot product
      *
-     * @param v, a vertex
+     * @param v a vertex
      * @return returns the dot product u.v
      */
     inline double
@@ -157,7 +157,7 @@ public:
     /**
      * Computes the scalar product c(v)
      *
-     * @param v, a vertex
+     * @param c scaling factor
      * @return returns the scaled vector
      */
     inline std::unique_ptr<Vertex>

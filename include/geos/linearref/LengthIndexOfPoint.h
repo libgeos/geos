@@ -77,7 +77,7 @@ public:
      * minLocation = [end of line] ).
      *
      * @param inputPt the coordinate to locate
-     * @param minLocation the minimum location for the point location
+     * @param minIndex the minimum location for the point location
      * @return the location of the nearest point
      */
     double indexOfAfter(const geom::Coordinate& inputPt, double minIndex) const;

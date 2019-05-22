@@ -101,7 +101,7 @@ public:
      * DS1 > DS2   if   DS1.seg is right of DS2.seg
      * </pre>
      *
-     * @param obj
+     * @param other
      * @return
      */
     int

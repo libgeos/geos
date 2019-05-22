@@ -132,8 +132,6 @@ public:
 
     /** \brief
      * Compute the DirectedEdge depths for a subsequence of the edge array.
-     *
-     * @return the last depth assigned (from the R side of the last edge visited)
      */
     void computeDepths(DirectedEdge* de);
 

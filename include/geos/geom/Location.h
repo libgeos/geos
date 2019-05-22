@@ -24,7 +24,6 @@ namespace geos {
 namespace geom { // geos::geom
 
 /** \brief
- *
  *  Constants representing the location of a point relative to a geometry.
  *
  *  They  can also be thought of as the row or column index of a DE-9IM matrix.

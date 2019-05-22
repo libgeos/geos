@@ -134,11 +134,10 @@ public:
      * coordinates, which are rounded to the grid defined by the
      * scale factor.
      *
-     * @param  scale
-     *	amount by which to multiply a coordinate after subtracting
-     *	the offset, to obtain a precise coordinate
-     * @param  offsetX  not used.
-     * @param  offsetY  not used.
+     * @param  newScale  amount by which to multiply a coordinate after
+     *                   subtracting the offset, to obtain a precise coordinate
+     * @param  newOffsetX  not used.
+     * @param  newOffsetY  not used.
      *
      * @deprecated offsets are no longer supported, since internal
      * representation is rounded floating point

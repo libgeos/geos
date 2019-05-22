@@ -91,7 +91,7 @@ public:
      * This method should no longer be necessary, since the buffer
      * algorithm now is highly robust.
      *
-     * @param geom0 the first Geometry
+     * @param geom the first Geometry
      * @param distance the buffer distance
      * @return the Geometry representing the buffer of the input Geometry.
      */

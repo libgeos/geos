@@ -79,7 +79,7 @@ public:
      */
     virtual void insert(EdgeEnd* e) = 0;
 
-    /** \brief
+    /**
      * @return the coordinate for the node this star is based at
      *         or NULL if this is still an unbound star.
      * Be aware that the returned pointer will point to

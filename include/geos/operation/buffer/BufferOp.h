@@ -54,7 +54,7 @@ namespace buffer { // geos.operation.buffer
  * the Minkowski sum (or difference) of the geometry
  * with a circle with radius equal to the absolute value of the buffer
  * distance.
- * In the CAD/CAM world buffers are known as </i>offset curves</i>.
+ * In the CAD/CAM world buffers are known as <i>offset curves</i>.
  * In morphological analysis the operation of positive and negative buffering
  * is referred to as <i>erosion</i> and <i>dilation</i>.
  *
@@ -196,16 +196,14 @@ public:
      * The styles supported are CAP_ROUND, CAP_BUTT, and CAP_SQUARE.
      * The default is CAP_ROUND.
      *
-     * @param endCapStyle the end cap style to specify
+     * @param nEndCapStyle the end cap style to specify
      */
     inline void setEndCapStyle(int nEndCapStyle);
 
     /**
-     * Specifies the end cap style of the generated buffer.
-     * The styles supported are CAP_ROUND, CAP_BUTT, and CAP_SQUARE.
-     * The default is CAP_ROUND.
+     * Sets the number of segments used to approximate a angle fillet
      *
-     * @param endCapStyle the end cap style to specify
+     * @param nQuadrantSegments the number of segments in a fillet for a quadrant
      */
     inline void setQuadrantSegments(int nQuadrantSegments);
 
@@ -235,8 +233,7 @@ public:
      * Returns the buffer computed for a geometry for a given buffer
      * distance.
      *
-     * @param g the geometry to buffer
-     * @param distance the buffer distance
+     * @param nDistance the buffer distance
      * @return the buffer of the input geometry
      */
     geom::Geometry* getResultGeometry(double nDistance);

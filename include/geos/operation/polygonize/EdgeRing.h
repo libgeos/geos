@@ -174,6 +174,8 @@ public:
 
     void build(PolygonizeDirectedEdge* startDE);
 
+    void computeHole();
+
     /** \brief
      * Tests whether this ring is a hole.
      *
@@ -181,8 +183,6 @@ public:
      * a ring is a hole if it is oriented counter-clockwise.
      * @return <code>true</code> if this ring is a hole
      */
-    void computeHole();
-
     bool isHole() const {
         return is_hole;
     }
@@ -217,7 +217,7 @@ public:
     /** \brief
      *  Sets the containing shell ring of a ring that has been determined to be a hole.
      *
-     *  @param shell the shell ring
+     *  @param shellRing the shell ring
      */
     void setShell(EdgeRing* shellRing) {
         shell = shellRing;

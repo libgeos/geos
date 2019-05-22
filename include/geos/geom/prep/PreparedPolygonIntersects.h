@@ -69,7 +69,7 @@ public:
     /**
      * Creates an instance of this operation.
      *
-     * @param prepPoly the PreparedPolygon to evaluate
+     * @param prep the PreparedPolygon to evaluate
      */
     PreparedPolygonIntersects(const PreparedPolygon* const prep)
         :	PreparedPolygonPredicate(prep)

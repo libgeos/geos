@@ -186,7 +186,7 @@ public:
     /**
      * Tests whether an index is in the valid index range for the line.
      *
-     * @param length the index to test
+     * @param index the index to test
      * @return <code>true</code> if the index is in the valid range
      */
     bool isValidIndex(double index) const;

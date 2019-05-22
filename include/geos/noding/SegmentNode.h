@@ -38,10 +38,12 @@ class NodedSegmentString;
 namespace geos {
 namespace noding { // geos.noding
 
-/// Represents an intersection point between two NodedSegmentString.
-//
-/// Final class.
-///
+/**
+ * \brief
+ * Represents an intersection point between two NodedSegmentString.
+ *
+ * Final class.
+ */
 class GEOS_DLL SegmentNode {
 private:
     const NodedSegmentString& segString;
@@ -67,7 +69,7 @@ public:
     //
     /// @param ss the parent NodedSegmentString
     ///
-    /// @param coord the coordinate of the intersection, will be copied
+    /// @param nCoord the coordinate of the intersection, will be copied
     ///
     /// @param nSegmentIndex the index of the segment on parent
     ///                      NodedSegmentString

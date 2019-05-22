@@ -124,38 +124,32 @@ public:
     ///
     /// This method is a port of the toCoordinateArray() method of JTS.
     ///
-    virtual	void toVector(std::vector<Coordinate>& coords) const = 0;
+    virtual void toVector(std::vector<Coordinate>& coords) const = 0;
 
     /**
      * \brief Add an array of coordinates
-     * @param vc The coordinates
+     * @param vc the coordinates
      * @param allowRepeated if set to false, repeated coordinates
-     * 	are collapsed
-     * @return true (as by general collection contract)
+     *                      are collapsed
      */
     void add(const std::vector<Coordinate>* vc, bool allowRepeated);
 
     /** \brief
      *  Add an array of coordinates
      *
-     *  @param cl The coordinates
-     *
+     *  @param cl the coordinates
      *  @param allowRepeated
-     * 	if set to false, repeated coordinates are collapsed
-     *
+     *         if set to false, repeated coordinates are collapsed
      *  @param direction if false, the array is added in reverse order
-     *
-     *  @return true (as by general collection contract)
      */
     void add(const CoordinateSequence* cl, bool allowRepeated,
              bool direction);
 
     /**
      * \brief Add a coordinate
-     * @param c The coordinate to add
+     * @param c the coordinate to add
      * @param allowRepeated if set to false, repeated coordinates
-     * are collapsed
-     * @return true (as by general collection contract)
+     *                      are collapsed
      */
     virtual void add(const Coordinate& c, bool allowRepeated);
 
@@ -173,19 +167,19 @@ public:
     virtual void add(std::size_t i, const Coordinate& coord, bool allowRepeated) = 0;
 
     /// Returns <code>true</code> it list contains no coordinates.
-    virtual	bool isEmpty() const = 0;
+    virtual bool isEmpty() const = 0;
 
     /// Add a Coordinate to the list
-    virtual	void add(const Coordinate& c) = 0;
+    virtual void add(const Coordinate& c) = 0;
 
     /// Copy Coordinate c to position pos
-    virtual	void setAt(const Coordinate& c, std::size_t pos) = 0;
+    virtual void setAt(const Coordinate& c, std::size_t pos) = 0;
 
     /// Get a string representation of CoordinateSequence
     virtual	std::string toString() const = 0;
 
     /// Substitute Coordinate list with a copy of the given vector
-    virtual	void setPoints(const std::vector<Coordinate>& v) = 0;
+    virtual void setPoints(const std::vector<Coordinate>& v) = 0;
 
     /// Returns true if contains any two consecutive points
     bool hasRepeatedPoints() const;
@@ -266,7 +260,7 @@ public:
      *
      * @param index  the coordinate index in the sequence
      * @param ordinateIndex the ordinate index in the coordinate
-     * 	   (in range [0, dimension-1])
+     *                      (in range [0, dimension-1])
      */
     virtual double getOrdinate(std::size_t index, std::size_t ordinateIndex) const = 0;
 
@@ -300,7 +294,7 @@ public:
      *
      * @param index  the coordinate index in the sequence
      * @param ordinateIndex the ordinate index in the coordinate
-     * 		(in range [0, dimension-1])
+     *                      (in range [0, dimension-1])
      * @param value  the new ordinate value
      */
     virtual void setOrdinate(std::size_t index, std::size_t ordinateIndex, double value) = 0;

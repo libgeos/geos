@@ -72,7 +72,6 @@ protected:
      *
      * Only subclasses can add Nodes, to ensure Nodes are
      * of the right type.
-     * @return the added node
      */
     void
     add(Node* node)

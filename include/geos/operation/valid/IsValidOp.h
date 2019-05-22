@@ -264,7 +264,7 @@ public:
      * and "C-shaped" holes which self-touch at a single point causing
      * an island to be formed.
      *
-     * @param isValid states whether geometry with this condition is valid
+     * @param p_isValid states whether geometry with this condition is valid
      */
     void
     setSelfTouchingRingFormingHoleValid(bool p_isValid)

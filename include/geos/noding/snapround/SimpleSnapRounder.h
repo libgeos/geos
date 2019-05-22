@@ -120,7 +120,8 @@ private:
     /** \brief
      * Computes nodes introduced as a result of snapping segments to
      * snap points (hot pixels)
-     * @param li
+     * @param segStrings
+     * @param snapPts
      */
     void computeSnaps(const std::vector<SegmentString*>& segStrings,
                       std::vector<geom::Coordinate>& snapPts);

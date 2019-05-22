@@ -115,8 +115,7 @@ public:
      * intersects the test geometry.
      * This is useful in A/A, A/L, A/P, L/P, and P/P cases.
      *
-     * @param geom the test geometry
-     * @param repPts the representative points of the target geometry
+     * @param testGeom the test geometry
      * @return true if any component intersects the areal test geometry
      */
     bool isAnyTargetComponentInTest(const geom::Geometry* testGeom) const;
@@ -129,7 +128,7 @@ public:
     /**
      * Default implementation.
      */
-    bool containsProperly(const geom::Geometry* g)	const override;
+    bool containsProperly(const geom::Geometry* g) const override;
 
     /**
      * Default implementation.
@@ -150,7 +149,7 @@ public:
      * Standard implementation for all geometries.
      * Supports {@link GeometryCollection}s as input.
      */
-    bool disjoint(const geom::Geometry* g)	const override;
+    bool disjoint(const geom::Geometry* g) const override;
 
     /**
      * Default implementation.
@@ -160,7 +159,7 @@ public:
     /**
      * Default implementation.
      */
-    bool overlaps(const geom::Geometry* g)	const override;
+    bool overlaps(const geom::Geometry* g) const override;
 
     /**
      * Default implementation.

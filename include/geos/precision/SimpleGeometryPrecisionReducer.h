@@ -60,7 +60,7 @@ public:
      * being removed completely, or simply being collapsed to an (invalid)
      * Geometry of the same type.
      *
-     * @param removeCollapsed if <code>true</code> collapsed
+     * @param nRemoveCollapsed if <code>true</code> collapsed
      * components will be removed
      */
     void setRemoveCollapsedComponents(bool nRemoveCollapsed);

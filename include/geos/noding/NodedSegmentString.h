@@ -92,7 +92,7 @@ public:
      * @param newPts CoordinateSequence representing the string,
      *               ownership transferred.
      *
-     * @param data the user-defined data of this segment string
+     * @param newContext the user-defined data of this segment string
      *             (may be null)
      */
     NodedSegmentString(geom::CoordinateSequence* newPts, const void* newContext)

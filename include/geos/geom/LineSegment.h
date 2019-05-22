@@ -104,7 +104,7 @@ public:
      * Determines the orientation of a LineSegment relative to this segment.
      * The concept of orientation is specified as follows:
      * Given two line segments A and L,
-     * <ul
+     * <ul>
      * <li>A is to the left of a segment L if A lies wholly in the
      * closed half-plane lying to the left of L
      * <li>A is to the right of a segment L if A lies wholly in the
@@ -119,7 +119,7 @@ public:
      * @return 1 if seg is to the left of this segment
      * @return -1 if seg is to the right of this segment
      * @return 0 if seg has indeterminate orientation relative
-     *	     to this segment
+     *         to this segment
      */
     int orientationIndex(const LineSegment& seg) const;
 
@@ -133,7 +133,7 @@ public:
      * The orientation index is as defined in
      * Orientation::index.
      *
-     * @param seg the LineSegment to compare
+     * @param p the Coordinate to compare
      *
      * @return 1 if <code>p</code> is to the left of this segment
      * @return -1 if <code>p</code> is to the right of this segment
@@ -295,7 +295,7 @@ public:
      *
      * Uses the standard lexicographic ordering for the points in the LineSegment.
      *
-     * @param  o  the LineSegment with which this LineSegment
+     * @param  other  the LineSegment with which this LineSegment
      *            is being compared
      * @return a negative integer, zero, or a positive integer as this
      *         LineSegment is less than, equal to, or greater than the
@@ -316,7 +316,7 @@ public:
 
     /**
      * Computes the closest points on two line segments.
-     * @param p the point to find the closest point to
+     * @param line the line segment to find the closest points to
      * @return a pair of Coordinates which are the closest points on
      * the line segments.
      * The returned CoordinateSequence must be deleted by caller

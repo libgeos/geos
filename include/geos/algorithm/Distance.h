@@ -60,7 +60,7 @@ public:
     *
     * @param p
     *          a point
-    * @param line
+    * @param seq
     *          a sequence of contiguous line segments defined by their vertices
     * @return the minimum distance between the point and the line segments
     */

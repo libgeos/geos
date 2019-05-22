@@ -292,8 +292,7 @@ public:
      * Expands this envelope by a given distance in all directions.
      * Both positive and negative distances are supported.
      *
-     * @param distance the distance to expand the envelope
-     * @return this envelope
+     * @param p_distance the distance to expand the envelope
      */
     void
     expandBy(double p_distance)
@@ -395,7 +394,7 @@ public:
      * Check if the point p
      * intersects (lies inside) the region of this Envelope.
      *
-     * @param  p  	the Coordinate to be tested
+     * @param  p the Coordinate to be tested
      * @return true if the point intersects this Envelope
      */
     bool intersects(const Coordinate& p) const;

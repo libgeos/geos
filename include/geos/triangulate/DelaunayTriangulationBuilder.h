@@ -110,7 +110,7 @@ public:
      * to improved the robustness of the triangulation computation.
      * A tolerance of 0.0 specifies that no snapping will take place.
      *
-     * @param tolerance the tolerance distance to use
+     * @param p_tolerance the tolerance distance to use
      */
     inline void
     setTolerance(double p_tolerance)

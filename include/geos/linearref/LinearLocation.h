@@ -182,7 +182,7 @@ public:
     /**
      *  Compares this object with the specified object for order.
      *
-     *@param  o  the <code>LineStringLocation</code> with which this <code>Coordinate</code>
+     *@param  other  the <code>LineStringLocation</code> with which this <code>Coordinate</code>
      *      is being compared
      *@return    a negative integer, zero, or a positive integer as this <code>LineStringLocation</code>
      *      is less than, equal to, or greater than the specified <code>LineStringLocation</code>

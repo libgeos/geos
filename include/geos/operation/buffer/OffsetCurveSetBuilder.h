@@ -141,8 +141,8 @@ private:
      * It may be degenerate (i.e. contain only 1, 2, or 3 points).
      * In this case it has no area, and hence has a minimum diameter of 0.
      *
-     * @param ring
-     * @param offsetDistance
+     * @param ringCoord
+     * @param bufferDistance
      * @return
      */
     bool isErodedCompletely(const geom::LinearRing* ringCoord,
