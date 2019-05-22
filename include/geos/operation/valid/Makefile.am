@@ -13,6 +13,7 @@ geos_HEADERS = \
     IsValidOp.h                 \
     MakeValid.h                 \
     QuadtreeNestedRingTester.h  \
+    RepeatedPointRemover.h      \
     RepeatedPointTester.h       \
     SimpleNestedRingTester.h    \
     SweeplineNestedRingTester.h \
