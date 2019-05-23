@@ -20,7 +20,7 @@
 namespace geos {
 namespace operation {
 namespace valid {
-    class RepeatedPointRemover {
+    class GEOS_DLL RepeatedPointRemover {
 
     /// \brief
     /// Returns a new CoordinateSequence being a copy of the input
