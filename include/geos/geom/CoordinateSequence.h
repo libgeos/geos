@@ -120,30 +120,8 @@ public:
         return getSize();
     }
 
-    /** \brief
-     * Returns a read-only vector with the Coordinates in this collection.
-     *
-     * Whether or not the Coordinates returned are the actual underlying
-     * Coordinates or merely copies depends on the implementation.
-     * Note that if this implementation does not store its data as an
-     * array of Coordinates, this method will incur a performance penalty
-     * because the array needs to be built from scratch.
-     *
-     * This method is a port of the toCoordinateArray() method of JTS.
-     * It is not much used as memory management requires us to
-     * know whether we should or not delete the returned object
-     * in a consistent way. Our options are: use shared_ptr<Coordinate>
-     * or always keep ownership of an eventual newly created vector.
-     * We opted for the second, so the returned object is a const, to
-     * also ensure that returning an internal pointer doesn't make
-     * the object mutable.
-     *
-     * @deprecated use toVector(std::vector<Coordinate>&) instead
-     */
-    virtual	const std::vector<Coordinate>* toVector() const = 0;
-
-    /// Pushes all Coordinates of this sequence onto the provided vector.
-    //
+    /// Pushes all Coordinates of this sequence into the provided vector.
+    ///
     /// This method is a port of the toCoordinateArray() method of JTS.
     ///
     virtual	void toVector(std::vector<Coordinate>& coords) const = 0;
@@ -206,7 +184,7 @@ public:
     /// Delete Coordinate at position pos (list will shrink).
     virtual	void deleteAt(std::size_t pos) = 0;
 
-    /// Get a string rapresentation of CoordinateSequence
+    /// Get a string representation of CoordinateSequence
     virtual	std::string toString() const = 0;
 
     /// Substitute Coordinate list with a copy of the given vector

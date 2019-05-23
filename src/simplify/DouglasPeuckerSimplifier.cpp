@@ -105,12 +105,11 @@ DPTransformer::transformCoordinates(
 {
     ::geos::ignore_unused_variable_warning(parent);
 
-    const Coordinate::Vect* inputPts = coords->toVector();
-    assert(inputPts);
+    Coordinate::Vect inputPts;
+    coords->toVector(inputPts);
 
     std::unique_ptr<Coordinate::Vect> newPts =
-        DouglasPeuckerLineSimplifier::simplify(*inputPts,
-                distanceTolerance);
+        DouglasPeuckerLineSimplifier::simplify(inputPts, distanceTolerance);
 
     return CoordinateSequence::Ptr(
                factory->getCoordinateSequenceFactory()->create(
