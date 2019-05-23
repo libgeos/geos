@@ -86,7 +86,7 @@ public:
         return new Point(*this);
     }
 
-    CoordinateSequence* getCoordinates(void) const override;
+    std::unique_ptr<CoordinateSequence> getCoordinates(void) const override;
 
     const CoordinateSequence* getCoordinatesRO() const;
 

@@ -73,10 +73,10 @@ CoordinateArraySequence::CoordinateArraySequence(
     }
 }
 
-CoordinateSequence*
+std::unique_ptr<CoordinateSequence>
 CoordinateArraySequence::clone() const
 {
-    return new CoordinateArraySequence(*this);
+    return std::unique_ptr<CoordinateSequence>(new CoordinateArraySequence(*this));
 }
 
 void

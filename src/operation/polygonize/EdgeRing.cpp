@@ -221,7 +221,7 @@ const CoordinateSequence*
 EdgeRing::getCoordinates()
 {
     if(ringPts == nullptr) {
-        ringPts.reset(factory->getCoordinateSequenceFactory()->create());
+        ringPts = factory->getCoordinateSequenceFactory()->create();
         for(const auto& de : deList) {
             auto edge = dynamic_cast<PolygonizeEdge*>(de->getEdge());
             addEdge(edge->getLine()->getCoordinatesRO(),

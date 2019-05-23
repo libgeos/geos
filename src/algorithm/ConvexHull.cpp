@@ -99,7 +99,7 @@ public:
 } // unnamed namespace
 
 /* private */
-CoordinateSequence*
+std::unique_ptr<CoordinateSequence>
 ConvexHull::toCoordinateSequence(Coordinate::ConstVect& cv)
 {
     const CoordinateSequenceFactory* csf =
@@ -243,8 +243,8 @@ ConvexHull::getConvexHull()
 
     if(nInputPts == 2) { // Return a LineString
         // Copy all Coordinates from the ConstVect
-        CoordinateSequence* cs = toCoordinateSequence(inputPts);
-        return geomFactory->createLineString(cs);
+        auto cs = toCoordinateSequence(inputPts);
+        return geomFactory->createLineString(cs.release());
     }
 
     // use heuristic to reduce points, if large
@@ -352,12 +352,12 @@ ConvexHull::lineOrPolygon(const Coordinate::ConstVect& input)
 
     if(cleaned.size() == 3) { // shouldn't this be 2 ??
         cleaned.resize(2);
-        CoordinateSequence* cl1 = toCoordinateSequence(cleaned);
-        LineString* ret = geomFactory->createLineString(cl1);
+        auto cl1 = toCoordinateSequence(cleaned);
+        LineString* ret = geomFactory->createLineString(cl1.release());
         return ret;
     }
-    CoordinateSequence* cl2 = toCoordinateSequence(cleaned);
-    LinearRing* linearRing = geomFactory->createLinearRing(cl2);
+    auto cl2 = toCoordinateSequence(cleaned);
+    LinearRing* linearRing = geomFactory->createLinearRing(cl2.release());
     return geomFactory->createPolygon(linearRing, nullptr);
 }
 

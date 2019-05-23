@@ -290,8 +290,8 @@ WKBReader::readLineString()
 #if DEBUG_WKB_READER
     cout << "WKB npoints: " << size << endl;
 #endif
-    CoordinateSequence* pts = readCoordinateSequence(size);
-    return factory.createLineString(pts);
+    auto pts = readCoordinateSequence(size);
+    return factory.createLineString(pts.release());
 }
 
 LinearRing*
@@ -301,8 +301,8 @@ WKBReader::readLinearRing()
 #if DEBUG_WKB_READER
     cout << "WKB npoints: " << size << endl;
 #endif
-    CoordinateSequence* pts = readCoordinateSequence(size);
-    return factory.createLinearRing(pts);
+    auto pts = readCoordinateSequence(size);
+    return factory.createLinearRing(pts.release());
 }
 
 Polygon*
@@ -441,10 +441,10 @@ WKBReader::readGeometryCollection()
     return factory.createGeometryCollection(geoms);
 }
 
-CoordinateSequence*
+std::unique_ptr<CoordinateSequence>
 WKBReader::readCoordinateSequence(int size)
 {
-    CoordinateSequence* seq = factory.getCoordinateSequenceFactory()->create(size, inputDimension);
+    auto seq = factory.getCoordinateSequenceFactory()->create(size, inputDimension);
     auto targetDim = seq->getDimension();
     if(targetDim > inputDimension) {
         targetDim = inputDimension;

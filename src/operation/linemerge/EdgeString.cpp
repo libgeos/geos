@@ -66,7 +66,7 @@ EdgeString::getCoordinates()
     if(coordinates == nullptr) {
         int forwardDirectedEdges = 0;
         int reverseDirectedEdges = 0;
-        coordinates = factory->getCoordinateSequenceFactory()->create();
+        coordinates = factory->getCoordinateSequenceFactory()->create().release();
         for(std::size_t i = 0, e = directedEdges.size(); i < e; ++i) {
             LineMergeDirectedEdge* directedEdge = directedEdges[i];
             if(directedEdge->getEdgeDirection()) {

@@ -298,7 +298,7 @@ public:
      * Returns this Geometry vertices.
      * Caller takes ownership of the returned object.
      */
-    virtual CoordinateSequence* getCoordinates() const = 0; //Abstract
+    virtual std::unique_ptr<CoordinateSequence> getCoordinates() const = 0; //Abstract
 
     /// Returns the count of this Geometrys vertices.
     virtual std::size_t getNumPoints() const = 0; //Abstract

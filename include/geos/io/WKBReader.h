@@ -153,7 +153,7 @@ private:
     geom::GeometryCollection* readGeometryCollection();
     // throws IOException, ParseException
 
-    geom::CoordinateSequence* readCoordinateSequence(int); // throws IOException
+    std::unique_ptr<geom::CoordinateSequence> readCoordinateSequence(int); // throws IOException
 
     void readCoordinate(); // throws IOException
 

@@ -60,9 +60,9 @@ public:
             // we take ownership of the coordinates here
             // TODO: check if this can be optimized by getting
             //       the internal CS.
-            geom::CoordinateSequence* pts = line->getCoordinates();
+            auto pts = line->getCoordinates();
 
-            segStr.push_back(new NodedSegmentString(pts, g));
+            segStr.push_back(new NodedSegmentString(pts.release(), g));
         }
     }
 

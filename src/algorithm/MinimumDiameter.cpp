@@ -101,7 +101,6 @@ MinimumDiameter::~MinimumDiameter()
 {
     delete minBaseSeg;
     delete minWidthPt;
-    delete convexHullPts;
 }
 
 /**
@@ -138,10 +137,10 @@ MinimumDiameter::getSupportingSegment()
 {
     computeMinimumDiameter();
     const GeometryFactory* fact = inputGeom->getFactory();
-    CoordinateSequence* cl = fact->getCoordinateSequenceFactory()->create();
+    auto cl = fact->getCoordinateSequenceFactory()->create();
     cl->add(minBaseSeg->p0);
     cl->add(minBaseSeg->p1);
-    return fact->createLineString(cl);
+    return fact->createLineString(cl.release());
 }
 
 /**
@@ -161,10 +160,10 @@ MinimumDiameter::getDiameter()
     Coordinate basePt;
     minBaseSeg->project(*minWidthPt, basePt);
 
-    CoordinateSequence* cl = inputGeom->getFactory()->getCoordinateSequenceFactory()->create();
+    auto cl = inputGeom->getFactory()->getCoordinateSequenceFactory()->create();
     cl->add(basePt);
     cl->add(*minWidthPt);
-    return inputGeom->getFactory()->createLineString(cl);
+    return inputGeom->getFactory()->createLineString(cl.release());
 }
 
 /* private */
@@ -191,7 +190,6 @@ void
 MinimumDiameter::computeWidthConvex(const Geometry* geom)
 {
     //System.out.println("Input = " + geom);
-    delete convexHullPts;
     if(typeid(*geom) == typeid(Polygon)) {
         const Polygon* p = dynamic_cast<const Polygon*>(geom);
         convexHullPts = p->getExteriorRing()->getCoordinates();
@@ -225,7 +223,7 @@ MinimumDiameter::computeWidthConvex(const Geometry* geom)
         minBaseSeg->p1 = convexHullPts->getAt(1);
         break;
     default:
-        computeConvexRingMinDiameter(convexHullPts);
+        computeConvexRingMinDiameter(convexHullPts.get());
     }
 }
 
@@ -355,14 +353,14 @@ MinimumDiameter::getMinimumRectangle()
     const CoordinateSequenceFactory* csf =
         inputGeom->getFactory()->getCoordinateSequenceFactory();
 
-    geom::CoordinateSequence* seq = csf->create(5, 2);
+    auto seq = csf->create(5, 2);
     seq->setAt(p0, 0);
     seq->setAt(p1, 1);
     seq->setAt(p2, 2);
     seq->setAt(p3, 3);
     seq->setAt(p0, 4); // close
 
-    LinearRing* shell = inputGeom->getFactory()->createLinearRing(seq);
+    LinearRing* shell = inputGeom->getFactory()->createLinearRing(seq.release());
     return inputGeom->getFactory()->createPolygon(shell, nullptr);
 }
 

@@ -20,6 +20,7 @@
 #ifndef GEOS_ALGORITHM_MINIMUMDIAMETER_H
 #define GEOS_ALGORITHM_MINIMUMDIAMETER_H
 
+#include <memory>
 #include <geos/export.h>
 
 // Forward declarations
@@ -67,7 +68,7 @@ private:
     const geom::Geometry* inputGeom;
     bool isConvex;
 
-    geom::CoordinateSequence* convexHullPts;
+    std::unique_ptr<geom::CoordinateSequence> convexHullPts;
 
     geom::LineSegment* minBaseSeg;
     geom::Coordinate* minWidthPt;

@@ -20,6 +20,7 @@
 #include <geos/constants.h>
 #include <geos/util/GeometricShapeFactory.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/PrecisionModel.h>
@@ -117,8 +118,8 @@ GeometricShapeFactory::createRectangle()
         (*vc)[ipt++] = coord(x, y);
     }
     (*vc)[ipt++] = (*vc)[0];
-    CoordinateSequence* cs = geomFact->getCoordinateSequenceFactory()->create(vc);
-    LinearRing* ring = geomFact->createLinearRing(cs);
+    auto cs = geomFact->getCoordinateSequenceFactory()->create(vc);
+    LinearRing* ring = geomFact->createLinearRing(cs.release());
     Polygon* poly = geomFact->createPolygon(ring, nullptr);
     return poly;
 }
@@ -143,8 +144,8 @@ GeometricShapeFactory::createCircle()
         (*pts)[iPt++] = coord(x, y);
     }
     (*pts)[iPt++] = (*pts)[0];
-    CoordinateSequence* cs = geomFact->getCoordinateSequenceFactory()->create(pts);
-    LinearRing* ring = geomFact->createLinearRing(cs);
+    auto cs = geomFact->getCoordinateSequenceFactory()->create(pts);
+    LinearRing* ring = geomFact->createLinearRing(cs.release());
     Polygon* poly = geomFact->createPolygon(ring, nullptr);
     return poly;
 }
@@ -174,8 +175,8 @@ GeometricShapeFactory::createArc(double startAng, double angExtent)
         double y = yRadius * sin(ang) + centreY;
         (*pts)[iPt++] = coord(x, y);
     }
-    CoordinateSequence* cs = geomFact->getCoordinateSequenceFactory()->create(pts);
-    LineString* line = geomFact->createLineString(cs);
+    auto cs = geomFact->getCoordinateSequenceFactory()->create(pts);
+    LineString* line = geomFact->createLineString(cs.release());
     return line;
 }
 
@@ -207,8 +208,8 @@ GeometricShapeFactory::createArcPolygon(double startAng, double angExtent)
     }
     (*pts)[iPt++] = coord(centreX, centreY);
 
-    CoordinateSequence* cs = geomFact->getCoordinateSequenceFactory()->create(pts);
-    LinearRing* ring = geomFact->createLinearRing(cs);
+    auto cs = geomFact->getCoordinateSequenceFactory()->create(pts);
+    LinearRing* ring = geomFact->createLinearRing(cs.release());
     Polygon* geom = geomFact->createPolygon(ring, nullptr);
     return geom;
 }

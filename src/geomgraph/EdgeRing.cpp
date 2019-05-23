@@ -55,7 +55,7 @@ EdgeRing::EdgeRing(DirectedEdge* newStart,
     holes(),
     maxNodeDegree(-1),
     edges(),
-    pts(newGeometryFactory->getCoordinateSequenceFactory()->create()),
+    pts(newGeometryFactory->getCoordinateSequenceFactory()->create().release()),
     label(Location::UNDEF), // new Label(Location::UNDEF)),
     ring(nullptr),
     isHoleVar(false),
@@ -77,16 +77,7 @@ EdgeRing::~EdgeRing()
 {
     testInvariant();
 
-    /*
-     * If we constructed a ring, we did by transferring
-     * ownership of the CoordinateSequence, so it will be
-     * destroyed by `ring' dtor and we must not destroy
-     * it twice.
-     */
-    if(ring == nullptr) {
-        delete pts;
-    }
-    else {
+    if(ring != nullptr) {
         delete ring;
     }
 
@@ -200,7 +191,6 @@ EdgeRing::computeRing()
     isHoleVar = Orientation::isCCW(pts);
 
     testInvariant();
-
 }
 
 /*public*/

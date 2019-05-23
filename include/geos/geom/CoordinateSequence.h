@@ -73,7 +73,7 @@ public:
     /** \brief
      * Returns a deep copy of this collection.
      */
-    virtual CoordinateSequence* clone() const = 0;
+    virtual std::unique_ptr<CoordinateSequence> clone() const = 0;
 
     /** \brief
      * Returns a read-only reference to Coordinate at position i.

@@ -22,10 +22,12 @@
 #define GEOS_ALGORITHM_CONVEXHULL_H
 
 #include <geos/export.h>
+#include <memory>
 #include <vector>
 
 // FIXME: avoid using Cordinate:: typedefs to avoid full include
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -37,7 +39,6 @@ namespace geos {
 namespace geom {
 class Geometry;
 class GeometryFactory;
-class CoordinateSequence;
 }
 }
 
@@ -66,7 +67,7 @@ private:
     /// This is needed to construct the geometries.
     /// Here coordinate copies happen
     /// The returned object is newly allocated !NO EXCEPTION SAFE!
-    geom::CoordinateSequence* toCoordinateSequence(geom::Coordinate::ConstVect& cv);
+    std::unique_ptr<geom::CoordinateSequence> toCoordinateSequence(geom::Coordinate::ConstVect& cv);
 
     void computeOctPts(const geom::Coordinate::ConstVect& src,
                        geom::Coordinate::ConstVect& tgt);

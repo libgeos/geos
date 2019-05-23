@@ -88,7 +88,7 @@ convertSegStrings(const GeometryFactory* fact, Iterator it, Iterator et)
     std::vector<Geometry*> lines;
     while(it != et) {
         const SegmentString* ss = *it;
-        LineString* line = fact->createLineString(ss->getCoordinates()->clone());
+        LineString* line = fact->createLineString(ss->getCoordinates()->clone().release());
         lines.push_back(line);
         ++it;
     }
@@ -213,7 +213,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
         SegmentString* ss = (*nodedEdges)[i];
 
         Geometry* tmp = geomFact->createLineString(
-                            ss->getCoordinates()->clone()
+                            ss->getCoordinates()->clone().release()
                         );
         delete ss;
 

@@ -27,9 +27,10 @@
 
 #include <geos/inline.h>
 
-#include <vector>
 #include <cassert> // for testInvariant
 #include <iosfwd> // for operator<<
+#include <memory>
+#include <vector>
 
 #ifdef _MSC_VER
 #pragma warning(push)

@@ -109,7 +109,7 @@ LinearRing::getGeometryType() const
 }
 
 void
-LinearRing::setPoints(CoordinateSequence* cl)
+LinearRing::setPoints(const CoordinateSequence* cl)
 {
     const vector<Coordinate>* v = cl->toVector();
     points->setPoints(*(v));
@@ -130,10 +130,10 @@ LinearRing::reverse() const
     }
 
     assert(points.get());
-    CoordinateSequence* seq = points->clone();
-    CoordinateSequence::reverse(seq);
+    auto seq = points->clone();
+    CoordinateSequence::reverse(seq.get());
     assert(getFactory());
-    return getFactory()->createLinearRing(seq);
+    return getFactory()->createLinearRing(seq.release());
 }
 
 } // namespace geos::geom

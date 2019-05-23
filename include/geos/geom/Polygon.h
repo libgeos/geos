@@ -85,7 +85,7 @@ public:
         return new Polygon(*this);
     }
 
-    CoordinateSequence* getCoordinates() const override;
+    std::unique_ptr<CoordinateSequence> getCoordinates() const override;
 
     size_t getNumPoints() const override;
 

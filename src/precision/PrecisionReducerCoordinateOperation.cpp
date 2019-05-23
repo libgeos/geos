@@ -55,7 +55,7 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
 
     // reducedCoords take ownership of 'vc'
     CoordinateSequence* reducedCoords =
-        geom->getFactory()->getCoordinateSequenceFactory()->create(vc);
+        geom->getFactory()->getCoordinateSequenceFactory()->create(vc).release();
 
     // remove repeated points, to simplify returned geometry as
     // much as possible.

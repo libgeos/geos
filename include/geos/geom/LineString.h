@@ -86,7 +86,7 @@ public:
      */
     Geometry* clone() const override;
 
-    CoordinateSequence* getCoordinates() const override;
+    std::unique_ptr<CoordinateSequence> getCoordinates() const override;
 
     /// Returns a read-only pointer to internal CoordinateSequence
     const CoordinateSequence* getCoordinatesRO() const;
