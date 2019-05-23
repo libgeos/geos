@@ -36,7 +36,7 @@ namespace geos {
 namespace geom { // geos.geom
 namespace prep { // geos.geom.prep
 
-const PreparedGeometry*
+std::unique_ptr<PreparedGeometry>
 PreparedGeometryFactory::create(const geom::Geometry* g) const
 {
     using geos::geom::GeometryTypeId;
@@ -45,27 +45,27 @@ PreparedGeometryFactory::create(const geom::Geometry* g) const
         throw util::IllegalArgumentException("PreparedGeometry constructed with null Geometry object");
     }
 
-    PreparedGeometry* pg = nullptr;
+    std::unique_ptr<PreparedGeometry> pg;
 
     switch(g->getGeometryTypeId()) {
     case GEOS_MULTIPOINT:
     case GEOS_POINT:
-        pg = new PreparedPoint(g);
+        pg.reset(new PreparedPoint(g));
         break;
 
     case GEOS_LINEARRING:
     case GEOS_LINESTRING:
     case GEOS_MULTILINESTRING:
-        pg = new PreparedLineString(g);
+        pg.reset(new PreparedLineString(g));
         break;
 
     case GEOS_POLYGON:
     case GEOS_MULTIPOLYGON:
-        pg = new PreparedPolygon(g);
+        pg.reset(new PreparedPolygon(g));
         break;
 
     default:
-        pg = new BasicPreparedGeometry(g);
+        pg.reset(new BasicPreparedGeometry(g));
     }
     return pg;
 }

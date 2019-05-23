@@ -23,6 +23,8 @@
 #include <geos/export.h>
 #include <geos/geom/prep/PreparedGeometry.h>
 
+#include <memory>
+
 namespace geos {
 namespace geom {
 namespace prep {
@@ -58,7 +60,7 @@ public:
     * @param geom the geometry to prepare
     * @return the prepared geometry
     */
-    static const PreparedGeometry*
+    static std::unique_ptr<PreparedGeometry>
     prepare(const geom::Geometry* geom)
     {
         PreparedGeometryFactory pf;
@@ -82,7 +84,7 @@ public:
     * @param geom the geometry to prepare
     * @return the prepared geometry
     */
-    const PreparedGeometry* create(const geom::Geometry* geom) const;
+    std::unique_ptr<PreparedGeometry> create(const geom::Geometry* geom) const;
 
 };
 
