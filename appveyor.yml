@@ -60,7 +60,7 @@ init:
 
 before_build:
   - ps: 'Write-Host "Running $env:BUILDER with $env:GENERATOR" -ForegroundColor Magenta'
-  - if "%BUILDER%"=="CMake" cmake.exe -G "%GENERATOR%" -DCMAKE_BUILD_TYPE=%CONFIGURATION% %APPVEYOR_BUILD_FOLDER%
+  - if "%BUILDER%"=="CMake" cmake.exe -G "%GENERATOR%" -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=%CONFIGURATION% %APPVEYOR_BUILD_FOLDER%
   - if "%BUILDER%"=="NMake" .\autogen.bat
 
 build_script:
