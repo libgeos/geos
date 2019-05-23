@@ -27,7 +27,7 @@ namespace tut {
 struct test_preparedgeometryfactory_data {
     typedef geos::geom::GeometryFactory GeometryFactory;
     GeometryPtr g_;
-    PreparedGeometryPtr pg_;
+    std::unique_ptr<geos::geom::prep::PreparedGeometry> pg_;
     geos::geom::PrecisionModel pm_;
     geos::geom::GeometryFactory::Ptr factory_;
     geos::io::WKTReader reader_;
@@ -44,9 +44,7 @@ struct test_preparedgeometryfactory_data {
     ~test_preparedgeometryfactory_data()
     {
         // FREE MEMORY per test case
-        prep::PreparedGeometryFactory::destroy(pg_);
         factory_->destroyGeometry(g_);
-        pg_ = nullptr;
         g_ = nullptr;
     }
 
@@ -122,7 +120,7 @@ void object::test<4>
     pg_ = prep::PreparedGeometryFactory::prepare(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test create empty GEOMETRY
@@ -138,7 +136,7 @@ void object::test<5>
     pg_ = pgf.create(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test prepare empty POINT
@@ -153,7 +151,7 @@ void object::test<6>
     pg_ = prep::PreparedGeometryFactory::prepare(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test create empty POINT
@@ -169,7 +167,7 @@ void object::test<7>
     pg_ = pgf.create(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test prepare empty LINESTRING
@@ -184,7 +182,7 @@ void object::test<8>
     pg_ = prep::PreparedGeometryFactory::prepare(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test create empty LINESTRING
@@ -199,7 +197,7 @@ void object::test<9>
     prep::PreparedGeometryFactory pgf;
     pg_ = pgf.create(g_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test prepare empty POLYGON
@@ -214,7 +212,7 @@ void object::test<10>
     pg_ = prep::PreparedGeometryFactory::prepare(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test create empty POLYGON
@@ -230,7 +228,7 @@ void object::test<11>
     pg_ = pgf.create(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test prepare empty MULTIPOINT
@@ -245,7 +243,7 @@ void object::test<12>
     pg_ = prep::PreparedGeometryFactory::prepare(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test create empty MULTIPOINT
@@ -261,7 +259,7 @@ void object::test<13>
     pg_ = pgf.create(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test prepare empty MULTILINESTRING
@@ -276,7 +274,7 @@ void object::test<14>
     pg_ = prep::PreparedGeometryFactory::prepare(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test create empty MULTILINESTRING
@@ -292,7 +290,7 @@ void object::test<15>
     pg_ = pgf.create(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test prepare empty MULTIPOLYGON
@@ -307,7 +305,7 @@ void object::test<16>
     pg_ = prep::PreparedGeometryFactory::prepare(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test create empty MULTIPOLYGON
@@ -323,7 +321,7 @@ void object::test<17>
     pg_ = pgf.create(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test prepare non-empty POINT
@@ -338,7 +336,7 @@ void object::test<18>
     pg_ = prep::PreparedGeometryFactory::prepare(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test create non-empty POINT
@@ -354,7 +352,7 @@ void object::test<19>
     pg_ = pgf.create(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test prepare non-empty LINESTRING
@@ -369,7 +367,7 @@ void object::test<20>
     pg_ = prep::PreparedGeometryFactory::prepare(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test create non-empty LINESTRING
@@ -385,7 +383,7 @@ void object::test<21>
     pg_ = pgf.create(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test prepare non-empty LINESTRING
@@ -400,7 +398,7 @@ void object::test<22>
     pg_ = prep::PreparedGeometryFactory::prepare(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test create non-empty LINESTRING
@@ -416,7 +414,7 @@ void object::test<23>
     pg_ = pgf.create(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test prepare non-empty MULTIPOINT
@@ -431,7 +429,7 @@ void object::test<24>
     pg_ = prep::PreparedGeometryFactory::prepare(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test create non-empty MULTIPOINT
@@ -447,7 +445,7 @@ void object::test<25>
     pg_ = pgf.create(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test prepare non-empty MULTILINESTRING
@@ -462,7 +460,7 @@ void object::test<26>
     pg_ = prep::PreparedGeometryFactory::prepare(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test create non-empty MULTILINESTRING
@@ -478,7 +476,7 @@ void object::test<27>
     pg_ = pgf.create(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test prepare non-empty POLYGON
@@ -493,7 +491,7 @@ void object::test<28>
     pg_ = prep::PreparedGeometryFactory::prepare(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 // Test create non-empty POLYGON
@@ -509,7 +507,7 @@ void object::test<29>
     pg_ = pgf.create(g_);
     ensure(nullptr != pg_);
 
-    ensure_equals_geometry(g_, pg_);
+    ensure_equals_geometry(g_, pg_.get());
 }
 
 } // namespace tut

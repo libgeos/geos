@@ -14,6 +14,7 @@
 #include <memory>
 
 using namespace geos::geom;
+using geos::geom::prep::PreparedGeometry;
 
 namespace tut {
 
@@ -22,15 +23,14 @@ namespace tut {
 //
 
 struct test_preparedgeometrytouches_data {
-    typedef std::unique_ptr<geos::geom::prep::PreparedGeometry> PrepGeomAutoPtr;
     typedef geos::geom::GeometryFactory GeometryFactory;
 
     geos::geom::GeometryFactory::Ptr factory;
     geos::io::WKTReader reader;
     GeometryPtr g1;
     GeometryPtr g2;
-    PreparedGeometryPtr pg1;
-    PreparedGeometryPtr pg2;
+    std::unique_ptr<PreparedGeometry> pg1;
+    std::unique_ptr<PreparedGeometry> pg2;
 
     test_preparedgeometrytouches_data()
         : factory(GeometryFactory::create())
@@ -42,8 +42,6 @@ struct test_preparedgeometrytouches_data {
     {}
     ~test_preparedgeometrytouches_data()
     {
-        prep::PreparedGeometryFactory::destroy(pg1);
-        prep::PreparedGeometryFactory::destroy(pg2);
         factory->destroyGeometry(g1);
         factory->destroyGeometry(g2);
     }

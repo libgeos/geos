@@ -5280,7 +5280,7 @@ extern "C" {
         const geos::geom::prep::PreparedGeometry* prep = 0;
 
         try {
-            prep = geos::geom::prep::PreparedGeometryFactory::prepare(g);
+            prep = geos::geom::prep::PreparedGeometryFactory::prepare(g).release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
