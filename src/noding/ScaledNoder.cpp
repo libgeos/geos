@@ -20,6 +20,7 @@
 #include <geos/geom/CoordinateSequence.h> // for apply and delete
 #include <geos/geom/CoordinateFilter.h> // for inheritance
 #include <geos/noding/ScaledNoder.h>
+#include <geos/noding/NodedSegmentString.h>
 #include <geos/noding/SegmentString.h>
 #include <geos/operation/valid/RepeatedPointRemover.h>
 #include <geos/operation/valid/RepeatedPointTester.h>
@@ -154,10 +155,8 @@ void
 ScaledNoder::scale(SegmentString::NonConstVect& segStrings) const
 {
     Scaler scaler(*this);
-    for(SegmentString::NonConstVect::const_iterator
-            i0 = segStrings.begin(), i0End = segStrings.end();
-            i0 != i0End; ++i0) {
-        SegmentString* ss = *i0;
+    for(size_t i = 0; i < segStrings.size(); i++) {
+        SegmentString* ss = segStrings[i];
 
         CoordinateSequence* cs = ss->getCoordinates();
 
@@ -167,16 +166,11 @@ ScaledNoder::scale(SegmentString::NonConstVect& segStrings) const
         cs->apply_rw(&scaler);
         assert(cs->size() == npts);
 
-        // Actually, we should be creating *new*
-        // SegmentStrings here, but who's going
-        // to delete them then ? And is it worth
-        // the memory cost ?
         operation::valid::RepeatedPointTester rpt;
         if (rpt.hasRepeatedPoint(cs)) {
             auto cs2 = operation::valid::RepeatedPointRemover::removeRepeatedPoints(cs);
-            delete cs;
-            cs = cs2.release();
-            // FIXME
+            segStrings[i] = new NodedSegmentString(cs2.release(), ss->getData());
+            delete ss;
         }
     }
 }
