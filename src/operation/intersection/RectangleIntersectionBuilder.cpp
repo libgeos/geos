@@ -451,8 +451,8 @@ RectangleIntersectionBuilder::reconnectPolygons(const Rectangle& rect)
             if(best_distance < 0 || own_distance < best_distance) {
                 close_ring(rect, ring);
                 normalize_ring(*ring);
-                geom::CoordinateSequence* shell_cs = _csf.create(ring);
-                geom::LinearRing* shell = _gf.createLinearRing(shell_cs);
+                auto shell_cs = _csf.create(ring);
+                geom::LinearRing* shell = _gf.createLinearRing(shell_cs.release());
                 exterior.push_back(make_pair(shell, new LinearRingVect()));
                 ring = nullptr;
             }

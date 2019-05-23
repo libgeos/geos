@@ -94,7 +94,7 @@ public:
      * @return the collected coordinates
      *
      */
-    CoordinateSequence* getCoordinates() const override;
+    std::unique_ptr<CoordinateSequence> getCoordinates() const override;
 
     bool isEmpty() const override;
 

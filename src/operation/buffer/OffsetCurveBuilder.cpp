@@ -178,7 +178,7 @@ OffsetCurveBuilder::getRingCurve(const CoordinateSequence* inputPts,
 
     // optimize creating ring for zero distance
     if(distance == 0.0) {
-        lineList.push_back(inputPts->clone());
+        lineList.push_back(inputPts->clone().release());
         return;
     }
 

@@ -60,7 +60,7 @@ CoordinateSequence::atLeastNCoordinatesOrNothing(size_t n,
     }
     else {
         // FIXME: return NULL rather then empty coordinate array
-        return CoordinateArraySequenceFactory::instance()->create();
+        return CoordinateArraySequenceFactory::instance()->create().release();
     }
 }
 

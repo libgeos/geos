@@ -78,8 +78,8 @@ SweeplineNestedRingTester::buildIndex()
 bool
 SweeplineNestedRingTester::isInside(LinearRing* innerRing, LinearRing* searchRing)
 {
-    CoordinateSequence* innerRingPts = innerRing->getCoordinates();
-    CoordinateSequence* searchRingPts = searchRing->getCoordinates();
+    const CoordinateSequence* innerRingPts = innerRing->getCoordinatesRO();
+    const CoordinateSequence* searchRingPts = searchRing->getCoordinatesRO();
 
     if(!innerRing->getEnvelopeInternal()->intersects(searchRing->getEnvelopeInternal())) {
         return false;

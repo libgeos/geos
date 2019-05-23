@@ -90,20 +90,19 @@ GeometryCollection::setSRID(int newSRID)
  * Returns a newly the collected coordinates
  *
  */
-CoordinateSequence*
+std::unique_ptr<CoordinateSequence>
 GeometryCollection::getCoordinates() const
 {
     vector<Coordinate>* coordinates = new vector<Coordinate>(getNumPoints());
 
     int k = -1;
     for(size_t i = 0; i < geometries->size(); ++i) {
-        CoordinateSequence* childCoordinates = (*geometries)[i]->getCoordinates();
+        auto childCoordinates = (*geometries)[i]->getCoordinates();
         size_t npts = childCoordinates->getSize();
         for(size_t j = 0; j < npts; ++j) {
             k++;
             (*coordinates)[k] = childCoordinates->getAt(j);
         }
-        delete childCoordinates;
     }
     return CoordinateArraySequenceFactory::instance()->create(coordinates);
 }

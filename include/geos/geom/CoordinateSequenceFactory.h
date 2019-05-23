@@ -21,6 +21,7 @@
 
 
 #include <geos/export.h>
+#include <memory>
 #include <vector>
 
 //#include <geos/geom/Coordinate.h>
@@ -51,7 +52,7 @@ public:
      * Returns an empty CoordinateSequence, the dimensions will be autodetected
      * when it is populated.
      */
-    virtual CoordinateSequence* create() const = 0;
+    virtual std::unique_ptr<CoordinateSequence> create() const = 0;
 
     /** \brief
      * Returns a CoordinateSequence based on the given array.
@@ -68,7 +69,7 @@ public:
      * @param coordinates the coordinates
      * @param dimension 0, 2 or 3 with 0 indicating unknown at this time.
      */
-    virtual CoordinateSequence* create(
+    virtual std::unique_ptr<CoordinateSequence> create(
         std::vector<Coordinate>* coordinates,
         std::size_t dimension = 0) const = 0;
 
@@ -82,8 +83,8 @@ public:
      * @param dimension the dimension of the coordinates in the sequence
      * 	(0=unknown, 2, or 3 - ignored if not user specifiable)
      */
-    virtual CoordinateSequence* create(std::size_t size,
-                                       std::size_t dimension = 0) const = 0;
+    virtual std::unique_ptr<CoordinateSequence> create(std::size_t size,
+                                                       std::size_t dimension = 0) const = 0;
 
     /** \brief
      * Creates a CoordinateSequence which is a copy of the given one.
@@ -92,7 +93,7 @@ public:
      *
      * @param coordSeq the coordinate sequence to copy
      */
-    virtual CoordinateSequence* create(const CoordinateSequence& coordSeq) const = 0;
+    virtual std::unique_ptr<CoordinateSequence> create(const CoordinateSequence& coordSeq) const = 0;
 
     virtual ~CoordinateSequenceFactory();
 };

@@ -98,7 +98,7 @@ Polygon::Polygon(LinearRing* newShell, vector<Geometry*>* newHoles,
     }
 }
 
-CoordinateSequence*
+std::unique_ptr<CoordinateSequence>
 Polygon::getCoordinates() const
 {
     if(isEmpty()) {
@@ -331,16 +331,15 @@ Polygon::normalize(LinearRing* ring, bool clockwise)
     if(ring->isEmpty()) {
         return;
     }
-    CoordinateSequence* uniqueCoordinates = ring->getCoordinates();
+    auto uniqueCoordinates = ring->getCoordinates();
     uniqueCoordinates->deleteAt(uniqueCoordinates->getSize() - 1);
-    const Coordinate* minCoordinate = CoordinateSequence::minCoordinate(uniqueCoordinates);
-    CoordinateSequence::scroll(uniqueCoordinates, minCoordinate);
+    const Coordinate* minCoordinate = CoordinateSequence::minCoordinate(uniqueCoordinates.get());
+    CoordinateSequence::scroll(uniqueCoordinates.get(), minCoordinate);
     uniqueCoordinates->add(uniqueCoordinates->getAt(0));
-    if(algorithm::Orientation::isCCW(uniqueCoordinates) == clockwise) {
-        CoordinateSequence::reverse(uniqueCoordinates);
+    if(algorithm::Orientation::isCCW(uniqueCoordinates.get()) == clockwise) {
+        CoordinateSequence::reverse(uniqueCoordinates.get());
     }
-    ring->setPoints(uniqueCoordinates);
-    delete(uniqueCoordinates);
+    ring->setPoints(uniqueCoordinates.get());
 }
 
 const Coordinate*

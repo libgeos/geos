@@ -22,32 +22,36 @@
 namespace geos {
 namespace geom { // geos::geom
 
-INLINE CoordinateSequence*
+INLINE std::unique_ptr<CoordinateSequence>
 CoordinateArraySequenceFactory::create() const
 {
-    return new CoordinateArraySequence(
-               reinterpret_cast<std::vector<Coordinate>*>(0), 0);
+    return std::unique_ptr<CoordinateSequence>(
+            new CoordinateArraySequence(
+                    reinterpret_cast<std::vector<Coordinate>*>(0), 0));
 }
 
-INLINE CoordinateSequence*
+INLINE std::unique_ptr<CoordinateSequence>
 CoordinateArraySequenceFactory::create(std::vector<Coordinate>* coords,
                                        size_t dimension) const
 {
-    return new CoordinateArraySequence(coords, dimension);
+    return std::unique_ptr<CoordinateSequence>(
+            new CoordinateArraySequence(coords, dimension));
 }
 
-INLINE CoordinateSequence*
+INLINE std::unique_ptr<CoordinateSequence>
 CoordinateArraySequenceFactory::create(std::size_t size, std::size_t dimension)
 const
 {
-    return new CoordinateArraySequence(size, dimension);
+    return std::unique_ptr<CoordinateSequence>(
+            new CoordinateArraySequence(size, dimension));
 }
 
-INLINE CoordinateSequence*
+INLINE std::unique_ptr<CoordinateSequence>
 CoordinateArraySequenceFactory::create(const CoordinateSequence& seq)
 const
 {
-    return new CoordinateArraySequence(seq);
+    return std::unique_ptr<CoordinateSequence>(
+            new CoordinateArraySequence(seq));
 }
 
 

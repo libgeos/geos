@@ -72,7 +72,7 @@ public:
     edit(const CoordinateSequence* coordSeq,
          const Geometry*) override
     {
-        return _gsf->create(*coordSeq);
+        return _gsf->create(*coordSeq).release();
     }
 };
 
@@ -277,7 +277,7 @@ GeometryFactory::toGeometry(const Envelope* envelope) const
         coord.y = envelope->getMinY();
         return createPoint(coord);
     }
-    CoordinateSequence* cl = CoordinateArraySequenceFactory::instance()->
+    auto cl = CoordinateArraySequenceFactory::instance()->
                              create((size_t) 0, 2);
     coord.x = envelope->getMinX();
     coord.y = envelope->getMinY();
@@ -295,7 +295,7 @@ GeometryFactory::toGeometry(const Envelope* envelope) const
     coord.y = envelope->getMinY();
     cl->add(coord);
 
-    Polygon* p = createPolygon(createLinearRing(cl), nullptr);
+    Polygon* p = createPolygon(createLinearRing(cl.release()), nullptr);
     return p;
 }
 
@@ -322,9 +322,9 @@ GeometryFactory::createPoint(const Coordinate& coordinate) const
     }
     else {
         std::size_t dim = std::isnan(coordinate.z) ? 2 : 3;
-        CoordinateSequence* cl = coordinateListFactory->create(new vector<Coordinate>(1, coordinate), dim);
+        auto cl = coordinateListFactory->create(new vector<Coordinate>(1, coordinate), dim);
         //cl->setAt(coordinate, 0);
-        Point* ret = createPoint(cl);
+        Point* ret = createPoint(cl.release());
         return ret;
     }
 }
@@ -340,16 +340,8 @@ GeometryFactory::createPoint(CoordinateSequence* newCoords) const
 Point*
 GeometryFactory::createPoint(const CoordinateSequence& fromCoords) const
 {
-    CoordinateSequence* newCoords = fromCoords.clone();
-    Point* g = nullptr;
-    try {
-        g = new Point(newCoords, this);
-    }
-    catch(...) {
-        delete newCoords;
-        throw;
-    }
-    return g;
+    auto newCoords = fromCoords.clone();
+    return new Point(newCoords.release(), this);
 
 }
 
@@ -499,10 +491,10 @@ GeometryFactory::createLinearRing(CoordinateSequence::Ptr newCoords) const
 LinearRing*
 GeometryFactory::createLinearRing(const CoordinateSequence& fromCoords) const
 {
-    CoordinateSequence* newCoords = fromCoords.clone();
+    auto newCoords = fromCoords.clone();
     LinearRing* g = nullptr;
     // construction failure will delete newCoords
-    g = new LinearRing(newCoords, this);
+    g = new LinearRing(newCoords.release(), this);
     return g;
 }
 
@@ -668,10 +660,10 @@ LineString*
 GeometryFactory::createLineString(const CoordinateSequence& fromCoords)
 const
 {
-    CoordinateSequence* newCoords = fromCoords.clone();
+    auto newCoords = fromCoords.clone();
     LineString* g = nullptr;
     // construction failure will delete newCoords
-    g = new LineString(newCoords, this);
+    g = new LineString(newCoords.release(), this);
     return g;
 }
 

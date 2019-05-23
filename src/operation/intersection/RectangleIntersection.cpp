@@ -231,8 +231,8 @@ RectangleIntersection::clip_linestring_parts(const geom::LineString* gi,
                     std::vector<Coordinate>* coords = new std::vector<Coordinate>(2);
                     (*coords)[0] = Coordinate(x0, y0);
                     (*coords)[1] = Coordinate(x, y);
-                    CoordinateSequence* seq = _csf->create(coords);
-                    geom::LineString* line = _gf->createLineString(seq);
+                    auto seq = _csf->create(coords);
+                    geom::LineString* line = _gf->createLineString(seq.release());
                     parts.add(line);
                 }
 
@@ -302,8 +302,8 @@ RectangleIntersection::clip_linestring_parts(const geom::LineString* gi,
                             coords->push_back(Coordinate(x, y));
                         }
 
-                        CoordinateSequence* seq = _csf->create(coords);
-                        geom::LineString* line = _gf->createLineString(seq);
+                        auto seq = _csf->create(coords);
+                        geom::LineString* line = _gf->createLineString(seq.release());
                         parts.add(line);
                     }
                     // And continue main loop on the outside
@@ -323,8 +323,8 @@ RectangleIntersection::clip_linestring_parts(const geom::LineString* gi,
                             //line->addSubLineString(&g, start_index, i-1);
                             coords->insert(coords->end(), cs.begin() + start_index, cs.begin() + i);
 
-                            CoordinateSequence* seq = _csf->create(coords);
-                            geom::LineString* line = _gf->createLineString(seq);
+                            auto seq = _csf->create(coords);
+                            geom::LineString* line = _gf->createLineString(seq.release());
                             parts.add(line);
                         }
                         start_index = i;
@@ -356,8 +356,8 @@ RectangleIntersection::clip_linestring_parts(const geom::LineString* gi,
                 //line->addSubLineString(&g, start_index, i-1);
                 coords->insert(coords->end(), cs.begin() + start_index, cs.begin() + i);
 
-                CoordinateSequence* seq = _csf->create(coords);
-                geom::LineString* line = _gf->createLineString(seq);
+                auto seq = _csf->create(coords);
+                geom::LineString* line = _gf->createLineString(seq.release());
                 parts.add(line);
             }
 

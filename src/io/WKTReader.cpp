@@ -68,7 +68,7 @@ WKTReader::read(const string& wellKnownText)
     return g;
 }
 
-CoordinateSequence*
+std::unique_ptr<CoordinateSequence>
 WKTReader::getCoordinates(StringTokenizer* tokenizer)
 {
     size_t dim;
@@ -81,20 +81,14 @@ WKTReader::getCoordinates(StringTokenizer* tokenizer)
     Coordinate coord;
     getPreciseCoordinate(tokenizer, coord, dim);
 
-    CoordinateSequence* coordinates = \
-                                      geometryFactory->getCoordinateSequenceFactory()->create((size_t)0, dim);
+    auto coordinates = geometryFactory->getCoordinateSequenceFactory()->create((size_t)0, dim);
     coordinates->add(coord);
-    try {
+
+    nextToken = getNextCloserOrComma(tokenizer);
+    while(nextToken == ",") {
+        getPreciseCoordinate(tokenizer, coord, dim);
+        coordinates->add(coord);
         nextToken = getNextCloserOrComma(tokenizer);
-        while(nextToken == ",") {
-            getPreciseCoordinate(tokenizer, coord, dim);
-            coordinates->add(coord);
-            nextToken = getNextCloserOrComma(tokenizer);
-        }
-    }
-    catch(...) {
-        delete coordinates;
-        throw;
     }
 
     return coordinates;
@@ -273,17 +267,17 @@ WKTReader::readPointText(StringTokenizer* tokenizer)
 LineString*
 WKTReader::readLineStringText(StringTokenizer* tokenizer)
 {
-    CoordinateSequence* coords = getCoordinates(tokenizer);
-    LineString* ret = geometryFactory->createLineString(coords);
+    auto coords = getCoordinates(tokenizer);
+    LineString* ret = geometryFactory->createLineString(coords.release());
     return ret;
 }
 
 LinearRing*
 WKTReader::readLinearRingText(StringTokenizer* tokenizer)
 {
-    CoordinateSequence* coords = getCoordinates(tokenizer);
+    auto coords = getCoordinates(tokenizer);
     LinearRing* ret;
-    ret = geometryFactory->createLinearRing(coords);
+    ret = geometryFactory->createLinearRing(coords.release());
     return ret;
 }
 
@@ -303,24 +297,18 @@ WKTReader::readMultiPointText(StringTokenizer* tokenizer)
         // Try to parse deprecated form "MULTIPOINT(0 0, 1 1)"
         const CoordinateSequenceFactory* csf = \
                                                geometryFactory->getCoordinateSequenceFactory();
-        CoordinateSequence* coords = csf->create();
-        try {
-            do {
-                Coordinate coord;
-                getPreciseCoordinate(tokenizer, coord, dim);
-                coords->add(coord);
-                nextToken = getNextCloserOrComma(tokenizer);
-            }
-            while(nextToken == ",");
+        auto coords = csf->create();
 
-            MultiPoint* ret = geometryFactory->createMultiPoint(*coords);
-            delete coords;
-            return ret;
+        do {
+            Coordinate coord;
+            getPreciseCoordinate(tokenizer, coord, dim);
+            coords->add(coord);
+            nextToken = getNextCloserOrComma(tokenizer);
         }
-        catch(...) {
-            delete coords;
-            throw;
-        }
+        while(nextToken == ",");
+
+        MultiPoint* ret = geometryFactory->createMultiPoint(*coords);
+        return ret;
     }
 
     else if(tok == '(') {

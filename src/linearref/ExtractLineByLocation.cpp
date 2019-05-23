@@ -84,7 +84,7 @@ ExtractLineByLocation::reverse(const Geometry* linear)
 LineString*
 ExtractLineByLocation::computeLine(const LinearLocation& start, const LinearLocation& end)
 {
-    CoordinateSequence* coordinates = line->getCoordinates();
+    auto coordinates = line->getCoordinates();
     CoordinateArraySequence newCoordinateArray;
 
     const size_t indexStep = 1;

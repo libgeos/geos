@@ -37,10 +37,10 @@ SimpleNestedRingTester::isNonNested()
 {
     for(size_t i = 0, ni = rings.size(); i < ni; i++) {
         LinearRing* innerRing = rings[i];
-        CoordinateSequence* innerRingPts = innerRing->getCoordinates();
+        const CoordinateSequence* innerRingPts = innerRing->getCoordinatesRO();
         for(size_t j = 0, nj = rings.size(); j < nj; j++) {
             LinearRing* searchRing = rings[j];
-            CoordinateSequence* searchRingPts = searchRing->getCoordinates();
+            const CoordinateSequence* searchRingPts = searchRing->getCoordinatesRO();
             if(innerRing == searchRing) {
                 continue;
             }

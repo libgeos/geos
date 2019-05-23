@@ -41,7 +41,7 @@ public:
 
     CoordinateArraySequence(const CoordinateSequence& cl);
 
-    CoordinateSequence* clone() const override;
+    std::unique_ptr<CoordinateSequence> clone() const override;
 
     //const Coordinate& getCoordinate(int pos) const;
     const Coordinate& getAt(std::size_t pos) const override;

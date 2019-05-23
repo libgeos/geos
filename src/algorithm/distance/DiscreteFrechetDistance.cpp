@@ -120,8 +120,8 @@ DiscreteFrechetDistance::compute(
     const geom::Geometry& discreteGeom,
     const geom::Geometry& geom)
 {
-    const CoordinateSequence* lp = discreteGeom.getCoordinates();
-    const CoordinateSequence* lq = geom.getCoordinates();
+    auto lp = discreteGeom.getCoordinates();
+    auto lq = geom.getCoordinates();
     size_t pSize, qSize;
     if(densifyFrac > 0) {
         size_t numSubSegs =  std::size_t(util::round(1.0 / densifyFrac));
@@ -139,8 +139,6 @@ DiscreteFrechetDistance::compute(
         }
     }
     ptDist = getFrecheDistance(ca, pSize - 1, qSize - 1, *lp, *lq);
-    delete lp;
-    delete lq;
 }
 
 } // namespace geos.algorithm.distance
