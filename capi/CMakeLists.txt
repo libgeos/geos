@@ -9,21 +9,6 @@
 # See the COPYING file for more information.
 ################################################################################
 
-include(GetGitRevision)
-
-get_git_revision(
-  HASH_LENGTH 7
-  HASH  GIT_COMMIT_HASH
-  DIRTY GEOS_GIT_IS_DIRTY)
-
-if (${GEOS_GIT_IS_DIRTY})
-  set(GIT_COMMIT_HASH "${GIT_COMMIT_HASH} (dirty)")
-endif()
-
-message(STATUS "GEOS: GEOS_REVISION=${GIT_COMMIT_HASH}")
-
-################################################################################
-
 file(GLOB_RECURSE _headers ${CMAKE_CURRENT_LIST_DIR}/*.cpp  CONFIGURE_DEPEND)
 target_sources(geos_c PRIVATE ${_headers})
 unset(_headers)

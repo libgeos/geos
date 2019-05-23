@@ -52,13 +52,6 @@ dnl -- JTS_PORT: the version of JTS this release is bound to
 dnl JTS_PORT=1.13.0
 JTS_PORT=`cat $VERTXT | awk -F= '/^JTS_PORT/ {print $2}'`
 
-AC_MSG_CHECKING([git revision hash])
-if [ test -d $srcdir/.git ]; then
-	GIT_COMMIT_HASH=`git -C "$srcdir" log -1 --format=%h`
-else
-	GIT_COMMIT_HASH=
-fi
-AC_MSG_RESULT([$GIT_COMMIT_HASH])
 
 dnl Hush warnings
 AC_DEFINE(USE_UNSTABLE_GEOS_CPP_API, [1], [We know])
@@ -394,7 +387,6 @@ AC_SUBST(VERSION_MINOR)
 AC_SUBST(VERSION_PATCH)
 AC_SUBST(VERSION_RELEASE)
 AC_SUBST(JTS_PORT)
-AC_SUBST(GIT_COMMIT_HASH)
 AC_SUBST(CAPI_VERSION)
 AC_SUBST(CAPI_VERSION_MAJOR)
 AC_SUBST(CAPI_VERSION_MINOR)
