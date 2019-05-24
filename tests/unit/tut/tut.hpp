@@ -236,7 +236,8 @@ class test_group : public group_base, public test_group_posix
                 }
 #else
                 bool d;
-                d = delete_obj();
+                d = delete_obj(); // on separate line from declaration to
+                                  // avoid MVSC warning
                 assert(d && "delete failed with SEH disabled: runtime bug?");
 #endif
             }
