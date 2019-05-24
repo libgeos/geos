@@ -9,7 +9,7 @@
 # See the COPYING file for more information.
 ################################################################################
 
-add_executable(test_sweep_line_speed
+add_executable(test_big_sweep_line_speed
     TestSweepLineSpeed.cpp
     GeometryTestFactory.cpp)
-target_link_libraries(test_sweep_line_speed PRIVATE geos)
+target_link_libraries(test_big_sweep_line_speed PRIVATE geos)

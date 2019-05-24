@@ -494,12 +494,12 @@ AC_OUTPUT([
 	tests/Makefile
 	tests/bigtest/Makefile
 	tests/unit/Makefile
-	tests/perf/Makefile
-	tests/perf/algorithm/Makefile
-	tests/perf/operation/Makefile
-	tests/perf/operation/buffer/Makefile
-	tests/perf/operation/predicate/Makefile
-	tests/perf/capi/Makefile
+	benchmarks/Makefile
+	benchmarks/algorithm/Makefile
+	benchmarks/operation/Makefile
+	benchmarks/operation/buffer/Makefile
+	benchmarks/operation/predicate/Makefile
+	benchmarks/capi/Makefile
 	tests/xmltester/Makefile
 	tests/geostest/Makefile
 	tests/thread/Makefile

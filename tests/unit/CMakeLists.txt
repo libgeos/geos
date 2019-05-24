@@ -17,4 +17,4 @@ target_include_directories(test_geos_unit
   PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>)
 
-add_test(NAME test_geos_unit COMMAND test_geos_unit)
+add_test(NAME test_unit COMMAND test_geos_unit)

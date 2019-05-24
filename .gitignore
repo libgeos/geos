@@ -36,10 +36,10 @@ tools/astyle/astyle
 tests/bigtest/TestSweepLineSpeed
 tests/bigtest/bug234
 tests/geostest/geostest
-tests/perf/operation/buffer/IteratedBufferStressTest
-tests/perf/operation/predicate/RectangleIntersectsPerfTest
-tests/perf/capi/memleak_mp_prep
-tests/perf/ClassSizes
+benchmarks/operation/buffer/IteratedBufferStressTest
+benchmarks/operation/predicate/RectangleIntersectsPerfTest
+benchmarks/capi/memleak_mp_prep
+benchmarks/ClassSizes
 include/geos/platform.h
 include/geos/platform.h.disabled
 include/geos/stamp-h2
