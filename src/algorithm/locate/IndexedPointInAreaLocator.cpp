@@ -24,12 +24,14 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/util/LinearComponentExtracter.h>
 #include <geos/index/intervalrtree/SortedPackedIntervalRTree.h>
-#include <geos/util/IllegalArgumentException.h>
+#include <geos/util.h>
 #include <geos/algorithm/RayCrossingCounter.h>
 #include <geos/index/ItemVisitor.h>
 
 #include <algorithm>
 #include <typeinfo>
+
+using geos::detail::make_unique;
 
 namespace geos {
 namespace algorithm {
@@ -72,7 +74,7 @@ IndexedPointInAreaLocator::IntervalIndexedGeometry::addLine(const geom::Coordina
 void
 IndexedPointInAreaLocator::buildIndex(const geom::Geometry& g)
 {
-    index = std::unique_ptr<IntervalIndexedGeometry>(new IntervalIndexedGeometry(g));
+    index = make_unique<IntervalIndexedGeometry>(g);
 }
 
 

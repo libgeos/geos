@@ -34,8 +34,7 @@
 #include <geos/geom/Envelope.h>
 #include <geos/geom/util/CoordinateOperation.h>
 #include <geos/geom/util/GeometryEditor.h>
-#include <geos/util/GEOSException.h>
-#include <geos/util/IllegalArgumentException.h>
+#include <geos/util.h>
 
 #include <cassert>
 #include <vector>
@@ -637,6 +636,7 @@ std::unique_ptr<LineString>
 GeometryFactory::createLineString(const LineString& ls) const
 {
     return std::unique_ptr<LineString>(new LineString(ls));
+    //return make_unique<LineString>(ls); // TODO why doesn't this work?
 }
 
 /*public*/
