@@ -43,6 +43,18 @@ cmake_dependent_option(GEOS_BUILD_DEVELOPER
 mark_as_advanced(GEOS_BUILD_DEVELOPER)
 
 #-----------------------------------------------------------------------------
+# Setup build directories
+#-----------------------------------------------------------------------------
+# Place executables and shared libraries in the same location for
+# convenience of direct execution from common spot and for
+# convenience in environments without RPATH support.
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+message(STATUS "GEOS: Run-time output: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+message(STATUS "GEOS: Archives output: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+
+#-----------------------------------------------------------------------------
 # Version
 #-----------------------------------------------------------------------------
 file(READ Version.txt _version_txt)
