@@ -5,7 +5,6 @@ SUBDIRS = \
 	bigtest		\
 	xmltester	\
 	unit		\
-	benchmarks        \
     geostest    \
     thread
 

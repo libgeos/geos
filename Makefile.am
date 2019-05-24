@@ -20,6 +20,7 @@ SUBDIRS = \
 	macros  \
 	swig    \
 	tests   \
+	benchmarks \
 	tools
 
 BUILT_SOURCES = geos_revision.h

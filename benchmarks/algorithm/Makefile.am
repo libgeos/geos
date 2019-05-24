@@ -7,10 +7,8 @@ top_builddir=@top_builddir@
 
 noinst_PROGRAMS = InteriorPointAreaPerfTest
 
-LIBS = $(top_builddir)/src/libgeos.la
-
 InteriorPointAreaPerfTest_SOURCES = InteriorPointAreaPerfTest.cpp
-InteriorPointAreaPerfTest_LDADD = $(LIBS)
+InteriorPointAreaPerfTest_LDADD = $(top_builddir)/src/libgeos.la
 
 AM_CPPFLAGS = -I$(top_srcdir)/include
 AM_CPPFLAGS += -I$(top_srcdir)/src/io/markup
