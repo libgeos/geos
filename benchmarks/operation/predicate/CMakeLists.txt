@@ -8,9 +8,5 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 ################################################################################
-add_executable(test_perf_class_sizes ClassSizes.cpp)
-target_link_libraries(test_perf_class_sizes PRIVATE geos)
-add_test(NAME test_perf_class_sizes COMMAND test_perf_class_sizes)
-
-add_subdirectory(operation)
-add_subdirectory(capi)
+add_executable(perf_rectangle_intersects RectangleIntersectsPerfTest.cpp)
+target_link_libraries(perf_rectangle_intersects PRIVATE geos)

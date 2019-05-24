@@ -1,6 +1,6 @@
 #################################################################################
 #
-# CMake configuration for GEOS perf/operation/predicate tests
+# CMake configuration for GEOS benchmarks/operation/predicate tests
 #
 # Copyright (C) 2017 Mateusz Loskot <mateusz@loskot.net>
 #
@@ -10,8 +10,5 @@
 # See the COPYING file for more information.
 #
 #################################################################################
-
 add_executable(perf_interiorpoint_area InteriorPointAreaPerfTest.cpp)
-
 target_link_libraries(perf_interiorpoint_area geos)
-
