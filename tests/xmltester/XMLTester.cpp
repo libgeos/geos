@@ -98,7 +98,7 @@ namespace {
 std::unique_ptr<const PreparedGeometry>
 prepare(const geom::Geometry* g)
 {
-    return std::unique_ptr<const PreparedGeometry> (PreparedGeometryFactory::prepare(g));
+    return PreparedGeometryFactory::prepare(g);
 }
 
 // Asymmetric Rounding Algorithm  - equivalent to Java Math.round()

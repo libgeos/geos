@@ -399,13 +399,10 @@ void object::test<26>
     ensure(poly_ != nullptr);
 
     // Caller takes ownership of 'coords'
-    CoordSeqPtr coords = poly_->getCoordinates();
+    auto coords = poly_->getCoordinates();
     ensure(coords != nullptr);
     ensure(!coords->isEmpty());
     ensure_equals(coords->getSize(), poly_->getNumPoints());
-
-    // FREE MEMORY
-    delete coords;
 }
 
 // Test of clone() and equals() for non-empty Polygon
@@ -497,7 +494,7 @@ void object::test<32>
     ensure(poly_ != nullptr);
     // "POLYGON((0 10, 5 5, 10 5, 15 10, 10 15, 5 15, 0 10))"
 
-    CoordSeqPtr coords = poly_->getCoordinates();
+    auto coords = poly_->getCoordinates();
     ensure(coords != nullptr);
     ensure_equals(coords->getSize(), poly_size_);
 
@@ -509,9 +506,6 @@ void object::test<32>
     const int middlePos = 3;
     ensure_equals(coords->getAt(middlePos).x, 15);
     ensure_equals(coords->getAt(middlePos).y, 10);
-
-    // FREE MEMORY
-    delete coords;
 }
 
 // Test of getGeometryType() for non-empty Polygon

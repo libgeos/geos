@@ -401,13 +401,13 @@ public:
     void
     visit(QuadEdge* triEdges[3]) override
     {
-        geom::CoordinateSequence* coordSeq = coordSeqFact.create(4, 0);
+        auto coordSeq = coordSeqFact.create(4, 0);
         for(int i = 0; i < 3; i++) {
             Vertex v = triEdges[i]->orig();
             coordSeq->setAt(v.getCoordinate(), i);
         }
         coordSeq->setAt(triEdges[0]->orig().getCoordinate(), 3);
-        triCoords->push_back(coordSeq);
+        triCoords->push_back(coordSeq.release());
     }
 };
 
@@ -470,14 +470,12 @@ QuadEdgeSubdivision::getEdges(const geom::GeometryFactory& geomFact)
     int i = 0;
     for(QuadEdgeSubdivision::QuadEdgeList::iterator it = p_quadEdges->begin(); it != p_quadEdges->end(); ++it) {
         QuadEdge* qe = *it;
-        CoordinateSequence* coordSeq = coordSeqFact->create((std::vector<geom::Coordinate>*)nullptr);;
+        auto coordSeq = coordSeqFact->create((std::vector<geom::Coordinate>*)nullptr);;
 
         coordSeq->add(qe->orig().getCoordinate());
         coordSeq->add(qe->dest().getCoordinate());
 
-        edges[i++] = static_cast<Geometry*>(geomFact.createLineString(*coordSeq));
-
-        delete coordSeq;
+        edges[i++] = static_cast<Geometry*>(geomFact.createLineString(coordSeq.release()));
     }
 
     geom::MultiLineString* result = geomFact.createMultiLineString(edges);

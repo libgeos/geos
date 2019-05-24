@@ -22,32 +22,44 @@
 
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateArraySequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
 #include <geos/triangulate/IncrementalDelaunayTriangulator.h>
 #include <geos/triangulate/quadedge/QuadEdgeSubdivision.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
+#include <geos/operation/valid/RepeatedPointTester.h>
 
 namespace geos {
 namespace triangulate { //geos.triangulate
 
 using namespace geos::geom;
 
-CoordinateSequence*
+std::unique_ptr<CoordinateSequence>
 DelaunayTriangulationBuilder::extractUniqueCoordinates(
     const Geometry& geom)
 {
-    geom::CoordinateSequence* coords = geom.getCoordinates();
-    unique(*coords);
-    return coords;
+    std::unique_ptr<CoordinateSequence> seq(geom.getCoordinates());
+    return unique(seq.get());
 }
 
-void
-DelaunayTriangulationBuilder::unique(CoordinateSequence& coords)
-{
-    std::vector<Coordinate> coordVector;
-    coords.toVector(coordVector);
-    std::sort(coordVector.begin(), coordVector.end(), geos::geom::CoordinateLessThen());
-    coords.setPoints(coordVector);
-    coords.removeRepeatedPoints();
+std::unique_ptr<CoordinateSequence>
+DelaunayTriangulationBuilder::unique(const CoordinateSequence* seq) {
+    auto seqFactory = CoordinateArraySequenceFactory::instance();
+    auto dim = seq->getDimension();
+
+    std::unique_ptr<std::vector<Coordinate>> coords(new std::vector<Coordinate>());
+    seq->toVector(*(coords.get()));
+    std::sort(coords->begin(), coords->end(), geos::geom::CoordinateLessThen());
+
+    std::unique_ptr<CoordinateSequence> sortedSeq(seqFactory->create(coords.release(), dim));
+
+    operation::valid::RepeatedPointTester rpt;
+    if (rpt.hasRepeatedPoint(sortedSeq.get())) {
+        return operation::valid::RepeatedPointRemover::removeRepeatedPoints(sortedSeq.get());
+    } else {
+        return sortedSeq;
+    }
 }
 
 IncrementalDelaunayTriangulator::VertexList*
@@ -70,9 +82,6 @@ DelaunayTriangulationBuilder::DelaunayTriangulationBuilder() :
 
 DelaunayTriangulationBuilder::~DelaunayTriangulationBuilder()
 {
-    if(siteCoords) {
-        delete siteCoords;
-    }
     if(subdiv) {
         delete subdiv;
     }
@@ -81,9 +90,6 @@ DelaunayTriangulationBuilder::~DelaunayTriangulationBuilder()
 void
 DelaunayTriangulationBuilder::setSites(const Geometry& geom)
 {
-    if(siteCoords) {
-        delete siteCoords;
-    }
     // remove any duplicate points (they will cause the triangulation to fail)
     siteCoords = extractUniqueCoordinates(geom);
 }
@@ -91,12 +97,8 @@ DelaunayTriangulationBuilder::setSites(const Geometry& geom)
 void
 DelaunayTriangulationBuilder::setSites(const CoordinateSequence& coords)
 {
-    if(siteCoords) {
-        delete siteCoords;
-    }
-    siteCoords = coords.clone();
     // remove any duplicate points (they will cause the triangulation to fail)
-    unique(*siteCoords);
+    siteCoords = operation::valid::RepeatedPointRemover::removeRepeatedPoints(&coords);
 }
 
 void

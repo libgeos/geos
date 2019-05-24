@@ -97,12 +97,12 @@ RepeatedPointTester::hasRepeatedPoint(const CoordinateSequence* coord)
 bool
 RepeatedPointTester::hasRepeatedPoint(const Polygon* p)
 {
-    if(hasRepeatedPoint(p->getExteriorRing()->getCoordinates())) {
+    if(hasRepeatedPoint(p->getExteriorRing()->getCoordinatesRO())) {
         return true;
     }
 
     for(size_t i = 0, n = p->getNumInteriorRing(); i < n; ++i) {
-        if(hasRepeatedPoint(p->getInteriorRingN(i)->getCoordinates())) {
+        if(hasRepeatedPoint(p->getInteriorRingN(i)->getCoordinatesRO())) {
             return true;
         }
     }

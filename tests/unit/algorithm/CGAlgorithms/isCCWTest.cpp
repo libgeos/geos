@@ -28,7 +28,7 @@ namespace tut {
 struct test_isccw_data {
     typedef std::unique_ptr<geos::geom::Geometry> GeometryPtr;
 
-    geos::geom::CoordinateSequence* cs_;
+    std::unique_ptr<geos::geom::CoordinateSequence> cs_;
     geos::io::WKTReader reader_;
     geos::io::WKBReader breader_;
 
@@ -40,8 +40,6 @@ struct test_isccw_data {
 
     ~test_isccw_data()
     {
-        delete cs_;
-        cs_ = nullptr;
     }
 };
 
@@ -64,7 +62,7 @@ void object::test<1>
     GeometryPtr geom(reader_.read(wkt));
 
     cs_ = geom->getCoordinates();
-    bool isCCW = Orientation::isCCW(cs_);
+    bool isCCW = Orientation::isCCW(cs_.get());
 
     ensure_equals(false, isCCW);
 }
@@ -79,7 +77,7 @@ void object::test<2>
     GeometryPtr geom(reader_.read(wkt));
 
     cs_ = geom->getCoordinates();
-    bool isCCW = Orientation::isCCW(cs_);
+    bool isCCW = Orientation::isCCW(cs_.get());
 
     ensure_equals(true, isCCW);
 }
@@ -94,7 +92,7 @@ void object::test<3>
     GeometryPtr geom(reader_.read(wkt));
 
     cs_ = geom->getCoordinates();
-    bool isCCW = Orientation::isCCW(cs_);
+    bool isCCW = Orientation::isCCW(cs_.get());
 
     ensure_equals(true, isCCW);
 }
@@ -111,7 +109,7 @@ void object::test<4>
     wkt("0102000000040000000000000000000000841D588465963540F56BFB214F0341408F26B714B2971B40F66BFB214F0341408C26B714B2971B400000000000000000841D588465963540");
     GeometryPtr geom(breader_.readHEX(wkt));
     cs_ = geom->getCoordinates();
-    bool isCCW = Orientation::isCCW(cs_);
+    bool isCCW = Orientation::isCCW(cs_.get());
     ensure_equals(isCCW, true);
 }
 
@@ -127,7 +125,7 @@ void object::test<5>
     wkt("0102000000040000000000000000000000841D588465963540F56BFB214F0341408F26B714B2971B40F66BFB214F0341408E26B714B2971B400000000000000000841D588465963540");
     GeometryPtr geom(breader_.readHEX(wkt));
     cs_ = geom->getCoordinates();
-    bool isCCW = Orientation::isCCW(cs_);
+    bool isCCW = Orientation::isCCW(cs_.get());
     ensure_equals(isCCW, true);
 }
 

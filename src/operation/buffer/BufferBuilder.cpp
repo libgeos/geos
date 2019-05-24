@@ -35,6 +35,7 @@
 #include <geos/operation/overlay/snap/SnapOverlayOp.h>
 #include <geos/operation/overlay/PolygonBuilder.h>
 #include <geos/operation/overlay/OverlayNodeFactory.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/noding/IntersectionAdder.h>
@@ -87,7 +88,7 @@ convertSegStrings(const GeometryFactory* fact, Iterator it, Iterator et)
     std::vector<Geometry*> lines;
     while(it != et) {
         const SegmentString* ss = *it;
-        LineString* line = fact->createLineString(ss->getCoordinates()->clone());
+        LineString* line = fact->createLineString(ss->getCoordinates()->clone().release());
         lines.push_back(line);
         ++it;
     }
@@ -212,7 +213,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
         SegmentString* ss = (*nodedEdges)[i];
 
         Geometry* tmp = geomFact->createLineString(
-                            ss->getCoordinates()->clone()
+                            ss->getCoordinates()->clone().release()
                         );
         delete ss;
 
@@ -556,17 +557,16 @@ BufferBuilder::computeNodedEdges(SegmentString::NonConstVect& bufferSegStrList,
         SegmentString* segStr = *i;
         const Label* oldLabel = static_cast<const Label*>(segStr->getData());
 
-        CoordinateSequence* cs = CoordinateSequence::removeRepeatedPoints(segStr->getCoordinates());
+        auto cs = operation::valid::RepeatedPointRemover::removeRepeatedPoints(segStr->getCoordinates());
         delete segStr;
         if(cs->size() < 2) {
             // don't insert collapsed edges
             // we need to take care of the memory here as cs is a new sequence
-            delete cs;
             continue;
         }
 
         // Edge takes ownership of the CoordinateSequence
-        Edge* edge = new Edge(cs, *oldLabel);
+        Edge* edge = new Edge(cs.release(), *oldLabel);
 
         // will take care of the Edge ownership
         insertUniqueEdge(edge);

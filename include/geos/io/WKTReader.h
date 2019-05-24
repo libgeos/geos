@@ -86,7 +86,7 @@ public:
 //	Geometry* read(Reader& reader);	//Not implemented yet
 
 protected:
-    geom::CoordinateSequence* getCoordinates(io::StringTokenizer* tokenizer);
+    std::unique_ptr<geom::CoordinateSequence> getCoordinates(io::StringTokenizer* tokenizer);
     double getNextNumber(io::StringTokenizer* tokenizer);
     std::string getNextEmptyOrOpener(io::StringTokenizer* tokenizer);
     std::string getNextCloserOrComma(io::StringTokenizer* tokenizer);

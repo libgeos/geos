@@ -73,22 +73,16 @@ CoordinateArraySequence::CoordinateArraySequence(
     }
 }
 
-CoordinateSequence*
+std::unique_ptr<CoordinateSequence>
 CoordinateArraySequence::clone() const
 {
-    return new CoordinateArraySequence(*this);
+    return std::unique_ptr<CoordinateSequence>(new CoordinateArraySequence(*this));
 }
 
 void
 CoordinateArraySequence::setPoints(const vector<Coordinate>& v)
 {
     vect->assign(v.begin(), v.end());
-}
-
-const vector<Coordinate>*
-CoordinateArraySequence::toVector() const
-{
-    return vect; //new vector<Coordinate>(vect->begin(),vect->end());
 }
 
 std::size_t
@@ -279,18 +273,6 @@ CoordinateArraySequence::apply_ro(CoordinateFilter* filter) const
     for(vector<Coordinate>::const_iterator i = vect->begin(), e = vect->end(); i != e; ++i) {
         filter->filter_ro(&(*i));
     }
-}
-
-CoordinateSequence&
-CoordinateArraySequence::removeRepeatedPoints()
-{
-    // We use == operator, which is 2D only
-    vector<Coordinate>::iterator new_end = \
-                                           std::unique(vect->begin(), vect->end());
-
-    vect->erase(new_end, vect->end());
-
-    return *this;
 }
 
 } // namespace geos::geom

@@ -6,8 +6,6 @@ before_script:
 
 test:
   script:
-    - lsb_release -a
-    - uname -a
     - ./autogen.sh
     - ./configure
     - make

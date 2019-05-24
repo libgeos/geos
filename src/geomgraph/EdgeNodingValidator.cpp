@@ -37,9 +37,9 @@ EdgeNodingValidator::toSegmentStrings(vector<Edge*>& edges)
     // convert Edges to SegmentStrings
     for(size_t i = 0, n = edges.size(); i < n; ++i) {
         Edge* e = edges[i];
-        CoordinateSequence* cs = e->getCoordinates()->clone();
-        newCoordSeq.push_back(cs);
-        segStr.push_back(new BasicSegmentString(cs, e));
+        auto cs = e->getCoordinates()->clone();
+        segStr.push_back(new BasicSegmentString(cs.get(), e));
+        newCoordSeq.push_back(cs.release());
     }
     return segStr;
 }

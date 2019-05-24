@@ -106,7 +106,7 @@ public:
 
     GeometryTypeId getGeometryTypeId() const override;
 
-    void setPoints(CoordinateSequence* cl);
+    void setPoints(const CoordinateSequence* cl);
 
     Geometry* reverse() const override;
 

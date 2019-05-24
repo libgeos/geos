@@ -73,7 +73,7 @@ public:
     /** \brief
      * Returns a deep copy of this collection.
      */
-    virtual CoordinateSequence* clone() const = 0;
+    virtual std::unique_ptr<CoordinateSequence> clone() const = 0;
 
     /** \brief
      * Returns a read-only reference to Coordinate at position i.
@@ -81,7 +81,6 @@ public:
      * Whether or not the Coordinate returned is the actual underlying
      * Coordinate or merely a copy depends on the implementation.
      */
-    //virtual const Coordinate& getCoordinate(int i) const=0;
     virtual const Coordinate& getAt(std::size_t i) const = 0;
 
     /// Return last Coordinate in the sequence
@@ -113,7 +112,6 @@ public:
      * Returns the number of Coordinates (actual or otherwise, as
      * this implementation may not store its data in Coordinate objects).
      */
-    //virtual int size() const=0;
     virtual std::size_t getSize() const = 0;
 
     size_t
@@ -122,30 +120,8 @@ public:
         return getSize();
     }
 
-    /** \brief
-     * Returns a read-only vector with the Coordinates in this collection.
-     *
-     * Whether or not the Coordinates returned are the actual underlying
-     * Coordinates or merely copies depends on the implementation.
-     * Note that if this implementation does not store its data as an
-     * array of Coordinates, this method will incur a performance penalty
-     * because the array needs to be built from scratch.
-     *
-     * This method is a port of the toCoordinateArray() method of JTS.
-     * It is not much used as memory management requires us to
-     * know wheter we should or not delete the returned object
-     * in a consistent way. Our options are: use shared_ptr<Coordinate>
-     * or always keep ownerhips of an eventual newly created vector.
-     * We opted for the second, so the returned object is a const, to
-     * also ensure that returning an internal pointer doesn't make
-     * the object mutable.
-     *
-     * @deprecated use toVector(std::vector<Coordinate>&) instead
-     */
-    virtual	const std::vector<Coordinate>* toVector() const = 0;
-
-    /// Pushes all Coordinates of this sequence onto the provided vector.
-    //
+    /// Pushes all Coordinates of this sequence into the provided vector.
+    ///
     /// This method is a port of the toCoordinateArray() method of JTS.
     ///
     virtual	void toVector(std::vector<Coordinate>& coords) const = 0;
@@ -158,9 +134,6 @@ public:
      * @return true (as by general collection contract)
      */
     void add(const std::vector<Coordinate>* vc, bool allowRepeated);
-
-    /* This is here for backward compatibility.. */
-    //void add(CoordinateSequence *cl,bool allowRepeated,bool direction);
 
     /** \brief
      *  Add an array of coordinates
@@ -205,19 +178,13 @@ public:
     /// Add a Coordinate to the list
     virtual	void add(const Coordinate& c) = 0;
 
-    // Get number of coordinates
-    //virtual int getSize() const=0;
-
-    /// Get a reference to Coordinate at position pos
-    //virtual	const Coordinate& getAt(std::size_t pos) const=0;
-
     /// Copy Coordinate c to position pos
     virtual	void setAt(const Coordinate& c, std::size_t pos) = 0;
 
     /// Delete Coordinate at position pos (list will shrink).
     virtual	void deleteAt(std::size_t pos) = 0;
 
-    /// Get a string rapresentation of CoordinateSequence
+    /// Get a string representation of CoordinateSequence
     virtual	std::string toString() const = 0;
 
     /// Substitute Coordinate list with a copy of the given vector
@@ -228,24 +195,6 @@ public:
 
     /// Returns lower-left Coordinate in list
     const Coordinate* minCoordinate() const;
-
-
-    /// \brief
-    /// Returns a new CoordinateSequence being a copy of the input
-    /// with any consecutive equal Coordinate removed.
-    ///
-    /// Equality test is 2D based
-    ///
-    /// Ownership of returned object goes to the caller.
-    ///
-    static CoordinateSequence* removeRepeatedPoints(
-        const CoordinateSequence* cl);
-
-    /// Remove consecutive equal Coordinates from the sequence
-    //
-    /// Equality test is 2D based. Returns a reference to self.
-    ///
-    virtual CoordinateSequence& removeRepeatedPoints() = 0;
 
     /** \brief
      *  Returns true if given CoordinateSequence contains

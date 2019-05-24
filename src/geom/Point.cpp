@@ -49,7 +49,7 @@ Point::Point(CoordinateSequence* newCoords, const GeometryFactory* factory)
     coordinates(newCoords)
 {
     if(coordinates.get() == nullptr) {
-        coordinates.reset(factory->getCoordinateSequenceFactory()->create());
+        coordinates = factory->getCoordinateSequenceFactory()->create();
         return;
     }
     if(coordinates->getSize() != 1) {
@@ -65,7 +65,7 @@ Point::Point(const Point& p)
 {
 }
 
-CoordinateSequence*
+std::unique_ptr<CoordinateSequence>
 Point::getCoordinates() const
 {
     return coordinates->clone();

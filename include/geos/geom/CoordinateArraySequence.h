@@ -41,7 +41,7 @@ public:
 
     CoordinateArraySequence(const CoordinateSequence& cl);
 
-    CoordinateSequence* clone() const override;
+    std::unique_ptr<CoordinateSequence> clone() const override;
 
     //const Coordinate& getCoordinate(int pos) const;
     const Coordinate& getAt(std::size_t pos) const override;
@@ -51,9 +51,6 @@ public:
 
     //int size() const;
     size_t getSize() const override;
-
-    // @deprecated
-    const std::vector<Coordinate>* toVector() const override;
 
     // See dox in CoordinateSequence.h
     void toVector(std::vector<Coordinate>&) const override;
@@ -127,8 +124,6 @@ public:
     void apply_rw(const CoordinateFilter* filter) override;
 
     void apply_ro(CoordinateFilter* filter) const override;
-
-    CoordinateSequence& removeRepeatedPoints() override;
 
 private:
     std::vector<Coordinate>* vect;

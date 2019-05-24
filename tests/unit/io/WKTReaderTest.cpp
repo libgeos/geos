@@ -58,12 +58,11 @@ void object::test<1>
 ()
 {
     GeomPtr geom(wktreader.read("POINT(-117 33)"));
-    geos::geom::CoordinateSequence* coords = geom->getCoordinates();
+    auto coords = geom->getCoordinates();
 
     ensure(coords->getDimension() == 2);
     ensure(coords->getX(0) == -117);
     ensure(coords->getY(0) == 33);
-    delete coords;
 }
 
 // 2 - Read a point, confirm 3D.
@@ -73,11 +72,10 @@ void object::test<2>
 ()
 {
     GeomPtr geom(wktreader.read("POINT(-117 33 10)"));
-    geos::geom::CoordinateSequence* coords = geom->getCoordinates();
+    auto coords = geom->getCoordinates();
 
     ensure(coords->getDimension() == 3);
     ensure(coords->getOrdinate(0, geos::geom::CoordinateSequence::Z) == 10.0);
-    delete coords;
 }
 
 // 3 - Linestring dimension preserved.
@@ -87,11 +85,9 @@ void object::test<3>
 ()
 {
     GeomPtr geom(wktreader.read("LINESTRING(-117 33, -116 34)"));
-    geos::geom::CoordinateSequence* coords = geom->getCoordinates();
+    auto coords = geom->getCoordinates();
 
     ensure(coords->getDimension() == 2);
-
-    delete coords;
 }
 
 // 4 - Ensure we can read ZM geometries, just discarding the M.
@@ -101,14 +97,12 @@ void object::test<4>
 ()
 {
     GeomPtr geom(wktreader.read("LINESTRING ZM (-117 33 2 3, -116 34 4 5)"));
-    geos::geom::CoordinateSequence* coords = geom->getCoordinates();
+    auto coords = geom->getCoordinates();
 
     ensure(coords->getDimension() == 3);
 
     ensure_equals(wktwriter.write(geom.get()),
                   std::string("LINESTRING Z (-117 33 2, -116 34 4)"));
-
-    delete coords;
 }
 
 // 5 - Check support for mixed case keywords (and old style 3D)
@@ -161,11 +155,10 @@ void object::test<7>
         const std::string str = " POINT (0 0) ";
         geom.reset(wktReader.read(str)); //HERE IT FAILS
 
-        geos::geom::CoordinateSequence* coords = geom->getCoordinates();
+        auto coords = geom->getCoordinates();
         ensure_equals(coords->getDimension(), 2U);
         ensure_distance(coords->getX(0), 0.0, 1e-12);
         ensure_distance(coords->getY(0), 0.0, 1e-12);
-        delete coords;
     }
     catch(const geos::util::IllegalArgumentException& ex) {
         ensure("Did get expected exception");

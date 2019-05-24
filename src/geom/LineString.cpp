@@ -62,10 +62,10 @@ LineString::reverse() const
     }
 
     assert(points.get());
-    CoordinateSequence* seq = points->clone();
-    CoordinateSequence::reverse(seq);
+    auto seq = points->clone();
+    CoordinateSequence::reverse(seq.get());
     assert(getFactory());
-    return getFactory()->createLineString(seq);
+    return getFactory()->createLineString(seq.release());
 }
 
 
@@ -74,7 +74,7 @@ void
 LineString::validateConstruction()
 {
     if(points.get() == nullptr) {
-        points.reset(getFactory()->getCoordinateSequenceFactory()->create());
+        points = getFactory()->getCoordinateSequenceFactory()->create();
         return;
     }
 
@@ -109,7 +109,7 @@ LineString::~LineString()
     //delete points;
 }
 
-CoordinateSequence*
+std::unique_ptr<CoordinateSequence>
 LineString::getCoordinates() const
 {
     assert(points.get());

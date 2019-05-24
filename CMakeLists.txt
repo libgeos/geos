@@ -43,6 +43,18 @@ cmake_dependent_option(GEOS_BUILD_DEVELOPER
 mark_as_advanced(GEOS_BUILD_DEVELOPER)
 
 #-----------------------------------------------------------------------------
+# Setup build directories
+#-----------------------------------------------------------------------------
+# Place executables and shared libraries in the same location for
+# convenience of direct execution from common spot and for
+# convenience in environments without RPATH support.
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+message(STATUS "GEOS: Run-time output: ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+message(STATUS "GEOS: Archives output: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+
+#-----------------------------------------------------------------------------
 # Version
 #-----------------------------------------------------------------------------
 file(READ Version.txt _version_txt)
@@ -133,6 +145,9 @@ target_compile_features(geos_cxx_flags INTERFACE cxx_std_11)
 option(DISABLE_GEOS_INLINE "Disable inlining" OFF)
 if(NOT DISABLE_GEOS_INLINE)
   target_compile_definitions(geos_cxx_flags INTERFACE GEOS_INLINE)
+else()
+  message(STATUS
+  "Setting DISABLE GEOS compilation with small functions inlining - ${DISABLE_GEOS_INLINE}")
 endif()
 
 #-----------------------------------------------------------------------------
@@ -188,6 +203,9 @@ add_subdirectory(include)
 add_subdirectory(src)
 
 if(BUILD_SHARED_LIBS)
+  target_compile_definitions(geos
+    PRIVATE $<$<CXX_COMPILER_ID:MSVC>:GEOS_DLL_EXPORT>)
+
   set_target_properties(geos PROPERTIES VERSION ${GEOS_VERSION})
   if(NOT WIN32)
     set_target_properties(geos PROPERTIES SOVERSION ${GEOS_VERSION_MAJOR})
@@ -199,14 +217,18 @@ endif()
 #-----------------------------------------------------------------------------
 add_library(geos_c "")
 target_link_libraries(geos_c PRIVATE geos)
-add_subdirectory(capi)
 
 if(BUILD_SHARED_LIBS)
+  target_compile_definitions(geos_c
+    PRIVATE $<$<CXX_COMPILER_ID:MSVC>:GEOS_DLL_EXPORT>)
+
   set_target_properties(geos_c PROPERTIES VERSION ${GEOS_VERSION})
   if(NOT WIN32)
     set_target_properties(geos_c PROPERTIES SOVERSION ${GEOS_VERSION_MAJOR})
   endif()
 endif()
+
+add_subdirectory(capi)
 
 #-----------------------------------------------------------------------------
 # Tests
@@ -215,6 +237,11 @@ include(CTest)
 if(BUILD_TESTING)
   add_subdirectory(tests)
 endif()
+
+#-----------------------------------------------------------------------------
+# Benchmarks
+#-----------------------------------------------------------------------------
+add_subdirectory(benchmarks)
 
 #-----------------------------------------------------------------------------
 # Install and export targets - support 'make install' or equivalent
@@ -269,41 +296,53 @@ add_custom_target(uninstall
 #-----------------------------------------------------------------------------
 # "make dist" workalike
 #-----------------------------------------------------------------------------
+get_property(_is_multi_config_generator GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+if(NOT _is_multi_config_generator)
+  set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "GEOS Computational Geometry Library")
+  set(CPACK_PACKAGE_VENDOR "OSGeo")
+  set(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
+  set(CPACK_SOURCE_GENERATOR "TBZ2")
+  set(CPACK_PACKAGE_VERSION_MAJOR ${GEOS_VERSION_MAJOR})
+  set(CPACK_PACKAGE_VERSION_MINOR ${GEOS_VERSION_MINOR})
+  set(CPACK_PACKAGE_VERSION_PATCH ${GEOS_VERSION_PATCH})
+  set(CPACK_SOURCE_PACKAGE_FILE_NAME "geos-${GEOS_VERSION_FULL}")
 
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "GEOS Computational Geometry Library")
-set(CPACK_PACKAGE_VENDOR "OSGeo")
-set(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
-set(CPACK_SOURCE_GENERATOR "TBZ2")
-set(CPACK_PACKAGE_VERSION_MAJOR ${GEOS_VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR ${GEOS_VERSION_MINOR})
-set(CPACK_PACKAGE_VERSION_PATCH ${GEOS_VERSION_PATCH})
-set(CPACK_SOURCE_PACKAGE_FILE_NAME "geos-${GEOS_VERSION_FULL}")
+  set(CPACK_SOURCE_IGNORE_FILES
+    "/\\\\.git"
+    "/autogen\\\\.sh"
+    "/tools/ci"
+    "/HOWTO_RELEASE"
+    "/autom4te\\\\.cache"
+    "\\\\.yml\$"
+    "\\\\.deps"
+    "/debian/"
+    "/php/"
+    "/.*build-.*/"
+    ${PROJECT_BINARY_DIR}
+    )
 
-set(CPACK_SOURCE_IGNORE_FILES
-  "/\\\\.git"
-  "/autogen\\\\.sh"
-  "/tools/ci"
-  "/HOWTO_RELEASE"
-  "/autom4te\\\\.cache"
-  "\\\\.yml\$"
-  "\\\\.deps"
-  "/debian/"
-  "/php/"
-  "/.*build-.*/"
-  ${PROJECT_BINARY_DIR}
-  )
+  # message(STATUS "GEOS: CPACK_SOURCE_PACKAGE_FILE_NAME: ${CPACK_SOURCE_PACKAGE_FILE_NAME}")
+  # message(STATUS "GEOS: CPACK_SOURCE_IGNORE_FILES: ${CPACK_SOURCE_IGNORE_FILES}")
+  # message(STATUS "GEOS: CMAKE_MODULE_PATH: ${CMAKE_MODULE_PATH}")
+  include(CPack)
+  add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
 
-# message(STATUS "GEOS: CPACK_SOURCE_PACKAGE_FILE_NAME: ${CPACK_SOURCE_PACKAGE_FILE_NAME}")
-# message(STATUS "GEOS: CPACK_SOURCE_IGNORE_FILES: ${CPACK_SOURCE_IGNORE_FILES}")
-# message(STATUS "GEOS: CMAKE_MODULE_PATH: ${CMAKE_MODULE_PATH}")
-include(CPack)
-add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
+  message(STATUS "GEOS: Configured 'dist' target")
+endif()
+
+#-----------------------------------------------------------------------------
+# "make check" workalike
+#-----------------------------------------------------------------------------
+
+add_custom_target(check COMMAND ${CMAKE_BUILD_TOOL} test)
 
 #-----------------------------------------------------------------------------
 # "make distcheck" workalike
 #-----------------------------------------------------------------------------
+if(NOT _is_multi_config_generator)
+  find_package(MakeDistCheck)
+  AddMakeDistCheck()
+  message(STATUS "GEOS: Configured 'distcheck' target")
+endif()
 
-find_package(MakeDistCheck)
-AddMakeDistCheck()
-
-
+unset(_is_multi_config_generator)

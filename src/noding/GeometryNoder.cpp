@@ -58,9 +58,9 @@ public:
     {
         const geom::LineString* ls = dynamic_cast<const geom::LineString*>(g);
         if(ls) {
-            geom::CoordinateSequence* coord = ls->getCoordinates();
+            auto coord = ls->getCoordinates();
             // coord ownership transferred to SegmentString
-            SegmentString* ss = new NodedSegmentString(coord, nullptr);
+            SegmentString* ss = new NodedSegmentString(coord.release(), nullptr);
             _to.push_back(ss);
         }
     }
@@ -106,7 +106,7 @@ GeometryNoder::toGeometry(SegmentString::NonConstVect& nodedEdges)
         // Check if an equivalent edge is known
         OrientedCoordinateArray oca1(*coords);
         if(ocas.insert(oca1).second) {
-            geom::Geometry* tmp = geomFact->createLineString(coords->clone());
+            geom::Geometry* tmp = geomFact->createLineString(coords->clone().release());
             lines->push_back(tmp);
         }
     }

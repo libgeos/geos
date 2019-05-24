@@ -44,9 +44,8 @@ CoordinateOperation::edit(const Geometry* geometry,
         return factory->createLineString(newCoords);
     }
     if(typeid(*geometry) == typeid(Point)) {
-        CoordinateSequence* coords = geometry->getCoordinates();
-        CoordinateSequence* newCoords = edit(coords, geometry);
-        delete coords;
+        auto coords = geometry->getCoordinates();
+        CoordinateSequence* newCoords = edit(coords.get(), geometry);
         return factory->createPoint(newCoords);
     }
 

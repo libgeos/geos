@@ -30,6 +30,7 @@
 #include <geos/triangulate/IncrementalDelaunayTriangulator.h>
 #include <geos/triangulate/DelaunayTriangulationBuilder.h>
 #include <geos/triangulate/quadedge/QuadEdgeSubdivision.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
 
 namespace geos {
 namespace triangulate { //geos.triangulate
@@ -49,14 +50,13 @@ VoronoiDiagramBuilder::~VoronoiDiagramBuilder()
 void
 VoronoiDiagramBuilder::setSites(const geom::Geometry& geom)
 {
-    siteCoords.reset(DelaunayTriangulationBuilder::extractUniqueCoordinates(geom));
+    siteCoords = DelaunayTriangulationBuilder::extractUniqueCoordinates(geom);
 }
 
 void
 VoronoiDiagramBuilder::setSites(const geom::CoordinateSequence& coords)
 {
-    siteCoords.reset(coords.clone());
-    DelaunayTriangulationBuilder::unique(*siteCoords);
+    siteCoords = operation::valid::RepeatedPointRemover::removeRepeatedPoints(&coords);
 }
 
 void
