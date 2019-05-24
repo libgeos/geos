@@ -235,7 +235,8 @@ class test_group : public group_base, public test_group_posix
                         " an SEH exception");
                 }
 #else
-                bool d = delete_obj();
+                bool d;
+                d = delete_obj();
                 assert(d && "delete failed with SEH disabled: runtime bug?");
 #endif
             }
