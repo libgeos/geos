@@ -8,12 +8,7 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 ################################################################################
-add_custom_target(check COMMAND ctest --exclude-regex perf
-        DEPENDS )
-
 add_subdirectory(unit)
 add_subdirectory(xmltester)
 add_subdirectory(bigtest)
 
-# perf tests are built but not run by default
-add_subdirectory(perf)

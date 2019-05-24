@@ -8,6 +8,5 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 ################################################################################
-add_executable(test_perf_iterated_buffer IteratedBufferStressTest.cpp)
-target_link_libraries(test_perf_iterated_buffer PRIVATE geos)
-add_test(NAME test_perf_iterated_buffer COMMAND test_perf_iterated_buffer)
+add_executable(perf_iterated_buffer IteratedBufferStressTest.cpp)
+target_link_libraries(perf_iterated_buffer PRIVATE geos)
