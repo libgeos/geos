@@ -279,41 +279,47 @@ add_custom_target(uninstall
 #-----------------------------------------------------------------------------
 # "make dist" workalike
 #-----------------------------------------------------------------------------
+get_property(_is_multi_config_generator GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+if(NOT _is_multi_config_generator)
+  set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "GEOS Computational Geometry Library")
+  set(CPACK_PACKAGE_VENDOR "OSGeo")
+  set(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
+  set(CPACK_SOURCE_GENERATOR "TBZ2")
+  set(CPACK_PACKAGE_VERSION_MAJOR ${GEOS_VERSION_MAJOR})
+  set(CPACK_PACKAGE_VERSION_MINOR ${GEOS_VERSION_MINOR})
+  set(CPACK_PACKAGE_VERSION_PATCH ${GEOS_VERSION_PATCH})
+  set(CPACK_SOURCE_PACKAGE_FILE_NAME "geos-${GEOS_VERSION_FULL}")
 
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "GEOS Computational Geometry Library")
-set(CPACK_PACKAGE_VENDOR "OSGeo")
-set(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
-set(CPACK_SOURCE_GENERATOR "TBZ2")
-set(CPACK_PACKAGE_VERSION_MAJOR ${GEOS_VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR ${GEOS_VERSION_MINOR})
-set(CPACK_PACKAGE_VERSION_PATCH ${GEOS_VERSION_PATCH})
-set(CPACK_SOURCE_PACKAGE_FILE_NAME "geos-${GEOS_VERSION_FULL}")
+  set(CPACK_SOURCE_IGNORE_FILES
+    "/\\\\.git"
+    "/autogen\\\\.sh"
+    "/tools/ci"
+    "/HOWTO_RELEASE"
+    "/autom4te\\\\.cache"
+    "\\\\.yml\$"
+    "\\\\.deps"
+    "/debian/"
+    "/php/"
+    "/.*build-.*/"
+    ${PROJECT_BINARY_DIR}
+    )
 
-set(CPACK_SOURCE_IGNORE_FILES
-  "/\\\\.git"
-  "/autogen\\\\.sh"
-  "/tools/ci"
-  "/HOWTO_RELEASE"
-  "/autom4te\\\\.cache"
-  "\\\\.yml\$"
-  "\\\\.deps"
-  "/debian/"
-  "/php/"
-  "/.*build-.*/"
-  ${PROJECT_BINARY_DIR}
-  )
+  # message(STATUS "GEOS: CPACK_SOURCE_PACKAGE_FILE_NAME: ${CPACK_SOURCE_PACKAGE_FILE_NAME}")
+  # message(STATUS "GEOS: CPACK_SOURCE_IGNORE_FILES: ${CPACK_SOURCE_IGNORE_FILES}")
+  # message(STATUS "GEOS: CMAKE_MODULE_PATH: ${CMAKE_MODULE_PATH}")
+  include(CPack)
+  add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
 
-# message(STATUS "GEOS: CPACK_SOURCE_PACKAGE_FILE_NAME: ${CPACK_SOURCE_PACKAGE_FILE_NAME}")
-# message(STATUS "GEOS: CPACK_SOURCE_IGNORE_FILES: ${CPACK_SOURCE_IGNORE_FILES}")
-# message(STATUS "GEOS: CMAKE_MODULE_PATH: ${CMAKE_MODULE_PATH}")
-include(CPack)
-add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
+  message(STATUS "GEOS: Configured 'dist' target")
+endif()
 
 #-----------------------------------------------------------------------------
 # "make distcheck" workalike
 #-----------------------------------------------------------------------------
+if(NOT _is_multi_config_generator)
+  find_package(MakeDistCheck)
+  AddMakeDistCheck()
+  message(STATUS "GEOS: Configured 'distcheck' target")
+endif()
 
-find_package(MakeDistCheck)
-AddMakeDistCheck()
-
-
+unset(_is_multi_config_generator)
