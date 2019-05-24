@@ -111,9 +111,7 @@ LinearRing::getGeometryType() const
 void
 LinearRing::setPoints(const CoordinateSequence* cl)
 {
-    const vector<Coordinate>* v = cl->toVector();
-    points->setPoints(*(v));
-    //delete v;
+    points = cl->clone();
 }
 
 GeometryTypeId

@@ -52,9 +52,6 @@ public:
     //int size() const;
     size_t getSize() const override;
 
-    // @deprecated
-    const std::vector<Coordinate>* toVector() const override;
-
     // See dox in CoordinateSequence.h
     void toVector(std::vector<Coordinate>&) const override;
 

@@ -85,12 +85,6 @@ CoordinateArraySequence::setPoints(const vector<Coordinate>& v)
     vect->assign(v.begin(), v.end());
 }
 
-const vector<Coordinate>*
-CoordinateArraySequence::toVector() const
-{
-    return vect; //new vector<Coordinate>(vect->begin(),vect->end());
-}
-
 std::size_t
 CoordinateArraySequence::getDimension() const
 {

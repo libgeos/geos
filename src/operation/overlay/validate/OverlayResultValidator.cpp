@@ -146,8 +146,11 @@ OverlayResultValidator::addVertices(const Geometry& g)
     // TODO: optimize this by not copying coordinates
     //       and pre-allocating memory
     unique_ptr<CoordinateSequence> cs(g.getCoordinates());
-    const vector<Coordinate>* coords = cs->toVector();
-    testCoords.insert(testCoords.end(), coords->begin(), coords->end());
+
+    testCoords.reserve(testCoords.size() + cs->size());
+    for (size_t i = 0; i < cs->size(); i++) {
+        testCoords.push_back(cs->getAt(i));
+    }
 }
 
 /*private*/

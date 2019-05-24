@@ -59,8 +59,9 @@ private:
         using std::unique_ptr;
 
         assert(srcPts);
-        assert(srcPts->toVector());
-        LineStringSnapper snapper(*(srcPts->toVector()), snapTol);
+        std::vector<Coordinate> coords;
+        srcPts->toVector(coords);
+        LineStringSnapper snapper(coords, snapTol);
         unique_ptr<Coordinate::Vect> newPts = snapper.snapTo(snapPts);
 
         const CoordinateSequenceFactory* cfact = factory->getCoordinateSequenceFactory();
