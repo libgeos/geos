@@ -68,3 +68,4 @@ authors.git
 !/docker/**/Makefile
 /.vs*
 .idea/
+out/
