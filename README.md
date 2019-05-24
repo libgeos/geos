@@ -65,6 +65,47 @@ check`.
 GEOS can be built with Microsoft Visual C++ by opening the `CMakeLists.txt` in
 the project root using `File > Open > CMake`.
 
+If you prefer the command-line
+
+#### Build with CMake generator for Ninja (fast)
+
+In the Visual Studio 2019 command prompt, `x64 Native Tools Command Prompt for VS 2019` or `x64_x86 Cross Tools Command Prompt for VS 2019`:
+
+```
+cmake -S . -B _build_vs2019_ninja -G Ninja -DCMAKE_BUILD_TYPE=Release
+cmake --build _build_vs2019_ninja -j 16 --verbose
+```
+
+#### Build with CMake generator for MSBuild (default)
+
+In the non-specific Command Prompt:
+
+##### 64-bit
+
+```
+cmake -S . -B _build_vs2019x64 -G "Visual Studio 16 2019" -A x64 -DCMAKE_GENERATOR_TOOLSET=host=x64
+cmake --build _build_vs2019x64 --config Release -j 16 --verbose
+```
+
+##### 32-bit
+
+```
+cmake -S . -B _build_vs2019x32 -G "Visual Studio 16 2019" -A x32 -DCMAKE_GENERATOR_TOOLSET=host=x64
+cmake --build _build_vs2019x32 --config Release -j 16 --verbose
+```
+
+#### Test using CMake
+
+```
+cd <build directory>
+ctest --show-only
+ctest
+ctest --output-on-failure
+ctest -V
+ctest -VV
+```
+
+
 ## Client applications
 
 ### Using the C interface
