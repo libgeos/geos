@@ -142,13 +142,13 @@ target_compile_features(geos_cxx_flags INTERFACE cxx_std_11)
 #-----------------------------------------------------------------------------
 # Target geos_cxx_flags: common compilation flags
 #-----------------------------------------------------------------------------
-option(GEOS_ENABLE_INLINE "Set to OFF|ON (default) to control GEOS compilation with small functions inlining" ON)
-if(GEOS_ENABLE_INLINE)
-  add_definitions(-DGEOS_INLINE)
+option(DISABLE_GEOS_INLINE "Disable inlining" OFF)
+if(NOT DISABLE_GEOS_INLINE)
+  target_compile_definitions(geos_cxx_flags INTERFACE GEOS_INLINE)
+else()
+  message(STATUS
+  "Setting DISABLE GEOS compilation with small functions inlining - ${DISABLE_GEOS_INLINE}")
 endif()
-
-message(STATUS
-  "Setting GEOS compilation with small functions inlining - ${GEOS_ENABLE_INLINE}")
 
 #-----------------------------------------------------------------------------
 # Target geos_developer_cxx_flags: developer mode compilation flags
