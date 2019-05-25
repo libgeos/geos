@@ -8,7 +8,7 @@ test:
   script:
     - ./autogen.sh
     - ./configure
-    - make
-    - make check
+    - make V=0
+    - make check V=0
     - install -m 755 /bin/true /usr/local/bin/git2cl
     - make distcheck

@@ -17,8 +17,8 @@ steps:
     commands:
       - ./autogen.sh
       - CXXFLAGS="-O0" ./configure
-      - make
+      - make V=0
   - name: check
     image: *test-image
     commands:
-      - CXXFLAGS="-O0" make check
+      - CXXFLAGS="-O0" make check V=0
