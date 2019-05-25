@@ -2,9 +2,13 @@ version: 1.0.{build}
 
 image: Visual Studio 2017
 
-platform: x64
+platform:
+  - x64
+  - win32
 
-configuration: Release
+configuration:
+  - Release
+  - Debug
 
 shallow_clone: true
 clone_depth: 5
@@ -14,68 +18,48 @@ matrix:
 
 environment:
   matrix:
-    - PLATFORM: x64
-      BUILDER: CMake
-      GENERATOR: "Visual Studio 15 2017 Win64"
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-#    - PLATFORM: x86
-#      BUILDER: CMake
-#      GENERATOR: "Visual Studio 15 2017"
-#      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-#    - PLATFORM: x64
-#      BUILDER: CMake
-#      GENERATOR: "NMake Makefiles"
-#      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-#    - PLATFORM: x86
-#      BUILDER: CMake
-#      GENERATOR: "NMake Makefiles"
-#      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-#    - PLATFORM: x64
-#      BUILDER: CMake
-#      GENERATOR: "Visual Studio 14 2015 Win64"
-#      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-#    - PLATFORM: x86
-#      BUILDER: CMake
-#      GENERATOR: "Visual Studio 14 2015"
-#      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-#    - PLATFORM: x64
-#      BUILDER: CMake
-#      GENERATOR: "NMake Makefiles"
-#      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-    - PLATFORM: x86
-      BUILDER: CMake
-      GENERATOR: "NMake Makefiles"
+    - G: "Visual Studio 15 2017"
+    - G: "Visual Studio 14 2015"
       APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
 
 init:
   - ps: 'Write-Host "Building GEOS branch: $env:APPVEYOR_REPO_BRANCH" -ForegroundColor Magenta'
-  #- ps: |
-  #  Write-Host "Build worker environment variables:" -ForegroundColor Magenta
-  #      Get-ChildItem Env: | %{"{0}={1}" -f $_.Name,$_.Value}
-  - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" if "%GENERATOR%"=="NMake Makefiles" if "%PLATFORM%"=="x86" call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat"
-  - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" if "%GENERATOR%"=="NMake Makefiles" if "%PLATFORM%"=="x64" call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
-  - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" if "%GENERATOR%"=="NMake Makefiles" if "%PLATFORM%"=="x86" call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
-  - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" if "%GENERATOR%"=="NMake Makefiles" if "%PLATFORM%"=="x64" call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
-  - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" if "%GENERATOR%"=="NMake Makefiles" if "%PLATFORM%"=="x64" call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86_amd64
+
+install:
+  - ps: Write-Host "Checking version of CMake latest release" -ForegroundColor Magenta;
+  - ps: |
+      $cmakeDownloadPage = Invoke-WebRequest 'https://cmake.org/download/'
+      $latestVersion = ($cmakeDownloadPage.AllElements | `
+          Where {$_.tagName -match 'H3' -and $_.innerText -match "Latest Release" } | `
+          Select-Object -ExpandProperty InnerText).Trim();
+      if ($latestVersion -match 'Latest Release\s+\((\d+\.\d+\.\d+)\)') {
+          $latestVersion = $matches[1]
+      } else {
+          Write-Host 'Failed to extract version of latest release';
+          exit 1;
+      }
+      $major, $minor, $micro = $latestVersion.split('.');
+      $cmakeDir = ('cmake-{0}.{1}.{2}-win64-x64' -f $major, $minor, $micro);
+      $cmakeZip = ('{0}.zip' -f $cmakeDir);
+      $cmakeUrl = ('https://cmake.org/files/v{0}.{1}/{2}' -f $major, $minor, $cmakeZip);
+      Write-Host "Installing $cmakeUrl" -ForegroundColor Magenta;
+      [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;
+      $cmakeZip = ('C:\{0}' -f $cmakeZip);
+      (New-Object System.Net.WebClient).DownloadFile($cmakeUrl, $cmakeZip);
+      Expand-Archive $cmakeZip -DestinationPath C:\
+      $env:Path = ('C:\{0}\bin;{1}' -f $cmakeDir, $env:Path);
+  - cmake --version
 
 before_build:
-  - ps: 'Write-Host "Running $env:BUILDER with $env:GENERATOR" -ForegroundColor Magenta'
-  - if "%BUILDER%"=="CMake" cmake.exe -G "%GENERATOR%" -DBUILD_SHARED_LIBS=OFF -DCMAKE_BUILD_TYPE=%CONFIGURATION% %APPVEYOR_BUILD_FOLDER%
-  - if "%BUILDER%"=="NMake" .\autogen.bat
+  - ps: 'Write-Host "Configuring $env:PLATFORM build using $env:G" -ForegroundColor Magenta'
+  - cmake -S . -B build -G "%G%" -A %PLATFORM% -DCMAKE_GENERATOR_TOOLSET=host=x64
 
 build_script:
-  - ps: 'Write-Host "Running $env:BUILDER:" -ForegroundColor Magenta'
-  - if "%BUILDER%"=="CMake" cmake --build . --config %CONFIGURATION%
-  - if "%BUILDER%"=="NMake" nmake /f makefile.vc
+  - ps: 'Write-Host "Building $env:CONFIGURATION configuration" -ForegroundColor Magenta'
+  - cmake --build build --config %CONFIGURATION%
 
 test_script:
-  - ps: 'Write-Host "Running tests:" -ForegroundColor Magenta'
-  - if "%BUILDER%"=="CMake" ctest --output-on-failure -C %CONFIGURATION%
-  - if "%BUILDER%"=="NMake" echo *** NMake does NOT build tests ***
-
-# If you need to debug AppVeyor session (https://www.appveyor.com/docs/how-to/rdp-to-build-worker), then:
-# 1. Uncomment the on_finish section below:
-#on_finish:
-#  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-# 2. Add this line to the init section below
-#- ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+  - ps: 'Write-Host "Running tests" -ForegroundColor Magenta'
+  - cd build
+  - ctest --build-config %CONFIGURATION% --show-only
+  - ctest --build-config %CONFIGURATION% -VV
