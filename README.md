@@ -126,9 +126,10 @@ linker flags for building against the C library:
 
 All functionality of the C API is available through the `geos_c.h` header file.
 
-Documentation for the C API is provided via comments in the `geos_c.h` header file.
-C API usage examples can be found in the GEOS unit tests and in the source
-code of software that uses GEOS, such as PostGIS and the sf package for R.
+Documentation for the C API is provided via comments in the `geos_c.h` header 
+file. C API usage examples can be found in the GEOS unit tests and in the 
+source code of software that uses GEOS, such as PostGIS and the sf package 
+for R.
 
 ### Using the C++ interface
 
@@ -147,39 +148,41 @@ linker flags for building against the C++ library:
     CFLAGS += `geos-config --cflags`
     LDFLAGS += `geos-config --ldflags` -lgeos
 
-A compiler warning may be issued when building against the C++ library. To remove
-the compiler warning, define `USE_UNSTABLE_GEOS_CPP_API` somewhere in the program.
+A compiler warning may be issued when building against the C++ library. To 
+remove the compiler warning, define `USE_UNSTABLE_GEOS_CPP_API` somewhere 
+in the program.
 
-Commonly-used functionality of GEOS is available in the `geos.h` header file.
-Less-common functionality can be accessed by including headers for individual
+Commonly-used functionality of GEOS is available in the `geos.h` header file.  
+Less-common functionality can be accessed by including headers for individual 
 classes, e.g. `#include <geos/algorithm/distance/DiscreteHausdorffDistance.h>`.
 
     #include <geos.h>
 
-Documentation for the C++ API is available at https://geos.osgeo.org/doxygen/, and
-basic C++ usage examples can be found in `doc/example.cpp`.
+Documentation for the C++ API is available at https://geos.osgeo.org/doxygen/, 
+and basic C++ usage examples can be found in `doc/example.cpp`.
 
 
 ### Scripting language bindings
 
 #### Ruby
-Ruby bindings are fully supported. To build, use the `--enable-ruby` option
+
+Ruby bindings are part of GEOS. To build, use the `--enable-ruby` option
 when configuring:
 
     ./configure .. --enable-ruby
 
 #### PHP
 
-PHP bindings for GEOS are available from the
-[php-geos](https://git.osgeo.org/gitea/geos/php-geos) project:
+PHP bindings for GEOS are available separately from 
+[php-geos](https://git.osgeo.org/gitea/geos/php-geos).
 
 #### Python
-Since version 3.0, the Python bindings are unsupported. Recommended options:
 
- 1. Become or recruit a new maintainer.
- 2. Use [Shapely](http://pypi.python.org/pypi/Shapely) with Python
-    versions 2.4 or greater.
- 3. Call functions from `libgeos_c` via Python ctypes.
+Python bindings are available via:
+
+ 1. [Shapely](http://pypi.python.org/pypi/Shapely) package.
+ 2. Calling functions from `libgeos_c` via Python ctypes.
+
 
 ## Documentation
 
