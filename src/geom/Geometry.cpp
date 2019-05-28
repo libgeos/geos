@@ -541,7 +541,7 @@ Geometry::buffer(double p_distance, int quadrantSegments, int endCapStyle) const
     return BufferOp::bufferOp(this, p_distance, quadrantSegments, endCapStyle);
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 Geometry::convexHull() const
 {
     return ConvexHull(this).getConvexHull();

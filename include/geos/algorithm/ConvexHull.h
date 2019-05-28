@@ -139,7 +139,7 @@ private:
      *                   collinear; otherwise, a Polygon with unnecessary
      *                   (collinear) vertices removed
      */
-    geom::Geometry* lineOrPolygon(const geom::Coordinate::ConstVect& vertices);
+    std::unique_ptr<geom::Geometry> lineOrPolygon(const geom::Coordinate::ConstVect& vertices);
 
     /**
      * Write in 'cleaned' a version of 'input' with collinear
@@ -176,7 +176,7 @@ public:
      *         a Polygon; 2 points, a LineString;
      *         1 point, a Point; 0 points, an empty GeometryCollection.
      */
-    geom::Geometry* getConvexHull();
+    std::unique_ptr<geom::Geometry> getConvexHull();
 };
 
 } // namespace geos::algorithm

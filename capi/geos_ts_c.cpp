@@ -1903,7 +1903,7 @@ extern "C" {
         }
 
         try {
-            Geometry* g3 = g1->convexHull();
+            Geometry* g3 = g1->convexHull().release();
             return g3;
         }
         catch(const std::exception& e) {

@@ -34,7 +34,7 @@ namespace tut {
 
 // dummy data, not used
 struct test_convexhull_data {
-    GeometryPtr geom_;
+    std::unique_ptr<Geometry> geom_;
     geos::geom::PrecisionModel pm_;
     geos::geom::GeometryFactory::Ptr factory_;
     geos::io::WKTReader reader_;
@@ -43,12 +43,6 @@ struct test_convexhull_data {
         : geom_(nullptr), pm_(1), factory_(GeometryFactory::create(&pm_, 0)), reader_(factory_.get())
     {
         assert(nullptr == geom_);
-    }
-
-    ~test_convexhull_data()
-    {
-        factory_->destroyGeometry(geom_);
-        geom_ = nullptr;
     }
 };
 
@@ -78,7 +72,7 @@ void object::test<1>
     ensure(nullptr != convexHull.get());
 
     geom_ = line->convexHull();
-    ensure(convexHull->equalsExact(geom_));
+    ensure(convexHull->equalsExact(geom_.get()));
 }
 
 // 2 - Test convex hull of multipoint
@@ -97,7 +91,7 @@ void object::test<2>
     ensure(nullptr != convexHull.get());
 
     geom_ = geom->convexHull();
-    ensure(convexHull->equalsExact(geom_));
+    ensure(convexHull->equalsExact(geom_.get()));
 }
 
 // 3 - Test convex hull of multipoint
@@ -116,7 +110,7 @@ void object::test<3>
     ensure(nullptr != convexHull.get());
 
     geom_ = geom->convexHull();
-    ensure(convexHull->equalsExact(geom_));
+    ensure(convexHull->equalsExact(geom_.get()));
 }
 
 // 4 - Test convex hull of multipoint
@@ -135,7 +129,7 @@ void object::test<4>
     ensure(nullptr != convexHull.get());
 
     geom_ = geom->convexHull();
-    ensure(convexHull->equalsExact(geom_));
+    ensure(convexHull->equalsExact(geom_.get()));
 }
 
 // 5 - Test convex hull of multipoint
@@ -154,7 +148,7 @@ void object::test<5>
     ensure(nullptr != convexHull.get());
 
     geom_ = geom->convexHull();
-    ensure(convexHull->equalsExact(geom_));
+    ensure(convexHull->equalsExact(geom_.get()));
 }
 
 // 6 - Test convex hull of multipoint exported to string form
@@ -193,7 +187,7 @@ void object::test<7>
     ensure(nullptr != convexHull.get());
 
     geom_ = geom->convexHull();
-    ensure(convexHull->equalsExact(geom_));
+    ensure(convexHull->equalsExact(geom_.get()));
 }
 
 } // namespace tut

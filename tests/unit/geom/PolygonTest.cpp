@@ -202,10 +202,9 @@ template<>
 void object::test<8>
 ()
 {
-    GeometryPtr hull = empty_poly_->convexHull();
+    auto hull = empty_poly_->convexHull();
     ensure(hull != nullptr);
     ensure(hull->isEmpty());
-    factory_->destroyGeometry(hull);
 }
 
 // Test of getGeometryTypeId() for empty Polygon
@@ -315,14 +314,11 @@ void object::test<19>
 {
     ensure(poly_ != nullptr);
 
-    GeometryPtr hull = poly_->convexHull();
+    auto hull = poly_->convexHull();
     ensure(hull != nullptr);
     ensure(!hull->isEmpty());
     ensure_equals(hull->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
     ensure_equals(hull->getDimension(), geos::geom::Dimension::A);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(hull);
 }
 
 // Test of getGeometryTypeId() for non-empty Polygon

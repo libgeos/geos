@@ -269,7 +269,7 @@ void object::test<8>
     ensure(geo->isEmpty());
     factory_->destroyGeometry(geo);
 
-    geo = pt->convexHull();
+    geo = pt->convexHull().release();
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
     factory_->destroyGeometry(geo);
@@ -323,7 +323,7 @@ void object::test<9>
     ensure(geo->isEmpty());
     factory_->destroyGeometry(geo);
 
-    geo = pt->convexHull();
+    geo = pt->convexHull().release();
     ensure(geo != nullptr);
     ensure(!geo->isEmpty());
     factory_->destroyGeometry(geo);
@@ -382,7 +382,7 @@ void object::test<10>
     ensure(geo->isEmpty());
     factory_->destroyGeometry(geo);
 
-    geo = pt->convexHull();
+    geo = pt->convexHull().release();
     ensure(geo != nullptr);
     ensure(!geo->isEmpty());
     factory_->destroyGeometry(geo);
@@ -439,7 +439,7 @@ void object::test<11>
     ensure(geo->isEmpty());
     factory_->destroyGeometry(geo);
 
-    geo = pt->convexHull();
+    geo = pt->convexHull().release();
     ensure(geo != nullptr);
     ensure(!geo->isEmpty());
     factory_->destroyGeometry(geo);
@@ -576,7 +576,7 @@ void object::test<15>
     ensure(geo->isEmpty());
     factory_->destroyGeometry(geo);
 
-    geo = line->convexHull();
+    geo = line->convexHull().release();
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
     factory_->destroyGeometry(geo);
@@ -680,7 +680,7 @@ void object::test<18>
     ensure(geo->isEmpty());
     factory_->destroyGeometry(geo);
 
-    geo = poly->convexHull();
+    geo = poly->convexHull().release();
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
     factory_->destroyGeometry(geo);
@@ -947,7 +947,7 @@ void object::test<24>
     ensure(geo->isEmpty());
     factory_->destroyGeometry(geo);
 
-    geo = mp->convexHull();
+    geo = mp->convexHull().release();
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
     factory_->destroyGeometry(geo);
@@ -1103,7 +1103,7 @@ void object::test<28>
     ensure(geo->isEmpty());
     factory_->destroyGeometry(geo);
 
-    geo = mls->convexHull();
+    geo = mls->convexHull().release();
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
     factory_->destroyGeometry(geo);

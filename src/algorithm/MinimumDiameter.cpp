@@ -179,9 +179,8 @@ MinimumDiameter::computeMinimumDiameter()
     }
     else {
         ConvexHull ch(inputGeom);
-        Geometry* convexGeom = ch.getConvexHull();
-        computeWidthConvex(convexGeom);
-        delete convexGeom;
+        std::unique_ptr<Geometry> convexGeom = ch.getConvexHull();
+        computeWidthConvex(convexGeom.get());
     }
 }
 

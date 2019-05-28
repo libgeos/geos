@@ -178,10 +178,9 @@ template<>
 void object::test<9>
 ()
 {
-    GeometryPtr hull = empty_mp_->convexHull();
+    auto hull = empty_mp_->convexHull();
     ensure(hull != nullptr);
     ensure(hull->isEmpty());
-    factory_->destroyGeometry(hull);
 }
 
 // Test of getGeometryTypeId() for empty MultiPoint
@@ -301,14 +300,11 @@ void object::test<20>
 {
     ensure(mp_ != nullptr);
 
-    GeometryPtr hull = mp_->convexHull();
+    auto hull = mp_->convexHull();
     ensure(hull != nullptr);
     ensure(!hull->isEmpty());
     ensure_equals(hull->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
     ensure_equals(hull->getDimension(), geos::geom::Dimension::L);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(hull);
 }
 
 // Test of getGeometryTypeId() for non-empty LinearRing

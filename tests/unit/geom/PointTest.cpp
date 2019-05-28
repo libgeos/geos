@@ -195,10 +195,9 @@ template<>
 void object::test<10>
 ()
 {
-    GeometryPtr hull = empty_point_->convexHull();
+    auto hull = empty_point_->convexHull();
     ensure(hull != nullptr);
     ensure(hull->isEmpty());
-    factory_->destroyGeometry(hull);
 }
 
 // Test of getGeometryTypeId() for empty Point
@@ -322,10 +321,9 @@ template<>
 void object::test<23>
 ()
 {
-    GeometryPtr hull = point_->convexHull();
+    auto hull = point_->convexHull();
     ensure(hull != nullptr);
     ensure(!hull->isEmpty());
-    factory_->destroyGeometry(hull);
 }
 
 // Test of getGeometryTypeId() for non-empty Point

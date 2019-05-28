@@ -129,7 +129,7 @@ public:
     void apply_rw(GeometryComponentFilter* filter) override;
     void apply_ro(GeometryComponentFilter* filter) const override;
 
-    Geometry* convexHull() const override;
+    std::unique_ptr<Geometry> convexHull() const override;
 
     void normalize() override;
 

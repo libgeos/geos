@@ -122,7 +122,7 @@ void object::test<2>
     ensure(!geo->isEmpty());
     factory_->destroyGeometry(geo);
 
-    geo = ls->convexHull();
+    geo = ls->convexHull().release();
     ensure(geo != nullptr);
     ensure(!geo->isEmpty());
     factory_->destroyGeometry(geo);
@@ -210,7 +210,7 @@ void object::test<4>
     ensure(!geo->isEmpty());
     factory_->destroyGeometry(geo);
 
-    geo = copy->convexHull();
+    geo = copy->convexHull().release();
     ensure(geo != nullptr);
     ensure(!geo->isEmpty());
     factory_->destroyGeometry(geo);
@@ -266,7 +266,7 @@ void object::test<8>
 ()
 {
     GeometryPtr geo = nullptr;
-    geo = empty_line_->convexHull();
+    geo = empty_line_->convexHull().release();
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
     factory_->destroyGeometry(geo);
@@ -405,7 +405,7 @@ void object::test<18>
     LineStringPtr line = dynamic_cast<LineStringPtr>(geo);
     ensure(line != nullptr);
 
-    GeometryPtr hull = line->convexHull();
+    GeometryPtr hull = line->convexHull().release();
     ensure(hull != nullptr);
     ensure(!hull->isEmpty());
     ensure_equals(hull->getGeometryTypeId(), geos::geom::GEOS_POLYGON);

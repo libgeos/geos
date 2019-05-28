@@ -227,24 +227,24 @@ ConvexHull::padArray3(geom::Coordinate::ConstVect& pts)
     }
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 ConvexHull::getConvexHull()
 {
     size_t nInputPts = inputPts.size();
 
     if(nInputPts == 0) { // Return an empty geometry
-        return geomFactory->createEmptyGeometry();
+        return std::unique_ptr<Geometry>(geomFactory->createEmptyGeometry());
     }
 
     if(nInputPts == 1) { // Return a Point
         // Copy the Coordinate from the ConstVect
-        return geomFactory->createPoint(*(inputPts[0]));
+        return std::unique_ptr<Geometry>(geomFactory->createPoint(*(inputPts[0])));
     }
 
     if(nInputPts == 2) { // Return a LineString
         // Copy all Coordinates from the ConstVect
         auto cs = toCoordinateSequence(inputPts);
-        return geomFactory->createLineString(cs.release());
+        return std::unique_ptr<Geometry>(geomFactory->createLineString(cs.release()));
     }
 
     // use heuristic to reduce points, if large
@@ -266,7 +266,6 @@ ConvexHull::getConvexHull()
     GEOS_CHECK_FOR_INTERRUPTS();
 
     return lineOrPolygon(cHS);
-
 }
 
 /* private */
@@ -343,7 +342,7 @@ ConvexHull::isBetween(const Coordinate& c1, const Coordinate& c2, const Coordina
 
 
 /* private */
-Geometry*
+std::unique_ptr<Geometry>
 ConvexHull::lineOrPolygon(const Coordinate::ConstVect& input)
 {
     Coordinate::ConstVect cleaned;
@@ -353,12 +352,12 @@ ConvexHull::lineOrPolygon(const Coordinate::ConstVect& input)
     if(cleaned.size() == 3) { // shouldn't this be 2 ??
         cleaned.resize(2);
         auto cl1 = toCoordinateSequence(cleaned);
-        LineString* ret = geomFactory->createLineString(cl1.release());
+        std::unique_ptr<LineString> ret(geomFactory->createLineString(cl1.release()));
         return ret;
     }
     auto cl2 = toCoordinateSequence(cleaned);
     LinearRing* linearRing = geomFactory->createLinearRing(cl2.release());
-    return geomFactory->createPolygon(linearRing, nullptr);
+    return std::unique_ptr<Geometry>(geomFactory->createPolygon(linearRing, nullptr));
 }
 
 /*private*/

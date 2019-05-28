@@ -629,7 +629,7 @@ public:
     /// \brief
     /// Returns the smallest convex Polygon that contains
     /// all the points in the Geometry.
-    virtual Geometry* convexHull() const;
+    virtual std::unique_ptr<Geometry> convexHull() const;
 
     /**
      * Computes a new geometry which has all component coordinate sequences

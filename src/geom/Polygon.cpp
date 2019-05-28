@@ -297,7 +297,7 @@ Polygon::apply_ro(GeometryFilter* filter) const
     filter->filter_ro(this);
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 Polygon::convexHull() const
 {
     return getExteriorRing()->convexHull();

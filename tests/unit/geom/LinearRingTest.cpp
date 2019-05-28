@@ -202,10 +202,9 @@ template<>
 void object::test<10>
 ()
 {
-    GeometryPtr hull = empty_ring_.convexHull();
+    auto hull = empty_ring_.convexHull();
     ensure(hull != nullptr);
     ensure(hull->isEmpty());
-    factory_->destroyGeometry(hull);
 }
 
 // Test of getGeometryTypeId() for empty LinearRing
@@ -326,14 +325,11 @@ void object::test<21>
 {
     ensure(ring_ != nullptr);
 
-    GeometryPtr hull = ring_->convexHull();
+    auto hull = ring_->convexHull();
     ensure(hull != nullptr);
     ensure(!hull->isEmpty());
     ensure_equals(hull->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
     ensure_equals(hull->getDimension(), geos::geom::Dimension::A);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(hull);
 }
 
 // Test of getGeometryTypeId() for non-empty LinearRing
