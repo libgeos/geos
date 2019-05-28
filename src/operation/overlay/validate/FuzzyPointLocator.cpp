@@ -71,7 +71,7 @@ FuzzyPointLocator::extractLineWork(const geom::Geometry& geom)
 
             // only get linework for polygonal components
             if(gComp->getDimension() == 2) {
-                lineGeom = gComp->getBoundary();
+                lineGeom = gComp->getBoundary().release();
                 lineGeoms->push_back(lineGeom);
             }
         }
@@ -101,7 +101,7 @@ FuzzyPointLocator::getLineWork(const geom::Geometry& geom)
             const Geometry* gComp = g.getGeometryN(i);
             Geometry* lineGeom;
             if(gComp->getDimension() == 2) {
-                lineGeom = gComp->getBoundary();
+                lineGeom = gComp->getBoundary().release();
             }
             else {
                 lineGeom = gComp->clone().release();

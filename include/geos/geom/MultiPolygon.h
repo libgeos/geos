@@ -75,7 +75,7 @@ public:
      * @return a lineal geometry (which may be empty)
      * @see Geometry#getBoundary
      */
-    Geometry* getBoundary() const override;
+    std::unique_ptr<Geometry> getBoundary() const override;
 
     std::string getGeometryType() const override;
 

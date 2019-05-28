@@ -371,13 +371,13 @@ public:
      *          of this <code>Geometry</code>.
      *          Ownershipof the returned object transferred to caller.
      */
-    virtual Geometry* getBoundary() const = 0; //Abstract
+    virtual std::unique_ptr<Geometry> getBoundary() const = 0; //Abstract
 
     /// Returns the dimension of this Geometrys inherent boundary.
     virtual int getBoundaryDimension() const = 0; //Abstract
 
     /// Returns this Geometrys bounding box.
-    virtual Geometry* getEnvelope() const;
+    virtual std::unique_ptr<Geometry> getEnvelope() const;
 
     /** \brief
      * Returns the minimum and maximum x and y values in this Geometry,
@@ -795,7 +795,7 @@ public:
      *
      * @return a {@link Point} which is the centroid of this Geometry
      */
-    virtual Point* getCentroid() const;
+    virtual std::unique_ptr<Point> getCentroid() const;
 
     /// Computes the centroid of this Geometry as a Coordinate
     //

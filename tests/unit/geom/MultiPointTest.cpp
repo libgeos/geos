@@ -154,10 +154,9 @@ template<>
 void object::test<7>
 ()
 {
-    GeometryPtr envelope = empty_mp_->getEnvelope();
+    auto envelope = empty_mp_->getEnvelope();
     ensure(envelope != nullptr);
     ensure(envelope->isEmpty());
-    factory_->destroyGeometry(envelope);
 }
 
 // Test of getBoundary() for empty MultiPoint
@@ -166,10 +165,9 @@ template<>
 void object::test<8>
 ()
 {
-    GeometryPtr boundary = empty_mp_->getBoundary();
+    auto boundary = empty_mp_->getBoundary();
     ensure(boundary != nullptr);
     ensure(boundary->isEmpty());
-    factory_->destroyGeometry(boundary);
 }
 
 // Test of convexHull() for empty MultiPoint
@@ -265,13 +263,10 @@ void object::test<18>
 {
     ensure(mp_ != nullptr);
 
-    GeometryPtr envelope = mp_->getEnvelope();
+    auto envelope = mp_->getEnvelope();
     ensure(envelope != nullptr);
     ensure(!envelope->isEmpty());
     ensure_equals(envelope->getDimension(), geos::geom::Dimension::A);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(envelope);
 }
 
 // Test of getBoundary() for non-empty LinearRing
@@ -282,14 +277,11 @@ void object::test<19>
 {
     ensure(mp_ != nullptr);
 
-    GeometryPtr boundary = mp_->getBoundary();
+    auto boundary = mp_->getBoundary();
     ensure(boundary != nullptr);
 
     // OGC 05-126, Version: 1.1.0, Chapter 6.1.5 MultiPoint
     ensure("[OGC] The boundary of a MultiPoint is the empty set.", boundary->isEmpty());
-
-    // FREE MEMORY
-    factory_->destroyGeometry(boundary);
 }
 
 // Test of convexHull() for non-empty LinearRing

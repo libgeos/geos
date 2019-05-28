@@ -110,7 +110,7 @@ public:
     /// Returns coordinate dimension.
     int getCoordinateDimension() const override;
 
-    Geometry* getBoundary() const override;
+    std::unique_ptr<Geometry> getBoundary() const override;
 
     /**
      * \brief

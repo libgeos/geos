@@ -65,35 +65,33 @@ MultiPolygon::getGeometryType() const
     return "MultiPolygon";
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 MultiPolygon::getBoundary() const
 {
     if(isEmpty()) {
-        return getFactory()->createMultiLineString();
+        return std::unique_ptr<Geometry>(getFactory()->createMultiLineString());
     }
     vector<Geometry*>* allRings = new vector<Geometry*>();
     for(size_t i = 0; i < geometries->size(); i++) {
         Polygon* pg = dynamic_cast<Polygon*>((*geometries)[i]);
         assert(pg);
-        Geometry* g = pg->getBoundary();
-        if(LineString* ls = dynamic_cast<LineString*>(g)) {
+        auto g = pg->getBoundary();
+        if(LineString* ls = dynamic_cast<LineString*>(g.get())) {
             allRings->push_back(ls);
+            g.release();
         }
         else {
-            GeometryCollection* rings = dynamic_cast<GeometryCollection*>(g);
+            GeometryCollection* rings = dynamic_cast<GeometryCollection*>(g.get());
             for(size_t j = 0, jn = rings->getNumGeometries();
                     j < jn; ++j) {
-                //allRings->push_back(new LineString(*(LineString*)rings->getGeometryN(j)));
                 allRings->push_back(rings->getGeometryN(j)->clone().release());
             }
-            delete g;
         }
     }
 
     Geometry* ret = getFactory()->createMultiLineString(allRings);
-    //for (int i=0; i<allRings->size(); i++) delete (*allRings)[i];
-    //delete allRings;
-    return ret;
+
+    return std::unique_ptr<Geometry>(ret);
 }
 
 bool

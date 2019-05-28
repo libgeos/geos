@@ -111,7 +111,7 @@ public:
      * @return an empty GeometryCollection
      * @see Geometry::getBoundary
      */
-    Geometry* getBoundary() const override;
+    std::unique_ptr<Geometry> getBoundary() const override;
 
     double getX() const;
     double getY() const;

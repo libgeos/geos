@@ -178,10 +178,9 @@ template<>
 void object::test<8>
 ()
 {
-    GeometryPtr envelope = empty_ring_.getEnvelope();
+    auto envelope = empty_ring_.getEnvelope();
     ensure(envelope != nullptr);
     ensure(envelope->isEmpty());
-    factory_->destroyGeometry(envelope);
 }
 
 // Test of getBoundary() for empty LinearRing
@@ -190,10 +189,9 @@ template<>
 void object::test<9>
 ()
 {
-    GeometryPtr boundary = empty_ring_.getBoundary();
+    auto boundary = empty_ring_.getBoundary();
     ensure(boundary != nullptr);
     ensure(boundary->isEmpty());
-    factory_->destroyGeometry(boundary);
 }
 
 // Test of convexHull() for empty LinearRing
@@ -290,13 +288,10 @@ void object::test<19>
 {
     ensure(ring_ != nullptr);
 
-    GeometryPtr envelope = ring_->getEnvelope();
+    auto envelope = ring_->getEnvelope();
     ensure(envelope != nullptr);
     ensure(!envelope->isEmpty());
     ensure_equals(envelope->getDimension(), geos::geom::Dimension::A);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(envelope);
 }
 
 // Test of getBoundary() for non-empty LinearRing
@@ -307,14 +302,11 @@ void object::test<20>
 {
     ensure(ring_ != nullptr);
 
-    GeometryPtr boundary = ring_->getBoundary();
+    auto boundary = ring_->getBoundary();
     ensure(boundary != nullptr);
 
     // OGC 05-126, Version: 1.1.0, Chapter 6.1.6 Curve
     ensure("[OGC] The boundary of a closed Curve must be empty.", boundary->isEmpty());
-
-    // FREE MEMORY
-    factory_->destroyGeometry(boundary);
 }
 
 // Test of convexHull() for non-empty LinearRing

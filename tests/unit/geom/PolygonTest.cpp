@@ -190,10 +190,9 @@ template<>
 void object::test<7>
 ()
 {
-    GeometryPtr boundary = empty_poly_->getBoundary();
+    auto boundary = empty_poly_->getBoundary();
     ensure(boundary != nullptr);
     ensure(boundary->isEmpty());
-    factory_->destroyGeometry(boundary);
 }
 
 // Test of convexHull() for empty Polygon
@@ -279,13 +278,10 @@ void object::test<17>
 {
     ensure(poly_ != nullptr);
 
-    GeometryPtr envelope = poly_->getEnvelope();
+    auto envelope = poly_->getEnvelope();
     ensure(envelope != nullptr);
     ensure(!envelope->isEmpty());
     ensure_equals(envelope->getDimension(), geos::geom::Dimension::A);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(envelope);
 }
 
 // Test of getBoundary() for non-empty Polygon
@@ -296,14 +292,11 @@ void object::test<18>
 {
     ensure(poly_ != nullptr);
 
-    GeometryPtr boundary = poly_->getBoundary();
+    auto boundary = poly_->getBoundary();
     ensure(boundary != nullptr);
 
     // OGC 05-126, Version: 1.1.0, Chapter 6.1.10 Surface
     ensure("[OGC] The boundary of Polygin is the set of closed Curves.", !boundary->isEmpty());
-
-    // FREE MEMORY
-    factory_->destroyGeometry(boundary);
 }
 
 // Test of convexHull() for non-empty Polygon
@@ -522,7 +515,7 @@ template<>
 void object::test<34>
 ()
 {
-    PointPtr point = empty_poly_->getCentroid();
+    auto point = empty_poly_->getCentroid();
     ensure(point == nullptr);
 }
 
@@ -543,13 +536,10 @@ template<>
 void object::test<36>
 ()
 {
-    PointPtr point = poly_->getCentroid();
+    auto point = poly_->getCentroid();
     ensure(point != nullptr);
     ensure(!point->isEmpty());
     ensure_equals(point->getGeometryTypeId(), geos::geom::GEOS_POINT);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(point);
 }
 
 // Test of Geometry::getCentroid(Coordinate& ret) const for non-empty Polygon
@@ -570,7 +560,7 @@ void object::test<38>
 ()
 {
     // First centroid
-    PointPtr point = poly_->getCentroid();
+    auto point = poly_->getCentroid();
     ensure(point != nullptr);
     ensure(!point->isEmpty());
     ensure_equals(point->getGeometryTypeId(), geos::geom::GEOS_POINT);
@@ -578,8 +568,6 @@ void object::test<38>
     CoordinateCPtr pointCoord = point->getCoordinate();
     ensure(pointCoord != nullptr);
     geos::geom::Coordinate pointCentr(*pointCoord);
-    // FREE MEMORY
-    factory_->destroyGeometry(point);
 
     // Second centroid
     geos::geom::Coordinate coordCentr;

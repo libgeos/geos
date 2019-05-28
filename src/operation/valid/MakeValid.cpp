@@ -237,7 +237,7 @@ static std::unique_ptr<geom::Geometry> MakeValidPoly(const geom::Geometry* geom)
 
         // We succeeded in building a ring !
         // Save the new ring boundaries first (to compute further cut edges later)
-        std::unique_ptr<geom::Geometry> new_area_bound(new_area->getBoundary());
+        std::unique_ptr<geom::Geometry> new_area_bound = new_area->getBoundary();
         assert(new_area_bound);
 
         // Now symdif new and old area

@@ -258,21 +258,18 @@ void object::test<8>
     ensure(pt->getCentroid() == nullptr);
     ensure(pt->getCoordinate() == nullptr);
 
-    GeometryPtr geo = nullptr;
+    std::unique_ptr<geos::geom::Geometry> geo;
     geo = pt->getEnvelope();
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
     geo = pt->getBoundary();
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
-    geo = pt->convexHull().release();
+    geo = pt->convexHull();
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
     ensure_equals(pt->getGeometryTypeId(), geos::geom::GEOS_POINT);
     ensure_equals(pt->getDimension(), geos::geom::Dimension::P);
@@ -307,26 +304,22 @@ void object::test<9>
     ensure_equals(pcoord->y, y_);
     ensure_equals(pcoord->z, z_);
 
-    GeometryPtr geo = nullptr;
+    std::unique_ptr<geos::geom::Geometry> geo;
     geo = pt->getEnvelope();
     ensure(geo != nullptr);
     ensure(!geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
     geo = pt->getCentroid();
     ensure(geo != nullptr);
     ensure(!geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
     geo = pt->getBoundary();
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
-    geo = pt->convexHull().release();
+    geo = pt->convexHull();
     ensure(geo != nullptr);
     ensure(!geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
     ensure_equals(pt->getGeometryTypeId(), geos::geom::GEOS_POINT);
     ensure_equals(pt->getDimension(), geos::geom::Dimension::P);
@@ -366,26 +359,22 @@ void object::test<10>
     ensure_equals(pcoord->y, y_);
     ensure_equals(pcoord->z, z_);
 
-    GeometryPtr geo = nullptr;
+    std::unique_ptr<geos::geom::Geometry> geo;
     geo = pt->getEnvelope();
     ensure(geo != nullptr);
     ensure(!geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
     geo = pt->getCentroid();
     ensure(geo != nullptr);
     ensure(!geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
     geo = pt->getBoundary();
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
-    geo = pt->convexHull().release();
+    geo = pt->convexHull();
     ensure(geo != nullptr);
     ensure(!geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
     ensure_equals(pt->getGeometryTypeId(), geos::geom::GEOS_POINT);
     ensure_equals(pt->getDimension(), geos::geom::Dimension::P);
@@ -423,26 +412,22 @@ void object::test<11>
     ensure_equals(pcoord->y, y_);
     ensure_equals(pcoord->z, z_);
 
-    GeometryPtr geo = nullptr;
+    std::unique_ptr<geos::geom::Geometry> geo;
     geo = pt->getEnvelope();
     ensure(geo != nullptr);
     ensure(!geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
     geo = pt->getCentroid();
     ensure(geo != nullptr);
     ensure(!geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
     geo = pt->getBoundary();
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
-    geo = pt->convexHull().release();
+    geo = pt->convexHull();
     ensure(geo != nullptr);
     ensure(!geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
     ensure_equals(pt->getGeometryTypeId(), geos::geom::GEOS_POINT);
     ensure_equals(pt->getDimension(), geos::geom::Dimension::P);
@@ -565,21 +550,18 @@ void object::test<15>
     // http://geos.osgeo.org/pipermail/geos-devel/2006-March/002006.html
     //ensure( line->getCoordinate() == 0 );
 
-    GeometryPtr geo = nullptr;
+    std::unique_ptr<geos::geom::Geometry> geo;
     geo = line->getEnvelope();
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
     geo = line->getBoundary();
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
-    geo = line->convexHull().release();
+    geo = line->convexHull();
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
     ensure_equals(line->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
     ensure_equals(line->getDimension(), geos::geom::Dimension::L);
@@ -667,7 +649,7 @@ void object::test<18>
     // http://geos.osgeo.org/pipermail/geos-devel/2006-March/002006.html
     //ensure( poly->getCoordinate() == 0 );
 
-    GeometryPtr geo = nullptr;
+    std::unique_ptr<geos::geom::Geometry> geo;
     // TODO - mloskot - waiting for resolution
     // http://geos.osgeo.org/pipermail/geos-devel/2006-March/002011.html
     //geo = poly->getEnvelope();
@@ -678,12 +660,10 @@ void object::test<18>
     geo = poly->getBoundary();
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
-    geo = poly->convexHull().release();
+    geo = poly->convexHull();
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
     ensure_equals(poly->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
     ensure_equals(poly->getDimension(), geos::geom::Dimension::A);
@@ -933,7 +913,7 @@ void object::test<24>
     ensure(mp->isValid());
     ensure(mp->getCentroid() == nullptr);
 
-    GeometryPtr geo = nullptr;
+    std::unique_ptr<geos::geom::Geometry> geo;
 
     // TODO - mloskot - waiting for resolution
     // http://geos.osgeo.org/pipermail/geos-devel/2006-March/002011.html
@@ -945,12 +925,10 @@ void object::test<24>
     geo = mp->getBoundary();
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
-    geo = mp->convexHull().release();
+    geo = mp->convexHull();
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
     ensure_equals(mp->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT);
     ensure_equals(mp->getDimension(), geos::geom::Dimension::P);
@@ -1089,7 +1067,7 @@ void object::test<28>
     ensure(mls->isValid());
     ensure(mls->getCentroid() == nullptr);
 
-    GeometryPtr geo = nullptr;
+    std::unique_ptr<geos::geom::Geometry> geo;
 
     // TODO - mloskot - waiting for resolution
     // http://geos.osgeo.org/pipermail/geos-devel/2006-March/002011.html
@@ -1101,12 +1079,10 @@ void object::test<28>
     geo = mls->getBoundary();
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
-    geo = mls->convexHull().release();
+    geo = mls->convexHull();
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
     ensure_equals(mls->getGeometryTypeId(), geos::geom::GEOS_MULTILINESTRING);
     ensure_equals(mls->getDimension(), geos::geom::Dimension::L);

@@ -171,10 +171,9 @@ template<>
 void object::test<8>
 ()
 {
-    GeometryPtr envelope = empty_point_->getEnvelope();
+    auto envelope = empty_point_->getEnvelope();
     ensure(envelope != nullptr);
     ensure(envelope->isEmpty());
-    factory_->destroyGeometry(envelope);
 }
 
 // Test of getBoundary() for empty Point
@@ -183,10 +182,9 @@ template<>
 void object::test<9>
 ()
 {
-    GeometryPtr boundary = empty_point_->getBoundary();
+    auto boundary = empty_point_->getBoundary();
     ensure(boundary != nullptr);
     ensure(boundary->isEmpty());
-    factory_->destroyGeometry(boundary);
 }
 
 // Test of convexHull() for empty Point
@@ -297,10 +295,9 @@ template<>
 void object::test<21>
 ()
 {
-    GeometryPtr envelope = point_->getEnvelope();
+    auto envelope = point_->getEnvelope();
     ensure(envelope != nullptr);
     ensure(!envelope->isEmpty());
-    factory_->destroyGeometry(envelope);
 }
 
 // Test of getBoundary() for non-empty Point
@@ -309,10 +306,9 @@ template<>
 void object::test<22>
 ()
 {
-    GeometryPtr boundary = point_->getBoundary();
+    auto boundary = point_->getBoundary();
     ensure(boundary != nullptr);
     ensure(boundary->isEmpty());
-    factory_->destroyGeometry(boundary);
 }
 
 // Test of convexHull() for non-empty Point

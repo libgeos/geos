@@ -215,23 +215,23 @@ LineString::getGeometryType() const
     return "LineString";
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 LineString::getBoundary() const
 {
     if(isEmpty()) {
-        return getFactory()->createMultiPoint();
+        return std::unique_ptr<Geometry>(getFactory()->createMultiPoint());
     }
 
     // using the default OGC_SFS MOD2 rule, the boundary of a
     // closed LineString is empty
     if(isClosed()) {
-        return getFactory()->createMultiPoint();
+        return std::unique_ptr<Geometry>(getFactory()->createMultiPoint());
     }
     vector<Geometry*>* pts = new vector<Geometry*>();
     pts->push_back(getStartPoint());
     pts->push_back(getEndPoint());
     MultiPoint* mp = getFactory()->createMultiPoint(pts);
-    return mp;
+    return std::unique_ptr<Geometry>(mp);
 }
 
 bool

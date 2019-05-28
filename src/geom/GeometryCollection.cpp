@@ -177,7 +177,7 @@ GeometryCollection::getGeometryType() const
     return "GeometryCollection";
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 GeometryCollection::getBoundary() const
 {
     throw util::IllegalArgumentException("Operation not supported by GeometryCollection\n");

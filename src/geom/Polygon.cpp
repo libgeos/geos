@@ -198,7 +198,7 @@ Polygon::getGeometryType() const
 
 // Returns a newly allocated Geometry object
 /*public*/
-Geometry*
+std::unique_ptr<Geometry>
 Polygon::getBoundary() const
 {
     /*
@@ -210,11 +210,11 @@ Polygon::getBoundary() const
     const GeometryFactory* gf = getFactory();
 
     if(isEmpty()) {
-        return gf->createMultiLineString();
+        return std::unique_ptr<Geometry>(gf->createMultiLineString());
     }
 
     if(! holes->size()) {
-        return gf->createLineString(*shell).release();
+        return std::unique_ptr<Geometry>(gf->createLineString(*shell).release());
     }
 
     vector<Geometry*>* rings = new vector<Geometry*>(holes->size() + 1);
@@ -227,7 +227,7 @@ Polygon::getBoundary() const
         (*rings)[i + 1] = ls;
     }
     MultiLineString* ret = getFactory()->createMultiLineString(rings);
-    return ret;
+    return std::unique_ptr<Geometry>(ret);
 }
 
 Envelope::Ptr

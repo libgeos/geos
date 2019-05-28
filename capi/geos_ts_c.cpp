@@ -1682,7 +1682,7 @@ extern "C" {
         }
 
         try {
-            Geometry* g3 = g1->getEnvelope();
+            Geometry* g3 = g1->getEnvelope().release();
             return g3;
         }
         catch(const std::exception& e) {
@@ -2072,7 +2072,7 @@ extern "C" {
         }
 
         try {
-            Geometry* g3 = g1->getBoundary();
+            Geometry* g3 = g1->getBoundary().release();
             return g3;
         }
         catch(const std::exception& e) {
@@ -2988,7 +2988,7 @@ extern "C" {
         }
 
         try {
-            Geometry* ret = g->getCentroid();
+            Geometry* ret = g->getCentroid().release();
             if(0 == ret) {
                 const GeometryFactory* gf = handle->geomFactory;
                 return gf->createPoint();

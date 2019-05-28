@@ -111,7 +111,7 @@ public:
      * Returns a MultiPoint.
      * Empty for closed LineString, a Point for each vertex otherwise.
      */
-    Geometry* getBoundary() const override;
+    std::unique_ptr<Geometry> getBoundary() const override;
 
     bool isEmpty() const override;
 

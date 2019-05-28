@@ -191,7 +191,7 @@ Geometry::isWithinDistance(const Geometry* geom, double cDistance) const
 }
 
 /*public*/
-Point*
+std::unique_ptr<Point>
 Geometry::getCentroid() const
 {
     Coordinate centPt;
@@ -201,8 +201,7 @@ Geometry::getCentroid() const
 
     // We don't use createPointFromInternalCoord here
     // because ::getCentroid() takes care about rounding
-    Point* pt = getFactory()->createPoint(centPt);
-    return pt;
+    return std::unique_ptr<Point>(getFactory()->createPoint(centPt));
 }
 
 /*public*/
@@ -276,10 +275,10 @@ Geometry::isValid() const
     return IsValidOp(this).isValid();
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 Geometry::getEnvelope() const
 {
-    return getFactory()->toGeometry(getEnvelopeInternal());
+    return std::unique_ptr<Geometry>(getFactory()->toGeometry(getEnvelopeInternal()));
 }
 
 const Envelope*

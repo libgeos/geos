@@ -67,7 +67,7 @@ public:
     int getBoundaryDimension() const override;
 
     /// Returns a (possibly empty) MultiPoint
-    Geometry* getBoundary() const override;
+    std::unique_ptr<Geometry> getBoundary() const override;
 
     std::string getGeometryType() const override;
 

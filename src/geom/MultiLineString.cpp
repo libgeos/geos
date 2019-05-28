@@ -86,17 +86,16 @@ MultiLineString::isClosed() const
     return true;
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 MultiLineString::getBoundary() const
 {
     if(isEmpty()) {
-        return getFactory()->createGeometryCollection(nullptr);
+        return std::unique_ptr<Geometry>(getFactory()->createGeometryCollection(nullptr));
     }
-    //Geometry *in = toInternalGeometry(this);
+
     GeometryGraph gg(0, this);
     CoordinateSequence* pts = gg.getBoundaryPoints();
-    Geometry* ret = getFactory()->createMultiPoint(*pts);
-    return ret;
+    return std::unique_ptr<Geometry>(getFactory()->createMultiPoint(*pts));
 }
 
 bool

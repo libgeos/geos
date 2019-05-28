@@ -146,10 +146,10 @@ Point::getGeometryType() const
     return "Point";
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 Point::getBoundary() const
 {
-    return getFactory()->createGeometryCollection(nullptr);
+    return std::unique_ptr<Geometry>(getFactory()->createGeometryCollection(nullptr));
 }
 
 Envelope::Ptr

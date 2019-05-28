@@ -111,21 +111,18 @@ void object::test<2>
     ensure(!ls->isClosed());
     ensure(!ls->isRing());
 
-    GeometryPtr geo = nullptr;
+    std::unique_ptr<geos::geom::Geometry> geo;
     geo = ls->getEnvelope();
     ensure(geo != nullptr);
     ensure(!geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
     geo = ls->getBoundary();
     ensure(geo != nullptr);
     ensure(!geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
-    geo = ls->convexHull().release();
+    geo = ls->convexHull();
     ensure(geo != nullptr);
     ensure(!geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
     ensure_equals(ls->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
     ensure_equals(ls->getDimension(), geos::geom::Dimension::L);
@@ -199,21 +196,18 @@ void object::test<4>
     ensure(!copy->isClosed());
     ensure(!copy->isRing());
 
-    GeometryPtr geo = nullptr;
+    std::unique_ptr<geos::geom::Geometry> geo;
     geo = copy->getEnvelope();
     ensure(geo != nullptr);
     ensure(!geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
     geo = copy->getBoundary();
     ensure(geo != nullptr);
     ensure(!geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
-    geo = copy->convexHull().release();
+    geo = copy->convexHull();
     ensure(geo != nullptr);
     ensure(!geo->isEmpty());
-    factory_->destroyGeometry(geo);
 
     ensure_equals(copy->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
     ensure_equals(copy->getDimension(), geos::geom::Dimension::L);
@@ -239,11 +233,9 @@ template<>
 void object::test<6>
 ()
 {
-    GeometryPtr geo = nullptr;
-    geo = empty_line_->getEnvelope();
+    auto geo = empty_line_->getEnvelope();
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
-    factory_->destroyGeometry(geo);
 }
 
 // Test of getBoundary() for empty linestring
@@ -252,11 +244,9 @@ template<>
 void object::test<7>
 ()
 {
-    GeometryPtr geo = nullptr;
-    geo = empty_line_->getBoundary();
+    auto geo = empty_line_->getBoundary();
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
-    factory_->destroyGeometry(geo);
 }
 
 // Test of convexHull() for empty linestring
@@ -265,11 +255,9 @@ template<>
 void object::test<8>
 ()
 {
-    GeometryPtr geo = nullptr;
-    geo = empty_line_->convexHull().release();
+    auto geo = empty_line_->convexHull();
     ensure(geo != nullptr);
     ensure(geo->isEmpty());
-    factory_->destroyGeometry(geo);
 }
 
 // Test of getGeometryTypeId() for empty linestring
@@ -359,12 +347,10 @@ void object::test<16>
     LineStringPtr line = dynamic_cast<LineStringPtr>(geo);
     ensure(line != nullptr);
 
-    GeometryPtr envelope = line->getEnvelope();
+    auto envelope = line->getEnvelope();
     ensure(envelope != nullptr);
     ensure(!envelope->isEmpty());
     ensure_equals(envelope->getDimension(), geos::geom::Dimension::A);
-
-    factory_->destroyGeometry(envelope);
 
     // FREE TESTED LINESTRING
     factory_->destroyGeometry(line);
@@ -382,12 +368,11 @@ void object::test<17>
     LineStringPtr line = dynamic_cast<LineStringPtr>(geo);
     ensure(line != nullptr);
 
-    GeometryPtr boundary = line->getBoundary();
+    auto boundary = line->getBoundary();
     ensure(boundary != nullptr);
     ensure(!boundary->isEmpty());
     ensure_equals(boundary->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT);
     ensure_equals(boundary->getDimension(), geos::geom::Dimension::P);
-    factory_->destroyGeometry(boundary);
 
     // FREE TESTED LINESTRING
     factory_->destroyGeometry(line);
@@ -405,12 +390,11 @@ void object::test<18>
     LineStringPtr line = dynamic_cast<LineStringPtr>(geo);
     ensure(line != nullptr);
 
-    GeometryPtr hull = line->convexHull().release();
+    auto hull = line->convexHull();
     ensure(hull != nullptr);
     ensure(!hull->isEmpty());
     ensure_equals(hull->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
     ensure_equals(hull->getDimension(), geos::geom::Dimension::A);
-    factory_->destroyGeometry(hull);
 
     // FREE TESTED LINESTRING
     factory_->destroyGeometry(line);

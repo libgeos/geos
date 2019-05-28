@@ -69,7 +69,7 @@ struct Face {
 static std::unique_ptr<Face> newFace(const geom::Polygon* p) {
     auto f = std::unique_ptr<Face>(new Face());
     f->poly = p;
-    f->env.reset(p->getEnvelope());
+    f->env = p->getEnvelope();
     f->envarea = f->env->getArea();
     return f;
 }

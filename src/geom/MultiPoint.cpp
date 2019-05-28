@@ -60,10 +60,10 @@ MultiPoint::getGeometryType() const
     return "MultiPoint";
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 MultiPoint::getBoundary() const
 {
-    return getFactory()->createGeometryCollection();
+    return std::unique_ptr<Geometry>(getFactory()->createGeometryCollection());
 }
 
 bool
