@@ -43,13 +43,11 @@ public:
 
     std::unique_ptr<CoordinateSequence> clone() const override;
 
-    //const Coordinate& getCoordinate(int pos) const;
     const Coordinate& getAt(std::size_t pos) const override;
 
     /// Copy Coordinate at position i to Coordinate c
     void getAt(std::size_t i, Coordinate& c) const override;
 
-    //int size() const;
     size_t getSize() const override;
 
     // See dox in CoordinateSequence.h
@@ -104,8 +102,6 @@ public:
     void add(std::size_t i, const Coordinate& coord, bool allowRepeated) override;
 
     void setAt(const Coordinate& c, std::size_t pos) override;
-
-    void deleteAt(std::size_t pos) override;
 
     std::string toString() const override;
 

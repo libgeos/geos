@@ -90,19 +90,6 @@ CoordinateSequence::minCoordinate() const
     return minCoord;
 }
 
-const Coordinate*
-CoordinateSequence::minCoordinate(CoordinateSequence* cl)
-{
-    const Coordinate* minCoord = nullptr;
-    const std::size_t p_size = cl->getSize();
-    for(std::size_t i = 0; i < p_size; i++) {
-        if(minCoord == nullptr || minCoord->compareTo(cl->getAt(i)) > 0) {
-            minCoord = &(cl->getAt(i));
-        }
-    }
-    return minCoord;
-}
-
 size_t
 CoordinateSequence::indexOf(const Coordinate* coordinate,
                             const CoordinateSequence* cl)
@@ -218,14 +205,6 @@ CoordinateSequence::add(const Coordinate& c, bool allowRepeated)
     add(c);
 }
 
-/* Here for backward compatibility */
-//void
-//CoordinateSequence::add(CoordinateSequence *cl, bool allowRepeated,
-//		bool direction)
-//{
-//	add(cl, allowRepeated, direction);
-//}
-
 /*public*/
 void
 CoordinateSequence::add(const CoordinateSequence* cl,
@@ -246,27 +225,6 @@ CoordinateSequence::add(const CoordinateSequence* cl,
     }
 }
 
-
-/*public static*/
-//CoordinateSequence*
-//CoordinateSequence::removeRepeatedPoints(const CoordinateSequence* cl)
-//{
-//#if PROFILE
-//    static Profile* prof = profiler->get("CoordinateSequence::removeRepeatedPoints()");
-//    prof->start();
-//#endif
-//    const vector<Coordinate>* v = cl->toVector();
-//
-//    vector<Coordinate>* nv = new vector<Coordinate>;
-//    nv->reserve(v->size());
-//    unique_copy(v->begin(), v->end(), back_inserter(*nv));
-//    CoordinateSequence* ret = CoordinateArraySequenceFactory::instance()->create(nv);
-//
-//#if PROFILE
-//    prof->stop();
-//#endif
-//    return ret;
-//}
 
 void
 CoordinateSequence::expandEnvelope(Envelope& env) const

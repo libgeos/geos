@@ -181,9 +181,6 @@ public:
     /// Copy Coordinate c to position pos
     virtual	void setAt(const Coordinate& c, std::size_t pos) = 0;
 
-    /// Delete Coordinate at position pos (list will shrink).
-    virtual	void deleteAt(std::size_t pos) = 0;
-
     /// Get a string representation of CoordinateSequence
     virtual	std::string toString() const = 0;
 
@@ -208,13 +205,6 @@ public:
      */
     static CoordinateSequence* atLeastNCoordinatesOrNothing(std::size_t n,
             CoordinateSequence* c);
-
-    /** \brief
-     *  Returns lower-left Coordinate in given CoordinateSequence.
-     *  This is actually the Coordinate with lower X (and Y if needed)
-     *  ordinate.
-     */
-    static const Coordinate* minCoordinate(CoordinateSequence* cl);
 
     /// Return position of a Coordinate, or -1 if not found
     //

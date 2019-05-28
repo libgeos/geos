@@ -331,9 +331,16 @@ Polygon::normalize(LinearRing* ring, bool clockwise)
     if(ring->isEmpty()) {
         return;
     }
-    auto uniqueCoordinates = ring->getCoordinates();
-    uniqueCoordinates->deleteAt(uniqueCoordinates->getSize() - 1);
-    const Coordinate* minCoordinate = CoordinateSequence::minCoordinate(uniqueCoordinates.get());
+
+    auto seqFactory = ring->getFactory()->getCoordinateSequenceFactory();
+
+    std::unique_ptr<std::vector<Coordinate>> coords(new std::vector<Coordinate>());
+    ring->getCoordinatesRO()->toVector(*coords);
+    coords->erase(coords->end() - 1); // remove last point (repeated)
+
+    std::unique_ptr<CoordinateSequence> uniqueCoordinates = seqFactory->create(coords.release());
+    const Coordinate* minCoordinate = uniqueCoordinates->minCoordinate();
+
     CoordinateSequence::scroll(uniqueCoordinates.get(), minCoordinate);
     uniqueCoordinates->add(uniqueCoordinates->getAt(0));
     if(algorithm::Orientation::isCCW(uniqueCoordinates.get()) == clockwise) {
