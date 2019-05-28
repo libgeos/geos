@@ -102,7 +102,7 @@ public:
      * @param endIndex the index of the end of the interval
      * @return the linear interval between the indices
      */
-    geom::Geometry* extractLine(double startIndex, double endIndex) const;
+    std::unique_ptr<geom::Geometry> extractLine(double startIndex, double endIndex) const;
 
 
     /**

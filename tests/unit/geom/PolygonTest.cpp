@@ -107,7 +107,7 @@ void object::test<1>
         ensure(ring.isSimple());
 
         // Exterior (clone is required here because Polygon takes ownership)
-        GeometryPtr geo = ring.clone();
+        geos::geom::Geometry* geo = ring.clone().release();
         LinearRingPtr exterior = dynamic_cast<LinearRingPtr>(geo);
 
         // Create non-empty Polygon
@@ -413,7 +413,7 @@ void object::test<27>
 {
     ensure(poly_ != nullptr);
 
-    GeometryPtr geo = poly_->clone();
+    GeometryPtr geo = poly_->clone().release();
     ensure(geo != nullptr);
     ensure(geo->equals(poly_));
 

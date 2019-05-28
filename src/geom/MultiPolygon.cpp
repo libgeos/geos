@@ -84,7 +84,7 @@ MultiPolygon::getBoundary() const
             for(size_t j = 0, jn = rings->getNumGeometries();
                     j < jn; ++j) {
                 //allRings->push_back(new LineString(*(LineString*)rings->getGeometryN(j)));
-                allRings->push_back(rings->getGeometryN(j)->clone());
+                allRings->push_back(rings->getGeometryN(j)->clone().release());
             }
             delete g;
         }
@@ -110,7 +110,7 @@ MultiPolygon::getGeometryTypeId() const
     return GEOS_MULTIPOLYGON;
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 MultiPolygon::reverse() const
 {
     if(isEmpty()) {
@@ -123,10 +123,10 @@ MultiPolygon::reverse() const
                    geometries->end(),
                    reversed->begin(),
     [](const Geometry * g) {
-        return g->reverse();
+        return g->reverse().release();
     });
 
-    return getFactory()->createMultiPolygon(reversed);
+    return std::unique_ptr<Geometry>(getFactory()->createMultiPolygon(reversed));
 }
 
 } // namespace geos::geom

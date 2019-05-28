@@ -140,7 +140,7 @@ CommonBitsOp::removeCommonBits(const Geometry* geom0)
     cerr << "CommonBitsRemover bits: " << commonCoord.x << ", " << commonCoord.y << endl;
 #endif
 
-    Geometry* geom = cbr->removeCommonBits(geom0->clone());
+    Geometry* geom = cbr->removeCommonBits(geom0->clone().release());
     return geom;
 }
 
@@ -163,8 +163,8 @@ CommonBitsOp::removeCommonBits(
     cerr << "CommonBitsRemover bits: " << commonCoord.x << ", " << commonCoord.y << endl;
 #endif
 
-    rgeom0.reset(cbr->removeCommonBits(geom0->clone()));
-    rgeom1.reset(cbr->removeCommonBits(geom1->clone()));
+    rgeom0.reset(cbr->removeCommonBits(geom0->clone().release()));
+    rgeom1.reset(cbr->removeCommonBits(geom1->clone().release()));
 
 }
 

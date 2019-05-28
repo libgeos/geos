@@ -122,7 +122,7 @@ static std::unique_ptr<geom::MultiPolygon> collectFacesWithEvenAncestors(
         if( face->countParents() % 2 ) {
             continue; /* we skip odd parents geoms */
         }
-        geoms->push_back(face->poly->clone());
+        geoms->push_back(face->poly->clone().release());
     }
     return std::unique_ptr<geom::MultiPolygon>(
         GeometryFactory::create()->createMultiPolygon(geoms));

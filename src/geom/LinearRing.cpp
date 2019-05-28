@@ -120,7 +120,7 @@ LinearRing::getGeometryTypeId() const
     return GEOS_LINEARRING;
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 LinearRing::reverse() const
 {
     if(isEmpty()) {
@@ -131,7 +131,7 @@ LinearRing::reverse() const
     auto seq = points->clone();
     CoordinateSequence::reverse(seq.get());
     assert(getFactory());
-    return getFactory()->createLinearRing(seq.release());
+    return std::unique_ptr<Geometry>(getFactory()->createLinearRing(seq.release()));
 }
 
 } // namespace geos::geom

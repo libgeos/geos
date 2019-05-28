@@ -113,7 +113,7 @@ MultiLineString::getGeometryTypeId() const
     return GEOS_MULTILINESTRING;
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 MultiLineString::reverse() const
 {
     if(isEmpty()) {
@@ -125,9 +125,9 @@ MultiLineString::reverse() const
     for(size_t i = 0; i < nLines; ++i) {
         LineString* iLS = dynamic_cast<LineString*>((*geometries)[i]);
         assert(iLS);
-        (*revLines)[nLines - 1 - i] = iLS->reverse();
+        (*revLines)[nLines - 1 - i] = iLS->reverse().release();
     }
-    return getFactory()->createMultiLineString(revLines);
+    return std::unique_ptr<Geometry>(getFactory()->createMultiLineString(revLines));
 }
 
 } // namespace geos::geom

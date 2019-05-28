@@ -166,7 +166,7 @@ EdgeRing::toPolygon(const GeometryFactory* p_geometryFactory)
     size_t nholes = holes.size();
     vector<Geometry*>* holeLR = new vector<Geometry*>(nholes);
     for(size_t i = 0; i < nholes; ++i) {
-        Geometry* hole = holes[i]->getLinearRing()->clone();
+        Geometry* hole = holes[i]->getLinearRing()->clone().release();
         (*holeLR)[i] = hole;
     }
 

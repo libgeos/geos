@@ -89,7 +89,7 @@ void object::test<2>
 ()
 {
     const size_t size0 = 0;
-    MultiPointAutoPtr copy(dynamic_cast<geos::geom::MultiPoint*>(empty_mp_->clone()));
+    MultiPointAutoPtr copy(dynamic_cast<geos::geom::MultiPoint*>(empty_mp_->clone().release()));
     ensure(nullptr != copy.get());
 
     ensure(copy->isEmpty());

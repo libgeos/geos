@@ -200,7 +200,7 @@ public:
     using Ptr = std::unique_ptr<Geometry> ;
 
     /// Make a deep-copy of this Geometry
-    virtual Geometry* clone() const = 0;
+    virtual std::unique_ptr<Geometry> clone() const = 0;
 
     /// Destroy Geometry and all components
     virtual ~Geometry();
@@ -637,7 +637,7 @@ public:
      *
      * @return a reversed geometry
      */
-    virtual Geometry* reverse() const = 0;
+    virtual std::unique_ptr<Geometry> reverse() const = 0;
 
     /** \brief
      * Returns a Geometry representing the points shared by

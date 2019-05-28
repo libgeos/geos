@@ -134,7 +134,7 @@ VoronoiDiagramBuilder::clipGeometryCollection(const geom::GeometryCollection& ge
         std::unique_ptr<Geometry> result;
         // don't clip unless necessary
         if(clipEnv.contains(g->getEnvelopeInternal())) {
-            result.reset(g->clone());
+            result = g->clone();
             // TODO: check if userData is correctly cloned here?
         }
         else if(clipEnv.intersects(g->getEnvelopeInternal())) {

@@ -414,7 +414,7 @@ GeometryFactory::createGeometryCollection(const vector<Geometry*>& fromGeoms) co
 {
     vector<Geometry*>* newGeoms = new vector<Geometry*>(fromGeoms.size());
     for(size_t i = 0; i < fromGeoms.size(); i++) {
-        (*newGeoms)[i] = fromGeoms[i]->clone();
+        (*newGeoms)[i] = fromGeoms[i]->clone().release();
     }
     GeometryCollection* g = nullptr;
     try {
@@ -450,7 +450,7 @@ GeometryFactory::createMultiPolygon(const vector<Geometry*>& fromPolys) const
 {
     vector<Geometry*>* newGeoms = new vector<Geometry*>(fromPolys.size());
     for(size_t i = 0; i < fromPolys.size(); i++) {
-        (*newGeoms)[i] = fromPolys[i]->clone();
+        (*newGeoms)[i] = fromPolys[i]->clone().release();
     }
     MultiPolygon* g = nullptr;
     try {
@@ -511,7 +511,7 @@ GeometryFactory::createMultiPoint(const vector<Geometry*>& fromPoints) const
 {
     vector<Geometry*>* newGeoms = new vector<Geometry*>(fromPoints.size());
     for(size_t i = 0; i < fromPoints.size(); i++) {
-        (*newGeoms)[i] = fromPoints[i]->clone();
+        (*newGeoms)[i] = fromPoints[i]->clone().release();
     }
 
     MultiPoint* g = nullptr;
@@ -605,10 +605,10 @@ Polygon*
 GeometryFactory::createPolygon(const LinearRing& shell, const vector<Geometry*>& holes)
 const
 {
-    LinearRing* newRing = dynamic_cast<LinearRing*>(shell.clone());
+    LinearRing* newRing = dynamic_cast<LinearRing*>(shell.clone().release());
     vector<Geometry*>* newHoles = new vector<Geometry*>(holes.size());
     for(size_t i = 0; i < holes.size(); i++) {
-        (*newHoles)[i] = holes[i]->clone();
+        (*newHoles)[i] = holes[i]->clone().release();
     }
     Polygon* g = nullptr;
     try {
@@ -731,7 +731,7 @@ GeometryFactory::buildGeometry(const vector<Geometry*>& fromGeoms) const
     }
 
     if(geomsSize == 1) {
-        return fromGeoms[0]->clone();
+        return fromGeoms[0]->clone().release();
     }
 
     bool isHeterogeneous = false;
@@ -760,8 +760,8 @@ GeometryFactory::buildGeometry(const vector<Geometry*>& fromGeoms) const
     else if(type == GEOS_POINT) {
         return createMultiPoint(fromGeoms);
     }
-    geos::util::GEOSException("GeometryFactory::buildGeometry encountered an unknown geometry type!");
-    return fromGeoms[0]->clone();
+
+    throw geos::util::GEOSException("GeometryFactory::buildGeometry encountered an unknown geometry type!");
 }
 
 /*public*/

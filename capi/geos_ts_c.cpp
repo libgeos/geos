@@ -3332,7 +3332,7 @@ extern "C" {
             std::vector<Geometry*>* linevec = new std::vector<Geometry*>(lines.size());
 
             for(std::size_t i = 0, n = lines.size(); i < n; ++i) {
-                (*linevec)[i] = lines[i]->clone();
+                (*linevec)[i] = lines[i]->clone().release();
             }
 
             const GeometryFactory* gf = handle->geomFactory;
@@ -3383,7 +3383,7 @@ extern "C" {
                 const std::vector<const LineString*>& lines = plgnzr.getCutEdges();
                 std::vector<Geometry*>* linevec = new std::vector<Geometry*>(lines.size());
                 for(std::size_t i = 0, n = lines.size(); i < n; ++i) {
-                    (*linevec)[i] = lines[i]->clone();
+                    (*linevec)[i] = lines[i]->clone().release();
                 }
 
                 // The below takes ownership of the passed vector,
@@ -3396,7 +3396,7 @@ extern "C" {
                 const std::vector<const LineString*>& lines = plgnzr.getDangles();
                 std::vector<Geometry*>* linevec = new std::vector<Geometry*>(lines.size());
                 for(std::size_t i = 0, n = lines.size(); i < n; ++i) {
-                    (*linevec)[i] = lines[i]->clone();
+                    (*linevec)[i] = lines[i]->clone().release();
                 }
 
                 // The below takes ownership of the passed vector,
@@ -3409,7 +3409,7 @@ extern "C" {
                 const std::vector<LineString*>& lines = plgnzr.getInvalidRingLines();
                 std::vector<Geometry*>* linevec = new std::vector<Geometry*>(lines.size());
                 for(std::size_t i = 0, n = lines.size(); i < n; ++i) {
-                    (*linevec)[i] = lines[i]->clone();
+                    (*linevec)[i] = lines[i]->clone().release();
                 }
 
                 // The below takes ownership of the passed vector,
@@ -3502,7 +3502,7 @@ extern "C" {
         }
 
         try {
-            return g->reverse();
+            return g->reverse().release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -4225,7 +4225,7 @@ extern "C" {
         }
 
         try {
-            return g->clone();
+            return g->clone().release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());

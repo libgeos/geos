@@ -82,13 +82,13 @@ public:
 
     bool equalsExact(const Geometry* other, double tolerance = 0) const override;
 
-    Geometry*
+    std::unique_ptr<Geometry>
     clone() const override
     {
-        return new MultiPoint(*this);
+        return std::unique_ptr<Geometry>(new MultiPoint(*this));
     }
 
-    Geometry*
+    std::unique_ptr<Geometry>
     reverse() const override
     {
         return clone();

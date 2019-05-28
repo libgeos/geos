@@ -136,10 +136,10 @@ CascadedUnion::unionSafe(geom::Geometry* g0, geom::Geometry* g1)
     }
 
     if(g0 == nullptr) {
-        return g1->clone();
+        return g1->clone().release();
     }
     if(g1 == nullptr) {
-        return g0->clone();
+        return g0->clone().release();
     }
 
     return unionOptimized(g0, g1);

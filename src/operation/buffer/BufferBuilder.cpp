@@ -139,7 +139,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
 
     // Nothing to do for a distance of zero
     if(distance == 0) {
-        return g->clone();
+        return g->clone().release();
     }
 
     // Get geometry factory and precision model.

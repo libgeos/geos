@@ -83,9 +83,9 @@ public:
 
     bool equalsExact(const Geometry* other, double tolerance = 0) const override;
 
-    Geometry* clone() const override;
+    std::unique_ptr<Geometry> clone() const override;
 
-    Geometry* reverse() const override;
+    std::unique_ptr<Geometry> reverse() const override;
 
 protected:
 

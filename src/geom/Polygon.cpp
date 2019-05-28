@@ -494,24 +494,24 @@ Polygon::isRectangle() const
     return true;
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 Polygon::reverse() const
 {
     if(isEmpty()) {
         return clone();
     }
 
-    auto* exteriorRingReversed = dynamic_cast<LinearRing*>(shell->reverse());
+    auto* exteriorRingReversed = dynamic_cast<LinearRing*>(shell->reverse().release());
     auto* interiorRingsReversed = new std::vector<Geometry*> {holes->size()};
 
     std::transform(holes->begin(),
                    holes->end(),
                    interiorRingsReversed->begin(),
     [](const Geometry * g) {
-        return g->reverse();
+        return g->reverse().release();
     });
 
-    return getFactory()->createPolygon(exteriorRingReversed, interiorRingsReversed);
+    return std::unique_ptr<Geometry>(getFactory()->createPolygon(exteriorRingReversed, interiorRingsReversed));
 }
 
 } // namespace geos::geom

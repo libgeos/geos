@@ -483,7 +483,7 @@ RectangleIntersectionBuilder::reconnectPolygons(const Rectangle& rect)
         const geom::LineString* hole = poly->getExteriorRing();
 
         if(exterior.size() == 1) {
-            exterior.front().second->push_back(hole->clone());
+            exterior.front().second->push_back(hole->clone().release());
         }
         else {
             using geos::algorithm::PointLocation;
@@ -494,7 +494,7 @@ RectangleIntersectionBuilder::reconnectPolygons(const Rectangle& rect)
                 const CoordinateSequence* shell_cs = p.first->getCoordinatesRO();
                 if(PointLocation::isInRing(c, shell_cs)) {
                     // add hole to shell
-                    p.second->push_back(hole->clone());
+                    p.second->push_back(hole->clone().release());
                     break;
                 }
             }
@@ -522,7 +522,7 @@ RectangleIntersectionBuilder::reverseLines()
     std::list<geom::LineString*> new_lines;
     for(std::list<geom::LineString*>::reverse_iterator i = lines.rbegin(), e = lines.rend(); i != e; ++i) {
         LineString* ol = *i;
-        new_lines.push_back(dynamic_cast<LineString*>(ol->reverse()));
+        new_lines.push_back(dynamic_cast<LineString*>(ol->reverse().release()));
         delete ol;
     }
     lines = new_lines;

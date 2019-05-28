@@ -188,7 +188,7 @@ void object::test<4>
     LineStringAutoPtr examplar(factory_->createLineString(pseq));
 
     // Create copy
-    LineStringAutoPtr copy(dynamic_cast<geos::geom::LineString*>(examplar->clone()));
+    LineStringAutoPtr copy(dynamic_cast<geos::geom::LineString*>(examplar->clone().release()));
 
     ensure(nullptr != copy.get());
 

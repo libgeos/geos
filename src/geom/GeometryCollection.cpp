@@ -50,7 +50,7 @@ GeometryCollection::GeometryCollection(const GeometryCollection& gc)
 
     geometries = new vector<Geometry*>(ngeoms);
     for(size_t i = 0; i < ngeoms; ++i) {
-        (*geometries)[i] = (*gc.geometries)[i]->clone();
+        (*geometries)[i] = (*gc.geometries)[i]->clone().release();
     }
 }
 
@@ -374,7 +374,7 @@ GeometryCollection::getGeometryTypeId() const
     return GEOS_GEOMETRYCOLLECTION;
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 GeometryCollection::reverse() const
 {
     if(isEmpty()) {
@@ -387,10 +387,10 @@ GeometryCollection::reverse() const
                    geometries->end(),
                    reversed->begin(),
     [](const Geometry * g) {
-        return g->reverse();
+        return g->reverse().release();
     });
 
-    return getFactory()->createGeometryCollection(reversed);
+    return std::unique_ptr<Geometry>(getFactory()->createGeometryCollection(reversed));
 }
 
 } // namespace geos::geom

@@ -71,10 +71,10 @@ public:
      *
      * @return a clone of this instance
      */
-    Geometry*
+    std::unique_ptr<Geometry>
     clone() const override
     {
-        return new GeometryCollection(*this);
+        return std::unique_ptr<Geometry>(new GeometryCollection(*this));
     }
 
     ~GeometryCollection() override;
@@ -167,7 +167,7 @@ public:
      *
      * @return a GeometryCollection in the reverse order
      */
-    Geometry* reverse() const override;
+    std::unique_ptr<Geometry> reverse() const override;
 
 protected:
 

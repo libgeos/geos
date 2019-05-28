@@ -225,10 +225,10 @@ CascadedPolygonUnion::unionSafe(geom::Geometry* g0, geom::Geometry* g1)
     }
 
     if(g0 == nullptr) {
-        return g1->clone();
+        return g1->clone().release();
     }
     if(g1 == nullptr) {
-        return g0->clone();
+        return g0->clone().release();
     }
 
     return unionOptimized(g0, g1);
@@ -411,7 +411,7 @@ CascadedPolygonUnion::restrictToPolygons(std::unique_ptr<geom::Geometry> g)
     Polygon::ConstVect::size_type n = polygons.size();
     GeomVect* newpolys = new GeomVect(n);
     for(Polygon::ConstVect::size_type i = 0; i < n; ++i) {
-        (*newpolys)[i] = polygons[i]->clone();
+        (*newpolys)[i] = polygons[i]->clone().release();
     }
     return unique_ptr<Geometry>(
                g->getFactory()->createMultiPolygon(newpolys)

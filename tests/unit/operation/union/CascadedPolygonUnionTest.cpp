@@ -45,16 +45,14 @@ geos::geom::Geometry*
 unionIterated(
     std::vector<geos::geom::Polygon*>* geoms)
 {
-    typedef std::vector<geos::geom::Polygon*>::iterator iterator;
-
     std::unique_ptr<geos::geom::Geometry> unionAll;
-    iterator end = geoms->end();
-    for(iterator i = geoms->begin(); i != end; ++i) {
-        if(!unionAll.get()) {
-            unionAll.reset((*i)->clone());
+
+    for(const auto& p : *geoms) {
+        if(unionAll == nullptr) {
+            unionAll = p->clone();
         }
         else {
-            unionAll.reset(unionAll->Union(*i));
+            unionAll.reset(unionAll->Union(p));
         }
     }
     return unionAll.release();

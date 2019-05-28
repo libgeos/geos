@@ -49,7 +49,7 @@ CoordinateOperation::edit(const Geometry* geometry,
         return factory->createPoint(newCoords);
     }
 
-    return geometry->clone();
+    return geometry->clone().release();
 }
 
 

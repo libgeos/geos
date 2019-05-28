@@ -298,8 +298,8 @@ SnapOp(const Geometry* g0, const Geometry* g1, BinOp _Op)
 #endif
 
     // Now remove common bits
-    GeomPtr rG0(cbr.removeCommonBits(g0->clone()));
-    GeomPtr rG1(cbr.removeCommonBits(g1->clone()));
+    GeomPtr rG0(cbr.removeCommonBits(g0->clone().release()));
+    GeomPtr rG1(cbr.removeCommonBits(g1->clone().release()));
 
 #if GEOS_DEBUG_BINARYOP
     check_valid(*rG0, "CBR: removed-bits geom 0");
@@ -399,8 +399,8 @@ BinaryOp(const Geometry* g0, const Geometry* g1, BinOp _Op)
         cbr.add(g0);
         cbr.add(g1);
 
-        rG0.reset(cbr.removeCommonBits(g0->clone()));
-        rG1.reset(cbr.removeCommonBits(g1->clone()));
+        rG0.reset(cbr.removeCommonBits(g0->clone().release()));
+        rG1.reset(cbr.removeCommonBits(g1->clone().release()));
 
 #if GEOS_DEBUG_BINARYOP
         check_valid(*rG0, "CBR: geom 0 (after common-bits removal)");

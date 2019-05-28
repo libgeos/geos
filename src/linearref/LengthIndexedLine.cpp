@@ -54,7 +54,7 @@ LengthIndexedLine::extractPoint(double index, double offsetDistance) const
 }
 
 
-Geometry*
+std::unique_ptr<Geometry>
 LengthIndexedLine::extractLine(double startIndex, double endIndex) const
 {
     const LocationIndexedLine lil(linearGeom);

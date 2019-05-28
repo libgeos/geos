@@ -50,7 +50,7 @@ struct test_geometry_normalize_data {
         ensure(eq);
 
         // Clone and re-normalize, check it doesn't change anymore
-        ge.reset(g2->clone());
+        ge = g2->clone();
         g2->normalize();
         ensure(g2->equalsExact(ge.get()));
     }

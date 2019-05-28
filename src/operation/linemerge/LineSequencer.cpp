@@ -218,7 +218,7 @@ LineSequencer::buildSequencedGeometry(const Sequences& sequences)
                 lineToAdd = reverse(line);
             }
             else {
-                Geometry* lineClone = line->clone();
+                Geometry* lineClone = line->clone().release();
                 lineToAdd = dynamic_cast<LineString*>(lineClone);
                 assert(lineToAdd);
             }

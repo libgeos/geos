@@ -35,7 +35,7 @@ class ExtractLineByLocation {
 
 private:
     const geom::Geometry* line;
-    geom::Geometry* reverse(const geom::Geometry* linear);
+    std::unique_ptr<geom::Geometry> reverse(const geom::Geometry* linear);
 
     /**
      * Assumes input is valid (e.g. start <= end)
@@ -44,7 +44,7 @@ private:
      * @param end
      * @return a linear geometry
      */
-    geom::LineString* computeLine(const LinearLocation& start, const LinearLocation& end);
+    std::unique_ptr<geom::LineString> computeLine(const LinearLocation& start, const LinearLocation& end);
 
     /**
      * Assumes input is valid (e.g. start <= end)
@@ -53,7 +53,7 @@ private:
      * @param end
      * @return a linear geometry
      */
-    geom::Geometry* computeLinear(const LinearLocation& start, const LinearLocation& end);
+    std::unique_ptr<geom::Geometry> computeLinear(const LinearLocation& start, const LinearLocation& end);
 
 public:
     /**
@@ -67,7 +67,7 @@ public:
      * @param end the end location
      * @return the extracted subline
      */
-    static geom::Geometry* extract(const geom::Geometry* line, const LinearLocation& start, const LinearLocation& end);
+    static std::unique_ptr<geom::Geometry> extract(const geom::Geometry* line, const LinearLocation& start, const LinearLocation& end);
 
     ExtractLineByLocation(const geom::Geometry* line);
 
@@ -79,7 +79,7 @@ public:
      * @param end the end location
      * @return a linear geometry
      */
-    geom::Geometry* extract(const LinearLocation& start, const LinearLocation& end);
+    std::unique_ptr<geom::Geometry> extract(const LinearLocation& start, const LinearLocation& end);
 
 };
 }

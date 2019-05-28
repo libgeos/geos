@@ -104,7 +104,7 @@ FuzzyPointLocator::getLineWork(const geom::Geometry& geom)
                 lineGeom = gComp->getBoundary();
             }
             else {
-                lineGeom = gComp->clone();
+                lineGeom = gComp->clone().release();
             }
             lineGeoms->push_back(lineGeom);
         }

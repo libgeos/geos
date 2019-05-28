@@ -587,10 +587,10 @@ Geometry::Union(const Geometry* other) const
 
     // special case: if one input is empty ==> other input
     if(isEmpty()) {
-        return other->clone();
+        return other->clone().release();
     }
     if(other->isEmpty()) {
-        return clone();
+        return clone().release();
     }
 
     Geometry* out = nullptr;
@@ -612,20 +612,20 @@ Geometry::Union(const Geometry* other) const
 
         if(nullptr != (coll = dynamic_cast<const GeometryCollection*>(this))) {
             for(size_t i = 0; i < ngeomsThis; ++i) {
-                v->push_back(coll->getGeometryN(i)->clone());
+                v->push_back(coll->getGeometryN(i)->clone().release());
             }
         }
         else {
-            v->push_back(this->clone());
+            v->push_back(this->clone().release());
         }
 
         if(nullptr != (coll = dynamic_cast<const GeometryCollection*>(other))) {
             for(size_t i = 0; i < ngeomsOther; ++i) {
-                v->push_back(coll->getGeometryN(i)->clone());
+                v->push_back(coll->getGeometryN(i)->clone().release());
             }
         }
         else {
-            v->push_back(other->clone());
+            v->push_back(other->clone().release());
         }
 
         out = _factory->buildGeometry(v);
@@ -653,7 +653,7 @@ Geometry::difference(const Geometry* other) const
         return getFactory()->createGeometryCollection();
     }
     if(other->isEmpty()) {
-        return clone();
+        return clone().release();
     }
 
     return BinaryOp(this, other, overlayOp(OverlayOp::opDIFFERENCE)).release();
@@ -664,10 +664,10 @@ Geometry::symDifference(const Geometry* other) const
 {
     // special case: if either input is empty ==> other input
     if(isEmpty()) {
-        return other->clone();
+        return other->clone().release();
     }
     if(other->isEmpty()) {
-        return clone();
+        return clone().release();
     }
 
     // if envelopes are disjoint return a MULTI geom or
@@ -685,20 +685,20 @@ Geometry::symDifference(const Geometry* other) const
 
         if(nullptr != (coll = dynamic_cast<const GeometryCollection*>(this))) {
             for(size_t i = 0; i < ngeomsThis; ++i) {
-                v->push_back(coll->getGeometryN(i)->clone());
+                v->push_back(coll->getGeometryN(i)->clone().release());
             }
         }
         else {
-            v->push_back(this->clone());
+            v->push_back(this->clone().release());
         }
 
         if(nullptr != (coll = dynamic_cast<const GeometryCollection*>(other))) {
             for(size_t i = 0; i < ngeomsOther; ++i) {
-                v->push_back(coll->getGeometryN(i)->clone());
+                v->push_back(coll->getGeometryN(i)->clone().release());
             }
         }
         else {
-            v->push_back(other->clone());
+            v->push_back(other->clone().release());
         }
 
         return _factory->buildGeometry(v);

@@ -125,7 +125,7 @@ RectangleIntersection::clip_point(const geom::Point* g,
     double y = g->getY();
 
     if(rect.position(x, y) == Rectangle::Inside) {
-        parts.add(dynamic_cast<geom::Point*>(g->clone()));
+        parts.add(dynamic_cast<geom::Point*>(g->clone().release()));
     }
 }
 
@@ -388,7 +388,7 @@ RectangleIntersection::clip_polygon_to_linestrings(const geom::Polygon* g,
     // If everything was in, just clone the original
 
     if(clip_linestring_parts(g->getExteriorRing(), parts, rect)) {
-        toParts.add(dynamic_cast<geom::Polygon*>(g->clone()));
+        toParts.add(dynamic_cast<geom::Polygon*>(g->clone().release()));
         return;
     }
 
@@ -421,7 +421,7 @@ RectangleIntersection::clip_polygon_to_linestrings(const geom::Polygon* g,
     for(size_t i = 0, n = g->getNumInteriorRing(); i < n; ++i) {
         if(clip_linestring_parts(g->getInteriorRingN(i), parts, rect)) {
             // clones
-            LinearRing* hole = dynamic_cast<LinearRing*>(g->getInteriorRingN(i)->clone());
+            LinearRing* hole = dynamic_cast<LinearRing*>(g->getInteriorRingN(i)->clone().release());
             // becomes exterior
             Polygon* poly = _gf->createPolygon(hole, nullptr);
             toParts.add(poly);
@@ -454,7 +454,7 @@ RectangleIntersection::clip_polygon_to_polygons(const geom::Polygon* g,
 
     const LineString* shell = g->getExteriorRing();
     if(clip_linestring_parts(shell, parts, rect)) {
-        toParts.add(dynamic_cast<geom::Polygon*>(g->clone()));
+        toParts.add(dynamic_cast<geom::Polygon*>(g->clone().release()));
         return;
     }
 
@@ -493,7 +493,7 @@ RectangleIntersection::clip_polygon_to_polygons(const geom::Polygon* g,
         const LineString* hole = g->getInteriorRingN(i);
         if(clip_linestring_parts(hole, holeparts, rect)) {
             // becomes exterior
-            LinearRing* cloned = dynamic_cast<LinearRing*>(hole->clone());
+            LinearRing* cloned = dynamic_cast<LinearRing*>(hole->clone().release());
             Polygon* poly = _gf->createPolygon(cloned, nullptr);
             parts.add(poly);
         }
@@ -559,7 +559,7 @@ RectangleIntersection::clip_linestring(const geom::LineString* g,
     // If everything was in, just clone the original
 
     if(clip_linestring_parts(g, parts, rect)) {
-        parts.add(dynamic_cast<geom::LineString*>(g->clone()));
+        parts.add(dynamic_cast<geom::LineString*>(g->clone().release()));
     }
 
 }

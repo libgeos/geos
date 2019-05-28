@@ -84,7 +84,7 @@ public:
      *
      * @return A clone of this instance
      */
-    Geometry* clone() const override;
+    std::unique_ptr<Geometry> clone() const override;
 
     std::unique_ptr<CoordinateSequence> getCoordinates() const override;
 
@@ -182,7 +182,7 @@ public:
      *
      * @return a LineString with coordinates in the reverse order
      */
-    Geometry* reverse() const override;
+    std::unique_ptr<Geometry> reverse() const override;
 
 protected:
 
@@ -222,10 +222,10 @@ struct GEOS_DLL  LineStringLT {
 };
 
 
-inline Geometry*
+inline std::unique_ptr<Geometry>
 LineString::clone() const
 {
-    return new LineString(*this);
+    return std::unique_ptr<Geometry>(new LineString(*this));
 }
 
 } // namespace geos::geom

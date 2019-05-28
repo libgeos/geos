@@ -91,8 +91,8 @@ SnapOverlayOp::removeCommonBits(const geom::Geometry& p_geom0,
     cbr->add(&p_geom0);
     cbr->add(&p_geom1);
 
-    remGeom.first.reset(cbr->removeCommonBits(p_geom0.clone()));
-    remGeom.second.reset(cbr->removeCommonBits(p_geom1.clone()));
+    remGeom.first.reset(cbr->removeCommonBits(p_geom0.clone().release()));
+    remGeom.second.reset(cbr->removeCommonBits(p_geom1.clone().release()));
 }
 
 /*private*/

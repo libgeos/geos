@@ -80,10 +80,10 @@ public:
      *
      * @return a clone of this instance
      */
-    Geometry*
+    std::unique_ptr<Geometry>
     clone() const override
     {
-        return new Point(*this);
+        return std::unique_ptr<Geometry>(new Point(*this));
     }
 
     std::unique_ptr<CoordinateSequence> getCoordinates(void) const override;
@@ -136,7 +136,7 @@ public:
         // a Point is always in normalized form
     }
 
-    Geometry*
+    std::unique_ptr<Geometry>
     reverse() const override
     {
         return clone();
