@@ -183,13 +183,13 @@ private:
 
         const CoordinateSequence* seq = ring.getCoordinatesRO();
         for (size_t i = 1; i < seq->size(); i++) {
-            Coordinate ptPrev = seq->getAt(i - 1);
-            Coordinate pt = seq->getAt(i);
+            const Coordinate& ptPrev = seq->getAt(i - 1);
+            const Coordinate& pt = seq->getAt(i);
             addEdgeCrossing(ptPrev, pt, interiorPointY, crossings);
         }
     }
 
-    void addEdgeCrossing(Coordinate& p0, Coordinate& p1, double scanY, vector<double>& crossings)
+    void addEdgeCrossing(const Coordinate& p0, const Coordinate& p1, double scanY, vector<double>& crossings)
     {
         // skip non-crossing segments
         if (!intersectsHorizontalLine(p0, p1, scanY))
@@ -206,7 +206,7 @@ private:
     void findBestMidpoint(vector<double>& crossings)
     {
         // zero-area polygons will have no crossings
-        if (crossings.size() == 0) return;
+        if (crossings.empty()) return;
 
         //Assert.isTrue(0 == crossings.size() % 2, "Interior Point robustness failure: odd number of scanline crossings");
 
@@ -230,7 +230,7 @@ private:
     }
 
     static bool
-    isEdgeCrossingCounted(Coordinate& p0, Coordinate& p1, double scanY)
+    isEdgeCrossingCounted(const Coordinate& p0, const Coordinate& p1, double scanY)
     {
         // skip horizontal lines
         if (p0.y == p1.y)
