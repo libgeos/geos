@@ -34,7 +34,7 @@ namespace polygonize {
  *
  * @author mdavis
  */
-class HoleAssigner {
+class GEOS_DLL HoleAssigner {
 public:
     /**
      * Assigns hole rings to shell rings
