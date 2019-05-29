@@ -23,9 +23,12 @@
 #include <geos/export.h>
 
 #include <geos/algorithm/PointLocator.h> // for composition
+#include <geos/operation/distance/GeometryLocation.h>
+#include <geos/geom/CoordinateSequence.h>
 
 #include <array>
 #include <vector>
+#include <memory>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -40,12 +43,6 @@ class Polygon;
 class LineString;
 class Point;
 class Geometry;
-class CoordinateSequence;
-}
-namespace operation {
-namespace distance {
-class GeometryLocation;
-}
 }
 }
 
@@ -117,24 +114,7 @@ public:
      *         A NULL return means one of the geometries is empty.
      *
      */
-    static geom::CoordinateSequence* nearestPoints(
-        const geom::Geometry* g0,
-        const geom::Geometry* g1);
-
-    /**
-     * Compute the the closest points of two geometries.
-     *
-     * The points are presented in the same order as the input Geometries.
-     *
-     * @param g0 a {@link Geometry}
-     * @param g1 another {@link Geometry}
-     *
-     * @return the closest points in the geometries, ownership to caller.
-     *         A NULL return means one of the geometries is empty.
-     *
-     * @deprecated renamed to nearestPoints
-     */
-    static geom::CoordinateSequence* closestPoints(
+    static std::unique_ptr<geom::CoordinateSequence> nearestPoints(
         const geom::Geometry* g0,
         const geom::Geometry* g1);
 
@@ -164,7 +144,7 @@ public:
     DistanceOp(const geom::Geometry& g0, const geom::Geometry& g1,
                double terminateDistance);
 
-    ~DistanceOp();
+    ~DistanceOp() = default;
 
     /**
      * Report the distance between the closest points on the input geometries.
@@ -174,17 +154,6 @@ public:
     double distance();
 
     /**
-     * Report the coordinates of the closest points in the input geometries.
-     * The points are presented in the same order as the input Geometries.
-     *
-     * @return a pair of {@link Coordinate}s of the closest points
-     *         as a newly allocated object (ownership to caller)
-     *
-     * @deprecated renamed to nearestPoints
-     */
-    geom::CoordinateSequence* closestPoints();
-
-    /**
      * Report the coordinates of the nearest points in the input geometries.
      * The points are presented in the same order as the input Geometries.
      *
@@ -192,23 +161,9 @@ public:
      *         as a newly allocated object (ownership to caller)
      *
      */
-    geom::CoordinateSequence* nearestPoints();
+    std::unique_ptr<geom::CoordinateSequence> nearestPoints();
 
 private:
-
-    /**
-     * Report the locations of the closest points in the input geometries.
-     * The locations are presented in the same order as the input
-     * Geometries.
-     *
-     * @return a pair of {@link GeometryLocation}s for the closest points.
-     *         Ownership of returned object is left to this instance and
-     *         it's reference will be alive for the whole lifetime of it.
-     *
-     * NOTE: this is public in JTS, but we aim at API reduction here...
-     *
-     */
-    std::vector<GeometryLocation*>* nearestLocations();
 
     // input
     std::array<geom::Geometry const*, 2> geom;
@@ -216,28 +171,23 @@ private:
 
     // working
     algorithm::PointLocator ptLocator;
-    // TODO: use unique_ptr
-    std::vector<GeometryLocation*>* minDistanceLocation;
+    std::array<std::unique_ptr<GeometryLocation>, 2> minDistanceLocation;
     double minDistance;
+    bool computed = false;
 
-    // memory management
-    std::vector<geom::Coordinate*> newCoords;
-
-
-    void updateMinDistance(std::vector<GeometryLocation*>& locGeom,
-                           bool flip);
+    void updateMinDistance(std::array<std::unique_ptr<GeometryLocation>, 2> & locGeom, bool flip);
 
     void computeMinDistance();
 
     void computeContainmentDistance();
 
-    void computeInside(std::vector<GeometryLocation*>* locs,
+    void computeInside(std::vector<std::unique_ptr<GeometryLocation>> & locs,
                        const std::vector<const geom::Polygon*>& polys,
-                       std::vector<GeometryLocation*>* locPtPoly);
+                       std::array<std::unique_ptr<GeometryLocation>, 2> & locPtPoly);
 
-    void computeInside(GeometryLocation* ptLoc,
+    void computeInside(std::unique_ptr<GeometryLocation> & ptLoc,
                        const geom::Polygon* poly,
-                       std::vector<GeometryLocation*>* locPtPoly);
+                       std::array<std::unique_ptr<GeometryLocation>, 2> & locPtPoly);
 
     /**
      * Computes distance between facets (lines and points)
@@ -248,25 +198,25 @@ private:
     void computeMinDistanceLines(
         const std::vector<const geom::LineString*>& lines0,
         const std::vector<const geom::LineString*>& lines1,
-        std::vector<GeometryLocation*>& locGeom);
+        std::array<std::unique_ptr<GeometryLocation>, 2> & locGeom);
 
     void computeMinDistancePoints(
         const std::vector<const geom::Point*>& points0,
         const std::vector<const geom::Point*>& points1,
-        std::vector<GeometryLocation*>& locGeom);
+        std::array<std::unique_ptr<GeometryLocation>, 2> & locGeom);
 
     void computeMinDistanceLinesPoints(
         const std::vector<const geom::LineString*>& lines0,
         const std::vector<const geom::Point*>& points1,
-        std::vector<GeometryLocation*>& locGeom);
+        std::array<std::unique_ptr<GeometryLocation>, 2> & locGeom);
 
     void computeMinDistance(const geom::LineString* line0,
                             const geom::LineString* line1,
-                            std::vector<GeometryLocation*>& locGeom);
+                            std::array<std::unique_ptr<GeometryLocation>, 2> & locGeom);
 
     void computeMinDistance(const geom::LineString* line,
                             const geom::Point* pt,
-                            std::vector<GeometryLocation*>& locGeom);
+                            std::array<std::unique_ptr<GeometryLocation>, 2> & locGeom);
 };
 
 

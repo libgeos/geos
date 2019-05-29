@@ -64,7 +64,7 @@ void object::test<1>
 
     ensure_equals(dist.distance(), 10);
 
-    CSPtr cs(dist.closestPoints());
+    CSPtr cs(dist.nearestPoints());
     ensure_equals(cs->getAt(0), Coordinate(0, 0));
     ensure_equals(cs->getAt(1), Coordinate(10, 0));
 }
@@ -86,7 +86,7 @@ void object::test<2>
 
     ensure_equals(dist.distance(), 10);
 
-    CSPtr cs(dist.closestPoints());
+    CSPtr cs(dist.nearestPoints());
     ensure_equals(cs->getAt(0), Coordinate(0, 0));
     ensure_equals(cs->getAt(1), Coordinate(10, 0));
 
@@ -109,7 +109,7 @@ void object::test<3>
 
     ensure_equals(dist.distance(), 10);
 
-    CSPtr cs(dist.closestPoints());
+    CSPtr cs(dist.nearestPoints());
     ensure_equals(cs->getAt(0), Coordinate(3, 0));
     ensure_equals(cs->getAt(1), Coordinate(3, 10));
 
@@ -132,7 +132,7 @@ void object::test<4>
 
     ensure_equals(dist.distance(), 10);
 
-    CSPtr cs(dist.closestPoints());
+    CSPtr cs(dist.nearestPoints());
     ensure_equals(cs->getAt(0), Coordinate(3, 0));
     ensure_equals(cs->getAt(1), Coordinate(3, 10));
 
@@ -155,7 +155,7 @@ void object::test<5>
 
     ensure_equals(dist.distance(), 6);
 
-    CSPtr cs(dist.closestPoints());
+    CSPtr cs(dist.nearestPoints());
     ensure_equals(cs->getAt(0), Coordinate(35, 60));
     ensure_equals(cs->getAt(1), Coordinate(35, 54));
 
@@ -179,7 +179,7 @@ void object::test<6>
 
     ensure_equals(dist.distance(), 6);
 
-    CSPtr cs(dist.closestPoints());
+    CSPtr cs(dist.nearestPoints());
     ensure_equals(cs->getAt(0), Coordinate(35, 60));
     ensure_equals(cs->getAt(1), Coordinate(35, 54));
 
@@ -206,7 +206,7 @@ void object::test<7>
 
     ensure_equals(dist.distance(), 6);
 
-    CSPtr cs(dist.closestPoints());
+    CSPtr cs(dist.nearestPoints());
     ensure_equals(cs->getAt(0), Coordinate(35, 60));
     ensure_equals(cs->getAt(1), Coordinate(35, 54));
 }
@@ -231,7 +231,7 @@ void object::test<8>
 
     ensure_equals(dist.distance(), 0);
 
-    ensure_equals(dist.closestPoints(), (void*)nullptr);
+    ensure(dist.nearestPoints() == nullptr);
 }
 
 template<>
@@ -251,7 +251,7 @@ void object::test<9>
 
     ensure_equals(dist.distance(), 0);
 
-    CSPtr cs(dist.closestPoints());
+    CSPtr cs(dist.nearestPoints());
     ensure_equals(cs->getAt(0), Coordinate(10, 0));
     ensure_equals(cs->getAt(1), Coordinate(10, 0));
 
@@ -274,7 +274,7 @@ void object::test<10>
 
     ensure_equals(dist.distance(), 10);
 
-    CSPtr cs(dist.closestPoints());
+    CSPtr cs(dist.nearestPoints());
     ensure_equals(cs->getAt(0), Coordinate(10, 0));
     ensure_equals(cs->getAt(1), Coordinate(0, 0));
 
@@ -297,7 +297,7 @@ void object::test<11>
 
     ensure_equals(dist.distance(), 10);
 
-    CSPtr cs(dist.closestPoints());
+    CSPtr cs(dist.nearestPoints());
     ensure_equals(cs->getAt(0), Coordinate(3, 0));
     ensure_equals(cs->getAt(1), Coordinate(3, 10));
 
@@ -320,7 +320,7 @@ void object::test<12>
 
     ensure_equals(dist.distance(), 10);
 
-    CSPtr cs(dist.closestPoints());
+    CSPtr cs(dist.nearestPoints());
     ensure_equals(cs->getAt(0), Coordinate(3, 0));
     ensure_equals(cs->getAt(1), Coordinate(3, 10));
 
@@ -343,7 +343,7 @@ void object::test<13>
 
     ensure_equals(dist.distance(), 6);
 
-    CSPtr cs(dist.closestPoints());
+    CSPtr cs(dist.nearestPoints());
     ensure_equals(cs->getAt(0), Coordinate(35, 60));
     ensure_equals(cs->getAt(1), Coordinate(35, 54));
 
@@ -367,7 +367,7 @@ void object::test<14>
 
     ensure_equals(dist.distance(), 6);
 
-    CSPtr cs(dist.closestPoints());
+    CSPtr cs(dist.nearestPoints());
     ensure_equals(cs->getAt(0), Coordinate(35, 60));
     ensure_equals(cs->getAt(1), Coordinate(35, 54));
 }
@@ -393,7 +393,7 @@ void object::test<15>
 
     ensure_equals(dist.distance(), 6);
 
-    CSPtr cs(dist.closestPoints());
+    CSPtr cs(dist.nearestPoints());
     ensure_equals(cs->getAt(0), Coordinate(35, 60));
     ensure_equals(cs->getAt(1), Coordinate(35, 54));
 
@@ -419,8 +419,7 @@ void object::test<16>
 
     ensure_equals(dist.distance(), 0);
 
-    ensure_equals(dist.closestPoints(), (void*)nullptr);
-
+    ensure(dist.nearestPoints() == nullptr);
 }
 
 // Test for crash reported in Ticket #236:
@@ -442,7 +441,7 @@ void object::test<17>
     DistanceOp dist(g0.get(), g1.get());
     ensure_equals(dist.distance(), 0.25);
 
-    CSPtr cs(dist.closestPoints());
+    CSPtr cs(dist.nearestPoints());
     ensure_equals(cs->getAt(0), Coordinate(1, 0.25));
     ensure_equals(cs->getAt(1), Coordinate(1.25, 0.25));
 }
@@ -537,7 +536,7 @@ void object::test<20>()
     GeomPtr g1(gfact->createLineString(seq1.release()));
 
     DistanceOp dist(g0.get(), g1.get());
-    CSPtr seq(dist.closestPoints());
+    CSPtr seq(dist.nearestPoints());
 
     // input lines overlap, so generated point should intersect both geometries
     ensure(geos::geom::LineSegment(a0, a1).distance(seq->getAt(0)) < 1e-8);
@@ -546,8 +545,8 @@ void object::test<20>()
     ensure(geos::geom::LineSegment(b0, b1).distance(seq->getAt(1)) < 1e-8);
 
     // reverse argument order and check again
-    dist = DistanceOp(g1.get(), g0.get());
-    seq.reset(dist.closestPoints());
+    DistanceOp dist2(g1.get(), g0.get());
+    seq = dist2.nearestPoints();
 
     ensure(geos::geom::LineSegment(a0, a1).distance(seq->getAt(0)) < 1e-8);
     ensure(geos::geom::LineSegment(a0, a1).distance(seq->getAt(1)) < 1e-8);

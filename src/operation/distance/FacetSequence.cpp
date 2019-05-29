@@ -200,16 +200,14 @@ FacetSequence::updateNearestLocationsLineLine(size_t i, const Coordinate& p0, co
 {
     LineSegment seg0(p0, p1);
     LineSegment seg1(q0, q1);
-    std::unique_ptr<CoordinateSequence> closestPts(seg0.closestPoints(seg1));
-    Coordinate c0, c1;
-    closestPts->getAt(0, c0);
-    closestPts->getAt(1, c1);
-    GeometryLocation gl0(geom, i, c0);
-    GeometryLocation gl1(facetSeq.geom, j, c1);
+
+    auto closestPts = seg0.closestPoints(seg1);
+    GeometryLocation gl0(geom, i, closestPts[0]);
+    GeometryLocation gl1(facetSeq.geom, j, closestPts[1]);
+
     locs->clear();
     locs->push_back(gl0);
     locs->push_back(gl1);
-    return;
 }
 
 void

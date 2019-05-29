@@ -1293,7 +1293,7 @@ extern "C" {
             if(g1->isEmpty() || g2->isEmpty()) {
                 return 0;
             }
-            return geos::operation::distance::DistanceOp::nearestPoints(g1, g2);
+            return geos::operation::distance::DistanceOp::nearestPoints(g1, g2).release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
