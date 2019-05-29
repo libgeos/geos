@@ -244,6 +244,11 @@ endif()
 add_subdirectory(benchmarks)
 
 #-----------------------------------------------------------------------------
+# Documentation/Examples
+#-----------------------------------------------------------------------------
+add_subdirectory(doc)
+
+#-----------------------------------------------------------------------------
 # Install and export targets - support 'make install' or equivalent
 #-----------------------------------------------------------------------------
 include(CMakePackageConfigHelpers)
