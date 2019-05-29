@@ -218,7 +218,7 @@ Geometry::getCentroid(Coordinate& ret) const
     return true;
 }
 
-Point*
+std::unique_ptr<Point>
 Geometry::getInteriorPoint() const
 {
     Coordinate interiorPt;
@@ -241,7 +241,7 @@ Geometry::getInteriorPoint() const
             return nullptr;
         }
     }
-    Point* p = getFactory()->createPointFromInternalCoord(&interiorPt, this);
+    std::unique_ptr<Point> p(getFactory()->createPointFromInternalCoord(&interiorPt, this));
     return p;
 }
 

@@ -2280,13 +2280,13 @@ extern "C" {
         }
 
         try {
-            Geometry* ret = g1->getInteriorPoint();
-            if(! ret) {
+            auto ret = g1->getInteriorPoint();
+            if(ret == nullptr) {
                 const GeometryFactory* gf = handle->geomFactory;
                 // return an empty point
                 return gf->createPoint();
             }
-            return ret;
+            return ret.release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
