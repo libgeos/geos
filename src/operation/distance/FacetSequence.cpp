@@ -60,26 +60,23 @@ FacetSequence::distance(const FacetSequence& facetSeq) const
 {
     bool isPointThis = isPoint();
     bool isPointOther = facetSeq.isPoint();
-    double distance;
 
     if(isPointThis && isPointOther) {
         Coordinate pt = pts->getAt(start);
         Coordinate seqPt = facetSeq.pts->getAt(facetSeq.start);
-        distance = pt.distance(seqPt);
+        return pt.distance(seqPt);
     }
     else if(isPointThis) {
         Coordinate pt = pts->getAt(start);
-        distance = computeDistancePointLine(pt, facetSeq, nullptr);
+        return computeDistancePointLine(pt, facetSeq, nullptr);
     }
     else if(isPointOther) {
         Coordinate seqPt = facetSeq.pts->getAt(facetSeq.start);
-        distance = computeDistancePointLine(seqPt, *this, nullptr);
+        return computeDistancePointLine(seqPt, *this, nullptr);
     }
     else {
-        distance = computeDistanceLineLine(facetSeq, nullptr);
+        return computeDistanceLineLine(facetSeq, nullptr);
     }
-
-    return distance;
 }
 
 /*
