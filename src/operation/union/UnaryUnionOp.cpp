@@ -58,7 +58,7 @@ UnaryUnionOp::unionWithNull(std::unique_ptr<geom::Geometry> g0,
         return g0;
     }
 
-    ret.reset(g0->Union(g1.get()));
+    ret = g0->Union(g1.get());
     return ret;
 }
 

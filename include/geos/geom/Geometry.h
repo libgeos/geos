@@ -573,19 +573,19 @@ public:
     virtual std::string toText() const;
 
     /// Returns a buffer region around this Geometry having the given width.
-    //
+    ///
     /// @throws util::TopologyException if a robustness error occurs
     ///
-    virtual Geometry* buffer(double distance) const;
+    std::unique_ptr<Geometry> buffer(double distance) const;
 
     /// \brief
     /// Returns a buffer region around this Geometry having the
     /// given width and with a specified number of segments used
     /// to approximate curves.
-    //
+    ///
     /// @throws util::TopologyException if a robustness error occurs
     ///
-    virtual Geometry* buffer(double distance, int quadrantSegments) const;
+    std::unique_ptr<Geometry> buffer(double distance, int quadrantSegments) const;
 
     /** \brief
      * Computes a buffer area around this geometry having the given
@@ -623,7 +623,7 @@ public:
      *
      * @see BufferOp
      */
-    virtual Geometry* buffer(double distance, int quadrantSegments,
+    std::unique_ptr<Geometry> buffer(double distance, int quadrantSegments,
                              int endCapStyle) const;
 
     /// \brief
@@ -648,7 +648,7 @@ public:
      *         non-empty GeometryCollection
      *
      */
-    virtual Geometry* intersection(const Geometry* other) const;
+    std::unique_ptr<Geometry> intersection(const Geometry* other) const;
 
     /** \brief
      * Returns a Geometry representing all the points in this Geometry
@@ -659,7 +659,7 @@ public:
      *         non-empty GeometryCollection
      *
      */
-    Geometry* Union(const Geometry* other) const;
+    std::unique_ptr<Geometry> Union(const Geometry* other) const;
     // throw(IllegalArgumentException *, TopologyException *);
 
     /**
@@ -692,7 +692,7 @@ public:
      *         non-empty GeometryCollection
      *
      */
-    virtual Geometry* difference(const Geometry* other) const;
+    std::unique_ptr<Geometry> difference(const Geometry* other) const;
 
     /** \brief
      * Returns a set combining the points in this Geometry not in other,
@@ -703,7 +703,7 @@ public:
      *         non-empty GeometryCollection
      *
      */
-    virtual Geometry* symDifference(const Geometry* other) const;
+    std::unique_ptr<Geometry> symDifference(const Geometry* other) const;
 
     /** \brief
      * Returns true iff the two Geometrys are of the same type and their
@@ -873,15 +873,6 @@ protected:
                double tolerance) const;
     int SRID;
 
-    /// @deprecated
-    //Geometry* toInternalGeometry(const Geometry *g) const;
-
-    /// @deprecated
-    //Geometry* fromInternalGeometry(const Geometry *g) const;
-
-    /// Polygon overrides to check for actual rectangle
-    //virtual bool isRectangle() const { return false; } -- moved to public
-
     Geometry(const Geometry& geom);
 
     /** \brief
@@ -911,7 +902,7 @@ private:
     static GeometryChangedFilter geometryChangedFilter;
 
     /// The GeometryFactory used to create this Geometry
-    //
+    ///
     /// Externally owned
     ///
     const GeometryFactory* _factory;

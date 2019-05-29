@@ -137,11 +137,11 @@ CommonBitsRemover::getCommonCoordinate()
  * @param geom the Geometry from which to remove the common coordinate bits
  * @return the shifted Geometry
  */
-Geometry*
+void
 CommonBitsRemover::removeCommonBits(Geometry* geom)
 {
     if(commonCoord.x == 0.0 && commonCoord.y == 0.0) {
-        return geom;
+        return;
     }
 
     Coordinate invCoord(commonCoord);
@@ -155,8 +155,6 @@ CommonBitsRemover::removeCommonBits(Geometry* geom)
 #if GEOS_DEBUG
     std::cerr << "CommonBits removed: " << *geom << std::endl;
 #endif
-
-    return geom;
 }
 
 /**

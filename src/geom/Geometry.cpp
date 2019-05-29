@@ -521,22 +521,22 @@ Geometry::toText() const
     return writer.write(this);
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 Geometry::buffer(double p_distance) const
 {
-    return BufferOp::bufferOp(this, p_distance);
+    return std::unique_ptr<Geometry>(BufferOp::bufferOp(this, p_distance));
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 Geometry::buffer(double p_distance, int quadrantSegments) const
 {
-    return BufferOp::bufferOp(this, p_distance, quadrantSegments);
+    return std::unique_ptr<Geometry>(BufferOp::bufferOp(this, p_distance, quadrantSegments));
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 Geometry::buffer(double p_distance, int quadrantSegments, int endCapStyle) const
 {
-    return BufferOp::bufferOp(this, p_distance, quadrantSegments, endCapStyle);
+    return std::unique_ptr<Geometry>(BufferOp::bufferOp(this, p_distance, quadrantSegments, endCapStyle));
 }
 
 std::unique_ptr<Geometry>
@@ -545,7 +545,7 @@ Geometry::convexHull() const
     return ConvexHull(this).getConvexHull();
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 Geometry::intersection(const Geometry* other) const
 {
     /**
@@ -554,7 +554,7 @@ Geometry::intersection(const Geometry* other) const
 
     // special case: if one input is empty ==> empty
     if(isEmpty() || other->isEmpty()) {
-        return getFactory()->createGeometryCollection();
+        return std::unique_ptr<Geometry>(getFactory()->createGeometryCollection());
     }
 
 #ifdef USE_RECTANGLE_INTERSECTION
@@ -575,23 +575,19 @@ Geometry::intersection(const Geometry* other) const
     }
 #endif
 
-    return BinaryOp(this, other, overlayOp(OverlayOp::opINTERSECTION)).release();
+    return BinaryOp(this, other, overlayOp(OverlayOp::opINTERSECTION));
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 Geometry::Union(const Geometry* other) const
-//throw(TopologyException *, IllegalArgumentException *)
 {
-
     // special case: if one input is empty ==> other input
     if(isEmpty()) {
-        return other->clone().release();
+        return other->clone();
     }
     if(other->isEmpty()) {
-        return clone().release();
+        return clone();
     }
-
-    Geometry* out = nullptr;
 
 #ifdef SHORTCIRCUIT_PREDICATES
     // if envelopes are disjoint return a MULTI geom or
@@ -626,12 +622,12 @@ Geometry::Union(const Geometry* other) const
             v->push_back(other->clone().release());
         }
 
-        out = _factory->buildGeometry(v);
+        std::unique_ptr<Geometry>out(_factory->buildGeometry(v));
         return out;
     }
 #endif
 
-    return BinaryOp(this, other, overlayOp(OverlayOp::opUNION)).release();
+    return BinaryOp(this, other, overlayOp(OverlayOp::opUNION));
 }
 
 /* public */
@@ -642,30 +638,30 @@ Geometry::Union() const
     return UnaryUnionOp::Union(*this);
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 Geometry::difference(const Geometry* other) const
 //throw(IllegalArgumentException *)
 {
     // special case: if A.isEmpty ==> empty; if B.isEmpty ==> A
     if(isEmpty()) {
-        return getFactory()->createGeometryCollection();
+        return std::unique_ptr<Geometry>(getFactory()->createGeometryCollection());
     }
     if(other->isEmpty()) {
-        return clone().release();
+        return clone();
     }
 
-    return BinaryOp(this, other, overlayOp(OverlayOp::opDIFFERENCE)).release();
+    return BinaryOp(this, other, overlayOp(OverlayOp::opDIFFERENCE));
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 Geometry::symDifference(const Geometry* other) const
 {
     // special case: if either input is empty ==> other input
     if(isEmpty()) {
-        return other->clone().release();
+        return other->clone();
     }
     if(other->isEmpty()) {
-        return clone().release();
+        return clone();
     }
 
     // if envelopes are disjoint return a MULTI geom or
@@ -699,10 +695,10 @@ Geometry::symDifference(const Geometry* other) const
             v->push_back(other->clone().release());
         }
 
-        return _factory->buildGeometry(v);
+        return std::unique_ptr<Geometry>(_factory->buildGeometry(v));
     }
 
-    return BinaryOp(this, other, overlayOp(OverlayOp::opSYMDIFFERENCE)).release();
+    return BinaryOp(this, other, overlayOp(OverlayOp::opSYMDIFFERENCE));
 }
 
 int

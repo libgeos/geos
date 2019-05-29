@@ -943,7 +943,7 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             GeomPtr gRealRes;
             if(gB) {
 #ifndef USE_BINARYOP
-                gRealRes.reset(gA->Union(gB));
+                gRealRes = gA->Union(gB);
 #else
                 gRealRes = BinaryOp(gA, gB, overlayOp(OverlayOp::opUNION));
 #endif

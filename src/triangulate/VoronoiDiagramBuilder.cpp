@@ -138,7 +138,7 @@ VoronoiDiagramBuilder::clipGeometryCollection(const geom::GeometryCollection& ge
             // TODO: check if userData is correctly cloned here?
         }
         else if(clipEnv.intersects(g->getEnvelopeInternal())) {
-            result.reset(clipPoly->intersection(g));
+            result = clipPoly->intersection(g);
             result->setUserData(((Geometry*)g)->getUserData()); // TODO: needed ?
         }
 

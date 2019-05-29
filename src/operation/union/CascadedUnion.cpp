@@ -201,7 +201,7 @@ CascadedUnion::extractByEnvelope(geom::Envelope const& env,
 geom::Geometry*
 CascadedUnion::unionActual(geom::Geometry* g0, geom::Geometry* g1)
 {
-    return g0->Union(g1);
+    return g0->Union(g1).release();
 }
 
 } // namespace geos.operation.union

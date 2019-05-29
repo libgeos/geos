@@ -139,7 +139,7 @@ GeometrySnapper::snapToSelf(double snapTolerance, bool cleanResult)
     if(cleanResult && (dynamic_cast<const Polygon*>(result.get()) ||
                        dynamic_cast<const MultiPolygon*>(result.get()))) {
         // TODO: use better cleaning approach
-        result.reset(result->buffer(0));
+        result = result->buffer(0);
     }
 
     return result;

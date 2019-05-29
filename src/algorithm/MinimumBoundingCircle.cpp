@@ -42,7 +42,7 @@ namespace geos {
 namespace algorithm { // geos.algorithm
 
 /*public*/
-Geometry*
+std::unique_ptr<Geometry>
 MinimumBoundingCircle::getCircle()
 {
     //TODO: ensure the output circle contains the extermal points.
@@ -50,9 +50,9 @@ MinimumBoundingCircle::getCircle()
 
     compute();
     if(centre.isNull()) {
-        return input->getFactory()->createPolygon();
+        return std::unique_ptr<Geometry>(input->getFactory()->createPolygon());
     }
-    Point* centrePoint = input->getFactory()->createPoint(centre);
+    std::unique_ptr<Geometry> centrePoint(input->getFactory()->createPoint(centre));
     if(radius == 0.0) {
         return centrePoint;
     }

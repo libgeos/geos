@@ -63,7 +63,7 @@ private:
      * @return a copy of the input Geometry with common bits removed
      *         (caller takes responsibility of its deletion)
      */
-    geom::Geometry* removeCommonBits(const geom::Geometry* geom0);
+    std::unique_ptr<geom::Geometry> removeCommonBits(const geom::Geometry* geom0);
 
     /** \brief
      *
@@ -98,7 +98,7 @@ public:
      * @return the Geometry representing the set-theoretic
      *  intersection of the input Geometries.
      */
-    geom::Geometry* intersection(
+    std::unique_ptr<geom::Geometry> intersection(
         const geom::Geometry* geom0,
         const geom::Geometry* geom1);
 
@@ -110,7 +110,7 @@ public:
      * @return the Geometry representing the set-theoretic union
      * of the input Geometries.
      */
-    geom::Geometry* Union(
+    std::unique_ptr<geom::Geometry> Union(
         const geom::Geometry* geom0,
         const geom::Geometry* geom1);
 
@@ -122,7 +122,7 @@ public:
      * @return the Geometry representing the set-theoretic difference
      * of the input Geometries.
      */
-    geom::Geometry* difference(
+    std::unique_ptr<geom::Geometry> difference(
         const geom::Geometry* geom0,
         const geom::Geometry* geom1);
 
@@ -134,7 +134,7 @@ public:
      * @return the Geometry representing the set-theoretic symmetric
      * difference of the input Geometries.
      */
-    geom::Geometry* symDifference(
+    std::unique_ptr<geom::Geometry> symDifference(
         const geom::Geometry* geom0,
         const geom::Geometry* geom1);
 
@@ -145,7 +145,7 @@ public:
      * @param distance the buffer distance
      * @return the Geometry representing the buffer of the input Geometry.
      */
-    geom::Geometry* buffer(
+    std::unique_ptr<geom::Geometry> buffer(
         const geom::Geometry* geom0,
         double distance);
 
@@ -160,8 +160,8 @@ public:
      * @param result the result Geometry to modify
      * @return the result Geometry with the required precision
      */
-    geom::Geometry* computeResultPrecision(
-        geom::Geometry* result);
+    std::unique_ptr<geom::Geometry> computeResultPrecision(
+        std::unique_ptr<geom::Geometry> result);
 };
 
 } // namespace geos.precision

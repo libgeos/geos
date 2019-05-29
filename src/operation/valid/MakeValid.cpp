@@ -68,22 +68,20 @@ nodeLineWithFirstCoordinate(const geom::Geometry* geom)
   const auto geomType = geom->getGeometryTypeId();
   assert( geomType == GEOS_LINESTRING || geomType == GEOS_MULTILINESTRING );
 
-  geom::Geometry* point;
+  std::unique_ptr<geom::Geometry> point;
   if( geomType == GEOS_LINESTRING ) {
       auto line = dynamic_cast<const geom::LineString*>(geom);
       assert(line);
-      point = line->getPointN(0);
+      point.reset(line->getPointN(0));
   } else {
       auto mls = dynamic_cast<const geom::MultiLineString*>(geom);
       assert(mls);
       auto line = dynamic_cast<const geom::LineString*>(mls->getGeometryN(0));
       assert(line);
-      point = line->getPointN(0);
+      point.reset(line->getPointN(0));
   }
-  auto noded = geom->Union(point);
-  delete point;
 
-  return std::unique_ptr<geom::Geometry>(noded);
+  return geom->Union(point.get());
 }
 
 

@@ -76,7 +76,7 @@ private:
         CoordinateSequence::Ptr transformCoordinates(const CoordinateSequence* coords, const Geometry* parent) override;
         Geometry::Ptr transformPolygon(const Polygon* geom, const Geometry* parent) override;
         Geometry::Ptr transformMultiPolygon(const MultiPolygon* geom, const Geometry* parent) override;
-        Geometry* createValidArea(const Geometry* roughAreaGeom);
+        Geometry::Ptr createValidArea(const Geometry* roughAreaGeom);
     };
 
 }; // Densifier

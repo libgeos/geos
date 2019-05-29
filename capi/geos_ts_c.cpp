@@ -1703,7 +1703,7 @@ extern "C" {
         }
 
         try {
-            return g1->intersection(g2);
+            return g1->intersection(g2).release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -1729,7 +1729,7 @@ extern "C" {
         }
 
         try {
-            Geometry* g3 = g1->buffer(width, quadrantsegments);
+            Geometry* g3 = g1->buffer(width, quadrantsegments).release();
             return g3;
         }
         catch(const std::exception& e) {
@@ -2040,7 +2040,7 @@ extern "C" {
         }
 
         try {
-            return g1->difference(g2);
+            return g1->difference(g2).release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -2093,7 +2093,7 @@ extern "C" {
         }
 
         try {
-            return g1->symDifference(g2);
+            return g1->symDifference(g2).release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -2120,7 +2120,7 @@ extern "C" {
         }
 
         try {
-            return g1->Union(g2);
+            return g1->Union(g2).release();
         }
         catch(const std::exception& e) {
 #if VERBOSE_EXCEPTIONS
