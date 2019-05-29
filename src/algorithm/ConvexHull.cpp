@@ -352,7 +352,7 @@ ConvexHull::lineOrPolygon(const Coordinate::ConstVect& input)
     if(cleaned.size() == 3) { // shouldn't this be 2 ??
         cleaned.resize(2);
         auto cl1 = toCoordinateSequence(cleaned);
-        std::unique_ptr<LineString> ret(geomFactory->createLineString(cl1.release()));
+        std::unique_ptr<Geometry> ret(geomFactory->createLineString(cl1.release()));
         return ret;
     }
     auto cl2 = toCoordinateSequence(cleaned);
