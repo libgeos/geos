@@ -14,7 +14,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/polygonize/Polygonizer.java rev. 974
+ * Last port: operation/polygonize/Polygonizer.java 0b3c7e3eb0d3e
  *
  **********************************************************************/
 
@@ -38,7 +38,9 @@
 namespace geos {
 namespace geom {
 class Geometry;
+
 class LineString;
+
 class Polygon;
 }
 namespace operation {
@@ -112,13 +114,7 @@ private:
 
     void findShellsAndHoles(const std::vector<EdgeRing*>& edgeRingList);
 
-    static void assignHolesToShells(const std::vector<EdgeRing*>& holeList,
-                                    std::vector<EdgeRing*>& shellList);
-
-    static void assignHoleToShell(EdgeRing* holeER,
-                                  std::vector<EdgeRing*>& shellList);
-
-    static void findDisjointShells(std::vector<EdgeRing*>& shellList);
+    void findDisjointShells();
 
     static void findOuterShells(std::vector<EdgeRing*>& shellList);
 
@@ -209,6 +205,8 @@ public:
      */
     const std::vector<const geom::LineString*>& getDangles();
 
+    bool hasDangles();
+
     /** \brief
      * Get the list of cut edges found during polygonization.
      *
@@ -217,6 +215,8 @@ public:
      *
      */
     const std::vector<const geom::LineString*>& getCutEdges();
+
+    bool hasCutEdges();
 
     /** \brief
      * Get the list of lines forming invalid rings found during
@@ -227,6 +227,10 @@ public:
      *
      */
     const std::vector<geom::LineString*>& getInvalidRingLines();
+
+    bool hasInvalidRingLines();
+
+    bool allInputsFormPolygons();
 
 // This seems to be needed by    GCC 2.95.4
     friend class Polygonizer::LineStringAdder;

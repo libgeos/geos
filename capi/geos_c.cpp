@@ -506,6 +506,12 @@ extern "C" {
     }
 
     Geometry*
+    GEOSCoverageUnion(const Geometry* g)
+    {
+        return GEOSCoverageUnion_r(handle, g);
+    }
+
+    Geometry*
     GEOSNode(const Geometry* g)
     {
         return GEOSNode_r(handle, g);

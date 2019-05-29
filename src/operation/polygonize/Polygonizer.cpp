@@ -14,17 +14,19 @@
  *
  **********************************************************************
  *
- * Last port: operation/polygonize/Polygonizer.java rev. 974
+ * Last port: operation/polygonize/Polygonizer.java 0b3c7e3eb0d3e
  *
  **********************************************************************/
 
 #include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/operation/polygonize/PolygonizeGraph.h>
 #include <geos/operation/polygonize/EdgeRing.h>
+#include <geos/operation/polygonize/HoleAssigner.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Polygon.h>
 #include <geos/util/Interrupt.h>
+#include <geos/index/strtree/STRtree.h>
 // std
 #include <vector>
 
@@ -171,6 +173,12 @@ Polygonizer::getDangles()
     return dangles;
 }
 
+bool
+Polygonizer::hasDangles() {
+    polygonize();
+    return !dangles.empty();
+}
+
 /* public */
 const vector<const LineString*>&
 Polygonizer::getCutEdges()
@@ -179,12 +187,33 @@ Polygonizer::getCutEdges()
     return cutEdges;
 }
 
+bool
+Polygonizer::hasCutEdges()
+{
+    polygonize();
+    return !cutEdges.empty();
+}
+
 /* public */
 const vector<LineString*>&
 Polygonizer::getInvalidRingLines()
 {
     polygonize();
     return invalidRingLines;
+}
+
+bool
+Polygonizer::hasInvalidRingLines()
+{
+    polygonize();
+    return !invalidRingLines.empty();
+}
+
+bool
+Polygonizer::allInputsFormPolygons()
+{
+    polygonize();
+    return !hasCutEdges() && !hasDangles() &&!hasInvalidRingLines();
 }
 
 /* public */
@@ -225,11 +254,11 @@ Polygonizer::polygonize()
     cerr << "                           " << shellList.size() << " shells" << endl;
 #endif
 
-    assignHolesToShells(holeList, shellList);
+    HoleAssigner::assignHolesToShells(holeList, shellList);
 
     bool includeAll = true;
     if (extractOnlyPolygonal) {
-        findDisjointShells(shellList);
+        findDisjointShells();
         includeAll = false;
     }
     polyList = extractPolygons(shellList, includeAll);
@@ -271,46 +300,18 @@ Polygonizer::findShellsAndHoles(const vector<EdgeRing*>& edgeRingList)
     }
 }
 
-/* private */
-void
-Polygonizer::assignHolesToShells(const vector<EdgeRing*>& holeList, vector<EdgeRing*>& shellList)
-{
-    for(const auto& holeER : holeList) {
-        assignHoleToShell(holeER, shellList);
-        GEOS_CHECK_FOR_INTERRUPTS();
-    }
-}
-
-/* private */
-void
-Polygonizer::assignHoleToShell(EdgeRing* holeER,
-                               vector<EdgeRing*>& shellList)
-{
-    EdgeRing* shell = EdgeRing::findEdgeRingContaining(holeER, &shellList);
-
-    if(shell != nullptr) {
-        shell->addHole(holeER);
-    }
-}
 
 void
-Polygonizer::findDisjointShells(vector<EdgeRing*> & shells)
-{
-    findOuterShells(shells);
+Polygonizer::findDisjointShells() {
+    findOuterShells(shellList);
 
-    bool isMoreToScan;
-    do {
-        isMoreToScan = false;
-        for (EdgeRing* er : shells) {
-            if (er->isIncludedSet()) {
-                continue;
-            }
-            er->updateIncluded();
-            if (!er->isIncludedSet()) {
-                isMoreToScan = true;
-            }
+    for (EdgeRing *er : shellList) {
+        if (!er->isIncludedSet()) {
+            er->updateIncludedRecursive();
         }
-    } while (isMoreToScan);
+    }
+
+    return;
 }
 
 void

@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/polygonize/EdgeRing.java rev. 974
+ * Last port: operation/polygonize/EdgeRing.java 0b3c7e3eb0d3e
  *
  **********************************************************************/
 
@@ -30,6 +30,9 @@
 #include <geos/algorithm/Orientation.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util.h> // TODO: drop this, includes too much
+#include <geos/index/strtree/STRtree.h>
+#include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
+#include <geos/geom/Location.h>
 
 #include <vector>
 #include <cassert>
@@ -48,20 +51,19 @@ namespace polygonize { // geos.operation.polygonize
 
 /*public*/
 EdgeRing*
-EdgeRing::findEdgeRingContaining(EdgeRing* testEr,
-                                 vector<EdgeRing*>* shellList)
+EdgeRing::findEdgeRingContaining(const std::vector<EdgeRing*> & erList)
 {
-    const LinearRing* testRing = testEr->getRingInternal();
+    const LinearRing* testRing = getRingInternal();
     if(! testRing) {
         return nullptr;
     }
     const Envelope* testEnv = testRing->getEnvelopeInternal();
-    EdgeRing* minShell = nullptr;
-    const Envelope* minShellEnv = nullptr;
+    EdgeRing* minRing = nullptr;
+    const Envelope* minRingEnv = nullptr;
 
-    for(EdgeRing* tryShell : *shellList) {
-        auto tryShellRing = tryShell->getRingInternal();
-        auto tryShellEnv = tryShellRing->getEnvelopeInternal();
+    for(auto& tryEdgeRing : erList) {
+        auto tryRing = tryEdgeRing->getRingInternal();
+        auto tryShellEnv = tryRing->getEnvelopeInternal();
         // the hole envelope cannot equal the shell envelope
         // (also guards against testing rings against themselves)
         if (tryShellEnv->equals(testEnv)) {
@@ -72,20 +74,18 @@ EdgeRing::findEdgeRingContaining(EdgeRing* testEr,
             continue;
         }
 
-        auto tryCoords = tryShellRing->getCoordinatesRO();
+        auto tryCoords = tryRing->getCoordinatesRO();
         Coordinate testPt = ptNotInList(testRing->getCoordinatesRO(), tryCoords); // TODO: don't copy testPt !
 
-        bool isContained = PointLocation::isInRing(testPt, tryCoords);
-
         // check if this new containing ring is smaller than the current minimum ring
-        if(isContained) {
-            if(minShell == nullptr || minShellEnv->contains(tryShellEnv)) {
-                minShell = tryShell;
-                minShellEnv = minShell->getRingInternal()->getEnvelopeInternal();
+        if(tryEdgeRing->isInRing(testPt)) {
+            if(minRing == nullptr || minRingEnv->contains(tryShellEnv)) {
+                minRing = tryEdgeRing;
+                minRingEnv = minRing->getRingInternal()->getEnvelopeInternal();
             }
         }
     }
-    return minShell;
+    return minRing;
 }
 
 std::vector<PolygonizeDirectedEdge*>
@@ -287,6 +287,56 @@ EdgeRing::addEdge(const CoordinateSequence* coords, bool isForward,
             coordList->add(coords->getAt(i - 1), false);
         }
     }
+}
+
+EdgeRing*
+EdgeRing::getOuterHole() const {
+    // Only shells can have outer holes
+    if (isHole()) {
+        return nullptr;
+    }
+
+    // A shell is an outer shell if any edge is also in an outer hole.
+    // A hole is an outer shell if it is not contained by a shell.
+    for (auto& de : deList) {
+        auto adjRing = (dynamic_cast<PolygonizeDirectedEdge*>(de->getSym()))->getRing();
+        if (adjRing->isOuterHole()) {
+            return adjRing;
+        }
+    }
+
+    return nullptr;
+}
+
+void
+EdgeRing::updateIncludedRecursive() {
+    visitedByUpdateIncludedRecursive = true;
+
+    if (isHole()) {
+        return;
+    }
+
+    for (const auto& de : deList) {
+        auto adjShell = (dynamic_cast<const PolygonizeDirectedEdge*>(de->getSym()))->getRing()->getShell();
+
+        if (adjShell != nullptr) {
+            if (!adjShell->isIncludedSet() && !adjShell->visitedByUpdateIncludedRecursive) {
+                adjShell->updateIncludedRecursive();
+            }
+        }
+    }
+
+    for (const auto& de : deList) {
+        auto adjShell = (dynamic_cast<const PolygonizeDirectedEdge*>(de->getSym()))->getRing()->getShell();
+
+        if (adjShell != nullptr) {
+            if (adjShell->isIncludedSet()) {
+                setIncluded(!adjShell->isIncluded());
+                return;
+            }
+        }
+    }
+
 }
 
 } // namespace geos.operation.polygonize

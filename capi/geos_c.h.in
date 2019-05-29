@@ -573,6 +573,11 @@ extern GEOSGeometry GEOS_DLL *GEOSUnion_r(GEOSContextHandle_t handle,
                                           const GEOSGeometry* g2);
 extern GEOSGeometry GEOS_DLL *GEOSUnaryUnion_r(GEOSContextHandle_t handle,
                                           const GEOSGeometry* g);
+/* GEOSCoverageUnion is an optimized union algorithm for polygonal inputs that are correctly
+ * noded and do not overlap. It will not generate an error (return NULL) for inputs that
+ * do not satisfy this constraint. */
+extern GEOSGeometry GEOS_DLL *GEOSCoverageUnion_r(GEOSContextHandle_t handle,
+                                                  const GEOSGeometry* g);
 /* @deprecated in 3.3.0: use GEOSUnaryUnion_r instead */
 extern GEOSGeometry GEOS_DLL *GEOSUnionCascaded_r(GEOSContextHandle_t handle,
                                                   const GEOSGeometry* g);
@@ -1603,6 +1608,11 @@ extern GEOSGeometry GEOS_DLL *GEOSSymDifference(const GEOSGeometry* g1, const GE
 extern GEOSGeometry GEOS_DLL *GEOSBoundary(const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSUnion(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern GEOSGeometry GEOS_DLL *GEOSUnaryUnion(const GEOSGeometry* g);
+
+/* GEOSCoverageUnion is an optimized union algorithm for polygonal inputs that are correctly
+ * noded and do not overlap. It will not generate an error (return NULL) for inputs that
+ * do not satisfy this constraint. */
+extern GEOSGeometry GEOS_DLL *GEOSCoverageUnion(const GEOSGeometry *g);
 
 /* @deprecated in 3.3.0: use GEOSUnaryUnion instead */
 extern GEOSGeometry GEOS_DLL *GEOSUnionCascaded(const GEOSGeometry* g);

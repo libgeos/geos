@@ -13,7 +13,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/polygonize/EdgeRing.java rev. 974
+ * Last port: operation/polygonize/EdgeRing.java 0b3c7e3eb0d3e
  *
  **********************************************************************/
 
@@ -22,6 +22,7 @@
 #define GEOS_OP_POLYGONIZE_EDGERING_H
 
 #include <geos/export.h>
+#include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
 #include <geos/operation/polygonize/PolygonizeDirectedEdge.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/LinearRing.h>
@@ -29,6 +30,7 @@
 
 #include <memory>
 #include <vector>
+#include <geos/geom/Location.h>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -45,6 +47,11 @@ class Coordinate;
 }
 namespace planargraph {
 class DirectedEdge;
+}
+namespace index {
+namespace strtree {
+class STRtree;
+}
 }
 }
 
@@ -66,14 +73,16 @@ private:
     // cache the following data for efficiency
     std::unique_ptr<geom::LinearRing> ring;
     std::unique_ptr<geom::CoordinateSequence> ringPts;
+    std::unique_ptr<algorithm::locate::PointOnGeometryLocator> ringLocator;
 
     std::unique_ptr<std::vector<geom::Geometry*>> holes;
 
-    const EdgeRing* shell = nullptr;
+    EdgeRing* shell = nullptr;
     bool is_hole;
     bool is_processed = false;
     bool is_included_set = false;
     bool is_included = false;
+    bool visitedByUpdateIncludedRecursive = false;
 
     /** \brief
      * Computes the list of coordinates which are contained in this ring.
@@ -87,6 +96,13 @@ private:
                         bool isForward,
                         geom::CoordinateSequence* coordList);
 
+    algorithm::locate::PointOnGeometryLocator* getLocator() {
+        if (ringLocator == nullptr) {
+            ringLocator.reset(new algorithm::locate::IndexedPointInAreaLocator(*getRingInternal()));
+        }
+        return ringLocator.get();
+    }
+
 public:
     /** \brief
      * Adds a DirectedEdge which is known to form part of this ring.
@@ -98,7 +114,7 @@ public:
     /**
      * \brief
      * Find the innermost enclosing shell EdgeRing
-     * containing the argument EdgeRing, if any.
+     * containing this, if any.
      *
      * The innermost enclosing ring is the <i>smallest</i> enclosing ring.
      * The algorithm used depends on the fact that:
@@ -113,9 +129,7 @@ public:
      * @return containing EdgeRing, if there is one
      * @return null if no containing EdgeRing is found
      */
-    static EdgeRing* findEdgeRingContaining(
-        EdgeRing* testEr,
-        std::vector<EdgeRing*>* shellList);
+    EdgeRing* findEdgeRingContaining(const std::vector<EdgeRing*> & erList);
 
     /**
      * \brief
@@ -158,7 +172,6 @@ public:
 
     ~EdgeRing();
 
-
     void build(PolygonizeDirectedEdge* startDE);
 
     /** \brief
@@ -174,10 +187,16 @@ public:
         return is_hole;
     }
 
+    /* Indicates whether we know if the ring should be included in a polygonizer
+     * output of only polygons.
+     */
     bool isIncludedSet() const {
         return is_included_set;
     }
 
+    /* Indicates whether the ring should be included in a polygonizer output of
+     * only polygons.
+     */
     bool isIncluded() const {
         return is_included;
     }
@@ -200,89 +219,68 @@ public:
      *
      *  @param shell the shell ring
      */
-     void setShell(const EdgeRing* shellRing) {
+    void setShell(EdgeRing* shellRing) {
         shell = shellRing;
-     }
+    }
 
-     /** \brief
-      * Tests whether this ring has a shell assigned to it.
-      *
-      * @return true if the ring has a shell
-      */
-     bool hasShell() const {
-         return shell != nullptr;
-     }
+    /** \brief
+     * Tests whether this ring has a shell assigned to it.
+     *
+     * @return true if the ring has a shell
+     */
+    bool hasShell() const {
+        return shell != nullptr;
+    }
 
-     /** \brief
-      * Gets the shell for this ring. The shell is the ring itself if it is
-      * not a hole, otherwise it is the parent shell.
-      *
-      * @return the shell for the ring
-      */
-     const EdgeRing* getShell() const {
-         return isHole() ? shell : this;
-     }
+    /** \brief
+     * Gets the shell for this ring. The shell is the ring itself if it is
+     * not a hole, otherwise it is the parent shell.
+     *
+     * @return the shell for the ring
+     */
+    EdgeRing* getShell() {
+        return isHole() ? shell : this;
+    }
 
-     /** \brief
-      * Tests whether this ring is an outer hole.
-      * A hole is an outer hole if it is not contained by any shell.
-      *
-      * @return true if the ring is an outer hole.
-      */
-      bool isOuterHole() const {
-          if (!isHole()) {
-              return false;
-          }
-
-          return !hasShell();
-      }
-
-      /** \brief
-       * Tests whether this ring is an outer shell.
-       *
-       * @return true if the ring is an outer shell.
-       */
-       bool isOuterShell() const {
-           return getOuterHole() != nullptr;
-       }
-
-        EdgeRing* getOuterHole() const {
-           if (isHole()) {
-               return nullptr;
-           }
-
-           // A shell is an outer shell if any edge is also in an outer hole.
-           // A hole is an outer shell if it is not contained by a shell.
-           for (auto& de : deList) {
-               auto adjRing = (dynamic_cast<PolygonizeDirectedEdge*>(de->getSym()))->getRing();
-               if (adjRing->isOuterHole()) {
-                   return adjRing;
-               }
-           }
-
-           return nullptr;
-       }
-
-       /** \brief
-        * Updates the included status for currently non-included shells
-        * based on whether they are adjacent to an included shell.
-        */
-        void updateIncluded() {
-            if (isHole()) {
-                return;
-            }
-
-            for (const auto& de : deList) {
-                auto adjShell = (dynamic_cast<const PolygonizeDirectedEdge*>(de->getSym()))->getRing()->getShell();
-
-                if (adjShell != nullptr && adjShell->isIncludedSet()) {
-                    // adjacent ring has been processed, so set included to inverse of adjacent included
-                    setIncluded(!adjShell->isIncluded());
-                    return;
-                }
-
-            }
+    /** \brief
+     * Tests whether this ring is an outer hole.
+     * A hole is an outer hole if it is not contained by any shell.
+     *
+     * @return true if the ring is an outer hole.
+     */
+    bool isOuterHole() const {
+        if (!isHole()) {
+            return false;
         }
+
+        return !hasShell();
+    }
+
+    /** \brief
+     * Tests whether this ring is an outer shell.
+     *
+     * @return true if the ring is an outer shell.
+     */
+    bool isOuterShell() const {
+        return getOuterHole() != nullptr;
+    }
+
+    /** \brief
+     * Gets the outer hole of a shell, if it has one.
+     * An outer hole is one that is not contained in any other shell.
+     *
+     * Each disjoint connected group of shells is surrounded by
+     * an outer hole.
+     *
+     * @return the outer hole edge ring, or nullptr
+     */
+    EdgeRing* getOuterHole() const;
+
+    /** \brief
+     * Updates the included status for currently non-included shells
+     * based on whether they are adjacent to an included shell.
+     */
+    void updateIncludedRecursive();
 
     /** \brief
      * Adds a hole to the polygon formed by this ring.
@@ -336,6 +334,10 @@ public:
      * Caller gets ownership of ring.
      */
     std::unique_ptr<geom::LinearRing> getRingOwnership();
+
+    bool isInRing(const geom::Coordinate & pt) {
+        return geom::Location::EXTERIOR != getLocator()->locate(&pt);
+    }
 };
 
 } // namespace geos::operation::polygonize

@@ -1,16 +1,17 @@
 #
-# This file is part of project GEOS (http://trac.osgeo.org/geos/) 
+# This file is part of project GEOS (http://trac.osgeo.org/geos/)
 #
-SUBDIRS = 
+SUBDIRS =
 
 noinst_LTLIBRARIES = libopunion.la
 
-AM_CPPFLAGS = -I$(top_srcdir)/include 
+AM_CPPFLAGS = -I$(top_srcdir)/include
 
 libopunion_la_SOURCES = \
     CascadedPolygonUnion.cpp \
     CascadedUnion.cpp \
+    CoverageUnion.cpp \
     PointGeometryUnion.cpp \
-    UnaryUnionOp.cpp 
+    UnaryUnionOp.cpp
 
-libopunion_la_LIBADD = 
+libopunion_la_LIBADD =
