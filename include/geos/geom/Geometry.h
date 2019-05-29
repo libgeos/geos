@@ -466,7 +466,7 @@ public:
      * @throws util::IllegalArgumentException if either arg is a collection
      *
      */
-    virtual bool relate(const Geometry* g,
+    bool relate(const Geometry* g,
                         const std::string& intersectionPattern) const;
 
     bool
@@ -476,7 +476,7 @@ public:
     }
 
     /// Returns the DE-9IM intersection matrix for the two Geometrys.
-    virtual std::unique_ptr<IntersectionMatrix> relate(const Geometry* g) const;
+    std::unique_ptr<IntersectionMatrix> relate(const Geometry* g) const;
 
     std::unique_ptr<IntersectionMatrix> relate(const Geometry& g) const
     {
