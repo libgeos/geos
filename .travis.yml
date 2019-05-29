@@ -29,7 +29,19 @@ matrix:
           sources: *sources
           packages: ['g++-7','cmake','ccache']
       env:
-        - E="TOOL=cmake && CXX=g++-7 && ARCH=-m64 && CC=gcc-7"
+        - E="TOOL=cmake && BUILD_TYPE=Release && CXX=g++-7 && ARCH=-m64 && CC=gcc-7"
+
+    - os: linux
+      cache:
+        apt: true
+        directories:
+          - $HOME/.ccache
+      addons:
+        apt:
+          sources: *sources
+          packages: ['g++-7','cmake','ccache']
+      env:
+        - E="TOOL=cmake && BUILD_TYPE=Coverage && CXX=g++-7 && ARCH=-m64 && CC=gcc-7"
 
     - os: linux
       cache:
@@ -53,7 +65,7 @@ matrix:
           sources: *sources
           packages: ['g++-4.8','cmake','ccache']
       env:
-        - E="TOOL=cmake && CXX=g++-4.8 && ARCH=-m64 && CC=gcc-4.8"
+        - E="TOOL=cmake && BUILD_TYPE=Release && CXX=g++-4.8 && ARCH=-m64 && CC=gcc-4.8"
 
     - os: linux
       cache:
@@ -77,7 +89,7 @@ matrix:
           sources: *sources
           packages: ['clang-3.9','cmake','ccache']
       env:
-        - E="TOOL=cmake && CXX=clang++-3.9 && ARCH=-m64 && CC=clang-3.9"
+        - E="TOOL=cmake && BUILD_TYPE=Release && CXX=clang++-3.9 && ARCH=-m64 && CC=clang-3.9"
 
     - os: linux
       cache:
@@ -89,13 +101,14 @@ matrix:
           sources: *sources
           packages: ['clang','cmake','ccache']
       env:
-        - E="TOOL=cmake && CXX=clang++ && ARCH=-m64 && CC=clang"
+        - E="TOOL=cmake && BUILD_TYPE=Release && CXX=clang++ && ARCH=-m64 && CC=clang"
 
 before_install:
   - eval "${E}"
   - export CXXFLAGS=${ARCH}
   - export CFLAGS=${ARCH}
   - export GEOS_BUILD_TOOL=${TOOL}
+  - export BUILD_TYPE=${BUILD_TYPE}
   - export CXX="ccache ${CXX}"
   - ${CXX} --version
 
