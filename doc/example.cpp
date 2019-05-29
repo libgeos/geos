@@ -105,7 +105,7 @@ WKBtest(vector<Geometry*>* geoms)
 #endif
 
 
-    unsigned int ngeoms = geoms->size();
+    size_t ngeoms = geoms->size();
     for(unsigned int i = 0; i < ngeoms; ++i) {
         Geometry* gin = (*geoms)[i];
 
@@ -467,7 +467,7 @@ do_all()
     newgeoms = new vector<Geometry*>;
     for(unsigned int i = 0; i < geoms->size(); i++) {
         Geometry* g = (*geoms)[i];
-        newgeoms->push_back(g->getCentroid());
+        newgeoms->push_back(g->getCentroid().release());
     }
 
     // Print all convex hulls
@@ -488,7 +488,7 @@ do_all()
     for(unsigned int i = 0; i < geoms->size(); i++) {
         Geometry* g = (*geoms)[i];
         try {
-            Geometry* g2 = g->buffer(10);
+            Geometry* g2 = g->buffer(10).release();
             newgeoms->push_back(g2);
         }
         catch(const GEOSException& exc) {
@@ -512,7 +512,7 @@ do_all()
     newgeoms = new vector<Geometry*>;
     for(unsigned int i = 0; i < geoms->size(); i++) {
         Geometry* g = (*geoms)[i];
-        newgeoms->push_back(g->convexHull());
+        newgeoms->push_back(g->convexHull().release());
     }
 
     // Print all convex hulls
@@ -790,7 +790,6 @@ do_all()
         cout << "      [" << i << "]\t";
         for(unsigned int j = 0; j < geoms->size(); j++) {
             Geometry* g2 = (*geoms)[j];
-            IntersectionMatrix* im = NULL;
             try {
                 // second argument is intersectionPattern
                 string pattern = "212101212";
@@ -802,8 +801,7 @@ do_all()
                 }
 
                 // get the intersectionMatrix itself
-                im = g1->relate(g2);
-                delete im; // delete afterwards
+                auto im = g1->relate(g2);
             }
             // Geometry Collection is not a valid argument
             catch(const IllegalArgumentException& exc) {
@@ -944,7 +942,7 @@ do_all()
         for(unsigned int j = i + 1; j < geoms->size(); j++) {
             Geometry* g2 = (*geoms)[j];
             try {
-                Geometry* g3 = g1->Union(g2);
+                Geometry* g3 = g1->Union(g2).release();
                 newgeoms->push_back(g3);
             }
             // It's illegal to union a collection ...
@@ -979,7 +977,7 @@ do_all()
         for(unsigned int j = i + 1; j < geoms->size(); j++) {
             Geometry* g2 = (*geoms)[j];
             try {
-                Geometry* g3 = g1->intersection(g2);
+                Geometry* g3 = g1->intersection(g2).release();
                 newgeoms->push_back(g3);
             }
             // Collection are illegal as intersection argument
@@ -1012,7 +1010,7 @@ do_all()
         for(unsigned int j = i + 1; j < geoms->size(); j++) {
             Geometry* g2 = (*geoms)[j];
             try {
-                Geometry* g3 = g1->difference(g2);
+                Geometry* g3 = g1->difference(g2).release();
                 newgeoms->push_back(g3);
             }
             // Collection are illegal as difference argument
@@ -1045,7 +1043,7 @@ do_all()
         for(unsigned int j = i + 1; j < geoms->size(); j++) {
             Geometry* g2 = (*geoms)[j];
             try {
-                Geometry* g3 = g1->symDifference(g2);
+                Geometry* g3 = g1->symDifference(g2).release();
                 newgeoms->push_back(g3);
             }
             // Collection are illegal as symdifference argument
