@@ -27,6 +27,8 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/.git/HEAD)
   set(GEOS_BUILD_FROM_GIT ON)
 endif()
 
+message(STATUS "GEOS: Build type: ${CMAKE_BUILD_TYPE}")
+
 #-----------------------------------------------------------------------------
 # Options
 #-----------------------------------------------------------------------------
@@ -193,6 +195,11 @@ if(WIN32)
   target_compile_definitions(geos_cxx_flags
     INTERFACE TTMATH_NOASM)
 endif()
+
+#-----------------------------------------------------------------------------
+# Define a coverage build
+#-----------------------------------------------------------------------------
+set(CMAKE_CXX_FLAGS_COVERAGE "-fprofile-arcs -ftest-coverage")
 
 #-----------------------------------------------------------------------------
 # Target geos: C++ API library
