@@ -69,7 +69,7 @@ RelateComputer::~RelateComputer()
 {
 }
 
-IntersectionMatrix*
+std::unique_ptr<IntersectionMatrix>
 RelateComputer::computeIM()
 {
     // since Geometries are finite and embedded in a 2-D space, the EE element must always be 2
@@ -79,7 +79,7 @@ RelateComputer::computeIM()
     const Envelope* e2 = (*arg)[1]->getGeometry()->getEnvelopeInternal();
     if(!e1->intersects(e2)) {
         computeDisjointIM(im.get());
-        return im.release();
+        return std::move(im);
     }
 
 #if GEOS_DEBUG
@@ -237,7 +237,7 @@ RelateComputer::computeIM()
     labelIsolatedEdges(1, 0);
     // update the IM from all components
     updateIM(*im);
-    return im.release();
+    return std::move(im);
 }
 
 void

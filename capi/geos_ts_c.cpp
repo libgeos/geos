@@ -761,15 +761,12 @@ extern "C" {
         try {
             using geos::geom::IntersectionMatrix;
 
-            IntersectionMatrix* im = g1->relate(g2);
-            if(0 == im) {
+            auto im = g1->relate(g2);
+            if(im == nullptr) {
                 return 0;
             }
 
             char* result = gstrdup(im->toString());
-
-            delete im;
-            im = 0;
 
             return result;
         }
@@ -801,7 +798,7 @@ extern "C" {
             using geos::geom::IntersectionMatrix;
             using geos::algorithm::BoundaryNodeRule;
 
-            IntersectionMatrix* im;
+            std::unique_ptr<IntersectionMatrix> im;
             switch(bnr) {
             case GEOSRELATE_BNR_MOD2: /* same as OGC */
                 im = RelateOp::relate(g1, g2,
@@ -830,9 +827,6 @@ extern "C" {
             }
 
             char* result = gstrdup(im->toString());
-
-            delete im;
-            im = 0;
 
             return result;
         }

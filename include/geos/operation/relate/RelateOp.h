@@ -21,6 +21,7 @@
 
 #include <geos/export.h>
 
+#include <geos/geom/IntersectionMatrix.h>
 #include <geos/operation/GeometryGraphOperation.h> // for inheritance
 #include <geos/operation/relate/RelateComputer.h> // for composition
 
@@ -30,7 +31,6 @@ namespace algorithm {
 class BoundaryNodeRule;
 }
 namespace geom {
-class IntersectionMatrix;
 class Geometry;
 }
 }
@@ -69,7 +69,7 @@ public:
      * @return the IntersectonMatrix for the spatial relationship
      *         between the geometries. Ownership transferred.
      */
-    static geom::IntersectionMatrix* relate(
+    static std::unique_ptr<geom::IntersectionMatrix> relate(
         const geom::Geometry* a,
         const geom::Geometry* b);
 
@@ -85,7 +85,7 @@ public:
      * @return the IntersectonMatrix for the spatial relationship
      *         between the geometries. Ownership transferred.
      */
-    static geom::IntersectionMatrix* relate(
+    static std::unique_ptr<geom::IntersectionMatrix> relate(
         const geom::Geometry* a,
         const geom::Geometry* b,
         const algorithm::BoundaryNodeRule& boundaryNodeRule);
@@ -122,7 +122,7 @@ public:
      *         relationship between the input geometries.
      *         Ownership transferred.
      */
-    geom::IntersectionMatrix* getIntersectionMatrix();
+    std::unique_ptr<geom::IntersectionMatrix> getIntersectionMatrix();
 
 private:
 

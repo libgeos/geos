@@ -35,14 +35,14 @@ namespace geos {
 namespace operation { // geos.operation
 namespace relate { // geos.operation.relate
 
-IntersectionMatrix*
+std::unique_ptr<IntersectionMatrix>
 RelateOp::relate(const Geometry* a, const Geometry* b)
 {
     RelateOp relOp(a, b);
     return relOp.getIntersectionMatrix();
 }
 
-IntersectionMatrix*
+std::unique_ptr<IntersectionMatrix>
 RelateOp::relate(const Geometry* a, const Geometry* b,
                  const algorithm::BoundaryNodeRule& boundaryNodeRule)
 {
@@ -68,7 +68,7 @@ RelateOp::~RelateOp()
 {
 }
 
-IntersectionMatrix*
+std::unique_ptr<IntersectionMatrix>
 RelateOp::getIntersectionMatrix()
 {
     return relateComp.computeIM();

@@ -494,9 +494,8 @@ Geometry::equals(const Geometry* g) const
     return res;
 }
 
-IntersectionMatrix*
+std::unique_ptr<IntersectionMatrix>
 Geometry::relate(const Geometry* other) const
-//throw(IllegalArgumentException *)
 {
     return RelateOp::relate(this, other);
 }

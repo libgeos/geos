@@ -36,6 +36,7 @@
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
 #include <geos/geom/GeometryComponentFilter.h> // for inheritance
+#include <geos/geom/IntersectionMatrix.h>
 
 #include <string>
 #include <iostream>
@@ -58,7 +59,6 @@ class CoordinateSequenceFilter;
 class GeometryComponentFilter;
 class GeometryFactory;
 class GeometryFilter;
-class IntersectionMatrix;
 class PrecisionModel;
 class Point;
 }
@@ -476,9 +476,9 @@ public:
     }
 
     /// Returns the DE-9IM intersection matrix for the two Geometrys.
-    virtual IntersectionMatrix* relate(const Geometry* g) const;
-    IntersectionMatrix*
-    relate(const Geometry& g) const
+    virtual std::unique_ptr<IntersectionMatrix> relate(const Geometry* g) const;
+
+    std::unique_ptr<IntersectionMatrix> relate(const Geometry& g) const
     {
         return relate(&g);
     }
