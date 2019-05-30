@@ -54,7 +54,7 @@ public:
      */
     IncrementalDelaunayTriangulator(quadedge::QuadEdgeSubdivision* subdiv);
 
-    typedef std::list<quadedge::Vertex> VertexList;
+    typedef std::vector<quadedge::Vertex> VertexList;
 
     /**
      * Inserts all sites in a collection. The inserted vertices <b>MUST</b> be

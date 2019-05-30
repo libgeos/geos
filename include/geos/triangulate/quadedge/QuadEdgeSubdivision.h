@@ -22,7 +22,7 @@
 #include <memory>
 #include <list>
 #include <stack>
-#include <set>
+#include <unordered_set>
 #include <vector>
 
 #include <geos/geom/MultiLineString.h>
@@ -353,8 +353,8 @@ public:
 
 private:
     typedef std::stack<QuadEdge*> QuadEdgeStack;
-    typedef std::set<QuadEdge*> QuadEdgeSet;
-    typedef std::list< geom::CoordinateSequence*> TriList;
+    typedef std::unordered_set<QuadEdge*> QuadEdgeSet;
+    typedef std::vector<geom::CoordinateSequence*> TriList;
 
     /**
      * The quadedges forming a single triangle.
@@ -443,7 +443,7 @@ public:
      * @param geomFact a geometry factory
      * @return a List of Polygons
      */
-    std::unique_ptr< std::vector<geom::Geometry*> > getVoronoiCellPolygons(const geom::GeometryFactory& geomFact);
+    std::vector<std::unique_ptr<geom::Geometry>> getVoronoiCellPolygons(const geom::GeometryFactory& geomFact);
 
     /**
      * Gets a List of {@link LineString}s for the Voronoi cells
@@ -486,7 +486,7 @@ public:
      * @param geomFact a factory for building the polygon
      * @return a polygon indicating the cell extent
      */
-    std::unique_ptr<geom::Geometry> getVoronoiCellPolygon(QuadEdge* qe, const geom::GeometryFactory& geomFact);
+    std::unique_ptr<geom::Geometry> getVoronoiCellPolygon(const QuadEdge* qe, const geom::GeometryFactory& geomFact);
 
     /**
      * Gets the Voronoi cell edge around a site specified
@@ -499,7 +499,7 @@ public:
      * @param geomFact a factory for building the polygon
      * @return a polygon indicating the cell extent
      */
-    std::unique_ptr<geom::Geometry> getVoronoiCellEdge(QuadEdge* qe, const geom::GeometryFactory& geomFact);
+    std::unique_ptr<geom::Geometry> getVoronoiCellEdge(const QuadEdge* qe, const geom::GeometryFactory& geomFact);
 
 };
 

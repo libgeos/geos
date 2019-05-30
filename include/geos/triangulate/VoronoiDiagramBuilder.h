@@ -125,7 +125,7 @@ private:
     void create();
 
     static std::unique_ptr<geom::GeometryCollection>
-    clipGeometryCollection(const geom::GeometryCollection& geom, const geom::Envelope& clipEnv);
+    clipGeometryCollection(std::vector<std::unique_ptr<geom::Geometry>> & geoms, const geom::Envelope& clipEnv);
 
 };
 
