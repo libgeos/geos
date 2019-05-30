@@ -61,6 +61,7 @@ configure
 depcomp
 doc/Doxyfile
 doc/example
+doc/doxygen_docs
 include/config.h
 include/config.h.in
 authors.git
