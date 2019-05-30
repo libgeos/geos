@@ -11,5 +11,6 @@
 add_executable(perf_class_sizes ClassSizes.cpp)
 target_link_libraries(perf_class_sizes PRIVATE geos)
 
+add_subdirectory(algorithm)
 add_subdirectory(operation)
 add_subdirectory(capi)
