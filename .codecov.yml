@@ -5,3 +5,5 @@ ignore:
   - "include/geos/algorithm/ttmath"
   - "tests/unit/tut"
   - "tests/xmltester/tinyxml2"
+
+comment: off
