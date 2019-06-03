@@ -12,3 +12,6 @@
 #################################################################################
 add_executable(perf_interiorpoint_area InteriorPointAreaPerfTest.cpp)
 target_link_libraries(perf_interiorpoint_area geos)
+
+add_executable(perf_voronoi VoronoiPerfTest.cpp)
+target_link_libraries(perf_voronoi geos)

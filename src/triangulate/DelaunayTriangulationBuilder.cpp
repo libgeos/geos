@@ -62,15 +62,14 @@ DelaunayTriangulationBuilder::unique(const CoordinateSequence* seq) {
     }
 }
 
-IncrementalDelaunayTriangulator::VertexList*
+IncrementalDelaunayTriangulator::VertexList
 DelaunayTriangulationBuilder::toVertices(
     const CoordinateSequence& coords)
 {
-    IncrementalDelaunayTriangulator::VertexList* vertexList =
-        new IncrementalDelaunayTriangulator::VertexList();
+    IncrementalDelaunayTriangulator::VertexList vertexList(coords.size());
 
-    for(size_t iter = 0; iter < coords.size(); ++iter) {
-        vertexList->push_back(quadedge::Vertex(coords.getAt(iter)));
+    for(size_t i = 0; i < coords.size(); i++) {
+        vertexList[i] = quadedge::Vertex(coords.getAt(i));
     }
     return vertexList;
 }
@@ -78,13 +77,6 @@ DelaunayTriangulationBuilder::toVertices(
 DelaunayTriangulationBuilder::DelaunayTriangulationBuilder() :
     siteCoords(nullptr), tolerance(0.0), subdiv(nullptr)
 {
-}
-
-DelaunayTriangulationBuilder::~DelaunayTriangulationBuilder()
-{
-    if(subdiv) {
-        delete subdiv;
-    }
 }
 
 void
@@ -110,11 +102,12 @@ DelaunayTriangulationBuilder::create()
 
     Envelope siteEnv;
     siteCoords ->expandEnvelope(siteEnv);
-    IncrementalDelaunayTriangulator::VertexList* vertices = toVertices(*siteCoords);
-    subdiv = new quadedge::QuadEdgeSubdivision(siteEnv, tolerance);
-    IncrementalDelaunayTriangulator triangulator = IncrementalDelaunayTriangulator(subdiv);
-    triangulator.insertSites(*vertices);
-    delete vertices;
+    auto vertices = toVertices(*siteCoords);
+    std::sort(vertices.begin(), vertices.end()); // Best performance from locator when inserting points near each other
+
+    subdiv.reset(new quadedge::QuadEdgeSubdivision(siteEnv, tolerance));
+    IncrementalDelaunayTriangulator triangulator = IncrementalDelaunayTriangulator(subdiv.get());
+    triangulator.insertSites(vertices);
 }
 
 quadedge::QuadEdgeSubdivision&
@@ -144,12 +137,7 @@ geom::Envelope
 DelaunayTriangulationBuilder::envelope(const geom::CoordinateSequence& coords)
 {
     Envelope env;
-    std::vector<Coordinate> coord_vector;
-    coords.toVector(coord_vector);
-    for(std::vector<Coordinate>::iterator it = coord_vector.begin() ; it != coord_vector.end() ; ++it) {
-        const Coordinate& coord = *it;
-        env.expandToInclude(coord);
-    }
+    coords.expandEnvelope(env);
     return env;
 }
 

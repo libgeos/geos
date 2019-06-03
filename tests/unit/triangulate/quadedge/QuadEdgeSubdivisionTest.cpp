@@ -94,10 +94,10 @@ void object::test<2>
     double expandBy = std::max(Env.getWidth(), Env.getHeight());
     Env.expandBy(expandBy);
 
-    IncrementalDelaunayTriangulator::VertexList* vertices = DelaunayTriangulationBuilder::toVertices(*siteCoords);
+    IncrementalDelaunayTriangulator::VertexList vertices = DelaunayTriangulationBuilder::toVertices(*siteCoords);
     subdiv = new quadedge::QuadEdgeSubdivision(Env, 0);
     IncrementalDelaunayTriangulator triangulator(subdiv);
-    triangulator.insertSites(*vertices);
+    triangulator.insertSites(vertices);
 
     //Test for getVoronoiDiagram::
     const GeometryFactory& geomFact(*GeometryFactory::getDefaultInstance());
@@ -112,7 +112,6 @@ void object::test<2>
     ensure(polys->equalsExact(expected, 1e-7));
     delete sites;
     delete subdiv;
-    delete vertices;
     delete expected;
 //		ensure(polys->getCoordinateDimension() == expected->getCoordinateDimension());
 }
@@ -141,12 +140,10 @@ template<> template<> void object::test<3>
         new quadedge::QuadEdgeSubdivision(env, 10)
     );
 
-    std::unique_ptr<IncrementalDelaunayTriangulator::VertexList> vertices(
-        DelaunayTriangulationBuilder::toVertices(*siteCoords)
-    );
+    auto vertices(DelaunayTriangulationBuilder::toVertices(*siteCoords));
 
     IncrementalDelaunayTriangulator triangulator(subdiv.get());
-    triangulator.insertSites(*vertices);
+    triangulator.insertSites(vertices);
 
     //Test for getVoronoiDiagram::
     const GeometryFactory& geomFact(*GeometryFactory::getDefaultInstance());

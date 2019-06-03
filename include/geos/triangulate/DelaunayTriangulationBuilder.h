@@ -68,9 +68,9 @@ public:
      * {@link quadedge::Vertex}es.
      *
      * @param coords the coordinates to convert
-     * @return a List of Vertex objects. Call takes ownership of returned object.
+     * @return a List of Vertex objects.
      */
-    static IncrementalDelaunayTriangulator::VertexList* toVertices(const geom::CoordinateSequence& coords);
+    static IncrementalDelaunayTriangulator::VertexList toVertices(const geom::CoordinateSequence& coords);
 
     /**
      * Returns a CoordinateSequence containing only the unique coordinates of its input.
@@ -82,7 +82,7 @@ public:
 private:
     std::unique_ptr<geom::CoordinateSequence> siteCoords;
     double tolerance;
-    quadedge::QuadEdgeSubdivision* subdiv;
+    std::unique_ptr<quadedge::QuadEdgeSubdivision> subdiv;
 
 public:
     /**
@@ -91,7 +91,7 @@ public:
      */
     DelaunayTriangulationBuilder();
 
-    ~DelaunayTriangulationBuilder();
+    ~DelaunayTriangulationBuilder() = default;
 
     /**
      * Sets the sites (vertices) which will be triangulated.
