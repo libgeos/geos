@@ -55,14 +55,18 @@ namespace triangulate { //geos.triangulate
 class GEOS_DLL DelaunayTriangulationBuilder {
 public:
     /**
-     * Extracts the unique {@link Coordinate}s from the given {@link Geometry}.
+     * Extracts the unique {@link geom::Coordinate}s from the given
+     * {@link geom::Geometry}.
+     *
      * @param geom the geometry to extract from
      * @return a List of the unique Coordinates. Caller takes ownership of the returned object.
      */
     static std::unique_ptr<geom::CoordinateSequence> extractUniqueCoordinates(const geom::Geometry& geom);
 
     /**
-     * Converts all {@link Coordinate}s in a collection to {@link Vertex}es.
+     * Converts all {@link geom::Coordinate}s in a collection to
+     * {@link quadedge::Vertex}es.
+     *
      * @param coords the coordinates to convert
      * @return a List of Vertex objects. Call takes ownership of returned object.
      */
@@ -99,7 +103,7 @@ public:
 
     /**
      * Sets the sites (vertices) which will be triangulated
-     * from a collection of {@link Coordinate}s.
+     * from a collection of {@link geom::Coordinate}s.
      *
      * @param geom a CoordinateSequence.
      */
@@ -130,7 +134,7 @@ public:
     quadedge::QuadEdgeSubdivision& getSubdivision();
 
     /**
-     * Gets the edges of the computed triangulation as a {@link MultiLineString}.
+     * Gets the edges of the computed triangulation as a {@link geom::MultiLineString}.
      *
      * @param geomFact the geometry factory to use to create the output
      * @return the edges of the triangulation. The caller takes ownership of the returned object.
@@ -138,8 +142,8 @@ public:
     std::unique_ptr<geom::MultiLineString> getEdges(const geom::GeometryFactory& geomFact);
 
     /**
-     * Gets the faces of the computed triangulation as a {@link GeometryCollection}
-     * of {@link Polygon}.
+     * Gets the faces of the computed triangulation as a {@link geom::GeometryCollection}
+     * of {@link geom::Polygon}.
      *
      * @param geomFact the geometry factory to use to create the output
      * @return the faces of the triangulation. The caller takes ownership of the returned object.
@@ -147,7 +151,8 @@ public:
     std::unique_ptr<geom::GeometryCollection> getTriangles(const geom::GeometryFactory& geomFact);
 
     /**
-     * Computes the {@link Envelope} of a collection of {@link Coordinate}s.
+     * Computes the {@link geom::Envelope} of a collection of
+     * {@link geom::Coordinate}s.
      *
      * @param coords a List of Coordinates
      * @return the envelope of the set of coordinates

@@ -52,7 +52,8 @@ namespace geounion {  // geos::operation::geounion
 /**
  * \brief
  * Provides an efficient method of unioning a collection of
- * {@link Polygonal} geometries.
+ * {@link geom::Polygonal} geometries.
+ *
  * This algorithm is faster and likely more robust than
  * the simple iterated approach of
  * repeatedly unioning each polygon to a result geometry.
@@ -103,15 +104,17 @@ public:
 
     /**
      * Computes the union of
-     * a collection of {@link Polygonal} {@link Geometry}s.
+     * a collection of {@link geom::Polygonal} {@link geom::Geometry}s.
      *
-     * @param polys a collection of {@link Polygonal} {@link Geometry}s.
-     *        ownership of elements _and_ vector are left to caller.
+     * @param polys a collection of {@link geom::Polygonal}
+     *              {@link geom::Geometry}s.
+     *              ownership of elements _and_ vector are left to caller.
      */
     static geom::Geometry* Union(std::vector<geom::Polygon*>* polys);
 
     /**
-     * Computes the union of a set of {@link Polygonal} {@link Geometry}s.
+     * Computes the union of a set of {@link geom::Polygonal}
+     * {@link geom::Geometry}s.
      *
      * @tparam T an iterator yelding something castable to const Polygon *
      * @param start start iterator
@@ -131,19 +134,21 @@ public:
 
     /**
      * Computes the union of
-     * a collection of {@link Polygonal} {@link Geometry}s.
+     * a collection of {@link geom::Polygonal} {@link geom::Geometry}s.
      *
-     * @param polys a collection of {@link Polygonal} {@link Geometry}s
-     *        ownership of elements _and_ vector are left to caller.
+     * @param polys a collection of {@link geom::Polygonal}
+     *              {@link geom::Geometry}s.
+     *              Ownership of elements _and_ vector are left to caller.
      */
     static geom::Geometry* Union(const geom::MultiPolygon* polys);
 
     /**
      * Creates a new instance to union
-     * the given collection of {@link Geometry}s.
+     * the given collection of {@link geom::Geometry}s.
      *
-     * @param geoms a collection of {@link Polygonal} {@link Geometry}s
-     *        ownership of elements _and_ vector are left to caller.
+     * @param geoms a collection of {@link geom::Polygonal}
+     *              {@link geom::Geometry}s.
+     *              Ownership of elements _and_ vector are left to caller.
      */
     CascadedPolygonUnion(std::vector<geom::Polygon*>* polys)
         : inputPolys(polys),

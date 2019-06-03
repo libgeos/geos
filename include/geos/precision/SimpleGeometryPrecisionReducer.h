@@ -29,8 +29,8 @@ namespace geos {
 namespace precision { // geos.precision
 
 /** \brief
- * Reduces the precision of a {@link Geometry}
- * according to the supplied {@link PrecisionModel}, without
+ * Reduces the precision of a {@link geom::Geometry}
+ * according to the supplied {@link geom::PrecisionModel}, without
  * attempting to preserve valid topology.
  *
  * The topology of the resulting geometry may be invalid if

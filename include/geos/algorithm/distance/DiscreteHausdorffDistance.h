@@ -59,7 +59,7 @@ namespace distance { // geos::algorithm::distance
 /** \brief
  * An algorithm for computing a distance metric
  * which is an approximation to the Hausdorff Distance
- * based on a discretization of the input {@link Geometry}.
+ * based on a discretization of the input {@link geom::Geometry}.
  *
  * The algorithm computes the Hausdorff distance restricted to discrete points
  * for one of the geometries.

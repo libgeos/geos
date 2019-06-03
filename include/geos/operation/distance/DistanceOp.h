@@ -56,7 +56,7 @@ namespace distance { // geos::operation::distance
 
 /**
  * \brief
- * Find two points on two {@link Geometry}s which lie
+ * Find two points on two {@link geom::Geometry}s which lie
  * within a given distance, or else are the nearest points
  * on the geometries (in which case this also
  * provides the distance between the geometries).
@@ -78,8 +78,8 @@ public:
      * \brief
      * Compute the distance between the nearest points of two geometries.
      *
-     * @param g0 a {@link Geometry}
-     * @param g1 another {@link Geometry}
+     * @param g0 a {@link geom::Geometry}
+     * @param g1 another {@link geom::Geometry}
      * @return the distance between the geometries
      * @return 0 if either input geometry is empty
      * @throws IllegalArgumentException if either input geometry is null
@@ -96,8 +96,8 @@ public:
      * Test whether two geometries lie within a given distance of
      * each other.
      *
-     * @param g0 a {@link Geometry}
-     * @param g1 another {@link Geometry}
+     * @param g0 a {@link geom::Geometry}
+     * @param g1 another {@link geom::Geometry}
      * @param distance the distance to test
      * @return true if g0.distance(g1) <= distance
      */
@@ -110,8 +110,8 @@ public:
      *
      * The points are presented in the same order as the input Geometries.
      *
-     * @param g0 a {@link Geometry}
-     * @param g1 another {@link Geometry}
+     * @param g0 a {@link geom::Geometry}
+     * @param g1 another {@link geom::Geometry}
      *
      * @return the nearest points in the geometries, ownership to caller.
      *         A NULL return means one of the geometries is empty.
@@ -126,8 +126,8 @@ public:
      *
      * The points are presented in the same order as the input Geometries.
      *
-     * @param g0 a {@link Geometry}
-     * @param g1 another {@link Geometry}
+     * @param g0 a {@link geom::Geometry}
+     * @param g1 another {@link geom::Geometry}
      *
      * @return the closest points in the geometries, ownership to caller.
      *         A NULL return means one of the geometries is empty.
@@ -177,7 +177,7 @@ public:
      * Report the coordinates of the closest points in the input geometries.
      * The points are presented in the same order as the input Geometries.
      *
-     * @return a pair of {@link Coordinate}s of the closest points
+     * @return a pair of {@link geom::Coordinate}s of the closest points
      *         as a newly allocated object (ownership to caller)
      *
      * @deprecated renamed to nearestPoints
@@ -188,7 +188,7 @@ public:
      * Report the coordinates of the nearest points in the input geometries.
      * The points are presented in the same order as the input Geometries.
      *
-     * @return a pair of {@link Coordinate}s of the nearest points
+     * @return a pair of {@link geom::Coordinate}s of the nearest points
      *         as a newly allocated object (ownership to caller)
      *
      */

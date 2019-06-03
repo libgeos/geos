@@ -70,15 +70,15 @@ public:
     CascadedUnion();
 
     /**
-     * Computes the union of a collection of {@link Geometry}s.
+     * Computes the union of a collection of {@link geom::Geometry}s.
      *
-     * @param geoms a collection of {@link Geometry}s.
+     * @param geoms a collection of {@link geom::Geometry}s.
      *        ownership of elements _and_ vector are left to caller.
      */
     static geom::Geometry* Union(std::vector<geom::Geometry*>* geoms);
 
     /**
-     * Computes the union of a set of {@link Geometry}s.
+     * Computes the union of a set of {@link geom::Geometry}s.
      *
      * @tparam T an iterator yelding something castable to const Geometry *
      * @param start start iterator
@@ -98,10 +98,10 @@ public:
 
     /**
      * Creates a new instance to union
-     * the given collection of {@link Geometry}s.
+     * the given collection of {@link geom::Geometry}s.
      *
-     * @param geoms a collection of {@link Geometryal} {@link Geometry}s
-     *        ownership of elements _and_ vector are left to caller.
+     * @param geoms a collection of {@link geom::Geometry}s.
+     *              Ownership of elements _and_ vector are left to caller.
      */
     CascadedUnion(const std::vector<geom::Geometry*>* geoms)
         : inputGeoms(geoms),

@@ -36,8 +36,8 @@ namespace geos {
 namespace precision { // geos.precision
 
 /** \brief
- * Reduces the precision of a {@link Geometry}
- * according to the supplied {@link PrecisionModel},
+ * Reduces the precision of a {@link geom::Geometry}
+ * according to the supplied {@link geom::PrecisionModel},
  * ensuring that the result is topologically valid.
  */
 class GEOS_DLL GeometryPrecisionReducer {
