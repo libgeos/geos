@@ -41,14 +41,14 @@ namespace algorithm { // geos::algorithm
 namespace locate { // geos::algorithm::locate
 
 /** \brief
- * Determines the location of {@link Coordinate}s relative to
+ * Determines the location of {@link geom::Coordinate}s relative to
  * an areal geometry, using indexing for efficiency.
  *
  * The Location is computed precisely, in that points
  * located on the geometry boundary or segments will
- * return {@link Location.BOUNDARY}.
+ * return {@link geom::Location.BOUNDARY}.
  *
- * {@link Polygonal} and {@link LinearRing} geometries
+ * {@link geom::Polygonal} and {@link geom::LinearRing} geometries
  * are supported.
  */
 class IndexedPointInAreaLocator : public PointOnGeometryLocator {
@@ -97,8 +97,8 @@ private:
 
 public:
     /**
-     * Creates a new locator for a given {@link Geometry}
-     * {@link Polygonal} and {@link LinearRing} geometries
+     * Creates a new locator for a given {@link geom::Geometry}
+     * {@link geom::Polygonal} and {@link geom::LinearRing} geometries
     * are supported.
     *
      * @param g the Geometry to locate in
@@ -106,7 +106,8 @@ public:
     IndexedPointInAreaLocator(const geom::Geometry& g);
 
     /**
-     * Determines the {@link Location} of a point in an areal {@link Geometry}.
+     * Determines the {@link geom::Location} of a point in an areal
+     * {@link geom::Geometry}.
      *
      * @param p the point to test
      * @return the location of the point in the geometry
