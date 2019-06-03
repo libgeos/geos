@@ -22,18 +22,15 @@
 #include <geos/export.h>
 
 #include <geos/geom/GeometryFilter.h> // for inheritance
+#include <geos/operation/distance/GeometryLocation.h>
 
+#include <memory>
 #include <vector>
 
 // Forward declarations
 namespace geos {
 namespace geom {
 class Geometry;
-}
-namespace operation {
-namespace distance {
-class GeometryLocation;
-}
 }
 }
 
@@ -52,7 +49,8 @@ namespace distance { // geos::operation::distance
 class GEOS_DLL ConnectedElementLocationFilter: public geom::GeometryFilter {
 private:
 
-    std::vector<GeometryLocation*>* locations;
+    std::vector<std::unique_ptr<GeometryLocation>> locations;
+    ConnectedElementLocationFilter() = default;
 
 public:
     /**
@@ -61,12 +59,7 @@ public:
      * not a GeometryCollection, an empty list will be returned. The elements of the list
      * are {@link com.vividsolutions.jts.operation.distance.GeometryLocation}s.
      */
-    static std::vector<GeometryLocation*>* getLocations(const geom::Geometry* geom);
-
-    ConnectedElementLocationFilter(std::vector<GeometryLocation*>* newLocations)
-        :
-        locations(newLocations)
-    {}
+    static std::vector<std::unique_ptr<GeometryLocation>> getLocations(const geom::Geometry* geom);
 
     void filter_ro(const geom::Geometry* geom) override;
     void filter_rw(geom::Geometry* geom) override;

@@ -35,13 +35,12 @@ namespace operation { // geos.operation
 namespace distance { // geos.operation.distance
 
 /*public*/
-vector<GeometryLocation*>*
+vector<unique_ptr<GeometryLocation>>
 ConnectedElementLocationFilter::getLocations(const Geometry* geom)
 {
-    vector<GeometryLocation*>* loc = new vector<GeometryLocation*>();
-    ConnectedElementLocationFilter c(loc);
+    ConnectedElementLocationFilter c;
     geom->apply_ro(&c);
-    return loc;
+    return std::move(c.locations);
 }
 
 void
@@ -51,7 +50,7 @@ ConnectedElementLocationFilter::filter_ro(const Geometry* geom)
             (typeid(*geom) == typeid(LineString)) ||
             (typeid(*geom) == typeid(LinearRing)) ||
             (typeid(*geom) == typeid(Polygon))) {
-        locations->push_back(new GeometryLocation(geom, 0, *(geom->getCoordinate())));
+        locations.emplace_back(new GeometryLocation(geom, 0, *(geom->getCoordinate())));
     }
 }
 
@@ -62,7 +61,7 @@ ConnectedElementLocationFilter::filter_rw(Geometry* geom)
             (typeid(*geom) == typeid(LineString)) ||
             (typeid(*geom) == typeid(LinearRing)) ||
             (typeid(*geom) == typeid(Polygon))) {
-        locations->push_back(new GeometryLocation(geom, 0, *(geom->getCoordinate())));
+        locations.emplace_back(new GeometryLocation(geom, 0, *(geom->getCoordinate())));
     }
 }
 

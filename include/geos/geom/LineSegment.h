@@ -26,6 +26,7 @@
 
 #include <geos/inline.h>
 
+#include <array>
 #include <iostream> // for ostream
 #include <functional> // for std::hash
 #include <memory> // for unique_ptr
@@ -319,11 +320,10 @@ public:
      * @param line the line segment to find the closest points to
      * @return a pair of Coordinates which are the closest points on
      * the line segments.
-     * The returned CoordinateSequence must be deleted by caller
      */
-    CoordinateSequence* closestPoints(const LineSegment& line);
+    std::array<Coordinate, 2> closestPoints(const LineSegment& line);
 
-    CoordinateSequence* closestPoints(const LineSegment* line);
+    std::array<Coordinate, 2> closestPoints(const LineSegment* line);
 
     /**
      * Computes an intersection point between two segments,
