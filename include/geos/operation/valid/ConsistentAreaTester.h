@@ -90,8 +90,8 @@ public:
     /**
      * Creates a new tester for consistent areas.
      *
-     * @param geomGraph the topology graph of the area geometry.
-     *                  Caller keeps responsibility for its deletion
+     * @param newGeomGraph the topology graph of the area geometry.
+     *                     Caller keeps responsibility for its deletion
      */
     ConsistentAreaTester(geomgraph::GeometryGraph* newGeomGraph);
 

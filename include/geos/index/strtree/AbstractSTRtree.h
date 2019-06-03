@@ -195,7 +195,7 @@ protected:
     // Ownership to caller (TODO: return by unique_ptr)
     virtual AbstractNode* createNode(int level) = 0;
 
-    /**
+    /** \brief
      * Sorts the childBoundables then divides them into groups of size M, where
      * M is the node capacity.
      */
@@ -257,9 +257,9 @@ protected:
 
 public:
 
-    /**
+    /** \brief
      * Constructs an AbstractSTRtree with the specified maximum number of child
-     * nodes that a node may have
+     * nodes that a node may have.
      */
     AbstractSTRtree(std::size_t newNodeCapacity)
         :
@@ -283,16 +283,18 @@ public:
 
     virtual ~AbstractSTRtree();
 
-    /**
+    /** \brief
      * Creates parent nodes, grandparent nodes, and so forth up to the root
-     * node, for the data that has been inserted into the tree. Can only be
+     * node, for the data that has been inserted into the tree.
+     *
+     * Can only be
      * called once, and thus can be called only after all of the data has been
      * inserted into the tree.
      */
     virtual void build();
 
-    /**
-     * Returns the maximum number of child nodes that a node may have
+    /** \brief
+     * Returns the maximum number of child nodes that a node may have.
      */
     virtual std::size_t
     getNodeCapacity()
@@ -303,26 +305,28 @@ public:
     virtual void query(const void* searchBounds, const AbstractNode* node, std::vector<void*>* matches);
 
     /**
-         * Iterate over all items added thus far.  Explicitly does not build
-         * the tree.
-         */
+     * Iterate over all items added thus far.  Explicitly does not build
+     * the tree.
+     */
     void iterate(ItemVisitor& visitor);
 
 
     /**
      * @param level -1 to get items
+     * @param top an AbstractNode
+     * @param boundables a BoundableList
      */
     virtual void boundablesAtLevel(int level, AbstractNode* top,
                                    BoundableList* boundables);
 
-    /**
-     * Gets a tree structure (as a nested list)
-     * corresponding to the structure of the items and nodes in this tree.
-     * <p>
-     * The returned {@link List}s contain either {@link Object} items,
-     * or Lists which correspond to subtrees of the tree
-     * Subtrees which do not contain any items are not included.
-     * <p>
+    /** \brief
+     * Gets a tree structure (as a nested list) corresponding to the structure
+     * of the items and nodes in this tree.
+     *
+     * The returned Lists contain either Object items, or Lists which
+     * correspond to subtrees of the tree Subtrees which do not contain
+     * any items are not included.
+     *
      * Builds the tree if necessary.
      *
      * @note The caller is responsible for releasing the list

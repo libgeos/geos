@@ -27,8 +27,8 @@ namespace algorithm { // geos::algorithm
 namespace locate { // geos::algorithm::locate
 
 /** \brief
- * An interface for classes which determine the {@link Location} of
- * points in {@link Polygon} or {@link MultiPolygon} geometries.
+ * An interface for classes which determine the [Location](@ref geom::Location) of
+ * points in [Polygon](@ref geom::Polygon) or [MultiPolygon](@ref geom::MultiPolygon) geometries.
  *
  * @author Martin Davis
  */
@@ -41,7 +41,7 @@ public:
     { }
 
     /**
-     * Determines the {@link Location} of a point in an areal {@link Geometry}.
+     * Determines the [Location](@ref geom::Location) of a point in an areal [Geometry](@ref geom::Geometry).
      *
      * @param p the point to test
      * @return the location of the point in the geometry

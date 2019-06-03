@@ -74,27 +74,20 @@ protected:
     /** \brief The two DirectedEdges associated with this Edge */
     std::vector<DirectedEdge*> dirEdge;
 
-    /**
-     * \brief Constructs an Edge whose DirectedEdges are not yet set.
-     *
-     * Be sure to call setDirectedEdges(DirectedEdge, DirectedEdge)
-     */
-
 public:
 
     /** \brief
-     * Constructs a Edge whose DirectedEdges are
-     * not yet set.
+     * Constructs a Edge whose DirectedEdges are not yet set.
      *
      * Be sure to call
-     * {@link setDirectedEdges(DirectedEdge, DirectedEdge)}
+     * {@link #setDirectedEdges(DirectedEdge* de0, DirectedEdge* de1)}
      */
     Edge(): dirEdge() {}
 
     /**
      * \brief Constructs an Edge initialized with the given DirectedEdges.
      *
-     * For  each DirectedEdge: sets the Edge, sets the symmetric
+     * For each DirectedEdge: sets the Edge, sets the symmetric
      * DirectedEdge, and adds this Edge to its from-Node.
      */
     Edge(DirectedEdge* de0, DirectedEdge* de1)
@@ -108,8 +101,8 @@ public:
      * \brief Initializes this Edge's two DirectedEdges.
      *
      * For each DirectedEdge:
-     *  sets the Edge, sets the symmetric DirectedEdge, and
-     *  adds this Edge to its from-Node.
+     * - sets the Edge, sets the symmetric DirectedEdge, and
+     * - adds this Edge to its from-Node.
      */
     void setDirectedEdges(DirectedEdge* de0, DirectedEdge* de1);
 

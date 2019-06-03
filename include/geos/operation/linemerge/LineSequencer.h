@@ -62,10 +62,8 @@ namespace linemerge { // geos::operation::linemerge
  * components of the input.  Each linestring is oriented
  * so that identical endpoints are adjacent in the list.
  *
- * A typical use case is to convert a set of
- * unoriented geometric links
- * from a linear network
- * (e.g. such as block faces on a bus route)
+ * A typical use case is to convert a set of unoriented geometric links
+ * from a linear network (e.g. such as block faces on a bus route)
  * into a continuous oriented path through the network.
  *
  * The input linestrings may form one or more connected sets.
@@ -74,12 +72,10 @@ namespace linemerge { // geos::operation::linemerge
  * The computed output is a single MultiLineString containing the ordered
  * linestrings in the sequence.
  *
- * The sequencing employs the classic <b>Eulerian path</b> graph algorithm.
- * Since Eulerian paths are not uniquely determined,
- * further rules are used to
- * make the computed sequence preserve as much as possible of the input
- * ordering.
- * Within a connected subset of lines, the ordering rules are:
+ * The sequencing employs the classic **Eulerian path** graph algorithm.
+ * Since Eulerian paths are not uniquely determined, further rules are used
+ * to make the computed sequence preserve as much as possible of the input
+ * ordering. Within a connected subset of lines, the ordering rules are:
  *
  * - If there is degree-1 node which is the start
  *   node of an linestring, use that node as the start of the sequence
@@ -87,13 +83,11 @@ namespace linemerge { // geos::operation::linemerge
  *   node of an linestring, use that node as the end of the sequence
  * - If the sequence has no degree-1 nodes, use any node as the start
  *
- * Note that not all arrangements of lines can be sequenced.
- * For a connected set of edges in a graph,
- * <i>Euler's Theorem</i> states that there is a sequence
- * containing each edge once
- * <b>if and only if</b> there are no more than 2 nodes of odd degree.
- * If it is not possible to find a sequence, the isSequenceable method
- * will return <code>false</code>.
+ * @note Not all arrangements of lines can be sequenced. For a connected
+ * set of edges in a graph, *Euler's Theorem* states that there is a sequence
+ * containing each edge once **if and only if** there are no more than
+ * 2 nodes of odd degree. If it is not possible to find a sequence, the
+ * `isSequenceable` method will return `false`.
  *
  */
 class GEOS_DLL LineSequencer {
@@ -210,23 +204,24 @@ public:
         isSequenceableVar(false)
     {}
 
-    /**
-     * Tests whether a {@link Geometry} is sequenced correctly.
-     * {@llink LineString}s are trivially sequenced.
-     * {@link MultiLineString}s are checked for correct sequencing.
-     * Otherwise, <code>isSequenced</code> is defined
-     * to be <code>true</code> for geometries that are not lineal.
+    /** \brief
+     * Tests whether a [Geometry](@ref geom::Geometry) is sequenced correctly.
+     *
+     * [LineStrings](@ref geom::LineString) are trivially sequenced.
+     * [MultiLineStrings](@ref geom::MultiLineString) are checked for
+     * correct sequencing. Otherwise, `isSequenced` is defined
+     * to be `true` for geometries that are not lineal.
      *
      * @param geom the geometry to test
-     * @return true if the geometry is sequenced or is not lineal
+     * @return `true` if the geometry is sequenced or is not lineal
      */
     static bool isSequenced(const geom::Geometry* geom);
 
-    /**
+    /** \brief
      * Tests whether the arrangement of linestrings has a valid
      * sequence.
      *
-     * @return <code>true</code> if a valid sequence exists.
+     * @return `true` if a valid sequence exists.
      */
     bool
     isSequenceable()
@@ -235,8 +230,9 @@ public:
         return isSequenceableVar;
     }
 
-    /**
-     * Adds a {@link Geometry} to be sequenced.
+    /** \brief
+     * Adds a [Geometry](@ref geom::Geometry) to be sequenced.
+     *
      * May be called multiple times.
      * Any dimension of Geometry may be added; the constituent
      * linework will be extracted.
@@ -260,7 +256,7 @@ public:
         }
     }
 
-    /**
+    /** \brief
      * Act as a GeometryComponentFilter so to extract
      * the linearworks
      */
@@ -272,13 +268,13 @@ public:
         }
     }
 
-    /**
+    /** \brief
      * Returns the LineString or MultiLineString
      * built by the sequencing process, if one exists.
      *
      * @param release release ownership of computed Geometry
      * @return the sequenced linestrings,
-     *         or <code>null</code> if a valid sequence
+     *         or `null` if a valid sequence
      *         does not exist.
      */
     geom::Geometry*

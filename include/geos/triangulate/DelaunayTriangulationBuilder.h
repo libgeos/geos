@@ -105,7 +105,7 @@ public:
      * Sets the sites (vertices) which will be triangulated
      * from a collection of {@link geom::Coordinate}s.
      *
-     * @param geom a CoordinateSequence.
+     * @param coords a CoordinateSequence.
      */
     void setSites(const geom::CoordinateSequence& coords);
 

@@ -52,11 +52,11 @@ namespace intersection { // geos::operation::intersection
  * \brief Rebuild geometries from subpaths left by clipping with a rectangle
  *
  * The RectangleIntersectionBuilder is used to maintain lists of polygons,
- * linestrings and points left from clipping a {@link Geometry} with a {@link Rectangle}.
- * Once all clipping has been done, the class builds a valid {@link Geometry} from
+ * linestrings and points left from clipping a geom::Geometry with a Rectangle.
+ * Once all clipping has been done, the class builds a valid geom::Geometry from
  * the components.
  *
- * This is a utility class needed by {@link RectangleIntersection}, and is not
+ * @note This is a utility class needed by RectangleIntersection, and is not
  * intended for public use.
  */
 

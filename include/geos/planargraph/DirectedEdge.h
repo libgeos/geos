@@ -72,7 +72,7 @@ public:
      * Returns a List containing the parent Edge (possibly null)
      * for each of the given DirectedEdges.
      *
-     * NOTE: ownership of the returned vector is left to
+     * @note Ownership of the returned vector is left to
      * the caller, see the equivalent function taking a vector
      * reference to avoid this.
      */
@@ -84,20 +84,22 @@ public:
      * Add parent Edge (possibly null) of each of the given DirectedEdges
      * to the given parentEdges vector.
      *
-     * NOTE: parents are pushed to the parentEdges vector, make sure
+     * @note Parents are pushed to the parentEdges vector, make sure
      * it is empty if index-based corrispondence is important.
      */
     static void toEdges(std::vector<DirectedEdge*>& dirEdges,
                         std::vector<Edge*>& parentEdges);
 
     /**
-     * \brief Constructs a DirectedEdge connecting the <code>from</code>
-     * node to the <code>to</code> node.
+     * \brief Constructs a DirectedEdge connecting the `from`
+     * node to the `to` node.
      *
+     * @param newFrom `from` node
+     * @param newTo `to` node
      * @param directionPt specifies this DirectedEdge's direction
      *                    (given by an imaginary line from the
-     *                    <code>from</code> node to
-     *                    <code>directionPt</code>)
+     *                    `from` node to
+     *                    `directionPt`)
      * @param newEdgeDirection whether this DirectedEdge's direction
      *                         is the same as or opposite to that of the
      *                         parent Edge (if any)

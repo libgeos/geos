@@ -671,7 +671,7 @@ public:
      * - Unioning a set of {@link LineString}s has the effect of fully noding
      *   and dissolving the linework.
      * - Unioning a set of {@link Polygon}s will always
-     *   return a {@link Polygonal} geometry (unlike {link #union(Geometry)},
+     *   return a {@link Polygonal} geometry (unlike Geometry::Union(const Geometry* other) const),
      *   which may return geometrys of lower dimension if a topology collapse
      *   occurred.
      *
@@ -815,7 +815,7 @@ public:
      */
     std::unique_ptr<Point> getInteriorPoint() const;
 
-    /*
+    /**
      * \brief
      * Notifies this Geometry that its Coordinates have been changed
      * by an external party (using a CoordinateFilter, for example).

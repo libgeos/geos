@@ -76,15 +76,13 @@ private:
 public:
 
     /** \brief
-    * Checks whether the supplied {@link Edge}s
-     * are correctly noded.
+     * Checks whether the supplied {@link Edge}s are correctly noded.
      *
-     * Throws a  {@link TopologyException} if they are not.
+     * Throws a [TopologyException](@ref util::TopologyException) if they are not.
      *
      * @param edges a collection of Edges.
      * @throws TopologyException if the SegmentStrings are not
      *         correctly noded
-     *
      */
     static void
     checkValid(std::vector<Edge*>& edges)

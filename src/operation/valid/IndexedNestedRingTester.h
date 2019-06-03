@@ -41,7 +41,7 @@ namespace operation { // geos.operation
 namespace valid { // geos.operation.valid
 
 /** \brief
- * Tests whether any of a set of {@link LinearRing}s are
+ * Tests whether any of a set of [LinearRings](@ref geom::LinearRing) are
  * nested inside another ring in the set, using a spatial
  * index to speed up the comparisons.
  *

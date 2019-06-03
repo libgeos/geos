@@ -49,34 +49,38 @@ namespace geos {
 namespace operation { // geos::operation
 namespace geounion {  // geos::operation::geounion
 
-/**
+/** \brief
  * Unions a collection of Geometry or a single Geometry
  * (which may be a collection) together.
+ *
  * By using this special-purpose operation over a collection of
  * geometries it is possible to take advantage of various optimizations
  * to improve performance.
- * Heterogeneous {@link GeometryCollection}s are fully supported.
+ * Heterogeneous [GeometryCollections](@ref geom::GeometryCollection)
+ * are fully supported.
  *
  * The result obeys the following contract:
  *
- * - Unioning a set of overlapping {@link Polygons}s has the effect of
- *   merging the areas (i.e. the same effect as
+ * - Unioning a set of overlapping [Polygons](@ref geom::Polygon) has the effect
+ *   of merging the areas (i.e. the same effect as
  *   iteratively unioning all individual polygons together).
- * - Unioning a set of {@link LineString}s has the effect of
- *   <b>fully noding</b> and <b>dissolving</b> the input linework.
+ * - Unioning a set of [LineStrings](@ref geom::LineString) has the effect of
+ *   **fully noding** and **dissolving** the input linework.
  *   In this context "fully noded" means that there will be a node or
  *   endpoint in the output for every endpoint or line segment crossing
  *   in the input.
  *   "Dissolved" means that any duplicate (e.g. coincident) line segments
  *   or portions of line segments will be reduced to a single line segment
- *   in the output.  *   This is consistent with the semantics of the
- *   {@link Geometry#union(Geometry)} operation.
- *   If <b>merged</b> linework is required, the {@link LineMerger} class
+ *   in the output.
+ *   This is consistent with the semantics of the
+ *   [Geometry::Union(Geometry* )](@ref geom::Geometry::Union(const Geometry* other) const)
+ *   operation. If **merged** linework is required, the
+ *   [LineMerger](@ref operation::linemerge::LineMerger) class
  *   can be used.
- * - Unioning a set of {@link Points}s has the effect of merging
+ * - Unioning a set of [Points](@ref geom::Point) has the effect of merging
  *   al identical points (producing a set with no duplicates).
  *
- * <tt>UnaryUnion</tt> always operates on the individual components of
+ * `UnaryUnion` always operates on the individual components of
  * MultiGeometries.
  * So it is possible to use it to "clean" invalid self-intersecting
  * MultiPolygons (although the polygon components must all still be

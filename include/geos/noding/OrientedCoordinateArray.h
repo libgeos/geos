@@ -50,7 +50,7 @@ public:
      * Creates a new {@link OrientedCoordinateArray}
      * for the given {@link geom::CoordinateSequence}.
      *
-     * @param pts the coordinates to orient
+     * @param p_pts the coordinates to orient
      */
     OrientedCoordinateArray(const geom::CoordinateSequence& p_pts)
         :

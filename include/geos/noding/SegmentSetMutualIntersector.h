@@ -45,11 +45,11 @@ public:
     ~SegmentSetMutualIntersector() {}
 
     /**
-     * Sets the {@link SegmentIntersector} to use with this intersector.
+     * Sets the SegmentIntersector to use with this intersector.
      * The SegmentIntersector will either rocord or add intersection nodes
      * for the input segment strings.
      *
-     * @param segInt the segment intersector to use
+     * @param si the segment intersector to use
      */
     void
     setSegmentIntersector(SegmentIntersector* si)
@@ -59,14 +59,14 @@ public:
 
     /**
      *
-     * @param segStrings a collection of {@link SegmentString}s to node
+     * @param segStrings a collection of [SegmentStrings](@ref SegmentString) to node
      */
     virtual void setBaseSegments(SegmentString::ConstVect* segStrings) = 0;
 
     /**
-     * Computes the intersections for two collections of {@link SegmentString}s.
+     * Computes the intersections for two collections of [SegmentStrings](@ref SegmentString).
      *
-     * @param segStrings1 a collection of {@link SegmentString}s to node
+     * @param segStrings a collection of [SegmentStrings](@ref SegmentString) to node
      */
     virtual void process(SegmentString::ConstVect* segStrings) = 0;
 

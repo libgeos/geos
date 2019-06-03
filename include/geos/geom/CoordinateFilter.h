@@ -25,9 +25,9 @@ namespace geom { // geos::geom
 
 class Coordinate;
 
-/**
- * <code>Geometry</code> classes support the concept of applying a
- * coordinate filter to every coordinate in the <code>Geometry</code>.
+/** \brief
+ * Geometry classes support the concept of applying a
+ * coordinate filter to every coordinate in the Geometry.
  *
  * A  coordinate filter can either record information about each coordinate or
  * change the coordinate in some way. Coordinate filters implement the
@@ -45,10 +45,10 @@ public:
     virtual
     ~CoordinateFilter() {}
 
-    /**
-     * Performs an operation on <code>coord</code>.
+    /** \brief
+     * Performs an operation on `coord`.
      *
-     * @param  coord  a <code>Coordinate</code> to which the filter is applied.
+     * **param** `coord` a Coordinate to which the filter is applied.
      */
     virtual void
     filter_rw(Coordinate* /*coord*/) const
@@ -56,10 +56,10 @@ public:
         assert(0);
     }
 
-    /**
-     * Performs an operation with <code>coord</code>.
+    /** \brief
+     * Performs an operation with `coord`.
      *
-     * @param  coord  a <code>Coordinate</code> to which the filter is applied.
+     * **param** `coord`  a Coordinate to which the filter is applied.
      */
     virtual void
     filter_ro(const Coordinate* /*coord*/)

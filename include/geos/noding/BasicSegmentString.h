@@ -37,24 +37,22 @@ namespace algorithm {
 namespace geos {
 namespace noding { // geos.noding
 
-/**
- * Represents a list of contiguous line segments,
- * and supports noding the segments.
- * The line segments are represented by an array of {@link Coordinate}s.
- * Intended to optimize the noding of contiguous segments by
- * reducing the number of allocated objects.
- * SegmentStrings can carry a context object, which is useful
- * for preserving topological or parentage information.
+/** \brief
+ * Represents a list of contiguous line segments, and supports noding the segments.
+ *
+ * The line segments are represented by an array of [Coordinates](@ref geom::Coordinate).
+ * Intended to optimize the noding of contiguous segments by reducing the number
+ * of allocated objects. SegmentStrings can carry a context object, which is
+ * useful for preserving topological or parentage information.
  * All noded substrings are initialized with the same context object.
  */
 class GEOS_DLL BasicSegmentString : public SegmentString {
 
 public:
 
-    /// Construct a BasicSegmentString.
-    //
-    /// @param newPts CoordinateSequence representing the string,
-    ///                externally owned
+    /// \brief Construct a BasicSegmentString.
+    ///
+    /// @param newPts CoordinateSequence representing the string, externally owned
     /// @param newContext the context associated to this SegmentString
     ///
     BasicSegmentString(geom::CoordinateSequence* newPts,
@@ -67,23 +65,23 @@ public:
     ~BasicSegmentString() override
     {}
 
-    /// see dox in SegmentString.h
+    // see dox in SegmentString.h
     size_t
     size() const override
     {
         return pts->size();
     }
 
-    /// see dox in SegmentString.h
+    // see dox in SegmentString.h
     const geom::Coordinate& getCoordinate(size_t i) const override;
 
-    /// see dox in SegmentString.h
+    /// @see SegmentString::getCoordinates() const
     geom::CoordinateSequence* getCoordinates() const override;
 
-    /// see dox in SegmentString.h
+    // see dox in SegmentString.h
     bool isClosed() const override;
 
-    /// see dox in SegmentString.h
+    // see dox in SegmentString.h
     std::ostream& print(std::ostream& os) const override;
 
     /** \brief

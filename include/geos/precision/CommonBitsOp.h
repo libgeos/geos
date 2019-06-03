@@ -77,20 +77,20 @@ private:
 
 public:
 
-    /**
+    /** \brief
      * Creates a new instance of class, which reshifts result Geometry
      */
     CommonBitsOp();
 
-    /**
+    /** \brief
      * Creates a new instance of class, specifying whether
-     * the result {@link Geometry}s should be reshifted.
+     * the result {@link geom::Geometry}s should be reshifted.
      *
-     * @param returnToOriginalPrecision
+     * @param nReturnToOriginalPrecision
      */
     CommonBitsOp(bool nReturnToOriginalPrecision);
 
-    /**
+    /** \brief
      * Computes the set-theoretic intersection of two Geometry,
      * using enhanced precision.
      * @param geom0 the first Geometry
@@ -102,7 +102,7 @@ public:
         const geom::Geometry* geom0,
         const geom::Geometry* geom1);
 
-    /**
+    /** \brief
      * Computes the set-theoretic union of two Geometry,
      * using enhanced precision.
      * @param geom0 the first Geometry
@@ -114,7 +114,7 @@ public:
         const geom::Geometry* geom0,
         const geom::Geometry* geom1);
 
-    /**
+    /** \brief
      * Computes the set-theoretic difference of two Geometry,
      * using enhanced precision.
      * @param geom0 the first Geometry
@@ -126,7 +126,7 @@ public:
         const geom::Geometry* geom0,
         const geom::Geometry* geom1);
 
-    /**
+    /** \brief
      * Computes the set-theoretic symmetric difference of two geometries,
      * using enhanced precision.
      * @param geom0 the first Geometry
@@ -138,7 +138,7 @@ public:
         const geom::Geometry* geom0,
         const geom::Geometry* geom1);
 
-    /**
+    /** \brief
      * Computes the buffer a geometry,
      * using enhanced precision.
      * @param geom0 the Geometry to buffer
@@ -149,7 +149,7 @@ public:
         const geom::Geometry* geom0,
         double distance);
 
-    /**
+    /** \brief
      * If required, returning the result to the orginal precision
      * if required.
      *

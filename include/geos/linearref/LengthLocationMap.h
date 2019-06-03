@@ -29,8 +29,8 @@ namespace geos {
 namespace linearref { // geos::linearref
 
 /**
- * Computes the {@link LinearLocation} for a given length
- * along a linear {@link Geometry}.
+ * Computes the LinearLocation for a given length
+ * along a linear [Geometry](@ref geom::Geometry).
  * Negative lengths are measured in reverse from end of the linear geometry.
  * Out-of-range values are clamped.
  */
@@ -52,12 +52,12 @@ public:
 
     /**
      * \brief
-     * Computes the {@link LinearLocation} for a
-     * given length along a linear {@link Geometry}.
+     * Computes the LinearLocation for a
+     * given length along a linear [Geometry](@ref geom::Geometry).
      *
-     * @param line the linear geometry to use
+     * @param linearGeom the linear geometry to use
      * @param length the length index of the location
-     * @return the {@link LinearLocation} for the length
+     * @return the LinearLocation for the length
      */
     static LinearLocation
     getLocation(const geom::Geometry* linearGeom, double length)
@@ -68,14 +68,14 @@ public:
 
     /**
      * \brief
-     * Computes the {@link LinearLocation} for a
-     * given length along a linear {@link Geometry}.
+     * Computes the LinearLocation for a
+     * given length along a linear [Geometry].
      *
-     * @param line the linear geometry to use
+     * @param linearGeom the linear geometry to use
      * @param length the length index of the location
-     * @param resolveLower if true lengths are resolved to the
+     * @param resolveLower if `true` lengths are resolved to the
      *                     lowest possible index
-     * @return the {@link LinearLocation} for the length
+     * @return the LinearLocation for the length
      */
     static LinearLocation
     getLocation(const geom::Geometry* linearGeom, double length, bool resolveLower)
@@ -85,12 +85,12 @@ public:
     }
 
     /**
-     * Computes the length for a given {@link LinearLocation}
-     * on a linear {@link Geometry}.
+     * Computes the length for a given LinearLocation
+     * on a linear [Geometry](@ref geom::Geometry).
      *
-     * @param line the linear geometry to use
-     * @param loc the {@link LinearLocation} index of the location
-     * @return the length for the {@link LinearLocation}
+     * @param linearGeom the linear geometry to use
+     * @param loc the LinearLocation index of the location
+     * @return the length for the LinearLocation
      */
     static double getLength(const geom::Geometry* linearGeom, const LinearLocation& loc);
 
@@ -98,21 +98,23 @@ public:
 
     /**
      * \brief
-     * Compute the {@link LinearLocation} corresponding to a length.
+     * Compute the LinearLocation corresponding to a length.
      *
      * Negative lengths are measured in reverse from end of the linear geometry.
      * Out-of-range values are clamped.
      * Ambiguous indexes are resolved to the lowest possible location value,
-     * depending on the value of <tt>resolveLower</tt>.
+     * depending on the value of `resolveLower`.
      *
      * @param length the length index
+     * @param resolveLower if `true` lengths are resolved to the
+     *                     lowest possible index
      * @return the corresponding LinearLocation
      */
     LinearLocation getLocation(double length, bool resolveLower) const;
 
     /**
      * \brief
-     * Compute the {@link LinearLocation} corresponding to a length.
+     * Compute the LinearLocation corresponding to a length.
      *
      * Negative lengths are measured in reverse from end of the linear geometry.
      * Out-of-range values are clamped.

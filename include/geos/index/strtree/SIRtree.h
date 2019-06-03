@@ -62,6 +62,7 @@ public:
     /**
      * Returns items whose bounds intersect the given bounds.
      * @param x1 possibly equal to x2
+     * @param x2
      */
     std::vector<void*>*
     query(double x1, double x2)

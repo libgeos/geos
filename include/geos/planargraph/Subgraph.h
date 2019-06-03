@@ -38,21 +38,21 @@ class Edge;
 namespace geos {
 namespace planargraph { // geos.planargraph
 
-/// A subgraph of a PlanarGraph.
+/// \brief A subgraph of a PlanarGraph.
 //
-/// A subgraph may contain any subset of geomgraph::Edges
+/// A subgraph may contain any subset of {@link Edge}s
 /// from the parent graph.
-/// It will also automatically contain all geomgraph::DirectedEdge
-/// and geomgraph::Node associated with those edges.
+/// It will also automatically contain all {@link DirectedEdge}s
+/// and {@link Node}s associated with those edges.
 /// No new objects are created when edges are added -
 /// all associated components must already exist in the parent graph.
 ///
-/// @@ Actually we'll be copying Coordinates in NodeMap.
+/// @note Actually we'll be copying Coordinates in NodeMap.
 /// I guess that'll need to be changed soon.
 ///
 class GEOS_DLL Subgraph {
 public:
-    /**
+    /** \brief
      * Creates a new subgraph of the given PlanarGraph
      *
      * @param parent the parent graph
@@ -62,8 +62,8 @@ public:
         parentGraph(parent)
     {}
 
-    /**
-     * Gets the {@link PlanarGraph} which this subgraph
+    /** \brief
+     * Gets the PlanarGraph which this subgraph
      * is part of.
      *
      * @return the parent PlanarGraph
@@ -74,22 +74,23 @@ public:
         return parentGraph;
     }
 
-    /**
-     * Adds an {@link Edge} to the subgraph.
-     * The associated {@link DirectedEdge}s and {@link planarNode}s
+    /** \brief
+     * Adds an Edge to the subgraph.
+     *
+     * The associated {@link DirectedEdge}s and {@link Node}s
      * are also added.
      *
      * @param e the edge to add
      *
      * @return a pair with first element being an iterator
      *         to the Edge in set and second element
-     *	   being a boolean value indicating wheter
-     *	   the Edge has been inserted now or was
-     *	   already in the set.
+     *	       being a boolean value indicating wheter
+     *	       the Edge has been inserted now or was
+     *	       already in the set.
      */
     std::pair<std::set<Edge*>::iterator, bool> add(Edge* e);
 
-    /**
+    /** \brief
      * Returns an iterator over the DirectedEdge in this graph,
      * in the order in which they were added.
      *
@@ -104,8 +105,8 @@ public:
     }
 
 
-    /**
-     * Returns an {@link Iterator} over the {@link Edge}s in this
+    /** \brief
+     * Returns an iterator over the {@link Edge}s in this
      * graph, in the order in which they were added.
      *
      * @return an iterator over the edges
@@ -123,8 +124,8 @@ public:
         return edges.end();
     }
 
-    /**
-     * Returns a iterators over the planarNodesMap::container
+    /** \brief
+     * Returns a iterators over the planar NodeMap::container
      * in this graph.
      */
     NodeMap::container::iterator
@@ -148,10 +149,11 @@ public:
         return nodeMap.begin();
     }
 
-    /**
-     * Tests whether an {@link Edge} is contained in this subgraph
+    /** \brief
+     * Tests whether an {@link Edge} is contained in this subgraph.
+     *
      * @param e the edge to test
-     * @return <code>true</code> if the edge is contained in this subgraph
+     * @return `true` if the edge is contained in this subgraph
      */
     bool
     contains(Edge* e)

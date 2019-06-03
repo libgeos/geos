@@ -24,7 +24,8 @@ namespace operation {
  * spatial functions.
  *
  * The Overlay Algorithm is used in spatial analysis methods for computing
- * set-theoretic operations (boolean combinations) of input {@link Geometry}s.
+ * set-theoretic operations (boolean combinations) of input
+ * [Geometrys](@ref geom::Geometry).
  * The algorithm for computing the overlay uses the intersection operations
  * supported by topology graphs.
  * To compute an overlay it is necessary to explicitly compute the resultant

@@ -67,8 +67,8 @@ class EdgeSetIntersector;
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-/**
- * A GeometryGraph is a graph that models a given Geometry
+/** \brief
+ * A GeometryGraph is a graph that models a given Geometry.
  */
 class GEOS_DLL GeometryGraph: public PlanarGraph {
     using PlanarGraph::add;
@@ -197,18 +197,17 @@ public:
 
     /**
      * \brief
-     * Compute self-nodes, taking advantage of the Geometry type to
-     * minimize the number of intersection tests.  (E.g. rings are
-     * not tested for self-intersection, since
-     * they are assumed to be valid).
+     * Compute self-nodes, taking advantage of the Geometry type to minimize
+     * the number of intersection tests. (E.g. rings are not tested for
+     * self-intersection, since they are assumed to be valid).
      *
      * @param li the LineIntersector to use
-     *
-     * @param computeRingSelfNodes if <false>, intersection checks are
-     *	optimized to not test rings for self-intersection
+     * @param computeRingSelfNodes if `false`, intersection checks are optimized
+     *                             to not test rings for self-intersection
+     * @param env an Envelope
      *
      * @return the SegmentIntersector used, containing information about
-     *	the intersections found
+     *         the intersections found
      */
     index::SegmentIntersector*
     computeSelfNodes(

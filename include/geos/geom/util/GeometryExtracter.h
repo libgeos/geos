@@ -42,7 +42,7 @@ public:
      * and adds them to the provided container.
      *
      * @param geom the geometry from which to extract
-     * @param list the list to add the extracted elements to
+     * @param lst the list to add the extracted elements to
      */
     template <class ComponentType, class TargetContainer>
     static void

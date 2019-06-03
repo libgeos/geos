@@ -188,15 +188,16 @@ public:
      * Each offset curve has an attached {@link geomgraph::Label} indicating
      * its left and right location.
      *
-     * @return a Collection of SegmentStrings representing the raw
-     * buffer curves
+     * @return a Collection of SegmentStrings representing the raw buffer curves
      */
     std::vector<noding::SegmentString*>& getCurves();
 
-    /// Add raw curves for a set of CoordinateSequences
-    //
+    /// \brief Add raw curves for a set of CoordinateSequences.
+    ///
     /// @param lineList is a list of CoordinateSequence, ownership
-    ///        of which is transferred here.
+    ///                 of which is transferred here
+    /// @param leftLoc left location
+    /// @param rightLoc right location
     ///
     void addCurves(const std::vector<geom::CoordinateSequence*>& lineList,
                    int leftLoc, int rightLoc);

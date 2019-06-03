@@ -39,7 +39,7 @@ namespace geos {
 namespace noding { // geos::noding
 
 /** \brief
- * Finds if two sets of {@link SegmentStrings}s intersect.
+ * Finds if two sets of [SegmentStrings](@ref noding::SegmentString) intersect.
  *
  * Uses indexing for fast performance and to optimize repeated tests
  * against a target set of lines.

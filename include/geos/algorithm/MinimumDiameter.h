@@ -41,24 +41,20 @@ namespace algorithm { // geos::algorithm
 /** \brief
  * Computes the minimum diameter of a geom::Geometry
  *
- * The minimum diameter is defined to be the
- * width of the smallest band that
- * contains the geometry,
- * where a band is a strip of the plane defined
- * by two parallel lines.
- * This can be thought of as the smallest hole that the geometry can be
- * moved through, with a single rotation.
- * <p>
+ * The minimum diameter is defined to be the width of the smallest band that
+ * contains the geometry, where a band is a strip of the plane defined
+ * by two parallel lines. This can be thought of as the smallest hole
+ * that the geometry can be moved through, with a single rotation.
+ *
  * The first step in the algorithm is computing the convex hull of the Geometry.
  * If the input Geometry is known to be convex, a hint can be supplied to
  * avoid this computation.
- * <p>
+ *
  * This class can also be used to compute a line segment representing
  * the minimum diameter, the supporting line segment of the minimum diameter,
  * and a minimum rectangle enclosing the input geometry.
- * This rectangle will
- * have width equal to the minimum diameter, and have one side
- * parallel to the supporting segment.
+ * This rectangle will have width equal to the minimum diameter, and have
+ * one side parallel to the supporting segment.
  *
  * @see ConvexHull
  *
@@ -100,9 +96,9 @@ public:
     ~MinimumDiameter();
 
     /** \brief
-     * Compute a minimum diameter for a giver {@link Geometry}.
+     * Compute a minimum diameter for a given [Geometry](@ref geom::Geometry).
      *
-     * @param geom a Geometry
+     * @param newInputGeom a Geometry
      */
     MinimumDiameter(const geom::Geometry* newInputGeom);
 
@@ -113,51 +109,53 @@ public:
      * or a two-point LineString, or a Point).
      *
      * @param newInputGeom a Geometry which is convex
-     * @param newIsConvex <code>true</code> if the input geometry is convex
+     * @param newIsConvex `true` if the input geometry is convex
      */
     MinimumDiameter(const geom::Geometry* newInputGeom,
                     const bool newIsConvex);
 
     /** \brief
-     * Gets the length of the minimum diameter of the input Geometry
+     * Gets the length of the minimum diameter of the input Geometry.
      *
      * @return the length of the minimum diameter
      */
     double getLength();
 
     /** \brief
-     * Gets the {@link geom::Coordinate} forming one end of the minimum diameter
+     * Gets the {@link geom::Coordinate} forming one end of the minimum diameter.
      *
      * @return a coordinate forming one end of the minimum diameter
      */
     geom::Coordinate* getWidthCoordinate();
 
     /** \brief
-     * Gets the segment forming the base of the minimum diameter
+     * Gets the segment forming the base of the minimum diameter.
      *
      * @return the segment forming the base of the minimum diameter
      */
     geom::LineString* getSupportingSegment();
 
     /** \brief
-     * Gets a LineString which is a minimum diameter
+     * Gets a LineString which is a minimum diameter.
      *
      * @return a LineString which is a minimum diameter
      */
     geom::LineString* getDiameter();
 
-    /**
-     * Gets the minimum rectangular Polygon which encloses the input geometry. The rectangle has width
-     * equal to the minimum diameter, and a longer length. If the convex hill of the input is degenerate
-     * (a line or point) a LineString or Point is returned.
-     * The minimum rectangle can be used as an extremely generalized representation for the given
-     * geometry.
+    /** \brief
+     * Gets the minimum rectangular Polygon which encloses the input geometry.
+     *
+     * The rectangle has width equal to the minimum diameter, and a longer
+     * length. If the convex hill of the input is degenerate (a line or point)
+     * a LineString or Point is returned.
+     * The minimum rectangle can be used as an extremely generalized
+     * representation for the given geometry.
      *
      * @return the minimum rectangle enclosing the input (or a line or point if degenerate)
      */
     geom::Geometry* getMinimumRectangle();
 
-    /**
+    /** \brief
      * Gets the minimum rectangle enclosing a geometry.
      *
      * @param geom the geometry
@@ -165,8 +163,8 @@ public:
     */
     static geom::Geometry* getMinimumRectangle(geom::Geometry* geom);
 
-    /**
-     * Gets the length of the minimum diameter enclosing a geometry
+    /** \brief
+     * Gets the length of the minimum diameter enclosing a geometry.
      * @param geom the geometry
      * @return the length of the minimum diameter of the geometry
      */

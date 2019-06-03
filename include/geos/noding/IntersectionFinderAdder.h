@@ -54,7 +54,7 @@ class GEOS_DLL IntersectionFinderAdder: public SegmentIntersector {
 
 public:
 
-    /**
+    /** \brief
      * Creates an intersection finder which finds all proper intersections
      * and stores them in the provided Coordinate array
      *
@@ -68,12 +68,12 @@ public:
         interiorIntersections(v)
     {}
 
-    /**
-     * This method is called by clients
-     * of the {@link SegmentIntersector} class to process
-     * intersections for two segments of the {@link SegmentStrings}
-     * being intersected.
-     * Note that some clients (such as {@link MonotoneChain}s) may
+    /** \brief
+     * This method is called by clients of the SegmentIntersector
+     * class to process intersections for two segments of the
+     * {@link SegmentString}s being intersected.
+     *
+     * Note that some clients (such as `MonotoneChains`) may
      * optimize away this call for segment pairs which they have
      * determined do not intersect
      * (e.g. by an disjoint envelope test).

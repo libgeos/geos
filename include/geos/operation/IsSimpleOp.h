@@ -69,15 +69,15 @@ namespace operation { // geos.operation
  *
  * This definition relies on the definition of boundary points.
  * The SFS uses the Mod-2 rule to determine which points are on the boundary of
- * lineal geometries, but this class supports
- * using other {@link BoundaryNodeRule}s as well.
+ * lineal geometries, but this class supports using other
+ * [BoundaryNodeRules](@ref algorithm::BoundaryNodeRule) as well.
  *
- * Simplicity is defined for each {@link Geometry} subclass as follows:
+ * Simplicity is defined for each [Geometry](@ref geom::Geometry) subclass as follows:
  *
  *  - Valid polygonal geometries are simple by definition, so
- *    <code>isSimple</code> trivially returns true.
+ *    `isSimple` trivially returns true.
  *    (Hint: in order to check if a polygonal geometry has self-intersections,
- *    use {@link Geometry::isValid}).
+ *    use geom::Geometry::isValid()).
  *
  *  - Linear geometries are simple iff they do not self-intersect at points
  *    other than boundary points.
@@ -88,7 +88,7 @@ namespace operation { // geos.operation
  *  - Zero-dimensional geometries (points) are simple iff they have no
  *    repeated points.
  *
- *  - Empty <code>Geometry</code>s are always simple
+ *  - Empty `Geometry`s are always simple
  *
  * @see algorithm::BoundaryNodeRule
  *
@@ -124,21 +124,21 @@ public:
     IsSimpleOp(const geom::Geometry& geom,
                const algorithm::BoundaryNodeRule& boundaryNodeRule);
 
-    /**
+    /** \brief
      * Tests whether the geometry is simple.
      *
      * @return true if the geometry is simple
      */
     bool isSimple();
 
-    /**
+    /** \brief
      * Gets a coordinate for the location where the geometry
-     * fails to be simple.
-     * (i.e. where it has a non-boundary self-intersection).
+     * fails to be simple (i.e. where it has a non-boundary self-intersection).
+     *
      * {@link #isSimple} must be called before this method is called.
      *
      * @return a coordinate for the location of the non-boundary
-     *           self-intersection. Ownership retained.
+     *         self-intersection. Ownership retained.
      * @return the null coordinate if the geometry is simple
      */
     const geom::Coordinate*
@@ -147,7 +147,7 @@ public:
         return nonSimpleLocation.get();
     }
 
-    /**
+    /** \brief
      * Reports whether a geom::LineString is simple.
      *
      * @param geom the lineal geometry to test
@@ -157,7 +157,7 @@ public:
      */
     bool isSimple(const geom::LineString* geom);
 
-    /**
+    /** \brief
      * Reports whether a geom::MultiLineString is simple.
      *
      * @param geom the lineal geometry to test
@@ -167,7 +167,7 @@ public:
      */
     bool isSimple(const geom::MultiLineString* geom);
 
-    /**
+    /** \brief
      * A MultiPoint is simple iff it has no repeated points
      *
      * @deprecated use isSimple()

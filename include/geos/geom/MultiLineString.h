@@ -47,7 +47,7 @@ namespace geom { // geos::geom
 #pragma warning(disable:4250) // T1 inherits T2 via dominance
 #endif
 
-/// Models a collection of (@link LineString}s.
+/// Models a collection of [LineStrings](@ref geom::LineString).
 class GEOS_DLL MultiLineString: public GeometryCollection, public Lineal {
 
 public:
@@ -61,12 +61,12 @@ public:
 
     /**
      * \brief
-     * Returns Dimension::False if all LineStrings in the collection
+     * Returns Dimension::False if all [LineStrings](@ref geom::LineString) in the collection
      * are closed, 0 otherwise.
      */
     int getBoundaryDimension() const override;
 
-    /// Returns a (possibly empty) MultiPoint
+    /// Returns a (possibly empty) [MultiPoint](@ref geom::MultiPoint)
     std::unique_ptr<Geometry> getBoundary() const override;
 
     std::string getGeometryType() const override;
@@ -93,22 +93,20 @@ public:
 protected:
 
     /**
-     * \brief Constructs a <code>MultiLineString</code>.
+     * \brief Constructs a MultiLineString.
      *
-     * @param  newLines
-     *	The <code>LineStrings</code>s for this
-     *	<code>MultiLineString</code>, or <code>null</code>
-     *	or an empty array to create the empty geometry.
-     *	Elements may be empty <code>LineString</code>s,
-     *	but not <code>null</code>s.
+     * @param  newLines The [LineStrings](@ref geom::LineString) for this
+     *                  MultiLineString, or `null`
+     *                  or an empty array to create the empty geometry.
+     *                  Elements may be empty LineString,
+     *                  but not `null`s.
      *
-     *	Constructed object will take ownership of
-     *	the vector and its elements.
+     * @param newFactory The GeometryFactory used to create this geometry.
+     *                   Caller must keep the factory alive for the life-time
+     *                   of the constructed MultiLineString.
      *
-     * @param newFactory
-     * 	The GeometryFactory used to create this geometry.
-     *	Caller must keep the factory alive for the life-time
-     *	of the constructed MultiLineString.
+     * @note Constructed object will take ownership of
+     *       the vector and its elements.
      *
      */
     MultiLineString(std::vector<Geometry*>* newLines,

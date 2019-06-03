@@ -64,7 +64,7 @@ public:
     Rectangle(double x1, double y1, double x2, double y2);
 
     /**
-     * \@return the minimum x-coordinate of the rectangle
+     * @return the minimum x-coordinate of the rectangle
      */
     double
     xmin() const
@@ -73,7 +73,7 @@ public:
     }
 
     /**
-     * \@return the minimum y-coordinate of the rectangle
+     * @return the minimum y-coordinate of the rectangle
      */
 
     double
@@ -84,7 +84,7 @@ public:
 
 
     /**
-     * \@return the maximum x-coordinate of the rectangle
+     * @return the maximum x-coordinate of the rectangle
      */
 
     double
@@ -95,7 +95,7 @@ public:
 
 
     /**
-     * \@return the maximum y-coordinate of the rectangle
+     * @return the maximum y-coordinate of the rectangle
      */
 
     double
@@ -105,9 +105,9 @@ public:
     }
 
     /**
-     * \@return the rectangle as a polygon geometry
+     * @return the rectangle as a polygon geometry
      *
-     * Ownership transferred to caller
+     * @note Ownership transferred to caller
      */
     geom::Polygon* toPolygon(const geom::GeometryFactory& f) const;
 
@@ -133,9 +133,9 @@ public:
     };
 
     /**
-     * @brief Test if the given position is on a {@link Rectangle] edge
-     * @param pos {@link Rectangle} {@link Position}
-     * @return true, if the position is on an edge
+     * @brief Test if the given position is on a Rectangle edge
+     * @param pos Rectangle::Position
+     * @return `true`, if the position is on an edge
      */
 
     static bool
@@ -145,10 +145,10 @@ public:
     }
 
     /**
-     * @brief Test if the given positions are on the same {@link Rectangle} edge
-     * @param pos1 {@link Rectangle} {@link Position} of first coordinate
-     * @param pos2 {@link Rectangle} {@link Position} of second coordinate
-     * @return true, if the positions are on the same edge
+     * @brief Test if the given positions are on the same Rectangle edge
+     * @param pos1 [Position](@ref Rectangle::Position) of first coordinate
+     * @param pos2 [Position](@ref Rectangle::Position) of second coordinate
+     * @return `true`, if the positions are on the same edge
      */
 
     static bool
@@ -158,10 +158,10 @@ public:
     }
 
     /**
-     * @brief Establish position of coordinate with respect to a {@link Rectangle}
+     * @brief Establish position of coordinate with respect to a Rectangle
      * @param x x-coordinate
      * @param y y-coordinate
-     * @return {@link Position} of the coordinate
+     * @return [Position](@ref Rectangle::Position) of the coordinate
      */
 
     Position
@@ -194,8 +194,8 @@ public:
 
     /**
      * @brief Next edge in clock-wise direction
-     * @param pos {@link Rectangle} {@link Position}
-     * @return next {@Rectangle} {@link Position} in clock-wise direction
+     * @param pos [Position](@ref Rectangle::Position)
+     * @return next [Position](@ref Rectangle::Position) in clock-wise direction
      */
 
     static Position

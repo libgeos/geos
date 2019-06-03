@@ -32,23 +32,17 @@ namespace algorithm { // geos::algorithm
 namespace locate { // geos::algorithm::locate
 
 /** \brief
- * Computes the location of points
- * relative to a {@link Polygonal} {@link Geometry},
- * using a simple <tt>O(n)</tt> algorithm.
+ * Computes the location of points relative to a [Polygonal](@ref geom::Polygonal)
+ * [Geometry](@ref geom::Geometry), using a simple `O(n)` algorithm.
  *
- * The algorithm used reports
- * if a point lies in the interior, exterior,
+ * The algorithm used reports if a point lies in the interior, exterior,
  * or exactly on the boundary of the Geometry.
  *
- * Instance methods are provided to implement
- * the interface {@link PointInAreaLocator}.
- * However, they provide no performance
- * advantage over the class methods.
+ * Instance methods are provided to implement the interface `PointInAreaLocator`.
+ * However, they provide no performance advantage over the class methods.
  *
- * This algorithm is suitable for use in cases where
- * only a few points will be tested.
- * If many points will be tested,
- * {@link IndexedPointInAreaLocator} may provide better performance.
+ * This algorithm is suitable for use in cases where only a few points will be tested.
+ * If many points will be tested, IndexedPointInAreaLocator may provide better performance.
  */
 class SimplePointInAreaLocator : public PointOnGeometryLocator {
 
@@ -57,39 +51,41 @@ public:
     static int locate(const geom::Coordinate& p,
                       const geom::Geometry* geom);
 
-    /**
-    * Determines the {@link Location} of a point in a {@link Polygon}.
-    * The return value is one of:
-    *
-    * - {@link Location.INTERIOR} if the point is in the geometry interior
-    * - {@link Location.BOUNDARY} if the point lies exactly on the boundary
-    * - {@link Location.EXTERIOR} if the point is outside the geometry
-    *
-    * Computes {@link Location::BOUNDARY} if the point lies exactly
-    * on the polygon boundary.
-    *
-    * @param p the point to test
-    * @param poly the geometry to test
-    * @return the Location of the point in the polygon
-    */
+    /** \brief
+     * Determines the Location of a point in a [Polygon](@ref geom::Polygon).
+     *
+     * The return value is one of:
+     *
+     * - [Location::INTERIOR](@ref geom::Location::INTERIOR) if the point is in the geometry interior
+     * - [Location::BOUNDARY](@ref geom::Location::BOUNDARY) if the point lies exactly on the boundary
+     * - [Location::EXTERIOR](@ref geom::Location::EXTERIOR) if the point is outside the geometry
+     *
+     * Computes `Location::BOUNDARY` if the point lies exactly
+     * on the polygon boundary.
+     *
+     * @param p the point to test
+     * @param poly the geometry to test
+     * @return the Location of the point in the polygon
+     */
     static int locatePointInPolygon(const geom::Coordinate& p,
                                     const geom::Polygon* poly);
-    /**
-    * Determines whether a point is contained in a {@link Geometry},
-    * or lies on its boundary.
-    * This is a convenience method for
-    *
-    *  Location.EXTERIOR != locate(p, geom)
-    *
-    * @param p the point to test
-    * @param geom the geometry to test
-    * @return true if the point lies in or on the geometry
-    */
+    /** \brief
+     * Determines whether a point is contained in a [Geometry](@ref geom::Geometry),
+     * or lies on its boundary.
+     *
+     * This is a convenience method for
+     *
+     *      Location.EXTERIOR != locate(p, geom)
+     *
+     * @param p the point to test
+     * @param geom the geometry to test
+     * @return true if the point lies in or on the geometry
+     */
     static bool isContained(const geom::Coordinate& p,
                             const geom::Geometry* geom);
 
     SimplePointInAreaLocator(const geom::Geometry* p_g)
-        :	g(p_g)
+        : g(p_g)
     { }
 
     int

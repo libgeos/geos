@@ -41,17 +41,17 @@ namespace operation { // geos::operation
 namespace relate { // geos::operation::relate
 
 /** \brief
- * Implements the SFS <tt>relate()</tt> operation on two
+ * Implements the SFS `relate()` operation on two
  * geom::Geometry objects.
  *
  * This class supports specifying a custom algorithm::BoundaryNodeRule
  * to be used during the relate computation.
  *
- * <b>Note:</b> custom Boundary Node Rules do not (currently)
+ * @note Custom Boundary Node Rules do not (currently)
  * affect the results of other Geometry methods (such
- * as {@link Geometry::getBoundary}.  The results of
- * these methods may not be consistent with the relationship computed by
- * a custom Boundary Node Rule.
+ * as [Geometry::getBoundary()](@ref geom::Geometry::getBoundary() const)).
+ * The results of these methods may not be consistent with the relationship
+ * computed by a custom Boundary Node Rule.
  *
  */
 class GEOS_DLL RelateOp: public GeometryGraphOperation {
@@ -76,7 +76,7 @@ public:
     /** \brief
      * Computes the geom::IntersectionMatrix for the spatial relationship
      * between two geom::Geometry objects, using a specified
-     * Boundary Node Rule
+     * Boundary Node Rule.
      *
      * @param a a Geometry to test. Ownership left to caller.
      * @param b a Geometry to test. Ownership left to caller.

@@ -39,19 +39,17 @@ namespace geos {
 namespace triangulate { //geos.triangulate
 namespace quadedge { //geos.triangulate.quadedge
 
-/**
- * Models a site (node) in a {@link QuadEdgeSubdivision}.
- * The sites can be points on a line string representing a
- * linear site.
+/** \brief
+ * Models a site (node) in a QuadEdgeSubdivision.
+ *
+ * The sites can be points on a line string representing a linear site.
  *
  * The vertex can be considered as a vector with a norm, length, inner product, cross
  * product, etc. Additionally, point relations (e.g., is a point to the left of a line, the circle
  * defined by this point and two others, etc.) are also defined in this class.
  *
- * It is common to want to attach user-defined data to
- * the vertices of a subdivision.
- * One way to do this is to subclass <tt>Vertex</tt>
- * to carry any desired information (see {@link ConstraintVertex}).
+ * It is common to want to attach user-defined data to the vertices of a subdivision.
+ * One way to do this is to subclass `Vertex` to carry any desired information.
  *
  * @author JTS: David Skea
  * @author JTS: Martin Davis

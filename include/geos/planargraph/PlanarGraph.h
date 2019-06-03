@@ -219,9 +219,8 @@ public:
     }
 
     /**
-     * \brief
      * Returns the Edges that have been added to this PlanarGraph
-     * @see #add(Edge)
+     * @see PlanarGraph::add(Edge* edge)
      */
     std::vector<Edge*>*
     getEdges()

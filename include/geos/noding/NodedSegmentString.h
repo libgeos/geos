@@ -46,7 +46,7 @@ namespace noding { // geos::noding
  * Represents a list of contiguous line segments,
  * and supports noding the segments.
  *
- * The line segments are represented by an array of {@link Coordinate}s.
+ * The line segments are represented by an array of [Coordinates](@ref geom::Coordinate).
  * Intended to optimize the noding of contiguous segments by
  * reducing the number of allocated objects.
  * SegmentStrings can carry a context object, which is useful
@@ -86,14 +86,14 @@ public:
         const SegmentString::NonConstVect& segStrings);
 
 
-    /**
+    /** \brief
      * Creates a new segment string from a list of vertices.
      *
      * @param newPts CoordinateSequence representing the string,
      *               ownership transferred.
      *
      * @param newContext the user-defined data of this segment string
-     *             (may be null)
+     *                   (may be null)
      */
     NodedSegmentString(geom::CoordinateSequence* newPts, const void* newContext)
         : NodableSegmentString(newContext)
@@ -106,8 +106,9 @@ public:
         delete pts;
     }
 
-    /**
+    /** \brief
      * Adds an intersection node for a given point and segment to this segment string.
+     *
      * If an intersection already exists for this exact location, the existing
      * node will be returned.
      *
@@ -161,13 +162,13 @@ public:
      * Gets the octant of the segment starting at vertex index.
      *
      * @param index the index of the vertex starting the segment.
-     *        Must not be the last index in the vertex list
+     *              Must not be the last index in the vertex list
      * @return the octant of the segment at the vertex
      */
     int getSegmentOctant(size_t index) const;
 
     /** \brief
-     * Add {SegmentNode}s for one or both
+     * Add {@link SegmentNode}s for one or both
      * intersections found for a segment of an edge to the edge
      * intersection list.
      */

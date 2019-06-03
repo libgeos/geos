@@ -233,9 +233,8 @@ public:
     ///
     double getOffsetY() const;
 
-    /** \brief
-     *  Sets <code>internal</code> to the precise representation of
-     * <code>external</code>.
+    /*
+     *  Sets ´internal` to the precise representation of `external`.
      *
      * @param external the original coordinate
      * @param internal the coordinate whose values will be changed to the

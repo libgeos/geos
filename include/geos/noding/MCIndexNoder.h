@@ -52,11 +52,12 @@ namespace noding { // geos.noding
 
 /** \brief
  * Nodes a set of SegmentString using a index based
- * on index::chain::MonotoneChain and a index::SpatialIndex.
+ * on [MonotoneChain](@ref index::chain::MonotoneChain)
+ * and a [SpatialIndex](@ref index::SpatialIndex).
  *
- * The {@link SpatialIndex} used should be something that supports
- * envelope (range) queries efficiently (such as a index::quadtree::Quadtree
- * or index::strtree::STRtree.
+ * The [SpatialIndex](@ref index::SpatialIndex) used should be something that supports
+ * envelope (range) queries efficiently (such as a [Quadtree](@ref index::quadtree::Quadtree)
+ * or [STRtree](@ref index::strtree::STRtree)).
  *
  * Last port: noding/MCIndexNoder.java rev. 1.4 (JTS-1.7)
  */
@@ -86,7 +87,7 @@ public:
 
     ~MCIndexNoder() override;
 
-    /// Return a reference to this instance's std::vector of MonotoneChains
+    /// \brief Return a reference to this instance's std::vector of MonotoneChains
     std::vector<index::chain::MonotoneChain*>&
     getMonotoneChains()
     {

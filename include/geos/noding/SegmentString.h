@@ -51,8 +51,8 @@ public:
     friend std::ostream& operator<< (std::ostream& os,
                                      const SegmentString& ss);
 
-    /// Construct a SegmentString.
-    //
+    /// \brief Construct a SegmentString.
+    ///
     /// @param newContext the context associated to this SegmentString
     ///
     SegmentString(const void* newContext)
@@ -63,7 +63,7 @@ public:
     virtual
     ~SegmentString() {}
 
-    /**
+    /** \brief
      * Gets the user-defined data for this segment string.
      *
      * @return the user-defined data
@@ -74,7 +74,7 @@ public:
         return context;
     }
 
-    /**
+    /** \brief
      * Sets the user-defined data for this segment string.
      *
      * @param data an Object containing user-defined data
@@ -94,7 +94,7 @@ public:
     /// Return a pointer to the CoordinateSequence associated
     /// with this SegmentString.
     //
-    /// Note that the CoordinateSequence is owned by this SegmentString!
+    /// @note The CoordinateSequence is owned by this SegmentString!
     ///
     virtual geom::CoordinateSequence* getCoordinates() const = 0;
 

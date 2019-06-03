@@ -40,24 +40,22 @@ namespace geom { // geos::geom
 
 /**
  * \brief
- * Models an OGC SFS <code>LinearRing</code>.
+ * Models an OGC SFS LinearRing. A LinearRing is a LineString which is both
+ * closed and simple.
  *
- * A LinearRing is a LineString which is both closed and simple.
- * In other words,
- * the first and last coordinate in the ring must be equal,
- * and the interior of the ring must not self-intersect.
- * Either orientation of the ring is allowed.
+ * In other words, the first and last coordinate in the ring must be equal,
+ * and the interior of the ring must not self-intersect.  Either orientation
+ * of the ring is allowed.
  *
- * A ring must have either 0 or 4 or more points.
- * The first and last points must be equal (in 2D).
- * If these conditions are not met, the constructors throw
- * an {@link IllegalArgumentException}
+ * A ring must have either 0 or 4 or more points. The first and last points
+ * must be equal (in 2D). If these conditions are not met, the constructors
+ * throw an {@link geos::util::IllegalArgumentException}
  */
 class GEOS_DLL LinearRing : public LineString {
 
 public:
 
-    /**
+    /** \brief
      * The minimum number of vertices allowed in a valid non-empty ring (= 4).
      * Empty rings with 0 vertices are also valid.
      */
@@ -66,7 +64,7 @@ public:
     LinearRing(const LinearRing& lr);
 
     /**
-     * \brief Constructs a <code>LinearRing</code> with the given points.
+     * \brief Constructs a LinearRing with the given points.
      *
      * @param  points  points forming a closed and simple linestring, or
      *      <code>null</code> or an empty array to create the empty

@@ -104,7 +104,7 @@ public:
      * @param allowRepeated if set to false, repeated coordinates are
      *                      collapsed
      *
-     * NOTE: this is a CoordinateList interface in JTS
+     * @note this is a CoordinateList interface in JTS
      */
     void add(std::size_t i, const Coordinate& coord, bool allowRepeated);
 

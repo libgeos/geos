@@ -64,7 +64,7 @@ namespace geom { // geos::geom
  *
  *  A linestring must have either 0 or 2 or more points.
  *  If these conditions are not met, the constructors throw
- *  an {@link IllegalArgumentException}.
+ *  an {@link util::IllegalArgumentException}.
  */
 class GEOS_DLL LineString: public virtual Geometry, public Lineal {
 

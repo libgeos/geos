@@ -27,8 +27,8 @@
 namespace geos {
 namespace linearref { // geos::linearref
 
-/**
- * Extracts the subline of a linear {@link Geometry} between
+/** \brief
+ * Extracts the subline of a linear [Geometry](@ref geom::Geometry) between
  * two {@link LinearLocation}s on the line.
  */
 class ExtractLineByLocation {
@@ -56,9 +56,10 @@ private:
     std::unique_ptr<geom::Geometry> computeLinear(const LinearLocation& start, const LinearLocation& end);
 
 public:
-    /**
-     * Computes the subline of a {@link LineString} between
-     * two {@link LineStringLocation}s on the line.
+    /** \brief
+     * Computes the subline of a [LineString](@ref geom::LineString) between
+     * two {@link LinearLocation}s on the line.
+     *
      * If the start location is after the end location,
      * the computed geometry is reversed.
      *
@@ -71,9 +72,10 @@ public:
 
     ExtractLineByLocation(const geom::Geometry* line);
 
-    /**
+    /** \brief
      * Extracts a subline of the input.
-     * If <code>end < start</code> the linear geometry computed will be reversed.
+     *
+     * If `end < start` the linear geometry computed will be reversed.
      *
      * @param start the start location
      * @param end the end location

@@ -27,37 +27,38 @@
 namespace geos {
 namespace linearref { // geos::linearref
 
-/**
- * Determines the location of a subline along a linear {@link Geometry}.
+/** \brief
+ * Determines the location of a subline along a linear [Geometry](@ref geom::Geometry).
+ *
  * The location is reported as a pair of {@link LinearLocation}s.
- * <p>
- * <b>Note:</b> Currently this algorithm is not guaranteed to
- * return the correct substring in some situations where
- * an endpoint of the test line occurs more than once in the input line.
- * (However, the common case of a ring is always handled correctly).
+ *
+ * @note Currently this algorithm is not guaranteed to
+ *       return the correct substring in some situations where
+ *       an endpoint of the test line occurs more than once in the input line.
+ *       (However, the common case of a ring is always handled correctly).
  */
 class LocationIndexOfLine {
     /**
-    * MD - this algorithm has been extracted into a class
-    * because it is intended to validate that the subline truly is a subline,
-    * and also to use the internal vertex information to unambiguously locate the subline.
-    */
+     * MD - this algorithm has been extracted into a class
+     * because it is intended to validate that the subline truly is a subline,
+     * and also to use the internal vertex information to unambiguously locate the subline.
+     */
 private:
     const geom::Geometry* linearGeom;
 
 public:
 
     /** \brief
-     * Determines the location of a subline along a linear {@link Geometry}.
+     * Determines the location of a subline along a linear [Geometry](@ref geom::Geometry).
      *
-     * The location is reported as a pair of {@link LinearLocation}s.
+     * The location is reported as a pair of [LinearLocations](@ref LinearLocation).
      *
-     * <b>Note:</b> Currently this algorithm is not guaranteed to
-     * return the correct substring in some situations where
-     * an endpoint of the test line occurs more than once in the input line.
-     * (However, the common case of a ring is always handled correctly).
+     * @note Currently this algorithm is not guaranteed to
+     *       return the correct substring in some situations where
+     *       an endpoint of the test line occurs more than once in the input line.
+     *       (However, the common case of a ring is always handled correctly).
      *
-     * Caller must take of releasing with delete[]
+     * @note Caller must take of releasing with delete[]
      *
      */
     static LinearLocation* indicesOf(const geom::Geometry* linearGeom, const geom::Geometry* subLine);

@@ -34,24 +34,23 @@ class CoordinateSequence;
 namespace geos {
 namespace geom { // geos::geom
 
-/**
- *  Interface for classes which provide operations that
- *  can be applied to the coordinates in a {@link CoordinateSequence}.
- *  A CoordinateSequence filter can either record information about each
- *  coordinate or change the coordinate in some way.
- *  CoordinateSequence filters can be
- *  used to implement such things as coordinate transformations, centroid and
- *  envelope computation, and many other functions.
- *  For maximum efficiency, the execution of filters can be short-circuited.
- *  {@link Geometry} classes support the concept of applying a
- *  <code>CoordinateSequenceFilter</code> to each
- *  {@link CoordinateSequence}s they contain.
- *  <p>
- *  <code>CoordinateSequenceFilter</code> is
- *  an example of the Gang-of-Four Visitor pattern.
+/** \brief
+ * Interface for classes which provide operations that can be applied to
+ * the coordinates in a CoordinateSequence.
  *
- * @see Geometry::apply_ro(CoordinateSequenceFilter)
- * @see Geometry::apply_rw(CoordinateSequenceFilter)
+ * A CoordinateSequence filter can either record information about each
+ * coordinate or change the coordinate in some way.
+ * CoordinateSequence filters can be used to implement such things as
+ * coordinate transformations, centroid and envelope computation, and many
+ * other functions.
+ * For maximum efficiency, the execution of filters can be short-circuited.
+ * Geometry classes support the concept of applying a CoordinateSequenceFilter
+ * to each CoordinateSequences they contain.
+ *
+ * CoordinateSequenceFilter is an example of the Gang-of-Four Visitor pattern.
+ *
+ * @see Geometry::apply_ro(CoordinateSequenceFilter& filter) const
+ * @see Geometry::apply_rw(CoordinateSequenceFilter& filter)
  * @author Martin Davis
  *
  */
@@ -62,12 +61,11 @@ public:
     virtual
     ~CoordinateSequenceFilter() {}
 
-    /**
-     * Performs an operation on a coordinate in a {@link CoordinateSequence}.
+    /** \brief
+     * Performs an operation on a coordinate in a CoordinateSequence.
      *
-     * @param seq  the <code>CoordinateSequence</code> to which the filter
-     *             is applied
-     * @param i the index of the coordinate to apply the filter to
+     * **param** `seq`  the CoordinateSequence to which the filter is applied
+     * **param** `i` the index of the coordinate to apply the filter to
      */
     virtual void
     filter_rw(CoordinateSequence& /*seq*/, std::size_t /*i*/)
@@ -75,12 +73,11 @@ public:
         assert(0);
     }
 
-    /**
-     * Performs an operation on a coordinate in a {@link CoordinateSequence}.
+    /** \brief
+     * Performs an operation on a coordinate in a CoordinateSequence.
      *
-     * @param seq  the <code>CoordinateSequence</code> to which the filter
-     *             is applied
-     * @param i the index of the coordinate to apply the filter to
+     * **param** `seq`  the CoordinateSequence to which the filter is applied
+     * **param** `i` the index of the coordinate to apply the filter to
      */
     virtual void
     filter_ro(const CoordinateSequence& /*seq*/, std::size_t /*i*/)
@@ -88,26 +85,28 @@ public:
         assert(0);
     }
 
-    /**
+    /** \brief
      * Reports whether the application of this filter can be terminated.
-     * Once this method returns <tt>false</tt>, it should
-     * continue to return <tt>false</tt> on every subsequent call.
      *
-     * @return true if the application of this filter can be terminated.
+     * Once this method returns `false`, it should continue to return
+     * `false` on every subsequent call.
+     *
+     * @return `true` if the application of this filter can be terminated.
      */
     virtual bool isDone() const = 0;
 
 
-    /**
-     * Reports whether the execution of this filter
-     * has modified the coordinates of the geometry.
-     * If so, {@link Geometry#geometryChanged} will be executed
-     * after this filter has finished being executed.
+    /** \brief
+     * Reports whether the execution of this filter has modified
+     * the coordinates of the geometry.
      *
-     * Most filters can simply return a constant value reflecting
-     * whether they are able to change the coordinates.
+     * If so, Geometry::geometryChanged() will be executed after this
+     * filter has finished being executed.
      *
-     * @return true if this filter has changed the coordinates of the geometry
+     * Most filters can simply return a constant value reflecting whether
+     * they are able to change the coordinates.
+     *
+     * @return `true` if this filter has changed the coordinates of the geometry
      */
     virtual bool isGeometryChanged() const = 0;
 
