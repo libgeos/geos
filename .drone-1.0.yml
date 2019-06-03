@@ -14,6 +14,7 @@ clone:
 steps:
   - name: build
     image: *test-image
+    pull: true
     commands:
       - ./autogen.sh
       - CXXFLAGS="-O0" ./configure
