@@ -22,3 +22,7 @@ steps:
     image: *test-image
     commands:
       - CXXFLAGS="-O0" make check V=0
+  - name: docs
+    image: *test-image
+    commands:
+      - make doxygen
