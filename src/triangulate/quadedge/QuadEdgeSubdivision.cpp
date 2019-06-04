@@ -470,10 +470,10 @@ QuadEdgeSubdivision::getEdges(const geom::GeometryFactory& geomFact)
     int i = 0;
     for(QuadEdgeSubdivision::QuadEdgeList::iterator it = p_quadEdges->begin(); it != p_quadEdges->end(); ++it) {
         QuadEdge* qe = *it;
-        auto coordSeq = coordSeqFact->create((std::vector<geom::Coordinate>*)nullptr);;
+        auto coordSeq = coordSeqFact->create(2);
 
-        coordSeq->add(qe->orig().getCoordinate());
-        coordSeq->add(qe->dest().getCoordinate());
+        coordSeq->setAt(qe->orig().getCoordinate(), 0);
+        coordSeq->setAt(qe->dest().getCoordinate(), 1);
 
         edges[i++] = static_cast<Geometry*>(geomFact.createLineString(coordSeq.release()));
     }
