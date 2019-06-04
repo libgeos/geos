@@ -182,25 +182,6 @@ CoordinateArraySequence::setAt(const Coordinate& c, size_t pos)
     (*vect)[pos] = c;
 }
 
-string
-CoordinateArraySequence::toString() const
-{
-    string result("(");
-    if(getSize() > 0) {
-        //char buffer[100];
-        for(size_t i = 0, n = vect->size(); i < n; i++) {
-            Coordinate& c = (*vect)[i];
-            if(i) {
-                result.append(", ");
-            }
-            result.append(c.toString());
-        }
-    }
-    result.append(")");
-
-    return result;
-}
-
 CoordinateArraySequence::~CoordinateArraySequence()
 {
     delete vect;

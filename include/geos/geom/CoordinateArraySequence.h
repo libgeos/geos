@@ -103,8 +103,6 @@ public:
 
     void setAt(const Coordinate& c, std::size_t pos) override;
 
-    std::string toString() const override;
-
     void setPoints(const std::vector<Coordinate>& v) override;
 
     double getOrdinate(std::size_t index,

@@ -25,6 +25,7 @@
 #include <vector>
 #include <cassert>
 #include <iterator>
+#include <sstream>
 
 using namespace std;
 
@@ -249,6 +250,14 @@ operator<< (std::ostream& os, const CoordinateSequence& cs)
     os << ")";
 
     return os;
+}
+
+std::string
+CoordinateSequence::toString() const
+{
+    std::stringstream ss;
+    ss << *this;
+    return ss.str();
 }
 
 bool

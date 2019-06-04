@@ -176,7 +176,7 @@ public:
     virtual void setAt(const Coordinate& c, std::size_t pos) = 0;
 
     /// Get a string representation of CoordinateSequence
-    virtual	std::string toString() const = 0;
+    std::string toString() const;
 
     /// Substitute Coordinate list with a copy of the given vector
     virtual void setPoints(const std::vector<Coordinate>& v) = 0;
