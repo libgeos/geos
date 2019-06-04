@@ -29,6 +29,7 @@
 #include <geos/triangulate/quadedge/QuadEdgeSubdivision.h>
 #include <geos/operation/valid/RepeatedPointRemover.h>
 #include <geos/operation/valid/RepeatedPointTester.h>
+#include <geos/util.h>
 
 namespace geos {
 namespace triangulate { //geos.triangulate
@@ -48,7 +49,7 @@ DelaunayTriangulationBuilder::unique(const CoordinateSequence* seq) {
     auto seqFactory = CoordinateArraySequenceFactory::instance();
     auto dim = seq->getDimension();
 
-    std::unique_ptr<std::vector<Coordinate>> coords(new std::vector<Coordinate>());
+    auto coords = detail::make_unique<std::vector<Coordinate>>();
     seq->toVector(*(coords.get()));
     std::sort(coords->begin(), coords->end(), geos::geom::CoordinateLessThen());
 

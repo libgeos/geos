@@ -21,7 +21,7 @@
 #include <geos/triangulate/quadedge/TrianglePredicate.h>
 #include <geos/triangulate/quadedge/QuadEdge.h>
 #include <geos/algorithm/NotRepresentableException.h>
-
+#include <geos/util.h>
 
 namespace geos {
 namespace triangulate { //geos.triangulate
@@ -106,7 +106,7 @@ Vertex::bisector(const Vertex& a, const Vertex& b)
     HCoordinate l1 = HCoordinate(a.getX() + dx / 2.0, a.getY() + dy / 2.0, 1.0);
     HCoordinate l2 = HCoordinate(a.getX() - dy + dx / 2.0, a.getY() + dx + dy / 2.0, 1.0);
 
-    return std::unique_ptr<HCoordinate>(new HCoordinate(l1, l2));
+    return detail::make_unique<HCoordinate>(l1, l2);
 }
 
 double
@@ -133,19 +133,19 @@ Vertex::midPoint(const Vertex& a)
     double xm = (p.x + a.getX()) / 2.0;
     double ym = (p.y + a.getY()) / 2.0;
     double zm = (p.z + a.getZ()) / 2.0;
-    return std::unique_ptr<Vertex>(new Vertex(xm, ym, zm));
+    return detail::make_unique<Vertex>(xm, ym, zm);
 }
 
 std::unique_ptr<Vertex>
 Vertex::circleCenter(const Vertex& b, const Vertex& c) const
 {
-    std::unique_ptr<Vertex> a(new Vertex(getX(), getY()));
+    auto a = detail::make_unique<Vertex>(getX(), getY());
     // compute the perpendicular bisector of cord ab
     std::unique_ptr<HCoordinate> cab = bisector(*a, b);
     // compute the perpendicular bisector of cord bc
     std::unique_ptr<HCoordinate> cbc = bisector(b, c);
     // compute the intersection of the bisectors (circle radii)
-    std::unique_ptr<HCoordinate> hcc(new HCoordinate(*cab, *cbc));
+    std::unique_ptr<HCoordinate> hcc = detail::make_unique<HCoordinate>(*cab, *cbc);
     std::unique_ptr<Vertex> cc;
 
     try {

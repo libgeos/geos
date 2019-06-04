@@ -94,7 +94,7 @@ public:
 std::unique_ptr<Coordinate::ConstVect>
 GeometrySnapper::extractTargetCoordinates(const Geometry& g)
 {
-    std::unique_ptr<Coordinate::ConstVect> snapPts(new Coordinate::ConstVect());
+    auto snapPts = detail::make_unique<Coordinate::ConstVect>();
     util::UniqueCoordinateArrayFilter filter(*snapPts);
     g.apply_ro(&filter);
     // integrity check

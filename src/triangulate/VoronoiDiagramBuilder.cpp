@@ -31,6 +31,9 @@
 #include <geos/triangulate/DelaunayTriangulationBuilder.h>
 #include <geos/triangulate/quadedge/QuadEdgeSubdivision.h>
 #include <geos/operation/valid/RepeatedPointRemover.h>
+#include <geos/util.h>
+
+using geos::detail::make_unique;
 
 namespace geos {
 namespace triangulate { //geos.triangulate
@@ -140,7 +143,7 @@ VoronoiDiagramBuilder::clipGeometryCollection(std::vector<std::unique_ptr<Geomet
     auto gfact = geoms[0]->getFactory();
 
     std::unique_ptr<geom::Geometry> clipPoly(gfact->toGeometry(&clipEnv));
-    std::unique_ptr< std::vector<Geometry*> >clipped(new std::vector<Geometry*>);
+    auto clipped = make_unique<std::vector<Geometry*>>();
 
     for(auto& g : geoms) {
         std::unique_ptr<Geometry> result;

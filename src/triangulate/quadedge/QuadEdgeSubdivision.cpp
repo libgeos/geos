@@ -32,8 +32,7 @@
 #include <geos/geom/CoordinateList.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/util/IllegalArgumentException.h>
-#include <geos/util/GEOSException.h>
+#include <geos/util.h>
 #include <geos/triangulate/quadedge/QuadEdge.h>
 #include <geos/triangulate/quadedge/QuadEdgeLocator.h>
 #include <geos/triangulate/quadedge/LastFoundQuadEdgeLocator.h>
@@ -44,6 +43,7 @@
 
 using namespace geos::geom;
 using namespace std;
+
 namespace geos {
 namespace triangulate { //geos.triangulate
 namespace quadedge { //geos.triangulate.quadedge
@@ -555,7 +555,7 @@ QuadEdgeSubdivision::getVoronoiCellPolygons(const geom::GeometryFactory& geomFac
 std::unique_ptr< std::vector<geom::Geometry*> >
 QuadEdgeSubdivision::getVoronoiCellEdges(const geom::GeometryFactory& geomFact)
 {
-    std::unique_ptr< std::vector<geom::Geometry*> > cells(new std::vector<geom::Geometry*>);
+    auto cells = detail::make_unique<std::vector<geom::Geometry*>>();
     TriangleCircumcentreVisitor tricircumVisitor;
 
     visitTriangles((TriangleVisitor*) &tricircumVisitor, true);
@@ -639,7 +639,7 @@ QuadEdgeSubdivision::getVoronoiCellEdge(const QuadEdge* qe, const geom::Geometry
 std::unique_ptr<QuadEdgeSubdivision::QuadEdgeList>
 QuadEdgeSubdivision::getVertexUniqueEdges(bool includeFrame)
 {
-    std::unique_ptr<QuadEdgeSubdivision::QuadEdgeList> edges(new QuadEdgeList());
+    auto edges = detail::make_unique<QuadEdgeList>();
     std::set<Vertex> visitedVertices; // TODO unordered_set of Vertex* ?
 
     for(QuadEdge* qe : quadEdges) {

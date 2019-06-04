@@ -17,7 +17,7 @@
 #include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateFilter.h>
-#include <geos/util/IllegalArgumentException.h>
+#include <geos/util.h>
 
 #include <sstream>
 #include <cassert>
@@ -76,7 +76,7 @@ CoordinateArraySequence::CoordinateArraySequence(
 std::unique_ptr<CoordinateSequence>
 CoordinateArraySequence::clone() const
 {
-    return std::unique_ptr<CoordinateSequence>(new CoordinateArraySequence(*this));
+    return detail::make_unique<CoordinateArraySequence>(*this);
 }
 
 void
