@@ -31,8 +31,6 @@
 #include <geos/operation/valid/RepeatedPointTester.h>
 #include <geos/util.h>
 
-using geos::detail::make_unique;
-
 namespace geos {
 namespace triangulate { //geos.triangulate
 
@@ -51,7 +49,7 @@ DelaunayTriangulationBuilder::unique(const CoordinateSequence* seq) {
     auto seqFactory = CoordinateArraySequenceFactory::instance();
     auto dim = seq->getDimension();
 
-    auto coords = make_unique<std::vector<Coordinate>>();
+    auto coords = detail::make_unique<std::vector<Coordinate>>();
     seq->toVector(*(coords.get()));
     std::sort(coords->begin(), coords->end(), geos::geom::CoordinateLessThen());
 

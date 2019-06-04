@@ -18,8 +18,6 @@
 #include <geos/geom/CoordinateArraySequenceFactory.h>
 #include <geos/util.h>
 
-using geos::detail::make_unique;
-
 namespace geos {
 namespace operation {
 namespace valid {
@@ -34,7 +32,7 @@ RepeatedPointRemover::removeRepeatedPoints(const geom::CoordinateSequence* seq) 
         return std::unique_ptr<geom::CoordinateSequence>(seqFactory->create());
     }
 
-    auto pts = make_unique<std::vector<Coordinate>>();
+    auto pts = detail::make_unique<std::vector<Coordinate>>();
     auto sz = seq->getSize();
     pts->reserve(sz); // assume not many points are repeated
 

@@ -37,8 +37,6 @@
 //using namespace std;
 using namespace geos::geom;
 
-using geos::detail::make_unique;
-
 namespace geos {
 namespace operation { // geos.operation
 namespace overlay { // geos.operation.overlay
@@ -96,7 +94,7 @@ public:
 std::unique_ptr<Coordinate::ConstVect>
 GeometrySnapper::extractTargetCoordinates(const Geometry& g)
 {
-    auto snapPts = make_unique<Coordinate::ConstVect>();
+    auto snapPts = detail::make_unique<Coordinate::ConstVect>();
     util::UniqueCoordinateArrayFilter filter(*snapPts);
     g.apply_ro(&filter);
     // integrity check

@@ -48,8 +48,6 @@ using namespace std;
 using namespace geos::algorithm;
 using namespace geos::geom;
 
-using geos::detail::make_unique;
-
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
@@ -217,8 +215,8 @@ PlanarGraph::addEdges(const vector<Edge*>& edgesToAdd)
         // PlanarGraph destructor will delete all DirectedEdges
         // in edgeEndList, which is where these are added
         // by the ::add(EdgeEnd) call
-        auto de1 = make_unique<DirectedEdge>(e, true);
-        auto de2 = make_unique<DirectedEdge>(e, false);
+        auto de1 = detail::make_unique<DirectedEdge>(e, true);
+        auto de2 = detail::make_unique<DirectedEdge>(e, false);
         de1->setSym(de2.get());
         de2->setSym(de1.get());
 

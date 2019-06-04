@@ -27,8 +27,6 @@
 
 using namespace std;
 
-using geos::detail::make_unique;
-
 namespace geos {
 namespace geom { // geos::geom
 
@@ -78,7 +76,7 @@ CoordinateArraySequence::CoordinateArraySequence(
 std::unique_ptr<CoordinateSequence>
 CoordinateArraySequence::clone() const
 {
-    return make_unique<CoordinateArraySequence>(*this);
+    return detail::make_unique<CoordinateArraySequence>(*this);
 }
 
 void

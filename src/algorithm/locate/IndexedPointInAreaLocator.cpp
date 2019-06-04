@@ -31,8 +31,6 @@
 #include <algorithm>
 #include <typeinfo>
 
-using geos::detail::make_unique;
-
 namespace geos {
 namespace algorithm {
 namespace locate {
@@ -74,7 +72,7 @@ IndexedPointInAreaLocator::IntervalIndexedGeometry::addLine(const geom::Coordina
 void
 IndexedPointInAreaLocator::buildIndex(const geom::Geometry& g)
 {
-    index = make_unique<IntervalIndexedGeometry>(g);
+    index = detail::make_unique<IntervalIndexedGeometry>(g);
 }
 
 

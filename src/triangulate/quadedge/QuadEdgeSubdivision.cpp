@@ -44,8 +44,6 @@
 using namespace geos::geom;
 using namespace std;
 
-using geos::detail::make_unique;
-
 namespace geos {
 namespace triangulate { //geos.triangulate
 namespace quadedge { //geos.triangulate.quadedge
@@ -557,7 +555,7 @@ QuadEdgeSubdivision::getVoronoiCellPolygons(const geom::GeometryFactory& geomFac
 std::unique_ptr< std::vector<geom::Geometry*> >
 QuadEdgeSubdivision::getVoronoiCellEdges(const geom::GeometryFactory& geomFact)
 {
-    auto cells = make_unique<std::vector<geom::Geometry*>>();
+    auto cells = detail::make_unique<std::vector<geom::Geometry*>>();
     TriangleCircumcentreVisitor tricircumVisitor;
 
     visitTriangles((TriangleVisitor*) &tricircumVisitor, true);
@@ -641,7 +639,7 @@ QuadEdgeSubdivision::getVoronoiCellEdge(const QuadEdge* qe, const geom::Geometry
 std::unique_ptr<QuadEdgeSubdivision::QuadEdgeList>
 QuadEdgeSubdivision::getVertexUniqueEdges(bool includeFrame)
 {
-    auto edges = make_unique<QuadEdgeList>();
+    auto edges = detail::make_unique<QuadEdgeList>();
     std::set<Vertex> visitedVertices; // TODO unordered_set of Vertex* ?
 
     for(QuadEdge* qe : quadEdges) {
