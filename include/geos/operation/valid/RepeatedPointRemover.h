@@ -15,7 +15,7 @@
 #ifndef GEOS_OP_VALID_REPEATEDPOINTREMOVER_H
 #define GEOS_OP_VALID_REPEATEDPOINTREMOVER_H
 
-#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateArraySequence.h>
 
 namespace geos {
 namespace operation {
@@ -32,7 +32,7 @@ namespace valid {
     /// \param seq
     /// \return
     public:
-        static std::unique_ptr<geom::CoordinateSequence> removeRepeatedPoints(const geom::CoordinateSequence* seq);
+        static std::unique_ptr<geom::CoordinateArraySequence> removeRepeatedPoints(const geom::CoordinateSequence* seq);
     };
 }
 }

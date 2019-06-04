@@ -34,7 +34,7 @@ CoordinateSequence*
 GeometryTestFactory::createBox(double minx, double miny, int nSide, double segLen)
 {
     int i;
-    CoordinateSequence* pts = new CoordinateArraySequence();
+    CoordinateArraySequence* pts = new CoordinateArraySequence();
     double maxx = minx + nSide * segLen;
     double maxy = miny + nSide * segLen;
 
@@ -72,7 +72,7 @@ GeometryTestFactory::createBox(double minx, double miny, int nSide, double segLe
 CoordinateSequence*
 GeometryTestFactory::createCircle(double basex, double basey, double size, int nPts)
 {
-    CoordinateSequence* pts = new CoordinateArraySequence(nPts + 1);
+    CoordinateArraySequence* pts = new CoordinateArraySequence(nPts + 1);
     double len = size / 2.0;
 
     for(int i = 0; i < nPts; i++) {
@@ -116,7 +116,7 @@ GeometryTestFactory::createSineStar(double basex, double basey, double size, dou
     }
 
     //int nPts2=nArmPt*nArms;
-    CoordinateSequence* pts = new CoordinateArraySequence();
+    CoordinateArraySequence* pts = new CoordinateArraySequence();
 
     double starAng = 0.0;
 
@@ -128,15 +128,13 @@ GeometryTestFactory::createSineStar(double basex, double basey, double size, dou
             double y = len * sin(starAng + iArmPt * angInc / nArmPt) + basey;
 
             // FIXME - mloskot: Number of problems here:
-            // - new'd Coordinate definitely leaks
             // - add() method makes a copy
-            // - why temporarily used Coordinate is allocated on the heap?!?
-            pts->add(*(new Coordinate(x, y)));
+            pts->add(Coordinate(x, y));
         }
         starAng += angInc;
     }
     // FIXME - mloskot: The same problems as above
-    pts->add(*(new Coordinate(pts->getAt(0))));
+    pts->add(pts->getAt(0));
     return pts;
 }
 

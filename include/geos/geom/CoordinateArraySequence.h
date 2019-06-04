@@ -84,9 +84,16 @@ public:
         vect->clear();
     }
 
-    void add(const Coordinate& c) override;
+    /// Add a Coordinate to the list
+    void add(const Coordinate& c);
 
-    void add(const Coordinate& c, bool allowRepeated) override;
+    /**
+     * \brief Add a coordinate
+     * @param c the coordinate to add
+     * @param allowRepeated if set to false, repeated coordinates
+     *                      are collapsed
+     */
+    void add(const Coordinate& c, bool allowRepeated);
 
     /** \brief
      * Inserts the specified coordinate at the specified position in
@@ -99,7 +106,9 @@ public:
      *
      * NOTE: this is a CoordinateList interface in JTS
      */
-    void add(std::size_t i, const Coordinate& coord, bool allowRepeated) override;
+    void add(std::size_t i, const Coordinate& coord, bool allowRepeated);
+
+    void add(const CoordinateSequence* cl, bool allowRepeated, bool direction);
 
     void setAt(const Coordinate& c, std::size_t pos) override;
 

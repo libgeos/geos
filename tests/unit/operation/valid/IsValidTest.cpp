@@ -56,7 +56,7 @@ template<>
 void object::test<1>
 ()
 {
-    CoordinateSequence* cs = new CoordinateArraySequence();
+    CoordinateArraySequence* cs = new CoordinateArraySequence();
     cs->add(Coordinate(0.0, 0.0));
     cs->add(Coordinate(1.0, geos::DoubleNotANumber));
     GeomPtr line(factory_->createLineString(cs));

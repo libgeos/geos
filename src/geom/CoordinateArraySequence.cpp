@@ -32,7 +32,7 @@ namespace geom { // geos::geom
 
 CoordinateArraySequence::CoordinateArraySequence():
     vect(new vector<Coordinate>()),
-    dimension(3)
+    dimension(0)
 {
 }
 
@@ -129,6 +129,24 @@ CoordinateArraySequence::add(const Coordinate& c, bool allowRepeated)
         }
     }
     vect->push_back(c);
+}
+
+void
+CoordinateArraySequence::add(const CoordinateSequence* cl, bool allowRepeated, bool direction)
+{
+    // FIXME:  don't rely on negative values for 'j' (the reverse case)
+
+    const auto npts = cl->size();
+    if(direction) {
+        for(size_t i = 0; i < npts; ++i) {
+            add(cl->getAt(i), allowRepeated);
+        }
+    }
+    else {
+        for(auto j = npts; j > 0; --j) {
+            add(cl->getAt(j - 1), allowRepeated);
+        }
+    }
 }
 
 /*public*/

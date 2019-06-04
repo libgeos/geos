@@ -126,51 +126,8 @@ public:
     ///
     virtual void toVector(std::vector<Coordinate>& coords) const = 0;
 
-    /**
-     * \brief Add an array of coordinates
-     * @param vc the coordinates
-     * @param allowRepeated if set to false, repeated coordinates
-     *                      are collapsed
-     */
-    void add(const std::vector<Coordinate>* vc, bool allowRepeated);
-
-    /** \brief
-     *  Add an array of coordinates
-     *
-     *  @param cl the coordinates
-     *  @param allowRepeated
-     *         if set to false, repeated coordinates are collapsed
-     *  @param direction if false, the array is added in reverse order
-     */
-    void add(const CoordinateSequence* cl, bool allowRepeated,
-             bool direction);
-
-    /**
-     * \brief Add a coordinate
-     * @param c the coordinate to add
-     * @param allowRepeated if set to false, repeated coordinates
-     *                      are collapsed
-     */
-    virtual void add(const Coordinate& c, bool allowRepeated);
-
-    /** \brief
-     * Inserts the specified coordinate at the specified position in
-     * this list.
-     *
-     * @param i the position at which to insert
-     * @param coord the coordinate to insert
-     * @param allowRepeated if set to false, repeated coordinates are
-     *                      collapsed
-     *
-     * NOTE: this is a CoordinateList interface in JTS
-     */
-    virtual void add(std::size_t i, const Coordinate& coord, bool allowRepeated) = 0;
-
     /// Returns <code>true</code> it list contains no coordinates.
     virtual bool isEmpty() const = 0;
-
-    /// Add a Coordinate to the list
-    virtual void add(const Coordinate& c) = 0;
 
     /// Copy Coordinate c to position pos
     virtual void setAt(const Coordinate& c, std::size_t pos) = 0;

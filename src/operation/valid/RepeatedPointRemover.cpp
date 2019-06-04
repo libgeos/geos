@@ -22,14 +22,12 @@ namespace geos {
 namespace operation {
 namespace valid {
 
-std::unique_ptr<geom::CoordinateSequence>
+std::unique_ptr<geom::CoordinateArraySequence>
 RepeatedPointRemover::removeRepeatedPoints(const geom::CoordinateSequence* seq) {
     using geom::Coordinate;
 
-    auto seqFactory = geom::CoordinateArraySequenceFactory::instance();
-
     if (seq->isEmpty()) {
-        return std::unique_ptr<geom::CoordinateSequence>(seqFactory->create());
+        return detail::make_unique<geom::CoordinateArraySequence>(0, seq->getDimension());
     }
 
     auto pts = detail::make_unique<std::vector<Coordinate>>();
@@ -47,7 +45,7 @@ RepeatedPointRemover::removeRepeatedPoints(const geom::CoordinateSequence* seq) 
         prevPt = nextPt;
     }
 
-    return std::unique_ptr<geom::CoordinateSequence>(seqFactory->create(pts.release(), seq->getDimension()));
+    return detail::make_unique<geom::CoordinateArraySequence>(pts.release(), seq->getDimension());
 }
 
 }

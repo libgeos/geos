@@ -48,7 +48,7 @@ private:
 
     bool ignoreInvalidLines;
     bool fixInvalidLines;
-    geom::CoordinateSequence* coordList;
+    geom::CoordinateArraySequence* coordList;
 
     geom::Coordinate lastPt;
 

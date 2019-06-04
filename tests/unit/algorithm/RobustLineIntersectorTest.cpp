@@ -248,7 +248,7 @@ void object::test<13>
     using geos::geom::LineString;
 
     GeometryFactory::Ptr factory = GeometryFactory::create();
-    CoordinateSequence* cs = new CoordinateArraySequence();
+    CoordinateArraySequence* cs = new CoordinateArraySequence();
     cs->add(p1);
     cs->add(p2);
 

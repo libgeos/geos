@@ -6,8 +6,9 @@
 #include <geos/noding/BasicSegmentString.h>
 #include <geos/noding/Octant.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateArraySequenceFactory.h>
+#include <geos/util.h>
 // std
 #include <memory>
 
@@ -62,7 +63,7 @@ template<>
 void object::test<1>
 ()
 {
-    CoordinateSequenceAutoPtr cs(csFactory->create((size_t)0, 2));
+    auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0, 2);
 
     ensure(nullptr != cs.get());
 
@@ -107,7 +108,7 @@ template<>
 void object::test<2>
 ()
 {
-    CoordinateSequenceAutoPtr cs(csFactory->create((size_t)0, 2));
+    auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0, 2);
 
     ensure(nullptr != cs.get());
 
@@ -144,7 +145,7 @@ template<>
 void object::test<3>
 ()
 {
-    CoordinateSequenceAutoPtr cs(csFactory->create((size_t)0, 2));
+    auto cs = geos::detail::make_unique<geos::geom::CoordinateArraySequence>(0, 2);
 
     ensure(nullptr != cs.get());
 
