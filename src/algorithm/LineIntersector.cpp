@@ -77,25 +77,25 @@ Coordinate
 nearestEndpoint(const Coordinate& p1, const Coordinate& p2,
                 const Coordinate& q1, const Coordinate& q2)
 {
-    Coordinate nearestPt = p1;
+    const Coordinate* nearestPt = &p1;
     double minDist = Distance::pointToSegment(p1, q1, q2);
 
     double dist = Distance::pointToSegment(p2, q1, q2);
     if(dist < minDist) {
         minDist = dist;
-        nearestPt = p2;
+        nearestPt = &p2;
     }
     dist = Distance::pointToSegment(q1, p1, p2);
     if(dist < minDist) {
         minDist = dist;
-        nearestPt = q1;
+        nearestPt = &q1;
     }
     dist = Distance::pointToSegment(q2, p1, p2);
     if(dist < minDist) {
         minDist = dist;
-        nearestPt = q2;
+        nearestPt = &q2;
     }
-    return nearestPt;
+    return *nearestPt;
 }
 
 

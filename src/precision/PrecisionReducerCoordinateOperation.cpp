@@ -48,9 +48,8 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
 
     // copy coordinates and reduce
     for(size_t i = 0; i < csSize; ++i) {
-        Coordinate coord = cs->getAt(i);
-        targetPM.makePrecise(&coord);
-        (*vc)[i] = coord;
+        (*vc)[i] = cs->getAt(i);
+        targetPM.makePrecise((*vc)[i]);
     }
 
     // reducedCoords take ownership of 'vc'

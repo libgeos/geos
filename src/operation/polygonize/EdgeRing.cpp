@@ -75,7 +75,7 @@ EdgeRing::findEdgeRingContaining(const std::vector<EdgeRing*> & erList)
         }
 
         auto tryCoords = tryRing->getCoordinatesRO();
-        Coordinate testPt = ptNotInList(testRing->getCoordinatesRO(), tryCoords); // TODO: don't copy testPt !
+        const Coordinate& testPt = ptNotInList(testRing->getCoordinatesRO(), tryCoords);
 
         // check if this new containing ring is smaller than the current minimum ring
         if(tryEdgeRing->isInRing(testPt)) {

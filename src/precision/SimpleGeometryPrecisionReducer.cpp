@@ -78,10 +78,8 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
 
     // copy coordinates and reduce
     for(unsigned int i = 0; i < csSize; ++i) {
-        Coordinate coord = cs->getAt(i);
-        sgpr->getPrecisionModel()->makePrecise(&coord);
-        //reducedCoords->setAt(*coord,i);
-        (*vc)[i] = coord;
+        (*vc)[i] = cs->getAt(i);
+        sgpr->getPrecisionModel()->makePrecise((*vc)[i]);
     }
 
     // reducedCoords take ownership of 'vc'

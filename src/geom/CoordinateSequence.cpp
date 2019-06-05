@@ -145,7 +145,6 @@ CoordinateSequence::increasingDirection(const CoordinateSequence& pts)
 void
 CoordinateSequence::reverse(CoordinateSequence* cl)
 {
-
     // FIXME: use a standard algorithm
     auto last = cl->size() - 1;
     auto mid = last / 2;
