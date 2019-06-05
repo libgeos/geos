@@ -55,10 +55,7 @@ namespace geom { // geos::geom
 void
 LineSegment::reverse()
 {
-    // TODO: use std::swap<>
-    Coordinate temp = p0;
-    p0 = p1;
-    p1 = temp;
+    std::swap(p0, p1);
 }
 
 /*public*/
