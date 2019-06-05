@@ -57,12 +57,12 @@ SegmentIntersectionTester::hasIntersection(
     size_type seq1size = seq1.getSize();
 
     for(size_type i = 1; i < seq0size && !hasIntersectionVar; ++i) {
-        seq0.getAt(i - 1, pt00);
-        seq0.getAt(i, pt01);
+        const Coordinate& pt00 = seq0.getAt(i - 1);
+        const Coordinate& pt01 = seq0.getAt(i);
 
         for(size_type j = 1; j < seq1size && !hasIntersectionVar; ++j) {
-            seq1.getAt(j - 1, pt10);
-            seq1.getAt(j, pt11);
+            const Coordinate& pt10 = seq1.getAt(j - 1);
+            const Coordinate& pt11 = seq1.getAt(j);
 
             li.computeIntersection(pt00, pt01, pt10, pt11);
             if(li.hasIntersection()) {
@@ -91,8 +91,8 @@ SegmentIntersectionTester::hasIntersectionWithEnvelopeFilter(
     typedef std::size_t size_type;
 
     for(size_type i = 1; i < seq1size && !hasIntersectionVar; ++i) {
-        seq1.getAt(i - 1, pt10);
-        seq1.getAt(i, pt11);
+        const Coordinate& pt10 = seq1.getAt(i - 1);
+        const Coordinate& pt11 = seq1.getAt(i);
 
         // skip test if segment does not intersect query envelope
         if(! lineEnv->intersects(Envelope(pt10, pt11))) {
@@ -100,8 +100,8 @@ SegmentIntersectionTester::hasIntersectionWithEnvelopeFilter(
         }
 
         for(size_type j = 1; j < seq0size && !hasIntersectionVar; ++j) {
-            seq0.getAt(j - 1, pt00);
-            seq0.getAt(j, pt01);
+            const Coordinate& pt00 = seq0.getAt(j - 1);
+            const Coordinate& pt01 = seq0.getAt(j);
 
             li.computeIntersection(pt00, pt01, pt10, pt11);
             if(li.hasIntersection()) {

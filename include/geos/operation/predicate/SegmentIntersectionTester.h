@@ -57,12 +57,6 @@ private:
 
     bool hasIntersectionVar;
 
-    geom::Coordinate pt10;
-    geom::Coordinate pt11;
-    geom::Coordinate pt00;
-    geom::Coordinate pt01;
-
-
 public:
 
     SegmentIntersectionTester(): hasIntersectionVar(false) {}

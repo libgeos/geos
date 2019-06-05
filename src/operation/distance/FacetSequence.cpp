@@ -87,22 +87,21 @@ FacetSequence::distance(const FacetSequence& facetSeq) const
 std::vector<GeometryLocation>
 FacetSequence::nearestLocations(const FacetSequence& facetSeq)  const
 {
-    Coordinate pt, seqPt;
     bool isPointThis = isPoint();
     bool isPointOther = facetSeq.isPoint();
     std::vector<GeometryLocation> locs;
     if (isPointThis && isPointOther) {
-        pts->getAt(start, pt);
-        facetSeq.pts->getAt(facetSeq.start, seqPt);
+        const Coordinate& pt = pts->getAt(start);
+        const Coordinate& seqPt = facetSeq.pts->getAt(facetSeq.start);
         GeometryLocation gl1(geom, start, pt);
         GeometryLocation gl2(facetSeq.geom, facetSeq.start, seqPt);
     }
     else if (isPointThis) {
-        pts->getAt(start, pt);
+        const Coordinate& pt = pts->getAt(start);
         computeDistancePointLine(pt, facetSeq, &locs);
     }
     else if (isPointOther) {
-        facetSeq.pts->getAt(facetSeq.start, seqPt);
+        const Coordinate& seqPt = facetSeq.pts->getAt(facetSeq.start);
         computeDistancePointLine(seqPt, *this, &locs);
         // unflip the locations
         GeometryLocation tmp = locs[0];
@@ -122,12 +121,10 @@ FacetSequence::computeDistancePointLine(const Coordinate& pt,
 {
     double minDistance = std::numeric_limits<double>::infinity();
     double dist;
-    Coordinate q0;
-    Coordinate q1;
 
     for(size_t i = facetSeq.start; i < facetSeq.end - 1; i++) {
-        facetSeq.pts->getAt(i, q0);
-        facetSeq.pts->getAt(i + 1, q1);
+        const Coordinate& q0 = facetSeq.pts->getAt(i);
+        const Coordinate& q1 = facetSeq.pts->getAt(i + 1);
         dist = Distance::pointToSegment(pt, q0, q1);
         if(dist == 0.0) {
             return dist;
@@ -168,15 +165,14 @@ FacetSequence::computeDistanceLineLine(const FacetSequence& facetSeq, std::vecto
 {
     double minDistance = std::numeric_limits<double>::infinity();
     double dist;
-    Coordinate p0, p1, q0, q1;
 
     for(size_t i = start; i < end - 1; i++) {
-        pts->getAt(i, p0);
-        pts->getAt(i + 1, p1);
+        const Coordinate& p0 = pts->getAt(i);
+        const Coordinate& p1 = pts->getAt(i + 1);
 
         for(size_t j = facetSeq.start; j < facetSeq.end - 1; j++) {
-            facetSeq.pts->getAt(j, q0);
-            facetSeq.pts->getAt(j + 1, q1);
+            const Coordinate& q0 = facetSeq.pts->getAt(j);
+            const Coordinate& q1 = facetSeq.pts->getAt(j + 1);
 
             dist = Distance::segmentToSegment(p0, p1, q0, q1);
             if(dist <= minDistance) {
