@@ -91,6 +91,11 @@ bool
 PreparedPolygonPredicate::isAnyTestComponentInTargetInterior(
     const geom::Geometry* testGeom) const
 {
+    if (testGeom->getGeometryTypeId() == GEOS_POINT) {
+        // Avoid creating a vector to store a single point
+        return prepPoly->getPointLocator()->locate(testGeom->getCoordinate()) == geom::Location::INTERIOR;
+    }
+
     geom::Coordinate::ConstVect pts;
     geom::util::ComponentCoordinateExtracter::getCoordinates(*testGeom, pts);
 
