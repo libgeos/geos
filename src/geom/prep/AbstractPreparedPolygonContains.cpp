@@ -112,9 +112,11 @@ AbstractPreparedPolygonContains::eval(const geom::Geometry* geom)
     //
     // If a point of any test components does not lie in target,
     // result is false
-    bool isAllInTargetArea = isAllTestComponentsInTarget(geom);
-    if(!isAllInTargetArea) {
-        return false;
+    if (!requireSomePointInInterior || geom->getGeometryTypeId() != GEOS_POINT) {
+        bool isAllInTargetArea = isAllTestComponentsInTarget(geom);
+        if (!isAllInTargetArea) {
+            return false;
+        }
     }
 
     // If the test geometry consists of only Points,
