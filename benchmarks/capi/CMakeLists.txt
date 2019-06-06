@@ -16,3 +16,6 @@ target_include_directories(perf_memleak_mp_prep
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>)
 target_link_libraries(perf_memleak_mp_prep PRIVATE geos_c)
+
+add_executable(perf_geospreparedcontains GEOSPreparedContainsPerfTest.cpp)
+target_link_libraries(perf_geospreparedcontains PRIVATE geos geos_c)
