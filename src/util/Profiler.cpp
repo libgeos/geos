@@ -16,6 +16,7 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <sstream>
 #include <utility>
 
 using namespace std;
@@ -23,12 +24,10 @@ using namespace std;
 namespace geos {
 namespace util { // geos.util
 
-Profile::Profile(string newname)
-{
-    name = newname;
-    totaltime = 0;
-    min = max = avg = 0;
-}
+Profile::Profile(string newname) :
+    name(newname),
+    totaltime(timeunit::zero())
+{}
 
 Profile::~Profile()
 {
@@ -37,13 +36,13 @@ Profile::~Profile()
 double
 Profile::getMax() const
 {
-    return max;
+    return static_cast<double>(max.count());
 }
 
 double
 Profile::getMin() const
 {
-    return min;
+    return static_cast<double>(min.count());
 }
 
 double
@@ -55,14 +54,16 @@ Profile::getAvg() const
 double
 Profile::getTot() const
 {
-    return totaltime;
+    return static_cast<double>(totaltime.count());
 }
 
 std::string
 Profile::getTotFormatted() const
 {
-    long usec = (long) totaltime;
-    std::string fmt = to_string(usec);
+    std::stringstream usec;
+    usec << totaltime.count();
+
+    std::string fmt = usec.str();
     int insertPosition = static_cast<int>(fmt.length()) - 3;
     while (insertPosition > 0) {
         fmt.insert(insertPosition, ",");
