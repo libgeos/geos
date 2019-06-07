@@ -49,33 +49,34 @@ public:
     }
 private:
     decltype(geos::geom::GeometryFactory::create()) gfact = geos::geom::GeometryFactory::create();
+    geos::util::Profiler* profiler = geos::util::Profiler::instance();
 
     template<typename T>
     void voronoi(const T & sites) {
-        geos::util::Profile sw(std::string("Voronoi from ") + typeid(T).name());
-        sw.start();
+        auto sw = profiler->get(std::string("Voronoi from ") + typeid(T).name());
+        sw->start();
 
         geos::triangulate::VoronoiDiagramBuilder vdb;
         vdb.setSites(sites);
 
         auto result = vdb.getDiagram(*gfact);
-        sw.stop();
 
-        std::cout << sw.name << ": " << result->getNumGeometries() << ": " << sw.getTotFormatted() << std::endl;
+        sw->stop();
+        std::cout << sw->name << ": " << result->getNumGeometries() << ": " << *sw << std::endl;
     }
 
     template<typename T>
     void delaunay(const T & seq) {
-        geos::util::Profile sw(std::string("Delaunay from ") + typeid(T).name());
-        sw.start();
+        auto sw = profiler->get(std::string("Delaunay from ") + typeid(T).name());
+        sw->start();
 
         geos::triangulate::DelaunayTriangulationBuilder dtb;
         dtb.setSites(seq);
 
         auto result = dtb.getTriangles(*gfact);
 
-        sw.stop();
-        std::cout << sw.name << ": " << result->getNumGeometries() << ": " << sw.getTotFormatted() << std::endl;
+        sw->stop();
+        std::cout << sw->name << ": " << result->getNumGeometries() << ": " << *sw << std::endl;
     }
 };
 
