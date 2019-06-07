@@ -50,7 +50,7 @@ public:
     Profile(std::string name);
 
     /** \brief Destructor */
-    ~Profile();
+    ~Profile() = default;
 
     /** \brief start a new timer */
     void
@@ -136,8 +136,8 @@ class GEOS_DLL Profiler {
 
 public:
 
-    Profiler();
-    ~Profiler();
+    Profiler() = default;
+    ~Profiler() = default;
 
     /**
      * \brief
@@ -163,7 +163,7 @@ public:
     /** \brief get Profile of named task */
     Profile* get(std::string name);
 
-    std::map<std::string, Profile*> profs;
+    std::map<std::string, std::unique_ptr<Profile>> profs;
 };
 
 

@@ -29,10 +29,6 @@ Profile::Profile(string newname) :
     totaltime(timeunit::zero())
 {}
 
-Profile::~Profile()
-{
-}
-
 double
 Profile::getMax() const
 {
@@ -78,29 +74,17 @@ Profile::getNumTimings() const
     return timings.size();
 }
 
-Profiler::Profiler()
-{
-}
-
-Profiler::~Profiler()
-{
-    map<string, Profile*>::const_iterator it;
-    for(it = profs.begin(); it != profs.end(); ++it) {
-        delete it->second;
-    }
-}
-
 void
 Profiler::start(string name)
 {
-    Profile* prof = get(name);
+    auto prof = get(name);
     prof->start();
 }
 
 void
 Profiler::stop(string name)
 {
-    map<string, Profile*>::iterator iter = profs.find(name);
+    auto iter = profs.find(name);
     if(iter == profs.end()) {
         cerr << name << ": no such Profile started";
         return;
@@ -111,16 +95,12 @@ Profiler::stop(string name)
 Profile*
 Profiler::get(string name)
 {
-    Profile* prof;
-    map<string, Profile*>::iterator iter = profs.find(name);
-    if(iter == profs.end()) {
-        prof = new Profile(name);
-        profs.insert(pair<string, Profile*>(name, prof));
+    auto& prof = profs[name];
+    if (prof == nullptr) {
+        prof.reset(new Profile(name));
     }
-    else {
-        prof = iter->second;
-    }
-    return prof;
+
+    return prof.get();
 }
 
 Profiler*
@@ -144,9 +124,8 @@ operator<< (ostream& os, const Profile& prof)
 ostream&
 operator<< (ostream& os, const Profiler& prof)
 {
-    map<string, Profile*>::const_iterator it;
-    for(it = prof.profs.begin(); it != prof.profs.end(); ++it) {
-        os << *(it->second) << endl;
+    for(const auto& entry : prof.profs) {
+        os << *(entry.second) << endl;
     }
     return os;
 }
