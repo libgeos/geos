@@ -310,7 +310,7 @@ void
 GeometryCollection::apply_rw(GeometryComponentFilter* filter)
 {
     filter->filter_rw(this);
-    for(size_t i = 0; i < geometries->size(); ++i) {
+    for(size_t i = 0; i < geometries->size() && !filter->isDone(); ++i) {
         (*geometries)[i]->apply_rw(filter);
     }
 }
@@ -319,7 +319,7 @@ void
 GeometryCollection::apply_ro(GeometryComponentFilter* filter) const
 {
     filter->filter_ro(this);
-    for(size_t i = 0; i < geometries->size(); ++i) {
+    for(size_t i = 0; i < geometries->size() && !filter->isDone(); ++i) {
         (*geometries)[i]->apply_ro(filter);
     }
 }

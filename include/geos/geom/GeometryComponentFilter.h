@@ -52,6 +52,8 @@ public:
     virtual void filter_rw(Geometry* geom);
     virtual void filter_ro(const Geometry* geom);
 
+    virtual bool isDone() { return false; }
+
     virtual
     ~GeometryComponentFilter() {}
 };

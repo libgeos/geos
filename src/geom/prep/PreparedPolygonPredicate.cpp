@@ -47,13 +47,16 @@ struct AnyMatchingLocationFilter : public GeometryComponentFilter {
     bool found;
 
     void filter_ro(const Geometry* g) override {
-        auto pt = g->getCoordinate();
-        if (!found) {
-            const int loc = pt_locator->locate(pt);
-            if (loc == test_loc) {
-                found = true;
-            }
+        const Coordinate* pt = g->getCoordinate();
+        const int loc = pt_locator->locate(pt);
+
+        if (loc == test_loc) {
+            found = true;
         }
+    }
+
+    bool isDone() override {
+        return found;
     }
 };
 
@@ -66,13 +69,16 @@ struct AnyNotMatchingLocationFilter : public GeometryComponentFilter {
     bool found;
 
     void filter_ro(const Geometry* g) override {
-        auto pt = g->getCoordinate();
-        if (!found) {
-            const int loc = pt_locator->locate(pt);
-            if (loc != test_loc) {
-                found = true;
-            }
+        const Coordinate* pt = g->getCoordinate();
+        const int loc = pt_locator->locate(pt);
+
+        if (loc != test_loc) {
+            found = true;
         }
+    }
+
+    bool isDone() override {
+        return found;
     }
 };
 
