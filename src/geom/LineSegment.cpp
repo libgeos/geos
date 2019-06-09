@@ -310,9 +310,9 @@ LineSegment::pointAlongOffset(double segmentLengthFraction,
 std::unique_ptr<LineString>
 LineSegment::toGeometry(const GeometryFactory& gf) const
 {
-    CoordinateSequence* cl = new CoordinateArraySequence();
-    cl->add(p0);
-    cl->add(p1);
+    CoordinateSequence* cl = new CoordinateArraySequence(2);
+    cl->setAt(p0, 0);
+    cl->setAt(p1, 1);
     return std::unique_ptr<LineString>(
                gf.createLineString(cl) // ownership transferred
            );

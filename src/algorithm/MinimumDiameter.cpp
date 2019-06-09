@@ -137,9 +137,9 @@ MinimumDiameter::getSupportingSegment()
 {
     computeMinimumDiameter();
     const GeometryFactory* fact = inputGeom->getFactory();
-    auto cl = fact->getCoordinateSequenceFactory()->create();
-    cl->add(minBaseSeg->p0);
-    cl->add(minBaseSeg->p1);
+    auto cl = fact->getCoordinateSequenceFactory()->create(2);
+    cl->setAt(minBaseSeg->p0, 0);
+    cl->setAt(minBaseSeg->p1, 1);
     return fact->createLineString(cl.release());
 }
 
@@ -160,9 +160,9 @@ MinimumDiameter::getDiameter()
     Coordinate basePt;
     minBaseSeg->project(*minWidthPt, basePt);
 
-    auto cl = inputGeom->getFactory()->getCoordinateSequenceFactory()->create();
-    cl->add(basePt);
-    cl->add(*minWidthPt);
+    auto cl = inputGeom->getFactory()->getCoordinateSequenceFactory()->create(2);
+    cl->setAt(basePt, 0);
+    cl->setAt(*minWidthPt, 1);
     return inputGeom->getFactory()->createLineString(cl.release());
 }
 

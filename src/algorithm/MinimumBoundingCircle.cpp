@@ -71,11 +71,11 @@ MinimumBoundingCircle::getFarthestPoints()
         return input->getFactory()->createPoint(centre);
     }
 
-    size_t dims = input->getDimension();
+    size_t dims = input->getCoordinateDimension();
     size_t len = 2;
     auto cs = input->getFactory()->getCoordinateSequenceFactory()->create(len, dims);
-    cs->add(extremalPts[0], true);
-    cs->add(extremalPts[extremalPts.size() - 1], true);
+    cs->setAt(extremalPts[0], 0);
+    cs->setAt(extremalPts[extremalPts.size() - 1], 1);
     return input->getFactory()->createLineString(cs.release());
 }
 
@@ -90,13 +90,13 @@ MinimumBoundingCircle::getDiameter()
     case 1:
         return input->getFactory()->createPoint(centre);
     }
-    size_t dims = input->getDimension();
+    size_t dims = input->getCoordinateDimension();
     size_t len = 2;
     auto cs = input->getFactory()->getCoordinateSequenceFactory()->create(len, dims);
     // TODO: handle case of 3 extremal points, by computing a line from one of
     // them through the centre point with len = 2*radius
-    cs->add(extremalPts[0], true);
-    cs->add(extremalPts[1], true);
+    cs->setAt(extremalPts[0], 0);
+    cs->setAt(extremalPts[1], 1);
     return input->getFactory()->createLineString(cs.release());
 }
 

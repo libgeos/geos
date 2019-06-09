@@ -44,7 +44,7 @@ class GeometryFactory;
 class LinearRing;
 class Polygon;
 class Coordinate;
-class CoordinateSequence;
+class CoordinateArraySequence;
 }
 namespace geomgraph {
 class DirectedEdge;
@@ -181,7 +181,7 @@ private:
     /// the DirectedEdges making up this EdgeRing
     std::vector<DirectedEdge*> edges;
 
-    geom::CoordinateSequence* pts;
+    geom::CoordinateArraySequence* pts;
 
     // label stores the locations of each geometry on the
     // face surrounded by this ring

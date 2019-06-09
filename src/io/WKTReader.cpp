@@ -32,8 +32,10 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/inline.h>
+#include <geos/util.h>
 
 #include <sstream>
 #include <string>
@@ -81,7 +83,7 @@ WKTReader::getCoordinates(StringTokenizer* tokenizer)
     Coordinate coord;
     getPreciseCoordinate(tokenizer, coord, dim);
 
-    auto coordinates = geometryFactory->getCoordinateSequenceFactory()->create((size_t)0, dim);
+    auto coordinates = detail::make_unique<CoordinateArraySequence>(0, dim);
     coordinates->add(coord);
 
     nextToken = getNextCloserOrComma(tokenizer);
@@ -91,7 +93,7 @@ WKTReader::getCoordinates(StringTokenizer* tokenizer)
         nextToken = getNextCloserOrComma(tokenizer);
     }
 
-    return coordinates;
+    return std::move(coordinates);
 }
 
 
@@ -295,9 +297,7 @@ WKTReader::readMultiPointText(StringTokenizer* tokenizer)
         size_t dim;
 
         // Try to parse deprecated form "MULTIPOINT(0 0, 1 1)"
-        const CoordinateSequenceFactory* csf = \
-                                               geometryFactory->getCoordinateSequenceFactory();
-        auto coords = csf->create();
+        auto coords = detail::make_unique<CoordinateArraySequence>();
 
         do {
             Coordinate coord;

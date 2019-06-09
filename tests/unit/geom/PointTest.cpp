@@ -94,8 +94,9 @@ void object::test<2>
     ensure(!point->isEmpty());
 
     // currently the empty CoordinateArraySequence constructor
-    // produces a dimension 3 sequence.
-    ensure(point->getCoordinateDimension() == 3);
+    // produces a dimension 0 sequence. The dimension is then
+    // autodetected when the first point is inserted.
+    ensure(point->getCoordinateDimension() == 2);
 }
 
 // Test of user's constructor throwing IllegalArgumentException

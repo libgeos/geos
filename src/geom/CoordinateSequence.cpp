@@ -179,53 +179,6 @@ CoordinateSequence::equals(const CoordinateSequence* cl1,
     return true;
 }
 
-/*public*/
-void
-CoordinateSequence::add(const vector<Coordinate>* vc, bool allowRepeated)
-{
-    assert(vc);
-    for(size_t i = 0; i < vc->size(); ++i) {
-        add((*vc)[i], allowRepeated);
-    }
-}
-
-/*public*/
-void
-CoordinateSequence::add(const Coordinate& c, bool allowRepeated)
-{
-    if(!allowRepeated) {
-        std::size_t npts = getSize();
-        if(npts >= 1) {
-            const Coordinate& last = getAt(npts - 1);
-            if(last.equals2D(c)) {
-                return;
-            }
-        }
-    }
-    add(c);
-}
-
-/*public*/
-void
-CoordinateSequence::add(const CoordinateSequence* cl,
-                        bool allowRepeated, bool direction)
-{
-    // FIXME:  don't rely on negative values for 'j' (the reverse case)
-
-    const auto npts = cl->size();
-    if(direction) {
-        for(size_t i = 0; i < npts; ++i) {
-            add(cl->getAt(i), allowRepeated);
-        }
-    }
-    else {
-        for(auto j = npts; j > 0; --j) {
-            add(cl->getAt(j - 1), allowRepeated);
-        }
-    }
-}
-
-
 void
 CoordinateSequence::expandEnvelope(Envelope& env) const
 {

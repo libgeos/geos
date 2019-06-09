@@ -20,6 +20,7 @@
 #include <geos/operation/polygonize/EdgeRing.h>
 #include <geos/operation/polygonize/PolygonizeEdge.h>
 #include <geos/planargraph/DirectedEdge.h>
+#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/Coordinate.h>
@@ -221,7 +222,7 @@ const CoordinateSequence*
 EdgeRing::getCoordinates()
 {
     if(ringPts == nullptr) {
-        ringPts = factory->getCoordinateSequenceFactory()->create();
+        ringPts = detail::make_unique<CoordinateArraySequence>(0, 0);
         for(const auto& de : deList) {
             auto edge = dynamic_cast<PolygonizeEdge*>(de->getEdge());
             addEdge(edge->getLine()->getCoordinatesRO(),
@@ -274,7 +275,7 @@ EdgeRing::getRingOwnership()
 /*private*/
 void
 EdgeRing::addEdge(const CoordinateSequence* coords, bool isForward,
-                  CoordinateSequence* coordList)
+                  CoordinateArraySequence* coordList)
 {
     const std::size_t npts = coords->getSize();
     if(isForward) {

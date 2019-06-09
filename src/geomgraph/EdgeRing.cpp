@@ -30,6 +30,7 @@
 #include <geos/geomgraph/Label.h>
 #include <geos/geomgraph/Position.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LinearRing.h>
@@ -55,7 +56,7 @@ EdgeRing::EdgeRing(DirectedEdge* newStart,
     holes(),
     maxNodeDegree(-1),
     edges(),
-    pts(newGeometryFactory->getCoordinateSequenceFactory()->create().release()),
+    pts(new CoordinateArraySequence()),
     label(Location::UNDEF), // new Label(Location::UNDEF)),
     ring(nullptr),
     isHoleVar(false),

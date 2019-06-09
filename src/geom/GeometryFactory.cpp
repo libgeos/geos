@@ -277,22 +277,27 @@ GeometryFactory::toGeometry(const Envelope* envelope) const
         return createPoint(coord);
     }
     auto cl = CoordinateArraySequenceFactory::instance()->
-                             create((size_t) 0, 2);
+                             create((size_t) 5, 2);
+
     coord.x = envelope->getMinX();
     coord.y = envelope->getMinY();
-    cl->add(coord);
+    cl->setAt(coord, 0);
+
     coord.x = envelope->getMaxX();
     coord.y = envelope->getMinY();
-    cl->add(coord);
+    cl->setAt(coord, 1);
+
     coord.x = envelope->getMaxX();
     coord.y = envelope->getMaxY();
-    cl->add(coord);
+    cl->setAt(coord, 2);
+
     coord.x = envelope->getMinX();
     coord.y = envelope->getMaxY();
-    cl->add(coord);
+    cl->setAt(coord, 3);
+
     coord.x = envelope->getMinX();
     coord.y = envelope->getMinY();
-    cl->add(coord);
+    cl->setAt(coord, 4);
 
     Polygon* p = createPolygon(createLinearRing(cl.release()), nullptr);
     return p;

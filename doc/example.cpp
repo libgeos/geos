@@ -233,7 +233,7 @@ LineString*
 create_ushaped_linestring(double xoffset, double yoffset, double side)
 {
     // We will use a coordinate list to build the linestring
-    CoordinateSequence* cl = new CoordinateArraySequence();
+    CoordinateArraySequence* cl = new CoordinateArraySequence();
 
     cl->add(Coordinate(xoffset, yoffset));
     cl->add(Coordinate(xoffset, yoffset + side));
@@ -260,7 +260,7 @@ LinearRing*
 create_square_linearring(double xoffset, double yoffset, double side)
 {
     // We will use a coordinate list to build the linearring
-    CoordinateSequence* cl = new CoordinateArraySequence();
+    CoordinateArraySequence* cl = new CoordinateArraySequence();
 
     cl->add(Coordinate(xoffset, yoffset));
     cl->add(Coordinate(xoffset, yoffset + side));

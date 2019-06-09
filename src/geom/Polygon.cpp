@@ -20,7 +20,7 @@
 
 #include <geos/algorithm/Area.h>
 #include <geos/algorithm/Orientation.h>
-#include <geos/util/IllegalArgumentException.h>
+#include <geos/util.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/LinearRing.h>
@@ -29,7 +29,7 @@
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
-#include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateArraySequence.h>
 #include <geos/geom/CoordinateSequenceFilter.h>
 #include <geos/geom/GeometryFilter.h>
 #include <geos/geom/GeometryComponentFilter.h>
@@ -332,13 +332,12 @@ Polygon::normalize(LinearRing* ring, bool clockwise)
         return;
     }
 
-    auto seqFactory = ring->getFactory()->getCoordinateSequenceFactory();
-
-    std::unique_ptr<std::vector<Coordinate>> coords(new std::vector<Coordinate>());
+    auto coords = detail::make_unique<std::vector<Coordinate>>();
     ring->getCoordinatesRO()->toVector(*coords);
     coords->erase(coords->end() - 1); // remove last point (repeated)
 
-    std::unique_ptr<CoordinateSequence> uniqueCoordinates = seqFactory->create(coords.release());
+    auto uniqueCoordinates = detail::make_unique<CoordinateArraySequence>(coords.release());
+
     const Coordinate* minCoordinate = uniqueCoordinates->minCoordinate();
 
     CoordinateSequence::scroll(uniqueCoordinates.get(), minCoordinate);
