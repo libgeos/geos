@@ -19,6 +19,8 @@
 
 #include <geos/geom/GeometryFactory.h>
 #include <geos/io/WKTReader.h>
+#include <geos/geom/CoordinateArraySequence.h>
+#include <geos/geom/FixedSizeCoordinateSequence.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/LinearRing.h>
@@ -58,6 +60,9 @@ main()
     check(geom::MultiPoint);
     check(geom::MultiLineString);
     check(geom::MultiPolygon);
+    check(geom::CoordinateArraySequence);
+    check(geom::FixedSizeCoordinateSequence<1>);
+    check(geom::FixedSizeCoordinateSequence<2>);
     check(int64);
 }
 

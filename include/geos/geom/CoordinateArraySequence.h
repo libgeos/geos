@@ -114,9 +114,6 @@ public:
 
     void setPoints(const std::vector<Coordinate>& v) override;
 
-    double getOrdinate(std::size_t index,
-                       size_t ordinateIndex) const override;
-
     void setOrdinate(std::size_t index, std::size_t ordinateIndex,
                      double value) override;
 
