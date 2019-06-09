@@ -4253,7 +4253,7 @@ extern "C" {
             const PrecisionModel* pm = g->getPrecisionModel();
             double cursize = pm->isFloating() ? 0 : 1.0 / pm->getScale();
             std::unique_ptr<PrecisionModel> newpm;
-            if(gridSize) {
+            if(gridSize != 0) {
                 newpm.reset(new PrecisionModel(1.0 / gridSize));
             }
             else {
@@ -4262,7 +4262,7 @@ extern "C" {
             GeometryFactory::Ptr gf =
                 GeometryFactory::create(newpm.get(), g->getSRID());
             Geometry* ret;
-            if(gridSize && cursize != gridSize) {
+            if(gridSize != 0 && cursize != gridSize) {
                 // We need to snap the geometry
                 GeometryPrecisionReducer reducer(*gf);
                 reducer.setPointwise(flags & GEOS_PREC_NO_TOPO);

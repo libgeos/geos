@@ -126,14 +126,14 @@ void object::test<6>
 
     try {
         geom.reset(wktreader.read("POLYGON( EMPTY, (1 1,2 2,1 2,1 1))"));
-        ensure(!"Didn't get expected exception");
+        fail("Didn't get expected exception");
     }
     catch(const geos::util::IllegalArgumentException& ex) {
-        ensure("Did get expected exception");
+        ensure("Got expected exception", true);
         ex.what();
     }
     catch(...) {
-        ensure(!"Got unexpected exception");
+        fail("Got unexpected execpetion.");
     }
 }
 
@@ -161,11 +161,11 @@ void object::test<7>
         ensure_distance(coords->getY(0), 0.0, 1e-12);
     }
     catch(const geos::util::IllegalArgumentException& ex) {
-        ensure("Did get expected exception");
+        ensure("Got expected exception", true);
         ex.what();
     }
     catch(...) {
-        ensure(!"Got unexpected exception");
+        fail("Got unexpected exception");
     }
 }
 
@@ -185,10 +185,10 @@ void object::test<8>
     for(size_t i = 0; i < wkt.size(); i++) {
         try {
             wktreader.read(wkt[i]);
-            ensure(!"Didn't get expected exception");
+            fail("Didn't get expected exception");
         }
         catch(...) {
-            ensure("Did get expected exception");
+            ensure("Did get expected exception", true);
         }
     }
 }
