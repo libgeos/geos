@@ -50,7 +50,6 @@ geos_HEADERS = \
     precision.h \
     profiler.h \
     spatialIndex.h \
-    timeval.h \
     unload.h \
     util.h
 
