@@ -109,25 +109,38 @@ AbstractPreparedPolygonContains::eval(const geom::Geometry* geom)
 {
     // Do point-in-poly tests first, since they are cheaper and may result
     // in a quick negative result.
-    //
-    // If a point of any test components does not lie in target,
-    // result is false
-    if (!requireSomePointInInterior || geom->getGeometryTypeId() != GEOS_POINT) {
-        bool isAllInTargetArea = isAllTestComponentsInTarget(geom);
-        if (!isAllInTargetArea) {
-            return false;
-        }
+    auto outermostLoc = getOutermostTestComponentLocation(geom);
+
+    if (outermostLoc == Location::EXTERIOR) {
+        // If a point of any test components does not lie in target,
+        // result is false
+        return false;
     }
 
-    // If the test geometry consists of only Points,
-    // then it is now sufficient to test if any of those
-    // points lie in the interior of the target geometry.
+    // Short-circuit for (Multi)Points
+    //
+    // For the Covers predicate, we can return true
+    // since no Points are on the exterior of the Polygon.
+    //
+    // For the Contains predicate, we need to test if any
+    // of those points lie in the interior of the target
+    // geometry.
+    //
     // If so, the test is contained.
     // If not, all points are on the boundary of the area,
     // which implies not contained.
-    if(requireSomePointInInterior && geom->getDimension() == 0) {
-        bool isAnyInTargetInterior = isAnyTestComponentInTargetInterior(geom);
-        return isAnyInTargetInterior;
+    if (geom->getDimension() == 0) {
+        if (requireSomePointInInterior && outermostLoc == Location::BOUNDARY) {
+            if (geom->getNumGeometries() > 1) {
+                return isAnyTestComponentInTargetInterior(geom);
+            } else {
+                // We only had one point, so if it was on the
+                // boundary, it is not contained.
+                return false;
+            }
+        } else {
+            return true;
+        }
     }
 
     // Check if there is any intersection between the line segments

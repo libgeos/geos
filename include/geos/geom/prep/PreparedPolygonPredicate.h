@@ -22,6 +22,7 @@
 #define GEOS_GEOM_PREP_PREPAREDPOLYGONPREDICATE_H
 
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/Location.h>
 
 // forward declarations
 namespace geos {
@@ -64,16 +65,13 @@ protected:
     const PreparedPolygon* const prepPoly;
 
     /** \brief
-     * Tests whether all components of the test Geometry
-     * are contained in the target geometry.
-     *
-     * Handles both linear and point components.
+     * Returns the outermost Location among a test point from each
+     * components of the test geometry.
      *
      * @param testGeom a geometry to test
-     * @return true if all components of the argument are contained
-     *              in the target geometry
+     * @return the outermost Location
      */
-    bool isAllTestComponentsInTarget(const geom::Geometry* testGeom) const;
+    geom::Location::Value getOutermostTestComponentLocation(const geom::Geometry* testGeom) const;
 
     /** \brief
      * Tests whether all components of the test Geometry

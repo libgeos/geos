@@ -26,6 +26,7 @@
 #include <geos/algorithm/locate/PointOnGeometryLocator.h>
 #include <geos/algorithm/locate/SimplePointInAreaLocator.h>
 // std
+#include <algorithm> // std::max
 #include <cstddef>
 
 namespace geos {
@@ -82,13 +83,42 @@ struct AnyNotMatchingLocationFilter : public GeometryComponentFilter {
     }
 };
 
-bool
-PreparedPolygonPredicate::isAllTestComponentsInTarget(const geom::Geometry* testGeom) const
+struct OutermostLocationFilter : public GeometryComponentFilter {
+    explicit OutermostLocationFilter(algorithm::locate::PointOnGeometryLocator* locator) :
+    pt_locator(locator),
+    max_loc(geom::Location::UNDEF),
+    found(false) {}
+
+    algorithm::locate::PointOnGeometryLocator* pt_locator;
+    Location::Value max_loc;
+    bool found;
+
+    void filter_ro(const Geometry* g) override {
+        const Coordinate* pt = g->getCoordinate();
+        auto loc = static_cast<Location::Value>(pt_locator->locate(pt));
+
+        max_loc = std::max(max_loc, loc);
+        if (max_loc == geom::Location::EXTERIOR) {
+            found = true;
+        }
+    }
+
+    bool isDone() override {
+        return found;
+    }
+
+    Location::Value getOutermostLocation() {
+        return max_loc;
+    }
+};
+
+Location::Value
+PreparedPolygonPredicate::getOutermostTestComponentLocation(const geom::Geometry* testGeom) const
 {
-    AnyMatchingLocationFilter filter(prepPoly->getPointLocator(), geom::Location::EXTERIOR);
+    OutermostLocationFilter filter(prepPoly->getPointLocator());
     testGeom->apply_ro(&filter);
 
-    return !filter.found;
+    return filter.getOutermostLocation();
 }
 
 bool
