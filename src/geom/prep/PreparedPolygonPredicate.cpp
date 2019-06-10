@@ -26,7 +26,6 @@
 #include <geos/algorithm/locate/PointOnGeometryLocator.h>
 #include <geos/algorithm/locate/SimplePointInAreaLocator.h>
 // std
-#include <algorithm> // std::max
 #include <cstddef>
 
 namespace geos {
@@ -86,29 +85,31 @@ struct AnyNotMatchingLocationFilter : public GeometryComponentFilter {
 struct OutermostLocationFilter : public GeometryComponentFilter {
     explicit OutermostLocationFilter(algorithm::locate::PointOnGeometryLocator* locator) :
     pt_locator(locator),
-    max_loc(geom::Location::UNDEF),
-    found(false) {}
+    outermost_loc(geom::Location::UNDEF),
+    done(false) {}
 
     algorithm::locate::PointOnGeometryLocator* pt_locator;
-    Location::Value max_loc;
-    bool found;
+    Location::Value outermost_loc;
+    bool done;
 
     void filter_ro(const Geometry* g) override {
         const Coordinate* pt = g->getCoordinate();
         auto loc = static_cast<Location::Value>(pt_locator->locate(pt));
 
-        max_loc = std::max(max_loc, loc);
-        if (max_loc == geom::Location::EXTERIOR) {
-            found = true;
+        if (outermost_loc == Location::UNDEF || outermost_loc == Location::INTERIOR) {
+            outermost_loc = loc;
+        } else if (Location::EXTERIOR) {
+            outermost_loc = loc;
+            done = true;
         }
     }
 
     bool isDone() override {
-        return found;
+        return done;
     }
 
     Location::Value getOutermostLocation() {
-        return max_loc;
+        return outermost_loc;
     }
 };
 
