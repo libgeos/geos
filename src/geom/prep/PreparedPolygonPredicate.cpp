@@ -38,8 +38,8 @@ namespace prep { // geos.geom.prep
 //
 // protected:
 //
-struct AnyMatchingLocationFilter : public GeometryComponentFilter {
-    explicit AnyMatchingLocationFilter(algorithm::locate::PointOnGeometryLocator* locator, int loc) :
+struct LocationMatchingFilter : public GeometryComponentFilter {
+    explicit LocationMatchingFilter(algorithm::locate::PointOnGeometryLocator* locator, int loc) :
         pt_locator(locator), test_loc(loc), found(false) {}
 
     algorithm::locate::PointOnGeometryLocator* pt_locator;
@@ -60,8 +60,8 @@ struct AnyMatchingLocationFilter : public GeometryComponentFilter {
     }
 };
 
-struct AnyNotMatchingLocationFilter : public GeometryComponentFilter {
-    explicit AnyNotMatchingLocationFilter(algorithm::locate::PointOnGeometryLocator* locator, int loc) :
+struct LocationNotMatchingFilter : public GeometryComponentFilter {
+    explicit LocationNotMatchingFilter(algorithm::locate::PointOnGeometryLocator* locator, int loc) :
             pt_locator(locator), test_loc(loc), found(false) {}
 
     algorithm::locate::PointOnGeometryLocator* pt_locator;
@@ -126,7 +126,7 @@ bool
 PreparedPolygonPredicate::isAllTestComponentsInTargetInterior(
     const geom::Geometry* testGeom) const
 {
-    AnyNotMatchingLocationFilter filter(prepPoly->getPointLocator(), geom::Location::INTERIOR);
+    LocationNotMatchingFilter filter(prepPoly->getPointLocator(), geom::Location::INTERIOR);
     testGeom->apply_ro(&filter);
 
     return !filter.found;
@@ -136,7 +136,7 @@ bool
 PreparedPolygonPredicate::isAnyTestComponentInTarget(
     const geom::Geometry* testGeom) const
 {
-    AnyNotMatchingLocationFilter filter(prepPoly->getPointLocator(), geom::Location::EXTERIOR);
+    LocationNotMatchingFilter filter(prepPoly->getPointLocator(), geom::Location::EXTERIOR);
     testGeom->apply_ro(&filter);
 
     return filter.found;
@@ -146,7 +146,7 @@ bool
 PreparedPolygonPredicate::isAnyTestComponentInTargetInterior(
     const geom::Geometry* testGeom) const
 {
-    AnyMatchingLocationFilter filter(prepPoly->getPointLocator(), geom::Location::INTERIOR);
+    LocationMatchingFilter filter(prepPoly->getPointLocator(), geom::Location::INTERIOR);
     testGeom->apply_ro(&filter);
 
     return filter.found;
