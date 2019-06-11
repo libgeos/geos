@@ -99,6 +99,16 @@ protected:
     bool eval(const geom::Geometry* geom);
 
     /**
+     * Evaluate the <tt>contains</tt> or <tt>covers</tt> relationship
+     * for the given Puntal geometry.
+     *
+     * @param geom the test geometry
+     * @param outermostLoc outermost Location of all points in geom
+     * @return true if the test geometry is contained/covered in the target
+     */
+    bool evalPointTestGeom(const geom::Geometry* geom, geom::Location::Value outermostLoc);
+
+    /**
      * Computes the full topological predicate.
      * Used when short-circuit tests are not conclusive.
      *

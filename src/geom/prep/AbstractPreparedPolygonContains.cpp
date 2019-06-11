@@ -109,23 +109,17 @@ AbstractPreparedPolygonContains::eval(const geom::Geometry* geom)
 {
     // Do point-in-poly tests first, since they are cheaper and may result
     // in a quick negative result.
-    //
-    // If a point of any test components does not lie in target,
-    // result is false
-    bool isAllInTargetArea = isAllTestComponentsInTarget(geom);
-    if(!isAllInTargetArea) {
-        return false;
+    auto outermostLoc = getOutermostTestComponentLocation(geom);
+
+    // Short-circuit for (Multi)Points
+    if (geom->getDimension() == 0) {
+        return evalPointTestGeom(geom, outermostLoc);
     }
 
-    // If the test geometry consists of only Points,
-    // then it is now sufficient to test if any of those
-    // points lie in the interior of the target geometry.
-    // If so, the test is contained.
-    // If not, all points are on the boundary of the area,
-    // which implies not contained.
-    if(requireSomePointInInterior && geom->getDimension() == 0) {
-        bool isAnyInTargetInterior = isAnyTestComponentInTargetInterior(geom);
-        return isAnyInTargetInterior;
+    if (outermostLoc == Location::EXTERIOR) {
+        // If a point of any test components does not lie in target,
+        // result is false
+        return false;
     }
 
     // Check if there is any intersection between the line segments
@@ -185,6 +179,37 @@ AbstractPreparedPolygonContains::eval(const geom::Geometry* geom)
     }
 
     return true;
+}
+
+bool AbstractPreparedPolygonContains::evalPointTestGeom(const Geometry *geom,
+                                                      Location::Value outermostLoc) {
+    // If we had a point on the ourside of the polygon,
+    // we aren't covered or contained.
+    if (outermostLoc == Location::EXTERIOR) {
+        return false;
+    }
+
+    // For the Covers predicate, we can return true
+    // since no Points are on the exterior of the target
+    // geometry.
+    if (!requireSomePointInInterior) {
+        return true;
+    }
+
+    // For the Contains predicate, we need to test if any
+    // of those points lie in the interior of the target
+    // geometry.
+    if (outermostLoc == Location::INTERIOR) {
+        return true;
+    }
+
+    if (geom->getNumGeometries() > 1) {
+        // for MultiPoint, try to find at least one point
+        // in interior
+        return isAnyTestComponentInTargetInterior(geom);
+    }
+
+    return false;
 }
 
 //

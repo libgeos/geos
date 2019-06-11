@@ -20,6 +20,7 @@
 #include <geos/geom/prep/PreparedPolygonPredicate.h>
 #include <geos/geom/prep/PreparedPolygon.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/util/ComponentCoordinateExtracter.h>
 #include <geos/geom/Location.h>
 #include <geos/algorithm/locate/PointOnGeometryLocator.h>
@@ -37,71 +38,118 @@ namespace prep { // geos.geom.prep
 //
 // protected:
 //
-bool
-PreparedPolygonPredicate::isAllTestComponentsInTarget(const geom::Geometry* testGeom) const
-{
-    geom::Coordinate::ConstVect pts;
-    geom::util::ComponentCoordinateExtracter::getCoordinates(*testGeom, pts);
+struct LocationMatchingFilter : public GeometryComponentFilter {
+    explicit LocationMatchingFilter(algorithm::locate::PointOnGeometryLocator* locator, int loc) :
+        pt_locator(locator), test_loc(loc), found(false) {}
 
-    for(std::size_t i = 0, ni = pts.size(); i < ni; i++) {
-        const geom::Coordinate* pt = pts[i];
-        const int loc = prepPoly->getPointLocator()->locate(pt);
-        if(geom::Location::EXTERIOR == loc) {
-            return false;
+    algorithm::locate::PointOnGeometryLocator* pt_locator;
+    const int test_loc;
+    bool found;
+
+    void filter_ro(const Geometry* g) override {
+        const Coordinate* pt = g->getCoordinate();
+        const int loc = pt_locator->locate(pt);
+
+        if (loc == test_loc) {
+            found = true;
         }
     }
-    return true;
+
+    bool isDone() override {
+        return found;
+    }
+};
+
+struct LocationNotMatchingFilter : public GeometryComponentFilter {
+    explicit LocationNotMatchingFilter(algorithm::locate::PointOnGeometryLocator* locator, int loc) :
+            pt_locator(locator), test_loc(loc), found(false) {}
+
+    algorithm::locate::PointOnGeometryLocator* pt_locator;
+    const int test_loc;
+    bool found;
+
+    void filter_ro(const Geometry* g) override {
+        const Coordinate* pt = g->getCoordinate();
+        const int loc = pt_locator->locate(pt);
+
+        if (loc != test_loc) {
+            found = true;
+        }
+    }
+
+    bool isDone() override {
+        return found;
+    }
+};
+
+struct OutermostLocationFilter : public GeometryComponentFilter {
+    explicit OutermostLocationFilter(algorithm::locate::PointOnGeometryLocator* locator) :
+    pt_locator(locator),
+    outermost_loc(geom::Location::UNDEF),
+    done(false) {}
+
+    algorithm::locate::PointOnGeometryLocator* pt_locator;
+    Location::Value outermost_loc;
+    bool done;
+
+    void filter_ro(const Geometry* g) override {
+        const Coordinate* pt = g->getCoordinate();
+        auto loc = static_cast<Location::Value>(pt_locator->locate(pt));
+
+        if (outermost_loc == Location::UNDEF || outermost_loc == Location::INTERIOR) {
+            outermost_loc = loc;
+        } else if (Location::EXTERIOR) {
+            outermost_loc = loc;
+            done = true;
+        }
+    }
+
+    bool isDone() override {
+        return done;
+    }
+
+    Location::Value getOutermostLocation() {
+        return outermost_loc;
+    }
+};
+
+Location::Value
+PreparedPolygonPredicate::getOutermostTestComponentLocation(const geom::Geometry* testGeom) const
+{
+    OutermostLocationFilter filter(prepPoly->getPointLocator());
+    testGeom->apply_ro(&filter);
+
+    return filter.getOutermostLocation();
 }
 
 bool
 PreparedPolygonPredicate::isAllTestComponentsInTargetInterior(
     const geom::Geometry* testGeom) const
 {
-    geom::Coordinate::ConstVect pts;
-    geom::util::ComponentCoordinateExtracter::getCoordinates(*testGeom, pts);
+    LocationNotMatchingFilter filter(prepPoly->getPointLocator(), geom::Location::INTERIOR);
+    testGeom->apply_ro(&filter);
 
-    for(std::size_t i = 0, ni = pts.size(); i < ni; i++) {
-        const geom::Coordinate* pt = pts[i];
-        const int loc = prepPoly->getPointLocator()->locate(pt);
-        if(geom::Location::INTERIOR != loc) {
-            return false;
-        }
-    }
-    return true;
+    return !filter.found;
 }
 
 bool
 PreparedPolygonPredicate::isAnyTestComponentInTarget(
     const geom::Geometry* testGeom) const
 {
-    geom::Coordinate::ConstVect pts;
-    geom::util::ComponentCoordinateExtracter::getCoordinates(*testGeom, pts);
+    LocationNotMatchingFilter filter(prepPoly->getPointLocator(), geom::Location::EXTERIOR);
+    testGeom->apply_ro(&filter);
 
-    for(std::size_t i = 0, ni = pts.size(); i < ni; i++) {
-        const Coordinate* pt = pts[i];
-        const int loc = prepPoly->getPointLocator()->locate(pt);
-        if(geom::Location::EXTERIOR != loc) {
-            return true;
-        }
-    }
-    return false;
+    return filter.found;
 }
 
 bool
 PreparedPolygonPredicate::isAnyTestComponentInTargetInterior(
     const geom::Geometry* testGeom) const
 {
-    geom::Coordinate::ConstVect pts;
-    geom::util::ComponentCoordinateExtracter::getCoordinates(*testGeom, pts);
+    LocationMatchingFilter filter(prepPoly->getPointLocator(), geom::Location::INTERIOR);
+    testGeom->apply_ro(&filter);
 
-    for(std::size_t i = 0, ni = pts.size(); i < ni; i++) {
-        const Coordinate* pt = pts[i];
-        const int loc = prepPoly->getPointLocator()->locate(pt);
-        if(geom::Location::INTERIOR == loc) {
-            return true;
-        }
-    }
-    return false;
+    return filter.found;
 }
 
 bool

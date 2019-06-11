@@ -393,7 +393,7 @@ Polygon::apply_ro(GeometryComponentFilter* filter) const
 {
     filter->filter_ro(this);
     shell->apply_ro(filter);
-    for(size_t i = 0, n = holes->size(); i < n; ++i) {
+    for(size_t i = 0, n = holes->size(); i < n && !filter->isDone(); ++i) {
         (*holes)[i]->apply_ro(filter);
     }
 }
@@ -403,7 +403,7 @@ Polygon::apply_rw(GeometryComponentFilter* filter)
 {
     filter->filter_rw(this);
     shell->apply_rw(filter);
-    for(size_t i = 0, n = holes->size(); i < n; ++i) {
+    for(size_t i = 0, n = holes->size(); i < n && !filter->isDone(); ++i) {
         (*holes)[i]->apply_rw(filter);
     }
 }
