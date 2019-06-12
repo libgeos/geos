@@ -98,7 +98,7 @@ struct OutermostLocationFilter : public GeometryComponentFilter {
 
         if (outermost_loc == Location::UNDEF || outermost_loc == Location::INTERIOR) {
             outermost_loc = loc;
-        } else if (Location::EXTERIOR) {
+        } else if (loc == Location::EXTERIOR) {
             outermost_loc = loc;
             done = true;
         }
