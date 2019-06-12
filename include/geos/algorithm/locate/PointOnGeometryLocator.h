@@ -16,6 +16,8 @@
 #ifndef GEOS_ALGORITHM_LOCATE_POINTONGEOMETRYLOCATOR_H
 #define GEOS_ALGORITHM_LOCATE_POINTONGEOMETRYLOCATOR_H
 
+#include <geos/geom/Location.h>
+
 namespace geos {
 namespace geom {
 class Coordinate;
@@ -46,7 +48,7 @@ public:
      * @param p the point to test
      * @return the location of the point in the geometry
      */
-    virtual int locate(const geom::Coordinate* /*const*/ p) = 0;
+    virtual geom::Location locate(const geom::Coordinate* /*const*/ p) = 0;
 };
 
 } // geos::algorithm::locate

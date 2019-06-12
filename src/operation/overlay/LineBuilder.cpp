@@ -305,7 +305,7 @@ LineBuilder::labelIsolatedLines(vector<Edge*>* edgesList)
 void
 LineBuilder::labelIsolatedLine(Edge* e, int targetIndex)
 {
-    int loc = ptLocator->locate(e->getCoordinate(),
+    Location loc = ptLocator->locate(e->getCoordinate(),
                                 op->getArgGeometry(targetIndex));
     e->getLabel().setLocation(targetIndex, loc);
 }

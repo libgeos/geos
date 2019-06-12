@@ -346,7 +346,7 @@ RelateComputer::computeIntersectionNodes(int argIndex)
     std::vector<Edge*>* edges = (*arg)[argIndex]->getEdges();
     for(std::vector<Edge*>::iterator i = edges->begin(); i < edges->end(); i++) {
         Edge* e = *i;
-        int eLoc = e->getLabel().getLocation(argIndex);
+        Location eLoc = e->getLabel().getLocation(argIndex);
         EdgeIntersectionList& eiL = e->getEdgeIntersectionList();
         EdgeIntersectionList::iterator it = eiL.begin();
         EdgeIntersectionList::iterator end = eiL.end();
@@ -379,7 +379,7 @@ RelateComputer::labelIntersectionNodes(int argIndex)
     std::vector<Edge*>* edges = (*arg)[argIndex]->getEdges();
     for(std::vector<Edge*>::iterator i = edges->begin(); i < edges->end(); i++) {
         Edge* e = *i;
-        int eLoc = e->getLabel().getLocation(argIndex);
+        Location eLoc = e->getLabel().getLocation(argIndex);
         EdgeIntersectionList& eiL = e->getEdgeIntersectionList();
         EdgeIntersectionList::iterator eiIt = eiL.begin();
         EdgeIntersectionList::iterator eiEnd = eiL.end();
@@ -481,7 +481,7 @@ RelateComputer::labelIsolatedEdge(Edge* e, int targetIndex, const Geometry* targ
         // since edge is not in boundary, may not need the full generality of PointLocator?
         // Possibly should use ptInArea locator instead?  We probably know here
         // that the edge does not touch the bdy of the target Geometry
-        int loc = ptLocator.locate(e->getCoordinate(), target);
+        Location loc = ptLocator.locate(e->getCoordinate(), target);
         e->getLabel().setAllLocations(targetIndex, loc);
     }
     else {
@@ -515,7 +515,7 @@ RelateComputer::labelIsolatedNodes()
 void
 RelateComputer::labelIsolatedNode(Node* n, int targetIndex)
 {
-    int loc = ptLocator.locate(n->getCoordinate(),
+    Location loc = ptLocator.locate(n->getCoordinate(),
                                (*arg)[targetIndex]->getGeometry());
     n->getLabel().setAllLocations(targetIndex, loc);
     //debugPrintln(n.getLabel());

@@ -181,8 +181,7 @@ AbstractPreparedPolygonContains::eval(const geom::Geometry* geom)
     return true;
 }
 
-bool AbstractPreparedPolygonContains::evalPointTestGeom(const Geometry *geom,
-                                                      Location::Value outermostLoc) {
+bool AbstractPreparedPolygonContains::evalPointTestGeom(const Geometry *geom, Location outermostLoc) {
     // If we had a point on the ourside of the polygon,
     // we aren't covered or contained.
     if (outermostLoc == Location::EXTERIOR) {

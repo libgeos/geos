@@ -25,6 +25,7 @@
 #include <geos/export.h>
 #include <string>
 
+#include <geos/geom/Location.h>
 #include <geos/geomgraph/EdgeEnd.h> // for inheritance
 
 #include <geos/inline.h>
@@ -51,7 +52,7 @@ public:
      * E.g. if crossing from the INTERIOR to the EXTERIOR the depth
      * decreases, so the factor is -1
      */
-    static int depthFactor(int currLocation, int nextLocation);
+    static int depthFactor(geom::Location currLocation, geom::Location nextLocation);
 
     //DirectedEdge();
     //virtual ~DirectedEdge();

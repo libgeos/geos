@@ -115,7 +115,7 @@ EdgeEndBundle::computeLabelOn(int geomIndex, const algorithm::BoundaryNodeRule& 
 
     for(vector<EdgeEnd*>::iterator it = edgeEnds->begin(); it < edgeEnds->end(); it++) {
         EdgeEnd* e = *it;
-        int loc = e->getLabel().getLocation(geomIndex);
+        Location loc = e->getLabel().getLocation(geomIndex);
         if(loc == Location::BOUNDARY) {
             boundaryCount++;
         }
@@ -123,7 +123,7 @@ EdgeEndBundle::computeLabelOn(int geomIndex, const algorithm::BoundaryNodeRule& 
             foundInterior = true;
         }
     }
-    int loc = Location::UNDEF;
+    Location loc = Location::UNDEF;
     if(foundInterior) {
         loc = Location::INTERIOR;
     }
@@ -165,7 +165,7 @@ EdgeEndBundle::computeLabelSide(int geomIndex, int side)
     for(vector<EdgeEnd*>::iterator it = edgeEnds->begin(); it < edgeEnds->end(); it++) {
         EdgeEnd* e = *it;
         if(e->getLabel().isArea()) {
-            int loc = e->getLabel().getLocation(geomIndex, side);
+            Location loc = e->getLabel().getLocation(geomIndex, side);
             if(loc == Location::INTERIOR) {
                 label.setLocation(geomIndex, side, Location::INTERIOR);
                 return;

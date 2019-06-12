@@ -5,6 +5,7 @@
 // geos
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/geom/Dimension.h>
+#include <geos/geom/Location.h>
 // std
 #include <memory>
 #include <string>
@@ -176,11 +177,13 @@ template<>
 void object::test<11>
 ()
 {
+    using geos::geom::Location;
+
     // 'im_' is initialized with 'FFFFFFFFF'
     ensure_equals(im_.toString(), pattern_false_);
 
     // Do some changes and checks
-    im_.set(0, 0, geos::geom::Dimension::P);
+    im_.set(Location::INTERIOR, Location::INTERIOR, geos::geom::Dimension::P);
 
     ensure_equals(im_.toString(), "0FFFFFFFF");
 
@@ -248,15 +251,17 @@ template<>
 void object::test<15>
 ()
 {
+    using geos::geom::Location;
+
     // 'im_' is initialized with 'FFFFFFFFF'
     ensure_equals(im_.toString(), pattern_false_);
 
     // 1. No change expected
-    im_.setAtLeast(0, 0, geos::geom::Dimension::False);
+    im_.setAtLeast(Location::INTERIOR, Location::INTERIOR, geos::geom::Dimension::False);
     ensure_equals(im_.toString(), pattern_false_);
 
     // 2. Change is expected
-    im_.setAtLeast(0, 0, geos::geom::Dimension::A);
+    im_.setAtLeast(Location::INTERIOR, Location::INTERIOR, geos::geom::Dimension::A);
     ensure_equals(im_.toString(), "2FFFFFFFF");
 }
 
@@ -267,13 +272,15 @@ template<>
 void object::test<16>
 ()
 {
+    using geos::geom::Location;
+
     // 'im_' is initialized with 'FFFFFFFFF'
     ensure_equals(im_.toString(), pattern_false_);
 
     // 1. No change expected
-    im_.setAtLeast(0, 0, geos::geom::Dimension::A);
+    im_.setAtLeast(Location::INTERIOR, Location::INTERIOR, geos::geom::Dimension::A);
     ensure(im_.toString() != pattern_false_);
-    ensure_equals(im_.get(0, 0), geos::geom::Dimension::A);
+    ensure_equals(im_.get(Location::INTERIOR, Location::INTERIOR), geos::geom::Dimension::A);
 }
 
 // Test of get(int row, int column)
@@ -282,17 +289,19 @@ template<>
 void object::test<17>
 ()
 {
-    // Test on the original pattern 'FFFFFFFFF' of the 'im_' object
+    using geos::geom::Location;
+
+    // Test on the original p0attern 'FFFFFFFFF' of the 'im_' object
     ensure_equals(im_.toString(), pattern_false_);
-    ensure_equals(im_.get(0, 0), geos::geom::Dimension::False);
+    ensure_equals(im_.get(Location::INTERIOR, Location::INTERIOR), geos::geom::Dimension::False);
 
     // Change first value and test again
-    im_.setAtLeast(0, 0, geos::geom::Dimension::A);
-    ensure_equals(im_.get(0, 0), geos::geom::Dimension::A);
+    im_.setAtLeast(Location::INTERIOR, Location::INTERIOR, geos::geom::Dimension::A);
+    ensure_equals(im_.get(Location::INTERIOR, Location::INTERIOR), geos::geom::Dimension::A);
 
     // Change last value and test again
-    im_.setAtLeast(2, 2, geos::geom::Dimension::L);
-    ensure_equals(im_.get(2, 2), geos::geom::Dimension::L);
+    im_.setAtLeast(Location::EXTERIOR, Location::EXTERIOR, geos::geom::Dimension::L);
+    ensure_equals(im_.get(Location::EXTERIOR, Location::EXTERIOR), geos::geom::Dimension::L);
 }
 
 

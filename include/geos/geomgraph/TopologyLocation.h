@@ -23,6 +23,7 @@
 
 #include <geos/export.h>
 #include <geos/inline.h>
+#include <geos/geom/Location.h>
 
 #include <vector>
 #include <string>
@@ -78,15 +79,15 @@ public:
      *
      * @see Location
      */
-    TopologyLocation(int on, int left, int right);
+    TopologyLocation(geom::Location on, geom::Location left, geom::Location right);
 
-    TopologyLocation(int on);
+    TopologyLocation(geom::Location on);
 
     TopologyLocation(const TopologyLocation& gl);
 
     TopologyLocation& operator= (const TopologyLocation& gl);
 
-    int get(std::size_t posIndex) const;
+    geom::Location get(std::size_t posIndex) const;
 
     /**
      * @return true if all locations are Location::UNDEF
@@ -106,20 +107,20 @@ public:
 
     void flip();
 
-    void setAllLocations(int locValue);
+    void setAllLocations(geom::Location locValue);
 
-    void setAllLocationsIfNull(int locValue);
+    void setAllLocationsIfNull(geom::Location locValue);
 
-    void setLocation(std::size_t locIndex, int locValue);
+    void setLocation(std::size_t locIndex, geom::Location locValue);
 
-    void setLocation(int locValue);
+    void setLocation(geom::Location locValue);
 
     /// Warning: returns reference to owned memory
-    const std::vector<int>& getLocations() const;
+    const std::vector<geom::Location>& getLocations() const;
 
-    void setLocations(int on, int left, int right);
+    void setLocations(geom::Location on, geom::Location left, geom::Location right);
 
-    bool allPositionsEqual(int loc) const;
+    bool allPositionsEqual(geom::Location loc) const;
 
     /** \brief
      * merge updates only the UNDEF attributes of this object
@@ -131,7 +132,7 @@ public:
 
 private:
 
-    std::vector<int> location;
+    std::vector<geom::Location> location;
 };
 
 std::ostream& operator<< (std::ostream&, const TopologyLocation&);

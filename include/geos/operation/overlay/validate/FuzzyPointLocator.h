@@ -61,7 +61,7 @@ public:
 
     FuzzyPointLocator(const geom::Geometry& geom, double nTolerance);
 
-    geom::Location::Value getLocation(const geom::Coordinate& pt);
+    geom::Location getLocation(const geom::Coordinate& pt);
 
 private:
 

@@ -49,7 +49,7 @@ TopologyLocation::~TopologyLocation()
 }
 
 /*public*/
-TopologyLocation::TopologyLocation(int on, int left, int right):
+TopologyLocation::TopologyLocation(Location on, Location left, Location right):
     location(3)
 {
     location[Position::ON] = on;
@@ -58,7 +58,7 @@ TopologyLocation::TopologyLocation(int on, int left, int right):
 }
 
 /*public*/
-TopologyLocation::TopologyLocation(int on):
+TopologyLocation::TopologyLocation(Location on):
     location(1, on)
 {
     //(*location)[Position::ON]=on;
@@ -80,7 +80,7 @@ TopologyLocation::operator= (const TopologyLocation& gl)
 }
 
 /*public*/
-int
+Location
 TopologyLocation::get(size_t posIndex) const
 {
     // should be an assert() instead ?
@@ -142,14 +142,12 @@ TopologyLocation::flip()
     if(location.size() <= 1) {
         return;
     }
-    int temp = location[Position::LEFT];
-    location[Position::LEFT] = location[Position::RIGHT];
-    location[Position::RIGHT] = temp;
+    std::swap(location[Position::LEFT], location[Position::RIGHT]);
 }
 
 /*public*/
 void
-TopologyLocation::setAllLocations(int locValue)
+TopologyLocation::setAllLocations(Location locValue)
 {
     for(size_t i = 0, sz = location.size(); i < sz; ++i) {
         location[i] = locValue;
@@ -158,7 +156,7 @@ TopologyLocation::setAllLocations(int locValue)
 
 /*public*/
 void
-TopologyLocation::setAllLocationsIfNull(int locValue)
+TopologyLocation::setAllLocationsIfNull(Location locValue)
 {
     for(size_t i = 0, sz = location.size(); i < sz; ++i) {
         if(location[i] == Location::UNDEF) {
@@ -169,20 +167,20 @@ TopologyLocation::setAllLocationsIfNull(int locValue)
 
 /*public*/
 void
-TopologyLocation::setLocation(size_t locIndex, int locValue)
+TopologyLocation::setLocation(size_t locIndex, Location locValue)
 {
     location[locIndex] = locValue;
 }
 
 /*public*/
 void
-TopologyLocation::setLocation(int locValue)
+TopologyLocation::setLocation(Location locValue)
 {
     setLocation(Position::ON, locValue);
 }
 
 /*public*/
-const vector<int>&
+const vector<Location>&
 TopologyLocation::getLocations() const
 {
     return location;
@@ -190,7 +188,7 @@ TopologyLocation::getLocations() const
 
 /*public*/
 void
-TopologyLocation::setLocations(int on, int left, int right)
+TopologyLocation::setLocations(Location on, Location left, Location right)
 {
     assert(location.size() >= 3);
     location[Position::ON] = on;
@@ -200,7 +198,7 @@ TopologyLocation::setLocations(int on, int left, int right)
 
 /*public*/
 bool
-TopologyLocation::allPositionsEqual(int loc) const
+TopologyLocation::allPositionsEqual(Location loc) const
 {
     for(size_t i = 0, sz = location.size(); i < sz; ++i) {
         if(location[i] != loc) {
@@ -241,11 +239,11 @@ std::ostream&
 operator<< (std::ostream& os, const TopologyLocation& tl)
 {
     if(tl.location.size() > 1) {
-        os << Location::toLocationSymbol(tl.location[Position::LEFT]);
+        os << tl.location[Position::LEFT];
     }
-    os << Location::toLocationSymbol(tl.location[Position::ON]);
+    os << tl.location[Position::ON];
     if(tl.location.size() > 1) {
-        os << Location::toLocationSymbol(tl.location[Position::RIGHT]);
+        os << tl.location[Position::RIGHT];
     }
     return os;
 }

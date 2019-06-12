@@ -21,6 +21,7 @@
 #define GEOS_OP_BUFFER_OFFSETCURVESETBUILDER_H
 
 #include <geos/export.h>
+#include <geos/geom/Location.h>
 
 #include <vector>
 
@@ -98,8 +99,8 @@ private:
      *
      * @param coord is raw offset curve, ownership transferred here
      */
-    void addCurve(geom::CoordinateSequence* coord, int leftLoc,
-                  int rightLoc);
+    void addCurve(geom::CoordinateSequence* coord, geom::Location leftLoc,
+                  geom::Location rightLoc);
 
     void add(const geom::Geometry& g);
 
@@ -133,8 +134,8 @@ private:
      *                   (if it is CW)
      */
     void addPolygonRing(const geom::CoordinateSequence* coord,
-                        double offsetDistance, int side, int cwLeftLoc,
-                        int cwRightLoc);
+                        double offsetDistance, int side, geom::Location cwLeftLoc,
+                        geom::Location cwRightLoc);
 
     /**
      * The ringCoord is assumed to contain no repeated points.
@@ -200,7 +201,7 @@ public:
     /// @param rightLoc right location
     ///
     void addCurves(const std::vector<geom::CoordinateSequence*>& lineList,
-                   int leftLoc, int rightLoc);
+                   geom::Location leftLoc, geom::Location rightLoc);
 
 };
 

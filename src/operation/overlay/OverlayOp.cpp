@@ -97,15 +97,15 @@ OverlayOp::overlayOp(const Geometry* geom0, const Geometry* geom1,
 bool
 OverlayOp::isResultOfOp(const Label& label, OverlayOp::OpCode opCode)
 {
-    int loc0 = label.getLocation(0);
-    int loc1 = label.getLocation(1);
+    Location loc0 = label.getLocation(0);
+    Location loc1 = label.getLocation(1);
     return isResultOfOp(loc0, loc1, opCode);
 }
 
 
 /* static public */
 bool
-OverlayOp::isResultOfOp(int loc0, int loc1, OverlayOp::OpCode opCode)
+OverlayOp::isResultOfOp(Location loc0, Location loc1, OverlayOp::OpCode opCode)
 {
     if(loc0 == Location::BOUNDARY) {
         loc0 = Location::INTERIOR;
@@ -406,7 +406,7 @@ OverlayOp::labelIncompleteNode(Node* n, int targetIndex)
     cerr << "OverlayOp::labelIncompleteNode(" << n->print() << ", " << targetIndex << ")" << endl;
 #endif
     const Geometry* targetGeom = arg[targetIndex]->getGeometry();
-    int loc = ptLocator.locate(n->getCoordinate(), targetGeom);
+    Location loc = ptLocator.locate(n->getCoordinate(), targetGeom);
     n->getLabel().setLocation(targetIndex, loc);
 
 #if GEOS_DEBUG
@@ -606,7 +606,7 @@ OverlayOp::isCovered(const Coordinate& coord, vector<Geometry*>* geomList)
 {
     for(size_t i = 0, n = geomList->size(); i < n; ++i) {
         Geometry* geom = (*geomList)[i];
-        int loc = ptLocator.locate(coord, geom);
+        Location loc = ptLocator.locate(coord, geom);
         if(loc != Location::EXTERIOR) {
             return true;
         }
@@ -620,7 +620,7 @@ OverlayOp::isCovered(const Coordinate& coord, vector<LineString*>* geomList)
 {
     for(size_t i = 0, n = geomList->size(); i < n; ++i) {
         Geometry* geom = (Geometry*)(*geomList)[i];
-        int loc = ptLocator.locate(coord, geom);
+        Location loc = ptLocator.locate(coord, geom);
         if(loc != Location::EXTERIOR) {
             return true;
         }
@@ -634,7 +634,7 @@ OverlayOp::isCovered(const Coordinate& coord, vector<Polygon*>* geomList)
 {
     for(size_t i = 0, n = geomList->size(); i < n; ++i) {
         Geometry* geom = (Geometry*)(*geomList)[i];
-        int loc = ptLocator.locate(coord, geom);
+        Location loc = ptLocator.locate(coord, geom);
         if(loc != Location::EXTERIOR) {
             return true;
         }
@@ -1015,7 +1015,7 @@ struct PointCoveredByAny: public geom::CoordinateFilter {
     filter_ro(const Coordinate* coord) override
     {
         for(size_t i = 0, n = geoms.size(); i < n; ++i) {
-            int loc = locator.locate(*coord, geoms[i]);
+            Location loc = locator.locate(*coord, geoms[i]);
             if(loc == Location::INTERIOR ||
                     loc == Location::BOUNDARY) {
                 return;

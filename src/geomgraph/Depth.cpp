@@ -34,7 +34,7 @@ namespace geos {
 namespace geomgraph { // geos.geomgraph
 
 int
-Depth::depthAtLocation(int location)
+Depth::depthAtLocation(geom::Location location)
 {
     if(location == Location::EXTERIOR) {
         return 0;
@@ -72,7 +72,7 @@ Depth::setDepth(int geomIndex, int posIndex, int depthValue)
     depth[geomIndex][posIndex] = depthValue;
 }
 
-int
+Location
 Depth::getLocation(int geomIndex, int posIndex) const
 {
     if(depth[geomIndex][posIndex] <= 0) {
@@ -82,7 +82,7 @@ Depth::getLocation(int geomIndex, int posIndex) const
 }
 
 void
-Depth::add(int geomIndex, int posIndex, int location)
+Depth::add(int geomIndex, int posIndex, Location location)
 {
     if(location == Location::INTERIOR) {
         depth[geomIndex][posIndex]++;
@@ -159,7 +159,7 @@ Depth::add(const Label& lbl)
 {
     for(int i = 0; i < 2; i++) {
         for(int j = 1; j < 3; j++) {
-            int loc = lbl.getLocation(i, j);
+            Location loc = lbl.getLocation(i, j);
             if(loc == Location::EXTERIOR || loc == Location::INTERIOR) {
                 // initialize depth if it is null, otherwise
                 // add this location value

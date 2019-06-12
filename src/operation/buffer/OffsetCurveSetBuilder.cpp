@@ -92,7 +92,7 @@ OffsetCurveSetBuilder::getCurves()
 /*public*/
 void
 OffsetCurveSetBuilder::addCurves(const std::vector<CoordinateSequence*>& lineList,
-                                 int leftLoc, int rightLoc)
+                                 geom::Location leftLoc, geom::Location rightLoc)
 {
     for(size_t i = 0, n = lineList.size(); i < n; ++i) {
         CoordinateSequence* coords = lineList[i];
@@ -103,7 +103,7 @@ OffsetCurveSetBuilder::addCurves(const std::vector<CoordinateSequence*>& lineLis
 /*private*/
 void
 OffsetCurveSetBuilder::addCurve(CoordinateSequence* coord,
-                                int leftLoc, int rightLoc)
+                                geom::Location leftLoc, geom::Location rightLoc)
 {
 #if GEOS_DEBUG
     std::cerr << __FUNCTION__ << ": coords=" << coord->toString() << std::endl;
@@ -281,7 +281,7 @@ OffsetCurveSetBuilder::addPolygon(const Polygon* p)
 /* private */
 void
 OffsetCurveSetBuilder::addPolygonRing(const CoordinateSequence* coord,
-                                      double offsetDistance, int side, int cwLeftLoc, int cwRightLoc)
+                                      double offsetDistance, int side, geom::Location cwLeftLoc, geom::Location cwRightLoc)
 {
 
     // don't bother adding ring if it is "flat" and
@@ -290,8 +290,8 @@ OffsetCurveSetBuilder::addPolygonRing(const CoordinateSequence* coord,
         return;
     }
 
-    int leftLoc = cwLeftLoc;
-    int rightLoc = cwRightLoc;
+    Location leftLoc = cwLeftLoc;
+    Location rightLoc = cwRightLoc;
 #if GEOS_DEBUG
     std::cerr << "OffsetCurveSetBuilder::addPolygonRing: CCW: " << Orientation::isCCW(coord) << std::endl;
 #endif

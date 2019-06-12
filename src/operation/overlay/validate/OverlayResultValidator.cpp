@@ -172,7 +172,8 @@ bool
 OverlayResultValidator::testValid(OverlayOp::OpCode overlayOp,
                                   const Coordinate& pt)
 {
-    std::vector<geom::Location::Value> location(3);
+    // TODO use std::array<geom::Location, 3> ?
+    std::vector<geom::Location> location(3);
 
     location[0] = fpl0.getLocation(pt);
     location[1] = fpl1.getLocation(pt);
@@ -203,7 +204,7 @@ OverlayResultValidator::testValid(OverlayOp::OpCode overlayOp,
 /* private */
 bool
 OverlayResultValidator::isValidResult(OverlayOp::OpCode overlayOp,
-                                      std::vector<geom::Location::Value>& location)
+                                      std::vector<geom::Location>& location)
 {
     bool expectedInterior = OverlayOp::isResultOfOp(location[0],
                             location[1], overlayOp);

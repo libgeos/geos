@@ -112,7 +112,7 @@ public:
      * @param p the point to test
      * @return the location of the point in the geometry
      */
-    int locate(const geom::Coordinate* /*const*/ p) override;
+    geom::Location locate(const geom::Coordinate* /*const*/ p) override;
 
 };
 

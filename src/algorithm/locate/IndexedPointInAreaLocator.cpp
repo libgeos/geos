@@ -96,7 +96,7 @@ IndexedPointInAreaLocator::IndexedPointInAreaLocator(const geom::Geometry& g)
     buildIndex(areaGeom);
 }
 
-int
+geom::Location
 IndexedPointInAreaLocator::locate(const geom::Coordinate* /*const*/ p)
 {
     algorithm::RayCrossingCounter rcc(*p);

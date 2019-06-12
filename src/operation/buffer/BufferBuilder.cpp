@@ -109,8 +109,8 @@ static Profiler* profiler = Profiler::instance();
 int
 BufferBuilder::depthDelta(const Label& label)
 {
-    int lLoc = label.getLocation(0, Position::LEFT);
-    int rLoc = label.getLocation(0, Position::RIGHT);
+    Location lLoc = label.getLocation(0, Position::LEFT);
+    Location rLoc = label.getLocation(0, Position::RIGHT);
     if(lLoc == Location::INTERIOR && rLoc == Location::EXTERIOR) {
         return 1;
     }

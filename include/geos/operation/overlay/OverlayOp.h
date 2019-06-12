@@ -23,6 +23,7 @@
 
 #include <geos/algorithm/PointLocator.h> // for composition
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
+#include <geos/geom/Location.h>
 #include <geos/geomgraph/EdgeList.h> // for composition
 #include <geos/geomgraph/PlanarGraph.h> // for inline (GeometryGraph->PlanarGraph)
 #include <geos/operation/GeometryGraphOperation.h> // for inheritance
@@ -118,7 +119,7 @@ public:
     //
     /// @return true if the locations correspond to the opCode
     ///
-    static bool isResultOfOp(int loc0, int loc1, OpCode opCode);
+    static bool isResultOfOp(geom::Location loc0, geom::Location loc1, OpCode opCode);
 
     /// \brief Construct an OverlayOp with the given Geometry args.
     //

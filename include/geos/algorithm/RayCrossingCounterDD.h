@@ -21,6 +21,7 @@
 #define GEOS_ALGORITHM_RAYCROSSINGCOUNTERDD_H
 
 #include <geos/export.h>
+#include <geos/geom/Location.h>
 #include <geos/algorithm/ttmath/ttmath.h>
 
 #include <vector>
@@ -84,11 +85,11 @@ public:
      * @param ring an array of Coordinates forming a ring
      * @return the location of the point in the ring
      */
-    static int locatePointInRing(const geom::Coordinate& p,
+    static geom::Location locatePointInRing(const geom::Coordinate& p,
                                  const geom::CoordinateSequence& ring);
 
     /// Semantically equal to the above, just different args encoding
-    static int locatePointInRing(const geom::Coordinate& p,
+    static geom::Location locatePointInRing(const geom::Coordinate& p,
                                  const std::vector<const geom::Coordinate*>& ring);
 
     /** \brief
@@ -146,7 +147,7 @@ public:
      *
      * @return the Location of the point
      */
-    int getLocation();
+    geom::Location getLocation();
 
     /** \brief
      * Tests whether the point lies in or on the ring, polygon or multipolygon

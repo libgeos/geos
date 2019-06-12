@@ -91,7 +91,7 @@ GeometryGraph::isInBoundary(int boundaryCount)
     return boundaryCount % 2 == 1;
 }
 
-int
+Location
 GeometryGraph::determineBoundary(int boundaryCount)
 {
     return isInBoundary(boundaryCount) ? Location::BOUNDARY : Location::INTERIOR;
@@ -236,7 +236,7 @@ GeometryGraph::addPoint(const Point* p)
  * the left and right locations must be interchanged.
  */
 void
-GeometryGraph::addPolygonRing(const LinearRing* lr, int cwLeft, int cwRight)
+GeometryGraph::addPolygonRing(const LinearRing* lr, Location cwLeft, Location cwRight)
 // throw IllegalArgumentException (see below)
 {
     // skip empty component (see bug #234)
@@ -252,8 +252,8 @@ GeometryGraph::addPolygonRing(const LinearRing* lr, int cwLeft, int cwRight)
         invalidPoint = coord->getAt(0); // its now a Coordinate
         return;
     }
-    int left = cwLeft;
-    int right = cwRight;
+    Location left = cwLeft;
+    Location right = cwRight;
 
     /*
      * the isCCW call might throw an
@@ -430,7 +430,7 @@ GeometryGraph::computeEdgeIntersections(GeometryGraph* g,
 
 void
 GeometryGraph::insertPoint(int p_argIndex, const Coordinate& coord,
-                           int onLocation)
+                           geom::Location onLocation)
 {
 #if GEOS_DEBUG > 1
     cerr << "GeometryGraph::insertPoint(" << coord.toString() << " called" << endl;
@@ -462,14 +462,14 @@ GeometryGraph::insertBoundaryPoint(int p_argIndex, const Coordinate& coord)
     int boundaryCount = 1;
 
     // determine the current location for the point (if any)
-    int loc = lbl.getLocation(p_argIndex, Position::ON);
+    Location loc = lbl.getLocation(p_argIndex, Position::ON);
     if(loc == Location::BOUNDARY) {
         boundaryCount++;
     }
 
     // determine the boundary status of the point according to the
     // Boundary Determination Rule
-    int newLoc = determineBoundary(boundaryNodeRule, boundaryCount);
+    Location newLoc = determineBoundary(boundaryNodeRule, boundaryCount);
     lbl.setLocation(p_argIndex, newLoc);
 }
 
@@ -480,7 +480,7 @@ GeometryGraph::addSelfIntersectionNodes(int p_argIndex)
     for(vector<Edge*>::iterator i = edges->begin(), endIt = edges->end();
             i != endIt; ++i) {
         Edge* e = *i;
-        int eLoc = e->getLabel().getLocation(p_argIndex);
+        Location eLoc = e->getLabel().getLocation(p_argIndex);
         EdgeIntersectionList& eiL = e->eiList;
         for(EdgeIntersectionList::iterator
                 eiIt = eiL.begin(), eiEnd = eiL.end();
@@ -495,7 +495,7 @@ GeometryGraph::addSelfIntersectionNodes(int p_argIndex)
 /*private*/
 void
 GeometryGraph::addSelfIntersectionNode(int p_argIndex,
-                                       const Coordinate& coord, int loc)
+                                       const Coordinate& coord, Location loc)
 {
     // if this node is already a boundary node, don't change it
     if(isBoundaryNode(p_argIndex, coord)) {
@@ -571,7 +571,7 @@ GeometryGraph::GeometryGraph()
 
 
 /* public static */
-int
+Location
 GeometryGraph::determineBoundary(
     const algorithm::BoundaryNodeRule& boundaryNodeRule,
     int boundaryCount)

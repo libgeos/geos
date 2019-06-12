@@ -46,14 +46,14 @@ Label::toLineLabel(const Label& label)
 }
 
 /*public*/
-Label::Label(int onLoc)
+Label::Label(Location onLoc)
 {
     elt[0] = TopologyLocation(onLoc);
     elt[1] = TopologyLocation(onLoc);
 }
 
 /*public*/
-Label::Label(int geomIndex, int onLoc)
+Label::Label(int geomIndex, Location onLoc)
 {
     assert(geomIndex >= 0 && geomIndex < 2);
     elt[0] = TopologyLocation(Location::UNDEF);
@@ -62,7 +62,7 @@ Label::Label(int geomIndex, int onLoc)
 }
 
 /*public*/
-Label::Label(int onLoc, int leftLoc, int rightLoc)
+Label::Label(Location onLoc, Location leftLoc, Location rightLoc)
 {
     elt[0] = TopologyLocation(onLoc, leftLoc, rightLoc);
     elt[1] = TopologyLocation(onLoc, leftLoc, rightLoc);
@@ -92,7 +92,7 @@ Label::operator=(const Label& l)
 }
 
 /*public*/
-Label::Label(int geomIndex, int onLoc, int leftLoc, int rightLoc)
+Label::Label(int geomIndex, Location onLoc, Location leftLoc, Location rightLoc)
 {
     elt[0] = TopologyLocation(Location::UNDEF, Location::UNDEF, Location::UNDEF);
     elt[1] = TopologyLocation(Location::UNDEF, Location::UNDEF, Location::UNDEF);
@@ -108,7 +108,7 @@ Label::flip()
 }
 
 /*public*/
-int
+Location
 Label::getLocation(int geomIndex, int posIndex) const
 {
     assert(geomIndex >= 0 && geomIndex < 2);
@@ -116,7 +116,7 @@ Label::getLocation(int geomIndex, int posIndex) const
 }
 
 /*public*/
-int
+Location
 Label::getLocation(int geomIndex) const
 {
     assert(geomIndex >= 0 && geomIndex < 2);
@@ -125,7 +125,7 @@ Label::getLocation(int geomIndex) const
 
 /*public*/
 void
-Label::setLocation(int geomIndex, int posIndex, int location)
+Label::setLocation(int geomIndex, int posIndex, Location location)
 {
     assert(geomIndex >= 0 && geomIndex < 2);
     elt[geomIndex].setLocation(posIndex, location);
@@ -133,7 +133,7 @@ Label::setLocation(int geomIndex, int posIndex, int location)
 
 /*public*/
 void
-Label::setLocation(int geomIndex, int location)
+Label::setLocation(int geomIndex, Location location)
 {
     assert(geomIndex >= 0 && geomIndex < 2);
     elt[geomIndex].setLocation(Position::ON, location);
@@ -141,7 +141,7 @@ Label::setLocation(int geomIndex, int location)
 
 /*public*/
 void
-Label::setAllLocations(int geomIndex, int location)
+Label::setAllLocations(int geomIndex, Location location)
 {
     assert(geomIndex >= 0 && geomIndex < 2);
     elt[geomIndex].setAllLocations(location);
@@ -149,7 +149,7 @@ Label::setAllLocations(int geomIndex, int location)
 
 /*public*/
 void
-Label::setAllLocationsIfNull(int geomIndex, int location)
+Label::setAllLocationsIfNull(int geomIndex, Location location)
 {
     assert(geomIndex >= 0 && geomIndex < 2);
     elt[geomIndex].setAllLocationsIfNull(location);
@@ -157,7 +157,7 @@ Label::setAllLocationsIfNull(int geomIndex, int location)
 
 /*public*/
 void
-Label::setAllLocationsIfNull(int location)
+Label::setAllLocationsIfNull(Location location)
 {
     setAllLocationsIfNull(0, location);
     setAllLocationsIfNull(1, location);
@@ -243,7 +243,7 @@ Label::isEqualOnSide(const Label& lbl, int side) const
 
 /*public*/
 bool
-Label::allPositionsEqual(int geomIndex, int loc) const
+Label::allPositionsEqual(int geomIndex, Location loc) const
 {
     assert(geomIndex >= 0 && geomIndex < 2);
     return elt[geomIndex].allPositionsEqual(loc);

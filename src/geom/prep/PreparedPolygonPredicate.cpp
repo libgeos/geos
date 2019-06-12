@@ -39,16 +39,16 @@ namespace prep { // geos.geom.prep
 // protected:
 //
 struct LocationMatchingFilter : public GeometryComponentFilter {
-    explicit LocationMatchingFilter(algorithm::locate::PointOnGeometryLocator* locator, int loc) :
+    explicit LocationMatchingFilter(algorithm::locate::PointOnGeometryLocator* locator, Location loc) :
         pt_locator(locator), test_loc(loc), found(false) {}
 
     algorithm::locate::PointOnGeometryLocator* pt_locator;
-    const int test_loc;
+    const Location test_loc;
     bool found;
 
     void filter_ro(const Geometry* g) override {
         const Coordinate* pt = g->getCoordinate();
-        const int loc = pt_locator->locate(pt);
+        const auto loc = pt_locator->locate(pt);
 
         if (loc == test_loc) {
             found = true;
@@ -61,16 +61,16 @@ struct LocationMatchingFilter : public GeometryComponentFilter {
 };
 
 struct LocationNotMatchingFilter : public GeometryComponentFilter {
-    explicit LocationNotMatchingFilter(algorithm::locate::PointOnGeometryLocator* locator, int loc) :
+    explicit LocationNotMatchingFilter(algorithm::locate::PointOnGeometryLocator* locator, Location loc) :
             pt_locator(locator), test_loc(loc), found(false) {}
 
     algorithm::locate::PointOnGeometryLocator* pt_locator;
-    const int test_loc;
+    const Location test_loc;
     bool found;
 
     void filter_ro(const Geometry* g) override {
         const Coordinate* pt = g->getCoordinate();
-        const int loc = pt_locator->locate(pt);
+        const auto loc = pt_locator->locate(pt);
 
         if (loc != test_loc) {
             found = true;
@@ -89,12 +89,12 @@ struct OutermostLocationFilter : public GeometryComponentFilter {
     done(false) {}
 
     algorithm::locate::PointOnGeometryLocator* pt_locator;
-    Location::Value outermost_loc;
+    Location outermost_loc;
     bool done;
 
     void filter_ro(const Geometry* g) override {
         const Coordinate* pt = g->getCoordinate();
-        auto loc = static_cast<Location::Value>(pt_locator->locate(pt));
+        auto loc = pt_locator->locate(pt);
 
         if (outermost_loc == Location::UNDEF || outermost_loc == Location::INTERIOR) {
             outermost_loc = loc;
@@ -108,12 +108,12 @@ struct OutermostLocationFilter : public GeometryComponentFilter {
         return done;
     }
 
-    Location::Value getOutermostLocation() {
+    Location getOutermostLocation() {
         return outermost_loc;
     }
 };
 
-Location::Value
+Location
 PreparedPolygonPredicate::getOutermostTestComponentLocation(const geom::Geometry* testGeom) const
 {
     OutermostLocationFilter filter(prepPoly->getPointLocator());
@@ -161,7 +161,7 @@ PreparedPolygonPredicate::isAnyTargetComponentInAreaTest(
 
     for(std::size_t i = 0, ni = targetRepPts->size(); i < ni; i++) {
         const geom::Coordinate* pt = (*targetRepPts)[i];
-        const int loc = piaLoc.locate(pt);
+        const Location loc = piaLoc.locate(pt);
         if(geom::Location::EXTERIOR != loc) {
             return true;
         }

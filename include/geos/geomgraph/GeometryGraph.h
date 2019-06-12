@@ -123,14 +123,14 @@ private:
     void addPoint(const geom::Point* p);
 
     void addPolygonRing(const geom::LinearRing* lr,
-                        int cwLeft, int cwRight);
+                        geom::Location cwLeft, geom::Location cwRight);
 
     void addPolygon(const geom::Polygon* p);
 
     void addLineString(const geom::LineString* line);
 
     void insertPoint(int argIndex, const geom::Coordinate& coord,
-                     int onLocation);
+                     geom::Location onLocation);
 
     /** \brief
      * Adds candidate boundary points using the current
@@ -151,7 +151,7 @@ private:
      * Otherwise, just add it as a regular node.
      */
     void addSelfIntersectionNode(int argIndex,
-                                 const geom::Coordinate& coord, int loc);
+                                 const geom::Coordinate& coord, geom::Location loc);
 
     // Declare type as noncopyable
     GeometryGraph(const GeometryGraph& other) = delete;
@@ -161,9 +161,9 @@ public:
 
     static bool isInBoundary(int boundaryCount);
 
-    static int determineBoundary(int boundaryCount);
+    static geom::Location determineBoundary(int boundaryCount);
 
-    static int determineBoundary(
+    static geom::Location determineBoundary(
         const algorithm::BoundaryNodeRule& boundaryNodeRule,
         int boundaryCount);
 

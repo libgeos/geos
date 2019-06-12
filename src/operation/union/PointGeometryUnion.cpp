@@ -50,7 +50,7 @@ PointGeometryUnion::Union() const
         const Point* point = dynamic_cast<const Point*>(pointGeom.getGeometryN(i));
         assert(point);
         const Coordinate* coord = point->getCoordinate();
-        int loc = locater.locate(*coord, &otherGeom);
+        Location loc = locater.locate(*coord, &otherGeom);
         if(loc == Location::EXTERIOR) {
             exteriorCoords.insert(*coord);
         }

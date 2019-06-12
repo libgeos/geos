@@ -6,6 +6,7 @@
 // geos
 #include <geos/geom/Location.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <sstream>
 
 namespace tut {
 //
@@ -14,10 +15,10 @@ namespace tut {
 
 // Common data used by tests
 struct test_location_data {
-    int undef;
-    int interior;
-    int boundary;
-    int exterior;
+    geos::geom::Location undef;
+    geos::geom::Location interior;
+    geos::geom::Location boundary;
+    geos::geom::Location exterior;
     test_location_data()
         : undef(geos::geom::Location::UNDEF),
           interior(geos::geom::Location::INTERIOR),
@@ -44,7 +45,7 @@ void object::test<1>
     ensure("NOTE: Location has no default constructor.", true);
 }
 
-// Test of toLocationSymbol()
+// Test of << operator
 template<>
 template<>
 void object::test<2>
@@ -52,30 +53,25 @@ void object::test<2>
 {
     using geos::geom::Location;
 
-    ensure_equals(Location::toLocationSymbol(exterior), 'e');
-    ensure_equals(Location::toLocationSymbol(boundary), 'b');
-    ensure_equals(Location::toLocationSymbol(interior), 'i');
-    ensure_equals(Location::toLocationSymbol(undef), '-');
-}
+    std::stringstream s;
 
-// Test of toLocationSymbol() throwing IllegalArgumentException
-template<>
-template<>
-void object::test<3>
-()
-{
-    using geos::geom::Location;
+    s << Location::EXTERIOR;
+    ensure_equals(s.str(), "e");
+    s.str(""); // reset
+    s.clear();
 
-    try {
-        Location::toLocationSymbol(101);
-        Location::toLocationSymbol(-101);
+    s << Location::BOUNDARY;
+    ensure_equals(s.str(), "b");
+    s.str(""); // reset
+    s.clear();
 
-        fail("IllegalArgumentException expected");
-    }
-    catch(geos::util::IllegalArgumentException const& e) {
-        const char* msg = e.what(); // ok
-        ensure(msg != nullptr);
-    }
+    s << Location::INTERIOR;
+    ensure_equals(s.str(), "i");
+    s.str(""); // reset
+    s.clear();
+
+    s << Location::UNDEF;
+    ensure_equals(s.str(), "-");
 }
 
 } // namespace tut

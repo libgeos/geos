@@ -106,7 +106,7 @@ protected:
      * @param outermostLoc outermost Location of all points in geom
      * @return true if the test geometry is contained/covered in the target
      */
-    bool evalPointTestGeom(const geom::Geometry* geom, geom::Location::Value outermostLoc);
+    bool evalPointTestGeom(const geom::Geometry* geom, geom::Location outermostLoc);
 
     /**
      * Computes the full topological predicate.

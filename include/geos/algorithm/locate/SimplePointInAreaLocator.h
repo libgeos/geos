@@ -48,7 +48,7 @@ class SimplePointInAreaLocator : public PointOnGeometryLocator {
 
 public:
 
-    static int locate(const geom::Coordinate& p,
+    static geom::Location locate(const geom::Coordinate& p,
                       const geom::Geometry* geom);
 
     /** \brief
@@ -67,8 +67,9 @@ public:
      * @param poly the geometry to test
      * @return the Location of the point in the polygon
      */
-    static int locatePointInPolygon(const geom::Coordinate& p,
+    static geom::Location locatePointInPolygon(const geom::Coordinate& p,
                                     const geom::Polygon* poly);
+
     /** \brief
      * Determines whether a point is contained in a [Geometry](@ref geom::Geometry),
      * or lies on its boundary.
@@ -88,7 +89,7 @@ public:
         : g(p_g)
     { }
 
-    int
+    geom::Location
     locate(const geom::Coordinate* p) override
     {
         return locate(*p, g);
@@ -96,7 +97,7 @@ public:
 
 private:
 
-    static int locateInGeometry(const geom::Coordinate& p,
+    static geom::Location locateInGeometry(const geom::Coordinate& p,
                                 const geom::Geometry* geom);
 
     const geom::Geometry* g;

@@ -97,7 +97,7 @@ RelateNodeGraph::computeIntersectionNodes(GeometryGraph* geomGraph,
     vector<Edge*>::iterator edgeIt = edges->begin();
     for(; edgeIt < edges->end(); ++edgeIt) {
         Edge* e = *edgeIt;
-        int eLoc = e->getLabel().getLocation(argIndex);
+        Location eLoc = e->getLabel().getLocation(argIndex);
         EdgeIntersectionList& eiL = e->getEdgeIntersectionList();
         EdgeIntersectionList::iterator eiIt = eiL.begin();
         EdgeIntersectionList::iterator eiEnd = eiL.end();

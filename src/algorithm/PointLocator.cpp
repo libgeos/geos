@@ -38,7 +38,7 @@ namespace geos {
 namespace algorithm { // geos.algorithm
 
 
-int
+Location
 PointLocator::locate(const Coordinate& p, const Geometry* geom)
 {
     if(geom->isEmpty()) {
@@ -108,7 +108,7 @@ PointLocator::computeLocation(const Coordinate& p, const Geometry* geom)
 
 /* private */
 void
-PointLocator::updateLocationInfo(int loc)
+PointLocator::updateLocationInfo(geom::Location loc)
 {
     if(loc == Location::INTERIOR) {
         isIn = true;
@@ -119,7 +119,7 @@ PointLocator::updateLocationInfo(int loc)
 }
 
 /* private */
-int
+Location
 PointLocator::locate(const Coordinate& p, const Point* pt)
 {
     // no point in doing envelope test, since equality test is just as fast
@@ -131,7 +131,7 @@ PointLocator::locate(const Coordinate& p, const Point* pt)
 }
 
 /* private */
-int
+Location
 PointLocator::locate(const Coordinate& p, const LineString* l)
 {
     if(!l->getEnvelopeInternal()->intersects(p)) {
@@ -151,7 +151,7 @@ PointLocator::locate(const Coordinate& p, const LineString* l)
 }
 
 /* private */
-int
+Location
 PointLocator::locateInPolygonRing(const Coordinate& p, const LinearRing* ring)
 {
     if(!ring->getEnvelopeInternal()->intersects(p)) {
@@ -170,7 +170,7 @@ PointLocator::locateInPolygonRing(const Coordinate& p, const LinearRing* ring)
 }
 
 /* private */
-int
+Location
 PointLocator::locate(const Coordinate& p, const Polygon* poly)
 {
     if(poly->isEmpty()) {
@@ -180,7 +180,7 @@ PointLocator::locate(const Coordinate& p, const Polygon* poly)
     const LinearRing* shell = poly->getExteriorRing();
     assert(shell);
 
-    int shellLoc = locateInPolygonRing(p, shell);
+    Location shellLoc = locateInPolygonRing(p, shell);
     if(shellLoc == Location::EXTERIOR) {
         return Location::EXTERIOR;
     }
@@ -191,7 +191,7 @@ PointLocator::locate(const Coordinate& p, const Polygon* poly)
     // now test if the point lies in or on the holes
     for(size_t i = 0, n = poly->getNumInteriorRing(); i < n; ++i) {
         const LinearRing* hole = poly->getInteriorRingN(i);
-        int holeLoc = locateInPolygonRing(p, hole);
+        Location holeLoc = locateInPolygonRing(p, hole);
         if(holeLoc == Location::INTERIOR) {
             return Location::EXTERIOR;
         }

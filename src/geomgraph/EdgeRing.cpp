@@ -307,7 +307,7 @@ EdgeRing::mergeLabel(const Label& deLabel, int geomIndex)
 
     testInvariant();
 
-    int loc = deLabel.getLocation(geomIndex, Position::RIGHT);
+    Location loc = deLabel.getLocation(geomIndex, Position::RIGHT);
     // no information to be had from this label
     if(loc == Location::UNDEF) {
         return;

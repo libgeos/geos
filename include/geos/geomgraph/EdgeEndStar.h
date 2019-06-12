@@ -24,10 +24,12 @@
 
 #include <geos/export.h>
 #include <geos/geomgraph/EdgeEnd.h>  // for EdgeEndLT
+#include <geos/geom/Location.h>
 #include <geos/geom/Coordinate.h>  // for p0,p1
 
 #include <geos/inline.h>
 
+#include <array>
 #include <set>
 #include <string>
 #include <vector>
@@ -148,15 +150,15 @@ protected:
 
 private:
 
-    virtual int getLocation(int geomIndex,
-                            const geom::Coordinate& p,
-                            std::vector<GeometryGraph*>* geom);
+    virtual geom::Location getLocation(int geomIndex,
+                                       const geom::Coordinate& p,
+                                       std::vector<GeometryGraph*>* geom);
 
     /** \brief
      * The location of the point for this star in
      * Geometry i Areas
      */
-    int ptInAreaLocation[2];
+    std::array<geom::Location, 2> ptInAreaLocation;
 
     virtual void computeEdgeEndLabels(const algorithm::BoundaryNodeRule&);
 

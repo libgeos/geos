@@ -92,7 +92,7 @@ public:
      */
     virtual void mergeLabel(const Label& label2);
 
-    virtual void setLabel(int argIndex, int onLocation);
+    virtual void setLabel(int argIndex, geom::Location onLocation);
 
     /** \brief
      * Updates the label of a node to BOUNDARY,
@@ -108,7 +108,7 @@ public:
      * in the boundary.
      * The merged location is the maximum of the two input values.
      */
-    virtual int computeMergedLocation(const Label& label2, int eltIndex);
+    virtual geom::Location computeMergedLocation(const Label& label2, int eltIndex);
 
     virtual std::string print();
 

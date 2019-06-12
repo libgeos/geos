@@ -163,7 +163,7 @@ EdgeEndStar::computeLabelling(std::vector<GeometryGraph*>* geomGraph)
         Label& label = e->getLabel();
         for(int geomi = 0; geomi < 2; ++geomi) {
             if(label.isAnyNull(geomi)) {
-                int loc = Location::UNDEF;
+                Location loc = Location::UNDEF;
                 if(hasDimensionalCollapseEdge[geomi]) {
                     loc = Location::EXTERIOR;
                 }
@@ -191,7 +191,7 @@ EdgeEndStar::computeEdgeEndLabels(
 }
 
 /*public*/
-int
+Location
 EdgeEndStar::getLocation(int geomIndex,
                          const Coordinate& p, std::vector<GeometryGraph*>* geom)
 {
@@ -227,12 +227,12 @@ EdgeEndStar::checkAreaLabelsConsistent(int geomIndex)
     // initialize startLoc to location of last L side (if any)
     assert(*rbegin());
     const Label& startLabel = (*rbegin())->getLabel();
-    int startLoc = startLabel.getLocation(geomIndex, Position::LEFT);
+    Location startLoc = startLabel.getLocation(geomIndex, Position::LEFT);
 
     // Found unlabelled area edge
     assert(startLoc != Location::UNDEF);
 
-    int currLoc = startLoc;
+    Location currLoc = startLoc;
 
     for(EdgeEndStar::iterator it = begin(), itEnd = end(); it != itEnd; ++it) {
         EdgeEnd* e = *it;
@@ -244,8 +244,8 @@ EdgeEndStar::checkAreaLabelsConsistent(int geomIndex)
         // Found non-area edge
         assert(eLabel.isArea(geomIndex));
 
-        int leftLoc = eLabel.getLocation(geomIndex, Position::LEFT);
-        int rightLoc = eLabel.getLocation(geomIndex, Position::RIGHT);
+        Location leftLoc = eLabel.getLocation(geomIndex, Position::LEFT);
+        Location rightLoc = eLabel.getLocation(geomIndex, Position::RIGHT);
         // check that edge is really a boundary between inside and outside!
         if(leftLoc == rightLoc) {
             return false;
@@ -268,7 +268,7 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
     // Since edges are stored in CCW order around the node,
     // As we move around the ring we move from the right to the
     // left side of the edge
-    int startLoc = Location::UNDEF;
+    Location startLoc = Location::UNDEF;
 
     EdgeEndStar::iterator beginIt = begin();
     EdgeEndStar::iterator endIt = end();
@@ -290,7 +290,7 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
         return;
     }
 
-    int currLoc = startLoc;
+    Location currLoc = startLoc;
     for(it = beginIt; it != endIt; ++it) {
         EdgeEnd* e = *it;
         assert(e);
@@ -303,11 +303,11 @@ EdgeEndStar::propagateSideLabels(int geomIndex)
         // set side labels (if any)
         // if (label.isArea())  //ORIGINAL
         if(label.isArea(geomIndex)) {
-            int leftLoc = label.getLocation(geomIndex,
-                                            Position::LEFT);
+            Location leftLoc = label.getLocation(geomIndex,
+                                                 Position::LEFT);
 
-            int rightLoc = label.getLocation(geomIndex,
-                                             Position::RIGHT);
+            Location rightLoc = label.getLocation(geomIndex,
+                                                  Position::RIGHT);
 
             // if there is a right location, that is the next
             // location to propagate

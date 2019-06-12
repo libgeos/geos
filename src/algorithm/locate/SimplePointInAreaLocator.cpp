@@ -37,7 +37,7 @@ namespace locate { // geos.algorithm
  * and multi-element Geometries.  The algorithm for multi-element Geometries
  * is more complex, since it has to take into account the boundaryDetermination rule
  */
-int
+geom::Location
 SimplePointInAreaLocator::locate(const Coordinate& p, const Geometry* geom)
 {
     if(geom->isEmpty()) {
@@ -59,7 +59,7 @@ SimplePointInAreaLocator::isContained(const Coordinate& p, const Geometry* geom)
     return Location::EXTERIOR != locate(p, geom);
 }
 
-int
+geom::Location
 SimplePointInAreaLocator::locateInGeometry(const Coordinate& p, const Geometry* geom)
 {
     if(const Polygon* poly = dynamic_cast<const Polygon*>(geom)) {
@@ -72,7 +72,7 @@ SimplePointInAreaLocator::locateInGeometry(const Coordinate& p, const Geometry* 
     if(const GeometryCollection* col = dynamic_cast<const GeometryCollection*>(geom)) {
         for(auto g2 : *col) {
             assert(g2 != geom);
-            int loc = locateInGeometry(p, g2);
+            Location loc = locateInGeometry(p, g2);
             if(loc != Location::EXTERIOR) {
                 return loc;
             }
@@ -81,7 +81,7 @@ SimplePointInAreaLocator::locateInGeometry(const Coordinate& p, const Geometry* 
     return Location::EXTERIOR;
 }
 
-int
+geom::Location
 SimplePointInAreaLocator::locatePointInPolygon(const Coordinate& p, const Polygon* poly)
 {
     if(poly->isEmpty()) {
@@ -93,7 +93,7 @@ SimplePointInAreaLocator::locatePointInPolygon(const Coordinate& p, const Polygo
     const LineString* shell = poly->getExteriorRing();
     const CoordinateSequence* cl;
     cl = shell->getCoordinatesRO();
-    int shellLoc = PointLocation::locateInRing(p, *cl);
+    Location shellLoc = PointLocation::locateInRing(p, *cl);
     if(shellLoc != Location::INTERIOR) {
         return shellLoc;
     }
@@ -103,7 +103,7 @@ SimplePointInAreaLocator::locatePointInPolygon(const Coordinate& p, const Polygo
         const LineString* hole = poly->getInteriorRingN(i);
         if(hole->getEnvelopeInternal()->contains(p)) {
             cl = hole->getCoordinatesRO();
-            int holeLoc = RayCrossingCounter::locatePointInRing(p, *cl);
+            Location holeLoc = RayCrossingCounter::locatePointInRing(p, *cl);
             if(holeLoc == Location::BOUNDARY) {
                 return Location::BOUNDARY;
             }

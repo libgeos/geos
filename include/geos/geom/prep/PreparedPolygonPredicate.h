@@ -71,7 +71,7 @@ protected:
      * @param testGeom a geometry to test
      * @return the outermost Location
      */
-    geom::Location::Value getOutermostTestComponentLocation(const geom::Geometry* testGeom) const;
+    geom::Location getOutermostTestComponentLocation(const geom::Geometry* testGeom) const;
 
     /** \brief
      * Tests whether all components of the test Geometry
