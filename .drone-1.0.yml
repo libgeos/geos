@@ -26,4 +26,4 @@ steps:
   - name: docs
     image: *test-image
     commands:
-      - make doxygen
+      - make doxygen-checked

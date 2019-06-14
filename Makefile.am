@@ -49,6 +49,12 @@ gen-ChangeLog:
 apidoc doxygen:
 	cd doc && make $@
 
+doxygen-checked:
+	( set -o pipefail; \
+		! make doxygen 2>&1 > /dev/null | \
+		grep -v '\(not documented\|ignoring unsupported tag\)'; \
+	)
+
 authors.git: authors.svn
 	cd $(srcdir) && sed -e 's/:/ = /' authors.svn > authors.git
 
