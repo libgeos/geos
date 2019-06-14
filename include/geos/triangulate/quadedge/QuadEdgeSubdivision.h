@@ -313,7 +313,7 @@ public:
      *
      * @param e a QuadEdge
      * @param p a point
-     * @return `true` if the vertex lies on the edge
+     * @return `true` if the vertex lies on the edge
      */
     bool isOnEdge(const QuadEdge& e, const geom::Coordinate& p) const;
 
@@ -323,7 +323,7 @@ public:
      *
      * @param e
      * @param v
-     * @return `true` if the vertex is a endpoint of the edge
+     * @return `true` if the vertex is a endpoint of the edge
      */
     bool isVertexOfEdge(const QuadEdge& e, const Vertex& v) const;
 
@@ -334,7 +334,7 @@ public:
      * array of associated quadedges. These provide the unique geometric
      * edges of the triangulation.
      *
-     * @param includeFrame `true` if the frame edges are to be included
+     * @param includeFrame `true` if the frame edges are to be included
      * @return a List of QuadEdges. The caller takes ownership of the returned QuadEdgeList but not the
      *         items it contains.
      */
