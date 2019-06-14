@@ -27,6 +27,7 @@
 #include <geos/geom/Geometry.h> // for inheritance
 #include <geos/geom/Polygonal.h> // for inheritance
 #include <geos/geom/Envelope.h> // for proper use of unique_ptr<>
+#include <geos/geom/LinearRing.h>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
 
 #include <geos/inline.h>
@@ -39,7 +40,6 @@ namespace geom { // geos::geom
 class Coordinate;
 class CoordinateArraySequence;
 class CoordinateSequenceFilter;
-class LinearRing;
 class LineString;
 }
 }
@@ -109,13 +109,13 @@ public:
     bool isEmpty() const override;
 
     /// Returns the exterior ring (shell)
-    const LineString* getExteriorRing() const;
+    const LinearRing* getExteriorRing() const;
 
     /// Returns number of interior rings (hole)
     size_t getNumInteriorRing() const;
 
     /// Get nth interior ring (hole)
-    const LineString* getInteriorRingN(std::size_t n) const;
+    const LinearRing* getInteriorRingN(std::size_t n) const;
 
     std::string getGeometryType() const override;
     GeometryTypeId getGeometryTypeId() const override;
@@ -169,12 +169,12 @@ protected:
      *
      * Polygon will take ownership of Shell and Holes LinearRings
      */
-    Polygon(LinearRing* newShell, std::vector<Geometry*>* newHoles,
+    Polygon(LinearRing* newShell, std::vector<LinearRing*>* newHoles,
             const GeometryFactory* newFactory);
 
     LinearRing* shell;
 
-    std::vector<Geometry*>* holes;  //Actually vector<LinearRing *>
+    std::vector<LinearRing*>* holes;
 
     Envelope::Ptr computeEnvelopeInternal() const override;
 

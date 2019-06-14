@@ -769,7 +769,7 @@ void object::test<20>
     ensure_equals(hole->getNumPoints(), interiorSize);
 
     // REMEMBER TO DEALLOCATE THIS COLLECTION
-    std::vector<GeometryPtr> holes;
+    std::vector<LinearRingPtr> holes;
     holes.push_back(hole);
 
     // Create polygon using copy ctor
@@ -788,9 +788,8 @@ void object::test<20>
     ensure_equals(poly->getNumInteriorRing(), 1u);
 
     // FREE MEMORY
-    std::vector<GeometryPtr>::const_iterator it;
-    for(it = holes.begin(); it != holes.end(); ++it) {
-        delete(*it);
+    for(auto& h : holes) {
+        delete h;
     }
     holes.clear();
 

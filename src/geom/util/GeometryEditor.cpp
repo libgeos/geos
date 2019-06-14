@@ -130,7 +130,7 @@ GeometryEditor::editPolygon(const Polygon* polygon, GeometryEditorOperation* ope
         return factory->createPolygon(nullptr, nullptr);
     }
 
-    vector<Geometry*>* holes = new vector<Geometry*>;
+    vector<LinearRing*>* holes = new vector<LinearRing*>;
     for(size_t i = 0, n = newPolygon->getNumInteriorRing(); i < n; ++i) {
 
         Geometry* hole_geom = edit(newPolygon->getInteriorRingN(i),

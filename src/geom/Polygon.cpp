@@ -57,19 +57,15 @@ Polygon::Polygon(const Polygon& p)
 {
     shell = new LinearRing(*p.shell);
     size_t nholes = p.holes->size();
-    holes = new vector<Geometry*>(nholes);
+    holes = new vector<LinearRing*>(nholes);
     for(size_t i = 0; i < nholes; ++i) {
-        // TODO: holes is a vector of Geometry, anyway
-        //       so there's no point in casting here,
-        //       just use ->clone instead !
-        const LinearRing* lr = dynamic_cast<const LinearRing*>((*p.holes)[i]);
-        LinearRing* h = new LinearRing(*lr);
+        LinearRing* h = new LinearRing(*(*p.holes)[i]);
         (*holes)[i] = h;
     }
 }
 
 /*protected*/
-Polygon::Polygon(LinearRing* newShell, vector<Geometry*>* newHoles,
+Polygon::Polygon(LinearRing* newShell, vector<LinearRing*>* newHoles,
                  const GeometryFactory* newFactory):
     Geometry(newFactory)
 {
@@ -84,7 +80,7 @@ Polygon::Polygon(LinearRing* newShell, vector<Geometry*>* newHoles,
     }
 
     if(newHoles == nullptr) {
-        holes = new vector<Geometry*>();
+        holes = new vector<LinearRing*>();
     }
     else {
         if(hasNullElements(newHoles)) {
@@ -117,7 +113,7 @@ Polygon::getCoordinates() const
     // Add holes points
     size_t nholes = holes->size();
     for(size_t i = 0; i < nholes; ++i) {
-        const LinearRing* lr = dynamic_cast<const LinearRing*>((*holes)[i]);
+        const LinearRing* lr = (*holes)[i];
         const CoordinateSequence* childCoords = lr->getCoordinatesRO();
         childCoords->toVector(*cl);
     }
@@ -129,8 +125,7 @@ size_t
 Polygon::getNumPoints() const
 {
     size_t numPoints = shell->getNumPoints();
-    for(size_t i = 0, n = holes->size(); i < n; ++i) {
-        const LinearRing* lr = dynamic_cast<const LinearRing*>((*holes)[i]);
+    for(const LinearRing* lr : *holes) {
         numPoints += lr->getNumPoints();
     }
     return numPoints;
@@ -171,7 +166,7 @@ Polygon::isEmpty() const
     return shell->isEmpty();
 }
 
-const LineString*
+const LinearRing*
 Polygon::getExteriorRing() const
 {
     return shell;
@@ -183,11 +178,10 @@ Polygon::getNumInteriorRing() const
     return holes->size();
 }
 
-const LineString*
+const LinearRing*
 Polygon::getInteriorRingN(size_t n) const
 {
-    const LinearRing* lr = dynamic_cast<const LinearRing*>((*holes)[n]);
-    return lr;
+    return (*holes)[n];
 }
 
 string
@@ -221,7 +215,7 @@ Polygon::getBoundary() const
 
     (*rings)[0] = gf->createLineString(*shell).release();
     for(size_t i = 0, n = holes->size(); i < n; ++i) {
-        const LinearRing* hole = dynamic_cast<const LinearRing*>((*holes)[i]);
+        const LinearRing* hole = (*holes)[i];
         assert(hole);
         LineString* ls = gf->createLineString(*hole).release();
         (*rings)[i + 1] = ls;
@@ -269,8 +263,7 @@ void
 Polygon::apply_ro(CoordinateFilter* filter) const
 {
     shell->apply_ro(filter);
-    for(size_t i = 0, n = holes->size(); i < n; ++i) {
-        const LinearRing* lr = dynamic_cast<const LinearRing*>((*holes)[i]);
+    for(const LinearRing* lr : *holes) {
         lr->apply_ro(filter);
     }
 }
@@ -279,8 +272,7 @@ void
 Polygon::apply_rw(const CoordinateFilter* filter)
 {
     shell->apply_rw(filter);
-    for(size_t i = 0, n = holes->size(); i < n; ++i) {
-        LinearRing* lr = dynamic_cast<LinearRing*>((*holes)[i]);
+    for(LinearRing* lr : *holes) {
         lr->apply_rw(filter);
     }
 }
@@ -307,8 +299,7 @@ void
 Polygon::normalize()
 {
     normalize(shell, true);
-    for(size_t i = 0, n = holes->size(); i < n; ++i) {
-        LinearRing* lr = dynamic_cast<LinearRing*>((*holes)[i]);
+    for(LinearRing* lr : *holes) {
         normalize(lr, false);
     }
     sort(holes->begin(), holes->end(), GeometryGreaterThen());
@@ -364,8 +355,7 @@ Polygon::getArea() const
 {
     double area = 0.0;
     area += fabs(algorithm::Area::ofRing(shell->getCoordinatesRO()));
-    for(size_t i = 0, n = holes->size(); i < n; ++i) {
-        const LinearRing* lr = dynamic_cast<const LinearRing*>((*holes)[i]);
+    for(const LinearRing* lr : *holes) {
         const CoordinateSequence* h = lr->getCoordinatesRO();
         area -= fabs(algorithm::Area::ofRing(h));
     }
@@ -508,13 +498,13 @@ Polygon::reverse() const
     }
 
     auto* exteriorRingReversed = dynamic_cast<LinearRing*>(shell->reverse().release());
-    auto* interiorRingsReversed = new std::vector<Geometry*> {holes->size()};
+    auto* interiorRingsReversed = new std::vector<LinearRing*> {holes->size()};
 
     std::transform(holes->begin(),
                    holes->end(),
                    interiorRingsReversed->begin(),
     [](const Geometry * g) {
-        return g->reverse().release();
+        return dynamic_cast<LinearRing*>(g->reverse().release());
     });
 
     return std::unique_ptr<Geometry>(getFactory()->createPolygon(exteriorRingReversed, interiorRingsReversed));

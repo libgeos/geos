@@ -177,7 +177,7 @@ PointLocator::locate(const Coordinate& p, const Polygon* poly)
         return Location::EXTERIOR;
     }
 
-    const LinearRing* shell = dynamic_cast<const LinearRing*>(poly->getExteriorRing());
+    const LinearRing* shell = poly->getExteriorRing();
     assert(shell);
 
     int shellLoc = locateInPolygonRing(p, shell);
@@ -190,7 +190,7 @@ PointLocator::locate(const Coordinate& p, const Polygon* poly)
 
     // now test if the point lies in or on the holes
     for(size_t i = 0, n = poly->getNumInteriorRing(); i < n; ++i) {
-        const LinearRing* hole = dynamic_cast<const LinearRing*>(poly->getInteriorRingN(i));
+        const LinearRing* hole = poly->getInteriorRingN(i);
         int holeLoc = locateInPolygonRing(p, hole);
         if(holeLoc == Location::INTERIOR) {
             return Location::EXTERIOR;

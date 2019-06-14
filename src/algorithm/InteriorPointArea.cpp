@@ -160,10 +160,10 @@ public:
          */
         interiorPoint = *polygon.getCoordinate();
 
-        const LinearRing* shell = dynamic_cast<const LinearRing*>(polygon.getExteriorRing());
+        const LinearRing* shell = polygon.getExteriorRing();
         scanRing(*shell, crossings);
         for (size_t i = 0; i < polygon.getNumInteriorRing(); i++) {
-            const LinearRing* hole = dynamic_cast<const LinearRing*>(polygon.getInteriorRingN(i));
+            const LinearRing* hole = polygon.getInteriorRingN(i);
             scanRing(*hole, crossings);
         }
         findBestMidpoint(crossings);
