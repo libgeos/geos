@@ -399,10 +399,10 @@ public:
      * Gets the geometry for the triangles in a triangulated subdivision as a
      * [GeometryCollection](@ref geos::geom::GeometryCollection)
      * of triangular [Polygons](@ref geos::geom::Polygon).
-
+     *
      * @param geomFact the GeometryFactory to use
      * @return a GeometryCollection of triangular polygons.
-     
+     *
      * @note The caller takes ownership of the returned object.
      */
     std::unique_ptr<geom::GeometryCollection> getTriangles(const geom::GeometryFactory& geomFact);
