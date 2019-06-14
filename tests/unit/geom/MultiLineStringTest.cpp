@@ -3,6 +3,7 @@
 
 #include <tut/tut.hpp>
 // geos
+#include <geos/geom/GeometryFactory.h>
 #include <geos/geom/MultiLineString.h>
 
 namespace tut {
@@ -24,13 +25,16 @@ group test_multilinestring_group("geos::geom::MultiLineString");
 // Test Cases
 //
 
-// Test of default constructor
 template<>
 template<>
 void object::test<1>
 ()
 {
-    //inform("Test not implemented!");
+    // getCoordinate() returns nullptr for empty geometry
+    auto gf = geos::geom::GeometryFactory::create();
+    std::unique_ptr<geos::geom::Geometry> g(gf->createMultiLineString());
+
+    ensure(g->getCoordinate() == nullptr);
 }
 
 } // namespace tut

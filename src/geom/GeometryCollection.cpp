@@ -270,14 +270,12 @@ GeometryCollection::compareToSameClass(const Geometry* g) const
 const Coordinate*
 GeometryCollection::getCoordinate() const
 {
-    // should use unique_ptr here or return NULL or throw an exception !
-    // 	--strk;
     for(size_t i = 0; i < geometries->size(); ++i) {
         if(!(*geometries)[i]->isEmpty()) {
             return (*geometries)[i]->getCoordinate();
         }
     }
-    return new Coordinate();
+    return nullptr;
 }
 
 /**

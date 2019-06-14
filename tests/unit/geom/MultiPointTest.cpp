@@ -392,5 +392,17 @@ void object::test<28>
     }
 }
 
+template<>
+template<>
+void object::test<29>
+()
+{
+    // getCoordinate() returns nullptr for empty geometry
+    auto gf = geos::geom::GeometryFactory::create();
+    std::unique_ptr<geos::geom::Geometry> g(gf->createMultiPoint());
+
+    ensure(g->getCoordinate() == nullptr);
+}
+
 } // namespace tut
 

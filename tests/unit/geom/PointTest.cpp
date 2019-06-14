@@ -564,5 +564,17 @@ void object::test<40>
     delete p;
 }
 
+template<>
+template<>
+void object::test<41>
+()
+{
+    // getCoordinate() returns nullptr for empty geometry
+    auto gf = geos::geom::GeometryFactory::create();
+    std::unique_ptr<geos::geom::Geometry> g(gf->createPoint());
+
+    ensure(g->getCoordinate() == nullptr);
+}
+
 } // namespace tut
 

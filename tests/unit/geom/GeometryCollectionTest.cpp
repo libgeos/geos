@@ -81,4 +81,16 @@ void object::test<2>
     std::unique_ptr<Geometry> clone(geom_col->clone());
     ensure_equals(clone->getGeometryN(0)->getSRID(), 2);
 }
+
+template<>
+template<>
+void object::test<3>
+()
+{
+    // getCoordinate() returns nullptr for empty geometry
+    auto gf = GeometryFactory::create();
+    std::unique_ptr<geos::geom::Geometry> g(gf->createGeometryCollection());
+
+    ensure(g->getCoordinate() == nullptr);
+}
 } // namespace tut

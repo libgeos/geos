@@ -3,6 +3,7 @@
 
 #include <tut/tut.hpp>
 // geos
+#include <geos/geom/GeometryFactory.h>
 #include <geos/geom/MultiPolygon.h>
 
 namespace tut {
@@ -24,13 +25,16 @@ group test_multipolygon_group("geos::geom::MultiPolygon");
 // Test Cases
 //
 
-// Test of default constructor
 template<>
 template<>
 void object::test<1>
 ()
 {
-    //inform("Test not implemented!");
+    // getCoordinate() returns nullptr for empty geometry
+    auto gf = geos::geom::GeometryFactory::create();
+    std::unique_ptr<geos::geom::Geometry> g(gf->createMultiPolygon());
+
+    ensure(g->getCoordinate() == nullptr);
 }
 
 } // namespace tut

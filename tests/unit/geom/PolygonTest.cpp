@@ -591,4 +591,16 @@ void object::test<39>
     ensure(gBuffer->getNumPoints() == poly_->getNumPoints());
 }
 
+template<>
+template<>
+void object::test<40>
+()
+{
+    // getCoordinate() returns nullptr for empty geometry
+    auto gf = geos::geom::GeometryFactory::create();
+    std::unique_ptr<geos::geom::Geometry> g(gf->createPolygon());
+
+    ensure(g->getCoordinate() == nullptr);
+}
+
 } // namespace tut
