@@ -53,7 +53,6 @@
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/Polygon.h>
-#include <geos/geom/Lineal.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/precision/CommonBitsRemover.h>
@@ -170,7 +169,7 @@ namespace geom { // geos::geom
 inline bool
 check_valid(const Geometry& g, const std::string& label, bool doThrow = false, bool validOnly = false)
 {
-    if(dynamic_cast<const Lineal*>(&g)) {
+    if(g.isLineal()) {
         if(! validOnly) {
             operation::IsSimpleOp sop(g, algorithm::BoundaryNodeRule::getBoundaryEndPoint());
             if(! sop.isSimple()) {

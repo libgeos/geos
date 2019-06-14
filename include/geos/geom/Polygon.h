@@ -25,7 +25,6 @@
 #include <string>
 #include <vector>
 #include <geos/geom/Geometry.h> // for inheritance
-#include <geos/geom/Polygonal.h> // for inheritance
 #include <geos/geom/Envelope.h> // for proper use of unique_ptr<>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
 
@@ -62,7 +61,7 @@ namespace geom { // geos::geom
  *  Specification for SQL</A> .
  *
  */
-class GEOS_DLL Polygon: public virtual Geometry, public Polygonal {
+class GEOS_DLL Polygon: public virtual Geometry {
 
 public:
 

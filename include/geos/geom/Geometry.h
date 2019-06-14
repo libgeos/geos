@@ -352,6 +352,22 @@ public:
     /// Returns the dimension of this Geometry (0=point, 1=line, 2=surface)
     virtual Dimension::DimensionType getDimension() const = 0; //Abstract
 
+    virtual bool isMixedDimension() const {
+        return false;
+    }
+
+    bool isPuntal() const {
+        return getDimension() == Dimension::P;
+    }
+
+    bool isLineal() const {
+        return getDimension() == Dimension::L && !isMixedDimension();
+    }
+
+    bool isPolygonal() const {
+        return getDimension() == Dimension::A && !isMixedDimension();
+    }
+
     /// Returns the coordinate dimension of this Geometry (2=XY, 3=XYZ, 4=XYZM in future).
     virtual int getCoordinateDimension() const = 0; //Abstract
 

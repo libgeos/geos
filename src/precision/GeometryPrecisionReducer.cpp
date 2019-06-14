@@ -80,7 +80,7 @@ GeometryPrecisionReducer::reduce(const Geometry& geom)
     }
 
     //TODO: handle GeometryCollections containing polys
-    if(!(dynamic_cast<const Polygonal*>(reducePW.get()))) {
+    if(!reducePW->isPolygonal()) {
         return reducePW;
     }
 

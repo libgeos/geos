@@ -20,6 +20,14 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/io/WKTReader.h>
 #include <geos/geom/Geometry.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/LinearRing.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/Polygon.h>
+#include <geos/geom/GeometryCollection.h>
+#include <geos/geom/MultiPoint.h>
+#include <geos/geom/MultiLineString.h>
+#include <geos/geom/MultiPolygon.h>
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geomgraph/EdgeEnd.h>
 #include <geos/geomgraph/PlanarGraph.h>
@@ -41,6 +49,15 @@ main()
     check(geomgraph::EdgeEnd);
     check(geomgraph::DirectedEdge);
     check(noding::NodedSegmentString);
+    check(geom::Geometry);
+    check(geom::Point);
+    check(geom::LineString);
+    check(geom::LinearRing);
+    check(geom::Polygon);
+    check(geom::GeometryCollection);
+    check(geom::MultiPoint);
+    check(geom::MultiLineString);
+    check(geom::MultiPolygon);
     check(int64);
 }
 
