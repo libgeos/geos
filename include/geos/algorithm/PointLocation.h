@@ -37,17 +37,6 @@ class GEOS_DLL PointLocation {
 public:
 
     /** \brief
-     * Tests whether a point lies on the line defined by a list of
-     * coordinates.
-     *
-     * @param p the point to test
-     * @param line the line coordinates
-     * @return `true` if the point is a vertex of the line or lies in the interior
-     *         of a line segment in the line
-    */
-    //static bool isOnLine(const Coordinate &p, const std::vector<Coordinate> &line);
-
-    /** \brief
      * Tests whether a point lies on the line defined by a
      * [CoordinateSequence](@ref geom::CoordinateSequence).
      *
