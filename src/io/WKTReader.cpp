@@ -375,7 +375,7 @@ WKTReader::readPolygonText(StringTokenizer* tokenizer)
         return geometryFactory->createPolygon(nullptr, nullptr);
     }
 
-    vector<Geometry*>* holes = new vector<Geometry*>();
+    vector<LinearRing*>* holes = new vector<LinearRing*>();
     try {
         shell = readLinearRingText(tokenizer);
         nextToken = getNextCloserOrComma(tokenizer);

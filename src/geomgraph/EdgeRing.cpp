@@ -165,10 +165,9 @@ EdgeRing::toPolygon(const GeometryFactory* p_geometryFactory)
     testInvariant();
 
     size_t nholes = holes.size();
-    vector<Geometry*>* holeLR = new vector<Geometry*>(nholes);
+    vector<LinearRing*>* holeLR = new vector<LinearRing*>(nholes);
     for(size_t i = 0; i < nholes; ++i) {
-        Geometry* hole = holes[i]->getLinearRing()->clone().release();
-        (*holeLR)[i] = hole;
+        (*holeLR)[i] = new LinearRing(*(holes[i]->getLinearRing()));
     }
 
     // We don't use "clone" here because

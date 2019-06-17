@@ -74,6 +74,7 @@
 #include <geos/linearref/LengthIndexedLine.h>
 #include <geos/triangulate/DelaunayTriangulationBuilder.h>
 #include <geos/triangulate/VoronoiDiagramBuilder.h>
+#include <geos/util.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util/Interrupt.h>
 #include <geos/util/UniqueCoordinateArrayFilter.h>
@@ -4181,17 +4182,24 @@ extern "C" {
         try {
             using geos::geom::LinearRing;
 
-            std::vector<Geometry*>* vholes = new std::vector<Geometry*>(holes, holes + nholes);
+            auto vholes = geos::detail::make_unique<std::vector<LinearRing*>>(nholes);
+
+            for (size_t i = 0; i < nholes; i++) {
+                (*vholes)[i] = dynamic_cast<LinearRing*>(holes[i]);
+                if ((*vholes)[i] == nullptr) {
+                    handle->ERROR_MESSAGE("Hole is not a LinearRing");
+                    return NULL;
+                }
+            }
 
             LinearRing* nshell = dynamic_cast<LinearRing*>(shell);
             if(! nshell) {
                 handle->ERROR_MESSAGE("Shell is not a LinearRing");
-                delete vholes;
                 return NULL;
             }
             const GeometryFactory* gf = handle->geomFactory;
 
-            return gf->createPolygon(nshell, vholes);
+            return gf->createPolygon(nshell, vholes.release());
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());

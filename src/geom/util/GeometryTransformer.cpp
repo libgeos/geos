@@ -292,10 +292,9 @@ GeometryTransformer::transformPolygon(
         isAllValidLinearRings = false;
     }
 
-    vector<Geometry*>* holes = new vector<Geometry*>();
+    vector<LinearRing*>* holes = new vector<LinearRing*>();
     for(size_t i = 0, n = geom->getNumInteriorRing(); i < n; i++) {
-        const LinearRing* p_lr = dynamic_cast<const LinearRing*>(
-                                     geom->getInteriorRingN(i));
+        const LinearRing* p_lr = geom->getInteriorRingN(i);
         assert(p_lr);
 
         Geometry::Ptr hole(transformLinearRing(p_lr, geom));
@@ -311,7 +310,7 @@ GeometryTransformer::transformPolygon(
             isAllValidLinearRings = false;
         }
 
-        holes->push_back(hole.release());
+        holes->push_back(dynamic_cast<LinearRing*>(hole.release()));
     }
 
     if(isAllValidLinearRings) {

@@ -249,11 +249,11 @@ public:
 
     /// Construct a Polygon taking ownership of given arguments
     Polygon* createPolygon(LinearRing* shell,
-                           std::vector<Geometry*>* holes) const;
+                           std::vector<LinearRing*>* holes) const;
 
     /// Construct a Polygon with a deep-copy of given arguments
     Polygon* createPolygon(const LinearRing& shell,
-                           const std::vector<Geometry*>& holes) const;
+                           const std::vector<LinearRing*>& holes) const;
 
     /// Construct an EMPTY LineString
     LineString* createLineString() const;

@@ -319,12 +319,12 @@ WKBReader::readPolygon()
         shell = readLinearRing();
     }
 
-    vector<Geometry*>* holes = nullptr;
+    vector<LinearRing*>* holes = nullptr;
     if(numRings > 1) {
         try {
-            holes = new vector<Geometry*>(numRings - 1);
+            holes = new vector<LinearRing*>(numRings - 1);
             for(int i = 0; i < numRings - 1; i++) {
-                (*holes)[i] = (Geometry*)readLinearRing();
+                (*holes)[i] = readLinearRing();
             }
         }
         catch(...) {

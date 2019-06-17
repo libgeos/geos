@@ -402,7 +402,7 @@ RectangleIntersectionBuilder::reconnectPolygons(const Rectangle& rect)
 {
     // Build the exterior rings first
 
-    typedef std::vector< geom::Geometry*> LinearRingVect;
+    typedef std::vector< geom::LinearRing*> LinearRingVect;
     typedef std::pair< geom::LinearRing*, LinearRingVect* > ShellAndHoles;
     typedef std::list< ShellAndHoles > ShellAndHolesList;
 
@@ -480,10 +480,10 @@ RectangleIntersectionBuilder::reconnectPolygons(const Rectangle& rect)
 
     for(std::list<geom::Polygon*>::iterator i = polygons.begin(), e = polygons.end(); i != e; ++i) {
         geom::Polygon* poly = *i;
-        const geom::LineString* hole = poly->getExteriorRing();
+        const geom::LinearRing* hole = poly->getExteriorRing();
 
         if(exterior.size() == 1) {
-            exterior.front().second->push_back(hole->clone().release());
+            exterior.front().second->push_back(new LinearRing(*hole));
         }
         else {
             using geos::algorithm::PointLocation;
@@ -493,7 +493,7 @@ RectangleIntersectionBuilder::reconnectPolygons(const Rectangle& rect)
                 const CoordinateSequence* shell_cs = p.first->getCoordinatesRO();
                 if(PointLocation::isInRing(c, shell_cs)) {
                     // add hole to shell
-                    p.second->push_back(hole->clone().release());
+                    p.second->push_back(new LinearRing(*hole));
                     break;
                 }
             }

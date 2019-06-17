@@ -38,6 +38,7 @@
 #include <geos/geom/GeometryComponentFilter.h> // for inheritance
 #include <geos/geom/IntersectionMatrix.h>
 
+#include <algorithm>
 #include <string>
 #include <iostream>
 #include <vector>
@@ -835,13 +836,19 @@ protected:
     mutable std::unique_ptr<Envelope> envelope;
 
     /// Returns true if the array contains any non-empty Geometrys.
-    static bool hasNonEmptyElements(const std::vector<Geometry*>* geometries);
+    template<typename T>
+    static bool hasNonEmptyElements(const std::vector<T*>* geometries) {
+        return std::any_of(geometries->begin(), geometries->end(), [](const Geometry* g) { return !g->isEmpty(); });
+    }
 
     /// Returns true if the CoordinateSequence contains any null elements.
     static bool hasNullElements(const CoordinateSequence* list);
 
     /// Returns true if the vector contains any null elements.
-    static bool hasNullElements(const std::vector<Geometry*>* lrs);
+    template<typename T>
+    static bool hasNullElements(const std::vector<T*>* geometries) {
+        return std::any_of(geometries->begin(), geometries->end(), [](const Geometry* g) { return g == nullptr; });
+    }
 
 //	static void reversePointOrder(CoordinateSequence* coordinates);
 //	static Coordinate& minCoordinate(CoordinateSequence* coordinates);

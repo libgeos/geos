@@ -295,9 +295,8 @@ create_square_polygon(double xoffset, double yoffset, double side)
                         yoffset + (side / 3), (side / 3));
 
     // If we need to specify any hole, we do it using
-    // a vector of Geometry pointers (I don't know why
-    // not LinearRings)
-    vector<Geometry*>* holes = new vector<Geometry*>;
+    // a vector of LinearRing pointers
+    vector<LinearRing*>* holes = new vector<LinearRing*>;
 
     // We add the newly created geometry to the vector
     // of holes.

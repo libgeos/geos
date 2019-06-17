@@ -275,20 +275,14 @@ GeometryGraph::addPolygonRing(const LinearRing* lr, int cwLeft, int cwRight)
 void
 GeometryGraph::addPolygon(const Polygon* p)
 {
-    const LineString* ls;
-    const LinearRing* lr;
+    const LinearRing* lr = p->getExteriorRing();
 
-    ls = p->getExteriorRing();
-    assert(dynamic_cast<const LinearRing*>(ls));
-    lr = static_cast<const LinearRing*>(ls);
     addPolygonRing(lr, Location::EXTERIOR, Location::INTERIOR);
     for(size_t i = 0, n = p->getNumInteriorRing(); i < n; ++i) {
         // Holes are topologically labelled opposite to the shell, since
         // the interior of the polygon lies on their opposite side
         // (on the left, if the hole is oriented CW)
-        ls = p->getInteriorRingN(i);
-        assert(dynamic_cast<const LinearRing*>(ls));
-        lr = static_cast<const LinearRing*>(ls);
+        lr = p->getInteriorRingN(i);
         addPolygonRing(lr, Location::INTERIOR, Location::EXTERIOR);
     }
 }

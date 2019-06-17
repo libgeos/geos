@@ -75,7 +75,7 @@ private:
     std::unique_ptr<geom::CoordinateArraySequence> ringPts;
     std::unique_ptr<algorithm::locate::PointOnGeometryLocator> ringLocator;
 
-    std::unique_ptr<std::vector<geom::Geometry*>> holes;
+    std::unique_ptr<std::vector<geom::LinearRing*>> holes;
 
     EdgeRing* shell = nullptr;
     bool is_hole;

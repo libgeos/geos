@@ -226,8 +226,7 @@ OffsetCurveSetBuilder::addPolygon(const Polygon* p)
         offsetSide = Position::RIGHT;
     }
 
-    // FIXME: avoid the C-style cast
-    const LinearRing* shell = (const LinearRing*)p->getExteriorRing();
+    const LinearRing* shell = p->getExteriorRing();
 
     // optimization - don't bother computing buffer
     // if the polygon would be completely eroded

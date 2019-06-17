@@ -187,7 +187,7 @@ void
 EdgeRing::addHole(LinearRing* hole)
 {
     if(holes == nullptr) {
-        holes.reset(new vector<Geometry*>());
+        holes.reset(new vector<LinearRing*>());
     }
     holes->push_back(hole);
 }

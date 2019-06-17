@@ -136,34 +136,11 @@ Geometry::Geometry(const Geometry& geom)
 }
 
 bool
-Geometry::hasNonEmptyElements(const vector<Geometry*>* geometries)
-{
-    for(size_t i = 0; i < geometries->size(); i++) {
-        if(!(*geometries)[i]->isEmpty()) {
-            return true;
-        }
-    }
-    return false;
-}
-
-bool
 Geometry::hasNullElements(const CoordinateSequence* list)
 {
     size_t npts = list->getSize();
     for(size_t i = 0; i < npts; ++i) {
         if(list->getAt(i).isNull()) {
-            return true;
-        }
-    }
-    return false;
-}
-
-bool
-Geometry::hasNullElements(const vector<Geometry*>* lrs)
-{
-    size_t n = lrs->size();
-    for(size_t i = 0; i < n; ++i) {
-        if((*lrs)[i] == nullptr) {
             return true;
         }
     }

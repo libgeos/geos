@@ -598,7 +598,7 @@ GeometryFactory::createPolygon() const
 
 /*public*/
 Polygon*
-GeometryFactory::createPolygon(LinearRing* shell, vector<Geometry*>* holes)
+GeometryFactory::createPolygon(LinearRing* shell, vector<LinearRing*>* holes)
 const
 {
     return new Polygon(shell, holes, this);
@@ -606,13 +606,13 @@ const
 
 /*public*/
 Polygon*
-GeometryFactory::createPolygon(const LinearRing& shell, const vector<Geometry*>& holes)
+GeometryFactory::createPolygon(const LinearRing& shell, const vector<LinearRing*>& holes)
 const
 {
-    LinearRing* newRing = dynamic_cast<LinearRing*>(shell.clone().release());
-    vector<Geometry*>* newHoles = new vector<Geometry*>(holes.size());
+    LinearRing* newRing = new LinearRing(shell);
+    vector<LinearRing*>* newHoles = new vector<LinearRing*>(holes.size());
     for(size_t i = 0; i < holes.size(); i++) {
-        (*newHoles)[i] = holes[i]->clone().release();
+        (*newHoles)[i] = new LinearRing(*(holes[i]));
     }
     Polygon* g = nullptr;
     try {
