@@ -44,14 +44,7 @@ namespace precision { // geos.precision
 unique_ptr<Geometry>
 GeometryPrecisionReducer::reducePointwise(const Geometry& geom)
 {
-    unique_ptr<GeometryEditor> geomEdit;
-
-    if(newFactory) {
-        geomEdit.reset(new GeometryEditor(newFactory));
-    }
-    else {
-        geomEdit.reset(new GeometryEditor());
-    }
+    GeometryEditor geomEdit(newFactory);
 
     /**
      * For polygonal geometries, collapses are always removed, in order
@@ -64,7 +57,7 @@ GeometryPrecisionReducer::reducePointwise(const Geometry& geom)
 
     PrecisionReducerCoordinateOperation prco(targetPM, finalRemoveCollapsed);
 
-    std::unique_ptr<Geometry> g(geomEdit->edit(&geom, &prco));
+    std::unique_ptr<Geometry> g(geomEdit.edit(&geom, &prco));
 
     return g;
 }
