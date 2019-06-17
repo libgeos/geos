@@ -32,12 +32,11 @@
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/util/GeometryEditorOperation.h>
 #include <geos/util/UnsupportedOperationException.h>
+#include <geos/util.h>
 
 #include <vector>
 #include <cassert>
 #include <typeinfo>
-
-using namespace std;
 
 namespace geos {
 namespace geom { // geos.geom
@@ -72,7 +71,7 @@ GeometryEditor::GeometryEditor(const GeometryFactory* newFactory)
  * @param operation the edit operation to carry out
  * @return a new {@link Geometry} which is the result of the editing
  */
-Geometry*
+std::unique_ptr<Geometry>
 GeometryEditor::edit(const Geometry* geometry, GeometryEditorOperation* operation)
 {
     // if client did not supply a GeometryFactory, use the one from the input Geometry
@@ -102,17 +101,16 @@ GeometryEditor::edit(const Geometry* geometry, GeometryEditorOperation* operatio
     return nullptr;
 }
 
-Polygon*
+std::unique_ptr<Polygon>
 GeometryEditor::editPolygon(const Polygon* polygon, GeometryEditorOperation* operation)
 {
-    Polygon* newPolygon = dynamic_cast<Polygon*>(
-                              operation->edit(polygon, factory)
-                          );
+    std::unique_ptr<Polygon> newPolygon(dynamic_cast<Polygon*>(
+                                                operation->edit(polygon, factory).release()
+                                        ));
     if(newPolygon->isEmpty()) {
         //RemoveSelectedPlugIn relies on this behaviour. [Jon Aquino]
         if(newPolygon->getFactory() != factory) {
-            Polygon* ret = factory->createPolygon(nullptr, nullptr);
-            delete newPolygon;
+            std::unique_ptr<Polygon> ret(factory->createPolygon(nullptr, nullptr));
             return ret;
         }
         else {
@@ -120,64 +118,56 @@ GeometryEditor::editPolygon(const Polygon* polygon, GeometryEditorOperation* ope
         }
     }
 
-    Geometry* editResult = edit(newPolygon->getExteriorRing(), operation);
+    std::unique_ptr<LinearRing> shell(dynamic_cast<LinearRing*>(
+            edit(newPolygon->getExteriorRing(), operation).release()));
 
-    LinearRing* shell = dynamic_cast<LinearRing*>(editResult);
     if(shell->isEmpty()) {
         //RemoveSelectedPlugIn relies on this behaviour. [Jon Aquino]
-        delete shell;
-        delete newPolygon;
-        return factory->createPolygon(nullptr, nullptr);
+        return std::unique_ptr<Polygon>(factory->createPolygon(nullptr, nullptr));
     }
 
-    vector<LinearRing*>* holes = new vector<LinearRing*>;
+    auto holes = detail::make_unique<std::vector<LinearRing*>>();
     for(size_t i = 0, n = newPolygon->getNumInteriorRing(); i < n; ++i) {
 
-        Geometry* hole_geom = edit(newPolygon->getInteriorRingN(i),
-                                   operation);
+        std::unique_ptr<LinearRing> hole(dynamic_cast<LinearRing*>(
+                edit(newPolygon->getInteriorRingN(i), operation).release()));
 
-        LinearRing* hole = dynamic_cast<LinearRing*>(hole_geom);
         assert(hole);
 
         if(hole->isEmpty()) {
             continue;
         }
-        holes->push_back(hole);
+        holes->push_back(hole.release());
     }
-    delete newPolygon;
-    return factory->createPolygon(shell, holes);
+
+    return std::unique_ptr<Polygon>(factory->createPolygon(shell.release(), holes.release()));
 }
 
-GeometryCollection*
+std::unique_ptr<GeometryCollection>
 GeometryEditor::editGeometryCollection(const GeometryCollection* collection, GeometryEditorOperation* operation)
 {
-    GeometryCollection* newCollection = dynamic_cast<GeometryCollection*>(operation->edit(collection, factory));
-    vector<Geometry*>* geometries = new vector<Geometry*>();
+    auto newCollection = operation->edit(collection, factory);
+    auto geometries = detail::make_unique<std::vector<Geometry*>>();
     for(std::size_t i = 0, n = newCollection->getNumGeometries(); i < n; i++) {
-        Geometry* geometry = edit(newCollection->getGeometryN(i),
+        auto geometry = edit(newCollection->getGeometryN(i),
                                   operation);
         if(geometry->isEmpty()) {
-            delete geometry;
             continue;
         }
-        geometries->push_back(geometry);
+        geometries->push_back(geometry.release());
     }
 
-    if(typeid(*newCollection) == typeid(MultiPoint)) {
-        delete newCollection;
-        return factory->createMultiPoint(geometries);
+    if(newCollection->getGeometryTypeId() == GEOS_MULTIPOINT) {
+        return std::unique_ptr<GeometryCollection>(factory->createMultiPoint(geometries.release()));
     }
-    else if(typeid(*newCollection) == typeid(MultiLineString)) {
-        delete newCollection;
-        return factory->createMultiLineString(geometries);
+    else if(newCollection->getGeometryTypeId() == GEOS_MULTILINESTRING) {
+        return std::unique_ptr<GeometryCollection>(factory->createMultiLineString(geometries.release()));
     }
-    else if(typeid(*newCollection) == typeid(MultiPolygon)) {
-        delete newCollection;
-        return factory->createMultiPolygon(geometries);
+    else if(newCollection->getGeometryTypeId() == GEOS_MULTIPOLYGON) {
+        return std::unique_ptr<GeometryCollection>(factory->createMultiPolygon(geometries.release()));
     }
     else {
-        delete newCollection;
-        return factory->createGeometryCollection(geometries);
+        return std::unique_ptr<GeometryCollection>(factory->createGeometryCollection(geometries.release()));
     }
 }
 
