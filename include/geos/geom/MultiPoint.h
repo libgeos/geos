@@ -23,7 +23,6 @@
 
 #include <geos/export.h>
 #include <geos/geom/GeometryCollection.h> // for inheritance
-#include <geos/geom/Puntal.h> // for inheritance
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
 
 #include <geos/inline.h>
@@ -51,7 +50,7 @@ namespace geom { // geos::geom
  *
  * Any collection of Points is a valid MultiPoint.
  */
-class GEOS_DLL MultiPoint: public GeometryCollection, public Puntal {
+class GEOS_DLL MultiPoint: public GeometryCollection {
 
 public:
 
@@ -61,6 +60,10 @@ public:
 
     /// Returns point dimension (0)
     Dimension::DimensionType getDimension() const override;
+
+    bool isDimensionStrict(Dimension::DimensionType d) const override {
+        return d == Dimension::P;
+    }
 
     /// Returns Dimension::False (Point has no boundary)
     int getBoundaryDimension() const override;

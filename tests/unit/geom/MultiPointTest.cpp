@@ -245,7 +245,7 @@ void object::test<16>
     ensure_equals(empty_mp_->getArea(), 0.0);
 }
 
-// Test of isEmpty() for non-empty LinearRing
+// Test of isEmpty() for non-empty MultiPoint
 template<>
 template<>
 void object::test<17>
@@ -255,7 +255,7 @@ void object::test<17>
     ensure(!mp_->isEmpty());
 }
 
-// Test of getEnvelope() for non-empty LinearRing
+// Test of getEnvelope() for non-empty MultiPoint
 template<>
 template<>
 void object::test<18>
@@ -269,7 +269,7 @@ void object::test<18>
     ensure_equals(envelope->getDimension(), geos::geom::Dimension::A);
 }
 
-// Test of getBoundary() for non-empty LinearRing
+// Test of getBoundary() for non-empty MultiPoint
 template<>
 template<>
 void object::test<19>
@@ -284,7 +284,7 @@ void object::test<19>
     ensure("[OGC] The boundary of a MultiPoint is the empty set.", boundary->isEmpty());
 }
 
-// Test of convexHull() for non-empty LinearRing
+// Test of convexHull() for non-empty MultiPoint
 template<>
 template<>
 void object::test<20>
@@ -299,7 +299,7 @@ void object::test<20>
     ensure_equals(hull->getDimension(), geos::geom::Dimension::L);
 }
 
-// Test of getGeometryTypeId() for non-empty LinearRing
+// Test of getGeometryTypeId() for non-empty MultiPoint
 template<>
 template<>
 void object::test<21>
@@ -309,7 +309,7 @@ void object::test<21>
     ensure_equals(mp_->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT);
 }
 
-// Test of getGeometryType() for non-empty Polygon
+// Test of getGeometryType() for non-empty MultiPoint
 template<>
 template<>
 void object::test<22>
@@ -321,7 +321,7 @@ void object::test<22>
     ensure_equals(mp_->getGeometryType(), type);
 }
 
-// Test of getDimension() for non-empty LinearRing
+// Test of getDimension() for non-empty MultiPoint
 template<>
 template<>
 void object::test<23>
@@ -331,7 +331,7 @@ void object::test<23>
     ensure_equals(mp_->getDimension(), geos::geom::Dimension::P);
 }
 
-// Test of getBoundaryDimension() for non-empty LinearRing
+// Test of getBoundaryDimension() for non-empty MultiPoint
 template<>
 template<>
 void object::test<24>
@@ -341,7 +341,7 @@ void object::test<24>
     ensure_equals(mp_->getBoundaryDimension(), geos::geom::Dimension::False);
 }
 
-// Test of getNumPoints() for non-empty LinearRing
+// Test of getNumPoints() for non-empty MultiPoint
 template<>
 template<>
 void object::test<25>
@@ -351,7 +351,7 @@ void object::test<25>
     ensure_equals(mp_->getNumPoints(), mp_size_);
 }
 
-// Test of getLength() for non-empty LinearRing
+// Test of getLength() for non-empty MultiPoint
 template<>
 template<>
 void object::test<26>
@@ -361,7 +361,7 @@ void object::test<26>
     ensure_equals(mp_->getLength(), 0.0);
 }
 
-// Test of getArea() for non-empty LinearRing
+// Test of getArea() for non-empty MultiPoint
 template<>
 template<>
 void object::test<27>
@@ -371,7 +371,7 @@ void object::test<27>
     ensure_equals(mp_->getArea(), 0.0);
 }
 
-// Test of ParseException thrown when constructing MultiPoint from invalind WKT
+// Test of ParseException thrown when constructing MultiPoint from invalid WKT
 template<>
 template<>
 void object::test<28>
@@ -402,6 +402,26 @@ void object::test<29>
     std::unique_ptr<geos::geom::Geometry> g(gf->createMultiPoint());
 
     ensure(g->getCoordinate() == nullptr);
+}
+
+// test isDimensionStrict for empty MultiPoint
+template<>
+template<>
+void object::test<30>
+()
+{
+    ensure(empty_mp_->isDimensionStrict(geos::geom::Dimension::P));
+    ensure(!empty_mp_->isDimensionStrict(geos::geom::Dimension::L));
+}
+
+// test isDimensionStrict for non-empty MultiPoint
+template<>
+template<>
+void object::test<31>
+()
+{
+    ensure(empty_mp_->isDimensionStrict(geos::geom::Dimension::P));
+    ensure(!empty_mp_->isDimensionStrict(geos::geom::Dimension::L));
 }
 
 } // namespace tut

@@ -22,7 +22,6 @@
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Geometry.h>
-#include <geos/geom/Lineal.h>
 #include <geos/linearref/LinearLocation.h>
 #include <geos/linearref/LocationIndexOfPoint.h>
 #include <geos/linearref/LocationIndexOfLine.h>
@@ -44,7 +43,7 @@ private:
     void
     checkGeometryType()
     {
-        if(! dynamic_cast<const geom::Lineal*>(linearGeom)) {
+        if(!linearGeom->isLineal()) {
             throw util::IllegalArgumentException("Input geometry must be linear");
         }
     }

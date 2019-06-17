@@ -23,7 +23,6 @@
 
 #include <geos/export.h>
 #include <geos/geom/Geometry.h> // for inheritance
-#include <geos/geom/Puntal.h> // for inheritance
 #include <geos/geom/CoordinateSequence.h> // for proper use of unique_ptr<>
 #include <geos/geom/Envelope.h> // for proper use of unique_ptr<>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
@@ -63,7 +62,7 @@ namespace geom { // geos::geom
  *   (i.e does not have an NaN X or Y ordinate)
  *
  */
-class GEOS_DLL Point : public virtual Geometry, public Puntal {
+class GEOS_DLL Point : public virtual Geometry {
 
 public:
 

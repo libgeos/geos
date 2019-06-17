@@ -23,7 +23,6 @@
 
 #include <geos/export.h>
 #include <geos/geom/Geometry.h> // for inheritance
-#include <geos/geom/Lineal.h> // for inheritance
 #include <geos/geom/CoordinateSequence.h> // for proper use of unique_ptr<>
 #include <geos/geom/Envelope.h> // for proper use of unique_ptr<>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
@@ -66,7 +65,7 @@ namespace geom { // geos::geom
  *  If these conditions are not met, the constructors throw
  *  an {@link util::IllegalArgumentException}.
  */
-class GEOS_DLL LineString: public virtual Geometry, public Lineal {
+class GEOS_DLL LineString: public virtual Geometry {
 
 public:
 

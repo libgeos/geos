@@ -23,7 +23,6 @@
 
 #include <geos/export.h>
 #include <geos/geom/GeometryCollection.h> // for inheritance
-#include <geos/geom/Lineal.h> // for inheritance
 #include <geos/geom/Dimension.h>
 
 #include <string>
@@ -48,7 +47,7 @@ namespace geom { // geos::geom
 #endif
 
 /// Models a collection of [LineStrings](@ref geom::LineString).
-class GEOS_DLL MultiLineString: public GeometryCollection, public Lineal {
+class GEOS_DLL MultiLineString: public GeometryCollection {
 
 public:
 
@@ -58,6 +57,10 @@ public:
 
     /// Returns line dimension (1)
     Dimension::DimensionType getDimension() const override;
+
+    bool isDimensionStrict(Dimension::DimensionType d) const override {
+        return d == Dimension::L;
+    }
 
     /**
      * \brief

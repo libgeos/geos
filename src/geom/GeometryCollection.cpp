@@ -128,6 +128,14 @@ GeometryCollection::getDimension() const
     return dimension;
 }
 
+bool
+GeometryCollection::isDimensionStrict(Dimension::DimensionType d) const {
+    return std::all_of(geometries->begin(), geometries->end(),
+            [&d](const Geometry* g) {
+                return g->getDimension() == d;
+            });
+}
+
 int
 GeometryCollection::getBoundaryDimension() const
 {

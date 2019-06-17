@@ -25,7 +25,6 @@
 #include <string>
 #include <vector>
 #include <geos/geom/GeometryCollection.h> // for inheritance
-#include <geos/geom/Polygonal.h> // for inheritance
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
 
 #include <geos/inline.h>
@@ -56,7 +55,7 @@ namespace geom { // geos::geom
 /// This allows the topological point-set semantics
 /// to be well-defined.
 ///
-class GEOS_DLL MultiPolygon: public GeometryCollection, public Polygonal {
+class GEOS_DLL MultiPolygon: public GeometryCollection {
 public:
 
     friend class GeometryFactory;
@@ -65,6 +64,10 @@ public:
 
     /// Returns surface dimension (2)
     Dimension::DimensionType getDimension() const override;
+
+    bool isDimensionStrict(Dimension::DimensionType d) const override {
+        return d == Dimension::A;
+    }
 
     /// Returns 1 (MultiPolygon boundary is MultiLineString)
     int getBoundaryDimension() const override;

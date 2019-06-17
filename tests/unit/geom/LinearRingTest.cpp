@@ -460,4 +460,24 @@ void object::test<31>
 
     ensure(g->getCoordinate() == nullptr);
 }
+
+// test isDimensionStrict for empty LinearRing
+template<>
+template<>
+void object::test<32>
+()
+{
+    ensure(empty_ring_.isDimensionStrict(geos::geom::Dimension::L));
+    ensure(!empty_ring_.isDimensionStrict(geos::geom::Dimension::A));
+}
+
+// test isDimensionStrict for non-empty LinearRing
+template<>
+template<>
+void object::test<33>
+()
+{
+    ensure(ring_->isDimensionStrict(geos::geom::Dimension::L));
+    ensure(!ring_->isDimensionStrict(geos::geom::Dimension::A));
+}
 } // namespace tut

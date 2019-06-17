@@ -28,7 +28,6 @@ namespace geos {
 namespace geom {
 class GeometryFactory;
 class Geometry;
-class Puntal;
 }
 }
 
@@ -48,11 +47,11 @@ class GEOS_DLL PointGeometryUnion {
 public:
 
     static std::unique_ptr<geom::Geometry> Union(
-        const geom::Puntal& pointGeom,
+        const geom::Geometry& pointGeom,
         const geom::Geometry& otherGeom);
 
 
-    PointGeometryUnion(const geom::Puntal& pointGeom,
+    PointGeometryUnion(const geom::Geometry& pointGeom,
                        const geom::Geometry& otherGeom);
 
     std::unique_ptr<geom::Geometry> Union() const;

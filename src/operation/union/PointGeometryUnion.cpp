@@ -21,7 +21,6 @@
 #include <algorithm> // for copy
 #include <geos/operation/union/PointGeometryUnion.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/Puntal.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/Geometry.h>
@@ -81,7 +80,7 @@ PointGeometryUnion::Union() const
 
 /* public  static */
 std::unique_ptr<geom::Geometry>
-PointGeometryUnion::Union(const geom::Puntal& pointGeom,
+PointGeometryUnion::Union(const geom::Geometry& pointGeom,
                           const geom::Geometry& otherGeom)
 {
     PointGeometryUnion unioner(pointGeom, otherGeom);
@@ -89,7 +88,7 @@ PointGeometryUnion::Union(const geom::Puntal& pointGeom,
 }
 
 /* public */
-PointGeometryUnion::PointGeometryUnion(const geom::Puntal& pointGeom_,
+PointGeometryUnion::PointGeometryUnion(const geom::Geometry& pointGeom_,
                                        const geom::Geometry& otherGeom_)
     :
     pointGeom(pointGeom_),

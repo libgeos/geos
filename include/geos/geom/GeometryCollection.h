@@ -107,6 +107,8 @@ public:
      */
     Dimension::DimensionType getDimension() const override;
 
+    virtual bool isDimensionStrict(Dimension::DimensionType d) const;
+
     /// Returns coordinate dimension.
     int getCoordinateDimension() const override;
 

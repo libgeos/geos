@@ -19,6 +19,7 @@
  **********************************************************************/
 
 #include <geos/operation/union/CascadedPolygonUnion.h>
+#include <geos/geom/Dimension.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Polygon.h>
@@ -50,7 +51,7 @@ check_valid(const geos::geom::Geometry& g, const std::string& label, bool doThro
 {
     using namespace geos;
 
-    if(dynamic_cast<const geos::geom::Lineal*>(&g)) {
+    if(g.isLineal()) {
         if(! validOnly) {
             operation::IsSimpleOp sop(g, algorithm::BoundaryNodeRule::getBoundaryEndPoint());
             if(! sop.isSimple()) {
@@ -395,7 +396,7 @@ CascadedPolygonUnion::restrictToPolygons(std::unique_ptr<geom::Geometry> g)
     using namespace geom;
     using namespace std;
 
-    if(dynamic_cast<Polygonal*>(g.get())) {
+    if(g->isPolygonal()) {
         return g;
     }
 
