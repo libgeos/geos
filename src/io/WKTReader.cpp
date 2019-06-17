@@ -220,30 +220,30 @@ WKTReader::readGeometryTaggedText(StringTokenizer* tokenizer)
 {
     string type = getNextWord(tokenizer);
     if(type == "POINT") {
-        return std::unique_ptr<Geometry>(readPointText(tokenizer).release());
+        return readPointText(tokenizer);
     }
     else if(type == "LINESTRING") {
-        return std::unique_ptr<Geometry>(readLineStringText(tokenizer));
+        return readLineStringText(tokenizer);
     }
     else if(type == "LINEARRING") {
-        return std::unique_ptr<Geometry>(readLinearRingText(tokenizer));
+        return readLinearRingText(tokenizer);
     }
     else if(type == "POLYGON") {
-        return std::unique_ptr<Geometry>(readPolygonText(tokenizer));
+        return readPolygonText(tokenizer);
     }
     else if(type == "MULTIPOINT") {
-        return std::unique_ptr<Geometry>(readMultiPointText(tokenizer));
+        return readMultiPointText(tokenizer);
     }
     else if(type == "MULTILINESTRING") {
-        return std::unique_ptr<Geometry>(readMultiLineStringText(tokenizer));
+        return readMultiLineStringText(tokenizer);
     }
     else if(type == "MULTIPOLYGON") {
-        return std::unique_ptr<Geometry>(readMultiPolygonText(tokenizer));
+        return readMultiPolygonText(tokenizer);
     }
     else if(type == "GEOMETRYCOLLECTION") {
-        return std::unique_ptr<Geometry>(readGeometryCollectionText(tokenizer));
+        return readGeometryCollectionText(tokenizer);
     }
-    throw  ParseException("Unknown type", type);
+    throw ParseException("Unknown type", type);
 }
 
 std::unique_ptr<Point>

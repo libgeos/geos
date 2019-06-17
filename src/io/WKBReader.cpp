@@ -241,25 +241,25 @@ WKBReader::readGeometry()
 
     switch(geometryType) {
     case WKBConstants::wkbPoint :
-        result.reset(readPoint().release());
+        result = readPoint();
         break;
     case WKBConstants::wkbLineString :
-        result.reset(readLineString().release());
+        result = readLineString();
         break;
     case WKBConstants::wkbPolygon :
-        result.reset(readPolygon().release());
+        result = readPolygon();
         break;
     case WKBConstants::wkbMultiPoint :
-        result.reset(readMultiPoint().release());
+        result = readMultiPoint();
         break;
     case WKBConstants::wkbMultiLineString :
-        result.reset(readMultiLineString().release());
+        result = readMultiLineString();
         break;
     case WKBConstants::wkbMultiPolygon :
-        result.reset(readMultiPolygon().release());
+        result = readMultiPolygon();
         break;
     case WKBConstants::wkbGeometryCollection :
-        result.reset(readGeometryCollection().release());
+        result = readGeometryCollection();
         break;
     default:
         stringstream err;
