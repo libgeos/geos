@@ -65,8 +65,8 @@ public:
     /// Returns surface dimension (2)
     Dimension::DimensionType getDimension() const override;
 
-    bool isMixedDimension() const override {
-        return false;
+    bool isDimensionStrict(Dimension::DimensionType d) const override {
+        return d == Dimension::A;
     }
 
     /// Returns 1 (MultiPolygon boundary is MultiLineString)

@@ -524,5 +524,26 @@ void object::test<26>
     ensure(g->getCoordinate() == nullptr);
 }
 
+// test isDimensionStrict for empty LineString
+template<>
+template<>
+void object::test<27>
+()
+{
+    ensure(empty_line_->isDimensionStrict(geos::geom::Dimension::L));
+    ensure(!empty_line_->isDimensionStrict(geos::geom::Dimension::A));
+}
+
+// test isDimensionStrict for non-empty LineString
+template<>
+template<>
+void object::test<28>
+()
+{
+    std::unique_ptr<geos::geom::Geometry> geo(reader_.read("LINESTRING (0 0, 10 10, 20 0))"));
+
+    ensure(geo->isDimensionStrict(geos::geom::Dimension::L));
+    ensure(!geo->isDimensionStrict(geos::geom::Dimension::A));
+}
 } // namespace tut
 

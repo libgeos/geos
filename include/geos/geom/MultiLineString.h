@@ -58,8 +58,8 @@ public:
     /// Returns line dimension (1)
     Dimension::DimensionType getDimension() const override;
 
-    bool isMixedDimension() const override {
-        return false;
+    bool isDimensionStrict(Dimension::DimensionType d) const override {
+        return d == Dimension::L;
     }
 
     /**

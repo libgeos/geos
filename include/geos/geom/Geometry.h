@@ -352,20 +352,21 @@ public:
     /// Returns the dimension of this Geometry (0=point, 1=line, 2=surface)
     virtual Dimension::DimensionType getDimension() const = 0; //Abstract
 
-    virtual bool isMixedDimension() const {
-        return false;
+    /// Checks whether this Geometry consists only of components having dimension d.
+    virtual bool isDimensionStrict(Dimension::DimensionType d) const {
+        return d == getDimension();
     }
 
     bool isPuntal() const {
-        return getDimension() == Dimension::P;
+        return isDimensionStrict(Dimension::P);
     }
 
     bool isLineal() const {
-        return getDimension() == Dimension::L && !isMixedDimension();
+        return isDimensionStrict(Dimension::L);
     }
 
     bool isPolygonal() const {
-        return getDimension() == Dimension::A && !isMixedDimension();
+        return isDimensionStrict(Dimension::A);
     }
 
     /// Returns the coordinate dimension of this Geometry (2=XY, 3=XYZ, 4=XYZM in future).

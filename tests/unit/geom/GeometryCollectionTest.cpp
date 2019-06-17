@@ -18,10 +18,17 @@ struct test_geometry_collection_data {
 
     geos::geom::PrecisionModel pm_;
     GeometryFactory::Ptr factory_;
+    std::unique_ptr<geos::geom::Geometry> empty_gc_;
+
+    std::unique_ptr<geos::geom::Geometry> readWKT(std::string wkt) {
+        geos::io::WKTReader reader;
+        return std::unique_ptr<geos::geom::Geometry>(reader.read(wkt));
+    }
 
     test_geometry_collection_data()
-        : pm_(1000), factory_(GeometryFactory::create(&pm_, 0))
+        : pm_(1000), factory_(GeometryFactory::create(&pm_, 0)), empty_gc_(factory_->createGeometryCollection())
     {
+
     }
 };
 
@@ -82,15 +89,58 @@ void object::test<2>
     ensure_equals(clone->getGeometryN(0)->getSRID(), 2);
 }
 
+// test getCoordinate() returns nullptr for empty geometry
 template<>
 template<>
 void object::test<3>
 ()
 {
-    // getCoordinate() returns nullptr for empty geometry
-    auto gf = GeometryFactory::create();
-    std::unique_ptr<geos::geom::Geometry> g(gf->createGeometryCollection());
-
-    ensure(g->getCoordinate() == nullptr);
+    ensure(empty_gc_->getCoordinate() == nullptr);
 }
+
+// test isDimensionStrict for empty GeometryCollection
+template<>
+template<>
+void object::test<4>
+()
+{
+    // Empty GeometryCollection passes isDimensionStrict for any input
+    ensure(empty_gc_->isDimensionStrict(geos::geom::Dimension::P));
+    ensure(empty_gc_->isDimensionStrict(geos::geom::Dimension::L));
+    ensure(empty_gc_->isDimensionStrict(geos::geom::Dimension::A));
+}
+
+// test isDimensionStrict for homogeneous GeometryCollections
+template<>
+template<>
+void object::test<5>
+()
+{
+    auto point = readWKT("GEOMETRYCOLLECTION(POINT (1 1), POINT(2 2))");
+    auto line = readWKT("GEOMETRYCOLLECTION(LINESTRING (1 1, 2 2), LINESTRING (3 8, 3 9))");
+    auto poly = readWKT("GEOMETRYCOLLECTION(POLYGON ((1 1, 2 1, 2 2, 1 1)))");
+
+    ensure(point->isDimensionStrict(geos::geom::Dimension::P));
+    ensure(line->isDimensionStrict(geos::geom::Dimension::L));
+    ensure(poly->isDimensionStrict(geos::geom::Dimension::A));
+
+    ensure(!point->isDimensionStrict(geos::geom::Dimension::L));
+    ensure(!line->isDimensionStrict(geos::geom::Dimension::A));
+    ensure(!poly->isDimensionStrict(geos::geom::Dimension::P));
+}
+
+// test isDimensionStrict for heterogeneous GeometryCollections
+template<>
+template<>
+void object::test<6>
+()
+{
+    // Heterogenous GeometryCollection does not pass isDimensionString for any input
+    auto gc = readWKT("GEOMETRYCOLLECTION(POINT (1 1), LINESTRING (1 1, 2 2))");
+
+    ensure(!gc->isDimensionStrict(geos::geom::Dimension::P));
+    ensure(!gc->isDimensionStrict(geos::geom::Dimension::L));
+    ensure(!gc->isDimensionStrict(geos::geom::Dimension::A));
+}
+
 } // namespace tut

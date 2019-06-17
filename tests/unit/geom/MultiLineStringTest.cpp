@@ -5,6 +5,7 @@
 // geos
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/MultiLineString.h>
+#include <geos/io/WKTReader.h>
 
 namespace tut {
 //
@@ -13,7 +14,15 @@ namespace tut {
 
 // Common data used by tests
 struct test_multilinestring_data {
-    test_multilinestring_data() {}
+    std::unique_ptr<geos::geom::Geometry> empty_mls_;
+    std::unique_ptr<geos::geom::Geometry> mls_;
+
+    geos::io::WKTReader reader_;
+
+    test_multilinestring_data() {
+        empty_mls_.reset(reader_.read("MULTILINESTRING EMPTY"));
+        mls_.reset(reader_.read("MULTILINESTRING ((0 0, 1 1), (3 3, 4 4))"));
+    }
 };
 
 typedef test_group<test_multilinestring_data> group;
@@ -31,10 +40,27 @@ void object::test<1>
 ()
 {
     // getCoordinate() returns nullptr for empty geometry
-    auto gf = geos::geom::GeometryFactory::create();
-    std::unique_ptr<geos::geom::Geometry> g(gf->createMultiLineString());
+    ensure(empty_mls_->getCoordinate() == nullptr);
+}
 
-    ensure(g->getCoordinate() == nullptr);
+// test isDimensionStrict for empty MultiLineString
+template<>
+template<>
+void object::test<2>
+()
+{
+    ensure(empty_mls_->isDimensionStrict(geos::geom::Dimension::L));
+    ensure(!empty_mls_->isDimensionStrict(geos::geom::Dimension::A));
+}
+
+// test isDimensionStrict for non-empty MultiLineString
+template<>
+template<>
+void object::test<3>
+()
+{
+    ensure(mls_->isDimensionStrict(geos::geom::Dimension::L));
+    ensure(!mls_->isDimensionStrict(geos::geom::Dimension::A));
 }
 
 } // namespace tut

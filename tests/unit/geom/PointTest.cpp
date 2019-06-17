@@ -576,5 +576,25 @@ void object::test<41>
     ensure(g->getCoordinate() == nullptr);
 }
 
+// test isDimensionStrict for empty Point
+template<>
+template<>
+void object::test<42>
+()
+{
+    ensure(empty_point_->isDimensionStrict(geos::geom::Dimension::P));
+    ensure(!empty_point_->isDimensionStrict(geos::geom::Dimension::A));
+}
+
+// test isDimensionStrict for non-empty Point
+template<>
+template<>
+void object::test<43>
+()
+{
+    ensure(point_->isDimensionStrict(geos::geom::Dimension::P));
+    ensure(!point_->isDimensionStrict(geos::geom::Dimension::A));
+}
+
 } // namespace tut
 

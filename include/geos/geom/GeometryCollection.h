@@ -107,7 +107,7 @@ public:
      */
     Dimension::DimensionType getDimension() const override;
 
-    bool isMixedDimension() const override;
+    virtual bool isDimensionStrict(Dimension::DimensionType d) const;
 
     /// Returns coordinate dimension.
     int getCoordinateDimension() const override;

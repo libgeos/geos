@@ -129,13 +129,11 @@ GeometryCollection::getDimension() const
 }
 
 bool
-GeometryCollection::isMixedDimension() const
-{
-    for (size_t i = 1; i < geometries->size(); i++) {
-        if ((*geometries)[i]->getDimension() != (*geometries)[0]->getDimension())
-            return true;
-    }
-    return false;
+GeometryCollection::isDimensionStrict(Dimension::DimensionType d) const {
+    return std::all_of(geometries->begin(), geometries->end(),
+            [&d](const Geometry* g) {
+                return g->getDimension() == d;
+            });
 }
 
 int

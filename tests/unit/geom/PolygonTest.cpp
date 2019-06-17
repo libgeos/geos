@@ -603,4 +603,24 @@ void object::test<40>
     ensure(g->getCoordinate() == nullptr);
 }
 
+// test isDimensionStrict for empty Polygon
+template<>
+template<>
+void object::test<41>
+()
+{
+    ensure(empty_poly_->isDimensionStrict(geos::geom::Dimension::A));
+    ensure(!empty_poly_->isDimensionStrict(geos::geom::Dimension::L));
+}
+
+// test isDimensionStrict for non-empty Polygon
+template<>
+template<>
+void object::test<42>
+()
+{
+    ensure(poly_->isDimensionStrict(geos::geom::Dimension::A));
+    ensure(!poly_->isDimensionStrict(geos::geom::Dimension::L));
+}
+
 } // namespace tut
