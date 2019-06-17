@@ -109,7 +109,7 @@ void object::test<1>
     for(char const * const* p = polygons; *p != nullptr; ++p) {
         std::string wkt(*p);
         geos::geom::Polygon* geom =
-            dynamic_cast<geos::geom::Polygon*>(wktreader.read(wkt));
+            dynamic_cast<geos::geom::Polygon*>(wktreader.read(wkt).release());
         g.push_back(geom);
     }
 

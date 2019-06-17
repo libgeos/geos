@@ -85,7 +85,7 @@ void object::test<1>
     using std::vector;
 
     std::string wkt("POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))");
-    g.reset(wktreader.read(wkt));
+    g = wktreader.read(wkt);
 
     double dist = 10;
     OffsetPointGenerator gen(*g, dist);
@@ -110,7 +110,7 @@ void object::test<2>
     using std::vector;
 
     std::string wkt("POLYGON((0 0, 10 0, 10 5, 10 10, 0 10, 0 0))");
-    g.reset(wktreader.read(wkt));
+    g = wktreader.read(wkt);
 
     double dist = 0.0003;
 
@@ -135,7 +135,7 @@ void object::test<3>
     using std::vector;
 
     std::string wkt("POINT(10 -10)");
-    g.reset(wktreader.read(wkt));
+    g = wktreader.read(wkt);
 
     double dist = 0.0003;
 
@@ -160,7 +160,7 @@ void object::test<4>
     using std::vector;
 
     std::string wkt("LINESTRING(10 -10, 5 600)");
-    g.reset(wktreader.read(wkt));
+    g = wktreader.read(wkt);
 
     double dist = 0.03;
 
@@ -185,7 +185,7 @@ void object::test<5>
     using std::vector;
 
     std::string wkt("MULTILINESTRING((10 -10, 5 600), (1045 -12, 0 0, -435 34))");
-    g.reset(wktreader.read(wkt));
+    g = wktreader.read(wkt);
 
     double dist = 0.2;
 

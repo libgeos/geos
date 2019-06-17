@@ -55,14 +55,14 @@ struct test_minimumboundingcircle_data {
                                 geos::geom::Coordinate& centreOut, double radiusOut)
     {
 
-        geom.reset(reader.read(wktIn));
+        geom = reader.read(wktIn);
         MinimumBoundingCircle mbc(geom.get());
         std::vector<Coordinate> exPts = mbc.getExtremalPoints();
         std::unique_ptr<Geometry> actual(geomFact->createMultiPoint(exPts));
         double actualRadius = mbc.getRadius();
         geos::geom::Coordinate actualCentre = mbc.getCentre();
 
-        geomOut.reset(reader.read(wktOut));
+        geomOut = reader.read(wktOut);
         bool isEqual = actual->equals(geomOut.get());
 
         // need this hack because apparently equals does not work for MULTIPOINT EMPTY

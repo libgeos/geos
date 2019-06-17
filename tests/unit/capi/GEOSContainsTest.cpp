@@ -141,9 +141,9 @@ void object::test<4>
         geos::io::WKBReader reader(*factory);
 
         std::istringstream sOuter(outer);
-        geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sOuter));
+        geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sOuter).release());
         std::istringstream sInner(inner);
-        geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sInner));
+        geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sInner).release());
         ensure(nullptr != geom1_);
         ensure(nullptr != geom2_);
 
@@ -162,9 +162,9 @@ void object::test<4>
         geos::io::WKBReader reader(*factory);
 
         std::istringstream sOuter(outer);
-        geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sOuter));
+        geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sOuter).release());
         std::istringstream sInner(inner);
-        geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sInner));
+        geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sInner).release());
         ensure(nullptr != geom1_);
         ensure(nullptr != geom2_);
 
@@ -199,9 +199,9 @@ void object::test<5>
         geos::io::WKBReader reader(*factory);
 
         std::istringstream sOuter(outer);
-        geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sOuter));
+        geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sOuter).release());
         std::istringstream sInner(inner);
-        geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sInner));
+        geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sInner).release());
         ensure(nullptr != geom1_);
         ensure(nullptr != geom2_);
 
@@ -221,9 +221,9 @@ void object::test<5>
         geos::io::WKBReader reader(*factory);
 
         std::istringstream sOuter(outer);
-        geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sOuter));
+        geom1_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sOuter).release());
         std::istringstream sInner(inner);
-        geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sInner));
+        geom2_ = reinterpret_cast<GEOSGeometry*>(reader.readHEX(sInner).release());
         ensure(nullptr != geom1_);
         ensure(nullptr != geom2_);
 

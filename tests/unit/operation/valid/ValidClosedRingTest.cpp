@@ -53,7 +53,7 @@ struct test_validclosedring_data {
     {
         GeomPtr geom;
         try {
-            geom.reset(rdr.read(wkt));
+            geom = rdr.read(wkt);
         }
         catch(const GEOSException& ex) {
             cerr << ex.what() << endl;

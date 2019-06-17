@@ -59,15 +59,12 @@ using namespace geos::geom;
 namespace geos {
 namespace io { // geos.io
 
-Geometry*
+std::unique_ptr<Geometry>
 WKTReader::read(const string& wellKnownText)
 {
-    //unique_ptr<StringTokenizer> tokenizer(new StringTokenizer(wellKnownText));
     CLocalizer clocale;
     StringTokenizer tokenizer(wellKnownText);
-    Geometry* g = nullptr;
-    g = readGeometryTaggedText(&tokenizer);
-    return g;
+    return readGeometryTaggedText(&tokenizer);
 }
 
 std::unique_ptr<CoordinateSequence>
@@ -77,7 +74,6 @@ WKTReader::getCoordinates(StringTokenizer* tokenizer)
     string nextToken = getNextEmptyOrOpener(tokenizer);
     if(nextToken == "EMPTY") {
         return geometryFactory->getCoordinateSequenceFactory()->create();
-        //new CoordinateArraySequence();
     }
 
     Coordinate coord;
@@ -219,76 +215,76 @@ WKTReader::getNextWord(StringTokenizer* tokenizer)
     return "";
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 WKTReader::readGeometryTaggedText(StringTokenizer* tokenizer)
 {
     string type = getNextWord(tokenizer);
     if(type == "POINT") {
-        return readPointText(tokenizer);
+        return std::unique_ptr<Geometry>(readPointText(tokenizer).release());
     }
     else if(type == "LINESTRING") {
-        return readLineStringText(tokenizer);
+        return std::unique_ptr<Geometry>(readLineStringText(tokenizer));
     }
     else if(type == "LINEARRING") {
-        return readLinearRingText(tokenizer);
+        return std::unique_ptr<Geometry>(readLinearRingText(tokenizer));
     }
     else if(type == "POLYGON") {
-        return readPolygonText(tokenizer);
+        return std::unique_ptr<Geometry>(readPolygonText(tokenizer));
     }
     else if(type == "MULTIPOINT") {
-        return readMultiPointText(tokenizer);
+        return std::unique_ptr<Geometry>(readMultiPointText(tokenizer));
     }
     else if(type == "MULTILINESTRING") {
-        return readMultiLineStringText(tokenizer);
+        return std::unique_ptr<Geometry>(readMultiLineStringText(tokenizer));
     }
     else if(type == "MULTIPOLYGON") {
-        return readMultiPolygonText(tokenizer);
+        return std::unique_ptr<Geometry>(readMultiPolygonText(tokenizer));
     }
     else if(type == "GEOMETRYCOLLECTION") {
-        return readGeometryCollectionText(tokenizer);
+        return std::unique_ptr<Geometry>(readGeometryCollectionText(tokenizer));
     }
     throw  ParseException("Unknown type", type);
 }
 
-Point*
+std::unique_ptr<Point>
 WKTReader::readPointText(StringTokenizer* tokenizer)
 {
     size_t dim;
     string nextToken = getNextEmptyOrOpener(tokenizer);
     if(nextToken == "EMPTY") {
-        return geometryFactory->createPoint(Coordinate::getNull());
+        return std::unique_ptr<Point>(geometryFactory->createPoint(Coordinate::getNull()));
     }
 
     Coordinate coord;
     getPreciseCoordinate(tokenizer, coord, dim);
     getNextCloser(tokenizer);
 
-    return geometryFactory->createPoint(coord);
+    return std::unique_ptr<Point>(geometryFactory->createPoint(coord));
 }
 
-LineString*
+std::unique_ptr<LineString>
 WKTReader::readLineStringText(StringTokenizer* tokenizer)
 {
     auto coords = getCoordinates(tokenizer);
     LineString* ret = geometryFactory->createLineString(coords.release());
-    return ret;
+    return std::unique_ptr<LineString>(ret);
 }
 
-LinearRing*
+std::unique_ptr<LinearRing>
 WKTReader::readLinearRingText(StringTokenizer* tokenizer)
 {
     auto coords = getCoordinates(tokenizer);
     LinearRing* ret;
     ret = geometryFactory->createLinearRing(coords.release());
-    return ret;
+    return std::unique_ptr<LinearRing>(ret);
 }
 
-MultiPoint*
+std::unique_ptr<MultiPoint>
 WKTReader::readMultiPointText(StringTokenizer* tokenizer)
 {
     string nextToken = getNextEmptyOrOpener(tokenizer);
     if(nextToken == "EMPTY") {
-        return geometryFactory->createMultiPoint();
+        return std::unique_ptr<MultiPoint>(geometryFactory->createMultiPoint());
     }
 
     int tok = tokenizer->peekNextToken();
@@ -307,8 +303,7 @@ WKTReader::readMultiPointText(StringTokenizer* tokenizer)
         }
         while(nextToken == ",");
 
-        MultiPoint* ret = geometryFactory->createMultiPoint(*coords);
-        return ret;
+        return std::unique_ptr<MultiPoint>(geometryFactory->createMultiPoint(*coords));
     }
 
     else if(tok == '(') {
@@ -316,12 +311,12 @@ WKTReader::readMultiPointText(StringTokenizer* tokenizer)
         vector<Geometry*>* points = new vector<Geometry*>();
         try {
             do {
-                Point* point = readPointText(tokenizer);
-                points->push_back(point);
+                auto point = readPointText(tokenizer);
+                points->push_back(point.release());
                 nextToken = getNextCloserOrComma(tokenizer);
             }
             while(nextToken == ",");
-            return geometryFactory->createMultiPoint(points);
+            return std::unique_ptr<MultiPoint>(geometryFactory->createMultiPoint(points));
         }
         catch(...) {
             // clean up
@@ -365,58 +360,52 @@ WKTReader::readMultiPointText(StringTokenizer* tokenizer)
     }
 }
 
-Polygon*
+std::unique_ptr<Polygon>
 WKTReader::readPolygonText(StringTokenizer* tokenizer)
 {
     Polygon* poly = nullptr;
-    LinearRing* shell = nullptr;
     string nextToken = getNextEmptyOrOpener(tokenizer);
     if(nextToken == "EMPTY") {
-        return geometryFactory->createPolygon(nullptr, nullptr);
+        return std::unique_ptr<Polygon>(geometryFactory->createPolygon(nullptr, nullptr));
     }
 
     vector<LinearRing*>* holes = new vector<LinearRing*>();
     try {
-        shell = readLinearRingText(tokenizer);
+        auto shell = readLinearRingText(tokenizer);
         nextToken = getNextCloserOrComma(tokenizer);
         while(nextToken == ",") {
-            LinearRing* hole = readLinearRingText(tokenizer);
-            holes->push_back(hole);
+            auto hole = readLinearRingText(tokenizer);
+            holes->push_back(hole.release());
             nextToken = getNextCloserOrComma(tokenizer);
         }
-        poly = geometryFactory->createPolygon(shell, holes);
+        poly = geometryFactory->createPolygon(shell.get(), holes);
+        shell.release(); // release separately because Polygon constructor may throw
     }
     catch(...) {
         for(unsigned int i = 0; i < holes->size(); i++) {
             delete(*holes)[i];
         }
         delete holes;
-        delete shell;
         throw;
     }
-    return poly;
+    return std::unique_ptr<Polygon>(poly);
 }
 
-MultiLineString*
+std::unique_ptr<MultiLineString>
 WKTReader::readMultiLineStringText(StringTokenizer* tokenizer)
 {
     string nextToken = getNextEmptyOrOpener(tokenizer);
     if(nextToken == "EMPTY") {
-        return geometryFactory->createMultiLineString(nullptr);
+        return std::unique_ptr<MultiLineString>(geometryFactory->createMultiLineString(nullptr));
     }
     vector<Geometry*>* lineStrings = new vector<Geometry*>();
-    LineString* lineString = nullptr;
+    std::unique_ptr<LineString> lineString;
     try {
-        lineString = readLineStringText(tokenizer);
-        lineStrings->push_back(lineString);
-        lineString = nullptr;
-        nextToken = getNextCloserOrComma(tokenizer);
-        while(nextToken == ",") {
+        do {
             lineString = readLineStringText(tokenizer);
-            lineStrings->push_back(lineString);
-            lineString = nullptr;
+            lineStrings->push_back(lineString.release());
             nextToken = getNextCloserOrComma(tokenizer);
-        }
+        } while (nextToken == ",");
     }
     catch(...) {
         for(size_t i = 0; i < lineStrings->size(); i++) {
@@ -426,31 +415,24 @@ WKTReader::readMultiLineStringText(StringTokenizer* tokenizer)
         throw;
     }
     MultiLineString* ret = geometryFactory->createMultiLineString(lineStrings);
-    //for (int i=0; i<lineStrings->size(); i++) delete (*lineStrings)[i];
-    //delete lineStrings;
-    return ret;
+    return std::unique_ptr<MultiLineString>(ret);
 }
 
-MultiPolygon*
+std::unique_ptr<MultiPolygon>
 WKTReader::readMultiPolygonText(StringTokenizer* tokenizer)
 {
     string nextToken = getNextEmptyOrOpener(tokenizer);
     if(nextToken == "EMPTY") {
-        return geometryFactory->createMultiPolygon(nullptr);
+        return std::unique_ptr<MultiPolygon>(geometryFactory->createMultiPolygon(nullptr));
     }
     vector<Geometry*>* polygons = new vector<Geometry*>();
-    Polygon* polygon = nullptr;
+    std::unique_ptr<Polygon> polygon;
     try {
-        polygon = readPolygonText(tokenizer);
-        polygons->push_back(polygon);
-        polygon = nullptr;
-        nextToken = getNextCloserOrComma(tokenizer);
-        while(nextToken == ",") {
+        do {
             polygon = readPolygonText(tokenizer);
-            polygons->push_back(polygon);
-            polygon = nullptr;
+            polygons->push_back(polygon.release());
             nextToken = getNextCloserOrComma(tokenizer);
-        }
+        } while(nextToken == ",");
     }
     catch(...) {
         for(size_t i = 0; i < polygons->size(); i++) {
@@ -460,31 +442,24 @@ WKTReader::readMultiPolygonText(StringTokenizer* tokenizer)
         throw;
     }
     MultiPolygon* ret = geometryFactory->createMultiPolygon(polygons);
-    //for (int i=0; i<polygons->size(); i++) delete (*polygons)[i];
-    //delete polygons;
-    return ret;
+    return std::unique_ptr<MultiPolygon>(ret);
 }
 
-GeometryCollection*
+std::unique_ptr<GeometryCollection>
 WKTReader::readGeometryCollectionText(StringTokenizer* tokenizer)
 {
     string nextToken = getNextEmptyOrOpener(tokenizer);
     if(nextToken == "EMPTY") {
-        return geometryFactory->createGeometryCollection(nullptr);
+        return std::unique_ptr<GeometryCollection>(geometryFactory->createGeometryCollection(nullptr));
     }
     vector<Geometry*>* geoms = new vector<Geometry*>();
-    Geometry* geom = nullptr;
+    std::unique_ptr<Geometry> geom;
     try {
-        geom = readGeometryTaggedText(tokenizer);
-        geoms->push_back(geom);
-        geom = nullptr;
-        nextToken = getNextCloserOrComma(tokenizer);
-        while(nextToken == ",") {
+        do {
             geom = readGeometryTaggedText(tokenizer);
-            geoms->push_back(geom);
-            geom = nullptr;
+            geoms->push_back(geom.release());
             nextToken = getNextCloserOrComma(tokenizer);
-        }
+        } while(nextToken == ",");
     }
     catch(...) {
         for(size_t i = 0; i < geoms->size(); i++) {
@@ -494,9 +469,7 @@ WKTReader::readGeometryCollectionText(StringTokenizer* tokenizer)
         throw;
     }
     GeometryCollection* ret = geometryFactory->createGeometryCollection(geoms);
-    //for (int i=0; i<geoms->size(); i++) delete (*geoms)[i];
-    //delete geoms;
-    return ret;
+    return std::unique_ptr<GeometryCollection>(ret);
 }
 
 } // namespace geos.io

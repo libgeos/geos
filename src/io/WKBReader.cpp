@@ -127,7 +127,7 @@ ASCIIHexToUChar(char val)
 
 // Must be an even number of characters in the istream.
 // Throws a ParseException if there are an odd number of characters.
-Geometry*
+std::unique_ptr<Geometry>
 WKBReader::readHEX(istream& is)
 {
     // setup input/output stream
@@ -164,14 +164,14 @@ WKBReader::readHEX(istream& is)
     return this->read(os);
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 WKBReader::read(istream& is)
 {
     dis.setInStream(&is); // will default to machine endian
     return readGeometry();
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 WKBReader::readGeometry()
 {
     // determine byte order
@@ -237,29 +237,29 @@ WKBReader::readGeometry()
         ordValues.resize(inputDimension);
     }
 
-    Geometry* result;
+    std::unique_ptr<Geometry> result;
 
     switch(geometryType) {
     case WKBConstants::wkbPoint :
-        result = readPoint();
+        result.reset(readPoint().release());
         break;
     case WKBConstants::wkbLineString :
-        result = readLineString();
+        result.reset(readLineString().release());
         break;
     case WKBConstants::wkbPolygon :
-        result = readPolygon();
+        result.reset(readPolygon().release());
         break;
     case WKBConstants::wkbMultiPoint :
-        result = readMultiPoint();
+        result.reset(readMultiPoint().release());
         break;
     case WKBConstants::wkbMultiLineString :
-        result = readMultiLineString();
+        result.reset(readMultiLineString().release());
         break;
     case WKBConstants::wkbMultiPolygon :
-        result = readMultiPolygon();
+        result.reset(readMultiPolygon().release());
         break;
     case WKBConstants::wkbGeometryCollection :
-        result = readGeometryCollection();
+        result.reset(readGeometryCollection().release());
         break;
     default:
         stringstream err;
@@ -271,19 +271,19 @@ WKBReader::readGeometry()
     return result;
 }
 
-Point*
+std::unique_ptr<Point>
 WKBReader::readPoint()
 {
     readCoordinate();
     if(inputDimension == 3) {
-        return factory.createPoint(Coordinate(ordValues[0], ordValues[1], ordValues[2]));
+        return std::unique_ptr<Point>(factory.createPoint(Coordinate(ordValues[0], ordValues[1], ordValues[2])));
     }
     else {
-        return factory.createPoint(Coordinate(ordValues[0], ordValues[1]));
+        return std::unique_ptr<Point>(factory.createPoint(Coordinate(ordValues[0], ordValues[1])));
     }
 }
 
-LineString*
+std::unique_ptr<LineString>
 WKBReader::readLineString()
 {
     int size = dis.readInt();
@@ -291,10 +291,10 @@ WKBReader::readLineString()
     cout << "WKB npoints: " << size << endl;
 #endif
     auto pts = readCoordinateSequence(size);
-    return factory.createLineString(pts.release());
+    return std::unique_ptr<LineString>(factory.createLineString(pts.release()));
 }
 
-LinearRing*
+std::unique_ptr<LinearRing>
 WKBReader::readLinearRing()
 {
     int size = dis.readInt();
@@ -302,10 +302,10 @@ WKBReader::readLinearRing()
     cout << "WKB npoints: " << size << endl;
 #endif
     auto pts = readCoordinateSequence(size);
-    return factory.createLinearRing(pts.release());
+    return std::unique_ptr<LinearRing>(factory.createLinearRing(pts.release()));
 }
 
-Polygon*
+std::unique_ptr<Polygon>
 WKBReader::readPolygon()
 {
     int numRings = dis.readInt();
@@ -314,7 +314,7 @@ WKBReader::readPolygon()
     cout << "WKB numRings: " << numRings << endl;
 #endif
 
-    LinearRing* shell = nullptr;
+    std::unique_ptr<LinearRing> shell;
     if(numRings > 0) {
         shell = readLinearRing();
     }
@@ -324,7 +324,7 @@ WKBReader::readPolygon()
         try {
             holes = new vector<LinearRing*>(numRings - 1);
             for(int i = 0; i < numRings - 1; i++) {
-                (*holes)[i] = readLinearRing();
+                (*holes)[i] = readLinearRing().release();
             }
         }
         catch(...) {
@@ -332,14 +332,13 @@ WKBReader::readPolygon()
                 delete(*holes)[i];
             }
             delete holes;
-            delete shell;
             throw;
         }
     }
-    return factory.createPolygon(shell, holes);
+    return std::unique_ptr<Polygon>(factory.createPolygon(shell.release(), holes));
 }
 
-MultiPoint*
+std::unique_ptr<MultiPoint>
 WKBReader::readMultiPoint()
 {
     int numGeoms = dis.readInt();
@@ -347,13 +346,13 @@ WKBReader::readMultiPoint()
 
     try {
         for(int i = 0; i < numGeoms; i++) {
-            Geometry* g = readGeometry();
-            if(!dynamic_cast<Point*>(g)) {
+            auto g = readGeometry();
+            if(!dynamic_cast<Point*>(g.get())) {
                 stringstream err;
                 err << BAD_GEOM_TYPE_MSG << " MultiPoint";
                 throw ParseException(err.str());
             }
-            (*geoms)[i] = g;
+            (*geoms)[i] = g.release();
         }
     }
     catch(...) {
@@ -363,10 +362,10 @@ WKBReader::readMultiPoint()
         delete geoms;
         throw;
     }
-    return factory.createMultiPoint(geoms);
+    return std::unique_ptr<MultiPoint>(factory.createMultiPoint(geoms));
 }
 
-MultiLineString*
+std::unique_ptr<MultiLineString>
 WKBReader::readMultiLineString()
 {
     int numGeoms = dis.readInt();
@@ -374,13 +373,13 @@ WKBReader::readMultiLineString()
 
     try {
         for(int i = 0; i < numGeoms; i++) {
-            Geometry* g = readGeometry();
-            if(!dynamic_cast<LineString*>(g)) {
+            auto g = readGeometry();
+            if(!dynamic_cast<LineString*>(g.get())) {
                 stringstream err;
                 err << BAD_GEOM_TYPE_MSG << " LineString";
                 throw  ParseException(err.str());
             }
-            (*geoms)[i] = g;
+            (*geoms)[i] = g.release();
         }
     }
     catch(...) {
@@ -390,10 +389,10 @@ WKBReader::readMultiLineString()
         delete geoms;
         throw;
     }
-    return factory.createMultiLineString(geoms);
+    return std::unique_ptr<MultiLineString>(factory.createMultiLineString(geoms));
 }
 
-MultiPolygon*
+std::unique_ptr<MultiPolygon>
 WKBReader::readMultiPolygon()
 {
     int numGeoms = dis.readInt();
@@ -401,13 +400,13 @@ WKBReader::readMultiPolygon()
 
     try {
         for(int i = 0; i < numGeoms; i++) {
-            Geometry* g = readGeometry();
-            if(!dynamic_cast<Polygon*>(g)) {
+            auto g = readGeometry();
+            if(!dynamic_cast<Polygon*>(g.get())) {
                 stringstream err;
                 err << BAD_GEOM_TYPE_MSG << " Polygon";
                 throw  ParseException(err.str());
             }
-            (*geoms)[i] = g;
+            (*geoms)[i] = g.release();
         }
     }
     catch(...) {
@@ -417,10 +416,10 @@ WKBReader::readMultiPolygon()
         delete geoms;
         throw;
     }
-    return factory.createMultiPolygon(geoms);
+    return std::unique_ptr<MultiPolygon>(factory.createMultiPolygon(geoms));
 }
 
-GeometryCollection*
+std::unique_ptr<GeometryCollection>
 WKBReader::readGeometryCollection()
 {
     int numGeoms = dis.readInt();
@@ -428,7 +427,7 @@ WKBReader::readGeometryCollection()
 
     try {
         for(int i = 0; i < numGeoms; i++) {
-            (*geoms)[i] = (readGeometry());
+            (*geoms)[i] = readGeometry().release();
         }
     }
     catch(...) {
@@ -438,7 +437,7 @@ WKBReader::readGeometryCollection()
         delete geoms;
         throw;
     }
-    return factory.createGeometryCollection(geoms);
+    return std::unique_ptr<GeometryCollection>(factory.createGeometryCollection(geoms));
 }
 
 std::unique_ptr<CoordinateSequence>

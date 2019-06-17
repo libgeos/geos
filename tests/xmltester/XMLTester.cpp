@@ -592,7 +592,7 @@ XMLTester::parseGeometry(const std::string& in, const char* label)
     while(is.get(first_char) && std::isspace(first_char));
     is.unget();
 
-    geom::Geometry* ret;
+    std::unique_ptr<geom::Geometry> ret;
 
     switch(first_char) {
     case '0':
@@ -619,12 +619,12 @@ XMLTester::parseGeometry(const std::string& in, const char* label)
     }
 
     if(testValidInput) {
-        testValid(ret, std::string(label));
+        testValid(ret.get(), std::string(label));
     }
 
     //ret->normalize();
 
-    return ret;
+    return ret.release();
 }
 
 std::string

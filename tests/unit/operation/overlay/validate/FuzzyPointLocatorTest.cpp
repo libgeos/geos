@@ -36,7 +36,7 @@ struct test_fuzzypointlocator_data {
         wkbreader()
     {
         std::string wkt("POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))");
-        g.reset(wktreader.read(wkt));
+        g = wktreader.read(wkt);
     }
 };
 

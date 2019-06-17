@@ -760,10 +760,10 @@ void object::test<20>
     ensure(exterior->getLength() != 0.0);
 
     // Create collection of holes
-    GeometryPtr geo = reader_.read(("LINEARRING(7 7, 12 7, 12 12, 7 12, 7 7)"));
+    auto geo = reader_.read(("LINEARRING(7 7, 12 7, 12 12, 7 12, 7 7)"));
     ensure(geo != nullptr);
 
-    LinearRingPtr hole = dynamic_cast<LinearRingPtr>(geo);
+    LinearRingPtr hole = dynamic_cast<LinearRingPtr>(geo.release());
     ensure(hole != nullptr);
     ensure(hole->isRing());
     ensure_equals(hole->getNumPoints(), interiorSize);
