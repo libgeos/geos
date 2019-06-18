@@ -245,7 +245,7 @@ MinimumBoundingCircle::computeCirclePoints()
         return;
     }
     // never get here
-    util::GEOSException("Logic failure in MinimumBoundingCircle algorithm!");
+    throw util::GEOSException("Logic failure in MinimumBoundingCircle algorithm!");
 }
 
 /*private*/
