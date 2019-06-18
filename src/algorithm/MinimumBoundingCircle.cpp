@@ -149,8 +149,7 @@ MinimumBoundingCircle::computeCentre()
         break;
     }
     default: {
-        util::GEOSException("Logic failure in MinimumBoundingCircle algorithm!");
-        \
+        throw util::GEOSException("Logic failure in MinimumBoundingCircle algorithm!");
     }
     }
 }
