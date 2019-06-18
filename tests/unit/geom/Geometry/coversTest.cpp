@@ -94,9 +94,7 @@ void object::test<3>
     ensure(g2->coveredBy(g1.get()));
     ensure(! g1->contains(g2.get()));
 
-    g2.reset(reader.read(
-                 "POINT(0 2)"
-             ));
+    g2 = reader.read("POINT(0 2)");
 
     ensure(g1->covers(g2.get()));
     ensure(g2->coveredBy(g1.get()));

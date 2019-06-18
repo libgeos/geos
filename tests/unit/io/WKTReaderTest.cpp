@@ -125,7 +125,7 @@ void object::test<6>
     GeomPtr geom;
 
     try {
-        geom.reset(wktreader.read("POLYGON( EMPTY, (1 1,2 2,1 2,1 1))"));
+        geom = wktreader.read("POLYGON( EMPTY, (1 1,2 2,1 2,1 1))");
         fail("Didn't get expected exception");
     }
     catch(const geos::util::IllegalArgumentException& ex) {
@@ -153,7 +153,7 @@ void object::test<7>
         ggm::GeometryFactory::Ptr p_gf = ggm::GeometryFactory::create(&p_pm);
         gio::WKTReader wktReader(p_gf.get());
         const std::string str = " POINT (0 0) ";
-        geom.reset(wktReader.read(str)); //HERE IT FAILS
+        geom = wktReader.read(str); //HERE IT FAILS
 
         auto coords = geom->getCoordinates();
         ensure_equals(coords->getDimension(), 2U);

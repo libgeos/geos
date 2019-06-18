@@ -26,8 +26,8 @@
 #include <geos/io/ByteOrderDataInStream.h> // for composition
 
 #include <iosfwd> // ostream, istream
+#include <memory>
 #include <vector>
-#include <string>
 
 #define BAD_GEOM_TYPE_MSG "Bad geometry type encountered in"
 
@@ -93,8 +93,7 @@ public:
      * @throws IOException
      * @throws ParseException
      */
-    geom::Geometry* read(std::istream& is);
-    // throws IOException, ParseException
+    std::unique_ptr<geom::Geometry> read(std::istream& is);
 
     /**
      * \brief Reads a Geometry from an istream in hex format.
@@ -104,8 +103,7 @@ public:
      * @throws IOException
      * @throws ParseException
      */
-    geom::Geometry* readHEX(std::istream& is);
-    // throws IOException, ParseException
+    std::unique_ptr<geom::Geometry> readHEX(std::istream& is);
 
     /**
      * \brief Print WKB in HEX form to out stream
@@ -126,32 +124,23 @@ private:
 
     std::vector<double> ordValues;
 
-    geom::Geometry* readGeometry();
-    // throws IOException, ParseException
+    std::unique_ptr<geom::Geometry> readGeometry();
 
-    geom::Point* readPoint();
-    // throws IOException
+    std::unique_ptr<geom::Point> readPoint();
 
-    geom::LineString* readLineString();
-    // throws IOException
+    std::unique_ptr<geom::LineString> readLineString();
 
-    geom::LinearRing* readLinearRing();
-    // throws IOException
+    std::unique_ptr<geom::LinearRing> readLinearRing();
 
-    geom::Polygon* readPolygon();
-    // throws IOException
+    std::unique_ptr<geom::Polygon> readPolygon();
 
-    geom::MultiPoint* readMultiPoint();
-    // throws IOException, ParseException
+    std::unique_ptr<geom::MultiPoint> readMultiPoint();
 
-    geom::MultiLineString* readMultiLineString();
-    // throws IOException, ParseException
+    std::unique_ptr<geom::MultiLineString> readMultiLineString();
 
-    geom::MultiPolygon* readMultiPolygon();
-    // throws IOException, ParseException
+    std::unique_ptr<geom::MultiPolygon> readMultiPolygon();
 
-    geom::GeometryCollection* readGeometryCollection();
-    // throws IOException, ParseException
+    std::unique_ptr<geom::GeometryCollection> readGeometryCollection();
 
     std::unique_ptr<geom::CoordinateSequence> readCoordinateSequence(int); // throws IOException
 

@@ -53,7 +53,7 @@ struct test_linearring_data {
     {
         // Create non-empty LinearRing
         GeometryPtr geo = nullptr;
-        geo = reader_.read("LINEARRING(0 10, 5 5, 10 5, 15 10, 10 15, 5 15, 0 10)");
+        geo = reader_.read("LINEARRING(0 10, 5 5, 10 5, 15 10, 10 15, 5 15, 0 10)").release();
         ring_ = dynamic_cast<LinearRingPtr>(geo);
     }
 
@@ -396,12 +396,8 @@ void object::test<28>
 ()
 {
     try {
-        GeometryPtr geo = reader_.read("LINEARRING(0 0, 5 5, 10 10)");
+        auto geo = reader_.read("LINEARRING(0 0, 5 5, 10 10)");
         ensure(geo != nullptr);
-
-        // FREE TESTED LINEARRING
-        factory_->destroyGeometry(geo);
-
         fail("IllegalArgumentException expected.");
     }
     catch(geos::util::IllegalArgumentException const& e) {
@@ -410,7 +406,7 @@ void object::test<28>
     }
 }
 
-// TTest of exception thrown when constructing a self-intersecting LinearRing
+// Test of exception thrown when constructing a self-intersecting LinearRing
 template<>
 template<>
 void object::test<29>
@@ -418,16 +414,13 @@ void object::test<29>
 {
     try {
         // Construct LinearRing self-intersecting in point (5,5)
-        GeometryPtr geo = reader_.read("LINEARRING(0 0, 5 5, 10 10, 15 5, 5 5, 0 10)");
+        auto geo = reader_.read("LINEARRING(0 0, 5 5, 10 10, 15 5, 5 5, 0 10)");
         ensure(geo != nullptr);
 
-        LinearRingPtr ring = dynamic_cast<LinearRingPtr>(geo);
+        LinearRingPtr ring = dynamic_cast<LinearRingPtr>(geo.get());
         ensure(ring != nullptr);
 
         ensure(!ring->isValid());
-
-        // FREE TESTED LINEARRING
-        factory_->destroyGeometry(geo);
 
         fail("IllegalArgumentException expected.");
     }

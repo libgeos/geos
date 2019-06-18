@@ -57,13 +57,11 @@ template<>
 void object::test<1>
 ()
 {
-    geos::geom::Geometry* geom = wktreader.read("POINT(-117 33)");
+    auto geom = wktreader.read("POINT(-117 33)");
     std::stringstream result_stream;
 
     wkbwriter.setOutputDimension(3);
     wkbwriter.write(*geom, result_stream);
-    delete geom;
-    geom = nullptr;
 
     ensure(result_stream.str().length() == 21);
 
@@ -76,8 +74,6 @@ void object::test<1>
     ensure(geom->getCoordinate()->x == -117.0);
     ensure(geom->getCoordinate()->y == 33.0);
     ensure(std::isnan(geom->getCoordinate()->z) != 0);
-
-    delete geom;
 }
 
 // 2 - Test writing a 3D geometry with the WKBWriter in 3D output dimension.
@@ -86,13 +82,11 @@ template<>
 void object::test<2>
 ()
 {
-    geos::geom::Geometry* geom = wktreader.read("POINT(-117 33 11)");
+    auto geom = wktreader.read("POINT(-117 33 11)");
     std::stringstream result_stream;
 
     wkbwriter.setOutputDimension(3);
     wkbwriter.write(*geom, result_stream);
-    delete geom;
-    geom = nullptr;
 
     ensure(result_stream.str().length() == 29);
 
@@ -103,8 +97,6 @@ void object::test<2>
     ensure(geom->getCoordinate()->x == -117.0);
     ensure(geom->getCoordinate()->y == 33.0);
     ensure(geom->getCoordinate()->z == 11.0);
-
-    delete geom;
 }
 
 // 3 - Test writing a 3D geometry with the WKBWriter in 2D output dimension.
@@ -113,13 +105,11 @@ template<>
 void object::test<3>
 ()
 {
-    geos::geom::Geometry* geom = wktreader.read("POINT(-117 33 11)");
+    auto geom = wktreader.read("POINT(-117 33 11)");
     std::stringstream result_stream;
 
     wkbwriter.setOutputDimension(2);
     wkbwriter.write(*geom, result_stream);
-    delete geom;
-    geom = nullptr;
 
     ensure(result_stream.str().length() == 21);
 
@@ -130,8 +120,6 @@ void object::test<3>
     ensure(geom->getCoordinate()->x == -117.0);
     ensure(geom->getCoordinate()->y == 33.0);
     ensure(std::isnan(geom->getCoordinate()->z) != 0);
-
-    delete geom;
 }
 
 // 4 - Test that SRID is output only once
@@ -144,7 +132,7 @@ void object::test<4>
     typedef geos::geom::Geometry Geom;
     typedef std::vector<Geom*> GeomVect;
     GeomVect* geoms = new GeomVect;
-    geoms->push_back(wktreader.read("POLYGON((0 0,1 0,1 1,0 1,0 0))"));
+    geoms->push_back(wktreader.read("POLYGON((0 0,1 0,1 1,0 1,0 0))").release());
     geoms->back()->setSRID(4326);
     Geom* geom = gf->createGeometryCollection(geoms);
     geom->setSRID(4326);
@@ -169,7 +157,7 @@ template<>
 void object::test<5>
 ()
 {
-    geos::geom::Geometry* geom = wktreader.read("POLYGON EMPTY");
+    auto geom = wktreader.read("POLYGON EMPTY");
     geom->setSRID(4326);
     std::stringstream result_stream;
 
@@ -181,11 +169,8 @@ void object::test<5>
     std::string actual = result_stream.str();
     ensure_equals(actual, "0103000020E610000000000000");
 
-    geos::geom::Geometry* geom2 = wkbreader.readHEX(result_stream);
-    assert(geom->equals(geom2));
-
-    delete geom;
-    delete geom2;
+    auto geom2 = wkbreader.readHEX(result_stream);
+    assert(geom->equals(geom2.get()));
 }
 
 } // namespace tut

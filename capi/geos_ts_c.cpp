@@ -1324,8 +1324,8 @@ extern "C" {
             const std::string wktstring(wkt);
             WKTReader r(static_cast<GeometryFactory const*>(handle->geomFactory));
 
-            Geometry* g = r.read(wktstring);
-            return g;
+            auto g = r.read(wktstring);
+            return g.release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -1427,8 +1427,8 @@ extern "C" {
             std::istringstream is(std::ios_base::binary);
             is.str(wkbstring);
             is.seekg(0, std::ios::beg); // rewind reader pointer
-            Geometry* g = r.read(is);
-            return g;
+            auto g = r.read(is);
+            return g.release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -1501,8 +1501,8 @@ extern "C" {
             is.str(hexstring);
             is.seekg(0, std::ios::beg); // rewind reader pointer
 
-            Geometry* g = r.readHEX(is);
-            return g;
+            auto g = r.readHEX(is);
+            return g.release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -4638,8 +4638,7 @@ extern "C" {
 
         try {
             const std::string wktstring(wkt);
-            Geometry* g = reader->read(wktstring);
-            return g;
+            return reader->read(wktstring).release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -4950,8 +4949,7 @@ extern "C" {
             membuf mb((char*)wkb, size);
             istream is(&mb);
 
-            Geometry* g = reader->read(is);
-            return g;
+            return reader->read(is).release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());
@@ -4985,8 +4983,7 @@ extern "C" {
             is.str(hexstring);
             is.seekg(0, std::ios::beg); // rewind reader pointer
 
-            Geometry* g = reader->readHEX(is);
-            return g;
+            return reader->readHEX(is).release();
         }
         catch(const std::exception& e) {
             handle->ERROR_MESSAGE("%s", e.what());

@@ -38,13 +38,11 @@ void object::test<1>
 ()
 {
     const std::string wkt("POLYGON ((0 0, 0 100, 100 100, 100 0, 0 0))");
-    geos::geom::Geometry* g = reader.read(wkt);
+    auto g = reader.read(wkt);
 
-    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
+    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g.get());
     ensure("Geometry is not a Polygon: " + wkt, poly != nullptr);
     ensure(poly->isRectangle());
-
-    delete g;
 }
 
 // 2 - Test of another valid rectangle
@@ -54,13 +52,11 @@ void object::test<2>
 ()
 {
     const std::string wkt("POLYGON ((0 0, 0 200, 100 200, 100 0, 0 0))");
-    geos::geom::Geometry* g = reader.read(wkt);
+    auto g = reader.read(wkt);
 
-    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
+    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g.get());
     ensure("Geometry is not a Polygon: " + wkt, poly != nullptr);
     ensure(poly->isRectangle());
-
-    delete g;
 }
 
 // 3 - Test of rectangle with hole
@@ -71,13 +67,11 @@ void object::test<3>
 {
     const std::string wkt("POLYGON ((0 0, 0 100, 100 100, 100 0, 0 0), \
                               (10 10, 10 90, 90 90, 90 10, 10 10) ))");
-    geos::geom::Geometry* g = reader.read(wkt);
+    auto g = reader.read(wkt);
 
-    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
+    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g.get());
     ensure("Geometry is not a Polygon: " + wkt, poly != nullptr);
     ensure(!poly->isRectangle());
-
-    delete g;
 }
 
 // 4 - Test of non-rectilinear rectangle
@@ -87,13 +81,11 @@ void object::test<4>
 ()
 {
     const std::string wkt("POLYGON ((0 0, 0 100, 99 100, 100 0, 0 0))");
-    geos::geom::Geometry* g = reader.read(wkt);
+    auto g = reader.read(wkt);
 
-    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
+    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g.get());
     ensure("Geometry is not a Polygon: " + wkt, poly != nullptr);
     ensure(!poly->isRectangle());
-
-    delete g;
 }
 
 // 5 - Test of rectangle with too many points
@@ -103,13 +95,11 @@ void object::test<5>
 ()
 {
     const std::string wkt("POLYGON ((0 0, 0 100, 100 50, 100 100, 100 0, 0 0))");
-    geos::geom::Geometry* g = reader.read(wkt);
+    auto g = reader.read(wkt);
 
-    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
+    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g.get());
     ensure("Geometry is not a Polygon: " + wkt, poly != nullptr);
     ensure(!poly->isRectangle());
-
-    delete g;
 }
 
 // 6 - Test of rectangle with too few points
@@ -119,13 +109,11 @@ void object::test<6>
 ()
 {
     const std::string wkt("POLYGON ((0 0, 0 100, 100 0, 0 0))");
-    geos::geom::Geometry* g = reader.read(wkt);
+    auto g = reader.read(wkt);
 
-    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
+    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g.get());
     ensure("Geometry is not a Polygon: " + wkt, poly != nullptr);
     ensure(!poly->isRectangle());
-
-    delete g;
 }
 
 // 7 - Test of rectangle with points in wrong order
@@ -135,13 +123,11 @@ void object::test<7>
 ()
 {
     const std::string wkt("POLYGON ((0 0, 0 100, 100 0, 100 100, 0 0))");
-    geos::geom::Geometry* g = reader.read(wkt);
+    auto g = reader.read(wkt);
 
-    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g);
+    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g.get());
     ensure("Geometry is not a Polygon: " + wkt, poly != nullptr);
     ensure(!poly->isRectangle());
-
-    delete g;
 }
 
 } // namespace tut

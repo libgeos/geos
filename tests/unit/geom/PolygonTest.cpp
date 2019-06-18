@@ -39,7 +39,7 @@ struct test_polygon_data {
     geos::io::WKTReader reader_;
 
     PolygonAutoPtr empty_poly_;
-    PolygonPtr poly_;
+    PolygonAutoPtr poly_;
     const size_t poly_size_;
 
     test_polygon_data()
@@ -48,16 +48,9 @@ struct test_polygon_data {
         , reader_(factory_.get())
         , empty_poly_(factory_->createPolygon()), poly_size_(7)
     {
-        // Create non-empty LinearRing
-        GeometryPtr geo = nullptr;
-        geo = reader_.read("POLYGON((0 10, 5 5, 10 5, 15 10, 10 15, 5 15, 0 10))");
-        poly_ = dynamic_cast<PolygonPtr>(geo);
-    }
-
-    ~test_polygon_data()
-    {
-        // FREE MEMORY
-        factory_->destroyGeometry(poly_);
+        // Create non-empty Polygon
+        auto geo = reader_.read("POLYGON((0 10, 5 5, 10 5, 15 10, 10 15, 5 15, 0 10))");
+        poly_.reset(dynamic_cast<PolygonPtr>(geo.release()));
     }
 
 private:
@@ -402,11 +395,9 @@ void object::test<27>
 {
     ensure(poly_ != nullptr);
 
-    GeometryPtr geo = poly_->clone().release();
+    auto geo = poly_->clone();
     ensure(geo != nullptr);
-    ensure(geo->equals(poly_));
-
-    factory_->destroyGeometry(geo);
+    ensure(geo->equals(poly_.get()));
 }
 
 // Test of getExteriorRing() for non-empty Polygon
@@ -441,12 +432,11 @@ void object::test<30>
 {
     const size_t holesNum = 1;
 
-    GeometryPtr geo = nullptr;
-    geo = reader_.read("POLYGON ((0 0, 100 0, 100 100, 0 100, 0 0), (1 1, 1 10, 10 10, 10 1, 1 1) )");
+    auto geo = reader_.read("POLYGON ((0 0, 100 0, 100 100, 0 100, 0 0), (1 1, 1 10, 10 10, 10 1, 1 1) )");
     ensure(geo != nullptr);
     ensure_equals(geo->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
 
-    PolygonPtr poly = dynamic_cast<PolygonPtr>(geo);
+    PolygonPtr poly = dynamic_cast<PolygonPtr>(geo.get());
     ensure(poly != nullptr);
     ensure_equals(poly->getNumInteriorRing(), holesNum);
 
@@ -455,11 +445,9 @@ void object::test<30>
     ensure(interior->isRing());
 
     ensure_equals(interior->getGeometryTypeId(), geos::geom::GEOS_LINEARRING);
-
-    factory_->destroyGeometry(geo);
 }
 
-// Test of getCoordiante() for non-empty Polygon
+// Test of getCoordinate() for non-empty Polygon
 template<>
 template<>
 void object::test<31>
@@ -474,7 +462,7 @@ void object::test<31>
     ensure_equals(coord->y, 10);
 }
 
-// Test of getCoordiantes() for non-empty Polygon
+// Test of getCoordinates() for non-empty Polygon
 template<>
 template<>
 void object::test<32>

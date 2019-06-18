@@ -467,8 +467,8 @@ void object::test<18>
 
     wkt0 = "LINESTRING(0 0, 0 1, 1 1, 1 0, 0 0)";
     wkt1 = "LINESTRING(2 0, 10 1, 10 10)";
-    g0.reset(wktreader.read(wkt0));
-    g1.reset(wktreader.read(wkt1));
+    g0 = wktreader.read(wkt0);
+    g1 = wktreader.read(wkt1);
 
     ensure_equals(DistanceOp::distance(*g0, *g1), 1);
     ensure(DistanceOp::isWithinDistance(*g0, *g1, 2));

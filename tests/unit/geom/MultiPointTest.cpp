@@ -40,9 +40,8 @@ struct test_multipoint_data {
         , empty_mp_(factory_->createMultiPoint()), mp_size_(5)
     {
         // Create non-empty MultiPoint
-        GeometryPtr geo = nullptr;
-        geo = reader_.read("MULTIPOINT(0 0, 5 5, 10 10, 15 15, 20 20)");
-        mp_ = dynamic_cast<MultiPointPtr>(geo);
+        auto geo = reader_.read("MULTIPOINT(0 0, 5 5, 10 10, 15 15, 20 20)");
+        mp_ = dynamic_cast<MultiPointPtr>(geo.release());
     }
 
     ~test_multipoint_data()
@@ -107,8 +106,8 @@ void object::test<3>
 ()
 {
     const size_t size0 = 0;
-    GeometryPtr geo = reader_.read("MULTIPOINT EMPTY");
-    MultiPointPtr mp = dynamic_cast<MultiPointPtr>(geo);
+    auto geo = reader_.read("MULTIPOINT EMPTY");
+    MultiPointPtr mp = dynamic_cast<MultiPointPtr>(geo.get());
 
     ensure(mp->isEmpty());
     ensure(mp->isSimple());
@@ -116,9 +115,6 @@ void object::test<3>
     ensure(mp->getCentroid() == nullptr);
     ensure_equals(mp->getNumPoints(), size0);
     ensure_equals(mp->getNumGeometries(), size0);
-
-    // FREE MEMORY
-    factory_->destroyGeometry(geo);
 }
 
 // Test of isEmpty() for empty MultiPoint
@@ -378,11 +374,8 @@ void object::test<28>
 ()
 {
     try {
-        GeometryPtr geo = reader_.read("MULTIPOINT(0 0, 5)");
+        auto geo = reader_.read("MULTIPOINT(0 0, 5)");
         ensure(geo != nullptr);
-
-        // FREE TESTED LINEARRING
-        factory_->destroyGeometry(geo);
 
         fail("ParseException expected.");
     }

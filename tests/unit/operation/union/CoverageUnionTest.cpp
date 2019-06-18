@@ -47,7 +47,7 @@ namespace tut {
         std::vector<Geometry*> geoms;
 
         for (const auto& wkt : wkt_geoms) {
-            geoms.push_back(reader.read(wkt));
+            geoms.push_back(reader.read(wkt).release());
         }
 
         std::unique_ptr<Geometry> coll(gfact->createGeometryCollection(geoms));
@@ -73,7 +73,7 @@ namespace tut {
         std::vector<Geometry*> geoms;
 
         for (const auto& wkt : wkt_geoms) {
-            geoms.push_back(reader.read(wkt));
+            geoms.push_back(reader.read(wkt).release());
         }
 
         std::unique_ptr<Geometry> coll(gfact->createGeometryCollection(geoms));

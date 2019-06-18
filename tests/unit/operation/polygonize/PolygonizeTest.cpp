@@ -85,8 +85,8 @@ struct test_polygonizetest_data {
             return false;
         }
         for(typename T::iterator i = ex.begin(), e = ex.end(); i != e; ++i) {
-            if(! contains(ob, *i)) {
-                cout << "Expected " << wktwriter.write(*i)
+            if(! contains(ob, i->get())) {
+                cout << "Expected " << wktwriter.write(i->get())
                      << " not found" << endl;
                 return false;
             }
@@ -102,7 +102,7 @@ struct test_polygonizetest_data {
         using std::cout;
         using std::endl;
 
-        std::vector<Geom*> inputGeoms, expectGeoms;
+        std::vector<std::unique_ptr<geos::geom::Geometry>> inputGeoms, expectGeoms;
 
         for (const auto& wkt : inputWKT) {
             inputGeoms.push_back(wktreader.read(wkt));
@@ -111,19 +111,19 @@ struct test_polygonizetest_data {
         for (const auto& wkt : expectWKT) {
             auto g = wktreader.read(wkt);
             g->normalize();
-            expectGeoms.push_back(g);
+            expectGeoms.push_back(std::move(g));
         }
 
         Polygonizer polygonizer(onlyPolygonal);
-        polygonizer.add(&inputGeoms);
+        for (const auto& p : inputGeoms) {
+            polygonizer.add(p.get());
+        }
 
         std::unique_ptr<std::vector<std::unique_ptr<Poly>> > retGeoms;
         retGeoms = polygonizer.getPolygons();
         for (const auto& g : *retGeoms) {
             g->normalize();
         }
-
-        delAll(inputGeoms);
 
         bool ok = compare(expectGeoms, *retGeoms);
         if(! ok) {
@@ -135,8 +135,6 @@ struct test_polygonizetest_data {
 
             ensure("not all expected geometries in the obtained set", 0);
         }
-
-        delAll(expectGeoms);
 
         return ok;
     }

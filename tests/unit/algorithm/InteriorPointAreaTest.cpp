@@ -66,7 +66,7 @@ void object::test<1>
 
     // invalid polygon - classic hourglass-shape with a self intersection
     // without a node
-    geom.reset(reader.read("POLYGON((6 54, 15 54, 6 47, 15 47, 6 54))"));
+    geom = reader.read("POLYGON((6 54, 15 54, 6 47, 15 47, 6 54))");
 
     InteriorPointArea interiorPointArea(geom.get());
     interiorPointArea.getInteriorPoint(result);

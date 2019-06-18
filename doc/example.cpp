@@ -160,7 +160,7 @@ WKBtest(vector<Geometry*>* geoms)
              " fail:" << s.fail() << endl;
 #endif
 
-        gout = wkbReader.read(s);
+        gout = wkbReader.read(s).release();
 
 #if DEBUG_STREAM_STATE
         cout << "State of stream after READ: ";
