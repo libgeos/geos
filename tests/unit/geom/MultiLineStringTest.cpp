@@ -20,8 +20,8 @@ struct test_multilinestring_data {
     geos::io::WKTReader reader_;
 
     test_multilinestring_data() {
-        empty_mls_.reset(reader_.read("MULTILINESTRING EMPTY"));
-        mls_.reset(reader_.read("MULTILINESTRING ((0 0, 1 1), (3 3, 4 4))"));
+        empty_mls_ = reader_.read("MULTILINESTRING EMPTY");
+        mls_ = reader_.read("MULTILINESTRING ((0 0, 1 1), (3 3, 4 4))");
     }
 };
 

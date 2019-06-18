@@ -19,9 +19,8 @@ struct test_multipolygon_data {
     std::unique_ptr<geos::geom::Geometry> mp_;
 
     test_multipolygon_data() {
-        empty_mp_.reset(reader_.read("MULTIPOLYGON EMPTY"));
-        mp_.reset(reader_.read("MULTIPOLYGON (((1 1, 2 1, 2 2, 1 1)))"));
-
+        empty_mp_ = reader_.read("MULTIPOLYGON EMPTY");
+        mp_ = reader_.read("MULTIPOLYGON (((1 1, 2 1, 2 2, 1 1)))");
     }
 };
 
