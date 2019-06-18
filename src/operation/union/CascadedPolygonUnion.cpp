@@ -241,7 +241,7 @@ CascadedPolygonUnion::unionOptimized(geom::Geometry* g0, geom::Geometry* g1)
     geom::Envelope const* g1Env = g1->getEnvelopeInternal();
 
     if(!g0Env->intersects(g1Env)) {
-        return geom::util::GeometryCombiner::combine(g0, g1);
+        return geom::util::GeometryCombiner::combine(g0, g1).release();
     }
 
     if(g0->getNumGeometries() <= 1 && g1->getNumGeometries() <= 1) {
@@ -318,13 +318,13 @@ CascadedPolygonUnion::unionUsingEnvelopeIntersection(geom::Geometry* g0,
     std::unique_ptr<geom::Geometry> ret;
     if(polysOn.empty()) {
         disjointPolys.push_back(u.get());
-        ret.reset(geom::util::GeometryCombiner::combine(disjointPolys));
+        ret = geom::util::GeometryCombiner::combine(disjointPolys);
     }
     else {
         // TODO: could be further tweaked to only union with polysOn
         //       and combine with polysOff, but then it'll need again to
         //       recurse in the check for disjoint/intersecting
-        ret.reset(geom::util::GeometryCombiner::combine(disjointPolys));
+        ret = geom::util::GeometryCombiner::combine(disjointPolys);
         ret.reset(unionActual(ret.get(), u.get()));
     }
 

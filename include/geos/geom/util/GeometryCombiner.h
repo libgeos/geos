@@ -19,6 +19,7 @@
 #ifndef GEOS_GEOM_UTIL_GEOMETRYCOMBINER_H
 #define GEOS_GEOM_UTIL_GEOMETRYCOMBINER_H
 
+#include <memory>
 #include <vector>
 
 // Forward declarations
@@ -52,7 +53,7 @@ public:
      * @param geoms the geometries to combine (ownership left to caller)
      * @return the combined geometry
      */
-    static Geometry* combine(std::vector<Geometry*> const& geoms);
+    static std::unique_ptr<Geometry> combine(std::vector<Geometry*> const& geoms);
 
     /**
      * Combines two geometries.
@@ -61,7 +62,7 @@ public:
      * @param g1 a geometry to combine (ownership left to caller)
      * @return the combined geometry
      */
-    static Geometry* combine(const Geometry* g0, const Geometry* g1);
+    static std::unique_ptr<Geometry> combine(const Geometry* g0, const Geometry* g1);
 
     /**
      * Combines three geometries.
@@ -71,7 +72,7 @@ public:
      * @param g2 a geometry to combine (ownership left to caller)
      * @return the combined geometry
      */
-    static Geometry* combine(const Geometry* g0, const Geometry* g1, const Geometry* g2);
+    static std::unique_ptr<Geometry> combine(const Geometry* g0, const Geometry* g1, const Geometry* g2);
 
 private:
     GeometryFactory const* geomFactory;
@@ -100,7 +101,7 @@ public:
      *
      * @return a Geometry which is the combination of the inputs
      */
-    Geometry* combine();
+    std::unique_ptr<Geometry> combine();
 
 private:
     void extractElements(Geometry* geom, std::vector<Geometry*>& elems);

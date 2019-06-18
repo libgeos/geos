@@ -87,7 +87,7 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
 
     // remove repeated points, to simplify returned geometry as
     // much as possible.
-    auto noRepeatedCoords = operation::valid::RepeatedPointRemover::removeRepeatedPoints(reducedCoords.get());
+    std::unique_ptr<CoordinateSequence> noRepeatedCoords = operation::valid::RepeatedPointRemover::removeRepeatedPoints(reducedCoords.get());
 
     /**
      * Check to see if the removal of repeated points
