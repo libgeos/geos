@@ -29,13 +29,13 @@ namespace geom { // geos::geom
 INLINE GeometryCollection::const_iterator
 GeometryCollection::begin() const
 {
-    return geometries->begin();
+    return geometries.begin();
 }
 
 INLINE GeometryCollection::const_iterator
 GeometryCollection::end() const
 {
-    return geometries->end();
+    return geometries.end();
 }
 
 

@@ -70,9 +70,9 @@ SimplePointInAreaLocator::locateInGeometry(const Coordinate& p, const Geometry* 
         return Location::EXTERIOR;
     }
     if(const GeometryCollection* col = dynamic_cast<const GeometryCollection*>(geom)) {
-        for(auto g2 : *col) {
-            assert(g2 != geom);
-            Location loc = locateInGeometry(p, g2);
+        for(auto& g2 : *col) {
+            assert(g2.get() != geom);
+            Location loc = locateInGeometry(p, g2.get());
             if(loc != Location::EXTERIOR) {
                 return loc;
             }

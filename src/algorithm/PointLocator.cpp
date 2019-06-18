@@ -94,13 +94,9 @@ PointLocator::computeLocation(const Coordinate& p, const Geometry* geom)
         }
     }
     else if(const GeometryCollection* col = dynamic_cast<const GeometryCollection*>(geom)) {
-        for(GeometryCollection::const_iterator
-                it = col->begin(), endIt = col->end();
-                it != endIt;
-                ++it) {
-            const Geometry* g2 = *it;
-            assert(g2 != geom); // is this check really needed ?
-            computeLocation(p, g2);
+        for(const auto & g2 : *col) {
+            assert(g2.get() != geom); // is this check really needed ?
+            computeLocation(p, g2.get());
         }
     }
 

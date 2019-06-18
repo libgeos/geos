@@ -96,8 +96,8 @@ static std::unique_ptr<geom::Geometry> MakeValidMultiLine(const geom::MultiLineS
     std::vector<std::unique_ptr<geom::Geometry>> points;
     std::vector<std::unique_ptr<geom::Geometry>> lines;
 
-    for(const auto subgeom: *mls) {
-        auto line = dynamic_cast<const geom::LineString*>(subgeom);
+    for(const auto& subgeom: *mls) {
+        auto line = dynamic_cast<const geom::LineString*>(subgeom.get());
         assert(line);
         auto validSubGeom = MakeValidLine(line);
         if( !validSubGeom || validSubGeom->isEmpty() ) {
@@ -111,7 +111,7 @@ static std::unique_ptr<geom::Geometry> MakeValidMultiLine(const geom::MultiLineS
             lines.emplace_back(std::move(validSubGeom));
         } else if( validLineType == GEOS_MULTILINESTRING ) {
             auto mlsValid = dynamic_cast<const geom::MultiLineString*>(validSubGeom.get());
-            for(const auto subgeomMlsValid: *mlsValid) {
+            for(const auto& subgeomMlsValid: *mlsValid) {
                 lines.emplace_back(subgeomMlsValid->clone());
             }
         } else {
@@ -290,9 +290,9 @@ static std::unique_ptr<geom::Geometry> MakeValidCollection(const geom::GeometryC
 {
     auto validGeoms = new std::vector<geom::Geometry*>();
     try {
-        for( auto geom: *coll )
+        for(const auto& geom: *coll )
         {
-            validGeoms->push_back(MakeValid().build(geom).release());
+            validGeoms->push_back(MakeValid().build(geom.get()).release());
         }
         return std::unique_ptr<geom::Geometry>(
             GeometryFactory::create()->createGeometryCollection(validGeoms));

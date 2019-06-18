@@ -893,6 +893,8 @@ protected:
 
     int compare(std::vector<Geometry*> a, std::vector<Geometry*> b) const;
 
+    int compare(const std::vector<std::unique_ptr<Geometry>> & a, const std::vector<std::unique_ptr<Geometry>> & b) const;
+
     bool equal(const Coordinate& a, const Coordinate& b,
                double tolerance) const;
     int SRID;
