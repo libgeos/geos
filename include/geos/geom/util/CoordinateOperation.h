@@ -45,8 +45,8 @@ public:
     /**
      * Return a newly created geometry, ownership to caller
      */
-    Geometry* edit(const Geometry* geometry,
-                   const GeometryFactory* factory) override;
+    std::unique_ptr<Geometry> edit(const Geometry* geometry,
+                                   const GeometryFactory* factory) override;
 
     /**
      * Edits the array of Coordinate from a Geometry.
@@ -56,11 +56,11 @@ public:
      * @return an edited coordinate array (which may be the same as
      *         the input)
      */
-    virtual CoordinateSequence* edit(const CoordinateSequence* coordinates,
-                                     const Geometry* geometry) = 0;
+    virtual std::unique_ptr<CoordinateSequence> edit(const CoordinateSequence* coordinates,
+                                                     const Geometry* geometry) = 0;
 
 
-    ~CoordinateOperation() override {}
+    ~CoordinateOperation() override = default;
 };
 
 

@@ -16,6 +16,7 @@
 #define GEOS_PRECISION_SIMPLEGEOMETRYPRECISIONREDUCER_H
 
 #include <geos/export.h>
+#include <memory>
 
 // Forward declarations
 namespace geos {
@@ -80,7 +81,7 @@ public:
     const geom::PrecisionModel* getPrecisionModel();
 
     bool getRemoveCollapsed();
-    geom::Geometry* reduce(const geom::Geometry* geom);
+    std::unique_ptr<geom::Geometry> reduce(const geom::Geometry* geom);
 };
 
 } // namespace geos.precision

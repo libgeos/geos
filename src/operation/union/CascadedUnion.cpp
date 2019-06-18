@@ -152,7 +152,7 @@ CascadedUnion::unionOptimized(geom::Geometry* g0, geom::Geometry* g1)
     geom::Envelope const* g1Env = g1->getEnvelopeInternal();
 
     if(!g0Env->intersects(g1Env)) {
-        return geom::util::GeometryCombiner::combine(g0, g1);
+        return geom::util::GeometryCombiner::combine(g0, g1).release();
     }
 
     if(g0->getNumGeometries() <= 1 && g1->getNumGeometries() <= 1) {
@@ -176,7 +176,7 @@ CascadedUnion::unionUsingEnvelopeIntersection(geom::Geometry* g0,
     std::unique_ptr<geom::Geometry> u(unionActual(g0Int.get(), g1Int.get()));
     disjointPolys.push_back(u.get());
 
-    return geom::util::GeometryCombiner::combine(disjointPolys);
+    return geom::util::GeometryCombiner::combine(disjointPolys).release();
 }
 
 geom::Geometry*

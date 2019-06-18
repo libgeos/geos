@@ -25,16 +25,16 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/operation/valid/RepeatedPointRemover.h>
+#include <geos/util.h>
 
 #include <vector>
 
 using namespace geos::geom;
-using namespace std;
 
 namespace geos {
 namespace precision { // geos.precision
 
-CoordinateSequence*
+std::unique_ptr<CoordinateSequence>
 PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
         const Geometry* geom)
 {
@@ -44,7 +44,7 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
         return nullptr;
     }
 
-    vector<Coordinate>* vc = new vector<Coordinate>(csSize);
+    auto vc = detail::make_unique<std::vector<Coordinate>>(csSize);
 
     // copy coordinates and reduce
     for(size_t i = 0; i < csSize; ++i) {
@@ -53,12 +53,11 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
     }
 
     // reducedCoords take ownership of 'vc'
-    CoordinateSequence* reducedCoords =
-        geom->getFactory()->getCoordinateSequenceFactory()->create(vc).release();
+    auto reducedCoords = geom->getFactory()->getCoordinateSequenceFactory()->create(vc.release());
 
     // remove repeated points, to simplify returned geometry as
     // much as possible.
-    auto noRepeatedCoords = operation::valid::RepeatedPointRemover::removeRepeatedPoints(reducedCoords);
+    std::unique_ptr<CoordinateSequence> noRepeatedCoords = operation::valid::RepeatedPointRemover::removeRepeatedPoints(reducedCoords.get());
 
     /**
      * Check to see if the removal of repeated points
@@ -79,21 +78,17 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
         minLength = 4;
     }
 
-    CoordinateSequence* collapsedCoords = reducedCoords;
     if(removeCollapsed) {
-        delete reducedCoords;
         reducedCoords = nullptr;
-        collapsedCoords = nullptr;
     }
 
-    // return null or orginal length coordinate array
+    // return null or original length coordinate array
     if(noRepeatedCoords->getSize() < minLength) {
-        return collapsedCoords;
+        return reducedCoords;
     }
 
     // ok to return shorter coordinate array
-    delete reducedCoords;
-    return noRepeatedCoords.release();
+    return noRepeatedCoords;
 }
 
 

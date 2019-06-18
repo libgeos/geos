@@ -67,11 +67,11 @@ public:
     gfCoordinateOperation(const CoordinateSequenceFactory* gsf)
         : _gsf(gsf)
     {}
-    CoordinateSequence*
+    std::unique_ptr<CoordinateSequence>
     edit(const CoordinateSequence* coordSeq,
          const Geometry*) override
     {
-        return _gsf->create(*coordSeq).release();
+        return _gsf->create(*coordSeq);
     }
 };
 
@@ -777,8 +777,7 @@ GeometryFactory::createGeometry(const Geometry* g) const
     //return g->clone();
     util::GeometryEditor editor(this);
     gfCoordinateOperation coordOp(coordinateListFactory);
-    Geometry* ret = editor.edit(g, &coordOp);
-    return ret;
+    return editor.edit(g, &coordOp).release();
 }
 
 /*public*/

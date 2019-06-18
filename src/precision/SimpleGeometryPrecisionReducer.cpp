@@ -28,11 +28,11 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/operation/valid/RepeatedPointRemover.h>
+#include <geos/util.h>
 
 #include <vector>
 #include <typeinfo>
 
-using namespace std;
 using namespace geos::geom;
 using namespace geos::geom::util;
 
@@ -54,8 +54,8 @@ public:
         SimpleGeometryPrecisionReducer* newSgpr);
 
     /// Ownership of returned CoordinateSequence to caller
-    CoordinateSequence* edit(const CoordinateSequence* coordinates,
-                             const Geometry* geom) override;
+    std::unique_ptr<CoordinateSequence> edit(const CoordinateSequence* coordinates,
+                                             const Geometry* geom) override;
 };
 
 PrecisionReducerCoordinateOperation::PrecisionReducerCoordinateOperation(
@@ -64,7 +64,7 @@ PrecisionReducerCoordinateOperation::PrecisionReducerCoordinateOperation(
     sgpr = newSgpr;
 }
 
-CoordinateSequence*
+std::unique_ptr<CoordinateSequence>
 PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
         const Geometry* geom)
 {
@@ -74,7 +74,7 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
 
     auto csSize = cs->size();
 
-    vector<Coordinate>* vc = new vector<Coordinate>(csSize);
+    auto vc = detail::make_unique<std::vector<Coordinate>>(csSize);
 
     // copy coordinates and reduce
     for(unsigned int i = 0; i < csSize; ++i) {
@@ -83,12 +83,11 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
     }
 
     // reducedCoords take ownership of 'vc'
-    CoordinateSequence* reducedCoords =
-        geom->getFactory()->getCoordinateSequenceFactory()->create(vc).release();
+    auto reducedCoords = geom->getFactory()->getCoordinateSequenceFactory()->create(vc.release());
 
     // remove repeated points, to simplify returned geometry as
     // much as possible.
-    auto noRepeatedCoords = operation::valid::RepeatedPointRemover::removeRepeatedPoints(reducedCoords);
+    std::unique_ptr<CoordinateSequence> noRepeatedCoords = operation::valid::RepeatedPointRemover::removeRepeatedPoints(reducedCoords.get());
 
     /**
      * Check to see if the removal of repeated points
@@ -108,19 +107,16 @@ PrecisionReducerCoordinateOperation::edit(const CoordinateSequence* cs,
     if(typeid(*geom) == typeid(LinearRing)) {
         minLength = 4;
     }
-    CoordinateSequence* collapsedCoords = reducedCoords;
+
     if(sgpr->getRemoveCollapsed()) {
-        delete reducedCoords;
         reducedCoords = nullptr;
-        collapsedCoords = nullptr;
     }
-    // return null or orginal length coordinate array
+    // return null or original length coordinate array
     if(noRepeatedCoords->getSize() < minLength) {
-        return collapsedCoords;
+        return reducedCoords;
     }
     // ok to return shorter coordinate array
-    delete reducedCoords;
-    return noRepeatedCoords.release();
+    return noRepeatedCoords;
 }
 
 } // anonymous namespace
@@ -164,13 +160,12 @@ SimpleGeometryPrecisionReducer::getRemoveCollapsed()
     return removeCollapsed;
 }
 
-Geometry*
+std::unique_ptr<Geometry>
 SimpleGeometryPrecisionReducer::reduce(const Geometry* geom)
 {
     GeometryEditor geomEdit;
     PrecisionReducerCoordinateOperation prco(this);
-    Geometry* g = geomEdit.edit(geom, &prco);
-    return g;
+    return geomEdit.edit(geom, &prco);
 }
 
 } // namespace geos.precision
