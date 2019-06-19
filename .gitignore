@@ -35,6 +35,7 @@ tools/astyle/astyle
 tests/bigtest/TestSweepLineSpeed
 tests/bigtest/bug234
 tests/geostest/geostest
+benchmarks/algorithm/InteriorPointAreaPerfTest
 benchmarks/operation/buffer/IteratedBufferStressTest
 benchmarks/operation/predicate/RectangleIntersectsPerfTest
 benchmarks/capi/memleak_mp_prep
