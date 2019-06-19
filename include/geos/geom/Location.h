@@ -24,14 +24,13 @@ namespace geos {
 namespace geom { // geos::geom
 
 /** \brief
- *  Constants representing the location of a point relative to a geometry.
+ * Constants representing the location of a point relative to a geometry.
  *
- *  They  can also be thought of as the row or column index of a DE-9IM matrix.
- *  For a description of the DE-9IM, see the <A
- *  HREF="http://www.opengis.org/techno/specs.htm">OpenGIS Simple Features
- *  Specification for SQL</A> .
+ * They can also be thought of as the row or column index of a DE-9IM matrix.
+ * For a description of the DE-9IM, see the
+ * [OpenGIS Simple Features Specification for SQL](http://www.opengis.org/techno/specs.htm").
  */
-enum class GEOS_DLL Location : char {
+GEOS_DLL enum class Location : char {
     /**
      *  Used for uninitialized location values.
      */
