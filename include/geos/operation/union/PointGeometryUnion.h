@@ -37,8 +37,8 @@ namespace geounion {  // geos::operation::geounion
 
 /**
  * \brief
- * Computes the union of a [Puntal](@ref geom::Puntal) geometry with
- * another arbitrary [Geometry](@ref geom::Geometry).
+ * Computes the union of a puntal geometry with another
+ * arbitrary [Geometry](@ref geom::Geometry).
  *
  * Does not copy any component geometries.
  *

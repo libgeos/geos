@@ -32,7 +32,7 @@ namespace algorithm { // geos::algorithm
 namespace locate { // geos::algorithm::locate
 
 /** \brief
- * Computes the location of points relative to a [Polygonal](@ref geom::Polygonal)
+ * Computes the location of points relative to a polygonal
  * [Geometry](@ref geom::Geometry), using a simple `O(n)` algorithm.
  *
  * The algorithm used reports if a point lies in the interior, exterior,
@@ -56,9 +56,12 @@ public:
      *
      * The return value is one of:
      *
-     * - [Location::INTERIOR](@ref geom::Location::INTERIOR) if the point is in the geometry interior
-     * - [Location::BOUNDARY](@ref geom::Location::BOUNDARY) if the point lies exactly on the boundary
-     * - [Location::EXTERIOR](@ref geom::Location::EXTERIOR) if the point is outside the geometry
+     * - [Location::INTERIOR](@ref geom::Location::INTERIOR)
+     *   if the point is in the geometry interior
+     * - [Location::BOUNDARY](@ref geom::Location::BOUNDARY)
+     *   if the point lies exactly on the boundary
+     * - [Location::EXTERIOR](@ref geom::Location::EXTERIOR)
+     *   if the point is outside the geometry
      *
      * Computes `Location::BOUNDARY` if the point lies exactly
      * on the polygon boundary.
@@ -76,7 +79,7 @@ public:
      *
      * This is a convenience method for
      *
-     *      Location.EXTERIOR != locate(p, geom)
+     *      Location::EXTERIOR != locate(p, geom)
      *
      * @param p the point to test
      * @param geom the geometry to test

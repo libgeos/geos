@@ -42,11 +42,10 @@ namespace algorithm {
  * Counts the number of segments crossed by a horizontal ray extending to
  * the right from a given point, in an incremental fashion.
  *
- * This can be used to determine whether a point lies in a
- * [Polygonal](@ref geom::Polygonal) geometry. The class determines
- * the situation where the point lies exactly on a segment. When being used
- * for Point-In-Polygon determination, this case allows short-circuiting
- * the evaluation.
+ * This can be used to determine whether a point lies in a polygonal geometry.
+ * The class determines the situation where the point lies exactly on a segment.
+ * When being used for Point-In-Polygon determination, this case allows
+ * short-circuiting the evaluation.
  *
  * This class handles polygonal geometries with any number of shells and holes.
  * The orientation of the shell and hole rings is unimportant.

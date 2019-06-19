@@ -30,7 +30,7 @@ namespace algorithm { // geos::algorithm
 
 /** \brief
  * An interface for rules which determine whether node points which are
- * in boundaries of [Lineal](@ref geom::Lineal) geometry components
+ * in boundaries of lineal geometry components
  * are in the boundary of the parent geometry collection.
  *
  * The SFS specifies a single kind of boundary node rule,

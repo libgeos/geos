@@ -34,20 +34,21 @@ namespace geos {
 namespace geom { // geos.geom
 namespace util { // geos.geom.util
 
-/**
- * Combines {@link Geometry}s
- * to produce a {@link GeometryCollection} of the most appropriate type.
- * Input geometries which are already collections
- * will have their elements extracted first.
+/** \brief
+ * Combines [Geometrys](@ref Geometry) to produce a GeometryCollection
+ * of the most appropriate type.
+ *
+ * Input geometries which are already collections will have their elements
+ * extracted first.
  * No validation of the result geometry is performed.
- * (The only case where invalidity is possible is where {@link Polygonal}
- * geometries are combined and result in a self-intersection).
+ * (The only case where invalidity is possible is where polygonal geometries
+ * are combined and result in a self-intersection).
  *
  * @see GeometryFactory#buildGeometry
  */
 class GeometryCombiner {
 public:
-    /**
+    /** \brief
      * Combines a collection of geometries.
      *
      * @param geoms the geometries to combine (ownership left to caller)
@@ -55,7 +56,7 @@ public:
      */
     static std::unique_ptr<Geometry> combine(std::vector<Geometry*> const& geoms);
 
-    /**
+    /** \brief
      * Combines two geometries.
      *
      * @param g0 a geometry to combine (ownership left to caller)
@@ -64,7 +65,7 @@ public:
      */
     static std::unique_ptr<Geometry> combine(const Geometry* g0, const Geometry* g1);
 
-    /**
+    /** \brief
      * Combines three geometries.
      *
      * @param g0 a geometry to combine (ownership left to caller)
@@ -80,24 +81,24 @@ private:
     std::vector<Geometry*> const& inputGeoms;
 
 public:
-    /**
-     * Creates a new combiner for a collection of geometries
+    /** \brief
+     * Creates a new combiner for a collection of geometries.
      *
      * @param geoms the geometries to combine
      */
     GeometryCombiner(std::vector<Geometry*> const& geoms);
 
-    /**
-     * Extracts the GeometryFactory used by the geometries in a collection
+    /** \brief
+     * Extracts the GeometryFactory used by the geometries in a collection.
      *
      * @param geoms
      * @return a GeometryFactory
      */
     static GeometryFactory const* extractFactory(std::vector<Geometry*> const& geoms);
 
-    /**
+    /** \brief
      * Computes the combination of the input geometries
-     * to produce the most appropriate {@link Geometry} or {@link GeometryCollection}
+     * to produce the most appropriate Geometry or GeometryCollection.
      *
      * @return a Geometry which is the combination of the inputs
      */

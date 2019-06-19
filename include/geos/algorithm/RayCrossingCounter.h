@@ -41,11 +41,10 @@ namespace algorithm {
  * Counts the number of segments crossed by a horizontal ray extending to the
  * right from a given point, in an incremental fashion.
  *
- * This can be used to determine whether a point lies in a
- * [Polygonal](@ref geom::Polygonal) geometry. The class determines
- * the situation where the point lies exactly on a segment. When being
- * used for Point-In-Polygon determination, this case allows short-circuiting
- * the evaluation.
+ * This can be used to determine whether a point lies in a polygonal geometry.
+ * The class determines the situation where the point lies exactly on a segment.
+ * When being used for Point-In-Polygon determination, this case allows
+ * short-circuiting the evaluation.
  *
  * This class handles polygonal geometries with any number of shells and holes.
  * The orientation of the shell and hole rings is unimportant.
@@ -57,13 +56,11 @@ namespace algorithm {
  *
  * The only exception is when the point-on-segment situation is detected, in
  * which case no further processing is required.
- * The implication of the above rule is that segments
- * which can be a priori determined to *not* touch the ray
- * (i.e. by a test of their bounding box or Y-extent)
- * do not need to be counted. This allows for optimization by indexing.
+ * The implication of the above rule is that segments which can be a priori
+ * determined to *not* touch the ray (i.e. by a test of their bounding box or
+ * Y-extent) do not need to be counted. This allows for optimization by indexing.
  *
  * @author Martin Davis
- *
  */
 class GEOS_DLL RayCrossingCounter {
 private:
@@ -96,7 +93,7 @@ public:
                                  const std::vector<const geom::Coordinate*>& ring);
 
     RayCrossingCounter(const geom::Coordinate& p_point)
-        :	point(p_point),
+        : point(p_point),
           crossingCount(0),
           isPointOnSegment(false)
     { }

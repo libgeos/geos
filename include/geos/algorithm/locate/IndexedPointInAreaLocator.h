@@ -41,15 +41,13 @@ namespace algorithm { // geos::algorithm
 namespace locate { // geos::algorithm::locate
 
 /** \brief
- * Determines the location of {@link geom::Coordinate}s relative to
+ * Determines the location of [Coordinates](@ref geom::Coordinate) relative to
  * an areal geometry, using indexing for efficiency.
  *
- * The Location is computed precisely, in that points
- * located on the geometry boundary or segments will
- * return {@link geom::Location.BOUNDARY}.
+ * The Location is computed precisely, in that points located on the geometry boundary
+ * or segments will return [Location::BOUNDARY](@ref geom::Location::BOUNDARY).
  *
- * {@link geom::Polygonal} and {@link geom::LinearRing} geometries
- * are supported.
+ * Polygonal and [LinearRing](@ref geom::LinearRing) geometries are supported.
  */
 class IndexedPointInAreaLocator : public PointOnGeometryLocator {
 private:
@@ -96,18 +94,18 @@ private:
     IndexedPointInAreaLocator& operator=(const IndexedPointInAreaLocator& rhs) = delete;
 
 public:
-    /**
-     * Creates a new locator for a given {@link geom::Geometry}
-     * {@link geom::Polygonal} and {@link geom::LinearRing} geometries
-    * are supported.
-    *
+    /** \brief
+     * Creates a new locator for a given [Geometry](@ref geom::Geometry).
+     *
+     * Polygonal and [LinearRing](@ref geom::LinearRing) geometries are supported.
+     *
      * @param g the Geometry to locate in
      */
     IndexedPointInAreaLocator(const geom::Geometry& g);
 
-    /**
-     * Determines the {@link geom::Location} of a point in an areal
-     * {@link geom::Geometry}.
+    /** \brief
+     * Determines the [Location](@ref geom::Location) of a point in an areal
+     * [Geometry](@ref geom::Geometry).
      *
      * @param p the point to test
      * @return the location of the point in the geometry

@@ -251,20 +251,15 @@ public:
         return _userData;
     }
 
-    /*
-     * \brief
-     * Returns the ID of the Spatial Reference System used by the
-     * <code>Geometry</code>.
+    /** \brief
+     * Returns the ID of the Spatial Reference System used by the Geometry.
      *
      * GEOS supports Spatial Reference System information in the simple way
      * defined in the SFS. A Spatial Reference System ID (SRID) is present
-     * in each <code>Geometry</code> object. <code>Geometry</code>
-     * provides basic accessor operations for this field, but no others.
-     * The SRID is represented as an integer.
+     * in each Geometry object. Geometry provides basic accessor operations
+     * for this field, but no others. The SRID is represented as an integer.
      *
-     * @return the ID of the coordinate space in which the
-     * <code>Geometry</code> is defined.
-     *
+     * @return the ID of the coordinate space in which the Geometry is defined.
      */
     virtual int
     getSRID() const
@@ -272,9 +267,8 @@ public:
         return SRID;
     }
 
-    /*
-     * Sets the ID of the Spatial Reference System used by the
-     * <code>Geometry</code>.
+    /** \brief
+     * Sets the ID of the Spatial Reference System used by the Geometry.
      */
     virtual void
     setSRID(int newSRID)
@@ -288,10 +282,7 @@ public:
      */
     const PrecisionModel* getPrecisionModel() const;
 
-    /// \brief
-    /// Returns a vertex of this Geometry,
-    /// or NULL if this is the empty geometry
-    ///
+    /// Returns a vertex of this Geometry, or NULL if this is the empty geometry.
     virtual const Coordinate* getCoordinate() const = 0; //Abstract
 
     /**
@@ -321,7 +312,7 @@ public:
         return 1;
     }
 
-    /// Returns a pointer to the nth Geometry in this collection
+    /// \brief Returns a pointer to the nth Geometry in this collection
     /// (or self if this is not a collection)
     virtual const Geometry*
     getGeometryN(std::size_t /*n*/) const
@@ -649,7 +640,7 @@ public:
     /// all the points in the Geometry.
     virtual std::unique_ptr<Geometry> convexHull() const;
 
-    /**
+    /** \brief
      * Computes a new geometry which has all component coordinate sequences
      * in reverse order (opposite orientation) to this one.
      *
@@ -680,16 +671,16 @@ public:
     std::unique_ptr<Geometry> Union(const Geometry* other) const;
     // throw(IllegalArgumentException *, TopologyException *);
 
-    /**
+    /** \brief
      * Computes the union of all the elements of this geometry. Heterogeneous
-     * {@link GeometryCollection}s are fully supported.
+     * [GeometryCollections](@ref GeometryCollection) are fully supported.
      *
      * The result obeys the following contract:
      *
-     * - Unioning a set of {@link LineString}s has the effect of fully noding
+     * - Unioning a set of [LineStrings](@ref LineString) has the effect of fully noding
      *   and dissolving the linework.
-     * - Unioning a set of {@link Polygon}s will always
-     *   return a {@link Polygonal} geometry (unlike Geometry::Union(const Geometry* other) const),
+     * - Unioning a set of [Polygons](@ref Polygon) will always
+     *   return a polygonal geometry (unlike Geometry::Union(const Geometry* other) const),
      *   which may return geometrys of lower dimension if a topology collapse
      *   occurred.
      *
