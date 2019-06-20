@@ -31,14 +31,9 @@ SweepLineIndex::SweepLineIndex()
     indexBuilt(false),
     nOverlaps(0)
 {
-    //events=new vector<SweepLineEvent*>();
-    //nOverlaps=0;
 }
 
-SweepLineIndex::~SweepLineIndex()
-{
-    //delete events;
-}
+SweepLineIndex::~SweepLineIndex() = default;
 
 void
 SweepLineIndex::add(SweepLineInterval* sweepInt)

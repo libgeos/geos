@@ -104,10 +104,7 @@ LineString::LineString(CoordinateSequence::Ptr newCoords,
 }
 
 
-LineString::~LineString()
-{
-    //delete points;
-}
+LineString::~LineString() = default;
 
 std::unique_ptr<CoordinateSequence>
 LineString::getCoordinates() const

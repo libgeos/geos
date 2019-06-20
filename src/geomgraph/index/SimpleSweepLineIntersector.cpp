@@ -40,7 +40,6 @@ SimpleSweepLineIntersector::~SimpleSweepLineIntersector()
     for(unsigned int i = 0; i < events.size(); ++i) {
         delete events[i];
     }
-    //delete events;
 }
 
 void

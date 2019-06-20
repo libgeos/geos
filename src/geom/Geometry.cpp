@@ -154,8 +154,7 @@ Geometry::isWithinDistance(const Geometry* geom, double cDistance) const
     const Envelope* env0 = getEnvelopeInternal();
     const Envelope* env1 = geom->getEnvelopeInternal();
     double envDist = env0->distance(env1);
-    //delete env0;
-    //delete env1;
+
     if(envDist > cDistance) {
         return false;
     }
@@ -242,7 +241,6 @@ Geometry::geometryChanged()
 void
 Geometry::geometryChangedAction()
 {
-    //delete envelope;
     envelope.reset(nullptr);
 }
 

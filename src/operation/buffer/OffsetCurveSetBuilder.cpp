@@ -191,7 +191,6 @@ OffsetCurveSetBuilder::addPoint(const Point* p)
     curveBuilder.getLineCurve(coord, distance, lineList);
 
     addCurves(lineList, Location::EXTERIOR, Location::INTERIOR);
-    //delete lineList;
 }
 
 /*private*/

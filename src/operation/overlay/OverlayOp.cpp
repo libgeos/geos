@@ -172,7 +172,6 @@ OverlayOp::OverlayOp(const Geometry* g0, const Geometry* g1)
 
 OverlayOp::~OverlayOp()
 {
-    //delete edgeList;
     delete resultPolyList;
     delete resultLineList;
     delete resultPointList;
