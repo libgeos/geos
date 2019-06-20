@@ -25,30 +25,29 @@
 #include <vector>
 #include <cmath>
 
-using namespace std;
-
 namespace geos {
 namespace geom { // geos::geom
 
 CoordinateArraySequence::CoordinateArraySequence():
-    vect(new vector<Coordinate>()),
     dimension(0)
 {
 }
 
 CoordinateArraySequence::CoordinateArraySequence(size_t n,
         size_t dimension_in):
-    vect(new vector<Coordinate>(n)),
+    vect(n),
     dimension(dimension_in)
 {
 }
 
 CoordinateArraySequence::CoordinateArraySequence(
-    vector<Coordinate>* coords, size_t dimension_in)
-    : vect(coords), dimension(dimension_in)
+    std::vector<Coordinate>* coords, size_t dimension_in)
+    : dimension(dimension_in)
 {
-    if(! vect) {
-        vect = new vector<Coordinate>();
+    std::unique_ptr<std::vector<Coordinate>> coordp(coords);
+
+    if(coordp) {
+        vect = std::move(*coords);
     }
 }
 
@@ -56,7 +55,7 @@ CoordinateArraySequence::CoordinateArraySequence(
     const CoordinateArraySequence& c)
     :
     CoordinateSequence(c),
-    vect(new vector<Coordinate>(*(c.vect))),
+    vect(c.vect),
     dimension(c.getDimension())
 {
 }
@@ -65,11 +64,11 @@ CoordinateArraySequence::CoordinateArraySequence(
     const CoordinateSequence& c)
     :
     CoordinateSequence(c),
-    vect(new vector<Coordinate>(c.size())),
+    vect(c.size()),
     dimension(c.getDimension())
 {
-    for(size_t i = 0, n = vect->size(); i < n; ++i) {
-        (*vect)[i] = c.getAt(i);
+    for(size_t i = 0, n = vect.size(); i < n; ++i) {
+        vect[i] = c.getAt(i);
     }
 }
 
@@ -80,9 +79,9 @@ CoordinateArraySequence::clone() const
 }
 
 void
-CoordinateArraySequence::setPoints(const vector<Coordinate>& v)
+CoordinateArraySequence::setPoints(const std::vector<Coordinate>& v)
 {
-    vect->assign(v.begin(), v.end());
+    vect.assign(v.begin(), v.end());
 }
 
 std::size_t
@@ -92,11 +91,11 @@ CoordinateArraySequence::getDimension() const
         return dimension;
     }
 
-    if(vect->empty()) {
+    if(vect.empty()) {
         return 3;
     }
 
-    if(std::isnan((*vect)[0].z)) {
+    if(std::isnan(vect[0].z)) {
         dimension = 2;
     }
     else {
@@ -107,28 +106,27 @@ CoordinateArraySequence::getDimension() const
 }
 
 void
-CoordinateArraySequence::toVector(vector<Coordinate>& out) const
+CoordinateArraySequence::toVector(std::vector<Coordinate>& out) const
 {
-    // TODO: can this be optimized ?
-    out.insert(out.end(), vect->begin(), vect->end());
+    out.insert(out.end(), vect.begin(), vect.end());
 }
 
 void
 CoordinateArraySequence::add(const Coordinate& c)
 {
-    vect->push_back(c);
+    vect.push_back(c);
 }
 
 void
 CoordinateArraySequence::add(const Coordinate& c, bool allowRepeated)
 {
-    if(!allowRepeated && ! vect->empty()) {
-        const Coordinate& last = vect->back();
+    if(!allowRepeated && ! vect.empty()) {
+        const Coordinate& last = vect.back();
         if(last.equals2D(c)) {
             return;
         }
     }
-    vect->push_back(c);
+    vect.push_back(c);
 }
 
 void
@@ -173,43 +171,40 @@ CoordinateArraySequence::add(size_t i, const Coordinate& coord,
         }
     }
 
-    vect->insert(vect->begin() + i, coord);
+    vect.insert(vect.begin() + i, coord);
 }
 
 size_t
 CoordinateArraySequence::getSize() const
 {
-    return vect->size();
+    return vect.size();
 }
 
 const Coordinate&
 CoordinateArraySequence::getAt(size_t pos) const
 {
-    return (*vect)[pos];
+    return vect[pos];
 }
 
 void
 CoordinateArraySequence::getAt(size_t pos, Coordinate& c) const
 {
-    c = (*vect)[pos];
+    c = vect[pos];
 }
 
 void
 CoordinateArraySequence::setAt(const Coordinate& c, size_t pos)
 {
-    (*vect)[pos] = c;
+    vect[pos] = c;
 }
 
-CoordinateArraySequence::~CoordinateArraySequence()
-{
-    delete vect;
-}
+CoordinateArraySequence::~CoordinateArraySequence() = default;
 
 void
 CoordinateArraySequence::expandEnvelope(Envelope& env) const
 {
-    for(size_t i = 0, n = vect->size(); i < n; ++i) {
-        env.expandToInclude((*vect)[i]);
+    for(const auto& coord : vect) {
+        env.expandToInclude(coord);
     }
 }
 
@@ -218,11 +213,11 @@ CoordinateArraySequence::getOrdinate(size_t index, size_t ordinateIndex) const
 {
     switch(ordinateIndex) {
     case CoordinateSequence::X:
-        return (*vect)[index].x;
+        return vect[index].x;
     case CoordinateSequence::Y:
-        return (*vect)[index].y;
+        return vect[index].y;
     case CoordinateSequence::Z:
-        return (*vect)[index].z;
+        return vect[index].z;
     default:
         return DoubleNotANumber;
     }
@@ -234,13 +229,13 @@ CoordinateArraySequence::setOrdinate(size_t index, size_t ordinateIndex,
 {
     switch(ordinateIndex) {
     case CoordinateSequence::X:
-        (*vect)[index].x = value;
+        vect[index].x = value;
         break;
     case CoordinateSequence::Y:
-        (*vect)[index].y = value;
+        vect[index].y = value;
         break;
     case CoordinateSequence::Z:
-        (*vect)[index].z = value;
+        vect[index].z = value;
         break;
     default: {
         std::stringstream ss;
@@ -254,8 +249,8 @@ CoordinateArraySequence::setOrdinate(size_t index, size_t ordinateIndex,
 void
 CoordinateArraySequence::apply_rw(const CoordinateFilter* filter)
 {
-    for(vector<Coordinate>::iterator i = vect->begin(), e = vect->end(); i != e; ++i) {
-        filter->filter_rw(&(*i));
+    for(auto& coord : vect) {
+        filter->filter_rw(&coord);
     }
     dimension = 0; // re-check (see http://trac.osgeo.org/geos/ticket/435)
 }
@@ -263,8 +258,8 @@ CoordinateArraySequence::apply_rw(const CoordinateFilter* filter)
 void
 CoordinateArraySequence::apply_ro(CoordinateFilter* filter) const
 {
-    for(vector<Coordinate>::const_iterator i = vect->begin(), e = vect->end(); i != e; ++i) {
-        filter->filter_ro(&(*i));
+    for(const auto& coord : vect) {
+        filter->filter_ro(&coord);
     }
 }
 

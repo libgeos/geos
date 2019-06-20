@@ -74,14 +74,14 @@ public:
     bool
     empty() const
     {
-        return vect->empty();
+        return vect.empty();
     }
 
     /// Reset this CoordinateArraySequence to the empty state
     void
     clear()
     {
-        vect->clear();
+        vect.clear();
     }
 
     /// Add a Coordinate to the list
@@ -129,7 +129,7 @@ public:
     void apply_ro(CoordinateFilter* filter) const override;
 
 private:
-    std::vector<Coordinate>* vect;
+    std::vector<Coordinate> vect;
     mutable std::size_t dimension;
 };
 
