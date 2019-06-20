@@ -118,10 +118,8 @@ CascadedPolygonUnion::Union(const geom::MultiPolygon* multipoly)
 {
     std::vector<geom::Polygon*> polys;
 
-    typedef geom::MultiPolygon::const_iterator iterator;
-    iterator end = multipoly->end();
-    for(iterator i = multipoly->begin(); i != end; ++i) {
-        polys.push_back(dynamic_cast<geom::Polygon*>(*i));
+    for(const auto& g : *multipoly) {
+        polys.push_back(dynamic_cast<geom::Polygon*>(g.get()));
     }
 
     CascadedPolygonUnion op(&polys);

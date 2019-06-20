@@ -57,9 +57,9 @@ class GEOS_DLL GeometryCollection : public virtual Geometry {
 public:
     friend class GeometryFactory;
 
-    typedef std::vector<Geometry*>::const_iterator const_iterator;
+    typedef std::vector<std::unique_ptr<Geometry>>::const_iterator const_iterator;
 
-    typedef std::vector<Geometry*>::iterator iterator;
+    typedef std::vector<std::unique_ptr<Geometry>>::iterator iterator;
 
     const_iterator begin() const;
 
@@ -107,7 +107,7 @@ public:
      */
     Dimension::DimensionType getDimension() const override;
 
-    virtual bool isDimensionStrict(Dimension::DimensionType d) const;
+    bool isDimensionStrict(Dimension::DimensionType d) const override;
 
     /// Returns coordinate dimension.
     int getCoordinateDimension() const override;
@@ -207,7 +207,7 @@ protected:
         return SORTINDEX_GEOMETRYCOLLECTION;
     };
 
-    std::vector<Geometry*>* geometries;
+    std::vector<std::unique_ptr<Geometry>> geometries;
 
     Envelope::Ptr computeEnvelopeInternal() const override;
 

@@ -263,10 +263,8 @@ IsSimpleOp::computeSimple(const geom::Geometry* g)
 bool
 IsSimpleOp::isSimpleGeometryCollection(const geom::GeometryCollection* col)
 {
-    GeometryCollection::const_iterator it;
-    for(it = col->begin(); it < col->end(); ++it) {
-        const geom::Geometry* g = *it;
-        if(!computeSimple(g)) {
+    for(const auto& g : *col) {
+        if(!computeSimple(g.get())) {
             return false;
         }
     }

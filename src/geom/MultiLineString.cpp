@@ -77,8 +77,8 @@ MultiLineString::isClosed() const
     if(isEmpty()) {
         return false;
     }
-    for(size_t i = 0, n = geometries->size(); i < n; ++i) {
-        LineString* ls = dynamic_cast<LineString*>((*geometries)[i]);
+    for(const auto& g : geometries) {
+        LineString* ls = dynamic_cast<LineString*>(g.get());
         if(! ls->isClosed()) {
             return false;
         }
@@ -119,10 +119,10 @@ MultiLineString::reverse() const
         return clone();
     }
 
-    size_t nLines = geometries->size();
+    size_t nLines = geometries.size();
     Geometry::NonConstVect* revLines = new Geometry::NonConstVect(nLines);
     for(size_t i = 0; i < nLines; ++i) {
-        LineString* iLS = dynamic_cast<LineString*>((*geometries)[i]);
+        LineString* iLS = dynamic_cast<LineString*>(geometries[i].get());
         assert(iLS);
         (*revLines)[nLines - 1 - i] = iLS->reverse().release();
     }

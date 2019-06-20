@@ -44,7 +44,6 @@
 #define GEOS_DEBUG 0
 #endif
 
-using namespace std;
 //using namespace geos::algorithm;
 
 namespace geos {
@@ -53,44 +52,38 @@ namespace geom { // geos::geom
 /*protected*/
 Polygon::Polygon(const Polygon& p)
     :
-    Geometry(p)
+    Geometry(p),
+    shell(detail::make_unique<LinearRing>(*p.shell)),
+    holes(p.holes.size())
 {
-    shell = new LinearRing(*p.shell);
-    size_t nholes = p.holes->size();
-    holes = new vector<LinearRing*>(nholes);
-    for(size_t i = 0; i < nholes; ++i) {
-        LinearRing* h = new LinearRing(*(*p.holes)[i]);
-        (*holes)[i] = h;
+    for(size_t i = 0; i < holes.size(); ++i) {
+        holes[i] = detail::make_unique<LinearRing>(*p.holes[i]);
     }
 }
 
 /*protected*/
-Polygon::Polygon(LinearRing* newShell, vector<LinearRing*>* newHoles,
+Polygon::Polygon(LinearRing* newShell, std::vector<LinearRing*>* newHoles,
                  const GeometryFactory* newFactory):
     Geometry(newFactory)
 {
     if(newShell == nullptr) {
-        shell = getFactory()->createLinearRing(nullptr);
+        shell.reset(getFactory()->createLinearRing(nullptr));
     }
     else {
         if(newHoles != nullptr && newShell->isEmpty() && hasNonEmptyElements(newHoles)) {
             throw util::IllegalArgumentException("shell is empty but holes are not");
         }
-        shell = newShell;
+        shell.reset(newShell);
     }
 
-    if(newHoles == nullptr) {
-        holes = new vector<LinearRing*>();
-    }
-    else {
+    if(newHoles != nullptr) {
         if(hasNullElements(newHoles)) {
             throw util::IllegalArgumentException("holes must not contain null elements");
         }
-        for(size_t i = 0; i < newHoles->size(); i++)
-            if((*newHoles)[i]->getGeometryTypeId() != GEOS_LINEARRING) {
-                throw util::IllegalArgumentException("holes must be LinearRings");
-            }
-        holes = newHoles;
+        for (const auto& hole : *newHoles) {
+            holes.emplace_back(hole);
+        }
+        delete newHoles;
     }
 }
 
@@ -101,7 +94,7 @@ Polygon::getCoordinates() const
         return getFactory()->getCoordinateSequenceFactory()->create();
     }
 
-    vector<Coordinate>* cl = new vector<Coordinate>;
+    std::vector<Coordinate>* cl = new std::vector<Coordinate>;
 
     // reserve space in the vector for all the polygon points
     cl->reserve(getNumPoints());
@@ -111,10 +104,8 @@ Polygon::getCoordinates() const
     shellCoords->toVector(*cl);
 
     // Add holes points
-    size_t nholes = holes->size();
-    for(size_t i = 0; i < nholes; ++i) {
-        const LinearRing* lr = (*holes)[i];
-        const CoordinateSequence* childCoords = lr->getCoordinatesRO();
+    for(const auto& hole : holes) {
+        const CoordinateSequence* childCoords = hole->getCoordinatesRO();
         childCoords->toVector(*cl);
     }
 
@@ -125,7 +116,7 @@ size_t
 Polygon::getNumPoints() const
 {
     size_t numPoints = shell->getNumPoints();
-    for(const LinearRing* lr : *holes) {
+    for(const auto& lr : holes) {
         numPoints += lr->getNumPoints();
     }
     return numPoints;
@@ -143,12 +134,11 @@ Polygon::getCoordinateDimension() const
     int dimension = 2;
 
     if(shell != nullptr) {
-        dimension = max(dimension, shell->getCoordinateDimension());
+        dimension = std::max(dimension, shell->getCoordinateDimension());
     }
 
-    size_t nholes = holes->size();
-    for(size_t i = 0; i < nholes; ++i) {
-        dimension = max(dimension, (*holes)[i]->getCoordinateDimension());
+    for(const auto& hole : holes) {
+        dimension = std::max(dimension, hole->getCoordinateDimension());
     }
 
     return dimension;
@@ -169,22 +159,22 @@ Polygon::isEmpty() const
 const LinearRing*
 Polygon::getExteriorRing() const
 {
-    return shell;
+    return shell.get();
 }
 
 size_t
 Polygon::getNumInteriorRing() const
 {
-    return holes->size();
+    return holes.size();
 }
 
 const LinearRing*
 Polygon::getInteriorRingN(size_t n) const
 {
-    return (*holes)[n];
+    return holes[n].get();
 }
 
-string
+std::string
 Polygon::getGeometryType() const
 {
     return "Polygon";
@@ -207,15 +197,15 @@ Polygon::getBoundary() const
         return std::unique_ptr<Geometry>(gf->createMultiLineString());
     }
 
-    if(! holes->size()) {
-        return std::unique_ptr<Geometry>(gf->createLineString(*shell).release());
+    if(holes.empty()) {
+        return std::unique_ptr<Geometry>(gf->createLineString(*shell));
     }
 
-    vector<Geometry*>* rings = new vector<Geometry*>(holes->size() + 1);
+    std::vector<Geometry*>* rings = new std::vector<Geometry*>(holes.size() + 1);
 
     (*rings)[0] = gf->createLineString(*shell).release();
-    for(size_t i = 0, n = holes->size(); i < n; ++i) {
-        const LinearRing* hole = (*holes)[i];
+    for(size_t i = 0, n = holes.size(); i < n; ++i) {
+        const LinearRing* hole = holes[i].get();
         assert(hole);
         LineString* ls = gf->createLineString(*hole).release();
         (*rings)[i + 1] = ls;
@@ -238,19 +228,19 @@ Polygon::equalsExact(const Geometry* other, double tolerance) const
         return false;
     }
 
-    if(!shell->equalsExact(otherPolygon->shell, tolerance)) {
+    if(!shell->equalsExact(otherPolygon->shell.get(), tolerance)) {
         return false;
     }
 
-    size_t nholes = holes->size();
+    size_t nholes = holes.size();
 
-    if(nholes != otherPolygon->holes->size()) {
+    if(nholes != otherPolygon->holes.size()) {
         return false;
     }
 
     for(size_t i = 0; i < nholes; i++) {
-        const Geometry* hole = (*holes)[i];
-        const Geometry* otherhole = (*(otherPolygon->holes))[i];
+        const LinearRing* hole = holes[i].get();
+        const LinearRing* otherhole = otherPolygon->holes[i].get();
         if(!hole->equalsExact(otherhole, tolerance)) {
             return false;
         }
@@ -263,7 +253,7 @@ void
 Polygon::apply_ro(CoordinateFilter* filter) const
 {
     shell->apply_ro(filter);
-    for(const LinearRing* lr : *holes) {
+    for(const auto& lr : holes) {
         lr->apply_ro(filter);
     }
 }
@@ -272,7 +262,7 @@ void
 Polygon::apply_rw(const CoordinateFilter* filter)
 {
     shell->apply_rw(filter);
-    for(LinearRing* lr : *holes) {
+    for(auto& lr : holes) {
         lr->apply_rw(filter);
     }
 }
@@ -298,18 +288,20 @@ Polygon::convexHull() const
 void
 Polygon::normalize()
 {
-    normalize(shell, true);
-    for(LinearRing* lr : *holes) {
-        normalize(lr, false);
+    normalize(shell.get(), true);
+    for(auto& lr : holes) {
+        normalize(lr.get(), false);
     }
-    sort(holes->begin(), holes->end(), GeometryGreaterThen());
+    std::sort(holes.begin(), holes.end(), [](const std::unique_ptr<LinearRing> & a, const std::unique_ptr<LinearRing> & b) {
+        return a->compareTo(b.get()) > 0;
+    });
 }
 
 int
 Polygon::compareToSameClass(const Geometry* g) const
 {
     const Polygon* p = dynamic_cast<const Polygon*>(g);
-    return shell->compareToSameClass(p->shell);
+    return shell->compareToSameClass(p->shell.get());
 }
 
 /*
@@ -354,10 +346,10 @@ double
 Polygon::getArea() const
 {
     double area = 0.0;
-    area += fabs(algorithm::Area::ofRing(shell->getCoordinatesRO()));
-    for(const LinearRing* lr : *holes) {
+    area += algorithm::Area::ofRing(shell->getCoordinatesRO());
+    for(const auto& lr : holes) {
         const CoordinateSequence* h = lr->getCoordinatesRO();
-        area -= fabs(algorithm::Area::ofRing(h));
+        area -= algorithm::Area::ofRing(h);
     }
     return area;
 }
@@ -372,8 +364,8 @@ Polygon::getLength() const
 {
     double len = 0.0;
     len += shell->getLength();
-    for(size_t i = 0, n = holes->size(); i < n; ++i) {
-        len += (*holes)[i]->getLength();
+    for(const auto& hole : holes) {
+        len += hole->getLength();
     }
     return len;
 }
@@ -383,8 +375,8 @@ Polygon::apply_ro(GeometryComponentFilter* filter) const
 {
     filter->filter_ro(this);
     shell->apply_ro(filter);
-    for(size_t i = 0, n = holes->size(); i < n && !filter->isDone(); ++i) {
-        (*holes)[i]->apply_ro(filter);
+    for(size_t i = 0, n = holes.size(); i < n && !filter->isDone(); ++i) {
+        holes[i]->apply_ro(filter);
     }
 }
 
@@ -393,8 +385,8 @@ Polygon::apply_rw(GeometryComponentFilter* filter)
 {
     filter->filter_rw(this);
     shell->apply_rw(filter);
-    for(size_t i = 0, n = holes->size(); i < n && !filter->isDone(); ++i) {
-        (*holes)[i]->apply_rw(filter);
+    for(size_t i = 0, n = holes.size(); i < n && !filter->isDone(); ++i) {
+        holes[i]->apply_rw(filter);
     }
 }
 
@@ -404,8 +396,8 @@ Polygon::apply_rw(CoordinateSequenceFilter& filter)
     shell->apply_rw(filter);
 
     if(! filter.isDone()) {
-        for(size_t i = 0, n = holes->size(); i < n; ++i) {
-            (*holes)[i]->apply_rw(filter);
+        for(size_t i = 0, n = holes.size(); i < n; ++i) {
+            holes[i]->apply_rw(filter);
             if(filter.isDone()) {
                 break;
             }
@@ -422,8 +414,8 @@ Polygon::apply_ro(CoordinateSequenceFilter& filter) const
     shell->apply_ro(filter);
 
     if(! filter.isDone()) {
-        for(size_t i = 0, n = holes->size(); i < n; ++i) {
-            (*holes)[i]->apply_ro(filter);
+        for(size_t i = 0, n = holes.size(); i < n; ++i) {
+            holes[i]->apply_ro(filter);
             if(filter.isDone()) {
                 break;
             }
@@ -432,14 +424,7 @@ Polygon::apply_ro(CoordinateSequenceFilter& filter) const
     //if (filter.isGeometryChanged()) geometryChanged();
 }
 
-Polygon::~Polygon()
-{
-    delete shell;
-    for(size_t i = 0, n = holes->size(); i < n; ++i) {
-        delete(*holes)[i];
-    }
-    delete holes;
-}
+Polygon::~Polygon() = default;
 
 GeometryTypeId
 Polygon::getGeometryTypeId() const
@@ -498,12 +483,12 @@ Polygon::reverse() const
     }
 
     auto* exteriorRingReversed = dynamic_cast<LinearRing*>(shell->reverse().release());
-    auto* interiorRingsReversed = new std::vector<LinearRing*> {holes->size()};
+    auto* interiorRingsReversed = new std::vector<LinearRing*> {holes.size()};
 
-    std::transform(holes->begin(),
-                   holes->end(),
+    std::transform(holes.begin(),
+                   holes.end(),
                    interiorRingsReversed->begin(),
-    [](const Geometry * g) {
+    [](const std::unique_ptr<LinearRing> & g) {
         return dynamic_cast<LinearRing*>(g->reverse().release());
     });
 

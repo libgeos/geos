@@ -171,9 +171,9 @@ protected:
     Polygon(LinearRing* newShell, std::vector<LinearRing*>* newHoles,
             const GeometryFactory* newFactory);
 
-    LinearRing* shell;
+    std::unique_ptr<LinearRing> shell;
 
-    std::vector<LinearRing*>* holes;
+    std::vector<std::unique_ptr<LinearRing>> holes;
 
     Envelope::Ptr computeEnvelopeInternal() const override;
 

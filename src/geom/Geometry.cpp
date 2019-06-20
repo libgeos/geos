@@ -778,6 +778,31 @@ Geometry::compare(vector<Geometry*> a, vector<Geometry*> b) const
     return 0;
 }
 
+int
+Geometry::compare(const std::vector<std::unique_ptr<Geometry>> & a,
+        const std::vector<std::unique_ptr<Geometry>> & b) const
+{
+    size_t i = 0;
+    size_t j = 0;
+    while(i < a.size() && j < b.size()) {
+        Geometry* aGeom = a[i].get();
+        Geometry* bGeom = b[j].get();
+        int comparison = aGeom->compareTo(bGeom);
+        if(comparison != 0) {
+            return comparison;
+        }
+        i++;
+        j++;
+    }
+    if(i < a.size()) {
+        return 1;
+    }
+    if(j < b.size()) {
+        return -1;
+    }
+    return 0;
+}
+
 /**
  *  Returns the minimum distance between this Geometry
  *  and the other Geometry

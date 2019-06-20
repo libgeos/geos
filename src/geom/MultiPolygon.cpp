@@ -72,8 +72,8 @@ MultiPolygon::getBoundary() const
         return std::unique_ptr<Geometry>(getFactory()->createMultiLineString());
     }
     vector<Geometry*>* allRings = new vector<Geometry*>();
-    for(size_t i = 0; i < geometries->size(); i++) {
-        Polygon* pg = dynamic_cast<Polygon*>((*geometries)[i]);
+    for(size_t i = 0; i < geometries.size(); i++) {
+        Polygon* pg = dynamic_cast<Polygon*>(geometries[i].get());
         assert(pg);
         auto g = pg->getBoundary();
         if(LineString* ls = dynamic_cast<LineString*>(g.get())) {
@@ -115,12 +115,12 @@ MultiPolygon::reverse() const
         return clone();
     }
 
-    auto* reversed = new std::vector<Geometry*> {geometries->size()};
+    auto* reversed = new std::vector<Geometry*> {geometries.size()};
 
-    std::transform(geometries->begin(),
-                   geometries->end(),
+    std::transform(geometries.begin(),
+                   geometries.end(),
                    reversed->begin(),
-    [](const Geometry * g) {
+    [](const std::unique_ptr<Geometry> & g) {
         return g->reverse().release();
     });
 
