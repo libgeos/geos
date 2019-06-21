@@ -41,8 +41,7 @@ namespace geom { // geos::geom
 
 /*protected*/
 MultiPolygon::MultiPolygon(vector<Geometry*>* newPolys, const GeometryFactory* factory)
-    : Geometry(factory),
-      GeometryCollection(newPolys, factory)
+      : GeometryCollection(newPolys, factory)
 {}
 
 MultiPolygon::~MultiPolygon() {}

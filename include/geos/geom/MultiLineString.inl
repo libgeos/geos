@@ -31,7 +31,6 @@ namespace geom { // geos::geom
 INLINE
 MultiLineString::MultiLineString(const MultiLineString& mp)
     :
-    Geometry(mp),
     GeometryCollection(mp)
 {
 }

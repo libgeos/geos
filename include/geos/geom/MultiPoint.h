@@ -119,7 +119,7 @@ protected:
      */
     MultiPoint(std::vector<Geometry*>* newPoints, const GeometryFactory* newFactory);
 
-    MultiPoint(const MultiPoint& mp): Geometry(mp), GeometryCollection(mp) {}
+    MultiPoint(const MultiPoint& mp): GeometryCollection(mp) {}
 
     const Coordinate* getCoordinateN(size_t n) const;
 
