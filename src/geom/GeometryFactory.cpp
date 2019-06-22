@@ -327,7 +327,7 @@ GeometryFactory::createPoint(const Coordinate& coordinate) const
     else {
         std::size_t dim = std::isnan(coordinate.z) ? 2 : 3;
         auto cl = coordinateListFactory->create(new vector<Coordinate>(1, coordinate), dim);
-        //cl->setAt(coordinate, 0);
+
         Point* ret = createPoint(cl.release());
         return ret;
     }
@@ -366,29 +366,34 @@ const
 
 /*public*/
 MultiLineString*
-GeometryFactory::createMultiLineString(const vector<Geometry*>& fromLines)
+GeometryFactory::createMultiLineString(const std::vector<Geometry*>& fromLines)
 const
 {
-    vector<Geometry*>* newGeoms = new vector<Geometry*>(fromLines.size());
+    std::vector<std::unique_ptr<Geometry>> newGeoms(fromLines.size());
+
     for(size_t i = 0; i < fromLines.size(); i++) {
-        const LineString* line = dynamic_cast<const LineString*>(fromLines[i]);
-        if(! line) {
+        auto line = dynamic_cast<const LineString*>(fromLines[i]);
+
+        if(!line) {
             throw geos::util::IllegalArgumentException("createMultiLineString called with a vector containing non-LineStrings");
         }
-        (*newGeoms)[i] = new LineString(*line);
+
+        newGeoms[i].reset(new LineString(*line));
     }
-    MultiLineString* g = nullptr;
-    try {
-        g = new MultiLineString(newGeoms, this);
-    }
-    catch(...) {
-        for(size_t i = 0; i < newGeoms->size(); i++) {
-            delete(*newGeoms)[i];
-        }
-        delete newGeoms;
-        throw;
-    }
-    return g;
+
+    return new MultiLineString(std::move(newGeoms), *this);
+}
+
+std::unique_ptr<MultiLineString>
+GeometryFactory::createMultiLineString(std::vector<std::unique_ptr<LineString>> && fromLines) const {
+    // Can't use make_unique because constructor is protected
+    return std::unique_ptr<MultiLineString>(new MultiLineString(std::move(fromLines), *this));
+}
+
+std::unique_ptr<MultiLineString>
+GeometryFactory::createMultiLineString(std::vector<std::unique_ptr<Geometry>> && fromLines) const {
+    // Can't use make_unique because constructor is protected
+    return std::unique_ptr<MultiLineString>(new MultiLineString(std::move(fromLines), *this));
 }
 
 /*public*/
@@ -412,26 +417,23 @@ GeometryFactory::createGeometryCollection(vector<Geometry*>* newGeoms) const
     return new GeometryCollection(newGeoms, this);
 }
 
+std::unique_ptr<GeometryCollection>
+GeometryFactory::createGeometryCollection(std::vector<std::unique_ptr<geos::geom::Geometry>> && newGeoms) const {
+    // Can't use make_unique because constructor is protected
+    return std::unique_ptr<GeometryCollection>(new GeometryCollection(std::move(newGeoms), *this));
+}
+
 /*public*/
 GeometryCollection*
-GeometryFactory::createGeometryCollection(const vector<Geometry*>& fromGeoms) const
+GeometryFactory::createGeometryCollection(const std::vector<Geometry*>& fromGeoms) const
 {
-    vector<Geometry*>* newGeoms = new vector<Geometry*>(fromGeoms.size());
+    std::vector<std::unique_ptr<Geometry>> newGeoms(fromGeoms.size());
+
     for(size_t i = 0; i < fromGeoms.size(); i++) {
-        (*newGeoms)[i] = fromGeoms[i]->clone().release();
+        newGeoms[i] = fromGeoms[i]->clone();
     }
-    GeometryCollection* g = nullptr;
-    try {
-        g = new GeometryCollection(newGeoms, this);
-    }
-    catch(...) {
-        for(size_t i = 0; i < newGeoms->size(); i++) {
-            delete(*newGeoms)[i];
-        }
-        delete newGeoms;
-        throw;
-    }
-    return g;
+
+    return new GeometryCollection(std::move(newGeoms), *this);
 }
 
 /*public*/
@@ -448,26 +450,31 @@ GeometryFactory::createMultiPolygon(vector<Geometry*>* newPolys) const
     return new MultiPolygon(newPolys, this);
 }
 
+std::unique_ptr<MultiPolygon>
+GeometryFactory::createMultiPolygon(std::vector<std::unique_ptr<Polygon>> && newPolys) const
+{
+    // Can't use make_unique because constructor is protected
+    return std::unique_ptr<MultiPolygon>(new MultiPolygon(std::move(newPolys), *this));
+}
+
+std::unique_ptr<MultiPolygon>
+GeometryFactory::createMultiPolygon(std::vector<std::unique_ptr<Geometry>> && newPolys) const
+{
+    // Can't use make_unique because constructor is protected
+    return std::unique_ptr<MultiPolygon>(new MultiPolygon(std::move(newPolys), *this));
+}
+
 /*public*/
 MultiPolygon*
-GeometryFactory::createMultiPolygon(const vector<Geometry*>& fromPolys) const
+GeometryFactory::createMultiPolygon(const std::vector<Geometry*>& fromPolys) const
 {
-    vector<Geometry*>* newGeoms = new vector<Geometry*>(fromPolys.size());
+    std::vector<std::unique_ptr<Geometry>> newGeoms(fromPolys.size());
+
     for(size_t i = 0; i < fromPolys.size(); i++) {
-        (*newGeoms)[i] = fromPolys[i]->clone().release();
+        newGeoms[i] = fromPolys[i]->clone();
     }
-    MultiPolygon* g = nullptr;
-    try {
-        g = new MultiPolygon(newGeoms, this);
-    }
-    catch(...) {
-        for(size_t i = 0; i < newGeoms->size(); i++) {
-            delete(*newGeoms)[i];
-        }
-        delete newGeoms;
-        throw;
-    }
-    return g;
+
+    return new MultiPolygon(std::move(newGeoms), *this);
 }
 
 /*public*/
@@ -484,11 +491,11 @@ GeometryFactory::createLinearRing(CoordinateSequence* newCoords) const
     return new LinearRing(newCoords, this);
 }
 
-/*public*/
-Geometry::Ptr
-GeometryFactory::createLinearRing(CoordinateSequence::Ptr newCoords) const
+std::unique_ptr<LinearRing>
+GeometryFactory::createLinearRing(CoordinateSequence::Ptr && newCoords) const
 {
-    return Geometry::Ptr(new LinearRing(std::move(newCoords), this));
+    // Can't use make_unique with protected constructor
+    return std::unique_ptr<LinearRing>(new LinearRing(std::move(newCoords), *this));
 }
 
 /*public*/
@@ -509,27 +516,28 @@ GeometryFactory::createMultiPoint(vector<Geometry*>* newPoints) const
     return new MultiPoint(newPoints, this);
 }
 
+std::unique_ptr<MultiPoint>
+GeometryFactory::createMultiPoint(std::vector<std::unique_ptr<Point>> && newPoints) const
+{
+    return std::unique_ptr<MultiPoint>(new MultiPoint(std::move(newPoints), *this));
+}
+
+std::unique_ptr<MultiPoint>
+GeometryFactory::createMultiPoint(std::vector<std::unique_ptr<Geometry>> && newPoints) const
+{
+    return std::unique_ptr<MultiPoint>(new MultiPoint(std::move(newPoints), *this));
+}
+
 /*public*/
 MultiPoint*
 GeometryFactory::createMultiPoint(const vector<Geometry*>& fromPoints) const
 {
-    vector<Geometry*>* newGeoms = new vector<Geometry*>(fromPoints.size());
+    std::vector<std::unique_ptr<Geometry>> newGeoms(fromPoints.size());
     for(size_t i = 0; i < fromPoints.size(); i++) {
-        (*newGeoms)[i] = fromPoints[i]->clone().release();
+        newGeoms[i] = fromPoints[i]->clone();
     }
 
-    MultiPoint* g = nullptr;
-    try {
-        g = new MultiPoint(newGeoms, this);
-    }
-    catch(...) {
-        for(size_t i = 0; i < newGeoms->size(); i++) {
-            delete(*newGeoms)[i];
-        }
-        delete newGeoms;
-        throw;
-    }
-    return g;
+    return new MultiPoint(std::move(newGeoms), *this);
 }
 
 /*public*/
@@ -544,24 +552,13 @@ MultiPoint*
 GeometryFactory::createMultiPoint(const CoordinateSequence& fromCoords) const
 {
     size_t npts = fromCoords.getSize();
-    vector<Geometry*>* pts = new vector<Geometry*>;
-    pts->reserve(npts);
+    vector<std::unique_ptr<Geometry>> pts(npts);
+
     for(size_t i = 0; i < npts; ++i) {
-        Point* pt = createPoint(fromCoords.getAt(i));
-        pts->push_back(pt);
+        pts[i].reset(createPoint(fromCoords.getAt(i)));
     }
-    MultiPoint* mp = nullptr;
-    try {
-        mp = createMultiPoint(pts);
-    }
-    catch(...) {
-        for(size_t i = 0; i < npts; ++i) {
-            delete(*pts)[i];
-        }
-        delete pts;
-        throw;
-    }
-    return mp;
+
+    return new MultiPoint(std::move(pts), *this);
 }
 
 /*public*/
@@ -569,24 +566,13 @@ MultiPoint*
 GeometryFactory::createMultiPoint(const std::vector<Coordinate>& fromCoords) const
 {
     size_t npts = fromCoords.size();
-    vector<Geometry*>* pts = new vector<Geometry*>;
-    pts->reserve(npts);
+    std::vector<std::unique_ptr<Geometry>> pts(npts);
+
     for(size_t i = 0; i < npts; ++i) {
-        Point* pt = createPoint(fromCoords[i]);
-        pts->push_back(pt);
+        pts[i].reset(createPoint(fromCoords[i]));
     }
-    MultiPoint* mp = nullptr;
-    try {
-        mp = createMultiPoint(pts);
-    }
-    catch(...) {
-        for(size_t i = 0; i < npts; ++i) {
-            delete(*pts)[i];
-        }
-        delete pts;
-        throw;
-    }
-    return mp;
+
+    return new MultiPoint(std::move(pts), *this);
 }
 
 /*public*/
@@ -604,29 +590,36 @@ const
     return new Polygon(shell, holes, this);
 }
 
-/*public*/
-Polygon*
-GeometryFactory::createPolygon(const LinearRing& shell, const vector<LinearRing*>& holes)
+std::unique_ptr<Polygon>
+GeometryFactory::createPolygon(std::unique_ptr<LinearRing> && shell)
 const
 {
-    LinearRing* newRing = new LinearRing(shell);
-    vector<LinearRing*>* newHoles = new vector<LinearRing*>(holes.size());
+    // Can't use make_unique with protected constructor
+    return std::unique_ptr<Polygon>(new Polygon(std::move(shell), *this));
+}
+
+std::unique_ptr<Polygon>
+GeometryFactory::createPolygon(std::unique_ptr<LinearRing> && shell, std::vector<std::unique_ptr<LinearRing>> && holes)
+const
+{
+    // Can't use make_unique with protected constructor
+    return std::unique_ptr<Polygon>(new Polygon(std::move(shell), std::move(holes), *this));
+}
+
+/*public*/
+Polygon*
+GeometryFactory::createPolygon(const LinearRing& shell, const std::vector<LinearRing*>& holes)
+const
+{
+    std::unique_ptr<LinearRing> newRing(new LinearRing(shell));
+
+    std::vector<std::unique_ptr<LinearRing>> newHoles(holes.size());
+
     for(size_t i = 0; i < holes.size(); i++) {
-        (*newHoles)[i] = new LinearRing(*(holes[i]));
+        newHoles[i].reset(new LinearRing(*holes[i]));
     }
-    Polygon* g = nullptr;
-    try {
-        g = new Polygon(newRing, newHoles, this);
-    }
-    catch(...) {
-        delete newRing;
-        for(size_t i = 0; i < holes.size(); i++) {
-            delete(*newHoles)[i];
-        }
-        delete newHoles;
-        throw;
-    }
-    return g;
+
+    return new Polygon(std::move(newRing), std::move(newHoles), *this);
 }
 
 /*public*/
@@ -640,8 +633,8 @@ GeometryFactory::createLineString() const
 std::unique_ptr<LineString>
 GeometryFactory::createLineString(const LineString& ls) const
 {
+    // Can't use make_unique with protected constructor
     return std::unique_ptr<LineString>(new LineString(ls));
-    //return make_unique<LineString>(ls); // TODO why doesn't this work?
 }
 
 /*public*/
@@ -653,11 +646,12 @@ const
 }
 
 /*public*/
-Geometry::Ptr
-GeometryFactory::createLineString(CoordinateSequence::Ptr newCoords)
+std::unique_ptr<LineString>
+GeometryFactory::createLineString(CoordinateSequence::Ptr && newCoords)
 const
 {
-    return Geometry::Ptr(new LineString(std::move(newCoords), this));
+    // Can't use make_unique with protected constructor
+    return std::unique_ptr<LineString>(new LineString(std::move(newCoords), *this));
 }
 
 /*public*/

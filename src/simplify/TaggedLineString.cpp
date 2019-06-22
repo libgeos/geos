@@ -20,6 +20,7 @@
 #include <geos/simplify/TaggedLineSegment.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineString.h>
+#include <geos/geom/LinearRing.h>
 #include <geos/geom/Geometry.h> // for unique_ptr destructor
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequenceFactory.h>
@@ -224,8 +225,8 @@ TaggedLineString::asLineString() const
 unique_ptr<Geometry>
 TaggedLineString::asLinearRing() const
 {
-    return parentLine->getFactory()->createLinearRing(
-               getResultCoordinates());
+    return std::unique_ptr<Geometry>(parentLine->getFactory()->createLinearRing(
+               getResultCoordinates()));
 }
 
 /*public*/

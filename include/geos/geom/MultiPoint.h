@@ -119,6 +119,10 @@ protected:
      */
     MultiPoint(std::vector<Geometry*>* newPoints, const GeometryFactory* newFactory);
 
+    MultiPoint(std::vector<std::unique_ptr<Point>> && newPoints, const GeometryFactory& newFactory);
+
+    MultiPoint(std::vector<std::unique_ptr<Geometry>> && newPoints, const GeometryFactory& newFactory);
+
     MultiPoint(const MultiPoint& mp): GeometryCollection(mp) {}
 
     const Coordinate* getCoordinateN(size_t n) const;

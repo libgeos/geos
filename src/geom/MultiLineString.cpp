@@ -47,6 +47,16 @@ MultiLineString::MultiLineString(vector<Geometry*>* newLines,
 {
 }
 
+MultiLineString::MultiLineString(std::vector<std::unique_ptr<LineString>> && newLines,
+        const GeometryFactory& factory)
+        : GeometryCollection(std::move(newLines), factory)
+{}
+
+MultiLineString::MultiLineString(std::vector<std::unique_ptr<Geometry>> && newLines,
+                                 const GeometryFactory& factory)
+        : GeometryCollection(std::move(newLines), factory)
+{}
+
 MultiLineString::~MultiLineString() {}
 
 Dimension::DimensionType

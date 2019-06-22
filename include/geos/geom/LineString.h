@@ -193,8 +193,8 @@ protected:
     LineString(CoordinateSequence* pts, const GeometryFactory* newFactory);
 
     /// Hopefully cleaner version of the above
-    LineString(CoordinateSequence::Ptr pts,
-               const GeometryFactory* newFactory);
+    LineString(CoordinateSequence::Ptr && pts,
+               const GeometryFactory& newFactory);
 
     Envelope::Ptr computeEnvelopeInternal() const override;
 

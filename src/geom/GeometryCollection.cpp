@@ -70,6 +70,17 @@ GeometryCollection::GeometryCollection(std::vector<Geometry*>* newGeoms, const G
     setSRID(getSRID());
 }
 
+GeometryCollection::GeometryCollection(std::vector<std::unique_ptr<Geometry>> && newGeoms, const GeometryFactory& factory) :
+    Geometry(&factory),
+    geometries(std::move(newGeoms)) {
+
+    if (hasNullElements(&geometries)) {
+        throw util::IllegalArgumentException("geometries must not contain null elements\n");
+    }
+
+    setSRID(getSRID());
+}
+
 void
 GeometryCollection::setSRID(int newSRID)
 {

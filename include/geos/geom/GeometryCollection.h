@@ -201,6 +201,13 @@ protected:
      */
     GeometryCollection(std::vector<Geometry*>* newGeoms, const GeometryFactory* newFactory);
 
+    GeometryCollection(std::vector<std::unique_ptr<Geometry>> && newGeoms, const GeometryFactory& newFactory);
+
+    /// Convenience constructor to build a GeometryCollection from vector of Geometry subclass pointers
+    template<typename T>
+    GeometryCollection(std::vector<std::unique_ptr<T>> && newGeoms, const GeometryFactory& newFactory) :
+        GeometryCollection(toGeometryArray(std::move(newGeoms)), newFactory) {}
+
     int
     getSortIndex() const override
     {
