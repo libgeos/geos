@@ -34,7 +34,6 @@ namespace geom { // geos::geom
 /*protected*/
 MultiPoint::MultiPoint(vector<Geometry*>* newPoints, const GeometryFactory* factory)
     :
-    Geometry(factory),
     GeometryCollection(newPoints, factory)
 {
 }

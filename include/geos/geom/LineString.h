@@ -65,7 +65,7 @@ namespace geom { // geos::geom
  *  If these conditions are not met, the constructors throw
  *  an {@link util::IllegalArgumentException}.
  */
-class GEOS_DLL LineString: public virtual Geometry {
+class GEOS_DLL LineString: public Geometry {
 
 public:
 

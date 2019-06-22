@@ -28,7 +28,6 @@ namespace geom { // geos::geom
 INLINE
 MultiPolygon::MultiPolygon(const MultiPolygon& mp)
     :
-    Geometry(mp),
     GeometryCollection(mp)
 {
 }

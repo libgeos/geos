@@ -43,7 +43,6 @@ namespace geom { // geos::geom
 MultiLineString::MultiLineString(vector<Geometry*>* newLines,
                                  const GeometryFactory* factory)
     :
-    Geometry(factory),
     GeometryCollection(newLines, factory)
 {
 }
