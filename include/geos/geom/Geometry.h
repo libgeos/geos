@@ -845,8 +845,8 @@ protected:
 
     /// Returns true if the array contains any non-empty Geometrys.
     template<typename T>
-    static bool hasNonEmptyElements(const std::vector<T*>* geometries) {
-        return std::any_of(geometries->begin(), geometries->end(), [](const Geometry* g) { return !g->isEmpty(); });
+    static bool hasNonEmptyElements(const std::vector<T>* geometries) {
+        return std::any_of(geometries->begin(), geometries->end(), [](const T& g) { return !g->isEmpty(); });
     }
 
     /// Returns true if the CoordinateSequence contains any null elements.
@@ -854,8 +854,8 @@ protected:
 
     /// Returns true if the vector contains any null elements.
     template<typename T>
-    static bool hasNullElements(const std::vector<T*>* geometries) {
-        return std::any_of(geometries->begin(), geometries->end(), [](const Geometry* g) { return g == nullptr; });
+    static bool hasNullElements(const std::vector<T>* geometries) {
+        return std::any_of(geometries->begin(), geometries->end(), [](const T& g) { return g == nullptr; });
     }
 
 //	static void reversePointOrder(CoordinateSequence* coordinates);
@@ -903,6 +903,15 @@ protected:
      */
     Geometry(const GeometryFactory* factory);
 
+    template<typename T>
+    static std::vector<std::unique_ptr<Geometry>> toGeometryArray(std::vector<std::unique_ptr<T>> && v) {
+        static_assert(std::is_base_of<Geometry, T>::value, "");
+        std::vector<std::unique_ptr<Geometry>> gv(v.size());
+        for (size_t i = 0; i < v.size(); i++) {
+            gv[i] = std::move(v[i]);
+        }
+        return gv;
+    }
 
 protected:
 

@@ -79,8 +79,8 @@ public:
                const GeometryFactory* newFactory);
 
     /// Hopefully cleaner version of the above
-    LinearRing(CoordinateSequence::Ptr points,
-               const GeometryFactory* newFactory);
+    LinearRing(CoordinateSequence::Ptr && points,
+            const GeometryFactory& newFactory);
 
     std::unique_ptr<Geometry>
     clone() const override

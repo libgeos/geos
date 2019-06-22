@@ -25,6 +25,7 @@
 #include <string>
 #include <vector>
 #include <geos/geom/GeometryCollection.h> // for inheritance
+#include <geos/geom/Polygon.h> // for inheritance
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
 
 #include <geos/inline.h>
@@ -114,6 +115,12 @@ protected:
      *	of the constructed MultiPolygon.
      */
     MultiPolygon(std::vector<Geometry*>* newPolys, const GeometryFactory* newFactory);
+
+    MultiPolygon(std::vector<std::unique_ptr<Polygon>> && newPolys,
+            const GeometryFactory& newFactory);
+
+    MultiPolygon(std::vector<std::unique_ptr<Geometry>> && newPolys,
+                 const GeometryFactory& newFactory);
 
     MultiPolygon(const MultiPolygon& mp);
 

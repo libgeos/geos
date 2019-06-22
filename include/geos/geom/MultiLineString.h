@@ -24,6 +24,7 @@
 #include <geos/export.h>
 #include <geos/geom/GeometryCollection.h> // for inheritance
 #include <geos/geom/Dimension.h>
+#include <geos/geom/LineString.h>
 
 #include <string>
 #include <vector>
@@ -114,6 +115,12 @@ protected:
      */
     MultiLineString(std::vector<Geometry*>* newLines,
                     const GeometryFactory* newFactory);
+
+    MultiLineString(std::vector<std::unique_ptr<LineString>> && newLines,
+            const GeometryFactory& newFactory);
+
+    MultiLineString(std::vector<std::unique_ptr<Geometry>> && newLines,
+                    const GeometryFactory& newFactory);
 
     MultiLineString(const MultiLineString& mp);
 

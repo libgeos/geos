@@ -319,125 +319,82 @@ WKBReader::readPolygon()
         shell = readLinearRing();
     }
 
-    vector<LinearRing*>* holes = nullptr;
     if(numRings > 1) {
-        try {
-            holes = new vector<LinearRing*>(numRings - 1);
-            for(int i = 0; i < numRings - 1; i++) {
-                (*holes)[i] = readLinearRing().release();
-            }
+        std::vector<std::unique_ptr<LinearRing>> holes(numRings - 1);
+        for(int i = 0; i < numRings - 1; i++) {
+            holes[i] = readLinearRing();
         }
-        catch(...) {
-            for(unsigned int i = 0; i < holes->size(); i++) {
-                delete(*holes)[i];
-            }
-            delete holes;
-            throw;
-        }
+
+        return factory.createPolygon(std::move(shell), std::move(holes));
     }
-    return std::unique_ptr<Polygon>(factory.createPolygon(shell.release(), holes));
+    return factory.createPolygon(std::move(shell));
 }
 
 std::unique_ptr<MultiPoint>
 WKBReader::readMultiPoint()
 {
     int numGeoms = dis.readInt();
-    vector<Geometry*>* geoms = new vector<Geometry*>(numGeoms);
+    std::vector<std::unique_ptr<Geometry>> geoms(numGeoms);
 
-    try {
-        for(int i = 0; i < numGeoms; i++) {
-            auto g = readGeometry();
-            if(!dynamic_cast<Point*>(g.get())) {
-                stringstream err;
-                err << BAD_GEOM_TYPE_MSG << " MultiPoint";
-                throw ParseException(err.str());
-            }
-            (*geoms)[i] = g.release();
+    for(int i = 0; i < numGeoms; i++) {
+        geoms[i] = readGeometry();
+        if(!dynamic_cast<Point*>(geoms[i].get())) {
+            stringstream err;
+            err << BAD_GEOM_TYPE_MSG << " MultiPoint";
+            throw ParseException(err.str());
         }
     }
-    catch(...) {
-        for(unsigned int i = 0; i < geoms->size(); i++) {
-            delete(*geoms)[i];
-        }
-        delete geoms;
-        throw;
-    }
-    return std::unique_ptr<MultiPoint>(factory.createMultiPoint(geoms));
+
+    return factory.createMultiPoint(std::move(geoms));
 }
 
 std::unique_ptr<MultiLineString>
 WKBReader::readMultiLineString()
 {
     int numGeoms = dis.readInt();
-    vector<Geometry*>* geoms = new vector<Geometry*>(numGeoms);
+    std::vector<std::unique_ptr<Geometry>> geoms(numGeoms);
 
-    try {
-        for(int i = 0; i < numGeoms; i++) {
-            auto g = readGeometry();
-            if(!dynamic_cast<LineString*>(g.get())) {
-                stringstream err;
-                err << BAD_GEOM_TYPE_MSG << " LineString";
-                throw  ParseException(err.str());
-            }
-            (*geoms)[i] = g.release();
+    for(int i = 0; i < numGeoms; i++) {
+        geoms[i] = readGeometry();
+        if(!dynamic_cast<LineString*>(geoms[i].get())) {
+            stringstream err;
+            err << BAD_GEOM_TYPE_MSG << " LineString";
+            throw  ParseException(err.str());
         }
     }
-    catch(...) {
-        for(unsigned int i = 0; i < geoms->size(); i++) {
-            delete(*geoms)[i];
-        }
-        delete geoms;
-        throw;
-    }
-    return std::unique_ptr<MultiLineString>(factory.createMultiLineString(geoms));
+
+    return factory.createMultiLineString(std::move(geoms));
 }
 
 std::unique_ptr<MultiPolygon>
 WKBReader::readMultiPolygon()
 {
     int numGeoms = dis.readInt();
-    vector<Geometry*>* geoms = new vector<Geometry*>(numGeoms);
+    std::vector<std::unique_ptr<Geometry>> geoms(numGeoms);
 
-    try {
-        for(int i = 0; i < numGeoms; i++) {
-            auto g = readGeometry();
-            if(!dynamic_cast<Polygon*>(g.get())) {
-                stringstream err;
-                err << BAD_GEOM_TYPE_MSG << " Polygon";
-                throw  ParseException(err.str());
-            }
-            (*geoms)[i] = g.release();
+    for(int i = 0; i < numGeoms; i++) {
+        geoms[i] = readGeometry();
+        if(!dynamic_cast<Polygon*>(geoms[i].get())) {
+            stringstream err;
+            err << BAD_GEOM_TYPE_MSG << " Polygon";
+            throw  ParseException(err.str());
         }
     }
-    catch(...) {
-        for(unsigned int i = 0; i < geoms->size(); i++) {
-            delete(*geoms)[i];
-        }
-        delete geoms;
-        throw;
-    }
-    return std::unique_ptr<MultiPolygon>(factory.createMultiPolygon(geoms));
+
+    return factory.createMultiPolygon(std::move(geoms));
 }
 
 std::unique_ptr<GeometryCollection>
 WKBReader::readGeometryCollection()
 {
     int numGeoms = dis.readInt();
-    vector<Geometry*>* geoms = new vector<Geometry*>(numGeoms);
+    std::vector<std::unique_ptr<Geometry>> geoms(numGeoms);
 
-    try {
-        for(int i = 0; i < numGeoms; i++) {
-            (*geoms)[i] = readGeometry().release();
-        }
+    for(int i = 0; i < numGeoms; i++) {
+        geoms[i] = readGeometry();
     }
-    catch(...) {
-        for(unsigned int i = 0; i < geoms->size(); i++) {
-            delete(*geoms)[i];
-        }
-        delete geoms;
-        throw;
-    }
-    return std::unique_ptr<GeometryCollection>(factory.createGeometryCollection(geoms));
+
+    return factory.createGeometryCollection(std::move(geoms));
 }
 
 std::unique_ptr<CoordinateSequence>

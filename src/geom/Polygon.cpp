@@ -87,6 +87,37 @@ Polygon::Polygon(LinearRing* newShell, std::vector<LinearRing*>* newHoles,
     }
 }
 
+Polygon::Polygon(std::unique_ptr<LinearRing> && newShell,
+                 const GeometryFactory& newFactory) :
+        Geometry(&newFactory),
+        shell(std::move(newShell))
+{
+    if(shell == nullptr) {
+        shell.reset(getFactory()->createLinearRing(nullptr));
+    }
+}
+
+Polygon::Polygon(std::unique_ptr<LinearRing> && newShell,
+                 std::vector<std::unique_ptr<LinearRing>> && newHoles,
+                 const GeometryFactory& newFactory) :
+                 Geometry(&newFactory),
+                 shell(std::move(newShell)),
+                 holes(std::move(newHoles))
+{
+    if(shell == nullptr) {
+        shell.reset(getFactory()->createLinearRing(nullptr));
+    }
+
+    // TODO move into validateConstruction() method
+    if(shell->isEmpty() && hasNonEmptyElements(&holes)) {
+        throw util::IllegalArgumentException("shell is empty but holes are not");
+    }
+    if (hasNullElements(&holes)) {
+        throw util::IllegalArgumentException("holes must not contain null elements");
+    }
+}
+
+
 std::unique_ptr<CoordinateSequence>
 Polygon::getCoordinates() const
 {

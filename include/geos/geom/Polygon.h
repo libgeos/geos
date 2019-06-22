@@ -171,6 +171,13 @@ protected:
     Polygon(LinearRing* newShell, std::vector<LinearRing*>* newHoles,
             const GeometryFactory* newFactory);
 
+    Polygon(std::unique_ptr<LinearRing> && newShell,
+            const GeometryFactory& newFactory);
+
+    Polygon(std::unique_ptr<LinearRing> && newShell,
+            std::vector<std::unique_ptr<LinearRing>> && newHoles,
+            const GeometryFactory& newFactory);
+
     std::unique_ptr<LinearRing> shell;
 
     std::vector<std::unique_ptr<LinearRing>> holes;
