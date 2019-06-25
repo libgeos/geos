@@ -269,7 +269,7 @@ public:
     virtual void apply_ro(CoordinateFilter* filter) const = 0; //Abstract
 
     /** \brief
-     * Apply a fiter to each Coordinate of this sequence.
+     * Apply a filter to each Coordinate of this sequence.
      * The filter is expected to provide a .filter(Coordinate&)
      * method.
      *

@@ -747,7 +747,7 @@ public:
     virtual void apply_ro(CoordinateSequenceFilter& filter) const = 0;
 
     /** \brief
-     * Apply a fiter to each component of this geometry.
+     * Apply a filter to each component of this geometry.
      * The filter is expected to provide a .filter(const Geometry*)
      * method.
      *
