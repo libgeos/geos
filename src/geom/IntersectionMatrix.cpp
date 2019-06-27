@@ -168,7 +168,7 @@ IntersectionMatrix::setAtLeast(Location row, Location col, int minimumDimensionV
 void
 IntersectionMatrix::setAtLeastIfValid(Location row, Location col, int minimumDimensionValue)
 {
-    if(static_cast<size_t>(row) >= 0 && static_cast<size_t>(col) >= 0) {
+    if(row != Location::UNDEF && col != Location::UNDEF) {
         setAtLeast(row, col, minimumDimensionValue);
     }
 }
