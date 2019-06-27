@@ -47,7 +47,6 @@
 
 #include <cassert>
 #include <cmath>
-#include <functional>
 #include <vector>
 #include <sstream>
 #include <memory> // for unique_ptr
@@ -207,10 +206,6 @@ OverlayOp::insertUniqueEdges(vector<Edge*>* edges, const Envelope* env)
 #endif
         insertUniqueEdge(e);
     }
-    /*
-    	for_each(edges->begin(), edges->end(),
-    			bind1st(mem_fun(&OverlayOp::insertUniqueEdge), this));
-    */
 }
 
 /*private*/

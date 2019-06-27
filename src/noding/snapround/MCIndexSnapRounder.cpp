@@ -26,8 +26,6 @@
 
 #include <geos/inline.h>
 
-#include <functional> // std::mem_fun, std::bind1st
-#include <algorithm> // std::for_each
 #include <vector>
 
 
