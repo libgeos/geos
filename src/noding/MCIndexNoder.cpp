@@ -48,8 +48,9 @@ MCIndexNoder::computeNodes(SegmentString::NonConstVect* inputSegStrings)
     nodedSegStrings = inputSegStrings;
     assert(nodedSegStrings);
 
-    for_each(nodedSegStrings->begin(), nodedSegStrings->end(),
-             bind1st(mem_fun(&MCIndexNoder::add), this));
+    for (const auto& s : *nodedSegStrings) {
+        add(s);
+    }
 
     intersectChains();
 //cerr<<"MCIndexNoder: # chain overlaps = "<<nOverlaps<<endl;
