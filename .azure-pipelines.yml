@@ -210,10 +210,10 @@ stages:
       matrix:
         Xcode 10.1:
           TOOLSET: clang
-          CXXSTD: 14, 17, 20
+          CXXSTD: 14, 17
           XCODE_APP: /Applications/Xcode_10.1.app
         Xcode 10.0:
-          CXXSTD: 14, 17, 20
+          CXXSTD: 14, 17
           XCODE_APP: /Applications/Xcode_10.app
         Xcode 9.4.1:
           CXXSTD: 11, 14, 17
