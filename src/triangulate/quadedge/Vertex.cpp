@@ -151,7 +151,7 @@ Vertex::circleCenter(const Vertex& b, const Vertex& c) const
     try {
         cc.reset(new Vertex(hcc->getX(), hcc->getY()));
     }
-    catch(NotRepresentableException nre) {
+    catch(NotRepresentableException & nre) {
     }
 
     return cc;
