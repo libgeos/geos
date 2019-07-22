@@ -60,11 +60,6 @@ LineSegment::LineSegment()
 {
 }
 
-INLINE
-LineSegment::~LineSegment()
-{
-}
-
 INLINE double
 LineSegment::distancePerpendicular(const Coordinate& p) const
 {

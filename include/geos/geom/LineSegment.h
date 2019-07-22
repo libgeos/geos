@@ -74,8 +74,6 @@ public:
 
     LineSegment(double x0, double y0, double x1, double y1);
 
-    virtual ~LineSegment();
-
     void setCoordinates(const Coordinate& c0, const Coordinate& c1);
 
     // obsoleted, use operator[] instead
