@@ -116,10 +116,35 @@ public:
 
     static int signOfDet2x2(double dx1, double dy1, double dx2, double dy2);
 
+    static DD detDD(double x1, double y1, double x2, double y2);
+    static DD detDD(const DD& x1, const DD& y1, const DD& x2, const DD& y2);
+
+    /**
+    * Computes the circumcentre of a triangle. The circumcentre is the centre of
+    * the circumcircle, the smallest circle which encloses the triangle. It is
+    * also the common intersection point of the perpendicular bisectors of the
+    * sides of the triangle, and is the only point which has equal distance to
+    * all three vertices of the triangle.
+    * <p>
+    * The circumcentre does not necessarily lie within the triangle. For example,
+    * the circumcentre of an obtuse isosceles triangle lies outside the triangle.
+    * <p>
+    * This method uses {@link DD} extended-precision arithmetic to
+    * provide more accurate results than {@link #circumcentre(Coordinate, Coordinate, Coordinate)}
+    *
+    * @param a
+    *          a vertex of the triangle
+    * @param b
+    *          a vertex of the triangle
+    * @param c
+    *          a vertex of the triangle
+    * @return the circumcentre of the triangle
+    */
+    static geom::Coordinate circumcentreDD(const geom::Coordinate& a, const geom::Coordinate& b, const geom::Coordinate& c);
 
 protected:
 
-    static int signOfDet2x2(DD& x1, DD& y1, DD& x2, DD& y2);
+    static int signOfDet2x2(const DD& x1, const DD& y1, const DD& x2, const DD& y2);
 
 };
 
