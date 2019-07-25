@@ -65,6 +65,7 @@ public:
      * @param resultPoint the point into which to write the inCentre of the triangle
      */
     void circumcentre(Coordinate& resultPoint);
+    void circumcentreDD(Coordinate& resultPoint);
 
     static const Coordinate circumcentre(const Coordinate& p0, const Coordinate& p1, const Coordinate& p2);
 

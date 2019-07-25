@@ -6,6 +6,8 @@
 // geos
 #include <geos/geom/Triangle.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/algorithm/CGAlgorithmsDD.h>
+
 // std
 #include <cmath>
 
@@ -28,6 +30,7 @@ struct test_triangle_data {
     test_triangle_data()
         : a(3, 3), b(9, 3), c(6, 6), d(-4, -2), e(-8, -2), f(-4, -4)
     {}
+
 };
 
 typedef test_group<test_triangle_data> group;
@@ -172,5 +175,30 @@ void object::test<6>
 
     //  std::cout << "CicumCenter of triangle DEF:: " << c2.x << " " << c2.y << std::endl;
 }
+
+// Test circumcentreDD()
+template<>
+template<>
+void object::test<7>
+()
+{
+    using geos::geom::Triangle;
+    using geos::geom::Coordinate;
+    using geos::algorithm::CGAlgorithmsDD;
+
+    Coordinate x1(193600.80333333334, 469345.355);
+    Coordinate x2(193600.80333333334, 469345.0175);
+    Coordinate x3(193601.10666666666, 469345.0175);
+
+    Coordinate y1(193600.80333333334, 469345.355);
+    Coordinate y2(193601.10666666666, 469345.0175);
+    Coordinate y3(193601.10666666666, 469345.355);
+
+    Coordinate cc1 = CGAlgorithmsDD::circumcentreDD(x1, x2, x3);
+    Coordinate cc2 = CGAlgorithmsDD::circumcentreDD(y1, y2, y3);
+
+    ensure(cc1 == cc2);
+}
+
 
 } // namespace tut
