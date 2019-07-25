@@ -20,6 +20,18 @@ namespace geos {
 namespace geom { // geos::geom
 
 
+bool
+Triangle::isIsoceles()
+{
+    double len0 = p1.distance(p2);
+    double len1 = p0.distance(p2);
+    double len2 = p0.distance(p1);
+    if (len0 == len1 || len1 == len2 || len2 == len0)
+        return true;
+    else
+        return false;
+}
+
 void
 Triangle::inCentre(Coordinate& result)
 {
