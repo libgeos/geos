@@ -196,18 +196,18 @@ CGAlgorithmsDD::intersection(const Coordinate& p1, const Coordinate& p2,
 Coordinate
 CGAlgorithmsDD::circumcentreDD(const Coordinate& a, const Coordinate& b, const Coordinate& c)
 {
-    DD ax = DD(a.x) + DD(-c.x);
-    DD ay = DD(a.y) + DD(-c.y);
-    DD bx = DD(b.x) + DD(-c.x);
-    DD by = DD(b.y) + DD(-c.y);
+    DD ax = DD(a.x) - DD(c.x);
+    DD ay = DD(a.y) - DD(c.y);
+    DD bx = DD(b.x) - DD(c.x);
+    DD by = DD(b.y) - DD(c.y);
 
-    DD denom = detDD(ax, ay, bx, by);
+    DD denom = DD(2) * detDD(ax, ay, bx, by);
     DD asqr = (ax * ax) + (ay * ay);
     DD bsqr = (bx * bx) + (by * by);
     DD numx = detDD(ay, asqr, by, bsqr);
     DD numy = detDD(ax, asqr, bx, bsqr);
     double ccx = (DD(c.x) - (numx / denom)).ToDouble();
-    double ccy = (DD(c.y) - (numy / denom)).ToDouble();
+    double ccy = (DD(c.y) + (numy / denom)).ToDouble();
     Coordinate cc(ccx, ccy);
     return cc;
 }

@@ -421,7 +421,7 @@ public:
         Triangle triangle(triEdges[0]->orig().getCoordinate(),
                           triEdges[1]->orig().getCoordinate(), triEdges[2]->orig().getCoordinate());
         Coordinate cc;
-        triangle.circumcentre(cc);
+        triangle.circumcentreDD(cc);
 
         Vertex ccVertex(cc);
 
