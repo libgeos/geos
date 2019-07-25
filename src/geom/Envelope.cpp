@@ -268,6 +268,18 @@ Envelope::getHeight() const
 }
 
 /*public*/
+double
+Envelope::getDiameter() const
+{
+    if(isNull()) {
+        return 0;
+    }
+    double w = getWidth();
+    double h = getHeight();
+    return sqrt(w*w + h*h);
+}
+
+/*public*/
 void
 Envelope::expandToInclude(const Coordinate& p)
 {

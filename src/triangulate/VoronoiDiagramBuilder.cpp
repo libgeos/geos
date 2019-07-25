@@ -81,18 +81,26 @@ VoronoiDiagramBuilder::create()
         return;
     }
 
-    diagramEnv = DelaunayTriangulationBuilder::envelope(*siteCoords);
-    //adding buffer around the final envelope
-    double expandBy = std::max(diagramEnv.getWidth(), diagramEnv.getHeight());
-    diagramEnv.expandBy(expandBy);
-    if(clipEnv) {
-        diagramEnv.expandToInclude(clipEnv);
+    geom::Envelope siteEnv = DelaunayTriangulationBuilder::envelope(*siteCoords);
+    if (clipEnv == nullptr) {
+        /**
+        * If no user-provided clip env,
+        * create one which encloses all the sites,
+        * with a buffer around the edges.
+        */
+        diagramEnv = siteEnv;
+        // add a buffer around the sites envelope
+        double expandBy = diagramEnv.getDiameter();
+        diagramEnv.expandBy(expandBy);
+    }
+    else {
+        diagramEnv = *clipEnv;
     }
 
     auto vertices = DelaunayTriangulationBuilder::toVertices(*siteCoords);
     std::sort(vertices.begin(), vertices.end()); // Best performance from locator when inserting points near each other
 
-    subdiv.reset(new quadedge::QuadEdgeSubdivision(diagramEnv, tolerance));
+    subdiv.reset(new quadedge::QuadEdgeSubdivision(siteEnv, tolerance));
     IncrementalDelaunayTriangulator triangulator(subdiv.get());
     triangulator.insertSites(vertices);
 }

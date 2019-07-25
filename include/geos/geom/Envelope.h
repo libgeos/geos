@@ -204,14 +204,20 @@ public:
      */
     double getHeight(void) const;
 
+    /**
+     * Gets the length of the diameter (diagonal) of the envelope.
+     *
+     * @return the diameter length
+     */
+    double getDiameter(void) const;
+
     /** \brief
      * Gets the area of this envelope.
      *
      * @return the area of the envelope
      * @return 0.0 if the envelope is null
      */
-    double
-    getArea() const
+    double getArea() const
     {
         return getWidth() * getHeight();
     }
