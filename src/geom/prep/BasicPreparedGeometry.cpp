@@ -20,7 +20,6 @@
 #include <geos/geom/prep/BasicPreparedGeometry.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/GeometryCollection.h>
-#include <geos/geom/Puntal.h>
 #include <geos/algorithm/PointLocator.h>
 #include <geos/geom/util/ComponentCoordinateExtracter.h>
 
